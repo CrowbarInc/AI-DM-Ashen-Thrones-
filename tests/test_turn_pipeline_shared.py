@@ -4,6 +4,8 @@ These tests verify both endpoints exercise the same resolved-turn orchestration.
 """
 from __future__ import annotations
 
+import json
+
 from fastapi.testclient import TestClient
 
 from game import storage
@@ -17,6 +19,7 @@ from game.defaults import (
     default_session,
     default_world,
 )
+from game.prompt_context import NO_VALIDATOR_VOICE_RULE
 
 
 FAKE_GPT_RESPONSE = {
@@ -70,6 +73,19 @@ def _seed_shared_world(tmp_path, monkeypatch):
     storage._save_json(storage.CONDITIONS_PATH, default_conditions())
     if not storage.SESSION_LOG_PATH.exists():
         storage.SESSION_LOG_PATH.write_text("", encoding="utf-8")
+
+
+def _gm_response(text: str, *, tags=None, debug_notes: str = ""):
+    return {
+        "player_facing_text": text,
+        "tags": list(tags or []),
+        "scene_update": None,
+        "activate_scene_id": None,
+        "new_scene_draft": None,
+        "world_updates": None,
+        "suggested_action": None,
+        "debug_notes": debug_notes,
+    }
 
 
 def test_action_and_chat_social_use_equivalent_shared_turn_logic(tmp_path, monkeypatch):
@@ -199,25 +215,15 @@ def test_chat_fallback_preserves_endpoint_specific_no_resolution_shape(tmp_path,
     assert "gm_output" in data
 
 
-def test_chat_validator_voice_triggers_single_retry_instruction(tmp_path, monkeypatch):
+def test_chat_targeted_retry_validator_voice_only(tmp_path, monkeypatch):
     _seed_shared_world(tmp_path, monkeypatch)
     captured_inputs = []
 
-    first = {
-        "player_facing_text": "Based on what's established, we can determine very little here.",
-        "tags": [],
-        "scene_update": None,
-        "activate_scene_id": None,
-        "new_scene_draft": None,
-        "world_updates": None,
-        "suggested_action": None,
-        "debug_notes": "",
-    }
-    second = dict(FAKE_GPT_RESPONSE)
-
     def _fake_call_gpt(messages):
         captured_inputs.append(messages)
-        return first if len(captured_inputs) == 1 else second
+        if len(captured_inputs) == 1:
+            return _gm_response("Based on what's established, we can determine very little here.")
+        return _gm_response("Rain beads on the gate stones while Captain Veyra watches the refugee line.")
 
     with monkeypatch.context() as m:
         m.setattr("game.api.call_gpt", _fake_call_gpt)
@@ -225,13 +231,152 @@ def test_chat_validator_voice_triggers_single_retry_instruction(tmp_path, monkey
         m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
         m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
         client = TestClient(app)
-        resp = client.post("/api/chat", json={"text": "What do I know so far?"})
+        resp = client.post("/api/chat", json={"text": "Describe the gate."})
 
     assert resp.status_code == 200
+    data = resp.json()
     assert len(captured_inputs) == 2
     retry_messages = captured_inputs[1]
     retry_tail = retry_messages[-1]["content"]
-    assert "Do not explain limitations. Answer in-world or via OC." in retry_tail
+    assert "Retry target: validator_voice." in retry_tail
+    assert "unresolved_question" not in retry_tail
+    low = (data.get("gm_output") or {}).get("player_facing_text", "").lower()
+    assert "based on what's established" not in low
+    assert "we can determine" not in low
+    assert "retry_strategy:selected=validator_voice" in ((data.get("gm_output") or {}).get("debug_notes") or "")
+
+
+def test_chat_prompt_carries_no_validator_voice_policy(tmp_path, monkeypatch):
+    _seed_shared_world(tmp_path, monkeypatch)
+    captured_inputs = []
+
+    def _fake_call_gpt(messages):
+        captured_inputs.append(messages)
+        return _gm_response("Rain beads on the gate stones while Captain Veyra watches the refugee line.")
+
+    with monkeypatch.context() as m:
+        m.setattr("game.api.call_gpt", _fake_call_gpt)
+        m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
+        m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
+        m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+        client = TestClient(app)
+        resp = client.post("/api/chat", json={"text": "Describe the gate."})
+
+    assert resp.status_code == 200
+    assert len(captured_inputs) == 1
+    system_prompt = captured_inputs[0][0]["content"]
+    payload = json.loads(captured_inputs[0][1]["content"])
+    instructions = " ".join(payload.get("instructions", []))
+    assert NO_VALIDATOR_VOICE_RULE in system_prompt
+    assert NO_VALIDATOR_VOICE_RULE in instructions
+    assert payload["response_policy"]["no_validator_voice"]["enabled"] is True
+    assert payload["response_policy"]["no_validator_voice"]["applies_to"] == "standard_narration"
+
+
+def test_chat_targeted_retry_unresolved_question_only(tmp_path, monkeypatch):
+    _seed_shared_world(tmp_path, monkeypatch)
+    captured_inputs = []
+
+    def _fake_call_gpt(messages):
+        captured_inputs.append(messages)
+        if len(captured_inputs) == 1:
+            return _gm_response("Captain Veyra folds her arms and watches the road.")
+        return _gm_response(
+            "The report is usually copied to the notice board before dusk, though no one here will swear the last sheet is still hanging there. "
+            "Best lead: read the posted notices and ask Captain Veyra who took the last copy."
+        )
+
+    with monkeypatch.context() as m:
+        m.setattr("game.api.call_gpt", _fake_call_gpt)
+        m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
+        m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
+        m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+        client = TestClient(app)
+        resp = client.post("/api/chat", json={"text": "Where is the missing patrol report?"})
+
+    assert resp.status_code == 200
+    data = resp.json()
+    assert len(captured_inputs) == 2
+    retry_tail = captured_inputs[1][-1]["content"]
+    assert "Retry target: unresolved_question." in retry_tail
+    assert "validator_voice" not in retry_tail
+    low = (data.get("gm_output") or {}).get("player_facing_text", "").lower()
+    assert "i can't answer" not in low
+    assert "answer the player" not in low
+    assert low.startswith("the report is")
+    assert "retry_strategy:selected=unresolved_question" in ((data.get("gm_output") or {}).get("debug_notes") or "")
+
+
+def test_chat_targeted_retry_prefers_highest_priority_failure_first(tmp_path, monkeypatch):
+    _seed_shared_world(tmp_path, monkeypatch)
+    captured_inputs = []
+
+    def _fake_call_gpt(messages):
+        captured_inputs.append(messages)
+        if len(captured_inputs) == 1:
+            return _gm_response("I can't answer that. Based on what's established, we can determine very little here.")
+        return _gm_response(
+            "No one here has pinned the report to one locked drawer, but Captain Veyra says the gate board carried the last official notice before dusk. "
+            "Best lead: check the board, then press her on who removed the fresh copy."
+        )
+
+    with monkeypatch.context() as m:
+        m.setattr("game.api.call_gpt", _fake_call_gpt)
+        m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
+        m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
+        m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+        client = TestClient(app)
+        resp = client.post("/api/chat", json={"text": "Where is the missing patrol report?"})
+
+    assert resp.status_code == 200
+    data = resp.json()
+    assert len(captured_inputs) == 2
+    retry_tail = captured_inputs[1][-1]["content"]
+    assert "Retry target: unresolved_question." in retry_tail
+    assert "Retry target: validator_voice." not in retry_tail
+    low = (data.get("gm_output") or {}).get("player_facing_text", "").lower()
+    assert "i can't answer" not in low
+    assert "based on what's established" not in low
+    assert "retry_strategy:selected=unresolved_question" in ((data.get("gm_output") or {}).get("debug_notes") or "")
+
+
+def test_chat_targeted_retry_scene_stall_only(tmp_path, monkeypatch):
+    _seed_shared_world(tmp_path, monkeypatch)
+    session = storage.load_session()
+    scene_runtime = session.setdefault("scene_runtime", {}).setdefault("scene_investigate", {})
+    scene_runtime["momentum_exchanges_since"] = 2
+    scene_runtime["momentum_next_due_in"] = 3
+    storage._save_json(storage.SESSION_PATH, session)
+    captured_inputs = []
+
+    def _fake_call_gpt(messages):
+        captured_inputs.append(messages)
+        if len(captured_inputs) == 1:
+            return _gm_response("Captain Veyra studies you in silence.")
+        return _gm_response(
+            "A runner splashes up from the road with a torn dispatch and thrusts it toward Captain Veyra. "
+            "\"East road, half an hour old,\" he pants, giving you a fresh trail to follow.",
+            tags=["scene_momentum:new_information"],
+        )
+
+    with monkeypatch.context() as m:
+        m.setattr("game.api.call_gpt", _fake_call_gpt)
+        m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
+        m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
+        m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+        client = TestClient(app)
+        resp = client.post("/api/chat", json={"text": "I wait."})
+
+    assert resp.status_code == 200
+    data = resp.json()
+    assert len(captured_inputs) == 2
+    retry_tail = captured_inputs[1][-1]["content"]
+    assert "Retry target: scene_stall." in retry_tail
+    assert "validator_voice" not in retry_tail
+    low = (data.get("gm_output") or {}).get("player_facing_text", "").lower()
+    assert "answer the player" not in low
+    assert "rule priority" not in low
+    assert "retry_strategy:selected=scene_stall" in ((data.get("gm_output") or {}).get("debug_notes") or "")
 
 
 def test_chat_roll_requirement_question_routes_to_adjudication_without_gpt(tmp_path, monkeypatch):

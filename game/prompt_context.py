@@ -26,6 +26,83 @@ SOCIAL_REPLY_KINDS = frozenset({
 })
 NPC_REPLY_KIND_VALUES = frozenset({'answer', 'explanation', 'reaction', 'refusal'})
 
+# Single source of truth for narration-rule precedence. Prompting and
+# deterministic enforcement both read this so conflicts resolve the same way.
+RESPONSE_RULE_PRIORITY: tuple[tuple[str, str], ...] = (
+    ("must_answer", "ANSWER THE PLAYER"),
+    ("forbid_state_invention", "DO NOT CONTRADICT AUTHORITATIVE STATE"),
+    ("forbid_secret_leak", "DO NOT LEAK HIDDEN FACTS / SECRETS"),
+    ("allow_partial_answer", "IF FULL CERTAINTY IS UNAVAILABLE, GIVE A BOUNDED PARTIAL ANSWER"),
+    ("diegetic_only", "MAINTAIN DIEGETIC VOICE (no validator/system voice)"),
+    ("prefer_scene_momentum", "PRESERVE SCENE MOMENTUM"),
+    ("prefer_specificity", "ADD SPECIFICITY / FLAVOR / POLISH"),
+)
+
+RULE_PRIORITY_COMPACT_INSTRUCTION = (
+    "When rules conflict, resolve them in this order: answer the player; preserve authoritative "
+    "state; avoid leaking hidden facts; if certainty is incomplete, give a bounded partial answer; "
+    "remain diegetic; maintain scene momentum; then add specificity."
+)
+NO_VALIDATOR_VOICE_RULE = (
+    "Never speak as a validator, analyst, referee of canon, or system. Do not mention what is or "
+    "is not established, available to the model, visible to tools, or answerable by the system. "
+    "If uncertainty exists, express it as in-world uncertainty from people, circumstances, clues, "
+    "distance, darkness, rumor, missing access, or incomplete observation."
+)
+NO_VALIDATOR_VOICE_PROHIBITIONS: tuple[str, ...] = (
+    "canon_validation",
+    "evidence_review",
+    "system_limitation",
+    "tool_access",
+    "model_identity",
+    "rules_explanation_outside_oc_or_adjudication",
+)
+UNCERTAINTY_CATEGORIES: tuple[str, ...] = (
+    "unknown_identity",
+    "unknown_location",
+    "unknown_motive",
+    "unknown_method",
+    "unknown_quantity",
+    "unknown_feasibility",
+)
+UNCERTAINTY_ANSWER_SHAPE: tuple[str, ...] = (
+    "what_can_be_said_now",
+    "what_is_not_nailed_down_yet",
+    "best_current_lead",
+)
+
+
+def build_response_policy(*, narration_obligations: Dict[str, Any] | None = None) -> Dict[str, Any]:
+    """Build the inspectable response policy for the current turn.
+
+    This keeps the precedence ladder explicit in one place so prompt assembly
+    and post-generation enforcement can share it instead of re-encoding order.
+    """
+    obligations = narration_obligations if isinstance(narration_obligations, dict) else {}
+    return {
+        "rule_priority_order": [label for _, label in RESPONSE_RULE_PRIORITY],
+        "must_answer": True,
+        "forbid_state_invention": True,
+        "forbid_secret_leak": True,
+        "allow_partial_answer": True,
+        "diegetic_only": True,
+        "prefer_scene_momentum": True,
+        "prefer_specificity": True,
+        "no_validator_voice": {
+            "enabled": True,
+            "applies_to": "standard_narration",
+            "rule": NO_VALIDATOR_VOICE_RULE,
+            "prohibited_perspectives": list(NO_VALIDATOR_VOICE_PROHIBITIONS),
+            "rules_explanation_only_in": ["oc", "adjudication"],
+        },
+        "scene_momentum_due": bool(obligations.get("scene_momentum_due")),
+        "uncertainty": {
+            "enabled": True,
+            "categories": list(UNCERTAINTY_CATEGORIES),
+            "answer_shape": list(UNCERTAINTY_ANSWER_SHAPE),
+        },
+    }
+
 
 def _resolve_active_interaction_target_name(
     session: Dict[str, Any],
@@ -366,6 +443,7 @@ def build_narration_context(
     world_state_view: Dict[str, Any],
     mode_instruction: str,
     recent_log_for_prompt: List[Dict[str, Any]],
+    uncertainty_hint: Dict[str, Any] | None = None,
 ) -> Dict[str, Any]:
     """Build a compressed narration context payload for GPT.
 
@@ -384,6 +462,7 @@ def build_narration_context(
         recent_log_for_prompt=recent_log_for_prompt,
         scene_runtime=runtime,
     )
+    response_policy = build_response_policy(narration_obligations=narration_obligations)
     res = resolution if isinstance(resolution, dict) else {}
     state_changes = res.get("state_changes") if isinstance(res.get("state_changes"), dict) else {}
     scene_advancement = {
@@ -412,14 +491,17 @@ def build_narration_context(
 
     instructions: List[str] = (
         [
-            'Always answer the player. Prefer partial truth over refusal. Never output meta explanations.',
             'Prioritize the active conversation over general scene recap.',
             'Do not fall back to base scene description unless the location materially changes, a new threat emerges, the player explicitly surveys the environment, or the scene needs a transition beat.',
         ]
         if has_active_interlocutor
         else []
     ) + [
+        RULE_PRIORITY_COMPACT_INSTRUCTION,
         'Always answer the player. Prefer partial truth over refusal. Never output meta explanations.',
+        NO_VALIDATOR_VOICE_RULE,
+        'Follow response_policy.rule_priority_order strictly. Higher-priority rules override later ones.',
+        'Treat response_policy.no_validator_voice as a hard narration-lane rule for standard narration.',
         (
             "SCENE MOMENTUM RULE (HARD RULE): Every 2–3 exchanges, you MUST introduce exactly one of: "
             "new_information, new_actor_entering, environmental_change, time_pressure, consequence_or_opportunity. "
@@ -431,6 +513,8 @@ def build_narration_context(
         'Avoid generic dramatic filler and repeated warning phrases. Make NPC replies specific to the speaker and current situation.',
         'Forbidden generic phrases are disallowed: "In this city...", "Times are tough...", "Trust is hard to come by...", "You\'ll need to prove yourself..." — rewrite into specific names/locations/events.',
         'QUESTION RESOLUTION RULE (HARD RULE): Every direct player question MUST be answered explicitly before any additional dialogue. Structure: (1) Direct answer (first sentence), (2) Optional elaboration, (3) Optional hook. The GM/NPC MUST NOT deflect, generalize, or ask a new question before answering.',
+        'If certainty is incomplete, classify the uncertainty with response_policy.uncertainty.categories and answer in exactly three short beats: what can be said now, what is not nailed down yet in-world, and the best current lead tied to the current scene, NPC, clue, or condition.',
+        'Frame uncertainty as world-facing limits only: who knows, what can be seen, what distance, darkness, rumor, missing witnesses, or incomplete clues prevent right now.',
         'PERCEPTION / INTENT ADJUDICATION RULE (HARD RULE): When the player asks for behavioral insight (e.g., nervous, lying, controlled), choose ONE dominant state (not mixed), give 1–2 concrete observable tells, and optionally map to a skill interpretation (Sense Motive, etc.). Failure: "mix of"/"seems like both" or pure emotional summary with no cues.',
         'If the player meaningfully moves to a new location, you may provide a new_scene_draft and/or activate_scene_id.',
         'If the player meaningfully changes the world, you may provide world_updates.',
@@ -448,7 +532,7 @@ def build_narration_context(
         'If narration_obligations.should_answer_active_npc is true, prioritize the active interlocutor\'s reply and the immediate exchange over general scene recap.',
         'Use narration_obligations.active_npc_reply_kind as a compact reply-shape hint (answer, explanation, reaction, refusal).',
         'If narration_obligations.active_npc_reply_kind is refusal, make it substantive (clear boundary, brief reason, redirect, or consequence) rather than empty stalling.',
-        'If the player asks a direct question, answer concretely (name, place, fact, or direction); if certainty is incomplete, provide the best grounded partial answer and state uncertainty in-character; do not repeat prior information.',
+        'If the player asks a direct question, answer concretely (name, place, fact, or direction); if certainty is incomplete, provide the best grounded partial answer and state uncertainty in-character through witnesses, conditions, rumor, access, or incomplete observation; do not repeat prior information.',
         'NPC response contract: when an NPC is asked a question, include at least one of: (a) a specific person/place/faction, (b) a concrete next step the player can take, (c) directly usable info (time/location/condition/requirement). If the NPC lacks full information, give partial specifics or direct the player to a concrete source.',
         'When answering a player question, give a direct answer first. Do not replace the answer with narrative description.',
         'Use turn_summary and mechanical_resolution as primary narration anchors; treat player_input as supporting evidence for disambiguation, not as the sentence structure to mirror.',
@@ -470,6 +554,8 @@ def build_narration_context(
         'turn_summary': _build_turn_summary(user_text, resolution, intent),
         'recent_log': _compress_recent_log(recent_log_for_prompt) if recent_log_for_prompt else [],
         'player_input': str(user_text or ''),
+        'response_policy': response_policy,
+        'uncertainty_hint': uncertainty_hint,
         'narration_obligations': narration_obligations,
         'mechanical_resolution': resolution,
         'scene_advancement': scene_advancement,

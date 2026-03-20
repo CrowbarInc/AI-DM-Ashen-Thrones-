@@ -6,7 +6,12 @@ from game.config import MODEL_NAME
 from game.utils import slugify
 from game.exploration import EXPLORATION_KINDS
 from game.social import SOCIAL_KINDS
-from game.prompt_context import build_narration_context
+from game.prompt_context import (
+    NO_VALIDATOR_VOICE_RULE,
+    RESPONSE_RULE_PRIORITY,
+    RULE_PRIORITY_COMPACT_INSTRUCTION,
+    build_narration_context,
+)
 from game.storage import (
     load_scene,
     get_scene_runtime,
@@ -40,14 +45,43 @@ _VALIDATOR_VOICE_PATTERNS: tuple[tuple[re.Pattern[str], str], ...] = (
     (re.compile(r"\bbased on what(?:'s| is)\s+established\b", re.IGNORECASE), "based_on_established"),
     (re.compile(r"\bwe can determine\b", re.IGNORECASE), "we_can_determine"),
     (re.compile(r"\bas an ai\b", re.IGNORECASE), "as_an_ai"),
-    (re.compile(r"\bi (?:can(?:not|'t)|do not|don't)\s+(?:access|see|know)\b", re.IGNORECASE), "system_limitation"),
+    (re.compile(r"\bas (?:a )?(?:language )?model\b", re.IGNORECASE), "model_identity"),
+    (re.compile(r"\bi (?:can(?:not|'t)|do not|don't)\s+(?:access|see|know|verify|check|look up)\b", re.IGNORECASE), "system_limitation"),
+    (re.compile(r"\bi (?:do not|don't|can(?:not|'t))\s+have access\b", re.IGNORECASE), "tool_access"),
     (re.compile(r"\bmy (?:system|training data|tools?)\b", re.IGNORECASE), "system_reference"),
+    (re.compile(r"\b(?:the evidence|available evidence|the record|canon)\s+(?:suggests|indicates|shows)\b", re.IGNORECASE), "evidence_review"),
+    (re.compile(r"\b(?:under|by)\s+the\s+rules\b", re.IGNORECASE), "rules_explanation"),
+    (re.compile(r"\b(?:this|that|it)\s+(?:would|will)\s+require\s+(?:a\s+)?(?:roll|check)\b", re.IGNORECASE), "rules_explanation"),
 )
-_VALIDATOR_VOICE_SUBSTITUTIONS: tuple[tuple[re.Pattern[str], str], ...] = (
-    (re.compile(r"\bi can(?:not|'t)\s+answer that\b", re.IGNORECASE), "I do not have that nailed down yet"),
-    (re.compile(r"\bbased on what(?:'s| is)\s+established\b", re.IGNORECASE), "From what people here have shared"),
-    (re.compile(r"\bwe can determine\b", re.IGNORECASE), "What stands out right now is"),
-    (re.compile(r"\bas an ai\b", re.IGNORECASE), "(OC) Keeping this player-facing,"),
+UNCERTAINTY_CATEGORIES: tuple[str, ...] = (
+    "unknown_identity",
+    "unknown_location",
+    "unknown_motive",
+    "unknown_method",
+    "unknown_quantity",
+    "unknown_feasibility",
+)
+RETRY_FAILURE_PRIORITY: dict[str, int] = {
+    "unresolved_question": 10,
+    "validator_voice": 20,
+    "npc_contract_failure": 30,
+    "scene_stall": 40,
+    "echo_or_repetition": 50,
+    "forbidden_generic_phrase": 60,
+}
+MAX_TARGETED_RETRY_ATTEMPTS = 2
+
+_RULE_PRIORITY_PROMPT_BLOCK = "\n".join(
+    f"{idx}. {label}" for idx, (_, label) in enumerate(RESPONSE_RULE_PRIORITY, start=1)
+)
+_SYSTEM_PROMPT_HEADER = (
+    "You are the game master for a solo Pathfinder 1e inspired browser campaign.\n\n"
+    "Rule Priority Hierarchy (higher rules override lower ones):\n"
+    f"{_RULE_PRIORITY_PROMPT_BLOCK}\n"
+    f"{RULE_PRIORITY_COMPACT_INSTRUCTION}\n\n"
+    "Always answer the player. Prefer partial truth over refusal. Never output meta explanations.\n"
+    f"{NO_VALIDATOR_VOICE_RULE}\n"
+    "Rules explanation belongs only to explicit OC/adjudication lanes owned by the app; never let that voice bleed into standard narration.\n\n"
 )
 
 
@@ -119,10 +153,105 @@ def detect_validator_voice(player_facing_text: str) -> List[str]:
     return hits
 
 
-SYSTEM_PROMPT = """You are the game master for a solo Pathfinder 1e inspired browser campaign.
-Always answer the player. Prefer partial truth over refusal. Never output meta explanations.
+def _split_reply_sentences(text: str) -> List[str]:
+    """Split paragraphs into sentence-like units for targeted cleanup."""
+    if not isinstance(text, str):
+        return []
+    parts = [part.strip() for part in re.split(r"(?<=[.!?])\s+|\n+", text) if part.strip()]
+    return parts
 
-The application owns authoritative mechanics and persistence. You narrate, propose updates, and draft scenes.
+
+def choose_retry_strategy(failures: List[Dict[str, Any]]) -> Dict[str, Any] | None:
+    """Pick the highest-priority retry target from inspectable failures."""
+    ranked: List[Dict[str, Any]] = []
+    for failure in failures or []:
+        if not isinstance(failure, dict):
+            continue
+        failure_class = str(failure.get("failure_class") or "").strip()
+        if not failure_class:
+            continue
+        ranked.append(
+            {
+                **failure,
+                "failure_class": failure_class,
+                "priority": int(failure.get("priority") or RETRY_FAILURE_PRIORITY.get(failure_class, 999)),
+            }
+        )
+    if not ranked:
+        return None
+    ranked.sort(key=lambda item: (int(item.get("priority", 999)), str(item.get("failure_class") or "")))
+    return ranked[0]
+
+
+def build_retry_prompt_for_failure(
+    failure: Dict[str, Any],
+    *,
+    response_policy: Dict[str, Any] | None = None,
+) -> str:
+    """Build a narrowly scoped retry instruction for one failure class only."""
+    failure_class = str((failure or {}).get("failure_class") or "").strip()
+    reasons = [str(r).strip() for r in ((failure or {}).get("reasons") or []) if isinstance(r, str) and str(r).strip()]
+    priority_order = (
+        list((response_policy or {}).get("rule_priority_order") or [])
+        if isinstance((response_policy or {}).get("rule_priority_order"), list)
+        else [label for _, label in RESPONSE_RULE_PRIORITY]
+    )
+    shared = (
+        f"Rule Priority Hierarchy: {priority_order}. "
+        f"{RULE_PRIORITY_COMPACT_INSTRUCTION} "
+        f"Retry target: {failure_class}. Correct only this failure class. Return the same JSON shape."
+    )
+
+    if failure_class == "validator_voice":
+        return (
+            f"{shared} Rewrite the reply into diegetic, world-facing phrasing only. "
+            f"{NO_VALIDATOR_VOICE_RULE} "
+            "Remove validator, system, limitation, tool-access, model-identity, and rules-explanation language from standard narration."
+        )
+
+    if failure_class == "unresolved_question":
+        uncertainty_category = str((failure or {}).get("uncertainty_category") or "").strip()
+        category_hint = f" Uncertainty category: {uncertainty_category}." if uncertainty_category else ""
+        return (
+            f"{shared} The player's direct question still lacks a bounded answer. "
+            "Answer it in the first sentence. Do not refuse, deflect, or explain limitations. "
+            "If certainty is incomplete, give the best grounded partial answer and one concrete lead tied to the current scene or NPC."
+            f"{category_hint}"
+        )
+
+    if failure_class == "echo_or_repetition":
+        return (
+            f"{shared} Semantically rewrite the reply so it does not echo the player's wording or quoted speech. "
+            "Change sentence structure and phrasing, and react with new information or consequence instead of restating the input."
+        )
+
+    if failure_class == "npc_contract_failure":
+        missing = [str(x).strip() for x in ((failure or {}).get("missing") or []) if isinstance(x, str) and str(x).strip()]
+        missing_hint = f" Missing contract elements: {missing}." if missing else ""
+        return (
+            f"{shared} Produce a direct NPC answer, reaction, or refusal consistent with the current target. "
+            "Include at least one concrete person, place, faction, next step, or directly usable condition, time, or location."
+            f"{missing_hint}"
+        )
+
+    if failure_class == "scene_stall":
+        return (
+            f"{shared} Advance the scene by one concrete development now. "
+            "Introduce one actionable reveal, answer, consequence, opportunity, environmental change, or new pressure so the exchange does not remain static. "
+            "Include exactly one matching scene momentum tag in tags: scene_momentum:<kind>."
+        )
+
+    if failure_class == "forbidden_generic_phrase":
+        return (
+            f"{shared} Rewrite only the offending generic phrase or sentence into scene-anchored specifics. "
+            "Keep the rest of the reply intact where possible and avoid flattening the whole response."
+        )
+
+    reason_text = f" Reasons: {reasons}." if reasons else ""
+    return f"{shared} Rewrite narrowly to resolve this failure.{reason_text}"
+
+
+SYSTEM_PROMPT = _SYSTEM_PROMPT_HEADER + """The application owns authoritative mechanics and persistence. You narrate, propose updates, and draft scenes.
 You must not invent dice results or override mechanical resolutions supplied by the app.
 You may propose structured updates that the app may auto-apply.
 When introducing new names or factions, include a source (rumor, NPC claim, notice, or observation).
@@ -153,7 +282,8 @@ Structure:
 2. Optional elaboration
 3. Optional hook
 The GM/NPC MUST NOT deflect, generalize, or ask a new question before answering.
-If the player asks a direct question, you must answer it concretely. If full certainty is unavailable, provide the best grounded partial answer and state uncertainty in-character. Do not repeat prior information.
+If the player asks a direct question, you must answer it concretely. If full certainty is unavailable, provide the best grounded partial answer and state uncertainty in-character through rumor, witness limits, distance, darkness, missing access, or incomplete observation. Do not repeat prior information.
+Never speak as a validator, analyst, referee of canon, or system in standard narration. Do not mention what is or is not established, answerable, visible to tools, or available to the model.
 When answering a player question, give a direct answer first. Do not replace the answer with narrative description.
 If an interaction is underway with an active NPC in the payload, prioritize the immediate exchange and that interlocutor over re-stating base scene summary. Use environmental details only when newly relevant, requested, or needed for a transition beat.
 
@@ -405,12 +535,9 @@ def sanitize_player_facing_text(player_text: str, scene_envelope: Dict[str, Any]
     if not hit_reasons:
         return {'text': txt, 'did_sanitize': False, 'reasons': []}
 
-    safe = (
-        "You notice small, telling details in the crowd and the way people watch one another, "
-        "but nothing resolves into a clear answer yet. If you investigate more closely or question locals, "
-        "you may uncover more."
-    )
-    return {'text': safe, 'did_sanitize': True, 'reasons': hit_reasons}
+    uncertainty = classify_uncertainty(user_text, scene_envelope=scene_envelope) if _is_direct_player_question(user_text) else None
+    safe = _bounded_spoiler_safe_text(user_text, scene_envelope=scene_envelope)
+    return {'text': safe, 'did_sanitize': True, 'reasons': hit_reasons, 'uncertainty': uncertainty}
 
 
 _ECHO_TOKEN_PATTERN = re.compile(r"[a-z0-9']+")
@@ -533,7 +660,10 @@ def guard_gm_output(gm: Dict[str, Any], scene_envelope: Dict[str, Any], user_tex
         return gm
 
     tags = gm.get('tags') if isinstance(gm.get('tags'), list) else []
-    gm['tags'] = list(tags) + ['spoiler_guard']
+    uncertainty = res.get('uncertainty') if isinstance(res.get('uncertainty'), dict) else {}
+    category = str(uncertainty.get('category') or '').strip()
+    uncertainty_tags = [f'uncertainty:{category}'] if category else []
+    gm['tags'] = list(tags) + ['spoiler_guard'] + uncertainty_tags
     gm['player_facing_text'] = res['text']
     dbg = gm.get('debug_notes') if isinstance(gm.get('debug_notes'), str) else ''
     gm['debug_notes'] = (dbg + ' | ' if dbg else '') + f'spoiler_guard: {res["reasons"]}'
@@ -562,6 +692,12 @@ def _resolve_scene_id(scene_envelope: Dict[str, Any]) -> str:
 def _resolve_scene_location(scene_envelope: Dict[str, Any]) -> str:
     scene = (scene_envelope or {}).get("scene", {}) if isinstance(scene_envelope, dict) else {}
     return str(scene.get("location") or "").strip()
+
+
+def _scene_visible_facts(scene_envelope: Dict[str, Any]) -> List[str]:
+    scene = (scene_envelope or {}).get("scene", {}) if isinstance(scene_envelope, dict) else {}
+    visible = scene.get("visible_facts") if isinstance(scene.get("visible_facts"), list) else []
+    return [str(v).strip() for v in visible if isinstance(v, str) and str(v).strip()]
 
 
 _QUESTION_RESOLUTION_STOPWORDS: frozenset[str] = frozenset({
@@ -661,6 +797,32 @@ def _question_content_tokens(user_text: str) -> List[str]:
     return out[:10]
 
 
+def _classify_uncertainty_category(player_text: str) -> str:
+    low = str(player_text or "").strip().lower()
+    if not low:
+        return "unknown_method"
+    if any(phrase in low for phrase in ("how many", "how much", "how long", "how often", "what number", "what count")):
+        return "unknown_quantity"
+    if low.startswith(("who ", "whose ")) or re.search(r"\bwho\b", low):
+        return "unknown_identity"
+    if low.startswith("where ") or re.search(r"\bwhere\b", low):
+        return "unknown_location"
+    if low.startswith("why ") or any(
+        phrase in low
+        for phrase in ("what do they want", "what does he want", "what does she want", "what are they after", "what is driving")
+    ):
+        return "unknown_motive"
+    if low.startswith(("can ", "could ", "would ", "should ", "is it possible", "is this possible", "is that possible")):
+        return "unknown_feasibility"
+    if any(phrase in low for phrase in ("feasible", "possible", "can i", "could i", "would it work", "will it work", "can this work")):
+        return "unknown_feasibility"
+    if any(phrase in low for phrase in ("how far", "how tall", "how deep", "how wide")):
+        return "unknown_quantity"
+    if low.startswith("how "):
+        return "unknown_method"
+    return "unknown_method"
+
+
 def question_resolution_rule_check(*, player_text: str, gm_reply_text: str) -> Dict[str, Any]:
     """Check the Question Resolution Rule for direct player questions.
 
@@ -696,27 +858,211 @@ def question_resolution_rule_check(*, player_text: str, gm_reply_text: str) -> D
     return {"applies": True, "ok": ok, "reasons": reasons}
 
 
-def _uncertain_answer_prefix(player_text: str) -> str:
-    """Generate a direct, non-meta uncertain answer prefix by question type."""
-    low = str(player_text or "").strip().lower()
-    first_word = (low.replace('"', ' ').replace("'", " ").split() or [""])[0]
+def classify_uncertainty(
+    player_text: str,
+    *,
+    scene_envelope: Dict[str, Any] | None = None,
+    session: Dict[str, Any] | None = None,
+    world: Dict[str, Any] | None = None,
+    resolution: Dict[str, Any] | None = None,
+) -> Dict[str, str]:
+    """Classify unresolved answers into a compact, inspectable uncertainty shape."""
+    category = _classify_uncertainty_category(player_text)
+    scene_env = scene_envelope if isinstance(scene_envelope, dict) else {}
+    session_data = session if isinstance(session, dict) else {}
+    world_data = world if isinstance(world, dict) else {}
+    resolution_data = resolution if isinstance(resolution, dict) else {}
+    location = _resolve_scene_location(scene_env)
+    scene_id = _resolve_scene_id(scene_env)
+    visible = _scene_visible_facts(scene_env)
+    visible_low = " ".join(v.lower() for v in visible)
+    npc_id = _active_interaction_target_id(session_data)
+    npc_name = _resolve_npc_name(world_data, npc_id, scene_id)
+    scene = (scene_env or {}).get("scene", {}) if isinstance(scene_env, dict) else {}
+    exits = scene.get("exits") if isinstance(scene.get("exits"), list) else []
+    exit_label = ""
+    if exits and isinstance(exits[0], dict):
+        exit_label = str(exits[0].get("label") or "").strip()
 
-    if first_word == "who":
-        return "No one here will name a person with certainty yet."
-    if first_word == "where":
-        return "No one here will pin it to a single location yet."
-    if first_word == "when":
-        return "No one here will commit to a time yet."
-    if first_word == "why":
-        return "No one here will speak a clear motive yet."
-    if first_word == "how":
-        return "No one here can describe the method clearly yet."
-    if first_word == "what":
-        return "No one here can give the full picture yet."
-    return "No one here can confirm the full answer yet."
+    def _lead_from_scene(default_text: str) -> str:
+        if "notice board" in visible_low or "noticeboard" in visible_low:
+            return "Best lead: work the notice board for one concrete detail you can test right away."
+        if exit_label:
+            return f"Best lead: follow the route toward {exit_label} and press the next witness there."
+        if location:
+            return f"Best lead: press for one concrete handle in {location} rather than the whole answer at once."
+        return default_text
+
+    if category == "unknown_identity":
+        return {
+            "category": category,
+            "what_can_be_said_now": "No one here will hang a single name on it yet, but the field can be narrowed.",
+            "what_is_not_nailed_down_yet": "The true name is still in shadow here.",
+            "best_current_lead": (
+                f"Best lead: ask {npc_name} who fits, who does not, and whose name keeps surfacing."
+                if npc_name
+                else _lead_from_scene("Best lead: ask who fits the role, who does not, and which name keeps surfacing.")
+            ),
+        }
+    if category == "unknown_location":
+        return {
+            "category": category,
+            "what_can_be_said_now": "No one here can pin it to a single doorstep yet; you have a last-known trail, not a final point.",
+            "what_is_not_nailed_down_yet": "The exact place is still blurred by distance, rumor, or missing detail.",
+            "best_current_lead": (
+                f"Best lead: ask {npc_name} for the last sighting, the route taken, or who handles access there."
+                if npc_name
+                else _lead_from_scene("Best lead: pull the last sighting, route, or gatekeeper from the scene before chasing the final location.")
+            ),
+        }
+    if category == "unknown_motive":
+        return {
+            "category": category,
+            "what_can_be_said_now": "No one here is naming the heart of it yet, but the pressure around it can still be read.",
+            "what_is_not_nailed_down_yet": "The real reason is still being kept close to the chest.",
+            "best_current_lead": (
+                f"Best lead: ask {npc_name} who profits, who is under pressure, or what changed just before this."
+                if npc_name
+                else _lead_from_scene("Best lead: ask who gains, who is cornered, or what changed just before this turned.")
+            ),
+        }
+    if category == "unknown_quantity":
+        return {
+            "category": category,
+            "what_can_be_said_now": "No one here will swear to a clean count yet; you have a rough scale, not precision.",
+            "what_is_not_nailed_down_yet": "The exact number is still loose in the telling.",
+            "best_current_lead": (
+                f"Best lead: ask {npc_name} for the smallest and largest count they would swear to."
+                if npc_name
+                else _lead_from_scene("Best lead: pin down a lower and upper count from what is visible, posted, or witnessed.")
+            ),
+        }
+    if category == "unknown_feasibility":
+        check = resolution_data.get("check_request") if isinstance(resolution_data.get("check_request"), dict) else {}
+        skill = str(check.get("skill") or "").strip().replace("_", " ")
+        reason = str(check.get("reason") or "").strip()
+        lead = ""
+        if skill and reason:
+            lead = f"Best lead: the deciding condition is {reason}; test it with {skill} instead of guessing."
+        elif skill:
+            lead = f"Best lead: test the deciding condition with {skill} instead of guessing."
+        elif npc_name:
+            lead = f"Best lead: ask {npc_name} what would make them say yes, then meet that condition."
+        else:
+            lead = _lead_from_scene("Best lead: ask what condition would make it possible here, then test that condition directly.")
+        return {
+            "category": category,
+            "what_can_be_said_now": "No one here can promise it will work yet; success turns on one deciding condition.",
+            "what_is_not_nailed_down_yet": "Whether it can be done is not settled until that condition is tested.",
+            "best_current_lead": lead,
+        }
+    return {
+        "category": "unknown_method",
+        "what_can_be_said_now": "No one here can lay out the exact trick yet; the effect is plain enough.",
+        "what_is_not_nailed_down_yet": "The means are still obscured by the aftermath and half-seen tells.",
+        "best_current_lead": (
+            f"Best lead: ask {npc_name} what was touched, forced, moved, or bypassed."
+            if npc_name
+            else _lead_from_scene("Best lead: inspect what was touched, forced, moved, or bypassed before chasing the whole explanation.")
+        ),
+    }
 
 
-def enforce_question_resolution_rule(gm: Dict[str, Any], *, player_text: str) -> Dict[str, Any]:
+def render_uncertainty_response(uncertainty: Dict[str, Any]) -> str:
+    """Render a bounded answer with a known edge, uncertainty edge, and lead."""
+    if not isinstance(uncertainty, dict):
+        return ""
+    parts = [
+        str(uncertainty.get("what_can_be_said_now") or "").strip(),
+        str(uncertainty.get("what_is_not_nailed_down_yet") or "").strip(),
+        str(uncertainty.get("best_current_lead") or "").strip(),
+    ]
+    rendered: List[str] = []
+    for part in parts:
+        if not part:
+            continue
+        if part[-1] not in ".!?":
+            part += "."
+        rendered.append(part)
+    return " ".join(rendered).strip()
+
+
+def _apply_uncertainty_to_gm(
+    gm: Dict[str, Any],
+    *,
+    uncertainty: Dict[str, Any],
+    reason: str,
+    replace_text: bool = False,
+) -> Dict[str, Any]:
+    if not isinstance(gm, dict):
+        return gm
+    gm = dict(gm)
+    rendered = render_uncertainty_response(uncertainty)
+    if not rendered:
+        return gm
+    existing = gm.get("player_facing_text") if isinstance(gm.get("player_facing_text"), str) else ""
+    gm["player_facing_text"] = rendered if replace_text or not existing.strip() else (rendered + "\n\n" + existing.strip()).strip()
+    tags = gm.get("tags") if isinstance(gm.get("tags"), list) else []
+    category = str(uncertainty.get("category") or "").strip()
+    uncertainty_tag = f"uncertainty:{category}" if category else "uncertainty"
+    gm["tags"] = list(tags) + [uncertainty_tag]
+    dbg = gm.get("debug_notes") if isinstance(gm.get("debug_notes"), str) else ""
+    gm["debug_notes"] = (dbg + " | " if dbg else "") + f"{reason}:{category or 'unknown'}"
+    return gm
+
+
+def _bounded_spoiler_safe_text(
+    player_text: str,
+    *,
+    scene_envelope: Dict[str, Any] | None = None,
+    session: Dict[str, Any] | None = None,
+    world: Dict[str, Any] | None = None,
+    resolution: Dict[str, Any] | None = None,
+) -> str:
+    """Return a safe in-world fallback that still answers when secrets must stay hidden."""
+    if _is_direct_player_question(player_text):
+        return render_uncertainty_response(
+            classify_uncertainty(
+                player_text,
+                scene_envelope=scene_envelope,
+                session=session,
+                world=world,
+                resolution=resolution,
+            )
+        )
+    return (
+        "You notice small, telling details in the crowd and the way people watch one another, "
+        "but nothing resolves into a clear answer yet. If you investigate more closely or question locals, "
+        "you may uncover more."
+    )
+
+
+def _validator_voice_world_fallback(*, scene_envelope: Dict[str, Any], player_text: str) -> str:
+    """Rebuild leaked validator voice as in-world uncertainty."""
+    if _is_direct_player_question(player_text):
+        return render_uncertainty_response(
+            classify_uncertainty(
+                player_text,
+                scene_envelope=scene_envelope,
+            )
+        )
+    location = _resolve_scene_location(scene_envelope)
+    loc_phrase = f" in {location}" if location else ""
+    return (
+        f"No one gives you the whole shape of it{loc_phrase} yet; what you have are fragments, reactions, "
+        "and room to press for one concrete lead."
+    )
+
+
+def enforce_question_resolution_rule(
+    gm: Dict[str, Any],
+    *,
+    player_text: str,
+    scene_envelope: Dict[str, Any] | None = None,
+    session: Dict[str, Any] | None = None,
+    world: Dict[str, Any] | None = None,
+    resolution: Dict[str, Any] | None = None,
+) -> Dict[str, Any]:
     """Last-resort deterministic compliance with Question Resolution Rule.
 
     If the player asked a direct question and the reply doesn't start with an explicit
@@ -730,18 +1076,21 @@ def enforce_question_resolution_rule(gm: Dict[str, Any], *, player_text: str) ->
     if not chk.get("applies") or chk.get("ok"):
         return gm
 
-    prefix = (
-        f"{_uncertain_answer_prefix(player_text)}"
-        " Best known lead: ask for one specific name, place, or condition from the current scene source to pin it down."
+    out = _apply_uncertainty_to_gm(
+        gm,
+        uncertainty=classify_uncertainty(
+            player_text,
+            scene_envelope=scene_envelope,
+            session=session,
+            world=world,
+            resolution=resolution,
+        ),
+        reason=f"question_resolution_rule:enforced:{chk.get('reasons')}",
+        replace_text=False,
     )
-    txt = reply.strip()
-    gm["player_facing_text"] = (prefix + ("\n\n" + txt if txt else "")).strip()
-
-    tags = gm.get("tags") if isinstance(gm.get("tags"), list) else []
-    gm["tags"] = list(tags) + ["question_resolution_rule"]
-    dbg = gm.get("debug_notes") if isinstance(gm.get("debug_notes"), str) else ""
-    gm["debug_notes"] = (dbg + " | " if dbg else "") + f"question_resolution_rule:enforced:{chk.get('reasons')}"
-    return gm
+    tags = out.get("tags") if isinstance(out.get("tags"), list) else []
+    out["tags"] = list(tags) + ["question_resolution_rule"]
+    return out
 
 
 def _active_interaction_target_id(session: Dict[str, Any]) -> str:
@@ -1023,6 +1372,13 @@ def build_messages(
     public_scene, discoverable_raw, hidden = _scene_layers(scene)
     intent = classify_player_intent(user_text)
     allow_disc = bool(intent.get('allow_discoverable_clues'))
+    uncertainty_hint = classify_uncertainty(
+        user_text,
+        scene_envelope=scene,
+        session=session,
+        world=world,
+        resolution=resolution,
+    ) if _is_direct_player_question(user_text) else None
 
     normalized_clues = [normalize_clue_record(c) for c in discoverable_raw]
     runtime_for_scene = scene_runtime or {}
@@ -1086,6 +1442,7 @@ def build_messages(
         world_state_view=world_state_view,
         mode_instruction=mode_instruction,
         recent_log_for_prompt=recent_log_for_prompt,
+        uncertainty_hint=uncertainty_hint,
     )
     known_clues = get_known_clues_with_presentation(session)
     payload["clues"] = {
@@ -1601,19 +1958,27 @@ def enforce_no_validator_voice(
     if not hits:
         return gm
 
-    rewritten = txt
-    for pattern, repl in _VALIDATOR_VOICE_SUBSTITUTIONS:
-        rewritten = pattern.sub(repl, rewritten)
-
-    # If system-limitation references still remain, replace with a compact in-world fallback.
-    if detect_validator_voice(rewritten):
-        location = _resolve_scene_location(scene_envelope)
-        loc_phrase = f" in {location}" if location else ""
-        fallback = (
-            f"The story around this is still murky{loc_phrase}, but you can narrow it now: "
-            "press for one name, one place, or one requirement and I will resolve the next beat."
+    if _is_direct_player_question(player_text):
+        gm = _apply_uncertainty_to_gm(
+            gm,
+            uncertainty=classify_uncertainty(player_text, scene_envelope=scene_envelope),
+            reason=f"validator_voice_rewrite:{hits}",
+            replace_text=True,
         )
-        rewritten = fallback
+        tags = gm.get("tags") if isinstance(gm.get("tags"), list) else []
+        gm["tags"] = list(tags) + ["validator_voice_rewrite"]
+        return gm
+
+    clean_sentences = [
+        sentence for sentence in _split_reply_sentences(txt)
+        if not detect_validator_voice(sentence)
+    ]
+    rewritten = " ".join(clean_sentences).strip()
+    if not rewritten or detect_validator_voice(rewritten):
+        rewritten = _validator_voice_world_fallback(
+            scene_envelope=scene_envelope,
+            player_text=player_text,
+        )
 
     gm["player_facing_text"] = rewritten.strip()
     tags = gm.get("tags") if isinstance(gm.get("tags"), list) else []
@@ -1621,3 +1986,196 @@ def enforce_no_validator_voice(
     dbg = gm.get("debug_notes") if isinstance(gm.get("debug_notes"), str) else ""
     gm["debug_notes"] = (dbg + " | " if dbg else "") + f"validator_voice_rewrite:{hits}"
     return gm
+
+
+def scene_stall_check(
+    *,
+    gm_reply: Dict[str, Any],
+    session: Dict[str, Any],
+    scene_envelope: Dict[str, Any],
+) -> Dict[str, Any]:
+    """Detect when scene momentum is due but the reply leaves the scene static."""
+    scene = (scene_envelope or {}).get("scene", {}) if isinstance(scene_envelope, dict) else {}
+    scene_id = str(scene.get("id") or "").strip()
+    if not scene_id:
+        return {"applies": False, "ok": True, "reasons": []}
+    if not _scene_momentum_due(session, scene_id):
+        return {"applies": False, "ok": True, "reasons": []}
+    if _extract_scene_momentum_kind(gm_reply):
+        return {"applies": True, "ok": True, "reasons": []}
+    return {
+        "applies": True,
+        "ok": False,
+        "reasons": ["scene_stall:momentum_due_without_progress"],
+    }
+
+
+def detect_retry_failures(
+    *,
+    player_text: str,
+    gm_reply: Dict[str, Any],
+    scene_envelope: Dict[str, Any],
+    session: Dict[str, Any],
+    world: Dict[str, Any],
+    resolution: Dict[str, Any] | None,
+) -> List[Dict[str, Any]]:
+    """Collect inspectable retry failures before deterministic enforcement."""
+    if not isinstance(gm_reply, dict):
+        return []
+    reply_text = gm_reply.get("player_facing_text") if isinstance(gm_reply.get("player_facing_text"), str) else ""
+    failures: List[Dict[str, Any]] = []
+
+    validator_hits = detect_validator_voice(reply_text)
+    if validator_hits:
+        failures.append(
+            {
+                "failure_class": "validator_voice",
+                "priority": RETRY_FAILURE_PRIORITY["validator_voice"],
+                "reasons": validator_hits,
+            }
+        )
+
+    question_rule = question_resolution_rule_check(player_text=player_text, gm_reply_text=reply_text)
+    if question_rule.get("applies") and not question_rule.get("ok"):
+        uncertainty_hint = classify_uncertainty(
+            player_text,
+            scene_envelope=scene_envelope,
+            session=session,
+            world=world,
+            resolution=resolution,
+        )
+        failures.append(
+            {
+                "failure_class": "unresolved_question",
+                "priority": RETRY_FAILURE_PRIORITY["unresolved_question"],
+                "reasons": list(question_rule.get("reasons") or []),
+                "uncertainty_category": str(uncertainty_hint.get("category") or "").strip(),
+            }
+        )
+
+    echo_reasons: List[str] = []
+    if opening_sentence_echoes_player_input(reply_text, player_text):
+        echo_reasons.append("echo_or_repetition:opening_overlap")
+    if opening_sentence_overlaps_player_quote(reply_text, player_text):
+        echo_reasons.append("echo_or_repetition:quoted_speech_overlap")
+    echo_reasons.extend(detect_stock_warning_filler_repetition(reply_text))
+    if echo_reasons:
+        failures.append(
+            {
+                "failure_class": "echo_or_repetition",
+                "priority": RETRY_FAILURE_PRIORITY["echo_or_repetition"],
+                "reasons": echo_reasons,
+            }
+        )
+
+    npc_contract = npc_response_contract_check(
+        player_text=player_text,
+        npc_reply_text=reply_text,
+        scene_envelope=scene_envelope,
+        session=session,
+        world=world,
+        resolution=resolution,
+    )
+    if npc_contract.get("applies") and not npc_contract.get("ok"):
+        failures.append(
+            {
+                "failure_class": "npc_contract_failure",
+                "priority": RETRY_FAILURE_PRIORITY["npc_contract_failure"],
+                "reasons": list(npc_contract.get("reasons") or []),
+                "missing": list(npc_contract.get("missing") or []),
+            }
+        )
+
+    scene_stall = scene_stall_check(gm_reply=gm_reply, session=session, scene_envelope=scene_envelope)
+    if scene_stall.get("applies") and not scene_stall.get("ok"):
+        failures.append(
+            {
+                "failure_class": "scene_stall",
+                "priority": RETRY_FAILURE_PRIORITY["scene_stall"],
+                "reasons": list(scene_stall.get("reasons") or []),
+            }
+        )
+
+    forbidden_generic_hits = detect_forbidden_generic_phrases(reply_text)
+    if forbidden_generic_hits:
+        failures.append(
+            {
+                "failure_class": "forbidden_generic_phrase",
+                "priority": RETRY_FAILURE_PRIORITY["forbidden_generic_phrase"],
+                "reasons": forbidden_generic_hits,
+            }
+        )
+
+    return failures
+
+
+def apply_response_policy_enforcement(
+    gm: Dict[str, Any],
+    *,
+    response_policy: Dict[str, Any],
+    player_text: str,
+    scene_envelope: Dict[str, Any],
+    session: Dict[str, Any],
+    world: Dict[str, Any],
+    resolution: Dict[str, Any] | None,
+    discovered_clues: List[str] | None = None,
+) -> Dict[str, Any]:
+    """Apply deterministic post-generation enforcement in documented priority order."""
+    if not isinstance(gm, dict):
+        return gm
+
+    out = dict(gm)
+    policy = response_policy if isinstance(response_policy, dict) else {}
+
+    for policy_key, _rule_name in RESPONSE_RULE_PRIORITY:
+        if policy_key == "must_answer" and policy.get(policy_key, True):
+            out = enforce_question_resolution_rule(
+                out,
+                player_text=player_text,
+                scene_envelope=scene_envelope,
+                session=session,
+                world=world,
+                resolution=resolution,
+            )
+            continue
+
+        if policy_key == "forbid_state_invention" and policy.get(policy_key, True):
+            out = validate_gm_state_update(out, session, scene_envelope)
+            continue
+
+        if policy_key == "forbid_secret_leak" and policy.get(policy_key, True):
+            out = guard_gm_output(out, scene_envelope, player_text, discovered_clues)
+            continue
+
+        if policy_key == "allow_partial_answer":
+            continue
+
+        if (
+            policy_key == "diegetic_only"
+            and policy.get(policy_key, True)
+            and bool((policy.get("no_validator_voice") or {}).get("enabled", True))
+        ):
+            out = enforce_no_validator_voice(out, scene_envelope=scene_envelope, player_text=player_text)
+            continue
+
+        if policy_key == "prefer_scene_momentum" and policy.get(policy_key, True):
+            out = enforce_scene_momentum(out, session=session, scene_envelope=scene_envelope)
+            continue
+
+        if policy_key == "prefer_specificity" and policy.get(policy_key, True):
+            out = enforce_npc_response_contract(
+                out,
+                player_text=player_text,
+                scene_envelope=scene_envelope,
+                session=session,
+                world=world,
+                resolution=resolution,
+            )
+            out = enforce_forbidden_generic_phrases(
+                out,
+                scene_envelope=scene_envelope,
+                session=session,
+                world=world,
+            )
+
+    return out

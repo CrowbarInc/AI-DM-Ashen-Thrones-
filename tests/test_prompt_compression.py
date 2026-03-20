@@ -7,6 +7,8 @@ from game.prompt_context import (
     MAX_RECENT_LOG,
     MAX_GM_GUIDANCE,
     MAX_RECENT_EVENTS,
+    NO_VALIDATOR_VOICE_RULE,
+    RULE_PRIORITY_COMPACT_INSTRUCTION,
     build_narration_context,
 )
 from game.gm import build_messages
@@ -663,3 +665,100 @@ def test_prompt_context_includes_structured_turn_summary_and_no_restatement_guid
     assert obligations["prefer_structured_turn_summary"] is True
     assert "avoid_player_action_restatement" in instructions
     assert "prefer_structured_turn_summary" in instructions
+
+
+def test_prompt_context_exposes_rule_priority_hierarchy():
+    ctx = build_narration_context(
+        _dummy_campaign(),
+        _dummy_world(),
+        _dummy_session(),
+        _dummy_character(),
+        _dummy_scene(),
+        {"in_combat": False},
+        [],
+        'Galinor asks, "Who signed this order?"',
+        None,
+        {},
+        public_scene=_dummy_public_scene(),
+        discoverable_clues=[],
+        gm_only_hidden_facts=[],
+        gm_only_discoverable_locked=[],
+        discovered_clue_records=[],
+        undiscovered_clue_records=[],
+        pending_leads=[],
+        intent={"labels": ["social_probe"]},
+        world_state_view={"flags": {}, "counters": {}, "clocks_summary": []},
+        mode_instruction="Standard.",
+        recent_log_for_prompt=[],
+    )
+    policy = ctx["response_policy"]
+    instructions = " ".join(ctx.get("instructions", []))
+
+    assert policy["rule_priority_order"] == [
+        "ANSWER THE PLAYER",
+        "DO NOT CONTRADICT AUTHORITATIVE STATE",
+        "DO NOT LEAK HIDDEN FACTS / SECRETS",
+        "IF FULL CERTAINTY IS UNAVAILABLE, GIVE A BOUNDED PARTIAL ANSWER",
+        "MAINTAIN DIEGETIC VOICE (no validator/system voice)",
+        "PRESERVE SCENE MOMENTUM",
+        "ADD SPECIFICITY / FLAVOR / POLISH",
+    ]
+    assert RULE_PRIORITY_COMPACT_INSTRUCTION in instructions
+    assert "response_policy.rule_priority_order" in instructions
+    assert NO_VALIDATOR_VOICE_RULE in instructions
+    assert policy["no_validator_voice"]["enabled"] is True
+    assert policy["no_validator_voice"]["applies_to"] == "standard_narration"
+    assert policy["no_validator_voice"]["rules_explanation_only_in"] == ["oc", "adjudication"]
+    assert "rules_explanation_outside_oc_or_adjudication" in policy["no_validator_voice"]["prohibited_perspectives"]
+
+
+def test_prompt_context_exposes_typed_uncertainty_policy_and_hint():
+    ctx = build_narration_context(
+        _dummy_campaign(),
+        _dummy_world(),
+        _dummy_session(),
+        _dummy_character(),
+        _dummy_scene(),
+        {"in_combat": False},
+        [],
+        "Where is the patrol report?",
+        None,
+        {},
+        public_scene=_dummy_public_scene(),
+        discoverable_clues=[],
+        gm_only_hidden_facts=[],
+        gm_only_discoverable_locked=[],
+        discovered_clue_records=[],
+        undiscovered_clue_records=[],
+        pending_leads=[],
+        intent={"labels": ["social_probe"]},
+        world_state_view={"flags": {}, "counters": {}, "clocks_summary": []},
+        mode_instruction="Standard.",
+        recent_log_for_prompt=[],
+        uncertainty_hint={
+            "category": "unknown_location",
+            "what_can_be_said_now": "No one here can pin it to a single doorstep yet; you have a last-known trail, not a final point.",
+            "what_is_not_nailed_down_yet": "The exact place is still blurred by distance, rumor, or missing detail.",
+            "best_current_lead": "Best lead: ask for the last sighting, the route taken, or who handles access there.",
+        },
+    )
+    policy = ctx["response_policy"]
+    instructions = " ".join(ctx.get("instructions", [])).lower()
+
+    assert policy["uncertainty"]["enabled"] is True
+    assert policy["uncertainty"]["categories"] == [
+        "unknown_identity",
+        "unknown_location",
+        "unknown_motive",
+        "unknown_method",
+        "unknown_quantity",
+        "unknown_feasibility",
+    ]
+    assert policy["uncertainty"]["answer_shape"] == [
+        "what_can_be_said_now",
+        "what_is_not_nailed_down_yet",
+        "best_current_lead",
+    ]
+    assert ctx["uncertainty_hint"]["category"] == "unknown_location"
+    assert "response_policy.uncertainty.categories" in instructions
+    assert "frame uncertainty as world-facing limits only" in instructions

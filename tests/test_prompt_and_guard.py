@@ -1,5 +1,7 @@
 import json
 
+import pytest
+
 
 FRONTIER_GATE_SCENE = {
     "scene": {
@@ -53,6 +55,18 @@ def _dummy_state():
     combat = {"in_combat": False}
     recent_log = []
     return campaign, world, session, character, combat, recent_log
+
+
+def _assert_bounded_uncertainty(text: str, *, forbidden_terms: tuple[str, ...] = ()) -> None:
+    low = text.lower()
+    assert "i can't answer" not in low
+    assert "i cannot answer" not in low
+    assert "based on what's established" not in low
+    assert "training data" not in low
+    assert "tools" not in low
+    assert "best lead:" in low
+    for term in forbidden_terms:
+        assert term not in low
 
 
 def test_prompt_structure_separates_hidden_facts():
@@ -181,6 +195,38 @@ def test_guard_blocks_hidden_fact_phrasing():
     assert out["player_facing_text"] != gm["player_facing_text"]
     assert "spoiler_guard" in out.get("tags", [])
     assert "spoiler_guard" in out.get("debug_notes", "")
+
+
+@pytest.mark.parametrize(
+    ("player_text", "expected_category"),
+    [
+        ("Who is behind this?", "unknown_identity"),
+        ("Where did they take it?", "unknown_location"),
+        ("Why would they risk this?", "unknown_motive"),
+        ("How did they get through?", "unknown_method"),
+        ("How many were there?", "unknown_quantity"),
+        ("Can I get through the gate tonight?", "unknown_feasibility"),
+    ],
+)
+def test_typed_uncertainty_categories_render_bounded_answers(player_text, expected_category):
+    from game.gm import classify_uncertainty, render_uncertainty_response
+
+    _, world, session, _, _, _ = _dummy_state()
+    uncertainty = classify_uncertainty(
+        player_text,
+        scene_envelope=FRONTIER_GATE_SCENE,
+        session=session,
+        world=world,
+        resolution=None,
+    )
+    text = render_uncertainty_response(uncertainty)
+
+    assert uncertainty["category"] == expected_category
+    _assert_bounded_uncertainty(
+        text,
+        forbidden_terms=("noble house", "smuggler", "magical talent"),
+    )
+    assert "no one here" in text.lower()
 
 
 def test_guard_blocks_discoverable_clue_when_not_justified():
@@ -399,6 +445,7 @@ def test_system_prompt_mentions_resolved_exploration():
 def test_question_resolution_rule_enforcement_prepends_uncertain_answer_when_needed():
     from game.gm import enforce_question_resolution_rule
 
+    _, world, session, _, _, _ = _dummy_state()
     gm = {
         "player_facing_text": "Rain slicks the cobbles as the crowd surges around you.",
         "tags": [],
@@ -409,10 +456,19 @@ def test_question_resolution_rule_enforcement_prepends_uncertain_answer_when_nee
         "suggested_action": None,
         "debug_notes": "",
     }
-    out = enforce_question_resolution_rule(gm, player_text="Where is the missing patrol report?")
+    out = enforce_question_resolution_rule(
+        gm,
+        player_text="Where is the missing patrol report?",
+        scene_envelope=FRONTIER_GATE_SCENE,
+        session=session,
+        world=world,
+        resolution=None,
+    )
     first_sentence = out["player_facing_text"].split(".", 1)[0].lower()
     assert "no one here" in first_sentence
     assert "question_resolution_rule" in out.get("tags", [])
+    assert "uncertainty:unknown_location" in out.get("tags", [])
+    assert "best lead:" in out["player_facing_text"].lower()
 
 
 def test_validator_voice_detection_matches_forbidden_patterns():
@@ -420,17 +476,23 @@ def test_validator_voice_detection_matches_forbidden_patterns():
 
     text = (
         "I can't answer that right now. "
-        "Based on what's established, we can determine only a little."
+        "Based on what's established, we can determine only a little. "
+        "As an AI, I don't have access to the tools. "
+        "By the rules, that would require a roll."
     )
     hits = detect_validator_voice(text)
     assert "validator_voice:cant_answer_that" in hits
     assert "validator_voice:based_on_established" in hits
     assert "validator_voice:we_can_determine" in hits
+    assert "validator_voice:as_an_ai" in hits
+    assert "validator_voice:tool_access" in hits
+    assert "validator_voice:rules_explanation" in hits
 
 
 def test_validator_voice_enforcement_rewrites_system_tone():
     from game.gm import enforce_no_validator_voice
 
+    _, world, session, _, _, _ = _dummy_state()
     gm = {
         "player_facing_text": (
             "I can't answer that. Based on what's established, we can determine very little."
@@ -449,9 +511,37 @@ def test_validator_voice_enforcement_rewrites_system_tone():
         player_text="Where is the patrol report?",
     )
     low = out["player_facing_text"].lower()
-    assert "i can't answer that" not in low
-    assert "based on what's established" not in low
+    _assert_bounded_uncertainty(low)
     assert "we can determine" not in low
+    assert "validator_voice_rewrite" in out.get("tags", [])
+    assert "uncertainty:unknown_location" in out.get("tags", [])
+
+
+def test_validator_voice_enforcement_keeps_clean_diegetic_sentences_when_possible():
+    from game.gm import enforce_no_validator_voice
+
+    gm = {
+        "player_facing_text": (
+            "As an AI, I don't have access to that. "
+            "Rain beads on the east gate while refugees keep glancing toward the checkpoint."
+        ),
+        "tags": [],
+        "scene_update": None,
+        "activate_scene_id": None,
+        "new_scene_draft": None,
+        "world_updates": None,
+        "suggested_action": None,
+        "debug_notes": "",
+    }
+    out = enforce_no_validator_voice(
+        gm,
+        scene_envelope=FRONTIER_GATE_SCENE,
+        player_text="Describe the gate.",
+    )
+    low = out["player_facing_text"].lower()
+    assert "as an ai" not in low
+    assert "don't have access" not in low
+    assert "rain beads on the east gate" in low
     assert "validator_voice_rewrite" in out.get("tags", [])
 
 
@@ -560,6 +650,8 @@ def test_system_prompt_mentions_scene_momentum_rule_and_tag_contract():
 
     low = SYSTEM_PROMPT.lower()
     assert "always answer the player. prefer partial truth over refusal. never output meta explanations." in low
+    assert "never speak as a validator, analyst, referee of canon, or system." in low
+    assert "rules explanation belongs only to explicit oc/adjudication lanes" in low
     assert "scene momentum rule" in low
     assert "every 2–3 exchanges" in low or "every 2-3 exchanges" in low
     assert "scene_momentum:<kind>" in SYSTEM_PROMPT
@@ -649,3 +741,108 @@ def test_hidden_discoverable_safeguard_preserved_with_exploration():
     }
     out = guard_gm_output(leaky_gm, FRONTIER_GATE_SCENE, "Look around.", [])
     assert out["player_facing_text"] != leaky_gm["player_facing_text"]
+
+
+def test_rule_priority_prefers_bounded_answer_before_specificity():
+    from game.gm import apply_response_policy_enforcement
+    from game.prompt_context import build_response_policy
+
+    _, world, session, _, _, _ = _dummy_state()
+    gm = {
+        "player_facing_text": "Trust is hard to come by.",
+        "tags": [],
+        "scene_update": None,
+        "activate_scene_id": None,
+        "new_scene_draft": None,
+        "world_updates": None,
+        "suggested_action": None,
+        "debug_notes": "",
+    }
+    out = apply_response_policy_enforcement(
+        gm,
+        response_policy=build_response_policy(),
+        player_text="Who signed the order?",
+        scene_envelope=FRONTIER_GATE_SCENE,
+        session=session,
+        world=world,
+        resolution={
+            "kind": "question",
+            "social": {"npc_id": "guard_captain", "npc_name": "Captain Veyra", "npc_reply_expected": True},
+        },
+        discovered_clues=[],
+    )
+    first_sentence = out["player_facing_text"].split(".", 1)[0].lower()
+    assert "no one here" in first_sentence
+    assert "trust is hard to come by" not in out["player_facing_text"].lower()
+    assert "Captain Veyra" in out["player_facing_text"]
+
+
+def test_rule_priority_answers_without_leaking_hidden_facts():
+    from game.gm import apply_response_policy_enforcement
+    from game.prompt_context import build_response_policy
+
+    _, world, session, _, _, _ = _dummy_state()
+    gm = {
+        "player_facing_text": "An agent of a noble house is watching new arrivals for a smuggler contact looking for magical talent.",
+        "tags": [],
+        "scene_update": None,
+        "activate_scene_id": None,
+        "new_scene_draft": None,
+        "world_updates": None,
+        "suggested_action": None,
+        "debug_notes": "",
+    }
+    out = apply_response_policy_enforcement(
+        gm,
+        response_policy=build_response_policy(),
+        player_text="Who is really watching the new arrivals?",
+        scene_envelope=FRONTIER_GATE_SCENE,
+        session=session,
+        world=world,
+        resolution={
+            "kind": "question",
+            "social": {"npc_id": "guard_captain", "npc_name": "Captain Veyra", "npc_reply_expected": True},
+        },
+        discovered_clues=[],
+    )
+    low = out["player_facing_text"].lower()
+    assert "noble house" not in low
+    assert "smuggler" not in low
+    assert "magical talent" not in low
+    assert "no one here" in low
+    assert "i can't answer" not in low
+
+
+def test_rule_priority_keeps_momentum_when_certainty_is_incomplete():
+    from game.gm import apply_response_policy_enforcement
+    from game.prompt_context import build_response_policy
+    from game.storage import get_scene_runtime
+
+    _, world, session, _, _, _ = _dummy_state()
+    scene_rt = get_scene_runtime(session, "frontier_gate")
+    scene_rt["momentum_exchanges_since"] = 2
+    scene_rt["momentum_next_due_in"] = 3
+    gm = {
+        "player_facing_text": "I can't answer that.",
+        "tags": [],
+        "scene_update": None,
+        "activate_scene_id": None,
+        "new_scene_draft": None,
+        "world_updates": None,
+        "suggested_action": None,
+        "debug_notes": "",
+    }
+    out = apply_response_policy_enforcement(
+        gm,
+        response_policy=build_response_policy(narration_obligations={"scene_momentum_due": True}),
+        player_text="Where did the patrol go?",
+        scene_envelope=FRONTIER_GATE_SCENE,
+        session=session,
+        world=world,
+        resolution=None,
+        discovered_clues=[],
+    )
+    first_sentence = out["player_facing_text"].split(".", 1)[0].lower()
+    assert "no one here" in first_sentence
+    assert "i can't answer that" not in out["player_facing_text"].lower()
+    assert any(isinstance(tag, str) and tag.startswith("scene_momentum:") for tag in out.get("tags", []))

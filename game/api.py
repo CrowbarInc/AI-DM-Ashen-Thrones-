@@ -1,6 +1,7 @@
 from __future__ import annotations
 from contextlib import asynccontextmanager
 from pathlib import Path
+import json
 import re
 from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
@@ -58,21 +59,12 @@ from game.combat import (
 from game.gm import (
     build_messages,
     call_gpt,
-    normalize_scene_draft,
     guard_gm_output,
-    opening_sentence_echoes_player_input,
-    opening_sentence_overlaps_player_quote,
-    detect_stock_warning_filler_repetition,
-    detect_forbidden_generic_phrases,
-    npc_response_contract_check,
-    enforce_npc_response_contract,
-    question_resolution_rule_check,
-    enforce_question_resolution_rule,
-    enforce_scene_momentum,
-    enforce_forbidden_generic_phrases,
-    detect_validator_voice,
-    enforce_no_validator_voice,
-    validate_gm_state_update,
+    apply_response_policy_enforcement,
+    MAX_TARGETED_RETRY_ATTEMPTS,
+    detect_retry_failures,
+    choose_retry_strategy,
+    build_retry_prompt_for_failure,
 )
 from game.journal import build_player_journal
 from game.affordances import get_available_affordances
@@ -93,7 +85,7 @@ from game.interaction_context import (
 )
 from game.scene_graph import build_scene_graph, is_transition_valid
 from game.intent_parser import parse_intent, segment_mixed_player_turn
-from game.prompt_context import derive_narration_obligations
+from game.prompt_context import build_response_policy, derive_narration_obligations
 from game.utils import slugify, utc_iso_now
 from game.world import advance_world_tick, apply_world_updates, apply_resolution_world_updates
 from game.clocks import get_or_init_clocks, advance_clock, DEFAULT_CLOCKS
@@ -627,75 +619,63 @@ def _build_gpt_narration_from_authoritative_state(
         resolution,
         scene_runtime=scene_runtime,
     )
+    try:
+        prompt_payload = json.loads(messages[1]["content"]) if len(messages) > 1 else {}
+    except Exception:
+        prompt_payload = {}
+    response_policy = (
+        prompt_payload.get("response_policy")
+        if isinstance(prompt_payload, dict) and isinstance(prompt_payload.get("response_policy"), dict)
+        else build_response_policy()
+    )
     known_clues = list(get_all_known_clue_texts(session))
     gm = guard_gm_output(call_gpt(messages), scene, user_text, known_clues)
-    opening_text = str(gm.get('player_facing_text') or '')
-    should_retry_for_echo = opening_sentence_echoes_player_input(opening_text, user_text)
-    should_retry_for_quote_echo = opening_sentence_overlaps_player_quote(opening_text, user_text)
-    filler_reasons = detect_stock_warning_filler_repetition(opening_text)
-    should_retry_for_stock_warning_filler = bool(filler_reasons)
-    forbidden_generic_hits = detect_forbidden_generic_phrases(opening_text)
-    should_retry_for_forbidden_generic = bool(forbidden_generic_hits)
-    validator_voice_hits = detect_validator_voice(opening_text)
-    should_retry_for_validator_voice = bool(validator_voice_hits)
-    question_rule = question_resolution_rule_check(player_text=user_text, gm_reply_text=opening_text)
-    should_retry_for_question_rule = bool(question_rule.get("applies") and not question_rule.get("ok"))
-    npc_contract = npc_response_contract_check(
-        player_text=user_text,
-        npc_reply_text=opening_text,
-        scene_envelope=scene,
-        session=session,
-        world=world,
-        resolution=resolution,
-    )
-    should_retry_for_npc_contract = bool(npc_contract.get("applies") and not npc_contract.get("ok"))
-    if should_retry_for_echo or should_retry_for_quote_echo or should_retry_for_stock_warning_filler or should_retry_for_forbidden_generic or should_retry_for_validator_voice or should_retry_for_npc_contract or should_retry_for_question_rule:
-        retry_instruction = (
-            "Always answer the player. Prefer partial truth over refusal. Never output meta explanations. "
-            "Retry this narration with strict anti-echo: "
-            "Do not repeat the player's spoken line. React to it instead. "
-            "Start from reaction/outcome, not from reprinting or paraphrasing quoted speech."
-            " Avoid generic dramatic filler and repeated warning phrases; if you warn the player, add concrete details (name, faction, place, consequence, motive)."
-            " Forbidden generic phrases are disallowed: \"In this city...\", \"Times are tough...\", \"Trust is hard to come by...\", \"You'll need to prove yourself...\" - rewrite them into specific names/locations/events."
-            " If an NPC is being asked a question, obey the NPC response contract: include at least one of (a) specific person/place/faction, (b) a concrete next step the player can take, (c) directly usable info (time/location/condition/requirement)."
-            " QUESTION RESOLUTION RULE: If the player asks a direct question, your FIRST sentence must explicitly answer it; if certainty is incomplete, give the best grounded partial answer with in-character uncertainty before any narration or any new question."
-            " PERCEPTION / INTENT ADJUDICATION RULE: If the player asks for behavioral insight (e.g., nervous, lying, controlled), choose ONE dominant state and give 1–2 concrete observable tells (optionally Sense Motive mapping); do not use vague blends."
-            " Do not explain limitations. Answer in-world or via OC."
+    retry_attempt = 0
+    while retry_attempt < MAX_TARGETED_RETRY_ATTEMPTS:
+        failures = detect_retry_failures(
+            player_text=user_text,
+            gm_reply=gm,
+            scene_envelope=scene,
+            session=session,
+            world=world,
+            resolution=resolution,
+        )
+        selected_failure = choose_retry_strategy(failures)
+        if not selected_failure:
+            break
+        retry_attempt += 1
+        retry_instruction = build_retry_prompt_for_failure(
+            selected_failure,
+            response_policy=response_policy,
+        )
+        print(
+            "[RETRY] selected_strategy=",
+            selected_failure.get("failure_class"),
+            "attempt=",
+            retry_attempt,
+            "reasons=",
+            selected_failure.get("reasons"),
         )
         retry_messages = list(messages) + [{'role': 'user', 'content': retry_instruction}]
         gm_retry = guard_gm_output(call_gpt(retry_messages), scene, user_text, known_clues)
         retry_dbg = gm_retry.get('debug_notes') if isinstance(gm_retry.get('debug_notes'), str) else ''
-        retry_reasons: list[str] = []
-        if should_retry_for_echo:
-            retry_reasons.append('opening_overlap')
-        if should_retry_for_quote_echo:
-            retry_reasons.append('quoted_speech_overlap')
-        if should_retry_for_stock_warning_filler:
-            retry_reasons.extend(filler_reasons)
-        if should_retry_for_forbidden_generic:
-            retry_reasons.extend(forbidden_generic_hits)
-        if should_retry_for_validator_voice:
-            retry_reasons.extend(validator_voice_hits)
-        if should_retry_for_npc_contract:
-            retry_reasons.append("npc_response_contract")
-        if should_retry_for_question_rule:
-            retry_reasons.append("question_resolution_rule")
-        reason_suffix = ','.join(retry_reasons) if retry_reasons else 'unknown'
-        gm_retry['debug_notes'] = (retry_dbg + ' | ' if retry_dbg else '') + f'anti_echo_retry:attempted_once:{reason_suffix}'
+        reason_suffix = ','.join(str(r) for r in (selected_failure.get("reasons") or []) if isinstance(r, str)) or 'unknown'
+        gm_retry['debug_notes'] = (
+            (retry_dbg + ' | ' if retry_dbg else '')
+            + f"retry_strategy:selected={selected_failure.get('failure_class')}:attempt={retry_attempt}:reasons={reason_suffix}"
+        )
         gm = gm_retry
-    gm = enforce_npc_response_contract(
+    gm = apply_response_policy_enforcement(
         gm,
+        response_policy=response_policy,
         player_text=user_text,
         scene_envelope=scene,
         session=session,
         world=world,
         resolution=resolution,
+        discovered_clues=known_clues,
     )
-    gm = enforce_question_resolution_rule(gm, player_text=user_text)
-    gm = enforce_scene_momentum(gm, session=session, scene_envelope=scene)
-    gm = enforce_forbidden_generic_phrases(gm, scene_envelope=scene, session=session, world=world)
-    gm = enforce_no_validator_voice(gm, scene_envelope=scene, player_text=user_text)
-    return validate_gm_state_update(gm, session, scene)
+    return gm
 
 
 def _run_resolved_turn_pipeline(
@@ -769,6 +749,20 @@ def _build_check_prompt_gm_output(resolution: dict) -> dict:
         "world_updates": None,
         "suggested_action": None,
         "debug_notes": "engine_check_prompt",
+    }
+
+
+def _build_adjudication_gm_output(adjudication: dict) -> dict:
+    """Engine-authored adjudication output kept separate from GPT narration."""
+    return {
+        'player_facing_text': str(adjudication.get('player_facing_text') or ''),
+        'tags': ['adjudication_query'],
+        'scene_update': None,
+        'activate_scene_id': None,
+        'new_scene_draft': None,
+        'world_updates': None,
+        'suggested_action': None,
+        'debug_notes': f"adjudication:{adjudication.get('category')}",
     }
 
 
@@ -1786,16 +1780,7 @@ def chat(req: ChatRequest):
                 ),
                 'world_tick_events': tick.get('events', []),
             }
-            gm = {
-                'player_facing_text': str(adjudication.get('player_facing_text') or ''),
-                'tags': ['adjudication_query'],
-                'scene_update': None,
-                'activate_scene_id': None,
-                'new_scene_draft': None,
-                'world_updates': None,
-                'suggested_action': None,
-                'debug_notes': f"adjudication:{adjudication.get('category')}",
-            }
+            gm = _build_adjudication_gm_output(adjudication)
         else:
             gm = _build_gpt_narration_from_authoritative_state(
                 campaign=campaign,
