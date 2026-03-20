@@ -64,9 +64,57 @@ def _assert_bounded_uncertainty(text: str, *, forbidden_terms: tuple[str, ...] =
     assert "based on what's established" not in low
     assert "training data" not in low
     assert "tools" not in low
-    assert "best lead:" in low
+    assert "best lead:" not in low
+    assert "no one here can" not in low
+    assert "no one here will" not in low
+    assert "the exact place is still blurred" not in low
+    assert "the means are still obscured" not in low
+    assert "the effect is plain enough" not in low
     for term in forbidden_terms:
         assert term not in low
+
+
+def _assert_local_anchor(text: str) -> None:
+    low = text.lower()
+    assert any(
+        phrase in low
+        for phrase in (
+            "cinderwatch gate district",
+            "notice board",
+            "missing patrol",
+            "tavern runner",
+            "refugee",
+            "checkpoint",
+            "main gate",
+            "muddy approach",
+        )
+    )
+
+
+def _assert_actionable_lead(text: str) -> None:
+    low = text.lower()
+    assert any(
+        phrase in low
+        for phrase in (
+            "ask ",
+            "press ",
+            "follow ",
+            "take the route",
+            "buy ",
+            "pull names",
+            "start at ",
+            "lean on ",
+            "watch ",
+            "count ",
+            "find out ",
+            "inspect ",
+            "test ",
+            "use ",
+            "track ",
+            "chase ",
+            "lock down ",
+        )
+    )
 
 
 def test_prompt_structure_separates_hidden_facts():
@@ -222,11 +270,332 @@ def test_typed_uncertainty_categories_render_bounded_answers(player_text, expect
     text = render_uncertainty_response(uncertainty)
 
     assert uncertainty["category"] == expected_category
+    assert uncertainty["known_edge"]
+    assert uncertainty["unknown_edge"]
+    assert uncertainty["next_lead"]
     _assert_bounded_uncertainty(
         text,
         forbidden_terms=("noble house", "smuggler", "magical talent"),
     )
-    assert "no one here" in text.lower()
+    assert uncertainty["speaker"]["name"] == "Captain Veyra"
+    assert uncertainty["speaker"]["role"] == "npc"
+    _assert_local_anchor(text)
+    _assert_actionable_lead(text)
+
+
+def test_npc_dialogue_uncertainty_is_speaker_anchored():
+    from game.gm import classify_uncertainty, render_uncertainty_response
+
+    _, world, session, _, _, _ = _dummy_state()
+    uncertainty = classify_uncertainty(
+        "Where did they take the patrol report?",
+        scene_envelope=FRONTIER_GATE_SCENE,
+        session=session,
+        world=world,
+        resolution={
+            "kind": "question",
+            "social": {"npc_id": "guard_captain", "npc_name": "Captain Veyra", "reply_kind": "answer"},
+        },
+    )
+    text = render_uncertainty_response(uncertainty)
+
+    assert uncertainty["speaker"]["role"] == "npc"
+    assert uncertainty["speaker"]["name"] == "Captain Veyra"
+    assert "captain veyra" in text.lower()
+    assert '"' in text
+    _assert_local_anchor(text)
+
+
+def test_narrator_uncertainty_outside_direct_dialogue_is_scene_anchored():
+    from game.gm import classify_uncertainty, render_uncertainty_response
+
+    _, world, _session, _, _, _ = _dummy_state()
+    uncertainty = classify_uncertainty(
+        "Where did they take the patrol report?",
+        scene_envelope=FRONTIER_GATE_SCENE,
+        session={"active_scene_id": "frontier_gate"},
+        world=world,
+        resolution=None,
+        speaker_identity={"role": "narrator"},
+    )
+    text = render_uncertainty_response(uncertainty)
+
+    assert uncertainty["speaker"]["role"] == "narrator"
+    assert "captain veyra" not in text.lower()
+    assert '"' not in text
+    _assert_local_anchor(text)
+
+
+def test_uncertainty_questions_in_same_scene_render_different_contextual_answers():
+    from game.gm import classify_uncertainty, render_uncertainty_response
+
+    _, world, session, _, _, _ = _dummy_state()
+    questions = [
+        "Who is behind this?",
+        "Where did they take it?",
+        "Why would they risk this?",
+    ]
+    rendered = []
+    for question in questions:
+        uncertainty = classify_uncertainty(
+            question,
+            scene_envelope=FRONTIER_GATE_SCENE,
+            session=session,
+            world=world,
+            resolution={"kind": "question", "social": {"npc_id": "guard_captain", "npc_name": "Captain Veyra"}},
+        )
+        text = render_uncertainty_response(uncertainty)
+        rendered.append(text)
+        _assert_bounded_uncertainty(text)
+        _assert_local_anchor(text)
+        _assert_actionable_lead(text)
+
+    assert len(set(rendered)) == len(rendered)
+
+
+def test_contextual_lead_rotates_away_from_repeated_board_when_other_live_leads_exist():
+    from game.gm import choose_contextual_lead
+
+    selected = choose_contextual_lead(
+        {
+            "category": "unknown_location",
+            "scene_snapshot": {
+                "location": "Cinderwatch Gate District",
+                "visible_facts": [
+                    "A tattered watcher near the tavern entrance keeps one eye on the gate.",
+                    "Nearby guards react sharply to every mention of the missing patrol.",
+                    "A notice board lists new taxes, curfews, and a missing patrol.",
+                ],
+                "other_npc_names": [],
+                "pending_leads": [],
+                "has_notice_board": True,
+                "has_missing_patrol": True,
+                "has_refugees": True,
+                "has_tax_or_curfew": True,
+                "exit_label": "",
+            },
+            "turn_context": {"player_text": "Where should I start?"},
+        },
+        recent_leads=[
+            {
+                "key": "notice_board",
+                "kind": "notice_board",
+                "subject": "the notice board",
+                "position": "",
+                "named": False,
+                "positioned": False,
+            }
+        ],
+        current_speaker={"role": "narrator", "name": ""},
+        player_prompt="Where should I start?",
+    )
+
+    assert selected["key"] != "notice_board"
+    assert "notice board" not in selected["lead_text"].lower()
+    assert any(term in selected["lead_text"].lower() for term in ("tattered watcher", "guards", "missing patrol"))
+
+
+def test_contextual_lead_preserves_recent_named_follow_up():
+    from game.gm import choose_contextual_lead
+
+    selected = choose_contextual_lead(
+        {
+            "category": "unknown_location",
+            "scene_snapshot": {
+                "location": "Cinderwatch Gate District",
+                "visible_facts": [
+                    "A notice board lists new taxes, curfews, and a missing patrol.",
+                    "Nearby guards watch the crowd.",
+                ],
+                "other_npc_names": ["Captain Veyra"],
+                "pending_leads": [],
+                "has_notice_board": True,
+                "has_missing_patrol": True,
+                "has_refugees": True,
+                "has_tax_or_curfew": True,
+                "exit_label": "",
+            },
+            "turn_context": {"player_text": "Where do I find that person?"},
+        },
+        recent_leads=[
+            {
+                "key": "lady-misia-near-the-tavern-entrance",
+                "kind": "recent_named_figure",
+                "subject": "Lady Misia",
+                "position": "near the tavern entrance",
+                "named": True,
+                "positioned": True,
+            }
+        ],
+        current_speaker={"role": "npc", "name": "Captain Veyra"},
+        player_prompt="Where do I find that person?",
+    )
+
+    assert selected["subject"] == "Lady Misia"
+    assert "lady misia" in selected["lead_text"].lower()
+    assert "tavern entrance" in selected["lead_text"].lower()
+
+
+def test_contextual_lead_prefers_engaged_npc_over_notice_board():
+    from game.gm import choose_contextual_lead
+
+    selected = choose_contextual_lead(
+        {
+            "category": "unknown_identity",
+            "scene_snapshot": {
+                "location": "Cinderwatch Gate District",
+                "visible_facts": [
+                    "A notice board lists new taxes, curfews, and a missing patrol.",
+                ],
+                "other_npc_names": ["Lady Misia"],
+                "pending_leads": [],
+                "has_notice_board": True,
+                "has_missing_patrol": True,
+                "has_refugees": False,
+                "has_tax_or_curfew": True,
+                "exit_label": "",
+            },
+            "turn_context": {"player_text": "Who should I press first?"},
+        },
+        recent_leads=[],
+        current_speaker={"role": "npc", "name": "Captain Veyra"},
+        player_prompt="Who should I press first?",
+    )
+
+    assert selected["subject"] == "Captain Veyra"
+    assert selected["lead_text"].startswith("Press Captain Veyra")
+
+
+def test_remember_recent_contextual_leads_extracts_named_and_positioned_live_leads():
+    from game.gm import remember_recent_contextual_leads
+
+    session = {"scene_runtime": {}, "turn_counter": 3}
+    remembered = remember_recent_contextual_leads(
+        session,
+        "frontier_gate",
+        "Lady Misia waits near the tavern entrance while nearby guards watch the missing patrol notice.",
+    )
+
+    assert any(entry["subject"] == "Lady Misia" and entry["position"] == "near the tavern entrance" for entry in remembered)
+    assert any("missing patrol" in entry["subject"].lower() or "guards" in entry["subject"].lower() for entry in remembered)
+
+
+def test_known_fact_guard_resolves_recent_named_follow_up_before_uncertainty():
+    from game.gm import build_messages, classify_uncertainty, render_uncertainty_response, resolve_known_fact_before_uncertainty
+    from game.storage import get_scene_runtime
+
+    campaign, world, session, character, combat, recent_log = _dummy_state()
+    session_no_active = {
+        "scene_runtime": {
+            "frontier_gate": {
+                "recent_contextual_leads": [
+                    {
+                        "key": "lady-misia-near-the-tavern-entrance",
+                        "kind": "recent_named_figure",
+                        "subject": "Lady Misia",
+                        "position": "near the tavern entrance",
+                        "named": True,
+                        "positioned": True,
+                    }
+                ]
+            }
+        },
+        "interaction_context": dict(session.get("interaction_context") or {}),
+    }
+    resolution = {
+        "kind": "question",
+        "social": {"npc_id": "guard_captain", "npc_name": "Captain Veyra", "reply_kind": "answer"},
+    }
+
+    known = resolve_known_fact_before_uncertainty(
+        "Where do I find that person?",
+        scene_envelope=FRONTIER_GATE_SCENE,
+        session=session_no_active,
+        world=world,
+        resolution=resolution,
+    )
+    assert known is not None
+    assert known["text"] == "Lady Misia is near the tavern entrance."
+    assert known["source"] == "recent_dialogue_continuity"
+
+    uncertainty = classify_uncertainty(
+        "Where do I find that person?",
+        scene_envelope=FRONTIER_GATE_SCENE,
+        session=session_no_active,
+        world=world,
+        resolution=resolution,
+    )
+    assert uncertainty["category"] == ""
+    assert render_uncertainty_response(uncertainty) == "Lady Misia is near the tavern entrance."
+
+    scene_rt = get_scene_runtime(session_no_active, "frontier_gate")
+    msgs = build_messages(
+        campaign,
+        world,
+        session_no_active,
+        character,
+        FRONTIER_GATE_SCENE,
+        combat,
+        recent_log,
+        "Where do I find that person?",
+        resolution,
+        scene_runtime=scene_rt,
+    )
+    payload = json.loads(msgs[1]["content"])
+    assert payload["uncertainty_hint"] is None
+    assert payload["known_answer_hint"]["text"] == "Lady Misia is near the tavern entrance."
+
+
+def test_known_fact_guard_resolves_explicit_location_clue_before_uncertainty():
+    from game.gm import classify_uncertainty, render_uncertainty_response, resolve_known_fact_before_uncertainty
+
+    _, world, session, _, _, _ = _dummy_state()
+    known = resolve_known_fact_before_uncertainty(
+        "Where are the refugees?",
+        scene_envelope=FRONTIER_GATE_SCENE,
+        session=session,
+        world=world,
+        resolution=None,
+    )
+    assert known is not None
+    assert known["text"] == "Refugees crowd the muddy approach road."
+    assert known["source"] == "observable_scene_fact"
+
+    uncertainty = classify_uncertainty(
+        "Where are the refugees?",
+        scene_envelope=FRONTIER_GATE_SCENE,
+        session=session,
+        world=world,
+        resolution=None,
+    )
+    assert uncertainty["category"] == ""
+    assert render_uncertainty_response(uncertainty) == "Refugees crowd the muddy approach road."
+
+
+def test_known_fact_guard_resolves_observable_scene_fact_before_uncertainty():
+    from game.gm import classify_uncertainty, render_uncertainty_response, resolve_known_fact_before_uncertainty
+
+    _, world, session, _, _, _ = _dummy_state()
+    known = resolve_known_fact_before_uncertainty(
+        "What is on the notice board?",
+        scene_envelope=FRONTIER_GATE_SCENE,
+        session=session,
+        world=world,
+        resolution=None,
+    )
+    assert known is not None
+    assert known["text"] == "A notice board lists new taxes, curfews, and a missing patrol."
+    assert known["source"] == "observable_scene_fact"
+
+    uncertainty = classify_uncertainty(
+        "What is on the notice board?",
+        scene_envelope=FRONTIER_GATE_SCENE,
+        session=session,
+        world=world,
+        resolution=None,
+    )
+    assert uncertainty["category"] == ""
+    assert render_uncertainty_response(uncertainty) == "A notice board lists new taxes, curfews, and a missing patrol."
 
 
 def test_guard_blocks_discoverable_clue_when_not_justified():
@@ -464,11 +833,12 @@ def test_question_resolution_rule_enforcement_prepends_uncertain_answer_when_nee
         world=world,
         resolution=None,
     )
-    first_sentence = out["player_facing_text"].split(".", 1)[0].lower()
-    assert "no one here" in first_sentence
+    low = out["player_facing_text"].lower()
+    assert "captain veyra" in low
+    _assert_local_anchor(out["player_facing_text"])
     assert "question_resolution_rule" in out.get("tags", [])
     assert "uncertainty:unknown_location" in out.get("tags", [])
-    assert "best lead:" in out["player_facing_text"].lower()
+    _assert_actionable_lead(out["player_facing_text"])
 
 
 def test_validator_voice_detection_matches_forbidden_patterns():
@@ -771,10 +1141,10 @@ def test_rule_priority_prefers_bounded_answer_before_specificity():
         },
         discovered_clues=[],
     )
-    first_sentence = out["player_facing_text"].split(".", 1)[0].lower()
-    assert "no one here" in first_sentence
+    low = out["player_facing_text"].lower()
     assert "trust is hard to come by" not in out["player_facing_text"].lower()
-    assert "Captain Veyra" in out["player_facing_text"]
+    assert "captain veyra" in low
+    _assert_local_anchor(out["player_facing_text"])
 
 
 def test_rule_priority_answers_without_leaking_hidden_facts():
@@ -809,7 +1179,8 @@ def test_rule_priority_answers_without_leaking_hidden_facts():
     assert "noble house" not in low
     assert "smuggler" not in low
     assert "magical talent" not in low
-    assert "no one here" in low
+    assert "captain veyra" in low
+    _assert_local_anchor(out["player_facing_text"])
     assert "i can't answer" not in low
 
 
@@ -842,7 +1213,8 @@ def test_rule_priority_keeps_momentum_when_certainty_is_incomplete():
         resolution=None,
         discovered_clues=[],
     )
-    first_sentence = out["player_facing_text"].split(".", 1)[0].lower()
-    assert "no one here" in first_sentence
+    low = out["player_facing_text"].lower()
+    assert "captain veyra" in low
+    _assert_local_anchor(out["player_facing_text"])
     assert "i can't answer that" not in out["player_facing_text"].lower()
     assert any(isinstance(tag, str) and tag.startswith("scene_momentum:") for tag in out.get("tags", []))

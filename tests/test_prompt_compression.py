@@ -737,9 +737,9 @@ def test_prompt_context_exposes_typed_uncertainty_policy_and_hint():
         recent_log_for_prompt=[],
         uncertainty_hint={
             "category": "unknown_location",
-            "what_can_be_said_now": "No one here can pin it to a single doorstep yet; you have a last-known trail, not a final point.",
-            "what_is_not_nailed_down_yet": "The exact place is still blurred by distance, rumor, or missing detail.",
-            "best_current_lead": "Best lead: ask for the last sighting, the route taken, or who handles access there.",
+            "known_edge": "The trail points past the notice board, not to a final door.",
+            "unknown_edge": "After that, the last stop drops into rumor.",
+            "next_lead": "Start at the missing patrol notice and pin down the last sighting tied to it.",
         },
     )
     policy = ctx["response_policy"]
@@ -755,10 +755,20 @@ def test_prompt_context_exposes_typed_uncertainty_policy_and_hint():
         "unknown_feasibility",
     ]
     assert policy["uncertainty"]["answer_shape"] == [
-        "what_can_be_said_now",
-        "what_is_not_nailed_down_yet",
-        "best_current_lead",
+        "known_edge",
+        "unknown_edge",
+        "next_lead",
+    ]
+    assert policy["uncertainty"]["context_inputs"] == [
+        "turn_context",
+        "speaker",
+        "scene_snapshot",
     ]
     assert ctx["uncertainty_hint"]["category"] == "unknown_location"
     assert "response_policy.uncertainty.categories" in instructions
+    assert "response_policy.uncertainty.answer_shape" in instructions
+    assert "uncertainty_hint.turn_context" in instructions
+    assert "uncertainty_hint.speaker" in instructions
+    assert "uncertainty_hint.scene_snapshot" in instructions
     assert "frame uncertainty as world-facing limits only" in instructions
+    assert "vary sentence count and cadence naturally" in instructions

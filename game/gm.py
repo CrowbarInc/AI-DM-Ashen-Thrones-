@@ -71,6 +71,33 @@ RETRY_FAILURE_PRIORITY: dict[str, int] = {
 }
 MAX_TARGETED_RETRY_ATTEMPTS = 2
 
+_PASSIVE_ACTION_PATTERNS: tuple[tuple[re.Pattern[str], str], ...] = (
+    (re.compile(r"\bhold(?:ing)?\s+position\b", re.IGNORECASE), "hold_position"),
+    (re.compile(r"\bremain(?:ing)?\s+silent\b", re.IGNORECASE), "remain_silent"),
+    (re.compile(r"\bstay(?:ing)?\s+silent\b", re.IGNORECASE), "remain_silent"),
+    (re.compile(r"\bsay(?:ing)?\s+nothing\b", re.IGNORECASE), "remain_silent"),
+    (re.compile(r"\bkeep(?:ing)?\s+watch\b", re.IGNORECASE), "watch"),
+    (re.compile(r"\blook(?:ing)?\s+around\b", re.IGNORECASE), "observe"),
+    (re.compile(r"\bwait(?:ing)?\b", re.IGNORECASE), "wait"),
+    (re.compile(r"\bwatch(?:ing)?\b", re.IGNORECASE), "watch"),
+    (re.compile(r"\bobserve(?:s|d|ing)?\b", re.IGNORECASE), "observe"),
+)
+_CONCRETE_INTERACTION_PATTERNS: tuple[re.Pattern[str], ...] = (
+    re.compile(r"[\"“”'‘’]"),
+    re.compile(r"\b(?:approach(?:es|ed)?|step(?:s|ped)?\s+(?:toward|forward|out)|comes?\s+(?:straight\s+)?to|cuts?\s+across|blocks?|halts?|stops?\s+at|squares?\s+up|hails?|calls?\s+out|speaks?\s+first|says?|asks?|mutters?|warns?|orders?|interrupts?|thrusts?|hands?|points?)\b", re.IGNORECASE),
+)
+_SCENE_TENSION_PATTERNS: tuple[re.Pattern[str], ...] = (
+    re.compile(r"\bguard"),
+    re.compile(r"\bwatch"),
+    re.compile(r"\bsuspicious"),
+    re.compile(r"\bmissing patrol"),
+    re.compile(r"\brumou?r"),
+    re.compile(r"\bnotice board|\bnoticeboard"),
+    re.compile(r"\bcurfew"),
+    re.compile(r"\btax"),
+    re.compile(r"\brefugee"),
+)
+
 _RULE_PRIORITY_PROMPT_BLOCK = "\n".join(
     f"{idx}. {label}" for idx, (_, label) in enumerate(RESPONSE_RULE_PRIORITY, start=1)
 )
@@ -210,13 +237,38 @@ def build_retry_prompt_for_failure(
         )
 
     if failure_class == "unresolved_question":
+        known_fact_context = (failure or {}).get("known_fact_context") if isinstance((failure or {}).get("known_fact_context"), dict) else {}
+        known_answer = str(known_fact_context.get("answer") or "").strip()
+        if known_answer:
+            known_source = str(known_fact_context.get("source") or "").strip()
+            source_hint = f" Established source: {known_source}." if known_source else ""
+            return (
+                f"{shared} A direct answer is already established in current scene state or dialogue continuity. "
+                f"Use this answer or a close paraphrase in the first sentence: {known_answer}.{source_hint} "
+                "Do not reroute it into uncertainty, refusal, or generic fallback language."
+            )
         uncertainty_category = str((failure or {}).get("uncertainty_category") or "").strip()
+        uncertainty_context = (failure or {}).get("uncertainty_context") if isinstance((failure or {}).get("uncertainty_context"), dict) else {}
+        speaker = uncertainty_context.get("speaker") if isinstance(uncertainty_context.get("speaker"), dict) else {}
+        scene_snapshot = uncertainty_context.get("scene_snapshot") if isinstance(uncertainty_context.get("scene_snapshot"), dict) else {}
+        speaker_name = str(speaker.get("name") or "").strip()
+        speaker_role = str(speaker.get("role") or "").strip().lower()
+        location = str(scene_snapshot.get("location") or "").strip()
+        first_visible = str(scene_snapshot.get("first_visible_detail") or "").strip()
+        context_parts: List[str] = []
+        if speaker_role == "npc" and speaker_name:
+            context_parts.append(f"Answer from {speaker_name}'s plausible local perspective.")
+        elif location:
+            context_parts.append(f"Anchor the reply in visible details from {location}.")
+        if first_visible:
+            context_parts.append(f"Use scene specifics like: {first_visible}.")
         category_hint = f" Uncertainty category: {uncertainty_category}." if uncertainty_category else ""
+        context_hint = (" " + " ".join(context_parts)) if context_parts else ""
         return (
             f"{shared} The player's direct question still lacks a bounded answer. "
             "Answer it in the first sentence. Do not refuse, deflect, or explain limitations. "
             "If certainty is incomplete, give the best grounded partial answer and one concrete lead tied to the current scene or NPC."
-            f"{category_hint}"
+            f"{category_hint}{context_hint}"
         )
 
     if failure_class == "echo_or_repetition":
@@ -412,6 +464,11 @@ def classify_player_intent(user_text: str) -> Dict[str, Any]:
     )):
         labels.append('observation')
 
+    for pattern, _marker in _PASSIVE_ACTION_PATTERNS:
+        if pattern.search(text):
+            labels.append('passive_pause')
+            break
+
     # Fallback if nothing matched.
     if not labels:
         labels.append('general')
@@ -484,7 +541,16 @@ def normalize_clue_record(clue: Any) -> Dict[str, Any]:
     }
 
 
-def sanitize_player_facing_text(player_text: str, scene_envelope: Dict[str, Any], user_text: str, discovered_clues: List[str] | None = None) -> Dict[str, Any]:
+def sanitize_player_facing_text(
+    player_text: str,
+    scene_envelope: Dict[str, Any],
+    user_text: str,
+    discovered_clues: List[str] | None = None,
+    *,
+    session: Dict[str, Any] | None = None,
+    world: Dict[str, Any] | None = None,
+    resolution: Dict[str, Any] | None = None,
+) -> Dict[str, Any]:
     """Deterministic leak guard against obvious hidden-fact disclosure.
 
     This is intentionally simple: it catches exact/near-exact reuse of distinctive
@@ -535,8 +601,24 @@ def sanitize_player_facing_text(player_text: str, scene_envelope: Dict[str, Any]
     if not hit_reasons:
         return {'text': txt, 'did_sanitize': False, 'reasons': []}
 
-    uncertainty = classify_uncertainty(user_text, scene_envelope=scene_envelope) if _is_direct_player_question(user_text) else None
-    safe = _bounded_spoiler_safe_text(user_text, scene_envelope=scene_envelope)
+    uncertainty = (
+        classify_uncertainty(
+            user_text,
+            scene_envelope=scene_envelope,
+            session=session,
+            world=world,
+            resolution=resolution,
+        )
+        if _is_direct_player_question(user_text)
+        else None
+    )
+    safe = _bounded_spoiler_safe_text(
+        user_text,
+        scene_envelope=scene_envelope,
+        session=session,
+        world=world,
+        resolution=resolution,
+    )
     return {'text': safe, 'did_sanitize': True, 'reasons': hit_reasons, 'uncertainty': uncertainty}
 
 
@@ -648,25 +730,50 @@ def opening_sentence_overlaps_player_quote(player_facing_text: str, user_text: s
     return False
 
 
-def guard_gm_output(gm: Dict[str, Any], scene_envelope: Dict[str, Any], user_text: str, discovered_clues: List[str] | None = None) -> Dict[str, Any]:
+def guard_gm_output(
+    gm: Dict[str, Any],
+    scene_envelope: Dict[str, Any],
+    user_text: str,
+    discovered_clues: List[str] | None = None,
+    *,
+    session: Dict[str, Any] | None = None,
+    world: Dict[str, Any] | None = None,
+    resolution: Dict[str, Any] | None = None,
+) -> Dict[str, Any]:
     """Apply leak guard and annotate debug_notes/tags without breaking schema."""
     if not isinstance(gm, dict):
         return gm
     # Avoid mutating caller-owned dicts (easier to test and safer for reuse).
     gm = dict(gm)
     pft = gm.get('player_facing_text') if isinstance(gm.get('player_facing_text'), str) else ''
-    res = sanitize_player_facing_text(pft, scene_envelope, user_text, discovered_clues)
+    res = sanitize_player_facing_text(
+        pft,
+        scene_envelope,
+        user_text,
+        discovered_clues,
+        session=session,
+        world=world,
+        resolution=resolution,
+    )
     if not res['did_sanitize']:
         return gm
 
     tags = gm.get('tags') if isinstance(gm.get('tags'), list) else []
     uncertainty = res.get('uncertainty') if isinstance(res.get('uncertainty'), dict) else {}
+    known_fact = uncertainty.get("known_fact") if isinstance(uncertainty.get("known_fact"), dict) else {}
     category = str(uncertainty.get('category') or '').strip()
-    uncertainty_tags = [f'uncertainty:{category}'] if category else []
-    gm['tags'] = list(tags) + ['spoiler_guard'] + uncertainty_tags
+    if known_fact:
+        gm['tags'] = list(tags) + ['spoiler_guard', 'known_fact_guard']
+    else:
+        uncertainty_tags = [f'uncertainty:{category}'] if category else []
+        gm['tags'] = list(tags) + ['spoiler_guard'] + uncertainty_tags
     gm['player_facing_text'] = res['text']
     dbg = gm.get('debug_notes') if isinstance(gm.get('debug_notes'), str) else ''
-    gm['debug_notes'] = (dbg + ' | ' if dbg else '') + f'spoiler_guard: {res["reasons"]}'
+    if known_fact:
+        source = str(known_fact.get("source") or "known_fact").strip()
+        gm['debug_notes'] = (dbg + ' | ' if dbg else '') + f'spoiler_guard: {res["reasons"]} | known_fact_guard:{source}'
+    else:
+        gm['debug_notes'] = (dbg + ' | ' if dbg else '') + f'spoiler_guard: {res["reasons"]}'
     return gm
 
 
@@ -823,6 +930,1226 @@ def _classify_uncertainty_category(player_text: str) -> str:
     return "unknown_method"
 
 
+def _clean_scene_detail(text: str, *, max_len: int = 120) -> str:
+    detail = " ".join(str(text or "").strip().split()).rstrip(".")
+    if len(detail) <= max_len:
+        return detail
+    return detail[: max_len - 3].rstrip(" ,;:") + "..."
+
+
+def _normalize_speaker_identity(speaker_identity: Dict[str, Any] | str | None) -> Dict[str, str]:
+    if isinstance(speaker_identity, dict):
+        name = str(speaker_identity.get("name") or speaker_identity.get("label") or "").strip()
+        speaker_id = str(speaker_identity.get("id") or "").strip()
+        role = str(speaker_identity.get("role") or "").strip().lower()
+        if role not in {"npc", "narrator"}:
+            role = "npc" if name or speaker_id else "narrator"
+        return {"role": role, "id": speaker_id, "name": name}
+    if isinstance(speaker_identity, str) and speaker_identity.strip():
+        return {"role": "npc", "id": "", "name": speaker_identity.strip()}
+    return {"role": "", "id": "", "name": ""}
+
+
+def _resolve_uncertainty_speaker(
+    *,
+    session: Dict[str, Any],
+    world: Dict[str, Any],
+    resolution: Dict[str, Any],
+    scene_id: str,
+    speaker_identity: Dict[str, Any] | str | None,
+) -> Dict[str, str]:
+    explicit = _normalize_speaker_identity(speaker_identity)
+    if explicit.get("role") == "npc" and (explicit.get("name") or explicit.get("id")):
+        return explicit
+    if explicit.get("role") == "narrator":
+        return explicit
+
+    social = resolution.get("social") if isinstance(resolution.get("social"), dict) else {}
+    npc_id = str(social.get("npc_id") or "").strip() or _active_interaction_target_id(session)
+    npc_name = str(social.get("npc_name") or "").strip() or _resolve_npc_name(world, npc_id, scene_id)
+    if npc_name or npc_id:
+        return {"role": "npc", "id": npc_id, "name": npc_name}
+    return {"role": "narrator", "id": "", "name": ""}
+
+
+def _build_uncertainty_scene_snapshot(
+    *,
+    scene_envelope: Dict[str, Any],
+    world: Dict[str, Any],
+    scene_id: str,
+    location: str,
+    speaker_name: str,
+    scene_snapshot: Dict[str, Any] | None,
+) -> Dict[str, Any]:
+    explicit = dict(scene_snapshot) if isinstance(scene_snapshot, dict) else {}
+    visible = explicit.get("visible_facts")
+    if not isinstance(visible, list):
+        visible = _scene_visible_facts(scene_envelope)
+    visible_clean = [str(v).strip() for v in visible if isinstance(v, str) and str(v).strip()]
+    visible_low = " ".join(v.lower() for v in visible_clean)
+    scene = (scene_envelope or {}).get("scene", {}) if isinstance(scene_envelope, dict) else {}
+    exits_raw = explicit.get("exits")
+    if not isinstance(exits_raw, list):
+        exits_raw = scene.get("exits") if isinstance(scene.get("exits"), list) else []
+    exit_label = ""
+    if exits_raw:
+        first_exit = exits_raw[0]
+        if isinstance(first_exit, dict):
+            exit_label = str(first_exit.get("label") or "").strip()
+        else:
+            exit_label = str(first_exit or "").strip()
+    first_visible = _clean_scene_detail(visible_clean[0]) if visible_clean else ""
+    other_npcs = [
+        name for name in _in_scene_npc_names(world, scene_id)
+        if name and name != speaker_name
+    ]
+    return {
+        "scene_id": str(explicit.get("scene_id") or scene_id or "").strip(),
+        "location": str(explicit.get("location") or location or "").strip(),
+        "visible_facts": visible_clean,
+        "first_visible_detail": str(explicit.get("first_visible_detail") or first_visible or "").strip(),
+        "exit_label": str(explicit.get("exit_label") or exit_label or "").strip(),
+        "other_npc_names": other_npcs,
+        "has_notice_board": bool(("notice board" in visible_low) or ("noticeboard" in visible_low)),
+        "has_tavern_runner": bool(
+            ("tavern runner" in visible_low)
+            or ("tavern" in visible_low and "runner" in visible_low)
+            or ("rumor" in visible_low)
+            or ("rumour" in visible_low)
+        ),
+        "has_refugees": "refugee" in visible_low,
+        "has_gate_or_checkpoint": bool(
+            ("gate" in visible_low)
+            or ("checkpoint" in visible_low)
+            or ("road" in visible_low)
+            or ("approach" in visible_low)
+        ),
+        "has_missing_patrol": "missing patrol" in visible_low,
+        "has_tax_or_curfew": bool(("tax" in visible_low) or ("curfew" in visible_low)),
+    }
+
+
+def _build_uncertainty_turn_context(
+    *,
+    player_text: str,
+    session: Dict[str, Any],
+    resolution: Dict[str, Any],
+    turn_context: Dict[str, Any] | None,
+) -> Dict[str, Any]:
+    base = dict(turn_context) if isinstance(turn_context, dict) else {}
+    interaction = session.get("interaction_context") if isinstance(session, dict) else {}
+    interaction = interaction if isinstance(interaction, dict) else {}
+    social = resolution.get("social") if isinstance(resolution.get("social"), dict) else {}
+    check = resolution.get("check_request") if isinstance(resolution.get("check_request"), dict) else {}
+    skill = str(base.get("check_skill") or check.get("skill") or "").strip().replace("_", " ")
+    reason = str(base.get("check_reason") or check.get("reason") or "").strip()
+    return {
+        "player_text": str(player_text or "").strip(),
+        "question_focus": list(base.get("question_focus") or _question_content_tokens(player_text)),
+        "conversation_privacy": str(base.get("conversation_privacy") or interaction.get("conversation_privacy") or "").strip(),
+        "engagement_level": str(base.get("engagement_level") or interaction.get("engagement_level") or "").strip(),
+        "interaction_mode": str(base.get("interaction_mode") or interaction.get("interaction_mode") or "").strip(),
+        "reply_kind": str(base.get("reply_kind") or social.get("reply_kind") or "").strip(),
+        "check_skill": skill,
+        "check_reason": reason,
+        "is_direct_question": bool(base.get("is_direct_question") if "is_direct_question" in base else _is_direct_player_question(player_text)),
+    }
+
+
+_LEAD_HISTORY_LIMIT = 6
+_LEAD_FOLLOW_UP_PRONOUN_TOKENS: tuple[str, ...] = (
+    "that person",
+    "that one",
+    "that woman",
+    "that man",
+    "them",
+    "him",
+    "her",
+    "the one you mentioned",
+)
+_LEAD_FIND_REQUEST_TOKENS: tuple[str, ...] = (
+    "where do i find",
+    "where can i find",
+    "where is",
+    "where are",
+    "how do i find",
+    "take me to",
+)
+_LEAD_NAME_PATTERN = re.compile(
+    r"\b((?:Lady|Lord|Captain|Sergeant|Master|Mistress|Dame|Sir)\s+[A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)\b"
+)
+_LEAD_POSITION_PATTERN = re.compile(
+    r"\b((?:Lady|Lord|Captain|Sergeant|Master|Mistress|Dame|Sir)\s+[A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)\s+"
+    r"(near|by|at|outside|inside|beside|under)\s+([^.,;!?]+)",
+    re.IGNORECASE,
+)
+_LEAD_GENERIC_POSITION_PHRASES: tuple[str, ...] = (
+    "near the tavern entrance",
+    "by the gate",
+    "at the gate",
+    "by the board",
+    "near the board",
+    "at the board",
+    "in the refugee line",
+    "by the refugee line",
+)
+_VISIBLE_FIGURE_TOKENS: tuple[str, ...] = (
+    "watcher",
+    "onlooker",
+    "stranger",
+    "figure",
+    "runner",
+    "guard",
+    "guards",
+    "refugee",
+    "merchant",
+    "woman",
+    "man",
+    "noble",
+)
+_SUSPICIOUS_FIGURE_TOKENS: tuple[str, ...] = (
+    "watcher",
+    "watching",
+    "suspicious",
+    "tattered",
+    "well-dressed",
+    "rough-looking",
+    "lingering",
+    "loitering",
+)
+_LEAD_SUBJECT_CLEAN_PREFIX = re.compile(r"^(?:a|an|the)\s+", re.IGNORECASE)
+_LEAD_SUBJECT_VERB_MARKERS: tuple[str, ...] = (
+    " keeps ",
+    " keep ",
+    " stands ",
+    " stand ",
+    " waits ",
+    " wait ",
+    " lingers ",
+    " linger ",
+    " watches ",
+    " watch ",
+    " reacts ",
+    " react ",
+    " barks ",
+    " bark ",
+    " argues ",
+    " argue ",
+    " is ",
+    " are ",
+)
+_KNOWN_SCENE_LOCATION_PROMPTS: tuple[str, ...] = (
+    "where am i",
+    "where are we",
+    "where is this",
+    "what location",
+    "which location",
+    "what district",
+    "which district",
+)
+
+
+def _recent_contextual_leads(session: Dict[str, Any], scene_id: str) -> List[Dict[str, Any]]:
+    if not scene_id:
+        return []
+    runtime = get_scene_runtime(session, scene_id)
+    raw = runtime.get("recent_contextual_leads") if isinstance(runtime, dict) else []
+    if not isinstance(raw, list):
+        return []
+    out: List[Dict[str, Any]] = []
+    for item in raw[-_LEAD_HISTORY_LIMIT:]:
+        if not isinstance(item, dict):
+            continue
+        key = str(item.get("key") or "").strip()
+        subject = str(item.get("subject") or "").strip()
+        if not key or not subject:
+            continue
+        out.append(
+            {
+                "key": key,
+                "kind": str(item.get("kind") or "").strip(),
+                "subject": subject,
+                "position": str(item.get("position") or "").strip(),
+                "named": bool(item.get("named")),
+                "positioned": bool(item.get("positioned")),
+                "mentions": int(item.get("mentions", 1) or 1),
+                "last_turn": int(item.get("last_turn", 0) or 0),
+            }
+        )
+    return out
+
+
+def _lead_key(subject: str, *, kind: str = "", position: str = "") -> str:
+    return slugify(" ".join(part for part in (kind, subject, position) if part).strip()) or slugify(subject) or "lead"
+
+
+def _clean_lead_subject(subject: str) -> str:
+    clean = " ".join(str(subject or "").strip().split()).rstrip(" .,:;")
+    clean = _LEAD_SUBJECT_CLEAN_PREFIX.sub("", clean).strip()
+    return clean
+
+
+def _clean_lead_position(position: str) -> str:
+    clean = " ".join(str(position or "").strip().split()).rstrip(" .,:;")
+    low = clean.lower()
+    for marker in (" while ", " and ", " who ", " which ", " as ", " but "):
+        idx = low.find(marker)
+        if idx > 0:
+            clean = clean[:idx].strip(" ,.;:")
+            low = clean.lower()
+    return clean
+
+
+def _lead_subject_matches_prompt(subject: str, player_prompt: str) -> bool:
+    subject_low = str(subject or "").strip().lower()
+    prompt_low = str(player_prompt or "").strip().lower()
+    if not subject_low or not prompt_low:
+        return False
+    if subject_low in prompt_low:
+        return True
+    subject_tokens = [tok for tok in _ECHO_TOKEN_PATTERN.findall(subject_low) if len(tok) >= 4]
+    return any(tok in prompt_low for tok in subject_tokens[:3])
+
+
+def _looks_like_follow_up_find_request(player_prompt: str) -> bool:
+    low = str(player_prompt or "").strip().lower()
+    if not low:
+        return False
+    if any(token in low for token in _LEAD_FIND_REQUEST_TOKENS):
+        return True
+    return any(token in low for token in _LEAD_FOLLOW_UP_PRONOUN_TOKENS)
+
+
+def _render_candidate_reference(candidate: Dict[str, Any]) -> str:
+    subject = str(candidate.get("subject") or "").strip()
+    if not subject:
+        return ""
+    position = str(candidate.get("position") or "").strip()
+    if position:
+        return f"{subject} {position}".strip()
+    return subject
+
+
+def _lead_text_for_candidate(category: str, candidate: Dict[str, Any]) -> str:
+    kind = str(candidate.get("kind") or "").strip()
+    ref = _render_candidate_reference(candidate)
+    subject = str(candidate.get("subject") or "").strip() or "that lead"
+    if kind in {"engaged_npc", "scene_npc"}:
+        if category == "unknown_identity":
+            return f"Press {subject} for the name, badge, or title tied to it."
+        if category == "unknown_location":
+            return f"Ask {subject} for the last confirmed sighting and the landmark attached to it."
+        if category == "unknown_motive":
+            return f"Ask {subject} who profits if this pressure keeps building."
+        if category == "unknown_quantity":
+            return f"Ask {subject} for the smallest count they will stand behind."
+        if category == "unknown_feasibility":
+            return f"Ask {subject} what would make it possible tonight."
+        return f"Ask {subject} what changed first and who noticed."
+    if kind in {"recent_named_figure", "visible_named_figure", "visible_suspicious_figure"}:
+        if category == "unknown_location":
+            return f"Find {ref} and lock down where they were last seen speaking to anyone."
+        if category == "unknown_identity":
+            return f"Start with {ref} and force the next name behind them into the open."
+        if category == "unknown_motive":
+            return f"Watch {ref} closely and see who they avoid, favor, or report to."
+        if category == "unknown_quantity":
+            return f"Use {ref} to bracket who else is moving in the same pattern."
+        if category == "unknown_feasibility":
+            return f"Reach {ref} and see what barrier or permission they keep pointing back to."
+        return f"Follow up with {ref} before the trail goes cold."
+    if kind == "pending_clue":
+        if category == "unknown_location":
+            return f"Follow the clue about {subject} and pin down the last solid place it names."
+        if category == "unknown_identity":
+            return f"Work the clue about {subject} until it yields one concrete name."
+        return f"Push on the clue about {subject} until it narrows to one usable lead."
+    if kind == "active_event":
+        if category == "unknown_location":
+            return f"Watch {subject} and see where the pressure is pushing people next."
+        if category == "unknown_identity":
+            return f"Press into {subject} until one face or voice stands out as central."
+        if category == "unknown_motive":
+            return f"Lean on {subject} and see who benefits from keeping it hot."
+        if category == "unknown_quantity":
+            return f"Use {subject} to get a floor and ceiling instead of waiting for a perfect count."
+        if category == "unknown_feasibility":
+            return f"Test whether {subject} opens or closes the path you want."
+        return f"Stay with {subject} until it gives you one concrete turn."
+    if kind in {"scene_object", "notice_board", "scene_exit"}:
+        if "notice" in kind or "notice" in subject.lower() or "board" in subject.lower():
+            if category == "unknown_identity":
+                return "Pull names off the missing patrol notice and watch who keeps coming back to it."
+            if category == "unknown_location":
+                return "Start at the missing patrol notice and pin down the last sighting tied to it."
+            if category == "unknown_motive":
+                return "Read the taxes, curfews, and missing patrol posting together and see who profits from all three."
+            if category == "unknown_quantity":
+                return "Use the missing patrol posting as your floor, then ask who came back short."
+            return "Compare what changed around the missing patrol notice before chasing the whole story."
+        if kind == "scene_exit":
+            return f"Take the route toward {subject} and lock down the last confirmed sighting along it."
+        return f"Inspect {subject} for the concrete detail everyone else is skimming past."
+
+    if category == "unknown_identity":
+        return f"Chase the one name tied to {subject} before it gets washed out."
+    if category == "unknown_location":
+        return f"Lock down one direction from {subject} before you go hunting for the final door."
+    if category == "unknown_motive":
+        return f"Track who profits or tightens control around {subject}."
+    if category == "unknown_quantity":
+        return f"Use {subject} to bracket the scale with a floor and a ceiling."
+    if category == "unknown_feasibility":
+        return f"Test the condition tied to {subject} instead of guessing."
+    return f"Inspect what changed around {subject}."
+
+
+def _score_recent_repetition(candidate: Dict[str, Any], recent_leads: List[Dict[str, Any]]) -> int:
+    key = str(candidate.get("key") or "").strip()
+    if not key or not recent_leads:
+        return 0
+    penalty = 0
+    recent_keys = [str(item.get("key") or "").strip() for item in recent_leads[-3:]]
+    if recent_keys and recent_keys[-1] == key:
+        penalty += 45
+    penalty += 12 * sum(1 for seen in recent_keys if seen == key)
+    return penalty
+
+
+def _extract_visible_figure_candidate(fact: str) -> Dict[str, Any] | None:
+    text = " ".join(str(fact or "").strip().split()).rstrip(".")
+    low = text.lower()
+    if not text:
+        return None
+    named = _LEAD_NAME_PATTERN.search(text)
+    position = ""
+    for match in _LEAD_GENERIC_POSITION_PHRASES:
+        if match in low:
+            position = match
+            break
+    if named:
+        subject = named.group(1).strip()
+        positioned_match = _LEAD_POSITION_PATTERN.search(text)
+        if positioned_match:
+            position = _clean_lead_position(
+                f"{positioned_match.group(2).lower()} {positioned_match.group(3).strip()}".strip()
+            )
+        return {
+            "key": _lead_key(subject, kind="named_figure", position=position),
+            "kind": "visible_named_figure",
+            "subject": subject,
+            "position": position,
+            "named": True,
+            "positioned": bool(position),
+        }
+    if not any(token in low for token in _VISIBLE_FIGURE_TOKENS):
+        return None
+    subject = text
+    for marker in _LEAD_SUBJECT_VERB_MARKERS:
+        idx = low.find(marker)
+        if idx > 0:
+            subject = text[:idx]
+            break
+    if not position:
+        for marker in (" near ", " by ", " at ", " outside ", " beside ", " under "):
+            idx = low.find(marker)
+            if idx > 0:
+                position = _clean_lead_position(text[idx:].strip(" ,.;:"))
+                break
+    if position and position.lower() in subject.lower():
+        subject = subject[:subject.lower().find(position.lower())].strip(" ,.;:")
+    subject = _clean_lead_subject(subject)
+    if not subject:
+        return None
+    return {
+        "key": _lead_key(subject, kind="visible_figure", position=position),
+        "kind": "visible_suspicious_figure" if any(token in low for token in _SUSPICIOUS_FIGURE_TOKENS) else "active_event",
+        "subject": subject.lower(),
+        "position": position.lower() if position else "",
+        "named": False,
+        "positioned": bool(position),
+    }
+
+
+def choose_contextual_lead(
+    scene_context: Dict[str, Any],
+    recent_leads: List[Dict[str, Any]],
+    current_speaker: Dict[str, Any] | None,
+    player_prompt: str,
+) -> Dict[str, Any]:
+    category = str(scene_context.get("category") or "unknown_method").strip()
+    snapshot = scene_context.get("scene_snapshot") if isinstance(scene_context.get("scene_snapshot"), dict) else {}
+    turn_context = scene_context.get("turn_context") if isinstance(scene_context.get("turn_context"), dict) else {}
+    speaker = current_speaker if isinstance(current_speaker, dict) else {}
+    recent = [dict(item) for item in recent_leads if isinstance(item, dict)]
+    candidates: List[Dict[str, Any]] = []
+    seen: set[str] = set()
+
+    def _push(base_score: int, reason: str, candidate: Dict[str, Any]) -> None:
+        key = str(candidate.get("key") or "").strip()
+        subject = str(candidate.get("subject") or "").strip()
+        if not key or not subject or key in seen:
+            return
+        item = dict(candidate)
+        score = int(base_score)
+        prompt_low = str(player_prompt or "").strip().lower()
+        if _lead_subject_matches_prompt(subject, prompt_low):
+            score += 38
+        if item.get("position") and _looks_like_follow_up_find_request(prompt_low):
+            score += 15
+        score -= _score_recent_repetition(item, recent)
+        item["score"] = score
+        item["reason"] = reason
+        item["lead_text"] = _lead_text_for_candidate(category, item)
+        candidates.append(item)
+        seen.add(key)
+
+    speaker_name = str(speaker.get("name") or "").strip()
+    speaker_role = str(speaker.get("role") or "").strip().lower()
+    if speaker_role == "npc" and speaker_name:
+        _push(
+            118,
+            "currently_engaged_npc",
+            {
+                "key": _lead_key(speaker_name, kind="engaged_npc"),
+                "kind": "engaged_npc",
+                "subject": speaker_name,
+                "position": "",
+                "named": True,
+                "positioned": False,
+            },
+        )
+
+    for prior in reversed(recent[-3:]):
+        subject = str(prior.get("subject") or "").strip()
+        if not subject:
+            continue
+        base = 104 if (prior.get("named") or prior.get("positioned")) else 76
+        if _looks_like_follow_up_find_request(player_prompt) and (prior.get("named") or prior.get("positioned")):
+            base += 65
+        _push(
+            base,
+            "recent_live_lead",
+            {
+                "key": str(prior.get("key") or _lead_key(subject, kind="recent")),
+                "kind": "recent_named_figure" if prior.get("named") or prior.get("positioned") else str(prior.get("kind") or "active_event"),
+                "subject": subject,
+                "position": str(prior.get("position") or "").strip(),
+                "named": bool(prior.get("named")),
+                "positioned": bool(prior.get("positioned")),
+            },
+        )
+
+    for name in (snapshot.get("other_npc_names") or [])[:3]:
+        clean = str(name).strip()
+        if clean and clean != speaker_name and (speaker_role == "npc" or _lead_subject_matches_prompt(clean, player_prompt)):
+            _push(
+                86,
+                "other_scene_npc",
+                {
+                    "key": _lead_key(clean, kind="scene_npc"),
+                    "kind": "scene_npc",
+                    "subject": clean,
+                    "position": "",
+                    "named": True,
+                    "positioned": False,
+                },
+            )
+
+    for fact in (snapshot.get("visible_facts") or [])[:8]:
+        candidate = _extract_visible_figure_candidate(str(fact))
+        if candidate is None:
+            continue
+        kind = str(candidate.get("kind") or "")
+        base = 95 if kind == "visible_named_figure" else (92 if kind == "visible_suspicious_figure" else 64)
+        _push(base, "visible_scene_figure", candidate)
+
+    for lead in (snapshot.get("pending_leads") or [])[:4]:
+        if not isinstance(lead, dict):
+            continue
+        subject = str(lead.get("text") or lead.get("leads_to_npc") or lead.get("leads_to_scene") or "").strip()
+        if not subject:
+            continue
+        _push(
+            79,
+            "discovered_pending_clue",
+            {
+                "key": _lead_key(subject, kind="pending_clue"),
+                "kind": "pending_clue",
+                "subject": subject,
+                "position": "",
+                "named": bool(_LEAD_NAME_PATTERN.search(subject)),
+                "positioned": False,
+            },
+        )
+
+    exit_label = str(snapshot.get("exit_label") or "").strip()
+    if exit_label:
+        _push(
+            58,
+            "scene_exit",
+            {
+                "key": _lead_key(exit_label, kind="scene_exit"),
+                "kind": "scene_exit",
+                "subject": exit_label,
+                "position": "",
+                "named": False,
+                "positioned": False,
+            },
+        )
+    if snapshot.get("has_missing_patrol"):
+        _push(
+            68,
+            "active_public_tension",
+            {
+                "key": "missing_patrol_rumor",
+                "kind": "active_event",
+                "subject": "the guards reacting to the missing patrol rumor",
+                "position": "",
+                "named": False,
+                "positioned": False,
+            },
+        )
+    if snapshot.get("has_refugees"):
+        _push(
+            62,
+            "active_public_tension",
+            {
+                "key": "refugee_line",
+                "kind": "active_event",
+                "subject": "the refugee line under pressure",
+                "position": "",
+                "named": False,
+                "positioned": False,
+            },
+        )
+    if snapshot.get("has_tax_or_curfew"):
+        _push(
+            60,
+            "active_public_tension",
+            {
+                "key": "tax_curfew_crackdown",
+                "kind": "active_event",
+                "subject": "the new taxes and curfews squeezing the gate",
+                "position": "",
+                "named": False,
+                "positioned": False,
+            },
+        )
+    if snapshot.get("has_notice_board"):
+        _push(
+            44,
+            "notice_board_fallback",
+            {
+                "key": "notice_board",
+                "kind": "notice_board",
+                "subject": "the notice board",
+                "position": "",
+                "named": False,
+                "positioned": False,
+            },
+        )
+
+    if not candidates:
+        fallback_subject = str(snapshot.get("first_visible_detail") or snapshot.get("location") or "the scene").strip()
+        candidates.append(
+            {
+                "key": _lead_key(fallback_subject, kind="fallback"),
+                "kind": "scene_object",
+                "subject": fallback_subject,
+                "position": "",
+                "named": False,
+                "positioned": False,
+                "score": 20,
+                "reason": "fallback_visible_detail",
+                "lead_text": _lead_text_for_candidate(category, {"kind": "scene_object", "subject": fallback_subject}),
+            }
+        )
+
+    candidates.sort(
+        key=lambda item: (
+            int(item.get("score", 0)),
+            1 if item.get("named") else 0,
+            1 if item.get("positioned") else 0,
+            -len(str(item.get("subject") or "")),
+        ),
+        reverse=True,
+    )
+    selected = dict(candidates[0])
+    selected["alternatives"] = [
+        {
+            "key": str(item.get("key") or ""),
+            "kind": str(item.get("kind") or ""),
+            "subject": str(item.get("subject") or ""),
+            "position": str(item.get("position") or ""),
+            "score": int(item.get("score", 0)),
+        }
+        for item in candidates[1:4]
+    ]
+    return selected
+
+
+def extract_contextual_leads_from_text(player_facing_text: str) -> List[Dict[str, Any]]:
+    text = str(player_facing_text or "").strip()
+    if not text:
+        return []
+    out: List[Dict[str, Any]] = []
+    seen: set[str] = set()
+
+    def _add(kind: str, subject: str, *, position: str = "", named: bool = False) -> None:
+        clean_subject = _clean_lead_subject(subject)
+        clean_position = _clean_lead_position(position)
+        if not clean_subject:
+            return
+        key = _lead_key(clean_subject, kind=kind, position=clean_position)
+        if key in seen:
+            return
+        seen.add(key)
+        out.append(
+            {
+                "key": key,
+                "kind": kind,
+                "subject": clean_subject,
+                "position": clean_position,
+                "named": bool(named),
+                "positioned": bool(clean_position),
+            }
+        )
+
+    for match in _LEAD_POSITION_PATTERN.finditer(text):
+        _add(
+            "recent_named_figure",
+            match.group(1),
+            position=f"{match.group(2).lower()} {match.group(3).strip()}",
+            named=True,
+        )
+    for match in _LEAD_NAME_PATTERN.finditer(text):
+        _add("recent_named_figure", match.group(1), named=True)
+
+    for sentence in _split_reply_sentences(text):
+        candidate = _extract_visible_figure_candidate(sentence)
+        if candidate is None:
+            continue
+        _add(
+            str(candidate.get("kind") or "active_event"),
+            str(candidate.get("subject") or ""),
+            position=str(candidate.get("position") or ""),
+            named=bool(candidate.get("named")),
+        )
+
+    low = text.lower()
+    if "missing patrol notice" in low:
+        _add("notice_board", "the missing patrol notice")
+    elif "notice board" in low or "noticeboard" in low:
+        _add("notice_board", "the notice board")
+    if "tavern runner" in low:
+        _add("scene_npc", "Tavern Runner", named=True)
+    if "refugee line" in low:
+        _add("active_event", "the refugee line under pressure")
+    if "missing patrol" in low and "notice" not in low:
+        _add("active_event", "the missing patrol rumor")
+    return out[:_LEAD_HISTORY_LIMIT]
+
+
+def remember_recent_contextual_leads(
+    session: Dict[str, Any],
+    scene_id: str,
+    player_facing_text: str,
+) -> List[Dict[str, Any]]:
+    if not scene_id:
+        return []
+    discovered = extract_contextual_leads_from_text(player_facing_text)
+    runtime = get_scene_runtime(session, scene_id)
+    existing = _recent_contextual_leads(session, scene_id)
+    turn_counter = int(session.get("turn_counter", 0) or 0)
+    merged: List[Dict[str, Any]] = [dict(item) for item in existing]
+    for lead in discovered:
+        key = str(lead.get("key") or "").strip()
+        if not key:
+            continue
+        matched = next((item for item in merged if str(item.get("key") or "").strip() == key), None)
+        if matched is not None:
+            matched.update(
+                {
+                    "kind": str(lead.get("kind") or matched.get("kind") or "").strip(),
+                    "subject": str(lead.get("subject") or matched.get("subject") or "").strip(),
+                    "position": str(lead.get("position") or matched.get("position") or "").strip(),
+                    "named": bool(lead.get("named") or matched.get("named")),
+                    "positioned": bool(lead.get("positioned") or matched.get("positioned")),
+                    "mentions": int(matched.get("mentions", 1) or 1) + 1,
+                    "last_turn": turn_counter,
+                }
+            )
+            merged = [item for item in merged if str(item.get("key") or "").strip() != key] + [matched]
+            continue
+        merged.append(
+            {
+                "key": key,
+                "kind": str(lead.get("kind") or "").strip(),
+                "subject": str(lead.get("subject") or "").strip(),
+                "position": str(lead.get("position") or "").strip(),
+                "named": bool(lead.get("named")),
+                "positioned": bool(lead.get("positioned")),
+                "mentions": 1,
+                "last_turn": turn_counter,
+            }
+        )
+    runtime["recent_contextual_leads"] = merged[-_LEAD_HISTORY_LIMIT:]
+    return list(runtime["recent_contextual_leads"])
+
+
+def build_uncertainty_render_context(
+    player_text: str,
+    *,
+    scene_envelope: Dict[str, Any] | None = None,
+    session: Dict[str, Any] | None = None,
+    world: Dict[str, Any] | None = None,
+    resolution: Dict[str, Any] | None = None,
+    turn_context: Dict[str, Any] | None = None,
+    speaker_identity: Dict[str, Any] | str | None = None,
+    scene_snapshot: Dict[str, Any] | None = None,
+) -> Dict[str, Any]:
+    scene_env = scene_envelope if isinstance(scene_envelope, dict) else {}
+    session_data = session if isinstance(session, dict) else {}
+    world_data = world if isinstance(world, dict) else {}
+    resolution_data = resolution if isinstance(resolution, dict) else {}
+    scene_id = _resolve_scene_id(scene_env)
+    location = _resolve_scene_location(scene_env)
+    speaker = _resolve_uncertainty_speaker(
+        session=session_data,
+        world=world_data,
+        resolution=resolution_data,
+        scene_id=scene_id,
+        speaker_identity=speaker_identity,
+    )
+    snapshot = _build_uncertainty_scene_snapshot(
+        scene_envelope=scene_env,
+        world=world_data,
+        scene_id=scene_id,
+        location=location,
+        speaker_name=str(speaker.get("name") or "").strip(),
+        scene_snapshot=scene_snapshot,
+    )
+    snapshot["pending_leads"] = list(get_scene_runtime(session_data, scene_id).get("pending_leads") or []) if scene_id else []
+    snapshot["recent_contextual_leads"] = _recent_contextual_leads(session_data, scene_id)
+    turn = _build_uncertainty_turn_context(
+        player_text=player_text,
+        session=session_data,
+        resolution=resolution_data,
+        turn_context=turn_context,
+    )
+    return {
+        "speaker": speaker,
+        "turn_context": turn,
+        "scene_snapshot": snapshot,
+        "recent_leads": list(snapshot.get("recent_contextual_leads") or []),
+    }
+
+
+def _speaker_delivery(turn_context: Dict[str, Any], category: str) -> str:
+    privacy = str(turn_context.get("conversation_privacy") or "").strip().lower()
+    engagement = str(turn_context.get("engagement_level") or "").strip().lower()
+    base = {
+        "unknown_identity": "studies the crowd before answering",
+        "unknown_location": "jerks their chin toward the road",
+        "unknown_motive": "taps the nearest solid point in sight",
+        "unknown_method": "glances over the chokepoints",
+        "unknown_quantity": "sweeps a look across the bodies in motion",
+        "unknown_feasibility": "measures the barriers and the people around them",
+    }.get(category, "answers after a short pause")
+    if privacy in {"lowered_voice", "private", "whisper", "hushed"}:
+        return f"lowers their voice and {base}"
+    if engagement in {"guarded", "wary", "tense"}:
+        return f"keeps it guarded and {base}"
+    if engagement in {"hostile", "cold"}:
+        return f"answers in a clipped tone and {base}"
+    return base
+
+
+def _scene_anchor_phrase(scene_snapshot: Dict[str, Any], *, category: str) -> str:
+    if scene_snapshot.get("has_notice_board") and scene_snapshot.get("has_missing_patrol"):
+        if category == "unknown_identity":
+            return "the faces lingering over the missing patrol notice"
+        if category == "unknown_motive":
+            return "the new taxes, curfews, and the missing patrol posting"
+        return "the missing patrol notice on the board"
+    if scene_snapshot.get("has_tavern_runner"):
+        return "the tavern runner hawking rumors for coin"
+    if scene_snapshot.get("has_gate_or_checkpoint"):
+        return "the checkpoint and muddy approach road"
+    if scene_snapshot.get("has_refugees"):
+        return "the refugee line pressed up against the road"
+    first_visible = str(scene_snapshot.get("first_visible_detail") or "").strip()
+    if first_visible:
+        return first_visible.lower()
+    location = str(scene_snapshot.get("location") or "").strip()
+    if location:
+        return f"what is visible in {location}"
+    return "what is visible here"
+
+
+def _scene_handle_candidates(
+    *,
+    scene_snapshot: Dict[str, Any],
+    turn_context: Dict[str, Any],
+    speaker_name: str,
+) -> List[Dict[str, str]]:
+    other_npcs = [
+        str(name).strip()
+        for name in (scene_snapshot.get("other_npc_names") or [])
+        if isinstance(name, str) and str(name).strip()
+    ]
+    exit_label = str(scene_snapshot.get("exit_label") or "").strip()
+    location = str(scene_snapshot.get("location") or "").strip()
+    check_skill = str(turn_context.get("check_skill") or "").strip()
+    check_reason = str(turn_context.get("check_reason") or "").strip()
+    handles: List[Dict[str, str]] = []
+
+    if check_reason or check_skill:
+        handles.append(
+            {
+                "kind": "condition",
+                "check_reason": check_reason,
+                "check_skill": check_skill,
+            }
+        )
+    if scene_snapshot.get("has_notice_board") and scene_snapshot.get("has_missing_patrol"):
+        handles.append({"kind": "notice_board", "subject": "the missing patrol notice"})
+    if scene_snapshot.get("has_tavern_runner"):
+        handles.append({"kind": "tavern_runner", "subject": "the tavern runner"})
+    if exit_label:
+        handles.append({"kind": "exit", "subject": exit_label})
+    if scene_snapshot.get("has_gate_or_checkpoint"):
+        handles.append({"kind": "checkpoint", "subject": "the checkpoint"})
+    if scene_snapshot.get("has_refugees"):
+        handles.append({"kind": "refugee_line", "subject": "the refugee line"})
+    if other_npcs:
+        handles.append({"kind": "other_npc", "subject": other_npcs[0]})
+    if speaker_name:
+        handles.append({"kind": "speaker", "subject": speaker_name})
+    if location:
+        handles.append({"kind": "location", "subject": location})
+    return handles
+
+
+def _best_scene_lead(category: str, *, speaker_name: str, scene_snapshot: Dict[str, Any], turn_context: Dict[str, Any]) -> str:
+    selected = choose_contextual_lead(
+        {
+            "category": category,
+            "scene_snapshot": scene_snapshot,
+            "turn_context": turn_context,
+        },
+        list(scene_snapshot.get("recent_contextual_leads") or []),
+        {"role": "npc", "name": speaker_name} if speaker_name else {"role": "narrator", "name": ""},
+        str(turn_context.get("player_text") or ""),
+    )
+    return str(selected.get("lead_text") or "")
+
+
+def _build_known_edge(
+    category: str,
+    *,
+    anchor: str,
+    scene_snapshot: Dict[str, Any],
+    speaker_role: str,
+    turn_context: Dict[str, Any],
+) -> str:
+    viewpoint = "I" if speaker_role == "npc" else "The scene"
+    if category == "unknown_identity":
+        if scene_snapshot.get("has_tavern_runner"):
+            return f"{viewpoint} can narrow it to the buyers circling {anchor}, not a sure name."
+        return f"{viewpoint} can narrow it to the pattern around {anchor}, not a sure face."
+    if category == "unknown_location":
+        if scene_snapshot.get("has_gate_or_checkpoint"):
+            return f"{viewpoint} can give you a direction running past {anchor}, not a final door."
+        return f"{viewpoint} can give you a last sighting at {anchor}, not the final stop."
+    if category == "unknown_motive":
+        return f"{viewpoint} can point to the pressure around {anchor}, not the heart of it."
+    if category == "unknown_quantity":
+        return f"{anchor.capitalize()} gives only rough scale, not a clean count."
+    if category == "unknown_feasibility":
+        check_reason = str(turn_context.get("check_reason") or "").strip()
+        if check_reason:
+            return f"It turns on {check_reason}."
+        return f"It turns on one local condition around {anchor}."
+    return f"The aftermath around {anchor} is plain enough; the exact hand at work is not."
+
+
+def _build_unknown_edge(category: str, *, speaker_role: str, scene_snapshot: Dict[str, Any]) -> str:
+    trust_word = "I would trust" if speaker_role == "npc" else "the scene can prove"
+    if category == "unknown_identity":
+        return f"No name or badge {trust_word} has surfaced yet."
+    if category == "unknown_location":
+        return "After that, the trail breaks into rumor."
+    if category == "unknown_motive":
+        return "What drives it is still tucked behind secondhand behavior."
+    if category == "unknown_quantity":
+        if scene_snapshot.get("has_refugees"):
+            return "The crush keeps any exact tally slippery."
+        return "No one has a clean count they will stand behind."
+    if category == "unknown_feasibility":
+        return "Until that condition is tested, the answer stays unsettled."
+    return "The method stays half-seen and secondhand."
+
+
+def _ensure_terminal_punctuation(text: str) -> str:
+    line = str(text or "").strip()
+    if not line:
+        return ""
+    return line if line[-1] in ".!?" else f"{line}."
+
+
+def _quoted_sentence(text: str) -> str:
+    line = _ensure_terminal_punctuation(text)
+    return f'"{line}"' if line else ""
+
+
+def _render_uncertainty_lines(
+    uncertainty_type: str,
+    *,
+    turn_context: Dict[str, Any],
+    speaker_identity: Dict[str, Any],
+    scene_snapshot: Dict[str, Any],
+) -> Dict[str, str]:
+    category = uncertainty_type if uncertainty_type in UNCERTAINTY_CATEGORIES else "unknown_method"
+    speaker_role = str(speaker_identity.get("role") or "narrator").strip().lower()
+    speaker_name = str(speaker_identity.get("name") or "").strip() or "The voice answering you"
+    anchor = _scene_anchor_phrase(scene_snapshot, category=category)
+    delivery = _speaker_delivery(turn_context, category)
+    known_edge = _build_known_edge(
+        category,
+        anchor=anchor,
+        scene_snapshot=scene_snapshot,
+        speaker_role=speaker_role,
+        turn_context=turn_context,
+    )
+    unknown_edge = _build_unknown_edge(
+        category,
+        speaker_role=speaker_role,
+        scene_snapshot=scene_snapshot,
+    )
+    selected_lead = choose_contextual_lead(
+        {
+            "category": category,
+            "scene_snapshot": scene_snapshot,
+            "turn_context": turn_context,
+        },
+        list(scene_snapshot.get("recent_contextual_leads") or []),
+        speaker_identity,
+        str(turn_context.get("player_text") or ""),
+    )
+    next_lead = str(selected_lead.get("lead_text") or "")
+    return {
+        "category": category,
+        "known_edge": known_edge,
+        "unknown_edge": unknown_edge,
+        "next_lead": next_lead,
+        "what_can_be_said_now": known_edge,
+        "what_is_not_nailed_down_yet": unknown_edge,
+        "best_current_lead": next_lead,
+        "selected_lead": selected_lead,
+        "lead_candidates": list(selected_lead.get("alternatives") or []),
+        "speaker_role": speaker_role,
+        "speaker_name": speaker_name,
+        "delivery": delivery,
+    }
+
+
+def _known_fact_response_text(*, subject: str = "", position: str = "", fact_text: str = "") -> str:
+    fact = str(fact_text or "").strip()
+    if fact:
+        return _ensure_terminal_punctuation(fact)
+    clean_subject = str(subject or "").strip()
+    clean_position = str(position or "").strip().rstrip(".")
+    if clean_subject and clean_position:
+        return _ensure_terminal_punctuation(f"{clean_subject} is {clean_position}")
+    if clean_subject:
+        return _ensure_terminal_punctuation(clean_subject)
+    if clean_position:
+        return _ensure_terminal_punctuation(clean_position)
+    return ""
+
+
+def _known_fact_from_recent_leads(player_text: str, recent_leads: List[Dict[str, Any]]) -> Dict[str, Any] | None:
+    prompt_low = str(player_text or "").strip().lower()
+    if not prompt_low:
+        return None
+    category = _classify_uncertainty_category(player_text)
+    follow_up_find = _looks_like_follow_up_find_request(prompt_low)
+    follow_up_identity = any(token in prompt_low for token in _LEAD_FOLLOW_UP_PRONOUN_TOKENS)
+    for lead in reversed(recent_leads[-3:]):
+        if not isinstance(lead, dict):
+            continue
+        subject = str(lead.get("subject") or "").strip()
+        position = str(lead.get("position") or "").strip()
+        if not subject:
+            continue
+        if category == "unknown_location" and position:
+            if follow_up_find or _lead_subject_matches_prompt(subject, prompt_low):
+                return {
+                    "text": _known_fact_response_text(subject=subject, position=position),
+                    "source": "recent_dialogue_continuity",
+                    "subject": subject,
+                    "position": position,
+                }
+        if category == "unknown_identity" and (lead.get("named") or _lead_subject_matches_prompt(subject, prompt_low)):
+            if follow_up_identity or _lead_subject_matches_prompt(subject, prompt_low):
+                return {
+                    "text": _ensure_terminal_punctuation(f"That person is {subject}"),
+                    "source": "recent_dialogue_continuity",
+                    "subject": subject,
+                    "position": position,
+                }
+    return None
+
+
+def _known_fact_from_scene_location(player_text: str, scene_snapshot: Dict[str, Any]) -> Dict[str, Any] | None:
+    prompt_low = str(player_text or "").strip().lower()
+    location = str(scene_snapshot.get("location") or "").strip()
+    if not location or not prompt_low:
+        return None
+    if any(token in prompt_low for token in _KNOWN_SCENE_LOCATION_PROMPTS):
+        return {
+            "text": _ensure_terminal_punctuation(f"You are in {location}"),
+            "source": "current_scene_state",
+            "subject": location,
+            "position": "",
+        }
+    return None
+
+
+def _known_fact_from_visible_figures(player_text: str, scene_snapshot: Dict[str, Any]) -> Dict[str, Any] | None:
+    prompt_low = str(player_text or "").strip().lower()
+    if not prompt_low:
+        return None
+    category = _classify_uncertainty_category(player_text)
+    follow_up_find = _looks_like_follow_up_find_request(prompt_low)
+    follow_up_identity = any(token in prompt_low for token in _LEAD_FOLLOW_UP_PRONOUN_TOKENS)
+    candidates: List[tuple[str, Dict[str, Any]]] = []
+    for fact in (scene_snapshot.get("visible_facts") or [])[:8]:
+        candidate = _extract_visible_figure_candidate(str(fact))
+        if candidate is None:
+            continue
+        candidates.append((str(fact).strip(), candidate))
+    if not candidates:
+        return None
+
+    single_live_figure = len(
+        [1 for _fact, candidate in candidates if candidate.get("named") or candidate.get("positioned")]
+    ) == 1
+    for fact, candidate in candidates:
+        subject = str(candidate.get("subject") or "").strip()
+        position = str(candidate.get("position") or "").strip()
+        if not subject:
+            continue
+        if category == "unknown_location" and position:
+            if _lead_subject_matches_prompt(subject, prompt_low) or (follow_up_find and single_live_figure):
+                return {
+                    "text": _known_fact_response_text(subject=subject, position=position),
+                    "source": "visible_entity_descriptor",
+                    "subject": subject,
+                    "position": position,
+                    "fact_text": fact,
+                }
+        if category == "unknown_identity" and candidate.get("named"):
+            if _lead_subject_matches_prompt(subject, prompt_low) or (follow_up_identity and single_live_figure):
+                return {
+                    "text": _ensure_terminal_punctuation(f"That person is {subject}"),
+                    "source": "visible_entity_descriptor",
+                    "subject": subject,
+                    "position": position,
+                    "fact_text": fact,
+                }
+    return None
+
+
+def _known_fact_from_visible_scene_fact(player_text: str, scene_snapshot: Dict[str, Any]) -> Dict[str, Any] | None:
+    category = _classify_uncertainty_category(player_text)
+    if category in {"unknown_quantity", "unknown_feasibility", "unknown_motive"}:
+        return None
+    question_tokens = _question_content_tokens(player_text)
+    if not question_tokens:
+        return None
+    best_fact = ""
+    best_overlap: List[str] = []
+    for fact in (scene_snapshot.get("visible_facts") or [])[:8]:
+        fact_text = str(fact).strip()
+        if not fact_text:
+            continue
+        fact_low = fact_text.lower()
+        overlap = [tok for tok in question_tokens if tok in fact_low]
+        if len(overlap) > len(best_overlap):
+            best_fact = fact_text
+            best_overlap = overlap
+    if not best_fact:
+        return None
+    if category == "unknown_location":
+        best_low = best_fact.lower()
+        has_location_cue = bool(
+            re.search(r"\b(near|by|at|outside|inside|beside|under|along|toward|across|behind|beyond|around|road|entrance|gate|checkpoint)\b", best_low)
+            or " crowd " in best_low
+            or " crowds " in best_low
+            or " waits " in best_low
+            or " stands " in best_low
+            or " lingers " in best_low
+            or " watches " in best_low
+        )
+        if not has_location_cue:
+            return None
+    if len(best_overlap) >= 2 or any(len(tok) >= 7 for tok in best_overlap):
+        return {
+            "text": _ensure_terminal_punctuation(best_fact),
+            "source": "observable_scene_fact",
+            "subject": best_fact,
+            "position": "",
+            "matched_tokens": best_overlap,
+        }
+    return None
+
+
+def _resolve_known_fact_from_context(player_text: str, context: Dict[str, Any]) -> Dict[str, Any] | None:
+    if not _is_direct_player_question(player_text):
+        return None
+    scene_snapshot = context.get("scene_snapshot") if isinstance(context.get("scene_snapshot"), dict) else {}
+    recent_leads = scene_snapshot.get("recent_contextual_leads") if isinstance(scene_snapshot.get("recent_contextual_leads"), list) else []
+    return (
+        _known_fact_from_recent_leads(player_text, recent_leads)
+        or _known_fact_from_scene_location(player_text, scene_snapshot)
+        or _known_fact_from_visible_figures(player_text, scene_snapshot)
+        or _known_fact_from_visible_scene_fact(player_text, scene_snapshot)
+    )
+
+
+def resolve_known_fact_before_uncertainty(
+    player_text: str,
+    *,
+    scene_envelope: Dict[str, Any] | None = None,
+    session: Dict[str, Any] | None = None,
+    world: Dict[str, Any] | None = None,
+    resolution: Dict[str, Any] | None = None,
+    turn_context: Dict[str, Any] | None = None,
+    speaker_identity: Dict[str, Any] | str | None = None,
+    scene_snapshot: Dict[str, Any] | None = None,
+) -> Dict[str, Any] | None:
+    context = build_uncertainty_render_context(
+        player_text,
+        scene_envelope=scene_envelope,
+        session=session,
+        world=world,
+        resolution=resolution,
+        turn_context=turn_context,
+        speaker_identity=speaker_identity,
+        scene_snapshot=scene_snapshot,
+    )
+    known = _resolve_known_fact_from_context(player_text, context)
+    if not isinstance(known, dict):
+        return None
+    known["speaker"] = dict(context.get("speaker") or {})
+    known["turn_context"] = dict(context.get("turn_context") or {})
+    known["scene_snapshot"] = dict(context.get("scene_snapshot") or {})
+    return known
+
+
 def question_resolution_rule_check(*, player_text: str, gm_reply_text: str) -> Dict[str, Any]:
     """Check the Question Resolution Rule for direct player questions.
 
@@ -865,126 +2192,138 @@ def classify_uncertainty(
     session: Dict[str, Any] | None = None,
     world: Dict[str, Any] | None = None,
     resolution: Dict[str, Any] | None = None,
-) -> Dict[str, str]:
+    turn_context: Dict[str, Any] | None = None,
+    speaker_identity: Dict[str, Any] | str | None = None,
+    scene_snapshot: Dict[str, Any] | None = None,
+) -> Dict[str, Any]:
     """Classify unresolved answers into a compact, inspectable uncertainty shape."""
+    context = build_uncertainty_render_context(
+        player_text,
+        scene_envelope=scene_envelope,
+        session=session,
+        world=world,
+        resolution=resolution,
+        turn_context=turn_context,
+        speaker_identity=speaker_identity,
+        scene_snapshot=scene_snapshot,
+    )
+    known_fact = _resolve_known_fact_from_context(player_text, context)
+    if isinstance(known_fact, dict):
+        return {
+            "category": "",
+            "known_fact": known_fact,
+            "known_edge": str(known_fact.get("text") or "").strip(),
+            "unknown_edge": "",
+            "next_lead": "",
+            "speaker": context["speaker"],
+            "turn_context": context["turn_context"],
+            "scene_snapshot": context["scene_snapshot"],
+            "speaker_role": str((context.get("speaker") or {}).get("role") or "narrator").strip().lower(),
+            "speaker_name": str((context.get("speaker") or {}).get("name") or "").strip(),
+            "delivery": "",
+        }
     category = _classify_uncertainty_category(player_text)
-    scene_env = scene_envelope if isinstance(scene_envelope, dict) else {}
-    session_data = session if isinstance(session, dict) else {}
-    world_data = world if isinstance(world, dict) else {}
-    resolution_data = resolution if isinstance(resolution, dict) else {}
-    location = _resolve_scene_location(scene_env)
-    scene_id = _resolve_scene_id(scene_env)
-    visible = _scene_visible_facts(scene_env)
-    visible_low = " ".join(v.lower() for v in visible)
-    npc_id = _active_interaction_target_id(session_data)
-    npc_name = _resolve_npc_name(world_data, npc_id, scene_id)
-    scene = (scene_env or {}).get("scene", {}) if isinstance(scene_env, dict) else {}
-    exits = scene.get("exits") if isinstance(scene.get("exits"), list) else []
-    exit_label = ""
-    if exits and isinstance(exits[0], dict):
-        exit_label = str(exits[0].get("label") or "").strip()
-
-    def _lead_from_scene(default_text: str) -> str:
-        if "notice board" in visible_low or "noticeboard" in visible_low:
-            return "Best lead: work the notice board for one concrete detail you can test right away."
-        if exit_label:
-            return f"Best lead: follow the route toward {exit_label} and press the next witness there."
-        if location:
-            return f"Best lead: press for one concrete handle in {location} rather than the whole answer at once."
-        return default_text
-
-    if category == "unknown_identity":
-        return {
-            "category": category,
-            "what_can_be_said_now": "No one here will hang a single name on it yet, but the field can be narrowed.",
-            "what_is_not_nailed_down_yet": "The true name is still in shadow here.",
-            "best_current_lead": (
-                f"Best lead: ask {npc_name} who fits, who does not, and whose name keeps surfacing."
-                if npc_name
-                else _lead_from_scene("Best lead: ask who fits the role, who does not, and which name keeps surfacing.")
-            ),
-        }
-    if category == "unknown_location":
-        return {
-            "category": category,
-            "what_can_be_said_now": "No one here can pin it to a single doorstep yet; you have a last-known trail, not a final point.",
-            "what_is_not_nailed_down_yet": "The exact place is still blurred by distance, rumor, or missing detail.",
-            "best_current_lead": (
-                f"Best lead: ask {npc_name} for the last sighting, the route taken, or who handles access there."
-                if npc_name
-                else _lead_from_scene("Best lead: pull the last sighting, route, or gatekeeper from the scene before chasing the final location.")
-            ),
-        }
-    if category == "unknown_motive":
-        return {
-            "category": category,
-            "what_can_be_said_now": "No one here is naming the heart of it yet, but the pressure around it can still be read.",
-            "what_is_not_nailed_down_yet": "The real reason is still being kept close to the chest.",
-            "best_current_lead": (
-                f"Best lead: ask {npc_name} who profits, who is under pressure, or what changed just before this."
-                if npc_name
-                else _lead_from_scene("Best lead: ask who gains, who is cornered, or what changed just before this turned.")
-            ),
-        }
-    if category == "unknown_quantity":
-        return {
-            "category": category,
-            "what_can_be_said_now": "No one here will swear to a clean count yet; you have a rough scale, not precision.",
-            "what_is_not_nailed_down_yet": "The exact number is still loose in the telling.",
-            "best_current_lead": (
-                f"Best lead: ask {npc_name} for the smallest and largest count they would swear to."
-                if npc_name
-                else _lead_from_scene("Best lead: pin down a lower and upper count from what is visible, posted, or witnessed.")
-            ),
-        }
-    if category == "unknown_feasibility":
-        check = resolution_data.get("check_request") if isinstance(resolution_data.get("check_request"), dict) else {}
-        skill = str(check.get("skill") or "").strip().replace("_", " ")
-        reason = str(check.get("reason") or "").strip()
-        lead = ""
-        if skill and reason:
-            lead = f"Best lead: the deciding condition is {reason}; test it with {skill} instead of guessing."
-        elif skill:
-            lead = f"Best lead: test the deciding condition with {skill} instead of guessing."
-        elif npc_name:
-            lead = f"Best lead: ask {npc_name} what would make them say yes, then meet that condition."
-        else:
-            lead = _lead_from_scene("Best lead: ask what condition would make it possible here, then test that condition directly.")
-        return {
-            "category": category,
-            "what_can_be_said_now": "No one here can promise it will work yet; success turns on one deciding condition.",
-            "what_is_not_nailed_down_yet": "Whether it can be done is not settled until that condition is tested.",
-            "best_current_lead": lead,
-        }
-    return {
-        "category": "unknown_method",
-        "what_can_be_said_now": "No one here can lay out the exact trick yet; the effect is plain enough.",
-        "what_is_not_nailed_down_yet": "The means are still obscured by the aftermath and half-seen tells.",
-        "best_current_lead": (
-            f"Best lead: ask {npc_name} what was touched, forced, moved, or bypassed."
-            if npc_name
-            else _lead_from_scene("Best lead: inspect what was touched, forced, moved, or bypassed before chasing the whole explanation.")
-        ),
-    }
+    rendered = _render_uncertainty_lines(
+        category,
+        turn_context=context["turn_context"],
+        speaker_identity=context["speaker"],
+        scene_snapshot=context["scene_snapshot"],
+    )
+    rendered["speaker"] = context["speaker"]
+    rendered["turn_context"] = context["turn_context"]
+    rendered["scene_snapshot"] = context["scene_snapshot"]
+    return rendered
 
 
-def render_uncertainty_response(uncertainty: Dict[str, Any]) -> str:
+def render_uncertainty_response(
+    uncertainty: Dict[str, Any] | None = None,
+    *,
+    uncertainty_type: str | None = None,
+    turn_context: Dict[str, Any] | None = None,
+    speaker_identity: Dict[str, Any] | None = None,
+    scene_snapshot: Dict[str, Any] | None = None,
+) -> str:
     """Render a bounded answer with a known edge, uncertainty edge, and lead."""
     if not isinstance(uncertainty, dict):
-        return ""
-    parts = [
-        str(uncertainty.get("what_can_be_said_now") or "").strip(),
-        str(uncertainty.get("what_is_not_nailed_down_yet") or "").strip(),
-        str(uncertainty.get("best_current_lead") or "").strip(),
-    ]
-    rendered: List[str] = []
-    for part in parts:
-        if not part:
-            continue
-        if part[-1] not in ".!?":
-            part += "."
-        rendered.append(part)
-    return " ".join(rendered).strip()
+        if not uncertainty_type:
+            return ""
+        uncertainty = _render_uncertainty_lines(
+            uncertainty_type,
+            turn_context=turn_context if isinstance(turn_context, dict) else {},
+            speaker_identity=speaker_identity if isinstance(speaker_identity, dict) else {"role": "narrator", "id": "", "name": ""},
+            scene_snapshot=scene_snapshot if isinstance(scene_snapshot, dict) else {},
+        )
+    known_fact = uncertainty.get("known_fact") if isinstance(uncertainty.get("known_fact"), dict) else {}
+    known_fact_text = str(known_fact.get("text") or "").strip()
+    if known_fact_text:
+        return _ensure_terminal_punctuation(known_fact_text)
+    category = str(uncertainty.get("category") or uncertainty_type or "").strip()
+    known_edge = str(
+        uncertainty.get("known_edge")
+        or uncertainty.get("what_can_be_said_now")
+        or ""
+    ).strip()
+    unknown_edge = str(
+        uncertainty.get("unknown_edge")
+        or uncertainty.get("what_is_not_nailed_down_yet")
+        or ""
+    ).strip()
+    next_lead = str(
+        uncertainty.get("next_lead")
+        or uncertainty.get("best_current_lead")
+        or ""
+    ).strip()
+    speaker_role = str(
+        uncertainty.get("speaker_role")
+        or ((speaker_identity or {}).get("role") if isinstance(speaker_identity, dict) else "")
+        or ((uncertainty.get("speaker") or {}).get("role") if isinstance(uncertainty.get("speaker"), dict) else "")
+        or "narrator"
+    ).strip().lower()
+    speaker_name = str(
+        uncertainty.get("speaker_name")
+        or ((speaker_identity or {}).get("name") if isinstance(speaker_identity, dict) else "")
+        or ((uncertainty.get("speaker") or {}).get("name") if isinstance(uncertainty.get("speaker"), dict) else "")
+        or "The voice answering you"
+    ).strip()
+    delivery = str(uncertainty.get("delivery") or "").strip()
+
+    if speaker_role == "npc":
+        intro = _ensure_terminal_punctuation(f"{speaker_name} {delivery}".strip())
+        if category in {"unknown_location", "unknown_method", "unknown_feasibility"}:
+            quoted = [
+                _quoted_sentence(" ".join(p for p in (known_edge, unknown_edge) if p)),
+                _quoted_sentence(next_lead),
+            ]
+        elif category in {"unknown_identity", "unknown_motive"}:
+            quoted = [
+                _quoted_sentence(known_edge),
+                _quoted_sentence(" ".join(p for p in (unknown_edge, next_lead) if p)),
+            ]
+        else:
+            quoted = [
+                _quoted_sentence(known_edge),
+                _quoted_sentence(unknown_edge),
+                _quoted_sentence(next_lead),
+            ]
+        return " ".join(part for part in [intro, *quoted] if part).strip()
+
+    if category in {"unknown_location", "unknown_feasibility"}:
+        parts = [
+            _ensure_terminal_punctuation(known_edge),
+            _ensure_terminal_punctuation(" ".join(p for p in (unknown_edge, next_lead) if p)),
+        ]
+    elif category in {"unknown_identity", "unknown_method"}:
+        parts = [
+            _ensure_terminal_punctuation(" ".join(p for p in (known_edge, unknown_edge) if p)),
+            _ensure_terminal_punctuation(next_lead),
+        ]
+    else:
+        parts = [
+            _ensure_terminal_punctuation(known_edge),
+            _ensure_terminal_punctuation(unknown_edge),
+            _ensure_terminal_punctuation(next_lead),
+        ]
+    return " ".join(part for part in parts if part).strip()
 
 
 def _apply_uncertainty_to_gm(
@@ -997,17 +2336,26 @@ def _apply_uncertainty_to_gm(
     if not isinstance(gm, dict):
         return gm
     gm = dict(gm)
+    known_fact = uncertainty.get("known_fact") if isinstance(uncertainty, dict) and isinstance(uncertainty.get("known_fact"), dict) else {}
     rendered = render_uncertainty_response(uncertainty)
     if not rendered:
         return gm
     existing = gm.get("player_facing_text") if isinstance(gm.get("player_facing_text"), str) else ""
     gm["player_facing_text"] = rendered if replace_text or not existing.strip() else (rendered + "\n\n" + existing.strip()).strip()
     tags = gm.get("tags") if isinstance(gm.get("tags"), list) else []
-    category = str(uncertainty.get("category") or "").strip()
-    uncertainty_tag = f"uncertainty:{category}" if category else "uncertainty"
-    gm["tags"] = list(tags) + [uncertainty_tag]
+    if known_fact:
+        gm["tags"] = list(tags) + ["known_fact_guard"]
+    else:
+        category = str(uncertainty.get("category") or "").strip()
+        uncertainty_tag = f"uncertainty:{category}" if category else "uncertainty"
+        gm["tags"] = list(tags) + [uncertainty_tag]
     dbg = gm.get("debug_notes") if isinstance(gm.get("debug_notes"), str) else ""
-    gm["debug_notes"] = (dbg + " | " if dbg else "") + f"{reason}:{category or 'unknown'}"
+    if known_fact:
+        source = str(known_fact.get("source") or "known_fact").strip()
+        gm["debug_notes"] = (dbg + " | " if dbg else "") + f"{reason}:known_fact_guard:{source}"
+    else:
+        category = str(uncertainty.get("category") or "").strip()
+        gm["debug_notes"] = (dbg + " | " if dbg else "") + f"{reason}:{category or 'unknown'}"
     return gm
 
 
@@ -1021,6 +2369,15 @@ def _bounded_spoiler_safe_text(
 ) -> str:
     """Return a safe in-world fallback that still answers when secrets must stay hidden."""
     if _is_direct_player_question(player_text):
+        known_fact = resolve_known_fact_before_uncertainty(
+            player_text,
+            scene_envelope=scene_envelope,
+            session=session,
+            world=world,
+            resolution=resolution,
+        )
+        if isinstance(known_fact, dict) and str(known_fact.get("text") or "").strip():
+            return str(known_fact.get("text") or "").strip()
         return render_uncertainty_response(
             classify_uncertainty(
                 player_text,
@@ -1037,9 +2394,25 @@ def _bounded_spoiler_safe_text(
     )
 
 
-def _validator_voice_world_fallback(*, scene_envelope: Dict[str, Any], player_text: str) -> str:
+def _validator_voice_world_fallback(
+    *,
+    scene_envelope: Dict[str, Any],
+    player_text: str,
+    session: Dict[str, Any] | None = None,
+    world: Dict[str, Any] | None = None,
+    resolution: Dict[str, Any] | None = None,
+) -> str:
     """Rebuild leaked validator voice as in-world uncertainty."""
     if _is_direct_player_question(player_text):
+        known_fact = resolve_known_fact_before_uncertainty(
+            player_text,
+            scene_envelope=scene_envelope,
+            session=session,
+            world=world,
+            resolution=resolution,
+        )
+        if isinstance(known_fact, dict) and str(known_fact.get("text") or "").strip():
+            return str(known_fact.get("text") or "").strip()
         return render_uncertainty_response(
             classify_uncertainty(
                 player_text,
@@ -1047,10 +2420,11 @@ def _validator_voice_world_fallback(*, scene_envelope: Dict[str, Any], player_te
             )
         )
     location = _resolve_scene_location(scene_envelope)
+    visible = _scene_visible_facts(scene_envelope)
+    anchor = _clean_scene_detail(visible[0]).lower() if visible else "the immediate scene"
     loc_phrase = f" in {location}" if location else ""
     return (
-        f"No one gives you the whole shape of it{loc_phrase} yet; what you have are fragments, reactions, "
-        "and room to press for one concrete lead."
+        f"You only get fragments{loc_phrase}: {anchor}. The rest stays unsettled until you press one concrete lead."
     )
 
 
@@ -1372,13 +2746,22 @@ def build_messages(
     public_scene, discoverable_raw, hidden = _scene_layers(scene)
     intent = classify_player_intent(user_text)
     allow_disc = bool(intent.get('allow_discoverable_clues'))
-    uncertainty_hint = classify_uncertainty(
+    known_answer_hint = resolve_known_fact_before_uncertainty(
         user_text,
         scene_envelope=scene,
         session=session,
         world=world,
         resolution=resolution,
     ) if _is_direct_player_question(user_text) else None
+    uncertainty_hint = None
+    if _is_direct_player_question(user_text) and not known_answer_hint:
+        uncertainty_hint = classify_uncertainty(
+            user_text,
+            scene_envelope=scene,
+            session=session,
+            world=world,
+            resolution=resolution,
+        )
 
     normalized_clues = [normalize_clue_record(c) for c in discoverable_raw]
     runtime_for_scene = scene_runtime or {}
@@ -1444,6 +2827,34 @@ def build_messages(
         recent_log_for_prompt=recent_log_for_prompt,
         uncertainty_hint=uncertainty_hint,
     )
+    passive_streak = int(runtime_for_scene.get("passive_action_streak", 0) or 0)
+    passive_pause = "passive_pause" in [str(label).strip().lower() for label in intent.get("labels", []) if isinstance(label, str)]
+    visible_low = " ".join(str(v).lower() for v in public_scene.get("visible_facts", []) if isinstance(v, str))
+    passive_scene_pressure_due = passive_pause and (
+        passive_streak >= 2
+        or bool(runtime_for_scene.get("pending_leads"))
+        or bool(runtime_for_scene.get("recent_contextual_leads"))
+        or ("guard" in visible_low)
+        or ("watch" in visible_low)
+        or ("missing patrol" in visible_low)
+        or ("rumor" in visible_low)
+        or ("rumour" in visible_low)
+    )
+    if passive_scene_pressure_due:
+        payload["passive_scene_pressure"] = {
+            "current_action_is_passive": True,
+            "passive_action_streak": passive_streak,
+            "recent_player_actions": list(runtime_for_scene.get("recent_player_actions") or []),
+        }
+        payload["instructions"] = list(payload.get("instructions", [])) + [
+            "The player is pausing or holding position in a tense scene. Do not answer with atmosphere alone.",
+            "Advance the moment with direct interaction pressure: someone approaches, an NPC speaks first, a guard reacts, an interruption lands, or a clue becomes active now.",
+        ]
+    if known_answer_hint:
+        payload["known_answer_hint"] = known_answer_hint
+        payload["instructions"] = list(payload.get("instructions", [])) + [
+            "If known_answer_hint is present, answer with that established fact directly in the first sentence. Do not reroute known scene facts into uncertainty.",
+        ]
     known_clues = get_known_clues_with_presentation(session)
     payload["clues"] = {
         "known": known_clues,
@@ -1719,6 +3130,260 @@ def validate_gm_state_update(gm: Dict[str, Any], session: Dict[str, Any], scene_
     return gm
 
 
+def _reply_already_has_concrete_interaction(text: str) -> bool:
+    clean = str(text or "").strip()
+    if not clean:
+        return False
+    return any(pattern.search(clean) for pattern in _CONCRETE_INTERACTION_PATTERNS)
+
+
+def _scene_snapshot_has_tension(scene_snapshot: Dict[str, Any], runtime: Dict[str, Any]) -> bool:
+    visible_text = " ".join(
+        str(item)
+        for item in (scene_snapshot.get("visible_facts") or [])
+        if isinstance(item, str)
+    )
+    if any(pattern.search(visible_text) for pattern in _SCENE_TENSION_PATTERNS):
+        return True
+    if scene_snapshot.get("has_missing_patrol") or scene_snapshot.get("has_notice_board"):
+        return True
+    if scene_snapshot.get("has_refugees") or scene_snapshot.get("has_tax_or_curfew"):
+        return True
+    if runtime.get("pending_leads") or runtime.get("suspicion_flags"):
+        return True
+    recent = scene_snapshot.get("recent_contextual_leads")
+    return bool(recent)
+
+
+def _pick_passive_pressure_source(
+    scene_snapshot: Dict[str, Any],
+    speaker: Dict[str, Any],
+) -> Dict[str, Any]:
+    recent_leads = scene_snapshot.get("recent_contextual_leads")
+    if isinstance(recent_leads, list):
+        for lead in reversed(recent_leads[-4:]):
+            if not isinstance(lead, dict):
+                continue
+            kind = str(lead.get("kind") or "").strip()
+            if kind in {"visible_suspicious_figure", "recent_named_figure", "visible_named_figure"}:
+                return {
+                    "source": "lead_figure",
+                    "subject": str(lead.get("subject") or "").strip(),
+                    "position": str(lead.get("position") or "").strip(),
+                    "kind": kind,
+                }
+
+    pending = scene_snapshot.get("pending_leads")
+    if isinstance(pending, list):
+        for lead in pending[:3]:
+            if not isinstance(lead, dict):
+                continue
+            subject = str(
+                lead.get("leads_to_npc")
+                or lead.get("leads_to_rumor")
+                or lead.get("text")
+                or lead.get("leads_to_scene")
+                or ""
+            ).strip()
+            if subject:
+                return {
+                    "source": "pending_lead",
+                    "subject": subject,
+                    "position": "",
+                    "kind": "pending_clue",
+                }
+
+    visible_facts = scene_snapshot.get("visible_facts")
+    if isinstance(visible_facts, list):
+        for fact in visible_facts[:8]:
+            candidate = _extract_visible_figure_candidate(str(fact))
+            if candidate and str(candidate.get("subject") or "").strip():
+                return {
+                    "source": "visible_figure",
+                    "subject": str(candidate.get("subject") or "").strip(),
+                    "position": str(candidate.get("position") or "").strip(),
+                    "kind": str(candidate.get("kind") or "visible_figure"),
+                }
+
+    if scene_snapshot.get("has_missing_patrol"):
+        return {
+            "source": "guard_rumor",
+            "subject": "the missing patrol notice",
+            "position": "",
+            "kind": "active_event",
+        }
+
+    speaker_name = str(speaker.get("name") or "").strip()
+    if str(speaker.get("role") or "").strip().lower() == "npc" and speaker_name:
+        return {
+            "source": "engaged_npc",
+            "subject": speaker_name,
+            "position": "",
+            "kind": "engaged_npc",
+        }
+
+    for name in (scene_snapshot.get("other_npc_names") or [])[:2]:
+        clean = str(name).strip()
+        if clean:
+            return {
+                "source": "scene_npc",
+                "subject": clean,
+                "position": "",
+                "kind": "scene_npc",
+            }
+
+    return {
+        "source": "fallback",
+        "subject": str(scene_snapshot.get("location") or "the gate").strip() or "the scene",
+        "position": "",
+        "kind": "fallback",
+    }
+
+
+def _render_passive_pressure_beat(
+    *,
+    source: Dict[str, Any],
+    scene_snapshot: Dict[str, Any],
+    passive_streak: int,
+) -> tuple[str, str]:
+    subject = str(source.get("subject") or "").strip() or "someone"
+    position = str(source.get("position") or "").strip()
+    source_key = str(source.get("source") or "").strip()
+    move_from = f" leaves {position} and" if position else ""
+    if source_key == "lead_figure":
+        if passive_streak >= 2:
+            text = (
+                f"{subject}{move_from} comes straight to you before the pause can settle. "
+                f"\"Enough watching,\" they say. \"Ask me now, or lose the trail.\""
+            )
+            return "consequence_or_opportunity", text
+        text = (
+            f"{subject}{move_from} cuts through the crowd and stops at your shoulder. "
+            f"\"You're asking the wrong questions out loud,\" they murmur. \"Walk with me if you want the next name.\""
+        )
+        return "new_actor_entering", text
+    if source_key == "pending_lead":
+        text = (
+            f"The lull breaks when a runner shoulders through the press with news tied to {subject}. "
+            f"\"If you're moving on this, move now,\" they snap. \"The lead is still warm.\""
+        )
+        return "new_information", text
+    if source_key == "visible_figure":
+        if "guard" in subject.lower():
+            if passive_streak >= 2:
+                text = (
+                    f"{subject.capitalize()} pushes off the wall and closes the gap before you can settle back into stillness. "
+                    "\"No more staring,\" he says. \"State your business, or start with the road report now.\""
+                )
+                return "consequence_or_opportunity", text
+            text = (
+                f"{subject.capitalize()} notices you lingering and comes over at once. "
+                "\"If you're waiting on trouble, it already passed the checkpoint,\" he says. \"Take the east-road report or get clear.\""
+            )
+            return "new_actor_entering", text
+        if passive_streak >= 2:
+            text = (
+                f"{subject.capitalize()} finally breaks from watching and comes straight toward you. "
+                "\"You can keep holding still, or you can ask the next useful question,\" they say."
+            )
+            return "consequence_or_opportunity", text
+        text = (
+            f"{subject.capitalize()} notices your attention and crosses the space between you. "
+            "\"If you're looking for something, say it before the trail shifts,\" they say."
+        )
+        return "new_actor_entering", text
+    if source_key == "guard_rumor":
+        if passive_streak >= 2:
+            text = (
+                "The same guard does not let the silence stand a second time. "
+                "\"No more watching,\" he says, closing the distance and jabbing a finger at the east-road line on the notice. "
+                "\"Either tell me who sent you, or get moving before that trail cools for good.\""
+            )
+            return "consequence_or_opportunity", text
+        text = (
+            "A guard peels away from the notice board and squares up to you. "
+            "\"Standing still won't help that patrol,\" he says, stabbing two fingers at the posting. "
+            "\"Tell me what you know, or get on the east-road trail before it dies.\""
+        )
+        return "consequence_or_opportunity", text
+    if source_key in {"engaged_npc", "scene_npc"}:
+        text = (
+            f"{subject} breaks the silence first. "
+            f"\"Waiting won't sharpen this,\" they say. \"Question the runner, work the notice, or follow the road report now.\""
+        )
+        return "consequence_or_opportunity", text
+    if scene_snapshot.get("has_notice_board"):
+        text = (
+            "Fresh ink draws a curse from the guards at the notice board. "
+            "Someone has added a half-hour-old sighting to the missing patrol posting, and every eye nearby shifts toward the east road."
+        )
+        return "new_information", text
+    text = (
+        "The pause snaps when a nearby guard points with his spear-butt instead of waiting for you to choose. "
+        "\"Board, runner, or road,\" he says. \"Pick one before the gate swallows the trail.\""
+    )
+    return "consequence_or_opportunity", text
+
+
+def escalate_passive_scene(
+    gm: Dict[str, Any],
+    *,
+    player_text: str,
+    session: Dict[str, Any],
+    world: Dict[str, Any],
+    scene_envelope: Dict[str, Any],
+    resolution: Dict[str, Any] | None = None,
+) -> Dict[str, Any]:
+    """Turn passive pauses into direct scene pressure when the moment is stalling."""
+    if not isinstance(gm, dict):
+        return gm
+    scene = (scene_envelope or {}).get("scene", {}) if isinstance(scene_envelope, dict) else {}
+    scene_id = str(scene.get("id") or "").strip()
+    if not scene_id:
+        return gm
+    runtime = get_scene_runtime(session, scene_id)
+    intent = classify_player_intent(player_text)
+    labels = intent.get("labels") if isinstance(intent.get("labels"), list) else []
+    current_passive = bool(runtime.get("last_player_action_passive")) or ("passive_pause" in labels)
+    if not current_passive:
+        return gm
+    passive_streak = int(runtime.get("passive_action_streak", 0) or 0)
+    context = build_uncertainty_render_context(
+        player_text,
+        scene_envelope=scene_envelope,
+        session=session,
+        world=world,
+        resolution=resolution,
+    )
+    scene_snapshot = context.get("scene_snapshot") if isinstance(context.get("scene_snapshot"), dict) else {}
+    if passive_streak < 2 and not _scene_snapshot_has_tension(scene_snapshot, runtime):
+        return gm
+    text = gm.get("player_facing_text") if isinstance(gm.get("player_facing_text"), str) else ""
+    if _reply_already_has_concrete_interaction(text):
+        return gm
+    source = _pick_passive_pressure_source(
+        scene_snapshot,
+        context.get("speaker") if isinstance(context.get("speaker"), dict) else {},
+    )
+    momentum_kind, beat = _render_passive_pressure_beat(
+        source=source,
+        scene_snapshot=scene_snapshot,
+        passive_streak=passive_streak,
+    )
+    out = dict(gm)
+    tags = out.get("tags") if isinstance(out.get("tags"), list) else []
+    new_tags = list(tags)
+    if not _extract_scene_momentum_kind(out):
+        new_tags.append(f"{SCENE_MOMENTUM_TAG_PREFIX}{momentum_kind}")
+    if "passive_scene_pressure" not in new_tags:
+        new_tags.append("passive_scene_pressure")
+    out["tags"] = new_tags
+    out["player_facing_text"] = (text.strip() + ("\n\n" if text.strip() else "") + _ensure_terminal_punctuation(beat)).strip()
+    dbg = out.get("debug_notes") if isinstance(out.get("debug_notes"), str) else ""
+    out["debug_notes"] = (dbg + " | " if dbg else "") + f"passive_scene_pressure:{source.get('source')}:streak={passive_streak}"
+    return out
+
+
 def _scene_momentum_due(session: Dict[str, Any], scene_id: str) -> bool:
     rt = get_scene_runtime(session, scene_id)
     exchanges_since = int(rt.get("momentum_exchanges_since", 0) or 0)
@@ -1945,6 +3610,9 @@ def enforce_no_validator_voice(
     *,
     scene_envelope: Dict[str, Any],
     player_text: str,
+    session: Dict[str, Any] | None = None,
+    world: Dict[str, Any] | None = None,
+    resolution: Dict[str, Any] | None = None,
 ) -> Dict[str, Any]:
     """Deterministically remove system/validator wording from player-facing text."""
     if not isinstance(gm, dict):
@@ -1961,7 +3629,13 @@ def enforce_no_validator_voice(
     if _is_direct_player_question(player_text):
         gm = _apply_uncertainty_to_gm(
             gm,
-            uncertainty=classify_uncertainty(player_text, scene_envelope=scene_envelope),
+            uncertainty=classify_uncertainty(
+                player_text,
+                scene_envelope=scene_envelope,
+                session=session,
+                world=world,
+                resolution=resolution,
+            ),
             reason=f"validator_voice_rewrite:{hits}",
             replace_text=True,
         )
@@ -1978,6 +3652,9 @@ def enforce_no_validator_voice(
         rewritten = _validator_voice_world_fallback(
             scene_envelope=scene_envelope,
             player_text=player_text,
+            session=session,
+            world=world,
+            resolution=resolution,
         )
 
     gm["player_facing_text"] = rewritten.strip()
@@ -2037,21 +3714,39 @@ def detect_retry_failures(
 
     question_rule = question_resolution_rule_check(player_text=player_text, gm_reply_text=reply_text)
     if question_rule.get("applies") and not question_rule.get("ok"):
-        uncertainty_hint = classify_uncertainty(
+        known_fact = resolve_known_fact_before_uncertainty(
             player_text,
             scene_envelope=scene_envelope,
             session=session,
             world=world,
             resolution=resolution,
         )
-        failures.append(
-            {
-                "failure_class": "unresolved_question",
-                "priority": RETRY_FAILURE_PRIORITY["unresolved_question"],
-                "reasons": list(question_rule.get("reasons") or []),
-                "uncertainty_category": str(uncertainty_hint.get("category") or "").strip(),
+        failure_payload = {
+            "failure_class": "unresolved_question",
+            "priority": RETRY_FAILURE_PRIORITY["unresolved_question"],
+            "reasons": list(question_rule.get("reasons") or []),
+        }
+        if known_fact:
+            failure_payload["known_fact_context"] = {
+                "answer": str(known_fact.get("text") or "").strip(),
+                "source": str(known_fact.get("source") or "").strip(),
+                "subject": str(known_fact.get("subject") or "").strip(),
+                "position": str(known_fact.get("position") or "").strip(),
             }
-        )
+        else:
+            uncertainty_hint = classify_uncertainty(
+                player_text,
+                scene_envelope=scene_envelope,
+                session=session,
+                world=world,
+                resolution=resolution,
+            )
+            failure_payload["uncertainty_category"] = str(uncertainty_hint.get("category") or "").strip()
+            failure_payload["uncertainty_context"] = {
+                "speaker": dict(uncertainty_hint.get("speaker") or {}),
+                "scene_snapshot": dict(uncertainty_hint.get("scene_snapshot") or {}),
+            }
+        failures.append(failure_payload)
 
     echo_reasons: List[str] = []
     if opening_sentence_echoes_player_input(reply_text, player_text):
@@ -2144,7 +3839,15 @@ def apply_response_policy_enforcement(
             continue
 
         if policy_key == "forbid_secret_leak" and policy.get(policy_key, True):
-            out = guard_gm_output(out, scene_envelope, player_text, discovered_clues)
+            out = guard_gm_output(
+                out,
+                scene_envelope,
+                player_text,
+                discovered_clues,
+                session=session,
+                world=world,
+                resolution=resolution,
+            )
             continue
 
         if policy_key == "allow_partial_answer":
@@ -2155,10 +3858,25 @@ def apply_response_policy_enforcement(
             and policy.get(policy_key, True)
             and bool((policy.get("no_validator_voice") or {}).get("enabled", True))
         ):
-            out = enforce_no_validator_voice(out, scene_envelope=scene_envelope, player_text=player_text)
+            out = enforce_no_validator_voice(
+                out,
+                scene_envelope=scene_envelope,
+                player_text=player_text,
+                session=session,
+                world=world,
+                resolution=resolution,
+            )
             continue
 
         if policy_key == "prefer_scene_momentum" and policy.get(policy_key, True):
+            out = escalate_passive_scene(
+                out,
+                player_text=player_text,
+                session=session,
+                world=world,
+                scene_envelope=scene_envelope,
+                resolution=resolution,
+            )
             out = enforce_scene_momentum(out, session=session, scene_envelope=scene_envelope)
             continue
 

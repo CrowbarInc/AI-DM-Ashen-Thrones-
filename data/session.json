@@ -14,32 +14,26 @@
   },
   "scene_runtime": {
     "frontier_gate": {
-      "discovered_clues": [
-        "You can question the tavern runner for more details about the missing patrol."
-      ],
-      "discovered_clue_ids": [
-        "you_can_question_the_tavern_runner_for_more_details_about_the_missing_patrol"
-      ],
+      "discovered_clues": [],
+      "discovered_clue_ids": [],
       "pending_leads": [],
       "revealed_hidden_facts": [],
       "suspicion_flags": [],
-      "searched_targets": [
-        "thats_a_start_but_not_good_enough_whos_l"
-      ],
+      "searched_targets": [],
       "resolved_interactables": [],
-      "last_exploration_action_key": "you_know_who_im_talking_about_the_one_in",
-      "repeated_action_count": 1,
-      "last_resolution_kind": "interact",
-      "last_description_hash": "621b0df7a56587ba212d488dfcb38da9",
+      "last_exploration_action_key": null,
+      "repeated_action_count": 0,
+      "last_resolution_kind": null,
+      "last_description_hash": "7e19894b6c1f466e17fb7357a8827526",
       "consumed_action_ids": [],
-      "momentum_exchanges_since": 0,
-      "momentum_next_due_in": 2,
+      "momentum_exchanges_since": 1,
+      "momentum_next_due_in": 3,
       "momentum_last_kind": "new_information"
     }
   },
   "last_action_debug": {
     "last_action_type": "chat",
-    "player_input": "\"Are you in League with they Ash Cowl too? How do you know that without knowing their identity?\"",
+    "player_input": "\"Does she normally lurk around taverns? Seems a bit unlady-like to me.\"",
     "normalized_action": null,
     "resolution_kind": null,
     "target_scene": null,
@@ -51,20 +45,13 @@
   "flags": {},
   "response_mode": "standard",
   "character_name": "Galinor",
-  "clue_knowledge": {
-    "you_can_question_the_tavern_runner_for_more_details_about_the_missing_patrol": {
-      "state": "discovered",
-      "source_scene": "frontier_gate",
-      "presentation": "explicit",
-      "text": "You can question the tavern runner for more details about the missing patrol."
-    }
-  },
+  "clue_knowledge": {},
   "debug_traces": [
     {
-      "timestamp": "2026-03-19T22:43:08.581281Z",
+      "timestamp": "2026-03-20T01:50:55.623368Z",
       "source": "chat",
       "action_type": "chat",
-      "raw_input": "Begin the campaign.",
+      "raw_input": "Begin.",
       "turn_stage_order": [
         "player_input",
         "intent_normalization_expansion",
@@ -77,43 +64,14 @@
         "response_debug_packaging"
       ],
       "incoming_payload": {
-        "text": "Begin the campaign."
+        "text": "Begin."
       },
-      "parsed_intent": {
-        "id": "campaign_start_opening_scene",
-        "label": "Begin the campaign.",
-        "type": "scene_opening",
-        "prompt": "Begin the campaign.",
-        "targetSceneId": "frontier_gate",
-        "target_scene_id": "frontier_gate"
-      },
+      "parsed_intent": null,
       "segmented_turn": {
-        "declared_action_text": "Begin the campaign."
+        "declared_action_text": "Begin."
       },
-      "normalized_action": {
-        "id": "campaign_start_opening_scene",
-        "label": "Begin the campaign.",
-        "type": "scene_opening",
-        "prompt": "Begin the campaign.",
-        "targetSceneId": "frontier_gate",
-        "target_scene_id": "frontier_gate"
-      },
+      "normalized_action": null,
       "resolution": {
-        "kind": "scene_opening",
-        "action_id": "campaign_start_opening_scene",
-        "label": "Begin the campaign.",
-        "prompt": "Begin the campaign.",
-        "success": true,
-        "resolved_transition": false,
-        "target_scene_id": "frontier_gate",
-        "clue_id": null,
-        "discovered_clues": [],
-        "state_changes": {
-          "opening_scene_turn": true,
-          "arrived_at_scene": true,
-          "new_scene_context_available": true
-        },
-        "hint": "Campaign opening turn: narrate the active scene as an immediate playable situation, with concrete opportunities grounded in the current scene state.",
         "world_tick_events": []
       },
       "scene_before": "frontier_gate",
@@ -124,29 +82,13 @@
       ],
       "turn_trace": {
         "source": "chat",
-        "player_input": "Begin the campaign.",
+        "player_input": "Begin.",
         "intent": {
-          "parsed": {
-            "id": "campaign_start_opening_scene",
-            "label": "Begin the campaign.",
-            "type": "scene_opening",
-            "prompt": "Begin the campaign.",
-            "targetSceneId": "frontier_gate",
-            "target_scene_id": "frontier_gate"
-          },
+          "parsed": null,
           "segmented_turn": {
-            "declared_action_text": "Begin the campaign."
+            "declared_action_text": "Begin."
           },
-          "normalized": {
-            "id": "campaign_start_opening_scene",
-            "label": "Begin the campaign.",
-            "type": "scene_opening",
-            "prompt": "Begin the campaign.",
-            "targetSceneId": "frontier_gate",
-            "target_scene_id": "frontier_gate",
-            "targetEntityId": null,
-            "target_id": null
-          },
+          "normalized": null,
           "implied_context": {
             "applied": false,
             "cases": [],
@@ -155,17 +97,13 @@
         },
         "classification": {
           "action_type": "chat",
-          "resolved_kind": "scene_opening",
+          "resolved_kind": null,
           "requires_check": false
         },
-        "resolution_path": "exploration_engine",
+        "resolution_path": "chat_engine",
         "authoritative_state_changes": {
           "scene_transition": null,
-          "resolution_state_changes": {
-            "opening_scene_turn": true,
-            "arrived_at_scene": true,
-            "new_scene_context_available": true
-          },
+          "resolution_state_changes": {},
           "resolution_world_updates": [],
           "check_request": null
         },
@@ -179,7 +117,7 @@
         },
         "narration_obligations": {
           "is_opening_scene": true,
-          "must_advance_scene": true,
+          "must_advance_scene": false,
           "should_answer_active_npc": false,
           "avoid_input_echo": true,
           "avoid_player_action_restatement": true,
@@ -232,10 +170,10 @@
       "error": null
     },
     {
-      "timestamp": "2026-03-19T22:44:28.817847Z",
+      "timestamp": "2026-03-20T01:51:48.652932Z",
       "source": "chat",
       "action_type": "chat",
-      "raw_input": "Galinor approaches the man in tatters with a determination flashing in his eyes.",
+      "raw_input": "Galinor is weary from travel, but approaches the runner for food and news of what's going on.",
       "turn_stage_order": [
         "player_input",
         "intent_normalization_expansion",
@@ -248,11 +186,11 @@
         "response_debug_packaging"
       ],
       "incoming_payload": {
-        "text": "Galinor approaches the man in tatters with a determination flashing in his eyes."
+        "text": "Galinor is weary from travel, but approaches the runner for food and news of what's going on."
       },
       "parsed_intent": null,
       "segmented_turn": {
-        "declared_action_text": "Galinor approaches the man in tatters with a determination flashing in his eyes."
+        "declared_action_text": "Galinor is weary from travel, but approaches the runner for food and news of what's going on."
       },
       "normalized_action": null,
       "resolution": {
@@ -266,11 +204,11 @@
       ],
       "turn_trace": {
         "source": "chat",
-        "player_input": "Galinor approaches the man in tatters with a determination flashing in his eyes.",
+        "player_input": "Galinor is weary from travel, but approaches the runner for food and news of what's going on.",
         "intent": {
           "parsed": null,
           "segmented_turn": {
-            "declared_action_text": "Galinor approaches the man in tatters with a determination flashing in his eyes."
+            "declared_action_text": "Galinor is weary from travel, but approaches the runner for food and news of what's going on."
           },
           "normalized": null,
           "implied_context": {
@@ -354,10 +292,10 @@
       "error": null
     },
     {
-      "timestamp": "2026-03-19T22:45:13.824187Z",
+      "timestamp": "2026-03-20T01:53:13.923321Z",
       "source": "chat",
       "action_type": "chat",
-      "raw_input": "\"I may not be who you're expecting, but trust I'm much more promising. What's your business here?\"",
+      "raw_input": "\"Yeah, I would. Which councilor is feeding information to the smugglers?\"",
       "turn_stage_order": [
         "player_input",
         "intent_normalization_expansion",
@@ -370,11 +308,11 @@
         "response_debug_packaging"
       ],
       "incoming_payload": {
-        "text": "\"I may not be who you're expecting, but trust I'm much more promising. What's your business here?\""
+        "text": "\"Yeah, I would. Which councilor is feeding information to the smugglers?\""
       },
       "parsed_intent": null,
       "segmented_turn": {
-        "spoken_text": "I may not be who you're expecting, but trust I'm much more promising. What's your business here?"
+        "spoken_text": "Yeah, I would. Which councilor is feeding information to the smugglers?"
       },
       "normalized_action": null,
       "resolution": {
@@ -388,11 +326,11 @@
       ],
       "turn_trace": {
         "source": "chat",
-        "player_input": "\"I may not be who you're expecting, but trust I'm much more promising. What's your business here?\"",
+        "player_input": "\"Yeah, I would. Which councilor is feeding information to the smugglers?\"",
         "intent": {
           "parsed": null,
           "segmented_turn": {
-            "spoken_text": "I may not be who you're expecting, but trust I'm much more promising. What's your business here?"
+            "spoken_text": "Yeah, I would. Which councilor is feeding information to the smugglers?"
           },
           "normalized": null,
           "implied_context": {
@@ -476,10 +414,10 @@
       "error": null
     },
     {
-      "timestamp": "2026-03-19T22:46:04.675768Z",
+      "timestamp": "2026-03-20T01:54:34.344185Z",
       "source": "chat",
       "action_type": "chat",
-      "raw_input": "[OC] The statements are directed at the man in tatters.",
+      "raw_input": "Galinor addresses the runner again. \"Sorry, I meant to say, which window gives the best shot into the chamber?\"",
       "turn_stage_order": [
         "player_input",
         "intent_normalization_expansion",
@@ -492,11 +430,12 @@
         "response_debug_packaging"
       ],
       "incoming_payload": {
-        "text": "[OC] The statements are directed at the man in tatters."
+        "text": "Galinor addresses the runner again. \"Sorry, I meant to say, which window gives the best shot into the chamber?\""
       },
       "parsed_intent": null,
       "segmented_turn": {
-        "declared_action_text": "[OC] The statements are directed at the man in tatters."
+        "spoken_text": "Sorry, I meant to say, which window gives the best shot into the chamber?",
+        "declared_action_text": "Galinor addresses the runner again."
       },
       "normalized_action": null,
       "resolution": {
@@ -510,11 +449,12 @@
       ],
       "turn_trace": {
         "source": "chat",
-        "player_input": "[OC] The statements are directed at the man in tatters.",
+        "player_input": "Galinor addresses the runner again. \"Sorry, I meant to say, which window gives the best shot into the chamber?\"",
         "intent": {
           "parsed": null,
           "segmented_turn": {
-            "declared_action_text": "[OC] The statements are directed at the man in tatters."
+            "spoken_text": "Sorry, I meant to say, which window gives the best shot into the chamber?",
+            "declared_action_text": "Galinor addresses the runner again."
           },
           "normalized": null,
           "implied_context": {
@@ -598,10 +538,10 @@
       "error": null
     },
     {
-      "timestamp": "2026-03-19T22:49:15.564124Z",
+      "timestamp": "2026-03-20T01:56:29.025251Z",
       "source": "chat",
       "action_type": "chat",
-      "raw_input": "\"You're right. I need to know what you're looking for.\" Galinor steps even closer to the man. \"Speak, now.\"",
+      "raw_input": "Galinor nods. \"Is Lirael the murderer?\"",
       "turn_stage_order": [
         "player_input",
         "intent_normalization_expansion",
@@ -614,12 +554,12 @@
         "response_debug_packaging"
       ],
       "incoming_payload": {
-        "text": "\"You're right. I need to know what you're looking for.\" Galinor steps even closer to the man. \"Speak, now.\""
+        "text": "Galinor nods. \"Is Lirael the murderer?\""
       },
       "parsed_intent": null,
       "segmented_turn": {
-        "spoken_text": "You're right. I need to know what you're looking for. Speak, now.",
-        "declared_action_text": "Galinor steps even closer to the man."
+        "spoken_text": "Is Lirael the murderer?",
+        "declared_action_text": "Galinor nods."
       },
       "normalized_action": null,
       "resolution": {
@@ -633,12 +573,12 @@
       ],
       "turn_trace": {
         "source": "chat",
-        "player_input": "\"You're right. I need to know what you're looking for.\" Galinor steps even closer to the man. \"Speak, now.\"",
+        "player_input": "Galinor nods. \"Is Lirael the murderer?\"",
         "intent": {
           "parsed": null,
           "segmented_turn": {
-            "spoken_text": "You're right. I need to know what you're looking for. Speak, now.",
-            "declared_action_text": "Galinor steps even closer to the man."
+            "spoken_text": "Is Lirael the murderer?",
+            "declared_action_text": "Galinor nods."
           },
           "normalized": null,
           "implied_context": {
@@ -722,10 +662,10 @@
       "error": null
     },
     {
-      "timestamp": "2026-03-19T22:51:42.176610Z",
+      "timestamp": "2026-03-20T01:56:53.545984Z",
       "source": "chat",
       "action_type": "chat",
-      "raw_input": "\"That's a start, but not good enough. Who's looking for someone with magical skills? Who paid you to do this?\"",
+      "raw_input": "\u201cCome on, just tell me what the truth is.\u201d",
       "turn_stage_order": [
         "player_input",
         "intent_normalization_expansion",
@@ -738,78 +678,31 @@
         "response_debug_packaging"
       ],
       "incoming_payload": {
-        "text": "\"That's a start, but not good enough. Who's looking for someone with magical skills? Who paid you to do this?\""
+        "text": "\u201cCome on, just tell me what the truth is.\u201d"
       },
-      "parsed_intent": {
-        "id": "thats_a_start_but_not_good_enough_whos_l",
-        "label": "That's a start, but not good enough. Who's looking for someone with magical skills? Who paid you to do this?",
-        "type": "investigate",
-        "prompt": "That's a start, but not good enough. Who's looking for someone with magical skills? Who paid you to do this?",
-        "targetSceneId": null,
-        "target_scene_id": null
-      },
+      "parsed_intent": null,
       "segmented_turn": {
-        "spoken_text": "That's a start, but not good enough. Who's looking for someone with magical skills? Who paid you to do this?"
+        "declared_action_text": "\u201cCome on, just tell me what the truth is.\u201d"
       },
-      "normalized_action": {
-        "id": "thats_a_start_but_not_good_enough_whos_l",
-        "label": "That's a start, but not good enough. Who's looking for someone with magical skills? Who paid you to do this?",
-        "type": "investigate",
-        "prompt": "That's a start, but not good enough. Who's looking for someone with magical skills? Who paid you to do this?",
-        "targetSceneId": null
-      },
+      "normalized_action": null,
       "resolution": {
-        "kind": "investigate",
-        "action_id": "thats_a_start_but_not_good_enough_whos_l",
-        "label": "That's a start, but not good enough. Who's looking for someone with magical skills? Who paid you to do this?",
-        "prompt": "That's a start, but not good enough. Who's looking for someone with magical skills? Who paid you to do this?",
-        "success": null,
-        "resolved_transition": false,
-        "target_scene_id": null,
-        "clue_id": null,
-        "discovered_clues": [],
-        "state_changes": {},
-        "hint": "Player is investigating or seeking clues. Narrate what deeper scrutiny reveals; advance discovery if appropriate.",
-        "metadata": {
-          "turn_segmentation": {
-            "spoken_text": "That's a start, but not good enough. Who's looking for someone with magical skills? Who paid you to do this?"
-          }
-        },
         "world_tick_events": []
       },
       "scene_before": "frontier_gate",
       "scene_after": "frontier_gate",
-      "clue_updates": [
-        "You can question the tavern runner for more details about the missing patrol."
-      ],
+      "clue_updates": [],
       "world_flag_updates": [
         "clock:time_pressure=6"
       ],
       "turn_trace": {
         "source": "chat",
-        "player_input": "\"That's a start, but not good enough. Who's looking for someone with magical skills? Who paid you to do this?\"",
+        "player_input": "\u201cCome on, just tell me what the truth is.\u201d",
         "intent": {
-          "parsed": {
-            "id": "thats_a_start_but_not_good_enough_whos_l",
-            "label": "That's a start, but not good enough. Who's looking for someone with magical skills? Who paid you to do this?",
-            "type": "investigate",
-            "prompt": "That's a start, but not good enough. Who's looking for someone with magical skills? Who paid you to do this?",
-            "targetSceneId": null,
-            "target_scene_id": null
-          },
+          "parsed": null,
           "segmented_turn": {
-            "spoken_text": "That's a start, but not good enough. Who's looking for someone with magical skills? Who paid you to do this?"
+            "declared_action_text": "\u201cCome on, just tell me what the truth is.\u201d"
           },
-          "normalized": {
-            "id": "thats_a_start_but_not_good_enough_whos_l",
-            "label": "That's a start, but not good enough. Who's looking for someone with magical skills? Who paid you to do this?",
-            "type": "investigate",
-            "prompt": "That's a start, but not good enough. Who's looking for someone with magical skills? Who paid you to do this?",
-            "targetSceneId": null,
-            "target_scene_id": null,
-            "targetEntityId": null,
-            "target_id": null
-          },
+          "normalized": null,
           "implied_context": {
             "applied": false,
             "cases": [],
@@ -818,10 +711,10 @@
         },
         "classification": {
           "action_type": "chat",
-          "resolved_kind": "investigate",
+          "resolved_kind": null,
           "requires_check": false
         },
-        "resolution_path": "exploration_engine",
+        "resolution_path": "chat_engine",
         "authoritative_state_changes": {
           "scene_transition": null,
           "resolution_state_changes": {},
@@ -830,9 +723,9 @@
         },
         "interaction_after": {
           "active_interaction_target_id": null,
-          "active_interaction_kind": "investigate",
-          "interaction_mode": "activity",
-          "engagement_level": "focused",
+          "active_interaction_kind": null,
+          "interaction_mode": "none",
+          "engagement_level": "none",
           "conversation_privacy": null,
           "player_position_context": null
         },
@@ -850,19 +743,11 @@
           "scene_momentum_next_due_in": 2
         },
         "clues": {
-          "discovered_texts": [
-            "You can question the tavern runner for more details about the missing patrol."
-          ],
-          "presentation_changes": [
-            {
-              "id": "you_can_question_the_tavern_runner_for_more_details_about_the_missing_patrol",
-              "from": null,
-              "to": "explicit"
-            }
-          ],
+          "discovered_texts": [],
+          "presentation_changes": [],
           "known_counts": {
             "implicit": 0,
-            "explicit": 1,
+            "explicit": 0,
             "actionable": 0
           }
         },
@@ -899,10 +784,10 @@
       "error": null
     },
     {
-      "timestamp": "2026-03-19T22:52:28.254022Z",
+      "timestamp": "2026-03-20T01:57:16.066771Z",
       "source": "chat",
       "action_type": "chat",
-      "raw_input": "[OC] What\u2019s actually going on here?",
+      "raw_input": "Galinor waits.",
       "turn_stage_order": [
         "player_input",
         "intent_normalization_expansion",
@@ -915,11 +800,11 @@
         "response_debug_packaging"
       ],
       "incoming_payload": {
-        "text": "[OC] What\u2019s actually going on here?"
+        "text": "Galinor waits."
       },
       "parsed_intent": null,
       "segmented_turn": {
-        "declared_action_text": "[OC] What\u2019s actually going on here?"
+        "declared_action_text": "Galinor waits."
       },
       "normalized_action": null,
       "resolution": {
@@ -933,11 +818,11 @@
       ],
       "turn_trace": {
         "source": "chat",
-        "player_input": "[OC] What\u2019s actually going on here?",
+        "player_input": "Galinor waits.",
         "intent": {
           "parsed": null,
           "segmented_turn": {
-            "declared_action_text": "[OC] What\u2019s actually going on here?"
+            "declared_action_text": "Galinor waits."
           },
           "normalized": null,
           "implied_context": {
@@ -960,9 +845,9 @@
         },
         "interaction_after": {
           "active_interaction_target_id": null,
-          "active_interaction_kind": "investigate",
-          "interaction_mode": "activity",
-          "engagement_level": "focused",
+          "active_interaction_kind": null,
+          "interaction_mode": "none",
+          "engagement_level": "none",
           "conversation_privacy": null,
           "player_position_context": null
         },
@@ -984,7 +869,7 @@
           "presentation_changes": [],
           "known_counts": {
             "implicit": 0,
-            "explicit": 1,
+            "explicit": 0,
             "actionable": 0
           }
         },
@@ -1021,10 +906,10 @@
       "error": null
     },
     {
-      "timestamp": "2026-03-19T22:53:19.431997Z",
+      "timestamp": "2026-03-20T01:58:03.979150Z",
       "source": "chat",
       "action_type": "chat",
-      "raw_input": "[OC] Is he lying?",
+      "raw_input": "Galinor holds his position, unmoving.",
       "turn_stage_order": [
         "player_input",
         "intent_normalization_expansion",
@@ -1037,11 +922,11 @@
         "response_debug_packaging"
       ],
       "incoming_payload": {
-        "text": "[OC] Is he lying?"
+        "text": "Galinor holds his position, unmoving."
       },
       "parsed_intent": null,
       "segmented_turn": {
-        "adjudication_question_text": "[OC] Is he lying?"
+        "declared_action_text": "Galinor holds his position, unmoving."
       },
       "normalized_action": null,
       "resolution": {
@@ -1055,11 +940,11 @@
       ],
       "turn_trace": {
         "source": "chat",
-        "player_input": "[OC] Is he lying?",
+        "player_input": "Galinor holds his position, unmoving.",
         "intent": {
           "parsed": null,
           "segmented_turn": {
-            "adjudication_question_text": "[OC] Is he lying?"
+            "declared_action_text": "Galinor holds his position, unmoving."
           },
           "normalized": null,
           "implied_context": {
@@ -1082,9 +967,9 @@
         },
         "interaction_after": {
           "active_interaction_target_id": null,
-          "active_interaction_kind": "investigate",
-          "interaction_mode": "activity",
-          "engagement_level": "focused",
+          "active_interaction_kind": null,
+          "interaction_mode": "none",
+          "engagement_level": "none",
           "conversation_privacy": null,
           "player_position_context": null
         },
@@ -1106,7 +991,7 @@
           "presentation_changes": [],
           "known_counts": {
             "implicit": 0,
-            "explicit": 1,
+            "explicit": 0,
             "actionable": 0
           }
         },
@@ -1143,10 +1028,10 @@
       "error": null
     },
     {
-      "timestamp": "2026-03-19T22:54:37.425377Z",
+      "timestamp": "2026-03-20T01:59:27.305201Z",
       "source": "chat",
       "action_type": "chat",
-      "raw_input": "\"Who's the person watching us talk right now?\"",
+      "raw_input": "Galinor addresses the runner again. \"You know, this stew is nice, but I'd like to chat with someone interesting. Any recommendations?\"",
       "turn_stage_order": [
         "player_input",
         "intent_normalization_expansion",
@@ -1159,43 +1044,15 @@
         "response_debug_packaging"
       ],
       "incoming_payload": {
-        "text": "\"Who's the person watching us talk right now?\""
+        "text": "Galinor addresses the runner again. \"You know, this stew is nice, but I'd like to chat with someone interesting. Any recommendations?\""
       },
-      "parsed_intent": {
-        "id": "whos_the_person_watching_us_talk_right_n",
-        "label": "Who's the person watching us talk right now?",
-        "type": "interact",
-        "prompt": "Who's the person watching us talk right now?",
-        "targetSceneId": null,
-        "target_scene_id": null
-      },
+      "parsed_intent": null,
       "segmented_turn": {
-        "spoken_text": "Who's the person watching us talk right now?"
+        "spoken_text": "You know, this stew is nice, but I'd like to chat with someone interesting. Any recommendations?",
+        "declared_action_text": "Galinor addresses the runner again."
       },
-      "normalized_action": {
-        "id": "whos_the_person_watching_us_talk_right_n",
-        "label": "Who's the person watching us talk right now?",
-        "type": "interact",
-        "prompt": "Who's the person watching us talk right now?",
-        "targetSceneId": null
-      },
+      "normalized_action": null,
       "resolution": {
-        "kind": "interact",
-        "action_id": "whos_the_person_watching_us_talk_right_n",
-        "label": "Who's the person watching us talk right now?",
-        "prompt": "Who's the person watching us talk right now?",
-        "success": null,
-        "resolved_transition": false,
-        "target_scene_id": null,
-        "clue_id": null,
-        "discovered_clues": [],
-        "state_changes": {},
-        "hint": "Player is attempting social interaction or probing NPCs. Narrate the encounter or response.",
-        "metadata": {
-          "turn_segmentation": {
-            "spoken_text": "Who's the person watching us talk right now?"
-          }
-        },
         "world_tick_events": []
       },
       "scene_before": "frontier_gate",
@@ -1206,29 +1063,14 @@
       ],
       "turn_trace": {
         "source": "chat",
-        "player_input": "\"Who's the person watching us talk right now?\"",
+        "player_input": "Galinor addresses the runner again. \"You know, this stew is nice, but I'd like to chat with someone interesting. Any recommendations?\"",
         "intent": {
-          "parsed": {
-            "id": "whos_the_person_watching_us_talk_right_n",
-            "label": "Who's the person watching us talk right now?",
-            "type": "interact",
-            "prompt": "Who's the person watching us talk right now?",
-            "targetSceneId": null,
-            "target_scene_id": null
-          },
+          "parsed": null,
           "segmented_turn": {
-            "spoken_text": "Who's the person watching us talk right now?"
+            "spoken_text": "You know, this stew is nice, but I'd like to chat with someone interesting. Any recommendations?",
+            "declared_action_text": "Galinor addresses the runner again."
           },
-          "normalized": {
-            "id": "whos_the_person_watching_us_talk_right_n",
-            "label": "Who's the person watching us talk right now?",
-            "type": "interact",
-            "prompt": "Who's the person watching us talk right now?",
-            "targetSceneId": null,
-            "target_scene_id": null,
-            "targetEntityId": null,
-            "target_id": null
-          },
+          "normalized": null,
           "implied_context": {
             "applied": false,
             "cases": [],
@@ -1237,10 +1079,10 @@
         },
         "classification": {
           "action_type": "chat",
-          "resolved_kind": "interact",
+          "resolved_kind": null,
           "requires_check": false
         },
-        "resolution_path": "exploration_engine",
+        "resolution_path": "chat_engine",
         "authoritative_state_changes": {
           "scene_transition": null,
           "resolution_state_changes": {},
@@ -1249,9 +1091,9 @@
         },
         "interaction_after": {
           "active_interaction_target_id": null,
-          "active_interaction_kind": "interact",
-          "interaction_mode": "activity",
-          "engagement_level": "focused",
+          "active_interaction_kind": null,
+          "interaction_mode": "none",
+          "engagement_level": "none",
           "conversation_privacy": null,
           "player_position_context": null
         },
@@ -1273,7 +1115,7 @@
           "presentation_changes": [],
           "known_counts": {
             "implicit": 0,
-            "explicit": 1,
+            "explicit": 0,
             "actionable": 0
           }
         },
@@ -1310,10 +1152,10 @@
       "error": null
     },
     {
-      "timestamp": "2026-03-19T22:55:43.179172Z",
+      "timestamp": "2026-03-20T01:59:55.832936Z",
       "source": "chat",
       "action_type": "chat",
-      "raw_input": "\"You know who I'm talking about. The one in the dark robes. Who are they?\"",
+      "raw_input": "\u201cWhere do I find that person?\u201d",
       "turn_stage_order": [
         "player_input",
         "intent_normalization_expansion",
@@ -1326,46 +1168,14 @@
         "response_debug_packaging"
       ],
       "incoming_payload": {
-        "text": "\"You know who I'm talking about. The one in the dark robes. Who are they?\""
+        "text": "\u201cWhere do I find that person?\u201d"
       },
-      "parsed_intent": {
-        "id": "you_know_who_im_talking_about_the_one_in",
-        "label": "You know who I'm talking about. The one in the dark robes. Who are they?",
-        "type": "interact",
-        "prompt": "You know who I'm talking about. The one in the dark robes. Who are they?",
-        "targetSceneId": null,
-        "target_scene_id": null,
-        "metadata": {
-          "intent": "conversation"
-        }
-      },
+      "parsed_intent": null,
       "segmented_turn": {
-        "spoken_text": "You know who I'm talking about. The one in the dark robes. Who are they?"
+        "declared_action_text": "\u201cWhere do I find that person?\u201d"
       },
-      "normalized_action": {
-        "id": "you_know_who_im_talking_about_the_one_in",
-        "label": "You know who I'm talking about. The one in the dark robes. Who are they?",
-        "type": "interact",
-        "prompt": "You know who I'm talking about. The one in the dark robes. Who are they?",
-        "targetSceneId": null
-      },
+      "normalized_action": null,
       "resolution": {
-        "kind": "interact",
-        "action_id": "you_know_who_im_talking_about_the_one_in",
-        "label": "You know who I'm talking about. The one in the dark robes. Who are they?",
-        "prompt": "You know who I'm talking about. The one in the dark robes. Who are they?",
-        "success": null,
-        "resolved_transition": false,
-        "target_scene_id": null,
-        "clue_id": null,
-        "discovered_clues": [],
-        "state_changes": {},
-        "hint": "Player is attempting social interaction or probing NPCs. Narrate the encounter or response.",
-        "metadata": {
-          "turn_segmentation": {
-            "spoken_text": "You know who I'm talking about. The one in the dark robes. Who are they?"
-          }
-        },
         "world_tick_events": []
       },
       "scene_before": "frontier_gate",
@@ -1376,32 +1186,13 @@
       ],
       "turn_trace": {
         "source": "chat",
-        "player_input": "\"You know who I'm talking about. The one in the dark robes. Who are they?\"",
+        "player_input": "\u201cWhere do I find that person?\u201d",
         "intent": {
-          "parsed": {
-            "id": "you_know_who_im_talking_about_the_one_in",
-            "label": "You know who I'm talking about. The one in the dark robes. Who are they?",
-            "type": "interact",
-            "prompt": "You know who I'm talking about. The one in the dark robes. Who are they?",
-            "targetSceneId": null,
-            "target_scene_id": null,
-            "metadata": {
-              "intent": "conversation"
-            }
-          },
+          "parsed": null,
           "segmented_turn": {
-            "spoken_text": "You know who I'm talking about. The one in the dark robes. Who are they?"
+            "declared_action_text": "\u201cWhere do I find that person?\u201d"
           },
-          "normalized": {
-            "id": "you_know_who_im_talking_about_the_one_in",
-            "label": "You know who I'm talking about. The one in the dark robes. Who are they?",
-            "type": "interact",
-            "prompt": "You know who I'm talking about. The one in the dark robes. Who are they?",
-            "targetSceneId": null,
-            "target_scene_id": null,
-            "targetEntityId": null,
-            "target_id": null
-          },
+          "normalized": null,
           "implied_context": {
             "applied": false,
             "cases": [],
@@ -1410,10 +1201,10 @@
         },
         "classification": {
           "action_type": "chat",
-          "resolved_kind": "interact",
+          "resolved_kind": null,
           "requires_check": false
         },
-        "resolution_path": "exploration_engine",
+        "resolution_path": "chat_engine",
         "authoritative_state_changes": {
           "scene_transition": null,
           "resolution_state_changes": {},
@@ -1422,9 +1213,9 @@
         },
         "interaction_after": {
           "active_interaction_target_id": null,
-          "active_interaction_kind": "interact",
-          "interaction_mode": "activity",
-          "engagement_level": "focused",
+          "active_interaction_kind": null,
+          "interaction_mode": "none",
+          "engagement_level": "none",
           "conversation_privacy": null,
           "player_position_context": null
         },
@@ -1446,7 +1237,7 @@
           "presentation_changes": [],
           "known_counts": {
             "implicit": 0,
-            "explicit": 1,
+            "explicit": 0,
             "actionable": 0
           }
         },
@@ -1483,10 +1274,10 @@
       "error": null
     },
     {
-      "timestamp": "2026-03-19T22:57:13.060955Z",
+      "timestamp": "2026-03-20T02:00:42.662032Z",
       "source": "chat",
       "action_type": "chat",
-      "raw_input": "\"Are you in League with they Ash Cowl too? How do you know that without knowing their identity?\"",
+      "raw_input": "\"Does she normally lurk around taverns? Seems a bit unlady-like to me.\"",
       "turn_stage_order": [
         "player_input",
         "intent_normalization_expansion",
@@ -1499,11 +1290,11 @@
         "response_debug_packaging"
       ],
       "incoming_payload": {
-        "text": "\"Are you in League with they Ash Cowl too? How do you know that without knowing their identity?\""
+        "text": "\"Does she normally lurk around taverns? Seems a bit unlady-like to me.\""
       },
       "parsed_intent": null,
       "segmented_turn": {
-        "spoken_text": "Are you in League with they Ash Cowl too? How do you know that without knowing their identity?"
+        "spoken_text": "Does she normally lurk around taverns? Seems a bit unlady-like to me."
       },
       "normalized_action": null,
       "resolution": {
@@ -1515,11 +1306,11 @@
       "world_flag_updates": [],
       "turn_trace": {
         "source": "chat",
-        "player_input": "\"Are you in League with they Ash Cowl too? How do you know that without knowing their identity?\"",
+        "player_input": "\"Does she normally lurk around taverns? Seems a bit unlady-like to me.\"",
         "intent": {
           "parsed": null,
           "segmented_turn": {
-            "spoken_text": "Are you in League with they Ash Cowl too? How do you know that without knowing their identity?"
+            "spoken_text": "Does she normally lurk around taverns? Seems a bit unlady-like to me."
           },
           "normalized": null,
           "implied_context": {
@@ -1542,9 +1333,9 @@
         },
         "interaction_after": {
           "active_interaction_target_id": null,
-          "active_interaction_kind": "interact",
-          "interaction_mode": "activity",
-          "engagement_level": "focused",
+          "active_interaction_kind": null,
+          "interaction_mode": "none",
+          "engagement_level": "none",
           "conversation_privacy": null,
           "player_position_context": null
         },
@@ -1566,7 +1357,7 @@
           "presentation_changes": [],
           "known_counts": {
             "implicit": 0,
-            "explicit": 1,
+            "explicit": 0,
             "actionable": 0
           }
         },
@@ -1603,13 +1394,13 @@
       "error": null
     }
   ],
-  "last_saved_at": "2026-03-19T22:57:27.419407Z",
+  "last_saved_at": "2026-03-20T02:00:53.227263Z",
   "npc_runtime": {},
   "interaction_context": {
     "active_interaction_target_id": null,
-    "active_interaction_kind": "interact",
-    "interaction_mode": "activity",
-    "engagement_level": "focused",
+    "active_interaction_kind": null,
+    "interaction_mode": "none",
+    "engagement_level": "none",
     "conversation_privacy": null,
     "player_position_context": null
   }

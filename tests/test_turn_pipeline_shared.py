@@ -88,6 +88,27 @@ def _gm_response(text: str, *, tags=None, debug_notes: str = ""):
     }
 
 
+def _assert_concrete_pressure(text: str) -> None:
+    low = str(text or "").lower()
+    assert any(
+        phrase in low
+        for phrase in (
+            "\"",
+            "cuts through the crowd",
+            "stops at your shoulder",
+            "comes straight to you",
+            "squares up to you",
+            "breaks the silence first",
+            "if you're moving on this, move now",
+            "question the runner",
+            "work the notice",
+            "east-road trail",
+            "east road",
+            "ask me now",
+        )
+    )
+
+
 def test_action_and_chat_social_use_equivalent_shared_turn_logic(tmp_path, monkeypatch):
     social_action = {
         "id": "question-runner",
@@ -273,6 +294,63 @@ def test_chat_prompt_carries_no_validator_voice_policy(tmp_path, monkeypatch):
     assert payload["response_policy"]["no_validator_voice"]["applies_to"] == "standard_narration"
 
 
+def test_chat_persists_recent_contextual_leads_from_gm_reply(tmp_path, monkeypatch):
+    _seed_shared_world(tmp_path, monkeypatch)
+
+    with monkeypatch.context() as m:
+        m.setattr(
+            "game.api.call_gpt",
+            lambda _messages: _gm_response(
+                "Lady Misia waits near the tavern entrance while nearby guards keep glancing back to the missing patrol notice."
+            ),
+        )
+        m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
+        m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
+        m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+        client = TestClient(app)
+        resp = client.post("/api/chat", json={"text": "Who should I watch here?"})
+
+    assert resp.status_code == 200
+    data = resp.json()
+    rt = data.get("session", {}).get("scene_runtime", {}).get("scene_investigate", {})
+    recent = rt.get("recent_contextual_leads") or []
+    assert any(entry.get("subject") == "Lady Misia" and entry.get("position") == "near the tavern entrance" for entry in recent)
+    assert any("missing patrol" in str(entry.get("subject") or "").lower() for entry in recent)
+
+
+def test_chat_known_follow_up_bypasses_uncertainty_fallback(tmp_path, monkeypatch):
+    _seed_shared_world(tmp_path, monkeypatch)
+    session = storage.load_session()
+    scene_runtime = session.setdefault("scene_runtime", {}).setdefault("scene_investigate", {})
+    scene_runtime["recent_contextual_leads"] = [
+        {
+            "key": "lady-misia-near-the-tavern-entrance",
+            "kind": "recent_named_figure",
+            "subject": "Lady Misia",
+            "position": "near the tavern entrance",
+            "named": True,
+            "positioned": True,
+        }
+    ]
+    storage._save_json(storage.SESSION_PATH, session)
+
+    with monkeypatch.context() as m:
+        m.setattr("game.api.call_gpt", lambda _messages: _gm_response("Captain Veyra folds her arms and watches the road."))
+        m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
+        m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
+        m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+        client = TestClient(app)
+        resp = client.post("/api/chat", json={"text": "Where do I find that person?"})
+
+    assert resp.status_code == 200
+    data = resp.json()
+    gm_output = data.get("gm_output") or {}
+    assert (gm_output.get("player_facing_text") or "").startswith("Lady Misia is near the tavern entrance.")
+    assert "known_fact_guard" in (gm_output.get("tags") or [])
+    assert not any(str(tag).startswith("uncertainty:") for tag in (gm_output.get("tags") or []))
+    assert "known_fact_guard:recent_dialogue_continuity" in (gm_output.get("debug_notes") or "")
+
+
 def test_chat_targeted_retry_unresolved_question_only(tmp_path, monkeypatch):
     _seed_shared_world(tmp_path, monkeypatch)
     captured_inputs = []
@@ -377,6 +455,92 @@ def test_chat_targeted_retry_scene_stall_only(tmp_path, monkeypatch):
     assert "answer the player" not in low
     assert "rule priority" not in low
     assert "retry_strategy:selected=scene_stall" in ((data.get("gm_output") or {}).get("debug_notes") or "")
+
+
+def test_chat_single_wait_in_tense_scene_forces_interaction_pressure(tmp_path, monkeypatch):
+    _seed_shared_world(tmp_path, monkeypatch)
+    scene = storage.load_scene("scene_investigate")
+    scene["scene"]["visible_facts"] = [
+        "Guards keep glancing at a missing patrol notice beside the checkpoint.",
+        "A tavern runner lingers under an awning, selling rumors for coin.",
+    ]
+    storage.save_scene(scene)
+
+    with monkeypatch.context() as m:
+        m.setattr("game.api.call_gpt", lambda _messages: _gm_response("Rain beads on the checkpoint while nobody moves first."))
+        m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
+        m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
+        m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+        client = TestClient(app)
+        resp = client.post("/api/chat", json={"text": "I wait."})
+
+    assert resp.status_code == 200
+    data = resp.json()
+    text = (data.get("gm_output") or {}).get("player_facing_text") or ""
+    _assert_concrete_pressure(text)
+    assert "passive_scene_pressure" in ((data.get("gm_output") or {}).get("tags") or [])
+
+
+def test_chat_repeated_passive_actions_do_not_stall_into_atmosphere(tmp_path, monkeypatch):
+    _seed_shared_world(tmp_path, monkeypatch)
+    scene = storage.load_scene("scene_investigate")
+    scene["scene"]["visible_facts"] = [
+        "A guard leans near the checkpoint, watching the road.",
+        "A missing patrol notice curls in the damp beside him.",
+    ]
+    storage.save_scene(scene)
+
+    with monkeypatch.context() as m:
+        m.setattr("game.api.call_gpt", lambda _messages: _gm_response("The damp air hangs over the gate as everyone watches everyone else."))
+        m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
+        m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
+        m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+        client = TestClient(app)
+        first = client.post("/api/chat", json={"text": "I wait."})
+        second = client.post("/api/chat", json={"text": "I hold position and watch."})
+
+    assert first.status_code == 200
+    assert second.status_code == 200
+    data = second.json()
+    text = (data.get("gm_output") or {}).get("player_facing_text") or ""
+    _assert_concrete_pressure(text)
+    debug_notes = (((data.get("gm_output") or {}).get("debug_notes")) or "")
+    assert "passive_scene_pressure:" in debug_notes
+    assert "streak=2" in debug_notes
+
+
+def test_chat_passive_scene_prefers_already_introduced_suspicious_figure(tmp_path, monkeypatch):
+    _seed_shared_world(tmp_path, monkeypatch)
+    session = storage.load_session()
+    scene_runtime = session.setdefault("scene_runtime", {}).setdefault("scene_investigate", {})
+    scene_runtime["recent_contextual_leads"] = [
+        {
+            "key": "tattered-man-by-the-shuttered-well",
+            "kind": "visible_suspicious_figure",
+            "subject": "the tattered man",
+            "position": "by the shuttered well",
+            "named": False,
+            "positioned": True,
+            "mentions": 2,
+            "last_turn": 1,
+        }
+    ]
+    storage._save_json(storage.SESSION_PATH, session)
+
+    with monkeypatch.context() as m:
+        m.setattr("game.api.call_gpt", lambda _messages: _gm_response("The square stays hushed except for the scrape of boots on wet stone."))
+        m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
+        m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
+        m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+        client = TestClient(app)
+        resp = client.post("/api/chat", json={"text": "I remain silent and observe."})
+
+    assert resp.status_code == 200
+    data = resp.json()
+    text = (data.get("gm_output") or {}).get("player_facing_text") or ""
+    assert "the tattered man" in text.lower()
+    _assert_concrete_pressure(text)
+    assert "passive_scene_pressure:lead_figure" in (((data.get("gm_output") or {}).get("debug_notes")) or "")
 
 
 def test_chat_roll_requirement_question_routes_to_adjudication_without_gpt(tmp_path, monkeypatch):

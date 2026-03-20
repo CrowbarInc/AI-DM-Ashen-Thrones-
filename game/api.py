@@ -65,6 +65,7 @@ from game.gm import (
     detect_retry_failures,
     choose_retry_strategy,
     build_retry_prompt_for_failure,
+    remember_recent_contextual_leads,
 )
 from game.journal import build_player_journal
 from game.affordances import get_available_affordances
@@ -458,6 +459,78 @@ def _prepare_interaction_from_turn_input(
     return apply_turn_input_implied_context(session, world, scene_id, player_text)
 
 
+_PASSIVE_ACTION_CUES: tuple[tuple[str, str], ...] = (
+    ("hold position", "hold_position"),
+    ("remain silent", "remain_silent"),
+    ("stay silent", "remain_silent"),
+    ("say nothing", "remain_silent"),
+    ("keep watching", "watch"),
+    ("look around", "observe"),
+    ("wait", "wait"),
+    ("watch", "watch"),
+    ("observe", "observe"),
+)
+
+
+def _detect_passive_action_markers(
+    player_text: str | None,
+    normalized_action: dict | None = None,
+    resolution: dict | None = None,
+) -> list[str]:
+    """Detect passive/holding actions in a simple, inspectable way."""
+    markers: list[str] = []
+    low = str(player_text or "").strip().lower()
+    normalized_type = str((normalized_action or {}).get("type") or "").strip().lower()
+    resolution_kind = str((resolution or {}).get("kind") or "").strip().lower()
+    if normalized_type == "observe" or resolution_kind == "observe":
+        markers.append("observe")
+    for needle, label in _PASSIVE_ACTION_CUES:
+        if needle not in low:
+            continue
+        if label not in markers:
+            markers.append(label)
+    return markers
+
+
+def _record_scene_pressure_input(
+    session: dict,
+    scene_id: str,
+    player_text: str | None,
+    *,
+    normalized_action: dict | None = None,
+    resolution: dict | None = None,
+) -> dict:
+    """Track recent passive actions so pressure escalation can stay deterministic."""
+    sid = str(scene_id or "").strip()
+    if not sid:
+        return {}
+    runtime = get_scene_runtime(session, sid)
+    markers = _detect_passive_action_markers(
+        player_text,
+        normalized_action=normalized_action,
+        resolution=resolution,
+    )
+    is_passive = bool(markers)
+    previous_streak = int(runtime.get("passive_action_streak", 0) or 0)
+    runtime["passive_action_streak"] = (previous_streak + 1) if is_passive else 0
+    recent = runtime.get("recent_player_actions")
+    if not isinstance(recent, list):
+        recent = []
+    recent.append(
+        {
+            "text": str(player_text or "").strip()[:160],
+            "passive": is_passive,
+            "markers": list(markers[:3]),
+            "resolution_kind": str((resolution or {}).get("kind") or "").strip() or None,
+            "turn": int(session.get("turn_counter", 0) or 0),
+        }
+    )
+    runtime["recent_player_actions"] = recent[-4:]
+    runtime["last_player_action_text"] = str(player_text or "").strip()[:200]
+    runtime["last_player_action_passive"] = is_passive
+    return runtime
+
+
 def _apply_authoritative_clues_from_resolution(
     session: dict,
     scene_id: str,
@@ -629,7 +702,15 @@ def _build_gpt_narration_from_authoritative_state(
         else build_response_policy()
     )
     known_clues = list(get_all_known_clue_texts(session))
-    gm = guard_gm_output(call_gpt(messages), scene, user_text, known_clues)
+    gm = guard_gm_output(
+        call_gpt(messages),
+        scene,
+        user_text,
+        known_clues,
+        session=session,
+        world=world,
+        resolution=resolution,
+    )
     retry_attempt = 0
     while retry_attempt < MAX_TARGETED_RETRY_ATTEMPTS:
         failures = detect_retry_failures(
@@ -657,7 +738,15 @@ def _build_gpt_narration_from_authoritative_state(
             selected_failure.get("reasons"),
         )
         retry_messages = list(messages) + [{'role': 'user', 'content': retry_instruction}]
-        gm_retry = guard_gm_output(call_gpt(retry_messages), scene, user_text, known_clues)
+        gm_retry = guard_gm_output(
+            call_gpt(retry_messages),
+            scene,
+            user_text,
+            known_clues,
+            session=session,
+            world=world,
+            resolution=resolution,
+        )
         retry_dbg = gm_retry.get('debug_notes') if isinstance(gm_retry.get('debug_notes'), str) else ''
         reason_suffix = ','.join(str(r) for r in (selected_failure.get("reasons") or []) if isinstance(r, str)) or 'unknown'
         gm_retry['debug_notes'] = (
@@ -1393,6 +1482,14 @@ def action(req: ActionRequest):
         _finalize_and_append_trace(session, trace, False, f'Unsupported action type: {req.action_type}')
         return {'ok': False, 'error': f'Unsupported action type: {req.action_type}'}
 
+    _record_scene_pressure_input(
+        session,
+        scene_before_id,
+        fallback_user_text,
+        normalized_action=normalized_action,
+        resolution=resolution if isinstance(resolution, dict) else None,
+    )
+
     # Engine-owned roll prompting: when a check is required, skip GPT and return
     # deterministic check prompt text from authoritative resolution payload.
     if run_resolved_pipeline and _is_pending_check_resolution(resolution):
@@ -1419,6 +1516,11 @@ def action(req: ActionRequest):
         gm = {'player_facing_text': '', 'tags': [], 'scene_update': None, 'activate_scene_id': None, 'new_scene_draft': None, 'world_updates': None, 'suggested_action': None, 'debug_notes': 'No narration generated.'}
 
     scene, session, combat, surfaced_clue_telemetry = _apply_post_gm_updates(gm, scene, session, world, combat)
+    remember_recent_contextual_leads(
+        session,
+        scene['scene']['id'],
+        gm.get('player_facing_text') if isinstance(gm.get('player_facing_text'), str) else '',
+    )
     _update_interaction_context_after_action(
         session,
         resolution,
@@ -1644,6 +1746,13 @@ def chat(req: ChatRequest):
         # Attack when not in combat: fall back to GPT (don't route to exploration or combat)
         if parsed and (parsed.get("type") or "").strip().lower() == "attack" and not combat.get("in_combat"):
             parsed = None
+    _record_scene_pressure_input(
+        session,
+        scene_before_id,
+        req.text,
+        normalized_action=parsed if isinstance(parsed, dict) else None,
+        resolution=None,
+    )
     if parsed is not None and gm is None:
         # Stage 4: engine resolution from classified action.
         parsed_type = (parsed.get("type") or "").strip().lower()
@@ -1796,6 +1905,11 @@ def chat(req: ChatRequest):
             )
 
     scene, session, combat, surfaced_clue_telemetry = _apply_post_gm_updates(gm, scene, session, world, combat)
+    remember_recent_contextual_leads(
+        session,
+        scene['scene']['id'],
+        gm.get('player_facing_text') if isinstance(gm.get('player_facing_text'), str) else '',
+    )
     context_resolution = (
         resolution
         if isinstance(resolution, dict) and resolution.get('kind') and resolution.get('kind') != 'adjudication_query'
