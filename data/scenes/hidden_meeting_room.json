@@ -1,0 +1,81 @@
+{
+  "scene": {
+    "id": "hidden_meeting_room",
+    "location": "Behind the Tavern",
+    "summary": "A dimly lit room behind the tavern, filled with the rich aroma of hidden secrets and whispered plans. The walls are draped in dark fabric, muffling sounds from the outside world. A small table is set with maps and old parchments, revealing a network of connections and potential dangers.",
+    "mode": "exploration",
+    "visible_facts": [
+      "Dimly lit with shadows lurking in the corners.",
+      "A small table holds maps detailing recent patrol activities.",
+      "The air is thick with tension and anticipation."
+    ],
+    "discoverable_clues": [
+      {"id": "patrol_route_learned", "text": "A map indicates the locations of recent disturbances linked to the missing patrol."},
+      "Whispers hint at ancient dangers beneath the city."
+    ],
+    "hidden_facts": [
+      "The woman's contacts may have ulterior motives.",
+      "The missing patrol's fate is tied to forces far greater than mere political intrigue."
+    ],
+    "exits": [
+      {
+        "label": "Exit to the Alley",
+        "target_scene_id": "frontier_gate"
+      }
+    ],
+    "interactables": [
+      {
+        "id": "patrol_maps",
+        "type": "investigate",
+        "reveals_clue": "patrol_route_learned",
+        "world_updates_on_discover": {
+          "set_flags": {"patrol_route_known": true}
+        }
+      }
+    ],
+    "enemies": [],
+    "actions": [
+      {
+        "label": "Travel to the Crossroads",
+        "action_id": "travel_crossroads",
+        "id": "travel_crossroads",
+        "type": "scene_transition",
+        "targetSceneId": "old_milestone",
+        "prompt": "I follow the patrol route to the old trading crossroads.",
+        "conditions": {
+          "requires_flags": ["patrol_route_known"]
+        }
+      },
+      {
+        "label": "Ask the woman about the maps",
+        "id": "ask_woman_maps",
+        "type": "interact",
+        "prompt": "I ask the well-dressed woman about the maps on the table.",
+        "conditions": {
+          "requires_flags": ["met_well_dressed_woman"]
+        }
+      },
+      {
+        "label": "Confront the watcher",
+        "action_id": "confront_watcher",
+        "id": "confront_watcher",
+        "type": "interact",
+        "prompt": "I confront the well-dressed woman about what she knows.",
+        "conditions": {
+          "requires_flags": ["met_well_dressed_woman"],
+          "requires_clues": ["watcher_identified"],
+          "excludes_flags": ["watcher_fled"]
+        }
+      },
+      {
+        "label": "Scan for details",
+        "id": "scan-for-details",
+        "type": "observe",
+        "prompt": "I carefully scan the surroundings for anything unusual.",
+        "conditions": {
+          "excludes_clues": ["patrol_route_learned"]
+        }
+      }
+    ]
+  }
+}

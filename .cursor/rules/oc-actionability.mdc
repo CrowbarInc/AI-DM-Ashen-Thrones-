@@ -1,0 +1,46 @@
+---
+description: OC blocks must be immediately actionable (concrete next steps).
+alwaysApply: true
+---
+
+# OC Actionability Rule
+
+When you output an **OC** block, it MUST enable immediate player decision-making.
+
+## Requirements
+
+- Include at least **one concrete next step** the player can take *right now*.
+- Provide **specific options** phrased as real actions (not abstract intentions).
+- Prefer **2–5 options**, each with a clear method/angle and (when relevant) a suggested roll or cost.
+
+## Avoid
+
+- Vague summaries of the situation.
+- Restating the IC content in different words.
+- Non-committal options like “Ask questions”, “Investigate further”, “Do something”.
+
+## Examples
+
+### Good
+
+```json
+{
+  "options": [
+    "Press him about the patrol (Intimidate)",
+    "Offer 5 silver for names and routes",
+    "Shift to the merchants topic and ask who’s buying weapons"
+  ],
+  "next_step": "Pick one option and tell me exactly how you approach them (tone, leverage, offer)."
+}
+```
+
+### Bad
+
+```json
+{
+  "options": [
+    "Ask questions",
+    "Investigate further"
+  ]
+}
+```

@@ -1,0 +1,476 @@
+"""Intent parser for freeform player input.
+
+Converts typed player text into structured engine actions deterministically.
+Scene context (exits, interactables, visible_facts) is used for target matching.
+When the parser cannot confidently resolve intent, returns None → GPT fallback.
+"""
+from __future__ import annotations
+
+import re
+from typing import Any, Dict, List, Optional
+
+from game.utils import slugify
+
+# Action types compatible with exploration engine and normalize_scene_action
+ACTION_TYPES = ("observe", "investigate", "interact", "scene_transition", "travel", "attack", "custom")
+TURN_SEGMENT_KEYS = (
+    "spoken_text",
+    "declared_action_text",
+    "adjudication_question_text",
+    "observation_intent_text",
+    "contingency_text",
+)
+
+# Verb patterns: (pattern, action_type, extracts_target)
+# Order matters: more specific patterns first
+OBSERVE_PATTERNS = [
+    (r"\b(look\s+around|scan|survey|glance|take\s+in|watch\s+the\s+area)\b", "observe", False),
+    (r"\bobserve\s+(?:the\s+)?(.+)\b", "observe", True),
+]
+INVESTIGATE_PATTERNS = [
+    (r"\b(look\s+at|look\s+behind|look\s+under|look\s+in|look\s+for)\s+(?:the\s+)?(.+?)(?:\s+carefully|\s+closely)?\.?$", "investigate", True),
+    (r"\b(inspect|examine|study|search|check)\s+(?:the\s+)?(.+?)(?:\s+carefully|\s+for\s+)?\.?$", "investigate", True),
+    (r"\binvestigate\s+(?:the\s+)?(.+?)(?:\s+carefully)?\.?$", "investigate", True),
+    (r"\b(dig\s+through|rifle\s+through|search)\s+(?:the\s+)?(.+?)\.?$", "investigate", True),
+    (r"\b(look|search|inspect|examine)\b", "investigate", False),  # fallback when no target
+]
+INTERACT_PATTERNS = [
+    (r"\b(talk\s+to|talk\s+with|speak\s+to|speak\s+with|ask|question|chat\s+with|greet)\s+(?:the\s+)?(.+?)(?:\s+about\s+)?\.?$", "interact", True),
+    (r"\b(gauge|approach)\s+(?:the\s+)?(.+?)\.?$", "interact", True),
+    (r"\b(talk|speak|ask|question)\b", "interact", False),
+]
+TRAVEL_PREFIXES = (
+    "go ", "go to ", "follow ", "enter ", "travel ", "travel to ", "head ", "head to ",
+    "walk ", "walk to ", "move ", "move to ", "journey ", "journey to ", "leave for ",
+    "return to ", "take the route ", "take the path ", "run to ", "run ",
+)
+TRAVEL_BARE = ("go", "travel", "leave", "move", "north", "south", "east", "west")
+ATTACK_PATTERNS = [
+    (r"\b(attack|strike|hit|smite|slash|stab)\s+(?:the\s+)?(.+?)(?:\s+with\s+)?\.?$", "attack", True),
+    (r"\b(cast|use)\s+(?:my\s+)?(.+?)\s+(?:at|on)\s+(?:the\s+)?(.+?)\.?$", "attack", True),  # e.g. "cast magic missile at orc"
+    (r"\b(attack|strike|hit)\b", "attack", False),
+]
+
+_ADJUDICATION_TOKENS = (
+    "need",
+    "needed",
+    "require",
+    "required",
+    "roll",
+    "check",
+    "can",
+    "could",
+    "would",
+    "is",
+    "are",
+    "how far",
+    "earshot",
+    "who can hear",
+    "in range",
+)
+
+_OBSERVATION_VERBS = (
+    "see",
+    "spot",
+    "identify",
+    "listen",
+    "hear",
+    "notice",
+    "make out",
+)
+
+
+def _clean_clause(value: str | None) -> Optional[str]:
+    if not isinstance(value, str):
+        return None
+    cleaned = re.sub(r"\s+", " ", value).strip()
+    cleaned = re.sub(r"\s+([,.;:?!])", r"\1", cleaned)
+    return cleaned or None
+
+
+def _looks_like_adjudication_question(text: str) -> bool:
+    low = (text or "").strip().lower()
+    if not low or "?" not in low:
+        return False
+    return any(token in low for token in _ADJUDICATION_TOKENS)
+
+
+def _extract_parenthetical_adjudication(text: str) -> tuple[str, Optional[str]]:
+    if not isinstance(text, str) or not text.strip():
+        return text, None
+    for match in re.finditer(r"\(([^()]{1,200})\)", text):
+        candidate = _clean_clause(match.group(1))
+        if not candidate or not _looks_like_adjudication_question(candidate):
+            continue
+        updated = (text[: match.start()] + " " + text[match.end() :]).strip()
+        return updated, candidate
+    return text, None
+
+
+def _extract_inline_adjudication_clause(text: str) -> tuple[str, Optional[str]]:
+    if not isinstance(text, str) or "?" not in text:
+        return text, None
+    candidates = re.findall(r"([^?.!]{0,220}\?)", text)
+    for raw in reversed(candidates):
+        candidate = _clean_clause(raw)
+        if not candidate or not _looks_like_adjudication_question(candidate):
+            continue
+        updated = text.replace(raw, " ", 1).strip()
+        return updated, candidate
+    return text, None
+
+
+def _extract_contingency(text: str) -> tuple[str, Optional[str]]:
+    if not isinstance(text, str):
+        return text, None
+    low = text.lower()
+    m_then = re.search(r"\bif\b(.+?)\bthen\b(.+)", low)
+    if m_then:
+        start, end = m_then.span()
+        contingency_raw = text[start:end].strip()
+        remainder = text[end:].strip(" ,;.")
+        return (remainder or text), _clean_clause(contingency_raw)
+    if low.startswith("if "):
+        comma_idx = text.find(",")
+        if 3 <= comma_idx <= 200:
+            contingency_raw = text[:comma_idx]
+            remainder = text[comma_idx + 1 :].strip(" ,;.")
+            return (remainder or text), _clean_clause(contingency_raw)
+    return text, None
+
+
+def _extract_observation_intent(text: str) -> tuple[str, Optional[str]]:
+    if not isinstance(text, str):
+        return text, None
+    joined_verbs = "|".join(re.escape(v) for v in _OBSERVATION_VERBS)
+    pattern = (
+        r"\b(?:and|while|as)\s+(?:i am |i'm |i )?"
+        r"(?:trying|tries|try|attempting|attempts|attempt)\s+to\s+"
+        r"(?:"
+        + joined_verbs
+        + r")\b[^.?!;]*"
+    )
+    m = re.search(pattern, text, re.IGNORECASE)
+    if m:
+        candidate = _clean_clause(m.group(0))
+        updated = (text[: m.start()] + " " + text[m.end() :]).strip()
+        return updated, candidate
+    return text, None
+
+
+def segment_mixed_player_turn(text: str) -> Dict[str, Optional[str]]:
+    """Extract a narrow, inspectable mixed-turn shape before intent classification.
+
+    This is intentionally conservative and deterministic. It does not attempt full
+    natural-language decomposition, and only fills fields when cues are clear.
+    """
+    out: Dict[str, Optional[str]] = {k: None for k in TURN_SEGMENT_KEYS}
+    if not isinstance(text, str):
+        return out
+    raw = text.strip()
+    if not raw:
+        return out
+
+    spoken_matches = re.findall(r'"([^"\n]{1,240})"', raw)
+    if spoken_matches:
+        out["spoken_text"] = _clean_clause(" ".join(spoken_matches))
+    working = re.sub(r'"[^"\n]{1,240}"', " ", raw)
+
+    working, parenthetical_q = _extract_parenthetical_adjudication(working)
+    if parenthetical_q:
+        out["adjudication_question_text"] = parenthetical_q
+    else:
+        working, inline_q = _extract_inline_adjudication_clause(working)
+        if inline_q:
+            out["adjudication_question_text"] = inline_q
+
+    working, contingency = _extract_contingency(working)
+    if contingency:
+        out["contingency_text"] = contingency
+
+    working, observation = _extract_observation_intent(working)
+    if observation:
+        out["observation_intent_text"] = observation
+
+    declared = _clean_clause(working)
+    if declared:
+        out["declared_action_text"] = declared
+    elif not any(out.values()):
+        out["declared_action_text"] = raw
+    return out
+
+
+def _extract_target(pattern: str, text: str, group: int = 1) -> Optional[str]:
+    """Extract target from regex match. Group 1 or 2 typically holds the target noun phrase."""
+    m = re.search(pattern, text, re.IGNORECASE)
+    if not m:
+        return None
+    for g in (group, 2, 1):
+        if m.lastindex and g <= m.lastindex:
+            t = m.group(g)
+            if t and len(t.strip()) > 0 and len(t.strip()) < 80:
+                return t.strip()
+    return None
+
+
+def _match_exit(dest_hint: str, exits: List[Dict[str, Any]]) -> Optional[str]:
+    """Match a destination hint to an exit's label; return target_scene_id or None."""
+    if not dest_hint or not exits:
+        return None
+    dh = dest_hint.lower().strip()
+    for ex in exits:
+        if not isinstance(ex, dict):
+            continue
+        label = (ex.get("label") or "").strip().lower()
+        target = (ex.get("target_scene_id") or ex.get("targetSceneId") or "").strip()
+        if not target:
+            continue
+        if dh in label or label in dh:
+            return target
+        if slugify(dh) in slugify(label) or slugify(label) in slugify(dh):
+            return target
+    return None
+
+
+def _match_target_to_interactable(target_slug: str, interactables: List[Dict[str, Any]]) -> Optional[str]:
+    """Match target slug to an interactable id. Returns interactable id or None."""
+    if not target_slug or not interactables:
+        return None
+    for i in interactables:
+        if not isinstance(i, dict):
+            continue
+        i_id = str(i.get("id") or "").strip()
+        if not i_id:
+            continue
+        i_slug = slugify(i_id)
+        if target_slug in i_slug or i_slug in target_slug:
+            return i_id
+    return None
+
+
+def _match_target_to_visible_fact(target_slug: str, visible_facts: List[Any]) -> Optional[str]:
+    """Match target slug to a visible fact (string). Returns the fact text or None."""
+    if not target_slug or not visible_facts:
+        return None
+    for f in visible_facts:
+        text = str(f).strip() if f else ""
+        if not text:
+            continue
+        f_slug = slugify(text)
+        if target_slug in f_slug or f_slug in target_slug:
+            return text
+    return None
+
+
+def _build_action(
+    action_type: str,
+    label: str,
+    prompt: str,
+    *,
+    target_scene_id: Optional[str] = None,
+    target_id: Optional[str] = None,
+    action_id: Optional[str] = None,
+    metadata: Optional[Dict[str, Any]] = None,
+) -> Dict[str, Any]:
+    """Build canonical structured action for the engine."""
+    aid = action_id or (slugify(label) or slugify(prompt) or action_type)[:40]
+    out: Dict[str, Any] = {
+        "id": aid,
+        "label": label,
+        "type": action_type,
+        "prompt": prompt,
+        "targetSceneId": target_scene_id,
+        "target_scene_id": target_scene_id,
+    }
+    if target_id:
+        out["target_id"] = target_id
+        out["targetEntityId"] = target_id
+    if metadata:
+        out["metadata"] = metadata
+    return out
+
+
+def parse_freeform_to_action(
+    text: str,
+    scene_envelope: Optional[Dict[str, Any]] = None,
+) -> Optional[Dict[str, Any]]:
+    """Parse freeform player input into a structured engine action.
+
+    Uses verb patterns and scene context (exits, interactables, visible_facts)
+    to map common commands to structured actions. Returns None when ambiguous
+    → caller falls back to GPT narration.
+
+    Returns:
+        Structured action dict with id, label, type, prompt, targetSceneId?,
+        target_id?, or None if intent cannot be confidently resolved.
+    """
+    if not text or not isinstance(text, str):
+        return None
+    t = text.strip()
+    if not t:
+        return None
+    low = t.lower()
+
+    scene = (scene_envelope or {}).get("scene", {}) if isinstance(scene_envelope, dict) else {}
+    exits = scene.get("exits") or []
+    interactables = scene.get("interactables") or []
+    visible_facts = scene.get("visible_facts") or []
+
+    # ---- 1. Travel / scene_transition ----
+    for prefix in sorted(TRAVEL_PREFIXES, key=len, reverse=True):
+        if low.startswith(prefix):
+            dest_hint = t[len(prefix) :].strip()
+            target_id = _match_exit(dest_hint, exits) or _match_exit(t, exits)
+            return _build_action(
+                "scene_transition" if target_id else "travel",
+                t,
+                t,
+                target_scene_id=target_id,
+            )
+    if low in TRAVEL_BARE:
+        target_id = _match_exit(t, exits)
+        return _build_action(
+            "scene_transition" if target_id else "travel",
+            t,
+            t,
+            target_scene_id=target_id,
+        )
+    # Direction-only: "north", "south", etc. when no prefix
+    if low in ("north", "south", "east", "west") and exits:
+        target_id = _match_exit(low, exits)
+        if target_id:
+            return _build_action("scene_transition", t, t, target_scene_id=target_id)
+
+    # ---- 2. Attack (API routes to combat when in_combat; otherwise falls back to GPT) ----
+    for pattern, action_type, extracts in ATTACK_PATTERNS:
+        m = re.search(pattern, low)
+        if m:
+            target = None
+            if extracts and m.lastindex:
+                # Group 2 for "attack X"; group 3 for "cast X at Y"
+                if m.lastindex >= 3:
+                    target = m.group(3).strip()
+                elif m.lastindex >= 2:
+                    target = m.group(2).strip()
+                if target and len(target) > 50:
+                    target = target[:50]
+            return _build_action(
+                "attack",
+                t,
+                t,
+                target_id=target,
+                metadata={"intent": "attack"},
+            )
+
+    # ---- 3. Observe (check before investigate; "look around" != "look at X") ----
+    for pattern, action_type, extracts in OBSERVE_PATTERNS:
+        if re.search(pattern, low):
+            target = _extract_target(pattern, low, 2) if extracts else None
+            if target:
+                target_slug = slugify(target)
+                matched = _match_target_to_interactable(target_slug, interactables)
+                if matched:
+                    return _build_action("investigate", t, t, target_id=matched, action_id=matched)
+                matched_fact = _match_target_to_visible_fact(target_slug, visible_facts)
+                if matched_fact:
+                    aid = slugify(target)[:40] or "observe"
+                    return _build_action("investigate", t, t, target_id=aid, action_id=aid)
+            return _build_action("observe", t, t)
+
+    # ---- 4. Investigate (with target extraction) ----
+    for pattern, action_type, extracts in INVESTIGATE_PATTERNS:
+        m = re.search(pattern, low)
+        if m:
+            target = None
+            if extracts and m.lastindex and m.lastindex >= 2:
+                target = m.group(2).strip() if m.lastindex >= 2 else (m.group(1) if m.lastindex >= 1 else None)
+            elif extracts and m.lastindex:
+                target = m.group(1).strip() if m.lastindex >= 1 else None
+            target_slug = slugify(target) if target else None
+            matched_id = _match_target_to_interactable(target_slug, interactables) if target_slug else None
+            aid = matched_id or (slugify(t) or "investigate")[:40]
+            return _build_action(
+                "investigate",
+                t,
+                t,
+                target_id=matched_id or target,
+                action_id=aid,
+            )
+
+    # ---- 4. Observe (general look-around) ----
+    for pattern, action_type, extracts in OBSERVE_PATTERNS:
+        if re.search(pattern, low):
+            target = _extract_target(pattern, low, 2) if extracts else None
+            if target:
+                target_slug = slugify(target)
+                matched = _match_target_to_interactable(target_slug, interactables)
+                if matched:
+                    return _build_action("investigate", t, t, target_id=matched, action_id=matched)
+                matched_fact = _match_target_to_visible_fact(target_slug, visible_facts)
+                if matched_fact:
+                    aid = slugify(target)[:40] or "observe"
+                    return _build_action("investigate", t, t, target_id=aid, action_id=aid)
+            return _build_action("observe", t, t)
+
+    # ---- 5. Interact (social) ----
+    for pattern, action_type, extracts in INTERACT_PATTERNS:
+        if re.search(pattern, low):
+            target = None
+            if extracts:
+                m = re.search(pattern, low)
+                if m and m.lastindex >= 2:
+                    target = m.group(2).strip()
+            target_slug = slugify(target) if target else None
+            matched_id = _match_target_to_interactable(target_slug, interactables) if target_slug else None
+            return _build_action(
+                "interact",
+                t,
+                t,
+                target_id=matched_id or target,
+            )
+
+    # ---- 6. Legacy fallbacks from original parse_intent ----
+    if "follow" in low and exits:
+        target_id = _match_exit(low.replace("follow", "").strip(), exits) or _match_exit("follow", exits)
+        if target_id:
+            return _build_action("scene_transition", t, t, target_scene_id=target_id)
+        return _build_action("interact", t, t, metadata={"intent": "follow_target"})
+    if "leave" in low or "exit" in low:
+        target_id = _match_exit(low, exits)
+        return _build_action(
+            "scene_transition" if target_id else "travel",
+            t,
+            t,
+            target_scene_id=target_id,
+        )
+
+    return None
+
+
+def parse_intent(text: str) -> Optional[Dict[str, Any]]:
+    """Lightweight fallback when no scene context. Returns structured intent or None.
+
+    Used when parse_freeform_to_action(text, scene) returns None but we want
+    to try a minimal keyword match. Prefer parse_freeform_to_action when
+    scene_envelope is available.
+    """
+    result = parse_freeform_to_action(text, scene_envelope=None)
+    if result is not None:
+        return result
+    # Minimal patterns without scene (no exit matching, no interactable matching)
+    if not text or not isinstance(text, str):
+        return None
+    low = text.strip().lower()
+    if not low:
+        return None
+
+    if "follow" in low:
+        return _build_action("interact", text.strip(), text.strip(), metadata={"intent": "follow_target"})
+    if "leave" in low or "exit" in low:
+        return _build_action("travel", text.strip(), text.strip(), metadata={"intent": "leave_area"})
+    if "search" in low or "look" in low or "investigate" in low:
+        return _build_action("investigate", text.strip(), text.strip())
+    if "talk" in low or "ask" in low:
+        return _build_action("interact", text.strip(), text.strip(), metadata={"intent": "conversation"})
+
+    return None

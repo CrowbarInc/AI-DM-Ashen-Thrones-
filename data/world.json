@@ -1,0 +1,87 @@
+{
+  "settlements": [
+    {
+      "id": "cinderwatch",
+      "name": "Cinderwatch",
+      "type": "frontier_city",
+      "tags": [
+        "frontier",
+        "trade",
+        "unstable"
+      ],
+      "status": "strained",
+      "notes": "A frontier city balanced between noble influence, criminal pressure, and military necessity."
+    }
+  ],
+  "factions": [
+    {
+      "id": "house_verevin",
+      "name": "House Verevin",
+      "type": "noble_house",
+      "attitude": "wary",
+      "influence": 3,
+      "pressure": 10,
+      "goal": "",
+      "current_plan": "",
+      "agenda_progress": 10,
+      "assets": []
+    },
+    {
+      "id": "ash_cowl",
+      "name": "The Ash Cowl",
+      "type": "criminal_syndicate",
+      "attitude": "opportunistic",
+      "influence": 3,
+      "pressure": 10,
+      "goal": "",
+      "current_plan": "",
+      "agenda_progress": 10,
+      "assets": []
+    },
+    {
+      "id": "ordo_pyric",
+      "name": "Ordo Pyric",
+      "type": "religious_order",
+      "attitude": "suspicious",
+      "influence": 2,
+      "pressure": 10,
+      "goal": "",
+      "current_plan": "",
+      "agenda_progress": 10,
+      "assets": []
+    }
+  ],
+  "assets": [],
+  "projects": [],
+  "world_flags": [],
+  "event_log": [
+    {
+      "type": "faction_operation_complete",
+      "text": "House Verevin completes an off-screen operation.",
+      "source": "house_verevin"
+    },
+    {
+      "type": "faction_operation_complete",
+      "text": "The Ash Cowl completes an off-screen operation.",
+      "source": "ash_cowl"
+    },
+    {
+      "type": "faction_operation_complete",
+      "text": "Ordo Pyric completes an off-screen operation.",
+      "source": "ordo_pyric"
+    }
+  ],
+  "world_state": {
+    "flags": {
+      "faction_house_verevin_agenda_advanced": true,
+      "faction_ash_cowl_agenda_advanced": true,
+      "faction_ordo_pyric_agenda_advanced": true,
+      "patrol_route_known": true
+    },
+    "counters": {},
+    "clocks": {}
+  },
+  "inference_rules": [],
+  "clues": {},
+  "npcs": []
+}

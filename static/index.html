@@ -1,0 +1,198 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Ashen Thrones AI GM</title>
+  <link rel="stylesheet" href="/static/styles.css">
+  <link rel="icon" href="data:,">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="tabs">
+        <button class="tab active" data-tab="play">Play</button>
+        <button class="tab" data-tab="character">Character</button>
+        <button class="tab" data-tab="scene">Scene</button>
+        <button class="tab" data-tab="campaign">Campaign</button>
+        <button class="tab" data-tab="world">World</button>
+        <button class="tab" data-tab="debug">Debug</button>
+      </div>
+
+      <section class="tab-panel active" id="tab-play">
+        <h2>Play</h2>
+        <div id="charSummary" class="card"></div>
+        <div class="card" id="saveSummaryCard">
+          <h3>Save Status</h3>
+          <div id="saveSummaryContent" class="stacked muted">Loading…</div>
+        </div>
+        <div class="card">
+          <h3>Scene &amp; Mode</h3>
+          <div class="stacked">
+            <div><strong>Scene:</strong> <span id="sceneNameDisplay"></span></div>
+            <div><strong>Mode:</strong> <span id="sceneModeDisplay"></span></div>
+          </div>
+          <label for="responseModeSelect">Narration Mode</label>
+          <select id="responseModeSelect">
+            <option value="terse">Terse</option>
+            <option value="standard">Standard</option>
+            <option value="vivid">Vivid</option>
+            <option value="tactical">Tactical</option>
+            <option value="investigative">Investigative</option>
+          </select>
+          <div class="muted">Modes change narration style only &mdash; mechanics stay the same.</div>
+        </div>
+        <div class="card">
+          <h3>Combat</h3>
+          <div id="combatStatus"></div>
+          <div id="enemyStatus"></div>
+          <div class="button-row">
+            <button id="rollInitBtn">Roll Initiative</button>
+            <button id="endTurnBtn">End Turn</button>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Action Helper</h3>
+          <label>Target</label>
+          <select id="targetSelect"></select>
+          <label>Action Type</label>
+          <select id="actionType">
+            <option value="attack">Attack</option>
+            <option value="spell">Spell</option>
+            <option value="skill">Skill</option>
+            <option value="freeform">Freeform</option>
+          </select>
+          <div id="composerBody"></div>
+        </div>
+        <div class="card">
+          <h3>Controls</h3>
+          <div class="button-grid">
+            <button id="clearLogBtn">Clear Log</button>
+            <button id="resetCombatBtn">Reset Combat</button>
+            <button id="newCampaignBtn">New Campaign</button>
+          </div>
+        </div>
+        <details class="card">
+          <summary>Save Slots</summary>
+          <p class="muted">Create restore points for playtesting and branching.</p>
+          <input type="text" id="snapshotLabel" placeholder="Optional label">
+          <button id="createSnapshotBtn">Create Snapshot</button>
+          <ul id="snapshotsList" class="simple-list" style="margin-top:8px"></ul>
+        </details>
+      </section>
+
+      <section class="tab-panel" id="tab-character">
+        <h2>Character</h2>
+        <div class="card">
+          <h3>Import Sheet JSON</h3>
+          <input type="file" id="sheetFile" accept=".json">
+          <button id="importSheetBtn">Import Sheet</button>
+          <div class="muted">Optimized for the exported JSON format you've used in this chat.</div>
+        </div>
+        <div class="card">
+          <h3>Sheet Snapshot</h3>
+          <pre id="characterBox"></pre>
+        </div>
+      </section>
+
+      <section class="tab-panel" id="tab-scene">
+        <h2>Scene</h2>
+        <div class="card">
+          <label>Active Scene</label>
+          <select id="scenePicker"></select>
+          <button id="activateSceneBtn">Activate Scene</button>
+        </div>
+        <div class="card">
+          <label>Scene ID</label><input id="sceneId" type="text">
+          <label>Location</label><input id="sceneLocation" type="text">
+          <label>Summary</label><textarea id="sceneSummary"></textarea>
+          <label>Mode</label><input id="sceneMode" type="text">
+          <label>Visible Facts (one per line)</label><textarea id="sceneVisibleFacts"></textarea>
+          <label>Discoverable Clues (one per line)</label><textarea id="sceneDiscoverableClues"></textarea>
+          <label>Hidden Facts (one per line)</label><textarea id="sceneHiddenFacts"></textarea>
+          <button id="saveSceneBtn">Save Scene</button>
+        </div>
+      </section>
+
+      <section class="tab-panel" id="tab-campaign">
+        <h2>Campaign</h2>
+        <div class="card">
+          <label>Title</label><input id="campaignTitle" type="text">
+          <label>Premise</label><textarea id="campaignPremise"></textarea>
+          <label>Tone</label><input id="campaignTone" type="text">
+          <label>Starting Context</label><textarea id="campaignContext"></textarea>
+          <label>GM Guidance (one per line)</label><textarea id="campaignGuidance"></textarea>
+          <button id="saveCampaignBtn">Save Campaign</button>
+        </div>
+      </section>
+
+      <section class="tab-panel" id="tab-world">
+        <h2>World</h2>
+        <div class="card">
+          <h3>Factions</h3>
+          <pre id="worldFactions"></pre>
+        </div>
+        <div class="card">
+          <h3>Projects</h3>
+          <ul id="worldProjectsList" class="simple-list"></ul>
+        </div>
+        <div class="card">
+          <h3>Recent World Events</h3>
+          <ul id="worldEventsList" class="simple-list"></ul>
+        </div>
+        <div class="card">
+          <h3>Player Journal</h3>
+          <div class="journal-section">
+            <h4>Known Facts</h4>
+            <ul id="journalKnownFacts" class="simple-list"></ul>
+            <h4>Discovered Clues &amp; Leads</h4>
+            <ul id="journalClues" class="simple-list"></ul>
+          </div>
+        </div>
+        <details class="card">
+          <summary>Advanced World Debug</summary>
+          <pre id="worldDebugBox"></pre>
+        </details>
+      </section>
+
+      <section class="tab-panel" id="tab-debug">
+        <h2>Debug</h2>
+        <div class="card" id="actionPipelineDebugCard">
+          <h3>Action Pipeline Debug</h3>
+          <div id="actionPipelineDebugContent" class="action-pipeline-debug"></div>
+        </div>
+        <div class="card" id="actionTraceCard">
+          <h3>Action Trace (Latest)</h3>
+          <div id="actionTraceContent" class="action-pipeline-debug"></div>
+        </div>
+        <details open>
+          <summary>Full State JSON</summary>
+          <pre id="debugBox">No debug data yet.</pre>
+        </details>
+      </section>
+    </aside>
+
+    <main class="main-pane">
+      <div class="chat-header">
+        <h1 id="sceneHeader">Ashen Thrones</h1>
+        <div id="sceneSubheader"></div>
+      </div>
+      <div id="affordanceBar" class="affordance-bar">
+        <span class="affordance-label">Suggested Actions:</span>
+        <div id="affordanceButtons" class="affordance-buttons"></div>
+      </div>
+      <div id="engineDebugPanel" class="engine-debug-panel collapsed">
+        <button type="button" id="engineDebugToggle" class="engine-debug-toggle" aria-expanded="false" aria-controls="engineDebugContent" title="Toggle engine pipeline debug">Engine Debug &#9654;</button>
+        <div id="engineDebugContent" class="engine-debug-content" role="region" aria-label="Engine debug details"></div>
+      </div>
+      <div id="chatLog" class="chat-log"></div>
+      <div class="chat-input-panel">
+        <textarea id="chatInput" placeholder="Play by chat here. Describe what Galinor says or does."></textarea>
+        <div class="button-row">
+          <button id="sendChatBtn">Send</button>
+        </div>
+      </div>
+    </main>
+  </div>
+  <script src="/static/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,651 @@
+import json
+
+
+FRONTIER_GATE_SCENE = {
+    "scene": {
+        "id": "frontier_gate",
+        "location": "Cinderwatch Gate District",
+        "summary": "Rain spatters soot-dark stone as caravans and refugees choke the eastern gate. Guards watch the crowd with brittle discipline.",
+        "mode": "exploration",
+        "visible_facts": [
+            "Refugees crowd the muddy approach road.",
+            "A notice board lists new taxes, curfews, and a missing patrol.",
+            "A tavern runner loudly offers rumor and hot stew for coin.",
+        ],
+        "discoverable_clues": [
+            "A well-dressed onlooker near the gate seems more interested in newcomers than in the refugees.",
+            "A rough-looking bystander keeps watching anyone with unusual gear or arcane signs.",
+        ],
+        "hidden_facts": [
+            "An agent of a noble house is watching new arrivals.",
+            "A smuggler contact in the crowd is looking for magical talent.",
+        ],
+        "exits": [],
+        "enemies": [],
+    }
+}
+
+
+def _dummy_state():
+    campaign = {"title": "T", "character_role": "R"}
+    world = {
+        "event_log": [],
+        "npcs": [
+            {
+                "id": "guard_captain",
+                "name": "Captain Veyra",
+                "scene_id": "frontier_gate",
+            }
+        ],
+    }
+    session = {
+        "active_scene_id": "frontier_gate",
+        "interaction_context": {
+            "active_interaction_target_id": "guard_captain",
+            "active_interaction_kind": "social",
+            "interaction_mode": "social",
+            "engagement_level": "engaged",
+            "conversation_privacy": "lowered_voice",
+            "player_position_context": "seated_with_target",
+        },
+    }
+    character = {"name": "Galinor", "hp": {"current": 8, "max": 8}, "ac": {"normal": 12, "touch": 12, "flat_footed": 10}}
+    combat = {"in_combat": False}
+    recent_log = []
+    return campaign, world, session, character, combat, recent_log
+
+
+def test_prompt_structure_separates_hidden_facts():
+    from game.gm import build_messages
+    from game.storage import get_scene_runtime
+
+    campaign, world, session, character, combat, recent_log = _dummy_state()
+    # Use session without active_scene_id so build_messages uses the passed scene (tests need specific content)
+    session_no_active = {
+        "scene_runtime": {},
+        "interaction_context": dict(session.get("interaction_context") or {}),
+    }
+    scene_rt = get_scene_runtime(session_no_active, "frontier_gate")
+    msgs = build_messages(
+        campaign,
+        world,
+        session_no_active,
+        character,
+        FRONTIER_GATE_SCENE,
+        combat,
+        recent_log,
+        "Look around.",
+        None,
+        scene_runtime=scene_rt,
+    )
+    assert msgs[0]["role"] == "system"
+    assert "hidden_facts" in msgs[0]["content"]
+    assert "Spoiler safeguard" in msgs[0]["content"]
+
+    payload = json.loads(msgs[1]["content"])
+    scene_payload = payload["scene"]
+    assert "public" in scene_payload
+    assert "gm_only" in scene_payload
+    assert scene_payload["public"]["visible_facts"] == FRONTIER_GATE_SCENE["scene"]["visible_facts"]
+    # Not justified by "Look around." => discoverable clues must not be in the main discoverable list.
+    assert scene_payload["discoverable_clues"] == []
+    assert scene_payload["gm_only"]["hidden_facts"] == FRONTIER_GATE_SCENE["scene"]["hidden_facts"]
+    # Locked discoverables should still be available GM-side, but explicitly labeled as locked.
+    assert scene_payload["gm_only"]["discoverable_clues_locked"] == FRONTIER_GATE_SCENE["scene"]["discoverable_clues"]
+    assert payload["session"]["active_interaction_target_id"] == "guard_captain"
+    assert payload["session"]["active_interaction_target_name"] == "Captain Veyra"
+    assert payload["session"]["active_interaction_kind"] == "social"
+    assert payload["session"]["interaction_mode"] == "social"
+    assert payload["session"]["engagement_level"] == "engaged"
+    assert payload["session"]["conversation_privacy"] == "lowered_voice"
+    assert payload["session"]["player_position_context"] == "seated_with_target"
+    assert payload["interaction_continuity"]["active_interaction_target_id"] == "guard_captain"
+    assert payload["interaction_continuity"]["active_interaction_target_name"] == "Captain Veyra"
+    assert payload["interaction_continuity"]["active_interaction_kind"] == "social"
+    assert payload["interaction_continuity"]["interaction_mode"] == "social"
+    assert payload["interaction_continuity"]["engagement_level"] == "engaged"
+    assert payload["interaction_continuity"]["conversation_privacy"] == "lowered_voice"
+    assert payload["interaction_continuity"]["player_position_context"] == "seated_with_target"
+    obligations = payload["narration_obligations"]
+    assert obligations["should_answer_active_npc"] is True
+    assert obligations["avoid_input_echo"] is True
+
+
+def test_prompt_includes_speaker_lock_and_privacy_guidance():
+    from game.gm import build_messages
+    from game.storage import get_scene_runtime
+
+    campaign, world, session, character, combat, recent_log = _dummy_state()
+    scene_rt = get_scene_runtime({"scene_runtime": {}}, "frontier_gate")
+    msgs = build_messages(
+        campaign,
+        world,
+        session,
+        character,
+        FRONTIER_GATE_SCENE,
+        combat,
+        recent_log,
+        "I speak quietly with the guard captain.",
+        None,
+        scene_runtime=scene_rt,
+    )
+    payload = json.loads(msgs[1]["content"])
+    instructions = " ".join(payload.get("instructions", [])).lower()
+    assert "always answer the player. prefer partial truth over refusal. never output meta explanations." in instructions
+    assert "default conversational counterpart" in instructions
+    assert "non-addressed npcs should not casually interject" in instructions
+    assert "private exchange" in instructions
+    assert "authoritative engine state" in instructions
+    assert "narration_obligations.should_answer_active_npc" in instructions
+    assert "do not restate or paraphrase the player's input" in instructions
+
+
+def test_allow_discoverable_clues_heuristic():
+    from game.gm import allow_discoverable_clues, classify_player_intent
+
+    # Classification labels.
+    i1 = classify_player_intent("I search the wagon carefully.")
+    assert "investigation" in i1["labels"]
+    assert i1["allow_discoverable_clues"] is True
+
+    i2 = classify_player_intent("I question the guard about the caravans.")
+    assert "social_probe" in i2["labels"]
+    assert i2["allow_discoverable_clues"] is True
+
+    i3 = classify_player_intent("I walk north to the market.")
+    assert "travel" in i3["labels"] or "general" in i3["labels"]
+    # Travel alone should not auto-allow clues.
+    assert i3["allow_discoverable_clues"] is False
+
+    # Backward-compatible wrapper still behaves.
+    assert allow_discoverable_clues("Look around.") is False
+    assert allow_discoverable_clues("What do I notice immediately?") is False
+    assert allow_discoverable_clues("I investigate the area carefully.") is True
+    assert allow_discoverable_clues("I question locals about anything unusual.") is True
+
+
+def test_guard_blocks_hidden_fact_phrasing():
+    from game.gm import guard_gm_output
+
+    gm = {
+        "player_facing_text": "You spot an agent of a noble house and also a smuggler contact looking for magical talent.",
+        "tags": [],
+        "scene_update": None,
+        "activate_scene_id": None,
+        "new_scene_draft": None,
+        "world_updates": None,
+        "suggested_action": None,
+        "debug_notes": "",
+    }
+    out = guard_gm_output(gm, FRONTIER_GATE_SCENE, "Look around.", [])
+    assert out["player_facing_text"] != gm["player_facing_text"]
+    assert "spoiler_guard" in out.get("tags", [])
+    assert "spoiler_guard" in out.get("debug_notes", "")
+
+
+def test_guard_blocks_discoverable_clue_when_not_justified():
+    from game.gm import guard_gm_output
+
+    clue = FRONTIER_GATE_SCENE["scene"]["discoverable_clues"][0]
+    gm = {
+        "player_facing_text": f"You immediately notice: {clue}",
+        "tags": [],
+        "scene_update": None,
+        "activate_scene_id": None,
+        "new_scene_draft": None,
+        "world_updates": None,
+        "suggested_action": None,
+        "debug_notes": "",
+    }
+    out = guard_gm_output(gm, FRONTIER_GATE_SCENE, "What do I notice immediately?", [])
+    assert out["player_facing_text"] != gm["player_facing_text"]
+
+
+def test_guard_allows_discoverable_clue_when_justified():
+    from game.gm import guard_gm_output
+
+    clue = FRONTIER_GATE_SCENE["scene"]["discoverable_clues"][0]
+    gm = {
+        "player_facing_text": f"As you investigate carefully, you notice: {clue}",
+        "tags": [],
+        "scene_update": None,
+        "activate_scene_id": None,
+        "new_scene_draft": None,
+        "world_updates": None,
+        "suggested_action": None,
+        "debug_notes": "",
+    }
+    out = guard_gm_output(gm, FRONTIER_GATE_SCENE, "I investigate the area carefully.", [])
+    assert out["player_facing_text"] == gm["player_facing_text"]
+
+
+def test_npc_response_contract_enforces_specificity_on_direct_question():
+    from game.gm import enforce_npc_response_contract
+
+    campaign, world, session, character, combat, recent_log = _dummy_state()
+    _ = campaign, character, combat, recent_log
+    gm = {
+        "player_facing_text": "These are dangerous times. Be careful who you trust.",
+        "tags": [],
+        "scene_update": None,
+        "activate_scene_id": None,
+        "new_scene_draft": None,
+        "world_updates": None,
+        "suggested_action": None,
+        "debug_notes": "",
+    }
+    resolution = {
+        "kind": "question",
+        "social": {
+            "npc_id": "guard_captain",
+            "npc_name": "Captain Veyra",
+            "npc_reply_expected": True,
+            "reply_kind": "answer",
+        },
+    }
+    out = enforce_npc_response_contract(
+        gm,
+        player_text="Where can I find the missing patrol report?",
+        scene_envelope=FRONTIER_GATE_SCENE,
+        session=session,
+        world=world,
+        resolution=resolution,
+    )
+    assert "npc_response_contract" in out.get("tags", [])
+    assert "Next step:" in out.get("player_facing_text", "")
+
+
+def test_npc_response_contract_does_not_apply_without_question():
+    from game.gm import enforce_npc_response_contract
+
+    campaign, world, session, character, combat, recent_log = _dummy_state()
+    _ = campaign, character, combat, recent_log
+    gm = {
+        "player_facing_text": "The captain watches you for a long moment, saying nothing.",
+        "tags": [],
+        "scene_update": None,
+        "activate_scene_id": None,
+        "new_scene_draft": None,
+        "world_updates": None,
+        "suggested_action": None,
+        "debug_notes": "",
+    }
+    out = enforce_npc_response_contract(
+        gm,
+        player_text="I wait.",
+        scene_envelope=FRONTIER_GATE_SCENE,
+        session=session,
+        world=world,
+        resolution={"kind": "social_probe", "social": {"npc_id": "guard_captain", "npc_name": "Captain Veyra"}},
+    )
+    assert out["player_facing_text"] == gm["player_facing_text"]
+    assert "npc_response_contract" not in out.get("tags", [])
+
+
+# --- Resolved exploration context tests ---
+
+
+def test_build_messages_includes_resolved_exploration_context():
+    """build_messages adds resolved_exploration_action, resolution_kind, scene_transition_already_occurred when resolution is exploration."""
+    from game.gm import build_messages
+    from game.storage import get_scene_runtime
+
+    campaign, world, session, character, combat, recent_log = _dummy_state()
+    scene_rt = get_scene_runtime({"scene_runtime": {}}, "frontier_gate")
+    resolution = {
+        "kind": "observe",
+        "action_id": "observe-area",
+        "label": "Observe the area",
+        "prompt": "I look around.",
+        "resolved_transition": False,
+        "target_scene_id": None,
+        "hint": "Player is focusing on observing.",
+    }
+    msgs = build_messages(
+        campaign, world, session, character, FRONTIER_GATE_SCENE,
+        combat, recent_log, "I look around.", resolution, scene_runtime=scene_rt,
+    )
+    payload = json.loads(msgs[1]["content"])
+    assert "resolved_exploration_action" in payload
+    assert payload["resolved_exploration_action"]["id"] == "observe-area"
+    assert payload["resolved_exploration_action"]["type"] == "observe"
+    assert payload["resolution_kind"] == "observe"
+    assert payload["scene_transition_already_occurred"] is False
+    assert "resolution_summary" in payload
+
+
+def test_build_messages_exploration_with_transition_includes_originating_scene():
+    """When scene transition occurred, payload includes originating_scene_id and scene_transition_already_occurred."""
+    from game.gm import build_messages
+    from game.storage import get_scene_runtime
+
+    campaign, world, session, character, combat, recent_log = _dummy_state()
+    # Simulate post-transition: session now has active_scene_id = destination (build_messages loads from session)
+    session["active_scene_id"] = "market_quarter"
+    scene_rt = get_scene_runtime({"scene_runtime": {}}, "market_quarter")
+    resolution = {
+        "kind": "scene_transition",
+        "action_id": "go-market",
+        "label": "Go: Market",
+        "prompt": "I go to the market.",
+        "resolved_transition": True,
+        "target_scene_id": "market_quarter",
+        "originating_scene_id": "frontier_gate",
+        "hint": "Player has moved to scene market_quarter.",
+    }
+    market_scene = {
+        "scene": {
+            "id": "market_quarter",
+            "location": "Cinderwatch Market",
+            "summary": "Canvases snap in the wind.",
+            "mode": "exploration",
+            "visible_facts": [],
+            "discoverable_clues": [],
+            "hidden_facts": [],
+            "exits": [],
+            "enemies": [],
+        }
+    }
+    msgs = build_messages(
+        campaign, world, session, character, market_scene,
+        combat, recent_log, "I go to the market.", resolution, scene_runtime=scene_rt,
+    )
+    payload = json.loads(msgs[1]["content"])
+    assert payload["resolved_exploration_action"]["target_scene_id"] == "market_quarter"
+    assert payload["scene_transition_already_occurred"] is True
+    assert payload["originating_scene_id"] == "frontier_gate"
+    assert "market_quarter" in payload["resolution_summary"]
+
+
+def test_build_messages_exploration_instructions_no_restate():
+    """Exploration instructions explicitly mention not restating the previous scene after resolved transition."""
+    from game.gm import build_messages
+    from game.storage import get_scene_runtime
+
+    campaign, world, session, character, combat, recent_log = _dummy_state()
+    scene_rt = get_scene_runtime({"scene_runtime": {}}, "frontier_gate")
+    resolution = {
+        "kind": "investigate",
+        "action_id": "inv",
+        "label": "Investigate",
+        "prompt": "I investigate the wagon.",
+        "resolved_transition": False,
+    }
+    msgs = build_messages(
+        campaign, world, session, character, FRONTIER_GATE_SCENE,
+        combat, recent_log, "I investigate.", resolution, scene_runtime=scene_rt,
+    )
+    payload = json.loads(msgs[1]["content"])
+    instructions = " ".join(payload.get("instructions", [])).lower()
+    assert "do not restate the previous scene" in instructions
+    assert "resolved_exploration_action" in instructions or "resolved" in instructions
+    assert "never repeat the same observation" in instructions
+
+
+def test_system_prompt_mentions_resolved_exploration():
+    """SYSTEM_PROMPT explicitly mentions resolved exploration and not restating previous scene."""
+    from game.gm import SYSTEM_PROMPT
+
+    assert "resolved_exploration_action" in SYSTEM_PROMPT or "resolved" in SYSTEM_PROMPT
+    assert "do not restate" in SYSTEM_PROMPT
+    assert "scene_transition_already_occurred" in SYSTEM_PROMPT
+    assert "third person" in SYSTEM_PROMPT.lower()
+    assert "quoted in-character speech" in SYSTEM_PROMPT.lower()
+    assert "do not restate or paraphrase the player's input" in SYSTEM_PROMPT.lower()
+    assert "question resolution rule" in SYSTEM_PROMPT.lower()
+    assert "direct answer (first sentence)" in SYSTEM_PROMPT.lower()
+
+
+def test_question_resolution_rule_enforcement_prepends_uncertain_answer_when_needed():
+    from game.gm import enforce_question_resolution_rule
+
+    gm = {
+        "player_facing_text": "Rain slicks the cobbles as the crowd surges around you.",
+        "tags": [],
+        "scene_update": None,
+        "activate_scene_id": None,
+        "new_scene_draft": None,
+        "world_updates": None,
+        "suggested_action": None,
+        "debug_notes": "",
+    }
+    out = enforce_question_resolution_rule(gm, player_text="Where is the missing patrol report?")
+    first_sentence = out["player_facing_text"].split(".", 1)[0].lower()
+    assert "no one here" in first_sentence
+    assert "question_resolution_rule" in out.get("tags", [])
+
+
+def test_validator_voice_detection_matches_forbidden_patterns():
+    from game.gm import detect_validator_voice
+
+    text = (
+        "I can't answer that right now. "
+        "Based on what's established, we can determine only a little."
+    )
+    hits = detect_validator_voice(text)
+    assert "validator_voice:cant_answer_that" in hits
+    assert "validator_voice:based_on_established" in hits
+    assert "validator_voice:we_can_determine" in hits
+
+
+def test_validator_voice_enforcement_rewrites_system_tone():
+    from game.gm import enforce_no_validator_voice
+
+    gm = {
+        "player_facing_text": (
+            "I can't answer that. Based on what's established, we can determine very little."
+        ),
+        "tags": [],
+        "scene_update": None,
+        "activate_scene_id": None,
+        "new_scene_draft": None,
+        "world_updates": None,
+        "suggested_action": None,
+        "debug_notes": "",
+    }
+    out = enforce_no_validator_voice(
+        gm,
+        scene_envelope=FRONTIER_GATE_SCENE,
+        player_text="Where is the patrol report?",
+    )
+    low = out["player_facing_text"].lower()
+    assert "i can't answer that" not in low
+    assert "based on what's established" not in low
+    assert "we can determine" not in low
+    assert "validator_voice_rewrite" in out.get("tags", [])
+
+
+def test_opening_sentence_echo_detection():
+    from game.gm import opening_sentence_echoes_player_input, opening_sentence_overlaps_player_quote
+
+    echoed = opening_sentence_echoes_player_input(
+        "Galinor steps into the gate and looks around before speaking.",
+        "Galinor steps into the gate and looks around.",
+    )
+    assert echoed is True
+
+    forward_progress = opening_sentence_echoes_player_input(
+        "Rain slicks the stone beneath his boots as the crowd presses in.",
+        "Galinor steps into the gate and looks around.",
+    )
+    assert forward_progress is False
+
+    quoted_echo = opening_sentence_overlaps_player_quote(
+        '"Footman? I require an audience," Galinor calls out at the gate.',
+        'Galinor says, "Footman? I require an audience."',
+    )
+    assert quoted_echo is True
+
+    quoted_reaction = opening_sentence_overlaps_player_quote(
+        "His demand carries through the entry hall with practiced authority.",
+        'Galinor says, "Footman? I require an audience."',
+    )
+    assert quoted_reaction is False
+
+
+def test_prompt_includes_explicit_spoken_line_no_repeat_instruction():
+    from game.gm import build_messages
+    from game.storage import get_scene_runtime
+
+    campaign, world, session, character, combat, recent_log = _dummy_state()
+    scene_rt = get_scene_runtime({"scene_runtime": {}}, "frontier_gate")
+    msgs = build_messages(
+        campaign,
+        world,
+        session,
+        character,
+        FRONTIER_GATE_SCENE,
+        combat,
+        recent_log,
+        'Galinor says, "Footman? I require an audience."',
+        None,
+        scene_runtime=scene_rt,
+    )
+    payload = json.loads(msgs[1]["content"])
+    instructions = " ".join(payload.get("instructions", []))
+    assert "Do not repeat the player's spoken line. React to it instead." in instructions
+
+
+def test_stock_warning_filler_repetition_detection():
+    from game.gm import detect_stock_warning_filler_repetition
+
+    clustered = detect_stock_warning_filler_repetition(
+        "Be careful who you trust. Keep your wits about you."
+    )
+    assert bool(clustered) is True
+
+    repeated = detect_stock_warning_filler_repetition(
+        "These are dangerous times. These are dangerous times."
+    )
+    assert any("stock_warning_repeat" in r for r in repeated)
+
+    single = detect_stock_warning_filler_repetition(
+        "Be careful who you trust."
+    )
+    assert single == []
+
+
+def test_forbidden_generic_phrases_detection_triggers_on_single_occurrence():
+    from game.gm import detect_forbidden_generic_phrases
+
+    assert detect_forbidden_generic_phrases("In this city...") == ["forbidden_generic:in_this_city"]
+    assert detect_forbidden_generic_phrases("Times are tough...") == ["forbidden_generic:times_are_tough"]
+    assert detect_forbidden_generic_phrases("Trust is hard to come by.") == ["forbidden_generic:trust_is_hard_to_come_by"]
+    assert detect_forbidden_generic_phrases("You'll need to prove yourself.") == ["forbidden_generic:prove_yourself"]
+
+
+def test_forbidden_generic_phrases_enforcement_rewrites_into_specifics():
+    from game.gm import enforce_forbidden_generic_phrases
+
+    _, world, session, _, _, _ = _dummy_state()
+    gm = {
+        "player_facing_text": "Times are tough... You'll need to prove yourself.",
+        "tags": [],
+        "scene_update": None,
+        "activate_scene_id": None,
+        "new_scene_draft": None,
+        "world_updates": None,
+        "suggested_action": None,
+        "debug_notes": "",
+    }
+    out = enforce_forbidden_generic_phrases(gm, scene_envelope=FRONTIER_GATE_SCENE, session=session, world=world)
+    assert out["player_facing_text"] != gm["player_facing_text"]
+    assert "forbidden_generic_rewrite" in out.get("tags", [])
+    assert "Captain Veyra" in out["player_facing_text"]
+    assert "Cinderwatch Gate District" in out["player_facing_text"]
+
+
+def test_system_prompt_mentions_scene_momentum_rule_and_tag_contract():
+    from game.gm import SYSTEM_PROMPT
+
+    low = SYSTEM_PROMPT.lower()
+    assert "always answer the player. prefer partial truth over refusal. never output meta explanations." in low
+    assert "scene momentum rule" in low
+    assert "every 2–3 exchanges" in low or "every 2-3 exchanges" in low
+    assert "scene_momentum:<kind>" in SYSTEM_PROMPT
+    assert "consequence_or_opportunity" in SYSTEM_PROMPT
+
+
+def test_scene_momentum_enforcement_appends_opportunity_and_tag_when_due():
+    from game.gm import enforce_scene_momentum
+    from game.storage import get_scene_runtime, update_scene_momentum_runtime
+
+    session = {"scene_runtime": {}}
+    scene = {
+        "scene": {
+            "id": "frontier_gate",
+            "location": "Cinderwatch Gate District",
+            "visible_facts": [
+                "A notice board lists new taxes, curfews, and a missing patrol.",
+                "A tavern runner loudly offers rumor and hot stew for coin.",
+            ],
+            "discoverable_clues": [],
+            "hidden_facts": [],
+            "exits": [],
+            "enemies": [],
+        }
+    }
+    rt = get_scene_runtime(session, "frontier_gate")
+    rt["momentum_exchanges_since"] = 2  # would violate next turn without a beat
+    rt["momentum_next_due_in"] = 3
+
+    gm = {
+        "player_facing_text": "Captain Veyra’s gaze stays on you.",
+        "tags": [],
+        "scene_update": None,
+        "activate_scene_id": None,
+        "new_scene_draft": None,
+        "world_updates": None,
+        "suggested_action": None,
+        "debug_notes": "",
+    }
+    out = enforce_scene_momentum(gm, session=session, scene_envelope=scene)
+    assert any(isinstance(t, str) and t.startswith("scene_momentum:") for t in out.get("tags", []))
+    assert "Consequence / Opportunity:" in out.get("player_facing_text", "")
+
+    # Runtime update resets the counter when the tag exists.
+    update_scene_momentum_runtime(session, "frontier_gate", out)
+    rt2 = get_scene_runtime(session, "frontier_gate")
+    assert rt2["momentum_exchanges_since"] == 0
+
+
+def test_hidden_discoverable_safeguard_preserved_with_exploration():
+    """Clue layering (hidden/discoverable safeguards) still works when resolution is exploration."""
+    from game.gm import build_messages, guard_gm_output
+    from game.storage import get_scene_runtime
+
+    campaign, world, session, character, combat, recent_log = _dummy_state()
+    # Avoid session.active_scene_id forcing a load from disk; tests need controlled scene content.
+    session_no_active = {
+        "scene_runtime": {},
+        "interaction_context": dict(session.get("interaction_context") or {}),
+    }
+    scene_rt = get_scene_runtime({"scene_runtime": {}}, "frontier_gate")
+    resolution = {
+        "kind": "observe",
+        "action_id": "observe",
+        "label": "Observe",
+        "prompt": "Look around.",
+        "resolved_transition": False,
+    }
+    msgs = build_messages(
+        campaign, world, session_no_active, character, FRONTIER_GATE_SCENE,
+        combat, recent_log, "Look around.", resolution, scene_runtime=scene_rt,
+    )
+    payload = json.loads(msgs[1]["content"])
+    # "Look around." does not justify discoverable clues => must be empty
+    assert payload["scene"]["discoverable_clues"] == []
+    assert payload["scene"]["gm_only"]["hidden_facts"] == FRONTIER_GATE_SCENE["scene"]["hidden_facts"]
+    # Guard still blocks hidden fact leak
+    leaky_gm = {
+        "player_facing_text": "An agent of a noble house watches you.",
+        "tags": [],
+        "scene_update": None,
+        "activate_scene_id": None,
+        "new_scene_draft": None,
+        "world_updates": None,
+        "suggested_action": None,
+        "debug_notes": "",
+    }
+    out = guard_gm_output(leaky_gm, FRONTIER_GATE_SCENE, "Look around.", [])
+    assert out["player_facing_text"] != leaky_gm["player_facing_text"]
