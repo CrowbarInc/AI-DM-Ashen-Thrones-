@@ -7,6 +7,7 @@ including only relevant elements.
 from __future__ import annotations
 
 from typing import Any, Dict, List
+import re
 
 # Configurable limits for deterministic, inspectable compression
 MAX_RECENT_LOG = 5
@@ -14,6 +15,8 @@ MAX_RECENT_EVENTS = 5
 MAX_GM_GUIDANCE = 3
 MAX_WORLD_PRESSURES = 3
 MAX_LOG_ENTRY_SNIPPET = 200
+MAX_FOLLOW_UP_TOPIC_TOKENS = 6
+MAX_RECENT_CONTEXTUAL_LEADS = 4
 
 SOCIAL_REPLY_KINDS = frozenset({
     'question',
@@ -70,6 +73,109 @@ UNCERTAINTY_ANSWER_SHAPE: tuple[str, ...] = (
     "unknown_edge",
     "next_lead",
 )
+
+_TOPIC_TOKEN_PATTERN = re.compile(r"[a-zA-Z][a-zA-Z']{2,}")
+_TOPIC_STOPWORDS = frozenset({
+    "what", "where", "when", "why", "how", "who", "which",
+    "tell", "said", "says", "know", "knew", "think", "heard",
+    "about", "again", "still", "really", "actually", "just",
+    "there", "here", "them", "they", "their", "then", "than",
+    "with", "from", "into", "onto", "over", "under", "near",
+    "this", "that", "these", "those", "your", "you're", "youre",
+    "have", "has", "had", "can", "could", "would", "should",
+    "does", "did", "is", "are", "was", "were", "will",
+})
+_FOLLOW_UP_PRESS_TOKENS: tuple[str, ...] = (
+    "again",
+    "still",
+    "okay but",
+    "ok but",
+    "but",
+    "be specific",
+    "details",
+    "name",
+    "names",
+    "where exactly",
+    "who exactly",
+)
+
+
+def _topic_tokens(text: str) -> List[str]:
+    low = " ".join(str(text or "").strip().lower().split())
+    if not low:
+        return []
+    toks = [t for t in _TOPIC_TOKEN_PATTERN.findall(low) if len(t) >= 4 and t not in _TOPIC_STOPWORDS]
+    seen: set[str] = set()
+    out: List[str] = []
+    for t in toks:
+        if t in seen:
+            continue
+        out.append(t)
+        seen.add(t)
+        if len(out) >= MAX_FOLLOW_UP_TOPIC_TOKENS:
+            break
+    return out
+
+
+def _overlap_ratio(a: List[str], b: List[str]) -> float:
+    if not a or not b:
+        return 0.0
+    sa = set(a)
+    sb = set(b)
+    inter = len(sa & sb)
+    denom = min(len(sa), len(sb))
+    return float(inter) / float(denom or 1)
+
+
+def _compute_follow_up_pressure(recent_log_compact: List[Dict[str, Any]], user_text: str) -> Dict[str, Any] | None:
+    """Detect when the player is pressing the same topic over consecutive turns.
+
+    This is intentionally lightweight and prompt-scoped: it uses only the recent
+    log slice already passed to the model (no new persistence/memory subsystem).
+    """
+    if not recent_log_compact:
+        return None
+    last = recent_log_compact[-1] if isinstance(recent_log_compact[-1], dict) else {}
+    prev_player = str(last.get("player_input") or "").strip()
+    prev_gm = str(last.get("gm_snippet") or "").strip()
+    if not prev_player or not prev_gm:
+        return None
+
+    cur = str(user_text or "").strip()
+    if not cur:
+        return None
+
+    cur_low = cur.lower()
+    press_marker = any(tok in cur_low for tok in _FOLLOW_UP_PRESS_TOKENS)
+    cur_tokens = _topic_tokens(cur)
+    prev_tokens = _topic_tokens(prev_player)
+    overlap = _overlap_ratio(cur_tokens, prev_tokens)
+
+    pressed = (overlap >= 0.55 and len(cur_tokens) >= 2) or (press_marker and overlap >= 0.35 and len(cur_tokens) >= 1)
+    if not pressed:
+        return None
+
+    press_depth = 1
+    for entry in reversed(recent_log_compact[:-1]):
+        if not isinstance(entry, dict):
+            break
+        txt = str(entry.get("player_input") or "").strip()
+        if not txt:
+            break
+        if _overlap_ratio(cur_tokens, _topic_tokens(txt)) < 0.35:
+            break
+        press_depth += 1
+        if press_depth >= 3:
+            break
+
+    return {
+        "pressed": True,
+        "press_depth": press_depth,
+        "topic_tokens": cur_tokens,
+        "previous_player_input": prev_player[:240],
+        "previous_answer_snippet": prev_gm[:240],
+        "overlap_ratio": round(overlap, 3),
+    }
 
 
 def build_response_policy(*, narration_obligations: Dict[str, Any] | None = None) -> Dict[str, Any]:
@@ -278,9 +384,31 @@ def _compress_scene_runtime(runtime: Dict[str, Any]) -> Dict[str, Any]:
     """Keep only essential runtime fields to avoid bloat."""
     if not runtime or not isinstance(runtime, dict):
         return {}
+    recent_contextual_leads: List[Dict[str, Any]] = []
+    raw_leads = runtime.get("recent_contextual_leads")
+    if isinstance(raw_leads, list):
+        for item in raw_leads[-MAX_RECENT_CONTEXTUAL_LEADS:]:
+            if not isinstance(item, dict):
+                continue
+            subject = str(item.get("subject") or "").strip()
+            key = str(item.get("key") or "").strip()
+            if not subject or not key:
+                continue
+            recent_contextual_leads.append(
+                {
+                    "key": key,
+                    "kind": str(item.get("kind") or "").strip(),
+                    "subject": subject,
+                    "position": str(item.get("position") or "").strip(),
+                    "named": bool(item.get("named")),
+                    "mentions": int(item.get("mentions", 1) or 1),
+                    "last_turn": int(item.get("last_turn", 0) or 0),
+                }
+            )
     return {
         'discovered_clues': list(runtime.get('discovered_clues', []) or [])[:20],
         'pending_leads': list(runtime.get('pending_leads', []) or []),
+        'recent_contextual_leads': recent_contextual_leads,
         'repeated_action_count': runtime.get('repeated_action_count', 0) or 0,
         'last_exploration_action_key': runtime.get('last_exploration_action_key'),
         'momentum_exchanges_since': int(runtime.get('momentum_exchanges_since', 0) or 0),
@@ -554,12 +682,29 @@ def build_narration_context(
             'When transitioning scenes, include a brief bridge from the prior location before describing the new one.'
         )
 
+    recent_log_compact = _compress_recent_log(recent_log_for_prompt) if recent_log_for_prompt else []
+    follow_up_pressure = _compute_follow_up_pressure(recent_log_compact, user_text)
+    if follow_up_pressure:
+        instructions = list(instructions) + [
+            (
+                "FOLLOW-UP ESCALATION RULE (HARD RULE): The player is pressing the same topic again (see follow_up_pressure). "
+                "Do NOT recycle the same core lead from the previous answer. Escalate by doing AT LEAST TWO of the following: "
+                "(1) add one new concrete detail (time, place, condition, count, or observable), "
+                "(2) introduce a named person/place/faction/witness tied to the topic (with an in-world source), "
+                "(3) narrow the boundary of the unknown (what is ruled out; what is now most likely; what would confirm it), "
+                "(4) produce a more actionable immediate next step that uses the new detail. "
+                "Preserve uncertainty, but uncertainty must evolve. Preserve speaker grounding."
+            ),
+            "Allowed repetition: one short anchor clause for continuity. Not allowed: re-stating the same underlying lead as the whole answer.",
+        ]
+
     payload: Dict[str, Any] = {
         'instructions': instructions,
         'interaction_continuity': interaction_continuity,
         'turn_summary': _build_turn_summary(user_text, resolution, intent),
-        'recent_log': _compress_recent_log(recent_log_for_prompt) if recent_log_for_prompt else [],
+        'recent_log': recent_log_compact,
         'player_input': str(user_text or ''),
+        'follow_up_pressure': follow_up_pressure,
         'response_policy': response_policy,
         'uncertainty_hint': uncertainty_hint,
         'narration_obligations': narration_obligations,

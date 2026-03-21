@@ -14,6 +14,7 @@ from game.prompt_context import (
 )
 from game.storage import (
     load_scene,
+    load_log,
     get_scene_runtime,
     SCENE_MOMENTUM_KINDS,
     SCENE_MOMENTUM_TAG_PREFIX,
@@ -65,6 +66,7 @@ RETRY_FAILURE_PRIORITY: dict[str, int] = {
     "unresolved_question": 10,
     "validator_voice": 20,
     "npc_contract_failure": 30,
+    "followup_soft_repetition": 35,
     "scene_stall": 40,
     "echo_or_repetition": 50,
     "forbidden_generic_phrase": 60,
@@ -275,6 +277,22 @@ def build_retry_prompt_for_failure(
         return (
             f"{shared} Semantically rewrite the reply so it does not echo the player's wording or quoted speech. "
             "Change sentence structure and phrasing, and react with new information or consequence instead of restating the input."
+        )
+
+    if failure_class == "followup_soft_repetition":
+        ctx = (failure or {}).get("followup_context") if isinstance((failure or {}).get("followup_context"), dict) else {}
+        prev_player = str(ctx.get("previous_player_input") or "").strip()
+        prev_answer = str(ctx.get("previous_answer_snippet") or "").strip()
+        topic_tokens = ctx.get("topic_tokens") if isinstance(ctx.get("topic_tokens"), list) else []
+        topic_hint = f" Topic tokens: {topic_tokens}." if topic_tokens else ""
+        prev_player_hint = f" Previous player press: {prev_player}." if prev_player else ""
+        prev_answer_hint = f" Previous answer snippet (do not recycle): {prev_answer}." if prev_answer else ""
+        return (
+            f"{shared} The player is pressing the same topic again, and your reply repeated the prior answer without escalation."
+            f"{topic_hint}{prev_player_hint}{prev_answer_hint} "
+            "Do NOT restate the same underlying lead. Escalate with new content: add one concrete detail AND one of "
+            "(a) a named person/place/faction/witness (with an in-world source), or (b) a narrowed unknown boundary (time window, location bracket, condition, count). "
+            "End with a more actionable immediate next step that uses the new detail. Preserve speaker grounding and diegetic voice."
         )
 
     if failure_class == "npc_contract_failure":
@@ -627,6 +645,132 @@ _DOUBLE_QUOTED_SPEECH_PATTERN = re.compile(r'["\u201c\u201d]([^"\u201c\u201d]{3,
 _SINGLE_QUOTED_SPEECH_PATTERN = re.compile(
     r"(?:(?<=^)|(?<=[\s(\[{]))['\u2018\u2019]([^'\u2018\u2019]{3,240})['\u2018\u2019](?=$|[\s)\]}.,!?;:])"
 )
+_CAPITALIZED_TOKEN_PATTERN = re.compile(r"\b[A-Z][a-z]{2,}\b")
+_FOLLOWUP_PRESS_TOKENS: tuple[str, ...] = (
+    "again",
+    "still",
+    "okay but",
+    "ok but",
+    "but",
+    "be specific",
+    "details",
+    "name",
+    "names",
+    "where exactly",
+    "who exactly",
+)
+_TOPIC_STOPWORDS = frozenset({
+    "what", "where", "when", "why", "how", "who", "which",
+    "tell", "said", "says", "know", "knew", "think", "heard",
+    "about", "again", "still", "really", "actually", "just",
+    "there", "here", "them", "they", "their", "then", "than",
+    "with", "from", "into", "onto", "over", "under", "near",
+    "this", "that", "these", "those", "your", "youre", "you're",
+    "have", "has", "had", "can", "could", "would", "should",
+    "does", "did", "is", "are", "was", "were", "will",
+})
+
+
+def _topic_tokens_for_repetition(text: str) -> List[str]:
+    low = " ".join(str(text or "").strip().lower().split())
+    if not low:
+        return []
+    toks = [t for t in _ECHO_TOKEN_PATTERN.findall(low) if len(t) >= 4 and t not in _TOPIC_STOPWORDS]
+    seen: set[str] = set()
+    out: List[str] = []
+    for t in toks:
+        if t in seen:
+            continue
+        out.append(t)
+        seen.add(t)
+        if len(out) >= 10:
+            break
+    return out
+
+
+def _overlap_min_ratio(a: List[str], b: List[str]) -> float:
+    if not a or not b:
+        return 0.0
+    sa = set(a)
+    sb = set(b)
+    inter = len(sa & sb)
+    denom = min(len(sa), len(sb))
+    return float(inter) / float(denom or 1)
+
+
+def followup_soft_repetition_check(
+    *,
+    player_text: str,
+    reply_text: str,
+    session: Dict[str, Any],
+) -> Dict[str, Any]:
+    """Detect 'same topic' follow-up where the model repeats prior answer content.
+
+    Uses only the immediately previous logged turn as reference (no new subsystem).
+    """
+    player = str(player_text or "").strip()
+    reply = str(reply_text or "").strip()
+    if not player or not reply:
+        return {"applies": False, "ok": True, "reasons": []}
+    if len(reply) < 140:
+        return {"applies": False, "ok": True, "reasons": []}
+    if not _is_direct_player_question(player):
+        return {"applies": False, "ok": True, "reasons": []}
+
+    log = load_log()
+    if not isinstance(log, list) or not log:
+        return {"applies": False, "ok": True, "reasons": []}
+    prev = log[-1] if isinstance(log[-1], dict) else {}
+    prev_meta = prev.get("log_meta") if isinstance(prev.get("log_meta"), dict) else {}
+    prev_req = prev.get("request") if isinstance(prev.get("request"), dict) else {}
+    prev_player = str(prev_meta.get("player_input") or prev_req.get("chat") or "").strip()
+    prev_gm = prev.get("gm_output") if isinstance(prev.get("gm_output"), dict) else {}
+    prev_answer = str(prev_gm.get("player_facing_text") or "").strip()
+    if not prev_player or not prev_answer:
+        return {"applies": False, "ok": True, "reasons": []}
+
+    cur_low = player.lower()
+    press_marker = any(tok in cur_low for tok in _FOLLOWUP_PRESS_TOKENS)
+    cur_topic = _topic_tokens_for_repetition(player)
+    prev_topic = _topic_tokens_for_repetition(prev_player)
+    topic_overlap = _overlap_min_ratio(cur_topic, prev_topic)
+    pressed = (topic_overlap >= 0.55 and len(cur_topic) >= 2) or (press_marker and topic_overlap >= 0.35 and len(cur_topic) >= 1)
+    if not pressed:
+        return {"applies": False, "ok": True, "reasons": []}
+
+    reply_topic = _topic_tokens_for_repetition(reply)
+    prev_reply_topic = _topic_tokens_for_repetition(prev_answer)
+    answer_overlap = _overlap_min_ratio(reply_topic, prev_reply_topic)
+    if answer_overlap < 0.72:
+        return {"applies": True, "ok": True, "reasons": []}
+
+    # Allow repetition if the new reply introduces *new* concrete hooks (names/nums) beyond the prior answer.
+    prev_caps = set(_CAPITALIZED_TOKEN_PATTERN.findall(prev_answer))
+    curr_caps = set(_CAPITALIZED_TOKEN_PATTERN.findall(reply))
+    new_caps = [c for c in curr_caps if c not in prev_caps]
+    has_new_number = bool(re.search(r"\b\d{1,4}\b", reply)) and not bool(re.search(r"\b\d{1,4}\b", prev_answer))
+    prev_tok = set(prev_reply_topic)
+    new_info_tokens = [t for t in reply_topic if t not in prev_tok and len(t) >= 5]
+    if new_caps or has_new_number or len(new_info_tokens) >= 2:
+        return {"applies": True, "ok": True, "reasons": []}
+
+    active_target = str((session.get("interaction_context") or {}).get("active_interaction_target_id") or "").strip()
+    reasons = [
+        f"followup_soft_repetition:topic_overlap={round(topic_overlap,3)}",
+        f"followup_soft_repetition:answer_overlap={round(answer_overlap,3)}",
+        "followup_soft_repetition:no_new_detail_detected",
+    ]
+    return {
+        "applies": True,
+        "ok": False,
+        "reasons": reasons,
+        "followup_context": {
+            "topic_tokens": cur_topic[:6],
+            "previous_player_input": prev_player[:240],
+            "previous_answer_snippet": prev_answer[:240],
+            "active_interaction_target_id": active_target or None,
+        },
+    }
 
 
 def _extract_player_quoted_segments(user_text: str) -> List[str]:
@@ -1257,7 +1401,7 @@ def _lead_text_for_candidate(category: str, candidate: Dict[str, Any]) -> str:
             return f"Use {ref} to bracket who else is moving in the same pattern."
         if category == "unknown_feasibility":
             return f"Reach {ref} and see what barrier or permission they keep pointing back to."
-        return f"Follow up with {ref} before the trail goes cold."
+        return f"Follow {ref} and see where it leads."
     if kind == "pending_clue":
         if category == "unknown_location":
             return f"Follow the clue about {subject} and pin down the last solid place it names."
@@ -1854,33 +1998,31 @@ def _build_known_edge(
     speaker_role: str,
     turn_context: Dict[str, Any],
 ) -> str:
-    viewpoint = "I" if speaker_role == "npc" else "The scene"
     if category == "unknown_identity":
         if scene_snapshot.get("has_tavern_runner"):
-            return f"{viewpoint} can narrow it to the buyers circling {anchor}, not a sure name."
-        return f"{viewpoint} can narrow it to the pattern around {anchor}, not a sure face."
+            return f"You can narrow it to the buyers circling {anchor}, but not to a sure name."
+        return f"You can narrow it to the pattern around {anchor}, not to a single face."
     if category == "unknown_location":
         if scene_snapshot.get("has_gate_or_checkpoint"):
-            return f"{viewpoint} can give you a direction running past {anchor}, not a final door."
-        return f"{viewpoint} can give you a last sighting at {anchor}, not the final stop."
+            return f"You can get a direction that runs past {anchor}, but not all the way to a final door."
+        return f"You can pin down a last sighting at {anchor}, not the true destination."
     if category == "unknown_motive":
-        return f"{viewpoint} can point to the pressure around {anchor}, not the heart of it."
+        return f"You can see the pressure gathering around {anchor}, not the heart of why."
     if category == "unknown_quantity":
-        return f"{anchor.capitalize()} gives only rough scale, not a clean count."
+        return f"{anchor.capitalize()} gives a rough sense of scale, not a clean count."
     if category == "unknown_feasibility":
         check_reason = str(turn_context.get("check_reason") or "").strip()
         if check_reason:
-            return f"It turns on {check_reason}."
-        return f"It turns on one local condition around {anchor}."
-    return f"The aftermath around {anchor} is plain enough; the exact hand at work is not."
+            return f"It mostly depends on {check_reason}."
+        return f"It mostly depends on one local condition around {anchor}."
+    return f"You can read what was done around {anchor}, but not yet whose hand carried it out."
 
 
 def _build_unknown_edge(category: str, *, speaker_role: str, scene_snapshot: Dict[str, Any]) -> str:
-    trust_word = "I would trust" if speaker_role == "npc" else "the scene can prove"
     if category == "unknown_identity":
-        return f"No name or badge {trust_word} has surfaced yet."
+        return "No name or badge anyone would trust has surfaced yet."
     if category == "unknown_location":
-        return "After that, the trail breaks into rumor."
+        return "Beyond that, everything dissolves into rumor."
     if category == "unknown_motive":
         return "What drives it is still tucked behind secondhand behavior."
     if category == "unknown_quantity":
@@ -1889,7 +2031,7 @@ def _build_unknown_edge(category: str, *, speaker_role: str, scene_snapshot: Dic
         return "No one has a clean count they will stand behind."
     if category == "unknown_feasibility":
         return "Until that condition is tested, the answer stays unsettled."
-    return "The method stays half-seen and secondhand."
+    return "The exact method remains half-seen and secondhand."
 
 
 def _ensure_terminal_punctuation(text: str) -> str:
@@ -2424,7 +2566,7 @@ def _validator_voice_world_fallback(
     anchor = _clean_scene_detail(visible[0]).lower() if visible else "the immediate scene"
     loc_phrase = f" in {location}" if location else ""
     return (
-        f"You only get fragments{loc_phrase}: {anchor}. The rest stays unsettled until you press one concrete lead."
+        f"You only get fragments{loc_phrase}: {anchor}. The rest stays blurred until you push harder on something specific."
     )
 
 
@@ -3778,6 +3920,21 @@ def detect_retry_failures(
                 "priority": RETRY_FAILURE_PRIORITY["npc_contract_failure"],
                 "reasons": list(npc_contract.get("reasons") or []),
                 "missing": list(npc_contract.get("missing") or []),
+            }
+        )
+
+    followup_rep = followup_soft_repetition_check(player_text=player_text, reply_text=reply_text, session=session)
+    if followup_rep.get("applies") and not followup_rep.get("ok"):
+        failures.append(
+            {
+                "failure_class": "followup_soft_repetition",
+                "priority": RETRY_FAILURE_PRIORITY["followup_soft_repetition"],
+                "reasons": list(followup_rep.get("reasons") or []),
+                "followup_context": (
+                    followup_rep.get("followup_context")
+                    if isinstance(followup_rep.get("followup_context"), dict)
+                    else {}
+                ),
             }
         )
 

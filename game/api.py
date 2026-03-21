@@ -71,7 +71,11 @@ from game.journal import build_player_journal
 from game.affordances import get_available_affordances
 from game.scene_actions import normalize_scene_action
 from game.exploration import parse_exploration_intent, resolve_exploration_action, process_investigation_discovery
-from game.adjudication import classify_adjudication_query, resolve_adjudication_query
+from game.adjudication import (
+    classify_adjudication_query,
+    neutralize_engine_voice_for_player,
+    resolve_adjudication_query,
+)
 from game.social import (
     parse_social_intent,
     resolve_social_action,
@@ -829,6 +833,7 @@ def _build_check_prompt_gm_output(resolution: dict) -> dict:
         or str(resolution.get("hint") or "").strip()
         or "A check is required before this action can be resolved."
     )
+    prompt = neutralize_engine_voice_for_player(prompt)
     return {
         "player_facing_text": prompt,
         "tags": ["check_required"],
@@ -844,7 +849,7 @@ def _build_check_prompt_gm_output(resolution: dict) -> dict:
 def _build_adjudication_gm_output(adjudication: dict) -> dict:
     """Engine-authored adjudication output kept separate from GPT narration."""
     return {
-        'player_facing_text': str(adjudication.get('player_facing_text') or ''),
+        'player_facing_text': neutralize_engine_voice_for_player(str(adjudication.get('player_facing_text') or '')),
         'tags': ['adjudication_query'],
         'scene_update': None,
         'activate_scene_id': None,
@@ -993,8 +998,14 @@ def _prefer_dialogue_over_adjudication(
     player_text: str,
     segmented_turn: dict | None,
     adjudication_text: str | None,
+    has_active_interaction: bool = False,
 ) -> bool:
-    """Bias ambiguous turns toward dialogue instead of procedural adjudication."""
+    """Bias ambiguous turns toward dialogue instead of procedural adjudication.
+
+    When *has_active_interaction* is True the classifier uses narrowed
+    feasibility patterns so that normal in-character social questioning
+    during an active NPC conversation is not captured as adjudication.
+    """
     spoken_text = segmented_turn.get("spoken_text") if isinstance(segmented_turn, dict) else None
     declared_action_text = segmented_turn.get("declared_action_text") if isinstance(segmented_turn, dict) else None
     primary_clause = str(declared_action_text or spoken_text or player_text or "").strip()
@@ -1006,7 +1017,10 @@ def _prefer_dialogue_over_adjudication(
         return False
     if _is_engine_state_question(adjudication_text or primary_clause):
         return False
-    if classify_adjudication_query(adjudication_text or primary_clause) is not None:
+    if classify_adjudication_query(
+        adjudication_text or primary_clause,
+        has_active_interaction=has_active_interaction,
+    ) is not None:
         return False
     return _looks_like_in_character_exchange_clause(primary_clause, spoken_text)
 
@@ -1807,6 +1821,9 @@ def chat(req: ChatRequest):
                 session=session,
                 world=world,
                 character=character,
+                has_active_interaction=bool(
+                    str((inspect_interaction_context(session) or {}).get("active_interaction_target_id") or "").strip()
+                ),
             )
             if isinstance(embedded_question_text, str) and embedded_question_text.strip()
             else None
@@ -1846,10 +1863,15 @@ def chat(req: ChatRequest):
     elif gm is None:
         adjudication_text = embedded_question_text or req.text
         adjudication = None
+        _interaction_ctx = inspect_interaction_context(session)
+        _has_active_interaction = bool(
+            str((_interaction_ctx or {}).get("active_interaction_target_id") or "").strip()
+        )
         if not _prefer_dialogue_over_adjudication(
             player_text=req.text,
             segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
             adjudication_text=adjudication_text,
+            has_active_interaction=_has_active_interaction,
         ):
             adjudication = resolve_adjudication_query(
                 adjudication_text,
@@ -1857,6 +1879,7 @@ def chat(req: ChatRequest):
                 session=session,
                 world=world,
                 character=character,
+                has_active_interaction=_has_active_interaction,
             )
         if adjudication is not None:
             routed_via_adjudication = True
