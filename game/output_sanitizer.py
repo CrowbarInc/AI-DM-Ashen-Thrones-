@@ -35,18 +35,7 @@ _DROP_LINE_HINTS: tuple[str, ...] = (
     "resolve that procedurally",
 )
 
-_FULL_TEXT_REWRITES: tuple[tuple[re.Pattern[str], str], ...] = (
-    # Join artifact cleanup seen in gauntlet concatenation.
-    (
-        re.compile(r"\byou might start leaves by speaking\b", re.IGNORECASE),
-        "you might start by speaking",
-    ),
-    # Remove leaked label fragments that get spliced into valid narration.
-    (
-        re.compile(r"\b(?:internal|validator|router|planner)\s+(?:state|hint|instruction)s?\b", re.IGNORECASE),
-        "",
-    ),
-)
+_FULL_TEXT_REWRITES: tuple[tuple[re.Pattern[str], str], ...] = ()
 
 _SENTENCE_SPLIT_RE = re.compile(r"(?<=[.!?])\s+|\n+")
 
@@ -142,6 +131,26 @@ _KNOWN_SPLICE_PATTERNS: tuple[re.Pattern[str], ...] = (
     re.compile(r"\bstart leaves by\b", re.IGNORECASE),
     re.compile(r"\bstay with many want it\b", re.IGNORECASE),
     re.compile(r"\bforce the next name behind them into the open\b", re.IGNORECASE),
+)
+
+_TEMPLATE_FRAGMENT_PHRASES: tuple[str, ...] = (
+    "remains within reach",
+    "framed by the noise",
+    "another name",
+    "the next name",
+    "surrounding the tavern or",
+    "details that do not quite fit",
+)
+
+_CONJUNCTION_COLLISION_PATTERNS: tuple[re.Pattern[str], ...] = (
+    re.compile(r"\bor\s+(?:approach|investigate|observe|follow|examine|check|track|ask)\b", re.IGNORECASE),
+    re.compile(r"\band\s+remains\s+within\s+reach\b", re.IGNORECASE),
+    re.compile(r"\bor\s+[a-z]+ing\b", re.IGNORECASE),
+)
+
+_FINAL_INTERNAL_STYLE_PATTERNS: tuple[re.Pattern[str], ...] = (
+    re.compile(r"\b(?:planner|router|validator|adjudication|scaffold)\b", re.IGNORECASE),
+    re.compile(r"\b(?:the scene suggests|it can be inferred|no clear answer)\b", re.IGNORECASE),
 )
 
 _RESPONSE_SCHEMA_KEYS: tuple[str, ...] = (
@@ -365,10 +374,7 @@ def _rewrite_line(line: str, context: Dict[str, Any]) -> str:
     if not clean:
         return ""
     if re.search(r"\b(?:scaffold|planner|router|validator)\b", low):
-        clean = re.sub(r"\b(?:scaffold|planner|router|validator)\b", "", clean, flags=re.IGNORECASE).strip(" -:;,.")
-        low = clean.lower()
-        if not clean:
-            return ""
+        return _diegetic_uncertainty_fallback(context, source_text=clean)
 
     if (
         "more concrete action" in low
@@ -382,8 +388,8 @@ def _rewrite_line(line: str, context: Dict[str, Any]) -> str:
     if "distance is not established in authoritative state yet" in low:
         return "The distance is unclear from where you stand."
 
-    if "from established state" in low and clean.endswith("."):
-        return clean.replace("from established state", "from what you can see here").strip()
+    if "from established state" in low:
+        return _diegetic_uncertainty_fallback(context, source_text=clean)
 
     for hint in _DROP_LINE_HINTS:
         if hint in low:
@@ -400,6 +406,42 @@ def _log_sanitizer_event(context: Dict[str, Any], event: str, sentence: str) -> 
     debug_log = context.setdefault("sanitizer_debug", [])
     if isinstance(debug_log, list):
         debug_log.append({"event": event, "sentence": sentence[:240]})
+
+
+def _contains_template_fragment(sentence: str) -> bool:
+    low = (sentence or "").lower()
+    return any(fragment in low for fragment in _TEMPLATE_FRAGMENT_PHRASES)
+
+
+def _simple_diegetic_fallback(sentence: str, context: Dict[str, Any] | None = None) -> str:
+    low = (sentence or "").lower()
+    if "man in tattered clothes" in low:
+        return "The man in tattered clothes lingers nearby, watching the crowd."
+    if "runner" in low:
+        return "The runner lingers at the edge of the crowd, listening."
+    if "notice board" in low:
+        return "The notice board stands nearby, crowded with damp postings."
+    if "guard" in low:
+        return "A guard watches the lane with one hand on the spear."
+    return _diegetic_uncertainty_fallback(context, mode="narration", source_text=sentence)
+
+
+def _fails_final_validation_heuristics(sentence: str) -> bool:
+    s = (sentence or "").strip()
+    if not s:
+        return True
+    if _contains_template_fragment(s):
+        return True
+    if any(p.search(s) for p in _CONJUNCTION_COLLISION_PATTERNS):
+        return True
+    if any(p.search(s) for p in _FINAL_INTERNAL_STYLE_PATTERNS):
+        return True
+    if _is_spliced_or_malformed(s) or _looks_like_sentence_fragment(s):
+        return True
+    # Heuristic abrupt shift: unresolved conjunction between two scene anchors.
+    if re.search(r"\b(?:tavern|gate|crowd)\b.+\bor\s+(?:approach|follow|ask)\b", s, flags=re.IGNORECASE):
+        return True
+    return False
 
 
 def _split_sentences(text: str) -> list[str]:
@@ -445,6 +487,12 @@ def _rewrite_instructional_sentence(sentence: str, context: Dict[str, Any] | Non
         return "Another name seems to sit behind the story, still out of reach."
     if re.search(r"\bno name or badge anyone would trust has surfaced\b", low):
         return "No trustworthy name or badge has surfaced yet."
+
+    if "start leaves by speaking to" in low:
+        subject = _extract_subject_after_phrase(s, r"\bstart\s+leaves\s+by\s+speaking\s+to\s+([^.,;!?]+)")
+        if subject:
+            return f"{_subject_with_article(subject)} lingers nearby, watching the crowd."
+        return _simple_diegetic_fallback(s, context)
 
     start_match = re.search(r"\bstart with\s+([^.,;]+)", s, flags=re.IGNORECASE)
     if start_match:
@@ -585,8 +633,8 @@ def _rewrite_directive_sentence(sentence: str, context: Dict[str, Any] | None = 
     )
     if target:
         if re.match(r"^(the|a|an)\s+", target, flags=re.IGNORECASE):
-            return f"{target[0].upper()}{target[1:]} remains within reach, framed by the noise of the scene."
-        return f"{target[0].upper()}{target[1:]} remains within reach, framed by the noise of the scene."
+            return f"{target[0].upper()}{target[1:]} lingers nearby, half-hidden in the crowd."
+        return f"{target[0].upper()}{target[1:]} lingers nearby, half-hidden in the crowd."
 
     # Last-resort diegetic fallback with no direct instruction language.
     return _diegetic_uncertainty_fallback(context, mode="narration", source_text=s)
@@ -669,7 +717,7 @@ def _rewrite_implicit_instruction_sentence(sentence: str) -> str:
         if subject:
             framed = _subject_with_article(subject)
             if lemma in {"investigate", "examine", "check", "track"}:
-                return f"{framed} bears subtle signs of recent movement: scuffed edges, damp marks, and details that do not quite fit."
+                return f"{framed} bears subtle signs of recent movement: scuffed edges and damp marks."
             if lemma == "observe":
                 return f"{framed} keeps drawing stray glances, never still for long."
             if lemma in {"follow", "approach", "head toward", "go to"}:
@@ -784,6 +832,38 @@ def final_coherence_pass(text: str) -> str:
         cleaned.append(s)
     coherent = _cohere_sentences(cleaned)
     return " ".join(coherent).strip()
+
+
+def atomic_rewrite_enforcement_pass(sentences: list[str], context: Dict[str, Any] | None = None) -> list[str]:
+    out: list[str] = []
+    for sentence in sentences:
+        s = (sentence or "").strip()
+        if not s:
+            continue
+        if _contains_template_fragment(s) or any(p.search(s) for p in _CONJUNCTION_COLLISION_PATTERNS):
+            rewritten = _simple_diegetic_fallback(s, context).strip()
+            if rewritten:
+                out.append(rewritten)
+            continue
+        out.append(s)
+    return out
+
+
+def final_validation_pass(text: str, context: Dict[str, Any] | None = None) -> str:
+    if not isinstance(text, str):
+        return ""
+    validated: list[str] = []
+    for sentence in _split_sentences(text):
+        s = (sentence or "").strip()
+        if not s:
+            continue
+        if not _fails_final_validation_heuristics(s):
+            validated.append(s)
+            continue
+        rewritten = _simple_diegetic_fallback(s, context).strip()
+        if rewritten and not _fails_final_validation_heuristics(rewritten):
+            validated.append(rewritten)
+    return " ".join(_cohere_sentences(validated)).strip()
 
 
 def sanitize_player_facing_output(text: str, context: Dict[str, Any] | None = None) -> str:
@@ -903,8 +983,14 @@ def sanitize_player_facing_output(text: str, context: Dict[str, Any] | None = No
             sentence = rewritten
         implicit_rewritten.append(sentence)
 
-    # STEP 7: final coherence pass.
-    rebuilt = final_coherence_pass(" ".join(implicit_rewritten).strip())
+    # STEP 7: atomic rewrite enforcement.
+    atomic_rewritten = atomic_rewrite_enforcement_pass(implicit_rewritten, ctx)
+
+    # STEP 8: final validation gate.
+    validated_final = final_validation_pass(" ".join(atomic_rewritten).strip(), ctx)
+
+    # STEP 9: final coherence pass.
+    rebuilt = final_coherence_pass(validated_final)
 
     # Final boundary guard to avoid any surviving schema leakage.
     if resembles_serialized_response_payload(rebuilt):

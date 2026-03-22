@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from game.output_sanitizer import (
     extract_player_text_from_serialized_payload,
+    final_validation_pass,
     final_coherence_pass,
     rewrite_analytical_sentence,
     sanitize_player_facing_output,
@@ -311,3 +312,36 @@ def test_final_coherence_pass_repairs_malformed_join_and_drops_fragment():
     low = out.lower()
     assert low.count("the runner watches the crowd, clearly listening for more than he says.") == 1
     assert "and behind the" not in low
+
+
+def test_sanitizer_rewrites_partial_template_fragments_atomically():
+    text = "The next name remains within reach, framed by the noise of the scene."
+    out = sanitize_player_facing_output(text, {})
+    low = out.lower()
+    assert "the next name" not in low
+    assert "remains within reach" not in low
+    assert "framed by the noise" not in low
+
+
+def test_final_validation_pass_rejects_merged_fragment_sentence():
+    text = "The rumors surrounding the tavern or approach the man in tattered clothes."
+    out = final_validation_pass(text, {})
+    low = out.lower()
+    assert "surrounding the tavern or approach" not in low
+    assert "or approach" not in low
+    assert "man in tattered clothes lingers nearby, watching the crowd." in low
+
+
+def test_sanitizer_handles_overlapping_rewrite_artifacts_without_hybrids():
+    text = (
+        "You might want to ask the runner. "
+        "The next name remains within reach, framed by the noise of the scene. "
+        "Details that do not quite fit."
+    )
+    out = sanitize_player_facing_output(text, {})
+    low = out.lower()
+    assert "you might want to" not in low
+    assert "the next name" not in low
+    assert "remains within reach" not in low
+    assert "framed by the noise" not in low
+    assert "details that do not quite fit" not in low
