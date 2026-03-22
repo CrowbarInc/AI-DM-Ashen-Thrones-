@@ -88,6 +88,27 @@ def _gm_response(text: str, *, tags=None, debug_notes: str = ""):
     }
 
 
+def _seed_runner_dialogue_context(tmp_path, monkeypatch):
+    _seed_shared_world(tmp_path, monkeypatch)
+    world = storage.load_world()
+    world["npcs"] = [
+        {
+            "id": "runner",
+            "name": "Tavern Runner",
+            "location": "scene_investigate",
+            "topics": [{"id": "lanes", "text": "They were seen near the east lanes.", "clue_id": "east_lanes"}],
+        }
+    ]
+    storage._save_json(storage.WORLD_PATH, world)
+    session = storage.load_session()
+    session_ctx = session.setdefault("interaction_context", {})
+    session_ctx["active_interaction_target_id"] = "runner"
+    session_ctx["active_interaction_kind"] = "social"
+    session_ctx["interaction_mode"] = "social"
+    session_ctx["engagement_level"] = "engaged"
+    storage._save_json(storage.SESSION_PATH, session)
+
+
 def _assert_concrete_pressure(text: str) -> None:
     low = str(text or "").lower()
     assert any(
@@ -569,25 +590,7 @@ def test_chat_roll_requirement_question_routes_to_adjudication_without_gpt(tmp_p
 
 
 def test_chat_active_target_location_question_routes_to_social_exchange(tmp_path, monkeypatch):
-    _seed_shared_world(tmp_path, monkeypatch)
-    world = storage.load_world()
-    world["npcs"] = [
-        {
-            "id": "runner",
-            "name": "Tavern Runner",
-            "location": "scene_investigate",
-            "topics": [{"id": "lanes", "text": "They were seen near the east lanes.", "clue_id": "east_lanes"}],
-        }
-    ]
-    storage._save_json(storage.WORLD_PATH, world)
-
-    session = storage.load_session()
-    session_ctx = session.setdefault("interaction_context", {})
-    session_ctx["active_interaction_target_id"] = "runner"
-    session_ctx["active_interaction_kind"] = "social"
-    session_ctx["interaction_mode"] = "social"
-    session_ctx["engagement_level"] = "engaged"
-    storage._save_json(storage.SESSION_PATH, session)
+    _seed_runner_dialogue_context(tmp_path, monkeypatch)
 
     with monkeypatch.context() as m:
         m.setattr("game.api.call_gpt", lambda _: FAKE_GPT_RESPONSE)
@@ -603,6 +606,124 @@ def test_chat_active_target_location_question_routes_to_social_exchange(tmp_path
     assert resolution.get("kind") == "question"
     assert (resolution.get("social") or {}).get("social_intent_class") == "social_exchange"
     assert (resolution.get("social") or {}).get("npc_id") == "runner"
+    assert resolution.get("kind") != "adjudication_query"
+
+
+def test_chat_dialogue_lock_routes_npc_directed_question_regressions(tmp_path, monkeypatch):
+    _seed_runner_dialogue_context(tmp_path, monkeypatch)
+
+    prompts = [
+        "Runner, do you know where can I find those figures?",
+        "Who attacked them?",
+        "What are they planning?",
+        "Who saw this happen?",
+    ]
+    with monkeypatch.context() as m:
+        m.setattr("game.api.call_gpt", lambda _: FAKE_GPT_RESPONSE)
+        m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
+        m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
+        m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+        client = TestClient(app)
+        for prompt in prompts:
+            resp = client.post("/api/chat", json={"text": prompt})
+            assert resp.status_code == 200
+            data = resp.json()
+            resolution = data.get("resolution") or {}
+            assert resolution.get("kind") == "question"
+            assert (resolution.get("social") or {}).get("social_intent_class") == "social_exchange"
+            assert (resolution.get("social") or {}).get("npc_id") == "runner"
+            assert resolution.get("kind") != "adjudication_query"
+            text = ((data.get("gm_output") or {}).get("player_facing_text") or "").lower()
+            assert "resolve that procedurally" not in text
+
+
+def test_chat_repeated_topic_questions_force_escalation_by_third_probe(tmp_path, monkeypatch):
+    _seed_shared_world(tmp_path, monkeypatch)
+    world = storage.load_world()
+    world["npcs"] = [
+        {
+            "id": "runner",
+            "name": "Tavern Runner",
+            "location": "scene_investigate",
+            "topics": [],
+        }
+    ]
+    storage._save_json(storage.WORLD_PATH, world)
+    session = storage.load_session()
+    session_ctx = session.setdefault("interaction_context", {})
+    session_ctx["active_interaction_target_id"] = "runner"
+    session_ctx["active_interaction_kind"] = "social"
+    session_ctx["interaction_mode"] = "social"
+    session_ctx["engagement_level"] = "engaged"
+    storage._save_json(storage.SESSION_PATH, session)
+
+    stale = _gm_response(
+        "The runner rubs his neck. Rumor says the crossroads turned ugly, but no one can name the culprits yet "
+        "and people keep repeating the same whispers without anything solid."
+    )
+
+    with monkeypatch.context() as m:
+        m.setattr("game.api.call_gpt", lambda _messages: stale)
+        m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
+        m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
+        m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+        m.setattr("game.gm.resolve_known_fact_before_uncertainty", lambda *_args, **_kwargs: None)
+        m.setattr("game.gm.enforce_question_resolution_rule", lambda gm, **_kwargs: gm)
+        client = TestClient(app)
+        prompts = [
+            "Who is behind the crossroads attack?",
+            "Who is really behind it?",
+            "Who ordered it?",
+            "Who funds them?",
+        ]
+        for idx, prompt in enumerate(prompts, start=1):
+            resp = client.post("/api/chat", json={"text": prompt})
+            assert resp.status_code == 200
+            data = resp.json()
+            gm_output = data.get("gm_output") or {}
+            tags = gm_output.get("tags") or []
+            if idx >= 4:
+                assert "topic_pressure_escalation" in tags
+                assert any(str(tag).startswith("scene_momentum:") for tag in tags)
+
+
+def test_chat_dialogue_lock_mixed_questioning_keeps_dialogue_lane(tmp_path, monkeypatch):
+    _seed_runner_dialogue_context(tmp_path, monkeypatch)
+
+    prompts = [
+        "I lean in and ask quietly who saw it.",
+        "I scan the crowd while asking who saw it.",
+    ]
+    with monkeypatch.context() as m:
+        m.setattr("game.api.call_gpt", lambda _: FAKE_GPT_RESPONSE)
+        m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
+        m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
+        m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+        client = TestClient(app)
+        for prompt in prompts:
+            resp = client.post("/api/chat", json={"text": prompt})
+            assert resp.status_code == 200
+            data = resp.json()
+            resolution = data.get("resolution") or {}
+            assert resolution.get("kind") in {"question", "social_probe"}
+            assert (resolution.get("social") or {}).get("social_intent_class") == "social_exchange"
+            assert (resolution.get("social") or {}).get("npc_id") == "runner"
+            assert resolution.get("kind") != "adjudication_query"
+
+
+def test_chat_dialogue_lock_does_not_override_forceful_world_action(tmp_path, monkeypatch):
+    _seed_runner_dialogue_context(tmp_path, monkeypatch)
+
+    with monkeypatch.context() as m:
+        m.setattr("game.api.call_gpt", lambda _: FAKE_GPT_RESPONSE)
+        client = TestClient(app)
+        resp = client.post("/api/chat", json={"text": "I follow the runner."})
+
+    assert resp.status_code == 200
+    data = resp.json()
+    resolution = data.get("resolution") or {}
+    assert resolution.get("kind") != "question"
+    assert resolution.get("kind") != "social_probe"
     assert resolution.get("kind") != "adjudication_query"
 
 
@@ -727,7 +848,9 @@ def test_chat_adjudication_refuses_over_answer_without_basis(tmp_path, monkeypat
     adjudication = (data.get("resolution") or {}).get("adjudication") or {}
     assert (data.get("resolution") or {}).get("kind") == "adjudication_query"
     assert adjudication.get("answer_type") == "needs_concrete_action"
-    assert "need a concrete" in (((data.get("gm_output") or {}).get("player_facing_text") or "").lower())
+    low = (((data.get("gm_output") or {}).get("player_facing_text") or "").lower())
+    assert "state exactly what you do" not in low
+    assert ("need a concrete" in low) or ("scene offers no clear answer yet" in low)
 
 
 def test_chat_mixed_turn_preserves_embedded_adjudication_metadata(tmp_path, monkeypatch):
@@ -852,6 +975,51 @@ def test_chat_covert_concealment_under_observation_prompts_engine_check(tmp_path
     assert "Roll" in (check_request.get("player_prompt") or "")
     tags = ((data.get("gm_output") or {}).get("tags") or [])
     assert ("check_required" in tags) or ("adjudication_query" in tags)
+
+
+def test_chat_final_output_sanitizer_blocks_adjudication_procedural_leak(tmp_path, monkeypatch):
+    _seed_shared_world(tmp_path, monkeypatch)
+
+    with monkeypatch.context() as m:
+        m.setattr("game.api.call_gpt", lambda *_args, **_kwargs: (_ for _ in ()).throw(AssertionError("GPT should not be called")))
+        m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
+        m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
+        m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+        client = TestClient(app)
+        resp = client.post("/api/chat", json={"text": "How far away is he?"})
+
+    assert resp.status_code == 200
+    data = resp.json()
+    text = ((data.get("gm_output") or {}).get("player_facing_text") or "")
+    low = text.lower()
+    assert "resolve that procedurally" not in low
+    assert "adjudication:" not in low
+    assert "authoritative state" not in low
+    assert "state exactly what you do" not in low
+    assert ("distance is unclear" in low) or ("scene offers no clear answer yet" in low)
+
+
+def test_chat_final_output_sanitizer_blocks_internal_scaffold_labels(tmp_path, monkeypatch):
+    _seed_shared_world(tmp_path, monkeypatch)
+
+    with monkeypatch.context() as m:
+        m.setattr(
+            "game.api.call_gpt",
+            lambda _messages: _gm_response("Planner: route via router. Validator: unresolved."),
+        )
+        m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
+        m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
+        m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+        client = TestClient(app)
+        resp = client.post("/api/chat", json={"text": "Where should I start?"})
+
+    assert resp.status_code == 200
+    data = resp.json()
+    text = ((data.get("gm_output") or {}).get("player_facing_text") or "")
+    low = text.lower()
+    assert "planner:" not in low
+    assert "router" not in low
+    assert "validator:" not in low
 
 
 def test_resolved_turn_trace_is_compact_and_authoritative(tmp_path, monkeypatch):

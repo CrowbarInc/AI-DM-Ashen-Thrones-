@@ -299,6 +299,23 @@ def get_interaction_context(session: Dict[str, Any]) -> Dict[str, Any]:
     return ctx
 
 
+def get_scene_state(session: Dict[str, Any]) -> Dict[str, Any]:
+    """Return mutable scene-state scope, initializing deterministic keys."""
+    state = session.get("scene_state")
+    if not isinstance(state, dict):
+        state = {}
+        session["scene_state"] = state
+    if "active_scene_id" not in state:
+        state["active_scene_id"] = str(session.get("active_scene_id") or "").strip()
+    if not isinstance(state.get("active_entities"), list):
+        state["active_entities"] = []
+    if not isinstance(state.get("entity_presence"), dict):
+        state["entity_presence"] = {}
+    if "current_interlocutor" not in state:
+        state["current_interlocutor"] = None
+    return state
+
+
 def clear_interaction_context(session: Dict[str, Any]) -> Dict[str, Any]:
     """Backward-compatible clear helper; delegates to owner API."""
     from game.interaction_context import clear_for_scene_change

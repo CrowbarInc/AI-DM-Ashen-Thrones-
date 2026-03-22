@@ -1218,3 +1218,132 @@ def test_rule_priority_keeps_momentum_when_certainty_is_incomplete():
     _assert_local_anchor(out["player_facing_text"])
     assert "i can't answer that" not in out["player_facing_text"].lower()
     assert any(isinstance(tag, str) and tag.startswith("scene_momentum:") for tag in out.get("tags", []))
+
+
+def test_normalize_topic_clusters_semantic_variants():
+    from game.gm import normalize_topic
+
+    scene_ctx = FRONTIER_GATE_SCENE["scene"]
+    assert normalize_topic("What happened to the missing patrol?", scene_ctx) == "missing_patrol"
+    assert normalize_topic("Did anyone see those shadowy figures?", scene_ctx) == "shadowy_figures"
+    assert normalize_topic("Who is behind this attack?", scene_ctx) == "responsible_party"
+    assert normalize_topic("What happened at the crossroads last night?", scene_ctx) == "crossroads_incident"
+
+
+def test_topic_pressure_triggers_escalation_by_third_low_progress_probe():
+    from game.gm import _commit_topic_progress, detect_retry_failures, register_topic_probe
+
+    _, world, session, _, _, _ = _dummy_state()
+    resolution = {
+        "kind": "question",
+        "social": {"npc_id": "guard_captain", "npc_name": "Captain Veyra", "npc_reply_expected": True},
+    }
+    stale_reply = {
+        "player_facing_text": (
+            "Captain Veyra lowers her voice. Rumor says the crossroads were bad last night, "
+            "but no one here can give you names yet and whispers keep circling the same uncertainty."
+        ),
+        "tags": [],
+        "scene_update": None,
+        "activate_scene_id": None,
+        "new_scene_draft": None,
+        "world_updates": None,
+        "suggested_action": None,
+        "debug_notes": "",
+    }
+    prompts = [
+        "What happened at the crossroads?",
+        "Who attacked them at the crossroads?",
+        "Who is behind the crossroads attack?",
+    ]
+    seen_pressure_failure = False
+    for idx, prompt in enumerate(prompts, start=1):
+        session["turn_counter"] = idx
+        register_topic_probe(
+            session=session,
+            scene_envelope=FRONTIER_GATE_SCENE,
+            player_text=prompt,
+            resolution=resolution,
+        )
+        failures = detect_retry_failures(
+            player_text=prompt,
+            gm_reply=stale_reply,
+            scene_envelope=FRONTIER_GATE_SCENE,
+            session=session,
+            world=world,
+            resolution=resolution,
+        )
+        has_pressure = any(f.get("failure_class") == "topic_pressure_escalation" for f in failures if isinstance(f, dict))
+        if idx < 3:
+            assert has_pressure is False
+        else:
+            assert has_pressure is True
+            seen_pressure_failure = True
+        _commit_topic_progress(
+            session=session,
+            scene_envelope=FRONTIER_GATE_SCENE,
+            reply_text=stale_reply["player_facing_text"],
+        )
+    assert seen_pressure_failure is True
+
+
+def test_topic_pressure_does_not_escalate_when_each_answer_adds_concrete_info():
+    from game.gm import apply_response_policy_enforcement, detect_retry_failures, register_topic_probe
+    from game.prompt_context import build_response_policy
+
+    _, world, session, _, _, _ = _dummy_state()
+    resolution = {
+        "kind": "question",
+        "social": {"npc_id": "guard_captain", "npc_name": "Captain Veyra", "npc_reply_expected": True},
+    }
+    turns = [
+        (
+            "What happened to the patrol?",
+            "Captain Veyra says the missing patrol was last seen near the east road milestone before dusk.",
+        ),
+        (
+            "Who attacked them?",
+            "Captain Veyra adds that carter Rellan saw two hooded riders peel off toward the old mill road.",
+        ),
+        (
+            "Who is behind it?",
+            "Captain Veyra taps a torn dispatch seal marked Ash Cartel and tells you to question Rellan at the mill yard now.",
+        ),
+    ]
+    for idx, (prompt, reply_text) in enumerate(turns, start=1):
+        session["turn_counter"] = idx
+        register_topic_probe(
+            session=session,
+            scene_envelope=FRONTIER_GATE_SCENE,
+            player_text=prompt,
+            resolution=resolution,
+        )
+        gm = {
+            "player_facing_text": reply_text,
+            "tags": [],
+            "scene_update": None,
+            "activate_scene_id": None,
+            "new_scene_draft": None,
+            "world_updates": None,
+            "suggested_action": None,
+            "debug_notes": "",
+        }
+        failures = detect_retry_failures(
+            player_text=prompt,
+            gm_reply=gm,
+            scene_envelope=FRONTIER_GATE_SCENE,
+            session=session,
+            world=world,
+            resolution=resolution,
+        )
+        assert not any(f.get("failure_class") == "topic_pressure_escalation" for f in failures if isinstance(f, dict))
+        apply_response_policy_enforcement(
+            gm,
+            response_policy=build_response_policy(),
+            player_text=prompt,
+            scene_envelope=FRONTIER_GATE_SCENE,
+            session=session,
+            world=world,
+            resolution=resolution,
+            discovered_clues=[],
+        )

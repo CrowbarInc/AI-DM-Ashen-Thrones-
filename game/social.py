@@ -20,6 +20,8 @@ from game.utils import slugify
 from game.storage import get_npc_runtime
 from game.interaction_context import (
     apply_turn_input_implied_context,
+    assert_valid_speaker,
+    rebuild_active_scene_entities,
     set_non_social_activity,
     set_social_target,
 )
@@ -127,7 +129,7 @@ def parse_social_intent(
             name = str(npc.get("name") or "").strip()
             loc = npc.get("location") or npc.get("scene_id") or ""
             loc = str(loc).strip() if loc else ""
-            if not nid or (loc and loc != scene_id):
+            if not nid or loc != scene_id:
                 continue
             if target_slug and (slugify(nid) == target_slug or slugify(name) == target_slug or target_slug in slugify(nid) or target_slug in slugify(name)):
                 return {
@@ -209,10 +211,36 @@ def find_npc_by_target(
 
         if not nid:
             continue
-        # Must be in current scene
-        if loc and loc != scene_id:
+        # Must be in current scene; unknown location does not count as in-scene.
+        if loc != scene_id:
             continue
 
+        if nid == hint or nid.lower() == hint.lower():
+            return npc
+        if slugify(nid) == hint_slug or hint_slug in slugify(nid):
+            return npc
+        if name and (name.lower() == hint.lower() or slugify(name) == hint_slug or hint_slug in slugify(name)):
+            return npc
+    return None
+
+
+def _find_world_npc_by_target(world: Dict[str, Any], target_hint: str) -> Optional[Dict[str, Any]]:
+    if not target_hint or not isinstance(target_hint, str):
+        return None
+    hint = target_hint.strip()
+    if not hint:
+        return None
+    hint_slug = slugify(hint)
+    npcs = world.get("npcs") or []
+    if not isinstance(npcs, list):
+        return None
+    for npc in npcs:
+        if not isinstance(npc, dict):
+            continue
+        nid = str(npc.get("id") or "").strip()
+        name = str(npc.get("name") or "").strip()
+        if not nid:
+            continue
         if nid == hint or nid.lower() == hint.lower():
             return npc
         if slugify(nid) == hint_slug or hint_slug in slugify(nid):
@@ -430,10 +458,24 @@ def resolve_social_action(
     action_id = str(normalized_action.get("id") or "").strip() or "social"
     target_id = normalized_action.get("target_id") or normalized_action.get("targetEntityId") or raw_player_text
 
+    rebuild_active_scene_entities(session, world, scene_id, scene_envelope=scene_envelope)
+
     # Resolve NPC target
     npc = find_npc_by_target(world, str(target_id or ""), scene_id) if target_id else None
 
     if not npc:
+        known_target = _find_world_npc_by_target(world, str(target_id or "")) if target_id else None
+        known_target_id = str((known_target or {}).get("id") or "").strip()
+        known_target_name = str((known_target or {}).get("name") or "").strip()
+        known_target_loc = str((known_target or {}).get("location") or (known_target or {}).get("scene_id") or "").strip()
+        is_offscene_target = bool(known_target_id and known_target_loc and known_target_loc != scene_id)
+        if is_offscene_target:
+            hint = (
+                f"{known_target_name or 'That person'} is no longer here to answer. "
+                "Narrate that naturally from the current scene instead of attributing the reply to them."
+            )
+        else:
+            hint = "No matching NPC found in this scene. Narrate that the player's social attempt has no clear target or the intended person is not present."
         # Missing/unreachable NPC: fail cleanly
         result = SocialEngineResult(
             kind=action_type,
@@ -441,15 +483,16 @@ def resolve_social_action(
             label=label,
             prompt=prompt,
             success=False,
-            hint="No matching NPC found in this scene. Narrate that the player's social attempt has no clear target or the intended person is not present.",
+            hint=hint,
             social={
                 "social_intent_class": intent_class,
-                "npc_id": None,
-                "npc_name": None,
+                "npc_id": known_target_id or None,
+                "npc_name": known_target_name or None,
                 "target_resolved": False,
                 "skill_check": None,
                 "npc_reply_expected": False,
                 "reply_kind": "reaction",
+                "offscene_target": is_offscene_target,
             },
             requires_check=False,
         )
@@ -457,6 +500,28 @@ def resolve_social_action(
 
     npc_id = str(npc.get("id") or "").strip()
     npc_name = str(npc.get("name") or "the NPC").strip()
+    if not assert_valid_speaker(npc_id, session):
+        result = SocialEngineResult(
+            kind=action_type,
+            action_id=action_id,
+            label=label,
+            prompt=prompt,
+            success=False,
+            hint=f"{npc_name} is no longer here to answer. Narrate that naturally from the current scene.",
+            social={
+                "social_intent_class": intent_class,
+                "npc_id": npc_id,
+                "npc_name": npc_name,
+                "target_resolved": False,
+                "skill_check": None,
+                "npc_reply_expected": False,
+                "reply_kind": "reaction",
+                "offscene_target": True,
+            },
+            requires_check=False,
+        )
+        return result.to_dict()
+
     runtime = get_npc_runtime(session, npc_id)
     set_active_interaction_target(session, npc_id, kind="social")
 

@@ -237,7 +237,7 @@ def _resolve_active_interaction_target_name(
         if not npc_id or npc_id.lower() != target_id_low:
             continue
         npc_loc = str(npc.get('location') or npc.get('scene_id') or '').strip()
-        if scene_id and npc_loc and npc_loc != scene_id:
+        if scene_id and npc_loc != scene_id:
             continue
         npc_name = str(npc.get('name') or '').strip()
         return npc_name or None

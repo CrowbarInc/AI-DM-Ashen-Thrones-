@@ -262,7 +262,8 @@ def test_missing_npc_target_handled_safely():
     _assert_social_result_shape(resolution, "persuade")
     assert resolution["success"] is False
     assert resolution["social"]["target_resolved"] is False
-    assert resolution["social"]["npc_id"] is None
+    assert resolution["social"]["npc_id"] == "guard"
+    assert resolution["social"]["offscene_target"] is True
 
     action2 = {"id": "persuade-nobody", "label": "Persuade Nobody", "type": "persuade", "target_id": "nonexistent_npc"}
     resolution2 = resolve_social_action(scene, {}, world, action2, character=default_character(), turn_counter=1)

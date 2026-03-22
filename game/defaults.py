@@ -110,6 +110,12 @@ def default_session():
             "conversation_privacy": None,
             "player_position_context": None,
         },
+        "scene_state": {
+            "active_scene_id": "frontier_gate",
+            "active_entities": [],
+            "entity_presence": {},
+            "current_interlocutor": None,
+        },
     }
 
 

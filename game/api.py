@@ -66,6 +66,7 @@ from game.gm import (
     choose_retry_strategy,
     build_retry_prompt_for_failure,
     remember_recent_contextual_leads,
+    register_topic_probe,
 )
 from game.journal import build_player_journal
 from game.affordances import get_available_affordances
@@ -84,13 +85,17 @@ from game.social import (
 )
 from game.interaction_context import (
     apply_turn_input_implied_context,
+    assert_valid_speaker,
     clear_for_scene_change,
     inspect as inspect_interaction_context,
+    is_entity_active,
+    rebuild_active_scene_entities,
     update_after_resolved_action,
 )
 from game.scene_graph import build_scene_graph, is_transition_valid
 from game.intent_parser import parse_intent, segment_mixed_player_turn
 from game.prompt_context import build_response_policy, derive_narration_obligations
+from game.output_sanitizer import sanitize_player_facing_output
 from game.utils import slugify, utc_iso_now
 from game.world import advance_world_tick, apply_world_updates, apply_resolution_world_updates
 from game.clocks import get_or_init_clocks, advance_clock, DEFAULT_CLOCKS
@@ -409,6 +414,7 @@ def _apply_authoritative_scene_transition(
     scene: dict,
     session: dict,
     combat: dict,
+    world: dict,
 ) -> tuple[dict, dict, dict]:
     """Apply the single authoritative scene transition path.
 
@@ -424,6 +430,7 @@ def _apply_authoritative_scene_transition(
     combat = load_combat()
     _reset_combat(combat)
     clear_for_scene_change(session)
+    rebuild_active_scene_entities(session, world, sid, scene_envelope=scene)
     return scene, session, combat
 
 
@@ -627,7 +634,7 @@ def _apply_authoritative_resolution_state_mutation(
         target_scene_id = resolution['target_scene_id']
         print("[ENGINE] Scene transition →", target_scene_id)
         resolution['originating_scene_id'] = originating_scene_id
-        scene, session, combat = _apply_authoritative_scene_transition(target_scene_id, scene, session, combat)
+        scene, session, combat = _apply_authoritative_scene_transition(target_scene_id, scene, session, combat, world)
 
     authoritative_clue_updates.extend(
         _apply_authoritative_clues_from_resolution(session, scene['scene']['id'], resolution, world)
@@ -684,6 +691,12 @@ def _build_gpt_narration_from_authoritative_state(
     scene_runtime: dict,
 ) -> dict:
     """Stages 6-7: build prompt context from authoritative state, then narrate with GPT."""
+    register_topic_probe(
+        session=session,
+        scene_envelope=scene,
+        player_text=user_text,
+        resolution=resolution if isinstance(resolution, dict) else None,
+    )
     messages = build_messages(
         campaign,
         world,
@@ -825,6 +838,28 @@ def _is_pending_check_resolution(resolution: dict | None) -> bool:
     return isinstance(resolution.get("check_request"), dict)
 
 
+def _is_offscene_social_target_resolution(resolution: dict | None) -> bool:
+    if not isinstance(resolution, dict):
+        return False
+    social = resolution.get("social") if isinstance(resolution.get("social"), dict) else {}
+    return bool(social.get("offscene_target"))
+
+
+def _build_offscene_target_gm_output(resolution: dict) -> dict:
+    social = resolution.get("social") if isinstance(resolution.get("social"), dict) else {}
+    npc_name = str(social.get("npc_name") or "").strip() or "That person"
+    return {
+        "player_facing_text": f"{npc_name} is no longer here to answer.",
+        "tags": ["offscene_target"],
+        "scene_update": None,
+        "activate_scene_id": None,
+        "new_scene_draft": None,
+        "world_updates": None,
+        "suggested_action": None,
+        "debug_notes": "engine_offscene_target_guard",
+    }
+
+
 def _build_check_prompt_gm_output(resolution: dict) -> dict:
     """Engine-authored response when a check is required before narration."""
     check = resolution.get("check_request") if isinstance(resolution.get("check_request"), dict) else {}
@@ -952,6 +987,356 @@ _IN_CHARACTER_COMMAND_PREFIXES: tuple[str, ...] = (
     "stand aside",
     "step aside",
 )
+_DIALOGUE_QUESTION_WORDS: tuple[str, ...] = (
+    "who",
+    "what",
+    "where",
+    "when",
+    "why",
+    "how",
+    "which",
+)
+_DIALOGUE_SPEECH_TOKENS: tuple[str, ...] = (
+    "ask",
+    "asks",
+    "asked",
+    "question",
+    "tell me",
+    "do you know",
+    "what do you know",
+    "say",
+    "reply",
+    "answer",
+    "i ask",
+    "we ask",
+)
+_DIALOGUE_INFO_REQUEST_PHRASES: tuple[str, ...] = (
+    "do you know",
+    "what do you know",
+    "tell me what you know",
+    "who attacked",
+    "what are they planning",
+    "who saw this happen",
+    "who saw it",
+    "where can i find",
+    "where can we find",
+    "where do i find",
+    "where are they",
+)
+_WORLD_ACTION_STRONG_PATTERNS: tuple[str, ...] = (
+    r"\b(?:i|we)\s+(?:search|sneak|attack|follow|track|cast|inspect|examine|check|investigate)\b",
+    r"\b(?:i|we)\s+(?:grab|seize|shove|push|pull|pin|restrain|force|coerce|threaten)\b",
+    r"\b(?:i|we)\s+(?:pick up|open|unlock|break|climb|jump|hide|steal|manipulate)\b",
+)
+_WORLD_ACTION_FORCEFUL_PATTERNS: tuple[str, ...] = (
+    r"\b(?:i|we)\s+(?:grab|seize|attack|strike|cast|force|coerce|threaten|restrain)\b",
+    r"\b(?:i|we)\s+(?:follow|track|sneak|search)\b",
+)
+_NPC_REFERENCE_TITLES: tuple[str, ...] = (
+    "captain",
+    "guard",
+    "runner",
+    "footman",
+    "lady",
+    "lord",
+    "sir",
+    "madam",
+)
+
+
+def _scene_npcs_in_active_scene(scene: dict, world: dict) -> list[dict]:
+    scene_id = str(((scene or {}).get("scene") or {}).get("id") or "").strip()
+    npcs = (world or {}).get("npcs") or []
+    if not scene_id or not isinstance(npcs, list):
+        return []
+    scene_state = (scene or {}).get("scene_state") if isinstance(scene, dict) else None
+    active_ids = set()
+    if isinstance(scene_state, dict) and isinstance(scene_state.get("active_entities"), list):
+        active_ids = {
+            str(v).strip()
+            for v in scene_state.get("active_entities")
+            if isinstance(v, str) and str(v).strip()
+        }
+    out: list[dict] = []
+    for npc in npcs:
+        if not isinstance(npc, dict):
+            continue
+        npc_id = str(npc.get("id") or "").strip()
+        if not npc_id:
+            continue
+        if active_ids:
+            if npc_id in active_ids:
+                out.append(npc)
+            continue
+        location = str(npc.get("location") or npc.get("scene_id") or "").strip()
+        if location != scene_id:
+            continue
+        out.append(npc)
+    return out
+
+
+def _extract_leading_reference_tokens(npc: dict) -> set[str]:
+    refs: set[str] = set()
+    npc_id = str(npc.get("id") or "").strip().lower()
+    npc_name = str(npc.get("name") or "").strip().lower()
+    if npc_id:
+        refs.add(npc_id)
+    if npc_name:
+        refs.add(npc_name)
+    for token in re.split(r"[\s\-_]+", f"{npc_id} {npc_name}"):
+        token = token.strip().lower()
+        if len(token) >= 4:
+            refs.add(token)
+    for title in _NPC_REFERENCE_TITLES:
+        if title in npc_name:
+            refs.add(title)
+    return refs
+
+
+def _find_addressed_npc_id(
+    text: str,
+    *,
+    scene: dict,
+    session: dict,
+    world: dict,
+) -> str | None:
+    low = str(text or "").strip().lower()
+    if not low:
+        return None
+    scene_npcs = _scene_npcs_in_active_scene(scene, world)
+    if not scene_npcs:
+        return None
+    text_slug = slugify(low)
+    interaction = inspect_interaction_context(session)
+    active_target_id = str(interaction.get("active_interaction_target_id") or "").strip()
+
+    for npc in scene_npcs:
+        npc_id = str(npc.get("id") or "").strip()
+        npc_name = str(npc.get("name") or "").strip()
+        if not npc_id:
+            continue
+        npc_slug = slugify(f"{npc_id} {npc_name}")
+        if npc_slug and npc_slug in text_slug:
+            return npc_id
+        for ref in _extract_leading_reference_tokens(npc):
+            if not ref:
+                continue
+            if re.search(rf"^\s*{re.escape(ref)}\b(?:\s*[,:?!-]|\s+)", low):
+                return npc_id
+            if re.search(rf"\b(?:to|toward|towards|at)\s+{re.escape(ref)}\b", low):
+                return npc_id
+
+    if active_target_id and re.search(r"\b(you|your|him|her|them)\b", low):
+        if assert_valid_speaker(active_target_id, session):
+            return active_target_id
+    return None
+
+
+def _find_world_npc_reference_id(text: str, world: dict) -> str | None:
+    low = str(text or "").strip().lower()
+    if not low:
+        return None
+    text_slug = slugify(low)
+    npcs = (world or {}).get("npcs") or []
+    if not isinstance(npcs, list):
+        return None
+    for npc in npcs:
+        if not isinstance(npc, dict):
+            continue
+        npc_id = str(npc.get("id") or "").strip()
+        npc_name = str(npc.get("name") or "").strip()
+        if not npc_id:
+            continue
+        npc_slug = slugify(f"{npc_id} {npc_name}")
+        if npc_slug and npc_slug in text_slug:
+            return npc_id
+        for ref in _extract_leading_reference_tokens(npc):
+            if not ref:
+                continue
+            if re.search(rf"^\s*{re.escape(ref)}\b(?:\s*[,:?!-]|\s+)", low):
+                return npc_id
+            if re.search(rf"\b(?:to|toward|towards|at)\s+{re.escape(ref)}\b", low):
+                return npc_id
+    return None
+
+
+def _is_information_seeking_clause(text: str) -> bool:
+    low = str(text or "").strip().lower()
+    if not low:
+        return False
+    if any(phrase in low for phrase in _DIALOGUE_INFO_REQUEST_PHRASES):
+        return True
+    if any(token in low for token in _DIALOGUE_SPEECH_TOKENS) and any(word in low for word in _DIALOGUE_QUESTION_WORDS):
+        return True
+    if "?" in low:
+        lead = re.sub(r'^[^a-z0-9"]+', "", low)
+        lead = lead.replace('"', "")
+        first = lead.split(" ", 1)[0] if lead else ""
+        if first in _QUESTION_START_TOKENS:
+            return True
+        if any(word in low for word in _DIALOGUE_QUESTION_WORDS):
+            return True
+    return False
+
+
+def _has_dialogue_cue(*, text: str, segmented_turn: dict | None) -> bool:
+    low = str(text or "").strip().lower()
+    if not low:
+        return False
+    spoken_text = segmented_turn.get("spoken_text") if isinstance(segmented_turn, dict) else None
+    if isinstance(spoken_text, str) and spoken_text.strip():
+        return True
+    if '"' in low:
+        return True
+    if _is_information_seeking_clause(low):
+        return True
+    return any(token in low for token in _DIALOGUE_SPEECH_TOKENS)
+
+
+def is_world_action(text: str, segmented_turn: dict | None = None) -> bool:
+    clause = (
+        (segmented_turn.get("declared_action_text") if isinstance(segmented_turn, dict) else None)
+        or text
+    )
+    low = str(clause or "").strip().lower()
+    if not low:
+        return False
+    return any(re.search(pattern, low) for pattern in _WORLD_ACTION_STRONG_PATTERNS)
+
+
+def is_directed_dialogue(
+    text: str,
+    *,
+    scene: dict,
+    session: dict,
+    world: dict,
+    segmented_turn: dict | None = None,
+) -> bool:
+    primary_clause = (
+        (segmented_turn.get("declared_action_text") if isinstance(segmented_turn, dict) else None)
+        or (segmented_turn.get("spoken_text") if isinstance(segmented_turn, dict) else None)
+        or text
+    )
+    clause = str(primary_clause or "").strip()
+    if not clause:
+        return False
+    if _is_explicit_ooc(clause) or _is_explicit_ooc(text):
+        return False
+    if _contains_mechanics_or_procedural_language(clause):
+        return False
+    if _is_engine_state_question(clause):
+        return False
+
+    scene_npcs = _scene_npcs_in_active_scene(scene, world)
+    addressed_npc_id = _find_addressed_npc_id(
+        clause,
+        scene=scene,
+        session=session,
+        world=world,
+    )
+    has_present_character = bool(scene_npcs)
+    has_world_reference = bool(_find_world_npc_reference_id(clause, world))
+    has_dialogue_cue = _has_dialogue_cue(text=text, segmented_turn=segmented_turn)
+    asks_for_information = _is_information_seeking_clause(clause)
+
+    if addressed_npc_id:
+        return True
+    if has_dialogue_cue and has_world_reference:
+        return True
+    if has_dialogue_cue and has_present_character:
+        return True
+    if asks_for_information and has_present_character:
+        return True
+    return False
+
+
+def choose_interaction_route(
+    text: str,
+    *,
+    scene: dict,
+    session: dict,
+    world: dict,
+    segmented_turn: dict | None = None,
+) -> str:
+    """Choose chat interaction lane: dialogue, action, or undecided."""
+    directed_dialogue = is_directed_dialogue(
+        text,
+        scene=scene,
+        session=session,
+        world=world,
+        segmented_turn=segmented_turn,
+    )
+    world_action = is_world_action(text, segmented_turn=segmented_turn)
+    has_dialogue_cue = _has_dialogue_cue(text=text, segmented_turn=segmented_turn)
+    low = str(text or "").strip().lower()
+    forceful_action = any(re.search(pattern, low) for pattern in _WORLD_ACTION_FORCEFUL_PATTERNS)
+
+    if directed_dialogue:
+        # Dialogue lock: keep spoken questioning in social lane unless action intent is forceful.
+        if world_action and (forceful_action or not has_dialogue_cue):
+            return "action"
+        return "dialogue"
+    if world_action:
+        return "action"
+    return "undecided"
+
+
+def _build_dialogue_first_action(
+    *,
+    player_text: str,
+    scene: dict,
+    session: dict,
+    world: dict,
+    segmented_turn: dict | None,
+) -> dict | None:
+    if not is_directed_dialogue(
+        player_text,
+        scene=scene,
+        session=session,
+        world=world,
+        segmented_turn=segmented_turn,
+    ):
+        return None
+
+    target_id = _find_addressed_npc_id(
+        player_text,
+        scene=scene,
+        session=session,
+        world=world,
+    )
+    interaction = inspect_interaction_context(session)
+    active_target_id = str(interaction.get("active_interaction_target_id") or "").strip()
+    if not target_id and active_target_id and is_entity_active(session, active_target_id):
+        target_id = active_target_id
+    if not target_id:
+        target_id = _find_world_npc_reference_id(player_text, world)
+    if not target_id:
+        scene_npcs = _scene_npcs_in_active_scene(scene, world)
+        if len(scene_npcs) == 1:
+            target_id = str(scene_npcs[0].get("id") or "").strip() or None
+
+    action_kind = "question" if _is_information_seeking_clause(player_text) or "?" in str(player_text or "") else "social_probe"
+    action_label = str(player_text or "").strip()
+    if not action_label:
+        return None
+    metadata = {
+        "routed_via_dialogue_lock": True,
+        "route": "dialogue",
+    }
+    if target_id:
+        metadata["active_interaction_target_id"] = target_id
+    out = {
+        "id": slugify(f"{action_kind}-{target_id or 'npc'}") or "social",
+        "label": action_label[:140],
+        "type": action_kind,
+        "social_intent_class": "social_exchange",
+        "prompt": action_label,
+        "metadata": metadata,
+    }
+    if target_id:
+        out["target_id"] = target_id
+        out["targetEntityId"] = target_id
+    return out
 
 
 def _is_explicit_ooc(text: str | None) -> bool:
@@ -999,6 +1384,9 @@ def _prefer_dialogue_over_adjudication(
     segmented_turn: dict | None,
     adjudication_text: str | None,
     has_active_interaction: bool = False,
+    scene: dict | None = None,
+    session: dict | None = None,
+    world: dict | None = None,
 ) -> bool:
     """Bias ambiguous turns toward dialogue instead of procedural adjudication.
 
@@ -1017,69 +1405,21 @@ def _prefer_dialogue_over_adjudication(
         return False
     if _is_engine_state_question(adjudication_text or primary_clause):
         return False
+    if isinstance(scene, dict) and isinstance(session, dict) and isinstance(world, dict):
+        if choose_interaction_route(
+            player_text,
+            scene=scene,
+            session=session,
+            world=world,
+            segmented_turn=segmented_turn,
+        ) == "dialogue":
+            return True
     if classify_adjudication_query(
         adjudication_text or primary_clause,
         has_active_interaction=has_active_interaction,
     ) is not None:
         return False
     return _looks_like_in_character_exchange_clause(primary_clause, spoken_text)
-
-
-def _route_active_target_social_exchange(
-    *,
-    player_text: str,
-    segmented_turn: dict | None,
-    scene: dict,
-    session: dict,
-    world: dict,
-) -> dict | None:
-    """Prefer active-target social exchange for in-character turns.
-
-    This route is intentionally narrow:
-    - requires an active interaction target in-scene
-    - rejects explicit OOC/procedural/mechanical questions
-    - rejects explicit engine-state questions
-    - accepts direct in-character questions/replies (including quoted speech)
-    """
-    interaction = inspect_interaction_context(session)
-    active_target_id = str(interaction.get("active_interaction_target_id") or "").strip()
-    if not active_target_id:
-        return None
-
-    spoken_text = segmented_turn.get("spoken_text") if isinstance(segmented_turn, dict) else None
-    declared_action_text = segmented_turn.get("declared_action_text") if isinstance(segmented_turn, dict) else None
-    primary_clause = str(declared_action_text or spoken_text or player_text or "").strip()
-    if not primary_clause:
-        return None
-
-    if _is_explicit_ooc(player_text) or _is_explicit_ooc(primary_clause):
-        return None
-    if _contains_mechanics_or_procedural_language(primary_clause):
-        return None
-    if _is_engine_state_question(primary_clause):
-        return None
-    if not _looks_like_in_character_exchange_clause(primary_clause, spoken_text):
-        return None
-
-    scene_id = str(((scene or {}).get("scene") or {}).get("id") or "").strip()
-    if not find_npc_by_target(world, active_target_id, scene_id):
-        return None
-
-    action_kind = "question" if "?" in primary_clause else "social_probe"
-    action_label = primary_clause if len(primary_clause) <= 140 else primary_clause[:140].rstrip()
-    return {
-        "id": slugify(f"{action_kind}-{active_target_id}") or "social",
-        "label": action_label,
-        "type": action_kind,
-        "social_intent_class": "social_exchange",
-        "prompt": player_text.strip() or action_label,
-        "target_id": active_target_id,
-        "targetEntityId": active_target_id,
-        "metadata": {
-            "routed_via_active_interaction_target": True,
-            "active_interaction_target_id": active_target_id,
-        },
-    }
 
 
 def _build_opening_scene_resolution(user_text: str, scene_id: str) -> dict:
@@ -1115,6 +1455,16 @@ def _build_turn_response_payload(
     include_resolution: bool,
 ) -> dict:
     """Stages 8-9: derive affordances from authoritative state and package API response."""
+    if isinstance(gm, dict):
+        gm = dict(gm)
+        raw_text = gm.get("player_facing_text") if isinstance(gm.get("player_facing_text"), str) else ""
+        gm["player_facing_text"] = sanitize_player_facing_output(
+            raw_text,
+            {
+                "resolution": resolution if isinstance(resolution, dict) else None,
+                "include_resolution": bool(include_resolution),
+            },
+        )
     state = compose_state()  # Includes affordances derived from saved authoritative scene/session/world.
     payload: dict = {'ok': True, 'gm_output': gm, **state}
     if include_resolution:
@@ -1130,6 +1480,8 @@ def compose_state():
     combat = load_combat()
     conditions = load_conditions()
     scene = load_active_scene()
+    rebuild_active_scene_entities(session, world, scene["scene"]["id"], scene_envelope=scene)
+    scene["scene_state"] = session.get("scene_state")
     state = {
         'campaign': campaign,
         'character': character,
@@ -1216,7 +1568,8 @@ def api_activate_scene(payload: dict):
     scene = load_active_scene()
     session = load_session()
     combat = load_combat()
-    scene, session, combat = _apply_authoritative_scene_transition(scene_id, scene, session, combat)
+    world = load_world()
+    scene, session, combat = _apply_authoritative_scene_transition(scene_id, scene, session, combat, world)
     save_session(session)
     save_combat(combat)
     return {'ok': True, 'scene': scene, 'session': session}
@@ -1349,6 +1702,8 @@ def action(req: ActionRequest):
     combat = load_combat()
     conditions = load_conditions()
     scene = load_active_scene()
+    rebuild_active_scene_entities(session, world, scene["scene"]["id"], scene_envelope=scene)
+    scene["scene_state"] = session.get("scene_state")
     scene_before_id = scene['scene']['id']
 
     trace: dict = {
@@ -1506,6 +1861,11 @@ def action(req: ActionRequest):
 
     # Engine-owned roll prompting: when a check is required, skip GPT and return
     # deterministic check prompt text from authoritative resolution payload.
+    if run_resolved_pipeline and _is_offscene_social_target_resolution(resolution):
+        gm = _build_offscene_target_gm_output(resolution)
+        run_resolved_pipeline = False
+        trace['gpt_called'] = False
+
     if run_resolved_pipeline and _is_pending_check_resolution(resolution):
         gm = _build_check_prompt_gm_output(resolution)
         run_resolved_pipeline = False
@@ -1541,6 +1901,8 @@ def action(req: ActionRequest):
         scene_changed=scene_before_id != scene['scene']['id'],
         preserve_continuity=bool(implied_context.get("applied")),
     )
+    rebuild_active_scene_entities(session, world, scene["scene"]["id"], scene_envelope=scene)
+    scene["scene_state"] = session.get("scene_state")
 
     # Build action pipeline debug (no hidden facts or secrets).
     if isinstance(req.intent, str):
@@ -1652,6 +2014,8 @@ def chat(req: ChatRequest):
     combat = load_combat()
     conditions = load_conditions()
     scene = load_active_scene()
+    rebuild_active_scene_entities(session, world, scene["scene"]["id"], scene_envelope=scene)
+    scene["scene_state"] = session.get("scene_state")
     scene_before_id = scene['scene']['id']
 
     trace: dict = {
@@ -1741,19 +2105,26 @@ def chat(req: ChatRequest):
         resolution['world_tick_events'] = tick.get('events', [])
         parsed = normalized_chat
     else:
+        route_choice = choose_interaction_route(
+            req.text,
+            scene=scene,
+            session=session,
+            world=world,
+            segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+        )
         parsed = parse_social_intent(classification_text, scene, world)
         if parsed is None:
-            parsed = _route_active_target_social_exchange(
+            parsed = _build_dialogue_first_action(
                 player_text=req.text,
                 segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
                 scene=scene,
                 session=session,
                 world=world,
             )
-        if parsed is None:
+        if parsed is None and route_choice != "dialogue":
             parsed = parse_exploration_intent(classification_text, scene)
         intent = None
-        if parsed is None:
+        if parsed is None and route_choice != "dialogue":
             intent = parse_intent(classification_text)
             if intent:
                 parsed = intent  # Use full structured action from parser (id, label, type, prompt, target_id, etc.)
@@ -1842,7 +2213,10 @@ def chat(req: ChatRequest):
                     "answer_type": embedded_adjudication.get("answer_type"),
                     "requires_check": embedded_adjudication.get("requires_check"),
                 }
-        if _is_pending_check_resolution(resolution):
+        if _is_offscene_social_target_resolution(resolution):
+            trace['gpt_called'] = False
+            gm = _build_offscene_target_gm_output(resolution)
+        elif _is_pending_check_resolution(resolution):
             trace['gpt_called'] = False
             gm = _build_check_prompt_gm_output(resolution)
         else:
@@ -1872,6 +2246,9 @@ def chat(req: ChatRequest):
             segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
             adjudication_text=adjudication_text,
             has_active_interaction=_has_active_interaction,
+            scene=scene,
+            session=session,
+            world=world,
         ):
             adjudication = resolve_adjudication_query(
                 adjudication_text,
@@ -1944,6 +2321,8 @@ def chat(req: ChatRequest):
         scene_changed=scene_before_id != scene['scene']['id'],
         preserve_continuity=bool(implied_context.get("applied")),
     )
+    rebuild_active_scene_entities(session, world, scene["scene"]["id"], scene_envelope=scene)
+    scene["scene_state"] = session.get("scene_state")
     if gm.get('world_updates'):
         save_world(world)
 

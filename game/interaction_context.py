@@ -6,7 +6,7 @@ functions so behavior remains deterministic and inspectable.
 """
 from __future__ import annotations
 
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
 
 from game.utils import slugify
 
@@ -85,10 +85,134 @@ def _scene_npcs(world: Dict[str, Any], scene_id: str) -> list[Dict[str, Any]]:
         if not nid:
             continue
         loc = _clean_string(npc.get("location")) or _clean_string(npc.get("scene_id"))
-        if loc and loc != scene_id:
+        if loc != scene_id:
             continue
         out.append(npc)
     return out
+
+
+def _all_world_npc_ids(world: Dict[str, Any]) -> List[str]:
+    npcs = world.get("npcs") or []
+    if not isinstance(npcs, list):
+        return []
+    out: List[str] = []
+    for npc in npcs:
+        if not isinstance(npc, dict):
+            continue
+        nid = _clean_string(npc.get("id"))
+        if not nid or nid in out:
+            continue
+        out.append(nid)
+    return out
+
+
+def _scene_authored_entity_ids(scene_envelope: Dict[str, Any] | None) -> List[str]:
+    if not isinstance(scene_envelope, dict):
+        return []
+    scene = scene_envelope.get("scene")
+    if not isinstance(scene, dict):
+        return []
+    authored: List[str] = []
+    for key in ("active_entities", "entities", "npcs"):
+        raw = scene.get(key)
+        if not isinstance(raw, list):
+            continue
+        for item in raw:
+            ent_id = ""
+            if isinstance(item, str):
+                ent_id = item.strip()
+            elif isinstance(item, dict):
+                ent_id = str(item.get("id") or "").strip()
+            if ent_id and ent_id not in authored:
+                authored.append(ent_id)
+    return authored
+
+
+def _scene_state(session: Dict[str, Any]) -> Dict[str, Any]:
+    state = session.get("scene_state")
+    if not isinstance(state, dict):
+        state = {}
+        session["scene_state"] = state
+    if not isinstance(state.get("active_entities"), list):
+        state["active_entities"] = []
+    if not isinstance(state.get("entity_presence"), dict):
+        state["entity_presence"] = {}
+    if "active_scene_id" not in state:
+        state["active_scene_id"] = str(session.get("active_scene_id") or "").strip()
+    if "current_interlocutor" not in state:
+        state["current_interlocutor"] = None
+    return state
+
+
+def is_entity_active(session: Dict[str, Any], entity_id: Optional[str]) -> bool:
+    eid = _clean_string(entity_id)
+    if not eid:
+        return False
+    state = _scene_state(session)
+    active_ids = state.get("active_entities")
+    if not isinstance(active_ids, list):
+        return False
+    return eid in {str(x).strip() for x in active_ids if isinstance(x, str)}
+
+
+def entity_presence_state(session: Dict[str, Any], entity_id: Optional[str]) -> str:
+    eid = _clean_string(entity_id)
+    if not eid:
+        return "unknown"
+    state = _scene_state(session)
+    presence = state.get("entity_presence")
+    if not isinstance(presence, dict):
+        return "unknown"
+    value = str(presence.get(eid) or "").strip().lower()
+    return value if value in {"active", "nearby", "offscene", "unknown"} else "unknown"
+
+
+def assert_valid_speaker(candidate: Optional[str], session: Dict[str, Any]) -> bool:
+    return is_entity_active(session, candidate)
+
+
+def rebuild_active_scene_entities(
+    session: Dict[str, Any],
+    world: Dict[str, Any],
+    scene_id: str,
+    *,
+    scene_envelope: Optional[Dict[str, Any]] = None,
+) -> Dict[str, Any]:
+    """Rebuild explicit active-scene entity scope and invalidate stale interlocutors."""
+    sid = _clean_string(scene_id) or ""
+    state = _scene_state(session)
+    active_ids: List[str] = []
+    for npc in _scene_npcs(world, sid):
+        nid = _clean_string(npc.get("id"))
+        if nid and nid not in active_ids:
+            active_ids.append(nid)
+
+    # Scene-authored entities may be present even when world location is not explicit.
+    for ent_id in _scene_authored_entity_ids(scene_envelope):
+        if ent_id not in active_ids:
+            active_ids.append(ent_id)
+
+    presence: Dict[str, str] = {}
+    active_set = set(active_ids)
+    for npc_id in _all_world_npc_ids(world):
+        if npc_id in active_set:
+            presence[npc_id] = "active"
+        else:
+            presence[npc_id] = "offscene"
+
+    state["active_scene_id"] = sid
+    state["active_entities"] = active_ids
+    state["entity_presence"] = presence
+
+    ctx = inspect(session)
+    current_target = _clean_string(ctx.get("active_interaction_target_id"))
+    if current_target and current_target not in active_set:
+        # Target left scene scope; clear social continuity so off-scene NPCs cannot answer.
+        clear_for_scene_change(session)
+        current_target = None
+
+    state["current_interlocutor"] = current_target if current_target in active_set else None
+    return state
 
 
 def _extract_target_from_text(text: str, world: Dict[str, Any], scene_id: str) -> Optional[str]:
@@ -222,6 +346,8 @@ def clear_for_scene_change(session: Dict[str, Any]) -> Dict[str, Any]:
     ctx["engagement_level"] = "none"
     ctx["conversation_privacy"] = None
     ctx["player_position_context"] = None
+    state = _scene_state(session)
+    state["current_interlocutor"] = None
     return _normalize_context(ctx)
 
 

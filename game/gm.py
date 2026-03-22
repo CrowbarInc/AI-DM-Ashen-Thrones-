@@ -20,6 +20,7 @@ from game.storage import (
     SCENE_MOMENTUM_TAG_PREFIX,
 )
 from game.clues import get_clue_presentation, get_known_clues_with_presentation
+from game.interaction_context import assert_valid_speaker
 
 COMBAT_KINDS = frozenset({
     'initiative', 'attack', 'spell', 'skill_check',
@@ -66,6 +67,7 @@ RETRY_FAILURE_PRIORITY: dict[str, int] = {
     "unresolved_question": 10,
     "validator_voice": 20,
     "npc_contract_failure": 30,
+    "topic_pressure_escalation": 33,
     "followup_soft_repetition": 35,
     "scene_stall": 40,
     "echo_or_repetition": 50,
@@ -302,6 +304,20 @@ def build_retry_prompt_for_failure(
             f"{shared} Produce a direct NPC answer, reaction, or refusal consistent with the current target. "
             "Include at least one concrete person, place, faction, next step, or directly usable condition, time, or location."
             f"{missing_hint}"
+        )
+
+    if failure_class == "topic_pressure_escalation":
+        ctx = (failure or {}).get("topic_context") if isinstance((failure or {}).get("topic_context"), dict) else {}
+        topic_key = str(ctx.get("topic_key") or "").strip()
+        prev_answer = str(ctx.get("previous_answer_snippet") or "").strip()
+        repeat_count = int(ctx.get("repeat_count", 0) or 0)
+        topic_hint = f" Topic key: {topic_key}." if topic_key else ""
+        prev_answer_hint = f" Prior low-gain answer (do not paraphrase): {prev_answer}." if prev_answer else ""
+        return (
+            f"{shared} The player has pressed this unresolved topic repeatedly without meaningful progress."
+            f"{topic_hint}{prev_answer_hint} Repetition count: {repeat_count}. "
+            "You MUST escalate now with diegetic motion. Choose one: new NPC interruption, refusal that changes the scene, concrete clue, emerging threat, or environmental shift. "
+            "Include exactly one scene momentum tag and end with a concrete immediate action the player can take."
         )
 
     if failure_class == "scene_stall":
@@ -669,6 +685,476 @@ _TOPIC_STOPWORDS = frozenset({
     "have", "has", "had", "can", "could", "would", "should",
     "does", "did", "is", "are", "was", "were", "will",
 })
+_TOPIC_ALIAS_MAP: dict[str, str] = {
+    "patrols": "patrol",
+    "report": "report",
+    "reports": "report",
+    "crossroad": "crossroads",
+    "junction": "crossroads",
+    "intersections": "crossroads",
+    "intersection": "crossroads",
+    "figures": "figure",
+    "shadowy": "shadow",
+    "shadows": "shadow",
+    "hooded": "shadow",
+    "attacked": "attack",
+    "attacker": "attack",
+    "attackers": "attack",
+    "responsible": "behind",
+    "mastermind": "behind",
+    "culprit": "behind",
+    "planning": "plan",
+    "planned": "plan",
+    "happened": "happen",
+}
+_TOPIC_CLUSTER_HINTS: dict[str, tuple[str, ...]] = {
+    "missing_patrol": (
+        "missing patrol",
+        "patrol report",
+        "lost patrol",
+        "patrol notice",
+        "where is the patrol",
+    ),
+    "shadowy_figures": (
+        "shadowy figure",
+        "shadow figure",
+        "those figures",
+        "hooded figure",
+        "dark figure",
+        "watcher",
+    ),
+    "responsible_party": (
+        "who is behind",
+        "who's behind",
+        "who attacked",
+        "who did this",
+        "who is responsible",
+        "who ordered",
+        "what are they planning",
+        "what are they after",
+    ),
+    "crossroads_incident": (
+        "what happened at the crossroads",
+        "cross roads",
+        "at the crossroads",
+        "near the crossroads",
+        "crossroads attack",
+    ),
+}
+_TOPIC_CLUSTER_KEYWORDS: dict[str, tuple[str, ...]] = {
+    "missing_patrol": ("missing", "patrol", "report", "notice"),
+    "shadowy_figures": ("shadow", "figure", "watcher", "hood"),
+    "responsible_party": ("behind", "attack", "plan", "order", "responsible"),
+    "crossroads_incident": ("crossroads", "happen", "incident", "attack"),
+}
+_TOPIC_PROGRESS_ACTION_PATTERNS: tuple[re.Pattern[str], ...] = (
+    re.compile(r"\b(ask|press|follow|track|check|inspect|watch|question|speak to|meet|go to|head to|search|read)\b", re.IGNORECASE),
+    re.compile(r"\b(now|immediately|before dusk|before dawn|tonight)\b", re.IGNORECASE),
+)
+_TOPIC_STASIS_PATTERNS: tuple[re.Pattern[str], ...] = (
+    re.compile(r"\b(no one knows|nobody knows|unclear|rumou?r says|whispers say|hard to tell)\b", re.IGNORECASE),
+    re.compile(r"\b(still don't know|still do not know|can't say|cannot say)\b", re.IGNORECASE),
+)
+_TOPIC_ESCALATION_CUES: tuple[re.Pattern[str], ...] = (
+    re.compile(r"\b(interrupts?|cuts through|arrives?|rushes in|shouts?)\b", re.IGNORECASE),
+    re.compile(r"\b(refuses?|won't answer|will not answer|turns away|goes silent)\b", re.IGNORECASE),
+    re.compile(r"\b(hands you|passes you|torn dispatch|fresh clue|new lead)\b", re.IGNORECASE),
+    re.compile(r"\b(scene_momentum:)\b", re.IGNORECASE),
+)
+_TOPIC_PLACE_WORDS = frozenset(
+    {
+        "gate",
+        "road",
+        "crossroads",
+        "checkpoint",
+        "notice",
+        "board",
+        "tavern",
+        "alley",
+        "bridge",
+        "market",
+        "square",
+    }
+)
+
+
+def _stem_topic_token(token: str) -> str:
+    t = str(token or "").strip().lower()
+    if not t:
+        return ""
+    for suffix in ("ing", "ed", "es", "s"):
+        if t.endswith(suffix) and len(t) >= (len(suffix) + 4):
+            t = t[: -len(suffix)]
+            break
+    return _TOPIC_ALIAS_MAP.get(t, t)
+
+
+def _topic_tokens_for_matching(text: str) -> List[str]:
+    low = " ".join(str(text or "").strip().lower().split())
+    if not low:
+        return []
+    out: List[str] = []
+    seen: set[str] = set()
+    for raw in _ECHO_TOKEN_PATTERN.findall(low):
+        tok = _stem_topic_token(raw)
+        if len(tok) < 4 or tok in _TOPIC_STOPWORDS:
+            continue
+        if tok in seen:
+            continue
+        out.append(tok)
+        seen.add(tok)
+        if len(out) >= 14:
+            break
+    return out
+
+
+def normalize_topic(player_input: str, scene_context: Dict[str, Any] | None = None) -> str:
+    """Normalize semantically similar investigative prompts into a stable topic key."""
+    text = " ".join(str(player_input or "").strip().lower().split())
+    if not text:
+        return "unknown_topic"
+    tokens = set(_topic_tokens_for_matching(text))
+    scores: dict[str, float] = {}
+    for key, phrases in _TOPIC_CLUSTER_HINTS.items():
+        score = 0.0
+        for phrase in phrases:
+            if phrase in text:
+                score += 2.2
+        for kw in _TOPIC_CLUSTER_KEYWORDS.get(key, ()):
+            if kw in tokens:
+                score += 1.0
+        scores[key] = score
+    if scene_context and isinstance(scene_context, dict):
+        visible = scene_context.get("visible_facts")
+        if isinstance(visible, list):
+            visible_low = " ".join(str(v).lower() for v in visible if isinstance(v, str))
+            if "missing patrol" in visible_low and "patrol" in tokens:
+                scores["missing_patrol"] = scores.get("missing_patrol", 0.0) + 0.6
+            if "crossroads" in visible_low and ("crossroads" in tokens or "happen" in tokens):
+                scores["crossroads_incident"] = scores.get("crossroads_incident", 0.0) + 0.6
+    best_key = max(scores.items(), key=lambda item: item[1])[0]
+    if "crossroads" in tokens and best_key == "responsible_party":
+        return "crossroads_incident"
+    if scores.get(best_key, 0.0) >= 1.6:
+        return best_key
+    if tokens:
+        return "topic:" + slugify("-".join(sorted(tokens)[:3]))
+    return "unknown_topic"
+
+
+def _topic_speaker_key(session: Dict[str, Any], resolution: Dict[str, Any] | None) -> str:
+    social = (resolution or {}).get("social") if isinstance((resolution or {}).get("social"), dict) else {}
+    speaker_id = str(social.get("npc_id") or "").strip()
+    if speaker_id:
+        return speaker_id
+    interaction = session.get("interaction_context") if isinstance(session.get("interaction_context"), dict) else {}
+    active_target = str(interaction.get("active_interaction_target_id") or "").strip()
+    return active_target or "__scene__"
+
+
+def register_topic_probe(
+    *,
+    session: Dict[str, Any],
+    scene_envelope: Dict[str, Any],
+    player_text: str,
+    resolution: Dict[str, Any] | None = None,
+) -> Dict[str, Any]:
+    """Register one player investigative probe for per-topic pressure tracking."""
+    player = str(player_text or "").strip()
+    if not player or not _is_direct_player_question(player):
+        return {"tracked": False}
+    scene = (scene_envelope or {}).get("scene", {}) if isinstance(scene_envelope, dict) else {}
+    scene_id = str(scene.get("id") or "").strip()
+    if not scene_id:
+        return {"tracked": False}
+    runtime = get_scene_runtime(session, scene_id)
+    topic_key = normalize_topic(player, scene_context=scene)
+    previous_topic = str(runtime.get("topic_pressure_last_topic_key") or "").strip()
+    anaphora_followup = bool(re.search(r"\b(they|them|this|that|those|it|behind it|planning)\b", player.lower()))
+    if previous_topic and topic_key != previous_topic and anaphora_followup:
+        topic_key = previous_topic
+    speaker_key = _topic_speaker_key(session, resolution)
+    pressure = runtime.get("topic_pressure")
+    if not isinstance(pressure, dict):
+        pressure = {}
+        runtime["topic_pressure"] = pressure
+    entry = pressure.get(topic_key)
+    if not isinstance(entry, dict):
+        entry = {
+            "repeat_count": 0,
+            "low_progress_streak": 0,
+            "progress_score_total": 0.0,
+            "last_answer": "",
+            "last_turn": 0,
+            "speaker_targets": {},
+        }
+        pressure[topic_key] = entry
+    turn_counter = int(session.get("turn_counter", 0) or 0)
+    if int(entry.get("last_turn", 0) or 0) and (turn_counter - int(entry.get("last_turn", 0) or 0) > 6):
+        entry["repeat_count"] = 0
+        entry["low_progress_streak"] = 0
+    entry["repeat_count"] = int(entry.get("repeat_count", 0) or 0) + 1
+    entry["last_turn"] = turn_counter
+    entry["last_player_input"] = player[:260]
+    targets = entry.get("speaker_targets")
+    if not isinstance(targets, dict):
+        targets = {}
+        entry["speaker_targets"] = targets
+    s_entry = targets.get(speaker_key)
+    if not isinstance(s_entry, dict):
+        s_entry = {"repeat_count": 0, "low_progress_streak": 0, "patience": 3, "last_turn": 0}
+        targets[speaker_key] = s_entry
+    if int(s_entry.get("last_turn", 0) or 0) and (turn_counter - int(s_entry.get("last_turn", 0) or 0) > 6):
+        s_entry["repeat_count"] = 0
+        s_entry["low_progress_streak"] = 0
+    s_entry["repeat_count"] = int(s_entry.get("repeat_count", 0) or 0) + 1
+    s_entry["last_turn"] = turn_counter
+    last_topic = previous_topic
+    if last_topic and last_topic != topic_key:
+        for key, val in list(pressure.items()):
+            if key == topic_key or not isinstance(val, dict):
+                continue
+            val["repeat_count"] = max(0, int(val.get("repeat_count", 0) or 0) - 1)
+            val["low_progress_streak"] = max(0, int(val.get("low_progress_streak", 0) or 0) - 1)
+    runtime["topic_pressure_last_topic_key"] = topic_key
+    runtime["topic_pressure_current"] = {
+        "topic_key": topic_key,
+        "speaker_key": speaker_key,
+        "turn": turn_counter,
+        "player_text": player[:260],
+    }
+    return {
+        "tracked": True,
+        "scene_id": scene_id,
+        "topic_key": topic_key,
+        "speaker_key": speaker_key,
+        "repeat_count": int(entry.get("repeat_count", 0) or 0),
+        "speaker_repeat_count": int(s_entry.get("repeat_count", 0) or 0),
+    }
+
+
+def _topic_progress_score(reply_text: str, previous_answer: str) -> float:
+    reply = str(reply_text or "").strip()
+    prev = str(previous_answer or "").strip()
+    if not reply:
+        return 0.0
+    if not prev:
+        return 1.5
+    score = 0.0
+    reply_tokens = set(_topic_tokens_for_matching(reply))
+    prev_tokens = set(_topic_tokens_for_matching(prev))
+    overlap = _overlap_min_ratio(list(reply_tokens), list(prev_tokens))
+    if any(pattern.search(reply) for pattern in _TOPIC_ESCALATION_CUES):
+        score += 2.0
+    action_now = any(pattern.search(reply) for pattern in _TOPIC_PROGRESS_ACTION_PATTERNS)
+    action_prev = any(pattern.search(prev) for pattern in _TOPIC_PROGRESS_ACTION_PATTERNS)
+    if action_now and not action_prev:
+        score += 0.6
+    reply_caps = set(_CAPITALIZED_TOKEN_PATTERN.findall(reply))
+    prev_caps = set(_CAPITALIZED_TOKEN_PATTERN.findall(prev))
+    if any(cap not in prev_caps for cap in reply_caps):
+        score += 1.0
+    reply_nums = set(re.findall(r"\b\d{1,4}\b", reply))
+    prev_nums = set(re.findall(r"\b\d{1,4}\b", prev))
+    if any(num not in prev_nums for num in reply_nums):
+        score += 0.8
+    new_places = [t for t in reply_tokens if t in _TOPIC_PLACE_WORDS and t not in prev_tokens]
+    if new_places:
+        score += 0.7
+    if overlap < 0.45:
+        novel = [t for t in reply_tokens if t not in prev_tokens]
+        if len(novel) >= 3:
+            score += 0.6
+    if any(pattern.search(reply) for pattern in _TOPIC_STASIS_PATTERNS) and overlap >= 0.45 and score < 1.0:
+        score = 0.0
+    return score
+
+
+def _get_topic_pressure_context(
+    *,
+    session: Dict[str, Any],
+    scene_envelope: Dict[str, Any],
+) -> Dict[str, Any]:
+    scene = (scene_envelope or {}).get("scene", {}) if isinstance(scene_envelope, dict) else {}
+    scene_id = str(scene.get("id") or "").strip()
+    if not scene_id:
+        return {}
+    runtime = get_scene_runtime(session, scene_id)
+    current = runtime.get("topic_pressure_current")
+    if not isinstance(current, dict):
+        return {}
+    topic_key = str(current.get("topic_key") or "").strip()
+    speaker_key = str(current.get("speaker_key") or "__scene__").strip() or "__scene__"
+    if not topic_key:
+        return {}
+    pressure = runtime.get("topic_pressure")
+    if not isinstance(pressure, dict):
+        return {}
+    entry = pressure.get(topic_key)
+    if not isinstance(entry, dict):
+        return {}
+    targets = entry.get("speaker_targets") if isinstance(entry.get("speaker_targets"), dict) else {}
+    s_entry = targets.get(speaker_key) if isinstance(targets, dict) and isinstance(targets.get(speaker_key), dict) else {}
+    return {
+        "scene_id": scene_id,
+        "topic_key": topic_key,
+        "speaker_key": speaker_key,
+        "runtime": runtime,
+        "entry": entry,
+        "speaker_entry": s_entry,
+    }
+
+
+def _topic_pressure_snapshot_for_reply(
+    *,
+    session: Dict[str, Any],
+    scene_envelope: Dict[str, Any],
+    reply_text: str,
+) -> Dict[str, Any]:
+    ctx = _get_topic_pressure_context(session=session, scene_envelope=scene_envelope)
+    if not ctx:
+        return {"applies": False, "ok": True, "reasons": []}
+    entry = ctx["entry"]
+    speaker_entry = ctx["speaker_entry"] if isinstance(ctx.get("speaker_entry"), dict) else {}
+    prev_answer = str(entry.get("last_answer") or "").strip()
+    progress = _topic_progress_score(reply_text, prev_answer)
+    repeat_count = int(entry.get("repeat_count", 0) or 0)
+    low_streak = int(entry.get("low_progress_streak", 0) or 0)
+    speaker_low_streak = int(speaker_entry.get("low_progress_streak", 0) or 0)
+    patience = int(speaker_entry.get("patience", 3) or 3)
+    effective_low = max(low_streak, speaker_low_streak) + (1 if progress < 1.0 else 0)
+    should_escalate = repeat_count >= 3 and progress < 1.0
+    if not should_escalate:
+        return {"applies": True, "ok": True, "reasons": [], "progress": progress}
+    return {
+        "applies": True,
+        "ok": False,
+        "reasons": [
+            f"topic_pressure:topic={ctx['topic_key']}",
+            f"topic_pressure:repeat_count={repeat_count}",
+            f"topic_pressure:effective_low_progress={effective_low}",
+            f"topic_pressure:progress_score={round(progress, 3)}",
+        ],
+        "topic_context": {
+            "topic_key": ctx["topic_key"],
+            "speaker_key": ctx["speaker_key"],
+            "repeat_count": repeat_count,
+            "progress_score": round(progress, 3),
+            "previous_answer_snippet": prev_answer[:240],
+            "patience": patience,
+        },
+    }
+
+
+def _commit_topic_progress(
+    *,
+    session: Dict[str, Any],
+    scene_envelope: Dict[str, Any],
+    reply_text: str,
+) -> None:
+    ctx = _get_topic_pressure_context(session=session, scene_envelope=scene_envelope)
+    if not ctx:
+        return
+    entry = ctx["entry"]
+    speaker_entry = ctx["speaker_entry"] if isinstance(ctx.get("speaker_entry"), dict) else None
+    score = _topic_progress_score(reply_text, str(entry.get("last_answer") or ""))
+    entry["progress_score_total"] = float(entry.get("progress_score_total", 0.0) or 0.0) + score
+    if score < 1.0:
+        entry["low_progress_streak"] = int(entry.get("low_progress_streak", 0) or 0) + 1
+    else:
+        entry["low_progress_streak"] = max(0, int(entry.get("low_progress_streak", 0) or 0) - 1)
+    if isinstance(speaker_entry, dict):
+        if score < 1.0:
+            speaker_entry["low_progress_streak"] = int(speaker_entry.get("low_progress_streak", 0) or 0) + 1
+            speaker_entry["patience"] = max(0, int(speaker_entry.get("patience", 3) or 3) - 1)
+        else:
+            speaker_entry["low_progress_streak"] = max(0, int(speaker_entry.get("low_progress_streak", 0) or 0) - 1)
+            speaker_entry["patience"] = min(3, int(speaker_entry.get("patience", 3) or 3) + 1)
+    entry["last_answer"] = str(reply_text or "").strip()[:480]
+
+
+def _reply_has_escalation_motion(gm_reply: Dict[str, Any]) -> bool:
+    if _extract_scene_momentum_kind(gm_reply):
+        return True
+    text = str((gm_reply or {}).get("player_facing_text") or "")
+    if not text.strip():
+        return False
+    return any(pattern.search(text) for pattern in _TOPIC_ESCALATION_CUES)
+
+
+def _render_topic_pressure_escalation(
+    *,
+    topic_key: str,
+    speaker_key: str,
+) -> tuple[str, str]:
+    speaker_text = "The speaker"
+    if speaker_key and speaker_key not in {"__scene__", "none"}:
+        speaker_text = speaker_key.replace("_", " ")
+    if topic_key == "missing_patrol":
+        return (
+            "new_information",
+            "A mud-streaked runner shoulders through the crowd and thrusts a torn patrol strip into your hand: "
+            "\"East road marker, less than an hour old.\" The rumor stops being abstract.",
+        )
+    if topic_key == "shadowy_figures":
+        return (
+            "new_actor_entering",
+            "A dockhand cuts in, voice low: \"I saw two hooded figures break from the crossroads toward the shuttered bathhouse.\" "
+            "A witness is now on the table.",
+        )
+    if topic_key == "crossroads_incident":
+        return (
+            "environmental_change",
+            "A cart wheel snaps outside and people shout; guards surge toward the crossroads lane, forcing a decision now.",
+        )
+    return (
+        "consequence_or_opportunity",
+        f"{speaker_text.capitalize()} goes hard-evasive and shuts down further circular questions. "
+        "They give one actionable redirect instead: move now to the nearest witness, trail, or notice before it goes cold.",
+    )
+
+
+def enforce_topic_pressure_escalation(
+    gm: Dict[str, Any],
+    *,
+    player_text: str,
+    session: Dict[str, Any],
+    scene_envelope: Dict[str, Any],
+) -> Dict[str, Any]:
+    """Force diegetic scene motion when a topic has been pressed repeatedly with low progress."""
+    if not isinstance(gm, dict):
+        return gm
+    if not _is_direct_player_question(player_text):
+        return gm
+    pressure = _topic_pressure_snapshot_for_reply(
+        session=session,
+        scene_envelope=scene_envelope,
+        reply_text=str(gm.get("player_facing_text") or ""),
+    )
+    if not pressure.get("applies") or pressure.get("ok"):
+        return gm
+    if _reply_has_escalation_motion(gm):
+        return gm
+    topic_ctx = pressure.get("topic_context") if isinstance(pressure.get("topic_context"), dict) else {}
+    topic_key = str(topic_ctx.get("topic_key") or "").strip() or "topic:unknown"
+    speaker_key = str(topic_ctx.get("speaker_key") or "__scene__").strip() or "__scene__"
+    kind, beat = _render_topic_pressure_escalation(topic_key=topic_key, speaker_key=speaker_key)
+    out = dict(gm)
+    text = str(out.get("player_facing_text") or "").strip()
+    out["player_facing_text"] = (text + ("\n\n" if text else "") + beat).strip()
+    tags = out.get("tags") if isinstance(out.get("tags"), list) else []
+    next_tags = list(tags)
+    if not _extract_scene_momentum_kind(out):
+        next_tags.append(f"{SCENE_MOMENTUM_TAG_PREFIX}{kind}")
+    if "topic_pressure_escalation" not in next_tags:
+        next_tags.append("topic_pressure_escalation")
+    out["tags"] = next_tags
+    dbg = out.get("debug_notes") if isinstance(out.get("debug_notes"), str) else ""
+    out["debug_notes"] = (
+        (dbg + " | " if dbg else "")
+        + f"topic_pressure_escalation:topic={topic_key}:repeat={topic_ctx.get('repeat_count')}:progress={topic_ctx.get('progress_score')}"
+    )
+    return out
 
 
 def _topic_tokens_for_repetition(text: str) -> List[str]:
@@ -1103,13 +1589,18 @@ def _resolve_uncertainty_speaker(
     speaker_identity: Dict[str, Any] | str | None,
 ) -> Dict[str, str]:
     explicit = _normalize_speaker_identity(speaker_identity)
-    if explicit.get("role") == "npc" and (explicit.get("name") or explicit.get("id")):
+    explicit_id = str(explicit.get("id") or "").strip()
+    if explicit.get("role") == "npc" and (explicit.get("name") or explicit_id):
+        if explicit_id and not assert_valid_speaker(explicit_id, session):
+            return {"role": "narrator", "id": "", "name": ""}
         return explicit
     if explicit.get("role") == "narrator":
         return explicit
 
     social = resolution.get("social") if isinstance(resolution.get("social"), dict) else {}
     npc_id = str(social.get("npc_id") or "").strip() or _active_interaction_target_id(session)
+    if npc_id and not assert_valid_speaker(npc_id, session):
+        return {"role": "narrator", "id": "", "name": ""}
     npc_name = str(social.get("npc_name") or "").strip() or _resolve_npc_name(world, npc_id, scene_id)
     if npc_name or npc_id:
         return {"role": "npc", "id": npc_id, "name": npc_name}
@@ -1401,7 +1892,7 @@ def _lead_text_for_candidate(category: str, candidate: Dict[str, Any]) -> str:
             return f"Use {ref} to bracket who else is moving in the same pattern."
         if category == "unknown_feasibility":
             return f"Reach {ref} and see what barrier or permission they keep pointing back to."
-        return f"Follow {ref} and see where it leads."
+        return f"Shadow {ref} and pin down who they meet next."
     if kind == "pending_clue":
         if category == "unknown_location":
             return f"Follow the clue about {subject} and pin down the last solid place it names."
@@ -2015,7 +2506,7 @@ def _build_known_edge(
         if check_reason:
             return f"It mostly depends on {check_reason}."
         return f"It mostly depends on one local condition around {anchor}."
-    return f"You can read what was done around {anchor}, but not yet whose hand carried it out."
+    return f"You can trace what happened around {anchor}, but the responsible hand is still unclear."
 
 
 def _build_unknown_edge(category: str, *, speaker_role: str, scene_snapshot: Dict[str, Any]) -> str:
@@ -2031,7 +2522,7 @@ def _build_unknown_edge(category: str, *, speaker_role: str, scene_snapshot: Dic
         return "No one has a clean count they will stand behind."
     if category == "unknown_feasibility":
         return "Until that condition is tested, the answer stays unsettled."
-    return "The exact method remains half-seen and secondhand."
+    return "Only fragments of the method are visible."
 
 
 def _ensure_terminal_punctuation(text: str) -> str:
@@ -2137,7 +2628,7 @@ def _known_fact_from_recent_leads(player_text: str, recent_leads: List[Dict[str,
         if category == "unknown_identity" and (lead.get("named") or _lead_subject_matches_prompt(subject, prompt_low)):
             if follow_up_identity or _lead_subject_matches_prompt(subject, prompt_low):
                 return {
-                    "text": _ensure_terminal_punctuation(f"That person is {subject}"),
+                    "text": _ensure_terminal_punctuation(f"You recognize them as {subject}"),
                     "source": "recent_dialogue_continuity",
                     "subject": subject,
                     "position": position,
@@ -2196,7 +2687,7 @@ def _known_fact_from_visible_figures(player_text: str, scene_snapshot: Dict[str,
         if category == "unknown_identity" and candidate.get("named"):
             if _lead_subject_matches_prompt(subject, prompt_low) or (follow_up_identity and single_live_figure):
                 return {
-                    "text": _ensure_terminal_punctuation(f"That person is {subject}"),
+                    "text": _ensure_terminal_punctuation(f"You recognize them as {subject}"),
                     "source": "visible_entity_descriptor",
                     "subject": subject,
                     "position": position,
@@ -3923,6 +4414,25 @@ def detect_retry_failures(
             }
         )
 
+    topic_pressure = _topic_pressure_snapshot_for_reply(
+        session=session,
+        scene_envelope=scene_envelope,
+        reply_text=reply_text,
+    )
+    if topic_pressure.get("applies") and not topic_pressure.get("ok"):
+        failures.append(
+            {
+                "failure_class": "topic_pressure_escalation",
+                "priority": RETRY_FAILURE_PRIORITY["topic_pressure_escalation"],
+                "reasons": list(topic_pressure.get("reasons") or []),
+                "topic_context": (
+                    topic_pressure.get("topic_context")
+                    if isinstance(topic_pressure.get("topic_context"), dict)
+                    else {}
+                ),
+            }
+        )
+
     followup_rep = followup_soft_repetition_check(player_text=player_text, reply_text=reply_text, session=session)
     if followup_rep.get("applies") and not followup_rep.get("ok"):
         failures.append(
@@ -4026,6 +4536,12 @@ def apply_response_policy_enforcement(
             continue
 
         if policy_key == "prefer_scene_momentum" and policy.get(policy_key, True):
+            out = enforce_topic_pressure_escalation(
+                out,
+                player_text=player_text,
+                session=session,
+                scene_envelope=scene_envelope,
+            )
             out = escalate_passive_scene(
                 out,
                 player_text=player_text,
@@ -4053,4 +4569,9 @@ def apply_response_policy_enforcement(
                 world=world,
             )
 
+    _commit_topic_progress(
+        session=session,
+        scene_envelope=scene_envelope,
+        reply_text=str(out.get("player_facing_text") or ""),
+    )
     return out
