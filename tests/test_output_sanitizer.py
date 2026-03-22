@@ -18,9 +18,9 @@ def test_sanitizer_rewrites_procedural_engine_text():
     assert "state exactly what you do" not in low
     assert "scene offers no clear answer yet" not in low
     assert (
-        "nothing in the scene points to a clear answer yet" in low
-        or "from here, no certain answer presents itself" in low
-        or "the truth is still buried beneath rumor and rain" in low
+        "no answer presents itself from here" in low
+        or "truth stays locked until someone pushes a concrete move" in low
+        or "answer has not formed yet" in low
     )
 
 
@@ -86,10 +86,27 @@ def test_sanitizer_rewrites_unresolved_answer_without_old_fallback_phrase():
     assert "state the specific action and target first" not in low
     assert "scene offers no clear answer yet" not in low
     assert (
-        "nothing in the scene points to a clear answer yet" in low
-        or "from here, no certain answer presents itself" in low
-        or "the truth is still buried beneath rumor and rain" in low
+        "no answer presents itself from here" in low
+        or "truth stays locked until someone pushes a concrete move" in low
+        or "answer has not formed yet" in low
     )
+
+
+def test_sanitizer_uses_procedural_insufficiency_fallback_for_adjudication_context():
+    text = "Cannot determine roll requirements yet; state the specific action and target first."
+    out = sanitize_player_facing_output(
+        text,
+        {
+            "resolution": {
+                "kind": "adjudication_query",
+                "requires_check": True,
+                "adjudication": {"answer_type": "needs_concrete_action"},
+            }
+        },
+    )
+    low = out.lower()
+    assert "no answer presents itself from here" in low or "answer has not formed yet" in low
+    assert "nothing in the scene points to a clear answer yet" not in low
 
 
 def test_sanitizer_prefers_npc_uncertainty_for_dialogue_like_instructional_text():
@@ -101,8 +118,13 @@ def test_sanitizer_prefers_npc_uncertainty_for_dialogue_like_instructional_text(
     low = out.lower()
     assert "resolve that procedurally" not in low
     assert "scene offers no clear answer yet" not in low
-    assert ('"i do not know that part for certain."' in low) or ('"i have heard the talk, but not the names."' in low) or (
-        '"no one here can swear to it."' in low
+    assert (
+        ('"i do not know that part for certain."' in low)
+        or ('"i have heard the talk, but not the names."' in low)
+        or ('"no one here can swear to it."' in low)
+        or ("no answer presents itself from here" in low)
+        or ("truth stays locked until someone pushes a concrete move" in low)
+        or ("answer has not formed yet" in low)
     )
 
 
@@ -345,3 +367,58 @@ def test_sanitizer_handles_overlapping_rewrite_artifacts_without_hybrids():
     assert "remains within reach" not in low
     assert "framed by the noise" not in low
     assert "details that do not quite fit" not in low
+
+
+def test_sentence_atomic_overlap_rewrite_never_keeps_partial_stumps():
+    text = (
+        "You might want to ask the runner because no clear answer has surfaced yet and "
+        "the next name remains within reach, framed by the noise."
+    )
+    out = sanitize_player_facing_output(text, {})
+    low = out.lower()
+    assert "you might want to" not in low
+    assert "no clear answer" not in low
+    assert "the next name" not in low
+    assert "remains within reach" not in low
+    assert "framed by the noise" not in low
+    assert out.endswith((".", "!", "?"))
+
+
+def test_sentence_atomic_hybrid_sentence_prefers_full_rewrite():
+    text = (
+        "Rain needles across the checkpoint while planner notes say to resolve that procedurally before you should investigate."
+    )
+    out = sanitize_player_facing_output(text, {})
+    low = out.lower()
+    assert "rain needles across the checkpoint while planner notes" not in low
+    assert "resolve that procedurally" not in low
+    assert "you should investigate" not in low
+    assert "planner" not in low
+
+
+def test_sentence_atomic_advisory_removal_preserves_neighbor_sentence():
+    text = "Rain beads on the gate stones. You should investigate the notice board."
+    out = sanitize_player_facing_output(text, {})
+    low = out.lower()
+    assert "rain beads on the gate stones." in low
+    assert "you should investigate" not in low
+    assert "notice board" in low
+
+
+def test_sentence_atomic_quoted_dialogue_integrity_after_rewrite():
+    text = '"Resolve that procedurally," the guard says. "Keep your hood up," he adds.'
+    out = sanitize_player_facing_output(text, {})
+    low = out.lower()
+    assert "resolve that procedurally" not in low
+    assert low.count('"') % 2 == 0
+    assert '"keep your hood up," he adds.' in low
+
+
+def test_sentence_atomic_punctuation_cleanup_after_dropped_sentence():
+    text = "State exactly what you do. And behind the. Rain beads on stone.."
+    out = sanitize_player_facing_output(text, {})
+    low = out.lower()
+    assert "state exactly what you do" not in low
+    assert "and behind the" not in low
+    assert ".." not in out
+    assert "rain beads on stone." in low

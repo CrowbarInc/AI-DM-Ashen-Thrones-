@@ -84,3 +84,47 @@ def test_world_action_detection_remains_active_for_forceful_actions():
         session=_session("runner"),
         world=_world(),
     ) == "action"
+
+
+def test_active_npc_ambiguous_followups_prefer_dialogue_route():
+    scene = _scene()
+    world = _world()
+    session = _session("runner")
+
+    assert choose_interaction_route(
+        "Well? What should I do next?",
+        scene=scene,
+        session=session,
+        world=world,
+    ) == "dialogue"
+    assert choose_interaction_route(
+        "So what's the next step?",
+        scene=scene,
+        session=session,
+        world=world,
+    ) == "dialogue"
+    assert choose_interaction_route(
+        "Where does this lead?",
+        scene=scene,
+        session=session,
+        world=world,
+    ) == "dialogue"
+
+
+def test_explicit_mechanical_or_ooc_markers_do_not_force_dialogue():
+    scene = _scene()
+    world = _world()
+    session = _session("runner")
+
+    assert choose_interaction_route(
+        "OOC, what actions are available?",
+        scene=scene,
+        session=session,
+        world=world,
+    ) != "dialogue"
+    assert choose_interaction_route(
+        "Mechanically, what can I roll here?",
+        scene=scene,
+        session=session,
+        world=world,
+    ) != "dialogue"

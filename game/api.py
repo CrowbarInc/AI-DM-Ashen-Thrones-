@@ -65,6 +65,7 @@ from game.gm import (
     detect_retry_failures,
     choose_retry_strategy,
     build_retry_prompt_for_failure,
+    apply_deterministic_retry_fallback,
     remember_recent_contextual_leads,
     register_topic_probe,
 )
@@ -101,6 +102,7 @@ from game.output_sanitizer import (
     sanitize_player_facing_output,
     strip_serialized_payload_fragments,
 )
+from game.final_emission_gate import apply_final_emission_gate
 from game.utils import slugify, utc_iso_now
 from game.world import advance_world_tick, apply_world_updates, apply_resolution_world_updates
 from game.clocks import get_or_init_clocks, advance_clock, DEFAULT_CLOCKS
@@ -775,6 +777,63 @@ def _build_gpt_narration_from_authoritative_state(
             (retry_dbg + ' | ' if retry_dbg else '')
             + f"retry_strategy:selected={selected_failure.get('failure_class')}:attempt={retry_attempt}:reasons={reason_suffix}"
         )
+        retry_failures = detect_retry_failures(
+            player_text=user_text,
+            gm_reply=gm_retry,
+            scene_envelope=scene,
+            session=session,
+            world=world,
+            resolution=resolution,
+        )
+        selected_class = str(selected_failure.get("failure_class") or "").strip()
+        still_failing = next(
+            (
+                failure for failure in retry_failures
+                if isinstance(failure, dict) and str(failure.get("failure_class") or "").strip() == selected_class
+            ),
+            None,
+        )
+        if still_failing and selected_class == "unresolved_question":
+            print(
+                "[RETRY] validation_failed selected_strategy=",
+                selected_class,
+                "attempt=",
+                retry_attempt,
+                "reasons=",
+                still_failing.get("reasons"),
+                "action=deterministic_fallback",
+            )
+            gm_retry = apply_deterministic_retry_fallback(
+                gm_retry,
+                failure=still_failing,
+                player_text=user_text,
+                scene_envelope=scene,
+                session=session,
+                world=world,
+                resolution=resolution,
+            )
+            fallback_failures = detect_retry_failures(
+                player_text=user_text,
+                gm_reply=gm_retry,
+                scene_envelope=scene,
+                session=session,
+                world=world,
+                resolution=resolution,
+            )
+            fallback_still_failing = any(
+                isinstance(failure, dict) and str(failure.get("failure_class") or "").strip() == selected_class
+                for failure in fallback_failures
+            )
+            print(
+                "[RETRY] fallback_result selected_strategy=",
+                selected_class,
+                "attempt=",
+                retry_attempt,
+                "status=",
+                "failed" if fallback_still_failing else "passed",
+            )
+            gm = gm_retry
+            break
         gm = gm_retry
     gm = apply_response_policy_enforcement(
         gm,
@@ -933,6 +992,12 @@ _MECHANICS_OR_PROCEDURAL_TOKENS: tuple[str, ...] = (
     "need to roll",
     "do i need",
     "does this need",
+    "mechanically",
+    "rules-wise",
+    "rules wise",
+    "what actions are available",
+    "which actions are available",
+    "actions are available",
     "mechanic",
     "rules",
     "procedure",
@@ -1027,6 +1092,14 @@ _DIALOGUE_INFO_REQUEST_PHRASES: tuple[str, ...] = (
     "where can we find",
     "where do i find",
     "where are they",
+)
+_AMBIGUOUS_DIALOGUE_FOLLOWUP_PHRASES: tuple[str, ...] = (
+    "what should i do next",
+    "what's the next step",
+    "what is the next step",
+    "where does this lead",
+    "where does this go",
+    "what now",
 )
 _WORLD_ACTION_STRONG_PATTERNS: tuple[str, ...] = (
     r"\b(?:i|we)\s+(?:search|sneak|attack|follow|track|cast|inspect|examine|check|investigate)\b",
@@ -1231,6 +1304,11 @@ def is_directed_dialogue(
         return False
     if _is_engine_state_question(clause):
         return False
+    # Ambiguity rule: during an active NPC exchange, "next step"-style
+    # follow-ups default to that interlocutor unless explicit procedural/OOC
+    # markers were present above.
+    if _has_active_social_interlocutor(session) and _is_ambiguous_dialogue_followup(clause):
+        return True
 
     scene_npcs = _scene_npcs_in_active_scene(scene, world)
     addressed_npc_id = _find_addressed_npc_id(
@@ -1358,6 +1436,27 @@ def _contains_mechanics_or_procedural_language(text: str | None) -> bool:
     return any(token in low for token in _MECHANICS_OR_PROCEDURAL_TOKENS)
 
 
+def _has_active_social_interlocutor(session: dict | None) -> bool:
+    inspected = inspect_interaction_context(session if isinstance(session, dict) else {})
+    target_id = str((inspected or {}).get("active_interaction_target_id") or "").strip()
+    if not target_id:
+        return False
+    if not assert_valid_speaker(target_id, session if isinstance(session, dict) else {}):
+        return False
+    kind = str((inspected or {}).get("active_interaction_kind") or "").strip().lower()
+    mode = str((inspected or {}).get("interaction_mode") or "").strip().lower()
+    engagement = str((inspected or {}).get("engagement_level") or "").strip().lower()
+    return (kind == "social" or mode == "social") and engagement in {"engaged", "active", ""}
+
+
+def _is_ambiguous_dialogue_followup(text: str | None) -> bool:
+    """Return True for short follow-up prompts that can read IC or OOC."""
+    low = str(text or "").strip().lower()
+    if not low:
+        return False
+    return any(phrase in low for phrase in _AMBIGUOUS_DIALOGUE_FOLLOWUP_PHRASES)
+
+
 def _is_engine_state_question(text: str | None) -> bool:
     low = str(text or "").strip().lower()
     if not low or "?" not in low:
@@ -1410,6 +1509,8 @@ def _prefer_dialogue_over_adjudication(
         return False
     if _is_engine_state_question(adjudication_text or primary_clause):
         return False
+    if has_active_interaction and _is_ambiguous_dialogue_followup(primary_clause):
+        return True
     if isinstance(scene, dict) and isinstance(session, dict) and isinstance(world, dict):
         if choose_interaction_route(
             player_text,
@@ -1478,6 +1579,16 @@ def _build_turn_response_payload(
             },
         )
     state = compose_state()  # Includes affordances derived from saved authoritative scene/session/world.
+    state_session = state.get("session") if isinstance(state.get("session"), dict) else {}
+    state_scene = state.get("scene") if isinstance(state.get("scene"), dict) else {}
+    scene_obj = state_scene.get("scene") if isinstance(state_scene.get("scene"), dict) else {}
+    scene_id = str(scene_obj.get("id") or "").strip()
+    gm = apply_final_emission_gate(
+        gm,
+        resolution=resolution if isinstance(resolution, dict) else None,
+        session=state_session,
+        scene_id=scene_id,
+    )
     payload: dict = {'ok': True, 'gm_output': gm, **state}
     if include_resolution:
         payload['resolution'] = resolution

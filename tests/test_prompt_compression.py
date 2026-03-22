@@ -759,6 +759,11 @@ def test_prompt_context_exposes_typed_uncertainty_policy_and_hint():
         "unknown_edge",
         "next_lead",
     ]
+    assert policy["uncertainty"]["sources"] == [
+        "npc_ignorance",
+        "scene_ambiguity",
+        "procedural_insufficiency",
+    ]
     assert policy["uncertainty"]["context_inputs"] == [
         "turn_context",
         "speaker",
@@ -766,6 +771,7 @@ def test_prompt_context_exposes_typed_uncertainty_policy_and_hint():
     ]
     assert ctx["uncertainty_hint"]["category"] == "unknown_location"
     assert "response_policy.uncertainty.categories" in instructions
+    assert "response_policy.uncertainty.sources" in instructions
     assert "response_policy.uncertainty.answer_shape" in instructions
     assert "uncertainty_hint.turn_context" in instructions
     assert "uncertainty_hint.speaker" in instructions

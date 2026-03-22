@@ -1,4 +1,5 @@
 import json
+import re
 
 import pytest
 
@@ -324,6 +325,83 @@ def test_narrator_uncertainty_outside_direct_dialogue_is_scene_anchored():
     assert "captain veyra" not in text.lower()
     assert '"' not in text
     _assert_local_anchor(text)
+
+
+def test_uncertainty_source_modes_render_distinct_voice_and_shape():
+    from game.gm import classify_uncertainty, render_uncertainty_response
+
+    _, world, session, _, _, _ = _dummy_state()
+
+    npc_uncertainty = classify_uncertainty(
+        "Who is behind this?",
+        scene_envelope=FRONTIER_GATE_SCENE,
+        session=session,
+        world=world,
+        resolution={
+            "kind": "question",
+            "social": {"social_intent_class": "social_exchange", "npc_id": "guard_captain", "npc_name": "Captain Veyra"},
+        },
+    )
+    npc_text = render_uncertainty_response(npc_uncertainty)
+    assert npc_uncertainty["source"] == "npc_ignorance"
+    assert "captain veyra" in npc_text.lower()
+    assert '"' in npc_text
+
+    scene_uncertainty = classify_uncertainty(
+        "Who is behind this?",
+        scene_envelope=FRONTIER_GATE_SCENE,
+        session={"active_scene_id": "frontier_gate"},
+        world=world,
+        resolution=None,
+        speaker_identity={"role": "narrator"},
+    )
+    scene_text = render_uncertainty_response(scene_uncertainty)
+    assert scene_uncertainty["source"] == "scene_ambiguity"
+    assert '"' not in scene_text
+    assert "captain veyra" not in scene_text.lower()
+
+    procedural_uncertainty = classify_uncertainty(
+        "How far away is he?",
+        scene_envelope=FRONTIER_GATE_SCENE,
+        session=session,
+        world=world,
+        resolution={
+            "kind": "adjudication_query",
+            "requires_check": True,
+            "check_request": {"requires_check": True, "skill": "perception", "reason": "line of sight"},
+            "adjudication": {"answer_type": "needs_concrete_action"},
+        },
+    )
+    procedural_text = render_uncertainty_response(procedural_uncertainty)
+    low = procedural_text.lower()
+    assert procedural_uncertainty["source"] == "procedural_insufficiency"
+    assert "no answer presents itself from here" in low
+    assert "you should" not in low
+    assert "perhaps" not in low
+
+
+def test_social_exchange_uncertainty_stays_npc_grounded_on_repeated_questions():
+    from game.gm import classify_uncertainty, render_uncertainty_response
+
+    _, world, session, _, _, _ = _dummy_state()
+    resolution = {
+        "kind": "question",
+        "social": {"social_intent_class": "social_exchange", "npc_id": "guard_captain", "npc_name": "Captain Veyra"},
+    }
+    for prompt in ("Who hit them?", "Who ordered it?", "Who is behind this?"):
+        uncertainty = classify_uncertainty(
+            prompt,
+            scene_envelope=FRONTIER_GATE_SCENE,
+            session=session,
+            world=world,
+            resolution=resolution,
+        )
+        text = render_uncertainty_response(uncertainty)
+        low = text.lower()
+        assert uncertainty["source"] == "npc_ignorance"
+        assert "captain veyra" in low
+        assert '"' in text
+        assert "nothing in the scene points to a clear answer yet" not in low
 
 
 def test_uncertainty_questions_in_same_scene_render_different_contextual_answers():
@@ -841,6 +919,118 @@ def test_question_resolution_rule_enforcement_prepends_uncertain_answer_when_nee
     _assert_actionable_lead(out["player_facing_text"])
 
 
+@pytest.mark.parametrize(
+    "reply_text",
+    [
+        'Tavern Runner says, "Two cloaked riders hit them near the east road."',
+        'The runner shakes his head. "I don\'t know who hit them."',
+        "No names have surfaced yet, the runner says.",
+        'The runner\'s face tightens. "Ask me that again and I\'m done talking."',
+    ],
+)
+def test_social_exchange_question_first_sentence_contract_accepts_explicit_shapes(reply_text):
+    from game.gm import question_resolution_rule_check
+
+    check = question_resolution_rule_check(
+        player_text="Who hit them?",
+        gm_reply_text=reply_text,
+        resolution={
+            "kind": "question",
+            "social": {
+                "social_intent_class": "social_exchange",
+                "npc_id": "runner",
+                "npc_name": "Tavern Runner",
+            },
+        },
+    )
+    assert check["applies"] is True
+    assert check["ok"] is True
+    assert check["reasons"] == []
+
+
+def test_social_exchange_question_first_sentence_contract_rejects_atmospheric_opener():
+    from game.gm import question_resolution_rule_check
+
+    check = question_resolution_rule_check(
+        player_text="Who hit them?",
+        gm_reply_text=(
+            "The truth is still buried beneath rumor and rain. "
+            "The runner glances away and avoids your eyes."
+        ),
+        resolution={
+            "kind": "question",
+            "social": {
+                "social_intent_class": "social_exchange",
+                "npc_id": "runner",
+                "npc_name": "Tavern Runner",
+            },
+        },
+    )
+    assert check["applies"] is True
+    assert check["ok"] is False
+    assert "question_rule:social_exchange_first_sentence_not_speaker_grounded" in check["reasons"]
+    assert "question_rule:social_exchange_first_sentence_not_explicit_answer_shape" in check["reasons"]
+
+
+def test_detect_retry_failures_flags_social_exchange_first_sentence_contract():
+    from game.gm import detect_retry_failures
+
+    _, world, session, _, _, _ = _dummy_state()
+    failures = detect_retry_failures(
+        player_text="Who hit them?",
+        gm_reply={
+            "player_facing_text": "Around you, small details sharpen into clues as the gate crowd churns.",
+            "tags": [],
+            "scene_update": None,
+            "activate_scene_id": None,
+            "new_scene_draft": None,
+            "world_updates": None,
+            "suggested_action": None,
+            "debug_notes": "",
+        },
+        scene_envelope=FRONTIER_GATE_SCENE,
+        session=session,
+        world=world,
+        resolution={
+            "kind": "question",
+            "social": {
+                "social_intent_class": "social_exchange",
+                "npc_id": "guard_captain",
+                "npc_name": "Captain Veyra",
+            },
+        },
+    )
+    unresolved = next((f for f in failures if f.get("failure_class") == "unresolved_question"), None)
+    assert unresolved is not None
+    reasons = unresolved.get("reasons") or []
+    assert "question_rule:social_exchange_first_sentence_not_speaker_grounded" in reasons
+    assert "question_rule:social_exchange_first_sentence_not_explicit_answer_shape" in reasons
+
+
+def test_retry_prompt_for_social_exchange_first_sentence_failure_requests_explicit_shape():
+    from game.gm import build_retry_prompt_for_failure
+
+    prompt = build_retry_prompt_for_failure(
+        {
+            "failure_class": "unresolved_question",
+            "reasons": [
+                "question_rule:social_exchange_first_sentence_not_speaker_grounded",
+                "question_rule:social_exchange_first_sentence_not_explicit_answer_shape",
+            ],
+            "uncertainty_category": "unknown_identity",
+            "uncertainty_context": {
+                "speaker": {"role": "npc", "name": "Captain Veyra"},
+                "scene_snapshot": {"location": "Cinderwatch Gate District"},
+            },
+        }
+    )
+    low = prompt.lower()
+    assert "retry target: unresolved_question." in low
+    assert "sentence one must directly answer" in low
+    assert "social exchange contract" in low
+    assert "speaker-grounded and explicit" in low
+
+
 def test_validator_voice_detection_matches_forbidden_patterns():
     from game.gm import detect_validator_voice
 
@@ -1347,3 +1537,176 @@ def test_topic_pressure_does_not_escalate_when_each_answer_adds_concrete_info():
             resolution=resolution,
             discovered_clues=[],
         )
+
+
+def test_topic_pressure_requires_same_target_not_just_same_topic():
+    from game.gm import _commit_topic_progress, detect_retry_failures, register_topic_probe
+
+    _, world, session, _, _, _ = _dummy_state()
+    stale_reply = {
+        "player_facing_text": (
+            "Captain Veyra keeps repeating the same rumor: nobody can name who struck the patrol, "
+            "and every witness repeats the same uncertainty."
+        ),
+        "tags": [],
+        "scene_update": None,
+        "activate_scene_id": None,
+        "new_scene_draft": None,
+        "world_updates": None,
+        "suggested_action": None,
+        "debug_notes": "",
+    }
+    turns = [
+        (
+            1,
+            "Who ordered the crossroads hit?",
+            {"kind": "question", "social": {"npc_id": "guard_captain", "npc_name": "Captain Veyra", "social_intent_class": "social_exchange"}},
+        ),
+        (
+            2,
+            "Who ordered it then?",
+            {"kind": "question", "social": {"npc_id": "runner", "npc_name": "Tavern Runner", "social_intent_class": "social_exchange"}},
+        ),
+        (
+            3,
+            "Fine, who is behind it?",
+            {"kind": "question", "social": {"npc_id": "guard_captain", "npc_name": "Captain Veyra", "social_intent_class": "social_exchange"}},
+        ),
+    ]
+
+    for idx, prompt, resolution in turns:
+        session["turn_counter"] = idx
+        register_topic_probe(
+            session=session,
+            scene_envelope=FRONTIER_GATE_SCENE,
+            player_text=prompt,
+            resolution=resolution,
+        )
+        failures = detect_retry_failures(
+            player_text=prompt,
+            gm_reply=stale_reply,
+            scene_envelope=FRONTIER_GATE_SCENE,
+            session=session,
+            world=world,
+            resolution=resolution,
+        )
+        assert not any(f.get("failure_class") == "topic_pressure_escalation" for f in failures if isinstance(f, dict))
+        _commit_topic_progress(
+            session=session,
+            scene_envelope=FRONTIER_GATE_SCENE,
+            reply_text=stale_reply["player_facing_text"],
+        )
+
+
+def test_topic_pressure_does_not_escalate_across_clearly_different_topics():
+    from game.gm import _commit_topic_progress, detect_retry_failures, register_topic_probe
+
+    _, world, session, _, _, _ = _dummy_state()
+    resolution = {
+        "kind": "question",
+        "social": {"npc_id": "guard_captain", "npc_name": "Captain Veyra", "social_intent_class": "social_exchange"},
+    }
+    stale_reply = {
+        "player_facing_text": (
+            "Captain Veyra keeps her answer thin: the board is noisy, details are incomplete, "
+            "and rumors are still too muddy to lock down."
+        ),
+        "tags": [],
+        "scene_update": None,
+        "activate_scene_id": None,
+        "new_scene_draft": None,
+        "world_updates": None,
+        "suggested_action": None,
+        "debug_notes": "",
+    }
+    prompts = [
+        "What happened to the missing patrol?",
+        "Did anyone see those shadowy figures?",
+        "What happened at the crossroads last night?",
+    ]
+    for idx, prompt in enumerate(prompts, start=1):
+        session["turn_counter"] = idx
+        register_topic_probe(
+            session=session,
+            scene_envelope=FRONTIER_GATE_SCENE,
+            player_text=prompt,
+            resolution=resolution,
+        )
+        failures = detect_retry_failures(
+            player_text=prompt,
+            gm_reply=stale_reply,
+            scene_envelope=FRONTIER_GATE_SCENE,
+            session=session,
+            world=world,
+            resolution=resolution,
+        )
+        assert not any(f.get("failure_class") == "topic_pressure_escalation" for f in failures if isinstance(f, dict))
+        _commit_topic_progress(
+            session=session,
+            scene_envelope=FRONTIER_GATE_SCENE,
+            reply_text=stale_reply["player_facing_text"],
+        )
+
+
+def test_topic_pressure_escalation_rewrites_repeated_uncertainty_loop_with_social_stance(monkeypatch):
+    from game.gm import apply_response_policy_enforcement, register_topic_probe
+    from game.prompt_context import build_response_policy
+
+    _, world, session, _, _, _ = _dummy_state()
+    monkeypatch.setattr("game.gm.enforce_question_resolution_rule", lambda gm, **_kwargs: gm)
+    resolution = {
+        "kind": "question",
+        "social": {"npc_id": "guard_captain", "npc_name": "Captain Veyra", "social_intent_class": "social_exchange"},
+    }
+    stale_gm = {
+        "player_facing_text": (
+            "Captain Veyra lowers her voice. Rumor says the crossroads were bad last night, "
+            "but no one here can give you names yet and whispers keep circling the same uncertainty."
+        ),
+        "tags": [],
+        "scene_update": None,
+        "activate_scene_id": None,
+        "new_scene_draft": None,
+        "world_updates": None,
+        "suggested_action": None,
+        "debug_notes": "",
+    }
+    prompts = [
+        "Who is behind the crossroads attack?",
+        "Who is really behind it?",
+        "Who ordered it?",
+        "Who funds them?",
+    ]
+    escalated_outputs = []
+    for idx, prompt in enumerate(prompts, start=1):
+        session["turn_counter"] = idx
+        register_topic_probe(
+            session=session,
+            scene_envelope=FRONTIER_GATE_SCENE,
+            player_text=prompt,
+            resolution=resolution,
+        )
+        out = apply_response_policy_enforcement(
+            dict(stale_gm),
+            response_policy=build_response_policy(),
+            player_text=prompt,
+            scene_envelope=FRONTIER_GATE_SCENE,
+            session=session,
+            world=world,
+            resolution=resolution,
+            discovered_clues=[],
+        )
+        text = str(out.get("player_facing_text") or "")
+        low = text.lower()
+        if idx >= 3:
+            tags = out.get("tags") or []
+            assert "topic_pressure_escalation" in tags
+            assert "captain veyra" in low
+            assert "rumor says the crossroads were bad" not in low
+            first_sentence = re.split(r"(?<=[.!?])\s+", text.strip(), maxsplit=1)[0].lower()
+            assert first_sentence.startswith("captain veyra")
+            assert "no," in first_sentence or "no " in first_sentence
+            escalated_outputs.append(first_sentence)
+
+    assert len(escalated_outputs) == 2
+    assert escalated_outputs[0] != escalated_outputs[1]

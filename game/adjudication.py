@@ -144,6 +144,8 @@ def classify_adjudication_query(text: str, *, has_active_interaction: bool = Fal
         t,
     ):
         return "roll_requirement_query"
+    if re.search(r"\b(what|which)\s+actions?\s+are\s+available\b", t):
+        return "state_query"
     if re.search(r"\b(earshot|nearby|who is here|anyone else here|who can hear|in range|distance|how far)\b", t):
         return "perception_query"
 

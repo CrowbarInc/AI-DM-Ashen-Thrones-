@@ -63,6 +63,11 @@ UNCERTAINTY_CATEGORIES: tuple[str, ...] = (
     "unknown_quantity",
     "unknown_feasibility",
 )
+UNCERTAINTY_SOURCE_MODES: tuple[str, ...] = (
+    "npc_ignorance",
+    "scene_ambiguity",
+    "procedural_insufficiency",
+)
 RETRY_FAILURE_PRIORITY: dict[str, int] = {
     "unresolved_question": 10,
     "validator_voice": 20,
@@ -243,13 +248,37 @@ def build_retry_prompt_for_failure(
     if failure_class == "unresolved_question":
         known_fact_context = (failure or {}).get("known_fact_context") if isinstance((failure or {}).get("known_fact_context"), dict) else {}
         known_answer = str(known_fact_context.get("answer") or "").strip()
+        reasons_low = [
+            str(r).strip().lower()
+            for r in reasons
+            if isinstance(r, str) and str(r).strip()
+        ]
+        first_sentence_failed = any(
+            ("first_sentence_not_explicit_answer" in reason)
+            or reason.startswith("question_rule:social_exchange_first_sentence_")
+            for reason in reasons_low
+        )
+        social_exchange_first_sentence_failed = any(
+            reason.startswith("question_rule:social_exchange_first_sentence_")
+            for reason in reasons_low
+        )
         if known_answer:
             known_source = str(known_fact_context.get("source") or "").strip()
             source_hint = f" Established source: {known_source}." if known_source else ""
+            social_shape_hint = (
+                " Social exchange contract: sentence one must be speaker-grounded and explicit "
+                "(direct answer, bounded uncertainty, explicit refusal/lack of knowledge, or pressure escalation/evasive but character-grounded)."
+                if social_exchange_first_sentence_failed
+                else ""
+            )
             return (
                 f"{shared} A direct answer is already established in current scene state or dialogue continuity. "
                 f"Use this answer or a close paraphrase in the first sentence: {known_answer}.{source_hint} "
+                "First sentence contract: answer the asked question directly in sentence one. "
+                "Do not open with scene summary, atmosphere, or setup. "
+                "No advisory phrasing (do not use: 'you should', 'you could', 'best lead', 'try', 'consider'). "
                 "Do not reroute it into uncertainty, refusal, or generic fallback language."
+                f"{social_shape_hint}"
             )
         uncertainty_category = str((failure or {}).get("uncertainty_category") or "").strip()
         uncertainty_context = (failure or {}).get("uncertainty_context") if isinstance((failure or {}).get("uncertainty_context"), dict) else {}
@@ -268,11 +297,31 @@ def build_retry_prompt_for_failure(
             context_parts.append(f"Use scene specifics like: {first_visible}.")
         category_hint = f" Uncertainty category: {uncertainty_category}." if uncertainty_category else ""
         context_hint = (" " + " ".join(context_parts)) if context_parts else ""
+        first_sentence_hint = (
+            " First sentence failed previously: sentence one MUST be an explicit answer with no scene-preface."
+            if first_sentence_failed
+            else ""
+        )
+        speaker_hint = (
+            f" NPC-directed answer contract: sentence one must be explicitly grounded to {speaker_name}'s viewpoint."
+            if speaker_role == "npc" and speaker_name
+            else ""
+        )
+        social_shape_hint = (
+            " Social exchange contract: sentence one must be speaker-grounded and explicit "
+            "(direct answer, bounded uncertainty, explicit refusal/lack of knowledge, or pressure escalation/evasive but character-grounded)."
+            if social_exchange_first_sentence_failed
+            else ""
+        )
         return (
             f"{shared} The player's direct question still lacks a bounded answer. "
-            "Answer it in the first sentence. Do not refuse, deflect, or explain limitations. "
-            "If certainty is incomplete, give the best grounded partial answer and one concrete lead tied to the current scene or NPC."
-            f"{category_hint}{context_hint}"
+            "Single-purpose rewrite: fix answer shape only. "
+            "Sentence one MUST directly answer the exact player question. "
+            "Do not begin with atmosphere, scene summary, or recap. "
+            "Do not ask a question back. Do not refuse, deflect, or explain limitations. "
+            "No advisory phrasing (avoid: 'you should', 'you could', 'best lead', 'try', 'consider'). "
+            "If certainty is incomplete, keep uncertainty concrete and bounded to speaker evidence or scene facts."
+            f"{category_hint}{context_hint}{first_sentence_hint}{speaker_hint}{social_shape_hint}"
         )
 
     if failure_class == "echo_or_repetition":
@@ -662,6 +711,22 @@ _SINGLE_QUOTED_SPEECH_PATTERN = re.compile(
     r"(?:(?<=^)|(?<=[\s(\[{]))['\u2018\u2019]([^'\u2018\u2019]{3,240})['\u2018\u2019](?=$|[\s)\]}.,!?;:])"
 )
 _CAPITALIZED_TOKEN_PATTERN = re.compile(r"\b[A-Z][a-z]{2,}\b")
+_CAPITALIZED_NON_ENTITY_WORDS = frozenset(
+    {
+        "Rumor",
+        "Whispers",
+        "No",
+        "Yes",
+        "If",
+        "Then",
+        "The",
+        "They",
+        "There",
+        "This",
+        "That",
+        "All",
+    }
+)
 _FOLLOWUP_PRESS_TOKENS: tuple[str, ...] = (
     "again",
     "still",
@@ -760,6 +825,16 @@ _TOPIC_ESCALATION_CUES: tuple[re.Pattern[str], ...] = (
     re.compile(r"\b(refuses?|won't answer|will not answer|turns away|goes silent)\b", re.IGNORECASE),
     re.compile(r"\b(hands you|passes you|torn dispatch|fresh clue|new lead)\b", re.IGNORECASE),
     re.compile(r"\b(scene_momentum:)\b", re.IGNORECASE),
+)
+_TOPIC_SOCIAL_ESCALATION_STANCES: tuple[str, ...] = (
+    "irritation",
+    "guarded_refusal",
+    "contradiction",
+    "partial_reveal",
+    "urgent_redirect",
+    "end_conversation_threat",
+    "suspicious_evasion",
+    "withdrawal",
 )
 _TOPIC_PLACE_WORDS = frozenset(
     {
@@ -922,6 +997,10 @@ def register_topic_probe(
         "speaker_key": speaker_key,
         "turn": turn_counter,
         "player_text": player[:260],
+        "interaction_kind": str((session.get("interaction_context") or {}).get("active_interaction_kind") or "").strip().lower(),
+        "interaction_mode": str((session.get("interaction_context") or {}).get("interaction_mode") or "").strip().lower(),
+        "social_intent_class": str(((resolution or {}).get("social") or {}).get("social_intent_class") or "").strip().lower(),
+        "npc_name": str(((resolution or {}).get("social") or {}).get("npc_name") or "").strip(),
     }
     return {
         "tracked": True,
@@ -950,8 +1029,8 @@ def _topic_progress_score(reply_text: str, previous_answer: str) -> float:
     action_prev = any(pattern.search(prev) for pattern in _TOPIC_PROGRESS_ACTION_PATTERNS)
     if action_now and not action_prev:
         score += 0.6
-    reply_caps = set(_CAPITALIZED_TOKEN_PATTERN.findall(reply))
-    prev_caps = set(_CAPITALIZED_TOKEN_PATTERN.findall(prev))
+    reply_caps = {cap for cap in _CAPITALIZED_TOKEN_PATTERN.findall(reply) if cap not in _CAPITALIZED_NON_ENTITY_WORDS}
+    prev_caps = {cap for cap in _CAPITALIZED_TOKEN_PATTERN.findall(prev) if cap not in _CAPITALIZED_NON_ENTITY_WORDS}
     if any(cap not in prev_caps for cap in reply_caps):
         score += 1.0
     reply_nums = set(re.findall(r"\b\d{1,4}\b", reply))
@@ -965,8 +1044,12 @@ def _topic_progress_score(reply_text: str, previous_answer: str) -> float:
         novel = [t for t in reply_tokens if t not in prev_tokens]
         if len(novel) >= 3:
             score += 0.6
-    if any(pattern.search(reply) for pattern in _TOPIC_STASIS_PATTERNS) and overlap >= 0.45 and score < 1.0:
+    has_stasis = any(pattern.search(reply) for pattern in _TOPIC_STASIS_PATTERNS)
+    if has_stasis and overlap >= 0.45 and score < 1.0:
         score = 0.0
+    if has_stasis and not action_now and not any(cap not in prev_caps for cap in reply_caps) and not any(num not in prev_nums for num in reply_nums):
+        # Reworded uncertainty loops are still low progress even when token overlap drops.
+        score = min(score, 0.35)
     return score
 
 
@@ -1019,11 +1102,17 @@ def _topic_pressure_snapshot_for_reply(
     prev_answer = str(entry.get("last_answer") or "").strip()
     progress = _topic_progress_score(reply_text, prev_answer)
     repeat_count = int(entry.get("repeat_count", 0) or 0)
+    speaker_repeat_count = int(speaker_entry.get("repeat_count", 0) or 0)
     low_streak = int(entry.get("low_progress_streak", 0) or 0)
     speaker_low_streak = int(speaker_entry.get("low_progress_streak", 0) or 0)
     patience = int(speaker_entry.get("patience", 3) or 3)
     effective_low = max(low_streak, speaker_low_streak) + (1 if progress < 1.0 else 0)
-    should_escalate = repeat_count >= 3 and progress < 1.0
+    current = ctx["runtime"].get("topic_pressure_current") if isinstance(ctx.get("runtime"), dict) else {}
+    interaction_kind = str((current or {}).get("interaction_kind") or "").strip().lower()
+    interaction_mode = str((current or {}).get("interaction_mode") or "").strip().lower()
+    social_intent_class = str((current or {}).get("social_intent_class") or "").strip().lower()
+    npc_name = str((current or {}).get("npc_name") or "").strip()
+    should_escalate = speaker_repeat_count >= 3 and progress < 1.0
     if not should_escalate:
         return {"applies": True, "ok": True, "reasons": [], "progress": progress}
     return {
@@ -1032,6 +1121,7 @@ def _topic_pressure_snapshot_for_reply(
         "reasons": [
             f"topic_pressure:topic={ctx['topic_key']}",
             f"topic_pressure:repeat_count={repeat_count}",
+            f"topic_pressure:speaker_repeat_count={speaker_repeat_count}",
             f"topic_pressure:effective_low_progress={effective_low}",
             f"topic_pressure:progress_score={round(progress, 3)}",
         ],
@@ -1039,9 +1129,14 @@ def _topic_pressure_snapshot_for_reply(
             "topic_key": ctx["topic_key"],
             "speaker_key": ctx["speaker_key"],
             "repeat_count": repeat_count,
+            "speaker_repeat_count": speaker_repeat_count,
             "progress_score": round(progress, 3),
             "previous_answer_snippet": prev_answer[:240],
             "patience": patience,
+            "interaction_kind": interaction_kind,
+            "interaction_mode": interaction_mode,
+            "social_intent_class": social_intent_class,
+            "npc_name": npc_name,
         },
     }
 
@@ -1082,11 +1177,90 @@ def _reply_has_escalation_motion(gm_reply: Dict[str, Any]) -> bool:
     return any(pattern.search(text) for pattern in _TOPIC_ESCALATION_CUES)
 
 
+def _pressure_first_sentence_answer(player_text: str) -> str:
+    low = " ".join(str(player_text or "").strip().lower().split())
+    if low.startswith("who ") or low.startswith("who's ") or low.startswith("who is "):
+        return "No, I do not have a name for you."
+    if low.startswith("where "):
+        return "No, I cannot point you to a confirmed location."
+    if low.startswith("when "):
+        return "No, I do not have a time I trust enough to give you."
+    if low.startswith("why "):
+        return "No, I do not know their motive well enough to name it."
+    if low.startswith("how "):
+        return "No, I do not know the method and I will not invent one."
+    if low.startswith("what "):
+        return "No, I cannot give you a clean account yet."
+    return "No, I do not have a reliable answer I can stand behind."
+
+
+def _is_social_topic_route(topic_context: Dict[str, Any]) -> bool:
+    social_intent_class = str(topic_context.get("social_intent_class") or "").strip().lower()
+    interaction_kind = str(topic_context.get("interaction_kind") or "").strip().lower()
+    interaction_mode = str(topic_context.get("interaction_mode") or "").strip().lower()
+    return social_intent_class == "social_exchange" or interaction_kind == "social" or interaction_mode == "social"
+
+
+def _social_escalation_stance(topic_key: str, speaker_key: str, speaker_repeat_count: int) -> str:
+    base = max(0, int(speaker_repeat_count or 0) - 3)
+    seed = sum(ord(ch) for ch in f"{topic_key}:{speaker_key}")
+    idx = (seed + base) % len(_TOPIC_SOCIAL_ESCALATION_STANCES)
+    return _TOPIC_SOCIAL_ESCALATION_STANCES[idx]
+
+
 def _render_topic_pressure_escalation(
     *,
+    player_text: str,
     topic_key: str,
     speaker_key: str,
+    topic_context: Dict[str, Any] | None = None,
 ) -> tuple[str, str]:
+    topic_ctx = topic_context if isinstance(topic_context, dict) else {}
+    if _is_social_topic_route(topic_ctx):
+        speaker_label = str(topic_ctx.get("npc_name") or "").strip() or speaker_key.replace("_", " ").strip() or "The speaker"
+        speaker_repeat_count = int(topic_ctx.get("speaker_repeat_count", 0) or 0)
+        stance = _social_escalation_stance(topic_key, speaker_key, speaker_repeat_count)
+        first_sentence = _pressure_first_sentence_answer(player_text)
+        if stance == "irritation":
+            return (
+                "consequence_or_opportunity",
+                f"{speaker_label} snaps back, \"{first_sentence} Stop grinding the same point and bring me something I can use.\"",
+            )
+        if stance == "guarded_refusal":
+            return (
+                "consequence_or_opportunity",
+                f"{speaker_label} says, \"{first_sentence} I am not discussing names in the open.\" They lower their voice and add, \"Meet me by the north brazier after dusk if you want more.\"",
+            )
+        if stance == "contradiction":
+            return (
+                "new_information",
+                f"{speaker_label} cuts in, \"{first_sentence} You are pressing the wrong angle: the trail broke east of the crossroads marker, not in the square.\"",
+            )
+        if stance == "partial_reveal":
+            return (
+                "new_information",
+                f"{speaker_label} says, \"{first_sentence}\" Then they glance over your shoulder. \"All I can give you is this: the pay chit carried a black ash-wax seal.\"",
+            )
+        if stance == "urgent_redirect":
+            return (
+                "time_pressure",
+                f"{speaker_label} says, \"{first_sentence}\" They lean in. \"If you want the next piece, get to the mill yard before dawn and question the night carter.\"",
+            )
+        if stance == "end_conversation_threat":
+            return (
+                "consequence_or_opportunity",
+                f"{speaker_label} hardens and says, \"{first_sentence} Press me on this one more time and this conversation is over.\"",
+            )
+        if stance == "suspicious_evasion":
+            return (
+                "consequence_or_opportunity",
+                f"{speaker_label}'s expression turns flat as they answer, \"{first_sentence} There was no 'mastermind' here worth naming, so drop it.\"",
+            )
+        return (
+            "environmental_change",
+            f"{speaker_label} says, \"{first_sentence}\" They step back, break eye contact, and withdraw into the crowd before you can press further.",
+        )
+
     speaker_text = "The speaker"
     if speaker_key and speaker_key not in {"__scene__", "none"}:
         speaker_text = speaker_key.replace("_", " ")
@@ -1138,10 +1312,18 @@ def enforce_topic_pressure_escalation(
     topic_ctx = pressure.get("topic_context") if isinstance(pressure.get("topic_context"), dict) else {}
     topic_key = str(topic_ctx.get("topic_key") or "").strip() or "topic:unknown"
     speaker_key = str(topic_ctx.get("speaker_key") or "__scene__").strip() or "__scene__"
-    kind, beat = _render_topic_pressure_escalation(topic_key=topic_key, speaker_key=speaker_key)
+    kind, beat = _render_topic_pressure_escalation(
+        player_text=player_text,
+        topic_key=topic_key,
+        speaker_key=speaker_key,
+        topic_context=topic_ctx,
+    )
     out = dict(gm)
     text = str(out.get("player_facing_text") or "").strip()
-    out["player_facing_text"] = (text + ("\n\n" if text else "") + beat).strip()
+    if _is_social_topic_route(topic_ctx):
+        out["player_facing_text"] = beat.strip()
+    else:
+        out["player_facing_text"] = (text + ("\n\n" if text else "") + beat).strip()
     tags = out.get("tags") if isinstance(out.get("tags"), list) else []
     next_tags = list(tags)
     if not _extract_scene_momentum_kind(out):
@@ -1470,6 +1652,69 @@ _QUESTION_RESOLUTION_ANSWER_STARTERS: tuple[str, ...] = (
     "you should",
     "go to",
 )
+_SOCIAL_EXCHANGE_ANSWER_REFUSAL_TOKENS: tuple[str, ...] = (
+    "i don't know",
+    "i do not know",
+    "don't know",
+    "do not know",
+    "no idea",
+    "can't say",
+    "cannot say",
+    "won't say",
+    "will not say",
+    "not saying",
+    "no names",
+    "none yet",
+    "shakes his head",
+    "shakes her head",
+    "shakes their head",
+    "shakes his head.",
+    "shakes her head.",
+    "shakes their head.",
+    "shrugs.",
+    "shrugs",
+)
+_SOCIAL_EXCHANGE_ANSWER_UNCERTAINTY_TOKENS: tuple[str, ...] = (
+    "as far as i know",
+    "from what i heard",
+    "from what i saw",
+    "from what we know",
+    "not sure",
+    "unclear",
+    "might be",
+    "may be",
+    "seems like",
+    "haven't heard",
+    "have not heard",
+)
+_SOCIAL_EXCHANGE_PRESSURE_TOKENS: tuple[str, ...] = (
+    "ask me that again",
+    "done talking",
+    "i'm done talking",
+    "i am done talking",
+    "this conversation is over",
+    "i walk away",
+    "walk away",
+    "face tightens",
+)
+_SOCIAL_EXCHANGE_SPEAKER_VERBS: tuple[str, ...] = (
+    "says",
+    "said",
+    "answers",
+    "answered",
+    "replies",
+    "replied",
+    "shakes",
+    "shrugs",
+    "snaps",
+    "mutters",
+    "warns",
+    "growls",
+    "hisses",
+    "admits",
+    "insists",
+    "face tightens",
+)
 
 
 def _is_direct_player_question(user_text: str) -> bool:
@@ -1518,6 +1763,72 @@ def _first_sentence(text: str) -> str:
         return ""
     first = re.split(r"[.!?\n]", t, maxsplit=1)[0].strip()
     return first or t
+
+
+def _is_social_exchange_question_turn(player_text: str, resolution: Dict[str, Any] | None) -> bool:
+    if not _is_direct_player_question(player_text):
+        return False
+    if not isinstance(resolution, dict):
+        return False
+    social = resolution.get("social") if isinstance(resolution.get("social"), dict) else {}
+    if str(social.get("social_intent_class") or "").strip().lower() != "social_exchange":
+        return False
+    kind = str(resolution.get("kind") or "").strip().lower()
+    return kind in {"question", "social_probe"} or bool(social.get("npc_reply_expected"))
+
+
+def _social_exchange_first_sentence_contract(
+    *,
+    player_text: str,
+    gm_reply_text: str,
+    resolution: Dict[str, Any] | None,
+) -> Dict[str, Any]:
+    """Enforce explicit first-sentence answer shape for NPC-directed question turns.
+
+    This guard runs before broad prose sanitization so social_exchange replies
+    cannot start with ambient scene filler and still pass retry checks.
+    """
+    if not _is_social_exchange_question_turn(player_text, resolution):
+        return {"applies": False, "ok": True, "reasons": []}
+    reply = str(gm_reply_text or "").strip()
+    if not reply:
+        return {"applies": True, "ok": False, "reasons": ["question_rule:social_exchange_empty_reply"]}
+
+    first = _first_sentence(reply)
+    first_low = first.lower()
+    social = (resolution or {}).get("social") if isinstance((resolution or {}).get("social"), dict) else {}
+    npc_name = str(social.get("npc_name") or "").strip().lower()
+    npc_id = str(social.get("npc_id") or "").strip().lower()
+    npc_id_name = npc_id.replace("_", " ").replace("-", " ")
+    q_tokens = _question_content_tokens(player_text)
+
+    speaker_grounded = False
+    if npc_name and npc_name in first_low:
+        speaker_grounded = True
+    if npc_id_name and npc_id_name in first_low:
+        speaker_grounded = True
+    if re.search(r"\bthe\s+\w+\s+(?:says|said|answers|answered|replies|replied)\b", first_low):
+        speaker_grounded = True
+    if re.search(r"\bthe\s+\w+\s+(?:shakes|shrugs|snaps|mutters|warns|growls|hisses)\b", first_low):
+        speaker_grounded = True
+    if any(verb in first_low for verb in _SOCIAL_EXCHANGE_SPEAKER_VERBS):
+        if re.search(r"\b(?:the|this|that)\s+\w+\b", first_low) or npc_name or npc_id_name:
+            speaker_grounded = True
+
+    has_direct = any(first_low.startswith(p) for p in _QUESTION_RESOLUTION_ANSWER_STARTERS) or (
+        any(tok in first_low for tok in q_tokens) if q_tokens else False
+    )
+    has_refusal = any(token in first_low for token in _SOCIAL_EXCHANGE_ANSWER_REFUSAL_TOKENS)
+    has_uncertainty = any(token in first_low for token in _SOCIAL_EXCHANGE_ANSWER_UNCERTAINTY_TOKENS)
+    has_pressure = any(token in first_low for token in _SOCIAL_EXCHANGE_PRESSURE_TOKENS)
+    explicit_shape = has_direct or has_refusal or has_uncertainty or has_pressure
+
+    reasons: List[str] = []
+    if not speaker_grounded:
+        reasons.append("question_rule:social_exchange_first_sentence_not_speaker_grounded")
+    if not explicit_shape:
+        reasons.append("question_rule:social_exchange_first_sentence_not_explicit_answer_shape")
+    return {"applies": True, "ok": bool(speaker_grounded and explicit_shape), "reasons": reasons}
 
 
 def _question_content_tokens(user_text: str) -> List[str]:
@@ -1588,10 +1899,13 @@ def _resolve_uncertainty_speaker(
     scene_id: str,
     speaker_identity: Dict[str, Any] | str | None,
 ) -> Dict[str, str]:
+    scene_state = session.get("scene_state") if isinstance(session, dict) else {}
+    active_entities = scene_state.get("active_entities") if isinstance(scene_state, dict) and isinstance(scene_state.get("active_entities"), list) else []
+    strict_presence_scope = bool(active_entities)
     explicit = _normalize_speaker_identity(speaker_identity)
     explicit_id = str(explicit.get("id") or "").strip()
     if explicit.get("role") == "npc" and (explicit.get("name") or explicit_id):
-        if explicit_id and not assert_valid_speaker(explicit_id, session):
+        if explicit_id and not assert_valid_speaker(explicit_id, session) and strict_presence_scope:
             return {"role": "narrator", "id": "", "name": ""}
         return explicit
     if explicit.get("role") == "narrator":
@@ -1599,7 +1913,7 @@ def _resolve_uncertainty_speaker(
 
     social = resolution.get("social") if isinstance(resolution.get("social"), dict) else {}
     npc_id = str(social.get("npc_id") or "").strip() or _active_interaction_target_id(session)
-    if npc_id and not assert_valid_speaker(npc_id, session):
+    if npc_id and not assert_valid_speaker(npc_id, session) and strict_presence_scope:
         return {"role": "narrator", "id": "", "name": ""}
     npc_name = str(social.get("npc_name") or "").strip() or _resolve_npc_name(world, npc_id, scene_id)
     if npc_name or npc_id:
@@ -1676,6 +1990,7 @@ def _build_uncertainty_turn_context(
     interaction = interaction if isinstance(interaction, dict) else {}
     social = resolution.get("social") if isinstance(resolution.get("social"), dict) else {}
     check = resolution.get("check_request") if isinstance(resolution.get("check_request"), dict) else {}
+    adjudication = resolution.get("adjudication") if isinstance(resolution.get("adjudication"), dict) else {}
     skill = str(base.get("check_skill") or check.get("skill") or "").strip().replace("_", " ")
     reason = str(base.get("check_reason") or check.get("reason") or "").strip()
     return {
@@ -1688,6 +2003,14 @@ def _build_uncertainty_turn_context(
         "check_skill": skill,
         "check_reason": reason,
         "is_direct_question": bool(base.get("is_direct_question") if "is_direct_question" in base else _is_direct_player_question(player_text)),
+        "resolution_kind": str(base.get("resolution_kind") or resolution.get("kind") or "").strip().lower(),
+        "social_intent_class": str(base.get("social_intent_class") or social.get("social_intent_class") or "").strip().lower(),
+        "requires_check": bool(
+            base.get("requires_check")
+            if "requires_check" in base
+            else (bool(check.get("requires_check")) or bool(resolution.get("requires_check")))
+        ),
+        "adjudication_answer_type": str(base.get("adjudication_answer_type") or adjudication.get("answer_type") or "").strip().lower(),
     }
 
 
@@ -2401,6 +2724,96 @@ def _speaker_delivery(turn_context: Dict[str, Any], category: str) -> str:
     return base
 
 
+def _classify_uncertainty_source(
+    *,
+    category: str,
+    speaker_identity: Dict[str, Any],
+    turn_context: Dict[str, Any],
+) -> str:
+    role = str((speaker_identity or {}).get("role") or "").strip().lower()
+    resolution_kind = str(turn_context.get("resolution_kind") or "").strip().lower()
+    social_intent_class = str(turn_context.get("social_intent_class") or "").strip().lower()
+    adjudication_answer_type = str(turn_context.get("adjudication_answer_type") or "").strip().lower()
+    requires_check = bool(turn_context.get("requires_check"))
+    has_procedural_gate = bool(
+        turn_context.get("check_skill")
+        or turn_context.get("check_reason")
+        or adjudication_answer_type in {"needs_concrete_action", "check_required"}
+        or resolution_kind == "adjudication_query"
+    )
+    if requires_check or has_procedural_gate:
+        return "procedural_insufficiency"
+    if social_intent_class == "social_exchange" and bool(turn_context.get("is_direct_question")):
+        return "npc_ignorance"
+    if role == "npc" and bool(turn_context.get("is_direct_question")):
+        return "npc_ignorance"
+    if category == "unknown_feasibility" and has_procedural_gate:
+        return "procedural_insufficiency"
+    return "scene_ambiguity"
+
+
+def _build_source_specific_edges(
+    *,
+    source: str,
+    category: str,
+    anchor: str,
+    known_edge: str,
+    unknown_edge: str,
+    next_lead: str,
+    turn_context: Dict[str, Any],
+) -> Dict[str, str]:
+    if source == "npc_ignorance":
+        npc_known = {
+            "unknown_identity": f"I have heard rumor around {anchor}, not names.",
+            "unknown_location": f"I can point you toward {anchor}, not to a final door.",
+            "unknown_motive": f"I can tell you where pressure is building around {anchor}, not who gives the orders.",
+            "unknown_quantity": f"I can give you a rough sense from {anchor}, not a clean count.",
+            "unknown_feasibility": f"I cannot promise it yet from {anchor}; one condition still decides it.",
+            "unknown_method": f"I can tell what changed around {anchor}, not the full method behind it.",
+        }.get(category, known_edge)
+        npc_unknown = {
+            "unknown_identity": "No one has given me a name they will stand behind.",
+            "unknown_location": "After that, everyone points in different directions.",
+            "unknown_motive": "The motive is still secondhand talk.",
+            "unknown_quantity": "Any exact number shifts with every retelling.",
+            "unknown_feasibility": "Until that condition is tested, I would be guessing.",
+            "unknown_method": "The rest is fragments and crossed stories.",
+        }.get(category, unknown_edge)
+        return {"known_edge": npc_known, "unknown_edge": npc_unknown, "next_lead": next_lead}
+
+    if source == "procedural_insufficiency":
+        condition = str(turn_context.get("check_reason") or "").strip()
+        if not condition:
+            condition = str(turn_context.get("check_skill") or "").strip()
+        proc_known = "No answer presents itself from here."
+        proc_unknown = (
+            f"Until someone tests {condition}, the answer does not exist yet."
+            if condition
+            else "Until the scene is pushed with a concrete action, the answer does not exist yet."
+        )
+        lead_text = str(next_lead or "").strip()
+        proc_lead = f"The only lead is this: {lead_text}" if lead_text else "Only one lead remains visible right now."
+        return {"known_edge": proc_known, "unknown_edge": proc_unknown, "next_lead": proc_lead}
+
+    scene_known = {
+        "unknown_identity": f"Nothing around {anchor} confirms a culprit yet.",
+        "unknown_location": f"Nothing visible around {anchor} confirms the final destination yet.",
+        "unknown_motive": f"The pressure around {anchor} is visible, but intent is not.",
+        "unknown_quantity": f"The movement around {anchor} shows scale, not a firm count.",
+        "unknown_feasibility": f"From this vantage, {anchor} does not settle whether it can be done yet.",
+        "unknown_method": f"The signs around {anchor} show disruption, not a complete method.",
+    }.get(category, known_edge)
+    scene_unknown = {
+        "unknown_identity": "Every account is still partial.",
+        "unknown_location": "Beyond the visible markers, the trail breaks apart.",
+        "unknown_motive": "No visible conclusion ties those pieces to one motive yet.",
+        "unknown_quantity": "Any precise tally remains unverified.",
+        "unknown_feasibility": "The deciding condition has not surfaced in clear form.",
+        "unknown_method": "The remaining steps are still out of sight.",
+    }.get(category, unknown_edge)
+    return {"known_edge": scene_known, "unknown_edge": scene_unknown, "next_lead": next_lead}
+
+
 def _scene_anchor_phrase(scene_snapshot: Dict[str, Any], *, category: str) -> str:
     if scene_snapshot.get("has_notice_board") and scene_snapshot.get("has_missing_patrol"):
         if category == "unknown_identity":
@@ -2547,6 +2960,11 @@ def _render_uncertainty_lines(
     category = uncertainty_type if uncertainty_type in UNCERTAINTY_CATEGORIES else "unknown_method"
     speaker_role = str(speaker_identity.get("role") or "narrator").strip().lower()
     speaker_name = str(speaker_identity.get("name") or "").strip() or "The voice answering you"
+    source = _classify_uncertainty_source(
+        category=category,
+        speaker_identity=speaker_identity,
+        turn_context=turn_context,
+    )
     anchor = _scene_anchor_phrase(scene_snapshot, category=category)
     delivery = _speaker_delivery(turn_context, category)
     known_edge = _build_known_edge(
@@ -2572,14 +2990,24 @@ def _render_uncertainty_lines(
         str(turn_context.get("player_text") or ""),
     )
     next_lead = str(selected_lead.get("lead_text") or "")
+    source_edges = _build_source_specific_edges(
+        source=source,
+        category=category,
+        anchor=anchor,
+        known_edge=known_edge,
+        unknown_edge=unknown_edge,
+        next_lead=next_lead,
+        turn_context=turn_context,
+    )
     return {
         "category": category,
-        "known_edge": known_edge,
-        "unknown_edge": unknown_edge,
-        "next_lead": next_lead,
-        "what_can_be_said_now": known_edge,
-        "what_is_not_nailed_down_yet": unknown_edge,
-        "best_current_lead": next_lead,
+        "source": source,
+        "known_edge": str(source_edges.get("known_edge") or known_edge),
+        "unknown_edge": str(source_edges.get("unknown_edge") or unknown_edge),
+        "next_lead": str(source_edges.get("next_lead") or next_lead),
+        "what_can_be_said_now": str(source_edges.get("known_edge") or known_edge),
+        "what_is_not_nailed_down_yet": str(source_edges.get("unknown_edge") or unknown_edge),
+        "best_current_lead": str(source_edges.get("next_lead") or next_lead),
         "selected_lead": selected_lead,
         "lead_candidates": list(selected_lead.get("alternatives") or []),
         "speaker_role": speaker_role,
@@ -2783,7 +3211,12 @@ def resolve_known_fact_before_uncertainty(
     return known
 
 
-def question_resolution_rule_check(*, player_text: str, gm_reply_text: str) -> Dict[str, Any]:
+def question_resolution_rule_check(
+    *,
+    player_text: str,
+    gm_reply_text: str,
+    resolution: Dict[str, Any] | None = None,
+) -> Dict[str, Any]:
     """Check the Question Resolution Rule for direct player questions.
 
     Returns:
@@ -2797,6 +3230,18 @@ def question_resolution_rule_check(*, player_text: str, gm_reply_text: str) -> D
     if not reply:
         return {"applies": True, "ok": False, "reasons": ["question_rule:empty_reply"]}
 
+    social_contract = _social_exchange_first_sentence_contract(
+        player_text=player,
+        gm_reply_text=reply,
+        resolution=resolution,
+    )
+    if social_contract.get("applies") and not social_contract.get("ok"):
+        return {
+            "applies": True,
+            "ok": False,
+            "reasons": list(social_contract.get("reasons") or []),
+        }
+
     first = _first_sentence(reply)
     first_low = first.lower()
     reasons: List[str] = []
@@ -2809,10 +3254,14 @@ def question_resolution_rule_check(*, player_text: str, gm_reply_text: str) -> D
     q_tokens = _question_content_tokens(player)
     has_token_overlap = any(tok in first_low for tok in q_tokens) if q_tokens else False
 
-    if has_refusal:
+    if has_refusal and not social_contract.get("applies"):
         reasons.append("question_rule:refusal_or_meta_disallowed")
 
-    ok = bool(("?" not in first) and (not has_refusal) and (has_starter or has_token_overlap))
+    ok = bool(
+        ("?" not in first)
+        and ((not has_refusal) or bool(social_contract.get("applies")))
+        and (has_starter or has_token_overlap or bool(social_contract.get("applies")))
+    )
     if not ok and not reasons:
         reasons.append("question_rule:first_sentence_not_explicit_answer")
     return {"applies": True, "ok": ok, "reasons": reasons}
@@ -2891,6 +3340,17 @@ def render_uncertainty_response(
     if known_fact_text:
         return _ensure_terminal_punctuation(known_fact_text)
     category = str(uncertainty.get("category") or uncertainty_type or "").strip()
+    source = str(uncertainty.get("source") or "").strip()
+    if source not in UNCERTAINTY_SOURCE_MODES:
+        if speaker_role := str(
+            uncertainty.get("speaker_role")
+            or ((speaker_identity or {}).get("role") if isinstance(speaker_identity, dict) else "")
+            or ((uncertainty.get("speaker") or {}).get("role") if isinstance(uncertainty.get("speaker"), dict) else "")
+            or "narrator"
+        ).strip().lower():
+            source = "npc_ignorance" if speaker_role == "npc" else "scene_ambiguity"
+        else:
+            source = "scene_ambiguity"
     known_edge = str(
         uncertainty.get("known_edge")
         or uncertainty.get("what_can_be_said_now")
@@ -2920,25 +3380,21 @@ def render_uncertainty_response(
     ).strip()
     delivery = str(uncertainty.get("delivery") or "").strip()
 
-    if speaker_role == "npc":
+    if source == "npc_ignorance" and speaker_role == "npc":
         intro = _ensure_terminal_punctuation(f"{speaker_name} {delivery}".strip())
-        if category in {"unknown_location", "unknown_method", "unknown_feasibility"}:
-            quoted = [
-                _quoted_sentence(" ".join(p for p in (known_edge, unknown_edge) if p)),
-                _quoted_sentence(next_lead),
-            ]
-        elif category in {"unknown_identity", "unknown_motive"}:
-            quoted = [
-                _quoted_sentence(known_edge),
-                _quoted_sentence(" ".join(p for p in (unknown_edge, next_lead) if p)),
-            ]
-        else:
-            quoted = [
-                _quoted_sentence(known_edge),
-                _quoted_sentence(unknown_edge),
-                _quoted_sentence(next_lead),
-            ]
+        quoted = [
+            _quoted_sentence(" ".join(p for p in (known_edge, unknown_edge) if p)),
+            _quoted_sentence(next_lead),
+        ]
         return " ".join(part for part in [intro, *quoted] if part).strip()
+
+    if source == "procedural_insufficiency":
+        parts = [
+            _ensure_terminal_punctuation(known_edge),
+            _ensure_terminal_punctuation(unknown_edge),
+            _ensure_terminal_punctuation(next_lead),
+        ]
+        return " ".join(part for part in parts if part).strip()
 
     if category in {"unknown_location", "unknown_feasibility"}:
         parts = [
@@ -2981,14 +3437,18 @@ def _apply_uncertainty_to_gm(
     else:
         category = str(uncertainty.get("category") or "").strip()
         uncertainty_tag = f"uncertainty:{category}" if category else "uncertainty"
-        gm["tags"] = list(tags) + [uncertainty_tag]
+        source = str(uncertainty.get("source") or "").strip()
+        source_tag = f"uncertainty_source:{source}" if source else ""
+        gm["tags"] = list(tags) + [t for t in (uncertainty_tag, source_tag) if t]
     dbg = gm.get("debug_notes") if isinstance(gm.get("debug_notes"), str) else ""
     if known_fact:
         source = str(known_fact.get("source") or "known_fact").strip()
         gm["debug_notes"] = (dbg + " | " if dbg else "") + f"{reason}:known_fact_guard:{source}"
     else:
         category = str(uncertainty.get("category") or "").strip()
-        gm["debug_notes"] = (dbg + " | " if dbg else "") + f"{reason}:{category or 'unknown'}"
+        source = str(uncertainty.get("source") or "").strip()
+        suffix = f"{category or 'unknown'}:{source}" if source else f"{category or 'unknown'}"
+        gm["debug_notes"] = (dbg + " | " if dbg else "") + f"{reason}:{suffix}"
     return gm
 
 
@@ -3050,6 +3510,9 @@ def _validator_voice_world_fallback(
             classify_uncertainty(
                 player_text,
                 scene_envelope=scene_envelope,
+                session=session,
+                world=world,
+                resolution=resolution,
             )
         )
     location = _resolve_scene_location(scene_envelope)
@@ -3079,7 +3542,11 @@ def enforce_question_resolution_rule(
         return gm
     gm = dict(gm)
     reply = gm.get("player_facing_text") if isinstance(gm.get("player_facing_text"), str) else ""
-    chk = question_resolution_rule_check(player_text=player_text, gm_reply_text=reply)
+    chk = question_resolution_rule_check(
+        player_text=player_text,
+        gm_reply_text=reply,
+        resolution=resolution,
+    )
     if not chk.get("applies") or chk.get("ok"):
         return gm
 
@@ -4345,7 +4812,11 @@ def detect_retry_failures(
             }
         )
 
-    question_rule = question_resolution_rule_check(player_text=player_text, gm_reply_text=reply_text)
+    question_rule = question_resolution_rule_check(
+        player_text=player_text,
+        gm_reply_text=reply_text,
+        resolution=resolution,
+    )
     if question_rule.get("applies") and not question_rule.get("ok"):
         known_fact = resolve_known_fact_before_uncertainty(
             player_text,
@@ -4469,6 +4940,61 @@ def detect_retry_failures(
         )
 
     return failures
+
+
+def apply_deterministic_retry_fallback(
+    gm: Dict[str, Any],
+    *,
+    failure: Dict[str, Any],
+    player_text: str,
+    scene_envelope: Dict[str, Any],
+    session: Dict[str, Any],
+    world: Dict[str, Any],
+    resolution: Dict[str, Any] | None,
+) -> Dict[str, Any]:
+    """Apply deterministic fallback when targeted retry still fails."""
+    if not isinstance(gm, dict):
+        return gm
+    failure_class = str((failure or {}).get("failure_class") or "").strip()
+    if failure_class != "unresolved_question":
+        return gm
+
+    known_fact = resolve_known_fact_before_uncertainty(
+        player_text,
+        scene_envelope=scene_envelope,
+        session=session,
+        world=world,
+        resolution=resolution,
+    )
+    out = dict(gm)
+    if isinstance(known_fact, dict) and str(known_fact.get("text") or "").strip():
+        out["player_facing_text"] = _ensure_terminal_punctuation(str(known_fact.get("text") or "").strip())
+        tags = out.get("tags") if isinstance(out.get("tags"), list) else []
+        out["tags"] = list(tags) + ["question_retry_fallback", "known_fact_guard"]
+        dbg = out.get("debug_notes") if isinstance(out.get("debug_notes"), str) else ""
+        source = str(known_fact.get("source") or "known_fact").strip()
+        out["debug_notes"] = (
+            (dbg + " | " if dbg else "")
+            + f"retry_fallback:unresolved_question:known_fact_guard:{source}"
+        )
+        return out
+
+    uncertainty = classify_uncertainty(
+        player_text,
+        scene_envelope=scene_envelope,
+        session=session,
+        world=world,
+        resolution=resolution,
+    )
+    out = _apply_uncertainty_to_gm(
+        out,
+        uncertainty=uncertainty,
+        reason="retry_fallback:unresolved_question",
+        replace_text=True,
+    )
+    tags = out.get("tags") if isinstance(out.get("tags"), list) else []
+    out["tags"] = list(tags) + ["question_retry_fallback"]
+    return out
 
 
 def apply_response_policy_enforcement(

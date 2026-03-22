@@ -68,6 +68,11 @@ UNCERTAINTY_CATEGORIES: tuple[str, ...] = (
     "unknown_quantity",
     "unknown_feasibility",
 )
+UNCERTAINTY_SOURCES: tuple[str, ...] = (
+    "npc_ignorance",
+    "scene_ambiguity",
+    "procedural_insufficiency",
+)
 UNCERTAINTY_ANSWER_SHAPE: tuple[str, ...] = (
     "known_edge",
     "unknown_edge",
@@ -205,6 +210,7 @@ def build_response_policy(*, narration_obligations: Dict[str, Any] | None = None
         "uncertainty": {
             "enabled": True,
             "categories": list(UNCERTAINTY_CATEGORIES),
+            "sources": list(UNCERTAINTY_SOURCES),
             "answer_shape": list(UNCERTAINTY_ANSWER_SHAPE),
             "context_inputs": ["turn_context", "speaker", "scene_snapshot"],
         },
@@ -642,10 +648,11 @@ def build_narration_context(
         'Avoid generic dramatic filler and repeated warning phrases. Make NPC replies specific to the speaker and current situation.',
         'Forbidden generic phrases are disallowed: "In this city...", "Times are tough...", "Trust is hard to come by...", "You\'ll need to prove yourself..." — rewrite into specific names/locations/events.',
         'QUESTION RESOLUTION RULE (HARD RULE): Every direct player question MUST be answered explicitly before any additional dialogue. Structure: (1) Direct answer (first sentence), (2) Optional elaboration, (3) Optional hook. The GM/NPC MUST NOT deflect, generalize, or ask a new question before answering.',
-        'If certainty is incomplete, classify the uncertainty with response_policy.uncertainty.categories and compose it from response_policy.uncertainty.answer_shape: known_edge, unknown_edge, next_lead.',
+        'If certainty is incomplete, classify the uncertainty with response_policy.uncertainty.categories and response_policy.uncertainty.sources, then compose it from response_policy.uncertainty.answer_shape: known_edge, unknown_edge, next_lead.',
         'Ground uncertainty with response_policy.uncertainty.context_inputs: uncertainty_hint.turn_context, uncertainty_hint.speaker, and uncertainty_hint.scene_snapshot.',
         'If uncertainty_hint.speaker.role is npc, keep the reply attributable to that NPC and limited to what they could plausibly know, hear, point to, or direct the player toward.',
         'If there is no active NPC speaker, keep uncertainty in diegetic narrator voice but anchor it to visible scene circumstances rather than generic omniscient wording.',
+        'If social_intent_class remains social_exchange on an NPC-directed question, keep uncertainty speaker-grounded (npc_ignorance) instead of drifting into scene ambiguity.',
         'Frame uncertainty as world-facing limits only: who knows, what can be seen, what distance, darkness, rumor, missing witnesses, or incomplete clues prevent right now.',
         'Vary sentence count and cadence naturally; do not stamp the same three-sentence rhythm onto every uncertain answer.',
         'If no strong next lead exists, choose the strongest visible handle already in scene rather than giving generic investigative advice.',

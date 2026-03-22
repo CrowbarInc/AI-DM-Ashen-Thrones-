@@ -399,6 +399,9 @@ def test_chat_targeted_retry_unresolved_question_only(tmp_path, monkeypatch):
     retry_tail = captured_inputs[1][-1]["content"]
     assert "Retry target: unresolved_question." in retry_tail
     assert "validator_voice" not in retry_tail
+    assert "Sentence one MUST directly answer the exact player question." in retry_tail
+    assert "Do not begin with atmosphere, scene summary, or recap." in retry_tail
+    assert "No advisory phrasing" in retry_tail
     low = (data.get("gm_output") or {}).get("player_facing_text", "").lower()
     assert "i can't answer" not in low
     assert "answer the player" not in low
@@ -437,6 +440,69 @@ def test_chat_targeted_retry_prefers_highest_priority_failure_first(tmp_path, mo
     assert "i can't answer" not in low
     assert "based on what's established" not in low
     assert "retry_strategy:selected=unresolved_question" in ((data.get("gm_output") or {}).get("debug_notes") or "")
+
+
+def test_chat_unresolved_retry_failure_uses_deterministic_known_fact_fallback(tmp_path, monkeypatch):
+    _seed_shared_world(tmp_path, monkeypatch)
+    captured_inputs = []
+
+    def _fake_call_gpt(messages):
+        captured_inputs.append(messages)
+        if len(captured_inputs) == 1:
+            return _gm_response("Rain rolls over the checkpoint and the crowd shifts under dripping banners.")
+        return _gm_response("The checkpoint feels tense and crowded as boots splash through mud.")
+
+    with monkeypatch.context() as m:
+        m.setattr("game.api.call_gpt", _fake_call_gpt)
+        m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
+        m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
+        m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+        client = TestClient(app)
+        resp = client.post("/api/chat", json={"text": "Where are we?"})
+
+    assert resp.status_code == 200
+    data = resp.json()
+    assert len(captured_inputs) == 2
+    gm_output = data.get("gm_output") or {}
+    text = (gm_output.get("player_facing_text") or "").lower()
+    assert text.startswith("you are in")
+    assert "checkpoint feels tense" not in text
+    assert "question_retry_fallback" in (gm_output.get("tags") or [])
+    assert "known_fact_guard" in (gm_output.get("tags") or [])
+    dbg = gm_output.get("debug_notes") or ""
+    assert "retry_strategy:selected=unresolved_question" in dbg
+    assert "retry_fallback:unresolved_question:known_fact_guard:current_scene_state" in dbg
+
+
+def test_chat_unresolved_retry_failure_uses_speaker_grounded_uncertainty_fallback(tmp_path, monkeypatch):
+    _seed_runner_dialogue_context(tmp_path, monkeypatch)
+    captured_inputs = []
+
+    def _fake_call_gpt(messages):
+        captured_inputs.append(messages)
+        if len(captured_inputs) == 1:
+            return _gm_response("Rain rattles over the shutters while everyone keeps their own counsel.")
+        return _gm_response("Fog hangs low by the gate and no one steps forward first.")
+
+    with monkeypatch.context() as m:
+        m.setattr("game.api.call_gpt", _fake_call_gpt)
+        m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
+        m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
+        m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+        client = TestClient(app)
+        resp = client.post("/api/chat", json={"text": "Who attacked them?"})
+
+    assert resp.status_code == 200
+    data = resp.json()
+    assert len(captured_inputs) == 2
+    gm_output = data.get("gm_output") or {}
+    text = gm_output.get("player_facing_text") or ""
+    low = text.lower()
+    assert "fog hangs low" not in low
+    assert "tavern runner" in low
+    assert "question_retry_fallback" in (gm_output.get("tags") or [])
+    assert "retry_fallback:unresolved_question" in (gm_output.get("debug_notes") or "")
+    assert "retry_strategy:selected=unresolved_question" in (gm_output.get("debug_notes") or "")
 
 
 def test_chat_targeted_retry_scene_stall_only(tmp_path, monkeypatch):
@@ -637,6 +703,53 @@ def test_chat_dialogue_lock_routes_npc_directed_question_regressions(tmp_path, m
             assert "resolve that procedurally" not in text
 
 
+def test_chat_dialogue_lock_routes_ambiguous_next_step_questions_to_active_npc(tmp_path, monkeypatch):
+    _seed_runner_dialogue_context(tmp_path, monkeypatch)
+
+    prompts = [
+        "Well? What should I do next?",
+        "So? What's the next step?",
+        "Where does this lead?",
+    ]
+    with monkeypatch.context() as m:
+        m.setattr("game.api.call_gpt", lambda _: FAKE_GPT_RESPONSE)
+        m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
+        m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
+        m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+        client = TestClient(app)
+        for prompt in prompts:
+            resp = client.post("/api/chat", json={"text": prompt})
+            assert resp.status_code == 200
+            data = resp.json()
+            resolution = data.get("resolution") or {}
+            assert resolution.get("kind") in {"question", "social_probe"}
+            assert (resolution.get("social") or {}).get("social_intent_class") == "social_exchange"
+            assert (resolution.get("social") or {}).get("npc_id") == "runner"
+            assert resolution.get("kind") != "adjudication_query"
+
+
+def test_chat_repeated_social_questions_keep_npc_uncertainty_voice(tmp_path, monkeypatch):
+    _seed_runner_dialogue_context(tmp_path, monkeypatch)
+
+    with monkeypatch.context() as m:
+        m.setattr("game.api.call_gpt", lambda _messages: _gm_response("Rain rattles over the shutters while the crowd churns."))
+        m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
+        m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
+        m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+        client = TestClient(app)
+        prompts = ["Who attacked them?", "Who is behind it?"]
+        for prompt in prompts:
+            resp = client.post("/api/chat", json={"text": prompt})
+            assert resp.status_code == 200
+            data = resp.json()
+            text = ((data.get("gm_output") or {}).get("player_facing_text") or "")
+            low = text.lower()
+            assert "tavern runner" in low
+            assert '"' in text
+            assert "resolve that procedurally" not in low
+            assert "state exactly what you do" not in low
+
+
 def test_chat_repeated_topic_questions_force_escalation_by_third_probe(tmp_path, monkeypatch):
     _seed_shared_world(tmp_path, monkeypatch)
     world = storage.load_world()
@@ -668,6 +781,10 @@ def test_chat_repeated_topic_questions_force_escalation_by_third_probe(tmp_path,
         m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
         m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
         m.setattr("game.gm.resolve_known_fact_before_uncertainty", lambda *_args, **_kwargs: None)
+        m.setattr(
+            "game.gm.question_resolution_rule_check",
+            lambda **_kwargs: {"applies": False, "ok": True, "reasons": []},
+        )
         m.setattr("game.gm.enforce_question_resolution_rule", lambda gm, **_kwargs: gm)
         client = TestClient(app)
         prompts = [
@@ -801,6 +918,22 @@ def test_chat_explicit_ooc_roll_question_stays_adjudication(tmp_path, monkeypatc
     assert adjudication.get("category") == "roll_requirement_query"
 
 
+def test_chat_explicit_ooc_actions_available_stays_adjudication(tmp_path, monkeypatch):
+    _seed_shared_world(tmp_path, monkeypatch)
+
+    with monkeypatch.context() as m:
+        m.setattr("game.api.call_gpt", lambda *_args, **_kwargs: (_ for _ in ()).throw(AssertionError("GPT should not be called")))
+        m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
+        m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
+        m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+        client = TestClient(app)
+        resp = client.post("/api/chat", json={"text": "OOC, what actions are available?"})
+
+    assert resp.status_code == 200
+    data = resp.json()
+    assert (data.get("resolution") or {}).get("kind") == "adjudication_query"
+
+
 def test_chat_earshot_question_routes_to_adjudication_with_state_answer(tmp_path, monkeypatch):
     _seed_shared_world(tmp_path, monkeypatch)
     world = storage.load_world()
@@ -856,6 +989,9 @@ def test_chat_adjudication_refuses_over_answer_without_basis(tmp_path, monkeypat
         or "nothing in the scene points to a clear answer yet" in low
         or "from here, no certain answer presents itself" in low
         or "the truth is still buried beneath rumor and rain" in low
+        or "no answer presents itself from here" in low
+        or "truth stays locked until someone pushes a concrete move" in low
+        or "answer has not formed yet" in low
     )
 
 
@@ -1008,6 +1144,9 @@ def test_chat_final_output_sanitizer_blocks_adjudication_procedural_leak(tmp_pat
         or "nothing in the scene points to a clear answer yet" in low
         or "from here, no certain answer presents itself" in low
         or "the truth is still buried beneath rumor and rain" in low
+        or "no answer presents itself from here" in low
+        or "truth stays locked until someone pushes a concrete move" in low
+        or "answer has not formed yet" in low
     )
 
 
@@ -1227,3 +1366,154 @@ def test_chat_implied_sit_with_target_is_applied_before_prompt_context(tmp_path,
 
     assert resp.status_code == 200
     assert captured.get("player_position_context") == "seated_with_target"
+
+
+def test_final_emission_gate_replaces_invalid_social_exchange_blob_before_emit(tmp_path, monkeypatch):
+    _seed_runner_dialogue_context(tmp_path, monkeypatch)
+
+    with monkeypatch.context() as m:
+        m.setattr(
+            "game.api.call_gpt",
+            lambda _messages: _gm_response(
+                "From here, no certain answer presents itself. "
+                "The runner keeps repeating the same rumors while rain hits the shutters."
+            ),
+        )
+        m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
+        m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
+        m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+        client = TestClient(app)
+        resp = client.post("/api/chat", json={"text": "Who attacked them?"})
+
+    assert resp.status_code == 200
+    data = resp.json()
+    gm_out = data.get("gm_output") or {}
+    text = str(gm_out.get("player_facing_text") or "")
+    low = text.lower()
+    assert "from here, no certain answer presents itself" not in low
+    assert "truth is still buried beneath rumor and rain" not in low
+    assert "final_emission_gate_replaced" in (gm_out.get("tags") or [])
+    assert "tavern runner" in low
+
+
+def test_final_emission_gate_blocks_advisory_prose_inside_social_exchange(tmp_path, monkeypatch):
+    _seed_runner_dialogue_context(tmp_path, monkeypatch)
+
+    with monkeypatch.context() as m:
+        m.setattr(
+            "game.api.call_gpt",
+            lambda _messages: _gm_response(
+                "I'd suggest you question the notice board clerk before the lane goes cold."
+            ),
+        )
+        m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
+        m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
+        m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+        client = TestClient(app)
+        resp = client.post("/api/chat", json={"text": "Who attacked them?"})
+
+    assert resp.status_code == 200
+    data = resp.json()
+    text = str((data.get("gm_output") or {}).get("player_facing_text") or "")
+    low = text.lower()
+    assert "i'd suggest you" not in low
+    assert "you should" not in low
+    assert "you could" not in low
+    assert "final_emission_gate_replaced" in ((data.get("gm_output") or {}).get("tags") or [])
+
+
+def test_final_emission_gate_strips_unresolved_stock_phrases_from_social_output(tmp_path, monkeypatch):
+    _seed_runner_dialogue_context(tmp_path, monkeypatch)
+
+    with monkeypatch.context() as m:
+        m.setattr(
+            "game.api.call_gpt",
+            lambda _messages: _gm_response(
+                "The truth is still buried beneath rumor and rain. "
+                "The answer has not formed yet."
+            ),
+        )
+        m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
+        m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
+        m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+        client = TestClient(app)
+        resp = client.post("/api/chat", json={"text": "Who attacked them?"})
+
+    assert resp.status_code == 200
+    data = resp.json()
+    text = str((data.get("gm_output") or {}).get("player_facing_text") or "")
+    low = text.lower()
+    assert "truth is still buried beneath rumor and rain" not in low
+    assert "answer has not formed yet" not in low
+    assert "final_emission_gate_replaced" in ((data.get("gm_output") or {}).get("tags") or [])
+
+
+def test_final_emission_gate_keeps_interruption_output_coherent(tmp_path, monkeypatch):
+    _seed_runner_dialogue_context(tmp_path, monkeypatch)
+
+    with monkeypatch.context() as m:
+        m.setattr(
+            "game.api.call_gpt",
+            lambda _messages: _gm_response(
+                'Tavern Runner says, "No names. Only rumors." A shout erupts in the crowd. '
+                "I'd suggest you ask the captain and check the board."
+            ),
+        )
+        m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
+        m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
+        m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+        client = TestClient(app)
+        resp = client.post("/api/chat", json={"text": "Who attacked them?"})
+
+    assert resp.status_code == 200
+    data = resp.json()
+    text = str((data.get("gm_output") or {}).get("player_facing_text") or "")
+    low = text.lower()
+    assert "i'd suggest you" not in low
+    assert "check the board" not in low
+    assert "final_emission_gate_replaced" in ((data.get("gm_output") or {}).get("tags") or [])
+    assert any(
+        phrase in low
+        for phrase in (
+            "shouting breaks out",
+            "shout cuts across the square",
+            "\"i don't know.\"",
+            "\"no names. only rumors.\"",
+        )
+    )
+
+
+def test_final_emission_gate_repeated_questioning_can_end_clean_refusal(tmp_path, monkeypatch):
+    _seed_runner_dialogue_context(tmp_path, monkeypatch)
+
+    stale_blob = _gm_response(
+        "From here, no certain answer presents itself. "
+        "The runner says no names and then lists rumors while I'd suggest you check the board."
+    )
+
+    with monkeypatch.context() as m:
+        m.setattr("game.api.call_gpt", lambda _messages: stale_blob)
+        m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
+        m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
+        m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+        client = TestClient(app)
+        client.post("/api/chat", json={"text": "Who attacked them?"})
+        client.post("/api/chat", json={"text": "Who is really behind it?"})
+        third = client.post("/api/chat", json={"text": "Who ordered it?"})
+
+    assert third.status_code == 200
+    data = third.json()
+    text = str((data.get("gm_output") or {}).get("player_facing_text") or "")
+    low = text.lower()
+    assert any(
+        phrase in low
+        for phrase in (
+            "i've told you what i know",
+            "no more questions",
+            "shout cuts across the square",
+            "shouting breaks out",
+        )
+    )
+    assert "from here, no certain answer presents itself" not in low
+    assert "i'd suggest you" not in low
+    assert "final_emission_gate_replaced" in ((data.get("gm_output") or {}).get("tags") or [])

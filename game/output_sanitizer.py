@@ -37,7 +37,8 @@ _DROP_LINE_HINTS: tuple[str, ...] = (
 
 _FULL_TEXT_REWRITES: tuple[tuple[re.Pattern[str], str], ...] = ()
 
-_SENTENCE_SPLIT_RE = re.compile(r"(?<=[.!?])\s+|\n+")
+_SENTENCE_TERMINATORS = ".!?"
+_CLOSING_PUNCT_OR_QUOTES = "\"')]}»”’"
 
 _VISUAL_GROUNDED_HINTS: tuple[str, ...] = (
     "see",
@@ -167,16 +168,22 @@ _SCHEMA_KEY_ALT = "|".join(re.escape(k) for k in _RESPONSE_SCHEMA_KEYS)
 _QUOTED_RESPONSE_KEY_RE = re.compile(rf"""["'](?:{_SCHEMA_KEY_ALT})["']\s*:""", re.IGNORECASE)
 _PLAYER_TEXT_KEY_RE = re.compile(r"""["']player_facing_text["']\s*:""", re.IGNORECASE)
 
-_NARRATION_UNCERTAINTY_FALLBACKS: tuple[str, ...] = (
+_SCENE_AMBIGUITY_FALLBACKS: tuple[str, ...] = (
     "Nothing in the scene points to a clear answer yet.",
     "From here, no certain answer presents itself.",
     "The truth is still buried beneath rumor and rain.",
 )
 
-_NPC_UNCERTAINTY_FALLBACKS: tuple[str, ...] = (
+_NPC_IGNORANCE_FALLBACKS: tuple[str, ...] = (
     'He glances away. "I do not know that part for certain."',
     'She lowers her voice. "I have heard the talk, but not the names."',
     'They trade a quick look. "No one here can swear to it."',
+)
+
+_PROCEDURAL_INSUFFICIENCY_FALLBACKS: tuple[str, ...] = (
+    "No answer presents itself from here; the only lead is the east lane.",
+    "The truth stays locked until someone pushes a concrete move through the scene.",
+    "The answer has not formed yet; one visible lead still stands open at the checkpoint.",
 )
 
 
@@ -353,17 +360,57 @@ def _looks_like_npc_exchange(text: str, context: Dict[str, Any] | None) -> bool:
     return _context_prefers_npc_uncertainty(context) and _looks_like_dialogue(s)
 
 
+def _context_prefers_procedural_insufficiency(context: Dict[str, Any] | None) -> bool:
+    if not isinstance(context, dict):
+        return False
+    resolution = context.get("resolution")
+    if not isinstance(resolution, dict):
+        return False
+    kind = str(resolution.get("kind") or "").strip().lower()
+    if kind == "adjudication_query":
+        return True
+    if bool(resolution.get("requires_check")):
+        return True
+    check_request = resolution.get("check_request") if isinstance(resolution.get("check_request"), dict) else {}
+    if bool(check_request.get("requires_check")):
+        return True
+    adjudication = resolution.get("adjudication") if isinstance(resolution.get("adjudication"), dict) else {}
+    return str(adjudication.get("answer_type") or "").strip().lower() in {"needs_concrete_action", "check_required"}
+
+
+def _infer_uncertainty_source_mode(
+    context: Dict[str, Any] | None,
+    source_text: str,
+    explicit_mode: str | None = None,
+) -> str:
+    if explicit_mode in {"npc", "narration"}:
+        return "npc_ignorance" if explicit_mode == "npc" else "scene_ambiguity"
+    if _context_prefers_procedural_insufficiency(context):
+        return "procedural_insufficiency"
+    if _looks_like_npc_exchange(source_text, context):
+        return "npc_ignorance"
+    if re.search(
+        r"\b(resolve that procedurally|more concrete action|cannot determine roll requirements yet|state the specific action and target first|need a concrete, in-scene target)\b",
+        source_text or "",
+        re.IGNORECASE,
+    ):
+        return "procedural_insufficiency"
+    return "scene_ambiguity"
+
+
 def _diegetic_uncertainty_fallback(
     context: Dict[str, Any] | None,
     *,
     mode: str | None = None,
     source_text: str = "",
 ) -> str:
-    chosen_mode = mode
-    if chosen_mode not in {"narration", "npc"}:
-        chosen_mode = "npc" if _looks_like_npc_exchange(source_text, context) else "narration"
-    templates = _NPC_UNCERTAINTY_FALLBACKS if chosen_mode == "npc" else _NARRATION_UNCERTAINTY_FALLBACKS
-    seed = source_text.strip() or chosen_mode
+    source_mode = _infer_uncertainty_source_mode(context, source_text, explicit_mode=mode)
+    templates = {
+        "npc_ignorance": _NPC_IGNORANCE_FALLBACKS,
+        "scene_ambiguity": _SCENE_AMBIGUITY_FALLBACKS,
+        "procedural_insufficiency": _PROCEDURAL_INSUFFICIENCY_FALLBACKS,
+    }.get(source_mode, _SCENE_AMBIGUITY_FALLBACKS)
+    seed = source_text.strip() or source_mode
     idx = sum(ord(ch) for ch in seed) % len(templates)
     return templates[idx]
 
@@ -444,9 +491,81 @@ def _fails_final_validation_heuristics(sentence: str) -> bool:
     return False
 
 
+def _collapse_inline_whitespace(text: str) -> str:
+    return re.sub(r"\s+", " ", str(text or "")).strip()
+
+
 def _split_sentences(text: str) -> list[str]:
-    chunks = _SENTENCE_SPLIT_RE.split(text)
-    return [re.sub(r"\s+", " ", c).strip() for c in chunks if c and c.strip()]
+    if not isinstance(text, str):
+        return []
+    src = text.replace("\r\n", "\n").replace("\r", "\n")
+    if not src.strip():
+        return []
+
+    sentences: list[str] = []
+    buff: list[str] = []
+    i = 0
+    n = len(src)
+    while i < n:
+        ch = src[i]
+
+        # Preserve paragraph boundaries as sentence boundaries while avoiding
+        # accidental fragment merges across dropped lines.
+        if ch == "\n":
+            if i + 1 < n and src[i + 1] == "\n":
+                flushed = _collapse_inline_whitespace("".join(buff))
+                if flushed:
+                    sentences.append(flushed)
+                buff = []
+                while i + 1 < n and src[i + 1] == "\n":
+                    i += 1
+                i += 1
+                continue
+            buff.append(" ")
+            i += 1
+            continue
+
+        buff.append(ch)
+        if ch in _SENTENCE_TERMINATORS:
+            j = i + 1
+            while j < n and src[j] in _CLOSING_PUNCT_OR_QUOTES:
+                buff.append(src[j])
+                j += 1
+            flushed = _collapse_inline_whitespace("".join(buff))
+            if flushed:
+                sentences.append(flushed)
+            buff = []
+            while j < n and src[j].isspace():
+                j += 1
+            i = j
+            continue
+        i += 1
+
+    tail = _collapse_inline_whitespace("".join(buff))
+    if tail:
+        sentences.append(tail)
+    # Keep quoted speech + attribution together.
+    merged: list[str] = []
+    idx = 0
+    while idx < len(sentences):
+        current = sentences[idx]
+        if idx + 1 < len(sentences):
+            nxt = sentences[idx + 1]
+            if re.search(r'["\']\s*$', current) and re.match(
+                r"^(the|a|an|he|she|they|i|we|you|[A-Z][a-z]+)\b",
+                nxt,
+                flags=re.IGNORECASE,
+            ) and re.search(
+                r"\b(says|asks|asked|replies|reply|adds|added|murmurs|whispers|shouts|calls)\b",
+                nxt,
+                flags=re.IGNORECASE,
+            ):
+                merged.append(f"{current} {nxt}".strip())
+                idx += 2
+                continue
+        merged.append(current)
+        idx += 1
+    return merged
 
 
 def _looks_like_dialogue(sentence: str) -> bool:
@@ -754,6 +873,7 @@ def _cohere_sentences(sentences: list[str]) -> list[str]:
         if not clean:
             continue
         clean = re.sub(r"[ ]+([,.;!?])", r"\1", clean)
+        clean = re.sub(r"([!?.,])\1{1,}", r"\1", clean)
         if re.fullmatch(r"\[[^\]]+\]", clean):
             key = clean.lower()
             if key in seen:
@@ -795,7 +915,12 @@ def _looks_like_sentence_fragment(sentence: str) -> bool:
     # Drop terse clause-like fragments that rarely stand on their own.
     if len(words) <= 5:
         has_subject = bool(re.search(r"^(?:the|a|an|i|you|he|she|they|we|it|[A-Z][a-z]+)\b", s))
-        has_verb = bool(re.search(r"\b(is|are|was|were|be|been|do|does|did|has|have|had)\b", s.lower()))
+        has_verb = bool(
+            re.search(
+                r"\b(is|are|was|were|be|been|do|does|did|has|have|had|[a-z]+(?:s|ed|ing))\b",
+                s.lower(),
+            )
+        )
         if not (has_subject and has_verb):
             return True
     return False
@@ -809,6 +934,119 @@ def _dedupe_repeated_fragment(sentence: str) -> str:
     return s
 
 
+def _has_orphan_pronoun_lead(sentence: str, *, has_previous: bool) -> bool:
+    if has_previous:
+        return False
+    s = (sentence or "").strip()
+    if not s:
+        return True
+    if _looks_like_dialogue(s):
+        return False
+    return bool(re.match(r"^(he|she|they|it|this|that|these|those)\b", s, flags=re.IGNORECASE))
+
+
+def _has_orphan_quote_shape(sentence: str) -> bool:
+    s = (sentence or "").strip()
+    return bool(s) and s.count('"') % 2 != 0
+
+
+def _rewrite_sentence_atomically(sentence: str, context: Dict[str, Any] | None = None) -> str:
+    s = _strip_internal_prefixes(sentence).strip()
+    if not s:
+        return ""
+
+    # Start from explicit procedural/internal leakage to avoid carrying remnants.
+    if any(p.search(s) for p in _IMPERATIVE_OR_META_PATTERNS):
+        s = _rewrite_instructional_sentence(s, context).strip()
+    if not s:
+        return ""
+
+    if any(pattern.search(s) for pattern in DISALLOWED_HEURISTIC_PATTERNS):
+        s = _diegetic_uncertainty_fallback(context, source_text=s)
+
+    rewritten_identity = _rewrite_identity_system_sentence(s).strip()
+    if not rewritten_identity:
+        return ""
+    s = rewritten_identity
+
+    if _detect_analytical_phrases(s):
+        s = rewrite_analytical_sentence(s, context).strip()
+    if not s:
+        return ""
+
+    if _contains_directive_phrase(s):
+        s = _rewrite_directive_sentence(s, context).strip()
+    if not s:
+        return ""
+
+    if _contains_implicit_instruction(s):
+        s = _rewrite_implicit_instruction_sentence(s).strip()
+    if not s:
+        return ""
+
+    if _contains_template_fragment(s) or any(p.search(s) for p in _CONJUNCTION_COLLISION_PATTERNS):
+        s = _simple_diegetic_fallback(s, context).strip()
+    if not s:
+        return ""
+
+    if _has_orphan_quote_shape(s):
+        s = _diegetic_uncertainty_fallback(context, source_text=s)
+
+    if _fails_final_validation_heuristics(s):
+        fallback = _simple_diegetic_fallback(s, context).strip()
+        if not fallback or _fails_final_validation_heuristics(fallback):
+            return ""
+        s = fallback
+    return s.strip()
+
+
+def _classify_sentence_action(
+    sentence: str,
+    *,
+    context: Dict[str, Any] | None = None,
+    has_previous_kept_sentence: bool = False,
+) -> tuple[str, str]:
+    s = _strip_internal_prefixes(sentence).strip()
+    if not s:
+        return ("drop", "")
+    if re.fullmatch(r"\[[^\]]+\]", s):
+        return ("keep", s)
+
+    # Hard-drop tiny debris and malformed remnants.
+    if _has_unrecoverable_fragment_shape(s) and not _looks_like_dialogue(s):
+        return ("drop", "")
+
+    must_rewrite = False
+    if any(phrase.lower() in s.lower() for phrase in DISALLOWED_EXACT_PHRASES):
+        must_rewrite = True
+    if any(pattern.search(s) for pattern in DISALLOWED_HEURISTIC_PATTERNS):
+        must_rewrite = True
+    if any(p.search(s) for p in _IMPERATIVE_OR_META_PATTERNS):
+        must_rewrite = True
+    if _detect_analytical_phrases(s):
+        must_rewrite = True
+    if _contains_directive_phrase(s) or _contains_implicit_instruction(s):
+        must_rewrite = True
+    if any(p.search(s) for p in _IDENTITY_SYSTEM_PATTERNS):
+        must_rewrite = True
+    if _contains_template_fragment(s) or any(p.search(s) for p in _CONJUNCTION_COLLISION_PATTERNS):
+        must_rewrite = True
+    if _is_spliced_or_malformed(s) or _has_orphan_quote_shape(s):
+        must_rewrite = True
+    if _has_orphan_pronoun_lead(s, has_previous=has_previous_kept_sentence):
+        must_rewrite = True
+
+    if must_rewrite:
+        rewritten = _rewrite_sentence_atomically(s, context).strip()
+        if not rewritten:
+            return ("drop", "")
+        return ("rewrite", rewritten)
+
+    if not _is_diegetic_sentence(s) or _looks_like_sentence_fragment(s):
+        return ("drop", "")
+    return ("keep", s)
+
+
 def final_coherence_pass(text: str) -> str:
     if not isinstance(text, str):
         return ""
@@ -818,6 +1056,9 @@ def final_coherence_pass(text: str) -> str:
         s = _dedupe_repeated_fragment(sentence)
         s = re.sub(r"\s+", " ", s).strip()
         if not s:
+            continue
+        if re.fullmatch(r"\[[^\]]+\]", s):
+            cleaned.append(s)
             continue
         s = re.sub(r"[ ]+([,.;!?])", r"\1", s)
         if s and s[0].islower():
@@ -883,114 +1124,30 @@ def sanitize_player_facing_output(text: str, context: Dict[str, Any] | None = No
         extracted = extract_player_text_from_serialized_payload(out)
         out = extracted if isinstance(extracted, str) and extracted.strip() else strip_serialized_payload_fragments(out)
 
-    # STEP 2: pattern sanitizer.
+    # STEP 2: global pattern sanitizer.
     for pattern, replacement in _FULL_TEXT_REWRITES:
         out = pattern.sub(replacement, out)
 
-    # Continue STEP 2 at line level.
-    sanitized_lines: list[str] = []
-    for raw_line in out.splitlines():
-        line = raw_line.strip()
-        if not line:
-            if sanitized_lines and sanitized_lines[-1] != "":
-                sanitized_lines.append("")
+    # STEP 3: sentence-atomic sanitizer.
+    processed: list[str] = []
+    for sentence in _split_sentences(out):
+        action, resolved = _classify_sentence_action(
+            sentence,
+            context=ctx,
+            has_previous_kept_sentence=bool(processed),
+        )
+        if action == "drop":
+            _log_sanitizer_event(ctx, "dropped_sentence", sentence)
             continue
+        if action == "rewrite" and resolved != sentence.strip():
+            _log_sanitizer_event(ctx, "rewritten_sentence", sentence)
+        processed.append(resolved)
 
-        rewritten = _rewrite_line(line, ctx).strip()
-        if not rewritten:
-            continue
+    rebuilt = " ".join(_cohere_sentences(processed)).strip()
 
-        low = rewritten.lower()
-        if any(phrase.lower() in low for phrase in DISALLOWED_EXACT_PHRASES):
-            continue
-        if any(pattern.search(rewritten) for pattern in DISALLOWED_HEURISTIC_PATTERNS):
-            # Last-resort rewrite for procedural/internal phrasing that survived.
-            rewritten = _diegetic_uncertainty_fallback(ctx, source_text=rewritten)
-
-        sanitized_lines.append(rewritten)
-
-    rebuilt = "\n".join(sanitized_lines).strip()
-    rebuilt = re.sub(r"[ \t]{2,}", " ", rebuilt)
-    rebuilt = re.sub(r"\n{3,}", "\n\n", rebuilt)
-
-    # STEP 3: fragment sanitizer.
-    candidate_sentences = _split_sentences(rebuilt)
-    validated: list[str] = []
-    for sentence in candidate_sentences:
-        original = sentence
-        if not sentence:
-            continue
-        if any(p.search(sentence) for p in _IMPERATIVE_OR_META_PATTERNS) or _is_spliced_or_malformed(sentence):
-            sentence = _rewrite_instructional_sentence(sentence, ctx).strip()
-            if sentence != original:
-                _log_sanitizer_event(ctx, "rewritten", original)
-        if not sentence:
-            _log_sanitizer_event(ctx, "dropped_empty", original)
-            continue
-        if not _is_diegetic_sentence(sentence):
-            _log_sanitizer_event(ctx, "dropped_non_diegetic", original)
-            continue
-        validated.append(sentence)
-
-    # STEP 4: analytical rewrite.
-    analytical_rewritten: list[str] = []
-    for sentence in validated:
-        markers = _detect_analytical_phrases(sentence)
-        if not markers:
-            analytical_rewritten.append(sentence)
-            continue
-        rewritten = rewrite_analytical_sentence(sentence, ctx).strip()
-        if rewritten != sentence:
-            _log_sanitizer_event(ctx, f"analytical_rewritten:{'|'.join(markers)}", sentence)
-        if not rewritten:
-            _log_sanitizer_event(ctx, "analytical_dropped_empty", sentence)
-            continue
-        # Hard rule: never allow analytical framing to survive final output.
-        if _detect_analytical_phrases(rewritten):
-            fallback = _diegetic_uncertainty_fallback(ctx, source_text=rewritten)
-            if _detect_analytical_phrases(fallback):
-                _log_sanitizer_event(ctx, "analytical_dropped_unresolved", sentence)
-                continue
-            rewritten = fallback
-        analytical_rewritten.append(rewritten)
-
-    # STEP 5: directive rewrite (including system identity phrase removal).
-    directive_rewritten: list[str] = []
-    for sentence in analytical_rewritten:
-        identity_rewritten = _rewrite_identity_system_sentence(sentence).strip()
-        if identity_rewritten != sentence:
-            _log_sanitizer_event(ctx, "identity_rewritten_or_dropped", sentence)
-        if not identity_rewritten:
-            continue
-        if _contains_directive_phrase(identity_rewritten):
-            rewritten = _rewrite_directive_sentence(identity_rewritten, ctx).strip()
-            if rewritten != identity_rewritten:
-                _log_sanitizer_event(ctx, "directive_rewritten", sentence)
-            if not rewritten:
-                continue
-            identity_rewritten = rewritten
-        directive_rewritten.append(identity_rewritten)
-
-    # STEP 6: implicit imperative/advisory rewrite.
-    implicit_rewritten: list[str] = []
-    for sentence in directive_rewritten:
-        if _contains_implicit_instruction(sentence):
-            rewritten = _rewrite_implicit_instruction_sentence(sentence).strip()
-            if rewritten != sentence:
-                _log_sanitizer_event(ctx, "implicit_instruction_rewritten", sentence)
-            if not rewritten:
-                continue
-            sentence = rewritten
-        implicit_rewritten.append(sentence)
-
-    # STEP 7: atomic rewrite enforcement.
-    atomic_rewritten = atomic_rewrite_enforcement_pass(implicit_rewritten, ctx)
-
-    # STEP 8: final validation gate.
-    validated_final = final_validation_pass(" ".join(atomic_rewritten).strip(), ctx)
-
-    # STEP 9: final coherence pass.
-    rebuilt = final_coherence_pass(validated_final)
+    # STEP 4: final validation and coherence.
+    rebuilt = final_validation_pass(rebuilt, ctx)
+    rebuilt = final_coherence_pass(rebuilt)
 
     # Final boundary guard to avoid any surviving schema leakage.
     if resembles_serialized_response_payload(rebuilt):
