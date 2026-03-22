@@ -193,6 +193,16 @@ def test_transcript_exploration_social_affordance_routes_social_engine(tmp_path,
 def test_chat_fallback_does_not_clear_existing_interaction_context(tmp_path, monkeypatch):
     """Chat fallback (no parsed action kind) should preserve existing social context."""
     _seed_transcript_world(tmp_path, monkeypatch)
+    world = storage.load_world()
+    world["npcs"] = [
+        {
+            "id": "runner",
+            "name": "Tavern Runner",
+            "location": "scene_investigate",
+            "topics": [],
+        }
+    ]
+    storage._save_json(storage.WORLD_PATH, world)
     session = storage.load_session()
     session["interaction_context"] = {
         "active_interaction_target_id": "runner",

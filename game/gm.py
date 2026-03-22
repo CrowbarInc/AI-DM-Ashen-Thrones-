@@ -21,6 +21,11 @@ from game.storage import (
 )
 from game.clues import get_clue_presentation, get_known_clues_with_presentation
 from game.interaction_context import assert_valid_speaker
+from game.social_exchange_emission import (
+    apply_social_exchange_retry_fallback_gm,
+    is_scene_directed_watch_question,
+    should_apply_strict_social_exchange_emission,
+)
 
 COMBAT_KINDS = frozenset({
     'initiative', 'attack', 'spell', 'skill_check',
@@ -1768,6 +1773,8 @@ def _first_sentence(text: str) -> str:
 def _is_social_exchange_question_turn(player_text: str, resolution: Dict[str, Any] | None) -> bool:
     if not _is_direct_player_question(player_text):
         return False
+    if is_scene_directed_watch_question(player_text):
+        return False
     if not isinstance(resolution, dict):
         return False
     social = resolution.get("social") if isinstance(resolution.get("social"), dict) else {}
@@ -3226,6 +3233,8 @@ def question_resolution_rule_check(
     reply = str(gm_reply_text or "").strip()
     applies = _is_direct_player_question(player)
     if not applies:
+        return {"applies": False, "ok": True, "reasons": []}
+    if is_scene_directed_watch_question(player):
         return {"applies": False, "ok": True, "reasons": []}
     if not reply:
         return {"applies": True, "ok": False, "reasons": ["question_rule:empty_reply"]}
@@ -4978,6 +4987,25 @@ def apply_deterministic_retry_fallback(
             + f"retry_fallback:unresolved_question:known_fact_guard:{source}"
         )
         return out
+
+    scene_id = str((scene_envelope.get("scene") or {}).get("id") or "").strip()
+    hint = ""
+    if isinstance(session, dict) and scene_id:
+        rt = get_scene_runtime(session, scene_id)
+        hint = str(rt.get("last_player_action_text") or "").strip()
+    if should_apply_strict_social_exchange_emission(
+        resolution,
+        session,
+        scene_runtime_prompt=hint or None,
+    ):
+        return apply_social_exchange_retry_fallback_gm(
+            out,
+            player_text=player_text,
+            session=session,
+            world=world,
+            resolution=resolution,
+            scene_id=scene_id,
+        )
 
     uncertainty = classify_uncertainty(
         player_text,

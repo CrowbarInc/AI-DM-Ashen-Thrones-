@@ -4,13 +4,13 @@
     "frontier_gate"
   ],
   "current_date": "Day 1",
-  "turn_counter": 9,
+  "turn_counter": 7,
   "clocks": {
     "suspicion": 0,
     "unrest": 0,
     "danger": 0,
     "occult_instability": 0,
-    "time_pressure": 9
+    "time_pressure": 7
   },
   "scene_runtime": {
     "frontier_gate": {
@@ -21,36 +21,36 @@
       "suspicion_flags": [],
       "searched_targets": [],
       "resolved_interactables": [],
-      "last_exploration_action_key": null,
-      "repeated_action_count": 0,
-      "last_resolution_kind": null,
-      "last_description_hash": "ed9c59c06a2f1f2da4009ff8773d7cf1",
+      "last_exploration_action_key": "campaign_start_opening_scene",
+      "repeated_action_count": 1,
+      "last_resolution_kind": "scene_opening",
+      "last_description_hash": "fe7152623a5c6f67cc4f3c3f5e32a7ec",
       "consumed_action_ids": [],
       "momentum_exchanges_since": 0,
-      "momentum_next_due_in": 2,
+      "momentum_next_due_in": 3,
       "momentum_last_kind": "new_information",
       "passive_action_streak": 1,
       "recent_player_actions": [
         {
-          "text": "\"Runner, at least tell me where I can find these old crossraods.\"",
+          "text": "Galinor chuckles. \"Sorry, that was forward of me. Who do you think is behind it? Obviously if you knew dead to rights, you wouldn't say so in daylight.\"",
+          "passive": false,
+          "markers": [],
+          "resolution_kind": null,
+          "turn": 4
+        },
+        {
+          "text": "Galinor stares down the runner. \"Nothing? Okay. Theoretically, what would someone want with this action? Acting a patrol, that is.\"",
+          "passive": false,
+          "markers": [],
+          "resolution_kind": null,
+          "turn": 5
+        },
+        {
+          "text": "Galinor sighs. \"I just want to find out more. Can you at least tell me what to do next for that?\"",
           "passive": false,
           "markers": [],
           "resolution_kind": null,
           "turn": 6
-        },
-        {
-          "text": "\u201cWhat should I do next?\u201d",
-          "passive": false,
-          "markers": [],
-          "resolution_kind": null,
-          "turn": 7
-        },
-        {
-          "text": "\u201cDo you have any ideas where this all leads?\u201d",
-          "passive": false,
-          "markers": [],
-          "resolution_kind": null,
-          "turn": 8
         },
         {
           "text": "Galinor waits.",
@@ -59,26 +59,36 @@
             "wait"
           ],
           "resolution_kind": null,
-          "turn": 9
+          "turn": 7
         }
       ],
       "last_player_action_text": "Galinor waits.",
       "last_player_action_passive": true,
       "recent_contextual_leads": [
         {
-          "key": "visible_suspicious_figure_you_can_see_shadows_moving_between_the_stalls_the_crowd_tightening_around_suspicious_figures_increasing_the_air_of_tension_in_the_district",
-          "kind": "visible_suspicious_figure",
-          "subject": "you can see shadows moving between the stalls, the crowd tightening around suspicious figures, increasing the air of tension in the district",
+          "key": "active_event_folks_might_want_to",
+          "kind": "active_event",
+          "subject": "folks might want to",
           "position": "",
           "named": false,
           "positioned": false,
           "mentions": 1,
-          "last_turn": 6
+          "last_turn": 5
         },
         {
-          "key": "visible_suspicious_figure_you_should_investigate_the_man_in_tattered_clothes_who_appears_to_be_waiting_for_something_in_the_crowd",
-          "kind": "visible_suspicious_figure",
-          "subject": "you should investigate the man in tattered clothes who appears to be waiting for something in the crowd",
+          "key": "notice_board_notice_board",
+          "kind": "notice_board",
+          "subject": "notice board",
+          "position": "",
+          "named": false,
+          "positioned": false,
+          "mentions": 1,
+          "last_turn": 5
+        },
+        {
+          "key": "active_event_as_galinor_waits_the_tavern_runner_approaches_him_again_wiping_his_brow",
+          "kind": "active_event",
+          "subject": "as galinor waits, the tavern runner approaches him again, wiping his brow",
           "position": "",
           "named": false,
           "positioned": false,
@@ -86,24 +96,14 @@
           "last_turn": 7
         },
         {
-          "key": "active_event_find_tavern_runner_and_lock_down_where_they_were_last_seen_speaking_to_anyone",
-          "kind": "active_event",
-          "subject": "find tavern runner and lock down where they were last seen speaking to anyone",
+          "key": "visible_suspicious_figure_ive_heard_whispers_of_a_merchant_acting_suspiciously_there",
+          "kind": "visible_suspicious_figure",
+          "subject": "i've heard whispers of a merchant acting suspiciously there",
           "position": "",
           "named": false,
           "positioned": false,
           "mentions": 1,
-          "last_turn": 8
-        },
-        {
-          "key": "notice_board_missing_patrol_notice",
-          "kind": "notice_board",
-          "subject": "missing patrol notice",
-          "position": "",
-          "named": false,
-          "positioned": false,
-          "mentions": 2,
-          "last_turn": 8
+          "last_turn": 7
         },
         {
           "key": "scene_npc_tavern_runner",
@@ -112,60 +112,44 @@
           "position": "",
           "named": true,
           "positioned": false,
-          "mentions": 5,
-          "last_turn": 8
+          "mentions": 6,
+          "last_turn": 7
         },
         {
-          "key": "active_event_tension_rises_and_whispers_of_uncertainty_spread_like_wildfire_among_the_onlookers",
+          "key": "active_event_missing_patrol_rumor",
           "kind": "active_event",
-          "subject": "tension rises, and whispers of uncertainty spread like wildfire among the onlookers",
+          "subject": "missing patrol rumor",
           "position": "",
           "named": false,
           "positioned": false,
           "mentions": 1,
-          "last_turn": 9
+          "last_turn": 7
         }
       ],
       "topic_pressure": {
-        "missing_patrol": {
-          "repeat_count": 2,
+        "responsible_party": {
+          "repeat_count": 3,
           "low_progress_streak": 0,
-          "progress_score_total": 9.0,
-          "last_answer": "The tavern runner glances around nervously before responding. \"The old crossroads? They\u2019re about a mile west, just past the grove. But watch yourself\u2014bandits have been seen lurking there, especially at night. If you're looking for more information or perhaps a guide, you might want to check out the tavern. I hear they have connections there that deal with the shadows.\"\n\nAs he speaks, the rain pours even harder, drumming against the stone streets and causing deeper puddles to ",
-          "last_turn": 4,
+          "progress_score_total": 7.6000000000000005,
+          "last_answer": "As Galinor waits, the tavern runner approaches him again, wiping his brow. He leans in closer, glancing around cautiously. \"If you're looking for information about the missing patrol, you might want to head to the old trading crossroads. I've heard whispers of a merchant acting suspiciously there. Just be careful; things are tense.\"",
+          "last_turn": 5,
           "speaker_targets": {
             "__scene__": {
               "repeat_count": 3,
               "low_progress_streak": 0,
               "patience": 3,
-              "last_turn": 4
+              "last_turn": 5
             }
           },
-          "last_player_input": "Galinor shakes his head. \"I know you're nervous, but this important. Who's behind this?\""
-        },
-        "topic:next": {
-          "repeat_count": 2,
-          "low_progress_streak": 0,
-          "progress_score_total": 7.4,
-          "last_answer": "Galinor's patience is met with a sudden commotion as a nearby crowd member, eyes wide with fear, suddenly shouts, \"They\u2019re coming! The bandits!\" The crowd shifts uneasily, glancing towards the muddy road leading west where the old crossroads are situated. The tension rises, and whispers of uncertainty spread like wildfire among the onlookers.",
-          "last_turn": 8,
-          "speaker_targets": {
-            "__scene__": {
-              "repeat_count": 2,
-              "low_progress_streak": 0,
-              "patience": 3,
-              "last_turn": 8
-            }
-          },
-          "last_player_input": "\u201cDo you have any ideas where this all leads?\u201d"
+          "last_player_input": "Galinor stares down the runner. \"Nothing? Okay. Theoretically, what would someone want with this action? Acting a patrol, that is.\""
         }
       },
-      "topic_pressure_last_topic_key": "topic:next",
+      "topic_pressure_last_topic_key": "responsible_party",
       "topic_pressure_current": {
-        "topic_key": "topic:next",
+        "topic_key": "responsible_party",
         "speaker_key": "__scene__",
-        "turn": 8,
-        "player_text": "\u201cDo you have any ideas where this all leads?\u201d",
+        "turn": 5,
+        "player_text": "Galinor stares down the runner. \"Nothing? Okay. Theoretically, what would someone want with this action? Acting a patrol, that is.\"",
         "interaction_kind": "",
         "interaction_mode": "none",
         "social_intent_class": "",
@@ -190,10 +174,10 @@
   "clue_knowledge": {},
   "debug_traces": [
     {
-      "timestamp": "2026-03-22T16:58:36.135735Z",
+      "timestamp": "2026-03-22T20:32:58.732303Z",
       "source": "chat",
       "action_type": "chat",
-      "raw_input": "Begin.",
+      "raw_input": "Begin the game.",
       "turn_stage_order": [
         "player_input",
         "intent_normalization_expansion",
@@ -206,14 +190,43 @@
         "response_debug_packaging"
       ],
       "incoming_payload": {
-        "text": "Begin."
+        "text": "Begin the game."
       },
-      "parsed_intent": null,
+      "parsed_intent": {
+        "id": "campaign_start_opening_scene",
+        "label": "Begin the game.",
+        "type": "scene_opening",
+        "prompt": "Begin the game.",
+        "targetSceneId": "frontier_gate",
+        "target_scene_id": "frontier_gate"
+      },
       "segmented_turn": {
-        "declared_action_text": "Begin."
+        "declared_action_text": "Begin the game."
       },
-      "normalized_action": null,
+      "normalized_action": {
+        "id": "campaign_start_opening_scene",
+        "label": "Begin the game.",
+        "type": "scene_opening",
+        "prompt": "Begin the game.",
+        "targetSceneId": "frontier_gate",
+        "target_scene_id": "frontier_gate"
+      },
       "resolution": {
+        "kind": "scene_opening",
+        "action_id": "campaign_start_opening_scene",
+        "label": "Begin the game.",
+        "prompt": "Begin the game.",
+        "success": true,
+        "resolved_transition": false,
+        "target_scene_id": "frontier_gate",
+        "clue_id": null,
+        "discovered_clues": [],
+        "state_changes": {
+          "opening_scene_turn": true,
+          "arrived_at_scene": true,
+          "new_scene_context_available": true
+        },
+        "hint": "Campaign opening turn: narrate the active scene as an immediate playable situation, with concrete opportunities grounded in the current scene state.",
         "world_tick_events": []
       },
       "scene_before": "frontier_gate",
@@ -224,13 +237,29 @@
       ],
       "turn_trace": {
         "source": "chat",
-        "player_input": "Begin.",
+        "player_input": "Begin the game.",
         "intent": {
-          "parsed": null,
-          "segmented_turn": {
-            "declared_action_text": "Begin."
+          "parsed": {
+            "id": "campaign_start_opening_scene",
+            "label": "Begin the game.",
+            "type": "scene_opening",
+            "prompt": "Begin the game.",
+            "targetSceneId": "frontier_gate",
+            "target_scene_id": "frontier_gate"
           },
-          "normalized": null,
+          "segmented_turn": {
+            "declared_action_text": "Begin the game."
+          },
+          "normalized": {
+            "id": "campaign_start_opening_scene",
+            "label": "Begin the game.",
+            "type": "scene_opening",
+            "prompt": "Begin the game.",
+            "targetSceneId": "frontier_gate",
+            "target_scene_id": "frontier_gate",
+            "targetEntityId": null,
+            "target_id": null
+          },
           "implied_context": {
             "applied": false,
             "cases": [],
@@ -239,13 +268,17 @@
         },
         "classification": {
           "action_type": "chat",
-          "resolved_kind": null,
+          "resolved_kind": "scene_opening",
           "requires_check": false
         },
-        "resolution_path": "chat_engine",
+        "resolution_path": "exploration_engine",
         "authoritative_state_changes": {
           "scene_transition": null,
-          "resolution_state_changes": {},
+          "resolution_state_changes": {
+            "opening_scene_turn": true,
+            "arrived_at_scene": true,
+            "new_scene_context_available": true
+          },
           "resolution_world_updates": [],
           "check_request": null
         },
@@ -259,7 +292,7 @@
         },
         "narration_obligations": {
           "is_opening_scene": true,
-          "must_advance_scene": false,
+          "must_advance_scene": true,
           "should_answer_active_npc": false,
           "avoid_input_echo": true,
           "avoid_player_action_restatement": true,
@@ -312,10 +345,10 @@
       "error": null
     },
     {
-      "timestamp": "2026-03-22T17:02:01.043158Z",
+      "timestamp": "2026-03-22T20:33:59.864363Z",
       "source": "chat",
       "action_type": "chat",
-      "raw_input": "Galinor approaches the runner for questioning. \u201cYou! What happened to the missing patrol?\u201d",
+      "raw_input": "\"Runner...\" Galinor staggers over before taking a seat. \"Serve me some soup. That and tell me about this missing patrol...\"",
       "turn_stage_order": [
         "player_input",
         "intent_normalization_expansion",
@@ -328,12 +361,12 @@
         "response_debug_packaging"
       ],
       "incoming_payload": {
-        "text": "Galinor approaches the runner for questioning. \u201cYou! What happened to the missing patrol?\u201d"
+        "text": "\"Runner...\" Galinor staggers over before taking a seat. \"Serve me some soup. That and tell me about this missing patrol...\""
       },
       "parsed_intent": null,
       "segmented_turn": {
-        "declared_action_text": "Galinor approaches the runner for questioning. \u201cYou! \u201d",
-        "adjudication_question_text": "What happened to the missing patrol?"
+        "spoken_text": "Runner... Serve me some soup. That and tell me about this missing patrol...",
+        "declared_action_text": "Galinor staggers over before taking a seat."
       },
       "normalized_action": null,
       "resolution": {
@@ -347,12 +380,12 @@
       ],
       "turn_trace": {
         "source": "chat",
-        "player_input": "Galinor approaches the runner for questioning. \u201cYou! What happened to the missing patrol?\u201d",
+        "player_input": "\"Runner...\" Galinor staggers over before taking a seat. \"Serve me some soup. That and tell me about this missing patrol...\"",
         "intent": {
           "parsed": null,
           "segmented_turn": {
-            "declared_action_text": "Galinor approaches the runner for questioning. \u201cYou! \u201d",
-            "adjudication_question_text": "What happened to the missing patrol?"
+            "spoken_text": "Runner... Serve me some soup. That and tell me about this missing patrol...",
+            "declared_action_text": "Galinor staggers over before taking a seat."
           },
           "normalized": null,
           "implied_context": {
@@ -436,10 +469,10 @@
       "error": null
     },
     {
-      "timestamp": "2026-03-22T17:04:28.414421Z",
+      "timestamp": "2026-03-22T20:34:59.513647Z",
       "source": "chat",
       "action_type": "chat",
-      "raw_input": "\"Nothing to say runner? Who attacked them?\"",
+      "raw_input": "Galinor takes a deep breath after his first sip. \u201cWho attacked them? Surely patrols are respected here?\u201d",
       "turn_stage_order": [
         "player_input",
         "intent_normalization_expansion",
@@ -452,11 +485,12 @@
         "response_debug_packaging"
       ],
       "incoming_payload": {
-        "text": "\"Nothing to say runner? Who attacked them?\""
+        "text": "Galinor takes a deep breath after his first sip. \u201cWho attacked them? Surely patrols are respected here?\u201d"
       },
       "parsed_intent": null,
       "segmented_turn": {
-        "spoken_text": "Nothing to say runner? Who attacked them?"
+        "declared_action_text": "Galinor takes a deep breath after his first sip. \u201cWho attacked them? \u201d",
+        "adjudication_question_text": "Surely patrols are respected here?"
       },
       "normalized_action": null,
       "resolution": {
@@ -470,11 +504,12 @@
       ],
       "turn_trace": {
         "source": "chat",
-        "player_input": "\"Nothing to say runner? Who attacked them?\"",
+        "player_input": "Galinor takes a deep breath after his first sip. \u201cWho attacked them? Surely patrols are respected here?\u201d",
         "intent": {
           "parsed": null,
           "segmented_turn": {
-            "spoken_text": "Nothing to say runner? Who attacked them?"
+            "declared_action_text": "Galinor takes a deep breath after his first sip. \u201cWho attacked them? \u201d",
+            "adjudication_question_text": "Surely patrols are respected here?"
           },
           "normalized": null,
           "implied_context": {
@@ -558,10 +593,10 @@
       "error": null
     },
     {
-      "timestamp": "2026-03-22T17:12:01.342002Z",
+      "timestamp": "2026-03-22T20:36:17.262494Z",
       "source": "chat",
       "action_type": "chat",
-      "raw_input": "Galinor shakes his head. \"I know you're nervous, but this important. Who's behind this?\"",
+      "raw_input": "Galinor chuckles. \"Sorry, that was forward of me. Who do you think is behind it? Obviously if you knew dead to rights, you wouldn't say so in daylight.\"",
       "turn_stage_order": [
         "player_input",
         "intent_normalization_expansion",
@@ -574,12 +609,12 @@
         "response_debug_packaging"
       ],
       "incoming_payload": {
-        "text": "Galinor shakes his head. \"I know you're nervous, but this important. Who's behind this?\""
+        "text": "Galinor chuckles. \"Sorry, that was forward of me. Who do you think is behind it? Obviously if you knew dead to rights, you wouldn't say so in daylight.\""
       },
       "parsed_intent": null,
       "segmented_turn": {
-        "spoken_text": "I know you're nervous, but this important. Who's behind this?",
-        "declared_action_text": "Galinor shakes his head."
+        "spoken_text": "Sorry, that was forward of me. Who do you think is behind it? Obviously if you knew dead to rights, you wouldn't say so in daylight.",
+        "declared_action_text": "Galinor chuckles."
       },
       "normalized_action": null,
       "resolution": {
@@ -593,12 +628,12 @@
       ],
       "turn_trace": {
         "source": "chat",
-        "player_input": "Galinor shakes his head. \"I know you're nervous, but this important. Who's behind this?\"",
+        "player_input": "Galinor chuckles. \"Sorry, that was forward of me. Who do you think is behind it? Obviously if you knew dead to rights, you wouldn't say so in daylight.\"",
         "intent": {
           "parsed": null,
           "segmented_turn": {
-            "spoken_text": "I know you're nervous, but this important. Who's behind this?",
-            "declared_action_text": "Galinor shakes his head."
+            "spoken_text": "Sorry, that was forward of me. Who do you think is behind it? Obviously if you knew dead to rights, you wouldn't say so in daylight.",
+            "declared_action_text": "Galinor chuckles."
           },
           "normalized": null,
           "implied_context": {
@@ -682,10 +717,10 @@
       "error": null
     },
     {
-      "timestamp": "2026-03-22T17:12:42.666344Z",
+      "timestamp": "2026-03-22T20:37:21.074194Z",
       "source": "chat",
       "action_type": "chat",
-      "raw_input": "\"Can you at least tell me what they're planning?\"",
+      "raw_input": "Galinor stares down the runner. \"Nothing? Okay. Theoretically, what would someone want with this action? Acting a patrol, that is.\"",
       "turn_stage_order": [
         "player_input",
         "intent_normalization_expansion",
@@ -698,18 +733,143 @@
         "response_debug_packaging"
       ],
       "incoming_payload": {
-        "text": "\"Can you at least tell me what they're planning?\""
+        "text": "Galinor stares down the runner. \"Nothing? Okay. Theoretically, what would someone want with this action? Acting a patrol, that is.\""
       },
       "parsed_intent": null,
       "segmented_turn": {
-        "spoken_text": "Can you at least tell me what they're planning?"
+        "spoken_text": "Nothing? Okay. Theoretically, what would someone want with this action? Acting a patrol, that is.",
+        "declared_action_text": "Galinor stares down the runner."
+      },
+      "normalized_action": null,
+      "resolution": {
+        "world_tick_events": []
+      },
+      "scene_before": "frontier_gate",
+      "scene_after": "frontier_gate",
+      "clue_updates": [],
+      "world_flag_updates": [
+        "clock:time_pressure=5"
+      ],
+      "turn_trace": {
+        "source": "chat",
+        "player_input": "Galinor stares down the runner. \"Nothing? Okay. Theoretically, what would someone want with this action? Acting a patrol, that is.\"",
+        "intent": {
+          "parsed": null,
+          "segmented_turn": {
+            "spoken_text": "Nothing? Okay. Theoretically, what would someone want with this action? Acting a patrol, that is.",
+            "declared_action_text": "Galinor stares down the runner."
+          },
+          "normalized": null,
+          "implied_context": {
+            "applied": false,
+            "cases": [],
+            "target_id": null
+          }
+        },
+        "classification": {
+          "action_type": "chat",
+          "resolved_kind": null,
+          "requires_check": false
+        },
+        "resolution_path": "chat_engine",
+        "authoritative_state_changes": {
+          "scene_transition": null,
+          "resolution_state_changes": {},
+          "resolution_world_updates": [],
+          "check_request": null
+        },
+        "interaction_after": {
+          "active_interaction_target_id": null,
+          "active_interaction_kind": null,
+          "interaction_mode": "none",
+          "engagement_level": "none",
+          "conversation_privacy": null,
+          "player_position_context": null
+        },
+        "narration_obligations": {
+          "is_opening_scene": false,
+          "must_advance_scene": false,
+          "should_answer_active_npc": false,
+          "avoid_input_echo": true,
+          "avoid_player_action_restatement": true,
+          "prefer_structured_turn_summary": true,
+          "active_npc_reply_expected": false,
+          "active_npc_reply_kind": null,
+          "scene_momentum_due": false,
+          "scene_momentum_exchanges_since": 0,
+          "scene_momentum_next_due_in": 2
+        },
+        "clues": {
+          "discovered_texts": [],
+          "presentation_changes": [],
+          "known_counts": {
+            "implicit": 0,
+            "explicit": 0,
+            "actionable": 0
+          }
+        },
+        "affordances_after": [
+          {
+            "id": "leave_for_refugees_crowd_the_muddy_approach_road",
+            "type": "investigate",
+            "label": "Leave for Refugees crowd the muddy approach road"
+          },
+          {
+            "id": "examine_a_notice_board_lists_new_taxes",
+            "type": "investigate",
+            "label": "Examine A notice board lists new taxes"
+          },
+          {
+            "id": "talk_to_a_tavern_runner_loudly_offers_rumor_a",
+            "type": "investigate",
+            "label": "Talk to A tavern runner loudly offers rumor a"
+          },
+          {
+            "id": "examine_the_notice_board_reveals_new_taxes",
+            "type": "investigate",
+            "label": "Examine The notice board reveals new taxes"
+          },
+          {
+            "id": "examine_the_job_postings_suggest_a_need_for_labor",
+            "type": "investigate",
+            "label": "Examine the Job postings suggest a need for labor"
+          }
+        ]
+      },
+      "gpt_called": true,
+      "response_ok": true,
+      "error": null
+    },
+    {
+      "timestamp": "2026-03-22T20:38:10.797888Z",
+      "source": "chat",
+      "action_type": "chat",
+      "raw_input": "Galinor sighs. \"I just want to find out more. Can you at least tell me what to do next for that?\"",
+      "turn_stage_order": [
+        "player_input",
+        "intent_normalization_expansion",
+        "action_classification",
+        "engine_resolution",
+        "authoritative_state_mutation",
+        "prompt_context_construction",
+        "gpt_narration",
+        "affordance_derivation",
+        "response_debug_packaging"
+      ],
+      "incoming_payload": {
+        "text": "Galinor sighs. \"I just want to find out more. Can you at least tell me what to do next for that?\""
+      },
+      "parsed_intent": null,
+      "segmented_turn": {
+        "spoken_text": "I just want to find out more. Can you at least tell me what to do next for that?",
+        "declared_action_text": "Galinor sighs."
       },
       "normalized_action": null,
       "resolution": {
         "kind": "adjudication_query",
         "action_id": "adjudication_query",
-        "label": "\"Can you at least tell me what they're planning?\"",
-        "prompt": "\"Can you at least tell me what they're planning?\"",
+        "label": "Galinor sighs. \"I just want to find out more. Can you at least tell me what to do next for that?\"",
+        "prompt": "Galinor sighs. \"I just want to find out more. Can you at least tell me what to do next for that?\"",
         "success": null,
         "resolved_transition": false,
         "target_scene_id": null,
@@ -727,7 +887,8 @@
         "check_request": null,
         "metadata": {
           "turn_segmentation": {
-            "spoken_text": "Can you at least tell me what they're planning?"
+            "spoken_text": "I just want to find out more. Can you at least tell me what to do next for that?",
+            "declared_action_text": "Galinor sighs."
           }
         },
         "world_tick_events": []
@@ -736,15 +897,16 @@
       "scene_after": "frontier_gate",
       "clue_updates": [],
       "world_flag_updates": [
-        "clock:time_pressure=5"
+        "clock:time_pressure=6"
       ],
       "turn_trace": {
         "source": "chat",
-        "player_input": "\"Can you at least tell me what they're planning?\"",
+        "player_input": "Galinor sighs. \"I just want to find out more. Can you at least tell me what to do next for that?\"",
         "intent": {
           "parsed": null,
           "segmented_turn": {
-            "spoken_text": "Can you at least tell me what they're planning?"
+            "spoken_text": "I just want to find out more. Can you at least tell me what to do next for that?",
+            "declared_action_text": "Galinor sighs."
           },
           "normalized": null,
           "implied_context": {
@@ -828,375 +990,7 @@
       "error": null
     },
     {
-      "timestamp": "2026-03-22T17:13:21.915736Z",
-      "source": "chat",
-      "action_type": "chat",
-      "raw_input": "\"Runner, at least tell me where I can find these old crossraods.\"",
-      "turn_stage_order": [
-        "player_input",
-        "intent_normalization_expansion",
-        "action_classification",
-        "engine_resolution",
-        "authoritative_state_mutation",
-        "prompt_context_construction",
-        "gpt_narration",
-        "affordance_derivation",
-        "response_debug_packaging"
-      ],
-      "incoming_payload": {
-        "text": "\"Runner, at least tell me where I can find these old crossraods.\""
-      },
-      "parsed_intent": null,
-      "segmented_turn": {
-        "spoken_text": "Runner, at least tell me where I can find these old crossraods."
-      },
-      "normalized_action": null,
-      "resolution": {
-        "world_tick_events": []
-      },
-      "scene_before": "frontier_gate",
-      "scene_after": "frontier_gate",
-      "clue_updates": [],
-      "world_flag_updates": [
-        "clock:time_pressure=6"
-      ],
-      "turn_trace": {
-        "source": "chat",
-        "player_input": "\"Runner, at least tell me where I can find these old crossraods.\"",
-        "intent": {
-          "parsed": null,
-          "segmented_turn": {
-            "spoken_text": "Runner, at least tell me where I can find these old crossraods."
-          },
-          "normalized": null,
-          "implied_context": {
-            "applied": false,
-            "cases": [],
-            "target_id": null
-          }
-        },
-        "classification": {
-          "action_type": "chat",
-          "resolved_kind": null,
-          "requires_check": false
-        },
-        "resolution_path": "chat_engine",
-        "authoritative_state_changes": {
-          "scene_transition": null,
-          "resolution_state_changes": {},
-          "resolution_world_updates": [],
-          "check_request": null
-        },
-        "interaction_after": {
-          "active_interaction_target_id": null,
-          "active_interaction_kind": null,
-          "interaction_mode": "none",
-          "engagement_level": "none",
-          "conversation_privacy": null,
-          "player_position_context": null
-        },
-        "narration_obligations": {
-          "is_opening_scene": false,
-          "must_advance_scene": false,
-          "should_answer_active_npc": false,
-          "avoid_input_echo": true,
-          "avoid_player_action_restatement": true,
-          "prefer_structured_turn_summary": true,
-          "active_npc_reply_expected": false,
-          "active_npc_reply_kind": null,
-          "scene_momentum_due": false,
-          "scene_momentum_exchanges_since": 0,
-          "scene_momentum_next_due_in": 2
-        },
-        "clues": {
-          "discovered_texts": [],
-          "presentation_changes": [],
-          "known_counts": {
-            "implicit": 0,
-            "explicit": 0,
-            "actionable": 0
-          }
-        },
-        "affordances_after": [
-          {
-            "id": "leave_for_refugees_crowd_the_muddy_approach_road",
-            "type": "investigate",
-            "label": "Leave for Refugees crowd the muddy approach road"
-          },
-          {
-            "id": "examine_a_notice_board_lists_new_taxes",
-            "type": "investigate",
-            "label": "Examine A notice board lists new taxes"
-          },
-          {
-            "id": "talk_to_a_tavern_runner_loudly_offers_rumor_a",
-            "type": "investigate",
-            "label": "Talk to A tavern runner loudly offers rumor a"
-          },
-          {
-            "id": "examine_the_notice_board_reveals_new_taxes",
-            "type": "investigate",
-            "label": "Examine The notice board reveals new taxes"
-          },
-          {
-            "id": "examine_the_job_postings_suggest_a_need_for_labor",
-            "type": "investigate",
-            "label": "Examine the Job postings suggest a need for labor"
-          }
-        ]
-      },
-      "gpt_called": true,
-      "response_ok": true,
-      "error": null
-    },
-    {
-      "timestamp": "2026-03-22T17:13:35.848545Z",
-      "source": "chat",
-      "action_type": "chat",
-      "raw_input": "\u201cWhat should I do next?\u201d",
-      "turn_stage_order": [
-        "player_input",
-        "intent_normalization_expansion",
-        "action_classification",
-        "engine_resolution",
-        "authoritative_state_mutation",
-        "prompt_context_construction",
-        "gpt_narration",
-        "affordance_derivation",
-        "response_debug_packaging"
-      ],
-      "incoming_payload": {
-        "text": "\u201cWhat should I do next?\u201d"
-      },
-      "parsed_intent": null,
-      "segmented_turn": {
-        "declared_action_text": "\u201cWhat should I do next?\u201d"
-      },
-      "normalized_action": null,
-      "resolution": {
-        "world_tick_events": []
-      },
-      "scene_before": "frontier_gate",
-      "scene_after": "frontier_gate",
-      "clue_updates": [],
-      "world_flag_updates": [
-        "clock:time_pressure=7"
-      ],
-      "turn_trace": {
-        "source": "chat",
-        "player_input": "\u201cWhat should I do next?\u201d",
-        "intent": {
-          "parsed": null,
-          "segmented_turn": {
-            "declared_action_text": "\u201cWhat should I do next?\u201d"
-          },
-          "normalized": null,
-          "implied_context": {
-            "applied": false,
-            "cases": [],
-            "target_id": null
-          }
-        },
-        "classification": {
-          "action_type": "chat",
-          "resolved_kind": null,
-          "requires_check": false
-        },
-        "resolution_path": "chat_engine",
-        "authoritative_state_changes": {
-          "scene_transition": null,
-          "resolution_state_changes": {},
-          "resolution_world_updates": [],
-          "check_request": null
-        },
-        "interaction_after": {
-          "active_interaction_target_id": null,
-          "active_interaction_kind": null,
-          "interaction_mode": "none",
-          "engagement_level": "none",
-          "conversation_privacy": null,
-          "player_position_context": null
-        },
-        "narration_obligations": {
-          "is_opening_scene": false,
-          "must_advance_scene": false,
-          "should_answer_active_npc": false,
-          "avoid_input_echo": true,
-          "avoid_player_action_restatement": true,
-          "prefer_structured_turn_summary": true,
-          "active_npc_reply_expected": false,
-          "active_npc_reply_kind": null,
-          "scene_momentum_due": false,
-          "scene_momentum_exchanges_since": 0,
-          "scene_momentum_next_due_in": 2
-        },
-        "clues": {
-          "discovered_texts": [],
-          "presentation_changes": [],
-          "known_counts": {
-            "implicit": 0,
-            "explicit": 0,
-            "actionable": 0
-          }
-        },
-        "affordances_after": [
-          {
-            "id": "leave_for_refugees_crowd_the_muddy_approach_road",
-            "type": "investigate",
-            "label": "Leave for Refugees crowd the muddy approach road"
-          },
-          {
-            "id": "examine_a_notice_board_lists_new_taxes",
-            "type": "investigate",
-            "label": "Examine A notice board lists new taxes"
-          },
-          {
-            "id": "talk_to_a_tavern_runner_loudly_offers_rumor_a",
-            "type": "investigate",
-            "label": "Talk to A tavern runner loudly offers rumor a"
-          },
-          {
-            "id": "examine_the_notice_board_reveals_new_taxes",
-            "type": "investigate",
-            "label": "Examine The notice board reveals new taxes"
-          },
-          {
-            "id": "examine_the_job_postings_suggest_a_need_for_labor",
-            "type": "investigate",
-            "label": "Examine the Job postings suggest a need for labor"
-          }
-        ]
-      },
-      "gpt_called": true,
-      "response_ok": true,
-      "error": null
-    },
-    {
-      "timestamp": "2026-03-22T17:14:17.376312Z",
-      "source": "chat",
-      "action_type": "chat",
-      "raw_input": "\u201cDo you have any ideas where this all leads?\u201d",
-      "turn_stage_order": [
-        "player_input",
-        "intent_normalization_expansion",
-        "action_classification",
-        "engine_resolution",
-        "authoritative_state_mutation",
-        "prompt_context_construction",
-        "gpt_narration",
-        "affordance_derivation",
-        "response_debug_packaging"
-      ],
-      "incoming_payload": {
-        "text": "\u201cDo you have any ideas where this all leads?\u201d"
-      },
-      "parsed_intent": null,
-      "segmented_turn": {
-        "declared_action_text": "\u201d",
-        "adjudication_question_text": "\u201cDo you have any ideas where this all leads?"
-      },
-      "normalized_action": null,
-      "resolution": {
-        "world_tick_events": []
-      },
-      "scene_before": "frontier_gate",
-      "scene_after": "frontier_gate",
-      "clue_updates": [],
-      "world_flag_updates": [
-        "clock:time_pressure=8"
-      ],
-      "turn_trace": {
-        "source": "chat",
-        "player_input": "\u201cDo you have any ideas where this all leads?\u201d",
-        "intent": {
-          "parsed": null,
-          "segmented_turn": {
-            "declared_action_text": "\u201d",
-            "adjudication_question_text": "\u201cDo you have any ideas where this all leads?"
-          },
-          "normalized": null,
-          "implied_context": {
-            "applied": false,
-            "cases": [],
-            "target_id": null
-          }
-        },
-        "classification": {
-          "action_type": "chat",
-          "resolved_kind": null,
-          "requires_check": false
-        },
-        "resolution_path": "chat_engine",
-        "authoritative_state_changes": {
-          "scene_transition": null,
-          "resolution_state_changes": {},
-          "resolution_world_updates": [],
-          "check_request": null
-        },
-        "interaction_after": {
-          "active_interaction_target_id": null,
-          "active_interaction_kind": null,
-          "interaction_mode": "none",
-          "engagement_level": "none",
-          "conversation_privacy": null,
-          "player_position_context": null
-        },
-        "narration_obligations": {
-          "is_opening_scene": false,
-          "must_advance_scene": false,
-          "should_answer_active_npc": false,
-          "avoid_input_echo": true,
-          "avoid_player_action_restatement": true,
-          "prefer_structured_turn_summary": true,
-          "active_npc_reply_expected": false,
-          "active_npc_reply_kind": null,
-          "scene_momentum_due": false,
-          "scene_momentum_exchanges_since": 0,
-          "scene_momentum_next_due_in": 2
-        },
-        "clues": {
-          "discovered_texts": [],
-          "presentation_changes": [],
-          "known_counts": {
-            "implicit": 0,
-            "explicit": 0,
-            "actionable": 0
-          }
-        },
-        "affordances_after": [
-          {
-            "id": "leave_for_refugees_crowd_the_muddy_approach_road",
-            "type": "investigate",
-            "label": "Leave for Refugees crowd the muddy approach road"
-          },
-          {
-            "id": "examine_a_notice_board_lists_new_taxes",
-            "type": "investigate",
-            "label": "Examine A notice board lists new taxes"
-          },
-          {
-            "id": "talk_to_a_tavern_runner_loudly_offers_rumor_a",
-            "type": "investigate",
-            "label": "Talk to A tavern runner loudly offers rumor a"
-          },
-          {
-            "id": "examine_the_notice_board_reveals_new_taxes",
-            "type": "investigate",
-            "label": "Examine The notice board reveals new taxes"
-          },
-          {
-            "id": "examine_the_job_postings_suggest_a_need_for_labor",
-            "type": "investigate",
-            "label": "Examine the Job postings suggest a need for labor"
-          }
-        ]
-      },
-      "gpt_called": true,
-      "response_ok": true,
-      "error": null
-    },
-    {
-      "timestamp": "2026-03-22T17:14:53.122517Z",
+      "timestamp": "2026-03-22T20:38:18.912303Z",
       "source": "chat",
       "action_type": "chat",
       "raw_input": "Galinor waits.",
@@ -1226,7 +1020,7 @@
       "scene_after": "frontier_gate",
       "clue_updates": [],
       "world_flag_updates": [
-        "clock:time_pressure=9"
+        "clock:time_pressure=7"
       ],
       "turn_trace": {
         "source": "chat",
@@ -1318,7 +1112,7 @@
       "error": null
     }
   ],
-  "last_saved_at": "2026-03-22T17:14:58.205302Z",
+  "last_saved_at": "2026-03-22T20:38:24.123158Z",
   "npc_runtime": {},
   "interaction_context": {
     "active_interaction_target_id": null,

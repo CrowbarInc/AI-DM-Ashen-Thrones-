@@ -103,6 +103,10 @@ from game.output_sanitizer import (
     strip_serialized_payload_fragments,
 )
 from game.final_emission_gate import apply_final_emission_gate
+from game.social_exchange_emission import (
+    is_route_illegal_global_or_sanitizer_fallback_text,
+    strict_social_emission_will_apply,
+)
 from game.utils import slugify, utc_iso_now
 from game.world import advance_world_tick, apply_world_updates, apply_resolution_world_updates
 from game.clocks import get_or_init_clocks, advance_clock, DEFAULT_CLOCKS
@@ -1561,6 +1565,13 @@ def _build_turn_response_payload(
     include_resolution: bool,
 ) -> dict:
     """Stages 8-9: derive affordances from authoritative state and package API response."""
+    state = compose_state()  # Includes affordances derived from saved authoritative scene/session/world.
+    state_session = state.get("session") if isinstance(state.get("session"), dict) else {}
+    state_world = state.get("world") if isinstance(state.get("world"), dict) else {}
+    state_scene = state.get("scene") if isinstance(state.get("scene"), dict) else {}
+    scene_obj = state_scene.get("scene") if isinstance(state_scene.get("scene"), dict) else {}
+    scene_id = str(scene_obj.get("id") or "").strip()
+
     if isinstance(gm, dict):
         gm = dict(gm)
         raw_text = gm.get("player_facing_text") if isinstance(gm.get("player_facing_text"), str) else ""
@@ -1571,24 +1582,69 @@ def _build_turn_response_payload(
                 if isinstance(extracted, str) and extracted.strip()
                 else strip_serialized_payload_fragments(raw_text)
             )
-        gm["player_facing_text"] = sanitize_player_facing_output(
-            raw_text,
-            {
-                "resolution": resolution if isinstance(resolution, dict) else None,
-                "include_resolution": bool(include_resolution),
-            },
+        tag_list = gm.get("tags") if isinstance(gm.get("tags"), list) else []
+        tag_list = [str(t) for t in tag_list if isinstance(t, str)]
+        strict_social_turn = strict_social_emission_will_apply(
+            resolution if isinstance(resolution, dict) else None,
+            state_session,
+            state_world,
+            scene_id,
         )
-    state = compose_state()  # Includes affordances derived from saved authoritative scene/session/world.
-    state_session = state.get("session") if isinstance(state.get("session"), dict) else {}
-    state_scene = state.get("scene") if isinstance(state.get("scene"), dict) else {}
-    scene_obj = state_scene.get("scene") if isinstance(state_scene.get("scene"), dict) else {}
-    scene_id = str(scene_obj.get("id") or "").strip()
-    gm = apply_final_emission_gate(
-        gm,
-        resolution=resolution if isinstance(resolution, dict) else None,
-        session=state_session,
-        scene_id=scene_id,
-    )
+
+        san_ctx_base = {
+            "resolution": resolution if isinstance(resolution, dict) else None,
+            "include_resolution": bool(include_resolution),
+            "session": state_session,
+            "scene_id": scene_id,
+            "world": state_world,
+            "tags": tag_list,
+        }
+
+        if strict_social_turn:
+            gm["player_facing_text"] = raw_text
+            gm = apply_final_emission_gate(
+                gm,
+                resolution=resolution if isinstance(resolution, dict) else None,
+                session=state_session,
+                scene_id=scene_id,
+                world=state_world,
+            )
+            sealed = gm.get("player_facing_text") if isinstance(gm.get("player_facing_text"), str) else ""
+            gm["player_facing_text"] = sanitize_player_facing_output(
+                sealed,
+                {
+                    **san_ctx_base,
+                    "tags": gm.get("tags") if isinstance(gm.get("tags"), list) else tag_list,
+                    "post_final_emission_gate": True,
+                    "strict_social_terminal_clamp": True,
+                    "gate_sealed_text": sealed,
+                },
+            )
+            after = gm.get("player_facing_text") if isinstance(gm.get("player_facing_text"), str) else ""
+            meta = gm.get("_final_emission_meta") if isinstance(gm.get("_final_emission_meta"), dict) else {}
+            mutated = str(sealed or "").strip() != str(after or "").strip()
+            if mutated:
+                meta = {**meta, "post_gate_mutation_detected": True}
+            if is_route_illegal_global_or_sanitizer_fallback_text(after) and not is_route_illegal_global_or_sanitizer_fallback_text(
+                sealed
+            ):
+                gm["player_facing_text"] = sealed
+                meta = {
+                    **meta,
+                    "post_gate_sanitize_clamped": True,
+                    "final_emitted_source": meta.get("final_emitted_source") or "unknown_post_gate_writer",
+                }
+            gm["_final_emission_meta"] = meta
+        else:
+            gm["player_facing_text"] = sanitize_player_facing_output(raw_text, san_ctx_base)
+            gm = apply_final_emission_gate(
+                gm,
+                resolution=resolution if isinstance(resolution, dict) else None,
+                session=state_session,
+                scene_id=scene_id,
+                world=state_world,
+            )
+
     payload: dict = {'ok': True, 'gm_output': gm, **state}
     if include_resolution:
         payload['resolution'] = resolution

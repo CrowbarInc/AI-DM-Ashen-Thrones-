@@ -4,6 +4,13 @@ import json
 import re
 from typing import Any, Dict
 
+from game.social_exchange_emission import (
+    apply_strict_social_sentence_ownership_filter,
+    coerce_resolution_for_strict_social_emission,
+    social_fallback_line_for_sanitizer,
+    strict_social_emission_will_apply,
+)
+
 # Centralized exact phrases that must never leak as-is.
 DISALLOWED_EXACT_PHRASES: tuple[str, ...] = (
     "I need a more concrete action or target to resolve that procedurally.",
@@ -147,6 +154,12 @@ _CONJUNCTION_COLLISION_PATTERNS: tuple[re.Pattern[str], ...] = (
     re.compile(r"\bor\s+(?:approach|investigate|observe|follow|examine|check|track|ask)\b", re.IGNORECASE),
     re.compile(r"\band\s+remains\s+within\s+reach\b", re.IGNORECASE),
     re.compile(r"\bor\s+[a-z]+ing\b", re.IGNORECASE),
+)
+
+# Split `...says. "Next quoted beat"` so leakage repair on the first beat cannot consume the second.
+_CONSECUTIVE_ATTRIBUTED_QUOTE_CUT = re.compile(
+    r'\b(?:says|asks|adds|replies|murmurs|whispers|shouts|calls)\.\s+(?=")',
+    re.IGNORECASE,
 )
 
 _FINAL_INTERNAL_STYLE_PATTERNS: tuple[re.Pattern[str], ...] = (
@@ -333,6 +346,17 @@ def _has_unrecoverable_fragment_shape(text: str) -> bool:
     return False
 
 
+def _is_active_social_exchange_context(context: Dict[str, Any] | None) -> bool:
+    if not isinstance(context, dict):
+        return False
+    sess = context.get("session") if isinstance(context.get("session"), dict) else None
+    world = context.get("world") if isinstance(context.get("world"), dict) else None
+    scene_id = str(context.get("scene_id") or "").strip()
+    res = context.get("resolution") if isinstance(context.get("resolution"), dict) else None
+    _eff, active, _reason = coerce_resolution_for_strict_social_emission(res, sess, world, scene_id)
+    return active
+
+
 def _context_prefers_npc_uncertainty(context: Dict[str, Any] | None) -> bool:
     if not isinstance(context, dict):
         return False
@@ -384,9 +408,13 @@ def _infer_uncertainty_source_mode(
     explicit_mode: str | None = None,
 ) -> str:
     if explicit_mode in {"npc", "narration"}:
-        return "npc_ignorance" if explicit_mode == "npc" else "scene_ambiguity"
+        if explicit_mode == "npc":
+            return "npc_ignorance"
+        return "npc_ignorance" if _is_active_social_exchange_context(context) else "scene_ambiguity"
     if _context_prefers_procedural_insufficiency(context):
         return "procedural_insufficiency"
+    if _is_active_social_exchange_context(context):
+        return "npc_ignorance"
     if _looks_like_npc_exchange(source_text, context):
         return "npc_ignorance"
     if re.search(
@@ -404,6 +432,11 @@ def _diegetic_uncertainty_fallback(
     mode: str | None = None,
     source_text: str = "",
 ) -> str:
+    if _is_active_social_exchange_context(context):
+        source_mode = _infer_uncertainty_source_mode(context, source_text, explicit_mode=mode)
+        if source_mode == "scene_ambiguity":
+            source_mode = "npc_ignorance"
+        return social_fallback_line_for_sanitizer(context, source_text=source_text, mode=source_mode)
     source_mode = _infer_uncertainty_source_mode(context, source_text, explicit_mode=mode)
     templates = {
         "npc_ignorance": _NPC_IGNORANCE_FALLBACKS,
@@ -447,6 +480,51 @@ def _rewrite_line(line: str, context: Dict[str, Any]) -> str:
     return clean
 
 
+def _text_outside_double_quotes(sentence: str) -> str:
+    """Strip ASCII double-quoted spans so scaffold heuristics do not match in-character dialogue."""
+    s = sentence or ""
+    parts: list[str] = []
+    i, n = 0, len(s)
+    while i < n:
+        if s[i] == '"':
+            j = i + 1
+            while j < n and s[j] != '"':
+                j += 1
+            parts.append(" ")
+            i = j + 1
+            continue
+        parts.append(s[i])
+        i += 1
+    return "".join(parts)
+
+
+def _split_consecutive_attributed_quote_chunks(sentence: str) -> list[str]:
+    """Break multi-beat NPC lines at `says. \"` boundaries for per-chunk sanitizer passes."""
+    remaining = (sentence or "").strip()
+    if not remaining:
+        return []
+    chunks: list[str] = []
+    while remaining:
+        m = _CONSECUTIVE_ATTRIBUTED_QUOTE_CUT.search(remaining)
+        if not m:
+            chunks.append(remaining)
+            break
+        head = remaining[: m.end()].rstrip()
+        tail = remaining[m.end() :].lstrip()
+        if tail.startswith('"') and '"' in head:
+            chunks.append(head)
+            remaining = tail
+            continue
+        chunks.append(remaining)
+        break
+    return chunks
+
+
+def _conjunction_collision_hits(sentence: str) -> bool:
+    scrubbed = _text_outside_double_quotes(sentence)
+    return any(p.search(scrubbed) for p in _CONJUNCTION_COLLISION_PATTERNS)
+
+
 def _log_sanitizer_event(context: Dict[str, Any], event: str, sentence: str) -> None:
     if not isinstance(context, dict):
         return
@@ -456,11 +534,13 @@ def _log_sanitizer_event(context: Dict[str, Any], event: str, sentence: str) -> 
 
 
 def _contains_template_fragment(sentence: str) -> bool:
-    low = (sentence or "").lower()
-    return any(fragment in low for fragment in _TEMPLATE_FRAGMENT_PHRASES)
+    scrubbed = _text_outside_double_quotes(sentence).lower()
+    return any(fragment in scrubbed for fragment in _TEMPLATE_FRAGMENT_PHRASES)
 
 
 def _simple_diegetic_fallback(sentence: str, context: Dict[str, Any] | None = None) -> str:
+    if _is_active_social_exchange_context(context):
+        return social_fallback_line_for_sanitizer(context if isinstance(context, dict) else {}, source_text=sentence)
     low = (sentence or "").lower()
     if "man in tattered clothes" in low:
         return "The man in tattered clothes lingers nearby, watching the crowd."
@@ -479,14 +559,18 @@ def _fails_final_validation_heuristics(sentence: str) -> bool:
         return True
     if _contains_template_fragment(s):
         return True
-    if any(p.search(s) for p in _CONJUNCTION_COLLISION_PATTERNS):
+    if _conjunction_collision_hits(s):
         return True
     if any(p.search(s) for p in _FINAL_INTERNAL_STYLE_PATTERNS):
         return True
     if _is_spliced_or_malformed(s) or _looks_like_sentence_fragment(s):
         return True
     # Heuristic abrupt shift: unresolved conjunction between two scene anchors.
-    if re.search(r"\b(?:tavern|gate|crowd)\b.+\bor\s+(?:approach|follow|ask)\b", s, flags=re.IGNORECASE):
+    if re.search(
+        r"\b(?:tavern|gate|crowd)\b.+\bor\s+(?:approach|follow|ask)\b",
+        _text_outside_double_quotes(s),
+        flags=re.IGNORECASE,
+    ):
         return True
     return False
 
@@ -565,7 +649,21 @@ def _split_sentences(text: str) -> list[str]:
                 continue
         merged.append(current)
         idx += 1
-    return merged
+    return _merge_orphan_quote_sentences(merged)
+
+
+def _merge_orphan_quote_sentences(sentences: list[str]) -> list[str]:
+    """Re-attach trailing dialogue fragments split off after 'he says.' / 'they say.' etc."""
+    if not sentences:
+        return sentences
+    out: list[str] = []
+    for s in sentences:
+        t = (s or "").strip()
+        if t.startswith('"') and out:
+            out[-1] = f"{out[-1].rstrip()} {t}".strip()
+            continue
+        out.append(t)
+    return out
 
 
 def _looks_like_dialogue(sentence: str) -> bool:
@@ -688,6 +786,9 @@ def rewrite_analytical_sentence(sentence: str, context: Dict[str, Any] | None = 
     low = s.lower()
     strategy = _infer_analytical_strategy(markers, context)
 
+    if _is_active_social_exchange_context(context) and strategy in {"diegetic_observation", "environmental_implication"}:
+        return social_fallback_line_for_sanitizer(context if isinstance(context, dict) else {}, source_text=s)
+
     if strategy == "diegetic_observation":
         if "you might want to" in low and "runner" in low:
             return "The runner watches the crowd, clearly listening for more than he says."
@@ -717,7 +818,24 @@ def rewrite_analytical_sentence(sentence: str, context: Dict[str, Any] | None = 
 
 
 def _contains_directive_phrase(sentence: str) -> bool:
-    return any(p.search(sentence or "") for p in _DIRECTIVE_PHRASE_PATTERNS)
+    """Do not treat 'you should' inside quoted NPC dialogue as narrator directives."""
+    s = sentence or ""
+    outside_quotes = re.sub(r'"[^"]*"', " ", s)
+    return any(p.search(outside_quotes) for p in _DIRECTIVE_PHRASE_PATTERNS)
+
+
+def _is_attributed_dialogue_sentence(sentence: str) -> bool:
+    """Quoted speech closed out with ', they/he/she says' — do not run directive/implicit rewrites."""
+    s = (sentence or "").strip()
+    if s.count('"') < 2:
+        return False
+    return bool(
+        re.search(
+            r'"[^"]*"\s*,\s*(?:they|he|she)\s+(?:says|said|murmurs|whispers|asks|adds)',
+            s,
+            re.IGNORECASE,
+        )
+    )
 
 
 def _extract_subject_after_phrase(sentence: str, phrase_re: str) -> str | None:
@@ -736,6 +854,8 @@ def _rewrite_directive_sentence(sentence: str, context: Dict[str, Any] | None = 
     s = (sentence or "").strip().strip(" -:;")
     if not s:
         return ""
+    if _is_attributed_dialogue_sentence(s):
+        return s
     low = s.lower()
 
     if "notice board" in low:
@@ -756,6 +876,8 @@ def _rewrite_directive_sentence(sentence: str, context: Dict[str, Any] | None = 
         return f"{target[0].upper()}{target[1:]} lingers nearby, half-hidden in the crowd."
 
     # Last-resort diegetic fallback with no direct instruction language.
+    if _is_active_social_exchange_context(context):
+        return social_fallback_line_for_sanitizer(context if isinstance(context, dict) else {}, source_text=s)
     return _diegetic_uncertainty_fallback(context, mode="narration", source_text=s)
 
 
@@ -824,10 +946,14 @@ def _contains_implicit_instruction(sentence: str) -> bool:
     return any(p.search(s) for p in _ADVISORY_PHRASE_PATTERNS)
 
 
-def _rewrite_implicit_instruction_sentence(sentence: str) -> str:
+def _rewrite_implicit_instruction_sentence(sentence: str, context: Dict[str, Any] | None = None) -> str:
     s = (sentence or "").strip().strip(" -:;")
     if not s:
         return ""
+    if _is_attributed_dialogue_sentence(s):
+        return s
+    if _is_active_social_exchange_context(context):
+        return social_fallback_line_for_sanitizer(context if isinstance(context, dict) else {}, source_text=s)
 
     imperative_match = _IMPLICIT_IMPERATIVE_START_RE.search(s)
     if imperative_match:
@@ -850,6 +976,23 @@ def _rewrite_implicit_instruction_sentence(sentence: str) -> str:
         framed = _subject_with_article(advisory_target)
         return f"{framed} keeps to the margins of the crowd, as if waiting to be noticed."
     return "The scene offers an opening, but every voice keeps it wrapped in implication."
+
+
+def _already_has_terminal_punctuation(sentence: str) -> bool:
+    """True if the sentence already ends a thought, including `...said. \"Quote.\"` shapes.
+
+    _cohere_sentences / final_coherence_pass must not append `.` after a closing `\"` when the
+    dialogue inside the quotes already ends with .!? — otherwise we produce `...\".` which
+    splits into a lone `.` sentence and triggers final_validation diegetic rewrites.
+    """
+    t = (sentence or "").rstrip()
+    if not t:
+        return False
+    if t[-1] in ".!?":
+        return True
+    if t.endswith('"') and re.search(r"[.!?]\s*\"$", t):
+        return True
+    return False
 
 
 def _is_diegetic_sentence(sentence: str) -> bool:
@@ -883,7 +1026,7 @@ def _cohere_sentences(sentences: list[str]) -> list[str]:
             continue
         if clean.endswith("..."):
             clean = clean[:-3].rstrip() + "."
-        if not re.search(r"[.!?]$", clean):
+        if not _already_has_terminal_punctuation(clean):
             clean += "."
         key = re.sub(r"\s+", " ", clean.lower())
         if key in seen:
@@ -980,11 +1123,11 @@ def _rewrite_sentence_atomically(sentence: str, context: Dict[str, Any] | None =
         return ""
 
     if _contains_implicit_instruction(s):
-        s = _rewrite_implicit_instruction_sentence(s).strip()
+        s = _rewrite_implicit_instruction_sentence(s, context).strip()
     if not s:
         return ""
 
-    if _contains_template_fragment(s) or any(p.search(s) for p in _CONJUNCTION_COLLISION_PATTERNS):
+    if _contains_template_fragment(s) or _conjunction_collision_hits(s):
         s = _simple_diegetic_fallback(s, context).strip()
     if not s:
         return ""
@@ -1029,7 +1172,7 @@ def _classify_sentence_action(
         must_rewrite = True
     if any(p.search(s) for p in _IDENTITY_SYSTEM_PATTERNS):
         must_rewrite = True
-    if _contains_template_fragment(s) or any(p.search(s) for p in _CONJUNCTION_COLLISION_PATTERNS):
+    if _contains_template_fragment(s) or _conjunction_collision_hits(s):
         must_rewrite = True
     if _is_spliced_or_malformed(s) or _has_orphan_quote_shape(s):
         must_rewrite = True
@@ -1068,7 +1211,7 @@ def final_coherence_pass(text: str) -> str:
             s = s[0].upper() + s[1:]
         if _looks_like_sentence_fragment(s):
             continue
-        if not re.search(r"[.!?]$", s):
+        if not _already_has_terminal_punctuation(s):
             s += "."
         cleaned.append(s)
     coherent = _cohere_sentences(cleaned)
@@ -1081,7 +1224,7 @@ def atomic_rewrite_enforcement_pass(sentences: list[str], context: Dict[str, Any
         s = (sentence or "").strip()
         if not s:
             continue
-        if _contains_template_fragment(s) or any(p.search(s) for p in _CONJUNCTION_COLLISION_PATTERNS):
+        if _contains_template_fragment(s) or _conjunction_collision_hits(s):
             rewritten = _simple_diegetic_fallback(s, context).strip()
             if rewritten:
                 out.append(rewritten)
@@ -1104,6 +1247,11 @@ def final_validation_pass(text: str, context: Dict[str, Any] | None = None) -> s
         rewritten = _simple_diegetic_fallback(s, context).strip()
         if rewritten and not _fails_final_validation_heuristics(rewritten):
             validated.append(rewritten)
+            continue
+        if _is_active_social_exchange_context(context):
+            line = social_fallback_line_for_sanitizer(context if isinstance(context, dict) else {}, source_text=s)
+            if line and not _fails_final_validation_heuristics(line):
+                validated.append(line)
     return " ".join(_cohere_sentences(validated)).strip()
 
 
@@ -1131,17 +1279,18 @@ def sanitize_player_facing_output(text: str, context: Dict[str, Any] | None = No
     # STEP 3: sentence-atomic sanitizer.
     processed: list[str] = []
     for sentence in _split_sentences(out):
-        action, resolved = _classify_sentence_action(
-            sentence,
-            context=ctx,
-            has_previous_kept_sentence=bool(processed),
-        )
-        if action == "drop":
-            _log_sanitizer_event(ctx, "dropped_sentence", sentence)
-            continue
-        if action == "rewrite" and resolved != sentence.strip():
-            _log_sanitizer_event(ctx, "rewritten_sentence", sentence)
-        processed.append(resolved)
+        for chunk in _split_consecutive_attributed_quote_chunks(sentence):
+            action, resolved = _classify_sentence_action(
+                chunk,
+                context=ctx,
+                has_previous_kept_sentence=bool(processed),
+            )
+            if action == "drop":
+                _log_sanitizer_event(ctx, "dropped_sentence", chunk)
+                continue
+            if action == "rewrite" and resolved != chunk.strip():
+                _log_sanitizer_event(ctx, "rewritten_sentence", chunk)
+            processed.append(resolved)
 
     rebuilt = " ".join(_cohere_sentences(processed)).strip()
 
@@ -1155,6 +1304,36 @@ def sanitize_player_facing_output(text: str, context: Dict[str, Any] | None = No
         rebuilt = extracted if isinstance(extracted, str) and extracted.strip() else strip_serialized_payload_fragments(rebuilt)
         rebuilt = re.sub(r"\s+", " ", rebuilt).strip()
 
+    res = ctx.get("resolution") if isinstance(ctx.get("resolution"), dict) else None
+    sess = ctx.get("session") if isinstance(ctx.get("session"), dict) else None
+    world = ctx.get("world") if isinstance(ctx.get("world"), dict) else None
+    scene_id = str(ctx.get("scene_id") or "").strip()
+    post_gate = bool(ctx.get("post_final_emission_gate"))
+    strict_clamp = bool(ctx.get("strict_social_terminal_clamp"))
+    eff_res, strict_social, _coercion = coerce_resolution_for_strict_social_emission(res, sess, world, scene_id)
+    if post_gate and strict_clamp:
+        strict_social = True
+    elif not strict_social:
+        strict_social = strict_social_emission_will_apply(res, sess, world, scene_id)
+
+    if strict_social and isinstance(eff_res, dict):
+        tag_list = []
+        if isinstance(ctx.get("tags"), list):
+            tag_list = [str(t) for t in ctx["tags"] if isinstance(t, str)]
+        rebuilt = apply_strict_social_sentence_ownership_filter(
+            rebuilt,
+            resolution=eff_res,
+            tags=tag_list or None,
+            session=sess,
+            scene_id=scene_id,
+        )
+
     if not rebuilt:
+        if strict_clamp and isinstance(ctx.get("gate_sealed_text"), str) and str(ctx.get("gate_sealed_text") or "").strip():
+            return str(ctx.get("gate_sealed_text") or "").strip()
+        if strict_social and isinstance(eff_res, dict):
+            fb_ctx = dict(ctx)
+            fb_ctx["resolution"] = eff_res
+            return social_fallback_line_for_sanitizer(fb_ctx, source_text=out)
         return "For a breath, the scene stays still."
     return rebuilt

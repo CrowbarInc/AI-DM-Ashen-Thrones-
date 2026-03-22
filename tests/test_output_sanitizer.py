@@ -125,6 +125,9 @@ def test_sanitizer_prefers_npc_uncertainty_for_dialogue_like_instructional_text(
         or ("no answer presents itself from here" in low)
         or ("truth stays locked until someone pushes a concrete move" in low)
         or ("answer has not formed yet" in low)
+        or ('"i don\'t know."' in low)
+        or ("that's all i've got" in low)
+        or ("can't help you there" in low)
     )
 
 
@@ -215,7 +218,16 @@ def test_rewrite_analytical_sentence_social_uncertainty_prefers_npc_bounded_voic
     low = out.lower()
     assert "no clear answer" not in low
     assert '"' in out
-    assert any(phrase in low for phrase in ("i do not know", "i have heard", "no one here can swear"))
+    assert any(
+        phrase in low
+        for phrase in (
+            "i do not know",
+            "don't know",
+            "i have heard",
+            "i've heard",
+            "no one here can swear",
+        )
+    )
 
 
 def test_sanitizer_rewrites_gauntlet_analytical_phrases_into_diegetic_lines():
