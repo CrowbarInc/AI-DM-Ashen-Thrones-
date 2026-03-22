@@ -850,7 +850,13 @@ def test_chat_adjudication_refuses_over_answer_without_basis(tmp_path, monkeypat
     assert adjudication.get("answer_type") == "needs_concrete_action"
     low = (((data.get("gm_output") or {}).get("player_facing_text") or "").lower())
     assert "state exactly what you do" not in low
-    assert ("need a concrete" in low) or ("scene offers no clear answer yet" in low)
+    assert "scene offers no clear answer yet" not in low
+    assert (
+        "need a concrete" in low
+        or "nothing in the scene points to a clear answer yet" in low
+        or "from here, no certain answer presents itself" in low
+        or "the truth is still buried beneath rumor and rain" in low
+    )
 
 
 def test_chat_mixed_turn_preserves_embedded_adjudication_metadata(tmp_path, monkeypatch):
@@ -996,7 +1002,13 @@ def test_chat_final_output_sanitizer_blocks_adjudication_procedural_leak(tmp_pat
     assert "adjudication:" not in low
     assert "authoritative state" not in low
     assert "state exactly what you do" not in low
-    assert ("distance is unclear" in low) or ("scene offers no clear answer yet" in low)
+    assert "scene offers no clear answer yet" not in low
+    assert (
+        "distance is unclear" in low
+        or "nothing in the scene points to a clear answer yet" in low
+        or "from here, no certain answer presents itself" in low
+        or "the truth is still buried beneath rumor and rain" in low
+    )
 
 
 def test_chat_final_output_sanitizer_blocks_internal_scaffold_labels(tmp_path, monkeypatch):

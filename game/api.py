@@ -95,7 +95,12 @@ from game.interaction_context import (
 from game.scene_graph import build_scene_graph, is_transition_valid
 from game.intent_parser import parse_intent, segment_mixed_player_turn
 from game.prompt_context import build_response_policy, derive_narration_obligations
-from game.output_sanitizer import sanitize_player_facing_output
+from game.output_sanitizer import (
+    extract_player_text_from_serialized_payload,
+    resembles_serialized_response_payload,
+    sanitize_player_facing_output,
+    strip_serialized_payload_fragments,
+)
 from game.utils import slugify, utc_iso_now
 from game.world import advance_world_tick, apply_world_updates, apply_resolution_world_updates
 from game.clocks import get_or_init_clocks, advance_clock, DEFAULT_CLOCKS
@@ -1458,6 +1463,13 @@ def _build_turn_response_payload(
     if isinstance(gm, dict):
         gm = dict(gm)
         raw_text = gm.get("player_facing_text") if isinstance(gm.get("player_facing_text"), str) else ""
+        if resembles_serialized_response_payload(raw_text):
+            extracted = extract_player_text_from_serialized_payload(raw_text)
+            raw_text = (
+                extracted
+                if isinstance(extracted, str) and extracted.strip()
+                else strip_serialized_payload_fragments(raw_text)
+            )
         gm["player_facing_text"] = sanitize_player_facing_output(
             raw_text,
             {
