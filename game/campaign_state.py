@@ -17,11 +17,13 @@ Layering (what persists across a "New Campaign" hard reset vs what is reapplied)
    from ticks). Must reset to a clean graph on New Campaign; do not spread prior
    session dicts into the new state.
 
-Journal/codex ambiguity: ``build_player_journal`` merges scene ``visible_facts``
-(bootstrap from the active scene file) with ``clue_knowledge`` / ``scene_runtime``
-(runtime). ``world.event_log`` and ``world_state`` may mix intentional empty
-structure with emergent entries — treat appended log lines and flags as runtime
-unless the author pre-seeded them in shipped data.
+Journal/codex: ``build_player_journal`` seeds ``known_facts`` from
+``scene.journal_seed_facts`` (or a capped prefix of ``visible_facts``), plus
+runtime ``revealed_hidden_facts`` — not a wholesale copy of ``visible_facts``.
+It still merges ``clue_knowledge`` / ``scene_runtime`` clues. ``world.event_log``
+and ``world_state`` may mix intentional empty structure with emergent entries —
+treat appended log lines and flags as runtime unless the author pre-seeded them
+in shipped data.
 
 Canonical factories below define layer (3) only. They construct new dict/list
 graphs and must not alias nested structures from previous state.

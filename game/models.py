@@ -260,7 +260,7 @@ class CampaignUpdate(BaseModel):
 
 
 class SceneEnvelope(BaseModel):
-    """Scene dict may include visible_facts, discoverable_clues (default []), hidden_facts, and other keys."""
+    """Scene dict may include visible_facts, journal_seed_facts, discoverable_clues (default []), hidden_facts, and other keys."""
     scene: Dict[str, Any]
 
 

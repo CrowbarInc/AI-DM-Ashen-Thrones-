@@ -11,7 +11,20 @@ import logging
 import re
 from typing import Any, Dict, List, Optional, Tuple
 
-from game.interaction_context import assert_valid_speaker, inspect as inspect_interaction_context
+from game.interaction_context import (
+    _world_npc_dicts_for_addressing,
+    assert_valid_speaker,
+    effective_in_scene_npc_roster,
+    inspect as inspect_interaction_context,
+    line_opens_with_comma_vocative,
+    npc_id_from_explicit_generic_role_address,
+    npc_id_from_substring_line,
+    npc_id_from_vocative_line,
+    npc_roster_for_dialogue_addressing,
+)
+
+# Historical name in this module; delegates to canonical roster resolution in interaction_context.
+effective_scene_npc_roster = effective_in_scene_npc_roster
 from game.storage import get_scene_runtime
 from game.utils import slugify
 
@@ -139,6 +152,14 @@ def _merge_prompt_for_strict_gate(
     if extra and not base:
         return extra
     if extra and base:
+        # Do not always prepend raw scene-runtime text: it can carry a *previous* line
+        # (e.g. travel) and poison substring resolution. Prepend ``extra`` only when it
+        # opens with comma vocative syntax (this turn's raw line). If only ``base`` has
+        # that form, keep vocative at the front with ``base`` first.
+        if line_opens_with_comma_vocative(extra):
+            return f"{extra} {base}".strip()
+        if line_opens_with_comma_vocative(base):
+            return f"{base} {extra}".strip()
         return f"{base} {extra}".strip()
     return base
 
@@ -154,78 +175,6 @@ def merged_player_prompt_for_gate(
     return _merge_prompt_for_strict_gate(resolution if isinstance(resolution, dict) else None, hint or None)
 
 
-def effective_scene_npc_roster(world: Dict[str, Any] | None, scene_id: str) -> List[Dict[str, Any]]:
-    """NPCs present in the scene for strict-social routing.
-
-    When ``world.json`` has no ``npcs`` (disk can override defaults to []), fall back to
-    :func:`game.defaults.default_world` so vocative addressing (e.g. ``Runner, …``) still resolves.
-    """
-    from game.interaction_context import _scene_npcs
-
-    sid = str(scene_id or "").strip()
-    if not sid:
-        return []
-    roster = _scene_npcs(world or {}, sid)
-    if roster:
-        return roster
-    from game.defaults import default_world
-
-    return _scene_npcs(default_world(), sid)
-
-
-_VOCATIVE_PREFIX_RE = re.compile(r"^\s*([^,:\n]{1,64})\s*,")
-
-
-def _npc_id_from_vocative_line(text: str, roster: List[Dict[str, Any]]) -> str:
-    """Match leading ``Name, …`` to a scene NPC (handles ``Runner`` → tavern_runner)."""
-    m = _VOCATIVE_PREFIX_RE.match(str(text or "").strip())
-    if not m:
-        return ""
-    raw = m.group(1).strip()
-    voc_slug = slugify(raw)
-    if not voc_slug:
-        return ""
-    for npc in roster:
-        if not isinstance(npc, dict):
-            continue
-        nid = str(npc.get("id") or "").strip()
-        nm = str(npc.get("name") or "").strip()
-        if not nid:
-            continue
-        if slugify(nid) == voc_slug or (nm and slugify(nm) == voc_slug):
-            return nid
-        for word in re.split(r"\s+", nm):
-            w = slugify(word)
-            if w and w == voc_slug:
-                return nid
-        for part in slugify(nid).split("_"):
-            if part and part == voc_slug:
-                return nid
-    return ""
-
-
-def _npc_id_from_substring_line(text: str, roster: List[Dict[str, Any]]) -> str:
-    """Match full-line slug to NPC id/name (long tokens only, avoids noisy short hits)."""
-    text_slug = slugify(str(text or ""))
-    if not text_slug:
-        return ""
-    for npc in roster:
-        if not isinstance(npc, dict):
-            continue
-        nid = str(npc.get("id") or "").strip()
-        nm = str(npc.get("name") or "").strip()
-        if not nid:
-            continue
-        ns = slugify(nid)
-        if len(ns) >= 5 and ns in text_slug:
-            return nid
-        if nm:
-            ms = slugify(nm)
-            if len(ms) >= 5 and ms in text_slug:
-                return nid
-    return ""
-
-
 def resolve_strict_social_npc_target_id(
     session: Dict[str, Any] | None,
     world: Dict[str, Any] | None,
@@ -234,19 +183,36 @@ def resolve_strict_social_npc_target_id(
 ) -> Tuple[str, str]:
     """Pick the NPC for strict-social coercion: ``(npc_id, basis)``.
 
-    ``basis`` is one of: ``vocative``, ``active``, ``substring``, ``first_roster``, ``none``.
-    Resolution order: vocative address, then :func:`inspect` ``active_interaction_target_id``
-    (engine-established dialogue), then substring/name overlap, then first roster only as a last resort.
-    Vocative wins over active interlocutor so ``Runner, …`` targets the runner even if context
-    points elsewhere.
+    ``basis`` is one of: ``vocative``, ``generic_address``, ``active``, ``active_unlisted``,
+    ``substring``, ``first_roster``, ``none``.
+    Resolution order: vocative address (shared resolver with dialogue binding), then
+    explicit generic role address (same scoped roster as dialogue binding), then
+    :func:`inspect` ``active_interaction_target_id``, then substring/name overlap, then
+    first roster only as a last resort. Vocative wins over active interlocutor so
+    ``Runner, …`` targets the runner even if context points elsewhere.
     """
     sid = str(scene_id or "").strip()
     roster = effective_scene_npc_roster(world, sid)
     prompt = str(merged_player_prompt or "").strip()
     if roster and prompt:
-        voc = _npc_id_from_vocative_line(prompt, roster)
+        voc = npc_id_from_vocative_line(prompt, roster)
         if voc:
             return voc, "vocative"
+        wroster = _world_npc_dicts_for_addressing(world if isinstance(world, dict) else {})
+        voc_w = npc_id_from_vocative_line(prompt, wroster)
+        if voc_w:
+            return voc_w, "vocative"
+    w = world if isinstance(world, dict) else {}
+    addressable = npc_roster_for_dialogue_addressing(
+        w,
+        sid,
+        scene=None,
+        session=session if isinstance(session, dict) else None,
+    )
+    if addressable and prompt:
+        gen = npc_id_from_explicit_generic_role_address(prompt.lower(), addressable)
+        if gen:
+            return gen, "generic_address"
     if isinstance(session, dict):
         inspected = inspect_interaction_context(session)
         active = str((inspected or {}).get("active_interaction_target_id") or "").strip()
@@ -254,10 +220,9 @@ def resolve_strict_social_npc_target_id(
             for npc in roster:
                 if isinstance(npc, dict) and str(npc.get("id") or "").strip() == active:
                     return active, "active"
-            # Valid interlocutor not listed on the scene roster (data drift / spotlight NPC): still bind to active.
             return active, "active_unlisted"
     if roster and prompt:
-        sub = _npc_id_from_substring_line(prompt, roster)
+        sub = npc_id_from_substring_line(prompt, roster)
         if sub:
             return sub, "substring"
     if roster:
@@ -314,9 +279,18 @@ def player_line_triggers_strict_social_emission(
     if looks_like_npc_directed_question(text):
         return True
     sid = str(scene_id or "").strip()
-    roster = effective_scene_npc_roster(world, sid)
+    w = world if isinstance(world, dict) else {}
+    roster = effective_scene_npc_roster(w, sid)
+    addressable = npc_roster_for_dialogue_addressing(
+        w,
+        sid,
+        scene=None,
+        session=session if isinstance(session, dict) else None,
+    )
     p = str(text or "").strip()
-    if roster and p and _npc_id_from_vocative_line(p, roster):
+    if roster and p and npc_id_from_vocative_line(p, roster):
+        return True
+    if addressable and p and npc_id_from_explicit_generic_role_address(p.lower(), addressable):
         return True
     if is_conversational_npc_dialogue_line(text, session):
         return True
@@ -570,25 +544,6 @@ def reconcile_strict_social_resolution_speaker(
     if not isinstance(resolution, dict) or not sid:
         return resolution
     merged = merged_player_prompt_for_gate(resolution, session, sid)
-    roster = effective_scene_npc_roster(world, sid)
-    voc = _npc_id_from_vocative_line(merged, roster) if roster and merged else ""
-    inspected = inspect_interaction_context(session) if isinstance(session, dict) else {}
-    active = str((inspected or {}).get("active_interaction_target_id") or "").strip()
-    mode = str((inspected or {}).get("interaction_mode") or "").strip().lower()
-    if (
-        mode == "social"
-        and active
-        and assert_valid_speaker(active, session)
-        and (not voc or voc == active)
-    ):
-        out = dict(resolution)
-        soc = dict(resolution.get("social") or {}) if isinstance(resolution.get("social"), dict) else {}
-        soc["npc_id"] = active
-        soc["npc_name"] = _npc_display_name_for_emission(world, sid, active)
-        if not str(soc.get("social_intent_class") or "").strip():
-            soc["social_intent_class"] = "social_exchange"
-        out["social"] = soc
-        return out
     target_id, _basis = resolve_strict_social_npc_target_id(session, world, sid, merged)
     if not target_id:
         return resolution

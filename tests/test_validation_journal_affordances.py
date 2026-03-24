@@ -52,6 +52,41 @@ def test_validate_gm_state_update_strips_unexpected_and_blocks_hidden_promotion(
     assert len(nd["summary"]) <= 800
 
 
+def test_journal_uses_journal_seed_facts_not_full_visible_list():
+    _, world, session, _, _, _ = _dummy_state()
+    session["active_scene_id"] = "test_gate"
+    envelope = {
+        "scene": {
+            "id": "test_gate",
+            "journal_seed_facts": ["Seed line A.", "Seed line B."],
+            "visible_facts": [f"Visible {i}." for i in range(20)],
+        }
+    }
+    journal = build_player_journal(session, world, envelope)
+    assert journal["known_facts"] == ["Seed line A.", "Seed line B."]
+
+
+def test_journal_caps_visible_facts_when_no_journal_seed():
+    _, world, session, _, _, _ = _dummy_state()
+    session["active_scene_id"] = "test_gate"
+    envelope = {"scene": {"id": "test_gate", "visible_facts": [f"V{i}" for i in range(20)]}}
+    journal = build_player_journal(session, world, envelope)
+    assert len(journal["known_facts"]) == 8
+    assert journal["known_facts"][0] == "V0" and journal["known_facts"][-1] == "V7"
+
+
+def test_journal_merges_revealed_hidden_facts():
+    _, world, session, _, _, _ = _dummy_state()
+    session["active_scene_id"] = "frontier_gate"
+    session["scene_runtime"] = {
+        "frontier_gate": {"revealed_hidden_facts": ["A revealed secret."], "discovered_clues": []}
+    }
+    envelope = {"scene": {"id": "frontier_gate", "visible_facts": ["Only visible."], "journal_seed_facts": []}}
+    journal = build_player_journal(session, world, envelope)
+    assert "Only visible." in journal["known_facts"]
+    assert "A revealed secret." in journal["known_facts"]
+
+
 def test_journal_includes_discovered_clues_player_safe():
     campaign, world, session, character, combat, recent_log = _dummy_state()
     # Synthesize a runtime discovered clue.

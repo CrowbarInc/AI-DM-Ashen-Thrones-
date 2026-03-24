@@ -422,8 +422,10 @@ async function saveCampaign(){
 }
 
 async function saveScene(){
+  const base = state?.scene?.scene || {};
   const payload = {
     scene: {
+      ...base,
       id: $('sceneId').value.trim(),
       location: $('sceneLocation').value.trim(),
       summary: $('sceneSummary').value.trim(),
@@ -431,8 +433,8 @@ async function saveScene(){
       visible_facts: $('sceneVisibleFacts').value.split('\n').map(x=>x.trim()).filter(Boolean),
       discoverable_clues: $('sceneDiscoverableClues').value.split('\n').map(x=>x.trim()).filter(Boolean),
       hidden_facts: $('sceneHiddenFacts').value.split('\n').map(x=>x.trim()).filter(Boolean),
-      exits: state?.scene?.scene?.exits || [],
-      enemies: state?.scene?.scene?.enemies || []
+      exits: base.exits || [],
+      enemies: base.enemies || []
     }
   };
   const data = await fetchJSON(API+'/scene',{method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload)});

@@ -7,7 +7,7 @@ functions so behavior remains deterministic and inspectable.
 from __future__ import annotations
 
 import re
-from typing import Any, Dict, List, Optional, Set
+from typing import Any, Dict, List, Optional, Set, Tuple
 
 from game.utils import slugify
 
@@ -92,8 +92,35 @@ def _scene_npcs(world: Dict[str, Any], scene_id: str) -> list[Dict[str, Any]]:
     return out
 
 
+def effective_in_scene_npc_roster(world: Dict[str, Any] | None, scene_id: str) -> list[Dict[str, Any]]:
+    """NPC dicts in ``scene_id`` for dialogue binding, active-entity rebuild, and strict-social routing.
+
+    Uses persisted ``world["npcs"]`` when that list is non-empty; otherwise falls back to
+    :func:`game.defaults.default_world` for the same location filter. Keeping this roster
+    identical across interaction binding and strict-social emission prevents one subsystem
+    from seeing an empty scene (no bindable target) while the other still resolves vocative
+    lines—``active_interaction_target_id`` and speaker authority must agree.
+    """
+    sid = _clean_string(scene_id) or ""
+    if not sid:
+        return []
+    w = world if isinstance(world, dict) else {}
+    roster = _scene_npcs(w, sid)
+    if roster:
+        return roster
+    from game.defaults import default_world
+
+    return _scene_npcs(default_world(), sid)
+
+
 def _all_world_npc_ids(world: Dict[str, Any]) -> List[str]:
     npcs = world.get("npcs") or []
+    if not isinstance(npcs, list):
+        npcs = []
+    if not npcs:
+        from game.defaults import default_world
+
+        npcs = default_world().get("npcs") or []
     if not isinstance(npcs, list):
         return []
     out: List[str] = []
@@ -183,7 +210,7 @@ def rebuild_active_scene_entities(
     sid = _clean_string(scene_id) or ""
     state = _scene_state(session)
     active_ids: List[str] = []
-    for npc in _scene_npcs(world, sid):
+    for npc in effective_in_scene_npc_roster(world, sid):
         nid = _clean_string(npc.get("id"))
         if nid and nid not in active_ids:
             active_ids.append(nid)
@@ -222,7 +249,7 @@ def _extract_target_from_text(text: str, world: Dict[str, Any], scene_id: str) -
     text_slug = slugify(text)
     if not text_slug:
         return None
-    for npc in _scene_npcs(world, scene_id):
+    for npc in effective_in_scene_npc_roster(world, scene_id):
         npc_id = _clean_string(npc.get("id")) or ""
         npc_name = _clean_string(npc.get("name")) or ""
         npc_id_slug = slugify(npc_id)
@@ -516,38 +543,238 @@ _DIALOGUE_INFO_HINTS: tuple[str, ...] = (
 )
 
 
-def scene_npcs_in_active_scene(scene: Dict[str, Any] | None, world: Dict[str, Any]) -> List[Dict[str, Any]]:
-    """NPCs present in the active scene envelope (matches api routing)."""
-    if not isinstance(scene, dict):
-        return []
-    scene_id = str(((scene or {}).get("scene") or {}).get("id") or "").strip()
+_VOCATIVE_PREFIX_RE = re.compile(r"^\s*([^,:\n]{1,64})\s*,")
+
+
+def line_opens_with_comma_vocative(text: str) -> bool:
+    """True when the line begins with a ``Name, …`` clause (syntax only; no roster)."""
+    return _VOCATIVE_PREFIX_RE.match(str(text or "").strip()) is not None
+
+
+def npc_id_from_vocative_line(text: str, roster: List[Dict[str, Any]]) -> str:
+    """Match leading ``Name, …`` to a roster NPC id (shared with strict-social emission)."""
+    m = _VOCATIVE_PREFIX_RE.match(str(text or "").strip())
+    if not m:
+        return ""
+    raw = m.group(1).strip()
+    voc_slug = slugify(raw)
+    if not voc_slug:
+        return ""
+    for npc in roster:
+        if not isinstance(npc, dict):
+            continue
+        nid = str(npc.get("id") or "").strip()
+        nm = str(npc.get("name") or "").strip()
+        if not nid:
+            continue
+        if slugify(nid) == voc_slug or (nm and slugify(nm) == voc_slug):
+            return nid
+        for word in re.split(r"\s+", nm):
+            w = slugify(word)
+            if w and w == voc_slug:
+                return nid
+        for part in slugify(nid).split("_"):
+            if part and part == voc_slug:
+                return nid
+    return ""
+
+
+def npc_id_from_substring_line(text: str, roster: List[Dict[str, Any]]) -> str:
+    """Match full-line slug to NPC id/name (long tokens only; same rules as strict-social)."""
+    text_slug = slugify(str(text or ""))
+    if not text_slug:
+        return ""
+    for npc in roster:
+        if not isinstance(npc, dict):
+            continue
+        nid = str(npc.get("id") or "").strip()
+        nm = str(npc.get("name") or "").strip()
+        if not nid:
+            continue
+        ns = slugify(nid)
+        if len(ns) >= 5 and ns in text_slug:
+            return nid
+        if nm:
+            ms = slugify(nm)
+            if len(ms) >= 5 and ms in text_slug:
+                return nid
+    return ""
+
+
+def _world_npc_dicts_for_addressing(world: Dict[str, Any] | None) -> List[Dict[str, Any]]:
     npcs = (world or {}).get("npcs") or []
-    if not scene_id or not isinstance(npcs, list):
+    if not isinstance(npcs, list):
+        npcs = []
+    if not npcs:
+        from game.defaults import default_world
+
+        npcs = default_world().get("npcs") or []
+    if not isinstance(npcs, list):
         return []
-    scene_state = scene.get("scene_state") if isinstance(scene, dict) else None
-    active_ids: Set[str] = set()
-    if isinstance(scene_state, dict) and isinstance(scene_state.get("active_entities"), list):
-        active_ids = {
-            str(v).strip()
-            for v in scene_state.get("active_entities")
-            if isinstance(v, str) and str(v).strip()
-        }
-    out: List[Dict[str, Any]] = []
-    for npc in npcs:
+    return [n for n in npcs if isinstance(n, dict) and str(n.get("id") or "").strip()]
+
+
+def _active_entity_scope_ids_from_scene_envelope(scene: Dict[str, Any] | None) -> Optional[Set[str]]:
+    """Non-empty active_entities on the envelope narrows addressing; empty/absent means full location roster."""
+    if not isinstance(scene, dict):
+        return None
+    scene_state = scene.get("scene_state")
+    if not isinstance(scene_state, dict):
+        return None
+    raw = scene_state.get("active_entities")
+    if not isinstance(raw, list) or not raw:
+        return None
+    ids = {str(v).strip() for v in raw if isinstance(v, str) and str(v).strip()}
+    return ids or None
+
+
+def _active_entity_scope_ids_from_session(session: Dict[str, Any] | None, scene_id: str) -> Optional[Set[str]]:
+    """Mirror of scene envelope scope using synced session.scene_state (strict-social path has no envelope)."""
+    if not isinstance(session, dict):
+        return None
+    state = session.get("scene_state")
+    if not isinstance(state, dict):
+        return None
+    sid = _clean_string(scene_id) or ""
+    active_sid = str(state.get("active_scene_id") or "").strip()
+    if sid and active_sid and active_sid != sid:
+        return None
+    raw = state.get("active_entities")
+    if not isinstance(raw, list) or not raw:
+        return None
+    ids = {str(v).strip() for v in raw if isinstance(v, str) and str(v).strip()}
+    return ids or None
+
+
+def npc_roster_for_dialogue_addressing(
+    world: Dict[str, Any],
+    scene_id: str,
+    *,
+    scene: Dict[str, Any] | None = None,
+    session: Dict[str, Any] | None = None,
+) -> List[Dict[str, Any]]:
+    """Location roster optionally narrowed by active entity scope (same rules as :func:`scene_npcs_in_active_scene`)."""
+    sid = _clean_string(scene_id) or ""
+    roster = effective_in_scene_npc_roster(world if isinstance(world, dict) else {}, sid)
+    scope: Optional[Set[str]] = None
+    if scene is not None:
+        scope = _active_entity_scope_ids_from_scene_envelope(scene)
+    elif session is not None:
+        scope = _active_entity_scope_ids_from_session(session, sid)
+    if not scope:
+        return list(roster)
+    return [n for n in roster if isinstance(n, dict) and str(n.get("id") or "").strip() in scope]
+
+
+# Narrow spoken roles for explicit generic addressing (scene-local roster match only).
+_GENERIC_ADDRESS_ROLE_ALT = r"(?:guardsman|stranger|refugee|merchant|runner|guard)"
+_GENERIC_ADDRESS_PATTERNS: Tuple[re.Pattern[str], ...] = (
+    re.compile(rf"\byou\s*,\s*({_GENERIC_ADDRESS_ROLE_ALT})\b"),
+    re.compile(rf"\bto\s+the\s+({_GENERIC_ADDRESS_ROLE_ALT})\b"),
+    re.compile(rf"\btowards?\s+the\s+({_GENERIC_ADDRESS_ROLE_ALT})\b"),
+    re.compile(rf"^\s*({_GENERIC_ADDRESS_ROLE_ALT})\b(?:\s*[,:?!]|\s+)"),
+)
+
+
+def _normalize_spoken_generic_role_slug(raw: str) -> str:
+    s = str(raw or "").strip().lower()
+    if s == "guardsman":
+        return "guard"
+    return s
+
+
+def generic_address_slugs_for_npc(npc: Dict[str, Any]) -> Set[str]:
+    """Deterministic role tokens from authored NPC fields (id/name/role) for generic-address matching."""
+    out: Set[str] = set()
+    if not isinstance(npc, dict):
+        return out
+    role = npc.get("role")
+    if isinstance(role, str) and role.strip():
+        rs = slugify(role.strip())
+        if rs:
+            out.add(rs)
+    nid = str(npc.get("id") or "").strip()
+    for part in nid.split("_"):
+        ps = slugify(part)
+        if ps and len(ps) >= 3:
+            out.add(ps)
+    name = str(npc.get("name") or "").strip()
+    for word in re.split(r"\s+", name):
+        ws = slugify(word)
+        if ws and len(ws) >= 3:
+            out.add(ws)
+    return out
+
+
+def _npc_matches_normalized_generic_role(npc: Dict[str, Any], normalized_slug: str) -> bool:
+    if not normalized_slug:
+        return False
+    slugs = generic_address_slugs_for_npc(npc)
+    return normalized_slug in slugs
+
+
+def _last_spoken_generic_role_slug(low: str) -> str:
+    """Return the last explicit generic role token in the line (so ``… to the runner`` beats earlier mentions)."""
+    best_end = -1
+    best_slug = ""
+    for pat in _GENERIC_ADDRESS_PATTERNS:
+        for m in pat.finditer(low):
+            if m.end() > best_end:
+                best_end = m.end()
+                best_slug = _normalize_spoken_generic_role_slug(m.group(1))
+    return best_slug
+
+
+def npc_id_from_explicit_generic_role_address(low: str, addressable_npcs: List[Dict[str, Any]]) -> str:
+    """Resolve a scene-local NPC from narrow generic address forms (comma ``you, <role>``, ``to the <role>``, etc.).
+
+    Explicit generic redirection must override stale active-target continuity: otherwise ``you`` in
+    ``you, stranger, …`` is misread as pronoun continuation to the prior interlocutor.
+    """
+    line = str(low or "").strip().lower()
+    if not line or not addressable_npcs:
+        return ""
+    role = _last_spoken_generic_role_slug(line)
+    if not role:
+        return ""
+    matches = [
+        str(n.get("id") or "").strip()
+        for n in addressable_npcs
+        if isinstance(n, dict) and _npc_matches_normalized_generic_role(n, role)
+    ]
+    matches = [m for m in matches if m]
+    if not matches:
+        return ""
+    matches.sort()
+    return matches[0]
+
+
+def _explicit_addressed_npc_id_leading_or_directed(low: str, roster: List[Dict[str, Any]]) -> str:
+    """Line-leading name/title or ``to/at <ref>`` against roster (no comma required)."""
+    for npc in roster:
         if not isinstance(npc, dict):
             continue
         npc_id = str(npc.get("id") or "").strip()
         if not npc_id:
             continue
-        if active_ids:
-            if npc_id in active_ids:
-                out.append(npc)
-            continue
-        location = str(npc.get("location") or npc.get("scene_id") or "").strip()
-        if location != scene_id:
-            continue
-        out.append(npc)
-    return out
+        for ref in extract_npc_reference_tokens(npc):
+            if not ref:
+                continue
+            if re.search(rf"^\s*{re.escape(ref)}\b(?:\s*[,:?!-]|\s+)", low):
+                return npc_id
+            if re.search(rf"\b(?:to|toward|towards|at)\s+{re.escape(ref)}\b", low):
+                return npc_id
+    return ""
+
+
+def scene_npcs_in_active_scene(scene: Dict[str, Any] | None, world: Dict[str, Any]) -> List[Dict[str, Any]]:
+    """NPCs present in the active scene envelope (matches api routing)."""
+    if not isinstance(scene, dict):
+        return []
+    scene_id = str(((scene or {}).get("scene") or {}).get("id") or "").strip()
+    if not scene_id:
+        return []
+    return npc_roster_for_dialogue_addressing(world or {}, scene_id, scene=scene, session=None)
 
 
 def extract_npc_reference_tokens(npc: Dict[str, Any]) -> Set[str]:
@@ -590,6 +817,12 @@ def find_world_npc_reference_id_in_text(text: str, world: Dict[str, Any]) -> Opt
     text_slug = slugify(low)
     npcs = (world or {}).get("npcs") or []
     if not isinstance(npcs, list):
+        npcs = []
+    if not npcs:
+        from game.defaults import default_world
+
+        npcs = default_world().get("npcs") or []
+    if not isinstance(npcs, list):
         return None
     for npc in npcs:
         if not isinstance(npc, dict):
@@ -621,7 +854,37 @@ def find_addressed_npc_id_for_turn(
     low = str(text or "").strip().lower()
     if not low or not isinstance(session, dict):
         return None
-    scene_npcs = scene_npcs_in_active_scene(scene, world)
+    scene_id = str(((scene or {}).get("scene") or {}).get("id") or "").strip()
+    p = str(text or "").strip()
+    w = world if isinstance(world, dict) else {}
+
+    # Highest priority: comma vocative. Resolve against in-scene location roster first, then any
+    # world NPC so ``Runner, …`` overrides a stale interlocutor even when the addressee is off-scene.
+    roster_by_location = effective_in_scene_npc_roster(w, scene_id) if scene_id else []
+    if roster_by_location:
+        v_loc = npc_id_from_vocative_line(p, roster_by_location)
+        if v_loc:
+            return v_loc
+    world_roster = _world_npc_dicts_for_addressing(w)
+    v_world = npc_id_from_vocative_line(p, world_roster)
+    if v_world:
+        return v_world
+
+    # Line-leading / directed address on the full location roster (not active_entities subset).
+    if roster_by_location:
+        lead = _explicit_addressed_npc_id_leading_or_directed(low, roster_by_location)
+        if lead:
+            return lead
+
+    scene_npcs = (
+        npc_roster_for_dialogue_addressing(w, scene_id, scene=scene, session=session) if scene_id else []
+    )
+    # Generic role address beats substring overlap and pronoun continuation so lines like
+    # ``you, stranger, …`` retarget instead of sticking to the prior interlocutor on ``you``.
+    gen_id = npc_id_from_explicit_generic_role_address(low, scene_npcs)
+    if gen_id:
+        return gen_id
+
     if not scene_npcs:
         return None
     text_slug = slugify(low)
@@ -648,8 +911,6 @@ def find_addressed_npc_id_for_turn(
         if assert_valid_speaker(active_target_id, session):
             return active_target_id
 
-    # Single present NPC: hail or clear information-seeking / question (not exploration commands).
-    # Do not bind proximity if the line clearly names a different world NPC (off-scene vocative, etc.).
     world_ref = find_world_npc_reference_id_in_text(str(text or ""), world)
     if len(scene_npcs) == 1 and not _line_blocks_dialogue_addressing(low):
         only_id = str(scene_npcs[0].get("id") or "").strip()

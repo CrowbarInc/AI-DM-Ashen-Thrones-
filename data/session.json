@@ -4,27 +4,33 @@
     "frontier_gate"
   ],
   "current_date": "Day 1",
-  "turn_counter": 0,
+  "turn_counter": 4,
   "response_mode": "standard",
   "clocks": {
     "suspicion": 0,
     "unrest": 0,
     "danger": 0,
     "occult_instability": 0,
-    "time_pressure": 0
+    "time_pressure": 4
   },
   "interaction_context": {
     "active_interaction_target_id": null,
-    "active_interaction_kind": null,
-    "interaction_mode": "none",
-    "engagement_level": "none",
+    "active_interaction_kind": "social",
+    "interaction_mode": "social",
+    "engagement_level": "engaged",
     "conversation_privacy": null,
     "player_position_context": null
   },
   "scene_state": {
     "active_scene_id": "frontier_gate",
-    "active_entities": [],
-    "entity_presence": {},
+    "active_entities": [
+      "guard_captain",
+      "tavern_runner"
+    ],
+    "entity_presence": {
+      "guard_captain": "active",
+      "tavern_runner": "active"
+    },
     "current_interlocutor": null
   },
   "scene_runtime": {
@@ -36,24 +42,955 @@
       "suspicion_flags": [],
       "searched_targets": [],
       "resolved_interactables": [],
-      "last_exploration_action_key": null,
-      "repeated_action_count": 0,
-      "last_resolution_kind": null,
-      "last_description_hash": null,
+      "last_exploration_action_key": "question_npc",
+      "repeated_action_count": 3,
+      "last_resolution_kind": "question",
+      "last_description_hash": "d1bc1d90c871e0877ddafba1a9000385",
       "consumed_action_ids": [],
       "momentum_exchanges_since": 0,
       "momentum_next_due_in": 2,
-      "momentum_last_kind": null
+      "momentum_last_kind": "new_information",
+      "passive_action_streak": 0,
+      "recent_player_actions": [
+        {
+          "text": "Begin the game.",
+          "passive": false,
+          "markers": [],
+          "resolution_kind": null,
+          "turn": 1
+        },
+        {
+          "text": "Galinor approaches one of the guardsmen. \"Guard, where is your captain?\"",
+          "passive": false,
+          "markers": [],
+          "resolution_kind": null,
+          "turn": 2
+        },
+        {
+          "text": "Galinor steps away, immediately approaches one of the refugees. \"You, stranger, have you heard any good rumors of late?\"",
+          "passive": false,
+          "markers": [],
+          "resolution_kind": null,
+          "turn": 3
+        },
+        {
+          "text": "Galinor returns to the same guard he originally approached. \"What about you? I'm here to help the city, are you aware of any tasks that could use a hero?\"",
+          "passive": false,
+          "markers": [],
+          "resolution_kind": null,
+          "turn": 4
+        }
+      ],
+      "last_player_action_text": "Galinor returns to the same guard he originally approached. \"What about you? I'm here to help the city, are you aware of any tasks that could use a hero?\"",
+      "last_player_action_passive": false,
+      "recent_contextual_leads": [
+        {
+          "key": "active_event_galinor_at_the_cinderwatch_gate_rain_drenching_the_soot_dark_stone",
+          "kind": "active_event",
+          "subject": "galinor",
+          "position": "at the cinderwatch gate, rain drenching the soot-dark stone",
+          "named": false,
+          "positioned": true,
+          "mentions": 1,
+          "last_turn": 1
+        },
+        {
+          "key": "active_event_guards_dressed_in_weathered_uniforms_maintain_a_brittle_discipline_casting_wary_eyes_towards_the_masses",
+          "kind": "active_event",
+          "subject": "guards, dressed in weathered uniforms, maintain a brittle discipline, casting wary eyes towards the masses",
+          "position": "",
+          "named": false,
+          "positioned": false,
+          "mentions": 1,
+          "last_turn": 1
+        },
+        {
+          "key": "active_event_refugees_wagons_and_foot_traffic_clog_the_muddy_approach_guards_hold_the_choke_while_the_crowd_presses_in",
+          "kind": "active_event",
+          "subject": "refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in",
+          "position": "",
+          "named": false,
+          "positioned": false,
+          "mentions": 1,
+          "last_turn": 3
+        },
+        {
+          "key": "active_event_guard_looks_at_galinor",
+          "kind": "active_event",
+          "subject": "guard looks",
+          "position": "at galinor",
+          "named": false,
+          "positioned": true,
+          "mentions": 1,
+          "last_turn": 4
+        }
+      ],
+      "topic_pressure": {
+        "topic:approach_captain_galinor": {
+          "repeat_count": 0,
+          "low_progress_streak": 0,
+          "progress_score_total": 1.5,
+          "last_answer": "galinor is at the cinderwatch gate, rain drenching the soot-dark stone.",
+          "last_turn": 2,
+          "speaker_targets": {
+            "__scene__": {
+              "repeat_count": 1,
+              "low_progress_streak": 0,
+              "patience": 3,
+              "last_turn": 2
+            }
+          },
+          "last_player_input": "Galinor approaches one of the guardsmen. \"Guard, where is your captain?\""
+        },
+        "topic:approach_away_galinor": {
+          "repeat_count": 2,
+          "low_progress_streak": 0,
+          "progress_score_total": 3.7,
+          "last_answer": "The guard looks at Galinor and says, \"I can't say there's anything needing a 'hero' right now. Just keep an eye on the patrols; some have gone missing. Rumor has it they were last seen near the old trading crossroads, but details are murky.\" He shifts nervously, glancing over the crowd as if expecting something.",
+          "last_turn": 4,
+          "speaker_targets": {
+            "__scene__": {
+              "repeat_count": 2,
+              "low_progress_streak": 0,
+              "patience": 3,
+              "last_turn": 4
+            }
+          },
+          "last_player_input": "Galinor returns to the same guard he originally approached. \"What about you? I'm here to help the city, are you aware of any tasks that could use a hero?\""
+        }
+      },
+      "topic_pressure_last_topic_key": "topic:approach_away_galinor",
+      "topic_pressure_current": {
+        "topic_key": "topic:approach_away_galinor",
+        "speaker_key": "__scene__",
+        "turn": 4,
+        "player_text": "Galinor returns to the same guard he originally approached. \"What about you? I'm here to help the city, are you aware of any tasks that could use a hero?\"",
+        "interaction_kind": "social",
+        "interaction_mode": "social",
+        "social_intent_class": "social_exchange",
+        "npc_name": ""
+      }
     }
   },
   "clue_knowledge": {},
   "npc_runtime": {},
-  "last_action_debug": null,
-  "debug_traces": [],
+  "last_action_debug": {
+    "last_action_type": "chat",
+    "player_input": "Galinor returns to the same guard he originally approached. \"What about you? I'm here to help the city, are you aware of any tasks that could use a hero?\"",
+    "normalized_action": {
+      "id": "question_npc",
+      "label": "Galinor returns to the same guard he originally approached. \"What about you? I'm here to help the city, are you aware of any tasks that coul",
+      "type": "question",
+      "prompt": "Galinor returns to the same guard he originally approached. \"What about you? I'm here to help the city, are you aware of any tasks that could use a hero?\""
+    },
+    "resolution_kind": "question",
+    "target_scene": null,
+    "resolver_result": {
+      "kind": "question",
+      "action_id": "question_npc",
+      "label": "Galinor returns to the same guard he originally approached. \"What about you? I'm here to help the city, are you aware of any tasks that coul",
+      "prompt": "Galinor returns to the same guard he originally approached. \"What about you? I'm here to help the city, are you aware of any tasks that could use a hero?\"",
+      "success": false,
+      "resolved_transition": false,
+      "target_scene_id": null,
+      "clue_id": null,
+      "discovered_clues": [],
+      "state_changes": {},
+      "hint": "No matching NPC found in this scene. Narrate that the player's social attempt has no clear target or the intended person is not present.",
+      "social": {
+        "social_intent_class": "social_exchange",
+        "npc_id": null,
+        "npc_name": null,
+        "target_resolved": false,
+        "skill_check": null,
+        "npc_reply_expected": false,
+        "reply_kind": "reaction",
+        "offscene_target": false
+      },
+      "requires_check": false,
+      "world_tick_events": []
+    },
+    "scene_transition": null
+  },
+  "debug_traces": [
+    {
+      "timestamp": "2026-03-24T23:21:38.629676Z",
+      "source": "chat",
+      "action_type": "chat",
+      "raw_input": "Begin the game.",
+      "turn_stage_order": [
+        "player_input",
+        "intent_normalization_expansion",
+        "action_classification",
+        "engine_resolution",
+        "authoritative_state_mutation",
+        "prompt_context_construction",
+        "gpt_narration",
+        "affordance_derivation",
+        "response_debug_packaging"
+      ],
+      "incoming_payload": {
+        "text": "Begin the game."
+      },
+      "parsed_intent": {
+        "id": "campaign_start_opening_scene",
+        "label": "Begin the game.",
+        "type": "scene_opening",
+        "prompt": "Begin the game.",
+        "targetSceneId": "frontier_gate",
+        "target_scene_id": "frontier_gate"
+      },
+      "segmented_turn": {
+        "declared_action_text": "Begin the game."
+      },
+      "normalized_action": {
+        "id": "campaign_start_opening_scene",
+        "label": "Begin the game.",
+        "type": "scene_opening",
+        "prompt": "Begin the game.",
+        "targetSceneId": "frontier_gate",
+        "target_scene_id": "frontier_gate"
+      },
+      "resolution": {
+        "kind": "scene_opening",
+        "action_id": "campaign_start_opening_scene",
+        "label": "Begin the game.",
+        "prompt": "Begin the game.",
+        "success": true,
+        "resolved_transition": false,
+        "target_scene_id": "frontier_gate",
+        "clue_id": null,
+        "discovered_clues": [],
+        "state_changes": {
+          "opening_scene_turn": true,
+          "arrived_at_scene": true,
+          "new_scene_context_available": true
+        },
+        "hint": "Campaign opening turn: narrate the active scene as an immediate playable situation, with concrete opportunities grounded in the current scene state.",
+        "world_tick_events": [
+          {
+            "type": "faction_pressure",
+            "text": "House Verevin's pressure mounts.",
+            "source": "house_verevin"
+          },
+          {
+            "type": "faction_pressure",
+            "text": "The Ash Cowl's pressure mounts.",
+            "source": "ash_cowl"
+          }
+        ]
+      },
+      "scene_before": "frontier_gate",
+      "scene_after": "frontier_gate",
+      "clue_updates": [],
+      "world_flag_updates": [
+        "clock:time_pressure=1"
+      ],
+      "turn_trace": {
+        "source": "chat",
+        "player_input": "Begin the game.",
+        "intent": {
+          "parsed": {
+            "id": "campaign_start_opening_scene",
+            "label": "Begin the game.",
+            "type": "scene_opening",
+            "prompt": "Begin the game.",
+            "targetSceneId": "frontier_gate",
+            "target_scene_id": "frontier_gate"
+          },
+          "segmented_turn": {
+            "declared_action_text": "Begin the game."
+          },
+          "normalized": {
+            "id": "campaign_start_opening_scene",
+            "label": "Begin the game.",
+            "type": "scene_opening",
+            "prompt": "Begin the game.",
+            "targetSceneId": "frontier_gate",
+            "target_scene_id": "frontier_gate",
+            "targetEntityId": null,
+            "target_id": null
+          },
+          "implied_context": {
+            "applied": false,
+            "cases": [],
+            "target_id": null
+          }
+        },
+        "classification": {
+          "action_type": "chat",
+          "resolved_kind": "scene_opening",
+          "requires_check": false
+        },
+        "resolution_path": "exploration_engine",
+        "authoritative_state_changes": {
+          "scene_transition": null,
+          "resolution_state_changes": {
+            "opening_scene_turn": true,
+            "arrived_at_scene": true,
+            "new_scene_context_available": true
+          },
+          "resolution_world_updates": [],
+          "check_request": null
+        },
+        "interaction_after": {
+          "active_interaction_target_id": null,
+          "active_interaction_kind": null,
+          "interaction_mode": "none",
+          "engagement_level": "none",
+          "conversation_privacy": null,
+          "player_position_context": null
+        },
+        "narration_obligations": {
+          "is_opening_scene": true,
+          "must_advance_scene": true,
+          "should_answer_active_npc": false,
+          "avoid_input_echo": true,
+          "avoid_player_action_restatement": true,
+          "prefer_structured_turn_summary": true,
+          "active_npc_reply_expected": false,
+          "active_npc_reply_kind": null,
+          "scene_momentum_due": false,
+          "scene_momentum_exchanges_since": 0,
+          "scene_momentum_next_due_in": 2,
+          "suppress_non_social_emitters": false
+        },
+        "clues": {
+          "discovered_texts": [],
+          "presentation_changes": [],
+          "known_counts": {
+            "implicit": 0,
+            "explicit": 0,
+            "actionable": 0
+          }
+        },
+        "affordances_after": [
+          {
+            "id": "examine_the_rain_spatters_soot_dark_stone_frayed",
+            "type": "investigate",
+            "label": "Examine the Rain spatters soot-dark stone; frayed"
+          },
+          {
+            "id": "examine_refugees",
+            "type": "investigate",
+            "label": "Examine Refugees"
+          },
+          {
+            "id": "examine_a_notice_board_lists_new_taxes",
+            "type": "investigate",
+            "label": "Examine A notice board lists new taxes"
+          },
+          {
+            "id": "talk_to_a_tavern_runner_shouts_offers_of_hot",
+            "type": "investigate",
+            "label": "Talk to A tavern runner shouts offers of hot"
+          },
+          {
+            "id": "examine_a_well_appointed_townhouse_overlookin",
+            "type": "investigate",
+            "label": "Examine A well-appointed townhouse overlookin"
+          }
+        ]
+      },
+      "gpt_called": true,
+      "response_ok": true,
+      "error": null
+    },
+    {
+      "timestamp": "2026-03-24T23:22:21.765333Z",
+      "source": "chat",
+      "action_type": "chat",
+      "raw_input": "Galinor approaches one of the guardsmen. \"Guard, where is your captain?\"",
+      "turn_stage_order": [
+        "player_input",
+        "intent_normalization_expansion",
+        "action_classification",
+        "engine_resolution",
+        "authoritative_state_mutation",
+        "prompt_context_construction",
+        "gpt_narration",
+        "affordance_derivation",
+        "response_debug_packaging"
+      ],
+      "incoming_payload": {
+        "text": "Galinor approaches one of the guardsmen. \"Guard, where is your captain?\""
+      },
+      "parsed_intent": {
+        "id": "question_npc",
+        "label": "Galinor approaches one of the guardsmen. \"Guard, where is your captain?\"",
+        "type": "question",
+        "social_intent_class": "social_exchange",
+        "prompt": "Galinor approaches one of the guardsmen. \"Guard, where is your captain?\"",
+        "metadata": {
+          "routed_via_dialogue_lock": true,
+          "route": "dialogue",
+          "turn_segmentation": {
+            "spoken_text": "Guard, where is your captain?",
+            "declared_action_text": "Galinor approaches one of the guardsmen."
+          }
+        }
+      },
+      "segmented_turn": {
+        "spoken_text": "Guard, where is your captain?",
+        "declared_action_text": "Galinor approaches one of the guardsmen."
+      },
+      "normalized_action": {
+        "id": "question_npc",
+        "label": "Galinor approaches one of the guardsmen. \"Guard, where is your captain?\"",
+        "type": "question",
+        "prompt": "Galinor approaches one of the guardsmen. \"Guard, where is your captain?\""
+      },
+      "resolution": {
+        "kind": "question",
+        "action_id": "question_npc",
+        "label": "Galinor approaches one of the guardsmen. \"Guard, where is your captain?\"",
+        "prompt": "Galinor approaches one of the guardsmen. \"Guard, where is your captain?\"",
+        "success": false,
+        "resolved_transition": false,
+        "target_scene_id": null,
+        "clue_id": null,
+        "discovered_clues": [],
+        "state_changes": {},
+        "hint": "No matching NPC found in this scene. Narrate that the player's social attempt has no clear target or the intended person is not present.",
+        "social": {
+          "social_intent_class": "social_exchange",
+          "npc_id": null,
+          "npc_name": null,
+          "target_resolved": false,
+          "skill_check": null,
+          "npc_reply_expected": false,
+          "reply_kind": "reaction",
+          "offscene_target": false
+        },
+        "requires_check": false,
+        "metadata": {
+          "turn_segmentation": {
+            "spoken_text": "Guard, where is your captain?",
+            "declared_action_text": "Galinor approaches one of the guardsmen."
+          }
+        },
+        "world_tick_events": [
+          {
+            "type": "faction_pressure",
+            "text": "Ordo Pyric's pressure mounts.",
+            "source": "ordo_pyric"
+          }
+        ]
+      },
+      "scene_before": "frontier_gate",
+      "scene_after": "frontier_gate",
+      "clue_updates": [],
+      "world_flag_updates": [
+        "clock:time_pressure=2"
+      ],
+      "turn_trace": {
+        "source": "chat",
+        "player_input": "Galinor approaches one of the guardsmen. \"Guard, where is your captain?\"",
+        "intent": {
+          "parsed": {
+            "id": "question_npc",
+            "label": "Galinor approaches one of the guardsmen. \"Guard, where is your captain?\"",
+            "type": "question",
+            "social_intent_class": "social_exchange",
+            "prompt": "Galinor approaches one of the guardsmen. \"Guard, where is your captain?\"",
+            "metadata": {
+              "routed_via_dialogue_lock": true,
+              "route": "dialogue",
+              "turn_segmentation": {
+                "spoken_text": "Guard, where is your captain?",
+                "declared_action_text": "Galinor approaches one of the guardsmen."
+              }
+            }
+          },
+          "segmented_turn": {
+            "spoken_text": "Guard, where is your captain?",
+            "declared_action_text": "Galinor approaches one of the guardsmen."
+          },
+          "normalized": {
+            "id": "question_npc",
+            "label": "Galinor approaches one of the guardsmen. \"Guard, where is your captain?\"",
+            "type": "question",
+            "prompt": "Galinor approaches one of the guardsmen. \"Guard, where is your captain?\"",
+            "targetSceneId": null,
+            "target_scene_id": null,
+            "targetEntityId": null,
+            "target_id": null
+          },
+          "implied_context": {
+            "applied": false,
+            "cases": [],
+            "target_id": null
+          }
+        },
+        "classification": {
+          "action_type": "chat",
+          "resolved_kind": "question",
+          "requires_check": false
+        },
+        "resolution_path": "social_engine",
+        "authoritative_state_changes": {
+          "scene_transition": null,
+          "resolution_state_changes": {},
+          "resolution_world_updates": [],
+          "check_request": null
+        },
+        "interaction_after": {
+          "active_interaction_target_id": null,
+          "active_interaction_kind": "social",
+          "interaction_mode": "social",
+          "engagement_level": "engaged",
+          "conversation_privacy": null,
+          "player_position_context": null
+        },
+        "narration_obligations": {
+          "is_opening_scene": false,
+          "must_advance_scene": false,
+          "should_answer_active_npc": false,
+          "avoid_input_echo": true,
+          "avoid_player_action_restatement": true,
+          "prefer_structured_turn_summary": true,
+          "active_npc_reply_expected": false,
+          "active_npc_reply_kind": null,
+          "scene_momentum_due": false,
+          "scene_momentum_exchanges_since": 0,
+          "scene_momentum_next_due_in": 2,
+          "suppress_non_social_emitters": false
+        },
+        "clues": {
+          "discovered_texts": [],
+          "presentation_changes": [],
+          "known_counts": {
+            "implicit": 0,
+            "explicit": 0,
+            "actionable": 0
+          }
+        },
+        "affordances_after": [
+          {
+            "id": "examine_the_rain_spatters_soot_dark_stone_frayed",
+            "type": "investigate",
+            "label": "Examine the Rain spatters soot-dark stone; frayed"
+          },
+          {
+            "id": "examine_refugees",
+            "type": "investigate",
+            "label": "Examine Refugees"
+          },
+          {
+            "id": "examine_a_notice_board_lists_new_taxes",
+            "type": "investigate",
+            "label": "Examine A notice board lists new taxes"
+          },
+          {
+            "id": "talk_to_a_tavern_runner_shouts_offers_of_hot",
+            "type": "investigate",
+            "label": "Talk to A tavern runner shouts offers of hot"
+          },
+          {
+            "id": "examine_a_well_appointed_townhouse_overlookin",
+            "type": "investigate",
+            "label": "Examine A well-appointed townhouse overlookin"
+          }
+        ]
+      },
+      "gpt_called": true,
+      "response_ok": true,
+      "error": null
+    },
+    {
+      "timestamp": "2026-03-24T23:23:52.414640Z",
+      "source": "chat",
+      "action_type": "chat",
+      "raw_input": "Galinor steps away, immediately approaches one of the refugees. \"You, stranger, have you heard any good rumors of late?\"",
+      "turn_stage_order": [
+        "player_input",
+        "intent_normalization_expansion",
+        "action_classification",
+        "engine_resolution",
+        "authoritative_state_mutation",
+        "prompt_context_construction",
+        "gpt_narration",
+        "affordance_derivation",
+        "response_debug_packaging"
+      ],
+      "incoming_payload": {
+        "text": "Galinor steps away, immediately approaches one of the refugees. \"You, stranger, have you heard any good rumors of late?\""
+      },
+      "parsed_intent": {
+        "id": "question_npc",
+        "label": "Galinor steps away, immediately approaches one of the refugees. \"You, stranger, have you heard any good rumors of late?\"",
+        "type": "question",
+        "social_intent_class": "social_exchange",
+        "prompt": "Galinor steps away, immediately approaches one of the refugees. \"You, stranger, have you heard any good rumors of late?\"",
+        "metadata": {
+          "routed_via_dialogue_lock": true,
+          "route": "dialogue",
+          "turn_segmentation": {
+            "spoken_text": "You, stranger, have you heard any good rumors of late?",
+            "declared_action_text": "Galinor steps away, immediately approaches one of the refugees."
+          }
+        }
+      },
+      "segmented_turn": {
+        "spoken_text": "You, stranger, have you heard any good rumors of late?",
+        "declared_action_text": "Galinor steps away, immediately approaches one of the refugees."
+      },
+      "normalized_action": {
+        "id": "question_npc",
+        "label": "Galinor steps away, immediately approaches one of the refugees. \"You, stranger, have you heard any good rumors of late?\"",
+        "type": "question",
+        "prompt": "Galinor steps away, immediately approaches one of the refugees. \"You, stranger, have you heard any good rumors of late?\""
+      },
+      "resolution": {
+        "kind": "question",
+        "action_id": "question_npc",
+        "label": "Galinor steps away, immediately approaches one of the refugees. \"You, stranger, have you heard any good rumors of late?\"",
+        "prompt": "Galinor steps away, immediately approaches one of the refugees. \"You, stranger, have you heard any good rumors of late?\"",
+        "success": false,
+        "resolved_transition": false,
+        "target_scene_id": null,
+        "clue_id": null,
+        "discovered_clues": [],
+        "state_changes": {},
+        "hint": "No matching NPC found in this scene. Narrate that the player's social attempt has no clear target or the intended person is not present.",
+        "social": {
+          "social_intent_class": "social_exchange",
+          "npc_id": null,
+          "npc_name": null,
+          "target_resolved": false,
+          "skill_check": null,
+          "npc_reply_expected": false,
+          "reply_kind": "reaction",
+          "offscene_target": false
+        },
+        "requires_check": false,
+        "metadata": {
+          "turn_segmentation": {
+            "spoken_text": "You, stranger, have you heard any good rumors of late?",
+            "declared_action_text": "Galinor steps away, immediately approaches one of the refugees."
+          }
+        },
+        "world_tick_events": []
+      },
+      "scene_before": "frontier_gate",
+      "scene_after": "frontier_gate",
+      "clue_updates": [],
+      "world_flag_updates": [
+        "clock:time_pressure=3"
+      ],
+      "turn_trace": {
+        "source": "chat",
+        "player_input": "Galinor steps away, immediately approaches one of the refugees. \"You, stranger, have you heard any good rumors of late?\"",
+        "intent": {
+          "parsed": {
+            "id": "question_npc",
+            "label": "Galinor steps away, immediately approaches one of the refugees. \"You, stranger, have you heard any good rumors of late?\"",
+            "type": "question",
+            "social_intent_class": "social_exchange",
+            "prompt": "Galinor steps away, immediately approaches one of the refugees. \"You, stranger, have you heard any good rumors of late?\"",
+            "metadata": {
+              "routed_via_dialogue_lock": true,
+              "route": "dialogue",
+              "turn_segmentation": {
+                "spoken_text": "You, stranger, have you heard any good rumors of late?",
+                "declared_action_text": "Galinor steps away, immediately approaches one of the refugees."
+              }
+            }
+          },
+          "segmented_turn": {
+            "spoken_text": "You, stranger, have you heard any good rumors of late?",
+            "declared_action_text": "Galinor steps away, immediately approaches one of the refugees."
+          },
+          "normalized": {
+            "id": "question_npc",
+            "label": "Galinor steps away, immediately approaches one of the refugees. \"You, stranger, have you heard any good rumors of late?\"",
+            "type": "question",
+            "prompt": "Galinor steps away, immediately approaches one of the refugees. \"You, stranger, have you heard any good rumors of late?\"",
+            "targetSceneId": null,
+            "target_scene_id": null,
+            "targetEntityId": null,
+            "target_id": null
+          },
+          "implied_context": {
+            "applied": false,
+            "cases": [],
+            "target_id": null
+          }
+        },
+        "classification": {
+          "action_type": "chat",
+          "resolved_kind": "question",
+          "requires_check": false
+        },
+        "resolution_path": "social_engine",
+        "authoritative_state_changes": {
+          "scene_transition": null,
+          "resolution_state_changes": {},
+          "resolution_world_updates": [],
+          "check_request": null
+        },
+        "interaction_after": {
+          "active_interaction_target_id": null,
+          "active_interaction_kind": "social",
+          "interaction_mode": "social",
+          "engagement_level": "engaged",
+          "conversation_privacy": null,
+          "player_position_context": null
+        },
+        "narration_obligations": {
+          "is_opening_scene": false,
+          "must_advance_scene": false,
+          "should_answer_active_npc": false,
+          "avoid_input_echo": true,
+          "avoid_player_action_restatement": true,
+          "prefer_structured_turn_summary": true,
+          "active_npc_reply_expected": false,
+          "active_npc_reply_kind": null,
+          "scene_momentum_due": false,
+          "scene_momentum_exchanges_since": 0,
+          "scene_momentum_next_due_in": 2,
+          "suppress_non_social_emitters": false
+        },
+        "clues": {
+          "discovered_texts": [],
+          "presentation_changes": [],
+          "known_counts": {
+            "implicit": 0,
+            "explicit": 0,
+            "actionable": 0
+          }
+        },
+        "affordances_after": [
+          {
+            "id": "examine_the_rain_spatters_soot_dark_stone_frayed",
+            "type": "investigate",
+            "label": "Examine the Rain spatters soot-dark stone; frayed"
+          },
+          {
+            "id": "examine_refugees",
+            "type": "investigate",
+            "label": "Examine Refugees"
+          },
+          {
+            "id": "examine_a_notice_board_lists_new_taxes",
+            "type": "investigate",
+            "label": "Examine A notice board lists new taxes"
+          },
+          {
+            "id": "talk_to_a_tavern_runner_shouts_offers_of_hot",
+            "type": "investigate",
+            "label": "Talk to A tavern runner shouts offers of hot"
+          },
+          {
+            "id": "examine_a_well_appointed_townhouse_overlookin",
+            "type": "investigate",
+            "label": "Examine A well-appointed townhouse overlookin"
+          }
+        ]
+      },
+      "gpt_called": true,
+      "response_ok": true,
+      "error": null
+    },
+    {
+      "timestamp": "2026-03-24T23:25:06.810859Z",
+      "source": "chat",
+      "action_type": "chat",
+      "raw_input": "Galinor returns to the same guard he originally approached. \"What about you? I'm here to help the city, are you aware of any tasks that could use a hero?\"",
+      "turn_stage_order": [
+        "player_input",
+        "intent_normalization_expansion",
+        "action_classification",
+        "engine_resolution",
+        "authoritative_state_mutation",
+        "prompt_context_construction",
+        "gpt_narration",
+        "affordance_derivation",
+        "response_debug_packaging"
+      ],
+      "incoming_payload": {
+        "text": "Galinor returns to the same guard he originally approached. \"What about you? I'm here to help the city, are you aware of any tasks that could use a hero?\""
+      },
+      "parsed_intent": {
+        "id": "question_npc",
+        "label": "Galinor returns to the same guard he originally approached. \"What about you? I'm here to help the city, are you aware of any tasks that coul",
+        "type": "question",
+        "social_intent_class": "social_exchange",
+        "prompt": "Galinor returns to the same guard he originally approached. \"What about you? I'm here to help the city, are you aware of any tasks that could use a hero?\"",
+        "metadata": {
+          "routed_via_dialogue_lock": true,
+          "route": "dialogue",
+          "turn_segmentation": {
+            "spoken_text": "What about you? I'm here to help the city, are you aware of any tasks that could use a hero?",
+            "declared_action_text": "Galinor returns to the same guard he originally approached."
+          }
+        }
+      },
+      "segmented_turn": {
+        "spoken_text": "What about you? I'm here to help the city, are you aware of any tasks that could use a hero?",
+        "declared_action_text": "Galinor returns to the same guard he originally approached."
+      },
+      "normalized_action": {
+        "id": "question_npc",
+        "label": "Galinor returns to the same guard he originally approached. \"What about you? I'm here to help the city, are you aware of any tasks that coul",
+        "type": "question",
+        "prompt": "Galinor returns to the same guard he originally approached. \"What about you? I'm here to help the city, are you aware of any tasks that could use a hero?\""
+      },
+      "resolution": {
+        "kind": "question",
+        "action_id": "question_npc",
+        "label": "Galinor returns to the same guard he originally approached. \"What about you? I'm here to help the city, are you aware of any tasks that coul",
+        "prompt": "Galinor returns to the same guard he originally approached. \"What about you? I'm here to help the city, are you aware of any tasks that could use a hero?\"",
+        "success": false,
+        "resolved_transition": false,
+        "target_scene_id": null,
+        "clue_id": null,
+        "discovered_clues": [],
+        "state_changes": {},
+        "hint": "No matching NPC found in this scene. Narrate that the player's social attempt has no clear target or the intended person is not present.",
+        "social": {
+          "social_intent_class": "social_exchange",
+          "npc_id": null,
+          "npc_name": null,
+          "target_resolved": false,
+          "skill_check": null,
+          "npc_reply_expected": false,
+          "reply_kind": "reaction",
+          "offscene_target": false
+        },
+        "requires_check": false,
+        "metadata": {
+          "turn_segmentation": {
+            "spoken_text": "What about you? I'm here to help the city, are you aware of any tasks that could use a hero?",
+            "declared_action_text": "Galinor returns to the same guard he originally approached."
+          }
+        },
+        "world_tick_events": []
+      },
+      "scene_before": "frontier_gate",
+      "scene_after": "frontier_gate",
+      "clue_updates": [],
+      "world_flag_updates": [
+        "clock:time_pressure=4"
+      ],
+      "turn_trace": {
+        "source": "chat",
+        "player_input": "Galinor returns to the same guard he originally approached. \"What about you? I'm here to help the city, are you aware of any tasks that could use a hero?\"",
+        "intent": {
+          "parsed": {
+            "id": "question_npc",
+            "label": "Galinor returns to the same guard he originally approached. \"What about you? I'm here to help the city, are you aware of any tasks that coul",
+            "type": "question",
+            "social_intent_class": "social_exchange",
+            "prompt": "Galinor returns to the same guard he originally approached. \"What about you? I'm here to help the city, are you aware of any tasks that could use a hero?\"",
+            "metadata": {
+              "routed_via_dialogue_lock": true,
+              "route": "dialogue",
+              "turn_segmentation": {
+                "spoken_text": "What about you? I'm here to help the city, are you aware of any tasks that could use a hero?",
+                "declared_action_text": "Galinor returns to the same guard he originally approached."
+              }
+            }
+          },
+          "segmented_turn": {
+            "spoken_text": "What about you? I'm here to help the city, are you aware of any tasks that could use a hero?",
+            "declared_action_text": "Galinor returns to the same guard he originally approached."
+          },
+          "normalized": {
+            "id": "question_npc",
+            "label": "Galinor returns to the same guard he originally approached. \"What about you? I'm here to help the city, are you aware of any tasks that coul",
+            "type": "question",
+            "prompt": "Galinor returns to the same guard he originally approached. \"What about you? I'm here to help the city, are you aware of any tasks that could use a hero?\"",
+            "targetSceneId": null,
+            "target_scene_id": null,
+            "targetEntityId": null,
+            "target_id": null
+          },
+          "implied_context": {
+            "applied": false,
+            "cases": [],
+            "target_id": null
+          }
+        },
+        "classification": {
+          "action_type": "chat",
+          "resolved_kind": "question",
+          "requires_check": false
+        },
+        "resolution_path": "social_engine",
+        "authoritative_state_changes": {
+          "scene_transition": null,
+          "resolution_state_changes": {},
+          "resolution_world_updates": [],
+          "check_request": null
+        },
+        "interaction_after": {
+          "active_interaction_target_id": null,
+          "active_interaction_kind": "social",
+          "interaction_mode": "social",
+          "engagement_level": "engaged",
+          "conversation_privacy": null,
+          "player_position_context": null
+        },
+        "narration_obligations": {
+          "is_opening_scene": false,
+          "must_advance_scene": false,
+          "should_answer_active_npc": false,
+          "avoid_input_echo": true,
+          "avoid_player_action_restatement": true,
+          "prefer_structured_turn_summary": true,
+          "active_npc_reply_expected": false,
+          "active_npc_reply_kind": null,
+          "scene_momentum_due": false,
+          "scene_momentum_exchanges_since": 0,
+          "scene_momentum_next_due_in": 2,
+          "suppress_non_social_emitters": false
+        },
+        "clues": {
+          "discovered_texts": [],
+          "presentation_changes": [],
+          "known_counts": {
+            "implicit": 0,
+            "explicit": 0,
+            "actionable": 0
+          }
+        },
+        "affordances_after": [
+          {
+            "id": "examine_the_rain_spatters_soot_dark_stone_frayed",
+            "type": "investigate",
+            "label": "Examine the Rain spatters soot-dark stone; frayed"
+          },
+          {
+            "id": "examine_refugees",
+            "type": "investigate",
+            "label": "Examine Refugees"
+          },
+          {
+            "id": "examine_a_notice_board_lists_new_taxes",
+            "type": "investigate",
+            "label": "Examine A notice board lists new taxes"
+          },
+          {
+            "id": "talk_to_a_tavern_runner_shouts_offers_of_hot",
+            "type": "investigate",
+            "label": "Talk to A tavern runner shouts offers of hot"
+          },
+          {
+            "id": "examine_a_well_appointed_townhouse_overlookin",
+            "type": "investigate",
+            "label": "Examine A well-appointed townhouse overlookin"
+          }
+        ]
+      },
+      "gpt_called": true,
+      "response_ok": true,
+      "error": null
+    }
+  ],
   "flags": {},
-  "chat_history": [],
   "character_name": "Galinor",
-  "campaign_run_id": "1b59783b6dc97bd8555d1949",
-  "session_id": "1b59783b6dc97bd8555d1949",
-  "last_saved_at": "2026-03-24T11:24:38.455516Z"
+  "campaign_run_id": "4ab5b4d8efcc1ede51a21345",
+  "session_id": "4ab5b4d8efcc1ede51a21345",
+  "last_saved_at": "2026-03-24T23:25:18.187715Z"
 }

@@ -89,8 +89,8 @@ from game.interaction_context import (
     assert_valid_speaker,
     clear_for_scene_change,
     establish_dialogue_interaction_from_input,
-    extract_npc_reference_tokens,
     find_addressed_npc_id_for_turn,
+    find_world_npc_reference_id_in_text,
     inspect as inspect_interaction_context,
     is_entity_active,
     rebuild_active_scene_entities,
@@ -1168,31 +1168,7 @@ def _find_addressed_npc_id(
 
 
 def _find_world_npc_reference_id(text: str, world: dict) -> str | None:
-    low = str(text or "").strip().lower()
-    if not low:
-        return None
-    text_slug = slugify(low)
-    npcs = (world or {}).get("npcs") or []
-    if not isinstance(npcs, list):
-        return None
-    for npc in npcs:
-        if not isinstance(npc, dict):
-            continue
-        npc_id = str(npc.get("id") or "").strip()
-        npc_name = str(npc.get("name") or "").strip()
-        if not npc_id:
-            continue
-        npc_slug = slugify(f"{npc_id} {npc_name}")
-        if npc_slug and npc_slug in text_slug:
-            return npc_id
-        for ref in extract_npc_reference_tokens(npc):
-            if not ref:
-                continue
-            if re.search(rf"^\s*{re.escape(ref)}\b(?:\s*[,:?!-]|\s+)", low):
-                return npc_id
-            if re.search(rf"\b(?:to|toward|towards|at)\s+{re.escape(ref)}\b", low):
-                return npc_id
-    return None
+    return find_world_npc_reference_id_in_text(text, world)
 
 
 def _is_information_seeking_clause(text: str) -> bool:
