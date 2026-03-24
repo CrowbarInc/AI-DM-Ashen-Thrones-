@@ -1,78 +1,16 @@
-"""Persistence layer: campaign/world vs session separation.
+"""Persistence: static/bootstrap files vs runtime documents.
 
-Campaign templates (scenes, locations, clues, NPCs, summaries) are stored separately
-from session state. Session holds only playthrough state and is safe to reset.
+Static + bootstrap (authored defaults; not wiped by ``create_fresh_session_document``):
+``campaign.json``, ``world.json``, ``character.json``, ``data/scenes/*.json``,
+``conditions.json``.
 
-Campaign/world layer (immutable during session reset):
-- campaign.json: metadata, gm_guidance
-- world.json: settlements, factions, projects, event_log, world_state
-- data/scenes/<id>.json: scene templates (location, visible_facts, discoverable_clues,
-  hidden_facts, exits, enemies)
+Runtime (canonical fresh shape in ``game/campaign_state.py``): ``session.json``,
+``combat.json``, ``session_log.jsonl``. A full New Campaign also clears world
+playthrough fields via ``game.world.reset_world_playthrough_state`` (see
+``game.campaign_reset.apply_new_campaign_hard_reset``).
 
-Session layer (playthrough state only):
-- session.json: active_scene_id, visited_scene_ids, scene_runtime (discovered_clues,
-  pending_leads, etc.), clocks, turn_counter, response_mode, last_action_debug
-
-Scene activation: load_active_scene() reads active_scene_id from session, then loads
-scene content from data/scenes/<id>.json (disk), never from session.
-
-Persistence layer. Campaign/world data and session playthrough state are strictly separated.
-
-Campaign data (immutable during session reset):
-  - campaign.json: metadata (title, premise, gm_guidance, etc.)
-  - world.json: settlements, factions, assets, projects, event_log, world_state
-  - data/scenes/*.json: scene templates (location, summary, visible_facts, discoverable_clues,
-    hidden_facts, exits, enemies) — loaded via load_scene(), never stored in session
-
-Session playthrough state only (resettable):
-  - active_scene_id, visited_scene_ids, turn_counter, response_mode
-  - clocks (suspicion, unrest, time_pressure, etc.)
-  - scene_runtime: per-scene playthrough (discovered_clues, pending_leads, repeated_action_count)
-  - last_action_debug
-
-Scene activation reads scene content from data/scenes/{id}.json, not from session.
-
-Persistence layer. Data separation:
-
-Campaign/world (immutable during session reset):
-  - campaign.json: premise, tone, gm_guidance, etc.
-  - world.json: settlements, factions, assets, projects, event_log, world_state
-  - data/scenes/*.json: scene templates (location, summary, visible_facts,
-    discoverable_clues, hidden_facts, exits, enemies)
-
-Session (playthrough state only):
-  - session.json: active_scene_id, visited_scene_ids, turn_counter, clocks,
-    scene_runtime (discovered_clues, pending_leads, repeated_action_count, etc.)
-  - Session does NOT store scenes, locations, npcs, or clue templates.
-  - load_active_scene() reads scene_id from session, loads scene from disk.
-
-Persistence layer: campaign vs session data separation.
-
-Campaign/world data (immutable during session reset):
-  - campaign.json: title, premise, gm_guidance, etc.
-  - world.json: settlements, factions, projects, event_log, world_state
-  - data/scenes/*.json: scene templates (location, visible_facts, discoverable_clues,
-    hidden_facts, exits, enemies)
-
-Session data (playthrough state only; safe to reset):
-  - session.json: active_scene_id, visited_scene_ids, turn_counter, response_mode,
-    clocks, scene_runtime (discovered_clues per scene, pending_leads, etc.)
-
-Scene activation: uses session.active_scene_id then load_scene() from disk;
-scenes are never stored in session.
-
-Persistence layer. Campaign/world data separate from session playthrough state.
-
-Campaign data (immutable during session reset):
-  - campaign.json: title, premise, gm_guidance, etc.
-  - world.json: settlements, factions, projects, event_log, world_state
-  - data/scenes/*.json: scene templates (location, summary, visible_facts,
-    discoverable_clues, hidden_facts, exits, enemies)
-
-Session (playthrough state only):
-  - active_scene_id, visited_scene_ids, turn_counter, response_mode, clocks
-  - scene_runtime[scene_id]: discovered_clues, pending_leads, repeated_action_count
-  - Session never stores scenes, locations, npcs, or clue templates.
+``load_scene`` reads scene templates only from disk; session stores playthrough
+progress (``scene_runtime``, clocks, etc.), never a copy of the scene JSON.
 """
 from __future__ import annotations
 from pathlib import Path

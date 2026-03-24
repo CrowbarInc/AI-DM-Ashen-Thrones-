@@ -86,7 +86,7 @@ def _seed_gate_and_roadside(tmp_path, monkeypatch):
         storage.SESSION_LOG_PATH.write_text("", encoding="utf-8")
 
 
-def test_gauntlet_repeated_runner_probe_escalates_by_third_press(tmp_path, monkeypatch):
+def test_gauntlet_repeated_runner_probe_skips_policy_topic_pressure_for_strict_social(tmp_path, monkeypatch):
     _seed_gate_and_roadside(tmp_path, monkeypatch)
     stale_reply = {
         "player_facing_text": (
@@ -123,8 +123,9 @@ def test_gauntlet_repeated_runner_probe_escalates_by_third_press(tmp_path, monke
     assert out is not None and out.status_code == 200
     data = out.json()
     tags = (data.get("gm_output") or {}).get("tags") or []
-    assert "topic_pressure_escalation" in tags
-    assert any(str(tag).startswith("scene_momentum:") for tag in tags)
+    # Strict-social turns skip topic_pressure / scene_momentum policy mutators; final emission gate owns the rewrite.
+    assert "topic_pressure_escalation" not in tags
+    assert not any(str(tag).startswith("scene_momentum:") for tag in tags)
 
 
 def test_gauntlet_vague_npc_question_stays_dialogue_and_not_procedural(tmp_path, monkeypatch):

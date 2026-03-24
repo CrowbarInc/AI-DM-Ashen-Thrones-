@@ -1,3 +1,6 @@
+from game.campaign_state import create_fresh_combat_state, create_fresh_session_document
+
+
 def default_campaign():
     return {
         "title": "Ashen Thrones",
@@ -96,27 +99,8 @@ def default_character():
 
 
 def default_session():
-    return {
-        "active_scene_id": "frontier_gate",
-        "visited_scene_ids": ["frontier_gate"],
-        "current_date": "Day 1",
-        "turn_counter": 0,
-        "response_mode": "standard",
-        "interaction_context": {
-            "active_interaction_target_id": None,
-            "active_interaction_kind": None,
-            "interaction_mode": "none",
-            "engagement_level": "none",
-            "conversation_privacy": None,
-            "player_position_context": None,
-        },
-        "scene_state": {
-            "active_scene_id": "frontier_gate",
-            "active_entities": [],
-            "entity_presence": {},
-            "current_interlocutor": None,
-        },
-    }
+    """Bootstrap file default for missing ``session.json`` — delegates to runtime factory."""
+    return create_fresh_session_document()
 
 
 def default_world():
@@ -155,14 +139,8 @@ def default_world():
 
 
 def default_combat():
-    return {
-        "in_combat": False,
-        "round": 0,
-        "initiative_order": [],
-        "turn_index": 0,
-        "active_actor_id": None,
-        "player_turn_used": False
-    }
+    """Bootstrap file default for missing ``combat.json`` — delegates to runtime factory."""
+    return create_fresh_combat_state()
 
 
 def default_scene(scene_id: str = 'frontier_gate'):

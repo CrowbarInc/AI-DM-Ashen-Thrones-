@@ -13,6 +13,7 @@ from typing import Any, Dict, List, Optional, Tuple
 
 from game.interaction_context import assert_valid_speaker, inspect as inspect_interaction_context
 from game.storage import get_scene_runtime
+from game.utils import slugify
 
 _log = logging.getLogger(__name__)
 
@@ -153,28 +154,173 @@ def merged_player_prompt_for_gate(
     return _merge_prompt_for_strict_gate(resolution if isinstance(resolution, dict) else None, hint or None)
 
 
-def _first_scene_npc_id_from_world(session: Dict[str, Any] | None, world: Dict[str, Any] | None, scene_id: str) -> str:
+def effective_scene_npc_roster(world: Dict[str, Any] | None, scene_id: str) -> List[Dict[str, Any]]:
+    """NPCs present in the scene for strict-social routing.
+
+    When ``world.json`` has no ``npcs`` (disk can override defaults to []), fall back to
+    :func:`game.defaults.default_world` so vocative addressing (e.g. ``Runner, …``) still resolves.
+    """
+    from game.interaction_context import _scene_npcs
+
     sid = str(scene_id or "").strip()
     if not sid:
+        return []
+    roster = _scene_npcs(world or {}, sid)
+    if roster:
+        return roster
+    from game.defaults import default_world
+
+    return _scene_npcs(default_world(), sid)
+
+
+_VOCATIVE_PREFIX_RE = re.compile(r"^\s*([^,:\n]{1,64})\s*,")
+
+
+def _npc_id_from_vocative_line(text: str, roster: List[Dict[str, Any]]) -> str:
+    """Match leading ``Name, …`` to a scene NPC (handles ``Runner`` → tavern_runner)."""
+    m = _VOCATIVE_PREFIX_RE.match(str(text or "").strip())
+    if not m:
         return ""
-    if isinstance(session, dict):
-        ss = session.get("scene_state")
-        if isinstance(ss, dict) and isinstance(ss.get("active_entities"), list):
-            for eid in ss["active_entities"]:
-                if isinstance(eid, str) and eid.strip():
-                    return eid.strip()
-    npcs = world.get("npcs") if isinstance(world, dict) else None
-    if isinstance(npcs, list):
-        for npc in npcs:
-            if not isinstance(npc, dict):
-                continue
-            loc = str(npc.get("location") or npc.get("scene_id") or "").strip()
-            if loc != sid:
-                continue
-            nid = str(npc.get("id") or "").strip()
-            if nid:
+    raw = m.group(1).strip()
+    voc_slug = slugify(raw)
+    if not voc_slug:
+        return ""
+    for npc in roster:
+        if not isinstance(npc, dict):
+            continue
+        nid = str(npc.get("id") or "").strip()
+        nm = str(npc.get("name") or "").strip()
+        if not nid:
+            continue
+        if slugify(nid) == voc_slug or (nm and slugify(nm) == voc_slug):
+            return nid
+        for word in re.split(r"\s+", nm):
+            w = slugify(word)
+            if w and w == voc_slug:
+                return nid
+        for part in slugify(nid).split("_"):
+            if part and part == voc_slug:
                 return nid
     return ""
+
+
+def _npc_id_from_substring_line(text: str, roster: List[Dict[str, Any]]) -> str:
+    """Match full-line slug to NPC id/name (long tokens only, avoids noisy short hits)."""
+    text_slug = slugify(str(text or ""))
+    if not text_slug:
+        return ""
+    for npc in roster:
+        if not isinstance(npc, dict):
+            continue
+        nid = str(npc.get("id") or "").strip()
+        nm = str(npc.get("name") or "").strip()
+        if not nid:
+            continue
+        ns = slugify(nid)
+        if len(ns) >= 5 and ns in text_slug:
+            return nid
+        if nm:
+            ms = slugify(nm)
+            if len(ms) >= 5 and ms in text_slug:
+                return nid
+    return ""
+
+
+def resolve_strict_social_npc_target_id(
+    session: Dict[str, Any] | None,
+    world: Dict[str, Any] | None,
+    scene_id: str,
+    merged_player_prompt: str,
+) -> Tuple[str, str]:
+    """Pick the NPC for strict-social coercion: ``(npc_id, basis)``.
+
+    ``basis`` is one of: ``vocative``, ``active``, ``substring``, ``first_roster``, ``none``.
+    Resolution order: vocative address, then :func:`inspect` ``active_interaction_target_id``
+    (engine-established dialogue), then substring/name overlap, then first roster only as a last resort.
+    Vocative wins over active interlocutor so ``Runner, …`` targets the runner even if context
+    points elsewhere.
+    """
+    sid = str(scene_id or "").strip()
+    roster = effective_scene_npc_roster(world, sid)
+    prompt = str(merged_player_prompt or "").strip()
+    if roster and prompt:
+        voc = _npc_id_from_vocative_line(prompt, roster)
+        if voc:
+            return voc, "vocative"
+    if isinstance(session, dict):
+        inspected = inspect_interaction_context(session)
+        active = str((inspected or {}).get("active_interaction_target_id") or "").strip()
+        if active and assert_valid_speaker(active, session):
+            for npc in roster:
+                if isinstance(npc, dict) and str(npc.get("id") or "").strip() == active:
+                    return active, "active"
+            # Valid interlocutor not listed on the scene roster (data drift / spotlight NPC): still bind to active.
+            return active, "active_unlisted"
+    if roster and prompt:
+        sub = _npc_id_from_substring_line(prompt, roster)
+        if sub:
+            return sub, "substring"
+    if roster:
+        first = str(roster[0].get("id") or "").strip()
+        if first:
+            return first, "first_roster"
+    return "", "none"
+
+
+def is_conversational_npc_dialogue_line(text: str | None, session: Dict[str, Any] | None) -> bool:
+    """True when the player is in an active social exchange with a valid in-scene interlocutor."""
+    if not isinstance(session, dict) or not str(text or "").strip():
+        return False
+    low = str(text or "").strip().lower()
+    # Skill maneuvers are resolved by the engine / check prompts, not strict NPC dialogue emission.
+    if re.search(r"\b(persuade|intimidate|deceive|barter|recruit)\b", low):
+        return False
+    inspected = inspect_interaction_context(session)
+    target = str((inspected or {}).get("active_interaction_target_id") or "").strip()
+    if not target or not assert_valid_speaker(target, session):
+        return False
+    kind = str((inspected or {}).get("active_interaction_kind") or "").strip().lower()
+    mode = str((inspected or {}).get("interaction_mode") or "").strip().lower()
+    engagement = str((inspected or {}).get("engagement_level") or "").strip().lower()
+    if not (kind == "social" or mode == "social"):
+        return False
+    return engagement in {"engaged", "active", "", "focused"}
+
+
+def looks_like_npc_directed_question(text: str | None) -> bool:
+    """True when the player line reasonably expects an NPC verbal answer (not pure staging)."""
+    low = str(text or "").strip().lower()
+    if not low:
+        return False
+    if "?" in low:
+        return True
+    return bool(
+        re.search(
+            r"\b(" + "|".join(_DIRECT_QUESTION_WORDS_FOR_EMIT) + r")\b",
+            low,
+        )
+    )
+
+
+def player_line_triggers_strict_social_emission(
+    text: str | None,
+    session: Dict[str, Any] | None,
+    world: Dict[str, Any] | None,
+    scene_id: str,
+) -> bool:
+    """Single predicate for whether the player line is NPC-directed / in-scene social exchange."""
+    if is_scene_directed_watch_question(text):
+        return False
+    if looks_like_npc_directed_question(text):
+        return True
+    sid = str(scene_id or "").strip()
+    roster = effective_scene_npc_roster(world, sid)
+    p = str(text or "").strip()
+    if roster and p and _npc_id_from_vocative_line(p, roster):
+        return True
+    if is_conversational_npc_dialogue_line(text, session):
+        return True
+    return False
 
 
 def strict_social_emission_will_apply(
@@ -193,29 +339,13 @@ def strict_social_emission_will_apply(
             return False
         if resolution.get("adjudication") and not isinstance(resolution.get("social"), dict):
             return False
-    eff, on, _ = coerce_resolution_for_strict_social_emission(
+    _eff, social_route, _ = effective_strict_social_resolution_for_emission(
         resolution if isinstance(resolution, dict) else None,
         session if isinstance(session, dict) else None,
         world if isinstance(world, dict) else None,
         str(scene_id or "").strip(),
     )
-    if on:
-        return True
-    merged = merged_player_prompt_for_gate(
-        resolution if isinstance(resolution, dict) else None,
-        session if isinstance(session, dict) else None,
-        str(scene_id or "").strip(),
-    )
-    return (
-        minimal_social_resolution_for_directed_question_guard(
-            session if isinstance(session, dict) else None,
-            world if isinstance(world, dict) else None,
-            str(scene_id or "").strip(),
-            merged_player_prompt=merged,
-            resolution=resolution if isinstance(resolution, dict) else None,
-        )
-        is not None
-    )
+    return bool(social_route)
 
 
 def minimal_social_resolution_for_directed_question_guard(
@@ -236,20 +366,21 @@ def minimal_social_resolution_for_directed_question_guard(
             return None
         if resolution.get("adjudication") and not isinstance(resolution.get("social"), dict):
             return None
+        rk = str(resolution.get("kind") or "").strip().lower()
+        if rk in {"persuade", "intimidate", "deceive", "barter", "recruit"}:
+            return None
+        if resolution.get("requires_check"):
+            return None
     prompt = str(merged_player_prompt or "").strip()
-    if not prompt or not looks_like_npc_directed_question(prompt):
+    sid = str(scene_id or "").strip()
+    if not prompt or not player_line_triggers_strict_social_emission(prompt, session, world, sid):
         return None
     if is_scene_directed_watch_question(prompt):
         return None
-    inspected = inspect_interaction_context(session) if isinstance(session, dict) else {}
-    target = str((inspected or {}).get("active_interaction_target_id") or "").strip()
-    if target and assert_valid_speaker(target, session if isinstance(session, dict) else {}):
-        pass
-    else:
-        target = _first_scene_npc_id_from_world(session, world, str(scene_id or "").strip())
+    target, _basis = resolve_strict_social_npc_target_id(session, world, sid, prompt)
     if not target:
         return None
-    npc_name = _npc_display_name_for_emission(world, str(scene_id or "").strip(), target)
+    npc_name = _npc_display_name_for_emission(world, sid, target)
     return {
         "kind": "question",
         "prompt": prompt,
@@ -281,26 +412,13 @@ def _active_social_target_matches_npc(session: Dict[str, Any] | None, npc_id: st
     return assert_valid_speaker(nid, session)
 
 
-def looks_like_npc_directed_question(text: str | None) -> bool:
-    """True when the player line reasonably expects an NPC verbal answer (not pure staging)."""
-    low = str(text or "").strip().lower()
-    if not low:
-        return False
-    if "?" in low:
-        return True
-    return bool(
-        re.search(
-            r"\b(" + "|".join(_DIRECT_QUESTION_WORDS_FOR_EMIT) + r")\b",
-            low,
-        )
-    )
-
-
 def should_apply_strict_social_exchange_emission(
     resolution: Dict[str, Any] | None,
     session: Dict[str, Any] | None,
     *,
     scene_runtime_prompt: str | None = None,
+    scene_id: str | None = None,
+    world: Dict[str, Any] | None = None,
 ) -> bool:
     """True only for NPC-directed social_exchange turns (exempt scene-wide watch/scan questions)."""
     if not is_social_exchange_resolution(resolution):
@@ -309,13 +427,20 @@ def should_apply_strict_social_exchange_emission(
         return False
     social = resolution.get("social") if isinstance(resolution.get("social"), dict) else {}
     prompt = _merge_prompt_for_strict_gate(resolution, scene_runtime_prompt)
+    sid = str(scene_id or "").strip()
+    if not sid and isinstance(session, dict):
+        st = session.get("scene_state")
+        if isinstance(st, dict):
+            sid = str(st.get("active_scene_id") or "").strip()
+        if not sid:
+            sid = str(session.get("active_scene_id") or "").strip()
     if is_scene_directed_watch_question(prompt):
         return False
     if social.get("npc_reply_expected") is False:
         npc_id = str(social.get("npc_id") or "").strip()
         if not (
             _active_social_target_matches_npc(session, npc_id)
-            and looks_like_npc_directed_question(prompt)
+            and player_line_triggers_strict_social_emission(prompt, session, world, sid)
         ):
             return False
     return True
@@ -323,6 +448,7 @@ def should_apply_strict_social_exchange_emission(
 
 def _npc_display_name_for_emission(world: Dict[str, Any] | None, scene_id: str, npc_id: str) -> str:
     """Resolve a short speaker label; avoids depending on resolution.social.npc_name being present."""
+    from game.defaults import default_world
     from game.social import find_npc_by_target
 
     sid = str(scene_id or "").strip()
@@ -330,6 +456,8 @@ def _npc_display_name_for_emission(world: Dict[str, Any] | None, scene_id: str, 
     if not nid:
         return "The guard"
     npc = find_npc_by_target(world or {}, nid, sid) if world is not None else None
+    if npc is None:
+        npc = find_npc_by_target(default_world(), nid, sid)
     name = str((npc or {}).get("name") or "").strip()
     if name:
         return name
@@ -346,21 +474,23 @@ def synthetic_social_exchange_resolution_for_emission(
     """Build minimal resolution so strict social emission can run when engine resolution was not threaded."""
     if not isinstance(session, dict):
         return None
-    inspected = inspect_interaction_context(session)
-    target = str((inspected or {}).get("active_interaction_target_id") or "").strip()
-    if not target or not assert_valid_speaker(target, session):
-        return None
-    kind = str((inspected or {}).get("active_interaction_kind") or "").strip().lower()
-    mode = str((inspected or {}).get("interaction_mode") or "").strip().lower()
-    engagement = str((inspected or {}).get("engagement_level") or "").strip().lower()
-    if not ((kind == "social" or mode == "social") and engagement in {"engaged", "active", ""}):
-        return None
+    sid = str(scene_id or "").strip()
     prompt = str(prompt_text or "").strip()
-    if not looks_like_npc_directed_question(prompt):
+    if not prompt or not player_line_triggers_strict_social_emission(prompt, session, world, sid):
         return None
     if is_scene_directed_watch_question(prompt):
         return None
-    npc_name = _npc_display_name_for_emission(world, scene_id, target)
+    target, basis = resolve_strict_social_npc_target_id(session, world, sid, prompt)
+    if not target:
+        return None
+    if basis in {"active", "active_unlisted"}:
+        inspected = inspect_interaction_context(session)
+        kind = str((inspected or {}).get("active_interaction_kind") or "").strip().lower()
+        mode = str((inspected or {}).get("interaction_mode") or "").strip().lower()
+        engagement = str((inspected or {}).get("engagement_level") or "").strip().lower()
+        if not ((kind == "social" or mode == "social") and engagement in {"engaged", "active", ""}):
+            return None
+    npc_name = _npc_display_name_for_emission(world, sid, target)
     return {
         "kind": "question",
         "prompt": prompt,
@@ -389,28 +519,139 @@ def coerce_resolution_for_strict_social_emission(
             return resolution, False, "offscene_target_engine_response"
 
     sid = str(scene_id or "").strip()
+    w = world if isinstance(world, dict) else None
     if not isinstance(session, dict) or not sid:
         active = bool(
             resolution
             and isinstance(resolution, dict)
-            and should_apply_strict_social_exchange_emission(resolution, session)
+            and should_apply_strict_social_exchange_emission(
+                resolution, session, scene_id=sid or None, world=w
+            )
         )
         return resolution if isinstance(resolution, dict) else None, active, "no_session_or_scene"
 
     hint = _scene_runtime_player_hint(session, sid)
+    merged_for_syn = merged_player_prompt_for_gate(
+        resolution if isinstance(resolution, dict) else None,
+        session,
+        sid,
+    )
 
     if isinstance(resolution, dict) and should_apply_strict_social_exchange_emission(
-        resolution, session, scene_runtime_prompt=hint or None
+        resolution,
+        session,
+        scene_runtime_prompt=hint or None,
+        scene_id=sid,
+        world=w,
     ):
         return resolution, True, "native_resolution"
 
     syn = synthetic_social_exchange_resolution_for_emission(
-        session, world, sid, prompt_text=hint
+        session, world, sid, prompt_text=merged_for_syn or hint
     )
-    if syn and should_apply_strict_social_exchange_emission(syn, session):
+    if syn and should_apply_strict_social_exchange_emission(syn, session, scene_id=sid, world=w):
         return syn, True, "synthetic_active_interlocutor_question"
 
     return resolution if isinstance(resolution, dict) else None, False, "strict_social_inactive"
+
+
+def reconcile_strict_social_resolution_speaker(
+    resolution: Dict[str, Any],
+    session: Dict[str, Any] | None,
+    world: Dict[str, Any] | None,
+    scene_id: str,
+) -> Dict[str, Any]:
+    """Align ``resolution.social`` NPC fields with :func:`resolve_strict_social_npc_target_id` (merged prompt).
+
+    Prevents deterministic fallbacks from using a stale engine ``npc_id`` or ``first_roster`` ambient NPC
+    when vocative / active interlocutor / substring addressing resolves a different target.
+    """
+    sid = str(scene_id or "").strip()
+    if not isinstance(resolution, dict) or not sid:
+        return resolution
+    merged = merged_player_prompt_for_gate(resolution, session, sid)
+    roster = effective_scene_npc_roster(world, sid)
+    voc = _npc_id_from_vocative_line(merged, roster) if roster and merged else ""
+    inspected = inspect_interaction_context(session) if isinstance(session, dict) else {}
+    active = str((inspected or {}).get("active_interaction_target_id") or "").strip()
+    mode = str((inspected or {}).get("interaction_mode") or "").strip().lower()
+    if (
+        mode == "social"
+        and active
+        and assert_valid_speaker(active, session)
+        and (not voc or voc == active)
+    ):
+        out = dict(resolution)
+        soc = dict(resolution.get("social") or {}) if isinstance(resolution.get("social"), dict) else {}
+        soc["npc_id"] = active
+        soc["npc_name"] = _npc_display_name_for_emission(world, sid, active)
+        if not str(soc.get("social_intent_class") or "").strip():
+            soc["social_intent_class"] = "social_exchange"
+        out["social"] = soc
+        return out
+    target_id, _basis = resolve_strict_social_npc_target_id(session, world, sid, merged)
+    if not target_id:
+        return resolution
+    out = dict(resolution)
+    soc = dict(resolution.get("social") or {}) if isinstance(resolution.get("social"), dict) else {}
+    soc["npc_id"] = target_id
+    soc["npc_name"] = _npc_display_name_for_emission(world, sid, target_id)
+    if not str(soc.get("social_intent_class") or "").strip():
+        soc["social_intent_class"] = "social_exchange"
+    out["social"] = soc
+    return out
+
+
+def effective_strict_social_resolution_for_emission(
+    resolution: Dict[str, Any] | None,
+    session: Dict[str, Any] | None,
+    world: Dict[str, Any] | None,
+    scene_id: str,
+) -> Tuple[Optional[Dict[str, Any]], bool, str]:
+    """Effective resolution and strict-social route — matches :func:`apply_final_emission_gate`.
+
+    Coercion plus ``npc_directed_guard`` must stay aligned anywhere upstream emitters
+    branch on “strict social” so deterministic fallbacks cannot inject narrator/uncertainty
+    blobs while the gate still routes to :func:`build_final_strict_social_response`.
+    """
+    eff_resolution, social_route, coercion_reason = coerce_resolution_for_strict_social_emission(
+        resolution if isinstance(resolution, dict) else None,
+        session if isinstance(session, dict) else None,
+        world if isinstance(world, dict) else None,
+        str(scene_id or "").strip(),
+    )
+    merged_prompt = merged_player_prompt_for_gate(
+        resolution if isinstance(resolution, dict) else None,
+        session if isinstance(session, dict) else None,
+        str(scene_id or "").strip(),
+    )
+    if not social_route:
+        guard_res = minimal_social_resolution_for_directed_question_guard(
+            session if isinstance(session, dict) else None,
+            world if isinstance(world, dict) else None,
+            str(scene_id or "").strip(),
+            merged_player_prompt=merged_prompt,
+            resolution=resolution if isinstance(resolution, dict) else None,
+        )
+        if isinstance(guard_res, dict):
+            eff_resolution = guard_res
+            social_route = True
+            coercion_reason = f"{coercion_reason}|npc_directed_guard"
+    if social_route and isinstance(eff_resolution, dict):
+        eff_resolution = reconcile_strict_social_resolution_speaker(
+            eff_resolution,
+            session if isinstance(session, dict) else None,
+            world if isinstance(world, dict) else None,
+            str(scene_id or "").strip(),
+        )
+    preview = merged_prompt[:120] + ("…" if len(merged_prompt) > 120 else "")
+    _log.debug(
+        "strict_social_route social_route=%s coercion_reason=%s merged_prompt_preview=%r",
+        social_route,
+        coercion_reason,
+        preview,
+    )
+    return eff_resolution if isinstance(eff_resolution, dict) else None, social_route, coercion_reason
 
 
 def log_final_emission_decision(payload: Dict[str, Any]) -> None:
@@ -447,9 +688,9 @@ def strict_social_ownership_terminal_fallback(resolution: Dict[str, Any] | None)
     seed = f"ownership_terminal|{npc_id}|{speaker}"
     idx = _deterministic_index(seed, 3)
     lines = (
-        'The runner shakes his head. "I don\'t know."',
-        'He frowns. "That\'s all I\'ve got."',
-        "She hesitates, then looks away. \"I can't help you there.\"",
+        f'{speaker} shakes their head. "I don\'t know."',
+        f'{speaker} lowers their voice. "I heard talk, not names."',
+        f'{speaker} grimaces. "Hard to say—people whisper, nobody swears."',
     )
     return lines[idx]
 
@@ -492,12 +733,16 @@ def replacement_is_route_legal_social(
     *,
     resolution: Dict[str, Any] | None,
     session: Dict[str, Any] | None,
+    scene_id: str = "",
+    world: Dict[str, Any] | None = None,
 ) -> bool:
     """True if text is acceptable final social_exchange output (or intentional interruption path)."""
     return not hard_reject_social_exchange_text(
         text,
         resolution=resolution if isinstance(resolution, dict) else None,
         session=session if isinstance(session, dict) else None,
+        scene_id=str(scene_id or "").strip(),
+        world=world if isinstance(world, dict) else None,
     )
 
 
@@ -722,7 +967,7 @@ def _sentence_opens_with_resolved_npc_beat(sentence: str, resolution: Dict[str, 
             continue
         tail = s[len(p) :].lstrip(" \t,")
         if re.match(
-            r"^(?:frowns|grimaces|shrugs|nods|gestures|leans|mutters|spreads|opens|starts)\b",
+            r"^(?:frowns|grimaces|shrugs|nods|gestures|leans|mutters|spreads|opens|starts|shakes|lowers|raises)\b",
             tail,
             re.IGNORECASE,
         ):
@@ -778,6 +1023,37 @@ def _sentence_form_label(sentence: str) -> str:
     return "direct_answer"
 
 
+def _is_flat_idk_without_qualifier(sentence: str) -> bool:
+    """Flat 'I don't know' / 'no idea' with no in-sentence who/what/which follow-up."""
+    low = str(sentence or "").lower()
+    m = re.search(r"\b(?:i\s+don'?t\s+know|i\s+do\s+not\s+know|no\s+idea)\b", low)
+    if not m:
+        return False
+    tail = low[m.end() : m.end() + 100]
+    if re.search(r"\b(?:who|what|which|whether)\b", tail):
+        return False
+    return True
+
+
+def _contradictory_flat_ignorance_and_concrete_lead(sentences: List[str], labels: List[str]) -> bool:
+    """True when one line gives a concrete lead and another is flat ignorance (terminal-fallback case)."""
+    if len(sentences) != len(labels) or len(sentences) < 2:
+        return False
+    concrete_pat = re.compile(
+        r'(?:\b(?:east|west|north|south)(?:\s+road|\s+lane)?\b|"[^"]{0,120}(?:east|west|road|lane|mill|gate))',
+        re.IGNORECASE,
+    )
+    has_concrete = any(
+        lb == "direct_answer" and concrete_pat.search(sentences[i] or "")
+        for i, lb in enumerate(labels)
+    )
+    has_flat = any(
+        lb == "bounded_ignorance" and _is_flat_idk_without_qualifier(sentences[i] or "")
+        for i, lb in enumerate(labels)
+    )
+    return bool(has_concrete and has_flat)
+
+
 def _dominant_form_from_labels(labels: List[str], *, pressure_tag: bool) -> str | None:
     uniq = {lb for lb in labels if lb}
     if not uniq:
@@ -790,7 +1066,7 @@ def _dominant_form_from_labels(labels: List[str], *, pressure_tag: bool) -> str 
         return "pressure_escalation" if "pressure_escalation" in uniq else "refusal_evasion"
     # Conflicting substantive social claims: refuse to synthesize.
     if "bounded_ignorance" in uniq and "direct_answer" in uniq:
-        return None
+        return "mixed_ignorance_and_direct"
     if "refusal_evasion" in uniq and "direct_answer" in uniq:
         return "refusal_evasion"
     if "pressure_escalation" in uniq and "direct_answer" in uniq:
@@ -934,7 +1210,12 @@ def apply_strict_social_sentence_ownership_filter(
     if dominant is None:
         return strict_social_ownership_terminal_fallback(res)
 
-    selected = [s for s, lb in zip(social_sentences, labels) if lb == dominant]
+    if dominant == "mixed_ignorance_and_direct":
+        if _contradictory_flat_ignorance_and_concrete_lead(social_sentences, labels):
+            return strict_social_ownership_terminal_fallback(res)
+        selected = list(social_sentences)
+    else:
+        selected = [s for s, lb in zip(social_sentences, labels) if lb == dominant]
     if not selected:
         return strict_social_ownership_terminal_fallback(res)
 
@@ -942,9 +1223,6 @@ def apply_strict_social_sentence_ownership_filter(
     if _sentence_is_scene_contaminated(out) or _sentence_is_clue_or_analytical_substitute(out):
         return strict_social_ownership_terminal_fallback(res)
 
-    parts = _split_sentences(out)
-    if len(parts) > 1 and all('"' in p for p in parts) and dominant == "direct_answer":
-        return parts[0]
     return out
 
 
@@ -1084,6 +1362,8 @@ def deterministic_social_fallback_line(
         f'{speaker} spreads their hands. "I\'ve heard talk, not names."',
         f'{speaker} lowers their voice. "I have heard the talk, but not the names."',
         f'{speaker} glances away. "I do not know that part for certain."',
+        f'{speaker} mutters. "Word is, it was messy—but I won\'t swear to who."',
+        f'{speaker} shrugs. "Couldn\'t tell you—only rumors from the road."',
     )
     evasive = (
         f'{speaker} avoids your eyes. "I\'m not naming names."',
@@ -1173,6 +1453,8 @@ def hard_reject_social_exchange_text(
     *,
     resolution: Dict[str, Any] | None,
     session: Dict[str, Any] | None,
+    scene_id: str = "",
+    world: Dict[str, Any] | None = None,
 ) -> List[str]:
     """Reason codes for illegal final social_exchange emission."""
     from game.gm import question_resolution_rule_check
@@ -1186,14 +1468,18 @@ def hard_reject_social_exchange_text(
     res = resolution if isinstance(resolution, dict) else {}
     social = res.get("social") if isinstance(res.get("social"), dict) else {}
     npc_id = str(social.get("npc_id") or "").strip()
-    active_target = ""
-    if isinstance(session, dict):
-        interaction = session.get("interaction_context") if isinstance(session.get("interaction_context"), dict) else {}
-        active_target = str(interaction.get("active_interaction_target_id") or "").strip()
-    if npc_id and active_target and npc_id != active_target:
-        reasons.append("turn_owner_mismatch")
+    sid = str(scene_id or "").strip()
+    merged = merged_player_prompt_for_gate(resolution if isinstance(resolution, dict) else None, session, sid)
+    canonical_id, _basis = resolve_strict_social_npc_target_id(
+        session if isinstance(session, dict) else None,
+        world if isinstance(world, dict) else None,
+        sid,
+        merged,
+    )
+    if npc_id and canonical_id and npc_id != canonical_id:
+        reasons.append("speaker_binding_mismatch")
 
-    player_prompt = _question_prompt_for_resolution(resolution if isinstance(resolution, dict) else None)
+    player_prompt = merged or _question_prompt_for_resolution(resolution if isinstance(resolution, dict) else None)
     if player_prompt:
         first_sentence_contract = question_resolution_rule_check(
             player_text=player_prompt,
@@ -1246,3 +1532,171 @@ def hard_reject_social_exchange_text(
         reasons.append("scene_hold_placeholder")
 
     return reasons
+
+
+def _normalize_gate_text(text: str | None) -> str:
+    """Whitespace normalization matching :func:`game.final_emission_gate._normalize_text`."""
+    return " ".join(str(text or "").strip().split())
+
+
+def _speaker_label_for_emission_seed(resolution: Dict[str, Any] | None) -> str:
+    if not isinstance(resolution, dict):
+        return "The guard"
+    social = resolution.get("social") if isinstance(resolution.get("social"), dict) else {}
+    name = str(social.get("npc_name") or "").strip()
+    if name:
+        return name
+    npc_id = str(social.get("npc_id") or "").strip()
+    if npc_id:
+        return npc_id.replace("_", " ").replace("-", " ").title()
+    return "The guard"
+
+
+def _assert_all_sentences_strict_social_or_interruption(
+    text: str,
+    resolution: Dict[str, Any] | None,
+) -> None:
+    """Temporary invariant: final strict-social output must be only SOCIAL or INTERRUPTION sentences."""
+    res = resolution if isinstance(resolution, dict) else None
+    raw = _collapse_ws(text)
+    if not raw:
+        return
+    for sent in _split_sentences(raw):
+        s = (sent or "").strip()
+        if not s:
+            continue
+        cat = _classify_strict_social_ownership_sentence(s, res)
+        if cat not in ("social", "interruption"):
+            raise AssertionError(
+                f"strict_social_final_invariant: sentence not SOCIAL or INTERRUPTION: {cat!r}: {s[:120]!r}"
+            )
+
+
+def build_final_strict_social_response(
+    candidate_text: str,
+    *,
+    resolution: Dict[str, Any] | None,
+    tags: Optional[List[str]] = None,
+    session: Optional[Dict[str, Any]] = None,
+    scene_id: str = "",
+    world: Optional[Dict[str, Any]] = None,
+) -> tuple[str, dict[str, Any]]:
+    """Single final writer for strict-social turns.
+
+    Runs :func:`apply_strict_social_sentence_ownership_filter` on the candidate, then
+    :func:`hard_reject_social_exchange_text` (and the same banned-phrase gate as the emission gate).
+    If the result is rejected, selects deterministic / emergency fallback and runs the ownership
+    filter again on that fallback candidate so no unfiltered line reaches the player.
+    """
+    tag_list = [str(t) for t in tags if isinstance(t, str)] if isinstance(tags, list) else []
+    res = resolution if isinstance(resolution, dict) else None
+    sid = str(scene_id or "").strip()
+    sess = session if isinstance(session, dict) else None
+
+    filtered = apply_strict_social_sentence_ownership_filter(
+        candidate_text,
+        resolution=res,
+        tags=tag_list or None,
+        session=sess,
+        scene_id=sid,
+    )
+    text = _normalize_gate_text(filtered)
+
+    low = text.lower()
+    banned_any_route = (
+        "from here, no certain answer presents itself",
+        "the truth is still buried beneath rumor and rain",
+    )
+    reasons: List[str] = []
+    if any(phrase in low for phrase in banned_any_route):
+        reasons.append("banned_stock_phrase")
+    reasons.extend(
+        hard_reject_social_exchange_text(
+            text,
+            resolution=res,
+            session=sess,
+            scene_id=sid,
+            world=world if isinstance(world, dict) else None,
+        )
+    )
+
+    if not reasons:
+        _assert_all_sentences_strict_social_or_interruption(text, res)
+        final_emitted_source = (
+            "generated_candidate"
+            if _normalize_gate_text(candidate_text).strip() == text.strip()
+            else "normalized_social_candidate"
+        )
+        return text, {
+            "used_internal_fallback": False,
+            "fallback_kind": "none",
+            "rejection_reasons": [],
+            "final_emitted_source": final_emitted_source,
+            "deterministic_attempted": False,
+            "deterministic_passed": False,
+            "fallback_pool": "none",
+            "route_illegal_intercepted": False,
+            "intercepted_preview": "",
+        }
+
+    uncertainty_source = emission_gate_uncertainty_source(tag_list, text)
+    pressure_active = emission_gate_pressure_active(tag_list, session, sid)
+    interruption_active = emission_gate_interruption_active(tag_list, text)
+    seed = (
+        f"{sid}|{_speaker_label_for_emission_seed(res)}|{_question_prompt_for_resolution_early(res)}|"
+        f"{uncertainty_source}|{pressure_active}|{interruption_active}|{'|'.join(sorted(set(tag_list)))}"
+    )
+    fallback_pool = "social_deterministic"
+    deterministic_attempted = True
+    fallback_text, fallback_kind = deterministic_social_fallback_line(
+        resolution=res,
+        uncertainty_source=uncertainty_source,
+        pressure_active=pressure_active,
+        interruption_active=interruption_active,
+        seed=seed,
+    )
+    deterministic_passed = replacement_is_route_legal_social(
+        fallback_text,
+        resolution=res,
+        session=sess,
+        scene_id=sid,
+        world=world if isinstance(world, dict) else None,
+    )
+    final_emitted_source = "deterministic_social_fallback"
+    if not deterministic_passed:
+        fallback_text = minimal_social_emergency_fallback_line(res)
+        fallback_kind = "emergency_social_minimal"
+        final_emitted_source = "minimal_social_emergency_fallback"
+        deterministic_passed = False
+
+    route_illegal_intercepted = False
+    intercepted_preview = ""
+    if is_route_illegal_global_or_sanitizer_fallback_text(fallback_text):
+        intercepted_preview = fallback_text[:80]
+        fallback_text = minimal_social_emergency_fallback_line(res)
+        fallback_kind = "emergency_social_minimal"
+        final_emitted_source = "minimal_social_emergency_fallback"
+        deterministic_passed = False
+        route_illegal_intercepted = True
+
+    fb_filtered = apply_strict_social_sentence_ownership_filter(
+        fallback_text,
+        resolution=res,
+        tags=tag_list or None,
+        session=sess,
+        scene_id=sid,
+    )
+    out_text = _normalize_gate_text(fb_filtered)
+    _assert_all_sentences_strict_social_or_interruption(out_text, res)
+
+    return out_text, {
+        "used_internal_fallback": True,
+        "fallback_kind": fallback_kind,
+        "rejection_reasons": reasons,
+        "final_emitted_source": final_emitted_source,
+        "deterministic_attempted": deterministic_attempted,
+        "deterministic_passed": deterministic_passed,
+        "fallback_pool": fallback_pool,
+        "route_illegal_intercepted": route_illegal_intercepted,
+        "intercepted_preview": intercepted_preview,
+    }

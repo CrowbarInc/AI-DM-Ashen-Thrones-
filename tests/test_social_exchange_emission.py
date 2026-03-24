@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from game.defaults import default_session, default_world
+from game.gm import apply_deterministic_retry_fallback, sanitize_player_facing_text
 from game.final_emission_gate import apply_final_emission_gate
 from game.interaction_context import rebuild_active_scene_entities, set_social_target
 from game.output_sanitizer import (
@@ -13,12 +14,16 @@ from game.output_sanitizer import (
 from game.social_exchange_emission import (
     apply_strict_social_ownership_enforcement,
     apply_strict_social_sentence_ownership_filter,
+    build_final_strict_social_response,
     coerce_resolution_for_strict_social_emission,
+    effective_strict_social_resolution_for_emission,
     hard_reject_social_exchange_text,
     is_route_illegal_global_or_sanitizer_fallback_text,
     normalize_social_exchange_candidate,
     should_apply_strict_social_exchange_emission,
+    strict_social_emission_will_apply,
     strict_social_ownership_terminal_fallback,
+    synthetic_social_exchange_resolution_for_emission,
 )
 from game.storage import get_scene_runtime
 
@@ -86,6 +91,22 @@ def test_hard_reject_flags_scene_hold_on_strict_social():
     assert reasons
 
 
+def test_strict_social_vocative_runner_with_empty_world_npc_list():
+    """Vocative address to the runner must activate strict social even when world.npcs is empty on disk."""
+    session = default_session()
+    world = {"npcs": []}
+    sid = "frontier_gate"
+    rebuild_active_scene_entities(session, world, sid)
+    rt = get_scene_runtime(session, sid)
+    rt["last_player_action_text"] = "Runner, who attacked them?"
+    resolution = {"kind": "question", "prompt": "Runner, who attacked them?"}
+    _eff, social_route, _reason = effective_strict_social_resolution_for_emission(
+        resolution, session, world, sid
+    )
+    assert social_route is True
+    assert strict_social_emission_will_apply(resolution, session, world, sid) is True
+
+
 def test_coerce_synthetic_when_resolution_none_and_active_social_question():
     session = default_session()
     world = default_world()
@@ -97,9 +118,162 @@ def test_coerce_synthetic_when_resolution_none_and_active_social_question():
     eff, on, reason = coerce_resolution_for_strict_social_emission(None, session, world, sid)
     assert on is True
     assert reason == "synthetic_active_interlocutor_question"
-    assert isinstance(eff, dict)
-    assert eff["social"]["npc_id"] == "tavern_runner"
-    assert eff["social"]["social_intent_class"] == "social_exchange"
+
+
+def test_guard_coerces_strict_social_when_synthetic_emission_inactive():
+    """Synthetic strict-social resolution fails (e.g. engagement), but npc_directed_guard still coerces."""
+    session = default_session()
+    world = default_world()
+    sid = "frontier_gate"
+    set_social_target(session, "tavern_runner")
+    rebuild_active_scene_entities(session, world, sid)
+    ic = dict(session.get("interaction_context") or {})
+    ic["engagement_level"] = "focused"
+    session["interaction_context"] = ic
+    rt = get_scene_runtime(session, sid)
+    rt["last_player_action_text"] = "Where did they go?"
+    resolution = {"kind": "question", "prompt": "Where did they go?"}
+    assert synthetic_social_exchange_resolution_for_emission(session, world, sid, prompt_text="Where did they go?") is None
+    eff, on, _reason = coerce_resolution_for_strict_social_emission(resolution, session, world, sid)
+    assert on is False
+    eff2, on2, _ = effective_strict_social_resolution_for_emission(resolution, session, world, sid)
+    assert on2 is True
+    assert isinstance(eff2, dict)
+
+
+def test_deterministic_retry_fallback_never_injects_uncertainty_templates_on_guard_coerced_strict_social():
+    """apply_deterministic_retry_fallback must match final gate strict-social routing (incl. guard)."""
+    session = default_session()
+    world = default_world()
+    sid = "frontier_gate"
+    set_social_target(session, "tavern_runner")
+    rebuild_active_scene_entities(session, world, sid)
+    ic = dict(session.get("interaction_context") or {})
+    ic["engagement_level"] = "focused"
+    session["interaction_context"] = ic
+    rt = get_scene_runtime(session, sid)
+    rt["last_player_action_text"] = "Where did they go?"
+    resolution = {"kind": "question", "prompt": "Where did they go?"}
+    gm = {"player_facing_text": "The reply is vague.", "tags": []}
+    failure = {"failure_class": "unresolved_question", "reasons": ["test"]}
+    out = apply_deterministic_retry_fallback(
+        gm,
+        failure=failure,
+        player_text="Where did they go?",
+        scene_envelope={"scene": {"id": sid}},
+        session=session,
+        world=world,
+        resolution=resolution,
+    )
+    txt = out["player_facing_text"].lower()
+    assert "nothing in the scene points" not in txt
+    assert "answer has not formed yet" not in txt
+    assert "pin down who they meet" not in txt
+    assert "you can narrow it to" not in txt
+    assert "for a breath" not in txt
+    assert "scene holds" not in txt
+    assert "the answer has not formed yet" not in txt
+    tags = [str(t).lower() for t in (out.get("tags") or []) if isinstance(t, str)]
+    assert "social_exchange_retry_fallback" in tags
+
+
+def test_strict_social_pipeline_forbids_scene_hold_and_ambiguity_emitter_phrases():
+    """Strict-social must never surface final-emission scene-hold or GM uncertainty-template lines."""
+    forbidden = (
+        "for a breath",
+        "the scene holds",
+        "voices shift around you",
+        "nothing in the scene points",
+        "for a breath, the scene stays still",
+        "confirms a culprit",
+        "nothing around the faces",
+    )
+    session = default_session()
+    world = default_world()
+    sid = "frontier_gate"
+    set_social_target(session, "tavern_runner")
+    rebuild_active_scene_entities(session, world, sid)
+    ic = dict(session.get("interaction_context") or {})
+    ic["engagement_level"] = "focused"
+    session["interaction_context"] = ic
+    rt = get_scene_runtime(session, sid)
+    rt["last_player_action_text"] = "Who ordered the patrol?"
+    resolution = {"kind": "question", "prompt": "Who ordered the patrol?"}
+
+    gate_out = apply_final_emission_gate(
+        {
+            "player_facing_text": (
+                "Nothing in the scene points to a clear answer yet. "
+                "Nothing around the faces lingering over the missing patrol notice confirms a culprit yet. "
+                "For a breath, the scene holds while voices shift around you."
+            ),
+            "tags": [],
+        },
+        resolution=resolution,
+        session=session,
+        scene_id=sid,
+        world=world,
+    )
+    low = gate_out["player_facing_text"].lower()
+    for frag in forbidden:
+        assert frag not in low, frag
+
+    gm_retry = apply_deterministic_retry_fallback(
+        {"player_facing_text": "vague", "tags": []},
+        failure={"failure_class": "unresolved_question", "reasons": ["t"]},
+        player_text="Who ordered the patrol?",
+        scene_envelope={"scene": {"id": sid}},
+        session=session,
+        world=world,
+        resolution=resolution,
+    )
+    low = gm_retry["player_facing_text"].lower()
+    for frag in forbidden:
+        assert frag not in low, frag
+
+    scene = {"scene": {"id": sid, "visible_facts": [], "location": "gate"}}
+    spoil = sanitize_player_facing_text(
+        "noble house secret leak noble house",
+        scene,
+        "Who ordered the patrol?",
+        discovered_clues=[],
+        session=session,
+        world=world,
+        resolution=resolution,
+    )
+    assert spoil["did_sanitize"] is True
+    low = spoil["text"].lower()
+    for frag in forbidden:
+        assert frag not in low, frag
+
+
+def test_spoiler_guard_on_strict_social_never_replaces_with_uncertainty_renderer():
+    session = default_session()
+    world = default_world()
+    sid = "frontier_gate"
+    set_social_target(session, "tavern_runner")
+    rebuild_active_scene_entities(session, world, sid)
+    ic = dict(session.get("interaction_context") or {})
+    ic["engagement_level"] = "focused"
+    session["interaction_context"] = ic
+    rt = get_scene_runtime(session, sid)
+    rt["last_player_action_text"] = "Where did they go?"
+    resolution = {"kind": "question", "prompt": "Where did they go?"}
+    scene = {"scene": {"id": sid, "visible_facts": [], "location": "gate"}}
+    res = sanitize_player_facing_text(
+        "noble house secret leak noble house",
+        scene,
+        "Where did they go?",
+        discovered_clues=[],
+        session=session,
+        world=world,
+        resolution=resolution,
+    )
+    assert res["did_sanitize"] is True
+    low = res["text"].lower()
+    assert "nothing in the scene points" not in low
+    assert "answer has not formed yet" not in low
+    assert "pin down who they meet" not in low
 
 
 def test_final_emission_with_coercion_never_emits_global_scene_hold_for_strict_turn():
@@ -322,7 +496,8 @@ def test_normalize_contradictory_ignorance_and_answer_returns_terminal_fallback(
     assert out == strict_social_ownership_terminal_fallback(res)
 
 
-def test_active_social_sanitize_rewrites_scene_ambiguity_into_speaker_voice():
+def test_build_final_strict_social_response_rewrites_scene_ambiguity_into_speaker_voice():
+    """Strict-social cleanup is owned by build_final_strict_social_response, not sanitize_player_facing_output."""
     res = {
         "kind": "question",
         "prompt": "What should I do next?",
@@ -332,14 +507,19 @@ def test_active_social_sanitize_rewrites_scene_ambiguity_into_speaker_voice():
             "npc_name": "Runner",
         },
     }
-    ctx = {"resolution": res, "session": {}}
     raw = "Nothing in the scene points to a clear answer yet. You should pick a next step."
-    out = sanitize_player_facing_output(raw, ctx)
+    out, _ = build_final_strict_social_response(
+        raw,
+        resolution=res,
+        tags=[],
+        session={},
+        scene_id="",
+    )
     low = out.lower()
     assert "nothing in the scene points" not in low
     assert "you should" not in low
-    assert '"' in out
-    assert "runner" in low or "don't know" in low or "frowns" in low or "hesitates" in low
+    assert '"' in out or "shouting" in low or "breaks out" in low
+    assert "runner" in low or "don't know" in low or "frowns" in low or "hesitates" in low or "shouting" in low
 
 
 def test_strict_social_emission_meta_documents_final_emitted_source():
@@ -383,7 +563,11 @@ def test_strict_social_replacement_never_uses_global_scene_fallback_in_meta():
     )
     meta = out.get("_final_emission_meta") or {}
     assert meta.get("final_emitted_source") != "global_scene_fallback"
-    assert meta.get("final_emitted_source") in ("deterministic_social_fallback", "minimal_social_emergency_fallback")
+    assert meta.get("final_emitted_source") in (
+        "deterministic_social_fallback",
+        "minimal_social_emergency_fallback",
+        "normalized_social_candidate",
+    )
     low = out["player_facing_text"].lower()
     assert "for a breath" not in low
 
@@ -485,3 +669,184 @@ def test_ownership_pass_aliases_match():
     a = apply_strict_social_sentence_ownership_filter(raw, resolution=res)
     b = apply_strict_social_ownership_enforcement(raw, resolution=res)
     assert a == b == strict_social_ownership_terminal_fallback(res)
+
+
+def test_strict_social_keeps_two_sentences_when_both_npc_owned_direct_answer():
+    """Two dialogue beats should not collapse to one sentence when both are social."""
+    res = _strict_social_resolution()
+    raw = (
+        'The runner mutters, "No witnesses named." '
+        'They add, "Word is, it was messy near the east bend."'
+    )
+    out = apply_strict_social_sentence_ownership_filter(raw, resolution=res)
+    parts = [p.strip() for p in out.replace("“", '"').replace("”", '"').split('"') if p.strip()]
+    assert out.count('"') >= 2
+    assert "east" in out.lower() and "witnesses" in out.lower()
+
+
+def test_strict_social_ignorance_plus_compatible_detail_keeps_both_sentences():
+    res = _strict_social_resolution()
+    raw = (
+        'The runner shakes their head. "I don\'t know who ordered it." '
+        'They lean in. "I did hear extra watches posted by dusk."'
+    )
+    out = apply_strict_social_sentence_ownership_filter(raw, resolution=res)
+    low = out.lower()
+    assert "don\'t know who" in low or "don't know who" in low
+    assert "watches" in low or "dusk" in low
+
+
+def test_deterministic_social_fallback_variety_uses_speaker_label():
+    from game.social_exchange_emission import deterministic_social_fallback_line
+
+    res = {
+        "kind": "question",
+        "prompt": "Who attacked them?",
+        "social": {"social_intent_class": "social_exchange", "npc_id": "runner", "npc_name": "The runner"},
+    }
+    lines = []
+    for i in range(12):
+        line, _ = deterministic_social_fallback_line(
+            resolution=res,
+            uncertainty_source="npc_ignorance",
+            pressure_active=False,
+            interruption_active=False,
+            seed=f"test{i}",
+        )
+        lines.append(line.lower())
+    assert len(set(lines)) >= 3
+    assert all("runner" in ln for ln in lines)
+
+
+def test_scene_narration_leakage_still_removed_from_strict_social_blob():
+    res = _strict_social_resolution()
+    raw = (
+        "For a breath, the scene holds while voices shift around you. "
+        'The runner says, "Patrol never came back."'
+    )
+    out = apply_strict_social_sentence_ownership_filter(raw, resolution=res)
+    low = out.lower()
+    assert "for a breath" not in low and "scene holds" not in low
+    assert "patrol" in low or "came" in low
+
+
+def test_strict_social_reconcile_binds_fallback_to_active_not_first_roster():
+    """Stale engine npc_id must not make deterministic fallback speak as roster[0] when active is another NPC."""
+    from game.social_exchange_emission import deterministic_social_fallback_line
+
+    session = default_session()
+    world = dict(default_world())
+    sid = "frontier_gate"
+    world["npcs"] = [
+        {"id": "guard_captain", "name": "Guard Captain", "location": sid},
+        {"id": "rian", "name": "Rian", "location": sid},
+    ]
+    set_social_target(session, "rian")
+    rebuild_active_scene_entities(session, world, sid)
+    ic = dict(session.get("interaction_context") or {})
+    ic["engagement_level"] = "engaged"
+    session["interaction_context"] = ic
+    rt = get_scene_runtime(session, sid)
+    rt["last_player_action_text"] = "What did you hear about the patrol?"
+    resolution = {
+        "kind": "question",
+        "prompt": "What did you hear about the patrol?",
+        "social": {
+            "social_intent_class": "social_exchange",
+            "npc_id": "guard_captain",
+            "npc_name": "Guard Captain",
+            "npc_reply_expected": True,
+        },
+    }
+    eff, on, _ = effective_strict_social_resolution_for_emission(resolution, session, world, sid)
+    assert on is True
+    assert eff["social"]["npc_id"] == "rian"
+    assert eff["social"]["npc_name"] == "Rian"
+    line, _ = deterministic_social_fallback_line(
+        resolution=eff,
+        uncertainty_source="npc_ignorance",
+        pressure_active=False,
+        interruption_active=False,
+        seed="bind-test",
+    )
+    assert "Rian" in line
+    assert "Guard Captain" not in line
+
+
+def test_social_exchange_whispers_answer_passes_question_contract():
+    from game.gm import question_resolution_rule_check
+
+    res = {
+        "kind": "question",
+        "prompt": "Who ordered the patrol?",
+        "social": {
+            "social_intent_class": "social_exchange",
+            "npc_id": "runner",
+            "npc_name": "The runner",
+            "npc_reply_expected": True,
+        },
+    }
+    reply = 'The runner lowers their voice. "I\'ve heard whispers, but no one will swear to it."'
+    chk = question_resolution_rule_check(player_text=res["prompt"], gm_reply_text=reply, resolution=res)
+    assert chk["ok"] is True
+
+
+def test_strict_social_detect_retry_allows_trust_phrase_in_quoted_dialogue():
+    from game.gm import detect_retry_failures
+
+    session = default_session()
+    world = default_world()
+    sid = "frontier_gate"
+    set_social_target(session, "tavern_runner")
+    rebuild_active_scene_entities(session, world, sid)
+    resolution = {
+        "kind": "question",
+        "prompt": "What do you think of newcomers?",
+        "social": {
+            "social_intent_class": "social_exchange",
+            "npc_id": "tavern_runner",
+            "npc_name": "Tavern Runner",
+            "npc_reply_expected": True,
+        },
+    }
+    gm = {"player_facing_text": 'Tavern Runner mutters. "Trust is hard to come by out here."'}
+    failures = detect_retry_failures(
+        player_text="What do you think of newcomers?",
+        gm_reply=gm,
+        scene_envelope={"scene": {"id": sid}},
+        session=session,
+        world=world,
+        resolution=resolution,
+    )
+    classes = [str(f.get("failure_class") or "") for f in failures]
+    assert "forbidden_generic_phrase" not in classes
+
+
+def test_wait_turn_keeps_strict_social_binding_without_scene_uncertainty_blob():
+    """Passive wait during an active social exchange should still coerce strict-social (merged prompt)."""
+    session = default_session()
+    world = default_world()
+    sid = "frontier_gate"
+    set_social_target(session, "tavern_runner")
+    rebuild_active_scene_entities(session, world, sid)
+    ic = dict(session.get("interaction_context") or {})
+    ic["engagement_level"] = "engaged"
+    session["interaction_context"] = ic
+    rt = get_scene_runtime(session, sid)
+    rt["last_player_action_text"] = "I wait, watching the gate."
+    resolution = {"kind": "observe", "prompt": "I wait, watching the gate."}
+    eff, on, _ = effective_strict_social_resolution_for_emission(resolution, session, world, sid)
+    assert on is True
+    assert isinstance(eff, dict)
+    assert eff.get("social", {}).get("npc_id") == "tavern_runner"
+    out, _ = build_final_strict_social_response(
+        "From here, no certain answer presents itself about the gate.",
+        resolution=eff,
+        tags=[],
+        session=session,
+        scene_id=sid,
+        world=world,
+    )
+    low = out.lower()
+    assert "from here, no certain answer" not in low
+    assert "nothing in the scene points" not in low

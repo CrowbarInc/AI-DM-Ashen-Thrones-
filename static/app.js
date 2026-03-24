@@ -330,9 +330,9 @@ $('endTurnBtn').addEventListener('click', ()=>submitDirect({action_type:'end_tur
 $('clearLogBtn').addEventListener('click', async ()=>{ await fetchJSON(API+'/clear_log',{method:'POST'}); await loadLog(); });
 $('resetCombatBtn').addEventListener('click', async ()=>{ await fetchJSON(API+'/reset_combat',{method:'POST'}); await loadState(); });
 $('newCampaignBtn').addEventListener('click', async ()=>{
-  await fetch(API+'/new_campaign', {method:'POST'});
-  console.log('Campaign reset complete');
-  await fetchJSON(API+'/clear_log',{method:'POST'});
+  const data = await fetchJSON(API+'/new_campaign', {method:'POST'});
+  console.log('Campaign reset complete', data.campaign_run_id || '');
+  state = null;
   location.reload();
 });
 $('saveCampaignBtn').addEventListener('click', saveCampaign);

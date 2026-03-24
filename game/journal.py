@@ -6,7 +6,11 @@ from game.clues import get_all_known_clue_texts
 
 
 def build_player_journal(session: Dict[str, Any], world: Dict[str, Any] | None = None, scene_envelope: Dict[str, Any] | None = None) -> Dict[str, Any]:
-    """Construct a lightweight, player-facing journal/codex view."""
+    """Construct a lightweight, player-facing journal/codex view.
+
+    Merges bootstrap (scene ``visible_facts`` from disk, faction rows from ``world``)
+    with runtime (``clue_knowledge``, ``scene_runtime``). Not a persistence boundary.
+    """
     world = world or {}
     scene = (scene_envelope or {}).get('scene', {}) if isinstance(scene_envelope, dict) else {}
 

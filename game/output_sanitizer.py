@@ -5,8 +5,7 @@ import re
 from typing import Any, Dict
 
 from game.social_exchange_emission import (
-    apply_strict_social_sentence_ownership_filter,
-    coerce_resolution_for_strict_social_emission,
+    effective_strict_social_resolution_for_emission,
     social_fallback_line_for_sanitizer,
     strict_social_emission_will_apply,
 )
@@ -353,8 +352,7 @@ def _is_active_social_exchange_context(context: Dict[str, Any] | None) -> bool:
     world = context.get("world") if isinstance(context.get("world"), dict) else None
     scene_id = str(context.get("scene_id") or "").strip()
     res = context.get("resolution") if isinstance(context.get("resolution"), dict) else None
-    _eff, active, _reason = coerce_resolution_for_strict_social_emission(res, sess, world, scene_id)
-    return active
+    return strict_social_emission_will_apply(res, sess, world, scene_id)
 
 
 def _context_prefers_npc_uncertainty(context: Dict[str, Any] | None) -> bool:
@@ -1265,6 +1263,15 @@ def sanitize_player_facing_output(text: str, context: Dict[str, Any] | None = No
         return ""
 
     ctx = context if isinstance(context, dict) else {}
+    # Strict-social turns after apply_final_emission_gate: no further sentence rewrites or coherence passes.
+    if bool(ctx.get("post_final_emission_gate")) and bool(ctx.get("strict_social_terminal_clamp")):
+        sealed = ctx.get("gate_sealed_text")
+        if isinstance(sealed, str) and sealed.strip():
+            return sealed.strip()
+        if text.strip():
+            return text.strip()
+        return ""
+
     out = str(text)
 
     # STEP 1: structured firewall.
@@ -1308,25 +1315,8 @@ def sanitize_player_facing_output(text: str, context: Dict[str, Any] | None = No
     sess = ctx.get("session") if isinstance(ctx.get("session"), dict) else None
     world = ctx.get("world") if isinstance(ctx.get("world"), dict) else None
     scene_id = str(ctx.get("scene_id") or "").strip()
-    post_gate = bool(ctx.get("post_final_emission_gate"))
     strict_clamp = bool(ctx.get("strict_social_terminal_clamp"))
-    eff_res, strict_social, _coercion = coerce_resolution_for_strict_social_emission(res, sess, world, scene_id)
-    if post_gate and strict_clamp:
-        strict_social = True
-    elif not strict_social:
-        strict_social = strict_social_emission_will_apply(res, sess, world, scene_id)
-
-    if strict_social and isinstance(eff_res, dict):
-        tag_list = []
-        if isinstance(ctx.get("tags"), list):
-            tag_list = [str(t) for t in ctx["tags"] if isinstance(t, str)]
-        rebuilt = apply_strict_social_sentence_ownership_filter(
-            rebuilt,
-            resolution=eff_res,
-            tags=tag_list or None,
-            session=sess,
-            scene_id=scene_id,
-        )
+    eff_res, strict_social, _coercion = effective_strict_social_resolution_for_emission(res, sess, world, scene_id)
 
     if not rebuilt:
         if strict_clamp and isinstance(ctx.get("gate_sealed_text"), str) and str(ctx.get("gate_sealed_text") or "").strip():

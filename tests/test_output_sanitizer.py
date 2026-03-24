@@ -1,5 +1,9 @@
 from __future__ import annotations
 
+import game.output_sanitizer as output_sanitizer_module
+import game.social_exchange_emission as social_exchange_emission_module
+from game.defaults import default_session, default_world
+from game.interaction_context import rebuild_active_scene_entities, set_social_target
 from game.output_sanitizer import (
     extract_player_text_from_serialized_payload,
     final_validation_pass,
@@ -121,6 +125,9 @@ def test_sanitizer_prefers_npc_uncertainty_for_dialogue_like_instructional_text(
     assert (
         ('"i do not know that part for certain."' in low)
         or ('"i have heard the talk, but not the names."' in low)
+        or ("heard talk, not names" in low)
+        or ("word is, it was messy" in low)
+        or ("couldn't tell you" in low)
         or ('"no one here can swear to it."' in low)
         or ("no answer presents itself from here" in low)
         or ("truth stays locked until someone pushes a concrete move" in low)
@@ -434,3 +441,99 @@ def test_sentence_atomic_punctuation_cleanup_after_dropped_sentence():
     assert "and behind the" not in low
     assert ".." not in out
     assert "rain beads on stone." in low
+
+
+def _strict_social_resolution_for_sanitizer() -> dict:
+    return {
+        "kind": "question",
+        "prompt": "Where did they go?",
+        "social": {
+            "social_intent_class": "social_exchange",
+            "npc_id": "runner",
+            "npc_name": "The runner",
+            "npc_reply_expected": True,
+            "reply_kind": "answer",
+            "target_resolved": True,
+        },
+    }
+
+
+def test_post_gate_strict_clamp_does_not_call_strict_social_ownership_filter(monkeypatch):
+    """Strict-social post-gate path must not invoke ownership filter from the sanitizer."""
+    calls: list[int] = []
+    real = social_exchange_emission_module.apply_strict_social_sentence_ownership_filter
+
+    def spy(*args, **kwargs):
+        calls.append(1)
+        return real(*args, **kwargs)
+
+    monkeypatch.setattr(social_exchange_emission_module, "apply_strict_social_sentence_ownership_filter", spy)
+    res = _strict_social_resolution_for_sanitizer()
+    session = default_session()
+    world = default_world()
+    sid = "frontier_gate"
+    rebuild_active_scene_entities(session, world, sid)
+    set_social_target(session, "runner")
+    text = 'The runner nods once. "South road."'
+    sanitize_player_facing_output(
+        text,
+        {
+            "resolution": res,
+            "session": session,
+            "world": world,
+            "scene_id": sid,
+            "tags": [],
+            "post_final_emission_gate": True,
+            "strict_social_terminal_clamp": True,
+            "gate_sealed_text": text,
+        },
+    )
+    assert calls == []
+
+    sanitize_player_facing_output(
+        text,
+        {
+            "resolution": res,
+            "session": session,
+            "world": world,
+            "scene_id": sid,
+            "tags": [],
+        },
+    )
+    assert calls == []
+
+
+def test_post_gate_strict_clamp_preserves_valid_social_line():
+    """Non-semantic passes should leave already-gate-valid social text stable."""
+    res = _strict_social_resolution_for_sanitizer()
+    session = default_session()
+    world = default_world()
+    sid = "frontier_gate"
+    rebuild_active_scene_entities(session, world, sid)
+    set_social_target(session, "runner")
+    text = 'The runner nods once. "South road."'
+    ctx = {
+        "resolution": res,
+        "session": session,
+        "world": world,
+        "scene_id": sid,
+        "tags": [],
+        "post_final_emission_gate": True,
+        "strict_social_terminal_clamp": True,
+        "gate_sealed_text": text,
+    }
+    out = sanitize_player_facing_output(text, ctx)
+    assert out == text
+
+
+def test_post_gate_strict_clamp_empty_rebuilt_returns_gate_sealed_text():
+    sealed = 'The runner shrugs. "I don\'t know."'
+    out = sanitize_player_facing_output(
+        "",
+        {
+            "post_final_emission_gate": True,
+            "strict_social_terminal_clamp": True,
+            "gate_sealed_text": sealed,
+        },
+    )
+    assert out == sealed

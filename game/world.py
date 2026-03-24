@@ -294,3 +294,66 @@ def apply_resolution_world_updates(world: Dict[str, Any], resolution_updates: Di
                 except (TypeError, ValueError):
                     amount = 1
                 advance_world_clock(world, name, amount)
+
+
+def reset_world_playthrough_state(world: Dict[str, Any]) -> None:
+    """Clear emergent world runtime (log, ticks, projects) and resync factions/NPCs from bootstrap template.
+
+    Called on New Campaign after ``create_fresh_session_document`` replaces session: world.json on disk
+    still holds prior playthrough mutations until this runs. Root replacement is not used for the whole
+    world document because settlements/factions/npcs may be author-edited; we reset only layers that
+    the engine appends during play and realign known IDs with ``default_world()`` defaults.
+    """
+    from game.defaults import default_world
+
+    ensure_defaults(world)
+    template = default_world()
+
+    world["event_log"] = []
+    world["world_flags"] = []
+    world["projects"] = []
+    world["assets"] = []
+    world["world_state"] = {"flags": {}, "counters": {}, "clocks": {}}
+
+    t_factions = {
+        f["id"]: f
+        for f in (template.get("factions") or [])
+        if isinstance(f, dict) and f.get("id")
+    }
+    for fac in world.get("factions") or []:
+        if not isinstance(fac, dict):
+            continue
+        fid = fac.get("id")
+        tf = t_factions.get(fid) if fid else None
+        if tf:
+            for key in (
+                "pressure",
+                "agenda_progress",
+                "influence",
+                "attitude",
+                "current_plan",
+                "goal",
+            ):
+                if key in tf:
+                    fac[key] = tf[key]
+            fac["assets"] = list(tf["assets"]) if isinstance(tf.get("assets"), list) else []
+        else:
+            fac["pressure"] = 0
+            fac["agenda_progress"] = 0
+            fac.setdefault("assets", [])
+
+    t_npcs = {
+        n["id"]: n
+        for n in (template.get("npcs") or [])
+        if isinstance(n, dict) and n.get("id")
+    }
+    for npc in world.get("npcs") or []:
+        if not isinstance(npc, dict):
+            continue
+        nid = npc.get("id")
+        tn = t_npcs.get(nid) if nid else None
+        if not tn:
+            continue
+        for key in ("location", "scene_id", "availability", "current_agenda", "disposition"):
+            if key in tn:
+                npc[key] = tn[key]

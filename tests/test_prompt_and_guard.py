@@ -948,6 +948,56 @@ def test_social_exchange_question_first_sentence_contract_accepts_explicit_shape
     assert check["reasons"] == []
 
 
+def test_social_exchange_contract_accepts_beat_then_substantive_indirect_answer():
+    """Short NPC beat + follow-on counts as explicit; grounding tokens match npc_id slug."""
+    from game.gm import question_resolution_rule_check
+
+    check = question_resolution_rule_check(
+        player_text="What happened to the missing patrol?",
+        gm_reply_text=(
+            "The runner frowns. They never came back from the east bend—just rumors after that."
+        ),
+        resolution={
+            "kind": "question",
+            "social": {
+                "social_intent_class": "social_exchange",
+                "npc_id": "tavern_runner",
+                "npc_name": "The runner",
+            },
+        },
+    )
+    assert check["applies"] is True
+    assert check["ok"] is True
+    assert check["reasons"] == []
+
+
+def test_social_exchange_contract_accepts_leading_dialogue_without_name_prefix():
+    from game.gm import question_resolution_rule_check
+
+    check = question_resolution_rule_check(
+        player_text="Any idea who attacked them?",
+        gm_reply_text='"Couldn\'t tell you—only rumors from the road."',
+        resolution={
+            "kind": "question",
+            "social": {
+                "social_intent_class": "social_exchange",
+                "npc_id": "runner",
+                "npc_name": "Tavern Runner",
+            },
+        },
+    )
+    assert check["applies"] is True
+    assert check["ok"] is True
+
+
+def test_opening_echo_skips_when_reply_leads_with_dialogue():
+    from game.gm import opening_sentence_echoes_player_input
+
+    player = "What happened to the missing patrol?"
+    reply = '"Patrol never made the rendezvous," the runner mutters. "I heard riders, not names."'
+    assert opening_sentence_echoes_player_input(reply, player) is False
+
+
 def test_social_exchange_question_first_sentence_contract_rejects_atmospheric_opener():
     from game.gm import question_resolution_rule_check
 
@@ -1648,7 +1698,8 @@ def test_topic_pressure_does_not_escalate_across_clearly_different_topics():
         )
 
 
-def test_topic_pressure_escalation_rewrites_repeated_uncertainty_loop_with_social_stance(monkeypatch):
+def test_topic_pressure_escalation_skipped_for_strict_social_exchange(monkeypatch):
+    """Strict-social turns bypass topic_pressure_escalation so the final emission gate sees the raw candidate."""
     from game.gm import apply_response_policy_enforcement, register_topic_probe
     from game.prompt_context import build_response_policy
 
@@ -1677,7 +1728,6 @@ def test_topic_pressure_escalation_rewrites_repeated_uncertainty_loop_with_socia
         "Who ordered it?",
         "Who funds them?",
     ]
-    escalated_outputs = []
     for idx, prompt in enumerate(prompts, start=1):
         session["turn_counter"] = idx
         register_topic_probe(
@@ -1698,15 +1748,114 @@ def test_topic_pressure_escalation_rewrites_repeated_uncertainty_loop_with_socia
         )
         text = str(out.get("player_facing_text") or "")
         low = text.lower()
-        if idx >= 3:
-            tags = out.get("tags") or []
-            assert "topic_pressure_escalation" in tags
-            assert "captain veyra" in low
-            assert "rumor says the crossroads were bad" not in low
-            first_sentence = re.split(r"(?<=[.!?])\s+", text.strip(), maxsplit=1)[0].lower()
-            assert first_sentence.startswith("captain veyra")
-            assert "no," in first_sentence or "no " in first_sentence
-            escalated_outputs.append(first_sentence)
+        tags = out.get("tags") or []
+        assert "topic_pressure_escalation" not in tags
+        assert "rumor says the crossroads were bad" in low
+        assert "captain veyra" in low
 
-    assert len(escalated_outputs) == 2
-    assert escalated_outputs[0] != escalated_outputs[1]
+
+def test_apply_response_policy_enforcement_strict_social_bypasses_upstream_narrative_mutators():
+    """Strict social: no uncertainty prepend, momentum/pressure, next-step patches, spoiler/validator rewrites, or generic rewrites."""
+    from game.gm import apply_response_policy_enforcement
+    from game.prompt_context import build_response_policy
+    from game.storage import get_scene_runtime
+
+    _, world, session, _, _, _ = _dummy_state()
+    resolution = {
+        "kind": "question",
+        "prompt": "Who signed the order?",
+        "social": {
+            "social_intent_class": "social_exchange",
+            "npc_id": "guard_captain",
+            "npc_name": "Captain Veyra",
+            "npc_reply_expected": True,
+        },
+    }
+    scene_rt = get_scene_runtime(session, "frontier_gate")
+    scene_rt["momentum_exchanges_since"] = 3
+    scene_rt["momentum_next_due_in"] = 2
+    scene_rt["passive_action_streak"] = 3
+    scene_rt["last_player_action_passive"] = True
+
+    thin_reply = {
+        "player_facing_text": "I can't answer that.",
+        "tags": [],
+        "scene_update": None,
+        "activate_scene_id": None,
+        "new_scene_draft": None,
+        "world_updates": None,
+        "suggested_action": None,
+        "debug_notes": "",
+    }
+    out = apply_response_policy_enforcement(
+        dict(thin_reply),
+        response_policy=build_response_policy(),
+        player_text="Who signed the order?",
+        scene_envelope=FRONTIER_GATE_SCENE,
+        session=session,
+        world=world,
+        resolution=resolution,
+        discovered_clues=[],
+    )
+    text = str(out.get("player_facing_text") or "")
+    low = text.lower()
+    tags = [str(t) for t in (out.get("tags") or []) if isinstance(t, str)]
+    assert text.strip() == thin_reply["player_facing_text"].strip()
+    assert "nothing in the scene" not in low
+    assert "if you investigate" not in low
+    assert "consequence / opportunity" not in low
+    assert "next step:" not in low
+    assert "for a breath" not in low
+    assert "validator_voice_rewrite" not in tags
+    assert "spoiler_guard" not in tags
+    assert "scene_momentum:enforced_fallback" not in str(out.get("debug_notes") or "")
+    assert "passive_scene_pressure" not in tags
+    assert "topic_pressure_escalation" not in tags
+
+    generic_gm = {
+        "player_facing_text": "Trust is hard to come by.",
+        "tags": [],
+        "scene_update": None,
+        "activate_scene_id": None,
+        "new_scene_draft": None,
+        "world_updates": None,
+        "suggested_action": None,
+        "debug_notes": "",
+    }
+    out2 = apply_response_policy_enforcement(
+        dict(generic_gm),
+        response_policy=build_response_policy(),
+        player_text="Who signed the order?",
+        scene_envelope=FRONTIER_GATE_SCENE,
+        session=session,
+        world=world,
+        resolution=resolution,
+        discovered_clues=[],
+    )
+    assert out2["player_facing_text"] == generic_gm["player_facing_text"]
+    assert "forbidden_generic_rewrite" not in (out2.get("tags") or [])
+
+    leaky_gm = {
+        "player_facing_text": (
+            "An agent of a noble house is watching new arrivals for a smuggler contact looking for magical talent."
+        ),
+        "tags": [],
+        "scene_update": None,
+        "activate_scene_id": None,
+        "new_scene_draft": None,
+        "world_updates": None,
+        "suggested_action": None,
+        "debug_notes": "",
+    }
+    out3 = apply_response_policy_enforcement(
+        dict(leaky_gm),
+        response_policy=build_response_policy(),
+        player_text="Who is really watching the new arrivals?",
+        scene_envelope=FRONTIER_GATE_SCENE,
+        session=session,
+        world=world,
+        resolution=resolution,
+        discovered_clues=[],
+    )
+    assert out3["player_facing_text"] == leaky_gm["player_facing_text"]
+    assert "spoiler_guard" not in (out3.get("tags") or [])

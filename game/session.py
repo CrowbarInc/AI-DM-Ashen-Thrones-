@@ -1,51 +1,28 @@
 """Session module: playthrough state management and reset.
 
-Does NOT touch world, campaign, scenes, locations, npcs, or clues.
+Runtime fields live in ``session.json``; campaign/world/scene templates are separate
+(see ``game/campaign_state.py`` for layering). Reset replaces the runtime document
+with ``create_fresh_session_document()`` — it does not wipe bootstrap files.
 """
 from __future__ import annotations
 
 from typing import Any, Dict
 
-from game.clocks import DEFAULT_CLOCKS
-from game.interaction_context import clear_for_scene_change
+from game.campaign_state import create_fresh_session_document
 
 
 def reset_session_state(session: Dict[str, Any]) -> Dict[str, Any]:
-    """Clears runtime playthrough state but preserves campaign/world data.
+    """Replace *runtime* session fields with a fresh dict graph.
 
-    Mutates only runtime fields in the session dict. Does not touch world,
-    world.scenes, world.locations, world.npcs, or world.clues.
+    Does not touch campaign.json, world.json, or scene JSONs. Stale keys are
+    removed via ``clear()`` so prior playthrough-only fields cannot leak.
+
+    For a full New Campaign (session + combat + world playthrough + log), use
+    :func:`game.campaign_reset.apply_new_campaign_hard_reset` — ``world.json``
+    must be cleared separately or contamination persists across session replacement.
     """
-    # Clear scene runtime (discovered_clues, pending_leads, last_exploration_action_key, etc.)
-    session["scene_runtime"] = {}
-
-    # Reset to starting scene
-    session["active_scene_id"] = "frontier_gate"
-    session["visited_scene_ids"] = ["frontier_gate"]
-
-    # Reset counters and date
-    session["turn_counter"] = 0
-    session["current_date"] = "Day 1"
-
-    # Reset clocks to defaults
-    session["clocks"] = dict(DEFAULT_CLOCKS)
-
-    # Clear clue knowledge state (discovered + inferred)
-    session["clue_knowledge"] = {}
-
-    # Clear NPC runtime (attitude, trust, fear, etc.)
-    session["npc_runtime"] = {}
-    clear_for_scene_change(session)
-
-    # Clear debug and flags
-    session["last_action_debug"] = None
-    session["debug_traces"] = []
-    session["flags"] = {}
-    # Mark fresh campaign so build_messages does not inject prior chat logs
-    session["chat_history"] = []
-
-    # Preserve response_mode (user preference)
-    session.setdefault("response_mode", "standard")
-
+    fresh = create_fresh_session_document()
+    session.clear()
+    session.update(fresh)
     print("[SESSION RESET] runtime state cleared")
     return session

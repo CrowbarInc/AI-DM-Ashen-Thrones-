@@ -4,20 +4,13 @@ from typing import Any, Dict, List
 
 from game.interaction_context import inspect as inspect_interaction_context
 from game.social_exchange_emission import (
-    coerce_resolution_for_strict_social_emission,
-    deterministic_social_fallback_line,
-    emission_gate_interruption_active,
-    emission_gate_pressure_active,
-    emission_gate_uncertainty_source,
-    hard_reject_social_exchange_text,
-    is_route_illegal_global_or_sanitizer_fallback_text,
+    build_final_strict_social_response,
+    effective_strict_social_resolution_for_emission,
     log_final_emission_decision,
     log_final_emission_trace,
-    merged_player_prompt_for_gate,
     minimal_social_emergency_fallback_line,
-    minimal_social_resolution_for_directed_question_guard,
-    apply_strict_social_sentence_ownership_filter,
-    replacement_is_route_legal_social,
+    strict_social_emission_will_apply,
+    _npc_display_name_for_emission,
 )
 
 
@@ -72,29 +65,19 @@ def apply_final_emission_gate(
     tags = out.get("tags") if isinstance(out.get("tags"), list) else []
     tag_list = [str(t) for t in tags if isinstance(t, str)]
 
-    eff_resolution, social_route, coercion_reason = coerce_resolution_for_strict_social_emission(
+    eff_resolution, _effective_social_route, coercion_reason = effective_strict_social_resolution_for_emission(
         resolution if isinstance(resolution, dict) else None,
         session if isinstance(session, dict) else None,
         world if isinstance(world, dict) else None,
         str(scene_id or "").strip(),
     )
-    merged_prompt = merged_player_prompt_for_gate(
+    sid = str(scene_id or "").strip()
+    strict_social_turn = strict_social_emission_will_apply(
         resolution if isinstance(resolution, dict) else None,
         session if isinstance(session, dict) else None,
-        str(scene_id or "").strip(),
+        world if isinstance(world, dict) else None,
+        sid,
     )
-    if not social_route:
-        guard_res = minimal_social_resolution_for_directed_question_guard(
-            session if isinstance(session, dict) else None,
-            world if isinstance(world, dict) else None,
-            str(scene_id or "").strip(),
-            merged_player_prompt=merged_prompt,
-            resolution=resolution if isinstance(resolution, dict) else None,
-        )
-        if isinstance(guard_res, dict):
-            eff_resolution = guard_res
-            social_route = True
-            coercion_reason = f"{coercion_reason}|npc_directed_guard"
 
     inspected = inspect_interaction_context(session) if isinstance(session, dict) else {}
     active_interlocutor = str((inspected or {}).get("active_interaction_target_id") or "").strip()
@@ -113,17 +96,125 @@ def apply_final_emission_gate(
     normalization_ran = False
     text = pre_gate_text
 
-    if social_route:
+    strict_social_active = bool(strict_social_turn)
+    coercion_used = "|" in coercion_reason or "synthetic" in coercion_reason or "npc_directed_guard" in coercion_reason
+    retry_output = any(
+        isinstance(t, str) and ("question_retry_fallback" in t or "social_exchange_retry_fallback" in t)
+        for t in tag_list
+    )
+
+    if strict_social_turn:
         normalization_ran = True
-        text = _normalize_text(
-            apply_strict_social_sentence_ownership_filter(
-                text,
-                resolution=eff_resolution,
-                tags=tag_list,
-                session=session if isinstance(session, dict) else None,
-                scene_id=str(scene_id or "").strip(),
-            )
+        text, details = build_final_strict_social_response(
+            pre_gate_text,
+            resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
+            tags=tag_list,
+            session=session if isinstance(session, dict) else None,
+            scene_id=str(scene_id or "").strip(),
+            world=world if isinstance(world, dict) else None,
         )
+        out["player_facing_text"] = text
+        final_emitted_source = str(details.get("final_emitted_source") or "unknown_post_gate_writer")
+        if retry_output:
+            final_emitted_source = "retry_output"
+        gate_out_text = _normalize_text(out.get("player_facing_text"))
+        post_gate_mutation_detected = pre_gate_text != gate_out_text
+
+        if not details.get("used_internal_fallback"):
+            log_final_emission_decision(
+                {
+                    "stage": "final_emission_gate",
+                    "social_route": strict_social_turn,
+                    "coercion_reason": coercion_reason,
+                    "resolution_kind": res_kind,
+                    "social_intent_class": social_ic,
+                    "active_interlocutor": active_interlocutor or None,
+                    "candidate_ok": True,
+                    "rejection_reasons": [],
+                    "fallback_pool": str(details.get("fallback_pool") or "none"),
+                    "fallback_kind": str(details.get("fallback_kind") or "none"),
+                }
+            )
+            out["_final_emission_meta"] = {
+                "final_route": "accept_candidate",
+                "reply_kind": _reply_kind(eff_resolution if isinstance(eff_resolution, dict) else None),
+                "strict_social_active": strict_social_active,
+                "coercion_used": coercion_used,
+                "active_interlocutor_id": active_interlocutor or None,
+                "npc_id": npc_id_for_meta or None,
+                "normalization_ran": normalization_ran,
+                "candidate_validation_passed": True,
+                "deterministic_social_fallback_attempted": bool(details.get("deterministic_attempted")),
+                "deterministic_social_fallback_passed": bool(details.get("deterministic_passed")),
+                "final_emitted_source": final_emitted_source,
+                "post_gate_mutation_detected": post_gate_mutation_detected,
+                "final_text_preview": (gate_out_text[:120] + "…") if len(gate_out_text) > 120 else gate_out_text,
+                "coercion_reason": coercion_reason,
+            }
+            log_final_emission_trace({**out["_final_emission_meta"], "stage": "final_emission_gate_accept"})
+            return out
+
+        fb_kind = str(details.get("fallback_kind") or "none")
+        deterministic_attempted = bool(details.get("deterministic_attempted"))
+        deterministic_passed = bool(details.get("deterministic_passed"))
+        fallback_pool = str(details.get("fallback_pool") or "social_deterministic")
+        candidate_ok = False
+        rejection_reasons = details.get("rejection_reasons") if isinstance(details.get("rejection_reasons"), list) else []
+
+        out["tags"] = tag_list + ["final_emission_gate_replaced", f"final_emission_gate:{fb_kind}"]
+        if final_emitted_source == "minimal_social_emergency_fallback":
+            out["tags"] = list(out["tags"]) + ["terminal_strict_social_emission", "strict_social_terminal_safe"]
+
+        if details.get("route_illegal_intercepted"):
+            dbg = out.get("debug_notes") if isinstance(out.get("debug_notes"), str) else ""
+            preview = str(details.get("intercepted_preview") or "")
+            out["debug_notes"] = (
+                (dbg + " | " if dbg else "")
+                + f"final_emission_gate:route_illegal_writer_intercepted:{preview[:80]}"
+            )
+
+        dbg = out.get("debug_notes") if isinstance(out.get("debug_notes"), str) else ""
+        out["debug_notes"] = (
+            (dbg + " | " if dbg else "")
+            + "final_emission_gate:replaced:"
+            + ",".join([str(r) for r in rejection_reasons[:8] if isinstance(r, str)])
+        )
+        log_final_emission_decision(
+            {
+                "stage": "final_emission_gate",
+                "social_route": strict_social_turn,
+                "coercion_reason": coercion_reason,
+                "resolution_kind": res_kind,
+                "social_intent_class": social_ic,
+                "active_interlocutor": active_interlocutor or None,
+                "candidate_ok": candidate_ok,
+                "rejection_reasons": [str(r) for r in rejection_reasons[:12] if isinstance(r, str)],
+                "fallback_pool": fallback_pool,
+                "fallback_kind": fb_kind,
+            }
+        )
+        gate_out_text = _normalize_text(out.get("player_facing_text"))
+        post_gate_mutation_detected = pre_gate_text != gate_out_text
+
+        out["_final_emission_meta"] = {
+            "final_route": "replaced",
+            "reply_kind": _reply_kind(eff_resolution if isinstance(eff_resolution, dict) else None),
+            "strict_social_active": strict_social_active,
+            "coercion_used": coercion_used,
+            "active_interlocutor_id": active_interlocutor or None,
+            "npc_id": npc_id_for_meta or None,
+            "normalization_ran": normalization_ran,
+            "candidate_validation_passed": False,
+            "deterministic_social_fallback_attempted": deterministic_attempted,
+            "deterministic_social_fallback_passed": deterministic_passed,
+            "final_emitted_source": final_emitted_source,
+            "post_gate_mutation_detected": post_gate_mutation_detected,
+            "final_text_preview": (gate_out_text[:120] + "…") if len(gate_out_text) > 120 else gate_out_text,
+            "coercion_reason": coercion_reason,
+            "rejection_reasons_sample": [str(r) for r in rejection_reasons[:8] if isinstance(r, str)],
+        }
+        log_final_emission_trace({**out["_final_emission_meta"], "stage": "final_emission_gate_replace"})
+        return out
 
     low = text.lower()
     banned_any_route = (
@@ -133,37 +224,16 @@ def apply_final_emission_gate(
     if any(phrase in low for phrase in banned_any_route):
         reasons.append("banned_stock_phrase")
 
-    if social_route:
-        reasons.extend(
-            hard_reject_social_exchange_text(
-                text,
-                resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
-                session=session if isinstance(session, dict) else None,
-            )
-        )
-
     candidate_ok = not bool(reasons)
     fallback_pool = "none"
     fallback_kind = "none"
     deterministic_attempted = False
     deterministic_passed = False
     final_emitted_source = "unknown_post_gate_writer"
-    strict_social_active = bool(social_route)
-    coercion_used = "|" in coercion_reason or "synthetic" in coercion_reason or "npc_directed_guard" in coercion_reason
-
-    retry_output = any(
-        isinstance(t, str) and ("question_retry_fallback" in t or "social_exchange_retry_fallback" in t)
-        for t in tag_list
-    )
 
     if not reasons:
         out["player_facing_text"] = text
-        if social_route:
-            final_emitted_source = (
-                "generated_candidate" if pre_gate_text.strip() == text.strip() else "normalized_social_candidate"
-            )
-        else:
-            final_emitted_source = "generated_candidate"
+        final_emitted_source = "generated_candidate"
         if retry_output:
             final_emitted_source = "retry_output"
 
@@ -173,7 +243,7 @@ def apply_final_emission_gate(
         log_final_emission_decision(
             {
                 "stage": "final_emission_gate",
-                "social_route": social_route,
+                "social_route": strict_social_turn,
                 "coercion_reason": coercion_reason,
                 "resolution_kind": res_kind,
                 "social_intent_class": social_ic,
@@ -203,61 +273,35 @@ def apply_final_emission_gate(
         log_final_emission_trace({**out["_final_emission_meta"], "stage": "final_emission_gate_accept"})
         return out
 
-    uncertainty_source = emission_gate_uncertainty_source(tag_list, text)
-    pressure_active = emission_gate_pressure_active(tag_list, session, scene_id)
-    interruption_active = emission_gate_interruption_active(tag_list, text)
-    seed = (
-        f"{scene_id}|{_speaker_label(eff_resolution)}|{_question_prompt_for_resolution(eff_resolution)}|"
-        f"{uncertainty_source}|{pressure_active}|{interruption_active}|{'|'.join(sorted(set(tag_list)))}"
-    )
-
-    if social_route:
-        fallback_pool = "social_deterministic"
-        deterministic_attempted = True
-        fallback_text, fallback_kind = deterministic_social_fallback_line(
-            resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
-            uncertainty_source=uncertainty_source,
-            pressure_active=pressure_active,
-            interruption_active=interruption_active,
-            seed=seed,
-        )
-        deterministic_passed = replacement_is_route_legal_social(
-            fallback_text,
-            resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
-            session=session if isinstance(session, dict) else None,
-        )
-        if not deterministic_passed:
-            fallback_text = minimal_social_emergency_fallback_line(
-                eff_resolution if isinstance(eff_resolution, dict) else None
-            )
-            fallback_kind = "emergency_social_minimal"
-            final_emitted_source = "minimal_social_emergency_fallback"
-        else:
-            final_emitted_source = "deterministic_social_fallback"
+    # Non-social replace path only (strict-social replacement is handled in build_final_strict_social_response).
+    mode = str((inspected or {}).get("interaction_mode") or "").strip().lower()
+    if (
+        active_interlocutor
+        and mode == "social"
+        and isinstance(world, dict)
+    ):
+        mini_res: Dict[str, Any] = {
+            "kind": "question",
+            "social": {
+                "npc_id": active_interlocutor,
+                "npc_name": _npc_display_name_for_emission(world, sid, active_interlocutor),
+                "social_intent_class": "social_exchange",
+            },
+        }
+        fallback_pool = "social_active_interlocutor_minimal"
+        fallback_text = minimal_social_emergency_fallback_line(mini_res)
+        fallback_kind = "social_interlocutor_fallback"
+        final_emitted_source = "social_interlocutor_minimal_fallback"
     else:
         fallback_pool = "global_scene_narrative"
         fallback_text = "For a breath, the scene holds while voices shift around you."
         fallback_kind = "narrative_safe_fallback"
         final_emitted_source = "global_scene_fallback"
-
-    if strict_social_active and is_route_illegal_global_or_sanitizer_fallback_text(fallback_text):
-        fb0 = fallback_text
-        fallback_text = minimal_social_emergency_fallback_line(
-            eff_resolution if isinstance(eff_resolution, dict) else None
-        )
-        fallback_kind = "emergency_social_minimal"
-        final_emitted_source = "minimal_social_emergency_fallback"
-        deterministic_passed = False
-        dbg = out.get("debug_notes") if isinstance(out.get("debug_notes"), str) else ""
-        out["debug_notes"] = (
-            (dbg + " | " if dbg else "")
-            + f"final_emission_gate:route_illegal_writer_intercepted:{fb0[:80]}"
-        )
+    deterministic_attempted = False
+    deterministic_passed = False
 
     out["player_facing_text"] = fallback_text
     out["tags"] = tag_list + ["final_emission_gate_replaced", f"final_emission_gate:{fallback_kind}"]
-    if strict_social_active and final_emitted_source == "minimal_social_emergency_fallback":
-        out["tags"] = list(out["tags"]) + ["terminal_strict_social_emission", "strict_social_terminal_safe"]
 
     dbg = out.get("debug_notes") if isinstance(out.get("debug_notes"), str) else ""
     out["debug_notes"] = (
@@ -268,7 +312,7 @@ def apply_final_emission_gate(
     log_final_emission_decision(
         {
             "stage": "final_emission_gate",
-            "social_route": social_route,
+            "social_route": strict_social_turn,
             "coercion_reason": coercion_reason,
             "resolution_kind": res_kind,
             "social_intent_class": social_ic,

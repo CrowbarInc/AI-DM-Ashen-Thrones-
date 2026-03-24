@@ -20,11 +20,14 @@ from game.storage import (
     SCENE_MOMENTUM_TAG_PREFIX,
 )
 from game.clues import get_clue_presentation, get_known_clues_with_presentation
-from game.interaction_context import assert_valid_speaker
+from game.interaction_context import assert_valid_speaker, inspect as inspect_interaction_context
 from game.social_exchange_emission import (
     apply_social_exchange_retry_fallback_gm,
+    effective_strict_social_resolution_for_emission,
     is_scene_directed_watch_question,
-    should_apply_strict_social_exchange_emission,
+    looks_like_npc_directed_question,
+    minimal_social_emergency_fallback_line,
+    strict_social_emission_will_apply,
 )
 
 COMBAT_KINDS = frozenset({
@@ -33,6 +36,17 @@ COMBAT_KINDS = frozenset({
 })
 
 SOCIAL_CHECK_KINDS = frozenset({'persuade', 'intimidate', 'deceive', 'barter', 'recruit'})
+
+
+def _session_social_authority(session: Dict[str, Any] | None) -> bool:
+    """True when a social interlocutor is authoritative for this turn (prompt + sanitization)."""
+    if not isinstance(session, dict):
+        return False
+    ic = inspect_interaction_context(session)
+    return (
+        str(ic.get("interaction_mode") or "").strip().lower() == "social"
+        and bool(str(ic.get("active_interaction_target_id") or "").strip())
+    )
 
 _STOCK_WARNING_PATTERNS: tuple[tuple[re.Pattern[str], str], ...] = (
     (re.compile(r"\bbe careful who you trust\b", re.IGNORECASE), "be careful who you trust"),
@@ -688,6 +702,31 @@ def sanitize_player_facing_text(
 
     if not hit_reasons:
         return {'text': txt, 'did_sanitize': False, 'reasons': []}
+
+    scene_id = ""
+    if isinstance(scene_envelope, dict):
+        sc = scene_envelope.get("scene")
+        if isinstance(sc, dict):
+            scene_id = str(sc.get("id") or "").strip()
+    eff_res, strict_route, _ = effective_strict_social_resolution_for_emission(
+        resolution if isinstance(resolution, dict) else None,
+        session if isinstance(session, dict) else None,
+        world if isinstance(world, dict) else None,
+        scene_id,
+    )
+    if strict_route and isinstance(eff_res, dict):
+        safe = minimal_social_emergency_fallback_line(eff_res)
+        return {'text': safe, 'did_sanitize': True, 'reasons': hit_reasons, 'uncertainty': None}
+
+    if _session_social_authority(session):
+        safe = _bounded_spoiler_safe_text(
+            user_text,
+            scene_envelope=scene_envelope,
+            session=session,
+            world=world,
+            resolution=resolution,
+        )
+        return {'text': safe, 'did_sanitize': True, 'reasons': hit_reasons, 'uncertainty': None}
 
     uncertainty = (
         classify_uncertainty(
@@ -1462,6 +1501,28 @@ def _extract_player_quoted_segments(user_text: str) -> List[str]:
     return out
 
 
+def _opening_sentence_should_skip_echo_check(first_sentence: str) -> bool:
+    """NPC dialogue / attribution-led openings legitimately reuse question words (patrol, missing, etc.)."""
+    fs = str(first_sentence or "").strip()
+    if not fs:
+        return False
+    if fs.startswith('"') or fs.startswith("\u201c"):
+        return True
+    if re.match(
+        r"^(?:The\s+)?[\w'.-]+\s+(?:says|mutters|replies|answers|asks|adds|grunts)\s*[,:]?\s*[\"“]",
+        fs,
+        re.IGNORECASE,
+    ):
+        return True
+    if re.match(
+        r"^(?:The\s+)?[\w'.-]+\s+(?:frowns|grimaces|shrugs|nods|hesitates)\s*\.\s*[\"“]",
+        fs,
+        re.IGNORECASE,
+    ):
+        return True
+    return False
+
+
 def opening_sentence_echoes_player_input(player_facing_text: str, user_text: str) -> bool:
     """Detect strong overlap between opening sentence and player input."""
     if not isinstance(player_facing_text, str) or not isinstance(user_text, str):
@@ -1474,6 +1535,8 @@ def opening_sentence_echoes_player_input(player_facing_text: str, user_text: str
     first_sentence = re.split(r"[.!?\n]", gm_text, maxsplit=1)[0].strip()
     if not first_sentence:
         first_sentence = gm_text
+    if _opening_sentence_should_skip_echo_check(first_sentence):
+        return False
     gm_tokens = _ECHO_TOKEN_PATTERN.findall(first_sentence.lower())
     if len(gm_tokens) < 3:
         # Handle openings that begin with quoted questions, where sentence splitting
@@ -1684,6 +1747,10 @@ _SOCIAL_EXCHANGE_ANSWER_UNCERTAINTY_TOKENS: tuple[str, ...] = (
     "from what i heard",
     "from what i saw",
     "from what we know",
+    "i've heard",
+    "i have heard",
+    "heard whispers",
+    "whispers",
     "not sure",
     "unclear",
     "might be",
@@ -1691,6 +1758,22 @@ _SOCIAL_EXCHANGE_ANSWER_UNCERTAINTY_TOKENS: tuple[str, ...] = (
     "seems like",
     "haven't heard",
     "have not heard",
+    "beats me",
+    "hard to say",
+    "couldn't say",
+    "could not say",
+    "can't swear",
+    "cannot swear",
+    "won't swear",
+    "will swear",
+    "no one will",
+    "not my place",
+    "no witnesses",
+    "no names",
+    "word is",
+    "rumor is",
+    "people say",
+    "they say",
 )
 _SOCIAL_EXCHANGE_PRESSURE_TOKENS: tuple[str, ...] = (
     "ask me that again",
@@ -1770,9 +1853,97 @@ def _first_sentence(text: str) -> str:
     return first or t
 
 
-def _is_social_exchange_question_turn(player_text: str, resolution: Dict[str, Any] | None) -> bool:
-    if not _is_direct_player_question(player_text):
+def _split_leading_sentences(text: str, max_sentences: int = 2) -> List[str]:
+    """First one or two sentence-like units (strict-social contract scope)."""
+    t = str(text or "").strip()
+    if not t:
+        return []
+    parts = re.split(r"(?<=[.!?])\s+", t)
+    out: List[str] = []
+    for p in parts:
+        s = p.strip()
+        if s:
+            out.append(s)
+        if len(out) >= max_sentences:
+            break
+    return out
+
+
+_SHORT_NPC_BEAT_FIRST: re.Pattern[str] = re.compile(
+    r"^(?:The\s+)?(?:[\w'.-]+\s+){0,4}"
+    r"(?:frowns|grimaces|shrugs|nods|mutters|hesitates|laughs|sighs|looks\s+away|glances\s+away|"
+    r"shakes\s+(?:their|his|her)\s+head|lowers\s+(?:their|his|her)\s+voice|raises\s+(?:their|his|her)\s+voice)"
+    r"\s*\.?\s*$",
+    re.IGNORECASE,
+)
+
+
+def _is_short_npc_beat_opener(sentence: str) -> bool:
+    s = str(sentence or "").strip()
+    if not s or len(s) > 140:
         return False
+    return bool(_SHORT_NPC_BEAT_FIRST.match(s))
+
+
+def _social_exchange_contract_scope(reply: str) -> str:
+    """Text used for speaker/answer-shape checks: first sentence, or beat + second sentence."""
+    parts = _split_leading_sentences(reply, 2)
+    if not parts:
+        return ""
+    first = parts[0]
+    if len(parts) >= 2 and _is_short_npc_beat_opener(first):
+        return f"{first} {parts[1]}".strip()
+    return first
+
+
+def _npc_grounding_tokens_for_social(social: Dict[str, Any]) -> List[str]:
+    """Significant name/id words (e.g. runner from Tavern Runner / tavern_runner)."""
+    name = str(social.get("npc_name") or "").strip().lower()
+    npc_id = str(social.get("npc_id") or "").strip().lower()
+    chunks: List[str] = []
+    if name:
+        chunks.append(name)
+    if npc_id:
+        chunks.extend(re.split(r"[_\s-]+", npc_id.replace("-", " ")))
+    out: List[str] = []
+    for chunk in chunks:
+        for w in re.split(r"\s+", chunk):
+            wd = re.sub(r"[^a-z0-9]", "", w)
+            if len(wd) >= 4:
+                out.append(wd)
+    seen: set[str] = set()
+    uniq: List[str] = []
+    for w in out:
+        if w not in seen:
+            seen.add(w)
+            uniq.append(w)
+    return uniq
+
+
+def _first_sentence_opens_with_attributed_dialogue(sentence: str) -> bool:
+    s = str(sentence or "").strip()
+    if not s:
+        return False
+    if s.startswith('"') or s.startswith("\u201c"):
+        return True
+    return bool(
+        re.match(
+            r"^(?:The\s+)?[\w'.-]+\s+(?:says|mutters|replies|answers|asks)\s*[,:]?\s*[\"“]",
+            s,
+            re.IGNORECASE,
+        )
+    )
+
+
+_SOCIAL_SUBSTANTIVE_MOVE_RE = re.compile(
+    r"\b(?:saw|heard|heard\s+of|was\s+told|were\s+told|went|left|returned|lost|found|knew|know|"
+    r"dead|alive|still|never|came|riders|patrol|patrols|attacked|attack|ambush|witness|witnesses|"
+    r"rumor|rumors|word|names|named|missing|happened|bodies|body)\b",
+    re.IGNORECASE,
+)
+
+
+def _is_social_exchange_question_turn(player_text: str, resolution: Dict[str, Any] | None) -> bool:
     if is_scene_directed_watch_question(player_text):
         return False
     if not isinstance(resolution, dict):
@@ -1780,8 +1951,13 @@ def _is_social_exchange_question_turn(player_text: str, resolution: Dict[str, An
     social = resolution.get("social") if isinstance(resolution.get("social"), dict) else {}
     if str(social.get("social_intent_class") or "").strip().lower() != "social_exchange":
         return False
+    if not (_is_direct_player_question(player_text) or looks_like_npc_directed_question(player_text)):
+        return False
     kind = str(resolution.get("kind") or "").strip().lower()
-    return kind in {"question", "social_probe"} or bool(social.get("npc_reply_expected"))
+    engine_questionish = kind in {"question", "social_probe"} or bool(social.get("npc_reply_expected"))
+    if engine_questionish:
+        return True
+    return bool(looks_like_npc_directed_question(player_text))
 
 
 def _social_exchange_first_sentence_contract(
@@ -1807,12 +1983,17 @@ def _social_exchange_first_sentence_contract(
     npc_name = str(social.get("npc_name") or "").strip().lower()
     npc_id = str(social.get("npc_id") or "").strip().lower()
     npc_id_name = npc_id.replace("_", " ").replace("-", " ")
+    scope = _social_exchange_contract_scope(reply)
+    scope_low = scope.lower()
     q_tokens = _question_content_tokens(player_text)
+    grounding_tokens = _npc_grounding_tokens_for_social(social)
 
     speaker_grounded = False
     if npc_name and npc_name in first_low:
         speaker_grounded = True
     if npc_id_name and npc_id_name in first_low:
+        speaker_grounded = True
+    if any(tok and tok in scope_low for tok in grounding_tokens):
         speaker_grounded = True
     if re.search(r"\bthe\s+\w+\s+(?:says|said|answers|answered|replies|replied)\b", first_low):
         speaker_grounded = True
@@ -1821,14 +2002,25 @@ def _social_exchange_first_sentence_contract(
     if any(verb in first_low for verb in _SOCIAL_EXCHANGE_SPEAKER_VERBS):
         if re.search(r"\b(?:the|this|that)\s+\w+\b", first_low) or npc_name or npc_id_name:
             speaker_grounded = True
+    if _first_sentence_opens_with_attributed_dialogue(first):
+        speaker_grounded = True
+    if re.search(r"[\"“]", first):
+        speaker_grounded = True
 
-    has_direct = any(first_low.startswith(p) for p in _QUESTION_RESOLUTION_ANSWER_STARTERS) or (
-        any(tok in first_low for tok in q_tokens) if q_tokens else False
+    has_direct = any(scope_low.startswith(p) for p in _QUESTION_RESOLUTION_ANSWER_STARTERS) or (
+        any(tok in scope_low for tok in q_tokens) if q_tokens else False
     )
-    has_refusal = any(token in first_low for token in _SOCIAL_EXCHANGE_ANSWER_REFUSAL_TOKENS)
-    has_uncertainty = any(token in first_low for token in _SOCIAL_EXCHANGE_ANSWER_UNCERTAINTY_TOKENS)
-    has_pressure = any(token in first_low for token in _SOCIAL_EXCHANGE_PRESSURE_TOKENS)
-    explicit_shape = has_direct or has_refusal or has_uncertainty or has_pressure
+    has_refusal = any(token in scope_low for token in _SOCIAL_EXCHANGE_ANSWER_REFUSAL_TOKENS)
+    has_uncertainty = any(token in scope_low for token in _SOCIAL_EXCHANGE_ANSWER_UNCERTAINTY_TOKENS)
+    has_pressure = any(token in scope_low for token in _SOCIAL_EXCHANGE_PRESSURE_TOKENS)
+    has_substantive_move = bool(_SOCIAL_SUBSTANTIVE_MOVE_RE.search(scope_low))
+    explicit_shape = (
+        has_direct
+        or has_refusal
+        or has_uncertainty
+        or has_pressure
+        or (has_substantive_move and speaker_grounded)
+    )
 
     reasons: List[str] = []
     if not speaker_grounded:
@@ -3855,6 +4047,7 @@ def build_messages(
     public_scene, discoverable_raw, hidden = _scene_layers(scene)
     intent = classify_player_intent(user_text)
     allow_disc = bool(intent.get('allow_discoverable_clues'))
+    social_authority = _session_social_authority(session)
     known_answer_hint = resolve_known_fact_before_uncertainty(
         user_text,
         scene_envelope=scene,
@@ -3863,7 +4056,11 @@ def build_messages(
         resolution=resolution,
     ) if _is_direct_player_question(user_text) else None
     uncertainty_hint = None
-    if _is_direct_player_question(user_text) and not known_answer_hint:
+    if (
+        not social_authority
+        and _is_direct_player_question(user_text)
+        and not known_answer_hint
+    ):
         uncertainty_hint = classify_uncertainty(
             user_text,
             scene_envelope=scene,
@@ -3939,15 +4136,19 @@ def build_messages(
     passive_streak = int(runtime_for_scene.get("passive_action_streak", 0) or 0)
     passive_pause = "passive_pause" in [str(label).strip().lower() for label in intent.get("labels", []) if isinstance(label, str)]
     visible_low = " ".join(str(v).lower() for v in public_scene.get("visible_facts", []) if isinstance(v, str))
-    passive_scene_pressure_due = passive_pause and (
-        passive_streak >= 2
-        or bool(runtime_for_scene.get("pending_leads"))
-        or bool(runtime_for_scene.get("recent_contextual_leads"))
-        or ("guard" in visible_low)
-        or ("watch" in visible_low)
-        or ("missing patrol" in visible_low)
-        or ("rumor" in visible_low)
-        or ("rumour" in visible_low)
+    passive_scene_pressure_due = (
+        not social_authority
+        and passive_pause
+        and (
+            passive_streak >= 2
+            or bool(runtime_for_scene.get("pending_leads"))
+            or bool(runtime_for_scene.get("recent_contextual_leads"))
+            or ("guard" in visible_low)
+            or ("watch" in visible_low)
+            or ("missing patrol" in visible_low)
+            or ("rumor" in visible_low)
+            or ("rumour" in visible_low)
+        )
     )
     if passive_scene_pressure_due:
         payload["passive_scene_pressure"] = {
@@ -4796,6 +4997,31 @@ def scene_stall_check(
     }
 
 
+def _strip_double_quoted_spans_for_generic_scan(text: str) -> str:
+    """Remove ``"..."`` spans so forbidden-generic detection ignores in-character quoted stock lines."""
+    if not isinstance(text, str):
+        return ""
+    return re.sub(r'"[^"]*"', " ", str(text))
+
+
+def _strict_social_speaker_led_opening_for_retry(
+    reply_text: str,
+    resolution: Dict[str, Any] | None,
+) -> bool:
+    """True when the opening is clearly NPC-attributed (strict-social retry relax, not narrator sludge)."""
+    if not isinstance(resolution, dict):
+        return False
+    social = resolution.get("social") if isinstance(resolution.get("social"), dict) else {}
+    name = str(social.get("npc_name") or "").strip()
+    first = _first_sentence(reply_text)
+    if not first.strip():
+        return False
+    low = first.lower()
+    if name and name.lower() in low[: min(len(name) + 96, 200)]:
+        return True
+    return _opening_sentence_should_skip_echo_check(first)
+
+
 def detect_retry_failures(
     *,
     player_text: str,
@@ -4810,6 +5036,8 @@ def detect_retry_failures(
         return []
     reply_text = gm_reply.get("player_facing_text") if isinstance(gm_reply.get("player_facing_text"), str) else ""
     failures: List[Dict[str, Any]] = []
+    scene_id = _resolve_scene_id(scene_envelope)
+    strict_social = strict_social_emission_will_apply(resolution, session, world, scene_id)
 
     validator_hits = detect_validator_voice(reply_text)
     if validator_hits:
@@ -4826,6 +5054,24 @@ def detect_retry_failures(
         gm_reply_text=reply_text,
         resolution=resolution,
     )
+    if (
+        strict_social
+        and question_rule.get("applies")
+        and not question_rule.get("ok")
+        and _strict_social_speaker_led_opening_for_retry(reply_text, resolution)
+    ):
+        q_reasons = [str(r) for r in (question_rule.get("reasons") or [])]
+        relax_ok = bool(q_reasons) and all(
+            isinstance(r, str)
+            and r.startswith("question_rule:")
+            and "asked_question_before_answer" not in r
+            and "empty_reply" not in r
+            and "refusal_or_meta_disallowed" not in r
+            for r in q_reasons
+        )
+        if relax_ok:
+            question_rule = {"applies": True, "ok": True, "reasons": []}
+
     if question_rule.get("applies") and not question_rule.get("ok"):
         known_fact = resolve_known_fact_before_uncertainty(
             player_text,
@@ -4863,7 +5109,8 @@ def detect_retry_failures(
 
     echo_reasons: List[str] = []
     if opening_sentence_echoes_player_input(reply_text, player_text):
-        echo_reasons.append("echo_or_repetition:opening_overlap")
+        if not (strict_social and _strict_social_speaker_led_opening_for_retry(reply_text, resolution)):
+            echo_reasons.append("echo_or_repetition:opening_overlap")
     if opening_sentence_overlaps_player_quote(reply_text, player_text):
         echo_reasons.append("echo_or_repetition:quoted_speech_overlap")
     echo_reasons.extend(detect_stock_warning_filler_repetition(reply_text))
@@ -4939,6 +5186,12 @@ def detect_retry_failures(
         )
 
     forbidden_generic_hits = detect_forbidden_generic_phrases(reply_text)
+    if strict_social:
+        forbidden_generic_hits = detect_forbidden_generic_phrases(
+            _strip_double_quoted_spans_for_generic_scan(reply_text)
+        )
+        if forbidden_generic_hits and _strict_social_speaker_led_opening_for_retry(reply_text, resolution):
+            forbidden_generic_hits = []
     if forbidden_generic_hits:
         failures.append(
             {
@@ -4989,21 +5242,19 @@ def apply_deterministic_retry_fallback(
         return out
 
     scene_id = str((scene_envelope.get("scene") or {}).get("id") or "").strip()
-    hint = ""
-    if isinstance(session, dict) and scene_id:
-        rt = get_scene_runtime(session, scene_id)
-        hint = str(rt.get("last_player_action_text") or "").strip()
-    if should_apply_strict_social_exchange_emission(
-        resolution,
-        session,
-        scene_runtime_prompt=hint or None,
-    ):
+    eff_res, strict_route, _ = effective_strict_social_resolution_for_emission(
+        resolution if isinstance(resolution, dict) else None,
+        session if isinstance(session, dict) else None,
+        world if isinstance(world, dict) else None,
+        scene_id,
+    )
+    if strict_route and isinstance(eff_res, dict):
         return apply_social_exchange_retry_fallback_gm(
             out,
             player_text=player_text,
             session=session,
             world=world,
-            resolution=resolution,
+            resolution=eff_res,
             scene_id=scene_id,
         )
 
@@ -5042,17 +5293,24 @@ def apply_response_policy_enforcement(
 
     out = dict(gm)
     policy = response_policy if isinstance(response_policy, dict) else {}
+    scene_id = ""
+    if isinstance(scene_envelope, dict):
+        sc = scene_envelope.get("scene")
+        if isinstance(sc, dict):
+            scene_id = str(sc.get("id") or "").strip()
+    strict_social_turn = strict_social_emission_will_apply(resolution, session, world, scene_id)
 
     for policy_key, _rule_name in RESPONSE_RULE_PRIORITY:
         if policy_key == "must_answer" and policy.get(policy_key, True):
-            out = enforce_question_resolution_rule(
-                out,
-                player_text=player_text,
-                scene_envelope=scene_envelope,
-                session=session,
-                world=world,
-                resolution=resolution,
-            )
+            if not strict_social_turn:
+                out = enforce_question_resolution_rule(
+                    out,
+                    player_text=player_text,
+                    scene_envelope=scene_envelope,
+                    session=session,
+                    world=world,
+                    resolution=resolution,
+                )
             continue
 
         if policy_key == "forbid_state_invention" and policy.get(policy_key, True):
@@ -5060,15 +5318,16 @@ def apply_response_policy_enforcement(
             continue
 
         if policy_key == "forbid_secret_leak" and policy.get(policy_key, True):
-            out = guard_gm_output(
-                out,
-                scene_envelope,
-                player_text,
-                discovered_clues,
-                session=session,
-                world=world,
-                resolution=resolution,
-            )
+            if not strict_social_turn:
+                out = guard_gm_output(
+                    out,
+                    scene_envelope,
+                    player_text,
+                    discovered_clues,
+                    session=session,
+                    world=world,
+                    resolution=resolution,
+                )
             continue
 
         if policy_key == "allow_partial_answer":
@@ -5079,49 +5338,52 @@ def apply_response_policy_enforcement(
             and policy.get(policy_key, True)
             and bool((policy.get("no_validator_voice") or {}).get("enabled", True))
         ):
-            out = enforce_no_validator_voice(
-                out,
-                scene_envelope=scene_envelope,
-                player_text=player_text,
-                session=session,
-                world=world,
-                resolution=resolution,
-            )
+            if not strict_social_turn:
+                out = enforce_no_validator_voice(
+                    out,
+                    scene_envelope=scene_envelope,
+                    player_text=player_text,
+                    session=session,
+                    world=world,
+                    resolution=resolution,
+                )
             continue
 
         if policy_key == "prefer_scene_momentum" and policy.get(policy_key, True):
-            out = enforce_topic_pressure_escalation(
-                out,
-                player_text=player_text,
-                session=session,
-                scene_envelope=scene_envelope,
-            )
-            out = escalate_passive_scene(
-                out,
-                player_text=player_text,
-                session=session,
-                world=world,
-                scene_envelope=scene_envelope,
-                resolution=resolution,
-            )
-            out = enforce_scene_momentum(out, session=session, scene_envelope=scene_envelope)
+            if not strict_social_turn:
+                out = enforce_topic_pressure_escalation(
+                    out,
+                    player_text=player_text,
+                    session=session,
+                    scene_envelope=scene_envelope,
+                )
+                out = escalate_passive_scene(
+                    out,
+                    player_text=player_text,
+                    session=session,
+                    world=world,
+                    scene_envelope=scene_envelope,
+                    resolution=resolution,
+                )
+                out = enforce_scene_momentum(out, session=session, scene_envelope=scene_envelope)
             continue
 
         if policy_key == "prefer_specificity" and policy.get(policy_key, True):
-            out = enforce_npc_response_contract(
-                out,
-                player_text=player_text,
-                scene_envelope=scene_envelope,
-                session=session,
-                world=world,
-                resolution=resolution,
-            )
-            out = enforce_forbidden_generic_phrases(
-                out,
-                scene_envelope=scene_envelope,
-                session=session,
-                world=world,
-            )
+            if not strict_social_turn:
+                out = enforce_npc_response_contract(
+                    out,
+                    player_text=player_text,
+                    scene_envelope=scene_envelope,
+                    session=session,
+                    world=world,
+                    resolution=resolution,
+                )
+                out = enforce_forbidden_generic_phrases(
+                    out,
+                    scene_envelope=scene_envelope,
+                    session=session,
+                    world=world,
+                )
 
     _commit_topic_progress(
         session=session,

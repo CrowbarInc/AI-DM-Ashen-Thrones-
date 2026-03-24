@@ -6,7 +6,8 @@ functions so behavior remains deterministic and inspectable.
 """
 from __future__ import annotations
 
-from typing import Any, Dict, List, Optional
+import re
+from typing import Any, Dict, List, Optional, Set
 
 from game.utils import slugify
 
@@ -477,3 +478,207 @@ def apply_turn_input_implied_context(
         "cases": applied_cases,
         "target_id": target_id,
     }
+
+
+# --- Dialogue addressing (engine-owned; keeps active_interaction_target_id in sync) ---
+
+_NPC_REFERENCE_TITLES: tuple[str, ...] = (
+    "captain",
+    "guard",
+    "runner",
+    "footman",
+    "lady",
+    "lord",
+    "sir",
+    "madam",
+)
+
+_WORLD_ACTION_DIALOGUE_BLOCKERS: tuple[str, ...] = (
+    r"\b(?:i|we)\s+(?:search|sneak|attack|follow|track|cast|inspect|examine|check|investigate)\b",
+    r"\b(?:i|we)\s+(?:grab|seize|shove|push|pull|pin|restrain|force|coerce|threaten)\b",
+    r"\b(?:i|we)\s+(?:pick up|open|unlock|break|climb|jump|hide|steal|manipulate)\b",
+)
+
+_HAILING_RE = re.compile(
+    r"\b(?:you\s+there|hey\s+you|hey,?\s*you|excuse me|pardon me|pardon you|oi)\b",
+    re.IGNORECASE,
+)
+
+_DIALOGUE_INFO_HINTS: tuple[str, ...] = (
+    "your name",
+    "their name",
+    "who are you",
+    "what's your name",
+    "what is your name",
+    "who attacked",
+    "what happened",
+    "tell me",
+)
+
+
+def scene_npcs_in_active_scene(scene: Dict[str, Any] | None, world: Dict[str, Any]) -> List[Dict[str, Any]]:
+    """NPCs present in the active scene envelope (matches api routing)."""
+    if not isinstance(scene, dict):
+        return []
+    scene_id = str(((scene or {}).get("scene") or {}).get("id") or "").strip()
+    npcs = (world or {}).get("npcs") or []
+    if not scene_id or not isinstance(npcs, list):
+        return []
+    scene_state = scene.get("scene_state") if isinstance(scene, dict) else None
+    active_ids: Set[str] = set()
+    if isinstance(scene_state, dict) and isinstance(scene_state.get("active_entities"), list):
+        active_ids = {
+            str(v).strip()
+            for v in scene_state.get("active_entities")
+            if isinstance(v, str) and str(v).strip()
+        }
+    out: List[Dict[str, Any]] = []
+    for npc in npcs:
+        if not isinstance(npc, dict):
+            continue
+        npc_id = str(npc.get("id") or "").strip()
+        if not npc_id:
+            continue
+        if active_ids:
+            if npc_id in active_ids:
+                out.append(npc)
+            continue
+        location = str(npc.get("location") or npc.get("scene_id") or "").strip()
+        if location != scene_id:
+            continue
+        out.append(npc)
+    return out
+
+
+def extract_npc_reference_tokens(npc: Dict[str, Any]) -> Set[str]:
+    refs: Set[str] = set()
+    npc_id = str(npc.get("id") or "").strip().lower()
+    npc_name = str(npc.get("name") or "").strip().lower()
+    if npc_id:
+        refs.add(npc_id)
+    if npc_name:
+        refs.add(npc_name)
+    for token in re.split(r"[\s\-_]+", f"{npc_id} {npc_name}"):
+        token = token.strip().lower()
+        if len(token) >= 3:
+            refs.add(token)
+    for title in _NPC_REFERENCE_TITLES:
+        if title in npc_name:
+            refs.add(title)
+    return refs
+
+
+def _line_blocks_dialogue_addressing(low: str) -> bool:
+    if not low.strip():
+        return True
+    return any(re.search(pattern, low) for pattern in _WORLD_ACTION_DIALOGUE_BLOCKERS)
+
+
+def _information_seeking_dialogue_line(low: str) -> bool:
+    if "?" in low:
+        return True
+    if any(h in low for h in _DIALOGUE_INFO_HINTS):
+        return True
+    return bool(re.search(r"\b(who|what|where|when|why|how|which)\b", low))
+
+
+def find_world_npc_reference_id_in_text(text: str, world: Dict[str, Any]) -> Optional[str]:
+    """Match world NPC id/name tokens anywhere in the line (same rules as api dialogue routing)."""
+    low = str(text or "").strip().lower()
+    if not low:
+        return None
+    text_slug = slugify(low)
+    npcs = (world or {}).get("npcs") or []
+    if not isinstance(npcs, list):
+        return None
+    for npc in npcs:
+        if not isinstance(npc, dict):
+            continue
+        npc_id = str(npc.get("id") or "").strip()
+        npc_name = str(npc.get("name") or "").strip()
+        if not npc_id:
+            continue
+        npc_slug = slugify(f"{npc_id} {npc_name}")
+        if npc_slug and npc_slug in text_slug:
+            return npc_id
+        for ref in extract_npc_reference_tokens(npc):
+            if not ref:
+                continue
+            if re.search(rf"^\s*{re.escape(ref)}\b(?:\s*[,:?!-]|\s+)", low):
+                return npc_id
+            if re.search(rf"\b(?:to|toward|towards|at)\s+{re.escape(ref)}\b", low):
+                return npc_id
+    return None
+
+
+def find_addressed_npc_id_for_turn(
+    text: str,
+    session: Dict[str, Any],
+    world: Dict[str, Any],
+    scene: Dict[str, Any] | None,
+) -> Optional[str]:
+    """Resolve which scene NPC the player is addressing (vocative, name, proximity, pronouns, hailing)."""
+    low = str(text or "").strip().lower()
+    if not low or not isinstance(session, dict):
+        return None
+    scene_npcs = scene_npcs_in_active_scene(scene, world)
+    if not scene_npcs:
+        return None
+    text_slug = slugify(low)
+    interaction = inspect(session)
+    active_target_id = str(interaction.get("active_interaction_target_id") or "").strip()
+
+    for npc in scene_npcs:
+        npc_id = str(npc.get("id") or "").strip()
+        npc_name = str(npc.get("name") or "").strip()
+        if not npc_id:
+            continue
+        npc_slug = slugify(f"{npc_id} {npc_name}")
+        if npc_slug and npc_slug in text_slug:
+            return npc_id
+        for ref in extract_npc_reference_tokens(npc):
+            if not ref:
+                continue
+            if re.search(rf"^\s*{re.escape(ref)}\b(?:\s*[,:?!-]|\s+)", low):
+                return npc_id
+            if re.search(rf"\b(?:to|toward|towards|at)\s+{re.escape(ref)}\b", low):
+                return npc_id
+
+    if active_target_id and re.search(r"\b(you|your|him|her|them)\b", low):
+        if assert_valid_speaker(active_target_id, session):
+            return active_target_id
+
+    # Single present NPC: hail or clear information-seeking / question (not exploration commands).
+    # Do not bind proximity if the line clearly names a different world NPC (off-scene vocative, etc.).
+    world_ref = find_world_npc_reference_id_in_text(str(text or ""), world)
+    if len(scene_npcs) == 1 and not _line_blocks_dialogue_addressing(low):
+        only_id = str(scene_npcs[0].get("id") or "").strip()
+        if world_ref and only_id and world_ref != only_id:
+            return None
+        if only_id and (_HAILING_RE.search(low) or _information_seeking_dialogue_line(low)):
+            return only_id
+
+    return None
+
+
+def establish_dialogue_interaction_from_input(
+    session: Dict[str, Any],
+    world: Dict[str, Any],
+    scene: Dict[str, Any] | None,
+    player_text: str | None,
+) -> Dict[str, Any]:
+    """Set active social target when the player line addresses an NPC in the current scene."""
+    if not isinstance(session, dict) or not isinstance(world, dict):
+        return {"established": False, "target_id": None}
+    low = str(player_text or "").strip().lower()
+    if not low:
+        return {"established": False, "target_id": None}
+    if _line_blocks_dialogue_addressing(low):
+        return {"established": False, "target_id": None}
+
+    target_id = find_addressed_npc_id_for_turn(str(player_text or ""), session, world, scene)
+    if not target_id:
+        return {"established": False, "target_id": None}
+
+    set_social_target(session, target_id)
+    return {"established": True, "target_id": target_id}

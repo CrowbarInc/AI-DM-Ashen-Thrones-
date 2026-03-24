@@ -190,6 +190,7 @@ def build_response_policy(*, narration_obligations: Dict[str, Any] | None = None
     and post-generation enforcement can share it instead of re-encoding order.
     """
     obligations = narration_obligations if isinstance(narration_obligations, dict) else {}
+    suppress = bool(obligations.get("suppress_non_social_emitters"))
     return {
         "rule_priority_order": [label for _, label in RESPONSE_RULE_PRIORITY],
         "must_answer": True,
@@ -197,7 +198,7 @@ def build_response_policy(*, narration_obligations: Dict[str, Any] | None = None
         "forbid_secret_leak": True,
         "allow_partial_answer": True,
         "diegetic_only": True,
-        "prefer_scene_momentum": True,
+        "prefer_scene_momentum": not suppress,
         "prefer_specificity": True,
         "no_validator_voice": {
             "enabled": True,
@@ -206,9 +207,9 @@ def build_response_policy(*, narration_obligations: Dict[str, Any] | None = None
             "prohibited_perspectives": list(NO_VALIDATOR_VOICE_PROHIBITIONS),
             "rules_explanation_only_in": ["oc", "adjudication"],
         },
-        "scene_momentum_due": bool(obligations.get("scene_momentum_due")),
+        "scene_momentum_due": False if suppress else bool(obligations.get("scene_momentum_due")),
         "uncertainty": {
-            "enabled": True,
+            "enabled": not suppress,
             "categories": list(UNCERTAINTY_CATEGORIES),
             "sources": list(UNCERTAINTY_SOURCES),
             "answer_shape": list(UNCERTAINTY_ANSWER_SHAPE),
@@ -470,15 +471,22 @@ def derive_narration_obligations(
         and not isinstance(res.get('skill_check'), dict)
         and isinstance(res.get('check_request'), dict)
     )
-    active_npc_reply_expected_fallback = has_active_target and (
+    # Ongoing social exchange (engine-established target + social mode) expects an NPC reply
+    # even when this turn has no structured resolution.social (e.g. chat/wait while engaged).
+    active_npc_reply_expected_fallback = should_answer_active_npc and (
         has_social_resolution
         or 'social_probe' in labels_low
+        or interaction_mode == 'social'
     )
-    active_npc_reply_expected = (
-        False
-        if has_pending_check_prompt
-        else (explicit_reply_expected if explicit_reply_expected is not None else active_npc_reply_expected_fallback)
-    )
+    # Authoritative social mode: always expect an NPC reply unless a check prompt blocks narration.
+    if interaction_mode == 'social' and has_active_target:
+        active_npc_reply_expected = not has_pending_check_prompt
+    else:
+        active_npc_reply_expected = (
+            False
+            if has_pending_check_prompt
+            else (explicit_reply_expected if explicit_reply_expected is not None else active_npc_reply_expected_fallback)
+        )
     active_npc_reply_kind = explicit_reply_kind
     if active_npc_reply_expected and active_npc_reply_kind is None:
         if res_kind in {'persuade', 'intimidate', 'deceive', 'barter', 'recruit'}:
@@ -502,7 +510,8 @@ def derive_narration_obligations(
         due_threshold = 1
     if due_threshold > 2:
         due_threshold = 2
-    scene_momentum_due = exchanges_since >= due_threshold
+    suppress_non_social_emitters = interaction_mode == 'social' and has_active_target
+    scene_momentum_due = False if suppress_non_social_emitters else (exchanges_since >= due_threshold)
 
     return {
         'is_opening_scene': bool(is_opening_scene),
@@ -516,6 +525,7 @@ def derive_narration_obligations(
         'scene_momentum_due': bool(scene_momentum_due),
         'scene_momentum_exchanges_since': exchanges_since,
         'scene_momentum_next_due_in': next_due_in,
+        'suppress_non_social_emitters': bool(suppress_non_social_emitters),
     }
 
 
@@ -597,6 +607,8 @@ def build_narration_context(
         recent_log_for_prompt=recent_log_for_prompt,
         scene_runtime=runtime,
     )
+    social_authority = bool(narration_obligations.get("suppress_non_social_emitters"))
+    eff_uncertainty_hint = None if social_authority else uncertainty_hint
     response_policy = build_response_policy(narration_obligations=narration_obligations)
     res = resolution if isinstance(resolution, dict) else {}
     state_changes = res.get("state_changes") if isinstance(res.get("state_changes"), dict) else {}
@@ -689,8 +701,26 @@ def build_narration_context(
             'When transitioning scenes, include a brief bridge from the prior location before describing the new one.'
         )
 
+    if social_authority:
+        _skip_instr = (
+            "SCENE MOMENTUM RULE",
+            "uncertainty_hint",
+            "response_policy.uncertainty",
+            "classify the uncertainty",
+            "Ground uncertainty with",
+            "Frame uncertainty as",
+            "If uncertainty_hint",
+        )
+        instructions = [line for line in instructions if not any(m in line for m in _skip_instr)]
+        instructions.append(
+            "SOCIAL INTERACTION LOCK: Do not use ambient scene narration, scene-wide uncertainty pools, or momentum/pressure "
+            "beats as the main voice. The active interlocutor must carry this turn (substantive reply, reaction, or refusal)."
+        )
+
     recent_log_compact = _compress_recent_log(recent_log_for_prompt) if recent_log_for_prompt else []
     follow_up_pressure = _compute_follow_up_pressure(recent_log_compact, user_text)
+    if social_authority:
+        follow_up_pressure = {}
     if follow_up_pressure:
         instructions = list(instructions) + [
             (
@@ -713,7 +743,7 @@ def build_narration_context(
         'player_input': str(user_text or ''),
         'follow_up_pressure': follow_up_pressure,
         'response_policy': response_policy,
-        'uncertainty_hint': uncertainty_hint,
+        'uncertainty_hint': eff_uncertainty_hint,
         'narration_obligations': narration_obligations,
         'mechanical_resolution': resolution,
         'scene_advancement': scene_advancement,

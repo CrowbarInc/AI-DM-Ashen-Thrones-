@@ -88,9 +88,13 @@ from game.interaction_context import (
     apply_turn_input_implied_context,
     assert_valid_speaker,
     clear_for_scene_change,
+    establish_dialogue_interaction_from_input,
+    extract_npc_reference_tokens,
+    find_addressed_npc_id_for_turn,
     inspect as inspect_interaction_context,
     is_entity_active,
     rebuild_active_scene_entities,
+    scene_npcs_in_active_scene,
     update_after_resolved_action,
 )
 from game.scene_graph import build_scene_graph, is_transition_valid
@@ -103,15 +107,14 @@ from game.output_sanitizer import (
     strip_serialized_payload_fragments,
 )
 from game.final_emission_gate import apply_final_emission_gate
-from game.social_exchange_emission import (
-    is_route_illegal_global_or_sanitizer_fallback_text,
-    strict_social_emission_will_apply,
-)
+from game.social_exchange_emission import strict_social_emission_will_apply
 from game.utils import slugify, utc_iso_now
 from game.world import advance_world_tick, apply_world_updates, apply_resolution_world_updates
 from game.clocks import get_or_init_clocks, advance_clock, DEFAULT_CLOCKS
 from game.importers.pf_json_importer import import_sheet
 from game.session import reset_session_state
+from game.campaign_reset import apply_new_campaign_hard_reset
+from game.campaign_state import create_fresh_combat_state
 from game.clues import apply_authoritative_clue_discovery, get_all_known_clue_texts, get_known_clues_with_presentation
 
 @asynccontextmanager
@@ -445,6 +448,29 @@ def _apply_authoritative_scene_transition(
     return scene, session, combat
 
 
+def _session_ongoing_social_exchange(session: dict | None) -> bool:
+    """True when an authoritative social interlocutor is locked (interaction_mode + target)."""
+    if not isinstance(session, dict):
+        return False
+    ctx = inspect_interaction_context(session)
+    return (
+        str(ctx.get("interaction_mode") or "").strip().lower() == "social"
+        and bool(str(ctx.get("active_interaction_target_id") or "").strip())
+    )
+
+
+def _resolution_explicitly_breaks_social_continuity(resolution: dict | None) -> bool:
+    """Engine resolutions that should drop social continuity (movement/combat class)."""
+    if not isinstance(resolution, dict):
+        return False
+    kind = str(resolution.get("kind") or "").strip().lower()
+    if kind in ("scene_transition", "travel", "attack", "combat"):
+        return True
+    if resolution.get("disengage_social") is True:
+        return True
+    return False
+
+
 def _update_interaction_context_after_action(
     session: dict,
     resolution: dict | None,
@@ -461,12 +487,20 @@ def _update_interaction_context_after_action(
         inspect_interaction_context(session)
         return
 
+    effective_preserve = bool(
+        preserve_continuity
+        or (
+            _session_ongoing_social_exchange(session)
+            and not _resolution_explicitly_breaks_social_continuity(resolution)
+        )
+    )
+
     kind = str(resolution.get("kind") or "").strip().lower()
     if kind in SOCIAL_KINDS:
         update_after_resolved_action(session, kind, preserve_continuity=True)
         return
 
-    update_after_resolved_action(session, kind, preserve_continuity=preserve_continuity)
+    update_after_resolved_action(session, kind, preserve_continuity=effective_preserve)
     # Keep context inspectable for debugging even after owner updates.
     inspect_interaction_context(session)
 
@@ -476,9 +510,17 @@ def _prepare_interaction_from_turn_input(
     world: dict,
     scene_id: str,
     player_text: str | None,
+    scene: dict | None = None,
 ) -> dict:
     """Stage 2 normalization helper: deterministic implied continuity preparation."""
-    return apply_turn_input_implied_context(session, world, scene_id, player_text)
+    implied = apply_turn_input_implied_context(session, world, scene_id, player_text)
+    if scene is not None:
+        est = establish_dialogue_interaction_from_input(session, world, scene, player_text)
+        merged = dict(implied)
+        merged["interaction_established"] = bool(est.get("established"))
+        merged["dialogue_target_id"] = est.get("target_id")
+        return merged
+    return implied
 
 
 _PASSIVE_ACTION_CUES: tuple[tuple[str, str], ...] = (
@@ -613,7 +655,8 @@ def _apply_post_gm_updates(
         apply_world_updates(world, updates)
 
     apply_repeated_description_guard(gm, session, scene['scene']['id'])
-    update_scene_momentum_runtime(session, scene['scene']['id'], gm)
+    if not _session_ongoing_social_exchange(session):
+        update_scene_momentum_runtime(session, scene['scene']['id'], gm)
 
     surfaced_in_text: list = []
     if isinstance(gm.get('player_facing_text'), str):
@@ -1114,67 +1157,6 @@ _WORLD_ACTION_FORCEFUL_PATTERNS: tuple[str, ...] = (
     r"\b(?:i|we)\s+(?:grab|seize|attack|strike|cast|force|coerce|threaten|restrain)\b",
     r"\b(?:i|we)\s+(?:follow|track|sneak|search)\b",
 )
-_NPC_REFERENCE_TITLES: tuple[str, ...] = (
-    "captain",
-    "guard",
-    "runner",
-    "footman",
-    "lady",
-    "lord",
-    "sir",
-    "madam",
-)
-
-
-def _scene_npcs_in_active_scene(scene: dict, world: dict) -> list[dict]:
-    scene_id = str(((scene or {}).get("scene") or {}).get("id") or "").strip()
-    npcs = (world or {}).get("npcs") or []
-    if not scene_id or not isinstance(npcs, list):
-        return []
-    scene_state = (scene or {}).get("scene_state") if isinstance(scene, dict) else None
-    active_ids = set()
-    if isinstance(scene_state, dict) and isinstance(scene_state.get("active_entities"), list):
-        active_ids = {
-            str(v).strip()
-            for v in scene_state.get("active_entities")
-            if isinstance(v, str) and str(v).strip()
-        }
-    out: list[dict] = []
-    for npc in npcs:
-        if not isinstance(npc, dict):
-            continue
-        npc_id = str(npc.get("id") or "").strip()
-        if not npc_id:
-            continue
-        if active_ids:
-            if npc_id in active_ids:
-                out.append(npc)
-            continue
-        location = str(npc.get("location") or npc.get("scene_id") or "").strip()
-        if location != scene_id:
-            continue
-        out.append(npc)
-    return out
-
-
-def _extract_leading_reference_tokens(npc: dict) -> set[str]:
-    refs: set[str] = set()
-    npc_id = str(npc.get("id") or "").strip().lower()
-    npc_name = str(npc.get("name") or "").strip().lower()
-    if npc_id:
-        refs.add(npc_id)
-    if npc_name:
-        refs.add(npc_name)
-    for token in re.split(r"[\s\-_]+", f"{npc_id} {npc_name}"):
-        token = token.strip().lower()
-        if len(token) >= 4:
-            refs.add(token)
-    for title in _NPC_REFERENCE_TITLES:
-        if title in npc_name:
-            refs.add(title)
-    return refs
-
-
 def _find_addressed_npc_id(
     text: str,
     *,
@@ -1182,36 +1164,7 @@ def _find_addressed_npc_id(
     session: dict,
     world: dict,
 ) -> str | None:
-    low = str(text or "").strip().lower()
-    if not low:
-        return None
-    scene_npcs = _scene_npcs_in_active_scene(scene, world)
-    if not scene_npcs:
-        return None
-    text_slug = slugify(low)
-    interaction = inspect_interaction_context(session)
-    active_target_id = str(interaction.get("active_interaction_target_id") or "").strip()
-
-    for npc in scene_npcs:
-        npc_id = str(npc.get("id") or "").strip()
-        npc_name = str(npc.get("name") or "").strip()
-        if not npc_id:
-            continue
-        npc_slug = slugify(f"{npc_id} {npc_name}")
-        if npc_slug and npc_slug in text_slug:
-            return npc_id
-        for ref in _extract_leading_reference_tokens(npc):
-            if not ref:
-                continue
-            if re.search(rf"^\s*{re.escape(ref)}\b(?:\s*[,:?!-]|\s+)", low):
-                return npc_id
-            if re.search(rf"\b(?:to|toward|towards|at)\s+{re.escape(ref)}\b", low):
-                return npc_id
-
-    if active_target_id and re.search(r"\b(you|your|him|her|them)\b", low):
-        if assert_valid_speaker(active_target_id, session):
-            return active_target_id
-    return None
+    return find_addressed_npc_id_for_turn(text, session, world, scene)
 
 
 def _find_world_npc_reference_id(text: str, world: dict) -> str | None:
@@ -1232,7 +1185,7 @@ def _find_world_npc_reference_id(text: str, world: dict) -> str | None:
         npc_slug = slugify(f"{npc_id} {npc_name}")
         if npc_slug and npc_slug in text_slug:
             return npc_id
-        for ref in _extract_leading_reference_tokens(npc):
+        for ref in extract_npc_reference_tokens(npc):
             if not ref:
                 continue
             if re.search(rf"^\s*{re.escape(ref)}\b(?:\s*[,:?!-]|\s+)", low):
@@ -1314,7 +1267,7 @@ def is_directed_dialogue(
     if _has_active_social_interlocutor(session) and _is_ambiguous_dialogue_followup(clause):
         return True
 
-    scene_npcs = _scene_npcs_in_active_scene(scene, world)
+    scene_npcs = scene_npcs_in_active_scene(scene, world)
     addressed_npc_id = _find_addressed_npc_id(
         clause,
         scene=scene,
@@ -1393,12 +1346,12 @@ def _build_dialogue_first_action(
     )
     interaction = inspect_interaction_context(session)
     active_target_id = str(interaction.get("active_interaction_target_id") or "").strip()
+    if not target_id:
+        target_id = _find_world_npc_reference_id(player_text, world)
     if not target_id and active_target_id and is_entity_active(session, active_target_id):
         target_id = active_target_id
     if not target_id:
-        target_id = _find_world_npc_reference_id(player_text, world)
-    if not target_id:
-        scene_npcs = _scene_npcs_in_active_scene(scene, world)
+        scene_npcs = scene_npcs_in_active_scene(scene, world)
         if len(scene_npcs) == 1:
             target_id = str(scene_npcs[0].get("id") or "").strip() or None
 
@@ -1609,32 +1562,7 @@ def _build_turn_response_payload(
                 scene_id=scene_id,
                 world=state_world,
             )
-            sealed = gm.get("player_facing_text") if isinstance(gm.get("player_facing_text"), str) else ""
-            gm["player_facing_text"] = sanitize_player_facing_output(
-                sealed,
-                {
-                    **san_ctx_base,
-                    "tags": gm.get("tags") if isinstance(gm.get("tags"), list) else tag_list,
-                    "post_final_emission_gate": True,
-                    "strict_social_terminal_clamp": True,
-                    "gate_sealed_text": sealed,
-                },
-            )
-            after = gm.get("player_facing_text") if isinstance(gm.get("player_facing_text"), str) else ""
-            meta = gm.get("_final_emission_meta") if isinstance(gm.get("_final_emission_meta"), dict) else {}
-            mutated = str(sealed or "").strip() != str(after or "").strip()
-            if mutated:
-                meta = {**meta, "post_gate_mutation_detected": True}
-            if is_route_illegal_global_or_sanitizer_fallback_text(after) and not is_route_illegal_global_or_sanitizer_fallback_text(
-                sealed
-            ):
-                gm["player_facing_text"] = sealed
-                meta = {
-                    **meta,
-                    "post_gate_sanitize_clamped": True,
-                    "final_emitted_source": meta.get("final_emitted_source") or "unknown_post_gate_writer",
-                }
-            gm["_final_emission_meta"] = meta
+            # build_final_strict_social_response (via the gate) is the sole writer; no post-gate sanitizer.
         else:
             gm["player_facing_text"] = sanitize_player_facing_output(raw_text, san_ctx_base)
             gm = apply_final_emission_gate(
@@ -1702,6 +1630,7 @@ def compose_state():
     state['debug_traces'] = session.get('debug_traces') or []
     state['save_summary'] = get_save_summary()
     state['snapshots'] = list_snapshots()
+    state['campaign_run_id'] = session.get('campaign_run_id')
     return state
 
 
@@ -1792,19 +1721,20 @@ def update_response_mode(req: ResponseModeUpdate):
 @app.post('/api/reset_combat')
 def api_reset_combat():
     combat = load_combat()
-    combat.update({'in_combat': False, 'round': 0, 'initiative_order': [], 'turn_index': 0, 'active_actor_id': None, 'player_turn_used': False})
+    combat.clear()
+    combat.update(create_fresh_combat_state())
     save_combat(combat)
     return {'ok': True}
 
 
 @app.post('/api/new_campaign')
 def new_campaign():
-    """Reset runtime session state for a new campaign; does not reload or destroy campaign/world data."""
-    session = load_session()
-    reset_session_state(session)
-    save_session(session)
-    print("[API] New campaign started")
-    return {"status": "ok"}
+    """Hard reset: new session graph, fresh combat, world playthrough cleared, transcript empty."""
+    meta = apply_new_campaign_hard_reset()
+    # When ASHEN_THRONES_DEV_VERIFY=1, ``campaign_reset`` prints a compact runtime-clean summary.
+    if "dev_verify_ok" not in meta:
+        print("[API] New campaign started", meta.get("campaign_run_id"))
+    return {"status": "ok", **meta}
 
 
 @app.post('/api/reset_session')
@@ -1815,7 +1745,8 @@ def api_reset_session():
     save_session(session)
     clear_log()
     combat = load_combat()
-    combat.update({'in_combat': False, 'round': 0, 'initiative_order': [], 'turn_index': 0, 'active_actor_id': None, 'player_turn_used': False})
+    combat.clear()
+    combat.update(create_fresh_combat_state())
     save_combat(combat)
     return {'ok': True, **compose_state()}
 
@@ -1981,6 +1912,7 @@ def action(req: ActionRequest):
             world,
             scene_before_id,
             req.intent or normalized_action.get('prompt') or normalized_action.get('label'),
+            scene=scene,
         )
         normalized_type = (normalized_action.get('type') or '').strip().lower()
         raw_type = (raw.get('type') or '').strip().lower() if isinstance(raw, dict) else ''
@@ -2015,6 +1947,7 @@ def action(req: ActionRequest):
             world,
             scene_before_id,
             req.intent or normalized_action.get('prompt') or normalized_action.get('label'),
+            scene=scene,
         )
         if raw and (raw.get('type') or '').strip().lower() in SOCIAL_KINDS:
             normalized_action['type'] = (raw.get('type') or 'social_probe').strip().lower()
@@ -2078,7 +2011,9 @@ def action(req: ActionRequest):
         session,
         resolution,
         scene_changed=scene_before_id != scene['scene']['id'],
-        preserve_continuity=bool(implied_context.get("applied")),
+        preserve_continuity=bool(
+            implied_context.get("applied") or implied_context.get("interaction_established")
+        ),
     )
     rebuild_active_scene_entities(session, world, scene["scene"]["id"], scene_envelope=scene)
     scene["scene_state"] = session.get("scene_state")
@@ -2240,7 +2175,9 @@ def chat(req: ChatRequest):
     authoritative_clue_updates: list[str] = []
     surfaced_clue_telemetry: list[str] = []
     gm: dict | None = None
-    implied_context = _prepare_interaction_from_turn_input(session, world, scene_before_id, req.text)
+    implied_context = _prepare_interaction_from_turn_input(
+        session, world, scene_before_id, req.text, scene=scene
+    )
     segmented_turn = segment_mixed_player_turn(req.text)
     trace['segmented_turn'] = _compact_segmented_turn(segmented_turn)
     classification_text = (
@@ -2498,7 +2435,9 @@ def chat(req: ChatRequest):
         session,
         context_resolution,
         scene_changed=scene_before_id != scene['scene']['id'],
-        preserve_continuity=bool(implied_context.get("applied")),
+        preserve_continuity=bool(
+            implied_context.get("applied") or implied_context.get("interaction_established")
+        ),
     )
     rebuild_active_scene_entities(session, world, scene["scene"]["id"], scene_envelope=scene)
     scene["scene_state"] = session.get("scene_state")

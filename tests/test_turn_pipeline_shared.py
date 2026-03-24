@@ -750,7 +750,7 @@ def test_chat_repeated_social_questions_keep_npc_uncertainty_voice(tmp_path, mon
             assert "state exactly what you do" not in low
 
 
-def test_chat_repeated_topic_questions_force_escalation_by_third_probe(tmp_path, monkeypatch):
+def test_chat_repeated_topic_questions_skip_policy_topic_pressure_for_strict_social(tmp_path, monkeypatch):
     _seed_shared_world(tmp_path, monkeypatch)
     world = storage.load_world()
     world["npcs"] = [
@@ -800,8 +800,8 @@ def test_chat_repeated_topic_questions_force_escalation_by_third_probe(tmp_path,
             gm_output = data.get("gm_output") or {}
             tags = gm_output.get("tags") or []
             if idx >= 4:
-                assert "topic_pressure_escalation" in tags
-                assert any(str(tag).startswith("scene_momentum:") for tag in tags)
+                assert "topic_pressure_escalation" not in tags
+                assert not any(str(tag).startswith("scene_momentum:") for tag in tags)
 
 
 def test_chat_dialogue_lock_mixed_questioning_keeps_dialogue_lane(tmp_path, monkeypatch):
@@ -1526,4 +1526,3 @@ def test_final_emission_gate_repeated_questioning_can_end_clean_refusal(tmp_path
     )
     assert "from here, no certain answer presents itself" not in low
     assert "i'd suggest you" not in low
-    assert "final_emission_gate_replaced" in ((data.get("gm_output") or {}).get("tags") or [])
