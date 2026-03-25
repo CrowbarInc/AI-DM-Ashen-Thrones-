@@ -10,7 +10,10 @@
       "A notice board lists new taxes, curfews, and a posted warning about a missing patrol.",
       "A tavern runner shouts offers of hot stew and paid rumor.",
       "A well-appointed townhouse overlooking the square flies noble colors\u2014a quiet contrast to the mud and clamor.",
-      "One figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue."
+      "One figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue.",
+      "A notice board lists new taxes, curfews, and a warning about a missing patrol.",
+      "A tavern runner is shouting offers of hot stew.",
+      "A figure in threadbare clothes stands still, observing the crowd."
     ],
     "journal_seed_facts": [
       "You arrive at Cinderwatch's eastern gate in cold rain, under frayed banners.",
@@ -53,18 +56,64 @@
     "enemies": [],
     "actions": [],
     "interactables": [],
-    "objects": []
+    "objects": [],
+    "addressables": [
+      {
+        "id": "guard_captain",
+        "name": "Guard Captain",
+        "scene_id": "frontier_gate",
+        "kind": "npc",
+        "addressable": true,
+        "address_priority": 0,
+        "address_roles": ["guard", "watchman", "sentry", "guardsman", "captain"],
+        "aliases": []
+      },
+      {
+        "id": "tavern_runner",
+        "name": "Tavern Runner",
+        "scene_id": "frontier_gate",
+        "kind": "npc",
+        "addressable": true,
+        "address_priority": 1,
+        "address_roles": ["runner", "informant"],
+        "aliases": []
+      },
+      {
+        "id": "refugee",
+        "name": "Ragged stranger",
+        "scene_id": "frontier_gate",
+        "kind": "scene_actor",
+        "addressable": true,
+        "address_priority": 2,
+        "address_roles": ["stranger", "refugee"],
+        "aliases": ["ragged stranger"]
+      },
+      {
+        "id": "threadbare_watcher",
+        "name": "Threadbare watcher",
+        "scene_id": "frontier_gate",
+        "kind": "scene_actor",
+        "addressable": true,
+        "address_priority": 3,
+        "address_roles": ["watcher"],
+        "aliases": []
+      }
+    ]
   },
   "scene_state": {
     "active_scene_id": "frontier_gate",
     "active_entities": [
       "guard_captain",
-      "tavern_runner"
+      "tavern_runner",
+      "refugee",
+      "threadbare_watcher"
     ],
     "entity_presence": {
       "guard_captain": "active",
-      "tavern_runner": "active"
+      "tavern_runner": "active",
+      "refugee": "active",
+      "threadbare_watcher": "active"
     },
-    "current_interlocutor": null
+    "current_interlocutor": "guard_captain"
   }
 }

@@ -20,8 +20,11 @@ from game.utils import slugify
 from game.storage import get_npc_runtime
 from game.interaction_context import (
     apply_turn_input_implied_context,
-    assert_valid_speaker,
+    canonical_scene_addressable_roster,
+    npc_dict_by_id,
     rebuild_active_scene_entities,
+    resolve_authoritative_social_target,
+    scene_addressable_actor_ids,
     set_non_social_activity,
     set_social_target,
 )
@@ -385,6 +388,7 @@ def _social_payload_with_reply_expectation(
     raw_player_text: Optional[str],
     topic_revealed: bool,
     requires_check: bool,
+    debug_fields: Optional[Dict[str, Any]] = None,
 ) -> Dict[str, Any]:
     expected, reply_kind = _infer_reply_expectation(
         action_type,
@@ -396,6 +400,37 @@ def _social_payload_with_reply_expectation(
     out = dict(payload)
     out["npc_reply_expected"] = bool(expected)
     out["reply_kind"] = reply_kind
+    if isinstance(debug_fields, dict) and debug_fields:
+        out.update(debug_fields)
+    return out
+
+
+def _social_target_debug_fields(
+    session: Dict[str, Any],
+    world: Dict[str, Any],
+    scene_id: str,
+    scene_envelope: Dict[str, Any],
+    normalized_action: Dict[str, Any],
+    auth: Dict[str, Any],
+) -> Dict[str, Any]:
+    na = normalized_action if isinstance(normalized_action, dict) else {}
+    cand_raw = na.get("target_id") or na.get("targetEntityId")
+    cand = str(cand_raw).strip() if cand_raw is not None and str(cand_raw).strip() else None
+    ids = scene_addressable_actor_ids(
+        world,
+        scene_id,
+        scene_envelope=scene_envelope if isinstance(scene_envelope, dict) else None,
+        session=session if isinstance(session, dict) else None,
+    )
+    out = {
+        "target_source": auth.get("source"),
+        "target_reason": auth.get("reason"),
+        "target_candidate_id": cand,
+        "target_candidate_valid": bool(cand and cand in ids),
+    }
+    grb = auth.get("generic_role_rebind")
+    if isinstance(grb, dict):
+        out["generic_role_rebind"] = grb
     return out
 
 
@@ -460,10 +495,51 @@ def resolve_social_action(
 
     rebuild_active_scene_entities(session, world, scene_id, scene_envelope=scene_envelope)
 
-    # Resolve NPC target
-    npc = find_npc_by_target(world, str(target_id or ""), scene_id) if target_id else None
+    # Authoritative social target selection happens here. After this point, emission/validation may reject
+    # output text, but may not null the selected target unless it is invalidated by scene scope.
+    auth = resolve_authoritative_social_target(
+        session,
+        world,
+        scene_id,
+        player_text=raw_player_text,
+        normalized_action=normalized_action,
+        scene_envelope=scene_envelope,
+        allow_first_roster_fallback=False,
+    )
+    dbg = _social_target_debug_fields(
+        session, world, scene_id, scene_envelope, normalized_action, auth
+    )
 
-    if not npc:
+    if auth.get("offscene_target") and auth.get("npc_id"):
+        known_target_id = str(auth.get("npc_id") or "").strip()
+        known_target_name = str(auth.get("npc_name") or "").strip()
+        hint = (
+            f"{known_target_name or 'That person'} is no longer here to answer. "
+            "Narrate that naturally from the current scene instead of attributing the reply to them."
+        )
+        result = SocialEngineResult(
+            kind=action_type,
+            action_id=action_id,
+            label=label,
+            prompt=prompt,
+            success=False,
+            hint=hint,
+            social={
+                "social_intent_class": intent_class,
+                "npc_id": known_target_id or None,
+                "npc_name": known_target_name or None,
+                "target_resolved": False,
+                "skill_check": None,
+                "npc_reply_expected": False,
+                "reply_kind": "reaction",
+                "offscene_target": True,
+                **dbg,
+            },
+            requires_check=False,
+        )
+        return result.to_dict()
+
+    if not (auth.get("target_resolved") and auth.get("npc_id")):
         known_target = _find_world_npc_by_target(world, str(target_id or "")) if target_id else None
         known_target_id = str((known_target or {}).get("id") or "").strip()
         known_target_name = str((known_target or {}).get("name") or "").strip()
@@ -476,7 +552,6 @@ def resolve_social_action(
             )
         else:
             hint = "No matching NPC found in this scene. Narrate that the player's social attempt has no clear target or the intended person is not present."
-        # Missing/unreachable NPC: fail cleanly
         result = SocialEngineResult(
             kind=action_type,
             action_id=action_id,
@@ -493,34 +568,46 @@ def resolve_social_action(
                 "npc_reply_expected": False,
                 "reply_kind": "reaction",
                 "offscene_target": is_offscene_target,
+                **dbg,
             },
             requires_check=False,
         )
         return result.to_dict()
 
-    npc_id = str(npc.get("id") or "").strip()
-    npc_name = str(npc.get("name") or "the NPC").strip()
-    if not assert_valid_speaker(npc_id, session):
+    npc_id = str(auth.get("npc_id") or "").strip()
+    npc = npc_dict_by_id(world, npc_id)
+    if npc is None:
+        roster = canonical_scene_addressable_roster(
+            world,
+            scene_id,
+            scene_envelope=scene_envelope if isinstance(scene_envelope, dict) else None,
+            session=session if isinstance(session, dict) else None,
+        )
+        npc = next((x for x in roster if isinstance(x, dict) and str(x.get("id") or "").strip() == npc_id), None)
+    if not isinstance(npc, dict):
         result = SocialEngineResult(
             kind=action_type,
             action_id=action_id,
             label=label,
             prompt=prompt,
             success=False,
-            hint=f"{npc_name} is no longer here to answer. Narrate that naturally from the current scene.",
+            hint="No matching NPC found in this scene. Narrate that the player's social attempt has no clear target or the intended person is not present.",
             social={
                 "social_intent_class": intent_class,
-                "npc_id": npc_id,
-                "npc_name": npc_name,
+                "npc_id": None,
+                "npc_name": None,
                 "target_resolved": False,
                 "skill_check": None,
                 "npc_reply_expected": False,
                 "reply_kind": "reaction",
-                "offscene_target": True,
+                "offscene_target": False,
+                **dbg,
             },
             requires_check=False,
         )
         return result.to_dict()
+
+    npc_name = str(npc.get("name") or auth.get("npc_name") or "the NPC").strip()
 
     runtime = get_npc_runtime(session, npc_id)
     set_active_interaction_target(session, npc_id, kind="social")
@@ -567,6 +654,7 @@ def resolve_social_action(
                 raw_player_text=raw_player_text,
                 topic_revealed=True,
                 requires_check=False,
+                debug_fields=dbg,
             )
 
             result = SocialEngineResult(
@@ -599,6 +687,7 @@ def resolve_social_action(
             raw_player_text=raw_player_text,
             topic_revealed=False,
             requires_check=False,
+            debug_fields=dbg,
         )
         fallback_hint = (
             f"Player spoke with {npc_name}. No new information was revealed. "
@@ -632,6 +721,7 @@ def resolve_social_action(
             raw_player_text=raw_player_text,
             topic_revealed=False,
             requires_check=False,
+            debug_fields=dbg,
         )
         result = SocialEngineResult(
             kind=action_type,
@@ -661,6 +751,7 @@ def resolve_social_action(
             raw_player_text=raw_player_text,
             topic_revealed=False,
             requires_check=False,
+            debug_fields=dbg,
         )
         result = SocialEngineResult(
             kind=action_type,
@@ -701,6 +792,7 @@ def resolve_social_action(
             raw_player_text=raw_player_text,
             topic_revealed=False,
             requires_check=False,
+            debug_fields=dbg,
         )
         result = SocialEngineResult(
             kind=action_type,
@@ -743,6 +835,7 @@ def resolve_social_action(
         raw_player_text=raw_player_text,
         topic_revealed=False,
         requires_check=True,
+        debug_fields=dbg,
     )
 
     result = SocialEngineResult(

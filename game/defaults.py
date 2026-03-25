@@ -187,7 +187,49 @@ def default_scene(scene_id: str = 'frontier_gate'):
                     {"label": "Follow the missing patrol rumor", "target_scene_id": "old_milestone"}
                 ],
                 "enemies": [],
-                "actions": []
+                "actions": [],
+                "addressables": [
+                    {
+                        "id": "guard_captain",
+                        "name": "Guard Captain",
+                        "scene_id": "frontier_gate",
+                        "kind": "npc",
+                        "addressable": True,
+                        "address_priority": 0,
+                        "address_roles": ["guard", "watchman", "sentry", "guardsman", "captain"],
+                        "aliases": [],
+                    },
+                    {
+                        "id": "tavern_runner",
+                        "name": "Tavern Runner",
+                        "scene_id": "frontier_gate",
+                        "kind": "npc",
+                        "addressable": True,
+                        "address_priority": 1,
+                        "address_roles": ["runner", "informant"],
+                        "aliases": [],
+                    },
+                    {
+                        "id": "refugee",
+                        "name": "Ragged stranger",
+                        "scene_id": "frontier_gate",
+                        "kind": "scene_actor",
+                        "addressable": True,
+                        "address_priority": 2,
+                        "address_roles": ["stranger", "refugee"],
+                        "aliases": ["ragged stranger"],
+                    },
+                    {
+                        "id": "threadbare_watcher",
+                        "name": "Threadbare watcher",
+                        "scene_id": "frontier_gate",
+                        "kind": "scene_actor",
+                        "addressable": True,
+                        "address_priority": 3,
+                        "address_roles": ["watcher"],
+                        "aliases": [],
+                    },
+                ],
             }
         }
     if scene_id == 'market_quarter':

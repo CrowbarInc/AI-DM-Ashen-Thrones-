@@ -12,15 +12,15 @@ import re
 from typing import Any, Dict, List, Optional, Tuple
 
 from game.interaction_context import (
-    _world_npc_dicts_for_addressing,
     assert_valid_speaker,
+    canonical_scene_addressable_roster,
     effective_in_scene_npc_roster,
     inspect as inspect_interaction_context,
     line_opens_with_comma_vocative,
     npc_id_from_explicit_generic_role_address,
-    npc_id_from_substring_line,
     npc_id_from_vocative_line,
-    npc_roster_for_dialogue_addressing,
+    resolve_authoritative_social_target,
+    scene_addressable_actor_ids,
 )
 
 # Historical name in this module; delegates to canonical roster resolution in interaction_context.
@@ -29,6 +29,42 @@ from game.storage import get_scene_runtime
 from game.utils import slugify
 
 _log = logging.getLogger(__name__)
+
+
+def _scene_envelope_for_strict_social(session: Dict[str, Any] | None, scene_id: str) -> Dict[str, Any] | None:
+    """Load persisted scene JSON and overlay live ``session.scene_state`` (active_entities scope)."""
+    sid = str(scene_id or "").strip()
+    if not sid:
+        return None
+    from game.storage import load_scene
+
+    env = load_scene(sid)
+    if not isinstance(env, dict):
+        return None
+    out = dict(env)
+    if isinstance(session, dict):
+        st = session.get("scene_state")
+        if isinstance(st, dict):
+            out["scene_state"] = st
+    return out
+
+
+def _legacy_strict_basis_from_authoritative(auth: Dict[str, Any], world: Dict[str, Any] | None, scene_id: str) -> str:
+    """Map :func:`resolve_authoritative_social_target` ``source`` to historical ``basis`` strings."""
+    src = str((auth or {}).get("source") or "").strip()
+    if src == "generic_role":
+        return "generic_address"
+    if src == "continuity":
+        sid = str(scene_id or "").strip()
+        roster = effective_scene_npc_roster(world, sid)
+        nid = str((auth or {}).get("npc_id") or "").strip()
+        if nid and any(isinstance(n, dict) and str(n.get("id") or "").strip() == nid for n in roster):
+            return "active"
+        return "active_unlisted"
+    if src == "none":
+        return "none"
+    return src
+
 
 _UNCERTAINTY_TAG_PREFIX = "uncertainty:"
 _MOMENTUM_TAG_PREFIX = "scene_momentum:"
@@ -180,56 +216,33 @@ def resolve_strict_social_npc_target_id(
     world: Dict[str, Any] | None,
     scene_id: str,
     merged_player_prompt: str,
+    *,
+    normalized_action: Dict[str, Any] | None = None,
+    scene_envelope: Dict[str, Any] | None = None,
 ) -> Tuple[str, str]:
     """Pick the NPC for strict-social coercion: ``(npc_id, basis)``.
 
-    ``basis`` is one of: ``vocative``, ``generic_address``, ``active``, ``active_unlisted``,
-    ``substring``, ``first_roster``, ``none``.
-    Resolution order: vocative address (shared resolver with dialogue binding), then
-    explicit generic role address (same scoped roster as dialogue binding), then
-    :func:`inspect` ``active_interaction_target_id``, then substring/name overlap, then
-    first roster only as a last resort. Vocative wins over active interlocutor so
-    ``Runner, …`` targets the runner even if context points elsewhere.
+    Delegates to :func:`game.interaction_context.resolve_authoritative_social_target` with
+    ``allow_first_roster_fallback=True``. ``basis`` preserves legacy strings used by tests
+    (``generic_address`` for generic role, ``active`` / ``active_unlisted`` for continuity).
     """
     sid = str(scene_id or "").strip()
-    roster = effective_scene_npc_roster(world, sid)
     prompt = str(merged_player_prompt or "").strip()
-    if roster and prompt:
-        voc = npc_id_from_vocative_line(prompt, roster)
-        if voc:
-            return voc, "vocative"
-        wroster = _world_npc_dicts_for_addressing(world if isinstance(world, dict) else {})
-        voc_w = npc_id_from_vocative_line(prompt, wroster)
-        if voc_w:
-            return voc_w, "vocative"
-    w = world if isinstance(world, dict) else {}
-    addressable = npc_roster_for_dialogue_addressing(
-        w,
+    env = scene_envelope if isinstance(scene_envelope, dict) else None
+    if env is None and sid:
+        env = _scene_envelope_for_strict_social(session if isinstance(session, dict) else None, sid)
+    auth = resolve_authoritative_social_target(
+        session if isinstance(session, dict) else None,
+        world if isinstance(world, dict) else None,
         sid,
-        scene=None,
-        session=session if isinstance(session, dict) else None,
+        player_text=prompt,
+        normalized_action=normalized_action if isinstance(normalized_action, dict) else None,
+        scene_envelope=env,
+        merged_player_prompt=prompt,
+        allow_first_roster_fallback=True,
     )
-    if addressable and prompt:
-        gen = npc_id_from_explicit_generic_role_address(prompt.lower(), addressable)
-        if gen:
-            return gen, "generic_address"
-    if isinstance(session, dict):
-        inspected = inspect_interaction_context(session)
-        active = str((inspected or {}).get("active_interaction_target_id") or "").strip()
-        if active and assert_valid_speaker(active, session):
-            for npc in roster:
-                if isinstance(npc, dict) and str(npc.get("id") or "").strip() == active:
-                    return active, "active"
-            return active, "active_unlisted"
-    if roster and prompt:
-        sub = npc_id_from_substring_line(prompt, roster)
-        if sub:
-            return sub, "substring"
-    if roster:
-        first = str(roster[0].get("id") or "").strip()
-        if first:
-            return first, "first_roster"
-    return "", "none"
+    basis = _legacy_strict_basis_from_authoritative(auth, world if isinstance(world, dict) else None, sid)
+    return str(auth.get("npc_id") or "").strip(), basis
 
 
 def is_conversational_npc_dialogue_line(text: str | None, session: Dict[str, Any] | None) -> bool:
@@ -281,10 +294,11 @@ def player_line_triggers_strict_social_emission(
     sid = str(scene_id or "").strip()
     w = world if isinstance(world, dict) else {}
     roster = effective_scene_npc_roster(w, sid)
-    addressable = npc_roster_for_dialogue_addressing(
+    env = _scene_envelope_for_strict_social(session if isinstance(session, dict) else None, sid)
+    addressable = canonical_scene_addressable_roster(
         w,
         sid,
-        scene=None,
+        scene_envelope=env,
         session=session if isinstance(session, dict) else None,
     )
     p = str(text or "").strip()
@@ -351,22 +365,40 @@ def minimal_social_resolution_for_directed_question_guard(
         return None
     if is_scene_directed_watch_question(prompt):
         return None
-    target, _basis = resolve_strict_social_npc_target_id(session, world, sid, prompt)
-    if not target:
+    env = _scene_envelope_for_strict_social(session if isinstance(session, dict) else None, sid)
+    auth = resolve_authoritative_social_target(
+        session if isinstance(session, dict) else None,
+        world if isinstance(world, dict) else None,
+        sid,
+        player_text=prompt,
+        merged_player_prompt=prompt,
+        scene_envelope=env,
+        allow_first_roster_fallback=True,
+    )
+    target = str(auth.get("npc_id") or "").strip()
+    if not target or not auth.get("target_resolved") or auth.get("offscene_target"):
         return None
     npc_name = _npc_display_name_for_emission(world, sid, target)
+    soc = {
+        "social_intent_class": "social_exchange",
+        "npc_id": target,
+        "npc_name": npc_name,
+        "npc_reply_expected": True,
+        "reply_kind": "answer",
+        "target_resolved": True,
+        "target_source": auth.get("source"),
+        "target_reason": auth.get("reason"),
+        "target_candidate_id": None,
+        "target_candidate_valid": False,
+    }
+    grb = auth.get("generic_role_rebind")
+    if isinstance(grb, dict):
+        soc["generic_role_rebind"] = grb
     return {
         "kind": "question",
         "prompt": prompt,
         "label": prompt[:140],
-        "social": {
-            "social_intent_class": "social_exchange",
-            "npc_id": target,
-            "npc_name": npc_name,
-            "npc_reply_expected": True,
-            "reply_kind": "answer",
-            "target_resolved": True,
-        },
+        "social": soc,
     }
 
 
@@ -454,10 +486,20 @@ def synthetic_social_exchange_resolution_for_emission(
         return None
     if is_scene_directed_watch_question(prompt):
         return None
-    target, basis = resolve_strict_social_npc_target_id(session, world, sid, prompt)
-    if not target:
+    env = _scene_envelope_for_strict_social(session if isinstance(session, dict) else None, sid)
+    auth = resolve_authoritative_social_target(
+        session if isinstance(session, dict) else None,
+        world if isinstance(world, dict) else None,
+        sid,
+        player_text=prompt,
+        merged_player_prompt=prompt,
+        scene_envelope=env,
+        allow_first_roster_fallback=True,
+    )
+    target = str(auth.get("npc_id") or "").strip()
+    if not target or not auth.get("target_resolved") or auth.get("offscene_target"):
         return None
-    if basis in {"active", "active_unlisted"}:
+    if auth.get("source") == "continuity":
         inspected = inspect_interaction_context(session)
         kind = str((inspected or {}).get("active_interaction_kind") or "").strip().lower()
         mode = str((inspected or {}).get("interaction_mode") or "").strip().lower()
@@ -465,18 +507,26 @@ def synthetic_social_exchange_resolution_for_emission(
         if not ((kind == "social" or mode == "social") and engagement in {"engaged", "active", ""}):
             return None
     npc_name = _npc_display_name_for_emission(world, sid, target)
+    soc2 = {
+        "social_intent_class": "social_exchange",
+        "npc_id": target,
+        "npc_name": npc_name,
+        "npc_reply_expected": True,
+        "reply_kind": "answer",
+        "target_resolved": True,
+        "target_source": auth.get("source"),
+        "target_reason": auth.get("reason"),
+        "target_candidate_id": None,
+        "target_candidate_valid": False,
+    }
+    grb2 = auth.get("generic_role_rebind")
+    if isinstance(grb2, dict):
+        soc2["generic_role_rebind"] = grb2
     return {
         "kind": "question",
         "prompt": prompt,
         "label": prompt[:140],
-        "social": {
-            "social_intent_class": "social_exchange",
-            "npc_id": target,
-            "npc_name": npc_name,
-            "npc_reply_expected": True,
-            "reply_kind": "answer",
-            "target_resolved": True,
-        },
+        "social": soc2,
     }
 
 
@@ -535,24 +585,56 @@ def reconcile_strict_social_resolution_speaker(
     world: Dict[str, Any] | None,
     scene_id: str,
 ) -> Dict[str, Any]:
-    """Align ``resolution.social`` NPC fields with :func:`resolve_strict_social_npc_target_id` (merged prompt).
+    """Align ``resolution.social`` NPC fields with :func:`resolve_authoritative_social_target` (merged prompt).
 
     Prevents deterministic fallbacks from using a stale engine ``npc_id`` or ``first_roster`` ambient NPC
     when vocative / active interlocutor / substring addressing resolves a different target.
     """
+    # Authoritative social target selection happens here. After this point, emission/validation may reject
+    # output text, but may not null the selected target unless it is invalidated by scene scope.
     sid = str(scene_id or "").strip()
     if not isinstance(resolution, dict) or not sid:
         return resolution
     merged = merged_player_prompt_for_gate(resolution, session, sid)
-    target_id, _basis = resolve_strict_social_npc_target_id(session, world, sid, merged)
-    if not target_id:
+    meta = resolution.get("metadata") if isinstance(resolution.get("metadata"), dict) else {}
+    na = meta.get("normalized_action") if isinstance(meta.get("normalized_action"), dict) else None
+    env = _scene_envelope_for_strict_social(session if isinstance(session, dict) else None, sid)
+    auth = resolve_authoritative_social_target(
+        session if isinstance(session, dict) else None,
+        world if isinstance(world, dict) else None,
+        sid,
+        player_text=merged,
+        normalized_action=na,
+        merged_player_prompt=merged,
+        scene_envelope=env,
+        allow_first_roster_fallback=True,
+    )
+    target_id = str(auth.get("npc_id") or "").strip()
+    if not target_id or not auth.get("target_resolved") or auth.get("offscene_target"):
         return resolution
     out = dict(resolution)
     soc = dict(resolution.get("social") or {}) if isinstance(resolution.get("social"), dict) else {}
     soc["npc_id"] = target_id
     soc["npc_name"] = _npc_display_name_for_emission(world, sid, target_id)
+    soc["target_resolved"] = bool(auth.get("target_resolved"))
+    soc["offscene_target"] = bool(auth.get("offscene_target"))
+    soc["target_source"] = auth.get("source")
+    soc["target_reason"] = auth.get("reason")
+    cand_raw = (na or {}).get("target_id") or (na or {}).get("targetEntityId")
+    cand = str(cand_raw).strip() if cand_raw is not None and str(cand_raw).strip() else None
+    addr = scene_addressable_actor_ids(
+        world if isinstance(world, dict) else None,
+        sid,
+        scene_envelope=env,
+        session=session if isinstance(session, dict) else None,
+    )
+    soc["target_candidate_id"] = cand
+    soc["target_candidate_valid"] = bool(cand and cand in addr)
     if not str(soc.get("social_intent_class") or "").strip():
         soc["social_intent_class"] = "social_exchange"
+    grb = auth.get("generic_role_rebind")
+    if isinstance(grb, dict):
+        soc["generic_role_rebind"] = grb
     out["social"] = soc
     return out
 
@@ -1425,12 +1507,20 @@ def hard_reject_social_exchange_text(
     npc_id = str(social.get("npc_id") or "").strip()
     sid = str(scene_id or "").strip()
     merged = merged_player_prompt_for_gate(resolution if isinstance(resolution, dict) else None, session, sid)
-    canonical_id, _basis = resolve_strict_social_npc_target_id(
+    meta = resolution.get("metadata") if isinstance(resolution, dict) and isinstance(resolution.get("metadata"), dict) else {}
+    na = meta.get("normalized_action") if isinstance(meta.get("normalized_action"), dict) else None
+    env_hr = _scene_envelope_for_strict_social(session if isinstance(session, dict) else None, sid)
+    auth = resolve_authoritative_social_target(
         session if isinstance(session, dict) else None,
         world if isinstance(world, dict) else None,
         sid,
-        merged,
+        player_text=merged,
+        normalized_action=na,
+        merged_player_prompt=merged,
+        scene_envelope=env_hr,
+        allow_first_roster_fallback=True,
     )
+    canonical_id = str(auth.get("npc_id") or "").strip()
     if npc_id and canonical_id and npc_id != canonical_id:
         reasons.append("speaker_binding_mismatch")
 

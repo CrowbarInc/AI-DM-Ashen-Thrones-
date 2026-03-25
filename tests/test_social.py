@@ -12,6 +12,12 @@ from game.skill_checks import resolve_skill_check
 from game.models import SocialEngineResult, social_result_to_dict
 from game.storage import get_npc_runtime, get_interaction_context, clear_interaction_context
 from game.defaults import default_world, default_character, default_session
+from game.interaction_context import (
+    rebuild_active_scene_entities,
+    resolve_authoritative_social_target,
+    set_social_target,
+)
+from game.storage import load_scene
 
 
 ENGINE_RESULT_REQUIRED = frozenset({
@@ -249,6 +255,63 @@ def test_question_without_topic_marks_refusal_and_substantive_hint():
     assert social["npc_reply_expected"] is True
     assert social["reply_kind"] == "refusal"
     assert "substantive in-turn response" in resolution["hint"]
+
+
+def test_follow_up_without_explicit_target_id_keeps_guard_captain_via_continuity():
+    """Bare follow-ups must keep active_interaction_target_id through engine resolution (continuity path)."""
+    world = default_world()
+    session = default_session()
+    session["active_scene_id"] = "frontier_gate"
+    scene = {"scene": {"id": "frontier_gate"}}
+    rebuild_active_scene_entities(session, world, "frontier_gate", scene_envelope=scene)
+    set_social_target(session, "guard_captain")
+    action = {
+        "id": "q-follow",
+        "type": "question",
+        "label": "follow-up",
+        "prompt": "What did you mean by that?",
+    }
+    resolution = resolve_social_action(
+        scene,
+        session,
+        world,
+        action,
+        raw_player_text=action["prompt"],
+        character=default_character(),
+        turn_counter=1,
+    )
+    assert resolution["social"]["npc_id"] == "guard_captain"
+    assert resolution["social"]["target_resolved"] is True
+    assert resolution["social"]["target_source"] == "continuity"
+    assert resolution["social"]["target_candidate_id"] is None
+
+
+def test_return_to_guard_follow_up_resolves_same_npc_via_generic_role():
+    """Phrases like 'to the guard' hit generic-role precedence before continuity; target must stay in-scene."""
+    world = default_world()
+    session = default_session()
+    session["active_scene_id"] = "frontier_gate"
+    scene = {"scene": {"id": "frontier_gate"}}
+    rebuild_active_scene_entities(session, world, "frontier_gate", scene_envelope=scene)
+    set_social_target(session, "guard_captain")
+    action = {
+        "id": "q-follow",
+        "type": "question",
+        "label": "follow-up",
+        "prompt": "I return to the guard. What did you mean?",
+    }
+    resolution = resolve_social_action(
+        scene,
+        session,
+        world,
+        action,
+        raw_player_text=action["prompt"],
+        character=default_character(),
+        turn_counter=1,
+    )
+    assert resolution["social"]["npc_id"] == "guard_captain"
+    assert resolution["social"]["target_resolved"] is True
+    assert resolution["social"]["target_source"] == "generic_role"
 
 
 def test_missing_npc_target_handled_safely():
@@ -492,6 +555,98 @@ def test_implied_ambiguous_phrasing_is_noop():
     assert ctx["conversation_privacy"] is None
     assert ctx["player_position_context"] is None
     assert ctx["active_interaction_target_id"] == "guard_captain"
+
+
+def test_frontier_gate_generic_addressing_smoke_authoritative():
+    """Scene addressables + empty world.npcs: watchman/stranger/runner bind; follow-up uses continuity."""
+    world: dict = {"npcs": []}
+    session = default_session()
+    st = session["scene_state"]
+    st["active_scene_id"] = "frontier_gate"
+    st["active_entities"] = ["guard_captain", "tavern_runner", "refugee", "threadbare_watcher"]
+    scene = load_scene("frontier_gate")
+    scene["scene_state"] = dict(st)
+    rebuild_active_scene_entities(session, world, "frontier_gate", scene_envelope=scene)
+
+    auth_w = resolve_authoritative_social_target(
+        session,
+        world,
+        "frontier_gate",
+        player_text="You, watchman. Where is your Captain?",
+        scene_envelope=scene,
+        allow_first_roster_fallback=False,
+    )
+    assert auth_w["npc_id"] == "guard_captain"
+    assert auth_w["source"] == "generic_role"
+    grw = auth_w.get("generic_role_rebind")
+    assert isinstance(grw, dict)
+    assert grw.get("matched_role") == "guard"
+    assert grw.get("matched_actor_id") == "guard_captain"
+
+    set_social_target(session, "guard_captain")
+    auth_s = resolve_authoritative_social_target(
+        session,
+        world,
+        "frontier_gate",
+        player_text="Stranger, do you know anything about the missing patrol?",
+        scene_envelope=scene,
+        allow_first_roster_fallback=False,
+    )
+    assert auth_s["npc_id"] == "refugee"
+    # Comma vocative on "Stranger" resolves before generic-role patterns (same correct target).
+    assert auth_s["source"] in ("vocative", "generic_role")
+    if auth_s["source"] == "generic_role":
+        grs = auth_s.get("generic_role_rebind")
+        assert isinstance(grs, dict)
+        assert grs.get("continuity_overridden") is True
+
+    auth_s_gen = resolve_authoritative_social_target(
+        session,
+        world,
+        "frontier_gate",
+        player_text="To the stranger — anything about the missing patrol?",
+        scene_envelope=scene,
+        allow_first_roster_fallback=False,
+    )
+    assert auth_s_gen["npc_id"] == "refugee"
+    assert auth_s_gen["source"] == "generic_role"
+    grsg = auth_s_gen.get("generic_role_rebind")
+    assert isinstance(grsg, dict)
+    assert grsg.get("continuity_overridden") is True
+
+    auth_r = resolve_authoritative_social_target(
+        session,
+        world,
+        "frontier_gate",
+        player_text="Runner, what rumor are you selling?",
+        scene_envelope=scene,
+        allow_first_roster_fallback=False,
+    )
+    assert auth_r["npc_id"] == "tavern_runner"
+    assert auth_r["source"] in ("vocative", "generic_role")
+
+    auth_r_gen = resolve_authoritative_social_target(
+        session,
+        world,
+        "frontier_gate",
+        player_text="To the runner - what rumor are you selling?",
+        scene_envelope=scene,
+        allow_first_roster_fallback=False,
+    )
+    assert auth_r_gen["npc_id"] == "tavern_runner"
+    assert auth_r_gen["source"] == "generic_role"
+
+    set_social_target(session, "refugee")
+    auth_f = resolve_authoritative_social_target(
+        session,
+        world,
+        "frontier_gate",
+        player_text="And the west road?",
+        scene_envelope=scene,
+        allow_first_roster_fallback=False,
+    )
+    assert auth_f["npc_id"] == "refugee"
+    assert auth_f["source"] == "continuity"
 
 
 def test_clear_interaction_context_resets_all_fields():

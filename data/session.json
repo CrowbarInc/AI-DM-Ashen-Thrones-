@@ -14,7 +14,7 @@
     "time_pressure": 4
   },
   "interaction_context": {
-    "active_interaction_target_id": null,
+    "active_interaction_target_id": "guard_captain",
     "active_interaction_kind": "social",
     "interaction_mode": "social",
     "engagement_level": "engaged",
@@ -31,7 +31,7 @@
       "guard_captain": "active",
       "tavern_runner": "active"
     },
-    "current_interlocutor": null
+    "current_interlocutor": "guard_captain"
   },
   "scene_runtime": {
     "frontier_gate": {
@@ -42,10 +42,10 @@
       "suspicion_flags": [],
       "searched_targets": [],
       "resolved_interactables": [],
-      "last_exploration_action_key": "question_npc",
-      "repeated_action_count": 3,
+      "last_exploration_action_key": "question_guard_captain",
+      "repeated_action_count": 1,
       "last_resolution_kind": "question",
-      "last_description_hash": "d1bc1d90c871e0877ddafba1a9000385",
+      "last_description_hash": "dce5081154c62421da88e043d753a3b6",
       "consumed_action_ids": [],
       "momentum_exchanges_since": 0,
       "momentum_next_due_in": 2,
@@ -53,51 +53,43 @@
       "passive_action_streak": 0,
       "recent_player_actions": [
         {
-          "text": "Begin the game.",
+          "text": "Begin.",
           "passive": false,
           "markers": [],
           "resolution_kind": null,
           "turn": 1
         },
         {
-          "text": "Galinor approaches one of the guardsmen. \"Guard, where is your captain?\"",
-          "passive": false,
-          "markers": [],
+          "text": "Galinor approaches one of the stern looking guards. \"You, watchman. Where is your Captain?\"",
+          "passive": true,
+          "markers": [
+            "watch"
+          ],
           "resolution_kind": null,
           "turn": 2
         },
         {
-          "text": "Galinor steps away, immediately approaches one of the refugees. \"You, stranger, have you heard any good rumors of late?\"",
+          "text": "Galinor approaches one of the countless refuguees. \"Stranger, do you know anything about the missing patrol? I've heard rumor about?\"",
           "passive": false,
           "markers": [],
           "resolution_kind": null,
           "turn": 3
         },
         {
-          "text": "Galinor returns to the same guard he originally approached. \"What about you? I'm here to help the city, are you aware of any tasks that could use a hero?\"",
+          "text": "Galinor returns to the guard he originally approached. \"Are you saying your Captain has gone missing?\"",
           "passive": false,
           "markers": [],
           "resolution_kind": null,
           "turn": 4
         }
       ],
-      "last_player_action_text": "Galinor returns to the same guard he originally approached. \"What about you? I'm here to help the city, are you aware of any tasks that could use a hero?\"",
+      "last_player_action_text": "Galinor returns to the guard he originally approached. \"Are you saying your Captain has gone missing?\"",
       "last_player_action_passive": false,
       "recent_contextual_leads": [
         {
-          "key": "active_event_galinor_at_the_cinderwatch_gate_rain_drenching_the_soot_dark_stone",
+          "key": "active_event_amidst_the_masses_a_figure_in_threadbare_clothes",
           "kind": "active_event",
-          "subject": "galinor",
-          "position": "at the cinderwatch gate, rain drenching the soot-dark stone",
-          "named": false,
-          "positioned": true,
-          "mentions": 1,
-          "last_turn": 1
-        },
-        {
-          "key": "active_event_guards_dressed_in_weathered_uniforms_maintain_a_brittle_discipline_casting_wary_eyes_towards_the_masses",
-          "kind": "active_event",
-          "subject": "guards, dressed in weathered uniforms, maintain a brittle discipline, casting wary eyes towards the masses",
+          "subject": "amidst the masses, a figure in threadbare clothes",
           "position": "",
           "named": false,
           "positioned": false,
@@ -105,66 +97,102 @@
           "last_turn": 1
         },
         {
-          "key": "active_event_refugees_wagons_and_foot_traffic_clog_the_muddy_approach_guards_hold_the_choke_while_the_crowd_presses_in",
+          "key": "scene_npc_tavern_runner",
+          "kind": "scene_npc",
+          "subject": "Tavern Runner",
+          "position": "",
+          "named": true,
+          "positioned": false,
+          "mentions": 1,
+          "last_turn": 1
+        },
+        {
+          "key": "active_event_guard_jerks_his_chin_toward_the_notice_board_and_says_i_cant_tell_you_where_the_captain_is_but_you_might_find_the_missing_patrol_notice_there",
           "kind": "active_event",
-          "subject": "refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in",
+          "subject": "guard jerks his chin toward the notice board and says, \"i can't tell you where the captain is, but you might find the missing patrol notice there",
           "position": "",
           "named": false,
           "positioned": false,
           "mentions": 1,
+          "last_turn": 2
+        },
+        {
+          "key": "notice_board_missing_patrol_notice",
+          "kind": "notice_board",
+          "subject": "missing patrol notice",
+          "position": "",
+          "named": false,
+          "positioned": false,
+          "mentions": 1,
+          "last_turn": 2
+        },
+        {
+          "key": "notice_board_notice_board",
+          "kind": "notice_board",
+          "subject": "notice board",
+          "position": "",
+          "named": false,
+          "positioned": false,
+          "mentions": 2,
           "last_turn": 3
         },
         {
-          "key": "active_event_guard_looks_at_galinor",
+          "key": "active_event_guard_captain_nods_once",
           "kind": "active_event",
-          "subject": "guard looks",
-          "position": "at galinor",
+          "subject": "guard captain nods once",
+          "position": "",
           "named": false,
-          "positioned": true,
+          "positioned": false,
           "mentions": 1,
           "last_turn": 4
         }
       ],
       "topic_pressure": {
         "topic:approach_captain_galinor": {
-          "repeat_count": 0,
+          "repeat_count": 1,
           "low_progress_streak": 0,
-          "progress_score_total": 1.5,
-          "last_answer": "galinor is at the cinderwatch gate, rain drenching the soot-dark stone.",
-          "last_turn": 2,
+          "progress_score_total": 3.8,
+          "last_answer": "Guard Captain nods once. \"Old Millstone. South road.\"",
+          "last_turn": 4,
           "speaker_targets": {
             "__scene__": {
               "repeat_count": 1,
               "low_progress_streak": 0,
               "patience": 3,
               "last_turn": 2
-            }
-          },
-          "last_player_input": "Galinor approaches one of the guardsmen. \"Guard, where is your captain?\""
-        },
-        "topic:approach_away_galinor": {
-          "repeat_count": 2,
-          "low_progress_streak": 0,
-          "progress_score_total": 3.7,
-          "last_answer": "The guard looks at Galinor and says, \"I can't say there's anything needing a 'hero' right now. Just keep an eye on the patrols; some have gone missing. Rumor has it they were last seen near the old trading crossroads, but details are murky.\" He shifts nervously, glancing over the crowd as if expecting something.",
-          "last_turn": 4,
-          "speaker_targets": {
-            "__scene__": {
-              "repeat_count": 2,
+            },
+            "guard_captain": {
+              "repeat_count": 1,
               "low_progress_streak": 0,
               "patience": 3,
               "last_turn": 4
             }
           },
-          "last_player_input": "Galinor returns to the same guard he originally approached. \"What about you? I'm here to help the city, are you aware of any tasks that could use a hero?\""
+          "last_player_input": "Galinor returns to the guard he originally approached. \"Are you saying your Captain has gone missing?\""
+        },
+        "missing_patrol": {
+          "repeat_count": 0,
+          "low_progress_streak": 0,
+          "progress_score_total": 1.5,
+          "last_answer": "A notice board lists new taxes, curfews, and a posted warning about a missing patrol.",
+          "last_turn": 3,
+          "speaker_targets": {
+            "__scene__": {
+              "repeat_count": 1,
+              "low_progress_streak": 0,
+              "patience": 3,
+              "last_turn": 3
+            }
+          },
+          "last_player_input": "Galinor approaches one of the countless refuguees. \"Stranger, do you know anything about the missing patrol? I've heard rumor about?\""
         }
       },
-      "topic_pressure_last_topic_key": "topic:approach_away_galinor",
+      "topic_pressure_last_topic_key": "topic:approach_captain_galinor",
       "topic_pressure_current": {
-        "topic_key": "topic:approach_away_galinor",
-        "speaker_key": "__scene__",
+        "topic_key": "topic:approach_captain_galinor",
+        "speaker_key": "guard_captain",
         "turn": 4,
-        "player_text": "Galinor returns to the same guard he originally approached. \"What about you? I'm here to help the city, are you aware of any tasks that could use a hero?\"",
+        "player_text": "Galinor returns to the guard he originally approached. \"Are you saying your Captain has gone missing?\"",
         "interaction_kind": "social",
         "interaction_mode": "social",
         "social_intent_class": "social_exchange",
@@ -176,20 +204,20 @@
   "npc_runtime": {},
   "last_action_debug": {
     "last_action_type": "chat",
-    "player_input": "Galinor returns to the same guard he originally approached. \"What about you? I'm here to help the city, are you aware of any tasks that could use a hero?\"",
+    "player_input": "Galinor returns to the guard he originally approached. \"Are you saying your Captain has gone missing?\"",
     "normalized_action": {
-      "id": "question_npc",
-      "label": "Galinor returns to the same guard he originally approached. \"What about you? I'm here to help the city, are you aware of any tasks that coul",
+      "id": "question_guard_captain",
+      "label": "Galinor returns to the guard he originally approached. \"Are you saying your Captain has gone missing?\"",
       "type": "question",
-      "prompt": "Galinor returns to the same guard he originally approached. \"What about you? I'm here to help the city, are you aware of any tasks that could use a hero?\""
+      "prompt": "Galinor returns to the guard he originally approached. \"Are you saying your Captain has gone missing?\""
     },
     "resolution_kind": "question",
     "target_scene": null,
     "resolver_result": {
       "kind": "question",
-      "action_id": "question_npc",
-      "label": "Galinor returns to the same guard he originally approached. \"What about you? I'm here to help the city, are you aware of any tasks that coul",
-      "prompt": "Galinor returns to the same guard he originally approached. \"What about you? I'm here to help the city, are you aware of any tasks that could use a hero?\"",
+      "action_id": "question_guard_captain",
+      "label": "Galinor returns to the guard he originally approached. \"Are you saying your Captain has gone missing?\"",
+      "prompt": "Galinor returns to the guard he originally approached. \"Are you saying your Captain has gone missing?\"",
       "success": false,
       "resolved_transition": false,
       "target_scene_id": null,
@@ -214,10 +242,10 @@
   },
   "debug_traces": [
     {
-      "timestamp": "2026-03-24T23:21:38.629676Z",
+      "timestamp": "2026-03-24T23:50:32.832759Z",
       "source": "chat",
       "action_type": "chat",
-      "raw_input": "Begin the game.",
+      "raw_input": "Begin.",
       "turn_stage_order": [
         "player_input",
         "intent_normalization_expansion",
@@ -230,43 +258,14 @@
         "response_debug_packaging"
       ],
       "incoming_payload": {
-        "text": "Begin the game."
+        "text": "Begin."
       },
-      "parsed_intent": {
-        "id": "campaign_start_opening_scene",
-        "label": "Begin the game.",
-        "type": "scene_opening",
-        "prompt": "Begin the game.",
-        "targetSceneId": "frontier_gate",
-        "target_scene_id": "frontier_gate"
-      },
+      "parsed_intent": null,
       "segmented_turn": {
-        "declared_action_text": "Begin the game."
+        "declared_action_text": "Begin."
       },
-      "normalized_action": {
-        "id": "campaign_start_opening_scene",
-        "label": "Begin the game.",
-        "type": "scene_opening",
-        "prompt": "Begin the game.",
-        "targetSceneId": "frontier_gate",
-        "target_scene_id": "frontier_gate"
-      },
+      "normalized_action": null,
       "resolution": {
-        "kind": "scene_opening",
-        "action_id": "campaign_start_opening_scene",
-        "label": "Begin the game.",
-        "prompt": "Begin the game.",
-        "success": true,
-        "resolved_transition": false,
-        "target_scene_id": "frontier_gate",
-        "clue_id": null,
-        "discovered_clues": [],
-        "state_changes": {
-          "opening_scene_turn": true,
-          "arrived_at_scene": true,
-          "new_scene_context_available": true
-        },
-        "hint": "Campaign opening turn: narrate the active scene as an immediate playable situation, with concrete opportunities grounded in the current scene state.",
         "world_tick_events": [
           {
             "type": "faction_pressure",
@@ -288,29 +287,13 @@
       ],
       "turn_trace": {
         "source": "chat",
-        "player_input": "Begin the game.",
+        "player_input": "Begin.",
         "intent": {
-          "parsed": {
-            "id": "campaign_start_opening_scene",
-            "label": "Begin the game.",
-            "type": "scene_opening",
-            "prompt": "Begin the game.",
-            "targetSceneId": "frontier_gate",
-            "target_scene_id": "frontier_gate"
-          },
+          "parsed": null,
           "segmented_turn": {
-            "declared_action_text": "Begin the game."
+            "declared_action_text": "Begin."
           },
-          "normalized": {
-            "id": "campaign_start_opening_scene",
-            "label": "Begin the game.",
-            "type": "scene_opening",
-            "prompt": "Begin the game.",
-            "targetSceneId": "frontier_gate",
-            "target_scene_id": "frontier_gate",
-            "targetEntityId": null,
-            "target_id": null
-          },
+          "normalized": null,
           "implied_context": {
             "applied": false,
             "cases": [],
@@ -319,17 +302,13 @@
         },
         "classification": {
           "action_type": "chat",
-          "resolved_kind": "scene_opening",
+          "resolved_kind": null,
           "requires_check": false
         },
-        "resolution_path": "exploration_engine",
+        "resolution_path": "chat_engine",
         "authoritative_state_changes": {
           "scene_transition": null,
-          "resolution_state_changes": {
-            "opening_scene_turn": true,
-            "arrived_at_scene": true,
-            "new_scene_context_available": true
-          },
+          "resolution_state_changes": {},
           "resolution_world_updates": [],
           "check_request": null
         },
@@ -343,7 +322,7 @@
         },
         "narration_obligations": {
           "is_opening_scene": true,
-          "must_advance_scene": true,
+          "must_advance_scene": false,
           "should_answer_active_npc": false,
           "avoid_input_echo": true,
           "avoid_player_action_restatement": true,
@@ -397,10 +376,10 @@
       "error": null
     },
     {
-      "timestamp": "2026-03-24T23:22:21.765333Z",
+      "timestamp": "2026-03-24T23:51:54.971819Z",
       "source": "chat",
       "action_type": "chat",
-      "raw_input": "Galinor approaches one of the guardsmen. \"Guard, where is your captain?\"",
+      "raw_input": "Galinor approaches one of the stern looking guards. \"You, watchman. Where is your Captain?\"",
       "turn_stage_order": [
         "player_input",
         "intent_normalization_expansion",
@@ -413,38 +392,38 @@
         "response_debug_packaging"
       ],
       "incoming_payload": {
-        "text": "Galinor approaches one of the guardsmen. \"Guard, where is your captain?\""
+        "text": "Galinor approaches one of the stern looking guards. \"You, watchman. Where is your Captain?\""
       },
       "parsed_intent": {
         "id": "question_npc",
-        "label": "Galinor approaches one of the guardsmen. \"Guard, where is your captain?\"",
+        "label": "Galinor approaches one of the stern looking guards. \"You, watchman. Where is your Captain?\"",
         "type": "question",
         "social_intent_class": "social_exchange",
-        "prompt": "Galinor approaches one of the guardsmen. \"Guard, where is your captain?\"",
+        "prompt": "Galinor approaches one of the stern looking guards. \"You, watchman. Where is your Captain?\"",
         "metadata": {
           "routed_via_dialogue_lock": true,
           "route": "dialogue",
           "turn_segmentation": {
-            "spoken_text": "Guard, where is your captain?",
-            "declared_action_text": "Galinor approaches one of the guardsmen."
+            "spoken_text": "You, watchman. Where is your Captain?",
+            "declared_action_text": "Galinor approaches one of the stern looking guards."
           }
         }
       },
       "segmented_turn": {
-        "spoken_text": "Guard, where is your captain?",
-        "declared_action_text": "Galinor approaches one of the guardsmen."
+        "spoken_text": "You, watchman. Where is your Captain?",
+        "declared_action_text": "Galinor approaches one of the stern looking guards."
       },
       "normalized_action": {
         "id": "question_npc",
-        "label": "Galinor approaches one of the guardsmen. \"Guard, where is your captain?\"",
+        "label": "Galinor approaches one of the stern looking guards. \"You, watchman. Where is your Captain?\"",
         "type": "question",
-        "prompt": "Galinor approaches one of the guardsmen. \"Guard, where is your captain?\""
+        "prompt": "Galinor approaches one of the stern looking guards. \"You, watchman. Where is your Captain?\""
       },
       "resolution": {
         "kind": "question",
         "action_id": "question_npc",
-        "label": "Galinor approaches one of the guardsmen. \"Guard, where is your captain?\"",
-        "prompt": "Galinor approaches one of the guardsmen. \"Guard, where is your captain?\"",
+        "label": "Galinor approaches one of the stern looking guards. \"You, watchman. Where is your Captain?\"",
+        "prompt": "Galinor approaches one of the stern looking guards. \"You, watchman. Where is your Captain?\"",
         "success": false,
         "resolved_transition": false,
         "target_scene_id": null,
@@ -465,8 +444,8 @@
         "requires_check": false,
         "metadata": {
           "turn_segmentation": {
-            "spoken_text": "Guard, where is your captain?",
-            "declared_action_text": "Galinor approaches one of the guardsmen."
+            "spoken_text": "You, watchman. Where is your Captain?",
+            "declared_action_text": "Galinor approaches one of the stern looking guards."
           }
         },
         "world_tick_events": [
@@ -485,32 +464,32 @@
       ],
       "turn_trace": {
         "source": "chat",
-        "player_input": "Galinor approaches one of the guardsmen. \"Guard, where is your captain?\"",
+        "player_input": "Galinor approaches one of the stern looking guards. \"You, watchman. Where is your Captain?\"",
         "intent": {
           "parsed": {
             "id": "question_npc",
-            "label": "Galinor approaches one of the guardsmen. \"Guard, where is your captain?\"",
+            "label": "Galinor approaches one of the stern looking guards. \"You, watchman. Where is your Captain?\"",
             "type": "question",
             "social_intent_class": "social_exchange",
-            "prompt": "Galinor approaches one of the guardsmen. \"Guard, where is your captain?\"",
+            "prompt": "Galinor approaches one of the stern looking guards. \"You, watchman. Where is your Captain?\"",
             "metadata": {
               "routed_via_dialogue_lock": true,
               "route": "dialogue",
               "turn_segmentation": {
-                "spoken_text": "Guard, where is your captain?",
-                "declared_action_text": "Galinor approaches one of the guardsmen."
+                "spoken_text": "You, watchman. Where is your Captain?",
+                "declared_action_text": "Galinor approaches one of the stern looking guards."
               }
             }
           },
           "segmented_turn": {
-            "spoken_text": "Guard, where is your captain?",
-            "declared_action_text": "Galinor approaches one of the guardsmen."
+            "spoken_text": "You, watchman. Where is your Captain?",
+            "declared_action_text": "Galinor approaches one of the stern looking guards."
           },
           "normalized": {
             "id": "question_npc",
-            "label": "Galinor approaches one of the guardsmen. \"Guard, where is your captain?\"",
+            "label": "Galinor approaches one of the stern looking guards. \"You, watchman. Where is your Captain?\"",
             "type": "question",
-            "prompt": "Galinor approaches one of the guardsmen. \"Guard, where is your captain?\"",
+            "prompt": "Galinor approaches one of the stern looking guards. \"You, watchman. Where is your Captain?\"",
             "targetSceneId": null,
             "target_scene_id": null,
             "targetEntityId": null,
@@ -598,10 +577,10 @@
       "error": null
     },
     {
-      "timestamp": "2026-03-24T23:23:52.414640Z",
+      "timestamp": "2026-03-24T23:52:59.250842Z",
       "source": "chat",
       "action_type": "chat",
-      "raw_input": "Galinor steps away, immediately approaches one of the refugees. \"You, stranger, have you heard any good rumors of late?\"",
+      "raw_input": "Galinor approaches one of the countless refuguees. \"Stranger, do you know anything about the missing patrol? I've heard rumor about?\"",
       "turn_stage_order": [
         "player_input",
         "intent_normalization_expansion",
@@ -614,38 +593,38 @@
         "response_debug_packaging"
       ],
       "incoming_payload": {
-        "text": "Galinor steps away, immediately approaches one of the refugees. \"You, stranger, have you heard any good rumors of late?\""
+        "text": "Galinor approaches one of the countless refuguees. \"Stranger, do you know anything about the missing patrol? I've heard rumor about?\""
       },
       "parsed_intent": {
         "id": "question_npc",
-        "label": "Galinor steps away, immediately approaches one of the refugees. \"You, stranger, have you heard any good rumors of late?\"",
+        "label": "Galinor approaches one of the countless refuguees. \"Stranger, do you know anything about the missing patrol? I've heard rumor about?\"",
         "type": "question",
         "social_intent_class": "social_exchange",
-        "prompt": "Galinor steps away, immediately approaches one of the refugees. \"You, stranger, have you heard any good rumors of late?\"",
+        "prompt": "Galinor approaches one of the countless refuguees. \"Stranger, do you know anything about the missing patrol? I've heard rumor about?\"",
         "metadata": {
           "routed_via_dialogue_lock": true,
           "route": "dialogue",
           "turn_segmentation": {
-            "spoken_text": "You, stranger, have you heard any good rumors of late?",
-            "declared_action_text": "Galinor steps away, immediately approaches one of the refugees."
+            "spoken_text": "Stranger, do you know anything about the missing patrol? I've heard rumor about?",
+            "declared_action_text": "Galinor approaches one of the countless refuguees."
           }
         }
       },
       "segmented_turn": {
-        "spoken_text": "You, stranger, have you heard any good rumors of late?",
-        "declared_action_text": "Galinor steps away, immediately approaches one of the refugees."
+        "spoken_text": "Stranger, do you know anything about the missing patrol? I've heard rumor about?",
+        "declared_action_text": "Galinor approaches one of the countless refuguees."
       },
       "normalized_action": {
         "id": "question_npc",
-        "label": "Galinor steps away, immediately approaches one of the refugees. \"You, stranger, have you heard any good rumors of late?\"",
+        "label": "Galinor approaches one of the countless refuguees. \"Stranger, do you know anything about the missing patrol? I've heard rumor about?\"",
         "type": "question",
-        "prompt": "Galinor steps away, immediately approaches one of the refugees. \"You, stranger, have you heard any good rumors of late?\""
+        "prompt": "Galinor approaches one of the countless refuguees. \"Stranger, do you know anything about the missing patrol? I've heard rumor about?\""
       },
       "resolution": {
         "kind": "question",
         "action_id": "question_npc",
-        "label": "Galinor steps away, immediately approaches one of the refugees. \"You, stranger, have you heard any good rumors of late?\"",
-        "prompt": "Galinor steps away, immediately approaches one of the refugees. \"You, stranger, have you heard any good rumors of late?\"",
+        "label": "Galinor approaches one of the countless refuguees. \"Stranger, do you know anything about the missing patrol? I've heard rumor about?\"",
+        "prompt": "Galinor approaches one of the countless refuguees. \"Stranger, do you know anything about the missing patrol? I've heard rumor about?\"",
         "success": false,
         "resolved_transition": false,
         "target_scene_id": null,
@@ -666,8 +645,8 @@
         "requires_check": false,
         "metadata": {
           "turn_segmentation": {
-            "spoken_text": "You, stranger, have you heard any good rumors of late?",
-            "declared_action_text": "Galinor steps away, immediately approaches one of the refugees."
+            "spoken_text": "Stranger, do you know anything about the missing patrol? I've heard rumor about?",
+            "declared_action_text": "Galinor approaches one of the countless refuguees."
           }
         },
         "world_tick_events": []
@@ -680,32 +659,32 @@
       ],
       "turn_trace": {
         "source": "chat",
-        "player_input": "Galinor steps away, immediately approaches one of the refugees. \"You, stranger, have you heard any good rumors of late?\"",
+        "player_input": "Galinor approaches one of the countless refuguees. \"Stranger, do you know anything about the missing patrol? I've heard rumor about?\"",
         "intent": {
           "parsed": {
             "id": "question_npc",
-            "label": "Galinor steps away, immediately approaches one of the refugees. \"You, stranger, have you heard any good rumors of late?\"",
+            "label": "Galinor approaches one of the countless refuguees. \"Stranger, do you know anything about the missing patrol? I've heard rumor about?\"",
             "type": "question",
             "social_intent_class": "social_exchange",
-            "prompt": "Galinor steps away, immediately approaches one of the refugees. \"You, stranger, have you heard any good rumors of late?\"",
+            "prompt": "Galinor approaches one of the countless refuguees. \"Stranger, do you know anything about the missing patrol? I've heard rumor about?\"",
             "metadata": {
               "routed_via_dialogue_lock": true,
               "route": "dialogue",
               "turn_segmentation": {
-                "spoken_text": "You, stranger, have you heard any good rumors of late?",
-                "declared_action_text": "Galinor steps away, immediately approaches one of the refugees."
+                "spoken_text": "Stranger, do you know anything about the missing patrol? I've heard rumor about?",
+                "declared_action_text": "Galinor approaches one of the countless refuguees."
               }
             }
           },
           "segmented_turn": {
-            "spoken_text": "You, stranger, have you heard any good rumors of late?",
-            "declared_action_text": "Galinor steps away, immediately approaches one of the refugees."
+            "spoken_text": "Stranger, do you know anything about the missing patrol? I've heard rumor about?",
+            "declared_action_text": "Galinor approaches one of the countless refuguees."
           },
           "normalized": {
             "id": "question_npc",
-            "label": "Galinor steps away, immediately approaches one of the refugees. \"You, stranger, have you heard any good rumors of late?\"",
+            "label": "Galinor approaches one of the countless refuguees. \"Stranger, do you know anything about the missing patrol? I've heard rumor about?\"",
             "type": "question",
-            "prompt": "Galinor steps away, immediately approaches one of the refugees. \"You, stranger, have you heard any good rumors of late?\"",
+            "prompt": "Galinor approaches one of the countless refuguees. \"Stranger, do you know anything about the missing patrol? I've heard rumor about?\"",
             "targetSceneId": null,
             "target_scene_id": null,
             "targetEntityId": null,
@@ -793,10 +772,10 @@
       "error": null
     },
     {
-      "timestamp": "2026-03-24T23:25:06.810859Z",
+      "timestamp": "2026-03-24T23:53:44.422183Z",
       "source": "chat",
       "action_type": "chat",
-      "raw_input": "Galinor returns to the same guard he originally approached. \"What about you? I'm here to help the city, are you aware of any tasks that could use a hero?\"",
+      "raw_input": "Galinor returns to the guard he originally approached. \"Are you saying your Captain has gone missing?\"",
       "turn_stage_order": [
         "player_input",
         "intent_normalization_expansion",
@@ -809,38 +788,41 @@
         "response_debug_packaging"
       ],
       "incoming_payload": {
-        "text": "Galinor returns to the same guard he originally approached. \"What about you? I'm here to help the city, are you aware of any tasks that could use a hero?\""
+        "text": "Galinor returns to the guard he originally approached. \"Are you saying your Captain has gone missing?\""
       },
       "parsed_intent": {
-        "id": "question_npc",
-        "label": "Galinor returns to the same guard he originally approached. \"What about you? I'm here to help the city, are you aware of any tasks that coul",
+        "id": "question_guard_captain",
+        "label": "Galinor returns to the guard he originally approached. \"Are you saying your Captain has gone missing?\"",
         "type": "question",
         "social_intent_class": "social_exchange",
-        "prompt": "Galinor returns to the same guard he originally approached. \"What about you? I'm here to help the city, are you aware of any tasks that could use a hero?\"",
+        "prompt": "Galinor returns to the guard he originally approached. \"Are you saying your Captain has gone missing?\"",
         "metadata": {
           "routed_via_dialogue_lock": true,
           "route": "dialogue",
+          "active_interaction_target_id": "guard_captain",
           "turn_segmentation": {
-            "spoken_text": "What about you? I'm here to help the city, are you aware of any tasks that could use a hero?",
-            "declared_action_text": "Galinor returns to the same guard he originally approached."
+            "spoken_text": "Are you saying your Captain has gone missing?",
+            "declared_action_text": "Galinor returns to the guard he originally approached."
           }
-        }
+        },
+        "target_id": "guard_captain",
+        "targetEntityId": "guard_captain"
       },
       "segmented_turn": {
-        "spoken_text": "What about you? I'm here to help the city, are you aware of any tasks that could use a hero?",
-        "declared_action_text": "Galinor returns to the same guard he originally approached."
+        "spoken_text": "Are you saying your Captain has gone missing?",
+        "declared_action_text": "Galinor returns to the guard he originally approached."
       },
       "normalized_action": {
-        "id": "question_npc",
-        "label": "Galinor returns to the same guard he originally approached. \"What about you? I'm here to help the city, are you aware of any tasks that coul",
+        "id": "question_guard_captain",
+        "label": "Galinor returns to the guard he originally approached. \"Are you saying your Captain has gone missing?\"",
         "type": "question",
-        "prompt": "Galinor returns to the same guard he originally approached. \"What about you? I'm here to help the city, are you aware of any tasks that could use a hero?\""
+        "prompt": "Galinor returns to the guard he originally approached. \"Are you saying your Captain has gone missing?\""
       },
       "resolution": {
         "kind": "question",
-        "action_id": "question_npc",
-        "label": "Galinor returns to the same guard he originally approached. \"What about you? I'm here to help the city, are you aware of any tasks that coul",
-        "prompt": "Galinor returns to the same guard he originally approached. \"What about you? I'm here to help the city, are you aware of any tasks that could use a hero?\"",
+        "action_id": "question_guard_captain",
+        "label": "Galinor returns to the guard he originally approached. \"Are you saying your Captain has gone missing?\"",
+        "prompt": "Galinor returns to the guard he originally approached. \"Are you saying your Captain has gone missing?\"",
         "success": false,
         "resolved_transition": false,
         "target_scene_id": null,
@@ -861,8 +843,8 @@
         "requires_check": false,
         "metadata": {
           "turn_segmentation": {
-            "spoken_text": "What about you? I'm here to help the city, are you aware of any tasks that could use a hero?",
-            "declared_action_text": "Galinor returns to the same guard he originally approached."
+            "spoken_text": "Are you saying your Captain has gone missing?",
+            "declared_action_text": "Galinor returns to the guard he originally approached."
           }
         },
         "world_tick_events": []
@@ -875,36 +857,39 @@
       ],
       "turn_trace": {
         "source": "chat",
-        "player_input": "Galinor returns to the same guard he originally approached. \"What about you? I'm here to help the city, are you aware of any tasks that could use a hero?\"",
+        "player_input": "Galinor returns to the guard he originally approached. \"Are you saying your Captain has gone missing?\"",
         "intent": {
           "parsed": {
-            "id": "question_npc",
-            "label": "Galinor returns to the same guard he originally approached. \"What about you? I'm here to help the city, are you aware of any tasks that coul",
+            "id": "question_guard_captain",
+            "label": "Galinor returns to the guard he originally approached. \"Are you saying your Captain has gone missing?\"",
             "type": "question",
             "social_intent_class": "social_exchange",
-            "prompt": "Galinor returns to the same guard he originally approached. \"What about you? I'm here to help the city, are you aware of any tasks that could use a hero?\"",
+            "prompt": "Galinor returns to the guard he originally approached. \"Are you saying your Captain has gone missing?\"",
             "metadata": {
               "routed_via_dialogue_lock": true,
               "route": "dialogue",
+              "active_interaction_target_id": "guard_captain",
               "turn_segmentation": {
-                "spoken_text": "What about you? I'm here to help the city, are you aware of any tasks that could use a hero?",
-                "declared_action_text": "Galinor returns to the same guard he originally approached."
+                "spoken_text": "Are you saying your Captain has gone missing?",
+                "declared_action_text": "Galinor returns to the guard he originally approached."
               }
-            }
+            },
+            "target_id": "guard_captain",
+            "targetEntityId": "guard_captain"
           },
           "segmented_turn": {
-            "spoken_text": "What about you? I'm here to help the city, are you aware of any tasks that could use a hero?",
-            "declared_action_text": "Galinor returns to the same guard he originally approached."
+            "spoken_text": "Are you saying your Captain has gone missing?",
+            "declared_action_text": "Galinor returns to the guard he originally approached."
           },
           "normalized": {
-            "id": "question_npc",
-            "label": "Galinor returns to the same guard he originally approached. \"What about you? I'm here to help the city, are you aware of any tasks that coul",
+            "id": "question_guard_captain",
+            "label": "Galinor returns to the guard he originally approached. \"Are you saying your Captain has gone missing?\"",
             "type": "question",
-            "prompt": "Galinor returns to the same guard he originally approached. \"What about you? I'm here to help the city, are you aware of any tasks that could use a hero?\"",
+            "prompt": "Galinor returns to the guard he originally approached. \"Are you saying your Captain has gone missing?\"",
             "targetSceneId": null,
             "target_scene_id": null,
-            "targetEntityId": null,
-            "target_id": null
+            "targetEntityId": "guard_captain",
+            "target_id": "guard_captain"
           },
           "implied_context": {
             "applied": false,
@@ -925,7 +910,7 @@
           "check_request": null
         },
         "interaction_after": {
-          "active_interaction_target_id": null,
+          "active_interaction_target_id": "guard_captain",
           "active_interaction_kind": "social",
           "interaction_mode": "social",
           "engagement_level": "engaged",
@@ -935,16 +920,16 @@
         "narration_obligations": {
           "is_opening_scene": false,
           "must_advance_scene": false,
-          "should_answer_active_npc": false,
+          "should_answer_active_npc": true,
           "avoid_input_echo": true,
           "avoid_player_action_restatement": true,
           "prefer_structured_turn_summary": true,
-          "active_npc_reply_expected": false,
-          "active_npc_reply_kind": null,
+          "active_npc_reply_expected": true,
+          "active_npc_reply_kind": "reaction",
           "scene_momentum_due": false,
           "scene_momentum_exchanges_since": 0,
           "scene_momentum_next_due_in": 2,
-          "suppress_non_social_emitters": false
+          "suppress_non_social_emitters": true
         },
         "clues": {
           "discovered_texts": [],
@@ -990,7 +975,7 @@
   ],
   "flags": {},
   "character_name": "Galinor",
-  "campaign_run_id": "4ab5b4d8efcc1ede51a21345",
-  "session_id": "4ab5b4d8efcc1ede51a21345",
-  "last_saved_at": "2026-03-24T23:25:18.187715Z"
+  "campaign_run_id": "3e1b5a59bc58a0dd76107626",
+  "session_id": "3e1b5a59bc58a0dd76107626",
+  "last_saved_at": "2026-03-24T23:54:01.959859Z"
 }
