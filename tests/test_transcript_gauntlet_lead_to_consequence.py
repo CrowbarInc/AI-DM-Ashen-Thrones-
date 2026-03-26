@@ -36,6 +36,10 @@ LEAD_CLUE_ID = "lead_gauntlet_missing_patrol"
 LEAD_TEXT_MARKER = "GAUNTLET_LEAD_MISSING_PATROL"
 CONSEQUENCE_FLAG_KEY = "patrol_route_known"
 
+# Social transcript slice: NPC topic → structured clue / pending lead / event / journal.
+SOCIAL_VEREVIN_CLUE_ID = "gauntlet_social_house_verevin"
+SOCIAL_VEREVIN_MARKER = "GAUNTLET_SOCIAL_VEREVIN_LEAD"
+
 
 def _gm_ok(speaker: str, line: str) -> dict[str, Any]:
     return {
@@ -56,6 +60,36 @@ def _gm_opening() -> dict[str, Any]:
 
 def _patch_call_gpt(monkeypatch: Any, fn: Callable[..., dict[str, Any]]) -> None:
     monkeypatch.setattr("game.api.call_gpt", fn)
+
+
+def _setup_frontier_social_verevin_topic(tmp_path: Path, monkeypatch: Any) -> None:
+    """Frontier gate + tavern_runner topic (House Verevin / crossroads style) for social lead landing."""
+    patch_transcript_storage(monkeypatch, tmp_path)
+    write_default_bootstrap_scenes()
+    if not storage.SESSION_LOG_PATH.exists():
+        storage.SESSION_LOG_PATH.write_text("", encoding="utf-8")
+
+
+def _seed_world_runner_verevin_topic() -> None:
+    world = storage.load_world()
+    npcs = world.setdefault("npcs", [])
+    if not isinstance(npcs, list):
+        return
+    for npc in npcs:
+        if isinstance(npc, dict) and str(npc.get("id") or "").strip() == "tavern_runner":
+            npc["topics"] = [
+                {
+                    "id": "verevin_stronghold",
+                    "text": (
+                        f"{SOCIAL_VEREVIN_MARKER} House Verevin keeps a walled manor past the old trading crossroads—"
+                        "same line travelers use toward the milestone."
+                    ),
+                    "clue_id": SOCIAL_VEREVIN_CLUE_ID,
+                    "leads_to_scene": "old_milestone",
+                }
+            ]
+            break
+    storage.save_world(world)
 
 
 def _setup_frontier_patrol_lead_scene(tmp_path: Path, monkeypatch: Any) -> None:
@@ -271,3 +305,81 @@ def test_transcript_lead_surfaces_actionable_travel_and_persists_consequence(tmp
 
     # Smoke: transcript harness fields remain usable for debugging regressions.
     assert all(s.get("scene_id") for s in snaps)
+
+
+def test_transcript_social_reveal_lands_structured_markers_and_survives_followup(tmp_path: Path, monkeypatch: Any) -> None:
+    """After NPC reveals Verevin/crossroads-style info, structured state + journal/event; follow-up turn keeps clue id."""
+    _setup_frontier_social_verevin_topic(tmp_path, monkeypatch)
+
+    idx = {"n": 0}
+    filler = _gm_ok("The world", "Rain drums the cobbles; the gate crowd shifts.")
+
+    def call_gpt(_messages: list[dict[str, str]]) -> dict[str, Any]:
+        i = idx["n"]
+        idx["n"] += 1
+        if i == 0:
+            return _gm_opening()
+        return filler
+
+    _patch_call_gpt(monkeypatch, call_gpt)
+
+    apply_new_campaign_hard_reset()
+    _seed_world_runner_verevin_topic()
+    storage.activate_scene("frontier_gate")
+
+    turns = [
+        "Begin.",
+        "Ask the tavern runner about House Verevin.",
+        "Where can I find their stronghold?",
+    ]
+    payloads: list[dict[str, Any]] = []
+
+    for t in turns:
+        payloads.append(chat(ChatRequest(text=t)))
+
+    sess1 = payloads[1].get("session") if isinstance(payloads[1].get("session"), dict) else {}
+    markers = _collect_clue_markers(sess1)
+    j1 = payloads[1].get("journal") if isinstance(payloads[1].get("journal"), dict) else {}
+    world1 = payloads[1].get("world") if isinstance(payloads[1].get("world"), dict) else {}
+    ev1 = world1.get("event_log") if isinstance(world1.get("event_log"), list) else []
+
+    structured_ok = (
+        SOCIAL_VEREVIN_CLUE_ID in markers["clue_knowledge_ids"]
+        or SOCIAL_VEREVIN_CLUE_ID in markers["runtime_discovered_clue_ids"]
+    )
+    journal_ok = SOCIAL_VEREVIN_MARKER in _journal_blob(j1)
+    event_ok = any(
+        isinstance(e, dict)
+        and e.get("type") == "social_lead_revealed"
+        and e.get("clue_id") == SOCIAL_VEREVIN_CLUE_ID
+        for e in ev1
+    )
+    rt1 = sess1.get("scene_runtime") if isinstance(sess1.get("scene_runtime"), dict) else {}
+    fg_rt = rt1.get("frontier_gate") if isinstance(rt1.get("frontier_gate"), dict) else {}
+    pending = fg_rt.get("pending_leads") if isinstance(fg_rt.get("pending_leads"), list) else []
+    pending_ok = any(
+        isinstance(p, dict) and p.get("clue_id") == SOCIAL_VEREVIN_CLUE_ID and p.get("leads_to_scene") == "old_milestone"
+        for p in pending
+    )
+
+    assert structured_ok and journal_ok and event_ok and pending_ok, (
+        f"markers={markers!r} journal_blob_has_marker={journal_ok} event_ok={event_ok} pending_ok={pending_ok}"
+    )
+
+    social_events = [
+        e
+        for e in (world1.get("event_log") or [])
+        if isinstance(e, dict)
+        and e.get("type") == "social_lead_revealed"
+        and e.get("clue_id") == SOCIAL_VEREVIN_CLUE_ID
+    ]
+    assert len(social_events) == 1
+
+    # Follow-up: clue remains in saved session (no reliance on prose-only memory).
+    sess2 = payloads[2].get("session") if isinstance(payloads[2].get("session"), dict) else {}
+    markers2 = _collect_clue_markers(sess2)
+    assert SOCIAL_VEREVIN_CLUE_ID in markers2["clue_knowledge_ids"] or SOCIAL_VEREVIN_CLUE_ID in markers2["runtime_discovered_clue_ids"]
+
+    stored = storage.load_session()
+    markers_disk = _collect_clue_markers(stored)
+    assert SOCIAL_VEREVIN_CLUE_ID in markers_disk["clue_knowledge_ids"] or SOCIAL_VEREVIN_CLUE_ID in markers_disk["runtime_discovered_clue_ids"]

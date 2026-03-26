@@ -4,17 +4,17 @@
     "frontier_gate"
   ],
   "current_date": "Day 1",
-  "turn_counter": 4,
+  "turn_counter": 6,
   "response_mode": "standard",
   "clocks": {
     "suspicion": 0,
     "unrest": 0,
     "danger": 0,
     "occult_instability": 0,
-    "time_pressure": 4
+    "time_pressure": 6
   },
   "interaction_context": {
-    "active_interaction_target_id": "guard_captain",
+    "active_interaction_target_id": "tavern_runner",
     "active_interaction_kind": "social",
     "interaction_mode": "social",
     "engagement_level": "engaged",
@@ -25,76 +25,122 @@
     "active_scene_id": "frontier_gate",
     "active_entities": [
       "guard_captain",
-      "tavern_runner"
+      "tavern_runner",
+      "refugee",
+      "threadbare_watcher"
     ],
     "entity_presence": {
       "guard_captain": "active",
       "tavern_runner": "active"
     },
-    "current_interlocutor": "guard_captain"
+    "current_interlocutor": "tavern_runner"
   },
   "scene_runtime": {
     "frontier_gate": {
-      "discovered_clues": [],
-      "discovered_clue_ids": [],
+      "discovered_clues": [
+        "Hot stew and rumors for coin."
+      ],
+      "discovered_clue_ids": [
+        "social_frontier_gate_tavern_runner_stew"
+      ],
       "pending_leads": [],
       "revealed_hidden_facts": [],
       "suspicion_flags": [],
       "searched_targets": [],
       "resolved_interactables": [],
-      "last_exploration_action_key": "question_guard_captain",
+      "last_exploration_action_key": "im_not_asking_about_secrets_but_their_pu",
       "repeated_action_count": 1,
-      "last_resolution_kind": "question",
-      "last_description_hash": "dce5081154c62421da88e043d753a3b6",
+      "last_resolution_kind": "interact",
+      "last_description_hash": "65ab8dc7a266c72520ec25002d5d881b",
       "consumed_action_ids": [],
-      "momentum_exchanges_since": 0,
-      "momentum_next_due_in": 2,
+      "momentum_exchanges_since": 2,
+      "momentum_next_due_in": 3,
       "momentum_last_kind": "new_information",
       "passive_action_streak": 0,
       "recent_player_actions": [
         {
-          "text": "Begin.",
-          "passive": false,
-          "markers": [],
-          "resolution_kind": null,
-          "turn": 1
-        },
-        {
-          "text": "Galinor approaches one of the stern looking guards. \"You, watchman. Where is your Captain?\"",
-          "passive": true,
-          "markers": [
-            "watch"
-          ],
-          "resolution_kind": null,
-          "turn": 2
-        },
-        {
-          "text": "Galinor approaches one of the countless refuguees. \"Stranger, do you know anything about the missing patrol? I've heard rumor about?\"",
+          "text": "\"Who attacked the patrol?\"",
           "passive": false,
           "markers": [],
           "resolution_kind": null,
           "turn": 3
         },
         {
-          "text": "Galinor returns to the guard he originally approached. \"Are you saying your Captain has gone missing?\"",
+          "text": "Galinor shifts, moving to one of the nearby guards. \"Watchmen, have you heard of this missing patrol? Who is believed to have attacked them?\"",
+          "passive": true,
+          "markers": [
+            "watch"
+          ],
+          "resolution_kind": null,
+          "turn": 4
+        },
+        {
+          "text": "\"Runner, what is house Verevin's dominion in this city?\"",
           "passive": false,
           "markers": [],
           "resolution_kind": null,
-          "turn": 4
+          "turn": 5
+        },
+        {
+          "text": "\"I'm not asking about secrets, but their public business. Do they maintain power through birthright, trade, or military might?\"",
+          "passive": false,
+          "markers": [],
+          "resolution_kind": null,
+          "turn": 6
         }
       ],
-      "last_player_action_text": "Galinor returns to the guard he originally approached. \"Are you saying your Captain has gone missing?\"",
+      "last_player_action_text": "\"I'm not asking about secrets, but their public business. Do they maintain power through birthright, trade, or military might?\"",
       "last_player_action_passive": false,
       "recent_contextual_leads": [
         {
-          "key": "active_event_amidst_the_masses_a_figure_in_threadbare_clothes",
+          "key": "active_event_you_might_want_to_speak_with_some_of_the_guards_or_catch_the_crier_when_she_s_free_for_more_details_he_sets_to_work_ladling_out_the_stew_steam_rising_into_the_damp_air",
           "kind": "active_event",
-          "subject": "amidst the masses, a figure in threadbare clothes",
+          "subject": "you might want to speak with some of the guards or catch the crier when she\u2019s free for more details.\" he sets to work ladling out the stew, steam rising into the damp air",
           "position": "",
           "named": false,
           "positioned": false,
           "mentions": 1,
-          "last_turn": 1
+          "last_turn": 2
+        },
+        {
+          "key": "active_event_missing_patrol_rumor",
+          "kind": "active_event",
+          "subject": "missing patrol rumor",
+          "position": "",
+          "named": false,
+          "positioned": false,
+          "mentions": 2,
+          "last_turn": 3
+        },
+        {
+          "key": "active_event_tavern_runner_raises_an_eyebrow_wiping_his_hands_on_his_apron",
+          "kind": "active_event",
+          "subject": "tavern runner raises an eyebrow, wiping his hands on his apron",
+          "position": "",
+          "named": false,
+          "positioned": false,
+          "mentions": 1,
+          "last_turn": 5
+        },
+        {
+          "key": "active_event_if_you_want_to_know_more_youll_need_to_tread_carefully_they_dont_like_strangers_asking_too_many_questions_he_gestures_towards_a_steaming_bowl_of_stew_before_adding_perhaps_a_bit_of_their_favor_could_shed_more_light",
+          "kind": "active_event",
+          "subject": "if you want to know more, you'll need to tread carefully; they don't like strangers asking too many questions.\" he gestures towards a steaming bowl of stew before adding, \"perhaps a bit of their favor could shed more light?\"",
+          "position": "",
+          "named": false,
+          "positioned": false,
+          "mentions": 1,
+          "last_turn": 5
+        },
+        {
+          "key": "active_event_tavern_runner_leans_in_slightly_sensing_your_deeper_interest",
+          "kind": "active_event",
+          "subject": "tavern runner leans in slightly, sensing your deeper interest",
+          "position": "",
+          "named": false,
+          "positioned": false,
+          "mentions": 1,
+          "last_turn": 6
         },
         {
           "key": "scene_npc_tavern_runner",
@@ -103,146 +149,99 @@
           "position": "",
           "named": true,
           "positioned": false,
-          "mentions": 1,
-          "last_turn": 1
-        },
-        {
-          "key": "active_event_guard_jerks_his_chin_toward_the_notice_board_and_says_i_cant_tell_you_where_the_captain_is_but_you_might_find_the_missing_patrol_notice_there",
-          "kind": "active_event",
-          "subject": "guard jerks his chin toward the notice board and says, \"i can't tell you where the captain is, but you might find the missing patrol notice there",
-          "position": "",
-          "named": false,
-          "positioned": false,
-          "mentions": 1,
-          "last_turn": 2
-        },
-        {
-          "key": "notice_board_missing_patrol_notice",
-          "kind": "notice_board",
-          "subject": "missing patrol notice",
-          "position": "",
-          "named": false,
-          "positioned": false,
-          "mentions": 1,
-          "last_turn": 2
-        },
-        {
-          "key": "notice_board_notice_board",
-          "kind": "notice_board",
-          "subject": "notice board",
-          "position": "",
-          "named": false,
-          "positioned": false,
-          "mentions": 2,
-          "last_turn": 3
-        },
-        {
-          "key": "active_event_guard_captain_nods_once",
-          "kind": "active_event",
-          "subject": "guard captain nods once",
-          "position": "",
-          "named": false,
-          "positioned": false,
-          "mentions": 1,
-          "last_turn": 4
+          "mentions": 4,
+          "last_turn": 6
         }
       ],
       "topic_pressure": {
-        "topic:approach_captain_galinor": {
-          "repeat_count": 1,
+        "responsible_party": {
+          "repeat_count": 3,
           "low_progress_streak": 0,
-          "progress_score_total": 3.8,
-          "last_answer": "Guard Captain nods once. \"Old Millstone. South road.\"",
-          "last_turn": 4,
-          "speaker_targets": {
-            "__scene__": {
-              "repeat_count": 1,
-              "low_progress_streak": 0,
-              "patience": 3,
-              "last_turn": 2
-            },
-            "guard_captain": {
-              "repeat_count": 1,
-              "low_progress_streak": 0,
-              "patience": 3,
-              "last_turn": 4
-            }
-          },
-          "last_player_input": "Galinor returns to the guard he originally approached. \"Are you saying your Captain has gone missing?\""
-        },
-        "missing_patrol": {
-          "repeat_count": 0,
-          "low_progress_streak": 0,
-          "progress_score_total": 1.5,
-          "last_answer": "A notice board lists new taxes, curfews, and a posted warning about a missing patrol.",
-          "last_turn": 3,
+          "progress_score_total": 5.4,
+          "last_answer": "The tavern runner leans in slightly, sensing your deeper interest. \"House Verevin? They\u2019ve held power through a blend of trade and military might, especially over these eastern routes. Their birthright matters little against the gilded sword of coin and influence. You'll find their reach extends into various trades, and they often employ mercenaries to enforce their will.\" He pauses, eyeing the crowd. \"But I\u2019ll tell you this: their grip is being tested. If you want to know mo",
+          "last_turn": 6,
           "speaker_targets": {
             "__scene__": {
               "repeat_count": 1,
               "low_progress_streak": 0,
               "patience": 3,
               "last_turn": 3
+            },
+            "tavern_runner": {
+              "repeat_count": 2,
+              "low_progress_streak": 0,
+              "patience": 3,
+              "last_turn": 6
             }
           },
-          "last_player_input": "Galinor approaches one of the countless refuguees. \"Stranger, do you know anything about the missing patrol? I've heard rumor about?\""
+          "last_player_input": "I'm not asking about secrets, but their public business. Do they maintain power through birthright, trade, or military might?"
         }
       },
-      "topic_pressure_last_topic_key": "topic:approach_captain_galinor",
+      "topic_pressure_last_topic_key": "responsible_party",
       "topic_pressure_current": {
-        "topic_key": "topic:approach_captain_galinor",
-        "speaker_key": "guard_captain",
-        "turn": 4,
-        "player_text": "Galinor returns to the guard he originally approached. \"Are you saying your Captain has gone missing?\"",
+        "topic_key": "responsible_party",
+        "speaker_key": "tavern_runner",
+        "turn": 6,
+        "player_text": "I'm not asking about secrets, but their public business. Do they maintain power through birthright, trade, or military might?",
         "interaction_kind": "social",
         "interaction_mode": "social",
-        "social_intent_class": "social_exchange",
+        "social_intent_class": "",
         "npc_name": ""
       }
     }
   },
-  "clue_knowledge": {},
-  "npc_runtime": {},
+  "clue_knowledge": {
+    "social_frontier_gate_tavern_runner_stew": {
+      "state": "discovered",
+      "source_scene": "frontier_gate",
+      "presentation": "explicit",
+      "text": "Hot stew and rumors for coin."
+    }
+  },
+  "npc_runtime": {
+    "tavern_runner": {
+      "attitude": 0,
+      "trust": 1,
+      "fear": 0,
+      "suspicion": 0,
+      "known_topics": [],
+      "revealed_topics": [
+        "stew"
+      ],
+      "last_interaction_turn": 5
+    }
+  },
   "last_action_debug": {
     "last_action_type": "chat",
-    "player_input": "Galinor returns to the guard he originally approached. \"Are you saying your Captain has gone missing?\"",
+    "player_input": "\"I'm not asking about secrets, but their public business. Do they maintain power through birthright, trade, or military might?\"",
     "normalized_action": {
-      "id": "question_guard_captain",
-      "label": "Galinor returns to the guard he originally approached. \"Are you saying your Captain has gone missing?\"",
-      "type": "question",
-      "prompt": "Galinor returns to the guard he originally approached. \"Are you saying your Captain has gone missing?\""
+      "id": "im_not_asking_about_secrets_but_their_pu",
+      "label": "I'm not asking about secrets, but their public business. Do they maintain power through birthright, trade, or military might?",
+      "type": "interact",
+      "targetSceneId": null,
+      "prompt": "I'm not asking about secrets, but their public business. Do they maintain power through birthright, trade, or military might?"
     },
-    "resolution_kind": "question",
+    "resolution_kind": "interact",
     "target_scene": null,
     "resolver_result": {
-      "kind": "question",
-      "action_id": "question_guard_captain",
-      "label": "Galinor returns to the guard he originally approached. \"Are you saying your Captain has gone missing?\"",
-      "prompt": "Galinor returns to the guard he originally approached. \"Are you saying your Captain has gone missing?\"",
-      "success": false,
+      "kind": "interact",
+      "action_id": "im_not_asking_about_secrets_but_their_pu",
+      "label": "I'm not asking about secrets, but their public business. Do they maintain power through birthright, trade, or military might?",
+      "prompt": "I'm not asking about secrets, but their public business. Do they maintain power through birthright, trade, or military might?",
+      "success": null,
       "resolved_transition": false,
       "target_scene_id": null,
       "clue_id": null,
       "discovered_clues": [],
       "state_changes": {},
-      "hint": "No matching NPC found in this scene. Narrate that the player's social attempt has no clear target or the intended person is not present.",
-      "social": {
-        "social_intent_class": "social_exchange",
-        "npc_id": null,
-        "npc_name": null,
-        "target_resolved": false,
-        "skill_check": null,
-        "npc_reply_expected": false,
-        "reply_kind": "reaction",
-        "offscene_target": false
-      },
-      "requires_check": false,
+      "hint": "Player is attempting social interaction or probing NPCs. Narrate the encounter or response.",
       "world_tick_events": []
     },
     "scene_transition": null
   },
   "debug_traces": [
     {
-      "timestamp": "2026-03-24T23:50:32.832759Z",
+      "timestamp": "2026-03-26T10:02:47.094492Z",
       "source": "chat",
       "action_type": "chat",
       "raw_input": "Begin.",
@@ -376,10 +375,10 @@
       "error": null
     },
     {
-      "timestamp": "2026-03-24T23:51:54.971819Z",
+      "timestamp": "2026-03-26T10:05:09.027014Z",
       "source": "chat",
       "action_type": "chat",
-      "raw_input": "Galinor approaches one of the stern looking guards. \"You, watchman. Where is your Captain?\"",
+      "raw_input": "Galinor approaches the tavern runner, handing over a palm's worth of copper pieces. \"I am weary from travel runner. Pour me a bowl of your stew. Tell me what you can about Cinderwatch.\"",
       "turn_stage_order": [
         "player_input",
         "intent_normalization_expansion",
@@ -392,62 +391,15 @@
         "response_debug_packaging"
       ],
       "incoming_payload": {
-        "text": "Galinor approaches one of the stern looking guards. \"You, watchman. Where is your Captain?\""
+        "text": "Galinor approaches the tavern runner, handing over a palm's worth of copper pieces. \"I am weary from travel runner. Pour me a bowl of your stew. Tell me what you can about Cinderwatch.\""
       },
-      "parsed_intent": {
-        "id": "question_npc",
-        "label": "Galinor approaches one of the stern looking guards. \"You, watchman. Where is your Captain?\"",
-        "type": "question",
-        "social_intent_class": "social_exchange",
-        "prompt": "Galinor approaches one of the stern looking guards. \"You, watchman. Where is your Captain?\"",
-        "metadata": {
-          "routed_via_dialogue_lock": true,
-          "route": "dialogue",
-          "turn_segmentation": {
-            "spoken_text": "You, watchman. Where is your Captain?",
-            "declared_action_text": "Galinor approaches one of the stern looking guards."
-          }
-        }
-      },
+      "parsed_intent": null,
       "segmented_turn": {
-        "spoken_text": "You, watchman. Where is your Captain?",
-        "declared_action_text": "Galinor approaches one of the stern looking guards."
+        "spoken_text": "I am weary from travel runner. Pour me a bowl of your stew. Tell me what you can about Cinderwatch.",
+        "declared_action_text": "Galinor approaches the tavern runner, handing over a palm's worth of copper pieces."
       },
-      "normalized_action": {
-        "id": "question_npc",
-        "label": "Galinor approaches one of the stern looking guards. \"You, watchman. Where is your Captain?\"",
-        "type": "question",
-        "prompt": "Galinor approaches one of the stern looking guards. \"You, watchman. Where is your Captain?\""
-      },
+      "normalized_action": null,
       "resolution": {
-        "kind": "question",
-        "action_id": "question_npc",
-        "label": "Galinor approaches one of the stern looking guards. \"You, watchman. Where is your Captain?\"",
-        "prompt": "Galinor approaches one of the stern looking guards. \"You, watchman. Where is your Captain?\"",
-        "success": false,
-        "resolved_transition": false,
-        "target_scene_id": null,
-        "clue_id": null,
-        "discovered_clues": [],
-        "state_changes": {},
-        "hint": "No matching NPC found in this scene. Narrate that the player's social attempt has no clear target or the intended person is not present.",
-        "social": {
-          "social_intent_class": "social_exchange",
-          "npc_id": null,
-          "npc_name": null,
-          "target_resolved": false,
-          "skill_check": null,
-          "npc_reply_expected": false,
-          "reply_kind": "reaction",
-          "offscene_target": false
-        },
-        "requires_check": false,
-        "metadata": {
-          "turn_segmentation": {
-            "spoken_text": "You, watchman. Where is your Captain?",
-            "declared_action_text": "Galinor approaches one of the stern looking guards."
-          }
-        },
         "world_tick_events": [
           {
             "type": "faction_pressure",
@@ -464,37 +416,14 @@
       ],
       "turn_trace": {
         "source": "chat",
-        "player_input": "Galinor approaches one of the stern looking guards. \"You, watchman. Where is your Captain?\"",
+        "player_input": "Galinor approaches the tavern runner, handing over a palm's worth of copper pieces. \"I am weary from travel runner. Pour me a bowl of your stew. Tell me what you can about Cinderwatch.\"",
         "intent": {
-          "parsed": {
-            "id": "question_npc",
-            "label": "Galinor approaches one of the stern looking guards. \"You, watchman. Where is your Captain?\"",
-            "type": "question",
-            "social_intent_class": "social_exchange",
-            "prompt": "Galinor approaches one of the stern looking guards. \"You, watchman. Where is your Captain?\"",
-            "metadata": {
-              "routed_via_dialogue_lock": true,
-              "route": "dialogue",
-              "turn_segmentation": {
-                "spoken_text": "You, watchman. Where is your Captain?",
-                "declared_action_text": "Galinor approaches one of the stern looking guards."
-              }
-            }
-          },
+          "parsed": null,
           "segmented_turn": {
-            "spoken_text": "You, watchman. Where is your Captain?",
-            "declared_action_text": "Galinor approaches one of the stern looking guards."
+            "spoken_text": "I am weary from travel runner. Pour me a bowl of your stew. Tell me what you can about Cinderwatch.",
+            "declared_action_text": "Galinor approaches the tavern runner, handing over a palm's worth of copper pieces."
           },
-          "normalized": {
-            "id": "question_npc",
-            "label": "Galinor approaches one of the stern looking guards. \"You, watchman. Where is your Captain?\"",
-            "type": "question",
-            "prompt": "Galinor approaches one of the stern looking guards. \"You, watchman. Where is your Captain?\"",
-            "targetSceneId": null,
-            "target_scene_id": null,
-            "targetEntityId": null,
-            "target_id": null
-          },
+          "normalized": null,
           "implied_context": {
             "applied": false,
             "cases": [],
@@ -503,10 +432,10 @@
         },
         "classification": {
           "action_type": "chat",
-          "resolved_kind": "question",
+          "resolved_kind": null,
           "requires_check": false
         },
-        "resolution_path": "social_engine",
+        "resolution_path": "chat_engine",
         "authoritative_state_changes": {
           "scene_transition": null,
           "resolution_state_changes": {},
@@ -515,9 +444,9 @@
         },
         "interaction_after": {
           "active_interaction_target_id": null,
-          "active_interaction_kind": "social",
-          "interaction_mode": "social",
-          "engagement_level": "engaged",
+          "active_interaction_kind": null,
+          "interaction_mode": "none",
+          "engagement_level": "none",
           "conversation_privacy": null,
           "player_position_context": null
         },
@@ -577,10 +506,10 @@
       "error": null
     },
     {
-      "timestamp": "2026-03-24T23:52:59.250842Z",
+      "timestamp": "2026-03-26T10:05:33.587226Z",
       "source": "chat",
       "action_type": "chat",
-      "raw_input": "Galinor approaches one of the countless refuguees. \"Stranger, do you know anything about the missing patrol? I've heard rumor about?\"",
+      "raw_input": "\"Who attacked the patrol?\"",
       "turn_stage_order": [
         "player_input",
         "intent_normalization_expansion",
@@ -593,62 +522,14 @@
         "response_debug_packaging"
       ],
       "incoming_payload": {
-        "text": "Galinor approaches one of the countless refuguees. \"Stranger, do you know anything about the missing patrol? I've heard rumor about?\""
+        "text": "\"Who attacked the patrol?\""
       },
-      "parsed_intent": {
-        "id": "question_npc",
-        "label": "Galinor approaches one of the countless refuguees. \"Stranger, do you know anything about the missing patrol? I've heard rumor about?\"",
-        "type": "question",
-        "social_intent_class": "social_exchange",
-        "prompt": "Galinor approaches one of the countless refuguees. \"Stranger, do you know anything about the missing patrol? I've heard rumor about?\"",
-        "metadata": {
-          "routed_via_dialogue_lock": true,
-          "route": "dialogue",
-          "turn_segmentation": {
-            "spoken_text": "Stranger, do you know anything about the missing patrol? I've heard rumor about?",
-            "declared_action_text": "Galinor approaches one of the countless refuguees."
-          }
-        }
-      },
+      "parsed_intent": null,
       "segmented_turn": {
-        "spoken_text": "Stranger, do you know anything about the missing patrol? I've heard rumor about?",
-        "declared_action_text": "Galinor approaches one of the countless refuguees."
+        "spoken_text": "Who attacked the patrol?"
       },
-      "normalized_action": {
-        "id": "question_npc",
-        "label": "Galinor approaches one of the countless refuguees. \"Stranger, do you know anything about the missing patrol? I've heard rumor about?\"",
-        "type": "question",
-        "prompt": "Galinor approaches one of the countless refuguees. \"Stranger, do you know anything about the missing patrol? I've heard rumor about?\""
-      },
+      "normalized_action": null,
       "resolution": {
-        "kind": "question",
-        "action_id": "question_npc",
-        "label": "Galinor approaches one of the countless refuguees. \"Stranger, do you know anything about the missing patrol? I've heard rumor about?\"",
-        "prompt": "Galinor approaches one of the countless refuguees. \"Stranger, do you know anything about the missing patrol? I've heard rumor about?\"",
-        "success": false,
-        "resolved_transition": false,
-        "target_scene_id": null,
-        "clue_id": null,
-        "discovered_clues": [],
-        "state_changes": {},
-        "hint": "No matching NPC found in this scene. Narrate that the player's social attempt has no clear target or the intended person is not present.",
-        "social": {
-          "social_intent_class": "social_exchange",
-          "npc_id": null,
-          "npc_name": null,
-          "target_resolved": false,
-          "skill_check": null,
-          "npc_reply_expected": false,
-          "reply_kind": "reaction",
-          "offscene_target": false
-        },
-        "requires_check": false,
-        "metadata": {
-          "turn_segmentation": {
-            "spoken_text": "Stranger, do you know anything about the missing patrol? I've heard rumor about?",
-            "declared_action_text": "Galinor approaches one of the countless refuguees."
-          }
-        },
         "world_tick_events": []
       },
       "scene_before": "frontier_gate",
@@ -659,37 +540,13 @@
       ],
       "turn_trace": {
         "source": "chat",
-        "player_input": "Galinor approaches one of the countless refuguees. \"Stranger, do you know anything about the missing patrol? I've heard rumor about?\"",
+        "player_input": "\"Who attacked the patrol?\"",
         "intent": {
-          "parsed": {
-            "id": "question_npc",
-            "label": "Galinor approaches one of the countless refuguees. \"Stranger, do you know anything about the missing patrol? I've heard rumor about?\"",
-            "type": "question",
-            "social_intent_class": "social_exchange",
-            "prompt": "Galinor approaches one of the countless refuguees. \"Stranger, do you know anything about the missing patrol? I've heard rumor about?\"",
-            "metadata": {
-              "routed_via_dialogue_lock": true,
-              "route": "dialogue",
-              "turn_segmentation": {
-                "spoken_text": "Stranger, do you know anything about the missing patrol? I've heard rumor about?",
-                "declared_action_text": "Galinor approaches one of the countless refuguees."
-              }
-            }
-          },
+          "parsed": null,
           "segmented_turn": {
-            "spoken_text": "Stranger, do you know anything about the missing patrol? I've heard rumor about?",
-            "declared_action_text": "Galinor approaches one of the countless refuguees."
+            "spoken_text": "Who attacked the patrol?"
           },
-          "normalized": {
-            "id": "question_npc",
-            "label": "Galinor approaches one of the countless refuguees. \"Stranger, do you know anything about the missing patrol? I've heard rumor about?\"",
-            "type": "question",
-            "prompt": "Galinor approaches one of the countless refuguees. \"Stranger, do you know anything about the missing patrol? I've heard rumor about?\"",
-            "targetSceneId": null,
-            "target_scene_id": null,
-            "targetEntityId": null,
-            "target_id": null
-          },
+          "normalized": null,
           "implied_context": {
             "applied": false,
             "cases": [],
@@ -698,10 +555,10 @@
         },
         "classification": {
           "action_type": "chat",
-          "resolved_kind": "question",
+          "resolved_kind": null,
           "requires_check": false
         },
-        "resolution_path": "social_engine",
+        "resolution_path": "chat_engine",
         "authoritative_state_changes": {
           "scene_transition": null,
           "resolution_state_changes": {},
@@ -710,9 +567,9 @@
         },
         "interaction_after": {
           "active_interaction_target_id": null,
-          "active_interaction_kind": "social",
-          "interaction_mode": "social",
-          "engagement_level": "engaged",
+          "active_interaction_kind": null,
+          "interaction_mode": "none",
+          "engagement_level": "none",
           "conversation_privacy": null,
           "player_position_context": null
         },
@@ -772,10 +629,10 @@
       "error": null
     },
     {
-      "timestamp": "2026-03-24T23:53:44.422183Z",
+      "timestamp": "2026-03-26T10:06:51.752293Z",
       "source": "chat",
       "action_type": "chat",
-      "raw_input": "Galinor returns to the guard he originally approached. \"Are you saying your Captain has gone missing?\"",
+      "raw_input": "Galinor shifts, moving to one of the nearby guards. \"Watchmen, have you heard of this missing patrol? Who is believed to have attacked them?\"",
       "turn_stage_order": [
         "player_input",
         "intent_normalization_expansion",
@@ -788,63 +645,44 @@
         "response_debug_packaging"
       ],
       "incoming_payload": {
-        "text": "Galinor returns to the guard he originally approached. \"Are you saying your Captain has gone missing?\""
+        "text": "Galinor shifts, moving to one of the nearby guards. \"Watchmen, have you heard of this missing patrol? Who is believed to have attacked them?\""
       },
-      "parsed_intent": {
-        "id": "question_guard_captain",
-        "label": "Galinor returns to the guard he originally approached. \"Are you saying your Captain has gone missing?\"",
-        "type": "question",
-        "social_intent_class": "social_exchange",
-        "prompt": "Galinor returns to the guard he originally approached. \"Are you saying your Captain has gone missing?\"",
-        "metadata": {
-          "routed_via_dialogue_lock": true,
-          "route": "dialogue",
-          "active_interaction_target_id": "guard_captain",
-          "turn_segmentation": {
-            "spoken_text": "Are you saying your Captain has gone missing?",
-            "declared_action_text": "Galinor returns to the guard he originally approached."
-          }
-        },
-        "target_id": "guard_captain",
-        "targetEntityId": "guard_captain"
-      },
+      "parsed_intent": null,
       "segmented_turn": {
-        "spoken_text": "Are you saying your Captain has gone missing?",
-        "declared_action_text": "Galinor returns to the guard he originally approached."
+        "spoken_text": "Watchmen, have you heard of this missing patrol? Who is believed to have attacked them?",
+        "declared_action_text": "Galinor shifts, moving to one of the nearby guards."
       },
-      "normalized_action": {
-        "id": "question_guard_captain",
-        "label": "Galinor returns to the guard he originally approached. \"Are you saying your Captain has gone missing?\"",
-        "type": "question",
-        "prompt": "Galinor returns to the guard he originally approached. \"Are you saying your Captain has gone missing?\""
-      },
+      "normalized_action": null,
       "resolution": {
-        "kind": "question",
-        "action_id": "question_guard_captain",
-        "label": "Galinor returns to the guard he originally approached. \"Are you saying your Captain has gone missing?\"",
-        "prompt": "Galinor returns to the guard he originally approached. \"Are you saying your Captain has gone missing?\"",
-        "success": false,
+        "kind": "adjudication_query",
+        "action_id": "adjudication_query",
+        "label": "Galinor shifts, moving to one of the nearby guards. \"Watchmen, have you heard of this missing patrol? Who is believed to have attacked them?\"",
+        "prompt": "Galinor shifts, moving to one of the nearby guards. \"Watchmen, have you heard of this missing patrol? Who is believed to have attacked them?\"",
+        "success": null,
         "resolved_transition": false,
         "target_scene_id": null,
         "clue_id": null,
         "discovered_clues": [],
         "state_changes": {},
-        "hint": "No matching NPC found in this scene. Narrate that the player's social attempt has no clear target or the intended person is not present.",
-        "social": {
-          "social_intent_class": "social_exchange",
-          "npc_id": null,
-          "npc_name": null,
-          "target_resolved": false,
-          "skill_check": null,
-          "npc_reply_expected": false,
-          "reply_kind": "reaction",
-          "offscene_target": false
+        "hint": "",
+        "adjudication": {
+          "category": "perception_query",
+          "answer_type": "direct_answer",
+          "requires_check": false,
+          "check_request": null
         },
         "requires_check": false,
+        "check_request": null,
         "metadata": {
           "turn_segmentation": {
-            "spoken_text": "Are you saying your Captain has gone missing?",
-            "declared_action_text": "Galinor returns to the guard he originally approached."
+            "spoken_text": "Watchmen, have you heard of this missing patrol? Who is believed to have attacked them?",
+            "declared_action_text": "Galinor shifts, moving to one of the nearby guards."
+          },
+          "intent_route_debug": {
+            "routed_to": "adjudication_query",
+            "route_reason": "procedural_perception_query",
+            "addressed_actor_id": null,
+            "addressed_actor_source": null
           }
         },
         "world_tick_events": []
@@ -857,39 +695,274 @@
       ],
       "turn_trace": {
         "source": "chat",
-        "player_input": "Galinor returns to the guard he originally approached. \"Are you saying your Captain has gone missing?\"",
+        "player_input": "Galinor shifts, moving to one of the nearby guards. \"Watchmen, have you heard of this missing patrol? Who is believed to have attacked them?\"",
+        "intent": {
+          "parsed": null,
+          "segmented_turn": {
+            "spoken_text": "Watchmen, have you heard of this missing patrol? Who is believed to have attacked them?",
+            "declared_action_text": "Galinor shifts, moving to one of the nearby guards."
+          },
+          "normalized": null,
+          "implied_context": {
+            "applied": false,
+            "cases": [],
+            "target_id": null
+          }
+        },
+        "classification": {
+          "action_type": "chat",
+          "resolved_kind": "adjudication_query",
+          "requires_check": false
+        },
+        "resolution_path": "adjudication_engine",
+        "authoritative_state_changes": {
+          "scene_transition": null,
+          "resolution_state_changes": {},
+          "resolution_world_updates": [],
+          "check_request": null
+        },
+        "interaction_after": {
+          "active_interaction_target_id": null,
+          "active_interaction_kind": null,
+          "interaction_mode": "none",
+          "engagement_level": "none",
+          "conversation_privacy": null,
+          "player_position_context": null
+        },
+        "narration_obligations": {
+          "is_opening_scene": false,
+          "must_advance_scene": false,
+          "should_answer_active_npc": false,
+          "avoid_input_echo": true,
+          "avoid_player_action_restatement": true,
+          "prefer_structured_turn_summary": true,
+          "active_npc_reply_expected": false,
+          "active_npc_reply_kind": null,
+          "scene_momentum_due": false,
+          "scene_momentum_exchanges_since": 0,
+          "scene_momentum_next_due_in": 2,
+          "suppress_non_social_emitters": false
+        },
+        "clues": {
+          "discovered_texts": [],
+          "presentation_changes": [],
+          "known_counts": {
+            "implicit": 0,
+            "explicit": 0,
+            "actionable": 0
+          }
+        },
+        "affordances_after": [
+          {
+            "id": "examine_the_rain_spatters_soot_dark_stone_frayed",
+            "type": "investigate",
+            "label": "Examine the Rain spatters soot-dark stone; frayed"
+          },
+          {
+            "id": "examine_refugees",
+            "type": "investigate",
+            "label": "Examine Refugees"
+          },
+          {
+            "id": "examine_a_notice_board_lists_new_taxes",
+            "type": "investigate",
+            "label": "Examine A notice board lists new taxes"
+          },
+          {
+            "id": "talk_to_a_tavern_runner_shouts_offers_of_hot",
+            "type": "investigate",
+            "label": "Talk to A tavern runner shouts offers of hot"
+          },
+          {
+            "id": "examine_a_well_appointed_townhouse_overlookin",
+            "type": "investigate",
+            "label": "Examine A well-appointed townhouse overlookin"
+          }
+        ]
+      },
+      "gpt_called": false,
+      "response_ok": true,
+      "error": null
+    },
+    {
+      "timestamp": "2026-03-26T10:07:26.502272Z",
+      "source": "chat",
+      "action_type": "chat",
+      "raw_input": "\"Runner, what is house Verevin's dominion in this city?\"",
+      "turn_stage_order": [
+        "player_input",
+        "intent_normalization_expansion",
+        "action_classification",
+        "engine_resolution",
+        "authoritative_state_mutation",
+        "prompt_context_construction",
+        "gpt_narration",
+        "affordance_derivation",
+        "response_debug_packaging"
+      ],
+      "incoming_payload": {
+        "text": "\"Runner, what is house Verevin's dominion in this city?\""
+      },
+      "parsed_intent": {
+        "id": "question_tavern_runner",
+        "label": "\"Runner, what is house Verevin's dominion in this city?\"",
+        "type": "question",
+        "social_intent_class": "social_exchange",
+        "prompt": "\"Runner, what is house Verevin's dominion in this city?\"",
+        "metadata": {
+          "routed_via_dialogue_lock": true,
+          "route": "dialogue",
+          "intent_route_debug": {
+            "routed_to": "social_exchange",
+            "route_reason": "active_interlocutor_followup",
+            "addressed_actor_id": "tavern_runner",
+            "addressed_actor_source": "active_interlocutor"
+          },
+          "active_interaction_target_id": "tavern_runner",
+          "turn_segmentation": {
+            "spoken_text": "Runner, what is house Verevin's dominion in this city?"
+          }
+        },
+        "target_id": "tavern_runner",
+        "targetEntityId": "tavern_runner"
+      },
+      "segmented_turn": {
+        "spoken_text": "Runner, what is house Verevin's dominion in this city?"
+      },
+      "normalized_action": {
+        "id": "question_tavern_runner",
+        "label": "\"Runner, what is house Verevin's dominion in this city?\"",
+        "type": "question",
+        "prompt": "\"Runner, what is house Verevin's dominion in this city?\""
+      },
+      "resolution": {
+        "kind": "question",
+        "action_id": "question_tavern_runner",
+        "label": "\"Runner, what is house Verevin's dominion in this city?\"",
+        "prompt": "\"Runner, what is house Verevin's dominion in this city?\"",
+        "success": true,
+        "resolved_transition": false,
+        "target_scene_id": null,
+        "clue_id": null,
+        "discovered_clues": [
+          "Hot stew and rumors for coin."
+        ],
+        "state_changes": {
+          "topic_revealed": true,
+          "npc_id": "tavern_runner"
+        },
+        "hint": "Player questioned Tavern Runner and learned: Hot stew and rumors for coin.. Narrate the revelation.",
+        "social": {
+          "social_intent_class": "social_exchange",
+          "npc_id": "tavern_runner",
+          "npc_name": "Tavern Runner",
+          "target_resolved": true,
+          "topic_revealed": {
+            "id": "stew",
+            "text": "Hot stew and rumors for coin.",
+            "clue_id": null,
+            "clue_text": null
+          },
+          "skill_check": null,
+          "npc_reply_expected": true,
+          "reply_kind": "answer",
+          "target_source": "explicit_target",
+          "target_reason": "normalized target_id matches scene-addressable roster",
+          "target_candidate_id": "tavern_runner",
+          "target_candidate_valid": true
+        },
+        "requires_check": false,
+        "metadata": {
+          "routed_via_dialogue_lock": true,
+          "route": "dialogue",
+          "intent_route_debug": {
+            "routed_to": "social_exchange",
+            "route_reason": "active_interlocutor_followup",
+            "addressed_actor_id": "tavern_runner",
+            "addressed_actor_source": "active_interlocutor"
+          },
+          "active_interaction_target_id": "tavern_runner",
+          "turn_segmentation": {
+            "spoken_text": "Runner, what is house Verevin's dominion in this city?"
+          },
+          "lead_landing": {
+            "revealed_lead_ids": [
+              "social_frontier_gate_tavern_runner_stew"
+            ],
+            "already_known_lead_ids": [],
+            "actionable_lead_ids": [],
+            "lead_write_targets": [
+              "clue_knowledge",
+              "scene_runtime.discovered_clue_ids",
+              "event_log"
+            ]
+          }
+        },
+        "world_tick_events": [
+          {
+            "type": "faction_operation_complete",
+            "text": "House Verevin completes an off-screen operation.",
+            "source": "house_verevin"
+          },
+          {
+            "type": "faction_operation_complete",
+            "text": "The Ash Cowl completes an off-screen operation.",
+            "source": "ash_cowl"
+          },
+          {
+            "type": "faction_operation_complete",
+            "text": "Ordo Pyric completes an off-screen operation.",
+            "source": "ordo_pyric"
+          }
+        ]
+      },
+      "scene_before": "frontier_gate",
+      "scene_after": "frontier_gate",
+      "clue_updates": [
+        "Hot stew and rumors for coin."
+      ],
+      "world_flag_updates": [
+        "clock:time_pressure=5"
+      ],
+      "turn_trace": {
+        "source": "chat",
+        "player_input": "\"Runner, what is house Verevin's dominion in this city?\"",
         "intent": {
           "parsed": {
-            "id": "question_guard_captain",
-            "label": "Galinor returns to the guard he originally approached. \"Are you saying your Captain has gone missing?\"",
+            "id": "question_tavern_runner",
+            "label": "\"Runner, what is house Verevin's dominion in this city?\"",
             "type": "question",
             "social_intent_class": "social_exchange",
-            "prompt": "Galinor returns to the guard he originally approached. \"Are you saying your Captain has gone missing?\"",
+            "prompt": "\"Runner, what is house Verevin's dominion in this city?\"",
             "metadata": {
               "routed_via_dialogue_lock": true,
               "route": "dialogue",
-              "active_interaction_target_id": "guard_captain",
+              "intent_route_debug": {
+                "routed_to": "social_exchange",
+                "route_reason": "active_interlocutor_followup",
+                "addressed_actor_id": "tavern_runner",
+                "addressed_actor_source": "active_interlocutor"
+              },
+              "active_interaction_target_id": "tavern_runner",
               "turn_segmentation": {
-                "spoken_text": "Are you saying your Captain has gone missing?",
-                "declared_action_text": "Galinor returns to the guard he originally approached."
+                "spoken_text": "Runner, what is house Verevin's dominion in this city?"
               }
             },
-            "target_id": "guard_captain",
-            "targetEntityId": "guard_captain"
+            "target_id": "tavern_runner",
+            "targetEntityId": "tavern_runner"
           },
           "segmented_turn": {
-            "spoken_text": "Are you saying your Captain has gone missing?",
-            "declared_action_text": "Galinor returns to the guard he originally approached."
+            "spoken_text": "Runner, what is house Verevin's dominion in this city?"
           },
           "normalized": {
-            "id": "question_guard_captain",
-            "label": "Galinor returns to the guard he originally approached. \"Are you saying your Captain has gone missing?\"",
+            "id": "question_tavern_runner",
+            "label": "\"Runner, what is house Verevin's dominion in this city?\"",
             "type": "question",
-            "prompt": "Galinor returns to the guard he originally approached. \"Are you saying your Captain has gone missing?\"",
+            "prompt": "\"Runner, what is house Verevin's dominion in this city?\"",
             "targetSceneId": null,
             "target_scene_id": null,
-            "targetEntityId": "guard_captain",
-            "target_id": "guard_captain"
+            "targetEntityId": "tavern_runner",
+            "target_id": "tavern_runner"
           },
           "implied_context": {
             "applied": false,
@@ -905,12 +978,197 @@
         "resolution_path": "social_engine",
         "authoritative_state_changes": {
           "scene_transition": null,
+          "resolution_state_changes": {
+            "topic_revealed": true,
+            "npc_id": "tavern_runner"
+          },
+          "resolution_world_updates": [],
+          "check_request": null
+        },
+        "interaction_after": {
+          "active_interaction_target_id": "tavern_runner",
+          "active_interaction_kind": "social",
+          "interaction_mode": "social",
+          "engagement_level": "engaged",
+          "conversation_privacy": null,
+          "player_position_context": null
+        },
+        "narration_obligations": {
+          "is_opening_scene": false,
+          "must_advance_scene": false,
+          "should_answer_active_npc": true,
+          "avoid_input_echo": true,
+          "avoid_player_action_restatement": true,
+          "prefer_structured_turn_summary": true,
+          "active_npc_reply_expected": true,
+          "active_npc_reply_kind": "answer",
+          "scene_momentum_due": false,
+          "scene_momentum_exchanges_since": 0,
+          "scene_momentum_next_due_in": 2,
+          "suppress_non_social_emitters": true
+        },
+        "clues": {
+          "discovered_texts": [
+            "Hot stew and rumors for coin."
+          ],
+          "presentation_changes": [
+            {
+              "id": "social_frontier_gate_tavern_runner_stew",
+              "from": null,
+              "to": "explicit"
+            }
+          ],
+          "known_counts": {
+            "implicit": 0,
+            "explicit": 1,
+            "actionable": 0
+          }
+        },
+        "affordances_after": [
+          {
+            "id": "examine_the_rain_spatters_soot_dark_stone_frayed",
+            "type": "investigate",
+            "label": "Examine the Rain spatters soot-dark stone; frayed"
+          },
+          {
+            "id": "examine_refugees",
+            "type": "investigate",
+            "label": "Examine Refugees"
+          },
+          {
+            "id": "examine_a_notice_board_lists_new_taxes",
+            "type": "investigate",
+            "label": "Examine A notice board lists new taxes"
+          },
+          {
+            "id": "talk_to_a_tavern_runner_shouts_offers_of_hot",
+            "type": "investigate",
+            "label": "Talk to A tavern runner shouts offers of hot"
+          },
+          {
+            "id": "examine_a_well_appointed_townhouse_overlookin",
+            "type": "investigate",
+            "label": "Examine A well-appointed townhouse overlookin"
+          }
+        ]
+      },
+      "gpt_called": true,
+      "response_ok": true,
+      "error": null
+    },
+    {
+      "timestamp": "2026-03-26T10:08:58.288174Z",
+      "source": "chat",
+      "action_type": "chat",
+      "raw_input": "\"I'm not asking about secrets, but their public business. Do they maintain power through birthright, trade, or military might?\"",
+      "turn_stage_order": [
+        "player_input",
+        "intent_normalization_expansion",
+        "action_classification",
+        "engine_resolution",
+        "authoritative_state_mutation",
+        "prompt_context_construction",
+        "gpt_narration",
+        "affordance_derivation",
+        "response_debug_packaging"
+      ],
+      "incoming_payload": {
+        "text": "\"I'm not asking about secrets, but their public business. Do they maintain power through birthright, trade, or military might?\""
+      },
+      "parsed_intent": {
+        "id": "im_not_asking_about_secrets_but_their_pu",
+        "label": "I'm not asking about secrets, but their public business. Do they maintain power through birthright, trade, or military might?",
+        "type": "interact",
+        "prompt": "I'm not asking about secrets, but their public business. Do they maintain power through birthright, trade, or military might?",
+        "targetSceneId": null,
+        "target_scene_id": null,
+        "metadata": {
+          "intent": "conversation"
+        }
+      },
+      "segmented_turn": {
+        "spoken_text": "I'm not asking about secrets, but their public business. Do they maintain power through birthright, trade, or military might?"
+      },
+      "normalized_action": {
+        "id": "im_not_asking_about_secrets_but_their_pu",
+        "label": "I'm not asking about secrets, but their public business. Do they maintain power through birthright, trade, or military might?",
+        "type": "interact",
+        "prompt": "I'm not asking about secrets, but their public business. Do they maintain power through birthright, trade, or military might?",
+        "targetSceneId": null
+      },
+      "resolution": {
+        "kind": "interact",
+        "action_id": "im_not_asking_about_secrets_but_their_pu",
+        "label": "I'm not asking about secrets, but their public business. Do they maintain power through birthright, trade, or military might?",
+        "prompt": "I'm not asking about secrets, but their public business. Do they maintain power through birthright, trade, or military might?",
+        "success": null,
+        "resolved_transition": false,
+        "target_scene_id": null,
+        "clue_id": null,
+        "discovered_clues": [],
+        "state_changes": {},
+        "hint": "Player is attempting social interaction or probing NPCs. Narrate the encounter or response.",
+        "metadata": {
+          "turn_segmentation": {
+            "spoken_text": "I'm not asking about secrets, but their public business. Do they maintain power through birthright, trade, or military might?"
+          }
+        },
+        "world_tick_events": []
+      },
+      "scene_before": "frontier_gate",
+      "scene_after": "frontier_gate",
+      "clue_updates": [],
+      "world_flag_updates": [
+        "clock:time_pressure=6"
+      ],
+      "turn_trace": {
+        "source": "chat",
+        "player_input": "\"I'm not asking about secrets, but their public business. Do they maintain power through birthright, trade, or military might?\"",
+        "intent": {
+          "parsed": {
+            "id": "im_not_asking_about_secrets_but_their_pu",
+            "label": "I'm not asking about secrets, but their public business. Do they maintain power through birthright, trade, or military might?",
+            "type": "interact",
+            "prompt": "I'm not asking about secrets, but their public business. Do they maintain power through birthright, trade, or military might?",
+            "targetSceneId": null,
+            "target_scene_id": null,
+            "metadata": {
+              "intent": "conversation"
+            }
+          },
+          "segmented_turn": {
+            "spoken_text": "I'm not asking about secrets, but their public business. Do they maintain power through birthright, trade, or military might?"
+          },
+          "normalized": {
+            "id": "im_not_asking_about_secrets_but_their_pu",
+            "label": "I'm not asking about secrets, but their public business. Do they maintain power through birthright, trade, or military might?",
+            "type": "interact",
+            "prompt": "I'm not asking about secrets, but their public business. Do they maintain power through birthright, trade, or military might?",
+            "targetSceneId": null,
+            "target_scene_id": null,
+            "targetEntityId": null,
+            "target_id": null
+          },
+          "implied_context": {
+            "applied": false,
+            "cases": [],
+            "target_id": "tavern_runner"
+          }
+        },
+        "classification": {
+          "action_type": "chat",
+          "resolved_kind": "interact",
+          "requires_check": false
+        },
+        "resolution_path": "exploration_engine",
+        "authoritative_state_changes": {
+          "scene_transition": null,
           "resolution_state_changes": {},
           "resolution_world_updates": [],
           "check_request": null
         },
         "interaction_after": {
-          "active_interaction_target_id": "guard_captain",
+          "active_interaction_target_id": "tavern_runner",
           "active_interaction_kind": "social",
           "interaction_mode": "social",
           "engagement_level": "engaged",
@@ -936,7 +1194,7 @@
           "presentation_changes": [],
           "known_counts": {
             "implicit": 0,
-            "explicit": 0,
+            "explicit": 1,
             "actionable": 0
           }
         },
@@ -975,7 +1233,10 @@
   ],
   "flags": {},
   "character_name": "Galinor",
-  "campaign_run_id": "3e1b5a59bc58a0dd76107626",
-  "session_id": "3e1b5a59bc58a0dd76107626",
-  "last_saved_at": "2026-03-24T23:54:01.959859Z"
+  "campaign_run_id": "7b861224e522051db1266efa",
+  "session_id": "7b861224e522051db1266efa",
+  "last_saved_at": "2026-03-26T10:09:33.425632Z",
+  "social_lead_event_ids": [
+    "social_frontier_gate_tavern_runner_stew"
+  ]
 }

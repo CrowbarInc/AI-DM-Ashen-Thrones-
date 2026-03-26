@@ -13,7 +13,10 @@
       "One figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue.",
       "A notice board lists new taxes, curfews, and a warning about a missing patrol.",
       "A tavern runner is shouting offers of hot stew.",
-      "A figure in threadbare clothes stands still, observing the crowd."
+      "A figure in threadbare clothes stands still, observing the crowd.",
+      "The notice board prominently displays new taxes, curfews, and a warning about a missing patrol.",
+      "The tavern runner prepares a steaming bowl of thick stew.",
+      "The tavern's warmth contrasts with the brisk rain outside, drawing in weary souls looking for food and news."
     ],
     "journal_seed_facts": [
       "You arrive at Cinderwatch's eastern gate in cold rain, under frayed banners.",
@@ -30,7 +33,10 @@
       "The threadbare watcher starts at certain whistles and hand-signs; shadowing him could reveal who he's meeting.",
       "When guards look away, voices near the tavern door drop to hurried talk about the patrol and whether the inn is safe after dark.",
       "Stall-holders and porters mutter about needing extra hands\u2014busy season, nerves, or both.",
-      "Job chalkboards and runner gossip hint at merchants hiring short-term muscle for the next caravan push."
+      "Job chalkboards and runner gossip hint at merchants hiring short-term muscle for the next caravan push.",
+      "The tavern runner has information about House Verevin's stronghold at the outskirts of Cinderwatch.",
+      "The tavern runner has information about House Verevin's movements and the status of the missing patrol.",
+      "Whispers near the old trading crossroads could shed light on House Verevin's rivals."
     ],
     "hidden_facts": [
       "An agent of a noble house is watching new arrivals from the square's edge.",
@@ -65,7 +71,13 @@
         "kind": "npc",
         "addressable": true,
         "address_priority": 0,
-        "address_roles": ["guard", "watchman", "sentry", "guardsman", "captain"],
+        "address_roles": [
+          "guard",
+          "watchman",
+          "sentry",
+          "guardsman",
+          "captain"
+        ],
         "aliases": []
       },
       {
@@ -75,7 +87,10 @@
         "kind": "npc",
         "addressable": true,
         "address_priority": 1,
-        "address_roles": ["runner", "informant"],
+        "address_roles": [
+          "runner",
+          "informant"
+        ],
         "aliases": []
       },
       {
@@ -85,8 +100,13 @@
         "kind": "scene_actor",
         "addressable": true,
         "address_priority": 2,
-        "address_roles": ["stranger", "refugee"],
-        "aliases": ["ragged stranger"]
+        "address_roles": [
+          "stranger",
+          "refugee"
+        ],
+        "aliases": [
+          "ragged stranger"
+        ]
       },
       {
         "id": "threadbare_watcher",
@@ -95,7 +115,9 @@
         "kind": "scene_actor",
         "addressable": true,
         "address_priority": 3,
-        "address_roles": ["watcher"],
+        "address_roles": [
+          "watcher"
+        ],
         "aliases": []
       }
     ]
@@ -110,10 +132,8 @@
     ],
     "entity_presence": {
       "guard_captain": "active",
-      "tavern_runner": "active",
-      "refugee": "active",
-      "threadbare_watcher": "active"
+      "tavern_runner": "active"
     },
-    "current_interlocutor": "guard_captain"
+    "current_interlocutor": "tavern_runner"
   }
 }

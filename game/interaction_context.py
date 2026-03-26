@@ -980,6 +980,9 @@ def resolve_authoritative_social_target(
     Precedence: explicit normalized target → comma vocative / directed name → generic role
     → active interaction continuity → conservative substring → optional first roster → none.
 
+    Owns: final ``npc_id`` / ``npc_name`` for engine social resolution and strict-social emission
+    alignment. Downstream narration may paraphrase; it must not substitute a different NPC id.
+
     Callers that emit or validate social output should use this result instead of re-deriving
     ``npc_id`` in a different order (prevents wiping a valid engine target on follow-up lines).
     """
@@ -1236,6 +1239,7 @@ def resolve_authoritative_social_target(
 _GENERIC_ADDRESS_ROLE_ALT = r"(?:guardsman|guardswoman|watchman|sentry|stranger|refugee|merchant|runner|guard)"
 _GENERIC_ADDRESS_PATTERNS: Tuple[re.Pattern[str], ...] = (
     re.compile(rf"\byou\s*,\s*({_GENERIC_ADDRESS_ROLE_ALT})\b"),
+    re.compile(rf"\byou\s+there,?\s*({_GENERIC_ADDRESS_ROLE_ALT})\b"),
     re.compile(rf"\bto\s+the\s+({_GENERIC_ADDRESS_ROLE_ALT})\b"),
     re.compile(rf"\btowards?\s+the\s+({_GENERIC_ADDRESS_ROLE_ALT})\b"),
     re.compile(rf"^\s*({_GENERIC_ADDRESS_ROLE_ALT})\b(?:\s*[,:?!]|\s+)"),
@@ -1538,6 +1542,193 @@ def find_addressed_npc_id_for_turn(
             return only_id
 
     return None
+
+
+def resolve_dialogue_lock_action_target_id(
+    player_text: str,
+    *,
+    scene: Dict[str, Any],
+    session: Dict[str, Any],
+    world: Dict[str, Any],
+) -> Optional[str]:
+    """Hint ``target_id`` for dialogue-lane structured actions (see :func:`game.api._build_dialogue_first_action`).
+
+    Precedence matches the historical API behavior: addressed line → world name/id mention → active
+    interlocutor (when valid) → sole present NPC. This does **not** replace
+    :func:`resolve_authoritative_social_target`, which owns the final NPC at social resolution time;
+    emission and validation must not pick a different NPC afterward.
+    """
+    target_id = find_addressed_npc_id_for_turn(player_text, session, world, scene)
+    if not target_id:
+        target_id = find_world_npc_reference_id_in_text(player_text, world)
+    if not target_id:
+        interaction = inspect(session)
+        active_target_id = str(interaction.get("active_interaction_target_id") or "").strip()
+        if active_target_id and is_entity_active(session, active_target_id):
+            target_id = active_target_id
+    if not target_id:
+        scene_npcs = scene_npcs_in_active_scene(scene, world)
+        if len(scene_npcs) == 1:
+            target_id = str(scene_npcs[0].get("id") or "").strip() or None
+    return target_id
+
+
+def build_intent_route_debug_social_exchange(
+    *,
+    should_route_meta: Dict[str, Any] | None,
+    resolved_target_id: str | None,
+) -> Dict[str, Any]:
+    """Assemble ``metadata.intent_route_debug`` for dialogue-lock → social exchange turns."""
+    m = should_route_meta if isinstance(should_route_meta, dict) else {}
+    route_reason = m.get("route_reason") or "dialogue_lane"
+    addressed_id = resolved_target_id or (str(m.get("addressed_actor_id") or "").strip() or None)
+    addressed_src = m.get("addressed_actor_source")
+    if addressed_src is None:
+        addressed_src = "dialogue_target_resolution" if resolved_target_id else None
+    return {
+        "routed_to": "social_exchange",
+        "route_reason": route_reason,
+        "addressed_actor_id": addressed_id,
+        "addressed_actor_source": addressed_src,
+    }
+
+
+def build_intent_route_debug_adjudication_query(*, category: str | None) -> Dict[str, Any]:
+    """Assemble ``metadata.intent_route_debug`` when the turn resolves as procedural adjudication."""
+    return {
+        "routed_to": "adjudication_query",
+        "route_reason": f"procedural_{category or 'unknown'}",
+        "addressed_actor_id": None,
+        "addressed_actor_source": None,
+    }
+
+
+def is_rules_or_engine_mechanics_question(text: str | None) -> bool:
+    """True for roll/skill/procedure questions to the GM (including short parenthetical clauses)."""
+    low = str(text or "").strip().lower()
+    if not low:
+        return False
+    if re.search(r"\b(?:does|do)\s+that\s+require\b", low) and re.search(
+        r"\b(?:sleight|hand|perception|stealth|roll|check|skill|difficulty)\b",
+        low,
+    ):
+        return True
+    if re.search(r"\b(?:skill\s+check|saving\s+throw|\bdc\b|difficulty\s+class)\b", low):
+        return True
+    if re.search(
+        r"\b(?:sleight of hand|perception|stealth|sense motive|diplomacy|intimidate|bluff|thievery)\b",
+        low,
+    ) and re.search(r"\b(?:need|needed|require|required|roll|check)\b", low):
+        return True
+    if re.search(r"\bneed(?:ed)?\s+(?:a\s+)?roll\b", low) or re.search(
+        r"\brequire(?:s|d)?\s+(?:a\s+)?(?:roll|check)\b",
+        low,
+    ):
+        return True
+    return False
+
+
+def is_gm_or_system_facing_question(text: str | None) -> bool:
+    """True for clear player-to-GM feasibility / state questions, not NPC-directed dialogue."""
+    low = str(text or "").strip().lower()
+    if not low:
+        return False
+    if re.search(r"\b(?:can|could|would)\s+(?:i|we)\b", low):
+        return True
+    if re.search(r"\b(?:is there|are there)\s+(?:enough|any)\b", low):
+        return True
+    if "read the" in low and "board" in low and "?" in low:
+        return True
+    if re.search(r"\bwould\s+\w+\s+know\s+(?:this|that|already)\b", low):
+        return True
+    if "?" in low and re.search(
+        r"\b(?:reach|climb|jump)\s+(?:the\s+)?(?:roof|wall|ledge|balcony)\b",
+        low,
+    ):
+        return True
+    return False
+
+
+def _looks_like_information_seeking_player_question(text: str) -> bool:
+    low = str(text or "").strip().lower()
+    if not low:
+        return False
+    if "?" in low:
+        return True
+    if any(h in low for h in _DIALOGUE_INFO_HINTS):
+        return True
+    return bool(re.search(r"\b(who|what|where|when|why|how|which|tell me|do you know)\b", low))
+
+
+def should_route_addressed_question_to_social(
+    text: str | None,
+    *,
+    session: Dict[str, Any] | None,
+    world: Dict[str, Any] | None,
+    scene_envelope: Dict[str, Any] | None,
+) -> tuple[bool, Dict[str, Any]]:
+    """Canonical gate: NPC-directed information-seeking vs GM/rules feasibility (adjudication lane).
+
+    Owns: the decision that a line should **not** be classified as procedural adjudication so chat
+    can stay in social exchange (active interlocutor follow-up or directed scene question).
+    :func:`game.adjudication.classify_adjudication_query` consults this first; do not reimplement
+    the same checks in other layers.
+
+    Returns (decision, debug_meta) with route_reason / addressed_actor_id / addressed_actor_source.
+    """
+    meta: Dict[str, Any] = {
+        "route_reason": None,
+        "addressed_actor_id": None,
+        "addressed_actor_source": None,
+    }
+    t = str(text or "").strip()
+    if not t:
+        return False, meta
+    if is_gm_or_system_facing_question(t):
+        meta["route_reason"] = "gm_feasibility"
+        return False, meta
+    if is_rules_or_engine_mechanics_question(t):
+        meta["route_reason"] = "rules_or_mechanics_query"
+        return False, meta
+
+    if not isinstance(scene_envelope, dict):
+        return False, meta
+    scene_obj = scene_envelope.get("scene")
+    if not isinstance(scene_obj, dict):
+        return False, meta
+    scene_id = str(scene_obj.get("id") or "").strip()
+    if not scene_id:
+        return False, meta
+
+    sess = session if isinstance(session, dict) else None
+    w = world if isinstance(world, dict) else {}
+    if not _looks_like_information_seeking_player_question(t):
+        return False, meta
+
+    if sess is not None:
+        ctx = inspect(sess)
+        active_id = str(ctx.get("active_interaction_target_id") or "").strip()
+        mode = str(ctx.get("interaction_mode") or "").strip().lower()
+        kind = str(ctx.get("active_interaction_kind") or "").strip().lower()
+        social_mode = mode == "social" or kind == "social"
+        if active_id and social_mode and is_entity_active(sess, active_id):
+            addr_ids = scene_addressable_actor_ids(
+                w, scene_id, scene_envelope=scene_envelope, session=sess
+            )
+            if active_id in addr_ids:
+                meta["route_reason"] = "active_interlocutor_followup"
+                meta["addressed_actor_id"] = active_id
+                meta["addressed_actor_source"] = "active_interlocutor"
+                return True, meta
+
+        addressed = find_addressed_npc_id_for_turn(t, sess, w, scene_envelope)
+        if addressed:
+            meta["route_reason"] = "directed_social_question"
+            meta["addressed_actor_id"] = addressed
+            meta["addressed_actor_source"] = "scene_address_resolution"
+            return True, meta
+
+    return False, meta
 
 
 def establish_dialogue_interaction_from_input(

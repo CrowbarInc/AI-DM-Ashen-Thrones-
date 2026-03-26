@@ -2,6 +2,10 @@
 
 Ensures player-facing text is speaker-owned, single-form, and never pulled from
 scene/ambient uncertainty pools except as an explicit interruption breakoff.
+
+Speaker identity for strict emission aligns with
+:func:`game.interaction_context.resolve_authoritative_social_target`; do not resolve a competing
+NPC id in this module except through that helper (or thin wrappers around it).
 """
 
 from __future__ import annotations

@@ -323,12 +323,17 @@ def _next_topic_to_reveal(
             continue
         if hint_slug and hint_slug not in slugify(tid) and hint_slug not in slugify(rec.get("text", "")):
             continue
-        return {
+        out: Dict[str, Any] = {
             "id": tid,
             "text": str(rec.get("text") or rec.get("label") or "").strip() or "Unknown.",
             "clue_id": rec.get("clue_id") or rec.get("reveals_clue"),
             "clue_text": rec.get("clue_text"),
         }
+        for key in ("leads_to_scene", "leads_to_npc", "leads_to_rumor"):
+            v = rec.get(key)
+            if isinstance(v, str) and v.strip():
+                out[key] = v.strip()
+        return out
     return None
 
 
@@ -464,6 +469,19 @@ def apply_npc_runtime_deltas(
             rt["attitude"] = max(-5, int(rt.get("attitude", 0) or 0) - 1)
 
 
+def _social_result_dict_with_incoming_metadata(
+    result: SocialEngineResult, incoming_meta: Dict[str, Any]
+) -> Dict[str, Any]:
+    out = result.to_dict()
+    if incoming_meta:
+        merged = dict(incoming_meta)
+        prev = out.get("metadata")
+        if isinstance(prev, dict):
+            merged = {**prev, **merged}
+        out["metadata"] = merged
+    return out
+
+
 def resolve_social_action(
     scene_envelope: Dict[str, Any],
     session: Dict[str, Any],
@@ -480,6 +498,10 @@ def resolve_social_action(
     Returns:
         kind, action_id, label, prompt, success, hint, social {npc_id, npc_name, skill_check?, topic_revealed?, ...}
     """
+    incoming_action_meta = (
+        dict(normalized_action["metadata"]) if isinstance(normalized_action.get("metadata"), dict) else {}
+    )
+
     scene = (scene_envelope or {}).get("scene", {}) if isinstance(scene_envelope, dict) else {}
     scene_id = str(scene.get("id") or "").strip()
 
@@ -537,7 +559,7 @@ def resolve_social_action(
             },
             requires_check=False,
         )
-        return result.to_dict()
+        return _social_result_dict_with_incoming_metadata(result, incoming_action_meta)
 
     if not (auth.get("target_resolved") and auth.get("npc_id")):
         known_target = _find_world_npc_by_target(world, str(target_id or "")) if target_id else None
@@ -572,7 +594,7 @@ def resolve_social_action(
             },
             requires_check=False,
         )
-        return result.to_dict()
+        return _social_result_dict_with_incoming_metadata(result, incoming_action_meta)
 
     npc_id = str(auth.get("npc_id") or "").strip()
     npc = npc_dict_by_id(world, npc_id)
@@ -605,7 +627,7 @@ def resolve_social_action(
             },
             requires_check=False,
         )
-        return result.to_dict()
+        return _social_result_dict_with_incoming_metadata(result, incoming_action_meta)
 
     npc_name = str(npc.get("name") or auth.get("npc_name") or "the NPC").strip()
 
@@ -670,7 +692,7 @@ def resolve_social_action(
                 social=social_payload,
                 requires_check=False,
             )
-            return result.to_dict()
+            return _social_result_dict_with_incoming_metadata(result, incoming_action_meta)
 
         apply_npc_runtime_deltas(session, npc_id, action_type, None, turn_counter)
         social_payload = _social_payload_with_reply_expectation(
@@ -703,7 +725,7 @@ def resolve_social_action(
             social=social_payload,
             requires_check=False,
         )
-        return result.to_dict()
+        return _social_result_dict_with_incoming_metadata(result, incoming_action_meta)
 
     # Skill-check kinds: persuade, intimidate, deceive, barter, recruit
     skill_entry = SOCIAL_SKILL_MAP.get(action_type)
@@ -733,7 +755,7 @@ def resolve_social_action(
             social=social_payload,
             requires_check=False,
         )
-        return result.to_dict()
+        return _social_result_dict_with_incoming_metadata(result, incoming_action_meta)
 
     skill_id, dc_mod = skill_entry
     effective_skill = _resolve_skill_for_kind(action_type, character or {})
@@ -763,7 +785,7 @@ def resolve_social_action(
             social=social_payload,
             requires_check=False,
         )
-        return result.to_dict()
+        return _social_result_dict_with_incoming_metadata(result, incoming_action_meta)
 
     # Skill check authority: engine decides when to roll
     ctx = {
@@ -804,7 +826,7 @@ def resolve_social_action(
             social=social_payload,
             requires_check=False,
         )
-        return result.to_dict()
+        return _social_result_dict_with_incoming_metadata(result, incoming_action_meta)
 
     effective_skill = _resolve_skill_for_kind(action_type, character or {}) or decision["skill"]
     dc = int(decision["difficulty"])
@@ -852,4 +874,4 @@ def resolve_social_action(
         requires_check=True,
         check_request=check_request,
     )
-    return result.to_dict()
+    return _social_result_dict_with_incoming_metadata(result, incoming_action_meta)

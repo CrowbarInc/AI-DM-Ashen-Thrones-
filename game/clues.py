@@ -7,7 +7,8 @@ from __future__ import annotations
 
 from typing import Any, Dict, List, Set
 
-from game.storage import mark_clue_discovered
+from game.storage import add_pending_lead, mark_clue_discovered
+from game.utils import slugify
 
 
 CLUE_PRESENTATION_LEVELS: tuple[str, ...] = ("implicit", "explicit", "actionable")
@@ -345,5 +346,164 @@ def apply_authoritative_clue_discovery(
         if mark_clue_discovered(session, scene_id, txt):
             added_texts.append(txt)
         set_clue_presentation(session, clue_id=normalized_clue_id or None, clue_text=txt, level="explicit")
+
+    return added_texts
+
+
+def _stable_social_lead_id(scene_id: str, npc_id: str, topic_id: str) -> str:
+    a, b, c = slugify(scene_id), slugify(npc_id), slugify(topic_id)
+    if not c:
+        c = "topic"
+    return f"social_{a}_{b}_{c}"
+
+
+def _stable_social_text_lead_id(scene_id: str, npc_id: str, primary_text: str) -> str:
+    tail = slugify(primary_text)[:56] or "lead"
+    if npc_id:
+        return f"social_text_{slugify(scene_id)}_{slugify(npc_id)}_{tail}"
+    return f"social_text_{slugify(scene_id)}_{tail}"
+
+
+def apply_socially_revealed_leads(
+    session: Dict[str, Any],
+    scene_id: str,
+    world: Dict[str, Any],
+    resolution: Dict[str, Any],
+) -> List[str]:
+    """Canonical **first** landing for information revealed by the social engine (single entry point).
+
+    Call from authoritative resolution mutation only for social ``kind`` values; avoid parallel
+    clue writes from other layers for the same reveal.
+
+    Normalizes clue/lead candidates from resolution + ``social.topic_revealed``,
+    runs :func:`apply_authoritative_clue_discovery`, optionally adds ``pending_leads``,
+    promotes presentation to ``actionable`` when a topic carries ``leads_to_*``,
+    and appends a single idempotent ``event_log`` entry per stable ``clue_id``.
+
+    Returns:
+        Newly-added discovered clue texts (same contract as ``apply_authoritative_clue_discovery``).
+    """
+    from game.social import SOCIAL_KINDS
+
+    kind = str(resolution.get("kind") or "").strip().lower()
+    if kind not in SOCIAL_KINDS:
+        return []
+
+    social = resolution.get("social") if isinstance(resolution.get("social"), dict) else {}
+    topic = social.get("topic_revealed") if isinstance(social.get("topic_revealed"), dict) else None
+
+    top_clue_id = str(resolution.get("clue_id") or "").strip() or None
+    top_texts: List[str] = []
+    for raw in resolution.get("discovered_clues") or []:
+        if isinstance(raw, str) and raw.strip():
+            t = raw.strip()
+            if t not in top_texts:
+                top_texts.append(t)
+
+    topic_text = ""
+    topic_clue_id: str | None = None
+    topic_tid = ""
+    if topic:
+        topic_text = str(topic.get("clue_text") or topic.get("text") or "").strip()
+        topic_clue_id = str(topic.get("clue_id") or topic.get("reveals_clue") or "").strip() or None
+        topic_tid = str(topic.get("id") or "").strip()
+
+    has_payload = bool(topic or top_clue_id or top_texts)
+    if not has_payload:
+        meta = resolution.setdefault("metadata", {})
+        if isinstance(meta, dict):
+            meta["lead_landing"] = {
+                "revealed_lead_ids": [],
+                "already_known_lead_ids": [],
+                "actionable_lead_ids": [],
+                "lead_write_targets": [],
+            }
+        return []
+
+    merged_texts: List[str] = []
+    if topic_text:
+        merged_texts.append(topic_text)
+    for t in top_texts:
+        if t not in merged_texts:
+            merged_texts.append(t)
+    primary_text = merged_texts[0] if merged_texts else None
+
+    npc_id = str(social.get("npc_id") or "").strip()
+
+    effective_clue_id = top_clue_id or topic_clue_id
+    if not effective_clue_id and topic and npc_id and topic_tid:
+        effective_clue_id = _stable_social_lead_id(scene_id, npc_id, topic_tid)
+    if not effective_clue_id and primary_text:
+        effective_clue_id = _stable_social_text_lead_id(scene_id, npc_id, primary_text)
+
+    before_ids = get_all_known_clue_ids(session)
+    was_id_known = bool(effective_clue_id and effective_clue_id in before_ids)
+
+    added_texts = apply_authoritative_clue_discovery(
+        session,
+        scene_id,
+        clue_id=effective_clue_id,
+        clue_text=primary_text,
+        discovered_clues=merged_texts if merged_texts else None,
+        world=world,
+    )
+
+    lead_write_targets: List[str] = ["clue_knowledge", "scene_runtime.discovered_clue_ids"]
+    revealed_lead_ids: List[str] = []
+    already_known_lead_ids: List[str] = []
+    actionable_lead_ids: List[str] = []
+
+    if effective_clue_id:
+        if was_id_known:
+            already_known_lead_ids.append(effective_clue_id)
+        elif effective_clue_id in get_all_known_clue_ids(session):
+            revealed_lead_ids.append(effective_clue_id)
+
+    if topic and effective_clue_id and primary_text:
+        lead: Dict[str, Any] = {"clue_id": effective_clue_id, "text": primary_text}
+        has_dest = False
+        for key in ("leads_to_scene", "leads_to_npc", "leads_to_rumor"):
+            v = topic.get(key)
+            if isinstance(v, str) and v.strip():
+                lead[key] = v.strip()
+                has_dest = True
+        if has_dest:
+            add_pending_lead(session, scene_id, lead)
+            lead_write_targets.append("pending_leads")
+            set_clue_presentation(session, clue_id=effective_clue_id, clue_text=primary_text, level="actionable")
+            actionable_lead_ids.append(effective_clue_id)
+
+    event_key = effective_clue_id or ""
+    logged_ids = session.setdefault("social_lead_event_ids", [])
+    if not isinstance(logged_ids, list):
+        session["social_lead_event_ids"] = []
+        logged_ids = session["social_lead_event_ids"]
+    should_log_event = bool(
+        event_key
+        and event_key not in logged_ids
+        and not was_id_known
+        and (revealed_lead_ids or added_texts)
+    )
+    if should_log_event:
+        world.setdefault("event_log", []).append(
+            {
+                "type": "social_lead_revealed",
+                "clue_id": event_key,
+                "scene_id": scene_id,
+                "npc_id": npc_id or None,
+                "topic_id": topic_tid or None,
+            }
+        )
+        logged_ids.append(event_key)
+        lead_write_targets.append("event_log")
+
+    meta = resolution.setdefault("metadata", {})
+    if isinstance(meta, dict):
+        meta["lead_landing"] = {
+            "revealed_lead_ids": revealed_lead_ids,
+            "already_known_lead_ids": already_known_lead_ids,
+            "actionable_lead_ids": actionable_lead_ids,
+            "lead_write_targets": list(dict.fromkeys(lead_write_targets)),
+        }
 
     return added_texts

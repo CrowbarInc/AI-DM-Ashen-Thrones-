@@ -87,14 +87,17 @@ from game.social import (
 from game.interaction_context import (
     apply_turn_input_implied_context,
     assert_valid_speaker,
+    build_intent_route_debug_adjudication_query,
+    build_intent_route_debug_social_exchange,
     clear_for_scene_change,
     establish_dialogue_interaction_from_input,
     find_addressed_npc_id_for_turn,
     find_world_npc_reference_id_in_text,
     inspect as inspect_interaction_context,
-    is_entity_active,
     rebuild_active_scene_entities,
+    resolve_dialogue_lock_action_target_id,
     scene_npcs_in_active_scene,
+    should_route_addressed_question_to_social,
     update_after_resolved_action,
 )
 from game.scene_graph import build_scene_graph, is_transition_valid
@@ -115,7 +118,12 @@ from game.importers.pf_json_importer import import_sheet
 from game.session import reset_session_state
 from game.campaign_reset import apply_new_campaign_hard_reset
 from game.campaign_state import create_fresh_combat_state
-from game.clues import apply_authoritative_clue_discovery, get_all_known_clue_texts, get_known_clues_with_presentation
+from game.clues import (
+    apply_authoritative_clue_discovery,
+    apply_socially_revealed_leads,
+    get_all_known_clue_texts,
+    get_known_clues_with_presentation,
+)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -690,9 +698,16 @@ def _apply_authoritative_resolution_state_mutation(
         resolution['originating_scene_id'] = originating_scene_id
         scene, session, combat = _apply_authoritative_scene_transition(target_scene_id, scene, session, combat, world)
 
-    authoritative_clue_updates.extend(
-        _apply_authoritative_clues_from_resolution(session, scene['scene']['id'], resolution, world)
-    )
+    res_kind = str(resolution.get("kind") or "").strip().lower()
+    if res_kind in SOCIAL_KINDS:
+        # Canonical first landing for socially revealed clues/leads (clue_knowledge, runtime, pending_leads, event_log).
+        authoritative_clue_updates.extend(
+            apply_socially_revealed_leads(session, scene["scene"]["id"], world, resolution)
+        )
+    else:
+        authoritative_clue_updates.extend(
+            _apply_authoritative_clues_from_resolution(session, scene['scene']['id'], resolution, world)
+        )
 
     scene_rt = get_scene_runtime(session, scene['scene']['id'])
     action_key = resolution.get('action_id') or ((normalized_action or {}).get('id') if isinstance(normalized_action, dict) else None)
@@ -1157,14 +1172,30 @@ _WORLD_ACTION_FORCEFUL_PATTERNS: tuple[str, ...] = (
     r"\b(?:i|we)\s+(?:grab|seize|attack|strike|cast|force|coerce|threaten|restrain)\b",
     r"\b(?:i|we)\s+(?:follow|track|sneak|search)\b",
 )
-def _find_addressed_npc_id(
-    text: str,
-    *,
-    scene: dict,
-    session: dict,
-    world: dict,
-) -> str | None:
-    return find_addressed_npc_id_for_turn(text, session, world, scene)
+
+
+def _merged_text_for_dialogue_routing(segmented_turn: dict | None, player_text: str) -> str:
+    """Rejoin turn segments so hail + extracted question still read as one line for addressing."""
+    if not isinstance(segmented_turn, dict):
+        return str(player_text or "").strip()
+    ordered_keys = (
+        "declared_action_text",
+        "spoken_text",
+        "adjudication_question_text",
+        "observation_intent_text",
+    )
+    parts: list[str] = []
+    seen: set[str] = set()
+    for key in ordered_keys:
+        raw = segmented_turn.get(key)
+        if not isinstance(raw, str):
+            continue
+        s = raw.strip()
+        if not s or s in seen:
+            continue
+        parts.append(s)
+        seen.add(s)
+    return " ".join(parts) if parts else str(player_text or "").strip()
 
 
 def _find_world_npc_reference_id(text: str, world: dict) -> str | None:
@@ -1223,11 +1254,11 @@ def is_directed_dialogue(
     world: dict,
     segmented_turn: dict | None = None,
 ) -> bool:
-    primary_clause = (
-        (segmented_turn.get("declared_action_text") if isinstance(segmented_turn, dict) else None)
-        or (segmented_turn.get("spoken_text") if isinstance(segmented_turn, dict) else None)
-        or text
+    merged = _merged_text_for_dialogue_routing(
+        segmented_turn if isinstance(segmented_turn, dict) else None,
+        str(text or ""),
     )
+    primary_clause = merged.strip() or str(text or "").strip()
     clause = str(primary_clause or "").strip()
     if not clause:
         return False
@@ -1244,12 +1275,7 @@ def is_directed_dialogue(
         return True
 
     scene_npcs = scene_npcs_in_active_scene(scene, world)
-    addressed_npc_id = _find_addressed_npc_id(
-        clause,
-        scene=scene,
-        session=session,
-        world=world,
-    )
+    addressed_npc_id = find_addressed_npc_id_for_turn(clause, session, world, scene)
     has_present_character = bool(scene_npcs)
     has_world_reference = bool(_find_world_npc_reference_id(clause, world))
     has_dialogue_cue = _has_dialogue_cue(text=text, segmented_turn=segmented_turn)
@@ -1274,7 +1300,12 @@ def choose_interaction_route(
     world: dict,
     segmented_turn: dict | None = None,
 ) -> str:
-    """Choose chat interaction lane: dialogue, action, or undecided."""
+    """Choose coarse chat lane: dialogue, action, or undecided.
+
+    This biases parser order and dialogue-lock; it does **not** replace
+    :func:`game.interaction_context.should_route_addressed_question_to_social` for adjudication
+    classification (that gate lives in adjudication + dialogue-first metadata only).
+    """
     directed_dialogue = is_directed_dialogue(
         text,
         scene=scene,
@@ -1314,30 +1345,30 @@ def _build_dialogue_first_action(
     ):
         return None
 
-    target_id = _find_addressed_npc_id(
+    target_id = resolve_dialogue_lock_action_target_id(
         player_text,
         scene=scene,
         session=session,
         world=world,
     )
-    interaction = inspect_interaction_context(session)
-    active_target_id = str(interaction.get("active_interaction_target_id") or "").strip()
-    if not target_id:
-        target_id = _find_world_npc_reference_id(player_text, world)
-    if not target_id and active_target_id and is_entity_active(session, active_target_id):
-        target_id = active_target_id
-    if not target_id:
-        scene_npcs = scene_npcs_in_active_scene(scene, world)
-        if len(scene_npcs) == 1:
-            target_id = str(scene_npcs[0].get("id") or "").strip() or None
 
     action_kind = "question" if _is_information_seeking_clause(player_text) or "?" in str(player_text or "") else "social_probe"
     action_label = str(player_text or "").strip()
     if not action_label:
         return None
+    _, _route_meta = should_route_addressed_question_to_social(
+        player_text,
+        session=session,
+        world=world,
+        scene_envelope=scene if isinstance(scene, dict) else None,
+    )
     metadata = {
         "routed_via_dialogue_lock": True,
         "route": "dialogue",
+        "intent_route_debug": build_intent_route_debug_social_exchange(
+            should_route_meta=_route_meta if isinstance(_route_meta, dict) else None,
+            resolved_target_id=target_id,
+        ),
     }
     if target_id:
         metadata["active_interaction_target_id"] = target_id
@@ -1433,7 +1464,10 @@ def _prefer_dialogue_over_adjudication(
     """
     spoken_text = segmented_turn.get("spoken_text") if isinstance(segmented_turn, dict) else None
     declared_action_text = segmented_turn.get("declared_action_text") if isinstance(segmented_turn, dict) else None
-    primary_clause = str(declared_action_text or spoken_text or player_text or "").strip()
+    primary_clause = _merged_text_for_dialogue_routing(
+        segmented_turn if isinstance(segmented_turn, dict) else None,
+        str(player_text or ""),
+    ).strip() or str(declared_action_text or spoken_text or player_text or "").strip()
     if not primary_clause:
         return False
     if _is_explicit_ooc(player_text) or _is_explicit_ooc(primary_clause):
@@ -1456,6 +1490,9 @@ def _prefer_dialogue_over_adjudication(
     if classify_adjudication_query(
         adjudication_text or primary_clause,
         has_active_interaction=has_active_interaction,
+        session=session if isinstance(session, dict) else None,
+        world=world if isinstance(world, dict) else None,
+        scene=scene if isinstance(scene, dict) else None,
     ) is not None:
         return False
     return _looks_like_in_character_exchange_clause(primary_clause, spoken_text)
@@ -2327,6 +2364,9 @@ def chat(req: ChatRequest):
             authoritative_clue_updates.extend(turn_clue_updates)
         resolution['world_tick_events'] = tick.get('events', [])
     elif gm is None:
+        # Final route when no deterministic engine action matched: procedural adjudication vs freeform GPT.
+        # Social exchange was already considered via parse_social_intent / dialogue-first / exploration / intent;
+        # _prefer_dialogue_over_adjudication only biases ambiguous *unparsed* lines away from adjudication.
         adjudication_text = embedded_question_text or req.text
         adjudication = None
         _interaction_ctx = inspect_interaction_context(session)
@@ -2374,11 +2414,12 @@ def chat(req: ChatRequest):
                 },
                 'requires_check': bool(adjudication.get('requires_check')),
                 'check_request': adjudication.get('check_request') if isinstance(adjudication.get('check_request'), dict) else None,
-                'metadata': (
-                    {'turn_segmentation': compact_segmented}
-                    if compact_segmented
-                    else {}
-                ),
+                'metadata': {
+                    **({'turn_segmentation': compact_segmented} if compact_segmented else {}),
+                    'intent_route_debug': build_intent_route_debug_adjudication_query(
+                        category=adjudication.get('category') if isinstance(adjudication, dict) else None,
+                    ),
+                },
                 'world_tick_events': tick.get('events', []),
             }
             gm = _build_adjudication_gm_output(adjudication)
@@ -2417,8 +2458,9 @@ def chat(req: ChatRequest):
     )
     rebuild_active_scene_entities(session, world, scene["scene"]["id"], scene_envelope=scene)
     scene["scene_state"] = session.get("scene_state")
-    if gm.get('world_updates'):
-        save_world(world)
+    # Persist world every turn (matches /api/action). Engine paths may mutate event_log / flags
+    # without GM-proposed world_updates (e.g. social lead landing).
+    save_world(world)
 
     # Build action pipeline debug for chat (no hidden facts or secrets).
     session['last_action_debug'] = _build_action_debug(
