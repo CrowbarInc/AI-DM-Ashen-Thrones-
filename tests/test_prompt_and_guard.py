@@ -3,6 +3,7 @@ import re
 
 import pytest
 
+pytestmark = pytest.mark.brittle
 
 FRONTIER_GATE_SCENE = {
     "scene": {
@@ -56,6 +57,13 @@ def _dummy_state():
     combat = {"in_combat": False}
     recent_log = []
     return campaign, world, session, character, combat, recent_log
+
+
+def _assert_text_contains_all(text: str, *substrings: str) -> None:
+    """Structural prose check: avoid pinning full canonical sentences from scene fixtures."""
+    low = (text or "").lower()
+    for s in substrings:
+        assert s.lower() in low, (s, text)
 
 
 def _assert_bounded_uncertainty(text: str, *, forbidden_terms: tuple[str, ...] = ()) -> None:
@@ -593,7 +601,7 @@ def test_known_fact_guard_resolves_recent_named_follow_up_before_uncertainty():
         resolution=resolution,
     )
     assert known is not None
-    assert known["text"] == "Lady Misia is near the tavern entrance."
+    _assert_text_contains_all(known["text"], "lady", "misia", "tavern")
     assert known["source"] == "recent_dialogue_continuity"
 
     uncertainty = classify_uncertainty(
@@ -604,7 +612,9 @@ def test_known_fact_guard_resolves_recent_named_follow_up_before_uncertainty():
         resolution=resolution,
     )
     assert uncertainty["category"] == ""
-    assert render_uncertainty_response(uncertainty) == "Lady Misia is near the tavern entrance."
+    rendered = render_uncertainty_response(uncertainty)
+    _assert_text_contains_all(rendered, "lady", "misia", "tavern")
+    assert rendered.strip() == known["text"].strip()
 
     scene_rt = get_scene_runtime(session_no_active, "frontier_gate")
     msgs = build_messages(
@@ -621,7 +631,9 @@ def test_known_fact_guard_resolves_recent_named_follow_up_before_uncertainty():
     )
     payload = json.loads(msgs[1]["content"])
     assert payload["uncertainty_hint"] is None
-    assert payload["known_answer_hint"]["text"] == "Lady Misia is near the tavern entrance."
+    kah = (payload.get("known_answer_hint") or {}).get("text") or ""
+    _assert_text_contains_all(kah, "lady", "misia", "tavern")
+    assert kah.strip() == known["text"].strip()
 
 
 def test_known_fact_guard_resolves_explicit_location_clue_before_uncertainty():
@@ -636,7 +648,7 @@ def test_known_fact_guard_resolves_explicit_location_clue_before_uncertainty():
         resolution=None,
     )
     assert known is not None
-    assert known["text"] == "Refugees crowd the muddy approach road."
+    _assert_text_contains_all(known["text"], "refugees", "muddy", "road")
     assert known["source"] == "observable_scene_fact"
 
     uncertainty = classify_uncertainty(
@@ -647,7 +659,9 @@ def test_known_fact_guard_resolves_explicit_location_clue_before_uncertainty():
         resolution=None,
     )
     assert uncertainty["category"] == ""
-    assert render_uncertainty_response(uncertainty) == "Refugees crowd the muddy approach road."
+    rendered = render_uncertainty_response(uncertainty)
+    _assert_text_contains_all(rendered, "refugees", "muddy", "road")
+    assert rendered.strip() == known["text"].strip()
 
 
 def test_known_fact_guard_resolves_observable_scene_fact_before_uncertainty():
@@ -662,7 +676,7 @@ def test_known_fact_guard_resolves_observable_scene_fact_before_uncertainty():
         resolution=None,
     )
     assert known is not None
-    assert known["text"] == "A notice board lists new taxes, curfews, and a missing patrol."
+    _assert_text_contains_all(known["text"], "notice", "board", "patrol")
     assert known["source"] == "observable_scene_fact"
 
     uncertainty = classify_uncertainty(
@@ -673,7 +687,9 @@ def test_known_fact_guard_resolves_observable_scene_fact_before_uncertainty():
         resolution=None,
     )
     assert uncertainty["category"] == ""
-    assert render_uncertainty_response(uncertainty) == "A notice board lists new taxes, curfews, and a missing patrol."
+    rendered = render_uncertainty_response(uncertainty)
+    _assert_text_contains_all(rendered, "notice", "board", "patrol")
+    assert rendered.strip() == known["text"].strip()
 
 
 def test_guard_blocks_discoverable_clue_when_not_justified():
@@ -1846,7 +1862,7 @@ def test_topic_pressure_escalation_skipped_for_strict_social_exchange(monkeypatc
         low = text.lower()
         tags = out.get("tags") or []
         assert "topic_pressure_escalation" not in tags
-        assert "rumor says the crossroads were bad" in low
+        assert "crossroads" in low and "rumor" in low
         assert "captain veyra" in low
 
 

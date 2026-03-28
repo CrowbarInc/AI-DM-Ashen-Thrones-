@@ -1,6 +1,8 @@
 """Tests for clue knowledge state and inference rules."""
 from __future__ import annotations
 
+import pytest
+
 from game.clues import (
     add_clue_to_knowledge,
     apply_authoritative_clue_discovery,
@@ -9,11 +11,14 @@ from game.clues import (
     get_all_known_clue_texts,
     get_known_clues_with_presentation,
     is_clue_known,
+    record_discovered_clue,
     reveal_clue,
     run_inference,
     set_clue_presentation,
 )
 from game.storage import load_session, save_session, load_world, save_world
+
+pytestmark = pytest.mark.unit
 
 
 def test_discovered_clues_update_player_knowledge():
@@ -29,10 +34,10 @@ def test_discovered_clues_update_player_knowledge():
     assert session["clue_knowledge"]["clue_a"]["state"] == "discovered"
 
 
-def test_inference_rules_activate_correctly():
-    """Inference rules add inferred clue when all prerequisites are known."""
-    session = {"scene_runtime": {}, "clue_knowledge": {}}
-    world = {
+def test_inference_rules_require_all_prerequisites():
+    """Inferred clues appear only once every required prerequisite is known (two- and three-prereq rules)."""
+    session_pair = {"scene_runtime": {}, "clue_knowledge": {}}
+    world_pair = {
         "inference_rules": [
             {
                 "inferred_clue_id": "conspiracy",
@@ -42,19 +47,14 @@ def test_inference_rules_activate_correctly():
         ],
         "clues": {},
     }
+    add_clue_to_knowledge(session_pair, "clue_a", "discovered", clue_text="Guard took gold.")
+    add_clue_to_knowledge(session_pair, "clue_b", "discovered", clue_text="Noble met the guard.")
+    newly_pair = run_inference(session_pair, world_pair)
+    assert "conspiracy" in newly_pair
+    assert "conspiracy" in get_all_known_clue_ids(session_pair)
+    assert "A conspiracy links the guard and the noble." in get_all_known_clue_texts(session_pair)
+    assert session_pair["clue_knowledge"]["conspiracy"]["state"] == "inferred"
 
-    add_clue_to_knowledge(session, "clue_a", "discovered", clue_text="Guard took gold.")
-    add_clue_to_knowledge(session, "clue_b", "discovered", clue_text="Noble met the guard.")
-    newly = run_inference(session, world)
-
-    assert "conspiracy" in newly
-    assert "conspiracy" in get_all_known_clue_ids(session)
-    assert "A conspiracy links the guard and the noble." in get_all_known_clue_texts(session)
-    assert session["clue_knowledge"]["conspiracy"]["state"] == "inferred"
-
-
-def test_inferred_clues_appear_only_after_prerequisites():
-    """Inferred clue is not added until all prerequisites are known."""
     session = {"scene_runtime": {}, "clue_knowledge": {}}
     world = {
         "inference_rules": [
@@ -77,6 +77,47 @@ def test_inferred_clues_appear_only_after_prerequisites():
     add_clue_to_knowledge(session, "clue_c", "discovered")
     run_inference(session, world)
     assert "conspiracy" in get_all_known_clue_ids(session)
+
+
+def test_reveal_clue_duplicate_does_not_reinvoke_inference(monkeypatch):
+    """Retrying the same clue does not call run_inference again or duplicate runtime rows."""
+    session = {"scene_runtime": {}, "clue_knowledge": {}}
+    world = {
+        "inference_rules": [
+            {
+                "inferred_clue_id": "deduction",
+                "requires": ["first", "second"],
+                "inferred_clue_text": "Deduced.",
+            }
+        ],
+    }
+    calls: list[int] = []
+
+    def spy(s, w):
+        calls.append(1)
+        return run_inference(s, w)
+
+    monkeypatch.setattr("game.clues.run_inference", spy)
+    reveal_clue(session, "gate", "first", clue_text="First.", world=world)
+    reveal_clue(session, "gate", "first", clue_text="First.", world=world)
+    assert len(calls) == 1
+    assert session["scene_runtime"]["gate"]["discovered_clue_ids"] == ["first"]
+
+
+def test_record_discovered_clue_returns_structured_status(capsys):
+    """record_discovered_clue reports newly_recorded vs duplicate_ignored."""
+    session = {"scene_runtime": {}, "clue_knowledge": {}}
+    r1 = record_discovered_clue(session, "s", "c1", clue_text="text")
+    assert r1 == {"status": "newly_recorded", "clue_id": "c1"}
+    out1 = capsys.readouterr().out
+    assert "[CLUE DISCOVERED]" in out1
+    assert "[CLUE DUPLICATE IGNORED]" not in out1
+
+    r2 = record_discovered_clue(session, "s", "c1", clue_text="text")
+    assert r2 == {"status": "duplicate_ignored", "clue_id": "c1"}
+    out2 = capsys.readouterr().out
+    assert "[CLUE DUPLICATE IGNORED] c1" in out2
+    assert "[CLUE DISCOVERED]" not in out2
 
 
 def test_reveal_clue_triggers_inference():

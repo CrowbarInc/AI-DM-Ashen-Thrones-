@@ -14,6 +14,7 @@ from game import storage
 from game.api import chat
 from game.campaign_reset import apply_new_campaign_hard_reset
 from game.clues import _social_resolution_carries_information
+from game.gm import _is_placeholder_only_player_facing_text
 from game.models import ChatRequest
 from game.storage import get_npc_runtime, get_scene_runtime
 from tests.helpers.transcript_runner import (
@@ -23,6 +24,13 @@ from tests.helpers.transcript_runner import (
     snapshot_from_chat_payload,
     write_default_bootstrap_scenes,
 )
+
+pytestmark = [
+    pytest.mark.integration,
+    pytest.mark.regression,
+    pytest.mark.transcript,
+    pytest.mark.slow,
+]
 
 _GM_OK_MARKER = "MIXED_STATE_GM_OK"
 
@@ -201,7 +209,11 @@ def test_approach_visible_figure_then_question_routes_social(tmp_path: Path, mon
 
 
 def test_narrated_new_figure_can_be_addressed_next_turn(tmp_path: Path, monkeypatch: Any) -> None:
-    """Narration introduces a titled figure; the following turn binds socially to that emergent id."""
+    """Narration introduces a titled figure; the following turn binds socially to that emergent id.
+
+    When turn-3 narration hits the targeted-retry escape hatch with empty strict-social repair,
+    continuity must still allow a vocative follow-up on turn 4 to bind to the same emergent id.
+    """
     _setup_transcript_frontier(tmp_path, monkeypatch)
 
     idx = {"n": 0}
@@ -212,13 +224,36 @@ def test_narrated_new_figure_can_be_addressed_next_turn(tmp_path: Path, monkeypa
         if i == 0:
             return _gm_opening_gate()
         if i == 1:
-            return _gm_ok(
-                "The square",
-                "Lord Ashvale studies you from the rain-slick steps, umbrella tilted like a crown.",
-            )
+            # Plain narration so emergent noble hint extraction can enroll Lord Ashvale (see test_emergent_scene_actors).
+            return {
+                "player_facing_text": (
+                    "Lord Ashvale studies you from the rain-slick steps, umbrella tilted like a crown."
+                ),
+                "tags": [],
+                "scene_update": None,
+                "activate_scene_id": None,
+                "new_scene_draft": None,
+                "world_updates": None,
+                "suggested_action": None,
+                "debug_notes": "",
+            }
+        if 2 <= i <= 4:
+            return {
+                "player_facing_text": (
+                    "I can't answer that. Based on what's established, we can determine very little here."
+                ),
+                "tags": [],
+                "scene_update": None,
+                "activate_scene_id": None,
+                "new_scene_draft": None,
+                "world_updates": None,
+                "suggested_action": None,
+                "debug_notes": "",
+            }
         return _gm_ok("Lord Ashvale", _GM_OK_MARKER)
 
     _patch_call_gpt(monkeypatch, call_gpt)
+
     apply_new_campaign_hard_reset()
     storage.activate_scene("frontier_gate")
 
@@ -226,25 +261,62 @@ def test_narrated_new_figure_can_be_addressed_next_turn(tmp_path: Path, monkeypa
         "Begin.",
         "I take in the gate crowd and the banners.",
         "Lord Ashvale, are you here for the missing patrol or for me?",
+        "Ashvale—one word: are the gates locked tonight?",
     ]
     payloads: list[dict[str, Any]] = []
-    for t in turns:
-        payloads.append(chat(ChatRequest(text=t)))
+    payloads.append(chat(ChatRequest(text=turns[0])))
+    # Narration-only turn: disable targeted retries so scene_stall cannot replace GM text before emergent enrollment.
+    with monkeypatch.context() as m:
+        m.setattr("game.api.detect_retry_failures", lambda **kwargs: [])
+        payloads.append(chat(ChatRequest(text=turns[1])))
+    with monkeypatch.context() as m:
+        m.setattr("game.gm.apply_social_exchange_retry_fallback_gm", lambda *a, **k: {})
+        m.setattr("game.gm.minimal_social_emergency_fallback_line", lambda *_a, **_k: "")
+        payloads.append(chat(ChatRequest(text=turns[2])))
+    payloads.append(chat(ChatRequest(text=turns[3])))
 
-    pl = payloads[2]
-    res = pl.get("resolution") if isinstance(pl.get("resolution"), dict) else {}
+    pl3 = payloads[2]
+    res3 = pl3.get("resolution") if isinstance(pl3.get("resolution"), dict) else {}
+    gm3 = pl3.get("gm_output") if isinstance(pl3.get("gm_output"), dict) else {}
+    snap3 = snapshot_from_chat_payload(2, turns[2], pl3)
     try:
-        assert res.get("kind") == "question"
-        assert res.get("kind") != "adjudication_query"
-        soc = res.get("social") if isinstance(res.get("social"), dict) else {}
-        assert soc.get("social_intent_class") == "social_exchange"
-        nid = str(soc.get("npc_id") or "")
-        assert nid == "emergent_lord_ashvale", f"unexpected npc_id={nid!r}"
-        sess = pl.get("session") if isinstance(pl.get("session"), dict) else {}
-        trace = _last_debug_trace(sess)
-        assert trace.get("canonical_entry_path") == "social"
+        if res3:
+            assert res3.get("kind") == "question"
+            assert res3.get("kind") != "adjudication_query"
+            soc3 = res3.get("social") if isinstance(res3.get("social"), dict) else {}
+            assert soc3.get("social_intent_class") == "social_exchange"
+            nid3 = str(soc3.get("npc_id") or "")
+        else:
+            nid3 = str(latest_target_id(snap3) or "")
+        assert nid3 == "emergent_lord_ashvale", f"unexpected npc_id={nid3!r}"
+        sess3 = pl3.get("session") if isinstance(pl3.get("session"), dict) else {}
+        trace3 = _last_debug_trace(sess3)
+        assert trace3.get("canonical_entry_path") == "social"
+        pft3 = str(gm3.get("player_facing_text") or "")
+        assert pft3.strip()
+        assert not _is_placeholder_only_player_facing_text(pft3)
+        assert gm3.get("targeted_retry_terminal") is True
     except AssertionError as e:
         _fail_mixed(str(e), failing_turn=2, turns=turns, payloads=payloads)
+
+    pl4 = payloads[3]
+    res4 = pl4.get("resolution") if isinstance(pl4.get("resolution"), dict) else {}
+    snap4 = snapshot_from_chat_payload(3, turns[3], pl4)
+    try:
+        if res4:
+            assert res4.get("kind") == "question"
+            assert res4.get("kind") != "adjudication_query"
+            soc4 = res4.get("social") if isinstance(res4.get("social"), dict) else {}
+            assert soc4.get("social_intent_class") == "social_exchange"
+            nid4 = str(soc4.get("npc_id") or "")
+        else:
+            nid4 = str(latest_target_id(snap4) or "")
+        assert nid4 == "emergent_lord_ashvale", f"unexpected npc_id turn4={nid4!r}"
+        sess4 = pl4.get("session") if isinstance(pl4.get("session"), dict) else {}
+        trace4 = _last_debug_trace(sess4)
+        assert trace4.get("canonical_entry_path") == "social"
+    except AssertionError as e:
+        _fail_mixed(str(e), failing_turn=3, turns=turns, payloads=payloads)
 
 
 def test_social_text_with_hook_cannot_end_with_no_new_information_state(tmp_path: Path, monkeypatch: Any) -> None:

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import pytest
 from fastapi.testclient import TestClient
 
 from game import storage
@@ -14,6 +15,9 @@ from game.defaults import (
     default_world,
 )
 
+pytestmark = [pytest.mark.integration, pytest.mark.regression]
+
+# feature: social, continuity
 
 FAKE_GPT_RESPONSE = {
     "player_facing_text": "[Narration]",

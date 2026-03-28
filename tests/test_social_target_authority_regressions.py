@@ -20,6 +20,7 @@ from game.social import resolve_social_action
 from game.social_exchange_emission import build_final_strict_social_response
 from game.storage import load_scene
 
+pytestmark = [pytest.mark.integration, pytest.mark.regression]
 
 STRANGER_PATROL_LINE = "Stranger, do you know anything about the missing patrol?"
 WATCHMAN_CAPTAIN_LINE = "You, watchman. Where is your Captain?"

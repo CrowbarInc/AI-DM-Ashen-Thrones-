@@ -10,6 +10,8 @@ from fastapi.testclient import TestClient
 from game.api import app
 from game.utils import utc_iso_now
 
+# feature: continuity
+
 
 def test_utc_iso_now_returns_valid_iso_format():
     """utc_iso_now() returns parseable ISO timestamp ending with Z."""

@@ -1,15 +1,24 @@
 """Shared turn-pipeline tests for /api/action and /api/chat.
 
 These tests verify both endpoints exercise the same resolved-turn orchestration.
+
+Per-test ``# feature: ...`` comments tag ownership for ``tools/test_audit.py``:
+routing, retry, fallback, social, continuity, clues, leads, emission, legality.
+
+Parametrized blocks (same setup + assertion shape): dialogue-lock prompt variants;
+OOC adjudication without GPT; action vs chat runtime mutation before prompt build.
+Canonical routing table remains ``test_choose_interaction_route_dialogue_lock_pure_contract``.
+Explicit multi-turn / retry / emission-gate bug locks stay non-parametrized.
 """
 from __future__ import annotations
 
 import json
 
+import pytest
 from fastapi.testclient import TestClient
 
 from game import storage
-from game.api import app
+from game.api import app, choose_interaction_route, is_directed_dialogue, is_world_action
 from game.defaults import (
     default_campaign,
     default_character,
@@ -21,6 +30,7 @@ from game.defaults import (
 )
 from game.prompt_context import NO_VALIDATOR_VOICE_RULE
 
+pytestmark = pytest.mark.integration
 
 FAKE_GPT_RESPONSE = {
     "player_facing_text": "[Narration]",
@@ -130,6 +140,7 @@ def _assert_concrete_pressure(text: str) -> None:
     )
 
 
+# feature: social, routing
 def test_action_and_chat_social_use_equivalent_shared_turn_logic(tmp_path, monkeypatch):
     social_action = {
         "id": "question-runner",
@@ -198,6 +209,7 @@ def test_action_and_chat_social_use_equivalent_shared_turn_logic(tmp_path, monke
     assert chat_ctx.get("engagement_level") == "engaged"
 
 
+# feature: clues
 def test_action_and_chat_investigate_both_mark_runtime_discovery_memory(tmp_path, monkeypatch):
     explore_action = {
         "id": "inv-desk",
@@ -239,6 +251,7 @@ def test_action_and_chat_investigate_both_mark_runtime_discovery_memory(tmp_path
     assert "inv-desk" in (chat_rt.get("searched_targets") or [])
 
 
+# feature: fallback
 def test_chat_fallback_preserves_endpoint_specific_no_resolution_shape(tmp_path, monkeypatch):
     _seed_shared_world(tmp_path, monkeypatch)
 
@@ -257,6 +270,7 @@ def test_chat_fallback_preserves_endpoint_specific_no_resolution_shape(tmp_path,
     assert "gm_output" in data
 
 
+# feature: retry, legality
 def test_chat_targeted_retry_validator_voice_only(tmp_path, monkeypatch):
     _seed_shared_world(tmp_path, monkeypatch)
     captured_inputs = []
@@ -288,6 +302,7 @@ def test_chat_targeted_retry_validator_voice_only(tmp_path, monkeypatch):
     assert "retry_strategy:selected=validator_voice" in ((data.get("gm_output") or {}).get("debug_notes") or "")
 
 
+# feature: legality
 def test_chat_prompt_carries_no_validator_voice_policy(tmp_path, monkeypatch):
     _seed_shared_world(tmp_path, monkeypatch)
     captured_inputs = []
@@ -315,6 +330,7 @@ def test_chat_prompt_carries_no_validator_voice_policy(tmp_path, monkeypatch):
     assert payload["response_policy"]["no_validator_voice"]["applies_to"] == "standard_narration"
 
 
+# feature: leads
 def test_chat_persists_recent_contextual_leads_from_gm_reply(tmp_path, monkeypatch):
     _seed_shared_world(tmp_path, monkeypatch)
 
@@ -339,6 +355,7 @@ def test_chat_persists_recent_contextual_leads_from_gm_reply(tmp_path, monkeypat
     assert any("missing patrol" in str(entry.get("subject") or "").lower() for entry in recent)
 
 
+# feature: fallback, leads
 def test_chat_known_follow_up_bypasses_uncertainty_fallback(tmp_path, monkeypatch):
     _seed_shared_world(tmp_path, monkeypatch)
     session = storage.load_session()
@@ -372,6 +389,7 @@ def test_chat_known_follow_up_bypasses_uncertainty_fallback(tmp_path, monkeypatc
     assert "known_fact_guard:recent_dialogue_continuity" in (gm_output.get("debug_notes") or "")
 
 
+# feature: retry, legality
 def test_chat_targeted_retry_unresolved_question_only(tmp_path, monkeypatch):
     _seed_shared_world(tmp_path, monkeypatch)
     captured_inputs = []
@@ -409,6 +427,7 @@ def test_chat_targeted_retry_unresolved_question_only(tmp_path, monkeypatch):
     assert "retry_strategy:selected=unresolved_question" in ((data.get("gm_output") or {}).get("debug_notes") or "")
 
 
+# feature: retry
 def test_chat_targeted_retry_prefers_highest_priority_failure_first(tmp_path, monkeypatch):
     _seed_shared_world(tmp_path, monkeypatch)
     captured_inputs = []
@@ -442,6 +461,7 @@ def test_chat_targeted_retry_prefers_highest_priority_failure_first(tmp_path, mo
     assert "retry_strategy:selected=unresolved_question" in ((data.get("gm_output") or {}).get("debug_notes") or "")
 
 
+# feature: retry, fallback
 def test_chat_unresolved_retry_failure_uses_deterministic_known_fact_fallback(tmp_path, monkeypatch):
     _seed_shared_world(tmp_path, monkeypatch)
     captured_inputs = []
@@ -474,6 +494,7 @@ def test_chat_unresolved_retry_failure_uses_deterministic_known_fact_fallback(tm
     assert "retry_fallback:unresolved_question:known_fact_guard:current_scene_state" in dbg
 
 
+# feature: retry, fallback
 def test_chat_unresolved_retry_failure_uses_speaker_grounded_uncertainty_fallback(tmp_path, monkeypatch):
     _seed_runner_dialogue_context(tmp_path, monkeypatch)
     captured_inputs = []
@@ -505,6 +526,7 @@ def test_chat_unresolved_retry_failure_uses_speaker_grounded_uncertainty_fallbac
     assert "retry_strategy:selected=unresolved_question" in (gm_output.get("debug_notes") or "")
 
 
+# feature: retry
 def test_chat_targeted_retry_scene_stall_only(tmp_path, monkeypatch):
     _seed_shared_world(tmp_path, monkeypatch)
     session = storage.load_session()
@@ -544,6 +566,7 @@ def test_chat_targeted_retry_scene_stall_only(tmp_path, monkeypatch):
     assert "retry_strategy:selected=scene_stall" in ((data.get("gm_output") or {}).get("debug_notes") or "")
 
 
+# feature: social, continuity
 def test_chat_single_wait_in_tense_scene_forces_interaction_pressure(tmp_path, monkeypatch):
     _seed_shared_world(tmp_path, monkeypatch)
     scene = storage.load_scene("scene_investigate")
@@ -568,6 +591,7 @@ def test_chat_single_wait_in_tense_scene_forces_interaction_pressure(tmp_path, m
     assert "passive_scene_pressure" in ((data.get("gm_output") or {}).get("tags") or [])
 
 
+# feature: social
 def test_chat_repeated_passive_actions_do_not_stall_into_atmosphere(tmp_path, monkeypatch):
     _seed_shared_world(tmp_path, monkeypatch)
     scene = storage.load_scene("scene_investigate")
@@ -596,6 +620,7 @@ def test_chat_repeated_passive_actions_do_not_stall_into_atmosphere(tmp_path, mo
     assert "streak=2" in debug_notes
 
 
+# feature: social
 def test_chat_passive_scene_prefers_already_introduced_suspicious_figure(tmp_path, monkeypatch):
     _seed_shared_world(tmp_path, monkeypatch)
     session = storage.load_session()
@@ -630,6 +655,7 @@ def test_chat_passive_scene_prefers_already_introduced_suspicious_figure(tmp_pat
     assert "passive_scene_pressure:lead_figure" in (((data.get("gm_output") or {}).get("debug_notes")) or "")
 
 
+# feature: emission
 def test_chat_roll_requirement_question_routes_to_adjudication_without_gpt(tmp_path, monkeypatch):
     _seed_shared_world(tmp_path, monkeypatch)
 
@@ -655,6 +681,74 @@ def test_chat_roll_requirement_question_routes_to_adjudication_without_gpt(tmp_p
     assert "adjudication_query" in (data.get("gm_output") or {}).get("tags", [])
 
 
+# feature: routing
+@pytest.mark.unit
+@pytest.mark.regression
+def test_choose_interaction_route_dialogue_lock_pure_contract() -> None:
+    """Canonical pure routing table for dialogue lock (merged from former test_dialogue_routing_lock)."""
+    scene = {"scene": {"id": "scene_investigate"}}
+    world = {
+        "npcs": [
+            {"id": "runner", "name": "Tavern Runner", "location": "scene_investigate"},
+            {"id": "captain_veyra", "name": "Captain Veyra", "location": "scene_investigate"},
+        ]
+    }
+    session = {
+        "interaction_context": {
+            "active_interaction_target_id": "runner",
+            "active_interaction_kind": "social",
+            "interaction_mode": "social",
+            "engagement_level": "engaged",
+        }
+    }
+    assert is_directed_dialogue(
+        "Runner, do you know where I can find those figures?",
+        scene=scene,
+        session=session,
+        world=world,
+    )
+    for text in (
+        "Who attacked them?",
+        "What are they planning?",
+        "Who saw this happen?",
+        "Tell me what you know.",
+    ):
+        assert choose_interaction_route(text, scene=scene, session=session, world=world) == "dialogue"
+    assert is_world_action("I search the crossroads for tracks.")
+    assert (
+        choose_interaction_route("I follow the runner.", scene=scene, session=session, world=world) == "action"
+    )
+    assert (
+        choose_interaction_route("I grab him and demand answers.", scene=scene, session=session, world=world)
+        == "action"
+    )
+    for text in (
+        "Well? What should I do next?",
+        "So what's the next step?",
+        "Where does this lead?",
+    ):
+        assert choose_interaction_route(text, scene=scene, session=session, world=world) == "dialogue"
+    assert (
+        choose_interaction_route(
+            "OOC, what actions are available?",
+            scene=scene,
+            session=session,
+            world=world,
+        )
+        != "dialogue"
+    )
+    assert (
+        choose_interaction_route(
+            "Mechanically, what can I roll here?",
+            scene=scene,
+            session=session,
+            world=world,
+        )
+        != "dialogue"
+    )
+
+
+# feature: routing, social
 def test_chat_active_target_location_question_routes_to_social_exchange(tmp_path, monkeypatch):
     _seed_runner_dialogue_context(tmp_path, monkeypatch)
 
@@ -675,59 +769,73 @@ def test_chat_active_target_location_question_routes_to_social_exchange(tmp_path
     assert resolution.get("kind") != "adjudication_query"
 
 
-def test_chat_dialogue_lock_routes_npc_directed_question_regressions(tmp_path, monkeypatch):
+# feature: routing, social
+@pytest.mark.parametrize(
+    "user_text",
+    [
+        pytest.param(
+            "Runner, do you know where can I find those figures?",
+            id="runner_direct_address",
+        ),
+        pytest.param("Who attacked them?", id="pronoun_who_attacked"),
+        pytest.param("What are they planning?", id="pronoun_what_planning"),
+        pytest.param("Who saw this happen?", id="who_saw"),
+    ],
+)
+def test_chat_dialogue_lock_routes_npc_directed_question_regressions(tmp_path, monkeypatch, user_text):
+    """Pipeline lock: directed / pronominal questions stay social_exchange on active runner."""
     _seed_runner_dialogue_context(tmp_path, monkeypatch)
 
-    prompts = [
-        "Runner, do you know where can I find those figures?",
-        "Who attacked them?",
-        "What are they planning?",
-        "Who saw this happen?",
-    ]
     with monkeypatch.context() as m:
         m.setattr("game.api.call_gpt", lambda _: FAKE_GPT_RESPONSE)
         m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
         m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
         m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
         client = TestClient(app)
-        for prompt in prompts:
-            resp = client.post("/api/chat", json={"text": prompt})
-            assert resp.status_code == 200
-            data = resp.json()
-            resolution = data.get("resolution") or {}
-            assert resolution.get("kind") == "question"
-            assert (resolution.get("social") or {}).get("social_intent_class") == "social_exchange"
-            assert (resolution.get("social") or {}).get("npc_id") == "runner"
-            assert resolution.get("kind") != "adjudication_query"
-            text = ((data.get("gm_output") or {}).get("player_facing_text") or "").lower()
-            assert "resolve that procedurally" not in text
+        resp = client.post("/api/chat", json={"text": user_text})
+    assert resp.status_code == 200
+    data = resp.json()
+    resolution = data.get("resolution") or {}
+    assert resolution.get("kind") == "question"
+    assert (resolution.get("social") or {}).get("social_intent_class") == "social_exchange"
+    assert (resolution.get("social") or {}).get("npc_id") == "runner"
+    assert resolution.get("kind") != "adjudication_query"
+    text = ((data.get("gm_output") or {}).get("player_facing_text") or "").lower()
+    assert "resolve that procedurally" not in text
 
 
-def test_chat_dialogue_lock_routes_ambiguous_next_step_questions_to_active_npc(tmp_path, monkeypatch):
+# feature: routing, social
+@pytest.mark.parametrize(
+    "user_text",
+    [
+        pytest.param("Well? What should I do next?", id="what_next_well"),
+        pytest.param("So? What's the next step?", id="next_step_so"),
+        pytest.param("Where does this lead?", id="where_lead"),
+    ],
+)
+def test_chat_dialogue_lock_routes_ambiguous_next_step_questions_to_active_npc(
+    tmp_path, monkeypatch, user_text
+):
+    """Meta / ambiguous follow-ups stay dialogue lane (question or social_probe), not adjudication."""
     _seed_runner_dialogue_context(tmp_path, monkeypatch)
 
-    prompts = [
-        "Well? What should I do next?",
-        "So? What's the next step?",
-        "Where does this lead?",
-    ]
     with monkeypatch.context() as m:
         m.setattr("game.api.call_gpt", lambda _: FAKE_GPT_RESPONSE)
         m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
         m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
         m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
         client = TestClient(app)
-        for prompt in prompts:
-            resp = client.post("/api/chat", json={"text": prompt})
-            assert resp.status_code == 200
-            data = resp.json()
-            resolution = data.get("resolution") or {}
-            assert resolution.get("kind") in {"question", "social_probe"}
-            assert (resolution.get("social") or {}).get("social_intent_class") == "social_exchange"
-            assert (resolution.get("social") or {}).get("npc_id") == "runner"
-            assert resolution.get("kind") != "adjudication_query"
+        resp = client.post("/api/chat", json={"text": user_text})
+    assert resp.status_code == 200
+    data = resp.json()
+    resolution = data.get("resolution") or {}
+    assert resolution.get("kind") in {"question", "social_probe"}
+    assert (resolution.get("social") or {}).get("social_intent_class") == "social_exchange"
+    assert (resolution.get("social") or {}).get("npc_id") == "runner"
+    assert resolution.get("kind") != "adjudication_query"
 
 
+# feature: social
 def test_chat_repeated_social_questions_keep_npc_uncertainty_voice(tmp_path, monkeypatch):
     _seed_runner_dialogue_context(tmp_path, monkeypatch)
 
@@ -750,6 +858,7 @@ def test_chat_repeated_social_questions_keep_npc_uncertainty_voice(tmp_path, mon
             assert "state exactly what you do" not in low
 
 
+# feature: social
 def test_chat_repeated_topic_questions_skip_policy_topic_pressure_for_strict_social(tmp_path, monkeypatch):
     _seed_shared_world(tmp_path, monkeypatch)
     world = storage.load_world()
@@ -804,30 +913,35 @@ def test_chat_repeated_topic_questions_skip_policy_topic_pressure_for_strict_soc
                 assert not any(str(tag).startswith("scene_momentum:") for tag in tags)
 
 
-def test_chat_dialogue_lock_mixed_questioning_keeps_dialogue_lane(tmp_path, monkeypatch):
+# feature: routing, social
+@pytest.mark.parametrize(
+    "user_text",
+    [
+        pytest.param("I lean in and ask quietly who saw it.", id="lean_in_quiet_question"),
+        pytest.param("I scan the crowd while asking who saw it.", id="scan_crowd_question"),
+    ],
+)
+def test_chat_dialogue_lock_mixed_questioning_keeps_dialogue_lane(tmp_path, monkeypatch, user_text):
+    """Action-flavored wording with a question still routes to dialogue, not world/adjudication."""
     _seed_runner_dialogue_context(tmp_path, monkeypatch)
 
-    prompts = [
-        "I lean in and ask quietly who saw it.",
-        "I scan the crowd while asking who saw it.",
-    ]
     with monkeypatch.context() as m:
         m.setattr("game.api.call_gpt", lambda _: FAKE_GPT_RESPONSE)
         m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
         m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
         m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
         client = TestClient(app)
-        for prompt in prompts:
-            resp = client.post("/api/chat", json={"text": prompt})
-            assert resp.status_code == 200
-            data = resp.json()
-            resolution = data.get("resolution") or {}
-            assert resolution.get("kind") in {"question", "social_probe"}
-            assert (resolution.get("social") or {}).get("social_intent_class") == "social_exchange"
-            assert (resolution.get("social") or {}).get("npc_id") == "runner"
-            assert resolution.get("kind") != "adjudication_query"
+        resp = client.post("/api/chat", json={"text": user_text})
+    assert resp.status_code == 200
+    data = resp.json()
+    resolution = data.get("resolution") or {}
+    assert resolution.get("kind") in {"question", "social_probe"}
+    assert (resolution.get("social") or {}).get("social_intent_class") == "social_exchange"
+    assert (resolution.get("social") or {}).get("npc_id") == "runner"
+    assert resolution.get("kind") != "adjudication_query"
 
 
+# feature: routing
 def test_chat_dialogue_lock_does_not_override_forceful_world_action(tmp_path, monkeypatch):
     _seed_runner_dialogue_context(tmp_path, monkeypatch)
 
@@ -844,6 +958,7 @@ def test_chat_dialogue_lock_does_not_override_forceful_world_action(tmp_path, mo
     assert resolution.get("kind") != "adjudication_query"
 
 
+# feature: routing, social
 def test_chat_social_pressure_line_prefers_dialogue_over_adjudication(tmp_path, monkeypatch):
     _seed_shared_world(tmp_path, monkeypatch)
 
@@ -862,6 +977,7 @@ def test_chat_social_pressure_line_prefers_dialogue_over_adjudication(tmp_path, 
     assert "adjudication_query" not in ((data.get("gm_output") or {}).get("tags") or [])
 
 
+# feature: routing, social
 def test_chat_active_target_direct_command_routes_to_social_exchange(tmp_path, monkeypatch):
     _seed_shared_world(tmp_path, monkeypatch)
     world = storage.load_world()
@@ -900,7 +1016,18 @@ def test_chat_active_target_direct_command_routes_to_social_exchange(tmp_path, m
     assert resolution.get("kind") != "adjudication_query"
 
 
-def test_chat_explicit_ooc_roll_question_stays_adjudication(tmp_path, monkeypatch):
+# feature: routing, emission
+@pytest.mark.parametrize(
+    "user_text, expected_category",
+    [
+        pytest.param("OOC: does this need a roll?", "roll_requirement_query", id="ooc_roll_question"),
+        pytest.param("OOC, what actions are available?", None, id="ooc_actions_available"),
+    ],
+)
+def test_chat_explicit_ooc_stays_adjudication_without_gpt(
+    tmp_path, monkeypatch, user_text, expected_category
+):
+    """Explicit OOC/mechanical questions bypass dialogue lock and resolve as adjudication (no GPT)."""
     _seed_shared_world(tmp_path, monkeypatch)
 
     with monkeypatch.context() as m:
@@ -909,31 +1036,17 @@ def test_chat_explicit_ooc_roll_question_stays_adjudication(tmp_path, monkeypatc
         m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
         m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
         client = TestClient(app)
-        resp = client.post("/api/chat", json={"text": "OOC: does this need a roll?"})
+        resp = client.post("/api/chat", json={"text": user_text})
 
     assert resp.status_code == 200
     data = resp.json()
     assert (data.get("resolution") or {}).get("kind") == "adjudication_query"
-    adjudication = (data.get("resolution") or {}).get("adjudication") or {}
-    assert adjudication.get("category") == "roll_requirement_query"
+    if expected_category is not None:
+        adjudication = (data.get("resolution") or {}).get("adjudication") or {}
+        assert adjudication.get("category") == expected_category
 
 
-def test_chat_explicit_ooc_actions_available_stays_adjudication(tmp_path, monkeypatch):
-    _seed_shared_world(tmp_path, monkeypatch)
-
-    with monkeypatch.context() as m:
-        m.setattr("game.api.call_gpt", lambda *_args, **_kwargs: (_ for _ in ()).throw(AssertionError("GPT should not be called")))
-        m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
-        m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
-        m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
-        client = TestClient(app)
-        resp = client.post("/api/chat", json={"text": "OOC, what actions are available?"})
-
-    assert resp.status_code == 200
-    data = resp.json()
-    assert (data.get("resolution") or {}).get("kind") == "adjudication_query"
-
-
+# feature: emission
 def test_chat_earshot_question_routes_to_adjudication_with_state_answer(tmp_path, monkeypatch):
     _seed_shared_world(tmp_path, monkeypatch)
     world = storage.load_world()
@@ -965,6 +1078,7 @@ def test_chat_earshot_question_routes_to_adjudication_with_state_answer(tmp_path
     assert "Guard Captain" in ((data.get("gm_output") or {}).get("player_facing_text") or "")
 
 
+# feature: emission
 def test_chat_adjudication_refuses_over_answer_without_basis(tmp_path, monkeypatch):
     _seed_shared_world(tmp_path, monkeypatch)
 
@@ -995,6 +1109,7 @@ def test_chat_adjudication_refuses_over_answer_without_basis(tmp_path, monkeypat
     )
 
 
+# feature: continuity, emission
 def test_chat_mixed_turn_preserves_embedded_adjudication_metadata(tmp_path, monkeypatch):
     _seed_shared_world(tmp_path, monkeypatch)
     with monkeypatch.context() as m:
@@ -1016,6 +1131,7 @@ def test_chat_mixed_turn_preserves_embedded_adjudication_metadata(tmp_path, monk
     assert "Perception" in (embedded.get("question") or "")
 
 
+# feature: routing, social
 def test_chat_mixed_dialogue_with_parenthetical_rules_uses_social_main_lane(tmp_path, monkeypatch):
     _seed_shared_world(tmp_path, monkeypatch)
     world = storage.load_world()
@@ -1059,6 +1175,7 @@ def test_chat_mixed_dialogue_with_parenthetical_rules_uses_social_main_lane(tmp_
     assert embedded.get("requires_check") is True
 
 
+# feature: emission
 def test_chat_persuasion_returns_engine_check_prompt_without_gpt(tmp_path, monkeypatch):
     _seed_shared_world(tmp_path, monkeypatch)
     world = storage.load_world()
@@ -1095,6 +1212,7 @@ def test_chat_persuasion_returns_engine_check_prompt_without_gpt(tmp_path, monke
     assert (data.get("gm_output") or {}).get("player_facing_text") == check_request.get("player_prompt")
 
 
+# feature: emission
 def test_chat_covert_concealment_under_observation_prompts_engine_check(tmp_path, monkeypatch):
     _seed_shared_world(tmp_path, monkeypatch)
     with monkeypatch.context() as m:
@@ -1119,6 +1237,7 @@ def test_chat_covert_concealment_under_observation_prompts_engine_check(tmp_path
     assert ("check_required" in tags) or ("adjudication_query" in tags)
 
 
+# feature: legality
 def test_chat_final_output_sanitizer_blocks_adjudication_procedural_leak(tmp_path, monkeypatch):
     _seed_shared_world(tmp_path, monkeypatch)
 
@@ -1150,6 +1269,7 @@ def test_chat_final_output_sanitizer_blocks_adjudication_procedural_leak(tmp_pat
     )
 
 
+# feature: legality
 def test_chat_final_output_sanitizer_blocks_internal_scaffold_labels(tmp_path, monkeypatch):
     _seed_shared_world(tmp_path, monkeypatch)
 
@@ -1173,6 +1293,7 @@ def test_chat_final_output_sanitizer_blocks_internal_scaffold_labels(tmp_path, m
     assert "validator:" not in low
 
 
+# feature: emission
 def test_resolved_turn_trace_is_compact_and_authoritative(tmp_path, monkeypatch):
     explore_action = {
         "id": "inv-desk",
@@ -1213,7 +1334,18 @@ def test_resolved_turn_trace_is_compact_and_authoritative(tmp_path, monkeypatch)
     assert any(a.get("id") == "desk" for a in affordances_after if isinstance(a, dict))
 
 
-def test_action_mutates_runtime_before_prompt_context_construction(tmp_path, monkeypatch):
+# feature: emission
+@pytest.mark.parametrize(
+    "channel",
+    [
+        pytest.param("action", id="via_api_action"),
+        pytest.param("chat", id="via_api_chat"),
+    ],
+)
+def test_action_and_chat_mutate_runtime_before_prompt_context_construction(
+    tmp_path, monkeypatch, channel
+):
+    """Exploration resolution updates scene_runtime before build_messages sees it (action and chat)."""
     explore_action = {
         "id": "desk",
         "label": "Investigate the desk",
@@ -1233,46 +1365,27 @@ def test_action_mutates_runtime_before_prompt_context_construction(tmp_path, mon
         m.setattr("game.api.build_messages", _fake_build_messages)
         m.setattr("game.api.call_gpt", lambda _: FAKE_GPT_RESPONSE)
         client = TestClient(app)
-        resp = client.post(
-            "/api/action",
-            json={"action_type": "exploration", "intent": "I investigate the desk.", "exploration_action": explore_action},
-        )
+        if channel == "action":
+            resp = client.post(
+                "/api/action",
+                json={
+                    "action_type": "exploration",
+                    "intent": "I investigate the desk.",
+                    "exploration_action": explore_action,
+                },
+            )
+        else:
+            m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
+            m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: explore_action)
+            m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+            resp = client.post("/api/chat", json={"text": "I investigate the desk."})
 
     assert resp.status_code == 200
     assert "A map indicates patrol locations." in (captured.get("discovered_clues") or [])
     assert "desk" in (captured.get("searched_targets") or [])
 
 
-def test_chat_mutates_runtime_before_prompt_context_construction(tmp_path, monkeypatch):
-    explore_action = {
-        "id": "desk",
-        "label": "Investigate the desk",
-        "type": "investigate",
-        "prompt": "I investigate the desk.",
-    }
-    _seed_shared_world(tmp_path, monkeypatch)
-    captured: dict = {}
-
-    def _fake_build_messages(*_args, **kwargs):
-        scene_runtime = kwargs.get("scene_runtime") or {}
-        captured["discovered_clues"] = list(scene_runtime.get("discovered_clues") or [])
-        captured["searched_targets"] = list(scene_runtime.get("searched_targets") or [])
-        return [{"role": "system", "content": "x"}, {"role": "user", "content": "{}"}]
-
-    with monkeypatch.context() as m:
-        m.setattr("game.api.build_messages", _fake_build_messages)
-        m.setattr("game.api.call_gpt", lambda _: FAKE_GPT_RESPONSE)
-        m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
-        m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: explore_action)
-        m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
-        client = TestClient(app)
-        resp = client.post("/api/chat", json={"text": "I investigate the desk."})
-
-    assert resp.status_code == 200
-    assert "A map indicates patrol locations." in (captured.get("discovered_clues") or [])
-    assert "desk" in (captured.get("searched_targets") or [])
-
-
+# feature: emission
 def test_affordances_are_state_derived_not_from_gpt_text(tmp_path, monkeypatch):
     explore_action = {
         "id": "desk",
@@ -1309,6 +1422,7 @@ def test_affordances_are_state_derived_not_from_gpt_text(tmp_path, monkeypatch):
     assert "(already searched)" in str(desk_affs[0].get("label") or "")
 
 
+# feature: social
 def test_chat_implied_lowered_voice_is_applied_before_prompt_context(tmp_path, monkeypatch):
     _seed_shared_world(tmp_path, monkeypatch)
     captured: dict = {}
@@ -1332,6 +1446,7 @@ def test_chat_implied_lowered_voice_is_applied_before_prompt_context(tmp_path, m
     assert captured.get("conversation_privacy") == "lowered_voice"
 
 
+# feature: social
 def test_chat_implied_sit_with_target_is_applied_before_prompt_context(tmp_path, monkeypatch):
     _seed_shared_world(tmp_path, monkeypatch)
     world = storage.load_world()
@@ -1368,6 +1483,7 @@ def test_chat_implied_sit_with_target_is_applied_before_prompt_context(tmp_path,
     assert captured.get("player_position_context") == "seated_with_target"
 
 
+# feature: emission
 def test_final_emission_gate_replaces_invalid_social_exchange_blob_before_emit(tmp_path, monkeypatch):
     _seed_runner_dialogue_context(tmp_path, monkeypatch)
 
@@ -1404,6 +1520,7 @@ def test_final_emission_gate_replaces_invalid_social_exchange_blob_before_emit(t
     )
 
 
+# feature: emission, legality
 def test_final_emission_gate_blocks_advisory_prose_inside_social_exchange(tmp_path, monkeypatch):
     _seed_runner_dialogue_context(tmp_path, monkeypatch)
 
@@ -1439,6 +1556,7 @@ def test_final_emission_gate_blocks_advisory_prose_inside_social_exchange(tmp_pa
     )
 
 
+# feature: emission
 def test_final_emission_gate_strips_unresolved_stock_phrases_from_social_output(tmp_path, monkeypatch):
     _seed_runner_dialogue_context(tmp_path, monkeypatch)
 
@@ -1474,6 +1592,7 @@ def test_final_emission_gate_strips_unresolved_stock_phrases_from_social_output(
     )
 
 
+# feature: emission
 def test_final_emission_gate_keeps_interruption_output_coherent(tmp_path, monkeypatch):
     _seed_runner_dialogue_context(tmp_path, monkeypatch)
 
@@ -1511,6 +1630,7 @@ def test_final_emission_gate_keeps_interruption_output_coherent(tmp_path, monkey
     )
 
 
+# feature: emission
 def test_final_emission_gate_repeated_questioning_can_end_clean_refusal(tmp_path, monkeypatch):
     _seed_runner_dialogue_context(tmp_path, monkeypatch)
 

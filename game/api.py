@@ -67,8 +67,13 @@ from game.gm import (
     prioritize_retry_failures_for_social_answer_candidate,
     build_retry_prompt_for_failure,
     apply_deterministic_retry_fallback,
+    force_terminal_retry_fallback,
     remember_recent_contextual_leads,
     register_topic_probe,
+    _gm_has_usable_player_facing_text,
+    _session_social_authority,
+    ensure_minimal_nonsocial_resolution,
+    ensure_minimal_social_resolution,
 )
 from game.journal import build_player_journal
 from game.affordances import get_available_affordances
@@ -986,6 +991,30 @@ def _build_gpt_narration_from_authoritative_state(
         )
         return prioritized
 
+    def _repair_terminal_player_facing_if_needed(gm_dict: dict, *, reason: str) -> dict:
+        sid = str((scene.get("scene") or {}).get("id") or "").strip()
+        social_lane = _session_social_authority(session) or strict_social_emission_will_apply(
+            resolution, session, world, sid
+        )
+        if _gm_has_usable_player_facing_text(gm_dict):
+            return gm_dict
+        if social_lane:
+            repaired = ensure_minimal_social_resolution(
+                gm=gm_dict,
+                session=session,
+                reason=reason,
+                world=world,
+                resolution=resolution if isinstance(resolution, dict) else None,
+                scene_envelope=scene,
+            )
+            print("[SOCIAL RESOLUTION REPAIR] terminal empty social output repaired")
+            return repaired
+        repaired_ns = ensure_minimal_nonsocial_resolution(gm=gm_dict, session=session)
+        dbg = repaired_ns.get("debug_notes") if isinstance(repaired_ns.get("debug_notes"), str) else ""
+        repaired_ns["debug_notes"] = (dbg + " | " if dbg else "") + f"nonsocial_repair_context:{reason}"
+        print("[NON-SOCIAL RESOLUTION REPAIR] empty output repaired")
+        return repaired_ns
+
     known_clues = list(get_all_known_clue_texts(session))
     gm = guard_gm_output(
         call_gpt(messages),
@@ -997,7 +1026,7 @@ def _build_gpt_narration_from_authoritative_state(
         resolution=resolution,
     )
     retry_attempt = 0
-    while retry_attempt < MAX_TARGETED_RETRY_ATTEMPTS:
+    while True:
         failures = _failures_after_social_answer_priority(
             detect_retry_failures(
                 player_text=user_text,
@@ -1010,6 +1039,24 @@ def _build_gpt_narration_from_authoritative_state(
         )
         selected_failure = choose_retry_strategy(failures)
         if not selected_failure:
+            break
+        if retry_attempt >= MAX_TARGETED_RETRY_ATTEMPTS:
+            fc = str(selected_failure.get("failure_class") or "").strip()
+            print(f"[RETRY ESCAPE HATCH] class={fc} attempts={retry_attempt}")
+            gm = force_terminal_retry_fallback(
+                session=session,
+                original_text=str(gm.get("player_facing_text") or ""),
+                failure=selected_failure,
+                retry_failures=failures,
+                player_text=user_text,
+                scene_envelope=scene,
+                world=world,
+                resolution=resolution,
+                base_gm=gm,
+            )
+            gm = _repair_terminal_player_facing_if_needed(
+                gm, reason="api_post_force_terminal_retry_fallback"
+            )
             break
         retry_attempt += 1
         retry_instruction = build_retry_prompt_for_failure(
@@ -1071,13 +1118,14 @@ def _build_gpt_narration_from_authoritative_state(
             selected_class == "answer" and still_unresolved_after_answer_retry
         )
         if use_question_retry_fallback:
+            _vf = still_failing if isinstance(still_failing, dict) else still_unresolved_after_answer_retry
             print(
                 "[RETRY] validation_failed selected_strategy=",
                 selected_class,
                 "attempt=",
                 retry_attempt,
                 "reasons=",
-                still_failing.get("reasons"),
+                (_vf.get("reasons") if isinstance(_vf, dict) else None),
                 "action=deterministic_fallback",
             )
             fallback_failure = (
@@ -1114,9 +1162,37 @@ def _build_gpt_narration_from_authoritative_state(
                 "status=",
                 "failed" if fallback_still_failing else "passed",
             )
-            gm = gm_retry
+            if fallback_still_failing:
+                print(f"[RETRY ESCAPE HATCH] class={selected_class} attempts={retry_attempt}")
+                fail_meta = next(
+                    (
+                        f
+                        for f in fallback_failures
+                        if isinstance(f, dict) and str(f.get("failure_class") or "").strip() == selected_class
+                    ),
+                    selected_failure,
+                )
+                gm = force_terminal_retry_fallback(
+                    session=session,
+                    original_text=str(gm_retry.get("player_facing_text") or ""),
+                    failure=fail_meta if isinstance(fail_meta, dict) else selected_failure,
+                    retry_failures=fallback_failures,
+                    player_text=user_text,
+                    scene_envelope=scene,
+                    world=world,
+                    resolution=resolution,
+                    base_gm=gm_retry,
+                )
+                gm = _repair_terminal_player_facing_if_needed(
+                    gm, reason="api_post_force_terminal_retry_fallback"
+                )
+            else:
+                gm = gm_retry
             break
         gm = gm_retry
+    gm = _repair_terminal_player_facing_if_needed(
+        gm, reason="api_targeted_retry_post_terminal"
+    )
     gm = apply_response_policy_enforcement(
         gm,
         response_policy=response_policy,
@@ -1126,6 +1202,9 @@ def _build_gpt_narration_from_authoritative_state(
         world=world,
         resolution=resolution,
         discovered_clues=known_clues,
+    )
+    gm = _repair_terminal_player_facing_if_needed(
+        gm, reason="api_post_response_policy_enforcement"
     )
     return gm
 

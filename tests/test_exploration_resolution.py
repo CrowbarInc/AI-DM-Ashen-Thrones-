@@ -6,15 +6,19 @@ from game.scene_actions import normalize_scene_action
 from game.storage import get_scene_runtime
 from game.defaults import default_scene, default_session, default_world, default_character, default_campaign, default_combat, default_conditions
 from fastapi.testclient import TestClient
+import pytest
 
-# Canonical engine result keys that resolve_exploration_action must always return
+# Canonical engine result keys from ExplorationEngineResult.to_dict()
 ENGINE_RESULT_REQUIRED_KEYS = frozenset({
     "kind", "action_id", "label", "prompt", "success", "resolved_transition",
     "target_scene_id", "clue_id", "discovered_clues", "world_updates", "state_changes", "hint",
 })
+ENGINE_RESULT_EXTRA_KEYS = frozenset({
+    "originating_scene_id", "interactable_id", "clue_text", "metadata", "skill_check",
+})
 
 
-def _assert_normalized_engine_result(resolution: dict, expected_kind: str) -> None:
+def _assert_normalized_engine_result(resolution: dict, expected_kind: str, **extra_assertions) -> None:
     """Assert resolution conforms to the standardized engine result schema."""
     assert isinstance(resolution, dict), "resolution must be a dict"
     for key in ENGINE_RESULT_REQUIRED_KEYS:
@@ -28,6 +32,11 @@ def _assert_normalized_engine_result(resolution: dict, expected_kind: str) -> No
     assert isinstance(resolution["discovered_clues"], list)
     assert isinstance(resolution["state_changes"], dict)
     assert isinstance(resolution["hint"], str)
+    known = ENGINE_RESULT_REQUIRED_KEYS | ENGINE_RESULT_EXTRA_KEYS
+    for key in resolution:
+        assert key in known, f"Unexpected key in resolution: {key}"
+    for k, v in extra_assertions.items():
+        assert resolution.get(k) == v, f"{k}={resolution.get(k)} != {v}"
 
 
 def _patch_storage(tmp_path, monkeypatch):
@@ -111,26 +120,7 @@ def test_scene_transition_with_known_target_activates_before_narration(tmp_path,
     assert call_gpt_invoked_with_scene_id and call_gpt_invoked_with_scene_id[-1] == "scene_b"
 
 
-# Canonical keys that all exploration engine results must have (ExplorationEngineResult schema)
-ENGINE_RESULT_CANONICAL_KEYS = frozenset({
-    "kind", "action_id", "label", "prompt", "success", "resolved_transition",
-    "target_scene_id", "clue_id", "discovered_clues", "world_updates", "state_changes", "hint",
-})
-
-
-def _assert_normalized_engine_result(resolution, expected_kind, **extra_assertions):
-    """Assert resolution conforms to the standardized engine result schema."""
-    assert isinstance(resolution, dict)
-    for key in ENGINE_RESULT_CANONICAL_KEYS:
-        assert key in resolution, f"Missing canonical key: {key}"
-    assert resolution["kind"] == expected_kind
-    assert isinstance(resolution.get("discovered_clues"), list)
-    assert isinstance(resolution.get("state_changes"), dict)
-    for k, v in extra_assertions.items():
-        assert resolution.get(k) == v, f"{k}={resolution.get(k)} != {v}"
-
-
-def test_observe_returns_normalized_engine_result():
+def test_observe_engine_result_with_literal_empty_session_world():
     """Observe actions return the standardized ExplorationEngineResult schema."""
     scene = {"scene": {"id": "test", "location": "Here"}}
     action = normalize_scene_action({"id": "observe-a", "label": "Observe the area", "type": "observe", "prompt": "Look around."})
@@ -140,7 +130,7 @@ def test_observe_returns_normalized_engine_result():
     assert resolution["success"] is None
 
 
-def test_investigate_returns_normalized_engine_result():
+def test_investigate_engine_result_with_empty_discoverable_clues():
     """Investigate actions (without interactable match) return normalized engine result."""
     scene = {"scene": {"id": "test", "location": "Here", "discoverable_clues": []}}
     action = normalize_scene_action({"id": "inv-desk", "label": "Investigate the desk", "type": "investigate", "prompt": "Search the desk."})
@@ -149,7 +139,7 @@ def test_investigate_returns_normalized_engine_result():
     assert resolution["action_id"] == "inv-desk"
 
 
-def test_discover_clue_returns_normalized_engine_result():
+def test_discover_clue_engine_result_map_fragment_interactable():
     """discover_clue (investigate on interactable) returns normalized engine result with clue fields."""
     scene = {
         "scene": {
@@ -168,7 +158,7 @@ def test_discover_clue_returns_normalized_engine_result():
     assert resolution.get("interactable_id") == "maps"
 
 
-def test_scene_transition_returns_normalized_engine_result():
+def test_scene_transition_engine_result_north_room_exit():
     """scene_transition with known target returns normalized engine result."""
     scene = {"scene": {"id": "gate", "exits": [{"label": "North", "target_scene_id": "north_room"}]}}
     action = normalize_scene_action({"id": "go-north", "label": "Go north", "type": "scene_transition", "targetSceneId": "north_room", "prompt": "Go north"})
@@ -178,7 +168,7 @@ def test_scene_transition_returns_normalized_engine_result():
     assert resolution["state_changes"].get("scene_changed") is True
 
 
-def test_custom_action_returns_normalized_engine_result():
+def test_custom_engine_result_mystery_action_id():
     """Unknown/custom actions still return a valid normalized engine result."""
     scene = {"scene": {"id": "test"}}
     action = normalize_scene_action({"id": "mystery", "label": "Do something odd", "type": "custom", "prompt": "Do something odd"})
@@ -187,30 +177,6 @@ def test_custom_action_returns_normalized_engine_result():
     assert resolution["action_id"] == "mystery"
     assert resolution["resolved_transition"] is False
     assert resolution["success"] is None
-
-
-# Canonical engine result keys (standardized schema from resolve_exploration_action)
-ENGINE_RESULT_REQUIRED = frozenset({"kind", "action_id", "label", "prompt", "resolved_transition", "hint"})
-ENGINE_RESULT_OPTIONAL = frozenset({"success", "target_scene_id", "clue_id", "clue_text", "discovered_clues", "world_updates", "state_changes", "originating_scene_id", "interactable_id"})
-
-
-def _assert_normalized_engine_result(resolution: dict, expected_kind: str, **extra_assertions) -> None:
-    """Assert resolution conforms to the standardized engine result schema."""
-    assert resolution is not None and isinstance(resolution, dict)
-    assert resolution["kind"] == expected_kind
-    for key in ENGINE_RESULT_REQUIRED:
-        assert key in resolution, f"Missing required key: {key}"
-    # Optional keys may be present; ensure no ad-hoc keys outside known set
-    known = ENGINE_RESULT_REQUIRED | ENGINE_RESULT_OPTIONAL
-    for key in resolution:
-        assert key in known or key in ("metadata",), f"Unexpected ad-hoc key: {key}"
-    assert isinstance(resolution.get("state_changes"), dict)
-    assert isinstance(resolution.get("discovered_clues"), list)
-    # success: bool or None
-    s = resolution.get("success")
-    assert s is None or isinstance(s, bool)
-    for k, v in extra_assertions.items():
-        assert resolution.get(k) == v, f"{k}={resolution.get(k)} != {v}"
 
 
 def test_observe_investigate_interact_produce_structured_resolution():
@@ -349,7 +315,7 @@ def test_combat_actions_still_routed_unchanged(tmp_path, monkeypatch):
     assert "Unsupported action type" in str(data2.get("error", ""))
 
 
-def test_parse_exploration_intent_go_north_resolves_travel():
+def test_parse_go_north_travel_north_gate_exit_in_label():
     """'go north' parses into a travel action."""
     scene = {"scene": {"id": "gate", "exits": [{"label": "North gate", "target_scene_id": "north_area"}]}}
     parsed = parse_exploration_intent("go north", scene)
@@ -358,7 +324,7 @@ def test_parse_exploration_intent_go_north_resolves_travel():
     assert "go" in parsed.get("label", "").lower() or "north" in parsed.get("label", "").lower()
 
 
-def test_parse_exploration_intent_investigate_resolves():
+def test_parse_investigate_notice_board_gate_no_exits():
     """'investigate the notice board' parses into investigate action."""
     scene = {"scene": {"id": "gate", "exits": []}}
     parsed = parse_exploration_intent("investigate the notice board", scene)
@@ -366,14 +332,22 @@ def test_parse_exploration_intent_investigate_resolves():
     assert parsed.get("type") == "investigate"
 
 
-def test_parse_exploration_intent_unrelated_returns_none():
-    """Unrelated chat like 'I attack the guard' returns None."""
-    scene = {"scene": {"id": "gate"}}
-    parsed = parse_exploration_intent("I attack the guard with my sword", scene)
-    assert parsed is None
+@pytest.mark.parametrize(
+    "scene,phrase",
+    [
+        ({"scene": {"id": "gate"}}, "I attack the guard with my sword"),
+        ({"scene": {"id": "gate"}}, "Cast magic missile at the orc"),
+        ({"scene": {"id": "gate"}}, "I attack the guard"),
+        ({"scene": {"id": "here", "exits": []}}, "I attack the guard"),
+        ({"scene": {"id": "here", "exits": []}}, "Cast magic missile at the orc"),
+    ],
+)
+def test_parse_exploration_intent_unrelated_phrases_return_none(scene, phrase):
+    """Combat and unrelated chat do not parse as exploration."""
+    assert parse_exploration_intent(phrase, scene) is None
 
 
-def test_chat_parsed_exploration_routes_through_resolver(tmp_path, monkeypatch):
+def test_chat_investigate_desk_resolution_kind_in_gpt_messages(tmp_path, monkeypatch):
     """Chat with 'investigate the desk' routes through exploration pipeline."""
     _seed_scenes_and_session(tmp_path, monkeypatch, active="scene_a")
     resolution_seen = []
@@ -400,7 +374,7 @@ def test_chat_parsed_exploration_routes_through_resolver(tmp_path, monkeypatch):
     assert "investigate" in resolution_seen
 
 
-def test_chat_unrelated_goes_to_gpt_normally(tmp_path, monkeypatch):
+def test_chat_quarterstaff_attack_mechanical_resolution_absent(tmp_path, monkeypatch):
     """Chat with unrelated text goes to GPT without exploration resolution."""
     _seed_scenes_and_session(tmp_path, monkeypatch, active="scene_a")
     gpt_called_with_none_resolution = []
@@ -426,7 +400,7 @@ def test_chat_unrelated_goes_to_gpt_normally(tmp_path, monkeypatch):
     assert any(gpt_called_with_none_resolution)
 
 
-def test_parse_exploration_intent_go_north_resolves_travel():
+def test_parse_go_north_label_and_prompt_match_raw_text():
     """Free text 'go north' parses into a travel action."""
     scene = {"scene": {"id": "gate", "exits": [{"label": "North gate", "target_scene_id": "north_area"}]}}
     parsed = parse_exploration_intent("go north", scene)
@@ -436,7 +410,7 @@ def test_parse_exploration_intent_go_north_resolves_travel():
     assert parsed.get("prompt") == "go north"
 
 
-def test_parse_exploration_intent_investigate_resolves():
+def test_parse_investigate_label_contains_investigate_word():
     """Free text 'investigate the notice board' parses into investigate action."""
     scene = {"scene": {"id": "gate"}}
     parsed = parse_exploration_intent("investigate the notice board", scene)
@@ -445,23 +419,15 @@ def test_parse_exploration_intent_investigate_resolves():
     assert "investigate" in (parsed.get("label") or "").lower()
 
 
-def test_parse_exploration_intent_unrelated_returns_none():
-    """Unrelated chat like combat intent returns None and goes to normal GPT flow."""
-    scene = {"scene": {"id": "gate"}}
-    parsed = parse_exploration_intent("I attack the guard with my sword", scene)
-    assert parsed is None
-
-    parsed2 = parse_exploration_intent("Cast magic missile at the orc", scene)
-    assert parsed2 is None
-
-
-def test_chat_parsed_exploration_routes_through_resolver(tmp_path, monkeypatch):
+def test_chat_observe_area_resolution_kwarg_to_build_messages(tmp_path, monkeypatch):
     """When /api/chat receives exploration-style text, it routes through exploration pipeline."""
     _seed_scenes_and_session(tmp_path, monkeypatch, active="scene_a")
     build_messages_called_with_resolution = []
 
     def capture_build_messages(*args, **kwargs):
-        build_messages_called_with_resolution.append(kwargs.get("resolution"))
+        # api passes resolution as the 9th positional arg to build_messages
+        res = args[8] if len(args) > 8 else kwargs.get("resolution")
+        build_messages_called_with_resolution.append(res)
         from game.gm import build_messages as _orig
         return _orig(*args, **kwargs)
 
@@ -482,13 +448,14 @@ def test_chat_parsed_exploration_routes_through_resolver(tmp_path, monkeypatch):
     assert resolution.get("kind") == "observe"
 
 
-def test_chat_unrelated_goes_to_gpt_normally(tmp_path, monkeypatch):
-    """When /api/chat receives non-exploration text, it uses normal flow without resolution."""
+def test_chat_captain_dialog_build_messages_not_exploration_kind(tmp_path, monkeypatch):
+    """When /api/chat receives non-exploration text, it must not route as core exploration (observe/investigate/…)."""
     _seed_scenes_and_session(tmp_path, monkeypatch)
     build_messages_called_with_resolution = []
 
     def capture_build_messages(*args, **kwargs):
-        build_messages_called_with_resolution.append(kwargs.get("resolution"))
+        res = args[8] if len(args) > 8 else kwargs.get("resolution")
+        build_messages_called_with_resolution.append(res)
 
     def fake_gpt(messages):
         return {"player_facing_text": "The guard glares at you.", "tags": [], "scene_update": None, "activate_scene_id": None, "new_scene_draft": None, "world_updates": None, "suggested_action": None, "debug_notes": ""}
@@ -499,12 +466,17 @@ def test_chat_unrelated_goes_to_gpt_normally(tmp_path, monkeypatch):
         client = TestClient(app)
         r = client.post("/api/chat", json={"text": "I demand to speak with your captain"})
     assert r.status_code == 200
+    data = r.json()
     assert data.get("ok") is True
     assert len(build_messages_called_with_resolution) >= 1
-    assert build_messages_called_with_resolution[-1] is None
+    resolution = build_messages_called_with_resolution[-1]
+    exploration_kinds = ("observe", "investigate", "interact", "scene_transition", "travel", "discover_clue")
+    assert resolution is None or (
+        isinstance(resolution, dict) and resolution.get("kind") not in exploration_kinds
+    )
 
 
-def test_parse_exploration_intent_go_north_resolves_travel():
+def test_parse_go_north_with_exit_label_go_north():
     """Free text 'go north' parses into a travel/scene_transition action."""
     from game.exploration import parse_exploration_intent
     scene = {"scene": {"id": "gate", "exits": [{"label": "Go north", "target_scene_id": "north_area"}]}}
@@ -514,7 +486,7 @@ def test_parse_exploration_intent_go_north_resolves_travel():
     assert "north" in parsed["label"].lower() or parsed["label"] == "go north"
 
 
-def test_parse_exploration_intent_investigate_resolves():
+def test_parse_investigate_notice_board_in_label_local_import():
     """Free text 'investigate the notice board' parses into investigate action."""
     from game.exploration import parse_exploration_intent
     scene = {"scene": {"id": "gate", "exits": []}}
@@ -524,7 +496,7 @@ def test_parse_exploration_intent_investigate_resolves():
     assert "notice board" in parsed["label"].lower()
 
 
-def test_chat_unrelated_goes_to_gpt_normally(tmp_path, monkeypatch):
+def test_chat_sword_attack_calls_gpt_keeps_active_scene(tmp_path, monkeypatch):
     """Unrelated chat text (e.g. combat-like) does not get parsed as exploration; goes to GPT normally."""
     _seed_scenes_and_session(tmp_path, monkeypatch)
     call_gpt_called = []
@@ -544,20 +516,22 @@ def test_chat_unrelated_goes_to_gpt_normally(tmp_path, monkeypatch):
     assert data.get("session", {}).get("active_scene_id") == "scene_a"
 
 
-def test_chat_parsed_exploration_routes_through_resolver(tmp_path, monkeypatch):
+def test_chat_observe_area_gm_build_messages_stub_receives_observe_resolution(tmp_path, monkeypatch):
     """Chat text 'observe the area' parses and routes through exploration pipeline."""
     _seed_scenes_and_session(tmp_path, monkeypatch)
     build_messages_resolution = []
 
     def capture_build(*args, **kwargs):
-        build_messages_resolution.append(kwargs.get("resolution"))
+        res = args[8] if len(args) > 8 else kwargs.get("resolution")
+        build_messages_resolution.append(res)
         return [{"role": "system", "content": "x"}, {"role": "user", "content": "{}"}]
 
     def fake_gpt(messages):
         return {"player_facing_text": "You look around.", "tags": [], "scene_update": None, "activate_scene_id": None, "new_scene_draft": None, "world_updates": None, "suggested_action": None, "debug_notes": ""}
 
     with monkeypatch.context() as m:
-        m.setattr("game.gm.build_messages", lambda *a, **kw: capture_build(*a, **kw) or [{"role":"s","content":"x"},{"role":"u","content":"{}"}])
+        # api holds its own reference to build_messages; patch game.api, not game.gm
+        m.setattr("game.api.build_messages", capture_build)
         m.setattr("game.api.call_gpt", fake_gpt)
         client = TestClient(app)
         r = client.post("/api/chat", json={"text": "observe the area"})
@@ -567,7 +541,7 @@ def test_chat_parsed_exploration_routes_through_resolver(tmp_path, monkeypatch):
     assert build_messages_resolution[0].get("kind") == "observe"
 
 
-def test_parse_exploration_intent_go_north_resolves_travel():
+def test_parse_go_north_no_exits_normalizes_label_and_prompt():
     """parse_exploration_intent detects 'go north' as a travel action."""
     from game.exploration import parse_exploration_intent
 
@@ -579,18 +553,7 @@ def test_parse_exploration_intent_go_north_resolves_travel():
     assert parsed.get("prompt") == "go north"
 
 
-def test_parse_exploration_intent_investigate_resolves():
-    """parse_exploration_intent detects 'investigate the notice board' as investigate."""
-    from game.exploration import parse_exploration_intent
-
-    scene = {"scene": {"id": "gate", "exits": []}}
-    parsed = parse_exploration_intent("investigate the notice board", scene)
-    assert parsed is not None
-    assert parsed.get("type") == "investigate"
-    assert "notice board" in parsed.get("label", "")
-
-
-def test_chat_unrelated_goes_to_gpt_normally(tmp_path, monkeypatch):
+def test_chat_sword_attack_gpt_invoked(tmp_path, monkeypatch):
     """Unrelated chat (e.g. combat/attack) is not parsed as exploration and goes to GPT as before."""
     _seed_scenes_and_session(tmp_path, monkeypatch)
     call_gpt_invoked = []
@@ -636,7 +599,7 @@ def test_chat_exploration_parsed_routes_through_exploration(tmp_path, monkeypatc
     assert last_payload.get("resolution_kind") == "observe"
 
 
-def test_parse_exploration_intent_go_north_resolves_travel():
+def test_parse_go_north_here_scene_north_room_exit():
     """'go north' parses into a travel action."""
     scene = {"scene": {"id": "here", "exits": [{"label": "North", "target_scene_id": "north_room"}]}}
     parsed = parse_exploration_intent("go north", scene)
@@ -645,7 +608,7 @@ def test_parse_exploration_intent_go_north_resolves_travel():
     assert "go north" in parsed.get("label", "").lower() or "north" in parsed.get("label", "").lower()
 
 
-def test_parse_exploration_intent_investigate_resolves():
+def test_parse_investigate_notice_board_gate_empty_exits_investigate_in_label():
     """'investigate the notice board' parses into investigate action."""
     scene = {"scene": {"id": "gate", "exits": []}}
     parsed = parse_exploration_intent("investigate the notice board", scene)
@@ -654,14 +617,7 @@ def test_parse_exploration_intent_investigate_resolves():
     assert "investigate" in parsed.get("label", "").lower()
 
 
-def test_parse_exploration_intent_unrelated_returns_none():
-    """Combat/unrelated chat does not parse as exploration."""
-    scene = {"scene": {"id": "here", "exits": []}}
-    assert parse_exploration_intent("I attack the guard", scene) is None
-    assert parse_exploration_intent("Cast magic missile at the orc", scene) is None
-
-
-def test_chat_parsed_exploration_routes_through_resolver(tmp_path, monkeypatch):
+def test_chat_investigate_desk_logged_resolution_kind_investigate(tmp_path, monkeypatch):
     """When /api/chat receives 'investigate the desk', it routes through exploration pipeline."""
     _seed_scenes_and_session(tmp_path, monkeypatch, active="scene_a")
 
@@ -683,7 +639,7 @@ def test_chat_parsed_exploration_routes_through_resolver(tmp_path, monkeypatch):
     assert res.get("kind") == "investigate"
 
 
-def test_chat_unrelated_goes_to_gpt_normally(tmp_path, monkeypatch):
+def test_chat_peaceful_intent_log_world_tick_not_exploration_kind(tmp_path, monkeypatch):
     """Unrelated chat text does not route through exploration; uses normal GPT flow."""
     _seed_scenes_and_session(tmp_path, monkeypatch, active="scene_a")
 
@@ -706,7 +662,7 @@ def test_chat_unrelated_goes_to_gpt_normally(tmp_path, monkeypatch):
     assert "world_tick_events" in res
 
 
-def test_parse_exploration_intent_go_north_resolves_travel():
+def test_parse_go_north_label_or_prompt_contains_go_north_phrase():
     """Free text 'go north' parses into a travel or scene_transition action."""
     scene = {"scene": {"id": "gate", "exits": [{"label": "North", "target_scene_id": "north_area"}]}}
     parsed = parse_exploration_intent("go north", scene)
@@ -715,7 +671,7 @@ def test_parse_exploration_intent_go_north_resolves_travel():
     assert "go north" in (parsed.get("label") or "").lower() or "go north" in (parsed.get("prompt") or "").lower()
 
 
-def test_parse_exploration_intent_investigate_resolves():
+def test_parse_investigate_notice_board_gate_minimal_scene_investigate_in_label():
     """Free text 'investigate the notice board' parses into investigate action."""
     scene = {"scene": {"id": "gate"}}
     parsed = parse_exploration_intent("investigate the notice board", scene)
@@ -724,7 +680,7 @@ def test_parse_exploration_intent_investigate_resolves():
     assert "investigate" in (parsed.get("label") or "").lower()
 
 
-def test_chat_unrelated_goes_to_gpt_normally(tmp_path, monkeypatch):
+def test_chat_attack_mechanical_resolution_kind_not_exploration_set(tmp_path, monkeypatch):
     """Chat with non-exploration text (e.g. combat/rp) goes to GPT without exploration routing."""
     _seed_scenes_and_session(tmp_path, monkeypatch)
     result = {"routed_exploration": False}
@@ -752,7 +708,7 @@ def test_chat_unrelated_goes_to_gpt_normally(tmp_path, monkeypatch):
     assert result["routed_exploration"] is False
 
 
-def test_chat_parsed_exploration_routes_through_resolver(tmp_path, monkeypatch):
+def test_chat_investigate_notice_board_mechanical_resolution_investigate(tmp_path, monkeypatch):
     """Chat with 'investigate the notice board' routes through exploration pipeline."""
     _seed_scenes_and_session(tmp_path, monkeypatch)
 

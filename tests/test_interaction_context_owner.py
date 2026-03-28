@@ -15,6 +15,8 @@ from game.interaction_context import (
 )
 from game.storage import get_scene_runtime
 
+# feature: social, continuity
+
 
 def test_set_social_target_set_and_update():
     session = default_session()

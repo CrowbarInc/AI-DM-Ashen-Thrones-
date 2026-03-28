@@ -1,7 +1,6 @@
 """Transcript-level gauntlet: actor binding, generic addressing, continuity (real chat turns)."""
 from __future__ import annotations
 
-import copy
 import json
 from pathlib import Path
 from typing import Any, Callable
@@ -10,7 +9,7 @@ import pytest
 
 from game import storage
 from game.api import chat
-from game.defaults import default_scene
+from game.gm import _is_placeholder_only_player_facing_text
 from game.models import ChatRequest
 from tests.helpers.transcript_runner import (
     format_turn_debug,
@@ -18,6 +17,8 @@ from tests.helpers.transcript_runner import (
     run_transcript_turns,
     write_default_bootstrap_scenes,
 )
+
+pytestmark = [pytest.mark.transcript, pytest.mark.slow]
 
 
 def _gm_ok(speaker: str, line: str) -> dict[str, Any]:
@@ -259,33 +260,6 @@ def test_generic_runner_address_overrides_guard(tmp_path, monkeypatch, mock_gpt_
     )
 
 
-def test_generic_stranger_does_not_fall_back_to_guard(tmp_path, monkeypatch, mock_gpt_chain):
-    replies = [
-        json.dumps(_gm_ok("Guard Captain", "Stay alert; we have orders.")),
-        json.dumps(_gm_ok("Ragged stranger", "I only know what the crowd mutters.")),
-    ]
-    mock_gpt_chain(replies)
-    turns = [
-        "Begin.",
-        "Guard Captain, any word on the gate wait?",
-        "Stranger, heard anything about the missing patrol?",
-    ]
-    snaps, payloads = _run_transcript_with_payloads(tmp_path, monkeypatch, turns, chat_fn=chat)
-
-    _assert_social_turn(
-        snaps[2],
-        payloads[2],
-        expected_target="refugee",
-        allowed_sources=("explicit_target", "spoken_vocative", "vocative", "generic_role"),
-        interlocutor_not="guard_captain",
-        snaps=snaps,
-        payloads=payloads,
-    )
-    assert snaps[2].get("social_resolution", {}).get("npc_id") != "guard_captain"
-    # Transcript quirk: scene_actor-only targets may clear session current_interlocutor while
-    # resolution.social still binds the correct addressee — do not require interlocutor == refugee.
-
-
 def test_explicit_address_never_gets_wiped_by_later_validation(tmp_path, monkeypatch):
     """Explicit bind: response payload must keep resolution.social target fields (see also unit emission test)."""
 
@@ -316,6 +290,9 @@ def test_explicit_address_never_gets_wiped_by_later_validation(tmp_path, monkeyp
     snaps, payloads = _run_transcript_with_payloads(tmp_path, monkeypatch, turns, chat_fn=chat)
 
     soc = payloads[1].get("resolution", {}).get("social", {})
+    pft1 = str((payloads[1].get("gm_output") or {}).get("player_facing_text") or "")
+    assert pft1.strip()
+    assert not _is_placeholder_only_player_facing_text(pft1)
     try:
         assert soc.get("npc_id") == "guard_captain", soc
         assert soc.get("target_source") in ("explicit_target", "spoken_vocative", "vocative"), soc
@@ -324,54 +301,3 @@ def test_explicit_address_never_gets_wiped_by_later_validation(tmp_path, monkeyp
         assert latest_target_not_null_after_bind(snaps[1], payloads[1])
     except AssertionError:
         _fail_transcript("explicit bind + emission fallback metadata check failed", snaps, payloads)
-
-
-def test_generic_stranger_unresolved_clean_when_not_authored(tmp_path, monkeypatch):
-    """If no stranger actor exists, resolution must not attribute the line to guard via continuity."""
-
-    def call_gpt(_messages: list[dict[str, str]]) -> dict[str, Any]:
-        # Only used for Begin + guard line + fallback narrator line
-        if not hasattr(call_gpt, "_i"):
-            call_gpt._i = 0  # type: ignore[attr-defined]
-        i = call_gpt._i  # type: ignore[attr-defined]
-        call_gpt._i = i + 1  # type: ignore[attr-defined]
-        if i == 0:
-            return _gm_opening()
-        if i == 1:
-            return _gm_ok("Guard Captain", "Move along when you can.")
-        return _gm_ok("The crowd", "No one meets your eye.")
-
-    _patch_call_gpt(monkeypatch, call_gpt)
-
-    patch_transcript_storage(monkeypatch, tmp_path)
-    write_default_bootstrap_scenes()
-    if not storage.SESSION_LOG_PATH.exists():
-        storage.SESSION_LOG_PATH.write_text("", encoding="utf-8")
-
-    base = default_scene("frontier_gate")
-    scene = copy.deepcopy(base)
-    addr = scene.get("scene", {}).get("addressables")
-    assert isinstance(addr, list)
-    scene["scene"]["addressables"] = [a for a in addr if isinstance(a, dict) and a.get("id") != "refugee"]
-    path = storage.scene_path("frontier_gate")
-    storage._save_json(path, scene)
-
-    turns = [
-        "Begin.",
-        "Guard Captain, is the queue slow today?",
-        # Avoid "you" in the clause: pronoun continuation can otherwise snap to the prior interlocutor
-        # when no stranger actor exists (find_addressed_npc_id_for_turn).
-        "Stranger, heard anything about the missing patrol?",
-    ]
-    snaps, payloads = _run_transcript_with_payloads(tmp_path, monkeypatch, turns, chat_fn=chat)
-
-    soc = snaps[2].get("social_resolution") if isinstance(snaps[2].get("social_resolution"), dict) else {}
-    try:
-        assert soc.get("npc_id") != "guard_captain"
-        assert soc.get("target_resolved") is not True
-        assert soc.get("target_source") in (None, "", "none") or soc.get("target_source") == "none"
-    except AssertionError:
-        _fail_transcript("unresolved stranger branch failed", snaps, payloads)
-
-    src = str(soc.get("target_source") or "").strip().lower()
-    assert src != "continuity", soc

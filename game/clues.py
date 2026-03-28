@@ -257,27 +257,32 @@ def run_inference(session: Dict[str, Any], world: Dict[str, Any]) -> List[str]:
     return newly_inferred
 
 
-def reveal_clue(
+def record_discovered_clue(
     session: Dict[str, Any],
     scene_id: str,
     clue_id: str,
     clue_text: str | None = None,
     world: Dict[str, Any] | None = None,
-) -> str:
-    """Record that a structured clue was discovered. Augments scene_runtime and clue_knowledge.
+    *,
+    presentation_level: str = "explicit",
+) -> Dict[str, Any]:
+    """Record a structured clue discovery once per knowledge/runtime identity (idempotent).
 
-    Backward compatible: clue_text and world are optional.
-    When world is provided, runs inference after adding the clue.
+    Discovery (knowledge + scene runtime list + discovery log + inference) runs only on first commit.
+    Retries return ``duplicate_ignored`` without re-appending, re-logging, or re-running inference.
+    Presentation may still be promoted on duplicate when strictly higher than the stored level
+    (metadata only; not treated as rediscovery).
 
     Returns:
-        clue_id (for convenience).
+        ``{"status": "newly_recorded"|"duplicate_ignored", "clue_id": str}``
     """
     if not clue_id or not isinstance(clue_id, str):
-        return clue_id or ""
+        return {"status": "duplicate_ignored", "clue_id": str(clue_id or "").strip()}
     clue_id = clue_id.strip()
     if not clue_id:
-        return ""
+        return {"status": "duplicate_ignored", "clue_id": ""}
 
+    knowledge = _ensure_clue_knowledge(session)
     runtime = session.setdefault("scene_runtime", {})
     if not isinstance(runtime, dict):
         session["scene_runtime"] = {}
@@ -288,18 +293,66 @@ def reveal_clue(
         scene_rt = runtime[scene_id]
     clue_ids: List[str] = scene_rt.setdefault("discovered_clue_ids", [])
 
-    if clue_id not in clue_ids:
-        clue_ids.append(clue_id)
+    # --- A) membership (discovery identity) ---
+    already_known = clue_id in knowledge
+    already_in_scene_runtime = clue_id in clue_ids
 
+    target_pres = _normalize_presentation(presentation_level, default="explicit")
+    if already_known:
+        entry = knowledge.get(clue_id)
+        current_pres = (
+            _normalize_presentation(entry.get("presentation"), default="implicit")
+            if isinstance(entry, dict)
+            else "implicit"
+        )
+    else:
+        current_pres = "implicit"
+    already_presented_same_way = _presentation_rank(target_pres) <= _presentation_rank(current_pres)
+
+    already_discovered = already_known or already_in_scene_runtime
+
+    # --- Duplicate: no knowledge/runtime discovery side effects, no inference, no discovery log ---
+    if already_discovered:
+        print("[CLUE DUPLICATE IGNORED]", clue_id)
+        if already_known and not already_presented_same_way:
+            set_clue_presentation(session, clue_id=clue_id, clue_text=clue_text, level=presentation_level)
+        return {"status": "duplicate_ignored", "clue_id": clue_id}
+
+    # --- B) first-time commit ---
+    clue_ids.append(clue_id)
     add_clue_to_knowledge(session, clue_id, "discovered", clue_text=clue_text, source_scene=scene_id)
-    set_clue_presentation(session, clue_id=clue_id, level="explicit")
+    set_clue_presentation(session, clue_id=clue_id, clue_text=clue_text, level=presentation_level)
 
+    # --- C) one-shot side effects ---
     print("[CLUE DISCOVERED]", clue_id)
-
     if world and isinstance(world, dict):
         run_inference(session, world)
 
-    return clue_id
+    return {"status": "newly_recorded", "clue_id": clue_id}
+
+
+def reveal_clue(
+    session: Dict[str, Any],
+    scene_id: str,
+    clue_id: str,
+    clue_text: str | None = None,
+    world: Dict[str, Any] | None = None,
+) -> str:
+    """Record that a structured clue was discovered. Augments scene_runtime and clue_knowledge.
+
+    Backward compatible: delegates to :func:`record_discovered_clue`; returns ``clue_id`` string.
+
+    When world is provided, runs inference only on first-time discovery for this clue identity.
+    """
+    result = record_discovered_clue(
+        session,
+        scene_id,
+        clue_id,
+        clue_text=clue_text,
+        world=world,
+        presentation_level="explicit",
+    )
+    return str(result.get("clue_id") or "")
 
 
 def apply_authoritative_clue_discovery(

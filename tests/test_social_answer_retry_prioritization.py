@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import pytest
+
 from game.defaults import default_session, default_world
 from game.gm import choose_retry_strategy, prioritize_retry_failures_for_social_answer_candidate
 from game.interaction_context import rebuild_active_scene_entities, set_social_target
@@ -42,8 +44,27 @@ def _session_runner_topic_caden():
     return session, sid
 
 
-def test_prioritize_suppresses_scene_stall_when_structured_candidate_exists():
+@pytest.mark.parametrize(
+    "failure_class,player_text,anchor_substring",
+    [
+        ("scene_stall", "Who is the he you're referring to?", "Caden"),
+        ("echo_or_repetition", "What happened on the east road?", None),
+    ],
+)
+def test_prioritize_suppresses_stall_or_echo_when_structured_candidate_exists(
+    failure_class: str,
+    player_text: str,
+    anchor_substring: str | None,
+) -> None:
     session, sid = _session_runner_topic_caden()
+    if failure_class == "echo_or_repetition":
+        session["clue_knowledge"] = {
+            "clue_x": {
+                "text": "Word is the east road convoy left an hour ago; guards argue about which sergeant signed the relief.",
+                "source_scene": sid,
+                "presentation": "actionable",
+            }
+        }
     resolution = {
         "kind": "question",
         "social": {
@@ -54,64 +75,31 @@ def test_prioritize_suppresses_scene_stall_when_structured_candidate_exists():
     }
     scene_envelope = {"scene": {"id": sid}}
     failures = [
-        {"failure_class": "scene_stall", "priority": 40, "reasons": ["scene_stall:test"]},
+        {"failure_class": failure_class, "priority": 40 if failure_class == "scene_stall" else 50, "reasons": [f"{failure_class}:test"]},
     ]
     out, dbg = prioritize_retry_failures_for_social_answer_candidate(
         failures,
-        player_text="Who is the he you're referring to?",
+        player_text=player_text,
         resolution=resolution,
         session=session,
         scene_envelope=scene_envelope,
     )
     assert dbg["strategy_forced_to_answer"] is True
-    assert "scene_stall" in dbg["suppressed_fallback_strategies"]
+    assert failure_class in dbg["suppressed_fallback_strategies"]
     assert resolution["social"]["strategy_forced_to_answer"] is True
-    assert resolution["social"]["suppressed_fallback_strategies"] == ["scene_stall"]
-    assert "Caden" in (resolution["social"].get("social_answer_retry_anchor_text") or "")
+    assert resolution["social"]["suppressed_fallback_strategies"] == [failure_class]
+    if anchor_substring:
+        assert anchor_substring in (resolution["social"].get("social_answer_retry_anchor_text") or "")
     chosen = choose_retry_strategy(out)
     assert chosen is not None
     assert chosen.get("failure_class") == "answer"
 
 
-def test_prioritize_suppresses_echo_when_reconciled_candidate_exists():
-    session, sid = _session_runner_topic_caden()
-    session["clue_knowledge"] = {
-        "clue_x": {
-            "text": "Word is the east road convoy left an hour ago; guards argue about which sergeant signed the relief.",
-            "source_scene": sid,
-            "presentation": "actionable",
-        }
-    }
-    resolution = {
-        "kind": "question",
-        "social": {
-            "social_intent_class": "social_exchange",
-            "npc_id": "tavern_runner",
-        },
-    }
-    scene_envelope = {"scene": {"id": sid}}
-    failures = [
-        {"failure_class": "echo_or_repetition", "priority": 50, "reasons": ["echo:test"]},
-    ]
-    out, dbg = prioritize_retry_failures_for_social_answer_candidate(
-        failures,
-        player_text="What happened on the east road?",
-        resolution=resolution,
-        session=session,
-        scene_envelope=scene_envelope,
-    )
-    assert dbg["strategy_forced_to_answer"] is True
-    assert "echo_or_repetition" in dbg["suppressed_fallback_strategies"]
-    chosen = choose_retry_strategy(out)
-    assert chosen is not None
-    assert chosen.get("failure_class") == "answer"
-
-
-def test_prioritize_leaves_stall_when_no_social_candidate():
+def test_prioritize_skips_forcing_when_inapplicable() -> None:
     session, sid = _session_runner_topic_caden()
     rt = get_scene_runtime(session, sid)
     rt["topic_pressure"] = {}
-    resolution = {
+    resolution_stall = {
         "kind": "question",
         "social": {
             "social_intent_class": "social_exchange",
@@ -125,7 +113,7 @@ def test_prioritize_leaves_stall_when_no_social_candidate():
     out, dbg = prioritize_retry_failures_for_social_answer_candidate(
         failures,
         player_text="Who is the secret archmage nobody knows?",
-        resolution=resolution,
+        resolution=resolution_stall,
         session=session,
         scene_envelope=scene_envelope,
     )
@@ -133,20 +121,17 @@ def test_prioritize_leaves_stall_when_no_social_candidate():
     assert out == failures
     assert choose_retry_strategy(out).get("failure_class") == "scene_stall"
 
-
-def test_prioritize_not_applied_outside_social_exchange():
-    session, sid = _session_runner_topic_caden()
-    resolution = {"kind": "question", "social": {"social_intent_class": "question", "npc_id": "tavern_runner"}}
-    scene_envelope = {"scene": {"id": sid}}
-    failures = [
-        {"failure_class": "scene_stall", "priority": 40, "reasons": ["scene_stall:test"]},
-    ]
-    out, dbg = prioritize_retry_failures_for_social_answer_candidate(
+    session2, sid2 = _session_runner_topic_caden()
+    resolution_question = {
+        "kind": "question",
+        "social": {"social_intent_class": "question", "npc_id": "tavern_runner"},
+    }
+    out2, dbg2 = prioritize_retry_failures_for_social_answer_candidate(
         failures,
         player_text="Who is the he you're referring to?",
-        resolution=resolution,
-        session=session,
-        scene_envelope=scene_envelope,
+        resolution=resolution_question,
+        session=session2,
+        scene_envelope={"scene": {"id": sid2}},
     )
-    assert dbg["strategy_forced_to_answer"] is False
-    assert out == failures
+    assert dbg2["strategy_forced_to_answer"] is False
+    assert out2 == failures

@@ -1,5 +1,6 @@
 from __future__ import annotations
 from typing import Any, Dict, List, Tuple
+import copy
 import json
 import re
 from game.config import MODEL_NAME
@@ -33,6 +34,7 @@ from game.interaction_context import (
 from game.social_exchange_emission import (
     apply_social_exchange_retry_fallback_gm,
     effective_strict_social_resolution_for_emission,
+    is_route_illegal_global_or_sanitizer_fallback_text,
     is_scene_directed_watch_question,
     looks_like_npc_directed_question,
     minimal_social_emergency_fallback_line,
@@ -5592,6 +5594,823 @@ def apply_deterministic_retry_fallback(
     )
     tags = out.get("tags") if isinstance(out.get("tags"), list) else []
     out["tags"] = list(tags) + ["question_retry_fallback"]
+    return out
+
+
+def _stable_u32_from_seed(seed: str) -> int:
+    acc = 2166136261
+    for ch in str(seed or ""):
+        acc = (acc ^ ord(ch)) * 16777619
+        acc &= 0xFFFFFFFF
+    return int(acc)
+
+
+def _nonsocial_forced_retry_progress_line(
+    player_text: str,
+    *,
+    scene_envelope: Dict[str, Any] | None,
+    session: Dict[str, Any] | None,
+    world: Dict[str, Any] | None,
+    resolution: Dict[str, Any] | None,
+) -> str:
+    """Short narrator fallback after retries: acknowledge when possible, one concrete forward beat."""
+    pt = str(player_text or "").strip()
+    env = scene_envelope if isinstance(scene_envelope, dict) else {}
+    sess = session if isinstance(session, dict) else {}
+    w = world if isinstance(world, dict) else {}
+    if _is_direct_player_question(pt):
+        known_fact = resolve_known_fact_before_uncertainty(
+            pt,
+            scene_envelope=env,
+            session=sess,
+            world=w,
+            resolution=resolution,
+        )
+        if isinstance(known_fact, dict) and str(known_fact.get("text") or "").strip():
+            return _ensure_terminal_punctuation(str(known_fact.get("text") or "").strip())
+        uncertainty = classify_uncertainty(
+            pt,
+            scene_envelope=env,
+            session=sess,
+            world=w,
+            resolution=resolution,
+        )
+        line = render_uncertainty_response(uncertainty)
+        if isinstance(line, str) and line.strip():
+            return _ensure_terminal_punctuation(line.strip())
+
+    loc = _resolve_scene_location(env)
+    visible = _scene_visible_facts(env)
+    sid = _resolve_scene_id(env)
+    seed = f"{sid}|{pt[:200]}"
+    idx = _stable_u32_from_seed(seed) % 3
+    loc_bit = f" near {loc}" if loc else ""
+    detail = _clean_scene_detail(visible[0]) if visible else ""
+    templates: List[str] = [
+        (
+            f"You weigh what you just tried{loc_bit}; "
+            "the next beat is yours—move toward the clearest face in front of you, let the crowd push you a step, or hold still and listen hard."
+        ),
+        (
+            f"The moment doesn't sharpen on its own{loc_bit}, so you choose footing: "
+            "step aside for a cleaner sightline, trade a flat look with the nearest watcher, or head for the nearest door you already know."
+        ),
+    ]
+    if detail:
+        templates.append(
+            f"{detail[:1].upper()}{detail[1:] if len(detail) > 1 else ''} still reads the same{loc_bit}; "
+            "you can examine it closer, leave it, or change your angle before anyone decides for you."
+        )
+    return _ensure_terminal_punctuation(templates[idx % len(templates)])
+
+
+_SOCIAL_EMPTY_REPAIR_HARD_LINE = "They answer cautiously, keeping it brief."
+
+_NONSOCIAL_EMPTY_REPAIR_HARD_LINE = "Something shifts in the scene, drawing your attention forward."
+
+_NON_SOCIAL_TERMINAL_FINAL_ROUTES: frozenset[str] = frozenset({"forced_retry_fallback"})
+
+_SOCIAL_EXCLUSIVE_FINAL_ROUTES_FOR_NONSOCIAL_REPAIR: frozenset[str] = frozenset({"social_fallback_minimal"})
+
+_PLACEHOLDER_LITERAL_PLAYER_TEXT: frozenset[str] = frozenset(
+    {"{}", "[]", "()", "null", "none", "n/a", "na", "...", "…", "tbd", "todo"}
+)
+
+
+def _is_placeholder_only_player_facing_text(t: str) -> bool:
+    s = str(t or "").strip()
+    if not s:
+        return True
+    low = s.lower()
+    if low in _PLACEHOLDER_LITERAL_PLAYER_TEXT or s in _PLACEHOLDER_LITERAL_PLAYER_TEXT:
+        return True
+    if re.fullmatch(r"[\s.…]{1,40}", s):
+        return True
+    if re.fullmatch(r"[\W_]+", s, flags=re.UNICODE):
+        return True
+    return False
+
+
+def _gm_has_usable_player_facing_text(gm: Dict[str, Any] | None) -> bool:
+    """True when gm carries non-empty, route-legal player-facing narration text."""
+    if not isinstance(gm, dict):
+        return False
+    t = gm.get("player_facing_text")
+    if not isinstance(t, str) or not t.strip():
+        return False
+    if is_route_illegal_global_or_sanitizer_fallback_text(t):
+        return False
+    if _is_placeholder_only_player_facing_text(t):
+        return False
+    return True
+
+
+_WEAK_REPAIR_STALL_PHRASES: frozenset[str] = frozenset({
+    "something shifts",
+    "they answer cautiously",
+    "after a pause",
+    "for a moment",
+})
+
+
+def _repair_prose_has_weak_stall_wording(text: str) -> bool:
+    low = str(text or "").lower()
+    return any(p in low for p in _WEAK_REPAIR_STALL_PHRASES)
+
+
+def _player_facing_text_same_line(a: str, b: str) -> bool:
+    def _norm(s: str) -> str:
+        return re.sub(r"\s+", " ", str(s or "").strip().lower().rstrip(".!?"))
+
+    return _norm(a) == _norm(b)
+
+
+def _minimal_repair_context(
+    *,
+    gm: Dict[str, Any] | None,
+    session: Dict[str, Any] | None,
+) -> Dict[str, Any]:
+    """
+    Gather only safe, already-established context for repair phrasing.
+    No new facts. No inference beyond what is already in session/gm/scene.
+    """
+    sess = session if isinstance(session, dict) else {}
+    gm_d = gm if isinstance(gm, dict) else {}
+    sid = str(sess.get("active_scene_id") or "").strip()
+    env: Dict[str, Any] = {}
+    if sid:
+        try:
+            env = load_scene(sid)
+        except (OSError, ValueError, TypeError, json.JSONDecodeError):
+            env = {}
+    if not isinstance(env, dict):
+        env = {}
+    visible = _scene_visible_facts(env)
+    raw_first = visible[0] if visible else ""
+    first_visible = _clean_scene_detail(raw_first) if raw_first else ""
+
+    meta = gm_d.get("_final_emission_meta") if isinstance(gm_d.get("_final_emission_meta"), dict) else {}
+    ic = inspect_interaction_context(sess) if sess else {}
+    interlocutor_id = str(
+        meta.get("active_interlocutor_id")
+        or meta.get("npc_id")
+        or ic.get("active_interaction_target_id")
+        or ""
+    ).strip()
+
+    last_text = str(sess.get("player_input") or "").strip()
+    topic_pressure_current: Dict[str, Any] = {}
+    if sid:
+        rt = get_scene_runtime(sess, sid)
+        if isinstance(rt, dict):
+            if not last_text:
+                last_text = str(rt.get("last_player_action_text") or "").strip()
+            tpc = rt.get("topic_pressure_current")
+            if isinstance(tpc, dict):
+                topic_pressure_current = tpc
+                if not last_text:
+                    last_text = str(tpc.get("player_text") or "").strip()
+
+    direct_question = _is_direct_player_question(last_text)
+    social_authority = _session_social_authority(sess)
+    strict_social_active = bool(meta.get("strict_social_active")) if meta else False
+
+    intent_labels: List[str] = []
+    last_intent_class = "general"
+    if last_text:
+        intent_info = classify_player_intent(last_text)
+        if isinstance(intent_info, dict):
+            raw_lbl = intent_info.get("labels") or []
+            intent_labels = [str(x) for x in raw_lbl if isinstance(x, str)]
+            last_intent_class = str(intent_labels[0]).strip().lower() if intent_labels else "general"
+
+    canonical_speaker = str(topic_pressure_current.get("npc_name") or "").strip()
+
+    return {
+        "active_scene_id": sid,
+        "first_visible_fact_detail": first_visible,
+        "active_interlocutor_id": interlocutor_id,
+        "direct_question": direct_question,
+        "session_social_authority": social_authority,
+        "strict_social_active": strict_social_active,
+        "last_player_text": last_text[:260],
+        "intent_labels": intent_labels,
+        "last_intent_class": last_intent_class,
+        "canonical_speaker_label": canonical_speaker,
+    }
+
+
+def _contextual_social_repair_line(
+    *,
+    gm: Dict[str, Any] | None,
+    session: Dict[str, Any] | None,
+) -> Tuple[str, str]:
+    ctx = _minimal_repair_context(gm=gm, session=session)
+    interlocutor = str(ctx.get("active_interlocutor_id") or "").strip()
+    dq = bool(ctx.get("direct_question"))
+    detail = str(ctx.get("first_visible_fact_detail") or "").strip()
+    speaker = str(ctx.get("canonical_speaker_label") or "").strip()
+    sid = str(ctx.get("active_scene_id") or "").strip()
+
+    def pick(seed: str, options: Tuple[str, ...]) -> str:
+        if not options:
+            return ""
+        idx = _stable_u32_from_seed(seed) % len(options)
+        return options[idx]
+
+    if dq and interlocutor:
+        seed = f"soc_ctx|q|{interlocutor}|{speaker}|{detail[:40]}|{sid}"
+        if speaker:
+            opts: Tuple[str, ...] = (
+                f"{speaker} answers with visible caution.",
+                f"{speaker} offers a tight, careful reply.",
+            )
+        else:
+            opts = (
+                "The reply comes back clipped and immediate.",
+                "The answer arrives low and controlled.",
+            )
+        cand = pick(seed, opts)
+        line = _ensure_terminal_punctuation(str(cand).strip())
+        if _gm_has_usable_player_facing_text({"player_facing_text": line}) and not _repair_prose_has_weak_stall_wording(line):
+            return line, "question_ack"
+
+    if detail:
+        seed = f"soc_ctx|scene|{sid}|{detail[:80]}"
+        lead = detail[0].upper() + (detail[1:] if len(detail) > 1 else "")
+        opts2: Tuple[str, ...] = (
+            f"{lead} still frames what you hear—the reply stays careful and brief.",
+            f"You still mark {lead.lower()} while the answer lands, short and measured.",
+        )
+        cand2 = pick(seed, opts2)
+        line2 = _ensure_terminal_punctuation(str(cand2).strip())
+        if _gm_has_usable_player_facing_text({"player_facing_text": line2}) and not _repair_prose_has_weak_stall_wording(line2):
+            return line2, "scene_anchor"
+
+    hl = _ensure_terminal_punctuation(str(_SOCIAL_EMPTY_REPAIR_HARD_LINE).strip())
+    return hl, "hard_fallback"
+
+
+def _contextual_nonsocial_repair_line(
+    *,
+    gm: Dict[str, Any] | None,
+    session: Dict[str, Any] | None,
+) -> Tuple[str, str]:
+    ctx = _minimal_repair_context(gm=gm, session=session)
+    detail = str(ctx.get("first_visible_fact_detail") or "").strip()
+    labels_raw = ctx.get("intent_labels") or []
+    labels = [str(x).lower() for x in labels_raw if isinstance(x, str)]
+    label_set = frozenset(labels)
+    last_text = str(ctx.get("last_player_text") or "").strip()
+    sid = str(ctx.get("active_scene_id") or "").strip()
+
+    pressure_labels = frozenset({"combat", "travel", "investigation", "social_probe"})
+    has_pressure = bool(pressure_labels.intersection(label_set))
+
+    def pick(seed: str, options: Tuple[str, ...]) -> str:
+        idx = _stable_u32_from_seed(seed) % len(options)
+        return options[idx]
+
+    if detail:
+        seed = f"ns_ctx|sc|{sid}|{detail[:80]}"
+        lead = detail[0].upper() + (detail[1:] if len(detail) > 1 else "")
+        opts: Tuple[str, ...] = (
+            f"{lead} catches your eye again as the moment turns toward what happens next.",
+            f"{lead} holds the room while the situation asks for your next move.",
+        )
+        cand = pick(seed, opts)
+        line = _ensure_terminal_punctuation(str(cand).strip())
+        if _gm_has_usable_player_facing_text({"player_facing_text": line}) and not _repair_prose_has_weak_stall_wording(line):
+            return line, "scene_anchor"
+
+    if has_pressure and last_text:
+        seed = f"ns_ctx|pr|{last_text[:120]}|{sid}"
+        opts2: Tuple[str, ...] = (
+            "The moment sharpens, demanding an answer.",
+            "The scene presses forward before the pause can settle.",
+        )
+        cand2 = pick(seed, opts2)
+        line2 = _ensure_terminal_punctuation(str(cand2).strip())
+        if _gm_has_usable_player_facing_text({"player_facing_text": line2}) and not _repair_prose_has_weak_stall_wording(line2):
+            return line2, "pressure_forward"
+
+    hl = _ensure_terminal_punctuation(str(_NONSOCIAL_EMPTY_REPAIR_HARD_LINE).strip())
+    return hl, "hard_fallback"
+
+
+_FINAL_EMISSION_META_CONTINUITY_KEYS: frozenset[str] = frozenset({
+    "active_interlocutor_id",
+    "npc_id",
+    "reply_kind",
+    "strict_social_active",
+    "coercion_used",
+    "coercion_reason",
+})
+
+
+def _is_social_continuity_slot_empty(value: Any) -> bool:
+    if value is None:
+        return True
+    if isinstance(value, str) and not value.strip():
+        return True
+    if isinstance(value, dict) and len(value) == 0:
+        return True
+    if isinstance(value, list) and len(value) == 0:
+        return True
+    return False
+
+
+def _preserve_social_continuity_fields(
+    dst: Dict[str, Any],
+    sources: List[Dict[str, Any] | None],
+    session: Dict[str, Any] | None,
+    resolution: Dict[str, Any] | None,
+    *,
+    world: Dict[str, Any] | None,
+    scene_id: str,
+) -> None:
+    """Copy only speaker/interlocutor/lane fields into *dst* without reintroducing rejected prose or clue junk.
+
+    Sources are scanned in order; first non-empty continuity value wins. Session/resolution fill any
+    remaining gaps for authoritative ids (aligned with :func:`effective_strict_social_resolution_for_emission`).
+    """
+    if not isinstance(dst, dict):
+        return
+    lane_social = _session_social_authority(session) or strict_social_emission_will_apply(
+        resolution if isinstance(resolution, dict) else None,
+        session if isinstance(session, dict) else None,
+        world if isinstance(world, dict) else None,
+        str(scene_id or "").strip(),
+    )
+    if not lane_social:
+        return
+
+    preserved: List[str] = []
+    merged: Dict[str, Any] = {}
+    cur = dst.get("_final_emission_meta")
+    if isinstance(cur, dict):
+        merged = dict(cur)
+
+    for src in sources:
+        if not isinstance(src, dict):
+            continue
+        sm = src.get("_final_emission_meta")
+        if not isinstance(sm, dict):
+            continue
+        for key in _FINAL_EMISSION_META_CONTINUITY_KEYS:
+            if key not in sm:
+                continue
+            val = sm[key]
+            if _is_social_continuity_slot_empty(val):
+                continue
+            if not _is_social_continuity_slot_empty(merged.get(key)):
+                continue
+            merged[key] = val
+            preserved.append(f"_final_emission_meta.{key}")
+
+    eff_res, strict_route, coercion_reason = effective_strict_social_resolution_for_emission(
+        resolution if isinstance(resolution, dict) else None,
+        session if isinstance(session, dict) else None,
+        world if isinstance(world, dict) else None,
+        str(scene_id or "").strip(),
+    )
+    soc = (
+        eff_res.get("social")
+        if isinstance(eff_res, dict) and isinstance(eff_res.get("social"), dict)
+        else {}
+    )
+    inspected = inspect_interaction_context(session) if isinstance(session, dict) else {}
+    active_ic = str((inspected or {}).get("active_interaction_target_id") or "").strip()
+    npc_res = str(soc.get("npc_id") or "").strip() or active_ic
+    reply_kind = str(soc.get("reply_kind") or "").strip()
+
+    cr = str(coercion_reason or "").strip()
+    coercion_used = "|" in cr or "synthetic" in cr or "npc_directed_guard" in cr
+
+    if _is_social_continuity_slot_empty(merged.get("active_interlocutor_id")) and active_ic:
+        merged["active_interlocutor_id"] = active_ic
+        preserved.append("_final_emission_meta.active_interlocutor_id")
+    if _is_social_continuity_slot_empty(merged.get("npc_id")) and npc_res:
+        merged["npc_id"] = npc_res
+        preserved.append("_final_emission_meta.npc_id")
+    if _is_social_continuity_slot_empty(merged.get("reply_kind")) and reply_kind:
+        merged["reply_kind"] = reply_kind
+        preserved.append("_final_emission_meta.reply_kind")
+    if _is_social_continuity_slot_empty(merged.get("strict_social_active")):
+        ss = strict_route or strict_social_emission_will_apply(
+            resolution if isinstance(resolution, dict) else None,
+            session if isinstance(session, dict) else None,
+            world if isinstance(world, dict) else None,
+            str(scene_id or "").strip(),
+        )
+        merged["strict_social_active"] = bool(ss)
+        preserved.append("_final_emission_meta.strict_social_active")
+    if _is_social_continuity_slot_empty(merged.get("coercion_reason")) and cr:
+        merged["coercion_reason"] = cr
+        preserved.append("_final_emission_meta.coercion_reason")
+    if _is_social_continuity_slot_empty(merged.get("coercion_used")):
+        merged["coercion_used"] = coercion_used
+        preserved.append("_final_emission_meta.coercion_used")
+
+    if merged:
+        dst["_final_emission_meta"] = merged
+    if preserved:
+        dst["preserved_social_continuity_fields"] = preserved
+
+
+def ensure_minimal_social_resolution(
+    *,
+    gm: Dict[str, Any] | None,
+    session: Dict[str, Any] | None,
+    reason: str = "",
+    world: Dict[str, Any] | None = None,
+    resolution: Dict[str, Any] | None = None,
+    scene_envelope: Dict[str, Any] | None = None,
+) -> Dict[str, Any]:
+    """
+    Return a minimally valid social-resolution-shaped GM payload.
+    Used when a social retry/fallback path produced empty or structurally insufficient output.
+    """
+    out: Dict[str, Any] = copy.deepcopy(gm) if isinstance(gm, dict) else {}
+    sess = session if isinstance(session, dict) else None
+    w = world if isinstance(world, dict) else None
+    res_in = resolution if isinstance(resolution, dict) else None
+    env = scene_envelope if isinstance(scene_envelope, dict) else {}
+    scene_id = _resolve_scene_id(env)
+
+    eff_res, _strict_route, _ = effective_strict_social_resolution_for_emission(
+        res_in,
+        sess,
+        w,
+        scene_id,
+    )
+    res_for_line = eff_res if isinstance(eff_res, dict) else res_in
+
+    src_for_preserve = gm if isinstance(gm, dict) else None
+    _preserve_social_continuity_fields(
+        out,
+        [src_for_preserve, out],
+        sess,
+        res_in,
+        world=w,
+        scene_id=scene_id,
+    )
+
+    ctx_mode_social = ""
+    if not _gm_has_usable_player_facing_text(out):
+        line = minimal_social_emergency_fallback_line(
+            res_for_line if isinstance(res_for_line, dict) else None
+        )
+        if (
+            not isinstance(line, str)
+            or not line.strip()
+            or is_route_illegal_global_or_sanitizer_fallback_text(line)
+            or _is_placeholder_only_player_facing_text(line)
+        ):
+            c_line, ctx_mode_social = _contextual_social_repair_line(gm=out, session=sess)
+            if _gm_has_usable_player_facing_text({"player_facing_text": c_line}):
+                line = c_line
+            else:
+                line = _SOCIAL_EMPTY_REPAIR_HARD_LINE
+                ctx_mode_social = "hard_fallback"
+        out["player_facing_text"] = _ensure_terminal_punctuation(str(line).strip())
+
+    if not _gm_has_usable_player_facing_text(out):
+        out["player_facing_text"] = _ensure_terminal_punctuation(_SOCIAL_EMPTY_REPAIR_HARD_LINE.strip())
+        ctx_mode_social = "hard_fallback"
+
+    existing_route = str(out.get("final_route") or "").strip()
+    if existing_route and existing_route not in _NON_SOCIAL_TERMINAL_FINAL_ROUTES:
+        out["final_route"] = existing_route
+    else:
+        out["final_route"] = "social_fallback_minimal"
+    out["fallback_kind"] = "social_empty_resolution_repair"
+    out["accepted_via"] = "social_resolution_repair"
+    out["targeted_retry_terminal"] = True
+    out["retry_exhausted"] = True
+
+    tags = out.get("tags") if isinstance(out.get("tags"), list) else []
+    tag_list = [str(t) for t in tags if isinstance(t, str)]
+    for extra in ("social_empty_resolution_repair", "retry_exhausted"):
+        if extra not in tag_list:
+            tag_list.append(extra)
+    out["tags"] = tag_list
+
+    dbg = out.get("debug_notes") if isinstance(out.get("debug_notes"), str) else ""
+    repair_note = "social_empty_resolution_repair:terminal social resolution repair"
+    suffix = f"{repair_note}|{reason}" if reason else repair_note
+    if ctx_mode_social:
+        suffix = f"{suffix}|social_contextual_repair:{ctx_mode_social}"
+    out["debug_notes"] = (dbg + " | " if dbg else "") + suffix
+    return out
+
+
+def _nonsocial_minimal_resolution_line(*, session: Dict[str, Any] | None) -> str:
+    """Conservative forward beat for empty non-social GM text; may anchor to on-disk scene visible_facts only."""
+    sess = session if isinstance(session, dict) else None
+    if not sess:
+        return _ensure_terminal_punctuation(str(_NONSOCIAL_EMPTY_REPAIR_HARD_LINE).strip())
+    sid = str(sess.get("active_scene_id") or "").strip()
+    if not sid:
+        return _ensure_terminal_punctuation(str(_NONSOCIAL_EMPTY_REPAIR_HARD_LINE).strip())
+    try:
+        env = load_scene(sid)
+    except (OSError, ValueError, TypeError, json.JSONDecodeError):
+        env = {}
+    if not isinstance(env, dict):
+        env = {}
+    visible = _scene_visible_facts(env)
+    if visible:
+        detail = _clean_scene_detail(visible[0])
+        if detail:
+            lead = detail[0].upper() + (detail[1:] if len(detail) > 1 else "")
+            return _ensure_terminal_punctuation(
+                f"{lead} still frames what you can see; the moment invites your next move."
+            )
+    seed = f"{sid}|nonsocial_empty_resolution_repair"
+    idx = _stable_u32_from_seed(seed) % 2
+    alts = (
+        str(_NONSOCIAL_EMPTY_REPAIR_HARD_LINE).strip(),
+        "The air settles into a clear beat—time to commit to your next step.",
+    )
+    return _ensure_terminal_punctuation(alts[idx])
+
+
+def ensure_minimal_nonsocial_resolution(
+    *,
+    gm: Dict[str, Any] | None,
+    session: Dict[str, Any] | None,
+) -> Dict[str, Any]:
+    """
+    Return a minimally valid non-social GM payload when narration is empty or structurally unusable.
+    Does not invent NPCs or clues; may reference visible_facts from the active scene template only.
+    """
+    out: Dict[str, Any] = copy.deepcopy(gm) if isinstance(gm, dict) else {}
+    hard_line = _ensure_terminal_punctuation(str(_NONSOCIAL_EMPTY_REPAIR_HARD_LINE).strip())
+    ctx_mode_ns = ""
+    if not _gm_has_usable_player_facing_text(out):
+        line = _nonsocial_minimal_resolution_line(session=session)
+        bad = (
+            not isinstance(line, str)
+            or not line.strip()
+            or is_route_illegal_global_or_sanitizer_fallback_text(line)
+            or _is_placeholder_only_player_facing_text(line)
+        )
+        need_ctx = bad or _player_facing_text_same_line(line, hard_line)
+        if need_ctx:
+            c_line, ctx_mode_ns = _contextual_nonsocial_repair_line(gm=out, session=session)
+            if _gm_has_usable_player_facing_text({"player_facing_text": c_line}):
+                line = c_line
+            else:
+                line = hard_line
+                ctx_mode_ns = "hard_fallback"
+        out["player_facing_text"] = line
+    if not _gm_has_usable_player_facing_text(out):
+        out["player_facing_text"] = hard_line
+        ctx_mode_ns = "hard_fallback"
+
+    existing_route = str(out.get("final_route") or "").strip()
+    if existing_route and existing_route not in _SOCIAL_EXCLUSIVE_FINAL_ROUTES_FOR_NONSOCIAL_REPAIR:
+        out["final_route"] = existing_route
+    else:
+        out["final_route"] = "nonsocial_fallback_minimal"
+    out["fallback_kind"] = "nonsocial_empty_resolution_repair"
+    out["accepted_via"] = "nonsocial_resolution_repair"
+    out["targeted_retry_terminal"] = True
+    out["retry_exhausted"] = True
+
+    tags = out.get("tags") if isinstance(out.get("tags"), list) else []
+    tag_list = [str(t) for t in tags if isinstance(t, str)]
+    for extra in ("nonsocial_empty_resolution_repair", "retry_exhausted"):
+        if extra not in tag_list:
+            tag_list.append(extra)
+    out["tags"] = tag_list
+
+    dbg = out.get("debug_notes") if isinstance(out.get("debug_notes"), str) else ""
+    repair_note = "nonsocial_empty_resolution_repair:terminal non-social resolution repair"
+    dbg_suffix = repair_note
+    if ctx_mode_ns:
+        dbg_suffix = f"{repair_note}|nonsocial_contextual_repair:{ctx_mode_ns}"
+    out["debug_notes"] = (dbg + " | " if dbg else "") + dbg_suffix
+    return out
+
+
+def force_terminal_retry_fallback(
+    *,
+    session: Dict[str, Any] | None,
+    original_text: str,
+    failure: Dict[str, Any] | None,
+    retry_failures: List[Dict[str, Any]] | None = None,
+    player_text: str = "",
+    scene_envelope: Dict[str, Any] | None = None,
+    world: Dict[str, Any] | None = None,
+    resolution: Dict[str, Any] | None = None,
+    base_gm: Dict[str, Any] | None = None,
+) -> Dict[str, Any]:
+    """
+    Produce a terminal fallback payload after targeted retries are exhausted.
+    Must be deterministic enough to break loops and conservative enough to avoid scene pollution.
+    """
+    fail = failure if isinstance(failure, dict) else {}
+    failure_class = str(fail.get("failure_class") or "").strip()
+    reason_list = [str(r) for r in (fail.get("reasons") or []) if isinstance(r, str)]
+    out = dict(base_gm) if isinstance(base_gm, dict) else {}
+    sess = session if isinstance(session, dict) else None
+    env = scene_envelope if isinstance(scene_envelope, dict) else {}
+    w = world if isinstance(world, dict) else None
+    res = resolution if isinstance(resolution, dict) else None
+    scene_id = _resolve_scene_id(env)
+
+    line = ""
+    gm_work: Dict[str, Any] | None = None
+    if _session_social_authority(sess):
+        eff_res, _, _ = effective_strict_social_resolution_for_emission(
+            res,
+            sess,
+            w,
+            scene_id,
+        )
+        res_for_social = eff_res if isinstance(eff_res, dict) else res
+        gm_work = dict(out)
+        if isinstance(res_for_social, dict):
+            gm_work = apply_social_exchange_retry_fallback_gm(
+                gm_work,
+                player_text=str(player_text or ""),
+                session=sess if isinstance(sess, dict) else {},
+                world=w if isinstance(w, dict) else {},
+                resolution=res_for_social,
+                scene_id=scene_id,
+            )
+        candidate = str(gm_work.get("player_facing_text") or "").strip()
+        if not isinstance(res_for_social, dict):
+            candidate = ""
+        if (
+            not candidate
+            or is_route_illegal_global_or_sanitizer_fallback_text(candidate)
+        ):
+            candidate = minimal_social_emergency_fallback_line(
+                res_for_social if isinstance(res_for_social, dict) else None
+            )
+        line_raw = str(candidate).strip()
+        line = _ensure_terminal_punctuation(line_raw) if line_raw else ""
+        gm_work["player_facing_text"] = line
+        if not _gm_has_usable_player_facing_text(gm_work):
+            out = ensure_minimal_social_resolution(
+                gm=gm_work,
+                session=sess,
+                reason="force_terminal_retry_fallback",
+                world=w,
+                resolution=res_for_social if isinstance(res_for_social, dict) else None,
+                scene_envelope=env,
+            )
+            out["retry_failure_class"] = failure_class or None
+            out["retry_failure_reasons"] = list(reason_list)
+            if retry_failures is not None:
+                out["retry_failures_snapshot"] = list(retry_failures)
+            rtags = out.get("tags") if isinstance(out.get("tags"), list) else []
+            rt = [str(t) for t in rtags if isinstance(t, str)]
+            if "retry_escape_hatch" not in rt:
+                rt.append("retry_escape_hatch")
+            out["tags"] = rt
+            _preserve_social_continuity_fields(
+                out,
+                [base_gm, gm_work],
+                sess,
+                res,
+                world=w,
+                scene_id=scene_id,
+            )
+            if not _gm_has_usable_player_facing_text(out):
+                out = ensure_minimal_social_resolution(
+                    gm=out,
+                    session=sess,
+                    reason="force_terminal_retry_fallback_social_repair_chain",
+                    world=w,
+                    resolution=res_for_social if isinstance(res_for_social, dict) else None,
+                    scene_envelope=env,
+                )
+                out["retry_failure_class"] = failure_class or None
+                out["retry_failure_reasons"] = list(reason_list)
+                if retry_failures is not None:
+                    out["retry_failures_snapshot"] = list(retry_failures)
+                rtags2 = out.get("tags") if isinstance(out.get("tags"), list) else []
+                rt2 = [str(t) for t in rtags2 if isinstance(t, str)]
+                if "retry_escape_hatch" not in rt2:
+                    rt2.append("retry_escape_hatch")
+                out["tags"] = rt2
+                _preserve_social_continuity_fields(
+                    out,
+                    [base_gm, gm_work],
+                    sess,
+                    res,
+                    world=w,
+                    scene_id=scene_id,
+                )
+            return out
+        line = str(gm_work.get("player_facing_text") or "").strip()
+    else:
+        line = _nonsocial_forced_retry_progress_line(
+            str(player_text or ""),
+            scene_envelope=env,
+            session=sess,
+            world=w,
+            resolution=res,
+        )
+
+    if not str(line or "").strip():
+        line = _ensure_terminal_punctuation(
+            "You hold your ground a breath, then choose your next move: step in, step back, or hold still and watch who reacts first."
+        )
+
+    out["player_facing_text"] = _ensure_terminal_punctuation(str(line).strip())
+    out["final_route"] = "forced_retry_fallback"
+    out["fallback_kind"] = "retry_escape_hatch"
+    out["accepted_via"] = "forced_fallback"
+    out["retry_exhausted"] = True
+    out["targeted_retry_terminal"] = True
+    out["retry_failure_class"] = failure_class or None
+    out["retry_failure_reasons"] = list(reason_list)
+    if retry_failures is not None:
+        out["retry_failures_snapshot"] = list(retry_failures)
+
+    tags = out.get("tags") if isinstance(out.get("tags"), list) else []
+    out["tags"] = list(tags) + ["retry_escape_hatch", "forced_retry_fallback", "retry_exhausted"]
+    dbg = out.get("debug_notes") if isinstance(out.get("debug_notes"), str) else ""
+    out["debug_notes"] = (
+        (dbg + " | " if dbg else "")
+        + f"retry_escape_hatch:class={failure_class or 'unknown'}:reasons={','.join(reason_list[:6])}"
+    )
+    if gm_work is not None:
+        _preserve_social_continuity_fields(
+            out,
+            [base_gm, gm_work],
+            sess,
+            res,
+            world=w,
+            scene_id=scene_id,
+        )
+    else:
+        _preserve_social_continuity_fields(
+            out,
+            [base_gm],
+            sess,
+            res,
+            world=w,
+            scene_id=scene_id,
+        )
+
+    lane_social = _session_social_authority(sess) or strict_social_emission_will_apply(
+        res, sess, w, scene_id
+    )
+    if lane_social and not _gm_has_usable_player_facing_text(out):
+        out = ensure_minimal_social_resolution(
+            gm=out,
+            session=sess,
+            reason="force_terminal_retry_fallback_lane_sweep",
+            world=w,
+            resolution=res,
+            scene_envelope=env,
+        )
+        rtags_sweep = out.get("tags") if isinstance(out.get("tags"), list) else []
+        rt_sweep = [str(t) for t in rtags_sweep if isinstance(t, str)]
+        for extra in ("retry_escape_hatch", "forced_retry_fallback", "retry_exhausted"):
+            if extra not in rt_sweep:
+                rt_sweep.append(extra)
+        out["tags"] = rt_sweep
+        out["retry_failure_class"] = failure_class or None
+        out["retry_failure_reasons"] = list(reason_list)
+        if retry_failures is not None:
+            out["retry_failures_snapshot"] = list(retry_failures)
+        sweep_sources: List[Dict[str, Any] | None] = [base_gm, gm_work] if gm_work is not None else [base_gm]
+        _preserve_social_continuity_fields(
+            out,
+            sweep_sources,
+            sess,
+            res,
+            world=w,
+            scene_id=scene_id,
+        )
+    if lane_social and not _gm_has_usable_player_facing_text(out):
+        out["player_facing_text"] = _ensure_terminal_punctuation(_SOCIAL_EMPTY_REPAIR_HARD_LINE.strip())
+        out["fallback_kind"] = "social_empty_resolution_repair"
+        out["accepted_via"] = "social_resolution_repair"
+        out["retry_exhausted"] = True
+        out["targeted_retry_terminal"] = True
+        dbg_sw = out.get("debug_notes") if isinstance(out.get("debug_notes"), str) else ""
+        out["debug_notes"] = (
+            (dbg_sw + " | " if dbg_sw else "")
+            + "social_empty_resolution_repair:lane_sweep_hard_line"
+        )
+        sweep_sources2: List[Dict[str, Any] | None] = [base_gm, gm_work] if gm_work is not None else [base_gm]
+        _preserve_social_continuity_fields(
+            out,
+            sweep_sources2,
+            sess,
+            res,
+            world=w,
+            scene_id=scene_id,
+        )
+
     return out
 
 

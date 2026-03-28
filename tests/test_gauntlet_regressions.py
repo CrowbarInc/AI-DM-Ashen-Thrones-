@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import pytest
 from fastapi.testclient import TestClient
 
 from game import storage
@@ -13,6 +14,8 @@ from game.defaults import (
     default_session,
     default_world,
 )
+
+pytestmark = [pytest.mark.integration, pytest.mark.regression]
 
 
 def _patch_storage(tmp_path, monkeypatch):

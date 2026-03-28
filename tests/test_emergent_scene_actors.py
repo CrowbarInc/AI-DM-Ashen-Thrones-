@@ -13,6 +13,8 @@ from game.interaction_context import (
     rebuild_active_scene_entities,
 )
 
+# feature: social, continuity
+
 
 def _scene(sid: str = "test_gate") -> dict:
     return {"scene": {"id": sid}}

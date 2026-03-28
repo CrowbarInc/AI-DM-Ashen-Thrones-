@@ -7,6 +7,8 @@ from game.clocks import get_or_init_clocks, DEFAULT_CLOCKS
 from game.defaults import default_scene, default_session, default_world, default_character, default_campaign, default_combat, default_conditions
 from fastapi.testclient import TestClient
 
+# feature: routing, emission
+
 
 def _patch_storage_to_tmp(tmp_path, monkeypatch):
     """Point storage to tmp_path and create dirs; call once per test that needs isolated storage."""
