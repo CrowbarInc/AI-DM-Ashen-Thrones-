@@ -64,6 +64,7 @@ from game.gm import (
     MAX_TARGETED_RETRY_ATTEMPTS,
     detect_retry_failures,
     choose_retry_strategy,
+    prioritize_retry_failures_for_social_answer_candidate,
     build_retry_prompt_for_failure,
     apply_deterministic_retry_fallback,
     remember_recent_contextual_leads,
@@ -81,23 +82,31 @@ from game.adjudication import (
 from game.social import (
     parse_social_intent,
     resolve_social_action,
+    apply_social_topic_escalation_to_resolution,
     SOCIAL_KINDS,
     find_npc_by_target,
 )
 from game.interaction_context import (
+    apply_conservative_emergent_enrollment_from_gm_output,
     apply_turn_input_implied_context,
     assert_valid_speaker,
     build_intent_route_debug_adjudication_query,
     build_intent_route_debug_social_exchange,
+    clear_emergent_scene_actors_on_scene_change,
     clear_for_scene_change,
+    clear_turn_start_interlocutor_snapshot,
     establish_dialogue_interaction_from_input,
     find_addressed_npc_id_for_turn,
     find_world_npc_reference_id_in_text,
     inspect as inspect_interaction_context,
-    rebuild_active_scene_entities,
+    merge_turn_segments_for_directed_social_entry,
+    resolve_declared_actor_switch,
     resolve_dialogue_lock_action_target_id,
+    resolve_directed_social_entry,
     scene_npcs_in_active_scene,
     should_route_addressed_question_to_social,
+    snapshot_turn_start_interlocutor,
+    synchronize_scene_addressability,
     update_after_resolved_action,
 )
 from game.scene_graph import build_scene_graph, is_transition_valid
@@ -110,6 +119,7 @@ from game.output_sanitizer import (
     strip_serialized_payload_fragments,
 )
 from game.final_emission_gate import apply_final_emission_gate
+from game.narration_state_consistency import reconcile_final_text_with_structured_state
 from game.social_exchange_emission import strict_social_emission_will_apply
 from game.utils import slugify, utc_iso_now
 from game.world import advance_world_tick, apply_world_updates, apply_resolution_world_updates
@@ -120,7 +130,9 @@ from game.campaign_reset import apply_new_campaign_hard_reset
 from game.campaign_state import create_fresh_combat_state
 from game.clues import (
     apply_authoritative_clue_discovery,
+    apply_social_narration_lead_supplements,
     apply_socially_revealed_leads,
+    ensure_scene_has_minimum_actionable_lead,
     get_all_known_clue_texts,
     get_known_clues_with_presentation,
 )
@@ -154,6 +166,16 @@ AUTHORITATIVE_TURN_STAGE_ORDER: tuple[str, ...] = (
 @app.get('/')
 def index():
     return FileResponse(STATIC_DIR / 'index.html')
+
+
+def _merge_emergent_actor_debug_into_action_debug(session: dict) -> None:
+    lad = session.get("last_action_debug")
+    if not isinstance(lad, dict):
+        return
+    em = session.get("emergent_actor_debug") if isinstance(session.get("emergent_actor_debug"), dict) else {}
+    lad["emergent_actor_enrolled"] = bool(em.get("emergent_actor_enrolled"))
+    lad["emergent_actor_id"] = em.get("emergent_actor_id")
+    lad["emergent_actor_source_text"] = em.get("emergent_actor_source_text")
 
 
 def _build_action_debug(
@@ -190,7 +212,115 @@ def _build_action_debug(
                      'requires_check', 'check_request',
                      'combat', 'social', 'adjudication'}
         debug['resolver_result'] = {k: v for k, v in resolution.items() if k in safe_keys}
+        nsc = None
+        md = resolution.get('metadata')
+        if isinstance(md, dict):
+            nsc = md.get('narration_state_consistency')
+            if isinstance(nsc, dict):
+                debug['narration_state_mismatch_detected'] = bool(nsc.get('narration_state_mismatch_detected'))
+                debug['mismatch_kind'] = nsc.get('mismatch_kind') or ''
+                debug['mismatch_repair_applied'] = nsc.get('mismatch_repair_applied') or 'none'
+                mra = nsc.get('mismatch_repairs_applied')
+                debug['mismatch_repairs_applied'] = list(mra) if isinstance(mra, list) else []
+            mal = md.get('minimum_actionable_lead')
+            if isinstance(mal, dict):
+                debug['minimum_actionable_lead_enforced'] = bool(mal.get('minimum_actionable_lead_enforced'))
+                debug['enforced_lead_id'] = mal.get('enforced_lead_id')
+                debug['enforced_lead_source'] = mal.get('enforced_lead_source')
     return debug
+
+
+def _strip_internal_gm_keys(gm: dict) -> dict:
+    out = dict(gm)
+    out.pop("_player_facing_emission_finalized", None)
+    return out
+
+
+def _finalize_player_facing_for_turn(
+    gm: dict | None,
+    *,
+    resolution: dict | None,
+    session: dict,
+    world: dict,
+    scene: dict,
+    include_resolution_in_sanitizer: bool = True,
+) -> tuple[dict | None, dict]:
+    """Apply repeated-description guard and scene momentum, then sanitize, emission gate, and mismatch repair.
+
+    Guard/momentum run here (before sanitization) so they match the pre-emission pipeline order; when
+    ``_player_facing_emission_finalized`` is set, ``_apply_post_gm_updates`` skips repeating them.
+
+    Must run before ``_apply_post_gm_updates`` so narration supplements use the same text the client receives.
+
+    Returns:
+        ``(gm_out, narration_consistency_meta)`` — meta is always a dict (possibly empty flags).
+    """
+    if not isinstance(gm, dict):
+        return gm, {
+            "narration_state_mismatch_detected": False,
+            "mismatch_kind": "",
+            "mismatch_repair_applied": "none",
+            "mismatch_repairs_applied": [],
+            "repaired_discovered_clue_texts": [],
+        }
+    gm_out = dict(gm)
+    scene_id = str((scene.get("scene") or {}).get("id") or "").strip()
+    if scene_id:
+        apply_repeated_description_guard(gm_out, session, scene_id)
+        if not _session_ongoing_social_exchange(session):
+            update_scene_momentum_runtime(session, scene_id, gm_out)
+    raw_text = gm_out.get("player_facing_text") if isinstance(gm_out.get("player_facing_text"), str) else ""
+    if resembles_serialized_response_payload(raw_text):
+        extracted = extract_player_text_from_serialized_payload(raw_text)
+        raw_text = (
+            extracted
+            if isinstance(extracted, str) and extracted.strip()
+            else strip_serialized_payload_fragments(raw_text)
+        )
+    tag_list = gm_out.get("tags") if isinstance(gm_out.get("tags"), list) else []
+    tag_list = [str(t) for t in tag_list if isinstance(t, str)]
+    strict_social_turn = strict_social_emission_will_apply(
+        resolution if isinstance(resolution, dict) else None,
+        session,
+        world,
+        scene_id,
+    )
+    san_ctx_base = {
+        "resolution": resolution if isinstance(resolution, dict) else None,
+        "include_resolution": bool(include_resolution_in_sanitizer),
+        "session": session,
+        "scene_id": scene_id,
+        "world": world,
+        "tags": tag_list,
+    }
+    if strict_social_turn:
+        gm_out["player_facing_text"] = raw_text
+        gm_out = apply_final_emission_gate(
+            gm_out,
+            resolution=resolution if isinstance(resolution, dict) else None,
+            session=session,
+            scene_id=scene_id,
+            world=world,
+        )
+    else:
+        gm_out["player_facing_text"] = sanitize_player_facing_output(raw_text, san_ctx_base)
+        gm_out = apply_final_emission_gate(
+            gm_out,
+            resolution=resolution if isinstance(resolution, dict) else None,
+            session=session,
+            scene_id=scene_id,
+            world=world,
+        )
+
+    narr_meta = reconcile_final_text_with_structured_state(
+        session=session,
+        scene=scene,
+        world=world,
+        resolution=resolution if isinstance(resolution, dict) else None,
+        gm_output=gm_out,
+    )
+    gm_out["_player_facing_emission_finalized"] = True
+    return gm_out, narr_meta
 
 
 def _sanitize_incoming_payload(req: ActionRequest | None) -> dict:
@@ -413,6 +543,11 @@ def _build_compact_turn_trace(
             "known_counts": clue_counts,
         },
         "affordances_after": _derive_affordances_from_authoritative_state(scene, session, world),
+        "emergent_actor": (
+            dict(session.get("emergent_actor_debug"))
+            if isinstance(session, dict) and isinstance(session.get("emergent_actor_debug"), dict)
+            else None
+        ),
     }
 
 
@@ -452,7 +587,8 @@ def _apply_authoritative_scene_transition(
     combat = load_combat()
     _reset_combat(combat)
     clear_for_scene_change(session)
-    rebuild_active_scene_entities(session, world, sid, scene_envelope=scene)
+    clear_emergent_scene_actors_on_scene_change(session)
+    synchronize_scene_addressability(session, scene, world)
     return scene, session, combat
 
 
@@ -489,6 +625,7 @@ def _update_interaction_context_after_action(
     """Maintain deterministic interaction context after each action/chat turn."""
     if scene_changed:
         clear_for_scene_change(session)
+        clear_emergent_scene_actors_on_scene_change(session)
         return
 
     if not isinstance(resolution, dict):
@@ -628,10 +765,12 @@ def _apply_post_gm_updates(
     session: dict,
     world: dict,
     combat: dict,
-) -> tuple[dict, dict, dict, list]:
+    resolution: dict | None = None,
+) -> tuple[dict, dict, dict, list, list]:
     """Apply GM-proposed updates (scene_update, new_scene_draft, activate_scene_id, world_updates),
-    repeated description guard, and detect surfaced clues (telemetry only).
-    Returns (scene, session, combat, surfaced_in_text)."""
+    repeated description guard, detect surfaced clues (telemetry only), and narration-based social leads.
+
+    Returns (scene, session, combat, surfaced_in_text, narration_social_lead_clue_texts)."""
     if gm.get('scene_update'):
         su = gm['scene_update']
         scene['scene'].setdefault('visible_facts', [])
@@ -662,9 +801,10 @@ def _apply_post_gm_updates(
             updates['append_events'] = [{'type': 'gm_event', 'text': t} if isinstance(t, str) else t for t in updates['append_events']]
         apply_world_updates(world, updates)
 
-    apply_repeated_description_guard(gm, session, scene['scene']['id'])
-    if not _session_ongoing_social_exchange(session):
-        update_scene_momentum_runtime(session, scene['scene']['id'], gm)
+    if not gm.get("_player_facing_emission_finalized"):
+        apply_repeated_description_guard(gm, session, scene['scene']['id'])
+        if not _session_ongoing_social_exchange(session):
+            update_scene_momentum_runtime(session, scene['scene']['id'], gm)
 
     surfaced_in_text: list = []
     if isinstance(gm.get('player_facing_text'), str):
@@ -672,7 +812,45 @@ def _apply_post_gm_updates(
         for clue_text in detect_surfaced_clues(gm['player_facing_text'], scene):
             surfaced_in_text.append(clue_text)
 
-    return (scene, session, combat, surfaced_in_text)
+    narration_social_leads: list[str] = []
+    ptext = gm.get('player_facing_text') if isinstance(gm.get('player_facing_text'), str) else ''
+    if resolution and isinstance(resolution, dict) and isinstance(ptext, str) and ptext.strip():
+        narration_social_leads.extend(
+            apply_social_narration_lead_supplements(
+                session,
+                scene['scene']['id'],
+                world,
+                resolution,
+                ptext.strip(),
+                scene,
+            )
+        )
+
+    if resolution and isinstance(resolution, dict):
+        ensure_scene_has_minimum_actionable_lead(
+            scene_id=scene['scene']['id'],
+            session=session,
+            scene=scene,
+            resolution=resolution,
+            gm_output=gm if isinstance(gm, dict) else None,
+            world=world,
+        )
+
+    emergent_debug = {
+        "emergent_actor_enrolled": False,
+        "emergent_actor_id": None,
+        "emergent_actor_source_text": None,
+    }
+    if isinstance(session, dict) and isinstance(scene, dict) and isinstance(scene.get("scene"), dict):
+        narr = gm.get("player_facing_text") if isinstance(gm.get("player_facing_text"), str) else ""
+        emergent_debug = apply_conservative_emergent_enrollment_from_gm_output(
+            session=session,
+            scene=scene,
+            narration_text=narr.strip() or None,
+        )
+    session["emergent_actor_debug"] = emergent_debug
+
+    return (scene, session, combat, surfaced_in_text, narration_social_leads)
 
 
 def _apply_authoritative_resolution_state_mutation(
@@ -702,7 +880,9 @@ def _apply_authoritative_resolution_state_mutation(
     if res_kind in SOCIAL_KINDS:
         # Canonical first landing for socially revealed clues/leads (clue_knowledge, runtime, pending_leads, event_log).
         authoritative_clue_updates.extend(
-            apply_socially_revealed_leads(session, scene["scene"]["id"], world, resolution)
+            apply_socially_revealed_leads(
+                session, scene["scene"]["id"], world, resolution, scene=scene
+            )
         )
     else:
         authoritative_clue_updates.extend(
@@ -766,6 +946,14 @@ def _build_gpt_narration_from_authoritative_state(
         player_text=user_text,
         resolution=resolution if isinstance(resolution, dict) else None,
     )
+    if isinstance(resolution, dict):
+        apply_social_topic_escalation_to_resolution(
+            world=world,
+            session=session,
+            scene=scene,
+            user_text=user_text,
+            resolution=resolution,
+        )
     messages = build_messages(
         campaign,
         world,
@@ -787,6 +975,17 @@ def _build_gpt_narration_from_authoritative_state(
         if isinstance(prompt_payload, dict) and isinstance(prompt_payload.get("response_policy"), dict)
         else build_response_policy()
     )
+
+    def _failures_after_social_answer_priority(raw: list) -> list:
+        prioritized, _dbg = prioritize_retry_failures_for_social_answer_candidate(
+            raw,
+            player_text=user_text,
+            resolution=resolution,
+            session=session,
+            scene_envelope=scene,
+        )
+        return prioritized
+
     known_clues = list(get_all_known_clue_texts(session))
     gm = guard_gm_output(
         call_gpt(messages),
@@ -799,13 +998,15 @@ def _build_gpt_narration_from_authoritative_state(
     )
     retry_attempt = 0
     while retry_attempt < MAX_TARGETED_RETRY_ATTEMPTS:
-        failures = detect_retry_failures(
-            player_text=user_text,
-            gm_reply=gm,
-            scene_envelope=scene,
-            session=session,
-            world=world,
-            resolution=resolution,
+        failures = _failures_after_social_answer_priority(
+            detect_retry_failures(
+                player_text=user_text,
+                gm_reply=gm,
+                scene_envelope=scene,
+                session=session,
+                world=world,
+                resolution=resolution,
+            )
         )
         selected_failure = choose_retry_strategy(failures)
         if not selected_failure:
@@ -839,13 +1040,15 @@ def _build_gpt_narration_from_authoritative_state(
             (retry_dbg + ' | ' if retry_dbg else '')
             + f"retry_strategy:selected={selected_failure.get('failure_class')}:attempt={retry_attempt}:reasons={reason_suffix}"
         )
-        retry_failures = detect_retry_failures(
-            player_text=user_text,
-            gm_reply=gm_retry,
-            scene_envelope=scene,
-            session=session,
-            world=world,
-            resolution=resolution,
+        retry_failures = _failures_after_social_answer_priority(
+            detect_retry_failures(
+                player_text=user_text,
+                gm_reply=gm_retry,
+                scene_envelope=scene,
+                session=session,
+                world=world,
+                resolution=resolution,
+            )
         )
         selected_class = str(selected_failure.get("failure_class") or "").strip()
         still_failing = next(
@@ -855,7 +1058,19 @@ def _build_gpt_narration_from_authoritative_state(
             ),
             None,
         )
-        if still_failing and selected_class == "unresolved_question":
+        still_unresolved_after_answer_retry = next(
+            (
+                failure
+                for failure in retry_failures
+                if isinstance(failure, dict)
+                and str(failure.get("failure_class") or "").strip() == "unresolved_question"
+            ),
+            None,
+        )
+        use_question_retry_fallback = (selected_class == "unresolved_question" and still_failing) or (
+            selected_class == "answer" and still_unresolved_after_answer_retry
+        )
+        if use_question_retry_fallback:
             print(
                 "[RETRY] validation_failed selected_strategy=",
                 selected_class,
@@ -865,22 +1080,27 @@ def _build_gpt_narration_from_authoritative_state(
                 still_failing.get("reasons"),
                 "action=deterministic_fallback",
             )
+            fallback_failure = (
+                still_failing if selected_class == "unresolved_question" else selected_failure
+            )
             gm_retry = apply_deterministic_retry_fallback(
                 gm_retry,
-                failure=still_failing,
+                failure=fallback_failure,
                 player_text=user_text,
                 scene_envelope=scene,
                 session=session,
                 world=world,
                 resolution=resolution,
             )
-            fallback_failures = detect_retry_failures(
-                player_text=user_text,
-                gm_reply=gm_retry,
-                scene_envelope=scene,
-                session=session,
-                world=world,
-                resolution=resolution,
+            fallback_failures = _failures_after_social_answer_priority(
+                detect_retry_failures(
+                    player_text=user_text,
+                    gm_reply=gm_retry,
+                    scene_envelope=scene,
+                    session=session,
+                    world=world,
+                    resolution=resolution,
+                )
             )
             fallback_still_failing = any(
                 isinstance(failure, dict) and str(failure.get("failure_class") or "").strip() == selected_class
@@ -1253,7 +1473,19 @@ def is_directed_dialogue(
     session: dict,
     world: dict,
     segmented_turn: dict | None = None,
+    canonical_social_entry: dict | None = None,
 ) -> bool:
+    ce = canonical_social_entry
+    if ce is None:
+        ce = resolve_directed_social_entry(
+            session=session,
+            scene=scene,
+            world=world,
+            segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+            raw_text=str(text or ""),
+        )
+    if ce.get("should_route_social"):
+        return True
     merged = _merged_text_for_dialogue_routing(
         segmented_turn if isinstance(segmented_turn, dict) else None,
         str(text or ""),
@@ -1271,7 +1503,9 @@ def is_directed_dialogue(
     # Ambiguity rule: during an active NPC exchange, "next step"-style
     # follow-ups default to that interlocutor unless explicit procedural/OOC
     # markers were present above.
-    if _has_active_social_interlocutor(session) and _is_ambiguous_dialogue_followup(clause):
+    if _has_active_social_interlocutor(session, scene=scene, world=world) and _is_ambiguous_dialogue_followup(
+        clause
+    ):
         return True
 
     scene_npcs = scene_npcs_in_active_scene(scene, world)
@@ -1299,12 +1533,12 @@ def choose_interaction_route(
     session: dict,
     world: dict,
     segmented_turn: dict | None = None,
+    canonical_social_entry: dict | None = None,
 ) -> str:
     """Choose coarse chat lane: dialogue, action, or undecided.
 
-    This biases parser order and dialogue-lock; it does **not** replace
-    :func:`game.interaction_context.should_route_addressed_question_to_social` for adjudication
-    classification (that gate lives in adjudication + dialogue-first metadata only).
+    Canonical social entry is computed in :func:`game.interaction_context.resolve_directed_social_entry`
+    (pass *canonical_social_entry* from /api/chat to avoid duplicate work).
     """
     directed_dialogue = is_directed_dialogue(
         text,
@@ -1312,6 +1546,7 @@ def choose_interaction_route(
         session=session,
         world=world,
         segmented_turn=segmented_turn,
+        canonical_social_entry=canonical_social_entry,
     )
     world_action = is_world_action(text, segmented_turn=segmented_turn)
     has_dialogue_cue = _has_dialogue_cue(text=text, segmented_turn=segmented_turn)
@@ -1335,29 +1570,49 @@ def _build_dialogue_first_action(
     session: dict,
     world: dict,
     segmented_turn: dict | None,
+    canonical_social_entry: dict | None = None,
 ) -> dict | None:
-    if not is_directed_dialogue(
+    ce = canonical_social_entry
+    if ce is None:
+        ce = resolve_directed_social_entry(
+            session=session,
+            scene=scene,
+            world=world,
+            segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+            raw_text=str(player_text or ""),
+        )
+    merged_address = merge_turn_segments_for_directed_social_entry(
+        segmented_turn if isinstance(segmented_turn, dict) else None,
+        str(player_text or ""),
+    )
+    if not ce.get("should_route_social") and not is_directed_dialogue(
         player_text,
         scene=scene,
         session=session,
         world=world,
         segmented_turn=segmented_turn,
+        canonical_social_entry=ce,
     ):
         return None
 
-    target_id = resolve_dialogue_lock_action_target_id(
-        player_text,
+    target_id = str(ce.get("target_actor_id") or "").strip() or resolve_dialogue_lock_action_target_id(
+        merged_address or player_text,
         scene=scene,
         session=session,
         world=world,
     )
 
-    action_kind = "question" if _is_information_seeking_clause(player_text) or "?" in str(player_text or "") else "social_probe"
+    action_kind = (
+        "question"
+        if _is_information_seeking_clause(merged_address or player_text)
+        or "?" in str(merged_address or player_text or "")
+        else "social_probe"
+    )
     action_label = str(player_text or "").strip()
     if not action_label:
         return None
     _, _route_meta = should_route_addressed_question_to_social(
-        player_text,
+        merged_address or player_text,
         session=session,
         world=world,
         scene_envelope=scene if isinstance(scene, dict) else None,
@@ -1365,6 +1620,9 @@ def _build_dialogue_first_action(
     metadata = {
         "routed_via_dialogue_lock": True,
         "route": "dialogue",
+        "canonical_entry_path": "social",
+        "canonical_entry_reason": ce.get("reason"),
+        "canonical_entry_target_actor_id": ce.get("target_actor_id") or target_id,
         "intent_route_debug": build_intent_route_debug_social_exchange(
             should_route_meta=_route_meta if isinstance(_route_meta, dict) else None,
             resolved_target_id=target_id,
@@ -1400,12 +1658,22 @@ def _contains_mechanics_or_procedural_language(text: str | None) -> bool:
     return any(token in low for token in _MECHANICS_OR_PROCEDURAL_TOKENS)
 
 
-def _has_active_social_interlocutor(session: dict | None) -> bool:
+def _has_active_social_interlocutor(
+    session: dict | None,
+    *,
+    scene: dict | None = None,
+    world: dict | None = None,
+) -> bool:
     inspected = inspect_interaction_context(session if isinstance(session, dict) else {})
     target_id = str((inspected or {}).get("active_interaction_target_id") or "").strip()
     if not target_id:
         return False
-    if not assert_valid_speaker(target_id, session if isinstance(session, dict) else {}):
+    if not assert_valid_speaker(
+        target_id,
+        session if isinstance(session, dict) else {},
+        scene_envelope=scene if isinstance(scene, dict) else None,
+        world=world if isinstance(world, dict) else None,
+    ):
         return False
     kind = str((inspected or {}).get("active_interaction_kind") or "").strip().lower()
     mode = str((inspected or {}).get("interaction_mode") or "").strip().lower()
@@ -1455,6 +1723,7 @@ def _prefer_dialogue_over_adjudication(
     scene: dict | None = None,
     session: dict | None = None,
     world: dict | None = None,
+    canonical_social_entry: dict | None = None,
 ) -> bool:
     """Bias ambiguous turns toward dialogue instead of procedural adjudication.
 
@@ -1462,6 +1731,18 @@ def _prefer_dialogue_over_adjudication(
     feasibility patterns so that normal in-character social questioning
     during an active NPC conversation is not captured as adjudication.
     """
+    if isinstance(scene, dict) and isinstance(session, dict) and isinstance(world, dict):
+        ce = canonical_social_entry
+        if ce is None:
+            ce = resolve_directed_social_entry(
+                session=session,
+                scene=scene,
+                world=world,
+                segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+                raw_text=str(player_text or ""),
+            )
+        if ce.get("should_route_social"):
+            return True
     spoken_text = segmented_turn.get("spoken_text") if isinstance(segmented_turn, dict) else None
     declared_action_text = segmented_turn.get("declared_action_text") if isinstance(segmented_turn, dict) else None
     primary_clause = _merged_text_for_dialogue_routing(
@@ -1540,51 +1821,54 @@ def _build_turn_response_payload(
 
     if isinstance(gm, dict):
         gm = dict(gm)
-        raw_text = gm.get("player_facing_text") if isinstance(gm.get("player_facing_text"), str) else ""
-        if resembles_serialized_response_payload(raw_text):
-            extracted = extract_player_text_from_serialized_payload(raw_text)
-            raw_text = (
-                extracted
-                if isinstance(extracted, str) and extracted.strip()
-                else strip_serialized_payload_fragments(raw_text)
-            )
-        tag_list = gm.get("tags") if isinstance(gm.get("tags"), list) else []
-        tag_list = [str(t) for t in tag_list if isinstance(t, str)]
-        strict_social_turn = strict_social_emission_will_apply(
-            resolution if isinstance(resolution, dict) else None,
-            state_session,
-            state_world,
-            scene_id,
-        )
-
-        san_ctx_base = {
-            "resolution": resolution if isinstance(resolution, dict) else None,
-            "include_resolution": bool(include_resolution),
-            "session": state_session,
-            "scene_id": scene_id,
-            "world": state_world,
-            "tags": tag_list,
-        }
-
-        if strict_social_turn:
-            gm["player_facing_text"] = raw_text
-            gm = apply_final_emission_gate(
-                gm,
-                resolution=resolution if isinstance(resolution, dict) else None,
-                session=state_session,
-                scene_id=scene_id,
-                world=state_world,
-            )
-            # build_final_strict_social_response (via the gate) is the sole writer; no post-gate sanitizer.
+        if gm.get("_player_facing_emission_finalized"):
+            gm = _strip_internal_gm_keys(gm)
         else:
-            gm["player_facing_text"] = sanitize_player_facing_output(raw_text, san_ctx_base)
-            gm = apply_final_emission_gate(
-                gm,
-                resolution=resolution if isinstance(resolution, dict) else None,
-                session=state_session,
-                scene_id=scene_id,
-                world=state_world,
+            raw_text = gm.get("player_facing_text") if isinstance(gm.get("player_facing_text"), str) else ""
+            if resembles_serialized_response_payload(raw_text):
+                extracted = extract_player_text_from_serialized_payload(raw_text)
+                raw_text = (
+                    extracted
+                    if isinstance(extracted, str) and extracted.strip()
+                    else strip_serialized_payload_fragments(raw_text)
+                )
+            tag_list = gm.get("tags") if isinstance(gm.get("tags"), list) else []
+            tag_list = [str(t) for t in tag_list if isinstance(t, str)]
+            strict_social_turn = strict_social_emission_will_apply(
+                resolution if isinstance(resolution, dict) else None,
+                state_session,
+                state_world,
+                scene_id,
             )
+
+            san_ctx_base = {
+                "resolution": resolution if isinstance(resolution, dict) else None,
+                "include_resolution": bool(include_resolution),
+                "session": state_session,
+                "scene_id": scene_id,
+                "world": state_world,
+                "tags": tag_list,
+            }
+
+            if strict_social_turn:
+                gm["player_facing_text"] = raw_text
+                gm = apply_final_emission_gate(
+                    gm,
+                    resolution=resolution if isinstance(resolution, dict) else None,
+                    session=state_session,
+                    scene_id=scene_id,
+                    world=state_world,
+                )
+                # build_final_strict_social_response (via the gate) is the sole writer; no post-gate sanitizer.
+            else:
+                gm["player_facing_text"] = sanitize_player_facing_output(raw_text, san_ctx_base)
+                gm = apply_final_emission_gate(
+                    gm,
+                    resolution=resolution if isinstance(resolution, dict) else None,
+                    session=state_session,
+                    scene_id=scene_id,
+                    world=state_world,
+                )
 
     payload: dict = {'ok': True, 'gm_output': gm, **state}
     if include_resolution:
@@ -1600,7 +1884,7 @@ def compose_state():
     combat = load_combat()
     conditions = load_conditions()
     scene = load_active_scene()
-    rebuild_active_scene_entities(session, world, scene["scene"]["id"], scene_envelope=scene)
+    synchronize_scene_addressability(session, scene, world)
     scene["scene_state"] = session.get("scene_state")
     state = {
         'campaign': campaign,
@@ -1825,7 +2109,7 @@ def action(req: ActionRequest):
     combat = load_combat()
     conditions = load_conditions()
     scene = load_active_scene()
-    rebuild_active_scene_entities(session, world, scene["scene"]["id"], scene_envelope=scene)
+    synchronize_scene_addressability(session, scene, world)
     scene["scene_state"] = session.get("scene_state")
     scene_before_id = scene['scene']['id']
 
@@ -2014,7 +2298,24 @@ def action(req: ActionRequest):
     if gm is None:
         gm = {'player_facing_text': '', 'tags': [], 'scene_update': None, 'activate_scene_id': None, 'new_scene_draft': None, 'world_updates': None, 'suggested_action': None, 'debug_notes': 'No narration generated.'}
 
-    scene, session, combat, surfaced_clue_telemetry = _apply_post_gm_updates(gm, scene, session, world, combat)
+    gm, _narr_consistency = _finalize_player_facing_for_turn(
+        gm,
+        resolution=resolution if isinstance(resolution, dict) else None,
+        session=session,
+        world=world,
+        scene=scene,
+        include_resolution_in_sanitizer=True,
+    )
+    for _rt in _narr_consistency.get("repaired_discovered_clue_texts") or []:
+        if isinstance(_rt, str) and _rt.strip() and _rt.strip() not in authoritative_clue_updates:
+            authoritative_clue_updates.append(_rt.strip())
+
+    scene, session, combat, surfaced_clue_telemetry, narration_social_leads = _apply_post_gm_updates(
+        gm, scene, session, world, combat, resolution=resolution if isinstance(resolution, dict) else None
+    )
+    for _txt in narration_social_leads:
+        if isinstance(_txt, str) and _txt.strip() and _txt.strip() not in authoritative_clue_updates:
+            authoritative_clue_updates.append(_txt.strip())
     remember_recent_contextual_leads(
         session,
         scene['scene']['id'],
@@ -2028,7 +2329,7 @@ def action(req: ActionRequest):
             implied_context.get("applied") or implied_context.get("interaction_established")
         ),
     )
-    rebuild_active_scene_entities(session, world, scene["scene"]["id"], scene_envelope=scene)
+    synchronize_scene_addressability(session, scene, world)
     scene["scene_state"] = session.get("scene_state")
 
     # Build action pipeline debug (no hidden facts or secrets).
@@ -2041,6 +2342,7 @@ def action(req: ActionRequest):
     session['last_action_debug'] = _build_action_debug(
         req.action_type, _player_input, normalized_action, resolution
     )
+    _merge_emergent_actor_debug_into_action_debug(session)
 
     # Populate trace for success path.
     trace['normalized_action'] = (
@@ -2137,11 +2439,12 @@ def chat(req: ChatRequest):
     campaign = load_campaign()
     character = load_character()
     session = load_session()
+    snapshot_turn_start_interlocutor(session)
     world = load_world()
     combat = load_combat()
     conditions = load_conditions()
     scene = load_active_scene()
-    rebuild_active_scene_entities(session, world, scene["scene"]["id"], scene_envelope=scene)
+    synchronize_scene_addressability(session, scene, world)
     scene["scene_state"] = session.get("scene_state")
     scene_before_id = scene['scene']['id']
 
@@ -2188,15 +2491,64 @@ def chat(req: ChatRequest):
     authoritative_clue_updates: list[str] = []
     surfaced_clue_telemetry: list[str] = []
     gm: dict | None = None
+    # Segment + canonical social entry before implied dialogue establishment so prior interlocutor
+    # and continuity flags (declared switch / spoken vocative) see pre-turn binding.
+    segmented_turn = segment_mixed_player_turn(req.text)
+    trace['segmented_turn'] = _compact_segmented_turn(segmented_turn)
+    canonical_entry = resolve_directed_social_entry(
+        session=session,
+        scene=scene,
+        world=world,
+        segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+        raw_text=req.text,
+    )
+    declared_switch_meta = resolve_declared_actor_switch(
+        session=session,
+        scene=scene,
+        segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+        raw_text=req.text,
+    )
+    trace['canonical_entry'] = {
+        'should_route_social': bool(canonical_entry.get('should_route_social')),
+        'target_actor_id': canonical_entry.get('target_actor_id'),
+        'target_source': canonical_entry.get('target_source'),
+        'reason': canonical_entry.get('reason'),
+        'spoken_text': canonical_entry.get('spoken_text'),
+        'declared_switch_detected': bool(declared_switch_meta.get('has_declared_switch')),
+        'declared_switch_target_actor_id': (
+            declared_switch_meta.get('target_actor_id')
+            if declared_switch_meta.get('has_declared_switch')
+            else None
+        ),
+        'continuity_overridden_by_declared_switch': bool(
+            canonical_entry.get('continuity_overridden_by_declared_switch')
+        ),
+        'spoken_vocative_detected': bool(canonical_entry.get('spoken_vocative_detected')),
+        'spoken_vocative_target_actor_id': canonical_entry.get('spoken_vocative_target_actor_id'),
+        'continuity_overridden_by_spoken_vocative': bool(
+            canonical_entry.get('continuity_overridden_by_spoken_vocative')
+        ),
+    }
+    trace['canonical_entry_path'] = (
+        'social' if canonical_entry.get('should_route_social') else 'undecided'
+    )
+    trace['canonical_entry_reason'] = canonical_entry.get('reason')
+    trace['canonical_entry_target_actor_id'] = canonical_entry.get('target_actor_id')
     implied_context = _prepare_interaction_from_turn_input(
         session, world, scene_before_id, req.text, scene=scene
     )
-    segmented_turn = segment_mixed_player_turn(req.text)
-    trace['segmented_turn'] = _compact_segmented_turn(segmented_turn)
+    merged_classification = merge_turn_segments_for_directed_social_entry(
+        segmented_turn if isinstance(segmented_turn, dict) else None,
+        req.text,
+    )
     classification_text = (
-        (segmented_turn.get("declared_action_text") if isinstance(segmented_turn, dict) else None)
-        or (segmented_turn.get("spoken_text") if isinstance(segmented_turn, dict) else None)
-        or req.text
+        merged_classification.strip()
+        if isinstance(merged_classification, str) and merged_classification.strip()
+        else (
+            (segmented_turn.get("declared_action_text") if isinstance(segmented_turn, dict) else None)
+            or (segmented_turn.get("spoken_text") if isinstance(segmented_turn, dict) else None)
+            or req.text
+        )
     )
     embedded_question_text = (
         segmented_turn.get("adjudication_question_text")
@@ -2240,15 +2592,17 @@ def chat(req: ChatRequest):
             session=session,
             world=world,
             segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+            canonical_social_entry=canonical_entry,
         )
         parsed = parse_social_intent(classification_text, scene, world)
-        if parsed is None:
+        if parsed is None and route_choice != "action":
             parsed = _build_dialogue_first_action(
                 player_text=req.text,
                 segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
                 scene=scene,
                 session=session,
                 world=world,
+                canonical_social_entry=canonical_entry,
             )
         if parsed is None and route_choice != "dialogue":
             parsed = parse_exploration_intent(classification_text, scene)
@@ -2291,6 +2645,16 @@ def chat(req: ChatRequest):
             routed_via_exploration = True
             normalized = parsed  # Social actions use own shape; ensure type is set
             normalized_chat = normalized
+            _sm = normalized.get("metadata")
+            if not isinstance(_sm, dict):
+                _sm = {}
+                normalized["metadata"] = _sm
+            _sm.setdefault("canonical_entry_path", "social")
+            _sm.setdefault("canonical_entry_reason", canonical_entry.get("reason"))
+            _sm.setdefault("canonical_entry_target_actor_id", canonical_entry.get("target_actor_id"))
+            if isinstance(compact_segmented, dict) and compact_segmented:
+                _sm.setdefault("segmented_turn", compact_segmented)
+            trace["canonical_entry_path"] = "social"
             resolution = resolve_social_action(
                 scene, session, world, normalized,
                 raw_player_text=req.text,
@@ -2381,6 +2745,7 @@ def chat(req: ChatRequest):
             scene=scene,
             session=session,
             world=world,
+            canonical_social_entry=canonical_entry,
         ):
             adjudication = resolve_adjudication_query(
                 adjudication_text,
@@ -2393,6 +2758,7 @@ def chat(req: ChatRequest):
         if adjudication is not None:
             routed_via_adjudication = True
             trace['gpt_called'] = False
+            trace['canonical_entry_path'] = 'adjudication'
             resolution = {
                 'kind': 'adjudication_query',
                 'action_id': 'adjudication_query',
@@ -2416,6 +2782,9 @@ def chat(req: ChatRequest):
                 'check_request': adjudication.get('check_request') if isinstance(adjudication.get('check_request'), dict) else None,
                 'metadata': {
                     **({'turn_segmentation': compact_segmented} if compact_segmented else {}),
+                    'canonical_entry_path': 'adjudication',
+                    'canonical_entry_reason': canonical_entry.get('reason'),
+                    'canonical_entry_target_actor_id': canonical_entry.get('target_actor_id'),
                     'intent_route_debug': build_intent_route_debug_adjudication_query(
                         category=adjudication.get('category') if isinstance(adjudication, dict) else None,
                     ),
@@ -2424,6 +2793,7 @@ def chat(req: ChatRequest):
             }
             gm = _build_adjudication_gm_output(adjudication)
         else:
+            trace['canonical_entry_path'] = 'procedural'
             gm = _build_gpt_narration_from_authoritative_state(
                 campaign=campaign,
                 world=world,
@@ -2437,7 +2807,27 @@ def chat(req: ChatRequest):
                 scene_runtime=scene_rt,
             )
 
-    scene, session, combat, surfaced_clue_telemetry = _apply_post_gm_updates(gm, scene, session, world, combat)
+    _include_res_chat = bool(
+        (routed_via_exploration or routed_via_adjudication) and isinstance(resolution, dict)
+    )
+    gm, _narr_consistency_chat = _finalize_player_facing_for_turn(
+        gm,
+        resolution=resolution if isinstance(resolution, dict) else None,
+        session=session,
+        world=world,
+        scene=scene,
+        include_resolution_in_sanitizer=_include_res_chat,
+    )
+    for _rt in _narr_consistency_chat.get("repaired_discovered_clue_texts") or []:
+        if isinstance(_rt, str) and _rt.strip() and _rt.strip() not in authoritative_clue_updates:
+            authoritative_clue_updates.append(_rt.strip())
+
+    scene, session, combat, surfaced_clue_telemetry, narration_social_leads = _apply_post_gm_updates(
+        gm, scene, session, world, combat, resolution=resolution if isinstance(resolution, dict) else None
+    )
+    for _txt in narration_social_leads:
+        if isinstance(_txt, str) and _txt.strip() and _txt.strip() not in authoritative_clue_updates:
+            authoritative_clue_updates.append(_txt.strip())
     remember_recent_contextual_leads(
         session,
         scene['scene']['id'],
@@ -2456,7 +2846,7 @@ def chat(req: ChatRequest):
             implied_context.get("applied") or implied_context.get("interaction_established")
         ),
     )
-    rebuild_active_scene_entities(session, world, scene["scene"]["id"], scene_envelope=scene)
+    synchronize_scene_addressability(session, scene, world)
     scene["scene_state"] = session.get("scene_state")
     # Persist world every turn (matches /api/action). Engine paths may mutate event_log / flags
     # without GM-proposed world_updates (e.g. social lead landing).
@@ -2466,6 +2856,7 @@ def chat(req: ChatRequest):
     session['last_action_debug'] = _build_action_debug(
         'chat', req.text, normalized_chat, resolution
     )
+    _merge_emergent_actor_debug_into_action_debug(session)
 
     clocks_changed = {"time_pressure": time_pressure_after} if clocks_before.get("time_pressure") != time_pressure_after else {}
 
@@ -2502,6 +2893,7 @@ def chat(req: ChatRequest):
     )
     _finalize_and_append_trace(session, trace, True, None)
 
+    clear_turn_start_interlocutor_snapshot(session)
     save_session(session)
     save_scene(scene)
     save_combat(combat)

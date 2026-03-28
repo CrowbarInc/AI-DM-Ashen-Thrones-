@@ -1019,7 +1019,7 @@ def test_social_exchange_question_first_sentence_contract_rejects_atmospheric_op
     assert check["applies"] is True
     assert check["ok"] is False
     assert "question_rule:social_exchange_first_sentence_not_speaker_grounded" in check["reasons"]
-    assert "question_rule:social_exchange_first_sentence_not_explicit_answer_shape" in check["reasons"]
+    assert "question_rule:social_exchange_first_sentence_not_substantive_answer" in check["reasons"]
 
 
 def test_detect_retry_failures_flags_social_exchange_first_sentence_contract():
@@ -1054,10 +1054,10 @@ def test_detect_retry_failures_flags_social_exchange_first_sentence_contract():
     assert unresolved is not None
     reasons = unresolved.get("reasons") or []
     assert "question_rule:social_exchange_first_sentence_not_speaker_grounded" in reasons
-    assert "question_rule:social_exchange_first_sentence_not_explicit_answer_shape" in reasons
+    assert "question_rule:social_exchange_first_sentence_not_substantive_answer" in reasons
 
 
-def test_retry_prompt_for_social_exchange_first_sentence_failure_requests_explicit_shape():
+def test_retry_prompt_for_social_exchange_first_sentence_failure_requests_substantive_shape():
     from game.gm import build_retry_prompt_for_failure
 
     prompt = build_retry_prompt_for_failure(
@@ -1065,7 +1065,7 @@ def test_retry_prompt_for_social_exchange_first_sentence_failure_requests_explic
             "failure_class": "unresolved_question",
             "reasons": [
                 "question_rule:social_exchange_first_sentence_not_speaker_grounded",
-                "question_rule:social_exchange_first_sentence_not_explicit_answer_shape",
+                "question_rule:social_exchange_first_sentence_not_substantive_answer",
             ],
             "uncertainty_category": "unknown_identity",
             "uncertainty_context": {
@@ -1078,7 +1078,103 @@ def test_retry_prompt_for_social_exchange_first_sentence_failure_requests_explic
     assert "retry target: unresolved_question." in low
     assert "sentence one must directly answer" in low
     assert "social exchange contract" in low
-    assert "speaker-grounded and explicit" in low
+    assert "speaker-grounded and substantive" in low
+
+
+def test_social_exchange_natural_warning_passes_question_rule():
+    from game.gm import question_resolution_rule_check
+
+    check = question_resolution_rule_check(
+        player_text="Anyone I should steer clear of for sure?",
+        gm_reply_text=(
+            "Tavern Runner doesn't look at you. "
+            "Keep clear of House Verevin's bailiffs by the east crossroads—people vanish near that stretch."
+        ),
+        resolution={
+            "kind": "question",
+            "social": {
+                "social_intent_class": "social_exchange",
+                "npc_id": "tavern_runner",
+                "npc_name": "Tavern Runner",
+            },
+        },
+    )
+    assert check["applies"] is True
+    assert check["ok"] is True
+    assert check.get("social_answer_validation_mode") == "substantive_content"
+    assert check.get("first_sentence_substantive") is True
+    assert check.get("rejected_as_cinematic_nonanswer") is False
+
+
+def test_social_exchange_natural_directional_passes_question_rule():
+    from game.gm import question_resolution_rule_check
+
+    check = question_resolution_rule_check(
+        player_text="Where shouldn't I go tonight?",
+        gm_reply_text='Tavern Runner says, "Watch out for the mill yard after dark—best not cross Verevin\'s riders there."',
+        resolution={
+            "kind": "question",
+            "social": {
+                "social_intent_class": "social_exchange",
+                "npc_id": "tavern_runner",
+                "npc_name": "Tavern Runner",
+            },
+        },
+    )
+    assert check["applies"] is True
+    assert check["ok"] is True
+
+
+def test_social_exchange_cinematic_interruption_fails_question_rule():
+    from game.gm import question_resolution_rule_check
+
+    check = question_resolution_rule_check(
+        player_text="Who should I avoid?",
+        gm_reply_text=(
+            "Tavern Runner starts to answer, then pauses as shouting breaks out by the gate."
+        ),
+        resolution={
+            "kind": "question",
+            "social": {
+                "social_intent_class": "social_exchange",
+                "npc_id": "tavern_runner",
+                "npc_name": "Tavern Runner",
+            },
+        },
+    )
+    assert check["applies"] is True
+    assert check["ok"] is False
+    assert "question_rule:social_exchange_first_sentence_not_substantive_answer" in check["reasons"]
+    assert check.get("rejected_as_cinematic_nonanswer") is True
+
+
+def test_is_valid_social_answer_first_sentence_helper():
+    from game.gm import is_valid_social_answer_first_sentence
+
+    assert is_valid_social_answer_first_sentence("Keep clear of House Verevin's men by the crossroads.") is True
+    assert is_valid_social_answer_first_sentence("Watch out for riders on the east road.") is True
+    assert is_valid_social_answer_first_sentence("Tavern Runner starts to answer, then pauses.") is False
+    assert is_valid_social_answer_first_sentence("For a moment the scene holds, unreadable.") is False
+    assert is_valid_social_answer_first_sentence("") is False
+
+
+def test_social_exchange_short_substantive_answer_passes_question_rule():
+    from game.gm import question_resolution_rule_check
+
+    check = question_resolution_rule_check(
+        player_text="Any names I should know?",
+        gm_reply_text='Tavern Runner mutters, "Don\'t trust the night clerk at the Crown."',
+        resolution={
+            "kind": "question",
+            "social": {
+                "social_intent_class": "social_exchange",
+                "npc_id": "tavern_runner",
+                "npc_name": "Tavern Runner",
+            },
+        },
+    )
+    assert check["applies"] is True
+    assert check["ok"] is True
 
 
 def test_validator_voice_detection_matches_forbidden_patterns():

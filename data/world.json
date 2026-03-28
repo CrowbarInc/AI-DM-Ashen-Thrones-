@@ -20,10 +20,10 @@
       "type": "noble_house",
       "attitude": "wary",
       "influence": 3,
-      "pressure": 8,
+      "pressure": 7,
       "goal": "Expand territory",
       "current_plan": "Gathering influence",
-      "agenda_progress": 6,
+      "agenda_progress": 5,
       "assets": []
     },
     {
@@ -32,10 +32,10 @@
       "type": "criminal_syndicate",
       "attitude": "opportunistic",
       "influence": 3,
-      "pressure": 8,
+      "pressure": 7,
       "goal": "Control black market",
       "current_plan": "Establishing smuggling routes",
-      "agenda_progress": 6,
+      "agenda_progress": 5,
       "assets": []
     },
     {
@@ -44,10 +44,10 @@
       "type": "religious_order",
       "attitude": "suspicious",
       "influence": 2,
-      "pressure": 7,
+      "pressure": 6,
       "goal": "Suppress dangerous magic",
       "current_plan": "Watching newcomers",
-      "agenda_progress": 6,
+      "agenda_progress": 5,
       "assets": []
     }
   ],
@@ -71,6 +71,19 @@
       "source": "ordo_pyric"
     },
     {
+      "type": "social_lead_revealed",
+      "clue_id": "social_frontier_gate_tavern_runner_stew",
+      "scene_id": "frontier_gate",
+      "npc_id": "tavern_runner",
+      "topic_id": "stew"
+    },
+    {
+      "type": "social_extracted_lead",
+      "clue_id": "lead_frontier_gate_old_milestone",
+      "scene_id": "frontier_gate",
+      "source": "narration_reconciled:old_milestone"
+    },
+    {
       "type": "faction_operation_complete",
       "text": "House Verevin completes an off-screen operation.",
       "source": "house_verevin"
@@ -84,13 +97,6 @@
       "type": "faction_operation_complete",
       "text": "Ordo Pyric completes an off-screen operation.",
       "source": "ordo_pyric"
-    },
-    {
-      "type": "social_lead_revealed",
-      "clue_id": "social_frontier_gate_tavern_runner_stew",
-      "scene_id": "frontier_gate",
-      "npc_id": "tavern_runner",
-      "topic_id": "stew"
     }
   ],
   "world_state": {

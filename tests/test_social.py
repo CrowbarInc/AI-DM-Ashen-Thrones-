@@ -594,7 +594,7 @@ def test_frontier_gate_generic_addressing_smoke_authoritative():
     )
     assert auth_s["npc_id"] == "refugee"
     # Comma vocative on "Stranger" resolves before generic-role patterns (same correct target).
-    assert auth_s["source"] in ("vocative", "generic_role")
+    assert auth_s["source"] in ("spoken_vocative", "vocative", "generic_role")
     if auth_s["source"] == "generic_role":
         grs = auth_s.get("generic_role_rebind")
         assert isinstance(grs, dict)
@@ -623,7 +623,7 @@ def test_frontier_gate_generic_addressing_smoke_authoritative():
         allow_first_roster_fallback=False,
     )
     assert auth_r["npc_id"] == "tavern_runner"
-    assert auth_r["source"] in ("vocative", "generic_role")
+    assert auth_r["source"] in ("spoken_vocative", "vocative", "generic_role")
 
     auth_r_gen = resolve_authoritative_social_target(
         session,

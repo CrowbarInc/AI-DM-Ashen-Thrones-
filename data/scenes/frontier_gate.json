@@ -16,7 +16,20 @@
       "A figure in threadbare clothes stands still, observing the crowd.",
       "The notice board prominently displays new taxes, curfews, and a warning about a missing patrol.",
       "The tavern runner prepares a steaming bowl of thick stew.",
-      "The tavern's warmth contrasts with the brisk rain outside, drawing in weary souls looking for food and news."
+      "The tavern's warmth contrasts with the brisk rain outside, drawing in weary souls looking for food and news.",
+      "The tavern runner is pulling together supplies as patrons enter, offering them warm stew.",
+      "The atmosphere buzzes with urgent whispers from a few nearby patrons.",
+      "The rain intensifies, making the muddy ground slick and treacherous.",
+      "The well-dressed figure near the gate seems particularly interested in newcomers.",
+      "Lord Aldric indicates that the missing patrol could hold vital information.",
+      "Nearby guards exchange wary glances, indicating a rising tension in the crowd.",
+      "The Tavern Runner offers steaming stew and urgent rumors, creating a tempting opportunity.",
+      "The Tavern Runner's demeanor shifts to serious as they share the rumor.",
+      "A hooded figure is approaching the guard, shadowy and indistinct.",
+      "The tavern runner appears anxious but intent on providing information.",
+      "Steam rises from a cauldron bubbling with thick stew, a beacon for weary souls.",
+      "The atmosphere is thick with tension as the guards exchange wary glances.",
+      "Several figures in the crowd seem to be watching newcomers intently."
     ],
     "journal_seed_facts": [
       "You arrive at Cinderwatch's eastern gate in cold rain, under frayed banners.",
@@ -36,7 +49,17 @@
       "Job chalkboards and runner gossip hint at merchants hiring short-term muscle for the next caravan push.",
       "The tavern runner has information about House Verevin's stronghold at the outskirts of Cinderwatch.",
       "The tavern runner has information about House Verevin's movements and the status of the missing patrol.",
-      "Whispers near the old trading crossroads could shed light on House Verevin's rivals."
+      "Whispers near the old trading crossroads could shed light on House Verevin's rivals.",
+      "A patrol went missing near the old milestone.",
+      "Investigate the old milestone.",
+      "A closer look at the notice board might reveal more about the missing patrol and its implications.",
+      "The missing patrol is rumored to have encountered something significant that could affect Cinderwatch.",
+      "House Verevin's influence is rumored to be strong in Cinderwatch.",
+      "Lord Aldric has been seen frequenting the old milestone, possibly linked to the missing patrol.",
+      "The missing patrol is rumored to have encountered something strange.",
+      "The patrol went missing near the old milestone.",
+      "Rumors suggest that investigating the old milestone could yield information about the missing patrol.",
+      "A patrol went missing near the old milestone. Rumors suggest strange occurrences."
     ],
     "hidden_facts": [
       "An agent of a noble house is watching new arrivals from the square's edge.",
@@ -128,12 +151,35 @@
       "guard_captain",
       "tavern_runner",
       "refugee",
-      "threadbare_watcher"
+      "threadbare_watcher",
+      "emergent_lord_aldric"
     ],
     "entity_presence": {
       "guard_captain": "active",
-      "tavern_runner": "active"
+      "tavern_runner": "active",
+      "emergent_lord_aldric": "active",
+      "threadbare_watcher": "active",
+      "refugee": "active"
     },
-    "current_interlocutor": "tavern_runner"
+    "current_interlocutor": "tavern_runner",
+    "emergent_addressables": [
+      {
+        "id": "emergent_lord_aldric",
+        "name": "Lord Aldric",
+        "scene_id": "frontier_gate",
+        "address_roles": [
+          "lord"
+        ],
+        "aliases": [
+          "Lord Aldric",
+          "aldric",
+          "lord aldric"
+        ],
+        "kind": "scene_actor",
+        "addressable": true,
+        "address_priority": 40,
+        "emergent_source": "promoted_visible_figure"
+      }
+    ]
   }
 }

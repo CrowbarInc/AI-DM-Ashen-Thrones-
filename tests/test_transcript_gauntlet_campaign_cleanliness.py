@@ -317,7 +317,7 @@ def test_explicit_target_in_campaign_a_does_not_influence_campaign_b(tmp_path: P
     )
     soc_b = payloads_b[-1].get("resolution", {}).get("social") if isinstance(payloads_b[-1].get("resolution"), dict) else {}
     assert soc_b.get("npc_id") == "tavern_runner", soc_b
-    assert soc_b.get("target_source") in ("explicit_target", "vocative"), soc_b
+    assert soc_b.get("target_source") in ("explicit_target", "spoken_vocative", "vocative"), soc_b
     assert soc_b.get("npc_id") != "guard_captain", soc_b
 
     snap_b = snapshot_from_chat_payload(1, "Runner, what are you selling today?", payloads_b[-1])

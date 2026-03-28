@@ -4,7 +4,7 @@ This module handles lightweight question categories before GPT narration fallbac
 It does not mutate authoritative state.
 
 Directed NPC information questions are excluded via
-:func:`game.interaction_context.should_route_addressed_question_to_social` inside
+:func:`game.interaction_context.resolve_directed_social_entry` inside
 :func:`classify_adjudication_query` — that gate is authoritative; do not duplicate its rules here.
 """
 from __future__ import annotations
@@ -12,7 +12,12 @@ from __future__ import annotations
 import re
 from typing import Any, Dict, Optional
 
-from game.interaction_context import should_route_addressed_question_to_social
+from game.interaction_context import (
+    addressable_scene_npc_id_universe,
+    canonical_scene_addressable_roster,
+    is_rules_or_engine_mechanics_question,
+    resolve_directed_social_entry,
+)
 from game.models import make_check_request
 from game.social import find_npc_by_target
 
@@ -125,6 +130,7 @@ def classify_adjudication_query(
         return None
 
     # Social-before-adjudication gate (single owner: interaction_context).
+    # Mechanics/rules fragments (including extracted parentheticals) must not be captured as social.
     if (
         session is not None
         and world is not None
@@ -132,14 +138,16 @@ def classify_adjudication_query(
         and isinstance(session, dict)
         and isinstance(world, dict)
         and isinstance(scene, dict)
+        and not is_rules_or_engine_mechanics_question(text)
     ):
-        route_social, _meta = should_route_addressed_question_to_social(
-            text,
+        entry = resolve_directed_social_entry(
             session=session,
+            scene=scene,
             world=world,
-            scene_envelope=scene,
+            segmented_turn=None,
+            raw_text=text,
         )
-        if route_social:
+        if entry.get("should_route_social"):
             return None
 
     # Keep this lane explicitly procedural; do not treat ordinary social language
@@ -280,6 +288,18 @@ def resolve_adjudication_query(
 
     scene_id = str(((scene or {}).get("scene") or {}).get("id") or "").strip()
     npcs_here = _in_scene_npcs(world, scene_id)
+    universe = addressable_scene_npc_id_universe(session, scene, world)
+    roster_addr = canonical_scene_addressable_roster(
+        world if isinstance(world, dict) else {},
+        scene_id,
+        scene_envelope=scene if isinstance(scene, dict) else None,
+        session=session if isinstance(session, dict) else None,
+    )
+    roster_by_id = {
+        str(r.get("id") or "").strip(): r
+        for r in roster_addr
+        if isinstance(r, dict) and str(r.get("id") or "").strip()
+    }
 
     # 1) Roll requirement queries.
     if category == "roll_requirement_query":
@@ -352,6 +372,18 @@ def resolve_adjudication_query(
             if active_target and nid == active_target:
                 continue
             filtered.append(name)
+        if not filtered and universe:
+            for uid in sorted(universe):
+                if active_target and uid == active_target:
+                    continue
+                row = roster_by_id.get(uid)
+                label = (
+                    str((row or {}).get("name") or "").strip()
+                    if isinstance(row, dict)
+                    else ""
+                ) or uid.replace("_", " ").replace("-", " ").title()
+                if label:
+                    filtered.append(label)
         if filtered:
             return _finalize_adjudication_result(
                 {

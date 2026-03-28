@@ -4,14 +4,14 @@
     "frontier_gate"
   ],
   "current_date": "Day 1",
-  "turn_counter": 6,
+  "turn_counter": 5,
   "response_mode": "standard",
   "clocks": {
     "suspicion": 0,
     "unrest": 0,
     "danger": 0,
     "occult_instability": 0,
-    "time_pressure": 6
+    "time_pressure": 5
   },
   "interaction_context": {
     "active_interaction_target_id": "tavern_runner",
@@ -27,80 +27,121 @@
       "guard_captain",
       "tavern_runner",
       "refugee",
-      "threadbare_watcher"
+      "threadbare_watcher",
+      "emergent_lord_aldric"
     ],
     "entity_presence": {
       "guard_captain": "active",
-      "tavern_runner": "active"
+      "tavern_runner": "active",
+      "emergent_lord_aldric": "active",
+      "threadbare_watcher": "active",
+      "refugee": "active"
     },
-    "current_interlocutor": "tavern_runner"
+    "current_interlocutor": "tavern_runner",
+    "emergent_addressables": [
+      {
+        "id": "emergent_lord_aldric",
+        "name": "Lord Aldric",
+        "scene_id": "frontier_gate",
+        "address_roles": [
+          "lord"
+        ],
+        "aliases": [
+          "Lord Aldric",
+          "aldric",
+          "lord aldric"
+        ],
+        "kind": "scene_actor",
+        "addressable": true,
+        "address_priority": 40,
+        "emergent_source": "promoted_visible_figure"
+      }
+    ]
   },
   "scene_runtime": {
     "frontier_gate": {
       "discovered_clues": [
-        "Hot stew and rumors for coin."
+        "Hot stew and rumors for coin.",
+        "Investigate the old milestone"
       ],
       "discovered_clue_ids": [
-        "social_frontier_gate_tavern_runner_stew"
+        "social_frontier_gate_tavern_runner_stew",
+        "lead_frontier_gate_old_milestone"
       ],
-      "pending_leads": [],
+      "pending_leads": [
+        {
+          "clue_id": "lead_frontier_gate_old_milestone",
+          "text": "Investigate the old milestone",
+          "leads_to_scene": "old_milestone"
+        }
+      ],
       "revealed_hidden_facts": [],
       "suspicion_flags": [],
       "searched_targets": [],
       "resolved_interactables": [],
-      "last_exploration_action_key": "im_not_asking_about_secrets_but_their_pu",
-      "repeated_action_count": 1,
-      "last_resolution_kind": "interact",
-      "last_description_hash": "65ab8dc7a266c72520ec25002d5d881b",
+      "last_exploration_action_key": "question_tavern_runner",
+      "repeated_action_count": 4,
+      "last_resolution_kind": "question",
+      "last_description_hash": "d6c0c1fdcceff9ba4e8a51a9253e8e32",
       "consumed_action_ids": [],
-      "momentum_exchanges_since": 2,
-      "momentum_next_due_in": 3,
-      "momentum_last_kind": "new_information",
+      "momentum_exchanges_since": 1,
+      "momentum_next_due_in": 2,
+      "momentum_last_kind": null,
       "passive_action_streak": 0,
       "recent_player_actions": [
         {
-          "text": "\"Who attacked the patrol?\"",
+          "text": "Galinor strides up to the runner. \"You there, runner. I'm a hero looking for a way to aid this city, what issues could use my assistance?\"",
           "passive": false,
           "markers": [],
           "resolution_kind": null,
-          "turn": 3
+          "turn": 2
         },
         {
-          "text": "Galinor shifts, moving to one of the nearby guards. \"Watchmen, have you heard of this missing patrol? Who is believed to have attacked them?\"",
+          "text": "Galinor hands over the silver. \"Tell me! Who would attack honest watchmen?\"",
           "passive": true,
           "markers": [
             "watch"
           ],
           "resolution_kind": null,
+          "turn": 3
+        },
+        {
+          "text": "\"The Ash Cowl? How can I stay clear of them while investigating this?\"",
+          "passive": false,
+          "markers": [],
+          "resolution_kind": null,
           "turn": 4
         },
         {
-          "text": "\"Runner, what is house Verevin's dominion in this city?\"",
+          "text": "\"Fair enough. Where was that patrol last seen?\"",
           "passive": false,
           "markers": [],
           "resolution_kind": null,
           "turn": 5
-        },
-        {
-          "text": "\"I'm not asking about secrets, but their public business. Do they maintain power through birthright, trade, or military might?\"",
-          "passive": false,
-          "markers": [],
-          "resolution_kind": null,
-          "turn": 6
         }
       ],
-      "last_player_action_text": "\"I'm not asking about secrets, but their public business. Do they maintain power through birthright, trade, or military might?\"",
+      "last_player_action_text": "\"Fair enough. Where was that patrol last seen?\"",
       "last_player_action_passive": false,
       "recent_contextual_leads": [
         {
-          "key": "active_event_you_might_want_to_speak_with_some_of_the_guards_or_catch_the_crier_when_she_s_free_for_more_details_he_sets_to_work_ladling_out_the_stew_steam_rising_into_the_damp_air",
+          "key": "active_event_guards",
           "kind": "active_event",
-          "subject": "you might want to speak with some of the guards or catch the crier when she\u2019s free for more details.\" he sets to work ladling out the stew, steam rising into the damp air",
+          "subject": "guards",
           "position": "",
           "named": false,
           "positioned": false,
           "mentions": 1,
-          "last_turn": 2
+          "last_turn": 1
+        },
+        {
+          "key": "notice_board_notice_board",
+          "kind": "notice_board",
+          "subject": "notice board",
+          "position": "",
+          "named": false,
+          "positioned": false,
+          "mentions": 1,
+          "last_turn": 1
         },
         {
           "key": "active_event_missing_patrol_rumor",
@@ -109,38 +150,28 @@
           "position": "",
           "named": false,
           "positioned": false,
-          "mentions": 2,
-          "last_turn": 3
+          "mentions": 1,
+          "last_turn": 2
         },
         {
-          "key": "active_event_tavern_runner_raises_an_eyebrow_wiping_his_hands_on_his_apron",
+          "key": "active_event_tavern_runner_shifts_nervously_glancing_around_as_they_reply_staying_clear_of_the_ash_cowl_means_being_cautious_and_avoiding_patrols_at_night",
           "kind": "active_event",
-          "subject": "tavern runner raises an eyebrow, wiping his hands on his apron",
-          "position": "",
+          "subject": "tavern runner shifts nervously, glancing around as they reply, \"staying clear of the ash cowl means being cautious and avoiding patrols",
+          "position": "at night",
           "named": false,
-          "positioned": false,
+          "positioned": true,
+          "mentions": 1,
+          "last_turn": 4
+        },
+        {
+          "key": "active_event_they_were_last_reported_near_the_old_milestone_the_tavern_runner_replies_glancing_nervously_around_the_square",
+          "kind": "active_event",
+          "subject": "\"they were last reported",
+          "position": "near the old milestone,\" the tavern runner replies, glancing nervously around the square",
+          "named": false,
+          "positioned": true,
           "mentions": 1,
           "last_turn": 5
-        },
-        {
-          "key": "active_event_if_you_want_to_know_more_youll_need_to_tread_carefully_they_dont_like_strangers_asking_too_many_questions_he_gestures_towards_a_steaming_bowl_of_stew_before_adding_perhaps_a_bit_of_their_favor_could_shed_more_light",
-          "kind": "active_event",
-          "subject": "if you want to know more, you'll need to tread carefully; they don't like strangers asking too many questions.\" he gestures towards a steaming bowl of stew before adding, \"perhaps a bit of their favor could shed more light?\"",
-          "position": "",
-          "named": false,
-          "positioned": false,
-          "mentions": 1,
-          "last_turn": 5
-        },
-        {
-          "key": "active_event_tavern_runner_leans_in_slightly_sensing_your_deeper_interest",
-          "kind": "active_event",
-          "subject": "tavern runner leans in slightly, sensing your deeper interest",
-          "position": "",
-          "named": false,
-          "positioned": false,
-          "mentions": 1,
-          "last_turn": 6
         },
         {
           "key": "scene_npc_tavern_runner",
@@ -149,44 +180,58 @@
           "position": "",
           "named": true,
           "positioned": false,
-          "mentions": 4,
-          "last_turn": 6
+          "mentions": 3,
+          "last_turn": 5
         }
       ],
       "topic_pressure": {
-        "responsible_party": {
-          "repeat_count": 3,
+        "topic:assistance_city_galinor": {
+          "repeat_count": 0,
           "low_progress_streak": 0,
-          "progress_score_total": 5.4,
-          "last_answer": "The tavern runner leans in slightly, sensing your deeper interest. \"House Verevin? They\u2019ve held power through a blend of trade and military might, especially over these eastern routes. Their birthright matters little against the gilded sword of coin and influence. You'll find their reach extends into various trades, and they often employ mercenaries to enforce their will.\" He pauses, eyeing the crowd. \"But I\u2019ll tell you this: their grip is being tested. If you want to know mo",
-          "last_turn": 6,
+          "progress_score_total": 1.5,
+          "last_answer": "The Tavern Runner leans in closer, their voice low. \"Rumors say there\u2019s trouble brewing near the old milestone\u2014something about a missing patrol that might\u2019ve stumbled into a dark secret. If you\u2019re willing to buy me a drink, I might share more about what I know. For five silver, I can tell you about the last spot they were seen.\" They glance around, ensuring no one is eavesdropping too closely.",
+          "last_turn": 2,
           "speaker_targets": {
-            "__scene__": {
+            "tavern_runner": {
               "repeat_count": 1,
               "low_progress_streak": 0,
               "patience": 3,
-              "last_turn": 3
-            },
-            "tavern_runner": {
-              "repeat_count": 2,
-              "low_progress_streak": 0,
-              "patience": 3,
-              "last_turn": 6
+              "last_turn": 2
             }
           },
-          "last_player_input": "I'm not asking about secrets, but their public business. Do they maintain power through birthright, trade, or military might?"
+          "previous_probe_dimension": "",
+          "last_probe_dimension": "general",
+          "last_player_input": "Galinor strides up to the runner. \"You there, runner. I'm a hero looking for a way to aid this city, what issues could use my assistance?\""
+        },
+        "topic:attack_galinor_hand": {
+          "repeat_count": 3,
+          "low_progress_streak": 0,
+          "progress_score_total": 5.4,
+          "last_answer": "\"They were last reported near the old milestone,\" the Tavern Runner replies, glancing nervously around the square. \"It's said they stumbled into something they shouldn't have, so tread lightly if you go looking for them. But if you want more details, I'd suggest talking to Lord Aldric\u2014he might know more than he lets on.\"",
+          "last_turn": 5,
+          "speaker_targets": {
+            "tavern_runner": {
+              "repeat_count": 3,
+              "low_progress_streak": 0,
+              "patience": 3,
+              "last_turn": 5
+            }
+          },
+          "previous_probe_dimension": "general",
+          "last_probe_dimension": "location",
+          "last_player_input": "\"Fair enough. Where was that patrol last seen?\""
         }
       },
-      "topic_pressure_last_topic_key": "responsible_party",
+      "topic_pressure_last_topic_key": "topic:attack_galinor_hand",
       "topic_pressure_current": {
-        "topic_key": "responsible_party",
+        "topic_key": "topic:attack_galinor_hand",
         "speaker_key": "tavern_runner",
-        "turn": 6,
-        "player_text": "I'm not asking about secrets, but their public business. Do they maintain power through birthright, trade, or military might?",
+        "turn": 5,
+        "player_text": "\"Fair enough. Where was that patrol last seen?\"",
         "interaction_kind": "social",
         "interaction_mode": "social",
-        "social_intent_class": "",
-        "npc_name": ""
+        "social_intent_class": "social_exchange",
+        "npc_name": "Tavern Runner"
       }
     }
   },
@@ -196,6 +241,12 @@
       "source_scene": "frontier_gate",
       "presentation": "explicit",
       "text": "Hot stew and rumors for coin."
+    },
+    "lead_frontier_gate_old_milestone": {
+      "state": "discovered",
+      "source_scene": "frontier_gate",
+      "presentation": "actionable",
+      "text": "Investigate the old milestone"
     }
   },
   "npc_runtime": {
@@ -213,35 +264,128 @@
   },
   "last_action_debug": {
     "last_action_type": "chat",
-    "player_input": "\"I'm not asking about secrets, but their public business. Do they maintain power through birthright, trade, or military might?\"",
+    "player_input": "\"Fair enough. Where was that patrol last seen?\"",
     "normalized_action": {
-      "id": "im_not_asking_about_secrets_but_their_pu",
-      "label": "I'm not asking about secrets, but their public business. Do they maintain power through birthright, trade, or military might?",
-      "type": "interact",
-      "targetSceneId": null,
-      "prompt": "I'm not asking about secrets, but their public business. Do they maintain power through birthright, trade, or military might?"
+      "id": "question_tavern_runner",
+      "label": "\"Fair enough. Where was that patrol last seen?\"",
+      "type": "question",
+      "prompt": "\"Fair enough. Where was that patrol last seen?\""
     },
-    "resolution_kind": "interact",
+    "resolution_kind": "question",
     "target_scene": null,
     "resolver_result": {
-      "kind": "interact",
-      "action_id": "im_not_asking_about_secrets_but_their_pu",
-      "label": "I'm not asking about secrets, but their public business. Do they maintain power through birthright, trade, or military might?",
-      "prompt": "I'm not asking about secrets, but their public business. Do they maintain power through birthright, trade, or military might?",
-      "success": null,
+      "kind": "question",
+      "action_id": "question_tavern_runner",
+      "label": "\"Fair enough. Where was that patrol last seen?\"",
+      "prompt": "\"Fair enough. Where was that patrol last seen?\"",
+      "success": true,
       "resolved_transition": false,
       "target_scene_id": null,
-      "clue_id": null,
-      "discovered_clues": [],
+      "clue_id": "lead_frontier_gate_old_milestone",
+      "discovered_clues": [
+        "Investigate the old milestone"
+      ],
       "state_changes": {},
-      "hint": "Player is attempting social interaction or probing NPCs. Narrate the encounter or response.",
-      "world_tick_events": []
+      "hint": "Player spoke with Tavern Runner. Narration introduced investigatively relevant detail; treat as partial answer or redirect consistent with the spoken reply.",
+      "social": {
+        "social_intent_class": "social_exchange",
+        "npc_id": "tavern_runner",
+        "npc_name": "Tavern Runner",
+        "target_resolved": true,
+        "topic_revealed": {
+          "id": "narration_repair_frontier_gate_operational_pattern",
+          "text": "Investigate the old milestone",
+          "clue_text": "Investigate the old milestone",
+          "clue_id": "lead_frontier_gate_old_milestone",
+          "leads_to_scene": "old_milestone"
+        },
+        "skill_check": null,
+        "npc_reply_expected": true,
+        "reply_kind": "answer",
+        "target_source": "explicit_target",
+        "target_reason": "normalized target_id matches scene-addressable roster",
+        "target_candidate_id": "tavern_runner",
+        "target_candidate_valid": true,
+        "stale_interlocutor_cleared": false,
+        "addressability_checked_against": [
+          "active_entities",
+          "entity_presence_active_or_nearby",
+          "scene_addressables",
+          "world_roster_in_scene",
+          "interaction_continuity"
+        ],
+        "declared_switch_detected": false,
+        "declared_switch_target_actor_id": null,
+        "continuity_overridden_by_declared_switch": false,
+        "spoken_vocative_detected": false,
+        "spoken_vocative_target_actor_id": null,
+        "continuity_overridden_by_spoken_vocative": false,
+        "actor_addressable": true,
+        "social_escalation": {
+          "escalation_level": 3,
+          "escalation_reason": "third_attempt_same_topic",
+          "escalation_effect": "explicit_exhaustion_plus_where_to_next",
+          "force_partial_answer": false,
+          "force_actionable_lead": true,
+          "add_suspicion": false,
+          "trigger_scene_momentum": false,
+          "convert_refusal_to_conditioned_offer": false,
+          "topic_exhausted": false,
+          "effective_reply_kind": null,
+          "social_question_dimension": "location",
+          "topic_exhausted_for_dimension": true,
+          "valid_followup_detected": false,
+          "prior_same_dimension_answer_exists": true
+        },
+        "social_question_dimension": "location",
+        "topic_exhausted_for_dimension": true,
+        "valid_followup_detected": false,
+        "prior_same_dimension_answer_exists": true,
+        "strategy_forced_to_answer": false,
+        "suppressed_fallback_strategies": [],
+        "social_answer_retry_candidate_kind": "structured_fact",
+        "social_answer_retry_anchor_text": "Staying clear of the Ash Cowl means being cautious and avoiding patrols at night.",
+        "social_answer_retry_candidate_source": "topic_pressure:last_answer"
+      },
+      "requires_check": false,
+      "world_tick_events": [
+        {
+          "type": "faction_operation_complete",
+          "text": "House Verevin completes an off-screen operation.",
+          "source": "house_verevin"
+        },
+        {
+          "type": "faction_operation_complete",
+          "text": "The Ash Cowl completes an off-screen operation.",
+          "source": "ash_cowl"
+        },
+        {
+          "type": "faction_operation_complete",
+          "text": "Ordo Pyric completes an off-screen operation.",
+          "source": "ordo_pyric"
+        }
+      ]
     },
-    "scene_transition": null
+    "scene_transition": null,
+    "narration_state_mismatch_detected": true,
+    "mismatch_kind": "empty_social_payload_vs_narration:operational_pattern",
+    "mismatch_repair_applied": "extracted_actionable_leads",
+    "mismatch_repairs_applied": [
+      "structured_from_extracted_actionable_leads",
+      "success_set_true",
+      "engine_hint_no_new_info_replaced",
+      "canonical_social_lead_landing"
+    ],
+    "minimum_actionable_lead_enforced": false,
+    "enforced_lead_id": null,
+    "enforced_lead_source": null,
+    "emergent_actor_enrolled": true,
+    "emergent_actor_id": "emergent_lord_aldric",
+    "emergent_actor_source_text": "Lord Aldric"
   },
   "debug_traces": [
     {
-      "timestamp": "2026-03-26T10:02:47.094492Z",
+      "timestamp": "2026-03-28T15:49:55.175327Z",
       "source": "chat",
       "action_type": "chat",
       "raw_input": "Begin.",
@@ -368,17 +512,38 @@
             "type": "investigate",
             "label": "Examine A well-appointed townhouse overlookin"
           }
-        ]
+        ],
+        "emergent_actor": {
+          "emergent_actor_enrolled": true,
+          "emergent_actor_id": "emergent_lord_aldric",
+          "emergent_actor_source_text": "Lord Aldric"
+        }
       },
       "gpt_called": true,
       "response_ok": true,
-      "error": null
+      "error": null,
+      "canonical_entry": {
+        "should_route_social": false,
+        "target_actor_id": null,
+        "target_source": null,
+        "reason": "no_addressable_target",
+        "spoken_text": null,
+        "declared_switch_detected": false,
+        "declared_switch_target_actor_id": null,
+        "continuity_overridden_by_declared_switch": false,
+        "spoken_vocative_detected": false,
+        "spoken_vocative_target_actor_id": null,
+        "continuity_overridden_by_spoken_vocative": false
+      },
+      "canonical_entry_path": "procedural",
+      "canonical_entry_reason": "no_addressable_target",
+      "canonical_entry_target_actor_id": null
     },
     {
-      "timestamp": "2026-03-26T10:05:09.027014Z",
+      "timestamp": "2026-03-28T16:07:19.230101Z",
       "source": "chat",
       "action_type": "chat",
-      "raw_input": "Galinor approaches the tavern runner, handing over a palm's worth of copper pieces. \"I am weary from travel runner. Pour me a bowl of your stew. Tell me what you can about Cinderwatch.\"",
+      "raw_input": "Galinor strides up to the runner. \"You there, runner. I'm a hero looking for a way to aid this city, what issues could use my assistance?\"",
       "turn_stage_order": [
         "player_input",
         "intent_normalization_expansion",
@@ -391,455 +556,54 @@
         "response_debug_packaging"
       ],
       "incoming_payload": {
-        "text": "Galinor approaches the tavern runner, handing over a palm's worth of copper pieces. \"I am weary from travel runner. Pour me a bowl of your stew. Tell me what you can about Cinderwatch.\""
-      },
-      "parsed_intent": null,
-      "segmented_turn": {
-        "spoken_text": "I am weary from travel runner. Pour me a bowl of your stew. Tell me what you can about Cinderwatch.",
-        "declared_action_text": "Galinor approaches the tavern runner, handing over a palm's worth of copper pieces."
-      },
-      "normalized_action": null,
-      "resolution": {
-        "world_tick_events": [
-          {
-            "type": "faction_pressure",
-            "text": "Ordo Pyric's pressure mounts.",
-            "source": "ordo_pyric"
-          }
-        ]
-      },
-      "scene_before": "frontier_gate",
-      "scene_after": "frontier_gate",
-      "clue_updates": [],
-      "world_flag_updates": [
-        "clock:time_pressure=2"
-      ],
-      "turn_trace": {
-        "source": "chat",
-        "player_input": "Galinor approaches the tavern runner, handing over a palm's worth of copper pieces. \"I am weary from travel runner. Pour me a bowl of your stew. Tell me what you can about Cinderwatch.\"",
-        "intent": {
-          "parsed": null,
-          "segmented_turn": {
-            "spoken_text": "I am weary from travel runner. Pour me a bowl of your stew. Tell me what you can about Cinderwatch.",
-            "declared_action_text": "Galinor approaches the tavern runner, handing over a palm's worth of copper pieces."
-          },
-          "normalized": null,
-          "implied_context": {
-            "applied": false,
-            "cases": [],
-            "target_id": null
-          }
-        },
-        "classification": {
-          "action_type": "chat",
-          "resolved_kind": null,
-          "requires_check": false
-        },
-        "resolution_path": "chat_engine",
-        "authoritative_state_changes": {
-          "scene_transition": null,
-          "resolution_state_changes": {},
-          "resolution_world_updates": [],
-          "check_request": null
-        },
-        "interaction_after": {
-          "active_interaction_target_id": null,
-          "active_interaction_kind": null,
-          "interaction_mode": "none",
-          "engagement_level": "none",
-          "conversation_privacy": null,
-          "player_position_context": null
-        },
-        "narration_obligations": {
-          "is_opening_scene": false,
-          "must_advance_scene": false,
-          "should_answer_active_npc": false,
-          "avoid_input_echo": true,
-          "avoid_player_action_restatement": true,
-          "prefer_structured_turn_summary": true,
-          "active_npc_reply_expected": false,
-          "active_npc_reply_kind": null,
-          "scene_momentum_due": false,
-          "scene_momentum_exchanges_since": 0,
-          "scene_momentum_next_due_in": 2,
-          "suppress_non_social_emitters": false
-        },
-        "clues": {
-          "discovered_texts": [],
-          "presentation_changes": [],
-          "known_counts": {
-            "implicit": 0,
-            "explicit": 0,
-            "actionable": 0
-          }
-        },
-        "affordances_after": [
-          {
-            "id": "examine_the_rain_spatters_soot_dark_stone_frayed",
-            "type": "investigate",
-            "label": "Examine the Rain spatters soot-dark stone; frayed"
-          },
-          {
-            "id": "examine_refugees",
-            "type": "investigate",
-            "label": "Examine Refugees"
-          },
-          {
-            "id": "examine_a_notice_board_lists_new_taxes",
-            "type": "investigate",
-            "label": "Examine A notice board lists new taxes"
-          },
-          {
-            "id": "talk_to_a_tavern_runner_shouts_offers_of_hot",
-            "type": "investigate",
-            "label": "Talk to A tavern runner shouts offers of hot"
-          },
-          {
-            "id": "examine_a_well_appointed_townhouse_overlookin",
-            "type": "investigate",
-            "label": "Examine A well-appointed townhouse overlookin"
-          }
-        ]
-      },
-      "gpt_called": true,
-      "response_ok": true,
-      "error": null
-    },
-    {
-      "timestamp": "2026-03-26T10:05:33.587226Z",
-      "source": "chat",
-      "action_type": "chat",
-      "raw_input": "\"Who attacked the patrol?\"",
-      "turn_stage_order": [
-        "player_input",
-        "intent_normalization_expansion",
-        "action_classification",
-        "engine_resolution",
-        "authoritative_state_mutation",
-        "prompt_context_construction",
-        "gpt_narration",
-        "affordance_derivation",
-        "response_debug_packaging"
-      ],
-      "incoming_payload": {
-        "text": "\"Who attacked the patrol?\""
-      },
-      "parsed_intent": null,
-      "segmented_turn": {
-        "spoken_text": "Who attacked the patrol?"
-      },
-      "normalized_action": null,
-      "resolution": {
-        "world_tick_events": []
-      },
-      "scene_before": "frontier_gate",
-      "scene_after": "frontier_gate",
-      "clue_updates": [],
-      "world_flag_updates": [
-        "clock:time_pressure=3"
-      ],
-      "turn_trace": {
-        "source": "chat",
-        "player_input": "\"Who attacked the patrol?\"",
-        "intent": {
-          "parsed": null,
-          "segmented_turn": {
-            "spoken_text": "Who attacked the patrol?"
-          },
-          "normalized": null,
-          "implied_context": {
-            "applied": false,
-            "cases": [],
-            "target_id": null
-          }
-        },
-        "classification": {
-          "action_type": "chat",
-          "resolved_kind": null,
-          "requires_check": false
-        },
-        "resolution_path": "chat_engine",
-        "authoritative_state_changes": {
-          "scene_transition": null,
-          "resolution_state_changes": {},
-          "resolution_world_updates": [],
-          "check_request": null
-        },
-        "interaction_after": {
-          "active_interaction_target_id": null,
-          "active_interaction_kind": null,
-          "interaction_mode": "none",
-          "engagement_level": "none",
-          "conversation_privacy": null,
-          "player_position_context": null
-        },
-        "narration_obligations": {
-          "is_opening_scene": false,
-          "must_advance_scene": false,
-          "should_answer_active_npc": false,
-          "avoid_input_echo": true,
-          "avoid_player_action_restatement": true,
-          "prefer_structured_turn_summary": true,
-          "active_npc_reply_expected": false,
-          "active_npc_reply_kind": null,
-          "scene_momentum_due": false,
-          "scene_momentum_exchanges_since": 0,
-          "scene_momentum_next_due_in": 2,
-          "suppress_non_social_emitters": false
-        },
-        "clues": {
-          "discovered_texts": [],
-          "presentation_changes": [],
-          "known_counts": {
-            "implicit": 0,
-            "explicit": 0,
-            "actionable": 0
-          }
-        },
-        "affordances_after": [
-          {
-            "id": "examine_the_rain_spatters_soot_dark_stone_frayed",
-            "type": "investigate",
-            "label": "Examine the Rain spatters soot-dark stone; frayed"
-          },
-          {
-            "id": "examine_refugees",
-            "type": "investigate",
-            "label": "Examine Refugees"
-          },
-          {
-            "id": "examine_a_notice_board_lists_new_taxes",
-            "type": "investigate",
-            "label": "Examine A notice board lists new taxes"
-          },
-          {
-            "id": "talk_to_a_tavern_runner_shouts_offers_of_hot",
-            "type": "investigate",
-            "label": "Talk to A tavern runner shouts offers of hot"
-          },
-          {
-            "id": "examine_a_well_appointed_townhouse_overlookin",
-            "type": "investigate",
-            "label": "Examine A well-appointed townhouse overlookin"
-          }
-        ]
-      },
-      "gpt_called": true,
-      "response_ok": true,
-      "error": null
-    },
-    {
-      "timestamp": "2026-03-26T10:06:51.752293Z",
-      "source": "chat",
-      "action_type": "chat",
-      "raw_input": "Galinor shifts, moving to one of the nearby guards. \"Watchmen, have you heard of this missing patrol? Who is believed to have attacked them?\"",
-      "turn_stage_order": [
-        "player_input",
-        "intent_normalization_expansion",
-        "action_classification",
-        "engine_resolution",
-        "authoritative_state_mutation",
-        "prompt_context_construction",
-        "gpt_narration",
-        "affordance_derivation",
-        "response_debug_packaging"
-      ],
-      "incoming_payload": {
-        "text": "Galinor shifts, moving to one of the nearby guards. \"Watchmen, have you heard of this missing patrol? Who is believed to have attacked them?\""
-      },
-      "parsed_intent": null,
-      "segmented_turn": {
-        "spoken_text": "Watchmen, have you heard of this missing patrol? Who is believed to have attacked them?",
-        "declared_action_text": "Galinor shifts, moving to one of the nearby guards."
-      },
-      "normalized_action": null,
-      "resolution": {
-        "kind": "adjudication_query",
-        "action_id": "adjudication_query",
-        "label": "Galinor shifts, moving to one of the nearby guards. \"Watchmen, have you heard of this missing patrol? Who is believed to have attacked them?\"",
-        "prompt": "Galinor shifts, moving to one of the nearby guards. \"Watchmen, have you heard of this missing patrol? Who is believed to have attacked them?\"",
-        "success": null,
-        "resolved_transition": false,
-        "target_scene_id": null,
-        "clue_id": null,
-        "discovered_clues": [],
-        "state_changes": {},
-        "hint": "",
-        "adjudication": {
-          "category": "perception_query",
-          "answer_type": "direct_answer",
-          "requires_check": false,
-          "check_request": null
-        },
-        "requires_check": false,
-        "check_request": null,
-        "metadata": {
-          "turn_segmentation": {
-            "spoken_text": "Watchmen, have you heard of this missing patrol? Who is believed to have attacked them?",
-            "declared_action_text": "Galinor shifts, moving to one of the nearby guards."
-          },
-          "intent_route_debug": {
-            "routed_to": "adjudication_query",
-            "route_reason": "procedural_perception_query",
-            "addressed_actor_id": null,
-            "addressed_actor_source": null
-          }
-        },
-        "world_tick_events": []
-      },
-      "scene_before": "frontier_gate",
-      "scene_after": "frontier_gate",
-      "clue_updates": [],
-      "world_flag_updates": [
-        "clock:time_pressure=4"
-      ],
-      "turn_trace": {
-        "source": "chat",
-        "player_input": "Galinor shifts, moving to one of the nearby guards. \"Watchmen, have you heard of this missing patrol? Who is believed to have attacked them?\"",
-        "intent": {
-          "parsed": null,
-          "segmented_turn": {
-            "spoken_text": "Watchmen, have you heard of this missing patrol? Who is believed to have attacked them?",
-            "declared_action_text": "Galinor shifts, moving to one of the nearby guards."
-          },
-          "normalized": null,
-          "implied_context": {
-            "applied": false,
-            "cases": [],
-            "target_id": null
-          }
-        },
-        "classification": {
-          "action_type": "chat",
-          "resolved_kind": "adjudication_query",
-          "requires_check": false
-        },
-        "resolution_path": "adjudication_engine",
-        "authoritative_state_changes": {
-          "scene_transition": null,
-          "resolution_state_changes": {},
-          "resolution_world_updates": [],
-          "check_request": null
-        },
-        "interaction_after": {
-          "active_interaction_target_id": null,
-          "active_interaction_kind": null,
-          "interaction_mode": "none",
-          "engagement_level": "none",
-          "conversation_privacy": null,
-          "player_position_context": null
-        },
-        "narration_obligations": {
-          "is_opening_scene": false,
-          "must_advance_scene": false,
-          "should_answer_active_npc": false,
-          "avoid_input_echo": true,
-          "avoid_player_action_restatement": true,
-          "prefer_structured_turn_summary": true,
-          "active_npc_reply_expected": false,
-          "active_npc_reply_kind": null,
-          "scene_momentum_due": false,
-          "scene_momentum_exchanges_since": 0,
-          "scene_momentum_next_due_in": 2,
-          "suppress_non_social_emitters": false
-        },
-        "clues": {
-          "discovered_texts": [],
-          "presentation_changes": [],
-          "known_counts": {
-            "implicit": 0,
-            "explicit": 0,
-            "actionable": 0
-          }
-        },
-        "affordances_after": [
-          {
-            "id": "examine_the_rain_spatters_soot_dark_stone_frayed",
-            "type": "investigate",
-            "label": "Examine the Rain spatters soot-dark stone; frayed"
-          },
-          {
-            "id": "examine_refugees",
-            "type": "investigate",
-            "label": "Examine Refugees"
-          },
-          {
-            "id": "examine_a_notice_board_lists_new_taxes",
-            "type": "investigate",
-            "label": "Examine A notice board lists new taxes"
-          },
-          {
-            "id": "talk_to_a_tavern_runner_shouts_offers_of_hot",
-            "type": "investigate",
-            "label": "Talk to A tavern runner shouts offers of hot"
-          },
-          {
-            "id": "examine_a_well_appointed_townhouse_overlookin",
-            "type": "investigate",
-            "label": "Examine A well-appointed townhouse overlookin"
-          }
-        ]
-      },
-      "gpt_called": false,
-      "response_ok": true,
-      "error": null
-    },
-    {
-      "timestamp": "2026-03-26T10:07:26.502272Z",
-      "source": "chat",
-      "action_type": "chat",
-      "raw_input": "\"Runner, what is house Verevin's dominion in this city?\"",
-      "turn_stage_order": [
-        "player_input",
-        "intent_normalization_expansion",
-        "action_classification",
-        "engine_resolution",
-        "authoritative_state_mutation",
-        "prompt_context_construction",
-        "gpt_narration",
-        "affordance_derivation",
-        "response_debug_packaging"
-      ],
-      "incoming_payload": {
-        "text": "\"Runner, what is house Verevin's dominion in this city?\""
+        "text": "Galinor strides up to the runner. \"You there, runner. I'm a hero looking for a way to aid this city, what issues could use my assistance?\""
       },
       "parsed_intent": {
         "id": "question_tavern_runner",
-        "label": "\"Runner, what is house Verevin's dominion in this city?\"",
+        "label": "Galinor strides up to the runner. \"You there, runner. I'm a hero looking for a way to aid this city, what issues could use my assistance?\"",
         "type": "question",
         "social_intent_class": "social_exchange",
-        "prompt": "\"Runner, what is house Verevin's dominion in this city?\"",
+        "prompt": "Galinor strides up to the runner. \"You there, runner. I'm a hero looking for a way to aid this city, what issues could use my assistance?\"",
         "metadata": {
           "routed_via_dialogue_lock": true,
           "route": "dialogue",
+          "canonical_entry_path": "social",
+          "canonical_entry_reason": "generic_role_address",
+          "canonical_entry_target_actor_id": "tavern_runner",
           "intent_route_debug": {
             "routed_to": "social_exchange",
-            "route_reason": "active_interlocutor_followup",
+            "route_reason": "generic_role_address",
             "addressed_actor_id": "tavern_runner",
-            "addressed_actor_source": "active_interlocutor"
+            "addressed_actor_source": "generic_role"
           },
           "active_interaction_target_id": "tavern_runner",
+          "segmented_turn": {
+            "spoken_text": "You there, runner. I'm a hero looking for a way to aid this city, what issues could use my assistance?",
+            "declared_action_text": "Galinor strides up to the runner."
+          },
           "turn_segmentation": {
-            "spoken_text": "Runner, what is house Verevin's dominion in this city?"
+            "spoken_text": "You there, runner. I'm a hero looking for a way to aid this city, what issues could use my assistance?",
+            "declared_action_text": "Galinor strides up to the runner."
           }
         },
         "target_id": "tavern_runner",
         "targetEntityId": "tavern_runner"
       },
       "segmented_turn": {
-        "spoken_text": "Runner, what is house Verevin's dominion in this city?"
+        "spoken_text": "You there, runner. I'm a hero looking for a way to aid this city, what issues could use my assistance?",
+        "declared_action_text": "Galinor strides up to the runner."
       },
       "normalized_action": {
         "id": "question_tavern_runner",
-        "label": "\"Runner, what is house Verevin's dominion in this city?\"",
+        "label": "Galinor strides up to the runner. \"You there, runner. I'm a hero looking for a way to aid this city, what issues could use my assistance?\"",
         "type": "question",
-        "prompt": "\"Runner, what is house Verevin's dominion in this city?\""
+        "prompt": "Galinor strides up to the runner. \"You there, runner. I'm a hero looking for a way to aid this city, what issues could use my assistance?\""
       },
       "resolution": {
         "kind": "question",
         "action_id": "question_tavern_runner",
-        "label": "\"Runner, what is house Verevin's dominion in this city?\"",
-        "prompt": "\"Runner, what is house Verevin's dominion in this city?\"",
+        "label": "Galinor strides up to the runner. \"You there, runner. I'm a hero looking for a way to aid this city, what issues could use my assistance?\"",
+        "prompt": "Galinor strides up to the runner. \"You there, runner. I'm a hero looking for a way to aid this city, what issues could use my assistance?\"",
         "success": true,
         "resolved_transition": false,
         "target_scene_id": null,
@@ -869,49 +633,106 @@
           "target_source": "explicit_target",
           "target_reason": "normalized target_id matches scene-addressable roster",
           "target_candidate_id": "tavern_runner",
-          "target_candidate_valid": true
+          "target_candidate_valid": true,
+          "stale_interlocutor_cleared": false,
+          "addressability_checked_against": [
+            "active_entities",
+            "entity_presence_active_or_nearby",
+            "scene_addressables",
+            "world_roster_in_scene",
+            "interaction_continuity"
+          ],
+          "declared_switch_detected": false,
+          "declared_switch_target_actor_id": null,
+          "continuity_overridden_by_declared_switch": false,
+          "spoken_vocative_detected": false,
+          "spoken_vocative_target_actor_id": null,
+          "continuity_overridden_by_spoken_vocative": false,
+          "actor_addressable": true,
+          "social_escalation": {
+            "escalation_level": 1,
+            "escalation_reason": "first_attempt_same_topic",
+            "escalation_effect": "vague_or_guarded_answer_allowed",
+            "force_partial_answer": false,
+            "force_actionable_lead": false,
+            "add_suspicion": false,
+            "trigger_scene_momentum": false,
+            "convert_refusal_to_conditioned_offer": false,
+            "topic_exhausted": false,
+            "effective_reply_kind": null,
+            "social_question_dimension": "general",
+            "topic_exhausted_for_dimension": false,
+            "valid_followup_detected": false,
+            "prior_same_dimension_answer_exists": false
+          },
+          "social_question_dimension": "general",
+          "topic_exhausted_for_dimension": false,
+          "valid_followup_detected": false,
+          "prior_same_dimension_answer_exists": false,
+          "strategy_forced_to_answer": false,
+          "suppressed_fallback_strategies": []
         },
         "requires_check": false,
         "metadata": {
           "routed_via_dialogue_lock": true,
           "route": "dialogue",
+          "canonical_entry_path": "social",
+          "canonical_entry_reason": "generic_role_address",
+          "canonical_entry_target_actor_id": "tavern_runner",
           "intent_route_debug": {
             "routed_to": "social_exchange",
-            "route_reason": "active_interlocutor_followup",
+            "route_reason": "generic_role_address",
             "addressed_actor_id": "tavern_runner",
-            "addressed_actor_source": "active_interlocutor"
+            "addressed_actor_source": "generic_role"
           },
           "active_interaction_target_id": "tavern_runner",
+          "segmented_turn": {
+            "spoken_text": "You there, runner. I'm a hero looking for a way to aid this city, what issues could use my assistance?",
+            "declared_action_text": "Galinor strides up to the runner."
+          },
           "turn_segmentation": {
-            "spoken_text": "Runner, what is house Verevin's dominion in this city?"
+            "spoken_text": "You there, runner. I'm a hero looking for a way to aid this city, what issues could use my assistance?",
+            "declared_action_text": "Galinor strides up to the runner."
           },
           "lead_landing": {
             "revealed_lead_ids": [
               "social_frontier_gate_tavern_runner_stew"
             ],
             "already_known_lead_ids": [],
-            "actionable_lead_ids": [],
+            "actionable_lead_ids": [
+              "lead_frontier_gate_old_milestone"
+            ],
             "lead_write_targets": [
               "clue_knowledge",
               "scene_runtime.discovered_clue_ids",
-              "event_log"
+              "event_log",
+              "pending_leads"
+            ],
+            "extracted_lead_ids": [
+              "lead_frontier_gate_old_milestone"
+            ],
+            "extracted_lead_sources": [
+              "narration_reconciled:old_milestone"
+            ],
+            "extracted_from_text": true,
+            "extracted_from_reconciled_text": true,
+            "narration_supplement_texts": [
+              "Investigate the old milestone"
             ]
-          }
+          },
+          "minimum_actionable_lead": {
+            "minimum_actionable_lead_enforced": false,
+            "enforced_lead_id": null,
+            "enforced_lead_source": null
+          },
+          "minimum_actionable_lead_enforced": false,
+          "enforced_lead_id": null,
+          "enforced_lead_source": null
         },
         "world_tick_events": [
           {
-            "type": "faction_operation_complete",
-            "text": "House Verevin completes an off-screen operation.",
-            "source": "house_verevin"
-          },
-          {
-            "type": "faction_operation_complete",
-            "text": "The Ash Cowl completes an off-screen operation.",
-            "source": "ash_cowl"
-          },
-          {
-            "type": "faction_operation_complete",
-            "text": "Ordo Pyric completes an off-screen operation.",
+            "type": "faction_pressure",
+            "text": "Ordo Pyric's pressure mounts.",
             "source": "ordo_pyric"
           }
         ]
@@ -919,46 +740,56 @@
       "scene_before": "frontier_gate",
       "scene_after": "frontier_gate",
       "clue_updates": [
-        "Hot stew and rumors for coin."
+        "Hot stew and rumors for coin.",
+        "Investigate the old milestone"
       ],
       "world_flag_updates": [
-        "clock:time_pressure=5"
+        "clock:time_pressure=2"
       ],
       "turn_trace": {
         "source": "chat",
-        "player_input": "\"Runner, what is house Verevin's dominion in this city?\"",
+        "player_input": "Galinor strides up to the runner. \"You there, runner. I'm a hero looking for a way to aid this city, what issues could use my assistance?\"",
         "intent": {
           "parsed": {
             "id": "question_tavern_runner",
-            "label": "\"Runner, what is house Verevin's dominion in this city?\"",
+            "label": "Galinor strides up to the runner. \"You there, runner. I'm a hero looking for a way to aid this city, what issues could use my assistance?\"",
             "type": "question",
             "social_intent_class": "social_exchange",
-            "prompt": "\"Runner, what is house Verevin's dominion in this city?\"",
+            "prompt": "Galinor strides up to the runner. \"You there, runner. I'm a hero looking for a way to aid this city, what issues could use my assistance?\"",
             "metadata": {
               "routed_via_dialogue_lock": true,
               "route": "dialogue",
+              "canonical_entry_path": "social",
+              "canonical_entry_reason": "generic_role_address",
+              "canonical_entry_target_actor_id": "tavern_runner",
               "intent_route_debug": {
                 "routed_to": "social_exchange",
-                "route_reason": "active_interlocutor_followup",
+                "route_reason": "generic_role_address",
                 "addressed_actor_id": "tavern_runner",
-                "addressed_actor_source": "active_interlocutor"
+                "addressed_actor_source": "generic_role"
               },
               "active_interaction_target_id": "tavern_runner",
+              "segmented_turn": {
+                "spoken_text": "You there, runner. I'm a hero looking for a way to aid this city, what issues could use my assistance?",
+                "declared_action_text": "Galinor strides up to the runner."
+              },
               "turn_segmentation": {
-                "spoken_text": "Runner, what is house Verevin's dominion in this city?"
+                "spoken_text": "You there, runner. I'm a hero looking for a way to aid this city, what issues could use my assistance?",
+                "declared_action_text": "Galinor strides up to the runner."
               }
             },
             "target_id": "tavern_runner",
             "targetEntityId": "tavern_runner"
           },
           "segmented_turn": {
-            "spoken_text": "Runner, what is house Verevin's dominion in this city?"
+            "spoken_text": "You there, runner. I'm a hero looking for a way to aid this city, what issues could use my assistance?",
+            "declared_action_text": "Galinor strides up to the runner."
           },
           "normalized": {
             "id": "question_tavern_runner",
-            "label": "\"Runner, what is house Verevin's dominion in this city?\"",
+            "label": "Galinor strides up to the runner. \"You there, runner. I'm a hero looking for a way to aid this city, what issues could use my assistance?\"",
             "type": "question",
-            "prompt": "\"Runner, what is house Verevin's dominion in this city?\"",
+            "prompt": "Galinor strides up to the runner. \"You there, runner. I'm a hero looking for a way to aid this city, what issues could use my assistance?\"",
             "targetSceneId": null,
             "target_scene_id": null,
             "targetEntityId": "tavern_runner",
@@ -1009,9 +840,15 @@
         },
         "clues": {
           "discovered_texts": [
-            "Hot stew and rumors for coin."
+            "Hot stew and rumors for coin.",
+            "Investigate the old milestone"
           ],
           "presentation_changes": [
+            {
+              "id": "lead_frontier_gate_old_milestone",
+              "from": null,
+              "to": "actionable"
+            },
             {
               "id": "social_frontier_gate_tavern_runner_stew",
               "from": null,
@@ -1021,7 +858,7 @@
           "known_counts": {
             "implicit": 0,
             "explicit": 1,
-            "actionable": 0
+            "actionable": 1
           }
         },
         "affordances_after": [
@@ -1050,17 +887,38 @@
             "type": "investigate",
             "label": "Examine A well-appointed townhouse overlookin"
           }
-        ]
+        ],
+        "emergent_actor": {
+          "emergent_actor_enrolled": true,
+          "emergent_actor_id": "emergent_lord_aldric",
+          "emergent_actor_source_text": "Lord Aldric"
+        }
       },
       "gpt_called": true,
       "response_ok": true,
-      "error": null
+      "error": null,
+      "canonical_entry": {
+        "should_route_social": true,
+        "target_actor_id": "tavern_runner",
+        "target_source": "generic_role",
+        "reason": "generic_role_address",
+        "spoken_text": "You there, runner. I'm a hero looking for a way to aid this city, what issues could use my assistance?",
+        "declared_switch_detected": false,
+        "declared_switch_target_actor_id": null,
+        "continuity_overridden_by_declared_switch": false,
+        "spoken_vocative_detected": false,
+        "spoken_vocative_target_actor_id": null,
+        "continuity_overridden_by_spoken_vocative": false
+      },
+      "canonical_entry_path": "social",
+      "canonical_entry_reason": "generic_role_address",
+      "canonical_entry_target_actor_id": "tavern_runner"
     },
     {
-      "timestamp": "2026-03-26T10:08:58.288174Z",
+      "timestamp": "2026-03-28T16:08:50.846740Z",
       "source": "chat",
       "action_type": "chat",
-      "raw_input": "\"I'm not asking about secrets, but their public business. Do they maintain power through birthright, trade, or military might?\"",
+      "raw_input": "Galinor hands over the silver. \"Tell me! Who would attack honest watchmen?\"",
       "turn_stage_order": [
         "player_input",
         "intent_normalization_expansion",
@@ -1073,44 +931,143 @@
         "response_debug_packaging"
       ],
       "incoming_payload": {
-        "text": "\"I'm not asking about secrets, but their public business. Do they maintain power through birthright, trade, or military might?\""
+        "text": "Galinor hands over the silver. \"Tell me! Who would attack honest watchmen?\""
       },
       "parsed_intent": {
-        "id": "im_not_asking_about_secrets_but_their_pu",
-        "label": "I'm not asking about secrets, but their public business. Do they maintain power through birthright, trade, or military might?",
-        "type": "interact",
-        "prompt": "I'm not asking about secrets, but their public business. Do they maintain power through birthright, trade, or military might?",
-        "targetSceneId": null,
-        "target_scene_id": null,
+        "id": "question_tavern_runner",
+        "label": "Galinor hands over the silver. \"Tell me! Who would attack honest watchmen?\"",
+        "type": "question",
+        "social_intent_class": "social_exchange",
+        "prompt": "Galinor hands over the silver. \"Tell me! Who would attack honest watchmen?\"",
         "metadata": {
-          "intent": "conversation"
-        }
+          "routed_via_dialogue_lock": true,
+          "route": "dialogue",
+          "canonical_entry_path": "social",
+          "canonical_entry_reason": "active_interlocutor_followup",
+          "canonical_entry_target_actor_id": "tavern_runner",
+          "intent_route_debug": {
+            "routed_to": "social_exchange",
+            "route_reason": "active_interlocutor_followup",
+            "addressed_actor_id": "tavern_runner",
+            "addressed_actor_source": "active_interlocutor"
+          },
+          "active_interaction_target_id": "tavern_runner",
+          "segmented_turn": {
+            "spoken_text": "Tell me! Who would attack honest watchmen?",
+            "declared_action_text": "Galinor hands over the silver."
+          },
+          "turn_segmentation": {
+            "spoken_text": "Tell me! Who would attack honest watchmen?",
+            "declared_action_text": "Galinor hands over the silver."
+          }
+        },
+        "target_id": "tavern_runner",
+        "targetEntityId": "tavern_runner"
       },
       "segmented_turn": {
-        "spoken_text": "I'm not asking about secrets, but their public business. Do they maintain power through birthright, trade, or military might?"
+        "spoken_text": "Tell me! Who would attack honest watchmen?",
+        "declared_action_text": "Galinor hands over the silver."
       },
       "normalized_action": {
-        "id": "im_not_asking_about_secrets_but_their_pu",
-        "label": "I'm not asking about secrets, but their public business. Do they maintain power through birthright, trade, or military might?",
-        "type": "interact",
-        "prompt": "I'm not asking about secrets, but their public business. Do they maintain power through birthright, trade, or military might?",
-        "targetSceneId": null
+        "id": "question_tavern_runner",
+        "label": "Galinor hands over the silver. \"Tell me! Who would attack honest watchmen?\"",
+        "type": "question",
+        "prompt": "Galinor hands over the silver. \"Tell me! Who would attack honest watchmen?\""
       },
       "resolution": {
-        "kind": "interact",
-        "action_id": "im_not_asking_about_secrets_but_their_pu",
-        "label": "I'm not asking about secrets, but their public business. Do they maintain power through birthright, trade, or military might?",
-        "prompt": "I'm not asking about secrets, but their public business. Do they maintain power through birthright, trade, or military might?",
+        "kind": "question",
+        "action_id": "question_tavern_runner",
+        "label": "Galinor hands over the silver. \"Tell me! Who would attack honest watchmen?\"",
+        "prompt": "Galinor hands over the silver. \"Tell me! Who would attack honest watchmen?\"",
         "success": null,
         "resolved_transition": false,
         "target_scene_id": null,
         "clue_id": null,
         "discovered_clues": [],
         "state_changes": {},
-        "hint": "Player is attempting social interaction or probing NPCs. Narrate the encounter or response.",
+        "hint": "Player spoke with Tavern Runner. No new information was revealed. Narrate a substantive in-turn response (answer, refusal, evasion, or inability), not dead-air stalling.",
+        "social": {
+          "social_intent_class": "social_exchange",
+          "npc_id": "tavern_runner",
+          "npc_name": "Tavern Runner",
+          "target_resolved": true,
+          "topic_revealed": null,
+          "skill_check": null,
+          "npc_reply_expected": true,
+          "reply_kind": "answer",
+          "target_source": "explicit_target",
+          "target_reason": "normalized target_id matches scene-addressable roster",
+          "target_candidate_id": "tavern_runner",
+          "target_candidate_valid": true,
+          "stale_interlocutor_cleared": false,
+          "addressability_checked_against": [
+            "active_entities",
+            "entity_presence_active_or_nearby",
+            "scene_addressables",
+            "world_roster_in_scene",
+            "interaction_continuity"
+          ],
+          "declared_switch_detected": false,
+          "declared_switch_target_actor_id": null,
+          "continuity_overridden_by_declared_switch": false,
+          "spoken_vocative_detected": false,
+          "spoken_vocative_target_actor_id": null,
+          "continuity_overridden_by_spoken_vocative": false,
+          "actor_addressable": true,
+          "social_escalation": {
+            "escalation_level": 1,
+            "escalation_reason": "first_attempt_same_topic",
+            "escalation_effect": "vague_or_guarded_answer_allowed",
+            "force_partial_answer": false,
+            "force_actionable_lead": false,
+            "add_suspicion": false,
+            "trigger_scene_momentum": false,
+            "convert_refusal_to_conditioned_offer": false,
+            "topic_exhausted": false,
+            "effective_reply_kind": null,
+            "social_question_dimension": "identity",
+            "topic_exhausted_for_dimension": false,
+            "valid_followup_detected": false,
+            "prior_same_dimension_answer_exists": false
+          },
+          "social_question_dimension": "identity",
+          "topic_exhausted_for_dimension": false,
+          "valid_followup_detected": false,
+          "prior_same_dimension_answer_exists": false,
+          "strategy_forced_to_answer": false,
+          "suppressed_fallback_strategies": []
+        },
+        "requires_check": false,
         "metadata": {
+          "routed_via_dialogue_lock": true,
+          "route": "dialogue",
+          "canonical_entry_path": "social",
+          "canonical_entry_reason": "active_interlocutor_followup",
+          "canonical_entry_target_actor_id": "tavern_runner",
+          "intent_route_debug": {
+            "routed_to": "social_exchange",
+            "route_reason": "active_interlocutor_followup",
+            "addressed_actor_id": "tavern_runner",
+            "addressed_actor_source": "active_interlocutor"
+          },
+          "active_interaction_target_id": "tavern_runner",
+          "segmented_turn": {
+            "spoken_text": "Tell me! Who would attack honest watchmen?",
+            "declared_action_text": "Galinor hands over the silver."
+          },
           "turn_segmentation": {
-            "spoken_text": "I'm not asking about secrets, but their public business. Do they maintain power through birthright, trade, or military might?"
+            "spoken_text": "Tell me! Who would attack honest watchmen?",
+            "declared_action_text": "Galinor hands over the silver."
+          },
+          "lead_landing": {
+            "revealed_lead_ids": [],
+            "already_known_lead_ids": [],
+            "actionable_lead_ids": [],
+            "lead_write_targets": [],
+            "extracted_lead_ids": [],
+            "extracted_lead_sources": [],
+            "extracted_from_text": false,
+            "extracted_from_reconciled_text": false
           }
         },
         "world_tick_events": []
@@ -1119,35 +1076,56 @@
       "scene_after": "frontier_gate",
       "clue_updates": [],
       "world_flag_updates": [
-        "clock:time_pressure=6"
+        "clock:time_pressure=3"
       ],
       "turn_trace": {
         "source": "chat",
-        "player_input": "\"I'm not asking about secrets, but their public business. Do they maintain power through birthright, trade, or military might?\"",
+        "player_input": "Galinor hands over the silver. \"Tell me! Who would attack honest watchmen?\"",
         "intent": {
           "parsed": {
-            "id": "im_not_asking_about_secrets_but_their_pu",
-            "label": "I'm not asking about secrets, but their public business. Do they maintain power through birthright, trade, or military might?",
-            "type": "interact",
-            "prompt": "I'm not asking about secrets, but their public business. Do they maintain power through birthright, trade, or military might?",
-            "targetSceneId": null,
-            "target_scene_id": null,
+            "id": "question_tavern_runner",
+            "label": "Galinor hands over the silver. \"Tell me! Who would attack honest watchmen?\"",
+            "type": "question",
+            "social_intent_class": "social_exchange",
+            "prompt": "Galinor hands over the silver. \"Tell me! Who would attack honest watchmen?\"",
             "metadata": {
-              "intent": "conversation"
-            }
+              "routed_via_dialogue_lock": true,
+              "route": "dialogue",
+              "canonical_entry_path": "social",
+              "canonical_entry_reason": "active_interlocutor_followup",
+              "canonical_entry_target_actor_id": "tavern_runner",
+              "intent_route_debug": {
+                "routed_to": "social_exchange",
+                "route_reason": "active_interlocutor_followup",
+                "addressed_actor_id": "tavern_runner",
+                "addressed_actor_source": "active_interlocutor"
+              },
+              "active_interaction_target_id": "tavern_runner",
+              "segmented_turn": {
+                "spoken_text": "Tell me! Who would attack honest watchmen?",
+                "declared_action_text": "Galinor hands over the silver."
+              },
+              "turn_segmentation": {
+                "spoken_text": "Tell me! Who would attack honest watchmen?",
+                "declared_action_text": "Galinor hands over the silver."
+              }
+            },
+            "target_id": "tavern_runner",
+            "targetEntityId": "tavern_runner"
           },
           "segmented_turn": {
-            "spoken_text": "I'm not asking about secrets, but their public business. Do they maintain power through birthright, trade, or military might?"
+            "spoken_text": "Tell me! Who would attack honest watchmen?",
+            "declared_action_text": "Galinor hands over the silver."
           },
           "normalized": {
-            "id": "im_not_asking_about_secrets_but_their_pu",
-            "label": "I'm not asking about secrets, but their public business. Do they maintain power through birthright, trade, or military might?",
-            "type": "interact",
-            "prompt": "I'm not asking about secrets, but their public business. Do they maintain power through birthright, trade, or military might?",
+            "id": "question_tavern_runner",
+            "label": "Galinor hands over the silver. \"Tell me! Who would attack honest watchmen?\"",
+            "type": "question",
+            "prompt": "Galinor hands over the silver. \"Tell me! Who would attack honest watchmen?\"",
             "targetSceneId": null,
             "target_scene_id": null,
-            "targetEntityId": null,
-            "target_id": null
+            "targetEntityId": "tavern_runner",
+            "target_id": "tavern_runner"
           },
           "implied_context": {
             "applied": false,
@@ -1157,10 +1135,10 @@
         },
         "classification": {
           "action_type": "chat",
-          "resolved_kind": "interact",
+          "resolved_kind": "question",
           "requires_check": false
         },
-        "resolution_path": "exploration_engine",
+        "resolution_path": "social_engine",
         "authoritative_state_changes": {
           "scene_transition": null,
           "resolution_state_changes": {},
@@ -1183,7 +1161,7 @@
           "avoid_player_action_restatement": true,
           "prefer_structured_turn_summary": true,
           "active_npc_reply_expected": true,
-          "active_npc_reply_kind": "reaction",
+          "active_npc_reply_kind": "answer",
           "scene_momentum_due": false,
           "scene_momentum_exchanges_since": 0,
           "scene_momentum_next_due_in": 2,
@@ -1195,7 +1173,7 @@
           "known_counts": {
             "implicit": 0,
             "explicit": 1,
-            "actionable": 0
+            "actionable": 1
           }
         },
         "affordances_after": [
@@ -1224,19 +1202,761 @@
             "type": "investigate",
             "label": "Examine A well-appointed townhouse overlookin"
           }
-        ]
+        ],
+        "emergent_actor": {
+          "emergent_actor_enrolled": true,
+          "emergent_actor_id": "emergent_lord_aldric",
+          "emergent_actor_source_text": "Lord Aldric"
+        }
       },
       "gpt_called": true,
       "response_ok": true,
-      "error": null
+      "error": null,
+      "canonical_entry": {
+        "should_route_social": true,
+        "target_actor_id": "tavern_runner",
+        "target_source": "active_interlocutor",
+        "reason": "active_interlocutor_followup",
+        "spoken_text": "Tell me! Who would attack honest watchmen?",
+        "declared_switch_detected": false,
+        "declared_switch_target_actor_id": null,
+        "continuity_overridden_by_declared_switch": false,
+        "spoken_vocative_detected": false,
+        "spoken_vocative_target_actor_id": null,
+        "continuity_overridden_by_spoken_vocative": false
+      },
+      "canonical_entry_path": "social",
+      "canonical_entry_reason": "active_interlocutor_followup",
+      "canonical_entry_target_actor_id": "tavern_runner"
+    },
+    {
+      "timestamp": "2026-03-28T16:09:53.520924Z",
+      "source": "chat",
+      "action_type": "chat",
+      "raw_input": "\"The Ash Cowl? How can I stay clear of them while investigating this?\"",
+      "turn_stage_order": [
+        "player_input",
+        "intent_normalization_expansion",
+        "action_classification",
+        "engine_resolution",
+        "authoritative_state_mutation",
+        "prompt_context_construction",
+        "gpt_narration",
+        "affordance_derivation",
+        "response_debug_packaging"
+      ],
+      "incoming_payload": {
+        "text": "\"The Ash Cowl? How can I stay clear of them while investigating this?\""
+      },
+      "parsed_intent": {
+        "id": "question_tavern_runner",
+        "label": "\"The Ash Cowl? How can I stay clear of them while investigating this?\"",
+        "type": "question",
+        "social_intent_class": "social_exchange",
+        "prompt": "\"The Ash Cowl? How can I stay clear of them while investigating this?\"",
+        "metadata": {
+          "routed_via_dialogue_lock": true,
+          "route": "dialogue",
+          "canonical_entry_path": "social",
+          "canonical_entry_reason": "active_interlocutor_followup",
+          "canonical_entry_target_actor_id": "tavern_runner",
+          "intent_route_debug": {
+            "routed_to": "social_exchange",
+            "route_reason": "active_interlocutor_followup",
+            "addressed_actor_id": "tavern_runner",
+            "addressed_actor_source": "active_interlocutor"
+          },
+          "active_interaction_target_id": "tavern_runner",
+          "segmented_turn": {
+            "spoken_text": "The Ash Cowl? How can I stay clear of them while investigating this?"
+          },
+          "turn_segmentation": {
+            "spoken_text": "The Ash Cowl? How can I stay clear of them while investigating this?"
+          }
+        },
+        "target_id": "tavern_runner",
+        "targetEntityId": "tavern_runner"
+      },
+      "segmented_turn": {
+        "spoken_text": "The Ash Cowl? How can I stay clear of them while investigating this?"
+      },
+      "normalized_action": {
+        "id": "question_tavern_runner",
+        "label": "\"The Ash Cowl? How can I stay clear of them while investigating this?\"",
+        "type": "question",
+        "prompt": "\"The Ash Cowl? How can I stay clear of them while investigating this?\""
+      },
+      "resolution": {
+        "kind": "question",
+        "action_id": "question_tavern_runner",
+        "label": "\"The Ash Cowl? How can I stay clear of them while investigating this?\"",
+        "prompt": "\"The Ash Cowl? How can I stay clear of them while investigating this?\"",
+        "success": true,
+        "resolved_transition": false,
+        "target_scene_id": null,
+        "clue_id": "lead_frontier_gate_old_milestone",
+        "discovered_clues": [
+          "Investigate the old milestone"
+        ],
+        "state_changes": {},
+        "hint": "Player spoke with Tavern Runner. Narration introduced investigatively relevant detail; treat as partial answer or redirect consistent with the spoken reply.",
+        "social": {
+          "social_intent_class": "social_exchange",
+          "npc_id": "tavern_runner",
+          "npc_name": "Tavern Runner",
+          "target_resolved": true,
+          "topic_revealed": {
+            "id": "narration_repair_frontier_gate_operational_pattern",
+            "text": "Investigate the old milestone",
+            "clue_text": "Investigate the old milestone",
+            "clue_id": "lead_frontier_gate_old_milestone",
+            "leads_to_scene": "old_milestone"
+          },
+          "skill_check": null,
+          "npc_reply_expected": true,
+          "reply_kind": "explanation",
+          "target_source": "explicit_target",
+          "target_reason": "normalized target_id matches scene-addressable roster",
+          "target_candidate_id": "tavern_runner",
+          "target_candidate_valid": true,
+          "stale_interlocutor_cleared": false,
+          "addressability_checked_against": [
+            "active_entities",
+            "entity_presence_active_or_nearby",
+            "scene_addressables",
+            "world_roster_in_scene",
+            "interaction_continuity"
+          ],
+          "declared_switch_detected": false,
+          "declared_switch_target_actor_id": null,
+          "continuity_overridden_by_declared_switch": false,
+          "spoken_vocative_detected": false,
+          "spoken_vocative_target_actor_id": null,
+          "continuity_overridden_by_spoken_vocative": false,
+          "actor_addressable": true,
+          "social_escalation": {
+            "escalation_level": 2,
+            "escalation_reason": "second_attempt_same_topic",
+            "escalation_effect": "redirect_only_no_new_npc_facts",
+            "force_partial_answer": false,
+            "force_actionable_lead": true,
+            "add_suspicion": false,
+            "trigger_scene_momentum": false,
+            "convert_refusal_to_conditioned_offer": false,
+            "topic_exhausted": false,
+            "effective_reply_kind": null,
+            "social_question_dimension": "general",
+            "topic_exhausted_for_dimension": false,
+            "valid_followup_detected": false,
+            "prior_same_dimension_answer_exists": false
+          },
+          "social_question_dimension": "general",
+          "topic_exhausted_for_dimension": false,
+          "valid_followup_detected": false,
+          "prior_same_dimension_answer_exists": false,
+          "strategy_forced_to_answer": false,
+          "suppressed_fallback_strategies": []
+        },
+        "requires_check": false,
+        "metadata": {
+          "routed_via_dialogue_lock": true,
+          "route": "dialogue",
+          "canonical_entry_path": "social",
+          "canonical_entry_reason": "active_interlocutor_followup",
+          "canonical_entry_target_actor_id": "tavern_runner",
+          "intent_route_debug": {
+            "routed_to": "social_exchange",
+            "route_reason": "active_interlocutor_followup",
+            "addressed_actor_id": "tavern_runner",
+            "addressed_actor_source": "active_interlocutor"
+          },
+          "active_interaction_target_id": "tavern_runner",
+          "segmented_turn": {
+            "spoken_text": "The Ash Cowl? How can I stay clear of them while investigating this?"
+          },
+          "turn_segmentation": {
+            "spoken_text": "The Ash Cowl? How can I stay clear of them while investigating this?"
+          },
+          "lead_landing": {
+            "revealed_lead_ids": [],
+            "already_known_lead_ids": [
+              "lead_frontier_gate_old_milestone"
+            ],
+            "actionable_lead_ids": [
+              "lead_frontier_gate_old_milestone"
+            ],
+            "lead_write_targets": [
+              "clue_knowledge",
+              "scene_runtime.discovered_clue_ids"
+            ],
+            "extracted_lead_ids": [
+              "lead_frontier_gate_old_milestone"
+            ],
+            "extracted_lead_sources": [
+              "topic_hook"
+            ],
+            "extracted_from_text": false,
+            "extracted_from_reconciled_text": false,
+            "narration_mismatch_repair": true
+          },
+          "narration_state_consistency": {
+            "narration_state_mismatch_detected": true,
+            "mismatch_kind": "empty_social_payload_vs_narration:operational_pattern",
+            "mismatch_repair_applied": "extracted_actionable_leads",
+            "mismatch_repairs_applied": [
+              "structured_from_extracted_actionable_leads",
+              "success_set_true",
+              "engine_hint_no_new_info_replaced",
+              "canonical_social_lead_landing"
+            ],
+            "repaired_discovered_clue_texts": [],
+            "emergent_actor_hint_detected": false
+          },
+          "minimum_actionable_lead": {
+            "minimum_actionable_lead_enforced": false,
+            "enforced_lead_id": null,
+            "enforced_lead_source": null
+          },
+          "minimum_actionable_lead_enforced": false,
+          "enforced_lead_id": null,
+          "enforced_lead_source": null
+        },
+        "world_tick_events": []
+      },
+      "scene_before": "frontier_gate",
+      "scene_after": "frontier_gate",
+      "clue_updates": [],
+      "world_flag_updates": [
+        "clock:time_pressure=4"
+      ],
+      "turn_trace": {
+        "source": "chat",
+        "player_input": "\"The Ash Cowl? How can I stay clear of them while investigating this?\"",
+        "intent": {
+          "parsed": {
+            "id": "question_tavern_runner",
+            "label": "\"The Ash Cowl? How can I stay clear of them while investigating this?\"",
+            "type": "question",
+            "social_intent_class": "social_exchange",
+            "prompt": "\"The Ash Cowl? How can I stay clear of them while investigating this?\"",
+            "metadata": {
+              "routed_via_dialogue_lock": true,
+              "route": "dialogue",
+              "canonical_entry_path": "social",
+              "canonical_entry_reason": "active_interlocutor_followup",
+              "canonical_entry_target_actor_id": "tavern_runner",
+              "intent_route_debug": {
+                "routed_to": "social_exchange",
+                "route_reason": "active_interlocutor_followup",
+                "addressed_actor_id": "tavern_runner",
+                "addressed_actor_source": "active_interlocutor"
+              },
+              "active_interaction_target_id": "tavern_runner",
+              "segmented_turn": {
+                "spoken_text": "The Ash Cowl? How can I stay clear of them while investigating this?"
+              },
+              "turn_segmentation": {
+                "spoken_text": "The Ash Cowl? How can I stay clear of them while investigating this?"
+              }
+            },
+            "target_id": "tavern_runner",
+            "targetEntityId": "tavern_runner"
+          },
+          "segmented_turn": {
+            "spoken_text": "The Ash Cowl? How can I stay clear of them while investigating this?"
+          },
+          "normalized": {
+            "id": "question_tavern_runner",
+            "label": "\"The Ash Cowl? How can I stay clear of them while investigating this?\"",
+            "type": "question",
+            "prompt": "\"The Ash Cowl? How can I stay clear of them while investigating this?\"",
+            "targetSceneId": null,
+            "target_scene_id": null,
+            "targetEntityId": "tavern_runner",
+            "target_id": "tavern_runner"
+          },
+          "implied_context": {
+            "applied": false,
+            "cases": [],
+            "target_id": "tavern_runner"
+          }
+        },
+        "classification": {
+          "action_type": "chat",
+          "resolved_kind": "question",
+          "requires_check": false
+        },
+        "resolution_path": "social_engine",
+        "authoritative_state_changes": {
+          "scene_transition": null,
+          "resolution_state_changes": {},
+          "resolution_world_updates": [],
+          "check_request": null
+        },
+        "interaction_after": {
+          "active_interaction_target_id": "tavern_runner",
+          "active_interaction_kind": "social",
+          "interaction_mode": "social",
+          "engagement_level": "engaged",
+          "conversation_privacy": null,
+          "player_position_context": null
+        },
+        "narration_obligations": {
+          "is_opening_scene": false,
+          "must_advance_scene": false,
+          "should_answer_active_npc": true,
+          "avoid_input_echo": true,
+          "avoid_player_action_restatement": true,
+          "prefer_structured_turn_summary": true,
+          "active_npc_reply_expected": true,
+          "active_npc_reply_kind": "explanation",
+          "scene_momentum_due": false,
+          "scene_momentum_exchanges_since": 0,
+          "scene_momentum_next_due_in": 2,
+          "suppress_non_social_emitters": true
+        },
+        "clues": {
+          "discovered_texts": [],
+          "presentation_changes": [],
+          "known_counts": {
+            "implicit": 0,
+            "explicit": 1,
+            "actionable": 1
+          }
+        },
+        "affordances_after": [
+          {
+            "id": "examine_the_rain_spatters_soot_dark_stone_frayed",
+            "type": "investigate",
+            "label": "Examine the Rain spatters soot-dark stone; frayed"
+          },
+          {
+            "id": "examine_refugees",
+            "type": "investigate",
+            "label": "Examine Refugees"
+          },
+          {
+            "id": "examine_a_notice_board_lists_new_taxes",
+            "type": "investigate",
+            "label": "Examine A notice board lists new taxes"
+          },
+          {
+            "id": "talk_to_a_tavern_runner_shouts_offers_of_hot",
+            "type": "investigate",
+            "label": "Talk to A tavern runner shouts offers of hot"
+          },
+          {
+            "id": "examine_a_well_appointed_townhouse_overlookin",
+            "type": "investigate",
+            "label": "Examine A well-appointed townhouse overlookin"
+          }
+        ],
+        "emergent_actor": {
+          "emergent_actor_enrolled": true,
+          "emergent_actor_id": "emergent_lord_aldric",
+          "emergent_actor_source_text": "Lord Aldric"
+        }
+      },
+      "gpt_called": true,
+      "response_ok": true,
+      "error": null,
+      "canonical_entry": {
+        "should_route_social": true,
+        "target_actor_id": "tavern_runner",
+        "target_source": "active_interlocutor",
+        "reason": "active_interlocutor_followup",
+        "spoken_text": "The Ash Cowl? How can I stay clear of them while investigating this?",
+        "declared_switch_detected": false,
+        "declared_switch_target_actor_id": null,
+        "continuity_overridden_by_declared_switch": false,
+        "spoken_vocative_detected": false,
+        "spoken_vocative_target_actor_id": null,
+        "continuity_overridden_by_spoken_vocative": false
+      },
+      "canonical_entry_path": "social",
+      "canonical_entry_reason": "active_interlocutor_followup",
+      "canonical_entry_target_actor_id": "tavern_runner"
+    },
+    {
+      "timestamp": "2026-03-28T16:11:03.648692Z",
+      "source": "chat",
+      "action_type": "chat",
+      "raw_input": "\"Fair enough. Where was that patrol last seen?\"",
+      "turn_stage_order": [
+        "player_input",
+        "intent_normalization_expansion",
+        "action_classification",
+        "engine_resolution",
+        "authoritative_state_mutation",
+        "prompt_context_construction",
+        "gpt_narration",
+        "affordance_derivation",
+        "response_debug_packaging"
+      ],
+      "incoming_payload": {
+        "text": "\"Fair enough. Where was that patrol last seen?\""
+      },
+      "parsed_intent": {
+        "id": "question_tavern_runner",
+        "label": "\"Fair enough. Where was that patrol last seen?\"",
+        "type": "question",
+        "social_intent_class": "social_exchange",
+        "prompt": "\"Fair enough. Where was that patrol last seen?\"",
+        "metadata": {
+          "routed_via_dialogue_lock": true,
+          "route": "dialogue",
+          "canonical_entry_path": "social",
+          "canonical_entry_reason": "active_interlocutor_followup",
+          "canonical_entry_target_actor_id": "tavern_runner",
+          "intent_route_debug": {
+            "routed_to": "social_exchange",
+            "route_reason": "active_interlocutor_followup",
+            "addressed_actor_id": "tavern_runner",
+            "addressed_actor_source": "active_interlocutor"
+          },
+          "active_interaction_target_id": "tavern_runner",
+          "segmented_turn": {
+            "spoken_text": "Fair enough. Where was that patrol last seen?"
+          },
+          "turn_segmentation": {
+            "spoken_text": "Fair enough. Where was that patrol last seen?"
+          }
+        },
+        "target_id": "tavern_runner",
+        "targetEntityId": "tavern_runner"
+      },
+      "segmented_turn": {
+        "spoken_text": "Fair enough. Where was that patrol last seen?"
+      },
+      "normalized_action": {
+        "id": "question_tavern_runner",
+        "label": "\"Fair enough. Where was that patrol last seen?\"",
+        "type": "question",
+        "prompt": "\"Fair enough. Where was that patrol last seen?\""
+      },
+      "resolution": {
+        "kind": "question",
+        "action_id": "question_tavern_runner",
+        "label": "\"Fair enough. Where was that patrol last seen?\"",
+        "prompt": "\"Fair enough. Where was that patrol last seen?\"",
+        "success": true,
+        "resolved_transition": false,
+        "target_scene_id": null,
+        "clue_id": "lead_frontier_gate_old_milestone",
+        "discovered_clues": [
+          "Investigate the old milestone"
+        ],
+        "state_changes": {},
+        "hint": "Player spoke with Tavern Runner. Narration introduced investigatively relevant detail; treat as partial answer or redirect consistent with the spoken reply.",
+        "social": {
+          "social_intent_class": "social_exchange",
+          "npc_id": "tavern_runner",
+          "npc_name": "Tavern Runner",
+          "target_resolved": true,
+          "topic_revealed": {
+            "id": "narration_repair_frontier_gate_operational_pattern",
+            "text": "Investigate the old milestone",
+            "clue_text": "Investigate the old milestone",
+            "clue_id": "lead_frontier_gate_old_milestone",
+            "leads_to_scene": "old_milestone"
+          },
+          "skill_check": null,
+          "npc_reply_expected": true,
+          "reply_kind": "answer",
+          "target_source": "explicit_target",
+          "target_reason": "normalized target_id matches scene-addressable roster",
+          "target_candidate_id": "tavern_runner",
+          "target_candidate_valid": true,
+          "stale_interlocutor_cleared": false,
+          "addressability_checked_against": [
+            "active_entities",
+            "entity_presence_active_or_nearby",
+            "scene_addressables",
+            "world_roster_in_scene",
+            "interaction_continuity"
+          ],
+          "declared_switch_detected": false,
+          "declared_switch_target_actor_id": null,
+          "continuity_overridden_by_declared_switch": false,
+          "spoken_vocative_detected": false,
+          "spoken_vocative_target_actor_id": null,
+          "continuity_overridden_by_spoken_vocative": false,
+          "actor_addressable": true,
+          "social_escalation": {
+            "escalation_level": 3,
+            "escalation_reason": "third_attempt_same_topic",
+            "escalation_effect": "explicit_exhaustion_plus_where_to_next",
+            "force_partial_answer": false,
+            "force_actionable_lead": true,
+            "add_suspicion": false,
+            "trigger_scene_momentum": false,
+            "convert_refusal_to_conditioned_offer": false,
+            "topic_exhausted": false,
+            "effective_reply_kind": null,
+            "social_question_dimension": "location",
+            "topic_exhausted_for_dimension": true,
+            "valid_followup_detected": false,
+            "prior_same_dimension_answer_exists": true
+          },
+          "social_question_dimension": "location",
+          "topic_exhausted_for_dimension": true,
+          "valid_followup_detected": false,
+          "prior_same_dimension_answer_exists": true,
+          "strategy_forced_to_answer": false,
+          "suppressed_fallback_strategies": [],
+          "social_answer_retry_candidate_kind": "structured_fact",
+          "social_answer_retry_anchor_text": "Staying clear of the Ash Cowl means being cautious and avoiding patrols at night.",
+          "social_answer_retry_candidate_source": "topic_pressure:last_answer"
+        },
+        "requires_check": false,
+        "metadata": {
+          "routed_via_dialogue_lock": true,
+          "route": "dialogue",
+          "canonical_entry_path": "social",
+          "canonical_entry_reason": "active_interlocutor_followup",
+          "canonical_entry_target_actor_id": "tavern_runner",
+          "intent_route_debug": {
+            "routed_to": "social_exchange",
+            "route_reason": "active_interlocutor_followup",
+            "addressed_actor_id": "tavern_runner",
+            "addressed_actor_source": "active_interlocutor"
+          },
+          "active_interaction_target_id": "tavern_runner",
+          "segmented_turn": {
+            "spoken_text": "Fair enough. Where was that patrol last seen?"
+          },
+          "turn_segmentation": {
+            "spoken_text": "Fair enough. Where was that patrol last seen?"
+          },
+          "lead_landing": {
+            "revealed_lead_ids": [],
+            "already_known_lead_ids": [
+              "lead_frontier_gate_old_milestone"
+            ],
+            "actionable_lead_ids": [
+              "lead_frontier_gate_old_milestone"
+            ],
+            "lead_write_targets": [
+              "clue_knowledge",
+              "scene_runtime.discovered_clue_ids"
+            ],
+            "extracted_lead_ids": [
+              "lead_frontier_gate_old_milestone"
+            ],
+            "extracted_lead_sources": [
+              "topic_hook"
+            ],
+            "extracted_from_text": false,
+            "extracted_from_reconciled_text": false,
+            "narration_mismatch_repair": true
+          },
+          "narration_state_consistency": {
+            "narration_state_mismatch_detected": true,
+            "mismatch_kind": "empty_social_payload_vs_narration:operational_pattern",
+            "mismatch_repair_applied": "extracted_actionable_leads",
+            "mismatch_repairs_applied": [
+              "structured_from_extracted_actionable_leads",
+              "success_set_true",
+              "engine_hint_no_new_info_replaced",
+              "canonical_social_lead_landing"
+            ],
+            "repaired_discovered_clue_texts": [],
+            "emergent_actor_hint_detected": false
+          },
+          "minimum_actionable_lead": {
+            "minimum_actionable_lead_enforced": false,
+            "enforced_lead_id": null,
+            "enforced_lead_source": null
+          },
+          "minimum_actionable_lead_enforced": false,
+          "enforced_lead_id": null,
+          "enforced_lead_source": null
+        },
+        "world_tick_events": [
+          {
+            "type": "faction_operation_complete",
+            "text": "House Verevin completes an off-screen operation.",
+            "source": "house_verevin"
+          },
+          {
+            "type": "faction_operation_complete",
+            "text": "The Ash Cowl completes an off-screen operation.",
+            "source": "ash_cowl"
+          },
+          {
+            "type": "faction_operation_complete",
+            "text": "Ordo Pyric completes an off-screen operation.",
+            "source": "ordo_pyric"
+          }
+        ]
+      },
+      "scene_before": "frontier_gate",
+      "scene_after": "frontier_gate",
+      "clue_updates": [],
+      "world_flag_updates": [
+        "clock:time_pressure=5"
+      ],
+      "turn_trace": {
+        "source": "chat",
+        "player_input": "\"Fair enough. Where was that patrol last seen?\"",
+        "intent": {
+          "parsed": {
+            "id": "question_tavern_runner",
+            "label": "\"Fair enough. Where was that patrol last seen?\"",
+            "type": "question",
+            "social_intent_class": "social_exchange",
+            "prompt": "\"Fair enough. Where was that patrol last seen?\"",
+            "metadata": {
+              "routed_via_dialogue_lock": true,
+              "route": "dialogue",
+              "canonical_entry_path": "social",
+              "canonical_entry_reason": "active_interlocutor_followup",
+              "canonical_entry_target_actor_id": "tavern_runner",
+              "intent_route_debug": {
+                "routed_to": "social_exchange",
+                "route_reason": "active_interlocutor_followup",
+                "addressed_actor_id": "tavern_runner",
+                "addressed_actor_source": "active_interlocutor"
+              },
+              "active_interaction_target_id": "tavern_runner",
+              "segmented_turn": {
+                "spoken_text": "Fair enough. Where was that patrol last seen?"
+              },
+              "turn_segmentation": {
+                "spoken_text": "Fair enough. Where was that patrol last seen?"
+              }
+            },
+            "target_id": "tavern_runner",
+            "targetEntityId": "tavern_runner"
+          },
+          "segmented_turn": {
+            "spoken_text": "Fair enough. Where was that patrol last seen?"
+          },
+          "normalized": {
+            "id": "question_tavern_runner",
+            "label": "\"Fair enough. Where was that patrol last seen?\"",
+            "type": "question",
+            "prompt": "\"Fair enough. Where was that patrol last seen?\"",
+            "targetSceneId": null,
+            "target_scene_id": null,
+            "targetEntityId": "tavern_runner",
+            "target_id": "tavern_runner"
+          },
+          "implied_context": {
+            "applied": false,
+            "cases": [],
+            "target_id": "tavern_runner"
+          }
+        },
+        "classification": {
+          "action_type": "chat",
+          "resolved_kind": "question",
+          "requires_check": false
+        },
+        "resolution_path": "social_engine",
+        "authoritative_state_changes": {
+          "scene_transition": null,
+          "resolution_state_changes": {},
+          "resolution_world_updates": [],
+          "check_request": null
+        },
+        "interaction_after": {
+          "active_interaction_target_id": "tavern_runner",
+          "active_interaction_kind": "social",
+          "interaction_mode": "social",
+          "engagement_level": "engaged",
+          "conversation_privacy": null,
+          "player_position_context": null
+        },
+        "narration_obligations": {
+          "is_opening_scene": false,
+          "must_advance_scene": false,
+          "should_answer_active_npc": true,
+          "avoid_input_echo": true,
+          "avoid_player_action_restatement": true,
+          "prefer_structured_turn_summary": true,
+          "active_npc_reply_expected": true,
+          "active_npc_reply_kind": "answer",
+          "scene_momentum_due": false,
+          "scene_momentum_exchanges_since": 0,
+          "scene_momentum_next_due_in": 2,
+          "suppress_non_social_emitters": true
+        },
+        "clues": {
+          "discovered_texts": [],
+          "presentation_changes": [],
+          "known_counts": {
+            "implicit": 0,
+            "explicit": 1,
+            "actionable": 1
+          }
+        },
+        "affordances_after": [
+          {
+            "id": "examine_the_rain_spatters_soot_dark_stone_frayed",
+            "type": "investigate",
+            "label": "Examine the Rain spatters soot-dark stone; frayed"
+          },
+          {
+            "id": "examine_refugees",
+            "type": "investigate",
+            "label": "Examine Refugees"
+          },
+          {
+            "id": "examine_a_notice_board_lists_new_taxes",
+            "type": "investigate",
+            "label": "Examine A notice board lists new taxes"
+          },
+          {
+            "id": "talk_to_a_tavern_runner_shouts_offers_of_hot",
+            "type": "investigate",
+            "label": "Talk to A tavern runner shouts offers of hot"
+          },
+          {
+            "id": "examine_a_well_appointed_townhouse_overlookin",
+            "type": "investigate",
+            "label": "Examine A well-appointed townhouse overlookin"
+          }
+        ],
+        "emergent_actor": {
+          "emergent_actor_enrolled": true,
+          "emergent_actor_id": "emergent_lord_aldric",
+          "emergent_actor_source_text": "Lord Aldric"
+        }
+      },
+      "gpt_called": true,
+      "response_ok": true,
+      "error": null,
+      "canonical_entry": {
+        "should_route_social": true,
+        "target_actor_id": "tavern_runner",
+        "target_source": "active_interlocutor",
+        "reason": "active_interlocutor_followup",
+        "spoken_text": "Fair enough. Where was that patrol last seen?",
+        "declared_switch_detected": false,
+        "declared_switch_target_actor_id": null,
+        "continuity_overridden_by_declared_switch": false,
+        "spoken_vocative_detected": false,
+        "spoken_vocative_target_actor_id": null,
+        "continuity_overridden_by_spoken_vocative": false
+      },
+      "canonical_entry_path": "social",
+      "canonical_entry_reason": "active_interlocutor_followup",
+      "canonical_entry_target_actor_id": "tavern_runner"
     }
   ],
   "flags": {},
   "character_name": "Galinor",
-  "campaign_run_id": "7b861224e522051db1266efa",
-  "session_id": "7b861224e522051db1266efa",
-  "last_saved_at": "2026-03-26T10:09:33.425632Z",
+  "campaign_run_id": "1482d51a197e2a389ee3c4a2",
+  "session_id": "1482d51a197e2a389ee3c4a2",
+  "last_saved_at": "2026-03-28T16:11:19.311491Z",
+  "emergent_actor_debug": {
+    "emergent_actor_enrolled": true,
+    "emergent_actor_id": "emergent_lord_aldric",
+    "emergent_actor_source_text": "Lord Aldric"
+  },
   "social_lead_event_ids": [
-    "social_frontier_gate_tavern_runner_stew"
+    "social_frontier_gate_tavern_runner_stew",
+    "lead_frontier_gate_old_milestone"
   ]
 }

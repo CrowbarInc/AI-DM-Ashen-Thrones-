@@ -30,6 +30,11 @@ from game.interaction_context import (
 # Historical name in this module; delegates to canonical roster resolution in interaction_context.
 effective_scene_npc_roster = effective_in_scene_npc_roster
 from game.storage import get_scene_runtime
+from game.social import (
+    classify_social_question_dimension,
+    format_structured_fact_social_line,
+    select_best_social_answer_candidate,
+)
 from game.utils import slugify
 
 _log = logging.getLogger(__name__)
@@ -58,6 +63,8 @@ def _legacy_strict_basis_from_authoritative(auth: Dict[str, Any], world: Dict[st
     src = str((auth or {}).get("source") or "").strip()
     if src == "generic_role":
         return "generic_address"
+    if src == "spoken_vocative":
+        return "vocative"
     if src == "continuity":
         sid = str(scene_id or "").strip()
         roster = effective_scene_npc_roster(world, sid)
@@ -1621,6 +1628,102 @@ def _assert_all_sentences_strict_social_or_interruption(
             )
 
 
+def _looks_like_strict_social_terminal_placeholder(text: str) -> bool:
+    """True for ownership-filter terminal ignorance / tight-lipped lines (not substantive NPC answers)."""
+    low = str(text or "").strip().lower()
+    if not low:
+        return True
+    if any(p.search(str(text or "")) for p in _SCENE_CONTAMINATION_PATTERNS):
+        return True
+    if "hard to say" in low and ("whisper" in low or "nobody" in low or "swear" in low):
+        return True
+    if re.search(r"\b(don'?t know|do not know|no names here|won'?t name)\b", low) and (
+        "shake" in low or "grimace" in low or "mutter" in low or "spread" in low
+    ):
+        return True
+    return False
+
+
+def _structured_fact_emission_details() -> dict[str, Any]:
+    return {
+        "used_internal_fallback": False,
+        "fallback_kind": "none",
+        "rejection_reasons": [],
+        "final_emitted_source": "structured_fact_candidate_emission",
+        "deterministic_attempted": False,
+        "deterministic_passed": False,
+        "fallback_pool": "structured_fact",
+        "route_illegal_intercepted": False,
+        "intercepted_preview": "",
+    }
+
+
+def _try_emit_structured_fact_strict_line(
+    *,
+    resolution: Dict[str, Any],
+    session: Dict[str, Any] | None,
+    scene_id: str,
+    world: Dict[str, Any] | None,
+    tag_list: List[str],
+) -> str | None:
+    """If topic pressure / clues hold a factual answer, return route-legal strict-social text."""
+    sid = str(scene_id or "").strip()
+    sess = session if isinstance(session, dict) else None
+    merged_pt = merged_player_prompt_for_gate(resolution, sess, sid)
+    soc_pre = resolution.get("social") if isinstance(resolution.get("social"), dict) else {}
+    nid_pre = str(soc_pre.get("npc_id") or "").strip() or None
+    cand = select_best_social_answer_candidate(
+        session=sess,
+        scene_id=sid,
+        npc_id=nid_pre,
+        topic_key=None,
+        player_text=merged_pt,
+        resolution=resolution,
+    )
+    if cand.get("answer_kind") not in ("structured_fact", "reconciled_fact") or not str(cand.get("text") or "").strip():
+        return None
+    synth = format_structured_fact_social_line(resolution, str(cand.get("text") or ""))
+    synth_f = apply_strict_social_sentence_ownership_filter(
+        synth,
+        resolution=resolution,
+        tags=tag_list or None,
+        session=sess,
+        scene_id=sid,
+    )
+    synth_n = _normalize_gate_text(synth_f)
+    low_s = synth_n.lower()
+    banned_any_route2 = (
+        "from here, no certain answer presents itself",
+        "the truth is still buried beneath rumor and rain",
+    )
+    reasons2: List[str] = []
+    if any(phrase in low_s for phrase in banned_any_route2):
+        reasons2.append("banned_stock_phrase")
+    reasons2.extend(
+        hard_reject_social_exchange_text(
+            synth_n,
+            resolution=resolution,
+            session=sess,
+            scene_id=sid,
+            world=world if isinstance(world, dict) else None,
+        )
+    )
+    if reasons2:
+        return None
+    if isinstance(resolution.get("social"), dict):
+        resolution["social"]["answer_candidate_selected"] = str(cand.get("answer_kind") or "")
+        resolution["social"]["answer_candidate_source"] = str(cand.get("source") or "")
+        resolution["social"]["answer_candidate_dimension"] = classify_social_question_dimension(merged_pt)
+        resolution["social"]["refusal_suppressed_by_structured_fact"] = True
+    preview = synth_n[:140] + ("…" if len(synth_n) > 140 else "")
+    resolution["hint"] = (
+        "Final strict-social emission used stored thread facts as the spoken NPC line "
+        f"({preview}). This is not a refusal and not an empty-information turn."
+    )
+    _assert_all_sentences_strict_social_or_interruption(synth_n, resolution)
+    return synth_n
+
+
 def build_final_strict_social_response(
     candidate_text: str,
     *,
@@ -1670,6 +1773,25 @@ def build_final_strict_social_response(
     )
 
     if not reasons:
+        soc_ok = res.get("social") if isinstance(res, dict) and isinstance(res.get("social"), dict) else {}
+        prefer_structured = bool(
+            isinstance(res, dict)
+            and (
+                str(soc_ok.get("reply_kind") or "").strip().lower() == "refusal"
+                or res.get("success") is not True
+                or soc_ok.get("refusal_suppressed_by_structured_fact") is True
+            )
+        )
+        if prefer_structured and isinstance(res, dict) and _looks_like_strict_social_terminal_placeholder(text):
+            st = _try_emit_structured_fact_strict_line(
+                resolution=res,
+                session=sess,
+                scene_id=sid,
+                world=world if isinstance(world, dict) else None,
+                tag_list=tag_list,
+            )
+            if st:
+                return st, _structured_fact_emission_details()
         _assert_all_sentences_strict_social_or_interruption(text, res)
         final_emitted_source = (
             "generated_candidate"
@@ -1687,6 +1809,17 @@ def build_final_strict_social_response(
             "route_illegal_intercepted": False,
             "intercepted_preview": "",
         }
+
+    if isinstance(res, dict):
+        st2 = _try_emit_structured_fact_strict_line(
+            resolution=res,
+            session=sess,
+            scene_id=sid,
+            world=world if isinstance(world, dict) else None,
+            tag_list=tag_list,
+        )
+        if st2:
+            return st2, _structured_fact_emission_details()
 
     uncertainty_source = emission_gate_uncertainty_source(tag_list, text)
     pressure_active = emission_gate_pressure_active(tag_list, session, sid)

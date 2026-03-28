@@ -5,9 +5,10 @@ Supports a knowledge-state layer: discovered, inferred, known_to_player.
 """
 from __future__ import annotations
 
-from typing import Any, Dict, List, Set
+import re
+from typing import Any, Dict, List, Set, Tuple
 
-from game.storage import add_pending_lead, mark_clue_discovered
+from game.storage import add_pending_lead, get_scene_runtime, is_known_scene_id, mark_clue_discovered
 from game.utils import slugify
 
 
@@ -364,11 +365,824 @@ def _stable_social_text_lead_id(scene_id: str, npc_id: str, primary_text: str) -
     return f"social_text_{slugify(scene_id)}_{tail}"
 
 
+def _stable_extracted_lead_id(scene_id: str, *descriptor_parts: str) -> str:
+    tail = "_".join(slugify(p) for p in descriptor_parts if p and str(p).strip())
+    tail = (tail or "lead")[:96]
+    return f"lead_{slugify(scene_id)}_{tail}"
+
+
+def _effective_social_clue_context(
+    resolution: Dict[str, Any],
+    scene_id: str,
+) -> Tuple[str | None, str | None, List[str], Dict[str, Any] | None, str, str]:
+    """Return (effective_clue_id, primary_text, merged_texts, topic, npc_id, topic_tid) from a social resolution."""
+    social = resolution.get("social") if isinstance(resolution.get("social"), dict) else {}
+    topic = social.get("topic_revealed") if isinstance(social.get("topic_revealed"), dict) else None
+
+    top_clue_id = str(resolution.get("clue_id") or "").strip() or None
+    top_texts: List[str] = []
+    for raw in resolution.get("discovered_clues") or []:
+        if isinstance(raw, str) and raw.strip():
+            t = raw.strip()
+            if t not in top_texts:
+                top_texts.append(t)
+
+    topic_text = ""
+    topic_clue_id: str | None = None
+    topic_tid = ""
+    if topic:
+        topic_text = str(topic.get("clue_text") or topic.get("text") or "").strip()
+        topic_clue_id = str(topic.get("clue_id") or topic.get("reveals_clue") or "").strip() or None
+        topic_tid = str(topic.get("id") or "").strip()
+
+    merged_texts: List[str] = []
+    if topic_text:
+        merged_texts.append(topic_text)
+    for t in top_texts:
+        if t not in merged_texts:
+            merged_texts.append(t)
+    primary_text = merged_texts[0] if merged_texts else None
+
+    npc_id = str(social.get("npc_id") or "").strip()
+
+    effective_clue_id = top_clue_id or topic_clue_id
+    if not effective_clue_id and topic and npc_id and topic_tid:
+        effective_clue_id = _stable_social_lead_id(scene_id, npc_id, topic_tid)
+    if not effective_clue_id and primary_text:
+        effective_clue_id = _stable_social_text_lead_id(scene_id, npc_id, primary_text)
+
+    return effective_clue_id, primary_text, merged_texts, topic, npc_id, topic_tid
+
+
+def _public_lead_dict(
+    *,
+    lead_id: str,
+    kind: str,
+    label: str,
+    source_scene_id: str,
+    source_npc_id: str | None,
+    target_scene_id: str | None = None,
+    target_npc_id: str | None = None,
+    rumor_text: str | None = None,
+    evidence_text: str | None = None,
+    extraction_source: str | None = None,
+) -> Dict[str, Any]:
+    rec: Dict[str, Any] = {
+        "lead_id": lead_id,
+        "kind": kind,
+        "label": label,
+        "source_scene_id": source_scene_id,
+        "source_npc_id": source_npc_id,
+        "target_scene_id": target_scene_id,
+        "target_npc_id": target_npc_id,
+        "rumor_text": rumor_text,
+        "evidence_text": evidence_text,
+    }
+    if extraction_source:
+        rec["extraction_source"] = extraction_source
+    return rec
+
+
+# Deterministic, conservative phrase → investigative lead signals (low false-positive rate).
+_TEXT_LEAD_SPECS: tuple[tuple[re.Pattern[str], str, str, str | None, str | None], ...] = (
+    (
+        re.compile(r"\bold\s+trading\s+crossroads\b", re.IGNORECASE),
+        "location",
+        "Ask around the old trading crossroads",
+        None,
+        "old_trading_crossroads",
+    ),
+    (
+        re.compile(r"\bold\s+milestone\b", re.IGNORECASE),
+        "scene",
+        "Investigate the old milestone",
+        "old_milestone",
+        "old_milestone",
+    ),
+    (
+        re.compile(
+            r"\b(?:speak|talk)\s+(?:with|to)\s+(?:the\s+)?guards?\b",
+            re.IGNORECASE,
+        ),
+        "npc",
+        "Speak with the guards",
+        None,
+        "guards",
+    ),
+    (
+        re.compile(
+            r"\b(?:find|seek|locate)\s+(?:the\s+)?(?:town\s+)?crier\b|\b(?:town\s+)?crier\s+(?:at|near|by)\b",
+            re.IGNORECASE,
+        ),
+        "npc",
+        "Find the town crier",
+        None,
+        "town_crier",
+    ),
+    (
+        re.compile(
+            r"\bshipments?\b.{0,48}\bout\s+of\s+(?:the\s+)?city\b|\bout\s+of\s+(?:the\s+)?city\b.{0,48}\bshipments?\b",
+            re.IGNORECASE | re.DOTALL,
+        ),
+        "operation",
+        "Shipments moving out of the city",
+        None,
+        "shipments_city",
+    ),
+    (
+        re.compile(
+            r"\bhouse\s+verevin\b.{0,64}\b(?:stronghold|estate|outskirts)\b|\b(?:stronghold|estate|outskirts)\b.{0,64}\bhouse\s+verevin\b",
+            re.IGNORECASE | re.DOTALL,
+        ),
+        "location",
+        "House Verevin stronghold at the outskirts",
+        None,
+        "house_verevin",
+    ),
+)
+
+
+def _topic_hook_lead_id(
+    scene_id: str,
+    npc_id: str | None,
+    topic: Dict[str, Any],
+    primary_clue_id: str | None,
+) -> str:
+    """Stable id for topic-hook leads when the engine did not supply a clue_id."""
+    if primary_clue_id and str(primary_clue_id).strip():
+        return str(primary_clue_id).strip()
+    tid = str(topic.get("id") or "").strip()
+    if not tid:
+        tid = slugify(str(topic.get("text") or topic.get("clue_text") or ""))[:40] or "topic"
+    return _stable_social_lead_id(scene_id, str(npc_id or "").strip() or "_scene", tid)
+
+
+def _structured_social_fact_leads(
+    scene_id: str,
+    npc_id: str | None,
+    resolution: Dict[str, Any],
+    topic: Dict[str, Any] | None,
+    *,
+    suppressed_scene_targets: Set[str],
+) -> List[Dict[str, Any]]:
+    """Tier B: leads from reconciled structured fields (scene ids as clue ids), no regex."""
+    out: List[Dict[str, Any]] = []
+    sid = str(scene_id or "").strip()
+    if not sid:
+        return out
+    local_seen: Set[str] = set()
+
+    def _emit_for_scene_target(target_sid: str, label_hint: str | None) -> None:
+        ts = str(target_sid or "").strip()
+        if not ts or not is_known_scene_id(ts):
+            return
+        if ts in suppressed_scene_targets:
+            return
+        lid = _stable_extracted_lead_id(sid, ts)
+        if lid in local_seen:
+            return
+        local_seen.add(lid)
+        lab = (label_hint or "").strip() or f"Investigate {ts.replace('_', ' ')}"
+        out.append(
+            _public_lead_dict(
+                lead_id=lid,
+                kind="scene",
+                label=lab[:200],
+                source_scene_id=sid,
+                source_npc_id=npc_id,
+                target_scene_id=ts,
+                target_npc_id=None,
+                rumor_text=None,
+                evidence_text=None,
+                extraction_source="structured_fact:scene_id",
+            )
+        )
+
+    sources: List[Dict[str, Any]] = []
+    if isinstance(resolution, dict):
+        sources.append(resolution)
+    if isinstance(topic, dict):
+        sources.append(topic)
+
+    for src in sources:
+        for key in ("clue_id", "reveals_clue"):
+            raw = src.get(key)
+            if isinstance(raw, str) and raw.strip():
+                hint = str(src.get("clue_text") or src.get("text") or "").strip() or None
+                _emit_for_scene_target(raw.strip(), hint)
+
+    return out
+
+
+def _scan_text_for_actionable_leads(
+    scene_id: str,
+    source_npc_id: str | None,
+    text: str,
+    *,
+    extraction_source_prefix: str,
+) -> List[Dict[str, Any]]:
+    if not text or not isinstance(text, str) or not text.strip():
+        return []
+
+    found: List[Dict[str, Any]] = []
+    seen_ids: Set[str] = set()
+    low = text.strip()
+    for pattern, kind, label, target_scene, slug_tail in _TEXT_LEAD_SPECS:
+        if not pattern.search(low):
+            continue
+        resolved_scene = target_scene
+        if resolved_scene and not is_known_scene_id(resolved_scene):
+            resolved_scene = None
+        rumor: str | None = None
+        if not resolved_scene and kind in ("location", "operation", "npc"):
+            rumor = label
+        lid = _stable_extracted_lead_id(scene_id, slug_tail)
+        if lid in seen_ids:
+            continue
+        seen_ids.add(lid)
+        found.append(
+            _public_lead_dict(
+                lead_id=lid,
+                kind=kind,
+                label=label,
+                source_scene_id=scene_id,
+                source_npc_id=source_npc_id,
+                target_scene_id=resolved_scene,
+                target_npc_id=None,
+                rumor_text=rumor,
+                evidence_text=text.strip()[:400] or None,
+                extraction_source=f"{extraction_source_prefix}:{slug_tail}",
+            )
+        )
+    return found
+
+
+def extract_actionable_social_leads(
+    *,
+    scene_id: str,
+    npc_id: str | None,
+    topic_payload: dict | None,
+    social_resolution: dict | None,
+    player_facing_text: str | None,
+    scene: dict | None,
+    session: dict | None,
+    primary_clue_id: str | None = None,
+    extraction_pass: str = "full",
+    narration_text_is_reconciled: bool = False,
+) -> List[Dict[str, Any]]:
+    """Derive normalized actionable leads from social topic hooks, structured facts, and text (deterministic).
+
+    Precedence (within a pass): **A** explicit ``leads_to_*`` topic hooks → **B** structured facts (e.g. clue id
+    that is a known scene id) → **C** regex hooks on reconciled topic/clue strings, then on narration text.
+
+    ``player_facing_text`` for tier **C** narration scans should be the post–Block-3 reconciled/finalized string
+    when ``narration_text_is_reconciled`` is True (callers after :func:`reconcile_final_text_with_structured_state`).
+
+    extraction_pass:
+        - ``topic``: A + B + C on topic / resolution strings only (no narration).
+        - ``narration``: C on ``player_facing_text`` only.
+        - ``full``: A + B + C (topic strings first, then narration); deduped by ``lead_id``.
+    """
+    _ = scene, session  # reserved for future scene-graph / known-NPC hints
+
+    res = social_resolution if isinstance(social_resolution, dict) else {}
+    topic = topic_payload if isinstance(topic_payload, dict) else None
+    sid = str(scene_id or "").strip()
+    if not sid:
+        return []
+
+    npc = str(npc_id or "").strip() or None
+    pass_norm = str(extraction_pass or "full").strip().lower()
+    if pass_norm not in ("full", "topic", "narration"):
+        pass_norm = "full"
+
+    leads: List[Dict[str, Any]] = []
+    seen_lead_ids: Set[str] = set()
+    suppressed_scene_targets: Set[str] = set()
+    if topic:
+        hook_skip = str(topic.get("leads_to_scene") or "").strip()
+        if hook_skip:
+            suppressed_scene_targets.add(hook_skip)
+
+    def _add(lead: Dict[str, Any]) -> None:
+        lid = str(lead.get("lead_id") or "").strip()
+        if not lid or lid in seen_lead_ids:
+            return
+        seen_lead_ids.add(lid)
+        leads.append(lead)
+
+    # --- A: explicit topic hooks (leads_to_*) ---
+    if pass_norm in ("full", "topic") and topic:
+        hook_scene = str(topic.get("leads_to_scene") or "").strip() or None
+        hook_npc = str(topic.get("leads_to_npc") or "").strip() or None
+        hook_rumor = str(topic.get("leads_to_rumor") or "").strip() or None
+        if hook_scene or hook_npc or hook_rumor:
+            hook_lid = _topic_hook_lead_id(sid, npc, topic, primary_clue_id)
+            primary_txt = str(topic.get("clue_text") or topic.get("text") or "").strip() or "Social lead"
+            _add(
+                _public_lead_dict(
+                    lead_id=hook_lid,
+                    kind="scene" if hook_scene else ("npc" if hook_npc else "rumor"),
+                    label=primary_txt[:200],
+                    source_scene_id=sid,
+                    source_npc_id=npc,
+                    target_scene_id=hook_scene,
+                    target_npc_id=hook_npc,
+                    rumor_text=hook_rumor,
+                    evidence_text=None,
+                    extraction_source="topic_hook",
+                )
+            )
+
+    # --- B: reconciled structured social facts (no regex) ---
+    if pass_norm in ("full", "topic"):
+        for L in _structured_social_fact_leads(
+            sid,
+            npc,
+            res,
+            topic,
+            suppressed_scene_targets=suppressed_scene_targets,
+        ):
+            _add(L)
+
+    # --- C: deterministic text hooks on topic + resolution clue strings ---
+    if pass_norm in ("full", "topic"):
+        texts_c: List[str] = []
+        if topic:
+            for key in ("clue_text", "text"):
+                v = topic.get(key)
+                if isinstance(v, str) and v.strip():
+                    texts_c.append(v.strip())
+        for raw in res.get("discovered_clues") or []:
+            if isinstance(raw, str) and raw.strip():
+                texts_c.append(raw.strip())
+        for chunk in texts_c:
+            for L in _scan_text_for_actionable_leads(sid, npc, chunk, extraction_source_prefix="topic_text"):
+                ts = str(L.get("target_scene_id") or "").strip()
+                if ts and ts in suppressed_scene_targets:
+                    continue
+                _add(L)
+
+    # --- C (narration slice): same pattern library, reconciled GM text only in this branch ---
+    if pass_norm in ("full", "narration") and player_facing_text:
+        narr_prefix = "narration_reconciled" if narration_text_is_reconciled else "narration"
+        for L in _scan_text_for_actionable_leads(
+            sid, npc, player_facing_text, extraction_source_prefix=narr_prefix
+        ):
+            ts = str(L.get("target_scene_id") or "").strip()
+            if ts and ts in suppressed_scene_targets:
+                continue
+            _add(L)
+
+    return leads
+
+
+def _lead_has_pending_target(lead: Dict[str, Any]) -> bool:
+    return bool(
+        str(lead.get("target_scene_id") or "").strip()
+        or str(lead.get("target_npc_id") or "").strip()
+        or str(lead.get("rumor_text") or "").strip()
+    )
+
+
+def _apply_extracted_social_leads(
+    session: Dict[str, Any],
+    scene_id: str,
+    world: Dict[str, Any],
+    leads: List[Dict[str, Any]],
+    *,
+    actionable_lead_ids: List[str],
+    lead_write_targets: List[str],
+    primary_canonical_clue_id: str | None = None,
+) -> List[str]:
+    """Persist supplemental leads (clue knowledge, pending_leads, actionable presentation)."""
+    added: List[str] = []
+    touched_pending = False
+    logged_ids = session.setdefault("social_lead_event_ids", [])
+    if not isinstance(logged_ids, list):
+        session["social_lead_event_ids"] = []
+        logged_ids = session["social_lead_event_ids"]
+    primary_skip = str(primary_canonical_clue_id or "").strip() or None
+
+    for lead in leads:
+        if not isinstance(lead, dict):
+            continue
+        cid = str(lead.get("lead_id") or "").strip()
+        if not cid:
+            continue
+        label = str(lead.get("label") or "").strip() or cid
+        reveal_clue(session, scene_id, cid, clue_text=label, world=world)
+        if label and mark_clue_discovered(session, scene_id, label):
+            added.append(label)
+
+        if _lead_has_pending_target(lead):
+            pend: Dict[str, Any] = {"clue_id": cid, "text": label}
+            ts = str(lead.get("target_scene_id") or "").strip()
+            tn = str(lead.get("target_npc_id") or "").strip()
+            tr = str(lead.get("rumor_text") or "").strip()
+            if ts:
+                pend["leads_to_scene"] = ts
+            if tn:
+                pend["leads_to_npc"] = tn
+            if tr:
+                pend["leads_to_rumor"] = tr
+            newly_pending = add_pending_lead(session, scene_id, pend)
+            if newly_pending:
+                touched_pending = True
+                ext_src = str(lead.get("extraction_source") or "")
+                if (
+                    ext_src
+                    and ext_src != "topic_hook"
+                    and cid != primary_skip
+                    and cid not in logged_ids
+                ):
+                    world.setdefault("event_log", []).append(
+                        {
+                            "type": "social_extracted_lead",
+                            "clue_id": cid,
+                            "scene_id": scene_id,
+                            "source": ext_src,
+                        }
+                    )
+                    logged_ids.append(cid)
+                    if "event_log" not in lead_write_targets:
+                        lead_write_targets.append("event_log")
+            set_clue_presentation(session, clue_id=cid, clue_text=label, level="actionable")
+            if cid not in actionable_lead_ids:
+                actionable_lead_ids.append(cid)
+    if touched_pending and "pending_leads" not in lead_write_targets:
+        lead_write_targets.append("pending_leads")
+    return added
+
+
+def apply_social_narration_lead_supplements(
+    session: Dict[str, Any],
+    scene_id: str,
+    world: Dict[str, Any],
+    resolution: Dict[str, Any],
+    player_facing_text: str,
+    scene: Dict[str, Any] | None,
+) -> List[str]:
+    """Second-pass landing: narration-only patterns after GM text exists. Idempotent."""
+    from game.social import SOCIAL_KINDS
+
+    kind = str(resolution.get("kind") or "").strip().lower()
+    if kind not in SOCIAL_KINDS:
+        return []
+    if resolution.get("success") is False:
+        return []
+    if resolution.get("requires_check"):
+        return []
+    social = resolution.get("social") if isinstance(resolution.get("social"), dict) else {}
+    if social.get("offscene_target"):
+        return []
+    if not social.get("target_resolved", True):
+        return []
+
+    eff_id, _primary, _merged, topic, npc_id, _tid = _effective_social_clue_context(resolution, scene_id)
+    extra = extract_actionable_social_leads(
+        scene_id=scene_id,
+        npc_id=npc_id,
+        topic_payload=topic,
+        social_resolution=resolution,
+        player_facing_text=player_facing_text,
+        scene=scene,
+        session=session,
+        primary_clue_id=eff_id,
+        extraction_pass="narration",
+        narration_text_is_reconciled=True,
+    )
+    if not extra:
+        return []
+
+    actionable_ids: List[str] = []
+    targets: List[str] = []
+    added_texts = _apply_extracted_social_leads(
+        session,
+        scene_id,
+        world,
+        extra,
+        actionable_lead_ids=actionable_ids,
+        lead_write_targets=targets,
+        primary_canonical_clue_id=eff_id,
+    )
+
+    meta = resolution.setdefault("metadata", {})
+    if isinstance(meta, dict):
+        ll = meta.get("lead_landing") if isinstance(meta.get("lead_landing"), dict) else {}
+        merged = dict(ll)
+        prev_e = list(merged.get("extracted_lead_ids") or [])
+        merged["extracted_lead_ids"] = list(
+            dict.fromkeys(
+                prev_e + [str(x.get("lead_id")) for x in extra if isinstance(x, dict) and x.get("lead_id")]
+            )
+        )
+        prev_s = list(merged.get("extracted_lead_sources") or [])
+        narr_keys = [
+            str(x.get("extraction_source") or f"narration:{x.get('lead_id')}")
+            for x in extra
+            if isinstance(x, dict)
+        ]
+        merged["extracted_lead_sources"] = list(dict.fromkeys(prev_s + narr_keys))
+        merged["extracted_from_text"] = bool(merged.get("extracted_from_text")) or True
+        merged["extracted_from_reconciled_text"] = bool(merged.get("extracted_from_reconciled_text")) or True
+        merged["actionable_lead_ids"] = list(
+            dict.fromkeys(list(merged.get("actionable_lead_ids") or []) + actionable_ids)
+        )
+        merged["lead_write_targets"] = list(
+            dict.fromkeys(list(merged.get("lead_write_targets") or []) + targets)
+        )
+        merged["narration_supplement_texts"] = added_texts
+        meta["lead_landing"] = merged
+
+    return added_texts
+
+
+# Opening / social hubs where a successful information-bearing exchange must not end with zero actionable leads.
+_MINIMUM_ACTIONABLE_LEAD_SCENE_IDS: frozenset[str] = frozenset({"frontier_gate"})
+_SCENE_FLAG_MINIMUM_LEAD = "ensure_minimum_actionable_lead_after_social"
+
+_INVESTIGATIVE_EXIT_LABEL_KEYWORDS: tuple[str, ...] = (
+    "rumor",
+    "patrol",
+    "milestone",
+    "crossroads",
+    "follow",
+    "investigate",
+    "missing",
+    "trail",
+    "lead",
+    "clue",
+    "east",
+    "outskirts",
+)
+
+# Slug tails aligned with _TEXT_LEAD_SPECS — scan discoverable_clues in this order before generic matches / exits.
+_MINIMUM_LEAD_AUTHORED_HOOK_SLUG_PRIORITY: tuple[str, ...] = (
+    "old_milestone",
+    "old_trading_crossroads",
+    "guards",
+    "town_crier",
+    "shipments_city",
+    "house_verevin",
+)
+
+
+def _discoverable_clue_texts(scene_inner: Dict[str, Any]) -> List[str]:
+    out: List[str] = []
+    for raw in scene_inner.get("discoverable_clues") or []:
+        if isinstance(raw, str) and raw.strip():
+            out.append(raw.strip())
+        elif isinstance(raw, dict):
+            t = raw.get("text")
+            if isinstance(t, str) and t.strip():
+                out.append(t.strip())
+    return out
+
+
+def _pick_actionable_lead_from_discoverable_clues(scene_id: str, scene_inner: Dict[str, Any]) -> Dict[str, Any] | None:
+    """Prefer milestone / crossroads / guards / crier hooks from authored discoverable strings; then any other match."""
+    texts = _discoverable_clue_texts(scene_inner)
+    if not texts:
+        return None
+    sid = str(scene_id or "").strip()
+    if not sid:
+        return None
+    for slug in _MINIMUM_LEAD_AUTHORED_HOOK_SLUG_PRIORITY:
+        want_suffix = f"discoverable_clue:{slug}"
+        for chunk in texts:
+            for L in _scan_text_for_actionable_leads(
+                sid, None, chunk, extraction_source_prefix="discoverable_clue"
+            ):
+                if str(L.get("extraction_source") or "") == want_suffix:
+                    return L
+    for chunk in texts:
+        found = _scan_text_for_actionable_leads(
+            sid, None, chunk, extraction_source_prefix="discoverable_clue"
+        )
+        if found:
+            return found[0]
+    return None
+
+
+def _scene_eligible_for_minimum_actionable_lead(scene_id: str, scene: dict | None) -> bool:
+    if scene_id in _MINIMUM_ACTIONABLE_LEAD_SCENE_IDS:
+        return True
+    inner = scene.get("scene") if isinstance(scene, dict) and isinstance(scene.get("scene"), dict) else {}
+    return bool(inner.get(_SCENE_FLAG_MINIMUM_LEAD))
+
+
+def _session_has_actionable_pending_lead(session: Dict[str, Any], scene_id: str) -> bool:
+    rt = get_scene_runtime(session, scene_id)
+    for p in rt.get("pending_leads") or []:
+        if not isinstance(p, dict):
+            continue
+        if str(p.get("leads_to_scene") or "").strip():
+            return True
+        if str(p.get("leads_to_npc") or "").strip():
+            return True
+        if str(p.get("leads_to_rumor") or "").strip():
+            return True
+    return False
+
+
+def _social_resolution_carries_information(resolution: Dict[str, Any]) -> bool:
+    """True when the social engine surfaced a topic, clue id, or clue strings (same gate as lead landing)."""
+    social = resolution.get("social") if isinstance(resolution.get("social"), dict) else {}
+    if social.get("social_probe_engine_contract"):
+        return True
+    topic = social.get("topic_revealed") if isinstance(social.get("topic_revealed"), dict) else None
+    top_clue_id = str(resolution.get("clue_id") or "").strip()
+    top_texts: List[str] = []
+    for raw in resolution.get("discovered_clues") or []:
+        if isinstance(raw, str) and raw.strip():
+            t = raw.strip()
+            if t not in top_texts:
+                top_texts.append(t)
+    return bool(topic or top_clue_id or top_texts)
+
+
+def _score_exit_for_investigative_lead(ex: Dict[str, Any]) -> int:
+    score = 0
+    wu = ex.get("world_updates_on_transition")
+    if isinstance(wu, dict) and wu:
+        score += 10
+    lab = str(ex.get("label") or "").strip().lower()
+    for kw in _INVESTIGATIVE_EXIT_LABEL_KEYWORDS:
+        if kw in lab:
+            score += 2
+    if lab.startswith("enter ") or lab.startswith("go to ") or lab.startswith("return to "):
+        score -= 4
+    return score
+
+
+def _pick_best_investigative_exit(scene_inner: Dict[str, Any]) -> Dict[str, Any] | None:
+    exits = scene_inner.get("exits") or []
+    if not isinstance(exits, list):
+        return None
+    best: Dict[str, Any] | None = None
+    best_score = 0
+    for ex in exits:
+        if not isinstance(ex, dict):
+            continue
+        tid = str(ex.get("target_scene_id") or ex.get("targetSceneId") or "").strip()
+        if not tid or not is_known_scene_id(tid):
+            continue
+        s = _score_exit_for_investigative_lead(ex)
+        if s > best_score:
+            best_score = s
+            best = ex
+    return best if best_score >= 3 else None
+
+
+def ensure_scene_has_minimum_actionable_lead(
+    *,
+    scene_id: str,
+    session: dict,
+    scene: dict,
+    resolution: dict | None,
+    gm_output: dict | None,
+    world: dict | None = None,
+) -> dict | None:
+    """Safety rail: after a successful, information-bearing social turn, ensure at least one actionable pending lead.
+
+    Uses authored discoverable_clues (priority hooks: milestone, crossroads, guards, crier, …), then investigative
+    exits, then full structured/text extraction. At most one lead per call.
+
+    Debug: ``resolution["metadata"]["minimum_actionable_lead"]`` plus top-level
+    ``minimum_actionable_lead_enforced``, ``enforced_lead_id``, ``enforced_lead_source`` on the same metadata dict.
+    """
+    from game.social import SOCIAL_KINDS
+
+    sid = str(scene_id or "").strip()
+    if not sid or not isinstance(session, dict):
+        return None
+    if not _scene_eligible_for_minimum_actionable_lead(sid, scene if isinstance(scene, dict) else None):
+        return None
+    if not isinstance(resolution, dict):
+        return None
+
+    kind = str(resolution.get("kind") or "").strip().lower()
+    if kind not in SOCIAL_KINDS:
+        return None
+    if resolution.get("success") is False:
+        return None
+    if resolution.get("requires_check"):
+        return None
+    social = resolution.get("social") if isinstance(resolution.get("social"), dict) else {}
+    if social.get("offscene_target"):
+        return None
+    if not social.get("target_resolved", True):
+        return None
+    if not _social_resolution_carries_information(resolution):
+        return None
+    if _session_has_actionable_pending_lead(session, sid):
+        meta = resolution.setdefault("metadata", {})
+        if isinstance(meta, dict):
+            meta["minimum_actionable_lead"] = {
+                "minimum_actionable_lead_enforced": False,
+                "enforced_lead_id": None,
+                "enforced_lead_source": None,
+            }
+            meta["minimum_actionable_lead_enforced"] = False
+            meta["enforced_lead_id"] = None
+            meta["enforced_lead_source"] = None
+        return meta.get("minimum_actionable_lead") if isinstance(meta, dict) else None
+
+    scene_inner = scene.get("scene") if isinstance(scene, dict) and isinstance(scene.get("scene"), dict) else {}
+    w = world if isinstance(world, dict) else {}
+
+    meta = resolution.setdefault("metadata", {})
+    if not isinstance(meta, dict):
+        return None
+
+    def _record(enforced: bool, lead_id: str | None, source: str | None) -> dict[str, Any]:
+        block: Dict[str, Any] = {
+            "minimum_actionable_lead_enforced": enforced,
+            "enforced_lead_id": lead_id,
+            "enforced_lead_source": source,
+        }
+        meta["minimum_actionable_lead"] = block
+        meta["minimum_actionable_lead_enforced"] = enforced
+        meta["enforced_lead_id"] = lead_id
+        meta["enforced_lead_source"] = source
+        return block
+
+    def _apply_single_enforced_lead(lead: Dict[str, Any], *, primary_skip: str | None) -> str | None:
+        _apply_extracted_social_leads(
+            session,
+            sid,
+            w,
+            [lead],
+            actionable_lead_ids=[],
+            lead_write_targets=[],
+            primary_canonical_clue_id=primary_skip,
+        )
+        return str(lead.get("lead_id") or "").strip() or None
+
+    # --- A: authored discoverable_clues (priority hooks, then any pattern match) ---
+    disc_lead = _pick_actionable_lead_from_discoverable_clues(sid, scene_inner)
+    if disc_lead is not None:
+        lid = _apply_single_enforced_lead(disc_lead, primary_skip=None)
+        return _record(True, lid, "discoverable_clue")
+
+    # --- B: best investigative exit ---
+    best_ex = _pick_best_investigative_exit(scene_inner)
+    if best_ex is not None:
+        target = str(best_ex.get("target_scene_id") or best_ex.get("targetSceneId") or "").strip()
+        label = str(best_ex.get("label") or "").strip() or f"Investigate {target}"
+        clue_id = f"minlead_exit_{slugify(sid)}_{slugify(target)}"
+        lead = _public_lead_dict(
+            lead_id=clue_id,
+            kind="scene",
+            label=label[:200],
+            source_scene_id=sid,
+            source_npc_id=None,
+            target_scene_id=target,
+            target_npc_id=None,
+            rumor_text=None,
+            evidence_text=None,
+            extraction_source="author_exit",
+        )
+        _apply_single_enforced_lead(lead, primary_skip=None)
+        return _record(True, clue_id, "exit")
+
+    # --- C: extracted social (topic + resolution + narration) ---
+    eff_id, _p, _m, topic, npc_id, _tid = _effective_social_clue_context(resolution, sid)
+    ptext = ""
+    if isinstance(gm_output, dict):
+        pt = gm_output.get("player_facing_text")
+        if isinstance(pt, str):
+            ptext = pt.strip()
+    extracted = extract_actionable_social_leads(
+        scene_id=sid,
+        npc_id=npc_id or None,
+        topic_payload=topic,
+        social_resolution=resolution,
+        player_facing_text=ptext or None,
+        scene=scene_inner if scene_inner else None,
+        session=session,
+        primary_clue_id=eff_id,
+        extraction_pass="full",
+        narration_text_is_reconciled=bool(ptext),
+    )
+    if extracted:
+        L = extracted[0]
+        lid = _apply_single_enforced_lead(L, primary_skip=eff_id)
+        return _record(True, lid, "extracted_social")
+
+    return _record(False, None, None)
+
+
 def apply_socially_revealed_leads(
     session: Dict[str, Any],
     scene_id: str,
     world: Dict[str, Any],
     resolution: Dict[str, Any],
+    *,
+    player_facing_text: str | None = None,
+    player_facing_text_is_reconciled: bool = False,
+    scene: Dict[str, Any] | None = None,
 ) -> List[str]:
     """Canonical **first** landing for information revealed by the social engine (single entry point).
 
@@ -400,14 +1214,6 @@ def apply_socially_revealed_leads(
             if t not in top_texts:
                 top_texts.append(t)
 
-    topic_text = ""
-    topic_clue_id: str | None = None
-    topic_tid = ""
-    if topic:
-        topic_text = str(topic.get("clue_text") or topic.get("text") or "").strip()
-        topic_clue_id = str(topic.get("clue_id") or topic.get("reveals_clue") or "").strip() or None
-        topic_tid = str(topic.get("id") or "").strip()
-
     has_payload = bool(topic or top_clue_id or top_texts)
     if not has_payload:
         meta = resolution.setdefault("metadata", {})
@@ -417,24 +1223,16 @@ def apply_socially_revealed_leads(
                 "already_known_lead_ids": [],
                 "actionable_lead_ids": [],
                 "lead_write_targets": [],
+                "extracted_lead_ids": [],
+                "extracted_lead_sources": [],
+                "extracted_from_text": False,
+                "extracted_from_reconciled_text": False,
             }
         return []
 
-    merged_texts: List[str] = []
-    if topic_text:
-        merged_texts.append(topic_text)
-    for t in top_texts:
-        if t not in merged_texts:
-            merged_texts.append(t)
-    primary_text = merged_texts[0] if merged_texts else None
-
-    npc_id = str(social.get("npc_id") or "").strip()
-
-    effective_clue_id = top_clue_id or topic_clue_id
-    if not effective_clue_id and topic and npc_id and topic_tid:
-        effective_clue_id = _stable_social_lead_id(scene_id, npc_id, topic_tid)
-    if not effective_clue_id and primary_text:
-        effective_clue_id = _stable_social_text_lead_id(scene_id, npc_id, primary_text)
+    effective_clue_id, primary_text, merged_texts, topic, npc_id, topic_tid = _effective_social_clue_context(
+        resolution, scene_id
+    )
 
     before_ids = get_all_known_clue_ids(session)
     was_id_known = bool(effective_clue_id and effective_clue_id in before_ids)
@@ -448,6 +1246,24 @@ def apply_socially_revealed_leads(
         world=world,
     )
 
+    ext_pass = (
+        "full"
+        if (player_facing_text and isinstance(player_facing_text, str) and player_facing_text.strip())
+        else "topic"
+    )
+    extracted = extract_actionable_social_leads(
+        scene_id=scene_id,
+        npc_id=npc_id or None,
+        topic_payload=topic,
+        social_resolution=resolution,
+        player_facing_text=player_facing_text,
+        scene=scene,
+        session=session,
+        primary_clue_id=effective_clue_id,
+        extraction_pass=ext_pass,
+        narration_text_is_reconciled=bool(player_facing_text_is_reconciled),
+    )
+
     lead_write_targets: List[str] = ["clue_knowledge", "scene_runtime.discovered_clue_ids"]
     revealed_lead_ids: List[str] = []
     already_known_lead_ids: List[str] = []
@@ -459,19 +1275,22 @@ def apply_socially_revealed_leads(
         elif effective_clue_id in get_all_known_clue_ids(session):
             revealed_lead_ids.append(effective_clue_id)
 
-    if topic and effective_clue_id and primary_text:
-        lead: Dict[str, Any] = {"clue_id": effective_clue_id, "text": primary_text}
-        has_dest = False
-        for key in ("leads_to_scene", "leads_to_npc", "leads_to_rumor"):
-            v = topic.get(key)
-            if isinstance(v, str) and v.strip():
-                lead[key] = v.strip()
-                has_dest = True
-        if has_dest:
-            add_pending_lead(session, scene_id, lead)
-            lead_write_targets.append("pending_leads")
-            set_clue_presentation(session, clue_id=effective_clue_id, clue_text=primary_text, level="actionable")
-            actionable_lead_ids.append(effective_clue_id)
+    sup_targets: List[str] = []
+    supplemental_added = _apply_extracted_social_leads(
+        session,
+        scene_id,
+        world,
+        extracted,
+        actionable_lead_ids=actionable_lead_ids,
+        lead_write_targets=sup_targets,
+        primary_canonical_clue_id=effective_clue_id,
+    )
+    for t in sup_targets:
+        if t not in lead_write_targets:
+            lead_write_targets.append(t)
+    for txt in supplemental_added:
+        if txt and txt not in added_texts:
+            added_texts.append(txt)
 
     event_key = effective_clue_id or ""
     logged_ids = session.setdefault("social_lead_event_ids", [])
@@ -497,13 +1316,34 @@ def apply_socially_revealed_leads(
         logged_ids.append(event_key)
         lead_write_targets.append("event_log")
 
+    extracted_from_text_flag = any(
+        str(x.get("extraction_source") or "").startswith("narration")
+        for x in extracted
+        if isinstance(x, dict)
+    )
+    extracted_from_reconciled_text_flag = bool(player_facing_text_is_reconciled) and any(
+        str(x.get("extraction_source") or "").startswith("narration_reconciled")
+        for x in extracted
+        if isinstance(x, dict)
+    )
+    extracted_ids = [str(x["lead_id"]) for x in extracted if isinstance(x, dict) and x.get("lead_id")]
+    extracted_sources = [
+        str(x.get("extraction_source") or "")
+        for x in extracted
+        if isinstance(x, dict) and x.get("extraction_source")
+    ]
+
     meta = resolution.setdefault("metadata", {})
     if isinstance(meta, dict):
         meta["lead_landing"] = {
             "revealed_lead_ids": revealed_lead_ids,
             "already_known_lead_ids": already_known_lead_ids,
-            "actionable_lead_ids": actionable_lead_ids,
+            "actionable_lead_ids": list(dict.fromkeys(actionable_lead_ids)),
             "lead_write_targets": list(dict.fromkeys(lead_write_targets)),
+            "extracted_lead_ids": extracted_ids,
+            "extracted_lead_sources": list(dict.fromkeys(extracted_sources)),
+            "extracted_from_text": extracted_from_text_flag,
+            "extracted_from_reconciled_text": extracted_from_reconciled_text_flag,
         }
 
     return added_texts

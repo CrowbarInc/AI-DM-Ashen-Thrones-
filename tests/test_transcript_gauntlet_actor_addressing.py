@@ -170,7 +170,7 @@ def test_guard_followup_preserves_target(tmp_path, monkeypatch, mock_gpt_chain):
         snaps[1],
         payloads[1],
         expected_target="guard_captain",
-        allowed_sources=("explicit_target", "vocative"),
+        allowed_sources=("explicit_target", "spoken_vocative", "vocative"),
         interlocutor="guard_captain",
         snaps=snaps,
         payloads=payloads,
@@ -207,7 +207,7 @@ def test_generic_guard_address_overrides_runner(tmp_path, monkeypatch, mock_gpt_
         snaps[1],
         payloads[1],
         expected_target="tavern_runner",
-        allowed_sources=("explicit_target", "vocative"),
+        allowed_sources=("explicit_target", "spoken_vocative", "vocative"),
         interlocutor="tavern_runner",
         snaps=snaps,
         payloads=payloads,
@@ -216,7 +216,7 @@ def test_generic_guard_address_overrides_runner(tmp_path, monkeypatch, mock_gpt_
         snaps[2],
         payloads[2],
         expected_target="guard_captain",
-        allowed_sources=("explicit_target", "generic_role", "vocative"),
+        allowed_sources=("explicit_target", "generic_role", "spoken_vocative", "vocative"),
         interlocutor="guard_captain",
         snaps=snaps,
         payloads=payloads,
@@ -243,7 +243,7 @@ def test_generic_runner_address_overrides_guard(tmp_path, monkeypatch, mock_gpt_
         snaps[1],
         payloads[1],
         expected_target="guard_captain",
-        allowed_sources=("explicit_target", "vocative"),
+        allowed_sources=("explicit_target", "spoken_vocative", "vocative"),
         interlocutor="guard_captain",
         snaps=snaps,
         payloads=payloads,
@@ -252,7 +252,7 @@ def test_generic_runner_address_overrides_guard(tmp_path, monkeypatch, mock_gpt_
         snaps[2],
         payloads[2],
         expected_target="tavern_runner",
-        allowed_sources=("explicit_target", "vocative", "generic_role"),
+        allowed_sources=("explicit_target", "spoken_vocative", "vocative", "generic_role"),
         interlocutor="tavern_runner",
         snaps=snaps,
         payloads=payloads,
@@ -276,7 +276,7 @@ def test_generic_stranger_does_not_fall_back_to_guard(tmp_path, monkeypatch, moc
         snaps[2],
         payloads[2],
         expected_target="refugee",
-        allowed_sources=("explicit_target", "vocative", "generic_role"),
+        allowed_sources=("explicit_target", "spoken_vocative", "vocative", "generic_role"),
         interlocutor_not="guard_captain",
         snaps=snaps,
         payloads=payloads,
@@ -318,7 +318,7 @@ def test_explicit_address_never_gets_wiped_by_later_validation(tmp_path, monkeyp
     soc = payloads[1].get("resolution", {}).get("social", {})
     try:
         assert soc.get("npc_id") == "guard_captain", soc
-        assert soc.get("target_source") in ("explicit_target", "vocative"), soc
+        assert soc.get("target_source") in ("explicit_target", "spoken_vocative", "vocative"), soc
         assert soc.get("target_resolved") is True, soc
         assert snaps[1].get("current_interlocutor") == "guard_captain"
         assert latest_target_not_null_after_bind(snaps[1], payloads[1])

@@ -5,8 +5,14 @@ Scene context (exits, interactables, visible_facts) is used for target matching.
 When the parser cannot confidently resolve intent, returns None → GPT fallback.
 
 ``adjudication_question_text`` is syntactic extraction only; whether that clause is treated as
-procedural adjudication vs in-scene dialogue is decided in ``game.interaction_context`` /
+procedural adjudication vs in-scene dialogue is decided by
+:func:`game.interaction_context.resolve_directed_social_entry` (canonical entry) and
 ``game.adjudication``, not here.
+
+Explicit spoken comma vocatives (including discourse-prefixed forms like "Alright Runner, …") are
+resolved by :func:`game.interaction_context.resolve_spoken_vocative_target` using segmented
+``spoken_text`` / merged addressing text — see that module for roster-aware precedence over
+interlocutor continuity.
 """
 from __future__ import annotations
 

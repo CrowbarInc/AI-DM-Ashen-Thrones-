@@ -6,14 +6,17 @@ import copy
 
 import pytest
 
-from game.defaults import default_session, default_world
+from game.defaults import default_character, default_session, default_world
+from game.adjudication import resolve_adjudication_query
 from game.interaction_context import (
     assert_valid_speaker,
     inspect as inspect_interaction_context,
     rebuild_active_scene_entities,
     resolve_authoritative_social_target,
     set_social_target,
+    synchronize_scene_addressability,
 )
+from game.social import resolve_social_action
 from game.social_exchange_emission import build_final_strict_social_response
 from game.storage import load_scene
 
@@ -107,7 +110,7 @@ def test_generic_refugee_address_does_not_fall_back_to_guard(frontier_gate_empty
         f"stranger-address must not snap to prior guard_captain continuity; got {auth!r}"
     )
     assert auth.get("npc_id") == "refugee", auth
-    assert auth.get("source") in ("vocative", "generic_role"), auth
+    assert auth.get("source") in ("spoken_vocative", "vocative", "generic_role"), auth
 
 
 def test_generic_refugee_address_without_refugee_actor_is_unresolved_not_continuity():
@@ -212,3 +215,50 @@ def test_emission_validation_does_not_null_authoritatively_resolved_target():
     assert after_id == before_id == "guard_captain", (
         f"emission path must not clear resolution.social.npc_id; before={before_id!r} after={after_id!r} meta={meta!r}"
     )
+
+
+def test_synchronize_clears_interlocutor_when_target_not_addressable(frontier_gate_empty_world_envelope):
+    session, world, scene = frontier_gate_empty_world_envelope
+    set_social_target(session, "definitely_not_an_npc_id")
+    meta = synchronize_scene_addressability(session, scene, world)
+    assert meta.get("stale_interlocutor_cleared") is True, meta
+    # Rebuild drops unknown ids from active scope and clears continuity; target must not linger.
+    assert not str(inspect_interaction_context(session).get("active_interaction_target_id") or "").strip()
+    st = session.get("scene_state") if isinstance(session.get("scene_state"), dict) else {}
+    assert st.get("current_interlocutor") in (None, "")
+
+
+def test_adjudication_nearby_lists_scene_addressables_with_empty_world_npcs():
+    world: dict = {"npcs": []}
+    session = default_session()
+    session["active_scene_id"] = "frontier_gate"
+    scene = load_scene("frontier_gate")
+    synchronize_scene_addressability(session, scene, world)
+    character = default_character()
+    out = resolve_adjudication_query(
+        "Who is nearby?",
+        scene=scene,
+        session=session,
+        world=world,
+        character=character,
+        has_active_interaction=False,
+    )
+    assert isinstance(out, dict), out
+    text = str(out.get("player_facing_text") or "").lower()
+    assert "no nearby npc presence" not in text, out
+
+
+def test_resolve_social_includes_addressability_debug_metadata(frontier_gate_empty_world_envelope):
+    session, world, scene = frontier_gate_empty_world_envelope
+    normalized_action = {
+        "id": "q-guard",
+        "type": "question",
+        "label": "Ask captain",
+        "prompt": "What is the curfew?",
+        "target_id": "guard_captain",
+    }
+    result = resolve_social_action(scene, session, world, normalized_action, raw_player_text="What is the curfew?")
+    social = result.get("social") if isinstance(result.get("social"), dict) else {}
+    assert "stale_interlocutor_cleared" in social
+    assert "addressability_checked_against" in social
+    assert social.get("actor_addressable") is True

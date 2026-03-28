@@ -76,6 +76,14 @@ def _clean_string(value: Any) -> Optional[str]:
 
 SCENE_ADDRESSABLE_KINDS = frozenset({"npc", "scene_actor", "crowd_actor"})
 
+EmergentActorSource = Literal["emergent_narration", "authored", "promoted_visible_figure"]
+_EMERGENT_ACTOR_SOURCES: Set[str] = {
+    "emergent_narration",
+    "authored",
+    "promoted_visible_figure",
+}
+_EMERGENT_ID_RE = re.compile(r"^[a-z][a-z0-9_]{2,80}$")
+
 
 def _scene_npcs(world: Dict[str, Any], scene_id: str) -> list[Dict[str, Any]]:
     npcs = world.get("npcs") or []
@@ -255,11 +263,507 @@ def _scene_state(session: Dict[str, Any]) -> Dict[str, Any]:
         state["active_entities"] = []
     if not isinstance(state.get("entity_presence"), dict):
         state["entity_presence"] = {}
+    if not isinstance(state.get("emergent_addressables"), list):
+        state["emergent_addressables"] = []
     if "active_scene_id" not in state:
         state["active_scene_id"] = str(session.get("active_scene_id") or "").strip()
     if "current_interlocutor" not in state:
         state["current_interlocutor"] = None
     return state
+
+
+def _clear_emergent_addressables(session: Dict[str, Any]) -> None:
+    st = _scene_state(session)
+    st["emergent_addressables"] = []
+
+
+def enroll_emergent_scene_actor(
+    *,
+    session: dict,
+    scene: dict,
+    actor_hint: dict,
+) -> Optional[str]:
+    """Enroll a single concrete, socially relevant scene figure into the session roster.
+
+    Persists a lightweight addressable row under ``session["scene_state"]["emergent_addressables"]``,
+    rebuilds-friendly via :func:`rebuild_active_scene_entities` and dialogue via
+    :func:`canonical_scene_addressable_roster`. Callers must pass conservative hints only.
+    """
+    if not isinstance(session, dict) or not isinstance(scene, dict) or not isinstance(actor_hint, dict):
+        return None
+    sc = scene.get("scene")
+    if not isinstance(sc, dict):
+        return None
+    sid = _clean_string(sc.get("id"))
+    if not sid:
+        return None
+    hint_sid = _clean_string(actor_hint.get("scene_id"))
+    if hint_sid and hint_sid != sid:
+        return None
+
+    src = str(actor_hint.get("source") or "").strip()
+    if src not in _EMERGENT_ACTOR_SOURCES:
+        return None
+
+    display = _clean_string(actor_hint.get("display_name")) or _clean_string(actor_hint.get("name"))
+    if not display or len(display) > 80 or len(display) < 2:
+        return None
+
+    raw_id = _clean_string(actor_hint.get("actor_id")) or _clean_string(actor_hint.get("id"))
+    eid = ""
+    if raw_id and _EMERGENT_ID_RE.match(raw_id):
+        eid = raw_id
+    else:
+        base = slugify(display)
+        if not base or len(base) < 3:
+            return None
+        eid = f"emergent_{base}"[:80]
+        if not _EMERGENT_ID_RE.match(eid):
+            return None
+
+    addressable = actor_hint.get("addressable")
+    if addressable is not None and not bool(addressable):
+        return None
+
+    from game.storage import load_world
+
+    world = load_world()
+    if not isinstance(world, dict):
+        world = {}
+
+    for npc in effective_in_scene_npc_roster(world, sid):
+        if not isinstance(npc, dict):
+            continue
+        nid = _clean_string(npc.get("id"))
+        if not nid:
+            continue
+        if nid == eid:
+            return None
+        nm = _clean_string(npc.get("name"))
+        if nm and slugify(nm) == slugify(display):
+            return None
+        if slugify(nid) == slugify(display):
+            return None
+
+    for spec in scene_addressables_from_envelope(scene):
+        if not isinstance(spec, dict):
+            continue
+        if str(spec.get("id") or "").strip() == eid:
+            return None
+
+    state = _scene_state(session)
+    emergent: List[Dict[str, Any]] = list(state.get("emergent_addressables") or [])
+    existing_ids = {str(r.get("id") or "").strip() for r in emergent if isinstance(r, dict)}
+    if eid in existing_ids:
+        return eid
+
+    roles_in: Any = actor_hint.get("address_roles")
+    roles: List[str] = []
+    if isinstance(roles_in, list):
+        for r in roles_in:
+            if isinstance(r, str) and r.strip():
+                rl = r.strip().lower()
+                if rl not in roles:
+                    roles.append(rl)
+    aliases_in: Any = actor_hint.get("aliases")
+    aliases: List[str] = []
+    if isinstance(aliases_in, list):
+        for a in aliases_in:
+            if isinstance(a, str) and a.strip() and a.strip() not in aliases:
+                aliases.append(a.strip())
+    low_display = display.strip().lower()
+    if low_display and low_display not in [x.lower() for x in aliases]:
+        aliases.append(display.strip())
+
+    row: Dict[str, Any] = {
+        "id": eid,
+        "name": display.strip(),
+        "scene_id": sid,
+        "address_roles": roles,
+        "aliases": aliases,
+        "kind": "scene_actor",
+        "addressable": True,
+        "address_priority": 40,
+        "emergent_source": src,
+    }
+    hint_role = actor_hint.get("role")
+    if isinstance(hint_role, str) and hint_role.strip():
+        row["role"] = hint_role.strip()
+
+    emergent.append(row)
+    state["emergent_addressables"] = emergent
+
+    active_raw = state.get("active_entities")
+    if isinstance(active_raw, list) and eid not in {str(x).strip() for x in active_raw if isinstance(x, str)}:
+        active_raw = list(active_raw)
+        active_raw.append(eid)
+        state["active_entities"] = active_raw
+    presence = state.get("entity_presence")
+    if isinstance(presence, dict):
+        presence[eid] = "active"
+
+    return eid
+
+
+_TITLED_GIVEN_NAME_RE = re.compile(
+    r"\b(Lord|Lady|Sir|Ser|Dame)\s+([A-Z][a-z]{2,20})\b",
+)
+_WELL_DRESSED_WATCHER_RE = re.compile(r"\b(?:a|the)\s+well[- ]dressed\s+watcher\b", re.IGNORECASE)
+_TOWN_CRIER_RE = re.compile(r"\b(?:a|the)\s+(?:town\s+)?crier\b", re.IGNORECASE)
+_SPOTLIGHT_VERB_RE = re.compile(
+    r"(?i)\b(you\s+notice|your\s+eye\s+catches|you\s+spot|nearby\s+stands|standing\s+nearby\s+is)\b",
+)
+
+
+def _hint_from_titled_name(match: Any, *, source: str, source_text: str) -> Dict[str, Any]:
+    title = match.group(1).strip()
+    given = match.group(2).strip()
+    display = f"{title} {given}"
+    base = slugify(f"{title}_{given}")
+    eid = f"emergent_{base}"[:80]
+    if not _EMERGENT_ID_RE.match(eid):
+        eid = f"emergent_{slugify(given)}"
+    role_slug = slugify(title)
+    roles = [role_slug] if role_slug else []
+    return {
+        "actor_id": eid,
+        "display_name": display,
+        "address_roles": roles,
+        "aliases": [display, given.lower(), f"{title.lower()} {given.lower()}"],
+        "source": source,
+        "scene_id": None,
+        "_source_text": source_text,
+    }
+
+
+def _collect_emergent_hints_from_text(
+    text: str,
+    *,
+    source: EmergentActorSource,
+) -> List[Dict[str, Any]]:
+    if not isinstance(text, str):
+        return []
+    s = text.strip()
+    if len(s) < 12:
+        return []
+    hints: List[Dict[str, Any]] = []
+    seen_slug: Set[str] = set()
+
+    def _add(h: Dict[str, Any]) -> None:
+        eid = str(h.get("actor_id") or "").strip()
+        if not eid:
+            return
+        sl = slugify(eid)
+        if sl in seen_slug:
+            return
+        seen_slug.add(sl)
+        hints.append(h)
+
+    for m in _TITLED_GIVEN_NAME_RE.finditer(s):
+        h = _hint_from_titled_name(m, source=source, source_text=m.group(0).strip())
+        _add(h)
+
+    wm = _WELL_DRESSED_WATCHER_RE.search(s)
+    if wm:
+        verb_ok = bool(_SPOTLIGHT_VERB_RE.search(s)) or source == "promoted_visible_figure"
+        if verb_ok:
+            _add(
+                {
+                    "actor_id": "emergent_well_dressed_watcher",
+                    "display_name": "Well-Dressed Watcher",
+                    "address_roles": ["watcher"],
+                    "aliases": ["well-dressed watcher", "the well-dressed watcher", "watcher"],
+                    "source": source,
+                    "scene_id": None,
+                    "_source_text": wm.group(0).strip(),
+                }
+            )
+
+    cm = _TOWN_CRIER_RE.search(s)
+    if cm:
+        verb_ok = bool(_SPOTLIGHT_VERB_RE.search(s)) or source == "promoted_visible_figure"
+        if verb_ok:
+            _add(
+                {
+                    "actor_id": "emergent_town_crier",
+                    "display_name": "Town Crier",
+                    "address_roles": ["crier", "town crier"],
+                    "aliases": ["town crier", "the town crier", "crier"],
+                    "source": source,
+                    "scene_id": None,
+                    "_source_text": cm.group(0).strip(),
+                }
+            )
+
+    return hints
+
+
+def extract_conservative_emergent_actor_hints(
+    *,
+    scene_id: str,
+    narration_text: Optional[str],
+    visible_fact_strings: Optional[List[str]] = None,
+) -> List[Dict[str, Any]]:
+    """Derive at most a few enrollable actor hints from narration and visible facts (strict heuristics)."""
+    sid = _clean_string(scene_id) or ""
+    if not sid:
+        return []
+    ordered: List[Dict[str, Any]] = []
+    seen: Set[str] = set()
+
+    def _extend(src: EmergentActorSource, chunk: str) -> None:
+        for h in _collect_emergent_hints_from_text(chunk, source=src):
+            eid = str(h.get("actor_id") or "").strip()
+            if not eid or eid in seen:
+                continue
+            seen.add(eid)
+            nh = dict(h)
+            nh["scene_id"] = sid
+            ordered.append(nh)
+            if len(ordered) >= 3:
+                return
+
+    vf = visible_fact_strings if isinstance(visible_fact_strings, list) else []
+    for fact in vf:
+        if isinstance(fact, str) and fact.strip():
+            _extend("promoted_visible_figure", fact.strip())
+            if len(ordered) >= 3:
+                return list(ordered)
+
+    narr = _clean_string(narration_text)
+    if narr:
+        _extend("emergent_narration", narr)
+
+    return ordered
+
+
+def apply_conservative_emergent_enrollment_from_gm_output(
+    *,
+    session: dict,
+    scene: dict,
+    narration_text: Optional[str],
+) -> Dict[str, Any]:
+    """Run detection after GM output; enroll up to a few new figures per call (conservative hints only)."""
+    debug: Dict[str, Any] = {
+        "emergent_actor_enrolled": False,
+        "emergent_actor_id": None,
+        "emergent_actor_source_text": None,
+    }
+    if not isinstance(session, dict) or not isinstance(scene, dict):
+        return debug
+    sc = scene.get("scene")
+    if not isinstance(sc, dict):
+        return debug
+    sid = _clean_string(sc.get("id"))
+    if not sid:
+        return debug
+
+    vf: List[str] = []
+    vis = sc.get("visible_facts")
+    if isinstance(vis, list):
+        vf = [str(x) for x in vis if isinstance(x, str)]
+
+    hints = extract_conservative_emergent_actor_hints(
+        scene_id=sid,
+        narration_text=narration_text,
+        visible_fact_strings=vf,
+    )
+    for raw in hints:
+        src_txt = str(raw.get("_source_text") or "").strip()
+        hint = {k: v for k, v in raw.items() if not (isinstance(k, str) and k.startswith("_"))}
+        enrolled = enroll_emergent_scene_actor(session=session, scene=scene, actor_hint=hint)
+        if enrolled:
+            debug["emergent_actor_enrolled"] = True
+            debug["emergent_actor_id"] = enrolled
+            debug["emergent_actor_source_text"] = src_txt or str(hint.get("display_name") or "")
+    return debug
+def _scene_envelope_for_addressability(
+    session: Dict[str, Any] | None, scene_envelope: Dict[str, Any] | None
+) -> Dict[str, Any]:
+    """Resolve a scene envelope with ``scene`` + ``scene_state`` for addressability checks."""
+    if isinstance(scene_envelope, dict) and isinstance(scene_envelope.get("scene"), dict):
+        return scene_envelope
+    sid = ""
+    if isinstance(session, dict):
+        st = session.get("scene_state")
+        if isinstance(st, dict):
+            sid = _clean_string(st.get("active_scene_id"))
+        if not sid:
+            sid = _clean_string(session.get("active_scene_id"))
+    if sid:
+        from game.storage import load_scene
+
+        return load_scene(sid)
+    return scene_envelope if isinstance(scene_envelope, dict) else {}
+
+
+def scene_addressable_entity_ids_from_envelope(scene_envelope: Dict[str, Any] | None) -> Set[str]:
+    """Ids listed under ``scene.addressables`` with ``addressable`` true (normalized)."""
+    env = scene_envelope if isinstance(scene_envelope, dict) else {}
+    return {
+        str(n.get("id") or "").strip()
+        for n in scene_addressables_from_envelope(env)
+        if isinstance(n, dict) and str(n.get("id") or "").strip()
+    }
+
+
+def addressable_scene_npc_id_universe(
+    session: Dict[str, Any] | None,
+    scene_envelope: Dict[str, Any] | None,
+    world: Dict[str, Any] | None,
+    *,
+    debug_checked: Optional[List[str]] = None,
+) -> Set[str]:
+    """Canonical id set: active_entities ∪ presence(active|nearby) ∪ scene addressables ∪ valid continuity.
+
+    Used for social authority, strict speaker checks, and adjudication presence hints.
+    """
+    out: Set[str] = set()
+    checked: List[str] = []
+    if not isinstance(session, dict):
+        if debug_checked is not None:
+            debug_checked.extend(["(no session)"])
+        return out
+
+    env = _scene_envelope_for_addressability(session, scene_envelope)
+    scene = env.get("scene") if isinstance(env.get("scene"), dict) else {}
+    sid = _clean_string(scene.get("id"))
+    if not sid:
+        st0 = session.get("scene_state")
+        if isinstance(st0, dict):
+            sid = _clean_string(st0.get("active_scene_id")) or _clean_string(session.get("active_scene_id"))
+
+    state = _scene_state(session)
+    active_raw = state.get("active_entities")
+    if isinstance(active_raw, list):
+        for raw in active_raw:
+            if isinstance(raw, str) and raw.strip():
+                out.add(raw.strip())
+    checked.append("active_entities")
+
+    presence = state.get("entity_presence")
+    if isinstance(presence, dict):
+        for pid, pv in presence.items():
+            peid = _clean_string(str(pid))
+            if not peid:
+                continue
+            pv_s = str(pv or "").strip().lower()
+            if pv_s in {"active", "nearby"}:
+                out.add(peid)
+        checked.append("entity_presence_active_or_nearby")
+
+    spec_ids = scene_addressable_entity_ids_from_envelope(env)
+    out.update(spec_ids)
+    checked.append("scene_addressables")
+
+    w = world if isinstance(world, dict) else {}
+    for npc in effective_in_scene_npc_roster(w, sid or ""):
+        if not isinstance(npc, dict):
+            continue
+        nid = _clean_string(npc.get("id"))
+        if nid:
+            out.add(nid)
+    checked.append("world_roster_in_scene")
+
+    ctx = inspect(session)
+    continuity_ids: List[str] = []
+    t_ctx = _clean_string(ctx.get("active_interaction_target_id"))
+    if t_ctx:
+        continuity_ids.append(t_ctx)
+    t_il = _clean_string(state.get("current_interlocutor"))
+    if t_il:
+        continuity_ids.append(t_il)
+    for cid in continuity_ids:
+        if not cid or cid in out:
+            continue
+        if entity_presence_state(session, cid) == "offscene":
+            continue
+        if cid in spec_ids:
+            out.add(cid)
+            continue
+        if isinstance(active_raw, list) and cid in {str(x).strip() for x in active_raw if isinstance(x, str)}:
+            out.add(cid)
+            continue
+        if entity_presence_state(session, cid) in {"active", "nearby"}:
+            out.add(cid)
+            continue
+        for npc in effective_in_scene_npc_roster(w, sid or ""):
+            if isinstance(npc, dict) and _clean_string(npc.get("id")) == cid:
+                out.add(cid)
+                break
+    if continuity_ids:
+        checked.append("interaction_continuity")
+
+    if debug_checked is not None:
+        debug_checked.extend(checked)
+    return out
+
+
+def is_actor_addressable_in_current_scene(
+    session: Dict[str, Any],
+    scene_envelope: Dict[str, Any] | None,
+    actor_id: Optional[str],
+    *,
+    world: Dict[str, Any] | None = None,
+    debug: Optional[Dict[str, Any]] = None,
+) -> bool:
+    """True when *actor_id* is part of the canonical in-scene addressable universe."""
+    eid = _clean_string(actor_id)
+    if not eid:
+        if isinstance(debug, dict):
+            debug["actor_addressable"] = False
+            debug["addressability_checked_against"] = []
+        return False
+
+    checked: List[str] = []
+    universe = addressable_scene_npc_id_universe(session, scene_envelope, world, debug_checked=checked)
+    ok = eid in universe
+    if isinstance(debug, dict):
+        debug["actor_addressable"] = ok
+        debug["addressability_checked_against"] = list(checked)
+    return ok
+
+
+def synchronize_scene_addressability(
+    session: Dict[str, Any],
+    scene_envelope: Optional[Dict[str, Any]],
+    world: Dict[str, Any],
+) -> Dict[str, Any]:
+    """Rebuild active scope, align ``entity_presence`` for scene actors, clear only truly invalid interlocutors."""
+    meta: Dict[str, Any] = {
+        "stale_interlocutor_cleared": False,
+        "addressability_checked_against": [],
+    }
+    env = _scene_envelope_for_addressability(session, scene_envelope)
+    scene = env.get("scene") if isinstance(env.get("scene"), dict) else {}
+    sid = _clean_string(scene.get("id"))
+    if not sid:
+        st = session.get("scene_state") if isinstance(session, dict) else None
+        if isinstance(st, dict):
+            sid = _clean_string(st.get("active_scene_id")) or _clean_string(
+                (session or {}).get("active_scene_id")
+            )
+    if not sid:
+        return meta
+
+    pre_tgt = _clean_string(inspect(session).get("active_interaction_target_id"))
+    rebuild_active_scene_entities(session, world, sid, scene_envelope=env)
+    post_rebuild_tgt = _clean_string(inspect(session).get("active_interaction_target_id"))
+    if pre_tgt and not post_rebuild_tgt:
+        meta["stale_interlocutor_cleared"] = True
+
+    universe = addressable_scene_npc_id_universe(session, env, world, debug_checked=meta["addressability_checked_against"])
+
+    ctx = inspect(session)
+    tgt = _clean_string(ctx.get("active_interaction_target_id"))
+    if tgt and tgt not in universe:
+        clear_for_scene_change(session)
+        meta["stale_interlocutor_cleared"] = True
+    else:
+        st = _scene_state(session)
+        if tgt:
+            st["current_interlocutor"] = tgt
+    return meta
 
 
 def is_entity_active(session: Dict[str, Any], entity_id: Optional[str]) -> bool:
@@ -285,8 +789,15 @@ def entity_presence_state(session: Dict[str, Any], entity_id: Optional[str]) -> 
     return value if value in {"active", "nearby", "offscene", "unknown"} else "unknown"
 
 
-def assert_valid_speaker(candidate: Optional[str], session: Dict[str, Any]) -> bool:
-    return is_entity_active(session, candidate)
+def assert_valid_speaker(
+    candidate: Optional[str],
+    session: Dict[str, Any],
+    *,
+    scene_envelope: Optional[Dict[str, Any]] = None,
+    world: Optional[Dict[str, Any]] = None,
+) -> bool:
+    """True when *candidate* is in the canonical addressable universe (not only ``active_entities``)."""
+    return is_actor_addressable_in_current_scene(session, scene_envelope, candidate, world=world)
 
 
 def rebuild_active_scene_entities(
@@ -310,6 +821,22 @@ def rebuild_active_scene_entities(
         if ent_id not in active_ids:
             active_ids.append(ent_id)
 
+    env = scene_envelope if isinstance(scene_envelope, dict) else {}
+    for ent_id in sorted(scene_addressable_entity_ids_from_envelope(env)):
+        if ent_id not in active_ids:
+            active_ids.append(ent_id)
+
+    st_em = _scene_state(session)
+    for row in st_em.get("emergent_addressables") or []:
+        if not isinstance(row, dict):
+            continue
+        rsid = _clean_string(row.get("scene_id"))
+        if rsid and rsid != sid:
+            continue
+        eid = _clean_string(row.get("id"))
+        if eid and eid not in active_ids:
+            active_ids.append(eid)
+
     presence: Dict[str, str] = {}
     active_set = set(active_ids)
     for npc_id in _all_world_npc_ids(world):
@@ -317,6 +844,10 @@ def rebuild_active_scene_entities(
             presence[npc_id] = "active"
         else:
             presence[npc_id] = "offscene"
+
+    for eid in active_set:
+        if eid not in presence:
+            presence[eid] = "active"
 
     state["active_scene_id"] = sid
     state["active_entities"] = active_ids
@@ -408,6 +939,33 @@ def inspect(session: Dict[str, Any]) -> Dict[str, Any]:
     return _normalize_context(get_interaction_context(session))
 
 
+_TURN_START_ACTIVE_INTERACTION_TARGET_KEY = "__turn_start_active_interaction_target_id"
+
+
+def snapshot_turn_start_interlocutor(session: Dict[str, Any] | None) -> None:
+    """Capture ``active_interaction_target_id`` before turn handlers rebind dialogue (e.g. establish)."""
+    if not isinstance(session, dict):
+        return
+    ctx = inspect(session)
+    tid = str((ctx or {}).get("active_interaction_target_id") or "").strip()
+    session[_TURN_START_ACTIVE_INTERACTION_TARGET_KEY] = tid
+
+
+def clear_turn_start_interlocutor_snapshot(session: Dict[str, Any] | None) -> None:
+    if isinstance(session, dict) and _TURN_START_ACTIVE_INTERACTION_TARGET_KEY in session:
+        del session[_TURN_START_ACTIVE_INTERACTION_TARGET_KEY]
+
+
+def prior_interlocutor_for_turn_metadata(session: Dict[str, Any] | None) -> Optional[str]:
+    """Binding used for continuity override metadata: turn-start snapshot, else live inspect."""
+    if not isinstance(session, dict):
+        return None
+    snap = str(session.get(_TURN_START_ACTIVE_INTERACTION_TARGET_KEY) or "").strip()
+    if snap:
+        return snap
+    return _clean_string(inspect(session).get("active_interaction_target_id"))
+
+
 def set_interaction_mode(session: Dict[str, Any], mode: Optional[str]) -> Dict[str, Any]:
     """Set interaction mode to one of: none, social, activity."""
     ctx = inspect(session)
@@ -437,6 +995,9 @@ def set_social_target(session: Dict[str, Any], target_id: Optional[str]) -> Dict
     ctx["active_interaction_kind"] = "social"
     ctx["interaction_mode"] = "social"
     ctx["engagement_level"] = "engaged"
+    st = _scene_state(session)
+    tid = _clean_string(target_id)
+    st["current_interlocutor"] = tid if tid else None
     return _normalize_context(ctx)
 
 
@@ -453,6 +1014,11 @@ def set_position_context(session: Dict[str, Any], position_context: Optional[str
     ctx = inspect(session)
     ctx["player_position_context"] = _clean_string(position_context)
     return _normalize_context(ctx)
+
+
+def clear_emergent_scene_actors_on_scene_change(session: Dict[str, Any]) -> None:
+    """Drop session-local emergent addressables when the active location changes."""
+    _clear_emergent_addressables(session)
 
 
 def clear_for_scene_change(session: Dict[str, Any]) -> Dict[str, Any]:
@@ -614,6 +1180,8 @@ _WORLD_ACTION_DIALOGUE_BLOCKERS: tuple[str, ...] = (
     r"\b(?:i|we)\s+(?:search|sneak|attack|follow|track|cast|inspect|examine|check|investigate)\b",
     r"\b(?:i|we)\s+(?:grab|seize|shove|push|pull|pin|restrain|force|coerce|threaten)\b",
     r"\b(?:i|we)\s+(?:pick up|open|unlock|break|climb|jump|hide|steal|manipulate)\b",
+    # Imperative exploration verbs (no "I …" prefix) must not hijack interlocutor continuity.
+    r"^\s*(?:investigate|inspect|examine|search)\b",
 )
 
 _HAILING_RE = re.compile(
@@ -679,6 +1247,217 @@ def npc_id_from_vocative_line(text: str, roster: List[Dict[str, Any]]) -> str:
                 if w and w == voc_slug:
                     return nid
     return ""
+
+
+# Discourse-softened spoken vocatives:
+# - ``Well, Captain, …`` — discourse word + comma, then ``Name, …``
+# - ``Alright Runner, …`` — discourse word + space + ``Name, …`` (no comma after discourse)
+_DISCOURSE_VOCATIVE_PREFIX_RE = re.compile(
+    r"^\s*(?:alright|all\s*right|well|ok|okay|look|listen|now\s+then|so|hey)\s*,\s*",
+    re.IGNORECASE,
+)
+_DISCOURSE_SPACE_THEN_NAME_COMMA_RE = re.compile(
+    r"^\s*(?:alright|all\s*right|well|ok|okay|look|listen|now\s+then|so|hey)\s+([^,:\n]{1,64}?)\s*,",
+    re.IGNORECASE,
+)
+
+_VOCATIVE_BAD_LEADING_SLUGS = frozenset(
+    {"i", "we", "me", "us", "the", "a", "an", "my", "your", "it", "its", "this", "that"}
+)
+
+# Spoken label -> generic role slug for roster match (scene-local, ambiguity-aware).
+_VOCATIVE_TOKEN_TO_GENERIC_ROLE: Dict[str, str] = {
+    "captain": "guard",
+    "watchman": "guard",
+    "guardsman": "guard",
+    "guardswoman": "guard",
+    "sentry": "guard",
+    "guard": "guard",
+    "stranger": "stranger",
+    "refugee": "refugee",
+    "runner": "runner",
+}
+
+
+def _is_plausible_spoken_vocative_label(raw: str) -> bool:
+    s = str(raw or "").strip()
+    if len(s) < 2:
+        return False
+    first = s.split(None, 1)[0]
+    if slugify(first) in _VOCATIVE_BAD_LEADING_SLUGS:
+        return False
+    return True
+
+
+def _strip_leading_quotes_for_vocative(s: str) -> str:
+    return re.sub(r'^[\s"\']+', "", str(s or "").strip())
+
+
+def _extract_comma_vocative_phrase_after_discourse(sentence: str) -> Optional[str]:
+    """Return ``Name`` from ``Name, …`` or ``<discourse>, Name, …`` at sentence start."""
+    s = _strip_leading_quotes_for_vocative(str(sentence or ""))
+    if not s:
+        return None
+    m_d = _DISCOURSE_VOCATIVE_PREFIX_RE.match(s)
+    if m_d:
+        s = s[m_d.end() :].lstrip()
+    else:
+        m_sp = _DISCOURSE_SPACE_THEN_NAME_COMMA_RE.match(s)
+        if m_sp:
+            raw = m_sp.group(1).strip()
+            if _is_plausible_spoken_vocative_label(raw):
+                return raw
+            return None
+    m_v = _VOCATIVE_PREFIX_RE.match(s)
+    if not m_v:
+        return None
+    raw = m_v.group(1).strip()
+    if not _is_plausible_spoken_vocative_label(raw):
+        return None
+    return raw
+
+
+def _sentences_for_vocative_scan(text: str) -> List[str]:
+    t = str(text or "").strip()
+    if not t:
+        return []
+    chunks = re.split(r"(?<=[.!?])\s+", t)
+    return [c.strip() for c in chunks if c.strip()]
+
+
+def _resolve_vocative_phrase_to_roster_id(
+    phrase: str,
+    roster: List[Dict[str, Any]],
+    addr_ids: Set[str],
+) -> str:
+    """Map a single vocative name/role phrase to at most one addressable roster id."""
+    phrase = str(phrase or "").strip()
+    if not phrase or not roster:
+        return ""
+    probe = f"{phrase}, "
+    nid = npc_id_from_vocative_line(probe, roster)
+    if nid and nid in addr_ids:
+        return nid
+    sl = slugify(phrase)
+    if not sl:
+        return ""
+    role = _VOCATIVE_TOKEN_TO_GENERIC_ROLE.get(sl)
+    if role:
+        gr = match_generic_role_address(f"to the {role}", roster)
+        if gr.get("ambiguous"):
+            return ""
+        gid = str(gr.get("npc_id") or "").strip()
+        if gid and gid in addr_ids:
+            return gid
+    return ""
+
+
+def _text_for_spoken_vocative_scan(
+    segmented_turn: Dict[str, Any] | None,
+    merged_addressing_text: str,
+) -> str:
+    """Prefer quoted ``spoken_text``, else declared clause, else merged addressing text."""
+    if isinstance(segmented_turn, dict):
+        st = _clean_string(segmented_turn.get("spoken_text"))
+        if st:
+            return st
+        decl_only = _clean_string(segmented_turn.get("declared_action_text"))
+        if decl_only:
+            return decl_only
+    return str(merged_addressing_text or "").strip()
+
+
+def resolve_spoken_vocative_target(
+    *,
+    session: dict,
+    scene: dict | None,
+    spoken_text: str | None,
+) -> dict:
+    """Resolve an explicit spoken comma vocative (optionally discourse-prefixed) against the scene roster.
+
+    Callers should pass in-character addressing text: quoted ``spoken_text`` when segmented, otherwise
+    merged declared/spoken addressing text so unquoted lines like ``Alright Runner, …`` are visible.
+
+    Returns:
+        has_spoken_vocative, target_actor_id, target_source (``spoken_vocative`` when matched), reason.
+    """
+    out: Dict[str, Any] = {
+        "has_spoken_vocative": False,
+        "target_actor_id": None,
+        "target_source": None,
+        "reason": "",
+    }
+    raw = str(spoken_text or "").strip()
+    if not raw:
+        out["reason"] = "empty_spoken_text"
+        return out
+    if not isinstance(session, dict):
+        out["reason"] = "no_session"
+        return out
+    env = scene if isinstance(scene, dict) else {}
+    sc = env.get("scene")
+    if not isinstance(sc, dict):
+        out["reason"] = "no_scene_envelope"
+        return out
+    sid = _clean_string(sc.get("id"))
+    if not sid:
+        st = session.get("scene_state")
+        if isinstance(st, dict):
+            sid = _clean_string(st.get("active_scene_id")) or _clean_string(session.get("active_scene_id"))
+    if not sid:
+        out["reason"] = "empty_scene_id"
+        return out
+
+    from game.storage import load_world
+
+    world = load_world()
+    if not isinstance(world, dict):
+        world = {}
+
+    roster = canonical_scene_addressable_roster(
+        world, sid, scene_envelope=env, session=session
+    )
+    universe = addressable_scene_npc_id_universe(session, env, world)
+    addr_ids = universe | scene_addressable_actor_ids(world, sid, scene_envelope=env, session=session)
+
+    sents = _sentences_for_vocative_scan(raw)
+    scan_order = list(reversed(sents)) if sents else [raw]
+    best_id = ""
+    best_reason = "no_spoken_vocative_pattern_or_no_roster_match"
+    for sent in scan_order:
+        phrase = _extract_comma_vocative_phrase_after_discourse(sent)
+        if not phrase:
+            continue
+        nid = _resolve_vocative_phrase_to_roster_id(phrase, roster, addr_ids)
+        if nid:
+            best_id = nid
+            best_reason = "spoken_vocative_resolved_to_addressable_actor"
+            break
+    if not best_id:
+        out["reason"] = best_reason
+        return out
+    if not is_actor_addressable_in_current_scene(session, env, best_id, world=world):
+        out["reason"] = "spoken_vocative_target_not_addressable_in_scene"
+        return out
+    out["has_spoken_vocative"] = True
+    out["target_actor_id"] = best_id
+    out["target_source"] = "spoken_vocative"
+    out["reason"] = best_reason
+    return out
+
+
+def _merged_text_has_resolvable_spoken_vocative(merged_text: str, roster: List[Dict[str, Any]]) -> bool:
+    """Roster-only cue for explicit spoken address (softened or per-sentence), without session/world."""
+    if not roster:
+        return False
+    addr_ids = {str(x.get("id") or "").strip() for x in roster if isinstance(x, dict) and str(x.get("id") or "").strip()}
+    for sent in reversed(_sentences_for_vocative_scan(str(merged_text or "").strip()) or [str(merged_text or "").strip()]):
+        phrase = _extract_comma_vocative_phrase_after_discourse(sent)
+        if not phrase:
+            continue
+        if _resolve_vocative_phrase_to_roster_id(phrase, roster, addr_ids):
+            return True
+    return False
 
 
 def npc_id_from_substring_line(text: str, roster: List[Dict[str, Any]]) -> str:
@@ -844,6 +1623,23 @@ def canonical_scene_addressable_roster(
         if eid:
             spec_by_id[eid] = s
 
+    emergent_by_id: Dict[str, Dict[str, Any]] = {}
+    if isinstance(session, dict):
+        st = session.get("scene_state")
+        if isinstance(st, dict):
+            active_sid = str(st.get("active_scene_id") or "").strip()
+            if (not sid or not active_sid or active_sid == sid):
+                for row in st.get("emergent_addressables") or []:
+                    if not isinstance(row, dict):
+                        continue
+                    eid = str(row.get("id") or "").strip()
+                    rsid = _clean_string(row.get("scene_id"))
+                    if not eid or (rsid and rsid != sid):
+                        continue
+                    norm = _normalize_scene_addressable_actor(row, sid)
+                    if norm and norm.get("addressable", True):
+                        emergent_by_id[eid] = norm
+
     base = npc_roster_for_dialogue_addressing(
         world or {},
         sid,
@@ -870,12 +1666,18 @@ def canonical_scene_addressable_roster(
         nid = str(row.get("id") or "").strip()
         if nid and nid in spec_by_id:
             row = _merge_addressable_spec_onto_row(row, spec_by_id[nid])
+        if nid and nid in emergent_by_id:
+            row = _merge_addressable_spec_onto_row(row, emergent_by_id[nid])
         _put(row)
 
     for s in specs:
         nid = str(s.get("id") or "").strip()
         if nid and nid not in acc:
             _put(dict(s))
+
+    for eid, em in emergent_by_id.items():
+        if eid not in acc:
+            _put(dict(em))
 
     seen_ids = set(acc.keys())
     if isinstance(session, dict):
@@ -889,13 +1691,21 @@ def canonical_scene_addressable_roster(
                         continue
                     npc = npc_dict_by_id(world, eid)
                     spec = spec_by_id.get(eid)
+                    em = emergent_by_id.get(eid)
                     if npc:
                         row = dict(npc)
                         if spec:
                             row = _merge_addressable_spec_onto_row(row, spec)
+                        if em:
+                            row = _merge_addressable_spec_onto_row(row, em)
                         _put(row)
                     elif spec:
-                        _put(dict(spec))
+                        row = dict(spec)
+                        if em:
+                            row = _merge_addressable_spec_onto_row(row, em)
+                        _put(row)
+                    elif em:
+                        _put(dict(em))
                     else:
                         _put({"id": eid, "name": eid.replace("_", " ").title()})
                     seen_ids.add(eid)
@@ -955,6 +1765,8 @@ def _display_name_for_npc_entry(npc: Dict[str, Any] | None, npc_id: str) -> Opti
 
 AuthoritativeSocialSource = Literal[
     "explicit_target",
+    "declared_action",
+    "spoken_vocative",
     "vocative",
     "generic_role",
     "continuity",
@@ -974,11 +1786,13 @@ def resolve_authoritative_social_target(
     scene_envelope: Dict[str, Any] | None = None,
     merged_player_prompt: str | None = None,
     allow_first_roster_fallback: bool = False,
+    segmented_turn: Dict[str, Any] | None = None,
 ) -> Dict[str, Any]:
     """Single precedence-ordered resolver for who the player is addressing in-scene.
 
-    Precedence: explicit normalized target → comma vocative / directed name → generic role
-    → active interaction continuity → conservative substring → optional first roster → none.
+    Precedence: explicit normalized target → declared-action actor switch → spoken vocative
+    (comma / discourse-prefixed, roster-aware) → comma vocative / directed name → generic role →
+    active interaction continuity → conservative substring → optional first roster → none.
 
     Owns: final ``npc_id`` / ``npc_name`` for engine social resolution and strict-social emission
     alignment. Downstream narration may paraphrase; it must not substitute a different NPC id.
@@ -988,6 +1802,16 @@ def resolve_authoritative_social_target(
     """
     sid = _clean_string(scene_id) or ""
     w = world if isinstance(world, dict) else {}
+
+    line_raw = _clean_string(merged_player_prompt) or _clean_string(player_text) or ""
+    p_voc = str(line_raw).strip()
+    low = line_raw.lower()
+    prior_interlocutor: Optional[str] = prior_interlocutor_for_turn_metadata(
+        session if isinstance(session, dict) else None
+    )
+
+    decl_sw: Dict[str, Any] = {}
+    voc_res: Dict[str, Any] = {}
 
     def _result(
         npc_id: Optional[str],
@@ -1001,6 +1825,7 @@ def resolve_authoritative_social_target(
     ) -> Dict[str, Any]:
         nid = _clean_string(npc_id)
         nm = _clean_string(npc_name)
+        vr = voc_res if isinstance(voc_res, dict) else {}
         out: Dict[str, Any] = {
             "npc_id": nid,
             "npc_name": nm,
@@ -1011,6 +1836,43 @@ def resolve_authoritative_social_target(
         }
         if generic_role_rebind is not None:
             out["generic_role_rebind"] = generic_role_rebind
+        out["declared_switch_detected"] = bool(decl_sw.get("has_declared_switch"))
+        out["declared_switch_target_actor_id"] = (
+            decl_sw.get("target_actor_id") if decl_sw.get("has_declared_switch") else None
+        )
+        decl_tid = _clean_string(decl_sw.get("target_actor_id")) if decl_sw.get("has_declared_switch") else ""
+        out["continuity_overridden_by_declared_switch"] = bool(
+            prior_interlocutor
+            and nid
+            and prior_interlocutor != nid
+            and (
+                source == "declared_action"
+                or (
+                    source == "explicit_target"
+                    and decl_tid
+                    and decl_tid == nid
+                )
+            )
+        )
+        out["spoken_vocative_detected"] = bool(vr.get("has_spoken_vocative"))
+        out["spoken_vocative_target_actor_id"] = (
+            vr.get("target_actor_id") if vr.get("has_spoken_vocative") else None
+        )
+        voc_tid = str(vr.get("target_actor_id") or "").strip()
+        out["continuity_overridden_by_spoken_vocative"] = bool(
+            prior_interlocutor
+            and nid
+            and prior_interlocutor != nid
+            and (
+                source == "spoken_vocative"
+                or (
+                    source == "explicit_target"
+                    and vr.get("has_spoken_vocative")
+                    and voc_tid
+                    and voc_tid == nid
+                )
+            )
+        )
         return out
 
     if not sid:
@@ -1026,19 +1888,50 @@ def resolve_authoritative_social_target(
     roster = canonical_scene_addressable_roster(
         w, sid, scene_envelope=scene_envelope, session=session if isinstance(session, dict) else None
     )
-    addr_ids = scene_addressable_actor_ids(
+    universe = addressable_scene_npc_id_universe(
+        session if isinstance(session, dict) else None,
+        scene_envelope,
+        w,
+    )
+    seen_roster = {str(x.get("id") or "").strip() for x in roster if isinstance(x, dict)}
+    env_for_specs = scene_envelope if isinstance(scene_envelope, dict) else {}
+    addr_specs = {str(s.get("id") or "").strip(): s for s in scene_addressables_from_envelope(env_for_specs) if isinstance(s, dict)}
+    for uid in sorted(universe):
+        if not uid or uid in seen_roster:
+            continue
+        seen_roster.add(uid)
+        n = npc_dict_by_id(w, uid)
+        if isinstance(n, dict):
+            roster.append(dict(n))
+            continue
+        spec = addr_specs.get(uid)
+        if isinstance(spec, dict):
+            roster.append(dict(spec))
+        else:
+            roster.append({"id": uid, "name": _display_name_for_npc_entry(None, uid) or uid})
+
+    addr_ids = universe | scene_addressable_actor_ids(
         w, sid, scene_envelope=scene_envelope, session=session if isinstance(session, dict) else None
+    )
+
+    decl_sw = resolve_declared_actor_switch(
+        session=session if isinstance(session, dict) else {},
+        scene=scene_envelope if isinstance(scene_envelope, dict) else {},
+        segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+        raw_text=line_raw,
+    )
+    voc_scan = _text_for_spoken_vocative_scan(
+        segmented_turn if isinstance(segmented_turn, dict) else None,
+        line_raw,
+    )
+    voc_res = resolve_spoken_vocative_target(
+        session=session if isinstance(session, dict) else {},
+        scene=scene_envelope if isinstance(scene_envelope, dict) else None,
+        spoken_text=voc_scan,
     )
 
     na = normalized_action if isinstance(normalized_action, dict) else {}
     explicit = _clean_string(na.get("target_id")) or _clean_string(na.get("targetEntityId"))
-
-    line_raw = _clean_string(merged_player_prompt) or _clean_string(player_text) or ""
-    p_voc = str(line_raw).strip()
-    low = line_raw.lower()
-    prior_interlocutor: Optional[str] = None
-    if isinstance(session, dict):
-        prior_interlocutor = _clean_string(inspect(session).get("active_interaction_target_id"))
 
     # --- A. Explicit normalized target_id / targetEntityId ---
     if explicit:
@@ -1091,7 +1984,37 @@ def resolve_authoritative_social_target(
             )
         # Unrecognized explicit hint: fall through to text-based resolution.
 
-    # --- B. Comma vocative or leading/directed named address (roster then world) ---
+    # --- B. Declared-action actor switch (segmented declared clause beats continuity) ---
+    decl_id = _clean_string(decl_sw.get("target_actor_id")) if decl_sw.get("has_declared_switch") else ""
+    if decl_id and decl_id in addr_ids:
+        npc = npc_dict_by_id(w, decl_id) or next(
+            (x for x in roster if str(x.get("id") or "").strip() == decl_id), None
+        )
+        return _result(
+            decl_id,
+            _display_name_for_npc_entry(npc if isinstance(npc, dict) else None, decl_id),
+            target_resolved=True,
+            offscene_target=False,
+            source="declared_action",
+            reason="declared_action_phrase_resolved_before_vocative_or_continuity",
+        )
+
+    # --- B2. Spoken vocative (discourse-prefixed or late-sentence comma address; beats continuity) ---
+    voc_tid = _clean_string(voc_res.get("target_actor_id")) if voc_res.get("has_spoken_vocative") else ""
+    if voc_tid and voc_tid in addr_ids:
+        npc = npc_dict_by_id(w, voc_tid) or next(
+            (x for x in roster if str(x.get("id") or "").strip() == voc_tid), None
+        )
+        return _result(
+            voc_tid,
+            _display_name_for_npc_entry(npc if isinstance(npc, dict) else None, voc_tid),
+            target_resolved=True,
+            offscene_target=False,
+            source="spoken_vocative",
+            reason=str(voc_res.get("reason") or "spoken_vocative_resolved_to_addressable_actor"),
+        )
+
+    # --- C. Comma vocative or leading/directed named address (roster then world) ---
     if p_voc:
         voc = npc_id_from_vocative_line(p_voc, roster)
         if voc and voc in addr_ids:
@@ -1139,7 +2062,7 @@ def resolve_authoritative_social_target(
                     reason="leading or directed named address matched roster",
                 )
 
-    # --- C. Explicit generic role address ---
+    # --- D. Explicit generic role address ---
     if low and roster:
         gr = match_generic_role_address(low, roster)
         if gr.get("ambiguous"):
@@ -1152,6 +2075,23 @@ def resolve_authoritative_social_target(
                 reason="ambiguous generic role address among scene addressables",
             )
         gen = str(gr.get("npc_id") or "").strip()
+        if not gen and prior_interlocutor:
+            spoken_slug = _last_spoken_generic_role_slug(low)
+            norm_spoken = _normalize_spoken_generic_role_slug(spoken_slug)
+            if norm_spoken == "guard":
+                guard_hits = [
+                    str(n.get("id") or "").strip()
+                    for n in roster
+                    if isinstance(n, dict) and _npc_matches_normalized_generic_role(n, "guard")
+                ]
+                guard_hits = [g for g in guard_hits if g and g in addr_ids]
+                if len(guard_hits) == 1:
+                    gen = guard_hits[0]
+                    gr = {
+                        "npc_id": gen,
+                        "matched_role": spoken_slug or norm_spoken,
+                        "ambiguous": False,
+                    }
         if gen and gen in addr_ids:
             npc = next((x for x in roster if str(x.get("id") or "").strip() == gen), None)
             rebind_meta = {
@@ -1180,7 +2120,7 @@ def resolve_authoritative_social_target(
                 reason="generic role address had no matching scene actor",
             )
 
-    # --- D. Active interaction continuity ---
+    # --- E. Active interaction continuity ---
     if isinstance(session, dict):
         ctx = inspect(session)
         active = _clean_string(ctx.get("active_interaction_target_id"))
@@ -1197,7 +2137,7 @@ def resolve_authoritative_social_target(
                 reason="active_interaction_target_id is scene-addressable",
             )
 
-    # --- E. Conservative substring / name overlap ---
+    # --- F. Conservative substring / name overlap ---
     if line_raw and roster:
         sub = npc_id_from_substring_line(line_raw, roster)
         if sub and sub in addr_ids:
@@ -1211,7 +2151,7 @@ def resolve_authoritative_social_target(
                 reason="conservative slug substring matched one roster NPC",
             )
 
-    # --- F. First roster (strict-social emission fallback only) ---
+    # --- G. First roster (strict-social emission fallback only) ---
     if allow_first_roster_fallback and roster:
         first = str(roster[0].get("id") or "").strip()
         if first:
@@ -1483,6 +2423,13 @@ def find_addressed_npc_id_for_turn(
         if scene_id else []
     )
 
+    if roster_canon and isinstance(scene, dict):
+        voc_res = resolve_spoken_vocative_target(session=session, scene=scene, spoken_text=p)
+        if voc_res.get("has_spoken_vocative") and voc_res.get("target_actor_id"):
+            vt = str(voc_res["target_actor_id"]).strip()
+            if vt and is_actor_addressable_in_current_scene(session, scene, vt, world=w):
+                return vt
+
     # Highest priority: comma vocative. Canonical roster includes scene addressables; then any world NPC.
     if roster_canon:
         v_loc = npc_id_from_vocative_line(p, roster_canon)
@@ -1530,7 +2477,7 @@ def find_addressed_npc_id_for_turn(
                 return npc_id
 
     if active_target_id and re.search(r"\b(you|your|him|her|them)\b", low):
-        if assert_valid_speaker(active_target_id, session):
+        if assert_valid_speaker(active_target_id, session, scene_envelope=envelope, world=w):
             return active_target_id
 
     world_ref = find_world_npc_reference_id_in_text(str(text or ""), world)
@@ -1553,18 +2500,39 @@ def resolve_dialogue_lock_action_target_id(
 ) -> Optional[str]:
     """Hint ``target_id`` for dialogue-lane structured actions (see :func:`game.api._build_dialogue_first_action`).
 
-    Precedence matches the historical API behavior: addressed line → world name/id mention → active
-    interlocutor (when valid) → sole present NPC. This does **not** replace
+    Precedence matches the historical API behavior: declared-action switch → addressed line → world
+    name/id mention → active interlocutor (when valid) → sole present NPC. This does **not** replace
     :func:`resolve_authoritative_social_target`, which owns the final NPC at social resolution time;
     emission and validation must not pick a different NPC afterward.
     """
+    from game.intent_parser import segment_mixed_player_turn
+
+    seg = segment_mixed_player_turn(player_text)
+    decl = resolve_declared_actor_switch(
+        session=session,
+        scene=scene,
+        segmented_turn=seg,
+        raw_text=player_text,
+    )
+    if decl.get("has_declared_switch") and decl.get("target_actor_id"):
+        tid0 = str(decl["target_actor_id"]).strip()
+        if tid0 and is_actor_addressable_in_current_scene(session, scene, tid0, world=world):
+            return tid0
+
+    voc_scan = _text_for_spoken_vocative_scan(seg, merge_turn_segments_for_directed_social_entry(seg, player_text))
+    voc = resolve_spoken_vocative_target(session=session, scene=scene, spoken_text=voc_scan)
+    if voc.get("has_spoken_vocative") and voc.get("target_actor_id"):
+        tid1 = str(voc["target_actor_id"]).strip()
+        if tid1 and is_actor_addressable_in_current_scene(session, scene, tid1, world=world):
+            return tid1
+
     target_id = find_addressed_npc_id_for_turn(player_text, session, world, scene)
     if not target_id:
         target_id = find_world_npc_reference_id_in_text(player_text, world)
     if not target_id:
         interaction = inspect(session)
         active_target_id = str(interaction.get("active_interaction_target_id") or "").strip()
-        if active_target_id and is_entity_active(session, active_target_id):
+        if active_target_id and assert_valid_speaker(active_target_id, session, scene_envelope=scene, world=world):
             target_id = active_target_id
     if not target_id:
         scene_npcs = scene_npcs_in_active_scene(scene, world)
@@ -1660,6 +2628,639 @@ def _looks_like_information_seeking_player_question(text: str) -> bool:
     return bool(re.search(r"\b(who|what|where|when|why|how|which|tell me|do you know)\b", low))
 
 
+def _line_marked_explicit_ooc(text: str) -> bool:
+    """True for explicit player-to-GM / table-talk markers (mirrors api dialogue lock)."""
+    low = str(text or "").strip().lower()
+    if not low:
+        return False
+    patterns = (
+        r"\booc\b",
+        r"\bout of character\b",
+        r"\bas a player\b",
+        r"^\s*\(\(",
+    )
+    return any(re.search(pattern, low) for pattern in patterns)
+
+
+def _line_marked_mechanical_table_talk(text: str) -> bool:
+    low = str(text or "").strip().lower()
+    if not low:
+        return False
+    return bool(re.match(r"^\s*mechanically\b", low) or re.match(r"^\s*rules[- ]?wise\b", low))
+
+
+_SCENE_PRESENCE_OR_SCOPE_QUERY_RE = re.compile(
+    r"\b(?:earshot|who\s+can\s+hear|in\s+range|is\s+anyone\s+else|who\s+is\s+here)\b",
+    re.IGNORECASE,
+)
+
+
+def _text_for_declared_actor_switch_scan(
+    segmented_turn: Dict[str, Any] | None,
+    raw_text: str,
+) -> str:
+    """Prefer syntactic declared-action clause; else full raw (unsegmented turns)."""
+    if isinstance(segmented_turn, dict):
+        decl = _clean_string(segmented_turn.get("declared_action_text"))
+        if decl:
+            return decl
+    return str(raw_text or "").strip()
+
+
+_DECLARED_SWITCH_TARGET_CAPTURE = (
+    # turns to speak with a nearby refugee / turn to speak to the guard
+    re.compile(
+        r"\bturns?\s+to\s+speak\s+(?:with|to)\s+(.+?)(?=\.|\"|\?|$)",
+        re.IGNORECASE,
+    ),
+    # approaches the guard / approach a nearby refugee
+    re.compile(
+        r"\bapproaches?\s+(.+?)(?=\.|\"|\?|$)",
+        re.IGNORECASE,
+    ),
+    # turns to the captain / turn toward the watcher (not "turns to speak …")
+    re.compile(
+        r"\bturns?\s+(?:to|toward|towards)\s+(?!speak\b)(.+?)(?=\.|\"|\?|$)",
+        re.IGNORECASE,
+    ),
+    # speak with Lord Aldric / speaks to the refugee
+    re.compile(
+        r"\bspeaks?\s+(?:with|to)\s+(.+?)(?=\.|\"|\?|$)",
+        re.IGNORECASE,
+    ),
+    # addresses the watcher
+    re.compile(
+        r"\baddresses\s+(.+?)(?=\.|\"|\?|$)",
+        re.IGNORECASE,
+    ),
+)
+
+
+def _strip_leading_articles_and_proximity(low: str) -> str:
+    s = str(low or "").strip().lower()
+    s = re.sub(r"^(?:the|a|an)\s+", "", s)
+    s = re.sub(r"^nearby\s+", "", s)
+    return s.strip()
+
+
+def _resolve_social_address_phrase_to_roster_id(
+    phrase: str,
+    roster: List[Dict[str, Any]],
+    addr_ids: Set[str],
+) -> str:
+    """Map a declared noun phrase to at most one scene-addressable roster id."""
+    raw = str(phrase or "").strip()
+    if not raw:
+        return ""
+    low = raw.lower().strip()
+    low = re.sub(r"[.,;:!?]+$", "", low).strip()
+    if not low:
+        return ""
+
+    rest = _strip_leading_articles_and_proximity(low)
+    if not rest:
+        return ""
+
+    syn_to = f"to the {rest}"
+    gr = match_generic_role_address(syn_to, roster)
+    if not gr.get("ambiguous"):
+        nid = str(gr.get("npc_id") or "").strip()
+        if nid and nid in addr_ids:
+            return nid
+
+    for probe in (syn_to, f"to {rest}", f"at {rest}", rest):
+        lead = _explicit_addressed_npc_id_leading_or_directed(probe, roster)
+        if lead and lead in addr_ids:
+            return lead
+
+    voc = npc_id_from_vocative_line(f"{raw}, tell me", roster)
+    if voc and voc in addr_ids:
+        return voc
+
+    best_id = ""
+    best_len = 0
+    for npc in roster:
+        if not isinstance(npc, dict):
+            continue
+        nid = str(npc.get("id") or "").strip()
+        if not nid or nid not in addr_ids:
+            continue
+        for ref in extract_npc_reference_tokens(npc):
+            if len(ref) < 3:
+                continue
+            if re.search(rf"\b{re.escape(ref)}\b", low):
+                if len(ref) > best_len:
+                    best_len = len(ref)
+                    best_id = nid
+    return best_id
+
+
+def resolve_declared_actor_switch(
+    *,
+    session: dict,
+    scene: dict | None,
+    segmented_turn: dict | None,
+    raw_text: str,
+) -> dict:
+    """Detect a player-authored *declared* redirection to a new addressee (beats interlocutor continuity).
+
+    Scans :func:`game.intent_parser.segment_mixed_player_turn` ``declared_action_text`` when present,
+    else *raw_text*. Resolves against :func:`canonical_scene_addressable_roster` (roles, aliases, names).
+    """
+    out: Dict[str, Any] = {
+        "has_declared_switch": False,
+        "target_actor_id": None,
+        "target_source": None,
+        "reason": "",
+    }
+    scan = _text_for_declared_actor_switch_scan(
+        segmented_turn if isinstance(segmented_turn, dict) else None,
+        str(raw_text or ""),
+    )
+    if not scan.strip():
+        out["reason"] = "empty_scan_text"
+        return out
+
+    if not isinstance(session, dict):
+        out["reason"] = "no_session"
+        return out
+
+    env = scene if isinstance(scene, dict) else {}
+    sc = env.get("scene")
+    if not isinstance(sc, dict):
+        out["reason"] = "no_scene_envelope"
+        return out
+    sid = _clean_string(sc.get("id"))
+    if not sid:
+        st = session.get("scene_state")
+        if isinstance(st, dict):
+            sid = _clean_string(st.get("active_scene_id")) or _clean_string(session.get("active_scene_id"))
+    if not sid:
+        out["reason"] = "empty_scene_id"
+        return out
+
+    from game.storage import load_world
+
+    world = load_world()
+    if not isinstance(world, dict):
+        world = {}
+
+    roster = canonical_scene_addressable_roster(
+        world, sid, scene_envelope=env, session=session
+    )
+    universe = addressable_scene_npc_id_universe(session, env, world)
+    addr_ids = universe | scene_addressable_actor_ids(world, sid, scene_envelope=env, session=session)
+
+    low_scan = scan.lower()
+    best_end = -1
+    best_phrase = ""
+    for pat in _DECLARED_SWITCH_TARGET_CAPTURE:
+        for m in pat.finditer(low_scan):
+            ph = _clean_string(m.group(1))
+            if not ph:
+                continue
+            if m.end() > best_end:
+                best_end = m.end()
+                best_phrase = ph
+
+    if not best_phrase:
+        out["reason"] = "no_declared_motion_or_address_pattern"
+        return out
+
+    nid = _resolve_social_address_phrase_to_roster_id(best_phrase, roster, addr_ids)
+    if not nid:
+        out["reason"] = "declared_phrase_did_not_resolve_to_addressable_actor"
+        return out
+
+    out["has_declared_switch"] = True
+    out["target_actor_id"] = nid
+    out["target_source"] = "declared_action"
+    out["reason"] = "declared_action_phrase_resolved_to_scene_addressable_actor"
+    return out
+
+
+def merge_turn_segments_for_directed_social_entry(
+    segmented_turn: Dict[str, Any] | None,
+    raw_text: str,
+) -> str:
+    """Join declared/spoken/observation segments for addressing — excludes adjudication clauses."""
+    if not isinstance(segmented_turn, dict):
+        return str(raw_text or "").strip()
+    ordered_keys = (
+        "declared_action_text",
+        "spoken_text",
+        "observation_intent_text",
+    )
+    parts: List[str] = []
+    seen: Set[str] = set()
+    for key in ordered_keys:
+        raw = segmented_turn.get(key)
+        if not isinstance(raw, str):
+            continue
+        s = raw.strip()
+        if not s or s in seen:
+            continue
+        parts.append(s)
+        seen.add(s)
+    return " ".join(parts) if parts else str(raw_text or "").strip()
+
+
+# Phrases for interlocutor follow-up vs new addressee (mirrors api dialogue lock).
+_AMBIGUOUS_DIALOGUE_FOLLOWUP_PHRASES_IC: tuple[str, ...] = (
+    "what should i do next",
+    "what's the next step",
+    "what is the next step",
+    "where does this lead",
+    "where does this go",
+    "what now",
+)
+
+_DIALOGUE_SPEECH_MARKERS_IC: tuple[str, ...] = (
+    "say ",
+    "tell ",
+    "ask ",
+    "reply ",
+    "answer ",
+    "shout ",
+    "whisper ",
+    "mutter ",
+    "call out",
+    "speak ",
+)
+
+
+def _npc_id_from_directed_motion_or_ask_phrases(low: str, roster: List[Dict[str, Any]]) -> str:
+    """Resolve ``approach|turn to|ask …`` style phrases to a roster NPC id (longest ref wins)."""
+    if not low.strip() or not roster:
+        return ""
+    best_id = ""
+    best_len = -1
+    for npc in roster:
+        if not isinstance(npc, dict):
+            continue
+        nid = str(npc.get("id") or "").strip()
+        if not nid:
+            continue
+        refs = sorted(extract_npc_reference_tokens(npc), key=len, reverse=True)
+        for ref in refs:
+            if len(ref) < 3:
+                continue
+            esc = re.escape(ref)
+            patterns = (
+                rf"\bapproach(?:es|ing)?\s+(?:the\s+|a\s+|an\s+)?(?:nearby\s+)?{esc}\b",
+                rf"\bapproaching\s+(?:the\s+|a\s+|an\s+)?(?:nearby\s+)?{esc}\b",
+                rf"\bturns?\s+to\s+(?:the\s+)?{esc}\b",
+                rf"\bturns?\s+towards?\s+(?:the\s+)?{esc}\b",
+                rf"\bask\s+(?:the\s+)?{esc}\b",
+                rf"\bquestion\s+(?:the\s+)?{esc}\b",
+                rf"\btalk\s+to\s+(?:the\s+)?{esc}\b",
+                rf"\bspeak\s+(?:to|with)\s+(?:the\s+|a\s+|an\s+)?(?:nearby\s+)?{esc}\b",
+                rf"\bgauge\s+(?:the\s+)?{esc}\b",
+            )
+            for pat in patterns:
+                if re.search(pat, low):
+                    if len(ref) > best_len:
+                        best_len = len(ref)
+                        best_id = nid
+                    break
+    return best_id
+
+
+def _explicit_address_or_role_cue_in_line(
+    low: str,
+    roster: List[Dict[str, Any]],
+    *,
+    merged_text: str | None = None,
+) -> bool:
+    """True when the line likely selects a *new* addressee (not a bare interlocutor follow-up)."""
+    mt = merged_text if merged_text is not None else low
+    if _merged_text_has_resolvable_spoken_vocative(mt, roster):
+        return True
+    if npc_id_from_vocative_line(low, roster):
+        return True
+    if _explicit_addressed_npc_id_leading_or_directed(low, roster):
+        return True
+    if _npc_id_from_directed_motion_or_ask_phrases(low, roster):
+        return True
+    gr = match_generic_role_address(low, roster)
+    if gr.get("npc_id") and not gr.get("ambiguous"):
+        return True
+    role_spoken = _last_spoken_generic_role_slug(low)
+    if role_spoken and (gr.get("ambiguous") or not gr.get("npc_id")):
+        return True
+    return False
+
+
+def _merged_indicates_travel_not_social(merged: str, scene_envelope: Dict[str, Any]) -> bool:
+    """True when freeform parse is clearly travel / scene transition (wins over interlocutor continuity)."""
+    from game.intent_parser import parse_freeform_to_action
+
+    m = str(merged or "").strip()
+    if not m:
+        return False
+    act = parse_freeform_to_action(m, scene_envelope if isinstance(scene_envelope, dict) else None)
+    if not isinstance(act, dict):
+        return False
+    t = str(act.get("type") or "").strip().lower()
+    return t in ("travel", "scene_transition")
+
+
+def resolve_directed_social_entry(
+    *,
+    session: dict | None,
+    scene: dict | None,
+    world: dict | None,
+    segmented_turn: dict | None,
+    raw_text: str,
+) -> dict:
+    """Single pre-classification decision: should this turn enter the social pipeline first?
+
+    Runs before adjudication / perception / feasibility classification. Uses
+    :func:`is_actor_addressable_in_current_scene` as the only addressability check for the
+    resolved target.
+
+    Returns keys: should_route_social, target_actor_id, target_source, reason, spoken_text.
+    """
+    out: Dict[str, Any] = {
+        "should_route_social": False,
+        "target_actor_id": None,
+        "target_source": None,
+        "reason": "",
+        "spoken_text": None,
+    }
+    spoken_raw = (
+        segmented_turn.get("spoken_text") if isinstance(segmented_turn, dict) else None
+    )
+    if isinstance(spoken_raw, str) and spoken_raw.strip():
+        out["spoken_text"] = spoken_raw.strip()
+
+    merged = merge_turn_segments_for_directed_social_entry(
+        segmented_turn if isinstance(segmented_turn, dict) else None,
+        str(raw_text or ""),
+    )
+    t = merged.strip()
+    if not t:
+        out["reason"] = "empty_turn"
+        return out
+    if _line_marked_explicit_ooc(t):
+        out["reason"] = "explicit_ooc"
+        return out
+    if _line_marked_mechanical_table_talk(t):
+        out["reason"] = "mechanical_table_talk"
+        return out
+
+    if not isinstance(scene, dict):
+        out["reason"] = "no_scene_envelope"
+        return out
+    scene_obj = scene.get("scene")
+    if not isinstance(scene_obj, dict):
+        out["reason"] = "no_scene_object"
+        return out
+    scene_id = str(scene_obj.get("id") or "").strip()
+    if not scene_id:
+        out["reason"] = "empty_scene_id"
+        return out
+
+    if _merged_indicates_travel_not_social(t, scene):
+        out["reason"] = "travel_or_scene_transition_intent"
+        return out
+
+    sess = session if isinstance(session, dict) else None
+    w = world if isinstance(world, dict) else {}
+    if sess is None:
+        out["reason"] = "no_session"
+        return out
+
+    low = t.lower()
+    roster = canonical_scene_addressable_roster(
+        w, scene_id, scene_envelope=scene, session=sess
+    )
+
+    decl_sw = resolve_declared_actor_switch(
+        session=sess,
+        scene=scene,
+        segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+        raw_text=str(raw_text or ""),
+    )
+    decl_id = _clean_string(decl_sw.get("target_actor_id")) if decl_sw.get("has_declared_switch") else ""
+    decl_ok = bool(
+        decl_id and is_actor_addressable_in_current_scene(sess, scene, decl_id, world=w)
+    )
+
+    decl_cue = bool(decl_sw.get("has_declared_switch"))
+    voc_scan = _text_for_spoken_vocative_scan(
+        segmented_turn if isinstance(segmented_turn, dict) else None,
+        t,
+    )
+    voc_res = resolve_spoken_vocative_target(
+        session=sess,
+        scene=scene,
+        spoken_text=voc_scan,
+    )
+    voc_id = _clean_string(voc_res.get("target_actor_id")) if voc_res.get("has_spoken_vocative") else ""
+    voc_ok = bool(voc_id and is_actor_addressable_in_current_scene(sess, scene, voc_id, world=w))
+
+    if _line_blocks_dialogue_addressing(low) and not _explicit_address_or_role_cue_in_line(
+        low, roster, merged_text=t
+    ) and not decl_cue:
+        out["reason"] = "non_dialogue_world_action"
+        return out
+
+    if "?" in t and _SCENE_PRESENCE_OR_SCOPE_QUERY_RE.search(low):
+        if (
+            not _explicit_address_or_role_cue_in_line(low, roster, merged_text=t)
+            and not _npc_id_from_directed_motion_or_ask_phrases(low, roster)
+            and not decl_cue
+        ):
+            out["reason"] = "scene_presence_or_perception_query"
+            return out
+
+    motion_id = _npc_id_from_directed_motion_or_ask_phrases(low, roster)
+    motion_ok = False
+    if motion_id:
+        motion_ok = is_actor_addressable_in_current_scene(sess, scene, motion_id, world=w)
+
+    auth = resolve_authoritative_social_target(
+        sess,
+        w,
+        scene_id,
+        player_text=t,
+        normalized_action=None,
+        scene_envelope=scene,
+        merged_player_prompt=t,
+        allow_first_roster_fallback=False,
+        segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+    )
+    auth_id = str(auth.get("npc_id") or "").strip() if auth.get("target_resolved") else ""
+    auth_ok = bool(
+        auth_id
+        and is_actor_addressable_in_current_scene(sess, scene, auth_id, world=w)
+        and not auth.get("offscene_target")
+    )
+
+    chosen_id = ""
+    chosen_source = ""
+    if decl_ok:
+        chosen_id = decl_id
+        chosen_source = "declared_action"
+    elif voc_ok:
+        chosen_id = voc_id
+        chosen_source = "spoken_vocative"
+    elif motion_ok:
+        chosen_id = motion_id
+        chosen_source = "directed_motion_or_ask"
+    elif auth_ok:
+        chosen_id = auth_id
+        src = str(auth.get("source") or "")
+        chosen_source = src or "authoritative_resolver"
+
+    ctx = inspect(sess)
+    active_id = str(ctx.get("active_interaction_target_id") or "").strip()
+    prior_bind = prior_interlocutor_for_turn_metadata(sess) or active_id
+    mode = str(ctx.get("interaction_mode") or "").strip().lower()
+    kind = str(ctx.get("active_interaction_kind") or "").strip().lower()
+    social_mode = mode == "social" or kind == "social"
+
+    interlocutor_ok = bool(
+        active_id
+        and social_mode
+        and assert_valid_speaker(active_id, sess, scene_envelope=scene, world=w)
+        and is_actor_addressable_in_current_scene(sess, scene, active_id, world=w)
+    )
+
+    # Precedence: interlocutor follow-up only when no explicit addressee cue and no declared switch.
+    if (
+        not chosen_id
+        and interlocutor_ok
+        and not _explicit_address_or_role_cue_in_line(low, roster, merged_text=t)
+        and not decl_cue
+    ):
+        if _looks_like_information_seeking_player_question(t) or any(
+            phrase in low for phrase in _AMBIGUOUS_DIALOGUE_FOLLOWUP_PHRASES_IC
+        ):
+            chosen_id = active_id
+            chosen_source = "active_interlocutor"
+
+    if not chosen_id:
+        if not is_gm_or_system_facing_question(t) and not is_rules_or_engine_mechanics_question(t):
+            fb = find_addressed_npc_id_for_turn(
+                t, sess, w, scene if isinstance(scene, dict) else None
+            )
+            if fb and is_actor_addressable_in_current_scene(sess, scene, fb, world=w):
+                chosen_id = fb
+                chosen_source = "scene_address_resolution"
+
+    if not chosen_id:
+        if is_gm_or_system_facing_question(t):
+            out["reason"] = "gm_feasibility"
+            return out
+        if is_rules_or_engine_mechanics_question(t):
+            out["reason"] = "rules_or_mechanics_query"
+            return out
+        out["reason"] = "no_addressable_target"
+        return out
+
+    addr_ok = is_actor_addressable_in_current_scene(sess, scene, chosen_id, world=w)
+    if not addr_ok:
+        if is_gm_or_system_facing_question(t):
+            out["reason"] = "gm_feasibility"
+            return out
+        if is_rules_or_engine_mechanics_question(t):
+            out["reason"] = "rules_or_mechanics_query"
+            return out
+        out["reason"] = "target_not_addressable"
+        return out
+
+    if is_rules_or_engine_mechanics_question(t) and not (
+        addr_ok
+        and (
+            _looks_like_information_seeking_player_question(t)
+            or bool(chosen_source == "directed_motion_or_ask")
+            or bool(chosen_source == "declared_action")
+            or bool(chosen_source == "spoken_vocative")
+            or bool(re.search(r"\b(whether|if)\b", low))
+        )
+    ):
+        out["reason"] = "rules_or_mechanics_query"
+        return out
+
+    if not _turn_plausibly_addressed_spoken_npc_exchange(
+        t, low, chosen_source=str(chosen_source or "")
+    ):
+        out["reason"] = "not_directed_spoken_interaction"
+        return out
+
+    out["should_route_social"] = True
+    out["target_actor_id"] = chosen_id
+    src_out = str(chosen_source or "")
+    if src_out == "continuity":
+        src_out = "active_interlocutor"
+    out["target_source"] = src_out
+    out["declared_switch_detected"] = bool(decl_sw.get("has_declared_switch"))
+    out["declared_switch_target_actor_id"] = (
+        decl_sw.get("target_actor_id") if decl_sw.get("has_declared_switch") else None
+    )
+    out["continuity_overridden_by_declared_switch"] = bool(
+        decl_cue
+        and prior_bind
+        and chosen_id
+        and prior_bind != chosen_id
+        and src_out == "declared_action"
+    )
+    out["spoken_vocative_detected"] = bool(voc_res.get("has_spoken_vocative"))
+    out["spoken_vocative_target_actor_id"] = (
+        voc_res.get("target_actor_id") if voc_res.get("has_spoken_vocative") else None
+    )
+    out["continuity_overridden_by_spoken_vocative"] = bool(
+        prior_bind
+        and chosen_id
+        and prior_bind != chosen_id
+        and src_out == "spoken_vocative"
+    )
+    if src_out == "active_interlocutor":
+        out["reason"] = "active_interlocutor_followup"
+    elif src_out == "declared_action":
+        out["reason"] = "declared_action_actor_switch"
+    elif src_out == "spoken_vocative":
+        out["reason"] = "spoken_vocative_address"
+    elif src_out == "directed_motion_or_ask":
+        out["reason"] = "directed_motion_or_ask"
+    elif src_out == "generic_role":
+        out["reason"] = "generic_role_address"
+    elif src_out in ("vocative", "substring", "explicit_target", "scene_address_resolution"):
+        out["reason"] = "directed_social_question"
+    else:
+        out["reason"] = "directed_social_question"
+    return out
+
+
+def _turn_plausibly_addressed_spoken_npc_exchange(text: str, low: str, *, chosen_source: str) -> bool:
+    if _looks_like_information_seeking_player_question(text):
+        return True
+    if '"' in text:
+        return True
+    if any(token in low for token in _DIALOGUE_SPEECH_MARKERS_IC):
+        return True
+    if re.search(r"\b(i|we)\s+(?:say|tell|ask|call\s+out)\b", low):
+        return True
+    if re.search(r"\b(whether|if)\b", low):
+        return True
+    if chosen_source in (
+        "directed_motion_or_ask",
+        "declared_action",
+        "spoken_vocative",
+        "vocative",
+        "generic_role",
+        "substring",
+        "explicit_target",
+        "scene_address_resolution",
+    ):
+        return True
+    if chosen_source in ("active_interlocutor", "continuity"):
+        return True
+    return False
+
+
 def should_route_addressed_question_to_social(
     text: str | None,
     *,
@@ -1667,68 +3268,36 @@ def should_route_addressed_question_to_social(
     world: Dict[str, Any] | None,
     scene_envelope: Dict[str, Any] | None,
 ) -> tuple[bool, Dict[str, Any]]:
-    """Canonical gate: NPC-directed information-seeking vs GM/rules feasibility (adjudication lane).
-
-    Owns: the decision that a line should **not** be classified as procedural adjudication so chat
-    can stay in social exchange (active interlocutor follow-up or directed scene question).
-    :func:`game.adjudication.classify_adjudication_query` consults this first; do not reimplement
-    the same checks in other layers.
-
-    Returns (decision, debug_meta) with route_reason / addressed_actor_id / addressed_actor_source.
-    """
+    """Canonical gate: delegates to :func:`resolve_directed_social_entry` (single routing owner)."""
     meta: Dict[str, Any] = {
         "route_reason": None,
         "addressed_actor_id": None,
         "addressed_actor_source": None,
     }
-    t = str(text or "").strip()
-    if not t:
-        return False, meta
-    if is_gm_or_system_facing_question(t):
-        meta["route_reason"] = "gm_feasibility"
-        return False, meta
-    if is_rules_or_engine_mechanics_question(t):
-        meta["route_reason"] = "rules_or_mechanics_query"
-        return False, meta
-
-    if not isinstance(scene_envelope, dict):
-        return False, meta
-    scene_obj = scene_envelope.get("scene")
-    if not isinstance(scene_obj, dict):
-        return False, meta
-    scene_id = str(scene_obj.get("id") or "").strip()
-    if not scene_id:
-        return False, meta
-
-    sess = session if isinstance(session, dict) else None
-    w = world if isinstance(world, dict) else {}
-    if not _looks_like_information_seeking_player_question(t):
+    entry = resolve_directed_social_entry(
+        session=session,
+        scene=scene_envelope,
+        world=world,
+        segmented_turn=None,
+        raw_text=str(text or ""),
+    )
+    if not entry.get("should_route_social"):
+        r = str(entry.get("reason") or "")
+        if r in (
+            "gm_feasibility",
+            "rules_or_mechanics_query",
+            "empty_turn",
+            "no_addressable_target",
+            "target_not_addressable",
+            "not_directed_spoken_interaction",
+        ):
+            meta["route_reason"] = r
         return False, meta
 
-    if sess is not None:
-        ctx = inspect(sess)
-        active_id = str(ctx.get("active_interaction_target_id") or "").strip()
-        mode = str(ctx.get("interaction_mode") or "").strip().lower()
-        kind = str(ctx.get("active_interaction_kind") or "").strip().lower()
-        social_mode = mode == "social" or kind == "social"
-        if active_id and social_mode and is_entity_active(sess, active_id):
-            addr_ids = scene_addressable_actor_ids(
-                w, scene_id, scene_envelope=scene_envelope, session=sess
-            )
-            if active_id in addr_ids:
-                meta["route_reason"] = "active_interlocutor_followup"
-                meta["addressed_actor_id"] = active_id
-                meta["addressed_actor_source"] = "active_interlocutor"
-                return True, meta
-
-        addressed = find_addressed_npc_id_for_turn(t, sess, w, scene_envelope)
-        if addressed:
-            meta["route_reason"] = "directed_social_question"
-            meta["addressed_actor_id"] = addressed
-            meta["addressed_actor_source"] = "scene_address_resolution"
-            return True, meta
-
-    return False, meta
+    meta["route_reason"] = entry.get("reason")
+    meta["addressed_actor_id"] = entry.get("target_actor_id")
+    meta["addressed_actor_source"] = entry.get("target_source")
+    return True, meta
 
 
 def establish_dialogue_interaction_from_input(
