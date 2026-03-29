@@ -17,6 +17,7 @@ from game.prompt_context import (
     RESPONSE_RULE_PRIORITY,
     RULE_PRIORITY_COMPACT_INSTRUCTION,
     build_narration_context,
+    canonical_interaction_target_npc_id,
 )
 from game.storage import (
     load_scene,
@@ -5729,6 +5730,7 @@ def _minimal_repair_context(
     *,
     gm: Dict[str, Any] | None,
     session: Dict[str, Any] | None,
+    world: Dict[str, Any] | None = None,
 ) -> Dict[str, Any]:
     """
     Gather only safe, already-established context for repair phrasing.
@@ -5751,12 +5753,13 @@ def _minimal_repair_context(
 
     meta = gm_d.get("_final_emission_meta") if isinstance(gm_d.get("_final_emission_meta"), dict) else {}
     ic = inspect_interaction_context(sess) if sess else {}
-    interlocutor_id = str(
+    interlocutor_raw = str(
         meta.get("active_interlocutor_id")
         or meta.get("npc_id")
         or ic.get("active_interaction_target_id")
         or ""
     ).strip()
+    interlocutor_id = canonical_interaction_target_npc_id(sess, interlocutor_raw) if interlocutor_raw else ""
 
     last_text = str(sess.get("player_input") or "").strip()
     topic_pressure_current: Dict[str, Any] = {}
@@ -5785,6 +5788,15 @@ def _minimal_repair_context(
             last_intent_class = str(intent_labels[0]).strip().lower() if intent_labels else "general"
 
     canonical_speaker = str(topic_pressure_current.get("npc_name") or "").strip()
+    w = world if isinstance(world, dict) else None
+    if interlocutor_id and w is not None:
+        from game.world import get_world_npc_by_id
+
+        wrow = get_world_npc_by_id(w, interlocutor_id)
+        if isinstance(wrow, dict):
+            wn = str(wrow.get("name") or "").strip()
+            if wn:
+                canonical_speaker = wn
 
     return {
         "active_scene_id": sid,
@@ -5804,8 +5816,9 @@ def _contextual_social_repair_line(
     *,
     gm: Dict[str, Any] | None,
     session: Dict[str, Any] | None,
+    world: Dict[str, Any] | None = None,
 ) -> Tuple[str, str]:
-    ctx = _minimal_repair_context(gm=gm, session=session)
+    ctx = _minimal_repair_context(gm=gm, session=session, world=world)
     interlocutor = str(ctx.get("active_interlocutor_id") or "").strip()
     dq = bool(ctx.get("direct_question"))
     detail = str(ctx.get("first_visible_fact_detail") or "").strip()
@@ -5856,7 +5869,7 @@ def _contextual_nonsocial_repair_line(
     gm: Dict[str, Any] | None,
     session: Dict[str, Any] | None,
 ) -> Tuple[str, str]:
-    ctx = _minimal_repair_context(gm=gm, session=session)
+    ctx = _minimal_repair_context(gm=gm, session=session, world=None)
     detail = str(ctx.get("first_visible_fact_detail") or "").strip()
     labels_raw = ctx.get("intent_labels") or []
     labels = [str(x).lower() for x in labels_raw if isinstance(x, str)]
@@ -5981,14 +5994,19 @@ def _preserve_social_continuity_fields(
     )
     inspected = inspect_interaction_context(session) if isinstance(session, dict) else {}
     active_ic = str((inspected or {}).get("active_interaction_target_id") or "").strip()
-    npc_res = str(soc.get("npc_id") or "").strip() or active_ic
+    soc_nid = str(soc.get("npc_id") or "").strip()
+    sess = session if isinstance(session, dict) else None
+    npc_res_raw = soc_nid or active_ic
+    npc_res = canonical_interaction_target_npc_id(sess, npc_res_raw) if npc_res_raw else ""
+    interlocutor_raw = active_ic or soc_nid
+    interlocutor_canon = canonical_interaction_target_npc_id(sess, interlocutor_raw) if interlocutor_raw else ""
     reply_kind = str(soc.get("reply_kind") or "").strip()
 
     cr = str(coercion_reason or "").strip()
     coercion_used = "|" in cr or "synthetic" in cr or "npc_directed_guard" in cr
 
-    if _is_social_continuity_slot_empty(merged.get("active_interlocutor_id")) and active_ic:
-        merged["active_interlocutor_id"] = active_ic
+    if _is_social_continuity_slot_empty(merged.get("active_interlocutor_id")) and interlocutor_canon:
+        merged["active_interlocutor_id"] = interlocutor_canon
         preserved.append("_final_emission_meta.active_interlocutor_id")
     if _is_social_continuity_slot_empty(merged.get("npc_id")) and npc_res:
         merged["npc_id"] = npc_res
@@ -6067,7 +6085,7 @@ def ensure_minimal_social_resolution(
             or is_route_illegal_global_or_sanitizer_fallback_text(line)
             or _is_placeholder_only_player_facing_text(line)
         ):
-            c_line, ctx_mode_social = _contextual_social_repair_line(gm=out, session=sess)
+            c_line, ctx_mode_social = _contextual_social_repair_line(gm=out, session=sess, world=w)
             if _gm_has_usable_player_facing_text({"player_facing_text": c_line}):
                 line = c_line
             else:

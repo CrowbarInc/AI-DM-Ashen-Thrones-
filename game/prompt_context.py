@@ -9,6 +9,9 @@ from __future__ import annotations
 from typing import Any, Dict, List
 import re
 
+from game.storage import get_scene_state
+from game.world import get_world_npc_by_id
+
 # Configurable limits for deterministic, inspectable compression
 MAX_RECENT_LOG = 5
 MAX_RECENT_EVENTS = 5
@@ -218,30 +221,56 @@ def build_response_policy(*, narration_obligations: Dict[str, Any] | None = None
     }
 
 
+def canonical_interaction_target_npc_id(session: Dict[str, Any] | None, raw_target_id: str | None) -> str:
+    """Map session interaction target to promoted world NPC id when ``promoted_actor_npc_map`` binds it."""
+    raw = str(raw_target_id or "").strip()
+    if not raw or not isinstance(session, dict):
+        return raw
+    st = get_scene_state(session)
+    pmap = st.get("promoted_actor_npc_map")
+    if not isinstance(pmap, dict):
+        return raw
+    mapped = pmap.get(raw)
+    if isinstance(mapped, str) and mapped.strip():
+        return mapped.strip()
+    return raw
+
+
 def _resolve_active_interaction_target_name(
     session: Dict[str, Any],
     world: Dict[str, Any],
     public_scene: Dict[str, Any],
+    *,
+    npc_id: str | None = None,
 ) -> str | None:
-    """Resolve active interaction target id to an in-scene NPC name when available."""
-    interaction_ctx = session.get('interaction_context') or {}
-    if not isinstance(interaction_ctx, dict):
-        return None
-    target_id = str(interaction_ctx.get('active_interaction_target_id') or '').strip()
-    if not target_id:
+    """Resolve interaction target (or explicit *npc_id*) to a display name; prefers world row, then in-scene match."""
+    tid = str(npc_id or "").strip()
+    if not tid:
+        interaction_ctx = session.get('interaction_context') or {}
+        if not isinstance(interaction_ctx, dict):
+            return None
+        tid = str(interaction_ctx.get('active_interaction_target_id') or '').strip()
+    if not tid:
         return None
 
+    w = world if isinstance(world, dict) else {}
+    row = get_world_npc_by_id(w, tid)
+    if isinstance(row, dict):
+        nm = str(row.get("name") or "").strip()
+        if nm:
+            return nm
+
     scene_id = str(public_scene.get('id') or '').strip()
-    npcs = world.get('npcs') or []
+    npcs = w.get('npcs') or []
     if not isinstance(npcs, list):
         return None
 
-    target_id_low = target_id.lower()
+    target_id_low = tid.lower()
     for npc in npcs:
         if not isinstance(npc, dict):
             continue
-        npc_id = str(npc.get('id') or '').strip()
-        if not npc_id or npc_id.lower() != target_id_low:
+        nid = str(npc.get('id') or '').strip()
+        if not nid or nid.lower() != target_id_low:
             continue
         npc_loc = str(npc.get('location') or npc.get('scene_id') or '').strip()
         if scene_id and npc_loc != scene_id:
@@ -249,6 +278,130 @@ def _resolve_active_interaction_target_name(
         npc_name = str(npc.get('name') or '').strip()
         return npc_name or None
     return None
+
+
+def build_active_interlocutor_export(
+    session: Dict[str, Any],
+    world: Dict[str, Any],
+    public_scene: Dict[str, Any],
+) -> Dict[str, Any] | None:
+    """Engine-authored active speaker profile for prompts (canonical ``npc_id`` when promoted)."""
+    if not isinstance(session, dict):
+        return None
+    ic = session.get("interaction_context") or {}
+    if not isinstance(ic, dict):
+        return None
+    raw = str(ic.get("active_interaction_target_id") or "").strip()
+    if not raw:
+        return None
+    npc_id = canonical_interaction_target_npc_id(session, raw)
+    w = world if isinstance(world, dict) else {}
+    npc = get_world_npc_by_id(w, npc_id)
+    name = _resolve_active_interaction_target_name(session, w, public_scene, npc_id=npc_id) or ""
+    base: Dict[str, Any] = {
+        "npc_id": npc_id,
+        "raw_interaction_target_id": raw,
+        "display_name": name,
+    }
+    if not isinstance(npc, dict):
+        return {**base, "origin_kind": None, "stance_toward_player": None, "knowledge_scope": [],
+                "information_reliability": None, "affiliation": None, "current_agenda": None,
+                "promoted_from_actor_id": None}
+    return {
+        **base,
+        "origin_kind": str(npc.get("origin_kind") or "").strip() or None,
+        "stance_toward_player": str(npc.get("stance_toward_player") or "").strip() or None,
+        "knowledge_scope": list(npc.get("knowledge_scope") or []) if isinstance(npc.get("knowledge_scope"), list) else [],
+        "information_reliability": str(npc.get("information_reliability") or "").strip() or None,
+        "affiliation": str(npc.get("affiliation") or "").strip() or None,
+        "current_agenda": str(npc.get("current_agenda") or "").strip() or None,
+        "promoted_from_actor_id": str(npc.get("promoted_from_actor_id") or "").strip() or None,
+    }
+
+
+def build_social_interlocutor_profile(interlocutor: Dict[str, Any] | None) -> Dict[str, Any]:
+    """Deterministic ``social_context.interlocutor_profile`` payload (engine fields only)."""
+    if not isinstance(interlocutor, dict) or not str(interlocutor.get("npc_id") or "").strip():
+        return {
+            "npc_is_promoted": False,
+            "stance": None,
+            "reliability": None,
+            "knowledge_scope": [],
+            "agenda": None,
+            "affiliation": None,
+        }
+    pfa = str(interlocutor.get("promoted_from_actor_id") or "").strip()
+    ks = interlocutor.get("knowledge_scope")
+    scope_list = [str(x).strip() for x in ks if isinstance(x, str) and str(x).strip()] if isinstance(ks, list) else []
+    return {
+        "npc_is_promoted": bool(pfa),
+        "stance": interlocutor.get("stance_toward_player"),
+        "reliability": interlocutor.get("information_reliability"),
+        "knowledge_scope": scope_list,
+        "agenda": interlocutor.get("current_agenda"),
+        "affiliation": interlocutor.get("affiliation"),
+    }
+
+
+def deterministic_interlocutor_answer_style_hints(
+    interlocutor: Dict[str, Any] | None,
+    *,
+    scene_id: str,
+) -> List[str]:
+    """Fixed strings derived only from engine reliability + knowledge_scope (+ scene id)."""
+    if not isinstance(interlocutor, dict) or not str(interlocutor.get("npc_id") or "").strip():
+        return []
+    rel = str(interlocutor.get("information_reliability") or "").strip().lower()
+    if rel not in ("truthful", "partial", "misleading"):
+        rel = "partial"
+    ks_raw = interlocutor.get("knowledge_scope")
+    scopes = sorted(
+        {str(x).strip() for x in ks_raw if isinstance(x, str) and str(x).strip()}
+        if isinstance(ks_raw, list)
+        else set()
+    )
+    sid = str(scene_id or "").strip()
+    scope_note = (
+        f"Engine knowledge_scope tokens (direct professional/local anchors): {', '.join(scopes)}."
+        if scopes
+        else "Engine knowledge_scope is empty: treat direct private knowledge as narrow unless grounded in visible role, scene, or prior established exchanges."
+    )
+    out = [
+        "INTERLOCUTOR KNOWLEDGE GATE (engine): Answer as this specific NPC. "
+        "Use knowledge_scope as the boundary for what they know firsthand. "
+        "Topics outside those anchors must be hearsay, uncertainty, deflection, or an honest 'I don't know'—not omniscient facts.",
+        scope_note,
+    ]
+    if sid:
+        needle = f"scene:{sid.lower()}"
+        if any(s.lower() == needle for s in scopes):
+            out.append(
+                f"This NPC's scope includes the current scene token ({needle}): patrol layout, gate procedures, and crowd-level "
+                "local knowledge may be stated directly when consistent with reliability."
+            )
+    if rel == "truthful":
+        out.append(
+            "INFORMATION_RELIABILITY truthful (engine): Within knowledge_scope, state what they know directly and clearly; "
+            "do not add hidden omniscient details outside scope."
+        )
+    elif rel == "partial":
+        out.append(
+            "INFORMATION_RELIABILITY partial (engine): Within knowledge_scope, answers are incomplete, selective, or hedged; "
+            "do not present full certainty or insider completeness they would not have."
+        )
+    else:
+        out.append(
+            "INFORMATION_RELIABILITY misleading (engine): Within knowledge_scope, replies may distort, omit, or deflect; "
+            "lies stay plausible for this person—never omniscient fabrication or perfect hidden plots."
+        )
+    ok_origin = str(interlocutor.get("origin_kind") or "").strip().lower() in {"scene_actor", "crowd_actor"}
+    has_pfa = bool(str(interlocutor.get("promoted_from_actor_id") or "").strip())
+    if ok_origin and not has_pfa:
+        out.append(
+            "INCIDENTAL SCENE ACTOR (engine row without promotion linkage): keep characterization to this scene's role; "
+            "do not invent a recurring named persona, secret dossier, or stable off-screen biography unless engine state already provides it."
+        )
+    return out
 
 
 def _compress_campaign(campaign: Dict[str, Any]) -> Dict[str, Any]:
@@ -336,6 +489,9 @@ def _compress_session(
         interaction_ctx = {}
 
     active_target = interaction_ctx.get('active_interaction_target_id')
+    raw_tgt = str(active_target).strip() if isinstance(active_target, str) and active_target.strip() else None
+    canonical_tgt = canonical_interaction_target_npc_id(session, raw_tgt) if raw_tgt else None
+    eff_tgt = canonical_tgt or raw_tgt
     active_kind = interaction_ctx.get('active_interaction_kind')
     interaction_mode = interaction_ctx.get('interaction_mode')
     engagement_level = interaction_ctx.get('engagement_level')
@@ -347,8 +503,8 @@ def _compress_session(
         'response_mode': str(session.get('response_mode', 'standard') or 'standard'),
         'turn_counter': int(session.get('turn_counter', 0) or 0),
         'visited_scene_count': visited_count,
-        'active_interaction_target_id': str(active_target).strip() if isinstance(active_target, str) and active_target.strip() else None,
-        'active_interaction_target_name': _resolve_active_interaction_target_name(session, world, public_scene),
+        'active_interaction_target_id': eff_tgt,
+        'active_interaction_target_name': _resolve_active_interaction_target_name(session, world, public_scene, npc_id=eff_tgt) if eff_tgt else None,
         'active_interaction_kind': str(active_kind).strip() if isinstance(active_kind, str) and active_kind.strip() else None,
         'interaction_mode': str(interaction_mode).strip() if isinstance(interaction_mode, str) and interaction_mode.strip() else 'none',
         'engagement_level': str(engagement_level).strip() if isinstance(engagement_level, str) and engagement_level.strip() else 'none',
@@ -628,6 +784,11 @@ def build_narration_context(
         'player_position_context': session_view.get('player_position_context'),
     }
     has_active_interlocutor = bool(str(interaction_continuity.get('active_interaction_target_id') or '').strip())
+    scene_pub_id = str((public_scene or {}).get("id") or "").strip()
+    interlocutor_export = build_active_interlocutor_export(session, world, public_scene)
+    answer_style_hints_list = deterministic_interlocutor_answer_style_hints(
+        interlocutor_export, scene_id=scene_pub_id
+    )
 
     clue_records_all: List[Dict[str, Any]] = list(discovered_clue_records) + list(undiscovered_clue_records)
     clue_visibility = {
@@ -735,9 +896,27 @@ def build_narration_context(
             "Allowed repetition: one short anchor clause for continuity. Not allowed: re-stating the same underlying lead as the whole answer.",
         ]
 
+    if interlocutor_export and str(interlocutor_export.get("npc_id") or "").strip():
+        nid = str(interlocutor_export.get("npc_id") or "").strip()
+        dn = str(interlocutor_export.get("display_name") or "").strip()
+        naming_line = (
+            f"NAMING CONTINUITY (engine): Active interlocutor canonical id is {nid!r}"
+            + (f", display name {dn!r}" if dn else "")
+            + ". Keep this name/title stable across turns unless engine state changes it; "
+            "do not regress to generic unnamed incidental-crowd wording for this id."
+        )
+        instructions = list(instructions) + list(answer_style_hints_list) + [naming_line]
+
+    soc_profile = build_social_interlocutor_profile(interlocutor_export)
+
     payload: Dict[str, Any] = {
         'instructions': instructions,
         'interaction_continuity': interaction_continuity,
+        'active_interlocutor': interlocutor_export,
+        'social_context': {
+            'interlocutor_profile': soc_profile,
+            'answer_style_hints': list(answer_style_hints_list),
+        },
         'turn_summary': _build_turn_summary(user_text, resolution, intent),
         'recent_log': recent_log_compact,
         'player_input': str(user_text or ''),

@@ -17,7 +17,8 @@ from typing import Any, Dict, List, Optional, Tuple
 
 from game.models import SocialEngineResult, make_check_request, social_result_to_dict
 from game.utils import slugify
-from game.storage import get_npc_runtime, get_scene_runtime
+from game.npc_promotion import promote_scene_actor_to_npc, should_promote_scene_actor
+from game.storage import get_npc_runtime, get_scene_runtime, get_scene_state
 from game.interaction_context import (
     apply_turn_input_implied_context,
     canonical_scene_addressable_roster,
@@ -46,6 +47,285 @@ SOCIAL_SKILL_MAP = {
 SOCIAL_KINDS = tuple(SOCIAL_SKILL_MAP.keys())
 SOCIAL_EXCHANGE_KINDS = ("question", "social_probe")
 SOCIAL_MANEUVER_KINDS = ("persuade", "intimidate", "deceive", "barter", "recruit")
+
+# Sources that count as stable explicit in-scene address for promotion triggers (not ambient fallbacks).
+_STABLE_SOCIAL_ADDRESS_SOURCES = frozenset(
+    {
+        "explicit_target",
+        "declared_action",
+        "spoken_vocative",
+        "vocative",
+        "generic_role",
+        "substring",
+    }
+)
+
+
+def _topic_pressure_speaker_has_prior_answer(
+    session: Dict[str, Any],
+    scene_id: str,
+    actor_id: str,
+) -> bool:
+    """True when topic_pressure names this speaker and has a stored last_answer (engine-owned)."""
+    sid = str(scene_id or "").strip()
+    aid = str(actor_id or "").strip()
+    if not sid or not aid or not isinstance(session, dict):
+        return False
+    rt = get_scene_runtime(session, sid)
+    tcur = rt.get("topic_pressure_current") if isinstance(rt.get("topic_pressure_current"), dict) else {}
+    speaker_key = str(tcur.get("speaker_key") or "").strip()
+    if not speaker_key:
+        return False
+    a, b = speaker_key.lower(), aid.lower()
+    if not (a == b or a in b or b in a):
+        return False
+    tk = str(tcur.get("topic_key") or "").strip()
+    pressure = rt.get("topic_pressure") if isinstance(rt.get("topic_pressure"), dict) else {}
+    entry = pressure.get(tk) if tk and isinstance(pressure.get(tk), dict) else {}
+    if str(entry.get("last_answer") or "").strip():
+        return True
+    targets = entry.get("speaker_targets") if isinstance(entry.get("speaker_targets"), dict) else {}
+    st = targets.get(speaker_key) if isinstance(targets.get(speaker_key), dict) else {}
+    st = st or targets.get(aid) if isinstance(targets.get(aid), dict) else {}
+    return int(st.get("repeat_count") or 0) >= 1
+
+
+_CONSEQUENTIAL_SPEECH_ACT_RE = re.compile(
+    r"\b(threaten|threatens|threatening|bribe|bribes|bribing|blackmail|blackmails|blackmailing)\b",
+    re.IGNORECASE,
+)
+
+
+def should_auto_promote_scene_actor_for_social(
+    session: Dict[str, Any],
+    world: Dict[str, Any],
+    scene_id: str,
+    actor_id: str,
+    *,
+    auth_source: str,
+    action_type: str,
+    turn_counter: int,
+    roster_row: Optional[Dict[str, Any]] = None,
+    raw_player_text: Optional[str] = None,
+) -> Tuple[bool, str]:
+    """Deterministic policy: promote roster-only actors only when engine facts justify it.
+
+    Returns (should_promote, reason_code).
+    """
+    if not isinstance(session, dict) or not isinstance(world, dict):
+        return False, "invalid_session_or_world"
+    aid = str(actor_id or "").strip()
+    sid = str(scene_id or "").strip()
+    if not aid or not sid:
+        return False, "empty_actor_or_scene"
+    if not should_promote_scene_actor(session, world, sid, aid):
+        return False, "not_promotable_or_already_bound"
+    src = str(auth_source or "").strip().lower()
+    at = str(action_type or "").strip().lower()
+    if at in SOCIAL_MANEUVER_KINDS:
+        return True, "consequential_social_maneuver"
+    if raw_player_text and _CONSEQUENTIAL_SPEECH_ACT_RE.search(str(raw_player_text)):
+        return True, "consequential_speech_act_in_player_text"
+    if src == "first_roster":
+        return False, "first_roster_ambient_fallback"
+    if src in _STABLE_SOCIAL_ADDRESS_SOURCES:
+        return True, "stable_explicit_address"
+    rt = get_npc_runtime(session, aid)
+    revealed = rt.get("revealed_topics") or []
+    if isinstance(revealed, list) and any(str(x).strip() for x in revealed):
+        return True, "prior_engine_topic_reveal"
+    row = roster_row if isinstance(roster_row, dict) else {}
+    if row and _next_topic_to_reveal(row, rt, None) is not None:
+        return True, "pending_engine_topic_for_target"
+    if _topic_pressure_speaker_has_prior_answer(session, sid, aid):
+        return True, "topic_pressure_prior_answer_as_speaker"
+    lit = rt.get("last_interaction_turn")
+    if isinstance(lit, int) and lit < int(turn_counter or 0):
+        return True, "prior_substantive_interaction_turn"
+    return False, "no_promotion_trigger"
+
+
+def compute_social_target_profile_hints(npc: Optional[Dict[str, Any]], scene_id: str) -> Dict[str, Any]:
+    """Structured, deterministic hints from long-term NPC social fields (no freeform)."""
+    sid = str(scene_id or "").strip()
+    if not isinstance(npc, dict):
+        return {
+            "guardedness": "medium",
+            "answer_reliability_tier": "medium",
+            "speaks_authoritatively_for_scene": False,
+        }
+    stance = str(npc.get("stance_toward_player") or "").strip().lower()
+    if stance in ("hostile", "wary"):
+        guardedness = "high"
+    elif stance == "favorable":
+        guardedness = "low"
+    else:
+        guardedness = "medium"
+    rel = str(npc.get("information_reliability") or "").strip().lower()
+    if rel == "truthful":
+        tier = "high"
+    elif rel == "misleading":
+        tier = "low"
+    else:
+        tier = "medium"
+    scopes = npc.get("knowledge_scope") or []
+    auth_scene = False
+    if sid and isinstance(scopes, list):
+        needle = f"scene:{sid}"
+        for x in scopes:
+            if isinstance(x, str) and needle == x.strip().lower():
+                auth_scene = True
+                break
+    return {
+        "guardedness": guardedness,
+        "answer_reliability_tier": tier,
+        "speaks_authoritatively_for_scene": bool(auth_scene or (isinstance(scopes, list) and len(scopes) >= 2)),
+    }
+
+
+def finalize_social_target_with_promotion(
+    session: Dict[str, Any],
+    world: Dict[str, Any],
+    scene_id: str,
+    auth: Dict[str, Any],
+    *,
+    action_type: str,
+    turn_counter: int,
+    scene_envelope: Optional[Dict[str, Any]] = None,
+    raw_player_text: Optional[str] = None,
+) -> Tuple[Dict[str, Any], Dict[str, Any], Dict[str, Any]]:
+    """Apply promoted_actor_npc_map lookup and conditional auto-promotion; return (auth, binding, profile_hints)."""
+    empty_binding: Dict[str, Any] = {}
+    empty_hints: Dict[str, Any] = {}
+    if not isinstance(auth, dict):
+        return {}, empty_binding, empty_hints
+    out = dict(auth)
+    sid = str(scene_id or "").strip()
+    w = world if isinstance(world, dict) else {}
+    if not sid or not isinstance(session, dict):
+        return out, empty_binding, empty_hints
+    if not out.get("target_resolved") or out.get("offscene_target"):
+        return out, empty_binding, empty_hints
+
+    resolved = str(out.get("npc_id") or "").strip()
+    if not resolved:
+        return out, empty_binding, empty_hints
+
+    st = get_scene_state(session)
+    pmap_raw = st.get("promoted_actor_npc_map")
+    pmap = pmap_raw if isinstance(pmap_raw, dict) else {}
+
+    auth_source = str(out.get("source") or "").strip()
+    tc = int(turn_counter or 0)
+
+    roster: List[Dict[str, Any]] = canonical_scene_addressable_roster(
+        w,
+        sid,
+        scene_envelope=scene_envelope if isinstance(scene_envelope, dict) else None,
+        session=session,
+    )
+    roster_row = next((x for x in roster if isinstance(x, dict) and str(x.get("id") or "").strip() == resolved), None)
+
+    origin_actor: Optional[str] = None
+    promoted_this_turn = False
+    promo_reason = ""
+
+    wnpc_check = npc_dict_by_id(w, resolved)
+    # (a) Native world NPC: already backed by world row and not a promotable orphan scene actor.
+    if isinstance(wnpc_check, dict) and not should_promote_scene_actor(session, w, sid, resolved):
+        src_pf = "native_npc"
+        if str(wnpc_check.get("promoted_from_actor_id") or "").strip():
+            src_pf = "promoted_actor"
+        binding = {
+            "final_target_kind": "npc",
+            "npc_id": resolved,
+            "target_source": src_pf,
+            "origin_actor_id": None,
+            "promoted_this_turn": False,
+        }
+        return out, binding, compute_social_target_profile_hints(wnpc_check, sid)
+
+    # (b) Session promotion map (follow-up turns bind to canonical npc_id).
+    if resolved in pmap:
+        canon = str(pmap[resolved]).strip()
+        if canon and canon != resolved:
+            origin_actor = resolved
+        if canon:
+            out["npc_id"] = canon
+            wnpc2 = npc_dict_by_id(w, canon)
+            if isinstance(wnpc2, dict):
+                nm = str(wnpc2.get("name") or "").strip()
+                if nm:
+                    out["npc_name"] = nm
+            binding = {
+                "final_target_kind": "npc",
+                "npc_id": canon,
+                "target_source": "promoted_actor",
+                "origin_actor_id": origin_actor,
+                "promoted_this_turn": False,
+            }
+            return out, binding, compute_social_target_profile_hints(
+                wnpc2 if isinstance(wnpc2, dict) else None, sid
+            )
+
+    # (c) Auto-promote when policy matches.
+    do_promo, promo_reason = should_auto_promote_scene_actor_for_social(
+        session,
+        w,
+        sid,
+        resolved,
+        auth_source=auth_source,
+        action_type=action_type,
+        turn_counter=tc,
+        roster_row=roster_row,
+        raw_player_text=raw_player_text,
+    )
+    if do_promo:
+        pr = promote_scene_actor_to_npc(
+            session,
+            w,
+            sid,
+            resolved,
+            reason=f"social_auto:{promo_reason}",
+            turn_counter=tc,
+        )
+        if isinstance(pr, dict) and pr.get("ok"):
+            nid = str(pr.get("npc_id") or "").strip()
+            promoted_this_turn = not bool(pr.get("already_promoted"))
+            if nid:
+                out["npc_id"] = nid
+                npc_ob = pr.get("npc") if isinstance(pr.get("npc"), dict) else npc_dict_by_id(w, nid)
+                if isinstance(npc_ob, dict):
+                    nm = str(npc_ob.get("name") or "").strip()
+                    if nm:
+                        out["npc_name"] = nm
+                binding = {
+                    "final_target_kind": "npc",
+                    "npc_id": nid,
+                    "target_source": "promoted_actor",
+                    "origin_actor_id": resolved if nid != resolved else None,
+                    "promoted_this_turn": promoted_this_turn,
+                }
+                return out, binding, compute_social_target_profile_hints(
+                    npc_ob if isinstance(npc_ob, dict) else None, sid
+                )
+
+    # (d) Fallback: keep authoritative resolver output; binding only if world backs id.
+    wnpc3 = npc_dict_by_id(w, resolved)
+    if isinstance(wnpc3, dict):
+        src_pf = "native_npc"
+        if str(wnpc3.get("promoted_from_actor_id") or "").strip():
+            src_pf = "promoted_actor"
+        binding = {
+            "final_target_kind": "npc",
+            "npc_id": resolved,
+            "target_source": src_pf,
+            "origin_actor_id": None,
+            "promoted_this_turn": False,
+        }
+        return out, binding, compute_social_target_profile_hints(wnpc3, sid)
+
+    return out, empty_binding, empty_hints
 
 _DIRECT_QUESTION_WORDS = ("who", "what", "where", "when", "why", "how", "which")
 _NAME_REQUEST_TOKENS = ("your name", "their name", "his name", "her name", "called", "who are you")
@@ -1315,6 +1595,8 @@ def _social_target_debug_fields(
     auth: Dict[str, Any],
     *,
     sync_meta: Optional[Dict[str, Any]] = None,
+    target_binding: Optional[Dict[str, Any]] = None,
+    target_profile_hints: Optional[Dict[str, Any]] = None,
 ) -> Dict[str, Any]:
     na = normalized_action if isinstance(normalized_action, dict) else {}
     cand_raw = na.get("target_id") or na.get("targetEntityId")
@@ -1366,6 +1648,12 @@ def _social_target_debug_fields(
         )
         if "actor_addressable" in ad2:
             out["actor_addressable"] = ad2.get("actor_addressable")
+    tb = target_binding if isinstance(target_binding, dict) else {}
+    if tb:
+        out["target_binding"] = dict(tb)
+    tph = target_profile_hints if isinstance(target_profile_hints, dict) else {}
+    if tph:
+        out["target_profile_hints"] = dict(tph)
     return out
 
 
@@ -1495,6 +1783,17 @@ def resolve_social_action(
                 "reason": "addressability invariant: normalized target is canonically present in scene",
             }
 
+    auth, target_binding, target_profile_hints = finalize_social_target_with_promotion(
+        session,
+        world,
+        scene_id,
+        auth,
+        action_type=action_type,
+        turn_counter=turn_counter,
+        scene_envelope=scene_envelope if isinstance(scene_envelope, dict) else None,
+        raw_player_text=raw_player_text,
+    )
+
     dbg = _social_target_debug_fields(
         session,
         world,
@@ -1503,6 +1802,8 @@ def resolve_social_action(
         normalized_action,
         auth,
         sync_meta=sync_meta,
+        target_binding=target_binding or None,
+        target_profile_hints=target_profile_hints or None,
     )
 
     if auth.get("offscene_target") and auth.get("npc_id"):

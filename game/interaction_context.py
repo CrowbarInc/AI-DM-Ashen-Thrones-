@@ -3,6 +3,10 @@
 This module is the single owner for interaction-context runtime mutations.
 Callers may read context elsewhere, but all writes should route through these
 functions so behavior remains deterministic and inspectable.
+
+Promotion: ``game.npc_promotion.promote_scene_actor_to_npc`` (also exported from
+``game.world``), plus hooks ``should_promote_scene_actor`` and
+``maybe_promote_active_social_target`` in this module and ``game.npc_promotion``.
 """
 from __future__ import annotations
 
@@ -11,6 +15,7 @@ from typing import Any, Dict, List, Literal, Optional, Set, Tuple
 
 from game.utils import slugify
 
+from game.npc_promotion import maybe_promote_active_social_target, should_promote_scene_actor
 from game.storage import get_interaction_context
 
 
@@ -269,6 +274,8 @@ def _scene_state(session: Dict[str, Any]) -> Dict[str, Any]:
         state["active_scene_id"] = str(session.get("active_scene_id") or "").strip()
     if "current_interlocutor" not in state:
         state["current_interlocutor"] = None
+    if not isinstance(state.get("promoted_actor_npc_map"), dict):
+        state["promoted_actor_npc_map"] = {}
     return state
 
 

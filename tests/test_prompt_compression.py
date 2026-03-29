@@ -778,3 +778,76 @@ def test_prompt_context_exposes_typed_uncertainty_policy_and_hint():
     assert "uncertainty_hint.scene_snapshot" in instructions
     assert "frame uncertainty as world-facing limits only" in instructions
     assert "vary sentence count and cadence naturally" in instructions
+
+
+def test_narration_context_uses_canonical_promoted_npc_and_social_profile():
+    """Prompt session + social_context prefer promoted world npc_id and engine social fields."""
+    world = {
+        **_dummy_world(),
+        "npcs": [
+            {
+                "id": "frontier_gate__ragged_stranger",
+                "name": "Keene",
+                "location": "frontier_gate",
+                "stance_toward_player": "wary",
+                "information_reliability": "partial",
+                "knowledge_scope": ["scene:frontier_gate", "rumor"],
+                "affiliation": "",
+                "current_agenda": "watch the gate",
+                "promoted_from_actor_id": "ragged_stranger",
+                "origin_kind": "scene_actor",
+            }
+        ],
+    }
+    session = {
+        "active_scene_id": "frontier_gate",
+        "response_mode": "standard",
+        "turn_counter": 3,
+        "interaction_context": {
+            "active_interaction_target_id": "ragged_stranger",
+            "active_interaction_kind": "social",
+            "interaction_mode": "social",
+            "engagement_level": "engaged",
+        },
+        "scene_state": {
+            "promoted_actor_npc_map": {"ragged_stranger": "frontier_gate__ragged_stranger"},
+        },
+    }
+    ctx = build_narration_context(
+        _dummy_campaign(),
+        world,
+        session,
+        _dummy_character(),
+        _dummy_scene(),
+        {"in_combat": False},
+        [],
+        "What did you hear?",
+        None,
+        {},
+        public_scene=_dummy_public_scene(),
+        discoverable_clues=[],
+        gm_only_hidden_facts=["A secret motivation."],
+        gm_only_discoverable_locked=["A discoverable clue."],
+        discovered_clue_records=[],
+        undiscovered_clue_records=[{"id": "c1", "text": "A discoverable clue."}],
+        pending_leads=[],
+        intent={"labels": ["question"], "allow_discoverable_clues": False},
+        world_state_view={"flags": {"flag1": True}, "counters": {"c1": 5}, "clocks_summary": []},
+        mode_instruction="Narration mode: standard.",
+        recent_log_for_prompt=[],
+    )
+    assert ctx["session"]["active_interaction_target_id"] == "frontier_gate__ragged_stranger"
+    assert ctx["session"]["active_interaction_target_name"] == "Keene"
+    prof = ctx["social_context"]["interlocutor_profile"]
+    assert prof["npc_is_promoted"] is True
+    assert prof["reliability"] == "partial"
+    assert prof["stance"] == "wary"
+    assert "scene:frontier_gate" in prof["knowledge_scope"]
+    ai = ctx["active_interlocutor"]
+    assert ai["npc_id"] == "frontier_gate__ragged_stranger"
+    assert ai["raw_interaction_target_id"] == "ragged_stranger"
+    assert ai["promoted_from_actor_id"] == "ragged_stranger"
+    hints = ctx["social_context"]["answer_style_hints"]
+    assert any("INFORMATION_RELIABILITY partial" in h for h in hints)
+    assert any("INTERLOCUTOR KNOWLEDGE GATE" in h for h in hints)
+    assert any("NAMING CONTINUITY (engine)" in x for x in ctx["instructions"])

@@ -1,6 +1,13 @@
 from __future__ import annotations
-from typing import Any, Dict, List
+import copy
+from typing import Any, Dict, List, Optional
 
+from game.npc_promotion import (
+    ensure_npc_social_fields,
+    normalize_promoted_npc_record,
+    promote_scene_actor_to_npc,
+    promoted_npc_id_for_actor,
+)
 from game.projects import normalize_project_entry
 
 
@@ -35,6 +42,50 @@ def ensure_defaults(world: Dict[str, Any]) -> Dict[str, Any]:
     return world
 
 
+def get_world_npc_by_id(world: Dict[str, Any], npc_id: str) -> Optional[Dict[str, Any]]:
+    """Return the NPC dict from ``world[\"npcs\"]`` by id, with social fields normalized."""
+    ensure_defaults(world)
+    nid = str(npc_id or "").strip()
+    if not nid:
+        return None
+    for npc in world.get("npcs") or []:
+        if not isinstance(npc, dict):
+            continue
+        if str(npc.get("id") or "").strip() == nid:
+            ensure_npc_social_fields(npc)
+            return npc
+    return None
+
+
+def upsert_world_npc(world: Dict[str, Any], npc_record: Dict[str, Any]) -> Dict[str, Any]:
+    """Insert or merge an NPC by ``id`` into ``world[\"npcs\"]``. Idempotent for identical input."""
+    ensure_defaults(world)
+    if not isinstance(npc_record, dict):
+        raise TypeError("npc_record must be a dict")
+    npcs = world["npcs"]
+    if not isinstance(npcs, list):
+        world["npcs"] = []
+        npcs = world["npcs"]
+    nid = str(npc_record.get("id") or "").strip()
+    if not nid:
+        raise ValueError("npc_record must include a non-empty id")
+    idx = -1
+    for i, row in enumerate(npcs):
+        if isinstance(row, dict) and str(row.get("id") or "").strip() == nid:
+            idx = i
+            break
+    if idx >= 0:
+        merged = {**npcs[idx], **npc_record}
+    else:
+        merged = copy.deepcopy(npc_record)
+    normalized = normalize_promoted_npc_record(merged)
+    if idx >= 0:
+        npcs[idx] = normalized
+    else:
+        npcs.append(normalized)
+    return normalized
+
+
 def _ensure_faction_agenda(faction: Dict[str, Any]) -> None:
     """Ensure faction has agenda fields. Backward compatible."""
     if not isinstance(faction, dict):
@@ -63,6 +114,7 @@ def _ensure_npc_agenda(npc: Dict[str, Any]) -> None:
         npc['location'] = npc['scene_id']
     elif 'location' not in npc:
         npc['location'] = ''
+    ensure_npc_social_fields(npc)
 
 
 def advance_world_tick(world: Dict[str, Any], campaign: Dict[str, Any]) -> Dict[str, Any]:
@@ -357,3 +409,4 @@ def reset_world_playthrough_state(world: Dict[str, Any]) -> None:
         for key in ("location", "scene_id", "availability", "current_agenda", "disposition"):
             if key in tn:
                 npc[key] = tn[key]
+        ensure_npc_social_fields(npc)

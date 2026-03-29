@@ -15,6 +15,8 @@ import logging
 import re
 from typing import Any, Dict, List, Optional, Tuple
 
+from game.prompt_context import canonical_interaction_target_npc_id
+
 from game.interaction_context import (
     assert_valid_speaker,
     canonical_scene_addressable_roster,
@@ -32,12 +34,44 @@ effective_scene_npc_roster = effective_in_scene_npc_roster
 from game.storage import get_scene_runtime
 from game.social import (
     classify_social_question_dimension,
+    finalize_social_target_with_promotion,
     format_structured_fact_social_line,
     select_best_social_answer_candidate,
 )
 from game.utils import slugify
 
 _log = logging.getLogger(__name__)
+
+
+def _session_turn_counter(session: Dict[str, Any] | None) -> int:
+    if not isinstance(session, dict):
+        return 0
+    try:
+        return int(session.get("turn_counter") or 0)
+    except (TypeError, ValueError):
+        return 0
+
+
+def _auth_after_social_promotion_binding(
+    session: Dict[str, Any] | None,
+    world: Dict[str, Any] | None,
+    scene_id: str,
+    auth: Dict[str, Any],
+    scene_envelope: Dict[str, Any] | None,
+    *,
+    merged_player_prompt: str | None = None,
+) -> Tuple[Dict[str, Any], Dict[str, Any], Dict[str, Any]]:
+    """Align resolver output with promoted_actor_npc_map and auto-promotion policy (same as engine social)."""
+    return finalize_social_target_with_promotion(
+        session if isinstance(session, dict) else {},
+        world if isinstance(world, dict) else {},
+        str(scene_id or "").strip(),
+        auth,
+        action_type="",
+        turn_counter=_session_turn_counter(session),
+        scene_envelope=scene_envelope if isinstance(scene_envelope, dict) else None,
+        raw_player_text=merged_player_prompt,
+    )
 
 
 def _scene_envelope_for_strict_social(session: Dict[str, Any] | None, scene_id: str) -> Dict[str, Any] | None:
@@ -252,6 +286,9 @@ def resolve_strict_social_npc_target_id(
         merged_player_prompt=prompt,
         allow_first_roster_fallback=True,
     )
+    auth, _, _ = _auth_after_social_promotion_binding(
+        session, world, sid, auth, env, merged_player_prompt=prompt
+    )
     basis = _legacy_strict_basis_from_authoritative(auth, world if isinstance(world, dict) else None, sid)
     return str(auth.get("npc_id") or "").strip(), basis
 
@@ -386,6 +423,9 @@ def minimal_social_resolution_for_directed_question_guard(
         scene_envelope=env,
         allow_first_roster_fallback=True,
     )
+    auth, tb, tph = _auth_after_social_promotion_binding(
+        session, world, sid, auth, env, merged_player_prompt=prompt
+    )
     target = str(auth.get("npc_id") or "").strip()
     if not target or not auth.get("target_resolved") or auth.get("offscene_target"):
         return None
@@ -402,6 +442,10 @@ def minimal_social_resolution_for_directed_question_guard(
         "target_candidate_id": None,
         "target_candidate_valid": False,
     }
+    if tb:
+        soc["target_binding"] = dict(tb)
+    if tph:
+        soc["target_profile_hints"] = dict(tph)
     grb = auth.get("generic_role_rebind")
     if isinstance(grb, dict):
         soc["generic_role_rebind"] = grb
@@ -464,15 +508,22 @@ def should_apply_strict_social_exchange_emission(
 
 
 def _npc_display_name_for_emission(world: Dict[str, Any] | None, scene_id: str, npc_id: str) -> str:
-    """Resolve a short speaker label; avoids depending on resolution.social.npc_name being present."""
+    """Resolve a short speaker label; prefers persisted world NPC row (stable across turns)."""
     from game.defaults import default_world
     from game.social import find_npc_by_target
+    from game.world import get_world_npc_by_id
 
     sid = str(scene_id or "").strip()
     nid = str(npc_id or "").strip()
     if not nid:
         return "The guard"
-    npc = find_npc_by_target(world or {}, nid, sid) if world is not None else None
+    w = world if isinstance(world, dict) else {}
+    row = get_world_npc_by_id(w, nid)
+    if isinstance(row, dict):
+        nm = str(row.get("name") or "").strip()
+        if nm:
+            return nm
+    npc = find_npc_by_target(w, nid, sid) if w is not None else None
     if npc is None:
         npc = find_npc_by_target(default_world(), nid, sid)
     name = str((npc or {}).get("name") or "").strip()
@@ -507,6 +558,9 @@ def synthetic_social_exchange_resolution_for_emission(
         scene_envelope=env,
         allow_first_roster_fallback=True,
     )
+    auth, tb2, tph2 = _auth_after_social_promotion_binding(
+        session, world, sid, auth, env, merged_player_prompt=prompt
+    )
     target = str(auth.get("npc_id") or "").strip()
     if not target or not auth.get("target_resolved") or auth.get("offscene_target"):
         return None
@@ -530,6 +584,10 @@ def synthetic_social_exchange_resolution_for_emission(
         "target_candidate_id": None,
         "target_candidate_valid": False,
     }
+    if tb2:
+        soc2["target_binding"] = dict(tb2)
+    if tph2:
+        soc2["target_profile_hints"] = dict(tph2)
     grb2 = auth.get("generic_role_rebind")
     if isinstance(grb2, dict):
         soc2["generic_role_rebind"] = grb2
@@ -620,7 +678,11 @@ def reconcile_strict_social_resolution_speaker(
         scene_envelope=env,
         allow_first_roster_fallback=True,
     )
+    auth, tb3, tph3 = _auth_after_social_promotion_binding(
+        session, world, sid, auth, env, merged_player_prompt=merged
+    )
     target_id = str(auth.get("npc_id") or "").strip()
+    target_id = canonical_interaction_target_npc_id(session if isinstance(session, dict) else None, target_id)
     if not target_id or not auth.get("target_resolved") or auth.get("offscene_target"):
         return resolution
     out = dict(resolution)
@@ -643,6 +705,10 @@ def reconcile_strict_social_resolution_speaker(
     soc["target_candidate_valid"] = bool(cand and cand in addr)
     if not str(soc.get("social_intent_class") or "").strip():
         soc["social_intent_class"] = "social_exchange"
+    if tb3:
+        soc["target_binding"] = dict(tb3)
+    if tph3:
+        soc["target_profile_hints"] = dict(tph3)
     grb = auth.get("generic_role_rebind")
     if isinstance(grb, dict):
         soc["generic_role_rebind"] = grb
@@ -1530,6 +1596,9 @@ def hard_reject_social_exchange_text(
         merged_player_prompt=merged,
         scene_envelope=env_hr,
         allow_first_roster_fallback=True,
+    )
+    auth, _, _ = _auth_after_social_promotion_binding(
+        session, world, sid, auth, env_hr, merged_player_prompt=merged
     )
     canonical_id = str(auth.get("npc_id") or "").strip()
     if npc_id and canonical_id and npc_id != canonical_id:
