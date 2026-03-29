@@ -3,7 +3,7 @@ from typing import Any, Dict, List, Tuple
 import copy
 import json
 import re
-from game.config import MODEL_NAME
+from game.config import MODEL_NAME, OPENAI_API_KEY
 from game.utils import slugify
 from game.exploration import EXPLORATION_KINDS
 from game.social import (
@@ -4560,7 +4560,7 @@ def call_gpt(messages: List[Dict[str, str]]) -> Dict[str, Any]:
     # Wrap the OpenAI call so network/API/model errors do not crash gameplay.
     try:
         from openai import OpenAI
-        client = OpenAI()
+        client = OpenAI(api_key=OPENAI_API_KEY)
         resp = client.responses.create(model=MODEL_NAME, input=messages)
         text = getattr(resp, 'output_text', None)
         if text is None:
