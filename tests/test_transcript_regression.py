@@ -2,8 +2,9 @@
 
 Single-turn routing, discovery shape, and combat engine details are covered by integration/unit tests
 (e.g. ``test_turn_pipeline_shared``, ``test_exploration_resolution``, ``test_discovery_memory``,
-``test_combat_resolution``). This module only locks **ordering** across requests: state from turn N
-must be visible on turn N+1.
+``test_combat_resolution``). This module locks **ordering** across requests (state from turn N
+must be visible on turn N+1) and a small slice of **retry-budget exhaustion** end-to-end on
+``/api/action`` (terminal forward progress, not narration wording).
 """
 from __future__ import annotations
 
@@ -18,6 +19,7 @@ from game.defaults import (
     default_session,
     default_world,
 )
+from game.gm import MAX_TARGETED_RETRY_ATTEMPTS
 from fastapi.testclient import TestClient
 
 import pytest
@@ -25,6 +27,11 @@ import pytest
 pytestmark = [pytest.mark.transcript, pytest.mark.slow]
 
 DESK_CLUE_ID = "desk_clue"
+
+# Triggers ``validator_voice`` retry failures on every attempt (no ``?`` player line → no unresolved-question race).
+_VALIDATOR_VOICE_TRAP_TEXT = (
+    "Based on what's established, we can determine very little here."
+)
 
 FAKE_GPT_RESPONSE = {
     "player_facing_text": "[Narration]",
@@ -116,6 +123,56 @@ def _seed_transcript_world(tmp_path, monkeypatch, **overrides):
     storage._save_json(storage.CONDITIONS_PATH, default_conditions())
     if not storage.SESSION_LOG_PATH.exists():
         storage.SESSION_LOG_PATH.write_text("", encoding="utf-8")
+
+
+def _gm_response(text: str, *, tags=None, debug_notes: str = ""):
+    return {
+        "player_facing_text": text,
+        "tags": list(tags or []),
+        "scene_update": None,
+        "activate_scene_id": None,
+        "new_scene_draft": None,
+        "world_updates": None,
+        "suggested_action": None,
+        "debug_notes": debug_notes,
+    }
+
+
+def _seed_transcript_world_with_runner(tmp_path, monkeypatch):
+    """Transcript seed plus a single NPC for directed social turns on the investigation scene."""
+    _seed_transcript_world(tmp_path, monkeypatch)
+    world = storage.load_world()
+    world["npcs"] = [
+        {
+            "id": "runner",
+            "name": "Tavern Runner",
+            "location": "scene_investigate",
+            "topics": [{"id": "gate_rumor", "text": "The gate closes at dusk.", "clue_id": "gate_rumor"}],
+        }
+    ]
+    storage._save_json(storage.WORLD_PATH, world)
+
+
+def _assert_player_facing_text_is_usable(text: str) -> None:
+    t = (text or "").strip()
+    assert t, "player-facing text must be non-empty"
+    assert not t.startswith("{"), "player-facing text must not look like a raw JSON object"
+    assert '"player_facing_text"' not in t, "player-facing text must not embed serialized payload keys"
+    assert '"scene_update"' not in t
+
+
+def _assert_terminal_retry_or_repair_metadata(gm: dict) -> None:
+    tags = gm.get("tags") if isinstance(gm.get("tags"), list) else []
+    dbg = gm.get("debug_notes") if isinstance(gm.get("debug_notes"), str) else ""
+    assert (
+        gm.get("targeted_retry_terminal") is True
+        or gm.get("retry_exhausted") is True
+        or "forced_retry_fallback" in tags
+        or "retry_escape_hatch" in tags
+        or "retry_exhausted" in tags
+        or "forced_retry_fallback" in dbg
+        or "retry_escape_hatch" in dbg
+    ), "expected terminal retry / escape-hatch signals on gm_output"
 
 
 def _post_explore(client, exploration_action: dict, intent: str | None = None):
@@ -219,3 +276,97 @@ def test_transcript_sequence_combat_initiative_then_attack(tmp_path, monkeypatch
     assert res2["combat"]["combat_phase"] == "attack"
     assert res2["combat"]["actor"]["id"] == "galinor"
     assert res2["combat"]["target"]["id"] == "goblin_1"
+
+
+def test_transcript_social_retry_exhaustion_terminal_forward_progress(tmp_path, monkeypatch):
+    """Social POST: every GPT attempt fails ``validator_voice`` until the budget is exhausted; response still completes."""
+    _seed_transcript_world_with_runner(tmp_path, monkeypatch)
+    social_action = {
+        "id": "greet-runner",
+        "label": "Acknowledge the runner",
+        "type": "question",
+        "prompt": "I nod to the Tavern Runner, giving them room to speak.",
+        "target_id": "runner",
+        "targetEntityId": "runner",
+    }
+    gpt_calls: list = []
+
+    def _always_fail_validator_voice(_messages):
+        gpt_calls.append(_messages)
+        return _gm_response(_VALIDATOR_VOICE_TRAP_TEXT)
+
+    with monkeypatch.context() as m:
+        m.setattr("game.api.call_gpt", _always_fail_validator_voice)
+        client = TestClient(app)
+        resp = client.post(
+            "/api/action",
+            json={
+                "action_type": "social",
+                "intent": "I nod to the Tavern Runner, giving them room to speak.",
+                "social_action": social_action,
+            },
+        )
+
+    assert resp.status_code == 200
+    data = resp.json()
+    assert data.get("ok") is True
+    gm = data.get("gm_output") or {}
+    pft = gm.get("player_facing_text")
+    _assert_player_facing_text_is_usable(str(pft or ""))
+    assert _VALIDATOR_VOICE_TRAP_TEXT.lower() not in str(pft or "").lower()
+    _assert_terminal_retry_or_repair_metadata(gm)
+
+    assert len(gpt_calls) == 1 + MAX_TARGETED_RETRY_ATTEMPTS
+
+    ctx = (data.get("session") or {}).get("interaction_context") or {}
+    assert ctx.get("active_interaction_target_id") == "runner"
+    assert ctx.get("active_interaction_kind") == "social"
+    assert ctx.get("interaction_mode") == "social"
+    assert (ctx.get("engagement_level") or "").strip().lower() == "engaged"
+
+    res = data.get("resolution") or {}
+    assert res.get("kind") == "question"
+    assert (res.get("social") or {}).get("npc_id") == "runner"
+
+
+def test_transcript_nonsocial_retry_exhaustion_terminal_forward_progress(tmp_path, monkeypatch):
+    """Exploration POST: retry budget exhausts on repeated ``validator_voice``; clue discovery and narration still complete."""
+    _seed_transcript_world(tmp_path, monkeypatch)
+    desk_action = {
+        "id": "inv-desk",
+        "label": "Investigate the desk",
+        "type": "investigate",
+        "prompt": "I investigate the desk",
+    }
+    gpt_calls: list = []
+
+    def _always_fail_validator_voice(_messages):
+        gpt_calls.append(_messages)
+        return _gm_response(_VALIDATOR_VOICE_TRAP_TEXT)
+
+    with monkeypatch.context() as m:
+        m.setattr("game.api.call_gpt", _always_fail_validator_voice)
+        client = TestClient(app)
+        resp = client.post(
+            "/api/action",
+            json={
+                "action_type": "exploration",
+                "intent": "I investigate the desk",
+                "exploration_action": desk_action,
+            },
+        )
+
+    assert resp.status_code == 200
+    data = resp.json()
+    assert data.get("ok") is True
+    gm = data.get("gm_output") or {}
+    _assert_player_facing_text_is_usable(str(gm.get("player_facing_text") or ""))
+    _assert_terminal_retry_or_repair_metadata(gm)
+    assert len(gpt_calls) == 1 + MAX_TARGETED_RETRY_ATTEMPTS
+
+    assert (data.get("session") or {}).get("active_scene_id") == "scene_investigate"
+    res = data.get("resolution") or {}
+    assert res.get("kind") == "discover_clue"
+    assert res.get("clue_id") == DESK_CLUE_ID
+    rt = (data.get("session") or {}).get("scene_runtime", {}).get("scene_investigate") or {}
+    assert DESK_CLUE_ID in (rt.get("discovered_clue_ids") or [])
