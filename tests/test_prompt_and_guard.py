@@ -3,6 +3,7 @@ import re
 
 import pytest
 
+pytestmark = pytest.mark.brittle
 
 FRONTIER_GATE_SCENE = {
     "scene": {
@@ -56,6 +57,13 @@ def _dummy_state():
     combat = {"in_combat": False}
     recent_log = []
     return campaign, world, session, character, combat, recent_log
+
+
+def _assert_text_contains_all(text: str, *substrings: str) -> None:
+    """Structural prose check: avoid pinning full canonical sentences from scene fixtures."""
+    low = (text or "").lower()
+    for s in substrings:
+        assert s.lower() in low, (s, text)
 
 
 def _assert_bounded_uncertainty(text: str, *, forbidden_terms: tuple[str, ...] = ()) -> None:
@@ -593,7 +601,7 @@ def test_known_fact_guard_resolves_recent_named_follow_up_before_uncertainty():
         resolution=resolution,
     )
     assert known is not None
-    assert known["text"] == "Lady Misia is near the tavern entrance."
+    _assert_text_contains_all(known["text"], "lady", "misia", "tavern")
     assert known["source"] == "recent_dialogue_continuity"
 
     uncertainty = classify_uncertainty(
@@ -604,7 +612,9 @@ def test_known_fact_guard_resolves_recent_named_follow_up_before_uncertainty():
         resolution=resolution,
     )
     assert uncertainty["category"] == ""
-    assert render_uncertainty_response(uncertainty) == "Lady Misia is near the tavern entrance."
+    rendered = render_uncertainty_response(uncertainty)
+    _assert_text_contains_all(rendered, "lady", "misia", "tavern")
+    assert rendered.strip() == known["text"].strip()
 
     scene_rt = get_scene_runtime(session_no_active, "frontier_gate")
     msgs = build_messages(
@@ -621,7 +631,9 @@ def test_known_fact_guard_resolves_recent_named_follow_up_before_uncertainty():
     )
     payload = json.loads(msgs[1]["content"])
     assert payload["uncertainty_hint"] is None
-    assert payload["known_answer_hint"]["text"] == "Lady Misia is near the tavern entrance."
+    kah = (payload.get("known_answer_hint") or {}).get("text") or ""
+    _assert_text_contains_all(kah, "lady", "misia", "tavern")
+    assert kah.strip() == known["text"].strip()
 
 
 def test_known_fact_guard_resolves_explicit_location_clue_before_uncertainty():
@@ -636,7 +648,7 @@ def test_known_fact_guard_resolves_explicit_location_clue_before_uncertainty():
         resolution=None,
     )
     assert known is not None
-    assert known["text"] == "Refugees crowd the muddy approach road."
+    _assert_text_contains_all(known["text"], "refugees", "muddy", "road")
     assert known["source"] == "observable_scene_fact"
 
     uncertainty = classify_uncertainty(
@@ -647,7 +659,9 @@ def test_known_fact_guard_resolves_explicit_location_clue_before_uncertainty():
         resolution=None,
     )
     assert uncertainty["category"] == ""
-    assert render_uncertainty_response(uncertainty) == "Refugees crowd the muddy approach road."
+    rendered = render_uncertainty_response(uncertainty)
+    _assert_text_contains_all(rendered, "refugees", "muddy", "road")
+    assert rendered.strip() == known["text"].strip()
 
 
 def test_known_fact_guard_resolves_observable_scene_fact_before_uncertainty():
@@ -662,7 +676,7 @@ def test_known_fact_guard_resolves_observable_scene_fact_before_uncertainty():
         resolution=None,
     )
     assert known is not None
-    assert known["text"] == "A notice board lists new taxes, curfews, and a missing patrol."
+    _assert_text_contains_all(known["text"], "notice", "board", "patrol")
     assert known["source"] == "observable_scene_fact"
 
     uncertainty = classify_uncertainty(
@@ -673,7 +687,9 @@ def test_known_fact_guard_resolves_observable_scene_fact_before_uncertainty():
         resolution=None,
     )
     assert uncertainty["category"] == ""
-    assert render_uncertainty_response(uncertainty) == "A notice board lists new taxes, curfews, and a missing patrol."
+    rendered = render_uncertainty_response(uncertainty)
+    _assert_text_contains_all(rendered, "notice", "board", "patrol")
+    assert rendered.strip() == known["text"].strip()
 
 
 def test_guard_blocks_discoverable_clue_when_not_justified():
@@ -1019,7 +1035,7 @@ def test_social_exchange_question_first_sentence_contract_rejects_atmospheric_op
     assert check["applies"] is True
     assert check["ok"] is False
     assert "question_rule:social_exchange_first_sentence_not_speaker_grounded" in check["reasons"]
-    assert "question_rule:social_exchange_first_sentence_not_explicit_answer_shape" in check["reasons"]
+    assert "question_rule:social_exchange_first_sentence_not_substantive_answer" in check["reasons"]
 
 
 def test_detect_retry_failures_flags_social_exchange_first_sentence_contract():
@@ -1054,10 +1070,10 @@ def test_detect_retry_failures_flags_social_exchange_first_sentence_contract():
     assert unresolved is not None
     reasons = unresolved.get("reasons") or []
     assert "question_rule:social_exchange_first_sentence_not_speaker_grounded" in reasons
-    assert "question_rule:social_exchange_first_sentence_not_explicit_answer_shape" in reasons
+    assert "question_rule:social_exchange_first_sentence_not_substantive_answer" in reasons
 
 
-def test_retry_prompt_for_social_exchange_first_sentence_failure_requests_explicit_shape():
+def test_retry_prompt_for_social_exchange_first_sentence_failure_requests_substantive_shape():
     from game.gm import build_retry_prompt_for_failure
 
     prompt = build_retry_prompt_for_failure(
@@ -1065,7 +1081,7 @@ def test_retry_prompt_for_social_exchange_first_sentence_failure_requests_explic
             "failure_class": "unresolved_question",
             "reasons": [
                 "question_rule:social_exchange_first_sentence_not_speaker_grounded",
-                "question_rule:social_exchange_first_sentence_not_explicit_answer_shape",
+                "question_rule:social_exchange_first_sentence_not_substantive_answer",
             ],
             "uncertainty_category": "unknown_identity",
             "uncertainty_context": {
@@ -1078,7 +1094,103 @@ def test_retry_prompt_for_social_exchange_first_sentence_failure_requests_explic
     assert "retry target: unresolved_question." in low
     assert "sentence one must directly answer" in low
     assert "social exchange contract" in low
-    assert "speaker-grounded and explicit" in low
+    assert "speaker-grounded and substantive" in low
+
+
+def test_social_exchange_natural_warning_passes_question_rule():
+    from game.gm import question_resolution_rule_check
+
+    check = question_resolution_rule_check(
+        player_text="Anyone I should steer clear of for sure?",
+        gm_reply_text=(
+            "Tavern Runner doesn't look at you. "
+            "Keep clear of House Verevin's bailiffs by the east crossroads—people vanish near that stretch."
+        ),
+        resolution={
+            "kind": "question",
+            "social": {
+                "social_intent_class": "social_exchange",
+                "npc_id": "tavern_runner",
+                "npc_name": "Tavern Runner",
+            },
+        },
+    )
+    assert check["applies"] is True
+    assert check["ok"] is True
+    assert check.get("social_answer_validation_mode") == "substantive_content"
+    assert check.get("first_sentence_substantive") is True
+    assert check.get("rejected_as_cinematic_nonanswer") is False
+
+
+def test_social_exchange_natural_directional_passes_question_rule():
+    from game.gm import question_resolution_rule_check
+
+    check = question_resolution_rule_check(
+        player_text="Where shouldn't I go tonight?",
+        gm_reply_text='Tavern Runner says, "Watch out for the mill yard after dark—best not cross Verevin\'s riders there."',
+        resolution={
+            "kind": "question",
+            "social": {
+                "social_intent_class": "social_exchange",
+                "npc_id": "tavern_runner",
+                "npc_name": "Tavern Runner",
+            },
+        },
+    )
+    assert check["applies"] is True
+    assert check["ok"] is True
+
+
+def test_social_exchange_cinematic_interruption_fails_question_rule():
+    from game.gm import question_resolution_rule_check
+
+    check = question_resolution_rule_check(
+        player_text="Who should I avoid?",
+        gm_reply_text=(
+            "Tavern Runner starts to answer, then pauses as shouting breaks out by the gate."
+        ),
+        resolution={
+            "kind": "question",
+            "social": {
+                "social_intent_class": "social_exchange",
+                "npc_id": "tavern_runner",
+                "npc_name": "Tavern Runner",
+            },
+        },
+    )
+    assert check["applies"] is True
+    assert check["ok"] is False
+    assert "question_rule:social_exchange_first_sentence_not_substantive_answer" in check["reasons"]
+    assert check.get("rejected_as_cinematic_nonanswer") is True
+
+
+def test_is_valid_social_answer_first_sentence_helper():
+    from game.gm import is_valid_social_answer_first_sentence
+
+    assert is_valid_social_answer_first_sentence("Keep clear of House Verevin's men by the crossroads.") is True
+    assert is_valid_social_answer_first_sentence("Watch out for riders on the east road.") is True
+    assert is_valid_social_answer_first_sentence("Tavern Runner starts to answer, then pauses.") is False
+    assert is_valid_social_answer_first_sentence("For a moment the scene holds, unreadable.") is False
+    assert is_valid_social_answer_first_sentence("") is False
+
+
+def test_social_exchange_short_substantive_answer_passes_question_rule():
+    from game.gm import question_resolution_rule_check
+
+    check = question_resolution_rule_check(
+        player_text="Any names I should know?",
+        gm_reply_text='Tavern Runner mutters, "Don\'t trust the night clerk at the Crown."',
+        resolution={
+            "kind": "question",
+            "social": {
+                "social_intent_class": "social_exchange",
+                "npc_id": "tavern_runner",
+                "npc_name": "Tavern Runner",
+            },
+        },
+    )
+    assert check["applies"] is True
+    assert check["ok"] is True
 
 
 def test_validator_voice_detection_matches_forbidden_patterns():
@@ -1750,7 +1862,7 @@ def test_topic_pressure_escalation_skipped_for_strict_social_exchange(monkeypatc
         low = text.lower()
         tags = out.get("tags") or []
         assert "topic_pressure_escalation" not in tags
-        assert "rumor says the crossroads were bad" in low
+        assert "crossroads" in low and "rumor" in low
         assert "captain veyra" in low
 
 

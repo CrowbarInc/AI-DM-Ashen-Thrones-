@@ -119,7 +119,14 @@ def save_session(data: Dict[str, Any]) -> None:
 
 
 def load_world() -> Dict[str, Any]:
-    return _load_json(WORLD_PATH, default_world())
+    data = _load_json(WORLD_PATH, default_world())
+    from game.world import ensure_defaults, ensure_npc_social_fields
+
+    ensure_defaults(data)
+    for npc in data.get("npcs") or []:
+        if isinstance(npc, dict):
+            ensure_npc_social_fields(npc)
+    return data
 
 
 def save_world(data: Dict[str, Any]) -> None:
@@ -251,6 +258,8 @@ def get_scene_state(session: Dict[str, Any]) -> Dict[str, Any]:
         state["entity_presence"] = {}
     if "current_interlocutor" not in state:
         state["current_interlocutor"] = None
+    if not isinstance(state.get("promoted_actor_npc_map"), dict):
+        state["promoted_actor_npc_map"] = {}
     return state
 
 

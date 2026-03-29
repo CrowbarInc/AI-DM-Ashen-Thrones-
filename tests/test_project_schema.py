@@ -1,4 +1,6 @@
 """Tests for canonical project shape, legacy compatibility, and advancement."""
+import pytest
+
 from game.projects import (
     PROJECT_STATUSES,
     create_project,
@@ -6,6 +8,10 @@ from game.projects import (
     _normalize_project_shape,
 )
 from game.world import advance_world_tick
+
+pytestmark = pytest.mark.unit
+
+# feature: continuity
 
 
 def test_advancement_uses_canonical_target_progress_status():

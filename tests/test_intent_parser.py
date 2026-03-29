@@ -3,6 +3,8 @@ import pytest
 
 from game.intent_parser import parse_freeform_to_action, parse_intent, segment_mixed_player_turn
 
+pytestmark = pytest.mark.unit
+
 
 def test_look_at_altar_maps_to_investigate():
     """'look at altar' maps to investigate with target altar."""

@@ -2,12 +2,22 @@
 
 This module handles lightweight question categories before GPT narration fallback.
 It does not mutate authoritative state.
+
+Directed NPC information questions are excluded via
+:func:`game.interaction_context.resolve_directed_social_entry` inside
+:func:`classify_adjudication_query` — that gate is authoritative; do not duplicate its rules here.
 """
 from __future__ import annotations
 
 import re
 from typing import Any, Dict, Optional
 
+from game.interaction_context import (
+    addressable_scene_npc_id_universe,
+    canonical_scene_addressable_roster,
+    is_rules_or_engine_mechanics_question,
+    resolve_directed_social_entry,
+)
 from game.models import make_check_request
 from game.social import find_npc_by_target
 
@@ -97,17 +107,48 @@ def _resolve_target_hint(text: str, session: Dict[str, Any]) -> Optional[str]:
     return None
 
 
-def classify_adjudication_query(text: str, *, has_active_interaction: bool = False) -> Optional[str]:
+def classify_adjudication_query(
+    text: str,
+    *,
+    has_active_interaction: bool = False,
+    session: Optional[Dict[str, Any]] = None,
+    world: Optional[Dict[str, Any]] = None,
+    scene: Optional[Dict[str, Any]] = None,
+) -> Optional[str]:
     """Classify likely adjudication questions into a small inspectable category set.
 
     When *has_active_interaction* is True the classifier skips broad feasibility
     patterns that overlap with normal in-character social questioning (e.g.
     "can I …", "can <name> tell if …").  Explicitly mechanical language still
     routes to adjudication regardless.
+
+    When *session*, *world*, and *scene* are provided, directed NPC information
+    questions are excluded so they can route to social exchange first.
     """
     t = (text or "").strip().lower()
     if not t or "?" not in t:
         return None
+
+    # Social-before-adjudication gate (single owner: interaction_context).
+    # Mechanics/rules fragments (including extracted parentheticals) must not be captured as social.
+    if (
+        session is not None
+        and world is not None
+        and scene is not None
+        and isinstance(session, dict)
+        and isinstance(world, dict)
+        and isinstance(scene, dict)
+        and not is_rules_or_engine_mechanics_question(text)
+    ):
+        entry = resolve_directed_social_entry(
+            session=session,
+            scene=scene,
+            world=world,
+            segmented_turn=None,
+            raw_text=text,
+        )
+        if entry.get("should_route_social"):
+            return None
 
     # Keep this lane explicitly procedural; do not treat ordinary social language
     # (e.g., "I require an audience.") as a mechanics query.
@@ -170,7 +211,19 @@ def classify_adjudication_query(text: str, *, has_active_interaction: bool = Fal
         r"without\s+(?:being\s+)?(?:seen|noticed|detected|heard)"
         r")\b"
     )
-    if re.search(r"\b(can i|can \w+|would it work|is it possible|feasible|can .* tell if)\b", t):
+    # Feasibility openers: player (I/we) or third-party ("can the door…"), not NPC-directed "can you…".
+    _FEASIBILITY_OPENER = re.compile(
+        r"\b("
+        r"can\s+i\b|could\s+i\b|would\s+i\b|"
+        r"can\s+we\b|could\s+we\b|would\s+we\b|"
+        r"can\s+(?!you\b|ye\b)\w+|"
+        r"could\s+(?!you\b|ye\b)\w+|"
+        r"would\s+(?!you\b|ye\b)\w+|"
+        r"would it work|is it possible|feasible|can .* tell if"
+        r")\b",
+        re.IGNORECASE,
+    )
+    if _FEASIBILITY_OPENER.search(t):
         if _MECHANICAL_FEASIBILITY_ANCHORS.search(t):
             return "action_feasibility_query"
         if not has_active_interaction:
@@ -223,12 +276,30 @@ def resolve_adjudication_query(
     Returns None when text is not an adjudication query.
     """
     _ = character  # Reserved for future skill/context checks.
-    category = classify_adjudication_query(text, has_active_interaction=has_active_interaction)
+    category = classify_adjudication_query(
+        text,
+        has_active_interaction=has_active_interaction,
+        session=session,
+        world=world,
+        scene=scene,
+    )
     if category is None:
         return None
 
     scene_id = str(((scene or {}).get("scene") or {}).get("id") or "").strip()
     npcs_here = _in_scene_npcs(world, scene_id)
+    universe = addressable_scene_npc_id_universe(session, scene, world)
+    roster_addr = canonical_scene_addressable_roster(
+        world if isinstance(world, dict) else {},
+        scene_id,
+        scene_envelope=scene if isinstance(scene, dict) else None,
+        session=session if isinstance(session, dict) else None,
+    )
+    roster_by_id = {
+        str(r.get("id") or "").strip(): r
+        for r in roster_addr
+        if isinstance(r, dict) and str(r.get("id") or "").strip()
+    }
 
     # 1) Roll requirement queries.
     if category == "roll_requirement_query":
@@ -301,6 +372,18 @@ def resolve_adjudication_query(
             if active_target and nid == active_target:
                 continue
             filtered.append(name)
+        if not filtered and universe:
+            for uid in sorted(universe):
+                if active_target and uid == active_target:
+                    continue
+                row = roster_by_id.get(uid)
+                label = (
+                    str((row or {}).get("name") or "").strip()
+                    if isinstance(row, dict)
+                    else ""
+                ) or uid.replace("_", " ").replace("-", " ").title()
+                if label:
+                    filtered.append(label)
         if filtered:
             return _finalize_adjudication_result(
                 {

@@ -1,13 +1,15 @@
 from __future__ import annotations
 
 import os
+from pathlib import Path
 
 from dotenv import load_dotenv
 
-# Load environment from .env (if present). This enables local development without
-# hardcoding secrets into source control.
-load_dotenv()
+ROOT_DIR = Path(__file__).resolve().parent.parent
+ENV_PATH = ROOT_DIR / ".env"
 
+# Always load the repo-root .env explicitly rather than relying on cwd.
+load_dotenv(dotenv_path=ENV_PATH)
 
 def _getenv_required(name: str) -> str:
     val = os.getenv(name)
@@ -15,10 +17,8 @@ def _getenv_required(name: str) -> str:
         raise RuntimeError(f"Missing required environment variable: {name}")
     return val
 
-
-# Secrets (no defaults)
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+# Secrets (required)
+OPENAI_API_KEY = _getenv_required("OPENAI_API_KEY")
 
 # Non-secrets (defaults allowed)
 MODEL_NAME = os.getenv("MODEL_NAME", "gpt-4o-mini")
-

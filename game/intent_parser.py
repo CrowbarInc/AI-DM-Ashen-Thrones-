@@ -3,6 +3,16 @@
 Converts typed player text into structured engine actions deterministically.
 Scene context (exits, interactables, visible_facts) is used for target matching.
 When the parser cannot confidently resolve intent, returns None → GPT fallback.
+
+``adjudication_question_text`` is syntactic extraction only; whether that clause is treated as
+procedural adjudication vs in-scene dialogue is decided by
+:func:`game.interaction_context.resolve_directed_social_entry` (canonical entry) and
+``game.adjudication``, not here.
+
+Explicit spoken comma vocatives (including discourse-prefixed forms like "Alright Runner, …") are
+resolved by :func:`game.interaction_context.resolve_spoken_vocative_target` using segmented
+``spoken_text`` / merged addressing text — see that module for roster-aware precedence over
+interlocutor continuity.
 """
 from __future__ import annotations
 
@@ -88,9 +98,24 @@ def _clean_clause(value: str | None) -> Optional[str]:
     return cleaned or None
 
 
+def _looks_like_npc_directed_second_person_question(low: str) -> bool:
+    """Spoken questions to an NPC ('can you…', 'do you know…') — not GM adjudication clauses."""
+    if not low or "?" not in low:
+        return False
+    if re.search(r"\b(?:can|could|would|will)\s+you\b", low):
+        return True
+    if re.search(r"\b(?:do|does|did)\s+you\s+know\b", low):
+        return True
+    if re.search(r"\bhave\s+you\s+seen\b", low):
+        return True
+    return False
+
+
 def _looks_like_adjudication_question(text: str) -> bool:
     low = (text or "").strip().lower()
     if not low or "?" not in low:
+        return False
+    if _looks_like_npc_directed_second_person_question(low):
         return False
     return any(token in low for token in _ADJUDICATION_TOKENS)
 

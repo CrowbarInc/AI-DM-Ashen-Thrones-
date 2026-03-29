@@ -1,5 +1,6 @@
 """Tests for deterministic social resolution engine."""
-import pytest
+import copy
+
 from game.social import (
     resolve_social_action,
     find_npc_by_target,
@@ -18,6 +19,8 @@ from game.interaction_context import (
     set_social_target,
 )
 from game.storage import load_scene
+from game.world import get_world_npc_by_id
+from game.npc_promotion import promoted_npc_id_for_actor as promoted_npc_id_for_actor_core
 
 
 ENGINE_RESULT_REQUIRED = frozenset({
@@ -594,7 +597,7 @@ def test_frontier_gate_generic_addressing_smoke_authoritative():
     )
     assert auth_s["npc_id"] == "refugee"
     # Comma vocative on "Stranger" resolves before generic-role patterns (same correct target).
-    assert auth_s["source"] in ("vocative", "generic_role")
+    assert auth_s["source"] in ("spoken_vocative", "vocative", "generic_role")
     if auth_s["source"] == "generic_role":
         grs = auth_s.get("generic_role_rebind")
         assert isinstance(grs, dict)
@@ -623,7 +626,7 @@ def test_frontier_gate_generic_addressing_smoke_authoritative():
         allow_first_roster_fallback=False,
     )
     assert auth_r["npc_id"] == "tavern_runner"
-    assert auth_r["source"] in ("vocative", "generic_role")
+    assert auth_r["source"] in ("spoken_vocative", "vocative", "generic_role")
 
     auth_r_gen = resolve_authoritative_social_target(
         session,
@@ -665,3 +668,227 @@ def test_clear_interaction_context_resets_all_fields():
     assert ctx["engagement_level"] == "none"
     assert ctx["conversation_privacy"] is None
     assert ctx["player_position_context"] is None
+
+
+def _frontier_gate_empty_world_session():
+    """Empty world.npcs with frontier_gate scene entities rebuilt (matches Block 2 smoke tests)."""
+    world: dict = {"npcs": []}
+    session = default_session()
+    session["active_scene_id"] = "frontier_gate"
+    session["scene_state"]["active_scene_id"] = "frontier_gate"
+    st = session["scene_state"]
+    st["active_entities"] = ["guard_captain", "tavern_runner", "refugee", "threadbare_watcher"]
+    ep = st.setdefault("entity_presence", {})
+    ep.update(
+        {
+            "guard_captain": "active",
+            "tavern_runner": "active",
+            "refugee": "active",
+            "threadbare_watcher": "active",
+        }
+    )
+    scene = load_scene("frontier_gate")
+    scene["scene_state"] = dict(st)
+    rebuild_active_scene_entities(session, world, "frontier_gate", scene_envelope=scene)
+    return world, session, scene
+
+
+def test_social_resolution_uses_existing_promoted_actor_map_before_new_promotion():
+    """promoted_actor_npc_map binds follow-ups before any auto-promotion / world upsert."""
+    world, session, scene = _frontier_gate_empty_world_session()
+    canon = "canon_refugee_row"
+    world["npcs"] = [
+        {
+            "id": canon,
+            "name": "Ragged stranger",
+            "location": "frontier_gate",
+            "disposition": "neutral",
+            "role": "refugee",
+            "affiliation": "",
+            "availability": "available",
+            "current_agenda": "flee west",
+            "topics": [{"id": "t1", "text": "I saw riders on the west road.", "clue_id": "west_riders"}],
+            "promoted_from_actor_id": "refugee",
+            "origin_scene_id": "other_scene",
+            "origin_kind": "scene_actor",
+        }
+    ]
+    assert promoted_npc_id_for_actor_core(None, world, "frontier_gate", "refugee") is None
+    session["scene_state"]["promoted_actor_npc_map"]["refugee"] = canon
+    set_social_target(session, "refugee")
+
+    n_before = len(world["npcs"])
+    r = resolve_social_action(
+        scene,
+        session,
+        world,
+        {"id": "q-follow", "type": "question", "label": "follow-up", "prompt": "What do you mean by that?"},
+        raw_player_text="What do you mean by that?",
+        character=default_character(),
+        turn_counter=2,
+    )
+    assert len(world["npcs"]) == n_before == 1
+    assert r["social"]["npc_id"] == canon
+    assert r["social"]["target_resolved"] is True
+    tb = r["social"].get("target_binding") or {}
+    assert tb.get("npc_id") == canon
+    assert tb.get("target_source") == "promoted_actor"
+    assert tb.get("promoted_this_turn") is False
+
+
+def test_scene_actor_auto_promotes_on_meaningful_social_contact():
+    """One stable vocative-style address promotes roster scene_actor into world.npcs once."""
+    world, session, scene = _frontier_gate_empty_world_session()
+    text = "Threadbare watcher, what did you see out there?"
+    r = resolve_social_action(
+        scene,
+        session,
+        world,
+        {
+            "id": "q-watcher",
+            "type": "question",
+            "label": "Ask watcher",
+            "prompt": text,
+            "target_id": "threadbare_watcher",
+        },
+        raw_player_text=text,
+        character=default_character(),
+        turn_counter=1,
+    )
+    assert len(world["npcs"]) == 1
+    assert r["social"]["target_resolved"] is True
+    assert r["social"]["npc_id"] == "threadbare_watcher"
+    tb = r["social"].get("target_binding") or {}
+    assert tb.get("promoted_this_turn") is True
+    npc = world["npcs"][0]
+    assert npc["id"] == "threadbare_watcher"
+    assert npc.get("promoted_from_actor_id") == "threadbare_watcher"
+
+
+def test_promoted_actor_followup_resolves_same_npc_via_continuity():
+    world, session, scene = _frontier_gate_empty_world_session()
+    t1 = "Stranger, what did you see near the gate?"
+    r1 = resolve_social_action(
+        scene,
+        session,
+        world,
+        {"id": "q1", "type": "question", "label": "ask stranger", "prompt": t1},
+        raw_player_text=t1,
+        character=default_character(),
+        turn_counter=1,
+    )
+    canon_id = r1["social"]["npc_id"]
+    assert len(world["npcs"]) == 1
+    tb1 = r1["social"].get("target_binding") or {}
+    assert tb1.get("promoted_this_turn") is True
+
+    t2 = "What do you mean by that?"
+    r2 = resolve_social_action(
+        scene,
+        session,
+        world,
+        {"id": "q2", "type": "question", "label": "follow-up", "prompt": t2},
+        raw_player_text=t2,
+        character=default_character(),
+        turn_counter=2,
+    )
+    assert r2["social"]["npc_id"] == canon_id
+    assert r2["social"]["target_resolved"] is True
+    assert r2["social"]["target_source"] == "continuity"
+    tb2 = r2["social"].get("target_binding") or {}
+    assert tb2.get("npc_id") == canon_id
+    assert tb2.get("target_source") == "promoted_actor"
+    assert tb2.get("promoted_this_turn") is False
+    assert len(world["npcs"]) == 1
+
+
+def test_repromotion_of_same_actor_is_idempotent_in_social_path():
+    world, session, scene = _frontier_gate_empty_world_session()
+    lines = [
+        "Threadbare watcher, any news?",
+        "Threadbare watcher, tell me more.",
+        "Threadbare watcher, who sent you?",
+    ]
+    for i, raw in enumerate(lines):
+        r = resolve_social_action(
+            scene,
+            session,
+            world,
+            {"id": f"q{i}", "type": "question", "label": "ask", "prompt": raw},
+            raw_player_text=raw,
+            character=default_character(),
+            turn_counter=i + 1,
+        )
+        assert r["social"]["target_resolved"] is True
+        tb = r["social"].get("target_binding") or {}
+        assert tb.get("promoted_this_turn") is (i == 0)
+    assert len(world["npcs"]) == 1
+
+
+def test_native_world_npc_path_never_gets_false_promotion_metadata():
+    world = default_world()
+    captain_before = copy.deepcopy(next(n for n in world["npcs"] if n["id"] == "guard_captain"))
+    session = default_session()
+    session["active_scene_id"] = "frontier_gate"
+    session["scene_state"]["active_scene_id"] = "frontier_gate"
+    st = session["scene_state"]
+    st["active_entities"] = ["guard_captain", "tavern_runner", "refugee", "threadbare_watcher"]
+    st["entity_presence"] = {
+        "guard_captain": "active",
+        "tavern_runner": "active",
+        "refugee": "active",
+        "threadbare_watcher": "active",
+    }
+    scene = load_scene("frontier_gate")
+    scene["scene_state"] = dict(st)
+    rebuild_active_scene_entities(session, world, "frontier_gate", scene_envelope=scene)
+    set_social_target(session, "guard_captain")
+
+    r = resolve_social_action(
+        scene,
+        session,
+        world,
+        {
+            "id": "q-cap",
+            "type": "question",
+            "label": "follow captain",
+            "prompt": "What do you mean?",
+        },
+        raw_player_text="What do you mean?",
+        character=default_character(),
+        turn_counter=1,
+    )
+    tb = r["social"].get("target_binding") or {}
+    assert tb.get("target_source") == "native_npc"
+    assert tb.get("promoted_this_turn") is False
+    assert tb.get("origin_actor_id") is None
+
+    captain_after = get_world_npc_by_id(world, "guard_captain")
+    assert captain_after is not None
+    assert (captain_after.get("promoted_from_actor_id") or None) == (
+        captain_before.get("promoted_from_actor_id") or None
+    )
+    assert r["social"]["npc_id"] == "guard_captain"
+
+
+def test_unpromotable_actor_fails_cleanly_in_social_resolution():
+    """Unknown explicit target: no resolution and no emergent world.npcs row."""
+    world, session, scene = _frontier_gate_empty_world_session()
+    bogus = "totally_unknown_addressable_zz"
+    r = resolve_social_action(
+        scene,
+        session,
+        world,
+        {
+            "id": "q-bogus",
+            "type": "question",
+            "label": "hail",
+            "prompt": "Hey.",
+            "target_id": bogus,
+        },
+        raw_player_text="Hey you.",
+        character=default_character(),
+        turn_counter=1,
+    )
+    assert r["social"]["target_resolved"] is False
+    assert len(world["npcs"]) == 0

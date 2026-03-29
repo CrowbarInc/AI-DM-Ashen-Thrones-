@@ -57,6 +57,8 @@ def _fresh_scene_state(scene_id: str) -> Dict[str, Any]:
         "active_entities": [],
         "entity_presence": {},
         "current_interlocutor": None,
+        "emergent_addressables": [],
+        "promoted_actor_npc_map": {},
     }
 
 

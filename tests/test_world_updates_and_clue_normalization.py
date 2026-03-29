@@ -146,7 +146,7 @@ def test_gpt_narration_surfacing_does_not_mutate_clue_state():
         "debug_notes": "",
     }
 
-    _, session_after, _, surfaced = _apply_post_gm_updates(gm, scene, session, world, combat)
+    _, session_after, _, surfaced, _narr_leads = _apply_post_gm_updates(gm, scene, session, world, combat)
     assert surfaced == ["A coded mark is carved beneath the bridge rail."]
     assert session_after.get("clue_knowledge") == {}
     assert (session_after.get("scene_runtime", {}).get("gate", {}).get("discovered_clue_ids") or []) == []
