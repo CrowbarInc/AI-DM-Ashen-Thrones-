@@ -34,6 +34,7 @@ import secrets
 from typing import Any, Dict
 
 from game.clocks import DEFAULT_CLOCKS
+from game.leads import SESSION_LEAD_REGISTRY_KEY
 
 # Bootstrap-aligned opening location; matches seeded ``data/scenes/*.json`` and
 # ``ensure_data_files_exist``. Not runtime residue — part of new-campaign seed.
@@ -87,6 +88,7 @@ def create_fresh_session_document() -> Dict[str, Any]:
         "scene_state": _fresh_scene_state(sid),
         "scene_runtime": {},
         "clue_knowledge": {},
+        SESSION_LEAD_REGISTRY_KEY: {},
         "npc_runtime": {},
         "last_action_debug": None,
         "debug_traces": [],

@@ -6,7 +6,7 @@ This module is self-contained; callers integrate elsewhere when ready.
 from __future__ import annotations
 
 from enum import Enum
-from typing import Any, Dict, Iterable, List, Mapping, MutableMapping, Sequence
+from typing import AbstractSet, Any, Dict, Iterable, List, Mapping, MutableMapping, Sequence
 
 from game.utils import slugify
 
@@ -75,8 +75,40 @@ _LEAD_LIST_FIELD_NAMES: frozenset[str] = frozenset(
         "supersedes",
         "unlocks",
         "blocked_by",
+        "related_faction_ids",
+        "related_scene_ids",
+        "tags",
+        "evidence_clue_ids",
     }
 )
+
+# Id-like / tag lists normalized with :func:`_normalize_id_list` (not lead-to-lead relation buckets).
+_LEAD_NORMALIZED_ID_LIST_FIELDS: frozenset[str] = frozenset(
+    {
+        "related_faction_ids",
+        "related_scene_ids",
+        "tags",
+        "evidence_clue_ids",
+    }
+)
+
+# Lead-local relation buckets (not a generic graph engine; see relation helpers below).
+LEAD_RELATION_LIST_FIELDS: frozenset[str] = frozenset(
+    {
+        "related_clue_ids",
+        "related_npc_ids",
+        "related_location_ids",
+        "supersedes",
+        "unlocks",
+        "blocked_by",
+    }
+)
+LEAD_RELATION_SCALAR_FIELDS: frozenset[str] = frozenset({"parent_lead_id", "superseded_by"})
+# Directional relations that may participate in inverse maintenance (subset actually wired in code).
+LEAD_RELATION_INVERSE_CAPABLE_DIRECTIONAL: frozenset[str] = frozenset({"supersedes", "parent_lead_id"})
+
+_LEAD_TO_LEAD_LIST_RELATIONS: frozenset[str] = frozenset({"supersedes", "unlocks", "blocked_by"})
+_LEAD_RELATION_MUTABLE: frozenset[str] = LEAD_RELATION_LIST_FIELDS | frozenset({"parent_lead_id"})
 
 # Session dict key for the authoritative lead registry (id -> lead dict).
 SESSION_LEAD_REGISTRY_KEY = "lead_registry"
@@ -140,7 +172,8 @@ def normalize_lead(lead: Any) -> Dict[str, Any]:
 
     Mutates ``lead`` in place when it is a :class:`MutableMapping` (e.g. ``dict``); otherwise
     returns a new dict. List-valued fields get a fresh ``[]`` when absent so templates are not
-    shared across records.
+    shared across records. Faction/scene/tag/evidence id lists are always passed through
+    :func:`_normalize_id_list`; ``metadata`` is a fresh shallow copy or ``{}`` if missing/invalid.
     """
     if isinstance(lead, MutableMapping):
         d: MutableMapping[str, Any] = lead
@@ -156,6 +189,11 @@ def normalize_lead(lead: Any) -> Dict[str, Any]:
     for key, default in _LEAD_SCALAR_DEFAULTS.items():
         if key not in d:
             d[key] = default
+
+    for key in _LEAD_NORMALIZED_ID_LIST_FIELDS:
+        d[key] = _normalize_id_list(d.get(key))
+
+    d["metadata"] = _normalize_metadata(d.get("metadata"))
 
     return d  # type: ignore[return-value]
 
@@ -296,6 +334,67 @@ def _as_str_list(value: Any) -> List[str]:
     return out
 
 
+def _normalize_optional_id(value: Any) -> str | None:
+    """Strip and validate a single relation id; drop blanks and non-coercible junk."""
+    if value is None:
+        return None
+    if isinstance(value, bool):
+        return None
+    if isinstance(value, Enum):
+        s = str(value.value).strip()
+        return s if s else None
+    if isinstance(value, (int, float)):
+        s = str(value).strip()
+        return s if s else None
+    if isinstance(value, str):
+        s = value.strip()
+        return s if s else None
+    if isinstance(value, bytes):
+        try:
+            s = value.decode("utf-8").strip()
+        except (UnicodeDecodeError, ValueError):
+            return None
+        return s if s else None
+    if isinstance(value, (Mapping, Sequence)) and not isinstance(value, (str, bytes)):
+        return None
+    s = str(value).strip()
+    return s if s else None
+
+
+def _normalize_id_list(values: Any) -> List[str]:
+    """Normalize id lists: strip, drop blanks/junk, dedupe, preserve first-seen order."""
+    if values is None:
+        return []
+    if isinstance(values, Mapping):
+        return []
+    if isinstance(values, str):
+        one = _normalize_optional_id(values)
+        return [one] if one else []
+    if isinstance(values, bytes):
+        one = _normalize_optional_id(values)
+        return [one] if one else []
+    if not isinstance(values, Iterable):
+        return []
+    out: List[str] = []
+    seen: set[str] = set()
+    for item in values:
+        nid = _normalize_optional_id(item)
+        if nid is None or nid in seen:
+            continue
+        seen.add(nid)
+        out.append(nid)
+    return out
+
+
+def _normalize_metadata(value: Any) -> Dict[str, Any]:
+    """Return a fresh dict; shallow-copy mapping values, else ``{}`` for non-mappings."""
+    if value is None:
+        return {}
+    if not isinstance(value, Mapping):
+        return {}
+    return dict(value)
+
+
 def _normalize_lifecycle(value: Any) -> str:
     raw = _as_str(value).lower()
     if raw in _LEAD_LIFECYCLE_VALUES:
@@ -425,6 +524,194 @@ def _is_legal_core_field_transition(
     return True
 
 
+def _is_lead_resolved_or_obsolete_lifecycle(row: Mapping[str, Any]) -> bool:
+    lc = _coerce_lifecycle_str(row.get("lifecycle"))
+    return lc in (LeadLifecycle.RESOLVED.value, LeadLifecycle.OBSOLETE.value)
+
+
+def _validate_relation_shapes(lead: Mapping[str, Any]) -> List[str]:
+    out: List[str] = []
+    for field in LEAD_RELATION_LIST_FIELDS:
+        v = lead.get(field)
+        if not isinstance(v, list):
+            out.append(f"relation_list_not_list:{field}")
+            continue
+        bad = False
+        for item in v:
+            if item is None or not isinstance(item, str):
+                out.append(f"relation_list_bad_element:{field}")
+                bad = True
+                break
+        if bad:
+            continue
+    for field in LEAD_RELATION_SCALAR_FIELDS:
+        v = lead.get(field)
+        if v is not None and not isinstance(v, str):
+            out.append(f"relation_scalar_not_str_or_none:{field}")
+    return out
+
+
+def _validate_no_self_links(lead: Mapping[str, Any]) -> List[str]:
+    out: List[str] = []
+    sid = _derive_lead_id(lead)
+    if not sid:
+        return out
+    for field in ("supersedes", "blocked_by", "unlocks"):
+        raw = lead.get(field)
+        if not isinstance(raw, list):
+            continue
+        if sid in raw:
+            out.append(f"relation_self_link:{field}")
+    p = lead.get("parent_lead_id")
+    if isinstance(p, str) and p == sid:
+        out.append("relation_self_parent")
+    return out
+
+
+def _validate_inverse_consistency(lead: Mapping[str, Any], registry: Mapping[str, Any]) -> List[str]:
+    out: List[str] = []
+    sid = _derive_lead_id(lead)
+    if not sid:
+        return out
+    sup = lead.get("supersedes")
+    if not isinstance(sup, list):
+        return out
+    for b in sup:
+        if not isinstance(b, str):
+            continue
+        other = registry.get(b)
+        if not isinstance(other, Mapping):
+            continue
+        if _as_optional_str(other.get("superseded_by")) != sid:
+            out.append("inverse_supersedes_mismatch")
+            break
+    return out
+
+
+def _validate_reference_existence(lead: Mapping[str, Any], registry: Mapping[str, Any]) -> List[str]:
+    out: List[str] = []
+    sid = _derive_lead_id(lead)
+    sb = lead.get("superseded_by")
+    if isinstance(sb, str) and sb:
+        row = registry.get(sb)
+        if not isinstance(row, Mapping):
+            out.append("superseded_by_target_missing")
+
+    pl = lead.get("parent_lead_id")
+    if isinstance(pl, str) and pl:
+        row = registry.get(pl)
+        if not isinstance(row, Mapping):
+            out.append("parent_lead_missing")
+
+    for field in _LEAD_TO_LEAD_LIST_RELATIONS:
+        raw = lead.get(field)
+        if not isinstance(raw, list):
+            continue
+        for tid in raw:
+            if not isinstance(tid, str):
+                continue
+            tgt = registry.get(tid)
+            if not isinstance(tgt, Mapping):
+                out.append(f"relation_target_missing:{field}")
+                break
+    return out
+
+
+def _validate_no_parent_cycle(lead: Mapping[str, Any], registry: Mapping[str, Any]) -> List[str]:
+    start = _derive_lead_id(lead)
+    if not start or start not in registry:
+        return []
+    seen: set[str] = set()
+    cur: str | None = start
+    while cur is not None:
+        if cur in seen:
+            return ["parent_cycle"]
+        seen.add(cur)
+        row = registry.get(cur)
+        if not isinstance(row, Mapping):
+            break
+        cur = _as_optional_str(row.get("parent_lead_id"))
+    return []
+
+
+def _validate_no_supersedes_cycle(lead: Mapping[str, Any], registry: Mapping[str, Any]) -> List[str]:
+    start = _derive_lead_id(lead)
+    if not start:
+        return []
+    row0 = registry.get(start)
+    if not isinstance(row0, Mapping):
+        return []
+
+    def reaches_start_again(u: str, stack: set[str]) -> bool:
+        row = registry.get(u)
+        if not isinstance(row, Mapping):
+            return False
+        subs = row.get("supersedes")
+        if not isinstance(subs, list):
+            return False
+        for v in subs:
+            if not isinstance(v, str):
+                continue
+            if v == start:
+                return True
+            if v in stack:
+                continue
+            stack.add(v)
+            if reaches_start_again(v, stack):
+                return True
+            stack.remove(v)
+        return False
+
+    subs0 = row0.get("supersedes")
+    if not isinstance(subs0, list):
+        return []
+    stack: set[str] = {start}
+    for v in subs0:
+        if not isinstance(v, str):
+            continue
+        if v == start:
+            return ["supersedes_cycle"]
+        if v in stack:
+            continue
+        stack.add(v)
+        if reaches_start_again(v, stack):
+            return ["supersedes_cycle"]
+        stack.remove(v)
+    return []
+
+
+def _validate_blocked_by_unlocks_list_constraints(lead: Mapping[str, Any]) -> List[str]:
+    out: List[str] = []
+    for field in ("blocked_by", "unlocks"):
+        raw = lead.get(field)
+        if not isinstance(raw, list):
+            continue
+        seen: set[str] = set()
+        for x in raw:
+            if not isinstance(x, str):
+                continue
+            if x in seen:
+                out.append(f"relation_duplicate_in_{field}")
+            seen.add(x)
+    return out
+
+
+def _collect_directional_relation_violations(
+    lead: Mapping[str, Any], registry: Mapping[str, Any] | None
+) -> List[str]:
+    out: List[str] = []
+    out.extend(_validate_relation_shapes(lead))
+    out.extend(_validate_no_self_links(lead))
+    out.extend(_validate_blocked_by_unlocks_list_constraints(lead))
+    if registry is None:
+        return out
+    out.extend(_validate_reference_existence(lead, registry))
+    out.extend(_validate_inverse_consistency(lead, registry))
+    out.extend(_validate_no_parent_cycle(lead, registry))
+    out.extend(_validate_no_supersedes_cycle(lead, registry))
+    return out
+
+
 def _collect_lead_invariant_violations(lead: Mapping[str, Any]) -> List[str]:
     """Return stable violation codes for a lead snapshot (lifecycle/status/confidence and field presence vs lifecycle)."""
     out: List[str] = []
@@ -469,8 +756,25 @@ def _lead_invariants_hold(lead: Mapping[str, Any]) -> bool:
     return not _collect_lead_invariant_violations(lead)
 
 
-def _ensure_invariants_after_mutation(lead: Mapping[str, Any]) -> None:
+def _ensure_invariants_after_mutation(
+    lead: Mapping[str, Any],
+    *,
+    registry: Mapping[str, Any] | None = None,
+    legally_new_parent_id: str | None = None,
+    legally_new_supersedes_targets: AbstractSet[str] | None = None,
+) -> None:
+    if registry is not None and legally_new_parent_id:
+        parent_row = registry.get(legally_new_parent_id)
+        if isinstance(parent_row, Mapping) and _is_lead_resolved_or_obsolete_lifecycle(parent_row):
+            raise ValueError("cannot assign new parent: parent lead is resolved or obsolete")
+
+    if registry is not None and legally_new_supersedes_targets:
+        if any(legally_new_supersedes_targets) and isinstance(lead, Mapping):
+            if _is_lead_resolved_or_obsolete_lifecycle(lead):
+                raise ValueError("cannot add supersedes: source lead is resolved or obsolete")
+
     violations = _collect_lead_invariant_violations(lead)
+    violations.extend(_collect_directional_relation_violations(lead, registry))
     if violations:
         raise RuntimeError(
             "lead invariants violated after mutation: " + ", ".join(violations)
@@ -960,6 +1264,314 @@ def update_session_lead_staleness(
     return update_lead_staleness(d, current_turn=current_turn)
 
 
+# --- Lead-local relationship helpers (authoritative registry; not a generic graph engine) ---
+
+
+def add_lead_relation(
+    session: MutableMapping[str, Any],
+    lead_id: Any,
+    relation: str,
+    target_id: Any,
+    *,
+    turn: Any = None,
+) -> Dict[str, Any]:
+    """Add one relation target on a stored lead (lead-local fields only; not a generic edge store).
+
+    Validates registry membership for lead-to-lead edges. Maintains ``superseded_by`` when using
+    ``supersedes``. Stamps ``last_updated_turn`` / ``last_touched_turn`` only when something changes.
+    """
+    rel = _as_str(relation)
+    if rel not in _LEAD_RELATION_MUTABLE:
+        raise ValueError(f"unsupported relation field: {relation!r}")
+
+    sid = _normalize_optional_id(lead_id)
+    if sid is None:
+        raise ValueError("lead_id is required")
+    source = get_lead(session, sid)
+    if source is None:
+        raise ValueError(f"lead does not exist: {sid!r}")
+    normalize_lead(source)
+    reg = ensure_lead_registry(session)
+
+    tid = _normalize_optional_id(target_id)
+    if tid is None:
+        raise ValueError("target_id is required")
+
+    target_lead: Dict[str, Any] | None = None
+    if rel in _LEAD_TO_LEAD_LIST_RELATIONS or rel == "parent_lead_id":
+        if tid == sid:
+            raise ValueError("lead cannot relate to itself")
+        target_lead = get_lead(session, tid)
+        if target_lead is None:
+            raise ValueError(f"target lead does not exist: {tid!r}")
+        normalize_lead(target_lead)
+
+    if rel == "parent_lead_id":
+        assert target_lead is not None
+        prev = _as_optional_str(source.get("parent_lead_id"))
+        if prev == tid:
+            return source
+        source["parent_lead_id"] = tid
+        _ensure_invariants_after_mutation(
+            source,
+            registry=reg,
+            legally_new_parent_id=tid,
+        )
+        _stamp_turn_metadata(source, turn, mutated=True, touched=True)
+        return source
+
+    assert rel in LEAD_RELATION_LIST_FIELDS
+    cur = _normalize_id_list(source.get(rel))
+    if tid in cur:
+        return source
+
+    new_sup: frozenset[str] | None = None
+    if rel == "supersedes":
+        new_sup = frozenset({tid})
+
+    target_touched = False
+    if rel == "supersedes":
+        assert target_lead is not None
+        if _as_optional_str(target_lead.get("superseded_by")) != sid:
+            target_lead["superseded_by"] = sid
+            _ensure_invariants_after_mutation(target_lead, registry=reg)
+            target_touched = True
+
+    source[rel] = cur + [tid]
+    _ensure_invariants_after_mutation(
+        source,
+        registry=reg,
+        legally_new_supersedes_targets=new_sup,
+    )
+    _stamp_turn_metadata(source, turn, mutated=True, touched=True)
+
+    if rel == "supersedes" and target_touched:
+        assert target_lead is not None
+        _stamp_turn_metadata(target_lead, turn, mutated=True, touched=True)
+
+    return source
+
+
+def remove_lead_relation(
+    session: MutableMapping[str, Any],
+    lead_id: Any,
+    relation: str,
+    target_id: Any,
+    *,
+    turn: Any = None,
+) -> Dict[str, Any]:
+    """Remove one relation target; no-op when absent. Keeps ``superseded_by`` consistent for ``supersedes``."""
+    rel = _as_str(relation)
+    if rel not in _LEAD_RELATION_MUTABLE:
+        raise ValueError(f"unsupported relation field: {relation!r}")
+
+    sid = _normalize_optional_id(lead_id)
+    if sid is None:
+        raise ValueError("lead_id is required")
+    source = get_lead(session, sid)
+    if source is None:
+        raise ValueError(f"lead does not exist: {sid!r}")
+    normalize_lead(source)
+    reg = ensure_lead_registry(session)
+
+    tid = _normalize_optional_id(target_id)
+    if tid is None:
+        return source
+
+    if rel == "parent_lead_id":
+        prev = _as_optional_str(source.get("parent_lead_id"))
+        if prev != tid:
+            return source
+        source["parent_lead_id"] = None
+        _ensure_invariants_after_mutation(source, registry=reg)
+        _stamp_turn_metadata(source, turn, mutated=True, touched=True)
+        return source
+
+    assert rel in LEAD_RELATION_LIST_FIELDS
+    cur = _normalize_id_list(source.get(rel))
+    if tid not in cur:
+        return source
+
+    source[rel] = [x for x in cur if x != tid]
+    _ensure_invariants_after_mutation(source, registry=reg)
+    _stamp_turn_metadata(source, turn, mutated=True, touched=True)
+
+    if rel == "supersedes":
+        other = get_lead(session, tid)
+        if other is not None and _as_optional_str(other.get("superseded_by")) == sid:
+            other["superseded_by"] = None
+            _ensure_invariants_after_mutation(other, registry=reg)
+            _stamp_turn_metadata(other, turn, mutated=True, touched=True)
+
+    return source
+
+
+def replace_lead_relations(
+    session: MutableMapping[str, Any],
+    lead_id: Any,
+    relation: str,
+    target_ids: Any,
+    *,
+    turn: Any = None,
+) -> Dict[str, Any]:
+    """Replace an entire list relation or the sole ``parent_lead_id``; normalizes and validates like add."""
+    rel = _as_str(relation)
+    if rel not in _LEAD_RELATION_MUTABLE:
+        raise ValueError(f"unsupported relation field: {relation!r}")
+
+    sid = _normalize_optional_id(lead_id)
+    if sid is None:
+        raise ValueError("lead_id is required")
+    source = get_lead(session, sid)
+    if source is None:
+        raise ValueError(f"lead does not exist: {sid!r}")
+    normalize_lead(source)
+    reg = ensure_lead_registry(session)
+
+    new_list = _normalize_id_list(target_ids)
+
+    if rel == "parent_lead_id":
+        if len(new_list) > 1:
+            raise ValueError("parent_lead_id accepts at most one target id")
+        new_parent = new_list[0] if new_list else None
+        if new_parent is not None:
+            if new_parent == sid:
+                raise ValueError("lead cannot relate to itself")
+            if get_lead(session, new_parent) is None:
+                raise ValueError(f"target lead does not exist: {new_parent!r}")
+        prev = _as_optional_str(source.get("parent_lead_id"))
+        if prev == new_parent:
+            return source
+        source["parent_lead_id"] = new_parent
+        _ensure_invariants_after_mutation(
+            source,
+            registry=reg,
+            legally_new_parent_id=new_parent if new_parent else None,
+        )
+        _stamp_turn_metadata(source, turn, mutated=True, touched=True)
+        return source
+
+    if rel == "supersedes":
+        for tid in new_list:
+            if tid == sid:
+                raise ValueError("lead cannot relate to itself")
+            if get_lead(session, tid) is None:
+                raise ValueError(f"target lead does not exist: {tid!r}")
+        old_list = _normalize_id_list(source.get("supersedes"))
+        if old_list == new_list:
+            return source
+        old_set, new_set = set(old_list), set(new_list)
+        touched: Dict[int, MutableMapping[str, Any]] = {}
+        for bid in old_set - new_set:
+            other = get_lead(session, bid)
+            if other is None:
+                continue
+            normalize_lead(other)
+            if _as_optional_str(other.get("superseded_by")) == sid:
+                other["superseded_by"] = None
+                touched[id(other)] = other
+        for bid in new_set:
+            other = get_lead(session, bid)
+            assert other is not None
+            normalize_lead(other)
+            if _as_optional_str(other.get("superseded_by")) != sid:
+                other["superseded_by"] = sid
+                touched[id(other)] = other
+        source["supersedes"] = new_list
+        touched[id(source)] = source
+        new_edges = frozenset(new_set - old_set)
+        for L in touched.values():
+            _ensure_invariants_after_mutation(
+                L,
+                registry=reg,
+                legally_new_supersedes_targets=new_edges if L is source else None,
+            )
+        for L in touched.values():
+            _stamp_turn_metadata(L, turn, mutated=True, touched=True)
+        return source
+
+    assert rel in LEAD_RELATION_LIST_FIELDS
+    if rel in _LEAD_TO_LEAD_LIST_RELATIONS:
+        for tid in new_list:
+            if tid == sid:
+                raise ValueError("lead cannot relate to itself")
+            if get_lead(session, tid) is None:
+                raise ValueError(f"target lead does not exist: {tid!r}")
+
+    old_list = _normalize_id_list(source.get(rel))
+    if old_list == new_list:
+        return source
+    source[rel] = new_list
+    _ensure_invariants_after_mutation(source, registry=reg)
+    _stamp_turn_metadata(source, turn, mutated=True, touched=True)
+    return source
+
+
+def get_related_lead_ids(
+    session: MutableMapping[str, Any],
+    lead_id: Any,
+    relation: str,
+) -> List[str]:
+    """Return normalized lead ids for a lead-to-lead relation (lists or ``parent_lead_id``)."""
+    rel = _as_str(relation)
+    if rel not in _LEAD_TO_LEAD_LIST_RELATIONS and rel != "parent_lead_id":
+        raise ValueError(f"not a lead-to-lead relation field: {relation!r}")
+
+    sid = _normalize_optional_id(lead_id)
+    if sid is None:
+        raise ValueError("lead_id is required")
+    source = get_lead(session, sid)
+    if source is None:
+        raise ValueError(f"lead does not exist: {sid!r}")
+    normalize_lead(source)
+
+    if rel == "parent_lead_id":
+        p = _as_optional_str(source.get("parent_lead_id"))
+        return [p] if p else []
+    return _normalize_id_list(source.get(rel))
+
+
+def add_lead_tag(
+    session: MutableMapping[str, Any],
+    lead_id: Any,
+    tag: Any,
+    *,
+    turn: Any = None,
+) -> Dict[str, Any]:
+    """Append one normalized tag when absent; no-op for blank tags or duplicates."""
+    sid = _normalize_optional_id(lead_id)
+    if sid is None:
+        raise ValueError("lead_id is required")
+    source = get_lead(session, sid)
+    if source is None:
+        raise ValueError(f"lead does not exist: {sid!r}")
+    normalize_lead(source)
+    reg = ensure_lead_registry(session)
+
+    t = _normalize_optional_id(tag)
+    if t is None:
+        return source
+    cur = _normalize_id_list(source.get("tags"))
+    if t in cur:
+        return source
+    source["tags"] = cur + [t]
+    _ensure_invariants_after_mutation(source, registry=reg)
+    _stamp_turn_metadata(source, turn, mutated=True, touched=True)
+    return source
+
+
+def get_lead_tags(session: MutableMapping[str, Any], lead_id: Any) -> List[str]:
+    """Return a normalized, deduped tag list (fresh list object)."""
+    sid = _normalize_optional_id(lead_id)
+    if sid is None:
+        raise ValueError("lead_id is required")
+    source = get_lead(session, sid)
+    if source is None:
+        raise ValueError(f"lead does not exist: {sid!r}")
+    normalize_lead(source)
+    return _normalize_id_list(source.get("tags"))
+
+
 def create_lead(
     *,
     title: str,
@@ -990,6 +1602,11 @@ def create_lead(
     superseded_by: str | None = None,
     unlocks: Iterable[str] | None = None,
     blocked_by: Iterable[str] | None = None,
+    related_faction_ids: Iterable[str] | None = None,
+    related_scene_ids: Iterable[str] | None = None,
+    tags: Iterable[str] | None = None,
+    evidence_clue_ids: Iterable[str] | None = None,
+    metadata: Mapping[str, Any] | None = None,
 ) -> Dict[str, Any]:
     """Build a structurally complete normalized lead dict with stable field names.
 
@@ -1034,4 +1651,9 @@ def create_lead(
         "superseded_by": _as_optional_str(superseded_by),
         "unlocks": _as_str_list(unlocks),
         "blocked_by": _as_str_list(blocked_by),
+        "related_faction_ids": _normalize_id_list(related_faction_ids),
+        "related_scene_ids": _normalize_id_list(related_scene_ids),
+        "tags": _normalize_id_list(tags),
+        "evidence_clue_ids": _normalize_id_list(evidence_clue_ids),
+        "metadata": _normalize_metadata(metadata),
     }
