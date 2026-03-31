@@ -8,7 +8,9 @@ from game.clues import (
     extract_actionable_social_leads,
     get_all_known_clue_ids,
     get_clue_presentation,
+    record_discovered_clue,
 )
+from game.leads import ensure_lead_registry, get_lead
 from game.defaults import default_character, default_world
 from game.social import resolve_social_action
 from game.storage import add_pending_lead, get_scene_runtime, load_scene
@@ -474,3 +476,185 @@ def test_extract_actionable_social_leads_public_shape():
         "rumor_text",
         "evidence_text",
     }.issubset(L.keys())
+
+
+def test_extracted_social_lead_creates_authoritative_registry_row():
+    session: dict = {"scene_runtime": {}, "clue_knowledge": {}, "turn_counter": 1}
+    world = default_world()
+    world.setdefault("event_log", [])
+    scene_id = "frontier_gate"
+    res = {
+        "kind": "question",
+        "success": True,
+        "requires_check": False,
+        "clue_id": "missing_patrol",
+        "discovered_clues": ["A patrol went missing near the old milestone."],
+        "social": {
+            "npc_id": "guard_captain",
+            "target_resolved": True,
+            "topic_revealed": {
+                "id": "patrol",
+                "text": "A patrol went missing near the old milestone.",
+                "clue_id": "missing_patrol",
+            },
+        },
+    }
+    apply_socially_revealed_leads(session, scene_id, world, res, scene={"scene": {"id": scene_id}})
+    lid = "lead_frontier_gate_old_milestone"
+    row = get_lead(session, lid)
+    assert row is not None
+    assert lid in (row.get("evidence_clue_ids") or [])
+    assert "social" in (row.get("discovery_source") or "")
+
+
+def test_repeated_social_landing_does_not_duplicate_authoritative_lead():
+    session: dict = {"scene_runtime": {}, "clue_knowledge": {}, "turn_counter": 1}
+    world = default_world()
+    res = {
+        "kind": "question",
+        "success": True,
+        "requires_check": False,
+        "clue_id": "missing_patrol",
+        "discovered_clues": ["A patrol went missing near the old milestone."],
+        "social": {
+            "npc_id": "guard_captain",
+            "target_resolved": True,
+            "topic_revealed": {
+                "id": "patrol",
+                "text": "A patrol went missing near the old milestone.",
+                "clue_id": "missing_patrol",
+            },
+        },
+    }
+    apply_socially_revealed_leads(session, "frontier_gate", world, res, scene={"scene": {"id": "frontier_gate"}})
+    reg_size_after_first = len(ensure_lead_registry(session))
+    apply_socially_revealed_leads(session, "frontier_gate", world, res, scene={"scene": {"id": "frontier_gate"}})
+    assert len(ensure_lead_registry(session)) == reg_size_after_first
+
+
+def test_lead_landing_metadata_reports_authoritative_outcomes():
+    session: dict = {"scene_runtime": {}, "clue_knowledge": {}, "turn_counter": 1}
+    world = default_world()
+    res = {
+        "kind": "question",
+        "success": True,
+        "requires_check": False,
+        "clue_id": "to_milestone",
+        "discovered_clues": ["They were seen toward the old milestone."],
+        "social": {
+            "npc_id": "runner",
+            "target_resolved": True,
+            "topic_revealed": {
+                "id": "t1",
+                "text": "They were seen toward the old milestone.",
+                "clue_id": "to_milestone",
+                "leads_to_scene": "old_milestone",
+            },
+        },
+    }
+    apply_socially_revealed_leads(session, "gate", world, res)
+    ll = res["metadata"]["lead_landing"]
+    auth_ids = (
+        (ll.get("authoritative_created_ids") or [])
+        + (ll.get("authoritative_updated_ids") or [])
+        + (ll.get("authoritative_unchanged_ids") or [])
+    )
+    assert "to_milestone" in auth_ids
+    assert isinstance(ll.get("authoritative_promoted_ids"), list)
+
+    apply_socially_revealed_leads(session, "gate", world, res)
+    ll2 = res["metadata"]["lead_landing"]
+    second_pass = (ll2.get("authoritative_updated_ids") or []) + (ll2.get("authoritative_unchanged_ids") or [])
+    assert "to_milestone" in second_pass
+
+
+def test_clue_discovery_then_social_extract_updates_same_authoritative_row():
+    session: dict = {"scene_runtime": {}, "clue_knowledge": {}, "turn_counter": 1}
+    world = default_world()
+    world.setdefault("event_log", [])
+    world["clues"] = {
+        "gate_hint": {
+            "canonical_lead_id": "unified_thread",
+            "leads_to_scene": "old_milestone",
+            "type": "investigation",
+        }
+    }
+    record_discovered_clue(
+        session,
+        "frontier_gate",
+        "gate_hint",
+        clue_text="Watch papers cite the old milestone route.",
+        world=world,
+    )
+    assert get_lead(session, "unified_thread") is not None
+    assert len(ensure_lead_registry(session)) == 1
+
+    res = {
+        "kind": "question",
+        "success": True,
+        "requires_check": False,
+        "clue_id": "gate_hint",
+        "discovered_clues": ["The captain confirms: old milestone."],
+        "social": {
+            "npc_id": "guard_captain",
+            "target_resolved": True,
+            "topic_revealed": {
+                "id": "cap",
+                "text": "The captain confirms: old milestone.",
+                "clue_id": "old_milestone",
+            },
+        },
+    }
+    apply_socially_revealed_leads(session, "frontier_gate", world, res, scene={"scene": {"id": "frontier_gate"}})
+
+    assert len(ensure_lead_registry(session)) == 1
+    row = get_lead(session, "unified_thread")
+    assert row is not None
+    ev = row.get("evidence_clue_ids") or []
+    assert "gate_hint" in ev
+    assert "lead_frontier_gate_old_milestone" in ev
+
+
+def test_social_extract_reinforced_second_disclosure_one_registry_row():
+    session: dict = {"scene_runtime": {}, "clue_knowledge": {}, "turn_counter": 1}
+    world = default_world()
+    res1 = {
+        "kind": "question",
+        "success": True,
+        "requires_check": False,
+        "clue_id": "missing_patrol",
+        "discovered_clues": ["A patrol went missing near the old milestone."],
+        "social": {
+            "npc_id": "guard_captain",
+            "target_resolved": True,
+            "topic_revealed": {
+                "id": "patrol",
+                "text": "A patrol went missing near the old milestone.",
+                "clue_id": "missing_patrol",
+            },
+        },
+    }
+    apply_socially_revealed_leads(session, "frontier_gate", world, res1, scene={"scene": {"id": "frontier_gate"}})
+    reg_after_first = len(ensure_lead_registry(session))
+    res2 = {
+        "kind": "question",
+        "success": True,
+        "requires_check": False,
+        "clue_id": "missing_patrol",
+        "discovered_clues": [
+            "A patrol went missing near the old milestone. Fresh hoofprints marked the east verge."
+        ],
+        "social": {
+            "npc_id": "guard_captain",
+            "target_resolved": True,
+            "topic_revealed": {
+                "id": "patrol",
+                "text": "A patrol went missing near the old milestone. Fresh hoofprints marked the east verge.",
+                "clue_id": "missing_patrol",
+            },
+        },
+    }
+    apply_socially_revealed_leads(session, "frontier_gate", world, res2, scene={"scene": {"id": "frontier_gate"}})
+    assert len(ensure_lead_registry(session)) == reg_after_first
+    row = get_lead(session, "lead_frontier_gate_old_milestone")
+    assert row is not None

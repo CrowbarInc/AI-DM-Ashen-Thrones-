@@ -8,6 +8,7 @@ from __future__ import annotations
 import re
 from typing import Any, Dict, List, Set, Tuple
 
+from game.leads import SESSION_LEAD_REGISTRY_KEY, LeadType, apply_engine_lead_signal, is_valid_type
 from game.storage import add_pending_lead, get_scene_runtime, is_known_scene_id, mark_clue_discovered
 from game.utils import slugify
 
@@ -25,6 +26,207 @@ def _normalize_presentation(value: Any, *, default: str = "implicit") -> str:
 def _presentation_rank(level: str) -> int:
     norm = _normalize_presentation(level)
     return CLUE_PRESENTATION_LEVELS.index(norm)
+
+
+def _empty_authoritative_lead_meta() -> Dict[str, Any]:
+    return {
+        "authoritative_lead_status": None,
+        "authoritative_lead_id": None,
+        "authoritative_lead_promotion_applied": False,
+        "authoritative_lead_changed_fields": [],
+    }
+
+
+def _session_turn_for_leads(session: Dict[str, Any]) -> Any:
+    tc = session.get("turn_counter")
+    if tc is None:
+        return None
+    try:
+        return int(tc)
+    except (TypeError, ValueError):
+        return None
+
+
+def _world_clue_row(world: Dict[str, Any] | None, clue_id: str) -> Dict[str, Any] | None:
+    if not world or not clue_id:
+        return None
+    reg = world.get("clues")
+    if not isinstance(reg, dict):
+        return None
+    raw = reg.get(clue_id)
+    return raw if isinstance(raw, dict) else None
+
+
+def _effective_clue_targets_and_type(
+    world: Dict[str, Any] | None,
+    clue_id: str,
+    structured_clue: Dict[str, Any] | None,
+) -> Tuple[str | None, str | None, Any]:
+    """Scene discoverable record wins for targets; world.clues fills gaps and type."""
+    ts: str | None = None
+    tn: str | None = None
+    lead_type: Any = None
+    if structured_clue and isinstance(structured_clue, dict):
+        s1 = str(structured_clue.get("leads_to_scene") or "").strip()
+        ts = s1 or None
+        s2 = str(structured_clue.get("leads_to_npc") or "").strip()
+        tn = s2 or None
+    row = _world_clue_row(world, clue_id)
+    if row:
+        lead_type = row.get("type")
+        if ts is None:
+            s = str(row.get("leads_to_scene") or "").strip()
+            ts = s or None
+        if tn is None:
+            n = str(row.get("leads_to_npc") or "").strip()
+            tn = n or None
+    return ts, tn, lead_type
+
+
+def _canonical_registry_lead_id(
+    clue_id: str,
+    world: Dict[str, Any] | None,
+    structured_clue: Dict[str, Any] | None,
+) -> str:
+    """Optional ``canonical_lead_id`` on scene clue or ``world.clues`` row; default ``clue_id``."""
+    if structured_clue and isinstance(structured_clue, dict):
+        s = str(structured_clue.get("canonical_lead_id") or "").strip()
+        if s:
+            return s
+    row = _world_clue_row(world, clue_id)
+    if row:
+        s = str(row.get("canonical_lead_id") or "").strip()
+        if s:
+            return s
+    return clue_id
+
+
+def _normalize_lead_type_for_signal(value: Any) -> str:
+    if is_valid_type(value):
+        return str(value).strip().lower()
+    return LeadType.RUMOR.value
+
+
+def _social_extracted_kind_to_lead_type(kind: Any) -> str:
+    k = str(kind or "").strip().lower()
+    if k == "scene":
+        return LeadType.INVESTIGATION.value
+    if k == "npc":
+        return LeadType.SOCIAL.value
+    if k == "location":
+        return LeadType.LOCATION.value
+    if k == "operation":
+        return LeadType.OPPORTUNITY.value
+    return LeadType.RUMOR.value
+
+
+def _registry_lead_id_for_extracted_social_lead(
+    lead: Dict[str, Any],
+    world: Dict[str, Any] | None,
+    *,
+    primary_canonical_clue_id: str | None,
+) -> str:
+    """Map normalized social lead to authoritative registry id (same conventions as clue canonicalization)."""
+    w = world if isinstance(world, dict) else None
+    lid = str(lead.get("lead_id") or "").strip()
+    primary = str(primary_canonical_clue_id or "").strip() or None
+    ts = str(lead.get("target_scene_id") or "").strip() or None
+
+    if primary and lid == primary:
+        return _canonical_registry_lead_id(primary, w, None)
+
+    if ts and _world_clue_row(w, ts):
+        return _canonical_registry_lead_id(ts, w, None)
+
+    if primary:
+        prow = _world_clue_row(w, primary)
+        if prow and ts:
+            pts = str(prow.get("leads_to_scene") or "").strip()
+            if pts and ts == pts:
+                return _canonical_registry_lead_id(primary, w, None)
+        p_can = _canonical_registry_lead_id(primary, w, None)
+        l_can = _canonical_registry_lead_id(lid, w, None)
+        if p_can == l_can:
+            return p_can
+
+    return _canonical_registry_lead_id(lid, w, None)
+
+
+def _accumulate_authoritative_signal_outcome(
+    outcomes: Dict[str, List[str]] | None,
+    sig: Dict[str, Any],
+) -> None:
+    if outcomes is None or not isinstance(sig, dict):
+        return
+    lid = str(sig.get("lead_id") or "").strip()
+    if not lid:
+        return
+    st = sig.get("status")
+    if st == "created":
+        outcomes.setdefault("authoritative_created_ids", []).append(lid)
+    elif st == "updated":
+        outcomes.setdefault("authoritative_updated_ids", []).append(lid)
+    elif st == "unchanged":
+        outcomes.setdefault("authoritative_unchanged_ids", []).append(lid)
+    if sig.get("promotion_applied"):
+        outcomes.setdefault("authoritative_promoted_ids", []).append(lid)
+
+
+def _merge_authoritative_outcomes_into_lead_landing_dict(
+    ll: Dict[str, Any],
+    outcomes: Dict[str, List[str]] | None,
+) -> None:
+    if outcomes is None or not isinstance(ll, dict):
+        return
+    keys = (
+        "authoritative_created_ids",
+        "authoritative_updated_ids",
+        "authoritative_unchanged_ids",
+        "authoritative_promoted_ids",
+    )
+    if not any(outcomes.get(k) for k in keys):
+        return
+    for k in keys:
+        ll[k] = list(dict.fromkeys(list(ll.get(k) or []) + list(outcomes.get(k) or [])))
+
+
+def _apply_authoritative_lead_signal_for_clue(
+    session: Dict[str, Any],
+    *,
+    clue_id: str,
+    clue_text: str | None,
+    source_kind: str,
+    source_scene_id: str | None,
+    presentation_level: str,
+    world: Dict[str, Any] | None,
+    structured_clue: Dict[str, Any] | None,
+) -> Dict[str, Any]:
+    """Call :func:`apply_engine_lead_signal` with clue-normalized inputs; return UI/debug metadata keys."""
+    ts, tn, lt_hint = _effective_clue_targets_and_type(world, clue_id, structured_clue)
+    registry_lead_id = _canonical_registry_lead_id(clue_id, world, structured_clue)
+    title = (clue_text or "").strip() or registry_lead_id
+    summary = (clue_text or "").strip()
+    lead_type = _normalize_lead_type_for_signal(lt_hint)
+    sig = apply_engine_lead_signal(
+        session,
+        lead_id=registry_lead_id,
+        title=title,
+        summary=summary,
+        lead_type=lead_type,
+        source_kind=source_kind,
+        source_scene_id=source_scene_id,
+        target_scene_id=ts,
+        target_npc_id=tn,
+        trigger_clue_id=clue_id,
+        presentation_level=presentation_level,
+        turn=_session_turn_for_leads(session),
+    )
+    return {
+        "authoritative_lead_status": sig["status"],
+        "authoritative_lead_id": sig["lead_id"],
+        "authoritative_lead_promotion_applied": sig["promotion_applied"],
+        "authoritative_lead_changed_fields": list(sig["changed_fields"]),
+    }
 
 
 def _resolve_known_clue_id(
@@ -253,6 +455,17 @@ def run_inference(session: Dict[str, Any], world: Dict[str, Any]) -> List[str]:
             newly_inferred.append(inferred_id)
             changed = True
             print("[CLUE INFERRED]", inferred_id)
+            pres_inf = get_clue_presentation(session, clue_id=inferred_id, clue_text=text)
+            _apply_authoritative_lead_signal_for_clue(
+                session,
+                clue_id=inferred_id,
+                clue_text=text if isinstance(text, str) else None,
+                source_kind="clue_inference",
+                source_scene_id=None,
+                presentation_level=pres_inf,
+                world=world if isinstance(world, dict) else None,
+                structured_clue=None,
+            )
 
     return newly_inferred
 
@@ -265,6 +478,8 @@ def record_discovered_clue(
     world: Dict[str, Any] | None = None,
     *,
     presentation_level: str = "explicit",
+    structured_clue: Dict[str, Any] | None = None,
+    apply_registry_signal: bool = True,
 ) -> Dict[str, Any]:
     """Record a structured clue discovery once per knowledge/runtime identity (idempotent).
 
@@ -273,14 +488,22 @@ def record_discovered_clue(
     Presentation may still be promoted on duplicate when strictly higher than the stored level
     (metadata only; not treated as rediscovery).
 
+    Authoritative lead registry updates go through :func:`game.leads.apply_engine_lead_signal`
+    unless ``apply_registry_signal`` is False (used when another gateway, e.g. social extraction,
+    owns the registry write for this identity).
+
     Returns:
-        ``{"status": "newly_recorded"|"duplicate_ignored", "clue_id": str}``
+        Status ``clue_id`` plus ``authoritative_lead_*`` metadata from the lead signal (or empty placeholders).
     """
     if not clue_id or not isinstance(clue_id, str):
-        return {"status": "duplicate_ignored", "clue_id": str(clue_id or "").strip()}
+        return {
+            "status": "duplicate_ignored",
+            "clue_id": str(clue_id or "").strip(),
+            **_empty_authoritative_lead_meta(),
+        }
     clue_id = clue_id.strip()
     if not clue_id:
-        return {"status": "duplicate_ignored", "clue_id": ""}
+        return {"status": "duplicate_ignored", "clue_id": "", **_empty_authoritative_lead_meta()}
 
     knowledge = _ensure_clue_knowledge(session)
     runtime = session.setdefault("scene_runtime", {})
@@ -316,7 +539,23 @@ def record_discovered_clue(
         print("[CLUE DUPLICATE IGNORED]", clue_id)
         if already_known and not already_presented_same_way:
             set_clue_presentation(session, clue_id=clue_id, clue_text=clue_text, level=presentation_level)
-        return {"status": "duplicate_ignored", "clue_id": clue_id}
+        pres_dup = get_clue_presentation(session, clue_id=clue_id, clue_text=clue_text)
+        w = world if isinstance(world, dict) else None
+        lead_dup = (
+            _apply_authoritative_lead_signal_for_clue(
+                session,
+                clue_id=clue_id,
+                clue_text=clue_text,
+                source_kind="clue_explicit",
+                source_scene_id=str(scene_id).strip() if scene_id else None,
+                presentation_level=pres_dup,
+                world=w,
+                structured_clue=structured_clue if isinstance(structured_clue, dict) else None,
+            )
+            if apply_registry_signal
+            else _empty_authoritative_lead_meta()
+        )
+        return {"status": "duplicate_ignored", "clue_id": clue_id, **lead_dup}
 
     # --- B) first-time commit ---
     clue_ids.append(clue_id)
@@ -328,7 +567,23 @@ def record_discovered_clue(
     if world and isinstance(world, dict):
         run_inference(session, world)
 
-    return {"status": "newly_recorded", "clue_id": clue_id}
+    pres_new = get_clue_presentation(session, clue_id=clue_id, clue_text=clue_text)
+    w = world if isinstance(world, dict) else None
+    lead_new = (
+        _apply_authoritative_lead_signal_for_clue(
+            session,
+            clue_id=clue_id,
+            clue_text=clue_text,
+            source_kind="clue_explicit",
+            source_scene_id=str(scene_id).strip() if scene_id else None,
+            presentation_level=pres_new,
+            world=w,
+            structured_clue=structured_clue if isinstance(structured_clue, dict) else None,
+        )
+        if apply_registry_signal
+        else _empty_authoritative_lead_meta()
+    )
+    return {"status": "newly_recorded", "clue_id": clue_id, **lead_new}
 
 
 def reveal_clue(
@@ -337,12 +592,18 @@ def reveal_clue(
     clue_id: str,
     clue_text: str | None = None,
     world: Dict[str, Any] | None = None,
+    *,
+    structured_clue: Dict[str, Any] | None = None,
+    apply_registry_signal: bool = True,
 ) -> str:
     """Record that a structured clue was discovered. Augments scene_runtime and clue_knowledge.
 
     Backward compatible: delegates to :func:`record_discovered_clue`; returns ``clue_id`` string.
 
     When world is provided, runs inference only on first-time discovery for this clue identity.
+
+    Set ``apply_registry_signal=False`` when the lead registry row for this clue is written elsewhere
+    (e.g. :func:`_apply_extracted_social_leads` via :func:`apply_engine_lead_signal`).
     """
     result = record_discovered_clue(
         session,
@@ -351,6 +612,8 @@ def reveal_clue(
         clue_text=clue_text,
         world=world,
         presentation_level="explicit",
+        structured_clue=structured_clue,
+        apply_registry_signal=apply_registry_signal,
     )
     return str(result.get("clue_id") or "")
 
@@ -363,6 +626,7 @@ def apply_authoritative_clue_discovery(
     clue_text: str | None = None,
     discovered_clues: List[str] | None = None,
     world: Dict[str, Any] | None = None,
+    structured_clue: Dict[str, Any] | None = None,
 ) -> List[str]:
     """Single authoritative clue mutation gateway.
 
@@ -392,6 +656,7 @@ def apply_authoritative_clue_discovery(
             normalized_clue_id,
             clue_text=primary_text,
             world=world,
+            structured_clue=structured_clue if isinstance(structured_clue, dict) else None,
         )
         if primary_text:
             set_clue_presentation(session, clue_id=normalized_clue_id, clue_text=primary_text, level="explicit")
@@ -807,15 +1072,18 @@ def _apply_extracted_social_leads(
     actionable_lead_ids: List[str],
     lead_write_targets: List[str],
     primary_canonical_clue_id: str | None = None,
+    authoritative_outcomes: Dict[str, List[str]] | None = None,
 ) -> List[str]:
-    """Persist supplemental leads (clue knowledge, pending_leads, actionable presentation)."""
+    """Persist supplemental leads: authoritative registry via :func:`apply_engine_lead_signal`, then clue mirror + compat pending."""
     added: List[str] = []
     touched_pending = False
+    processed_any = False
     logged_ids = session.setdefault("social_lead_event_ids", [])
     if not isinstance(logged_ids, list):
         session["social_lead_event_ids"] = []
         logged_ids = session["social_lead_event_ids"]
     primary_skip = str(primary_canonical_clue_id or "").strip() or None
+    sid = str(scene_id or "").strip() or None
 
     for lead in leads:
         if not isinstance(lead, dict):
@@ -824,15 +1092,56 @@ def _apply_extracted_social_leads(
         if not cid:
             continue
         label = str(lead.get("label") or "").strip() or cid
-        reveal_clue(session, scene_id, cid, clue_text=label, world=world)
+        registry_id = _registry_lead_id_for_extracted_social_lead(
+            lead,
+            world if isinstance(world, dict) else None,
+            primary_canonical_clue_id=primary_canonical_clue_id,
+        )
+        has_target = _lead_has_pending_target(lead)
+        pres_for_signal = "actionable" if has_target else "explicit"
+        ts = str(lead.get("target_scene_id") or "").strip() or None
+        tn = str(lead.get("target_npc_id") or "").strip() or None
+        tr = str(lead.get("rumor_text") or "").strip() or None
+        rumor_for_signal = tr if tr else None
+        summary = label
+        ext_src = str(lead.get("extraction_source") or "").strip()
+        meta_sig: Dict[str, Any] = {}
+        if ext_src:
+            meta_sig["social_extraction_source"] = ext_src
+
+        sig = apply_engine_lead_signal(
+            session,
+            lead_id=registry_id,
+            title=label,
+            summary=summary,
+            lead_type=_social_extracted_kind_to_lead_type(lead.get("kind")),
+            source_kind="social",
+            source_scene_id=sid,
+            source_npc_id=str(lead.get("source_npc_id") or "").strip() or None,
+            target_scene_id=ts,
+            target_npc_id=tn,
+            rumor_text=rumor_for_signal,
+            trigger_clue_id=cid,
+            presentation_level=pres_for_signal,
+            metadata=meta_sig if meta_sig else None,
+            turn=_session_turn_for_leads(session),
+        )
+        _accumulate_authoritative_signal_outcome(authoritative_outcomes, sig)
+        processed_any = True
+
+        reveal_clue(
+            session,
+            scene_id,
+            cid,
+            clue_text=label,
+            world=world,
+            apply_registry_signal=False,
+        )
         if label and mark_clue_discovered(session, scene_id, label):
             added.append(label)
 
-        if _lead_has_pending_target(lead):
+        if has_target:
             pend: Dict[str, Any] = {"clue_id": cid, "text": label}
-            ts = str(lead.get("target_scene_id") or "").strip()
-            tn = str(lead.get("target_npc_id") or "").strip()
-            tr = str(lead.get("rumor_text") or "").strip()
             if ts:
                 pend["leads_to_scene"] = ts
             if tn:
@@ -842,7 +1151,6 @@ def _apply_extracted_social_leads(
             newly_pending = add_pending_lead(session, scene_id, pend)
             if newly_pending:
                 touched_pending = True
-                ext_src = str(lead.get("extraction_source") or "")
                 if (
                     ext_src
                     and ext_src != "topic_hook"
@@ -865,6 +1173,8 @@ def _apply_extracted_social_leads(
                 actionable_lead_ids.append(cid)
     if touched_pending and "pending_leads" not in lead_write_targets:
         lead_write_targets.append("pending_leads")
+    if processed_any and SESSION_LEAD_REGISTRY_KEY not in lead_write_targets:
+        lead_write_targets.append(SESSION_LEAD_REGISTRY_KEY)
     return added
 
 
@@ -910,6 +1220,7 @@ def apply_social_narration_lead_supplements(
 
     actionable_ids: List[str] = []
     targets: List[str] = []
+    auth_out: Dict[str, List[str]] = {}
     added_texts = _apply_extracted_social_leads(
         session,
         scene_id,
@@ -918,6 +1229,7 @@ def apply_social_narration_lead_supplements(
         actionable_lead_ids=actionable_ids,
         lead_write_targets=targets,
         primary_canonical_clue_id=eff_id,
+        authoritative_outcomes=auth_out,
     )
 
     meta = resolution.setdefault("metadata", {})
@@ -946,6 +1258,7 @@ def apply_social_narration_lead_supplements(
             dict.fromkeys(list(merged.get("lead_write_targets") or []) + targets)
         )
         merged["narration_supplement_texts"] = added_texts
+        _merge_authoritative_outcomes_into_lead_landing_dict(merged, auth_out)
         meta["lead_landing"] = merged
 
     return added_texts
@@ -1161,6 +1474,14 @@ def ensure_scene_has_minimum_actionable_lead(
         meta["enforced_lead_source"] = source
         return block
 
+    auth_accum: Dict[str, List[str]] = {}
+
+    def _flush_auth_meta() -> None:
+        ll0 = meta.get("lead_landing") if isinstance(meta.get("lead_landing"), dict) else {}
+        merged_ll = dict(ll0)
+        _merge_authoritative_outcomes_into_lead_landing_dict(merged_ll, auth_accum)
+        meta["lead_landing"] = merged_ll
+
     def _apply_single_enforced_lead(lead: Dict[str, Any], *, primary_skip: str | None) -> str | None:
         _apply_extracted_social_leads(
             session,
@@ -1170,6 +1491,7 @@ def ensure_scene_has_minimum_actionable_lead(
             actionable_lead_ids=[],
             lead_write_targets=[],
             primary_canonical_clue_id=primary_skip,
+            authoritative_outcomes=auth_accum,
         )
         return str(lead.get("lead_id") or "").strip() or None
 
@@ -1177,6 +1499,7 @@ def ensure_scene_has_minimum_actionable_lead(
     disc_lead = _pick_actionable_lead_from_discoverable_clues(sid, scene_inner)
     if disc_lead is not None:
         lid = _apply_single_enforced_lead(disc_lead, primary_skip=None)
+        _flush_auth_meta()
         return _record(True, lid, "discoverable_clue")
 
     # --- B: best investigative exit ---
@@ -1198,6 +1521,7 @@ def ensure_scene_has_minimum_actionable_lead(
             extraction_source="author_exit",
         )
         _apply_single_enforced_lead(lead, primary_skip=None)
+        _flush_auth_meta()
         return _record(True, clue_id, "exit")
 
     # --- C: extracted social (topic + resolution + narration) ---
@@ -1222,6 +1546,7 @@ def ensure_scene_has_minimum_actionable_lead(
     if extracted:
         L = extracted[0]
         lid = _apply_single_enforced_lead(L, primary_skip=eff_id)
+        _flush_auth_meta()
         return _record(True, lid, "extracted_social")
 
     return _record(False, None, None)
@@ -1280,6 +1605,10 @@ def apply_socially_revealed_leads(
                 "extracted_lead_sources": [],
                 "extracted_from_text": False,
                 "extracted_from_reconciled_text": False,
+                "authoritative_created_ids": [],
+                "authoritative_updated_ids": [],
+                "authoritative_unchanged_ids": [],
+                "authoritative_promoted_ids": [],
             }
         return []
 
@@ -1329,6 +1658,7 @@ def apply_socially_revealed_leads(
             revealed_lead_ids.append(effective_clue_id)
 
     sup_targets: List[str] = []
+    auth_out: Dict[str, List[str]] = {}
     supplemental_added = _apply_extracted_social_leads(
         session,
         scene_id,
@@ -1337,6 +1667,7 @@ def apply_socially_revealed_leads(
         actionable_lead_ids=actionable_lead_ids,
         lead_write_targets=sup_targets,
         primary_canonical_clue_id=effective_clue_id,
+        authoritative_outcomes=auth_out,
     )
     for t in sup_targets:
         if t not in lead_write_targets:
@@ -1397,6 +1728,10 @@ def apply_socially_revealed_leads(
             "extracted_lead_sources": list(dict.fromkeys(extracted_sources)),
             "extracted_from_text": extracted_from_text_flag,
             "extracted_from_reconciled_text": extracted_from_reconciled_text_flag,
+            "authoritative_created_ids": list(dict.fromkeys(auth_out.get("authoritative_created_ids") or [])),
+            "authoritative_updated_ids": list(dict.fromkeys(auth_out.get("authoritative_updated_ids") or [])),
+            "authoritative_unchanged_ids": list(dict.fromkeys(auth_out.get("authoritative_unchanged_ids") or [])),
+            "authoritative_promoted_ids": list(dict.fromkeys(auth_out.get("authoritative_promoted_ids") or [])),
         }
 
     return added_texts

@@ -34,7 +34,11 @@
       "A well-dressed observer nearby is subtly studying newcomers.",
       "Guards exchange wary glances, indicating rising tension.",
       "The tavern runner shouts offers of warm stew, but seems anxious.",
-      "A cheer rises from nearby patrons, drawing attention."
+      "A cheer rises from nearby patrons, drawing attention.",
+      "The rain intensifies, making the ground slick and treacherous.",
+      "Patrons near the tavern are whispering urgently about the missing patrol.",
+      "A well-dressed bystander near the figure in tatters appears to exchange a subtle hand gesture, signaling something.",
+      "Several guards are now scanning the crowd with heightened attention."
     ],
     "journal_seed_facts": [
       "You arrive at Cinderwatch's eastern gate in cold rain, under frayed banners.",
@@ -66,7 +70,10 @@
       "Rumors suggest that investigating the old milestone could yield information about the missing patrol.",
       "A patrol went missing near the old milestone. Rumors suggest strange occurrences.",
       "The missing patrol is rumored to have encountered something unusual.",
-      "Investigating near the old milestone could yield more clues."
+      "Investigating near the old milestone could yield more clues.",
+      "The hand signal might be linked to an arrangement or communication within the crowd.",
+      "Lord Aldric can provide insights about the well-dressed individual.",
+      "The town crier, Lirael, frequently posts important notices that might reveal more about the duo."
     ],
     "hidden_facts": [
       "An agent of a noble house is watching new arrivals from the square's edge.",
@@ -155,18 +162,18 @@
   "scene_state": {
     "active_scene_id": "frontier_gate",
     "active_entities": [
+      "emergent_lord_aldric",
       "guard_captain",
       "tavern_runner",
       "refugee",
-      "threadbare_watcher",
-      "emergent_lord_aldric"
+      "threadbare_watcher"
     ],
     "entity_presence": {
-      "guard_captain": "active",
-      "tavern_runner": "active",
       "emergent_lord_aldric": "active",
+      "guard_captain": "active",
       "refugee": "active",
-      "threadbare_watcher": "active"
+      "threadbare_watcher": "active",
+      "tavern_runner": "active"
     },
     "current_interlocutor": "tavern_runner",
     "emergent_addressables": [
@@ -188,6 +195,8 @@
         "emergent_source": "promoted_visible_figure"
       }
     ],
-    "promoted_actor_npc_map": {}
+    "promoted_actor_npc_map": {
+      "emergent_lord_aldric": "emergent_lord_aldric"
+    }
   }
 }

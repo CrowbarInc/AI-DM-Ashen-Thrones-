@@ -108,13 +108,16 @@ def test_record_discovered_clue_returns_structured_status(capsys):
     """record_discovered_clue reports newly_recorded vs duplicate_ignored."""
     session = {"scene_runtime": {}, "clue_knowledge": {}}
     r1 = record_discovered_clue(session, "s", "c1", clue_text="text")
-    assert r1 == {"status": "newly_recorded", "clue_id": "c1"}
+    assert r1["status"] == "newly_recorded" and r1["clue_id"] == "c1"
+    assert r1.get("authoritative_lead_status") == "created"
+    assert r1.get("authoritative_lead_id") == "c1"
     out1 = capsys.readouterr().out
     assert "[CLUE DISCOVERED]" in out1
     assert "[CLUE DUPLICATE IGNORED]" not in out1
 
     r2 = record_discovered_clue(session, "s", "c1", clue_text="text")
-    assert r2 == {"status": "duplicate_ignored", "clue_id": "c1"}
+    assert r2["status"] == "duplicate_ignored" and r2["clue_id"] == "c1"
+    assert r2.get("authoritative_lead_status") == "unchanged"
     out2 = capsys.readouterr().out
     assert "[CLUE DUPLICATE IGNORED] c1" in out2
     assert "[CLUE DISCOVERED]" not in out2

@@ -477,6 +477,7 @@ def process_investigation_discovery(
             clue_text=text.strip(),
             discovered_clues=[text.strip()],
             world=world,
+            structured_clue=rec,
         )
         if added_texts:
             lead: Dict[str, Any] = {"clue_id": rec.get("id", ""), "text": text.strip()}

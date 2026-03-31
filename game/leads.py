@@ -5,8 +5,9 @@ This module is self-contained; callers integrate elsewhere when ready.
 """
 from __future__ import annotations
 
+import copy
 from enum import Enum
-from typing import AbstractSet, Any, Dict, Iterable, List, Mapping, MutableMapping, Sequence
+from typing import AbstractSet, Any, Dict, Iterable, List, Literal, Mapping, MutableMapping, Sequence, TypedDict
 
 from game.utils import slugify
 
@@ -1656,4 +1657,343 @@ def create_lead(
         "tags": _normalize_id_list(tags),
         "evidence_clue_ids": _normalize_id_list(evidence_clue_ids),
         "metadata": _normalize_metadata(metadata),
+    }
+
+
+# --- Engine-owned authoritative lead signal (normalized inputs; wraps registry + create/upsert) ---
+
+ENGINE_PRESENTATION_LEVELS: tuple[str, ...] = ("implicit", "explicit", "actionable")
+
+
+class EngineLeadSignalResult(TypedDict):
+    status: Literal["created", "updated", "unchanged"]
+    lead_id: str
+    promotion_applied: bool
+    changed_fields: List[str]
+    compat_pending_lead_needed: bool
+
+
+def _normalize_engine_presentation(value: Any, *, default: str = "implicit") -> str:
+    raw = _as_str(value).lower()
+    if raw in ENGINE_PRESENTATION_LEVELS:
+        return raw
+    return default
+
+
+def _engine_presentation_rank(level: str) -> int:
+    return ENGINE_PRESENTATION_LEVELS.index(_normalize_engine_presentation(level))
+
+
+def _normalize_engine_source_kind(value: Any) -> str:
+    raw = _as_str(value).lower()
+    aliases: Dict[str, str] = {
+        "explicit_clue": "clue_explicit",
+        "clue": "clue_explicit",
+        "discovery": "clue_explicit",
+        "clue_discovery": "clue_explicit",
+        "inference": "clue_inference",
+        "inferred": "clue_inference",
+        "clue_infer": "clue_inference",
+        "social_disclosure": "social",
+    }
+    if raw in aliases:
+        return aliases[raw]
+    if raw in ("clue_explicit", "clue_inference", "social"):
+        return raw
+    return "other"
+
+
+def _engine_signal_floors(source_kind: Any, presentation_level: Any) -> tuple[str, str]:
+    """Return ``(lifecycle_floor, confidence_floor)`` implied by this signal (before optional user confidence)."""
+    sk = _normalize_engine_source_kind(source_kind)
+    pr = _normalize_engine_presentation(
+        presentation_level if presentation_level is not None else "implicit",
+        default="implicit",
+    )
+    rank = _engine_presentation_rank(pr)
+
+    if sk == "clue_inference":
+        return LeadLifecycle.HINTED.value, LeadConfidence.RUMOR.value
+    if sk == "social":
+        return LeadLifecycle.DISCOVERED.value, LeadConfidence.PLAUSIBLE.value
+    if sk == "clue_explicit":
+        if rank >= _engine_presentation_rank("explicit"):
+            return LeadLifecycle.DISCOVERED.value, LeadConfidence.PLAUSIBLE.value
+        return LeadLifecycle.HINTED.value, LeadConfidence.RUMOR.value
+    return LeadLifecycle.HINTED.value, LeadConfidence.RUMOR.value
+
+
+def _merge_ordered_unique_ids(*parts: Iterable[Any]) -> List[str]:
+    out: List[str] = []
+    seen: set[str] = set()
+    for seq in parts:
+        if seq is None:
+            continue
+        for item in seq:
+            nid = _normalize_optional_id(item)
+            if nid is None or nid in seen:
+                continue
+            seen.add(nid)
+            out.append(nid)
+    return out
+
+
+def _merge_discovery_source(existing: Any, incoming: Any) -> str:
+    e = _as_str(existing)
+    i = _as_str(incoming)
+    if not i:
+        return e
+    if not e:
+        return i
+    if i in e:
+        return e
+    return f"{e}; {i}"
+
+
+def _metadata_merge_engine(existing: Mapping[str, Any], incoming: Mapping[str, Any]) -> Dict[str, Any]:
+    base = _normalize_metadata(existing)
+    out = dict(base)
+    for k, v in incoming.items():
+        out[str(k)] = v
+    return out
+
+
+def _confidence_bump_one(confidence: Any) -> str:
+    s = _coerce_confidence_str(confidence)
+    if s is None:
+        return LeadConfidence.RUMOR.value
+    r = _confidence_rank(s)
+    if r is None:
+        return LeadConfidence.RUMOR.value
+    if r >= len(_CONFIDENCE_ORDERED_VALUES) - 1:
+        return _CONFIDENCE_ORDERED_VALUES[-1]
+    return _CONFIDENCE_ORDERED_VALUES[r + 1]
+
+
+def _max_lifecycle(a: Any, b: Any) -> str:
+    ra = _lifecycle_rank(a)
+    rb = _lifecycle_rank(b)
+    if ra is None and rb is None:
+        return LeadLifecycle.HINTED.value
+    if ra is None:
+        return _coerce_lifecycle_str(b) or LeadLifecycle.HINTED.value
+    if rb is None:
+        return _coerce_lifecycle_str(a) or LeadLifecycle.HINTED.value
+    return _LIFECYCLE_ORDERED_VALUES[max(ra, rb)]
+
+
+def _max_confidence(a: Any, b: Any) -> str:
+    ra = _confidence_rank(a)
+    rb = _confidence_rank(b)
+    if ra is None and rb is None:
+        return LeadConfidence.RUMOR.value
+    if ra is None:
+        return _coerce_confidence_str(b) or LeadConfidence.RUMOR.value
+    if rb is None:
+        return _coerce_confidence_str(a) or LeadConfidence.RUMOR.value
+    return _CONFIDENCE_ORDERED_VALUES[max(ra, rb)]
+
+
+def _lead_row_effective_field_diff(before: Mapping[str, Any], after: Mapping[str, Any]) -> List[str]:
+    """Stable field names that differ between two normalized snapshots (core + merged engine fields)."""
+    keys = (
+        "title",
+        "summary",
+        "type",
+        "lifecycle",
+        "status",
+        "confidence",
+        "discovery_source",
+        "next_step",
+        "related_clue_ids",
+        "related_npc_ids",
+        "related_location_ids",
+        "related_faction_ids",
+        "related_scene_ids",
+        "tags",
+        "evidence_clue_ids",
+        "metadata",
+        "first_discovered_turn",
+        "last_updated_turn",
+        "last_touched_turn",
+    )
+    changed: List[str] = []
+    for k in keys:
+        if before.get(k) != after.get(k):
+            changed.append(k)
+    return changed
+
+
+def apply_engine_lead_signal(
+    session: MutableMapping[str, Any],
+    *,
+    lead_id: Any,
+    title: Any = "",
+    summary: Any = "",
+    lead_type: Any = LeadType.RUMOR.value,
+    source_kind: Any = "other",
+    source_scene_id: Any = None,
+    source_npc_id: Any = None,
+    target_scene_id: Any = None,
+    target_npc_id: Any = None,
+    rumor_text: Any = None,
+    trigger_clue_id: Any = None,
+    presentation_level: Any = None,
+    confidence: Any = None,
+    metadata: Mapping[str, Any] | None = None,
+    tags: Iterable[Any] | None = None,
+    turn: Any = None,
+) -> EngineLeadSignalResult:
+    """Apply one engine-originated lead write: monotonic lifecycle/confidence, merged lists, registry upsert.
+
+    Uses :func:`ensure_lead_registry`, :func:`get_lead`, :func:`create_lead`, and :func:`upsert_lead` only
+    (no parallel registry). Weaker signals never downgrade an existing lead; identical replays are unchanged.
+    """
+    ensure_lead_registry(session)
+
+    title_clean = _as_str(title)
+    sid = _normalize_optional_id(lead_id) or slugify(title_clean or "lead")
+    if not sid:
+        sid = "lead"
+
+    lc_floor, cf_floor = _engine_signal_floors(source_kind, presentation_level)
+    cf_user = _coerce_confidence_str(confidence)
+    if cf_user is not None:
+        cf_floor = _max_confidence(cf_floor, cf_user)
+
+    scene_additions = _merge_ordered_unique_ids(
+        [source_scene_id] if source_scene_id is not None else [],
+        [target_scene_id] if target_scene_id is not None else [],
+    )
+    npc_additions = _merge_ordered_unique_ids(
+        [source_npc_id] if source_npc_id is not None else [],
+        [target_npc_id] if target_npc_id is not None else [],
+    )
+    trigger_norm = _normalize_optional_id(trigger_clue_id)
+    evidence_additions: List[str] = [trigger_norm] if trigger_norm else []
+
+    tag_additions = _normalize_id_list(tags) if tags is not None else []
+
+    meta_incoming: Dict[str, Any] = dict(metadata) if isinstance(metadata, Mapping) else {}
+    rumor_s = _as_str(rumor_text)
+    if rumor_s:
+        meta_incoming = {**meta_incoming, "rumor_text": rumor_s}
+
+    sk_label = _normalize_engine_source_kind(source_kind)
+    compat_pending = _normalize_optional_id(target_scene_id) is not None
+
+    existing = get_lead(session, sid)
+    created = existing is None
+
+    if created:
+        merged_scenes = _merge_ordered_unique_ids([], scene_additions)
+        merged_npcs = _merge_ordered_unique_ids([], npc_additions)
+        merged_evidence = _merge_ordered_unique_ids([], evidence_additions)
+        merged_tags = _merge_ordered_unique_ids(tag_additions, [])
+
+        row = create_lead(
+            title=title_clean or sid,
+            summary=_as_str(summary),
+            id=sid,
+            type=lead_type,
+            lifecycle=lc_floor,
+            confidence=cf_floor,
+            discovery_source=sk_label,
+            related_scene_ids=merged_scenes,
+            related_npc_ids=merged_npcs,
+            evidence_clue_ids=merged_evidence,
+            tags=merged_tags,
+            metadata=meta_incoming,
+        )
+        row["type"] = _normalize_type(row.get("type"))
+        t = _as_optional_int(turn)
+        if t is not None:
+            row["first_discovered_turn"] = t
+            row["last_updated_turn"] = t
+            row["last_touched_turn"] = t
+
+        blank = normalize_lead({"id": sid})
+        changed_fields = _lead_row_effective_field_diff(blank, row)
+        promotion_applied = True
+        _ensure_invariants_after_mutation(row)
+        upsert_lead(session, row)
+        return {
+            "status": "created",
+            "lead_id": sid,
+            "promotion_applied": promotion_applied,
+            "changed_fields": changed_fields,
+            "compat_pending_lead_needed": compat_pending,
+        }
+
+    before_snap = normalize_lead(copy.deepcopy(existing))
+
+    prev_evidence = _normalize_id_list(before_snap.get("evidence_clue_ids"))
+    evidence_grew = False
+    if trigger_norm and trigger_norm not in set(prev_evidence):
+        evidence_grew = True
+
+    merged_scenes = _merge_ordered_unique_ids(_normalize_id_list(before_snap.get("related_scene_ids")), scene_additions)
+    merged_npcs = _merge_ordered_unique_ids(
+        [_as_str(x) for x in (before_snap.get("related_npc_ids") or []) if _as_str(x)],
+        npc_additions,
+    )
+
+    merged_evidence = _merge_ordered_unique_ids(prev_evidence, evidence_additions)
+    merged_tags = _merge_ordered_unique_ids(_normalize_id_list(before_snap.get("tags")), tag_additions)
+
+    prev_lc = before_snap.get("lifecycle")
+    prev_cf = before_snap.get("confidence")
+    new_lc = _max_lifecycle(prev_lc, lc_floor)
+    new_cf = _max_confidence(prev_cf, cf_floor)
+    if evidence_grew:
+        new_cf = _max_confidence(new_cf, _confidence_bump_one(prev_cf))
+
+    after_row = normalize_lead(copy.deepcopy(before_snap))
+    if title_clean:
+        after_row["title"] = title_clean
+    summ = _as_str(summary)
+    if summ:
+        after_row["summary"] = summ
+    if _as_str(lead_type):
+        after_row["type"] = _normalize_type(lead_type)
+
+    after_row["lifecycle"] = new_lc
+    after_row["confidence"] = new_cf
+    after_row["discovery_source"] = _merge_discovery_source(before_snap.get("discovery_source"), sk_label)
+    after_row["related_scene_ids"] = merged_scenes
+    after_row["related_npc_ids"] = merged_npcs
+    after_row["evidence_clue_ids"] = merged_evidence
+    after_row["tags"] = merged_tags
+    after_row["metadata"] = _metadata_merge_engine(before_snap.get("metadata") or {}, meta_incoming)
+
+    changed_fields = _lead_row_effective_field_diff(before_snap, after_row)
+    substantive = [f for f in changed_fields if f not in ("last_updated_turn", "last_touched_turn")]
+    promotion_applied = (_lifecycle_rank(new_lc) or 0) > (_lifecycle_rank(prev_lc) or 0) or (
+        _confidence_rank(new_cf) or 0
+    ) > (_confidence_rank(prev_cf) or 0)
+
+    if not substantive:
+        return {
+            "status": "unchanged",
+            "lead_id": sid,
+            "promotion_applied": False,
+            "changed_fields": [],
+            "compat_pending_lead_needed": compat_pending,
+        }
+
+    t = _as_optional_int(turn)
+    if t is not None:
+        after_row["last_updated_turn"] = t
+        after_row["last_touched_turn"] = t
+
+    changed_fields = _lead_row_effective_field_diff(before_snap, after_row)
+
+    _ensure_invariants_after_mutation(after_row)
+    upsert_lead(session, after_row)
+    return {
+        "status": "updated",
+        "lead_id": sid,
+        "promotion_applied": promotion_applied,
+        "changed_fields": changed_fields,
+        "compat_pending_lead_needed": compat_pending,
     }
