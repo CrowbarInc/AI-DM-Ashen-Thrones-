@@ -10,7 +10,7 @@ from game.clues import (
     get_clue_presentation,
     record_discovered_clue,
 )
-from game.leads import ensure_lead_registry, get_lead
+from game.leads import SESSION_LEAD_REGISTRY_KEY, ensure_lead_registry, get_lead
 from game.defaults import default_character, default_world
 from game.social import resolve_social_action
 from game.storage import add_pending_lead, get_scene_runtime, load_scene
@@ -117,6 +117,8 @@ def test_social_lead_with_leads_to_scene_adds_pending_and_actionable():
     rt = get_scene_runtime(session, scene_id)
     pending = rt.get("pending_leads") or []
     assert any(isinstance(p, dict) and p.get("clue_id") == "to_milestone" for p in pending)
+    p = next(p for p in pending if isinstance(p, dict) and p.get("clue_id") == "to_milestone")
+    assert p.get("authoritative_lead_id") == "to_milestone"
     assert get_clue_presentation(session, clue_id="to_milestone") == "actionable"
     meta = res.get("metadata") if isinstance(res.get("metadata"), dict) else {}
     ll = meta.get("lead_landing") if isinstance(meta.get("lead_landing"), dict) else {}
@@ -243,6 +245,55 @@ def test_structured_fact_scene_id_without_regex_creates_lead():
     apply_socially_revealed_leads(session, "frontier_gate", world, res, scene={"scene": {"id": "frontier_gate"}})
     lid = "lead_frontier_gate_old_milestone"
     assert lid in get_all_known_clue_ids(session)
+
+
+def test_add_pending_lead_dedupes_by_authoritative_lead_id_and_merges_targets():
+    session: dict = {}
+    scene_id = "gate"
+    add_pending_lead(
+        session,
+        scene_id,
+        {
+            "clue_id": "first_clue",
+            "text": "Same thread",
+            "authoritative_lead_id": "registry_one",
+            "leads_to_scene": "old_milestone",
+        },
+    )
+    add_pending_lead(
+        session,
+        scene_id,
+        {
+            "clue_id": "second_clue",
+            "text": "Same thread",
+            "authoritative_lead_id": "registry_one",
+            "leads_to_npc": "guards",
+        },
+    )
+    rt = get_scene_runtime(session, scene_id)
+    rows = [p for p in (rt.get("pending_leads") or []) if isinstance(p, dict)]
+    assert len(rows) == 1
+    assert rows[0].get("authoritative_lead_id") == "registry_one"
+    assert rows[0].get("leads_to_scene") == "old_milestone"
+    assert rows[0].get("leads_to_npc") == "guards"
+
+
+def test_add_pending_lead_legacy_still_dedupes_by_clue_id_only():
+    session: dict = {}
+    scene_id = "gate"
+    add_pending_lead(
+        session,
+        scene_id,
+        {"clue_id": "only_clue", "text": "A", "leads_to_scene": "s1"},
+    )
+    added_again = add_pending_lead(
+        session,
+        scene_id,
+        {"clue_id": "only_clue", "text": "B", "leads_to_scene": "s2"},
+    )
+    assert added_again is False
+    rt = get_scene_runtime(session, scene_id)
+    assert len([p for p in (rt.get("pending_leads") or []) if isinstance(p, dict)]) == 1
 
 
 def test_duplicate_social_resolution_does_not_duplicate_extracted_pending():
@@ -612,6 +663,224 @@ def test_clue_discovery_then_social_extract_updates_same_authoritative_row():
     assert row is not None
     ev = row.get("evidence_clue_ids") or []
     assert "gate_hint" in ev
+    assert "lead_frontier_gate_old_milestone" in ev
+
+
+_SCENE_FLAG_MINIMUM_ACTIONABLE = "ensure_minimum_actionable_lead_after_social"
+
+_LEAD_LANDING_LIST_KEYS = (
+    "revealed_lead_ids",
+    "already_known_lead_ids",
+    "actionable_lead_ids",
+    "lead_write_targets",
+    "extracted_lead_ids",
+    "extracted_lead_sources",
+    "authoritative_created_ids",
+    "authoritative_updated_ids",
+    "authoritative_unchanged_ids",
+    "authoritative_promoted_ids",
+)
+
+
+def _assert_lists_deduped(ll: dict, keys: tuple[str, ...]) -> None:
+    for k in keys:
+        xs = ll.get(k) or []
+        assert isinstance(xs, list)
+        assert len(xs) == len(list(dict.fromkeys(xs)))
+
+
+def test_apply_socially_revealed_leads_reentrancy_one_authoritative_one_pending_idempotent_events():
+    """Same resolution twice: one registry row, one compat pending per authoritative id, stable event log."""
+    session: dict = {"scene_runtime": {}, "clue_knowledge": {}, "turn_counter": 1}
+    world = default_world()
+    world.setdefault("event_log", [])
+    res = {
+        "kind": "question",
+        "success": True,
+        "requires_check": False,
+        "clue_id": "missing_patrol",
+        "discovered_clues": ["A patrol went missing near the old milestone."],
+        "social": {
+            "npc_id": "guard_captain",
+            "target_resolved": True,
+            "topic_revealed": {
+                "id": "patrol",
+                "text": "A patrol went missing near the old milestone.",
+                "clue_id": "missing_patrol",
+            },
+        },
+    }
+    auth_id = "lead_frontier_gate_old_milestone"
+    apply_socially_revealed_leads(session, "frontier_gate", world, res, scene={"scene": {"id": "frontier_gate"}})
+    reg_after_first = len(ensure_lead_registry(session))
+    events_after_first = list(world.get("event_log") or [])
+    apply_socially_revealed_leads(session, "frontier_gate", world, res, scene={"scene": {"id": "frontier_gate"}})
+    assert len(ensure_lead_registry(session)) == reg_after_first
+    assert get_lead(session, auth_id) is not None
+    rt = get_scene_runtime(session, "frontier_gate")
+    pending = [p for p in (rt.get("pending_leads") or []) if isinstance(p, dict)]
+    by_auth = [p for p in pending if p.get("authoritative_lead_id") == auth_id]
+    assert len(by_auth) == 1
+    assert by_auth[0].get("clue_id") == auth_id
+    actionable_dupes = [p for p in pending if p.get("clue_id") == auth_id]
+    assert len(actionable_dupes) == 1
+    assert world.get("event_log") == events_after_first
+    revealed = [
+        e
+        for e in world.get("event_log") or []
+        if isinstance(e, dict) and e.get("type") == "social_lead_revealed" and e.get("clue_id") == "missing_patrol"
+    ]
+    assert len(revealed) == 1
+
+
+def test_narration_supplement_twice_same_text_metadata_lists_stay_deduped():
+    session: dict = {"scene_runtime": {}, "clue_knowledge": {}, "turn_counter": 1}
+    world = default_world()
+    scene_id = "frontier_gate"
+    scene = {"scene": {"id": scene_id}}
+    res = _resolution_question_with_topic(clue_id="stew_clue", text="Hot stew and rumors for coin.")
+    apply_socially_revealed_leads(session, scene_id, world, res, scene=scene)
+    narr = (
+        "The runner leans in. If you want the real thread, ask around the old trading crossroads—"
+        "voices loosen there after dark."
+    )
+    apply_social_narration_lead_supplements(session, scene_id, world, res, narr, scene)
+    ll1 = dict(res["metadata"]["lead_landing"])
+    reg_after_first = len(ensure_lead_registry(session))
+    apply_social_narration_lead_supplements(session, scene_id, world, res, narr, scene)
+    ll2 = res["metadata"]["lead_landing"]
+    lid = "lead_frontier_gate_old_trading_crossroads"
+    assert get_lead(session, lid) is not None
+    assert len(ensure_lead_registry(session)) == reg_after_first
+    row = get_lead(session, lid)
+    assert row is not None
+    rt = get_scene_runtime(session, scene_id)
+    cross = [p for p in (rt.get("pending_leads") or []) if isinstance(p, dict) and p.get("clue_id") == lid]
+    assert len(cross) == 1
+    _assert_lists_deduped(ll2, _LEAD_LANDING_LIST_KEYS)
+    assert set(ll2.get("extracted_lead_ids") or []) == set(ll1.get("extracted_lead_ids") or [])
+    assert set(ll2.get("extracted_lead_sources") or []) == set(ll1.get("extracted_lead_sources") or [])
+    for k in (
+        "authoritative_created_ids",
+        "authoritative_updated_ids",
+        "authoritative_unchanged_ids",
+        "authoritative_promoted_ids",
+    ):
+        xs = ll2.get(k) or []
+        assert len(xs) == len(list(dict.fromkeys(xs)))
+
+
+def test_ensure_minimum_actionable_skips_after_normal_social_landing_no_extra_rows():
+    """Actionable pending from apply_socially_revealed_leads: safety rail is a no-op."""
+    session: dict = {"scene_runtime": {}, "clue_knowledge": {}, "turn_counter": 1}
+    world = default_world()
+    scene = {
+        "scene": {
+            "id": "custom_hub",
+            "exits": [],
+            "discoverable_clues": [],
+            _SCENE_FLAG_MINIMUM_ACTIONABLE: True,
+        }
+    }
+    res = _resolution_question_with_topic(
+        clue_id="to_milestone",
+        text="They were seen toward the old milestone.",
+        leads_to_scene="old_milestone",
+    )
+    apply_socially_revealed_leads(session, "custom_hub", world, res, scene=scene)
+    reg_n = len(ensure_lead_registry(session))
+    rt = get_scene_runtime(session, "custom_hub")
+    pending_n = len([p for p in (rt.get("pending_leads") or []) if isinstance(p, dict)])
+    dbg = ensure_scene_has_minimum_actionable_lead(
+        scene_id="custom_hub",
+        session=session,
+        scene=scene,
+        resolution=res,
+        gm_output={"player_facing_text": "They nod toward the east road."},
+        world=world,
+    )
+    assert dbg is not None
+    assert dbg.get("minimum_actionable_lead_enforced") is False
+    assert len(ensure_lead_registry(session)) == reg_n
+    rt2 = get_scene_runtime(session, "custom_hub")
+    assert len([p for p in (rt2.get("pending_leads") or []) if isinstance(p, dict)]) == pending_n
+    mal = res.get("metadata", {}).get("minimum_actionable_lead", {})
+    assert mal.get("minimum_actionable_lead_enforced") is False
+
+
+def test_first_pass_lead_landing_metadata_shape_actionable_matches_pending():
+    session: dict = {"scene_runtime": {}, "clue_knowledge": {}, "turn_counter": 1}
+    world = default_world()
+    res = {
+        "kind": "question",
+        "success": True,
+        "requires_check": False,
+        "clue_id": "to_milestone",
+        "discovered_clues": ["They were seen toward the old milestone."],
+        "social": {
+            "npc_id": "runner",
+            "target_resolved": True,
+            "topic_revealed": {
+                "id": "t1",
+                "text": "They were seen toward the old milestone.",
+                "clue_id": "to_milestone",
+                "leads_to_scene": "old_milestone",
+            },
+        },
+    }
+    apply_socially_revealed_leads(session, "gate", world, res)
+    ll = res["metadata"]["lead_landing"]
+    assert set(_LEAD_LANDING_LIST_KEYS).issubset(ll.keys())
+    assert "extracted_from_text" in ll and isinstance(ll["extracted_from_text"], bool)
+    assert "extracted_from_reconciled_text" in ll and isinstance(ll["extracted_from_reconciled_text"], bool)
+    _assert_lists_deduped(ll, _LEAD_LANDING_LIST_KEYS)
+    assert SESSION_LEAD_REGISTRY_KEY in (ll.get("lead_write_targets") or [])
+    assert "to_milestone" in (ll.get("authoritative_created_ids") or []) or "to_milestone" in (
+        ll.get("authoritative_updated_ids") or []
+    ) or "to_milestone" in (ll.get("authoritative_unchanged_ids") or [])
+    actionable = ll.get("actionable_lead_ids") or []
+    rt = get_scene_runtime(session, "gate")
+    pending_ids = [p.get("clue_id") for p in (rt.get("pending_leads") or []) if isinstance(p, dict)]
+    for aid in actionable:
+        assert aid in pending_ids
+
+
+def test_canonical_extracted_sibling_collapses_evidence_uses_one_extracted_trigger_cid():
+    """Design: among extracted siblings sharing one registry id, only the canonical extracted row supplies trigger/evidence.
+
+    Other extracted sibling clue ids must not appear on the authoritative lead row (primary clue discovery may still add its own trigger).
+    """
+    session: dict = {"scene_runtime": {}, "clue_knowledge": {}, "turn_counter": 1}
+    world = default_world()
+    world["clues"] = {
+        "primary_x": {"canonical_lead_id": "merged_auth"},
+        "old_milestone": {"canonical_lead_id": "merged_auth"},
+        "lead_frontier_gate_guards": {"canonical_lead_id": "merged_auth"},
+    }
+    res = {
+        "kind": "question",
+        "success": True,
+        "requires_check": False,
+        "clue_id": "primary_x",
+        "discovered_clues": ["If you need help, speak with the guards at the barbican."],
+        "social": {
+            "npc_id": "runner",
+            "target_resolved": True,
+            "topic_revealed": {
+                "id": "t1",
+                "text": "A patrol went missing near the old milestone.",
+                "clue_id": "primary_x",
+            },
+        },
+    }
+    apply_socially_revealed_leads(session, "frontier_gate", world, res, scene={"scene": {"id": "frontier_gate"}})
+    ext = res["metadata"]["lead_landing"]["extracted_lead_ids"]
+    assert "lead_frontier_gate_old_milestone" in ext
+    assert "lead_frontier_gate_guards" in ext
+    row = get_lead(session, "merged_auth")
+    assert row is not None
+    ev = row.get("evidence_clue_ids") or []
+    assert "lead_frontier_gate_guards" not in ev
     assert "lead_frontier_gate_old_milestone" in ev
 
 

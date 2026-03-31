@@ -6,6 +6,7 @@ Supports a knowledge-state layer: discovered, inferred, known_to_player.
 from __future__ import annotations
 
 import re
+from collections import OrderedDict
 from typing import Any, Dict, List, Set, Tuple
 
 from game.leads import SESSION_LEAD_REGISTRY_KEY, LeadType, apply_engine_lead_signal, is_valid_type
@@ -1063,6 +1064,41 @@ def _lead_has_pending_target(lead: Dict[str, Any]) -> bool:
     )
 
 
+def _extracted_social_canonical_tuple(lead: Dict[str, Any]) -> Tuple[int, int, int, int]:
+    return (
+        1 if _lead_has_pending_target(lead) else 0,
+        1 if str(lead.get("target_scene_id") or "").strip() else 0,
+        1 if str(lead.get("target_npc_id") or "").strip() else 0,
+        1 if str(lead.get("rumor_text") or "").strip() else 0,
+    )
+
+
+def _extracted_social_canonical_beats(
+    cand: Dict[str, Any],
+    cand_idx: int,
+    cur: Dict[str, Any],
+    cur_idx: int,
+) -> bool:
+    sc = _extracted_social_canonical_tuple(cand)
+    s0 = _extracted_social_canonical_tuple(cur)
+    if sc > s0:
+        return True
+    if sc < s0:
+        return False
+    return cand_idx < cur_idx
+
+
+def _select_canonical_extracted_social_lead(leads: List[Dict[str, Any]]) -> Dict[str, Any]:
+    """Strongest payload among extracted siblings that share one authoritative registry id."""
+    best = leads[0]
+    best_i = 0
+    for i in range(1, len(leads)):
+        cand = leads[i]
+        if _extracted_social_canonical_beats(cand, i, best, best_i):
+            best, best_i = cand, i
+    return best
+
+
 def _apply_extracted_social_leads(
     session: Dict[str, Any],
     scene_id: str,
@@ -1084,19 +1120,31 @@ def _apply_extracted_social_leads(
         logged_ids = session["social_lead_event_ids"]
     primary_skip = str(primary_canonical_clue_id or "").strip() or None
     sid = str(scene_id or "").strip() or None
+    w = world if isinstance(world, dict) else None
 
+    grouped: "OrderedDict[str, List[Dict[str, Any]]]" = OrderedDict()
     for lead in leads:
         if not isinstance(lead, dict):
             continue
         cid = str(lead.get("lead_id") or "").strip()
         if not cid:
             continue
-        label = str(lead.get("label") or "").strip() or cid
         registry_id = _registry_lead_id_for_extracted_social_lead(
             lead,
-            world if isinstance(world, dict) else None,
+            w,
             primary_canonical_clue_id=primary_canonical_clue_id,
         )
+        reg = str(registry_id or "").strip()
+        if not reg:
+            continue
+        grouped.setdefault(reg, []).append(lead)
+
+    for registry_id, bucket in grouped.items():
+        lead = _select_canonical_extracted_social_lead(bucket)
+        cid = str(lead.get("lead_id") or "").strip()
+        if not cid:
+            continue
+        label = str(lead.get("label") or "").strip() or cid
         has_target = _lead_has_pending_target(lead)
         pres_for_signal = "actionable" if has_target else "explicit"
         ts = str(lead.get("target_scene_id") or "").strip() or None
@@ -1141,7 +1189,12 @@ def _apply_extracted_social_leads(
             added.append(label)
 
         if has_target:
-            pend: Dict[str, Any] = {"clue_id": cid, "text": label}
+            # Authoritative registry row (registry_id) is source of truth; pending_leads is compatibility mirror only.
+            pend: Dict[str, Any] = {
+                "clue_id": cid,
+                "text": label,
+                "authoritative_lead_id": registry_id,
+            }
             if ts:
                 pend["leads_to_scene"] = ts
             if tn:

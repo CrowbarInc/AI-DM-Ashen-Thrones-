@@ -385,8 +385,68 @@ def mark_clue_discovered(session: Dict[str, Any], scene_id: str, clue_text: str)
     return _add_unique_to_list(rt['discovered_clues'], clue_text)
 
 
+def _pending_lead_clean(lead: Dict[str, Any]) -> Dict[str, Any]:
+    return {k: v for k, v in lead.items() if v is not None and v != ''}
+
+
+def _pending_str_field(d: Dict[str, Any], key: str) -> str:
+    return str(d.get(key) or "").strip()
+
+
+def _merge_pending_lead_authoritative(
+    existing: Dict[str, Any], incoming: Dict[str, Any]
+) -> tuple[Dict[str, Any], bool]:
+    """Merge incoming into existing for the same authoritative_lead_id; fill empty leads_to_* / text / clue_id."""
+    out = dict(existing)
+    changed = False
+    for key in ("leads_to_scene", "leads_to_npc", "leads_to_rumor"):
+        cur = _pending_str_field(out, key)
+        raw = incoming.get(key)
+        if raw is None or raw == "":
+            continue
+        inc = str(raw).strip()
+        if not inc:
+            continue
+        if not cur:
+            out[key] = raw
+            changed = True
+    inc_text = _pending_str_field(incoming, "text")
+    if inc_text and not _pending_str_field(out, "text"):
+        out["text"] = incoming["text"]
+        changed = True
+    elif inc_text and _pending_str_field(out, "text") and inc_text != _pending_str_field(out, "text"):
+        inc_targets = sum(
+            1 for k in ("leads_to_scene", "leads_to_npc", "leads_to_rumor") if _pending_str_field(incoming, k)
+        )
+        out_targets = sum(
+            1 for k in ("leads_to_scene", "leads_to_npc", "leads_to_rumor") if _pending_str_field(out, k)
+        )
+        if inc_targets > out_targets:
+            out["text"] = incoming["text"]
+            changed = True
+    inc_cid = _pending_str_field(incoming, "clue_id")
+    if inc_cid and not _pending_str_field(out, "clue_id"):
+        out["clue_id"] = incoming["clue_id"]
+        changed = True
+    inc_auth = _pending_str_field(incoming, "authoritative_lead_id")
+    if inc_auth and _pending_str_field(out, "authoritative_lead_id") != inc_auth:
+        out["authoritative_lead_id"] = incoming["authoritative_lead_id"]
+        changed = True
+    clean = _pending_lead_clean(out)
+    if clean != out:
+        changed = True
+    return clean, changed
+
+
 def add_pending_lead(session: Dict[str, Any], scene_id: str, lead: Dict[str, Any]) -> bool:
-    """Add a pending lead from a discovered clue. Returns True if newly added. Lead shape: {clue_id, text, leads_to_scene?, leads_to_npc?, leads_to_rumor?}."""
+    """Add or merge a pending lead from a discovered clue.
+
+    When ``authoritative_lead_id`` is present, dedupe/merge by that id (single row per authority);
+    otherwise use legacy ``clue_id`` dedupe (append-only, no merge).
+
+    Returns True if the pending list changed (new row or merged update).
+    Lead shape: {clue_id, text, authoritative_lead_id?, leads_to_scene?, leads_to_npc?, leads_to_rumor?}.
+    """
     if not lead or not isinstance(lead, dict):
         return False
     clue_id = str(lead.get('clue_id', '')).strip()
@@ -397,10 +457,27 @@ def add_pending_lead(session: Dict[str, Any], scene_id: str, lead: Dict[str, Any
     if not isinstance(pending, list):
         rt['pending_leads'] = []
         pending = []
+    auth_in = str(lead.get("authoritative_lead_id") or "").strip() or None
+
+    if auth_in:
+        for i, p in enumerate(pending):
+            if not isinstance(p, dict):
+                continue
+            if str(p.get("authoritative_lead_id") or "").strip() != auth_in:
+                continue
+            merged, changed = _merge_pending_lead_authoritative(p, lead)
+            if changed:
+                pending[i] = merged
+                rt['pending_leads'] = pending
+            return changed
+        clean = _pending_lead_clean(lead)
+        rt['pending_leads'] = pending + [clean]
+        return True
+
     for p in pending:
         if isinstance(p, dict) and p.get('clue_id') == clue_id:
             return False
-    clean = {k: v for k, v in lead.items() if v is not None and v != ''}
+    clean = _pending_lead_clean(lead)
     rt['pending_leads'] = pending + [clean]
     return True
 
