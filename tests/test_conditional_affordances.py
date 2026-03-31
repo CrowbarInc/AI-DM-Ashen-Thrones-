@@ -280,6 +280,33 @@ def test_normalize_preserves_conditions():
     assert out["conditions"]["excludes_flags"] == ["d"]
 
 
+def test_normalize_preserves_follow_lead_commitment_metadata():
+    """normalize_scene_action passes through follow-lead commitment metadata unchanged."""
+    raw = {
+        "id": "follow-lead-bootprints-toward-the-river",
+        "label": "Follow lead: Bootprints toward the river.",
+        "type": "scene_transition",
+        "targetSceneId": "market_quarter",
+        "prompt": "I follow the lead to market_quarter.",
+        "metadata": {
+            "authoritative_lead_id": "tracks_reg",
+            "clue_id": "tracks",
+            "commitment_source": "follow_lead_affordance",
+            "commitment_strength": 1,
+            "target_scene_id": "market_quarter",
+            "lead_text": "Bootprints toward the river.",
+        },
+    }
+    out = normalize_scene_action(raw)
+    m = out.get("metadata") or {}
+    assert m.get("authoritative_lead_id") == "tracks_reg"
+    assert m.get("clue_id") == "tracks"
+    assert m.get("commitment_source") == "follow_lead_affordance"
+    assert m.get("commitment_strength") == 1
+    assert m.get("target_scene_id") == "market_quarter"
+    assert "Bootprints" in (m.get("lead_text") or "")
+
+
 def test_backward_compat_scenes_without_conditions():
     """Scenes without any conditions in actions work unchanged."""
     scene = _scene_with_actions([

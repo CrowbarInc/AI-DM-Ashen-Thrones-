@@ -17,9 +17,32 @@ interlocutor continuity.
 from __future__ import annotations
 
 import re
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple
 
+from game.leads import get_lead
+from game.storage import get_scene_runtime
 from game.utils import slugify
+
+_EXPLICIT_PURSUIT_COMMITMENT_SOURCE = "explicit_player_pursuit"
+_EXPLICIT_PURSUIT_COMMITMENT_STRENGTH = 2
+
+# Narrow explicit pursuit (Block 3). Must not fire on generic investigate/travel.
+_RE_PURSUIT_BARE = re.compile(
+    r"^\s*(?:i\s+(?:will\s+)?)?(?:follow|pursue)\s+the\s+lead\s*[\s\.,;?!]*$",
+    re.IGNORECASE,
+)
+_RE_PURSUIT_GO_TO_THE_X_LEAD = re.compile(
+    r"\b(?:go|head|travel)\s+to\s+the\s+(.+?)\s+lead\b",
+    re.IGNORECASE,
+)
+_RE_PURSUIT_FOLLOW_THE_X_LEAD = re.compile(
+    r"\b(?:follow|pursue)\s+the\s+(.+?)\s+lead\b",
+    re.IGNORECASE,
+)
+_RE_PURSUIT_INVESTIGATE_THE_X_LEAD = re.compile(
+    r"\binvestigate\s+the\s+(.+?)\s+lead\b",
+    re.IGNORECASE,
+)
 
 # Action types compatible with exploration engine and normalize_scene_action
 ACTION_TYPES = ("observe", "investigate", "interact", "scene_transition", "travel", "attack", "custom")
@@ -315,15 +338,143 @@ def _build_action(
     return out
 
 
+def _actionable_pending_with_registry_rows(
+    session: Dict[str, Any], scene_id: str
+) -> List[Dict[str, Any]]:
+    """Pending leads that carry an authoritative id with a real registry row (no clue_id fallback)."""
+    if not isinstance(session, dict) or not isinstance(scene_id, str) or not scene_id.strip():
+        return []
+    rt = get_scene_runtime(session, scene_id)
+    pending = rt.get("pending_leads") or []
+    out: List[Dict[str, Any]] = []
+    for p in pending:
+        if not isinstance(p, dict):
+            continue
+        aid = str(p.get("authoritative_lead_id") or "").strip()
+        if not aid or get_lead(session, aid) is None:
+            continue
+        out.append(p)
+    return out
+
+
+def _commitment_meta_for_pursuit(authoritative_lead_id: str) -> Dict[str, Any]:
+    return {
+        "authoritative_lead_id": authoritative_lead_id,
+        "commitment_source": _EXPLICIT_PURSUIT_COMMITMENT_SOURCE,
+        "commitment_strength": _EXPLICIT_PURSUIT_COMMITMENT_STRENGTH,
+    }
+
+
+def _single_lead_for_target_scene(
+    actionable: List[Dict[str, Any]], target_scene_id: str
+) -> Optional[str]:
+    tid = str(target_scene_id or "").strip()
+    if not tid:
+        return None
+    cands = [p for p in actionable if str(p.get("leads_to_scene") or "").strip() == tid]
+    if len(cands) != 1:
+        return None
+    return str(cands[0].get("authoritative_lead_id") or "").strip() or None
+
+
+def _resolve_phrase_to_scene_and_authoritative_id(
+    phrase: str,
+    exits: List[Dict[str, Any]],
+    actionable: List[Dict[str, Any]],
+) -> Tuple[Optional[str], Optional[str]]:
+    """Prefer exit→target_scene_id, then exact pending lead text match. Returns (target_scene_id, lead_id)."""
+    raw = (phrase or "").strip()
+    if not raw:
+        return None, None
+    tid = _match_exit(raw, exits)
+    if tid:
+        aid = _single_lead_for_target_scene(actionable, tid)
+        return (tid, aid) if aid else (None, None)
+    key = raw.lower()
+    text_hits = [
+        p
+        for p in actionable
+        if str(p.get("text") or "").strip().lower() == key
+    ]
+    if len(text_hits) != 1:
+        return None, None
+    p = text_hits[0]
+    ts = str(p.get("leads_to_scene") or "").strip()
+    aid = str(p.get("authoritative_lead_id") or "").strip()
+    if not ts or not aid:
+        return None, None
+    return ts, aid
+
+
+def _try_explicit_pursuit_scene_transition(
+    text: str,
+    low: str,
+    scene: Dict[str, Any],
+    session: Dict[str, Any],
+) -> Optional[Dict[str, Any]]:
+    """If text is explicit pursuit and exactly one authoritative lead applies, return scene_transition + metadata."""
+    scene_id = str(scene.get("id") or "").strip()
+    if not scene_id:
+        return None
+    exits = scene.get("exits") or []
+    actionable = _actionable_pending_with_registry_rows(session, scene_id)
+    if not actionable:
+        return None
+
+    target_scene_id: Optional[str] = None
+    authoritative_id: Optional[str] = None
+
+    if _RE_PURSUIT_BARE.fullmatch(text.strip()):
+        with_scene = [p for p in actionable if str(p.get("leads_to_scene") or "").strip()]
+        if len(with_scene) != 1:
+            return None
+        p0 = with_scene[0]
+        target_scene_id = str(p0.get("leads_to_scene") or "").strip()
+        authoritative_id = str(p0.get("authoritative_lead_id") or "").strip()
+    else:
+        m_go = _RE_PURSUIT_GO_TO_THE_X_LEAD.search(low)
+        m_fp = _RE_PURSUIT_FOLLOW_THE_X_LEAD.search(low)
+        m_inv = _RE_PURSUIT_INVESTIGATE_THE_X_LEAD.search(low)
+        phrase: Optional[str] = None
+        if m_go:
+            phrase = m_go.group(1).strip()
+        elif m_inv:
+            phrase = m_inv.group(1).strip()
+        elif m_fp:
+            phrase = m_fp.group(1).strip()
+        if not phrase:
+            return None
+        target_scene_id, authoritative_id = _resolve_phrase_to_scene_and_authoritative_id(
+            phrase, exits if isinstance(exits, list) else [], actionable
+        )
+
+    if not target_scene_id or not authoritative_id:
+        return None
+    meta = _commitment_meta_for_pursuit(authoritative_id)
+    return _build_action(
+        "scene_transition",
+        text,
+        text,
+        target_scene_id=target_scene_id,
+        metadata=meta,
+    )
+
+
 def parse_freeform_to_action(
     text: str,
     scene_envelope: Optional[Dict[str, Any]] = None,
+    *,
+    session: Optional[Dict[str, Any]] = None,
 ) -> Optional[Dict[str, Any]]:
     """Parse freeform player input into a structured engine action.
 
     Uses verb patterns and scene context (exits, interactables, visible_facts)
     to map common commands to structured actions. Returns None when ambiguous
     → caller falls back to GPT narration.
+
+    When ``session`` is provided, narrow explicit pursuit phrases may attach
+    ``metadata.authoritative_lead_id`` (and commitment fields) on a deterministic
+    ``scene_transition``; no lead state is mutated here.
 
     Returns:
         Structured action dict with id, label, type, prompt, targetSceneId?,
@@ -340,6 +491,12 @@ def parse_freeform_to_action(
     exits = scene.get("exits") or []
     interactables = scene.get("interactables") or []
     visible_facts = scene.get("visible_facts") or []
+
+    # ---- 0. Explicit pursuit → scene_transition + authoritative commitment metadata (session only) ----
+    if isinstance(session, dict):
+        pursuit = _try_explicit_pursuit_scene_transition(t, low, scene, session)
+        if pursuit is not None:
+            return pursuit
 
     # ---- 1. Travel / scene_transition ----
     for prefix in sorted(TRAVEL_PREFIXES, key=len, reverse=True):

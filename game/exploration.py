@@ -7,6 +7,7 @@ from game.models import ExplorationEngineResult
 from game.utils import slugify
 from game.storage import get_scene_runtime, add_pending_lead, is_interactable_resolved, is_target_searched
 from game.clues import apply_authoritative_clue_discovery, set_clue_presentation
+from game.leads import commit_session_lead_with_context, get_lead
 from game.scene_graph import build_scene_graph, is_transition_valid
 from game.skill_checks import resolve_skill_check, should_trigger_check
 
@@ -102,14 +103,19 @@ def _get_skill_check_config(
     return None
 
 
-def parse_exploration_intent(text: str, scene_envelope: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+def parse_exploration_intent(
+    text: str,
+    scene_envelope: Dict[str, Any],
+    session: Optional[Dict[str, Any]] = None,
+) -> Optional[Dict[str, Any]]:
     """Detect exploration patterns in free text. Returns a raw dict compatible with normalize_scene_action, or None.
 
     Delegates to intent_parser.parse_freeform_to_action for deterministic parsing with scene context.
+    When ``session`` is set, explicit pursuit phrases may attach authoritative follow-lead metadata.
     """
     from game.intent_parser import parse_freeform_to_action
 
-    result = parse_freeform_to_action(text, scene_envelope)
+    result = parse_freeform_to_action(text, scene_envelope, session=session)
     # Exclude combat-only intents (attack) from exploration pipeline; caller handles routing
     if result and (result.get("type") or "").strip().lower() == "attack":
         return None  # API chat will route attack via combat when in_combat
@@ -414,6 +420,79 @@ def resolve_exploration_action(
     if skill_check_result:
         d["skill_check"] = skill_check_result
     return d
+
+
+def _follow_lead_commitment_snapshot(row: Dict[str, Any] | None) -> tuple[Any, ...] | None:
+    if not row:
+        return None
+    return (
+        row.get("lifecycle"),
+        row.get("status"),
+        row.get("committed_at_turn"),
+        row.get("commitment_source"),
+        row.get("commitment_strength"),
+    )
+
+
+def apply_follow_lead_commitment_after_resolved_scene_transition(
+    session: Dict[str, Any],
+    resolution: Dict[str, Any],
+    normalized_action: Dict[str, Any] | None,
+    *,
+    target_scene_id: str,
+) -> None:
+    """Commit authoritative lead when a successful scene_transition used follow-lead metadata.
+
+    Call only after :func:`game.api._apply_authoritative_scene_transition` (or equivalent) so ``session``
+    is the post-transition authoritative dict. Requires ``metadata.authoritative_lead_id`` on the action;
+    generic transitions without that key are ignored (legacy-safe).
+    """
+    if not isinstance(session, dict) or not isinstance(resolution, dict):
+        return
+    if not isinstance(normalized_action, dict):
+        return
+    if str(normalized_action.get("type") or "").strip().lower() != "scene_transition":
+        return
+    if str(resolution.get("kind") or "").strip().lower() != "scene_transition":
+        return
+    if not resolution.get("resolved_transition"):
+        return
+    tid = str(target_scene_id or "").strip()
+    if not tid or str(resolution.get("target_scene_id") or "").strip() != tid:
+        return
+    meta_raw = normalized_action.get("metadata")
+    meta = dict(meta_raw) if isinstance(meta_raw, dict) else {}
+    lead_id = str(meta.get("authoritative_lead_id") or "").strip() or None
+    if not lead_id:
+        return
+
+    commitment_source = meta.get("commitment_source")
+    commitment_strength = meta.get("commitment_strength")
+
+    row_before = get_lead(session, lead_id)
+    if row_before is None:
+        return
+    snap_before = _follow_lead_commitment_snapshot(row_before)
+    commit_session_lead_with_context(
+        session,
+        lead_id,
+        turn=int(session.get("turn_counter", 0) or 0),
+        commitment_source=commitment_source,
+        commitment_strength=commitment_strength,
+    )
+    row_after = get_lead(session, lead_id)
+    snap_after = _follow_lead_commitment_snapshot(row_after)
+
+    rmeta = resolution.get("metadata")
+    if not isinstance(rmeta, dict):
+        rmeta = {}
+        resolution["metadata"] = rmeta
+    rmeta["committed_lead_id"] = lead_id
+    if commitment_source is not None:
+        rmeta["commitment_source"] = commitment_source
+    rmeta["commitment_applied"] = bool(
+        snap_before is not None and snap_after is not None and snap_before != snap_after
+    )
 
 
 def _merge_world_updates(base: Dict[str, Any], extra: Dict[str, Any]) -> Dict[str, Any]:

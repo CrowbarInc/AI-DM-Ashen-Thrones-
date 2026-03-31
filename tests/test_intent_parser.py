@@ -2,6 +2,8 @@
 import pytest
 
 from game.intent_parser import parse_freeform_to_action, parse_intent, segment_mixed_player_turn
+from game.leads import LeadLifecycle, LeadStatus, create_lead, upsert_lead
+from game.storage import get_scene_runtime
 
 pytestmark = pytest.mark.unit
 
@@ -204,3 +206,104 @@ def test_segment_mixed_turn_ambiguous_fallback_is_conservative():
     assert segmented["observation_intent_text"] is None
     assert segmented["contingency_text"] is None
     assert segmented["declared_action_text"] == text
+
+
+def test_investigate_the_room_not_treated_as_explicit_pursuit():
+    scene = {
+        "scene": {
+            "id": "room",
+            "exits": [],
+            "interactables": [],
+        }
+    }
+    session = {}
+    upsert_lead(
+        session,
+        create_lead(id="L1", title="x", summary="", lifecycle=LeadLifecycle.DISCOVERED, status=LeadStatus.ACTIVE),
+    )
+    rt = get_scene_runtime(session, "room")
+    rt["pending_leads"] = [
+        {
+            "clue_id": "c1",
+            "authoritative_lead_id": "L1",
+            "text": "Something else",
+            "leads_to_scene": "elsewhere",
+        }
+    ]
+    parsed = parse_freeform_to_action("investigate the room", scene, session=session)
+    assert parsed is not None
+    assert parsed.get("type") == "investigate"
+    assert (parsed.get("metadata") or {}).get("authoritative_lead_id") is None
+
+
+def test_look_around_no_pursuit_metadata_even_with_session():
+    scene = {"scene": {"id": "room", "exits": []}}
+    session = {}
+    upsert_lead(session, create_lead(id="L1", title="x", summary="", lifecycle=LeadLifecycle.DISCOVERED))
+    rt = get_scene_runtime(session, "room")
+    rt["pending_leads"] = [
+        {"clue_id": "c1", "authoritative_lead_id": "L1", "text": "t", "leads_to_scene": "x"},
+    ]
+    parsed = parse_freeform_to_action("look around", scene, session=session)
+    assert parsed.get("type") == "observe"
+    assert (parsed.get("metadata") or {}).get("authoritative_lead_id") is None
+
+
+def test_pursue_the_x_lead_resolves_via_exact_pending_text_when_exit_unmatched():
+    scene = {
+        "scene": {
+            "id": "gate",
+            "exits": [{"label": "Unrelated exit", "target_scene_id": "other"}],
+        }
+    }
+    session = {}
+    upsert_lead(session, create_lead(id="exact_lead", title="E", summary="", lifecycle=LeadLifecycle.DISCOVERED))
+    rt = get_scene_runtime(session, "gate")
+    rt["pending_leads"] = [
+        {
+            "clue_id": "c1",
+            "authoritative_lead_id": "exact_lead",
+            "text": "Blue sigil on the door",
+            "leads_to_scene": "old_milestone",
+        }
+    ]
+    parsed = parse_freeform_to_action(
+        "pursue the Blue sigil on the door lead", scene, session=session
+    )
+    assert parsed is not None
+    assert parsed.get("type") == "scene_transition"
+    assert parsed.get("target_scene_id") == "old_milestone"
+    assert (parsed.get("metadata") or {}).get("authoritative_lead_id") == "exact_lead"
+
+
+def test_investigate_the_x_lead_maps_to_scene_transition_with_metadata():
+    scene = {
+        "scene": {
+            "id": "gate",
+            "exits": [{"label": "Old milestone trail", "target_scene_id": "old_milestone"}],
+        }
+    }
+    session = {}
+    upsert_lead(
+        session,
+        create_lead(id="m_lead", title="M", summary="", lifecycle=LeadLifecycle.DISCOVERED),
+    )
+    rt = get_scene_runtime(session, "gate")
+    rt["pending_leads"] = [
+        {
+            "clue_id": "c1",
+            "authoritative_lead_id": "m_lead",
+            "text": "Rumor",
+            "leads_to_scene": "old_milestone",
+        }
+    ]
+    parsed = parse_freeform_to_action(
+        "investigate the old milestone lead", scene, session=session
+    )
+    assert parsed is not None
+    assert parsed.get("type") == "scene_transition"
+    assert parsed.get("target_scene_id") == "old_milestone"
+    md = parsed.get("metadata") or {}
+    assert md.get("authoritative_lead_id") == "m_lead"
+    assert md.get("commitment_source") == "explicit_player_pursuit"
+    assert md.get("commitment_strength") == 2

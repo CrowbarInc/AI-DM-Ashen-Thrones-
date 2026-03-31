@@ -78,7 +78,12 @@ from game.gm import (
 from game.journal import build_player_journal
 from game.affordances import get_available_affordances
 from game.scene_actions import normalize_scene_action
-from game.exploration import parse_exploration_intent, resolve_exploration_action, process_investigation_discovery
+from game.exploration import (
+    apply_follow_lead_commitment_after_resolved_scene_transition,
+    parse_exploration_intent,
+    process_investigation_discovery,
+    resolve_exploration_action,
+)
 from game.adjudication import (
     classify_adjudication_query,
     neutralize_engine_voice_for_player,
@@ -880,6 +885,12 @@ def _apply_authoritative_resolution_state_mutation(
         print("[ENGINE] Scene transition →", target_scene_id)
         resolution['originating_scene_id'] = originating_scene_id
         scene, session, combat = _apply_authoritative_scene_transition(target_scene_id, scene, session, combat, world)
+        apply_follow_lead_commitment_after_resolved_scene_transition(
+            session,
+            resolution,
+            normalized_action,
+            target_scene_id=str(target_scene_id).strip(),
+        )
 
     res_kind = str(resolution.get("kind") or "").strip().lower()
     if res_kind in SOCIAL_KINDS:
@@ -2684,7 +2695,7 @@ def chat(req: ChatRequest):
                 canonical_social_entry=canonical_entry,
             )
         if parsed is None and route_choice != "dialogue":
-            parsed = parse_exploration_intent(classification_text, scene)
+            parsed = parse_exploration_intent(classification_text, scene, session)
         intent = None
         if parsed is None and route_choice != "dialogue":
             intent = parse_intent(classification_text)

@@ -466,9 +466,10 @@ def generate_scene_affordances(scene_envelope: Dict[str, Any], mode: str, sessio
         target_scene_id: str | None = None,
         target_entity_id: str | None = None,
         target_location_id: str | None = None,
+        metadata: Dict[str, Any] | None = None,
     ) -> None:
         aid = slugify(label) or slugify(prompt) or "action"
-        actions.append({
+        row: Dict[str, Any] = {
             "id": aid,
             "label": label,
             "type": action_type,
@@ -476,7 +477,10 @@ def generate_scene_affordances(scene_envelope: Dict[str, Any], mode: str, sessio
             "targetSceneId": target_scene_id,
             "targetEntityId": target_entity_id,
             "targetLocationId": target_location_id,
-        })
+        }
+        if metadata:
+            row["metadata"] = dict(metadata)
+        actions.append(row)
 
     # Small baseline set: keep one generic look action.
     add_action("Observe the area", "observe", "I look around and take in the area.")
@@ -524,7 +528,30 @@ def generate_scene_affordances(scene_envelope: Dict[str, Any], mode: str, sessio
         if target and str(target).strip() in known_ids:
             text = lead.get("text", "")[:60]
             label = f"Follow lead: {text}..." if len(str(lead.get("text", ""))) > 60 else f"Follow lead: {text}"
-            add_action(label, "scene_transition", f"I follow the lead to {target}.", target_scene_id=str(target).strip())
+            auth_lid = str(lead.get("authoritative_lead_id") or "").strip() or str(lead.get("clue_id") or "").strip()
+            if not auth_lid:
+                continue
+            clue_id_val = str(lead.get("clue_id") or "").strip()
+            fl_meta: Dict[str, Any] = {
+                "authoritative_lead_id": auth_lid,
+                "commitment_source": "follow_lead_affordance",
+                "commitment_strength": 1,
+                "target_scene_id": str(target).strip(),
+            }
+            if clue_id_val:
+                fl_meta["clue_id"] = clue_id_val
+            lt_raw = lead.get("text")
+            if lt_raw is not None:
+                lt_s = str(lt_raw).strip()
+                if lt_s:
+                    fl_meta["lead_text"] = lt_s
+            add_action(
+                label,
+                "scene_transition",
+                f"I follow the lead to {target}.",
+                target_scene_id=str(target).strip(),
+                metadata=fl_meta,
+            )
 
     # Mode-specific
     if mode == "combat":

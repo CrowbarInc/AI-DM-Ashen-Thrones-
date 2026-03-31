@@ -126,6 +126,8 @@ _LEAD_SCALAR_DEFAULTS: Dict[str, Any] = {
     "first_discovered_turn": None,
     "last_updated_turn": None,
     "committed_at_turn": None,
+    "commitment_source": None,
+    "commitment_strength": None,
     "resolved_at_turn": None,
     "resolution_type": None,
     "resolution_summary": None,
@@ -1205,6 +1207,55 @@ def commit_session_lead(
     return commit_lead(d, turn=turn)
 
 
+def commit_session_lead_with_context(
+    session: MutableMapping[str, Any],
+    lead_id: Any,
+    *,
+    turn: Any = None,
+    commitment_source: Any = None,
+    commitment_strength: Any = None,
+    next_step: Any = None,
+) -> Dict[str, Any] | None:
+    """Apply explicit player commitment to a stored lead: :func:`commit_lead`, status ``pursued``, optional context.
+
+    Uses :func:`commit_lead` and :func:`set_lead_status` only for lifecycle/status; does not downgrade or
+    touch resolved/obsolete leads. ``commitment_source`` / ``commitment_strength`` update only when those
+    keyword arguments are not ``None``. ``next_step`` updates only when provided and non-blank after strip.
+    """
+    d = get_lead(session, lead_id)
+    if d is None:
+        return None
+    normalize_lead(d)
+    if _is_lead_resolved_or_obsolete_lifecycle(d):
+        return d
+
+    commit_lead(d, turn=turn)
+    set_lead_status(d, LeadStatus.PURSUED, turn=turn)
+
+    meta_mut = False
+    if commitment_source is not None:
+        val = _as_optional_str(commitment_source)
+        if d.get("commitment_source") != val:
+            d["commitment_source"] = val
+            meta_mut = True
+    if commitment_strength is not None:
+        val = _as_optional_int(commitment_strength)
+        if d.get("commitment_strength") != val:
+            d["commitment_strength"] = val
+            meta_mut = True
+    if next_step is not None:
+        ns = _as_str(next_step)
+        if ns and d.get("next_step") != ns:
+            d["next_step"] = ns
+            meta_mut = True
+
+    if meta_mut:
+        _ensure_invariants_after_mutation(d)
+        _stamp_turn_metadata(d, turn, mutated=True, touched=True)
+
+    return d
+
+
 def resolve_session_lead(
     session: MutableMapping[str, Any],
     lead_id: Any,
@@ -1586,6 +1637,8 @@ def create_lead(
     first_discovered_turn: int | None = None,
     last_updated_turn: int | None = None,
     committed_at_turn: int | None = None,
+    commitment_source: str | None = None,
+    commitment_strength: int | None = None,
     resolved_at_turn: int | None = None,
     resolution_type: str | None = None,
     resolution_summary: str | None = None,
@@ -1635,6 +1688,8 @@ def create_lead(
         "first_discovered_turn": _as_optional_int(first_discovered_turn),
         "last_updated_turn": _as_optional_int(last_updated_turn),
         "committed_at_turn": _as_optional_int(committed_at_turn),
+        "commitment_source": _as_optional_str(commitment_source),
+        "commitment_strength": _as_optional_int(commitment_strength),
         "resolved_at_turn": _as_optional_int(resolved_at_turn),
         "resolution_type": _as_optional_str(resolution_type),
         "resolution_summary": _as_optional_str(resolution_summary),
@@ -1816,6 +1871,9 @@ def _lead_row_effective_field_diff(before: Mapping[str, Any], after: Mapping[str
         "first_discovered_turn",
         "last_updated_turn",
         "last_touched_turn",
+        "committed_at_turn",
+        "commitment_source",
+        "commitment_strength",
     )
     changed: List[str] = []
     for k in keys:

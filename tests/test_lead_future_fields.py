@@ -23,6 +23,8 @@ def test_normalize_lead_backfills_new_list_fields_and_metadata():
     assert raw["tags"] == []
     assert raw["evidence_clue_ids"] == []
     assert raw["metadata"] == {}
+    assert raw.get("commitment_source") is None
+    assert raw.get("commitment_strength") is None
 
 
 def test_normalize_lead_new_lists_are_fresh_objects_each_call():
@@ -84,6 +86,18 @@ def test_create_lead_accepts_extended_fields():
     assert lead["tags"] == ["alpha", "beta"]
     assert lead["evidence_clue_ids"] == ["clue-a", "clue-b"]
     assert lead["metadata"] == {"source": "test", "n": 2}
+
+
+def test_create_lead_accepts_commitment_metadata_fields():
+    lead = create_lead(
+        title="C",
+        summary="",
+        id="commit-lead",
+        commitment_source="player_choice",
+        commitment_strength=3,
+    )
+    assert lead["commitment_source"] == "player_choice"
+    assert lead["commitment_strength"] == 3
 
 
 def test_upsert_preserves_metadata_and_extended_lists_when_absent_from_payload():
