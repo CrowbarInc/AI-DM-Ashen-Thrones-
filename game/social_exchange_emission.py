@@ -33,10 +33,14 @@ from game.interaction_context import (
 effective_scene_npc_roster = effective_in_scene_npc_roster
 from game.storage import get_scene_runtime
 from game.social import (
+    apply_social_reply_speaker_grounding,
     classify_social_question_dimension,
     finalize_social_target_with_promotion,
     format_structured_fact_social_line,
+    neutral_reply_speaker_grounding_bridge_line,
+    resolve_grounded_social_speaker,
     select_best_social_answer_candidate,
+    topic_pressure_speaker_id_for_social_exchange,
 )
 from game.utils import slugify
 
@@ -290,7 +294,23 @@ def resolve_strict_social_npc_target_id(
         session, world, sid, auth, env, merged_player_prompt=prompt
     )
     basis = _legacy_strict_basis_from_authoritative(auth, world if isinstance(world, dict) else None, sid)
-    return str(auth.get("npc_id") or "").strip(), basis
+    tid0 = str(auth.get("npc_id") or "").strip()
+    if tid0 and auth.get("target_resolved") and not auth.get("offscene_target"):
+        _soc_gate = {
+            "npc_id": tid0,
+            "target_resolved": True,
+            "npc_name": str(auth.get("npc_name") or "").strip(),
+        }
+        apply_social_reply_speaker_grounding(
+            _soc_gate,
+            session if isinstance(session, dict) else {},
+            world if isinstance(world, dict) else {},
+            sid,
+            env,
+            auth,
+        )
+        tid0 = str(_soc_gate.get("npc_id") or "").strip()
+    return tid0, basis
 
 
 def is_conversational_npc_dialogue_line(text: str | None, session: Dict[str, Any] | None) -> bool:
@@ -449,6 +469,15 @@ def minimal_social_resolution_for_directed_question_guard(
     grb = auth.get("generic_role_rebind")
     if isinstance(grb, dict):
         soc["generic_role_rebind"] = grb
+    apply_social_reply_speaker_grounding(
+        soc,
+        session if isinstance(session, dict) else {},
+        world if isinstance(world, dict) else {},
+        sid,
+        env,
+        auth,
+        proposed_reply_speaker_id=str(target or "").strip() or None,
+    )
     return {
         "kind": "question",
         "prompt": prompt,
@@ -591,6 +620,15 @@ def synthetic_social_exchange_resolution_for_emission(
     grb2 = auth.get("generic_role_rebind")
     if isinstance(grb2, dict):
         soc2["generic_role_rebind"] = grb2
+    apply_social_reply_speaker_grounding(
+        soc2,
+        session if isinstance(session, dict) else {},
+        world if isinstance(world, dict) else {},
+        sid,
+        env,
+        auth,
+        proposed_reply_speaker_id=str(target or "").strip() or None,
+    )
     return {
         "kind": "question",
         "prompt": prompt,
@@ -712,6 +750,15 @@ def reconcile_strict_social_resolution_speaker(
     grb = auth.get("generic_role_rebind")
     if isinstance(grb, dict):
         soc["generic_role_rebind"] = grb
+    apply_social_reply_speaker_grounding(
+        soc,
+        session if isinstance(session, dict) else {},
+        world if isinstance(world, dict) else {},
+        sid,
+        env,
+        auth,
+        proposed_reply_speaker_id=str(target_id or "").strip() or None,
+    )
     out["social"] = soc
     return out
 
@@ -1540,6 +1587,40 @@ def apply_social_exchange_retry_fallback_gm(
     """Replace GM text with a compact social fallback (no uncertainty renderer blob)."""
     if not isinstance(gm, dict):
         return gm
+    sid_rf = str(scene_id or "").strip()
+    if isinstance(resolution, dict) and isinstance(session, dict) and sid_rf:
+        soc_r = resolution.get("social") if isinstance(resolution.get("social"), dict) else None
+        if isinstance(soc_r, dict) and soc_r.get("target_resolved") is True and not soc_r.get("offscene_target"):
+            env_rf = _scene_envelope_for_strict_social(session, sid_rf)
+            merged_rf = merged_player_prompt_for_gate(resolution, session, sid_rf)
+            meta_rf = resolution.get("metadata") if isinstance(resolution.get("metadata"), dict) else {}
+            na_rf = meta_rf.get("normalized_action") if isinstance(meta_rf.get("normalized_action"), dict) else None
+            auth_rf = resolve_authoritative_social_target(
+                session,
+                world if isinstance(world, dict) else None,
+                sid_rf,
+                player_text=merged_rf,
+                normalized_action=na_rf,
+                merged_player_prompt=merged_rf,
+                scene_envelope=env_rf,
+                allow_first_roster_fallback=True,
+            )
+            auth_rf, _, _ = _auth_after_social_promotion_binding(
+                session,
+                world if isinstance(world, dict) else {},
+                sid_rf,
+                auth_rf,
+                env_rf,
+                merged_player_prompt=merged_rf,
+            )
+            apply_social_reply_speaker_grounding(
+                soc_r,
+                session,
+                world if isinstance(world, dict) else {},
+                sid_rf,
+                env_rf,
+                auth_rf,
+            )
     out = dict(gm)
     tags = out.get("tags") if isinstance(out.get("tags"), list) else []
     tag_list = [str(t) for t in tags if isinstance(t, str)]
@@ -1600,8 +1681,21 @@ def hard_reject_social_exchange_text(
     auth, _, _ = _auth_after_social_promotion_binding(
         session, world, sid, auth, env_hr, merged_player_prompt=merged
     )
-    canonical_id = str(auth.get("npc_id") or "").strip()
-    if npc_id and canonical_id and npc_id != canonical_id:
+    tp_hr = topic_pressure_speaker_id_for_social_exchange(session if isinstance(session, dict) else {}, sid)
+    gr_hr = resolve_grounded_social_speaker(
+        session if isinstance(session, dict) else {},
+        world if isinstance(world, dict) else {},
+        sid,
+        env_hr,
+        auth,
+        proposed_reply_speaker_id=npc_id or None,
+        topic_pressure_speaker_id=tp_hr,
+    )
+    if social.get("reply_speaker_grounding_neutral_bridge"):
+        pass
+    elif npc_id and not gr_hr.get("allowed"):
+        reasons.append("reply_speaker_grounding_denied")
+    elif npc_id and gr_hr.get("grounded_actor_id") and npc_id != str(gr_hr.get("grounded_actor_id") or "").strip():
         reasons.append("speaker_binding_mismatch")
 
     player_prompt = merged or _question_prompt_for_resolution(resolution if isinstance(resolution, dict) else None)
@@ -1813,6 +1907,23 @@ def build_final_strict_social_response(
     res = resolution if isinstance(resolution, dict) else None
     sid = str(scene_id or "").strip()
     sess = session if isinstance(session, dict) else None
+
+    soc0 = res.get("social") if isinstance(res, dict) and isinstance(res.get("social"), dict) else {}
+    if soc0.get("reply_speaker_grounding_neutral_bridge"):
+        nb = neutral_reply_speaker_grounding_bridge_line(
+            seed=f"{sid}|neutral_grounding|{_question_prompt_for_resolution_early(res)}"
+        )
+        return nb, {
+            "used_internal_fallback": True,
+            "fallback_kind": "neutral_speaker_grounding_bridge",
+            "rejection_reasons": [],
+            "final_emitted_source": "neutral_reply_speaker_grounding_bridge",
+            "deterministic_attempted": False,
+            "deterministic_passed": False,
+            "fallback_pool": "neutral_grounding",
+            "route_illegal_intercepted": False,
+            "intercepted_preview": "",
+        }
 
     filtered = apply_strict_social_sentence_ownership_filter(
         candidate_text,

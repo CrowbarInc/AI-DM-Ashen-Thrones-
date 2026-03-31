@@ -22,6 +22,7 @@ from game.storage import get_npc_runtime, get_scene_runtime, get_scene_state
 from game.interaction_context import (
     apply_turn_input_implied_context,
     canonical_scene_addressable_roster,
+    inspect as inspect_interaction_context,
     is_actor_addressable_in_current_scene,
     npc_dict_by_id,
     resolve_authoritative_social_target,
@@ -59,6 +60,425 @@ _STABLE_SOCIAL_ADDRESS_SOURCES = frozenset(
         "substring",
     }
 )
+
+# Authoritative sources that may license an NPC reply speaker for this exchange.
+# ``first_roster`` is ambient fallback (promotion/narration only), not explicit grounding.
+_SOCIAL_REPLY_AUTHORITY_SOURCES = frozenset(
+    {
+        "explicit_target",
+        "declared_action",
+        "spoken_vocative",
+        "vocative",
+        "generic_role",
+        "continuity",
+        "substring",
+    }
+)
+
+
+def _clean_actor_id(actor_id: Optional[str]) -> str:
+    return str(actor_id or "").strip()
+
+
+def _fallback_interlocutor_id(
+    session: Dict[str, Any],
+    scene_envelope: Optional[Dict[str, Any]],
+    world: Optional[Dict[str, Any]],
+) -> Optional[str]:
+    """Active social target when still scene-addressable; used only as debug fallback hints."""
+    if not isinstance(session, dict):
+        return None
+    ctx = inspect_interaction_context(session)
+    tid = _clean_actor_id(ctx.get("active_interaction_target_id"))
+    if tid and is_actor_addressable_in_current_scene(session, scene_envelope, tid, world=world):
+        return tid
+    return None
+
+
+def is_scene_actor_present_for_social(
+    session: Dict[str, Any],
+    scene_envelope: Optional[Dict[str, Any]],
+    actor_id: Optional[str],
+    *,
+    world: Optional[Dict[str, Any]] = None,
+) -> Dict[str, Any]:
+    """True when *actor_id* is in the canonical addressable scene universe (presence for social).
+
+    Invariant: mentioning an NPC or holding a lead_registry entry does not set this; only engine
+    addressability does (:func:`game.interaction_context.is_actor_addressable_in_current_scene`).
+    """
+    aid = _clean_actor_id(actor_id)
+    if not aid:
+        return {
+            "present": False,
+            "reason_code": "empty_actor_id",
+            "actor_id": None,
+        }
+    ok = is_actor_addressable_in_current_scene(session, scene_envelope, aid, world=world)
+    return {
+        "present": bool(ok),
+        "reason_code": "scene_addressable" if ok else "not_in_addressable_scene_universe",
+        "actor_id": aid,
+    }
+
+
+def is_actor_explicitly_addressed_for_social(
+    authoritative_target: Dict[str, Any],
+    actor_id: Optional[str],
+) -> Dict[str, Any]:
+    """True when this turn's authoritative resolution targets *actor_id* via an explicit address path.
+
+    ``continuity`` alone does not count as an explicit *new* address (interlocutor is already grounded).
+    """
+    aid = _clean_actor_id(actor_id)
+    auth = authoritative_target if isinstance(authoritative_target, dict) else {}
+    src = str(auth.get("source") or "").strip()
+    nid = _clean_actor_id(auth.get("npc_id"))
+    if not aid:
+        return {
+            "addressed": False,
+            "reason_code": "empty_actor_id",
+            "source": src or None,
+            "actor_id": None,
+        }
+    if not bool(auth.get("target_resolved")) or bool(auth.get("offscene_target")):
+        return {
+            "addressed": False,
+            "reason_code": "no_resolved_in_scene_authority",
+            "source": src or None,
+            "actor_id": aid,
+        }
+    if nid != aid:
+        return {
+            "addressed": False,
+            "reason_code": "not_authoritative_target_npc",
+            "source": src or None,
+            "actor_id": aid,
+        }
+    if src == "continuity":
+        return {
+            "addressed": False,
+            "reason_code": "continuity_not_explicit_turn_address",
+            "source": src,
+            "actor_id": aid,
+        }
+    if src in _STABLE_SOCIAL_ADDRESS_SOURCES:
+        return {
+            "addressed": True,
+            "reason_code": "explicit_stable_address_source",
+            "source": src,
+            "actor_id": aid,
+        }
+    return {
+        "addressed": False,
+        "reason_code": "source_not_explicit_address",
+        "source": src or None,
+        "actor_id": aid,
+    }
+
+
+def can_actor_speak_in_current_exchange(
+    session: Dict[str, Any],
+    world: Dict[str, Any],
+    scene_id: str,
+    scene_envelope: Optional[Dict[str, Any]],
+    actor_id: Optional[str],
+    authoritative_target: Dict[str, Any],
+    *,
+    topic_pressure_speaker_id: Optional[str] = None,
+) -> Dict[str, Any]:
+    """Whether *actor_id* may be selected as the in-character **reply** speaker for this exchange.
+
+    Central invariants:
+
+    - Scene presence is mandatory; topic salience never overrides absence.
+    - The authoritative resolver's in-scene ``npc_id`` is the only eligible reply target.
+    - Topic pressure may reinforce an already grounded speaker (same id) but cannot introduce a
+      different off-screen or merely mentioned actor as reply speaker.
+    - An actor only referenced in dialogue content (not authoritative target / not present) must
+      not be selected as the reply speaker (they may still appear in narration or quoted rumor).
+
+    ``topic_pressure_speaker_id`` is optional metadata for debugging (e.g. engine topic_pressure
+    ``speaker_key``); it does not grant eligibility by itself.
+    """
+    aid = _clean_actor_id(actor_id)
+    auth = authoritative_target if isinstance(authoritative_target, dict) else {}
+    auth_src = str(auth.get("source") or "").strip()
+    auth_nid = _clean_actor_id(auth.get("npc_id"))
+    tp_sp = _clean_actor_id(topic_pressure_speaker_id)
+
+    base: Dict[str, Any] = {
+        "allowed": False,
+        "reason_code": "",
+        "grounded_actor_id": None,
+        "fallback_actor_id": None,
+    }
+
+    if not aid:
+        base["reason_code"] = "empty_actor_id"
+        base["fallback_actor_id"] = _fallback_interlocutor_id(session, scene_envelope, world)
+        return base
+
+    pres = is_scene_actor_present_for_social(session, scene_envelope, aid, world=world)
+    if not pres.get("present"):
+        base["reason_code"] = "not_scene_present"
+        if (
+            auth_nid
+            and bool(auth.get("target_resolved"))
+            and not bool(auth.get("offscene_target"))
+            and is_scene_actor_present_for_social(session, scene_envelope, auth_nid, world=world).get("present")
+        ):
+            base["fallback_actor_id"] = auth_nid
+        else:
+            base["fallback_actor_id"] = _fallback_interlocutor_id(session, scene_envelope, world)
+        return base
+
+    if not auth_nid or not bool(auth.get("target_resolved")) or bool(auth.get("offscene_target")):
+        base["reason_code"] = "no_authoritative_in_scene_target"
+        base["fallback_actor_id"] = _fallback_interlocutor_id(session, scene_envelope, world)
+        return base
+
+    if not auth_src or auth_src not in _SOCIAL_REPLY_AUTHORITY_SOURCES:
+        base["reason_code"] = "authority_source_disallowed_for_reply"
+        base["fallback_actor_id"] = _fallback_interlocutor_id(session, scene_envelope, world)
+        return base
+
+    if aid != auth_nid:
+        base["reason_code"] = "non_authoritative_reply_speaker"
+        base["grounded_actor_id"] = auth_nid
+        if is_scene_actor_present_for_social(session, scene_envelope, auth_nid, world=world).get("present"):
+            base["fallback_actor_id"] = auth_nid
+        else:
+            base["fallback_actor_id"] = _fallback_interlocutor_id(session, scene_envelope, world)
+        if tp_sp and tp_sp == aid and tp_sp != auth_nid:
+            base["reason_code"] = "topic_pressure_cannot_elevate_non_authoritative_speaker"
+        return base
+
+    auth_pres = is_scene_actor_present_for_social(session, scene_envelope, auth_nid, world=world)
+    if not auth_pres.get("present"):
+        base["reason_code"] = "authoritative_target_not_scene_present"
+        base["grounded_actor_id"] = auth_nid
+        base["fallback_actor_id"] = _fallback_interlocutor_id(session, scene_envelope, world)
+        return base
+
+    base["allowed"] = True
+    base["grounded_actor_id"] = auth_nid
+    if tp_sp and tp_sp != auth_nid:
+        base["reason_code"] = "authoritative_speaker_eligible_topic_salience_ignored"
+    elif tp_sp == auth_nid and _topic_pressure_speaker_has_prior_answer(session, str(scene_id or "").strip(), auth_nid):
+        base["reason_code"] = "authoritative_speaker_topic_pressure_reinforced"
+    else:
+        base["reason_code"] = "authoritative_speaker_eligible"
+    return base
+
+
+def resolve_grounded_social_speaker(
+    session: Dict[str, Any],
+    world: Dict[str, Any],
+    scene_id: str,
+    scene_envelope: Optional[Dict[str, Any]],
+    authoritative_target: Dict[str, Any],
+    *,
+    proposed_reply_speaker_id: Optional[str] = None,
+    topic_pressure_speaker_id: Optional[str] = None,
+) -> Dict[str, Any]:
+    """Resolve who may speak as the grounded social interlocutor for this exchange.
+
+    When ``proposed_reply_speaker_id`` is omitted, validates the authoritative target. When set,
+    validates that proposal against the same policy (e.g. block topic-pressure-only or mention-only
+    ids).
+
+    Returns keys: ``allowed``, ``reason_code``, ``grounded_actor_id``, ``fallback_actor_id``.
+    """
+    auth = authoritative_target if isinstance(authoritative_target, dict) else {}
+    prop = _clean_actor_id(proposed_reply_speaker_id)
+    auth_nid = _clean_actor_id(auth.get("npc_id"))
+    candidate = prop or auth_nid
+    return can_actor_speak_in_current_exchange(
+        session,
+        world,
+        scene_id,
+        scene_envelope,
+        candidate,
+        auth,
+        topic_pressure_speaker_id=topic_pressure_speaker_id,
+    )
+
+
+def topic_pressure_speaker_id_for_social_exchange(
+    session: Dict[str, Any],
+    scene_id: str,
+) -> Optional[str]:
+    """Engine topic_pressure_current speaker_key for grounding (debug / policy input only)."""
+    sid = str(scene_id or "").strip()
+    if not sid or not isinstance(session, dict):
+        return None
+    rt = get_scene_runtime(session, sid)
+    tcur = rt.get("topic_pressure_current") if isinstance(rt.get("topic_pressure_current"), dict) else {}
+    sk = str(tcur.get("speaker_key") or "").strip()
+    return sk or None
+
+
+def _interlocutor_continuity_authority_for_reply_fallback(
+    session: Dict[str, Any],
+    world: Dict[str, Any],
+    scene_id: str,
+    scene_envelope: Optional[Dict[str, Any]],
+    interlocutor_id: str,
+) -> Optional[Dict[str, Any]]:
+    """Continuity-shaped authority for the session's active social interlocutor (reply fallback only)."""
+    iid = _clean_actor_id(interlocutor_id)
+    if not iid or not isinstance(session, dict):
+        return None
+    ctx = inspect_interaction_context(session)
+    if _clean_actor_id(ctx.get("active_interaction_target_id")) != iid:
+        return None
+    if str(ctx.get("active_interaction_kind") or "").strip().lower() != "social":
+        return None
+    mode = str(ctx.get("interaction_mode") or "").strip().lower()
+    if mode and mode not in ("", "social"):
+        return None
+    if not is_scene_actor_present_for_social(session, scene_envelope, iid, world=world).get("present"):
+        return None
+    wnpc = npc_dict_by_id(world, iid)
+    nm = ""
+    if isinstance(wnpc, dict):
+        nm = str(wnpc.get("name") or "").strip()
+    if not nm:
+        nm = iid.replace("_", " ").replace("-", " ").title()
+    return {
+        "npc_id": iid,
+        "npc_name": nm,
+        "target_resolved": True,
+        "offscene_target": False,
+        "source": "continuity",
+        "reason": "active_interlocutor_reply_fallback_after_denied_proposal",
+    }
+
+
+def neutral_reply_speaker_grounding_bridge_line(*, seed: str) -> str:
+    """Narrator-neutral repair when no grounded NPC may speak (no false attribution)."""
+    opts = (
+        "The murmur around you never tightens into a single clear voice on that point.",
+        "No one at hand answers that directly—the question hangs in the noise.",
+        "The moment passes without anyone stepping forward to own that thread.",
+    )
+    idx = sum(ord(c) for c in str(seed or "")) % len(opts)
+    line = opts[idx]
+    if not re.search(r"[.!?…]$", line):
+        line += "."
+    return line
+
+
+def apply_social_reply_speaker_grounding(
+    soc: Dict[str, Any],
+    session: Dict[str, Any],
+    world: Dict[str, Any],
+    scene_id: str,
+    scene_envelope: Optional[Dict[str, Any]],
+    authoritative_target: Dict[str, Any],
+    *,
+    proposed_reply_speaker_id: Optional[str] = None,
+) -> Dict[str, Any]:
+    """Gate live reply speaker fields through :func:`resolve_grounded_social_speaker`; mutates *soc* in place.
+
+    Sets debug keys: ``proposed_reply_speaker_id``, ``grounded_speaker_id``, ``grounding_reason_code``,
+    ``grounding_fallback_applied``, ``authority_source_used``. On hard deny with no interlocutor fallback,
+    clears NPC attribution and sets ``reply_speaker_grounding_neutral_bridge`` for emission.
+    """
+    if not isinstance(soc, dict):
+        return {
+            "allowed": False,
+            "reason_code": "invalid_social_dict",
+            "grounded_actor_id": None,
+            "fallback_actor_id": None,
+        }
+    auth = authoritative_target if isinstance(authoritative_target, dict) else {}
+    prop = _clean_actor_id(proposed_reply_speaker_id)
+    if not prop:
+        prop = _clean_actor_id(soc.get("npc_id"))
+    sid = str(scene_id or "").strip()
+    w = world if isinstance(world, dict) else {}
+    tp = topic_pressure_speaker_id_for_social_exchange(session, sid)
+    soc["authority_source_used"] = str(auth.get("source") or "").strip() or None
+    soc["proposed_reply_speaker_id"] = prop or None
+    soc["grounding_fallback_applied"] = False
+    soc.pop("reply_speaker_grounding_neutral_bridge", None)
+
+    gr = resolve_grounded_social_speaker(
+        session,
+        w,
+        sid,
+        scene_envelope,
+        auth,
+        proposed_reply_speaker_id=prop or None,
+        topic_pressure_speaker_id=tp,
+    )
+
+    if not gr.get("allowed") and gr.get("fallback_actor_id"):
+        fb = _clean_actor_id(gr.get("fallback_actor_id"))
+        auth_fb = _interlocutor_continuity_authority_for_reply_fallback(
+            session, w, sid, scene_envelope, fb
+        )
+        if auth_fb:
+            gr2 = resolve_grounded_social_speaker(
+                session,
+                w,
+                sid,
+                scene_envelope,
+                auth_fb,
+                proposed_reply_speaker_id=fb,
+                topic_pressure_speaker_id=tp,
+            )
+            if gr2.get("allowed"):
+                gr = gr2
+                soc["grounding_fallback_applied"] = True
+
+    soc["grounding_reason_code"] = str(gr.get("reason_code") or "")
+    soc["grounded_speaker_id"] = _clean_actor_id(gr.get("grounded_actor_id")) or None
+
+    if gr.get("allowed"):
+        final_id = _clean_actor_id(gr.get("grounded_actor_id")) or prop
+        if not final_id:
+            soc["reply_speaker_grounding_neutral_bridge"] = True
+            soc["npc_id"] = None
+            soc["npc_name"] = None
+            soc["npc_reply_expected"] = False
+            return gr
+        soc["npc_id"] = final_id
+        npc_ob = npc_dict_by_id(w, final_id)
+        if not isinstance(npc_ob, dict):
+            roster = canonical_scene_addressable_roster(
+                w,
+                sid,
+                scene_envelope=scene_envelope if isinstance(scene_envelope, dict) else None,
+                session=session if isinstance(session, dict) else None,
+            )
+            npc_ob = next(
+                (x for x in roster if isinstance(x, dict) and str(x.get("id") or "").strip() == final_id),
+                None,
+            )
+        if isinstance(npc_ob, dict):
+            nm = str(npc_ob.get("name") or soc.get("npc_name") or "").strip()
+            if nm:
+                soc["npc_name"] = nm
+        elif not str(soc.get("npc_name") or "").strip():
+            soc["npc_name"] = final_id.replace("_", " ").replace("-", " ").title()
+        return gr
+
+    # Denied and interlocutor continuity fallback did not salvage a speaker
+    soc["reply_speaker_grounding_neutral_bridge"] = True
+    soc["npc_id"] = None
+    soc["npc_name"] = None
+    soc["npc_reply_expected"] = False
+    soc["target_resolved"] = False
+    denied = {
+        "allowed": False,
+        "reason_code": str(gr.get("reason_code") or "reply_speaker_grounding_denied"),
+        "grounded_actor_id": gr.get("grounded_actor_id"),
+        "fallback_actor_id": gr.get("fallback_actor_id"),
+    }
+    return denied
 
 
 def _topic_pressure_speaker_has_prior_answer(
@@ -1722,6 +2142,7 @@ def resolve_social_action(
 
     scene = (scene_envelope or {}).get("scene", {}) if isinstance(scene_envelope, dict) else {}
     scene_id = str(scene.get("id") or "").strip()
+    env_for_ground = scene_envelope if isinstance(scene_envelope, dict) else None
 
     action_type = (normalized_action.get("type") or "social_probe").strip().lower()
     if action_type not in SOCIAL_KINDS:
@@ -1870,6 +2291,61 @@ def resolve_social_action(
         )
         return _social_result_dict_with_incoming_metadata(result, incoming_action_meta)
 
+    _gp_social: Dict[str, Any] = {
+        "npc_id": str(auth.get("npc_id") or "").strip(),
+        "target_resolved": True,
+        "npc_name": str(auth.get("npc_name") or "").strip(),
+    }
+    apply_social_reply_speaker_grounding(
+        _gp_social,
+        session,
+        world,
+        str(scene_id or "").strip(),
+        env_for_ground,
+        auth,
+    )
+    if _gp_social.get("reply_speaker_grounding_neutral_bridge"):
+        hint_nb = (
+            "No grounded in-scene interlocutor can speak for this exchange; narrate a neutral beat "
+            "without attributing dialogue to an absent or non-authoritative NPC."
+        )
+        result = SocialEngineResult(
+            kind=action_type,
+            action_id=action_id,
+            label=label,
+            prompt=prompt,
+            success=False,
+            hint=hint_nb,
+            social={
+                "social_intent_class": intent_class,
+                "npc_id": None,
+                "npc_name": None,
+                "target_resolved": False,
+                "skill_check": None,
+                "npc_reply_expected": False,
+                "reply_kind": "reaction",
+                "offscene_target": False,
+                "proposed_reply_speaker_id": _gp_social.get("proposed_reply_speaker_id"),
+                "grounded_speaker_id": _gp_social.get("grounded_speaker_id"),
+                "grounding_reason_code": _gp_social.get("grounding_reason_code"),
+                "grounding_fallback_applied": bool(_gp_social.get("grounding_fallback_applied")),
+                "authority_source_used": _gp_social.get("authority_source_used"),
+                "reply_speaker_grounding_neutral_bridge": True,
+                **dbg,
+            },
+            requires_check=False,
+        )
+        return _social_result_dict_with_incoming_metadata(result, incoming_action_meta)
+    _g_nid = str(_gp_social.get("npc_id") or "").strip()
+    if _g_nid and _g_nid != str(auth.get("npc_id") or "").strip():
+        auth = dict(auth)
+        auth["npc_id"] = _g_nid
+        wn = npc_dict_by_id(world, _g_nid)
+        if isinstance(wn, dict) and str(wn.get("name") or "").strip():
+            auth["npc_name"] = str(wn.get("name") or "").strip()
+        elif str(_gp_social.get("npc_name") or "").strip():
+            auth["npc_name"] = str(_gp_social.get("npc_name") or "").strip()
+
     npc_id = str(auth.get("npc_id") or "").strip()
     npc = npc_dict_by_id(world, npc_id)
     if npc is None:
@@ -1952,6 +2428,7 @@ def resolve_social_action(
                 requires_check=False,
                 debug_fields=dbg,
             )
+            apply_social_reply_speaker_grounding(social_payload, session, world, scene_id, env_for_ground, auth)
 
             result = SocialEngineResult(
                 kind=action_type,
@@ -2021,6 +2498,7 @@ def resolve_social_action(
                     "social_probe_engine_contract": True,
                     **dbg,
                 }
+                apply_social_reply_speaker_grounding(social_payload, session, world, scene_id, env_for_ground, auth)
                 result = SocialEngineResult(
                     kind=action_type,
                     action_id=action_id,
@@ -2054,6 +2532,7 @@ def resolve_social_action(
             requires_check=False,
             debug_fields=dbg,
         )
+        apply_social_reply_speaker_grounding(social_payload, session, world, scene_id, env_for_ground, auth)
         fallback_hint = (
             f"Player spoke with {npc_name}. No new information was revealed. "
             "Narrate a substantive in-turn response (answer, refusal, evasion, or inability), not dead-air stalling."
@@ -2088,6 +2567,7 @@ def resolve_social_action(
             requires_check=False,
             debug_fields=dbg,
         )
+        apply_social_reply_speaker_grounding(social_payload, session, world, scene_id, env_for_ground, auth)
         result = SocialEngineResult(
             kind=action_type,
             action_id=action_id,
@@ -2118,6 +2598,7 @@ def resolve_social_action(
             requires_check=False,
             debug_fields=dbg,
         )
+        apply_social_reply_speaker_grounding(social_payload, session, world, scene_id, env_for_ground, auth)
         result = SocialEngineResult(
             kind=action_type,
             action_id=action_id,
@@ -2159,6 +2640,7 @@ def resolve_social_action(
             requires_check=False,
             debug_fields=dbg,
         )
+        apply_social_reply_speaker_grounding(social_payload, session, world, scene_id, env_for_ground, auth)
         result = SocialEngineResult(
             kind=action_type,
             action_id=action_id,
@@ -2202,6 +2684,7 @@ def resolve_social_action(
         requires_check=True,
         debug_fields=dbg,
     )
+    apply_social_reply_speaker_grounding(social_payload, session, world, scene_id, env_for_ground, auth)
 
     result = SocialEngineResult(
         kind=action_type,

@@ -38,7 +38,11 @@
       "The rain intensifies, making the ground slick and treacherous.",
       "Patrons near the tavern are whispering urgently about the missing patrol.",
       "A well-dressed bystander near the figure in tatters appears to exchange a subtle hand gesture, signaling something.",
-      "Several guards are now scanning the crowd with heightened attention."
+      "Several guards are now scanning the crowd with heightened attention.",
+      "The tavern runner's expression reflects an anxious urgency.",
+      "The tavern runner mentions Lirael, the town crier, as a possible source of information about the missing patrol.",
+      "A hooded figure has bumped into a guard, causing a shout among the crowd.",
+      "Onlookers are whispering nervously about the confrontation."
     ],
     "journal_seed_facts": [
       "You arrive at Cinderwatch's eastern gate in cold rain, under frayed banners.",
@@ -73,7 +77,10 @@
       "Investigating near the old milestone could yield more clues.",
       "The hand signal might be linked to an arrangement or communication within the crowd.",
       "Lord Aldric can provide insights about the well-dressed individual.",
-      "The town crier, Lirael, frequently posts important notices that might reveal more about the duo."
+      "The town crier, Lirael, frequently posts important notices that might reveal more about the duo.",
+      "The tavern runner mentions a trader who frequents the old quarters.",
+      "Seeking out Lirael, the town crier, might uncover more details regarding the missing patrol.",
+      "Observing the commotion might reveal whether the hooded figure has something to hide or if it\u2019s simply an accident."
     ],
     "hidden_facts": [
       "An agent of a noble house is watching new arrivals from the square's edge.",
@@ -166,28 +173,31 @@
       "guard_captain",
       "tavern_runner",
       "refugee",
-      "threadbare_watcher"
+      "threadbare_watcher",
+      "emergent_town_crier"
     ],
     "entity_presence": {
       "emergent_lord_aldric": "active",
       "guard_captain": "active",
       "refugee": "active",
-      "threadbare_watcher": "active",
-      "tavern_runner": "active"
+      "tavern_runner": "active",
+      "emergent_town_crier": "active",
+      "threadbare_watcher": "active"
     },
     "current_interlocutor": "tavern_runner",
     "emergent_addressables": [
       {
-        "id": "emergent_lord_aldric",
-        "name": "Lord Aldric",
+        "id": "emergent_town_crier",
+        "name": "Town Crier",
         "scene_id": "frontier_gate",
         "address_roles": [
-          "lord"
+          "crier",
+          "town crier"
         ],
         "aliases": [
-          "Lord Aldric",
-          "aldric",
-          "lord aldric"
+          "town crier",
+          "the town crier",
+          "crier"
         ],
         "kind": "scene_actor",
         "addressable": true,
@@ -195,8 +205,6 @@
         "emergent_source": "promoted_visible_figure"
       }
     ],
-    "promoted_actor_npc_map": {
-      "emergent_lord_aldric": "emergent_lord_aldric"
-    }
+    "promoted_actor_npc_map": {}
   }
 }
