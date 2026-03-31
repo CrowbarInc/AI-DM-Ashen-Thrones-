@@ -150,6 +150,10 @@ def apply_final_emission_gate(
                 "post_gate_mutation_detected": post_gate_mutation_detected,
                 "final_text_preview": (gate_out_text[:120] + "…") if len(gate_out_text) > 120 else gate_out_text,
                 "coercion_reason": coercion_reason,
+                "candidate_quality_degraded": bool(details.get("candidate_quality_degraded")),
+                "resolved_answer_preferred": bool(details.get("resolved_answer_preferred")),
+                "resolved_answer_source": details.get("resolved_answer_source"),
+                "resolved_answer_preference_reason": details.get("resolved_answer_preference_reason"),
             }
             log_final_emission_trace({**out["_final_emission_meta"], "stage": "final_emission_gate_accept"})
             return out
@@ -212,6 +216,10 @@ def apply_final_emission_gate(
             "final_text_preview": (gate_out_text[:120] + "…") if len(gate_out_text) > 120 else gate_out_text,
             "coercion_reason": coercion_reason,
             "rejection_reasons_sample": [str(r) for r in rejection_reasons[:8] if isinstance(r, str)],
+            "candidate_quality_degraded": bool(details.get("candidate_quality_degraded")),
+            "resolved_answer_preferred": bool(details.get("resolved_answer_preferred")),
+            "resolved_answer_source": details.get("resolved_answer_source"),
+            "resolved_answer_preference_reason": details.get("resolved_answer_preference_reason"),
         }
         log_final_emission_trace({**out["_final_emission_meta"], "stage": "final_emission_gate_replace"})
         return out

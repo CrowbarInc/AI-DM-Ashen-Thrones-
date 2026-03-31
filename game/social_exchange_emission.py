@@ -1818,7 +1818,256 @@ def _structured_fact_emission_details() -> dict[str, Any]:
         "fallback_pool": "structured_fact",
         "route_illegal_intercepted": False,
         "intercepted_preview": "",
+        "candidate_quality_degraded": False,
+        "resolved_answer_preferred": False,
+        "resolved_answer_source": None,
+        "resolved_answer_preference_reason": None,
     }
+
+
+def select_best_grounded_social_answer_text(
+    *,
+    session: Dict[str, Any] | None,
+    scene_id: str,
+    resolution: Dict[str, Any] | None,
+) -> Dict[str, Any]:
+    """Return the strongest engine-owned social answer snippet (no narration pools / lead salience).
+
+    Delegates to :func:`game.social.select_best_social_answer_candidate` with the same precedence
+    as structured strict-social fallbacks: ``topic_revealed``, topic-pressure ``last_answer``,
+    reconciled ``clue_knowledge``, then redirect-style ``last_answer`` partials.
+    """
+    sid = str(scene_id or "").strip()
+    sess = session if isinstance(session, dict) else None
+    res = resolution if isinstance(resolution, dict) else None
+    merged = merged_player_prompt_for_gate(res, sess, sid)
+    soc: Dict[str, Any] = {}
+    if isinstance(res, dict):
+        s = res.get("social")
+        if isinstance(s, dict):
+            soc = s
+    nid = str(soc.get("npc_id") or "").strip() or None
+    cand = select_best_social_answer_candidate(
+        session=sess if sess is not None else {},
+        scene_id=sid,
+        npc_id=nid,
+        topic_key=None,
+        player_text=merged,
+        resolution=res,
+    )
+    kind = str(cand.get("answer_kind") or "").strip()
+    txt = str(cand.get("text") or "").strip()
+    if kind not in ("structured_fact", "reconciled_fact", "partial_answer") or not txt:
+        return {"text": None, "source": str(cand.get("source") or "none"), "answer_kind": kind or "refusal"}
+    return {"text": txt, "source": str(cand.get("source") or ""), "answer_kind": kind}
+
+
+_ACTIONABLE_DETAIL_RE = re.compile(
+    r"\b(?:east|west|north|south|road|lane|gate|mill|square|market|crossroad|milestone|patrol)\b",
+    re.IGNORECASE,
+)
+
+
+def _actionable_hits(text: str) -> set[str]:
+    return {m.group(0).lower() for m in _ACTIONABLE_DETAIL_RE.finditer(str(text or ""))}
+
+
+def _strict_social_bounded_evasion_or_placeholder_candidate(text: str) -> bool:
+    """True for refusal / flat ignorance / pressure-only lines that should not beat substantive facts."""
+    t = _collapse_ws(str(text or ""))
+    if not t:
+        return True
+    if _looks_like_strict_social_terminal_placeholder(t):
+        return True
+    sents = _split_sentences(t)
+    if not sents:
+        return True
+    if len(sents) > 1:
+        return False
+    s0 = sents[0]
+    if any(p.search(s0) for p in _REFUSAL_SIGNAL_PATTERNS):
+        return True
+    if any(p.search(s0) for p in _PRESSURE_SIGNAL_PATTERNS) and '"' not in s0:
+        return True
+    if _is_flat_idk_without_qualifier(s0):
+        return True
+    low = s0.lower()
+    if re.search(r"\b(?:can'?t|cannot)\s+help\b", low) and '"' not in s0:
+        return True
+    return False
+
+
+def _strict_social_elliptical_fragment_candidate(text: str) -> bool:
+    t = _collapse_ws(str(text or "")).strip()
+    if not t:
+        return True
+    core = t.rstrip(".!?…").strip()
+    if len(core) <= 6 and core.lower() in {"just", "only", "right", "there", "here", "well"}:
+        return True
+    if re.match(r"^just\s*\.?$", t, re.IGNORECASE):
+        return True
+    return False
+
+
+def _strict_social_fragmentary_trailing_clause(text: str) -> bool:
+    t = _collapse_ws(str(text or ""))
+    low = t.lower()
+    if re.search(r"\b(?:though|because|if|when)\s+the\s+\w+\s*$", low):
+        return True
+    if re.search(r",\s*though\s*$", low) and len(t) < 48:
+        return True
+    return False
+
+
+def _grounded_snippet_is_substantive(snippet: str, *, answer_kind: str) -> bool:
+    s = _collapse_ws(str(snippet or ""))
+    if len(s) < 14:
+        return False
+    if answer_kind == "partial_answer":
+        return len(s) >= 18
+    return True
+
+
+def _normalized_social_candidate_is_degraded_vs_grounded(
+    accepted_text: str,
+    grounded_snippet: str,
+    *,
+    answer_kind: str,
+) -> tuple[bool, str]:
+    """Conservative: True only when the accepted line is clearly worse than engine-grounded text."""
+    c = _collapse_ws(str(accepted_text or ""))
+    g = _collapse_ws(str(grounded_snippet or ""))
+    if not c or not g:
+        return False, ""
+    if not _grounded_snippet_is_substantive(g, answer_kind=answer_kind):
+        return False, ""
+    if c.strip() == g.strip():
+        return False, ""
+
+    if _strict_social_bounded_evasion_or_placeholder_candidate(c):
+        return True, "evasion_or_placeholder_over_substantive_grounded_answer"
+
+    if _strict_social_elliptical_fragment_candidate(c):
+        return True, "elliptical_fragment"
+
+    if _strict_social_fragmentary_trailing_clause(c):
+        return True, "fragmentary_trailing_clause"
+
+    gl, cl = g.lower(), c.lower()
+    if len(g) >= 52 and len(c) < len(g) * 0.5:
+        gh = _actionable_hits(g)
+        ch = _actionable_hits(c)
+        if gh and gh - ch:
+            return True, "lost_actionable_detail_vs_grounded_answer"
+
+    if len(g) >= 40 and len(c) + 35 < len(g):
+        toks = [t for t in re.findall(r"[a-z]{5,}", gl) if t not in {"their", "there", "where", "which", "would", "could", "about", "mutters", "runner", "guard", "tavern"}]
+        hits = sum(1 for t in toks[:10] if t in cl)
+        if len(toks) >= 4 and hits <= 1:
+            return True, "much_shorter_less_informative_vs_grounded_answer"
+
+    return False, ""
+
+
+def _strict_social_resolved_line_passes_legality(
+    line: str,
+    *,
+    resolution: Dict[str, Any],
+    session: Dict[str, Any] | None,
+    scene_id: str,
+    world: Dict[str, Any] | None,
+) -> bool:
+    t = _normalize_gate_text(line)
+    low = t.lower()
+    banned_any_route = (
+        "from here, no certain answer presents itself",
+        "the truth is still buried beneath rumor and rain",
+    )
+    if any(phrase in low for phrase in banned_any_route):
+        return False
+    return not hard_reject_social_exchange_text(
+        t,
+        resolution=resolution,
+        session=session if isinstance(session, dict) else None,
+        scene_id=str(scene_id or "").strip(),
+        world=world if isinstance(world, dict) else None,
+    )
+
+
+def _prefer_resolved_social_answer_over_candidate(
+    accepted_text: str,
+    *,
+    resolution: Dict[str, Any],
+    session: Dict[str, Any] | None,
+    scene_id: str,
+    world: Dict[str, Any] | None,
+    tags: List[str],
+) -> tuple[str, Dict[str, Any]]:
+    """If accepted text is clearly degraded vs engine-grounded facts, emit formatted grounded line instead.
+
+    The replacement must pass the same strict-social ownership filter and
+    :func:`hard_reject_social_exchange_text` checks as normal final emission.
+    """
+    sid = str(scene_id or "").strip()
+    base_meta: Dict[str, Any] = {
+        "candidate_quality_degraded": False,
+        "resolved_answer_preferred": False,
+        "resolved_answer_source": None,
+        "resolved_answer_preference_reason": None,
+    }
+    sess = session if isinstance(session, dict) else None
+    if not sid or not isinstance(resolution, dict):
+        return accepted_text, base_meta
+
+    grounded = select_best_grounded_social_answer_text(
+        session=sess,
+        scene_id=sid,
+        resolution=resolution,
+    )
+    snippet = grounded.get("text")
+    src = str(grounded.get("source") or "")
+    akind = str(grounded.get("answer_kind") or "")
+    if not isinstance(snippet, str) or not str(snippet).strip():
+        return accepted_text, base_meta
+
+    degraded, deg_reason = _normalized_social_candidate_is_degraded_vs_grounded(
+        accepted_text,
+        str(snippet).strip(),
+        answer_kind=akind,
+    )
+    if not degraded:
+        return accepted_text, base_meta
+
+    base_meta["candidate_quality_degraded"] = True
+    tag_list = [str(t) for t in tags if isinstance(t, str)]
+    synth = format_structured_fact_social_line(resolution, str(snippet).strip())
+    synth_f = apply_strict_social_sentence_ownership_filter(
+        synth,
+        resolution=resolution,
+        tags=tag_list or None,
+        session=sess,
+        scene_id=sid,
+    )
+    synth_n = _normalize_gate_text(synth_f)
+    if synth_n.strip() == _normalize_gate_text(accepted_text).strip():
+        base_meta["candidate_quality_degraded"] = False
+        return accepted_text, base_meta
+
+    if not _strict_social_resolved_line_passes_legality(
+        synth_n,
+        resolution=resolution,
+        session=sess,
+        scene_id=sid,
+        world=world if isinstance(world, dict) else None,
+    ):
+        base_meta["resolved_answer_preference_reason"] = "stronger_answer_failed_strict_legality"
+        return accepted_text, base_meta
+
+    base_meta["resolved_answer_preferred"] = True
+    base_meta["resolved_answer_source"] = src or None
+    base_meta["resolved_answer_preference_reason"] = deg_reason
+    _assert_all_sentences_strict_social_or_interruption(synth_n, resolution)
+    return synth_n, base_meta
 
 
 def _try_emit_structured_fact_strict_line(
@@ -1923,6 +2172,10 @@ def build_final_strict_social_response(
             "fallback_pool": "neutral_grounding",
             "route_illegal_intercepted": False,
             "intercepted_preview": "",
+            "candidate_quality_degraded": False,
+            "resolved_answer_preferred": False,
+            "resolved_answer_source": None,
+            "resolved_answer_preference_reason": None,
         }
 
     filtered = apply_strict_social_sentence_ownership_filter(
@@ -1972,12 +2225,23 @@ def build_final_strict_social_response(
             )
             if st:
                 return st, _structured_fact_emission_details()
+        pref_text, pref_meta = _prefer_resolved_social_answer_over_candidate(
+            text,
+            resolution=res,
+            session=sess,
+            scene_id=sid,
+            world=world if isinstance(world, dict) else None,
+            tags=tag_list,
+        )
+        text = pref_text
         _assert_all_sentences_strict_social_or_interruption(text, res)
         final_emitted_source = (
             "generated_candidate"
             if _normalize_gate_text(candidate_text).strip() == text.strip()
             else "normalized_social_candidate"
         )
+        if pref_meta.get("resolved_answer_preferred"):
+            final_emitted_source = "resolved_grounded_social_answer"
         return text, {
             "used_internal_fallback": False,
             "fallback_kind": "none",
@@ -1988,6 +2252,7 @@ def build_final_strict_social_response(
             "fallback_pool": "none",
             "route_illegal_intercepted": False,
             "intercepted_preview": "",
+            **pref_meta,
         }
 
     if isinstance(res, dict):
@@ -2061,4 +2326,8 @@ def build_final_strict_social_response(
         "fallback_pool": fallback_pool,
         "route_illegal_intercepted": route_illegal_intercepted,
         "intercepted_preview": intercepted_preview,
+        "candidate_quality_degraded": False,
+        "resolved_answer_preferred": False,
+        "resolved_answer_source": None,
+        "resolved_answer_preference_reason": None,
     }

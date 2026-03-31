@@ -539,7 +539,12 @@ def test_strict_social_emission_meta_documents_final_emitted_source():
     )
     meta = out.get("_final_emission_meta") or {}
     assert meta.get("strict_social_active") is True
-    assert meta.get("final_emitted_source") in ("generated_candidate", "normalized_social_candidate", "retry_output")
+    assert meta.get("final_emitted_source") in (
+        "generated_candidate",
+        "normalized_social_candidate",
+        "retry_output",
+        "resolved_grounded_social_answer",
+    )
     assert meta.get("candidate_validation_passed") is True
 
 
