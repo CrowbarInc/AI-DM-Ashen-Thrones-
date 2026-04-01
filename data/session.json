@@ -5,18 +5,18 @@
     "old_milestone"
   ],
   "current_date": "Day 1",
-  "turn_counter": 16,
+  "turn_counter": 6,
   "response_mode": "standard",
   "clocks": {
     "suspicion": 0,
     "unrest": 0,
     "danger": 0,
     "occult_instability": 0,
-    "time_pressure": 10
+    "time_pressure": 6
   },
   "interaction_context": {
     "active_interaction_target_id": null,
-    "active_interaction_kind": "investigate",
+    "active_interaction_kind": "interact",
     "interaction_mode": "activity",
     "engagement_level": "focused",
     "conversation_privacy": null,
@@ -36,11 +36,11 @@
     "frontier_gate": {
       "discovered_clues": [
         "Investigate the old milestone",
-        "\"If you want to talk to someone who might know more, seek out Lirael, the town crier. Just be careful; things are tense right now, and she\u2019s been known to keep her distance from troublemakers.\""
+        "notice board"
       ],
       "discovered_clue_ids": [
         "lead_frontier_gate_old_milestone",
-        "narration_ctx_frontier_gate_if_you_want_to_talk_to_someone_who_might_know_mo"
+        "narration_ctx_frontier_gate_notice_board"
       ],
       "pending_leads": [
         {
@@ -54,10 +54,10 @@
       "suspicion_flags": [],
       "searched_targets": [],
       "resolved_interactables": [],
-      "last_exploration_action_key": "social_probe_tavern_runner",
+      "last_exploration_action_key": "question_tavern_runner",
       "repeated_action_count": 1,
-      "last_resolution_kind": "social_probe",
-      "last_description_hash": "8ba4b8ac20469d52e53f46f73d0c5788",
+      "last_resolution_kind": "question",
+      "last_description_hash": "db6a66a06b784067f066ea2560ac7a40",
       "consumed_action_ids": [],
       "momentum_exchanges_since": 1,
       "momentum_next_due_in": 2,
@@ -65,43 +65,51 @@
       "passive_action_streak": 0,
       "recent_player_actions": [
         {
-          "text": "Galinor hands over two gold pieces, whispering \"I'm here to help the city. Tell me what you know, or at least where I can get started.\"",
+          "text": "Galinor approaches the runner. \"3 Silver for stew, and 3 for tales of this city. I may be new, but I'm here to help.\"",
+          "passive": false,
+          "markers": [],
+          "resolution_kind": null,
+          "turn": 2
+        },
+        {
+          "text": "\"Miss who?\"",
           "passive": false,
           "markers": [],
           "resolution_kind": null,
           "turn": 3
         },
         {
-          "text": "\"Sure there is. Who stands to gain from attacking the watch?\"",
-          "passive": true,
-          "markers": [
-            "watch"
-          ],
+          "text": "Galinor takes a moment to consider what the runner said...",
+          "passive": false,
+          "markers": [],
           "resolution_kind": null,
           "turn": 4
         },
         {
-          "text": "\"If you won't talk, at least tell me who can.\"",
+          "text": "\"Anything else I should know about before taking my leave?\"",
           "passive": false,
           "markers": [],
           "resolution_kind": null,
           "turn": 5
-        },
-        {
-          "text": "Galinor nods before stepping away back into the street. As he walks, Galinor takes a moment to consider everything he's learned so far.",
-          "passive": false,
-          "markers": [],
-          "resolution_kind": null,
-          "turn": 6
         }
       ],
-      "last_player_action_text": "Galinor nods before stepping away back into the street. As he walks, Galinor takes a moment to consider everything he's learned so far.",
+      "last_player_action_text": "\"Anything else I should know about before taking my leave?\"",
       "last_player_action_passive": false,
       "recent_contextual_leads": [
         {
-          "key": "active_event_figure_in_threadbare_clothes_observes_the_crowd_with_unsettling_stillness_seemingly_waiting_for_something_or_someone",
+          "key": "active_event_refugees_and_traders_alike_huddle_under_eaves_their_muffled_conversations_mixing_with_the_persistent_drumming_of_rainfall",
           "kind": "active_event",
-          "subject": "figure in threadbare clothes observes the crowd with unsettling stillness, seemingly waiting for something or someone",
+          "subject": "refugees and traders alike huddle",
+          "position": "under eaves, their muffled conversations mixing with the persistent drumming of rainfall",
+          "named": false,
+          "positioned": true,
+          "mentions": 1,
+          "last_turn": 1
+        },
+        {
+          "key": "active_event_guards_survey_the_crowd_with_tense_vigilance_while_a_tavern_runner_shouts_offering_steaming_bowls_of_stew_amidst_the_chaos",
+          "kind": "active_event",
+          "subject": "guards survey the crowd with tense vigilance, while a tavern runner shouts, offering steaming bowls of stew amidst the chaos",
           "position": "",
           "named": false,
           "positioned": false,
@@ -116,37 +124,27 @@
           "named": false,
           "positioned": false,
           "mentions": 1,
-          "last_turn": 1
-        },
-        {
-          "key": "active_event_tavern_runner_hesitates_glancing_around_furtively_before_responding_nine_silver_won_t_fetch_much_in_these_parts_traveler",
-          "kind": "active_event",
-          "subject": "tavern runner hesitates, glancing around furtively before responding, \"nine silver won\u2019t fetch much in these parts, traveler",
-          "position": "",
-          "named": false,
-          "positioned": false,
-          "mentions": 1,
-          "last_turn": 2
-        },
-        {
-          "key": "active_event_tavern_runner_looks_at_the_two_gold_pieces_with_a_mix_of_anxiety",
-          "kind": "active_event",
-          "subject": "tavern runner looks",
-          "position": "at the two gold pieces with a mix of anxiety",
-          "named": false,
-          "positioned": true,
-          "mentions": 1,
           "last_turn": 3
         },
         {
-          "key": "active_event_tavern_runner_mutters_word_is_as_galinor_steps_back_into_the_street_he_feels_the_weight_of_the_tavern_runners_words",
-          "kind": "active_event",
-          "subject": "tavern runner mutters, \"word is, as galinor steps back into the street, he feels the weight of the tavern runner's words",
+          "key": "visible_suspicious_figure_but_many",
+          "kind": "visible_suspicious_figure",
+          "subject": "but many",
           "position": "",
           "named": false,
           "positioned": false,
           "mentions": 1,
-          "last_turn": 6
+          "last_turn": 4
+        },
+        {
+          "key": "active_event_tavern_runner_grimaces",
+          "kind": "active_event",
+          "subject": "tavern runner grimaces",
+          "position": "",
+          "named": false,
+          "positioned": false,
+          "mentions": 1,
+          "last_turn": 5
         },
         {
           "key": "scene_npc_tavern_runner",
@@ -155,54 +153,54 @@
           "position": "",
           "named": true,
           "positioned": false,
-          "mentions": 4,
-          "last_turn": 6
+          "mentions": 2,
+          "last_turn": 5
         }
       ],
       "topic_pressure": {
-        "missing_patrol": {
+        "topic:miss": {
           "repeat_count": 0,
           "low_progress_streak": 0,
           "progress_score_total": 3.1,
-          "last_answer": "The tavern runner looks at the two gold pieces with a mix of anxiety and caution before whispering back, \"There's not much I can share with you, friend. Talk flows around here, but I can't risk getting involved too deeply. Best you speak with Lirael, the town crier. She might know where the patrol was last seen, but only if you approach her correctly\u2014she likes a good drink. And be careful, there are eyes everywhere.\"",
-          "last_turn": 2,
+          "last_answer": "The tavern runner looks at Galinor with a mix of eagerness and urgency. \"You\u2019ve got a mind for this place, I can tell. Lirael\u2019s your best bet for news that can make a difference around here. But many are watching, so tread carefully\u2014trust nobody too easily.\"",
+          "last_turn": 3,
           "speaker_targets": {
             "tavern_runner": {
               "repeat_count": 1,
               "low_progress_streak": 0,
               "patience": 3,
-              "last_turn": 2
-            }
-          },
-          "previous_probe_dimension": "",
-          "last_probe_dimension": "general",
-          "last_player_input": "Galinor approaches the runner. \"You there, runner, here's 9 silver. What can you tell me about the missing patrol?\""
-        },
-        "topic:attack_gain_stand": {
-          "repeat_count": 1,
-          "low_progress_streak": 0,
-          "progress_score_total": 7.300000000000001,
-          "last_answer": "As Galinor steps back into the street, he feels the weight of the tavern runner's words linger in the damp air. He observes the bustling crowd, noting their anxious glances towards the guards and the watchful bystanders. He considers his next move: the mention of Lirael, the town crier, and the old milestone loom in his mind as potential avenues for further investigation.",
-          "last_turn": 4,
-          "speaker_targets": {
-            "tavern_runner": {
-              "repeat_count": 1,
-              "low_progress_streak": 0,
-              "patience": 3,
-              "last_turn": 4
+              "last_turn": 3
             }
           },
           "previous_probe_dimension": "",
           "last_probe_dimension": "identity",
-          "last_player_input": "\"Sure there is. Who stands to gain from attacking the watch?\""
+          "last_player_input": "\"Miss who?\""
+        },
+        "topic:anyth_before_else": {
+          "repeat_count": 1,
+          "low_progress_streak": 0,
+          "progress_score_total": 1.5,
+          "last_answer": "The tavern runner leans in closer, lowering his voice. \u201cIt\u2019s not just the patrol that\u2019s troubling the folk around here. There\u2019s word that something\u2019s been stirring near the old milestone. Best be careful if you choose to investigate\u2014more than just wildlife is lurking about.\u201d",
+          "last_turn": 5,
+          "speaker_targets": {
+            "tavern_runner": {
+              "repeat_count": 1,
+              "low_progress_streak": 0,
+              "patience": 3,
+              "last_turn": 5
+            }
+          },
+          "previous_probe_dimension": "",
+          "last_probe_dimension": "general",
+          "last_player_input": "\"Anything else I should know about before taking my leave?\""
         }
       },
-      "topic_pressure_last_topic_key": "topic:attack_gain_stand",
+      "topic_pressure_last_topic_key": "topic:anyth_before_else",
       "topic_pressure_current": {
-        "topic_key": "topic:attack_gain_stand",
+        "topic_key": "topic:anyth_before_else",
         "speaker_key": "tavern_runner",
-        "turn": 4,
-        "player_text": "\"Sure there is. Who stands to gain from attacking the watch?\"",
+        "turn": 5,
+        "player_text": "\"Anything else I should know about before taking my leave?\"",
         "interaction_kind": "social",
         "interaction_mode": "social",
         "social_intent_class": "social_exchange",
@@ -210,94 +208,33 @@
       }
     },
     "old_milestone": {
-      "discovered_clues": [
-        "The letter hints at treachery and warnings, but the details are hard to read.",
-        "The dagger shows wear but has not yet been drawn."
-      ],
-      "discovered_clue_ids": [
-        "the_letter_hints_at_treachery_and_warnings_but_the_details_are_hard_to_read",
-        "the_dagger_shows_wear_but_has_not_yet_been_drawn"
-      ],
+      "discovered_clues": [],
+      "discovered_clue_ids": [],
       "pending_leads": [],
       "revealed_hidden_facts": [],
       "suspicion_flags": [],
-      "searched_targets": [
-        "galinor_investigates_the_area_carefully",
-        "he_thinks_maybe_i_should_check_that_plac"
-      ],
+      "searched_targets": [],
       "resolved_interactables": [],
-      "last_exploration_action_key": "he_thinks_maybe_i_should_check_that_plac",
+      "last_exploration_action_key": "galinor_follows_the_lead_to_old_mileston",
       "repeated_action_count": 1,
-      "last_resolution_kind": "investigate",
-      "last_description_hash": "d9d677b2ba2c33f6e90ea5348dc8df2c",
+      "last_resolution_kind": "interact",
+      "last_description_hash": "c287fd803307814ea339c420cc1dd09c",
       "consumed_action_ids": [],
       "momentum_exchanges_since": 0,
-      "momentum_next_due_in": 3,
+      "momentum_next_due_in": 2,
       "momentum_last_kind": "new_actor_entering",
-      "recent_contextual_leads": [
-        {
-          "key": "visible_suspicious_figure_wind_shifts_causing_the_carrion_birds_to_take_flight_revealing_a_small_figure_concealed_by_the_weathered_milestone_a_scavenger_bandit_quietly_watching_him_likely_waiting_for_an_opportune_moment_to_strike_or_engage",
-          "kind": "visible_suspicious_figure",
-          "subject": "wind shifts, causing the carrion birds to take flight, revealing a small figure concealed",
-          "position": "by the weathered milestone: a scavenger bandit, quietly watching him, likely waiting for an opportune moment to strike or engage",
-          "named": false,
-          "positioned": true,
-          "mentions": 1,
-          "last_turn": 11
-        },
-        {
-          "key": "visible_suspicious_figure_suddenly_the_wind_shifts_causing_the_carrion_birds_to_stir_revealing_a_small_figure_concealed_behind_the_milestone_a_scavenger_bandit_watching_closely_potentially_waiting_for_an_opportune_moment_to_intervene",
-          "kind": "visible_suspicious_figure",
-          "subject": "suddenly, the wind shifts, causing the carrion birds to stir, revealing a small figure concealed behind the milestone\u2014a scavenger bandit watching closely, potentially waiting for an opportune moment to intervene",
-          "position": "",
-          "named": false,
-          "positioned": false,
-          "mentions": 1,
-          "last_turn": 13
-        },
-        {
-          "key": "active_event_carrion_birds_take_flight_revealing_a_small_figure_concealed_behind_the_stone_its_a_scavenger_bandit_their_eyes_glinting_with_keen_interest_likely_waiting_for_an_opportune_moment_to_strike_or_engage",
-          "kind": "active_event",
-          "subject": "carrion birds take flight, revealing a small figure concealed behind the stone\u2014it's a scavenger bandit, their eyes glinting with keen interest, likely waiting for an opportune moment to strike or engage",
-          "position": "",
-          "named": false,
-          "positioned": false,
-          "mentions": 1,
-          "last_turn": 16
-        }
-      ],
+      "recent_contextual_leads": [],
       "passive_action_streak": 0,
       "recent_player_actions": [
         {
-          "text": "Galinor follows the lead to the old milestone.",
+          "text": "Galinor follows the lead to old milestone.",
           "passive": false,
           "markers": [],
           "resolution_kind": null,
-          "turn": 13
-        },
-        {
-          "text": "\"Let\u2019s head over there and see what\u2019s going on...\" Galinor thinks to himself.",
-          "passive": false,
-          "markers": [],
-          "resolution_kind": null,
-          "turn": 14
-        },
-        {
-          "text": "Galinor follows the lead to Lirael.",
-          "passive": false,
-          "markers": [],
-          "resolution_kind": null,
-          "turn": 15
-        },
-        {
-          "text": "\"Maybe I should check that place out...\" he thinks.",
-          "passive": false,
-          "markers": [],
-          "resolution_kind": null,
-          "turn": 16
+          "turn": 6
         }
       ],
-      "last_player_action_text": "\"Maybe I should check that place out...\" he thinks.",
+      "last_player_action_text": "Galinor follows the lead to old milestone.",
       "last_player_action_passive": false
     }
   },
@@ -308,23 +245,11 @@
       "presentation": "actionable",
       "text": "Investigate the old milestone"
     },
-    "narration_ctx_frontier_gate_if_you_want_to_talk_to_someone_who_might_know_mo": {
+    "narration_ctx_frontier_gate_notice_board": {
       "state": "discovered",
       "source_scene": "frontier_gate",
       "presentation": "explicit",
-      "text": "\"If you want to talk to someone who might know more, seek out Lirael, the town crier. Just be careful; things are tense right now, and she\u2019s been known to keep her distance from troublemakers.\""
-    },
-    "the_letter_hints_at_treachery_and_warnings_but_the_details_are_hard_to_read": {
-      "state": "discovered",
-      "source_scene": "old_milestone",
-      "presentation": "explicit",
-      "text": "The letter hints at treachery and warnings, but the details are hard to read."
-    },
-    "the_dagger_shows_wear_but_has_not_yet_been_drawn": {
-      "state": "discovered",
-      "source_scene": "old_milestone",
-      "presentation": "explicit",
-      "text": "The dagger shows wear but has not yet been drawn."
+      "text": "notice board"
     }
   },
   "lead_registry": {
@@ -336,7 +261,7 @@
       "lifecycle": "discovered",
       "status": "active",
       "confidence": "plausible",
-      "discovery_source": "clue_explicit; social",
+      "discovery_source": "social",
       "first_discovered_turn": 2,
       "last_updated_turn": 2,
       "committed_at_turn": null,
@@ -348,9 +273,7 @@
       "obsolete_reason": null,
       "next_step": "",
       "related_clue_ids": [],
-      "related_npc_ids": [
-        "tavern_runner"
-      ],
+      "related_npc_ids": [],
       "related_location_ids": [],
       "owner_faction_id": null,
       "priority": 0,
@@ -371,20 +294,20 @@
         "lead_frontier_gate_old_milestone"
       ],
       "metadata": {
-        "social_extraction_source": "topic_hook"
+        "social_extraction_source": "discoverable_clue:old_milestone"
       }
     },
-    "narration_ctx_frontier_gate_if_you_want_to_talk_to_someone_who_might_know_mo": {
-      "id": "narration_ctx_frontier_gate_if_you_want_to_talk_to_someone_who_might_know_mo",
-      "title": "\"If you want to talk to someone who might know more, seek out Lirael, the town crier. Just be careful; things are tense right now, and she\u2019s been known to keep her distance from troublemakers.\"",
-      "summary": "\"If you want to talk to someone who might know more, seek out Lirael, the town crier. Just be careful; things are tense right now, and she\u2019s been known to keep her distance from troublemakers.\"",
+    "narration_ctx_frontier_gate_notice_board": {
+      "id": "narration_ctx_frontier_gate_notice_board",
+      "title": "notice board",
+      "summary": "notice board",
       "type": "rumor",
       "lifecycle": "discovered",
       "status": "active",
       "confidence": "plausible",
       "discovery_source": "clue_explicit",
-      "first_discovered_turn": 5,
-      "last_updated_turn": 5,
+      "first_discovered_turn": 3,
+      "last_updated_turn": 3,
       "committed_at_turn": null,
       "commitment_source": null,
       "commitment_strength": null,
@@ -398,7 +321,7 @@
       "related_location_ids": [],
       "owner_faction_id": null,
       "priority": 0,
-      "last_touched_turn": 5,
+      "last_touched_turn": 3,
       "stale_after_turns": null,
       "parent_lead_id": null,
       "supersedes": [],
@@ -411,89 +334,7 @@
       ],
       "tags": [],
       "evidence_clue_ids": [
-        "narration_ctx_frontier_gate_if_you_want_to_talk_to_someone_who_might_know_mo"
-      ],
-      "metadata": {}
-    },
-    "the_letter_hints_at_treachery_and_warnings_but_the_details_are_hard_to_read": {
-      "id": "the_letter_hints_at_treachery_and_warnings_but_the_details_are_hard_to_read",
-      "title": "The letter hints at treachery and warnings, but the details are hard to read.",
-      "summary": "The letter hints at treachery and warnings, but the details are hard to read.",
-      "type": "rumor",
-      "lifecycle": "discovered",
-      "status": "active",
-      "confidence": "plausible",
-      "discovery_source": "clue_explicit",
-      "first_discovered_turn": 8,
-      "last_updated_turn": 8,
-      "committed_at_turn": null,
-      "commitment_source": null,
-      "commitment_strength": null,
-      "resolved_at_turn": null,
-      "resolution_type": null,
-      "resolution_summary": null,
-      "obsolete_reason": null,
-      "next_step": "",
-      "related_clue_ids": [],
-      "related_npc_ids": [],
-      "related_location_ids": [],
-      "owner_faction_id": null,
-      "priority": 0,
-      "last_touched_turn": 8,
-      "stale_after_turns": null,
-      "parent_lead_id": null,
-      "supersedes": [],
-      "superseded_by": null,
-      "unlocks": [],
-      "blocked_by": [],
-      "related_faction_ids": [],
-      "related_scene_ids": [
-        "old_milestone"
-      ],
-      "tags": [],
-      "evidence_clue_ids": [
-        "the_letter_hints_at_treachery_and_warnings_but_the_details_are_hard_to_read"
-      ],
-      "metadata": {}
-    },
-    "the_dagger_shows_wear_but_has_not_yet_been_drawn": {
-      "id": "the_dagger_shows_wear_but_has_not_yet_been_drawn",
-      "title": "The dagger shows wear but has not yet been drawn.",
-      "summary": "The dagger shows wear but has not yet been drawn.",
-      "type": "rumor",
-      "lifecycle": "discovered",
-      "status": "active",
-      "confidence": "plausible",
-      "discovery_source": "clue_explicit",
-      "first_discovered_turn": 16,
-      "last_updated_turn": 16,
-      "committed_at_turn": null,
-      "commitment_source": null,
-      "commitment_strength": null,
-      "resolved_at_turn": null,
-      "resolution_type": null,
-      "resolution_summary": null,
-      "obsolete_reason": null,
-      "next_step": "",
-      "related_clue_ids": [],
-      "related_npc_ids": [],
-      "related_location_ids": [],
-      "owner_faction_id": null,
-      "priority": 0,
-      "last_touched_turn": 16,
-      "stale_after_turns": null,
-      "parent_lead_id": null,
-      "supersedes": [],
-      "superseded_by": null,
-      "unlocks": [],
-      "blocked_by": [],
-      "related_faction_ids": [],
-      "related_scene_ids": [
-        "old_milestone"
-      ],
-      "tags": [],
-      "evidence_clue_ids": [
-        "the_dagger_shows_wear_but_has_not_yet_been_drawn"
+        "narration_ctx_frontier_gate_notice_board"
       ],
       "metadata": {}
     }
@@ -501,38 +342,38 @@
   "npc_runtime": {
     "tavern_runner": {
       "attitude": 0,
-      "trust": 0,
+      "trust": 1,
       "fear": 0,
       "suspicion": 0,
       "known_topics": [],
       "revealed_topics": [],
-      "last_interaction_turn": 6
+      "last_interaction_turn": 5
     }
   },
   "last_action_debug": {
     "last_action_type": "chat",
-    "player_input": "\"Maybe I should check that place out...\" he thinks.",
+    "player_input": "Galinor follows the lead to old milestone.",
     "normalized_action": {
-      "id": "he_thinks_maybe_i_should_check_that_plac",
-      "label": "he thinks. Maybe I should check that place out...",
-      "type": "investigate",
+      "id": "galinor_follows_the_lead_to_old_mileston",
+      "label": "Galinor follows the lead to old milestone.",
+      "type": "interact",
       "targetSceneId": null,
-      "prompt": "he thinks. Maybe I should check that place out..."
+      "prompt": "Galinor follows the lead to old milestone."
     },
-    "resolution_kind": "investigate",
+    "resolution_kind": "interact",
     "target_scene": null,
     "resolver_result": {
-      "kind": "investigate",
-      "action_id": "he_thinks_maybe_i_should_check_that_plac",
-      "label": "he thinks. Maybe I should check that place out...",
-      "prompt": "he thinks. Maybe I should check that place out...",
+      "kind": "interact",
+      "action_id": "galinor_follows_the_lead_to_old_mileston",
+      "label": "Galinor follows the lead to old milestone.",
+      "prompt": "Galinor follows the lead to old milestone.",
       "success": null,
       "resolved_transition": false,
       "target_scene_id": null,
       "clue_id": null,
       "discovered_clues": [],
       "state_changes": {},
-      "hint": "Player is investigating or seeking clues. Narrate what deeper scrutiny reveals; advance discovery if appropriate.",
+      "hint": "Player is attempting social interaction or probing NPCs. Narrate the encounter or response.",
       "world_tick_events": []
     },
     "scene_transition": null,
@@ -542,7 +383,7 @@
   },
   "debug_traces": [
     {
-      "timestamp": "2026-03-31T22:38:27.505190Z",
+      "timestamp": "2026-03-31T23:49:55.720975Z",
       "source": "chat",
       "action_type": "chat",
       "raw_input": "Begin.",
@@ -698,10 +539,10 @@
       "canonical_entry_target_actor_id": null
     },
     {
-      "timestamp": "2026-03-31T22:40:33.620979Z",
+      "timestamp": "2026-03-31T23:53:23.376403Z",
       "source": "chat",
       "action_type": "chat",
-      "raw_input": "Galinor approaches the runner. \"You there, runner, here's 9 silver. What can you tell me about the missing patrol?\"",
+      "raw_input": "Galinor approaches the runner. \"3 Silver for stew, and 3 for tales of this city. I may be new, but I'm here to help.\"",
       "turn_stage_order": [
         "player_input",
         "intent_normalization_expansion",
@@ -714,14 +555,14 @@
         "response_debug_packaging"
       ],
       "incoming_payload": {
-        "text": "Galinor approaches the runner. \"You there, runner, here's 9 silver. What can you tell me about the missing patrol?\""
+        "text": "Galinor approaches the runner. \"3 Silver for stew, and 3 for tales of this city. I may be new, but I'm here to help.\""
       },
       "parsed_intent": {
-        "id": "question_tavern_runner",
-        "label": "Galinor approaches the runner. \"You there, runner, here's 9 silver. What can you tell me about the missing patrol?\"",
-        "type": "question",
+        "id": "social_probe_tavern_runner",
+        "label": "Galinor approaches the runner. \"3 Silver for stew, and 3 for tales of this city. I may be new, but I'm here to help.\"",
+        "type": "social_probe",
         "social_intent_class": "social_exchange",
-        "prompt": "Galinor approaches the runner. \"You there, runner, here's 9 silver. What can you tell me about the missing patrol?\"",
+        "prompt": "Galinor approaches the runner. \"3 Silver for stew, and 3 for tales of this city. I may be new, but I'm here to help.\"",
         "metadata": {
           "routed_via_dialogue_lock": true,
           "route": "dialogue",
@@ -736,11 +577,11 @@
           },
           "active_interaction_target_id": "tavern_runner",
           "segmented_turn": {
-            "spoken_text": "You there, runner, here's 9 silver. What can you tell me about the missing patrol?",
+            "spoken_text": "3 Silver for stew, and 3 for tales of this city. I may be new, but I'm here to help.",
             "declared_action_text": "Galinor approaches the runner."
           },
           "turn_segmentation": {
-            "spoken_text": "You there, runner, here's 9 silver. What can you tell me about the missing patrol?",
+            "spoken_text": "3 Silver for stew, and 3 for tales of this city. I may be new, but I'm here to help.",
             "declared_action_text": "Galinor approaches the runner."
           }
         },
@@ -748,44 +589,41 @@
         "targetEntityId": "tavern_runner"
       },
       "segmented_turn": {
-        "spoken_text": "You there, runner, here's 9 silver. What can you tell me about the missing patrol?",
+        "spoken_text": "3 Silver for stew, and 3 for tales of this city. I may be new, but I'm here to help.",
         "declared_action_text": "Galinor approaches the runner."
       },
       "normalized_action": {
-        "id": "question_tavern_runner",
-        "label": "Galinor approaches the runner. \"You there, runner, here's 9 silver. What can you tell me about the missing patrol?\"",
-        "type": "question",
-        "prompt": "Galinor approaches the runner. \"You there, runner, here's 9 silver. What can you tell me about the missing patrol?\""
+        "id": "social_probe_tavern_runner",
+        "label": "Galinor approaches the runner. \"3 Silver for stew, and 3 for tales of this city. I may be new, but I'm here to help.\"",
+        "type": "social_probe",
+        "prompt": "Galinor approaches the runner. \"3 Silver for stew, and 3 for tales of this city. I may be new, but I'm here to help.\""
       },
       "resolution": {
-        "kind": "question",
-        "action_id": "question_tavern_runner",
-        "label": "Galinor approaches the runner. \"You there, runner, here's 9 silver. What can you tell me about the missing patrol?\"",
-        "prompt": "Galinor approaches the runner. \"You there, runner, here's 9 silver. What can you tell me about the missing patrol?\"",
+        "kind": "social_probe",
+        "action_id": "social_probe_tavern_runner",
+        "label": "Galinor approaches the runner. \"3 Silver for stew, and 3 for tales of this city. I may be new, but I'm here to help.\"",
+        "prompt": "Galinor approaches the runner. \"3 Silver for stew, and 3 for tales of this city. I may be new, but I'm here to help.\"",
         "success": true,
         "resolved_transition": false,
         "target_scene_id": null,
-        "clue_id": "lead_frontier_gate_old_milestone",
-        "discovered_clues": [
-          "Investigate the old milestone"
-        ],
+        "clue_id": null,
+        "discovered_clues": [],
         "state_changes": {},
-        "hint": "Player spoke with Tavern Runner. Narration introduced investigatively relevant detail; treat as partial answer or redirect consistent with the spoken reply.",
+        "hint": "Tavern Runner should treat this as a concrete offer (coin, meal, favor) and answer with either a partial honest detail they are willing to sell *or* a sharp redirect (who to ask / where to go) grounded in what they can credibly know\u2014no dead-air shrug.",
         "social": {
           "social_intent_class": "social_exchange",
           "npc_id": "tavern_runner",
           "npc_name": "Tavern Runner",
           "target_resolved": true,
-          "topic_revealed": {
-            "id": "narration_repair_frontier_gate_operational_pattern",
-            "text": "Investigate the old milestone",
-            "clue_text": "Investigate the old milestone",
-            "clue_id": "lead_frontier_gate_old_milestone",
-            "leads_to_scene": "old_milestone"
-          },
+          "topic_revealed": null,
           "skill_check": null,
           "npc_reply_expected": true,
           "reply_kind": "explanation",
+          "social_probe_move": "transactional",
+          "probe_move_reason": "matched_transactional_pattern[0]; target=tavern_runner",
+          "probe_outcome": "actionable_redirect",
+          "probe_outcome_reason": "engine_topics_exhausted_trade_seeks_next_step",
+          "social_probe_engine_contract": true,
           "target_source": "explicit_target",
           "target_reason": "normalized target_id matches scene-addressable roster",
           "target_candidate_id": "tavern_runner",
@@ -795,8 +633,7 @@
             "active_entities",
             "entity_presence_active_or_nearby",
             "scene_addressables",
-            "world_roster_in_scene",
-            "interaction_continuity"
+            "world_roster_in_scene"
           ],
           "declared_switch_detected": true,
           "declared_switch_target_actor_id": "tavern_runner",
@@ -810,26 +647,6 @@
           "grounding_fallback_applied": false,
           "grounding_reason_code": "authoritative_speaker_eligible",
           "grounded_speaker_id": "tavern_runner",
-          "social_escalation": {
-            "escalation_level": 1,
-            "escalation_reason": "first_attempt_same_topic",
-            "escalation_effect": "vague_or_guarded_answer_allowed",
-            "force_partial_answer": false,
-            "force_actionable_lead": false,
-            "add_suspicion": false,
-            "trigger_scene_momentum": false,
-            "convert_refusal_to_conditioned_offer": false,
-            "topic_exhausted": false,
-            "effective_reply_kind": null,
-            "social_question_dimension": "general",
-            "topic_exhausted_for_dimension": false,
-            "valid_followup_detected": false,
-            "prior_same_dimension_answer_exists": false
-          },
-          "social_question_dimension": "general",
-          "topic_exhausted_for_dimension": false,
-          "valid_followup_detected": false,
-          "prior_same_dimension_answer_exists": false,
           "strategy_forced_to_answer": false,
           "suppressed_fallback_strategies": []
         },
@@ -848,68 +665,39 @@
           },
           "active_interaction_target_id": "tavern_runner",
           "segmented_turn": {
-            "spoken_text": "You there, runner, here's 9 silver. What can you tell me about the missing patrol?",
+            "spoken_text": "3 Silver for stew, and 3 for tales of this city. I may be new, but I'm here to help.",
             "declared_action_text": "Galinor approaches the runner."
           },
           "turn_segmentation": {
-            "spoken_text": "You there, runner, here's 9 silver. What can you tell me about the missing patrol?",
+            "spoken_text": "3 Silver for stew, and 3 for tales of this city. I may be new, but I'm here to help.",
             "declared_action_text": "Galinor approaches the runner."
           },
           "lead_landing": {
-            "revealed_lead_ids": [
-              "lead_frontier_gate_old_milestone"
-            ],
+            "revealed_lead_ids": [],
             "already_known_lead_ids": [],
-            "actionable_lead_ids": [
-              "lead_frontier_gate_old_milestone"
-            ],
-            "lead_write_targets": [
-              "clue_knowledge",
-              "scene_runtime.discovered_clue_ids",
-              "pending_leads",
-              "lead_registry",
-              "event_log"
-            ],
-            "extracted_lead_ids": [
-              "lead_frontier_gate_old_milestone"
-            ],
-            "extracted_lead_sources": [
-              "topic_hook"
-            ],
+            "actionable_lead_ids": [],
+            "lead_write_targets": [],
+            "extracted_lead_ids": [],
+            "extracted_lead_sources": [],
             "extracted_from_text": false,
             "extracted_from_reconciled_text": false,
-            "authoritative_created_ids": [],
-            "authoritative_updated_ids": [
+            "authoritative_created_ids": [
               "lead_frontier_gate_old_milestone"
             ],
+            "authoritative_updated_ids": [],
             "authoritative_unchanged_ids": [],
-            "authoritative_promoted_ids": [],
-            "narration_mismatch_repair": true
-          },
-          "narration_state_consistency": {
-            "narration_state_mismatch_detected": true,
-            "mismatch_kind": "refusal_or_empty_payload_vs_narration:operational_pattern",
-            "mismatch_repair_applied": "extracted_actionable_leads",
-            "mismatch_repairs_applied": [
-              "structured_from_extracted_actionable_leads",
-              "reply_kind_upgraded_from_refusal",
-              "success_set_true",
-              "engine_hint_no_new_info_replaced",
-              "canonical_social_lead_landing"
-            ],
-            "repaired_discovered_clue_texts": [
-              "Investigate the old milestone"
-            ],
-            "emergent_actor_hint_detected": false
+            "authoritative_promoted_ids": [
+              "lead_frontier_gate_old_milestone"
+            ]
           },
           "minimum_actionable_lead": {
-            "minimum_actionable_lead_enforced": false,
-            "enforced_lead_id": null,
-            "enforced_lead_source": null
+            "minimum_actionable_lead_enforced": true,
+            "enforced_lead_id": "lead_frontier_gate_old_milestone",
+            "enforced_lead_source": "discoverable_clue"
           },
-          "minimum_actionable_lead_enforced": false,
-          "enforced_lead_id": null,
-          "enforced_lead_source": null
+          "minimum_actionable_lead_enforced": true,
+          "enforced_lead_id": "lead_frontier_gate_old_milestone",
+          "enforced_lead_source": "discoverable_clue"
         },
         "world_tick_events": [
           {
@@ -921,22 +709,20 @@
       },
       "scene_before": "frontier_gate",
       "scene_after": "frontier_gate",
-      "clue_updates": [
-        "Investigate the old milestone"
-      ],
+      "clue_updates": [],
       "world_flag_updates": [
         "clock:time_pressure=2"
       ],
       "turn_trace": {
         "source": "chat",
-        "player_input": "Galinor approaches the runner. \"You there, runner, here's 9 silver. What can you tell me about the missing patrol?\"",
+        "player_input": "Galinor approaches the runner. \"3 Silver for stew, and 3 for tales of this city. I may be new, but I'm here to help.\"",
         "intent": {
           "parsed": {
-            "id": "question_tavern_runner",
-            "label": "Galinor approaches the runner. \"You there, runner, here's 9 silver. What can you tell me about the missing patrol?\"",
-            "type": "question",
+            "id": "social_probe_tavern_runner",
+            "label": "Galinor approaches the runner. \"3 Silver for stew, and 3 for tales of this city. I may be new, but I'm here to help.\"",
+            "type": "social_probe",
             "social_intent_class": "social_exchange",
-            "prompt": "Galinor approaches the runner. \"You there, runner, here's 9 silver. What can you tell me about the missing patrol?\"",
+            "prompt": "Galinor approaches the runner. \"3 Silver for stew, and 3 for tales of this city. I may be new, but I'm here to help.\"",
             "metadata": {
               "routed_via_dialogue_lock": true,
               "route": "dialogue",
@@ -951,11 +737,11 @@
               },
               "active_interaction_target_id": "tavern_runner",
               "segmented_turn": {
-                "spoken_text": "You there, runner, here's 9 silver. What can you tell me about the missing patrol?",
+                "spoken_text": "3 Silver for stew, and 3 for tales of this city. I may be new, but I'm here to help.",
                 "declared_action_text": "Galinor approaches the runner."
               },
               "turn_segmentation": {
-                "spoken_text": "You there, runner, here's 9 silver. What can you tell me about the missing patrol?",
+                "spoken_text": "3 Silver for stew, and 3 for tales of this city. I may be new, but I'm here to help.",
                 "declared_action_text": "Galinor approaches the runner."
               }
             },
@@ -963,14 +749,14 @@
             "targetEntityId": "tavern_runner"
           },
           "segmented_turn": {
-            "spoken_text": "You there, runner, here's 9 silver. What can you tell me about the missing patrol?",
+            "spoken_text": "3 Silver for stew, and 3 for tales of this city. I may be new, but I'm here to help.",
             "declared_action_text": "Galinor approaches the runner."
           },
           "normalized": {
-            "id": "question_tavern_runner",
-            "label": "Galinor approaches the runner. \"You there, runner, here's 9 silver. What can you tell me about the missing patrol?\"",
-            "type": "question",
-            "prompt": "Galinor approaches the runner. \"You there, runner, here's 9 silver. What can you tell me about the missing patrol?\"",
+            "id": "social_probe_tavern_runner",
+            "label": "Galinor approaches the runner. \"3 Silver for stew, and 3 for tales of this city. I may be new, but I'm here to help.\"",
+            "type": "social_probe",
+            "prompt": "Galinor approaches the runner. \"3 Silver for stew, and 3 for tales of this city. I may be new, but I'm here to help.\"",
             "targetSceneId": null,
             "target_scene_id": null,
             "targetEntityId": "tavern_runner",
@@ -984,7 +770,7 @@
         },
         "classification": {
           "action_type": "chat",
-          "resolved_kind": "question",
+          "resolved_kind": "social_probe",
           "requires_check": false
         },
         "resolution_path": "social_engine",
@@ -1017,9 +803,7 @@
           "suppress_non_social_emitters": true
         },
         "clues": {
-          "discovered_texts": [
-            "Investigate the old milestone"
-          ],
+          "discovered_texts": [],
           "presentation_changes": [
             {
               "id": "lead_frontier_gate_old_milestone",
@@ -1075,7 +859,7 @@
         "target_actor_id": "tavern_runner",
         "target_source": "declared_action",
         "reason": "declared_action_actor_switch",
-        "spoken_text": "You there, runner, here's 9 silver. What can you tell me about the missing patrol?",
+        "spoken_text": "3 Silver for stew, and 3 for tales of this city. I may be new, but I'm here to help.",
         "declared_switch_detected": true,
         "declared_switch_target_actor_id": "tavern_runner",
         "continuity_overridden_by_declared_switch": false,
@@ -1088,10 +872,10 @@
       "canonical_entry_target_actor_id": "tavern_runner"
     },
     {
-      "timestamp": "2026-03-31T22:44:38.124043Z",
+      "timestamp": "2026-03-31T23:54:45.404576Z",
       "source": "chat",
       "action_type": "chat",
-      "raw_input": "Galinor hands over two gold pieces, whispering \"I'm here to help the city. Tell me what you know, or at least where I can get started.\"",
+      "raw_input": "\"Miss who?\"",
       "turn_stage_order": [
         "player_input",
         "intent_normalization_expansion",
@@ -1104,14 +888,14 @@
         "response_debug_packaging"
       ],
       "incoming_payload": {
-        "text": "Galinor hands over two gold pieces, whispering \"I'm here to help the city. Tell me what you know, or at least where I can get started.\""
+        "text": "\"Miss who?\""
       },
       "parsed_intent": {
         "id": "question_tavern_runner",
-        "label": "Galinor hands over two gold pieces, whispering \"I'm here to help the city. Tell me what you know, or at least where I can get started.\"",
+        "label": "\"Miss who?\"",
         "type": "question",
         "social_intent_class": "social_exchange",
-        "prompt": "Galinor hands over two gold pieces, whispering \"I'm here to help the city. Tell me what you know, or at least where I can get started.\"",
+        "prompt": "\"Miss who?\"",
         "metadata": {
           "routed_via_dialogue_lock": true,
           "route": "dialogue",
@@ -1126,355 +910,52 @@
           },
           "active_interaction_target_id": "tavern_runner",
           "segmented_turn": {
-            "spoken_text": "I'm here to help the city. Tell me what you know, or at least where I can get started.",
-            "declared_action_text": "Galinor hands over two gold pieces, whispering"
+            "spoken_text": "Miss who?"
           },
           "turn_segmentation": {
-            "spoken_text": "I'm here to help the city. Tell me what you know, or at least where I can get started.",
-            "declared_action_text": "Galinor hands over two gold pieces, whispering"
+            "spoken_text": "Miss who?"
           }
         },
         "target_id": "tavern_runner",
         "targetEntityId": "tavern_runner"
       },
       "segmented_turn": {
-        "spoken_text": "I'm here to help the city. Tell me what you know, or at least where I can get started.",
-        "declared_action_text": "Galinor hands over two gold pieces, whispering"
+        "spoken_text": "Miss who?"
       },
       "normalized_action": {
         "id": "question_tavern_runner",
-        "label": "Galinor hands over two gold pieces, whispering \"I'm here to help the city. Tell me what you know, or at least where I can get started.\"",
+        "label": "\"Miss who?\"",
         "type": "question",
-        "prompt": "Galinor hands over two gold pieces, whispering \"I'm here to help the city. Tell me what you know, or at least where I can get started.\""
+        "prompt": "\"Miss who?\""
       },
       "resolution": {
         "kind": "question",
         "action_id": "question_tavern_runner",
-        "label": "Galinor hands over two gold pieces, whispering \"I'm here to help the city. Tell me what you know, or at least where I can get started.\"",
-        "prompt": "Galinor hands over two gold pieces, whispering \"I'm here to help the city. Tell me what you know, or at least where I can get started.\"",
-        "success": null,
+        "label": "\"Miss who?\"",
+        "prompt": "\"Miss who?\"",
+        "success": true,
         "resolved_transition": false,
         "target_scene_id": null,
-        "clue_id": null,
-        "discovered_clues": [],
-        "state_changes": {},
-        "hint": "Player spoke with Tavern Runner. No new information was revealed. Narrate a substantive in-turn response (answer, refusal, evasion, or inability), not dead-air stalling.",
-        "social": {
-          "social_intent_class": "social_exchange",
-          "npc_id": "tavern_runner",
-          "npc_name": "Tavern Runner",
-          "target_resolved": true,
-          "topic_revealed": null,
-          "skill_check": null,
-          "npc_reply_expected": true,
-          "reply_kind": "refusal",
-          "target_source": "explicit_target",
-          "target_reason": "normalized target_id matches scene-addressable roster",
-          "target_candidate_id": "tavern_runner",
-          "target_candidate_valid": true,
-          "stale_interlocutor_cleared": false,
-          "addressability_checked_against": [
-            "active_entities",
-            "entity_presence_active_or_nearby",
-            "scene_addressables",
-            "world_roster_in_scene",
-            "interaction_continuity"
-          ],
-          "declared_switch_detected": false,
-          "declared_switch_target_actor_id": null,
-          "continuity_overridden_by_declared_switch": false,
-          "spoken_vocative_detected": false,
-          "spoken_vocative_target_actor_id": null,
-          "continuity_overridden_by_spoken_vocative": false,
-          "actor_addressable": true,
-          "authority_source_used": "explicit_target",
-          "proposed_reply_speaker_id": "tavern_runner",
-          "grounding_fallback_applied": false,
-          "grounding_reason_code": "authoritative_speaker_topic_pressure_reinforced",
-          "grounded_speaker_id": "tavern_runner",
-          "strategy_forced_to_answer": false,
-          "suppressed_fallback_strategies": [],
-          "social_answer_retry_candidate_kind": "structured_fact",
-          "social_answer_retry_anchor_text": "Nobody here\u2019s seen them since they were last noted near the old milestone.",
-          "social_answer_retry_candidate_source": "topic_pressure:last_answer"
-        },
-        "requires_check": false,
-        "metadata": {
-          "routed_via_dialogue_lock": true,
-          "route": "dialogue",
-          "canonical_entry_path": "social",
-          "canonical_entry_reason": "active_interlocutor_followup",
-          "canonical_entry_target_actor_id": "tavern_runner",
-          "intent_route_debug": {
-            "routed_to": "social_exchange",
-            "route_reason": "active_interlocutor_followup",
-            "addressed_actor_id": "tavern_runner",
-            "addressed_actor_source": "active_interlocutor"
-          },
-          "active_interaction_target_id": "tavern_runner",
-          "segmented_turn": {
-            "spoken_text": "I'm here to help the city. Tell me what you know, or at least where I can get started.",
-            "declared_action_text": "Galinor hands over two gold pieces, whispering"
-          },
-          "turn_segmentation": {
-            "spoken_text": "I'm here to help the city. Tell me what you know, or at least where I can get started.",
-            "declared_action_text": "Galinor hands over two gold pieces, whispering"
-          },
-          "lead_landing": {
-            "revealed_lead_ids": [],
-            "already_known_lead_ids": [],
-            "actionable_lead_ids": [],
-            "lead_write_targets": [],
-            "extracted_lead_ids": [],
-            "extracted_lead_sources": [],
-            "extracted_from_text": false,
-            "extracted_from_reconciled_text": false,
-            "authoritative_created_ids": [],
-            "authoritative_updated_ids": [],
-            "authoritative_unchanged_ids": [],
-            "authoritative_promoted_ids": []
-          }
-        },
-        "world_tick_events": []
-      },
-      "scene_before": "frontier_gate",
-      "scene_after": "frontier_gate",
-      "clue_updates": [],
-      "world_flag_updates": [
-        "clock:time_pressure=3"
-      ],
-      "turn_trace": {
-        "source": "chat",
-        "player_input": "Galinor hands over two gold pieces, whispering \"I'm here to help the city. Tell me what you know, or at least where I can get started.\"",
-        "intent": {
-          "parsed": {
-            "id": "question_tavern_runner",
-            "label": "Galinor hands over two gold pieces, whispering \"I'm here to help the city. Tell me what you know, or at least where I can get started.\"",
-            "type": "question",
-            "social_intent_class": "social_exchange",
-            "prompt": "Galinor hands over two gold pieces, whispering \"I'm here to help the city. Tell me what you know, or at least where I can get started.\"",
-            "metadata": {
-              "routed_via_dialogue_lock": true,
-              "route": "dialogue",
-              "canonical_entry_path": "social",
-              "canonical_entry_reason": "active_interlocutor_followup",
-              "canonical_entry_target_actor_id": "tavern_runner",
-              "intent_route_debug": {
-                "routed_to": "social_exchange",
-                "route_reason": "active_interlocutor_followup",
-                "addressed_actor_id": "tavern_runner",
-                "addressed_actor_source": "active_interlocutor"
-              },
-              "active_interaction_target_id": "tavern_runner",
-              "segmented_turn": {
-                "spoken_text": "I'm here to help the city. Tell me what you know, or at least where I can get started.",
-                "declared_action_text": "Galinor hands over two gold pieces, whispering"
-              },
-              "turn_segmentation": {
-                "spoken_text": "I'm here to help the city. Tell me what you know, or at least where I can get started.",
-                "declared_action_text": "Galinor hands over two gold pieces, whispering"
-              }
-            },
-            "target_id": "tavern_runner",
-            "targetEntityId": "tavern_runner"
-          },
-          "segmented_turn": {
-            "spoken_text": "I'm here to help the city. Tell me what you know, or at least where I can get started.",
-            "declared_action_text": "Galinor hands over two gold pieces, whispering"
-          },
-          "normalized": {
-            "id": "question_tavern_runner",
-            "label": "Galinor hands over two gold pieces, whispering \"I'm here to help the city. Tell me what you know, or at least where I can get started.\"",
-            "type": "question",
-            "prompt": "Galinor hands over two gold pieces, whispering \"I'm here to help the city. Tell me what you know, or at least where I can get started.\"",
-            "targetSceneId": null,
-            "target_scene_id": null,
-            "targetEntityId": "tavern_runner",
-            "target_id": "tavern_runner"
-          },
-          "implied_context": {
-            "applied": true,
-            "cases": [
-              "lowered_voice"
-            ],
-            "target_id": "tavern_runner"
-          }
-        },
-        "classification": {
-          "action_type": "chat",
-          "resolved_kind": "question",
-          "requires_check": false
-        },
-        "resolution_path": "social_engine",
-        "authoritative_state_changes": {
-          "scene_transition": null,
-          "resolution_state_changes": {},
-          "resolution_world_updates": [],
-          "check_request": null
-        },
-        "interaction_after": {
-          "active_interaction_target_id": "tavern_runner",
-          "active_interaction_kind": "social",
-          "interaction_mode": "social",
-          "engagement_level": "engaged",
-          "conversation_privacy": "lowered_voice",
-          "player_position_context": null
-        },
-        "narration_obligations": {
-          "is_opening_scene": false,
-          "must_advance_scene": false,
-          "should_answer_active_npc": true,
-          "avoid_input_echo": true,
-          "avoid_player_action_restatement": true,
-          "prefer_structured_turn_summary": true,
-          "active_npc_reply_expected": true,
-          "active_npc_reply_kind": "refusal",
-          "scene_momentum_due": false,
-          "scene_momentum_exchanges_since": 0,
-          "scene_momentum_next_due_in": 2,
-          "suppress_non_social_emitters": true
-        },
-        "clues": {
-          "discovered_texts": [],
-          "presentation_changes": [],
-          "known_counts": {
-            "implicit": 0,
-            "explicit": 0,
-            "actionable": 1
-          }
-        },
-        "affordances_after": [
-          {
-            "id": "question_emergent_lord_aldric",
-            "type": "question",
-            "label": "Talk to Lord Aldric",
-            "targetEntityId": "emergent_lord_aldric"
-          },
-          {
-            "id": "examine_the_rain_spatters_soot_dark_stone_frayed",
-            "type": "investigate",
-            "label": "Examine the Rain spatters soot-dark stone; frayed"
-          },
-          {
-            "id": "examine_refugees",
-            "type": "investigate",
-            "label": "Examine Refugees"
-          },
-          {
-            "id": "examine_a_notice_board_lists_new_taxes",
-            "type": "investigate",
-            "label": "Examine A notice board lists new taxes"
-          },
-          {
-            "id": "talk_to_a_tavern_runner_shouts_offers_of_hot",
-            "type": "investigate",
-            "label": "Talk to A tavern runner shouts offers of hot"
-          }
+        "clue_id": "narration_ctx_frontier_gate_notice_board",
+        "discovered_clues": [
+          "notice board"
         ],
-        "emergent_actor": {
-          "emergent_actor_enrolled": true,
-          "emergent_actor_id": "emergent_town_crier",
-          "emergent_actor_source_text": "the town crier"
-        }
-      },
-      "gpt_called": true,
-      "response_ok": true,
-      "error": null,
-      "canonical_entry": {
-        "should_route_social": true,
-        "target_actor_id": "tavern_runner",
-        "target_source": "active_interlocutor",
-        "reason": "active_interlocutor_followup",
-        "spoken_text": "I'm here to help the city. Tell me what you know, or at least where I can get started.",
-        "declared_switch_detected": false,
-        "declared_switch_target_actor_id": null,
-        "continuity_overridden_by_declared_switch": false,
-        "spoken_vocative_detected": false,
-        "spoken_vocative_target_actor_id": null,
-        "continuity_overridden_by_spoken_vocative": false
-      },
-      "canonical_entry_path": "social",
-      "canonical_entry_reason": "active_interlocutor_followup",
-      "canonical_entry_target_actor_id": "tavern_runner"
-    },
-    {
-      "timestamp": "2026-03-31T22:45:08.370692Z",
-      "source": "chat",
-      "action_type": "chat",
-      "raw_input": "\"Sure there is. Who stands to gain from attacking the watch?\"",
-      "turn_stage_order": [
-        "player_input",
-        "intent_normalization_expansion",
-        "action_classification",
-        "engine_resolution",
-        "authoritative_state_mutation",
-        "prompt_context_construction",
-        "gpt_narration",
-        "affordance_derivation",
-        "response_debug_packaging"
-      ],
-      "incoming_payload": {
-        "text": "\"Sure there is. Who stands to gain from attacking the watch?\""
-      },
-      "parsed_intent": {
-        "id": "question_tavern_runner",
-        "label": "\"Sure there is. Who stands to gain from attacking the watch?\"",
-        "type": "question",
-        "social_intent_class": "social_exchange",
-        "prompt": "\"Sure there is. Who stands to gain from attacking the watch?\"",
-        "metadata": {
-          "routed_via_dialogue_lock": true,
-          "route": "dialogue",
-          "canonical_entry_path": "social",
-          "canonical_entry_reason": "active_interlocutor_followup",
-          "canonical_entry_target_actor_id": "tavern_runner",
-          "intent_route_debug": {
-            "routed_to": "social_exchange",
-            "route_reason": "active_interlocutor_followup",
-            "addressed_actor_id": "tavern_runner",
-            "addressed_actor_source": "active_interlocutor"
-          },
-          "active_interaction_target_id": "tavern_runner",
-          "segmented_turn": {
-            "spoken_text": "Sure there is. Who stands to gain from attacking the watch?"
-          },
-          "turn_segmentation": {
-            "spoken_text": "Sure there is. Who stands to gain from attacking the watch?"
-          }
-        },
-        "target_id": "tavern_runner",
-        "targetEntityId": "tavern_runner"
-      },
-      "segmented_turn": {
-        "spoken_text": "Sure there is. Who stands to gain from attacking the watch?"
-      },
-      "normalized_action": {
-        "id": "question_tavern_runner",
-        "label": "\"Sure there is. Who stands to gain from attacking the watch?\"",
-        "type": "question",
-        "prompt": "\"Sure there is. Who stands to gain from attacking the watch?\""
-      },
-      "resolution": {
-        "kind": "question",
-        "action_id": "question_tavern_runner",
-        "label": "\"Sure there is. Who stands to gain from attacking the watch?\"",
-        "prompt": "\"Sure there is. Who stands to gain from attacking the watch?\"",
-        "success": null,
-        "resolved_transition": false,
-        "target_scene_id": null,
-        "clue_id": null,
-        "discovered_clues": [],
         "state_changes": {},
-        "hint": "Player spoke with Tavern Runner. No new information was revealed. Narrate a substantive in-turn response (answer, refusal, evasion, or inability), not dead-air stalling.",
+        "hint": "Player spoke with Tavern Runner. Narration introduced investigatively relevant detail; treat as partial answer or redirect consistent with the spoken reply.",
         "social": {
           "social_intent_class": "social_exchange",
           "npc_id": "tavern_runner",
           "npc_name": "Tavern Runner",
           "target_resolved": true,
-          "topic_revealed": null,
+          "topic_revealed": {
+            "id": "narration_repair_frontier_gate_directional_phrase",
+            "text": "notice board",
+            "clue_text": "notice board",
+            "clue_id": "narration_ctx_frontier_gate_notice_board"
+          },
           "skill_check": null,
           "npc_reply_expected": true,
-          "reply_kind": "refusal",
+          "reply_kind": "explanation",
           "target_source": "explicit_target",
           "target_reason": "normalized target_id matches scene-addressable roster",
           "target_candidate_id": "tavern_runner",
@@ -1497,7 +978,7 @@
           "authority_source_used": "explicit_target",
           "proposed_reply_speaker_id": "tavern_runner",
           "grounding_fallback_applied": false,
-          "grounding_reason_code": "authoritative_speaker_topic_pressure_reinforced",
+          "grounding_reason_code": "authoritative_speaker_eligible",
           "grounded_speaker_id": "tavern_runner",
           "social_escalation": {
             "escalation_level": 1,
@@ -1537,318 +1018,14 @@
           },
           "active_interaction_target_id": "tavern_runner",
           "segmented_turn": {
-            "spoken_text": "Sure there is. Who stands to gain from attacking the watch?"
+            "spoken_text": "Miss who?"
           },
           "turn_segmentation": {
-            "spoken_text": "Sure there is. Who stands to gain from attacking the watch?"
-          },
-          "lead_landing": {
-            "revealed_lead_ids": [],
-            "already_known_lead_ids": [],
-            "actionable_lead_ids": [],
-            "lead_write_targets": [],
-            "extracted_lead_ids": [],
-            "extracted_lead_sources": [],
-            "extracted_from_text": false,
-            "extracted_from_reconciled_text": false,
-            "authoritative_created_ids": [],
-            "authoritative_updated_ids": [],
-            "authoritative_unchanged_ids": [],
-            "authoritative_promoted_ids": []
-          }
-        },
-        "world_tick_events": []
-      },
-      "scene_before": "frontier_gate",
-      "scene_after": "frontier_gate",
-      "clue_updates": [],
-      "world_flag_updates": [
-        "clock:time_pressure=4"
-      ],
-      "turn_trace": {
-        "source": "chat",
-        "player_input": "\"Sure there is. Who stands to gain from attacking the watch?\"",
-        "intent": {
-          "parsed": {
-            "id": "question_tavern_runner",
-            "label": "\"Sure there is. Who stands to gain from attacking the watch?\"",
-            "type": "question",
-            "social_intent_class": "social_exchange",
-            "prompt": "\"Sure there is. Who stands to gain from attacking the watch?\"",
-            "metadata": {
-              "routed_via_dialogue_lock": true,
-              "route": "dialogue",
-              "canonical_entry_path": "social",
-              "canonical_entry_reason": "active_interlocutor_followup",
-              "canonical_entry_target_actor_id": "tavern_runner",
-              "intent_route_debug": {
-                "routed_to": "social_exchange",
-                "route_reason": "active_interlocutor_followup",
-                "addressed_actor_id": "tavern_runner",
-                "addressed_actor_source": "active_interlocutor"
-              },
-              "active_interaction_target_id": "tavern_runner",
-              "segmented_turn": {
-                "spoken_text": "Sure there is. Who stands to gain from attacking the watch?"
-              },
-              "turn_segmentation": {
-                "spoken_text": "Sure there is. Who stands to gain from attacking the watch?"
-              }
-            },
-            "target_id": "tavern_runner",
-            "targetEntityId": "tavern_runner"
-          },
-          "segmented_turn": {
-            "spoken_text": "Sure there is. Who stands to gain from attacking the watch?"
-          },
-          "normalized": {
-            "id": "question_tavern_runner",
-            "label": "\"Sure there is. Who stands to gain from attacking the watch?\"",
-            "type": "question",
-            "prompt": "\"Sure there is. Who stands to gain from attacking the watch?\"",
-            "targetSceneId": null,
-            "target_scene_id": null,
-            "targetEntityId": "tavern_runner",
-            "target_id": "tavern_runner"
-          },
-          "implied_context": {
-            "applied": false,
-            "cases": [],
-            "target_id": "tavern_runner"
-          }
-        },
-        "classification": {
-          "action_type": "chat",
-          "resolved_kind": "question",
-          "requires_check": false
-        },
-        "resolution_path": "social_engine",
-        "authoritative_state_changes": {
-          "scene_transition": null,
-          "resolution_state_changes": {},
-          "resolution_world_updates": [],
-          "check_request": null
-        },
-        "interaction_after": {
-          "active_interaction_target_id": "tavern_runner",
-          "active_interaction_kind": "social",
-          "interaction_mode": "social",
-          "engagement_level": "engaged",
-          "conversation_privacy": "lowered_voice",
-          "player_position_context": null
-        },
-        "narration_obligations": {
-          "is_opening_scene": false,
-          "must_advance_scene": false,
-          "should_answer_active_npc": true,
-          "avoid_input_echo": true,
-          "avoid_player_action_restatement": true,
-          "prefer_structured_turn_summary": true,
-          "active_npc_reply_expected": true,
-          "active_npc_reply_kind": "refusal",
-          "scene_momentum_due": false,
-          "scene_momentum_exchanges_since": 0,
-          "scene_momentum_next_due_in": 2,
-          "suppress_non_social_emitters": true
-        },
-        "clues": {
-          "discovered_texts": [],
-          "presentation_changes": [],
-          "known_counts": {
-            "implicit": 0,
-            "explicit": 0,
-            "actionable": 1
-          }
-        },
-        "affordances_after": [
-          {
-            "id": "question_emergent_lord_aldric",
-            "type": "question",
-            "label": "Talk to Lord Aldric",
-            "targetEntityId": "emergent_lord_aldric"
-          },
-          {
-            "id": "examine_the_rain_spatters_soot_dark_stone_frayed",
-            "type": "investigate",
-            "label": "Examine the Rain spatters soot-dark stone; frayed"
-          },
-          {
-            "id": "examine_refugees",
-            "type": "investigate",
-            "label": "Examine Refugees"
-          },
-          {
-            "id": "examine_a_notice_board_lists_new_taxes",
-            "type": "investigate",
-            "label": "Examine A notice board lists new taxes"
-          },
-          {
-            "id": "talk_to_a_tavern_runner_shouts_offers_of_hot",
-            "type": "investigate",
-            "label": "Talk to A tavern runner shouts offers of hot"
-          }
-        ],
-        "emergent_actor": {
-          "emergent_actor_enrolled": true,
-          "emergent_actor_id": "emergent_town_crier",
-          "emergent_actor_source_text": "the town crier"
-        }
-      },
-      "gpt_called": true,
-      "response_ok": true,
-      "error": null,
-      "canonical_entry": {
-        "should_route_social": true,
-        "target_actor_id": "tavern_runner",
-        "target_source": "active_interlocutor",
-        "reason": "active_interlocutor_followup",
-        "spoken_text": "Sure there is. Who stands to gain from attacking the watch?",
-        "declared_switch_detected": false,
-        "declared_switch_target_actor_id": null,
-        "continuity_overridden_by_declared_switch": false,
-        "spoken_vocative_detected": false,
-        "spoken_vocative_target_actor_id": null,
-        "continuity_overridden_by_spoken_vocative": false
-      },
-      "canonical_entry_path": "social",
-      "canonical_entry_reason": "active_interlocutor_followup",
-      "canonical_entry_target_actor_id": "tavern_runner"
-    },
-    {
-      "timestamp": "2026-03-31T22:46:27.825906Z",
-      "source": "chat",
-      "action_type": "chat",
-      "raw_input": "\"If you won't talk, at least tell me who can.\"",
-      "turn_stage_order": [
-        "player_input",
-        "intent_normalization_expansion",
-        "action_classification",
-        "engine_resolution",
-        "authoritative_state_mutation",
-        "prompt_context_construction",
-        "gpt_narration",
-        "affordance_derivation",
-        "response_debug_packaging"
-      ],
-      "incoming_payload": {
-        "text": "\"If you won't talk, at least tell me who can.\""
-      },
-      "parsed_intent": {
-        "id": "question_tavern_runner",
-        "label": "\"If you won't talk, at least tell me who can.\"",
-        "type": "question",
-        "social_intent_class": "social_exchange",
-        "prompt": "\"If you won't talk, at least tell me who can.\"",
-        "metadata": {
-          "routed_via_dialogue_lock": true,
-          "route": "dialogue",
-          "canonical_entry_path": "social",
-          "canonical_entry_reason": "active_interlocutor_followup",
-          "canonical_entry_target_actor_id": "tavern_runner",
-          "intent_route_debug": {
-            "routed_to": "social_exchange",
-            "route_reason": "active_interlocutor_followup",
-            "addressed_actor_id": "tavern_runner",
-            "addressed_actor_source": "active_interlocutor"
-          },
-          "active_interaction_target_id": "tavern_runner",
-          "segmented_turn": {
-            "spoken_text": "If you won't talk, at least tell me who can."
-          },
-          "turn_segmentation": {
-            "spoken_text": "If you won't talk, at least tell me who can."
-          }
-        },
-        "target_id": "tavern_runner",
-        "targetEntityId": "tavern_runner"
-      },
-      "segmented_turn": {
-        "spoken_text": "If you won't talk, at least tell me who can."
-      },
-      "normalized_action": {
-        "id": "question_tavern_runner",
-        "label": "\"If you won't talk, at least tell me who can.\"",
-        "type": "question",
-        "prompt": "\"If you won't talk, at least tell me who can.\""
-      },
-      "resolution": {
-        "kind": "question",
-        "action_id": "question_tavern_runner",
-        "label": "\"If you won't talk, at least tell me who can.\"",
-        "prompt": "\"If you won't talk, at least tell me who can.\"",
-        "success": true,
-        "resolved_transition": false,
-        "target_scene_id": null,
-        "clue_id": "narration_ctx_frontier_gate_if_you_want_to_talk_to_someone_who_might_know_mo",
-        "discovered_clues": [
-          "\"If you want to talk to someone who might know more, seek out Lirael, the town crier. Just be careful; things are tense right now, and she\u2019s been known to keep her distance from troublemakers.\""
-        ],
-        "state_changes": {},
-        "hint": "Player spoke with Tavern Runner. Narration introduced investigatively relevant detail; treat as partial answer or redirect consistent with the spoken reply.",
-        "social": {
-          "social_intent_class": "social_exchange",
-          "npc_id": "tavern_runner",
-          "npc_name": "Tavern Runner",
-          "target_resolved": true,
-          "topic_revealed": {
-            "id": "narration_repair_frontier_gate_directional_phrase",
-            "text": "\"If you want to talk to someone who might know more, seek out Lirael, the town crier. Just be careful; things are tense right now, and she\u2019s been known to keep her distance from troublemakers.\"",
-            "clue_text": "\"If you want to talk to someone who might know more, seek out Lirael, the town crier. Just be careful; things are tense right now, and she\u2019s been known to keep her distance from troublemakers.\"",
-            "clue_id": "narration_ctx_frontier_gate_if_you_want_to_talk_to_someone_who_might_know_mo"
-          },
-          "skill_check": null,
-          "npc_reply_expected": true,
-          "reply_kind": "explanation",
-          "target_source": "explicit_target",
-          "target_reason": "normalized target_id matches scene-addressable roster",
-          "target_candidate_id": "tavern_runner",
-          "target_candidate_valid": true,
-          "stale_interlocutor_cleared": false,
-          "addressability_checked_against": [
-            "active_entities",
-            "entity_presence_active_or_nearby",
-            "scene_addressables",
-            "world_roster_in_scene",
-            "interaction_continuity"
-          ],
-          "declared_switch_detected": false,
-          "declared_switch_target_actor_id": null,
-          "continuity_overridden_by_declared_switch": false,
-          "spoken_vocative_detected": false,
-          "spoken_vocative_target_actor_id": null,
-          "continuity_overridden_by_spoken_vocative": false,
-          "actor_addressable": true,
-          "authority_source_used": "explicit_target",
-          "proposed_reply_speaker_id": "tavern_runner",
-          "grounding_fallback_applied": false,
-          "grounding_reason_code": "authoritative_speaker_topic_pressure_reinforced",
-          "grounded_speaker_id": "tavern_runner",
-          "strategy_forced_to_answer": false,
-          "suppressed_fallback_strategies": []
-        },
-        "requires_check": false,
-        "metadata": {
-          "routed_via_dialogue_lock": true,
-          "route": "dialogue",
-          "canonical_entry_path": "social",
-          "canonical_entry_reason": "active_interlocutor_followup",
-          "canonical_entry_target_actor_id": "tavern_runner",
-          "intent_route_debug": {
-            "routed_to": "social_exchange",
-            "route_reason": "active_interlocutor_followup",
-            "addressed_actor_id": "tavern_runner",
-            "addressed_actor_source": "active_interlocutor"
-          },
-          "active_interaction_target_id": "tavern_runner",
-          "segmented_turn": {
-            "spoken_text": "If you won't talk, at least tell me who can."
-          },
-          "turn_segmentation": {
-            "spoken_text": "If you won't talk, at least tell me who can."
+            "spoken_text": "Miss who?"
           },
           "lead_landing": {
             "revealed_lead_ids": [
-              "narration_ctx_frontier_gate_if_you_want_to_talk_to_someone_who_might_know_mo"
+              "narration_ctx_frontier_gate_notice_board"
             ],
             "already_known_lead_ids": [],
             "actionable_lead_ids": [],
@@ -1879,7 +1056,7 @@
               "canonical_social_lead_landing"
             ],
             "repaired_discovered_clue_texts": [
-              "\"If you want to talk to someone who might know more, seek out Lirael, the town crier. Just be careful; things are tense right now, and she\u2019s been known to keep her distance from troublemakers.\""
+              "notice board"
             ],
             "emergent_actor_hint_detected": false
           },
@@ -1892,42 +1069,26 @@
           "enforced_lead_id": null,
           "enforced_lead_source": null
         },
-        "world_tick_events": [
-          {
-            "type": "faction_operation_complete",
-            "text": "House Verevin completes an off-screen operation.",
-            "source": "house_verevin"
-          },
-          {
-            "type": "faction_operation_complete",
-            "text": "The Ash Cowl completes an off-screen operation.",
-            "source": "ash_cowl"
-          },
-          {
-            "type": "faction_operation_complete",
-            "text": "Ordo Pyric completes an off-screen operation.",
-            "source": "ordo_pyric"
-          }
-        ]
+        "world_tick_events": []
       },
       "scene_before": "frontier_gate",
       "scene_after": "frontier_gate",
       "clue_updates": [
-        "\"If you want to talk to someone who might know more, seek out Lirael, the town crier. Just be careful; things are tense right now, and she\u2019s been known to keep her distance from troublemakers.\""
+        "notice board"
       ],
       "world_flag_updates": [
-        "clock:time_pressure=5"
+        "clock:time_pressure=3"
       ],
       "turn_trace": {
         "source": "chat",
-        "player_input": "\"If you won't talk, at least tell me who can.\"",
+        "player_input": "\"Miss who?\"",
         "intent": {
           "parsed": {
             "id": "question_tavern_runner",
-            "label": "\"If you won't talk, at least tell me who can.\"",
+            "label": "\"Miss who?\"",
             "type": "question",
             "social_intent_class": "social_exchange",
-            "prompt": "\"If you won't talk, at least tell me who can.\"",
+            "prompt": "\"Miss who?\"",
             "metadata": {
               "routed_via_dialogue_lock": true,
               "route": "dialogue",
@@ -1942,23 +1103,23 @@
               },
               "active_interaction_target_id": "tavern_runner",
               "segmented_turn": {
-                "spoken_text": "If you won't talk, at least tell me who can."
+                "spoken_text": "Miss who?"
               },
               "turn_segmentation": {
-                "spoken_text": "If you won't talk, at least tell me who can."
+                "spoken_text": "Miss who?"
               }
             },
             "target_id": "tavern_runner",
             "targetEntityId": "tavern_runner"
           },
           "segmented_turn": {
-            "spoken_text": "If you won't talk, at least tell me who can."
+            "spoken_text": "Miss who?"
           },
           "normalized": {
             "id": "question_tavern_runner",
-            "label": "\"If you won't talk, at least tell me who can.\"",
+            "label": "\"Miss who?\"",
             "type": "question",
-            "prompt": "\"If you won't talk, at least tell me who can.\"",
+            "prompt": "\"Miss who?\"",
             "targetSceneId": null,
             "target_scene_id": null,
             "targetEntityId": "tavern_runner",
@@ -1987,7 +1148,7 @@
           "active_interaction_kind": "social",
           "interaction_mode": "social",
           "engagement_level": "engaged",
-          "conversation_privacy": "lowered_voice",
+          "conversation_privacy": null,
           "player_position_context": null
         },
         "narration_obligations": {
@@ -2006,11 +1167,11 @@
         },
         "clues": {
           "discovered_texts": [
-            "\"If you want to talk to someone who might know more, seek out Lirael, the town crier. Just be careful; things are tense right now, and she\u2019s been known to keep her distance from troublemakers.\""
+            "notice board"
           ],
           "presentation_changes": [
             {
-              "id": "narration_ctx_frontier_gate_if_you_want_to_talk_to_someone_who_might_know_mo",
+              "id": "narration_ctx_frontier_gate_notice_board",
               "from": null,
               "to": "explicit"
             }
@@ -2063,7 +1224,7 @@
         "target_actor_id": "tavern_runner",
         "target_source": "active_interlocutor",
         "reason": "active_interlocutor_followup",
-        "spoken_text": "If you won't talk, at least tell me who can.",
+        "spoken_text": "Miss who?",
         "declared_switch_detected": false,
         "declared_switch_target_actor_id": null,
         "continuity_overridden_by_declared_switch": false,
@@ -2076,10 +1237,10 @@
       "canonical_entry_target_actor_id": "tavern_runner"
     },
     {
-      "timestamp": "2026-03-31T22:48:48.878717Z",
+      "timestamp": "2026-03-31T23:55:05.605899Z",
       "source": "chat",
       "action_type": "chat",
-      "raw_input": "Galinor nods before stepping away back into the street. As he walks, Galinor takes a moment to consider everything he's learned so far.",
+      "raw_input": "Galinor takes a moment to consider what the runner said...",
       "turn_stage_order": [
         "player_input",
         "intent_normalization_expansion",
@@ -2092,14 +1253,14 @@
         "response_debug_packaging"
       ],
       "incoming_payload": {
-        "text": "Galinor nods before stepping away back into the street. As he walks, Galinor takes a moment to consider everything he's learned so far."
+        "text": "Galinor takes a moment to consider what the runner said..."
       },
       "parsed_intent": {
         "id": "social_probe_tavern_runner",
-        "label": "Galinor nods before stepping away back into the street. As he walks, Galinor takes a moment to consider everything he's learned so far.",
+        "label": "Galinor takes a moment to consider what the runner said...",
         "type": "social_probe",
         "social_intent_class": "social_exchange",
-        "prompt": "Galinor nods before stepping away back into the street. As he walks, Galinor takes a moment to consider everything he's learned so far.",
+        "prompt": "Galinor takes a moment to consider what the runner said...",
         "metadata": {
           "routed_via_dialogue_lock": true,
           "route": "dialogue",
@@ -2114,29 +1275,29 @@
           },
           "active_interaction_target_id": "tavern_runner",
           "segmented_turn": {
-            "declared_action_text": "Galinor nods before stepping away back into the street. As he walks, Galinor takes a moment to consider everything he's learned so far."
+            "declared_action_text": "Galinor takes a moment to consider what the runner said..."
           },
           "turn_segmentation": {
-            "declared_action_text": "Galinor nods before stepping away back into the street. As he walks, Galinor takes a moment to consider everything he's learned so far."
+            "declared_action_text": "Galinor takes a moment to consider what the runner said..."
           }
         },
         "target_id": "tavern_runner",
         "targetEntityId": "tavern_runner"
       },
       "segmented_turn": {
-        "declared_action_text": "Galinor nods before stepping away back into the street. As he walks, Galinor takes a moment to consider everything he's learned so far."
+        "declared_action_text": "Galinor takes a moment to consider what the runner said..."
       },
       "normalized_action": {
         "id": "social_probe_tavern_runner",
-        "label": "Galinor nods before stepping away back into the street. As he walks, Galinor takes a moment to consider everything he's learned so far.",
+        "label": "Galinor takes a moment to consider what the runner said...",
         "type": "social_probe",
-        "prompt": "Galinor nods before stepping away back into the street. As he walks, Galinor takes a moment to consider everything he's learned so far."
+        "prompt": "Galinor takes a moment to consider what the runner said..."
       },
       "resolution": {
         "kind": "social_probe",
         "action_id": "social_probe_tavern_runner",
-        "label": "Galinor nods before stepping away back into the street. As he walks, Galinor takes a moment to consider everything he's learned so far.",
-        "prompt": "Galinor nods before stepping away back into the street. As he walks, Galinor takes a moment to consider everything he's learned so far.",
+        "label": "Galinor takes a moment to consider what the runner said...",
+        "prompt": "Galinor takes a moment to consider what the runner said...",
         "success": null,
         "resolved_transition": false,
         "target_scene_id": null,
@@ -2151,8 +1312,8 @@
           "target_resolved": true,
           "topic_revealed": null,
           "skill_check": null,
-          "npc_reply_expected": false,
-          "reply_kind": "reaction",
+          "npc_reply_expected": true,
+          "reply_kind": "refusal",
           "target_source": "explicit_target",
           "target_reason": "normalized target_id matches scene-addressable roster",
           "target_candidate_id": "tavern_runner",
@@ -2179,9 +1340,9 @@
           "grounded_speaker_id": "tavern_runner",
           "strategy_forced_to_answer": false,
           "suppressed_fallback_strategies": [],
-          "social_answer_retry_candidate_kind": "reconciled_fact",
-          "social_answer_retry_anchor_text": "Investigate the old milestone",
-          "social_answer_retry_candidate_source": "clue_knowledge:lead_frontier_gate_old_milestone"
+          "social_answer_retry_candidate_kind": "partial_answer",
+          "social_answer_retry_anchor_text": "If you want the real tales of this place, she\u2019s the one to speak to.",
+          "social_answer_retry_candidate_source": "topic_pressure:last_answer:redirect"
         },
         "requires_check": false,
         "metadata": {
@@ -2198,10 +1359,10 @@
           },
           "active_interaction_target_id": "tavern_runner",
           "segmented_turn": {
-            "declared_action_text": "Galinor nods before stepping away back into the street. As he walks, Galinor takes a moment to consider everything he's learned so far."
+            "declared_action_text": "Galinor takes a moment to consider what the runner said..."
           },
           "turn_segmentation": {
-            "declared_action_text": "Galinor nods before stepping away back into the street. As he walks, Galinor takes a moment to consider everything he's learned so far."
+            "declared_action_text": "Galinor takes a moment to consider what the runner said..."
           },
           "lead_landing": {
             "revealed_lead_ids": [],
@@ -2224,18 +1385,18 @@
       "scene_after": "frontier_gate",
       "clue_updates": [],
       "world_flag_updates": [
-        "clock:time_pressure=6"
+        "clock:time_pressure=4"
       ],
       "turn_trace": {
         "source": "chat",
-        "player_input": "Galinor nods before stepping away back into the street. As he walks, Galinor takes a moment to consider everything he's learned so far.",
+        "player_input": "Galinor takes a moment to consider what the runner said...",
         "intent": {
           "parsed": {
             "id": "social_probe_tavern_runner",
-            "label": "Galinor nods before stepping away back into the street. As he walks, Galinor takes a moment to consider everything he's learned so far.",
+            "label": "Galinor takes a moment to consider what the runner said...",
             "type": "social_probe",
             "social_intent_class": "social_exchange",
-            "prompt": "Galinor nods before stepping away back into the street. As he walks, Galinor takes a moment to consider everything he's learned so far.",
+            "prompt": "Galinor takes a moment to consider what the runner said...",
             "metadata": {
               "routed_via_dialogue_lock": true,
               "route": "dialogue",
@@ -2250,23 +1411,23 @@
               },
               "active_interaction_target_id": "tavern_runner",
               "segmented_turn": {
-                "declared_action_text": "Galinor nods before stepping away back into the street. As he walks, Galinor takes a moment to consider everything he's learned so far."
+                "declared_action_text": "Galinor takes a moment to consider what the runner said..."
               },
               "turn_segmentation": {
-                "declared_action_text": "Galinor nods before stepping away back into the street. As he walks, Galinor takes a moment to consider everything he's learned so far."
+                "declared_action_text": "Galinor takes a moment to consider what the runner said..."
               }
             },
             "target_id": "tavern_runner",
             "targetEntityId": "tavern_runner"
           },
           "segmented_turn": {
-            "declared_action_text": "Galinor nods before stepping away back into the street. As he walks, Galinor takes a moment to consider everything he's learned so far."
+            "declared_action_text": "Galinor takes a moment to consider what the runner said..."
           },
           "normalized": {
             "id": "social_probe_tavern_runner",
-            "label": "Galinor nods before stepping away back into the street. As he walks, Galinor takes a moment to consider everything he's learned so far.",
+            "label": "Galinor takes a moment to consider what the runner said...",
             "type": "social_probe",
-            "prompt": "Galinor nods before stepping away back into the street. As he walks, Galinor takes a moment to consider everything he's learned so far.",
+            "prompt": "Galinor takes a moment to consider what the runner said...",
             "targetSceneId": null,
             "target_scene_id": null,
             "targetEntityId": "tavern_runner",
@@ -2295,7 +1456,7 @@
           "active_interaction_kind": "social",
           "interaction_mode": "social",
           "engagement_level": "engaged",
-          "conversation_privacy": "lowered_voice",
+          "conversation_privacy": null,
           "player_position_context": null
         },
         "narration_obligations": {
@@ -2306,7 +1467,7 @@
           "avoid_player_action_restatement": true,
           "prefer_structured_turn_summary": true,
           "active_npc_reply_expected": true,
-          "active_npc_reply_kind": "reaction",
+          "active_npc_reply_kind": "refusal",
           "scene_momentum_due": false,
           "scene_momentum_exchanges_since": 0,
           "scene_momentum_next_due_in": 2,
@@ -2376,10 +1537,10 @@
       "canonical_entry_target_actor_id": "tavern_runner"
     },
     {
-      "timestamp": "2026-03-31T22:53:21.603895Z",
+      "timestamp": "2026-03-31T23:58:32.050591Z",
       "source": "chat",
       "action_type": "chat",
-      "raw_input": "Galinor decides to follow-up on the old milestone, and heads that way.",
+      "raw_input": "\"Anything else I should know about before taking my leave?\"",
       "turn_stage_order": [
         "player_input",
         "intent_normalization_expansion",
@@ -2392,31 +1553,364 @@
         "response_debug_packaging"
       ],
       "incoming_payload": {
-        "text": "Galinor decides to follow-up on the old milestone, and heads that way."
+        "text": "\"Anything else I should know about before taking my leave?\""
       },
       "parsed_intent": {
-        "id": "galinor_decides_to_follow_up_on_the_old_",
-        "label": "Galinor decides to follow-up on the old milestone, and heads that way.",
+        "id": "question_tavern_runner",
+        "label": "\"Anything else I should know about before taking my leave?\"",
+        "type": "question",
+        "social_intent_class": "social_exchange",
+        "prompt": "\"Anything else I should know about before taking my leave?\"",
+        "metadata": {
+          "routed_via_dialogue_lock": true,
+          "route": "dialogue",
+          "canonical_entry_path": "social",
+          "canonical_entry_reason": "travel_or_scene_transition_intent",
+          "canonical_entry_target_actor_id": "tavern_runner",
+          "intent_route_debug": {
+            "routed_to": "social_exchange",
+            "route_reason": "dialogue_lane",
+            "addressed_actor_id": "tavern_runner",
+            "addressed_actor_source": "dialogue_target_resolution"
+          },
+          "active_interaction_target_id": "tavern_runner",
+          "segmented_turn": {
+            "spoken_text": "Anything else I should know about before taking my leave?"
+          },
+          "turn_segmentation": {
+            "spoken_text": "Anything else I should know about before taking my leave?"
+          }
+        },
+        "target_id": "tavern_runner",
+        "targetEntityId": "tavern_runner"
+      },
+      "segmented_turn": {
+        "spoken_text": "Anything else I should know about before taking my leave?"
+      },
+      "normalized_action": {
+        "id": "question_tavern_runner",
+        "label": "\"Anything else I should know about before taking my leave?\"",
+        "type": "question",
+        "prompt": "\"Anything else I should know about before taking my leave?\""
+      },
+      "resolution": {
+        "kind": "question",
+        "action_id": "question_tavern_runner",
+        "label": "\"Anything else I should know about before taking my leave?\"",
+        "prompt": "\"Anything else I should know about before taking my leave?\"",
+        "success": null,
+        "resolved_transition": false,
+        "target_scene_id": null,
+        "clue_id": null,
+        "discovered_clues": [],
+        "state_changes": {},
+        "hint": "Player spoke with Tavern Runner. No new information was revealed. Narrate a substantive in-turn response (answer, refusal, evasion, or inability), not dead-air stalling.",
+        "social": {
+          "social_intent_class": "social_exchange",
+          "npc_id": "tavern_runner",
+          "npc_name": "Tavern Runner",
+          "target_resolved": true,
+          "topic_revealed": null,
+          "skill_check": null,
+          "npc_reply_expected": true,
+          "reply_kind": "refusal",
+          "target_source": "explicit_target",
+          "target_reason": "normalized target_id matches scene-addressable roster",
+          "target_candidate_id": "tavern_runner",
+          "target_candidate_valid": true,
+          "stale_interlocutor_cleared": false,
+          "addressability_checked_against": [
+            "active_entities",
+            "entity_presence_active_or_nearby",
+            "scene_addressables",
+            "world_roster_in_scene",
+            "interaction_continuity"
+          ],
+          "declared_switch_detected": false,
+          "declared_switch_target_actor_id": null,
+          "continuity_overridden_by_declared_switch": false,
+          "spoken_vocative_detected": false,
+          "spoken_vocative_target_actor_id": null,
+          "continuity_overridden_by_spoken_vocative": false,
+          "actor_addressable": true,
+          "authority_source_used": "explicit_target",
+          "proposed_reply_speaker_id": "tavern_runner",
+          "grounding_fallback_applied": false,
+          "grounding_reason_code": "authoritative_speaker_topic_pressure_reinforced",
+          "grounded_speaker_id": "tavern_runner",
+          "social_escalation": {
+            "escalation_level": 1,
+            "escalation_reason": "first_attempt_same_topic",
+            "escalation_effect": "vague_or_guarded_answer_allowed",
+            "force_partial_answer": false,
+            "force_actionable_lead": false,
+            "add_suspicion": false,
+            "trigger_scene_momentum": false,
+            "convert_refusal_to_conditioned_offer": false,
+            "topic_exhausted": false,
+            "effective_reply_kind": null,
+            "social_question_dimension": "general",
+            "topic_exhausted_for_dimension": false,
+            "valid_followup_detected": false,
+            "prior_same_dimension_answer_exists": false
+          },
+          "social_question_dimension": "general",
+          "topic_exhausted_for_dimension": false,
+          "valid_followup_detected": false,
+          "prior_same_dimension_answer_exists": false,
+          "strategy_forced_to_answer": false,
+          "suppressed_fallback_strategies": []
+        },
+        "requires_check": false,
+        "metadata": {
+          "routed_via_dialogue_lock": true,
+          "route": "dialogue",
+          "canonical_entry_path": "social",
+          "canonical_entry_reason": "travel_or_scene_transition_intent",
+          "canonical_entry_target_actor_id": "tavern_runner",
+          "intent_route_debug": {
+            "routed_to": "social_exchange",
+            "route_reason": "dialogue_lane",
+            "addressed_actor_id": "tavern_runner",
+            "addressed_actor_source": "dialogue_target_resolution"
+          },
+          "active_interaction_target_id": "tavern_runner",
+          "segmented_turn": {
+            "spoken_text": "Anything else I should know about before taking my leave?"
+          },
+          "turn_segmentation": {
+            "spoken_text": "Anything else I should know about before taking my leave?"
+          },
+          "lead_landing": {
+            "revealed_lead_ids": [],
+            "already_known_lead_ids": [],
+            "actionable_lead_ids": [],
+            "lead_write_targets": [],
+            "extracted_lead_ids": [],
+            "extracted_lead_sources": [],
+            "extracted_from_text": false,
+            "extracted_from_reconciled_text": false,
+            "authoritative_created_ids": [],
+            "authoritative_updated_ids": [],
+            "authoritative_unchanged_ids": [],
+            "authoritative_promoted_ids": []
+          }
+        },
+        "world_tick_events": [
+          {
+            "type": "faction_operation_complete",
+            "text": "House Verevin completes an off-screen operation.",
+            "source": "house_verevin"
+          },
+          {
+            "type": "faction_operation_complete",
+            "text": "The Ash Cowl completes an off-screen operation.",
+            "source": "ash_cowl"
+          },
+          {
+            "type": "faction_operation_complete",
+            "text": "Ordo Pyric completes an off-screen operation.",
+            "source": "ordo_pyric"
+          }
+        ]
+      },
+      "scene_before": "frontier_gate",
+      "scene_after": "frontier_gate",
+      "clue_updates": [],
+      "world_flag_updates": [
+        "clock:time_pressure=5"
+      ],
+      "turn_trace": {
+        "source": "chat",
+        "player_input": "\"Anything else I should know about before taking my leave?\"",
+        "intent": {
+          "parsed": {
+            "id": "question_tavern_runner",
+            "label": "\"Anything else I should know about before taking my leave?\"",
+            "type": "question",
+            "social_intent_class": "social_exchange",
+            "prompt": "\"Anything else I should know about before taking my leave?\"",
+            "metadata": {
+              "routed_via_dialogue_lock": true,
+              "route": "dialogue",
+              "canonical_entry_path": "social",
+              "canonical_entry_reason": "travel_or_scene_transition_intent",
+              "canonical_entry_target_actor_id": "tavern_runner",
+              "intent_route_debug": {
+                "routed_to": "social_exchange",
+                "route_reason": "dialogue_lane",
+                "addressed_actor_id": "tavern_runner",
+                "addressed_actor_source": "dialogue_target_resolution"
+              },
+              "active_interaction_target_id": "tavern_runner",
+              "segmented_turn": {
+                "spoken_text": "Anything else I should know about before taking my leave?"
+              },
+              "turn_segmentation": {
+                "spoken_text": "Anything else I should know about before taking my leave?"
+              }
+            },
+            "target_id": "tavern_runner",
+            "targetEntityId": "tavern_runner"
+          },
+          "segmented_turn": {
+            "spoken_text": "Anything else I should know about before taking my leave?"
+          },
+          "normalized": {
+            "id": "question_tavern_runner",
+            "label": "\"Anything else I should know about before taking my leave?\"",
+            "type": "question",
+            "prompt": "\"Anything else I should know about before taking my leave?\"",
+            "targetSceneId": null,
+            "target_scene_id": null,
+            "targetEntityId": "tavern_runner",
+            "target_id": "tavern_runner"
+          },
+          "implied_context": {
+            "applied": false,
+            "cases": [],
+            "target_id": "tavern_runner"
+          }
+        },
+        "classification": {
+          "action_type": "chat",
+          "resolved_kind": "question",
+          "requires_check": false
+        },
+        "resolution_path": "social_engine",
+        "authoritative_state_changes": {
+          "scene_transition": null,
+          "resolution_state_changes": {},
+          "resolution_world_updates": [],
+          "check_request": null
+        },
+        "interaction_after": {
+          "active_interaction_target_id": "tavern_runner",
+          "active_interaction_kind": "social",
+          "interaction_mode": "social",
+          "engagement_level": "engaged",
+          "conversation_privacy": null,
+          "player_position_context": null
+        },
+        "narration_obligations": {
+          "is_opening_scene": false,
+          "must_advance_scene": false,
+          "should_answer_active_npc": true,
+          "avoid_input_echo": true,
+          "avoid_player_action_restatement": true,
+          "prefer_structured_turn_summary": true,
+          "active_npc_reply_expected": true,
+          "active_npc_reply_kind": "refusal",
+          "scene_momentum_due": false,
+          "scene_momentum_exchanges_since": 0,
+          "scene_momentum_next_due_in": 2,
+          "suppress_non_social_emitters": true
+        },
+        "clues": {
+          "discovered_texts": [],
+          "presentation_changes": [],
+          "known_counts": {
+            "implicit": 0,
+            "explicit": 1,
+            "actionable": 1
+          }
+        },
+        "affordances_after": [
+          {
+            "id": "question_emergent_lord_aldric",
+            "type": "question",
+            "label": "Talk to Lord Aldric",
+            "targetEntityId": "emergent_lord_aldric"
+          },
+          {
+            "id": "examine_the_rain_spatters_soot_dark_stone_frayed",
+            "type": "investigate",
+            "label": "Examine the Rain spatters soot-dark stone; frayed"
+          },
+          {
+            "id": "examine_refugees",
+            "type": "investigate",
+            "label": "Examine Refugees"
+          },
+          {
+            "id": "examine_a_notice_board_lists_new_taxes",
+            "type": "investigate",
+            "label": "Examine A notice board lists new taxes"
+          },
+          {
+            "id": "talk_to_a_tavern_runner_shouts_offers_of_hot",
+            "type": "investigate",
+            "label": "Talk to A tavern runner shouts offers of hot"
+          }
+        ],
+        "emergent_actor": {
+          "emergent_actor_enrolled": true,
+          "emergent_actor_id": "emergent_town_crier",
+          "emergent_actor_source_text": "the town crier"
+        }
+      },
+      "gpt_called": true,
+      "response_ok": true,
+      "error": null,
+      "canonical_entry": {
+        "should_route_social": false,
+        "target_actor_id": null,
+        "target_source": null,
+        "reason": "travel_or_scene_transition_intent",
+        "spoken_text": "Anything else I should know about before taking my leave?",
+        "declared_switch_detected": false,
+        "declared_switch_target_actor_id": null,
+        "continuity_overridden_by_declared_switch": false,
+        "spoken_vocative_detected": false,
+        "spoken_vocative_target_actor_id": null,
+        "continuity_overridden_by_spoken_vocative": false
+      },
+      "canonical_entry_path": "social",
+      "canonical_entry_reason": "travel_or_scene_transition_intent",
+      "canonical_entry_target_actor_id": null
+    },
+    {
+      "timestamp": "2026-04-01T00:00:30.600046Z",
+      "source": "chat",
+      "action_type": "chat",
+      "raw_input": "Galinor follows the lead to Lirael.",
+      "turn_stage_order": [
+        "player_input",
+        "intent_normalization_expansion",
+        "action_classification",
+        "engine_resolution",
+        "authoritative_state_mutation",
+        "prompt_context_construction",
+        "gpt_narration",
+        "affordance_derivation",
+        "response_debug_packaging"
+      ],
+      "incoming_payload": {
+        "text": "Galinor follows the lead to Lirael."
+      },
+      "parsed_intent": {
+        "id": "galinor_follows_the_lead_to_lirael",
+        "label": "Galinor follows the lead to Lirael.",
         "type": "scene_transition",
-        "prompt": "Galinor decides to follow-up on the old milestone, and heads that way.",
+        "prompt": "Galinor follows the lead to Lirael.",
         "targetSceneId": "old_milestone",
         "target_scene_id": "old_milestone"
       },
       "segmented_turn": {
-        "declared_action_text": "Galinor decides to follow-up on the old milestone, and heads that way."
+        "declared_action_text": "Galinor follows the lead to Lirael."
       },
       "normalized_action": {
-        "id": "galinor_decides_to_follow_up_on_the_old_",
-        "label": "Galinor decides to follow-up on the old milestone, and heads that way.",
+        "id": "galinor_follows_the_lead_to_lirael",
+        "label": "Galinor follows the lead to Lirael.",
         "type": "scene_transition",
-        "prompt": "Galinor decides to follow-up on the old milestone, and heads that way.",
+        "prompt": "Galinor follows the lead to Lirael.",
         "targetSceneId": "old_milestone"
       },
       "resolution": {
         "kind": "scene_transition",
-        "action_id": "galinor_decides_to_follow_up_on_the_old_",
-        "label": "Galinor decides to follow-up on the old milestone, and heads that way.",
-        "prompt": "Galinor decides to follow-up on the old milestone, and heads that way.",
+        "action_id": "galinor_follows_the_lead_to_lirael",
+        "label": "Galinor follows the lead to Lirael.",
+        "prompt": "Galinor follows the lead to Lirael.",
         "success": true,
         "resolved_transition": true,
         "target_scene_id": "old_milestone",
@@ -2431,7 +1925,7 @@
         "hint": "Player has moved to scene old_milestone. Narrate arrival and what they see there.",
         "metadata": {
           "turn_segmentation": {
-            "declared_action_text": "Galinor decides to follow-up on the old milestone, and heads that way."
+            "declared_action_text": "Galinor follows the lead to Lirael."
           }
         },
         "originating_scene_id": "frontier_gate",
@@ -2441,28 +1935,28 @@
       "scene_after": "old_milestone",
       "clue_updates": [],
       "world_flag_updates": [
-        "clock:time_pressure=7"
+        "clock:time_pressure=6"
       ],
       "turn_trace": {
         "source": "chat",
-        "player_input": "Galinor decides to follow-up on the old milestone, and heads that way.",
+        "player_input": "Galinor follows the lead to Lirael.",
         "intent": {
           "parsed": {
-            "id": "galinor_decides_to_follow_up_on_the_old_",
-            "label": "Galinor decides to follow-up on the old milestone, and heads that way.",
+            "id": "galinor_follows_the_lead_to_lirael",
+            "label": "Galinor follows the lead to Lirael.",
             "type": "scene_transition",
-            "prompt": "Galinor decides to follow-up on the old milestone, and heads that way.",
+            "prompt": "Galinor follows the lead to Lirael.",
             "targetSceneId": "old_milestone",
             "target_scene_id": "old_milestone"
           },
           "segmented_turn": {
-            "declared_action_text": "Galinor decides to follow-up on the old milestone, and heads that way."
+            "declared_action_text": "Galinor follows the lead to Lirael."
           },
           "normalized": {
-            "id": "galinor_decides_to_follow_up_on_the_old_",
-            "label": "Galinor decides to follow-up on the old milestone, and heads that way.",
+            "id": "galinor_follows_the_lead_to_lirael",
+            "label": "Galinor follows the lead to Lirael.",
             "type": "scene_transition",
-            "prompt": "Galinor decides to follow-up on the old milestone, and heads that way.",
+            "prompt": "Galinor follows the lead to Lirael.",
             "targetSceneId": "old_milestone",
             "target_scene_id": null,
             "targetEntityId": null,
@@ -2579,10 +2073,10 @@
       "canonical_entry_target_actor_id": null
     },
     {
-      "timestamp": "2026-03-31T22:54:41.431629Z",
+      "timestamp": "2026-04-01T00:02:15.466835Z",
       "source": "chat",
       "action_type": "chat",
-      "raw_input": "Galinor decides to follow-up on the old milestone, and heads that way.",
+      "raw_input": "Galinor follows the lead to old milestone.",
       "turn_stage_order": [
         "player_input",
         "intent_normalization_expansion",
@@ -2595,13 +2089,13 @@
         "response_debug_packaging"
       ],
       "incoming_payload": {
-        "text": "Galinor decides to follow-up on the old milestone, and heads that way."
+        "text": "Galinor follows the lead to old milestone."
       },
       "parsed_intent": {
-        "id": "galinor_decides_to_follow_up_on_the_old_",
-        "label": "Galinor decides to follow-up on the old milestone, and heads that way.",
+        "id": "galinor_follows_the_lead_to_old_mileston",
+        "label": "Galinor follows the lead to old milestone.",
         "type": "interact",
-        "prompt": "Galinor decides to follow-up on the old milestone, and heads that way.",
+        "prompt": "Galinor follows the lead to old milestone.",
         "targetSceneId": null,
         "target_scene_id": null,
         "metadata": {
@@ -2609,20 +2103,20 @@
         }
       },
       "segmented_turn": {
-        "declared_action_text": "Galinor decides to follow-up on the old milestone, and heads that way."
+        "declared_action_text": "Galinor follows the lead to old milestone."
       },
       "normalized_action": {
-        "id": "galinor_decides_to_follow_up_on_the_old_",
-        "label": "Galinor decides to follow-up on the old milestone, and heads that way.",
+        "id": "galinor_follows_the_lead_to_old_mileston",
+        "label": "Galinor follows the lead to old milestone.",
         "type": "interact",
-        "prompt": "Galinor decides to follow-up on the old milestone, and heads that way.",
+        "prompt": "Galinor follows the lead to old milestone.",
         "targetSceneId": null
       },
       "resolution": {
         "kind": "interact",
-        "action_id": "galinor_decides_to_follow_up_on_the_old_",
-        "label": "Galinor decides to follow-up on the old milestone, and heads that way.",
-        "prompt": "Galinor decides to follow-up on the old milestone, and heads that way.",
+        "action_id": "galinor_follows_the_lead_to_old_mileston",
+        "label": "Galinor follows the lead to old milestone.",
+        "prompt": "Galinor follows the lead to old milestone.",
         "success": null,
         "resolved_transition": false,
         "target_scene_id": null,
@@ -2632,7 +2126,7 @@
         "hint": "Player is attempting social interaction or probing NPCs. Narrate the encounter or response.",
         "metadata": {
           "turn_segmentation": {
-            "declared_action_text": "Galinor decides to follow-up on the old milestone, and heads that way."
+            "declared_action_text": "Galinor follows the lead to old milestone."
           }
         },
         "world_tick_events": []
@@ -2641,17 +2135,17 @@
       "scene_after": "old_milestone",
       "clue_updates": [],
       "world_flag_updates": [
-        "clock:time_pressure=7"
+        "clock:time_pressure=6"
       ],
       "turn_trace": {
         "source": "chat",
-        "player_input": "Galinor decides to follow-up on the old milestone, and heads that way.",
+        "player_input": "Galinor follows the lead to old milestone.",
         "intent": {
           "parsed": {
-            "id": "galinor_decides_to_follow_up_on_the_old_",
-            "label": "Galinor decides to follow-up on the old milestone, and heads that way.",
+            "id": "galinor_follows_the_lead_to_old_mileston",
+            "label": "Galinor follows the lead to old milestone.",
             "type": "interact",
-            "prompt": "Galinor decides to follow-up on the old milestone, and heads that way.",
+            "prompt": "Galinor follows the lead to old milestone.",
             "targetSceneId": null,
             "target_scene_id": null,
             "metadata": {
@@ -2659,13 +2153,13 @@
             }
           },
           "segmented_turn": {
-            "declared_action_text": "Galinor decides to follow-up on the old milestone, and heads that way."
+            "declared_action_text": "Galinor follows the lead to old milestone."
           },
           "normalized": {
-            "id": "galinor_decides_to_follow_up_on_the_old_",
-            "label": "Galinor decides to follow-up on the old milestone, and heads that way.",
+            "id": "galinor_follows_the_lead_to_old_mileston",
+            "label": "Galinor follows the lead to old milestone.",
             "type": "interact",
-            "prompt": "Galinor decides to follow-up on the old milestone, and heads that way.",
+            "prompt": "Galinor follows the lead to old milestone.",
             "targetSceneId": null,
             "target_scene_id": null,
             "targetEntityId": null,
@@ -2772,1671 +2266,13 @@
       "canonical_entry_path": "undecided",
       "canonical_entry_reason": "no_addressable_target",
       "canonical_entry_target_actor_id": null
-    },
-    {
-      "timestamp": "2026-03-31T22:55:44.851442Z",
-      "source": "chat",
-      "action_type": "chat",
-      "raw_input": "Galinor investigates the area carefully.",
-      "turn_stage_order": [
-        "player_input",
-        "intent_normalization_expansion",
-        "action_classification",
-        "engine_resolution",
-        "authoritative_state_mutation",
-        "prompt_context_construction",
-        "gpt_narration",
-        "affordance_derivation",
-        "response_debug_packaging"
-      ],
-      "incoming_payload": {
-        "text": "Galinor investigates the area carefully."
-      },
-      "parsed_intent": {
-        "id": "galinor_investigates_the_area_carefully",
-        "label": "Galinor investigates the area carefully.",
-        "type": "investigate",
-        "prompt": "Galinor investigates the area carefully.",
-        "targetSceneId": null,
-        "target_scene_id": null
-      },
-      "segmented_turn": {
-        "declared_action_text": "Galinor investigates the area carefully."
-      },
-      "normalized_action": {
-        "id": "galinor_investigates_the_area_carefully",
-        "label": "Galinor investigates the area carefully.",
-        "type": "investigate",
-        "prompt": "Galinor investigates the area carefully.",
-        "targetSceneId": null
-      },
-      "resolution": {
-        "kind": "investigate",
-        "action_id": "galinor_investigates_the_area_carefully",
-        "label": "Galinor investigates the area carefully.",
-        "prompt": "Galinor investigates the area carefully.",
-        "success": null,
-        "resolved_transition": false,
-        "target_scene_id": null,
-        "clue_id": null,
-        "discovered_clues": [],
-        "state_changes": {},
-        "hint": "Player is investigating or seeking clues. Narrate what deeper scrutiny reveals; advance discovery if appropriate.",
-        "metadata": {
-          "turn_segmentation": {
-            "declared_action_text": "Galinor investigates the area carefully."
-          }
-        },
-        "world_tick_events": []
-      },
-      "scene_before": "old_milestone",
-      "scene_after": "old_milestone",
-      "clue_updates": [
-        "The letter hints at treachery and warnings, but the details are hard to read."
-      ],
-      "world_flag_updates": [
-        "clock:time_pressure=8"
-      ],
-      "turn_trace": {
-        "source": "chat",
-        "player_input": "Galinor investigates the area carefully.",
-        "intent": {
-          "parsed": {
-            "id": "galinor_investigates_the_area_carefully",
-            "label": "Galinor investigates the area carefully.",
-            "type": "investigate",
-            "prompt": "Galinor investigates the area carefully.",
-            "targetSceneId": null,
-            "target_scene_id": null
-          },
-          "segmented_turn": {
-            "declared_action_text": "Galinor investigates the area carefully."
-          },
-          "normalized": {
-            "id": "galinor_investigates_the_area_carefully",
-            "label": "Galinor investigates the area carefully.",
-            "type": "investigate",
-            "prompt": "Galinor investigates the area carefully.",
-            "targetSceneId": null,
-            "target_scene_id": null,
-            "targetEntityId": null,
-            "target_id": null
-          },
-          "implied_context": {
-            "applied": false,
-            "cases": [],
-            "target_id": null
-          }
-        },
-        "classification": {
-          "action_type": "chat",
-          "resolved_kind": "investigate",
-          "requires_check": false
-        },
-        "resolution_path": "exploration_engine",
-        "authoritative_state_changes": {
-          "scene_transition": null,
-          "resolution_state_changes": {},
-          "resolution_world_updates": [],
-          "check_request": null
-        },
-        "interaction_after": {
-          "active_interaction_target_id": null,
-          "active_interaction_kind": "investigate",
-          "interaction_mode": "activity",
-          "engagement_level": "focused",
-          "conversation_privacy": null,
-          "player_position_context": null
-        },
-        "narration_obligations": {
-          "is_opening_scene": false,
-          "must_advance_scene": false,
-          "should_answer_active_npc": false,
-          "avoid_input_echo": true,
-          "avoid_player_action_restatement": true,
-          "prefer_structured_turn_summary": true,
-          "active_npc_reply_expected": false,
-          "active_npc_reply_kind": null,
-          "scene_momentum_due": false,
-          "scene_momentum_exchanges_since": 0,
-          "scene_momentum_next_due_in": 2,
-          "suppress_non_social_emitters": false
-        },
-        "clues": {
-          "discovered_texts": [
-            "The letter hints at treachery and warnings, but the details are hard to read."
-          ],
-          "presentation_changes": [
-            {
-              "id": "the_letter_hints_at_treachery_and_warnings_but_the_details_are_hard_to_read",
-              "from": null,
-              "to": "explicit"
-            }
-          ],
-          "known_counts": {
-            "implicit": 0,
-            "explicit": 2,
-            "actionable": 1
-          }
-        },
-        "affordances_after": [
-          {
-            "id": "examine_a_dead_courier_lies_half_hidden_in_th",
-            "type": "investigate",
-            "label": "Examine A dead courier lies half-hidden in th"
-          },
-          {
-            "id": "examine_the_fresh_bootprints_and_claw_marks_cross",
-            "type": "investigate",
-            "label": "Examine the Fresh bootprints and claw marks cross"
-          },
-          {
-            "id": "examine_the_dead_courier_has_belongings_that",
-            "type": "investigate",
-            "label": "Examine The dead courier has belongings that"
-          },
-          {
-            "id": "examine_the_dead_couriers_satchel_is_slightl",
-            "type": "investigate",
-            "label": "Examine The dead courier's satchel is slightl"
-          },
-          {
-            "id": "examine_the_scavenger_bandit_positions_himsel",
-            "type": "investigate",
-            "label": "Examine The scavenger bandit positions himsel"
-          }
-        ],
-        "emergent_actor": {
-          "emergent_actor_enrolled": false,
-          "emergent_actor_id": null,
-          "emergent_actor_source_text": null
-        }
-      },
-      "gpt_called": true,
-      "response_ok": true,
-      "error": null,
-      "canonical_entry": {
-        "should_route_social": false,
-        "target_actor_id": null,
-        "target_source": null,
-        "reason": "no_addressable_target",
-        "spoken_text": null,
-        "declared_switch_detected": false,
-        "declared_switch_target_actor_id": null,
-        "continuity_overridden_by_declared_switch": false,
-        "spoken_vocative_detected": false,
-        "spoken_vocative_target_actor_id": null,
-        "continuity_overridden_by_spoken_vocative": false
-      },
-      "canonical_entry_path": "undecided",
-      "canonical_entry_reason": "no_addressable_target",
-      "canonical_entry_target_actor_id": null
-    },
-    {
-      "timestamp": "2026-03-31T23:01:19.608688Z",
-      "source": "chat",
-      "action_type": "chat",
-      "raw_input": "Galinor follows the lead.",
-      "turn_stage_order": [
-        "player_input",
-        "intent_normalization_expansion",
-        "action_classification",
-        "engine_resolution",
-        "authoritative_state_mutation",
-        "prompt_context_construction",
-        "gpt_narration",
-        "affordance_derivation",
-        "response_debug_packaging"
-      ],
-      "incoming_payload": {
-        "text": "Galinor follows the lead."
-      },
-      "parsed_intent": {
-        "id": "galinor_follows_the_lead",
-        "label": "Galinor follows the lead.",
-        "type": "interact",
-        "prompt": "Galinor follows the lead.",
-        "targetSceneId": null,
-        "target_scene_id": null,
-        "metadata": {
-          "intent": "follow_target"
-        }
-      },
-      "segmented_turn": {
-        "declared_action_text": "Galinor follows the lead."
-      },
-      "normalized_action": {
-        "id": "galinor_follows_the_lead",
-        "label": "Galinor follows the lead.",
-        "type": "interact",
-        "prompt": "Galinor follows the lead.",
-        "targetSceneId": null
-      },
-      "resolution": {
-        "kind": "interact",
-        "action_id": "galinor_follows_the_lead",
-        "label": "Galinor follows the lead.",
-        "prompt": "Galinor follows the lead.",
-        "success": null,
-        "resolved_transition": false,
-        "target_scene_id": null,
-        "clue_id": null,
-        "discovered_clues": [],
-        "state_changes": {},
-        "hint": "Player is attempting social interaction or probing NPCs. Narrate the encounter or response.",
-        "metadata": {
-          "turn_segmentation": {
-            "declared_action_text": "Galinor follows the lead."
-          }
-        },
-        "world_tick_events": []
-      },
-      "scene_before": "old_milestone",
-      "scene_after": "old_milestone",
-      "clue_updates": [],
-      "world_flag_updates": [
-        "clock:time_pressure=9"
-      ],
-      "turn_trace": {
-        "source": "chat",
-        "player_input": "Galinor follows the lead.",
-        "intent": {
-          "parsed": {
-            "id": "galinor_follows_the_lead",
-            "label": "Galinor follows the lead.",
-            "type": "interact",
-            "prompt": "Galinor follows the lead.",
-            "targetSceneId": null,
-            "target_scene_id": null,
-            "metadata": {
-              "intent": "follow_target"
-            }
-          },
-          "segmented_turn": {
-            "declared_action_text": "Galinor follows the lead."
-          },
-          "normalized": {
-            "id": "galinor_follows_the_lead",
-            "label": "Galinor follows the lead.",
-            "type": "interact",
-            "prompt": "Galinor follows the lead.",
-            "targetSceneId": null,
-            "target_scene_id": null,
-            "targetEntityId": null,
-            "target_id": null
-          },
-          "implied_context": {
-            "applied": false,
-            "cases": [],
-            "target_id": null
-          }
-        },
-        "classification": {
-          "action_type": "chat",
-          "resolved_kind": "interact",
-          "requires_check": false
-        },
-        "resolution_path": "exploration_engine",
-        "authoritative_state_changes": {
-          "scene_transition": null,
-          "resolution_state_changes": {},
-          "resolution_world_updates": [],
-          "check_request": null
-        },
-        "interaction_after": {
-          "active_interaction_target_id": null,
-          "active_interaction_kind": "interact",
-          "interaction_mode": "activity",
-          "engagement_level": "focused",
-          "conversation_privacy": null,
-          "player_position_context": null
-        },
-        "narration_obligations": {
-          "is_opening_scene": false,
-          "must_advance_scene": false,
-          "should_answer_active_npc": false,
-          "avoid_input_echo": true,
-          "avoid_player_action_restatement": true,
-          "prefer_structured_turn_summary": true,
-          "active_npc_reply_expected": false,
-          "active_npc_reply_kind": null,
-          "scene_momentum_due": false,
-          "scene_momentum_exchanges_since": 0,
-          "scene_momentum_next_due_in": 2,
-          "suppress_non_social_emitters": false
-        },
-        "clues": {
-          "discovered_texts": [],
-          "presentation_changes": [],
-          "known_counts": {
-            "implicit": 0,
-            "explicit": 2,
-            "actionable": 1
-          }
-        },
-        "affordances_after": [
-          {
-            "id": "examine_a_dead_courier_lies_half_hidden_in_th",
-            "type": "investigate",
-            "label": "Examine A dead courier lies half-hidden in th"
-          },
-          {
-            "id": "examine_the_fresh_bootprints_and_claw_marks_cross",
-            "type": "investigate",
-            "label": "Examine the Fresh bootprints and claw marks cross"
-          },
-          {
-            "id": "examine_the_dead_courier_has_belongings_that",
-            "type": "investigate",
-            "label": "Examine The dead courier has belongings that"
-          },
-          {
-            "id": "examine_the_dead_couriers_satchel_is_slightl",
-            "type": "investigate",
-            "label": "Examine The dead courier's satchel is slightl"
-          },
-          {
-            "id": "examine_the_scavenger_bandit_positions_himsel",
-            "type": "investigate",
-            "label": "Examine The scavenger bandit positions himsel"
-          }
-        ],
-        "emergent_actor": {
-          "emergent_actor_enrolled": false,
-          "emergent_actor_id": null,
-          "emergent_actor_source_text": null
-        }
-      },
-      "gpt_called": true,
-      "response_ok": true,
-      "error": null,
-      "canonical_entry": {
-        "should_route_social": false,
-        "target_actor_id": null,
-        "target_source": null,
-        "reason": "no_addressable_target",
-        "spoken_text": null,
-        "declared_switch_detected": false,
-        "declared_switch_target_actor_id": null,
-        "continuity_overridden_by_declared_switch": false,
-        "spoken_vocative_detected": false,
-        "spoken_vocative_target_actor_id": null,
-        "continuity_overridden_by_spoken_vocative": false
-      },
-      "canonical_entry_path": "undecided",
-      "canonical_entry_reason": "no_addressable_target",
-      "canonical_entry_target_actor_id": null
-    },
-    {
-      "timestamp": "2026-03-31T23:02:20.633557Z",
-      "source": "chat",
-      "action_type": "chat",
-      "raw_input": "Galinor follows the lead to the old place.",
-      "turn_stage_order": [
-        "player_input",
-        "intent_normalization_expansion",
-        "action_classification",
-        "engine_resolution",
-        "authoritative_state_mutation",
-        "prompt_context_construction",
-        "gpt_narration",
-        "affordance_derivation",
-        "response_debug_packaging"
-      ],
-      "incoming_payload": {
-        "text": "Galinor follows the lead to the old place."
-      },
-      "parsed_intent": {
-        "id": "galinor_follows_the_lead_to_the_old_plac",
-        "label": "Galinor follows the lead to the old place.",
-        "type": "interact",
-        "prompt": "Galinor follows the lead to the old place.",
-        "targetSceneId": null,
-        "target_scene_id": null,
-        "metadata": {
-          "intent": "follow_target"
-        }
-      },
-      "segmented_turn": {
-        "declared_action_text": "Galinor follows the lead to the old place."
-      },
-      "normalized_action": {
-        "id": "galinor_follows_the_lead_to_the_old_plac",
-        "label": "Galinor follows the lead to the old place.",
-        "type": "interact",
-        "prompt": "Galinor follows the lead to the old place.",
-        "targetSceneId": null
-      },
-      "resolution": {
-        "kind": "interact",
-        "action_id": "galinor_follows_the_lead_to_the_old_plac",
-        "label": "Galinor follows the lead to the old place.",
-        "prompt": "Galinor follows the lead to the old place.",
-        "success": null,
-        "resolved_transition": false,
-        "target_scene_id": null,
-        "clue_id": null,
-        "discovered_clues": [],
-        "state_changes": {},
-        "hint": "Player is attempting social interaction or probing NPCs. Narrate the encounter or response.",
-        "metadata": {
-          "turn_segmentation": {
-            "declared_action_text": "Galinor follows the lead to the old place."
-          }
-        },
-        "world_tick_events": []
-      },
-      "scene_before": "old_milestone",
-      "scene_after": "old_milestone",
-      "clue_updates": [],
-      "world_flag_updates": [
-        "clock:time_pressure=10"
-      ],
-      "turn_trace": {
-        "source": "chat",
-        "player_input": "Galinor follows the lead to the old place.",
-        "intent": {
-          "parsed": {
-            "id": "galinor_follows_the_lead_to_the_old_plac",
-            "label": "Galinor follows the lead to the old place.",
-            "type": "interact",
-            "prompt": "Galinor follows the lead to the old place.",
-            "targetSceneId": null,
-            "target_scene_id": null,
-            "metadata": {
-              "intent": "follow_target"
-            }
-          },
-          "segmented_turn": {
-            "declared_action_text": "Galinor follows the lead to the old place."
-          },
-          "normalized": {
-            "id": "galinor_follows_the_lead_to_the_old_plac",
-            "label": "Galinor follows the lead to the old place.",
-            "type": "interact",
-            "prompt": "Galinor follows the lead to the old place.",
-            "targetSceneId": null,
-            "target_scene_id": null,
-            "targetEntityId": null,
-            "target_id": null
-          },
-          "implied_context": {
-            "applied": false,
-            "cases": [],
-            "target_id": null
-          }
-        },
-        "classification": {
-          "action_type": "chat",
-          "resolved_kind": "interact",
-          "requires_check": false
-        },
-        "resolution_path": "exploration_engine",
-        "authoritative_state_changes": {
-          "scene_transition": null,
-          "resolution_state_changes": {},
-          "resolution_world_updates": [],
-          "check_request": null
-        },
-        "interaction_after": {
-          "active_interaction_target_id": null,
-          "active_interaction_kind": "interact",
-          "interaction_mode": "activity",
-          "engagement_level": "focused",
-          "conversation_privacy": null,
-          "player_position_context": null
-        },
-        "narration_obligations": {
-          "is_opening_scene": false,
-          "must_advance_scene": false,
-          "should_answer_active_npc": false,
-          "avoid_input_echo": true,
-          "avoid_player_action_restatement": true,
-          "prefer_structured_turn_summary": true,
-          "active_npc_reply_expected": false,
-          "active_npc_reply_kind": null,
-          "scene_momentum_due": false,
-          "scene_momentum_exchanges_since": 0,
-          "scene_momentum_next_due_in": 2,
-          "suppress_non_social_emitters": false
-        },
-        "clues": {
-          "discovered_texts": [],
-          "presentation_changes": [],
-          "known_counts": {
-            "implicit": 0,
-            "explicit": 2,
-            "actionable": 1
-          }
-        },
-        "affordances_after": [
-          {
-            "id": "examine_a_dead_courier_lies_half_hidden_in_th",
-            "type": "investigate",
-            "label": "Examine A dead courier lies half-hidden in th"
-          },
-          {
-            "id": "examine_the_fresh_bootprints_and_claw_marks_cross",
-            "type": "investigate",
-            "label": "Examine the Fresh bootprints and claw marks cross"
-          },
-          {
-            "id": "examine_the_dead_courier_has_belongings_that",
-            "type": "investigate",
-            "label": "Examine The dead courier has belongings that"
-          },
-          {
-            "id": "examine_the_dead_couriers_satchel_is_slightl",
-            "type": "investigate",
-            "label": "Examine The dead courier's satchel is slightl"
-          },
-          {
-            "id": "examine_the_scavenger_bandit_positions_himsel",
-            "type": "investigate",
-            "label": "Examine The scavenger bandit positions himsel"
-          }
-        ],
-        "emergent_actor": {
-          "emergent_actor_enrolled": false,
-          "emergent_actor_id": null,
-          "emergent_actor_source_text": null
-        }
-      },
-      "gpt_called": true,
-      "response_ok": true,
-      "error": null,
-      "canonical_entry": {
-        "should_route_social": false,
-        "target_actor_id": null,
-        "target_source": null,
-        "reason": "no_addressable_target",
-        "spoken_text": null,
-        "declared_switch_detected": false,
-        "declared_switch_target_actor_id": null,
-        "continuity_overridden_by_declared_switch": false,
-        "spoken_vocative_detected": false,
-        "spoken_vocative_target_actor_id": null,
-        "continuity_overridden_by_spoken_vocative": false
-      },
-      "canonical_entry_path": "undecided",
-      "canonical_entry_reason": "no_addressable_target",
-      "canonical_entry_target_actor_id": null
-    },
-    {
-      "timestamp": "2026-03-31T23:05:53.504312Z",
-      "source": "chat",
-      "action_type": "chat",
-      "raw_input": "Galinor follows the lead to Lirael.",
-      "turn_stage_order": [
-        "player_input",
-        "intent_normalization_expansion",
-        "action_classification",
-        "engine_resolution",
-        "authoritative_state_mutation",
-        "prompt_context_construction",
-        "gpt_narration",
-        "affordance_derivation",
-        "response_debug_packaging"
-      ],
-      "incoming_payload": {
-        "text": "Galinor follows the lead to Lirael."
-      },
-      "parsed_intent": {
-        "id": "galinor_follows_the_lead_to_lirael",
-        "label": "Galinor follows the lead to Lirael.",
-        "type": "interact",
-        "prompt": "Galinor follows the lead to Lirael.",
-        "targetSceneId": null,
-        "target_scene_id": null,
-        "metadata": {
-          "intent": "follow_target"
-        }
-      },
-      "segmented_turn": {
-        "declared_action_text": "Galinor follows the lead to Lirael."
-      },
-      "normalized_action": {
-        "id": "galinor_follows_the_lead_to_lirael",
-        "label": "Galinor follows the lead to Lirael.",
-        "type": "interact",
-        "prompt": "Galinor follows the lead to Lirael.",
-        "targetSceneId": null
-      },
-      "resolution": {
-        "kind": "interact",
-        "action_id": "galinor_follows_the_lead_to_lirael",
-        "label": "Galinor follows the lead to Lirael.",
-        "prompt": "Galinor follows the lead to Lirael.",
-        "success": null,
-        "resolved_transition": false,
-        "target_scene_id": null,
-        "clue_id": null,
-        "discovered_clues": [],
-        "state_changes": {},
-        "hint": "Player is attempting social interaction or probing NPCs. Narrate the encounter or response.",
-        "metadata": {
-          "turn_segmentation": {
-            "declared_action_text": "Galinor follows the lead to Lirael."
-          }
-        },
-        "world_tick_events": []
-      },
-      "scene_before": "old_milestone",
-      "scene_after": "old_milestone",
-      "clue_updates": [],
-      "world_flag_updates": [],
-      "turn_trace": {
-        "source": "chat",
-        "player_input": "Galinor follows the lead to Lirael.",
-        "intent": {
-          "parsed": {
-            "id": "galinor_follows_the_lead_to_lirael",
-            "label": "Galinor follows the lead to Lirael.",
-            "type": "interact",
-            "prompt": "Galinor follows the lead to Lirael.",
-            "targetSceneId": null,
-            "target_scene_id": null,
-            "metadata": {
-              "intent": "follow_target"
-            }
-          },
-          "segmented_turn": {
-            "declared_action_text": "Galinor follows the lead to Lirael."
-          },
-          "normalized": {
-            "id": "galinor_follows_the_lead_to_lirael",
-            "label": "Galinor follows the lead to Lirael.",
-            "type": "interact",
-            "prompt": "Galinor follows the lead to Lirael.",
-            "targetSceneId": null,
-            "target_scene_id": null,
-            "targetEntityId": null,
-            "target_id": null
-          },
-          "implied_context": {
-            "applied": false,
-            "cases": [],
-            "target_id": null
-          }
-        },
-        "classification": {
-          "action_type": "chat",
-          "resolved_kind": "interact",
-          "requires_check": false
-        },
-        "resolution_path": "exploration_engine",
-        "authoritative_state_changes": {
-          "scene_transition": null,
-          "resolution_state_changes": {},
-          "resolution_world_updates": [],
-          "check_request": null
-        },
-        "interaction_after": {
-          "active_interaction_target_id": null,
-          "active_interaction_kind": "interact",
-          "interaction_mode": "activity",
-          "engagement_level": "focused",
-          "conversation_privacy": null,
-          "player_position_context": null
-        },
-        "narration_obligations": {
-          "is_opening_scene": false,
-          "must_advance_scene": false,
-          "should_answer_active_npc": false,
-          "avoid_input_echo": true,
-          "avoid_player_action_restatement": true,
-          "prefer_structured_turn_summary": true,
-          "active_npc_reply_expected": false,
-          "active_npc_reply_kind": null,
-          "scene_momentum_due": false,
-          "scene_momentum_exchanges_since": 0,
-          "scene_momentum_next_due_in": 2,
-          "suppress_non_social_emitters": false
-        },
-        "clues": {
-          "discovered_texts": [],
-          "presentation_changes": [],
-          "known_counts": {
-            "implicit": 0,
-            "explicit": 2,
-            "actionable": 1
-          }
-        },
-        "affordances_after": [
-          {
-            "id": "examine_a_dead_courier_lies_half_hidden_in_th",
-            "type": "investigate",
-            "label": "Examine A dead courier lies half-hidden in th"
-          },
-          {
-            "id": "examine_the_fresh_bootprints_and_claw_marks_cross",
-            "type": "investigate",
-            "label": "Examine the Fresh bootprints and claw marks cross"
-          },
-          {
-            "id": "examine_the_dead_courier_has_belongings_that",
-            "type": "investigate",
-            "label": "Examine The dead courier has belongings that"
-          },
-          {
-            "id": "examine_the_dead_couriers_satchel_is_slightl",
-            "type": "investigate",
-            "label": "Examine The dead courier's satchel is slightl"
-          },
-          {
-            "id": "examine_the_scavenger_bandit_positions_himsel",
-            "type": "investigate",
-            "label": "Examine The scavenger bandit positions himsel"
-          }
-        ],
-        "emergent_actor": {
-          "emergent_actor_enrolled": false,
-          "emergent_actor_id": null,
-          "emergent_actor_source_text": null
-        }
-      },
-      "gpt_called": true,
-      "response_ok": true,
-      "error": null,
-      "canonical_entry": {
-        "should_route_social": false,
-        "target_actor_id": null,
-        "target_source": null,
-        "reason": "no_addressable_target",
-        "spoken_text": null,
-        "declared_switch_detected": false,
-        "declared_switch_target_actor_id": null,
-        "continuity_overridden_by_declared_switch": false,
-        "spoken_vocative_detected": false,
-        "spoken_vocative_target_actor_id": null,
-        "continuity_overridden_by_spoken_vocative": false
-      },
-      "canonical_entry_path": "undecided",
-      "canonical_entry_reason": "no_addressable_target",
-      "canonical_entry_target_actor_id": null
-    },
-    {
-      "timestamp": "2026-03-31T23:06:06.968134Z",
-      "source": "chat",
-      "action_type": "chat",
-      "raw_input": "Galinor pursues the Lirael lead.",
-      "turn_stage_order": [
-        "player_input",
-        "intent_normalization_expansion",
-        "action_classification",
-        "engine_resolution",
-        "authoritative_state_mutation",
-        "prompt_context_construction",
-        "gpt_narration",
-        "affordance_derivation",
-        "response_debug_packaging"
-      ],
-      "incoming_payload": {
-        "text": "Galinor pursues the Lirael lead."
-      },
-      "parsed_intent": null,
-      "segmented_turn": {
-        "declared_action_text": "Galinor pursues the Lirael lead."
-      },
-      "normalized_action": null,
-      "resolution": {
-        "world_tick_events": []
-      },
-      "scene_before": "old_milestone",
-      "scene_after": "old_milestone",
-      "clue_updates": [],
-      "world_flag_updates": [],
-      "turn_trace": {
-        "source": "chat",
-        "player_input": "Galinor pursues the Lirael lead.",
-        "intent": {
-          "parsed": null,
-          "segmented_turn": {
-            "declared_action_text": "Galinor pursues the Lirael lead."
-          },
-          "normalized": null,
-          "implied_context": {
-            "applied": false,
-            "cases": [],
-            "target_id": null
-          }
-        },
-        "classification": {
-          "action_type": "chat",
-          "resolved_kind": null,
-          "requires_check": false
-        },
-        "resolution_path": "chat_engine",
-        "authoritative_state_changes": {
-          "scene_transition": null,
-          "resolution_state_changes": {},
-          "resolution_world_updates": [],
-          "check_request": null
-        },
-        "interaction_after": {
-          "active_interaction_target_id": null,
-          "active_interaction_kind": "interact",
-          "interaction_mode": "activity",
-          "engagement_level": "focused",
-          "conversation_privacy": null,
-          "player_position_context": null
-        },
-        "narration_obligations": {
-          "is_opening_scene": false,
-          "must_advance_scene": false,
-          "should_answer_active_npc": false,
-          "avoid_input_echo": true,
-          "avoid_player_action_restatement": true,
-          "prefer_structured_turn_summary": true,
-          "active_npc_reply_expected": false,
-          "active_npc_reply_kind": null,
-          "scene_momentum_due": false,
-          "scene_momentum_exchanges_since": 0,
-          "scene_momentum_next_due_in": 2,
-          "suppress_non_social_emitters": false
-        },
-        "clues": {
-          "discovered_texts": [],
-          "presentation_changes": [],
-          "known_counts": {
-            "implicit": 0,
-            "explicit": 2,
-            "actionable": 1
-          }
-        },
-        "affordances_after": [
-          {
-            "id": "examine_a_dead_courier_lies_half_hidden_in_th",
-            "type": "investigate",
-            "label": "Examine A dead courier lies half-hidden in th"
-          },
-          {
-            "id": "examine_the_fresh_bootprints_and_claw_marks_cross",
-            "type": "investigate",
-            "label": "Examine the Fresh bootprints and claw marks cross"
-          },
-          {
-            "id": "examine_the_dead_courier_has_belongings_that",
-            "type": "investigate",
-            "label": "Examine The dead courier has belongings that"
-          },
-          {
-            "id": "examine_the_dead_couriers_satchel_is_slightl",
-            "type": "investigate",
-            "label": "Examine The dead courier's satchel is slightl"
-          },
-          {
-            "id": "examine_the_scavenger_bandit_positions_himsel",
-            "type": "investigate",
-            "label": "Examine The scavenger bandit positions himsel"
-          }
-        ],
-        "emergent_actor": {
-          "emergent_actor_enrolled": false,
-          "emergent_actor_id": null,
-          "emergent_actor_source_text": null
-        }
-      },
-      "gpt_called": true,
-      "response_ok": true,
-      "error": null,
-      "canonical_entry": {
-        "should_route_social": false,
-        "target_actor_id": null,
-        "target_source": null,
-        "reason": "no_addressable_target",
-        "spoken_text": null,
-        "declared_switch_detected": false,
-        "declared_switch_target_actor_id": null,
-        "continuity_overridden_by_declared_switch": false,
-        "spoken_vocative_detected": false,
-        "spoken_vocative_target_actor_id": null,
-        "continuity_overridden_by_spoken_vocative": false
-      },
-      "canonical_entry_path": "procedural",
-      "canonical_entry_reason": "no_addressable_target",
-      "canonical_entry_target_actor_id": null
-    },
-    {
-      "timestamp": "2026-03-31T23:06:19.899316Z",
-      "source": "chat",
-      "action_type": "chat",
-      "raw_input": "Galinor follows the lead to the old milestone.",
-      "turn_stage_order": [
-        "player_input",
-        "intent_normalization_expansion",
-        "action_classification",
-        "engine_resolution",
-        "authoritative_state_mutation",
-        "prompt_context_construction",
-        "gpt_narration",
-        "affordance_derivation",
-        "response_debug_packaging"
-      ],
-      "incoming_payload": {
-        "text": "Galinor follows the lead to the old milestone."
-      },
-      "parsed_intent": {
-        "id": "galinor_follows_the_lead_to_the_old_mile",
-        "label": "Galinor follows the lead to the old milestone.",
-        "type": "interact",
-        "prompt": "Galinor follows the lead to the old milestone.",
-        "targetSceneId": null,
-        "target_scene_id": null,
-        "metadata": {
-          "intent": "follow_target"
-        }
-      },
-      "segmented_turn": {
-        "declared_action_text": "Galinor follows the lead to the old milestone."
-      },
-      "normalized_action": {
-        "id": "galinor_follows_the_lead_to_the_old_mile",
-        "label": "Galinor follows the lead to the old milestone.",
-        "type": "interact",
-        "prompt": "Galinor follows the lead to the old milestone.",
-        "targetSceneId": null
-      },
-      "resolution": {
-        "kind": "interact",
-        "action_id": "galinor_follows_the_lead_to_the_old_mile",
-        "label": "Galinor follows the lead to the old milestone.",
-        "prompt": "Galinor follows the lead to the old milestone.",
-        "success": null,
-        "resolved_transition": false,
-        "target_scene_id": null,
-        "clue_id": null,
-        "discovered_clues": [],
-        "state_changes": {},
-        "hint": "Player is attempting social interaction or probing NPCs. Narrate the encounter or response.",
-        "metadata": {
-          "turn_segmentation": {
-            "declared_action_text": "Galinor follows the lead to the old milestone."
-          }
-        },
-        "world_tick_events": []
-      },
-      "scene_before": "old_milestone",
-      "scene_after": "old_milestone",
-      "clue_updates": [],
-      "world_flag_updates": [],
-      "turn_trace": {
-        "source": "chat",
-        "player_input": "Galinor follows the lead to the old milestone.",
-        "intent": {
-          "parsed": {
-            "id": "galinor_follows_the_lead_to_the_old_mile",
-            "label": "Galinor follows the lead to the old milestone.",
-            "type": "interact",
-            "prompt": "Galinor follows the lead to the old milestone.",
-            "targetSceneId": null,
-            "target_scene_id": null,
-            "metadata": {
-              "intent": "follow_target"
-            }
-          },
-          "segmented_turn": {
-            "declared_action_text": "Galinor follows the lead to the old milestone."
-          },
-          "normalized": {
-            "id": "galinor_follows_the_lead_to_the_old_mile",
-            "label": "Galinor follows the lead to the old milestone.",
-            "type": "interact",
-            "prompt": "Galinor follows the lead to the old milestone.",
-            "targetSceneId": null,
-            "target_scene_id": null,
-            "targetEntityId": null,
-            "target_id": null
-          },
-          "implied_context": {
-            "applied": false,
-            "cases": [],
-            "target_id": null
-          }
-        },
-        "classification": {
-          "action_type": "chat",
-          "resolved_kind": "interact",
-          "requires_check": false
-        },
-        "resolution_path": "exploration_engine",
-        "authoritative_state_changes": {
-          "scene_transition": null,
-          "resolution_state_changes": {},
-          "resolution_world_updates": [],
-          "check_request": null
-        },
-        "interaction_after": {
-          "active_interaction_target_id": null,
-          "active_interaction_kind": "interact",
-          "interaction_mode": "activity",
-          "engagement_level": "focused",
-          "conversation_privacy": null,
-          "player_position_context": null
-        },
-        "narration_obligations": {
-          "is_opening_scene": false,
-          "must_advance_scene": false,
-          "should_answer_active_npc": false,
-          "avoid_input_echo": true,
-          "avoid_player_action_restatement": true,
-          "prefer_structured_turn_summary": true,
-          "active_npc_reply_expected": false,
-          "active_npc_reply_kind": null,
-          "scene_momentum_due": false,
-          "scene_momentum_exchanges_since": 0,
-          "scene_momentum_next_due_in": 2,
-          "suppress_non_social_emitters": false
-        },
-        "clues": {
-          "discovered_texts": [],
-          "presentation_changes": [],
-          "known_counts": {
-            "implicit": 0,
-            "explicit": 2,
-            "actionable": 1
-          }
-        },
-        "affordances_after": [
-          {
-            "id": "examine_a_dead_courier_lies_half_hidden_in_th",
-            "type": "investigate",
-            "label": "Examine A dead courier lies half-hidden in th"
-          },
-          {
-            "id": "examine_the_fresh_bootprints_and_claw_marks_cross",
-            "type": "investigate",
-            "label": "Examine the Fresh bootprints and claw marks cross"
-          },
-          {
-            "id": "examine_the_dead_courier_has_belongings_that",
-            "type": "investigate",
-            "label": "Examine The dead courier has belongings that"
-          },
-          {
-            "id": "examine_the_dead_couriers_satchel_is_slightl",
-            "type": "investigate",
-            "label": "Examine The dead courier's satchel is slightl"
-          },
-          {
-            "id": "examine_the_scavenger_bandit_positions_himsel",
-            "type": "investigate",
-            "label": "Examine The scavenger bandit positions himsel"
-          }
-        ],
-        "emergent_actor": {
-          "emergent_actor_enrolled": false,
-          "emergent_actor_id": null,
-          "emergent_actor_source_text": null
-        }
-      },
-      "gpt_called": true,
-      "response_ok": true,
-      "error": null,
-      "canonical_entry": {
-        "should_route_social": false,
-        "target_actor_id": null,
-        "target_source": null,
-        "reason": "no_addressable_target",
-        "spoken_text": null,
-        "declared_switch_detected": false,
-        "declared_switch_target_actor_id": null,
-        "continuity_overridden_by_declared_switch": false,
-        "spoken_vocative_detected": false,
-        "spoken_vocative_target_actor_id": null,
-        "continuity_overridden_by_spoken_vocative": false
-      },
-      "canonical_entry_path": "undecided",
-      "canonical_entry_reason": "no_addressable_target",
-      "canonical_entry_target_actor_id": null
-    },
-    {
-      "timestamp": "2026-03-31T23:06:44.192568Z",
-      "source": "chat",
-      "action_type": "chat",
-      "raw_input": "\"Let\u2019s head over there and see what\u2019s going on...\" Galinor thinks to himself.",
-      "turn_stage_order": [
-        "player_input",
-        "intent_normalization_expansion",
-        "action_classification",
-        "engine_resolution",
-        "authoritative_state_mutation",
-        "prompt_context_construction",
-        "gpt_narration",
-        "affordance_derivation",
-        "response_debug_packaging"
-      ],
-      "incoming_payload": {
-        "text": "\"Let\u2019s head over there and see what\u2019s going on...\" Galinor thinks to himself."
-      },
-      "parsed_intent": null,
-      "segmented_turn": {
-        "spoken_text": "Let\u2019s head over there and see what\u2019s going on...",
-        "declared_action_text": "Galinor thinks to himself."
-      },
-      "normalized_action": null,
-      "resolution": {
-        "world_tick_events": []
-      },
-      "scene_before": "old_milestone",
-      "scene_after": "old_milestone",
-      "clue_updates": [],
-      "world_flag_updates": [],
-      "turn_trace": {
-        "source": "chat",
-        "player_input": "\"Let\u2019s head over there and see what\u2019s going on...\" Galinor thinks to himself.",
-        "intent": {
-          "parsed": null,
-          "segmented_turn": {
-            "spoken_text": "Let\u2019s head over there and see what\u2019s going on...",
-            "declared_action_text": "Galinor thinks to himself."
-          },
-          "normalized": null,
-          "implied_context": {
-            "applied": false,
-            "cases": [],
-            "target_id": null
-          }
-        },
-        "classification": {
-          "action_type": "chat",
-          "resolved_kind": null,
-          "requires_check": false
-        },
-        "resolution_path": "chat_engine",
-        "authoritative_state_changes": {
-          "scene_transition": null,
-          "resolution_state_changes": {},
-          "resolution_world_updates": [],
-          "check_request": null
-        },
-        "interaction_after": {
-          "active_interaction_target_id": null,
-          "active_interaction_kind": "interact",
-          "interaction_mode": "activity",
-          "engagement_level": "focused",
-          "conversation_privacy": null,
-          "player_position_context": null
-        },
-        "narration_obligations": {
-          "is_opening_scene": false,
-          "must_advance_scene": false,
-          "should_answer_active_npc": false,
-          "avoid_input_echo": true,
-          "avoid_player_action_restatement": true,
-          "prefer_structured_turn_summary": true,
-          "active_npc_reply_expected": false,
-          "active_npc_reply_kind": null,
-          "scene_momentum_due": false,
-          "scene_momentum_exchanges_since": 0,
-          "scene_momentum_next_due_in": 2,
-          "suppress_non_social_emitters": false
-        },
-        "clues": {
-          "discovered_texts": [],
-          "presentation_changes": [],
-          "known_counts": {
-            "implicit": 0,
-            "explicit": 2,
-            "actionable": 1
-          }
-        },
-        "affordances_after": [
-          {
-            "id": "examine_a_dead_courier_lies_half_hidden_in_th",
-            "type": "investigate",
-            "label": "Examine A dead courier lies half-hidden in th"
-          },
-          {
-            "id": "examine_the_fresh_bootprints_and_claw_marks_cross",
-            "type": "investigate",
-            "label": "Examine the Fresh bootprints and claw marks cross"
-          },
-          {
-            "id": "examine_the_dead_courier_has_belongings_that",
-            "type": "investigate",
-            "label": "Examine The dead courier has belongings that"
-          },
-          {
-            "id": "examine_the_dead_couriers_satchel_is_slightl",
-            "type": "investigate",
-            "label": "Examine The dead courier's satchel is slightl"
-          },
-          {
-            "id": "examine_the_scavenger_bandit_positions_himsel",
-            "type": "investigate",
-            "label": "Examine The scavenger bandit positions himsel"
-          }
-        ],
-        "emergent_actor": {
-          "emergent_actor_enrolled": false,
-          "emergent_actor_id": null,
-          "emergent_actor_source_text": null
-        }
-      },
-      "gpt_called": true,
-      "response_ok": true,
-      "error": null,
-      "canonical_entry": {
-        "should_route_social": false,
-        "target_actor_id": null,
-        "target_source": null,
-        "reason": "no_addressable_target",
-        "spoken_text": "Let\u2019s head over there and see what\u2019s going on...",
-        "declared_switch_detected": false,
-        "declared_switch_target_actor_id": null,
-        "continuity_overridden_by_declared_switch": false,
-        "spoken_vocative_detected": false,
-        "spoken_vocative_target_actor_id": null,
-        "continuity_overridden_by_spoken_vocative": false
-      },
-      "canonical_entry_path": "procedural",
-      "canonical_entry_reason": "no_addressable_target",
-      "canonical_entry_target_actor_id": null
-    },
-    {
-      "timestamp": "2026-03-31T23:08:48.022230Z",
-      "source": "chat",
-      "action_type": "chat",
-      "raw_input": "Galinor follows the lead to Lirael.",
-      "turn_stage_order": [
-        "player_input",
-        "intent_normalization_expansion",
-        "action_classification",
-        "engine_resolution",
-        "authoritative_state_mutation",
-        "prompt_context_construction",
-        "gpt_narration",
-        "affordance_derivation",
-        "response_debug_packaging"
-      ],
-      "incoming_payload": {
-        "text": "Galinor follows the lead to Lirael."
-      },
-      "parsed_intent": {
-        "id": "galinor_follows_the_lead_to_lirael",
-        "label": "Galinor follows the lead to Lirael.",
-        "type": "interact",
-        "prompt": "Galinor follows the lead to Lirael.",
-        "targetSceneId": null,
-        "target_scene_id": null,
-        "metadata": {
-          "intent": "follow_target"
-        }
-      },
-      "segmented_turn": {
-        "declared_action_text": "Galinor follows the lead to Lirael."
-      },
-      "normalized_action": {
-        "id": "galinor_follows_the_lead_to_lirael",
-        "label": "Galinor follows the lead to Lirael.",
-        "type": "interact",
-        "prompt": "Galinor follows the lead to Lirael.",
-        "targetSceneId": null
-      },
-      "resolution": {
-        "kind": "interact",
-        "action_id": "galinor_follows_the_lead_to_lirael",
-        "label": "Galinor follows the lead to Lirael.",
-        "prompt": "Galinor follows the lead to Lirael.",
-        "success": null,
-        "resolved_transition": false,
-        "target_scene_id": null,
-        "clue_id": null,
-        "discovered_clues": [],
-        "state_changes": {},
-        "hint": "Player is attempting social interaction or probing NPCs. Narrate the encounter or response.",
-        "metadata": {
-          "turn_segmentation": {
-            "declared_action_text": "Galinor follows the lead to Lirael."
-          }
-        },
-        "world_tick_events": []
-      },
-      "scene_before": "old_milestone",
-      "scene_after": "old_milestone",
-      "clue_updates": [],
-      "world_flag_updates": [],
-      "turn_trace": {
-        "source": "chat",
-        "player_input": "Galinor follows the lead to Lirael.",
-        "intent": {
-          "parsed": {
-            "id": "galinor_follows_the_lead_to_lirael",
-            "label": "Galinor follows the lead to Lirael.",
-            "type": "interact",
-            "prompt": "Galinor follows the lead to Lirael.",
-            "targetSceneId": null,
-            "target_scene_id": null,
-            "metadata": {
-              "intent": "follow_target"
-            }
-          },
-          "segmented_turn": {
-            "declared_action_text": "Galinor follows the lead to Lirael."
-          },
-          "normalized": {
-            "id": "galinor_follows_the_lead_to_lirael",
-            "label": "Galinor follows the lead to Lirael.",
-            "type": "interact",
-            "prompt": "Galinor follows the lead to Lirael.",
-            "targetSceneId": null,
-            "target_scene_id": null,
-            "targetEntityId": null,
-            "target_id": null
-          },
-          "implied_context": {
-            "applied": false,
-            "cases": [],
-            "target_id": null
-          }
-        },
-        "classification": {
-          "action_type": "chat",
-          "resolved_kind": "interact",
-          "requires_check": false
-        },
-        "resolution_path": "exploration_engine",
-        "authoritative_state_changes": {
-          "scene_transition": null,
-          "resolution_state_changes": {},
-          "resolution_world_updates": [],
-          "check_request": null
-        },
-        "interaction_after": {
-          "active_interaction_target_id": null,
-          "active_interaction_kind": "interact",
-          "interaction_mode": "activity",
-          "engagement_level": "focused",
-          "conversation_privacy": null,
-          "player_position_context": null
-        },
-        "narration_obligations": {
-          "is_opening_scene": false,
-          "must_advance_scene": false,
-          "should_answer_active_npc": false,
-          "avoid_input_echo": true,
-          "avoid_player_action_restatement": true,
-          "prefer_structured_turn_summary": true,
-          "active_npc_reply_expected": false,
-          "active_npc_reply_kind": null,
-          "scene_momentum_due": false,
-          "scene_momentum_exchanges_since": 0,
-          "scene_momentum_next_due_in": 2,
-          "suppress_non_social_emitters": false
-        },
-        "clues": {
-          "discovered_texts": [],
-          "presentation_changes": [],
-          "known_counts": {
-            "implicit": 0,
-            "explicit": 2,
-            "actionable": 1
-          }
-        },
-        "affordances_after": [
-          {
-            "id": "examine_a_dead_courier_lies_half_hidden_in_th",
-            "type": "investigate",
-            "label": "Examine A dead courier lies half-hidden in th"
-          },
-          {
-            "id": "examine_the_fresh_bootprints_and_claw_marks_cross",
-            "type": "investigate",
-            "label": "Examine the Fresh bootprints and claw marks cross"
-          },
-          {
-            "id": "examine_the_dead_courier_has_belongings_that",
-            "type": "investigate",
-            "label": "Examine The dead courier has belongings that"
-          },
-          {
-            "id": "examine_the_dead_couriers_satchel_is_slightl",
-            "type": "investigate",
-            "label": "Examine The dead courier's satchel is slightl"
-          },
-          {
-            "id": "examine_the_scavenger_bandit_positions_himsel",
-            "type": "investigate",
-            "label": "Examine The scavenger bandit positions himsel"
-          }
-        ],
-        "emergent_actor": {
-          "emergent_actor_enrolled": false,
-          "emergent_actor_id": null,
-          "emergent_actor_source_text": null
-        }
-      },
-      "gpt_called": true,
-      "response_ok": true,
-      "error": null,
-      "canonical_entry": {
-        "should_route_social": false,
-        "target_actor_id": null,
-        "target_source": null,
-        "reason": "no_addressable_target",
-        "spoken_text": null,
-        "declared_switch_detected": false,
-        "declared_switch_target_actor_id": null,
-        "continuity_overridden_by_declared_switch": false,
-        "spoken_vocative_detected": false,
-        "spoken_vocative_target_actor_id": null,
-        "continuity_overridden_by_spoken_vocative": false
-      },
-      "canonical_entry_path": "undecided",
-      "canonical_entry_reason": "no_addressable_target",
-      "canonical_entry_target_actor_id": null
-    },
-    {
-      "timestamp": "2026-03-31T23:09:48.870378Z",
-      "source": "chat",
-      "action_type": "chat",
-      "raw_input": "\"Maybe I should check that place out...\" he thinks.",
-      "turn_stage_order": [
-        "player_input",
-        "intent_normalization_expansion",
-        "action_classification",
-        "engine_resolution",
-        "authoritative_state_mutation",
-        "prompt_context_construction",
-        "gpt_narration",
-        "affordance_derivation",
-        "response_debug_packaging"
-      ],
-      "incoming_payload": {
-        "text": "\"Maybe I should check that place out...\" he thinks."
-      },
-      "parsed_intent": {
-        "id": "he_thinks_maybe_i_should_check_that_plac",
-        "label": "he thinks. Maybe I should check that place out...",
-        "type": "investigate",
-        "prompt": "he thinks. Maybe I should check that place out...",
-        "targetSceneId": null,
-        "target_scene_id": null,
-        "target_id": "that place out..",
-        "targetEntityId": "that place out.."
-      },
-      "segmented_turn": {
-        "spoken_text": "Maybe I should check that place out...",
-        "declared_action_text": "he thinks."
-      },
-      "normalized_action": {
-        "id": "he_thinks_maybe_i_should_check_that_plac",
-        "label": "he thinks. Maybe I should check that place out...",
-        "type": "investigate",
-        "prompt": "he thinks. Maybe I should check that place out...",
-        "targetSceneId": null
-      },
-      "resolution": {
-        "kind": "investigate",
-        "action_id": "he_thinks_maybe_i_should_check_that_plac",
-        "label": "he thinks. Maybe I should check that place out...",
-        "prompt": "he thinks. Maybe I should check that place out...",
-        "success": null,
-        "resolved_transition": false,
-        "target_scene_id": null,
-        "clue_id": null,
-        "discovered_clues": [],
-        "state_changes": {},
-        "hint": "Player is investigating or seeking clues. Narrate what deeper scrutiny reveals; advance discovery if appropriate.",
-        "metadata": {
-          "turn_segmentation": {
-            "spoken_text": "Maybe I should check that place out...",
-            "declared_action_text": "he thinks."
-          }
-        },
-        "world_tick_events": []
-      },
-      "scene_before": "old_milestone",
-      "scene_after": "old_milestone",
-      "clue_updates": [
-        "The dagger shows wear but has not yet been drawn."
-      ],
-      "world_flag_updates": [],
-      "turn_trace": {
-        "source": "chat",
-        "player_input": "\"Maybe I should check that place out...\" he thinks.",
-        "intent": {
-          "parsed": {
-            "id": "he_thinks_maybe_i_should_check_that_plac",
-            "label": "he thinks. Maybe I should check that place out...",
-            "type": "investigate",
-            "prompt": "he thinks. Maybe I should check that place out...",
-            "targetSceneId": null,
-            "target_scene_id": null,
-            "target_id": "that place out..",
-            "targetEntityId": "that place out.."
-          },
-          "segmented_turn": {
-            "spoken_text": "Maybe I should check that place out...",
-            "declared_action_text": "he thinks."
-          },
-          "normalized": {
-            "id": "he_thinks_maybe_i_should_check_that_plac",
-            "label": "he thinks. Maybe I should check that place out...",
-            "type": "investigate",
-            "prompt": "he thinks. Maybe I should check that place out...",
-            "targetSceneId": null,
-            "target_scene_id": null,
-            "targetEntityId": "that place out..",
-            "target_id": null
-          },
-          "implied_context": {
-            "applied": false,
-            "cases": [],
-            "target_id": null
-          }
-        },
-        "classification": {
-          "action_type": "chat",
-          "resolved_kind": "investigate",
-          "requires_check": false
-        },
-        "resolution_path": "exploration_engine",
-        "authoritative_state_changes": {
-          "scene_transition": null,
-          "resolution_state_changes": {},
-          "resolution_world_updates": [],
-          "check_request": null
-        },
-        "interaction_after": {
-          "active_interaction_target_id": null,
-          "active_interaction_kind": "investigate",
-          "interaction_mode": "activity",
-          "engagement_level": "focused",
-          "conversation_privacy": null,
-          "player_position_context": null
-        },
-        "narration_obligations": {
-          "is_opening_scene": false,
-          "must_advance_scene": false,
-          "should_answer_active_npc": false,
-          "avoid_input_echo": true,
-          "avoid_player_action_restatement": true,
-          "prefer_structured_turn_summary": true,
-          "active_npc_reply_expected": false,
-          "active_npc_reply_kind": null,
-          "scene_momentum_due": false,
-          "scene_momentum_exchanges_since": 0,
-          "scene_momentum_next_due_in": 2,
-          "suppress_non_social_emitters": false
-        },
-        "clues": {
-          "discovered_texts": [
-            "The dagger shows wear but has not yet been drawn."
-          ],
-          "presentation_changes": [
-            {
-              "id": "the_dagger_shows_wear_but_has_not_yet_been_drawn",
-              "from": null,
-              "to": "explicit"
-            }
-          ],
-          "known_counts": {
-            "implicit": 0,
-            "explicit": 3,
-            "actionable": 1
-          }
-        },
-        "affordances_after": [
-          {
-            "id": "examine_a_dead_courier_lies_half_hidden_in_th",
-            "type": "investigate",
-            "label": "Examine A dead courier lies half-hidden in th"
-          },
-          {
-            "id": "examine_the_fresh_bootprints_and_claw_marks_cross",
-            "type": "investigate",
-            "label": "Examine the Fresh bootprints and claw marks cross"
-          },
-          {
-            "id": "examine_the_dead_courier_has_belongings_that",
-            "type": "investigate",
-            "label": "Examine The dead courier has belongings that"
-          },
-          {
-            "id": "examine_the_dead_couriers_satchel_is_slightl",
-            "type": "investigate",
-            "label": "Examine The dead courier's satchel is slightl"
-          },
-          {
-            "id": "examine_the_scavenger_bandit_positions_himsel",
-            "type": "investigate",
-            "label": "Examine The scavenger bandit positions himsel"
-          }
-        ],
-        "emergent_actor": {
-          "emergent_actor_enrolled": false,
-          "emergent_actor_id": null,
-          "emergent_actor_source_text": null
-        }
-      },
-      "gpt_called": true,
-      "response_ok": true,
-      "error": null,
-      "canonical_entry": {
-        "should_route_social": false,
-        "target_actor_id": null,
-        "target_source": null,
-        "reason": "no_addressable_target",
-        "spoken_text": "Maybe I should check that place out...",
-        "declared_switch_detected": false,
-        "declared_switch_target_actor_id": null,
-        "continuity_overridden_by_declared_switch": false,
-        "spoken_vocative_detected": false,
-        "spoken_vocative_target_actor_id": null,
-        "continuity_overridden_by_spoken_vocative": false
-      },
-      "canonical_entry_path": "undecided",
-      "canonical_entry_reason": "no_addressable_target",
-      "canonical_entry_target_actor_id": null
     }
   ],
   "flags": {},
   "character_name": "Galinor",
-  "campaign_run_id": "b4974aeffbbb72412f97ffda",
-  "session_id": "b4974aeffbbb72412f97ffda",
-  "last_saved_at": "2026-03-31T23:09:51.560469Z",
+  "campaign_run_id": "aee91006a4b23f036d124e6b",
+  "session_id": "aee91006a4b23f036d124e6b",
+  "last_saved_at": "2026-04-01T00:02:22.702662Z",
   "emergent_actor_debug": {
     "emergent_actor_enrolled": false,
     "emergent_actor_id": null,
@@ -4444,6 +2280,6 @@
   },
   "social_lead_event_ids": [
     "lead_frontier_gate_old_milestone",
-    "narration_ctx_frontier_gate_if_you_want_to_talk_to_someone_who_might_know_mo"
+    "narration_ctx_frontier_gate_notice_board"
   ]
 }

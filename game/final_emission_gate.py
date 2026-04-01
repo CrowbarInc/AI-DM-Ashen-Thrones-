@@ -3,13 +3,16 @@ from __future__ import annotations
 from typing import Any, Dict, List
 
 from game.interaction_context import inspect as inspect_interaction_context
+from game.output_sanitizer import sanitize_player_facing_output
 from game.social_exchange_emission import (
     build_final_strict_social_response,
     effective_strict_social_resolution_for_emission,
     log_final_emission_decision,
     log_final_emission_trace,
+    merged_player_prompt_for_gate,
     minimal_social_emergency_fallback_line,
     strict_social_emission_will_apply,
+    strict_social_suppress_non_native_coercion_for_narration_beat,
     _npc_display_name_for_emission,
 )
 
@@ -78,6 +81,43 @@ def apply_final_emission_gate(
         world if isinstance(world, dict) else None,
         sid,
     )
+    merged_for_suppress = merged_player_prompt_for_gate(
+        resolution if isinstance(resolution, dict) else None,
+        session if isinstance(session, dict) else None,
+        sid,
+    )
+    strict_social_suppressed_non_social_turn = False
+    strict_social_suppression_reason: str | None = None
+    original_coercion_reason = coercion_reason
+    if strict_social_turn:
+        do_suppress, sup_reason = strict_social_suppress_non_native_coercion_for_narration_beat(
+            resolution if isinstance(resolution, dict) else None,
+            session if isinstance(session, dict) else None,
+            world if isinstance(world, dict) else None,
+            sid,
+            coercion_reason=coercion_reason,
+            merged_player_prompt=merged_for_suppress,
+        )
+        if do_suppress:
+            strict_social_suppressed_non_social_turn = True
+            strict_social_suppression_reason = sup_reason
+            strict_social_turn = False
+            pre_gate_text = _normalize_text(
+                sanitize_player_facing_output(
+                    pre_gate_text,
+                    {
+                        "resolution": resolution if isinstance(resolution, dict) else None,
+                        "include_resolution": True,
+                        "session": session if isinstance(session, dict) else None,
+                        "scene_id": sid,
+                        "world": world if isinstance(world, dict) else None,
+                        "tags": tag_list,
+                    },
+                )
+            )
+            eff_resolution = resolution if isinstance(resolution, dict) else None
+            coercion_reason = f"{original_coercion_reason}|suppressed_non_social_narration:{sup_reason}"
+            out["player_facing_text"] = pre_gate_text
 
     inspected = inspect_interaction_context(session) if isinstance(session, dict) else {}
     active_interlocutor = str((inspected or {}).get("active_interaction_target_id") or "").strip()
@@ -97,7 +137,11 @@ def apply_final_emission_gate(
     text = pre_gate_text
 
     strict_social_active = bool(strict_social_turn)
-    coercion_used = "|" in coercion_reason or "synthetic" in coercion_reason or "npc_directed_guard" in coercion_reason
+    coercion_used = (
+        "|" in original_coercion_reason
+        or "synthetic" in original_coercion_reason
+        or "npc_directed_guard" in original_coercion_reason
+    )
     retry_output = any(
         isinstance(t, str) and ("question_retry_fallback" in t or "social_exchange_retry_fallback" in t)
         for t in tag_list
@@ -154,6 +198,8 @@ def apply_final_emission_gate(
                 "resolved_answer_preferred": bool(details.get("resolved_answer_preferred")),
                 "resolved_answer_source": details.get("resolved_answer_source"),
                 "resolved_answer_preference_reason": details.get("resolved_answer_preference_reason"),
+                "strict_social_suppressed_non_social_turn": strict_social_suppressed_non_social_turn,
+                "strict_social_suppression_reason": strict_social_suppression_reason,
             }
             log_final_emission_trace({**out["_final_emission_meta"], "stage": "final_emission_gate_accept"})
             return out
@@ -220,6 +266,8 @@ def apply_final_emission_gate(
             "resolved_answer_preferred": bool(details.get("resolved_answer_preferred")),
             "resolved_answer_source": details.get("resolved_answer_source"),
             "resolved_answer_preference_reason": details.get("resolved_answer_preference_reason"),
+            "strict_social_suppressed_non_social_turn": strict_social_suppressed_non_social_turn,
+            "strict_social_suppression_reason": strict_social_suppression_reason,
         }
         log_final_emission_trace({**out["_final_emission_meta"], "stage": "final_emission_gate_replace"})
         return out
@@ -277,6 +325,8 @@ def apply_final_emission_gate(
             "post_gate_mutation_detected": post_gate_mutation_detected,
             "final_text_preview": (gate_out_text[:120] + "…") if len(gate_out_text) > 120 else gate_out_text,
             "coercion_reason": coercion_reason,
+            "strict_social_suppressed_non_social_turn": strict_social_suppressed_non_social_turn,
+            "strict_social_suppression_reason": strict_social_suppression_reason,
         }
         log_final_emission_trace({**out["_final_emission_meta"], "stage": "final_emission_gate_accept"})
         return out
@@ -287,6 +337,7 @@ def apply_final_emission_gate(
         active_interlocutor
         and mode == "social"
         and isinstance(world, dict)
+        and not strict_social_suppressed_non_social_turn
     ):
         mini_res: Dict[str, Any] = {
             "kind": "question",
@@ -350,6 +401,8 @@ def apply_final_emission_gate(
         "final_text_preview": (gate_out_text[:120] + "…") if len(gate_out_text) > 120 else gate_out_text,
         "coercion_reason": coercion_reason,
         "rejection_reasons_sample": reasons[:8],
+        "strict_social_suppressed_non_social_turn": strict_social_suppressed_non_social_turn,
+        "strict_social_suppression_reason": strict_social_suppression_reason,
     }
     log_final_emission_trace({**out["_final_emission_meta"], "stage": "final_emission_gate_replace"})
     return out

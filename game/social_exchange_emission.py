@@ -42,9 +42,34 @@ from game.social import (
     select_best_social_answer_candidate,
     topic_pressure_speaker_id_for_social_exchange,
 )
+from game.exploration import EXPLORATION_KINDS
+from game.social import SOCIAL_KINDS
 from game.utils import slugify
 
 _log = logging.getLogger(__name__)
+
+_EXPLORATION_RESOLUTION_KINDS = frozenset(str(k).strip().lower() for k in EXPLORATION_KINDS)
+
+_REFLECTIVE_OR_MOVEMENT_NARRATION_OPEN_RE = re.compile(
+    r"^\s*(?:"
+    r"i\s+(?:"
+    r"think|consider|reflect|recall|remember|weigh|mull|ponder|digest|"
+    r"take\s+a\s+moment|step\s+back|walk\s+away|move\s+off|head\s+away|turn\s+away|"
+    r"glance\s+around|look\s+around|examine\s+the\s+room|study\s+the|"
+    r"listen\s+to\s+the\s+(?:ambient|crowd|room)"
+    r")"
+    r"|we\s+(?:step|walk|move|head)\b"
+    r"|looking\s+(?:around|about|over)\b"
+    r"|after\s+(?:a\s+moment|stepping\s+away|walking\s+off)\b"
+    r"|the\s+scene\s+(?:holds|settles|shifts)\b"
+    r")",
+    re.IGNORECASE,
+)
+
+_IMPERATIVE_SOCIAL_CONTINUATION_RE = re.compile(
+    r"^\s*(?:[\w\s']+,\s*)?(?:tell|give|say|spill|explain|share|describe|go\s+on|continue|elaborate)\b",
+    re.IGNORECASE,
+)
 
 
 def _session_turn_counter(session: Dict[str, Any] | None) -> int:
@@ -813,6 +838,102 @@ def effective_strict_social_resolution_for_emission(
         preview,
     )
     return eff_resolution if isinstance(eff_resolution, dict) else None, social_route, coercion_reason
+
+
+def _normalized_action_from_resolution(resolution: Dict[str, Any] | None) -> Dict[str, Any] | None:
+    if not isinstance(resolution, dict):
+        return None
+    meta = resolution.get("metadata")
+    if isinstance(meta, dict):
+        na = meta.get("normalized_action")
+        if isinstance(na, dict):
+            return na
+    return None
+
+
+def _merged_prompt_opens_reflective_or_world_action_beat(merged_player_prompt: str) -> bool:
+    p = str(merged_player_prompt or "").strip()
+    return bool(p and _REFLECTIVE_OR_MOVEMENT_NARRATION_OPEN_RE.match(p))
+
+
+def coerced_strict_social_allowed_by_merged_prompt(
+    merged_player_prompt: str,
+    session: Dict[str, Any] | None,
+    world: Dict[str, Any] | None,
+    scene_id: str,
+) -> bool:
+    """Narrow allow-list for synthetic / npc_directed_guard strict-social (not continuity-only)."""
+    merged = str(merged_player_prompt or "").strip()
+    if not merged:
+        return False
+    if "?" in merged:
+        return True
+    if _merged_prompt_opens_reflective_or_world_action_beat(merged):
+        return False
+    if _IMPERATIVE_SOCIAL_CONTINUATION_RE.search(merged):
+        return True
+    if looks_like_npc_directed_question(merged):
+        return True
+    sid = str(scene_id or "").strip()
+    w = world if isinstance(world, dict) else {}
+    roster = effective_scene_npc_roster(w, sid)
+    env = _scene_envelope_for_strict_social(session if isinstance(session, dict) else None, sid)
+    addressable = canonical_scene_addressable_roster(
+        w,
+        sid,
+        scene_envelope=env,
+        session=session if isinstance(session, dict) else None,
+    )
+    if roster and npc_id_from_vocative_line(merged, roster):
+        return True
+    if addressable and npc_id_from_explicit_generic_role_address(merged.lower(), addressable):
+        return True
+    return False
+
+
+def strict_social_suppress_non_native_coercion_for_narration_beat(
+    resolution: Dict[str, Any] | None,
+    session: Dict[str, Any] | None,
+    world: Dict[str, Any] | None,
+    scene_id: str,
+    *,
+    coercion_reason: str,
+    merged_player_prompt: str,
+) -> tuple[bool, str]:
+    """If True, final emission must not use strict-social / NPC-owned writers for this turn.
+
+    Preserves ``native_resolution`` strict-social. Targets synthetic continuity and npc_directed_guard
+    when the turn is exploration, reflective framing, or lacks surface NPC-directed form.
+    """
+    cr = str(coercion_reason or "").strip()
+    if cr == "native_resolution":
+        return False, ""
+    if not cr or "offscene_target" in cr:
+        return False, ""
+
+    merged = str(merged_player_prompt or "").strip()
+    sid = str(scene_id or "").strip()
+
+    if isinstance(resolution, dict):
+        rk = str(resolution.get("kind") or "").strip().lower()
+        if rk in _EXPLORATION_RESOLUTION_KINDS:
+            return True, "exploration_resolution_kind"
+        if rk and rk not in SOCIAL_KINDS and rk not in {"adjudication_query", "scene_opening"}:
+            return True, "non_social_engine_resolution_kind"
+
+    na = _normalized_action_from_resolution(resolution if isinstance(resolution, dict) else None)
+    if isinstance(na, dict):
+        nt = str(na.get("type") or "").strip().lower()
+        if nt and nt not in SOCIAL_KINDS:
+            return True, "non_social_normalized_action_type"
+
+    if merged and "?" not in merged and _merged_prompt_opens_reflective_or_world_action_beat(merged):
+        return True, "reflective_or_world_action_prompt"
+
+    if coerced_strict_social_allowed_by_merged_prompt(merged, session, world, sid):
+        return False, ""
+
+    return True, "continuity_only_no_npc_directed_surface_form"
 
 
 def log_final_emission_decision(payload: Dict[str, Any]) -> None:

@@ -936,6 +936,240 @@ def _scan_text_for_actionable_leads(
     return found
 
 
+def _scene_envelope_parts(scene: dict | None) -> tuple[Dict[str, Any], Dict[str, Any]]:
+    """Split loaded scene envelope into inner scene dict and scene_state (emergent addressables live in state)."""
+    if not scene or not isinstance(scene, dict):
+        return {}, {}
+    inner = scene.get("scene") if isinstance(scene.get("scene"), dict) else scene
+    st = scene.get("scene_state") if isinstance(scene.get("scene_state"), dict) else {}
+    if not isinstance(inner, dict):
+        inner = {}
+    return inner, st
+
+
+_DISCOVERABLE_CRIER_NAME = re.compile(
+    r"\btown\s+crier\s*,?\s*([A-Z][a-z]+)\b|"
+    r"\b([A-Z][a-z]+)\s*,\s*the\s+town\s+crier\b|"
+    r"\btown\s+crier\s+([A-Z][a-z]+)\b",
+    re.IGNORECASE,
+)
+
+# Actionable redirect or co-anchor near a proper name surfaced from authored discoverables (crier names).
+_NAME_REDIRECT_ANCHOR_WINDOW = re.compile(
+    r"\b(?:find|seek|locate|check|try|ask|start|head|go|make\s+for|"
+    r"speak\s+(?:with|to)|talk\s+(?:with|to)|visit|look|read|see)\b",
+    re.IGNORECASE,
+)
+_NAME_LANDMARK_ANCHOR = re.compile(r"\b(?:near|at|by|beside|toward)\s+the\s+notice\s+board\b|\bnotice\s+board\b", re.IGNORECASE)
+_NAME_CRIER_TOKEN = re.compile(r"\b(?:town\s+)?crier\b", re.IGNORECASE)
+
+_NOTICE_BOARD_STRICT = re.compile(
+    r"\b(?:find|seek|locate|check|try|look|read|see|start|head)\b[\s\S]{0,80}\bnotice\s+board\b|"
+    r"\bnotice\s+board\b[\s\S]{0,56}\b(?:for|about|regarding|closer|more|again)\b",
+    re.IGNORECASE,
+)
+
+_FALSE_PROPER_NAMES = frozenset(
+    {
+        "house",
+        "the",
+        "some",
+        "when",
+        "where",
+        "your",
+        "near",
+        "old",
+        "new",
+    }
+)
+
+
+def _crier_npc_id_from_addressables(scene_inner: dict, scene_state: dict) -> str | None:
+    rows: List[Dict[str, Any]] = []
+    for raw in (scene_inner.get("addressables") or []):
+        if isinstance(raw, dict):
+            rows.append(raw)
+    for raw in (scene_state.get("emergent_addressables") or []):
+        if isinstance(raw, dict):
+            rows.append(raw)
+    best: tuple[int, str] | None = None
+    for row in rows:
+        rid = str(row.get("id") or "").strip()
+        if not rid:
+            continue
+        roles = row.get("address_roles") if isinstance(row.get("address_roles"), list) else []
+        role_s = " ".join(str(x) for x in roles if isinstance(x, str)).lower()
+        score = 0
+        if "crier" in role_s:
+            score += 3
+        if "town" in role_s and "crier" in role_s:
+            score += 2
+        if "crier" in rid.lower():
+            score += 2
+        if score > 0 and (best is None or score > best[0]):
+            best = (score, rid)
+    return best[1] if best else None
+
+
+def _discoverable_crier_names(scene_inner: dict) -> Set[str]:
+    out: Set[str] = set()
+    for raw in scene_inner.get("discoverable_clues") or []:
+        chunk = ""
+        if isinstance(raw, str):
+            chunk = raw
+        elif isinstance(raw, dict):
+            t = raw.get("text")
+            chunk = t if isinstance(t, str) else ""
+        if not chunk.strip():
+            continue
+        for m in _DISCOVERABLE_CRIER_NAME.finditer(chunk):
+            for g in m.groups():
+                if not g:
+                    continue
+                name = str(g).strip()
+                if len(name) < 3 or name.lower() in _FALSE_PROPER_NAMES:
+                    continue
+                out.add(name)
+    return out
+
+
+def _scene_authors_notice_board(scene_inner: dict) -> bool:
+    blobs: List[str] = []
+    for k in ("visible_facts", "journal_seed_facts"):
+        for x in scene_inner.get(k) or []:
+            if isinstance(x, str) and x.strip():
+                blobs.append(x.lower())
+    for raw in scene_inner.get("discoverable_clues") or []:
+        if isinstance(raw, str):
+            blobs.append(raw.lower())
+        elif isinstance(raw, dict):
+            t = raw.get("text")
+            if isinstance(t, str):
+                blobs.append(t.lower())
+    return any("notice board" in b for b in blobs)
+
+
+def _proper_name_in_actionable_redirect_context(text: str, name: str) -> bool:
+    if not text or not name:
+        return False
+    for m in re.finditer(rf"\b{re.escape(name)}\b", text, flags=re.IGNORECASE):
+        start, end = m.start(), m.end()
+        win = text[max(0, start - 100) : min(len(text), end + 100)]
+        if _NAME_REDIRECT_ANCHOR_WINDOW.search(win):
+            return True
+        if _NAME_LANDMARK_ANCHOR.search(win) and (
+            _NAME_CRIER_TOKEN.search(win) or _NAME_REDIRECT_ANCHOR_WINDOW.search(text)
+        ):
+            return True
+    return False
+
+
+def _scan_scene_anchored_destination_leads(
+    text: str,
+    scene_id: str,
+    source_npc_id: str | None,
+    scene: dict | None,
+) -> List[Dict[str, Any]]:
+    """Concrete in-scene destinations: exit labels, named crier from discoverables + redirect, strict notice board."""
+    if not text or not isinstance(text, str) or not text.strip() or not scene:
+        return []
+
+    sid = str(scene_id or "").strip()
+    if not sid:
+        return []
+
+    inner, st = _scene_envelope_parts(scene if isinstance(scene, dict) else None)
+
+    found: List[Dict[str, Any]] = []
+    seen_ids: Set[str] = set()
+
+    # --- Named town crier from authored discoverables, anchored in narration ---
+    crier_id = _crier_npc_id_from_addressables(inner, st)
+    names = _discoverable_crier_names(inner)
+    for name in sorted(names):
+        if not _proper_name_in_actionable_redirect_context(text, name):
+            continue
+        if not crier_id:
+            break
+        lid = _stable_extracted_lead_id(sid, "npc", crier_id)
+        if lid in seen_ids:
+            continue
+        seen_ids.add(lid)
+        label = f"Find {name} (town crier)"
+        found.append(
+            _public_lead_dict(
+                lead_id=lid,
+                kind="npc",
+                label=label[:200],
+                source_scene_id=sid,
+                source_npc_id=source_npc_id,
+                target_scene_id=None,
+                target_npc_id=crier_id,
+                rumor_text=None,
+                evidence_text=text.strip()[:400] or None,
+                extraction_source="scene_anchor:named_crier",
+            )
+        )
+        break
+
+    # --- Exit label substring (conservative minimum length) ---
+    low = text.lower()
+    for ex in inner.get("exits") or []:
+        if not isinstance(ex, dict):
+            continue
+        lab = str(ex.get("label") or "").strip()
+        tid = str(ex.get("target_scene_id") or ex.get("targetSceneId") or "").strip()
+        if len(lab) < 12 or lab.lower() not in low:
+            continue
+        if not tid or not is_known_scene_id(tid):
+            continue
+        lid = _stable_extracted_lead_id(sid, "exit", slugify(lab)[:48])
+        if lid in seen_ids:
+            continue
+        seen_ids.add(lid)
+        found.append(
+            _public_lead_dict(
+                lead_id=lid,
+                kind="scene",
+                label=lab[:200],
+                source_scene_id=sid,
+                source_npc_id=source_npc_id,
+                target_scene_id=tid,
+                target_npc_id=None,
+                rumor_text=None,
+                evidence_text=text.strip()[:400] or None,
+                extraction_source="scene_anchor:exit_label",
+            )
+        )
+
+    # --- Same-scene notice board (strict verb window; scene must author the landmark) ---
+    has_crier_lead = any(str(x.get("extraction_source") or "") == "scene_anchor:named_crier" for x in found)
+    if (
+        not has_crier_lead
+        and _scene_authors_notice_board(inner)
+        and _NOTICE_BOARD_STRICT.search(text)
+    ):
+        lid = _stable_extracted_lead_id(sid, "notice_board")
+        if lid not in seen_ids:
+            seen_ids.add(lid)
+            found.append(
+                _public_lead_dict(
+                    lead_id=lid,
+                    kind="location",
+                    label="Check the notice board",
+                    source_scene_id=sid,
+                    source_npc_id=source_npc_id,
+                    target_scene_id=None,
+                    target_npc_id=None,
+                    rumor_text="Check the notice board",
+                    evidence_text=text.strip()[:400] or None,
+                    extraction_source="scene_anchor:notice_board",
+                )
+            )
+
+    return found
+
+
 def extract_actionable_social_leads(
     *,
     scene_id: str,
@@ -957,12 +1191,15 @@ def extract_actionable_social_leads(
     ``player_facing_text`` for tier **C** narration scans should be the post–Block-3 reconciled/finalized string
     when ``narration_text_is_reconciled`` is True (callers after :func:`reconcile_final_text_with_structured_state`).
 
+    Tier **D** (when ``scene`` is provided): exit labels, discoverable-anchored named criers, and strict same-scene
+    notice-board redirects — all via the same lead landing path as other extracted social leads.
+
     extraction_pass:
         - ``topic``: A + B + C on topic / resolution strings only (no narration).
         - ``narration``: C on ``player_facing_text`` only.
         - ``full``: A + B + C (topic strings first, then narration); deduped by ``lead_id``.
     """
-    _ = scene, session  # reserved for future scene-graph / known-NPC hints
+    _ = session
 
     res = social_resolution if isinstance(social_resolution, dict) else {}
     topic = topic_payload if isinstance(topic_payload, dict) else None
@@ -1041,6 +1278,12 @@ def extract_actionable_social_leads(
                 if ts and ts in suppressed_scene_targets:
                     continue
                 _add(L)
+        for chunk in texts_c:
+            for L in _scan_scene_anchored_destination_leads(chunk, sid, npc, scene):
+                ts = str(L.get("target_scene_id") or "").strip()
+                if ts and ts in suppressed_scene_targets:
+                    continue
+                _add(L)
 
     # --- C (narration slice): same pattern library, reconciled GM text only in this branch ---
     if pass_norm in ("full", "narration") and player_facing_text:
@@ -1048,6 +1291,11 @@ def extract_actionable_social_leads(
         for L in _scan_text_for_actionable_leads(
             sid, npc, player_facing_text, extraction_source_prefix=narr_prefix
         ):
+            ts = str(L.get("target_scene_id") or "").strip()
+            if ts and ts in suppressed_scene_targets:
+                continue
+            _add(L)
+        for L in _scan_scene_anchored_destination_leads(player_facing_text, sid, npc, scene):
             ts = str(L.get("target_scene_id") or "").strip()
             if ts and ts in suppressed_scene_targets:
                 continue
@@ -1590,7 +1838,7 @@ def ensure_scene_has_minimum_actionable_lead(
         topic_payload=topic,
         social_resolution=resolution,
         player_facing_text=ptext or None,
-        scene=scene_inner if scene_inner else None,
+        scene=scene if isinstance(scene, dict) else None,
         session=session,
         primary_clue_id=eff_id,
         extraction_pass="full",

@@ -17,7 +17,7 @@ interlocutor continuity.
 from __future__ import annotations
 
 import re
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional
 
 from game.leads import get_lead
 from game.storage import get_scene_runtime
@@ -43,6 +43,18 @@ _RE_PURSUIT_INVESTIGATE_THE_X_LEAD = re.compile(
     r"\binvestigate\s+the\s+(.+?)\s+lead\b",
     re.IGNORECASE,
 )
+# Qualified pursuit: explicit destination after "the lead to …" (fail-closed when unresolved).
+_RE_QUAL_FOLLOW_PURSE_LEAD_TO = re.compile(
+    r"\b(?:follow|pursue)\s+the\s+lead\s+to\s+(.+)$",
+    re.IGNORECASE | re.MULTILINE,
+)
+_RE_QUAL_GO_TO_THE_LEAD_TO = re.compile(
+    r"\bgo\s+to\s+the\s+lead\s+to\s+(.+)$",
+    re.IGNORECASE | re.MULTILINE,
+)
+
+# Returned from pursuit resolver → parse_freeform_to_action must not fall through to travel/follow.
+_QUALIFIED_PURSUIT_FAILED = object()
 
 # Action types compatible with exploration engine and normalize_scene_action
 ACTION_TYPES = ("observe", "investigate", "interact", "scene_transition", "travel", "attack", "custom")
@@ -365,99 +377,293 @@ def _commitment_meta_for_pursuit(authoritative_lead_id: str) -> Dict[str, Any]:
     }
 
 
-def _single_lead_for_target_scene(
-    actionable: List[Dict[str, Any]], target_scene_id: str
+def _strip_trailing_pursuit_fragment_punct(s: str) -> str:
+    s = (s or "").strip()
+    s = re.sub(r"[\s\.,;:!?]+$", "", s)
+    return s.strip()
+
+
+def _strict_unique_exit_destination(target_text: str, exits: List[Dict[str, Any]]) -> Optional[str]:
+    """Map target_text to exactly one exit target_scene_id (casefold or slugify on label); else None."""
+    raw = (target_text or "").strip()
+    if not raw or not isinstance(exits, list):
+        return None
+    cf = raw.casefold()
+    sg = slugify(raw)
+    hits: List[str] = []
+    for ex in exits:
+        if not isinstance(ex, dict):
+            continue
+        lab = str(ex.get("label") or "").strip()
+        tid = str(ex.get("target_scene_id") or ex.get("targetSceneId") or "").strip()
+        if not lab or not tid:
+            continue
+        if lab.casefold() == cf or slugify(lab) == sg:
+            hits.append(tid)
+    uniq = list(dict.fromkeys(hits))
+    if len(uniq) == 1:
+        return uniq[0]
+    return None
+
+
+def _npc_location_from_world(world: Optional[Dict[str, Any]], npc_id: str) -> Optional[str]:
+    nid = str(npc_id or "").strip()
+    if not nid or not isinstance(world, dict):
+        return None
+    for n in world.get("npcs") or []:
+        if not isinstance(n, dict):
+            continue
+        if str(n.get("id") or "").strip() != nid:
+            continue
+        loc = str(n.get("location") or n.get("scene_id") or "").strip()
+        return loc or None
+    return None
+
+
+def _town_crier_find_name_from_label(label: str) -> Optional[str]:
+    m = re.match(
+        r"^\s*find\s+(.+?)\s*\(\s*town\s+crier\s*\)\s*$",
+        (label or "").strip(),
+        flags=re.IGNORECASE,
+    )
+    if not m:
+        return None
+    inner = m.group(1).strip()
+    return inner or None
+
+
+def _npc_destination_matches_target(
+    npc_id: str,
+    target_cf: str,
+    target_slug: str,
+    *,
+    world: Optional[Dict[str, Any]],
+    reg_row: Optional[Dict[str, Any]],
+    pending_text: str,
+) -> bool:
+    nid = str(npc_id or "").strip()
+    if not nid:
+        return False
+    if nid.casefold() == target_cf or slugify(nid) == target_slug:
+        return True
+    if isinstance(world, dict):
+        for n in world.get("npcs") or []:
+            if not isinstance(n, dict):
+                continue
+            if str(n.get("id") or "").strip() != nid:
+                continue
+            name = str(n.get("name") or "").strip().casefold()
+            if name == target_cf:
+                return True
+            for al in n.get("aliases") or []:
+                if isinstance(al, str) and al.strip().casefold() == target_cf:
+                    return True
+    for label in (pending_text, str((reg_row or {}).get("title") or "")):
+        if not label or not str(label).strip():
+            continue
+        cn = _town_crier_find_name_from_label(str(label))
+        if cn and cn.casefold() == target_cf:
+            return True
+    return False
+
+
+def _scene_destination_matches_target(
+    leads_to_scene: str,
+    target_cf: str,
+    target_slug: str,
+    exit_tid: Optional[str],
+) -> bool:
+    ts = str(leads_to_scene or "").strip()
+    if not ts:
+        return False
+    if ts.casefold() == target_cf or slugify(ts) == target_slug:
+        return True
+    if exit_tid and ts == exit_tid:
+        return True
+    return False
+
+
+def _pending_row_resolved_scene_id(
+    p: Dict[str, Any],
+    world: Optional[Dict[str, Any]],
 ) -> Optional[str]:
-    tid = str(target_scene_id or "").strip()
-    if not tid:
-        return None
-    cands = [p for p in actionable if str(p.get("leads_to_scene") or "").strip() == tid]
-    if len(cands) != 1:
-        return None
-    return str(cands[0].get("authoritative_lead_id") or "").strip() or None
-
-
-def _resolve_phrase_to_scene_and_authoritative_id(
-    phrase: str,
-    exits: List[Dict[str, Any]],
-    actionable: List[Dict[str, Any]],
-) -> Tuple[Optional[str], Optional[str]]:
-    """Prefer exit→target_scene_id, then exact pending lead text match. Returns (target_scene_id, lead_id)."""
-    raw = (phrase or "").strip()
-    if not raw:
-        return None, None
-    tid = _match_exit(raw, exits)
-    if tid:
-        aid = _single_lead_for_target_scene(actionable, tid)
-        return (tid, aid) if aid else (None, None)
-    key = raw.lower()
-    text_hits = [
-        p
-        for p in actionable
-        if str(p.get("text") or "").strip().lower() == key
-    ]
-    if len(text_hits) != 1:
-        return None, None
-    p = text_hits[0]
     ts = str(p.get("leads_to_scene") or "").strip()
+    if ts:
+        return ts
+    npc = str(p.get("leads_to_npc") or "").strip()
+    if npc:
+        return _npc_location_from_world(world, npc)
+    return None
+
+
+def _build_pursuit_scene_transition_action(
+    prompt: str,
+    p: Dict[str, Any],
+    *,
+    world: Optional[Dict[str, Any]],
+) -> Optional[Dict[str, Any]]:
     aid = str(p.get("authoritative_lead_id") or "").strip()
-    if not ts or not aid:
-        return None, None
-    return ts, aid
+    if not aid:
+        return None
+    ts = str(p.get("leads_to_scene") or "").strip()
+    npc = str(p.get("leads_to_npc") or "").strip()
+    meta = _commitment_meta_for_pursuit(aid)
+    if ts:
+        return _build_action(
+            "scene_transition",
+            prompt,
+            prompt,
+            target_scene_id=ts,
+            metadata=meta,
+        )
+    if npc:
+        loc = _npc_location_from_world(world, npc)
+        if not loc:
+            return None
+        return _build_action(
+            "scene_transition",
+            prompt,
+            prompt,
+            target_scene_id=loc,
+            target_id=npc,
+            metadata=meta,
+        )
+    return None
+
+
+def _extract_qualified_pursuit_target_text(text: str) -> Optional[str]:
+    """If input matches a qualified pursuit phrase, return normalized target fragment; else None."""
+    raw = (text or "").strip()
+    if not raw or _RE_PURSUIT_BARE.fullmatch(raw):
+        return None
+    m = _RE_QUAL_FOLLOW_PURSE_LEAD_TO.search(raw) or _RE_QUAL_GO_TO_THE_LEAD_TO.search(raw)
+    if m:
+        frag = _strip_trailing_pursuit_fragment_punct(m.group(1))
+        return frag or None
+    low = raw.lower()
+    m = _RE_PURSUIT_GO_TO_THE_X_LEAD.search(low)
+    if m:
+        frag = _strip_trailing_pursuit_fragment_punct(m.group(1))
+        return frag or None
+    m = _RE_PURSUIT_INVESTIGATE_THE_X_LEAD.search(low)
+    if m:
+        frag = _strip_trailing_pursuit_fragment_punct(m.group(1))
+        return frag or None
+    m = _RE_PURSUIT_FOLLOW_THE_X_LEAD.search(low)
+    if m:
+        frag = _strip_trailing_pursuit_fragment_punct(m.group(1))
+        if not frag or frag.strip().casefold() == "lead":
+            return None
+        return frag
+    return None
+
+
+def _resolve_qualified_pursuit_target_to_row(
+    target_fragment: str,
+    scene: Dict[str, Any],
+    session: Dict[str, Any],
+    world: Optional[Dict[str, Any]],
+    actionable: List[Dict[str, Any]],
+) -> Optional[Dict[str, Any]]:
+    """Pick exactly one pending row for qualified pursuit; None if ambiguous or unresolved."""
+    raw = (target_fragment or "").strip()
+    if not raw:
+        return None
+    target_cf = raw.casefold()
+    target_slug = slugify(raw)
+    exits = scene.get("exits") if isinstance(scene.get("exits"), list) else []
+    exit_tid = _strict_unique_exit_destination(raw, exits)
+
+    matches_a: List[Dict[str, Any]] = []
+    seen_ids: set[str] = set()
+    for p in actionable:
+        if not isinstance(p, dict):
+            continue
+        aid = str(p.get("authoritative_lead_id") or "").strip()
+        matched = False
+        ts = str(p.get("leads_to_scene") or "").strip()
+        npc = str(p.get("leads_to_npc") or "").strip()
+        reg_row = get_lead(session, aid) if aid else None
+        pend_txt = str(p.get("text") or "")
+        if ts and _scene_destination_matches_target(ts, target_cf, target_slug, exit_tid):
+            matched = True
+        if npc and _npc_destination_matches_target(
+            npc, target_cf, target_slug, world=world, reg_row=reg_row, pending_text=pend_txt
+        ):
+            matched = True
+        if matched and aid and aid not in seen_ids:
+            seen_ids.add(aid)
+            matches_a.append(p)
+
+    chosen: Optional[Dict[str, Any]] = None
+    if len(matches_a) == 1:
+        chosen = matches_a[0]
+    elif len(matches_a) > 1:
+        return None
+    else:
+        text_hits = [
+            p
+            for p in actionable
+            if isinstance(p, dict) and str(p.get("text") or "").strip().casefold() == target_cf
+        ]
+        if len(text_hits) == 1:
+            chosen = text_hits[0]
+        elif len(text_hits) > 1:
+            return None
+        else:
+            slug_hits = [
+                p
+                for p in actionable
+                if isinstance(p, dict)
+                and str(p.get("text") or "").strip()
+                and slugify(str(p.get("text") or "")) == target_slug
+            ]
+            if len(slug_hits) != 1:
+                return None
+            chosen = slug_hits[0]
+
+    if not isinstance(chosen, dict):
+        return None
+    if not _pending_row_resolved_scene_id(chosen, world):
+        return None
+    return chosen
 
 
 def _try_explicit_pursuit_scene_transition(
     text: str,
-    low: str,
     scene: Dict[str, Any],
     session: Dict[str, Any],
-) -> Optional[Dict[str, Any]]:
-    """If text is explicit pursuit and exactly one authoritative lead applies, return scene_transition + metadata."""
+    *,
+    world: Optional[Dict[str, Any]] = None,
+) -> Any:
+    """Explicit pursuit: scene_transition + commitment metadata, or _QUALIFIED_PURSUIT_FAILED, or None."""
     scene_id = str(scene.get("id") or "").strip()
     if not scene_id:
         return None
     exits = scene.get("exits") or []
     actionable = _actionable_pending_with_registry_rows(session, scene_id)
+
+    q_target = _extract_qualified_pursuit_target_text(text)
+    if q_target is not None:
+        if not actionable:
+            return _QUALIFIED_PURSUIT_FAILED
+        row = _resolve_qualified_pursuit_target_to_row(q_target, scene, session, world, actionable)
+        if row is None:
+            return _QUALIFIED_PURSUIT_FAILED
+        act = _build_pursuit_scene_transition_action(text, row, world=world)
+        return act if act is not None else _QUALIFIED_PURSUIT_FAILED
+
     if not actionable:
         return None
 
-    target_scene_id: Optional[str] = None
-    authoritative_id: Optional[str] = None
-
     if _RE_PURSUIT_BARE.fullmatch(text.strip()):
-        with_scene = [p for p in actionable if str(p.get("leads_to_scene") or "").strip()]
-        if len(with_scene) != 1:
+        if len(actionable) != 1:
             return None
-        p0 = with_scene[0]
-        target_scene_id = str(p0.get("leads_to_scene") or "").strip()
-        authoritative_id = str(p0.get("authoritative_lead_id") or "").strip()
-    else:
-        m_go = _RE_PURSUIT_GO_TO_THE_X_LEAD.search(low)
-        m_fp = _RE_PURSUIT_FOLLOW_THE_X_LEAD.search(low)
-        m_inv = _RE_PURSUIT_INVESTIGATE_THE_X_LEAD.search(low)
-        phrase: Optional[str] = None
-        if m_go:
-            phrase = m_go.group(1).strip()
-        elif m_inv:
-            phrase = m_inv.group(1).strip()
-        elif m_fp:
-            phrase = m_fp.group(1).strip()
-        if not phrase:
-            return None
-        target_scene_id, authoritative_id = _resolve_phrase_to_scene_and_authoritative_id(
-            phrase, exits if isinstance(exits, list) else [], actionable
-        )
+        p0 = actionable[0]
+        act = _build_pursuit_scene_transition_action(text, p0, world=world)
+        return act
 
-    if not target_scene_id or not authoritative_id:
-        return None
-    meta = _commitment_meta_for_pursuit(authoritative_id)
-    return _build_action(
-        "scene_transition",
-        text,
-        text,
-        target_scene_id=target_scene_id,
-        metadata=meta,
-    )
+    return None
 
 
 def parse_freeform_to_action(
@@ -465,6 +671,7 @@ def parse_freeform_to_action(
     scene_envelope: Optional[Dict[str, Any]] = None,
     *,
     session: Optional[Dict[str, Any]] = None,
+    world: Optional[Dict[str, Any]] = None,
 ) -> Optional[Dict[str, Any]]:
     """Parse freeform player input into a structured engine action.
 
@@ -475,6 +682,10 @@ def parse_freeform_to_action(
     When ``session`` is provided, narrow explicit pursuit phrases may attach
     ``metadata.authoritative_lead_id`` (and commitment fields) on a deterministic
     ``scene_transition``; no lead state is mutated here.
+
+    ``world`` is optional; when set, ``leads_to_npc`` rows resolve ``target_scene_id`` from
+    ``world[\"npcs\"]`` (``location`` / ``scene_id``). Qualified pursuit phrases that name a
+    target but cannot be resolved return ``None`` and do not fall through to generic travel.
 
     Returns:
         Structured action dict with id, label, type, prompt, targetSceneId?,
@@ -492,9 +703,14 @@ def parse_freeform_to_action(
     interactables = scene.get("interactables") or []
     visible_facts = scene.get("visible_facts") or []
 
-    # ---- 0. Explicit pursuit → scene_transition + authoritative commitment metadata (session only) ----
+    # ---- 0. Qualified explicit pursuit (fail-closed) + bare follow-the-lead (session) ----
+    q_frag = _extract_qualified_pursuit_target_text(t)
+    if q_frag is not None and not isinstance(session, dict):
+        return None
     if isinstance(session, dict):
-        pursuit = _try_explicit_pursuit_scene_transition(t, low, scene, session)
+        pursuit = _try_explicit_pursuit_scene_transition(t, scene, session, world=world)
+        if pursuit is _QUALIFIED_PURSUIT_FAILED:
+            return None
         if pursuit is not None:
             return pursuit
 

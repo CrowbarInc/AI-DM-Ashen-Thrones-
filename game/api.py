@@ -216,6 +216,7 @@ def _build_action_debug(
                 'to': resolution.get('target_scene_id'),
             }
         safe_keys = {'kind', 'resolved_transition', 'target_scene_id', 'originating_scene_id',
+                     'same_scene_transition_suppressed', 'transition_applied',
                      'action_id', 'label', 'prompt', 'hint', 'attack_id', 'skill_id', 'spell_id',
                      'roll', 'damage', 'total', 'hit', 'round', 'active_actor_id', 'world_tick_events',
                      'clue_id', 'clue_text', 'discovered_clues', 'state_changes', 'success', 'skill_check',
@@ -879,18 +880,35 @@ def _apply_authoritative_resolution_state_mutation(
         apply_resolution_world_updates(world, resolution["world_updates"])
         save_world(world)
 
-    originating_scene_id = scene['scene']['id']
+    originating_scene_id = str(scene['scene']['id'] or '').strip()
     if resolution.get('resolved_transition') and resolution.get('target_scene_id'):
-        target_scene_id = resolution['target_scene_id']
-        print("[ENGINE] Scene transition →", target_scene_id)
+        target_scene_id = str(resolution['target_scene_id'] or '').strip()
         resolution['originating_scene_id'] = originating_scene_id
-        scene, session, combat = _apply_authoritative_scene_transition(target_scene_id, scene, session, combat, world)
-        apply_follow_lead_commitment_after_resolved_scene_transition(
-            session,
-            resolution,
-            normalized_action,
-            target_scene_id=str(target_scene_id).strip(),
-        )
+        # Block 2: authoritative same-scene — no reload/re-entry; skip follow-lead hook.
+        if originating_scene_id and target_scene_id and originating_scene_id == target_scene_id:
+            resolution['same_scene_transition_suppressed'] = True
+            resolution['transition_applied'] = False
+            resolution['resolved_transition'] = False
+            resolution['target_scene_id'] = None
+            sc = resolution.get('state_changes')
+            if isinstance(sc, dict):
+                for k in (
+                    'scene_changed',
+                    'scene_transition_occurred',
+                    'arrived_at_scene',
+                    'new_scene_context_available',
+                ):
+                    sc.pop(k, None)
+                resolution['state_changes'] = sc
+        else:
+            print("[ENGINE] Scene transition →", target_scene_id)
+            scene, session, combat = _apply_authoritative_scene_transition(target_scene_id, scene, session, combat, world)
+            apply_follow_lead_commitment_after_resolved_scene_transition(
+                session,
+                resolution,
+                normalized_action,
+                target_scene_id=target_scene_id,
+            )
 
     res_kind = str(resolution.get("kind") or "").strip().lower()
     if res_kind in SOCIAL_KINDS:
@@ -2168,6 +2186,7 @@ def _sanitize_resolution(res: dict | None) -> dict | None:
     if not res or not isinstance(res, dict):
         return None
     safe = {'kind', 'resolved_transition', 'target_scene_id', 'originating_scene_id',
+            'same_scene_transition_suppressed', 'transition_applied',
             'action_id', 'label', 'prompt', 'hint', 'attack_id', 'skill_id', 'spell_id',
             'roll', 'damage', 'total', 'hit', 'round', 'active_actor_id', 'world_tick_events',
             'clue_id', 'clue_text', 'discovered_clues', 'state_changes', 'success', 'metadata',
@@ -2695,7 +2714,7 @@ def chat(req: ChatRequest):
                 canonical_social_entry=canonical_entry,
             )
         if parsed is None and route_choice != "dialogue":
-            parsed = parse_exploration_intent(classification_text, scene, session)
+            parsed = parse_exploration_intent(classification_text, scene, session, world)
         intent = None
         if parsed is None and route_choice != "dialogue":
             intent = parse_intent(classification_text)

@@ -283,7 +283,7 @@ def reconcile_final_text_with_structured_state(
         topic_payload=topic,
         social_resolution=resolution,
         player_facing_text=text,
-        scene=_scene_inner(scene) or None,
+        scene=scene if isinstance(scene, dict) else None,
         session=session,
         primary_clue_id=str(resolution.get("clue_id") or "").strip() or None,
         extraction_pass="full",
