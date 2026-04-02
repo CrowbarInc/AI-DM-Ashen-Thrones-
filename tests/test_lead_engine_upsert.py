@@ -7,6 +7,8 @@ from game.leads import (
     apply_engine_lead_signal,
     ensure_lead_registry,
     get_lead,
+    list_active_session_leads,
+    resolve_session_lead,
 )
 
 
@@ -177,3 +179,35 @@ def test_second_distinct_trigger_corroborates_confidence():
         turn=2,
     )
     assert get_lead(session, "corr")["confidence"] == "credible"
+
+
+def test_list_active_session_leads_and_engine_monotonic_unchanged_for_terminal():
+    session: dict = {}
+    apply_engine_lead_signal(
+        session,
+        lead_id="mono_term",
+        title="Mono",
+        summary="First",
+        source_kind="clue_explicit",
+        presentation_level="explicit",
+        confidence="credible",
+        turn=1,
+    )
+    assert len(list_active_session_leads(session)) == 1
+    resolve_session_lead(session, "mono_term", resolution_type="done", turn=2)
+    assert list_active_session_leads(session) == []
+    row_before = dict(get_lead(session, "mono_term") or {})
+    out = apply_engine_lead_signal(
+        session,
+        lead_id="mono_term",
+        title="Mono",
+        summary="First",
+        source_kind="clue_inference",
+        presentation_level="implicit",
+        turn=3,
+    )
+    row_after = get_lead(session, "mono_term")
+    assert row_after is not None
+    assert row_after["lifecycle"] == row_before["lifecycle"] == "resolved"
+    assert row_after["confidence"] == row_before["confidence"] == "credible"
+    assert out["status"] in ("unchanged", "updated")

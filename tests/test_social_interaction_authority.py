@@ -179,8 +179,11 @@ def test_final_gate_emits_social_minimal_not_ambient_scene_when_engaged():
         world=world,
     )
     text = str(out.get("player_facing_text") or "")
-    assert "voices shift around you" not in text.lower()
-    assert "runner" in text.lower() or "they" in text.lower() or '"' in text
+    meta = out.get("_final_emission_meta") or {}
+    assert meta.get("strict_social_suppressed_non_social_turn") is True
+    # Banned stock phrase is stripped; suppressed non-social turns use global narrative fallback (not NPC-owned).
+    assert "from here, no certain answer presents itself" not in text.lower()
+    assert "voices shift around you" in text.lower() or "for a breath" in text.lower()
 
 
 def test_session_ongoing_social_exchange_helper():

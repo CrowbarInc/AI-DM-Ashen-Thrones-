@@ -9,6 +9,7 @@ from __future__ import annotations
 from typing import Any, Dict, List
 import re
 
+from game.leads import filter_pending_leads_for_active_follow_surface
 from game.storage import get_scene_state
 from game.world import get_world_npc_by_id
 
@@ -543,7 +544,7 @@ def _compress_combat(combat: Dict[str, Any]) -> Dict[str, Any] | None:
     return combat
 
 
-def _compress_scene_runtime(runtime: Dict[str, Any]) -> Dict[str, Any]:
+def _compress_scene_runtime(runtime: Dict[str, Any], session: Dict[str, Any] | None = None) -> Dict[str, Any]:
     """Keep only essential runtime fields to avoid bloat."""
     if not runtime or not isinstance(runtime, dict):
         return {}
@@ -568,9 +569,15 @@ def _compress_scene_runtime(runtime: Dict[str, Any]) -> Dict[str, Any]:
                     "last_turn": int(item.get("last_turn", 0) or 0),
                 }
             )
+    raw_pending = list(runtime.get('pending_leads', []) or [])
+    pending_view = (
+        filter_pending_leads_for_active_follow_surface(session, raw_pending)
+        if isinstance(session, dict)
+        else raw_pending
+    )
     return {
         'discovered_clues': list(runtime.get('discovered_clues', []) or [])[:20],
-        'pending_leads': list(runtime.get('pending_leads', []) or []),
+        'pending_leads': pending_view,
         'recent_contextual_leads': recent_contextual_leads,
         'repeated_action_count': runtime.get('repeated_action_count', 0) or 0,
         'last_exploration_action_key': runtime.get('last_exploration_action_key'),
@@ -754,7 +761,12 @@ def build_narration_context(
 
     Returns a dict suitable for JSON serialization as the user message content.
     """
-    runtime = _compress_scene_runtime(scene_runtime or {})
+    active_pending_leads = (
+        filter_pending_leads_for_active_follow_surface(session, pending_leads)
+        if isinstance(session, dict)
+        else list(pending_leads or [])
+    )
+    runtime = _compress_scene_runtime(scene_runtime or {}, session=session if isinstance(session, dict) else None)
     session_view = _compress_session(session, world, public_scene)
     narration_obligations = derive_narration_obligations(
         session_view=session_view,
@@ -954,7 +966,7 @@ def build_narration_context(
             'visible_clues': discovered_clue_records,
             'discovered_clues': discovered_clue_records,
             'clue_visibility': clue_visibility,
-            'pending_leads': pending_leads,
+            'pending_leads': active_pending_leads,
             'runtime': runtime,
             'intent': intent,
             'layering_rules': {

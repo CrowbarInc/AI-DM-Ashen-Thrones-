@@ -80,6 +80,7 @@ _LEAD_LIST_FIELD_NAMES: frozenset[str] = frozenset(
         "related_scene_ids",
         "tags",
         "evidence_clue_ids",
+        "consequence_ids",
     }
 )
 
@@ -90,6 +91,7 @@ _LEAD_NORMALIZED_ID_LIST_FIELDS: frozenset[str] = frozenset(
         "related_scene_ids",
         "tags",
         "evidence_clue_ids",
+        "consequence_ids",
     }
 )
 
@@ -225,6 +227,86 @@ def get_lead(session: MutableMapping[str, Any], lead_id: Any) -> Dict[str, Any] 
     return existing if isinstance(existing, dict) else None
 
 
+def pending_lead_surfaces_as_active_follow_opportunity(
+    session: MutableMapping[str, Any], pending: Mapping[str, Any]
+) -> bool:
+    """Return whether a scene-runtime ``pending_leads`` row may surface as a live follow opportunity.
+
+    Rows without ``authoritative_lead_id`` keep legacy behavior (True — caller decides structural validity).
+
+    When ``authoritative_lead_id`` is set: require a registry row (fail closed if missing) and exclude
+    terminal lifecycles via :func:`is_lead_terminal`.
+    """
+    aid = _normalize_optional_id(pending.get("authoritative_lead_id"))
+    if aid is None:
+        return True
+    row = get_lead(session, aid)
+    if row is None:
+        return False
+    return not is_lead_terminal(row)
+
+
+def filter_pending_leads_for_active_follow_surface(
+    session: MutableMapping[str, Any], pending: Iterable[Any]
+) -> List[Dict[str, Any]]:
+    """Deterministic filter: drop pending rows that must not appear as active follow opportunities."""
+    out: List[Dict[str, Any]] = []
+    for p in pending:
+        if not isinstance(p, dict):
+            continue
+        if pending_lead_surfaces_as_active_follow_opportunity(session, p):
+            out.append(p)
+    return out
+
+
+def is_lead_terminal(lead: Any) -> bool:
+    """Return whether the lead's lifecycle is terminal (resolved or obsolete).
+
+    The snapshot is evaluated on a shallow copy passed through :func:`normalize_lead` so registry
+    rows are not mutated and list fields get schema defaults before reading ``lifecycle``.
+    """
+    if isinstance(lead, Mapping):
+        snap = normalize_lead(dict(lead))
+    else:
+        snap = normalize_lead({})
+    lc = _coerce_lifecycle_str(snap.get("lifecycle"))
+    if lc is None:
+        return False
+    return lc in (LeadLifecycle.RESOLVED.value, LeadLifecycle.OBSOLETE.value)
+
+
+def list_session_leads(session: Mapping[str, Any], *, include_terminal: bool = True) -> List[Dict[str, Any]]:
+    """Return normalized lead dict copies from the session registry, sorted by derived lead id.
+
+    Does not create or mutate ``session`` or stored rows. Skips non-dict registry values.
+    When ``include_terminal`` is false, excludes leads whose normalized lifecycle is resolved or obsolete.
+    """
+    reg = session.get(SESSION_LEAD_REGISTRY_KEY)
+    if not isinstance(reg, dict):
+        return []
+
+    items: List[tuple[str, Dict[str, Any]]] = []
+    for _storage_key, raw in reg.items():
+        if not isinstance(raw, dict):
+            continue
+        c = copy.deepcopy(raw)
+        normalize_lead(c)
+        sort_id = _derive_lead_id(c)
+        items.append((sort_id, c))
+    items.sort(key=lambda t: t[0])
+
+    out: List[Dict[str, Any]] = []
+    for _, c in items:
+        if include_terminal or not is_lead_terminal(c):
+            out.append(c)
+    return out
+
+
+def list_active_session_leads(session: Mapping[str, Any]) -> List[Dict[str, Any]]:
+    """Return non-terminal leads only; equivalent to ``list_session_leads(..., include_terminal=False)``."""
+    return list_session_leads(session, include_terminal=False)
+
+
 def _debug_dump_scalar(value: Any) -> str:
     if value is None:
         return ""
@@ -238,7 +320,9 @@ def debug_dump_leads(session: Mapping[str, Any]) -> List[Dict[str, str]]:
 
     Reads ``session``'s lead registry only; does not create the registry, modify ``session``,
     or mutate any stored lead dict. Registry keys are iterated in sorted string order; each row
-    is a new dict with string fields: id, title, type, lifecycle, status, confidence.
+    is a new dict with string fields: id, title, type, lifecycle, status, confidence, plus terminal
+    metadata (``resolved_at_turn``, ``resolution_type``, ``obsolete_reason``) and a comma-separated
+    ``consequence_ids`` field when non-empty after normalization.
     """
     reg = session.get(SESSION_LEAD_REGISTRY_KEY)
     if not isinstance(reg, dict):
@@ -250,15 +334,22 @@ def debug_dump_leads(session: Mapping[str, Any]) -> List[Dict[str, str]]:
         if not isinstance(raw, dict):
             continue
         sk = _debug_dump_scalar(storage_key)
-        lid = _debug_dump_scalar(raw.get("id")) or sk
+        snap = normalize_lead(dict(raw))
+        lid = _debug_dump_scalar(snap.get("id")) or sk
+        rat = _as_optional_int(snap.get("resolved_at_turn"))
+        cq = _normalize_id_list(snap.get("consequence_ids"))
         rows.append(
             {
                 "id": lid,
-                "title": _debug_dump_scalar(raw.get("title")),
-                "type": _debug_dump_scalar(raw.get("type")),
-                "lifecycle": _debug_dump_scalar(raw.get("lifecycle")),
-                "status": _debug_dump_scalar(raw.get("status")),
-                "confidence": _debug_dump_scalar(raw.get("confidence")),
+                "title": _debug_dump_scalar(snap.get("title")),
+                "type": _debug_dump_scalar(snap.get("type")),
+                "lifecycle": _debug_dump_scalar(snap.get("lifecycle")),
+                "status": _debug_dump_scalar(snap.get("status")),
+                "confidence": _debug_dump_scalar(snap.get("confidence")),
+                "resolved_at_turn": "" if rat is None else str(rat),
+                "resolution_type": _debug_dump_scalar(snap.get("resolution_type")),
+                "obsolete_reason": _debug_dump_scalar(snap.get("obsolete_reason")),
+                "consequence_ids": ",".join(cq),
             }
         )
     return rows
@@ -801,6 +892,28 @@ def _stamp_turn_metadata(
         lead["last_touched_turn"] = t
 
 
+def _normalize_resolution_type_token(value: Any) -> str:
+    """Normalize resolution_type: strip and lowercase; reject blank input."""
+    s = _as_str(value).lower()
+    if not s:
+        raise ValueError("resolution_type is required and cannot be blank")
+    return s
+
+
+def _normalize_obsolete_reason_token(value: Any) -> str:
+    """Strip obsolete_reason free text; reject blank."""
+    s = _as_str(value).strip()
+    if not s:
+        raise ValueError("obsolete_reason is required and cannot be blank")
+    return s
+
+
+def _resolution_type_token_or_none(value: Any) -> str | None:
+    """Lowercase resolution_type for comparison; ``None`` if missing or blank."""
+    s = _as_optional_str(value)
+    return s.lower() if s is not None else None
+
+
 # --- Public lead lifecycle mutations (legality via internal helpers; illegal ops raise ValueError) ---
 
 
@@ -1039,11 +1152,21 @@ def commit_lead(lead: Any, *, turn: Any = None) -> Dict[str, Any]:
 def resolve_lead(
     lead: Any,
     *,
+    resolution_type: Any,
+    resolution_summary: Any = "",
     turn: Any = None,
-    resolution_type: Any = None,
-    resolution_summary: Any = None,
+    consequence_ids: Any | None = None,
+    clear_obsolete_reason: bool = True,
 ) -> Dict[str, Any]:
-    """Move ``lead`` to resolved lifecycle and status; optional resolution metadata and turn stamps."""
+    """Move ``lead`` to resolved lifecycle and status; stamp resolution metadata and optional consequence ids.
+
+    ``resolution_type`` is required (non-blank), normalized to stripped lowercase. Blank
+    ``resolution_summary`` becomes ``None``. By default clears ``obsolete_reason``.
+    Idempotent when the lead is already resolved and the effective payload matches.
+    """
+    rt_token = _normalize_resolution_type_token(resolution_type)
+    rs_norm = _as_optional_str(resolution_summary)
+
     d = normalize_lead(lead)
 
     from_lc = _coerce_lifecycle_str(d.get("lifecycle"))
@@ -1051,14 +1174,22 @@ def resolve_lead(
     if from_lc is None:
         raise ValueError("lead has invalid lifecycle; cannot resolve")
 
+    if from_lc == LeadLifecycle.OBSOLETE.value:
+        raise ValueError("cannot resolve lead in obsolete lifecycle")
+
     from_cf = _coerce_confidence_str(d.get("confidence"))
     if from_cf is None:
         raise ValueError("lead has invalid confidence; cannot resolve")
 
+    st_now = _coerce_status_str(d.get("status"))
+    if st_now is None:
+        raise ValueError("lead has invalid status; cannot resolve")
+
+    to_st = LeadStatus.RESOLVED.value
+
     if not _is_legal_lifecycle_transition(from_lc, to_lc):
         raise ValueError(f"illegal lifecycle transition: {from_lc!r} -> {to_lc!r}")
 
-    to_st = LeadStatus.RESOLVED.value
     if not _is_legal_core_field_transition(
         from_lifecycle=from_lc,
         to_lifecycle=to_lc,
@@ -1068,7 +1199,33 @@ def resolve_lead(
     ):
         raise ValueError("resolve rejected: status incompatible with resolved lifecycle")
 
+    cq_target = _normalize_id_list(consequence_ids) if consequence_ids is not None else _normalize_id_list(d.get("consequence_ids"))
+
+    obsolete_ok = _as_optional_str(d.get("obsolete_reason")) is None
+    if from_lc == LeadLifecycle.RESOLVED.value:
+        cur_rt = _resolution_type_token_or_none(d.get("resolution_type"))
+        cur_rs = _as_optional_str(d.get("resolution_summary"))
+        cur_cq = _normalize_id_list(d.get("consequence_ids"))
+        if (
+            obsolete_ok
+            and cur_rt == rt_token
+            and cur_rs == rs_norm
+            and cur_cq == cq_target
+            and d.get("lifecycle") == to_lc
+            and d.get("status") == to_st
+        ):
+            _ensure_invariants_after_mutation(d)
+            _stamp_turn_metadata(d, turn, mutated=False, touched=False)
+            return d  # type: ignore[return-value]
+
+    if not clear_obsolete_reason and _as_optional_str(d.get("obsolete_reason")) is not None:
+        raise ValueError(
+            "cannot resolve while obsolete_reason is set; pass clear_obsolete_reason=True to clear it"
+        )
+
     mutated = False
+    entering_resolved = from_lc != LeadLifecycle.RESOLVED.value
+
     if d.get("lifecycle") != to_lc:
         d["lifecycle"] = to_lc
         mutated = True
@@ -1076,31 +1233,49 @@ def resolve_lead(
         d["status"] = to_st
         mutated = True
 
-    if turn is not None:
+    if d.get("resolution_type") != rt_token:
+        d["resolution_type"] = rt_token
+        mutated = True
+    if d.get("resolution_summary") != rs_norm:
+        d["resolution_summary"] = rs_norm
+        mutated = True
+
+    if consequence_ids is not None:
+        if _normalize_id_list(d.get("consequence_ids")) != cq_target:
+            d["consequence_ids"] = cq_target
+            mutated = True
+
+    if clear_obsolete_reason and _as_optional_str(d.get("obsolete_reason")) is not None:
+        d["obsolete_reason"] = None
+        mutated = True
+
+    if entering_resolved:
         t = _as_optional_int(turn)
         if t is not None and d.get("resolved_at_turn") != t:
             d["resolved_at_turn"] = t
             mutated = True
 
-    if resolution_type is not None:
-        rt = _as_optional_str(resolution_type)
-        if d.get("resolution_type") != rt:
-            d["resolution_type"] = rt
-            mutated = True
-
-    if resolution_summary is not None:
-        rs = _as_optional_str(resolution_summary)
-        if d.get("resolution_summary") != rs:
-            d["resolution_summary"] = rs
-            mutated = True
-
     _ensure_invariants_after_mutation(d)
-    _stamp_turn_metadata(d, turn, mutated=mutated, touched=mutated)
+    _stamp_turn_metadata(d, turn, mutated=mutated, touched=False)
     return d  # type: ignore[return-value]
 
 
-def obsolete_lead(lead: Any, *, turn: Any = None, obsolete_reason: Any = None) -> Dict[str, Any]:
-    """Move ``lead`` to obsolete lifecycle; never leaves status as pursued; optional reason."""
+def obsolete_lead(
+    lead: Any,
+    *,
+    obsolete_reason: Any,
+    turn: Any = None,
+    consequence_ids: Any | None = None,
+    clear_resolution_fields: bool = False,
+) -> Dict[str, Any]:
+    """Move ``lead`` to obsolete lifecycle; never leaves status as pursued.
+
+    ``obsolete_reason`` is required (non-blank after strip). By default resolution metadata is left
+    unchanged (``clear_resolution_fields=False``), which stays invariant-safe. Idempotent when
+    already obsolete with the same effective payload.
+    """
+    reason_token = _normalize_obsolete_reason_token(obsolete_reason)
+
     d = normalize_lead(lead)
 
     from_lc = _coerce_lifecycle_str(d.get("lifecycle"))
@@ -1130,6 +1305,30 @@ def obsolete_lead(lead: Any, *, turn: Any = None, obsolete_reason: Any = None) -
     ):
         raise ValueError("obsolete rejected: status incompatible with obsolete lifecycle")
 
+    cq_target = _normalize_id_list(consequence_ids) if consequence_ids is not None else _normalize_id_list(d.get("consequence_ids"))
+
+    def _resolution_fields_cleared() -> bool:
+        return (
+            _as_optional_int(d.get("resolved_at_turn")) is None
+            and _as_optional_str(d.get("resolution_type")) is None
+            and _as_optional_str(d.get("resolution_summary")) is None
+        )
+
+    if from_lc == LeadLifecycle.OBSOLETE.value:
+        cur_reason = _as_str(d.get("obsolete_reason")).strip()
+        cur_cq = _normalize_id_list(d.get("consequence_ids"))
+        res_ok = (not clear_resolution_fields) or _resolution_fields_cleared()
+        if (
+            res_ok
+            and cur_reason == reason_token
+            and cur_cq == cq_target
+            and d.get("lifecycle") == to_lc
+            and d.get("status") == st_after
+        ):
+            _ensure_invariants_after_mutation(d)
+            _stamp_turn_metadata(d, turn, mutated=False, touched=False)
+            return d  # type: ignore[return-value]
+
     mutated = False
     if d.get("lifecycle") != to_lc:
         d["lifecycle"] = to_lc
@@ -1138,10 +1337,24 @@ def obsolete_lead(lead: Any, *, turn: Any = None, obsolete_reason: Any = None) -
         d["status"] = st_after
         mutated = True
 
-    if obsolete_reason is not None:
-        reason = _as_optional_str(obsolete_reason)
-        if d.get("obsolete_reason") != reason:
-            d["obsolete_reason"] = reason
+    if _as_str(d.get("obsolete_reason")).strip() != reason_token:
+        d["obsolete_reason"] = reason_token
+        mutated = True
+
+    if consequence_ids is not None:
+        if _normalize_id_list(d.get("consequence_ids")) != cq_target:
+            d["consequence_ids"] = cq_target
+            mutated = True
+
+    if clear_resolution_fields:
+        if _as_optional_int(d.get("resolved_at_turn")) is not None:
+            d["resolved_at_turn"] = None
+            mutated = True
+        if _as_optional_str(d.get("resolution_type")) is not None:
+            d["resolution_type"] = None
+            mutated = True
+        if _as_optional_str(d.get("resolution_summary")) is not None:
+            d["resolution_summary"] = None
             mutated = True
 
     _ensure_invariants_after_mutation(d)
@@ -1260,34 +1473,110 @@ def resolve_session_lead(
     session: MutableMapping[str, Any],
     lead_id: Any,
     *,
+    resolution_type: Any,
+    resolution_summary: Any = "",
     turn: Any = None,
-    resolution_type: Any = None,
-    resolution_summary: Any = None,
-) -> Dict[str, Any] | None:
-    """Resolve the registry lead for ``lead_id`` via :func:`resolve_lead`; ``None`` if absent."""
-    d = get_lead(session, lead_id)
+    consequence_ids: Any | None = None,
+) -> Dict[str, Any]:
+    """Resolve the registry lead for ``lead_id`` in place via :func:`resolve_lead`.
+
+    Raises :class:`ValueError` when ``lead_id`` is missing/blank or no lead exists for that id.
+    """
+    sid = _normalize_optional_id(lead_id)
+    if sid is None:
+        raise ValueError("lead_id is required")
+    d = get_lead(session, sid)
     if d is None:
-        return None
-    return resolve_lead(
+        raise ValueError(f"lead does not exist: {sid!r}")
+    out = resolve_lead(
         d,
-        turn=turn,
         resolution_type=resolution_type,
         resolution_summary=resolution_summary,
+        turn=turn,
+        consequence_ids=consequence_ids,
     )
+    reg = ensure_lead_registry(session)
+    _ensure_invariants_after_mutation(out, registry=reg)
+    return out
 
 
 def obsolete_session_lead(
     session: MutableMapping[str, Any],
     lead_id: Any,
     *,
+    obsolete_reason: Any,
     turn: Any = None,
-    obsolete_reason: Any = None,
-) -> Dict[str, Any] | None:
-    """Mark the registry lead for ``lead_id`` obsolete via :func:`obsolete_lead`; ``None`` if absent."""
-    d = get_lead(session, lead_id)
+    consequence_ids: Any | None = None,
+) -> Dict[str, Any]:
+    """Mark the registry lead for ``lead_id`` obsolete in place via :func:`obsolete_lead`.
+
+    Raises :class:`ValueError` when ``lead_id`` is missing/blank or no lead exists for that id.
+    """
+    sid = _normalize_optional_id(lead_id)
+    if sid is None:
+        raise ValueError("lead_id is required")
+    d = get_lead(session, sid)
     if d is None:
-        return None
-    return obsolete_lead(d, turn=turn, obsolete_reason=obsolete_reason)
+        raise ValueError(f"lead does not exist: {sid!r}")
+    out = obsolete_lead(
+        d,
+        obsolete_reason=obsolete_reason,
+        turn=turn,
+        consequence_ids=consequence_ids,
+    )
+    reg = ensure_lead_registry(session)
+    _ensure_invariants_after_mutation(out, registry=reg)
+    return out
+
+
+def obsolete_superseded_lead(
+    session: MutableMapping[str, Any],
+    lead_id: Any,
+    *,
+    replaced_by_lead_id: Any = None,
+    turn: Any = None,
+    consequence_ids: Any | None = None,
+) -> Dict[str, Any]:
+    """Mark ``lead_id`` obsolete with reason ``superseded``; optionally wire ``replaced_by_lead_id`` via ``supersedes``.
+
+    Validates existence of the target lead. When ``replaced_by_lead_id`` is set, the replacer must
+    exist and the target's existing ``superseded_by`` must be absent or already equal to it; then
+    :func:`add_lead_relation` ensures ``supersedes`` / ``superseded_by`` without duplicating edges.
+    Uses :func:`obsolete_session_lead` with default resolution-field preservation (Block 1 semantics).
+    """
+    sid = _normalize_optional_id(lead_id)
+    if sid is None:
+        raise ValueError("lead_id is required")
+    target = get_lead(session, sid)
+    if target is None:
+        raise ValueError(f"lead does not exist: {sid!r}")
+
+    rid: str | None = None
+    if replaced_by_lead_id is not None:
+        rid = _normalize_optional_id(replaced_by_lead_id)
+        if rid is None:
+            raise ValueError("replaced_by_lead_id is required when provided")
+        if rid == sid:
+            raise ValueError("replaced_by_lead_id cannot equal lead_id")
+        if get_lead(session, rid) is None:
+            raise ValueError(f"target lead does not exist: {rid!r}")
+        normalize_lead(target)
+        existing_sb = _as_optional_str(target.get("superseded_by"))
+        if existing_sb is not None and existing_sb != rid:
+            raise ValueError(
+                f"lead {sid!r} already superseded_by {existing_sb!r}; incompatible with replaced_by_lead_id {rid!r}"
+            )
+
+    out = obsolete_session_lead(
+        session,
+        sid,
+        obsolete_reason="superseded",
+        turn=turn,
+        consequence_ids=consequence_ids,
+    )
+    if rid is not None:
+        add_lead_relation(session, rid, "supersedes", sid, turn=turn)
+    return out
 
 
 def refresh_session_lead_touch(
@@ -1660,6 +1949,7 @@ def create_lead(
     related_scene_ids: Iterable[str] | None = None,
     tags: Iterable[str] | None = None,
     evidence_clue_ids: Iterable[str] | None = None,
+    consequence_ids: Iterable[str] | None = None,
     metadata: Mapping[str, Any] | None = None,
 ) -> Dict[str, Any]:
     """Build a structurally complete normalized lead dict with stable field names.
@@ -1711,6 +2001,7 @@ def create_lead(
         "related_scene_ids": _normalize_id_list(related_scene_ids),
         "tags": _normalize_id_list(tags),
         "evidence_clue_ids": _normalize_id_list(evidence_clue_ids),
+        "consequence_ids": _normalize_id_list(consequence_ids),
         "metadata": _normalize_metadata(metadata),
     }
 

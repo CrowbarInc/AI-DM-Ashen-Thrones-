@@ -22,6 +22,7 @@ def test_normalize_lead_backfills_new_list_fields_and_metadata():
     assert raw["related_scene_ids"] == []
     assert raw["tags"] == []
     assert raw["evidence_clue_ids"] == []
+    assert raw["consequence_ids"] == []
     assert raw["metadata"] == {}
     assert raw.get("commitment_source") is None
     assert raw.get("commitment_strength") is None
@@ -45,12 +46,14 @@ def test_normalize_lead_id_lists_dedupe_drop_blanks_deterministic_order():
         "related_faction_ids": [" f1 ", "f2", "f1", "", None],
         "tags": ["b", "a", "b"],
         "evidence_clue_ids": ("c1", "c1", "c2"),
+        "consequence_ids": [" z ", "z", "w"],
     }
     normalize_lead(raw)
 
     assert raw["related_faction_ids"] == ["f1", "f2"]
     assert raw["tags"] == ["b", "a"]
     assert raw["evidence_clue_ids"] == ["c1", "c2"]
+    assert raw["consequence_ids"] == ["z", "w"]
 
 
 def test_normalize_lead_metadata_fresh_dict_non_mapping_to_empty():

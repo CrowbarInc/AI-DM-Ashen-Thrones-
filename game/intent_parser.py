@@ -19,7 +19,7 @@ from __future__ import annotations
 import re
 from typing import Any, Dict, List, Optional
 
-from game.leads import get_lead
+from game.leads import get_lead, pending_lead_surfaces_as_active_follow_opportunity
 from game.storage import get_scene_runtime
 from game.utils import slugify
 
@@ -363,7 +363,9 @@ def _actionable_pending_with_registry_rows(
         if not isinstance(p, dict):
             continue
         aid = str(p.get("authoritative_lead_id") or "").strip()
-        if not aid or get_lead(session, aid) is None:
+        if not aid:
+            continue
+        if not pending_lead_surfaces_as_active_follow_opportunity(session, p):
             continue
         out.append(p)
     return out
@@ -654,11 +656,13 @@ def _try_explicit_pursuit_scene_transition(
         return act if act is not None else _QUALIFIED_PURSUIT_FAILED
 
     if not actionable:
+        if _RE_PURSUIT_BARE.fullmatch(text.strip()):
+            return _QUALIFIED_PURSUIT_FAILED
         return None
 
     if _RE_PURSUIT_BARE.fullmatch(text.strip()):
         if len(actionable) != 1:
-            return None
+            return _QUALIFIED_PURSUIT_FAILED
         p0 = actionable[0]
         act = _build_pursuit_scene_transition_action(text, p0, world=world)
         return act

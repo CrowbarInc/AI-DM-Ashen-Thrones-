@@ -21,8 +21,10 @@ from game.defaults import (
 )
 from game.final_emission_gate import apply_final_emission_gate
 from game.interaction_context import rebuild_active_scene_entities, set_social_target
+from game.affordances import generate_scene_affordances
+from game.exploration import finalize_followed_lead
 from game.intent_parser import parse_freeform_to_action
-from game.leads import LeadLifecycle, LeadStatus, create_lead, get_lead, upsert_lead
+from game.leads import LeadLifecycle, LeadStatus, create_lead, debug_dump_leads, get_lead, upsert_lead
 from game.storage import get_scene_runtime
 
 pytestmark = [pytest.mark.transcript, pytest.mark.regression]
@@ -399,6 +401,78 @@ def test_block3_boundary_native_social_control_still_allows_speaker_owned_emissi
     meta = out.get("_final_emission_meta") or {}
     assert meta.get("strict_social_active") is True
     assert meta.get("strict_social_suppressed_non_social_turn") is False
+
+
+def test_block3_transcript_ended_lead_drops_follow_surfaces_registry_retained():
+    """After payoff-time resolution, follow affordances / explicit pursuit stop; registry history remains."""
+    session: dict = {"turn_counter": 2}
+    upsert_lead(
+        session,
+        create_lead(
+            title="Milestone",
+            summary="",
+            id="lead_to_ms",
+            lifecycle=LeadLifecycle.DISCOVERED,
+            status=LeadStatus.ACTIVE,
+        ),
+    )
+    rt = get_scene_runtime(session, "frontier_gate")
+    rt["pending_leads"] = [
+        {
+            "clue_id": "c_ms",
+            "authoritative_lead_id": "lead_to_ms",
+            "text": "Investigate the old milestone",
+            "leads_to_scene": "old_milestone",
+        }
+    ]
+    scene = {
+        "scene": {
+            "id": "frontier_gate",
+            "visible_facts": [],
+            "exits": [{"label": "To Old Milestone", "target_scene_id": "old_milestone"}],
+            "mode": "exploration",
+        }
+    }
+    affs_before = generate_scene_affordances(
+        scene,
+        "exploration",
+        session,
+        list_scene_ids_fn=lambda: ["frontier_gate", "old_milestone"],
+    )
+    assert any(
+        isinstance(a.get("label"), str) and str(a["label"]).startswith("Follow lead:") for a in affs_before
+    )
+
+    finalize_followed_lead(
+        session,
+        "lead_to_ms",
+        terminal_mode="resolved",
+        turn=2,
+        resolution_type="confirmed",
+        resolution_summary="Milestone checked; thread closed.",
+    )
+
+    affs_after = generate_scene_affordances(
+        scene,
+        "exploration",
+        session,
+        list_scene_ids_fn=lambda: ["frontier_gate", "old_milestone"],
+    )
+    assert not any(
+        isinstance(a.get("label"), str) and str(a["label"]).startswith("Follow lead:") for a in affs_after
+    )
+    parsed = parse_freeform_to_action(
+        "follow the lead",
+        scene,
+        session=session,
+    )
+    assert parsed is None
+
+    row = get_lead(session, "lead_to_ms")
+    assert row is not None
+    assert row.get("lifecycle") == "resolved"
+    dump = debug_dump_leads(session)
+    assert any(str(r.get("id") or "") == "lead_to_ms" for r in dump)
 
 
 def test_block3_boundary_different_scene_still_transitions_and_commits(tmp_path, monkeypatch):

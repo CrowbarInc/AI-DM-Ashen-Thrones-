@@ -12,6 +12,7 @@ from game.leads import (
     get_lead,
     get_related_lead_ids,
     obsolete_session_lead,
+    obsolete_superseded_lead,
     remove_lead_relation,
     replace_lead_relations,
     resolve_session_lead,
@@ -179,7 +180,7 @@ def test_new_parent_rejected_when_parent_resolved():
     session: dict = {}
     upsert_lead(session, create_lead(title="Child", summary="", id="child"))
     upsert_lead(session, create_lead(title="Par", summary="", id="par"))
-    resolve_session_lead(session, "par", turn=1)
+    resolve_session_lead(session, "par", turn=1, resolution_type="confirmed")
     with pytest.raises(ValueError, match="resolved or obsolete"):
         add_lead_relation(session, "child", "parent_lead_id", "par", turn=2)
 
@@ -188,16 +189,37 @@ def test_new_supersedes_rejected_when_source_obsolete():
     session: dict = {}
     upsert_lead(session, create_lead(title="A", summary="", id="a"))
     upsert_lead(session, create_lead(title="B", summary="", id="b"))
-    obsolete_session_lead(session, "a", turn=1)
+    obsolete_session_lead(session, "a", turn=1, obsolete_reason="superseded")
     with pytest.raises(ValueError, match="resolved or obsolete"):
         add_lead_relation(session, "a", "supersedes", "b", turn=2)
+
+
+def test_obsolete_superseded_lead_rejects_conflicting_superseded_by():
+    session: dict = {}
+    upsert_lead(session, create_lead(title="Old", summary="", id="old"))
+    upsert_lead(session, create_lead(title="A", summary="", id="a"))
+    upsert_lead(session, create_lead(title="B", summary="", id="b"))
+    add_lead_relation(session, "a", "supersedes", "old", turn=1)
+    with pytest.raises(ValueError, match="incompatible"):
+        obsolete_superseded_lead(session, "old", replaced_by_lead_id="b", turn=2)
+
+
+def test_obsolete_superseded_lead_keeps_inverse_consistent_for_validator():
+    session: dict = {}
+    upsert_lead(session, create_lead(title="Old", summary="", id="old", lifecycle="discovered"))
+    upsert_lead(session, create_lead(title="New", summary="", id="new", lifecycle="discovered"))
+    obsolete_superseded_lead(session, "old", replaced_by_lead_id="new", turn=1)
+    reg = ensure_lead_registry(session)
+    new_row = get_lead(session, "new")
+    assert new_row is not None
+    _ensure_invariants_after_mutation(new_row, registry=reg)
 
 
 def test_new_supersedes_rejected_when_source_resolved():
     session: dict = {}
     upsert_lead(session, create_lead(title="A", summary="", id="a"))
     upsert_lead(session, create_lead(title="B", summary="", id="b"))
-    resolve_session_lead(session, "a", turn=1)
+    resolve_session_lead(session, "a", turn=1, resolution_type="confirmed")
     with pytest.raises(ValueError, match="resolved or obsolete"):
         add_lead_relation(session, "a", "supersedes", "b", turn=2)
 

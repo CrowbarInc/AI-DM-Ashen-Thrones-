@@ -8,6 +8,8 @@ from __future__ import annotations
 
 from typing import Any, Callable, Dict, List, Optional, Set
 
+from game.leads import pending_lead_surfaces_as_active_follow_opportunity
+
 
 def build_scene_graph(
     list_scene_ids_fn: Callable[[], List[str]],
@@ -60,10 +62,13 @@ def get_reachable_from(
         rt = (session.get("scene_runtime") or {}).get(from_scene_id)
         if isinstance(rt, dict):
             for lead in rt.get("pending_leads") or []:
-                if isinstance(lead, dict):
-                    tid = (lead.get("leads_to_scene") or "").strip()
-                    if tid and tid in known_scene_ids:
-                        reachable.add(tid)
+                if not isinstance(lead, dict):
+                    continue
+                if not pending_lead_surfaces_as_active_follow_opportunity(session, lead):
+                    continue
+                tid = (lead.get("leads_to_scene") or "").strip()
+                if tid and tid in known_scene_ids:
+                    reachable.add(tid)
 
     return reachable
 

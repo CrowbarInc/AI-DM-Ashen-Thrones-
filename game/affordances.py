@@ -4,6 +4,7 @@ import re
 from typing import Any, Dict, List, Optional, Set, Tuple
 
 from game.utils import slugify
+from game.leads import pending_lead_surfaces_as_active_follow_opportunity
 from game.scene_actions import normalize_scene_action
 from game.scene_graph import get_reachable_from
 from game.clues import get_all_known_clue_ids as get_known_clue_ids, get_all_known_clue_texts as get_known_clue_texts
@@ -523,6 +524,8 @@ def generate_scene_affordances(scene_envelope: Dict[str, Any], mode: str, sessio
     rt = get_scene_runtime(session, scene_id) if scene_id and isinstance(session, dict) else {}
     for lead in (rt.get("pending_leads") or [])[:5]:
         if not isinstance(lead, dict):
+            continue
+        if not pending_lead_surfaces_as_active_follow_opportunity(session, lead):
             continue
         target = lead.get("leads_to_scene")
         if target and str(target).strip() in known_ids:

@@ -27,6 +27,7 @@ from game.storage import (
     SCENE_MOMENTUM_TAG_PREFIX,
 )
 from game.clues import get_clue_presentation, get_known_clues_with_presentation
+from game.leads import filter_pending_leads_for_active_follow_surface
 from game.interaction_context import (
     addressable_scene_npc_id_universe,
     assert_valid_speaker,
@@ -3142,7 +3143,13 @@ def build_uncertainty_render_context(
         speaker_name=str(speaker.get("name") or "").strip(),
         scene_snapshot=scene_snapshot,
     )
-    snapshot["pending_leads"] = list(get_scene_runtime(session_data, scene_id).get("pending_leads") or []) if scene_id else []
+    rt0 = get_scene_runtime(session_data, scene_id) if scene_id else {}
+    raw_pending0 = list(rt0.get("pending_leads") or []) if scene_id else []
+    snapshot["pending_leads"] = (
+        filter_pending_leads_for_active_follow_surface(session_data, raw_pending0)
+        if scene_id and isinstance(session_data, dict)
+        else raw_pending0
+    )
     snapshot["recent_contextual_leads"] = _recent_contextual_leads(session_data, scene_id)
     turn = _build_uncertainty_turn_context(
         player_text=player_text,
@@ -4428,7 +4435,9 @@ def build_messages(
         gm_only_discoverable_locked=[c['text'] for c in undiscovered] if not allow_disc else [],
         discovered_clue_records=discovered,
         undiscovered_clue_records=undiscovered,
-        pending_leads=list(runtime_for_scene.get('pending_leads') or []),
+        pending_leads=filter_pending_leads_for_active_follow_surface(
+            session, list(runtime_for_scene.get('pending_leads') or [])
+        ),
         intent=intent,
         world_state_view=world_state_view,
         mode_instruction=mode_instruction,
@@ -4444,12 +4453,15 @@ def build_messages(
     passive_streak = int(runtime_for_scene.get("passive_action_streak", 0) or 0)
     passive_pause = "passive_pause" in [str(label).strip().lower() for label in intent.get("labels", []) if isinstance(label, str)]
     visible_low = " ".join(str(v).lower() for v in public_scene.get("visible_facts", []) if isinstance(v, str))
+    active_runtime_pending = filter_pending_leads_for_active_follow_surface(
+        session, list(runtime_for_scene.get("pending_leads") or [])
+    )
     passive_scene_pressure_due = (
         not social_authority
         and passive_pause
         and (
             passive_streak >= 2
-            or bool(runtime_for_scene.get("pending_leads"))
+            or bool(active_runtime_pending)
             or bool(runtime_for_scene.get("recent_contextual_leads"))
             or ("guard" in visible_low)
             or ("watch" in visible_low)
@@ -4755,7 +4767,11 @@ def _reply_already_has_concrete_interaction(text: str) -> bool:
     return any(pattern.search(clean) for pattern in _CONCRETE_INTERACTION_PATTERNS)
 
 
-def _scene_snapshot_has_tension(scene_snapshot: Dict[str, Any], runtime: Dict[str, Any]) -> bool:
+def _scene_snapshot_has_tension(
+    scene_snapshot: Dict[str, Any],
+    runtime: Dict[str, Any],
+    session: Dict[str, Any] | None = None,
+) -> bool:
     visible_text = " ".join(
         str(item)
         for item in (scene_snapshot.get("visible_facts") or [])
@@ -4767,7 +4783,13 @@ def _scene_snapshot_has_tension(scene_snapshot: Dict[str, Any], runtime: Dict[st
         return True
     if scene_snapshot.get("has_refugees") or scene_snapshot.get("has_tax_or_curfew"):
         return True
-    if runtime.get("pending_leads") or runtime.get("suspicion_flags"):
+    pending_raw = runtime.get("pending_leads") or []
+    pending_active = (
+        filter_pending_leads_for_active_follow_surface(session, pending_raw)
+        if isinstance(session, dict)
+        else bool(pending_raw)
+    )
+    if pending_active or runtime.get("suspicion_flags"):
         return True
     recent = scene_snapshot.get("recent_contextual_leads")
     return bool(recent)
@@ -4974,7 +4996,7 @@ def escalate_passive_scene(
         resolution=resolution,
     )
     scene_snapshot = context.get("scene_snapshot") if isinstance(context.get("scene_snapshot"), dict) else {}
-    if passive_streak < 2 and not _scene_snapshot_has_tension(scene_snapshot, runtime):
+    if passive_streak < 2 and not _scene_snapshot_has_tension(scene_snapshot, runtime, session):
         return gm
     text = gm.get("player_facing_text") if isinstance(gm.get("player_facing_text"), str) else ""
     if _reply_already_has_concrete_interaction(text):

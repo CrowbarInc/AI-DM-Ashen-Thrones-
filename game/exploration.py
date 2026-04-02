@@ -1,13 +1,18 @@
 """Deterministic exploration action resolution: runs before GPT narration for scene_transition, observe, investigate, interact, custom."""
 from __future__ import annotations
 
-from typing import Any, Callable, Dict, List, Optional
+from typing import Any, Callable, Dict, List, Literal, Optional
 
 from game.models import ExplorationEngineResult
 from game.utils import slugify
 from game.storage import get_scene_runtime, add_pending_lead, is_interactable_resolved, is_target_searched
 from game.clues import apply_authoritative_clue_discovery, set_clue_presentation
-from game.leads import commit_session_lead_with_context, get_lead
+from game.leads import (
+    commit_session_lead_with_context,
+    get_lead,
+    obsolete_session_lead,
+    resolve_session_lead,
+)
 from game.scene_graph import build_scene_graph, is_transition_valid
 from game.skill_checks import resolve_skill_check, should_trigger_check
 
@@ -433,6 +438,48 @@ def _follow_lead_commitment_snapshot(row: Dict[str, Any] | None) -> tuple[Any, .
         row.get("commitment_source"),
         row.get("commitment_strength"),
     )
+
+
+def finalize_followed_lead(
+    session: Dict[str, Any],
+    authoritative_lead_id: Any,
+    *,
+    terminal_mode: Literal["resolved", "obsolete"] | str,
+    turn: Any = None,
+    resolution_type: Any = None,
+    resolution_summary: Any = "",
+    obsolete_reason: Any = None,
+    consequence_ids: Any | None = None,
+) -> Dict[str, Any]:
+    """End an authoritative lead after payoff: resolve or obsolete via session registry wrappers.
+
+    No automatic lifecycle changes from travel or follow success — call this only when fiction delivers closure.
+
+    Raises :class:`ValueError` for blank ``authoritative_lead_id``, unknown ``terminal_mode``, or missing registry row
+    (same as :func:`resolve_session_lead` / :func:`obsolete_session_lead`). ``resolution_type`` is required when
+    ``terminal_mode`` is ``resolved``; ``obsolete_reason`` when ``obsolete``.
+    """
+    if not isinstance(session, dict):
+        raise ValueError("session is required")
+    mode = str(terminal_mode or "").strip().lower()
+    if mode == "resolved":
+        return resolve_session_lead(
+            session,
+            authoritative_lead_id,
+            resolution_type=resolution_type,
+            resolution_summary=resolution_summary,
+            turn=turn,
+            consequence_ids=consequence_ids,
+        )
+    if mode == "obsolete":
+        return obsolete_session_lead(
+            session,
+            authoritative_lead_id,
+            obsolete_reason=obsolete_reason,
+            turn=turn,
+            consequence_ids=consequence_ids,
+        )
+    raise ValueError("terminal_mode must be 'resolved' or 'obsolete'")
 
 
 def apply_follow_lead_commitment_after_resolved_scene_transition(

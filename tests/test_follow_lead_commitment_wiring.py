@@ -1,14 +1,18 @@
 """Follow-lead affordance metadata → successful scene_transition → commit_session_lead_with_context."""
 from __future__ import annotations
 
+import pytest
+
 from game.affordances import generate_scene_affordances
 from game.exploration import (
     apply_follow_lead_commitment_after_resolved_scene_transition,
+    finalize_followed_lead,
     parse_exploration_intent,
     resolve_exploration_action,
 )
 from game.intent_parser import parse_freeform_to_action
 from game.leads import LeadLifecycle, LeadStatus, create_lead, get_lead, upsert_lead
+from game.prompt_context import build_narration_context
 from game.scene_actions import normalize_scene_action
 from game.storage import get_scene_runtime
 
@@ -27,6 +31,16 @@ def _scene_gate():
 def test_follow_lead_affordance_carries_commitment_metadata():
     scene = _scene_gate()
     session: dict = {}
+    upsert_lead(
+        session,
+        create_lead(
+            title="Milestone",
+            summary="",
+            id="to_milestone",
+            lifecycle=LeadLifecycle.DISCOVERED,
+            status=LeadStatus.ACTIVE,
+        ),
+    )
     rt = get_scene_runtime(session, "gate")
     rt["pending_leads"] = [
         {
@@ -482,6 +496,7 @@ def test_explicit_pursuit_two_leads_same_destination_no_metadata():
 
 
 def test_explicit_pursuit_resolved_lead_no_commitment_mutation():
+    """Terminal authoritative lead is excluded from actionable pursuit; no live 'follow the lead' binding."""
     session: dict = {"turn_counter": 4}
     upsert_lead(
         session,
@@ -505,9 +520,21 @@ def test_explicit_pursuit_resolved_lead_no_commitment_mutation():
     ]
     scene = _scene_milestone_gate()
     raw = parse_freeform_to_action("follow the lead", scene, session=session)
-    assert (raw.get("metadata") or {}).get("authoritative_lead_id") == "Ldone"
+    assert raw is None
     before = dict(get_lead(session, "Ldone") or {})
-    norm = normalize_scene_action(raw)
+    norm = normalize_scene_action(
+        {
+            "id": "fl",
+            "label": "Follow lead: done",
+            "type": "scene_transition",
+            "targetSceneId": "old_milestone",
+            "metadata": {
+                "authoritative_lead_id": "Ldone",
+                "commitment_source": "follow_lead_affordance",
+                "commitment_strength": 1,
+            },
+        }
+    )
     resolution = resolve_exploration_action(
         scene, session, {}, norm, list_scene_ids=lambda: ["gate", "old_milestone"]
     )
@@ -559,3 +586,186 @@ def test_convergence_affordance_then_explicit_pursuit_idempotent():
     assert row["status"] == "pursued"
     assert row["commitment_source"] == "explicit_player_pursuit"
     assert row["commitment_strength"] == 2
+
+
+def test_resolved_authoritative_lead_omitted_from_follow_lead_affordances():
+    scene = _scene_gate()
+    session: dict = {"turn_counter": 1}
+    upsert_lead(
+        session,
+        create_lead(
+            title="Closed",
+            summary="",
+            id="closed_lead",
+            lifecycle=LeadLifecycle.RESOLVED,
+            status=LeadStatus.RESOLVED,
+            resolved_at_turn=1,
+            resolution_type="confirmed",
+        ),
+    )
+    rt = get_scene_runtime(session, "gate")
+    rt["pending_leads"] = [
+        {
+            "clue_id": "c1",
+            "authoritative_lead_id": "closed_lead",
+            "text": "A thread you already closed.",
+            "leads_to_scene": "old_milestone",
+        }
+    ]
+    affs = generate_scene_affordances(
+        scene, "exploration", session, list_scene_ids_fn=lambda: ["gate", "old_milestone"]
+    )
+    assert not any(
+        isinstance(a.get("label"), str) and str(a["label"]).startswith("Follow lead:") for a in affs
+    )
+
+
+def test_obsolete_authoritative_lead_omitted_from_follow_lead_affordances():
+    scene = _scene_gate()
+    session: dict = {}
+    upsert_lead(
+        session,
+        create_lead(
+            title="Cold",
+            summary="",
+            id="cold_lead",
+            lifecycle=LeadLifecycle.OBSOLETE,
+            status=LeadStatus.ACTIVE,
+            obsolete_reason="stale",
+        ),
+    )
+    rt = get_scene_runtime(session, "gate")
+    rt["pending_leads"] = [
+        {
+            "clue_id": "c2",
+            "authoritative_lead_id": "cold_lead",
+            "text": "Stale rumor",
+            "leads_to_scene": "old_milestone",
+        }
+    ]
+    affs = generate_scene_affordances(
+        scene, "exploration", session, list_scene_ids_fn=lambda: ["gate", "old_milestone"]
+    )
+    assert not any(
+        isinstance(a.get("label"), str) and str(a["label"]).startswith("Follow lead:") for a in affs
+    )
+
+
+def test_finalize_followed_lead_resolved_stamps_metadata():
+    session: dict = {"turn_counter": 11}
+    upsert_lead(
+        session,
+        create_lead(
+            title="Payoff",
+            summary="",
+            id="pay_lead",
+            lifecycle=LeadLifecycle.COMMITTED,
+            status=LeadStatus.PURSUED,
+        ),
+    )
+    finalize_followed_lead(
+        session,
+        "pay_lead",
+        terminal_mode="resolved",
+        turn=11,
+        resolution_type="confirmed",
+        resolution_summary="The signet matches the ledger.",
+        consequence_ids=["cons_ledger"],
+    )
+    row = get_lead(session, "pay_lead")
+    assert row is not None
+    assert row["lifecycle"] == "resolved"
+    assert row["status"] == "resolved"
+    assert row["resolution_type"] == "confirmed"
+    assert row["resolution_summary"] == "The signet matches the ledger."
+    assert row["resolved_at_turn"] == 11
+    assert row.get("consequence_ids") == ["cons_ledger"]
+
+
+def test_finalize_followed_lead_obsolete_stamps_metadata():
+    session: dict = {"turn_counter": 4}
+    upsert_lead(
+        session,
+        create_lead(title="Dud", summary="", id="dud_lead", lifecycle=LeadLifecycle.DISCOVERED),
+    )
+    finalize_followed_lead(
+        session,
+        "dud_lead",
+        terminal_mode="obsolete",
+        turn=4,
+        obsolete_reason="trail went cold",
+        consequence_ids=["cons_x"],
+    )
+    row = get_lead(session, "dud_lead")
+    assert row["lifecycle"] == "obsolete"
+    assert row["obsolete_reason"] == "trail went cold"
+    assert row.get("consequence_ids") == ["cons_x"]
+
+
+def test_finalize_followed_lead_invalid_terminal_mode_raises():
+    session: dict = {}
+    upsert_lead(session, create_lead(title="Z", summary="", id="z_lead"))
+    with pytest.raises(ValueError, match="terminal_mode"):
+        finalize_followed_lead(session, "z_lead", terminal_mode="maybe", resolution_type="x")
+
+
+def test_finalize_followed_lead_missing_registry_row_raises():
+    session: dict = {}
+    with pytest.raises(ValueError, match="does not exist"):
+        finalize_followed_lead(
+            session,
+            "missing_lead_id",
+            terminal_mode="resolved",
+            resolution_type="done",
+        )
+
+
+def test_prompt_export_filters_terminal_pending_leads():
+    session: dict = {}
+    upsert_lead(
+        session,
+        create_lead(
+            title="Done",
+            summary="",
+            id="done_pl",
+            lifecycle=LeadLifecycle.RESOLVED,
+            status=LeadStatus.RESOLVED,
+            resolution_type="confirmed",
+            resolved_at_turn=1,
+        ),
+    )
+    pending = [
+        {
+            "clue_id": "c",
+            "authoritative_lead_id": "done_pl",
+            "text": "Should not surface as active",
+            "leads_to_scene": "x",
+        }
+    ]
+    payload = build_narration_context(
+        campaign={},
+        world={},
+        session=session,
+        character={},
+        scene={},
+        combat={},
+        recent_log=[],
+        user_text="",
+        resolution=None,
+        scene_runtime={"pending_leads": pending},
+        public_scene={"id": "gate"},
+        discoverable_clues=[],
+        gm_only_hidden_facts=[],
+        gm_only_discoverable_locked=[],
+        discovered_clue_records=[],
+        undiscovered_clue_records=[],
+        pending_leads=pending,
+        intent={},
+        world_state_view={},
+        mode_instruction="",
+        recent_log_for_prompt=[],
+    )
+    scene_block = payload.get("scene") or {}
+    assert scene_block.get("pending_leads") == []
+    rt_block = scene_block.get("runtime") or {}
+    assert rt_block.get("pending_leads") == []
