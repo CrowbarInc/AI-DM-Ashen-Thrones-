@@ -27,6 +27,7 @@ from game.interaction_context import (
     npc_dict_by_id,
     resolve_authoritative_social_target,
     scene_addressable_actor_ids,
+    session_allows_implicit_social_reply_authority,
     set_non_social_activity,
     set_social_target,
     synchronize_scene_addressability,
@@ -243,6 +244,11 @@ def can_actor_speak_in_current_exchange(
         base["fallback_actor_id"] = _fallback_interlocutor_id(session, scene_envelope, world)
         return base
 
+    if auth_src in ("continuity", "first_roster") and not session_allows_implicit_social_reply_authority(session):
+        base["reason_code"] = "implicit_social_reply_authority_blocked_non_social_turn"
+        base["fallback_actor_id"] = _fallback_interlocutor_id(session, scene_envelope, world)
+        return base
+
     if aid != auth_nid:
         base["reason_code"] = "non_authoritative_reply_speaker"
         base["grounded_actor_id"] = auth_nid
@@ -329,6 +335,8 @@ def _interlocutor_continuity_authority_for_reply_fallback(
     """Continuity-shaped authority for the session's active social interlocutor (reply fallback only)."""
     iid = _clean_actor_id(interlocutor_id)
     if not iid or not isinstance(session, dict):
+        return None
+    if not session_allows_implicit_social_reply_authority(session):
         return None
     ctx = inspect_interaction_context(session)
     if _clean_actor_id(ctx.get("active_interaction_target_id")) != iid:

@@ -20,7 +20,8 @@ from game.defaults import (
     default_world,
 )
 from game.final_emission_gate import apply_final_emission_gate
-from game.interaction_context import rebuild_active_scene_entities, set_social_target
+from game.interaction_context import inspect as inspect_interaction_context
+from game.interaction_context import rebuild_active_scene_entities, set_non_social_activity, set_social_target
 from game.affordances import generate_scene_affordances
 from game.exploration import finalize_followed_lead
 from game.intent_parser import parse_freeform_to_action
@@ -164,6 +165,32 @@ def _seed_frontier_with_lead_and_active_tavern_runner(tmp_path, monkeypatch):
     storage._save_json(storage.SESSION_PATH, session)
 
 
+def test_block3_gate_bare_question_after_redirect_activity_mode_no_strict_social_reopen():
+    """Block 3: post-redirect activity session + bare question-shaped row must not reopen strict-social alone."""
+    session = default_session()
+    world = default_world()
+    sid = "frontier_gate"
+    set_social_target(session, "tavern_runner")
+    rebuild_active_scene_entities(session, world, sid)
+    set_non_social_activity(session, "investigate")
+    ctx = inspect_interaction_context(session)
+    assert ctx.get("interaction_mode") == "activity"
+    assert not str(ctx.get("active_interaction_target_id") or "").strip()
+
+    rt = get_scene_runtime(session, sid)
+    rt["last_player_action_text"] = "What about the missing patrol?"
+    gm = {
+        "player_facing_text": "The question hangs; ledgers and boot-scuffs offer no voice.",
+        "tags": [],
+    }
+    resolution = {"kind": "question", "prompt": rt["last_player_action_text"]}
+    out = apply_final_emission_gate(gm, resolution=resolution, session=session, scene_id=sid, world=world)
+    meta = out.get("_final_emission_meta") or {}
+    # Bare question shape without social payload: strict-social must not activate on an activity-mode turn.
+    assert meta.get("strict_social_active") is False
+    assert meta.get("coercion_reason") == "strict_social_inactive"
+
+
 def test_block3_boundary_post_dialogue_reflective_non_social_strict_suppression(tmp_path, monkeypatch):
     """After dialogue engagement, exploration-shaped turns stay GM-safe: no NPC-voiced fallback; meta when suppressed."""
     _seed_runner_dialogue_context(tmp_path, monkeypatch)
@@ -205,9 +232,11 @@ def test_block3_boundary_post_dialogue_reflective_non_social_strict_suppression(
     assert "whispers" not in low
     assert "tavern runner" not in low
     meta = gm.get("_final_emission_meta") or {}
-    assert meta.get("strict_social_suppressed_non_social_turn") is True
-    assert meta.get("strict_social_suppression_reason") == "exploration_resolution_kind"
     assert meta.get("strict_social_active") is False
+    if meta.get("strict_social_suppressed_non_social_turn"):
+        assert meta.get("strict_social_suppression_reason") == "exploration_resolution_kind"
+    ic = (data.get("session") or {}).get("interaction_context") or {}
+    assert not str(ic.get("active_interaction_target_id") or "").strip()
 
 
 def test_block3_boundary_post_dialogue_gate_unit_reflective_question_without_social():

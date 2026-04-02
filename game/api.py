@@ -100,6 +100,7 @@ from game.social import (
 )
 from game.interaction_context import (
     apply_conservative_emergent_enrollment_from_gm_output,
+    apply_explicit_non_social_commitment_break,
     apply_turn_input_implied_context,
     assert_valid_speaker,
     build_intent_route_debug_adjudication_query,
@@ -527,6 +528,8 @@ def _build_compact_turn_trace(
                 "applied": bool((implied_context or {}).get("applied")),
                 "cases": list((implied_context or {}).get("cases") or []),
                 "target_id": (implied_context or {}).get("target_id"),
+                "commitment_broken": bool((implied_context or {}).get("commitment_broken")),
+                "break_reason": (implied_context or {}).get("break_reason"),
             },
         },
         "classification": {
@@ -669,16 +672,28 @@ def _prepare_interaction_from_turn_input(
     scene_id: str,
     player_text: str | None,
     scene: dict | None = None,
+    normalized_action: dict | None = None,
 ) -> dict:
     """Stage 2 normalization helper: deterministic implied continuity preparation."""
+    # Commitment break uses turn-start social state + raw/normalized action; must run before
+    # apply_turn_input_implied_context so same-turn courtesy (sit, lowered voice) is not mistaken
+    # for an active interlocutor lock from the prior turn.
+    commitment = apply_explicit_non_social_commitment_break(
+        session,
+        world,
+        scene_id,
+        player_text,
+        normalized_action,
+        scene_envelope=scene if isinstance(scene, dict) else None,
+    )
     implied = apply_turn_input_implied_context(session, world, scene_id, player_text)
+    merged = {**implied, **commitment}
     if scene is not None:
         est = establish_dialogue_interaction_from_input(session, world, scene, player_text)
-        merged = dict(implied)
         merged["interaction_established"] = bool(est.get("established"))
         merged["dialogue_target_id"] = est.get("target_id")
         return merged
-    return implied
+    return merged
 
 
 _PASSIVE_ACTION_CUES: tuple[tuple[str, str], ...] = (
@@ -2328,6 +2343,7 @@ def action(req: ActionRequest):
             scene_before_id,
             req.intent or normalized_action.get('prompt') or normalized_action.get('label'),
             scene=scene,
+            normalized_action=normalized_action,
         )
         normalized_type = (normalized_action.get('type') or '').strip().lower()
         raw_type = (raw.get('type') or '').strip().lower() if isinstance(raw, dict) else ''
@@ -2363,6 +2379,7 @@ def action(req: ActionRequest):
             scene_before_id,
             req.intent or normalized_action.get('prompt') or normalized_action.get('label'),
             scene=scene,
+            normalized_action=normalized_action,
         )
         if raw and (raw.get('type') or '').strip().lower() in SOCIAL_KINDS:
             normalized_action['type'] = (raw.get('type') or 'social_probe').strip().lower()
@@ -2444,7 +2461,8 @@ def action(req: ActionRequest):
         resolution,
         scene_changed=scene_before_id != scene['scene']['id'],
         preserve_continuity=bool(
-            implied_context.get("applied") or implied_context.get("interaction_established")
+            (implied_context.get("applied") or implied_context.get("interaction_established"))
+            and not implied_context.get("commitment_broken")
         ),
     )
     synchronize_scene_addressability(session, scene, world)
@@ -2766,10 +2784,20 @@ def chat(req: ChatRequest):
             routed_via_exploration = True
             normalized_chat = normalize_scene_action(parsed)
             normalized = normalized_chat
+            implied_context.update(
+                apply_explicit_non_social_commitment_break(
+                    session, world, scene_before_id, req.text, normalized, scene_envelope=scene
+                )
+            )
         elif parsed_type in SOCIAL_KINDS:
             routed_via_exploration = True
             normalized = parsed  # Social actions use own shape; ensure type is set
             normalized_chat = normalized
+            implied_context.update(
+                apply_explicit_non_social_commitment_break(
+                    session, world, scene_before_id, req.text, normalized, scene_envelope=scene
+                )
+            )
             _sm = normalized.get("metadata")
             if not isinstance(_sm, dict):
                 _sm = {}
@@ -2790,6 +2818,11 @@ def chat(req: ChatRequest):
             routed_via_exploration = True
             normalized = normalize_scene_action(parsed)
             normalized_chat = normalized
+            implied_context.update(
+                apply_explicit_non_social_commitment_break(
+                    session, world, scene_before_id, req.text, normalized, scene_envelope=scene
+                )
+            )
             resolution = resolve_exploration_action(
                 scene, session, world, normalized,
                 raw_player_text=req.text,
@@ -2968,7 +3001,8 @@ def chat(req: ChatRequest):
         context_resolution,
         scene_changed=scene_before_id != scene['scene']['id'],
         preserve_continuity=bool(
-            implied_context.get("applied") or implied_context.get("interaction_established")
+            (implied_context.get("applied") or implied_context.get("interaction_established"))
+            and not implied_context.get("commitment_broken")
         ),
     )
     synchronize_scene_addressability(session, scene, world)

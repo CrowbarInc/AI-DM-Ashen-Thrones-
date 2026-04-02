@@ -4,6 +4,7 @@ from game.defaults import default_campaign, default_character, default_combat, d
 from game.gm import build_messages
 from game.interaction_context import (
     apply_implied_hint,
+    apply_explicit_non_social_commitment_break,
     clear_for_scene_change,
     inspect,
     set_engagement_level,
@@ -11,6 +12,7 @@ from game.interaction_context import (
     set_non_social_activity,
     set_privacy,
     set_social_target,
+    should_break_social_commitment_for_input,
     update_after_resolved_action,
 )
 from game.storage import get_scene_runtime
@@ -71,6 +73,7 @@ def test_set_non_social_activity_clears_social_continuity():
     set_non_social_activity(session, "investigate")
     ctx = inspect(session)
     assert ctx["active_interaction_target_id"] is None
+    assert (session.get("scene_state") or {}).get("current_interlocutor") is None
     assert ctx["active_interaction_kind"] == "investigate"
     assert ctx["interaction_mode"] == "activity"
     assert ctx["engagement_level"] == "focused"
@@ -150,6 +153,45 @@ def test_update_after_resolved_action_preserves_or_downgrades_deterministically(
     assert ctx["active_interaction_kind"] == "investigate"
     assert ctx["interaction_mode"] == "activity"
     assert ctx["engagement_level"] == "focused"
+
+
+def test_should_break_social_commitment_movement_and_investigate_not_at_interlocutor():
+    session = default_session()
+    world = default_world()
+    set_social_target(session, "tavern_runner")
+
+    ok, reason = should_break_social_commitment_for_input(
+        session,
+        'I stride directly toward the notice board.',
+        {"type": "investigate", "label": "notice board", "prompt": "notice board", "target_id": "notice_board"},
+        world=world,
+    )
+    assert ok is True
+    assert reason
+
+    ok2, _ = should_break_social_commitment_for_input(
+        session,
+        "What did you hear about the patrol?",
+        {"type": "question", "prompt": "What did you hear?"},
+        world=world,
+    )
+    assert ok2 is False
+
+
+def test_apply_explicit_non_social_commitment_break_clears_target():
+    session = default_session()
+    world = default_world()
+    set_social_target(session, "tavern_runner")
+    out = apply_explicit_non_social_commitment_break(
+        session,
+        world,
+        "frontier_gate",
+        "I follow the path toward the square.",
+        {"type": "travel", "label": "follow path", "prompt": "follow path"},
+        scene_envelope=None,
+    )
+    assert out.get("commitment_broken") is True
+    assert inspect(session)["active_interaction_target_id"] is None
 
 
 def test_explicit_mode_and_engagement_helpers_normalize_literals():

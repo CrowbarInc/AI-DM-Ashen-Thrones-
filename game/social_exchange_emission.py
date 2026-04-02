@@ -27,6 +27,7 @@ from game.interaction_context import (
     npc_id_from_vocative_line,
     resolve_authoritative_social_target,
     scene_addressable_actor_ids,
+    session_allows_implicit_social_reply_authority,
 )
 
 # Historical name in this module; delegates to canonical roster resolution in interaction_context.
@@ -382,7 +383,10 @@ def player_line_triggers_strict_social_emission(
     """Single predicate for whether the player line is NPC-directed / in-scene social exchange."""
     if is_scene_directed_watch_question(text):
         return False
-    if looks_like_npc_directed_question(text):
+    # Question-shaped lines alone must not trigger strict-social after explicit non-social activity.
+    if looks_like_npc_directed_question(text) and session_allows_implicit_social_reply_authority(
+        session if isinstance(session, dict) else None
+    ):
         return True
     sid = str(scene_id or "").strip()
     w = world if isinstance(world, dict) else {}
@@ -618,7 +622,10 @@ def synthetic_social_exchange_resolution_for_emission(
     target = str(auth.get("npc_id") or "").strip()
     if not target or not auth.get("target_resolved") or auth.get("offscene_target"):
         return None
-    if auth.get("source") == "continuity":
+    src_syn = str(auth.get("source") or "").strip()
+    if src_syn in ("continuity", "first_roster") and not session_allows_implicit_social_reply_authority(session):
+        return None
+    if src_syn == "continuity":
         inspected = inspect_interaction_context(session)
         kind = str((inspected or {}).get("active_interaction_kind") or "").strip().lower()
         mode = str((inspected or {}).get("interaction_mode") or "").strip().lower()

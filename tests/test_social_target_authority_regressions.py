@@ -9,15 +9,22 @@ import pytest
 from game.defaults import default_character, default_session, default_world
 from game.adjudication import resolve_adjudication_query
 from game.interaction_context import (
+    apply_explicit_non_social_commitment_break,
     assert_valid_speaker,
     inspect as inspect_interaction_context,
     rebuild_active_scene_entities,
     resolve_authoritative_social_target,
+    session_allows_implicit_social_reply_authority,
+    set_non_social_activity,
     set_social_target,
+    should_break_social_commitment_for_input,
     synchronize_scene_addressability,
 )
-from game.social import resolve_social_action
-from game.social_exchange_emission import build_final_strict_social_response
+from game.social import can_actor_speak_in_current_exchange, resolve_social_action
+from game.social_exchange_emission import (
+    build_final_strict_social_response,
+    player_line_triggers_strict_social_emission,
+)
 from game.storage import load_scene
 
 pytestmark = [pytest.mark.integration, pytest.mark.regression]
@@ -164,6 +171,194 @@ def test_followup_without_new_addressee_reuses_current_interlocutor():
     assert auth.get("npc_id") == "guard_captain", auth
     assert auth.get("source") == "continuity", auth
     assert auth.get("target_resolved") is True, auth
+    assert session_allows_implicit_social_reply_authority(session) is True
+    speak = can_actor_speak_in_current_exchange(
+        session,
+        world,
+        "frontier_gate",
+        scene,
+        "guard_captain",
+        auth,
+    )
+    assert speak.get("allowed") is True, speak
+    assert speak.get("reason_code") == "authoritative_speaker_eligible", speak
+
+
+def test_courtesy_preface_does_not_block_implicit_social_reply_authority():
+    """Block 3: 'Thanks. Now tell me more…' stays dialogue-shaped; session must not enter activity block."""
+    world = default_world()
+    session = default_session()
+    session["active_scene_id"] = "frontier_gate"
+    scene = {"scene": {"id": "frontier_gate"}}
+    rebuild_active_scene_entities(session, world, "frontier_gate", scene_envelope=scene)
+    set_social_target(session, "guard_captain")
+    line = "Thanks. Now tell me more about the patrol."
+    ok, _ = should_break_social_commitment_for_input(
+        session,
+        line,
+        {"type": "custom", "label": "Reply", "prompt": line},
+        world=world,
+    )
+    assert ok is False
+    ctx = inspect_interaction_context(session)
+    assert ctx.get("interaction_mode") == "social"
+    assert ctx.get("active_interaction_target_id") == "guard_captain"
+    assert session_allows_implicit_social_reply_authority(session) is True
+
+    auth = resolve_authoritative_social_target(
+        session,
+        world,
+        "frontier_gate",
+        player_text=line,
+        scene_envelope=scene,
+        allow_first_roster_fallback=False,
+    )
+    assert auth.get("source") == "continuity", auth
+    assert auth.get("npc_id") == "guard_captain", auth
+    speak = can_actor_speak_in_current_exchange(
+        session,
+        world,
+        "frontier_gate",
+        scene,
+        "guard_captain",
+        auth,
+    )
+    assert speak.get("allowed") is True, speak
+    assert speak.get("reason_code") != "implicit_social_reply_authority_blocked_non_social_turn", speak
+
+
+def test_non_social_activity_blocks_implicit_continuity_and_bare_question_strict_gate():
+    """Explicit non-social activity must not license continuity, first-roster, or bare-? strict-social."""
+    world = default_world()
+    session = default_session()
+    session["active_scene_id"] = "frontier_gate"
+    scene = {"scene": {"id": "frontier_gate"}}
+    rebuild_active_scene_entities(session, world, "frontier_gate", scene_envelope=scene)
+    set_social_target(session, "tavern_runner")
+    set_non_social_activity(session, "travel")
+
+    auth = resolve_authoritative_social_target(
+        session,
+        world,
+        "frontier_gate",
+        player_text="qqqqq unknown placename?",
+        scene_envelope=scene,
+        allow_first_roster_fallback=True,
+    )
+    assert auth.get("source") not in ("continuity", "first_roster"), auth
+
+    assert (
+        player_line_triggers_strict_social_emission(
+            "qqqqq unknown placename?",
+            session,
+            world,
+            "frontier_gate",
+        )
+        is False
+    )
+
+
+def test_explicit_redirect_via_apply_explicit_breaks_stale_continuity_and_roster_paths():
+    """Block 3: state-to-emission boundary — apply_explicit_non_social_commitment_break clears licensing paths."""
+    world = default_world()
+    session = default_session()
+    session["active_scene_id"] = "frontier_gate"
+    scene = {"scene": {"id": "frontier_gate"}}
+    rebuild_active_scene_entities(session, world, "frontier_gate", scene_envelope=scene)
+    set_social_target(session, "tavern_runner")
+    session.setdefault("scene_state", {})["current_interlocutor"] = "tavern_runner"
+
+    out = apply_explicit_non_social_commitment_break(
+        session,
+        world,
+        "frontier_gate",
+        "I stride directly toward the notice board.",
+        {"type": "investigate", "label": "notice board", "prompt": "notice board", "target_id": "notice_board"},
+        scene_envelope=scene,
+    )
+    assert out.get("commitment_broken") is True
+    ctx = inspect_interaction_context(session)
+    assert ctx.get("interaction_mode") == "activity"
+    assert ctx.get("active_interaction_kind") == "investigate"
+    assert not str(ctx.get("active_interaction_target_id") or "").strip()
+    st = session.get("scene_state") or {}
+    assert st.get("current_interlocutor") in (None, "")
+
+    vague = resolve_authoritative_social_target(
+        session,
+        world,
+        "frontier_gate",
+        player_text="qqqqq unknown placename?",
+        scene_envelope=scene,
+        allow_first_roster_fallback=True,
+    )
+    assert vague.get("source") not in ("continuity", "first_roster"), vague
+    assert vague.get("npc_id") != "tavern_runner", vague
+
+    session2 = default_session()
+    session2["active_scene_id"] = "frontier_gate"
+    rebuild_active_scene_entities(session2, world, "frontier_gate", scene_envelope=scene)
+    set_social_target(session2, "tavern_runner")
+    out2 = apply_explicit_non_social_commitment_break(
+        session2,
+        world,
+        "frontier_gate",
+        "I follow the path toward the square.",
+        {"type": "travel", "label": "follow path", "prompt": "follow path"},
+        scene_envelope=scene,
+    )
+    assert out2.get("commitment_broken") is True
+    assert inspect_interaction_context(session2).get("interaction_mode") == "activity"
+    vague2 = resolve_authoritative_social_target(
+        session2,
+        world,
+        "frontier_gate",
+        player_text="qqqqq unknown placename?",
+        scene_envelope=scene,
+        allow_first_roster_fallback=True,
+    )
+    assert vague2.get("source") not in ("continuity", "first_roster"), vague2
+    assert vague2.get("npc_id") != "tavern_runner", vague2
+
+
+def test_explicit_normalized_target_still_authorizes_when_implicit_social_paths_are_blocked():
+    """Block 3: explicit target_id must survive implicit-authority tightening on activity turns."""
+    world = default_world()
+    session = default_session()
+    session["active_scene_id"] = "frontier_gate"
+    scene = {"scene": {"id": "frontier_gate"}}
+    rebuild_active_scene_entities(session, world, "frontier_gate", scene_envelope=scene)
+    set_social_target(session, "tavern_runner")
+    set_non_social_activity(session, "travel")
+
+    normalized_action = {
+        "id": "q-guard",
+        "type": "question",
+        "label": "Ask captain",
+        "prompt": "What is the curfew?",
+        "target_id": "guard_captain",
+    }
+    auth = resolve_authoritative_social_target(
+        session,
+        world,
+        "frontier_gate",
+        player_text="Captain, what is the curfew tonight?",
+        normalized_action=normalized_action,
+        scene_envelope=scene,
+        allow_first_roster_fallback=False,
+    )
+    assert auth.get("source") == "explicit_target", auth
+    assert auth.get("npc_id") == "guard_captain", auth
+    speak = can_actor_speak_in_current_exchange(
+        session,
+        world,
+        "frontier_gate",
+        scene,
+        "guard_captain",
+        auth,
+    )
+    assert speak.get("allowed") is True, speak
+    assert speak.get("reason_code") != "implicit_social_reply_authority_blocked_non_social_turn", speak
 
 
 def test_scene_local_actor_can_be_valid_speaker_without_world_npc_entry(
