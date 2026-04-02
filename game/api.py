@@ -80,6 +80,7 @@ from game.affordances import get_available_affordances
 from game.scene_actions import normalize_scene_action
 from game.exploration import (
     apply_follow_lead_commitment_after_resolved_scene_transition,
+    maybe_finalize_pursued_lead_destination_payoff_after_scene_transition,
     parse_exploration_intent,
     process_investigation_discovery,
     resolve_exploration_action,
@@ -120,7 +121,7 @@ from game.interaction_context import (
     update_after_resolved_action,
 )
 from game.scene_graph import build_scene_graph, is_transition_valid
-from game.intent_parser import parse_intent, segment_mixed_player_turn
+from game.intent_parser import is_qualified_pursuit_shaped, parse_intent, segment_mixed_player_turn
 from game.prompt_context import build_response_policy, derive_narration_obligations
 from game.output_sanitizer import (
     extract_player_text_from_serialized_payload,
@@ -904,6 +905,12 @@ def _apply_authoritative_resolution_state_mutation(
             print("[ENGINE] Scene transition →", target_scene_id)
             scene, session, combat = _apply_authoritative_scene_transition(target_scene_id, scene, session, combat, world)
             apply_follow_lead_commitment_after_resolved_scene_transition(
+                session,
+                resolution,
+                normalized_action,
+                target_scene_id=target_scene_id,
+            )
+            maybe_finalize_pursued_lead_destination_payoff_after_scene_transition(
                 session,
                 resolution,
                 normalized_action,
@@ -2703,8 +2710,15 @@ def chat(req: ChatRequest):
             segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
             canonical_social_entry=canonical_entry,
         )
-        parsed = parse_social_intent(classification_text, scene, world)
-        if parsed is None and route_choice != "action":
+        # Block 4A: explicit "follow/pursue the lead to <target>" must be parsed as qualified pursuit
+        # before dialogue-lock / social follow-up (which otherwise skips exploration when route is "dialogue").
+        qualified_pursuit_shaped = is_qualified_pursuit_shaped(classification_text)
+        parsed = None
+        if qualified_pursuit_shaped:
+            parsed = parse_exploration_intent(classification_text, scene, session, world)
+        if parsed is None and not qualified_pursuit_shaped:
+            parsed = parse_social_intent(classification_text, scene, world)
+        if parsed is None and route_choice != "action" and not qualified_pursuit_shaped:
             parsed = _build_dialogue_first_action(
                 player_text=req.text,
                 segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
@@ -2713,10 +2727,10 @@ def chat(req: ChatRequest):
                 world=world,
                 canonical_social_entry=canonical_entry,
             )
-        if parsed is None and route_choice != "dialogue":
+        if parsed is None and route_choice != "dialogue" and not qualified_pursuit_shaped:
             parsed = parse_exploration_intent(classification_text, scene, session, world)
         intent = None
-        if parsed is None and route_choice != "dialogue":
+        if parsed is None and route_choice != "dialogue" and not qualified_pursuit_shaped:
             intent = parse_intent(classification_text)
             if intent:
                 parsed = intent  # Use full structured action from parser (id, label, type, prompt, target_id, etc.)

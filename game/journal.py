@@ -2,7 +2,8 @@ from __future__ import annotations
 
 from typing import Any, Dict, List
 
-from game.clues import get_all_known_clue_texts
+from game.clues import _canonical_registry_lead_id, get_all_known_clue_texts
+from game.leads import get_lead, is_lead_terminal
 
 # When a scene has no ``journal_seed_facts``, only this many ``visible_facts`` lines
 # are copied into the journal. Full ``visible_facts`` may be long (GM/debug/prompt
@@ -52,6 +53,31 @@ def _runtime_revealed_hidden_facts(session: Dict[str, Any]) -> List[str]:
     return gathered
 
 
+def _clue_text_surfaces_as_unresolved_lead(session: Dict[str, Any], world: Dict[str, Any] | None, text: str) -> bool:
+    """Player unresolved-lead list: exclude when every known clue identity for this text maps to a terminal lead."""
+    knowledge = session.get("clue_knowledge") if isinstance(session, dict) else None
+    if not isinstance(knowledge, dict):
+        return True
+    stripped = text.strip()
+    matching_ids = [
+        cid
+        for cid, entry in knowledge.items()
+        if isinstance(cid, str)
+        and cid.strip()
+        and isinstance(entry, dict)
+        and str(entry.get("text") or "").strip() == stripped
+    ]
+    if not matching_ids:
+        return True
+    w = world if isinstance(world, dict) else None
+    for cid in matching_ids:
+        lid = _canonical_registry_lead_id(cid.strip(), w, None)
+        row = get_lead(session, lid)
+        if row is None or not is_lead_terminal(row):
+            return True
+    return False
+
+
 def _merge_known_fact_lines(bootstrap: List[str], revealed: List[str]) -> List[str]:
     """Preserve order: seed first, then earned reveals; drop duplicates (case-insensitive)."""
     out: List[str] = []
@@ -86,8 +112,9 @@ def build_player_journal(session: Dict[str, Any], world: Dict[str, Any] | None =
     # Include discovered + inferred clues from clue knowledge layer
     discovered_clues = list(get_all_known_clue_texts(session))
 
-    # For v1, treat all discovered clues as unresolved leads.
-    unresolved_leads = list(discovered_clues)
+    # Unresolved leads: same pool as discovered clue texts, minus rows whose authoritative registry
+    # lead is terminal (resolved/obsolete). Presentation-only; registry and debug dumps unchanged.
+    unresolved_leads = [t for t in discovered_clues if _clue_text_surfaces_as_unresolved_lead(session, world, t)]
 
     factions = list(world.get('factions', []) or [])
     recent_events = list((world.get('event_log', []) or [])[-10:])

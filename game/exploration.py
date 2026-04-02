@@ -6,11 +6,16 @@ from typing import Any, Callable, Dict, List, Literal, Optional
 from game.models import ExplorationEngineResult
 from game.utils import slugify
 from game.storage import get_scene_runtime, add_pending_lead, is_interactable_resolved, is_target_searched
-from game.clues import apply_authoritative_clue_discovery, set_clue_presentation
+from game.clues import _canonical_registry_lead_id, apply_authoritative_clue_discovery, set_clue_presentation
 from game.leads import (
+    LeadLifecycle,
+    LeadStatus,
     commit_session_lead_with_context,
     get_lead,
+    is_lead_terminal,
+    normalize_lead,
     obsolete_session_lead,
+    obsolete_superseded_lead,
     resolve_session_lead,
 )
 from game.scene_graph import build_scene_graph, is_transition_valid
@@ -440,6 +445,99 @@ def _follow_lead_commitment_snapshot(row: Dict[str, Any] | None) -> tuple[Any, .
     )
 
 
+# Canonical resolution_type when a pursued destination-scene lead pays off via arrival (see
+# :func:`maybe_finalize_pursued_lead_destination_payoff_after_scene_transition`).
+RESOLUTION_TYPE_REACHED_DESTINATION = "reached_destination"
+
+
+def _effective_follow_action_target_scene_id(normalized_action: Dict[str, Any]) -> str:
+    """Destination encoded on the follow/pursuit action (metadata or top-level)."""
+    meta = normalized_action.get("metadata")
+    if isinstance(meta, dict):
+        for key in ("target_scene_id", "targetSceneId"):
+            v = meta.get(key)
+            if v is not None and str(v).strip():
+                return str(v).strip()
+    for key in ("target_scene_id", "targetSceneId"):
+        v = normalized_action.get(key)
+        if v is not None and str(v).strip():
+            return str(v).strip()
+    return ""
+
+
+def maybe_finalize_pursued_lead_destination_payoff_after_scene_transition(
+    session: Dict[str, Any],
+    resolution: Dict[str, Any],
+    normalized_action: Dict[str, Any] | None,
+    *,
+    target_scene_id: str,
+) -> None:
+    """If a scene transition is the grounded payoff of a pursued destination lead, resolve that lead.
+
+    Runs only after :func:`apply_follow_lead_commitment_after_resolved_scene_transition` so pursuit
+    commitment is already applied. Uses ``metadata.authoritative_lead_id`` (or equivalent) on the
+    transition action — no guessing. Requires the action to encode the same destination as
+    ``target_scene_id`` (affordance metadata or top-level target id, including qualified pursuit),
+    and the registry row to list that scene in ``related_scene_ids`` (engine signal destination).
+
+    Does not run on generic travel without a matching encoded destination on the action.
+    """
+    if not isinstance(session, dict) or not isinstance(resolution, dict):
+        return
+    if not isinstance(normalized_action, dict):
+        return
+    if str(normalized_action.get("type") or "").strip().lower() != "scene_transition":
+        return
+    if str(resolution.get("kind") or "").strip().lower() != "scene_transition":
+        return
+    if resolution.get("success") is False:
+        return
+    if not resolution.get("resolved_transition"):
+        return
+    tid = str(target_scene_id or "").strip()
+    if not tid or str(resolution.get("target_scene_id") or "").strip() != tid:
+        return
+
+    meta_raw = normalized_action.get("metadata")
+    meta = dict(meta_raw) if isinstance(meta_raw, dict) else {}
+    aid = str(meta.get("authoritative_lead_id") or "").strip() or None
+    if not aid:
+        return
+
+    encoded = _effective_follow_action_target_scene_id(normalized_action)
+    if not encoded or encoded != tid:
+        return
+
+    rmeta = resolution.get("metadata")
+    if isinstance(rmeta, dict):
+        cid = rmeta.get("committed_lead_id")
+        if cid is not None and str(cid).strip() and str(cid).strip() != aid:
+            return
+
+    row = get_lead(session, aid)
+    if row is None or is_lead_terminal(row):
+        return
+
+    snap = normalize_lead(dict(row))
+    scenes = [str(x).strip() for x in (snap.get("related_scene_ids") or []) if str(x).strip()]
+    if tid not in scenes:
+        return
+
+    if snap.get("lifecycle") != LeadLifecycle.COMMITTED.value:
+        return
+    if snap.get("status") != LeadStatus.PURSUED.value:
+        return
+
+    finalize_followed_lead(
+        session,
+        aid,
+        terminal_mode="resolved",
+        turn=session.get("turn_counter"),
+        resolution_type=RESOLUTION_TYPE_REACHED_DESTINATION,
+        resolution_summary="Arrived at the lead's destination.",
+    )
+
+
 def finalize_followed_lead(
     session: Dict[str, Any],
     authoritative_lead_id: Any,
@@ -588,6 +686,15 @@ def process_investigation_discovery(
     discovered_set = {t.strip().lower() for t in discovered_texts if t}
 
     normalized = [normalize_clue_record(c) for c in discoverable_raw]
+    # ``normalize_clue_record`` drops authoring-only keys; keep explicit supersession targets by normalized id.
+    supersede_by_clue_id: Dict[str, str] = {}
+    for raw, nrec in zip(discoverable_raw, normalized):
+        if isinstance(raw, dict):
+            sup = str(raw.get("supersedes_lead_id") or "").strip()
+            rid = str(nrec.get("id") or "").strip()
+            if rid and sup:
+                supersede_by_clue_id[rid] = sup
+
     for rec in normalized:
         text = rec.get("text") or ""
         if not text.strip():
@@ -616,5 +723,24 @@ def process_investigation_discovery(
                 add_pending_lead(session, scene_id, lead)
                 # Lead-bearing clues are explicitly actionable for affordance/context packaging.
                 set_clue_presentation(session, clue_id=str(rec.get("id") or "").strip() or None, clue_text=text.strip(), level="actionable")
+            superseded_id = supersede_by_clue_id.get(str(rec.get("id") or "").strip(), "")
+            if superseded_id:
+                cid_for_registry = str(rec.get("id") or clue_id or "").strip()
+                w = world if isinstance(world, dict) else None
+                new_registry_id = _canonical_registry_lead_id(cid_for_registry, w, rec)
+                if (
+                    new_registry_id
+                    and superseded_id != new_registry_id
+                    and get_lead(session, new_registry_id) is not None
+                ):
+                    try:
+                        obsolete_superseded_lead(
+                            session,
+                            superseded_id,
+                            replaced_by_lead_id=new_registry_id,
+                            turn=session.get("turn_counter"),
+                        )
+                    except ValueError:
+                        pass
             return [rec]
     return []

@@ -533,6 +533,18 @@ def _build_pursuit_scene_transition_action(
     return None
 
 
+def is_qualified_pursuit_shaped(text: str | None) -> bool:
+    """True when *text* is explicit target-qualified lead pursuit phrasing (not bare ``follow the lead``).
+
+    Chat routing uses this to run :func:`parse_freeform_to_action` / exploration pursuit resolution
+    before dialogue-lock social follow-up. Matches the same patterns as
+    :func:`_extract_qualified_pursuit_target_text`.
+    """
+    if not isinstance(text, str) or not text.strip():
+        return False
+    return _extract_qualified_pursuit_target_text(text) is not None
+
+
 def _extract_qualified_pursuit_target_text(text: str) -> Optional[str]:
     """If input matches a qualified pursuit phrase, return normalized target fragment; else None."""
     raw = (text or "").strip()

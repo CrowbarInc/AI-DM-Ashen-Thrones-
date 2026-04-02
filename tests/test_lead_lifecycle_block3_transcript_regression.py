@@ -148,6 +148,22 @@ def _seed_frontier_with_actionable_lead(tmp_path, monkeypatch):
         storage.SESSION_LOG_PATH.write_text("", encoding="utf-8")
 
 
+def _seed_frontier_with_lead_and_active_tavern_runner(tmp_path, monkeypatch):
+    """frontier_gate + actionable milestone lead + engaged social lock on tavern_runner (dialogue continuity)."""
+    _seed_frontier_with_actionable_lead(tmp_path, monkeypatch)
+    session = storage.load_session()
+    session_ctx = session.setdefault("interaction_context", {})
+    session_ctx["active_interaction_target_id"] = "tavern_runner"
+    session_ctx["active_interaction_kind"] = "social"
+    session_ctx["interaction_mode"] = "social"
+    session_ctx["engagement_level"] = "engaged"
+    storage._save_json(storage.SESSION_PATH, session)
+    world = storage.load_world()
+    scene = storage.load_scene("frontier_gate")
+    rebuild_active_scene_entities(session, world, "frontier_gate", scene_envelope=scene)
+    storage._save_json(storage.SESSION_PATH, session)
+
+
 def test_block3_boundary_post_dialogue_reflective_non_social_strict_suppression(tmp_path, monkeypatch):
     """After dialogue engagement, exploration-shaped turns stay GM-safe: no NPC-voiced fallback; meta when suppressed."""
     _seed_runner_dialogue_context(tmp_path, monkeypatch)
@@ -256,6 +272,55 @@ def test_block3_boundary_follow_lead_to_missing_npc_fail_closed_no_snap(tmp_path
         world=storage.load_world(),
     )
     assert parsed is None
+
+
+def test_block4a_chat_qualified_pursuit_fail_closed_not_social_probe_with_dialogue_lock(
+    tmp_path, monkeypatch,
+):
+    """Explicit follow-target pursuit must not lose to active_interlocutor social follow-up when unmatched."""
+    _seed_frontier_with_lead_and_active_tavern_runner(tmp_path, monkeypatch)
+    with monkeypatch.context() as m:
+        m.setattr("game.api.call_gpt", lambda _messages: _gm_response("The gate crowd shifts; no path resolves to that name."))
+        client = TestClient(app)
+        resp = client.post("/api/chat", json={"text": "follow the lead to Lirael"})
+    assert resp.status_code == 200
+    data = resp.json()
+    # Fail-closed qualified pursuit: no engine exploration/social resolution (would wrongly be social_probe + dialogue lock).
+    assert data.get("resolution") is None
+
+
+def test_block4a_chat_qualified_pursuit_resolves_scene_transition_despite_dialogue_lock(
+    tmp_path, monkeypatch,
+):
+    """Exact actionable lead text match: explicit pursuit still binds while dialogue lock is active."""
+    _seed_frontier_with_lead_and_active_tavern_runner(tmp_path, monkeypatch)
+    with monkeypatch.context() as m:
+        m.setattr("game.api.call_gpt", lambda _messages: _gm_response("You turn toward the milestone road."))
+        client = TestClient(app)
+        resp = client.post(
+            "/api/chat",
+            json={"text": "follow the lead to Investigate the old milestone"},
+        )
+    assert resp.status_code == 200
+    data = resp.json()
+    res = data.get("resolution") if isinstance(data.get("resolution"), dict) else {}
+    assert res.get("kind") == "scene_transition"
+    assert res.get("resolved_transition") is True
+    assert res.get("target_scene_id") == "old_milestone"
+
+
+def test_block4a_chat_tell_me_more_still_routes_social_with_dialogue_lock(tmp_path, monkeypatch):
+    """Non-pursuit follow-ups keep dialogue-lock / social continuity behavior."""
+    _seed_frontier_with_lead_and_active_tavern_runner(tmp_path, monkeypatch)
+    with monkeypatch.context() as m:
+        m.setattr("game.api.call_gpt", lambda _messages: _gm_response("The runner leans in."))
+        client = TestClient(app)
+        resp = client.post("/api/chat", json={"text": "tell me more"})
+    assert resp.status_code == 200
+    data = resp.json()
+    res = data.get("resolution") if isinstance(data.get("resolution"), dict) else {}
+    assert res.get("kind") in ("question", "social_probe")
+    assert (res.get("social") or {}).get("npc_id") == "tavern_runner"
 
 
 def test_block3_boundary_explicit_pursuit_non_actionable_does_not_transition_commit_or_snap_lead(

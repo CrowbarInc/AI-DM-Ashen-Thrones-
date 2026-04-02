@@ -10,7 +10,7 @@ from game.exploration import (
     parse_exploration_intent,
     resolve_exploration_action,
 )
-from game.intent_parser import parse_freeform_to_action
+from game.intent_parser import is_qualified_pursuit_shaped, parse_freeform_to_action
 from game.leads import LeadLifecycle, LeadStatus, create_lead, get_lead, upsert_lead
 from game.prompt_context import build_narration_context
 from game.scene_actions import normalize_scene_action
@@ -386,6 +386,12 @@ def test_explicit_pursuit_text_commits_after_resolved_transition():
     assert row["committed_at_turn"] == 7
     assert row["commitment_source"] == "explicit_player_pursuit"
     assert row["commitment_strength"] == 2
+
+
+def test_block4a_is_qualified_pursuit_shaped_targets_only_not_bare():
+    """Bare follow-the-lead is not qualified-shaped; targeted phrases are (routing uses this in /api/chat)."""
+    assert is_qualified_pursuit_shaped("follow the lead") is False
+    assert is_qualified_pursuit_shaped("follow the lead to Lirael") is True
 
 
 def test_parse_exploration_intent_passes_session_for_explicit_pursuit():
