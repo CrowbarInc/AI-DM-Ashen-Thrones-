@@ -23,7 +23,7 @@
       "pressure": 10,
       "goal": "Expand territory",
       "current_plan": "Gathering influence",
-      "agenda_progress": 8,
+      "agenda_progress": 10,
       "assets": []
     },
     {
@@ -35,7 +35,7 @@
       "pressure": 10,
       "goal": "Control black market",
       "current_plan": "Establishing smuggling routes",
-      "agenda_progress": 8,
+      "agenda_progress": 10,
       "assets": []
     },
     {
@@ -44,10 +44,10 @@
       "type": "religious_order",
       "attitude": "suspicious",
       "influence": 2,
-      "pressure": 9,
+      "pressure": 10,
       "goal": "Suppress dangerous magic",
       "current_plan": "Watching newcomers",
-      "agenda_progress": 8,
+      "agenda_progress": 10,
       "assets": []
     }
   ],
@@ -72,10 +72,23 @@
     },
     {
       "type": "social_lead_revealed",
-      "clue_id": "lead_frontier_gate_old_trading_crossroads",
+      "clue_id": "narration_ctx_frontier_gate_i_cant_say_much_about_the_patrol_but_it_s_not_go",
       "scene_id": "frontier_gate",
       "npc_id": "tavern_runner",
-      "topic_id": "narration_repair_frontier_gate_operational_pattern"
+      "topic_id": "narration_repair_frontier_gate_operational_token"
+    },
+    {
+      "type": "social_extracted_lead",
+      "clue_id": "lead_frontier_gate_old_milestone",
+      "scene_id": "frontier_gate",
+      "source": "discoverable_clue:old_milestone"
+    },
+    {
+      "type": "social_lead_revealed",
+      "clue_id": "narration_ctx_frontier_gate_lirael_rumor_has_it_shes_cautious_about_whom_she",
+      "scene_id": "frontier_gate",
+      "npc_id": "tavern_runner",
+      "topic_id": "narration_repair_frontier_gate_operational_token"
     },
     {
       "type": "faction_operation_complete",
