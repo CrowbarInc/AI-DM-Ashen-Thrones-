@@ -2,8 +2,10 @@ from __future__ import annotations
 
 from typing import Any, Dict, List
 
+from game.exploration import NPC_PURSUIT_CONTACT_SESSION_KEY
 from game.interaction_context import inspect as inspect_interaction_context
 from game.output_sanitizer import sanitize_player_facing_output
+from game.social import SOCIAL_KINDS
 from game.social_exchange_emission import (
     build_final_strict_social_response,
     effective_strict_social_resolution_for_emission,
@@ -43,6 +45,37 @@ def _speaker_label(resolution: Dict[str, Any] | None) -> str:
     if npc_id:
         return npc_id.replace("_", " ").replace("-", " ").title()
     return "The guard"
+
+
+def _should_use_neutral_nonprogress_fallback_instead_of_global_stock(
+    session: Dict[str, Any] | None,
+    eff_resolution: Dict[str, Any] | None,
+) -> bool:
+    """Parser-built NPC-target pursuit turns without grounded contact must not get the stock 'voices shift' line."""
+    if not isinstance(session, dict):
+        return False
+    ctx = session.get(NPC_PURSUIT_CONTACT_SESSION_KEY)
+    if not isinstance(ctx, dict):
+        return False
+    if str(ctx.get("commitment_source") or "").strip() != "explicit_player_pursuit":
+        return False
+    if not isinstance(eff_resolution, dict):
+        return False
+    rk = str(eff_resolution.get("kind") or "").strip().lower()
+    if rk not in SOCIAL_KINDS:
+        return False
+    target = str(ctx.get("target_npc_id") or "").strip()
+    if not target:
+        return False
+    soc = eff_resolution.get("social") if isinstance(eff_resolution.get("social"), dict) else {}
+    if soc.get("offscene_target"):
+        return True
+    gs = str(soc.get("grounded_speaker_id") or "").strip()
+    if gs and gs == target:
+        return False
+    if soc.get("target_resolved") is True and str(soc.get("npc_id") or "").strip() == target:
+        return False
+    return True
 
 
 def _reply_kind(resolution: Dict[str, Any] | None) -> str:
@@ -352,10 +385,16 @@ def apply_final_emission_gate(
         fallback_kind = "social_interlocutor_fallback"
         final_emitted_source = "social_interlocutor_minimal_fallback"
     else:
-        fallback_pool = "global_scene_narrative"
-        fallback_text = "For a breath, the scene holds while voices shift around you."
-        fallback_kind = "narrative_safe_fallback"
-        final_emitted_source = "global_scene_fallback"
+        if _should_use_neutral_nonprogress_fallback_instead_of_global_stock(session, eff_resolution):
+            fallback_pool = "npc_pursuit_fail_closed_neutral"
+            fallback_text = "Nothing confirms progress toward that lead yet—the moment stays unresolved."
+            fallback_kind = "npc_pursuit_neutral_nonprogress"
+            final_emitted_source = "npc_pursuit_neutral_fallback"
+        else:
+            fallback_pool = "global_scene_narrative"
+            fallback_text = "For a breath, the scene holds while voices shift around you."
+            fallback_kind = "narrative_safe_fallback"
+            final_emitted_source = "global_scene_fallback"
     deterministic_attempted = False
     deterministic_passed = False
 

@@ -368,6 +368,8 @@ def test_explicit_pursuit_text_commits_after_resolved_transition():
     assert md.get("authoritative_lead_id") == "to_milestone"
     assert md.get("commitment_source") == "explicit_player_pursuit"
     assert md.get("commitment_strength") == 2
+    assert md.get("target_kind") == "scene"
+    assert md.get("destination_scene_id") == "old_milestone"
     norm = normalize_scene_action(raw)
     resolution = resolve_exploration_action(
         scene,

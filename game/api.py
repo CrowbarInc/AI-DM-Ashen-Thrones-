@@ -81,6 +81,7 @@ from game.scene_actions import normalize_scene_action
 from game.exploration import (
     apply_follow_lead_commitment_after_resolved_scene_transition,
     maybe_finalize_pursued_lead_destination_payoff_after_scene_transition,
+    maybe_finalize_pursued_lead_npc_contact_payoff,
     parse_exploration_intent,
     process_investigation_discovery,
     resolve_exploration_action,
@@ -925,6 +926,7 @@ def _apply_authoritative_resolution_state_mutation(
                 session, scene["scene"]["id"], world, resolution, scene=scene
             )
         )
+        maybe_finalize_pursued_lead_npc_contact_payoff(session, resolution, normalized_action)
     else:
         authoritative_clue_updates.extend(
             _apply_authoritative_clues_from_resolution(session, scene['scene']['id'], resolution, world)

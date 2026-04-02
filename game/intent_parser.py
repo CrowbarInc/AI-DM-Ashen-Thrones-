@@ -422,6 +422,47 @@ def _npc_location_from_world(world: Optional[Dict[str, Any]], npc_id: str) -> Op
     return None
 
 
+def _npc_display_name_from_world(world: Optional[Dict[str, Any]], npc_id: str) -> Optional[str]:
+    nid = str(npc_id or "").strip()
+    if not nid or not isinstance(world, dict):
+        return None
+    for n in world.get("npcs") or []:
+        if not isinstance(n, dict):
+            continue
+        if str(n.get("id") or "").strip() != nid:
+            continue
+        name = str(n.get("name") or "").strip()
+        return name or None
+    return None
+
+
+def _world_npc_ids_matching_name_fragment(
+    target_cf: str,
+    target_slug: str,
+    world: Optional[Dict[str, Any]],
+) -> set[str]:
+    """NPC ids in world whose id/name/aliases match the pursuit fragment (for fail-closed guard)."""
+    out: set[str] = set()
+    if not isinstance(world, dict):
+        return out
+    for n in world.get("npcs") or []:
+        if not isinstance(n, dict):
+            continue
+        nid = str(n.get("id") or "").strip()
+        if not nid:
+            continue
+        if _npc_destination_matches_target(
+            nid,
+            target_cf,
+            target_slug,
+            world=world,
+            reg_row=None,
+            pending_text="",
+        ):
+            out.add(nid)
+    return out
+
+
 def _town_crier_find_name_from_label(label: str) -> Optional[str]:
     m = re.match(
         r"^\s*find\s+(.+?)\s*\(\s*town\s+crier\s*\)\s*$",
@@ -509,8 +550,13 @@ def _build_pursuit_scene_transition_action(
         return None
     ts = str(p.get("leads_to_scene") or "").strip()
     npc = str(p.get("leads_to_npc") or "").strip()
-    meta = _commitment_meta_for_pursuit(aid)
+    base = _commitment_meta_for_pursuit(aid)
     if ts:
+        meta = {
+            **base,
+            "target_kind": "scene",
+            "destination_scene_id": ts,
+        }
         return _build_action(
             "scene_transition",
             prompt,
@@ -522,6 +568,15 @@ def _build_pursuit_scene_transition_action(
         loc = _npc_location_from_world(world, npc)
         if not loc:
             return None
+        meta = {
+            **base,
+            "target_kind": "npc",
+            "target_npc_id": npc,
+            "destination_scene_id": loc,
+        }
+        tname = _npc_display_name_from_world(world, npc)
+        if tname:
+            meta["target_npc_name"] = tname
         return _build_action(
             "scene_transition",
             prompt,
@@ -579,7 +634,12 @@ def _resolve_qualified_pursuit_target_to_row(
     world: Optional[Dict[str, Any]],
     actionable: List[Dict[str, Any]],
 ) -> Optional[Dict[str, Any]]:
-    """Pick exactly one pending row for qualified pursuit; None if ambiguous or unresolved."""
+    """Pick exactly one pending row for qualified pursuit; None if ambiguous or unresolved.
+
+    Scene-target and NPC-target leads are distinguished: naming a known NPC without an NPC-target
+    lead fails closed (no repurposing scene-only leads). Text/slug fallbacks bind scene/thread
+    labels, not world NPC names that lack a ``leads_to_npc`` row.
+    """
     raw = (target_fragment or "").strip()
     if not raw:
         return None
@@ -588,33 +648,51 @@ def _resolve_qualified_pursuit_target_to_row(
     exits = scene.get("exits") if isinstance(scene.get("exits"), list) else []
     exit_tid = _strict_unique_exit_destination(raw, exits)
 
-    matches_a: List[Dict[str, Any]] = []
-    seen_ids: set[str] = set()
+    npc_matches: List[Dict[str, Any]] = []
+    scene_matches: List[Dict[str, Any]] = []
+    seen_npc: set[str] = set()
+    seen_scene: set[str] = set()
     for p in actionable:
         if not isinstance(p, dict):
             continue
         aid = str(p.get("authoritative_lead_id") or "").strip()
-        matched = False
+        if not aid:
+            continue
         ts = str(p.get("leads_to_scene") or "").strip()
         npc = str(p.get("leads_to_npc") or "").strip()
         reg_row = get_lead(session, aid) if aid else None
         pend_txt = str(p.get("text") or "")
-        if ts and _scene_destination_matches_target(ts, target_cf, target_slug, exit_tid):
-            matched = True
         if npc and _npc_destination_matches_target(
             npc, target_cf, target_slug, world=world, reg_row=reg_row, pending_text=pend_txt
         ):
-            matched = True
-        if matched and aid and aid not in seen_ids:
-            seen_ids.add(aid)
-            matches_a.append(p)
+            if aid not in seen_npc:
+                seen_npc.add(aid)
+                npc_matches.append(p)
+            continue
+        if ts and _scene_destination_matches_target(ts, target_cf, target_slug, exit_tid):
+            if aid not in seen_scene:
+                seen_scene.add(aid)
+                scene_matches.append(p)
 
     chosen: Optional[Dict[str, Any]] = None
-    if len(matches_a) == 1:
-        chosen = matches_a[0]
-    elif len(matches_a) > 1:
+    if len(npc_matches) == 1:
+        chosen = npc_matches[0]
+    elif len(npc_matches) > 1:
+        return None
+    elif len(scene_matches) == 1:
+        chosen = scene_matches[0]
+    elif len(scene_matches) > 1:
         return None
     else:
+        world_npc_ids = _world_npc_ids_matching_name_fragment(target_cf, target_slug, world)
+        if world_npc_ids:
+            has_npc_lead = any(
+                str(p.get("leads_to_npc") or "").strip() in world_npc_ids
+                for p in actionable
+                if isinstance(p, dict)
+            )
+            if not has_npc_lead:
+                return None
         text_hits = [
             p
             for p in actionable
@@ -702,6 +780,10 @@ def parse_freeform_to_action(
     ``world`` is optional; when set, ``leads_to_npc`` rows resolve ``target_scene_id`` from
     ``world[\"npcs\"]`` (``location`` / ``scene_id``). Qualified pursuit phrases that name a
     target but cannot be resolved return ``None`` and do not fall through to generic travel.
+
+    NPC-target rows include ``metadata.target_kind`` ``"npc"``, ``target_npc_id``, optional
+    ``target_npc_name``, and ``destination_scene_id`` as travel context (authoritative target is
+    the NPC, not the scene alone).
 
     Returns:
         Structured action dict with id, label, type, prompt, targetSceneId?,

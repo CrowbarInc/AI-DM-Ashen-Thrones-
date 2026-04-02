@@ -20,6 +20,7 @@ from game.leads import (
 )
 from game.scene_graph import build_scene_graph, is_transition_valid
 from game.skill_checks import resolve_skill_check, should_trigger_check
+from game.social import SOCIAL_KINDS as _SOCIAL_ENGINE_KINDS
 
 
 EXPLORATION_KINDS = ("scene_transition", "travel", "observe", "investigate", "interact", "custom", "discover_clue", "already_searched")
@@ -449,6 +450,14 @@ def _follow_lead_commitment_snapshot(row: Dict[str, Any] | None) -> tuple[Any, .
 # :func:`maybe_finalize_pursued_lead_destination_payoff_after_scene_transition`).
 RESOLUTION_TYPE_REACHED_DESTINATION = "reached_destination"
 
+# Canonical resolution_type when parser-built NPC-target pursuit pays off via grounded contact (see
+# :func:`maybe_finalize_pursued_lead_npc_contact_payoff`).
+RESOLUTION_TYPE_REACHED_NPC = "reached_npc"
+
+# Session key: parser-built NPC-target pursuit context after a successful follow transition (explicit_player_pursuit).
+_NPC_PURSUIT_CONTACT_CONTEXT_KEY = "_npc_pursuit_contact_context"
+NPC_PURSUIT_CONTACT_SESSION_KEY = _NPC_PURSUIT_CONTACT_CONTEXT_KEY
+
 
 def _effective_follow_action_target_scene_id(normalized_action: Dict[str, Any]) -> str:
     """Destination encoded on the follow/pursuit action (metadata or top-level)."""
@@ -463,6 +472,121 @@ def _effective_follow_action_target_scene_id(normalized_action: Dict[str, Any]) 
         if v is not None and str(v).strip():
             return str(v).strip()
     return ""
+
+
+def _merge_action_resolution_metadata(
+    normalized_action: Dict[str, Any] | None, resolution: Dict[str, Any] | None
+) -> Dict[str, Any]:
+    out: Dict[str, Any] = {}
+    for src in (normalized_action, resolution):
+        if not isinstance(src, dict):
+            continue
+        md = src.get("metadata")
+        if isinstance(md, dict):
+            out.update(md)
+    return out
+
+
+def _effective_parser_npc_pursuit_metadata(
+    session: Dict[str, Any],
+    normalized_action: Dict[str, Any] | None,
+    resolution: Dict[str, Any] | None,
+) -> Dict[str, Any] | None:
+    """Metadata for parser-built NPC-target pursuit (explicit_player_pursuit), merged with session context."""
+    merged = _merge_action_resolution_metadata(normalized_action, resolution)
+    ctx_raw = session.get(_NPC_PURSUIT_CONTACT_CONTEXT_KEY) if isinstance(session, dict) else None
+    if isinstance(ctx_raw, dict):
+        ctx = dict(ctx_raw)
+        if str(ctx.get("commitment_source") or "").strip() == "explicit_player_pursuit":
+            aid_c = str(ctx.get("authoritative_lead_id") or "").strip()
+            if aid_c and not str(merged.get("authoritative_lead_id") or "").strip():
+                merged = {**ctx, **merged}
+    if str(merged.get("target_kind") or "").strip().lower() != "npc":
+        return None
+    tn = str(merged.get("target_npc_id") or "").strip()
+    if not tn:
+        return None
+    aid = str(merged.get("authoritative_lead_id") or "").strip()
+    if not aid:
+        return None
+    if str(merged.get("commitment_source") or "").strip() != "explicit_player_pursuit":
+        return None
+    return merged
+
+
+def _grounded_respondent_npc_id(resolution: Dict[str, Any]) -> str:
+    """Authoritative NPC id for who was reached in social resolution (no prose inference)."""
+    soc = resolution.get("social") if isinstance(resolution.get("social"), dict) else {}
+    if soc.get("offscene_target"):
+        return ""
+    if soc.get("reply_speaker_grounding_neutral_bridge"):
+        return ""
+    gs = str(soc.get("grounded_speaker_id") or "").strip()
+    if gs:
+        return gs
+    if soc.get("target_resolved") is True:
+        return str(soc.get("npc_id") or "").strip()
+    return ""
+
+
+def clear_npc_pursuit_contact_context_if_lead(session: Dict[str, Any], authoritative_lead_id: Any) -> None:
+    """Drop session NPC pursuit context when it matches the given lead id."""
+    if not isinstance(session, dict):
+        return
+    ctx = session.get(_NPC_PURSUIT_CONTACT_CONTEXT_KEY)
+    if not isinstance(ctx, dict):
+        return
+    if str(ctx.get("authoritative_lead_id") or "").strip() == str(authoritative_lead_id or "").strip():
+        session[_NPC_PURSUIT_CONTACT_CONTEXT_KEY] = None
+
+
+def maybe_finalize_pursued_lead_npc_contact_payoff(
+    session: Dict[str, Any],
+    resolution: Dict[str, Any],
+    normalized_action: Dict[str, Any] | None,
+) -> None:
+    """Resolve an NPC-target pursued lead when grounded social resolution confirms contact with ``target_npc_id``.
+
+    Restricted to parser-built pursuit (``commitment_source`` ``explicit_player_pursuit`` and ``target_kind`` ``npc``).
+    Does not run on scene arrival alone — caller should invoke after social engine resolution.
+    """
+    if not isinstance(session, dict) or not isinstance(resolution, dict):
+        return
+    res_kind = str(resolution.get("kind") or "").strip().lower()
+    if res_kind not in _SOCIAL_ENGINE_KINDS:
+        return
+    meta = _effective_parser_npc_pursuit_metadata(session, normalized_action, resolution)
+    if not meta:
+        return
+    aid = str(meta.get("authoritative_lead_id") or "").strip()
+    target_npc = str(meta.get("target_npc_id") or "").strip()
+    if not aid or not target_npc:
+        return
+    if resolution.get("success") is False:
+        return
+
+    grounded = _grounded_respondent_npc_id(resolution)
+    if not grounded or grounded != target_npc:
+        return
+
+    row = get_lead(session, aid)
+    if row is None or is_lead_terminal(row):
+        return
+    snap = normalize_lead(dict(row))
+    if snap.get("lifecycle") != LeadLifecycle.COMMITTED.value:
+        return
+    if snap.get("status") != LeadStatus.PURSUED.value:
+        return
+
+    finalize_followed_lead(
+        session,
+        aid,
+        terminal_mode="resolved",
+        turn=session.get("turn_counter"),
+        resolution_type=RESOLUTION_TYPE_REACHED_NPC,
+        resolution_summary="Reached the pursued contact.",
+    )
+    clear_npc_pursuit_contact_context_if_lead(session, aid)
 
 
 def maybe_finalize_pursued_lead_destination_payoff_after_scene_transition(
@@ -481,6 +605,8 @@ def maybe_finalize_pursued_lead_destination_payoff_after_scene_transition(
     and the registry row to list that scene in ``related_scene_ids`` (engine signal destination).
 
     Does not run on generic travel without a matching encoded destination on the action.
+    Skips NPC-target pursuit (metadata ``target_kind`` ``npc``): arrival at a scene is not the
+    same as reaching the pursued NPC.
     """
     if not isinstance(session, dict) or not isinstance(resolution, dict):
         return
@@ -502,6 +628,9 @@ def maybe_finalize_pursued_lead_destination_payoff_after_scene_transition(
     meta = dict(meta_raw) if isinstance(meta_raw, dict) else {}
     aid = str(meta.get("authoritative_lead_id") or "").strip() or None
     if not aid:
+        return
+    # NPC-target pursuit: travel only reaches a scene where the NPC may be — not destination payoff.
+    if str(meta.get("target_kind") or "").strip().lower() == "npc":
         return
 
     encoded = _effective_follow_action_target_scene_id(normalized_action)
@@ -639,6 +768,21 @@ def apply_follow_lead_commitment_after_resolved_scene_transition(
     rmeta["commitment_applied"] = bool(
         snap_before is not None and snap_after is not None and snap_before != snap_after
     )
+    # Parser-built NPC-target travel: remember contact target for payoff on a later grounded social turn.
+    if str(meta.get("commitment_source") or "").strip() == "explicit_player_pursuit":
+        if str(meta.get("target_kind") or "").strip().lower() == "npc":
+            tn = str(meta.get("target_npc_id") or "").strip()
+            if tn:
+                session[_NPC_PURSUIT_CONTACT_CONTEXT_KEY] = {
+                    "authoritative_lead_id": lead_id,
+                    "target_kind": "npc",
+                    "target_npc_id": tn,
+                    "destination_scene_id": str(meta.get("destination_scene_id") or "").strip() or None,
+                    "commitment_source": "explicit_player_pursuit",
+                    "commitment_strength": meta.get("commitment_strength"),
+                }
+        else:
+            session[_NPC_PURSUIT_CONTACT_CONTEXT_KEY] = None
 
 
 def _merge_world_updates(base: Dict[str, Any], extra: Dict[str, Any]) -> Dict[str, Any]:
