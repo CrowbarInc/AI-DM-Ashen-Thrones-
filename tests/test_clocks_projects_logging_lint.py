@@ -10,6 +10,10 @@ from game import storage
 from tests.test_prompt_and_guard import FRONTIER_GATE_SCENE, _dummy_state
 
 
+import pytest
+
+pytestmark = pytest.mark.integration
+
 def test_clocks_init_advance_set_clamp():
     session = {}
     clocks = get_or_init_clocks(session)

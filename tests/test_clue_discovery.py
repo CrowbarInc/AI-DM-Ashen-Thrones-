@@ -8,6 +8,10 @@ from game.affordances import generate_scene_affordances
 from game.clues import get_clue_presentation
 
 
+import pytest
+
+pytestmark = pytest.mark.integration
+
 def test_investigation_reveals_new_clue_once():
     """First investigate reveals the next undiscovered clue; second investigate reveals the next."""
     scene = {

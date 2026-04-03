@@ -19,6 +19,10 @@ from game.defaults import (
     default_world,
 )
 
+import pytest
+
+pytestmark = pytest.mark.integration
+
 # feature: routing, emission
 
 

@@ -7,6 +7,10 @@ from game.storage import (
 )
 
 
+import pytest
+
+pytestmark = pytest.mark.unit
+
 def test_intent_classification_examples():
     info = classify_player_intent("I search the wagon carefully.")
     assert "investigation" in info["labels"]

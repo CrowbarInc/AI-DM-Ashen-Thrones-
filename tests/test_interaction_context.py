@@ -8,6 +8,10 @@ from game.social import finalize_social_target_with_promotion
 from game.storage import load_scene
 
 
+import pytest
+
+pytestmark = pytest.mark.integration
+
 def _session_gate_with_roster(world: dict):
     session = create_fresh_session_document()
     session["active_scene_id"] = "frontier_gate"

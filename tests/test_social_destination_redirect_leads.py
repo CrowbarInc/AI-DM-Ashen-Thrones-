@@ -7,6 +7,10 @@ from game.defaults import default_world
 from game.storage import add_pending_lead, get_scene_runtime, load_scene
 
 
+import pytest
+
+pytestmark = pytest.mark.integration
+
 def _lirael_notice_board_resolution() -> dict:
     return {
         "kind": "question",

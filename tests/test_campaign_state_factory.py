@@ -11,6 +11,10 @@ from game.leads import SESSION_LEAD_REGISTRY_KEY
 from game.session import reset_session_state
 
 
+import pytest
+
+pytestmark = pytest.mark.unit
+
 def test_fresh_session_is_independent_graph():
     a = create_fresh_session_document()
     b = create_fresh_session_document()

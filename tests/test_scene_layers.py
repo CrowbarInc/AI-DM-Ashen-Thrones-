@@ -1,6 +1,10 @@
 import json
 
 
+import pytest
+
+pytestmark = pytest.mark.integration
+
 def test_scene_without_discoverable_clues_loads_with_default(tmp_path, monkeypatch):
     # Import locally so monkeypatch works even if module caches paths.
     from game import storage

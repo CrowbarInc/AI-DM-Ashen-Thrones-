@@ -682,7 +682,6 @@ def test_chat_roll_requirement_question_routes_to_adjudication_without_gpt(tmp_p
 
 
 # feature: routing
-@pytest.mark.unit
 @pytest.mark.regression
 def test_choose_interaction_route_dialogue_lock_pure_contract() -> None:
     """Canonical pure routing table for dialogue lock (merged from former test_dialogue_routing_lock)."""

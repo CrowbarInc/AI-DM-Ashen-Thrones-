@@ -13,6 +13,10 @@ from game.interaction_context import (
     rebuild_active_scene_entities,
 )
 
+import pytest
+
+pytestmark = pytest.mark.unit
+
 # feature: social, continuity
 
 

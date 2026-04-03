@@ -10,6 +10,9 @@ from game.exploration import resolve_exploration_action
 from game.world import apply_resolution_world_updates
 
 
+
+pytestmark = pytest.mark.unit
+
 def _scene(id: str = "test", exits=None, actions=None, interactables=None) -> dict:
     return {
         "scene": {

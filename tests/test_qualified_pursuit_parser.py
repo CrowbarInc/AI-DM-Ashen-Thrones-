@@ -6,6 +6,10 @@ from game.leads import LeadLifecycle, LeadStatus, create_lead, get_lead, upsert_
 from game.storage import get_scene_runtime
 
 
+import pytest
+
+pytestmark = pytest.mark.integration
+
 def _scene_gate_exits_milestone():
     return {
         "scene": {

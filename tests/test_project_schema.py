@@ -9,7 +9,7 @@ from game.projects import (
 )
 from game.world import advance_world_tick
 
-pytestmark = pytest.mark.unit
+pytestmark = pytest.mark.integration
 
 # feature: continuity
 

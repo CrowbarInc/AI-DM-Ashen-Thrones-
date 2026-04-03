@@ -29,6 +29,10 @@ from game.storage import (
 )
 
 
+import pytest
+
+pytestmark = pytest.mark.integration
+
 def _setup_data_dir(tmp_path, monkeypatch):
     monkeypatch.setattr(st, "BASE_DIR", tmp_path)
     monkeypatch.setattr(st, "DATA_DIR", tmp_path / "data")

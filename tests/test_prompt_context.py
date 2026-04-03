@@ -12,6 +12,10 @@ from game.social import compute_social_target_profile_hints
 from game.world import upsert_world_npc
 
 
+import pytest
+
+pytestmark = pytest.mark.integration
+
 def test_prompt_context_exports_promoted_interlocutor_profile():
     session = create_fresh_session_document()
     session["active_scene_id"] = "frontier_gate"

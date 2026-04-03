@@ -13,6 +13,8 @@ from game.leads import (
     upsert_lead,
 )
 
+pytestmark = pytest.mark.unit
+
 
 def test_normalize_lead_backfills_new_list_fields_and_metadata():
     raw: dict = {"id": "x", "title": "X"}

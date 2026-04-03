@@ -18,6 +18,10 @@ from game.defaults import (
 )
 
 
+import pytest
+
+pytestmark = pytest.mark.integration
+
 def _patch_storage(tmp_path, monkeypatch):
     monkeypatch.setattr(storage, "BASE_DIR", tmp_path)
     monkeypatch.setattr(storage, "DATA_DIR", tmp_path / "data")

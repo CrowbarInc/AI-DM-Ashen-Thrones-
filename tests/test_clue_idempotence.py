@@ -10,7 +10,7 @@ from game.defaults import default_world
 from game.exploration import process_investigation_discovery
 from game.storage import get_scene_runtime
 
-pytestmark = pytest.mark.unit
+pytestmark = pytest.mark.integration
 
 
 def _canonical_clue_snapshot(session: dict, scene_id: str, world: dict) -> dict:

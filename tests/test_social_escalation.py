@@ -10,6 +10,10 @@ from game.social import (
 )
 
 
+import pytest
+
+pytestmark = pytest.mark.unit
+
 def _session_with_pressure(scene_id: str, topic_key: str, speaker_key: str, repeat_count: int) -> dict:
     session: dict = {"turn_counter": 1}
     from game.storage import get_scene_runtime

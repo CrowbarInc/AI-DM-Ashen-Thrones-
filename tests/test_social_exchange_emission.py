@@ -28,6 +28,10 @@ from game.social_exchange_emission import (
 from game.storage import get_scene_runtime
 
 
+import pytest
+
+pytestmark = pytest.mark.unit
+
 def _strict_social_resolution() -> dict:
     return {
         "kind": "question",

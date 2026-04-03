@@ -13,6 +13,10 @@ from game.output_sanitizer import (
 )
 
 
+import pytest
+
+pytestmark = pytest.mark.unit
+
 def test_sanitizer_rewrites_procedural_engine_text():
     text = "I need a more concrete action or target to resolve that procedurally."
     out = sanitize_player_facing_output(text, {})

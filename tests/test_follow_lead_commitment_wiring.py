@@ -17,6 +17,9 @@ from game.scene_actions import normalize_scene_action
 from game.storage import get_scene_runtime
 
 
+
+pytestmark = pytest.mark.integration
+
 def _scene_gate():
     return {
         "scene": {

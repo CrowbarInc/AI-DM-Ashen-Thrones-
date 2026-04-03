@@ -10,7 +10,7 @@ from tests.helpers.transcript_runner import (
     run_transcript,
 )
 
-pytestmark = [pytest.mark.transcript, pytest.mark.unit]
+pytestmark = [pytest.mark.transcript, pytest.mark.integration]
 
 
 def _fake_gpt_response():

@@ -8,6 +8,9 @@ from game.defaults import default_scene, default_session, default_world, default
 from fastapi.testclient import TestClient
 import pytest
 
+
+pytestmark = pytest.mark.unit
+
 # Canonical engine result keys from ExplorationEngineResult.to_dict()
 ENGINE_RESULT_REQUIRED_KEYS = frozenset({
     "kind", "action_id", "label", "prompt", "success", "resolved_transition",

@@ -7,6 +7,9 @@ from game.defaults import default_scene, default_session, default_world, default
 from fastapi.testclient import TestClient
 
 
+
+pytestmark = pytest.mark.integration
+
 def _patch_storage(tmp_path, monkeypatch):
     monkeypatch.setattr(storage, "BASE_DIR", tmp_path)
     monkeypatch.setattr(storage, "DATA_DIR", tmp_path / "data")

@@ -5,6 +5,10 @@ from game.scene_actions import normalize_scene_action
 from game.defaults import default_campaign, default_character, default_combat, default_conditions, default_world
 
 
+import pytest
+
+pytestmark = pytest.mark.integration
+
 def test_investigate_with_successful_skill_check(monkeypatch):
     """Investigate with skill_check configured and roll that passes: returns success, discover_clue, skill_check in result."""
     monkeypatch.setattr("game.skill_checks._deterministic_d20", lambda _: 20)  # Always pass

@@ -12,6 +12,10 @@ from game.scene_actions import normalize_scene_action
 from game.storage import get_scene_runtime
 
 
+import pytest
+
+pytestmark = pytest.mark.integration
+
 def _scene_env(scene_id: str) -> dict:
     return {"scene": {"id": scene_id, "visible_facts": [], "exits": [], "mode": "exploration"}}
 

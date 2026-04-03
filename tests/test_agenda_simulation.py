@@ -10,6 +10,10 @@ from game.world import (
 )
 
 
+import pytest
+
+pytestmark = pytest.mark.unit
+
 def _world(factions=None, npcs=None, projects=None, event_log=None):
     """Minimal world dict for testing."""
     w = {

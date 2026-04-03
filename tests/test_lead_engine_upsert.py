@@ -12,6 +12,10 @@ from game.leads import (
 )
 
 
+import pytest
+
+pytestmark = pytest.mark.integration
+
 def test_explicit_discovery_creates_lead_in_registry():
     session: dict = {}
     r = apply_engine_lead_signal(

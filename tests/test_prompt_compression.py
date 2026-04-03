@@ -15,6 +15,10 @@ from game.gm import build_messages
 from game.storage import get_scene_runtime
 
 
+import pytest
+
+pytestmark = pytest.mark.integration
+
 def _dummy_campaign():
     return {
         "title": "Test Campaign",

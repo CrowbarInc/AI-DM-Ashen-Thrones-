@@ -12,6 +12,10 @@ from game.leads import (
 )
 
 
+import pytest
+
+pytestmark = pytest.mark.unit
+
 def test_commit_discovered_lead_sets_committed_pursued_and_first_turn_stamp():
     session: dict = {}
     upsert_lead(

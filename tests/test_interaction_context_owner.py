@@ -17,6 +17,10 @@ from game.interaction_context import (
 )
 from game.storage import get_scene_runtime
 
+import pytest
+
+pytestmark = pytest.mark.unit
+
 # feature: social, continuity
 
 

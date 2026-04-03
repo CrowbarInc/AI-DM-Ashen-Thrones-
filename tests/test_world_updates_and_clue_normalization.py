@@ -4,6 +4,10 @@ from game.gm import detect_surfaced_clues, _normalize_clue_match_text
 from game.api import _apply_post_gm_updates
 
 
+import pytest
+
+pytestmark = pytest.mark.integration
+
 def test_malformed_world_updates_projects_sanitized():
     """Malformed or partial projects in world_updates do not wipe existing; valid entries merged."""
     world = {"projects": [], "event_log": [], "factions": [{"id": "f1", "name": "Guild"}]}

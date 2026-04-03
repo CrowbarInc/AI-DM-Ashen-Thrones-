@@ -13,6 +13,9 @@ from game.social_exchange_emission import (
 )
 from game.storage import get_scene_runtime
 
+
+pytestmark = pytest.mark.integration
+
 _LIRAEL_LAST_ANSWER = (
     "Speak to Lirael if you want the sheepfold rumor straight—she keeps to the fold "
     "on the north road by the old milestone."

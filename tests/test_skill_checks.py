@@ -4,6 +4,9 @@ from game.skill_checks import resolve_skill_check, should_trigger_check
 from game.defaults import default_character, default_world
 
 
+
+pytestmark = pytest.mark.unit
+
 def test_action_that_does_not_require_roll():
     """Action without config or safe context does NOT require a roll."""
     action = {"id": "observe-a", "type": "observe", "label": "Look around"}

@@ -6,6 +6,10 @@ from game.clues import apply_authoritative_clue_discovery, record_discovered_clu
 from game.leads import SESSION_LEAD_REGISTRY_KEY, ensure_lead_registry, get_lead
 
 
+import pytest
+
+pytestmark = pytest.mark.integration
+
 def test_explicit_discovery_creates_authoritative_lead():
     session: dict = {"scene_runtime": {}, "clue_knowledge": {}, "turn_counter": 1}
     r = record_discovered_clue(session, "gate", "patrol_clue", clue_text="Tracks lead east.")

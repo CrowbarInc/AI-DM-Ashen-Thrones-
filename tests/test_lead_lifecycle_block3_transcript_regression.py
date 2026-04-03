@@ -28,7 +28,7 @@ from game.intent_parser import parse_freeform_to_action
 from game.leads import LeadLifecycle, LeadStatus, create_lead, debug_dump_leads, get_lead, upsert_lead
 from game.storage import get_scene_runtime
 
-pytestmark = [pytest.mark.transcript, pytest.mark.regression]
+pytestmark = [pytest.mark.transcript, pytest.mark.regression, pytest.mark.integration]
 
 
 def _patch_storage(tmp_path, monkeypatch):

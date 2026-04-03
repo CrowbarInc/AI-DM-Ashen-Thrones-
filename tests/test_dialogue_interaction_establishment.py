@@ -16,6 +16,10 @@ from game.social_exchange_emission import (
 from game.storage import get_interaction_context
 
 
+import pytest
+
+pytestmark = pytest.mark.integration
+
 def _scene(gate_id: str = "gate") -> dict:
     return {"scene": {"id": gate_id}, "scene_state": {"active_entities": []}}
 

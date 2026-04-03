@@ -11,6 +11,9 @@ from game.validation import SceneValidationError, validate_all_scenes, validate_
 from game.validation import SceneValidationError, validate_all_scenes, validate_scene
 
 
+
+pytestmark = pytest.mark.unit
+
 def _minimal_valid_scene(scene_id: str = "test_scene") -> dict:
     """Build a minimal valid scene envelope."""
     return {

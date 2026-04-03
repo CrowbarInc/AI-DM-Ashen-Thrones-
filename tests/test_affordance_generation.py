@@ -11,6 +11,9 @@ from game.affordances import (
 from game.scene_actions import normalize_scene_action
 
 
+
+pytestmark = pytest.mark.integration
+
 def _scene(overrides: dict | None = None) -> dict:
     """Build a scene envelope with optional overrides."""
     base = {

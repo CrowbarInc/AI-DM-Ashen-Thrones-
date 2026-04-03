@@ -10,6 +10,9 @@ from fastapi.testclient import TestClient
 from game.api import app
 from game.utils import utc_iso_now
 
+
+pytestmark = pytest.mark.unit
+
 # feature: continuity
 
 

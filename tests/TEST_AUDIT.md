@@ -12,6 +12,96 @@ Diagnostic inventory of `tests/` only: no runtime code or assertions were change
 
 ---
 
+## Block 1 — Fast lane vs full lane (classification plan)
+
+**Purpose:** Repo-native rules for splitting **fast** (day-to-day) and **full** (pre-merge / milestone) pytest lanes, aligned with `tools/test_audit.py` buckets and today’s suite. **No new pytest markers are required** if every heavy or transcript-harness module is tagged with the existing `transcript` and/or `slow` markers and scope is tagged with `unit` / `integration` / `regression` where helpful.
+
+**Ground truth:** `tests/test_inventory.json` (`summary`, `files[].primary_bucket`, `files[].high_brittleness_test_count`). Regenerate with `py -3 tools/test_audit.py`.
+
+### Lane definitions
+
+| Lane | Intent | Proposed selection (after Block 2 cleanup) |
+| --- | --- | --- |
+| **Full** | Everything needed before merge: full regression surface, transcript replay, gauntlets, and any intentionally expensive flows. | `pytest` / `pytest tests/` (no marker filter). |
+| **Fast** | Stable, deterministic, relatively cheap, high-signal checks for routine local development; excludes transcript-harness and explicitly slow modules. | `pytest -m "not transcript and not slow"` |
+
+**Optional stricter fast slice** (if prompt-heavy tests are too noisy locally): add `and not brittle`. `brittle` remains valid on modules like `test_prompt_and_guard.py` that are prose- or prompt-shape sensitive.
+
+### Marker meanings (lane-relevant subset)
+
+Declared in `pytest.ini`. For **lane membership**:
+
+- **`transcript`** — Module uses multi-turn transcript harness / session-log replay patterns (`tests.helpers.transcript_runner`, gauntlet-style flows, or file naming `test_transcript_gauntlet_*`). **Fast lane excludes** these regardless of runtime.
+- **`slow`** — Heavier runtime (large turn counts, large pipelines). **Fast lane excludes** these.
+- **`unit`**, **`integration`**, **`regression`** — Describe **scope** and signal density; they do **not** imply fast or slow by themselves. Use them for documentation, inventory alignment, and expressions like `pytest -m "regression"` — not as the sole fast-lane gate once exclusion markers are complete.
+- **`brittle`** — Optional **fast-lane** exclusion for prompt/prose-sensitive suites; orthogonal to ownership markers below.
+
+**Ownership markers** (`routing`, `retry`, `fallback`, `social`, `continuity`, `clues`, `leads`, `emission`, `legality`) are for feature ownership and inventory only — **do not** use them to define lanes.
+
+### Classification rules (apply per module)
+
+Use this order when tagging in Block 2:
+
+1. **Full-lane anchor (tag `transcript` and usually `slow` if multi-turn or expensive):**  
+   - Path matches `tests/test_transcript_gauntlet_*.py`.  
+   - Module uses `run_transcript` / transcript runner as the primary harness (`test_transcript_regression.py`, `test_transcript_runner_smoke.py`, `test_mixed_state_recovery_regressions.py`, `test_lead_lifecycle_block3_transcript_regression.py`).  
+   - Re-evaluate **`test_social_emission_quality.py`**: some tests already carry `transcript`; align with **module-level** `pytestmark` so behavior matches intent.
+2. **Mark `slow` without `transcript` when:** a module is integration-weighted but unusually expensive (many sequential API turns, huge fixtures) and should drop out of fast lane even if not “transcript” by naming.
+3. **Fast-eligible default:** all other modules — typical `TestClient` + `tmp_path` + mocks, pure logic, or single-turn API checks — **no** `transcript` / `slow` unless measured otherwise.
+4. **Scope markers:** add module-level `pytestmark` with one or more of `unit`, `integration`, `regression` consistent with the majority `primary_bucket` in `test_inventory.json` (heuristic: `unit`-majority files → prefer `unit`; `integration`-majority → `integration`; files already in `tests/*_regressions.py` or regression-majority → include `regression`).
+
+### Module tiers (inventory-informed snapshot)
+
+Tiers describe **expected lane** after Block 2 tagging, not current marker coverage.
+
+| Tier | Description | Examples (non-exhaustive) |
+| --- | --- | --- |
+| **1 — Core / unit-like** | Majority `unit` in JSON; little or no transcript harness. Fast-eligible. | `test_intent_parser.py`, `test_output_sanitizer.py`, `test_exploration_resolution.py`, `test_social_exchange_emission.py`, `test_world_state.py`, `test_skill_checks.py`, … |
+| **2 — Routine integration** | Majority `integration`; API/storage/pipeline; still day-to-day friendly if not tagged `slow`/`transcript`. Fast-eligible. | `test_turn_pipeline_shared.py`, `test_prompt_and_guard.py`, `test_directed_social_routing.py`, `test_follow_lead_commitment_wiring.py`, `test_save_load.py`, … |
+| **3 — Regression-heavy** | Majority `regression` or `*_regressions.py`; may be fast-eligible unless also `transcript`/`slow`. | `test_empty_social_retry_regressions.py`, `test_contextual_minimal_repair_regressions.py`, `test_social_target_authority_regressions.py`, `test_gauntlet_regressions.py` (API-style; name ≠ transcript marker today). |
+| **4 — Transcript / gauntlet / heavy** | `transcript_gauntlet` file pattern or transcript-tagged modules. Full lane (and fast lane **off**). | `test_transcript_gauntlet_actor_addressing.py`, `test_transcript_gauntlet_campaign_cleanliness.py`, `test_transcript_regression.py`, `test_mixed_state_recovery_regressions.py`, `test_transcript_runner_smoke.py`, `test_lead_lifecycle_block3_transcript_regression.py`. |
+
+**Special-purpose / diagnostic:** No separate pytest modules are audit-only; `tools/test_audit.py` is tooling, not collected. `test_clocks_projects_logging_lint.py` is normal integration coverage (scene lint + clocks/projects), not a separate lane.
+
+### Current marker coverage vs target
+
+- **Module-level `pytestmark` today:** 18 files set lane-related markers (`unit` / `integration` / `regression` / `transcript` / `slow` / `brittle`). The other **60** `test_*.py` files have **no** module-level lane markers yet.
+- **Per-test markers:** `test_turn_pipeline_shared.py` adds `unit`+`regression` on one test while the module is `integration`. `test_social_emission_quality.py` marks `transcript` on a subset of tests only — normalize in Block 2.
+- **`test_prompt_and_guard.py`:** module is `brittle` only — add `integration` (or `unit`) alongside `brittle` so scope is explicit for inventory and optional filters.
+
+**Legacy README command** `pytest -m "(unit or regression) and not transcript"` is **incomplete** until Block 2: it currently collects **69** tests in **10** files (verified 2026-04-02) because most of the suite is not marked `unit`/`regression` at module level. Prefer documenting **`not transcript and not slow`** as the post–Block 2 fast lane.
+
+### Block 2 — files likely needing marker cleanup
+
+1. **All 60 modules without module-level lane `pytestmark`** — add `unit` / `integration` / `regression` per rules above; add `transcript` / `slow` where tier 4 or expensive.
+2. **`test_social_emission_quality.py`** — consolidate per-test `transcript` / ownership marks into clear module-level policy.
+3. **`test_turn_pipeline_shared.py`** — reconcile module `integration` with the single test that adds `unit`+`regression` (drop redundancy or document dual intent).
+4. **`test_prompt_and_guard.py`** — add scope marker(s) in addition to `brittle`.
+5. **`test_lead_lifecycle_block3_transcript_regression.py`** — already `transcript`+`regression`; decide if `slow` is warranted from runtime.
+6. **`test_gauntlet_regressions.py`** — name suggests gauntlet; implementation is API/integration — either keep fast-eligible (current) or add `transcript`/`slow` only if it truly uses harness-scale replay (verify before tagging).
+
+**Already module-tagged (review only in Block 2):**  
+`test_clue_idempotence.py`, `test_clue_knowledge.py`, `test_contextual_minimal_repair_regressions.py`, `test_empty_social_retry_regressions.py`, `test_gauntlet_regressions.py`, `test_intent_parser.py`, `test_lead_lifecycle_block3_transcript_regression.py`, `test_mixed_state_recovery_regressions.py`, `test_project_schema.py`, `test_prompt_and_guard.py`, `test_scene_entity_lock.py`, `test_social_target_authority_regressions.py`, `test_transcript_gauntlet_actor_addressing.py`, `test_transcript_gauntlet_campaign_cleanliness.py`, `test_transcript_regression.py`, `test_transcript_runner_smoke.py`, `test_turn_pipeline_shared.py`, `test_turn_trace_contract.py`.
+
+### New markers?
+
+**Not necessary** for a clean two-lane model: reuse **`transcript`**, **`slow`**, **`brittle`**, and scope markers **`unit` / `integration` / `regression`**. Add a dedicated `fast` marker only if team wants opt-in fast suites instead of “default collect minus exclusions.”
+
+### Block 3 — Fast/full workflow verification (recorded baseline)
+
+Verified from repo root with `pytest` / `pytest --collect-only` (2026-04-02):
+
+| Command | Result |
+| --- | --- |
+| `pytest --collect-only -q` | **887** tests collected |
+| `pytest --collect-only -m "not transcript and not slow" -q` | **853** collected, **34** deselected |
+
+The **34** deselected items match the **`transcript` or `slow`** slice (`pytest --collect-only -m "transcript or slow"` → 34 collected), so the fast lane is the complement of that slice.
+
+**Baseline failures (not caused by lane selection):** `tests/test_social_destination_redirect_leads.py` — **3** failing tests; same failures under `pytest` and `pytest -m "not transcript and not slow"`. Treat as separate bugfix work; see `tests/README_TESTS.md` → *Known baseline failures*.
+
+---
+
 ## Executive counts
 
 | Metric | Value |
@@ -200,10 +290,9 @@ Concrete “source of truth” examples for recurring themes (prefer extending t
 | test_social_probe_determinism.py | 6 | integration | 0 | general, legality/sanitizer, lead extraction |
 | test_social_target_authority_regressions.py | 10 | regression | 0 | social continuity |
 | test_startup_and_timestamps.py | 4 | unit | 0 | general |
-| test_transcript_gauntlet_actor_addressing.py | 6 | transcript_gauntlet | 6 | transcript regression |
-| test_transcript_gauntlet_campaign_cleanliness.py | 4 | transcript_gauntlet | 4 | transcript regression |
-| test_transcript_gauntlet_lead_to_consequence.py | 8 | transcript_gauntlet | 8 | transcript regression |
-| test_transcript_regression.py | 10 | regression | 10 | transcript regression |
+| test_transcript_gauntlet_actor_addressing.py | 4 | transcript_gauntlet | 4 | transcript regression |
+| test_transcript_gauntlet_campaign_cleanliness.py | 3 | transcript_gauntlet | 3 | transcript regression |
+| test_transcript_regression.py | 5 | regression | 5 | transcript regression |
 | test_transcript_runner_smoke.py | 1 | integration | 0 | transcript regression |
 | test_turn_pipeline_shared.py | 46 | integration | 0 | general, routing, retry, combat/skill |
 | test_validation_journal_affordances.py | 10 | unit | 0 | general, clue system |

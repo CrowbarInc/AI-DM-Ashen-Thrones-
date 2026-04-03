@@ -29,6 +29,10 @@ ENGINE_RESULT_REQUIRED = frozenset({
 })
 
 
+import pytest
+
+pytestmark = pytest.mark.integration
+
 def _assert_social_result_shape(resolution: dict, expected_kind: str) -> None:
     """Assert resolution conforms to SocialEngineResult engine contract."""
     assert isinstance(resolution, dict)

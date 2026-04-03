@@ -9,6 +9,10 @@ from game.narration_state_consistency import (
 )
 
 
+import pytest
+
+pytestmark = pytest.mark.unit
+
 def _scene_envelope(scene_id: str) -> dict:
     return {"scene": {"id": scene_id}}
 

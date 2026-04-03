@@ -19,6 +19,8 @@ from game.leads import (
     upsert_lead,
 )
 
+pytestmark = pytest.mark.unit
+
 
 def test_add_remove_supersedes_maintains_superseded_by_inverse():
     session: dict = {}

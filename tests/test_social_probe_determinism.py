@@ -8,6 +8,10 @@ from game.social import classify_social_probe_move, resolve_social_action
 from game.storage import get_npc_runtime
 
 
+import pytest
+
+pytestmark = pytest.mark.integration
+
 def _npc_rt(session: dict, npc_id: str) -> dict:
     return get_npc_runtime(session, npc_id)
 

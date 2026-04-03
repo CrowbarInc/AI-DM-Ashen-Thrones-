@@ -28,6 +28,9 @@ from game.social_exchange_emission import (
 from game.storage import get_scene_runtime, load_scene
 
 
+
+pytestmark = pytest.mark.integration
+
 def _assert_runner_strict_social_grounding(social: dict) -> None:
     """Player-visible reply speaker must remain Tavern Runner with grounding metadata populated."""
     assert social.get("npc_id") == "tavern_runner"

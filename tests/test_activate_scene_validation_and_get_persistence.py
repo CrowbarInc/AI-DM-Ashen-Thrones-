@@ -7,6 +7,10 @@ from game.clocks import get_or_init_clocks, DEFAULT_CLOCKS
 from game.defaults import default_scene, default_session, default_world, default_character, default_campaign, default_combat, default_conditions
 from fastapi.testclient import TestClient
 
+import pytest
+
+pytestmark = pytest.mark.integration
+
 # feature: routing, emission
 
 

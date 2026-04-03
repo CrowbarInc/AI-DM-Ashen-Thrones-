@@ -16,6 +16,10 @@ from game.social import resolve_social_action
 from game.storage import add_pending_lead, get_scene_runtime, load_scene
 
 
+import pytest
+
+pytestmark = pytest.mark.integration
+
 def _resolution_question_with_topic(*, clue_id: str | None, text: str, leads_to_scene: str | None = None) -> dict:
     topic: dict = {"id": "t1", "text": text}
     if clue_id:

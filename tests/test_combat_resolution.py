@@ -28,6 +28,10 @@ COMBAT_CANONICAL_TOP_KEYS = frozenset({
 })
 
 
+import pytest
+
+pytestmark = pytest.mark.integration
+
 def _assert_canonical_combat_result(resolution: dict, expected_kind: str) -> None:
     """Assert combat resolution conforms to the standardized engine result schema."""
     assert isinstance(resolution, dict), "resolution must be a dict"

@@ -18,7 +18,7 @@ from game.clues import (
 )
 from game.storage import load_session, save_session, load_world, save_world
 
-pytestmark = pytest.mark.unit
+pytestmark = pytest.mark.integration
 
 
 def test_discovered_clues_update_player_knowledge():

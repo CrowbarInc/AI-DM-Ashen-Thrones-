@@ -8,6 +8,9 @@ from game.scene_actions import normalize_scene_action
 from game.storage import get_scene_runtime, mark_action_consumed
 
 
+
+pytestmark = pytest.mark.unit
+
 def _scene_with_actions(actions: list) -> dict:
     """Build a scene envelope with custom actions."""
     return {

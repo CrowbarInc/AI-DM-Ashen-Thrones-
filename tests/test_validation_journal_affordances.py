@@ -8,6 +8,10 @@ from game.scene_actions import normalize_scene_action, normalize_scene_actions_l
 from tests.test_prompt_and_guard import FRONTIER_GATE_SCENE, _dummy_state
 
 
+import pytest
+
+pytestmark = pytest.mark.unit
+
 def test_validate_gm_state_update_strips_unexpected_and_blocks_hidden_promotion():
     _, _, session, _, _, _ = _dummy_state()
     scene = FRONTIER_GATE_SCENE

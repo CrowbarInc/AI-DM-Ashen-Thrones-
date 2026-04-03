@@ -21,6 +21,8 @@ from game.storage import (
     save_session,
 )
 
+pytestmark = pytest.mark.integration
+
 
 def test_investigating_interactable_marks_it_resolved():
     """Investigating an interactable that reveals a clue marks it in resolved_interactables and searched_targets."""

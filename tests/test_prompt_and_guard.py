@@ -3,7 +3,7 @@ import re
 
 import pytest
 
-pytestmark = pytest.mark.brittle
+pytestmark = [pytest.mark.brittle, pytest.mark.integration]
 
 FRONTIER_GATE_SCENE = {
     "scene": {

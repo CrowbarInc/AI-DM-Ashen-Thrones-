@@ -17,6 +17,10 @@ from game.world import (
 )
 
 
+import pytest
+
+pytestmark = pytest.mark.unit
+
 def test_default_world_loads_and_normalizes_on_ensure():
     w = default_world()
     npc = w["npcs"][0]

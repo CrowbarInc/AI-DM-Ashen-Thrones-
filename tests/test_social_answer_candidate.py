@@ -12,6 +12,10 @@ from game.social_exchange_emission import build_final_strict_social_response
 from game.storage import get_scene_runtime
 
 
+import pytest
+
+pytestmark = pytest.mark.unit
+
 def _session_with_topic_pressure_caden() -> tuple[dict, dict, str]:
     session = default_session()
     world = default_world()

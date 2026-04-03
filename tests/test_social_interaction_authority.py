@@ -16,6 +16,10 @@ from game.prompt_context import build_narration_context, derive_narration_obliga
 from game.social_exchange_emission import reconcile_strict_social_resolution_speaker
 
 
+import pytest
+
+pytestmark = pytest.mark.integration
+
 def _minimal_scene():
     # Match default_world NPC locations (frontier_gate) so rebuild_active_scene_entities keeps targets.
     return {"scene": {"id": "frontier_gate", "visible_facts": [], "discoverable_clues": []}}

@@ -27,6 +27,8 @@ from game.leads import (
     upsert_lead,
 )
 
+pytestmark = pytest.mark.unit
+
 
 def test_normalize_lead_consequence_ids_default_and_normalization():
     raw: dict = {"id": "c", "title": "C"}

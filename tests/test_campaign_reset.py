@@ -11,6 +11,10 @@ from game.fresh_campaign_verify import collect_fresh_campaign_violations
 from game.storage import load_log, load_session, load_world, save_session, save_world
 
 
+import pytest
+
+pytestmark = pytest.mark.integration
+
 def _setup_data_dir(tmp_path, monkeypatch):
     monkeypatch.setattr(st, "BASE_DIR", tmp_path)
     monkeypatch.setattr(st, "DATA_DIR", tmp_path / "data")

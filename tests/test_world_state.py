@@ -10,6 +10,10 @@ from game.storage import (
 from game.world import apply_world_updates, ensure_defaults
 
 
+import pytest
+
+pytestmark = pytest.mark.unit
+
 def test_set_world_flag_persists():
     """Setting a flag updates the world dict and persists via save/load."""
     world = {"world_state": {"flags": {}, "counters": {}, "clocks": {}}}

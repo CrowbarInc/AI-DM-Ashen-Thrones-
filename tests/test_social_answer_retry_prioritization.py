@@ -10,6 +10,9 @@ from game.interaction_context import rebuild_active_scene_entities, set_social_t
 from game.storage import get_scene_runtime
 
 
+
+pytestmark = pytest.mark.integration
+
 def _session_runner_topic_caden():
     session = default_session()
     world = default_world()
