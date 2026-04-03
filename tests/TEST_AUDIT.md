@@ -1,6 +1,6 @@
 # Test suite audit (Block 15A)
 
-Diagnostic inventory of `tests/` only: no runtime code or assertions were changed for this pass.
+Diagnostic inventory of `tests/` only: no runtime code or assertions were changed for this pass. **How to run tests (fast/full lanes, collect-only, Windows):** `tests/README_TESTS.md`.
 
 **Regenerate artifacts:** from repo root run `py -3 tools/test_audit.py` (or `python tools/test_audit.py`). That refreshes `tests/test_inventory.json` using `pytest --collect-only` plus static heuristics. The script prints a one-line summary of **module-level duplicate `test_*` names** (shadowed defs); details are in JSON under `summary.files_with_shadowed_duplicate_test_defs`. It also prints a short **overlap spread** line (themes by distinct file count; heuristic, not semantic duplicate detection).
 
@@ -45,13 +45,13 @@ Heuristic tags (`test_inventory.json` → `feature_areas_by_distinct_files`) sho
 4. **Legality / sanitizer + fallback** — **16** files each; repair regressions overlap with sanitizer, prompt/guard, and pipeline.
 5. **Social continuity** — **15** files; `test_social.py`, `test_directed_social_routing.py`, `test_mixed_state_recovery_regressions.py`, `test_turn_pipeline_shared.py`, emission quality.
 
-### Block 2 — concrete files to touch first
+### Block 2 — concrete files to touch next
 
-Prioritize **marker normalization + overlap trimming** (not mass deletion):
+Prioritize **marker normalization + overlap trimming** (not mass deletion). **Routing cluster:** consolidation pass is **closed** (`TEST_CONSOLIDATION_PLAN.md` Block 3); the rows below are for **ongoing** cleanup. **Suggested batch order** after routing: repair/retry → prompt/sanitizer → social/emission → lead/clue **after** `test_social_destination_redirect_leads.py` baseline is handled — same list as *Next consolidation order* in that plan.
 
 | Priority | File(s) | Why |
 | --- | --- | --- |
-| High — **routing ownership closed (Block 3)** | `test_turn_pipeline_shared.py` ↔ `test_directed_social_routing.py` ↔ `test_dialogue_routing_lock.py` | Layer split is recorded (`TEST_CONSOLIDATION_PLAN.md` Block 3). Future **thinning** only with a replacement strategy; some cross-layer phrase overlap remains **intentional**. |
+| Done — **routing ownership (Block 3)** | `test_turn_pipeline_shared.py` ↔ `test_directed_social_routing.py` ↔ `test_dialogue_routing_lock.py` | Layer split is recorded. Future **thinning** only with a replacement strategy; some cross-layer phrase overlap remains **intentional**. |
 | High | `test_contextual_minimal_repair_regressions.py` ↔ `test_empty_social_retry_regressions.py` | Shared repair/retry vocabulary; split remains: **payload/legality** vs **retry termination + API**. |
 | High | `test_social.py` ↔ `test_social_exchange_emission.py` ↔ `test_social_escalation.py` | Thematic overlap; migrate strict emission assertions to `test_social_exchange_emission.py`; shrink `test_social.py`. |
 | High | `test_transcript_regression.py` ↔ `test_lead_lifecycle_block3_transcript_regression.py` ↔ `test_gauntlet_regressions.py` | Multi-step flows; **weaken** transcript duplicate substring locks where a focused test already owns the gate. |
@@ -72,20 +72,20 @@ Prioritize **marker normalization + overlap trimming** (not mass deletion):
 
 ---
 
-## Block 1 — Fast lane vs full lane (classification plan)
+## Block 1 — Fast lane vs full lane
 
-**Purpose:** Repo-native rules for splitting **fast** (day-to-day) and **full** (pre-merge / milestone) pytest lanes, aligned with `tools/test_audit.py` buckets and today’s suite. **No new pytest markers are required** if every heavy or transcript-harness module is tagged with the existing `transcript` and/or `slow` markers and scope is tagged with `unit` / `integration` / `regression` where helpful.
+**Purpose:** Document how **fast** (day-to-day) and **full** (pre-merge / milestone) pytest lanes are run today. Exclusion markers `transcript` and `slow` define fast-lane membership; scope tags `unit` / `integration` / `regression` support inventory and optional filters but **do not** replace that expression. Commands and collect-only expectations: `tests/README_TESTS.md`.
 
 **Ground truth:** `tests/test_inventory.json` (`summary`, `files[].primary_bucket`, `files[].high_brittleness_test_count`). Regenerate with `py -3 tools/test_audit.py`.
 
 ### Lane definitions
 
-| Lane | Intent | Proposed selection (after Block 2 cleanup) |
+| Lane | Intent | Selection (current) |
 | --- | --- | --- |
-| **Full** | Everything needed before merge: full regression surface, transcript replay, gauntlets, and any intentionally expensive flows. | `pytest` / `pytest tests/` (no marker filter). |
-| **Fast** | Stable, deterministic, relatively cheap, high-signal checks for routine local development; excludes transcript-harness and explicitly slow modules. | `pytest -m "not transcript and not slow"` |
+| **Full** | Full regression surface, transcript replay, gauntlets, and expensive flows. | `pytest` / `pytest tests/` (no marker filter). |
+| **Fast** | Routine local feedback; excludes transcript-harness and explicitly slow items. | `pytest -m "not transcript and not slow"` |
 
-**Optional stricter fast slice** (if prompt-heavy tests are too noisy locally): add `and not brittle`. `brittle` remains valid on modules like `test_prompt_and_guard.py` that are prose- or prompt-shape sensitive.
+**Optional stricter fast** (if prompt-heavy tests are too noisy locally): `pytest -m "not transcript and not slow and not brittle"`. `brittle` is appropriate on prose- or prompt-shape–sensitive modules (e.g. `test_prompt_and_guard.py`).
 
 ### Marker meanings (lane-relevant subset)
 
@@ -112,7 +112,7 @@ Use this order when tagging in Block 2:
 
 ### Module tiers (inventory-informed snapshot)
 
-Tiers describe **expected lane** after Block 2 tagging, not current marker coverage.
+Tiers describe **expected lane membership** from `transcript` / `slow` (and thus fast vs full), not “everything is green.” Remaining marker work below is mostly **scope** (`unit` / `integration` / `regression`) coverage for inventory — it does not change the fast-lane command.
 
 | Tier | Description | Examples (non-exhaustive) |
 | --- | --- | --- |
@@ -129,7 +129,7 @@ Tiers describe **expected lane** after Block 2 tagging, not current marker cover
 - **Per-test markers:** `test_turn_pipeline_shared.py` adds `unit`+`regression` on one test while the module is `integration`. `test_social_emission_quality.py` marks `transcript` on a subset of tests only — normalize in Block 2.
 - **`test_prompt_and_guard.py`:** module is `brittle` only — add `integration` (or `unit`) alongside `brittle` so scope is explicit for inventory and optional filters.
 
-**Legacy README command** `pytest -m "(unit or regression) and not transcript"` is **incomplete** until Block 2: it currently collects **69** tests in **10** files (verified 2026-04-02) because most of the suite is not marked `unit`/`regression` at module level. Prefer documenting **`not transcript and not slow`** as the post–Block 2 fast lane.
+**Optional narrow filter:** `pytest -m "(unit or regression) and not transcript"` is **not** the fast lane — it collected **69** tests in **10** files when last checked (2026-04-02) because most modules are not tagged `unit`/`regression` at module level. **Primary fast lane** remains `pytest -m "not transcript and not slow"` (documented in `tests/README_TESTS.md`).
 
 ### Block 2 — files likely needing marker cleanup
 
@@ -149,7 +149,7 @@ Tiers describe **expected lane** after Block 2 tagging, not current marker cover
 
 ### Block 3 — Fast/full workflow verification (recorded baseline)
 
-Verified from repo root with `pytest` / `pytest --collect-only` (2026-04-02):
+Verified from repo root with `pytest` / `pytest --collect-only` (2026-04-03):
 
 | Command | Result |
 | --- | --- |

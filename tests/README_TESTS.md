@@ -1,97 +1,100 @@
 # Running tests
 
-Markers are declared in `pytest.ini`. Module-level `pytestmark` carries scope (`unit` / `integration` / `regression`) and lane markers (`transcript`, `slow`, `brittle`) per `tests/TEST_AUDIT.md`.
+**Full lane** runs the whole suite. **Fast lane** excludes items marked `transcript` or `slow`. **Stricter fast** also excludes `brittle`. Marker definitions live in `pytest.ini`; scope and ownership notes are in `tests/TEST_AUDIT.md`. Routing test ownership is settled (see `tests/TEST_CONSOLIDATION_PLAN.md` → *Block 3*).
 
-**Where to add new tests:** See `tests/TEST_AUDIT.md` → *Consolidation Block 1 — Canonical ownership map & overlap hotspots* for canonical owners by theme (routing, social, leads/clues, transcript vs focused, repair/legality). For **routing** specifically, the three-module split is recorded in `tests/TEST_CONSOLIDATION_PLAN.md` → *Block 3 — Routing ownership (consolidation pass closed)*. See the same file for the **next consolidation order** after routing.
+**Windows:** If `pytest` is not on your `PATH`, use `py -3 -m pytest` instead of `pytest` for every command below (for example `py -3 -m pytest -m "not transcript and not slow"`).
 
-## What “trustworthy” means for fast vs full
+## Full lane
 
-**Lane trustworthiness is about correct composition and selection** — which tests are included or excluded by markers — **not** about the whole suite being green. A failing test in the fast lane is still a real failure; it is simply **orthogonal** to whether the fast/full split matches intent (exclude transcript harness and slow modules from fast; run everything on full).
+**When:** Pre-merge, milestones, or whenever you need the full regression surface (transcript harnesses, gauntlets, expensive flows).
 
-## Fast lane
-
-**Purpose:** Day-to-day feedback: run most of the suite without transcript-harness modules and modules explicitly marked `slow`.
-
-**Selection:** Everything **except** tests on items marked `transcript` or `slow` (module- or test-level marks both apply).
-
-**Command** (from repo root):
-
-```bash
-pytest -m "not transcript and not slow"
-```
-
-**Sanity check (collection only):**
-
-```bash
-pytest --collect-only -m "not transcript and not slow" -q
-```
-
-Expect **853 tests collected** and **34 deselected** (suite size **887** total) — re-verify after adding tests; see `tests/TEST_AUDIT.md` (Block 3) for the last recorded numbers.
-
-## Full lane (authoritative)
-
-**Purpose:** Pre-merge, milestone, or CI confidence: **the full regression surface**, including transcript replay, gauntlets, and expensive flows. This is the authoritative “all tests” path.
-
-**Command:**
+From repo root:
 
 ```bash
 pytest
 ```
 
-Equivalent explicit path:
+Same thing with an explicit path:
 
 ```bash
 pytest tests/
 ```
 
-**Sanity check (collection only):**
+**Collect only:**
 
 ```bash
 pytest --collect-only -q
 ```
 
-Expect **887 tests collected** (no marker deselection).
+Expect **887** tests collected (no marker deselection). Re-check after large suite changes; see `tests/TEST_AUDIT.md` → *Block 3 — Fast/full workflow verification*.
 
-## Optional stricter local run (brittle)
+## Fast lane
 
-If prompt- or prose-sensitive tests are too noisy locally, narrow further:
+**When:** Day-to-day feedback without transcript-harness modules and modules marked `slow`.
+
+**Selection:** Everything except tests on classes/functions/modules marked `transcript` or `slow`.
+
+```bash
+pytest -m "not transcript and not slow"
+```
+
+**Collect only:**
+
+```bash
+pytest --collect-only -m "not transcript and not slow" -q
+```
+
+Expect **853** tests collected and **34** deselected (887 total). Re-verify after adding tests.
+
+## Optional stricter fast lane (`brittle`)
+
+When prompt- or prose-sensitive tests are too noisy locally:
 
 ```bash
 pytest -m "not transcript and not slow and not brittle"
 ```
 
-## Known baseline failures (outside lane work)
+## What “trustworthy” means for fast vs full
 
-These failures **reproduce with the same three tests** whether you run the fast lane or the full suite. They are **pre-existing** relative to fast/full marker normalization and should be **fixed or quarantined in a separate task** — not interpreted as “the lanes are wrong.”
+**Lane trustworthiness is about composition and selection** — which tests the marker expression includes or excludes — **not** about the whole fast lane being green. A red test in the fast lane is still a real failure; it is **orthogonal** to whether the fast/full split matches intent (exclude transcript + slow from fast; run everything on full).
 
-After the routing consolidation pass (Block 3), **fast-lane failures still come from** `tests/test_social_destination_redirect_leads.py` — not from routing test ownership or the routing-module split. Treat destination-redirect / pending-lead baseline work as orthogonal to routing consolidation.
+## Known baseline failures (not lane or routing issues)
+
+Current **fast-lane reds** come from **`tests/test_social_destination_redirect_leads.py`** — **three** failing tests (destination redirect / pending-lead behavior). The same failures appear under full lane (`pytest` / `pytest tests/`). They are a **known product/test baseline**, not a bug in the fast-lane definition, marker wiring, or routing consolidation.
+
+Treat fixes or quarantine as a **separate task** from lane work and from routing ownership.
 
 | Module | Notes |
 |--------|--------|
-| `tests/test_social_destination_redirect_leads.py` | Three failing tests (destination redirect / pending lead behavior). Unrelated to transcript vs slow selection and unrelated to routing consolidation. |
+| `tests/test_social_destination_redirect_leads.py` | Three failing tests; unrelated to transcript/slow selection and unrelated to routing consolidation. |
 
-## Common commands (reference)
+## Where to add new tests
+
+See `tests/TEST_AUDIT.md` → *Consolidation Block 1 — Canonical ownership map & overlap hotspots* for owners by theme. **Next consolidation order** (after routing): repair/retry → prompt/sanitizer → social/emission → lead/clue **after** destination-redirect baseline is handled — see `tests/TEST_CONSOLIDATION_PLAN.md` → *Next consolidation order*.
+
+## Command cheat sheet
 
 | Goal | Command |
 |------|---------|
+| **Full lane** | `pytest` or `pytest tests/` |
+| **Full lane, collect only** | `pytest --collect-only -q` |
 | **Fast lane** | `pytest -m "not transcript and not slow"` |
+| **Fast lane, collect only** | `pytest --collect-only -m "not transcript and not slow" -q` |
 | **Stricter fast** (optional) | `pytest -m "not transcript and not slow and not brittle"` |
-| **Full suite** | `pytest` or `pytest tests/` |
-| **Legacy / partial** (only `unit` or `regression`; narrower than fast lane) | `pytest -m "(unit or regression) and not transcript"` |
-| **All tagged unit + regression** | `pytest -m "unit or regression"` |
+| **Transcript / slow slice** | `pytest -m "transcript or slow"` (complement of fast selection) |
+| **Transcript only** | `pytest -m "transcript"` |
+| **Slow only** | `pytest -m "slow"` |
 | **Exclude transcript only** | `pytest -m "not transcript"` |
-| **Transcript / gauntlet slice** | `pytest -m "transcript"` |
-| **Slow slice** (profiling / nightly) | `pytest -m "slow"` |
+| **All tagged unit + regression** | `pytest -m "unit or regression"` |
+| **Narrow legacy filter** (not equivalent to fast lane) | `pytest -m "(unit or regression) and not transcript"` — omits many integration-only modules; see `tests/TEST_AUDIT.md` |
 
-## Marker meanings
+## Marker meanings (lane-relevant)
 
-- **unit** — Small scope, mostly pure logic or tight helpers.
-- **integration** — HTTP/API, storage, or multi-step pipeline through the app.
-- **regression** — Locks for previously fixed bugs or fragile behavior.
-- **transcript** — Multi-turn transcript harness or transcript gauntlet modules (**fast lane excludes**).
-- **slow** — Longer runs (large gauntlets, many turns; **fast lane excludes**).
-- **brittle** — Sensitive to prompt wording or prose shape (**optional** fast-lane exclusion).
+- **unit** / **integration** / **regression** — Scope and signal density; **not** the fast-lane gate. Use for inventory, filters like `pytest -m regression`, and documentation.
+- **transcript** — Transcript harness / gauntlet-style modules (**fast lane excludes**).
+- **slow** — Longer or expensive runs (**fast lane excludes**).
+- **brittle** — Prompt/prose-sensitive (**optional** extra exclusion for stricter fast).
 
-Ownership markers (`routing`, `retry`, `fallback`, …) are for feature ownership and inventory tooling — **not** for choosing fast vs full lanes. See `pytest.ini` for the full list.
+Ownership markers (`routing`, `retry`, `fallback`, …) are for inventory and feature tagging only — **not** for choosing fast vs full. See `pytest.ini` for the full list.
 
-The `(unit or regression)` filter is intentionally **narrower** than the fast lane: many integration-only modules are fast-eligible but would be omitted by that expression.
+The expression `(unit or regression) and not transcript` is **narrower** than the fast lane: many fast-eligible modules are integration-only and would be skipped.

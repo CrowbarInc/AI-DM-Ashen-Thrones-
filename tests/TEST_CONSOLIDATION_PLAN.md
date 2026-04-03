@@ -8,7 +8,7 @@
 
 **Consolidation Block 1 (ownership):** The authoritative **canonical ownership map**, **overlap hotspots**, **Block 2 file list**, and **deferrals** live in `tests/TEST_AUDIT.md` → section *Consolidation Block 1 — Canonical ownership map & overlap hotspots*. This plan stays aligned with that section.
 
-**Block 2 progress (routing / turn-pipeline cluster):** Restored `test_dialogue_routing_lock.py` as the home for the pure `choose_interaction_route` / dialogue-lock table (`test_choose_interaction_route_dialogue_lock_pure_contract`); removed that duplicate from `test_turn_pipeline_shared.py` and trimmed redundant `kind != adjudication_query` / GM substring checks where stronger assertions already held. `test_directed_social_routing.py` chat smoke cases dropped the redundant adjudication negation when `kind == "question"` already applied.
+**Completed — routing / turn-pipeline cluster:** Restored `test_dialogue_routing_lock.py` as the home for the pure `choose_interaction_route` / dialogue-lock table (`test_choose_interaction_route_dialogue_lock_pure_contract`); removed that duplicate from `test_turn_pipeline_shared.py` and trimmed redundant `kind != adjudication_query` / GM substring checks where stronger assertions already held. `test_directed_social_routing.py` chat smoke cases dropped the redundant adjudication negation when `kind == "question"` already applied.
 
 ### Block 3 — Routing ownership (consolidation pass closed)
 
@@ -46,7 +46,7 @@ Work the clusters in this order unless a release forces a narrow fix:
 
 - **Transcript and regression modules** dominate high-brittleness counts (audit): `test_transcript_regression.py`, `test_lead_lifecycle_block3_transcript_regression.py`, `test_mixed_state_recovery_regressions.py`, `test_transcript_gauntlet_actor_addressing.py`, `test_empty_social_retry_regressions.py`, `test_transcript_gauntlet_campaign_cleanliness.py`, plus scattered cases in `test_prompt_and_guard.py` and others.
 - **Prose-sensitive assertions** are few in count (audit: ~7 prose-sensitive items) but disproportionately painful when prompts or copy change.
-- **Marker debt:** `pytest.ini` defines `unit`, `integration`, `regression`, `transcript`, `slow`, `brittle`, but adoption is inconsistent; the audit’s heuristics do not yet mirror markers — hard to run “fast lane” vs “slow/brittle lane” reliably without follow-up tagging.
+- **Scope marker debt:** `unit` / `integration` / `regression` adoption is still uneven at module level; audit heuristics do not mirror those tags. **Fast vs full lanes** still use `pytest -m "not transcript and not slow"` (see `tests/README_TESTS.md`) regardless — that is selection/composition, not “all green.”
 
 ### Under-protected
 
@@ -91,20 +91,20 @@ See **§3** for per-item detail. High-level targets:
 - **`test_inventory.json` / `tools/test_audit.py`:** Inventory tooling; keep until consolidation stabilizes.
 - **Files with single high-brittleness tests** (`test_agenda_simulation.py`, `test_clue_discovery.py`, `test_emergent_scene_actors.py`, `test_gauntlet_regressions.py`): not priority targets until broader batches complete.
 - **World/state, snapshots, save/load, schema, clocks/lint:** Lower overlap in audit; avoid drive-by merges.
-- **Broad marker refactors:** Defer mass `pytest.mark.brittle` / `slow` application until one pilot file proves the workflow (see order of operations).
+- **Broad scope-marker refactors:** Defer mass `unit` / `integration` / `regression` cleanup until done in small batches; optional `brittle` / extra `slow` tuning can follow the same pilot pattern (§5).
 - **Consolidation Block 1 explicit deferrals:** No broad merge of `test_prompt_and_guard.py` or `test_turn_pipeline_shared.py`; no regression/transcript deletion without nodeid replacement map; `test_social_destination_redirect_leads.py` failures are a separate bugfix track.
 
-### D. Block 2 — first files to touch (from ownership pass)
+### D. Block 2 — clusters (routing done; remaining batches)
 
-Overlap reduction and marker cleanup, **not** wholesale rewrites:
+Routing three-module split is **complete** (Block 3 above). Overlap reduction and marker cleanup elsewhere — **not** wholesale rewrites:
 
-1. `test_turn_pipeline_shared.py`, `test_directed_social_routing.py`, `test_dialogue_routing_lock.py`
-2. `test_contextual_minimal_repair_regressions.py`, `test_empty_social_retry_regressions.py`
+1. ~~`test_turn_pipeline_shared.py`, `test_directed_social_routing.py`, `test_dialogue_routing_lock.py`~~ — **routing pass closed**; only thinning with a replacement strategy if needed later.
+2. **Next:** `test_contextual_minimal_repair_regressions.py`, `test_empty_social_retry_regressions.py`
 3. `test_social.py`, `test_social_exchange_emission.py`, `test_social_escalation.py`
 4. `test_transcript_regression.py`, `test_lead_lifecycle_block3_transcript_regression.py`, `test_gauntlet_regressions.py`
 5. `test_social_emission_quality.py` (module-level transcript policy)
 6. `test_prompt_and_guard.py`, `test_output_sanitizer.py`
-7. Lead/clue cluster: `test_social_lead_landing.py`, `test_clue_lead_registry_integration.py`, `test_social_destination_redirect_leads.py` (last after baseline fix decision)
+7. Lead/clue cluster: `test_social_lead_landing.py`, `test_clue_lead_registry_integration.py`, `test_social_destination_redirect_leads.py` — **last**, after **destination-redirect** baseline in that file is fixed or quarantined (`tests/README_TESTS.md`).
 
 ---
 
@@ -115,7 +115,7 @@ Each row is a **future** change candidate. **Do not** execute without a replacem
 | ID | Tests / files involved | Overlap reason | Proposed action | Risk |
 | --- | --- | --- | --- | --- |
 | R1 | `test_contextual_minimal_repair_regressions.py` ↔ `test_empty_social_retry_regressions.py` | Both touch contextual/minimal repair and social empties; shared helper behavior | **Merge:** extract shared fixtures/helpers to `tests/conftest.py` or a `tests/repair_helpers.py`; **do not** merge scenario lists until ownership split is clear (retry/API vs payload/legality). Optionally **weaken** duplicated prose checks if one file keeps the strict version. | Low (helpers only); Medium if merging test bodies |
-| R2 | `test_turn_pipeline_shared.py` ↔ `test_directed_social_routing.py` ↔ `test_dialogue_routing_lock.py` | Dialogue lock, routing, and social boundaries recur at different depths | **Merge/reduce:** add new routing cases to `test_directed_social_routing.py` unless full pipeline required; **avoid** a fourth parallel routing file. **Weaken** only duplicate assertions that are already structurally locked in the smaller file. | Medium |
+| R2 | `test_turn_pipeline_shared.py` ↔ `test_directed_social_routing.py` ↔ `test_dialogue_routing_lock.py` | Dialogue lock, routing, and social boundaries recur at different depths | **Ownership settled** (Block 3). **Future thinning only:** add new routing cases to `test_directed_social_routing.py` unless full pipeline required; **avoid** a fourth parallel routing file. **Weaken** only duplicate assertions already structurally locked in the smaller file. | Medium |
 | R3 | `test_output_sanitizer.py` ↔ `test_prompt_and_guard.py` | Legality strings, validator voice, sanitization | **No file merge.** **Move** new cases by symptom: post-GM output → sanitizer; messages-to-model → prompt/guard. **Weaken** cross-file duplicate string equality if one side keeps canonical assertion. | Low |
 | R4 | `test_social.py` ↔ `test_social_exchange_emission.py` ↔ `test_social_escalation.py` | Broad “social” vocabulary | **Reduce:** migrate strict emission tests into `test_social_exchange_emission.py`; keep escalation in `test_social_escalation.py`. **Delete** from `test_social.py` only after migration (replacement required). | Medium |
 | R5 | `test_transcript_regression.py` ↔ `test_turn_pipeline_shared.py` / other integration tests | Multi-step flows may re-assert the same gate (e.g. routing, emission) already covered in pipeline tests | **Reduce overlap:** drop or **weaken** transcript assertions that duplicate a named integration/regression test; keep transcript steps that prove **ordering** or **cross-turn state**. **Move** heavy cases to `@pytest.mark.slow` + `@pytest.mark.transcript` consistently. | Medium–High |
@@ -164,7 +164,7 @@ Execute **one bullet per PR** (or smaller), then **full test suite** (`pytest` f
 
 1. **Keep exploration tests collectible:** When adding cases in `test_exploration_resolution.py`, use unique top-level names or parametrization; re-run `pytest --collect-only` and `tools/test_audit.py` after bulk edits. *Risk: none if naming discipline holds.*
 2. **Weaken brittle prose assertions (pilot):** Pick one high-brittleness file (e.g. a single `test_transcript_gauntlet_*.py` or one `test_transcript_regression.py` case). Replace fragile substring locks with structural checks where a canonical integration test already covers wording. Mark remaining prose-bound tests `@pytest.mark.brittle`. *Validates marker workflow.*
-3. **Apply markers to transcript/slow lane:** Ensure `test_transcript_gauntlet_*.py`, `test_transcript_regression.py`, and long harness tests consistently use `transcript` + `slow` (already partially true for `test_transcript_regression.py`). Add `brittle` where prose remains. Document a CI/local command for “fast path” vs “full path” once stable.
+3. **Tighten transcript/slow/brittle tagging:** Keep `test_transcript_gauntlet_*.py`, `test_transcript_regression.py`, and long harness tests aligned with `transcript` + `slow` where appropriate; add `brittle` where prose remains. **Fast vs full commands** are already documented in `tests/README_TESTS.md`.
 4. **Extract shared helpers (R1, R6):** Move duplicate `_patch_storage` / seed helpers into shared test utilities **without** deleting tests. *Low risk.*
 5. **Merge duplicate regression scenarios (R2, R4, R5):** After helper dedup, merge **only** pairs that have been read side-by-side; keep mapping table of removed nodeids → replacements.
 6. **Reduce transcript overlap (R5, R6):** Remove or slim transcript steps only when covered by smaller tests; prefer **weaken** before **delete**.
@@ -185,6 +185,7 @@ Execute **one bullet per PR** (or smaller), then **full test suite** (`pytest` f
 
 ## References
 
+- `tests/README_TESTS.md` — full lane, fast lane, stricter fast, collect-only, Windows `py -3 -m pytest`, known baseline failures.
 - `tests/TEST_AUDIT.md` — counts, brittleness leaders, canonical examples, duplicate-name guardrail notes.
 - `tests/test_inventory.json` — per-item `nodeid`, buckets, heuristics.
 - `pytest.ini` — markers: `unit`, `integration`, `regression`, `transcript`, `slow`, `brittle`.
