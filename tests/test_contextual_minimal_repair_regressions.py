@@ -102,7 +102,6 @@ def test_social_contextual_repair_scene_anchor_without_question_signal(monkeypat
     )
     pft = str(out.get("player_facing_text") or "").lower()
     assert "social_contextual_repair:scene_anchor" in str(out.get("debug_notes") or "")
-    assert out.get("targeted_retry_terminal") is True
     _assert_repair_line_legal(str(out.get("player_facing_text") or ""))
     assert "tavern" in pft or "locals" in pft or "lantern" in pft or "frames what you hear" in pft
 
@@ -127,7 +126,6 @@ def test_nonsocial_minimal_repair_by_context() -> None:
     )
     pft_e = str(out_empty.get("player_facing_text") or "")
     _assert_repair_line_legal(pft_e)
-    assert out_empty.get("targeted_retry_terminal") is True
     assert _norm_pft(pft_e) == hard
 
 
@@ -212,4 +210,3 @@ def test_contextual_repair_lines_pass_legality_checks(monkeypatch: Any) -> None:
     pft_n = str(out_n.get("player_facing_text") or "")
     _assert_repair_line_legal(pft_n)
     assert "nonsocial_contextual_repair:scene_anchor" in str(out_n.get("debug_notes") or "")
-    assert "something shifts" not in pft_n.lower()

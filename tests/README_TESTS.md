@@ -1,6 +1,6 @@
 # Running tests
 
-**Full lane** runs the whole suite. **Fast lane** excludes items marked `transcript` or `slow`. **Stricter fast** also excludes `brittle`. Marker definitions live in `pytest.ini`; scope and ownership notes are in `tests/TEST_AUDIT.md`. Routing test ownership is settled (see `tests/TEST_CONSOLIDATION_PLAN.md` → *Block 3*).
+**Full lane** runs the whole suite. **Fast lane** excludes items marked `transcript` or `slow`. **Stricter fast** also excludes `brittle`. Marker definitions live in `pytest.ini`; scope and ownership notes are in `tests/TEST_AUDIT.md`. Routing and **repair/retry regression** ownership are settled (see `tests/TEST_CONSOLIDATION_PLAN.md` → *Block 3 — Routing* and *Repair / retry cluster — Block 3*).
 
 **Windows:** If `pytest` is not on your `PATH`, use `py -3 -m pytest` instead of `pytest` for every command below (for example `py -3 -m pytest -m "not transcript and not slow"`).
 
@@ -58,19 +58,9 @@ pytest -m "not transcript and not slow and not brittle"
 
 **Lane trustworthiness is about composition and selection** — which tests the marker expression includes or excludes — **not** about the whole fast lane being green. A red test in the fast lane is still a real failure; it is **orthogonal** to whether the fast/full split matches intent (exclude transcript + slow from fast; run everything on full).
 
-## Known baseline failures (not lane or routing issues)
-
-Current **fast-lane reds** come from **`tests/test_social_destination_redirect_leads.py`** — **three** failing tests (destination redirect / pending-lead behavior). The same failures appear under full lane (`pytest` / `pytest tests/`). They are a **known product/test baseline**, not a bug in the fast-lane definition, marker wiring, or routing consolidation.
-
-Treat fixes or quarantine as a **separate task** from lane work and from routing ownership.
-
-| Module | Notes |
-|--------|--------|
-| `tests/test_social_destination_redirect_leads.py` | Three failing tests; unrelated to transcript/slow selection and unrelated to routing consolidation. |
-
 ## Where to add new tests
 
-See `tests/TEST_AUDIT.md` → *Consolidation Block 1 — Canonical ownership map & overlap hotspots* for owners by theme. **Next consolidation order** (after routing): repair/retry → prompt/sanitizer → social/emission → lead/clue **after** destination-redirect baseline is handled — see `tests/TEST_CONSOLIDATION_PLAN.md` → *Next consolidation order*.
+See `tests/TEST_AUDIT.md` → *Consolidation Block 1 — Canonical ownership map & overlap hotspots* for owners by theme. **Next consolidation order:** prompt/sanitizer → social/emission → lead/clue (repair/retry cluster documented and closed enough — see `tests/TEST_CONSOLIDATION_PLAN.md` → *Next consolidation order* and *Repair / retry cluster — Block 3*).
 
 ## Command cheat sheet
 

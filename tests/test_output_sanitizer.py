@@ -101,6 +101,7 @@ def test_sanitizer_rewrites_unresolved_answer_without_old_fallback_phrase():
 
 
 def test_sanitizer_uses_procedural_insufficiency_fallback_for_adjudication_context():
+    # Canonical post-emission procedural phrasing lives here; prompt/guard owns source classification upstream.
     text = "Cannot determine roll requirements yet; state the specific action and target first."
     out = sanitize_player_facing_output(
         text,

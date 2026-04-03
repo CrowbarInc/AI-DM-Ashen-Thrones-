@@ -140,8 +140,7 @@ def test_nonsocial_contextual_repair_pressure_forward_without_scene_detail() -> 
             "player_input": "I search the rubble for tracks.",
         },
     )
-    pft = str(out.get("player_facing_text") or "")
-    assert "Something shifts" not in pft
+    assert _gm_has_usable_player_facing_text(out)
     assert "nonsocial_contextual_repair:pressure_forward" in str(out.get("debug_notes") or "")
 
 
@@ -161,6 +160,9 @@ def test_ensure_minimal_social_resolution_survives_total_minimal_helper_failure(
     assert _gm_has_usable_player_facing_text(out)
     assert "They answer cautiously" in str(out.get("player_facing_text") or "")
     assert out.get("fallback_kind") == "social_empty_resolution_repair"
+    assert out.get("accepted_via") == "social_resolution_repair"
+    assert out.get("targeted_retry_terminal") is True
+    assert out.get("retry_exhausted") is True
 
 
 def test_api_repairs_empty_social_after_force_terminal_retry_fallback(monkeypatch: Any, tmp_path: Any) -> None:

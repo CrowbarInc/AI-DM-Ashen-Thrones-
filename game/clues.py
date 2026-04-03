@@ -992,6 +992,19 @@ def _crier_npc_id_from_addressables(scene_inner: dict, scene_state: dict) -> str
     for raw in (scene_state.get("emergent_addressables") or []):
         if isinstance(raw, dict):
             rows.append(raw)
+    # Emergent NPCs (e.g. town crier) may appear in active_entities before they are mirrored
+    # into addressables / emergent_addressables; frontier_gate authors Lirael in discoverables
+    # alongside emergent_town_crier in scene_state.
+    if isinstance(scene_state, dict):
+        seen_active: Set[str] = set()
+        for eid in scene_state.get("active_entities") or []:
+            if not isinstance(eid, str):
+                continue
+            eid_s = eid.strip()
+            if not eid_s or eid_s in seen_active or "crier" not in eid_s.lower():
+                continue
+            seen_active.add(eid_s)
+            rows.append({"id": eid_s, "address_roles": ["town", "crier"]})
     best: tuple[int, str] | None = None
     for row in rows:
         rid = str(row.get("id") or "").strip()

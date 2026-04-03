@@ -1,4 +1,9 @@
-"""Regression: directional social narration promotes concrete destination anchors to actionable leads."""
+"""Regression: directional social narration promotes concrete destination anchors to actionable leads.
+
+Named crier redirects (e.g. Lirael) require resolving ``emergent_town_crier`` from scene state; the
+engine may list that NPC in ``active_entities`` before it appears in addressables — see
+``_crier_npc_id_from_addressables`` in ``game.clues``.
+"""
 from __future__ import annotations
 
 from game.clues import apply_social_narration_lead_supplements, apply_socially_revealed_leads
@@ -59,9 +64,13 @@ def test_lirael_near_notice_board_creates_actionable_npc_pending_and_registry():
     npc_pending = [p for p in pending if p.get("leads_to_npc") == "emergent_town_crier"]
     assert len(npc_pending) == 1
     assert npc_pending[0].get("authoritative_lead_id")
+    # Regression: NPC anchor must not degrade to a rumor-only pending row when crier is in active_entities.
+    assert not npc_pending[0].get("leads_to_rumor")
     auth = npc_pending[0]["authoritative_lead_id"]
     row = get_lead(session, auth)
     assert row is not None
+    assert row.get("type") == "social"
+    assert "emergent_town_crier" in (row.get("related_npc_ids") or [])
     reg = session.get(SESSION_LEAD_REGISTRY_KEY) or {}
     assert isinstance(reg, dict)
     assert sum(1 for k in reg if isinstance(k, str)) >= 1
