@@ -1,24 +1,50 @@
 # Test consolidation plan (Block 15C)
 
-**Status:** Plan only — no deletions, merges, or assertion changes in this block.
+**Status:** Plan + recorded ownership; routing consolidation **pass closed** (Block 3 documentation only in the last routing block — no further routing refactors implied by this section).
 
 **Source:** Derived from `tests/TEST_AUDIT.md`, `tests/test_inventory.json` (regenerate via `py -3 tools/test_audit.py`), and spot review of transcript vs pipeline modules.
 
 **Goal:** A concrete, low-risk roadmap so cleanup can run in small batches with full-suite checks between steps.
 
+**Consolidation Block 1 (ownership):** The authoritative **canonical ownership map**, **overlap hotspots**, **Block 2 file list**, and **deferrals** live in `tests/TEST_AUDIT.md` → section *Consolidation Block 1 — Canonical ownership map & overlap hotspots*. This plan stays aligned with that section.
+
+**Block 2 progress (routing / turn-pipeline cluster):** Restored `test_dialogue_routing_lock.py` as the home for the pure `choose_interaction_route` / dialogue-lock table (`test_choose_interaction_route_dialogue_lock_pure_contract`); removed that duplicate from `test_turn_pipeline_shared.py` and trimmed redundant `kind != adjudication_query` / GM substring checks where stronger assertions already held. `test_directed_social_routing.py` chat smoke cases dropped the redundant adjudication negation when `kind == "question"` already applied.
+
+### Block 3 — Routing ownership (consolidation pass closed)
+
+The following **routing ownership pattern** is now the explicit contract for new tests and overlap review. It reflects what the consolidation pass proved: three modules, three layers — not one mega-file.
+
+| Module | Owns |
+| --- | --- |
+| `tests/test_turn_pipeline_shared.py` | Full-stack **`/api/chat`** and **`/api/action`** routing behavior; dialogue-lock **HTTP** regressions; **turn-trace-adjacent** flow; **end-to-end resolution** behavior. |
+| `tests/test_dialogue_routing_lock.py` | The **pure routing-table / dialogue-lock contract** (e.g. `choose_interaction_route`) **without** `TestClient`. |
+| `tests/test_directed_social_routing.py` | **Directed-social precedence**, **vocative overrides**, **segmentation**, **narrow directed `/api/chat` scenarios**, and **emergent-actor targeting** behavior. |
+
+**Intentional duplication:** Some phrases or scenarios appear in **both** pure-routing / table coverage (`test_dialogue_routing_lock.py`, aspects of `test_directed_social_routing.py`) **and** full-pipeline coverage (`test_turn_pipeline_shared.py`) because they assert **different layers** (unit/table vs HTTP/stack vs resolution). That overlap is expected unless a later pass maps a specific case to a single layer with a replacement strategy.
+
+### Next consolidation order (after routing)
+
+Work the clusters in this order unless a release forces a narrow fix:
+
+1. **Repair / retry cluster** next — `test_contextual_minimal_repair_regressions.py`, `test_empty_social_retry_regressions.py`, and related repair/retry surfaces.
+2. **Prompt / sanitizer cluster** after that — `test_prompt_and_guard.py`, `test_output_sanitizer.py`, symptom-based split (messages-to-model vs post-GM output).
+3. **Social / emission** later — `test_social_exchange_emission.py`, `test_social_escalation.py`, `test_social.py` migration, emission-quality harness alignment.
+4. **Lead / clue** only **after** the known **destination-redirect** baseline in `test_social_destination_redirect_leads.py` is handled in a **separate** fix/quarantine task (do not fold that baseline into consolidation scope).
+
 ---
+
 
 ## 1. Short summary
 
 ### Over-tested (redundant *surface area*, not necessarily redundant *value*)
 
 - **Clue + legality + routing themes** appear across many files (audit: clue system in ~19 files; legality/sanitizer ~14; routing ~11). Multiple modules can assert similar high-level outcomes with different harness depth.
-- **Large integration files** concentrate many scenarios in one place: `test_turn_pipeline_shared.py` (~46 items), `test_prompt_and_guard.py` (~67), `test_social_exchange_emission.py` (~43), `test_output_sanitizer.py` (~41). New cases have historically landed in “kitchen sink” files instead of extending a single canonical home.
+- **Large integration files** concentrate many scenarios in one place: `test_turn_pipeline_shared.py` (~53 items), `test_prompt_and_guard.py` (~67), `test_social_exchange_emission.py` (~43), `test_output_sanitizer.py` (~41). New cases have historically landed in “kitchen sink” files instead of extending a single canonical home. (Approximate counts — re-run `pytest --collect-only` for live totals.)
 - **Social behavior** is spread across `test_social.py`, `test_social_exchange_emission.py`, `test_social_escalation.py`, `test_directed_social_routing.py`, and others — overlap is *thematic*, not name-collision (audit: 0 identical cross-file test names).
 
 ### Fragile (high churn / prose-sensitive / expensive)
 
-- **Transcript and regression modules** dominate high-brittleness counts (audit): `test_transcript_regression.py`, `test_transcript_gauntlet_lead_to_consequence.py`, `test_mixed_state_recovery_regressions.py`, `test_transcript_gauntlet_actor_addressing.py`, `test_empty_social_retry_regressions.py`, `test_transcript_gauntlet_campaign_cleanliness.py`, plus scattered cases in `test_prompt_and_guard.py` and others.
+- **Transcript and regression modules** dominate high-brittleness counts (audit): `test_transcript_regression.py`, `test_lead_lifecycle_block3_transcript_regression.py`, `test_mixed_state_recovery_regressions.py`, `test_transcript_gauntlet_actor_addressing.py`, `test_empty_social_retry_regressions.py`, `test_transcript_gauntlet_campaign_cleanliness.py`, plus scattered cases in `test_prompt_and_guard.py` and others.
 - **Prose-sensitive assertions** are few in count (audit: ~7 prose-sensitive items) but disproportionately painful when prompts or copy change.
 - **Marker debt:** `pytest.ini` defines `unit`, `integration`, `regression`, `transcript`, `slow`, `brittle`, but adoption is inconsistent; the audit’s heuristics do not yet mirror markers — hard to run “fast lane” vs “slow/brittle lane” reliably without follow-up tagging.
 
@@ -35,8 +61,9 @@
 
 | Area | Canonical files / examples |
 | --- | --- |
-| Full `/api/chat` pipeline locks | `test_turn_pipeline_shared.py` |
-| Focused routing tables (no full pipeline) | `test_directed_social_routing.py`, `test_dialogue_routing_lock.py` |
+| Full `/api/chat` + `/api/action` stack, dialogue-lock HTTP regressions, turn-trace-adjacent flow, end-to-end resolution | `test_turn_pipeline_shared.py` |
+| Pure dialogue-lock / routing table (no `TestClient`) | `test_dialogue_routing_lock.py` |
+| Directed-social precedence, vocative overrides, segmentation, narrow directed `/api/chat`, emergent-actor targeting | `test_directed_social_routing.py` |
 | Emit-time sanitizer | `test_output_sanitizer.py` |
 | Prompt construction + guard contracts | `test_prompt_and_guard.py` |
 | Strict social / emission shape | `test_social_exchange_emission.py` |
@@ -65,6 +92,19 @@ See **§3** for per-item detail. High-level targets:
 - **Files with single high-brittleness tests** (`test_agenda_simulation.py`, `test_clue_discovery.py`, `test_emergent_scene_actors.py`, `test_gauntlet_regressions.py`): not priority targets until broader batches complete.
 - **World/state, snapshots, save/load, schema, clocks/lint:** Lower overlap in audit; avoid drive-by merges.
 - **Broad marker refactors:** Defer mass `pytest.mark.brittle` / `slow` application until one pilot file proves the workflow (see order of operations).
+- **Consolidation Block 1 explicit deferrals:** No broad merge of `test_prompt_and_guard.py` or `test_turn_pipeline_shared.py`; no regression/transcript deletion without nodeid replacement map; `test_social_destination_redirect_leads.py` failures are a separate bugfix track.
+
+### D. Block 2 — first files to touch (from ownership pass)
+
+Overlap reduction and marker cleanup, **not** wholesale rewrites:
+
+1. `test_turn_pipeline_shared.py`, `test_directed_social_routing.py`, `test_dialogue_routing_lock.py`
+2. `test_contextual_minimal_repair_regressions.py`, `test_empty_social_retry_regressions.py`
+3. `test_social.py`, `test_social_exchange_emission.py`, `test_social_escalation.py`
+4. `test_transcript_regression.py`, `test_lead_lifecycle_block3_transcript_regression.py`, `test_gauntlet_regressions.py`
+5. `test_social_emission_quality.py` (module-level transcript policy)
+6. `test_prompt_and_guard.py`, `test_output_sanitizer.py`
+7. Lead/clue cluster: `test_social_lead_landing.py`, `test_clue_lead_registry_integration.py`, `test_social_destination_redirect_leads.py` (last after baseline fix decision)
 
 ---
 
@@ -91,7 +131,7 @@ Each row is a **future** change candidate. **Do not** execute without a replacem
 
 - **`test_transcript_regression.py` (module):** Protects **multi-step sequencing** and play-loop state transitions; explicitly deterministic, no live GPT. Keep as the **canonical end-to-end transcript** suite unless each scenario’s ordering guarantees exist elsewhere.
 - **`test_transcript_runner_smoke.py`:** Validates the transcript runner / harness wiring; cheap sanity check for the gauntlet toolchain.
-- **`test_transcript_gauntlet_lead_to_consequence.py`:** LTC-slice–specific behavior; high brittleness but encodes product-critical harness contracts.
+- **`test_lead_lifecycle_block3_transcript_regression.py`:** Multi-turn lead lifecycle story on the transcript harness; own **cross-turn lifecycle ordering**, not single-turn routing tables duplicated elsewhere.
 - **`test_transcript_gauntlet_actor_addressing.py`:** Address stability under validation (audit cites explicit-address test as canonical example).
 - **`test_transcript_gauntlet_campaign_cleanliness.py`:** Campaign/scene cleanliness invariants for the gauntlet slice.
 

@@ -240,7 +240,6 @@ def test_chat_hailing_runner_with_can_you_question_routes_social(tmp_path, monke
     assert resolution.get("kind") == "question"
     assert (resolution.get("social") or {}).get("social_intent_class") == "social_exchange"
     assert (resolution.get("social") or {}).get("npc_id") == "runner"
-    assert resolution.get("kind") != "adjudication_query"
 
 
 def test_chat_runner_binding_followup_can_you_stays_social(tmp_path, monkeypatch):
@@ -267,7 +266,6 @@ def test_chat_runner_binding_followup_can_you_stays_social(tmp_path, monkeypatch
     resolution = data.get("resolution") or {}
     assert resolution.get("kind") == "question"
     assert (resolution.get("social") or {}).get("npc_id") == "runner"
-    assert resolution.get("kind") != "adjudication_query"
 
 
 def test_declared_switch_turns_to_speak_with_refugee_overrides_runner_continuity(tmp_path, monkeypatch):

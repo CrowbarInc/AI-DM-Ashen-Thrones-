@@ -2,6 +2,8 @@
 
 Markers are declared in `pytest.ini`. Module-level `pytestmark` carries scope (`unit` / `integration` / `regression`) and lane markers (`transcript`, `slow`, `brittle`) per `tests/TEST_AUDIT.md`.
 
+**Where to add new tests:** See `tests/TEST_AUDIT.md` → *Consolidation Block 1 — Canonical ownership map & overlap hotspots* for canonical owners by theme (routing, social, leads/clues, transcript vs focused, repair/legality). For **routing** specifically, the three-module split is recorded in `tests/TEST_CONSOLIDATION_PLAN.md` → *Block 3 — Routing ownership (consolidation pass closed)*. See the same file for the **next consolidation order** after routing.
+
 ## What “trustworthy” means for fast vs full
 
 **Lane trustworthiness is about correct composition and selection** — which tests are included or excluded by markers — **not** about the whole suite being green. A failing test in the fast lane is still a real failure; it is simply **orthogonal** to whether the fast/full split matches intent (exclude transcript harness and slow modules from fast; run everything on full).
@@ -62,9 +64,11 @@ pytest -m "not transcript and not slow and not brittle"
 
 These failures **reproduce with the same three tests** whether you run the fast lane or the full suite. They are **pre-existing** relative to fast/full marker normalization and should be **fixed or quarantined in a separate task** — not interpreted as “the lanes are wrong.”
 
+After the routing consolidation pass (Block 3), **fast-lane failures still come from** `tests/test_social_destination_redirect_leads.py` — not from routing test ownership or the routing-module split. Treat destination-redirect / pending-lead baseline work as orthogonal to routing consolidation.
+
 | Module | Notes |
 |--------|--------|
-| `tests/test_social_destination_redirect_leads.py` | Three failing tests (destination redirect / pending lead behavior). Unrelated to transcript vs slow selection. |
+| `tests/test_social_destination_redirect_leads.py` | Three failing tests (destination redirect / pending lead behavior). Unrelated to transcript vs slow selection and unrelated to routing consolidation. |
 
 ## Common commands (reference)
 

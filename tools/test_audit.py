@@ -423,6 +423,11 @@ def main() -> None:
 
     OUT_JSON.write_text(json.dumps(payload, indent=2), encoding="utf-8")
     print(f"Wrote {OUT_JSON} ({len(nodeids)} tests, {len(file_rows)} files)")
+    # One-line overlap hint: themes touching the most distinct files (see JSON feature_areas_by_distinct_files).
+    top_spread = spread_ranked[:8]
+    if top_spread:
+        parts = [f"{row['area']}: {row['distinct_files']} files" for row in top_spread]
+        print("Overlap spread (heuristic primary feature tag; not proof of duplicate tests): " + "; ".join(parts))
     # Surface module-level duplicate test_* names (Python shadowing); pytest only runs the last def.
     if dup_report:
         print("Duplicate top-level test_* names (same function name redefined in one module):")
