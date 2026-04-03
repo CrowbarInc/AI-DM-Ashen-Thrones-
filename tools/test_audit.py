@@ -3,6 +3,10 @@
 
 Run from repo root: python tools/test_audit.py
 Requires: same interpreter used for pytest (py -3 tools/test_audit.py).
+
+Also prints whether any module defines the same top-level ``test_*`` name twice
+(Python keeps only the last — pytest would under-collect). Details:
+``summary.files_with_shadowed_duplicate_test_defs`` in the JSON.
 """
 from __future__ import annotations
 
@@ -419,6 +423,17 @@ def main() -> None:
 
     OUT_JSON.write_text(json.dumps(payload, indent=2), encoding="utf-8")
     print(f"Wrote {OUT_JSON} ({len(nodeids)} tests, {len(file_rows)} files)")
+    # Surface module-level duplicate test_* names (Python shadowing); pytest only runs the last def.
+    if dup_report:
+        print("Duplicate top-level test_* names (same function name redefined in one module):")
+        for row in sorted(dup_report, key=lambda r: r["file"]):
+            names = ", ".join(sorted(row["shadowed_duplicate_names"]))
+            print(
+                f"  {row['file']}: {names} "
+                f"({row['raw_def_count']} def lines, {row['unique_name_count']} unique names)"
+            )
+    else:
+        print("No duplicate top-level test_* names (module-level shadowing) in tests/test_*.py.")
 
 
 if __name__ == "__main__":

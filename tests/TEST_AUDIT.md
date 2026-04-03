@@ -2,7 +2,9 @@
 
 Diagnostic inventory of `tests/` only: no runtime code or assertions were changed for this pass.
 
-**Regenerate artifacts:** from repo root run `py -3 tools/test_audit.py` (or `python tools/test_audit.py`). That refreshes `tests/test_inventory.json` using `pytest --collect-only` plus static heuristics.
+**Regenerate artifacts:** from repo root run `py -3 tools/test_audit.py` (or `python tools/test_audit.py`). That refreshes `tests/test_inventory.json` using `pytest --collect-only` plus static heuristics. The script prints a one-line summary of **module-level duplicate `test_*` names** (shadowed defs); details are in JSON under `summary.files_with_shadowed_duplicate_test_defs`.
+
+**Counts in this markdown** were reconciled with `tests/test_inventory.json` on 2026-04-03. For live numbers after adding tests, re-run the audit and read `summary` / `files` in that JSON (the full per-file table is not duplicated here).
 
 **Block 20 — feature ownership:** Inventory `feature_areas` now honor optional per-test `# feature: tag1, tag2` lines (immediately above the test, optionally above `@pytest.mark.*`), module-level `# feature:` before the first top-level `def test_`, and `@pytest.mark.routing|retry|fallback|social|continuity|clues|leads|emission|legality` when present. Tags map into the existing inventory labels (e.g. `clues` → `clue system`, `leads` → `lead extraction`). See `pytest.ini` for registered markers.
 
@@ -14,46 +16,38 @@ Diagnostic inventory of `tests/` only: no runtime code or assertions were change
 
 | Metric | Value |
 | --- | ---: |
-| Test files (`tests/test_*.py`) | 59 |
-| Pytest collected items | 639 |
-| Module-level `def test_*` lines (AST) | 656 |
-| Unique test names per module (AST, one per name) | 631 |
-| Parametrized expansion beyond unique names | 8 (`tests/test_prompt_and_guard.py`) |
-| Items flagged `historically_motivated` (heuristic) | 66 |
-| Assertion style (heuristic, per collected item) | structural 170, behavioral 438, mixed 24, prose-sensitive 7 |
-| Brittleness (heuristic) | low 480, medium 114, high 45 |
+| Test files (`tests/test_*.py`) | 78 |
+| Pytest collected items | 887 |
+| Module-level `def test_*` lines (AST, summed per file) | 862 |
+| Unique top-level `test_*` names per file (AST; matches def count when no shadowing) | 862 |
+| Parametrized expansion (collected − AST def lines, suite-wide) | 25 |
+| Items flagged `historically_motivated` (heuristic) | 68 |
+| Assertion style (heuristic, per collected item) | structural 239, behavioral 599, mixed 38, prose-sensitive 11 |
+| Brittleness (heuristic) | low 704, medium 148, high 35 |
 | Redundancy flag `possible_overlap` from identical test names across files | 0 |
 
 ### Counts by test-level primary bucket
 
-Derived per collected item (filename hint + body heuristics): **integration** 322, **unit** 254, **regression** 45, **transcript_gauntlet** 18.
+Derived per collected item (filename hint + body heuristics): **integration** 481, **unit** 358, **regression** 41, **transcript_gauntlet** 7.
 
 ### Counts by file-level primary bucket
 
-`primary_bucket` on each file record is the **majority** bucket among that file’s collected tests: **integration** 31 files, **unit** 19, **transcript_gauntlet** 3, **regression** 6. The JSON field `filename_bucket` records path-pattern hints only (`transcript_gauntlet`, `regression`, or `mixed/unclear`).
+`primary_bucket` on each file record is the **majority** bucket among that file’s collected tests: **integration** 46 files, **unit** 24, **transcript_gauntlet** 2, **regression** 6. The JSON field `filename_bucket` records path-pattern hints only (`transcript_gauntlet`, `regression`, or `mixed/unclear`).
 
 ---
 
-## Critical data-quality issue: shadowed duplicate defs
+## Module-level duplicate `test_*` names (guardrail)
 
-`tests/test_exploration_resolution.py` defines **41** `def test_*` lines but only **16** unique names: earlier bodies are overwritten by later redefinitions. Pytest runs **16** tests from this module; **25** intended cases are currently unreachable. Treat any “inventory” that counts raw `def test_*` lines as overstated until this file is deduplicated (future block; not fixed here).
+If the same top-level `def test_foo` appears twice in one module, Python keeps only the last definition; pytest then collects **one** item for that name and earlier bodies never run. **`tools/test_audit.py` detects this** (AST duplicate names per file) and reports it on stdout and in `tests/test_inventory.json` → `summary.files_with_shadowed_duplicate_test_defs`.
+
+`tests/test_exploration_resolution.py` currently has **38** unique top-level `test_*` names, **38** AST def lines (no shadowing), and **42** collected items (one parametrized test adds 4 extra cases). An older version of this audit text incorrectly claimed mass shadowing here; that was **stale documentation** — the live source of truth is `pytest --collect-only` plus the audit JSON.
 
 ---
 
-## Top 10 files by count of high-brittleness tests (heuristic)
+## Top files by count of high-brittleness tests (heuristic)
 
-1. `tests/test_transcript_regression.py` — 10  
-2. `tests/test_transcript_gauntlet_lead_to_consequence.py` — 8  
-3. `tests/test_mixed_state_recovery_regressions.py` — 6  
-4. `tests/test_transcript_gauntlet_actor_addressing.py` — 6  
-5. `tests/test_empty_social_retry_regressions.py` — 4  
-6. `tests/test_transcript_gauntlet_campaign_cleanliness.py` — 4  
-7. `tests/test_prompt_and_guard.py` — 3  
-8. `tests/test_agenda_simulation.py` — 1  
-9. `tests/test_clue_discovery.py` — 1  
-10. `tests/test_emergent_scene_actors.py` — 1  
-
-(Next: `tests/test_gauntlet_regressions.py` — 1.)
+Snapshot from `test_inventory.json` → `top_high_brittleness_files` (2026-04-03):  
+`test_mixed_state_recovery_regressions.py` — 6; `test_transcript_regression.py` — 5; `test_empty_social_retry_regressions.py`, `test_social_emission_quality.py`, `test_transcript_gauntlet_actor_addressing.py` — 4 each; then several files at 3 or 1. Re-run the audit for an updated ordered list.
 
 ---
 
@@ -63,18 +57,18 @@ These are **feature tags** (keyword heuristics), not proof of duplicate tests. H
 
 | Rank | Feature tag (heuristic) | Distinct files touching tag (any position) |
 | --- | --- | ---: |
-| 1 | general | 24 |
-| 2 | clue system | 19 |
-| 3 | legality/sanitizer | 14 |
-| 4 | fallback | 13 |
-| 5 | resolution/emission | 12 |
-| 6 | routing | 11 |
-| 7 | world/state | 11 |
-| 8 | combat/skill | 10 |
-| 9 | social continuity | 8 |
-| 10 | lead extraction | 7 |
+| 1 | lead extraction | 26 |
+| 2 | clue system | 24 |
+| 3 | resolution/emission | 21 |
+| 4 | general | 20 |
+| 5 | legality/sanitizer | 16 |
+| 6 | fallback | 16 |
+| 7 | routing | 15 |
+| 8 | social continuity | 15 |
+| 9 | world/state | 11 |
+| 10 | retry | 11 |
 
-The large **general** bucket indicates tagging debt: many modules do not match current keyword rules and default to `general`; refine rules or add explicit markers over time.
+The **general** bucket still indicates tagging debt where modules do not match keyword rules; refine rules or add explicit `# feature:` / markers over time. Re-run the audit to refresh this table.
 
 ---
 
@@ -94,7 +88,7 @@ Use as starting points when deciding where new coverage should live first.
 | Directed routing & dialogue lock | `test_directed_social_routing.py`, `test_dialogue_routing_lock.py` |
 | Clue knowledge & inference | `test_clue_knowledge.py`, `test_world_updates_and_clue_normalization.py` |
 | Output / legality | `test_output_sanitizer.py`, `test_prompt_and_guard.py`, `test_debug_payload_spoiler_safety.py` |
-| Exploration resolution | `test_exploration_resolution.py` (after dedup), `test_exploration_skill_checks.py` |
+| Exploration resolution | `test_exploration_resolution.py`, `test_exploration_skill_checks.py` |
 
 ---
 
@@ -142,16 +136,18 @@ Concrete “source of truth” examples for recurring themes (prefer extending t
    - **Canonical:** `test_social_exchange_emission.py` for **strict social / emission**; `test_social_escalation.py` for **pressure/escalation state machine**; `test_social.py` as **misc integration** only if no better home.  
    - **Merge/weaken:** New strict-social assertions should default to `test_social_exchange_emission.py`.
 
-5. **`test_exploration_resolution.py` (internal duplication)**  
-   - **Overlap:** Repeated function names shadow earlier tests (see above).  
-   - **Canonical:** After cleanup, one named test per behavior; use **parametrize** or distinct names for variants.  
-   - **Merge/weaken:** No merge across files needed first—fix shadowing to restore intended coverage.
+5. **`test_exploration_resolution.py` (naming discipline)**  
+   - **Overlap:** Thematic clusters (parse vs API vs engine schema) live in one module; keep **distinct** top-level `test_*` names so pytest collects every case (`tools/test_audit.py` flags duplicate names in-module).  
+   - **Canonical:** One named test per behavior; prefer **parametrize** for variant matrices.  
+   - **Merge/weaken:** No merge across files required for naming alone; extend here for exploration resolution.
 
 ---
 
 ## Full file index
 
 `primary_bucket` = majority of tests in that file. `High-brittleness` = count of tests with heuristic `brittleness: high` in that file. Feature tags = top primary feature labels (first keyword hit per test, aggregated).
+
+**Authoritative list:** All `tests/test_*.py` rows (78 files) live in `tests/test_inventory.json` → `files`. The table below is a partial snapshot; rows for newer modules may be missing until this section is expanded.
 
 | File | Collected | Primary bucket (majority of tests) | High-brittleness tests | Top primary feature tags |
 | --- | ---: | --- | ---: | --- |
@@ -173,7 +169,7 @@ Concrete “source of truth” examples for recurring themes (prefer extending t
 | test_discovery_memory.py | 8 | integration | 0 | clue system |
 | test_emergent_scene_actors.py | 6 | unit | 1 | general |
 | test_empty_social_retry_regressions.py | 8 | regression | 4 | retry |
-| test_exploration_resolution.py | 16 | integration | 0 | resolution/emission, routing, clue system |
+| test_exploration_resolution.py | 42 | unit | 0 | resolution/emission, routing, clue system |
 | test_exploration_skill_checks.py | 5 | integration | 0 | combat/skill |
 | test_gauntlet_regressions.py | 5 | regression | 1 | transcript regression |
 | test_intent_and_runtime.py | 2 | unit | 0 | routing |
@@ -219,7 +215,7 @@ Concrete “source of truth” examples for recurring themes (prefer extending t
 
 ## Methodology & limitations
 
-- **Ground truth for “what runs”:** pytest collection (`639` items). AST line counts include shadowed defs in `test_exploration_resolution.py`.  
+- **Ground truth for “what runs”:** pytest collection (`887` items as of 2026-04-03). AST `def test_*` counts are per-file module-level defs; **duplicate names in the same file** are listed in `summary.files_with_shadowed_duplicate_test_defs` and echoed when running `tools/test_audit.py`.  
 - **Buckets:** Test-level buckets use filename patterns (`transcript_gauntlet`, `regression`) then body signals (`TestClient`, `tmp_path`, length).  
 - **Feature areas:** Substring rules on `nodeid`, merged with explicit `# feature:` / ownership `pytest.mark.*` when present; unannotated tests may still land on **general**.  
 - **Assertion style / brittleness:** Regex on function source (long string `==`, `in "..."`, structural calls). Transcript/regression modules biased to **high** brittleness.  

@@ -24,7 +24,7 @@
 
 ### Under-protected
 
-- **`test_exploration_resolution.py`:** Critical data-quality issue — **41** `def test_*` lines but only **16** unique names; **~25 scenarios are shadowed** and never run. Fixing this is **restoration of coverage**, not deletion.
+- **`test_exploration_resolution.py`:** Module-level `test_*` names are unique and collected count matches intent (see `tests/TEST_AUDIT.md` and `pytest --collect-only`). Keep using distinct names or parametrization so `tools/test_audit.py` never reports in-file shadowing.
 - **Tagging / “general” bucket:** Many tests fall through to `general` in audit feature tags, which obscures true gaps vs redundancy.
 
 ---
@@ -48,7 +48,7 @@
 | Repair payload / legality invariants | `test_contextual_minimal_repair_regressions.py` |
 | End-to-end transcript sequencing | `test_transcript_regression.py` |
 | Gauntlet / harness slice | `test_transcript_gauntlet_*.py`, `test_transcript_runner_smoke.py` |
-| Exploration resolution (after dedup) | `test_exploration_resolution.py` + `test_exploration_skill_checks.py` |
+| Exploration resolution | `test_exploration_resolution.py` + `test_exploration_skill_checks.py` |
 
 ### B. Merge / reduce (planned actions — execute later in batches)
 
@@ -57,7 +57,7 @@ See **§3** for per-item detail. High-level targets:
 - Share helpers/fixtures between repair-focused regression files without merging scenarios blindly.
 - Route new social strict assertions to `test_social_exchange_emission.py`; shrink `test_social.py` to true misc only or fold cases into canonical files.
 - Reduce transcript vs integration **double-locking** where a smaller test already pins the same invariant.
-- After shadowing fix, **parametrize or rename** in `test_exploration_resolution.py` instead of maintaining duplicate `def test_*` names.
+- In `test_exploration_resolution.py`, prefer **parametrize or distinct names** for variants so module-level duplicate `def test_*` names never reappear (audit script surfaces those).
 
 ### C. Leave alone for now
 
@@ -80,7 +80,7 @@ Each row is a **future** change candidate. **Do not** execute without a replacem
 | R4 | `test_social.py` ↔ `test_social_exchange_emission.py` ↔ `test_social_escalation.py` | Broad “social” vocabulary | **Reduce:** migrate strict emission tests into `test_social_exchange_emission.py`; keep escalation in `test_social_escalation.py`. **Delete** from `test_social.py` only after migration (replacement required). | Medium |
 | R5 | `test_transcript_regression.py` ↔ `test_turn_pipeline_shared.py` / other integration tests | Multi-step flows may re-assert the same gate (e.g. routing, emission) already covered in pipeline tests | **Reduce overlap:** drop or **weaken** transcript assertions that duplicate a named integration/regression test; keep transcript steps that prove **ordering** or **cross-turn state**. **Move** heavy cases to `@pytest.mark.slow` + `@pytest.mark.transcript` consistently. | Medium–High |
 | R6 | `test_transcript_gauntlet_*.py` ↔ `test_gauntlet_regressions.py` ↔ `test_transcript_regression.py` | All exercise long / harness-style flows; gauntlet files are LTC-slice focused | **Merge/reduce:** consolidate **shared harness fixtures** only; keep slice-specific files until one module owns “gauntlet runner” smoke. **Marker-only:** ensure gauntlet + transcript regression share `transcript` + `slow` (and `brittle` where prose-bound). | Medium |
-| R7 | `test_exploration_resolution.py` (internal) | Duplicate function names shadow prior tests | **Fix:** rename or **parametrize** so every intended scenario is collected — **not** a deletion. | Low once renamed; High if attempted by deletion |
+| R7 | `test_exploration_resolution.py` (internal) | Risk of reintroducing duplicate top-level `test_*` names (Python shadowing) | **Prevent:** rename or **parametrize** variants; run `tools/test_audit.py` after large edits. | Low |
 | R8 | Multiple clue-tagged files (`test_clue_knowledge.py`, `test_clue_discovery.py`, `test_discovery_memory.py`, …) | Thematic spread; not automatic duplicates | **Leave** canonical clue tests; **merge** only after side-by-side read. Prefer **weaken** redundant prose in peripheral files after `test_clue_knowledge.py` owns idempotency/gateway. | Medium |
 
 ---
@@ -122,7 +122,7 @@ These encode historical bug locks or narrow invariants; removal requires **eithe
 
 Execute **one bullet per PR** (or smaller), then **full test suite** (`pytest` from repo root). Use `py -3 tools/test_audit.py` after structural changes to refresh inventory.
 
-1. **Restore hidden coverage (no trimming):** Fix `test_exploration_resolution.py` shadowed `def test_*` names so all intended cases collect. Re-run suite; update inventory. *Risk: none if purely rename/parametrize.*
+1. **Keep exploration tests collectible:** When adding cases in `test_exploration_resolution.py`, use unique top-level names or parametrization; re-run `pytest --collect-only` and `tools/test_audit.py` after bulk edits. *Risk: none if naming discipline holds.*
 2. **Weaken brittle prose assertions (pilot):** Pick one high-brittleness file (e.g. a single `test_transcript_gauntlet_*.py` or one `test_transcript_regression.py` case). Replace fragile substring locks with structural checks where a canonical integration test already covers wording. Mark remaining prose-bound tests `@pytest.mark.brittle`. *Validates marker workflow.*
 3. **Apply markers to transcript/slow lane:** Ensure `test_transcript_gauntlet_*.py`, `test_transcript_regression.py`, and long harness tests consistently use `transcript` + `slow` (already partially true for `test_transcript_regression.py`). Add `brittle` where prose remains. Document a CI/local command for “fast path” vs “full path” once stable.
 4. **Extract shared helpers (R1, R6):** Move duplicate `_patch_storage` / seed helpers into shared test utilities **without** deleting tests. *Low risk.*
@@ -145,6 +145,6 @@ Execute **one bullet per PR** (or smaller), then **full test suite** (`pytest` f
 
 ## References
 
-- `tests/TEST_AUDIT.md` — counts, brittleness leaders, canonical examples, exploration shadowing issue.
+- `tests/TEST_AUDIT.md` — counts, brittleness leaders, canonical examples, duplicate-name guardrail notes.
 - `tests/test_inventory.json` — per-item `nodeid`, buckets, heuristics.
 - `pytest.ini` — markers: `unit`, `integration`, `regression`, `transcript`, `slow`, `brittle`.
