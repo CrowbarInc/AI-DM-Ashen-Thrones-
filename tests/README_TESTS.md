@@ -26,7 +26,7 @@ pytest tests/
 pytest --collect-only -q
 ```
 
-Expect **887** tests collected (no marker deselection). Re-check after large suite changes; see `tests/TEST_AUDIT.md` → *Block 3 — Fast/full workflow verification*.
+Expect **889** tests collected (no marker deselection). Re-check after large suite changes; see `tests/TEST_AUDIT.md` → *Block 3 — Fast/full workflow verification*.
 
 ## Fast lane
 
@@ -44,7 +44,7 @@ pytest -m "not transcript and not slow"
 pytest --collect-only -m "not transcript and not slow" -q
 ```
 
-Expect **853** tests collected and **34** deselected (887 total). Re-verify after adding tests.
+Expect **855** tests collected and **34** deselected (889 total). Re-verify after adding tests.
 
 ## Optional stricter fast lane (`brittle`)
 
@@ -53,6 +53,74 @@ When prompt- or prose-sensitive tests are too noisy locally:
 ```bash
 pytest -m "not transcript and not slow and not brittle"
 ```
+
+## Synthetic-player harness (`synthetic`)
+
+The helpers under `tests/helpers/synthetic_*.py` are **test/tooling infrastructure only** (no `game/` coupling in the scaffold). They are meant to drive or evaluate automated “synthetic players” alongside patterns like `tests/helpers/transcript_runner.py`, not to add gameplay modes.
+
+- The primary harness runner surface is `run_synthetic_session(...)`; `run_placeholder_session(...)` remains compatibility-only.
+- Synthetic pytest smoke coverage is deterministic and fake-GM-backed by default.
+- For manual exploratory runs, use `tools/run_synthetic_session.py` (defaults to fake-GM mode; real-GM mode is explicit opt-in via `--real-gm`).
+
+### Manual CLI examples
+
+```bash
+# Default deterministic fake-GM run
+python tools/run_synthetic_session.py
+
+# Explicit real-GM exploratory run
+python tools/run_synthetic_session.py --real-gm
+
+# Use a non-default synthetic profile
+python tools/run_synthetic_session.py --profile risk_taker
+
+# Pin deterministic run parameters
+python tools/run_synthetic_session.py --seed 1337 --max-turns 12
+```
+
+Fake-GM mode is for deterministic harness validation; real-GM mode is exploratory and may be less stable run-to-run.
+
+### Recommended synthetic lanes
+
+Use these marker slices to keep the synthetic workflow explicit without changing fast/full lane boundaries.
+
+- **Fake-GM synthetic lane** (`synthetic and not transcript and not slow`)  
+  Deterministic regression signal for day-to-day harness confidence.
+- **Transcript-backed synthetic lane** (`synthetic and transcript`)  
+  Lightweight real-path health checks (materially slower than fake-GM).
+- **Full synthetic lane** (`synthetic`)  
+  Everything tagged synthetic, across fake-GM and transcript-backed tests.
+- **Manual CLI lane** (`tools/run_synthetic_session.py`)  
+  Exploratory work outside pytest selection.
+
+Quick run guidance:
+- Run the **fake-GM synthetic lane** for routine local feedback and deterministic harness confidence.
+- Run the **transcript-backed synthetic lane** when validating real-path wiring or bug/risk-sensitive social routing signals.
+- Run the **full synthetic lane** before merge when harness, scenario presets, or policy behavior changes span both lanes.
+
+Copy/paste commands:
+
+```bash
+# Deterministic synthetic non-transcript runs (recommended fake-GM lane)
+pytest -m "synthetic and not transcript and not slow"
+
+# Transcript-backed synthetic runs
+pytest -m "synthetic and transcript"
+
+# All synthetic runs
+pytest -m "synthetic"
+
+# One-file focused synthetic run
+pytest tests/test_synthetic_smoke.py
+
+# One-file focused transcript-backed synthetic run
+pytest tests/test_synthetic_runner.py -m "synthetic and transcript"
+```
+
+- **End-to-end** synthetic sessions (multi-turn, real `chat` / transcript loops) should usually be marked **`synthetic`** and **`slow`** so they stay out of the default fast lane (`not transcript and not slow`).
+- **Unit tests** for the harness itself (imports, shapes, pure policy stubs) can stay **fast**: mark them `synthetic` and `unit` without `slow` if they do not run multi-turn sessions.
+
+Optional stricter selection: add `and not synthetic` to a local fast-lane command if you want to skip all harness-tagged tests.
 
 ## What “trustworthy” means for fast vs full
 
@@ -75,6 +143,10 @@ See `tests/TEST_AUDIT.md` → *Consolidation Block 1 — Canonical ownership map
 | **Transcript only** | `pytest -m "transcript"` |
 | **Slow only** | `pytest -m "slow"` |
 | **Exclude transcript only** | `pytest -m "not transcript"` |
+| **Synthetic fake-GM lane** | `pytest -m "synthetic and not transcript and not slow"` |
+| **Synthetic transcript lane** | `pytest -m "synthetic and transcript"` |
+| **All synthetic** | `pytest -m "synthetic"` |
+| **Synthetic one-file focus** | `pytest tests/test_synthetic_smoke.py` |
 | **All tagged unit + regression** | `pytest -m "unit or regression"` |
 | **Narrow legacy filter** (not equivalent to fast lane) | `pytest -m "(unit or regression) and not transcript"` — omits many integration-only modules; see `tests/TEST_AUDIT.md` |
 
@@ -82,6 +154,7 @@ See `tests/TEST_AUDIT.md` → *Consolidation Block 1 — Canonical ownership map
 
 - **unit** / **integration** / **regression** — Scope and signal density; **not** the fast-lane gate. Use for inventory, filters like `pytest -m regression`, and documentation.
 - **transcript** — Transcript harness / gauntlet-style modules (**fast lane excludes**).
+- **synthetic** — Synthetic-player harness and automation-owned checks (tag for ownership; fast lane does **not** exclude unless you add `not synthetic`).
 - **slow** — Longer or expensive runs (**fast lane excludes**).
 - **brittle** — Prompt/prose-sensitive (**optional** extra exclusion for stricter fast).
 
