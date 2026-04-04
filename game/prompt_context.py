@@ -10,11 +10,13 @@ from typing import Any, Dict, List, Mapping
 import re
 
 from game.leads import (
+    effective_lead_pressure_score,
     filter_pending_leads_for_active_follow_surface,
     get_lead,
     is_lead_terminal,
     LeadLifecycle,
     LeadStatus,
+    LeadType,
     list_session_leads,
 )
 from game.social import (
@@ -136,6 +138,13 @@ def _lead_status_value(lead: Any) -> str:
     return s
 
 
+def _lead_lifecycle_value(lead: Any) -> str:
+    raw = _lead_get(lead, "lifecycle")
+    if isinstance(raw, LeadLifecycle):
+        return raw.value
+    return str(raw or "").strip().lower()
+
+
 def _lead_int(lead: Any, key: str, *, default: int = 0) -> int:
     v = _lead_get(lead, key, default)
     if v is None:
@@ -146,14 +155,49 @@ def _lead_int(lead: Any, key: str, *, default: int = 0) -> int:
         return default
 
 
-def _lead_sort_key(lead: Any) -> tuple[Any, ...]:
-    pri = _lead_int(lead, "priority", default=0)
+def _lead_type_value(lead: Any) -> str:
+    raw = _lead_get(lead, "type")
+    if isinstance(raw, LeadType):
+        return raw.value
+    return str(raw or "").strip().lower()
+
+
+def _lead_pressure_sort_key(lead: Any, current_turn: int) -> tuple[Any, ...]:
+    pres = effective_lead_pressure_score(lead, current_turn)
     lu = _lead_int(lead, "last_updated_turn", default=0)
     lt = _lead_int(lead, "last_touched_turn", default=0)
     title = _lead_get(lead, "title") or ""
     lid = _lead_get(lead, "id") or ""
     tie = str(title).strip() or str(lid).strip() or ""
-    return (-pri, -lu, -lt, tie)
+    return (-pres, -lu, -lt, tie)
+
+
+def _recent_change_signal_rank(lead: Any, current_turn: int) -> int:
+    """Higher = more preferred for recent_lead_changes when inferable from reconciled fields this turn."""
+    if current_turn <= 0:
+        return 0
+    if _lead_int(lead, "escalated_at_turn", default=-1) == current_turn:
+        return 4
+    lu = _lead_int(lead, "last_updated_turn", default=-1)
+    if lu != current_turn:
+        return 0
+    if str(_lead_get(lead, "unlocked_by_lead_id") or "").strip():
+        return 3
+    if _lead_status_value(lead) == LeadStatus.STALE.value:
+        return 2
+    if _lead_lifecycle_value(lead) == LeadLifecycle.OBSOLETE.value:
+        return 1
+    return 0
+
+
+def _recent_lead_changes_sort_key(lead: Any, current_turn: int) -> tuple[Any, ...]:
+    sig = _recent_change_signal_rank(lead, current_turn)
+    lu = _lead_int(lead, "last_updated_turn", default=0)
+    pres = effective_lead_pressure_score(lead, current_turn)
+    title = _lead_get(lead, "title") or ""
+    lid = _lead_get(lead, "id") or ""
+    tie = str(title).strip() or str(lid).strip() or ""
+    return (-sig, -lu, -pres, tie)
 
 
 def _compact_lead_row(lead: Any) -> Dict[str, Any]:
@@ -177,6 +221,13 @@ def _compact_lead_row(lead: Any) -> Dict[str, Any]:
         "last_touched_turn": _lead_get(lead, "last_touched_turn"),
         "related_npc_ids": rel_npc,
         "related_location_ids": rel_loc,
+        "escalation_level": _lead_int(lead, "escalation_level", default=0),
+        "escalation_reason": _lead_get(lead, "escalation_reason"),
+        "escalated_at_turn": _lead_get(lead, "escalated_at_turn"),
+        "unlocked_by_lead_id": _lead_get(lead, "unlocked_by_lead_id"),
+        "obsolete_by_lead_id": _lead_get(lead, "obsolete_by_lead_id"),
+        "superseded_by": _lead_get(lead, "superseded_by"),
+        "stale_after_turns": _lead_get(lead, "stale_after_turns"),
     }
 
 
@@ -200,6 +251,9 @@ def build_authoritative_lead_prompt_context(
         "has_pursued": False,
         "has_stale": False,
         "npc_has_relevant": False,
+        "has_escalated_threat": False,
+        "has_newly_unlocked": False,
+        "has_supersession_cleanup": False,
     }
     if not leads:
         return {
@@ -211,19 +265,26 @@ def build_authoritative_lead_prompt_context(
             "follow_up_pressure_from_leads": empty_pressure,
         }
 
-    active_vals = (LeadStatus.ACTIVE.value, LeadStatus.PURSUED.value)
-    active_like = [l for l in leads if _lead_status_value(l) in active_vals]
-    pursued = [l for l in leads if _lead_status_value(l) == LeadStatus.PURSUED.value]
-    stale = [l for l in leads if _lead_status_value(l) == LeadStatus.STALE.value]
+    current_turn = _lead_int(session, "turn_counter", default=0) if isinstance(session, Mapping) else 0
 
-    active_like_sorted = sorted(active_like, key=_lead_sort_key)
-    pursued_sorted = sorted(pursued, key=_lead_sort_key)
-    stale_sorted = sorted(stale, key=_lead_sort_key)
+    active_vals = (LeadStatus.ACTIVE.value, LeadStatus.PURSUED.value)
+    active_like = [
+        l
+        for l in leads
+        if _lead_status_value(l) in active_vals and not is_lead_terminal(l)
+    ]
+    pursued = [
+        l
+        for l in leads
+        if _lead_status_value(l) == LeadStatus.PURSUED.value and not is_lead_terminal(l)
+    ]
+    stale = [l for l in leads if _lead_status_value(l) == LeadStatus.STALE.value and not is_lead_terminal(l)]
+
+    active_like_sorted = sorted(active_like, key=lambda l: _lead_pressure_sort_key(l, current_turn))
+    pursued_sorted = sorted(pursued, key=lambda l: _lead_pressure_sort_key(l, current_turn))
 
     top_active_leads = [_compact_lead_row(l) for l in active_like_sorted[:3]]
     currently_pursued_lead = _compact_lead_row(pursued_sorted[0]) if pursued_sorted else None
-
-    current_turn = _lead_int(session, "turn_counter", default=0) if isinstance(session, Mapping) else 0
 
     def _not_recently_touched(lead: Any) -> bool:
         raw = _lead_get(lead, "last_touched_turn")
@@ -234,54 +295,89 @@ def build_authoritative_lead_prompt_context(
             return True
         return current_turn - touched >= 2
 
-    high_pri_active = [
+    stale_sorted = sorted(stale, key=lambda l: _lead_pressure_sort_key(l, current_turn))
+    threat_escalated = [
         l
         for l in leads
-        if _lead_status_value(l) == LeadStatus.ACTIVE.value
-        and _lead_int(l, "priority", default=0) >= 1
-        and _not_recently_touched(l)
+        if not is_lead_terminal(l)
+        and _lead_type_value(l) == LeadType.THREAT.value
+        and _lead_int(l, "escalation_level", default=0) > 0
     ]
-    high_pri_active_sorted = sorted(high_pri_active, key=_lead_sort_key)
+    threat_escalated_sorted = sorted(threat_escalated, key=lambda l: _lead_pressure_sort_key(l, current_turn))
+
+    high_pressure_unattended = [
+        l
+        for l in leads
+        if not is_lead_terminal(l)
+        and _lead_status_value(l) == LeadStatus.ACTIVE.value
+        and _not_recently_touched(l)
+        and effective_lead_pressure_score(l, current_turn) >= 1
+    ]
+    high_pressure_unattended_sorted = sorted(
+        high_pressure_unattended, key=lambda l: _lead_pressure_sort_key(l, current_turn)
+    )
 
     urgent_or_stale_raw: List[Any] = []
-    seen_ids: set[str] = set()
+    seen_urgent: set[str] = set()
+
+    def _append_urgent(candidate: Any) -> None:
+        if len(urgent_or_stale_raw) >= 3:
+            return
+        lid = str(_lead_get(candidate, "id") or "").strip()
+        if lid and lid in seen_urgent:
+            return
+        urgent_or_stale_raw.append(candidate)
+        if lid:
+            seen_urgent.add(lid)
+
     for l in stale_sorted:
-        if len(urgent_or_stale_raw) >= 3:
-            break
-        lid = str(_lead_get(l, "id") or "").strip()
-        urgent_or_stale_raw.append(l)
-        if lid:
-            seen_ids.add(lid)
-    for l in high_pri_active_sorted:
-        if len(urgent_or_stale_raw) >= 3:
-            break
-        lid = str(_lead_get(l, "id") or "").strip()
-        if lid and lid in seen_ids:
-            continue
-        urgent_or_stale_raw.append(l)
-        if lid:
-            seen_ids.add(lid)
+        _append_urgent(l)
+    for l in threat_escalated_sorted:
+        _append_urgent(l)
+    for l in high_pressure_unattended_sorted:
+        _append_urgent(l)
     urgent_or_stale_leads = [_compact_lead_row(l) for l in urgent_or_stale_raw]
 
-    def _recent_change_key(lead: Any) -> tuple[int, str]:
-        lu = _lead_int(lead, "last_updated_turn", default=0)
-        tie = str(_lead_get(lead, "id") or _lead_get(lead, "title") or "").strip()
-        return (-lu, tie)
-
-    recent_sorted = sorted(leads, key=_recent_change_key)
+    recent_sorted = sorted(leads, key=lambda l: _recent_lead_changes_sort_key(l, current_turn))
     recent_lead_changes = [_compact_lead_row(l) for l in recent_sorted[:5]]
 
     npc_relevant_raw: List[Any] = []
     aid = str(active_npc_id or "").strip()
     if aid:
         for l in leads:
+            if is_lead_terminal(l):
+                continue
             rel = _lead_get(l, "related_npc_ids")
             if not isinstance(rel, list):
                 continue
             if any(str(x or "").strip() == aid for x in rel):
                 npc_relevant_raw.append(l)
-        npc_relevant_raw = sorted(npc_relevant_raw, key=_lead_sort_key)[:3]
+        npc_relevant_raw = sorted(
+            npc_relevant_raw, key=lambda l: _lead_pressure_sort_key(l, current_turn)
+        )[:3]
     npc_relevant_leads = [_compact_lead_row(l) for l in npc_relevant_raw]
+
+    stale_any = [l for l in leads if _lead_status_value(l) == LeadStatus.STALE.value]
+    has_escalated_threat = any(
+        not is_lead_terminal(l)
+        and _lead_type_value(l) == LeadType.THREAT.value
+        and _lead_int(l, "escalation_level", default=0) > 0
+        for l in leads
+    )
+    has_newly_unlocked = any(
+        str(_lead_get(l, "unlocked_by_lead_id") or "").strip()
+        and _lead_int(l, "last_updated_turn", default=-1) == current_turn
+        for l in leads
+    )
+    has_supersession_cleanup = any(
+        _lead_int(l, "last_updated_turn", default=-1) == current_turn
+        and _lead_lifecycle_value(l) == LeadLifecycle.OBSOLETE.value
+        and (
+            str(_lead_get(l, "obsolete_reason") or "").strip().lower() == "superseded"
+            or str(_lead_get(l, "superseded_by") or "").strip()
+        )
+        for l in leads
+    )
 
     return {
         "top_active_leads": top_active_leads,
@@ -291,8 +387,11 @@ def build_authoritative_lead_prompt_context(
         "npc_relevant_leads": npc_relevant_leads,
         "follow_up_pressure_from_leads": {
             "has_pursued": bool(pursued),
-            "has_stale": bool(stale),
+            "has_stale": bool(stale_any),
             "npc_has_relevant": bool(npc_relevant_leads),
+            "has_escalated_threat": bool(has_escalated_threat),
+            "has_newly_unlocked": bool(has_newly_unlocked),
+            "has_supersession_cleanup": bool(has_supersession_cleanup),
         },
     }
 
@@ -1326,6 +1425,9 @@ def build_narration_context(
             "has_pursued": False,
             "has_stale": False,
             "npc_has_relevant": False,
+            "has_escalated_threat": False,
+            "has_newly_unlocked": False,
+            "has_supersession_cleanup": False,
         }
 
     if follow_up_log_pressure:
@@ -1349,10 +1451,13 @@ def build_narration_context(
         "When interaction_continuity names an active NPC, use lead_context.npc_relevant_leads to tie the exchange to registry-linked threads that list that NPC—without fabricating details beyond those rows.",
         "Use lead_context.urgent_or_stale_leads to surface unattended time pressure or stale threads as diegetic tension or reminders—only as implied by those rows; do not invent urgency.",
         "Use lead_context.recent_lead_changes for continuity with the latest registry state shifts (status, next_step, touches)—do not restate full buckets or dump all leads.",
-        "follow_up_pressure.from_leads is boolean-only: has_pursued, has_stale, npc_has_relevant. Do not treat it as prose; use the matching lead_context lists/objects for specifics.",
+        "follow_up_pressure.from_leads is boolean-only: has_pursued, has_stale, npc_has_relevant, has_escalated_threat, has_newly_unlocked, has_supersession_cleanup. Do not treat it as prose; use the matching lead_context lists/objects for specifics.",
         "If follow_up_pressure.from_leads.has_pursued is true, bias narration toward continuing that pursued thread when it fits the player's action.",
         "If follow_up_pressure.from_leads.has_stale is true, you may surface reminder, pressure, or unattended-thread beats that fit the scene—without inventing facts beyond lead_context.",
         "If follow_up_pressure.from_leads.npc_has_relevant is true, you may let the active NPC exchange reflect relevance to those threads—within knowledge_scope and without inventing registry facts.",
+        "If follow_up_pressure.from_leads.has_escalated_threat is true, bias tension beats toward unattended threat rows in lead_context (escalation fields)—without inventing facts beyond those rows.",
+        "If follow_up_pressure.from_leads.has_newly_unlocked is true, you may acknowledge a thread becoming available or unblocked when it fits the scene—grounded in unlocked_by_lead_id / recent_lead_changes only.",
+        "If follow_up_pressure.from_leads.has_supersession_cleanup is true, avoid treating superseded obsoleted threads as primary pressure unless the player returns to them; prefer current non-terminal rows.",
     ]
     instructions = list(instructions) + lead_instr
 

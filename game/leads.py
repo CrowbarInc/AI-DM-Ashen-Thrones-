@@ -141,6 +141,11 @@ _LEAD_SCALAR_DEFAULTS: Dict[str, Any] = {
     "stale_after_turns": None,
     "parent_lead_id": None,
     "superseded_by": None,
+    "escalation_level": 0,
+    "escalation_reason": None,
+    "escalated_at_turn": None,
+    "unlocked_by_lead_id": None,
+    "obsolete_by_lead_id": None,
 }
 
 
@@ -1932,6 +1937,11 @@ def create_lead(
     resolution_type: str | None = None,
     resolution_summary: str | None = None,
     obsolete_reason: str | None = None,
+    escalation_level: int = 0,
+    escalation_reason: str | None = None,
+    escalated_at_turn: int | None = None,
+    unlocked_by_lead_id: str | None = None,
+    obsolete_by_lead_id: str | None = None,
     next_step: str = "",
     related_clue_ids: Iterable[str] | None = None,
     related_npc_ids: Iterable[str] | None = None,
@@ -1984,6 +1994,11 @@ def create_lead(
         "resolution_type": _as_optional_str(resolution_type),
         "resolution_summary": _as_optional_str(resolution_summary),
         "obsolete_reason": _as_optional_str(obsolete_reason),
+        "escalation_level": _as_priority(escalation_level),
+        "escalation_reason": _as_optional_str(escalation_reason),
+        "escalated_at_turn": _as_optional_int(escalated_at_turn),
+        "unlocked_by_lead_id": _as_optional_str(unlocked_by_lead_id),
+        "obsolete_by_lead_id": _as_optional_str(obsolete_by_lead_id),
         "next_step": _as_str(next_step),
         "related_clue_ids": _as_str_list(related_clue_ids),
         "related_npc_ids": _as_str_list(related_npc_ids),
@@ -2003,6 +2018,311 @@ def create_lead(
         "evidence_clue_ids": _normalize_id_list(evidence_clue_ids),
         "consequence_ids": _normalize_id_list(consequence_ids),
         "metadata": _normalize_metadata(metadata),
+    }
+
+
+# --- Lead progression reconciliation (deterministic; no narration) ---
+
+
+def lead_reference_turn(lead: Any) -> int | None:
+    """Reference turn for staleness / unattended age: first present in priority order."""
+    d = lead if isinstance(lead, Mapping) else {}
+    for key in ("last_touched_turn", "last_updated_turn", "committed_at_turn", "first_discovered_turn"):
+        t = _as_optional_int(d.get(key))
+        if t is not None:
+            return t
+    return None
+
+
+def lead_staleness_age(current_turn: Any, lead: Any) -> int | None:
+    """``current_turn - reference_turn`` when both are usable; otherwise ``None``."""
+    now = _as_optional_int(current_turn)
+    ref = lead_reference_turn(lead)
+    if now is None or ref is None:
+        return None
+    return now - ref
+
+
+def should_decay_lead_to_stale(lead: Any, current_turn: Any) -> bool:
+    """Whether an active/pursued non-terminal lead has aged past ``stale_after_turns`` (positive int)."""
+    if is_lead_terminal(lead):
+        return False
+    d = normalize_lead(dict(lead)) if isinstance(lead, Mapping) else normalize_lead({})
+    st = _coerce_status_str(d.get("status"))
+    if st not in (LeadStatus.ACTIVE.value, LeadStatus.PURSUED.value):
+        return False
+    thresh = _as_optional_int(d.get("stale_after_turns"))
+    if thresh is None or thresh <= 0:
+        return False
+    age = lead_staleness_age(current_turn, d)
+    if age is None:
+        return False
+    return age >= thresh
+
+
+def compute_threat_escalation_level(lead: Any, current_turn: Any) -> int:
+    """Unattended threat tier from reference age (v1); non-threat and terminal leads => 0."""
+    d = normalize_lead(dict(lead)) if isinstance(lead, Mapping) else normalize_lead({})
+    if _normalize_type(d.get("type")) != LeadType.THREAT.value:
+        return 0
+    if is_lead_terminal(d):
+        return 0
+    age = lead_staleness_age(current_turn, d)
+    if age is None:
+        return 0
+    if age < 0:
+        age = 0
+    if age < 2:
+        tier = 0
+    elif age <= 3:
+        tier = 1
+    elif age <= 5:
+        tier = 2
+    else:
+        tier = 3
+    return max(0, min(3, tier))
+
+
+def _reconcile_turn_int(current_turn: Any) -> int:
+    t = _as_optional_int(current_turn)
+    return 0 if t is None else t
+
+
+def _sorted_registry_storage_keys(registry: Mapping[str, Any]) -> List[Any]:
+    """Storage keys for dict rows, ordered by derived lead id then key string."""
+    pairs: List[tuple[str, str, Any]] = []
+    for sk, raw in registry.items():
+        if not isinstance(raw, dict):
+            continue
+        snap = normalize_lead(dict(raw))
+        did = _derive_lead_id(snap)
+        pairs.append((did, str(sk), sk))
+    pairs.sort(key=lambda x: (x[0], x[1]))
+    return [p[2] for p in pairs]
+
+
+def _reconcile_lead_stale_and_threat_escalation_inplace(
+    row: MutableMapping[str, Any],
+    registry: Mapping[str, Any],
+    current_turn: int,
+) -> tuple[List[str], tuple[int, int] | None]:
+    """Apply stale decay and threat escalation to one stored row; return ``(codes, esc_from_to)``."""
+    normalize_lead(row)
+    codes: List[str] = []
+    esc_pair: tuple[int, int] | None = None
+
+    if should_decay_lead_to_stale(row, current_turn):
+        st = _coerce_status_str(row.get("status"))
+        if st in (LeadStatus.ACTIVE.value, LeadStatus.PURSUED.value):
+            row["status"] = LeadStatus.STALE.value
+            row["last_updated_turn"] = current_turn
+            codes.append("staled")
+            _ensure_invariants_after_mutation(row, registry=registry)
+
+    ty = _normalize_type(row.get("type"))
+    if ty == LeadType.THREAT.value and not is_lead_terminal(row):
+        new_lvl = compute_threat_escalation_level(row, current_turn)
+        old_lvl = max(0, min(3, _as_priority(row.get("escalation_level"))))
+        cur_reason = _as_optional_str(row.get("escalation_reason"))
+        if new_lvl == 0:
+            need_esc = (
+                old_lvl != new_lvl
+                or cur_reason is not None
+                or _as_optional_int(row.get("escalated_at_turn")) is not None
+            )
+        else:
+            need_esc = old_lvl != new_lvl or cur_reason != "unattended_threat"
+        if need_esc:
+            row["escalation_level"] = new_lvl
+            if new_lvl == 0:
+                row["escalation_reason"] = None
+                row["escalated_at_turn"] = None
+            else:
+                row["escalation_reason"] = "unattended_threat"
+                if new_lvl > old_lvl:
+                    row["escalated_at_turn"] = current_turn
+            if old_lvl != new_lvl:
+                esc_pair = (old_lvl, new_lvl)
+            codes.append("escalated")
+            _ensure_invariants_after_mutation(row, registry=registry)
+
+    return codes, esc_pair
+
+
+def reconcile_single_lead_progression(
+    lead: Any,
+    registry: Mapping[str, Any],
+    current_turn: Any,
+) -> tuple[Dict[str, Any], List[str]]:
+    """Apply deterministic stale decay and threat escalation to a copy of ``lead`` (local transitions only)."""
+    d = normalize_lead(copy.deepcopy(lead if isinstance(lead, Mapping) else {}))
+    codes, _ = _reconcile_lead_stale_and_threat_escalation_inplace(
+        d, registry, _reconcile_turn_int(current_turn)
+    )
+    return d, codes
+
+
+def effective_lead_pressure_score(lead: Any, current_turn: Any) -> int:
+    """Deterministic pressure score for downstream prompt use (not wired here). ``current_turn`` reserved."""
+    _ = current_turn
+    d = normalize_lead(dict(lead)) if isinstance(lead, Mapping) else normalize_lead({})
+    score = _as_priority(d.get("priority"))
+    score += max(0, min(3, _as_priority(d.get("escalation_level")))) * 2
+    st = _coerce_status_str(d.get("status"))
+    if st == LeadStatus.PURSUED.value:
+        score += 2
+    if st == LeadStatus.STALE.value:
+        score += 1
+    return score
+
+
+def _pick_superseding_lead_id(registry: Mapping[str, Any], b_id: str, b_row: Mapping[str, Any]) -> str | None:
+    """Smallest valid superseder id: ``B.superseded_by`` target and/or any ``A`` with ``B in A.supersedes``."""
+    cands: set[str] = set()
+    sb = _as_optional_str(b_row.get("superseded_by"))
+    if sb:
+        a_row = registry.get(sb)
+        if isinstance(a_row, dict):
+            cands.add(sb)
+    for raw in registry.values():
+        if not isinstance(raw, dict):
+            continue
+        aid = _derive_lead_id(normalize_lead(dict(raw)))
+        sup = _normalize_id_list(raw.get("supersedes"))
+        if b_id in sup:
+            cands.add(aid)
+    valid: List[str] = []
+    for aid in cands:
+        if aid == b_id:
+            continue
+        a_row = registry.get(aid)
+        if not isinstance(a_row, dict):
+            continue
+        if is_lead_terminal(a_row):
+            continue
+        valid.append(aid)
+    return min(valid) if valid else None
+
+
+def _apply_unlocks_from_resolved_sources(
+    registry: MutableMapping[str, Any],
+    current_turn: int,
+) -> List[Dict[str, str]]:
+    unlocked: List[Dict[str, str]] = []
+    for sk in _sorted_registry_storage_keys(registry):
+        source = registry.get(sk)
+        if not isinstance(source, dict):
+            continue
+        normalize_lead(source)
+        sid = _derive_lead_id(source)
+        if _coerce_lifecycle_str(source.get("lifecycle")) != LeadLifecycle.RESOLVED.value:
+            continue
+        for tid in sorted(_normalize_id_list(source.get("unlocks"))):
+            target = registry.get(tid)
+            if not isinstance(target, dict):
+                continue
+            normalize_lead(target)
+            if is_lead_terminal(target):
+                continue
+            changed = False
+            lc = _coerce_lifecycle_str(target.get("lifecycle"))
+            if lc == LeadLifecycle.HINTED.value:
+                advance_lead_lifecycle(target, LeadLifecycle.DISCOVERED, turn=current_turn)
+                changed = True
+            st = _coerce_status_str(target.get("status"))
+            if st == LeadStatus.STALE.value:
+                target["status"] = LeadStatus.ACTIVE.value
+                _ensure_invariants_after_mutation(target, registry=registry)
+                changed = True
+            if _as_optional_int(target.get("first_discovered_turn")) is None:
+                target["first_discovered_turn"] = current_turn
+                changed = True
+            if not _as_str(target.get("discovery_source")):
+                target["discovery_source"] = f"unlocked_by:{sid}"
+                changed = True
+            if not _as_optional_str(target.get("unlocked_by_lead_id")):
+                target["unlocked_by_lead_id"] = sid
+                changed = True
+            if changed:
+                target["last_updated_turn"] = current_turn
+                _ensure_invariants_after_mutation(target, registry=registry)
+                unlocked.append({"source_lead_id": sid, "target_lead_id": tid})
+    return unlocked
+
+
+def _apply_supersession_retirement(
+    registry: MutableMapping[str, Any],
+    current_turn: int,
+) -> List[Dict[str, str]]:
+    obsoleted: List[Dict[str, str]] = []
+    for sk in _sorted_registry_storage_keys(registry):
+        b = registry.get(sk)
+        if not isinstance(b, dict):
+            continue
+        normalize_lead(b)
+        b_id = _derive_lead_id(b)
+        lc_b = _coerce_lifecycle_str(b.get("lifecycle"))
+        if lc_b == LeadLifecycle.RESOLVED.value:
+            continue
+        if is_lead_terminal(b):
+            continue
+        a_id = _pick_superseding_lead_id(registry, b_id, b)
+        if a_id is None:
+            continue
+        a_row = registry.get(a_id)
+        if not isinstance(a_row, dict) or is_lead_terminal(a_row):
+            continue
+        prev_st = _coerce_status_str(b.get("status"))
+        b["lifecycle"] = LeadLifecycle.OBSOLETE.value
+        st_after = LeadStatus.ACTIVE.value if prev_st == LeadStatus.PURSUED.value else prev_st
+        if st_after is not None:
+            b["status"] = st_after
+        b["obsolete_reason"] = "superseded"
+        if not _as_optional_str(b.get("superseded_by")):
+            b["superseded_by"] = a_id
+        b["obsolete_by_lead_id"] = a_id
+        b["last_updated_turn"] = current_turn
+        _ensure_invariants_after_mutation(b, registry=registry)
+        obsoleted.append({"source_lead_id": a_id, "target_lead_id": b_id})
+    return obsoleted
+
+
+def reconcile_session_lead_progression(
+    session: MutableMapping[str, Any],
+    *,
+    turn: Any = None,
+) -> Dict[str, Any]:
+    """One deterministic reconciliation pass: stale decay, threat escalation, unlocks, supersession retirement."""
+    reg = ensure_lead_registry(session)
+    if turn is not None:
+        current_turn = _reconcile_turn_int(turn)
+    else:
+        current_turn = _reconcile_turn_int(session.get("turn_counter"))
+
+    staled: List[str] = []
+    escalated: List[Dict[str, Any]] = []
+
+    for sk in _sorted_registry_storage_keys(reg):
+        row = reg.get(sk)
+        if not isinstance(row, dict):
+            continue
+        lid_before = _derive_lead_id(normalize_lead(dict(row)))
+        codes, esc_pair = _reconcile_lead_stale_and_threat_escalation_inplace(row, reg, current_turn)
+        if "staled" in codes:
+            staled.append(lid_before)
+        if esc_pair is not None:
+            f, to = esc_pair
+            escalated.append({"lead_id": lid_before, "from": f, "to": to})
+
+    unlocked = _apply_unlocks_from_resolved_sources(reg, current_turn)
+    obsoleted = _apply_supersession_retirement(reg, current_turn)
+
+    return {
+        "current_turn": current_turn,
+        "staled": staled,
+        "escalated": escalated,
+        "unlocked": unlocked,
+        "obsoleted": obsoleted,
     }
 
 

@@ -4,20 +4,20 @@
     "frontier_gate"
   ],
   "current_date": "Day 1",
-  "turn_counter": 5,
+  "turn_counter": 2,
   "response_mode": "standard",
   "clocks": {
     "suspicion": 0,
     "unrest": 0,
     "danger": 0,
     "occult_instability": 0,
-    "time_pressure": 5
+    "time_pressure": 2
   },
   "interaction_context": {
-    "active_interaction_target_id": "tavern_runner",
-    "active_interaction_kind": "social",
-    "interaction_mode": "social",
-    "engagement_level": "engaged",
+    "active_interaction_target_id": null,
+    "active_interaction_kind": "travel",
+    "interaction_mode": "activity",
+    "engagement_level": "focused",
     "conversation_privacy": null,
     "player_position_context": null
   },
@@ -34,99 +34,56 @@
     "entity_presence": {
       "emergent_lord_aldric": "active",
       "emergent_town_crier": "active",
-      "refugee": "active",
-      "guard_captain": "active",
       "tavern_runner": "active",
-      "threadbare_watcher": "active"
+      "threadbare_watcher": "active",
+      "guard_captain": "active",
+      "refugee": "active"
     },
-    "current_interlocutor": "tavern_runner",
+    "current_interlocutor": null,
     "emergent_addressables": [],
     "promoted_actor_npc_map": {}
   },
   "scene_runtime": {
     "frontier_gate": {
-      "discovered_clues": [
-        "missing patrol rumor",
-        "Investigate the old milestone",
-        "\"Old crossroads\u2014that way.\"",
-        "Lord Aldric"
-      ],
-      "discovered_clue_ids": [
-        "narration_ctx_frontier_gate_missing_patrol_rumor",
-        "lead_frontier_gate_old_milestone",
-        "narration_ctx_frontier_gate_old_crossroads_that_way",
-        "narration_ctx_frontier_gate_lord_aldric"
-      ],
-      "pending_leads": [
-        {
-          "clue_id": "lead_frontier_gate_old_milestone",
-          "text": "Investigate the old milestone",
-          "authoritative_lead_id": "lead_frontier_gate_old_milestone",
-          "leads_to_scene": "old_milestone"
-        }
-      ],
+      "discovered_clues": [],
+      "discovered_clue_ids": [],
+      "pending_leads": [],
       "revealed_hidden_facts": [],
       "suspicion_flags": [],
       "searched_targets": [],
       "resolved_interactables": [],
-      "last_exploration_action_key": "question_tavern_runner",
+      "last_exploration_action_key": "we_leave_the_gatehouse_antechamber_and_s",
       "repeated_action_count": 1,
-      "last_resolution_kind": "question",
-      "last_description_hash": "c93a69cf51d353e2f1ca9b8ff77ba1c9",
+      "last_resolution_kind": "travel",
+      "last_description_hash": "dc0039a4370ce0cbb8a3338e20233c99",
       "consumed_action_ids": [],
-      "momentum_exchanges_since": 1,
-      "momentum_next_due_in": 2,
-      "momentum_last_kind": null,
-      "passive_action_streak": 1,
+      "momentum_exchanges_since": 0,
+      "momentum_next_due_in": 3,
+      "momentum_last_kind": "new_information",
+      "passive_action_streak": 0,
       "recent_player_actions": [
         {
-          "text": "Galinor approaches the tavern runner. \"Runner, I'm here to save the city. What can you tell me about the missing patrol?\"",
+          "text": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals.",
+          "passive": false,
+          "markers": [],
+          "resolution_kind": null,
+          "turn": 1
+        },
+        {
+          "text": "I circle back to an earlier detail we skipped and insist we resolve it before moving on.",
           "passive": false,
           "markers": [],
           "resolution_kind": null,
           "turn": 2
-        },
-        {
-          "text": "\"Courage, runner. I need something, anything. You can trust me.\"",
-          "passive": false,
-          "markers": [],
-          "resolution_kind": null,
-          "turn": 3
-        },
-        {
-          "text": "Galinor nods and approaches a nearby guard. \"I've heard some of your comrades went missing near the old crossroads. Is that true?\"",
-          "passive": false,
-          "markers": [],
-          "resolution_kind": null,
-          "turn": 4
-        },
-        {
-          "text": "Galinor walks back to the Runner. \"Can you believe these Watchmen? They're too chicken to have each others backs!\"",
-          "passive": true,
-          "markers": [
-            "watch"
-          ],
-          "resolution_kind": null,
-          "turn": 5
         }
       ],
-      "last_player_action_text": "Galinor walks back to the Runner. \"Can you believe these Watchmen? They're too chicken to have each others backs!\"",
-      "last_player_action_passive": true,
+      "last_player_action_text": "I circle back to an earlier detail we skipped and insist we resolve it before moving on.",
+      "last_player_action_passive": false,
       "recent_contextual_leads": [
         {
-          "key": "active_event_guards_eye_the_crowd_with_unease_clearly_on_alert_for_trouble",
+          "key": "active_event_he_notices_several_figures_observing_the_crowd_with_a_mix_of_curiosity_and_suspicion_while_a_tavern_runner_calls_out_urgently_about_stew_and_rumors_surrounding_a_missing_patrol",
           "kind": "active_event",
-          "subject": "guards eye the crowd with unease, clearly on alert for trouble",
-          "position": "",
-          "named": false,
-          "positioned": false,
-          "mentions": 1,
-          "last_turn": 1
-        },
-        {
-          "key": "active_event_tavern_runner_yells_announcements_about_hot_stew_and_rumors_of_a_missing_patrol_trying_to_catch_the_attention_of_the_weary_souls_around",
-          "kind": "active_event",
-          "subject": "tavern runner yells announcements about hot stew and rumors of a missing patrol, trying to catch the attention of the weary souls around",
+          "subject": "he notices several figures observing the crowd with a mix of curiosity and suspicion, while a tavern runner calls out urgently about stew and rumors surrounding a missing patrol",
           "position": "",
           "named": false,
           "positioned": false,
@@ -144,422 +101,47 @@
           "last_turn": 1
         },
         {
-          "key": "active_event_missing_patrol_rumor",
+          "key": "active_event_as_she_speaks_several_figures_in_the_crowd_seem_to",
           "kind": "active_event",
-          "subject": "missing patrol rumor",
+          "subject": "as she speaks, several figures in the crowd seem to",
           "position": "",
           "named": false,
           "positioned": false,
-          "mentions": 2,
+          "mentions": 1,
           "last_turn": 2
-        },
-        {
-          "key": "recent_named_figure_lord_aldric",
-          "kind": "recent_named_figure",
-          "subject": "Lord Aldric",
-          "position": "",
-          "named": true,
-          "positioned": false,
-          "mentions": 1,
-          "last_turn": 5
-        },
-        {
-          "key": "visible_named_figure_lord_aldric",
-          "kind": "visible_named_figure",
-          "subject": "Lord Aldric",
-          "position": "",
-          "named": true,
-          "positioned": false,
-          "mentions": 1,
-          "last_turn": 5
         }
-      ],
-      "topic_pressure": {
-        "missing_patrol": {
-          "repeat_count": 3,
-          "low_progress_streak": 0,
-          "progress_score_total": 8.3,
-          "last_answer": "The Tavern Runner shakes her head, a grave expression crossing her face. \"You think it\u2019s just the Watchmen? I\u2019ve heard rumors there\u2019s something more lurking out there. Strange sightings by the old milestone, shadows moving where they shouldn\u2019t be. If you're looking for answers, maybe checking that place isn\u2019t a bad start. But be careful\u2014people go missing there too.\"\n\nShe glances around, lowering her voice. \"And there's talk\u2014some say Lord Aldric has been seen near there. Might",
-          "last_turn": 5,
-          "speaker_targets": {
-            "tavern_runner": {
-              "repeat_count": 2,
-              "low_progress_streak": 0,
-              "patience": 3,
-              "last_turn": 5
-            },
-            "guard_captain": {
-              "repeat_count": 1,
-              "low_progress_streak": 0,
-              "patience": 3,
-              "last_turn": 4
-            }
-          },
-          "previous_probe_dimension": "general",
-          "last_probe_dimension": "general",
-          "last_player_input": "Galinor walks back to the Runner. \"Can you believe these Watchmen? They're too chicken to have each others backs!\""
-        }
-      },
-      "topic_pressure_last_topic_key": "missing_patrol",
-      "topic_pressure_current": {
-        "topic_key": "missing_patrol",
-        "speaker_key": "tavern_runner",
-        "turn": 5,
-        "player_text": "Galinor walks back to the Runner. \"Can you believe these Watchmen? They're too chicken to have each others backs!\"",
-        "interaction_kind": "social",
-        "interaction_mode": "social",
-        "social_intent_class": "social_exchange",
-        "npc_name": "Tavern Runner"
-      }
+      ]
     }
   },
-  "clue_knowledge": {
-    "narration_ctx_frontier_gate_missing_patrol_rumor": {
-      "state": "discovered",
-      "source_scene": "frontier_gate",
-      "presentation": "explicit",
-      "text": "missing patrol rumor"
-    },
-    "lead_frontier_gate_old_milestone": {
-      "state": "discovered",
-      "source_scene": "frontier_gate",
-      "presentation": "actionable",
-      "text": "Investigate the old milestone"
-    },
-    "narration_ctx_frontier_gate_old_crossroads_that_way": {
-      "state": "discovered",
-      "source_scene": "frontier_gate",
-      "presentation": "explicit",
-      "text": "\"Old crossroads\u2014that way.\""
-    },
-    "narration_ctx_frontier_gate_lord_aldric": {
-      "state": "discovered",
-      "source_scene": "frontier_gate",
-      "presentation": "explicit",
-      "text": "Lord Aldric"
-    }
-  },
-  "lead_registry": {
-    "narration_ctx_frontier_gate_missing_patrol_rumor": {
-      "id": "narration_ctx_frontier_gate_missing_patrol_rumor",
-      "title": "missing patrol rumor",
-      "summary": "missing patrol rumor",
-      "type": "rumor",
-      "lifecycle": "discovered",
-      "status": "active",
-      "confidence": "plausible",
-      "discovery_source": "clue_explicit",
-      "first_discovered_turn": 2,
-      "last_updated_turn": 2,
-      "committed_at_turn": null,
-      "commitment_source": null,
-      "commitment_strength": null,
-      "resolved_at_turn": null,
-      "resolution_type": null,
-      "resolution_summary": null,
-      "obsolete_reason": null,
-      "next_step": "",
-      "related_clue_ids": [],
-      "related_npc_ids": [],
-      "related_location_ids": [],
-      "owner_faction_id": null,
-      "priority": 0,
-      "last_touched_turn": 2,
-      "stale_after_turns": null,
-      "parent_lead_id": null,
-      "supersedes": [],
-      "superseded_by": null,
-      "unlocks": [],
-      "blocked_by": [],
-      "related_faction_ids": [],
-      "related_scene_ids": [
-        "frontier_gate"
-      ],
-      "tags": [],
-      "evidence_clue_ids": [
-        "narration_ctx_frontier_gate_missing_patrol_rumor"
-      ],
-      "consequence_ids": [],
-      "metadata": {}
-    },
-    "lead_frontier_gate_old_milestone": {
-      "id": "lead_frontier_gate_old_milestone",
-      "title": "Investigate the old milestone",
-      "summary": "Investigate the old milestone",
-      "type": "investigation",
-      "lifecycle": "discovered",
-      "status": "active",
-      "confidence": "plausible",
-      "discovery_source": "social",
-      "first_discovered_turn": 2,
-      "last_updated_turn": 2,
-      "committed_at_turn": null,
-      "commitment_source": null,
-      "commitment_strength": null,
-      "resolved_at_turn": null,
-      "resolution_type": null,
-      "resolution_summary": null,
-      "obsolete_reason": null,
-      "next_step": "",
-      "related_clue_ids": [],
-      "related_npc_ids": [],
-      "related_location_ids": [],
-      "owner_faction_id": null,
-      "priority": 0,
-      "last_touched_turn": 2,
-      "stale_after_turns": null,
-      "parent_lead_id": null,
-      "supersedes": [],
-      "superseded_by": null,
-      "unlocks": [],
-      "blocked_by": [],
-      "related_faction_ids": [],
-      "related_scene_ids": [
-        "frontier_gate",
-        "old_milestone"
-      ],
-      "tags": [],
-      "evidence_clue_ids": [
-        "lead_frontier_gate_old_milestone"
-      ],
-      "consequence_ids": [],
-      "metadata": {
-        "social_extraction_source": "discoverable_clue:old_milestone"
-      }
-    },
-    "narration_ctx_frontier_gate_old_crossroads_that_way": {
-      "id": "narration_ctx_frontier_gate_old_crossroads_that_way",
-      "title": "\"Old crossroads\u2014that way.\"",
-      "summary": "\"Old crossroads\u2014that way.\"",
-      "type": "rumor",
-      "lifecycle": "discovered",
-      "status": "active",
-      "confidence": "plausible",
-      "discovery_source": "clue_explicit",
-      "first_discovered_turn": 3,
-      "last_updated_turn": 3,
-      "committed_at_turn": null,
-      "commitment_source": null,
-      "commitment_strength": null,
-      "resolved_at_turn": null,
-      "resolution_type": null,
-      "resolution_summary": null,
-      "obsolete_reason": null,
-      "next_step": "",
-      "related_clue_ids": [],
-      "related_npc_ids": [],
-      "related_location_ids": [],
-      "owner_faction_id": null,
-      "priority": 0,
-      "last_touched_turn": 3,
-      "stale_after_turns": null,
-      "parent_lead_id": null,
-      "supersedes": [],
-      "superseded_by": null,
-      "unlocks": [],
-      "blocked_by": [],
-      "related_faction_ids": [],
-      "related_scene_ids": [
-        "frontier_gate"
-      ],
-      "tags": [],
-      "evidence_clue_ids": [
-        "narration_ctx_frontier_gate_old_crossroads_that_way"
-      ],
-      "consequence_ids": [],
-      "metadata": {}
-    },
-    "narration_ctx_frontier_gate_lord_aldric": {
-      "id": "narration_ctx_frontier_gate_lord_aldric",
-      "title": "Lord Aldric",
-      "summary": "Lord Aldric",
-      "type": "rumor",
-      "lifecycle": "discovered",
-      "status": "active",
-      "confidence": "plausible",
-      "discovery_source": "clue_explicit",
-      "first_discovered_turn": 5,
-      "last_updated_turn": 5,
-      "committed_at_turn": null,
-      "commitment_source": null,
-      "commitment_strength": null,
-      "resolved_at_turn": null,
-      "resolution_type": null,
-      "resolution_summary": null,
-      "obsolete_reason": null,
-      "next_step": "",
-      "related_clue_ids": [],
-      "related_npc_ids": [],
-      "related_location_ids": [],
-      "owner_faction_id": null,
-      "priority": 0,
-      "last_touched_turn": 5,
-      "stale_after_turns": null,
-      "parent_lead_id": null,
-      "supersedes": [],
-      "superseded_by": null,
-      "unlocks": [],
-      "blocked_by": [],
-      "related_faction_ids": [],
-      "related_scene_ids": [
-        "frontier_gate"
-      ],
-      "tags": [],
-      "evidence_clue_ids": [
-        "narration_ctx_frontier_gate_lord_aldric"
-      ],
-      "consequence_ids": [],
-      "metadata": {}
-    }
-  },
-  "npc_runtime": {
-    "tavern_runner": {
-      "attitude": 0,
-      "trust": 0,
-      "fear": 0,
-      "suspicion": 0,
-      "known_topics": [],
-      "revealed_topics": [],
-      "last_interaction_turn": 5
-    },
-    "guard_captain": {
-      "attitude": 0,
-      "trust": 0,
-      "fear": 0,
-      "suspicion": 0,
-      "known_topics": [],
-      "revealed_topics": [],
-      "last_interaction_turn": 4
-    }
-  },
+  "clue_knowledge": {},
+  "lead_registry": {},
+  "npc_runtime": {},
   "last_action_debug": {
     "last_action_type": "chat",
-    "player_input": "Galinor walks back to the Runner. \"Can you believe these Watchmen? They're too chicken to have each others backs!\"",
-    "normalized_action": {
-      "id": "question_tavern_runner",
-      "label": "Galinor walks back to the Runner. \"Can you believe these Watchmen? They're too chicken to have each others backs!\"",
-      "type": "question",
-      "prompt": "Galinor walks back to the Runner. \"Can you believe these Watchmen? They're too chicken to have each others backs!\""
-    },
-    "resolution_kind": "question",
+    "player_input": "I circle back to an earlier detail we skipped and insist we resolve it before moving on.",
+    "normalized_action": null,
+    "resolution_kind": null,
     "target_scene": null,
     "resolver_result": {
-      "kind": "question",
-      "action_id": "question_tavern_runner",
-      "label": "Galinor walks back to the Runner. \"Can you believe these Watchmen? They're too chicken to have each others backs!\"",
-      "prompt": "Galinor walks back to the Runner. \"Can you believe these Watchmen? They're too chicken to have each others backs!\"",
-      "success": true,
-      "resolved_transition": false,
-      "target_scene_id": null,
-      "clue_id": "narration_ctx_frontier_gate_lord_aldric",
-      "discovered_clues": [
-        "Lord Aldric"
-      ],
-      "state_changes": {},
-      "hint": "Player spoke with Tavern Runner. Narration introduced investigatively relevant detail; treat as partial answer or redirect consistent with the spoken reply.",
-      "social": {
-        "social_intent_class": "social_exchange",
-        "npc_id": "tavern_runner",
-        "npc_name": "Tavern Runner",
-        "target_resolved": true,
-        "topic_revealed": {
-          "id": "narration_repair_frontier_gate_contextual_lead",
-          "text": "Lord Aldric",
-          "clue_text": "Lord Aldric",
-          "clue_id": "narration_ctx_frontier_gate_lord_aldric"
-        },
-        "skill_check": null,
-        "npc_reply_expected": true,
-        "reply_kind": "answer",
-        "target_source": "explicit_target",
-        "target_reason": "normalized target_id matches scene-addressable roster",
-        "target_candidate_id": "tavern_runner",
-        "target_candidate_valid": true,
-        "stale_interlocutor_cleared": false,
-        "addressability_checked_against": [
-          "active_entities",
-          "entity_presence_active_or_nearby",
-          "scene_addressables",
-          "world_roster_in_scene",
-          "interaction_continuity"
-        ],
-        "declared_switch_detected": false,
-        "declared_switch_target_actor_id": null,
-        "continuity_overridden_by_declared_switch": false,
-        "spoken_vocative_detected": false,
-        "spoken_vocative_target_actor_id": null,
-        "continuity_overridden_by_spoken_vocative": false,
-        "actor_addressable": true,
-        "authority_source_used": "explicit_target",
-        "proposed_reply_speaker_id": "tavern_runner",
-        "grounding_fallback_applied": false,
-        "grounding_reason_code": "authoritative_speaker_eligible_topic_salience_ignored",
-        "grounded_speaker_id": "tavern_runner",
-        "social_escalation": {
-          "escalation_level": 2,
-          "escalation_reason": "second_attempt_same_topic",
-          "escalation_effect": "redirect_only_no_new_npc_facts",
-          "force_partial_answer": false,
-          "force_actionable_lead": true,
-          "add_suspicion": false,
-          "trigger_scene_momentum": false,
-          "convert_refusal_to_conditioned_offer": false,
-          "topic_exhausted": true,
-          "effective_reply_kind": "answer",
-          "social_question_dimension": "general",
-          "topic_exhausted_for_dimension": false,
-          "valid_followup_detected": false,
-          "prior_same_dimension_answer_exists": false
-        },
-        "social_question_dimension": "general",
-        "topic_exhausted_for_dimension": false,
-        "valid_followup_detected": false,
-        "prior_same_dimension_answer_exists": false,
-        "strategy_forced_to_answer": false,
-        "suppressed_fallback_strategies": []
-      },
-      "requires_check": false,
       "world_tick_events": [
         {
-          "type": "faction_operation_complete",
-          "text": "House Verevin completes an off-screen operation.",
-          "source": "house_verevin"
-        },
-        {
-          "type": "faction_operation_complete",
-          "text": "The Ash Cowl completes an off-screen operation.",
-          "source": "ash_cowl"
-        },
-        {
-          "type": "faction_operation_complete",
-          "text": "Ordo Pyric completes an off-screen operation.",
+          "type": "faction_pressure",
+          "text": "Ordo Pyric's pressure mounts.",
           "source": "ordo_pyric"
         }
       ]
     },
     "scene_transition": null,
-    "narration_state_mismatch_detected": true,
-    "mismatch_kind": "empty_social_payload_vs_narration:contextual_lead",
-    "mismatch_repair_applied": "contextual_lead_clues",
-    "mismatch_repairs_applied": [
-      "structured_from_contextual_clues",
-      "success_set_true",
-      "engine_hint_no_new_info_replaced",
-      "canonical_social_lead_landing"
-    ],
-    "minimum_actionable_lead_enforced": false,
-    "enforced_lead_id": null,
-    "enforced_lead_source": null,
     "emergent_actor_enrolled": false,
     "emergent_actor_id": null,
     "emergent_actor_source_text": null
   },
   "debug_traces": [
     {
-      "timestamp": "2026-04-04T21:01:58.934271Z",
+      "timestamp": "2026-04-04T22:13:32.002316Z",
       "source": "chat",
       "action_type": "chat",
-      "raw_input": "Begin.",
+      "raw_input": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals.",
       "turn_stage_order": [
         "player_input",
         "intent_normalization_expansion",
@@ -572,14 +154,43 @@
         "response_debug_packaging"
       ],
       "incoming_payload": {
-        "text": "Begin."
+        "text": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals."
       },
-      "parsed_intent": null,
+      "parsed_intent": {
+        "id": "we_leave_the_gatehouse_antechamber_and_s",
+        "label": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals.",
+        "type": "travel",
+        "prompt": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals.",
+        "targetSceneId": null,
+        "target_scene_id": null
+      },
       "segmented_turn": {
-        "declared_action_text": "Begin."
+        "declared_action_text": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals."
       },
-      "normalized_action": null,
+      "normalized_action": {
+        "id": "we_leave_the_gatehouse_antechamber_and_s",
+        "label": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals.",
+        "type": "travel",
+        "prompt": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals.",
+        "targetSceneId": null
+      },
       "resolution": {
+        "kind": "travel",
+        "action_id": "we_leave_the_gatehouse_antechamber_and_s",
+        "label": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals.",
+        "prompt": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals.",
+        "success": false,
+        "resolved_transition": false,
+        "target_scene_id": null,
+        "clue_id": null,
+        "discovered_clues": [],
+        "state_changes": {},
+        "hint": "Player expressed travel intent; target scene not resolved. Narrate based on current scene and intent.",
+        "metadata": {
+          "turn_segmentation": {
+            "declared_action_text": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals."
+          }
+        },
         "world_tick_events": [
           {
             "type": "faction_pressure",
@@ -601,11 +212,181 @@
       ],
       "turn_trace": {
         "source": "chat",
-        "player_input": "Begin.",
+        "player_input": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals.",
+        "intent": {
+          "parsed": {
+            "id": "we_leave_the_gatehouse_antechamber_and_s",
+            "label": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals.",
+            "type": "travel",
+            "prompt": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals.",
+            "targetSceneId": null,
+            "target_scene_id": null
+          },
+          "segmented_turn": {
+            "declared_action_text": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals."
+          },
+          "normalized": {
+            "id": "we_leave_the_gatehouse_antechamber_and_s",
+            "label": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals.",
+            "type": "travel",
+            "prompt": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals.",
+            "targetSceneId": null,
+            "target_scene_id": null,
+            "targetEntityId": null,
+            "target_id": null
+          },
+          "implied_context": {
+            "applied": false,
+            "cases": [],
+            "target_id": null,
+            "commitment_broken": false,
+            "break_reason": null
+          }
+        },
+        "classification": {
+          "action_type": "chat",
+          "resolved_kind": "travel",
+          "requires_check": false
+        },
+        "resolution_path": "exploration_engine",
+        "authoritative_state_changes": {
+          "scene_transition": null,
+          "resolution_state_changes": {},
+          "resolution_world_updates": [],
+          "check_request": null
+        },
+        "interaction_after": {
+          "active_interaction_target_id": null,
+          "active_interaction_kind": "travel",
+          "interaction_mode": "activity",
+          "engagement_level": "focused",
+          "conversation_privacy": null,
+          "player_position_context": null
+        },
+        "narration_obligations": {
+          "is_opening_scene": true,
+          "must_advance_scene": false,
+          "should_answer_active_npc": false,
+          "avoid_input_echo": true,
+          "avoid_player_action_restatement": true,
+          "prefer_structured_turn_summary": true,
+          "active_npc_reply_expected": false,
+          "active_npc_reply_kind": null,
+          "scene_momentum_due": false,
+          "scene_momentum_exchanges_since": 0,
+          "scene_momentum_next_due_in": 2,
+          "suppress_non_social_emitters": false
+        },
+        "clues": {
+          "discovered_texts": [],
+          "presentation_changes": [],
+          "known_counts": {
+            "implicit": 0,
+            "explicit": 0,
+            "actionable": 0
+          }
+        },
+        "affordances_after": [
+          {
+            "id": "question_emergent_lord_aldric",
+            "type": "question",
+            "label": "Talk to Lord Aldric",
+            "targetEntityId": "emergent_lord_aldric"
+          },
+          {
+            "id": "question_emergent_town_crier",
+            "type": "question",
+            "label": "Talk to Town Crier",
+            "targetEntityId": "emergent_town_crier"
+          },
+          {
+            "id": "examine_the_rain_spatters_soot_dark_stone_frayed",
+            "type": "investigate",
+            "label": "Examine the Rain spatters soot-dark stone; frayed"
+          },
+          {
+            "id": "examine_refugees",
+            "type": "investigate",
+            "label": "Examine Refugees"
+          },
+          {
+            "id": "examine_a_notice_board_lists_new_taxes",
+            "type": "investigate",
+            "label": "Examine A notice board lists new taxes"
+          }
+        ],
+        "emergent_actor": {
+          "emergent_actor_enrolled": false,
+          "emergent_actor_id": null,
+          "emergent_actor_source_text": null
+        }
+      },
+      "gpt_called": true,
+      "response_ok": true,
+      "error": null,
+      "canonical_entry": {
+        "should_route_social": false,
+        "target_actor_id": null,
+        "target_source": null,
+        "reason": "travel_or_scene_transition_intent",
+        "spoken_text": null,
+        "declared_switch_detected": false,
+        "declared_switch_target_actor_id": null,
+        "continuity_overridden_by_declared_switch": false,
+        "spoken_vocative_detected": false,
+        "spoken_vocative_target_actor_id": null,
+        "continuity_overridden_by_spoken_vocative": false
+      },
+      "canonical_entry_path": "undecided",
+      "canonical_entry_reason": "travel_or_scene_transition_intent",
+      "canonical_entry_target_actor_id": null
+    },
+    {
+      "timestamp": "2026-04-04T22:13:46.075378Z",
+      "source": "chat",
+      "action_type": "chat",
+      "raw_input": "I circle back to an earlier detail we skipped and insist we resolve it before moving on.",
+      "turn_stage_order": [
+        "player_input",
+        "intent_normalization_expansion",
+        "action_classification",
+        "engine_resolution",
+        "authoritative_state_mutation",
+        "prompt_context_construction",
+        "gpt_narration",
+        "affordance_derivation",
+        "response_debug_packaging"
+      ],
+      "incoming_payload": {
+        "text": "I circle back to an earlier detail we skipped and insist we resolve it before moving on."
+      },
+      "parsed_intent": null,
+      "segmented_turn": {
+        "declared_action_text": "I circle back to an earlier detail we skipped and insist we resolve it before moving on."
+      },
+      "normalized_action": null,
+      "resolution": {
+        "world_tick_events": [
+          {
+            "type": "faction_pressure",
+            "text": "Ordo Pyric's pressure mounts.",
+            "source": "ordo_pyric"
+          }
+        ]
+      },
+      "scene_before": "frontier_gate",
+      "scene_after": "frontier_gate",
+      "clue_updates": [],
+      "world_flag_updates": [
+        "clock:time_pressure=2"
+      ],
+      "turn_trace": {
+        "source": "chat",
+        "player_input": "I circle back to an earlier detail we skipped and insist we resolve it before moving on.",
         "intent": {
           "parsed": null,
           "segmented_turn": {
-            "declared_action_text": "Begin."
+            "declared_action_text": "I circle back to an earlier detail we skipped and insist we resolve it before moving on."
           },
           "normalized": null,
           "implied_context": {
@@ -630,14 +411,14 @@
         },
         "interaction_after": {
           "active_interaction_target_id": null,
-          "active_interaction_kind": null,
-          "interaction_mode": "none",
-          "engagement_level": "none",
+          "active_interaction_kind": "travel",
+          "interaction_mode": "activity",
+          "engagement_level": "focused",
           "conversation_privacy": null,
           "player_position_context": null
         },
         "narration_obligations": {
-          "is_opening_scene": true,
+          "is_opening_scene": false,
           "must_advance_scene": false,
           "should_answer_active_npc": false,
           "avoid_input_echo": true,
@@ -713,1487 +494,16 @@
       "canonical_entry_path": "procedural",
       "canonical_entry_reason": "no_addressable_target",
       "canonical_entry_target_actor_id": null
-    },
-    {
-      "timestamp": "2026-04-04T21:03:19.603678Z",
-      "source": "chat",
-      "action_type": "chat",
-      "raw_input": "Galinor approaches the tavern runner. \"Runner, I'm here to save the city. What can you tell me about the missing patrol?\"",
-      "turn_stage_order": [
-        "player_input",
-        "intent_normalization_expansion",
-        "action_classification",
-        "engine_resolution",
-        "authoritative_state_mutation",
-        "prompt_context_construction",
-        "gpt_narration",
-        "affordance_derivation",
-        "response_debug_packaging"
-      ],
-      "incoming_payload": {
-        "text": "Galinor approaches the tavern runner. \"Runner, I'm here to save the city. What can you tell me about the missing patrol?\""
-      },
-      "parsed_intent": {
-        "id": "question_tavern_runner",
-        "label": "Galinor approaches the tavern runner. \"Runner, I'm here to save the city. What can you tell me about the missing patrol?\"",
-        "type": "question",
-        "social_intent_class": "social_exchange",
-        "prompt": "Galinor approaches the tavern runner. \"Runner, I'm here to save the city. What can you tell me about the missing patrol?\"",
-        "metadata": {
-          "routed_via_dialogue_lock": true,
-          "route": "dialogue",
-          "canonical_entry_path": "social",
-          "canonical_entry_reason": "declared_action_actor_switch",
-          "canonical_entry_target_actor_id": "tavern_runner",
-          "intent_route_debug": {
-            "routed_to": "social_exchange",
-            "route_reason": "declared_action_actor_switch",
-            "addressed_actor_id": "tavern_runner",
-            "addressed_actor_source": "declared_action"
-          },
-          "active_interaction_target_id": "tavern_runner",
-          "segmented_turn": {
-            "spoken_text": "Runner, I'm here to save the city. What can you tell me about the missing patrol?",
-            "declared_action_text": "Galinor approaches the tavern runner."
-          },
-          "turn_segmentation": {
-            "spoken_text": "Runner, I'm here to save the city. What can you tell me about the missing patrol?",
-            "declared_action_text": "Galinor approaches the tavern runner."
-          }
-        },
-        "target_id": "tavern_runner",
-        "targetEntityId": "tavern_runner"
-      },
-      "segmented_turn": {
-        "spoken_text": "Runner, I'm here to save the city. What can you tell me about the missing patrol?",
-        "declared_action_text": "Galinor approaches the tavern runner."
-      },
-      "normalized_action": {
-        "id": "question_tavern_runner",
-        "label": "Galinor approaches the tavern runner. \"Runner, I'm here to save the city. What can you tell me about the missing patrol?\"",
-        "type": "question",
-        "prompt": "Galinor approaches the tavern runner. \"Runner, I'm here to save the city. What can you tell me about the missing patrol?\""
-      },
-      "resolution": {
-        "kind": "question",
-        "action_id": "question_tavern_runner",
-        "label": "Galinor approaches the tavern runner. \"Runner, I'm here to save the city. What can you tell me about the missing patrol?\"",
-        "prompt": "Galinor approaches the tavern runner. \"Runner, I'm here to save the city. What can you tell me about the missing patrol?\"",
-        "success": true,
-        "resolved_transition": false,
-        "target_scene_id": null,
-        "clue_id": "narration_ctx_frontier_gate_missing_patrol_rumor",
-        "discovered_clues": [
-          "missing patrol rumor"
-        ],
-        "state_changes": {},
-        "hint": "Player spoke with Tavern Runner. Narration introduced investigatively relevant detail; treat as partial answer or redirect consistent with the spoken reply.",
-        "social": {
-          "social_intent_class": "social_exchange",
-          "npc_id": "tavern_runner",
-          "npc_name": "Tavern Runner",
-          "target_resolved": true,
-          "topic_revealed": {
-            "id": "narration_repair_frontier_gate_operational_token",
-            "text": "missing patrol rumor",
-            "clue_text": "missing patrol rumor",
-            "clue_id": "narration_ctx_frontier_gate_missing_patrol_rumor"
-          },
-          "skill_check": null,
-          "npc_reply_expected": true,
-          "reply_kind": "answer",
-          "target_source": "explicit_target",
-          "target_reason": "normalized target_id matches scene-addressable roster",
-          "target_candidate_id": "tavern_runner",
-          "target_candidate_valid": true,
-          "stale_interlocutor_cleared": false,
-          "addressability_checked_against": [
-            "active_entities",
-            "entity_presence_active_or_nearby",
-            "scene_addressables",
-            "world_roster_in_scene",
-            "interaction_continuity"
-          ],
-          "declared_switch_detected": true,
-          "declared_switch_target_actor_id": "tavern_runner",
-          "continuity_overridden_by_declared_switch": false,
-          "spoken_vocative_detected": true,
-          "spoken_vocative_target_actor_id": "tavern_runner",
-          "continuity_overridden_by_spoken_vocative": false,
-          "actor_addressable": true,
-          "authority_source_used": "explicit_target",
-          "proposed_reply_speaker_id": "tavern_runner",
-          "grounding_fallback_applied": false,
-          "grounding_reason_code": "authoritative_speaker_eligible",
-          "grounded_speaker_id": "tavern_runner",
-          "social_escalation": {
-            "escalation_level": 1,
-            "escalation_reason": "first_attempt_same_topic",
-            "escalation_effect": "vague_or_guarded_answer_allowed",
-            "force_partial_answer": false,
-            "force_actionable_lead": false,
-            "add_suspicion": false,
-            "trigger_scene_momentum": false,
-            "convert_refusal_to_conditioned_offer": false,
-            "topic_exhausted": false,
-            "effective_reply_kind": null,
-            "social_question_dimension": "general",
-            "topic_exhausted_for_dimension": false,
-            "valid_followup_detected": false,
-            "prior_same_dimension_answer_exists": false
-          },
-          "social_question_dimension": "general",
-          "topic_exhausted_for_dimension": false,
-          "valid_followup_detected": false,
-          "prior_same_dimension_answer_exists": false,
-          "strategy_forced_to_answer": false,
-          "suppressed_fallback_strategies": []
-        },
-        "requires_check": false,
-        "metadata": {
-          "routed_via_dialogue_lock": true,
-          "route": "dialogue",
-          "canonical_entry_path": "social",
-          "canonical_entry_reason": "declared_action_actor_switch",
-          "canonical_entry_target_actor_id": "tavern_runner",
-          "intent_route_debug": {
-            "routed_to": "social_exchange",
-            "route_reason": "declared_action_actor_switch",
-            "addressed_actor_id": "tavern_runner",
-            "addressed_actor_source": "declared_action"
-          },
-          "active_interaction_target_id": "tavern_runner",
-          "segmented_turn": {
-            "spoken_text": "Runner, I'm here to save the city. What can you tell me about the missing patrol?",
-            "declared_action_text": "Galinor approaches the tavern runner."
-          },
-          "turn_segmentation": {
-            "spoken_text": "Runner, I'm here to save the city. What can you tell me about the missing patrol?",
-            "declared_action_text": "Galinor approaches the tavern runner."
-          },
-          "lead_landing": {
-            "revealed_lead_ids": [
-              "narration_ctx_frontier_gate_missing_patrol_rumor"
-            ],
-            "already_known_lead_ids": [],
-            "actionable_lead_ids": [],
-            "lead_write_targets": [
-              "clue_knowledge",
-              "scene_runtime.discovered_clue_ids",
-              "event_log"
-            ],
-            "extracted_lead_ids": [],
-            "extracted_lead_sources": [],
-            "extracted_from_text": false,
-            "extracted_from_reconciled_text": false,
-            "authoritative_created_ids": [
-              "lead_frontier_gate_old_milestone"
-            ],
-            "authoritative_updated_ids": [],
-            "authoritative_unchanged_ids": [],
-            "authoritative_promoted_ids": [
-              "lead_frontier_gate_old_milestone"
-            ],
-            "narration_mismatch_repair": true
-          },
-          "narration_state_consistency": {
-            "narration_state_mismatch_detected": true,
-            "mismatch_kind": "refusal_or_empty_payload_vs_narration:operational_token",
-            "mismatch_repair_applied": "contextual_lead_clues",
-            "mismatch_repairs_applied": [
-              "structured_from_contextual_clues",
-              "reply_kind_upgraded_from_refusal",
-              "success_set_true",
-              "engine_hint_no_new_info_replaced",
-              "canonical_social_lead_landing"
-            ],
-            "repaired_discovered_clue_texts": [
-              "missing patrol rumor"
-            ],
-            "emergent_actor_hint_detected": false
-          },
-          "minimum_actionable_lead": {
-            "minimum_actionable_lead_enforced": true,
-            "enforced_lead_id": "lead_frontier_gate_old_milestone",
-            "enforced_lead_source": "discoverable_clue"
-          },
-          "minimum_actionable_lead_enforced": true,
-          "enforced_lead_id": "lead_frontier_gate_old_milestone",
-          "enforced_lead_source": "discoverable_clue"
-        },
-        "world_tick_events": [
-          {
-            "type": "faction_pressure",
-            "text": "Ordo Pyric's pressure mounts.",
-            "source": "ordo_pyric"
-          }
-        ]
-      },
-      "scene_before": "frontier_gate",
-      "scene_after": "frontier_gate",
-      "clue_updates": [
-        "missing patrol rumor"
-      ],
-      "world_flag_updates": [
-        "clock:time_pressure=2"
-      ],
-      "turn_trace": {
-        "source": "chat",
-        "player_input": "Galinor approaches the tavern runner. \"Runner, I'm here to save the city. What can you tell me about the missing patrol?\"",
-        "intent": {
-          "parsed": {
-            "id": "question_tavern_runner",
-            "label": "Galinor approaches the tavern runner. \"Runner, I'm here to save the city. What can you tell me about the missing patrol?\"",
-            "type": "question",
-            "social_intent_class": "social_exchange",
-            "prompt": "Galinor approaches the tavern runner. \"Runner, I'm here to save the city. What can you tell me about the missing patrol?\"",
-            "metadata": {
-              "routed_via_dialogue_lock": true,
-              "route": "dialogue",
-              "canonical_entry_path": "social",
-              "canonical_entry_reason": "declared_action_actor_switch",
-              "canonical_entry_target_actor_id": "tavern_runner",
-              "intent_route_debug": {
-                "routed_to": "social_exchange",
-                "route_reason": "declared_action_actor_switch",
-                "addressed_actor_id": "tavern_runner",
-                "addressed_actor_source": "declared_action"
-              },
-              "active_interaction_target_id": "tavern_runner",
-              "segmented_turn": {
-                "spoken_text": "Runner, I'm here to save the city. What can you tell me about the missing patrol?",
-                "declared_action_text": "Galinor approaches the tavern runner."
-              },
-              "turn_segmentation": {
-                "spoken_text": "Runner, I'm here to save the city. What can you tell me about the missing patrol?",
-                "declared_action_text": "Galinor approaches the tavern runner."
-              }
-            },
-            "target_id": "tavern_runner",
-            "targetEntityId": "tavern_runner"
-          },
-          "segmented_turn": {
-            "spoken_text": "Runner, I'm here to save the city. What can you tell me about the missing patrol?",
-            "declared_action_text": "Galinor approaches the tavern runner."
-          },
-          "normalized": {
-            "id": "question_tavern_runner",
-            "label": "Galinor approaches the tavern runner. \"Runner, I'm here to save the city. What can you tell me about the missing patrol?\"",
-            "type": "question",
-            "prompt": "Galinor approaches the tavern runner. \"Runner, I'm here to save the city. What can you tell me about the missing patrol?\"",
-            "targetSceneId": null,
-            "target_scene_id": null,
-            "targetEntityId": "tavern_runner",
-            "target_id": "tavern_runner"
-          },
-          "implied_context": {
-            "applied": false,
-            "cases": [],
-            "target_id": null,
-            "commitment_broken": false,
-            "break_reason": null
-          }
-        },
-        "classification": {
-          "action_type": "chat",
-          "resolved_kind": "question",
-          "requires_check": false
-        },
-        "resolution_path": "social_engine",
-        "authoritative_state_changes": {
-          "scene_transition": null,
-          "resolution_state_changes": {},
-          "resolution_world_updates": [],
-          "check_request": null
-        },
-        "interaction_after": {
-          "active_interaction_target_id": "tavern_runner",
-          "active_interaction_kind": "social",
-          "interaction_mode": "social",
-          "engagement_level": "engaged",
-          "conversation_privacy": null,
-          "player_position_context": null
-        },
-        "narration_obligations": {
-          "is_opening_scene": false,
-          "must_advance_scene": false,
-          "should_answer_active_npc": true,
-          "avoid_input_echo": true,
-          "avoid_player_action_restatement": true,
-          "prefer_structured_turn_summary": true,
-          "active_npc_reply_expected": true,
-          "active_npc_reply_kind": "answer",
-          "scene_momentum_due": false,
-          "scene_momentum_exchanges_since": 0,
-          "scene_momentum_next_due_in": 2,
-          "suppress_non_social_emitters": true
-        },
-        "clues": {
-          "discovered_texts": [
-            "missing patrol rumor"
-          ],
-          "presentation_changes": [
-            {
-              "id": "lead_frontier_gate_old_milestone",
-              "from": null,
-              "to": "actionable"
-            },
-            {
-              "id": "narration_ctx_frontier_gate_missing_patrol_rumor",
-              "from": null,
-              "to": "explicit"
-            }
-          ],
-          "known_counts": {
-            "implicit": 0,
-            "explicit": 1,
-            "actionable": 1
-          }
-        },
-        "affordances_after": [
-          {
-            "id": "question_emergent_lord_aldric",
-            "type": "question",
-            "label": "Talk to Lord Aldric",
-            "targetEntityId": "emergent_lord_aldric"
-          },
-          {
-            "id": "question_emergent_town_crier",
-            "type": "question",
-            "label": "Talk to Town Crier",
-            "targetEntityId": "emergent_town_crier"
-          },
-          {
-            "id": "examine_the_rain_spatters_soot_dark_stone_frayed",
-            "type": "investigate",
-            "label": "Examine the Rain spatters soot-dark stone; frayed"
-          },
-          {
-            "id": "examine_refugees",
-            "type": "investigate",
-            "label": "Examine Refugees"
-          },
-          {
-            "id": "examine_a_notice_board_lists_new_taxes",
-            "type": "investigate",
-            "label": "Examine A notice board lists new taxes"
-          }
-        ],
-        "emergent_actor": {
-          "emergent_actor_enrolled": false,
-          "emergent_actor_id": null,
-          "emergent_actor_source_text": null
-        }
-      },
-      "gpt_called": true,
-      "response_ok": true,
-      "error": null,
-      "canonical_entry": {
-        "should_route_social": true,
-        "target_actor_id": "tavern_runner",
-        "target_source": "declared_action",
-        "reason": "declared_action_actor_switch",
-        "spoken_text": "Runner, I'm here to save the city. What can you tell me about the missing patrol?",
-        "declared_switch_detected": true,
-        "declared_switch_target_actor_id": "tavern_runner",
-        "continuity_overridden_by_declared_switch": false,
-        "spoken_vocative_detected": true,
-        "spoken_vocative_target_actor_id": "tavern_runner",
-        "continuity_overridden_by_spoken_vocative": false
-      },
-      "canonical_entry_path": "social",
-      "canonical_entry_reason": "declared_action_actor_switch",
-      "canonical_entry_target_actor_id": "tavern_runner"
-    },
-    {
-      "timestamp": "2026-04-04T21:03:53.329444Z",
-      "source": "chat",
-      "action_type": "chat",
-      "raw_input": "\"Courage, runner. I need something, anything. You can trust me.\"",
-      "turn_stage_order": [
-        "player_input",
-        "intent_normalization_expansion",
-        "action_classification",
-        "engine_resolution",
-        "authoritative_state_mutation",
-        "prompt_context_construction",
-        "gpt_narration",
-        "affordance_derivation",
-        "response_debug_packaging"
-      ],
-      "incoming_payload": {
-        "text": "\"Courage, runner. I need something, anything. You can trust me.\""
-      },
-      "parsed_intent": {
-        "id": "social_probe_tavern_runner",
-        "label": "\"Courage, runner. I need something, anything. You can trust me.\"",
-        "type": "social_probe",
-        "social_intent_class": "social_exchange",
-        "prompt": "\"Courage, runner. I need something, anything. You can trust me.\"",
-        "metadata": {
-          "routed_via_dialogue_lock": true,
-          "route": "dialogue",
-          "canonical_entry_path": "social",
-          "canonical_entry_reason": "active_interlocutor_followup",
-          "canonical_entry_target_actor_id": "tavern_runner",
-          "intent_route_debug": {
-            "routed_to": "social_exchange",
-            "route_reason": "active_interlocutor_followup",
-            "addressed_actor_id": "tavern_runner",
-            "addressed_actor_source": "active_interlocutor"
-          },
-          "active_interaction_target_id": "tavern_runner",
-          "segmented_turn": {
-            "spoken_text": "Courage, runner. I need something, anything. You can trust me."
-          },
-          "turn_segmentation": {
-            "spoken_text": "Courage, runner. I need something, anything. You can trust me."
-          }
-        },
-        "target_id": "tavern_runner",
-        "targetEntityId": "tavern_runner"
-      },
-      "segmented_turn": {
-        "spoken_text": "Courage, runner. I need something, anything. You can trust me."
-      },
-      "normalized_action": {
-        "id": "social_probe_tavern_runner",
-        "label": "\"Courage, runner. I need something, anything. You can trust me.\"",
-        "type": "social_probe",
-        "prompt": "\"Courage, runner. I need something, anything. You can trust me.\""
-      },
-      "resolution": {
-        "kind": "social_probe",
-        "action_id": "social_probe_tavern_runner",
-        "label": "\"Courage, runner. I need something, anything. You can trust me.\"",
-        "prompt": "\"Courage, runner. I need something, anything. You can trust me.\"",
-        "success": true,
-        "resolved_transition": false,
-        "target_scene_id": null,
-        "clue_id": "narration_ctx_frontier_gate_old_crossroads_that_way",
-        "discovered_clues": [
-          "\"Old crossroads\u2014that way.\""
-        ],
-        "state_changes": {},
-        "hint": "Player spoke with Tavern Runner. Narration introduced investigatively relevant detail; treat as partial answer or redirect consistent with the spoken reply.",
-        "social": {
-          "social_intent_class": "social_exchange",
-          "npc_id": "tavern_runner",
-          "npc_name": "Tavern Runner",
-          "target_resolved": true,
-          "topic_revealed": {
-            "id": "narration_repair_frontier_gate_operational_token",
-            "text": "\"Old crossroads\u2014that way.\"",
-            "clue_text": "\"Old crossroads\u2014that way.\"",
-            "clue_id": "narration_ctx_frontier_gate_old_crossroads_that_way"
-          },
-          "skill_check": null,
-          "npc_reply_expected": false,
-          "reply_kind": "reaction",
-          "target_source": "explicit_target",
-          "target_reason": "normalized target_id matches scene-addressable roster",
-          "target_candidate_id": "tavern_runner",
-          "target_candidate_valid": true,
-          "stale_interlocutor_cleared": false,
-          "addressability_checked_against": [
-            "active_entities",
-            "entity_presence_active_or_nearby",
-            "scene_addressables",
-            "world_roster_in_scene",
-            "interaction_continuity"
-          ],
-          "declared_switch_detected": false,
-          "declared_switch_target_actor_id": null,
-          "continuity_overridden_by_declared_switch": false,
-          "spoken_vocative_detected": false,
-          "spoken_vocative_target_actor_id": null,
-          "continuity_overridden_by_spoken_vocative": false,
-          "actor_addressable": true,
-          "authority_source_used": "explicit_target",
-          "proposed_reply_speaker_id": "tavern_runner",
-          "grounding_fallback_applied": false,
-          "grounding_reason_code": "authoritative_speaker_topic_pressure_reinforced",
-          "grounded_speaker_id": "tavern_runner",
-          "strategy_forced_to_answer": true,
-          "suppressed_fallback_strategies": [
-            "scene_stall"
-          ],
-          "social_answer_retry_candidate_kind": "structured_fact",
-          "social_answer_retry_anchor_text": "I can't tell you much about the missing patrol, not without putting myself at risk.",
-          "social_answer_retry_candidate_source": "topic_pressure:last_answer"
-        },
-        "requires_check": false,
-        "metadata": {
-          "routed_via_dialogue_lock": true,
-          "route": "dialogue",
-          "canonical_entry_path": "social",
-          "canonical_entry_reason": "active_interlocutor_followup",
-          "canonical_entry_target_actor_id": "tavern_runner",
-          "intent_route_debug": {
-            "routed_to": "social_exchange",
-            "route_reason": "active_interlocutor_followup",
-            "addressed_actor_id": "tavern_runner",
-            "addressed_actor_source": "active_interlocutor"
-          },
-          "active_interaction_target_id": "tavern_runner",
-          "segmented_turn": {
-            "spoken_text": "Courage, runner. I need something, anything. You can trust me."
-          },
-          "turn_segmentation": {
-            "spoken_text": "Courage, runner. I need something, anything. You can trust me."
-          },
-          "lead_landing": {
-            "revealed_lead_ids": [
-              "narration_ctx_frontier_gate_old_crossroads_that_way"
-            ],
-            "already_known_lead_ids": [],
-            "actionable_lead_ids": [],
-            "lead_write_targets": [
-              "clue_knowledge",
-              "scene_runtime.discovered_clue_ids",
-              "event_log"
-            ],
-            "extracted_lead_ids": [],
-            "extracted_lead_sources": [],
-            "extracted_from_text": false,
-            "extracted_from_reconciled_text": false,
-            "authoritative_created_ids": [],
-            "authoritative_updated_ids": [],
-            "authoritative_unchanged_ids": [],
-            "authoritative_promoted_ids": [],
-            "narration_mismatch_repair": true
-          },
-          "narration_state_consistency": {
-            "narration_state_mismatch_detected": true,
-            "mismatch_kind": "empty_social_payload_vs_narration:operational_token",
-            "mismatch_repair_applied": "contextual_lead_clues",
-            "mismatch_repairs_applied": [
-              "structured_from_contextual_clues",
-              "success_set_true",
-              "engine_hint_no_new_info_replaced",
-              "canonical_social_lead_landing"
-            ],
-            "repaired_discovered_clue_texts": [
-              "\"Old crossroads\u2014that way.\""
-            ],
-            "emergent_actor_hint_detected": false
-          },
-          "minimum_actionable_lead": {
-            "minimum_actionable_lead_enforced": false,
-            "enforced_lead_id": null,
-            "enforced_lead_source": null
-          },
-          "minimum_actionable_lead_enforced": false,
-          "enforced_lead_id": null,
-          "enforced_lead_source": null
-        },
-        "world_tick_events": []
-      },
-      "scene_before": "frontier_gate",
-      "scene_after": "frontier_gate",
-      "clue_updates": [
-        "\"Old crossroads\u2014that way.\""
-      ],
-      "world_flag_updates": [
-        "clock:time_pressure=3"
-      ],
-      "turn_trace": {
-        "source": "chat",
-        "player_input": "\"Courage, runner. I need something, anything. You can trust me.\"",
-        "intent": {
-          "parsed": {
-            "id": "social_probe_tavern_runner",
-            "label": "\"Courage, runner. I need something, anything. You can trust me.\"",
-            "type": "social_probe",
-            "social_intent_class": "social_exchange",
-            "prompt": "\"Courage, runner. I need something, anything. You can trust me.\"",
-            "metadata": {
-              "routed_via_dialogue_lock": true,
-              "route": "dialogue",
-              "canonical_entry_path": "social",
-              "canonical_entry_reason": "active_interlocutor_followup",
-              "canonical_entry_target_actor_id": "tavern_runner",
-              "intent_route_debug": {
-                "routed_to": "social_exchange",
-                "route_reason": "active_interlocutor_followup",
-                "addressed_actor_id": "tavern_runner",
-                "addressed_actor_source": "active_interlocutor"
-              },
-              "active_interaction_target_id": "tavern_runner",
-              "segmented_turn": {
-                "spoken_text": "Courage, runner. I need something, anything. You can trust me."
-              },
-              "turn_segmentation": {
-                "spoken_text": "Courage, runner. I need something, anything. You can trust me."
-              }
-            },
-            "target_id": "tavern_runner",
-            "targetEntityId": "tavern_runner"
-          },
-          "segmented_turn": {
-            "spoken_text": "Courage, runner. I need something, anything. You can trust me."
-          },
-          "normalized": {
-            "id": "social_probe_tavern_runner",
-            "label": "\"Courage, runner. I need something, anything. You can trust me.\"",
-            "type": "social_probe",
-            "prompt": "\"Courage, runner. I need something, anything. You can trust me.\"",
-            "targetSceneId": null,
-            "target_scene_id": null,
-            "targetEntityId": "tavern_runner",
-            "target_id": "tavern_runner"
-          },
-          "implied_context": {
-            "applied": false,
-            "cases": [],
-            "target_id": "tavern_runner",
-            "commitment_broken": false,
-            "break_reason": null
-          }
-        },
-        "classification": {
-          "action_type": "chat",
-          "resolved_kind": "social_probe",
-          "requires_check": false
-        },
-        "resolution_path": "social_engine",
-        "authoritative_state_changes": {
-          "scene_transition": null,
-          "resolution_state_changes": {},
-          "resolution_world_updates": [],
-          "check_request": null
-        },
-        "interaction_after": {
-          "active_interaction_target_id": "tavern_runner",
-          "active_interaction_kind": "social",
-          "interaction_mode": "social",
-          "engagement_level": "engaged",
-          "conversation_privacy": null,
-          "player_position_context": null
-        },
-        "narration_obligations": {
-          "is_opening_scene": false,
-          "must_advance_scene": false,
-          "should_answer_active_npc": true,
-          "avoid_input_echo": true,
-          "avoid_player_action_restatement": true,
-          "prefer_structured_turn_summary": true,
-          "active_npc_reply_expected": true,
-          "active_npc_reply_kind": "reaction",
-          "scene_momentum_due": false,
-          "scene_momentum_exchanges_since": 0,
-          "scene_momentum_next_due_in": 2,
-          "suppress_non_social_emitters": true
-        },
-        "clues": {
-          "discovered_texts": [
-            "\"Old crossroads\u2014that way.\""
-          ],
-          "presentation_changes": [
-            {
-              "id": "narration_ctx_frontier_gate_old_crossroads_that_way",
-              "from": null,
-              "to": "explicit"
-            }
-          ],
-          "known_counts": {
-            "implicit": 0,
-            "explicit": 2,
-            "actionable": 1
-          }
-        },
-        "affordances_after": [
-          {
-            "id": "question_emergent_lord_aldric",
-            "type": "question",
-            "label": "Talk to Lord Aldric",
-            "targetEntityId": "emergent_lord_aldric"
-          },
-          {
-            "id": "question_emergent_town_crier",
-            "type": "question",
-            "label": "Talk to Town Crier",
-            "targetEntityId": "emergent_town_crier"
-          },
-          {
-            "id": "examine_the_rain_spatters_soot_dark_stone_frayed",
-            "type": "investigate",
-            "label": "Examine the Rain spatters soot-dark stone; frayed"
-          },
-          {
-            "id": "examine_refugees",
-            "type": "investigate",
-            "label": "Examine Refugees"
-          },
-          {
-            "id": "examine_a_notice_board_lists_new_taxes",
-            "type": "investigate",
-            "label": "Examine A notice board lists new taxes"
-          }
-        ],
-        "emergent_actor": {
-          "emergent_actor_enrolled": false,
-          "emergent_actor_id": null,
-          "emergent_actor_source_text": null
-        }
-      },
-      "gpt_called": true,
-      "response_ok": true,
-      "error": null,
-      "canonical_entry": {
-        "should_route_social": true,
-        "target_actor_id": "tavern_runner",
-        "target_source": "active_interlocutor",
-        "reason": "active_interlocutor_followup",
-        "spoken_text": "Courage, runner. I need something, anything. You can trust me.",
-        "declared_switch_detected": false,
-        "declared_switch_target_actor_id": null,
-        "continuity_overridden_by_declared_switch": false,
-        "spoken_vocative_detected": false,
-        "spoken_vocative_target_actor_id": null,
-        "continuity_overridden_by_spoken_vocative": false
-      },
-      "canonical_entry_path": "social",
-      "canonical_entry_reason": "active_interlocutor_followup",
-      "canonical_entry_target_actor_id": "tavern_runner"
-    },
-    {
-      "timestamp": "2026-04-04T21:04:57.116625Z",
-      "source": "chat",
-      "action_type": "chat",
-      "raw_input": "Galinor nods and approaches a nearby guard. \"I've heard some of your comrades went missing near the old crossroads. Is that true?\"",
-      "turn_stage_order": [
-        "player_input",
-        "intent_normalization_expansion",
-        "action_classification",
-        "engine_resolution",
-        "authoritative_state_mutation",
-        "prompt_context_construction",
-        "gpt_narration",
-        "affordance_derivation",
-        "response_debug_packaging"
-      ],
-      "incoming_payload": {
-        "text": "Galinor nods and approaches a nearby guard. \"I've heard some of your comrades went missing near the old crossroads. Is that true?\""
-      },
-      "parsed_intent": {
-        "id": "question_guard_captain",
-        "label": "Galinor nods and approaches a nearby guard. \"I've heard some of your comrades went missing near the old crossroads. Is that true?\"",
-        "type": "question",
-        "social_intent_class": "social_exchange",
-        "prompt": "Galinor nods and approaches a nearby guard. \"I've heard some of your comrades went missing near the old crossroads. Is that true?\"",
-        "metadata": {
-          "routed_via_dialogue_lock": true,
-          "route": "dialogue",
-          "canonical_entry_path": "social",
-          "canonical_entry_reason": "declared_action_actor_switch",
-          "canonical_entry_target_actor_id": "guard_captain",
-          "intent_route_debug": {
-            "routed_to": "social_exchange",
-            "route_reason": "declared_action_actor_switch",
-            "addressed_actor_id": "guard_captain",
-            "addressed_actor_source": "declared_action"
-          },
-          "active_interaction_target_id": "guard_captain",
-          "segmented_turn": {
-            "spoken_text": "I've heard some of your comrades went missing near the old crossroads. Is that true?",
-            "declared_action_text": "Galinor nods and approaches a nearby guard."
-          },
-          "turn_segmentation": {
-            "spoken_text": "I've heard some of your comrades went missing near the old crossroads. Is that true?",
-            "declared_action_text": "Galinor nods and approaches a nearby guard."
-          }
-        },
-        "target_id": "guard_captain",
-        "targetEntityId": "guard_captain"
-      },
-      "segmented_turn": {
-        "spoken_text": "I've heard some of your comrades went missing near the old crossroads. Is that true?",
-        "declared_action_text": "Galinor nods and approaches a nearby guard."
-      },
-      "normalized_action": {
-        "id": "question_guard_captain",
-        "label": "Galinor nods and approaches a nearby guard. \"I've heard some of your comrades went missing near the old crossroads. Is that true?\"",
-        "type": "question",
-        "prompt": "Galinor nods and approaches a nearby guard. \"I've heard some of your comrades went missing near the old crossroads. Is that true?\""
-      },
-      "resolution": {
-        "kind": "question",
-        "action_id": "question_guard_captain",
-        "label": "Galinor nods and approaches a nearby guard. \"I've heard some of your comrades went missing near the old crossroads. Is that true?\"",
-        "prompt": "Galinor nods and approaches a nearby guard. \"I've heard some of your comrades went missing near the old crossroads. Is that true?\"",
-        "success": null,
-        "resolved_transition": false,
-        "target_scene_id": null,
-        "clue_id": null,
-        "discovered_clues": [],
-        "state_changes": {},
-        "hint": "Player spoke with Guard Captain. No new information was revealed. Narrate a substantive in-turn response (answer, refusal, evasion, or inability), not dead-air stalling.",
-        "social": {
-          "social_intent_class": "social_exchange",
-          "npc_id": "guard_captain",
-          "npc_name": "Guard Captain",
-          "target_resolved": true,
-          "topic_revealed": null,
-          "skill_check": null,
-          "npc_reply_expected": true,
-          "reply_kind": "refusal",
-          "target_source": "explicit_target",
-          "target_reason": "normalized target_id matches scene-addressable roster",
-          "target_candidate_id": "guard_captain",
-          "target_candidate_valid": true,
-          "stale_interlocutor_cleared": false,
-          "addressability_checked_against": [
-            "active_entities",
-            "entity_presence_active_or_nearby",
-            "scene_addressables",
-            "world_roster_in_scene",
-            "interaction_continuity"
-          ],
-          "declared_switch_detected": true,
-          "declared_switch_target_actor_id": "guard_captain",
-          "continuity_overridden_by_declared_switch": true,
-          "spoken_vocative_detected": false,
-          "spoken_vocative_target_actor_id": null,
-          "continuity_overridden_by_spoken_vocative": false,
-          "actor_addressable": true,
-          "authority_source_used": "explicit_target",
-          "proposed_reply_speaker_id": "guard_captain",
-          "grounding_fallback_applied": false,
-          "grounding_reason_code": "authoritative_speaker_eligible_topic_salience_ignored",
-          "grounded_speaker_id": "guard_captain",
-          "social_escalation": {
-            "escalation_level": 1,
-            "escalation_reason": "first_attempt_same_topic",
-            "escalation_effect": "vague_or_guarded_answer_allowed",
-            "force_partial_answer": false,
-            "force_actionable_lead": false,
-            "add_suspicion": false,
-            "trigger_scene_momentum": false,
-            "convert_refusal_to_conditioned_offer": false,
-            "topic_exhausted": true,
-            "effective_reply_kind": null,
-            "social_question_dimension": "general",
-            "topic_exhausted_for_dimension": true,
-            "valid_followup_detected": false,
-            "prior_same_dimension_answer_exists": true
-          },
-          "social_question_dimension": "general",
-          "topic_exhausted_for_dimension": true,
-          "valid_followup_detected": false,
-          "prior_same_dimension_answer_exists": true,
-          "strategy_forced_to_answer": false,
-          "suppressed_fallback_strategies": [],
-          "social_answer_retry_candidate_kind": "structured_fact",
-          "social_answer_retry_anchor_text": "Old crossroads\u2014that way.",
-          "social_answer_retry_candidate_source": "topic_pressure:last_answer"
-        },
-        "requires_check": false,
-        "metadata": {
-          "routed_via_dialogue_lock": true,
-          "route": "dialogue",
-          "canonical_entry_path": "social",
-          "canonical_entry_reason": "declared_action_actor_switch",
-          "canonical_entry_target_actor_id": "guard_captain",
-          "intent_route_debug": {
-            "routed_to": "social_exchange",
-            "route_reason": "declared_action_actor_switch",
-            "addressed_actor_id": "guard_captain",
-            "addressed_actor_source": "declared_action"
-          },
-          "active_interaction_target_id": "guard_captain",
-          "segmented_turn": {
-            "spoken_text": "I've heard some of your comrades went missing near the old crossroads. Is that true?",
-            "declared_action_text": "Galinor nods and approaches a nearby guard."
-          },
-          "turn_segmentation": {
-            "spoken_text": "I've heard some of your comrades went missing near the old crossroads. Is that true?",
-            "declared_action_text": "Galinor nods and approaches a nearby guard."
-          },
-          "lead_landing": {
-            "revealed_lead_ids": [],
-            "already_known_lead_ids": [],
-            "actionable_lead_ids": [],
-            "lead_write_targets": [],
-            "extracted_lead_ids": [],
-            "extracted_lead_sources": [],
-            "extracted_from_text": false,
-            "extracted_from_reconciled_text": false,
-            "authoritative_created_ids": [],
-            "authoritative_updated_ids": [],
-            "authoritative_unchanged_ids": [],
-            "authoritative_promoted_ids": []
-          }
-        },
-        "world_tick_events": []
-      },
-      "scene_before": "frontier_gate",
-      "scene_after": "frontier_gate",
-      "clue_updates": [],
-      "world_flag_updates": [
-        "clock:time_pressure=4"
-      ],
-      "turn_trace": {
-        "source": "chat",
-        "player_input": "Galinor nods and approaches a nearby guard. \"I've heard some of your comrades went missing near the old crossroads. Is that true?\"",
-        "intent": {
-          "parsed": {
-            "id": "question_guard_captain",
-            "label": "Galinor nods and approaches a nearby guard. \"I've heard some of your comrades went missing near the old crossroads. Is that true?\"",
-            "type": "question",
-            "social_intent_class": "social_exchange",
-            "prompt": "Galinor nods and approaches a nearby guard. \"I've heard some of your comrades went missing near the old crossroads. Is that true?\"",
-            "metadata": {
-              "routed_via_dialogue_lock": true,
-              "route": "dialogue",
-              "canonical_entry_path": "social",
-              "canonical_entry_reason": "declared_action_actor_switch",
-              "canonical_entry_target_actor_id": "guard_captain",
-              "intent_route_debug": {
-                "routed_to": "social_exchange",
-                "route_reason": "declared_action_actor_switch",
-                "addressed_actor_id": "guard_captain",
-                "addressed_actor_source": "declared_action"
-              },
-              "active_interaction_target_id": "guard_captain",
-              "segmented_turn": {
-                "spoken_text": "I've heard some of your comrades went missing near the old crossroads. Is that true?",
-                "declared_action_text": "Galinor nods and approaches a nearby guard."
-              },
-              "turn_segmentation": {
-                "spoken_text": "I've heard some of your comrades went missing near the old crossroads. Is that true?",
-                "declared_action_text": "Galinor nods and approaches a nearby guard."
-              }
-            },
-            "target_id": "guard_captain",
-            "targetEntityId": "guard_captain"
-          },
-          "segmented_turn": {
-            "spoken_text": "I've heard some of your comrades went missing near the old crossroads. Is that true?",
-            "declared_action_text": "Galinor nods and approaches a nearby guard."
-          },
-          "normalized": {
-            "id": "question_guard_captain",
-            "label": "Galinor nods and approaches a nearby guard. \"I've heard some of your comrades went missing near the old crossroads. Is that true?\"",
-            "type": "question",
-            "prompt": "Galinor nods and approaches a nearby guard. \"I've heard some of your comrades went missing near the old crossroads. Is that true?\"",
-            "targetSceneId": null,
-            "target_scene_id": null,
-            "targetEntityId": "guard_captain",
-            "target_id": "guard_captain"
-          },
-          "implied_context": {
-            "applied": false,
-            "cases": [],
-            "target_id": "tavern_runner",
-            "commitment_broken": false,
-            "break_reason": null
-          }
-        },
-        "classification": {
-          "action_type": "chat",
-          "resolved_kind": "question",
-          "requires_check": false
-        },
-        "resolution_path": "social_engine",
-        "authoritative_state_changes": {
-          "scene_transition": null,
-          "resolution_state_changes": {},
-          "resolution_world_updates": [],
-          "check_request": null
-        },
-        "interaction_after": {
-          "active_interaction_target_id": "guard_captain",
-          "active_interaction_kind": "social",
-          "interaction_mode": "social",
-          "engagement_level": "engaged",
-          "conversation_privacy": null,
-          "player_position_context": null
-        },
-        "narration_obligations": {
-          "is_opening_scene": false,
-          "must_advance_scene": false,
-          "should_answer_active_npc": true,
-          "avoid_input_echo": true,
-          "avoid_player_action_restatement": true,
-          "prefer_structured_turn_summary": true,
-          "active_npc_reply_expected": true,
-          "active_npc_reply_kind": "refusal",
-          "scene_momentum_due": false,
-          "scene_momentum_exchanges_since": 0,
-          "scene_momentum_next_due_in": 2,
-          "suppress_non_social_emitters": true
-        },
-        "clues": {
-          "discovered_texts": [],
-          "presentation_changes": [],
-          "known_counts": {
-            "implicit": 0,
-            "explicit": 2,
-            "actionable": 1
-          }
-        },
-        "affordances_after": [
-          {
-            "id": "question_emergent_lord_aldric",
-            "type": "question",
-            "label": "Talk to Lord Aldric",
-            "targetEntityId": "emergent_lord_aldric"
-          },
-          {
-            "id": "question_emergent_town_crier",
-            "type": "question",
-            "label": "Talk to Town Crier",
-            "targetEntityId": "emergent_town_crier"
-          },
-          {
-            "id": "examine_the_rain_spatters_soot_dark_stone_frayed",
-            "type": "investigate",
-            "label": "Examine the Rain spatters soot-dark stone; frayed"
-          },
-          {
-            "id": "examine_refugees",
-            "type": "investigate",
-            "label": "Examine Refugees"
-          },
-          {
-            "id": "examine_a_notice_board_lists_new_taxes",
-            "type": "investigate",
-            "label": "Examine A notice board lists new taxes"
-          }
-        ],
-        "emergent_actor": {
-          "emergent_actor_enrolled": false,
-          "emergent_actor_id": null,
-          "emergent_actor_source_text": null
-        }
-      },
-      "gpt_called": true,
-      "response_ok": true,
-      "error": null,
-      "canonical_entry": {
-        "should_route_social": true,
-        "target_actor_id": "guard_captain",
-        "target_source": "declared_action",
-        "reason": "declared_action_actor_switch",
-        "spoken_text": "I've heard some of your comrades went missing near the old crossroads. Is that true?",
-        "declared_switch_detected": true,
-        "declared_switch_target_actor_id": "guard_captain",
-        "continuity_overridden_by_declared_switch": true,
-        "spoken_vocative_detected": false,
-        "spoken_vocative_target_actor_id": null,
-        "continuity_overridden_by_spoken_vocative": false
-      },
-      "canonical_entry_path": "social",
-      "canonical_entry_reason": "declared_action_actor_switch",
-      "canonical_entry_target_actor_id": "guard_captain"
-    },
-    {
-      "timestamp": "2026-04-04T21:05:47.754025Z",
-      "source": "chat",
-      "action_type": "chat",
-      "raw_input": "Galinor walks back to the Runner. \"Can you believe these Watchmen? They're too chicken to have each others backs!\"",
-      "turn_stage_order": [
-        "player_input",
-        "intent_normalization_expansion",
-        "action_classification",
-        "engine_resolution",
-        "authoritative_state_mutation",
-        "prompt_context_construction",
-        "gpt_narration",
-        "affordance_derivation",
-        "response_debug_packaging"
-      ],
-      "incoming_payload": {
-        "text": "Galinor walks back to the Runner. \"Can you believe these Watchmen? They're too chicken to have each others backs!\""
-      },
-      "parsed_intent": {
-        "id": "question_tavern_runner",
-        "label": "Galinor walks back to the Runner. \"Can you believe these Watchmen? They're too chicken to have each others backs!\"",
-        "type": "question",
-        "social_intent_class": "social_exchange",
-        "prompt": "Galinor walks back to the Runner. \"Can you believe these Watchmen? They're too chicken to have each others backs!\"",
-        "metadata": {
-          "routed_via_dialogue_lock": true,
-          "route": "dialogue",
-          "canonical_entry_path": "social",
-          "canonical_entry_reason": "generic_role_address",
-          "canonical_entry_target_actor_id": "tavern_runner",
-          "intent_route_debug": {
-            "routed_to": "social_exchange",
-            "route_reason": "generic_role_address",
-            "addressed_actor_id": "tavern_runner",
-            "addressed_actor_source": "generic_role"
-          },
-          "active_interaction_target_id": "tavern_runner",
-          "segmented_turn": {
-            "spoken_text": "Can you believe these Watchmen? They're too chicken to have each others backs!",
-            "declared_action_text": "Galinor walks back to the Runner."
-          },
-          "turn_segmentation": {
-            "spoken_text": "Can you believe these Watchmen? They're too chicken to have each others backs!",
-            "declared_action_text": "Galinor walks back to the Runner."
-          }
-        },
-        "target_id": "tavern_runner",
-        "targetEntityId": "tavern_runner"
-      },
-      "segmented_turn": {
-        "spoken_text": "Can you believe these Watchmen? They're too chicken to have each others backs!",
-        "declared_action_text": "Galinor walks back to the Runner."
-      },
-      "normalized_action": {
-        "id": "question_tavern_runner",
-        "label": "Galinor walks back to the Runner. \"Can you believe these Watchmen? They're too chicken to have each others backs!\"",
-        "type": "question",
-        "prompt": "Galinor walks back to the Runner. \"Can you believe these Watchmen? They're too chicken to have each others backs!\""
-      },
-      "resolution": {
-        "kind": "question",
-        "action_id": "question_tavern_runner",
-        "label": "Galinor walks back to the Runner. \"Can you believe these Watchmen? They're too chicken to have each others backs!\"",
-        "prompt": "Galinor walks back to the Runner. \"Can you believe these Watchmen? They're too chicken to have each others backs!\"",
-        "success": true,
-        "resolved_transition": false,
-        "target_scene_id": null,
-        "clue_id": "narration_ctx_frontier_gate_lord_aldric",
-        "discovered_clues": [
-          "Lord Aldric"
-        ],
-        "state_changes": {},
-        "hint": "Player spoke with Tavern Runner. Narration introduced investigatively relevant detail; treat as partial answer or redirect consistent with the spoken reply.",
-        "social": {
-          "social_intent_class": "social_exchange",
-          "npc_id": "tavern_runner",
-          "npc_name": "Tavern Runner",
-          "target_resolved": true,
-          "topic_revealed": {
-            "id": "narration_repair_frontier_gate_contextual_lead",
-            "text": "Lord Aldric",
-            "clue_text": "Lord Aldric",
-            "clue_id": "narration_ctx_frontier_gate_lord_aldric"
-          },
-          "skill_check": null,
-          "npc_reply_expected": true,
-          "reply_kind": "answer",
-          "target_source": "explicit_target",
-          "target_reason": "normalized target_id matches scene-addressable roster",
-          "target_candidate_id": "tavern_runner",
-          "target_candidate_valid": true,
-          "stale_interlocutor_cleared": false,
-          "addressability_checked_against": [
-            "active_entities",
-            "entity_presence_active_or_nearby",
-            "scene_addressables",
-            "world_roster_in_scene",
-            "interaction_continuity"
-          ],
-          "declared_switch_detected": false,
-          "declared_switch_target_actor_id": null,
-          "continuity_overridden_by_declared_switch": false,
-          "spoken_vocative_detected": false,
-          "spoken_vocative_target_actor_id": null,
-          "continuity_overridden_by_spoken_vocative": false,
-          "actor_addressable": true,
-          "authority_source_used": "explicit_target",
-          "proposed_reply_speaker_id": "tavern_runner",
-          "grounding_fallback_applied": false,
-          "grounding_reason_code": "authoritative_speaker_eligible_topic_salience_ignored",
-          "grounded_speaker_id": "tavern_runner",
-          "social_escalation": {
-            "escalation_level": 2,
-            "escalation_reason": "second_attempt_same_topic",
-            "escalation_effect": "redirect_only_no_new_npc_facts",
-            "force_partial_answer": false,
-            "force_actionable_lead": true,
-            "add_suspicion": false,
-            "trigger_scene_momentum": false,
-            "convert_refusal_to_conditioned_offer": false,
-            "topic_exhausted": true,
-            "effective_reply_kind": "answer",
-            "social_question_dimension": "general",
-            "topic_exhausted_for_dimension": false,
-            "valid_followup_detected": false,
-            "prior_same_dimension_answer_exists": false
-          },
-          "social_question_dimension": "general",
-          "topic_exhausted_for_dimension": false,
-          "valid_followup_detected": false,
-          "prior_same_dimension_answer_exists": false,
-          "strategy_forced_to_answer": false,
-          "suppressed_fallback_strategies": []
-        },
-        "requires_check": false,
-        "metadata": {
-          "routed_via_dialogue_lock": true,
-          "route": "dialogue",
-          "canonical_entry_path": "social",
-          "canonical_entry_reason": "generic_role_address",
-          "canonical_entry_target_actor_id": "tavern_runner",
-          "intent_route_debug": {
-            "routed_to": "social_exchange",
-            "route_reason": "generic_role_address",
-            "addressed_actor_id": "tavern_runner",
-            "addressed_actor_source": "generic_role"
-          },
-          "active_interaction_target_id": "tavern_runner",
-          "segmented_turn": {
-            "spoken_text": "Can you believe these Watchmen? They're too chicken to have each others backs!",
-            "declared_action_text": "Galinor walks back to the Runner."
-          },
-          "turn_segmentation": {
-            "spoken_text": "Can you believe these Watchmen? They're too chicken to have each others backs!",
-            "declared_action_text": "Galinor walks back to the Runner."
-          },
-          "lead_landing": {
-            "revealed_lead_ids": [
-              "narration_ctx_frontier_gate_lord_aldric"
-            ],
-            "already_known_lead_ids": [],
-            "actionable_lead_ids": [],
-            "lead_write_targets": [
-              "clue_knowledge",
-              "scene_runtime.discovered_clue_ids",
-              "event_log"
-            ],
-            "extracted_lead_ids": [],
-            "extracted_lead_sources": [],
-            "extracted_from_text": false,
-            "extracted_from_reconciled_text": false,
-            "authoritative_created_ids": [],
-            "authoritative_updated_ids": [],
-            "authoritative_unchanged_ids": [],
-            "authoritative_promoted_ids": [],
-            "narration_mismatch_repair": true
-          },
-          "narration_state_consistency": {
-            "narration_state_mismatch_detected": true,
-            "mismatch_kind": "empty_social_payload_vs_narration:contextual_lead",
-            "mismatch_repair_applied": "contextual_lead_clues",
-            "mismatch_repairs_applied": [
-              "structured_from_contextual_clues",
-              "success_set_true",
-              "engine_hint_no_new_info_replaced",
-              "canonical_social_lead_landing"
-            ],
-            "repaired_discovered_clue_texts": [
-              "Lord Aldric"
-            ],
-            "emergent_actor_hint_detected": true
-          },
-          "minimum_actionable_lead": {
-            "minimum_actionable_lead_enforced": false,
-            "enforced_lead_id": null,
-            "enforced_lead_source": null
-          },
-          "minimum_actionable_lead_enforced": false,
-          "enforced_lead_id": null,
-          "enforced_lead_source": null
-        },
-        "world_tick_events": [
-          {
-            "type": "faction_operation_complete",
-            "text": "House Verevin completes an off-screen operation.",
-            "source": "house_verevin"
-          },
-          {
-            "type": "faction_operation_complete",
-            "text": "The Ash Cowl completes an off-screen operation.",
-            "source": "ash_cowl"
-          },
-          {
-            "type": "faction_operation_complete",
-            "text": "Ordo Pyric completes an off-screen operation.",
-            "source": "ordo_pyric"
-          }
-        ]
-      },
-      "scene_before": "frontier_gate",
-      "scene_after": "frontier_gate",
-      "clue_updates": [
-        "Lord Aldric"
-      ],
-      "world_flag_updates": [
-        "clock:time_pressure=5"
-      ],
-      "turn_trace": {
-        "source": "chat",
-        "player_input": "Galinor walks back to the Runner. \"Can you believe these Watchmen? They're too chicken to have each others backs!\"",
-        "intent": {
-          "parsed": {
-            "id": "question_tavern_runner",
-            "label": "Galinor walks back to the Runner. \"Can you believe these Watchmen? They're too chicken to have each others backs!\"",
-            "type": "question",
-            "social_intent_class": "social_exchange",
-            "prompt": "Galinor walks back to the Runner. \"Can you believe these Watchmen? They're too chicken to have each others backs!\"",
-            "metadata": {
-              "routed_via_dialogue_lock": true,
-              "route": "dialogue",
-              "canonical_entry_path": "social",
-              "canonical_entry_reason": "generic_role_address",
-              "canonical_entry_target_actor_id": "tavern_runner",
-              "intent_route_debug": {
-                "routed_to": "social_exchange",
-                "route_reason": "generic_role_address",
-                "addressed_actor_id": "tavern_runner",
-                "addressed_actor_source": "generic_role"
-              },
-              "active_interaction_target_id": "tavern_runner",
-              "segmented_turn": {
-                "spoken_text": "Can you believe these Watchmen? They're too chicken to have each others backs!",
-                "declared_action_text": "Galinor walks back to the Runner."
-              },
-              "turn_segmentation": {
-                "spoken_text": "Can you believe these Watchmen? They're too chicken to have each others backs!",
-                "declared_action_text": "Galinor walks back to the Runner."
-              }
-            },
-            "target_id": "tavern_runner",
-            "targetEntityId": "tavern_runner"
-          },
-          "segmented_turn": {
-            "spoken_text": "Can you believe these Watchmen? They're too chicken to have each others backs!",
-            "declared_action_text": "Galinor walks back to the Runner."
-          },
-          "normalized": {
-            "id": "question_tavern_runner",
-            "label": "Galinor walks back to the Runner. \"Can you believe these Watchmen? They're too chicken to have each others backs!\"",
-            "type": "question",
-            "prompt": "Galinor walks back to the Runner. \"Can you believe these Watchmen? They're too chicken to have each others backs!\"",
-            "targetSceneId": null,
-            "target_scene_id": null,
-            "targetEntityId": "tavern_runner",
-            "target_id": "tavern_runner"
-          },
-          "implied_context": {
-            "applied": false,
-            "cases": [],
-            "target_id": "guard_captain",
-            "commitment_broken": false,
-            "break_reason": null
-          }
-        },
-        "classification": {
-          "action_type": "chat",
-          "resolved_kind": "question",
-          "requires_check": false
-        },
-        "resolution_path": "social_engine",
-        "authoritative_state_changes": {
-          "scene_transition": null,
-          "resolution_state_changes": {},
-          "resolution_world_updates": [],
-          "check_request": null
-        },
-        "interaction_after": {
-          "active_interaction_target_id": "tavern_runner",
-          "active_interaction_kind": "social",
-          "interaction_mode": "social",
-          "engagement_level": "engaged",
-          "conversation_privacy": null,
-          "player_position_context": null
-        },
-        "narration_obligations": {
-          "is_opening_scene": false,
-          "must_advance_scene": false,
-          "should_answer_active_npc": true,
-          "avoid_input_echo": true,
-          "avoid_player_action_restatement": true,
-          "prefer_structured_turn_summary": true,
-          "active_npc_reply_expected": true,
-          "active_npc_reply_kind": "answer",
-          "scene_momentum_due": false,
-          "scene_momentum_exchanges_since": 0,
-          "scene_momentum_next_due_in": 2,
-          "suppress_non_social_emitters": true
-        },
-        "clues": {
-          "discovered_texts": [
-            "Lord Aldric"
-          ],
-          "presentation_changes": [
-            {
-              "id": "narration_ctx_frontier_gate_lord_aldric",
-              "from": null,
-              "to": "explicit"
-            }
-          ],
-          "known_counts": {
-            "implicit": 0,
-            "explicit": 3,
-            "actionable": 1
-          }
-        },
-        "affordances_after": [
-          {
-            "id": "question_emergent_lord_aldric",
-            "type": "question",
-            "label": "Talk to Lord Aldric",
-            "targetEntityId": "emergent_lord_aldric"
-          },
-          {
-            "id": "question_emergent_town_crier",
-            "type": "question",
-            "label": "Talk to Town Crier",
-            "targetEntityId": "emergent_town_crier"
-          },
-          {
-            "id": "examine_the_rain_spatters_soot_dark_stone_frayed",
-            "type": "investigate",
-            "label": "Examine the Rain spatters soot-dark stone; frayed"
-          },
-          {
-            "id": "examine_refugees",
-            "type": "investigate",
-            "label": "Examine Refugees"
-          },
-          {
-            "id": "examine_a_notice_board_lists_new_taxes",
-            "type": "investigate",
-            "label": "Examine A notice board lists new taxes"
-          }
-        ],
-        "emergent_actor": {
-          "emergent_actor_enrolled": false,
-          "emergent_actor_id": null,
-          "emergent_actor_source_text": null
-        }
-      },
-      "gpt_called": true,
-      "response_ok": true,
-      "error": null,
-      "canonical_entry": {
-        "should_route_social": true,
-        "target_actor_id": "tavern_runner",
-        "target_source": "generic_role",
-        "reason": "generic_role_address",
-        "spoken_text": "Can you believe these Watchmen? They're too chicken to have each others backs!",
-        "declared_switch_detected": false,
-        "declared_switch_target_actor_id": null,
-        "continuity_overridden_by_declared_switch": false,
-        "spoken_vocative_detected": false,
-        "spoken_vocative_target_actor_id": null,
-        "continuity_overridden_by_spoken_vocative": false
-      },
-      "canonical_entry_path": "social",
-      "canonical_entry_reason": "generic_role_address",
-      "canonical_entry_target_actor_id": "tavern_runner"
     }
   ],
   "flags": {},
   "character_name": "Galinor",
-  "campaign_run_id": "f446f09588c1120126744a6e",
-  "session_id": "f446f09588c1120126744a6e",
-  "last_saved_at": "2026-04-04T21:06:00.563517Z",
+  "campaign_run_id": "5e066f0031e6e17cd98ff041",
+  "session_id": "5e066f0031e6e17cd98ff041",
+  "last_saved_at": "2026-04-04T22:13:50.600605Z",
   "emergent_actor_debug": {
     "emergent_actor_enrolled": false,
     "emergent_actor_id": null,
     "emergent_actor_source_text": null
-  },
-  "social_lead_event_ids": [
-    "narration_ctx_frontier_gate_missing_patrol_rumor",
-    "lead_frontier_gate_old_milestone",
-    "narration_ctx_frontier_gate_old_crossroads_that_way",
-    "narration_ctx_frontier_gate_lord_aldric"
-  ]
+  }
 }

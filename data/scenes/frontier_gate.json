@@ -3,7 +3,7 @@
     "id": "frontier_gate",
     "location": "Cinderwatch Gate District",
     "summary": "Rain spatters soot-dark stone as caravans and refugees choke the eastern gate. Guards watch the crowd with the brittle discipline of men who expect trouble, while old banners rot above the walls.",
-    "mode": "social",
+    "mode": "exploration",
     "visible_facts": [
       "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate.",
       "Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in.",
@@ -134,7 +134,29 @@
       "A figure in threadbare clothes stands still, observing the crowd intently.",
       "The tavern runner, now near the tavern entrance, shouts about warm stew and urgent rumors of a missing patrol.",
       "A well-dressed figure scans the crowd for newcomers, his interest unmistakable.",
-      "The Tavern Runner hints at something strange about the missing patrol, specifically involving the old milestone."
+      "The Tavern Runner hints at something strange about the missing patrol, specifically involving the old milestone.",
+      "Faint footprints lead northwest into a thicket of crates, suggesting hurried movements.",
+      "Faint footprints lead northwest into a thicket of crates, suggesting recent hurried movements.",
+      "The tavern runner calls out to nearby patrons, urging them to grab warm stew while the opportunity lasts.",
+      "Guards at the gate exchange whispers, suggesting rising tensions in the crowd.",
+      "A well-dressed figure near the entrance seems particularly interested in the newcomers.",
+      "Lirael, the town crier, stands nearby, her expression serious as she exchanges whispers with anxious patrons.",
+      "The crowd's murmurs grow louder, particularly surrounding the rumors about the missing patrol.",
+      "A loud shout from the tavern runner echoes as she calls for assistance.",
+      "Some patrons turn to look, their faces marked with concern and curiosity.",
+      "A faint trail leads from the crowd toward a dark thicket of crates, marked by disturbed earth.",
+      "The tavern runner's expression shifts to concern as she glances at the trail.",
+      "Faint footprints are visible in the muddy ground around the dead drop, suggesting recent activity.",
+      "Nearby crates appear disturbed, some contents spilling out into the mud, indicating a possible hurried escape.",
+      "The faint footprints lead deeper into the thicket of crates, suggesting someone may have recently escaped or hidden something.",
+      "Nearby patrons are whispering urgently, their concern hinting at the significance of the missing patrol.",
+      "The tavern runner, a woman with a worried expression, emphasizes that the missing patrol could be crucial to the town's safety.",
+      "Two alleyways are nearby\u2014one narrow and deserted, the other wider leading to a tavern.",
+      "A hooded figure stands nearby, casting furtive glances.",
+      "The muddy earth squishes underfoot, making each step careful.",
+      "The well-dressed figure\u2019s gaze flits between passerby, appearing particularly interested in newcomers.",
+      "The tavern runner gestures emphatically, urging locals to pay attention to the rumors.",
+      "The rain-soaked yard is filled with a mix of refugees and townsfolk. The atmosphere is thick with tension as whispers about a missing patrol weave through the crowd."
     ],
     "journal_seed_facts": [
       "You arrive at Cinderwatch's eastern gate in cold rain, under frayed banners.",
@@ -185,7 +207,11 @@
       "Lirael, the town crier, is known to issue curfew passes. She can typically be found at the tavern in the eastern square.",
       "A closer examination of the crates might reveal contents that were hastily discarded or hidden.",
       "Listening to the locals could offer insights into what happened near the dead drop.",
-      "Rumors suggest the patrol encountered something unnatural near the old milestone."
+      "Rumors suggest the patrol encountered something unnatural near the old milestone.",
+      "Paying attention to the tavern runner might reveal more about the strange activity linked to the trail.",
+      "Closer examination may reveal a torn piece of parchment wedged between the crates, possibly containing a note.",
+      "Among the disturbed crates, there may be a marked symbol resembling a sigil associated with The Ash Cowl.",
+      "A closer examination might reveal a torn piece of parchment wedged between the crates, possibly containing a note."
     ],
     "hidden_facts": [
       "An agent of a noble house is watching new arrivals from the square's edge.",
@@ -195,7 +221,8 @@
       "A nearby patron is whispering fervently about sightings near the old trading crossroads.",
       "The hooded figure seems to be waiting for a signal from someone among the crowd.",
       "The hooded figure is signaling someone among the crowd, aware of your presence.",
-      "A few nearby patrons glance nervously at the crates, indicating they might know more about the dead drop."
+      "A few nearby patrons glance nervously at the crates, indicating they might know more about the dead drop.",
+      "A rough customer in the press keeps sizing up travelers with unusual packs or sigils\u2014enough attention might expose black-market or arcane interest."
     ],
     "exits": [
       {
@@ -288,12 +315,12 @@
     "entity_presence": {
       "emergent_lord_aldric": "active",
       "emergent_town_crier": "active",
-      "refugee": "active",
-      "guard_captain": "active",
       "tavern_runner": "active",
-      "threadbare_watcher": "active"
+      "threadbare_watcher": "active",
+      "guard_captain": "active",
+      "refugee": "active"
     },
-    "current_interlocutor": "tavern_runner",
+    "current_interlocutor": null,
     "emergent_addressables": [],
     "promoted_actor_npc_map": {}
   }

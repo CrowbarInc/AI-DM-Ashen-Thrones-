@@ -1,12 +1,22 @@
 """Prompt-layer exports for promoted interlocutors (Block 2 profile + hint contracts)."""
 from __future__ import annotations
 
+import copy
 from types import SimpleNamespace
 from unittest.mock import patch
 
 from game.campaign_state import create_fresh_session_document
 from game.interaction_context import set_social_target
-from game.leads import SESSION_LEAD_REGISTRY_KEY, LeadLifecycle, LeadStatus
+from game.leads import (
+    SESSION_LEAD_REGISTRY_KEY,
+    LeadLifecycle,
+    LeadStatus,
+    LeadType,
+    create_lead,
+    reconcile_session_lead_progression,
+    refresh_lead_touch,
+    resolve_lead,
+)
 from game.prompt_context import (
     build_active_interlocutor_export,
     build_authoritative_lead_prompt_context,
@@ -45,8 +55,28 @@ def _minimal_lead_row_keys() -> frozenset[str]:
             "last_touched_turn",
             "related_npc_ids",
             "related_location_ids",
+            "escalation_level",
+            "escalation_reason",
+            "escalated_at_turn",
+            "unlocked_by_lead_id",
+            "obsolete_by_lead_id",
+            "superseded_by",
+            "stale_after_turns",
         }
     )
+
+
+def _expected_follow_up_pressure_from_leads(**overrides: bool) -> dict:
+    base = {
+        "has_pursued": False,
+        "has_stale": False,
+        "npc_has_relevant": False,
+        "has_escalated_threat": False,
+        "has_newly_unlocked": False,
+        "has_supersession_cleanup": False,
+    }
+    base.update(overrides)
+    return base
 
 
 def _session_with_registry(*leads: dict) -> dict:
@@ -92,7 +122,7 @@ def _record_discussion(
 
 @pytest.mark.unit
 def test_build_authoritative_lead_prompt_context_active_and_pursued_ranking():
-    """Top active slice ranks by priority, then last_updated_turn, then last_touched_turn, then stable tie."""
+    """Top active slice ranks by effective lead pressure, then last_updated_turn, last_touched_turn, stable tie."""
     session = _session_with_registry(
         {
             "id": "z_pursued_same_pri",
@@ -522,6 +552,7 @@ def test_build_authoritative_lead_prompt_context_npc_relevance_cap_and_filter():
     rel_ids = {r["id"] for r in out["npc_relevant_leads"]}
     assert rel_ids <= {"rel_a", "rel_b"}
     assert "unrelated_hot" not in rel_ids
+    assert [r["id"] for r in out["npc_relevant_leads"]] == ["rel_a", "rel_b"]
 
 
 @patch("game.prompt_context.list_session_leads")
@@ -636,6 +667,119 @@ def test_build_authoritative_lead_prompt_context_terminal_in_recent_only_not_act
 
 
 @pytest.mark.unit
+def test_escalated_threat_outranks_high_priority_rumor_in_top_active():
+    session = _session_with_registry(
+        {
+            "id": "rumor",
+            "title": "Rumor",
+            "type": LeadType.RUMOR.value,
+            "status": LeadStatus.ACTIVE.value,
+            "lifecycle": LeadLifecycle.DISCOVERED.value,
+            "priority": 5,
+            "last_updated_turn": 10,
+            "last_touched_turn": 10,
+        },
+        {
+            "id": "threat",
+            "title": "Threat",
+            "type": LeadType.THREAT.value,
+            "status": LeadStatus.ACTIVE.value,
+            "lifecycle": LeadLifecycle.DISCOVERED.value,
+            "priority": 0,
+            "escalation_level": 3,
+            "last_updated_turn": 1,
+            "last_touched_turn": 1,
+        },
+    )
+    session["turn_counter"] = 20
+    out = build_authoritative_lead_prompt_context(
+        session, world={}, public_scene={}, runtime={}, recent_log=[], active_npc_id=None
+    )
+    assert out["top_active_leads"][0]["id"] == "threat"
+    assert out["follow_up_pressure_from_leads"]["has_escalated_threat"] is True
+
+
+@pytest.mark.unit
+def test_newly_unlocked_lead_surfaces_first_in_recent_lead_changes():
+    session = _session_with_registry(
+        {
+            "id": "older",
+            "title": "Older",
+            "status": LeadStatus.ACTIVE.value,
+            "lifecycle": LeadLifecycle.DISCOVERED.value,
+            "last_updated_turn": 50,
+        },
+        {
+            "id": "unlocked",
+            "title": "Unlocked",
+            "status": LeadStatus.ACTIVE.value,
+            "lifecycle": LeadLifecycle.DISCOVERED.value,
+            "last_updated_turn": 60,
+            "unlocked_by_lead_id": "resolver_lead",
+        },
+    )
+    session["turn_counter"] = 60
+    out = build_authoritative_lead_prompt_context(
+        session, world={}, public_scene={}, runtime={}, recent_log=[], active_npc_id=None
+    )
+    assert out["recent_lead_changes"][0]["id"] == "unlocked"
+    assert out["follow_up_pressure_from_leads"]["has_newly_unlocked"] is True
+
+
+@pytest.mark.unit
+def test_obsolete_superseded_lead_excluded_from_active_emphasis_views():
+    session = _session_with_registry(
+        {
+            "id": "dead",
+            "title": "Superseded thread",
+            "status": LeadStatus.ACTIVE.value,
+            "lifecycle": LeadLifecycle.OBSOLETE.value,
+            "priority": 999,
+            "last_updated_turn": 200,
+            "obsolete_reason": "superseded",
+            "superseded_by": "replacer",
+            "related_npc_ids": ["npc_1"],
+        },
+        {
+            "id": "live",
+            "title": "Live thread",
+            "status": LeadStatus.ACTIVE.value,
+            "lifecycle": LeadLifecycle.DISCOVERED.value,
+            "priority": 1,
+            "last_updated_turn": 1,
+            "related_npc_ids": ["npc_1"],
+        },
+    )
+    session["turn_counter"] = 201
+    out = build_authoritative_lead_prompt_context(
+        session, world={}, public_scene={}, runtime={}, recent_log=[], active_npc_id="npc_1"
+    )
+    for bucket in ("top_active_leads", "urgent_or_stale_leads", "npc_relevant_leads"):
+        assert all(r["id"] != "dead" for r in out[bucket])
+    assert out["currently_pursued_lead"] is None
+
+
+@pytest.mark.unit
+def test_supersession_cleanup_sets_follow_up_pressure_flag():
+    session = _session_with_registry(
+        {
+            "id": "gone",
+            "title": "Gone",
+            "status": LeadStatus.ACTIVE.value,
+            "lifecycle": LeadLifecycle.OBSOLETE.value,
+            "last_updated_turn": 7,
+            "obsolete_reason": "superseded",
+            "superseded_by": "new_lead",
+        },
+    )
+    session["turn_counter"] = 7
+    out = build_authoritative_lead_prompt_context(
+        session, world={}, public_scene={}, runtime={}, recent_log=[], active_npc_id=None
+    )
+    assert out["follow_up_pressure_from_leads"]["has_supersession_cleanup"] is True
+
+
+@pytest.mark.unit
 def test_build_authoritative_lead_prompt_context_title_tie_break_when_scores_equal():
     """When priority and turn keys tie, ordering follows the final string tie-break (title, else id)."""
     session = _session_with_registry(
@@ -695,11 +839,215 @@ def test_build_authoritative_lead_prompt_context_empty_registry():
     assert out["urgent_or_stale_leads"] == []
     assert out["recent_lead_changes"] == []
     assert out["npc_relevant_leads"] == []
-    assert out["follow_up_pressure_from_leads"] == {
-        "has_pursued": False,
-        "has_stale": False,
-        "npc_has_relevant": False,
+    assert out["follow_up_pressure_from_leads"] == _expected_follow_up_pressure_from_leads()
+
+
+@patch("game.leads.reconcile_session_lead_progression")
+@pytest.mark.unit
+def test_prompt_builders_do_not_invoke_session_lead_reconciliation(mock_reconcile):
+    """Lead prompt paths are registry read-only; progression belongs to the authoritative API layer."""
+    session = _session_with_registry(
+        {
+            "id": "x",
+            "title": "X",
+            "status": LeadStatus.ACTIVE.value,
+            "lifecycle": LeadLifecycle.COMMITTED.value,
+            "priority": 1,
+            "last_updated_turn": 1,
+        }
+    )
+    session["turn_counter"] = 2
+    build_authoritative_lead_prompt_context(
+        session, world={}, public_scene={}, runtime={}, recent_log=[], active_npc_id=None
+    )
+    build_authoritative_lead_prompt_context(
+        session, world={}, public_scene={}, runtime={}, recent_log=[], active_npc_id=None
+    )
+    mock_reconcile.assert_not_called()
+    build_narration_context(**_narration_minimal_kwargs(session=session))
+    mock_reconcile.assert_not_called()
+
+
+@pytest.mark.unit
+def test_double_authoritative_lead_prompt_context_is_read_only_on_registry():
+    row = {
+        "id": "r",
+        "title": "R",
+        "status": LeadStatus.ACTIVE.value,
+        "lifecycle": LeadLifecycle.DISCOVERED.value,
+        "priority": 1,
+        "last_updated_turn": 3,
+        "first_discovered_turn": 0,
     }
+    session = {
+        "active_scene_id": "frontier_gate",
+        "turn_counter": 4,
+        "interaction_context": {"active_interaction_target_id": None, "interaction_mode": "none"},
+        SESSION_LEAD_REGISTRY_KEY: {"r": dict(row)},
+    }
+    snap = copy.deepcopy(session[SESSION_LEAD_REGISTRY_KEY])
+    build_authoritative_lead_prompt_context(
+        session, world={}, public_scene={}, runtime={}, recent_log=[], active_npc_id=None
+    )
+    build_authoritative_lead_prompt_context(
+        session, world={}, public_scene={}, runtime={}, recent_log=[], active_npc_id=None
+    )
+    assert session[SESSION_LEAD_REGISTRY_KEY] == snap
+
+
+@pytest.mark.unit
+def test_stale_lead_in_urgent_and_recent_not_in_top_active():
+    """Stale threads stay visible via urgent/recent slices; they drop out of the active top-3 emphasis."""
+    session = _session_with_registry(
+        {
+            "id": "gone_stale",
+            "title": "Forgotten thread",
+            "status": LeadStatus.STALE.value,
+            "lifecycle": LeadLifecycle.DISCOVERED.value,
+            "priority": 2,
+            "last_updated_turn": 20,
+            "last_touched_turn": 0,
+        },
+        {
+            "id": "still_hot",
+            "title": "Hot",
+            "status": LeadStatus.ACTIVE.value,
+            "lifecycle": LeadLifecycle.DISCOVERED.value,
+            "priority": 1,
+            "last_updated_turn": 19,
+        },
+    )
+    session["turn_counter"] = 20
+    out = build_authoritative_lead_prompt_context(
+        session, world={}, public_scene={}, runtime={}, recent_log=[], active_npc_id=None
+    )
+    assert any(r["id"] == "gone_stale" for r in out["urgent_or_stale_leads"])
+    assert any(r["id"] == "gone_stale" for r in out["recent_lead_changes"])
+    assert all(r["id"] != "gone_stale" for r in out["top_active_leads"])
+    assert out["follow_up_pressure_from_leads"]["has_stale"] is True
+
+
+@pytest.mark.unit
+def test_threat_touch_refresh_clears_escalated_threat_prompt_flag():
+    row = create_lead(
+        title="T",
+        summary="",
+        id="t",
+        type=LeadType.THREAT,
+        first_discovered_turn=0,
+    )
+    session = {
+        "turn_counter": 9,
+        "interaction_context": {"active_interaction_target_id": None, "interaction_mode": "none"},
+        SESSION_LEAD_REGISTRY_KEY: {"t": row},
+    }
+    reconcile_session_lead_progression(session, turn=9)
+    pc1 = build_authoritative_lead_prompt_context(
+        session, world={}, public_scene={}, runtime={}, recent_log=[], active_npc_id=None
+    )
+    assert pc1["follow_up_pressure_from_leads"]["has_escalated_threat"] is True
+    assert pc1["top_active_leads"] and pc1["top_active_leads"][0]["id"] == "t"
+
+    refresh_lead_touch(session[SESSION_LEAD_REGISTRY_KEY]["t"], turn=9)
+    reconcile_session_lead_progression(session, turn=9)
+    pc2 = build_authoritative_lead_prompt_context(
+        session, world={}, public_scene={}, runtime={}, recent_log=[], active_npc_id=None
+    )
+    assert pc2["follow_up_pressure_from_leads"]["has_escalated_threat"] is False
+
+
+@pytest.mark.unit
+def test_multi_effect_reconcile_then_prompt_context_all_pressure_flags():
+    """After one reconciliation pass, prompt slices expose stale, threat, unlock, and supersession signals."""
+    parent = resolve_lead(
+        create_lead(title="Src", summary="", id="src_u", unlocks=["child_u"]),
+        resolution_type="done",
+        turn=1,
+    )
+    child_u = create_lead(title="Ch", summary="", id="child_u", lifecycle=LeadLifecycle.HINTED)
+    stale_me = create_lead(
+        title="S",
+        summary="",
+        id="stale_me",
+        lifecycle=LeadLifecycle.DISCOVERED,
+        status=LeadStatus.ACTIVE,
+        stale_after_turns=1,
+        first_discovered_turn=0,
+    )
+    threat_e = create_lead(
+        title="Th",
+        summary="",
+        id="threat_e",
+        type=LeadType.THREAT,
+        first_discovered_turn=0,
+    )
+    newer_m = create_lead(title="New", summary="", id="newer_m", supersedes=["old_m"])
+    old_m = create_lead(
+        title="Old",
+        summary="",
+        id="old_m",
+        lifecycle=LeadLifecycle.DISCOVERED,
+        superseded_by="newer_m",
+    )
+    session = {
+        "active_scene_id": "frontier_gate",
+        "turn_counter": 10,
+        "interaction_context": {"active_interaction_target_id": None, "interaction_mode": "none"},
+        SESSION_LEAD_REGISTRY_KEY: {
+            "src_u": parent,
+            "child_u": child_u,
+            "stale_me": stale_me,
+            "threat_e": threat_e,
+            "newer_m": newer_m,
+            "old_m": old_m,
+        },
+    }
+    reconcile_session_lead_progression(session, turn=10)
+    reg = session[SESSION_LEAD_REGISTRY_KEY]
+    out = build_authoritative_lead_prompt_context(
+        session, world={}, public_scene={}, runtime={}, recent_log=[], active_npc_id=None
+    )
+    pressure = out["follow_up_pressure_from_leads"]
+    assert pressure["has_stale"] is True
+    assert pressure["has_escalated_threat"] is True
+    assert pressure["has_newly_unlocked"] is True
+    assert pressure["has_supersession_cleanup"] is True
+
+    assert any(r["id"] == "stale_me" for r in out["urgent_or_stale_leads"])
+    assert any(r["id"] == "threat_e" for r in out["urgent_or_stale_leads"])
+    assert any(r["id"] == "child_u" for r in out["top_active_leads"])
+    assert reg["child_u"]["lifecycle"] == LeadLifecycle.DISCOVERED.value
+    assert reg["child_u"]["lifecycle"] != LeadLifecycle.COMMITTED.value
+
+    for bucket in ("top_active_leads", "urgent_or_stale_leads", "npc_relevant_leads"):
+        assert all(r["id"] != "old_m" for r in out[bucket])
+
+    recent_ids = [r["id"] for r in out["recent_lead_changes"]]
+    assert "old_m" in recent_ids
+    assert "stale_me" in recent_ids
+    assert "child_u" in recent_ids
+
+
+@pytest.mark.unit
+def test_missing_ref_after_reconcile_prompt_context_still_builds():
+    src = resolve_lead(
+        create_lead(title="S", summary="", id="src_x", unlocks=["nope"]),
+        resolution_type="z",
+        turn=1,
+    )
+    orphan = create_lead(title="O", summary="", id="orphan_x", superseded_by="ghost")
+    session = {
+        "active_scene_id": "frontier_gate",
+        "turn_counter": 2,
+        "interaction_context": {"active_interaction_target_id": None, "interaction_mode": "none"},
+        SESSION_LEAD_REGISTRY_KEY: {"src_x": src, "orphan_x": orphan},
+    }
+    reconcile_session_lead_progression(session, turn=2)
+    out = build_authoritative_lead_prompt_context(
+        session, world={}, public_scene={}, runtime={}, recent_log=[], active_npc_id=None
+    )
+    assert isinstance(out["top_active_leads"], list)
+    assert isinstance(out["follow_up_pressure_from_leads"], dict)
 
 
 def _narration_minimal_kwargs(**overrides):
@@ -1059,7 +1407,7 @@ def test_follow_up_pressure_merges_log_pressure_with_from_leads():
     assert isinstance(fup, dict)
     assert fup.get("pressed") is True
     assert "from_leads" in fup
-    assert set(fup["from_leads"].keys()) == {"has_pursued", "has_stale", "npc_has_relevant"}
+    assert set(fup["from_leads"].keys()) == set(_expected_follow_up_pressure_from_leads().keys())
     assert all(isinstance(fup["from_leads"][k], bool) for k in fup["from_leads"])
 
 
@@ -1076,13 +1424,7 @@ def test_follow_up_pressure_from_leads_only_when_no_log_pressure():
     )
     ctx = build_narration_context(**_narration_minimal_kwargs(session=session, recent_log_for_prompt=[]))
     fup = ctx["follow_up_pressure"]
-    assert fup == {
-        "from_leads": {
-            "has_pursued": True,
-            "has_stale": False,
-            "npc_has_relevant": False,
-        }
-    }
+    assert fup == {"from_leads": _expected_follow_up_pressure_from_leads(has_pursued=True)}
     assert "pressed" not in fup
 
 
@@ -1143,11 +1485,7 @@ def test_social_lock_keeps_from_leads_without_log_escalation():
     )
     fup = ctx["follow_up_pressure"]
     assert fup == {
-        "from_leads": {
-            "has_pursued": True,
-            "has_stale": False,
-            "npc_has_relevant": True,
-        }
+        "from_leads": _expected_follow_up_pressure_from_leads(has_pursued=True, npc_has_relevant=True),
     }
     assert "pressed" not in fup
 

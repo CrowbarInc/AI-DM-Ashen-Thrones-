@@ -75,6 +75,7 @@ from game.gm import (
     ensure_minimal_nonsocial_resolution,
     ensure_minimal_social_resolution,
 )
+from game import leads as leads_module
 from game.journal import build_player_journal
 from game.affordances import get_available_affordances
 from game.scene_actions import normalize_scene_action
@@ -566,6 +567,15 @@ def _build_compact_turn_trace(
             else None
         ),
     }
+
+
+def _reconcile_session_lead_progression_after_authoritative_mutation(session: dict) -> None:
+    """Apply deterministic lead lifecycle progression for the current session turn.
+
+    Call only after authoritative mutations for the request are complete (including post-narration
+    session patches) and before compact turn-trace construction so traces match persisted state.
+    """
+    leads_module.reconcile_session_lead_progression(session)
 
 
 def _finalize_and_append_trace(session: dict, trace: dict, response_ok: bool, error: str | None = None) -> None:
@@ -2475,6 +2485,8 @@ def action(req: ActionRequest):
     synchronize_scene_addressability(session, scene, world)
     scene["scene_state"] = session.get("scene_state")
 
+    _reconcile_session_lead_progression_after_authoritative_mutation(session)
+
     # Build action pipeline debug (no hidden facts or secrets).
     if isinstance(req.intent, str):
         _player_input = req.intent
@@ -3017,6 +3029,8 @@ def chat(req: ChatRequest):
     # Persist world every turn (matches /api/action). Engine paths may mutate event_log / flags
     # without GM-proposed world_updates (e.g. social lead landing).
     save_world(world)
+
+    _reconcile_session_lead_progression_after_authoritative_mutation(session)
 
     # Build action pipeline debug for chat (no hidden facts or secrets).
     session['last_action_debug'] = _build_action_debug(
