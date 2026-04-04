@@ -6,10 +6,15 @@ including only relevant elements.
 """
 from __future__ import annotations
 
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Mapping
 import re
 
-from game.leads import filter_pending_leads_for_active_follow_surface
+from game.leads import (
+    filter_pending_leads_for_active_follow_surface,
+    LeadLifecycle,
+    LeadStatus,
+    list_session_leads,
+)
 from game.storage import get_scene_state
 from game.world import get_world_npc_by_id
 
@@ -107,6 +112,181 @@ _FOLLOW_UP_PRESS_TOKENS: tuple[str, ...] = (
     "where exactly",
     "who exactly",
 )
+
+def _lead_get(lead: Any, key: str, default: Any = None) -> Any:
+    """Read a lead field from a mapping or object without mutating the lead."""
+    if isinstance(lead, Mapping):
+        return lead.get(key, default)
+    return getattr(lead, key, default)
+
+
+def _lead_status_value(lead: Any) -> str:
+    raw = _lead_get(lead, "status")
+    if isinstance(raw, LeadStatus):
+        return raw.value
+    s = str(raw or "").strip().lower()
+    return s
+
+
+def _lead_int(lead: Any, key: str, *, default: int = 0) -> int:
+    v = _lead_get(lead, key, default)
+    if v is None:
+        return default
+    try:
+        return int(v)
+    except (TypeError, ValueError):
+        return default
+
+
+def _lead_sort_key(lead: Any) -> tuple[Any, ...]:
+    pri = _lead_int(lead, "priority", default=0)
+    lu = _lead_int(lead, "last_updated_turn", default=0)
+    lt = _lead_int(lead, "last_touched_turn", default=0)
+    title = _lead_get(lead, "title") or ""
+    lid = _lead_get(lead, "id") or ""
+    tie = str(title).strip() or str(lid).strip() or ""
+    return (-pri, -lu, -lt, tie)
+
+
+def _compact_lead_row(lead: Any) -> Dict[str, Any]:
+    rel_npc = _lead_get(lead, "related_npc_ids")
+    if not isinstance(rel_npc, list):
+        rel_npc = []
+    rel_loc = _lead_get(lead, "related_location_ids")
+    if not isinstance(rel_loc, list):
+        rel_loc = []
+    return {
+        "id": _lead_get(lead, "id"),
+        "title": _lead_get(lead, "title"),
+        "summary": _lead_get(lead, "summary"),
+        "type": _lead_get(lead, "type"),
+        "status": _lead_get(lead, "status"),
+        "lifecycle": _lead_get(lead, "lifecycle"),
+        "confidence": _lead_get(lead, "confidence"),
+        "priority": _lead_int(lead, "priority", default=0),
+        "next_step": _lead_get(lead, "next_step"),
+        "last_updated_turn": _lead_get(lead, "last_updated_turn"),
+        "last_touched_turn": _lead_get(lead, "last_touched_turn"),
+        "related_npc_ids": rel_npc,
+        "related_location_ids": rel_loc,
+    }
+
+
+def build_authoritative_lead_prompt_context(
+    session: Any,
+    world: Any,
+    public_scene: Any,
+    runtime: Any,
+    recent_log: Any,
+    active_npc_id: str | None = None,
+) -> Dict[str, Any]:
+    """Deterministic, registry-only lead slice for prompts (read-only; no journal, no session mutation)."""
+    _ = (world, public_scene, runtime, recent_log)
+
+    if isinstance(session, Mapping):
+        leads = list_session_leads(session, include_terminal=True)
+    else:
+        leads = []
+
+    empty_pressure = {
+        "has_pursued": False,
+        "has_stale": False,
+        "npc_has_relevant": False,
+    }
+    if not leads:
+        return {
+            "top_active_leads": [],
+            "currently_pursued_lead": None,
+            "urgent_or_stale_leads": [],
+            "recent_lead_changes": [],
+            "npc_relevant_leads": [],
+            "follow_up_pressure_from_leads": empty_pressure,
+        }
+
+    active_vals = (LeadStatus.ACTIVE.value, LeadStatus.PURSUED.value)
+    active_like = [l for l in leads if _lead_status_value(l) in active_vals]
+    pursued = [l for l in leads if _lead_status_value(l) == LeadStatus.PURSUED.value]
+    stale = [l for l in leads if _lead_status_value(l) == LeadStatus.STALE.value]
+
+    active_like_sorted = sorted(active_like, key=_lead_sort_key)
+    pursued_sorted = sorted(pursued, key=_lead_sort_key)
+    stale_sorted = sorted(stale, key=_lead_sort_key)
+
+    top_active_leads = [_compact_lead_row(l) for l in active_like_sorted[:3]]
+    currently_pursued_lead = _compact_lead_row(pursued_sorted[0]) if pursued_sorted else None
+
+    current_turn = _lead_int(session, "turn_counter", default=0) if isinstance(session, Mapping) else 0
+
+    def _not_recently_touched(lead: Any) -> bool:
+        raw = _lead_get(lead, "last_touched_turn")
+        if raw is None:
+            return True
+        touched = _lead_int(lead, "last_touched_turn", default=-1)
+        if touched < 0:
+            return True
+        return current_turn - touched >= 2
+
+    high_pri_active = [
+        l
+        for l in leads
+        if _lead_status_value(l) == LeadStatus.ACTIVE.value
+        and _lead_int(l, "priority", default=0) >= 1
+        and _not_recently_touched(l)
+    ]
+    high_pri_active_sorted = sorted(high_pri_active, key=_lead_sort_key)
+
+    urgent_or_stale_raw: List[Any] = []
+    seen_ids: set[str] = set()
+    for l in stale_sorted:
+        if len(urgent_or_stale_raw) >= 3:
+            break
+        lid = str(_lead_get(l, "id") or "").strip()
+        urgent_or_stale_raw.append(l)
+        if lid:
+            seen_ids.add(lid)
+    for l in high_pri_active_sorted:
+        if len(urgent_or_stale_raw) >= 3:
+            break
+        lid = str(_lead_get(l, "id") or "").strip()
+        if lid and lid in seen_ids:
+            continue
+        urgent_or_stale_raw.append(l)
+        if lid:
+            seen_ids.add(lid)
+    urgent_or_stale_leads = [_compact_lead_row(l) for l in urgent_or_stale_raw]
+
+    def _recent_change_key(lead: Any) -> tuple[int, str]:
+        lu = _lead_int(lead, "last_updated_turn", default=0)
+        tie = str(_lead_get(lead, "id") or _lead_get(lead, "title") or "").strip()
+        return (-lu, tie)
+
+    recent_sorted = sorted(leads, key=_recent_change_key)
+    recent_lead_changes = [_compact_lead_row(l) for l in recent_sorted[:5]]
+
+    npc_relevant_raw: List[Any] = []
+    aid = str(active_npc_id or "").strip()
+    if aid:
+        for l in leads:
+            rel = _lead_get(l, "related_npc_ids")
+            if not isinstance(rel, list):
+                continue
+            if any(str(x or "").strip() == aid for x in rel):
+                npc_relevant_raw.append(l)
+        npc_relevant_raw = sorted(npc_relevant_raw, key=_lead_sort_key)[:3]
+    npc_relevant_leads = [_compact_lead_row(l) for l in npc_relevant_raw]
+
+    return {
+        "top_active_leads": top_active_leads,
+        "currently_pursued_lead": currently_pursued_lead,
+        "urgent_or_stale_leads": urgent_or_stale_leads,
+        "recent_lead_changes": recent_lead_changes,
+        "npc_relevant_leads": npc_relevant_leads,
+        "follow_up_pressure_from_leads": {
+            "has_pursued": bool(pursued),
+            "has_stale": bool(stale),
+            "npc_has_relevant": bool(npc_relevant_leads),
+        },
+    }
 
 
 def _topic_tokens(text: str) -> List[str]:
@@ -891,10 +1071,38 @@ def build_narration_context(
         )
 
     recent_log_compact = _compress_recent_log(recent_log_for_prompt) if recent_log_for_prompt else []
-    follow_up_pressure = _compute_follow_up_pressure(recent_log_compact, user_text)
+    follow_up_log_pressure = _compute_follow_up_pressure(recent_log_compact, user_text)
     if social_authority:
-        follow_up_pressure = {}
-    if follow_up_pressure:
+        follow_up_log_pressure = None
+
+    active_npc_id: str | None = None
+    if isinstance(public_scene, Mapping):
+        if isinstance(interlocutor_export, dict):
+            _nid = str(interlocutor_export.get("npc_id") or "").strip()
+            if _nid:
+                active_npc_id = _nid
+        if active_npc_id is None:
+            _tid = session_view.get("active_interaction_target_id")
+            if _tid and str(_tid).strip():
+                active_npc_id = str(_tid).strip()
+
+    lead_context = build_authoritative_lead_prompt_context(
+        session=session,
+        world=world,
+        public_scene=public_scene,
+        runtime=runtime,
+        recent_log=recent_log_compact,
+        active_npc_id=active_npc_id,
+    )
+    from_leads_pressure = lead_context.get("follow_up_pressure_from_leads")
+    if not isinstance(from_leads_pressure, dict):
+        from_leads_pressure = {
+            "has_pursued": False,
+            "has_stale": False,
+            "npc_has_relevant": False,
+        }
+
+    if follow_up_log_pressure:
         instructions = list(instructions) + [
             (
                 "FOLLOW-UP ESCALATION RULE (HARD RULE): The player is pressing the same topic again (see follow_up_pressure). "
@@ -907,6 +1115,29 @@ def build_narration_context(
             ),
             "Allowed repetition: one short anchor clause for continuity. Not allowed: re-stating the same underlying lead as the whole answer.",
         ]
+
+    lead_instr: List[str] = [
+        "LEAD REGISTRY (authoritative slice): Use top-level lead_context only as supplied—do not invent leads, facts, or journal summaries. "
+        "Turn compact rows into light, actionable nudges (what could matter next), not recap.",
+        "When the player is clearly continuing an existing investigation thread, prefer lead_context.currently_pursued_lead as the primary thread anchor when it is non-null.",
+        "When interaction_continuity names an active NPC, use lead_context.npc_relevant_leads to tie the exchange to registry-linked threads that list that NPC—without fabricating details beyond those rows.",
+        "Use lead_context.urgent_or_stale_leads to surface unattended time pressure or stale threads as diegetic tension or reminders—only as implied by those rows; do not invent urgency.",
+        "Use lead_context.recent_lead_changes for continuity with the latest registry state shifts (status, next_step, touches)—do not restate full buckets or dump all leads.",
+        "follow_up_pressure.from_leads is boolean-only: has_pursued, has_stale, npc_has_relevant. Do not treat it as prose; use the matching lead_context lists/objects for specifics.",
+        "If follow_up_pressure.from_leads.has_pursued is true, bias narration toward continuing that pursued thread when it fits the player's action.",
+        "If follow_up_pressure.from_leads.has_stale is true, you may surface reminder, pressure, or unattended-thread beats that fit the scene—without inventing facts beyond lead_context.",
+        "If follow_up_pressure.from_leads.npc_has_relevant is true, you may let the active NPC exchange reflect relevance to those threads—within knowledge_scope and without inventing registry facts.",
+    ]
+    instructions = list(instructions) + lead_instr
+
+    if social_authority:
+        follow_up_pressure = {"from_leads": dict(from_leads_pressure)}
+    elif follow_up_log_pressure is not None:
+        follow_up_pressure = {**follow_up_log_pressure, "from_leads": dict(from_leads_pressure)}
+    elif any(from_leads_pressure.values()):
+        follow_up_pressure = {"from_leads": dict(from_leads_pressure)}
+    else:
+        follow_up_pressure = None
 
     if interlocutor_export and str(interlocutor_export.get("npc_id") or "").strip():
         nid = str(interlocutor_export.get("npc_id") or "").strip()
@@ -933,6 +1164,7 @@ def build_narration_context(
         'recent_log': recent_log_compact,
         'player_input': str(user_text or ''),
         'follow_up_pressure': follow_up_pressure,
+        'lead_context': lead_context,
         'response_policy': response_policy,
         'uncertainty_hint': eff_uncertainty_hint,
         'narration_obligations': narration_obligations,
