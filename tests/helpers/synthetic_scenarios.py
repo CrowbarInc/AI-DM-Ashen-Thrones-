@@ -172,6 +172,192 @@ def retry_pressure_opening() -> SyntheticScenario:
     )
 
 
+def social_redirect_followup_opening() -> SyntheticScenario:
+    """Seeded social destination redirect; policy turns should stay socially grounded."""
+    return SyntheticScenario(
+        scenario_id="social_redirect_followup_opening",
+        profile_factory=profile_social_prober,
+        seed=1110,
+        max_turns=5,
+        player_texts=(
+            "The gate clerk redirects me to the duty sergeant; I follow and pick the conversation "
+            "back up about tonight's patrol assignments.",
+        ),
+        transcript_recommended=False,
+        notes="Redirect-then-reopen thread; pressures social follow-up after a destination shift.",
+        regression_risk_class="social_destination_redirect_followup",
+    )
+
+
+def who_next_where_followup_opening() -> SyntheticScenario:
+    """Who/where authority seed; pressures target-aware questioning across later turns."""
+    return SyntheticScenario(
+        scenario_id="who_next_where_followup_opening",
+        profile_factory=profile_social_prober,
+        seed=1120,
+        max_turns=5,
+        player_texts=(
+            "Who can sign a curfew pass after dark, and where are they stationed right now?",
+        ),
+        transcript_recommended=True,
+        notes="Explicit who/where social question; good for soft transcript policy-slug signal.",
+        regression_risk_class="social_target_location_followup",
+    )
+
+
+def authority_switch_followup_opening() -> SyntheticScenario:
+    """Authority figure changes mid-exchange; follow-ups should preserve addressable social pressure."""
+    return SyntheticScenario(
+        scenario_id="authority_switch_followup_opening",
+        profile_factory=profile_social_prober,
+        seed=1130,
+        max_turns=5,
+        player_texts=(
+            "The visiting magistrate cuts across the harbormaster mid-sentence; I address the "
+            "magistrate and restate my question about sealed cargo.",
+        ),
+        transcript_recommended=False,
+        notes="Speaker/authority switch with restated question; continuity across policy turns.",
+        regression_risk_class="social_authority_switch_continuity",
+    )
+
+
+def speaker_grounding_followup_opening() -> SyntheticScenario:
+    """Pin a claim to the speaker; pressures grounded social follow-up rather than abstract drift."""
+    return SyntheticScenario(
+        scenario_id="speaker_grounding_followup_opening",
+        profile_factory=profile_social_prober,
+        seed=1140,
+        max_turns=5,
+        player_texts=(
+            "They claimed the watch rotates at the bell—I turn to the speaker and press them on "
+            "who actually rang it last night.",
+        ),
+        transcript_recommended=False,
+        notes="Speaker-grounded contradiction pressure; social probe/direct follow-through.",
+        regression_risk_class="social_speaker_grounding_followup",
+    )
+
+
+def lead_commitment_followthrough_opening() -> SyntheticScenario:
+    """Seeded commitment to a working lead; policy turns should keep investigative momentum."""
+    return SyntheticScenario(
+        scenario_id="lead_commitment_followthrough_opening",
+        profile_factory=profile_cautious_investigator,
+        seed=6020,
+        max_turns=5,
+        player_texts=(
+            "I treat the smuggler's dead drop as our working lead and commit the next stretch of "
+            "time to tracing it without taking side quests.",
+        ),
+        transcript_recommended=True,
+        notes="Lead commitment seed; post-opener turns pressure follow-through vs stalling.",
+        regression_risk_class="lead_commitment_followthrough_stall",
+    )
+
+
+def npc_payoff_or_fallback_opening() -> SyntheticScenario:
+    """NPC-mediated payoff vs fallback; policy turns should stay socially and procedurally engaged."""
+    return SyntheticScenario(
+        scenario_id="npc_payoff_or_fallback_opening",
+        profile_factory=profile_social_prober,
+        seed=6021,
+        max_turns=5,
+        player_texts=(
+            "The informant either names the buyer or offers a safe fallback meeting; I pin them to "
+            "which outcome we actually got and what we do next.",
+        ),
+        transcript_recommended=False,
+        notes="Payoff/fallback fork after an NPC handoff; continuity across policy turns.",
+        regression_risk_class="lead_npc_payoff_or_fallback_continuity",
+    )
+
+
+def obsolete_lead_pressure_opening() -> SyntheticScenario:
+    """New information supersedes an old trail; policy should keep forward investigative pressure."""
+    return SyntheticScenario(
+        scenario_id="obsolete_lead_pressure_opening",
+        profile_factory=profile_cautious_investigator,
+        seed=6022,
+        max_turns=5,
+        player_texts=(
+            "Fresh testimony supersedes yesterday's trail; I stop chasing the old lead and re-aim "
+            "the investigation on what matters now.",
+        ),
+        transcript_recommended=False,
+        notes="Obsolescence pivot seed; avoids narrating engine state—pressures player-side follow-up.",
+        regression_risk_class="lead_obsolescence_pivot_pressure",
+    )
+
+
+def alternate_resolution_followup_opening() -> SyntheticScenario:
+    """Player bypasses the expected route; later policy turns should preserve purposeful pressure."""
+    return SyntheticScenario(
+        scenario_id="alternate_resolution_followup_opening",
+        profile_factory=profile_cautious_investigator,
+        seed=6023,
+        max_turns=5,
+        player_texts=(
+            "Rather than wait for the warrant, I take the side-alley approach; I keep pressure on "
+            "the objective without reopening the front-door angle.",
+        ),
+        transcript_recommended=False,
+        notes="Alternate resolution path; follow-up behavior after a deliberate route change.",
+        regression_risk_class="lead_alternate_route_continuity",
+    )
+
+
+def advancement_signal_opening() -> SyntheticScenario:
+    """Seeded GM/thread signal; post-opener policy should stay investigation- or action-forward."""
+    return SyntheticScenario(
+        scenario_id="advancement_signal_opening",
+        profile_factory=profile_cautious_investigator,
+        seed=7025,
+        max_turns=5,
+        player_texts=(
+            "The sergeant points to fresh wheel ruts and a snapped latch on the postern; I treat "
+            "that as the live thread and push the examination forward instead of re-litigating the gate.",
+        ),
+        transcript_recommended=False,
+        notes="Advancement cue in opener; pressures continued survey/investigation/push after setup.",
+        regression_risk_class="exploration_advancement_signal_stall",
+    )
+
+
+def conditional_affordance_opening() -> SyntheticScenario:
+    """If/then affordance seed; policy turns should pick up a branch (social, trade, or persistence)."""
+    return SyntheticScenario(
+        scenario_id="conditional_affordance_opening",
+        profile_factory=profile_social_prober,
+        seed=7026,
+        max_turns=5,
+        player_texts=(
+            "If the watch corporal signs the passage chit, I move immediately; if they refuse, I "
+            "negotiate a witnessed escort instead of arguing in place.",
+        ),
+        transcript_recommended=False,
+        notes="Conditional branch seed; follow-through vs dropping the fork after turn 0.",
+        regression_risk_class="exploration_conditional_affordance_drop",
+    )
+
+
+def scene_transition_followup_opening() -> SyntheticScenario:
+    """Location shift seed; post-opener behavior should stay forward (not hang-back-only re-asks)."""
+    return SyntheticScenario(
+        scenario_id="scene_transition_followup_opening",
+        profile_factory=profile_cautious_investigator,
+        seed=7027,
+        max_turns=5,
+        player_texts=(
+            "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk "
+            "and re-orient on sightlines, cover, and what the open space reveals.",
+        ),
+        transcript_recommended=True,
+        notes="Scene transition seed; progression/momentum after spatial movement.",
+        regression_risk_class="exploration_scene_transition_followup_stall",
+    )
+
+
 # All preset factories in stable order (for iteration / stability tests).
 PRESET_FACTORIES: tuple[Callable[[], SyntheticScenario], ...] = (
     default_opening,
@@ -183,4 +369,15 @@ PRESET_FACTORIES: tuple[Callable[[], SyntheticScenario], ...] = (
     emergent_npc_opening,
     clue_followup_opening,
     retry_pressure_opening,
+    social_redirect_followup_opening,
+    who_next_where_followup_opening,
+    authority_switch_followup_opening,
+    speaker_grounding_followup_opening,
+    lead_commitment_followthrough_opening,
+    npc_payoff_or_fallback_opening,
+    obsolete_lead_pressure_opening,
+    alternate_resolution_followup_opening,
+    advancement_signal_opening,
+    conditional_affordance_opening,
+    scene_transition_followup_opening,
 )

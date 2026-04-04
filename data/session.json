@@ -15,9 +15,9 @@
   },
   "interaction_context": {
     "active_interaction_target_id": null,
-    "active_interaction_kind": "social",
-    "interaction_mode": "social",
-    "engagement_level": "engaged",
+    "active_interaction_kind": "travel",
+    "interaction_mode": "activity",
+    "engagement_level": "focused",
     "conversation_privacy": null,
     "player_position_context": null
   },
@@ -34,10 +34,10 @@
     "entity_presence": {
       "emergent_lord_aldric": "active",
       "emergent_town_crier": "active",
-      "guard_captain": "active",
       "refugee": "active",
+      "tavern_runner": "active",
       "threadbare_watcher": "active",
-      "tavern_runner": "active"
+      "guard_captain": "active"
     },
     "current_interlocutor": null,
     "emergent_addressables": [],
@@ -52,65 +52,75 @@
       "suspicion_flags": [],
       "searched_targets": [],
       "resolved_interactables": [],
-      "last_exploration_action_key": "question_npc",
+      "last_exploration_action_key": "we_leave_the_gatehouse_antechamber_and_s",
       "repeated_action_count": 1,
-      "last_resolution_kind": "question",
-      "last_description_hash": "e90a3a5d3ebc794405473ff83022c9ef",
+      "last_resolution_kind": "travel",
+      "last_description_hash": "121984fab03ca6fb263235c2da34241e",
       "consumed_action_ids": [],
-      "momentum_exchanges_since": 1,
-      "momentum_next_due_in": 3,
+      "momentum_exchanges_since": 0,
+      "momentum_next_due_in": 2,
       "momentum_last_kind": "new_information",
       "passive_action_streak": 0,
       "recent_player_actions": [
         {
-          "text": "I approach the gate sergeant directly and ask who controls patrol assignments tonight.",
+          "text": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals.",
           "passive": false,
           "markers": [],
           "resolution_kind": null,
           "turn": 1
         },
         {
-          "text": "What exactly would happen if I tried that right now?",
+          "text": "I circle back to an earlier detail we skipped and insist we resolve it before moving on.",
           "passive": false,
           "markers": [],
           "resolution_kind": null,
           "turn": 2
         }
       ],
-      "last_player_action_text": "What exactly would happen if I tried that right now?",
+      "last_player_action_text": "I circle back to an earlier detail we skipped and insist we resolve it before moving on.",
       "last_player_action_passive": false,
-      "recent_contextual_leads": [],
-      "topic_pressure": {
-        "topic:exactly_happen_right": {
-          "repeat_count": 1,
-          "low_progress_streak": 0,
-          "progress_score_total": 1.5,
-          "last_answer": "I can tell what changed around the missing patrol notice on the board, not the full method behind it. The rest is fragments and crossed stories. Stay with the guards reacting to the missing patrol rumor until it gives you one concrete turn.",
-          "last_turn": 2,
-          "speaker_targets": {
-            "__scene__": {
-              "repeat_count": 1,
-              "low_progress_streak": 0,
-              "patience": 3,
-              "last_turn": 2
-            }
-          },
-          "previous_probe_dimension": "",
-          "last_probe_dimension": "general",
-          "last_player_input": "What exactly would happen if I tried that right now?"
+      "recent_contextual_leads": [
+        {
+          "key": "active_event_in_the_open_space_he_notes_the_refugees_and_wagons_clogging_the_approach_to_the_gate_while_guards_exude_a_tense_readiness_their_eyes_scanning_for_trouble",
+          "kind": "active_event",
+          "subject": "in the open space, he notes the refugees and wagons clogging the approach to the gate, while guards exude a tense readiness, their eyes scanning for trouble",
+          "position": "",
+          "named": false,
+          "positioned": false,
+          "mentions": 1,
+          "last_turn": 1
+        },
+        {
+          "key": "active_event_clamor_by_the_tavern_runner_shouting_offers_of_hot_stew",
+          "kind": "active_event",
+          "subject": "clamor",
+          "position": "by the tavern runner shouting offers of hot stew",
+          "named": false,
+          "positioned": true,
+          "mentions": 1,
+          "last_turn": 1
+        },
+        {
+          "key": "scene_npc_tavern_runner",
+          "kind": "scene_npc",
+          "subject": "Tavern Runner",
+          "position": "",
+          "named": true,
+          "positioned": false,
+          "mentions": 1,
+          "last_turn": 1
+        },
+        {
+          "key": "active_event_missing_patrol_rumor",
+          "kind": "active_event",
+          "subject": "missing patrol rumor",
+          "position": "",
+          "named": false,
+          "positioned": false,
+          "mentions": 2,
+          "last_turn": 2
         }
-      },
-      "topic_pressure_last_topic_key": "topic:exactly_happen_right",
-      "topic_pressure_current": {
-        "topic_key": "topic:exactly_happen_right",
-        "speaker_key": "__scene__",
-        "turn": 2,
-        "player_text": "What exactly would happen if I tried that right now?",
-        "interaction_kind": "social",
-        "interaction_mode": "social",
-        "social_intent_class": "social_exchange",
-        "npc_name": ""
-      }
+      ]
     }
   },
   "clue_knowledge": {},
@@ -118,57 +128,11 @@
   "npc_runtime": {},
   "last_action_debug": {
     "last_action_type": "chat",
-    "player_input": "What exactly would happen if I tried that right now?",
-    "normalized_action": {
-      "id": "question_npc",
-      "label": "What exactly would happen if I tried that right now?",
-      "type": "question",
-      "prompt": "What exactly would happen if I tried that right now?"
-    },
-    "resolution_kind": "question",
+    "player_input": "I circle back to an earlier detail we skipped and insist we resolve it before moving on.",
+    "normalized_action": null,
+    "resolution_kind": null,
     "target_scene": null,
     "resolver_result": {
-      "kind": "question",
-      "action_id": "question_npc",
-      "label": "What exactly would happen if I tried that right now?",
-      "prompt": "What exactly would happen if I tried that right now?",
-      "success": false,
-      "resolved_transition": false,
-      "target_scene_id": null,
-      "clue_id": null,
-      "discovered_clues": [],
-      "state_changes": {},
-      "hint": "No matching NPC found in this scene. Narrate that the player's social attempt has no clear target or the intended person is not present.",
-      "social": {
-        "social_intent_class": "social_exchange",
-        "npc_id": null,
-        "npc_name": null,
-        "target_resolved": false,
-        "skill_check": null,
-        "npc_reply_expected": false,
-        "reply_kind": "reaction",
-        "offscene_target": false,
-        "target_source": "none",
-        "target_reason": "no addressable target resolved",
-        "target_candidate_id": null,
-        "target_candidate_valid": false,
-        "stale_interlocutor_cleared": false,
-        "addressability_checked_against": [
-          "active_entities",
-          "entity_presence_active_or_nearby",
-          "scene_addressables",
-          "world_roster_in_scene"
-        ],
-        "declared_switch_detected": false,
-        "declared_switch_target_actor_id": null,
-        "continuity_overridden_by_declared_switch": false,
-        "spoken_vocative_detected": false,
-        "spoken_vocative_target_actor_id": null,
-        "continuity_overridden_by_spoken_vocative": false,
-        "strategy_forced_to_answer": false,
-        "suppressed_fallback_strategies": []
-      },
-      "requires_check": false,
       "world_tick_events": [
         {
           "type": "faction_pressure",
@@ -184,10 +148,10 @@
   },
   "debug_traces": [
     {
-      "timestamp": "2026-04-04T02:12:35.727124Z",
+      "timestamp": "2026-04-04T04:48:16.443881Z",
       "source": "chat",
       "action_type": "chat",
-      "raw_input": "I approach the gate sergeant directly and ask who controls patrol assignments tonight.",
+      "raw_input": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals.",
       "turn_stage_order": [
         "player_input",
         "intent_normalization_expansion",
@@ -200,103 +164,41 @@
         "response_debug_packaging"
       ],
       "incoming_payload": {
-        "text": "I approach the gate sergeant directly and ask who controls patrol assignments tonight."
+        "text": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals."
       },
       "parsed_intent": {
-        "id": "question_who_controls_patrol_assignments",
-        "label": "I approach the gate sergeant directly and ask who controls patrol assignments tonight.",
-        "type": "question",
-        "social_intent_class": "social_exchange",
-        "prompt": "I approach the gate sergeant directly and ask who controls patrol assignments tonight.",
-        "target_id": "who controls patrol assignments tonight",
-        "targetEntityId": "who controls patrol assignments tonight",
-        "metadata": {
-          "canonical_entry_path": "social",
-          "canonical_entry_reason": "no_addressable_target",
-          "canonical_entry_target_actor_id": null,
-          "segmented_turn": {
-            "declared_action_text": "I approach the gate sergeant directly and ask who controls patrol assignments tonight."
-          },
-          "turn_segmentation": {
-            "declared_action_text": "I approach the gate sergeant directly and ask who controls patrol assignments tonight."
-          }
-        }
+        "id": "we_leave_the_gatehouse_antechamber_and_s",
+        "label": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals.",
+        "type": "travel",
+        "prompt": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals.",
+        "targetSceneId": null,
+        "target_scene_id": null
       },
       "segmented_turn": {
-        "declared_action_text": "I approach the gate sergeant directly and ask who controls patrol assignments tonight."
+        "declared_action_text": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals."
       },
       "normalized_action": {
-        "id": "question_who_controls_patrol_assignments",
-        "label": "I approach the gate sergeant directly and ask who controls patrol assignments tonight.",
-        "type": "question",
-        "prompt": "I approach the gate sergeant directly and ask who controls patrol assignments tonight."
+        "id": "we_leave_the_gatehouse_antechamber_and_s",
+        "label": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals.",
+        "type": "travel",
+        "prompt": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals.",
+        "targetSceneId": null
       },
       "resolution": {
-        "kind": "question",
-        "action_id": "question_who_controls_patrol_assignments",
-        "label": "I approach the gate sergeant directly and ask who controls patrol assignments tonight.",
-        "prompt": "I approach the gate sergeant directly and ask who controls patrol assignments tonight.",
+        "kind": "travel",
+        "action_id": "we_leave_the_gatehouse_antechamber_and_s",
+        "label": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals.",
+        "prompt": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals.",
         "success": false,
         "resolved_transition": false,
         "target_scene_id": null,
         "clue_id": null,
         "discovered_clues": [],
         "state_changes": {},
-        "hint": "No matching NPC found in this scene. Narrate that the player's social attempt has no clear target or the intended person is not present.",
-        "social": {
-          "social_intent_class": "social_exchange",
-          "npc_id": null,
-          "npc_name": null,
-          "target_resolved": false,
-          "skill_check": null,
-          "npc_reply_expected": false,
-          "reply_kind": "reaction",
-          "offscene_target": false,
-          "target_source": "none",
-          "target_reason": "no addressable target resolved",
-          "target_candidate_id": "who controls patrol assignments tonight",
-          "target_candidate_valid": false,
-          "stale_interlocutor_cleared": false,
-          "addressability_checked_against": [
-            "active_entities",
-            "entity_presence_active_or_nearby",
-            "scene_addressables",
-            "world_roster_in_scene"
-          ],
-          "declared_switch_detected": false,
-          "declared_switch_target_actor_id": null,
-          "continuity_overridden_by_declared_switch": false,
-          "spoken_vocative_detected": false,
-          "spoken_vocative_target_actor_id": null,
-          "continuity_overridden_by_spoken_vocative": false,
-          "actor_addressable": false,
-          "strategy_forced_to_answer": false,
-          "suppressed_fallback_strategies": []
-        },
-        "requires_check": false,
+        "hint": "Player expressed travel intent; target scene not resolved. Narrate based on current scene and intent.",
         "metadata": {
-          "canonical_entry_path": "social",
-          "canonical_entry_reason": "no_addressable_target",
-          "canonical_entry_target_actor_id": null,
-          "segmented_turn": {
-            "declared_action_text": "I approach the gate sergeant directly and ask who controls patrol assignments tonight."
-          },
           "turn_segmentation": {
-            "declared_action_text": "I approach the gate sergeant directly and ask who controls patrol assignments tonight."
-          },
-          "lead_landing": {
-            "revealed_lead_ids": [],
-            "already_known_lead_ids": [],
-            "actionable_lead_ids": [],
-            "lead_write_targets": [],
-            "extracted_lead_ids": [],
-            "extracted_lead_sources": [],
-            "extracted_from_text": false,
-            "extracted_from_reconciled_text": false,
-            "authoritative_created_ids": [],
-            "authoritative_updated_ids": [],
-            "authoritative_unchanged_ids": [],
-            "authoritative_promoted_ids": []
+            "declared_action_text": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals."
           }
         },
         "world_tick_events": [
@@ -320,40 +222,28 @@
       ],
       "turn_trace": {
         "source": "chat",
-        "player_input": "I approach the gate sergeant directly and ask who controls patrol assignments tonight.",
+        "player_input": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals.",
         "intent": {
           "parsed": {
-            "id": "question_who_controls_patrol_assignments",
-            "label": "I approach the gate sergeant directly and ask who controls patrol assignments tonight.",
-            "type": "question",
-            "social_intent_class": "social_exchange",
-            "prompt": "I approach the gate sergeant directly and ask who controls patrol assignments tonight.",
-            "target_id": "who controls patrol assignments tonight",
-            "targetEntityId": "who controls patrol assignments tonight",
-            "metadata": {
-              "canonical_entry_path": "social",
-              "canonical_entry_reason": "no_addressable_target",
-              "canonical_entry_target_actor_id": null,
-              "segmented_turn": {
-                "declared_action_text": "I approach the gate sergeant directly and ask who controls patrol assignments tonight."
-              },
-              "turn_segmentation": {
-                "declared_action_text": "I approach the gate sergeant directly and ask who controls patrol assignments tonight."
-              }
-            }
+            "id": "we_leave_the_gatehouse_antechamber_and_s",
+            "label": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals.",
+            "type": "travel",
+            "prompt": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals.",
+            "targetSceneId": null,
+            "target_scene_id": null
           },
           "segmented_turn": {
-            "declared_action_text": "I approach the gate sergeant directly and ask who controls patrol assignments tonight."
+            "declared_action_text": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals."
           },
           "normalized": {
-            "id": "question_who_controls_patrol_assignments",
-            "label": "I approach the gate sergeant directly and ask who controls patrol assignments tonight.",
-            "type": "question",
-            "prompt": "I approach the gate sergeant directly and ask who controls patrol assignments tonight.",
+            "id": "we_leave_the_gatehouse_antechamber_and_s",
+            "label": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals.",
+            "type": "travel",
+            "prompt": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals.",
             "targetSceneId": null,
             "target_scene_id": null,
-            "targetEntityId": "who controls patrol assignments tonight",
-            "target_id": "who controls patrol assignments tonight"
+            "targetEntityId": null,
+            "target_id": null
           },
           "implied_context": {
             "applied": false,
@@ -365,10 +255,10 @@
         },
         "classification": {
           "action_type": "chat",
-          "resolved_kind": "question",
+          "resolved_kind": "travel",
           "requires_check": false
         },
-        "resolution_path": "social_engine",
+        "resolution_path": "exploration_engine",
         "authoritative_state_changes": {
           "scene_transition": null,
           "resolution_state_changes": {},
@@ -377,9 +267,9 @@
         },
         "interaction_after": {
           "active_interaction_target_id": null,
-          "active_interaction_kind": "social",
-          "interaction_mode": "social",
-          "engagement_level": "engaged",
+          "active_interaction_kind": "travel",
+          "interaction_mode": "activity",
+          "engagement_level": "focused",
           "conversation_privacy": null,
           "player_position_context": null
         },
@@ -448,7 +338,7 @@
         "should_route_social": false,
         "target_actor_id": null,
         "target_source": null,
-        "reason": "no_addressable_target",
+        "reason": "travel_or_scene_transition_intent",
         "spoken_text": null,
         "declared_switch_detected": false,
         "declared_switch_target_actor_id": null,
@@ -457,15 +347,15 @@
         "spoken_vocative_target_actor_id": null,
         "continuity_overridden_by_spoken_vocative": false
       },
-      "canonical_entry_path": "social",
-      "canonical_entry_reason": "no_addressable_target",
+      "canonical_entry_path": "undecided",
+      "canonical_entry_reason": "travel_or_scene_transition_intent",
       "canonical_entry_target_actor_id": null
     },
     {
-      "timestamp": "2026-04-04T02:12:41.455842Z",
+      "timestamp": "2026-04-04T04:48:30.393226Z",
       "source": "chat",
       "action_type": "chat",
-      "raw_input": "What exactly would happen if I tried that right now?",
+      "raw_input": "I circle back to an earlier detail we skipped and insist we resolve it before moving on.",
       "turn_stage_order": [
         "player_input",
         "intent_normalization_expansion",
@@ -478,124 +368,14 @@
         "response_debug_packaging"
       ],
       "incoming_payload": {
-        "text": "What exactly would happen if I tried that right now?"
+        "text": "I circle back to an earlier detail we skipped and insist we resolve it before moving on."
       },
-      "parsed_intent": {
-        "id": "question_npc",
-        "label": "What exactly would happen if I tried that right now?",
-        "type": "question",
-        "social_intent_class": "social_exchange",
-        "prompt": "What exactly would happen if I tried that right now?",
-        "metadata": {
-          "routed_via_dialogue_lock": true,
-          "route": "dialogue",
-          "canonical_entry_path": "social",
-          "canonical_entry_reason": "no_addressable_target",
-          "canonical_entry_target_actor_id": null,
-          "intent_route_debug": {
-            "routed_to": "social_exchange",
-            "route_reason": "no_addressable_target",
-            "addressed_actor_id": null,
-            "addressed_actor_source": null
-          },
-          "segmented_turn": {
-            "adjudication_question_text": "What exactly would happen if I tried that right now?"
-          },
-          "turn_segmentation": {
-            "adjudication_question_text": "What exactly would happen if I tried that right now?"
-          }
-        }
-      },
+      "parsed_intent": null,
       "segmented_turn": {
-        "adjudication_question_text": "What exactly would happen if I tried that right now?"
+        "declared_action_text": "I circle back to an earlier detail we skipped and insist we resolve it before moving on."
       },
-      "normalized_action": {
-        "id": "question_npc",
-        "label": "What exactly would happen if I tried that right now?",
-        "type": "question",
-        "prompt": "What exactly would happen if I tried that right now?"
-      },
+      "normalized_action": null,
       "resolution": {
-        "kind": "question",
-        "action_id": "question_npc",
-        "label": "What exactly would happen if I tried that right now?",
-        "prompt": "What exactly would happen if I tried that right now?",
-        "success": false,
-        "resolved_transition": false,
-        "target_scene_id": null,
-        "clue_id": null,
-        "discovered_clues": [],
-        "state_changes": {},
-        "hint": "No matching NPC found in this scene. Narrate that the player's social attempt has no clear target or the intended person is not present.",
-        "social": {
-          "social_intent_class": "social_exchange",
-          "npc_id": null,
-          "npc_name": null,
-          "target_resolved": false,
-          "skill_check": null,
-          "npc_reply_expected": false,
-          "reply_kind": "reaction",
-          "offscene_target": false,
-          "target_source": "none",
-          "target_reason": "no addressable target resolved",
-          "target_candidate_id": null,
-          "target_candidate_valid": false,
-          "stale_interlocutor_cleared": false,
-          "addressability_checked_against": [
-            "active_entities",
-            "entity_presence_active_or_nearby",
-            "scene_addressables",
-            "world_roster_in_scene"
-          ],
-          "declared_switch_detected": false,
-          "declared_switch_target_actor_id": null,
-          "continuity_overridden_by_declared_switch": false,
-          "spoken_vocative_detected": false,
-          "spoken_vocative_target_actor_id": null,
-          "continuity_overridden_by_spoken_vocative": false,
-          "strategy_forced_to_answer": false,
-          "suppressed_fallback_strategies": []
-        },
-        "requires_check": false,
-        "metadata": {
-          "routed_via_dialogue_lock": true,
-          "route": "dialogue",
-          "canonical_entry_path": "social",
-          "canonical_entry_reason": "no_addressable_target",
-          "canonical_entry_target_actor_id": null,
-          "intent_route_debug": {
-            "routed_to": "social_exchange",
-            "route_reason": "no_addressable_target",
-            "addressed_actor_id": null,
-            "addressed_actor_source": null
-          },
-          "segmented_turn": {
-            "adjudication_question_text": "What exactly would happen if I tried that right now?"
-          },
-          "turn_segmentation": {
-            "adjudication_question_text": "What exactly would happen if I tried that right now?"
-          },
-          "embedded_adjudication": {
-            "question": "What exactly would happen if I tried that right now?",
-            "category": "action_feasibility_query",
-            "answer_type": "needs_concrete_action",
-            "requires_check": null
-          },
-          "lead_landing": {
-            "revealed_lead_ids": [],
-            "already_known_lead_ids": [],
-            "actionable_lead_ids": [],
-            "lead_write_targets": [],
-            "extracted_lead_ids": [],
-            "extracted_lead_sources": [],
-            "extracted_from_text": false,
-            "extracted_from_reconciled_text": false,
-            "authoritative_created_ids": [],
-            "authoritative_updated_ids": [],
-            "authoritative_unchanged_ids": [],
-            "authoritative_promoted_ids": []
-          }
-        },
         "world_tick_events": [
           {
             "type": "faction_pressure",
@@ -612,47 +392,13 @@
       ],
       "turn_trace": {
         "source": "chat",
-        "player_input": "What exactly would happen if I tried that right now?",
+        "player_input": "I circle back to an earlier detail we skipped and insist we resolve it before moving on.",
         "intent": {
-          "parsed": {
-            "id": "question_npc",
-            "label": "What exactly would happen if I tried that right now?",
-            "type": "question",
-            "social_intent_class": "social_exchange",
-            "prompt": "What exactly would happen if I tried that right now?",
-            "metadata": {
-              "routed_via_dialogue_lock": true,
-              "route": "dialogue",
-              "canonical_entry_path": "social",
-              "canonical_entry_reason": "no_addressable_target",
-              "canonical_entry_target_actor_id": null,
-              "intent_route_debug": {
-                "routed_to": "social_exchange",
-                "route_reason": "no_addressable_target",
-                "addressed_actor_id": null,
-                "addressed_actor_source": null
-              },
-              "segmented_turn": {
-                "adjudication_question_text": "What exactly would happen if I tried that right now?"
-              },
-              "turn_segmentation": {
-                "adjudication_question_text": "What exactly would happen if I tried that right now?"
-              }
-            }
-          },
+          "parsed": null,
           "segmented_turn": {
-            "adjudication_question_text": "What exactly would happen if I tried that right now?"
+            "declared_action_text": "I circle back to an earlier detail we skipped and insist we resolve it before moving on."
           },
-          "normalized": {
-            "id": "question_npc",
-            "label": "What exactly would happen if I tried that right now?",
-            "type": "question",
-            "prompt": "What exactly would happen if I tried that right now?",
-            "targetSceneId": null,
-            "target_scene_id": null,
-            "targetEntityId": null,
-            "target_id": null
-          },
+          "normalized": null,
           "implied_context": {
             "applied": false,
             "cases": [],
@@ -663,10 +409,10 @@
         },
         "classification": {
           "action_type": "chat",
-          "resolved_kind": "question",
+          "resolved_kind": null,
           "requires_check": false
         },
-        "resolution_path": "social_engine",
+        "resolution_path": "chat_engine",
         "authoritative_state_changes": {
           "scene_transition": null,
           "resolution_state_changes": {},
@@ -675,9 +421,9 @@
         },
         "interaction_after": {
           "active_interaction_target_id": null,
-          "active_interaction_kind": "social",
-          "interaction_mode": "social",
-          "engagement_level": "engaged",
+          "active_interaction_kind": "travel",
+          "interaction_mode": "activity",
+          "engagement_level": "focused",
           "conversation_privacy": null,
           "player_position_context": null
         },
@@ -755,16 +501,16 @@
         "spoken_vocative_target_actor_id": null,
         "continuity_overridden_by_spoken_vocative": false
       },
-      "canonical_entry_path": "social",
+      "canonical_entry_path": "procedural",
       "canonical_entry_reason": "no_addressable_target",
       "canonical_entry_target_actor_id": null
     }
   ],
   "flags": {},
   "character_name": "Galinor",
-  "campaign_run_id": "d2b42c2d155b422edb497785",
-  "session_id": "d2b42c2d155b422edb497785",
-  "last_saved_at": "2026-04-04T02:13:00.220947Z",
+  "campaign_run_id": "faf5f83e5f41f0177ba08e61",
+  "session_id": "faf5f83e5f41f0177ba08e61",
+  "last_saved_at": "2026-04-04T04:48:41.556951Z",
   "emergent_actor_debug": {
     "emergent_actor_enrolled": false,
     "emergent_actor_id": null,
