@@ -10,6 +10,7 @@ from game.interaction_context import rebuild_active_scene_entities, set_social_t
 from game.social_exchange_emission import (
     build_final_strict_social_response,
     select_best_grounded_social_answer_text,
+    social_final_emission_malformed_player_echo,
 )
 from game.storage import get_scene_runtime
 
@@ -425,3 +426,206 @@ def test_select_best_grounded_social_answer_text_returns_engine_snippet():
     )
     assert g.get("text")
     assert "east" in str(g.get("text")).lower()
+
+
+@pytest.mark.emission
+@pytest.mark.social
+def test_transactional_offer_place_question_does_not_emit_mirrored_player_ask():
+    """Transactional probe: reject NPC dialogue that bounces the player's offer back as a 'would you' question."""
+    session, world, sid = _base_session_scene()
+    rt = get_scene_runtime(session, sid)
+    rt["last_player_action_text"] = (
+        "Tavern Runner, three silver for a straight answer—which inn is safest tonight?"
+    )
+    resolution = {
+        "kind": "social_probe",
+        "prompt": rt["last_player_action_text"],
+        "success": True,
+        "social": {
+            "social_intent_class": "social_exchange",
+            "npc_id": "tavern_runner",
+            "npc_name": "Tavern Runner",
+            "npc_reply_expected": True,
+            "reply_kind": "answer",
+            "social_probe_move": "transactional",
+            "probe_outcome": "partial_or_trade",
+            "probe_outcome_reason": "trade_pressure_with_remaining_engine_topics",
+        },
+    }
+    mirrored = (
+        'The tavern runner leans in. "Three silver—which inn would you want me to recommend for you tonight?"'
+    )
+    bad, reasons = social_final_emission_malformed_player_echo(
+        player_text=rt["last_player_action_text"],
+        final_text=mirrored,
+        resolution=resolution,
+    )
+    assert bad is True
+    assert "player_request_framing_in_npc_dialogue" in reasons
+
+    out, details = build_final_strict_social_response(
+        mirrored,
+        resolution=resolution,
+        tags=[],
+        session=session,
+        scene_id=sid,
+        world=world,
+    )
+    low = out.lower()
+    assert "would you" not in low
+    assert details.get("social_emission_integrity_replaced") is True
+    assert details.get("final_emitted_source") == "social_emission_integrity_fallback"
+    assert "ward" in low or "clerk" in low or "stable" in low or "river" in low or "gate" in low
+
+
+@pytest.mark.emission
+@pytest.mark.social
+def test_refusal_structured_echo_replaced_with_npc_voiced_refusal():
+    """Structured refusal must not restate the player's question back to them."""
+    session, world, sid = _base_session_scene()
+    rt = get_scene_runtime(session, sid)
+    rt["last_player_action_text"] = "Who runs the forged seal trade out of this ward?"
+    resolution = {
+        "kind": "question",
+        "prompt": rt["last_player_action_text"],
+        "success": False,
+        "social": {
+            "social_intent_class": "social_exchange",
+            "npc_id": "tavern_runner",
+            "npc_name": "Tavern Runner",
+            "reply_kind": "refusal",
+            "probe_outcome": "pushback_rebuke",
+        },
+    }
+    echo = (
+        'The tavern runner tilts their head. "Who runs the forged seal trade out of this ward?"'
+    )
+    out, details = build_final_strict_social_response(
+        echo,
+        resolution=resolution,
+        tags=[],
+        session=session,
+        scene_id=sid,
+        world=world,
+    )
+    low = out.lower()
+    assert out.strip() != echo.strip()
+    assert "won't answer" in low or "no names" in low or "not from me" in low
+    assert details.get("social_emission_integrity_replaced") is True
+    assert details.get("final_emitted_source") == "social_emission_integrity_fallback"
+
+
+@pytest.mark.emission
+@pytest.mark.social
+def test_actionable_redirect_realizes_as_redirect_in_final_text():
+    session, world, sid = _base_session_scene()
+    rt = get_scene_runtime(session, sid)
+    rt["last_player_action_text"] = "I'll buy you a meal if you point me at who keeps the night ledgers."
+    resolution = {
+        "kind": "social_probe",
+        "prompt": rt["last_player_action_text"],
+        "success": True,
+        "social": {
+            "social_intent_class": "social_exchange",
+            "npc_id": "tavern_runner",
+            "npc_name": "Tavern Runner",
+            "reply_kind": "explanation",
+            "social_probe_move": "transactional",
+            "probe_outcome": "actionable_redirect",
+            "probe_outcome_reason": "engine_topics_exhausted_trade_seeks_next_step",
+        },
+    }
+    echo = (
+        'The tavern runner smiles. "A meal if I point you at who keeps the night ledgers—is that your offer?"'
+    )
+    out, details = build_final_strict_social_response(
+        echo,
+        resolution=resolution,
+        tags=[],
+        session=session,
+        scene_id=sid,
+        world=world,
+    )
+    low = out.lower()
+    assert "is that your offer" not in low
+    assert "ward clerk" in low or "speak to" in low or "river gate" in low or "clerk" in low
+    assert details.get("social_emission_integrity_replaced") is True
+
+
+@pytest.mark.emission
+@pytest.mark.social
+def test_explanation_structured_echo_replaced_with_npc_explanation():
+    session, world, sid = _base_session_scene()
+    rt = get_scene_runtime(session, sid)
+    rt["last_player_action_text"] = "Why did the harbor crowd scatter so fast yesterday?"
+    resolution = {
+        "kind": "social_probe",
+        "prompt": rt["last_player_action_text"],
+        "success": True,
+        "social": {
+            "social_intent_class": "social_exchange",
+            "npc_id": "tavern_runner",
+            "npc_name": "Tavern Runner",
+            "reply_kind": "explanation",
+            "social_probe_move": "followup",
+            "probe_outcome": "guarded_continuation",
+            "probe_outcome_reason": "followup_after_exhaustion",
+        },
+    }
+    echo = (
+        'The tavern runner frowns. "Why did the harbor crowd scatter so fast yesterday?"'
+    )
+    out, details = build_final_strict_social_response(
+        echo,
+        resolution=resolution,
+        tags=[],
+        session=session,
+        scene_id=sid,
+        world=world,
+    )
+    low = out.lower()
+    assert "why did the harbor crowd scatter" not in low
+    assert "word is" in low or "rumor" in low or "clerk" in low or "all i know" in low
+    assert details.get("social_emission_integrity_replaced") is True
+
+
+@pytest.mark.emission
+@pytest.mark.social
+def test_valid_substantive_refusal_not_replaced_by_integrity_guard():
+    """Low structural overlap with a mirrored question; substantive refusal must pass through."""
+    session, world, sid = _base_session_scene()
+    rt = get_scene_runtime(session, sid)
+    rt["last_player_action_text"] = "Who runs the forged seal trade out of this ward?"
+    resolution = {
+        "kind": "question",
+        "prompt": rt["last_player_action_text"],
+        "success": False,
+        "social": {
+            "social_intent_class": "social_exchange",
+            "npc_id": "tavern_runner",
+            "npc_name": "Tavern Runner",
+            "reply_kind": "refusal",
+        },
+    }
+    refusal = (
+        'The tavern runner exhales through their teeth. '
+        '"I don\'t trade in seal gossip—the ward clerk watches those papers, not me."'
+    )
+    bad, _ = social_final_emission_malformed_player_echo(
+        player_text=rt["last_player_action_text"],
+        final_text=refusal,
+        resolution=resolution,
+    )
+    assert bad is False
+
+    out, details = build_final_strict_social_response(
+        refusal,
+        resolution=resolution,
+        tags=[],
+        session=session,
+        scene_id=sid,
+        world=world,
+    )
+    assert "seal gossip" in out.lower() or "clerk" in out.lower()
+    assert details.get("social_emission_integrity_replaced") is False
+    assert details.get("final_emitted_source") in ("generated_candidate", "normalized_social_candidate")

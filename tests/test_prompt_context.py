@@ -10,11 +10,17 @@ from game.leads import SESSION_LEAD_REGISTRY_KEY, LeadLifecycle, LeadStatus
 from game.prompt_context import (
     build_active_interlocutor_export,
     build_authoritative_lead_prompt_context,
+    build_interlocutor_lead_discussion_context,
     build_narration_context,
     build_social_interlocutor_profile,
     deterministic_interlocutor_answer_style_hints,
+    deterministic_interlocutor_lead_behavior_hints,
 )
-from game.social import compute_social_target_profile_hints
+from game.social import (
+    compute_social_target_profile_hints,
+    mark_player_acknowledged_npc_lead,
+    record_npc_lead_discussion,
+)
 from game.world import upsert_world_npc
 
 
@@ -54,6 +60,34 @@ def _session_with_registry(*leads: dict) -> dict:
         "interaction_context": {"active_interaction_target_id": None, "interaction_mode": "none"},
         SESSION_LEAD_REGISTRY_KEY: reg,
     }
+
+
+def _record_discussion(
+    session: dict,
+    *,
+    scene_id: str,
+    npc_id: str,
+    lead_id: str,
+    turn: int,
+    disclosure_level: str = "hinted",
+    acknowledged: bool = False,
+) -> None:
+    record_npc_lead_discussion(
+        session,
+        scene_id,
+        npc_id,
+        lead_id,
+        disclosure_level=disclosure_level,
+        turn_counter=turn,
+    )
+    if acknowledged:
+        mark_player_acknowledged_npc_lead(
+            session,
+            scene_id,
+            npc_id,
+            lead_id,
+            turn_counter=turn,
+        )
 
 
 @pytest.mark.unit
@@ -106,6 +140,272 @@ def test_build_authoritative_lead_prompt_context_active_and_pursued_ranking():
     assert ids_top == ["top_active", "a_pursued_same_pri", "z_pursued_same_pri"]
     assert out["currently_pursued_lead"] is not None
     assert out["currently_pursued_lead"]["id"] == "a_pursued_same_pri"
+
+
+@pytest.mark.unit
+def test_build_interlocutor_lead_discussion_context_only_active_npc_rows():
+    session = _session_with_registry(
+        {"id": "lead_a", "title": "Lead A", "status": LeadStatus.ACTIVE.value, "lifecycle": LeadLifecycle.COMMITTED.value},
+        {"id": "lead_b", "title": "Lead B", "status": LeadStatus.ACTIVE.value, "lifecycle": LeadLifecycle.COMMITTED.value},
+    )
+    session["active_scene_id"] = "scene_docks"
+    session["turn_counter"] = 10
+    _record_discussion(session, scene_id="scene_docks", npc_id="npc_dockmaster", lead_id="lead_a", turn=9)
+    _record_discussion(session, scene_id="scene_docks", npc_id="npc_other", lead_id="lead_b", turn=9)
+    out = build_interlocutor_lead_discussion_context(
+        session=session,
+        world={},
+        public_scene={"id": "scene_docks"},
+        recent_log=[],
+        active_npc_id="npc_dockmaster",
+    )
+    assert out["active_npc_id"] == "npc_dockmaster"
+    assert [r["lead_id"] for r in out["introduced_by_npc"]] == ["lead_a"]
+
+
+@pytest.mark.unit
+def test_build_interlocutor_lead_discussion_context_joins_registry_fields():
+    session = _session_with_registry(
+        {
+            "id": "lead_smuggler_drop",
+            "title": "Smuggler Drop",
+            "status": LeadStatus.ACTIVE.value,
+            "lifecycle": LeadLifecycle.COMMITTED.value,
+        }
+    )
+    session["active_scene_id"] = "scene_docks"
+    session["turn_counter"] = 10
+    _record_discussion(
+        session,
+        scene_id="scene_docks",
+        npc_id="npc_dockmaster",
+        lead_id="lead_smuggler_drop",
+        turn=10,
+        disclosure_level="explicit",
+    )
+    out = build_interlocutor_lead_discussion_context(
+        session=session,
+        world={},
+        public_scene={"id": "scene_docks"},
+        recent_log=[],
+        active_npc_id="npc_dockmaster",
+    )
+    row = out["introduced_by_npc"][0]
+    assert row["title"] == "Smuggler Drop"
+    assert row["status"] == LeadStatus.ACTIVE.value
+    assert row["lifecycle"] == LeadLifecycle.COMMITTED.value
+
+
+@pytest.mark.unit
+def test_build_interlocutor_lead_discussion_context_unacknowledged_sorts_first():
+    session = _session_with_registry(
+        {"id": "lead_unack", "title": "A Lead", "status": LeadStatus.ACTIVE.value, "lifecycle": LeadLifecycle.COMMITTED.value},
+        {"id": "lead_ack", "title": "B Lead", "status": LeadStatus.ACTIVE.value, "lifecycle": LeadLifecycle.COMMITTED.value},
+    )
+    session["active_scene_id"] = "scene_docks"
+    session["turn_counter"] = 10
+    _record_discussion(session, scene_id="scene_docks", npc_id="npc_dockmaster", lead_id="lead_ack", turn=10, acknowledged=True)
+    _record_discussion(session, scene_id="scene_docks", npc_id="npc_dockmaster", lead_id="lead_unack", turn=10)
+    out = build_interlocutor_lead_discussion_context(
+        session=session,
+        world={},
+        public_scene={"id": "scene_docks"},
+        recent_log=[],
+        active_npc_id="npc_dockmaster",
+    )
+    assert [r["lead_id"] for r in out["introduced_by_npc"]][:2] == ["lead_unack", "lead_ack"]
+    assert [r["lead_id"] for r in out["unacknowledged_from_npc"]] == ["lead_unack"]
+
+
+@pytest.mark.unit
+def test_build_interlocutor_lead_discussion_context_recent_window_and_repeat_suppression():
+    session = _session_with_registry(
+        {"id": "lead_recent", "title": "Recent", "status": LeadStatus.ACTIVE.value, "lifecycle": LeadLifecycle.COMMITTED.value},
+        {"id": "lead_old", "title": "Old", "status": LeadStatus.ACTIVE.value, "lifecycle": LeadLifecycle.COMMITTED.value},
+    )
+    session["active_scene_id"] = "scene_docks"
+    session["turn_counter"] = 10
+    _record_discussion(session, scene_id="scene_docks", npc_id="npc_dockmaster", lead_id="lead_recent", turn=9)
+    _record_discussion(session, scene_id="scene_docks", npc_id="npc_dockmaster", lead_id="lead_old", turn=6)
+    out = build_interlocutor_lead_discussion_context(
+        session=session,
+        world={},
+        public_scene={"id": "scene_docks"},
+        recent_log=[],
+        active_npc_id="npc_dockmaster",
+    )
+    recency_by_id = {r["lead_id"]: r["recently_discussed"] for r in out["introduced_by_npc"]}
+    assert recency_by_id["lead_recent"] is True
+    assert recency_by_id["lead_old"] is False
+    assert out["repeat_suppression"]["has_recent_repeat_risk"] is True
+    assert out["repeat_suppression"]["recent_lead_ids"] == ["lead_recent"]
+    assert out["repeat_suppression"]["prefer_progress_over_restatement"] is True
+
+
+@pytest.mark.unit
+def test_build_interlocutor_lead_discussion_context_excludes_terminal_from_actionable():
+    session = _session_with_registry(
+        {"id": "lead_active", "title": "Active", "status": LeadStatus.ACTIVE.value, "lifecycle": LeadLifecycle.COMMITTED.value},
+        {"id": "lead_done", "title": "Done", "status": LeadStatus.RESOLVED.value, "lifecycle": LeadLifecycle.RESOLVED.value},
+    )
+    session["active_scene_id"] = "scene_docks"
+    session["turn_counter"] = 10
+    _record_discussion(session, scene_id="scene_docks", npc_id="npc_dockmaster", lead_id="lead_active", turn=10)
+    _record_discussion(session, scene_id="scene_docks", npc_id="npc_dockmaster", lead_id="lead_done", turn=10)
+    out = build_interlocutor_lead_discussion_context(
+        session=session,
+        world={},
+        public_scene={"id": "scene_docks"},
+        recent_log=[],
+        active_npc_id="npc_dockmaster",
+    )
+    actionable_ids = {r["lead_id"] for r in out["introduced_by_npc"]}
+    terminal_ids = {r["lead_id"] for r in out["recent_terminal_reference"]}
+    assert "lead_active" in actionable_ids
+    assert "lead_done" not in actionable_ids
+    assert "lead_done" in terminal_ids
+
+
+@pytest.mark.unit
+def test_build_interlocutor_lead_discussion_context_neutral_when_no_active_npc():
+    session = _session_with_registry()
+    out = build_interlocutor_lead_discussion_context(
+        session=session,
+        world={},
+        public_scene={"id": "scene_docks"},
+        recent_log=[],
+        active_npc_id=None,
+    )
+    assert out["active_npc_id"] is None
+    assert out["introduced_by_npc"] == []
+    assert out["unacknowledged_from_npc"] == []
+    assert out["recently_discussed_with_npc"] == []
+    assert out["repeat_suppression"] == {
+        "has_recent_repeat_risk": False,
+        "recent_lead_ids": [],
+        "prefer_progress_over_restatement": False,
+    }
+
+
+@pytest.mark.unit
+def test_build_interlocutor_lead_discussion_context_skips_missing_registry_row():
+    session = _session_with_registry(
+        {"id": "lead_present", "title": "Present", "status": LeadStatus.ACTIVE.value, "lifecycle": LeadLifecycle.COMMITTED.value},
+    )
+    session["active_scene_id"] = "scene_docks"
+    session["turn_counter"] = 10
+    _record_discussion(session, scene_id="scene_docks", npc_id="npc_dockmaster", lead_id="lead_present", turn=10)
+    _record_discussion(session, scene_id="scene_docks", npc_id="npc_dockmaster", lead_id="lead_missing", turn=10)
+    out = build_interlocutor_lead_discussion_context(
+        session=session,
+        world={},
+        public_scene={"id": "scene_docks"},
+        recent_log=[],
+        active_npc_id="npc_dockmaster",
+    )
+    ids = [r["lead_id"] for r in out["introduced_by_npc"]]
+    assert ids == ["lead_present"]
+
+
+@pytest.mark.unit
+def test_interlocutor_lead_behavior_hints_repeat_risk_prefers_progression():
+    hints = deterministic_interlocutor_lead_behavior_hints(
+        {
+            "active_npc_id": "npc_dockmaster",
+            "introduced_by_npc": [{"lead_id": "lead_recent"}],
+            "unacknowledged_from_npc": [],
+            "recently_discussed_with_npc": [{"lead_id": "lead_recent", "disclosure_level": "hinted"}],
+            "recent_terminal_reference": [],
+            "repeat_suppression": {"has_recent_repeat_risk": True},
+        }
+    )
+    assert any("prefer advancement" in hint and "over repetition" in hint for hint in hints)
+
+
+@pytest.mark.unit
+def test_interlocutor_lead_behavior_hints_recent_explicit_not_brand_new():
+    hints = deterministic_interlocutor_lead_behavior_hints(
+        {
+            "active_npc_id": "npc_dockmaster",
+            "introduced_by_npc": [{"lead_id": "lead_explicit"}],
+            "unacknowledged_from_npc": [],
+            "recently_discussed_with_npc": [{"lead_id": "lead_explicit", "disclosure_level": "explicit"}],
+            "recent_terminal_reference": [],
+            "repeat_suppression": {"has_recent_repeat_risk": False},
+        }
+    )
+    assert any("already discussed explicitly as brand-new" in hint for hint in hints)
+
+
+@pytest.mark.unit
+def test_interlocutor_lead_behavior_hints_hinted_unack_allows_narrowing():
+    hints = deterministic_interlocutor_lead_behavior_hints(
+        {
+            "active_npc_id": "npc_dockmaster",
+            "introduced_by_npc": [{"lead_id": "lead_hint"}],
+            "unacknowledged_from_npc": [
+                {
+                    "lead_id": "lead_hint",
+                    "disclosure_level": "hinted",
+                    "player_acknowledged": False,
+                }
+            ],
+            "recently_discussed_with_npc": [],
+            "recent_terminal_reference": [],
+            "repeat_suppression": {"has_recent_repeat_risk": False},
+        }
+    )
+    assert any("continued hinting or narrowing is allowed" in hint for hint in hints)
+    assert any("full disclosure is not required" in hint for hint in hints)
+
+
+@pytest.mark.unit
+def test_interlocutor_lead_behavior_hints_acknowledged_is_shared_context():
+    hints = deterministic_interlocutor_lead_behavior_hints(
+        {
+            "active_npc_id": "npc_dockmaster",
+            "introduced_by_npc": [{"lead_id": "lead_ack", "player_acknowledged": True}],
+            "unacknowledged_from_npc": [],
+            "recently_discussed_with_npc": [],
+            "recent_terminal_reference": [],
+            "repeat_suppression": {"has_recent_repeat_risk": False},
+        }
+    )
+    assert any("treat it as shared context" in hint for hint in hints)
+    assert any("move beyond basic re-introduction" in hint for hint in hints)
+
+
+@pytest.mark.unit
+def test_interlocutor_lead_behavior_hints_terminal_only_returns_empty():
+    hints = deterministic_interlocutor_lead_behavior_hints(
+        {
+            "active_npc_id": "npc_dockmaster",
+            "introduced_by_npc": [],
+            "unacknowledged_from_npc": [],
+            "recently_discussed_with_npc": [],
+            "recent_terminal_reference": [{"lead_id": "lead_done"}],
+            "repeat_suppression": {"has_recent_repeat_risk": False},
+        }
+    )
+    assert hints == []
+
+
+@pytest.mark.unit
+def test_interlocutor_lead_behavior_hints_neutral_returns_empty():
+    neutral = {
+        "active_npc_id": None,
+        "introduced_by_npc": [],
+        "unacknowledged_from_npc": [],
+        "recently_discussed_with_npc": [],
+        "recent_terminal_reference": [],
+        "repeat_suppression": {
+            "has_recent_repeat_risk": False,
+            "recent_lead_ids": [],
+            "prefer_progress_over_restatement": False,
+        },
+    }
+    assert deterministic_interlocutor_lead_behavior_hints(neutral) == []
+    assert deterministic_interlocutor_lead_behavior_hints(None) == []
 
 
 @pytest.mark.unit
@@ -453,6 +753,9 @@ def test_build_narration_context_exposes_lead_context_and_preserves_pending_surf
     }
     ctx = build_narration_context(**_narration_minimal_kwargs(session=session))
     assert "lead_context" in ctx
+    assert "interlocutor_lead_context" in ctx
+    assert "interlocutor_lead_behavior_hints" in ctx
+    assert isinstance(ctx["interlocutor_lead_behavior_hints"], list)
     lc = ctx["lead_context"]
     for key in (
         "top_active_leads",
@@ -465,6 +768,275 @@ def test_build_narration_context_exposes_lead_context_and_preserves_pending_surf
         assert key in lc
     assert ctx["scene"]["pending_leads"] == [{"surface": "scene hook"}]
     assert ctx["scene"]["runtime"]["pending_leads"] == [{"hint": "legacy pending"}]
+
+
+def test_build_narration_context_repeat_continuity_alignment_across_export_and_hints():
+    session = _session_with_registry(
+        {
+            "id": "lead_smuggler_drop",
+            "title": "Smuggler Drop",
+            "status": LeadStatus.ACTIVE.value,
+            "lifecycle": LeadLifecycle.COMMITTED.value,
+        }
+    )
+    session["active_scene_id"] = "scene_docks"
+    session["turn_counter"] = 11
+    session["interaction_context"] = {
+        "active_interaction_target_id": "npc_dockmaster",
+        "active_interaction_kind": "social",
+        "interaction_mode": "social",
+        "engagement_level": "engaged",
+        "conversation_privacy": None,
+        "player_position_context": None,
+    }
+    _record_discussion(
+        session,
+        scene_id="scene_docks",
+        npc_id="npc_dockmaster",
+        lead_id="lead_smuggler_drop",
+        turn=10,
+        disclosure_level="hinted",
+    )
+    _record_discussion(
+        session,
+        scene_id="scene_docks",
+        npc_id="npc_dockmaster",
+        lead_id="lead_smuggler_drop",
+        turn=11,
+        disclosure_level="hinted",
+    )
+    ctx = build_narration_context(
+        **_narration_minimal_kwargs(
+            session=session,
+            world={},
+            public_scene={"id": "scene_docks", "visible_facts": [], "exits": [], "enemies": []},
+        )
+    )
+    ilc = ctx["interlocutor_lead_context"]
+    assert [r["lead_id"] for r in ilc["recently_discussed_with_npc"]] == ["lead_smuggler_drop"]
+    assert ilc["repeat_suppression"]["has_recent_repeat_risk"] is True
+    assert ilc["repeat_suppression"]["recent_lead_ids"] == ["lead_smuggler_drop"]
+    assert any("prefer advancement" in h and "over repetition" in h for h in ctx["interlocutor_lead_behavior_hints"])
+
+
+def test_build_narration_context_disclosure_upgrade_and_acknowledgement_behavior_alignment():
+    session = _session_with_registry(
+        {
+            "id": "lead_patrol",
+            "title": "Missing Patrol",
+            "status": LeadStatus.ACTIVE.value,
+            "lifecycle": LeadLifecycle.COMMITTED.value,
+        },
+        {
+            "id": "lead_unack",
+            "title": "Unacknowledged Lead",
+            "status": LeadStatus.ACTIVE.value,
+            "lifecycle": LeadLifecycle.COMMITTED.value,
+        },
+    )
+    session["active_scene_id"] = "scene_docks"
+    session["turn_counter"] = 9
+    session["interaction_context"] = {
+        "active_interaction_target_id": "npc_dockmaster",
+        "active_interaction_kind": "social",
+        "interaction_mode": "social",
+        "engagement_level": "engaged",
+        "conversation_privacy": None,
+        "player_position_context": None,
+    }
+    _record_discussion(
+        session,
+        scene_id="scene_docks",
+        npc_id="npc_dockmaster",
+        lead_id="lead_patrol",
+        turn=7,
+        disclosure_level="hinted",
+    )
+    _record_discussion(
+        session,
+        scene_id="scene_docks",
+        npc_id="npc_dockmaster",
+        lead_id="lead_patrol",
+        turn=8,
+        disclosure_level="explicit",
+    )
+    _record_discussion(
+        session,
+        scene_id="scene_docks",
+        npc_id="npc_dockmaster",
+        lead_id="lead_patrol",
+        turn=9,
+        disclosure_level="hinted",
+        acknowledged=True,
+    )
+    _record_discussion(
+        session,
+        scene_id="scene_docks",
+        npc_id="npc_dockmaster",
+        lead_id="lead_unack",
+        turn=9,
+        disclosure_level="hinted",
+    )
+
+    ctx = build_narration_context(
+        **_narration_minimal_kwargs(
+            session=session,
+            world={},
+            public_scene={"id": "scene_docks", "visible_facts": [], "exits": [], "enemies": []},
+        )
+    )
+    ilc = ctx["interlocutor_lead_context"]
+    by_id = {r["lead_id"]: r for r in ilc["introduced_by_npc"]}
+    assert by_id["lead_patrol"]["disclosure_level"] == "explicit"
+    assert by_id["lead_patrol"]["player_acknowledged"] is True
+    assert by_id["lead_unack"]["player_acknowledged"] is False
+    assert [r["lead_id"] for r in ilc["introduced_by_npc"]][:2] == ["lead_unack", "lead_patrol"]
+    hints = ctx["interlocutor_lead_behavior_hints"]
+    assert any("already discussed explicitly as brand-new" in h for h in hints)
+    assert any("treat it as shared context" in h for h in hints)
+
+
+def test_build_narration_context_npc_slice_strict_scoping_for_context_and_hints():
+    session = _session_with_registry(
+        {
+            "id": "lead_gate_watch",
+            "title": "Gate Watch",
+            "status": LeadStatus.ACTIVE.value,
+            "lifecycle": LeadLifecycle.COMMITTED.value,
+        }
+    )
+    session["active_scene_id"] = "scene_docks"
+    session["turn_counter"] = 12
+    _record_discussion(
+        session,
+        scene_id="scene_docks",
+        npc_id="npc_a",
+        lead_id="lead_gate_watch",
+        turn=12,
+        disclosure_level="hinted",
+        acknowledged=True,
+    )
+    _record_discussion(
+        session,
+        scene_id="scene_docks",
+        npc_id="npc_b",
+        lead_id="lead_gate_watch",
+        turn=12,
+        disclosure_level="hinted",
+        acknowledged=False,
+    )
+
+    session["interaction_context"] = {
+        "active_interaction_target_id": "npc_a",
+        "active_interaction_kind": "social",
+        "interaction_mode": "social",
+        "engagement_level": "engaged",
+        "conversation_privacy": None,
+        "player_position_context": None,
+    }
+    ctx_a = build_narration_context(
+        **_narration_minimal_kwargs(
+            session=session,
+            world={},
+            public_scene={"id": "scene_docks", "visible_facts": [], "exits": [], "enemies": []},
+        )
+    )
+    ilc_a = ctx_a["interlocutor_lead_context"]
+    assert ilc_a["active_npc_id"] == "npc_a"
+    assert [r["lead_id"] for r in ilc_a["introduced_by_npc"]] == ["lead_gate_watch"]
+    assert ilc_a["introduced_by_npc"][0]["player_acknowledged"] is True
+    assert any("shared context" in h for h in ctx_a["interlocutor_lead_behavior_hints"])
+
+    session["interaction_context"]["active_interaction_target_id"] = "npc_b"
+    ctx_b = build_narration_context(
+        **_narration_minimal_kwargs(
+            session=session,
+            world={},
+            public_scene={"id": "scene_docks", "visible_facts": [], "exits": [], "enemies": []},
+        )
+    )
+    ilc_b = ctx_b["interlocutor_lead_context"]
+    assert ilc_b["active_npc_id"] == "npc_b"
+    assert [r["lead_id"] for r in ilc_b["introduced_by_npc"]] == ["lead_gate_watch"]
+    assert ilc_b["introduced_by_npc"][0]["player_acknowledged"] is False
+    assert not any("shared context" in h for h in ctx_b["interlocutor_lead_behavior_hints"])
+
+
+def test_build_narration_context_terminal_missing_and_neutral_paths_are_safe():
+    session = _session_with_registry(
+        {
+            "id": "lead_done",
+            "title": "Done Lead",
+            "status": LeadStatus.RESOLVED.value,
+            "lifecycle": LeadLifecycle.RESOLVED.value,
+        }
+    )
+    session["active_scene_id"] = "scene_docks"
+    session["turn_counter"] = 14
+    session["interaction_context"] = {
+        "active_interaction_target_id": "npc_dockmaster",
+        "active_interaction_kind": "social",
+        "interaction_mode": "social",
+        "engagement_level": "engaged",
+        "conversation_privacy": None,
+        "player_position_context": None,
+    }
+    _record_discussion(
+        session,
+        scene_id="scene_docks",
+        npc_id="npc_dockmaster",
+        lead_id="lead_done",
+        turn=14,
+        disclosure_level="explicit",
+    )
+    _record_discussion(
+        session,
+        scene_id="scene_docks",
+        npc_id="npc_dockmaster",
+        lead_id="lead_missing",
+        turn=14,
+        disclosure_level="hinted",
+    )
+    ctx = build_narration_context(
+        **_narration_minimal_kwargs(
+            session=session,
+            world={},
+            public_scene={"id": "scene_docks", "visible_facts": [], "exits": [], "enemies": []},
+        )
+    )
+    ilc = ctx["interlocutor_lead_context"]
+    assert ilc["introduced_by_npc"] == []
+    assert ilc["unacknowledged_from_npc"] == []
+    assert ilc["recently_discussed_with_npc"] == []
+    assert ilc["repeat_suppression"] == {
+        "has_recent_repeat_risk": False,
+        "recent_lead_ids": [],
+        "prefer_progress_over_restatement": False,
+    }
+    assert [r["lead_id"] for r in ilc["recent_terminal_reference"]] == ["lead_done"]
+    assert ctx["interlocutor_lead_behavior_hints"] == []
+
+    session["interaction_context"]["active_interaction_target_id"] = None
+    neutral_ctx = build_narration_context(
+        **_narration_minimal_kwargs(
+            session=session,
+            world={},
+            public_scene={"id": "scene_docks", "visible_facts": [], "exits": [], "enemies": []},
+        )
+    )
+    assert neutral_ctx["interlocutor_lead_context"] == {
+        "active_npc_id": None,
+        "introduced_by_npc": [],
+        "unacknowledged_from_npc": [],
+        "recently_discussed_with_npc": [],
+        "recent_terminal_reference": [],
+        "repeat_suppression": {
+            "has_recent_repeat_risk": False,
+            "recent_lead_ids": [],
+            "prefer_progress_over_restatement": False,
+        },
+    }
+    assert neutral_ctx["interlocutor_lead_behavior_hints"] == []
 
 
 def test_follow_up_pressure_merges_log_pressure_with_from_leads():

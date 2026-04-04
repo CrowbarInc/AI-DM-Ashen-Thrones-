@@ -58,6 +58,7 @@ pytest -m "not transcript and not slow and not brittle"
 
 The helpers under `tests/helpers/synthetic_*.py` are **test/tooling infrastructure only** (no `game/` coupling in the scaffold). They are meant to drive or evaluate automated “synthetic players” alongside patterns like `tests/helpers/transcript_runner.py`, not to add gameplay modes.
 
+- **`py -m pytest -q` includes synthetic-player tests:** `pytest.ini` only adds `-q` (no marker filter). You get `tests/test_synthetic_sessions.py`, `tests/test_synthetic_policy.py`, and `tests/test_synthetic_smoke.py` (the last is `slow`). The fast lane `-m "not transcript and not slow"` skips `test_synthetic_smoke.py` but still runs the two lighter synthetic modules.
 - The primary harness runner surface is `run_synthetic_session(...)`; `run_placeholder_session(...)` remains compatibility-only.
 - Synthetic pytest smoke coverage is deterministic and fake-GM-backed by default.
 - For manual exploratory runs, use `tools/run_synthetic_session.py` (defaults to fake-GM mode; real-GM mode is explicit opt-in via `--real-gm`).
@@ -113,8 +114,8 @@ pytest -m "synthetic"
 # One-file focused synthetic run
 pytest tests/test_synthetic_smoke.py
 
-# One-file focused transcript-backed synthetic run
-pytest tests/test_synthetic_runner.py -m "synthetic and transcript"
+# Runner / preset regression (fast synthetic; not transcript-backed)
+pytest tests/test_synthetic_sessions.py
 ```
 
 - **End-to-end** synthetic sessions (multi-turn, real `chat` / transcript loops) should usually be marked **`synthetic`** and **`slow`** so they stay out of the default fast lane (`not transcript and not slow`).

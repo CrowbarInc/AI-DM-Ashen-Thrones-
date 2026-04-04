@@ -11,9 +11,16 @@ import re
 
 from game.leads import (
     filter_pending_leads_for_active_follow_surface,
+    get_lead,
+    is_lead_terminal,
     LeadLifecycle,
     LeadStatus,
     list_session_leads,
+)
+from game.social import (
+    _social_turn_counter,
+    explicit_player_topic_anchor_state,
+    list_recent_npc_lead_discussions,
 )
 from game.storage import get_scene_state
 from game.world import get_world_npc_by_id
@@ -26,6 +33,7 @@ MAX_WORLD_PRESSURES = 3
 MAX_LOG_ENTRY_SNIPPET = 200
 MAX_FOLLOW_UP_TOPIC_TOKENS = 6
 MAX_RECENT_CONTEXTUAL_LEADS = 4
+INTERLOCUTOR_DISCUSSION_RECENCY_WINDOW = 2
 
 SOCIAL_REPLY_KINDS = frozenset({
     'question',
@@ -287,6 +295,208 @@ def build_authoritative_lead_prompt_context(
             "npc_has_relevant": bool(npc_relevant_leads),
         },
     }
+
+
+def _interlocutor_discussion_sort_key(row: Dict[str, Any]) -> tuple[Any, ...]:
+    """Deterministic order for active-NPC lead discussion rows."""
+    ack = bool(row.get("player_acknowledged"))
+    recent = bool(row.get("recently_discussed"))
+    last_discussed = _lead_int(row, "last_discussed_turn", default=-1)
+    disclosure = str(row.get("disclosure_level") or "").strip().lower()
+    # Only guarantee explicit beats hinted on disclosure ties.
+    disclosure_rank = 0 if disclosure == "explicit" else 1
+    title = str(row.get("title") or "").strip().lower()
+    lead_id = str(row.get("lead_id") or "").strip().lower()
+    return (ack, not recent, -last_discussed, disclosure_rank, title, lead_id)
+
+
+def _discussion_row_recently_discussed(
+    *,
+    current_turn: int | None,
+    last_discussed_turn: Any,
+) -> bool:
+    if current_turn is None:
+        return False
+    try:
+        last_discussed = int(last_discussed_turn)
+    except (TypeError, ValueError):
+        return False
+    delta = current_turn - last_discussed
+    return 0 <= delta <= INTERLOCUTOR_DISCUSSION_RECENCY_WINDOW
+
+
+def build_interlocutor_lead_discussion_context(
+    session: Any,
+    world: Any,
+    public_scene: Any,
+    recent_log: Any,
+    *,
+    active_npc_id: str | None,
+) -> Dict[str, Any]:
+    """Read-only active-NPC lead discussion context from scene runtime Block 1 memory.
+
+    Source of truth: Block 1 npc_lead_discussions joined to get_lead; strict active_npc_id scoping;
+    terminal leads only in recent_terminal_reference; missing registry rows skipped. No writes.
+    """
+    _ = (world, recent_log)
+    neutral: Dict[str, Any] = {
+        "active_npc_id": None,
+        "introduced_by_npc": [],
+        "unacknowledged_from_npc": [],
+        "recently_discussed_with_npc": [],
+        "recent_terminal_reference": [],
+        "repeat_suppression": {
+            "has_recent_repeat_risk": False,
+            "recent_lead_ids": [],
+            "prefer_progress_over_restatement": False,
+        },
+    }
+    npc_id = str(active_npc_id or "").strip()
+    if not npc_id:
+        return neutral
+
+    scene_id = str(_lead_get(public_scene, "id") or "").strip()
+    if not scene_id:
+        scene_id = str(_lead_get(session, "active_scene_id") or "").strip()
+    if not scene_id:
+        return {**neutral, "active_npc_id": npc_id}
+
+    rows = list_recent_npc_lead_discussions(session, scene_id, npc_id=npc_id, limit=64)
+    current_turn = _social_turn_counter(session)
+    actionable_rows: List[Dict[str, Any]] = []
+    terminal_rows: List[Dict[str, Any]] = []
+    for rec in rows:
+        if not isinstance(rec, dict):
+            continue
+        lid = str(rec.get("lead_id") or "").strip()
+        if not lid:
+            continue
+        lead_row = get_lead(session, lid)
+        if not isinstance(lead_row, dict):
+            continue
+
+        title = str(lead_row.get("title") or "").strip()
+        status = _lead_status_value(lead_row)
+        lifecycle = str(lead_row.get("lifecycle") or "").strip().lower()
+        merged = {
+            "lead_id": lid,
+            "title": title,
+            "status": status,
+            "lifecycle": lifecycle,
+            "disclosure_level": str(rec.get("disclosure_level") or "").strip().lower() or "hinted",
+            "player_acknowledged": bool(rec.get("player_acknowledged")),
+            "player_acknowledged_turn": rec.get("player_acknowledged_turn"),
+            "mention_count": int(rec.get("mention_count") or 0),
+            "first_discussed_turn": rec.get("first_discussed_turn"),
+            "last_discussed_turn": rec.get("last_discussed_turn"),
+            "recently_discussed": _discussion_row_recently_discussed(
+                current_turn=current_turn,
+                last_discussed_turn=rec.get("last_discussed_turn"),
+            ),
+            "last_scene_id": str(rec.get("last_scene_id") or "").strip() or scene_id,
+        }
+        if is_lead_terminal(lead_row):
+            terminal_rows.append(merged)
+        else:
+            actionable_rows.append(merged)
+
+    actionable_rows = sorted(actionable_rows, key=_interlocutor_discussion_sort_key)
+    terminal_rows = sorted(terminal_rows, key=_interlocutor_discussion_sort_key)
+    unack = [r for r in actionable_rows if not bool(r.get("player_acknowledged"))]
+    recent = [r for r in actionable_rows if bool(r.get("recently_discussed"))]
+    recent_lead_ids = [str(r.get("lead_id") or "").strip() for r in recent if str(r.get("lead_id") or "").strip()]
+    has_repeat_risk = bool(recent_lead_ids)
+    return {
+        "active_npc_id": npc_id,
+        "introduced_by_npc": actionable_rows,
+        "unacknowledged_from_npc": unack,
+        "recently_discussed_with_npc": recent,
+        "recent_terminal_reference": terminal_rows[:2],
+        "repeat_suppression": {
+            "has_recent_repeat_risk": has_repeat_risk,
+            "recent_lead_ids": recent_lead_ids,
+            "prefer_progress_over_restatement": has_repeat_risk,
+        },
+    }
+
+
+def deterministic_interlocutor_lead_behavior_hints(
+    interlocutor_lead_context: Mapping[str, Any] | None,
+) -> List[str]:
+    """Return compact deterministic behavior hints from interlocutor lead context.
+
+    Input is interlocutor_lead_context only—no persistence or new inference; must not affect speaker
+    grounding. Tests should assert contract / hint triggers, not exact narration prose.
+    """
+    if not isinstance(interlocutor_lead_context, Mapping):
+        return []
+
+    introduced = interlocutor_lead_context.get("introduced_by_npc")
+    unack = interlocutor_lead_context.get("unacknowledged_from_npc")
+    recent = interlocutor_lead_context.get("recently_discussed_with_npc")
+    terminal_refs = interlocutor_lead_context.get("recent_terminal_reference")
+    repeat = interlocutor_lead_context.get("repeat_suppression")
+
+    introduced_rows = introduced if isinstance(introduced, list) else []
+    unack_rows = unack if isinstance(unack, list) else []
+    recent_rows = recent if isinstance(recent, list) else []
+    terminal_rows = terminal_refs if isinstance(terminal_refs, list) else []
+    repeat_map = repeat if isinstance(repeat, Mapping) else {}
+
+    has_actionable_rows = bool(introduced_rows or unack_rows or recent_rows)
+    if not has_actionable_rows and terminal_rows:
+        return []
+    if not has_actionable_rows:
+        return []
+
+    hints: List[str] = []
+    seen: set[str] = set()
+
+    def _append_hint(text: str) -> None:
+        hint = str(text or "").strip()
+        if not hint or hint in seen:
+            return
+        seen.add(hint)
+        hints.append(hint)
+
+    has_recent_repeat_risk = bool(repeat_map.get("has_recent_repeat_risk"))
+    if has_recent_repeat_risk:
+        _append_hint(
+            "If this NPC discussed a lead recently, prefer advancement, clarification, implication, cost, risk, condition, refusal, or next-step pressure over repetition."
+        )
+
+    has_recent_explicit = any(
+        str((row or {}).get("disclosure_level") or "").strip().lower() == "explicit"
+        for row in recent_rows
+        if isinstance(row, Mapping)
+    )
+    if has_recent_explicit:
+        _append_hint(
+            "NPC LEAD CONTINUITY (engine): Do not present a lead this NPC already discussed explicitly as brand-new."
+        )
+
+    has_hinted_unack = any(
+        (not bool((row or {}).get("player_acknowledged")))
+        and str((row or {}).get("disclosure_level") or "").strip().lower() == "hinted"
+        for row in unack_rows
+        if isinstance(row, Mapping)
+    )
+    if has_hinted_unack:
+        _append_hint(
+            "If a lead remains hinted and unacknowledged, continued hinting or narrowing is allowed; full disclosure is not required."
+        )
+
+    has_acknowledged = any(
+        bool((row or {}).get("player_acknowledged"))
+        for row in introduced_rows
+        if isinstance(row, Mapping)
+    )
+    if has_acknowledged:
+        _append_hint(
+            "If the player already acknowledged a lead from this NPC, treat it as shared context and move beyond basic re-introduction."
+        )
+
+    return hints
 
 
 def _topic_tokens(text: str) -> List[str]:
@@ -941,6 +1151,10 @@ def build_narration_context(
 
     Returns a dict suitable for JSON serialization as the user message content.
     """
+    # Interlocutor lead contract (maintenance): interlocutor_lead_context is the NPC-scoped export from
+    # discussion tracking + authoritative lead rows; interlocutor_lead_behavior_hints are derived only
+    # from that dict. Keep both separate from lead_context and pending_leads. Synthetic regression targets
+    # this export for continuity / repeat suppression—not fixed narration wording.
     active_pending_leads = (
         filter_pending_leads_for_active_follow_surface(session, pending_leads)
         if isinstance(session, dict)
@@ -1075,6 +1289,8 @@ def build_narration_context(
     if social_authority:
         follow_up_log_pressure = None
 
+    active_topic_anchor = explicit_player_topic_anchor_state(str(user_text or ""))
+
     active_npc_id: str | None = None
     if isinstance(public_scene, Mapping):
         if isinstance(interlocutor_export, dict):
@@ -1093,6 +1309,16 @@ def build_narration_context(
         runtime=runtime,
         recent_log=recent_log_compact,
         active_npc_id=active_npc_id,
+    )
+    interlocutor_lead_context = build_interlocutor_lead_discussion_context(
+        session=session,
+        world=world,
+        public_scene=public_scene,
+        recent_log=recent_log_compact,
+        active_npc_id=active_npc_id,
+    )
+    interlocutor_lead_behavior_hints = deterministic_interlocutor_lead_behavior_hints(
+        interlocutor_lead_context
     )
     from_leads_pressure = lead_context.get("follow_up_pressure_from_leads")
     if not isinstance(from_leads_pressure, dict):
@@ -1130,6 +1356,16 @@ def build_narration_context(
     ]
     instructions = list(instructions) + lead_instr
 
+    if social_authority and active_topic_anchor.get("active"):
+        instructions = list(instructions) + [
+            "ACTIVE TOPIC ANCHOR (HARD RULE): The player explicitly corrected or narrowed the conversational subject "
+            "this turn. Answer that subject first in the active interlocutor's voice. Do not pivot back to "
+            "lead_context.currently_pursued_lead, urgent_or_stale_leads, or unrelated registry mystery threads "
+            "for convenience. Registry salience alone is not sufficient to override the clarified subject. "
+            "A redirect is allowed only after a substantive answer—or honest refusal, evasion, or ignorance—on the "
+            "asked subject.",
+        ]
+
     if social_authority:
         follow_up_pressure = {"from_leads": dict(from_leads_pressure)}
     elif follow_up_log_pressure is not None:
@@ -1154,6 +1390,7 @@ def build_narration_context(
 
     payload: Dict[str, Any] = {
         'instructions': instructions,
+        'active_topic_anchor': active_topic_anchor,
         'interaction_continuity': interaction_continuity,
         'active_interlocutor': interlocutor_export,
         'social_context': {
@@ -1165,6 +1402,8 @@ def build_narration_context(
         'player_input': str(user_text or ''),
         'follow_up_pressure': follow_up_pressure,
         'lead_context': lead_context,
+        'interlocutor_lead_context': interlocutor_lead_context,
+        'interlocutor_lead_behavior_hints': interlocutor_lead_behavior_hints,
         'response_policy': response_policy,
         'uncertainty_hint': eff_uncertainty_hint,
         'narration_obligations': narration_obligations,

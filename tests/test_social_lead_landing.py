@@ -12,7 +12,11 @@ from game.clues import (
 )
 from game.leads import SESSION_LEAD_REGISTRY_KEY, ensure_lead_registry, get_lead
 from game.defaults import default_character, default_world
-from game.social import resolve_social_action
+from game.social import (
+    apply_social_lead_discussion_tracking,
+    get_npc_lead_discussion,
+    resolve_social_action,
+)
 from game.storage import add_pending_lead, get_scene_runtime, load_scene
 
 
@@ -155,6 +159,293 @@ def test_resolve_social_plus_apply_persists_like_pipeline():
 
     assert "patrol_vanish" in get_all_known_clue_ids(session)
     assert "patrol_vanish" in (get_scene_runtime(session, "gate").get("discovered_clue_ids") or [])
+
+
+def test_npc_lead_discussion_first_intro_creates_record():
+    session: dict = {"turn_counter": 1}
+    scene_id = "gate"
+    world = default_world()
+    res = _resolution_question_with_topic(clue_id="east_lanes", text="East road is dangerous.")
+    apply_socially_revealed_leads(session, scene_id, world, res)
+
+    updates = apply_social_lead_discussion_tracking(
+        session=session,
+        scene_id=scene_id,
+        resolution=res,
+        player_text="What did they see on the east lanes?",
+    )
+
+    rec = get_npc_lead_discussion(session, scene_id, "runner", "east_lanes")
+    assert rec is not None
+    assert rec.get("npc_id") == "runner"
+    assert rec.get("lead_id") == "east_lanes"
+    assert rec.get("first_discussed_turn") == 1
+    assert rec.get("last_discussed_turn") == 1
+    assert rec.get("mention_count") == 1
+    assert rec.get("last_scene_id") == scene_id
+    assert isinstance(updates, list) and updates
+
+
+def test_npc_lead_discussion_repeat_mention_updates_turn_and_count():
+    session: dict = {"turn_counter": 4}
+    scene_id = "gate"
+    world = default_world()
+    res = _resolution_question_with_topic(clue_id="east_lanes", text="East road is dangerous.")
+    apply_socially_revealed_leads(session, scene_id, world, res)
+    apply_social_lead_discussion_tracking(session=session, scene_id=scene_id, resolution=res, player_text="Any road rumors?")
+
+    session["turn_counter"] = 5
+    res2 = _resolution_question_with_topic(clue_id="east_lanes", text="Same road, same warning.")
+    apply_socially_revealed_leads(session, scene_id, world, res2)
+    apply_social_lead_discussion_tracking(
+        session=session,
+        scene_id=scene_id,
+        resolution=res2,
+        player_text="Tell me that lane warning again.",
+    )
+
+    rec = get_npc_lead_discussion(session, scene_id, "runner", "east_lanes")
+    assert rec is not None
+    assert rec.get("mention_count") == 2
+    assert rec.get("first_discussed_turn") == 4
+    assert rec.get("last_discussed_turn") == 5
+
+
+def test_npc_lead_discussion_explicit_upgrades_from_hint():
+    session: dict = {"turn_counter": 8}
+    scene_id = "gate"
+    res_hint = _resolution_question_with_topic(clue_id="patrol_vanish", text="A patrol may have vanished.")
+    apply_social_lead_discussion_tracking(
+        session=session,
+        scene_id=scene_id,
+        resolution=res_hint,
+        player_text="Any patrol rumors?",
+    )
+
+    session["turn_counter"] = 9
+    res_explicit = _resolution_question_with_topic(
+        clue_id="patrol_vanish",
+        text="The patrol vanished east of the old milestone.",
+        leads_to_scene="old_milestone",
+    )
+    res_explicit["metadata"] = {"lead_landing": {"revealed_lead_ids": ["patrol_vanish"]}}
+    apply_social_lead_discussion_tracking(
+        session=session,
+        scene_id=scene_id,
+        resolution=res_explicit,
+        player_text="Where exactly did they vanish?",
+    )
+
+    rec = get_npc_lead_discussion(session, scene_id, "runner", "patrol_vanish")
+    assert rec is not None
+    assert rec.get("disclosure_level") == "explicit"
+
+
+def test_npc_lead_discussion_does_not_downgrade_explicit_to_hint():
+    session: dict = {"turn_counter": 12}
+    scene_id = "gate"
+    res_explicit = _resolution_question_with_topic(
+        clue_id="patrol_vanish",
+        text="The patrol vanished east of the old milestone.",
+    )
+    res_explicit["metadata"] = {"lead_landing": {"revealed_lead_ids": ["patrol_vanish"]}}
+    apply_social_lead_discussion_tracking(
+        session=session,
+        scene_id=scene_id,
+        resolution=res_explicit,
+        player_text="What happened to the patrol?",
+    )
+
+    session["turn_counter"] = 13
+    res_hint = _resolution_question_with_topic(clue_id="patrol_vanish", text="People whisper about that patrol.")
+    apply_social_lead_discussion_tracking(
+        session=session,
+        scene_id=scene_id,
+        resolution=res_hint,
+        player_text="Any whispers?",
+    )
+
+    rec = get_npc_lead_discussion(session, scene_id, "runner", "patrol_vanish")
+    assert rec is not None
+    assert rec.get("disclosure_level") == "explicit"
+
+
+def test_npc_lead_discussion_skips_without_grounded_npc():
+    session: dict = {"turn_counter": 3}
+    scene_id = "gate"
+    res = _resolution_question_with_topic(clue_id="east_lanes", text="East road is dangerous.")
+    res["social"]["npc_id"] = None
+    res["social"]["target_resolved"] = False
+
+    updates = apply_social_lead_discussion_tracking(
+        session=session,
+        scene_id=scene_id,
+        resolution=res,
+        player_text="Tell me about east lanes.",
+    )
+
+    assert updates == []
+    assert get_npc_lead_discussion(session, scene_id, "runner", "east_lanes") is None
+
+
+def test_npc_lead_discussion_acknowledgement_marks_on_followup_same_npc_lead():
+    session: dict = {"turn_counter": 20}
+    scene_id = "gate"
+    world = default_world()
+    res = _resolution_question_with_topic(clue_id="missing_patrol", text="A patrol went missing east.")
+    apply_socially_revealed_leads(session, scene_id, world, res)
+    apply_social_lead_discussion_tracking(
+        session=session,
+        scene_id=scene_id,
+        resolution=res,
+        player_text="Any patrol rumors?",
+    )
+
+    session["turn_counter"] = 21
+    res2 = _resolution_question_with_topic(clue_id="missing_patrol", text="Same missing patrol thread.")
+    apply_socially_revealed_leads(session, scene_id, world, res2)
+    apply_social_lead_discussion_tracking(
+        session=session,
+        scene_id=scene_id,
+        resolution=res2,
+        player_text="What about that missing patrol exactly?",
+    )
+
+    rec = get_npc_lead_discussion(session, scene_id, "runner", "missing_patrol")
+    assert rec is not None
+    assert rec.get("player_acknowledged") is True
+    assert rec.get("player_acknowledged_turn") == 21
+
+
+def test_npc_lead_discussion_repeat_continuity_updates_storage_fields():
+    session: dict = {"turn_counter": 30}
+    scene_id = "gate"
+    world = default_world()
+    res1 = _resolution_question_with_topic(clue_id="lead_smuggler_drop", text="A smuggler drop happens at dusk.")
+    apply_socially_revealed_leads(session, scene_id, world, res1)
+    apply_social_lead_discussion_tracking(
+        session=session,
+        scene_id=scene_id,
+        resolution=res1,
+        player_text="What is the smuggler drop?",
+    )
+
+    session["turn_counter"] = 31
+    res2 = _resolution_question_with_topic(
+        clue_id="lead_smuggler_drop",
+        text="Same drop point, same dusk timing.",
+    )
+    apply_socially_revealed_leads(session, scene_id, world, res2)
+    apply_social_lead_discussion_tracking(
+        session=session,
+        scene_id=scene_id,
+        resolution=res2,
+        player_text="And what happens after dusk at that drop?",
+    )
+
+    rec = get_npc_lead_discussion(session, scene_id, "runner", "lead_smuggler_drop")
+    assert rec is not None
+    assert rec.get("mention_count") == 2
+    assert rec.get("first_discussed_turn") == 30
+    assert rec.get("last_discussed_turn") == 31
+
+
+def test_npc_lead_discussion_explicit_upgrade_persists_across_later_hinted_mentions():
+    session: dict = {"turn_counter": 40}
+    scene_id = "gate"
+    world = default_world()
+    res_hint = _resolution_question_with_topic(clue_id="missing_patrol", text="People whisper about a missing patrol.")
+    apply_socially_revealed_leads(session, scene_id, world, res_hint)
+    apply_social_lead_discussion_tracking(
+        session=session,
+        scene_id=scene_id,
+        resolution=res_hint,
+        player_text="Any patrol rumors?",
+    )
+
+    session["turn_counter"] = 41
+    res_explicit = _resolution_question_with_topic(
+        clue_id="missing_patrol",
+        text="The missing patrol was last seen near the old milestone.",
+        leads_to_scene="old_milestone",
+    )
+    apply_socially_revealed_leads(session, scene_id, world, res_explicit)
+    apply_social_lead_discussion_tracking(
+        session=session,
+        scene_id=scene_id,
+        resolution=res_explicit,
+        player_text="Where were they last seen?",
+    )
+
+    session["turn_counter"] = 42
+    res_hint_again = _resolution_question_with_topic(
+        clue_id="missing_patrol",
+        text="Locals still whisper about that patrol.",
+    )
+    apply_socially_revealed_leads(session, scene_id, world, res_hint_again)
+    apply_social_lead_discussion_tracking(
+        session=session,
+        scene_id=scene_id,
+        resolution=res_hint_again,
+        player_text="Any new whispers?",
+    )
+
+    rec = get_npc_lead_discussion(session, scene_id, "runner", "missing_patrol")
+    assert rec is not None
+    assert rec.get("mention_count") == 3
+    assert rec.get("disclosure_level") == "explicit"
+    assert rec.get("last_discussed_turn") == 42
+
+
+def test_npc_lead_discussion_strict_npc_scoping_for_same_lead():
+    session: dict = {"turn_counter": 50}
+    scene_id = "gate"
+    world = default_world()
+
+    res_a1 = _resolution_question_with_topic(clue_id="gate_watch", text="The gate watch rotates at dusk.")
+    apply_socially_revealed_leads(session, scene_id, world, res_a1)
+    apply_social_lead_discussion_tracking(
+        session=session,
+        scene_id=scene_id,
+        resolution=res_a1,
+        player_text="Tell me about the gate watch.",
+    )
+
+    session["turn_counter"] = 51
+    res_a2 = _resolution_question_with_topic(clue_id="gate_watch", text="Same watch, same rotation.")
+    apply_socially_revealed_leads(session, scene_id, world, res_a2)
+    apply_social_lead_discussion_tracking(
+        session=session,
+        scene_id=scene_id,
+        resolution=res_a2,
+        player_text="What about that watch rotation exactly?",
+    )
+
+    session["turn_counter"] = 52
+    res_b = _resolution_question_with_topic(clue_id="gate_watch", text="Captain confirms the same watch schedule.")
+    res_b["social"]["npc_id"] = "guard_captain"
+    res_b["social"]["npc_name"] = "Guard Captain"
+    apply_socially_revealed_leads(session, scene_id, world, res_b)
+    apply_social_lead_discussion_tracking(
+        session=session,
+        scene_id=scene_id,
+        resolution=res_b,
+        player_text="What does the captain say about it?",
+    )
+
+    rec_runner = get_npc_lead_discussion(session, scene_id, "runner", "gate_watch")
+    rec_captain = get_npc_lead_discussion(session, scene_id, "guard_captain", "gate_watch")
+    assert rec_runner is not None
+    assert rec_captain is not None
+    assert rec_runner.get("player_acknowledged") is True
+    assert rec_captain.get("player_acknowledged") is False
+    assert rec_runner.get("mention_count") == 2
+    assert rec_captain.get("mention_count") == 1
+
+    bucket = get_scene_runtime(session, scene_id).get("npc_lead_discussions") or {}
+    assert "runner" in bucket and "guard_captain" in bucket
+    assert isinstance(bucket["runner"], dict) and isinstance(bucket["guard_captain"], dict)
+    assert "gate_watch" in bucket["runner"] and "gate_watch" in bucket["guard_captain"]
 
 
 def test_topic_text_old_milestone_creates_extracted_lead():

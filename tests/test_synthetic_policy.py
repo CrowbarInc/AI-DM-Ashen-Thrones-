@@ -1,4 +1,8 @@
-"""Unit tests for synthetic policy (harness only)."""
+"""Unit tests for synthetic policy (harness only).
+
+Collected under default ``py -m pytest -q`` (``synthetic`` + ``unit``); see
+``test_synthetic_sessions.py`` for session-runner coverage.
+"""
 from __future__ import annotations
 
 import pytest

@@ -233,6 +233,9 @@ def apply_final_emission_gate(
                 "resolved_answer_preference_reason": details.get("resolved_answer_preference_reason"),
                 "strict_social_suppressed_non_social_turn": strict_social_suppressed_non_social_turn,
                 "strict_social_suppression_reason": strict_social_suppression_reason,
+                "social_emission_integrity_replaced": bool(details.get("social_emission_integrity_replaced")),
+                "social_emission_integrity_reasons": details.get("social_emission_integrity_reasons"),
+                "social_emission_integrity_fallback_kind": details.get("social_emission_integrity_fallback_kind"),
             }
             log_final_emission_trace({**out["_final_emission_meta"], "stage": "final_emission_gate_accept"})
             return out

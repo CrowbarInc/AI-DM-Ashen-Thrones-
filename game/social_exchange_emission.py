@@ -2264,6 +2264,390 @@ def _try_emit_structured_fact_strict_line(
     return synth_n
 
 
+_ECHO_TOKEN_STOPWORDS: frozenset[str] = frozenset(
+    {
+        "that",
+        "this",
+        "with",
+        "from",
+        "your",
+        "have",
+        "what",
+        "when",
+        "where",
+        "which",
+        "would",
+        "could",
+        "should",
+        "about",
+        "there",
+        "their",
+        "them",
+        "they",
+        "then",
+        "than",
+        "here",
+        "just",
+        "like",
+        "some",
+        "into",
+        "your",
+        "please",
+        "tavern",
+        "runner",
+        "guard",
+        "captain",
+        "player",
+    }
+)
+
+_PLAYER_REQUEST_IN_DIALOGUE_RE = re.compile(
+    r"\b(?:could\s+you|would\s+you|can\s+you|will\s+you|do\s+you\s+want|do\s+you\s+need|should\s+i)\b",
+    re.IGNORECASE,
+)
+
+_REDIRECT_REALIZATION_RE = re.compile(
+    r"\b(?:speak|talk)\s+to\b|\bask\s+the\b|\bhead\s+to\b|\btry\s+the\b|\bward\s+clerk\b|\bmain\s+gate\b|"
+    r"\briver\s+gate\b|\bwest\s+pier\b|\bnight\s+watch\b|\b(?:north|south|east|west)\s+road\b|\bold\s+\w+\b",
+    re.IGNORECASE,
+)
+
+_EXPLANATION_REALIZATION_RE = re.compile(
+    r"\b(?:word\s+is|rumor\s+is|people\s+say|they\s+say|all\s+i\s+know|all\s+i\s+can|because\b|reason\b|"
+    r"honest\b|truth\b|heard\b)\b",
+    re.IGNORECASE,
+)
+
+
+def _echo_token_set(text: str) -> set[str]:
+    low = str(text or "").lower()
+    return {
+        t
+        for t in re.findall(r"[a-z0-9']+", low)
+        if len(t) >= 4 and t not in _ECHO_TOKEN_STOPWORDS
+    }
+
+
+def _player_final_token_overlap_ratio(player_text: str, final_text: str) -> float:
+    pt = _echo_token_set(player_text)
+    if len(pt) < 3:
+        return 0.0
+    ft = _echo_token_set(final_text)
+    if not ft:
+        return 0.0
+    return len(pt & ft) / float(len(pt))
+
+
+def _social_text_shows_refusal_realization(text: str) -> bool:
+    s = str(text or "")
+    if not s.strip():
+        return False
+    if any(p.search(s) for p in _REFUSAL_SIGNAL_PATTERNS):
+        return True
+    if any(p.search(s) for p in _PRESSURE_SIGNAL_PATTERNS):
+        return True
+    if any(p.search(s) for p in _IGNORANCE_SIGNAL_PATTERNS):
+        return True
+    low = s.lower()
+    if re.search(r"\bwon'?t\s+answer\b", low):
+        return True
+    if re.search(r"\bnot\s+answering\b", low):
+        return True
+    if re.search(r"\bnot\s+something\s+i\b", low):
+        return True
+    if re.search(r"\bdon'?t\s+trade\b", low):
+        return True
+    if re.search(r"\bnot\s+from\s+me\b", low):
+        return True
+    if re.search(r"\bnot\s+me\b", low):
+        return True
+    return False
+
+
+def _social_line_has_playable_npc_substance(final_text: str) -> bool:
+    """True when the line already delivers a refusal, redirect, rumor, or concrete place/thread."""
+    s = str(final_text or "")
+    if not s.strip():
+        return False
+    if _social_text_shows_refusal_realization(s):
+        return True
+    if _REDIRECT_REALIZATION_RE.search(s):
+        return True
+    if _EXPLANATION_REALIZATION_RE.search(s):
+        return True
+    if _actionable_hits(s):
+        return True
+    return False
+
+
+def _social_text_shows_redirect_realization(text: str) -> bool:
+    return bool(_REDIRECT_REALIZATION_RE.search(str(text or "")))
+
+
+def _social_text_shows_explanation_realization(text: str) -> bool:
+    s = str(text or "")
+    if _EXPLANATION_REALIZATION_RE.search(s):
+        return True
+    return _social_text_shows_redirect_realization(s)
+
+
+def _npc_dialogue_has_player_request_framing(final_text: str) -> bool:
+    for m in re.finditer(r'"([^"]{5,200})"', str(final_text or "")):
+        if _PLAYER_REQUEST_IN_DIALOGUE_RE.search(m.group(1)):
+            return True
+    return False
+
+
+def _final_paragraph_ends_with_question(final_text: str) -> bool:
+    t = _collapse_ws(str(final_text or "")).strip()
+    return bool(t) and t.endswith("?")
+
+
+def social_final_emission_malformed_player_echo(
+    *,
+    player_text: str,
+    final_text: str,
+    resolution: Dict[str, Any] | None,
+) -> tuple[bool, List[str]]:
+    """Narrow, deterministic checks for NPC lines that echo the player's ask or invert roles.
+
+    Does not judge topic correctness—only final emission integrity vs structured reply hints.
+    """
+    reasons: List[str] = []
+    if not isinstance(resolution, dict):
+        return False, reasons
+    pt = str(player_text or "").strip()
+    ft = str(final_text or "").strip()
+    if not pt or not ft:
+        return False, reasons
+
+    overlap = _player_final_token_overlap_ratio(pt, ft)
+    soc = resolution.get("social") if isinstance(resolution.get("social"), dict) else {}
+    rk = str(soc.get("reply_kind") or "").strip().lower()
+    po = str(soc.get("probe_outcome") or "").strip().lower()
+    pmove = str(soc.get("social_probe_move") or "").strip().lower()
+
+    if overlap >= 0.56 and _echo_token_set(pt) and not _social_line_has_playable_npc_substance(ft):
+        reasons.append("high_player_token_overlap")
+
+    if (
+        _final_paragraph_ends_with_question(ft)
+        and overlap >= 0.38
+        and len(_echo_token_set(pt)) >= 3
+        and not _social_line_has_playable_npc_substance(ft)
+    ):
+        reasons.append("terminal_question_with_player_overlap")
+
+    if _npc_dialogue_has_player_request_framing(ft):
+        reasons.append("player_request_framing_in_npc_dialogue")
+
+    player_questionish = "?" in pt or looks_like_npc_directed_question(pt)
+
+    if (
+        rk == "refusal"
+        and player_questionish
+        and not _social_text_shows_refusal_realization(ft)
+        and overlap >= 0.42
+        and len(_echo_token_set(pt)) >= 4
+    ):
+        reasons.append("refusal_kind_without_refusal_realization")
+
+    if po in ("actionable_redirect", "actionable_lead_or_redirect"):
+        weak = not _social_text_shows_redirect_realization(ft)
+        if weak and overlap >= 0.46 and not _social_line_has_playable_npc_substance(ft):
+            reasons.append("actionable_outcome_without_redirect_realization")
+        if (
+            weak
+            and _final_paragraph_ends_with_question(ft)
+            and overlap >= 0.30
+            and not _social_line_has_playable_npc_substance(ft)
+        ):
+            reasons.append("actionable_outcome_question_echo")
+
+    if rk == "explanation" and po not in ("actionable_redirect", "actionable_lead_or_redirect"):
+        if (
+            not _social_text_shows_explanation_realization(ft)
+            and _final_paragraph_ends_with_question(ft)
+            and overlap >= 0.40
+            and not _social_line_has_playable_npc_substance(ft)
+        ):
+            reasons.append("explanation_kind_question_without_explanation_realization")
+
+    if (
+        pmove == "transactional"
+        and _final_paragraph_ends_with_question(ft)
+        and overlap >= 0.36
+        and not _social_line_has_playable_npc_substance(ft)
+    ):
+        reasons.append("transactional_terminal_question_overlap")
+
+    return bool(reasons), reasons
+
+
+def _integrity_topic_hook(player_text: str) -> str:
+    from game.gm import _question_content_tokens
+
+    hooks = _question_content_tokens(str(player_text or ""))
+    h = str(hooks[0] or "").strip() if hooks else ""
+    return h
+
+
+def _social_integrity_fallback_line_candidates(
+    *,
+    resolution: Dict[str, Any],
+    player_text: str,
+    session: Dict[str, Any] | None,
+    scene_id: str,
+    tag_list: List[str],
+    seed: str,
+) -> List[Tuple[str, str]]:
+    """Deterministic NPC-voiced lines ordered by structured social outcome (inspectable, no LLM)."""
+    speaker = _speaker_label(resolution if isinstance(resolution, dict) else None)
+    soc = resolution.get("social") if isinstance(resolution.get("social"), dict) else {}
+    rk = str(soc.get("reply_kind") or "").strip().lower()
+    po = str(soc.get("probe_outcome") or "").strip().lower()
+    pm = str(soc.get("social_probe_move") or "").strip().lower()
+    hook = _integrity_topic_hook(player_text)
+    topic = hook if hook else "that"
+
+    out: List[Tuple[str, str]] = []
+
+    def _add_unique(line: str, kind: str) -> None:
+        t = _normalize_gate_text(line).strip()
+        if not t:
+            return
+        if any(_normalize_gate_text(a).strip() == t for a, _ in out):
+            return
+        out.append((line, kind))
+
+    if po in ("actionable_redirect", "actionable_lead_or_redirect"):
+        _add_unique(
+            f'{speaker} nods once. "Speak to the ward clerk by the main gate if {topic} still matters to you."',
+            "integrity_redirect_clerk_gate",
+        )
+        _add_unique(
+            f'{speaker} mutters, "Word is, the night watch leans on the river gate route when {topic} comes up."',
+            "integrity_redirect_river_gate_rumor",
+        )
+    if rk == "refusal":
+        _add_unique(
+            f'{speaker} shakes their head. "I won\'t answer that about {topic}—not here."',
+            "integrity_refusal_boundary",
+        )
+        _add_unique(
+            f'{speaker} tightens their jaw. "No names and no favors on {topic}—not from me."',
+            "integrity_refusal_pressure",
+        )
+    if pm == "transactional":
+        _add_unique(
+            f'{speaker} pockets the coin without smiling. "Word is, the stable lane stays cheaper than the guild inns—'
+            f'that is what I will say on {topic}."',
+            "integrity_transactional_partial_rumor",
+        )
+        _add_unique(
+            f'{speaker} glances away. "If {topic} is what you are buying, ask the harbor clerk—they see who actually pays."',
+            "integrity_transactional_redirect_clerk",
+        )
+    if rk == "explanation" and po not in ("actionable_redirect", "actionable_lead_or_redirect"):
+        _add_unique(
+            f'{speaker} keeps their voice low. "All I know on {topic} is rumor: people say the ledger desk by the '
+            f'west pier sees the real traffic."',
+            "integrity_explanation_rumor_pier",
+        )
+        _add_unique(
+            f'{speaker} exhales. "Honest word—I can only point you at the ward clerk for {topic}; I do not keep that answer."',
+            "integrity_explanation_defer_clerk",
+        )
+
+    sid = str(scene_id or "").strip()
+    unc = emission_gate_uncertainty_source(tag_list, player_text)
+    press = emission_gate_pressure_active(tag_list, session, sid)
+    interrupt = interruption_cue_present_in_text(player_text)
+    fb, fk = deterministic_social_fallback_line(
+        resolution=resolution,
+        uncertainty_source=unc,
+        pressure_active=press,
+        interruption_active=interrupt,
+        seed=seed + "|integrity_tail",
+    )
+    _add_unique(fb, f"integrity_deterministic:{fk}")
+    _add_unique(minimal_social_emergency_fallback_line(resolution), "integrity_minimal_emergency")
+
+    return out
+
+
+def _apply_social_emission_integrity_guard(
+    accepted_text: str,
+    *,
+    player_text: str,
+    resolution: Dict[str, Any],
+    session: Dict[str, Any] | None,
+    scene_id: str,
+    world: Dict[str, Any] | None,
+    tags: List[str],
+) -> Tuple[str, Dict[str, Any]]:
+    """Replace obviously malformed strict-social lines using structured outcome templates."""
+    sid = str(scene_id or "").strip()
+    meta: Dict[str, Any] = {
+        "social_emission_integrity_replaced": False,
+        "social_emission_integrity_reasons": [],
+        "social_emission_integrity_fallback_kind": None,
+    }
+    bad, rsn = social_final_emission_malformed_player_echo(
+        player_text=player_text,
+        final_text=accepted_text,
+        resolution=resolution,
+    )
+    if not bad:
+        return accepted_text, meta
+    meta["social_emission_integrity_reasons"] = list(rsn)
+    seed = (
+        f"{sid}|integrity|{sum(ord(c) for c in str(player_text))}|{sum(ord(c) for c in str(accepted_text))}"
+    )
+    candidates = _social_integrity_fallback_line_candidates(
+        resolution=resolution,
+        player_text=player_text,
+        session=session,
+        scene_id=sid,
+        tag_list=tags,
+        seed=seed,
+    )
+    for raw_line, fk in candidates:
+        filtered = apply_strict_social_sentence_ownership_filter(
+            raw_line,
+            resolution=resolution,
+            tags=tags or None,
+            session=session,
+            scene_id=sid,
+        )
+        norm = _normalize_gate_text(filtered)
+        low = norm.lower()
+        banned_any = (
+            "from here, no certain answer presents itself",
+            "the truth is still buried beneath rumor and rain",
+        )
+        if any(b in low for b in banned_any):
+            continue
+        rej = hard_reject_social_exchange_text(
+            norm,
+            resolution=resolution,
+            session=session,
+            scene_id=sid,
+            world=world if isinstance(world, dict) else None,
+        )
+        if rej:
+            continue
+        try:
+            _assert_all_sentences_strict_social_or_interruption(norm, resolution)
+        except AssertionError:
+            continue
+        meta["social_emission_integrity_replaced"] = True
+        meta["social_emission_integrity_fallback_kind"] = fk
+        return norm, meta
+
+    return accepted_text, meta
+
+
 def build_final_strict_social_response(
     candidate_text: str,
     *,
@@ -2362,6 +2746,16 @@ def build_final_strict_social_response(
             tags=tag_list,
         )
         text = pref_text
+        merged_pt_ig = merged_player_prompt_for_gate(res, sess, sid)
+        text, integ_meta = _apply_social_emission_integrity_guard(
+            text,
+            player_text=merged_pt_ig,
+            resolution=res,
+            session=sess,
+            scene_id=sid,
+            world=world if isinstance(world, dict) else None,
+            tags=tag_list,
+        )
         _assert_all_sentences_strict_social_or_interruption(text, res)
         final_emitted_source = (
             "generated_candidate"
@@ -2370,6 +2764,8 @@ def build_final_strict_social_response(
         )
         if pref_meta.get("resolved_answer_preferred"):
             final_emitted_source = "resolved_grounded_social_answer"
+        if integ_meta.get("social_emission_integrity_replaced"):
+            final_emitted_source = "social_emission_integrity_fallback"
         return text, {
             "used_internal_fallback": False,
             "fallback_kind": "none",
@@ -2381,6 +2777,7 @@ def build_final_strict_social_response(
             "route_illegal_intercepted": False,
             "intercepted_preview": "",
             **pref_meta,
+            **integ_meta,
         }
 
     if isinstance(res, dict):

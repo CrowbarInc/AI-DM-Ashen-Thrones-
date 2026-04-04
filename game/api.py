@@ -92,6 +92,7 @@ from game.adjudication import (
     resolve_adjudication_query,
 )
 from game.social import (
+    apply_social_lead_discussion_tracking,
     parse_social_intent,
     resolve_social_action,
     apply_social_topic_escalation_to_resolution,
@@ -940,6 +941,12 @@ def _apply_authoritative_resolution_state_mutation(
             apply_socially_revealed_leads(
                 session, scene["scene"]["id"], world, resolution, scene=scene
             )
+        )
+        apply_social_lead_discussion_tracking(
+            session=session,
+            scene_id=scene["scene"]["id"],
+            resolution=resolution,
+            player_text=str(resolution.get("prompt") or ""),
         )
         maybe_finalize_pursued_lead_npc_contact_payoff(session, resolution, normalized_action)
     else:

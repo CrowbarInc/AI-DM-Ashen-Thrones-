@@ -9,6 +9,7 @@ from game.exploration import EXPLORATION_KINDS
 from game.social import (
     SOCIAL_KINDS,
     classify_social_followup_dimension,
+    explicit_player_topic_anchor_state,
     select_best_social_answer_candidate,
     sync_strategy_forced_to_answer_for_valid_followup_alignment,
 )
@@ -1109,6 +1110,8 @@ def register_topic_probe(
     topic_key = normalize_topic(player, scene_context=scene)
     previous_topic = str(runtime.get("topic_pressure_last_topic_key") or "").strip()
     anaphora_followup = bool(re.search(r"\b(they|them|this|that|those|it|behind it|planning)\b", player.lower()))
+    if explicit_player_topic_anchor_state(player).get("active"):
+        anaphora_followup = False
     if previous_topic and topic_key != previous_topic and anaphora_followup:
         topic_key = previous_topic
     speaker_key = _topic_speaker_key(session, resolution)

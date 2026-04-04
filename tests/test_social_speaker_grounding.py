@@ -13,11 +13,13 @@ from game.interaction_context import (
     set_social_target,
 )
 from game.leads import ensure_lead_registry, normalize_lead
+from game.prompt_context import build_narration_context
 from game.social import (
     apply_social_reply_speaker_grounding,
     can_actor_speak_in_current_exchange,
     is_actor_explicitly_addressed_for_social,
     is_scene_actor_present_for_social,
+    record_npc_lead_discussion,
     resolve_grounded_social_speaker,
     resolve_social_action,
 )
@@ -643,3 +645,110 @@ def test_transcript_lead_registry_and_recent_leads_do_not_emit_aldric_as_speaker
     soc = r.get("social") or {}
     _assert_runner_strict_social_grounding(soc)
     assert soc.get("npc_id") != "lord_aldric"
+
+
+def test_absent_lead_salience_does_not_override_grounded_speaker(frontier_gate_scene_bundle):
+    """Even if an absent NPC has denser lead history, active grounded speaker remains authoritative."""
+    session, world, env = frontier_gate_scene_bundle
+    sid = "frontier_gate"
+    set_social_target(session, "tavern_runner")
+    session["turn_counter"] = 6
+
+    reg = ensure_lead_registry(session)
+    reg["lead_runner_thread"] = normalize_lead(
+        {
+            "id": "lead_runner_thread",
+            "title": "Runner Thread",
+            "summary": "Local watch movement near the gate.",
+            "related_npc_ids": ["tavern_runner"],
+        }
+    )
+    reg["lead_aldric_thread"] = normalize_lead(
+        {
+            "id": "lead_aldric_thread",
+            "title": "Aldric Thread",
+            "summary": "Lord Aldric influence over patrol choices.",
+            "related_npc_ids": ["lord_aldric"],
+        }
+    )
+    record_npc_lead_discussion(
+        session,
+        sid,
+        "lord_aldric",
+        "lead_aldric_thread",
+        disclosure_level="explicit",
+        turn_counter=3,
+    )
+    record_npc_lead_discussion(
+        session,
+        sid,
+        "lord_aldric",
+        "lead_aldric_thread",
+        disclosure_level="explicit",
+        turn_counter=4,
+    )
+    record_npc_lead_discussion(
+        session,
+        sid,
+        "lord_aldric",
+        "lead_aldric_thread",
+        disclosure_level="explicit",
+        turn_counter=5,
+    )
+    record_npc_lead_discussion(
+        session,
+        sid,
+        "tavern_runner",
+        "lead_runner_thread",
+        disclosure_level="hinted",
+        turn_counter=6,
+    )
+
+    ctx = build_narration_context(
+        campaign={"title": "", "premise": "", "character_role": "", "gm_guidance": [], "world_pressures": []},
+        world=world,
+        session=session,
+        character=default_character(),
+        scene=env,
+        combat={"in_combat": False},
+        recent_log=[],
+        user_text="Runner, does Aldric still inspect the east road?",
+        resolution=None,
+        scene_runtime=get_scene_runtime(session, sid),
+        public_scene={"id": sid, "visible_facts": [], "exits": [], "enemies": []},
+        discoverable_clues=[],
+        gm_only_hidden_facts=[],
+        gm_only_discoverable_locked=[],
+        discovered_clue_records=[],
+        undiscovered_clue_records=[],
+        pending_leads=[],
+        intent={"labels": ["question"]},
+        world_state_view={"flags": {}, "counters": {}, "clocks_summary": []},
+        mode_instruction="Standard.",
+        recent_log_for_prompt=[],
+    )
+    ilc = ctx["interlocutor_lead_context"]
+    assert ilc["active_npc_id"] == "tavern_runner"
+    assert all(r.get("lead_id") != "lead_aldric_thread" for r in ilc["introduced_by_npc"])
+    assert all("Aldric" not in h for h in (ctx.get("interlocutor_lead_behavior_hints") or []))
+
+    line = "Runner, does Aldric still inspect the east road?"
+    action = {
+        "id": "q_runner_aldric",
+        "type": "question",
+        "label": line,
+        "prompt": line,
+        "target_id": "tavern_runner",
+    }
+    get_scene_runtime(session, sid)["last_player_action_text"] = line
+    r = resolve_social_action(
+        env,
+        session,
+        world,
+        action,
+        raw_player_text=line,
+        character=default_character(),
+        turn_counter=7,
+    )
+    soc = r.get("social") or {}
+    _assert_runner_strict_social_grounding(soc)

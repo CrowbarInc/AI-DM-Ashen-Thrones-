@@ -1,4 +1,9 @@
-"""Deterministic synthetic smoke tests built on run_synthetic_session."""
+"""Deterministic synthetic smoke tests built on run_synthetic_session.
+
+Default ``py -m pytest -q`` includes this module (marked ``slow``). Use
+``-m "not transcript and not slow"`` to skip it while still running lighter synthetic
+tests in ``test_synthetic_sessions.py`` and ``test_synthetic_policy.py``.
+"""
 from __future__ import annotations
 
 from collections.abc import Callable
