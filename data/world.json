@@ -20,10 +20,10 @@
       "type": "noble_house",
       "attitude": "wary",
       "influence": 3,
-      "pressure": 6,
+      "pressure": 4,
       "goal": "Expand territory",
       "current_plan": "Gathering influence",
-      "agenda_progress": 4,
+      "agenda_progress": 2,
       "assets": []
     },
     {
@@ -32,10 +32,10 @@
       "type": "criminal_syndicate",
       "attitude": "opportunistic",
       "influence": 3,
-      "pressure": 6,
+      "pressure": 4,
       "goal": "Control black market",
       "current_plan": "Establishing smuggling routes",
-      "agenda_progress": 4,
+      "agenda_progress": 2,
       "assets": []
     },
     {
@@ -44,10 +44,10 @@
       "type": "religious_order",
       "attitude": "suspicious",
       "influence": 2,
-      "pressure": 5,
+      "pressure": 3,
       "goal": "Suppress dangerous magic",
       "current_plan": "Watching newcomers",
-      "agenda_progress": 4,
+      "agenda_progress": 2,
       "assets": []
     }
   ],
@@ -69,27 +69,10 @@
       "type": "faction_pressure",
       "text": "Ordo Pyric's pressure mounts.",
       "source": "ordo_pyric"
-    },
-    {
-      "type": "social_lead_revealed",
-      "clue_id": "narration_ctx_frontier_gate_i_wish_i_had_something_for_you_but_i_m_not_sure_",
-      "scene_id": "frontier_gate",
-      "npc_id": "tavern_runner",
-      "topic_id": "narration_repair_frontier_gate_operational_token"
-    },
-    {
-      "type": "social_extracted_lead",
-      "clue_id": "lead_frontier_gate_old_milestone",
-      "scene_id": "frontier_gate",
-      "source": "discoverable_clue:old_milestone"
     }
   ],
   "world_state": {
-    "flags": {
-      "faction_house_verevin_agenda_advanced": true,
-      "faction_ash_cowl_agenda_advanced": true,
-      "faction_ordo_pyric_agenda_advanced": true
-    },
+    "flags": {},
     "counters": {},
     "clocks": {}
   },
