@@ -1232,6 +1232,69 @@ def _narration_minimal_kwargs(**overrides):
     return base
 
 
+@pytest.mark.unit
+def test_build_narration_context_narration_visibility_minimal_export():
+    hidden_text = "the baron is the cult leader"
+    discover_text = "loose brick in the fireplace"
+    inner = {
+        "id": "test_scene",
+        "visible_facts": ["Banner hangs above the door."],
+        "discoverable_clues": [{"text": discover_text}],
+        "hidden_facts": [hidden_text],
+        "exits": [],
+        "enemies": [],
+    }
+    session = _session_with_registry()
+    session["interaction_context"] = {
+        "active_interaction_target_id": "npc_gate_guard",
+        "active_interaction_kind": "social",
+        "interaction_mode": "social",
+        "engagement_level": "engaged",
+        "conversation_privacy": None,
+        "player_position_context": None,
+    }
+    ctx = build_narration_context(
+        **_narration_minimal_kwargs(
+            session=session,
+            scene={"scene": inner},
+            public_scene={
+                "id": "test_scene",
+                "visible_facts": inner["visible_facts"],
+                "exits": [],
+                "enemies": [],
+            },
+            gm_only_hidden_facts=[hidden_text],
+        )
+    )
+    assert "narration_visibility" in ctx
+    assert ctx["discoverable_hinting"] is True
+    nv = ctx["narration_visibility"]
+    assert "visible_entities" in nv and isinstance(nv["visible_entities"], list)
+    assert "visible_facts" in nv and isinstance(nv["visible_facts"], list)
+    assert nv["rules"] == {
+        "no_unseen_entities": True,
+        "no_hidden_facts": True,
+        "no_undiscovered_facts": True,
+    }
+    for forbidden in (
+        "visible_entity_aliases",
+        "hidden_fact_strings",
+        "discoverable_fact_strings",
+        "hidden_facts",
+    ):
+        assert forbidden not in nv
+    assert "banner hangs above the door" in nv["visible_facts"]
+    assert hidden_text.lower() not in nv["visible_facts"]
+    assert discover_text.lower() not in nv["visible_facts"]
+    assert nv.get("active_interlocutor_id") == "npc_gate_guard"
+    instr = "\n".join(ctx["instructions"])
+    assert "MUST NOT reference entities outside narration_visibility.visible_entities" in instr
+    assert "MUST NOT assert facts outside narration_visibility.visible_facts" in instr
+    assert "discoverable_hinting is true" in instr
+    lr = ctx["scene"]["layering_rules"]
+    assert "only visible facts may be directly asserted" in lr["visible_facts"].lower()
+
+
 def test_build_narration_context_exposes_lead_context_and_preserves_pending_surfaces():
     session = _session_with_registry(
         {

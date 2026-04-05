@@ -183,6 +183,7 @@ def _finalize_player_facing_for_turn(
             resolution=resolution if isinstance(resolution, dict) else None,
             session=session,
             scene_id=scene_id,
+            scene=scene,
             world=world,
         )
     else:
@@ -192,6 +193,7 @@ def _finalize_player_facing_for_turn(
             resolution=resolution if isinstance(resolution, dict) else None,
             session=session,
             scene_id=scene_id,
+            scene=scene,
             world=world,
         )
 
@@ -513,6 +515,7 @@ def _build_turn_response_payload(
                     resolution=resolution if isinstance(resolution, dict) else None,
                     session=state_session,
                     scene_id=scene_id,
+                    scene=state_scene,
                     world=state_world,
                 )
                 # build_final_strict_social_response (via the gate) is the sole writer; no post-gate sanitizer.
@@ -523,6 +526,7 @@ def _build_turn_response_payload(
                     resolution=resolution if isinstance(resolution, dict) else None,
                     session=state_session,
                     scene_id=scene_id,
+                    scene=state_scene,
                     world=state_world,
                 )
 

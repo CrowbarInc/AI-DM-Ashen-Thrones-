@@ -26,6 +26,7 @@ from game.social import (
 )
 from game.storage import get_scene_state
 from game.world import get_world_npc_by_id
+from game.narration_visibility import build_narration_visibility_contract
 
 # Configurable limits for deterministic, inspectable compression
 MAX_RECENT_LOG = 5
@@ -95,6 +96,16 @@ UNCERTAINTY_ANSWER_SHAPE: tuple[str, ...] = (
     "known_edge",
     "unknown_edge",
     "next_lead",
+)
+
+NARRATION_VISIBILITY_MANDATORY_INSTRUCTIONS: tuple[str, ...] = (
+    "VISIBILITY CONTRACT (MANDATORY): Use narration_visibility as the hard scope for entity references and factual assertions.",
+    "You MUST NOT reference entities outside narration_visibility.visible_entities.",
+    "You MUST NOT assert facts outside narration_visibility.visible_facts; only visible facts may be directly asserted.",
+    "You MUST NOT reveal hidden or undiscovered facts.",
+    "Discoverable facts may be hinted at (discoverable_hinting is true), but not asserted as confirmed truth.",
+    "If uncertain whether something is visible or known, omit or reframe it.",
+    "Only visible or addressable entities may act or speak.",
 )
 
 _TOPIC_TOKEN_PATTERN = re.compile(r"[a-zA-Z][a-zA-Z']{2,}")
@@ -827,6 +838,22 @@ def build_narration_context(
         'actionable': [c for c in clue_records_all if isinstance(c, dict) and c.get('presentation') == 'actionable'],
     }
 
+    visibility_contract = build_narration_visibility_contract(
+        session=session if isinstance(session, dict) else None,
+        scene=scene if isinstance(scene, dict) else None,
+        world=world if isinstance(world, dict) else None,
+    )
+    narration_visibility: Dict[str, Any] = {
+        "visible_entities": list(visibility_contract.get("visible_entity_names") or []),
+        "active_interlocutor_id": visibility_contract.get("active_interlocutor_id"),
+        "visible_facts": list(visibility_contract.get("visible_fact_strings") or []),
+        "rules": {
+            "no_unseen_entities": True,
+            "no_hidden_facts": True,
+            "no_undiscovered_facts": True,
+        },
+    }
+
     instructions: List[str] = (
         [
             'Prioritize the active conversation over general scene recap.',
@@ -840,6 +867,7 @@ def build_narration_context(
         NO_VALIDATOR_VOICE_RULE,
         'Follow response_policy.rule_priority_order strictly. Higher-priority rules override later ones.',
         'Treat response_policy.no_validator_voice as a hard narration-lane rule for standard narration.',
+        *NARRATION_VISIBILITY_MANDATORY_INSTRUCTIONS,
         (
             "SCENE MOMENTUM RULE (HARD RULE): Every 2–3 exchanges, you MUST introduce exactly one of: "
             "new_information, new_actor_entering, environmental_change, time_pressure, consequence_or_opportunity. "
@@ -1037,6 +1065,8 @@ def build_narration_context(
         'response_policy': response_policy,
         'uncertainty_hint': eff_uncertainty_hint,
         'narration_obligations': narration_obligations,
+        'narration_visibility': narration_visibility,
+        'discoverable_hinting': True,
         'mechanical_resolution': resolution,
         'scene_advancement': scene_advancement,
         'session': session_view,
@@ -1071,8 +1101,8 @@ def build_narration_context(
             'runtime': runtime,
             'intent': intent,
             'layering_rules': {
-                'visible_facts': 'Narrate freely.',
-                'discoverable_clues': 'Reveal only when player investigates/searches/questions/observes closely.',
+                'visible_facts': 'Only visible facts may be directly asserted; align with narration_visibility.visible_facts.',
+                'discoverable_clues': 'Reveal only when player investigates/searches/questions/observes closely; with discoverable_hinting, hint without asserting as confirmed truth.',
                 'hidden_facts': 'Never reveal directly; use only for implications, NPC behavior, atmosphere, indirect clues.',
             },
         },

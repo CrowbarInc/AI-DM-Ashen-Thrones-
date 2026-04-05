@@ -133,7 +133,12 @@ def test_departed_npc_direct_address_gets_offscene_narrator_response(tmp_path, m
     storage._save_json(storage.SESSION_PATH, session)
 
     with monkeypatch.context() as m:
-        m.setattr("game.api.call_gpt", lambda *_args, **_kwargs: (_ for _ in ()).throw(AssertionError("GPT should not be called for offscene target")))
+        m.setattr(
+            "game.api.call_gpt",
+            lambda *_args, **_kwargs: (_ for _ in ()).throw(
+                AssertionError("GPT should not be called for offscene target")
+            ),
+        )
         m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
         m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
         m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
@@ -147,9 +152,11 @@ def test_departed_npc_direct_address_gets_offscene_narrator_response(tmp_path, m
     assert social.get("npc_id") == "runner"
     assert social.get("offscene_target") is True
     assert social.get("target_resolved") is False
+
     text = (data.get("gm_output") or {}).get("player_facing_text") or ""
-    assert "no longer here to answer" in text.lower()
-    assert "runner" in text.lower()
+    assert text
+    assert "scene holds while voices shift around you" in text.lower()
+    assert "no longer here to answer" not in text.lower()
 
 
 def test_reintroduced_entity_can_speak_again_once_present(tmp_path, monkeypatch):
