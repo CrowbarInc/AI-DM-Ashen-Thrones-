@@ -443,6 +443,95 @@ def test_actionable_lead_declared_travel_authoritative_arrival_and_lead_metadata
     assert (row.get("resolution_type") or "").strip() == "reached_destination"
 
 
+def test_declared_travel_negative_old_milestone_no_authoritative_transition(tmp_path, monkeypatch):
+    """Refusal + milestone mention + actionable lead: no resolver transition to old_milestone."""
+    _patch_storage(tmp_path, monkeypatch)
+    tavern = default_scene("tavern")
+    tavern["scene"]["id"] = "tavern"
+    tavern["scene"]["exits"] = [{"label": "Path to the old milestone", "target_scene_id": "old_milestone"}]
+    for ad in tavern["scene"].get("addressables") or []:
+        if isinstance(ad, dict):
+            ad["scene_id"] = "tavern"
+    storage._save_json(storage.scene_path("tavern"), tavern)
+
+    ms = default_scene("old_milestone")
+    ms["scene"]["id"] = "old_milestone"
+    storage._save_json(storage.scene_path("old_milestone"), ms)
+
+    session = default_session()
+    session["active_scene_id"] = "tavern"
+    session["visited_scene_ids"] = ["tavern"]
+    session["interaction_context"] = {
+        "active_interaction_target_id": "tavern_runner",
+        "active_interaction_kind": "social",
+        "interaction_mode": "social",
+        "engagement_level": "engaged",
+        "conversation_privacy": None,
+        "player_position_context": None,
+    }
+    upsert_lead(
+        session,
+        create_lead(
+            id="ms_lead",
+            title="Milestone rumor",
+            summary="",
+            lifecycle=LeadLifecycle.DISCOVERED,
+            status=LeadStatus.ACTIVE,
+            related_scene_ids=["old_milestone"],
+        ),
+    )
+    rt = get_scene_runtime(session, "tavern")
+    rt["pending_leads"] = [
+        {
+            "clue_id": "c1",
+            "authoritative_lead_id": "ms_lead",
+            "text": "Investigate the old milestone",
+            "leads_to_scene": "old_milestone",
+        }
+    ]
+    storage._save_json(storage.SESSION_PATH, session)
+
+    world = default_world()
+    world["npcs"] = [
+        {
+            "id": "tavern_runner",
+            "name": "Tavern Runner",
+            "location": "tavern",
+            "topics": [{"id": "rumor", "text": "Patrols vanished.", "clue_id": "c1"}],
+        },
+    ]
+    storage._save_json(storage.WORLD_PATH, world)
+    storage._save_json(storage.CAMPAIGN_PATH, default_campaign())
+    storage._save_json(storage.CHARACTER_PATH, default_character())
+    storage._save_json(storage.COMBAT_PATH, default_combat())
+    storage._save_json(storage.CONDITIONS_PATH, default_conditions())
+    if not storage.SESSION_LOG_PATH.exists():
+        storage.SESSION_LOG_PATH.write_text("", encoding="utf-8")
+
+    line = (
+        '"Thanks anyway." Galinor decides against traveling to the old milestone for now '
+        "and stays to finish his drink."
+    )
+
+    with monkeypatch.context() as m:
+        m.setattr("game.api.call_gpt", lambda _: _gm_with_transition_proposal("old_milestone"))
+        client = TestClient(app)
+        r = client.post("/api/chat", json={"text": line})
+
+    assert r.status_code == 200
+    data = r.json()
+    assert data.get("ok") is True
+    assert data.get("session", {}).get("active_scene_id") == "tavern"
+    assert data.get("scene", {}).get("scene", {}).get("id") == "tavern"
+    res = data.get("resolution") or {}
+    assert res.get("target_scene_id") != "old_milestone"
+    assert res.get("resolved_transition") is not True
+    traces = data.get("debug_traces") or []
+    assert traces
+    dt = traces[-1].get("declared_travel_override") or {}
+    assert dt.get("applied") is not True
+
+
 def test_known_scene_transition_blocked_no_scene_mutation(tmp_path, monkeypatch):
     """Resolver has explicit target_scene_id but graph has no path: authoritative non-transition."""
     _seed_three_scenes(tmp_path, monkeypatch)
@@ -548,3 +637,311 @@ def test_declared_travel_unresolved_movement_no_social_no_scene_change(tmp_path,
     assert ictx.get("active_interaction_target_id") in (None, "")
     assert ictx.get("interaction_mode") == "activity"
     assert (ictx.get("engagement_level") or "").strip().lower() != "engaged"
+
+
+def test_declared_travel_eastern_square_disambiguates_against_prior_milestone_lead(tmp_path, monkeypatch):
+    """Stale actionable milestone lead must not override an affirmed move to eastern_square."""
+    _patch_storage(tmp_path, monkeypatch)
+    gate = default_scene("frontier_gate")
+    gate["scene"]["id"] = "frontier_gate"
+    gate["scene"]["exits"] = [
+        {"label": "Path to the eastern square", "target_scene_id": "eastern_square"},
+        {"label": "Trail to the old milestone", "target_scene_id": "old_milestone"},
+    ]
+    for ad in gate["scene"].get("addressables") or []:
+        if isinstance(ad, dict):
+            ad["scene_id"] = "frontier_gate"
+    storage._save_json(storage.scene_path("frontier_gate"), gate)
+
+    east = default_scene("tavern")
+    east["scene"]["id"] = "eastern_square"
+    east["scene"]["exits"] = []
+    storage._save_json(storage.scene_path("eastern_square"), east)
+
+    ms = default_scene("old_milestone")
+    ms["scene"]["id"] = "old_milestone"
+    storage._save_json(storage.scene_path("old_milestone"), ms)
+
+    session = default_session()
+    session["active_scene_id"] = "frontier_gate"
+    session["visited_scene_ids"] = ["frontier_gate"]
+    session["interaction_context"] = {
+        "active_interaction_target_id": "tavern_runner",
+        "active_interaction_kind": "social",
+        "interaction_mode": "social",
+        "engagement_level": "engaged",
+        "conversation_privacy": None,
+        "player_position_context": None,
+    }
+    upsert_lead(
+        session,
+        create_lead(
+            id="ms_lead",
+            title="Milestone rumor",
+            summary="",
+            lifecycle=LeadLifecycle.DISCOVERED,
+            status=LeadStatus.ACTIVE,
+            related_scene_ids=["old_milestone"],
+        ),
+    )
+    rt = get_scene_runtime(session, "frontier_gate")
+    rt["pending_leads"] = [
+        {
+            "clue_id": "c1",
+            "authoritative_lead_id": "ms_lead",
+            "text": "Investigate the old milestone",
+            "leads_to_scene": "old_milestone",
+        }
+    ]
+    storage._save_json(storage.SESSION_PATH, session)
+
+    world = default_world()
+    world["npcs"] = [
+        {
+            "id": "tavern_runner",
+            "name": "Tavern Runner",
+            "location": "frontier_gate",
+            "topics": [{"id": "rumor", "text": "Patrols vanished.", "clue_id": "c1"}],
+        }
+    ]
+    storage._save_json(storage.WORLD_PATH, world)
+    storage._save_json(storage.CAMPAIGN_PATH, default_campaign())
+    storage._save_json(storage.CHARACTER_PATH, default_character())
+    storage._save_json(storage.COMBAT_PATH, default_combat())
+    storage._save_json(storage.CONDITIONS_PATH, default_conditions())
+    if not storage.SESSION_LOG_PATH.exists():
+        storage.SESSION_LOG_PATH.write_text("", encoding="utf-8")
+
+    line = (
+        'I ask the runner about Lirael. "Safe travels." Galinor leaves for the eastern square.'
+    )
+
+    with monkeypatch.context() as m:
+        m.setattr("game.api.call_gpt", lambda _: _gm_with_transition_proposal("old_milestone"))
+        client = TestClient(app)
+        r = client.post("/api/chat", json={"text": line})
+
+    assert r.status_code == 200
+    data = r.json()
+    assert data.get("ok") is True
+    assert data.get("session", {}).get("active_scene_id") == "eastern_square"
+    assert data.get("scene", {}).get("scene", {}).get("id") == "eastern_square"
+    res = data.get("resolution") or {}
+    assert res.get("resolved_transition") is True
+    assert res.get("target_scene_id") == "eastern_square"
+    assert res.get("kind") == "scene_transition"
+    assert (res.get("metadata") or {}).get("authoritative_lead_id") in (None, "")
+    gm = data.get("gm_output") or {}
+    # Advisory GPT scene id must not match authoritative resolver target_scene_id.
+    assert gm.get("activate_scene_id") == "old_milestone"
+    assert res.get("target_scene_id") == "eastern_square", (
+        "resolver target_scene_id must be the affirmed exit (eastern_square), not the stale lead"
+    )
+    assert gm.get("activate_scene_id") != res.get("target_scene_id"), (
+        "gm_output.activate_scene_id is advisory-only; authoritative transition follows resolver"
+    )
+
+
+def test_combined_prior_lead_affirmed_waste_gpt_scene_proposal_non_authoritative(tmp_path, monkeypatch):
+    """Pending old_milestone lead; player affirms a different resolvable exit; GPT activate_scene_id ignored."""
+    _patch_storage(tmp_path, monkeypatch)
+    tavern = default_scene("tavern")
+    tavern["scene"]["id"] = "tavern"
+    tavern["scene"]["exits"] = [
+        {"label": "Trail to the old milestone", "target_scene_id": "old_milestone"},
+        {"label": "Road to the waste", "target_scene_id": "waste"},
+    ]
+    for ad in tavern["scene"].get("addressables") or []:
+        if isinstance(ad, dict):
+            ad["scene_id"] = "tavern"
+    storage._save_json(storage.scene_path("tavern"), tavern)
+
+    waste = default_scene("waste")
+    waste["scene"]["id"] = "waste"
+    storage._save_json(storage.scene_path("waste"), waste)
+
+    ms = default_scene("old_milestone")
+    ms["scene"]["id"] = "old_milestone"
+    storage._save_json(storage.scene_path("old_milestone"), ms)
+
+    session = default_session()
+    session["active_scene_id"] = "tavern"
+    session["visited_scene_ids"] = ["tavern"]
+    session["interaction_context"] = {
+        "active_interaction_target_id": "tavern_runner",
+        "active_interaction_kind": "social",
+        "interaction_mode": "social",
+        "engagement_level": "engaged",
+        "conversation_privacy": None,
+        "player_position_context": None,
+    }
+    upsert_lead(
+        session,
+        create_lead(
+            id="ms_lead",
+            title="Milestone rumor",
+            summary="",
+            lifecycle=LeadLifecycle.DISCOVERED,
+            status=LeadStatus.ACTIVE,
+            related_scene_ids=["old_milestone"],
+        ),
+    )
+    rt = get_scene_runtime(session, "tavern")
+    rt["pending_leads"] = [
+        {
+            "clue_id": "c1",
+            "authoritative_lead_id": "ms_lead",
+            "text": "Investigate the old milestone",
+            "leads_to_scene": "old_milestone",
+        }
+    ]
+    storage._save_json(storage.SESSION_PATH, session)
+
+    world = default_world()
+    world["npcs"] = [
+        {
+            "id": "tavern_runner",
+            "name": "Tavern Runner",
+            "location": "tavern",
+            "topics": [{"id": "rumor", "text": "Patrols vanished.", "clue_id": "c1"}],
+        },
+    ]
+    storage._save_json(storage.WORLD_PATH, world)
+    storage._save_json(storage.CAMPAIGN_PATH, default_campaign())
+    storage._save_json(storage.CHARACTER_PATH, default_character())
+    storage._save_json(storage.COMBAT_PATH, default_combat())
+    storage._save_json(storage.CONDITIONS_PATH, default_conditions())
+    if not storage.SESSION_LOG_PATH.exists():
+        storage.SESSION_LOG_PATH.write_text("", encoding="utf-8")
+
+    line = (
+        '"Not today." Galinor heads to the waste to look for scrap instead of the old milestone.'
+    )
+
+    with monkeypatch.context() as m:
+        m.setattr("game.api.call_gpt", lambda _: _gm_with_transition_proposal("old_milestone"))
+        client = TestClient(app)
+        r = client.post("/api/chat", json={"text": line})
+
+    assert r.status_code == 200
+    data = r.json()
+    assert data.get("ok") is True
+    sess = data.get("session") or {}
+    assert sess.get("active_scene_id") == "waste", (
+        f"active_scene_id: expected 'waste' after affirmed travel, got {sess.get('active_scene_id')!r}"
+    )
+    assert data.get("scene", {}).get("scene", {}).get("id") == "waste"
+    res = data.get("resolution") or {}
+    assert res.get("resolved_transition") is True, "resolver must record a successful scene transition"
+    assert res.get("target_scene_id") == "waste", (
+        f"resolver target_scene_id: expected 'waste', got {res.get('target_scene_id')!r}"
+    )
+    assert res.get("kind") == "scene_transition", (
+        f"normalized resolution.kind: expected 'scene_transition', got {res.get('kind')!r}"
+    )
+    gm = data.get("gm_output") or {}
+    assert gm.get("activate_scene_id") == "old_milestone", (
+        "GPT may propose old_milestone; that field is not authoritative"
+    )
+    assert gm.get("activate_scene_id") != res.get("target_scene_id"), (
+        "authoritative transition must follow resolver output, not gm_output.activate_scene_id"
+    )
+
+
+def test_unresolved_alternate_destination_with_prior_old_milestone_lead_no_substitution(
+    tmp_path, monkeypatch,
+):
+    """Affirmed unknown destination with pending milestone lead: no fallback transition to old_milestone."""
+    _patch_storage(tmp_path, monkeypatch)
+    tavern = default_scene("tavern")
+    tavern["scene"]["id"] = "tavern"
+    tavern["scene"]["exits"] = [{"label": "Trail to the old milestone", "target_scene_id": "old_milestone"}]
+    for ad in tavern["scene"].get("addressables") or []:
+        if isinstance(ad, dict):
+            ad["scene_id"] = "tavern"
+    storage._save_json(storage.scene_path("tavern"), tavern)
+
+    ms = default_scene("old_milestone")
+    ms["scene"]["id"] = "old_milestone"
+    storage._save_json(storage.scene_path("old_milestone"), ms)
+
+    session = default_session()
+    session["active_scene_id"] = "tavern"
+    session["visited_scene_ids"] = ["tavern"]
+    session["interaction_context"] = {
+        "active_interaction_target_id": "tavern_runner",
+        "active_interaction_kind": "social",
+        "interaction_mode": "social",
+        "engagement_level": "engaged",
+        "conversation_privacy": None,
+        "player_position_context": None,
+    }
+    upsert_lead(
+        session,
+        create_lead(
+            id="ms_lead",
+            title="Milestone rumor",
+            summary="",
+            lifecycle=LeadLifecycle.DISCOVERED,
+            status=LeadStatus.ACTIVE,
+            related_scene_ids=["old_milestone"],
+        ),
+    )
+    rt = get_scene_runtime(session, "tavern")
+    rt["pending_leads"] = [
+        {
+            "clue_id": "c1",
+            "authoritative_lead_id": "ms_lead",
+            "text": "Investigate the old milestone",
+            "leads_to_scene": "old_milestone",
+        }
+    ]
+    storage._save_json(storage.SESSION_PATH, session)
+
+    world = default_world()
+    world["npcs"] = [
+        {
+            "id": "tavern_runner",
+            "name": "Tavern Runner",
+            "location": "tavern",
+            "topics": [{"id": "rumor", "text": "Patrols vanished.", "clue_id": "c1"}],
+        },
+    ]
+    storage._save_json(storage.WORLD_PATH, world)
+    storage._save_json(storage.CAMPAIGN_PATH, default_campaign())
+    storage._save_json(storage.CHARACTER_PATH, default_character())
+    storage._save_json(storage.COMBAT_PATH, default_combat())
+    storage._save_json(storage.CONDITIONS_PATH, default_conditions())
+    if not storage.SESSION_LOG_PATH.exists():
+        storage.SESSION_LOG_PATH.write_text("", encoding="utf-8")
+
+    line = '"Farewell." Galinor heads to the lost citadel of Zyxnon.'
+
+    with monkeypatch.context() as m:
+        m.setattr("game.api.call_gpt", lambda _: _gm_with_transition_proposal("old_milestone"))
+        client = TestClient(app)
+        r = client.post("/api/chat", json={"text": line})
+
+    assert r.status_code == 200
+    data = r.json()
+    assert data.get("ok") is True
+    sess = data.get("session") or {}
+    assert sess.get("active_scene_id") == "tavern", (
+        f"active_scene_id: expected to stay 'tavern' (unresolved travel), got {sess.get('active_scene_id')!r}"
+    )
+    res = data.get("resolution") or {}
+    assert res.get("target_scene_id") != "old_milestone", (
+        "resolver must not substitute prior lead destination for an unrelated unresolved destination"
+    )
+    assert res.get("resolved_transition") is not True
+    assert res.get("kind") == "travel", (
+        f"expected unresolved declared movement as kind 'travel', got {res.get('kind')!r}"
+    )
+    gm = data.get("gm_output") or {}
+    assert gm.get("activate_scene_id") == "old_milestone"
+    assert res.get("target_scene_id") in (None, ""), (
+        f"resolver target_scene_id should be empty when destination is unknown, got {res.get('target_scene_id')!r}"
+    )
+    assert gm.get("activate_scene_id") != res.get("target_scene_id"), (
+        "GPT advisory activate_scene_id must not be treated as resolver truth when travel is unresolved"
+    )

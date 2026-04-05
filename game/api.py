@@ -128,6 +128,7 @@ from game.scene_graph import build_scene_graph, is_transition_valid
 from game.intent_parser import (
     is_qualified_pursuit_shaped,
     maybe_build_declared_travel_action,
+    maybe_build_passive_interruption_wait_action,
     parse_intent,
     segment_mixed_player_turn,
 )
@@ -669,6 +670,9 @@ def _resolution_explicitly_breaks_social_continuity(resolution: dict | None) -> 
     if kind in ("scene_transition", "travel", "attack", "combat"):
         return True
     if resolution.get("disengage_social") is True:
+        return True
+    res_meta = resolution.get("metadata")
+    if isinstance(res_meta, dict) and res_meta.get("passive_interruption_wait") is True:
         return True
     return False
 
@@ -2789,7 +2793,12 @@ def chat(req: ChatRequest):
         # before dialogue-lock / social follow-up (which otherwise skips exploration when route is "dialogue").
         qualified_pursuit_shaped = is_qualified_pursuit_shaped(classification_text)
         parsed = None
-        if qualified_pursuit_shaped:
+        if not declared_switch_meta.get("has_declared_switch"):
+            parsed = maybe_build_passive_interruption_wait_action(
+                segmented_turn if isinstance(segmented_turn, dict) else None,
+                raw_player_text=req.text,
+            )
+        if parsed is None and qualified_pursuit_shaped:
             parsed = parse_exploration_intent(classification_text, scene, session, world)
         if parsed is None and not qualified_pursuit_shaped:
             parsed = parse_social_intent(classification_text, scene, world)

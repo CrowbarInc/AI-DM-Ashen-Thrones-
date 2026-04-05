@@ -56,6 +56,25 @@ _RE_QUAL_GO_TO_THE_LEAD_TO = re.compile(
 # Returned from pursuit resolver → parse_freeform_to_action must not fall through to travel/follow.
 _QUALIFIED_PURSUIT_FAILED = object()
 
+# Passive wait / observe-interruption (Block 3): narrow declared-action shapes that must not route as social follow-up.
+_PASSIVE_INTERRUPTION_WAIT_PATTERNS: Tuple[re.Pattern[str], ...] = tuple(
+    re.compile(p, re.IGNORECASE)
+    for p in (
+        r"\b(?:wait|waits|waiting)\s+for\b[^?.!]{0,120}\bto\s+pass\b",
+        r"\b(?:let|lets|letting)\s+(?:the\s+)?(?:shouting|disturbance|commotion|interruption|noise|ruckus)\s+pass\b",
+        r"\blooks?\s+to\s+the\s+distraction\b",
+        r"\bwatches?\s+the\s+commotion\b",
+        r"\bpauses?\s+to\s+observe\b",
+        r"\bholds?\s+position\s+and\s+waits\b",
+        r"\b(?:wait|waits|waiting)\s+for\s+(?:the\s+)?interruption\s+to\s+end\b",
+    )
+)
+_RE_PASSIVE_WAIT_BLOCKS_DIRECTED_SPEECH = re.compile(
+    r"\basks?\s+the\b|\bask\s+the\b|\b(?:i|we)\s+asks?\s+",
+    re.IGNORECASE,
+)
+_RE_PASSIVE_WAIT_BLOCKS_ASK_ABOUT = re.compile(r"\basks?\s+about\b", re.IGNORECASE)
+
 # Action types compatible with exploration engine and normalize_scene_action
 ACTION_TYPES = ("observe", "investigate", "interact", "scene_transition", "travel", "attack", "custom")
 TURN_SEGMENT_KEYS = (
@@ -258,6 +277,75 @@ def segment_mixed_player_turn(text: str) -> Dict[str, Optional[str]]:
     elif not any(out.values()):
         out["declared_action_text"] = raw
     return out
+
+
+def _declared_matches_passive_interruption_wait(declared: str) -> bool:
+    """True when *declared* is a narrow passive wait / observe-disturbance clause (lowercasing internally)."""
+    d = (declared or "").strip()
+    if not d or "?" in d:
+        return False
+    low = d.lower()
+    if re.match(r"^\s*(?:what|where|why|how|who|which|when)\b", low):
+        return False
+    if _RE_PASSIVE_WAIT_BLOCKS_DIRECTED_SPEECH.search(low) or _RE_PASSIVE_WAIT_BLOCKS_ASK_ABOUT.search(low):
+        return False
+    return any(p.search(low) for p in _PASSIVE_INTERRUPTION_WAIT_PATTERNS)
+
+
+def passive_interruption_wait_declared_action_text(
+    segmented_turn: Optional[Dict[str, Any]],
+    *,
+    raw_player_text: Optional[str] = None,
+) -> Optional[str]:
+    """Return the declared clause to classify as passive wait, or None when guards fail."""
+    if not isinstance(segmented_turn, dict):
+        return None
+    spoken = segmented_turn.get("spoken_text")
+    if isinstance(spoken, str) and spoken.strip():
+        return None
+    if isinstance(segmented_turn.get("adjudication_question_text"), str) and str(
+        segmented_turn.get("adjudication_question_text") or ""
+    ).strip():
+        return None
+    declared = segmented_turn.get("declared_action_text")
+    if not isinstance(declared, str) or not declared.strip():
+        raw = (raw_player_text or "").strip()
+        if not raw or '"' in raw:
+            return None
+        declared = raw
+    if not _declared_matches_passive_interruption_wait(declared):
+        return None
+    return declared.strip()
+
+
+def maybe_build_passive_interruption_wait_action(
+    segmented_turn: Optional[Dict[str, Any]],
+    raw_player_text: Optional[str] = None,
+) -> Optional[Dict[str, Any]]:
+    """Deterministic observe action for passive wait / interruption beats (not social follow-up)."""
+    declared = passive_interruption_wait_declared_action_text(
+        segmented_turn, raw_player_text=raw_player_text
+    )
+    if not declared:
+        return None
+    label = (raw_player_text or "").strip() or declared
+    meta = {
+        "passive_interruption_wait": True,
+        "parser_lane": "passive_interruption_wait",
+    }
+    return _build_action(
+        "observe",
+        label[:200],
+        declared,
+        metadata=meta,
+    )
+
+
+def _raw_text_eligible_for_passive_interruption_wait_parse(text: str) -> bool:
+    t = (text or "").strip()
+    if not t or '"' in t:
+        return False
+    return True
 
 
 def _extract_target(pattern: str, text: str, group: int = 1) -> Optional[str]:
@@ -812,6 +900,18 @@ def parse_freeform_to_action(
         if pursuit is not None:
             return pursuit
 
+    # ---- 0b. Passive wait / observe interruption (before travel; no quoted speech) ----
+    if _raw_text_eligible_for_passive_interruption_wait_parse(t) and _declared_matches_passive_interruption_wait(t):
+        return _build_action(
+            "observe",
+            t,
+            t,
+            metadata={
+                "passive_interruption_wait": True,
+                "parser_lane": "passive_interruption_wait",
+            },
+        )
+
     # ---- 1. Travel / scene_transition ----
     for prefix in sorted(TRAVEL_PREFIXES, key=len, reverse=True):
         if low.startswith(prefix):
@@ -985,21 +1085,166 @@ def _infer_transition_target_from_declared_text(
     return None
 
 
+def _collect_exit_targets_matching_dest_fragment(
+    dest: str, exits: List[Dict[str, Any]]
+) -> List[str]:
+    """All exit target_scene_ids whose label/slug overlaps *dest* (same loose signals as :func:`_match_exit`)."""
+    hits: List[str] = []
+    if not (dest or "").strip() or not exits:
+        return hits
+    dh = dest.strip().lower()
+    for ex in exits:
+        if not isinstance(ex, dict):
+            continue
+        label = (ex.get("label") or "").strip().lower()
+        target = (ex.get("target_scene_id") or ex.get("targetSceneId") or "").strip()
+        if not target:
+            continue
+        if dh in label or label in dh or slugify(dh) in slugify(label) or slugify(label) in slugify(dh):
+            hits.append(target)
+    return hits
+
+
+def _declared_unique_exit_target_for_dest(dest: str, exits: List[Dict[str, Any]]) -> Optional[str]:
+    """Single exit target when *dest* matches exactly one exit; fail closed on ambiguity."""
+    hits = _collect_exit_targets_matching_dest_fragment(dest, exits)
+    uniq = list(dict.fromkeys(hits))
+    if len(uniq) == 1:
+        return uniq[0]
+    return None
+
+
+def _infer_unique_transition_target_from_declared_text(
+    prompt: str,
+    exits: List[Dict[str, Any]],
+    known_scene_ids: set[str],
+) -> Optional[str]:
+    """Like :func:`_infer_transition_target_from_declared_text` but requires a unique exit match."""
+    if not isinstance(prompt, str) or not prompt.strip():
+        return None
+    prompt_low = prompt.strip().lower()
+    prompt_slug = slugify(prompt_low)
+    hits: List[str] = []
+    for ex in exits or []:
+        if not isinstance(ex, dict):
+            continue
+        label = str(ex.get("label") or "").strip()
+        target = str(ex.get("target_scene_id") or ex.get("targetSceneId") or "").strip()
+        if not target:
+            continue
+        label_low = label.lower()
+        label_slug = slugify(label_low)
+        target_slug = slugify(target)
+        if (
+            (label_low and label_low in prompt_low)
+            or (label_low and prompt_low in label_low)
+            or (label_slug and label_slug in prompt_slug)
+            or (target_slug and target_slug in prompt_slug)
+        ):
+            if target in known_scene_ids:
+                hits.append(target)
+    uniq = list(dict.fromkeys(hits))
+    if len(uniq) == 1:
+        return uniq[0]
+    return None
+
+
+def _unique_known_scene_id_for_dest_phrase(dest: str, known_scene_ids: set[str]) -> Optional[str]:
+    """When the affirmed phrase maps to exactly one known scene id (slug / substring); fail closed."""
+    d = (dest or "").strip()
+    if not d or not known_scene_ids:
+        return None
+    dest_cf = d.casefold()
+    dest_slug = slugify(d)
+    if len(dest_slug) < 4:
+        return None
+    hits: List[str] = []
+    for sid in known_scene_ids:
+        s = str(sid).strip()
+        if not s:
+            continue
+        s_slug = slugify(s)
+        if s.casefold() == dest_cf or s_slug == dest_slug:
+            hits.append(s)
+            continue
+        if len(dest_slug) >= 6 and dest_slug in s_slug:
+            hits.append(s)
+    uniq = list(dict.fromkeys(hits))
+    if len(uniq) == 1:
+        return uniq[0]
+    return None
+
+
+def _resolve_declared_travel_target_scene_id(
+    dest: str,
+    infer_scope: str,
+    exits: List[Dict[str, Any]],
+    known_scene_ids: set[str],
+) -> Optional[str]:
+    """Resolve affirmed destination: exits first (strict then unique fuzzy), then unique inference, then phrase→id."""
+    tid = _strict_unique_exit_destination(dest, exits)
+    if not tid:
+        tid = _declared_unique_exit_target_for_dest(dest, exits)
+    if not tid:
+        tid = _infer_unique_transition_target_from_declared_text(infer_scope, exits, known_scene_ids)
+    if not tid:
+        tid = _infer_unique_transition_target_from_declared_text(dest, exits, known_scene_ids)
+    if not tid:
+        tid = _unique_known_scene_id_for_dest_phrase(dest, known_scene_ids)
+    return tid
+
+
+def _declared_travel_local_prefix_before_match(declared: str, match_start: int) -> str:
+    """Clause/sentence tail immediately before a travel match (avoids skipping real movement after a prior question)."""
+    prefix = declared[:match_start] if match_start > 0 else ""
+    if not isinstance(prefix, str) or not prefix.strip():
+        return ""
+    cut = -1
+    for sep in (".", "!", "?", ";", ",", "\n", "\u2014", "\u2013"):  # clause / em dash / en dash
+        idx = prefix.rfind(sep)
+        if idx > cut:
+            cut = idx
+    tail = prefix[cut + 1 :].strip() if cut >= 0 else prefix.strip()
+    return tail.lstrip(" \t\"'«»").strip()
+
+
 def _declared_travel_embedded_in_addressing_question(declared: str, match_start: int) -> bool:
-    prefix = (declared[:match_start] or "").lower()
+    """True when the travel phrase is part of the same addressing/question clause, not a separate declared move."""
+    local = _declared_travel_local_prefix_before_match(declared, match_start)
+    if not local:
+        return False
+    low = local.lower()
     return bool(
         re.search(
             r"\b(?:ask|asks|asking|question|questions|questioned|wonder|wonders|wondering|"
             r"inquire|inquires|tell|tells|telling)\s+",
-            prefix,
+            low,
         )
     )
+
+
+_PURPOSE_INFINITIVE_TAIL = re.compile(
+    r"^(?P<core>.+?)\s+to\s+(?:look|find|search|seek|check|speak|talk|meet|see|ask|buy|sell|grab|scout)\b",
+    re.IGNORECASE,
+)
+
+
+def _trim_declared_travel_dest_purpose_tail(s: str) -> str:
+    """Drop bounded trailing purpose clauses: '… to look for scrap' → '…'."""
+    t = (s or "").strip()
+    if not t:
+        return t
+    m = _PURPOSE_INFINITIVE_TAIL.match(t)
+    if m:
+        return (m.group("core") or "").strip()
+    return t
 
 
 def _normalize_declared_travel_dest_fragment(raw: str) -> Optional[str]:
     s = (raw or "").strip()
     s = re.sub(r'^["\'\s]+|["\'\s]+$', "", s).strip()
     s = re.sub(r"\s+", " ", s).strip(" \t.-")
+    s = _trim_declared_travel_dest_purpose_tail(s)
     if not s or len(s) < 3:
         return None
     core = s.casefold().strip()
@@ -1013,67 +1258,156 @@ _DECLARED_TRAVEL_WITH_DEST_PATTERNS: Tuple[Tuple[re.Pattern[str], str], ...] = t
     (re.compile(p, re.IGNORECASE | re.DOTALL), tag)
     for p, tag in (
         (
-            r"\bleaves?\s+.+?\s+for\s+(?:the\s+)?(.+?)(?:\s*[.?!]|$)",
+            r"\bleaves?\s+.+?\s+for\s+(?:the\s+)?(.+?)(?:\s*[.,;?!]|$)",
             "leave_X_for_Y",
         ),
         (
-            r"\bleaving\s+.+?\s+for\s+(?:the\s+)?(.+?)(?:\s*[.?!]|$)",
+            r"\bleaving\s+.+?\s+for\s+(?:the\s+)?(.+?)(?:\s*[.,;?!]|$)",
             "leaving_X_for_Y",
         ),
         (
-            r"\bleaves?\s+for\s+(?:the\s+)?(.+?)(?:\s*[.?!]|$)",
+            r"\bleaves?\s+for\s+(?:the\s+)?(.+?)(?:\s*[.,;?!]|$)",
             "leave_for_Y",
         ),
         (
-            r"\bleaving\s+for\s+(?:the\s+)?(.+?)(?:\s*[.?!]|$)",
+            r"\bleaving\s+for\s+(?:the\s+)?(.+?)(?:\s*[.,;?!]|$)",
             "leaving_for_Y",
         ),
         (
-            r"\b(?:goes|going)\s+to\s+(?:the\s+)?(.+?)(?:\s*[.?!]|$)",
+            r"\b(?:goes|going)\s+to\s+(?:the\s+)?(.+?)(?:\s*[.,;?!]|$)",
             "going_to_Y",
         ),
         (
-            r"\b(?:head|heads|heading)\s+(?:off\s+)?to\s+(?:the\s+)?(.+?)(?:\s*[.?!]|$)",
+            r"\b(?:head|heads|heading)\s+(?:off\s+)?to\s+(?:the\s+)?(.+?)(?:\s*[.,;?!]|$)",
             "head_to_Y",
         ),
         (
-            r"\b(?:head|heads|heading)\s+for\s+(?:the\s+)?(.+?)(?:\s*[.?!]|$)",
+            r"\b(?:head|heads|heading)\s+for\s+(?:the\s+)?(.+?)(?:\s*[.,;?!]|$)",
             "head_for_Y",
         ),
         (
-            r"\b(?:travel|travels|traveling|travelling)\s+(?:to|towards?)\s+(?:the\s+)?(.+?)(?:\s*[.?!]|$)",
+            r"\b(?:travel|travels|traveling|travelling)\s+(?:to|towards?)\s+(?:the\s+)?(.+?)(?:\s*[.,;?!]|$)",
             "travel_to_Y",
         ),
         (
-            r"\b(?:journey|journeys|journeying)\s+to\s+(?:the\s+)?(.+?)(?:\s*[.?!]|$)",
+            r"\b(?:journey|journeys|journeying)\s+to\s+(?:the\s+)?(.+?)(?:\s*[.,;?!]|$)",
             "journey_to_Y",
         ),
         (
-            r"\b(?:move|moves|moving)\s+to\s+(?:the\s+)?(.+?)(?:\s*[.?!]|$)",
+            r"\b(?:move|moves|moving)\s+to\s+(?:the\s+)?(.+?)(?:\s*[.,;?!]|$)",
             "move_to_Y",
         ),
         (
-            r"\b(?:walk|walks|walking|run|runs|running)\s+(?:off\s+)?to\s+(?:the\s+)?(.+?)(?:\s*[.?!]|$)",
+            r"\b(?:walk|walks|walking|run|runs|running)\s+(?:off\s+)?to\s+(?:the\s+)?(.+?)(?:\s*[.,;?!]|$)",
             "walk_run_to_Y",
         ),
         (
-            r"\b(?:depart|departs|departing)\s+for\s+(?:the\s+)?(.+?)(?:\s*[.?!]|$)",
+            r"\b(?:depart|departs|departing)\s+for\s+(?:the\s+)?(.+?)(?:\s*[.,;?!]|$)",
             "depart_for_Y",
         ),
         (
-            r"\b(?:return|returns|returning)\s+to\s+(?:the\s+)?(.+?)(?:\s*[.?!]|$)",
+            r"\b(?:return|returns|returning)\s+to\s+(?:the\s+)?(.+?)(?:\s*[.,;?!]|$)",
             "return_to_Y",
         ),
         (
-            r"\bset\s+out\s+for\s+(?:the\s+)?(.+?)(?:\s*[.?!]|$)",
+            r"\bset\s+out\s+for\s+(?:the\s+)?(.+?)(?:\s*[.,;?!]|$)",
             "set_out_for_Y",
         ),
         (
-            r"\b(?:ride|rides|riding|march|marches|marching)\s+to\s+(?:the\s+)?(.+?)(?:\s*[.?!]|$)",
+            r"\b(?:ride|rides|riding|march|marches|marching)\s+to\s+(?:the\s+)?(.+?)(?:\s*[.,;?!]|$)",
             "ride_march_to_Y",
         ),
     )
 )
+
+
+def _declared_travel_match_prefix(declared: str, m: re.Match) -> str:
+    i = m.start()
+    return declared[max(0, i - 220) : i].lower()
+
+
+def _declared_travel_match_starts_with_travel_verb(m: re.Match) -> bool:
+    head = (m.group(0) or "").lower().lstrip()
+    return bool(
+        re.match(
+            r"(?:goes|going|go)\s+|(?:travel|travels|traveling|travelling)\s+|"
+            r"(?:head|heads|heading)\s+|(?:leave|leaves|leaving)\b|"
+            r"(?:move|moves|moving)\s+|(?:walk|walks|walking|run|runs|running)\s+|"
+            r"(?:journey|journeys|journeying)\s+|(?:return|returns|returning)\s+|"
+            r"(?:depart|departs|departing)\s+|(?:ride|rides|riding|march|marches|marching)\s+",
+            head,
+        )
+    )
+
+
+def _declared_travel_negation_blocks_match(declared: str, m: re.Match) -> bool:
+    """True when bounded phrasing marks this travel phrase as refused, postponed, or contrastive."""
+    pre = _declared_travel_match_prefix(declared, m)
+    g0 = (m.group(0) or "").lower()
+    g0_head = g0.lstrip()
+
+    # Contrastive: the matched phrase is the rejected branch (instead of … to …).
+    if pre.rstrip().endswith("instead of") and _declared_travel_match_starts_with_travel_verb(m):
+        return True
+
+    # Decides / rules out travel to this destination.
+    if re.search(r"\bdecides?\s+against\s*$", pre) and _declared_travel_match_starts_with_travel_verb(m):
+        return True
+    if re.search(r"\bagainst\s*$", pre) and g0_head.startswith(
+        ("traveling ", "travelling ", "going ")
+    ):
+        return True
+
+    # "not going to" / "not traveling to" / copula + not
+    if re.search(r"\bnot\s*$", pre) and g0_head.startswith(("going ", "traveling ", "travelling ")):
+        return True
+    if re.search(r"\b(?:is|are|was|were)\s+not\s*$", pre) and g0_head.startswith(
+        ("going ", "traveling ", "travelling ")
+    ):
+        return True
+
+    # do/does/did not go to …
+    if re.search(r"\b(?:do|does|did)\s+not\s+go\s+to\s*$", pre):
+        return True
+
+    # won't / refuse / choose not
+    if re.search(r"\b(?:won't|wont)\s+go\s+to\s*$", pre):
+        return True
+    if re.search(r"\brefuses?\s+to\s+go\s+to\s*$", pre):
+        return True
+    if re.search(r"\bchooses?\s+not\s+to\s+go\s+to\s*$", pre):
+        return True
+
+    # Postponement scoped to this destination (e.g. "against … to … for now").
+    if m.lastindex and m.end(1) <= len(declared):
+        post = declared[m.end(1) : min(len(declared), m.end(1) + 80)].lower()
+        if re.search(r"\bfor\s+now\b", post):
+            if re.search(r"\bdecides?\s+against\s*$", pre) and _declared_travel_match_starts_with_travel_verb(m):
+                return True
+            if re.search(r"\bnot\s*$", pre) and g0_head.startswith(("going ", "traveling ", "travelling ")):
+                return True
+            if re.search(r"\b(?:is|are|was|were)\s+not\s*$", pre) and g0_head.startswith(
+                ("going ", "traveling ", "travelling ")
+            ):
+                return True
+            if re.search(r"\b(?:do|does|did)\s+not\s+go\s+to\s*$", pre):
+                return True
+
+    return False
+
+
+def _first_declared_travel_pattern_match(
+    declared: str, pos: int
+) -> Tuple[Optional[re.Match], Optional[str]]:
+    """Mirror legacy behavior: first pattern in tuple that matches from *pos*, not embedded in a question."""
+    for pat, tag in _DECLARED_TRAVEL_WITH_DEST_PATTERNS:
+        m = pat.search(declared, pos)
+        if not m:
+            continue
+        if _declared_travel_embedded_in_addressing_question(declared, m.start()):
+            continue
+        return m, tag
+    return None, None
 
 
 def maybe_build_declared_travel_action(
@@ -1111,57 +1445,72 @@ def maybe_build_declared_travel_action(
     exits = scene.get("exits") if isinstance(scene.get("exits"), list) else []
     scene_id = str(scene.get("id") or "").strip()
 
-    matched_tag: Optional[str] = None
-    dest_raw: Optional[str] = None
-    for pat, tag in _DECLARED_TRAVEL_WITH_DEST_PATTERNS:
-        m = pat.search(declared)
-        if not m:
-            continue
-        if _declared_travel_embedded_in_addressing_question(declared, m.start()):
-            continue
-        matched_tag = tag
+    cursor = 0
+    max_passes = 8
+    for _ in range(max_passes):
+        m, matched_tag = _first_declared_travel_pattern_match(declared, cursor)
+        if not m or not matched_tag:
+            return None
         dest_raw = m.group(1)
-        break
+        if not dest_raw:
+            return None
 
-    if not dest_raw:
-        return None
+        if _declared_travel_negation_blocks_match(declared, m):
+            nxt = m.end()
+            if nxt <= cursor:
+                cursor = cursor + 1
+            else:
+                cursor = nxt
+            continue
 
-    dest = _normalize_declared_travel_dest_fragment(dest_raw)
-    if not dest:
-        return None
+        dest = _normalize_declared_travel_dest_fragment(dest_raw)
+        if not dest:
+            return None
 
-    base_meta: Dict[str, Any] = {
-        "declared_travel_override": True,
-        "declared_travel_pattern": matched_tag,
-        "declared_travel_dest_hint": dest,
-    }
+        base_meta: Dict[str, Any] = {
+            "declared_travel_override": True,
+            "declared_travel_pattern": matched_tag,
+            "declared_travel_dest_hint": dest,
+        }
 
-    if isinstance(session, dict) and scene_id:
-        actionable = _actionable_pending_with_registry_rows(session, scene_id)
+        infer_scope = declared[m.start() :]
+        tid = _resolve_declared_travel_target_scene_id(dest, infer_scope, exits, known_scene_ids)
+
+        actionable: List[Dict[str, Any]] = []
+        if isinstance(session, dict) and scene_id:
+            actionable = _actionable_pending_with_registry_rows(session, scene_id)
+
+        row: Optional[Dict[str, Any]] = None
         if actionable:
             row = _resolve_qualified_pursuit_target_to_row(dest, scene, session, world, actionable)
-            if row is not None:
+        row_scene = _pending_row_resolved_scene_id(row, world) if row else None
+
+        # Affirmed exit/scene resolution wins; attach lead metadata only when the lead's destination matches.
+        if tid and tid in known_scene_ids:
+            if row and row_scene and row_scene == tid:
                 act = _build_pursuit_scene_transition_action(declared, row, world=world)
                 if act is not None:
                     md = act.setdefault("metadata", {})
                     md.update(base_meta)
                     return act
+            return _build_action(
+                "scene_transition",
+                declared,
+                declared,
+                target_scene_id=tid,
+                metadata=base_meta,
+            )
 
-    tid = _match_exit(dest, exits) or _strict_unique_exit_destination(dest, exits)
-    if not tid:
-        tid = _infer_transition_target_from_declared_text(declared, exits, known_scene_ids)
-    if not tid:
-        tid = _infer_transition_target_from_declared_text(dest, exits, known_scene_ids)
+        if row is not None:
+            act = _build_pursuit_scene_transition_action(declared, row, world=world)
+            if act is not None:
+                md = act.setdefault("metadata", {})
+                md.update(base_meta)
+                return act
 
-    if tid and tid in known_scene_ids:
-        return _build_action(
-            "scene_transition",
-            declared,
-            declared,
-            target_scene_id=tid,
-            metadata=base_meta,
-        )
-    return _build_action("travel", declared, declared, target_scene_id=None, metadata=base_meta)
+        return _build_action("travel", declared, declared, target_scene_id=None, metadata=base_meta)
+
+    return None
 
 
 def parse_intent(text: str) -> Optional[Dict[str, Any]]:

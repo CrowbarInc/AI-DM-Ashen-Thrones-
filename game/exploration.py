@@ -31,7 +31,11 @@ def _infer_transition_target_from_prompt(
     exits: List[Dict[str, Any]],
     known_scene_ids: set[str],
 ) -> Optional[str]:
-    """Best-effort deterministic destination inference from prompt text and exits."""
+    """Best-effort deterministic destination inference from prompt text and exits.
+
+    Mixed-turn *declared* movement uses stricter unique matching in
+    :func:`game.intent_parser.maybe_build_declared_travel_action` (ambiguous exits stay unresolved).
+    """
     if not isinstance(prompt, str) or not prompt.strip():
         return None
     prompt_low = prompt.strip().lower()
@@ -339,6 +343,12 @@ def resolve_exploration_action(
             hint = "Player expressed travel intent; target scene not resolved. Narrate based on current scene and intent."
     elif action_type == "observe":
         hint = "Player is focusing on observing the current scene. Narrate what stands out or what careful observation reveals—avoid repeating the same summary."
+        _am_obs = normalized_action.get("metadata")
+        if isinstance(_am_obs, dict) and _am_obs.get("passive_interruption_wait") is True:
+            hint = (
+                "The player waits out a disturbance or distraction. Narrate the interruption easing and the scene settling; "
+                "do not force a fresh in-character reply from a prior conversational partner unless the fiction already queued one."
+            )
     elif action_type == "investigate":
         hint = "Player is investigating or seeking clues. Narrate what deeper scrutiny reveals; advance discovery if appropriate."
     elif action_type == "interact":
@@ -414,10 +424,12 @@ def resolve_exploration_action(
         state_changes_final[k] = v
 
     res_metadata: Dict[str, Any] = {}
-    if transition_candidate:
-        am = normalized_action.get("metadata")
-        if isinstance(am, dict):
+    am = normalized_action.get("metadata")
+    if isinstance(am, dict):
+        if transition_candidate:
             res_metadata.update(am)
+        elif am.get("passive_interruption_wait") is True:
+            res_metadata["passive_interruption_wait"] = True
     if skill_check_result:
         res_metadata["skill_check"] = skill_check_result
 

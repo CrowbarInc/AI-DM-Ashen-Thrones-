@@ -10,7 +10,7 @@ from __future__ import annotations
 
 from game import storage
 from game.api import app
-from game.leads import get_lead
+from game.leads import LeadLifecycle, LeadStatus, create_lead, get_lead, upsert_lead
 from game.defaults import (
     default_campaign,
     default_character,
@@ -144,6 +144,78 @@ def _gm_with_non_authoritative_scene(target_scene_id: str) -> dict:
     out = _gm_response("You press on under a thin, watchful sky.")
     out["activate_scene_id"] = target_scene_id
     return out
+
+
+def _seed_frontier_gate_eastern_square_stale_milestone_lead(tmp_path, monkeypatch):
+    """Gate with exit to eastern_square + old_milestone; session holds a stale milestone pending lead."""
+    _patch_storage(tmp_path, monkeypatch)
+    gate = default_scene("frontier_gate")
+    gate["scene"]["id"] = "frontier_gate"
+    gate["scene"]["exits"] = [
+        {"label": "Path to the eastern square", "target_scene_id": "eastern_square"},
+        {"label": "Follow the missing patrol rumor", "target_scene_id": "old_milestone"},
+    ]
+    for ad in gate["scene"].get("addressables") or []:
+        if isinstance(ad, dict):
+            ad["scene_id"] = "frontier_gate"
+    storage._save_json(storage.scene_path("frontier_gate"), gate)
+
+    east = default_scene("tavern")
+    east["scene"]["id"] = "eastern_square"
+    east["scene"]["exits"] = []
+    storage._save_json(storage.scene_path("eastern_square"), east)
+
+    ms = default_scene("old_milestone")
+    ms["scene"]["id"] = "old_milestone"
+    storage._save_json(storage.scene_path("old_milestone"), ms)
+
+    session = default_session()
+    session["active_scene_id"] = "frontier_gate"
+    session["visited_scene_ids"] = ["frontier_gate"]
+    upsert_lead(
+        session,
+        create_lead(
+            id="ms_lead",
+            title="Patrol rumor",
+            summary="",
+            lifecycle=LeadLifecycle.DISCOVERED,
+            status=LeadStatus.ACTIVE,
+            related_scene_ids=["old_milestone"],
+        ),
+    )
+    rt = get_scene_runtime(session, "frontier_gate")
+    rt["pending_leads"] = [
+        {
+            "clue_id": "c_patrol",
+            "authoritative_lead_id": "ms_lead",
+            "text": "The patrol was last seen at the old milestone",
+            "leads_to_scene": "old_milestone",
+        }
+    ]
+    storage._save_json(storage.SESSION_PATH, session)
+
+    world = default_world()
+    world["npcs"] = [
+        {
+            "id": "tavern_runner",
+            "name": "Tavern Runner",
+            "location": "frontier_gate",
+            "topics": [
+                {
+                    "id": "lirael_tip",
+                    "text": "Lirael posts near the eastern square when she is not on the crier route.",
+                    "clue_id": "c_lirael",
+                }
+            ],
+        }
+    ]
+    storage._save_json(storage.WORLD_PATH, world)
+    storage._save_json(storage.CAMPAIGN_PATH, default_campaign())
+    storage._save_json(storage.CHARACTER_PATH, default_character())
+    storage._save_json(storage.COMBAT_PATH, default_combat())
+    storage._save_json(storage.CONDITIONS_PATH, default_conditions())
+    if not storage.SESSION_LOG_PATH.exists():
+        storage.SESSION_LOG_PATH.write_text("", encoding="utf-8")
 
 
 def _seed_tavern_patrol_lead_old_milestone(tmp_path, monkeypatch):
@@ -478,3 +550,315 @@ def test_transcript_old_milestone_chat_flow_stays_authoritative_end_to_end(tmp_p
     aid = str(meta.get("authoritative_lead_id") or "").strip()
     assert aid
     assert get_lead(d2.get("session") or {}, aid) is not None
+
+
+def test_transcript_lirael_clue_then_mixed_travel_eastern_square_authoritative(tmp_path, monkeypatch):
+    """Ask about Lirael, hear eastern square, then mixed farewell + declared travel; resolver beats GPT scene id."""
+    _seed_frontier_gate_eastern_square_stale_milestone_lead(tmp_path, monkeypatch)
+
+    gpt_calls: list[int] = []
+
+    def _call_gpt(_messages):
+        gpt_calls.append(len(gpt_calls))
+        if gpt_calls[-1] == 0:
+            return _gm_response(
+                "The runner leans in: Lirael works the eastern square when she is not on the crier route."
+            )
+        return _gm_with_non_authoritative_scene("bogus_gpt_scene")
+
+    with monkeypatch.context() as m:
+        m.setattr("game.api.call_gpt", _call_gpt)
+        client = TestClient(app)
+        r1 = client.post(
+            "/api/chat",
+            json={"text": "Tavern Runner, where can I find Lirael?"},
+        )
+        assert r1.status_code == 200
+        d1 = r1.json()
+        assert d1.get("ok") is True
+
+        r2 = client.post(
+            "/api/chat",
+            json={
+                "text": (
+                    '"Thanks for the tip." I asked about Lirael earlier. '
+                    "Galinor leaves for the eastern square."
+                )
+            },
+        )
+
+    assert r2.status_code == 200
+    d2 = r2.json()
+    assert d2.get("ok") is True
+    assert d2.get("session", {}).get("active_scene_id") == "eastern_square", (
+        f"active_scene_id: expected 'eastern_square', got {d2.get('session', {}).get('active_scene_id')!r}"
+    )
+    assert d2.get("scene", {}).get("scene", {}).get("id") == "eastern_square"
+    res = d2.get("resolution") or {}
+    assert res.get("resolved_transition") is True
+    assert res.get("target_scene_id") == "eastern_square", (
+        f"resolver target_scene_id: expected 'eastern_square', got {res.get('target_scene_id')!r}"
+    )
+    assert res.get("kind") == "scene_transition"
+    gm2 = d2.get("gm_output") or {}
+    assert gm2.get("activate_scene_id") == "bogus_gpt_scene"
+    assert gm2.get("activate_scene_id") != res.get("target_scene_id"), (
+        "gm_output.activate_scene_id is advisory; authoritative transition follows resolver only"
+    )
+    assert (res.get("metadata") or {}).get("authoritative_lead_id") in (None, "")
+
+
+def test_transcript_tavern_runner_patrol_wait_beat_then_follow_up_question(tmp_path, monkeypatch):
+    """Patrol question → passive wait for distraction → must not loop social/interruption; next directed question works."""
+    _seed_tavern_patrol_lead_old_milestone(tmp_path, monkeypatch)
+
+    gpt_calls: list[int] = []
+
+    def _call_gpt(_messages):
+        gpt_calls.append(len(gpt_calls))
+        if gpt_calls[-1] == 0:
+            return _gm_response(
+                "A drunk staggers between tables; the runner's eyes flick to the commotion, then back to you."
+            )
+        if gpt_calls[-1] == 1:
+            return _gm_response(
+                "The shout dies down; tankards settle. The runner exhales, attention returning to the room."
+            )
+        return _gm_response(
+            "The runner murmurs, low: last reliable sign pointed toward the old milestone, past the east gate."
+        )
+
+    with monkeypatch.context() as m:
+        m.setattr("game.api.call_gpt", _call_gpt)
+        client = TestClient(app)
+        r1 = client.post(
+            "/api/chat",
+            json={"text": "Tavern Runner, what happened to the patrol?"},
+        )
+        assert r1.status_code == 200
+        d1 = r1.json()
+        assert d1.get("ok") is True
+        res1 = d1.get("resolution") or {}
+        assert res1.get("kind") in ("question", "social_probe")
+        assert (res1.get("social") or {}).get("npc_id") == "tavern_runner"
+
+        r2 = client.post(
+            "/api/chat",
+            json={"text": "Galinor waits for the commotion to pass."},
+        )
+        assert r2.status_code == 200
+        d2 = r2.json()
+        assert d2.get("ok") is True
+        res2 = d2.get("resolution") or {}
+        assert res2.get("kind") == "observe"
+        assert (res2.get("metadata") or {}).get("passive_interruption_wait") is True
+        assert res2.get("social") in (None, {})
+        ctx2 = (d2.get("session") or {}).get("interaction_context") or {}
+        assert not str(ctx2.get("active_interaction_target_id") or "").strip()
+        assert str(ctx2.get("interaction_mode") or "").strip().lower() == "activity"
+
+        r3 = client.post(
+            "/api/chat",
+            json={
+                "text": (
+                    '"Runner," Galinor asks, "where were they last seen?"'
+                )
+            },
+        )
+        assert r3.status_code == 200
+        d3 = r3.json()
+        assert d3.get("ok") is True
+        res3 = d3.get("resolution") or {}
+        assert res3.get("kind") in ("question", "social_probe")
+        assert (res3.get("social") or {}).get("npc_id") == "tavern_runner"
+
+    assert len(gpt_calls) >= 3
+
+
+def test_transcript_combined_patrol_wait_decline_old_milestone_no_false_transition(
+    tmp_path, monkeypatch,
+):
+    """Patrol question → wait beat → re-ask (milestone surfaces) → explicit decline: stay put; GPT scene id cannot move you."""
+    _seed_tavern_patrol_lead_old_milestone(tmp_path, monkeypatch)
+
+    gpt_calls: list[int] = []
+
+    def _call_gpt(_messages):
+        n = len(gpt_calls)
+        gpt_calls.append(n)
+        if n == 0:
+            return _gm_response(
+                "A drunk staggers between tables; the runner's eyes flick to the commotion, then back to you."
+            )
+        if n == 1:
+            return _gm_response(
+                "The shout dies down; tankards settle. The runner exhales, attention returning to the room."
+            )
+        if n == 2:
+            return _gm_response(
+                "The runner murmurs, low: last reliable sign pointed toward the old milestone, past the east gate."
+            )
+        return _gm_with_non_authoritative_scene("old_milestone")
+
+    decline = (
+        '"Thanks anyway." Galinor decides against traveling to the old milestone for now '
+        "and stays to finish his drink."
+    )
+
+    with monkeypatch.context() as m:
+        m.setattr("game.api.call_gpt", _call_gpt)
+        client = TestClient(app)
+        r1 = client.post(
+            "/api/chat",
+            json={"text": "Tavern Runner, what happened to the patrol?"},
+        )
+        assert r1.status_code == 200
+        d1 = r1.json()
+        assert d1.get("ok") is True
+
+        r2 = client.post(
+            "/api/chat",
+            json={"text": "Galinor waits for the commotion to pass."},
+        )
+        assert r2.status_code == 200
+        d2 = r2.json()
+        assert d2.get("ok") is True
+        res2 = d2.get("resolution") or {}
+        assert res2.get("kind") == "observe", (
+            f"wait beat: expected resolution.kind 'observe', got {res2.get('kind')!r}"
+        )
+        assert (res2.get("metadata") or {}).get("passive_interruption_wait") is True
+
+        r3 = client.post(
+            "/api/chat",
+            json={"text": '"Runner," Galinor asks, "where were they last seen?"'},
+        )
+        assert r3.status_code == 200
+        d3 = r3.json()
+        assert d3.get("ok") is True
+        s3 = d3.get("session") or {}
+        rt3 = get_scene_runtime(s3, "tavern")
+        pending3 = rt3.get("pending_leads") or []
+        assert any(
+            str(p.get("leads_to_scene") or "").strip() == "old_milestone"
+            for p in pending3
+            if isinstance(p, dict)
+        ), "after re-ask, runtime should surface the milestone lead (pending_leads)"
+
+        r4 = client.post("/api/chat", json={"text": decline})
+        assert r4.status_code == 200
+        d4 = r4.json()
+
+    assert d4.get("ok") is True
+    s4 = d4.get("session") or {}
+    assert s4.get("active_scene_id") == "tavern", (
+        f"active_scene_id: expected 'tavern' after explicit decline, got {s4.get('active_scene_id')!r}"
+    )
+    assert d4.get("scene", {}).get("scene", {}).get("id") == "tavern"
+    res4 = d4.get("resolution") or {}
+    assert res4.get("resolved_transition") is not True, (
+        "declining the milestone must not produce an authoritative scene transition"
+    )
+    assert res4.get("target_scene_id") != "old_milestone", (
+        f"resolver target_scene_id must not fall back to old_milestone; got {res4.get('target_scene_id')!r}"
+    )
+    assert res4.get("kind") != "scene_transition", (
+        f"normalized action kind must not be scene_transition; got {res4.get('kind')!r}"
+    )
+    gm4 = d4.get("gm_output") or {}
+    assert gm4.get("activate_scene_id") == "old_milestone"
+    assert gm4.get("activate_scene_id") != res4.get("target_scene_id"), (
+        "gm_output.activate_scene_id is advisory; declined travel must not follow it"
+    )
+
+
+def test_transcript_passive_wait_then_followup_then_departure_stays_coherent(tmp_path, monkeypatch):
+    """Wait → follow-up → declared travel: resolver (not GPT) sets scene; no return to passive-wait / social-follow-up glitch."""
+    _seed_tavern_patrol_lead_old_milestone(tmp_path, monkeypatch)
+
+    gpt_calls: list[int] = []
+
+    def _call_gpt(_messages):
+        n = len(gpt_calls)
+        gpt_calls.append(n)
+        if n == 0:
+            return _gm_response(
+                "A drunk staggers between tables; the runner's eyes flick to the commotion, then back to you."
+            )
+        if n == 1:
+            return _gm_response(
+                "The shout dies down; tankards settle. The runner exhales, attention returning to the room."
+            )
+        if n == 2:
+            return _gm_response(
+                "The runner murmurs, low: last reliable sign pointed toward the old milestone, past the east gate."
+            )
+        return _gm_with_non_authoritative_scene("bogus_gpt_scene")
+
+    with monkeypatch.context() as m:
+        m.setattr("game.api.call_gpt", _call_gpt)
+        client = TestClient(app)
+        r1 = client.post(
+            "/api/chat",
+            json={"text": "Tavern Runner, what happened to the patrol?"},
+        )
+        assert r1.status_code == 200
+
+        r2 = client.post(
+            "/api/chat",
+            json={"text": "Galinor waits for the commotion to pass."},
+        )
+        assert r2.status_code == 200
+        d2 = r2.json()
+        res2 = d2.get("resolution") or {}
+        assert res2.get("kind") == "observe"
+        assert (res2.get("metadata") or {}).get("passive_interruption_wait") is True
+
+        r3 = client.post(
+            "/api/chat",
+            json={
+                "text": '"Runner," Galinor asks, "where were they last seen?"',
+            },
+        )
+        assert r3.status_code == 200
+        d3 = r3.json()
+        res3 = d3.get("resolution") or {}
+        assert res3.get("kind") in ("question", "social_probe")
+        assert (res3.get("social") or {}).get("npc_id") == "tavern_runner"
+
+        r4 = client.post(
+            "/api/chat",
+            json={
+                "text": (
+                    '"Thank you." Galinor leaves the runner for the old milestone.'
+                )
+            },
+        )
+        assert r4.status_code == 200
+        d4 = r4.json()
+
+    assert d4.get("ok") is True
+    res4 = d4.get("resolution") or {}
+    assert res4.get("kind") == "scene_transition", (
+        f"departure turn: expected resolution.kind 'scene_transition', not passive-wait replay; got {res4.get('kind')!r}"
+    )
+    assert (res4.get("metadata") or {}).get("passive_interruption_wait") is not True
+    assert res4.get("resolved_transition") is True
+    assert res4.get("target_scene_id") == "old_milestone", (
+        f"resolver target_scene_id: expected 'old_milestone', got {res4.get('target_scene_id')!r}"
+    )
+    s4 = d4.get("session") or {}
+    assert s4.get("active_scene_id") == "old_milestone", (
+        f"active_scene_id: expected 'old_milestone' after affirmed travel, got {s4.get('active_scene_id')!r}"
+    )
+    gm4 = d4.get("gm_output") or {}
+    assert gm4.get("activate_scene_id") == "bogus_gpt_scene"
+    assert gm4.get("activate_scene_id") != res4.get("target_scene_id"), (
+        "authoritative scene follows resolver target_scene_id, not gm_output.activate_scene_id"
+    )
+    ctx4 = s4.get("interaction_context") or {}
+    assert ctx4.get("interaction_mode") != "social" or not str(
+        ctx4.get("active_interaction_target_id") or ""
+    ).strip(), (
+        "after travel, session should not read as still mid-runner social loop from the wait beat"
+    )
