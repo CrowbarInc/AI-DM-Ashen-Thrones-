@@ -1,7 +1,12 @@
 """Tests for the freeform intent parser (parse_freeform_to_action, parse_intent)."""
 import pytest
 
-from game.intent_parser import parse_freeform_to_action, parse_intent, segment_mixed_player_turn
+from game.intent_parser import (
+    maybe_build_declared_travel_action,
+    parse_freeform_to_action,
+    parse_intent,
+    segment_mixed_player_turn,
+)
 from game.leads import LeadLifecycle, LeadStatus, create_lead, upsert_lead
 from game.storage import get_scene_runtime
 
@@ -307,3 +312,156 @@ def test_investigate_the_x_lead_maps_to_scene_transition_with_metadata():
     assert md.get("authoritative_lead_id") == "m_lead"
     assert md.get("commitment_source") == "explicit_player_pursuit"
     assert md.get("commitment_strength") == 2
+
+
+def test_maybe_declared_travel_leaves_for_exit_destination():
+    scene = {
+        "id": "gate",
+        "exits": [{"label": "Old milestone path", "target_scene_id": "old_milestone"}],
+    }
+    seg = segment_mixed_player_turn(
+        '"Bye." Galinor leaves the runner for the old milestone.'
+    )
+    act = maybe_build_declared_travel_action(
+        seg,
+        scene=scene,
+        session={},
+        world={},
+        known_scene_ids={"gate", "old_milestone"},
+    )
+    assert act is not None
+    assert act.get("type") == "scene_transition"
+    assert act.get("target_scene_id") == "old_milestone"
+    assert (act.get("metadata") or {}).get("declared_travel_override") is True
+
+
+def test_maybe_declared_travel_unresolved_stays_travel_not_social_shape():
+    scene = {"id": "gate", "exits": []}
+    seg = segment_mixed_player_turn("Galinor leaves the runner for the lost citadel of Zyxnon.")
+    act = maybe_build_declared_travel_action(
+        seg,
+        scene=scene,
+        session={},
+        world={},
+        known_scene_ids={"gate"},
+    )
+    assert act is not None
+    assert act.get("type") == "travel"
+    assert act.get("target_scene_id") in (None, "")
+
+
+def test_maybe_declared_travel_not_fired_for_quoted_farewell_only():
+    seg = segment_mixed_player_turn('"Okay... I\'ll be on my way."')
+    act = maybe_build_declared_travel_action(
+        seg,
+        scene={"id": "x", "exits": []},
+        session={},
+        world={},
+        known_scene_ids={"x"},
+    )
+    assert act is None
+
+
+def test_maybe_declared_travel_resolves_via_actionable_lead():
+    scene = {
+        "id": "gate",
+        "exits": [{"label": "Unrelated exit", "target_scene_id": "other"}],
+    }
+    session = {}
+    upsert_lead(
+        session,
+        create_lead(id="ms_lead", title="M", summary="", lifecycle=LeadLifecycle.DISCOVERED),
+    )
+    rt = get_scene_runtime(session, "gate")
+    rt["pending_leads"] = [
+        {
+            "clue_id": "c1",
+            "authoritative_lead_id": "ms_lead",
+            "text": "Investigate the old milestone",
+            "leads_to_scene": "old_milestone",
+        }
+    ]
+    seg = segment_mixed_player_turn("Galinor heads to the old milestone")
+    act = maybe_build_declared_travel_action(
+        seg,
+        scene=scene,
+        session=session,
+        world={},
+        known_scene_ids={"gate", "old_milestone", "other"},
+    )
+    assert act is not None
+    assert act.get("type") == "scene_transition"
+    assert act.get("target_scene_id") == "old_milestone"
+    md = act.get("metadata") or {}
+    assert md.get("authoritative_lead_id") == "ms_lead"
+    assert md.get("declared_travel_override") is True
+
+
+def test_question_about_leaving_does_not_false_positive_as_travel():
+    """Questions mentioning destinations must not yield declared-travel actions."""
+    scene = {
+        "id": "tavern",
+        "exits": [{"label": "Trail to the old milestone", "target_scene_id": "old_milestone"}],
+    }
+    known = {"tavern", "old_milestone"}
+    session: dict = {}
+    samples = (
+        "Who left for the old milestone?",
+        "Did the patrol go to the old milestone?",
+        "Can you tell me about leaving for the south road?",
+    )
+    for line in samples:
+        seg = segment_mixed_player_turn(line)
+        assert seg.get("declared_action_text")
+        assert (
+            maybe_build_declared_travel_action(
+                seg,
+                scene=scene,
+                session=session,
+                world={},
+                known_scene_ids=known,
+            )
+            is None
+        ), line
+
+
+def test_question_about_leaving_no_travel_override_with_actionable_lead():
+    """Guard clauses beat pending-lead / exit context on interrogative lines."""
+    scene = {
+        "id": "tavern",
+        "exits": [{"label": "Trail to the old milestone", "target_scene_id": "old_milestone"}],
+    }
+    session = {}
+    upsert_lead(
+        session,
+        create_lead(
+            id="lead_ms",
+            title="Milestone",
+            summary="",
+            lifecycle=LeadLifecycle.DISCOVERED,
+            status=LeadStatus.ACTIVE,
+            related_scene_ids=["old_milestone"],
+        ),
+    )
+    rt = get_scene_runtime(session, "tavern")
+    rt["pending_leads"] = [
+        {
+            "clue_id": "c_patrol",
+            "authoritative_lead_id": "lead_ms",
+            "text": "Investigate the old milestone",
+            "leads_to_scene": "old_milestone",
+        }
+    ]
+    seg = segment_mixed_player_turn("Did the patrol go to the old milestone?")
+    assert (
+        maybe_build_declared_travel_action(
+            seg,
+            scene=scene,
+            session=session,
+            world={},
+            known_scene_ids={"tavern", "old_milestone"},
+        )
+        is None
+    )
+    env = {"scene": scene}
+    assert parse_freeform_to_action("Who left for the old milestone?", env, session=session) is None

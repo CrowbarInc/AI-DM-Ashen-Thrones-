@@ -17,7 +17,7 @@ interlocutor continuity.
 from __future__ import annotations
 
 import re
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple
 
 from game.leads import get_lead, pending_lead_surfaces_as_active_follow_opportunity
 from game.storage import get_scene_runtime
@@ -941,6 +941,227 @@ def parse_freeform_to_action(
         )
 
     return None
+
+
+_DECLARED_TRAVEL_DEST_STOPWORDS = frozenset(
+    {
+        "later",
+        "now",
+        "tomorrow",
+        "another day",
+        "someday",
+    }
+)
+
+
+def _infer_transition_target_from_declared_text(
+    prompt: str,
+    exits: List[Dict[str, Any]],
+    known_scene_ids: set[str],
+) -> Optional[str]:
+    """Match prompt text to exit labels / scene ids (mirrors exploration inference; avoids import cycle)."""
+    if not isinstance(prompt, str) or not prompt.strip():
+        return None
+    prompt_low = prompt.strip().lower()
+    prompt_slug = slugify(prompt_low)
+    for ex in exits or []:
+        if not isinstance(ex, dict):
+            continue
+        label = str(ex.get("label") or "").strip()
+        target = str(ex.get("target_scene_id") or ex.get("targetSceneId") or "").strip()
+        if not target:
+            continue
+        label_low = label.lower()
+        label_slug = slugify(label_low)
+        target_slug = slugify(target)
+        if (
+            (label_low and label_low in prompt_low)
+            or (label_low and prompt_low in label_low)
+            or (label_slug and label_slug in prompt_slug)
+            or (target_slug and target_slug in prompt_slug)
+        ):
+            if target in known_scene_ids:
+                return target
+    return None
+
+
+def _declared_travel_embedded_in_addressing_question(declared: str, match_start: int) -> bool:
+    prefix = (declared[:match_start] or "").lower()
+    return bool(
+        re.search(
+            r"\b(?:ask|asks|asking|question|questions|questioned|wonder|wonders|wondering|"
+            r"inquire|inquires|tell|tells|telling)\s+",
+            prefix,
+        )
+    )
+
+
+def _normalize_declared_travel_dest_fragment(raw: str) -> Optional[str]:
+    s = (raw or "").strip()
+    s = re.sub(r'^["\'\s]+|["\'\s]+$', "", s).strip()
+    s = re.sub(r"\s+", " ", s).strip(" \t.-")
+    if not s or len(s) < 3:
+        return None
+    core = s.casefold().strip()
+    if core in _DECLARED_TRAVEL_DEST_STOPWORDS:
+        return None
+    return s
+
+
+# (regex, debug tag) — ordered; first match wins.
+_DECLARED_TRAVEL_WITH_DEST_PATTERNS: Tuple[Tuple[re.Pattern[str], str], ...] = tuple(
+    (re.compile(p, re.IGNORECASE | re.DOTALL), tag)
+    for p, tag in (
+        (
+            r"\bleaves?\s+.+?\s+for\s+(?:the\s+)?(.+?)(?:\s*[.?!]|$)",
+            "leave_X_for_Y",
+        ),
+        (
+            r"\bleaving\s+.+?\s+for\s+(?:the\s+)?(.+?)(?:\s*[.?!]|$)",
+            "leaving_X_for_Y",
+        ),
+        (
+            r"\bleaves?\s+for\s+(?:the\s+)?(.+?)(?:\s*[.?!]|$)",
+            "leave_for_Y",
+        ),
+        (
+            r"\bleaving\s+for\s+(?:the\s+)?(.+?)(?:\s*[.?!]|$)",
+            "leaving_for_Y",
+        ),
+        (
+            r"\b(?:goes|going)\s+to\s+(?:the\s+)?(.+?)(?:\s*[.?!]|$)",
+            "going_to_Y",
+        ),
+        (
+            r"\b(?:head|heads|heading)\s+(?:off\s+)?to\s+(?:the\s+)?(.+?)(?:\s*[.?!]|$)",
+            "head_to_Y",
+        ),
+        (
+            r"\b(?:head|heads|heading)\s+for\s+(?:the\s+)?(.+?)(?:\s*[.?!]|$)",
+            "head_for_Y",
+        ),
+        (
+            r"\b(?:travel|travels|traveling|travelling)\s+(?:to|towards?)\s+(?:the\s+)?(.+?)(?:\s*[.?!]|$)",
+            "travel_to_Y",
+        ),
+        (
+            r"\b(?:journey|journeys|journeying)\s+to\s+(?:the\s+)?(.+?)(?:\s*[.?!]|$)",
+            "journey_to_Y",
+        ),
+        (
+            r"\b(?:move|moves|moving)\s+to\s+(?:the\s+)?(.+?)(?:\s*[.?!]|$)",
+            "move_to_Y",
+        ),
+        (
+            r"\b(?:walk|walks|walking|run|runs|running)\s+(?:off\s+)?to\s+(?:the\s+)?(.+?)(?:\s*[.?!]|$)",
+            "walk_run_to_Y",
+        ),
+        (
+            r"\b(?:depart|departs|departing)\s+for\s+(?:the\s+)?(.+?)(?:\s*[.?!]|$)",
+            "depart_for_Y",
+        ),
+        (
+            r"\b(?:return|returns|returning)\s+to\s+(?:the\s+)?(.+?)(?:\s*[.?!]|$)",
+            "return_to_Y",
+        ),
+        (
+            r"\bset\s+out\s+for\s+(?:the\s+)?(.+?)(?:\s*[.?!]|$)",
+            "set_out_for_Y",
+        ),
+        (
+            r"\b(?:ride|rides|riding|march|marches|marching)\s+to\s+(?:the\s+)?(.+?)(?:\s*[.?!]|$)",
+            "ride_march_to_Y",
+        ),
+    )
+)
+
+
+def maybe_build_declared_travel_action(
+    segmented_turn: Optional[Dict[str, Any]],
+    *,
+    scene: Dict[str, Any],
+    session: Optional[Dict[str, Any]],
+    world: Optional[Dict[str, Any]],
+    known_scene_ids: set[str],
+) -> Optional[Dict[str, Any]]:
+    """If *declared_action_text* is explicit travel, return scene_transition/travel; else None.
+
+    Used to override social-only classification on mixed dialogue + movement turns.
+    Deterministic; inspect via ``metadata.declared_travel_*``.
+    """
+    if not isinstance(scene, dict):
+        return None
+    declared = None
+    if isinstance(segmented_turn, dict):
+        dt = segmented_turn.get("declared_action_text")
+        if isinstance(dt, str) and dt.strip():
+            declared = dt.strip()
+    if not declared:
+        return None
+
+    low_decl = declared.lower()
+    if re.match(r"^\s*(?:what|where|why|how|who|which|when)\b", low_decl):
+        return None
+    if low_decl.endswith("?") and any(
+        low_decl.startswith(p)
+        for p in ("what ", "where ", "why ", "how ", "who ", "which ", "when ")
+    ):
+        return None
+
+    exits = scene.get("exits") if isinstance(scene.get("exits"), list) else []
+    scene_id = str(scene.get("id") or "").strip()
+
+    matched_tag: Optional[str] = None
+    dest_raw: Optional[str] = None
+    for pat, tag in _DECLARED_TRAVEL_WITH_DEST_PATTERNS:
+        m = pat.search(declared)
+        if not m:
+            continue
+        if _declared_travel_embedded_in_addressing_question(declared, m.start()):
+            continue
+        matched_tag = tag
+        dest_raw = m.group(1)
+        break
+
+    if not dest_raw:
+        return None
+
+    dest = _normalize_declared_travel_dest_fragment(dest_raw)
+    if not dest:
+        return None
+
+    base_meta: Dict[str, Any] = {
+        "declared_travel_override": True,
+        "declared_travel_pattern": matched_tag,
+        "declared_travel_dest_hint": dest,
+    }
+
+    if isinstance(session, dict) and scene_id:
+        actionable = _actionable_pending_with_registry_rows(session, scene_id)
+        if actionable:
+            row = _resolve_qualified_pursuit_target_to_row(dest, scene, session, world, actionable)
+            if row is not None:
+                act = _build_pursuit_scene_transition_action(declared, row, world=world)
+                if act is not None:
+                    md = act.setdefault("metadata", {})
+                    md.update(base_meta)
+                    return act
+
+    tid = _match_exit(dest, exits) or _strict_unique_exit_destination(dest, exits)
+    if not tid:
+        tid = _infer_transition_target_from_declared_text(declared, exits, known_scene_ids)
+    if not tid:
+        tid = _infer_transition_target_from_declared_text(dest, exits, known_scene_ids)
+
+    if tid and tid in known_scene_ids:
+        return _build_action(
+            "scene_transition",
+            declared,
+            declared,
+            target_scene_id=tid,
+            metadata=base_meta,
+        )
+    return _build_action("travel", declared, declared, target_scene_id=None, metadata=base_meta)
 
 
 def parse_intent(text: str) -> Optional[Dict[str, Any]]:

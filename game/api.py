@@ -125,7 +125,12 @@ from game.interaction_context import (
     update_after_resolved_action,
 )
 from game.scene_graph import build_scene_graph, is_transition_valid
-from game.intent_parser import is_qualified_pursuit_shaped, parse_intent, segment_mixed_player_turn
+from game.intent_parser import (
+    is_qualified_pursuit_shaped,
+    maybe_build_declared_travel_action,
+    parse_intent,
+    segment_mixed_player_turn,
+)
 from game.prompt_context import build_response_policy, derive_narration_obligations
 from game.output_sanitizer import (
     extract_player_text_from_serialized_payload,
@@ -685,11 +690,15 @@ def _update_interaction_context_after_action(
         inspect_interaction_context(session)
         return
 
+    breaks_social = _resolution_explicitly_breaks_social_continuity(resolution)
+    # Movement-class resolutions must drop dialogue-lock preservation even when turn input
+    # implied continuity (e.g. quoted farewell + declared travel); otherwise unresolved travel
+    # would keep the prior interlocutor as active.
     effective_preserve = bool(
-        preserve_continuity
+        (preserve_continuity and not breaks_social)
         or (
             _session_ongoing_social_exchange(session)
-            and not _resolution_explicitly_breaks_social_continuity(resolution)
+            and not breaks_social
         )
     )
 
@@ -2803,6 +2812,51 @@ def chat(req: ChatRequest):
         # Attack when not in combat: fall back to GPT (don't route to exploration or combat)
         if parsed and (parsed.get("type") or "").strip().lower() == "attack" and not combat.get("in_combat"):
             parsed = None
+        # Declared movement in segmented turns overrides social-only lanes (dialogue lock / follow-up).
+        if isinstance(parsed, dict):
+            _ptype = (parsed.get("type") or "").strip().lower()
+            if _ptype in SOCIAL_KINDS:
+                travel_override = maybe_build_declared_travel_action(
+                    segmented_turn if isinstance(segmented_turn, dict) else None,
+                    scene=scene["scene"],
+                    session=session,
+                    world=world,
+                    known_scene_ids=set(list_scene_ids()),
+                )
+                if travel_override is not None:
+                    trace["declared_travel_override"] = {
+                        "applied": True,
+                        "prior_action_type": _ptype,
+                        "normalized_type": (travel_override.get("type") or "").strip().lower(),
+                        "target_scene_id": travel_override.get("target_scene_id")
+                        or travel_override.get("targetSceneId"),
+                    }
+                    parsed = travel_override
+                else:
+                    trace["declared_travel_override"] = {"applied": False}
+        # Declared movement in declared_action_text must still win when the main classifier
+        # chain produced no action (e.g. route/action interplay) — avoids GPT or adjudication
+        # treating explicit travel as generic dialogue.
+        if parsed is None:
+            travel_fallback = maybe_build_declared_travel_action(
+                segmented_turn if isinstance(segmented_turn, dict) else None,
+                scene=scene["scene"],
+                session=session,
+                world=world,
+                known_scene_ids=set(list_scene_ids()),
+            )
+            if travel_fallback is not None:
+                trace["declared_travel_override"] = {
+                    "applied": True,
+                    "prior_action_type": None,
+                    "normalized_type": (travel_fallback.get("type") or "").strip().lower(),
+                    "target_scene_id": travel_fallback.get("target_scene_id")
+                    or travel_fallback.get("targetSceneId"),
+                    "from_unparsed_fallback": True,
+                }
+                parsed = travel_fallback
+            elif "declared_travel_override" not in trace:
+                trace["declared_travel_override"] = {"applied": False}
     _record_scene_pressure_input(
         session,
         scene_before_id,

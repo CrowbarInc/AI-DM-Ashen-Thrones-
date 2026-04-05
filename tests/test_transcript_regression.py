@@ -10,6 +10,7 @@ from __future__ import annotations
 
 from game import storage
 from game.api import app
+from game.leads import get_lead
 from game.defaults import (
     default_campaign,
     default_character,
@@ -20,6 +21,7 @@ from game.defaults import (
     default_world,
 )
 from game.gm import MAX_TARGETED_RETRY_ATTEMPTS
+from game.storage import get_scene_runtime
 from fastapi.testclient import TestClient
 
 import pytest
@@ -136,6 +138,56 @@ def _gm_response(text: str, *, tags=None, debug_notes: str = ""):
         "suggested_action": None,
         "debug_notes": debug_notes,
     }
+
+
+def _gm_with_non_authoritative_scene(target_scene_id: str) -> dict:
+    out = _gm_response("You press on under a thin, watchful sky.")
+    out["activate_scene_id"] = target_scene_id
+    return out
+
+
+def _seed_tavern_patrol_lead_old_milestone(tmp_path, monkeypatch):
+    """Tavern + milestone exit + runner topic that lands an actionable milestone lead (no pre-seeded pending)."""
+    _patch_storage(tmp_path, monkeypatch)
+    tavern = default_scene("tavern")
+    tavern["scene"]["id"] = "tavern"
+    tavern["scene"]["exits"] = [{"label": "Path to the old milestone", "target_scene_id": "old_milestone"}]
+    for ad in tavern["scene"].get("addressables") or []:
+        if isinstance(ad, dict):
+            ad["scene_id"] = "tavern"
+    storage._save_json(storage.scene_path("tavern"), tavern)
+    ms = default_scene("old_milestone")
+    ms["scene"]["id"] = "old_milestone"
+    storage._save_json(storage.scene_path("old_milestone"), ms)
+
+    session = default_session()
+    session["active_scene_id"] = "tavern"
+    session["visited_scene_ids"] = ["tavern"]
+    storage._save_json(storage.SESSION_PATH, session)
+
+    world = default_world()
+    world["npcs"] = [
+        {
+            "id": "tavern_runner",
+            "name": "Tavern Runner",
+            "location": "tavern",
+            "topics": [
+                {
+                    "id": "patrol_milestone",
+                    "text": "The patrol never came back from the old milestone.",
+                    "clue_id": "c_patrol_milestone",
+                    "leads_to_scene": "old_milestone",
+                }
+            ],
+        }
+    ]
+    storage._save_json(storage.WORLD_PATH, world)
+    storage._save_json(storage.CAMPAIGN_PATH, default_campaign())
+    storage._save_json(storage.CHARACTER_PATH, default_character())
+    storage._save_json(storage.COMBAT_PATH, default_combat())
+    storage._save_json(storage.CONDITIONS_PATH, default_conditions())
+    if not storage.SESSION_LOG_PATH.exists():
+        storage.SESSION_LOG_PATH.write_text("", encoding="utf-8")
 
 
 def _seed_transcript_world_with_runner(tmp_path, monkeypatch):
@@ -370,3 +422,59 @@ def test_transcript_nonsocial_retry_exhaustion_terminal_forward_progress(tmp_pat
     assert res.get("clue_id") == DESK_CLUE_ID
     rt = (data.get("session") or {}).get("scene_runtime", {}).get("scene_investigate") or {}
     assert DESK_CLUE_ID in (rt.get("discovered_clue_ids") or [])
+
+
+def test_transcript_old_milestone_chat_flow_stays_authoritative_end_to_end(tmp_path, monkeypatch):
+    """Patrol question → actionable milestone lead → mixed farewell + travel; scene from resolver, not GPT scene id."""
+    _seed_tavern_patrol_lead_old_milestone(tmp_path, monkeypatch)
+
+    gpt_calls: list[int] = []
+
+    def _call_gpt(_messages):
+        gpt_calls.append(len(gpt_calls))
+        if gpt_calls[-1] == 0:
+            return _gm_response(
+                "The runner leans in: the last reliable sign of the patrol points toward the old milestone."
+            )
+        return _gm_with_non_authoritative_scene("bogus_gpt_scene")
+
+    with monkeypatch.context() as m:
+        m.setattr("game.api.call_gpt", _call_gpt)
+        client = TestClient(app)
+        r1 = client.post(
+            "/api/chat",
+            json={"text": "Tavern Runner, what happened to the patrol?"},
+        )
+        assert r1.status_code == 200
+        d1 = r1.json()
+        assert d1.get("ok") is True
+        s1 = d1.get("session") or {}
+        rt1 = get_scene_runtime(s1, "tavern")
+        pending = rt1.get("pending_leads") or []
+        assert any(str(p.get("leads_to_scene") or "").strip() == "old_milestone" for p in pending if isinstance(p, dict))
+
+        r2 = client.post(
+            "/api/chat",
+            json={
+                "text": (
+                    '"Thank you." Galinor leaves the runner for the old milestone.'
+                )
+            },
+        )
+
+    assert r2.status_code == 200
+    d2 = r2.json()
+    assert d2.get("ok") is True
+    assert d2.get("session", {}).get("active_scene_id") == "old_milestone"
+    assert d2.get("scene", {}).get("scene", {}).get("id") == "old_milestone"
+    res = d2.get("resolution") or {}
+    assert res.get("resolved_transition") is True
+    assert res.get("target_scene_id") == "old_milestone"
+    assert res.get("kind") == "scene_transition"
+    gm2 = d2.get("gm_output") or {}
+    assert gm2.get("activate_scene_id") == "bogus_gpt_scene"
+    assert gm2.get("activate_scene_id") != res.get("target_scene_id")
+    meta = res.get("metadata") or {}
+    aid = str(meta.get("authoritative_lead_id") or "").strip()
+    assert aid
+    assert get_lead(d2.get("session") or {}, aid) is not None

@@ -413,6 +413,14 @@ def resolve_exploration_action(
     for k, v in state_changes.items():
         state_changes_final[k] = v
 
+    res_metadata: Dict[str, Any] = {}
+    if transition_candidate:
+        am = normalized_action.get("metadata")
+        if isinstance(am, dict):
+            res_metadata.update(am)
+    if skill_check_result:
+        res_metadata["skill_check"] = skill_check_result
+
     result = ExplorationEngineResult(
         kind=action_type,
         action_id=action_id,
@@ -426,7 +434,7 @@ def resolve_exploration_action(
         world_updates=world_updates if world_updates else None,
         state_changes=state_changes_final,
         hint=hint,
-        metadata={"skill_check": skill_check_result} if skill_check_result else {},
+        metadata=res_metadata,
     )
     d = result.to_dict()
     if skill_check_result:
