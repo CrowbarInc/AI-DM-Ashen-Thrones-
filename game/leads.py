@@ -320,44 +320,15 @@ def _debug_dump_scalar(value: Any) -> str:
     return str(value).strip()
 
 
-def debug_dump_leads(session: Mapping[str, Any]) -> List[Dict[str, str]]:
+def debug_dump_leads(session: Mapping[str, Any]) -> List[Dict[str, Any]]:
     """Return a compact, deterministic snapshot of leads for debugging or tests.
 
     Reads ``session``'s lead registry only; does not create the registry, modify ``session``,
-    or mutate any stored lead dict. Registry keys are iterated in sorted string order; each row
-    is a new dict with string fields: id, title, type, lifecycle, status, confidence, plus terminal
-    metadata (``resolved_at_turn``, ``resolution_type``, ``obsolete_reason``) and a comma-separated
-    ``consequence_ids`` field when non-empty after normalization.
+    or mutate any stored lead dict. Skips non-dict registry values. Rows are ordered by lead id,
+    then storage key. Each row includes inspection metadata (transitions, progression effects) and
+    legacy string fields (``type``, ``confidence``, ``resolved_at_turn``, ``consequence_ids``).
     """
-    reg = session.get(SESSION_LEAD_REGISTRY_KEY)
-    if not isinstance(reg, dict):
-        return []
-
-    rows: List[Dict[str, str]] = []
-    for storage_key in sorted(reg.keys(), key=lambda k: str(k)):
-        raw = reg[storage_key]
-        if not isinstance(raw, dict):
-            continue
-        sk = _debug_dump_scalar(storage_key)
-        snap = normalize_lead(dict(raw))
-        lid = _debug_dump_scalar(snap.get("id")) or sk
-        rat = _as_optional_int(snap.get("resolved_at_turn"))
-        cq = _normalize_id_list(snap.get("consequence_ids"))
-        rows.append(
-            {
-                "id": lid,
-                "title": _debug_dump_scalar(snap.get("title")),
-                "type": _debug_dump_scalar(snap.get("type")),
-                "lifecycle": _debug_dump_scalar(snap.get("lifecycle")),
-                "status": _debug_dump_scalar(snap.get("status")),
-                "confidence": _debug_dump_scalar(snap.get("confidence")),
-                "resolved_at_turn": "" if rat is None else str(rat),
-                "resolution_type": _debug_dump_scalar(snap.get("resolution_type")),
-                "obsolete_reason": _debug_dump_scalar(snap.get("obsolete_reason")),
-                "consequence_ids": ",".join(cq),
-            }
-        )
-    return rows
+    return list(_iter_lead_debug_rows(session))
 
 
 def upsert_lead(session: MutableMapping[str, Any], lead: Any) -> Dict[str, Any]:
@@ -492,6 +463,346 @@ def _normalize_metadata(value: Any) -> Dict[str, Any]:
     if not isinstance(value, Mapping):
         return {}
     return dict(value)
+
+
+# Inspection-only keys under lead["metadata"] (deterministic; not for narration / prompt_context).
+_LEAD_METADATA_LAST_TRANSITION_REASON = "last_transition_reason"
+_LEAD_METADATA_LAST_TRANSITION_CATEGORY = "last_transition_category"
+_LEAD_METADATA_LAST_TRANSITION_TURN = "last_transition_turn"
+_LEAD_METADATA_LAST_TRANSITION_FROM_LIFECYCLE = "last_transition_from_lifecycle"
+_LEAD_METADATA_LAST_TRANSITION_TO_LIFECYCLE = "last_transition_to_lifecycle"
+_LEAD_METADATA_LAST_TRANSITION_FROM_STATUS = "last_transition_from_status"
+_LEAD_METADATA_LAST_TRANSITION_TO_STATUS = "last_transition_to_status"
+_LEAD_METADATA_LAST_PROGRESSION_EFFECTS = "last_progression_effects"
+
+_MAX_PROGRESSION_EFFECTS = 24
+
+
+def _inspection_lifecycle_token(value: Any) -> str:
+    s = _coerce_lifecycle_str(value)
+    return s if s is not None else ""
+
+
+def _inspection_status_token(value: Any) -> str:
+    s = _coerce_status_str(value)
+    return s if s is not None else ""
+
+
+def _normalize_progression_effect_tokens(effects: Any) -> List[str]:
+    """Sorted unique compact tokens; ignores blanks and non-strings in iterables."""
+    if effects is None:
+        return []
+    if isinstance(effects, str):
+        s = _as_str(effects).strip()
+        return [s] if s else []
+    if not isinstance(effects, Iterable) or isinstance(effects, (bytes, Mapping)):
+        return []
+    out: List[str] = []
+    seen: set[str] = set()
+    for item in effects:
+        s = _as_str(item).strip()
+        if not s or s in seen:
+            continue
+        seen.add(s)
+        out.append(s)
+    out.sort()
+    if len(out) > _MAX_PROGRESSION_EFFECTS:
+        out = out[:_MAX_PROGRESSION_EFFECTS]
+    return out
+
+
+# Compact debug row keys (fixed schema for dump / snapshot / shallow diff).
+_LEAD_DEBUG_COMPACT_ROW_KEYS: tuple[str, ...] = (
+    "id",
+    "title",
+    "lifecycle",
+    "status",
+    "priority",
+    "last_updated_turn",
+    "last_touched_turn",
+    "superseded_by",
+    "obsolete_reason",
+    "resolution_type",
+    "last_transition_reason",
+    "last_transition_category",
+    "last_transition_turn",
+    "last_transition_from_lifecycle",
+    "last_transition_to_lifecycle",
+    "last_transition_from_status",
+    "last_transition_to_status",
+    "last_progression_effects",
+    "type",
+    "confidence",
+    "resolved_at_turn",
+    "consequence_ids",
+)
+
+
+def _lead_debug_compact_row_from_normalized(snap: Mapping[str, Any], *, storage_key: str) -> Dict[str, Any]:
+    """Build one compact debug row from an already-normalized lead dict copy (read-only)."""
+    lid = _debug_dump_scalar(snap.get("id")) or storage_key
+    meta_raw = snap.get("metadata")
+    meta: Mapping[str, Any] = meta_raw if isinstance(meta_raw, dict) else {}
+
+    rat = _as_optional_int(snap.get("resolved_at_turn"))
+    lut = _as_optional_int(snap.get("last_updated_turn"))
+    l_touch = _as_optional_int(snap.get("last_touched_turn"))
+    trans_turn = _as_optional_int(meta.get(_LEAD_METADATA_LAST_TRANSITION_TURN))
+    cq = _normalize_id_list(snap.get("consequence_ids"))
+    progression = list(_normalize_progression_effect_tokens(meta.get(_LEAD_METADATA_LAST_PROGRESSION_EFFECTS)))
+
+    return {
+        "id": lid,
+        "title": _debug_dump_scalar(snap.get("title")),
+        "lifecycle": _debug_dump_scalar(snap.get("lifecycle")),
+        "status": _debug_dump_scalar(snap.get("status")),
+        "priority": str(_as_priority(snap.get("priority"))),
+        "last_updated_turn": "" if lut is None else str(lut),
+        "last_touched_turn": "" if l_touch is None else str(l_touch),
+        "superseded_by": _debug_dump_scalar(snap.get("superseded_by")),
+        "obsolete_reason": _debug_dump_scalar(snap.get("obsolete_reason")),
+        "resolution_type": _debug_dump_scalar(snap.get("resolution_type")),
+        "last_transition_reason": _debug_dump_scalar(meta.get(_LEAD_METADATA_LAST_TRANSITION_REASON)),
+        "last_transition_category": _debug_dump_scalar(meta.get(_LEAD_METADATA_LAST_TRANSITION_CATEGORY)),
+        "last_transition_turn": "" if trans_turn is None else str(trans_turn),
+        "last_transition_from_lifecycle": _debug_dump_scalar(meta.get(_LEAD_METADATA_LAST_TRANSITION_FROM_LIFECYCLE)),
+        "last_transition_to_lifecycle": _debug_dump_scalar(meta.get(_LEAD_METADATA_LAST_TRANSITION_TO_LIFECYCLE)),
+        "last_transition_from_status": _debug_dump_scalar(meta.get(_LEAD_METADATA_LAST_TRANSITION_FROM_STATUS)),
+        "last_transition_to_status": _debug_dump_scalar(meta.get(_LEAD_METADATA_LAST_TRANSITION_TO_STATUS)),
+        "last_progression_effects": progression,
+        "type": _debug_dump_scalar(snap.get("type")),
+        "confidence": _debug_dump_scalar(snap.get("confidence")),
+        "resolved_at_turn": "" if rat is None else str(rat),
+        "consequence_ids": ",".join(cq),
+    }
+
+
+def _iter_lead_debug_rows(session: Mapping[str, Any]) -> List[Dict[str, Any]]:
+    reg = session.get(SESSION_LEAD_REGISTRY_KEY)
+    if not isinstance(reg, dict):
+        return []
+
+    items: List[tuple[str, str, Dict[str, Any]]] = []
+    for storage_key in sorted(reg.keys(), key=lambda k: str(k)):
+        raw = reg[storage_key]
+        if not isinstance(raw, dict):
+            continue
+        sk = _debug_dump_scalar(storage_key)
+        snap = normalize_lead(dict(raw))
+        row = _lead_debug_compact_row_from_normalized(snap, storage_key=sk)
+        items.append((row["id"], sk, row))
+    items.sort(key=lambda t: (t[0], t[1]))
+    return [t[2] for t in items]
+
+
+def build_lead_debug_snapshot(session: Mapping[str, Any]) -> Dict[str, Dict[str, Any]]:
+    """Deterministic id -> compact debug row. Last registry row wins when ids collide after normalize."""
+    out: Dict[str, Dict[str, Any]] = {}
+    for row in _iter_lead_debug_rows(session):
+        out[row["id"]] = dict(row)
+    return out
+
+
+def diff_lead_debug_snapshots(
+    before: Mapping[str, Mapping[str, Any]],
+    after: Mapping[str, Mapping[str, Any]],
+) -> List[Dict[str, Any]]:
+    """Shallow diff on :data:`_LEAD_DEBUG_COMPACT_ROW_KEYS` only; deterministic ordering."""
+    all_ids = sorted(frozenset(before.keys()) | frozenset(after.keys()))
+    out: List[Dict[str, Any]] = []
+    for lid in all_ids:
+        br = before.get(lid)
+        ar = after.get(lid)
+        if br is None and ar is not None:
+            out.append(
+                {
+                    "id": lid,
+                    "change_kind": "added",
+                    "changed_fields": sorted(_LEAD_DEBUG_COMPACT_ROW_KEYS),
+                    "before": {},
+                    "after": dict(ar),
+                    "reason": _debug_dump_scalar(ar.get("last_transition_reason")),
+                    "category": _debug_dump_scalar(ar.get("last_transition_category")),
+                }
+            )
+            continue
+        if br is not None and ar is None:
+            out.append(
+                {
+                    "id": lid,
+                    "change_kind": "removed",
+                    "changed_fields": sorted(_LEAD_DEBUG_COMPACT_ROW_KEYS),
+                    "before": dict(br),
+                    "after": {},
+                    "reason": _debug_dump_scalar(br.get("last_transition_reason")),
+                    "category": _debug_dump_scalar(br.get("last_transition_category")),
+                }
+            )
+            continue
+        assert br is not None and ar is not None
+        changed_fields: List[str] = []
+        for k in _LEAD_DEBUG_COMPACT_ROW_KEYS:
+            if br.get(k) != ar.get(k):
+                changed_fields.append(k)
+        if not changed_fields:
+            continue
+        cf = sorted(changed_fields)
+        out.append(
+            {
+                "id": lid,
+                "change_kind": "changed",
+                "changed_fields": cf,
+                "before": {k: br.get(k) for k in cf},
+                "after": {k: ar.get(k) for k in cf},
+                "reason": _debug_dump_scalar(ar.get("last_transition_reason")),
+                "category": _debug_dump_scalar(ar.get("last_transition_category")),
+            }
+        )
+    return out
+
+
+def _format_lead_debug_reason_category_suffix(row: Mapping[str, Any]) -> str:
+    r, c = row.get("reason"), row.get("category")
+    rs = r if isinstance(r, str) else ("" if r is None else str(r))
+    cs = c if isinstance(c, str) else ("" if c is None else str(c))
+    parts: List[str] = []
+    if rs:
+        parts.append(f"reason={rs}")
+    if cs:
+        parts.append(f"category={cs}")
+    return f" {' '.join(parts)}" if parts else ""
+
+
+def _format_lead_debug_progression_tail(row: Mapping[str, Any]) -> str:
+    """Display-only progression fragment from diff row before/after; does not mutate list values."""
+    key = "last_progression_effects"
+    kind = row.get("change_kind")
+    if kind == "changed":
+        cf = row.get("changed_fields")
+        if not isinstance(cf, list) or key not in cf:
+            return ""
+        before = row.get("before")
+        after = row.get("after")
+        bef = before.get(key) if isinstance(before, dict) else None
+        aft = after.get(key) if isinstance(after, dict) else None
+
+        def disp(val: Any) -> str:
+            if isinstance(val, list):
+                return ",".join(str(x) for x in val)
+            if val is None:
+                return ""
+            return str(val)
+
+        # Field name already appears in changed_fields; only append value delta.
+        return f" before={disp(bef)} after={disp(aft)}"
+    if kind == "added":
+        after = row.get("after")
+        if not isinstance(after, dict):
+            return ""
+        val = after.get(key)
+        if isinstance(val, list) and val:
+            return f" last_progression_effects={','.join(str(x) for x in val)}"
+        return ""
+    if kind == "removed":
+        before = row.get("before")
+        if not isinstance(before, dict):
+            return ""
+        val = before.get(key)
+        if isinstance(val, list) and val:
+            return f" last_progression_effects={','.join(str(x) for x in val)}"
+        return ""
+    return ""
+
+
+def format_lead_debug_delta(delta_rows: Sequence[Mapping[str, Any]]) -> List[str]:
+    """One line per compact diff row from :func:`diff_lead_debug_snapshots` (debug-only; read-only)."""
+    out: List[str] = []
+    for row in delta_rows:
+        lid = str(row.get("id", ""))
+        kind = row.get("change_kind")
+        rc = _format_lead_debug_reason_category_suffix(row)
+        prog = _format_lead_debug_progression_tail(row)
+        if kind == "changed":
+            cf = row.get("changed_fields")
+            fields = ", ".join(cf) if isinstance(cf, list) else ""
+            out.append(f"{lid} changed: {fields}{rc}{prog}")
+        elif kind == "added":
+            out.append(f"{lid} added{rc}{prog}")
+        elif kind == "removed":
+            out.append(f"{lid} removed{rc}{prog}")
+        else:
+            out.append(f"{lid} {kind}{rc}{prog}")
+    return out
+
+
+def _ensure_metadata_dict(lead: MutableMapping[str, Any]) -> Dict[str, Any]:
+    m = lead.get("metadata")
+    if not isinstance(m, dict):
+        m = {}
+        lead["metadata"] = m
+    return m
+
+
+def _record_lead_transition_debug(
+    lead: MutableMapping[str, Any],
+    *,
+    reason: str,
+    category: str,
+    turn: Any,
+    from_lifecycle: Any,
+    to_lifecycle: Any,
+    from_status: Any,
+    to_status: Any,
+) -> None:
+    """Write lifecycle/status transition inspection fields when a real core transition occurs.
+
+    Idempotent: no-op when lifecycle/status are unchanged, or when metadata already matches.
+    """
+    fl = _inspection_lifecycle_token(from_lifecycle)
+    tl = _inspection_lifecycle_token(to_lifecycle)
+    fs = _inspection_status_token(from_status)
+    ts = _inspection_status_token(to_status)
+    if fl == tl and fs == ts:
+        return
+
+    t = _as_optional_int(turn)
+    meta = _ensure_metadata_dict(lead)
+    payload: Dict[str, Any] = {
+        _LEAD_METADATA_LAST_TRANSITION_REASON: _as_str(reason).strip(),
+        _LEAD_METADATA_LAST_TRANSITION_CATEGORY: _as_str(category).strip(),
+        _LEAD_METADATA_LAST_TRANSITION_TURN: t,
+        _LEAD_METADATA_LAST_TRANSITION_FROM_LIFECYCLE: fl,
+        _LEAD_METADATA_LAST_TRANSITION_TO_LIFECYCLE: tl,
+        _LEAD_METADATA_LAST_TRANSITION_FROM_STATUS: fs,
+        _LEAD_METADATA_LAST_TRANSITION_TO_STATUS: ts,
+    }
+    if all(meta.get(k) == v for k, v in payload.items()):
+        return
+    meta.update(payload)
+
+
+def _set_last_progression_effects(lead: MutableMapping[str, Any], effects: Sequence[str]) -> None:
+    """Merge new progression tokens with any existing list; normalized, sorted, bounded, idempotent."""
+    meta = _ensure_metadata_dict(lead)
+    existing_raw = meta.get(_LEAD_METADATA_LAST_PROGRESSION_EFFECTS)
+    existing = (
+        _normalize_progression_effect_tokens(existing_raw) if isinstance(existing_raw, list) else []
+    )
+    merged = _normalize_progression_effect_tokens(list(existing) + list(effects))
+    if meta.get(_LEAD_METADATA_LAST_PROGRESSION_EFFECTS) == merged:
+        return
+    meta[_LEAD_METADATA_LAST_PROGRESSION_EFFECTS] = merged
+
+
+def _clear_last_progression_effects(lead: MutableMapping[str, Any]) -> None:
+    """Clear progression-effect tokens when present; idempotent."""
+    meta = lead.get("metadata")
+    if not isinstance(meta, dict):
+        return
+    cur = meta.get(_LEAD_METADATA_LAST_PROGRESSION_EFFECTS)
+    if cur in (None, []):
+        return
+    meta[_LEAD_METADATA_LAST_PROGRESSION_EFFECTS] = []
 
 
 def _normalize_lifecycle(value: Any) -> str:
@@ -922,7 +1233,15 @@ def _resolution_type_token_or_none(value: Any) -> str | None:
 # --- Public lead lifecycle mutations (legality via internal helpers; illegal ops raise ValueError) ---
 
 
-def advance_lead_lifecycle(lead: Any, lifecycle: LeadLifecycle | str, *, turn: Any = None) -> Dict[str, Any]:
+def advance_lead_lifecycle(
+    lead: Any,
+    lifecycle: LeadLifecycle | str,
+    *,
+    turn: Any = None,
+    transition_reason: str | None = None,
+    transition_category: str | None = None,
+    skip_transition_inspection: bool = False,
+) -> Dict[str, Any]:
     """Move ``lead`` forward along the lifecycle axis only; adjust status when required for invariants.
 
     Raises :class:`ValueError` for backward targets, invalid endpoints, or incompatible snapshots.
@@ -969,10 +1288,31 @@ def advance_lead_lifecycle(lead: Any, lifecycle: LeadLifecycle | str, *, turn: A
     d["status"] = st_after
     _ensure_invariants_after_mutation(d)
     _stamp_turn_metadata(d, turn, mutated=True, touched=False)
+    if not skip_transition_inspection:
+        tr = transition_reason if transition_reason is not None else "lifecycle_advance"
+        tc = transition_category if transition_category is not None else "lifecycle_change"
+        _record_lead_transition_debug(
+            d,
+            reason=tr,
+            category=tc,
+            turn=turn,
+            from_lifecycle=from_lc,
+            to_lifecycle=to_lc,
+            from_status=st_before,
+            to_status=st_after,
+        )
     return d  # type: ignore[return-value]
 
 
-def set_lead_status(lead: Any, status: LeadStatus | str, *, turn: Any = None) -> Dict[str, Any]:
+def set_lead_status(
+    lead: Any,
+    status: LeadStatus | str,
+    *,
+    turn: Any = None,
+    transition_reason: str | None = None,
+    transition_category: str | None = None,
+    skip_transition_inspection: bool = False,
+) -> Dict[str, Any]:
     """Set ``status`` on ``lead`` if it is compatible with the current lifecycle (non-decreasing rules N/A)."""
     d = normalize_lead(lead)
 
@@ -993,6 +1333,19 @@ def set_lead_status(lead: Any, status: LeadStatus | str, *, turn: Any = None) ->
     d["status"] = st
     _ensure_invariants_after_mutation(d)
     _stamp_turn_metadata(d, turn, mutated=True, touched=True)
+    if not skip_transition_inspection:
+        tr = transition_reason if transition_reason is not None else "status_update"
+        tc = transition_category if transition_category is not None else "status_change"
+        _record_lead_transition_debug(
+            d,
+            reason=tr,
+            category=tc,
+            turn=turn,
+            from_lifecycle=lc,
+            to_lifecycle=lc,
+            from_status=prev,
+            to_status=st,
+        )
     return d  # type: ignore[return-value]
 
 
@@ -1066,7 +1419,13 @@ def update_lead_staleness(lead: Any, *, current_turn: Any = None) -> Dict[str, A
     if st == LeadStatus.STALE.value:
         return d  # type: ignore[return-value]
 
-    return set_lead_status(d, LeadStatus.STALE, turn=current_turn)
+    return set_lead_status(
+        d,
+        LeadStatus.STALE,
+        turn=current_turn,
+        transition_reason="stale_decay",
+        transition_category="status_change",
+    )
 
 
 def promote_lead_confidence(lead: Any, confidence: LeadConfidence | str, *, turn: Any = None) -> Dict[str, Any]:
@@ -1092,7 +1451,7 @@ def promote_lead_confidence(lead: Any, confidence: LeadConfidence | str, *, turn
     return d  # type: ignore[return-value]
 
 
-def commit_lead(lead: Any, *, turn: Any = None) -> Dict[str, Any]:
+def commit_lead(lead: Any, *, turn: Any = None, skip_transition_inspection: bool = False) -> Dict[str, Any]:
     """Ensure lifecycle is at least committed; normalize stale commitment to active; stamp first commit turn."""
     d = normalize_lead(lead)
 
@@ -1151,6 +1510,18 @@ def commit_lead(lead: Any, *, turn: Any = None) -> Dict[str, Any]:
 
     _ensure_invariants_after_mutation(d)
     _stamp_turn_metadata(d, turn, mutated=mutated, touched=mutated)
+    if not skip_transition_inspection and (from_lc != to_lc or st != st_after):
+        cat = "lifecycle_change" if from_lc != to_lc else "status_change"
+        _record_lead_transition_debug(
+            d,
+            reason="manual_commit",
+            category=cat,
+            turn=turn,
+            from_lifecycle=from_lc,
+            to_lifecycle=to_lc,
+            from_status=st,
+            to_status=st_after,
+        )
     return d  # type: ignore[return-value]
 
 
@@ -1262,6 +1633,17 @@ def resolve_lead(
 
     _ensure_invariants_after_mutation(d)
     _stamp_turn_metadata(d, turn, mutated=mutated, touched=False)
+    if mutated:
+        _record_lead_transition_debug(
+            d,
+            reason="manual_resolve",
+            category="lifecycle_change",
+            turn=turn,
+            from_lifecycle=from_lc,
+            to_lifecycle=to_lc,
+            from_status=st_now,
+            to_status=to_st,
+        )
     return d  # type: ignore[return-value]
 
 
@@ -1364,6 +1746,18 @@ def obsolete_lead(
 
     _ensure_invariants_after_mutation(d)
     _stamp_turn_metadata(d, turn, mutated=mutated, touched=False)
+    if mutated:
+        tr = "superseded" if reason_token.lower() == "superseded" else "manual_obsolete"
+        _record_lead_transition_debug(
+            d,
+            reason=tr,
+            category="lifecycle_change",
+            turn=turn,
+            from_lifecycle=from_lc,
+            to_lifecycle=to_lc,
+            from_status=st_before,
+            to_status=st_after,
+        )
     return d  # type: ignore[return-value]
 
 
@@ -1376,12 +1770,20 @@ def advance_session_lead_lifecycle(
     lifecycle: LeadLifecycle | str,
     *,
     turn: Any = None,
+    transition_reason: str | None = None,
+    transition_category: str | None = None,
 ) -> Dict[str, Any] | None:
     """Advance the registry lead for ``lead_id`` via :func:`advance_lead_lifecycle`; ``None`` if absent."""
     d = get_lead(session, lead_id)
     if d is None:
         return None
-    return advance_lead_lifecycle(d, lifecycle, turn=turn)
+    return advance_lead_lifecycle(
+        d,
+        lifecycle,
+        turn=turn,
+        transition_reason=transition_reason,
+        transition_category=transition_category,
+    )
 
 
 def set_session_lead_status(
@@ -1390,12 +1792,20 @@ def set_session_lead_status(
     status: LeadStatus | str,
     *,
     turn: Any = None,
+    transition_reason: str | None = None,
+    transition_category: str | None = None,
 ) -> Dict[str, Any] | None:
     """Set status on the registry lead for ``lead_id`` via :func:`set_lead_status`; ``None`` if absent."""
     d = get_lead(session, lead_id)
     if d is None:
         return None
-    return set_lead_status(d, status, turn=turn)
+    return set_lead_status(
+        d,
+        status,
+        turn=turn,
+        transition_reason=transition_reason,
+        transition_category=transition_category,
+    )
 
 
 def promote_session_lead_confidence(
@@ -1447,8 +1857,30 @@ def commit_session_lead_with_context(
     if _is_lead_resolved_or_obsolete_lifecycle(d):
         return d
 
-    commit_lead(d, turn=turn)
-    set_lead_status(d, LeadStatus.PURSUED, turn=turn)
+    lc0 = _coerce_lifecycle_str(d.get("lifecycle"))
+    st0 = _coerce_status_str(d.get("status"))
+    commit_lead(d, turn=turn, skip_transition_inspection=True)
+    set_lead_status(d, LeadStatus.PURSUED, turn=turn, skip_transition_inspection=True)
+    lc1 = _coerce_lifecycle_str(d.get("lifecycle"))
+    st1 = _coerce_status_str(d.get("status"))
+    if lc0 is not None and st0 is not None and lc1 is not None and st1 is not None:
+        if lc0 != lc1 or st0 != st1:
+            if lc0 != lc1 and st0 != st1:
+                commit_cat = "progression"
+            elif lc0 != lc1:
+                commit_cat = "lifecycle_change"
+            else:
+                commit_cat = "status_change"
+            _record_lead_transition_debug(
+                d,
+                reason="manual_commit",
+                category=commit_cat,
+                turn=turn,
+                from_lifecycle=lc0,
+                to_lifecycle=lc1,
+                from_status=st0,
+                to_status=st1,
+            )
 
     meta_mut = False
     if commitment_source is not None:
@@ -2114,10 +2546,22 @@ def _reconcile_lead_stale_and_threat_escalation_inplace(
     if should_decay_lead_to_stale(row, current_turn):
         st = _coerce_status_str(row.get("status"))
         if st in (LeadStatus.ACTIVE.value, LeadStatus.PURSUED.value):
+            lc_snap = _coerce_lifecycle_str(row.get("lifecycle"))
+            from_st = st
             row["status"] = LeadStatus.STALE.value
             row["last_updated_turn"] = current_turn
             codes.append("staled")
             _ensure_invariants_after_mutation(row, registry=registry)
+            _record_lead_transition_debug(
+                row,
+                reason="stale_decay",
+                category="status_change",
+                turn=current_turn,
+                from_lifecycle=lc_snap,
+                to_lifecycle=lc_snap,
+                from_status=from_st,
+                to_status=LeadStatus.STALE.value,
+            )
 
     ty = _normalize_type(row.get("type"))
     if ty == LeadType.THREAT.value and not is_lead_terminal(row):
@@ -2145,6 +2589,9 @@ def _reconcile_lead_stale_and_threat_escalation_inplace(
                 esc_pair = (old_lvl, new_lvl)
             codes.append("escalated")
             _ensure_invariants_after_mutation(row, registry=registry)
+            if esc_pair is not None:
+                f_e, t_e = esc_pair
+                _set_last_progression_effects(row, [f"escalation:{f_e}->{t_e}"])
 
     return codes, esc_pair
 
@@ -2224,10 +2671,17 @@ def _apply_unlocks_from_resolved_sources(
             normalize_lead(target)
             if is_lead_terminal(target):
                 continue
+            lc0 = _coerce_lifecycle_str(target.get("lifecycle"))
+            st0 = _coerce_status_str(target.get("status"))
             changed = False
-            lc = _coerce_lifecycle_str(target.get("lifecycle"))
+            lc = lc0
             if lc == LeadLifecycle.HINTED.value:
-                advance_lead_lifecycle(target, LeadLifecycle.DISCOVERED, turn=current_turn)
+                advance_lead_lifecycle(
+                    target,
+                    LeadLifecycle.DISCOVERED,
+                    turn=current_turn,
+                    skip_transition_inspection=True,
+                )
                 changed = True
             st = _coerce_status_str(target.get("status"))
             if st == LeadStatus.STALE.value:
@@ -2247,6 +2701,32 @@ def _apply_unlocks_from_resolved_sources(
                 target["last_updated_turn"] = current_turn
                 _ensure_invariants_after_mutation(target, registry=registry)
                 unlocked.append({"source_lead_id": sid, "target_lead_id": tid})
+                lc1 = _coerce_lifecycle_str(target.get("lifecycle"))
+                st1 = _coerce_status_str(target.get("status"))
+                if (
+                    lc0 is not None
+                    and st0 is not None
+                    and lc1 is not None
+                    and st1 is not None
+                    and (lc0 != lc1 or st0 != st1)
+                ):
+                    if lc0 != lc1 and st0 != st1:
+                        ucat = "progression"
+                    elif lc0 != lc1:
+                        ucat = "lifecycle_change"
+                    else:
+                        ucat = "status_change"
+                    _record_lead_transition_debug(
+                        target,
+                        reason="unlock_trigger",
+                        category=ucat,
+                        turn=current_turn,
+                        from_lifecycle=lc0,
+                        to_lifecycle=lc1,
+                        from_status=st0,
+                        to_status=st1,
+                    )
+                _set_last_progression_effects(target, ["unlock:apply"])
     return unlocked
 
 
@@ -2272,6 +2752,7 @@ def _apply_supersession_retirement(
         a_row = registry.get(a_id)
         if not isinstance(a_row, dict) or is_lead_terminal(a_row):
             continue
+        from_lc_sup = lc_b
         prev_st = _coerce_status_str(b.get("status"))
         b["lifecycle"] = LeadLifecycle.OBSOLETE.value
         st_after = LeadStatus.ACTIVE.value if prev_st == LeadStatus.PURSUED.value else prev_st
@@ -2283,6 +2764,18 @@ def _apply_supersession_retirement(
         b["obsolete_by_lead_id"] = a_id
         b["last_updated_turn"] = current_turn
         _ensure_invariants_after_mutation(b, registry=registry)
+        if prev_st is not None and st_after is not None:
+            _record_lead_transition_debug(
+                b,
+                reason="superseded",
+                category="lifecycle_change",
+                turn=current_turn,
+                from_lifecycle=from_lc_sup,
+                to_lifecycle=LeadLifecycle.OBSOLETE.value,
+                from_status=prev_st,
+                to_status=st_after,
+            )
+        _set_last_progression_effects(b, ["supersession:apply"])
         obsoleted.append({"source_lead_id": a_id, "target_lead_id": b_id})
     return obsoleted
 
@@ -2460,6 +2953,39 @@ def _max_confidence(a: Any, b: Any) -> str:
     return _CONFIDENCE_ORDERED_VALUES[max(ra, rb)]
 
 
+def _maybe_record_engine_signal_transition(
+    after_row: MutableMapping[str, Any],
+    before_snap: Mapping[str, Any],
+    *,
+    turn: Any,
+) -> None:
+    """Record inspection metadata when an engine upsert changes lifecycle or status."""
+    blc = _coerce_lifecycle_str(before_snap.get("lifecycle"))
+    alc = _coerce_lifecycle_str(after_row.get("lifecycle"))
+    bst = _coerce_status_str(before_snap.get("status"))
+    ast = _coerce_status_str(after_row.get("status"))
+    if blc is None or alc is None or bst is None or ast is None:
+        return
+    if blc == alc and bst == ast:
+        return
+    if blc != alc and bst != ast:
+        cat = "progression"
+    elif blc != alc:
+        cat = "lifecycle_change"
+    else:
+        cat = "status_change"
+    _record_lead_transition_debug(
+        after_row,
+        reason="engine_signal",
+        category=cat,
+        turn=turn,
+        from_lifecycle=blc,
+        to_lifecycle=alc,
+        from_status=bst,
+        to_status=ast,
+    )
+
+
 def _lead_row_effective_field_diff(before: Mapping[str, Any], after: Mapping[str, Any]) -> List[str]:
     """Stable field names that differ between two normalized snapshots (core + merged engine fields)."""
     keys = (
@@ -2586,6 +3112,7 @@ def apply_engine_lead_signal(
         promotion_applied = True
         _ensure_invariants_after_mutation(row)
         upsert_lead(session, row)
+        _maybe_record_engine_signal_transition(row, blank, turn=turn)
         return {
             "status": "created",
             "lead_id": sid,
@@ -2659,6 +3186,7 @@ def apply_engine_lead_signal(
 
     _ensure_invariants_after_mutation(after_row)
     upsert_lead(session, after_row)
+    _maybe_record_engine_signal_transition(after_row, before_snap, turn=turn)
     return {
         "status": "updated",
         "lead_id": sid,

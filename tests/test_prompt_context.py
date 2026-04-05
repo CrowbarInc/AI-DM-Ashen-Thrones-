@@ -62,6 +62,14 @@ def _minimal_lead_row_keys() -> frozenset[str]:
             "obsolete_by_lead_id",
             "superseded_by",
             "stale_after_turns",
+            "last_transition_reason",
+            "last_transition_category",
+            "last_transition_turn",
+            "last_transition_from_lifecycle",
+            "last_transition_to_lifecycle",
+            "last_transition_from_status",
+            "last_transition_to_status",
+            "last_progression_effects",
         }
     )
 
@@ -512,6 +520,152 @@ def test_build_authoritative_lead_prompt_context_recent_changes_order_and_compac
         assert isinstance(r, dict)
         assert set(r.keys()) == keys
         assert "id" in r and "title" in r and "status" in r and "priority" in r
+
+
+@pytest.mark.unit
+def test_build_authoritative_lead_prompt_context_compact_row_surfaces_engine_metadata_inspection():
+    """Compact rows copy transition/progression inspection keys from lead['metadata'] read-only."""
+    meta_full = {
+        "last_transition_reason": "reconcile:stale",
+        "last_transition_category": "staleness",
+        "last_transition_turn": 7,
+        "last_transition_from_lifecycle": "discovered",
+        "last_transition_to_lifecycle": "committed",
+        "last_transition_from_status": "active",
+        "last_transition_to_status": "pursued",
+        "last_progression_effects": ["escalation:0->1", "touch:refresh"],
+    }
+    meta_bad_effects = {"last_progression_effects": "not-a-list"}
+    session = _session_with_registry(
+        {
+            "id": "inspected",
+            "title": "Inspected",
+            "status": LeadStatus.ACTIVE.value,
+            "lifecycle": LeadLifecycle.COMMITTED.value,
+            "priority": 5,
+            "last_updated_turn": 10,
+            "metadata": meta_full,
+        },
+        {
+            "id": "plain",
+            "title": "Plain",
+            "status": LeadStatus.ACTIVE.value,
+            "lifecycle": LeadLifecycle.COMMITTED.value,
+            "priority": 1,
+            "last_updated_turn": 1,
+        },
+        {
+            "id": "bad_fx",
+            "title": "Bad fx",
+            "status": LeadStatus.STALE.value,
+            "lifecycle": LeadLifecycle.COMMITTED.value,
+            "priority": 0,
+            "last_updated_turn": 5,
+            "metadata": meta_bad_effects,
+        },
+    )
+    session["turn_counter"] = 10
+    out = build_authoritative_lead_prompt_context(
+        session, world={}, public_scene={}, runtime={}, recent_log=[], active_npc_id=None
+    )
+    by_id = {r["id"]: r for r in out["top_active_leads"] + out["recent_lead_changes"] + out["urgent_or_stale_leads"]}
+    row = by_id["inspected"]
+    assert row["last_transition_reason"] == "reconcile:stale"
+    assert row["last_transition_category"] == "staleness"
+    assert row["last_transition_turn"] == 7
+    assert row["last_transition_from_lifecycle"] == "discovered"
+    assert row["last_transition_to_lifecycle"] == "committed"
+    assert row["last_transition_from_status"] == "active"
+    assert row["last_transition_to_status"] == "pursued"
+    assert row["last_progression_effects"] == ["escalation:0->1", "touch:refresh"]
+    assert isinstance(row["last_progression_effects"], list)
+    assert row["last_progression_effects"] is not meta_full["last_progression_effects"]
+
+    plain = by_id["plain"]
+    for k in (
+        "last_transition_reason",
+        "last_transition_category",
+        "last_transition_turn",
+        "last_transition_from_lifecycle",
+        "last_transition_to_lifecycle",
+        "last_transition_from_status",
+        "last_transition_to_status",
+        "last_progression_effects",
+    ):
+        assert plain.get(k) is None
+
+    bad = by_id["bad_fx"]
+    assert bad["last_progression_effects"] is None
+
+    recent_row = next(r for r in out["recent_lead_changes"] if r["id"] == "inspected")
+    assert recent_row["last_transition_reason"] == "reconcile:stale"
+    assert isinstance(recent_row["last_progression_effects"], list)
+
+
+@pytest.mark.unit
+def test_build_authoritative_lead_prompt_context_inspection_metadata_does_not_alter_ranking_slices():
+    """Metadata enrichment must not change pursued selection, top-active order, or urgent composition."""
+    session = _session_with_registry(
+        {
+            "id": "z_pursued_same_pri",
+            "title": "Zebra",
+            "status": LeadStatus.PURSUED.value,
+            "lifecycle": LeadLifecycle.COMMITTED.value,
+            "priority": 3,
+            "last_updated_turn": 19,
+            "last_touched_turn": 10,
+            "metadata": {"last_transition_reason": "heavy", "last_progression_effects": ["a"]},
+        },
+        {
+            "id": "a_pursued_same_pri",
+            "title": "Alpha",
+            "status": LeadStatus.PURSUED.value,
+            "lifecycle": LeadLifecycle.COMMITTED.value,
+            "priority": 3,
+            "last_updated_turn": 20,
+            "last_touched_turn": 10,
+            "metadata": {"last_transition_reason": "light"},
+        },
+        {
+            "id": "top_active",
+            "title": "Active top",
+            "status": LeadStatus.ACTIVE.value,
+            "lifecycle": LeadLifecycle.COMMITTED.value,
+            "priority": 10,
+            "last_updated_turn": 1,
+            "last_touched_turn": 99,
+        },
+    )
+    session["turn_counter"] = 100
+    out = build_authoritative_lead_prompt_context(
+        session, world={}, public_scene={}, runtime={}, recent_log=[], active_npc_id=None
+    )
+    assert [r["id"] for r in out["top_active_leads"]] == ["top_active", "a_pursued_same_pri", "z_pursued_same_pri"]
+    assert out["currently_pursued_lead"]["id"] == "a_pursued_same_pri"
+    assert out["currently_pursued_lead"]["last_transition_reason"] == "light"
+
+
+@pytest.mark.unit
+def test_build_authoritative_lead_prompt_context_compact_effects_list_mutation_isolated_from_registry():
+    reg = _session_with_registry(
+        {
+            "id": "mut",
+            "title": "M",
+            "status": LeadStatus.ACTIVE.value,
+            "lifecycle": LeadLifecycle.COMMITTED.value,
+            "priority": 1,
+            "last_updated_turn": 1,
+            "metadata": {"last_progression_effects": ["one"]},
+        }
+    )
+    snap_fx = list(reg[SESSION_LEAD_REGISTRY_KEY]["mut"]["metadata"]["last_progression_effects"])
+    out = build_authoritative_lead_prompt_context(
+        reg, world={}, public_scene={}, runtime={}, recent_log=[], active_npc_id=None
+    )
+    row = out["top_active_leads"][0]
+    assert row["last_progression_effects"] == ["one"]
+    row["last_progression_effects"].append("injected")
+    assert reg[SESSION_LEAD_REGISTRY_KEY]["mut"]["metadata"]["last_progression_effects"] == snap_fx
 
 
 @pytest.mark.unit

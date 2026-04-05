@@ -207,6 +207,14 @@ def _compact_lead_row(lead: Any) -> Dict[str, Any]:
     rel_loc = _lead_get(lead, "related_location_ids")
     if not isinstance(rel_loc, list):
         rel_loc = []
+    meta = _lead_get(lead, "metadata")
+    meta_map: Mapping[str, Any] = meta if isinstance(meta, Mapping) else {}
+    effects_raw = meta_map.get("last_progression_effects")
+    last_progression_effects: List[Any] | None
+    if isinstance(effects_raw, list):
+        last_progression_effects = list(effects_raw)
+    else:
+        last_progression_effects = None
     return {
         "id": _lead_get(lead, "id"),
         "title": _lead_get(lead, "title"),
@@ -228,6 +236,14 @@ def _compact_lead_row(lead: Any) -> Dict[str, Any]:
         "obsolete_by_lead_id": _lead_get(lead, "obsolete_by_lead_id"),
         "superseded_by": _lead_get(lead, "superseded_by"),
         "stale_after_turns": _lead_get(lead, "stale_after_turns"),
+        "last_transition_reason": meta_map.get("last_transition_reason"),
+        "last_transition_category": meta_map.get("last_transition_category"),
+        "last_transition_turn": meta_map.get("last_transition_turn"),
+        "last_transition_from_lifecycle": meta_map.get("last_transition_from_lifecycle"),
+        "last_transition_to_lifecycle": meta_map.get("last_transition_to_lifecycle"),
+        "last_transition_from_status": meta_map.get("last_transition_from_status"),
+        "last_transition_to_status": meta_map.get("last_transition_to_status"),
+        "last_progression_effects": last_progression_effects,
     }
 
 

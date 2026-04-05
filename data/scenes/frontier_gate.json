@@ -156,7 +156,22 @@
       "The muddy earth squishes underfoot, making each step careful.",
       "The well-dressed figure\u2019s gaze flits between passerby, appearing particularly interested in newcomers.",
       "The tavern runner gestures emphatically, urging locals to pay attention to the rumors.",
-      "The rain-soaked yard is filled with a mix of refugees and townsfolk. The atmosphere is thick with tension as whispers about a missing patrol weave through the crowd."
+      "The rain-soaked yard is filled with a mix of refugees and townsfolk. The atmosphere is thick with tension as whispers about a missing patrol weave through the crowd.",
+      "To his left, there are two alleyways\u2014one narrow and deserted, the other wider leading toward a nearby tavern.",
+      "Nearby patrons whisper anxiously among themselves, their eyes darting toward Galinor.",
+      "The thicket of crates appears tangled and messy, suggesting that something has been moved.",
+      "Faint footprints continue deeper into the thicket, but also seem to veer towards a few disturbed crates.",
+      "The tension in the crowd grows as whispers amplify regarding the missing patrol.",
+      "A well-dressed man has fixed his gaze on newcomers like Galinor, keeping a sharp ear on the guards.",
+      "A well-dressed figure discreetly watches the crowd, glancing at the guards.",
+      "The tavern runner is shouting about warm stew and the latest rumors concerning the missing patrol.",
+      "The rain intensifies, further soaking the yard and creating puddles.",
+      "Shops offer basic supplies, though prices seem higher than usual due to recent tensions.",
+      "The local inns are crowded, with some patrons expressing concern about the missing patrol.",
+      "Tempers flare occasionally among the townsfolk, suggesting unrest in response to recent events.",
+      "The old milestone looms in the distance, partially obscured by thick underbrush and shadows.",
+      "The rain forms puddles around the worn path leading to the stone structure.",
+      "A chilling breeze rustles through the underbrush, enhancing the uneasy atmosphere."
     ],
     "journal_seed_facts": [
       "You arrive at Cinderwatch's eastern gate in cold rain, under frayed banners.",
@@ -211,7 +226,11 @@
       "Paying attention to the tavern runner might reveal more about the strange activity linked to the trail.",
       "Closer examination may reveal a torn piece of parchment wedged between the crates, possibly containing a note.",
       "Among the disturbed crates, there may be a marked symbol resembling a sigil associated with The Ash Cowl.",
-      "A closer examination might reveal a torn piece of parchment wedged between the crates, possibly containing a note."
+      "A closer examination might reveal a torn piece of parchment wedged between the crates, possibly containing a note.",
+      "Seeking out Captain Thoran might yield more information about patrols.",
+      "Faint footprints lead northwest into a thicket of crates near the dead drop, suggesting hurried movements.",
+      "A notable symbol associated with The Ash Cowl is visible among the disturbed crates.",
+      "A torn piece of parchment wedged between the crates may contain a note."
     ],
     "hidden_facts": [
       "An agent of a noble house is watching new arrivals from the square's edge.",
@@ -307,21 +326,23 @@
     "active_entities": [
       "emergent_lord_aldric",
       "emergent_town_crier",
+      "refugee",
       "guard_captain",
       "tavern_runner",
-      "refugee",
       "threadbare_watcher"
     ],
     "entity_presence": {
       "emergent_lord_aldric": "active",
       "emergent_town_crier": "active",
-      "tavern_runner": "active",
-      "threadbare_watcher": "active",
+      "refugee": "active",
       "guard_captain": "active",
-      "refugee": "active"
+      "tavern_runner": "active",
+      "threadbare_watcher": "active"
     },
-    "current_interlocutor": null,
+    "current_interlocutor": "tavern_runner",
     "emergent_addressables": [],
-    "promoted_actor_npc_map": {}
+    "promoted_actor_npc_map": {
+      "refugee": "refugee"
+    }
   }
 }

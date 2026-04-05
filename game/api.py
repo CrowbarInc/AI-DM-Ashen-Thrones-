@@ -478,6 +478,7 @@ def _build_compact_turn_trace(
     session: dict,
     world: dict,
     scene: dict,
+    leads_inspection: dict | None = None,
 ) -> dict:
     """Build compact resolved-turn trace grounded in post-resolution authoritative state."""
     interaction_after = inspect_interaction_context(session).copy()
@@ -566,6 +567,18 @@ def _build_compact_turn_trace(
             if isinstance(session, dict) and isinstance(session.get("emergent_actor_debug"), dict)
             else None
         ),
+        "leads": (
+            leads_inspection
+            if isinstance(leads_inspection, dict)
+            and isinstance(leads_inspection.get("registry_debug"), list)
+            and isinstance(leads_inspection.get("delta_after_reconcile"), list)
+            and isinstance(leads_inspection.get("changed_count"), int)
+            else {
+                "registry_debug": [],
+                "delta_after_reconcile": [],
+                "changed_count": 0,
+            }
+        ),
     }
 
 
@@ -576,6 +589,19 @@ def _reconcile_session_lead_progression_after_authoritative_mutation(session: di
     session patches) and before compact turn-trace construction so traces match persisted state.
     """
     leads_module.reconcile_session_lead_progression(session)
+
+
+def _lead_debug_trace_around_authoritative_reconcile(session: dict) -> dict:
+    """Capture compact lead rows before/after the single authoritative reconcile pass."""
+    before = leads_module.build_lead_debug_snapshot(session)
+    _reconcile_session_lead_progression_after_authoritative_mutation(session)
+    after = leads_module.build_lead_debug_snapshot(session)
+    delta = leads_module.diff_lead_debug_snapshots(before, after)
+    return {
+        "registry_debug": leads_module.debug_dump_leads(session),
+        "delta_after_reconcile": delta,
+        "changed_count": len(delta),
+    }
 
 
 def _finalize_and_append_trace(session: dict, trace: dict, response_ok: bool, error: str | None = None) -> None:
@@ -2485,7 +2511,7 @@ def action(req: ActionRequest):
     synchronize_scene_addressability(session, scene, world)
     scene["scene_state"] = session.get("scene_state")
 
-    _reconcile_session_lead_progression_after_authoritative_mutation(session)
+    leads_inspection = _lead_debug_trace_around_authoritative_reconcile(session)
 
     # Build action pipeline debug (no hidden facts or secrets).
     if isinstance(req.intent, str):
@@ -2528,6 +2554,7 @@ def action(req: ActionRequest):
         session=session,
         world=world,
         scene=scene,
+        leads_inspection=leads_inspection,
     )
     trace['gpt_called'] = req.action_type != 'roll_initiative' and not (
         req.action_type == 'end_turn' and gm.get('debug_notes') == 'No enemy response.'
@@ -3030,7 +3057,7 @@ def chat(req: ChatRequest):
     # without GM-proposed world_updates (e.g. social lead landing).
     save_world(world)
 
-    _reconcile_session_lead_progression_after_authoritative_mutation(session)
+    leads_inspection = _lead_debug_trace_around_authoritative_reconcile(session)
 
     # Build action pipeline debug for chat (no hidden facts or secrets).
     session['last_action_debug'] = _build_action_debug(
@@ -3070,6 +3097,7 @@ def chat(req: ChatRequest):
         session=session,
         world=world,
         scene=scene,
+        leads_inspection=leads_inspection,
     )
     _finalize_and_append_trace(session, trace, True, None)
 
