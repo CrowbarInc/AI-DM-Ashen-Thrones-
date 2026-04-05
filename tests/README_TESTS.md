@@ -4,6 +4,10 @@
 
 **Windows:** If `pytest` is not on your `PATH`, use `py -3 -m pytest` instead of `pytest` for every command below (for example `py -3 -m pytest -m "not transcript and not slow"`).
 
+## Manual gauntlets (outside pytest)
+
+Manual gauntlets are **not** part of pytest selection. Use them after changes that can **feel wrong in play** (lead follow-up, narration voice, speaker grounding, scene transitions) even when automated tests pass. Named scenarios, exact player prompt sequences, and pass/fail criteria: [`docs/manual_gauntlets.md`](../docs/manual_gauntlets.md).
+
 ## Full lane
 
 **When:** Pre-merge, milestones, or whenever you need the full regression surface (transcript harnesses, gauntlets, expensive flows).
