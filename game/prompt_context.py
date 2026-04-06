@@ -108,6 +108,15 @@ NARRATION_VISIBILITY_MANDATORY_INSTRUCTIONS: tuple[str, ...] = (
     "Only visible or addressable entities may act or speak.",
 )
 
+FIRST_MENTION_MANDATORY_INSTRUCTIONS: tuple[str, ...] = (
+    "FIRST-MENTION CONTRACT (MANDATORY): Visibility scope controls who/what may be referenced; first-mention contract controls how first references are phrased.",
+    "The first reference to any entity MUST be explicit.",
+    "A first reference MUST use a visible name or a visible descriptor.",
+    "A first reference MUST include grounding by location, behavior, or relation.",
+    "Pronouns MAY be used only after explicit introduction.",
+    "You MUST NOT use unearned familiarity phrases (for example, 'you recognize ...', 'you remember ...', 'you know this is ...') unless supported by narration_visibility.visible_facts.",
+)
+
 _TOPIC_TOKEN_PATTERN = re.compile(r"[a-zA-Z][a-zA-Z']{2,}")
 _TOPIC_STOPWORDS = frozenset({
     "what", "where", "when", "why", "how", "who", "which",
@@ -853,6 +862,13 @@ def build_narration_context(
             "no_undiscovered_facts": True,
         },
     }
+    first_mention_contract: Dict[str, Any] = {
+        "enabled": True,
+        "requires_explicit_intro": True,
+        "requires_grounding": True,
+        "disallow_pronoun_first_reference": True,
+        "disallow_unearned_familiarity": True,
+    }
 
     instructions: List[str] = (
         [
@@ -868,6 +884,7 @@ def build_narration_context(
         'Follow response_policy.rule_priority_order strictly. Higher-priority rules override later ones.',
         'Treat response_policy.no_validator_voice as a hard narration-lane rule for standard narration.',
         *NARRATION_VISIBILITY_MANDATORY_INSTRUCTIONS,
+        *FIRST_MENTION_MANDATORY_INSTRUCTIONS,
         (
             "SCENE MOMENTUM RULE (HARD RULE): Every 2–3 exchanges, you MUST introduce exactly one of: "
             "new_information, new_actor_entering, environmental_change, time_pressure, consequence_or_opportunity. "
@@ -1066,6 +1083,7 @@ def build_narration_context(
         'uncertainty_hint': eff_uncertainty_hint,
         'narration_obligations': narration_obligations,
         'narration_visibility': narration_visibility,
+        'first_mention_contract': first_mention_contract,
         'discoverable_hinting': True,
         'mechanical_resolution': resolution,
         'scene_advancement': scene_advancement,

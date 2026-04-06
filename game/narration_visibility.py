@@ -21,6 +21,74 @@ _ALLOWED_NARRATION_SOURCES: Dict[str, str] = {
     "fact_assertion": "visible_only",
 }
 
+_THIRD_PERSON_PRONOUNS = (
+    "he",
+    "she",
+    "they",
+    "him",
+    "her",
+    "them",
+    "his",
+    "hers",
+    "their",
+    "theirs",
+    "himself",
+    "herself",
+    "themselves",
+    "it",
+    "its",
+    "itself",
+)
+_THIRD_PERSON_PRONOUN_RE = re.compile(
+    rf"(?<!\w)(?:{'|'.join(re.escape(token) for token in _THIRD_PERSON_PRONOUNS)})(?!\w)"
+)
+_FIRST_MENTION_FAMILIARITY_PHRASES = (
+    "you recognize",
+    "you remember",
+    "you know",
+    "you've seen before",
+    "this is clearly",
+)
+_FIRST_MENTION_VISIBLE_ACTION_RE = re.compile(
+    r"(?<!\w)(?:"
+    r"stand|stands|standing|wait|waits|waiting|lean|leans|leaning|watch|watches|watching|"
+    r"look|looks|looking|turn|turns|turning|step|steps|stepping|move|moves|moving|"
+    r"sit|sits|sitting|kneel|kneels|kneeling|enter|enters|entering|cross|crosses|crossing|"
+    r"raise|raises|raising|lower|lowers|lowering|speak|speaks|speaking|say|says|saying|"
+    r"reply|replies|replying|gesture|gestures|gesturing|hold|holds|holding|carry|carries|carrying|"
+    r"open|opens|opening|close|closes|closing|block|blocks|blocking|follow|follows|following|"
+    r"approach|approaches|approaching|linger|lingers|lingering|nod|nods|nodding|shake|shakes|shaking|"
+    r"smile|smiles|smiling|frown|frowns|frowning|glance|glances|glancing|study|studies|studying|"
+    r"face|faces|facing|rest|rests|resting|pace|paces|pacing|shout|shouts|shouting|"
+    r"call|calls|calling|scan|scans|scanning|signal|signals|signaling"
+    r")(?!\w)"
+)
+_FIRST_MENTION_LOCATION_RE = re.compile(
+    r"(?<!\w)(?:"
+    r"in|at|near|by|under|beside|beyond|across|inside|outside|before|behind|among|around|on|"
+    r"within|from|into|over|through|along|amid|beneath|above|below"
+    r")\s+(?:the\s+|a\s+|an\s+|your\s+|this\s+|that\s+)?[a-z][\w'-]*(?:\s+[a-z][\w'-]*){0,4}"
+)
+_FIRST_MENTION_RELATIONAL_PATTERNS = (
+    "next to",
+    "across from",
+    "in front of",
+    "at your side",
+    "before you",
+    "behind you",
+    "near you",
+    "with you",
+)
+_FIRST_MENTION_SCENE_ADVERBIAL_OPENERS = (
+    "nearby",
+    "across the square",
+    "at the gate",
+    "by the board",
+    "under the awning",
+    "in the crowd",
+    "near the tavern",
+)
+
 
 def _normalize_visibility_text(value: Any) -> str:
     """Lowercase, collapse whitespace, strip edge punctuation (conservative matching)."""
@@ -223,6 +291,196 @@ def _fact_check_entry(kind: str, fact: str, match_kind: str) -> Dict[str, str]:
         "kind": kind,
         "fact": fact,
         "match_kind": match_kind,
+    }
+
+
+def _first_phrase_match_offset(normalized_text: str, phrase: str) -> Optional[int]:
+    if not normalized_text or not phrase:
+        return None
+    match = re.search(rf"(?<!\w){re.escape(phrase)}(?!\w)", normalized_text)
+    if not match:
+        return None
+    return int(match.start())
+
+
+def _sentence_bounds_for_offset(text: str, offset: int) -> tuple[int, int]:
+    if offset < 0:
+        return 0, len(text)
+    start = 0
+    for match in re.finditer(r"[.!?\n]+", text):
+        if match.end() <= offset:
+            start = match.end()
+            continue
+        break
+    end = len(text)
+    for match in re.finditer(r"[.!?\n]+", text[offset:]):
+        end = offset + match.start()
+        break
+    return start, end
+
+
+def _sentence_text_for_offset(text: str, offset: int) -> str:
+    start, end = _sentence_bounds_for_offset(text, offset)
+    return text[start:end].strip()
+
+
+def _sentence_starts_with_third_person_pronoun(sentence_text: str) -> bool:
+    stripped = sentence_text.lstrip(string.whitespace + "\"'([{")
+    if not stripped:
+        return False
+    return bool(re.match(rf"^(?:{'|'.join(re.escape(token) for token in _THIRD_PERSON_PRONOUNS)})(?!\w)", stripped))
+
+
+def _has_first_mention_grounding(sentence_text: str) -> bool:
+    if not sentence_text:
+        return False
+    lowered = sentence_text.lower()
+    stripped = lowered.lstrip(string.whitespace + "\"'([{")
+    if any(
+        stripped == opener
+        or stripped.startswith(f"{opener},")
+        or stripped.startswith(f"{opener} ")
+        for opener in _FIRST_MENTION_SCENE_ADVERBIAL_OPENERS
+    ):
+        return True
+    if _FIRST_MENTION_VISIBLE_ACTION_RE.search(lowered):
+        return True
+    if _FIRST_MENTION_LOCATION_RE.search(lowered):
+        return True
+    return any(phrase in lowered for phrase in _FIRST_MENTION_RELATIONAL_PATTERNS)
+
+
+def _first_mention_familiarity_phrase(sentence_text: str) -> Optional[str]:
+    if not sentence_text:
+        return None
+    lowered = sentence_text.lower()
+    for phrase in _FIRST_MENTION_FAMILIARITY_PHRASES:
+        if phrase in lowered:
+            return phrase
+    return None
+
+
+def validate_player_facing_first_mentions(
+    text: str,
+    *,
+    session: Dict[str, Any] | None,
+    scene: Dict[str, Any] | None,
+    world: Dict[str, Any] | None,
+) -> Dict[str, Any]:
+    contract = build_narration_visibility_contract(session=session, scene=scene, world=world)
+    normalized_text = _normalize_visibility_text(text)
+    visible_ids = {
+        str(raw).strip()
+        for raw in (contract.get("visible_entity_ids") or [])
+        if isinstance(raw, str) and str(raw).strip()
+    }
+    alias_map = contract.get("visible_entity_aliases") if isinstance(contract.get("visible_entity_aliases"), dict) else {}
+
+    matched_entities: List[Dict[str, Any]] = []
+    for entity_id, raw_aliases in alias_map.items():
+        if entity_id not in visible_ids or not isinstance(raw_aliases, list):
+            continue
+        best_alias = ""
+        best_offset: Optional[int] = None
+        for raw_alias in raw_aliases:
+            if not isinstance(raw_alias, str):
+                continue
+            alias = _normalize_visibility_text(raw_alias)
+            if not alias:
+                continue
+            offset = _first_phrase_match_offset(normalized_text, alias)
+            if offset is None:
+                continue
+            if best_offset is None or offset < best_offset or (offset == best_offset and len(alias) > len(best_alias)):
+                best_alias = alias
+                best_offset = offset
+        if best_offset is None or not best_alias:
+            continue
+        matched_entities.append(
+            {
+                "entity_id": entity_id,
+                "matched_alias": best_alias,
+                "first_offset": best_offset,
+            }
+        )
+
+    matched_entities.sort(key=lambda item: (int(item.get("first_offset", 10**9)), -len(str(item.get("matched_alias") or ""))))
+    violations: List[Dict[str, Any]] = []
+    checked_entities: List[Dict[str, Any]] = []
+    first_explicit_entity_offset: Optional[int] = None
+    leading_pronoun_detected = False
+    leading_pronoun_match: Optional[re.Match[str]] = None
+
+    if matched_entities:
+        first_match = matched_entities[0]
+        first_explicit_entity_offset = int(first_match.get("first_offset"))
+        pronoun_match = _THIRD_PERSON_PRONOUN_RE.search(normalized_text)
+        if pronoun_match and pronoun_match.start() < first_explicit_entity_offset:
+            leading_pronoun_detected = True
+            leading_pronoun_match = pronoun_match
+        sentence_start, sentence_end = _sentence_bounds_for_offset(normalized_text, first_explicit_entity_offset)
+        first_sentence = normalized_text[sentence_start:sentence_end].strip()
+        if not leading_pronoun_detected and _sentence_starts_with_third_person_pronoun(first_sentence):
+            first_sentence_pronoun = _THIRD_PERSON_PRONOUN_RE.search(first_sentence.lower())
+            if first_sentence_pronoun is not None and (sentence_start + first_sentence_pronoun.start()) < first_explicit_entity_offset:
+                leading_pronoun_detected = True
+                leading_pronoun_match = first_sentence_pronoun
+        if leading_pronoun_detected:
+            violations.append(
+                {
+                    "kind": "pronoun_before_first_explicit_entity",
+                    "token": leading_pronoun_match.group(0) if leading_pronoun_match is not None else "",
+                    "matched_entity_id": first_match.get("entity_id"),
+                    "matched_fact": None,
+                }
+            )
+
+    for entry in matched_entities:
+        entity_id = str(entry.get("entity_id") or "").strip()
+        matched_alias = str(entry.get("matched_alias") or "").strip()
+        first_offset = int(entry.get("first_offset"))
+        sentence_text = _sentence_text_for_offset(normalized_text, first_offset)
+        grounding_present = _has_first_mention_grounding(sentence_text)
+        familiarity_phrase = _first_mention_familiarity_phrase(sentence_text)
+        entity_violation_kinds: List[str] = []
+        if not grounding_present:
+            entity_violation_kinds.append("first_mention_missing_grounding")
+            violations.append(
+                {
+                    "kind": "first_mention_missing_grounding",
+                    "token": matched_alias,
+                    "matched_entity_id": entity_id,
+                    "matched_fact": None,
+                }
+            )
+        if familiarity_phrase:
+            entity_violation_kinds.append("first_mention_unearned_familiarity")
+            violations.append(
+                {
+                    "kind": "first_mention_unearned_familiarity",
+                    "token": matched_alias,
+                    "matched_entity_id": entity_id,
+                    "matched_fact": None,
+                    "trigger": familiarity_phrase,
+                }
+            )
+        checked_entities.append(
+            {
+                "entity_id": entity_id,
+                "matched_alias": matched_alias,
+                "first_offset": first_offset,
+                "grounding_present": grounding_present,
+                "familiarity_phrase": familiarity_phrase,
+                "violation_kinds": entity_violation_kinds,
+            }
+        )
+
+    return {
+        "ok": not violations,
+        "violations": violations,
+        "checked_entities": checked_entities,
+        "leading_pronoun_detected": leading_pronoun_detected,
+        "first_explicit_entity_offset": first_explicit_entity_offset,
     }
 
 

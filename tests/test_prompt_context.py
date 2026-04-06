@@ -1295,6 +1295,45 @@ def test_build_narration_context_narration_visibility_minimal_export():
     assert "only visible facts may be directly asserted" in lr["visible_facts"].lower()
 
 
+@pytest.mark.unit
+def test_build_narration_context_exports_first_mention_contract_and_instructions():
+    ctx = build_narration_context(**_narration_minimal_kwargs())
+
+    assert "first_mention_contract" in ctx
+    assert ctx["first_mention_contract"] == {
+        "enabled": True,
+        "requires_explicit_intro": True,
+        "requires_grounding": True,
+        "disallow_pronoun_first_reference": True,
+        "disallow_unearned_familiarity": True,
+    }
+
+    instr = "\n".join(ctx["instructions"]).lower()
+    assert "first reference to any entity must be explicit" in instr
+    assert "first reference must use a visible name or a visible descriptor" in instr
+    assert "first reference must include grounding by location, behavior, or relation" in instr
+    assert "pronouns may be used only after explicit introduction" in instr
+    assert "unearned familiarity phrases" in instr
+    assert "unless supported by narration_visibility.visible_facts" in instr
+
+
+@pytest.mark.unit
+def test_build_narration_context_keeps_narration_visibility_separate_from_first_mention_contract():
+    ctx = build_narration_context(**_narration_minimal_kwargs())
+    nv = ctx["narration_visibility"]
+
+    assert set(nv.keys()) == {
+        "visible_entities",
+        "active_interlocutor_id",
+        "visible_facts",
+        "rules",
+    }
+    assert "first_mention_contract" in ctx
+    assert "first_mention_contract" not in nv
+    assert "requires_explicit_intro" not in nv
+    assert "disallow_pronoun_first_reference" not in nv
+
+
 def test_build_narration_context_exposes_lead_context_and_preserves_pending_surfaces():
     session = _session_with_registry(
         {

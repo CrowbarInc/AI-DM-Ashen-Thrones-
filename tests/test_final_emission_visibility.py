@@ -6,7 +6,13 @@ import pytest
 
 import game.api_turn_support as api_turn_support
 from game.defaults import default_scene, default_session, default_world
+from game.final_emission_gate import (
+    _decompress_overpacked_sentences,
+    _micro_smooth_post_repair_sentences,
+    _repair_fragmentary_participial_splits,
+)
 from game.interaction_context import rebuild_active_scene_entities, set_social_target
+from game.narration_visibility import validate_player_facing_first_mentions
 from game.storage import get_scene_runtime
 
 
@@ -40,6 +46,18 @@ def _base_visibility_bundle():
     return session, world, scene, sid
 
 
+def _rich_scene_visibility_bundle():
+    session = default_session()
+    world = default_world()
+    scene = default_scene("frontier_gate")
+    sid = "frontier_gate"
+    session["active_scene_id"] = sid
+    session["scene_state"]["active_scene_id"] = sid
+    rebuild_active_scene_entities(session, world, sid, scene_envelope=scene)
+    scene["scene_state"] = dict(session["scene_state"])
+    return session, world, scene, sid
+
+
 def _finalize_via_turn_support(
     text: str,
     *,
@@ -58,6 +76,18 @@ def _finalize_via_turn_support(
     )
     assert out["_player_facing_emission_finalized"] is True
     return out
+
+
+def _assert_first_mention_default_meta_shape(meta: dict) -> None:
+    assert "first_mention_validation_passed" in meta
+    assert "first_mention_replacement_applied" in meta
+    assert "first_mention_violation_kinds" in meta
+    assert "first_mention_checked_entities" in meta
+    assert "first_mention_leading_pronoun_detected" in meta
+    assert "first_mention_first_explicit_entity_offset" in meta
+    assert "first_mention_fallback_strategy" in meta
+    assert "first_mention_fallback_candidate_source" in meta
+    assert "opening_scene_first_mention_preference_used" in meta
 
 
 def test_pipeline_replaces_offscene_known_npc_reference():
@@ -91,7 +121,7 @@ def test_pipeline_replaces_offscene_known_npc_reference():
 
 def test_pipeline_allows_visible_npc_reference():
     session, world, scene, _sid = _base_visibility_bundle()
-    candidate = "Guard Captain scans the crowd and signals another guard forward."
+    candidate = "Guard Captain stands near the gate."
 
     out = _finalize_via_turn_support(
         candidate,
@@ -294,3 +324,493 @@ def test_pipeline_visibility_enforcement_is_read_only_for_discovery_state(monkey
     assert session == before_session
     assert world == before_world
     assert scene == before_scene
+
+
+def test_pipeline_replaces_pronoun_before_first_explicit_entity():
+    session, world, scene, _sid = _base_visibility_bundle()
+    candidate = "He leans closer through the rain. Guard Captain studies your face."
+
+    out = _finalize_via_turn_support(candidate, session=session, world=world, scene=scene)
+
+    assert out["player_facing_text"] != candidate
+    meta = out["_final_emission_meta"]
+    assert meta["first_mention_validation_passed"] is False
+    assert meta["first_mention_replacement_applied"] is True
+    assert "pronoun_before_first_explicit_entity" in meta["first_mention_violation_kinds"]
+    assert meta["first_mention_leading_pronoun_detected"] is True
+    assert meta["first_mention_fallback_strategy"] == "composed_visible_scene_intro"
+    assert meta["first_mention_fallback_candidate_source"] == "visible_scene_composed_intro"
+    assert meta["opening_scene_first_mention_preference_used"] is True
+    assert "first_mention_enforcement_replaced" in out["tags"]
+
+
+def test_pipeline_replaces_unearned_familiarity_first_intro():
+    session, world, scene, _sid = _base_visibility_bundle()
+    candidate = "Guard Captain stands near the gate; you recognize him immediately."
+
+    out = _finalize_via_turn_support(candidate, session=session, world=world, scene=scene)
+
+    assert out["player_facing_text"] != candidate
+    meta = out["_final_emission_meta"]
+    assert meta["first_mention_validation_passed"] is False
+    assert meta["first_mention_replacement_applied"] is True
+    assert "first_mention_unearned_familiarity" in meta["first_mention_violation_kinds"]
+
+
+def test_pipeline_replaces_first_mention_missing_grounding():
+    session, world, scene, _sid = _base_visibility_bundle()
+    candidate = "Guard Captain appears."
+
+    out = _finalize_via_turn_support(candidate, session=session, world=world, scene=scene)
+
+    assert out["player_facing_text"] != candidate
+    meta = out["_final_emission_meta"]
+    assert meta["first_mention_validation_passed"] is False
+    assert meta["first_mention_replacement_applied"] is True
+    assert "first_mention_missing_grounding" in meta["first_mention_violation_kinds"]
+
+
+def test_pipeline_allows_grounded_explicit_first_intro():
+    session, world, scene, _sid = _base_visibility_bundle()
+    candidate = "Guard Captain stands near the gate."
+
+    out = _finalize_via_turn_support(candidate, session=session, world=world, scene=scene)
+
+    assert out["player_facing_text"] == candidate
+    meta = out["_final_emission_meta"]
+    assert meta["first_mention_validation_passed"] is True
+    assert meta["first_mention_replacement_applied"] is False
+    assert meta["first_mention_violation_kinds"] == []
+
+
+def test_pipeline_allows_grounded_active_interlocutor_intro():
+    session, world, scene, _sid = _base_visibility_bundle()
+    set_social_target(session, "tavern_runner")
+    candidate = 'Tavern Runner beside the shuttered bar says, "Keep your hood low."'
+
+    out = _finalize_via_turn_support(candidate, session=session, world=world, scene=scene)
+
+    assert out["player_facing_text"] == candidate
+    meta = out["_final_emission_meta"]
+    assert meta["first_mention_validation_passed"] is True
+    assert meta["first_mention_replacement_applied"] is False
+    assert meta["active_interlocutor_id"] == "tavern_runner"
+
+
+def test_pipeline_allows_opening_scene_composition_with_later_grounded_first_entity_mention():
+    session, world, scene, _sid = _base_visibility_bundle()
+    candidate = (
+        "Nearby, cart wheels hiss over the wet stones while vendors shout under the awning, "
+        "and Guard Captain calls for the line to keep moving at the gate."
+    )
+
+    out = _finalize_via_turn_support(candidate, session=session, world=world, scene=scene)
+
+    assert out["player_facing_text"] == candidate
+    meta = out["_final_emission_meta"]
+    assert meta["first_mention_validation_passed"] is True
+    assert meta["first_mention_replacement_applied"] is False
+    assert meta["first_mention_violation_kinds"] == []
+
+
+def test_pipeline_first_mention_metadata_records_checked_entities():
+    session, world, scene, _sid = _base_visibility_bundle()
+    candidate = "Guard Captain appears."
+
+    out = _finalize_via_turn_support(candidate, session=session, world=world, scene=scene)
+
+    meta = out["_final_emission_meta"]
+    checked = meta["first_mention_checked_entities"]
+    assert isinstance(checked, list)
+    assert checked
+    first = checked[0]
+    assert first["entity_id"] == "guard_captain"
+    assert "matched_alias" in first
+    assert "first_offset" in first
+    assert "grounding_present" in first
+    assert "violation_kinds" in first
+
+
+def test_pipeline_visibility_failure_skips_first_mention_but_keeps_default_meta_shape():
+    session, world, scene, _sid = _base_visibility_bundle()
+    candidate = "Lord Aldric watches the checkpoint from the square."
+
+    out = _finalize_via_turn_support(candidate, session=session, world=world, scene=scene)
+
+    assert out["player_facing_text"] == GLOBAL_VISIBILITY_FALLBACK
+    meta = out["_final_emission_meta"]
+    _assert_first_mention_default_meta_shape(meta)
+    assert meta["visibility_validation_passed"] is False
+    assert meta["visibility_replacement_applied"] is True
+    assert meta["first_mention_validation_passed"] is None
+    assert meta["first_mention_replacement_applied"] is False
+    assert meta["first_mention_violation_kinds"] == []
+    assert meta["first_mention_checked_entities"] == []
+    assert meta["first_mention_leading_pronoun_detected"] is False
+    assert meta["first_mention_first_explicit_entity_offset"] is None
+    assert meta["first_mention_fallback_strategy"] is None
+    assert meta["first_mention_fallback_candidate_source"] is None
+    assert meta["opening_scene_first_mention_preference_used"] is False
+
+
+def test_pipeline_first_mention_fallback_also_satisfies_gate_when_replacement_needed():
+    session, world, scene, _sid = _base_visibility_bundle()
+    candidate = "He leans closer through the rain. Guard Captain studies your face."
+
+    out = _finalize_via_turn_support(candidate, session=session, world=world, scene=scene)
+
+    meta = out["_final_emission_meta"]
+    assert meta["first_mention_replacement_applied"] is True
+    validation = validate_player_facing_first_mentions(
+        out["player_facing_text"],
+        session=session,
+        scene=scene,
+        world=world,
+    )
+    assert validation["ok"] is True
+
+
+def test_pipeline_opening_scene_pronoun_failure_prefers_grounded_visible_scene_fallback():
+    session, world, scene, _sid = _base_visibility_bundle()
+    candidate = "He watches the line in silence. Guard Captain studies the press at the gate."
+
+    out = _finalize_via_turn_support(candidate, session=session, world=world, scene=scene)
+
+    meta = out["_final_emission_meta"]
+    assert meta["first_mention_replacement_applied"] is True
+    assert out["player_facing_text"] != GLOBAL_VISIBILITY_FALLBACK
+    assert "guard captain" in out["player_facing_text"].lower()
+    assert any(token in out["player_facing_text"].lower() for token in ("gate", "rain", "approach", "crowd"))
+    assert meta["first_mention_fallback_strategy"] == "composed_visible_scene_intro"
+    assert meta["first_mention_fallback_candidate_source"] == "visible_scene_composed_intro"
+    assert meta["final_emitted_source"] == "composed_visible_scene_intro"
+    assert meta["opening_scene_first_mention_preference_used"] is True
+
+
+def test_pipeline_composed_scene_intro_avoids_repeated_trivial_verbs_when_fact_backed_actions_exist():
+    session, world, scene, _sid = _rich_scene_visibility_bundle()
+    candidate = "He leans closer through the rain. Guard Captain studies your face."
+
+    out = _finalize_via_turn_support(candidate, session=session, world=world, scene=scene)
+
+    text = out["player_facing_text"].lower()
+    meta = out["_final_emission_meta"]
+    assert meta["first_mention_replacement_applied"] is True
+    assert meta["first_mention_fallback_strategy"] == "composed_visible_scene_intro"
+    assert meta["final_emitted_source"] == "composed_visible_scene_intro"
+    assert any(token in text for token in ("rain", "gate", "muddy", "crowd"))
+    assert any(name in text for name in ("guard captain", "tavern runner", "threadbare watcher", "ragged stranger"))
+    assert "guard captain shouts, while tavern runner shouts" not in text
+    assert text.count(" shouts") <= 1
+    validation = validate_player_facing_first_mentions(
+        out["player_facing_text"],
+        session=session,
+        scene=scene,
+        world=world,
+    )
+    assert validation["ok"] is True
+
+
+def test_pipeline_visibility_and_first_mention_metadata_coexist():
+    session, world, scene, _sid = _base_visibility_bundle()
+    candidate = "Guard Captain stands near the gate."
+
+    out = _finalize_via_turn_support(candidate, session=session, world=world, scene=scene)
+
+    meta = out["_final_emission_meta"]
+    assert "visibility_validation_passed" in meta
+    assert "visibility_replacement_applied" in meta
+    assert "visibility_violation_kinds" in meta
+    _assert_first_mention_default_meta_shape(meta)
+    assert meta["visibility_validation_passed"] is True
+    assert meta["first_mention_validation_passed"] is True
+
+
+def test_validate_player_facing_first_mentions_pronoun_before_explicit_entity():
+    session, world, scene, _sid = _base_visibility_bundle()
+    result = validate_player_facing_first_mentions(
+        "He leans in. Guard Captain watches the road.",
+        session=session,
+        scene=scene,
+        world=world,
+    )
+    kinds = [v.get("kind") for v in result["violations"] if isinstance(v, dict)]
+    assert "pronoun_before_first_explicit_entity" in kinds
+
+
+def test_validate_player_facing_first_mentions_unearned_familiarity():
+    session, world, scene, _sid = _base_visibility_bundle()
+    result = validate_player_facing_first_mentions(
+        "You recognize Guard Captain immediately.",
+        session=session,
+        scene=scene,
+        world=world,
+    )
+    kinds = [v.get("kind") for v in result["violations"] if isinstance(v, dict)]
+    assert "first_mention_unearned_familiarity" in kinds
+
+
+def test_validate_player_facing_first_mentions_accepts_grounded_intro():
+    session, world, scene, _sid = _base_visibility_bundle()
+    result = validate_player_facing_first_mentions(
+        "Guard Captain stands near the gate.",
+        session=session,
+        scene=scene,
+        world=world,
+    )
+    assert result["ok"] is True
+
+
+def test_validate_player_facing_first_mentions_accepts_opening_scene_sentence_grounded_by_opener_and_action():
+    session, world, scene, _sid = _base_visibility_bundle()
+    result = validate_player_facing_first_mentions(
+        (
+            "Nearby, cart wheels hiss over the wet stones while vendors shout under the awning, "
+            "and Guard Captain calls for the line to keep moving at the gate."
+        ),
+        session=session,
+        scene=scene,
+        world=world,
+    )
+    assert result["ok"] is True
+
+
+@pytest.mark.parametrize(
+    "candidate",
+    [
+        "Guard Captain is there.",
+        "Tavern Runner is present.",
+    ],
+)
+def test_validate_player_facing_first_mentions_rejects_vague_presence_only_openings(candidate: str):
+    session, world, scene, _sid = _base_visibility_bundle()
+    result = validate_player_facing_first_mentions(
+        candidate,
+        session=session,
+        scene=scene,
+        world=world,
+    )
+    kinds = [v.get("kind") for v in result["violations"] if isinstance(v, dict)]
+    assert "first_mention_missing_grounding" in kinds
+
+
+def test_sentence_decompression_splits_semicolon_alternatives():
+    text = (
+        "Off to Galinor's left, two alleyways present themselves; "
+        "one is narrow and shadowy, the other wider and lively, leading toward the tavern."
+    )
+    out = _decompress_overpacked_sentences(text)
+
+    assert "; one is narrow and shadowy" not in out.lower()
+    assert out.count(".") >= 3
+    assert "two alleyways present themselves" in out.lower()
+    assert "narrow and shadowy" in out.lower()
+    assert "wider and lively" in out.lower()
+
+
+def test_sentence_decompression_splits_long_participial_tail():
+    text = (
+        "Nearby, the tavern runner energetically shouts offers of warm stew above the rain-slick crowd as wagons creak "
+        "through the gate, hinting at deeper tensions surrounding the missing patrol."
+    )
+    out = _decompress_overpacked_sentences(text)
+
+    assert ", hinting at deeper tensions surrounding the missing patrol" not in out.lower()
+    assert out.count(".") >= 2
+    assert "tavern runner" in out.lower()
+    assert "missing patrol" in out.lower()
+
+
+def test_fragmentary_participial_split_repair_anchors_to_previous_sentence():
+    text = (
+        "Nearby, a tavern runner calls out urgently. "
+        "Offering both warm stew and rumors, their voice cutting through the din."
+    )
+    repaired, applied = _repair_fragmentary_participial_splits(text)
+
+    assert applied is True
+    assert "They offer both warm stew and rumors." in repaired
+    assert "Their voice cuts through the din." in repaired
+
+
+def test_fragmentary_participial_split_repair_uses_sparse_it_subject_for_hinting():
+    text = "The rain taps steadily on the awning. Hinting at trouble just beyond the square."
+    repaired, applied = _repair_fragmentary_participial_splits(text)
+
+    assert applied is True
+    assert "It hints at trouble just beyond the square." in repaired
+
+
+def test_fragmentary_participial_split_repair_preserves_uncertain_suggesting_clause():
+    text = "A stranger watches from the edge of the crowd. Suggesting he knows more than he says."
+    repaired, applied = _repair_fragmentary_participial_splits(text)
+
+    assert applied is False
+    assert repaired == text
+
+
+def test_micro_smoothing_merges_short_they_to_they_pair():
+    text = "They offer both warm stew and rumors. They gesture toward the tavern."
+
+    smoothed, applied = _micro_smooth_post_repair_sentences(text)
+
+    assert applied is True
+    assert smoothed != text
+    assert smoothed.count(".") == 1
+    assert len(smoothed) <= 140
+    assert "They offer both warm stew and rumors" in smoothed
+    assert "gesture toward the tavern" in smoothed
+    assert "suggesting" not in smoothed.lower()
+    assert "implying" not in smoothed.lower()
+    assert "revealing" not in smoothed.lower()
+    assert "indicating" not in smoothed.lower()
+
+
+def test_micro_smoothing_merges_short_they_to_their_continuation():
+    text = "They offer both warm stew and rumors. Their voice cuts."
+
+    smoothed, applied = _micro_smooth_post_repair_sentences(text)
+
+    assert applied is True
+    assert smoothed != text
+    assert smoothed.count(".") == 1
+    assert "They offer both warm stew and rumors" in smoothed
+    assert "their voice cutting" in smoothed.lower()
+    assert "suggesting" not in smoothed.lower()
+    assert "implying" not in smoothed.lower()
+    assert "revealing" not in smoothed.lower()
+    assert "indicating" not in smoothed.lower()
+
+
+def test_micro_smoothing_preserves_when_anchor_changes():
+    text = "The tavern runner calls out from the awning. A guard scans the square."
+
+    smoothed, applied = _micro_smooth_post_repair_sentences(text)
+
+    assert applied is False
+    assert smoothed == text
+    assert smoothed.count(".") == 2
+
+
+@pytest.mark.parametrize(
+    "tail_sentence",
+    [
+        "Their expression hints at more than they say.",
+        "Their expression suggests they know more than they say.",
+        "Their expression reveals more than they say.",
+        "Their expression indicates more than they say.",
+        "Their expression implying more than they say.",
+    ],
+)
+def test_micro_smoothing_preserves_when_second_sentence_is_implication_language(tail_sentence: str):
+    text = f"They pause at the gate. {tail_sentence}"
+
+    smoothed, applied = _micro_smooth_post_repair_sentences(text)
+
+    assert applied is False
+    assert smoothed == text
+    assert smoothed.count(".") == 2
+    assert ", their expression" not in smoothed.lower()
+
+
+def test_micro_smoothing_preserves_dialogue_like_text():
+    text = 'They offer both warm stew and rumors. "Keep your hood low," they whisper.'
+
+    smoothed, applied = _micro_smooth_post_repair_sentences(text)
+
+    assert applied is False
+    assert smoothed == text
+
+
+def test_micro_smoothing_does_not_treat_contractions_as_dialogue():
+    text = "They don't linger. They scan the road."
+
+    smoothed, applied = _micro_smooth_post_repair_sentences(text)
+
+    assert applied is True
+    assert smoothed != text
+    assert "don't linger" in smoothed.lower()
+    assert smoothed.count(".") == 1
+
+
+def test_micro_smoothing_allows_simple_list_heavy_sentence_when_otherwise_safe():
+    text = "They carry bandages and lamp oil. They wave toward shelter."
+
+    smoothed, applied = _micro_smooth_post_repair_sentences(text)
+
+    assert applied is True
+    assert smoothed != text
+    assert smoothed.count(".") == 1
+    assert "bandages and lamp oil" in smoothed.lower()
+
+
+def test_micro_smoothing_never_merges_more_than_one_pair_per_passage():
+    text = (
+        "They offer both warm stew and rumors. "
+        "They gesture toward the tavern. "
+        "They scan the muddy lane. "
+        "They watch the gate."
+    )
+
+    smoothed, applied = _micro_smooth_post_repair_sentences(text)
+
+    assert applied is True
+    assert smoothed.count(".") == 3
+    assert "They scan the muddy lane. They watch the gate." in smoothed
+
+
+def test_micro_smoothing_respects_combined_length_guardrail():
+    text = (
+        "They map every alley from the awning to the south culvert and the watch post near the flooded square. "
+        "They recount each route marker, shuttered stall, and wagon scar to keep your notes exact."
+    )
+
+    smoothed, applied = _micro_smooth_post_repair_sentences(text)
+
+    assert applied is False
+    assert smoothed == text
+    assert smoothed.count(".") == 2
+
+
+def test_micro_smoothing_preserves_mechanical_or_combat_text():
+    text = "They roll initiative as steel clears leather. They draw and close the distance."
+
+    smoothed, applied = _micro_smooth_post_repair_sentences(text)
+
+    assert applied is False
+    assert smoothed == text
+
+
+def test_micro_smoothing_preserves_already_clean_output_when_no_clear_gain():
+    text = "They watch the awning. A guard checks the queue."
+
+    smoothed, applied = _micro_smooth_post_repair_sentences(text)
+
+    assert applied is False
+    assert smoothed == text
+
+
+def test_finalization_pipeline_metadata_for_micro_smoothing():
+    session, world, scene, _sid = _base_visibility_bundle()
+    repaired_candidate = (
+        "Nearby, a tavern runner calls out urgently, offering both warm stew and rumors, their voice cutting."
+    )
+    repaired_out = _finalize_via_turn_support(
+        repaired_candidate,
+        session=session,
+        world=world,
+        scene=scene,
+    )
+    assert repaired_out["_final_emission_meta"]["sentence_decompression_applied"] is True
+    assert repaired_out["_final_emission_meta"]["sentence_fragment_repair_applied"] is True
+    assert repaired_out["_final_emission_meta"]["sentence_micro_smoothing_applied"] is True
+
+    plain_out = _finalize_via_turn_support(
+        "Guard Captain stands near the gate.",
+        session=session,
+        world=world,
+        scene=scene,
+    )
+    assert plain_out["_final_emission_meta"]["sentence_decompression_applied"] is False
+    assert plain_out["_final_emission_meta"]["sentence_fragment_repair_applied"] is False
+    assert plain_out["_final_emission_meta"]["sentence_micro_smoothing_applied"] is False

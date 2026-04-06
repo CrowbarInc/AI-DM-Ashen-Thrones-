@@ -4,20 +4,20 @@
     "frontier_gate"
   ],
   "current_date": "Day 1",
-  "turn_counter": 2,
+  "turn_counter": 1,
   "response_mode": "standard",
   "clocks": {
     "suspicion": 0,
     "unrest": 0,
     "danger": 0,
     "occult_instability": 0,
-    "time_pressure": 2
+    "time_pressure": 1
   },
   "interaction_context": {
     "active_interaction_target_id": null,
-    "active_interaction_kind": "travel",
-    "interaction_mode": "activity",
-    "engagement_level": "focused",
+    "active_interaction_kind": null,
+    "interaction_mode": "none",
+    "engagement_level": "none",
     "conversation_privacy": null,
     "player_position_context": null
   },
@@ -35,8 +35,8 @@
       "emergent_lord_aldric": "active",
       "emergent_town_crier": "active",
       "refugee": "active",
-      "guard_captain": "active",
       "tavern_runner": "active",
+      "guard_captain": "active",
       "threadbare_watcher": "active"
     },
     "current_interlocutor": null,
@@ -52,38 +52,31 @@
       "suspicion_flags": [],
       "searched_targets": [],
       "resolved_interactables": [],
-      "last_exploration_action_key": "we_leave_the_gatehouse_antechamber_and_s",
-      "repeated_action_count": 1,
-      "last_resolution_kind": "travel",
-      "last_description_hash": "8ce3e0d5bd86c3ec38448a3fba198d3a",
+      "last_exploration_action_key": null,
+      "repeated_action_count": 0,
+      "last_resolution_kind": null,
+      "last_description_hash": "89ea897b9961040ee059d81cf5f5d614",
       "consumed_action_ids": [],
       "momentum_exchanges_since": 0,
-      "momentum_next_due_in": 2,
+      "momentum_next_due_in": 3,
       "momentum_last_kind": "new_information",
       "passive_action_streak": 0,
       "recent_player_actions": [
         {
-          "text": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals.",
+          "text": "Begin.",
           "passive": false,
           "markers": [],
           "resolution_kind": null,
           "turn": 1
-        },
-        {
-          "text": "I circle back to an earlier detail we skipped and insist we resolve it before moving on.",
-          "passive": false,
-          "markers": [],
-          "resolution_kind": null,
-          "turn": 2
         }
       ],
-      "last_player_action_text": "I circle back to an earlier detail we skipped and insist we resolve it before moving on.",
+      "last_player_action_text": "Begin.",
       "last_player_action_passive": false,
       "recent_contextual_leads": [
         {
-          "key": "active_event_he_takes_in_the_scene_noticing_the_buzz_of_the_crowd_refugees_and_townsfolk_jostle_for_space_their_faces_a_mixture_of_anxiety_and_determination",
+          "key": "active_event_refugees_and_traders_jostle_for_space_as_guards_eye_the_crowd_with_a_stern_vigilance",
           "kind": "active_event",
-          "subject": "he takes in the scene, noticing the buzz of the crowd\u2014refugees and townsfolk jostle for space, their faces a mixture of anxiety and determination",
+          "subject": "refugees and traders jostle for space as guards eye the crowd with a stern vigilance",
           "position": "",
           "named": false,
           "positioned": false,
@@ -91,9 +84,9 @@
           "last_turn": 1
         },
         {
-          "key": "visible_suspicious_figure_he_spots_a_well_dressed_figure_scanning_the_crowd_their_gaze_settled_on_newcomers_with_unsettling_intensity",
-          "kind": "visible_suspicious_figure",
-          "subject": "he spots a well-dressed figure scanning the crowd, their gaze settled on newcomers with unsettling intensity",
+          "key": "active_event_tavern_runners_shouts_for_warm_stew_cut_through_the_murmurs_of_anxiety_about_a_missing_patrol_a_theme_echoed_in_the_whispers_and_pointed_glances_between_patrons",
+          "kind": "active_event",
+          "subject": "tavern runner's shouts for warm stew cut through the murmurs of anxiety about a missing patrol, a theme echoed in the whispers and pointed glances between patrons",
           "position": "",
           "named": false,
           "positioned": false,
@@ -101,12 +94,12 @@
           "last_turn": 1
         },
         {
-          "key": "active_event_meanwhile_nearby_a_tavern_runner_energetically_shouts_offers_of_warm_stew_luring_patrons_closer_while_hinting_at_urgent_rumors_regarding_the_missing_patrols",
-          "kind": "active_event",
-          "subject": "meanwhile, nearby, a tavern runner energetically shouts offers of warm stew, luring patrons closer while hinting",
-          "position": "at urgent rumors regarding the missing patrols",
-          "named": false,
-          "positioned": true,
+          "key": "scene_npc_tavern_runner",
+          "kind": "scene_npc",
+          "subject": "Tavern Runner",
+          "position": "",
+          "named": true,
+          "positioned": false,
           "mentions": 1,
           "last_turn": 1
         },
@@ -119,26 +112,6 @@
           "positioned": false,
           "mentions": 1,
           "last_turn": 1
-        },
-        {
-          "key": "active_event_meanwhile_the_tavern_runner_resumes_shouting_offers_of_warm_stew_a_counterpoint_to_the_critical_topic_at_hand",
-          "kind": "active_event",
-          "subject": "meanwhile, the tavern runner resumes shouting offers of warm stew, a counterpoint to the critical topic",
-          "position": "at hand",
-          "named": false,
-          "positioned": true,
-          "mentions": 1,
-          "last_turn": 2
-        },
-        {
-          "key": "scene_npc_tavern_runner",
-          "kind": "scene_npc",
-          "subject": "Tavern Runner",
-          "position": "",
-          "named": true,
-          "positioned": false,
-          "mentions": 2,
-          "last_turn": 2
         }
       ]
     }
@@ -148,7 +121,7 @@
   "npc_runtime": {},
   "last_action_debug": {
     "last_action_type": "chat",
-    "player_input": "I circle back to an earlier detail we skipped and insist we resolve it before moving on.",
+    "player_input": "Begin.",
     "normalized_action": null,
     "resolution_kind": null,
     "target_scene": null,
@@ -156,8 +129,13 @@
       "world_tick_events": [
         {
           "type": "faction_pressure",
-          "text": "Ordo Pyric's pressure mounts.",
-          "source": "ordo_pyric"
+          "text": "House Verevin's pressure mounts.",
+          "source": "house_verevin"
+        },
+        {
+          "type": "faction_pressure",
+          "text": "The Ash Cowl's pressure mounts.",
+          "source": "ash_cowl"
         }
       ]
     },
@@ -168,10 +146,10 @@
   },
   "debug_traces": [
     {
-      "timestamp": "2026-04-05T19:39:50.433633Z",
+      "timestamp": "2026-04-06T03:34:00.701769Z",
       "source": "chat",
       "action_type": "chat",
-      "raw_input": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals.",
+      "raw_input": "Begin.",
       "turn_stage_order": [
         "player_input",
         "intent_normalization_expansion",
@@ -184,44 +162,14 @@
         "response_debug_packaging"
       ],
       "incoming_payload": {
-        "text": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals."
+        "text": "Begin."
       },
-      "parsed_intent": {
-        "id": "we_leave_the_gatehouse_antechamber_and_s",
-        "label": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals.",
-        "type": "travel",
-        "prompt": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals.",
-        "targetSceneId": null,
-        "target_scene_id": null
-      },
+      "parsed_intent": null,
       "segmented_turn": {
-        "declared_action_text": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals."
+        "declared_action_text": "Begin."
       },
-      "normalized_action": {
-        "id": "we_leave_the_gatehouse_antechamber_and_s",
-        "label": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals.",
-        "type": "travel",
-        "prompt": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals.",
-        "targetSceneId": null
-      },
+      "normalized_action": null,
       "resolution": {
-        "kind": "travel",
-        "action_id": "we_leave_the_gatehouse_antechamber_and_s",
-        "label": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals.",
-        "prompt": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals.",
-        "success": false,
-        "resolved_transition": false,
-        "target_scene_id": null,
-        "clue_id": null,
-        "discovered_clues": [],
-        "state_changes": {},
-        "hint": "Player expressed travel intent; target scene not resolved. Narrate based on current scene and intent.",
-        "metadata": {
-          "prompt": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals.",
-          "turn_segmentation": {
-            "declared_action_text": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals."
-          }
-        },
         "world_tick_events": [
           {
             "type": "faction_pressure",
@@ -243,187 +191,11 @@
       ],
       "turn_trace": {
         "source": "chat",
-        "player_input": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals.",
-        "intent": {
-          "parsed": {
-            "id": "we_leave_the_gatehouse_antechamber_and_s",
-            "label": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals.",
-            "type": "travel",
-            "prompt": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals.",
-            "targetSceneId": null,
-            "target_scene_id": null
-          },
-          "segmented_turn": {
-            "declared_action_text": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals."
-          },
-          "normalized": {
-            "id": "we_leave_the_gatehouse_antechamber_and_s",
-            "label": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals.",
-            "type": "travel",
-            "prompt": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals.",
-            "targetSceneId": null,
-            "target_scene_id": null,
-            "targetEntityId": null,
-            "target_id": null
-          },
-          "implied_context": {
-            "applied": false,
-            "cases": [],
-            "target_id": null,
-            "commitment_broken": false,
-            "break_reason": null
-          }
-        },
-        "classification": {
-          "action_type": "chat",
-          "resolved_kind": "travel",
-          "requires_check": false
-        },
-        "resolution_path": "exploration_engine",
-        "authoritative_state_changes": {
-          "scene_transition": null,
-          "resolution_state_changes": {},
-          "resolution_world_updates": [],
-          "check_request": null
-        },
-        "interaction_after": {
-          "active_interaction_target_id": null,
-          "active_interaction_kind": "travel",
-          "interaction_mode": "activity",
-          "engagement_level": "focused",
-          "conversation_privacy": null,
-          "player_position_context": null
-        },
-        "narration_obligations": {
-          "is_opening_scene": true,
-          "must_advance_scene": false,
-          "should_answer_active_npc": false,
-          "avoid_input_echo": true,
-          "avoid_player_action_restatement": true,
-          "prefer_structured_turn_summary": true,
-          "active_npc_reply_expected": false,
-          "active_npc_reply_kind": null,
-          "scene_momentum_due": false,
-          "scene_momentum_exchanges_since": 0,
-          "scene_momentum_next_due_in": 2,
-          "suppress_non_social_emitters": false
-        },
-        "clues": {
-          "discovered_texts": [],
-          "presentation_changes": [],
-          "known_counts": {
-            "implicit": 0,
-            "explicit": 0,
-            "actionable": 0
-          }
-        },
-        "affordances_after": [
-          {
-            "id": "question_emergent_lord_aldric",
-            "type": "question",
-            "label": "Talk to Lord Aldric",
-            "targetEntityId": "emergent_lord_aldric"
-          },
-          {
-            "id": "question_emergent_town_crier",
-            "type": "question",
-            "label": "Talk to Town Crier",
-            "targetEntityId": "emergent_town_crier"
-          },
-          {
-            "id": "question_refugee",
-            "type": "question",
-            "label": "Talk to Ragged stranger",
-            "targetEntityId": "refugee"
-          },
-          {
-            "id": "examine_the_rain_spatters_soot_dark_stone_frayed",
-            "type": "investigate",
-            "label": "Examine the Rain spatters soot-dark stone; frayed"
-          },
-          {
-            "id": "examine_refugees",
-            "type": "investigate",
-            "label": "Examine Refugees"
-          }
-        ],
-        "emergent_actor": {
-          "emergent_actor_enrolled": false,
-          "emergent_actor_id": null,
-          "emergent_actor_source_text": null
-        },
-        "leads": {
-          "registry_debug": [],
-          "delta_after_reconcile": [],
-          "changed_count": 0
-        }
-      },
-      "gpt_called": true,
-      "response_ok": true,
-      "error": null,
-      "canonical_entry": {
-        "should_route_social": false,
-        "target_actor_id": null,
-        "target_source": null,
-        "reason": "travel_or_scene_transition_intent",
-        "spoken_text": null,
-        "declared_switch_detected": false,
-        "declared_switch_target_actor_id": null,
-        "continuity_overridden_by_declared_switch": false,
-        "spoken_vocative_detected": false,
-        "spoken_vocative_target_actor_id": null,
-        "continuity_overridden_by_spoken_vocative": false
-      },
-      "canonical_entry_path": "undecided",
-      "canonical_entry_reason": "travel_or_scene_transition_intent",
-      "canonical_entry_target_actor_id": null
-    },
-    {
-      "timestamp": "2026-04-05T19:39:56.868777Z",
-      "source": "chat",
-      "action_type": "chat",
-      "raw_input": "I circle back to an earlier detail we skipped and insist we resolve it before moving on.",
-      "turn_stage_order": [
-        "player_input",
-        "intent_normalization_expansion",
-        "action_classification",
-        "engine_resolution",
-        "authoritative_state_mutation",
-        "prompt_context_construction",
-        "gpt_narration",
-        "affordance_derivation",
-        "response_debug_packaging"
-      ],
-      "incoming_payload": {
-        "text": "I circle back to an earlier detail we skipped and insist we resolve it before moving on."
-      },
-      "parsed_intent": null,
-      "segmented_turn": {
-        "declared_action_text": "I circle back to an earlier detail we skipped and insist we resolve it before moving on."
-      },
-      "normalized_action": null,
-      "resolution": {
-        "world_tick_events": [
-          {
-            "type": "faction_pressure",
-            "text": "Ordo Pyric's pressure mounts.",
-            "source": "ordo_pyric"
-          }
-        ]
-      },
-      "scene_before": "frontier_gate",
-      "scene_after": "frontier_gate",
-      "clue_updates": [],
-      "world_flag_updates": [
-        "clock:time_pressure=2"
-      ],
-      "turn_trace": {
-        "source": "chat",
-        "player_input": "I circle back to an earlier detail we skipped and insist we resolve it before moving on.",
+        "player_input": "Begin.",
         "intent": {
           "parsed": null,
           "segmented_turn": {
-            "declared_action_text": "I circle back to an earlier detail we skipped and insist we resolve it before moving on."
+            "declared_action_text": "Begin."
           },
           "normalized": null,
           "implied_context": {
@@ -448,14 +220,14 @@
         },
         "interaction_after": {
           "active_interaction_target_id": null,
-          "active_interaction_kind": "travel",
-          "interaction_mode": "activity",
-          "engagement_level": "focused",
+          "active_interaction_kind": null,
+          "interaction_mode": "none",
+          "engagement_level": "none",
           "conversation_privacy": null,
           "player_position_context": null
         },
         "narration_obligations": {
-          "is_opening_scene": false,
+          "is_opening_scene": true,
           "must_advance_scene": false,
           "should_answer_active_npc": false,
           "avoid_input_echo": true,
@@ -544,9 +316,9 @@
   ],
   "flags": {},
   "character_name": "Galinor",
-  "campaign_run_id": "3e6d70b1aea929d40e4ae5fb",
-  "session_id": "3e6d70b1aea929d40e4ae5fb",
-  "last_saved_at": "2026-04-05T19:40:08.704107Z",
+  "campaign_run_id": "cd01b45ad86cd1e96c2bf572",
+  "session_id": "cd01b45ad86cd1e96c2bf572",
+  "last_saved_at": "2026-04-06T03:34:05.821976Z",
   "emergent_actor_debug": {
     "emergent_actor_enrolled": false,
     "emergent_actor_id": null,

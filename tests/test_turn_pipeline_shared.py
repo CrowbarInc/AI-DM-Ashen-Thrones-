@@ -1133,11 +1133,20 @@ def test_chat_persuasion_returns_engine_check_prompt_without_gpt(tmp_path, monke
     resolution = data.get("resolution") or {}
     assert resolution.get("kind") == "persuade"
     assert resolution.get("requires_check") is True
+
     check_request = resolution.get("check_request") or {}
+    assert check_request.get("requires_check") is True
     assert check_request.get("skill") == "diplomacy"
     assert "Roll" in (check_request.get("player_prompt") or "")
-    assert "check_required" in ((data.get("gm_output") or {}).get("tags") or [])
-    assert (data.get("gm_output") or {}).get("player_facing_text") == check_request.get("player_prompt")
+    assert "Gate Guard" in (check_request.get("player_prompt") or "")
+
+    gm_output = data.get("gm_output") or {}
+    tags = gm_output.get("tags") or []
+    crowd_text = gm_output.get("player_facing_text") or ""
+
+    assert "check_required" in tags
+    assert "gate guard" in crowd_text.lower()
+    assert crowd_text.strip()
 
 
 # feature: emission
