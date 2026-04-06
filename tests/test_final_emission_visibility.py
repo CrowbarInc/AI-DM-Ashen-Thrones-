@@ -12,7 +12,10 @@ from game.final_emission_gate import (
     _repair_fragmentary_participial_splits,
 )
 from game.interaction_context import rebuild_active_scene_entities, set_social_target
-from game.narration_visibility import validate_player_facing_first_mentions
+from game.narration_visibility import (
+    validate_player_facing_first_mentions,
+    validate_player_facing_referential_clarity,
+)
 from game.storage import get_scene_runtime
 
 
@@ -58,6 +61,14 @@ def _rich_scene_visibility_bundle():
     return session, world, scene, sid
 
 
+def _visibility_bundle_with_extra_addressables(*addressables: dict):
+    session, world, scene, sid = _base_visibility_bundle()
+    scene["scene"]["addressables"].extend(deepcopy(list(addressables)))
+    rebuild_active_scene_entities(session, world, sid, scene_envelope=scene)
+    scene["scene_state"] = dict(session["scene_state"])
+    return session, world, scene, sid
+
+
 def _finalize_via_turn_support(
     text: str,
     *,
@@ -88,6 +99,14 @@ def _assert_first_mention_default_meta_shape(meta: dict) -> None:
     assert "first_mention_fallback_strategy" in meta
     assert "first_mention_fallback_candidate_source" in meta
     assert "opening_scene_first_mention_preference_used" in meta
+
+
+def _assert_referential_clarity_default_meta_shape(meta: dict) -> None:
+    assert "referential_clarity_validation_passed" in meta
+    assert "referential_clarity_replacement_applied" in meta
+    assert "referential_clarity_violation_kinds" in meta
+    assert "referential_clarity_checked_entities" in meta
+    assert "referential_clarity_violation_sample" in meta
 
 
 def test_pipeline_replaces_offscene_known_npc_reference():
@@ -440,6 +459,7 @@ def test_pipeline_visibility_failure_skips_first_mention_but_keeps_default_meta_
     assert out["player_facing_text"] == GLOBAL_VISIBILITY_FALLBACK
     meta = out["_final_emission_meta"]
     _assert_first_mention_default_meta_shape(meta)
+    _assert_referential_clarity_default_meta_shape(meta)
     assert meta["visibility_validation_passed"] is False
     assert meta["visibility_replacement_applied"] is True
     assert meta["first_mention_validation_passed"] is None
@@ -451,6 +471,11 @@ def test_pipeline_visibility_failure_skips_first_mention_but_keeps_default_meta_
     assert meta["first_mention_fallback_strategy"] is None
     assert meta["first_mention_fallback_candidate_source"] is None
     assert meta["opening_scene_first_mention_preference_used"] is False
+    assert meta["referential_clarity_validation_passed"] is None
+    assert meta["referential_clarity_replacement_applied"] is False
+    assert meta["referential_clarity_violation_kinds"] == []
+    assert meta["referential_clarity_checked_entities"] == []
+    assert meta["referential_clarity_violation_sample"] == []
 
 
 def test_pipeline_first_mention_fallback_also_satisfies_gate_when_replacement_needed():
@@ -522,8 +547,240 @@ def test_pipeline_visibility_and_first_mention_metadata_coexist():
     assert "visibility_replacement_applied" in meta
     assert "visibility_violation_kinds" in meta
     _assert_first_mention_default_meta_shape(meta)
+    _assert_referential_clarity_default_meta_shape(meta)
     assert meta["visibility_validation_passed"] is True
     assert meta["first_mention_validation_passed"] is True
+    assert meta["referential_clarity_validation_passed"] is True
+
+
+def test_pipeline_referential_clarity_allows_single_named_referent_followed_by_pronoun():
+    session, world, scene, _sid = _base_visibility_bundle()
+    candidate = "Guard Captain leans closer. He studies your face."
+
+    out = _finalize_via_turn_support(candidate, session=session, world=world, scene=scene)
+
+    assert out["player_facing_text"] == candidate
+    meta = out["_final_emission_meta"]
+    _assert_referential_clarity_default_meta_shape(meta)
+    assert meta["referential_clarity_validation_passed"] is True
+    assert meta["referential_clarity_replacement_applied"] is False
+    assert meta["referential_clarity_violation_kinds"] == []
+    assert "referential_clarity_enforcement_replaced" not in out["tags"]
+
+
+def test_pipeline_referential_clarity_allows_singular_they_for_single_local_person_referent():
+    session, world, scene, _sid = _base_visibility_bundle()
+    candidate = "Guard Captain leans closer. Their voice drops to a whisper."
+
+    out = _finalize_via_turn_support(candidate, session=session, world=world, scene=scene)
+
+    assert out["player_facing_text"] == candidate
+    meta = out["_final_emission_meta"]
+    _assert_referential_clarity_default_meta_shape(meta)
+    assert meta["referential_clarity_validation_passed"] is True
+    assert meta["referential_clarity_replacement_applied"] is False
+    assert meta["referential_clarity_violation_kinds"] == []
+
+
+def test_pipeline_referential_clarity_replaces_same_sentence_ambiguous_pronoun():
+    session, world, scene, _sid = _base_visibility_bundle()
+    candidate = "Guard Captain and Tavern Runner trade hard looks. He steps forward."
+
+    out = _finalize_via_turn_support(candidate, session=session, world=world, scene=scene)
+
+    assert out["player_facing_text"] != candidate
+    meta = out["_final_emission_meta"]
+    assert meta["referential_clarity_validation_passed"] is False
+    assert meta["referential_clarity_replacement_applied"] is True
+    assert "ambiguous_entity_reference" in meta["referential_clarity_violation_kinds"]
+    assert "referential_clarity_enforcement_replaced" in out["tags"]
+    assert "referential_clarity_violation:ambiguous_entity_reference" in out["tags"]
+
+
+def test_pipeline_referential_clarity_replaces_next_sentence_ambiguous_pronoun():
+    session, world, scene, _sid = _base_visibility_bundle()
+    candidate = "Guard Captain speaks with Tavern Runner near the brazier. He lowers his voice."
+
+    out = _finalize_via_turn_support(candidate, session=session, world=world, scene=scene)
+
+    assert out["player_facing_text"] != candidate
+    meta = out["_final_emission_meta"]
+    assert meta["referential_clarity_validation_passed"] is False
+    assert meta["referential_clarity_replacement_applied"] is True
+    assert "ambiguous_entity_reference" in meta["referential_clarity_violation_kinds"]
+
+
+def test_pipeline_referential_clarity_allows_explicit_reanchor():
+    session, world, scene, _sid = _base_visibility_bundle()
+    candidate = "Guard Captain and Tavern Runner trade hard looks. Guard Captain steps forward."
+
+    out = _finalize_via_turn_support(candidate, session=session, world=world, scene=scene)
+
+    assert out["player_facing_text"] == candidate
+    meta = out["_final_emission_meta"]
+    assert meta["referential_clarity_validation_passed"] is True
+    assert meta["referential_clarity_replacement_applied"] is False
+
+
+def test_pipeline_referential_clarity_allows_descriptor_reanchor_when_unique():
+    session, world, scene, _sid = _base_visibility_bundle()
+    candidate = "Guard Captain and Tavern Runner argue near the gate. The captain steps closer."
+
+    out = _finalize_via_turn_support(candidate, session=session, world=world, scene=scene)
+
+    meta = out["_final_emission_meta"]
+    _assert_referential_clarity_default_meta_shape(meta)
+    assert out["player_facing_text"] == candidate
+    assert meta["referential_clarity_validation_passed"] is True
+    assert meta["referential_clarity_replacement_applied"] is False
+    assert meta["referential_clarity_violation_kinds"] == []
+
+
+def test_pipeline_referential_clarity_replaces_ambiguous_descriptor_reanchor():
+    session, world, scene, _sid = _visibility_bundle_with_extra_addressables(
+        {
+            "id": "left_guard",
+            "name": "Left Guard",
+            "scene_id": "frontier_gate",
+            "kind": "scene_actor",
+            "addressable": True,
+            "address_priority": 4,
+            "address_roles": ["guard"],
+            "aliases": ["left guard"],
+        }
+    )
+    candidate = "Two guards block the way. The guard taps the pommel of a sheathed sword."
+
+    out = _finalize_via_turn_support(candidate, session=session, world=world, scene=scene)
+
+    meta = out["_final_emission_meta"]
+    _assert_referential_clarity_default_meta_shape(meta)
+    assert out["player_facing_text"] != candidate
+    assert meta["referential_clarity_validation_passed"] is False
+    assert meta["referential_clarity_replacement_applied"] is True
+    assert "ambiguous_entity_reference" in meta["referential_clarity_violation_kinds"]
+    assert "referential_clarity_enforcement_replaced" in out["tags"]
+
+
+def test_pipeline_referential_clarity_allows_unique_nonperson_pronoun():
+    session, world, scene, _sid = _base_visibility_bundle()
+    candidate = "Guard Captain stands near the gate holding the lantern. Its light catches the rain."
+
+    out = _finalize_via_turn_support(candidate, session=session, world=world, scene=scene)
+
+    meta = out["_final_emission_meta"]
+    _assert_referential_clarity_default_meta_shape(meta)
+    assert out["player_facing_text"] == candidate
+    assert meta["referential_clarity_validation_passed"] is True
+    assert meta["referential_clarity_replacement_applied"] is False
+
+
+def test_pipeline_referential_clarity_replaces_ambiguous_nonperson_pronoun():
+    session, world, scene, _sid = _base_visibility_bundle()
+    candidate = "Guard Captain sets the lantern beside the note. It glints in the dark."
+
+    out = _finalize_via_turn_support(candidate, session=session, world=world, scene=scene)
+
+    meta = out["_final_emission_meta"]
+    _assert_referential_clarity_default_meta_shape(meta)
+    assert out["player_facing_text"] != candidate
+    assert meta["referential_clarity_validation_passed"] is False
+    assert meta["referential_clarity_replacement_applied"] is True
+    assert "ambiguous_entity_reference" in meta["referential_clarity_violation_kinds"]
+    assert "referential_clarity_enforcement_replaced" in out["tags"]
+
+
+def test_pipeline_referential_clarity_replaces_neuter_pronoun_in_person_only_context():
+    session, world, scene, _sid = _base_visibility_bundle()
+    candidate = "The captain stands near the gate with the courier. It sways in the rain."
+
+    out = _finalize_via_turn_support(candidate, session=session, world=world, scene=scene)
+
+    meta = out["_final_emission_meta"]
+    assert out["player_facing_text"] != candidate
+    assert meta["referential_clarity_validation_passed"] is False
+    assert meta["referential_clarity_replacement_applied"] is True
+    assert "ambiguous_entity_reference" in meta["referential_clarity_violation_kinds"]
+
+
+def test_pipeline_referential_clarity_allows_clear_quoted_speaker_tag():
+    session, world, scene, _sid = _base_visibility_bundle()
+    candidate = 'Guard Captain stands near the gate. "Open the gate," he says.'
+
+    out = _finalize_via_turn_support(candidate, session=session, world=world, scene=scene)
+
+    meta = out["_final_emission_meta"]
+    _assert_referential_clarity_default_meta_shape(meta)
+    assert out["player_facing_text"] == candidate
+    assert meta["referential_clarity_validation_passed"] is True
+    assert meta["referential_clarity_replacement_applied"] is False
+
+
+def test_pipeline_referential_clarity_replaces_ambiguous_quoted_speaker_tag():
+    session, world, scene, _sid = _base_visibility_bundle()
+    candidate = 'Guard Captain and Tavern Runner stand near the gate. "Back away," he says.'
+
+    out = _finalize_via_turn_support(candidate, session=session, world=world, scene=scene)
+
+    meta = out["_final_emission_meta"]
+    assert out["player_facing_text"] != candidate
+    assert meta["referential_clarity_validation_passed"] is False
+    assert meta["referential_clarity_replacement_applied"] is True
+    assert "ambiguous_entity_reference" in meta["referential_clarity_violation_kinds"]
+    assert "referential_clarity_enforcement_replaced" in out["tags"]
+
+
+def test_pipeline_referential_clarity_replaces_referent_drift_after_new_competitor():
+    session, world, scene, _sid = _base_visibility_bundle()
+    candidate = "Guard Captain leans closer. Tavern Runner answers from the doorway. He folds his arms."
+
+    out = _finalize_via_turn_support(candidate, session=session, world=world, scene=scene)
+
+    assert out["player_facing_text"] != candidate
+    meta = out["_final_emission_meta"]
+    assert meta["referential_clarity_validation_passed"] is False
+    assert meta["referential_clarity_replacement_applied"] is True
+    assert any(kind in meta["referential_clarity_violation_kinds"] for kind in ("referent_drift", "ambiguous_entity_reference"))
+
+
+def test_pipeline_referential_clarity_replaces_singular_they_with_multiple_active_person_candidates():
+    session, world, scene, _sid = _base_visibility_bundle()
+    candidate = "Guard Captain and Tavern Runner watch you closely. Their voices stay low."
+
+    out = _finalize_via_turn_support(candidate, session=session, world=world, scene=scene)
+
+    meta = out["_final_emission_meta"]
+    _assert_referential_clarity_default_meta_shape(meta)
+    assert out["player_facing_text"] != candidate
+    assert meta["referential_clarity_validation_passed"] is False
+    assert meta["referential_clarity_replacement_applied"] is True
+    assert "ambiguous_entity_reference" in meta["referential_clarity_violation_kinds"]
+    assert "referential_clarity_enforcement_replaced" in out["tags"]
+
+
+def test_pipeline_referential_clarity_metadata_shape_always_present_on_pass():
+    session, world, scene, _sid = _base_visibility_bundle()
+    candidate = "Guard Captain leans closer. He studies your face."
+
+    out = _finalize_via_turn_support(candidate, session=session, world=world, scene=scene)
+
+    meta = out["_final_emission_meta"]
+    _assert_referential_clarity_default_meta_shape(meta)
+    assert isinstance(meta["referential_clarity_checked_entities"], list)
+    assert isinstance(meta["referential_clarity_violation_sample"], list)
+
+
+def test_validate_player_facing_referential_clarity_records_referent_drift():
+    session, world, scene, _sid = _base_visibility_bundle()
+    result = validate_player_facing_referential_clarity(
+        "Guard Captain leans closer. Tavern Runner answers from the doorway. He folds his arms.",
+        session=session,
+        scene=scene,
+        world=world,
+    )
+
+    kinds = [v.get("kind") for v in result["violations"] if isinstance(v, dict)]
+    assert "referent_drift" in kinds
 
 
 def test_validate_player_facing_first_mentions_pronoun_before_explicit_entity():

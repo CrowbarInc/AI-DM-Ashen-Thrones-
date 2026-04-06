@@ -8,6 +8,7 @@ from game.interaction_context import inspect as inspect_interaction_context
 from game.narration_visibility import (
     build_narration_visibility_contract,
     validate_player_facing_first_mentions,
+    validate_player_facing_referential_clarity,
     validate_player_facing_visibility,
 )
 from game.output_sanitizer import sanitize_player_facing_output
@@ -1610,6 +1611,32 @@ def _build_visibility_violation_sample(violations: List[Dict[str, Any]]) -> List
     return sample
 
 
+def _build_referential_clarity_violation_sample(violations: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    sample: List[Dict[str, Any]] = []
+    for violation in violations[:3]:
+        if not isinstance(violation, dict):
+            continue
+        sample.append(
+            {
+                "kind": str(violation.get("kind") or ""),
+                "token": str(violation.get("token") or ""),
+                "candidate_entity_ids": list(violation.get("candidate_entity_ids") or []),
+                "candidate_aliases": list(violation.get("candidate_aliases") or []),
+                "sentence_text": str(violation.get("sentence_text") or ""),
+                "offset": violation.get("offset"),
+            }
+        )
+    return sample
+
+
+def _apply_default_referential_clarity_meta(meta: Dict[str, Any], *, passed: bool | None) -> None:
+    meta["referential_clarity_validation_passed"] = passed
+    meta["referential_clarity_replacement_applied"] = False
+    meta["referential_clarity_violation_kinds"] = []
+    meta["referential_clarity_checked_entities"] = []
+    meta["referential_clarity_violation_sample"] = []
+
+
 def _standard_visibility_safe_fallback(
     *,
     session: Dict[str, Any] | None,
@@ -1621,6 +1648,7 @@ def _standard_visibility_safe_fallback(
     strict_social_active: bool,
     strict_social_suppressed_non_social_turn: bool,
     enforce_first_mentions: bool = False,
+    enforce_referential_clarity: bool = False,
     prefer_grounded_scene_intro: bool = False,
 ) -> tuple[str, str, str, str, str, str, Dict[str, Any]]:
     inspected = inspect_interaction_context(session) if isinstance(session, dict) else {}
@@ -1730,6 +1758,15 @@ def _standard_visibility_safe_fallback(
                 )
                 if first_mention_validation.get("ok") is not True:
                     continue
+            if enforce_referential_clarity:
+                referential_clarity_validation = validate_player_facing_referential_clarity(
+                    fallback_text,
+                    session=session if isinstance(session, dict) else None,
+                    scene=scene if isinstance(scene, dict) else None,
+                    world=world if isinstance(world, dict) else None,
+                )
+                if referential_clarity_validation.get("ok") is not True:
+                    continue
             return (
                 fallback_text,
                 fallback_pool,
@@ -1792,10 +1829,21 @@ def _apply_first_mention_enforcement(
     meta["opening_scene_first_mention_preference_used"] = False
     meta["first_mention_composition_used"] = False
     meta["first_mention_composition_layers"] = _default_first_mention_composition_layers()
+    _apply_default_referential_clarity_meta(meta, passed=None)
     out["_final_emission_meta"] = meta
 
     if validation.get("ok") is True:
-        return out
+        return _apply_referential_clarity_enforcement(
+            out,
+            session=session,
+            scene=scene,
+            world=world,
+            scene_id=scene_id,
+            eff_resolution=eff_resolution,
+            active_interlocutor=active_interlocutor,
+            strict_social_active=strict_social_active,
+            strict_social_suppressed_non_social_turn=strict_social_suppressed_non_social_turn,
+        )
 
     opening_scene_preference_used = _opening_scene_preference_active(session)
     prefer_grounded_scene_intro = True
@@ -1818,6 +1866,7 @@ def _apply_first_mention_enforcement(
         strict_social_active=strict_social_active,
         strict_social_suppressed_non_social_turn=strict_social_suppressed_non_social_turn,
         enforce_first_mentions=True,
+        enforce_referential_clarity=True,
         prefer_grounded_scene_intro=prefer_grounded_scene_intro,
     )
     out["player_facing_text"] = fallback_text
@@ -1863,6 +1912,114 @@ def _apply_first_mention_enforcement(
         }
     )
     log_final_emission_trace({**meta, "stage": "final_emission_gate_first_mention_replace"})
+    return _apply_referential_clarity_enforcement(
+        out,
+        session=session,
+        scene=scene,
+        world=world,
+        scene_id=scene_id,
+        eff_resolution=eff_resolution,
+        active_interlocutor=active_interlocutor,
+        strict_social_active=strict_social_active,
+        strict_social_suppressed_non_social_turn=strict_social_suppressed_non_social_turn,
+    )
+
+
+def _apply_referential_clarity_enforcement(
+    out: Dict[str, Any],
+    *,
+    session: Dict[str, Any] | None,
+    scene: Dict[str, Any] | None,
+    world: Dict[str, Any] | None,
+    scene_id: str,
+    eff_resolution: Dict[str, Any] | None,
+    active_interlocutor: str,
+    strict_social_active: bool,
+    strict_social_suppressed_non_social_turn: bool,
+) -> Dict[str, Any]:
+    candidate_text = _normalize_text(out.get("player_facing_text"))
+    validation = validate_player_facing_referential_clarity(
+        candidate_text,
+        session=session if isinstance(session, dict) else None,
+        scene=scene if isinstance(scene, dict) else None,
+        world=world if isinstance(world, dict) else None,
+    )
+    meta = out.get("_final_emission_meta") if isinstance(out.get("_final_emission_meta"), dict) else {}
+    violations = validation.get("violations") if isinstance(validation.get("violations"), list) else []
+    checked_entities = validation.get("checked_entities") if isinstance(validation.get("checked_entities"), list) else []
+    violation_kinds = _dedupe_preserve_order(
+        [str(v.get("kind") or "") for v in violations if isinstance(v, dict) and str(v.get("kind") or "").strip()]
+    )
+    meta["referential_clarity_validation_passed"] = validation.get("ok") is True
+    meta["referential_clarity_replacement_applied"] = False
+    meta["referential_clarity_violation_kinds"] = violation_kinds
+    meta["referential_clarity_checked_entities"] = checked_entities
+    meta["referential_clarity_violation_sample"] = _build_referential_clarity_violation_sample(violations)
+    out["_final_emission_meta"] = meta
+
+    if validation.get("ok") is True:
+        return out
+
+    (
+        fallback_text,
+        fallback_pool,
+        fallback_kind,
+        final_emitted_source,
+        _fallback_strategy,
+        _fallback_candidate_source,
+        composition_meta,
+    ) = _standard_visibility_safe_fallback(
+        session=session,
+        scene=scene,
+        world=world,
+        scene_id=scene_id,
+        eff_resolution=eff_resolution,
+        active_interlocutor=active_interlocutor,
+        strict_social_active=strict_social_active,
+        strict_social_suppressed_non_social_turn=strict_social_suppressed_non_social_turn,
+        enforce_first_mentions=True,
+        enforce_referential_clarity=True,
+    )
+    out["player_facing_text"] = fallback_text
+    tags = out.get("tags") if isinstance(out.get("tags"), list) else []
+    out["tags"] = _dedupe_preserve_order(
+        [str(t) for t in tags if isinstance(t, str)]
+        + ["final_emission_gate_replaced", "referential_clarity_enforcement_replaced"]
+        + [f"referential_clarity_violation:{kind}" for kind in violation_kinds]
+    )
+    dbg = out.get("debug_notes") if isinstance(out.get("debug_notes"), str) else ""
+    out["debug_notes"] = (
+        (dbg + " | " if dbg else "")
+        + "final_emission_gate:referential_clarity_replaced:"
+        + ",".join(violation_kinds[:8])
+    )
+
+    gate_out_text = _normalize_text(out.get("player_facing_text"))
+    meta["final_route"] = "replaced"
+    meta["final_emitted_source"] = final_emitted_source
+    meta["post_gate_mutation_detected"] = candidate_text != gate_out_text
+    meta["final_text_preview"] = (gate_out_text[:120] + "…") if len(gate_out_text) > 120 else gate_out_text
+    meta["referential_clarity_validation_passed"] = False
+    meta["referential_clarity_replacement_applied"] = True
+    meta["first_mention_composition_used"] = bool(composition_meta.get("first_mention_composition_used"))
+    meta["first_mention_composition_layers"] = composition_meta.get(
+        "first_mention_composition_layers",
+        _default_first_mention_composition_layers(),
+    )
+    out["_final_emission_meta"] = meta
+
+    log_final_emission_decision(
+        {
+            "stage": "final_emission_gate_referential_clarity",
+            "social_route": strict_social_active,
+            "candidate_ok": False,
+            "rejection_reasons": violation_kinds[:12],
+            "fallback_pool": fallback_pool,
+            "fallback_kind": fallback_kind,
+            "active_interlocutor": active_interlocutor or None,
+        }
+    )
+    log_final_emission_trace({**meta, "stage": "final_emission_gate_referential_clarity_replace"})
     return out
 
 
@@ -1912,6 +2069,7 @@ def _apply_visibility_enforcement(
     meta["opening_scene_first_mention_preference_used"] = False
     meta["first_mention_composition_used"] = False
     meta["first_mention_composition_layers"] = _default_first_mention_composition_layers()
+    _apply_default_referential_clarity_meta(meta, passed=None)
     meta["visibility_validation_passed"] = validation.get("ok") is True
     meta["visibility_replacement_applied"] = False
     meta["visibility_violation_kinds"] = violation_kinds
