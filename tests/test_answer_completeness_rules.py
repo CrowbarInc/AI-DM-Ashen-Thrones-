@@ -11,12 +11,15 @@ from game.defaults import default_session, default_world
 from game.final_emission_gate import (
     _apply_answer_completeness_layer,
     apply_final_emission_gate,
+    apply_spoken_state_refinement_cash_out,
     validate_answer_completeness,
 )
 from game.narration_visibility import validate_player_facing_referential_clarity
 from game.prompt_context import (
     ANSWER_COMPLETENESS_PARTIAL_REASONS,
+    _answer_pressure_followup_details,
     build_answer_completeness_contract,
+    build_response_delta_contract,
     question_detected_from_player_text,
 )
 
@@ -88,6 +91,267 @@ def test_build_answer_contract_action_turn_answer_not_required():
     assert c["answer_required"] is False
     assert c["enabled"] is False
     assert c["expected_voice"] == "either"
+
+
+def _recent_log_vague_npc_answer() -> list[dict]:
+    return [
+        {
+            "player_input": "What do you know about the seal?",
+            "gm_snippet": (
+                "The runner shrugs. Hard to say—there are rumors, but nothing you can hang a warrant on."
+            ),
+        }
+    ]
+
+
+def test_strict_social_answer_pressure_sets_answer_contract_and_trace():
+    log = _recent_log_vague_npc_answer()
+    c = build_answer_completeness_contract(
+        player_input="Stop dodging. Be specific about the seal.",
+        narration_obligations=_obligations_social_answer(),
+        resolution=None,
+        session_view={"active_interaction_target_id": "tavern_runner"},
+        uncertainty_hint=None,
+        recent_log_compact=log,
+    )
+    assert c["answer_required"] is True
+    assert c["trace"]["trigger_source"] == "answer_pressure_followup"
+    assert c["trace"]["answer_pressure_followup_detected"] is True
+    assert c["trace"]["strict_social_answer_seek_override"] is True
+
+
+def test_strict_social_response_delta_contract_not_suppressed_when_answer_pressure():
+    log = _recent_log_vague_npc_answer()
+    obligations = _obligations_social_answer()
+    session_view = {"active_interaction_target_id": "tavern_runner"}
+    ac = build_answer_completeness_contract(
+        player_input="Stop dodging. Be specific about the seal.",
+        narration_obligations=obligations,
+        resolution=None,
+        session_view=session_view,
+        uncertainty_hint=None,
+        recent_log_compact=log,
+    )
+    rd = build_response_delta_contract(
+        player_input="Stop dodging. Be specific about the seal.",
+        recent_log_compact=log,
+        narration_obligations=obligations,
+        resolution=None,
+        answer_completeness=ac,
+        session_view=session_view,
+    )
+    assert rd["enabled"] is True
+    assert rd["trace"]["strict_social_answer_seek_override"] is True
+    assert "social_lock" not in rd["trace"]["suppressed_because"]
+
+
+def test_strict_social_non_answer_seeking_turn_still_suppresses_response_delta():
+    log = _recent_log_vague_npc_answer()
+    obligations = _obligations_social_answer()
+    session_view = {"active_interaction_target_id": "tavern_runner"}
+    ac = build_answer_completeness_contract(
+        player_input="I nod and study the gate timbers while the crowd shuffles.",
+        narration_obligations=obligations,
+        resolution=None,
+        session_view=session_view,
+        uncertainty_hint=None,
+        recent_log_compact=log,
+    )
+    rd = build_response_delta_contract(
+        player_input="I nod and study the gate timbers while the crowd shuffles.",
+        recent_log_compact=log,
+        narration_obligations=obligations,
+        resolution=None,
+        answer_completeness=ac,
+        session_view=session_view,
+    )
+    assert rd["enabled"] is False
+    assert "social_lock" in rd["trace"]["suppressed_because"]
+
+
+def test_answer_pressure_contradiction_challenge_why_tensions():
+    """Inability/challenge + embedded why + lexical anchor to prior GM (Block 1 families)."""
+    log = [
+        {
+            "player_input": "What's happening at the gate?",
+            "gm_snippet": (
+                "The guard keeps his tone flat. Tensions are up—more patrols, shorter tempers—but "
+                "he won't spell out causes with this crowd listening."
+            ),
+        }
+    ]
+    obligations = _obligations_social_answer()
+    session_view = {"active_interaction_target_id": "gate_guard"}
+    line = "You can't tell me why tensions are rising?"
+    ac = build_answer_completeness_contract(
+        player_input=line,
+        narration_obligations=obligations,
+        resolution=None,
+        session_view=session_view,
+        uncertainty_hint=None,
+        recent_log_compact=log,
+    )
+    assert ac["answer_required"] is True
+    assert ac["trace"]["answer_pressure_followup_detected"] is True
+    assert ac["trace"]["contradiction_followup_detected"] is True
+    assert ac["trace"]["answer_pressure_family"] == "contradiction_or_refusal_challenge"
+    rd = build_response_delta_contract(
+        player_input=line,
+        recent_log_compact=log,
+        narration_obligations=obligations,
+        resolution=None,
+        answer_completeness=ac,
+        session_view=session_view,
+    )
+    assert rd["enabled"] is True
+    assert rd["trace"]["strict_social_answer_seek_override"] is True
+
+
+def test_answer_pressure_short_why_after_guarded_prior():
+    log = [
+        {
+            "player_input": "Who moved the wagons?",
+            "gm_snippet": (
+                'The clerk murmurs, "I can\'t point to a name—not without starting a fight in the yard."'
+            ),
+        }
+    ]
+    obligations = _obligations_social_answer()
+    session_view = {"active_interaction_target_id": "clerk_npc"}
+    ac = build_answer_completeness_contract(
+        player_input="Why?",
+        narration_obligations=obligations,
+        resolution=None,
+        session_view=session_view,
+        uncertainty_hint=None,
+        recent_log_compact=log,
+    )
+    assert ac["trace"]["short_followup_anchor_detected"] is True
+    assert ac["trace"]["answer_pressure_followup_detected"] is True
+
+
+def test_bare_what_without_continuity_anchor_not_answer_pressure():
+    log = [
+        {
+            "player_input": "Describe the granary layout.",
+            "gm_snippet": (
+                "Stone bins on the east, threshing floor west, hoist chain over the center—"
+                "workers move in two shifts."
+            ),
+        }
+    ]
+    obligations = _obligations_social_answer()
+    session_view = {"active_interaction_target_id": "foreman"}
+    ac = build_answer_completeness_contract(
+        player_input="What?",
+        narration_obligations=obligations,
+        resolution=None,
+        session_view=session_view,
+        uncertainty_hint=None,
+        recent_log_compact=log,
+    )
+    assert ac["trace"]["answer_pressure_followup_detected"] is not True
+
+
+def test_clarification_of_recent_reference_eyes_on_you_whose_eyes():
+    log = [
+        {
+            "player_input": "What should I worry about?",
+            "gm_snippet": (
+                "The runner doesn't smile. Too many eyes are on you in this yard—walk like you belong."
+            ),
+        }
+    ]
+    obligations = _obligations_social_answer()
+    session_view = {"active_interaction_target_id": "yard_runner"}
+    line = "Whose eyes?"
+    ac = build_answer_completeness_contract(
+        player_input=line,
+        narration_obligations=obligations,
+        resolution=None,
+        session_view=session_view,
+        uncertainty_hint=None,
+        recent_log_compact=log,
+    )
+    assert ac["trace"]["recent_reference_clarification_detected"] is True
+    assert ac["trace"]["answer_pressure_family"] == "clarification_of_recent_reference"
+    assert ac["trace"]["clarification_prompt_shape"] == "whose_eyes"
+    assert "path:clarification_of_recent_reference" in ac["trace"]["answer_pressure_reasons"]
+    rd = build_response_delta_contract(
+        player_input=line,
+        recent_log_compact=log,
+        narration_obligations=obligations,
+        resolution=None,
+        answer_completeness=ac,
+        session_view=session_view,
+    )
+    assert rd["enabled"] is True
+    assert rd["trace"]["strict_social_answer_seek_override"] is True
+
+
+def test_clarification_of_recent_reference_they_watching_who_bare():
+    log = [
+        {
+            "player_input": "Are we safe here?",
+            "gm_snippet": 'The clerk murmurs, "Not really—they\'re watching the side door."',
+        }
+    ]
+    obligations = _obligations_social_answer()
+    session_view = {"active_interaction_target_id": "clerk_npc"}
+    line = "Who?"
+    ac = build_answer_completeness_contract(
+        player_input=line,
+        narration_obligations=obligations,
+        resolution=None,
+        session_view=session_view,
+        uncertainty_hint=None,
+        recent_log_compact=log,
+    )
+    assert ac["trace"]["recent_reference_clarification_detected"] is True
+    assert ac["trace"]["answer_pressure_family"] == "clarification_of_recent_reference"
+    assert ac["trace"]["clarification_prompt_shape"] == "who_bare"
+    rd = build_response_delta_contract(
+        player_input=line,
+        recent_log_compact=log,
+        narration_obligations=obligations,
+        resolution=None,
+        answer_completeness=ac,
+        session_view=session_view,
+    )
+    assert rd["enabled"] is True
+
+
+def test_clarification_recent_reference_isolated_who_without_prior_referent():
+    obligations = _obligations_social_answer()
+    session_view = {"active_interaction_target_id": "gate_guard"}
+    ap = _answer_pressure_followup_details(
+        player_input="Who?",
+        recent_log_compact=[],
+        narration_obligations=obligations,
+        session_view=session_view,
+        answer_completeness=None,
+    )
+    assert ap.get("recent_reference_clarification_detected") is not True
+    assert ap.get("answer_pressure_family") != "clarification_of_recent_reference"
+
+
+def test_clarification_recent_reference_generic_roles_insufficient_without_watch_cue():
+    log = [
+        {
+            "player_input": "Who runs this post?",
+            "gm_snippet": "The captain nods once. The guard shifts his weight but says nothing.",
+        }
+    ]
+    obligations = _obligations_social_answer()
+    session_view = {"active_interaction_target_id": "gate_captain"}
+    ap = _answer_pressure_followup_details(
+        player_input="Who?",
+        recent_log_compact=log,
+        narration_obligations=obligations,
+        session_view=session_view,
+        answer_completeness=None,
+    )
+    assert ap.get("recent_reference_clarification_detected") is not True
 
 
 def test_build_answer_allowed_partial_reasons_only_grounded_buckets():
@@ -367,3 +631,139 @@ def test_strict_social_path_preserves_npc_voice_after_answer_completeness_repair
     low = repaired.lower()
     assert low.startswith("tavern runner says") or '"' in repaired
     assert "east" in low
+
+
+def test_spoken_state_refinement_cash_out_appends_refinement_on_answer_pressure(monkeypatch):
+    monkeypatch.setattr(
+        "game.final_emission_gate.strict_social_emission_will_apply",
+        lambda *a, **k: True,
+    )
+    ac = {
+        "enabled": True,
+        "answer_required": True,
+        "trace": {"strict_social_answer_seek_override": True},
+    }
+    session = {
+        "lead_registry": {
+            "lid_milestone": {
+                "id": "lid_milestone",
+                "title": "Investigate the old milestone",
+                "summary": "",
+            }
+        }
+    }
+    resolution = {
+        "kind": "question",
+        "prompt": "Where was the patrol last seen?",
+        "clue_id": "lid_milestone",
+        "metadata": {
+            "minimum_actionable_lead": {
+                "minimum_actionable_lead_enforced": True,
+                "enforced_lead_id": "lid_milestone",
+                "enforced_lead_source": "extracted_social",
+            }
+        },
+    }
+    gm = {
+        "player_facing_text": "I can't name names.",
+        "tags": [],
+        "response_policy": {"answer_completeness": ac},
+    }
+    out = apply_spoken_state_refinement_cash_out(
+        gm,
+        resolution=resolution,
+        session=session,
+        world={},
+        scene_id="frontier_gate",
+    )
+    assert "milestone" in out["player_facing_text"].lower()
+    assert out.get("_spoken_refinement_cash_out", {}).get("applied") is True
+
+
+def test_spoken_state_refinement_cash_out_skips_when_already_spoken(monkeypatch):
+    monkeypatch.setattr(
+        "game.final_emission_gate.strict_social_emission_will_apply",
+        lambda *a, **k: True,
+    )
+    ac = {
+        "enabled": True,
+        "answer_required": True,
+        "trace": {"strict_social_answer_seek_override": True},
+    }
+    session = {
+        "clue_knowledge": {"lid_milestone": {"text": "near the old milestone"}},
+        "lead_registry": {
+            "lid_milestone": {"id": "lid_milestone", "title": "Investigate the old milestone"}
+        },
+    }
+    resolution = {
+        "kind": "question",
+        "prompt": "Where?",
+        "metadata": {
+            "minimum_actionable_lead": {
+                "minimum_actionable_lead_enforced": True,
+                "enforced_lead_id": "lid_milestone",
+                "enforced_lead_source": "extracted_social",
+            }
+        },
+    }
+    text = 'They were last seen near the old milestone; I can say that much.'
+    gm = {"player_facing_text": text, "tags": [], "response_policy": {"answer_completeness": ac}}
+    out = apply_spoken_state_refinement_cash_out(
+        gm,
+        resolution=resolution,
+        session=session,
+        world={},
+        scene_id="frontier_gate",
+    )
+    assert out["player_facing_text"] == text
+    assert "_spoken_refinement_cash_out" not in out
+
+
+def test_spoken_state_refinement_cash_out_default_source_minimum_actionable_lead(monkeypatch):
+    """When ``enforced_lead_source`` is absent, debug uses ``minimum_actionable_lead`` bucket."""
+    monkeypatch.setattr(
+        "game.final_emission_gate.strict_social_emission_will_apply",
+        lambda *a, **k: True,
+    )
+    ac = {
+        "enabled": True,
+        "answer_required": True,
+        "trace": {"strict_social_answer_seek_override": True},
+    }
+    session = {
+        "lead_registry": {
+            "lid_default_src": {
+                "id": "lid_default_src",
+                "title": "Trace the eastern cistern line",
+                "summary": "",
+            }
+        }
+    }
+    resolution = {
+        "kind": "question",
+        "prompt": "Anything on the eastern cistern line?",
+        "clue_id": "lid_default_src",
+        "metadata": {
+            "minimum_actionable_lead": {
+                "minimum_actionable_lead_enforced": True,
+                "enforced_lead_id": "lid_default_src",
+            }
+        },
+    }
+    gm = {
+        "player_facing_text": "Can't say.",
+        "tags": [],
+        "response_policy": {"answer_completeness": ac},
+    }
+    out = apply_spoken_state_refinement_cash_out(
+        gm,
+        resolution=resolution,
+        session=session,
+        world={},
+        scene_id="frontier_gate",
+    )
+    assert "spoken_state_refinement_cash_out:minimum_actionable_lead" in (out.get("debug_notes") or "")
+    cash = out.get("_spoken_refinement_cash_out") or {}
+    assert cash.get("source") == "minimum_actionable_lead"
+    assert "cistern" in str(cash.get("refinement_preview") or "").lower()

@@ -176,6 +176,104 @@ def test_escalation_uses_aggregate_repeat_when_speaker_target_missing():
     assert out["force_actionable_lead"] is True
 
 
+def test_answer_pressure_details_semantic_escalation_reason_at_repeat_one():
+    session = _session_with_pressure("scene_investigate", "crossroads_incident", "runner", 1)
+    ap = {
+        "answer_pressure_followup_detected": True,
+        "same_interlocutor_followup": True,
+        "prior_answer_substantive": True,
+        "short_followup_anchor_detected": True,
+    }
+    out = determine_social_escalation_outcome(
+        session=session,
+        scene_id="scene_investigate",
+        npc_id="runner",
+        topic_key=None,
+        reply_kind="refusal",
+        progress_signals={"npc_knowledge_exhausted": False},
+        player_text="Why?",
+        answer_pressure_details=ap,
+    )
+    assert out["escalation_reason"] == "followup_after_guarded_answer"
+    assert out["valid_followup_detected"] is True
+
+
+def test_short_why_reuses_topic_bucket_and_marks_answer_pressure_followup():
+    """Bare ``Why?`` after a guarded NPC line should stay on the same topic_pressure bucket (Block 1 bridge)."""
+    from game.storage import get_scene_runtime
+
+    scene = {"scene": {"id": "scene_investigate", "location": "Yard", "visible_facts": []}}
+    resolution = {
+        "kind": "question",
+        "social": {
+            "social_intent_class": "social_exchange",
+            "npc_id": "runner",
+            "npc_name": "Runner",
+            "reply_kind": "refusal",
+            "target_resolved": True,
+            "npc_reply_expected": True,
+            "actor_addressable": True,
+        },
+    }
+    world = {
+        "npcs": [
+            {"id": "runner", "name": "Runner", "location": "scene_investigate", "topics": []},
+        ]
+    }
+    session = {
+        "turn_counter": 20,
+        "interaction_context": {"active_interaction_target_id": "runner"},
+    }
+    q1 = "Who is paying for the eastern shipments, exactly?"
+    prior_gm = (
+        "I can't tell you who pays—if I spoke openly, there would be consequences for anyone listening."
+    )
+    recent_log = [
+        {
+            "log_meta": {"player_input": q1},
+            "gm_output": {"player_facing_text": prior_gm},
+        }
+    ]
+    register_topic_probe(
+        session=session,
+        scene_envelope=scene,
+        player_text=q1,
+        resolution=resolution,
+        recent_log=None,
+    )
+    rt = get_scene_runtime(session, "scene_investigate")
+    tk = str(rt.get("topic_pressure_last_topic_key") or "").strip()
+    assert tk
+    rt["topic_pressure"][tk]["last_answer"] = prior_gm
+
+    register_topic_probe(
+        session=session,
+        scene_envelope=scene,
+        player_text="Why?",
+        resolution=resolution,
+        recent_log=recent_log,
+    )
+    assert rt.get("topic_pressure_last_topic_key") == tk
+    entry = rt["topic_pressure"][tk]
+    assert int(entry.get("repeat_count") or 0) == 2
+
+    rt["topic_pressure_current"]["player_text"] = "Why?"
+    apply_social_topic_escalation_to_resolution(
+        world=world,
+        session=session,
+        scene=scene,
+        user_text="Why?",
+        resolution=resolution,
+        recent_log=recent_log,
+    )
+    soc = resolution.get("social") or {}
+    assert soc.get("valid_followup_detected") is True
+    assert soc.get("prior_same_dimension_answer_exists") is True
+    esc = soc.get("social_escalation") or {}
+    assert int(esc.get("escalation_level") or 0) == 2
+    assert esc.get("escalation_reason") == "second_attempt_same_topic"
+
+
 def test_apply_escalation_merges_debug_metadata_after_register():
     scene = {"scene": {"id": "scene_investigate", "location": "Yard"}}
     resolution = {
@@ -424,3 +522,192 @@ def test_repeated_same_dimension_after_answer_can_mark_exhausted():
     )
     assert out["prior_same_dimension_answer_exists"] is True
     assert out["topic_exhausted"] is True
+
+
+def _answer_pressure_details(player: str, recent_compact: list, *, active_id: str = "runner") -> dict:
+    from game.prompt_context import _answer_pressure_followup_details
+
+    return _answer_pressure_followup_details(
+        player_input=player,
+        recent_log_compact=recent_compact,
+        narration_obligations={},
+        session_view={"active_interaction_target_id": active_id},
+    )
+
+
+def test_anchor_followup_detects_milestone_explanation_question():
+    prev_gm = (
+        "The watch captain jerks his chin toward the treeline. Most folk hurry past the old milestone; "
+        "few linger after dark."
+    )
+    compact = [{"player_input": "What marks the patrol route?", "gm_snippet": prev_gm}]
+    ap = _answer_pressure_details("What's so special about the old milestone?", compact)
+    assert ap["explanation_of_recent_anchor_followup"] is True
+    assert ap["anchor_followup_detected"] is True
+    assert ap["answer_pressure_followup_detected"] is True
+    assert "milestone" in ap["anchor_tokens_extracted"] or "old milestone" in ap["anchor_tokens_extracted"]
+    assert ap["anchor_token_matched"] == "milestone"
+    assert ap["answer_pressure_family"] == "explanation_of_recent_anchor_followup"
+
+
+def test_anchor_followup_why_the_milestone_and_ghost_stories():
+    g1 = _answer_pressure_details(
+        "Why the milestone?",
+        [{"player_input": "x", "gm_snippet": "Keep clear of the old milestone after dusk; caravans don't stop there."}],
+    )
+    assert g1["anchor_followup_detected"] is True
+    assert g1["anchor_token_matched"] == "milestone"
+
+    g2 = _answer_pressure_details(
+        "Ghost stories?",
+        [{"player_input": "x", "gm_snippet": "Sailors swap ghost stories about the alley behind the seal-house."}],
+    )
+    assert g2["anchor_followup_detected"] is True
+    assert g2["anchor_token_matched"] == "ghost"
+
+
+def test_anchor_followup_deictic_what_happened_there():
+    prev_gm = "Everyone knows the checkpoint by the east pier; guards gossip about what happened there last week."
+    ap = _answer_pressure_details(
+        "What happened there?",
+        [{"player_input": "Tell me about the pier.", "gm_snippet": prev_gm}],
+    )
+    assert ap["anchor_followup_detected"] is True
+    assert "checkpoint" in ap["anchor_tokens_extracted"]
+
+
+def test_anchor_followup_not_triggered_without_anchor_overlap():
+    prev_gm = "The road is muddy and the wind is cold tonight."
+    ap = _answer_pressure_details(
+        "What's the tax rate in the capital?",
+        [{"player_input": "How is business?", "gm_snippet": prev_gm}],
+    )
+    assert ap["anchor_followup_detected"] is False
+    assert ap["explanation_of_recent_anchor_followup"] is False
+    assert ap["anchor_tokens_extracted"] == []
+
+
+def test_anchor_followup_not_triggered_for_non_question_with_anchor_word():
+    ap = _answer_pressure_details(
+        "The old milestone is just a rock.",
+        [{"player_input": "x", "gm_snippet": "Folk call it the old milestone near the north bend."}],
+    )
+    assert ap["anchor_followup_detected"] is False
+
+
+def test_anchor_followup_not_on_first_question_when_only_generic_roles_in_npc_line():
+    """Opening-style NPC line with captain/tavern/runner must not yield anchor follow-up pressure."""
+    prev_gm = (
+        "The Tavern Runner squints at you. The watch captain said little—travelers hurry past "
+        "the tavern sign and the road stays quiet."
+    )
+    compact = [{"player_input": "Anything unusual on the north road tonight?", "gm_snippet": prev_gm}]
+    ap = _answer_pressure_details("What did the captain say exactly?", compact)
+    assert ap["explanation_of_recent_anchor_followup"] is False
+    assert ap["anchor_followup_detected"] is False
+    assert "captain" not in ap["anchor_tokens_extracted"]
+    assert "tavern" not in ap["anchor_tokens_extracted"]
+    assert "runner" not in ap["anchor_tokens_extracted"]
+
+
+def test_anchor_tokens_exclude_generic_roles_from_extraction():
+    from game.prompt_context import _extract_npc_introduced_anchor_tokens
+
+    s = "The watch captain jerks his chin; the Tavern Runner listens by the tavern door."
+    toks = _extract_npc_introduced_anchor_tokens(s)
+    assert "captain" not in toks
+    assert "runner" not in toks
+    assert "tavern" not in toks
+
+
+def test_anchor_followup_not_triggered_by_role_words_when_clue_present_but_unmatched():
+    """Player asks about runner/captain/guard alone; prior line's clue must not spuriously pair."""
+    prev_gm = "The guard at the checkpoint shrugs; runners come and go."
+    compact = [{"player_input": "Tell me about the pier.", "gm_snippet": prev_gm}]
+    for q in ("Why the runner?", "What about the captain?", "And the guard?"):
+        ap = _answer_pressure_details(q, compact)
+        assert ap["explanation_of_recent_anchor_followup"] is False, q
+        assert ap["anchor_followup_detected"] is False, q
+
+
+def test_answer_pressure_anchor_escalation_reason_at_repeat_one():
+    session = _session_with_pressure("scene_investigate", "crossroads_incident", "runner", 1)
+    ap = {
+        "answer_pressure_followup_detected": True,
+        "same_interlocutor_followup": True,
+        "prior_answer_substantive": True,
+        "anchor_followup_detected": True,
+        "explanation_of_recent_anchor_followup": True,
+    }
+    out = determine_social_escalation_outcome(
+        session=session,
+        scene_id="scene_investigate",
+        npc_id="runner",
+        topic_key=None,
+        reply_kind="refusal",
+        progress_signals={"npc_knowledge_exhausted": False},
+        player_text="What's special about the milestone?",
+        answer_pressure_details=ap,
+    )
+    assert out["escalation_reason"] == "explanation_anchor_followup"
+    assert out["valid_followup_detected"] is True
+
+
+def test_milestone_explanation_followup_reuses_topic_bucket():
+    """NPC-introduced anchor (milestone) keeps topic_pressure on the same bucket as the opening question."""
+    from game.storage import get_scene_runtime
+
+    scene = {"scene": {"id": "scene_investigate", "location": "Road", "visible_facts": []}}
+    resolution = {
+        "kind": "question",
+        "social": {
+            "social_intent_class": "social_exchange",
+            "npc_id": "runner",
+            "npc_name": "Runner",
+            "reply_kind": "answer",
+            "target_resolved": True,
+            "npc_reply_expected": True,
+            "actor_addressable": True,
+        },
+    }
+    world = {
+        "npcs": [
+            {"id": "runner", "name": "Runner", "location": "scene_investigate", "topics": []},
+        ]
+    }
+    session = {
+        "turn_counter": 21,
+        "interaction_context": {"active_interaction_target_id": "runner"},
+    }
+    q1 = "Anything unusual on the north road tonight?"
+    prior_gm = (
+        "The corporal shrugs. Travelers hurry past the old milestone by the fork; "
+        "honest folk don't loiter there after dark."
+    )
+    recent_log = [
+        {
+            "log_meta": {"player_input": q1},
+            "gm_output": {"player_facing_text": prior_gm},
+        }
+    ]
+    register_topic_probe(
+        session=session,
+        scene_envelope=scene,
+        player_text=q1,
+        resolution=resolution,
+        recent_log=None,
+    )
+    rt = get_scene_runtime(session, "scene_investigate")
+    tk = str(rt.get("topic_pressure_last_topic_key") or "").strip()
+    assert tk
+    rt["topic_pressure"][tk]["last_answer"] = prior_gm
+
+    register_topic_probe(
+        session=session,
+        scene_envelope=scene,
+        player_text="What's so special about the old milestone?",
+        resolution=resolution,
+        recent_log=recent_log,
+    )
+    assert rt.get("topic_pressure_last_topic_key") == tk
+    assert int(rt["topic_pressure"][tk].get("repeat_count") or 0) == 2

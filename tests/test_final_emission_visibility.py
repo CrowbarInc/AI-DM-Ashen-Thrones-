@@ -107,6 +107,12 @@ def _assert_referential_clarity_default_meta_shape(meta: dict) -> None:
     assert "referential_clarity_violation_kinds" in meta
     assert "referential_clarity_checked_entities" in meta
     assert "referential_clarity_violation_sample" in meta
+    assert "referential_clarity_local_substitution_attempted" in meta
+    assert "referential_clarity_local_substitution_applied" in meta
+    assert "referential_clarity_local_substitution_token" in meta
+    assert "referential_clarity_local_substitution_replacement" in meta
+    assert "referential_clarity_fallback_avoided" in meta
+    assert "referential_clarity_fallback_after_failed_local_repair" in meta
 
 
 def test_pipeline_replaces_offscene_known_npc_reference():

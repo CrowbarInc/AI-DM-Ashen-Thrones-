@@ -1392,6 +1392,44 @@ def _neutral_social_escalation_outcome() -> Dict[str, Any]:
     }
 
 
+def _answer_pressure_thread_followup(ap: Dict[str, Any] | None) -> bool:
+    """Block 1-style answer-pressure continuity for social escalation (no extra phrase matching)."""
+    if not isinstance(ap, dict) or not ap:
+        return False
+    if not ap.get("same_interlocutor_followup") or not ap.get("prior_answer_substantive"):
+        return False
+    return bool(
+        ap.get("answer_pressure_followup_detected")
+        or ap.get("short_followup_anchor_detected")
+        or ap.get("contradiction_followup_detected")
+        or ap.get("explanation_followup_detected")
+        or ap.get("insufficiency_followup_detected")
+        or ap.get("anchor_followup_detected")
+        or ap.get("explanation_of_recent_anchor_followup")
+        or ap.get("recent_reference_clarification_detected")
+    )
+
+
+def _escalation_reason_for_answer_pressure(ap: Dict[str, Any]) -> str | None:
+    if not isinstance(ap, dict) or not ap:
+        return None
+    if ap.get("anchor_followup_detected") or ap.get("explanation_of_recent_anchor_followup"):
+        return "explanation_anchor_followup"
+    if ap.get("recent_reference_clarification_detected") or ap.get("answer_pressure_family") == "clarification_of_recent_reference":
+        return "recent_reference_clarification_followup"
+    if ap.get("short_followup_anchor_detected"):
+        return "followup_after_guarded_answer"
+    if ap.get("contradiction_followup_detected") or ap.get("answer_pressure_family") == "contradiction_or_refusal_challenge":
+        return "contradiction_refusal_followup"
+    if ap.get("explanation_followup_detected") or ap.get("answer_pressure_family") == "explanation_demand":
+        return "explanation_pressure_followup"
+    if ap.get("insufficiency_followup_detected") or ap.get("answer_pressure_family") == "insufficiency_pressure":
+        return "insufficiency_pressure_followup"
+    if ap.get("answer_pressure_followup_detected"):
+        return "answer_pressure_thread_followup"
+    return None
+
+
 def determine_social_escalation_outcome(
     *,
     session: dict,
@@ -1401,11 +1439,15 @@ def determine_social_escalation_outcome(
     reply_kind: str | None,
     progress_signals: dict | None,
     player_text: str | None = None,
+    answer_pressure_details: Dict[str, Any] | None = None,
 ) -> Dict[str, Any]:
     """Deterministic ladder for repeated social probing on the same tracked topic.
 
     Uses per-scene ``topic_pressure`` / ``topic_pressure_current`` (see :func:`game.gm.register_topic_probe`).
     When the NPC has no engine topics left, escalation demands redirects (ask X / go to Y), not invented facts.
+
+    ``answer_pressure_details`` should be the dict from :func:`game.prompt_context._answer_pressure_followup_details`
+    (passed through from narration / API); when absent, behavior matches the pre–Block-2 ladder.
 
     Returns flags for the narration contract, plus ``effective_reply_kind`` when ``reply_kind`` should advance
     (e.g. refusal -> answer). ``effective_reply_kind`` is for callers to merge into resolution.social.
@@ -1438,14 +1480,22 @@ def determine_social_escalation_outcome(
     rk = str(reply_kind or "").strip().lower() or None
     pt = str(player_text or current.get("player_text") or "").strip()
     current_dim = classify_social_followup_dimension(pt)
-    valid_fu = is_valid_followup_question(pt)
+    ap = answer_pressure_details if isinstance(answer_pressure_details, dict) else {}
+    pressure_followup = _answer_pressure_thread_followup(ap)
+    valid_fu = is_valid_followup_question(pt) or pressure_followup
     last_ans = str(entry.get("last_answer") or "").strip()
     prev_probe_dim = str(entry.get("previous_probe_dimension") or "").strip()
+    thread_covers = _player_question_covers_stored_thread(pt, last_ans)
     prior_same = bool(
         last_ans
         and _stored_text_supports_dimension(last_ans, current_dim)
-        and _player_question_covers_stored_thread(pt, last_ans)
+        and thread_covers
     )
+    if not prior_same and pressure_followup and last_ans.strip():
+        dim_ok = _stored_text_supports_dimension(last_ans, current_dim)
+        if not dim_ok and current_dim in ("general", "clarification", "danger", "avoidance", "next_step"):
+            dim_ok = len(last_ans.strip()) >= 8
+        prior_same = bool(dim_ok)
     dim_changed = bool(prev_probe_dim and current_dim != prev_probe_dim)
     topic_exhausted_for_dimension = bool(knowledge_exhausted and prior_same)
 
@@ -1471,7 +1521,10 @@ def determine_social_escalation_outcome(
     out["escalation_effect"] = "allow_guarded_or_vague"
 
     if rc == 1:
-        out["escalation_reason"] = "first_attempt_same_topic"
+        out["escalation_reason"] = (
+            (_escalation_reason_for_answer_pressure(ap) if pressure_followup else None)
+            or "first_attempt_same_topic"
+        )
         out["escalation_effect"] = "vague_or_guarded_answer_allowed"
         if rk == "refusal" and valid_fu:
             out["effective_reply_kind"] = "explanation" if current_dim == "clarification" else "answer"
@@ -1848,6 +1901,7 @@ def apply_social_topic_escalation_to_resolution(
     scene: Dict[str, Any],
     user_text: str,
     resolution: Dict[str, Any],
+    recent_log: List[Dict[str, Any]] | None = None,
 ) -> None:
     """After :func:`game.gm.register_topic_probe`, attach escalation metadata and narration contract flags.
 
@@ -1873,6 +1927,29 @@ def apply_social_topic_escalation_to_resolution(
         return
     rk = str(soc.get("reply_kind") or "").strip() or None
     exhausted = npc_social_knowledge_exhausted(world, session, nid)
+    ap_details: Dict[str, Any] = {}
+    if recent_log is not None:
+        from game.prompt_context import _answer_pressure_followup_details, _compress_recent_log
+
+        icx = session.get("interaction_context") if isinstance(session.get("interaction_context"), dict) else {}
+        ap_details = _answer_pressure_followup_details(
+            player_input=str(user_text or ""),
+            recent_log_compact=_compress_recent_log(recent_log),
+            narration_obligations={},
+            session_view={"active_interaction_target_id": str(icx.get("active_interaction_target_id") or "").strip()},
+        )
+        for _trace_k in (
+            "anchor_tokens_extracted",
+            "anchor_token_matched",
+            "anchor_followup_detected",
+            "explanation_of_recent_anchor_followup",
+            "recent_reference_clarification_detected",
+            "recent_reference_kind",
+            "recent_reference_phrase_matched",
+            "clarification_prompt_shape",
+        ):
+            if _trace_k in ap_details:
+                soc[_trace_k] = ap_details[_trace_k]
     esc = determine_social_escalation_outcome(
         session=session,
         scene_id=sid,
@@ -1881,6 +1958,7 @@ def apply_social_topic_escalation_to_resolution(
         reply_kind=rk,
         progress_signals={"npc_knowledge_exhausted": exhausted},
         player_text=str(user_text or ""),
+        answer_pressure_details=ap_details,
     )
     if int(esc.get("escalation_level") or 0) <= 0:
         return

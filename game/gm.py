@@ -15,6 +15,8 @@ from game.prompt_context import (
     NO_VALIDATOR_VOICE_RULE,
     RESPONSE_RULE_PRIORITY,
     RULE_PRIORITY_COMPACT_INSTRUCTION,
+    _answer_pressure_followup_details,
+    _compress_recent_log,
     build_narration_context,
     canonical_interaction_target_npc_id,
 )
@@ -784,12 +786,35 @@ def _topic_speaker_key(session: Dict[str, Any], resolution: Dict[str, Any] | Non
     return active_target or "__scene__"
 
 
+def _answer_pressure_topic_bridge(ap: Dict[str, Any] | None) -> bool:
+    """True when Block 1 answer-pressure signals say this turn continues the prior answer thread.
+
+    Used to keep ``topic_pressure`` on the same bucket when normalize_topic would fragment
+    (e.g. bare ``Why?``) without running a second weak phrase detector.
+    """
+    if not isinstance(ap, dict) or not ap:
+        return False
+    if not ap.get("same_interlocutor_followup") or not ap.get("prior_answer_substantive"):
+        return False
+    return bool(
+        ap.get("answer_pressure_followup_detected")
+        or ap.get("short_followup_anchor_detected")
+        or ap.get("contradiction_followup_detected")
+        or ap.get("explanation_followup_detected")
+        or ap.get("insufficiency_followup_detected")
+        or ap.get("anchor_followup_detected")
+        or ap.get("explanation_of_recent_anchor_followup")
+        or ap.get("recent_reference_clarification_detected")
+    )
+
+
 def register_topic_probe(
     *,
     session: Dict[str, Any],
     scene_envelope: Dict[str, Any],
     player_text: str,
     resolution: Dict[str, Any] | None = None,
+    recent_log: List[Dict[str, Any]] | None = None,
 ) -> Dict[str, Any]:
     """Register one player investigative probe for per-topic pressure tracking."""
     player = str(player_text or "").strip()
@@ -807,6 +832,18 @@ def register_topic_probe(
         anaphora_followup = False
     if previous_topic and topic_key != previous_topic and anaphora_followup:
         topic_key = previous_topic
+    if recent_log is not None and previous_topic and topic_key != previous_topic:
+        icx = session.get("interaction_context") if isinstance(session.get("interaction_context"), dict) else {}
+        ap_bridge = _answer_pressure_followup_details(
+            player_input=player,
+            recent_log_compact=_compress_recent_log(recent_log),
+            narration_obligations={},
+            session_view={"active_interaction_target_id": str(icx.get("active_interaction_target_id") or "").strip()},
+        )
+        if _answer_pressure_topic_bridge(ap_bridge) and not bool(
+            explicit_player_topic_anchor_state(player).get("active")
+        ):
+            topic_key = previous_topic
     speaker_key = _topic_speaker_key(session, resolution)
     pressure = runtime.get("topic_pressure")
     if not isinstance(pressure, dict):

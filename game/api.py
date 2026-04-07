@@ -151,6 +151,7 @@ from game.clues import (
     get_all_known_clue_texts,
     get_known_clues_with_presentation,
 )
+from game.final_emission_gate import apply_spoken_state_refinement_cash_out
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -474,6 +475,14 @@ def _apply_post_gm_updates(
             gm_output=gm if isinstance(gm, dict) else None,
             world=world,
         )
+        if isinstance(gm, dict):
+            gm = apply_spoken_state_refinement_cash_out(
+                gm,
+                resolution=resolution,
+                session=session,
+                world=world,
+                scene_id=str(scene["scene"]["id"] or "").strip(),
+            )
 
     emergent_debug = {
         "emergent_actor_enrolled": False,
@@ -662,6 +671,7 @@ def _build_gpt_narration_from_authoritative_state(
         scene_envelope=scene,
         player_text=user_text,
         resolution=resolution if isinstance(resolution, dict) else None,
+        recent_log=recent_log,
     )
     if isinstance(resolution, dict):
         apply_social_topic_escalation_to_resolution(
@@ -670,6 +680,7 @@ def _build_gpt_narration_from_authoritative_state(
             scene=scene,
             user_text=user_text,
             resolution=resolution,
+            recent_log=recent_log,
         )
     messages = build_messages(
         campaign,
@@ -952,6 +963,8 @@ def _build_gpt_narration_from_authoritative_state(
     gm = _repair_terminal_player_facing_if_needed(
         gm, reason="api_post_response_policy_enforcement"
     )
+    if isinstance(session, dict) and isinstance(response_policy, dict):
+        session["last_turn_response_policy"] = dict(response_policy)
     return gm
 
 

@@ -703,10 +703,14 @@ def test_prompt_context_exposes_rule_priority_hierarchy():
         "DO NOT CONTRADICT AUTHORITATIVE STATE",
         "DO NOT LEAK HIDDEN FACTS / SECRETS",
         "IF FULL CERTAINTY IS UNAVAILABLE, GIVE A BOUNDED PARTIAL ANSWER",
+        "WHEN THE PLAYER PRESSES THE SAME TOPIC AGAIN, ADD NET-NEW VALUE RATHER THAN RESTATING",
         "MAINTAIN DIEGETIC VOICE (no validator/system voice)",
         "PRESERVE SCENE MOMENTUM",
         "ADD SPECIFICITY / FLAVOR / POLISH",
     ]
+    rd = policy.get("response_delta") or {}
+    assert rd.get("enabled") is False
+    assert rd.get("trigger_source") == "none"
     assert RULE_PRIORITY_COMPACT_INSTRUCTION in instructions
     assert "response_policy.rule_priority_order" in instructions
     assert NO_VALIDATOR_VOICE_RULE in instructions
@@ -714,6 +718,60 @@ def test_prompt_context_exposes_rule_priority_hierarchy():
     assert policy["no_validator_voice"]["applies_to"] == "standard_narration"
     assert policy["no_validator_voice"]["rules_explanation_only_in"] == ["oc", "adjudication"]
     assert "rules_explanation_outside_oc_or_adjudication" in policy["no_validator_voice"]["prohibited_perspectives"]
+
+
+def test_response_delta_contract_enables_on_same_topic_follow_up_question():
+    prior_chat = (
+        "What did the guards report about the north gate before the gates were barred?"
+    )
+    prior_gm = (
+        "The night sergeant filed a short report noting extra cart traffic and one sealed "
+        "warrant shown at the north gate before compline bells."
+    )
+    recent_log_for_prompt = [
+        {
+            "log_meta": {"player_input": prior_chat},
+            "gm_output": {"player_facing_text": prior_gm},
+        }
+    ]
+    ctx = build_narration_context(
+        _dummy_campaign(),
+        _dummy_world(),
+        _dummy_session(),
+        _dummy_character(),
+        _dummy_scene(),
+        {"in_combat": False},
+        [],
+        "Okay but what happened at the north gate after that?",
+        None,
+        {},
+        public_scene=_dummy_public_scene(),
+        discoverable_clues=[],
+        gm_only_hidden_facts=[],
+        gm_only_discoverable_locked=[],
+        discovered_clue_records=[],
+        undiscovered_clue_records=[],
+        pending_leads=[],
+        intent={"labels": ["social_probe"]},
+        world_state_view={"flags": {}, "counters": {}, "clocks_summary": []},
+        mode_instruction="Standard.",
+        recent_log_for_prompt=recent_log_for_prompt,
+    )
+    rd = ctx["response_policy"].get("response_delta") or {}
+    assert rd.get("enabled") is True
+    assert rd.get("delta_required") is True
+    assert rd.get("trigger_source") == "same_topic_direct_question"
+    assert rd.get("forbid_semantic_restatement") is True
+    assert set(rd.get("allowed_delta_kinds") or []) == {
+        "new_information",
+        "refinement",
+        "consequence",
+        "clarified_uncertainty",
+    }
+    tr = rd.get("trace") or {}
+    assert tr.get("follow_up_pressure_detected") is True
+    assert tr.get("prior_answer_available") is True
+    assert "response_policy.response_delta.enabled" in " ".join(ctx.get("instructions", [])).lower()
 
 
 def test_prompt_context_exposes_typed_uncertainty_policy_and_hint():

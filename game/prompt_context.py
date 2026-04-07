@@ -27,6 +27,10 @@ from game.social import (
 from game.storage import get_scene_state
 from game.world import get_world_npc_by_id
 from game.narration_visibility import build_narration_visibility_contract
+from game.opening_visible_fact_selection import (
+    OPENING_NARRATION_VISIBLE_FACT_MAX,
+    select_opening_narration_visible_facts,
+)
 
 # Configurable limits for deterministic, inspectable compression
 MAX_RECENT_LOG = 5
@@ -55,6 +59,10 @@ RESPONSE_RULE_PRIORITY: tuple[tuple[str, str], ...] = (
     ("forbid_state_invention", "DO NOT CONTRADICT AUTHORITATIVE STATE"),
     ("forbid_secret_leak", "DO NOT LEAK HIDDEN FACTS / SECRETS"),
     ("allow_partial_answer", "IF FULL CERTAINTY IS UNAVAILABLE, GIVE A BOUNDED PARTIAL ANSWER"),
+    (
+        "response_delta",
+        "WHEN THE PLAYER PRESSES THE SAME TOPIC AGAIN, ADD NET-NEW VALUE RATHER THAN RESTATING",
+    ),
     ("diegetic_only", "MAINTAIN DIEGETIC VOICE (no validator/system voice)"),
     ("prefer_scene_momentum", "PRESERVE SCENE MOMENTUM"),
     ("prefer_specificity", "ADD SPECIFICITY / FLAVOR / POLISH"),
@@ -63,7 +71,28 @@ RESPONSE_RULE_PRIORITY: tuple[tuple[str, str], ...] = (
 RULE_PRIORITY_COMPACT_INSTRUCTION = (
     "When rules conflict, resolve them in this order: answer the player; preserve authoritative "
     "state; avoid leaking hidden facts; if certainty is incomplete, give a bounded partial answer; "
-    "remain diegetic; maintain scene momentum; then add specificity."
+    "when the player presses the same topic, add net-new value rather than restating; remain diegetic; "
+    "maintain scene momentum; then add specificity."
+)
+
+# Resolution kinds where follow-up “delta vs repetition” is not meaningful (mechanical / transition turns).
+_RESPONSE_DELTA_SUPPRESS_RESOLUTION_KINDS: frozenset[str] = frozenset(
+    {
+        "attack",
+        "combat",
+        "cast_spell",
+        "roll_initiative",
+        "end_turn",
+        "scene_transition",
+        "travel",
+    }
+)
+
+_RESPONSE_DELTA_ALLOWED_KINDS: tuple[str, ...] = (
+    "new_information",
+    "refinement",
+    "consequence",
+    "clarified_uncertainty",
 )
 
 # Bounded-partial justification buckets for machine-readable enforcement (turn-local).
@@ -166,6 +195,476 @@ _FOLLOW_UP_PRESS_TOKENS: tuple[str, ...] = (
     "who exactly",
 )
 
+# Family-level deterministic detectors (strict-social answer-pressure). Prefer patterns over long phrase lists.
+_DIRECT_ANSWER_DEMAND_RE = re.compile(
+    r"\b("
+    r"answer\s+(directly|the\s+question|me)|please\s+answer|just\s+answer|"
+    r"give\s+(me\s+)?(a\s+)?straight|tell\s+me\s+straight|"
+    r"stop\s+(dodging|deflecting|evading)|quit\s+(dodging|deflecting)|"
+    r"enough\s+riddles|cut\s+the\s+crap|the\s+truth\s+now|"
+    r"not\s+a\s+hedge|don'?t\s+hedge"
+    r")\b",
+    re.IGNORECASE,
+)
+_SPECIFICITY_DEMAND_RE = re.compile(
+    r"\b("
+    r"be\s+specific|be\s+precise|"
+    r"exactly\s+(where|who|what|which|when|how)|"
+    r"no,?\s+exactly\s+where|"
+    r"which\s+one|what\s+exactly|where\s+exactly|who\s+exactly"
+    r")\b",
+    re.IGNORECASE,
+)
+_EXPLANATION_DEMAND_RE = re.compile(
+    r"\b("
+    r"why\s+not|why\b|how\s+so|"
+    r"what\s+do\s+you\s+mean(\s+by\s+that)?|"
+    r"(could|can|will)\s+you\s+explain|"
+    r"explain\s+(that|this|yourself)\b"
+    r")\b",
+    re.IGNORECASE,
+)
+_CONTRADICTION_OR_REFUSAL_CHALLENGE_RE = re.compile(
+    r"("
+    r"\b(you\s+)?(can'?t|cannot)\s+(tell|say|answer|explain)\b|"
+    r"\b(won'?t|will\s+not)\s+(say|tell|explain)\b|"
+    r"\b(you\s+)?(don'?t|do\s+not)\s+know\b|"
+    r"\bso\s+you\s+(don'?t|do\s+not)\s+know\b|"
+    r"\bare(n'?t|\s+not)\s+you\s+going\s+to\s+tell\b|"
+    r"\byou(\'re|\s+are)\s+saying\s+you\s+(can'?t|cannot)\b|"
+    r"\brefus(e|ing)\s+to\s+(say|tell|explain)\b|"
+    r"\bwon'?t\s+explain\b"
+    r")",
+    re.IGNORECASE,
+)
+_INSUFFICIENCY_PRESSURE_RE = re.compile(
+    r"\b("
+    r"that'?s\s+all\??|is\s+that\s+all\??|"
+    r"anything\s+more(\s+than\s+that)?|"
+    r"what\s+can\s+you\s+actually(\s+confirm|\s+know)?|"
+    r"what\s+do\s+you\s+actually\s+know|what\s+do\s+you\s+really\s+know|"
+    r"then\s+what\s+can\s+you\s+confirm|what\s+can\s+you\s+confirm"
+    r")\b",
+    re.IGNORECASE,
+)
+_CONSEQUENCE_PROBE_RE = re.compile(
+    r"\b("
+    r"safe\s+how|how\s+is\s+it\s+safe|"
+    r"what\s+happens\s+if\s+i\b|what\s+happens\s+if\s+we\b"
+    r")\b",
+    re.IGNORECASE,
+)
+_SHORT_INTERROGATIVE_FOLLOWUP_RE = re.compile(
+    r"^\s*(why|how|why\s+not|how\s+so)\s*\?\s*$",
+    re.IGNORECASE,
+)
+_BARE_WHAT_INTERROGATIVE_RE = re.compile(
+    r"^\s*what\s*\?\s*$",
+    re.IGNORECASE,
+)
+
+# Prior GM text suggests guarded / refusal / partial / hedge (follow-up "why?" is meaningful).
+_GM_GUARDED_OR_REFUSAL_MARKERS: tuple[str, ...] = (
+    "can't",
+    "cannot",
+    "cant ",
+    "won't",
+    "wont ",
+    "will not",
+    "don't know",
+    "dont know",
+    "dunno",
+    "not sure",
+    "hard to say",
+    "rather not",
+    "won't say",
+    "can't say",
+    "cannot say",
+    "no names",
+    "too many ears",
+    "nothing you can",
+    "can't give",
+    "won't give",
+    "if i tell",
+    "not at liberty",
+    "classified",
+    "rumors",
+    "rumour",
+    "word is thin",
+    "hedge",
+    "vague",
+    "rather vague",
+    "all i can say",
+    "as far as i",
+    "not much",
+    "only know",
+    "little i know",
+)
+
+# Broader anchors in prior NPC line: refusal, warning, condition, causal framing (short follow-up hook).
+_GM_FOLLOWUP_ANCHOR_MARKERS: tuple[str, ...] = _GM_GUARDED_OR_REFUSAL_MARKERS + (
+    "because",
+    "if you",
+    "warning",
+    "careful",
+    "listen",
+    "sealed",
+    "after dark",
+    "keep your voice",
+    "lower your",
+    "watch yourself",
+    "condition",
+    "unless",
+    "however",
+    "claim",
+    "truth is",
+)
+
+_GREETING_ONLY_LINE = re.compile(
+    r"^\s*(?:hi|hello|hey|good\s+(?:morning|afternoon|evening|day)|greetings)\b[^.!?]{0,40}\.?\s*$",
+    re.IGNORECASE,
+)
+_THANKS_ONLY_LINE = re.compile(
+    r"^\s*(?:thanks?|thank you|cheers|much obliged)\b[^.!?]{0,24}\.?\s*$",
+    re.IGNORECASE,
+)
+
+# Block 2: deterministic anchors from the immediately prior NPC line (no NLP).
+_ANCHOR_WORD_STOPWORDS: frozenset[str] = frozenset(
+    {
+        "the",
+        "a",
+        "an",
+        "and",
+        "but",
+        "for",
+        "with",
+        "from",
+        "into",
+        "onto",
+        "over",
+        "under",
+        "his",
+        "her",
+        "its",
+        "our",
+        "your",
+        "their",
+        "this",
+        "that",
+        "these",
+        "those",
+        "some",
+        "any",
+        "all",
+        "very",
+        "just",
+        "only",
+        "too",
+        "also",
+        "not",
+        "yes",
+        "no",
+        "old",
+        "new",
+        "few",
+        "own",
+        "same",
+        "other",
+        "such",
+    }
+)
+_ANCHOR_TITLE_CASE_SKIP: frozenset[str] = frozenset(
+    {
+        "the",
+        "a",
+        "an",
+        "i",
+        "we",
+        "you",
+        "they",
+        "he",
+        "she",
+        "it",
+        "if",
+        "when",
+        "as",
+        "but",
+        "and",
+        "or",
+        "so",
+        "there",
+        "here",
+    }
+)
+# Clue / location / concrete-object heads — not generic venue labels or role nouns (see blocklist below).
+_ANCHOR_LEAD_LEXEMES: tuple[str, ...] = (
+    "crossroads",
+    "graveyard",
+    "cemetery",
+    "checkpoint",
+    "milestone",
+    "warehouse",
+    "caravan",
+    "bastion",
+    "drawbridge",
+    "gatehouse",
+    "shrine",
+    "crypt",
+    "cellar",
+    "tunnel",
+    "ruins",
+    "patrol",
+    "contract",
+    "ledger",
+    "letter",
+    "banner",
+    "sigil",
+    "bridge",
+    "dock",
+    "alley",
+    "ghost",
+    "rumour",
+    "rumor",
+    "legend",
+    "oath",
+    "seal",
+    "shipment",
+    "map",
+)
+_ANCHOR_LEAD_LEXEMES_SET: frozenset[str] = frozenset(_ANCHOR_LEAD_LEXEMES)
+_ANCHOR_LEAD_LEXEMES_BY_LEN: tuple[str, ...] = tuple(
+    sorted(set(_ANCHOR_LEAD_LEXEMES), key=lambda s: (-len(s), s))
+)
+# Standalone suppression: these must not act as explanation-followup anchors unless paired with a clue lexeme
+# in the same multiword span (e.g. "tavern checkpoint" may still anchor on "checkpoint").
+_ANCHOR_GENERIC_ROLE_TITLE_TOKENS: frozenset[str] = frozenset(
+    {
+        "captain",
+        "guard",
+        "guards",
+        "runner",
+        "crier",
+        "lord",
+        "lords",
+        "stranger",
+        "strangers",
+        "watcher",
+        "watchers",
+        "refugee",
+        "refugees",
+        "corporal",
+        "sergeant",
+        "lieutenant",
+        "soldier",
+        "soldiers",
+        "merchant",
+        "merchants",
+        "bartender",
+        "innkeeper",
+        "envoy",
+        "envoys",
+        "messenger",
+        "messengers",
+        "herald",
+        "heralds",
+        "scout",
+        "scouts",
+        "sentinel",
+        "sentinels",
+        "watchman",
+        "watchmen",
+        "keeper",
+        "keepers",
+        "tavern",
+        "taverns",
+        "folk",
+        "traveler",
+        "travelers",
+        "traveller",
+        "travellers",
+        "sir",
+        "madam",
+        "maam",
+        "milord",
+        "master",
+        "mistress",
+    }
+)
+_ADJ_BEFORE_STRONG_NOUN_ALT = (
+    "old|new|east|west|north|south|central|upper|lower|inner|outer|main|"
+    "southern|northern|eastern|western"
+)
+_CLUE_LEXEME_RE_ALT = "|".join(
+    re.escape(x) for x in sorted(set(_ANCHOR_LEAD_LEXEMES), key=lambda s: (-len(s), s))
+)
+_ADJ_BEFORE_STRONG_NOUN_RE = re.compile(
+    rf"\b(?:{_ADJ_BEFORE_STRONG_NOUN_ALT})\s+(?:{_CLUE_LEXEME_RE_ALT})\b"
+)
+_PREP_HEADED_ANCHOR_PHRASE_RE = re.compile(
+    r"\b(?:near|at|by|toward|towards|beside|past|beyond)\s+(?:(?:the|a|an)\s+)?"
+    r"([A-Za-z][\w'-]*(?:\s+[A-Za-z][\w'-]*){0,2})\b",
+)
+
+
+def _sentence_start_char_indices(text: str) -> set[int]:
+    """Indices where a new sentence (or line) begins after punctuation or newline."""
+    starts = {0}
+    i = 0
+    n = len(text)
+    while i < n:
+        ch = text[i]
+        if ch in ".!?":
+            j = i + 1
+            while j < n and text[j] in "\"')]}":
+                j += 1
+            while j < n and text[j].isspace():
+                j += 1
+            if j < n:
+                starts.add(j)
+            i = j
+            continue
+        if ch == "\n":
+            j = i + 1
+            while j < n and text[j].isspace():
+                j += 1
+            if j < n:
+                starts.add(j)
+            i = j
+            continue
+        i += 1
+    return starts
+
+
+def _extract_npc_introduced_anchor_tokens(npc_reply: str) -> List[str]:
+    """Return 1–3 anchor-worthy strings from prior NPC text.
+
+    Favors clue/location lexemes and grounded phrases (e.g. ``old milestone``). Does not treat
+    generic role/title/address nouns as anchors unless they appear in the same multiword span
+    as a clue lexeme (e.g. anchoring on ``checkpoint`` in ``tavern checkpoint``).
+    """
+    text = str(npc_reply or "").strip()
+    if not text:
+        return []
+    low = " ".join(text.lower().split())
+    candidates: List[tuple[int, str]] = []
+    seen: set[str] = set()
+
+    def add_at(pos: int, tok: str) -> None:
+        t = str(tok or "").strip().lower().strip("'\"")
+        if len(t) < 3:
+            return
+        parts = t.split()
+        if any(len(p) < 3 for p in parts):
+            return
+        if " " not in t and t in _ANCHOR_WORD_STOPWORDS:
+            return
+        for p in parts:
+            if p not in _ANCHOR_GENERIC_ROLE_TITLE_TOKENS:
+                continue
+            if " " in t and any(x in _ANCHOR_LEAD_LEXEMES_SET for x in parts):
+                continue
+            return
+        if " " in t and not any(p in _ANCHOR_LEAD_LEXEMES_SET for p in parts):
+            return
+        if " " not in t and t in _ANCHOR_GENERIC_ROLE_TITLE_TOKENS:
+            return
+        if t not in seen:
+            seen.add(t)
+            candidates.append((pos, t))
+
+    for clue in _ANCHOR_LEAD_LEXEMES_BY_LEN:
+        for m in re.finditer(rf"\b{re.escape(clue)}\b", low):
+            add_at(m.start(), clue)
+
+    for m in _ADJ_BEFORE_STRONG_NOUN_RE.finditer(low):
+        add_at(m.start(), m.group(0).strip())
+
+    # Prep-headed spans: only keep a multiword anchor when a clue lexeme appears inside the span
+    # (do not emit per-word heads — that used to surface ``captain``, ``runner``, etc.).
+    for m in _PREP_HEADED_ANCHOR_PHRASE_RE.finditer(text):
+        phrase_raw = str(m.group(1) or "")
+        phrase_low = " ".join(phrase_raw.lower().split())
+        if not any(
+            re.search(rf"\b{re.escape(c)}\b", phrase_low) for c in _ANCHOR_LEAD_LEXEMES_SET
+        ):
+            continue
+        words = [w.strip(".,;:'\"—-") for w in phrase_raw.split()]
+        content = [w for w in words if w.lower() not in {"the", "a", "an"}]
+        if len(content) < 2:
+            continue
+        joined = " ".join(w.lower() for w in content)
+        non_generic = [w for w in joined.split() if w not in _ANCHOR_GENERIC_ROLE_TITLE_TOKENS]
+        if not non_generic:
+            continue
+        if not any(w in _ANCHOR_LEAD_LEXEMES_SET for w in non_generic):
+            continue
+        add_at(m.start(1), joined)
+
+    sent_starts = _sentence_start_char_indices(text)
+    for m in re.finditer(r"\b[A-Z][a-zA-Z']{2,}\b", text):
+        if m.start() in sent_starts:
+            continue
+        w = m.group(0)
+        wl = w.lower()
+        if wl in _ANCHOR_TITLE_CASE_SKIP:
+            continue
+        if wl in _ANCHOR_GENERIC_ROLE_TITLE_TOKENS:
+            continue
+        add_at(m.start(), wl)
+
+    candidates.sort(key=lambda x: x[0])
+    out: List[str] = []
+    for _pos, t in candidates:
+        if t in out:
+            continue
+        out.append(t)
+        if len(out) >= 3:
+            break
+    return out
+
+
+def _player_line_matches_anchor_token(player_norm: str, anchor: str) -> bool:
+    a = str(anchor or "").strip().lower()
+    if len(a) < 3:
+        return False
+    pl = str(player_norm or "").strip().lower()
+    if " " in a:
+        parts = a.split()
+        return all(bool(re.search(rf"\b{re.escape(p)}s?\b", pl)) for p in parts)
+    return bool(re.search(rf"\b{re.escape(a)}s?\b", pl))
+
+
+def _interrogative_or_explanation_ask_shape(player_text: str) -> bool:
+    t = str(player_text or "").strip()
+    if not t:
+        return False
+    if _short_interrogative_followup_line(t):
+        return True
+    if _bare_what_interrogative_line(t):
+        return True
+    if question_detected_from_player_text(t):
+        return True
+    if t.rstrip().endswith("?"):
+        return True
+    return False
+
+
+def _anchor_deictic_place_followup(player_text: str, player_norm: str) -> bool:
+    t = str(player_text or "").strip()
+    pl = str(player_norm or "").strip()
+    if not t or not pl:
+        return False
+    if not re.search(r"\b(there|here)\b", pl):
+        return False
+    if not re.search(r"\b(what|why|how|who|when|where|which)\b", pl):
+        return False
+    if len(t) > 56:
+        return False
+    if len(t.split()) > 10:
+        return False
+    return True
+
 
 def _topic_tokens(text: str) -> List[str]:
     low = " ".join(str(text or "").strip().lower().split())
@@ -192,6 +691,20 @@ def _overlap_ratio(a: List[str], b: List[str]) -> float:
     inter = len(sa & sb)
     denom = min(len(sa), len(sb))
     return float(inter) / float(denom or 1)
+
+
+def _prior_answer_snippet_substantive(gm_snippet: str) -> bool:
+    """Heuristic: prior GM text must be enough to compare against (not an empty/effectively non-answer)."""
+    s = " ".join(str(gm_snippet or "").strip().split())
+    if len(s) < 12:
+        return False
+    words = s.split()
+    if len(words) < 2 and len(s) < 36:
+        return False
+    low = s.lower()
+    if low in {"yes.", "no.", "ok.", "okay.", "nope.", "yeah.", "sure."}:
+        return False
+    return True
 
 
 def _compute_follow_up_pressure(recent_log_compact: List[Dict[str, Any]], user_text: str) -> Dict[str, Any] | None:
@@ -245,6 +758,554 @@ def _compute_follow_up_pressure(recent_log_compact: List[Dict[str, Any]], user_t
     }
 
 
+def _normalize_player_line_for_lexical(s: str) -> str:
+    t = " ".join(str(s or "").strip().lower().split())
+    return re.sub(r"[''`]", "", t)
+
+
+def _loose_lexical_anchor(player_text: str, haystack: str) -> bool:
+    """Any 4+ letter word from player line appears in haystack (handles light morph variance)."""
+    h = str(haystack or "").lower()
+    if not h:
+        return False
+    for w in re.findall(r"[a-zA-Z]{4,}", str(player_text or "").lower()):
+        if w in h:
+            return True
+    return False
+
+
+def _prior_gm_guarded_or_refusal_partial(gm_snippet: str) -> bool:
+    low = _normalize_player_line_for_lexical(gm_snippet)
+    if not low:
+        return False
+    return any(m in low for m in _GM_GUARDED_OR_REFUSAL_MARKERS)
+
+
+def _prior_gm_has_followup_anchor(gm_snippet: str) -> bool:
+    low = _normalize_player_line_for_lexical(gm_snippet)
+    if not low:
+        return False
+    return any(m in low for m in _GM_FOLLOWUP_ANCHOR_MARKERS)
+
+
+# Block 2: prior GM line carries a narrow watch/risk/attention referent (not clue-anchor extraction).
+_PRIOR_RECENT_REFERENCE_PATTERNS: tuple[tuple[re.Pattern[str], str], ...] = (
+    (re.compile(r"\beyes?\s+(?:are|were)\s+on\s+you\b", re.I), "eyes_on_you"),
+    (re.compile(r"\beye[s']?\s+on\s+you\b", re.I), "eyes_on_you"),
+    (re.compile(r"\bthey(?:'re|\s+are)\s+watching\b", re.I), "they_watching"),
+    (re.compile(r"\bpeople\s+watching\b", re.I), "people_watching"),
+    (re.compile(r"\bsome(?:one|body)\s+watching\b", re.I), "someone_watching"),
+    (re.compile(r"\bears\s+listening\b|\blistening\s+ears\b", re.I), "listening_ears"),
+    (re.compile(r"\bsome(?:one|body)\s+(?:is\s+)?listen(?:ing)?\b", re.I), "someone_listening"),
+    (re.compile(r"\b(?:watched|watching|watchers?)\b", re.I), "watching"),
+)
+
+# Short clarification prompts that can resolve those referents (regex-only; order = most specific first).
+_RECENT_REF_CLARIFICATION_SHAPES: tuple[tuple[re.Pattern[str], str], ...] = (
+    (re.compile(r"\bwhose\s+eyes\b", re.I), "whose_eyes"),
+    (re.compile(r"\bwhat\s+eyes\b", re.I), "what_eyes"),
+    (re.compile(r"\bwho'?s\s+watching\b", re.I), "whos_watching"),
+    (re.compile(r"\bwhat\s+do\s+you\s+mean", re.I), "what_do_you_mean"),
+    (re.compile(r"\bwhich\s+ones?\b", re.I), "which_ones"),
+    (re.compile(r"^\s*who\s+is\b", re.I), "who_is"),
+    (re.compile(r"^\s*whose\s*\?\s*$", re.I), "whose_bare"),
+    (re.compile(r"^\s*who\s*\?\s*$", re.I), "who_bare"),
+)
+
+_RECENT_REF_EYES_PRIOR_KINDS: frozenset[str] = frozenset({"eyes_on_you"})
+_RECENT_REF_WATCH_PRIOR_KINDS: frozenset[str] = frozenset(
+    {"they_watching", "people_watching", "someone_watching", "watching"}
+)
+_RECENT_REF_LISTEN_PRIOR_KINDS: frozenset[str] = frozenset({"listening_ears", "someone_listening"})
+
+
+def _scan_prior_recent_reference(gm_snippet: str) -> tuple[str | None, str | None]:
+    """Return (referent_kind, matched_phrase_snippet) for the first prior-line cue, else (None, None)."""
+    low = _normalize_player_line_for_lexical(gm_snippet)
+    if not low:
+        return None, None
+    for cre, kind in _PRIOR_RECENT_REFERENCE_PATTERNS:
+        m = cre.search(low)
+        if m:
+            return kind, str(m.group(0) or "").strip()[:48] or None
+    return None, None
+
+
+def _match_recent_reference_clarification_shape(player_text: str) -> str | None:
+    raw = str(player_text or "").strip()
+    if not raw:
+        return None
+    for cre, shape in _RECENT_REF_CLARIFICATION_SHAPES:
+        if cre.search(raw):
+            return shape
+    return None
+
+
+def _recent_reference_shape_matches_prior(prior_kind: str, shape: str) -> bool:
+    if prior_kind in _RECENT_REF_EYES_PRIOR_KINDS:
+        return shape in {
+            "whose_eyes",
+            "what_eyes",
+            "whose_bare",
+            "what_do_you_mean",
+            "who_bare",
+            "who_is",
+        }
+    if prior_kind in _RECENT_REF_WATCH_PRIOR_KINDS:
+        return shape in {
+            "who_bare",
+            "who_is",
+            "whos_watching",
+            "what_do_you_mean",
+            "which_ones",
+        }
+    if prior_kind in _RECENT_REF_LISTEN_PRIOR_KINDS:
+        return shape in {
+            "who_bare",
+            "who_is",
+            "what_do_you_mean",
+            "which_ones",
+        }
+    return False
+
+
+def _is_short_clarifying_reference_player_line(player_text: str) -> bool:
+    """Short, interrogative/clarifying line (bounded; not a general pronoun resolver)."""
+    t = str(player_text or "").strip()
+    if not t or len(t) > 96:
+        return False
+    if len(t.split()) > 14:
+        return False
+    if not (t.rstrip().endswith("?") or question_detected_from_player_text(t)):
+        return False
+    return True
+
+
+def _classify_answer_pressure_families(player_text: str) -> Dict[str, bool]:
+    raw = str(player_text or "").strip()
+    low = _normalize_player_line_for_lexical(raw)
+    if not low:
+        return {k: False for k in (
+            "direct_answer_demand",
+            "specificity_demand",
+            "explanation_demand",
+            "contradiction_or_refusal_challenge",
+            "insufficiency_pressure",
+            "consequence_probe",
+        )}
+    return {
+        "direct_answer_demand": bool(_DIRECT_ANSWER_DEMAND_RE.search(raw)),
+        "specificity_demand": bool(_SPECIFICITY_DEMAND_RE.search(raw)),
+        "explanation_demand": bool(_EXPLANATION_DEMAND_RE.search(raw)),
+        "contradiction_or_refusal_challenge": bool(_CONTRADICTION_OR_REFUSAL_CHALLENGE_RE.search(raw)),
+        "insufficiency_pressure": bool(_INSUFFICIENCY_PRESSURE_RE.search(raw)),
+        "consequence_probe": bool(_CONSEQUENCE_PROBE_RE.search(raw)),
+    }
+
+
+def _answer_pressure_lexical_hit(player_text: str) -> bool:
+    """True when any family uses a strong, self-sufficient phrase (legacy field ``lexical_pressure``)."""
+    fam = _classify_answer_pressure_families(player_text)
+    return any(
+        fam.get(k)
+        for k in (
+            "direct_answer_demand",
+            "specificity_demand",
+            "insufficiency_pressure",
+            "consequence_probe",
+        )
+    )
+
+
+def _short_interrogative_followup_line(player_text: str) -> bool:
+    return bool(_SHORT_INTERROGATIVE_FOLLOWUP_RE.match(str(player_text or "").strip()))
+
+
+def _bare_what_interrogative_line(player_text: str) -> bool:
+    return bool(_BARE_WHAT_INTERROGATIVE_RE.match(str(player_text or "").strip()))
+
+
+def _is_conversational_color_without_answer_demand(player_text: str) -> bool:
+    """Conservative exclusion for answer-pressure detection (greetings, bare thanks, tiny acks)."""
+    t = str(player_text or "").strip()
+    if not t:
+        return True
+    if _GREETING_ONLY_LINE.match(t) or _THANKS_ONLY_LINE.match(t):
+        return True
+    if len(t) < 18 and "?" not in t:
+        low = t.lower()
+        if low in {"yeah", "yep", "no", "nah", "ok", "okay", "sure", "fine"}:
+            return True
+    return False
+
+
+def _last_log_exchange(recent_log_compact: List[Dict[str, Any]] | None) -> tuple[str, str] | None:
+    if not recent_log_compact:
+        return None
+    last = recent_log_compact[-1]
+    if not isinstance(last, dict):
+        return None
+    prev_player = str(last.get("player_input") or "").strip()
+    prev_gm = str(last.get("gm_snippet") or "").strip()
+    if not prev_player or not prev_gm:
+        return None
+    return prev_player, prev_gm
+
+
+def _synthetic_follow_up_pressure_from_log(
+    recent_log_compact: List[Dict[str, Any]] | None,
+    player_input: str,
+) -> Dict[str, Any] | None:
+    pair = _last_log_exchange(recent_log_compact)
+    if pair is None:
+        return None
+    prev_player, prev_gm = pair
+    cur = str(player_input or "").strip()
+    if not cur:
+        return None
+    cur_tokens = _topic_tokens(cur)
+    prev_tokens = _topic_tokens(prev_player)
+    overlap = _overlap_ratio(cur_tokens, prev_tokens)
+    return {
+        "pressed": True,
+        "press_depth": 1,
+        "topic_tokens": cur_tokens or prev_tokens,
+        "previous_player_input": prev_player[:240],
+        "previous_answer_snippet": prev_gm[:240],
+        "overlap_ratio": round(overlap, 3),
+        "synthetic_for_answer_pressure": True,
+    }
+
+
+def _answer_pressure_followup_details(
+    *,
+    player_input: str,
+    recent_log_compact: List[Dict[str, Any]] | None,
+    narration_obligations: Dict[str, Any],
+    session_view: Dict[str, Any] | None,
+    answer_completeness: Dict[str, Any] | None = None,
+) -> Dict[str, Any]:
+    """Deterministic signal: player is pressing the same interlocutor for a substantive answer (strict-social safe)."""
+    _ = narration_obligations if isinstance(narration_obligations, dict) else {}
+    _ = answer_completeness if isinstance(answer_completeness, dict) else {}
+
+    def _base_false(suppressed: List[str]) -> Dict[str, Any]:
+        sb = list(suppressed)
+        return {
+            "answer_pressure_followup_detected": False,
+            "same_interlocutor_followup": False,
+            "lexical_pressure": False,
+            "question_like": False,
+            "prior_answer_substantive": False,
+            "topic_overlap_follows_up": False,
+            "suppressed_because": sb,
+            "answer_pressure_family": None,
+            "answer_pressure_anchor_kind": None,
+            "contradiction_followup_detected": False,
+            "explanation_followup_detected": False,
+            "insufficiency_followup_detected": False,
+            "short_followup_anchor_detected": False,
+            "answer_pressure_reasons": [],
+            "answer_pressure_suppressed_because": sb,
+            "anchor_tokens_extracted": [],
+            "anchor_token_matched": None,
+            "anchor_followup_detected": False,
+            "explanation_of_recent_anchor_followup": False,
+            "recent_reference_clarification_detected": False,
+            "recent_reference_kind": None,
+            "recent_reference_phrase_matched": None,
+            "clarification_prompt_shape": None,
+        }
+
+    suppressed_because: List[str] = []
+    sess = session_view if isinstance(session_view, dict) else {}
+    active_target_id = str(sess.get("active_interaction_target_id") or "").strip()
+
+    cur = str(player_input or "").strip()
+    if not cur:
+        suppressed_because.append("empty_player_input")
+        return _base_false(suppressed_because)
+
+    if _is_conversational_color_without_answer_demand(cur):
+        suppressed_because.append("conversational_color_only")
+        return _base_false(suppressed_because)
+
+    if not active_target_id:
+        suppressed_because.append("no_active_interlocutor")
+
+    pair = _last_log_exchange(recent_log_compact)
+    prior_substantive = False
+    prev_player = ""
+    prev_gm = ""
+    if pair is None:
+        suppressed_because.append("no_prior_log_exchange")
+    else:
+        prev_player, prev_gm = pair
+        prior_substantive = _prior_answer_snippet_substantive(prev_gm)
+        if not prior_substantive:
+            suppressed_because.append("prior_answer_not_substantive")
+
+    same_interlocutor_followup = bool(active_target_id and pair is not None)
+
+    fam = _classify_answer_pressure_families(cur)
+    lexical_pressure = _answer_pressure_lexical_hit(cur)
+    player_q = question_detected_from_player_text(cur)
+    pressure = _compute_follow_up_pressure(list(recent_log_compact or []), cur)
+
+    topic_overlap_follows_up = False
+    if pair and prev_player:
+        topic_overlap_follows_up = (
+            _overlap_ratio(_topic_tokens(cur), _topic_tokens(prev_player)) >= 0.35
+        )
+
+    cur_toks = _topic_tokens(cur)
+    gm_toks = _topic_tokens(prev_gm) if prev_gm else []
+    gm_token_overlap = bool(cur_toks and gm_toks and len(set(cur_toks) & set(gm_toks)) >= 1)
+    gm_loose_anchor = _loose_lexical_anchor(cur, prev_gm) if prev_gm else False
+    gm_overlap_signal = gm_token_overlap or gm_loose_anchor
+
+    prior_guarded = _prior_gm_guarded_or_refusal_partial(prev_gm) if prev_gm else False
+    prior_anchor = _prior_gm_has_followup_anchor(prev_gm) if prev_gm else False
+
+    relaxed_continuity = bool(
+        pressure is not None
+        or topic_overlap_follows_up
+        or gm_overlap_signal
+        or prior_guarded
+    )
+
+    has_question_mark = "?" in cur
+    challenge_framed = bool(player_q or has_question_mark)
+
+    insufficiency_hit = bool(fam.get("insufficiency_pressure"))
+    contradiction_hit = bool(fam.get("contradiction_or_refusal_challenge"))
+    explanation_hit = bool(fam.get("explanation_demand"))
+    short_interrogative = _short_interrogative_followup_line(cur)
+    bare_what = _bare_what_interrogative_line(cur)
+
+    contradiction_followup_detected = bool(
+        contradiction_hit
+        and challenge_framed
+        and (relaxed_continuity or prior_guarded or gm_loose_anchor)
+    )
+    explanation_followup_detected = bool(
+        explanation_hit
+        and not short_interrogative
+        and player_q
+        and relaxed_continuity
+    )
+    insufficiency_followup_detected = bool(insufficiency_hit)
+
+    short_followup_anchor_detected = bool(
+        short_interrogative
+        and prior_substantive
+        and prior_guarded
+        and prior_anchor
+    )
+
+    bare_what_ok = bool(
+        bare_what
+        and prior_substantive
+        and (prior_guarded or topic_overlap_follows_up or gm_overlap_signal)
+    )
+
+    cur_lex = _normalize_player_line_for_lexical(cur)
+    anchor_tokens_extracted: List[str] = []
+    anchor_token_matched: str | None = None
+    explanation_of_recent_anchor_followup = False
+    if pair is not None and prev_gm.strip():
+        anchor_tokens_extracted = _extract_npc_introduced_anchor_tokens(prev_gm)
+        # Prefer a single clue lexeme over a longer phrase when both match (stable, readable telemetry).
+        for tok in sorted(anchor_tokens_extracted, key=lambda t: (str(t).count(" "), len(str(t)))):
+            if _player_line_matches_anchor_token(cur_lex, tok):
+                anchor_token_matched = tok
+                break
+        asks_shape = _interrogative_or_explanation_ask_shape(cur)
+        deictic_ok = bool(
+            anchor_tokens_extracted
+            and _anchor_deictic_place_followup(cur, cur_lex)
+        )
+        asks_on_anchor = bool(anchor_token_matched and asks_shape)
+        # Generic role/title tokens are filtered in _extract_npc_introduced_anchor_tokens; with no
+        # anchor-worthy residue, this path must not fire (avoids first-turn false positives).
+        explanation_of_recent_anchor_followup = bool(
+            active_target_id
+            and prior_substantive
+            and bool(anchor_tokens_extracted)
+            and (asks_on_anchor or (deictic_ok and asks_shape))
+        )
+    anchor_followup_detected = bool(explanation_of_recent_anchor_followup)
+
+    recent_reference_kind: str | None = None
+    recent_reference_phrase_matched: str | None = None
+    clarification_prompt_shape: str | None = None
+    recent_reference_clarification_detected = False
+    if (
+        active_target_id
+        and pair is not None
+        and prior_substantive
+        and prev_gm.strip()
+    ):
+        ref_kind, ref_phrase = _scan_prior_recent_reference(prev_gm)
+        clar_shape = _match_recent_reference_clarification_shape(cur)
+        if (
+            ref_kind
+            and clar_shape
+            and _is_short_clarifying_reference_player_line(cur)
+            and _recent_reference_shape_matches_prior(ref_kind, clar_shape)
+        ):
+            recent_reference_clarification_detected = True
+            recent_reference_kind = ref_kind
+            recent_reference_phrase_matched = ref_phrase
+            clarification_prompt_shape = clar_shape
+
+    seeking = bool(
+        lexical_pressure
+        or contradiction_followup_detected
+        or explanation_followup_detected
+        or short_followup_anchor_detected
+        or bare_what_ok
+        or explanation_of_recent_anchor_followup
+        or recent_reference_clarification_detected
+        or (
+            player_q
+            and (pressure is not None or topic_overlap_follows_up)
+        )
+    )
+
+    detected = bool(
+        active_target_id
+        and pair is not None
+        and prior_substantive
+        and same_interlocutor_followup
+        and seeking
+    )
+
+    answer_pressure_reasons: List[str] = []
+    if lexical_pressure:
+        if fam.get("direct_answer_demand"):
+            answer_pressure_reasons.append("family:direct_answer_demand")
+        if fam.get("specificity_demand"):
+            answer_pressure_reasons.append("family:specificity_demand")
+        if fam.get("insufficiency_pressure"):
+            answer_pressure_reasons.append("family:insufficiency_pressure")
+        if fam.get("consequence_probe"):
+            answer_pressure_reasons.append("family:consequence_probe")
+    if contradiction_followup_detected:
+        answer_pressure_reasons.append("family:contradiction_or_refusal_challenge")
+    if explanation_followup_detected:
+        answer_pressure_reasons.append("family:explanation_demand")
+    if short_followup_anchor_detected:
+        answer_pressure_reasons.append("path:short_interrogative_after_guarded")
+    if bare_what_ok:
+        answer_pressure_reasons.append("path:bare_what_with_anchor")
+    if explanation_of_recent_anchor_followup:
+        answer_pressure_reasons.append("path:explanation_of_recent_anchor_followup")
+    if recent_reference_clarification_detected:
+        answer_pressure_reasons.append("path:clarification_of_recent_reference")
+    if seeking and pressure is not None:
+        answer_pressure_reasons.append("log:follow_up_pressure")
+    if seeking and topic_overlap_follows_up:
+        answer_pressure_reasons.append("anchor:topic_overlap_prior_player")
+    if seeking and gm_overlap_signal:
+        answer_pressure_reasons.append("anchor:gm_snippet_overlap")
+    if seeking and prior_guarded:
+        answer_pressure_reasons.append("anchor:prior_guarded_or_partial")
+
+    answer_pressure_family: str | None = None
+    if detected or seeking:
+        if explanation_of_recent_anchor_followup:
+            answer_pressure_family = "explanation_of_recent_anchor_followup"
+        elif recent_reference_clarification_detected:
+            answer_pressure_family = "clarification_of_recent_reference"
+        elif contradiction_followup_detected:
+            answer_pressure_family = "contradiction_or_refusal_challenge"
+        elif fam.get("direct_answer_demand"):
+            answer_pressure_family = "direct_answer_demand"
+        elif fam.get("specificity_demand"):
+            answer_pressure_family = "specificity_demand"
+        elif insufficiency_hit:
+            answer_pressure_family = "insufficiency_pressure"
+        elif explanation_followup_detected:
+            answer_pressure_family = "explanation_demand"
+        elif fam.get("consequence_probe"):
+            answer_pressure_family = "consequence_probe"
+        elif short_followup_anchor_detected or bare_what_ok:
+            answer_pressure_family = "short_followup_anchor"
+        elif player_q and (pressure is not None or topic_overlap_follows_up):
+            answer_pressure_family = "direct_question_continuity"
+
+    answer_pressure_anchor_kind: str | None = None
+    if explanation_of_recent_anchor_followup:
+        answer_pressure_anchor_kind = "npc_introduced_anchor_token"
+    elif recent_reference_clarification_detected:
+        answer_pressure_anchor_kind = "recent_reference_clarification"
+    elif short_followup_anchor_detected:
+        answer_pressure_anchor_kind = "short_interrogative_guarded_prior"
+    elif bare_what_ok:
+        answer_pressure_anchor_kind = "bare_what_anchored"
+    elif contradiction_followup_detected and gm_loose_anchor:
+        answer_pressure_anchor_kind = "challenge_with_gm_lexical_anchor"
+    elif contradiction_followup_detected and prior_guarded:
+        answer_pressure_anchor_kind = "challenge_with_prior_guarded"
+    elif gm_overlap_signal:
+        answer_pressure_anchor_kind = "gm_snippet_token_or_lexical"
+    elif topic_overlap_follows_up:
+        answer_pressure_anchor_kind = "prior_player_topic_overlap"
+    elif pressure is not None:
+        answer_pressure_anchor_kind = "log_press_continuity"
+    elif lexical_pressure and not answer_pressure_anchor_kind:
+        answer_pressure_anchor_kind = "phrase_family_strong"
+
+    if not detected and not seeking:
+        suppressed_because.append("not_question_or_answer_pressure")
+
+    return {
+        "answer_pressure_followup_detected": detected,
+        "same_interlocutor_followup": same_interlocutor_followup,
+        "lexical_pressure": lexical_pressure,
+        "question_like": player_q,
+        "prior_answer_substantive": prior_substantive,
+        "topic_overlap_follows_up": topic_overlap_follows_up,
+        "suppressed_because": suppressed_because,
+        "answer_pressure_family": answer_pressure_family,
+        "answer_pressure_anchor_kind": answer_pressure_anchor_kind,
+        "contradiction_followup_detected": contradiction_followup_detected,
+        "explanation_followup_detected": explanation_followup_detected,
+        "insufficiency_followup_detected": insufficiency_followup_detected,
+        "short_followup_anchor_detected": short_followup_anchor_detected,
+        "answer_pressure_reasons": answer_pressure_reasons,
+        "answer_pressure_suppressed_because": list(suppressed_because),
+        "anchor_tokens_extracted": list(anchor_tokens_extracted),
+        "anchor_token_matched": anchor_token_matched,
+        "anchor_followup_detected": anchor_followup_detected,
+        "explanation_of_recent_anchor_followup": explanation_of_recent_anchor_followup,
+        "recent_reference_clarification_detected": recent_reference_clarification_detected,
+        "recent_reference_kind": recent_reference_kind,
+        "recent_reference_phrase_matched": recent_reference_phrase_matched,
+        "clarification_prompt_shape": clarification_prompt_shape,
+    }
+
+
+def _is_answer_pressure_followup(
+    player_input: str,
+    recent_log_compact: List[Dict[str, Any]] | None,
+    narration_obligations: Dict[str, Any],
+    answer_completeness: Dict[str, Any] | None = None,
+    *,
+    session_view: Dict[str, Any] | None = None,
+) -> bool:
+    return bool(
+        _answer_pressure_followup_details(
+            player_input=player_input,
+            recent_log_compact=recent_log_compact,
+            narration_obligations=narration_obligations,
+            session_view=session_view,
+            answer_completeness=answer_completeness,
+        ).get("answer_pressure_followup_detected")
+    )
+
+
 def question_detected_from_player_text(player_text: str) -> bool:
     """Deterministic direct-question detection for turn-local answer contracts."""
     t = str(player_text or "").strip()
@@ -276,6 +1337,173 @@ def _resolution_suggests_gated_information(resolution: Dict[str, Any] | None) ->
     return False
 
 
+def build_response_delta_contract(
+    *,
+    player_input: str,
+    recent_log_compact: List[Dict[str, Any]] | None,
+    narration_obligations: Dict[str, Any],
+    resolution: Dict[str, Any] | None,
+    answer_completeness: Dict[str, Any],
+    uncertainty_hint: Dict[str, Any] | None = None,
+    session_view: Dict[str, Any] | None = None,
+) -> Dict[str, Any]:
+    """Turn-local contract: when the player presses the same topic, require net-new value.
+
+    Deterministic and recent-log-scoped. Uses `_compute_follow_up_pressure` for topic-continuity
+    detection; strict-social (``suppress_non_social_emitters``) no longer disables this contract
+    when :func:`_answer_pressure_followup_details` detects an answer-seeking follow-up.
+    "Refinement" is an allowed delta kind when the reply narrows or sharpens an earlier answer
+    (tighter identity, place, qualifier, or uncertainty boundary)—not when it only paraphrases.
+    """
+    obligations = narration_obligations if isinstance(narration_obligations, dict) else {}
+    res = resolution if isinstance(resolution, dict) else {}
+    sess = session_view if isinstance(session_view, dict) else {}
+    ac = answer_completeness if isinstance(answer_completeness, dict) else {}
+
+    social_lock = bool(obligations.get("suppress_non_social_emitters"))
+    active_target_id = str(sess.get("active_interaction_target_id") or "").strip() or None
+    answer_required = bool(ac.get("answer_required"))
+    player_q = question_detected_from_player_text(player_input)
+
+    ap_details = _answer_pressure_followup_details(
+        player_input=player_input,
+        recent_log_compact=list(recent_log_compact or []),
+        narration_obligations=obligations,
+        session_view=sess,
+        answer_completeness=ac,
+    )
+    answer_pressure_followup = bool(ap_details.get("answer_pressure_followup_detected"))
+    strict_social_answer_seek_override = bool(social_lock and answer_pressure_followup)
+    social_lock_suppresses = bool(social_lock and not strict_social_answer_seek_override)
+
+    explanatory_turn = bool(answer_required or player_q or answer_pressure_followup)
+
+    res_kind = str(res.get("kind") or "").strip().lower()
+    suppress_resolution_kind = res_kind in _RESPONSE_DELTA_SUPPRESS_RESOLUTION_KINDS
+    must_advance_scene = bool(obligations.get("must_advance_scene"))
+    opening_scene = bool(obligations.get("is_opening_scene"))
+
+    pressure = _compute_follow_up_pressure(list(recent_log_compact or []), player_input)
+    if pressure is None and answer_pressure_followup:
+        pressure = _synthetic_follow_up_pressure_from_log(recent_log_compact, player_input)
+    prior_snippet = str(pressure.get("previous_answer_snippet") or "").strip() if pressure else ""
+    prior_substantive = bool(prior_snippet and _prior_answer_snippet_substantive(prior_snippet))
+    hint_partial = _uncertainty_hint_suggests_partial(
+        uncertainty_hint if isinstance(uncertainty_hint, dict) else None
+    )
+
+    fail_reasons: List[str] = []
+    if pressure is None:
+        fail_reasons.append("no_follow_up_pressure")
+    if pressure is not None and not prior_substantive:
+        fail_reasons.append("prior_answer_not_substantive")
+    if not explanatory_turn:
+        fail_reasons.append("not_answer_seeking_turn")
+    if social_lock_suppresses:
+        fail_reasons.append("social_lock")
+    if suppress_resolution_kind:
+        fail_reasons.append("resolution_kind_suppressed")
+    if must_advance_scene:
+        fail_reasons.append("scene_advancement_turn")
+    if opening_scene:
+        fail_reasons.append("opening_scene")
+
+    activated = (
+        pressure is not None
+        and prior_substantive
+        and explanatory_turn
+        and not social_lock_suppresses
+        and not suppress_resolution_kind
+        and not must_advance_scene
+        and not opening_scene
+    )
+
+    if activated and strict_social_answer_seek_override:
+        trigger_source = "strict_social_answer_pressure"
+    elif activated and player_q:
+        trigger_source = "same_topic_direct_question"
+    elif activated:
+        trigger_source = "follow_up_pressure"
+    else:
+        trigger_source = "none"
+
+    exp_shape_ac = str(ac.get("expected_answer_shape") or "").strip()
+    if not activated:
+        expected_delta_shape = "none"
+    elif exp_shape_ac == "bounded_partial" or hint_partial:
+        expected_delta_shape = "bounded_partial_with_delta"
+    else:
+        expected_delta_shape = "direct_delta"
+
+    topic_tokens: List[str] = list(pressure.get("topic_tokens") or []) if pressure else []
+    press_depth = int(pressure.get("press_depth") or 0) if pressure else 0
+    overlap_ratio = pressure.get("overlap_ratio") if pressure else None
+    if overlap_ratio is not None and isinstance(overlap_ratio, (int, float)):
+        overlap_ratio = float(overlap_ratio)
+    else:
+        overlap_ratio = None
+
+    prev_in = pressure.get("previous_player_input") if pressure else None
+    prev_ans = pressure.get("previous_answer_snippet") if pressure else None
+
+    trace: Dict[str, Any] = {
+        "question_detected_from_player_text": bool(player_q),
+        "follow_up_pressure_detected": pressure is not None,
+        "follow_up_press_depth": press_depth,
+        "follow_up_overlap_ratio": overlap_ratio,
+        "prior_answer_available": bool(prior_substantive),
+        "answer_completeness_required": bool(answer_required),
+        "social_lock": bool(social_lock),
+        "active_target_id": active_target_id,
+        "answer_pressure_followup_detected": answer_pressure_followup,
+        "strict_social_answer_seek_override": strict_social_answer_seek_override,
+        "same_interlocutor_followup": bool(ap_details.get("same_interlocutor_followup")),
+        "answer_pressure_suppressed_because": list(ap_details.get("suppressed_because") or []),
+        "answer_pressure_family": ap_details.get("answer_pressure_family"),
+        "answer_pressure_anchor_kind": ap_details.get("answer_pressure_anchor_kind"),
+        "contradiction_followup_detected": bool(ap_details.get("contradiction_followup_detected")),
+        "explanation_followup_detected": bool(ap_details.get("explanation_followup_detected")),
+        "insufficiency_followup_detected": bool(ap_details.get("insufficiency_followup_detected")),
+        "short_followup_anchor_detected": bool(ap_details.get("short_followup_anchor_detected")),
+        "anchor_tokens_extracted": list(ap_details.get("anchor_tokens_extracted") or []),
+        "anchor_token_matched": ap_details.get("anchor_token_matched"),
+        "anchor_followup_detected": bool(ap_details.get("anchor_followup_detected")),
+        "explanation_of_recent_anchor_followup": bool(ap_details.get("explanation_of_recent_anchor_followup")),
+        "recent_reference_clarification_detected": bool(
+            ap_details.get("recent_reference_clarification_detected")
+        ),
+        "recent_reference_kind": ap_details.get("recent_reference_kind"),
+        "recent_reference_phrase_matched": ap_details.get("recent_reference_phrase_matched"),
+        "clarification_prompt_shape": ap_details.get("clarification_prompt_shape"),
+        "answer_pressure_reasons": list(ap_details.get("answer_pressure_reasons") or []),
+        "trigger_source": trigger_source,
+        "resolution_kind": res_kind or None,
+        "uncertainty_suggests_partial": bool(hint_partial),
+        "suppressed_because": list(fail_reasons) if fail_reasons else [],
+    }
+
+    allowed_kinds = list(_RESPONSE_DELTA_ALLOWED_KINDS) if activated else []
+
+    return {
+        "enabled": bool(activated),
+        "delta_required": bool(activated),
+        "delta_must_come_early": bool(activated),
+        "trigger_source": trigger_source,
+        "topic_tokens": topic_tokens,
+        "press_depth": press_depth,
+        "previous_player_input": (str(prev_in).strip() or None) if prev_in else None,
+        "previous_answer_snippet": (str(prev_ans).strip() or None) if prev_ans else None,
+        "overlap_ratio": overlap_ratio,
+        "allowed_delta_kinds": allowed_kinds,
+        "forbid_semantic_restatement": bool(activated),
+        "forbid_repackaged_nonanswer": bool(activated),
+        "allow_short_bridge_before_delta": bool(activated),
+        "require_delta_when_answer_required": bool(activated and answer_required),
+        "expected_delta_shape": expected_delta_shape,
+        "trace": trace,
+    }
+
+
 def build_answer_completeness_contract(
     *,
     player_input: str,
@@ -284,6 +1512,7 @@ def build_answer_completeness_contract(
     session_view: Dict[str, Any] | None,
     uncertainty_hint: Dict[str, Any] | None,
     allow_partial_answer: bool = True,
+    recent_log_compact: List[Dict[str, Any]] | None = None,
 ) -> Dict[str, Any]:
     """Derive an inspectable, turn-local answer contract from engine state only."""
     obligations = narration_obligations if isinstance(narration_obligations, dict) else {}
@@ -302,9 +1531,20 @@ def build_answer_completeness_contract(
     substantive_npc_qa = npc_expected and reply_kind_str in ("answer", "explanation")
     should_npc = bool(obligations.get("should_answer_active_npc"))
 
+    ap_details = _answer_pressure_followup_details(
+        player_input=player_input,
+        recent_log_compact=list(recent_log_compact or []),
+        narration_obligations=obligations,
+        session_view=sess,
+        answer_completeness=None,
+    )
+    answer_pressure_seek = bool(ap_details.get("answer_pressure_followup_detected"))
+
     if refusal_turn:
         answer_required = True
     elif player_q:
+        answer_required = True
+    elif answer_pressure_seek:
         answer_required = True
     elif substantive_npc_qa:
         answer_required = True
@@ -342,6 +1582,8 @@ def build_answer_completeness_contract(
         trigger_source = "active_npc_refusal"
     elif player_q:
         trigger_source = "player_direct_question"
+    elif answer_pressure_seek:
+        trigger_source = "answer_pressure_followup"
     elif substantive_npc_qa:
         trigger_source = "active_npc_answer_obligation"
     elif npc_expected:
@@ -361,6 +1603,27 @@ def build_answer_completeness_contract(
         "active_target_id": active_target_id or None,
         "active_npc_reply_kind": reply_kind_str or None,
         "question_detected_from_player_text": bool(player_q),
+        "answer_pressure_followup_detected": answer_pressure_seek,
+        "strict_social_answer_seek_override": bool(social_lock and answer_pressure_seek),
+        "same_interlocutor_followup": bool(ap_details.get("same_interlocutor_followup")),
+        "answer_pressure_suppressed_because": list(ap_details.get("suppressed_because") or []),
+        "answer_pressure_family": ap_details.get("answer_pressure_family"),
+        "answer_pressure_anchor_kind": ap_details.get("answer_pressure_anchor_kind"),
+        "contradiction_followup_detected": bool(ap_details.get("contradiction_followup_detected")),
+        "explanation_followup_detected": bool(ap_details.get("explanation_followup_detected")),
+        "insufficiency_followup_detected": bool(ap_details.get("insufficiency_followup_detected")),
+        "short_followup_anchor_detected": bool(ap_details.get("short_followup_anchor_detected")),
+        "anchor_tokens_extracted": list(ap_details.get("anchor_tokens_extracted") or []),
+        "anchor_token_matched": ap_details.get("anchor_token_matched"),
+        "anchor_followup_detected": bool(ap_details.get("anchor_followup_detected")),
+        "explanation_of_recent_anchor_followup": bool(ap_details.get("explanation_of_recent_anchor_followup")),
+        "recent_reference_clarification_detected": bool(
+            ap_details.get("recent_reference_clarification_detected")
+        ),
+        "recent_reference_kind": ap_details.get("recent_reference_kind"),
+        "recent_reference_phrase_matched": ap_details.get("recent_reference_phrase_matched"),
+        "clarification_prompt_shape": ap_details.get("clarification_prompt_shape"),
+        "answer_pressure_reasons": list(ap_details.get("answer_pressure_reasons") or []),
         "partial_answer_permitted": bool(partial_permitted),
     }
 
@@ -392,6 +1655,7 @@ def build_response_policy(
     resolution: Dict[str, Any] | None = None,
     session_view: Dict[str, Any] | None = None,
     uncertainty_hint: Dict[str, Any] | None = None,
+    recent_log_compact: List[Dict[str, Any]] | None = None,
 ) -> Dict[str, Any]:
     """Build the inspectable response policy for the current turn.
 
@@ -407,6 +1671,16 @@ def build_response_policy(
         session_view=session_view if isinstance(session_view, dict) else {},
         uncertainty_hint=uncertainty_hint,
         allow_partial_answer=True,
+        recent_log_compact=list(recent_log_compact or []),
+    )
+    response_delta = build_response_delta_contract(
+        player_input=str(player_text or ""),
+        recent_log_compact=recent_log_compact,
+        narration_obligations=obligations,
+        resolution=resolution,
+        answer_completeness=answer_completeness,
+        uncertainty_hint=uncertainty_hint,
+        session_view=session_view if isinstance(session_view, dict) else None,
     )
     return {
         "rule_priority_order": [label for _, label in RESPONSE_RULE_PRIORITY],
@@ -414,6 +1688,7 @@ def build_response_policy(
         "forbid_state_invention": True,
         "forbid_secret_leak": True,
         "allow_partial_answer": True,
+        "response_delta": response_delta,
         "diegetic_only": True,
         "prefer_scene_momentum": not suppress,
         "prefer_specificity": True,
@@ -995,12 +2270,16 @@ def build_narration_context(
     )
     social_authority = bool(narration_obligations.get("suppress_non_social_emitters"))
     eff_uncertainty_hint = None if social_authority else uncertainty_hint
+    recent_log_compact = (
+        _compress_recent_log(recent_log_for_prompt) if recent_log_for_prompt else []
+    )
     response_policy = build_response_policy(
         narration_obligations=narration_obligations,
         player_text=str(user_text or ""),
         resolution=resolution,
         session_view=session_view,
         uncertainty_hint=eff_uncertainty_hint,
+        recent_log_compact=recent_log_compact,
     )
     res = resolution if isinstance(resolution, dict) else {}
     state_changes = res.get("state_changes") if isinstance(res.get("state_changes"), dict) else {}
@@ -1038,10 +2317,17 @@ def build_narration_context(
         scene=scene if isinstance(scene, dict) else None,
         world=world if isinstance(world, dict) else None,
     )
+    visible_facts_for_prompt = list(visibility_contract.get("visible_fact_strings") or [])
+    if narration_obligations.get("is_opening_scene") and isinstance(public_scene, Mapping):
+        curated_opening = select_opening_narration_visible_facts(public_scene)
+        if curated_opening:
+            visible_facts_for_prompt = curated_opening
+        else:
+            visible_facts_for_prompt = visible_facts_for_prompt[:OPENING_NARRATION_VISIBLE_FACT_MAX]
     narration_visibility: Dict[str, Any] = {
         "visible_entities": list(visibility_contract.get("visible_entity_names") or []),
         "active_interlocutor_id": visibility_contract.get("active_interlocutor_id"),
-        "visible_facts": list(visibility_contract.get("visible_fact_strings") or []),
+        "visible_facts": visible_facts_for_prompt,
         "rules": {
             "no_unseen_entities": True,
             "no_hidden_facts": True,
@@ -1081,6 +2367,11 @@ def build_narration_context(
         (
             "When response_policy.answer_completeness.expected_voice is npc, keep the turn NPC-carried for the substantive reply "
             "per active interlocutor; when narrator, still lead with the answer in the first sentence when answer_required is true."
+        ),
+        (
+            "When response_policy.response_delta.enabled is true, the player is pressing the same topic again: do not merely restate "
+            "the prior answer. Add net-new value via allowed_delta_kinds (new_information, refinement that narrows the prior claim, "
+            "consequence, or clarified uncertainty—not paraphrase)."
         ),
         *NARRATION_VISIBILITY_MANDATORY_INSTRUCTIONS,
         *FIRST_MENTION_MANDATORY_INSTRUCTIONS,
@@ -1152,9 +2443,19 @@ def build_narration_context(
             "beats as the main voice. The active interlocutor must carry this turn (substantive reply, reaction, or refusal)."
         )
 
-    recent_log_compact = _compress_recent_log(recent_log_for_prompt) if recent_log_for_prompt else []
     follow_up_log_pressure = _compute_follow_up_pressure(recent_log_compact, user_text)
-    if social_authority:
+    ap_for_prompt = _answer_pressure_followup_details(
+        player_input=str(user_text or ""),
+        recent_log_compact=list(recent_log_compact or []),
+        narration_obligations=narration_obligations,
+        session_view=session_view,
+        answer_completeness=None,
+    )
+    if follow_up_log_pressure is None and ap_for_prompt.get("answer_pressure_followup_detected"):
+        follow_up_log_pressure = _synthetic_follow_up_pressure_from_log(
+            recent_log_compact, str(user_text or "")
+        )
+    if social_authority and not ap_for_prompt.get("answer_pressure_followup_detected"):
         follow_up_log_pressure = None
 
     active_topic_anchor = explicit_player_topic_anchor_state(str(user_text or ""))
@@ -1241,7 +2542,10 @@ def build_narration_context(
         ]
 
     if social_authority:
-        follow_up_pressure = {"from_leads": dict(from_leads_pressure)}
+        if follow_up_log_pressure is not None:
+            follow_up_pressure = {**follow_up_log_pressure, "from_leads": dict(from_leads_pressure)}
+        else:
+            follow_up_pressure = {"from_leads": dict(from_leads_pressure)}
     elif follow_up_log_pressure is not None:
         follow_up_pressure = {**follow_up_log_pressure, "from_leads": dict(from_leads_pressure)}
     elif any(from_leads_pressure.values()):

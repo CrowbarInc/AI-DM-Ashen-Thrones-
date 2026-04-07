@@ -1690,7 +1690,7 @@ def test_follow_up_pressure_none_when_no_log_and_no_lead_booleans():
     assert ctx["follow_up_pressure"] is None
 
 
-def test_social_lock_keeps_from_leads_without_log_escalation():
+def test_social_lock_merges_log_escalation_when_answer_pressure_followup():
     world: dict = {"npcs": []}
     upsert_world_npc(
         world,
@@ -1740,10 +1740,10 @@ def test_social_lock_keeps_from_leads_without_log_escalation():
         )
     )
     fup = ctx["follow_up_pressure"]
-    assert fup == {
-        "from_leads": _expected_follow_up_pressure_from_leads(has_pursued=True, npc_has_relevant=True),
-    }
-    assert "pressed" not in fup
+    assert fup["from_leads"] == _expected_follow_up_pressure_from_leads(
+        has_pursued=True, npc_has_relevant=True
+    )
+    assert fup.get("pressed") is True
 
 
 def test_active_npc_id_from_interlocutor_export_npc_id():

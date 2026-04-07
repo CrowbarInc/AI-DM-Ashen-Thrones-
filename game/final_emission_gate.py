@@ -10,6 +10,7 @@ from game.narration_visibility import (
     validate_player_facing_first_mentions,
     validate_player_facing_referential_clarity,
     validate_player_facing_visibility,
+    _split_visibility_sentences,
 )
 from game.output_sanitizer import sanitize_player_facing_output
 from game.social import SOCIAL_KINDS
@@ -26,8 +27,10 @@ from game.social_exchange_emission import (
     strict_social_ownership_terminal_fallback,
     strict_social_suppress_non_native_coercion_for_narration_beat,
     _npc_display_name_for_emission,
+    _speaker_label,
 )
 from game.storage import get_scene_runtime
+from game.leads import get_lead, normalize_lead
 
 
 def _normalize_text(text: str | None) -> str:
@@ -806,6 +809,7 @@ def _skip_answer_completeness_layer(
     *,
     strict_social_details: Dict[str, Any] | None,
     response_type_debug: Dict[str, Any],
+    gm_output: Dict[str, Any] | None = None,
 ) -> str | None:
     """Return skip reason, or None when the layer should run."""
     if response_type_debug.get("response_type_candidate_ok") is False:
@@ -818,6 +822,8 @@ def _skip_answer_completeness_layer(
         return "strict_social_ownership_terminal_repair"
     fe = str(strict_social_details.get("final_emitted_source") or "")
     if fe in {"neutral_reply_speaker_grounding_bridge", "structured_fact_candidate_emission"}:
+        if _strict_social_answer_pressure_ac_contract_active(gm_output):
+            return None
         return "strict_social_structured_or_bridge_source"
     return None
 
@@ -921,6 +927,7 @@ def _apply_answer_completeness_layer(
     skip = _skip_answer_completeness_layer(
         strict_social_details=strict_social_details,
         response_type_debug=response_type_debug,
+        gm_output=gm_output,
     )
     meta: Dict[str, Any] = {
         "answer_completeness_checked": False,
@@ -978,6 +985,774 @@ def _merge_answer_completeness_meta(meta: Dict[str, Any], ac_dbg: Dict[str, Any]
             "answer_completeness_repair_mode": ac_dbg.get("answer_completeness_repair_mode"),
             "answer_completeness_expected_voice": ac_dbg.get("answer_completeness_expected_voice"),
             "answer_completeness_skip_reason": ac_dbg.get("answer_completeness_skip_reason"),
+        }
+    )
+
+
+# --- Response delta (response_policy.response_delta) ---------------------------
+
+
+def _default_response_delta_meta() -> Dict[str, Any]:
+    return {
+        "response_delta_checked": False,
+        "response_delta_failed": False,
+        "response_delta_failure_reasons": [],
+        "response_delta_repaired": False,
+        "response_delta_repair_mode": None,
+        "response_delta_kind_detected": None,
+        "response_delta_echo_overlap_ratio": None,
+        "response_delta_skip_reason": None,
+        "response_delta_trigger_source": None,
+    }
+
+
+_RESPONSE_DELTA_STOPWORDS: frozenset[str] = frozenset(
+    {
+        "what",
+        "where",
+        "when",
+        "why",
+        "how",
+        "who",
+        "which",
+        "that",
+        "this",
+        "these",
+        "those",
+        "with",
+        "from",
+        "into",
+        "about",
+        "there",
+        "here",
+        "they",
+        "them",
+        "their",
+        "then",
+        "than",
+        "have",
+        "has",
+        "had",
+        "been",
+        "were",
+        "was",
+        "are",
+        "is",
+        "not",
+        "but",
+        "and",
+        "for",
+        "the",
+        "you",
+        "your",
+        "very",
+        "just",
+        "only",
+        "also",
+        "some",
+        "such",
+        "more",
+        "most",
+        "much",
+        "many",
+        "like",
+        "well",
+        "still",
+        "even",
+        "back",
+        "over",
+        "after",
+        "before",
+        "once",
+        "upon",
+    }
+)
+
+_RD_TOKEN_RE = re.compile(r"[a-z0-9']{4,}")
+
+_CONSEQUENCE_MARKERS: tuple[re.Pattern[str], ...] = (
+    re.compile(r"\b(?:so|therefore|which meant|which means|as a result)\b", re.IGNORECASE),
+    re.compile(r"\b(?:after that|from that|that left|led to|meant that)\b", re.IGNORECASE),
+)
+_REFINEMENT_MARKERS: tuple[re.Pattern[str], ...] = (
+    re.compile(r"\b(?:exactly|precisely|specifically|at least|at most)\b", re.IGNORECASE),
+    re.compile(r"\brather than\b", re.IGNORECASE),
+    re.compile(r"\bnot\b.{3,48}\bbut\b", re.IGNORECASE | re.DOTALL),
+)
+_CLARIFIED_UNCERTAINTY_MARKERS: tuple[re.Pattern[str], ...] = (
+    re.compile(r"\b(?:can'?t pin|can'?t say for certain|unclear whether|don'?t know if)\b", re.IGNORECASE),
+    re.compile(r"\b(?:might be|could be|as far as (?:i|we) know)\b", re.IGNORECASE),
+    re.compile(r"\b(?:no names?\b|never heard\b|wasn'?t on duty)\b", re.IGNORECASE),
+)
+
+
+def _response_delta_snippet_substantive(snippet: str) -> bool:
+    """Match ``prompt_context._prior_answer_snippet_substantive`` for defensive skips."""
+    s = " ".join(str(snippet or "").strip().split())
+    if len(s) < 12:
+        return False
+    words = s.split()
+    if len(words) < 2 and len(s) < 36:
+        return False
+    low = s.lower()
+    if low in {"yes.", "no.", "ok.", "okay.", "nope.", "yeah.", "sure."}:
+        return False
+    return True
+
+
+def _response_delta_tokens(text: str) -> List[str]:
+    low = re.sub(r"[^a-z0-9'\s]+", " ", str(text or "").lower())
+    return [t for t in _RD_TOKEN_RE.findall(low) if t not in _RESPONSE_DELTA_STOPWORDS]
+
+
+def _response_delta_token_overlap_ratio(a: List[str], b: List[str]) -> float:
+    if not a or not b:
+        return 0.0
+    sa, sb = set(a), set(b)
+    inter = len(sa & sb)
+    return float(inter) / float(max(len(sa), len(sb)))
+
+
+def _resolve_response_delta_contract(gm_output: Dict[str, Any] | None) -> Dict[str, Any] | None:
+    if not isinstance(gm_output, dict):
+        return None
+    pol = gm_output.get("response_policy")
+    if not isinstance(pol, dict):
+        return None
+    rd = pol.get("response_delta")
+    return rd if isinstance(rd, dict) else None
+
+
+def _strict_social_answer_pressure_ac_contract_active(gm_output: Dict[str, Any] | None) -> bool:
+    """True when prompt_context activated answer-completeness for strict-social answer-pressure (Block 1)."""
+    ac = _resolve_answer_completeness_contract(gm_output)
+    if not isinstance(ac, dict):
+        return False
+    if not _contract_bool(ac, "enabled") or not _contract_bool(ac, "answer_required"):
+        return False
+    trace = ac.get("trace") if isinstance(ac.get("trace"), dict) else {}
+    return bool(trace.get("strict_social_answer_seek_override"))
+
+
+def _strict_social_answer_pressure_rd_contract_active(gm_output: Dict[str, Any] | None) -> bool:
+    """True when response_delta is enabled with strict_social_answer_pressure trigger (Block 1)."""
+    rd = _resolve_response_delta_contract(gm_output)
+    if not isinstance(rd, dict) or not _contract_bool(rd, "enabled"):
+        return False
+    ts = str(rd.get("trigger_source") or "").strip()
+    if ts == "strict_social_answer_pressure":
+        return True
+    tr = rd.get("trace") if isinstance(rd.get("trace"), dict) else {}
+    return str(tr.get("trigger_source") or "").strip() == "strict_social_answer_pressure"
+
+
+def _clue_text_for_spoken_cash_out(session: Dict[str, Any], clue_id: str | None) -> str:
+    if not clue_id or not isinstance(session, dict):
+        return ""
+    ck = session.get("clue_knowledge") if isinstance(session.get("clue_knowledge"), dict) else {}
+    entry = ck.get(str(clue_id).strip())
+    if not isinstance(entry, dict):
+        return ""
+    t = entry.get("text")
+    return str(t).strip()[:400] if isinstance(t, str) and t.strip() else ""
+
+
+def _lead_row_phrase_for_spoken_cash_out(session: Dict[str, Any], lead_id: str | None) -> str:
+    if not lead_id:
+        return ""
+    row = get_lead(session, lead_id)
+    if not isinstance(row, dict):
+        return ""
+    ld = normalize_lead(dict(row))
+    for key in ("next_step", "summary", "title"):
+        v = str(ld.get(key) or "").strip()
+        if len(v) >= 6:
+            return v[:400]
+    return ""
+
+
+def _refinement_phrase_for_lead_or_clue_id(session: Dict[str, Any], lead_or_clue_id: str | None) -> str:
+    """Non-inventive phrase: prefer clue text, then registry row, then registry row matched by evidence clue id."""
+    cid = str(lead_or_clue_id or "").strip()
+    if not cid or not isinstance(session, dict):
+        return ""
+    t = _clue_text_for_spoken_cash_out(session, cid)
+    if t:
+        return t
+    lp = _lead_row_phrase_for_spoken_cash_out(session, cid)
+    if lp:
+        return lp
+    reg = session.get("lead_registry")
+    if not isinstance(reg, dict):
+        return ""
+    for row in reg.values():
+        if not isinstance(row, dict):
+            continue
+        ev = row.get("evidence_clue_ids") if isinstance(row.get("evidence_clue_ids"), list) else []
+        evs = {str(x).strip() for x in ev if x}
+        if cid not in evs:
+            continue
+        ld = normalize_lead(dict(row))
+        for key in ("title", "summary", "next_step"):
+            v = str(ld.get(key) or "").strip()
+            if len(v) >= 6:
+                return v[:400]
+    return ""
+
+
+def _topic_press_context_tokens(resolution: Dict[str, Any] | None) -> set[str]:
+    toks: set[str] = set()
+    if not isinstance(resolution, dict):
+        return toks
+    toks |= _content_tokens(str(resolution.get("prompt") or "").lower())
+    soc = resolution.get("social") if isinstance(resolution.get("social"), dict) else {}
+    tr = soc.get("topic_revealed") if isinstance(soc.get("topic_revealed"), dict) else {}
+    for key in ("title", "summary", "label", "topic_id"):
+        toks |= _content_tokens(str(tr.get(key) or "").lower())
+    return {t for t in toks if len(t) >= 4}
+
+
+def _refinement_relevant_to_answer_pressure(
+    resolution: Dict[str, Any] | None,
+    refinement: str,
+    *,
+    enforced_source: str | None,
+    enforced_lead_id: str | None,
+    promoted_ids: List[str],
+) -> bool:
+    if not str(refinement or "").strip():
+        return False
+    res = resolution if isinstance(resolution, dict) else {}
+    clue_id = str(res.get("clue_id") or "").strip()
+    press = _topic_press_context_tokens(res)
+    ref_toks = _content_tokens(str(refinement).lower())
+    inter = press & ref_toks
+
+    if str(enforced_source or "").strip() == "extracted_social":
+        return True
+    if clue_id and enforced_lead_id and clue_id == enforced_lead_id:
+        return True
+    if clue_id and clue_id in promoted_ids:
+        return True
+    if enforced_lead_id and enforced_lead_id in promoted_ids:
+        return True
+    if len(inter) >= 2:
+        return True
+    if len(inter) == 1 and len(ref_toks) <= 4:
+        return True
+    src = str(enforced_source or "").strip()
+    if src in ("discoverable_clue", "exit", "author_exit"):
+        return len(inter) >= 1
+    if promoted_ids:
+        return len(inter) >= 1
+    return False
+
+
+def _emitted_covers_refinement_spoken(emitted: str, refinement: str) -> bool:
+    e = _normalize_text(emitted).lower()
+    r = _normalize_text(refinement).lower()
+    if not r:
+        return True
+    if r in e:
+        return True
+    rtoks = _content_tokens(r)
+    etoks = _content_tokens(e)
+    if not rtoks:
+        return True
+    hit = len(rtoks & etoks)
+    need = min(2, len(rtoks))
+    return hit >= need
+
+
+def _gm_probe_for_answer_pressure_contracts(
+    gm_output: Dict[str, Any],
+    session: Dict[str, Any] | None,
+) -> Dict[str, Any]:
+    """Merge ``session["last_turn_response_policy"]`` when ``gm_output`` lacks ``response_policy`` (API stores policy on session)."""
+    pol = gm_output.get("response_policy") if isinstance(gm_output.get("response_policy"), dict) else None
+    if isinstance(pol, dict) and pol:
+        return gm_output
+    if isinstance(session, dict):
+        lp = session.get("last_turn_response_policy")
+        if isinstance(lp, dict) and lp:
+            merged = dict(gm_output)
+            merged["response_policy"] = lp
+            return merged
+    return gm_output
+
+
+def apply_spoken_state_refinement_cash_out(
+    gm_output: Dict[str, Any],
+    *,
+    resolution: Dict[str, Any] | None,
+    session: Dict[str, Any] | None,
+    world: Dict[str, Any] | None,
+    scene_id: str,
+) -> Dict[str, Any]:
+    """After state promotes a lead/clue, ensure spoken dialogue surfaces that refinement on answer-pressure turns.
+
+    Uses ``response_policy`` on ``gm_output`` when present; otherwise ``session["last_turn_response_policy"]``
+    from the narration pipeline (see :func:`game.api._build_gpt_narration_from_authoritative_state`).
+    """
+    if not isinstance(gm_output, dict) or not isinstance(session, dict):
+        return gm_output
+    sid = str(scene_id or "").strip()
+    if not sid:
+        return gm_output
+    if not strict_social_emission_will_apply(resolution, session, world, sid):
+        return gm_output
+    probe = _gm_probe_for_answer_pressure_contracts(gm_output, session)
+    if not (
+        _strict_social_answer_pressure_ac_contract_active(probe)
+        or _strict_social_answer_pressure_rd_contract_active(probe)
+    ):
+        return gm_output
+    if not isinstance(resolution, dict):
+        return gm_output
+
+    emitted = str(gm_output.get("player_facing_text") or "")
+    if not _normalize_text(emitted):
+        return gm_output
+
+    meta = resolution.get("metadata") if isinstance(resolution.get("metadata"), dict) else {}
+    mal = meta.get("minimum_actionable_lead") if isinstance(meta.get("minimum_actionable_lead"), dict) else {}
+    ll = meta.get("lead_landing") if isinstance(meta.get("lead_landing"), dict) else {}
+
+    enforced = bool(mal.get("minimum_actionable_lead_enforced"))
+    enforced_id = str(mal.get("enforced_lead_id") or "").strip() or None
+    enforced_src = str(mal.get("enforced_lead_source") or "").strip() or None
+
+    promoted_raw = ll.get("authoritative_promoted_ids") or []
+    promoted_ids = [str(x).strip() for x in promoted_raw if isinstance(x, str) and str(x).strip()]
+
+    if not enforced and not promoted_ids:
+        return gm_output
+
+    refinement = ""
+    source = ""
+
+    if enforced and enforced_id:
+        refinement = _refinement_phrase_for_lead_or_clue_id(session, enforced_id)
+        source = enforced_src or "minimum_actionable_lead"
+
+    if not refinement.strip() and promoted_ids:
+        pick = None
+        res_cid = str(resolution.get("clue_id") or "").strip()
+        if res_cid and res_cid in promoted_ids:
+            pick = res_cid
+        else:
+            pick = promoted_ids[0]
+        refinement = _refinement_phrase_for_lead_or_clue_id(session, pick)
+        source = "authoritative_promotion"
+
+    refinement = _normalize_text(refinement).strip()
+    if not refinement:
+        return gm_output
+
+    if not _refinement_relevant_to_answer_pressure(
+        resolution,
+        refinement,
+        enforced_source=enforced_src,
+        enforced_lead_id=enforced_id,
+        promoted_ids=promoted_ids,
+    ):
+        return gm_output
+
+    if _emitted_covers_refinement_spoken(emitted, refinement):
+        return gm_output
+
+    templates = (
+        "I can only add this: {ref}.",
+        "What I can say is: {ref}.",
+        "I don't know more than this: {ref}.",
+    )
+    idx = len(refinement) % 3
+    ref_clean = refinement.rstrip().rstrip(".")
+    tail = templates[idx].format(ref=ref_clean)
+    new_text = _normalize_text(emitted.rstrip() + " " + tail)
+    out = dict(gm_output)
+    out["player_facing_text"] = new_text
+    dbg = out.get("debug_notes") if isinstance(out.get("debug_notes"), str) else ""
+    out["debug_notes"] = (dbg + " | " if dbg else "") + f"spoken_state_refinement_cash_out:{source}"
+    out["_spoken_refinement_cash_out"] = {
+        "applied": True,
+        "source": source,
+        "refinement_preview": refinement[:160],
+    }
+    return out
+
+
+def _skip_response_delta_layer(
+    *,
+    contract: Dict[str, Any] | None,
+    emitted_text: str,
+    strict_social_details: Dict[str, Any] | None,
+    response_type_debug: Dict[str, Any],
+    answer_completeness_meta: Dict[str, Any],
+    gm_output: Dict[str, Any] | None = None,
+) -> str | None:
+    if not isinstance(contract, dict):
+        return "no_response_delta_contract"
+    if response_type_debug.get("response_type_candidate_ok") is False:
+        return "response_type_contract_failed"
+    if bool(answer_completeness_meta.get("answer_completeness_failed")):
+        return "answer_completeness_failed"
+    if not strict_social_details:
+        pass
+    else:
+        if strict_social_details.get("used_internal_fallback"):
+            return "strict_social_authoritative_internal_fallback"
+        if response_type_debug.get("response_type_repair_kind") == "strict_social_dialogue_repair":
+            return "strict_social_ownership_terminal_repair"
+        fe = str(strict_social_details.get("final_emitted_source") or "")
+        if fe in {"neutral_reply_speaker_grounding_bridge", "structured_fact_candidate_emission"}:
+            if _strict_social_answer_pressure_rd_contract_active(gm_output):
+                return None
+            return "strict_social_structured_or_bridge_source"
+    if not _contract_bool(contract, "enabled"):
+        return "response_delta_disabled"
+    if not _contract_bool(contract, "delta_required"):
+        return "delta_not_required"
+    prev = str(contract.get("previous_answer_snippet") or "").strip()
+    if not prev or not _response_delta_snippet_substantive(prev):
+        return "previous_answer_snippet_unavailable"
+    allowed = [str(x) for x in (contract.get("allowed_delta_kinds") or []) if str(x).strip()]
+    if not allowed:
+        return "allowed_delta_kinds_empty"
+    norm = _normalize_text(emitted_text)
+    if not norm:
+        return "empty_emitted_text"
+    return None
+
+
+def _detect_delta_kinds_in_text(
+    text: str,
+    prior_tokens: set[str],
+    *,
+    allowed: set[str],
+) -> set[str]:
+    found: set[str] = set()
+    toks = _response_delta_tokens(text)
+    tok_set = set(toks)
+    novel = tok_set - prior_tokens
+    if "new_information" in allowed and (
+        len(novel) >= 2 or any(len(t) >= 8 for t in novel) or _digit_bearing_new_info(str(text))
+    ):
+        found.add("new_information")
+    if "refinement" in allowed and any(p.search(text) for p in _REFINEMENT_MARKERS):
+        found.add("refinement")
+    if "consequence" in allowed and any(p.search(text) for p in _CONSEQUENCE_MARKERS):
+        found.add("consequence")
+    if "clarified_uncertainty" in allowed and any(p.search(text) for p in _CLARIFIED_UNCERTAINTY_MARKERS):
+        found.add("clarified_uncertainty")
+    if "new_information" in allowed and not found.isdisjoint({"refinement", "consequence", "clarified_uncertainty"}):
+        pass
+    return found & allowed
+
+
+def _digit_bearing_new_info(raw_text: str) -> bool:
+    return bool(re.search(r"\b\d+\s*(?:feet|yards|miles|men|guards|hours|minutes|silver|gold|copper)\b", raw_text, re.IGNORECASE))
+
+
+def _opening_carries_allowed_delta(
+    opening_text: str,
+    prior_token_set: set[str],
+    *,
+    allowed: set[str],
+) -> bool:
+    return bool(_detect_delta_kinds_in_text(opening_text, prior_token_set, allowed=allowed))
+
+
+def _early_window_has_delta(
+    sentences: List[str],
+    contract: Dict[str, Any],
+    prior_token_set: set[str],
+    *,
+    allowed: set[str],
+) -> bool:
+    if not sentences:
+        return False
+    bridge = bool(contract.get("allow_short_bridge_before_delta"))
+    first = sentences[0]
+    if _opening_carries_allowed_delta(first, prior_token_set, allowed=allowed):
+        return True
+    if len(sentences) >= 2 and bridge:
+        pair = f"{first} {sentences[1]}"
+        return bool(_detect_delta_kinds_in_text(pair, prior_token_set, allowed=allowed))
+    return False
+
+
+def validate_response_delta(
+    emitted_text: str,
+    contract: Dict[str, Any] | None,
+) -> Dict[str, Any]:
+    """Deterministic anti-echo check vs ``previous_answer_snippet`` only (no LLM)."""
+    out: Dict[str, Any] = {
+        "checked": False,
+        "passed": True,
+        "failure_reasons": [],
+        "delta_kind_detected": None,
+        "echo_overlap_ratio": None,
+        "early_delta_found": False,
+        "direct_restatement_detected": False,
+        "previous_answer_available": False,
+        "candidate_sentence_count": 0,
+    }
+    if not isinstance(contract, dict):
+        return out
+    if not _contract_bool(contract, "enabled") or not _contract_bool(contract, "delta_required"):
+        return out
+    prev = str(contract.get("previous_answer_snippet") or "").strip()
+    out["previous_answer_available"] = bool(prev and _response_delta_snippet_substantive(prev))
+    if not out["previous_answer_available"]:
+        return out
+
+    allowed_list = [str(x).strip().lower() for x in (contract.get("allowed_delta_kinds") or []) if str(x).strip()]
+    allowed_set = set(allowed_list)
+    if not allowed_set:
+        return out
+
+    text = _normalize_text(emitted_text)
+    out["checked"] = True
+    if not text:
+        out["passed"] = False
+        out["failure_reasons"] = ["no_delta_detected"]
+        return out
+
+    prior_tokens = _response_delta_tokens(prev)
+    prior_token_set = set(prior_tokens)
+    emitted_tokens = _response_delta_tokens(text)
+    sentences = _split_sentences_answer_complete(text)
+    out["candidate_sentence_count"] = len(sentences)
+
+    echo = _response_delta_token_overlap_ratio(emitted_tokens, prior_tokens)
+    out["echo_overlap_ratio"] = round(echo, 4)
+    opening = _opening_segment(text)
+    opening_toks = _response_delta_tokens(opening)
+    open_ov = _response_delta_token_overlap_ratio(opening_toks, prior_tokens)
+    out["direct_restatement_detected"] = bool(opening_toks and open_ov >= 0.62)
+
+    kinds = _detect_delta_kinds_in_text(text, prior_token_set, allowed=allowed_set)
+    if kinds:
+        priority = ("new_information", "consequence", "refinement", "clarified_uncertainty")
+        for k in priority:
+            if k in kinds:
+                out["delta_kind_detected"] = k
+                break
+        if out["delta_kind_detected"] is None:
+            out["delta_kind_detected"] = next(iter(kinds))
+    else:
+        out["delta_kind_detected"] = None
+
+    must_early = bool(contract.get("delta_must_come_early"))
+    early_ok = _early_window_has_delta(sentences, contract, prior_token_set, allowed=allowed_set)
+    out["early_delta_found"] = bool(early_ok)
+
+    exp_shape = str(contract.get("expected_delta_shape") or "").strip().lower()
+    failure_reasons: List[str] = []
+
+    if not kinds:
+        failure_reasons.append("no_delta_detected")
+    if must_early and kinds and not early_ok:
+        failure_reasons.append("follow_up_answer_without_refinement")
+    opening_has_delta = _opening_carries_allowed_delta(opening, prior_token_set, allowed=allowed_set)
+    if open_ov >= 0.55 and not opening_has_delta and kinds:
+        failure_reasons.append("opening_semantic_restatement")
+    if echo >= 0.78 and not kinds:
+        failure_reasons.append("full_response_semantic_restatement")
+    if _GENERIC_NONANSWER_SNIPPET.search(text) and echo >= 0.42 and not kinds:
+        failure_reasons.append("repackaged_nonanswer")
+    if (
+        exp_shape == "bounded_partial_with_delta"
+        and echo >= 0.68
+        and _partial_reason_in_text(text, ["uncertainty", "lack_of_knowledge", "gated_information"])
+        and kinds.isdisjoint({"new_information", "consequence", "refinement", "clarified_uncertainty"})
+    ):
+        failure_reasons.append("repeated_partial_without_new_boundary")
+
+    out["failure_reasons"] = list(dict.fromkeys(str(r) for r in failure_reasons if r))
+    out["passed"] = not bool(out["failure_reasons"])
+    return out
+
+
+def inspect_response_delta_failure(result: Dict[str, Any]) -> Dict[str, Any]:
+    if not isinstance(result, dict) or result.get("passed") is not False:
+        return {"failed": False}
+    return {
+        "failed": True,
+        "failure_reasons": list(result.get("failure_reasons") or []),
+        "echo_overlap_ratio": result.get("echo_overlap_ratio"),
+        "delta_kind_detected": result.get("delta_kind_detected"),
+    }
+
+
+def _sentence_carries_response_delta(
+    sentence: str,
+    prior_token_set: set[str],
+    *,
+    allowed: set[str],
+) -> bool:
+    return bool(_detect_delta_kinds_in_text(sentence, prior_token_set, allowed=allowed))
+
+
+def _repair_response_delta_minimal(
+    text: str,
+    _validation: Dict[str, Any],
+    contract: Dict[str, Any],
+) -> tuple[str | None, str | None]:
+    """Reorder / trim existing sentences only; never invent facts."""
+    prev = str(contract.get("previous_answer_snippet") or "").strip()
+    prior_token_set = set(_response_delta_tokens(prev))
+    allowed_list = [str(x).strip().lower() for x in (contract.get("allowed_delta_kinds") or []) if str(x).strip()]
+    allowed = set(allowed_list)
+    sentences = _split_sentences_answer_complete(text)
+    if len(sentences) < 2:
+        return None, None
+
+    # 1) Front-load first later sentence that already carries a valid delta.
+    for idx in range(1, len(sentences)):
+        if _sentence_carries_response_delta(sentences[idx], prior_token_set, allowed=allowed):
+            pick = sentences[idx]
+            rest = sentences[:idx] + sentences[idx + 1 :]
+            merged = _normalize_terminal_punctuation(pick) + " " + " ".join(
+                _normalize_terminal_punctuation(s) for s in rest if s
+            )
+            candidate = _normalize_text(merged)
+            v2 = validate_response_delta(candidate, contract)
+            if v2.get("passed"):
+                return candidate, "frontload_delta_sentence"
+
+    # 2) Trim echoed opening when the remainder validates.
+    open_ov = _response_delta_token_overlap_ratio(_response_delta_tokens(sentences[0]), list(prior_token_set))
+    if open_ov >= 0.5 and not _opening_carries_allowed_delta(sentences[0], prior_token_set, allowed=allowed):
+        tail = " ".join(_normalize_terminal_punctuation(s) for s in sentences[1:] if s)
+        candidate = _normalize_text(tail)
+        v2 = validate_response_delta(candidate, contract)
+        if v2.get("passed"):
+            return candidate, "trim_echo_opening"
+
+    # 3) Prioritize refinement / delta sentence before uncertainty caveat (swap s0/s1).
+    if len(sentences) >= 2:
+        s0, s1 = sentences[0], sentences[1]
+        if _partial_reason_in_text(s0, ["uncertainty", "lack_of_knowledge"]) and _sentence_carries_response_delta(
+            s1, prior_token_set, allowed=allowed
+        ):
+            merged = _normalize_terminal_punctuation(s1) + " " + _normalize_terminal_punctuation(s0)
+            candidate = _normalize_text(merged)
+            rest = " ".join(_normalize_terminal_punctuation(s) for s in sentences[2:] if s)
+            if rest:
+                candidate = _normalize_text(candidate + " " + rest)
+            v2 = validate_response_delta(candidate, contract)
+            if v2.get("passed"):
+                return candidate, "prioritize_refinement_before_caveat"
+
+    # 4) Compress: drop duplicate partial opener + keep first delta sentence.
+    if len(sentences) >= 2:
+        dup_ov = _response_delta_token_overlap_ratio(
+            _response_delta_tokens(sentences[0]),
+            _response_delta_tokens(sentences[1]),
+        )
+        if dup_ov >= 0.72:
+            trimmed = sentences[1:]
+            candidate = _normalize_text(
+                " ".join(_normalize_terminal_punctuation(s) for s in trimmed if s)
+            )
+            v2 = validate_response_delta(candidate, contract)
+            if v2.get("passed"):
+                return candidate, "drop_duplicate_partial_prefix"
+
+    # 5) Compress echoed opener + substantive later line (two sentences -> delta first, opener shortened).
+    if len(sentences) >= 2:
+        for idx in range(1, len(sentences)):
+            if not _sentence_carries_response_delta(sentences[idx], prior_token_set, allowed=allowed):
+                continue
+            delta_s = sentences[idx]
+            head = sentences[0]
+            rest = [s for i, s in enumerate(sentences) if i not in (0, idx)]
+            merged = (
+                _normalize_terminal_punctuation(delta_s)
+                + " "
+                + _normalize_terminal_punctuation(head)
+                + (" " + " ".join(_normalize_terminal_punctuation(s) for s in rest if s) if rest else "")
+            )
+            candidate = _normalize_text(merged)
+            v2 = validate_response_delta(candidate, contract)
+            if v2.get("passed"):
+                return candidate, "compress_echo_plus_delta"
+
+    return None, None
+
+
+def _apply_response_delta_layer(
+    text: str,
+    *,
+    gm_output: Dict[str, Any],
+    strict_social_details: Dict[str, Any] | None,
+    response_type_debug: Dict[str, Any],
+    answer_completeness_meta: Dict[str, Any],
+    strict_social_path: bool,
+) -> tuple[str, Dict[str, Any], List[str]]:
+    contract = _resolve_response_delta_contract(gm_output)
+    meta = _default_response_delta_meta()
+    trace = contract.get("trace") if isinstance(contract, dict) else None
+    if isinstance(trace, dict):
+        meta["response_delta_trigger_source"] = trace.get("trigger_source")
+    if isinstance(contract, dict) and contract.get("trigger_source"):
+        meta["response_delta_trigger_source"] = contract.get("trigger_source")
+
+    skip = _skip_response_delta_layer(
+        contract=contract if isinstance(contract, dict) else None,
+        emitted_text=text,
+        strict_social_details=strict_social_details,
+        response_type_debug=response_type_debug,
+        answer_completeness_meta=answer_completeness_meta,
+        gm_output=gm_output,
+    )
+    meta["response_delta_skip_reason"] = skip
+    if skip:
+        return text, meta, []
+
+    v0 = validate_response_delta(text, contract)
+    meta["response_delta_checked"] = bool(v0.get("checked"))
+    meta["response_delta_kind_detected"] = v0.get("delta_kind_detected")
+    meta["response_delta_echo_overlap_ratio"] = v0.get("echo_overlap_ratio")
+    if not v0.get("checked") or v0.get("passed"):
+        return text, meta, []
+
+    meta["response_delta_failed"] = True
+    meta["response_delta_failure_reasons"] = list(v0.get("failure_reasons") or [])
+
+    repaired, mode = _repair_response_delta_minimal(text, v0, contract)
+    if repaired:
+        v1 = validate_response_delta(repaired, contract)
+        if v1.get("passed"):
+            meta["response_delta_repaired"] = True
+            meta["response_delta_repair_mode"] = mode
+            meta["response_delta_failed"] = False
+            meta["response_delta_failure_reasons"] = []
+            meta["response_delta_kind_detected"] = v1.get("delta_kind_detected")
+            meta["response_delta_echo_overlap_ratio"] = v1.get("echo_overlap_ratio")
+            return repaired, meta, []
+
+    extra: List[str] = []
+    if not strict_social_path:
+        extra.append("response_delta_unsatisfied_after_repair")
+    meta["response_delta_failed"] = True
+    return text, meta, extra
+
+
+def _merge_response_delta_meta(meta: Dict[str, Any], rd_dbg: Dict[str, Any]) -> None:
+    meta.update(
+        {
+            "response_delta_checked": bool(rd_dbg.get("response_delta_checked")),
+            "response_delta_failed": bool(rd_dbg.get("response_delta_failed")),
+            "response_delta_failure_reasons": list(rd_dbg.get("response_delta_failure_reasons") or []),
+            "response_delta_repaired": bool(rd_dbg.get("response_delta_repaired")),
+            "response_delta_repair_mode": rd_dbg.get("response_delta_repair_mode"),
+            "response_delta_kind_detected": rd_dbg.get("response_delta_kind_detected"),
+            "response_delta_echo_overlap_ratio": rd_dbg.get("response_delta_echo_overlap_ratio"),
+            "response_delta_skip_reason": rd_dbg.get("response_delta_skip_reason"),
+            "response_delta_trigger_source": rd_dbg.get("response_delta_trigger_source"),
         }
     )
 
@@ -2871,12 +3646,238 @@ def _build_referential_clarity_violation_sample(violations: List[Dict[str, Any]]
     return sample
 
 
+_LOCAL_STRICT_SOCIAL_PRONOUN_SUBSTITUTION_TOKENS = frozenset(
+    {"he", "she", "they", "him", "her", "them"}
+)
+_REF_REPAIR_PERSON_LIKE_KINDS = frozenset({"npc", "scene_actor", "creature", "humanoid", "person"})
+
+
+def _strict_social_answer_payload_signals(clean: str) -> bool:
+    """True when dialogue carries bounded answer, refusal-with-reason, clue, or concrete direction."""
+    if candidate_satisfies_answer_contract(clean)[0]:
+        return True
+    if any(p.search(clean) for p in _ANSWER_DIRECT_PATTERNS):
+        return True
+    low = clean.lower()
+    if re.search(
+        r"\b(?:can'?t|cannot|won'?t|not (?:here|safe)|no names|won'?t name|too risky|wrong place)\b",
+        low,
+    ):
+        return True
+    if re.search(
+        r"\b(?:east|west|north|south|gate|road|lane|checkpoint|pier|market|dock|wharf)\b",
+        low,
+    ):
+        return True
+    if re.search(r"\b(?:if you (?:want|need)|check (?:the|with)|ask (?:at|about))\b", low):
+        return True
+    if re.search(r"\b(?:patrol|watch(?:ers)?|sentries|crowd|ears (?:are )?open|listening)\b", low):
+        return True
+    if re.search(r"\b(?:note|letter|slips? you|hands? you)\b", low):
+        return True
+    return False
+
+
+def _strict_social_dialogue_substantive_for_local_ref_repair(text: str) -> bool:
+    """Conservative gate: repair only when the line already carries a useful answer payload."""
+    clean = _normalize_text(text)
+    if len(clean) < 28:
+        return False
+    if re.search(r"\bstarts to answer\b", clean, re.IGNORECASE):
+        return False
+    if is_route_illegal_global_or_sanitizer_fallback_text(clean):
+        return False
+    return _strict_social_answer_payload_signals(clean)
+
+
+def _strict_social_eff_npc_id_matches_interlocutor(
+    eff_resolution: Dict[str, Any] | None, active_interlocutor: str
+) -> bool:
+    aid = str(active_interlocutor or "").strip()
+    if not aid:
+        return False
+    if not isinstance(eff_resolution, dict):
+        return False
+    soc = eff_resolution.get("social") if isinstance(eff_resolution.get("social"), dict) else {}
+    nid = str(soc.get("npc_id") or "").strip()
+    if nid and nid != aid:
+        return False
+    return True
+
+
+def _active_interlocutor_visible_person_like(
+    active_interlocutor: str,
+    *,
+    session: Dict[str, Any] | None,
+    scene: Dict[str, Any] | None,
+    world: Dict[str, Any] | None,
+) -> bool:
+    aid = str(active_interlocutor or "").strip()
+    if not aid:
+        return False
+    contract = build_narration_visibility_contract(
+        session=session if isinstance(session, dict) else None,
+        scene=scene if isinstance(scene, dict) else None,
+        world=world if isinstance(world, dict) else None,
+    )
+    visible_ids = [
+        str(raw).strip()
+        for raw in (contract.get("visible_entity_ids") or [])
+        if isinstance(raw, str) and str(raw).strip()
+    ]
+    if aid not in visible_ids:
+        return False
+    kinds = contract.get("visible_entity_kinds") if isinstance(contract.get("visible_entity_kinds"), dict) else {}
+    kind = str(kinds.get(aid) or "").strip().lower()
+    return kind in _REF_REPAIR_PERSON_LIKE_KINDS
+
+
+def _grounded_speaker_phrase_for_pronoun_substitution(
+    *,
+    eff_resolution: Dict[str, Any] | None,
+    active_interlocutor: str,
+    world: Dict[str, Any] | None,
+    scene_id: str,
+    pronoun_surface: str,
+) -> str:
+    label = (
+        _speaker_label(eff_resolution)
+        if isinstance(eff_resolution, dict)
+        else _npc_display_name_for_emission(world, scene_id, active_interlocutor)
+    )
+    base = str(label or "").strip()
+    if not base:
+        base = _npc_display_name_for_emission(world, scene_id, active_interlocutor)
+    core = base
+    low = core.lower()
+    if low.startswith("the "):
+        core = core[4:].lstrip()
+    phrase = f"the {core}".strip()
+    if pronoun_surface[:1].isupper():
+        return phrase[:1].upper() + phrase[1:]
+    return phrase
+
+
+def _violations_eligible_for_strict_social_local_pronoun_repair(violations: List[Dict[str, Any]]) -> bool:
+    if len(violations) != 1:
+        return False
+    v = violations[0]
+    if not isinstance(v, dict):
+        return False
+    if str(v.get("kind") or "").strip() != "ambiguous_entity_reference":
+        return False
+    cids = v.get("candidate_entity_ids")
+    if isinstance(cids, list) and len(cids) > 1:
+        return False
+    return True
+
+
+def _pronoun_violation_candidate_ids_align_with_interlocutor(
+    violation: Dict[str, Any], active_interlocutor: str
+) -> bool:
+    aid = str(active_interlocutor or "").strip()
+    cids = violation.get("candidate_entity_ids")
+    if not isinstance(cids, list) or len(cids) == 0:
+        return True
+    if len(cids) == 1:
+        return str(cids[0]).strip() == aid
+    return False
+
+
+def _try_strict_social_local_pronoun_substitution_repair(
+    candidate_text: str,
+    *,
+    violations: List[Dict[str, Any]],
+    session: Dict[str, Any] | None,
+    scene: Dict[str, Any] | None,
+    world: Dict[str, Any] | None,
+    scene_id: str,
+    eff_resolution: Dict[str, Any] | None,
+    active_interlocutor: str,
+) -> tuple[str | None, Dict[str, Any]]:
+    """Replace one ambiguous pronoun with the grounded interlocutor label; no clause moves or paraphrase."""
+    dbg: Dict[str, Any] = {
+        "referential_clarity_local_substitution_attempted": False,
+        "referential_clarity_local_substitution_applied": False,
+        "referential_clarity_local_substitution_token": None,
+        "referential_clarity_local_substitution_replacement": None,
+        "referential_clarity_fallback_avoided": False,
+        "referential_clarity_fallback_after_failed_local_repair": False,
+    }
+    if not candidate_text.strip():
+        return None, dbg
+    if not _violations_eligible_for_strict_social_local_pronoun_repair(violations):
+        return None, dbg
+    v0 = violations[0]
+    if not _pronoun_violation_candidate_ids_align_with_interlocutor(v0, active_interlocutor):
+        return None, dbg
+    token = str(v0.get("token") or "").strip().lower()
+    if token not in _LOCAL_STRICT_SOCIAL_PRONOUN_SUBSTITUTION_TOKENS:
+        return None, dbg
+    sens = _split_visibility_sentences(candidate_text)
+    if len(sens) != 1:
+        return None, dbg
+    try:
+        pat = re.compile(rf"(?<!\w){re.escape(token)}(?!\w)", re.IGNORECASE)
+    except re.error:
+        return None, dbg
+    matches = list(pat.finditer(candidate_text))
+    if len(matches) != 1:
+        return None, dbg
+    m = matches[0]
+    if not _strict_social_eff_npc_id_matches_interlocutor(eff_resolution, active_interlocutor):
+        return None, dbg
+    if not _active_interlocutor_visible_person_like(
+        active_interlocutor, session=session, scene=scene, world=world
+    ):
+        return None, dbg
+    if not _strict_social_dialogue_substantive_for_local_ref_repair(candidate_text):
+        return None, dbg
+    replacement = _grounded_speaker_phrase_for_pronoun_substitution(
+        eff_resolution=eff_resolution,
+        active_interlocutor=active_interlocutor,
+        world=world if isinstance(world, dict) else None,
+        scene_id=str(scene_id or "").strip(),
+        pronoun_surface=m.group(0),
+    )
+    repaired = pat.sub(replacement, candidate_text, count=1)
+    if repaired == candidate_text:
+        return None, dbg
+    dbg["referential_clarity_local_substitution_attempted"] = True
+    dbg["referential_clarity_local_substitution_token"] = m.group(0)
+    dbg["referential_clarity_local_substitution_replacement"] = replacement
+    sess = session if isinstance(session, dict) else None
+    sc = scene if isinstance(scene, dict) else None
+    w = world if isinstance(world, dict) else None
+    ref2 = validate_player_facing_referential_clarity(repaired, session=sess, scene=sc, world=w)
+    if ref2.get("ok") is not True:
+        dbg["referential_clarity_fallback_after_failed_local_repair"] = True
+        return None, dbg
+    fm2 = validate_player_facing_first_mentions(repaired, session=sess, scene=sc, world=w)
+    if fm2.get("ok") is not True:
+        dbg["referential_clarity_fallback_after_failed_local_repair"] = True
+        return None, dbg
+    vis2 = validate_player_facing_visibility(repaired, session=sess, scene=sc, world=w)
+    if vis2.get("ok") is not True:
+        dbg["referential_clarity_fallback_after_failed_local_repair"] = True
+        return None, dbg
+    dbg["referential_clarity_local_substitution_applied"] = True
+    dbg["referential_clarity_fallback_avoided"] = True
+    return repaired, dbg
+
+
 def _apply_default_referential_clarity_meta(meta: Dict[str, Any], *, passed: bool | None) -> None:
     meta["referential_clarity_validation_passed"] = passed
     meta["referential_clarity_replacement_applied"] = False
     meta["referential_clarity_violation_kinds"] = []
     meta["referential_clarity_checked_entities"] = []
     meta["referential_clarity_violation_sample"] = []
+    meta["referential_clarity_local_substitution_attempted"] = False
+    meta["referential_clarity_local_substitution_applied"] = False
+    meta["referential_clarity_local_substitution_token"] = None
+    meta["referential_clarity_local_substitution_replacement"] = None
+    meta["referential_clarity_fallback_avoided"] = False
+    meta["referential_clarity_fallback_after_failed_local_repair"] = False
 
 
 def _standard_visibility_safe_fallback(
@@ -3247,6 +4248,12 @@ def _apply_referential_clarity_enforcement(
     meta["referential_clarity_violation_kinds"] = violation_kinds
     meta["referential_clarity_checked_entities"] = checked_entities
     meta["referential_clarity_violation_sample"] = _build_referential_clarity_violation_sample(violations)
+    meta["referential_clarity_local_substitution_attempted"] = False
+    meta["referential_clarity_local_substitution_applied"] = False
+    meta["referential_clarity_local_substitution_token"] = None
+    meta["referential_clarity_local_substitution_replacement"] = None
+    meta["referential_clarity_fallback_avoided"] = False
+    meta["referential_clarity_fallback_after_failed_local_repair"] = False
     out["_final_emission_meta"] = meta
 
     if validation.get("ok") is True:
@@ -3256,6 +4263,56 @@ def _apply_referential_clarity_enforcement(
         meta["referential_clarity_validation_passed"] = None
         out["_final_emission_meta"] = meta
         return out
+
+    response_type_req = str(meta.get("response_type_required") or "").strip().lower()
+    if (
+        strict_social_active
+        and response_type_req == "dialogue"
+        and not strict_social_suppressed_non_social_turn
+    ):
+        repaired, subst_dbg = _try_strict_social_local_pronoun_substitution_repair(
+            candidate_text,
+            violations=[v for v in violations if isinstance(v, dict)],
+            session=session,
+            scene=scene,
+            world=world,
+            scene_id=scene_id,
+            eff_resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
+            active_interlocutor=active_interlocutor,
+        )
+        for k, val in subst_dbg.items():
+            meta[k] = val
+        if repaired is not None:
+            out["player_facing_text"] = repaired
+            meta["referential_clarity_validation_passed"] = True
+            meta["referential_clarity_replacement_applied"] = False
+            meta["referential_clarity_violation_kinds"] = []
+            meta["referential_clarity_violation_sample"] = []
+            tags = out.get("tags") if isinstance(out.get("tags"), list) else []
+            out["tags"] = _dedupe_preserve_order(
+                [str(t) for t in tags if isinstance(t, str)] + ["referential_clarity_local_substitution"]
+            )
+            gate_out_text = _normalize_text(out.get("player_facing_text"))
+            meta["post_gate_mutation_detected"] = bool(meta.get("post_gate_mutation_detected")) or (
+                candidate_text != gate_out_text
+            )
+            meta["final_text_preview"] = (gate_out_text[:120] + "…") if len(gate_out_text) > 120 else gate_out_text
+            out["_final_emission_meta"] = meta
+            log_final_emission_decision(
+                {
+                    "stage": "final_emission_gate_referential_clarity",
+                    "social_route": strict_social_active,
+                    "candidate_ok": True,
+                    "rejection_reasons": [],
+                    "fallback_pool": "referential_clarity_local_substitution",
+                    "fallback_kind": "none",
+                    "active_interlocutor": active_interlocutor or None,
+                }
+            )
+            log_final_emission_trace(
+                {**meta, "stage": "final_emission_gate_referential_clarity_local_substitution"}
+            )
+            return out
 
     (
         fallback_text,
@@ -3314,6 +4371,9 @@ def _apply_referential_clarity_enforcement(
             "fallback_pool": fallback_pool,
             "fallback_kind": fallback_kind,
             "active_interlocutor": active_interlocutor or None,
+            "referential_clarity_fallback_after_failed_local_repair": bool(
+                meta.get("referential_clarity_fallback_after_failed_local_repair")
+            ),
         }
     )
     log_final_emission_trace({**meta, "stage": "final_emission_gate_referential_clarity_replace"})
@@ -3580,6 +4640,7 @@ def apply_final_emission_gate(
     text = pre_gate_text
     response_type_debug = _default_response_type_debug(None, None)
     ac_layer_meta: Dict[str, Any] = {}
+    rd_layer_meta: Dict[str, Any] = _default_response_delta_meta()
 
     strict_social_active = bool(strict_social_turn)
     coercion_used = (
@@ -3643,6 +4704,14 @@ def apply_final_emission_gate(
             response_type_debug=response_type_debug,
             strict_social_path=True,
         )
+        text, rd_layer_meta, _ = _apply_response_delta_layer(
+            text,
+            gm_output=out,
+            strict_social_details=details,
+            response_type_debug=response_type_debug,
+            answer_completeness_meta=ac_layer_meta,
+            strict_social_path=True,
+        )
         out["player_facing_text"] = text
         final_emitted_source = str(details.get("final_emitted_source") or "unknown_post_gate_writer")
         if response_type_debug.get("response_type_repair_used"):
@@ -3654,6 +4723,10 @@ def apply_final_emission_gate(
         if ac_layer_meta.get("answer_completeness_repaired"):
             final_emitted_source = str(
                 ac_layer_meta.get("answer_completeness_repair_mode") or "answer_completeness_repair"
+            )
+        if rd_layer_meta.get("response_delta_repaired"):
+            final_emitted_source = str(
+                rd_layer_meta.get("response_delta_repair_mode") or "response_delta_repair"
             )
         gate_out_text = _normalize_text(out.get("player_facing_text"))
         post_gate_mutation_detected = pre_gate_text != gate_out_text
@@ -3701,6 +4774,7 @@ def apply_final_emission_gate(
             }
             _merge_response_type_meta(out["_final_emission_meta"], response_type_debug)
             _merge_answer_completeness_meta(out["_final_emission_meta"], ac_layer_meta)
+            _merge_response_delta_meta(out["_final_emission_meta"], rd_layer_meta)
             out = _apply_visibility_enforcement(
                 out,
                 session=session,
@@ -3784,6 +4858,7 @@ def apply_final_emission_gate(
         }
         _merge_response_type_meta(out["_final_emission_meta"], response_type_debug)
         _merge_answer_completeness_meta(out["_final_emission_meta"], ac_layer_meta)
+        _merge_response_delta_meta(out["_final_emission_meta"], rd_layer_meta)
         out = _apply_visibility_enforcement(
             out,
             session=session,
@@ -3838,6 +4913,16 @@ def apply_final_emission_gate(
     )
     reasons.extend(ac_reasons)
 
+    text, rd_layer_meta, rd_reasons = _apply_response_delta_layer(
+        text,
+        gm_output=out,
+        strict_social_details=None,
+        response_type_debug=response_type_debug,
+        answer_completeness_meta=ac_layer_meta,
+        strict_social_path=False,
+    )
+    reasons.extend(rd_reasons)
+
     candidate_ok = not bool(reasons)
     fallback_pool = "none"
     fallback_kind = "none"
@@ -3857,6 +4942,10 @@ def apply_final_emission_gate(
         if ac_layer_meta.get("answer_completeness_repaired"):
             final_emitted_source = str(
                 ac_layer_meta.get("answer_completeness_repair_mode") or "answer_completeness_repair"
+            )
+        if rd_layer_meta.get("response_delta_repaired"):
+            final_emitted_source = str(
+                rd_layer_meta.get("response_delta_repair_mode") or "response_delta_repair"
             )
 
         gate_out_text = _normalize_text(out.get("player_facing_text"))
@@ -3897,6 +4986,7 @@ def apply_final_emission_gate(
         }
         _merge_response_type_meta(out["_final_emission_meta"], response_type_debug)
         _merge_answer_completeness_meta(out["_final_emission_meta"], ac_layer_meta)
+        _merge_response_delta_meta(out["_final_emission_meta"], rd_layer_meta)
         out = _apply_visibility_enforcement(
             out,
             session=session,
@@ -4008,6 +5098,7 @@ def apply_final_emission_gate(
     }
     _merge_response_type_meta(out["_final_emission_meta"], response_type_debug)
     _merge_answer_completeness_meta(out["_final_emission_meta"], ac_layer_meta)
+    _merge_response_delta_meta(out["_final_emission_meta"], rd_layer_meta)
     out = _apply_visibility_enforcement(
         out,
         session=session,
