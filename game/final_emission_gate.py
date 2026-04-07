@@ -16,11 +16,14 @@ from game.social import SOCIAL_KINDS
 from game.social_exchange_emission import (
     build_final_strict_social_response,
     effective_strict_social_resolution_for_emission,
+    is_route_illegal_global_or_sanitizer_fallback_text,
     log_final_emission_decision,
     log_final_emission_trace,
     merged_player_prompt_for_gate,
     minimal_social_emergency_fallback_line,
+    replacement_is_route_legal_social,
     strict_social_emission_will_apply,
+    strict_social_ownership_terminal_fallback,
     strict_social_suppress_non_native_coercion_for_narration_beat,
     _npc_display_name_for_emission,
 )
@@ -73,6 +76,517 @@ def _capitalize_sentence_fragment(text: str) -> str:
             chars[idx] = ch.upper()
             break
     return "".join(chars)
+
+
+_RESPONSE_TYPE_VALUES = {"dialogue", "answer", "action_outcome", "neutral_narration"}
+_ANSWER_DIRECT_PATTERNS = (
+    re.compile(r"\b(?:yes|no|none|nothing|nowhere|someone|somebody|everyone|nobody)\b", re.IGNORECASE),
+    re.compile(r"\b(?:don'?t know|do not know|cannot say|can'?t say|that'?s all i(?:'ve| have) got)\b", re.IGNORECASE),
+    re.compile(r"\b(?:requires? a check|calls? for a check|need a more concrete|need a concrete|not established yet)\b", re.IGNORECASE),
+    re.compile(r"\b(?:in earshot|nearby npc presence|estimated distance|about \d+\s+feet)\b", re.IGNORECASE),
+    re.compile(r"\b(?:is armed|does not appear armed|no one else is clearly in earshot)\b", re.IGNORECASE),
+    re.compile(r"\b(?:roll|sleight of hand|stealth|perception|diplomacy|intimidate|bluff)\b", re.IGNORECASE),
+    re.compile(r"\b(?:east|west|north|south)\b", re.IGNORECASE),
+    re.compile(r"\b(?:road|lane|gate|pier|market|checkpoint|milestone|fold)\b", re.IGNORECASE),
+)
+_ANSWER_FILLER_PATTERNS = (
+    re.compile(r"\bfor a breath\b", re.IGNORECASE),
+    re.compile(r"\bthe scene holds\b", re.IGNORECASE),
+    re.compile(r"\bvoices shift around you\b", re.IGNORECASE),
+    re.compile(r"\brain beads on stone\b", re.IGNORECASE),
+    re.compile(r"\bthe truth is still buried\b", re.IGNORECASE),
+    re.compile(r"\bnothing in the scene points\b", re.IGNORECASE),
+)
+_ACTION_RESULT_PATTERNS = (
+    re.compile(r"\b(?:find|found|notice|noticed|spot|spotted|discover|discovered|reveal|revealed|turns? up|yields?)\b", re.IGNORECASE),
+    re.compile(r"\b(?:arrive|arrives|reach|reaches|move|moves|shift|shifts|change|changes|opens|closes)\b", re.IGNORECASE),
+    re.compile(r"\b(?:nothing new|already searched|requires? a check|calls? for a check|meets resistance)\b", re.IGNORECASE),
+    re.compile(r"\b(?:fails?|failed|succeeds?|succeeded|result|effect|immediate)\b", re.IGNORECASE),
+    re.compile(r"\b(?:clue|trail|mark|trace|scene)\b", re.IGNORECASE),
+)
+_AGENCY_SUBSTITUTE_PATTERNS = (
+    re.compile(r"\byou (?:think|reflect|hesitate|wonder)\b", re.IGNORECASE),
+    re.compile(r"\byou merely\b", re.IGNORECASE),
+    re.compile(r"\byou only\b", re.IGNORECASE),
+)
+_NON_HOSTILE_ESCALATION_PATTERNS = (
+    re.compile(r"\b(?:attack|strike|stab|shoot|kill|murder|slash|lunge|rush)\b", re.IGNORECASE),
+    re.compile(r"\b(?:grab|shove|slam|pin)\b", re.IGNORECASE),
+    re.compile(r"\bthreaten(?:s|ed|ing)?\b", re.IGNORECASE),
+    re.compile(r"\bdraw(?:s|ing)?\s+(?:steel|a weapon|his weapon|her weapon|their weapon|a sword|his sword|her sword|their sword)\b", re.IGNORECASE),
+)
+_ACTION_STOPWORDS = frozenset(
+    {
+        "the",
+        "that",
+        "this",
+        "with",
+        "from",
+        "into",
+        "over",
+        "under",
+        "then",
+        "your",
+        "their",
+        "them",
+        "they",
+        "there",
+        "here",
+        "about",
+        "while",
+        "through",
+        "would",
+        "could",
+        "should",
+        "just",
+        "still",
+        "have",
+        "been",
+        "were",
+        "what",
+        "where",
+        "when",
+        "which",
+        "who",
+    }
+)
+
+
+def _valid_response_type_contract(candidate: Any) -> Dict[str, Any] | None:
+    if not isinstance(candidate, dict):
+        return None
+    required = str(candidate.get("required_response_type") or "").strip().lower()
+    if required not in _RESPONSE_TYPE_VALUES:
+        return None
+    out = dict(candidate)
+    out["required_response_type"] = required
+    return out
+
+
+def _resolve_response_type_contract(
+    gm_output: Dict[str, Any] | None,
+    *,
+    resolution: Dict[str, Any] | None,
+    session: Dict[str, Any] | None,
+) -> tuple[Dict[str, Any] | None, str | None]:
+    response_policy = (
+        gm_output.get("response_policy")
+        if isinstance(gm_output, dict) and isinstance(gm_output.get("response_policy"), dict)
+        else None
+    )
+    contract = _valid_response_type_contract((response_policy or {}).get("response_type_contract"))
+    if contract:
+        return contract, "response_policy"
+
+    metadata = resolution.get("metadata") if isinstance(resolution, dict) and isinstance(resolution.get("metadata"), dict) else {}
+    contract = _valid_response_type_contract(metadata.get("response_type_contract"))
+    if contract:
+        return contract, "resolution.metadata"
+
+    debug_candidates: List[Any] = []
+    if isinstance(gm_output, dict):
+        debug_payload = gm_output.get("debug") if isinstance(gm_output.get("debug"), dict) else {}
+        debug_candidates.append(debug_payload.get("response_type_contract"))
+        debug_candidates.append(gm_output.get("response_type_contract"))
+    if isinstance(session, dict):
+        last_action_debug = session.get("last_action_debug") if isinstance(session.get("last_action_debug"), dict) else {}
+        debug_candidates.append(last_action_debug.get("response_type_contract"))
+
+    for candidate in debug_candidates:
+        contract = _valid_response_type_contract(candidate)
+        if contract:
+            return contract, "debug"
+    return None, None
+
+
+def _last_player_input(
+    *,
+    resolution: Dict[str, Any] | None,
+    session: Dict[str, Any] | None,
+    scene_id: str,
+) -> str:
+    metadata = resolution.get("metadata") if isinstance(resolution, dict) and isinstance(resolution.get("metadata"), dict) else {}
+    prompt = str(metadata.get("player_input") or "").strip()
+    if prompt:
+        return prompt
+    prompt = str((resolution or {}).get("prompt") or "").strip()
+    if prompt:
+        return prompt
+    lad = session.get("last_action_debug") if isinstance(session, dict) and isinstance(session.get("last_action_debug"), dict) else {}
+    prompt = str(lad.get("player_input") or "").strip()
+    if prompt:
+        return prompt
+    rt = get_scene_runtime(session if isinstance(session, dict) else None, scene_id)
+    return str((rt or {}).get("last_player_action_text") or "").strip()
+
+
+def _content_tokens(text: str) -> set[str]:
+    return {
+        tok
+        for tok in re.findall(r"[a-z']+", str(text or "").lower())
+        if len(tok) >= 4 and tok not in _ACTION_STOPWORDS
+    }
+
+
+def candidate_satisfies_dialogue_contract(
+    text: str,
+    *,
+    resolution: Dict[str, Any] | None,
+    session: Dict[str, Any] | None,
+    scene_id: str,
+    world: Dict[str, Any] | None,
+) -> tuple[bool, List[str]]:
+    clean = _normalize_text(text)
+    if not clean:
+        return False, ["dialogue_empty"]
+    if is_route_illegal_global_or_sanitizer_fallback_text(clean):
+        return False, ["dialogue_generic_fallback_text"]
+    if isinstance(resolution, dict) and replacement_is_route_legal_social(
+        clean,
+        resolution=resolution,
+        session=session,
+        scene_id=scene_id,
+        world=world,
+    ):
+        return True, []
+    low = clean.lower()
+    if '"' in clean or re.search(
+        r"\b(?:says|replies|asks|mutters|whispers|frowns|grimaces|shakes their head|starts to answer|glances past you)\b",
+        low,
+    ):
+        return True, []
+    return False, ["dialogue_not_in_character"]
+
+
+def candidate_satisfies_answer_contract(text: str) -> tuple[bool, List[str]]:
+    clean = _normalize_text(text)
+    if not clean:
+        return False, ["answer_empty"]
+    low = clean.lower()
+    if any(p.search(clean) for p in _ANSWER_FILLER_PATTERNS):
+        return False, ["answer_is_scene_prose"]
+    if clean.endswith("?"):
+        return False, ["answer_is_another_question"]
+    if any(p.search(clean) for p in _ANSWER_DIRECT_PATTERNS):
+        return True, []
+    words = re.findall(r"[A-Za-z']+", clean)
+    if len(words) < 4:
+        return False, ["answer_too_thin"]
+    if '"' in clean and not re.search(r"\b(?:yes|no|know|heard|names|road|lane|gate|check|feet)\b", low):
+        return False, ["answer_collapses_into_banter"]
+    if re.search(r"\b(?:there is|there are|it is|they are|he is|she is|estimated|about \d+)\b", low):
+        return True, []
+    if re.search(r"\b(?:east|west|north|south|road|lane|gate|pier|market|checkpoint|milestone|fold)\b", low):
+        return True, []
+    return False, ["answer_not_direct"]
+
+
+def candidate_satisfies_action_outcome_contract(
+    text: str,
+    *,
+    player_input: str,
+) -> tuple[bool, List[str]]:
+    clean = _normalize_text(text)
+    if not clean:
+        return False, ["action_outcome_empty"]
+    low = clean.lower()
+    if any(p.search(clean) for p in _ANSWER_FILLER_PATTERNS):
+        return False, ["action_outcome_is_scene_prose"]
+    if '"' in clean and "you " not in low and "your " not in low:
+        return False, ["action_outcome_replaced_by_dialogue"]
+    has_ack = bool(re.search(r"\b(?:you|your)\b", low))
+    if not has_ack:
+        has_ack = bool(_content_tokens(player_input) & _content_tokens(clean))
+    if not has_ack:
+        return False, ["action_outcome_missing_attempt_acknowledgement"]
+    if any(p.search(clean) for p in _AGENCY_SUBSTITUTE_PATTERNS):
+        return False, ["action_outcome_substitutes_internal_reflection"]
+    if not any(p.search(clean) for p in _ACTION_RESULT_PATTERNS):
+        return False, ["action_outcome_missing_result"]
+    return True, []
+
+
+def candidate_violates_non_hostile_escalation_contract(text: str) -> bool:
+    clean = _normalize_text(text)
+    if not clean:
+        return False
+    return any(p.search(clean) for p in _NON_HOSTILE_ESCALATION_PATTERNS)
+
+
+def _social_fallback_resolution(
+    *,
+    resolution: Dict[str, Any] | None,
+    active_interlocutor: str,
+    world: Dict[str, Any] | None,
+    scene_id: str,
+) -> Dict[str, Any] | None:
+    if isinstance(resolution, dict) and isinstance(resolution.get("social"), dict):
+        return resolution
+    if not active_interlocutor or not isinstance(world, dict):
+        return None
+    return {
+        "kind": "question",
+        "social": {
+            "npc_id": active_interlocutor,
+            "npc_name": _npc_display_name_for_emission(world, scene_id, active_interlocutor),
+            "social_intent_class": "social_exchange",
+        },
+    }
+
+
+def _to_second_person_action_clause(player_input: str, resolution: Dict[str, Any] | None) -> str:
+    raw = _normalize_text(player_input or str((resolution or {}).get("prompt") or "")).rstrip(".!?")
+    if not raw:
+        return "You act"
+    low = raw.lower()
+    if low.startswith("you "):
+        return _capitalize_sentence_fragment(raw)
+    if low.startswith("i am "):
+        return f"You are {raw[5:]}"
+    if low.startswith("i'm "):
+        return f"You are {raw[4:]}"
+    if low.startswith("i "):
+        return f"You {raw[2:]}"
+    if re.match(
+        r"^(?:go|move|travel|investigate|inspect|search|open|close|take|grab|climb|follow|approach|look|examine|head|ask|speak|draw|attack|strike|cast|use|push|pull|listen|wait)\b",
+        low,
+    ):
+        return f"You {raw}"
+    return "You act on that move"
+
+
+def _action_result_summary(resolution: Dict[str, Any] | None) -> str:
+    if not isinstance(resolution, dict):
+        return "the scene answers with an immediate change"
+    state_changes = resolution.get("state_changes") if isinstance(resolution.get("state_changes"), dict) else {}
+    check_request = resolution.get("check_request") if isinstance(resolution.get("check_request"), dict) else {}
+    kind = str(resolution.get("kind") or "").strip().lower()
+    if bool(resolution.get("resolved_transition")) or state_changes.get("scene_transition_occurred") or state_changes.get("arrived_at_scene"):
+        return "the scene shifts with that movement"
+    if state_changes.get("already_searched"):
+        if kind in {"investigate", "observe", "search"}:
+            return "the search turns up nothing new"
+        return "the attempt turns up nothing new"
+    if state_changes.get("clue_revealed") or resolution.get("clue_id") or resolution.get("discovered_clues"):
+        return "you turn up a concrete clue"
+    if state_changes.get("skill_check_failed"):
+        return "the attempt catches and fails to land cleanly"
+    if bool(resolution.get("requires_check")) or bool(check_request.get("requires_check")):
+        return "the attempt now calls for a check"
+    if resolution.get("success") is False:
+        return "the attempt meets resistance"
+    if resolution.get("success") is True:
+        return "the attempt produces an immediate result"
+    if kind in {"investigate", "observe"}:
+        return "you get an immediate read on what is there"
+    if kind in {"travel", "scene_transition"}:
+        return "your position in the scene changes"
+    return "the situation answers that move right away"
+
+
+def _minimal_answer_contract_repair(
+    *,
+    resolution: Dict[str, Any] | None,
+    active_interlocutor: str,
+    world: Dict[str, Any] | None,
+    scene_id: str,
+) -> str | None:
+    social_resolution = _social_fallback_resolution(
+        resolution=resolution,
+        active_interlocutor=active_interlocutor,
+        world=world,
+        scene_id=scene_id,
+    )
+    if isinstance(social_resolution, dict):
+        return minimal_social_emergency_fallback_line(social_resolution)
+    check_request = resolution.get("check_request") if isinstance(resolution, dict) and isinstance(resolution.get("check_request"), dict) else {}
+    prompt = _normalize_terminal_punctuation(str(check_request.get("player_prompt") or "").strip())
+    if prompt:
+        return prompt
+    adjudication = resolution.get("adjudication") if isinstance(resolution, dict) and isinstance(resolution.get("adjudication"), dict) else {}
+    answer_type = str(adjudication.get("answer_type") or "").strip().lower()
+    if answer_type == "needs_concrete_action":
+        return "You need a more concrete in-scene action or target before that can be answered."
+    if answer_type == "check_required" or bool((resolution or {}).get("requires_check")):
+        return "That cannot be answered cleanly until the required check is resolved."
+    return "No direct answer is established from the current state yet."
+
+
+def _minimal_action_outcome_contract_repair(
+    *,
+    player_input: str,
+    resolution: Dict[str, Any] | None,
+) -> str:
+    action_clause = _to_second_person_action_clause(player_input, resolution)
+    result_clause = _action_result_summary(resolution)
+    return _normalize_terminal_punctuation(f"{action_clause}, and {result_clause}")
+
+
+def _default_response_type_debug(contract: Dict[str, Any] | None, source: str | None) -> Dict[str, Any]:
+    return {
+        "response_type_required": str((contract or {}).get("required_response_type") or "") or None,
+        "response_type_contract_source": source,
+        "response_type_candidate_ok": None if not contract else True,
+        "response_type_repair_used": False,
+        "response_type_repair_kind": None,
+        "response_type_rejection_reasons": [],
+        "non_hostile_escalation_blocked": False,
+    }
+
+
+def _merge_response_type_meta(meta: Dict[str, Any], debug: Dict[str, Any]) -> None:
+    meta.update(
+        {
+            "response_type_required": debug.get("response_type_required"),
+            "response_type_contract_source": debug.get("response_type_contract_source"),
+            "response_type_candidate_ok": debug.get("response_type_candidate_ok"),
+            "response_type_repair_used": debug.get("response_type_repair_used"),
+            "response_type_repair_kind": debug.get("response_type_repair_kind"),
+            "response_type_rejection_reasons": list(debug.get("response_type_rejection_reasons") or []),
+            "non_hostile_escalation_blocked": bool(debug.get("non_hostile_escalation_blocked")),
+        }
+    )
+
+
+def _response_type_decision_payload(debug: Dict[str, Any]) -> Dict[str, Any]:
+    return {
+        "response_type_required": debug.get("response_type_required"),
+        "response_type_contract_source": debug.get("response_type_contract_source"),
+        "response_type_candidate_ok": debug.get("response_type_candidate_ok"),
+        "response_type_repair_used": debug.get("response_type_repair_used"),
+        "response_type_repair_kind": debug.get("response_type_repair_kind"),
+        "response_type_rejection_reasons": list(debug.get("response_type_rejection_reasons") or []),
+        "non_hostile_escalation_blocked": bool(debug.get("non_hostile_escalation_blocked")),
+    }
+
+
+def _enforce_response_type_contract(
+    candidate_text: str,
+    *,
+    gm_output: Dict[str, Any] | None,
+    resolution: Dict[str, Any] | None,
+    session: Dict[str, Any] | None,
+    scene_id: str,
+    world: Dict[str, Any] | None,
+    strict_social_turn: bool,
+    strict_social_suppressed_non_social_turn: bool,
+    active_interlocutor: str,
+) -> tuple[str, Dict[str, Any]]:
+    contract, source = _resolve_response_type_contract(
+        gm_output if isinstance(gm_output, dict) else None,
+        resolution=resolution,
+        session=session,
+    )
+    debug = _default_response_type_debug(contract, source)
+    if not contract:
+        return candidate_text, debug
+
+    required = str(contract.get("required_response_type") or "").strip().lower()
+    allow_escalation = bool(contract.get("allow_escalation"))
+    player_input = _last_player_input(
+        resolution=resolution,
+        session=session,
+        scene_id=scene_id,
+    )
+    current = _normalize_text(candidate_text)
+    reasons: List[str] = []
+
+    if not allow_escalation and candidate_violates_non_hostile_escalation_contract(current):
+        reasons.append("non_hostile_escalation_violation")
+        debug["non_hostile_escalation_blocked"] = True
+
+    validator_ok = True
+    validator_reasons: List[str] = []
+    if required == "dialogue":
+        if strict_social_suppressed_non_social_turn:
+            debug["response_type_candidate_ok"] = None
+            debug["response_type_repair_kind"] = "dialogue_enforcement_skipped_due_to_social_suppression"
+            return current, debug
+        validator_ok, validator_reasons = candidate_satisfies_dialogue_contract(
+            current,
+            resolution=resolution,
+            session=session,
+            scene_id=scene_id,
+            world=world,
+        )
+    elif required == "answer":
+        validator_ok, validator_reasons = candidate_satisfies_answer_contract(current)
+    elif required == "action_outcome":
+        validator_ok, validator_reasons = candidate_satisfies_action_outcome_contract(
+            current,
+            player_input=player_input,
+        )
+    reasons.extend(validator_reasons)
+
+    if validator_ok and not reasons:
+        debug["response_type_candidate_ok"] = True
+        return current, debug
+
+    repaired: str | None = None
+    repair_kind: str | None = None
+    if required == "dialogue":
+        social_resolution = _social_fallback_resolution(
+            resolution=resolution,
+            active_interlocutor=active_interlocutor,
+            world=world,
+            scene_id=scene_id,
+        )
+        if strict_social_turn and isinstance(social_resolution, dict):
+            repaired = strict_social_ownership_terminal_fallback(social_resolution)
+            repair_kind = "strict_social_dialogue_repair"
+        elif isinstance(social_resolution, dict):
+            repaired = minimal_social_emergency_fallback_line(social_resolution)
+            repair_kind = "dialogue_minimal_repair"
+    elif required == "answer":
+        repaired = _minimal_answer_contract_repair(
+            resolution=resolution,
+            active_interlocutor=active_interlocutor,
+            world=world,
+            scene_id=scene_id,
+        )
+        if repaired:
+            repair_kind = "answer_minimal_repair"
+    elif required == "action_outcome":
+        repaired = _minimal_action_outcome_contract_repair(
+            player_input=player_input,
+            resolution=resolution,
+        )
+        repair_kind = "action_outcome_minimal_repair"
+
+    if repaired:
+        repaired = _normalize_text(repaired)
+        repaired_reasons: List[str] = []
+        if not allow_escalation and candidate_violates_non_hostile_escalation_contract(repaired):
+            repaired_reasons.append("non_hostile_escalation_violation")
+        if required == "dialogue":
+            repaired_ok, validator_reasons = candidate_satisfies_dialogue_contract(
+                repaired,
+                resolution=resolution,
+                session=session,
+                scene_id=scene_id,
+                world=world,
+            )
+        elif required == "answer":
+            repaired_ok, validator_reasons = candidate_satisfies_answer_contract(repaired)
+        elif required == "action_outcome":
+            repaired_ok, validator_reasons = candidate_satisfies_action_outcome_contract(
+                repaired,
+                player_input=player_input,
+            )
+        else:
+            repaired_ok, validator_reasons = (True, [])
+        repaired_reasons.extend(validator_reasons)
+        if repaired_ok and not repaired_reasons:
+            debug["response_type_candidate_ok"] = True
+            debug["response_type_repair_used"] = True
+            debug["response_type_repair_kind"] = repair_kind
+            debug["response_type_rejection_reasons"] = list(dict.fromkeys(str(r) for r in reasons if r))
+            return repaired, debug
+
+    debug["response_type_candidate_ok"] = False
+    debug["response_type_repair_kind"] = repair_kind
+    debug["response_type_rejection_reasons"] = list(dict.fromkeys(str(r) for r in reasons if r))
+    return current, debug
 
 
 _PARTICIPIAL_BASE_VERBS: Dict[str, str] = {
@@ -2542,6 +3056,7 @@ def apply_final_emission_gate(
     reasons: List[str] = []
     normalization_ran = False
     text = pre_gate_text
+    response_type_debug = _default_response_type_debug(None, None)
 
     strict_social_active = bool(strict_social_turn)
     coercion_used = (
@@ -2564,8 +3079,45 @@ def apply_final_emission_gate(
             scene_id=str(scene_id or "").strip(),
             world=world if isinstance(world, dict) else None,
         )
+        text, response_type_debug = _enforce_response_type_contract(
+            text,
+            gm_output=out,
+            resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
+            session=session if isinstance(session, dict) else None,
+            scene_id=sid,
+            world=world if isinstance(world, dict) else None,
+            strict_social_turn=True,
+            strict_social_suppressed_non_social_turn=strict_social_suppressed_non_social_turn,
+            active_interlocutor=active_interlocutor,
+        )
+        if response_type_debug.get("response_type_candidate_ok") is False and isinstance(eff_resolution, dict):
+            text = minimal_social_emergency_fallback_line(eff_resolution)
+            text, response_type_debug = _enforce_response_type_contract(
+                text,
+                gm_output=out,
+                resolution=eff_resolution,
+                session=session if isinstance(session, dict) else None,
+                scene_id=sid,
+                world=world if isinstance(world, dict) else None,
+                strict_social_turn=True,
+                strict_social_suppressed_non_social_turn=strict_social_suppressed_non_social_turn,
+                active_interlocutor=active_interlocutor,
+            )
+            details = {
+                **details,
+                "used_internal_fallback": True,
+                "fallback_kind": "response_type_contract_social_emergency",
+                "fallback_pool": "response_type_contract",
+                "final_emitted_source": "minimal_social_emergency_fallback",
+                "rejection_reasons": list(details.get("rejection_reasons") or [])
+                + list(response_type_debug.get("response_type_rejection_reasons") or []),
+            }
         out["player_facing_text"] = text
         final_emitted_source = str(details.get("final_emitted_source") or "unknown_post_gate_writer")
+        if response_type_debug.get("response_type_repair_used"):
+            final_emitted_source = str(
+                response_type_debug.get("response_type_repair_kind") or "response_type_contract_repair"
+            )
         if retry_output:
             final_emitted_source = "retry_output"
         gate_out_text = _normalize_text(out.get("player_facing_text"))
@@ -2584,6 +3136,7 @@ def apply_final_emission_gate(
                     "rejection_reasons": [],
                     "fallback_pool": str(details.get("fallback_pool") or "none"),
                     "fallback_kind": str(details.get("fallback_kind") or "none"),
+                    **_response_type_decision_payload(response_type_debug),
                 }
             )
             out["_final_emission_meta"] = {
@@ -2611,6 +3164,7 @@ def apply_final_emission_gate(
                 "social_emission_integrity_reasons": details.get("social_emission_integrity_reasons"),
                 "social_emission_integrity_fallback_kind": details.get("social_emission_integrity_fallback_kind"),
             }
+            _merge_response_type_meta(out["_final_emission_meta"], response_type_debug)
             out = _apply_visibility_enforcement(
                 out,
                 session=session,
@@ -2631,6 +3185,7 @@ def apply_final_emission_gate(
         fallback_pool = str(details.get("fallback_pool") or "social_deterministic")
         candidate_ok = False
         rejection_reasons = details.get("rejection_reasons") if isinstance(details.get("rejection_reasons"), list) else []
+        rejection_reasons = list(rejection_reasons) + list(response_type_debug.get("response_type_rejection_reasons") or [])
 
         out["tags"] = tag_list + ["final_emission_gate_replaced", f"final_emission_gate:{fb_kind}"]
         if final_emitted_source == "minimal_social_emergency_fallback":
@@ -2662,6 +3217,7 @@ def apply_final_emission_gate(
                 "rejection_reasons": [str(r) for r in rejection_reasons[:12] if isinstance(r, str)],
                 "fallback_pool": fallback_pool,
                 "fallback_kind": fb_kind,
+                **_response_type_decision_payload(response_type_debug),
             }
         )
         gate_out_text = _normalize_text(out.get("player_facing_text"))
@@ -2690,6 +3246,7 @@ def apply_final_emission_gate(
             "strict_social_suppressed_non_social_turn": strict_social_suppressed_non_social_turn,
             "strict_social_suppression_reason": strict_social_suppression_reason,
         }
+        _merge_response_type_meta(out["_final_emission_meta"], response_type_debug)
         out = _apply_visibility_enforcement(
             out,
             session=session,
@@ -2718,6 +3275,22 @@ def apply_final_emission_gate(
     ) and not _reply_already_has_concrete_interaction(text):
         reasons.append("passive_scene_pressure_missing_concrete_beat")
 
+    text, response_type_debug = _enforce_response_type_contract(
+        text,
+        gm_output=out,
+        resolution=resolution if isinstance(resolution, dict) else None,
+        session=session if isinstance(session, dict) else None,
+        scene_id=sid,
+        world=world if isinstance(world, dict) else None,
+        strict_social_turn=False,
+        strict_social_suppressed_non_social_turn=strict_social_suppressed_non_social_turn,
+        active_interlocutor=active_interlocutor,
+    )
+    if response_type_debug.get("response_type_candidate_ok") is False:
+        reasons.extend(
+            [str(r) for r in (response_type_debug.get("response_type_rejection_reasons") or []) if isinstance(r, str)]
+        )
+
     candidate_ok = not bool(reasons)
     fallback_pool = "none"
     fallback_kind = "none"
@@ -2728,6 +3301,10 @@ def apply_final_emission_gate(
     if not reasons:
         out["player_facing_text"] = text
         final_emitted_source = "generated_candidate"
+        if response_type_debug.get("response_type_repair_used"):
+            final_emitted_source = str(
+                response_type_debug.get("response_type_repair_kind") or "response_type_contract_repair"
+            )
         if retry_output:
             final_emitted_source = "retry_output"
 
@@ -2746,6 +3323,7 @@ def apply_final_emission_gate(
                 "rejection_reasons": [],
                 "fallback_pool": fallback_pool,
                 "fallback_kind": fallback_kind,
+                **_response_type_decision_payload(response_type_debug),
             }
         )
         out["_final_emission_meta"] = {
@@ -2766,6 +3344,7 @@ def apply_final_emission_gate(
             "strict_social_suppressed_non_social_turn": strict_social_suppressed_non_social_turn,
             "strict_social_suppression_reason": strict_social_suppression_reason,
         }
+        _merge_response_type_meta(out["_final_emission_meta"], response_type_debug)
         out = _apply_visibility_enforcement(
             out,
             session=session,
@@ -2850,6 +3429,7 @@ def apply_final_emission_gate(
             "rejection_reasons": reasons[:12],
             "fallback_pool": fallback_pool,
             "fallback_kind": fallback_kind,
+            **_response_type_decision_payload(response_type_debug),
         }
     )
     gate_out_text = _normalize_text(out.get("player_facing_text"))
@@ -2874,6 +3454,7 @@ def apply_final_emission_gate(
         "strict_social_suppressed_non_social_turn": strict_social_suppressed_non_social_turn,
         "strict_social_suppression_reason": strict_social_suppression_reason,
     }
+    _merge_response_type_meta(out["_final_emission_meta"], response_type_debug)
     out = _apply_visibility_enforcement(
         out,
         session=session,

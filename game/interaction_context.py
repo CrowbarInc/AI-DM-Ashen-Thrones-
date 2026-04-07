@@ -978,6 +978,19 @@ def inspect(session: Dict[str, Any]) -> Dict[str, Any]:
     return _normalize_context(get_interaction_context(session))
 
 
+def response_type_context_snapshot(session: Dict[str, Any] | None) -> Dict[str, Any]:
+    """Return the compact interaction snapshot used by response-type gating."""
+    ctx = inspect(session if isinstance(session, dict) else {})
+    return {
+        "active_interaction_target_id": _clean_string(ctx.get("active_interaction_target_id")),
+        "active_interaction_kind": _clean_string(ctx.get("active_interaction_kind")),
+        "interaction_mode": _clean_string(ctx.get("interaction_mode")),
+        "engagement_level": _clean_string(ctx.get("engagement_level")),
+        "conversation_privacy": _clean_string(ctx.get("conversation_privacy")),
+        "player_position_context": _clean_string(ctx.get("player_position_context")),
+    }
+
+
 _TURN_START_ACTIVE_INTERACTION_TARGET_KEY = "__turn_start_active_interaction_target_id"
 
 

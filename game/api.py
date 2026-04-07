@@ -115,6 +115,7 @@ from game.interaction_context import (
     find_world_npc_reference_id_in_text,
     inspect as inspect_interaction_context,
     merge_turn_segments_for_directed_social_entry,
+    response_type_context_snapshot,
     resolve_declared_actor_switch,
     resolve_dialogue_lock_action_target_id,
     resolve_directed_social_entry,
@@ -133,6 +134,7 @@ from game.intent_parser import (
     segment_mixed_player_turn,
 )
 from game.prompt_context import build_response_policy
+from game.response_type_gating import compact_response_type_contract, derive_response_type_contract
 from game.social_exchange_emission import strict_social_emission_will_apply
 from game.utils import slugify, utc_iso_now
 from game.world import advance_world_tick, apply_world_updates, apply_resolution_world_updates
@@ -599,6 +601,44 @@ def _apply_authoritative_resolution_state_mutation(
     return (scene, session, combat, authoritative_clue_updates, scene_rt)
 
 
+def _attach_response_type_contract_to_resolution(
+    resolution: dict | None,
+    response_type_contract: dict | None,
+) -> None:
+    if not isinstance(resolution, dict) or not isinstance(response_type_contract, dict):
+        return
+    metadata = resolution.get("metadata")
+    if not isinstance(metadata, dict):
+        metadata = {}
+        resolution["metadata"] = metadata
+    metadata["response_type_contract"] = dict(response_type_contract)
+
+
+def _derive_response_type_contract_for_turn(
+    *,
+    session: dict,
+    segmented_turn: dict | None,
+    normalized_action: dict | None,
+    resolution: dict | None,
+    raw_player_text: str | None,
+    route_choice: str | None = None,
+    directed_social_entry: dict | None = None,
+    attach_to_resolution: bool = True,
+) -> dict:
+    contract = derive_response_type_contract(
+        segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+        normalized_action=normalized_action if isinstance(normalized_action, dict) else None,
+        resolution=resolution if isinstance(resolution, dict) else None,
+        interaction_context=response_type_context_snapshot(session),
+        directed_social_entry=directed_social_entry if isinstance(directed_social_entry, dict) else None,
+        route_choice=route_choice,
+        raw_player_text=raw_player_text,
+    ).to_dict()
+    if attach_to_resolution:
+        _attach_response_type_contract_to_resolution(resolution, contract)
+    return contract
+
+
 def _build_gpt_narration_from_authoritative_state(
     *,
     campaign: dict,
@@ -611,6 +651,10 @@ def _build_gpt_narration_from_authoritative_state(
     user_text: str,
     resolution: dict,
     scene_runtime: dict,
+    segmented_turn: dict | None = None,
+    route_choice: str | None = None,
+    directed_social_entry: dict | None = None,
+    response_type_contract: dict | None = None,
 ) -> dict:
     """Stages 6-7: build prompt context from authoritative state, then narrate with GPT."""
     register_topic_probe(
@@ -639,15 +683,47 @@ def _build_gpt_narration_from_authoritative_state(
         resolution,
         scene_runtime=scene_runtime,
     )
-    try:
-        prompt_payload = json.loads(messages[1]["content"]) if len(messages) > 1 else {}
-    except Exception:
-        prompt_payload = {}
+    prompt_payload: dict = {}
+    if isinstance(messages, list) and len(messages) > 1:
+        try:
+            m1 = messages[1]
+            if isinstance(m1, dict) and isinstance(m1.get("content"), str):
+                prompt_payload = json.loads(m1["content"])
+        except Exception:
+            prompt_payload = {}
     response_policy = (
         prompt_payload.get("response_policy")
         if isinstance(prompt_payload, dict) and isinstance(prompt_payload.get("response_policy"), dict)
         else build_response_policy()
     )
+    contract_payload = (
+        dict(response_type_contract)
+        if isinstance(response_type_contract, dict)
+        else _derive_response_type_contract_for_turn(
+            session=session,
+            segmented_turn=segmented_turn,
+            normalized_action=None,
+            resolution=resolution if isinstance(resolution, dict) else None,
+            raw_player_text=user_text,
+            route_choice=route_choice,
+            directed_social_entry=directed_social_entry,
+        )
+    )
+    if isinstance(prompt_payload, dict) and contract_payload:
+        prompt_payload["response_type_contract"] = dict(contract_payload)
+        response_policy = dict(response_policy) if isinstance(response_policy, dict) else build_response_policy()
+        compact_contract = compact_response_type_contract(contract_payload)
+        if compact_contract:
+            response_policy["response_type_contract"] = compact_contract
+        prompt_payload["response_policy"] = response_policy
+        if (
+            isinstance(messages, list)
+            and len(messages) > 1
+            and isinstance(messages[1], dict)
+        ):
+            messages = list(messages)
+            messages[1] = dict(messages[1])
+            messages[1]["content"] = json.dumps(prompt_payload, ensure_ascii=True)
 
     def _failures_after_social_answer_priority(raw: list) -> list:
         prioritized, _dbg = prioritize_retry_failures_for_social_answer_candidate(
@@ -739,7 +815,9 @@ def _build_gpt_narration_from_authoritative_state(
             "reasons=",
             selected_failure.get("reasons"),
         )
-        retry_messages = list(messages) + [{'role': 'user', 'content': retry_instruction}]
+        retry_messages = (
+            list(messages) if isinstance(messages, list) else []
+        ) + [{'role': 'user', 'content': retry_instruction}]
         gm_retry = guard_gm_output(
             call_gpt(retry_messages),
             scene,
@@ -889,7 +967,10 @@ def _run_resolved_turn_pipeline(
     resolution: dict,
     normalized_action: dict | None,
     fallback_user_text: str,
-) -> tuple[dict, dict, dict, dict, list[str]]:
+    segmented_turn: dict | None = None,
+    route_choice: str | None = None,
+    directed_social_entry: dict | None = None,
+) -> tuple[dict, dict, dict, dict, list[str], dict]:
     """Shared resolved-turn flow for both `/api/action` and `/api/chat`.
 
     Stage 5: authoritative engine mutation is applied first.
@@ -905,6 +986,15 @@ def _run_resolved_turn_pipeline(
     )
 
     user_text = resolution.get('prompt') or fallback_user_text
+    response_type_contract = _derive_response_type_contract_for_turn(
+        session=session,
+        segmented_turn=segmented_turn,
+        normalized_action=normalized_action,
+        resolution=resolution,
+        raw_player_text=user_text,
+        route_choice=route_choice,
+        directed_social_entry=directed_social_entry,
+    )
     gm = _build_gpt_narration_from_authoritative_state(
         campaign=campaign,
         world=world,
@@ -916,8 +1006,12 @@ def _run_resolved_turn_pipeline(
         user_text=user_text,
         resolution=resolution,
         scene_runtime=scene_rt,
+        segmented_turn=segmented_turn,
+        route_choice=route_choice,
+        directed_social_entry=directed_social_entry,
+        response_type_contract=response_type_contract,
     )
-    return (scene, session, combat, gm, authoritative_clue_updates)
+    return (scene, session, combat, gm, authoritative_clue_updates, response_type_contract)
 
 
 def _is_pending_check_resolution(resolution: dict | None) -> bool:
@@ -1789,6 +1883,7 @@ def action(req: ActionRequest):
     surfaced_clue_telemetry: list[str] = []
     fallback_user_text = req.intent or req.action_type
     gm: dict | None = None
+    response_type_contract: dict | None = None
     run_resolved_pipeline = False
     implied_context = {"applied": False}
     # Stages 1-3: request payload provides player input and normalized/classified action type.
@@ -1922,18 +2017,32 @@ def action(req: ActionRequest):
     # Engine-owned roll prompting: when a check is required, skip GPT and return
     # deterministic check prompt text from authoritative resolution payload.
     if run_resolved_pipeline and _is_offscene_social_target_resolution(resolution):
+        response_type_contract = _derive_response_type_contract_for_turn(
+            session=session,
+            segmented_turn=None,
+            normalized_action=normalized_action,
+            resolution=resolution,
+            raw_player_text=fallback_user_text,
+        )
         gm = _build_offscene_target_gm_output(resolution)
         run_resolved_pipeline = False
         trace['gpt_called'] = False
 
     if run_resolved_pipeline and _is_pending_check_resolution(resolution):
+        response_type_contract = _derive_response_type_contract_for_turn(
+            session=session,
+            segmented_turn=None,
+            normalized_action=normalized_action,
+            resolution=resolution,
+            raw_player_text=fallback_user_text,
+        )
         gm = _build_check_prompt_gm_output(resolution)
         run_resolved_pipeline = False
         trace['gpt_called'] = False
 
     # Stages 5-7: authoritative mutation -> prompt context from mutated state -> GPT narration.
     if run_resolved_pipeline and isinstance(resolution, dict):
-        scene, session, combat, gm, turn_clue_updates = _run_resolved_turn_pipeline(
+        scene, session, combat, gm, turn_clue_updates, response_type_contract = _run_resolved_turn_pipeline(
             campaign=campaign,
             character=character,
             session=session,
@@ -1948,6 +2057,15 @@ def action(req: ActionRequest):
         authoritative_clue_updates.extend(turn_clue_updates)
     if gm is None:
         gm = {'player_facing_text': '', 'tags': [], 'scene_update': None, 'activate_scene_id': None, 'new_scene_draft': None, 'world_updates': None, 'suggested_action': None, 'debug_notes': 'No narration generated.'}
+    if response_type_contract is None:
+        response_type_contract = _derive_response_type_contract_for_turn(
+            session=session,
+            segmented_turn=None,
+            normalized_action=normalized_action,
+            resolution=resolution if isinstance(resolution, dict) else None,
+            raw_player_text=fallback_user_text,
+            attach_to_resolution=bool(isinstance(resolution, dict)),
+        )
 
     gm, _narr_consistency = _finalize_player_facing_for_turn(
         gm,
@@ -1994,7 +2112,7 @@ def action(req: ActionRequest):
     else:
         _player_input = req.action_type
     session['last_action_debug'] = _build_action_debug(
-        req.action_type, _player_input, normalized_action, resolution
+        req.action_type, _player_input, normalized_action, resolution, response_type_contract
     )
     _merge_emergent_actor_debug_into_action_debug(session)
 
@@ -2004,6 +2122,7 @@ def action(req: ActionRequest):
         if normalized_action and isinstance(normalized_action, dict) else None
     )
     trace['resolution'] = _sanitize_resolution(resolution)
+    trace['response_type_contract'] = compact_response_type_contract(response_type_contract)
     trace['scene_after'] = scene['scene']['id']
     deduped_clue_updates: list[str] = []
     for txt in authoritative_clue_updates:
@@ -2028,6 +2147,7 @@ def action(req: ActionRequest):
         world=world,
         scene=scene,
         leads_inspection=leads_inspection,
+        response_type_contract=response_type_contract,
     )
     trace['gpt_called'] = req.action_type != 'roll_initiative' and not (
         req.action_type == 'end_turn' and gm.get('debug_notes') == 'No enemy response.'
@@ -2055,6 +2175,7 @@ def action(req: ActionRequest):
         'scene_id': scene['scene'].get('id'),
         'scene_mode': scene['scene'].get('mode'),
         'response_mode': session.get('response_mode', 'standard'),
+        'response_type_contract': compact_response_type_contract(response_type_contract),
     }
     if req.action_type == 'exploration' and resolution and isinstance(resolution, dict):
         gm_prompt_summary['exploration'] = {
@@ -2083,6 +2204,7 @@ def action(req: ActionRequest):
                 'discovered_clues_added': deduped_clue_updates,
                 'surfaced_clues_in_narration_non_authoritative': surfaced_clue_telemetry,
                 'clocks_changed': {},
+                'response_type_contract': compact_response_type_contract(response_type_contract),
             },
         }
     )
@@ -2146,6 +2268,8 @@ def chat(req: ChatRequest):
     authoritative_clue_updates: list[str] = []
     surfaced_clue_telemetry: list[str] = []
     gm: dict | None = None
+    response_type_contract: dict | None = None
+    route_choice: str | None = None
     # Segment + canonical social entry before implied dialogue establishment so prior interlocutor
     # and continuity flags (declared switch / spoken vocative) see pre-turn binding.
     segmented_turn = segment_mixed_player_turn(req.text)
@@ -2225,7 +2349,7 @@ def chat(req: ChatRequest):
             "target_scene_id": scene["scene"].get("id"),
         }
         resolution = _build_opening_scene_resolution(req.text, scene["scene"].get("id", ""))
-        scene, session, combat, gm, turn_clue_updates = _run_resolved_turn_pipeline(
+        scene, session, combat, gm, turn_clue_updates, response_type_contract = _run_resolved_turn_pipeline(
             campaign=campaign,
             character=character,
             session=session,
@@ -2236,6 +2360,9 @@ def chat(req: ChatRequest):
             resolution=resolution,
             normalized_action=normalized_chat,
             fallback_user_text=req.text,
+            segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+            route_choice="action",
+            directed_social_entry=canonical_entry,
         )
         authoritative_clue_updates.extend(turn_clue_updates)
         resolution['world_tick_events'] = tick.get('events', [])
@@ -2435,12 +2562,30 @@ def chat(req: ChatRequest):
                 }
         if _is_offscene_social_target_resolution(resolution):
             trace['gpt_called'] = False
+            response_type_contract = _derive_response_type_contract_for_turn(
+                session=session,
+                segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+                normalized_action=normalized,
+                resolution=resolution,
+                raw_player_text=req.text,
+                route_choice=route_choice,
+                directed_social_entry=canonical_entry,
+            )
             gm = _build_offscene_target_gm_output(resolution)
         elif _is_pending_check_resolution(resolution):
             trace['gpt_called'] = False
+            response_type_contract = _derive_response_type_contract_for_turn(
+                session=session,
+                segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+                normalized_action=normalized,
+                resolution=resolution,
+                raw_player_text=req.text,
+                route_choice=route_choice,
+                directed_social_entry=canonical_entry,
+            )
             gm = _build_check_prompt_gm_output(resolution)
         else:
-            scene, session, combat, gm, turn_clue_updates = _run_resolved_turn_pipeline(
+            scene, session, combat, gm, turn_clue_updates, response_type_contract = _run_resolved_turn_pipeline(
                 campaign=campaign,
                 character=character,
                 session=session,
@@ -2451,6 +2596,9 @@ def chat(req: ChatRequest):
                 resolution=resolution,
                 normalized_action=normalized,
                 fallback_user_text=req.text,
+                segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+                route_choice=route_choice,
+                directed_social_entry=canonical_entry,
             )
             authoritative_clue_updates.extend(turn_clue_updates)
         resolution['world_tick_events'] = tick.get('events', [])
@@ -2518,9 +2666,28 @@ def chat(req: ChatRequest):
                 },
                 'world_tick_events': tick.get('events', []),
             }
+            response_type_contract = _derive_response_type_contract_for_turn(
+                session=session,
+                segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+                normalized_action=None,
+                resolution=resolution,
+                raw_player_text=adjudication_text,
+                route_choice=route_choice,
+                directed_social_entry=canonical_entry,
+            )
             gm = _build_adjudication_gm_output(adjudication)
         else:
             trace['canonical_entry_path'] = 'procedural'
+            response_type_contract = _derive_response_type_contract_for_turn(
+                session=session,
+                segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+                normalized_action=None,
+                resolution=None,
+                raw_player_text=req.text,
+                route_choice=route_choice,
+                directed_social_entry=canonical_entry,
+                attach_to_resolution=False,
+            )
             gm = _build_gpt_narration_from_authoritative_state(
                 campaign=campaign,
                 world=world,
@@ -2532,11 +2699,26 @@ def chat(req: ChatRequest):
                 user_text=req.text,
                 resolution=None,
                 scene_runtime=scene_rt,
+                segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+                route_choice=route_choice,
+                directed_social_entry=canonical_entry,
+                response_type_contract=response_type_contract,
             )
 
     _include_res_chat = bool(
         (routed_via_exploration or routed_via_adjudication) and isinstance(resolution, dict)
     )
+    if response_type_contract is None:
+        response_type_contract = _derive_response_type_contract_for_turn(
+            session=session,
+            segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+            normalized_action=normalized_chat,
+            resolution=resolution if isinstance(resolution, dict) else None,
+            raw_player_text=req.text,
+            route_choice=route_choice,
+            directed_social_entry=canonical_entry,
+            attach_to_resolution=bool(isinstance(resolution, dict)),
+        )
     gm, _narr_consistency_chat = _finalize_player_facing_for_turn(
         gm,
         resolution=resolution if isinstance(resolution, dict) else None,
@@ -2584,7 +2766,7 @@ def chat(req: ChatRequest):
 
     # Build action pipeline debug for chat (no hidden facts or secrets).
     session['last_action_debug'] = _build_action_debug(
-        'chat', req.text, normalized_chat, resolution
+        'chat', req.text, normalized_chat, resolution, response_type_contract
     )
     _merge_emergent_actor_debug_into_action_debug(session)
 
@@ -2597,6 +2779,7 @@ def chat(req: ChatRequest):
         if normalized_chat and isinstance(normalized_chat, dict) else None
     )
     trace['resolution'] = _sanitize_resolution(resolution)
+    trace['response_type_contract'] = compact_response_type_contract(response_type_contract)
     trace['scene_after'] = scene['scene']['id']
     deduped_clue_updates: list[str] = []
     for txt in authoritative_clue_updates:
@@ -2621,6 +2804,7 @@ def chat(req: ChatRequest):
         world=world,
         scene=scene,
         leads_inspection=leads_inspection,
+        response_type_contract=response_type_contract,
     )
     _finalize_and_append_trace(session, trace, True, None)
 
@@ -2638,6 +2822,7 @@ def chat(req: ChatRequest):
         'scene_id': scene['scene'].get('id'),
         'scene_mode': scene['scene'].get('mode'),
         'response_mode': session.get('response_mode', 'standard'),
+        'response_type_contract': compact_response_type_contract(response_type_contract),
     }
     if routed_via_exploration and isinstance(resolution, dict):
         gm_prompt_summary['exploration'] = {
@@ -2668,6 +2853,7 @@ def chat(req: ChatRequest):
                 'discovered_clues_added': deduped_clue_updates,
                 'surfaced_clues_in_narration_non_authoritative': surfaced_clue_telemetry,
                 'clocks_changed': clocks_changed,
+                'response_type_contract': compact_response_type_contract(response_type_contract),
             },
         }
     )

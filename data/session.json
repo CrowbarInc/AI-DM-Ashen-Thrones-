@@ -35,9 +35,9 @@
       "emergent_lord_aldric": "active",
       "emergent_town_crier": "active",
       "refugee": "active",
-      "tavern_runner": "active",
+      "threadbare_watcher": "active",
       "guard_captain": "active",
-      "threadbare_watcher": "active"
+      "tavern_runner": "active"
     },
     "current_interlocutor": null,
     "emergent_addressables": [],
@@ -55,7 +55,7 @@
       "last_exploration_action_key": "we_leave_the_gatehouse_antechamber_and_s",
       "repeated_action_count": 1,
       "last_resolution_kind": "travel",
-      "last_description_hash": "3865b8389445a7a52872385bfa34a341",
+      "last_description_hash": "9a4c2ae3575b9d53ce9c3aff0facef39",
       "consumed_action_ids": [],
       "momentum_exchanges_since": 0,
       "momentum_next_due_in": 2,
@@ -79,38 +79,7 @@
       ],
       "last_player_action_text": "I circle back to an earlier detail we skipped and insist we resolve it before moving on.",
       "last_player_action_passive": false,
-      "recent_contextual_leads": [
-        {
-          "key": "active_event_rain_spatters_soot_dark_stone_while_refugees_wagons_and_foot_traffic_clog_the_muddy_approach",
-          "kind": "active_event",
-          "subject": "rain spatters soot-dark stone while refugees, wagons, and foot traffic clog the muddy approach",
-          "position": "",
-          "named": false,
-          "positioned": false,
-          "mentions": 1,
-          "last_turn": 1
-        },
-        {
-          "key": "active_event_guard_captain_holds_the_choke_while_the_crowd_presses_in_and_tavern_runner_shouts_offers_of_hot_stew_and_paid_rumor",
-          "kind": "active_event",
-          "subject": "guard captain holds the choke while the crowd presses in, and tavern runner shouts offers of hot stew and paid rumor",
-          "position": "",
-          "named": false,
-          "positioned": false,
-          "mentions": 1,
-          "last_turn": 1
-        },
-        {
-          "key": "scene_npc_tavern_runner",
-          "kind": "scene_npc",
-          "subject": "Tavern Runner",
-          "position": "",
-          "named": true,
-          "positioned": false,
-          "mentions": 1,
-          "last_turn": 1
-        }
-      ]
+      "recent_contextual_leads": []
     }
   },
   "clue_knowledge": {},
@@ -132,13 +101,22 @@
       ]
     },
     "scene_transition": null,
+    "response_type_contract": {
+      "required_response_type": "neutral_narration",
+      "source_route": "exploration",
+      "allow_escalation": true,
+      "debug_reasons": [
+        "no_stricter_authoritative_contract",
+        "authoritative_state_allows_escalation"
+      ]
+    },
     "emergent_actor_enrolled": false,
     "emergent_actor_id": null,
     "emergent_actor_source_text": null
   },
   "debug_traces": [
     {
-      "timestamp": "2026-04-07T01:40:17.132139Z",
+      "timestamp": "2026-04-07T03:51:38.749961Z",
       "source": "chat",
       "action_type": "chat",
       "raw_input": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals.",
@@ -190,6 +168,20 @@
           "prompt": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals.",
           "turn_segmentation": {
             "declared_action_text": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals."
+          },
+          "response_type_contract": {
+            "required_response_type": "action_outcome",
+            "source_route": "exploration",
+            "allow_escalation": false,
+            "escalation_block_reason": "non_hostile_world_action_guard",
+            "strict_target_id": null,
+            "strict_answer_expected": true,
+            "strict_dialogue_expected": false,
+            "action_must_preserve_agency": true,
+            "debug_reasons": [
+              "resolved_world_action_requires_action_outcome",
+              "non_hostile_world_action_guard"
+            ]
           }
         },
         "world_tick_events": [
@@ -248,6 +240,15 @@
           "action_type": "chat",
           "resolved_kind": "travel",
           "requires_check": false
+        },
+        "response_type_contract": {
+          "required_response_type": "action_outcome",
+          "source_route": "exploration",
+          "allow_escalation": false,
+          "debug_reasons": [
+            "resolved_world_action_requires_action_outcome",
+            "non_hostile_world_action_guard"
+          ]
         },
         "resolution_path": "exploration_engine",
         "authoritative_state_changes": {
@@ -346,10 +347,19 @@
       },
       "canonical_entry_path": "undecided",
       "canonical_entry_reason": "travel_or_scene_transition_intent",
-      "canonical_entry_target_actor_id": null
+      "canonical_entry_target_actor_id": null,
+      "response_type_contract": {
+        "required_response_type": "action_outcome",
+        "source_route": "exploration",
+        "allow_escalation": false,
+        "debug_reasons": [
+          "resolved_world_action_requires_action_outcome",
+          "non_hostile_world_action_guard"
+        ]
+      }
     },
     {
-      "timestamp": "2026-04-07T01:40:34.230437Z",
+      "timestamp": "2026-04-07T03:52:01.702481Z",
       "source": "chat",
       "action_type": "chat",
       "raw_input": "I circle back to an earlier detail we skipped and insist we resolve it before moving on.",
@@ -408,6 +418,15 @@
           "action_type": "chat",
           "resolved_kind": null,
           "requires_check": false
+        },
+        "response_type_contract": {
+          "required_response_type": "neutral_narration",
+          "source_route": "exploration",
+          "allow_escalation": true,
+          "debug_reasons": [
+            "no_stricter_authoritative_contract",
+            "authoritative_state_allows_escalation"
+          ]
         },
         "resolution_path": "chat_engine",
         "authoritative_state_changes": {
@@ -509,14 +528,23 @@
       "canonical_entry_target_actor_id": null,
       "declared_travel_override": {
         "applied": false
+      },
+      "response_type_contract": {
+        "required_response_type": "neutral_narration",
+        "source_route": "exploration",
+        "allow_escalation": true,
+        "debug_reasons": [
+          "no_stricter_authoritative_contract",
+          "authoritative_state_allows_escalation"
+        ]
       }
     }
   ],
   "flags": {},
   "character_name": "Galinor",
-  "campaign_run_id": "cc389e276d760358bee278ef",
-  "session_id": "cc389e276d760358bee278ef",
-  "last_saved_at": "2026-04-07T01:40:38.383192Z",
+  "campaign_run_id": "5c1afa7aa1cd6dbb1f581bb7",
+  "session_id": "5c1afa7aa1cd6dbb1f581bb7",
+  "last_saved_at": "2026-04-07T03:52:13.143441Z",
   "emergent_actor_debug": {
     "emergent_actor_enrolled": false,
     "emergent_actor_id": null,

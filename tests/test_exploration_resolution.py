@@ -479,6 +479,25 @@ def test_chat_captain_dialog_build_messages_not_exploration_kind(tmp_path, monke
     )
 
 
+def test_chat_build_messages_none_does_not_crash_on_response_type_metadata(tmp_path, monkeypatch):
+    """Monkeypatched build_messages returning None must not crash when response-type contract metadata is derived."""
+    _seed_scenes_and_session(tmp_path, monkeypatch)
+
+    def build_messages_returns_none(*args, **kwargs):
+        return None
+
+    def fake_gpt(messages):
+        return {"player_facing_text": "Ok.", "tags": [], "scene_update": None, "activate_scene_id": None, "new_scene_draft": None, "world_updates": None, "suggested_action": None, "debug_notes": ""}
+
+    with monkeypatch.context() as m:
+        m.setattr("game.api.build_messages", build_messages_returns_none)
+        m.setattr("game.api.call_gpt", fake_gpt)
+        client = TestClient(app)
+        r = client.post("/api/chat", json={"text": "hello"})
+    assert r.status_code == 200
+    assert r.json().get("ok") is True
+
+
 def test_parse_go_north_with_exit_label_go_north():
     """Free text 'go north' parses into a travel/scene_transition action."""
     from game.exploration import parse_exploration_intent

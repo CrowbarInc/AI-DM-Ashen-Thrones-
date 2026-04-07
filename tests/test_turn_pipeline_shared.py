@@ -331,6 +331,96 @@ def test_chat_prompt_carries_no_validator_voice_policy(tmp_path, monkeypatch):
     assert payload["response_policy"]["no_validator_voice"]["applies_to"] == "standard_narration"
 
 
+# feature: routing, emission
+def test_chat_prompt_and_debug_carry_response_type_contract(tmp_path, monkeypatch):
+    _seed_runner_dialogue_context(tmp_path, monkeypatch)
+    captured_inputs = []
+
+    def _fake_call_gpt(messages):
+        captured_inputs.append(messages)
+        return _gm_response('"The runner grimaces. ""No names,"" he says."')
+
+    with monkeypatch.context() as m:
+        m.setattr("game.api.call_gpt", _fake_call_gpt)
+        m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
+        m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
+        m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+        client = TestClient(app)
+        resp = client.post("/api/chat", json={"text": "Who attacked them?"})
+
+    assert resp.status_code == 200
+    data = resp.json()
+    assert captured_inputs
+    payload = json.loads(captured_inputs[0][1]["content"])
+    prompt_contract = payload.get("response_type_contract") or {}
+    policy_contract = (payload.get("response_policy") or {}).get("response_type_contract") or {}
+    debug_contract = (data.get("debug") or {}).get("response_type_contract") or {}
+    trace_contract = (((data.get("debug_traces") or [])[-1]).get("turn_trace") or {}).get("response_type_contract") or {}
+
+    assert prompt_contract.get("required_response_type") == "dialogue"
+    assert prompt_contract.get("source_route") == "social"
+    assert prompt_contract.get("allow_escalation") is False
+    assert policy_contract.get("required_response_type") == "dialogue"
+    assert debug_contract.get("required_response_type") == "dialogue"
+    assert trace_contract.get("required_response_type") == "dialogue"
+
+
+# feature: routing, emission
+@pytest.mark.parametrize(
+    "bad_text",
+    [
+        pytest.param(
+            "For a breath, the scene holds while voices shift around you.",
+            id="scene_hold_filler",
+        ),
+        pytest.param(
+            "Tavern Runner stands nearby under the torn awning.",
+            id="visible_intro_filler",
+        ),
+    ],
+)
+def test_chat_dialogue_lock_final_output_beats_generic_fillers_and_keeps_contract_meta(
+    tmp_path, monkeypatch, bad_text
+):
+    _seed_runner_dialogue_context(tmp_path, monkeypatch)
+
+    with monkeypatch.context() as m:
+        m.setattr("game.api.call_gpt", lambda _messages: _gm_response(bad_text))
+        m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
+        m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
+        m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+        client = TestClient(app)
+        resp = client.post("/api/chat", json={"text": "Runner, who attacked them?"})
+
+    assert resp.status_code == 200
+    data = resp.json()
+    resolution = data.get("resolution") or {}
+    gm_output = data.get("gm_output") or {}
+    text = str(gm_output.get("player_facing_text") or "")
+    low = text.lower()
+    meta = gm_output.get("_final_emission_meta") or {}
+    debug_contract = (data.get("debug") or {}).get("response_type_contract") or {}
+    trace_contract = (((data.get("debug_traces") or [])[-1]).get("turn_trace") or {}).get(
+        "response_type_contract"
+    ) or {}
+    resolution_contract = (resolution.get("metadata") or {}).get("response_type_contract") or {}
+
+    assert resolution.get("kind") == "question"
+    assert (resolution.get("social") or {}).get("npc_id") == "runner"
+    assert "for a breath" not in low
+    assert "scene holds" not in low
+    assert "stands nearby" not in low
+    assert "tavern runner" in low
+    assert ('"' in text) or ("don't know" in low) or ("do not know" in low) or ("starts to answer" in low)
+    assert meta.get("response_type_required") == "dialogue"
+    assert meta.get("response_type_contract_source") == "resolution.metadata"
+    assert meta.get("response_type_candidate_ok") is True
+    assert meta.get("final_emitted_source") != "global_scene_fallback"
+    assert debug_contract.get("required_response_type") == "dialogue"
+    assert trace_contract.get("required_response_type") == "dialogue"
+    assert resolution_contract.get("required_response_type") == "dialogue"
+
+
 # feature: leads
 def test_chat_persists_recent_contextual_leads_from_gm_reply(tmp_path, monkeypatch):
     _seed_shared_world(tmp_path, monkeypatch)
@@ -717,6 +807,40 @@ def test_chat_roll_requirement_question_routes_to_adjudication_without_gpt(tmp_p
     assert "adjudication_query" in (data.get("gm_output") or {}).get("tags", [])
 
 
+# feature: emission, routing
+def test_chat_adjudication_question_with_active_interlocutor_stays_answer_shaped(tmp_path, monkeypatch):
+    _seed_runner_dialogue_context(tmp_path, monkeypatch)
+
+    with monkeypatch.context() as m:
+        m.setattr(
+            "game.api.call_gpt",
+            lambda *_args, **_kwargs: (_ for _ in ()).throw(AssertionError("GPT should not be called")),
+        )
+        m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
+        m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
+        m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+        client = TestClient(app)
+        resp = client.post("/api/chat", json={"text": "OOC: does this need a roll?"})
+
+    assert resp.status_code == 200
+    data = resp.json()
+    resolution = data.get("resolution") or {}
+    gm_output = data.get("gm_output") or {}
+    text = str(gm_output.get("player_facing_text") or "")
+    low = text.lower()
+    meta = gm_output.get("_final_emission_meta") or {}
+
+    assert resolution.get("kind") == "adjudication_query"
+    assert "tavern runner" not in low
+    assert "lead" in low or "concrete move" in low or "answer has not formed yet" in low
+    assert "tavern runner" not in low
+    assert '"' not in text
+    assert meta.get("response_type_required") == "answer"
+    assert meta.get("response_type_candidate_ok") is True
+    assert meta.get("response_type_repair_used") is False
+    assert meta.get("final_emitted_source") == "generated_candidate"
+
+
 # feature: routing, social
 def test_chat_active_target_location_question_routes_to_social_exchange(tmp_path, monkeypatch):
     _seed_runner_dialogue_context(tmp_path, monkeypatch)
@@ -1092,6 +1216,51 @@ def test_chat_mixed_turn_preserves_embedded_adjudication_metadata(tmp_path, monk
     assert embedded.get("category") == "roll_requirement_query"
     assert embedded.get("requires_check") is True
     assert "Perception" in (embedded.get("question") or "")
+
+
+# feature: emission, continuity
+def test_chat_action_outcome_contract_survives_inside_active_social_scene(tmp_path, monkeypatch):
+    _seed_runner_dialogue_context(tmp_path, monkeypatch)
+    explore_action = {
+        "id": "inv-desk",
+        "label": "Investigate the desk",
+        "type": "investigate",
+        "prompt": "I investigate the desk.",
+    }
+
+    with monkeypatch.context() as m:
+        m.setattr(
+            "game.api.call_gpt",
+            lambda _messages: _gm_response("For a breath, the scene holds while voices shift around you."),
+        )
+        client = TestClient(app)
+        resp = client.post(
+            "/api/action",
+            json={
+                "action_type": "exploration",
+                "intent": "I investigate the desk.",
+                "exploration_action": explore_action,
+            },
+        )
+
+    assert resp.status_code == 200
+    data = resp.json()
+    resolution = data.get("resolution") or {}
+    gm_output = data.get("gm_output") or {}
+    text = str(gm_output.get("player_facing_text") or "")
+    low = text.lower()
+    meta = gm_output.get("_final_emission_meta") or {}
+
+    assert resolution.get("kind") == "discover_clue"
+    assert "for a breath" not in low
+    assert "scene holds" not in low
+    assert "tavern runner" not in low
+    assert "desk" in low
+    assert "concrete clue" in low or "map indicates patrol locations" in low
+    assert meta.get("response_type_required") == "action_outcome"
+    assert meta.get("response_type_candidate_ok") is True
+    assert meta.get("response_type_repair_used") is True
+    assert meta.get("final_emitted_source") == "action_outcome_minimal_repair"
 
 
 # feature: routing, social
@@ -1600,6 +1769,50 @@ def test_final_emission_gate_keeps_interruption_output_coherent(tmp_path, monkey
             "that's all i've got",
         )
     )
+
+
+# feature: emission, continuity
+def test_chat_repeated_interruption_progresses_without_losing_dialogue_contract(tmp_path, monkeypatch):
+    _seed_runner_dialogue_context(tmp_path, monkeypatch)
+    interruption = "Tavern Runner starts to answer, then glances past you as shouting breaks out in the crowd."
+
+    with monkeypatch.context() as m:
+        m.setattr("game.api.call_gpt", lambda _messages: _gm_response(interruption))
+        m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
+        m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
+        m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+        client = TestClient(app)
+        first = client.post("/api/chat", json={"text": "Who attacked them?"})
+        second = client.post("/api/chat", json={"text": "Who attacked them?"})
+
+    assert first.status_code == 200
+    assert second.status_code == 200
+
+    first_text = str((first.json().get("gm_output") or {}).get("player_facing_text") or "")
+    second_data = second.json()
+    second_output = second_data.get("gm_output") or {}
+    second_text = str(second_output.get("player_facing_text") or "")
+    low1 = first_text.lower()
+    low2 = second_text.lower()
+    meta = second_output.get("_final_emission_meta") or {}
+
+    assert "tavern runner" in low1
+    assert second_text != first_text
+    assert "for a breath" not in low2
+    assert "scene holds" not in low2
+    assert "tavern runner" in low2 or '"' in second_text
+    assert "that's all i've got" not in low2
+    assert (
+        "heard talk" in low2
+        or "not names" in low2
+        or "ward clerk" in low2
+        or "main gate" in low2
+        or "old crossroads" in low2
+        or "old millstone" in low2
+    )
+    assert meta.get("response_type_required") == "dialogue"
+    assert meta.get("response_type_candidate_ok") is True
+    assert meta.get("final_emitted_source") != "global_scene_fallback"
 
 
 # feature: emission

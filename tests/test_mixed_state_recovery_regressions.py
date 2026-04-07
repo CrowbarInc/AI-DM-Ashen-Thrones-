@@ -353,6 +353,86 @@ def test_narration_only_emergent_continuity_survives_degraded_followup(
         _fail_mixed(str(e), failing_turn=2, turns=turns, payloads=payloads)
 
 
+def test_emergent_vocative_repair_keeps_owner_under_dialogue_contract(
+    tmp_path: Path,
+    monkeypatch: Any,
+) -> None:
+    """A degraded follow-up to an emergent actor must repair into owned dialogue, not generic filler."""
+    _setup_transcript_frontier(tmp_path, monkeypatch)
+
+    idx = {"n": 0}
+
+    def call_gpt(_messages: list[dict[str, str]]) -> dict[str, Any]:
+        i = idx["n"]
+        idx["n"] += 1
+        if i == 0:
+            return _gm_opening_gate()
+        if i == 1:
+            return {
+                "player_facing_text": (
+                    "Lord Ashvale studies you from the rain-slick steps, umbrella tilted like a crown."
+                ),
+                "tags": [],
+                "scene_update": None,
+                "activate_scene_id": None,
+                "new_scene_draft": None,
+                "world_updates": None,
+                "suggested_action": None,
+                "debug_notes": "",
+            }
+        return {
+            "player_facing_text": "For a breath, the scene holds while voices shift around you.",
+            "tags": [],
+            "scene_update": None,
+            "activate_scene_id": None,
+            "new_scene_draft": None,
+            "world_updates": None,
+            "suggested_action": None,
+            "debug_notes": "",
+        }
+
+    _patch_call_gpt(monkeypatch, call_gpt)
+    apply_new_campaign_hard_reset()
+    storage.activate_scene("frontier_gate")
+
+    turns = [
+        "Begin.",
+        "I take in the gate crowd and the banners.",
+        "Lord Ashvale, answer plainly.",
+    ]
+    payloads: list[dict[str, Any]] = []
+    payloads.append(chat(ChatRequest(text=turns[0])))
+    with monkeypatch.context() as m:
+        m.setattr("game.api.detect_retry_failures", lambda **kwargs: [])
+        payloads.append(chat(ChatRequest(text=turns[1])))
+    payloads.append(chat(ChatRequest(text=turns[2])))
+
+    pl = payloads[2]
+    res = pl.get("resolution") if isinstance(pl.get("resolution"), dict) else {}
+    gm = pl.get("gm_output") if isinstance(pl.get("gm_output"), dict) else {}
+    meta = gm.get("_final_emission_meta") if isinstance(gm.get("_final_emission_meta"), dict) else {}
+    try:
+        assert res.get("kind") in {"question", "social_probe"}
+        soc = res.get("social") if isinstance(res.get("social"), dict) else {}
+        assert soc.get("social_intent_class") == "social_exchange"
+        assert soc.get("npc_id") == "emergent_lord_ashvale"
+        sess = pl.get("session") if isinstance(pl.get("session"), dict) else {}
+        trace = _last_debug_trace(sess)
+        assert trace.get("canonical_entry_path") == "social"
+        text = str(gm.get("player_facing_text") or "")
+        low = text.lower()
+        assert "for a breath" not in low
+        assert "scene holds" not in low
+        assert "stands nearby" not in low
+        assert "lord ashvale" in low
+        assert not _is_placeholder_only_player_facing_text(text)
+        assert meta.get("response_type_required") == "dialogue"
+        assert meta.get("response_type_candidate_ok") is True
+        assert meta.get("final_emitted_source") != "global_scene_fallback"
+    except AssertionError as e:
+        _fail_mixed(str(e), failing_turn=2, turns=turns, payloads=payloads)
+
+
 def test_narrated_new_figure_can_be_addressed_next_turn(tmp_path: Path, monkeypatch: Any) -> None:
     """Narration introduces a titled figure; the following turn binds socially to that emergent id.
 

@@ -19,6 +19,7 @@ from game.narration_state_consistency import reconcile_final_text_with_structure
 from game.social_exchange_emission import strict_social_emission_will_apply
 from game.interaction_context import inspect as inspect_interaction_context
 from game.prompt_context import derive_narration_obligations
+from game.response_type_gating import compact_response_type_contract
 from game.social import SOCIAL_KINDS
 from game.clues import get_known_clues_with_presentation
 from game.affordances import get_available_affordances
@@ -54,6 +55,7 @@ def _build_action_debug(
     player_input: str,
     normalized_action: dict | None,
     resolution: dict | None,
+    response_type_contract: dict | None = None,
 ) -> dict:
     """Build sanitized debug payload for action pipeline. No hidden facts or secrets."""
     debug: dict = {
@@ -99,6 +101,9 @@ def _build_action_debug(
                 debug['minimum_actionable_lead_enforced'] = bool(mal.get('minimum_actionable_lead_enforced'))
                 debug['enforced_lead_id'] = mal.get('enforced_lead_id')
                 debug['enforced_lead_source'] = mal.get('enforced_lead_source')
+    compact_contract = compact_response_type_contract(response_type_contract)
+    if compact_contract:
+        debug["response_type_contract"] = compact_contract
     return debug
 
 
@@ -329,6 +334,7 @@ def _build_compact_turn_trace(
     world: dict,
     scene: dict,
     leads_inspection: dict | None = None,
+    response_type_contract: dict | None = None,
 ) -> dict:
     """Build compact resolved-turn trace grounded in post-resolution authoritative state."""
     interaction_after = inspect_interaction_context(session).copy()
@@ -390,6 +396,7 @@ def _build_compact_turn_trace(
             "resolved_kind": (resolution or {}).get("kind") if isinstance(resolution, dict) else None,
             "requires_check": bool((resolution or {}).get("requires_check")) if isinstance(resolution, dict) else False,
         },
+        "response_type_contract": compact_response_type_contract(response_type_contract),
         "resolution_path": _trace_resolution_path(action_type, resolution),
         "authoritative_state_changes": {
             "scene_transition": {"from": scene_before, "to": scene_after} if scene_before != scene_after else None,

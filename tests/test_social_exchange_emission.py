@@ -195,6 +195,203 @@ def test_deterministic_retry_fallback_never_injects_uncertainty_templates_on_gua
     assert "social_exchange_retry_fallback" in tags
 
 
+def test_final_emission_gate_answer_contract_prefers_response_policy_surface_and_repairs_scene_prose():
+    resolution = {
+        "kind": "adjudication_query",
+        "prompt": "Is Sleight of Hand needed?",
+        "requires_check": True,
+        "check_request": {
+            "requires_check": True,
+            "player_prompt": "Roll Sleight of Hand to determine whether the move goes unnoticed.",
+        },
+        "metadata": {
+            "response_type_contract": {
+                "required_response_type": "dialogue",
+                "allow_escalation": True,
+            }
+        },
+    }
+    session = {
+        "last_action_debug": {
+            "player_input": "Is Sleight of Hand needed?",
+            "response_type_contract": {
+                "required_response_type": "action_outcome",
+                "allow_escalation": True,
+            },
+        }
+    }
+    out = apply_final_emission_gate(
+        {
+            "player_facing_text": "Rain beads on the square while voices drift around you.",
+            "tags": [],
+            "response_policy": {
+                "response_type_contract": {
+                    "required_response_type": "answer",
+                    "allow_escalation": False,
+                }
+            },
+        },
+        resolution=resolution,
+        session=session,
+        scene_id="frontier_gate",
+        world={},
+    )
+    meta = out.get("_final_emission_meta") or {}
+    assert out["player_facing_text"] == "Roll Sleight of Hand to determine whether the move goes unnoticed."
+    assert meta.get("response_type_required") == "answer"
+    assert meta.get("response_type_contract_source") == "response_policy"
+    assert meta.get("response_type_candidate_ok") is True
+    assert meta.get("response_type_repair_used") is True
+    assert meta.get("response_type_repair_kind") == "answer_minimal_repair"
+
+
+def test_final_emission_gate_action_outcome_contract_repairs_exposition_only_candidate():
+    resolution = {
+        "kind": "investigate",
+        "prompt": "I investigate the desk.",
+        "success": False,
+        "state_changes": {"already_searched": True},
+        "metadata": {
+            "response_type_contract": {
+                "required_response_type": "action_outcome",
+                "allow_escalation": False,
+            }
+        },
+    }
+    out = apply_final_emission_gate(
+        {
+            "player_facing_text": "Mist hangs over the room while the scene stays still.",
+            "tags": [],
+        },
+        resolution=resolution,
+        session={"last_action_debug": {"player_input": "I investigate the desk."}},
+        scene_id="frontier_gate",
+        world={},
+    )
+    low = out["player_facing_text"].lower()
+    meta = out.get("_final_emission_meta") or {}
+    assert "you investigate the desk" in low
+    assert "nothing new" in low
+    assert meta.get("response_type_required") == "action_outcome"
+    assert meta.get("response_type_candidate_ok") is True
+    assert meta.get("response_type_repair_used") is True
+    assert meta.get("response_type_repair_kind") == "action_outcome_minimal_repair"
+
+
+def test_final_emission_gate_non_hostile_contract_blocks_sudden_aggression():
+    resolution = {
+        "kind": "adjudication_query",
+        "prompt": "Is Sleight of Hand needed?",
+        "requires_check": True,
+        "check_request": {
+            "requires_check": True,
+            "player_prompt": "Roll Sleight of Hand to determine whether the move goes unnoticed.",
+        },
+        "metadata": {
+            "response_type_contract": {
+                "required_response_type": "answer",
+                "allow_escalation": False,
+            }
+        },
+    }
+    out = apply_final_emission_gate(
+        {
+            "player_facing_text": "He draws steel and lunges at you.",
+            "tags": [],
+        },
+        resolution=resolution,
+        session={"last_action_debug": {"player_input": "Is Sleight of Hand needed?"}},
+        scene_id="frontier_gate",
+        world={},
+    )
+    low = out["player_facing_text"].lower()
+    meta = out.get("_final_emission_meta") or {}
+    assert "draws steel" not in low
+    assert "lunges" not in low
+    assert "sleight of hand" in low
+    assert meta.get("non_hostile_escalation_blocked") is True
+    assert meta.get("response_type_candidate_ok") is True
+
+
+def test_final_emission_gate_non_hostile_answer_contract_stays_non_escalatory_with_active_interlocutor():
+    session = default_session()
+    world = default_world()
+    sid = "frontier_gate"
+    session["active_scene_id"] = sid
+    session["scene_state"] = {"active_scene_id": sid, "active_entities": ["tavern_runner"]}
+    session["last_action_debug"] = {"player_input": "Is Sleight of Hand needed?"}
+    resolution = {
+        "kind": "adjudication_query",
+        "prompt": "Is Sleight of Hand needed?",
+        "requires_check": True,
+        "check_request": {
+            "requires_check": True,
+            "player_prompt": "Roll Sleight of Hand to determine whether the move goes unnoticed.",
+        },
+        "metadata": {
+            "response_type_contract": {
+                "required_response_type": "answer",
+                "allow_escalation": False,
+            }
+        },
+    }
+    out = apply_final_emission_gate(
+        {
+            "player_facing_text": "The tavern runner draws steel and lunges at you.",
+            "tags": [],
+        },
+        resolution=resolution,
+        session=session,
+        scene_id=sid,
+        world=world,
+    )
+    low = out["player_facing_text"].lower()
+    meta = out.get("_final_emission_meta") or {}
+    assert "draws steel" not in low
+    assert "lunges" not in low
+    assert "sleight of hand" in low
+    assert "the move goes unnoticed" in low
+    assert "tavern runner" not in low
+    assert meta.get("response_type_required") == "answer"
+    assert meta.get("response_type_candidate_ok") is True
+    assert meta.get("response_type_repair_used") is True
+    assert meta.get("non_hostile_escalation_blocked") is True
+
+
+def test_final_emission_gate_dialogue_contract_can_repair_from_debug_surface():
+    session = default_session()
+    world = default_world()
+    sid = "frontier_gate"
+    set_social_target(session, "tavern_runner")
+    session["last_action_debug"] = {
+        "player_input": "Who attacked them?",
+        "response_type_contract": {
+            "required_response_type": "dialogue",
+            "allow_escalation": False,
+        },
+    }
+    out = apply_final_emission_gate(
+        {
+            "player_facing_text": "Rain beads on stone nearby.",
+            "tags": [],
+        },
+        resolution=None,
+        session=session,
+        scene_id=sid,
+        world=world,
+    )
+    low = out["player_facing_text"].lower()
+    meta = out.get("_final_emission_meta") or {}
+    assert "rain beads on stone" not in low
+    assert "tavern runner" in low
+    assert ('"' in out["player_facing_text"]) or ("starts to answer" in low)
+    assert meta.get("response_type_required") == "dialogue"
+    assert meta.get("response_type_contract_source") == "debug"
+    assert meta.get("response_type_candidate_ok") is True
+    assert meta.get("response_type_repair_used") is True
+    assert meta.get("response_type_repair_kind") == "dialogue_minimal_repair"
+
+
 def test_strict_social_pipeline_forbids_scene_hold_and_ambiguity_emitter_phrases():
     """Strict-social must never surface final-emission scene-hold or GM uncertainty-template lines."""
     forbidden = (
