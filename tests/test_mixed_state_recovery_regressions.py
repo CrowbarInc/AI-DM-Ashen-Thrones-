@@ -14,7 +14,14 @@ from game import storage
 from game.api import chat
 from game.campaign_reset import apply_new_campaign_hard_reset
 from game.clues import _social_resolution_carries_information
+from game.defaults import default_session
 from game.gm import _is_placeholder_only_player_facing_text
+from game.interaction_context import (
+    apply_conservative_emergent_enrollment_from_gm_output,
+    canonical_scene_addressable_roster,
+    rebuild_active_scene_entities,
+    resolve_authoritative_social_target,
+)
 from game.models import ChatRequest
 from game.storage import get_npc_runtime, get_scene_runtime
 from tests.helpers.transcript_runner import (
@@ -160,6 +167,16 @@ def _setup_transcript_frontier(tmp_path: Path, monkeypatch: Any) -> None:
         storage.SESSION_LOG_PATH.write_text("", encoding="utf-8")
 
 
+def _frontier_gate_context() -> tuple[dict[str, Any], dict[str, Any], dict[str, Any]]:
+    session = default_session()
+    session["active_scene_id"] = "frontier_gate"
+    session["scene_state"]["active_scene_id"] = "frontier_gate"
+    world: dict[str, Any] = {"npcs": []}
+    scene = storage.load_scene("frontier_gate")
+    rebuild_active_scene_entities(session, world, "frontier_gate", scene_envelope=scene)
+    return session, world, scene
+
+
 def test_approach_visible_figure_then_question_routes_social(tmp_path: Path, monkeypatch: Any) -> None:
     """Approach + ask in one turn must enter social for enrolled well-dressed watcher, not adjudication_query."""
     _setup_transcript_frontier(tmp_path, monkeypatch)
@@ -206,6 +223,134 @@ def test_approach_visible_figure_then_question_routes_social(tmp_path: Path, mon
         assert trace.get("canonical_entry_path") == "social"
     except AssertionError as e:
         _fail_mixed(str(e), failing_turn=1, turns=turns, payloads=payloads)
+
+
+def test_emergent_addressable_persists_across_rebuild_cycle(monkeypatch: Any) -> None:
+    """Narrated emergent actors must survive the active-scene rebuild path into the next roster."""
+    session, world, scene = _frontier_gate_context()
+    monkeypatch.setattr("game.storage.load_world", lambda: world)
+
+    debug = apply_conservative_emergent_enrollment_from_gm_output(
+        session=session,
+        scene=scene,
+        narration_text="Lord Ashvale studies you from the rain-slick steps, umbrella tilted like a crown.",
+    )
+    assert debug["emergent_actor_enrolled"] is True
+    assert debug["emergent_actor_id"] == "emergent_lord_ashvale"
+
+    rebuild_active_scene_entities(session, world, "frontier_gate", scene_envelope=scene)
+
+    roster = canonical_scene_addressable_roster(
+        world,
+        "frontier_gate",
+        scene_envelope=scene,
+        session=session,
+    )
+    ids = {str(row.get("id") or "") for row in roster if isinstance(row, dict)}
+    assert "emergent_lord_ashvale" in ids
+    assert "emergent_lord_ashvale" in {
+        str(raw) for raw in session["scene_state"].get("active_entities") or [] if isinstance(raw, str)
+    }
+
+
+def test_direct_vocative_resolves_to_seeded_emergent_addressable(monkeypatch: Any) -> None:
+    """Authoritative social targeting must bind direct vocatives to in-scene emergent addressables."""
+    session, world, scene = _frontier_gate_context()
+    monkeypatch.setattr("game.storage.load_world", lambda: world)
+
+    apply_conservative_emergent_enrollment_from_gm_output(
+        session=session,
+        scene=scene,
+        narration_text="Lord Ashvale studies you from the rain-slick steps, umbrella tilted like a crown.",
+    )
+    rebuild_active_scene_entities(session, world, "frontier_gate", scene_envelope=scene)
+
+    auth = resolve_authoritative_social_target(
+        session,
+        world,
+        "frontier_gate",
+        player_text="Ashvale, answer plainly.",
+        scene_envelope=scene,
+        allow_first_roster_fallback=False,
+    )
+
+    assert auth.get("source") in ("vocative", "spoken_vocative"), auth
+    assert auth.get("npc_id") == "emergent_lord_ashvale", auth
+    assert auth.get("reason") not in ("no_addressable_target", "no addressable target resolved"), auth
+
+
+def test_narration_only_emergent_continuity_survives_degraded_followup(
+    tmp_path: Path,
+    monkeypatch: Any,
+) -> None:
+    """A narration-only introduction must stay socially targetable even when the follow-up GM turn degrades."""
+    _setup_transcript_frontier(tmp_path, monkeypatch)
+
+    idx = {"n": 0}
+
+    def call_gpt(_messages: list[dict[str, str]]) -> dict[str, Any]:
+        i = idx["n"]
+        idx["n"] += 1
+        if i == 0:
+            return _gm_opening_gate()
+        if i == 1:
+            return {
+                "player_facing_text": (
+                    "Lord Ashvale studies you from the rain-slick steps, umbrella tilted like a crown."
+                ),
+                "tags": [],
+                "scene_update": None,
+                "activate_scene_id": None,
+                "new_scene_draft": None,
+                "world_updates": None,
+                "suggested_action": None,
+                "debug_notes": "",
+            }
+        return {
+            "player_facing_text": (
+                "I can't answer that. Based on what's established, we can determine very little here."
+            ),
+            "tags": [],
+            "scene_update": None,
+            "activate_scene_id": None,
+            "new_scene_draft": None,
+            "world_updates": None,
+            "suggested_action": None,
+            "debug_notes": "",
+        }
+
+    _patch_call_gpt(monkeypatch, call_gpt)
+    apply_new_campaign_hard_reset()
+    storage.activate_scene("frontier_gate")
+
+    turns = [
+        "Begin.",
+        "I take in the gate crowd and the banners.",
+        "Lord Ashvale, answer plainly.",
+    ]
+    payloads: list[dict[str, Any]] = []
+    payloads.append(chat(ChatRequest(text=turns[0])))
+    with monkeypatch.context() as m:
+        m.setattr("game.api.detect_retry_failures", lambda **kwargs: [])
+        payloads.append(chat(ChatRequest(text=turns[1])))
+    with monkeypatch.context() as m:
+        m.setattr("game.gm.apply_social_exchange_retry_fallback_gm", lambda *a, **k: {})
+        m.setattr("game.gm.minimal_social_emergency_fallback_line", lambda *_a, **_k: "")
+        payloads.append(chat(ChatRequest(text=turns[2])))
+
+    pl = payloads[2]
+    res = pl.get("resolution") if isinstance(pl.get("resolution"), dict) else {}
+    try:
+        assert res.get("kind") != "adjudication_query"
+        soc = res.get("social") if isinstance(res.get("social"), dict) else {}
+        assert soc.get("social_intent_class") == "social_exchange"
+        assert soc.get("npc_id") == "emergent_lord_ashvale"
+        sess = pl.get("session") if isinstance(pl.get("session"), dict) else {}
+        trace = _last_debug_trace(sess)
+        assert trace.get("canonical_entry_path") == "social"
+        assert trace.get("canonical_entry_reason") != "no_addressable_target"
+    except AssertionError as e:
+        _fail_mixed(str(e), failing_turn=2, turns=turns, payloads=payloads)
 
 
 def test_narrated_new_figure_can_be_addressed_next_turn(tmp_path: Path, monkeypatch: Any) -> None:

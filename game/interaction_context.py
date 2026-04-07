@@ -1778,6 +1778,64 @@ def resolve_spoken_vocative_target(
     return out
 
 
+def _recover_conservative_emergent_actor_from_player_vocative(
+    *,
+    session: Dict[str, Any] | None,
+    scene_envelope: Dict[str, Any] | None,
+    world: Dict[str, Any] | None,
+    player_text: str | None,
+) -> Optional[str]:
+    """Recover a missing scene-emergent actor from an exact direct vocative.
+
+    This is intentionally narrow: only an explicit comma/discourse vocative that
+    matches the existing conservative titled-name enrollment rules may mint a
+    scene-local emergent addressable, and only when it would not collide with an
+    authored world NPC.
+    """
+    if not isinstance(session, dict):
+        return None
+    raw = _clean_string(player_text)
+    if not raw:
+        return None
+    phrase = _extract_comma_vocative_phrase_after_discourse(raw)
+    if not phrase:
+        return None
+
+    env = _scene_envelope_for_addressability(session, scene_envelope)
+    scene = env if isinstance(env, dict) else {}
+    sc = scene.get("scene")
+    if not isinstance(sc, dict):
+        return None
+    sid = _clean_string(sc.get("id"))
+    if not sid:
+        return None
+
+    hints = extract_conservative_emergent_actor_hints(
+        scene_id=sid,
+        narration_text=phrase,
+        visible_fact_strings=[],
+    )
+    if len(hints) != 1:
+        return None
+
+    hint = hints[0]
+    eid = _clean_string(hint.get("actor_id"))
+    display = _clean_string(hint.get("display_name")) or _clean_string(hint.get("name"))
+    if not eid or not display:
+        return None
+    if _find_world_npc_dict_loose(world if isinstance(world, dict) else {}, display):
+        return None
+    if is_actor_addressable_in_current_scene(
+        session,
+        scene,
+        eid,
+        world=world if isinstance(world, dict) else None,
+    ):
+        return eid
+    enrolled = enroll_emergent_scene_actor(session=session, scene=scene, actor_hint=hint)
+    return _clean_string(enrolled) or None
+
+
 def _merged_text_has_resolvable_spoken_vocative(merged_text: str, roster: List[Dict[str, Any]]) -> bool:
     """Roster-only cue for explicit spoken address (softened or per-sentence), without session/world."""
     if not roster:
@@ -2237,38 +2295,59 @@ def resolve_authoritative_social_target(
             reason="empty scene_id",
         )
 
-    roster = canonical_scene_addressable_roster(
-        w, sid, scene_envelope=scene_envelope, session=session if isinstance(session, dict) else None
+    sess = session if isinstance(session, dict) else None
+    env = _scene_envelope_for_addressability(
+        sess,
+        scene_envelope if isinstance(scene_envelope, dict) else None,
     )
-    universe = addressable_scene_npc_id_universe(
-        session if isinstance(session, dict) else None,
-        scene_envelope,
-        w,
+    _recover_conservative_emergent_actor_from_player_vocative(
+        session=sess,
+        scene_envelope=env,
+        world=w,
+        player_text=line_raw,
     )
-    seen_roster = {str(x.get("id") or "").strip() for x in roster if isinstance(x, dict)}
-    env_for_specs = scene_envelope if isinstance(scene_envelope, dict) else {}
-    addr_specs = {str(s.get("id") or "").strip(): s for s in scene_addressables_from_envelope(env_for_specs) if isinstance(s, dict)}
-    for uid in sorted(universe):
-        if not uid or uid in seen_roster:
-            continue
-        seen_roster.add(uid)
-        n = npc_dict_by_id(w, uid)
-        if isinstance(n, dict):
-            roster.append(dict(n))
-            continue
-        spec = addr_specs.get(uid)
-        if isinstance(spec, dict):
-            roster.append(dict(spec))
-        else:
-            roster.append({"id": uid, "name": _display_name_for_npc_entry(None, uid) or uid})
 
-    addr_ids = universe | scene_addressable_actor_ids(
-        w, sid, scene_envelope=scene_envelope, session=session if isinstance(session, dict) else None
-    )
+    def _roster_context() -> tuple[List[Dict[str, Any]], Set[str]]:
+        roster_local = canonical_scene_addressable_roster(
+            w, sid, scene_envelope=env, session=sess
+        )
+        universe_local = addressable_scene_npc_id_universe(
+            sess,
+            env,
+            w,
+        )
+        seen_roster_local = {
+            str(x.get("id") or "").strip() for x in roster_local if isinstance(x, dict)
+        }
+        env_for_specs = env if isinstance(env, dict) else {}
+        addr_specs = {
+            str(s.get("id") or "").strip(): s
+            for s in scene_addressables_from_envelope(env_for_specs)
+            if isinstance(s, dict)
+        }
+        for uid in sorted(universe_local):
+            if not uid or uid in seen_roster_local:
+                continue
+            seen_roster_local.add(uid)
+            n = npc_dict_by_id(w, uid)
+            if isinstance(n, dict):
+                roster_local.append(dict(n))
+                continue
+            spec = addr_specs.get(uid)
+            if isinstance(spec, dict):
+                roster_local.append(dict(spec))
+            else:
+                roster_local.append({"id": uid, "name": _display_name_for_npc_entry(None, uid) or uid})
+        addr_ids_local = universe_local | scene_addressable_actor_ids(
+            w, sid, scene_envelope=env, session=sess
+        )
+        return roster_local, addr_ids_local
+
+    roster, addr_ids = _roster_context()
 
     decl_sw = resolve_declared_actor_switch(
-        session=session if isinstance(session, dict) else {},
-        scene=scene_envelope if isinstance(scene_envelope, dict) else {},
+        session=sess or {},
+        scene=env if isinstance(env, dict) else {},
         segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
         raw_text=line_raw,
     )
@@ -2277,8 +2356,8 @@ def resolve_authoritative_social_target(
         line_raw,
     )
     voc_res = resolve_spoken_vocative_target(
-        session=session if isinstance(session, dict) else {},
-        scene=scene_envelope if isinstance(scene_envelope, dict) else None,
+        session=sess or {},
+        scene=env if isinstance(env, dict) else None,
         spoken_text=voc_scan,
     )
 
@@ -2771,10 +2850,16 @@ def find_addressed_npc_id_for_turn(
     low = str(text or "").strip().lower()
     if not low or not isinstance(session, dict):
         return None
-    scene_id = str(((scene or {}).get("scene") or {}).get("id") or "").strip()
+    envelope = _scene_envelope_for_addressability(session, scene if isinstance(scene, dict) else None)
+    scene_id = str(((envelope or {}).get("scene") or {}).get("id") or "").strip()
     p = str(text or "").strip()
     w = world if isinstance(world, dict) else {}
-    envelope = scene if isinstance(scene, dict) else None
+    _recover_conservative_emergent_actor_from_player_vocative(
+        session=session,
+        scene_envelope=envelope,
+        world=w,
+        player_text=p,
+    )
     roster_canon = (
         canonical_scene_addressable_roster(w, scene_id, scene_envelope=envelope, session=session)
         if scene_id else []

@@ -24,6 +24,7 @@ from game.social_exchange_emission import (
     strict_social_suppress_non_native_coercion_for_narration_beat,
     _npc_display_name_for_emission,
 )
+from game.storage import get_scene_runtime
 
 
 def _normalize_text(text: str | None) -> str:
@@ -136,6 +137,15 @@ _MICRO_SMOOTH_COMBAT_MECHANICAL_MARKERS = (
     "check ",
     "hp",
     "ac",
+)
+_CONCRETE_INTERACTION_PATTERNS: tuple[re.Pattern[str], ...] = (
+    re.compile(r"[\"“”'‘’]"),
+    re.compile(
+        r"\b(?:approach(?:es|ed)?|step(?:s|ped)?\s+(?:toward|forward|out)|comes?\s+(?:straight\s+)?to|cuts?\s+across|"
+        r"blocks?|halts?|stops?\s+at|squares?\s+up|hails?|calls?\s+out|speaks?\s+first|says?|asks?|mutters?|warns?|"
+        r"orders?|interrupts?|thrusts?|hands?|points?)\b",
+        re.IGNORECASE,
+    ),
 )
 _THIRD_PERSON_TO_PARTICIPLE: Dict[str, str] = {
     "cuts": "cutting",
@@ -710,6 +720,202 @@ def _scene_visible_facts(scene: Dict[str, Any] | None) -> List[str]:
         if clean:
             out.append(clean)
     return _dedupe_preserve_order(out)
+
+
+def _augment_scene_with_runtime_visible_leads(
+    scene: Dict[str, Any] | None,
+    *,
+    session: Dict[str, Any] | None,
+    scene_id: str,
+) -> Dict[str, Any] | None:
+    if not isinstance(scene, dict):
+        return scene
+    if not isinstance(session, dict):
+        return scene
+    sid = str(scene_id or "").strip()
+    if not sid:
+        return scene
+    runtime = get_scene_runtime(session, sid)
+    recent = runtime.get("recent_contextual_leads") if isinstance(runtime, dict) else []
+    if not isinstance(recent, list) or not recent:
+        return scene
+
+    extra_facts: List[str] = []
+    for lead in recent[-4:]:
+        if not isinstance(lead, dict):
+            continue
+        kind = str(lead.get("kind") or "").strip()
+        if kind not in {"visible_suspicious_figure", "recent_named_figure", "visible_named_figure"}:
+            continue
+        subject = _normalize_text(lead.get("subject"))
+        position = _normalize_text(lead.get("position"))
+        if not subject:
+            continue
+        fact = f"{subject} lingers {position}" if position else f"{subject} lingers nearby"
+        extra_facts.append(_output_sentence(fact))
+
+    if not extra_facts:
+        return scene
+
+    if isinstance(scene.get("scene"), dict):
+        outer = dict(scene)
+        inner = dict(scene.get("scene") or {})
+        existing = _scene_visible_facts(scene)
+        inner["visible_facts"] = _dedupe_preserve_order(existing + extra_facts)
+        outer["scene"] = inner
+        return outer
+
+    inner = dict(scene)
+    existing = _scene_visible_facts(scene)
+    inner["visible_facts"] = _dedupe_preserve_order(existing + extra_facts)
+    return inner
+
+
+def _passive_scene_pressure_due_for_fallback(
+    *,
+    session: Dict[str, Any] | None,
+    scene: Dict[str, Any] | None,
+    scene_id: str,
+) -> bool:
+    if not isinstance(session, dict):
+        return False
+    sid = str(scene_id or "").strip()
+    if not sid:
+        return False
+    runtime = get_scene_runtime(session, sid)
+    passive_streak = int(runtime.get("passive_action_streak", 0) or 0) if isinstance(runtime, dict) else 0
+    last_player_action_passive = bool(runtime.get("last_player_action_passive")) if isinstance(runtime, dict) else False
+    if not last_player_action_passive and passive_streak <= 0:
+        return False
+    visible_low = " ".join(fact.lower() for fact in _scene_visible_facts(scene))
+    recent = runtime.get("recent_contextual_leads") if isinstance(runtime, dict) else []
+    return bool(
+        passive_streak >= 2
+        or isinstance(recent, list)
+        and any(isinstance(item, dict) for item in recent)
+        or "guard" in visible_low
+        or "watch" in visible_low
+        or "missing patrol" in visible_low
+        or "rumor" in visible_low
+        or "rumour" in visible_low
+    )
+
+
+def _reply_already_has_concrete_interaction(text: str) -> bool:
+    clean = str(text or "").strip()
+    if not clean:
+        return False
+    return any(pattern.search(clean) for pattern in _CONCRETE_INTERACTION_PATTERNS)
+
+
+def _passive_scene_pressure_fallback_candidates(
+    *,
+    session: Dict[str, Any] | None,
+    scene: Dict[str, Any] | None,
+    scene_id: str,
+) -> List[tuple[str, str, str, str, str, str, Dict[str, Any]]]:
+    if not _passive_scene_pressure_due_for_fallback(session=session, scene=scene, scene_id=scene_id):
+        return []
+
+    sid = str(scene_id or "").strip()
+    runtime = get_scene_runtime(session, sid) if isinstance(session, dict) and sid else {}
+    passive_streak = int(runtime.get("passive_action_streak", 0) or 0) if isinstance(runtime, dict) else 0
+    recent = runtime.get("recent_contextual_leads") if isinstance(runtime, dict) else []
+    if isinstance(recent, list):
+        for lead in reversed(recent[-4:]):
+            if not isinstance(lead, dict):
+                continue
+            kind = str(lead.get("kind") or "").strip()
+            if kind not in {"visible_suspicious_figure", "recent_named_figure", "visible_named_figure"}:
+                continue
+            subject = _normalize_text(lead.get("subject"))
+            position = _normalize_text(lead.get("position"))
+            if not subject:
+                continue
+            move_from = f" leaves {position} and" if position else ""
+            if passive_streak >= 2:
+                return [
+                    (
+                        _output_sentence(
+                            f'{subject}{move_from} comes straight to you before the pause can settle. "Enough watching," they say. "Ask me now, or lose the trail."'
+                        ),
+                        "passive_scene_pressure",
+                        "passive_scene_pressure_lead_figure",
+                        "passive_scene_pressure_fallback",
+                        "passive_scene_pressure_fallback",
+                        "passive_scene_pressure:lead_figure",
+                        _first_mention_composition_meta(),
+                    )
+                ]
+            return [
+                (
+                    _output_sentence(
+                        f'{subject}{move_from} cuts through the crowd and stops at your shoulder. "You\'re asking the wrong questions out loud," they murmur. "Walk with me if you want the next name."'
+                    ),
+                    "passive_scene_pressure",
+                    "passive_scene_pressure_lead_figure",
+                    "passive_scene_pressure_fallback",
+                    "passive_scene_pressure_fallback",
+                    "passive_scene_pressure:lead_figure",
+                    _first_mention_composition_meta(),
+                )
+            ]
+
+    visible_facts = _scene_visible_facts(scene)
+    visible_low = " ".join(fact.lower() for fact in visible_facts)
+    if "guard" in visible_low and "missing patrol" in visible_low:
+        if passive_streak >= 2:
+            text = (
+                'The same guard does not let the silence stand a second time. "No more watching," he says, '
+                "closing the distance and jabbing a finger at the east-road line on the notice. "
+                '"Either tell me who sent you, or get moving before that trail cools for good."'
+            )
+        else:
+            text = (
+                'A guard peels away from the notice board and squares up to you. "Standing still won\'t help that patrol," '
+                'he says, stabbing two fingers at the posting. "Tell me what you know, or get on the east-road trail before it dies."'
+            )
+        return [
+            (
+                _output_sentence(text),
+                "passive_scene_pressure",
+                "passive_scene_pressure_guard_rumor",
+                "passive_scene_pressure_fallback",
+                "passive_scene_pressure_fallback",
+                "passive_scene_pressure:guard_rumor",
+                _first_mention_composition_meta(),
+            )
+        ]
+    if "guard" in visible_low:
+        text = (
+            'A guard notices you lingering and comes over at once. "If you\'re waiting on trouble, it already passed the checkpoint," '
+            'he says. "Take the east-road report or get clear."'
+        )
+        return [
+            (
+                _output_sentence(text),
+                "passive_scene_pressure",
+                "passive_scene_pressure_visible_figure",
+                "passive_scene_pressure_fallback",
+                "passive_scene_pressure_fallback",
+                "passive_scene_pressure:visible_figure",
+                _first_mention_composition_meta(),
+            )
+        ]
+    return [
+        (
+            _output_sentence(
+                'The pause snaps when a nearby guard points with his spear-butt instead of waiting for you to choose. '
+                '"Board, runner, or road," he says. "Pick one before the gate swallows the trail."'
+            ),
+            "passive_scene_pressure",
+            "passive_scene_pressure_generic",
+            "passive_scene_pressure_fallback",
+            "passive_scene_pressure_fallback",
+            "passive_scene_pressure:fallback",
+            _first_mention_composition_meta(),
+        )
+    ]
 
 
 def _visible_entity_catalog(
@@ -1653,17 +1859,12 @@ def _standard_visibility_safe_fallback(
 ) -> tuple[str, str, str, str, str, str, Dict[str, Any]]:
     inspected = inspect_interaction_context(session) if isinstance(session, dict) else {}
     mode = str((inspected or {}).get("interaction_mode") or "").strip().lower()
+    validation_scene = _augment_scene_with_runtime_visible_leads(
+        scene,
+        session=session if isinstance(session, dict) else None,
+        scene_id=scene_id,
+    )
     fallback_candidates: List[tuple[str, str, str, str, str, str, Dict[str, Any]]] = []
-
-    if prefer_grounded_scene_intro:
-        fallback_candidates.extend(
-            _grounded_scene_intro_fallback_candidates(
-                session=session,
-                scene=scene,
-                world=world,
-                active_interlocutor=active_interlocutor,
-            )
-        )
 
     if strict_social_active and isinstance(eff_resolution, dict):
         social_fallback = minimal_social_emergency_fallback_line(eff_resolution)
@@ -1678,6 +1879,23 @@ def _standard_visibility_safe_fallback(
                 _first_mention_composition_meta(),
             )
         )
+    else:
+        fallback_candidates.extend(
+            _passive_scene_pressure_fallback_candidates(
+                session=session if isinstance(session, dict) else None,
+                scene=scene,
+                scene_id=scene_id,
+            )
+        )
+        if prefer_grounded_scene_intro:
+            fallback_candidates.extend(
+                _grounded_scene_intro_fallback_candidates(
+                    session=session,
+                    scene=validation_scene if isinstance(validation_scene, dict) else scene,
+                    world=world,
+                    active_interlocutor=active_interlocutor,
+                )
+            )
 
     sid = str(scene_id or "").strip()
     if (
@@ -1685,6 +1903,7 @@ def _standard_visibility_safe_fallback(
         and mode == "social"
         and isinstance(world, dict)
         and not strict_social_suppressed_non_social_turn
+        and not strict_social_active
     ):
         mini_res: Dict[str, Any] = {
             "kind": "question",
@@ -1718,7 +1937,11 @@ def _standard_visibility_safe_fallback(
                 _first_mention_composition_meta(),
             )
         )
-    else:
+    elif not strict_social_active and not _passive_scene_pressure_due_for_fallback(
+        session=session if isinstance(session, dict) else None,
+        scene=scene,
+        scene_id=scene_id,
+    ):
         fallback_candidates.append(
             (
                 "For a breath, the scene holds while voices shift around you.",
@@ -1745,7 +1968,7 @@ def _standard_visibility_safe_fallback(
         validation = validate_player_facing_visibility(
             fallback_text,
             session=session if isinstance(session, dict) else None,
-            scene=scene if isinstance(scene, dict) else None,
+            scene=validation_scene if isinstance(validation_scene, dict) else scene if isinstance(scene, dict) else None,
             world=world if isinstance(world, dict) else None,
         )
         if validation.get("ok") is True:
@@ -1753,7 +1976,7 @@ def _standard_visibility_safe_fallback(
                 first_mention_validation = validate_player_facing_first_mentions(
                     fallback_text,
                     session=session if isinstance(session, dict) else None,
-                    scene=scene if isinstance(scene, dict) else None,
+                    scene=validation_scene if isinstance(validation_scene, dict) else scene if isinstance(scene, dict) else None,
                     world=world if isinstance(world, dict) else None,
                 )
                 if first_mention_validation.get("ok") is not True:
@@ -1762,7 +1985,7 @@ def _standard_visibility_safe_fallback(
                 referential_clarity_validation = validate_player_facing_referential_clarity(
                     fallback_text,
                     session=session if isinstance(session, dict) else None,
-                    scene=scene if isinstance(scene, dict) else None,
+                    scene=validation_scene if isinstance(validation_scene, dict) else scene if isinstance(scene, dict) else None,
                     world=world if isinstance(world, dict) else None,
                 )
                 if referential_clarity_validation.get("ok") is not True:
@@ -1776,6 +1999,34 @@ def _standard_visibility_safe_fallback(
                 fallback_candidate_source,
                 composition_meta,
             )
+
+    if strict_social_active and isinstance(eff_resolution, dict):
+        return (
+            minimal_social_emergency_fallback_line(eff_resolution),
+            "strict_social_visibility_minimal",
+            "visibility_minimal_social_fallback",
+            "minimal_social_emergency_fallback",
+            "standard_safe_fallback",
+            "minimal_social_emergency_fallback",
+            _first_mention_composition_meta(),
+        )
+
+    passive_candidates = _passive_scene_pressure_fallback_candidates(
+        session=session if isinstance(session, dict) else None,
+        scene=scene,
+        scene_id=scene_id,
+    )
+    if passive_candidates:
+        fallback_text, fallback_pool, fallback_kind, final_emitted_source, fallback_strategy, fallback_candidate_source, composition_meta = passive_candidates[0]
+        return (
+            fallback_text,
+            fallback_pool,
+            fallback_kind,
+            final_emitted_source,
+            fallback_strategy,
+            fallback_candidate_source,
+            composition_meta,
+        )
 
     return (
         "For a breath, the scene holds while voices shift around you.",
@@ -1844,6 +2095,11 @@ def _apply_first_mention_enforcement(
             strict_social_active=strict_social_active,
             strict_social_suppressed_non_social_turn=strict_social_suppressed_non_social_turn,
         )
+
+    if not checked_entities and _reply_already_has_concrete_interaction(candidate_text):
+        meta["first_mention_validation_passed"] = None
+        out["_final_emission_meta"] = meta
+        return out
 
     opening_scene_preference_used = _opening_scene_preference_active(session)
     prefer_grounded_scene_intro = True
@@ -1958,6 +2214,11 @@ def _apply_referential_clarity_enforcement(
     out["_final_emission_meta"] = meta
 
     if validation.get("ok") is True:
+        return out
+
+    if not checked_entities and _reply_already_has_concrete_interaction(candidate_text):
+        meta["referential_clarity_validation_passed"] = None
+        out["_final_emission_meta"] = meta
         return out
 
     (
@@ -2090,6 +2351,11 @@ def _apply_visibility_enforcement(
             strict_social_active=strict_social_active,
             strict_social_suppressed_non_social_turn=strict_social_suppressed_non_social_turn,
         )
+
+    if not checked_entities and not checked_facts and _reply_already_has_concrete_interaction(candidate_text):
+        meta["visibility_validation_passed"] = None
+        out["_final_emission_meta"] = meta
+        return out
 
     (
         fallback_text,
@@ -2445,6 +2711,12 @@ def apply_final_emission_gate(
     )
     if any(phrase in low for phrase in banned_any_route):
         reasons.append("banned_stock_phrase")
+    if _passive_scene_pressure_due_for_fallback(
+        session=session if isinstance(session, dict) else None,
+        scene=scene,
+        scene_id=sid,
+    ) and not _reply_already_has_concrete_interaction(text):
+        reasons.append("passive_scene_pressure_missing_concrete_beat")
 
     candidate_ok = not bool(reasons)
     fallback_pool = "none"
@@ -2529,7 +2801,22 @@ def apply_final_emission_gate(
         fallback_kind = "social_interlocutor_fallback"
         final_emitted_source = "social_interlocutor_minimal_fallback"
     else:
-        if _should_use_neutral_nonprogress_fallback_instead_of_global_stock(session, eff_resolution):
+        passive_candidates = _passive_scene_pressure_fallback_candidates(
+            session=session if isinstance(session, dict) else None,
+            scene=scene,
+            scene_id=sid,
+        )
+        if passive_candidates:
+            (
+                fallback_text,
+                fallback_pool,
+                fallback_kind,
+                final_emitted_source,
+                _fallback_strategy,
+                _fallback_candidate_source,
+                _composition_meta,
+            ) = passive_candidates[0]
+        elif _should_use_neutral_nonprogress_fallback_instead_of_global_stock(session, eff_resolution):
             fallback_pool = "npc_pursuit_fail_closed_neutral"
             fallback_text = "Nothing confirms progress toward that lead yet—the moment stays unresolved."
             fallback_kind = "npc_pursuit_neutral_nonprogress"

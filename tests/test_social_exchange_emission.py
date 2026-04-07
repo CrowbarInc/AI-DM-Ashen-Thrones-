@@ -581,6 +581,76 @@ def test_strict_social_replacement_never_uses_global_scene_fallback_in_meta():
     assert "for a breath" not in low
 
 
+def test_strict_social_visibility_replacement_prefers_social_owned_fallback_over_visible_intro():
+    session = default_session()
+    world = default_world()
+    sid = "frontier_gate"
+    set_social_target(session, "tavern_runner")
+    rebuild_active_scene_entities(session, world, sid)
+    rt = get_scene_runtime(session, sid)
+    rt["last_player_action_text"] = "Who ordered the patrol?"
+    scene = {
+        "scene": {
+            "id": sid,
+            "location": "checkpoint",
+            "visible_facts": ["A tavern runner lingers under an awning near the checkpoint."],
+        }
+    }
+    out = apply_final_emission_gate(
+        {"player_facing_text": 'He says, "I don\'t know."', "tags": []},
+        resolution=None,
+        session=session,
+        scene_id=sid,
+        scene=scene,
+        world=world,
+    )
+    low = out["player_facing_text"].lower()
+    assert "stands nearby" not in low
+    assert "stands in checkpoint" not in low
+    meta = out.get("_final_emission_meta") or {}
+    assert meta.get("strict_social_active") is True
+    assert meta.get("final_emitted_source") in (
+        "deterministic_social_fallback",
+        "minimal_social_emergency_fallback",
+        "normalized_social_candidate",
+    )
+    assert meta.get("final_emitted_source") != "explicit_visible_entity_scene_intro"
+
+
+def test_final_emission_passive_pressure_restores_recent_suspicious_figure_from_weak_atmosphere():
+    session = default_session()
+    sid = "scene_investigate"
+    rt = get_scene_runtime(session, sid)
+    rt["last_player_action_passive"] = True
+    rt["passive_action_streak"] = 1
+    rt["recent_contextual_leads"] = [
+        {
+            "key": "tattered-man-by-the-shuttered-well",
+            "kind": "visible_suspicious_figure",
+            "subject": "the tattered man",
+            "position": "by the shuttered well",
+            "named": False,
+            "positioned": True,
+            "mentions": 2,
+            "last_turn": 1,
+        }
+    ]
+    out = apply_final_emission_gate(
+        {"player_facing_text": "The square stays hushed except for the scrape of boots on wet stone.", "tags": []},
+        resolution=None,
+        session=session,
+        scene_id=sid,
+        scene={"scene": {"id": sid, "location": "square", "visible_facts": []}},
+        world=default_world(),
+    )
+    low = out["player_facing_text"].lower()
+    assert "the tattered man" in low
+    assert "cuts through the crowd" in low or "comes straight to you" in low
+    assert "for a breath, the scene holds" not in low
+    meta = out.get("_final_emission_meta") or {}
+    assert meta.get("final_emitted_source") == "passive_scene_pressure_fallback"
+
+
 def test_clue_advice_sludge_intercepted_for_strict_npc_question():
     session = default_session()
     world = default_world()

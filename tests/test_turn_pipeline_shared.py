@@ -656,6 +656,41 @@ def test_chat_passive_scene_prefers_already_introduced_suspicious_figure(tmp_pat
     assert "passive_scene_pressure:lead_figure" in (((data.get("gm_output") or {}).get("debug_notes")) or "")
 
 
+def test_chat_passive_wait_with_recent_suspicious_figure_replaces_weak_atmosphere(tmp_path, monkeypatch):
+    _seed_shared_world(tmp_path, monkeypatch)
+    session = storage.load_session()
+    scene_runtime = session.setdefault("scene_runtime", {}).setdefault("scene_investigate", {})
+    scene_runtime["recent_contextual_leads"] = [
+        {
+            "key": "tattered-man-by-the-shuttered-well",
+            "kind": "visible_suspicious_figure",
+            "subject": "the tattered man",
+            "position": "by the shuttered well",
+            "named": False,
+            "positioned": True,
+            "mentions": 2,
+            "last_turn": 1,
+        }
+    ]
+    storage._save_json(storage.SESSION_PATH, session)
+
+    with monkeypatch.context() as m:
+        m.setattr("game.api.call_gpt", lambda _messages: _gm_response("The square stays hushed except for the scrape of boots on wet stone."))
+        m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
+        m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
+        m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+        client = TestClient(app)
+        resp = client.post("/api/chat", json={"text": "I wait."})
+
+    assert resp.status_code == 200
+    data = resp.json()
+    text = (data.get("gm_output") or {}).get("player_facing_text") or ""
+    low = text.lower()
+    assert "the tattered man" in low
+    assert "for a breath, the scene holds" not in low
+    _assert_concrete_pressure(text)
+
+
 # feature: emission
 def test_chat_roll_requirement_question_routes_to_adjudication_without_gpt(tmp_path, monkeypatch):
     _seed_shared_world(tmp_path, monkeypatch)
