@@ -65,6 +65,30 @@ RULE_PRIORITY_COMPACT_INSTRUCTION = (
     "state; avoid leaking hidden facts; if certainty is incomplete, give a bounded partial answer; "
     "remain diegetic; maintain scene momentum; then add specificity."
 )
+
+# Bounded-partial justification buckets for machine-readable enforcement (turn-local).
+ANSWER_COMPLETENESS_PARTIAL_REASONS: tuple[str, ...] = (
+    "uncertainty",
+    "lack_of_knowledge",
+    "gated_information",
+)
+EXPECTED_ANSWER_VOICE: tuple[str, ...] = ("npc", "narrator", "either")
+EXPECTED_ANSWER_SHAPE: tuple[str, ...] = ("direct", "bounded_partial", "refusal_with_reason")
+CONCRETE_PAYLOAD_KINDS: tuple[str, ...] = (
+    "name",
+    "place",
+    "fact",
+    "direction",
+    "condition",
+    "next_lead",
+)
+
+_QUESTION_LINE_PATTERN = re.compile(
+    r"(^\s*(what|where|when|why|how|who|which|whose)\b)|\?|"
+    r"\b(tell me|could you tell|can you tell|do you know|did you see|is it true)\b|"
+    r"\b(who is|who was|what's|whats|where's|wheres|how many|how much)\b",
+    re.IGNORECASE | re.MULTILINE,
+)
 NO_VALIDATOR_VOICE_RULE = (
     "Never speak as a validator, analyst, referee of canon, or system. Do not mention what is or "
     "is not established, available to the model, visible to tools, or answerable by the system. "
@@ -221,7 +245,154 @@ def _compute_follow_up_pressure(recent_log_compact: List[Dict[str, Any]], user_t
     }
 
 
-def build_response_policy(*, narration_obligations: Dict[str, Any] | None = None) -> Dict[str, Any]:
+def question_detected_from_player_text(player_text: str) -> bool:
+    """Deterministic direct-question detection for turn-local answer contracts."""
+    t = str(player_text or "").strip()
+    if not t:
+        return False
+    return bool(_QUESTION_LINE_PATTERN.search(t))
+
+
+def _uncertainty_hint_suggests_partial(hint: Dict[str, Any] | None) -> bool:
+    if not isinstance(hint, dict) or not hint:
+        return False
+    cat = str(hint.get("category") or "").strip()
+    if cat:
+        return True
+    for k in ("unknown_edge", "known_edge", "next_lead"):
+        v = hint.get(k)
+        if isinstance(v, str) and v.strip():
+            return True
+    return False
+
+
+def _resolution_suggests_gated_information(resolution: Dict[str, Any] | None) -> bool:
+    res = resolution if isinstance(resolution, dict) else {}
+    soc = res.get("social") if isinstance(res.get("social"), dict) else {}
+    if soc.get("gated_information") is True:
+        return True
+    if str(soc.get("information_gate") or "").strip():
+        return True
+    return False
+
+
+def build_answer_completeness_contract(
+    *,
+    player_input: str,
+    narration_obligations: Dict[str, Any],
+    resolution: Dict[str, Any] | None,
+    session_view: Dict[str, Any] | None,
+    uncertainty_hint: Dict[str, Any] | None,
+    allow_partial_answer: bool = True,
+) -> Dict[str, Any]:
+    """Derive an inspectable, turn-local answer contract from engine state only."""
+    obligations = narration_obligations if isinstance(narration_obligations, dict) else {}
+    sess = session_view if isinstance(session_view, dict) else {}
+    res = resolution if isinstance(resolution, dict) else {}
+
+    player_q = question_detected_from_player_text(player_input)
+    social_lock = bool(obligations.get("suppress_non_social_emitters"))
+    npc_expected = bool(obligations.get("active_npc_reply_expected"))
+    reply_kind = obligations.get("active_npc_reply_kind")
+    reply_kind_str = str(reply_kind).strip().lower() if reply_kind is not None else ""
+    if reply_kind_str not in NPC_REPLY_KIND_VALUES:
+        reply_kind_str = ""
+
+    refusal_turn = reply_kind_str == "refusal"
+    substantive_npc_qa = npc_expected and reply_kind_str in ("answer", "explanation")
+    should_npc = bool(obligations.get("should_answer_active_npc"))
+
+    if refusal_turn:
+        answer_required = True
+    elif player_q:
+        answer_required = True
+    elif substantive_npc_qa:
+        answer_required = True
+    else:
+        answer_required = False
+
+    hint_partial = _uncertainty_hint_suggests_partial(uncertainty_hint)
+    gated = _resolution_suggests_gated_information(res)
+
+    partial_permitted = bool(answer_required and not refusal_turn and allow_partial_answer)
+    allowed_reasons: List[str] = list(ANSWER_COMPLETENESS_PARTIAL_REASONS) if partial_permitted else []
+
+    if refusal_turn:
+        expected_shape = "refusal_with_reason"
+    elif answer_required and (hint_partial or gated):
+        expected_shape = "bounded_partial"
+    elif answer_required:
+        expected_shape = "direct"
+    else:
+        expected_shape = "direct"
+
+    active_target_id = str(sess.get("active_interaction_target_id") or "").strip()
+    if social_lock or (
+        active_target_id
+        and (should_npc or npc_expected)
+        and answer_required
+    ):
+        expected_voice = "npc"
+    elif answer_required:
+        expected_voice = "narrator"
+    else:
+        expected_voice = "either"
+
+    if refusal_turn:
+        trigger_source = "active_npc_refusal"
+    elif player_q:
+        trigger_source = "player_direct_question"
+    elif substantive_npc_qa:
+        trigger_source = "active_npc_answer_obligation"
+    elif npc_expected:
+        trigger_source = "active_npc_exchange"
+    else:
+        trigger_source = "none"
+
+    enabled = bool(answer_required)
+    answer_must_come_first = bool(answer_required)
+    forbid_deflection = bool(answer_required)
+    forbid_generic_nonanswer = bool(answer_required)
+    require_concrete_payload = bool(answer_required)
+    concrete_kinds = list(CONCRETE_PAYLOAD_KINDS) if require_concrete_payload else []
+
+    trace = {
+        "trigger_source": trigger_source,
+        "active_target_id": active_target_id or None,
+        "active_npc_reply_kind": reply_kind_str or None,
+        "question_detected_from_player_text": bool(player_q),
+        "partial_answer_permitted": bool(partial_permitted),
+    }
+
+    if expected_voice not in EXPECTED_ANSWER_VOICE:
+        expected_voice = "either"
+    if expected_shape not in EXPECTED_ANSWER_SHAPE:
+        expected_shape = "direct"
+
+    return {
+        "enabled": enabled,
+        "trace": trace,
+        "player_direct_question": bool(player_q),
+        "answer_required": bool(answer_required),
+        "answer_must_come_first": answer_must_come_first,
+        "expected_voice": expected_voice,
+        "expected_answer_shape": expected_shape,
+        "allowed_partial_reasons": allowed_reasons,
+        "forbid_deflection": forbid_deflection,
+        "forbid_generic_nonanswer": forbid_generic_nonanswer,
+        "require_concrete_payload": require_concrete_payload,
+        "concrete_payload_any_of": concrete_kinds,
+    }
+
+
+def build_response_policy(
+    *,
+    narration_obligations: Dict[str, Any] | None = None,
+    player_text: str | None = None,
+    resolution: Dict[str, Any] | None = None,
+    session_view: Dict[str, Any] | None = None,
+    uncertainty_hint: Dict[str, Any] | None = None,
+) -> Dict[str, Any]:
     """Build the inspectable response policy for the current turn.
 
     This keeps the precedence ladder explicit in one place so prompt assembly
@@ -229,6 +400,14 @@ def build_response_policy(*, narration_obligations: Dict[str, Any] | None = None
     """
     obligations = narration_obligations if isinstance(narration_obligations, dict) else {}
     suppress = bool(obligations.get("suppress_non_social_emitters"))
+    answer_completeness = build_answer_completeness_contract(
+        player_input=str(player_text or ""),
+        narration_obligations=obligations,
+        resolution=resolution,
+        session_view=session_view if isinstance(session_view, dict) else {},
+        uncertainty_hint=uncertainty_hint,
+        allow_partial_answer=True,
+    )
     return {
         "rule_priority_order": [label for _, label in RESPONSE_RULE_PRIORITY],
         "must_answer": True,
@@ -253,6 +432,7 @@ def build_response_policy(*, narration_obligations: Dict[str, Any] | None = None
             "answer_shape": list(UNCERTAINTY_ANSWER_SHAPE),
             "context_inputs": ["turn_context", "speaker", "scene_snapshot"],
         },
+        "answer_completeness": answer_completeness,
     }
 
 
@@ -815,7 +995,13 @@ def build_narration_context(
     )
     social_authority = bool(narration_obligations.get("suppress_non_social_emitters"))
     eff_uncertainty_hint = None if social_authority else uncertainty_hint
-    response_policy = build_response_policy(narration_obligations=narration_obligations)
+    response_policy = build_response_policy(
+        narration_obligations=narration_obligations,
+        player_text=str(user_text or ""),
+        resolution=resolution,
+        session_view=session_view,
+        uncertainty_hint=eff_uncertainty_hint,
+    )
     res = resolution if isinstance(resolution, dict) else {}
     state_changes = res.get("state_changes") if isinstance(res.get("state_changes"), dict) else {}
     scene_advancement = {
@@ -883,6 +1069,19 @@ def build_narration_context(
         NO_VALIDATOR_VOICE_RULE,
         'Follow response_policy.rule_priority_order strictly. Higher-priority rules override later ones.',
         'Treat response_policy.no_validator_voice as a hard narration-lane rule for standard narration.',
+        (
+            "ANSWER COMPLETENESS CONTRACT (MANDATORY): Obey response_policy.answer_completeness. "
+            "When answer_required is true, answer_must_come_first requires the first sentence to deliver the substantive reply "
+            "aligned with expected_answer_shape (direct, bounded_partial using an in-world limit from allowed_partial_reasons, "
+            "or refusal_with_reason). Bounded partials must name the limiting reason in-character (uncertainty, lack_of_knowledge, or gated_information). "
+            "When forbid_deflection or forbid_generic_nonanswer are true, evasive replies, scene filler before the core reply, and answering-with-a-question are invalid. "
+            "When require_concrete_payload is true, include at least one handle from concrete_payload_any_of. "
+            "Incomplete or hedged replies must still provide a usable specific or next_lead the player can pursue now."
+        ),
+        (
+            "When response_policy.answer_completeness.expected_voice is npc, keep the turn NPC-carried for the substantive reply "
+            "per active interlocutor; when narrator, still lead with the answer in the first sentence when answer_required is true."
+        ),
         *NARRATION_VISIBILITY_MANDATORY_INSTRUCTIONS,
         *FIRST_MENTION_MANDATORY_INSTRUCTIONS,
         (

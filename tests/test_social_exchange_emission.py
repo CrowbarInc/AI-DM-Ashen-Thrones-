@@ -2,7 +2,11 @@ from __future__ import annotations
 
 from game.defaults import default_session, default_world
 from game.gm import apply_deterministic_retry_fallback, sanitize_player_facing_text
-from game.final_emission_gate import apply_final_emission_gate
+from game.final_emission_gate import (
+    apply_final_emission_gate,
+    inspect_answer_completeness_failure,
+    validate_answer_completeness,
+)
 from game.interaction_context import rebuild_active_scene_entities, set_social_target
 from game.output_sanitizer import (
     _already_has_terminal_punctuation,
@@ -243,6 +247,58 @@ def test_final_emission_gate_answer_contract_prefers_response_policy_surface_and
     assert meta.get("response_type_candidate_ok") is True
     assert meta.get("response_type_repair_used") is True
     assert meta.get("response_type_repair_kind") == "answer_minimal_repair"
+
+
+_SAMPLE_ANSWER_COMPLETENESS_CONTRACT = {
+    "enabled": True,
+    "answer_required": True,
+    "answer_must_come_first": True,
+    "player_direct_question": True,
+    "expected_voice": "narrator",
+    "expected_answer_shape": "direct",
+    "allowed_partial_reasons": ["uncertainty", "lack_of_knowledge", "gated_information"],
+    "forbid_deflection": True,
+    "forbid_generic_nonanswer": True,
+    "require_concrete_payload": True,
+    "concrete_payload_any_of": ["place", "direction"],
+    "trace": {},
+}
+
+
+def test_validate_answer_completeness_flags_question_before_substance():
+    contract = dict(_SAMPLE_ANSWER_COMPLETENESS_CONTRACT)
+    res = validate_answer_completeness(
+        "Do you know who took the ledger? The east road is watched.",
+        contract,
+        resolution=None,
+    )
+    assert res["checked"] is True
+    assert res["question_first_violation"] is True
+    assert res["passed"] is False
+    fail = inspect_answer_completeness_failure(res)
+    assert fail["failed"] is True
+    assert "opening_question_before_answer" in fail["failure_reasons"]
+
+
+def test_final_emission_gate_answer_completeness_repairs_frontloaded_direct_answer():
+    contract = dict(_SAMPLE_ANSWER_COMPLETENESS_CONTRACT)
+    out = apply_final_emission_gate(
+        {
+            "player_facing_text": "Rain beads on the square. The east road runs past the old gate.",
+            "tags": [],
+            "response_policy": {"answer_completeness": contract},
+        },
+        resolution={"kind": "question", "prompt": "Which way did they go?"},
+        session=None,
+        scene_id="frontier_gate",
+        world={},
+    )
+    meta = out.get("_final_emission_meta") or {}
+    assert meta.get("answer_completeness_repaired") is True
+    assert meta.get("answer_completeness_repair_mode") == "frontload_direct_answer"
+    low = out["player_facing_text"].lower()
+    assert low.startswith("the east road")
+    assert "rain beads" in low
 
 
 def test_final_emission_gate_action_outcome_contract_repairs_exposition_only_candidate():
