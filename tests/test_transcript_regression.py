@@ -262,6 +262,26 @@ def _seed_tavern_patrol_lead_old_milestone(tmp_path, monkeypatch):
         storage.SESSION_LOG_PATH.write_text("", encoding="utf-8")
 
 
+def _seed_tavern_patrol_lead_with_second_npc(tmp_path, monkeypatch):
+    _seed_tavern_patrol_lead_old_milestone(tmp_path, monkeypatch)
+    world = storage.load_world()
+    world["npcs"] = list(world.get("npcs") or []) + [
+        {
+            "id": "guard_captain",
+            "name": "Guard Captain",
+            "location": "tavern",
+            "topics": [
+                {
+                    "id": "gate_scuffle",
+                    "text": "The main gate is a mess whenever the fish carts clog the lane.",
+                    "clue_id": "c_gate_scuffle",
+                }
+            ],
+        }
+    ]
+    storage._save_json(storage.WORLD_PATH, world)
+
+
 def _seed_transcript_world_with_runner(tmp_path, monkeypatch):
     """Transcript seed plus a single NPC for directed social turns on the investigation scene."""
     _seed_transcript_world(tmp_path, monkeypatch)
@@ -306,6 +326,84 @@ def _post_explore(client, exploration_action: dict, intent: str | None = None):
     r = client.post("/api/action", json=payload)
     assert r.status_code == 200
     return r.json()
+
+
+def _post_chat(client, text: str) -> dict:
+    r = client.post("/api/chat", json={"text": text})
+    assert r.status_code == 200
+    data = r.json()
+    assert data.get("ok") is True
+    return data
+
+
+def _latest_user_text(messages) -> str:
+    fallback = ""
+    for msg in reversed(list(messages or [])):
+        if not isinstance(msg, dict) or str(msg.get("role") or "").strip().lower() != "user":
+            continue
+        content = msg.get("content")
+        if isinstance(content, str):
+            try:
+                payload = __import__("json").loads(content)
+            except Exception:
+                if not fallback:
+                    fallback = content
+                continue
+            if isinstance(payload, dict):
+                player_text = str(payload.get("player_text") or "").strip()
+                if player_text:
+                    return player_text
+            if not fallback:
+                fallback = content
+            continue
+        if isinstance(content, list):
+            parts: list[str] = []
+            for item in content:
+                if isinstance(item, dict) and str(item.get("type") or "").strip() == "text":
+                    parts.append(str(item.get("text") or ""))
+            joined = " ".join(parts).strip()
+            if joined:
+                return joined
+    return fallback
+
+
+def _assert_not_repeated_interruption_beat(text: str) -> None:
+    low = str(text or "").lower()
+    forbidden = (
+        "starts to answer",
+        "begins to answer",
+        "begins to respond",
+        "opens their mouth",
+        "breaks off as a shout cuts across the square",
+        "shouting breaks out in the crowd",
+        "noise from the crowd pulls their attention away",
+    )
+    for frag in forbidden:
+        assert frag not in low, f"unexpected interruption replay fragment: {frag!r} in {text!r}"
+
+
+def _assert_socially_grounded_progression(text: str, *extra_markers: str) -> None:
+    low = str(text or "").lower()
+    markers = (
+        "runner",
+        "guard captain",
+        "old milestone",
+        "old millstone",
+        "main gate",
+        "ward clerk",
+        "watchmen",
+        "east gate",
+        "short version",
+        "cart",
+        "fishmonger",
+        "flinch",
+        "grimace",
+        "leans closer",
+        "jerks their chin",
+        "stay with me",
+        "catch the",
+    ) + tuple(m.lower() for m in extra_markers)
+    assert any(marker in low for marker in markers), f"expected socially grounded progression in {text!r}"
 
 
 def test_transcript_sequence_investigate_then_repeat_is_idempotent(tmp_path, monkeypatch):
@@ -653,6 +751,10 @@ def test_transcript_tavern_runner_patrol_wait_beat_then_follow_up_question(tmp_p
         assert res2.get("kind") == "observe"
         assert (res2.get("metadata") or {}).get("passive_interruption_wait") is True
         assert res2.get("social") in (None, {})
+        gm2 = d2.get("gm_output") or {}
+        txt2 = str(gm2.get("player_facing_text") or "")
+        _assert_not_repeated_interruption_beat(txt2)
+        _assert_socially_grounded_progression(txt2, "attention returning", "shout dies down")
         ctx2 = (d2.get("session") or {}).get("interaction_context") or {}
         assert not str(ctx2.get("active_interaction_target_id") or "").strip()
         assert str(ctx2.get("interaction_mode") or "").strip().lower() == "activity"
@@ -671,6 +773,81 @@ def test_transcript_tavern_runner_patrol_wait_beat_then_follow_up_question(tmp_p
         res3 = d3.get("resolution") or {}
         assert res3.get("kind") in ("question", "social_probe")
         assert (res3.get("social") or {}).get("npc_id") == "tavern_runner"
+
+    assert len(gpt_calls) >= 3
+
+
+def test_transcript_runner_repeated_interruption_beat_forces_progression(tmp_path, monkeypatch):
+    """Repeated interrupted patrol answers must advance instead of replaying the same beat."""
+    _seed_tavern_patrol_lead_old_milestone(tmp_path, monkeypatch)
+
+    gpt_calls: list[int] = []
+
+    def _call_gpt(_messages):
+        n = len(gpt_calls)
+        gpt_calls.append(n)
+        if n == 0:
+            return _gm_response(
+                "The runner starts to answer, then glances past you as shouting breaks out in the crowd."
+            )
+        if n == 1:
+            return _gm_response(
+                "The runner opens their mouth, then breaks off as a shout cuts across the square."
+            )
+        return _gm_response(
+            "The runner begins to respond before noise from the crowd pulls their attention away."
+        )
+
+    with monkeypatch.context() as m:
+        m.setattr("game.api.call_gpt", _call_gpt)
+        client = TestClient(app)
+
+        r1 = client.post(
+            "/api/chat",
+            json={"text": "Tavern Runner, what happened to the patrol?"},
+        )
+        assert r1.status_code == 200
+        d1 = r1.json()
+        assert d1.get("ok") is True
+        gm1 = d1.get("gm_output") or {}
+        txt1 = str(gm1.get("player_facing_text") or "")
+        low1 = txt1.lower()
+        assert "shouting" in low1 or "breaks out" in low1 or "breaks off" in low1
+        res1 = d1.get("resolution") or {}
+        assert res1.get("kind") in ("question", "social_probe")
+        assert (res1.get("social") or {}).get("npc_id") == "tavern_runner"
+
+        r2 = client.post(
+            "/api/chat",
+            json={"text": '"Runner," Galinor presses, "what were you about to say about the patrol?"'},
+        )
+        assert r2.status_code == 200
+        d2 = r2.json()
+        assert d2.get("ok") is True
+        gm2 = d2.get("gm_output") or {}
+        txt2 = str(gm2.get("player_facing_text") or "")
+        low2 = txt2.lower()
+        res2 = d2.get("resolution") or {}
+        assert res2.get("kind") in ("question", "social_probe")
+        assert (res2.get("social") or {}).get("npc_id") == "tavern_runner"
+        _assert_not_repeated_interruption_beat(txt2)
+        _assert_socially_grounded_progression(txt2)
+
+        r3 = client.post(
+            "/api/chat",
+            json={"text": '"Runner," Galinor says, "ignore the noise and tell me about the patrol."'},
+        )
+        assert r3.status_code == 200
+        d3 = r3.json()
+        assert d3.get("ok") is True
+        gm3 = d3.get("gm_output") or {}
+        txt3 = str(gm3.get("player_facing_text") or "")
+        low3 = txt3.lower()
+        res3 = d3.get("resolution") or {}
+        assert res3.get("kind") in ("question", "social_probe")
+        assert (res3.get("social") or {}).get("npc_id") == "tavern_runner"
+        _assert_not_repeated_interruption_beat(txt3)
+        _assert_socially_grounded_progression(txt3)
 
     assert len(gpt_calls) >= 3
 

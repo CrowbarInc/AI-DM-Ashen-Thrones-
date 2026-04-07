@@ -20,7 +20,9 @@ from game.prompt_context import canonical_interaction_target_npc_id
 from game.interaction_context import (
     assert_valid_speaker,
     canonical_scene_addressable_roster,
+    clear_social_exchange_interruption_tracker,
     effective_in_scene_npc_roster,
+    get_social_exchange_interruption_tracker,
     inspect as inspect_interaction_context,
     line_opens_with_comma_vocative,
     npc_id_from_explicit_generic_role_address,
@@ -28,6 +30,7 @@ from game.interaction_context import (
     resolve_authoritative_social_target,
     scene_addressable_actor_ids,
     session_allows_implicit_social_reply_authority,
+    set_social_exchange_interruption_tracker,
 )
 
 # Historical name in this module; delegates to canonical roster resolution in interaction_context.
@@ -1104,11 +1107,28 @@ def _has_explicit_interruption_shape(text: str) -> bool:
     return any(p.search(text) for p in _EXPLICIT_INTERRUPTION_JOIN_PATTERNS)
 
 
+def _looks_like_interruption_breakoff_text(text: str) -> bool:
+    s = (text or "").strip()
+    if not s:
+        return False
+    if any(p.search(s) for p in _INTERRUPTION_PATTERNS) or _has_explicit_interruption_shape(s):
+        return True
+    low = s.lower()
+    has_cutoff = bool(
+        re.search(
+            r"\b(?:starts?\s+to\s+answer|opens?\s+(?:their|his|her)\s+mouth|begins?\s+to\s+(?:answer|respond)|breaks?\s+off|cuts?\s+across|cut\s+off)\b",
+            low,
+        )
+    )
+    has_disturbance = bool(
+        re.search(r"\b(?:shout(?:ing)?|commotion|uproar|cry(?:ing|ies)?|yell(?:ing)?|crowd|square|room|tables?)\b", low)
+    )
+    return has_cutoff and has_disturbance
+
+
 def _interruption_sentence_index(sentences: List[str]) -> int | None:
     for i, s in enumerate(sentences):
-        if any(p.search(s) for p in _INTERRUPTION_PATTERNS):
-            return i
-        if _has_explicit_interruption_shape(s):
+        if _looks_like_interruption_breakoff_text(s):
             return i
     return None
 
@@ -1272,7 +1292,7 @@ def _sentence_is_speaker_owned_social(sentence: str, resolution: Dict[str, Any] 
     low = t.lower()
     if resolution is not None and _sentence_opens_with_resolved_npc_beat(t, resolution):
         return True
-    if any(p.search(t) for p in _INTERRUPTION_PATTERNS) or _has_explicit_interruption_shape(t):
+    if _looks_like_interruption_breakoff_text(t):
         return True
     if _sentence_is_bounded_social_signal(t):
         return True
@@ -1299,7 +1319,7 @@ def _sentence_form_label(sentence: str) -> str:
     """Single-form label for one sentence (after scene/clue drops)."""
     s = (sentence or "").strip()
     low = s.lower()
-    if any(p.search(s) for p in _INTERRUPTION_PATTERNS) or _has_explicit_interruption_shape(s):
+    if _looks_like_interruption_breakoff_text(s):
         return "interruption_breakoff"
     if any(p.search(s) for p in _PRESSURE_SIGNAL_PATTERNS):
         return "pressure_escalation"
@@ -1422,7 +1442,7 @@ def _classify_strict_social_ownership_sentence(
     s = (sentence or "").strip()
     if not s:
         return "invalid"
-    if any(p.search(s) for p in _INTERRUPTION_PATTERNS) or _has_explicit_interruption_shape(s):
+    if _looks_like_interruption_breakoff_text(s):
         return "interruption"
     if _strict_social_sentence_is_invalid(s, resolution):
         return "invalid"
@@ -1437,7 +1457,7 @@ def _merge_interruption_chunk(sentences: List[str]) -> str | None:
         return None
     start = intr_idx
     cur = sentences[intr_idx]
-    if intr_idx > 0 and any(p.search(cur) for p in _INTERRUPTION_PATTERNS) and not _has_explicit_interruption_shape(cur):
+    if intr_idx > 0 and _looks_like_interruption_breakoff_text(cur) and not _has_explicit_interruption_shape(cur):
         if _sentence_is_npc_setup(sentences[intr_idx - 1]):
             start = intr_idx - 1
     chunk = sentences[start : intr_idx + 1]
@@ -1622,7 +1642,308 @@ def emission_gate_interruption_active(tags: List[str], text: str) -> bool:
 
 def interruption_cue_present_in_text(text: str) -> bool:
     """Momentum tags alone must not select interruption fallback without diegetic cue."""
-    return any(pattern.search(text) for pattern in _INTERRUPTION_PATTERNS)
+    return _looks_like_interruption_breakoff_text(text)
+
+
+_INTERRUPTION_REPEAT_FORCE_THRESHOLD = 2
+_INTERRUPTION_SIGNATURE_STOPWORDS = frozenset(
+    {
+        "then",
+        "past",
+        "into",
+        "from",
+        "with",
+        "their",
+        "there",
+        "your",
+        "about",
+        "mouth",
+        "answer",
+        "starts",
+        "start",
+        "opens",
+        "open",
+        "glances",
+        "glance",
+        "flicks",
+        "flick",
+        "looks",
+        "look",
+        "breaks",
+        "break",
+        "breaksout",
+        "cuts",
+        "across",
+        "shout",
+        "shouting",
+        "commotion",
+        "crowd",
+        "square",
+        "room",
+        "tables",
+    }
+)
+
+
+def _social_exchange_interruption_exchange_key(
+    resolution: Dict[str, Any] | None,
+    scene_id: str,
+) -> str:
+    if not isinstance(resolution, dict):
+        return str(scene_id or "").strip()
+    social = resolution.get("social") if isinstance(resolution.get("social"), dict) else {}
+    npc_id = str(social.get("npc_id") or "").strip()
+    return f"{str(scene_id or '').strip()}|{npc_id}"
+
+
+def _interrupt_signature_actor_anchor(text: str) -> str:
+    low = str(text or "").lower()
+    actor_map = (
+        (r"\bdrunk(?:ard)?\b", "drunk"),
+        (r"\b(?:watchman|watchmen|watch)\b", "watch"),
+        (r"\bguard(?:s)?\b", "guard"),
+        (r"\bclerk\b", "clerk"),
+        (r"\bmerchant(?:s)?\b", "merchant"),
+    )
+    for pattern, label in actor_map:
+        if re.search(pattern, low):
+            return label
+    return "none"
+
+
+def _interrupt_signature_place_anchor(text: str) -> str:
+    low = str(text or "").lower()
+    place_map = (
+        (r"\bmain gate\b", "main_gate"),
+        (r"\bsouth gate\b", "south_gate"),
+        (r"\beast gate\b", "east_gate"),
+        (r"\bgate\b", "gate"),
+        (r"\bsquare\b", "public_space"),
+        (r"\balley\b", "alley"),
+        (r"\blane\b", "lane"),
+        (r"\bpier\b", "pier"),
+        (r"\bwell\b", "well"),
+        (r"\broom\b|\btables?\b|\btavern\b|\bcrowd\b|\bmarket\b", "public_space"),
+    )
+    for pattern, label in place_map:
+        if re.search(pattern, low):
+            return label
+    return "none"
+
+
+def _interruption_signature_for_text(
+    text: str,
+    *,
+    resolution: Dict[str, Any] | None,
+) -> str | None:
+    merged = _merge_interruption_chunk(_split_sentences(_collapse_ws(text)))
+    if not merged:
+        return None
+    low = merged.lower()
+    tokens: set[str] = set()
+
+    if re.search(
+        r"\b(?:starts?\s+to\s+answer|opens?\s+(?:their|his|her)\s+mouth|starts?\s+to\s+speak|begins?\s+to\s+(?:answer|respond))\b",
+        low,
+    ):
+        tokens.add("answer_cutoff")
+    if re.search(r"\b(?:shout(?:ing)?|commotion|uproar|alarm|cry(?:ing|ies)?|yell(?:ing)?|noise)\b", low):
+        tokens.add("disturbance_noise")
+    if re.search(r"\b(?:breaks?\s+off|cuts?\s+across|cut\s+off)\b", low):
+        tokens.add("interruption_motion")
+    if re.search(
+        r"\b(?:glances?|looks?|flicks?)\s+(?:past|toward|to)\b|\bpulls?\s+(?:their|his|her)\s+attention\s+away\b",
+        low,
+    ):
+        tokens.add("interruption_motion")
+    if re.search(r"\bback\s+to\s+you\b|\battention\s+returning\b", low):
+        tokens.add("interruption_motion")
+
+    actor_anchor = _interrupt_signature_actor_anchor(merged)
+    place_anchor = _interrupt_signature_place_anchor(merged)
+    if actor_anchor != "none":
+        tokens.add(f"actor:{actor_anchor}")
+    if place_anchor != "none":
+        if place_anchor == "public_space":
+            tokens.add("public_space")
+        else:
+            tokens.add(f"place:{place_anchor}")
+
+    if not tokens:
+        return None
+    return "|".join(sorted(tokens))
+
+
+def _forced_interruption_progression_line(
+    *,
+    resolution: Dict[str, Any],
+    session: Dict[str, Any] | None,
+    scene_id: str,
+    world: Dict[str, Any] | None,
+    tag_list: List[str],
+    signature: str,
+) -> tuple[str | None, str | None]:
+    sid = str(scene_id or "").strip()
+    structured = _try_emit_structured_fact_strict_line(
+        resolution=resolution,
+        session=session,
+        scene_id=sid,
+        world=world if isinstance(world, dict) else None,
+        tag_list=tag_list,
+    )
+    if structured:
+        return structured, "forced_progression_structured_fact"
+
+    merged_pt = merged_player_prompt_for_gate(resolution, session, sid)
+    seed = f"{sid}|interrupt_progression|{signature}|{merged_pt}"
+    topic = _integrity_topic_hook(merged_pt) or "that"
+    speaker = _speaker_label(resolution)
+    candidates = _social_integrity_fallback_line_candidates(
+        resolution=resolution,
+        player_text=merged_pt,
+        session=session,
+        scene_id=sid,
+        tag_list=tag_list,
+        seed=seed,
+    )
+    direct_hint, direct_kind = deterministic_social_fallback_line(
+        resolution=resolution,
+        uncertainty_source="scene_ambiguity",
+        pressure_active=False,
+        interruption_active=False,
+        seed=seed + "|direct_hint",
+    )
+    candidates.extend(
+        [
+            (
+                f'{speaker} lowers their voice. "That shouting is coming from the main gate. If {topic} still matters, catch the ward clerk before the square locks down."',
+                "forced_progression_gate_redirect",
+            ),
+            (
+                f'{speaker} jerks their chin toward the square. "Two watchmen are hauling someone out by the main gate. Stay with me and I will give you the short version on {topic} once they pass."',
+                "forced_progression_watch_pressure",
+            ),
+            (direct_hint, f"forced_progression_{direct_kind}"),
+        ]
+    )
+
+    for raw_line, kind in candidates:
+        filtered = apply_strict_social_sentence_ownership_filter(
+            raw_line,
+            resolution=resolution,
+            tags=tag_list or None,
+            session=session,
+            scene_id=sid,
+        )
+        norm = _normalize_gate_text(filtered)
+        if not norm or _interruption_signature_for_text(norm, resolution=resolution):
+            continue
+        if not _social_line_has_playable_npc_substance(norm):
+            continue
+        if not _strict_social_resolved_line_passes_legality(
+            norm,
+            resolution=resolution,
+            session=session,
+            scene_id=sid,
+            world=world if isinstance(world, dict) else None,
+        ):
+            continue
+        try:
+            _assert_all_sentences_strict_social_or_interruption(norm, resolution)
+        except AssertionError:
+            continue
+        return norm, kind
+
+    return None, None
+
+
+def _apply_interruption_repeat_guard(
+    text: str,
+    *,
+    resolution: Dict[str, Any] | None,
+    session: Dict[str, Any] | None,
+    scene_id: str,
+    world: Dict[str, Any] | None,
+    tags: List[str],
+    source_text: str | None = None,
+) -> tuple[str, Dict[str, Any]]:
+    meta: Dict[str, Any] = {
+        "forced_interruption_progression": False,
+        "forced_interruption_progression_kind": None,
+        "interruption_repeat_signature": None,
+        "interruption_repeat_count": 0,
+    }
+    if not isinstance(resolution, dict) or not isinstance(session, dict) or not str(scene_id or "").strip():
+        return text, meta
+
+    social = resolution.get("social") if isinstance(resolution.get("social"), dict) else {}
+    npc_id = str(social.get("npc_id") or "").strip()
+    if not npc_id:
+        clear_social_exchange_interruption_tracker(session)
+        return text, meta
+
+    source_signature = _interruption_signature_for_text(source_text or text, resolution=resolution)
+    final_signature = _interruption_signature_for_text(text, resolution=resolution)
+    signature = source_signature or final_signature
+    if not signature:
+        clear_social_exchange_interruption_tracker(session)
+        return text, meta
+
+    sid = str(scene_id or "").strip()
+    exchange_key = _social_exchange_interruption_exchange_key(resolution, sid)
+    tracker = get_social_exchange_interruption_tracker(session)
+    same_exchange = (
+        str(tracker.get("scene_id") or "").strip() == sid
+        and str(tracker.get("npc_id") or "").strip() == npc_id
+        and str(tracker.get("exchange_key") or "").strip() == exchange_key
+    )
+    same_signature = same_exchange and str(tracker.get("interruption_signature") or "").strip() == signature
+    prior_repeat_count = 0
+    if same_signature:
+        try:
+            prior_repeat_count = int(tracker.get("repeat_count", 0) or 0)
+        except (TypeError, ValueError):
+            prior_repeat_count = 0
+    repeat_count = prior_repeat_count + 1 if same_signature else 1
+    meta["interruption_repeat_signature"] = signature
+    meta["interruption_repeat_count"] = repeat_count
+
+    next_tracker: Dict[str, Any] = {
+        "scene_id": sid,
+        "npc_id": npc_id,
+        "exchange_key": exchange_key,
+        "interruption_signature": signature,
+        "repeat_count": repeat_count,
+        "last_turn_index": _session_turn_counter(session),
+        "last_emitted_text": text,
+    }
+
+    if repeat_count >= _INTERRUPTION_REPEAT_FORCE_THRESHOLD:
+        if source_signature and not final_signature and _social_line_has_playable_npc_substance(text):
+            next_tracker["last_emitted_text"] = text
+            next_tracker["forced_progression_count"] = int(tracker.get("forced_progression_count", 0) or 0) + 1
+            set_social_exchange_interruption_tracker(session, next_tracker)
+            meta["forced_interruption_progression"] = True
+            meta["forced_interruption_progression_kind"] = "existing_progression_output"
+            return text, meta
+        progressed, kind = _forced_interruption_progression_line(
+            resolution=resolution,
+            session=session,
+            scene_id=sid,
+            world=world if isinstance(world, dict) else None,
+            tag_list=tags,
+            signature=signature,
+        )
+        if progressed and _normalize_gate_text(progressed) != _normalize_gate_text(text):
+            next_tracker["last_emitted_text"] = progressed
+            next_tracker["forced_progression_count"] = int(tracker.get("forced_progression_count", 0) or 0) + 1
+            set_social_exchange_interruption_tracker(session, next_tracker)
+            meta["forced_interruption_progression"] = True
+            meta["forced_interruption_progression_kind"] = kind
+            return progressed, meta
+
+    set_social_exchange_interruption_tracker(session, next_tracker)
+    return text, meta
 
 
 def deterministic_social_fallback_line(
@@ -2671,6 +2992,7 @@ def build_final_strict_social_response(
 
     soc0 = res.get("social") if isinstance(res, dict) and isinstance(res.get("social"), dict) else {}
     if soc0.get("reply_speaker_grounding_neutral_bridge"):
+        clear_social_exchange_interruption_tracker(sess)
         nb = neutral_reply_speaker_grounding_bridge_line(
             seed=f"{sid}|neutral_grounding|{_question_prompt_for_resolution_early(res)}"
         )
@@ -2736,7 +3058,19 @@ def build_final_strict_social_response(
                 tag_list=tag_list,
             )
             if st:
-                return st, _structured_fact_emission_details()
+                st, interrupt_meta = _apply_interruption_repeat_guard(
+                    st,
+                    resolution=res,
+                    session=sess,
+                    scene_id=sid,
+                    world=world if isinstance(world, dict) else None,
+                    tags=tag_list,
+                    source_text=candidate_text,
+                )
+                return st, {
+                    **_structured_fact_emission_details(),
+                    **interrupt_meta,
+                }
         pref_text, pref_meta = _prefer_resolved_social_answer_over_candidate(
             text,
             resolution=res,
@@ -2755,6 +3089,15 @@ def build_final_strict_social_response(
             scene_id=sid,
             world=world if isinstance(world, dict) else None,
             tags=tag_list,
+        )
+        text, interrupt_meta = _apply_interruption_repeat_guard(
+            text,
+            resolution=res,
+            session=sess,
+            scene_id=sid,
+            world=world if isinstance(world, dict) else None,
+            tags=tag_list,
+            source_text=candidate_text,
         )
         _assert_all_sentences_strict_social_or_interruption(text, res)
         final_emitted_source = (
@@ -2778,6 +3121,7 @@ def build_final_strict_social_response(
             "intercepted_preview": "",
             **pref_meta,
             **integ_meta,
+            **interrupt_meta,
         }
 
     if isinstance(res, dict):
@@ -2789,7 +3133,19 @@ def build_final_strict_social_response(
             tag_list=tag_list,
         )
         if st2:
-            return st2, _structured_fact_emission_details()
+            st2, interrupt_meta = _apply_interruption_repeat_guard(
+                st2,
+                resolution=res,
+                session=sess,
+                scene_id=sid,
+                world=world if isinstance(world, dict) else None,
+                tags=tag_list,
+                source_text=candidate_text,
+            )
+            return st2, {
+                **_structured_fact_emission_details(),
+                **interrupt_meta,
+            }
 
     uncertainty_source = emission_gate_uncertainty_source(tag_list, text)
     pressure_active = emission_gate_pressure_active(tag_list, session, sid)
@@ -2839,6 +3195,15 @@ def build_final_strict_social_response(
         scene_id=sid,
     )
     out_text = _normalize_gate_text(fb_filtered)
+    out_text, interrupt_meta = _apply_interruption_repeat_guard(
+        out_text,
+        resolution=res,
+        session=sess,
+        scene_id=sid,
+        world=world if isinstance(world, dict) else None,
+        tags=tag_list,
+        source_text=candidate_text,
+    )
     _assert_all_sentences_strict_social_or_interruption(out_text, res)
 
     return out_text, {
@@ -2855,4 +3220,5 @@ def build_final_strict_social_response(
         "resolved_answer_preferred": False,
         "resolved_answer_source": None,
         "resolved_answer_preference_reason": None,
+        **interrupt_meta,
     }

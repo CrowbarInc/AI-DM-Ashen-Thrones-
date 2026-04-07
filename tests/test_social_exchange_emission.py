@@ -12,6 +12,7 @@ from game.output_sanitizer import (
     sanitize_player_facing_output,
 )
 from game.social_exchange_emission import (
+    _apply_interruption_repeat_guard,
     apply_strict_social_ownership_enforcement,
     apply_strict_social_sentence_ownership_filter,
     build_final_strict_social_response,
@@ -40,6 +41,19 @@ def _strict_social_resolution() -> dict:
             "social_intent_class": "social_exchange",
             "npc_id": "runner",
             "npc_name": "The runner",
+        },
+    }
+
+
+def _interruptible_runner_resolution() -> dict:
+    return {
+        "kind": "social_probe",
+        "prompt": "What happened to the missing patrol?",
+        "social": {
+            "social_intent_class": "social_exchange",
+            "npc_id": "tavern_runner",
+            "npc_name": "Tavern Runner",
+            "npc_reply_expected": True,
         },
     }
 
@@ -477,6 +491,392 @@ def test_normalize_interruption_emits_single_breakoff_only():
     out = normalize_social_exchange_candidate(raw, resolution=res)
     assert "from here, no clear answer" not in out.lower()
     assert "shouting" in out.lower() or "breaks out" in out.lower()
+
+
+def test_first_interruption_still_allowed_for_strict_social_exchange():
+    session = default_session()
+    world = default_world()
+    sid = "frontier_gate"
+    set_social_target(session, "tavern_runner")
+    rebuild_active_scene_entities(session, world, sid)
+    resolution = _interruptible_runner_resolution()
+    candidate = "Tavern Runner starts to answer, then glances past you as shouting breaks out in the crowd."
+
+    out, meta = build_final_strict_social_response(
+        candidate,
+        resolution=resolution,
+        tags=[],
+        session=session,
+        scene_id=sid,
+        world=world,
+    )
+
+    low = out.lower()
+    assert "runner" in low
+    assert "shouting" in low or "breaks out" in low
+    assert meta.get("forced_interruption_progression") is False
+    assert meta.get("interruption_repeat_count") == 1
+
+
+def test_repeated_interruption_reuse_forces_socially_grounded_progression():
+    session = default_session()
+    world = default_world()
+    sid = "frontier_gate"
+    set_social_target(session, "tavern_runner")
+    rebuild_active_scene_entities(session, world, sid)
+    resolution = _interruptible_runner_resolution()
+    candidate = "Tavern Runner starts to answer, then glances past you as shouting breaks out in the crowd."
+
+    out1, meta1 = build_final_strict_social_response(
+        candidate,
+        resolution=resolution,
+        tags=[],
+        session=session,
+        scene_id=sid,
+        world=world,
+    )
+    out2, meta2 = build_final_strict_social_response(
+        candidate,
+        resolution=resolution,
+        tags=[],
+        session=session,
+        scene_id=sid,
+        world=world,
+    )
+
+    assert meta1.get("forced_interruption_progression") is False
+    low2 = out2.lower()
+    assert meta2.get("forced_interruption_progression") is True
+    assert meta2.get("interruption_repeat_count") >= 2
+    assert "runner" in low2 or '"' in out2
+    assert "starts to answer" not in low2
+    assert "shouting breaks out" not in low2
+    assert (
+        "ward clerk" in low2
+        or "main gate" in low2
+        or "old crossroads" in low2
+        or "old millstone" in low2
+    )
+    assert out2 != out1
+
+
+def test_paraphrased_interruption_repeat_still_counts_and_forces_progression():
+    session = default_session()
+    world = default_world()
+    sid = "frontier_gate"
+    set_social_target(session, "tavern_runner")
+    rebuild_active_scene_entities(session, world, sid)
+    resolution = _interruptible_runner_resolution()
+    first = "Tavern Runner starts to answer, then glances past you as shouting breaks out in the crowd."
+    second = "Tavern Runner opens their mouth, then breaks off as a shout cuts across the square."
+
+    out1, meta1 = build_final_strict_social_response(
+        first,
+        resolution=resolution,
+        tags=[],
+        session=session,
+        scene_id=sid,
+        world=world,
+    )
+    out2, meta2 = build_final_strict_social_response(
+        second,
+        resolution=resolution,
+        tags=[],
+        session=session,
+        scene_id=sid,
+        world=world,
+    )
+
+    assert meta1.get("forced_interruption_progression") is False
+    low2 = out2.lower()
+    assert meta2.get("forced_interruption_progression") is True
+    assert meta2.get("interruption_repeat_count") >= 2
+    assert "runner" in low2 or '"' in out2
+    assert "breaks off" not in low2
+    assert "shout cuts across the square" not in low2
+    assert (
+        "ward clerk" in low2
+        or "main gate" in low2
+        or "old crossroads" in low2
+        or "old millstone" in low2
+    )
+    assert out2 != out1
+
+
+def test_noise_pulls_attention_away_counts_as_same_interruption_signature():
+    session = default_session()
+    world = default_world()
+    sid = "frontier_gate"
+    set_social_target(session, "tavern_runner")
+    rebuild_active_scene_entities(session, world, sid)
+    resolution = _interruptible_runner_resolution()
+    first = "Tavern Runner starts to answer, then glances past you as shouting breaks out in the crowd."
+    second = "Tavern Runner begins to respond before noise from the crowd pulls their attention away."
+
+    out1, meta1 = build_final_strict_social_response(
+        first,
+        resolution=resolution,
+        tags=[],
+        session=session,
+        scene_id=sid,
+        world=world,
+    )
+    out2, meta2 = build_final_strict_social_response(
+        second,
+        resolution=resolution,
+        tags=[],
+        session=session,
+        scene_id=sid,
+        world=world,
+    )
+
+    assert meta1.get("forced_interruption_progression") is False
+    low2 = out2.lower()
+    assert meta2.get("forced_interruption_progression") is True
+    assert meta2.get("interruption_repeat_count") >= 2
+    assert "begins to respond" not in low2
+    assert "noise from the crowd pulls their attention away" not in low2
+    assert (
+        "ward clerk" in low2
+        or "main gate" in low2
+        or "old crossroads" in low2
+        or "old millstone" in low2
+    )
+
+
+def test_interruption_repeat_tracker_resets_on_scene_change():
+    session = default_session()
+    world = default_world()
+    set_social_target(session, "tavern_runner")
+    rebuild_active_scene_entities(session, world, "frontier_gate")
+    resolution = _interruptible_runner_resolution()
+    candidate = "Tavern Runner starts to answer, then glances past you as shouting breaks out in the crowd."
+
+    _out1, meta1 = build_final_strict_social_response(
+        candidate,
+        resolution=resolution,
+        tags=[],
+        session=session,
+        scene_id="frontier_gate",
+        world=world,
+    )
+    out2, meta2 = build_final_strict_social_response(
+        candidate,
+        resolution=resolution,
+        tags=[],
+        session=session,
+        scene_id="eastern_square",
+        world=world,
+    )
+
+    low2 = out2.lower()
+    assert meta1.get("interruption_repeat_count") == 1
+    assert meta2.get("forced_interruption_progression") is False
+    assert meta2.get("interruption_repeat_count") == 1
+    assert "starts to answer" in low2
+    assert "shouting" in low2 or "breaks out" in low2
+
+
+def test_genuinely_new_interruption_signature_is_treated_fresh():
+    session = default_session()
+    world = default_world()
+    sid = "frontier_gate"
+    set_social_target(session, "tavern_runner")
+    rebuild_active_scene_entities(session, world, sid)
+    resolution = _interruptible_runner_resolution()
+    first = "Tavern Runner starts to answer, then glances past you as shouting breaks out in the crowd."
+    same = "Tavern Runner opens their mouth, then breaks off as a shout cuts across the square."
+    new_beat = "Tavern Runner starts to answer, then glances toward the main gate as an alarm rises and two guards shove through the lane."
+
+    _out1, meta1 = build_final_strict_social_response(
+        first,
+        resolution=resolution,
+        tags=[],
+        session=session,
+        scene_id=sid,
+        world=world,
+    )
+    out2, meta2 = build_final_strict_social_response(
+        same,
+        resolution=resolution,
+        tags=[],
+        session=session,
+        scene_id=sid,
+        world=world,
+    )
+    out3, meta3 = build_final_strict_social_response(
+        new_beat,
+        resolution=resolution,
+        tags=[],
+        session=session,
+        scene_id=sid,
+        world=world,
+    )
+
+    assert meta1.get("forced_interruption_progression") is False
+    assert meta2.get("forced_interruption_progression") is True
+    low3 = out3.lower()
+    assert meta3.get("forced_interruption_progression") is False
+    assert meta3.get("interruption_repeat_count") == 1
+    assert "starts to answer" in low3 or "opens their mouth" in low3
+    assert "old millstone" not in low3
+
+
+def test_existing_progression_output_for_cause_followup_survives_repeat_guard():
+    session = default_session()
+    world = default_world()
+    sid = "frontier_gate"
+    set_social_target(session, "tavern_runner")
+    rebuild_active_scene_entities(session, world, sid)
+    resolution = _interruptible_runner_resolution()
+    interruption = "Tavern Runner starts to answer, then glances past you as shouting breaks out in the crowd."
+    progressed = (
+        'Tavern Runner jerks their chin toward the main gate. '
+        '"Fish carts collided there, and two watchmen are hauling a fishmonger clear."'
+    )
+
+    _apply_interruption_repeat_guard(
+        interruption,
+        resolution=resolution,
+        session=session,
+        scene_id=sid,
+        world=world,
+        tags=[],
+        source_text=interruption,
+    )
+    out, meta = _apply_interruption_repeat_guard(
+        progressed,
+        resolution=resolution,
+        session=session,
+        scene_id=sid,
+        world=world,
+        tags=[],
+        source_text=interruption,
+    )
+
+    low = out.lower()
+    assert meta.get("forced_interruption_progression") is True
+    assert meta.get("forced_interruption_progression_kind") == "existing_progression_output"
+    assert "starts to answer" not in low
+    assert "main gate" in low or "watchmen" in low or "fishmonger" in low
+
+
+def test_existing_progression_output_for_reaction_followup_survives_repeat_guard():
+    session = default_session()
+    world = default_world()
+    sid = "frontier_gate"
+    set_social_target(session, "tavern_runner")
+    rebuild_active_scene_entities(session, world, sid)
+    resolution = _interruptible_runner_resolution()
+    interruption = "Tavern Runner starts to answer, then glances past you as shouting breaks out in the crowd."
+    progressed = (
+        'Tavern Runner grimaces at the shout and leans close. '
+        '"That rattled me. Give me a breath and I will tell you where the patrol was last seen."'
+    )
+
+    _apply_interruption_repeat_guard(
+        interruption,
+        resolution=resolution,
+        session=session,
+        scene_id=sid,
+        world=world,
+        tags=[],
+        source_text=interruption,
+    )
+    out, meta = _apply_interruption_repeat_guard(
+        progressed,
+        resolution=resolution,
+        session=session,
+        scene_id=sid,
+        world=world,
+        tags=[],
+        source_text=interruption,
+    )
+
+    low = out.lower()
+    assert meta.get("forced_interruption_progression") is True
+    assert meta.get("forced_interruption_progression_kind") == "existing_progression_output"
+    assert "starts to answer" not in low
+    assert "flinches" in low or "leans close" in low or "doorway clears" in low
+
+
+def test_existing_progression_output_for_partial_answer_survives_repeat_guard():
+    session = default_session()
+    world = default_world()
+    sid = "frontier_gate"
+    set_social_target(session, "tavern_runner")
+    rebuild_active_scene_entities(session, world, sid)
+    resolution = _interruptible_runner_resolution()
+    interruption = "Tavern Runner starts to answer, then glances past you as shouting breaks out in the crowd."
+    progressed = 'Tavern Runner says, "Short version: they were last seen near the old millstone. I did not see who led them."'
+
+    _apply_interruption_repeat_guard(
+        interruption,
+        resolution=resolution,
+        session=session,
+        scene_id=sid,
+        world=world,
+        tags=[],
+        source_text=interruption,
+    )
+    out, meta = _apply_interruption_repeat_guard(
+        progressed,
+        resolution=resolution,
+        session=session,
+        scene_id=sid,
+        world=world,
+        tags=[],
+        source_text=interruption,
+    )
+
+    low = out.lower()
+    assert meta.get("forced_interruption_progression") is True
+    assert meta.get("forced_interruption_progression_kind") == "existing_progression_output"
+    assert "starts to answer" not in low
+    assert "short version" in low or "old millstone" in low
+
+
+def test_interruption_repeat_tracker_resets_on_target_change():
+    session = default_session()
+    world = default_world()
+    sid = "frontier_gate"
+    set_social_target(session, "tavern_runner")
+    rebuild_active_scene_entities(session, world, sid)
+    first = _interruptible_runner_resolution()
+    second = {
+        "kind": "question",
+        "prompt": "Guard Captain, what happened at the gate?",
+        "social": {
+            "social_intent_class": "social_exchange",
+            "npc_id": "guard_captain",
+            "npc_name": "Guard Captain",
+            "npc_reply_expected": True,
+        },
+    }
+    candidate = "Tavern Runner starts to answer, then glances past you as shouting breaks out in the crowd."
+
+    _out1, meta1 = build_final_strict_social_response(
+        candidate,
+        resolution=first,
+        tags=[],
+        session=session,
+        scene_id=sid,
+        world=world,
+    )
+    out2, meta2 = build_final_strict_social_response(
+        "Guard Captain starts to answer, then glances toward the doorway as shouting breaks out in the crowd.",
+        resolution=second,
+        tags=[],
+        session=session,
+        scene_id=sid,
+        world=world,
+    )
+
+    low2 = out2.lower()
+    assert meta1.get("interruption_repeat_count") == 1
+    assert meta2.get("forced_interruption_progression") is False
+    assert meta2.get("interruption_repeat_count") == 1
+    assert "guard captain" in low2
 
 
 def test_normalize_ambiguous_follow_up_question_stays_speaker_owned():

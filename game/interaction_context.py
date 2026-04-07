@@ -279,6 +279,38 @@ def _scene_state(session: Dict[str, Any]) -> Dict[str, Any]:
     return state
 
 
+_SOCIAL_EXCHANGE_INTERRUPTION_TRACKER_KEY = "social_exchange_interruption_tracker"
+
+
+def get_social_exchange_interruption_tracker(session: Dict[str, Any] | None) -> Dict[str, Any]:
+    """Return exchange-local interruption tracking for the active scene."""
+    if not isinstance(session, dict):
+        return {}
+    tracker = _scene_state(session).get(_SOCIAL_EXCHANGE_INTERRUPTION_TRACKER_KEY)
+    if not isinstance(tracker, dict):
+        return {}
+    return dict(tracker)
+
+
+def set_social_exchange_interruption_tracker(
+    session: Dict[str, Any] | None,
+    tracker: Dict[str, Any] | None,
+) -> None:
+    """Persist or clear exchange-local interruption tracking for the active scene."""
+    if not isinstance(session, dict):
+        return
+    state = _scene_state(session)
+    if isinstance(tracker, dict) and tracker:
+        state[_SOCIAL_EXCHANGE_INTERRUPTION_TRACKER_KEY] = dict(tracker)
+        return
+    state.pop(_SOCIAL_EXCHANGE_INTERRUPTION_TRACKER_KEY, None)
+
+
+def clear_social_exchange_interruption_tracker(session: Dict[str, Any] | None) -> None:
+    """Drop interruption repetition tracking when the active exchange truly changes."""
+    set_social_exchange_interruption_tracker(session, None)
+
+
 def _clear_emergent_addressables(session: Dict[str, Any]) -> None:
     st = _scene_state(session)
     st["emergent_addressables"] = []
@@ -998,12 +1030,15 @@ def set_engagement_level(session: Dict[str, Any], level: Optional[str]) -> Dict[
 def set_social_target(session: Dict[str, Any], target_id: Optional[str]) -> Dict[str, Any]:
     """Set or clear the active social target; marks interaction kind as social."""
     ctx = inspect(session)
+    prior_target = _clean_string(ctx.get("active_interaction_target_id"))
     ctx["active_interaction_target_id"] = _clean_string(target_id)
     ctx["active_interaction_kind"] = "social"
     ctx["interaction_mode"] = "social"
     ctx["engagement_level"] = "engaged"
     st = _scene_state(session)
     tid = _clean_string(target_id)
+    if tid != prior_target:
+        clear_social_exchange_interruption_tracker(session)
     st["current_interlocutor"] = tid if tid else None
     return _normalize_context(ctx)
 
@@ -1039,6 +1074,7 @@ def clear_for_scene_change(session: Dict[str, Any]) -> Dict[str, Any]:
     ctx["player_position_context"] = None
     state = _scene_state(session)
     state["current_interlocutor"] = None
+    clear_social_exchange_interruption_tracker(session)
     return _normalize_context(ctx)
 
 
@@ -1058,6 +1094,7 @@ def set_non_social_activity(session: Dict[str, Any], kind: Optional[str]) -> Dic
     ctx["conversation_privacy"] = None
     ctx["player_position_context"] = None
     _scene_state(session)["current_interlocutor"] = None
+    clear_social_exchange_interruption_tracker(session)
     return _normalize_context(ctx)
 
 
