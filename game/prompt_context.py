@@ -263,6 +263,68 @@ _BARE_WHAT_INTERROGATIVE_RE = re.compile(
     re.IGNORECASE,
 )
 
+# Player explicitly rejects a non-responsive NPC line and reasserts the intended question (Objective #6).
+_CORRECTION_REASK_MISMATCH_RES: tuple[re.Pattern, ...] = (
+    re.compile(r"\bi\s+asked\b", re.IGNORECASE),
+    re.compile(r"\bi\s+was\s+asking\b", re.IGNORECASE),
+    re.compile(r"\bthat\s+didn'?t\s+answer\b", re.IGNORECASE),
+    re.compile(r"\bdidn'?t\s+answer\s+(my\s+)?question\b", re.IGNORECASE),
+    re.compile(r"\bnot\s+what\s+i\s+asked\b", re.IGNORECASE),
+    re.compile(r"\bthat'?s\s+not\s+what\s+i\s+asked\b", re.IGNORECASE),
+    re.compile(r"\bi\s+meant\b", re.IGNORECASE),
+    re.compile(r"\bno,?\s+i\s+asked\b", re.IGNORECASE),
+    re.compile(r"\banswer\s+the\s+question\s+i\s+asked\b", re.IGNORECASE),
+)
+
+
+def _correction_reask_mismatch_hit(player_text: str) -> bool:
+    t = str(player_text or "").strip()
+    if not t:
+        return False
+    return any(cre.search(t) for cre in _CORRECTION_REASK_MISMATCH_RES)
+
+
+def _correction_reask_reassertion_hit(player_text: str, prev_player_line: str) -> bool:
+    """Require a visible reassertion target (wh-axis, 'my question', contrast, prior-thread overlap, or long re-ask)."""
+    cur = str(player_text or "").strip()
+    if not cur:
+        return False
+    low = cur.lower()
+    if re.search(r"\b(why|where|who|what|which|how)\b", low):
+        return True
+    if "my question" in low:
+        return True
+    if re.search(r"\bnot\s+[^,\n]{1,32},\s*(why|where|who|what|which)\b", low):
+        return True
+    if re.search(r"\bi\s+meant\b", low):
+        return _overlap_ratio(_topic_tokens(cur), _topic_tokens(prev_player_line)) >= 0.22
+    if "i asked" in low and len(cur.split()) >= 5:
+        return True
+    return False
+
+
+def _correction_reask_followup_candidate(
+    player_text: str,
+    *,
+    active_target_id: str,
+    pair_ok: bool,
+    prior_substantive: bool,
+    prev_gm: str,
+    prev_player: str,
+) -> bool:
+    if not (
+        str(active_target_id or "").strip()
+        and pair_ok
+        and prior_substantive
+        and str(prev_gm or "").strip()
+    ):
+        return False
+    cur = str(player_text or "").strip()
+    if not _correction_reask_mismatch_hit(cur):
+        return False
+    return _correction_reask_reassertion_hit(cur, prev_player)
+
+
 # Prior GM text suggests guarded / refusal / partial / hedge (follow-up "why?" is meaningful).
 _GM_GUARDED_OR_REFUSAL_MARKERS: tuple[str, ...] = (
     "can't",
@@ -1015,6 +1077,7 @@ def _answer_pressure_followup_details(
             "recent_reference_kind": None,
             "recent_reference_phrase_matched": None,
             "clarification_prompt_shape": None,
+            "correction_reask_followup_detected": False,
         }
 
     suppressed_because: List[str] = []
@@ -1066,6 +1129,15 @@ def _answer_pressure_followup_details(
 
     prior_guarded = _prior_gm_guarded_or_refusal_partial(prev_gm) if prev_gm else False
     prior_anchor = _prior_gm_has_followup_anchor(prev_gm) if prev_gm else False
+
+    correction_reask_followup_detected = _correction_reask_followup_candidate(
+        cur,
+        active_target_id=active_target_id,
+        pair_ok=pair is not None,
+        prior_substantive=prior_substantive,
+        prev_gm=prev_gm,
+        prev_player=prev_player,
+    )
 
     relaxed_continuity = bool(
         pressure is not None
@@ -1160,7 +1232,8 @@ def _answer_pressure_followup_details(
             clarification_prompt_shape = clar_shape
 
     seeking = bool(
-        lexical_pressure
+        correction_reask_followup_detected
+        or lexical_pressure
         or contradiction_followup_detected
         or explanation_followup_detected
         or short_followup_anchor_detected
@@ -1203,6 +1276,8 @@ def _answer_pressure_followup_details(
         answer_pressure_reasons.append("path:explanation_of_recent_anchor_followup")
     if recent_reference_clarification_detected:
         answer_pressure_reasons.append("path:clarification_of_recent_reference")
+    if correction_reask_followup_detected:
+        answer_pressure_reasons.append("path:correction_reask_followup")
     if seeking and pressure is not None:
         answer_pressure_reasons.append("log:follow_up_pressure")
     if seeking and topic_overlap_follows_up:
@@ -1214,7 +1289,9 @@ def _answer_pressure_followup_details(
 
     answer_pressure_family: str | None = None
     if detected or seeking:
-        if explanation_of_recent_anchor_followup:
+        if correction_reask_followup_detected:
+            answer_pressure_family = "correction_reask_followup"
+        elif explanation_of_recent_anchor_followup:
             answer_pressure_family = "explanation_of_recent_anchor_followup"
         elif recent_reference_clarification_detected:
             answer_pressure_family = "clarification_of_recent_reference"
@@ -1236,7 +1313,9 @@ def _answer_pressure_followup_details(
             answer_pressure_family = "direct_question_continuity"
 
     answer_pressure_anchor_kind: str | None = None
-    if explanation_of_recent_anchor_followup:
+    if correction_reask_followup_detected:
+        answer_pressure_anchor_kind = "explicit_question_reassertion"
+    elif explanation_of_recent_anchor_followup:
         answer_pressure_anchor_kind = "npc_introduced_anchor_token"
     elif recent_reference_clarification_detected:
         answer_pressure_anchor_kind = "recent_reference_clarification"
@@ -1284,6 +1363,7 @@ def _answer_pressure_followup_details(
         "recent_reference_kind": recent_reference_kind,
         "recent_reference_phrase_matched": recent_reference_phrase_matched,
         "clarification_prompt_shape": clarification_prompt_shape,
+        "correction_reask_followup_detected": bool(correction_reask_followup_detected),
     }
 
 
@@ -1475,6 +1555,7 @@ def build_response_delta_contract(
         "recent_reference_kind": ap_details.get("recent_reference_kind"),
         "recent_reference_phrase_matched": ap_details.get("recent_reference_phrase_matched"),
         "clarification_prompt_shape": ap_details.get("clarification_prompt_shape"),
+        "correction_reask_followup_detected": bool(ap_details.get("correction_reask_followup_detected")),
         "answer_pressure_reasons": list(ap_details.get("answer_pressure_reasons") or []),
         "trigger_source": trigger_source,
         "resolution_kind": res_kind or None,
@@ -1623,6 +1704,7 @@ def build_answer_completeness_contract(
         "recent_reference_kind": ap_details.get("recent_reference_kind"),
         "recent_reference_phrase_matched": ap_details.get("recent_reference_phrase_matched"),
         "clarification_prompt_shape": ap_details.get("clarification_prompt_shape"),
+        "correction_reask_followup_detected": bool(ap_details.get("correction_reask_followup_detected")),
         "answer_pressure_reasons": list(ap_details.get("answer_pressure_reasons") or []),
         "partial_answer_permitted": bool(partial_permitted),
     }

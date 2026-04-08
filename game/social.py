@@ -1400,6 +1400,7 @@ def _answer_pressure_thread_followup(ap: Dict[str, Any] | None) -> bool:
         return False
     return bool(
         ap.get("answer_pressure_followup_detected")
+        or ap.get("correction_reask_followup_detected")
         or ap.get("short_followup_anchor_detected")
         or ap.get("contradiction_followup_detected")
         or ap.get("explanation_followup_detected")
@@ -1413,6 +1414,8 @@ def _answer_pressure_thread_followup(ap: Dict[str, Any] | None) -> bool:
 def _escalation_reason_for_answer_pressure(ap: Dict[str, Any]) -> str | None:
     if not isinstance(ap, dict) or not ap:
         return None
+    if ap.get("correction_reask_followup_detected") or ap.get("answer_pressure_family") == "correction_reask_followup":
+        return "explicit_question_reassertion"
     if ap.get("anchor_followup_detected") or ap.get("explanation_of_recent_anchor_followup"):
         return "explanation_anchor_followup"
     if ap.get("recent_reference_clarification_detected") or ap.get("answer_pressure_family") == "clarification_of_recent_reference":
@@ -1496,6 +1499,13 @@ def determine_social_escalation_outcome(
         if not dim_ok and current_dim in ("general", "clarification", "danger", "avoidance", "next_step"):
             dim_ok = len(last_ans.strip()) >= 8
         prior_same = bool(dim_ok)
+    correction_reask = bool(
+        ap.get("correction_reask_followup_detected")
+        or ap.get("answer_pressure_family") == "correction_reask_followup"
+    )
+    if correction_reask:
+        valid_fu = True
+        prior_same = True
     dim_changed = bool(prev_probe_dim and current_dim != prev_probe_dim)
     topic_exhausted_for_dimension = bool(knowledge_exhausted and prior_same)
 
@@ -1521,10 +1531,10 @@ def determine_social_escalation_outcome(
     out["escalation_effect"] = "allow_guarded_or_vague"
 
     if rc == 1:
-        out["escalation_reason"] = (
-            (_escalation_reason_for_answer_pressure(ap) if pressure_followup else None)
-            or "first_attempt_same_topic"
-        )
+        ap_esc = None
+        if pressure_followup or correction_reask:
+            ap_esc = _escalation_reason_for_answer_pressure(ap)
+        out["escalation_reason"] = ap_esc or "first_attempt_same_topic"
         out["escalation_effect"] = "vague_or_guarded_answer_allowed"
         if rk == "refusal" and valid_fu:
             out["effective_reply_kind"] = "explanation" if current_dim == "clarification" else "answer"
@@ -1943,6 +1953,7 @@ def apply_social_topic_escalation_to_resolution(
             "anchor_token_matched",
             "anchor_followup_detected",
             "explanation_of_recent_anchor_followup",
+            "correction_reask_followup_detected",
             "recent_reference_clarification_detected",
             "recent_reference_kind",
             "recent_reference_phrase_matched",

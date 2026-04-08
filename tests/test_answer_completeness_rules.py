@@ -22,6 +22,8 @@ from game.prompt_context import (
     build_response_delta_contract,
     question_detected_from_player_text,
 )
+from game.social import determine_social_escalation_outcome
+from tests.test_social_escalation import _session_with_pressure
 
 pytestmark = pytest.mark.unit
 
@@ -767,3 +769,126 @@ def test_spoken_state_refinement_cash_out_default_source_minimum_actionable_lead
     cash = out.get("_spoken_refinement_cash_out") or {}
     assert cash.get("source") == "minimum_actionable_lead"
     assert "cistern" in str(cash.get("refinement_preview") or "").lower()
+
+
+def _ap_details(player: str, compact: list, *, active_id: str = "tavern_runner") -> dict:
+    return _answer_pressure_followup_details(
+        player_input=player,
+        recent_log_compact=compact,
+        narration_obligations={},
+        session_view={"active_interaction_target_id": active_id},
+    )
+
+
+def test_correction_reask_followup_after_redirect_clue_line():
+    prior_gm = (
+        'The runner taps two fingers on the bar. "Word is the seal-house is holding a quiet drop '
+        'tonight—might be worth a glance if you like trouble."'
+    )
+    compact = [{"player_input": "Why is that?", "gm_snippet": prior_gm}]
+    line = "What? I asked you why people here wouldn't be friendly to newcomers."
+    ap = _ap_details(line, compact)
+    assert ap["correction_reask_followup_detected"] is True
+    assert ap["answer_pressure_followup_detected"] is True
+    assert ap["answer_pressure_family"] == "correction_reask_followup"
+    assert ap["answer_pressure_anchor_kind"] == "explicit_question_reassertion"
+    assert "path:correction_reask_followup" in ap["answer_pressure_reasons"]
+
+
+def test_correction_reask_no_i_asked_why_after_mismatch():
+    prior_gm = (
+        "She shrugs. If you want gossip, the east stall had a strange crate moved after dark—"
+        "that's all I noticed."
+    )
+    compact = [{"player_input": "What makes you say that?", "gm_snippet": prior_gm}]
+    ap = _ap_details("No, I asked why.", compact)
+    assert ap["correction_reask_followup_detected"] is True
+    assert ap["answer_pressure_family"] == "correction_reask_followup"
+
+
+def test_correction_reask_did_not_answer_my_question():
+    prior_gm = (
+        "He grins. There's a dice game in the back if you're bored—buy-in's steep tonight."
+    )
+    compact = [{"player_input": "Should I worry about the road north?", "gm_snippet": prior_gm}]
+    ap = _ap_details("That didn't answer my question.", compact)
+    assert ap["correction_reask_followup_detected"] is True
+    assert ap["answer_pressure_followup_detected"] is True
+
+
+def test_correction_reask_not_fired_for_bare_what_without_prior_exchange():
+    ap = _ap_details("What?", [])
+    assert ap["correction_reask_followup_detected"] is False
+    ap2 = _ap_details(
+        "What?",
+        [{"player_input": "Hello.", "gm_snippet": "Evening—what'll it be?"}],
+    )
+    assert ap2["correction_reask_followup_detected"] is False
+
+
+def test_correction_reask_social_escalation_explicit_reassertion_not_first_attempt():
+    prior_gm = (
+        'Runner leans in. "If you want something juicy, ask about the cellar key—they say it moved hands."'
+    )
+    compact = [{"player_input": "Why wouldn't people be friendly to strangers?", "gm_snippet": prior_gm}]
+    line = "What? I asked you why people here wouldn't be friendly to newcomers."
+    ap = _ap_details(line, compact)
+    session = _session_with_pressure("scene_tavern", "tavern_gossip", "tavern_runner", 1)
+    out = determine_social_escalation_outcome(
+        session=session,
+        scene_id="scene_tavern",
+        npc_id="tavern_runner",
+        topic_key="tavern_gossip",
+        reply_kind="answer",
+        progress_signals={"npc_knowledge_exhausted": False},
+        player_text=line,
+        answer_pressure_details=ap,
+    )
+    assert out["valid_followup_detected"] is True
+    assert out["prior_same_dimension_answer_exists"] is True
+    assert out["escalation_reason"] == "explicit_question_reassertion"
+    assert out["escalation_reason"] != "first_attempt_same_topic"
+
+
+def test_correction_reask_contracts_strict_social_answer_pressure_eligible():
+    log = [
+        {
+            "player_input": "Runner, anything interesting tonight?",
+            "gm_snippet": "The runner shrugs. Travelers talk about the old well—some say coins still glint down there.",
+        },
+        {
+            "player_input": "Why is that?",
+            "gm_snippet": (
+                'He taps the bar. "If you want a real thread, watch who visits the seal-house after dark."'
+            ),
+        },
+    ]
+    correction = "What? I asked you why people here wouldn't be friendly to newcomers."
+    obligations = _obligations_social_answer()
+    session_view = {"active_interaction_target_id": "tavern_runner"}
+    resolution = {
+        "kind": "question",
+        "social": {"npc_id": "tavern_runner", "npc_name": "Tavern Runner"},
+    }
+    ac = build_answer_completeness_contract(
+        player_input=correction,
+        narration_obligations=obligations,
+        resolution=resolution,
+        session_view=session_view,
+        uncertainty_hint=None,
+        recent_log_compact=log,
+    )
+    rd = build_response_delta_contract(
+        player_input=correction,
+        recent_log_compact=log,
+        narration_obligations=obligations,
+        resolution=resolution,
+        answer_completeness=ac,
+        session_view=session_view,
+    )
+    assert ac["trace"]["correction_reask_followup_detected"] is True
+    assert ac["trace"]["strict_social_answer_seek_override"] is True
+    assert ac["answer_required"] is True
+    assert rd["enabled"] is True
+    assert rd["trigger_source"] == "strict_social_answer_pressure"
+    assert rd["trace"]["correction_reask_followup_detected"] is True

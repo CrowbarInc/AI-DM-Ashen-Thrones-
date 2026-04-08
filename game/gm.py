@@ -798,6 +798,7 @@ def _answer_pressure_topic_bridge(ap: Dict[str, Any] | None) -> bool:
         return False
     return bool(
         ap.get("answer_pressure_followup_detected")
+        or ap.get("correction_reask_followup_detected")
         or ap.get("short_followup_anchor_detected")
         or ap.get("contradiction_followup_detected")
         or ap.get("explanation_followup_detected")

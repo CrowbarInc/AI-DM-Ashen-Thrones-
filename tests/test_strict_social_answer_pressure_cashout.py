@@ -16,9 +16,12 @@ from game.final_emission_gate import (
 )
 from game.prompt_context import (
     ANSWER_COMPLETENESS_PARTIAL_REASONS,
+    _answer_pressure_followup_details,
     build_answer_completeness_contract,
     build_response_delta_contract,
 )
+from game.social import determine_social_escalation_outcome
+from tests.test_social_escalation import _session_with_pressure
 
 pytestmark = pytest.mark.unit
 
@@ -77,6 +80,79 @@ def _tavern_patrol_pressure_log() -> list[dict]:
 
 
 # --- A. End-to-end transcript regression (contracts + layers + cash-out) ----------
+
+
+def test_transcript_runner_why_redirect_then_correction_reask_followup_recognition():
+    """Objective #6: correction/re-ask turn must not classify as a fresh first attempt."""
+    log_compact = [
+        {
+            "player_input": "Runner, anything interesting going on?",
+            "gm_snippet": (
+                "The Tavern Runner wipes a glass. Folk whisper about the north road—caravans "
+                "tighten their tarps when the wind turns cold."
+            ),
+        },
+        {
+            "player_input": "Why is that?",
+            "gm_snippet": (
+                'He lowers his voice. "If you want a lead, watch who slips into the seal-house '
+                'after the bell—there\'s a private drop rumored for tonight."'
+            ),
+        },
+    ]
+    correction = "What? I asked you why people here wouldn't be friendly to newcomers."
+    ap = _answer_pressure_followup_details(
+        player_input=correction,
+        recent_log_compact=log_compact,
+        narration_obligations={},
+        session_view={"active_interaction_target_id": "tavern_runner"},
+    )
+    assert ap["correction_reask_followup_detected"] is True
+    assert ap["answer_pressure_followup_detected"] is True
+    assert ap["answer_pressure_family"] == "correction_reask_followup"
+
+    session = _session_with_pressure("scene_tavern", "runner_local_gossip", "tavern_runner", 1)
+    soc = determine_social_escalation_outcome(
+        session=session,
+        scene_id="scene_tavern",
+        npc_id="tavern_runner",
+        topic_key="runner_local_gossip",
+        reply_kind="answer",
+        progress_signals={"npc_knowledge_exhausted": False},
+        player_text=correction,
+        answer_pressure_details=ap,
+    )
+    assert soc["valid_followup_detected"] is True
+    assert soc["prior_same_dimension_answer_exists"] is True
+    assert soc["escalation_reason"] != "first_attempt_same_topic"
+    assert soc["escalation_reason"] == "explicit_question_reassertion"
+
+    obligations = _obligations_social_answer()
+    session_view = {"active_interaction_target_id": "tavern_runner"}
+    resolution = {
+        "kind": "question",
+        "social": {"npc_id": "tavern_runner", "npc_name": "Tavern Runner"},
+    }
+    ac = build_answer_completeness_contract(
+        player_input=correction,
+        narration_obligations=obligations,
+        resolution=resolution,
+        session_view=session_view,
+        uncertainty_hint=None,
+        recent_log_compact=log_compact,
+    )
+    rd = build_response_delta_contract(
+        player_input=correction,
+        recent_log_compact=log_compact,
+        narration_obligations=obligations,
+        resolution=resolution,
+        answer_completeness=ac,
+        session_view=session_view,
+    )
+    assert ac["answer_required"] is True
+    assert ac["trace"].get("strict_social_answer_seek_override") is True
+    assert rd["enabled"] is True
+    assert rd["trigger_source"] == "strict_social_answer_pressure"
 
 
 def test_transcript_missing_patrol_turn4_answer_pressure_contracts_layers_and_cashout(monkeypatch):
