@@ -26,6 +26,7 @@ from game.social import (
 )
 from game.storage import get_scene_state
 from game.world import get_world_npc_by_id
+from game.interaction_context import build_speaker_selection_contract
 from game.narration_visibility import build_narration_visibility_contract
 from game.opening_visible_fact_selection import (
     OPENING_NARRATION_VISIBLE_FACT_MAX,
@@ -2648,8 +2649,59 @@ def build_narration_context(
 
     soc_profile = build_social_interlocutor_profile(interlocutor_export)
 
+    scene_id_for_speaker = scene_pub_id or (
+        str((session.get("scene_state") or {}).get("active_scene_id") or "").strip()
+        if isinstance(session, dict)
+        else ""
+    )
+    speaker_selection = build_speaker_selection_contract(
+        session if isinstance(session, dict) else None,
+        world if isinstance(world, dict) else None,
+        scene_id_for_speaker,
+        resolution=resolution if isinstance(resolution, dict) else None,
+    )
+    _psid = str((speaker_selection or {}).get("primary_speaker_id") or "").strip()
+    _allowed_ids = [
+        str(x).strip()
+        for x in ((speaker_selection or {}).get("allowed_speaker_ids") or [])
+        if isinstance(x, str) and str(x).strip()
+    ]
+    _switch_ok = bool((speaker_selection or {}).get("speaker_switch_allowed"))
+    _gff = bool((speaker_selection or {}).get("generic_fallback_forbidden"))
+    _labels_preview = ", ".join(
+        repr(x) for x in ((speaker_selection or {}).get("forbidden_fallback_labels") or [])[:8]
+    )
+    _speaker_contract_instr: List[str] = [
+        "SPEAKER SELECTION CONTRACT (HARD RULE): Obey the top-level `speaker_selection` object. "
+        "When `primary_speaker_id` is non-null, treat that NPC as the default voice for substantive quoted dialogue "
+        "and in-character answers for this turn.",
+    ]
+    if not _allowed_ids:
+        _speaker_contract_instr.append(
+            "SPEAKER SELECTION CONTRACT (HARD RULE): `allowed_speaker_ids` is empty — do not attribute quoted speech to any NPC; "
+            "remain narrator-neutral. Do not invent incidental speakers or crowd voices to answer for a missing interlocutor."
+        )
+    else:
+        _speaker_contract_instr.append(
+            f"SPEAKER SELECTION CONTRACT (HARD RULE): Only these NPC ids may carry quoted NPC dialogue this turn: {_allowed_ids!r}. "
+            "Do not give spoken lines to anyone else (including newly invented characters)."
+        )
+        if not _switch_ok:
+            _speaker_contract_instr.append(
+                "SPEAKER SELECTION CONTRACT (HARD RULE): `speaker_switch_allowed` is false — do not move the substantive reply "
+                "to a different NPC mid-turn. If `interruption_allowed` is true, a single explicit scene-event interruption may cut "
+                "off the current speaker per `interruption_requires_scene_event`."
+            )
+    if _gff:
+        _speaker_contract_instr.append(
+            "SPEAKER SELECTION CONTRACT (HARD RULE): `generic_fallback_forbidden` is true — do not use generic unnamed stand-ins "
+            f"(for example {_labels_preview}) as the answer source."
+        )
+    instructions = list(instructions) + _speaker_contract_instr
+
     payload: Dict[str, Any] = {
         'instructions': instructions,
+        'speaker_selection': speaker_selection,
         'active_topic_anchor': active_topic_anchor,
         'interaction_continuity': interaction_continuity,
         'active_interlocutor': interlocutor_export,

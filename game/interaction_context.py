@@ -2661,6 +2661,299 @@ def resolve_authoritative_social_target(
     )
 
 
+def _session_turn_counter_for_speaker_contract(session: Dict[str, Any] | None) -> int:
+    if not isinstance(session, dict):
+        return 0
+    try:
+        return int(session.get("turn_counter") or 0)
+    except (TypeError, ValueError):
+        return 0
+
+
+def _compose_speaker_selection_contract(
+    *,
+    session: Dict[str, Any] | None,
+    world: Dict[str, Any] | None,
+    scene_id: str,
+    scene_envelope: Dict[str, Any] | None,
+    merged_player_prompt: str,
+    resolution: Dict[str, Any] | None,
+    authoritative_target: Dict[str, Any],
+    social_grounding_slice: Dict[str, Any],
+    strict_social_active: bool,
+    debug_extras: Optional[Dict[str, Any]] = None,
+) -> Dict[str, Any]:
+    """Assemble the public speaker-selection dict from post-promotion auth + grounded social slice."""
+    from game.social import SPEAKER_CONTRACT_FORBIDDEN_FALLBACK_LABELS
+
+    sid = _clean_string(scene_id) or ""
+    auth = authoritative_target if isinstance(authoritative_target, dict) else {}
+    soc = social_grounding_slice if isinstance(social_grounding_slice, dict) else {}
+    sess = session if isinstance(session, dict) else None
+    w = world if isinstance(world, dict) else {}
+    env = scene_envelope if isinstance(scene_envelope, dict) else None
+
+    neutral_bridge = bool(soc.get("reply_speaker_grounding_neutral_bridge"))
+    pid = _clean_string(soc.get("npc_id"))
+    primary_id: Optional[str] = None
+    if not neutral_bridge and pid:
+        primary_id = pid
+
+    if bool(auth.get("offscene_target")):
+        primary_id = None
+
+    allowed: List[str] = []
+    if primary_id and sid and sess is not None:
+        if is_actor_addressable_in_current_scene(sess, env, primary_id, world=w):
+            allowed = [primary_id]
+        else:
+            primary_id = None
+    elif primary_id and sess is None:
+        primary_id = None
+
+    auth_src = str(auth.get("source") or "").strip()
+    primary_name: Optional[str] = None
+    primary_source: Optional[str] = None
+    if primary_id:
+        primary_name = _clean_string(soc.get("npc_name")) or _clean_string(auth.get("npc_name"))
+        if not primary_name:
+            primary_name = _display_name_for_npc_entry(None, primary_id)
+        primary_source = auth_src or None
+
+    generic_fallback_forbidden = not bool(allowed)
+    if strict_social_active and neutral_bridge:
+        generic_fallback_forbidden = True
+
+    continuity_locked = len(allowed) == 1
+    continuity_lock_reason: Optional[str] = None
+    if continuity_locked:
+        continuity_lock_reason = "single_grounded_in_scene_speaker"
+    elif strict_social_active and not allowed:
+        continuity_lock_reason = "strict_social_no_grounded_in_scene_speaker"
+
+    decl = bool(auth.get("declared_switch_detected")) or bool(auth.get("continuity_overridden_by_declared_switch"))
+    voc = bool(auth.get("spoken_vocative_detected")) or bool(auth.get("continuity_overridden_by_spoken_vocative"))
+    speaker_switch_allowed = False
+    speaker_switch_reason: Optional[str] = None
+    if decl:
+        speaker_switch_allowed = True
+        speaker_switch_reason = "declared_actor_switch"
+    elif voc:
+        speaker_switch_allowed = True
+        speaker_switch_reason = "spoken_vocative_or_explicit_address"
+    elif auth_src in ("explicit_target", "declared_action", "spoken_vocative", "vocative", "generic_role", "substring"):
+        speaker_switch_allowed = True
+        speaker_switch_reason = f"authoritative_source:{auth_src}"
+    elif auth_src == "first_roster":
+        speaker_switch_allowed = False
+        speaker_switch_reason = "first_roster_ambient_no_explicit_player_redirect"
+    elif auth_src == "continuity":
+        speaker_switch_allowed = False
+        speaker_switch_reason = "continuity_preserves_active_interlocutor"
+    elif auth_src in ("none",):
+        speaker_switch_allowed = True
+        speaker_switch_reason = "no_authoritative_pin"
+    elif not auth_src:
+        speaker_switch_allowed = True
+        speaker_switch_reason = "no_authoritative_pin"
+    else:
+        speaker_switch_allowed = True
+        speaker_switch_reason = f"authoritative_source:{auth_src or 'unknown'}"
+
+    tracker = get_social_exchange_interruption_tracker(sess)
+    tracker_substantive = bool(
+        str(tracker.get("interruption_signature") or "").strip()
+        or str(tracker.get("last_emitted_text") or "").strip()
+    )
+    if tracker_substantive:
+        speaker_switch_allowed = True
+        speaker_switch_reason = "session_interruption_tracker_suggests_scene_breakoff_continuity"
+
+    interruption_allowed = bool(strict_social_active or primary_id)
+    interruption_requires_scene_event = bool(strict_social_active and continuity_locked)
+
+    why_speaker = (
+        f"grounded_in_scene_npc:{primary_id};authority_source={auth_src};grounding={str(soc.get('grounding_reason_code') or '').strip() or 'n/a'}"
+        if primary_id
+        else (
+            "no_in_scene_speaker_after_authoritative_resolution_and_grounding"
+            if bool(auth.get("target_resolved"))
+            else "authoritative_target_unresolved"
+        )
+    )
+    dbg: Dict[str, Any] = {
+        "merged_player_prompt_preview": (merged_player_prompt[:140] + "…")
+        if len(merged_player_prompt) > 140
+        else merged_player_prompt,
+        "strict_social_active": strict_social_active,
+        "authoritative_source": auth_src or None,
+        "authoritative_reason": str(auth.get("reason") or "").strip() or None,
+        "grounding_reason_code": str(soc.get("grounding_reason_code") or "").strip() or None,
+        "grounding_fallback_applied": bool(soc.get("grounding_fallback_applied")),
+        "neutral_reply_bridge": neutral_bridge,
+        "why_speaker_chosen": why_speaker,
+        "why_continuity_locked_or_not": continuity_lock_reason,
+        "why_switch_permitted_or_not": speaker_switch_reason,
+        "interruption_tracker_active": tracker_substantive,
+    }
+    if isinstance(debug_extras, dict) and debug_extras:
+        dbg = {**dbg, **debug_extras}
+
+    return {
+        "primary_speaker_id": primary_id,
+        "primary_speaker_name": primary_name,
+        "primary_speaker_source": primary_source,
+        "allowed_speaker_ids": list(allowed),
+        "continuity_locked": continuity_locked,
+        "continuity_lock_reason": continuity_lock_reason,
+        "speaker_switch_allowed": speaker_switch_allowed,
+        "speaker_switch_reason": speaker_switch_reason,
+        "generic_fallback_forbidden": generic_fallback_forbidden,
+        "forbidden_fallback_labels": list(SPEAKER_CONTRACT_FORBIDDEN_FALLBACK_LABELS),
+        "interruption_allowed": interruption_allowed,
+        "interruption_requires_scene_event": interruption_requires_scene_event,
+        "offscene_speakers_forbidden": True,
+        "debug": dbg,
+    }
+
+
+def build_speaker_selection_contract(
+    session: Dict[str, Any] | None,
+    world: Dict[str, Any] | None,
+    scene_id: str,
+    *,
+    resolution: Optional[Dict[str, Any]] = None,
+    normalized_action: Optional[Dict[str, Any]] = None,
+    scene_envelope: Optional[Dict[str, Any]] = None,
+    merged_player_prompt: Optional[str] = None,
+    _engine_authoritative_target: Optional[Dict[str, Any]] = None,
+    _engine_grounded_social: Optional[Dict[str, Any]] = None,
+) -> Dict[str, Any]:
+    """Engine-authored contract: who may speak, continuity lock, switch and interruption policy.
+
+    Downstream prompting and emission should read this object instead of re-deriving speaker
+    authority from scattered flags.
+
+    When ``_engine_authoritative_target`` and ``_engine_grounded_social`` are provided (strict-social
+    reconcile path), authoritative resolution is not re-run.
+    """
+    from game.social import apply_social_reply_speaker_grounding, finalize_social_target_with_promotion
+    from game.social_exchange_emission import merged_player_prompt_for_gate, should_apply_strict_social_exchange_emission
+
+    sid = _clean_string(scene_id) or ""
+    sess = session if isinstance(session, dict) else None
+    w = world if isinstance(world, dict) else {}
+    if not sid:
+        return _compose_speaker_selection_contract(
+            session=sess,
+            world=w,
+            scene_id=sid,
+            scene_envelope=None,
+            merged_player_prompt="",
+            resolution=resolution if isinstance(resolution, dict) else None,
+            authoritative_target={},
+            social_grounding_slice={},
+            strict_social_active=False,
+            debug_extras={"contract_aborted": "empty_scene_id"},
+        )
+
+    res = resolution if isinstance(resolution, dict) else None
+    na = normalized_action if isinstance(normalized_action, dict) else None
+    if na is None and res is not None:
+        meta = res.get("metadata") if isinstance(res.get("metadata"), dict) else {}
+        na = meta.get("normalized_action") if isinstance(meta.get("normalized_action"), dict) else None
+
+    env = scene_envelope if isinstance(scene_envelope, dict) else None
+    if env is None and sess is not None:
+        env = _scene_envelope_for_addressability(sess, None)
+
+    merged = str(merged_player_prompt or "").strip()
+    if not merged and res is not None and sess is not None:
+        merged = merged_player_prompt_for_gate(res, sess, sid)
+
+    hint = ""
+    if sess is not None:
+        from game.storage import get_scene_runtime
+
+        rt = get_scene_runtime(sess, sid)
+        hint = str(rt.get("last_player_action_text") or "").strip()
+
+    strict_social = False
+    if sess is not None:
+        strict_social = should_apply_strict_social_exchange_emission(
+            res,
+            sess,
+            scene_runtime_prompt=hint or None,
+            scene_id=sid,
+            world=w,
+        )
+
+    if _engine_authoritative_target is not None and _engine_grounded_social is not None:
+        return _compose_speaker_selection_contract(
+            session=sess,
+            world=w,
+            scene_id=sid,
+            scene_envelope=env,
+            merged_player_prompt=merged,
+            resolution=res,
+            authoritative_target=_engine_authoritative_target,
+            social_grounding_slice=_engine_grounded_social,
+            strict_social_active=strict_social,
+            debug_extras={"resolution_path": "engine_reuse_strict_reconcile"},
+        )
+
+    allow_fr = bool(strict_social)
+    auth = resolve_authoritative_social_target(
+        sess,
+        w,
+        sid,
+        player_text=merged,
+        normalized_action=na,
+        scene_envelope=env,
+        merged_player_prompt=merged,
+        allow_first_roster_fallback=allow_fr,
+    )
+    res_kind = str((res or {}).get("kind") or "").strip()
+    auth, _, _ = finalize_social_target_with_promotion(
+        sess if sess is not None else {},
+        w,
+        sid,
+        auth,
+        action_type=res_kind,
+        turn_counter=_session_turn_counter_for_speaker_contract(sess),
+        scene_envelope=env,
+        raw_player_text=merged or None,
+    )
+
+    soc_probe: Dict[str, Any] = {
+        "npc_id": _clean_string(auth.get("npc_id")),
+        "target_resolved": bool(auth.get("target_resolved")),
+        "npc_name": _clean_string(auth.get("npc_name")),
+    }
+    apply_social_reply_speaker_grounding(
+        soc_probe,
+        sess if sess is not None else {},
+        w,
+        sid,
+        env,
+        auth,
+        proposed_reply_speaker_id=_clean_string(auth.get("npc_id")),
+    )
+
+    return _compose_speaker_selection_contract(
+        session=sess,
+        world=w,
+        scene_id=sid,
+        scene_envelope=env,
+        merged_player_prompt=merged,
+        resolution=res,
+        authoritative_target=auth,
+        social_grounding_slice=soc_probe,
+        strict_social_active=strict_social,
+        debug_extras={"resolution_path": "full_authoritative_resolve_plus_grounding"},
+    )
+
+
 # Narrow spoken roles for explicit generic addressing (scene-local roster match only).
 _GENERIC_ADDRESS_ROLE_ALT = r"(?:guardsman|guardswoman|watchman|sentry|stranger|refugee|merchant|runner|guard)"
 _GENERIC_ADDRESS_PATTERNS: Tuple[re.Pattern[str], ...] = (

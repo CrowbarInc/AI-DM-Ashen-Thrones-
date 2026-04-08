@@ -69,6 +69,20 @@ SOCIAL_KINDS = tuple(SOCIAL_SKILL_MAP.keys())
 SOCIAL_EXCHANGE_KINDS = ("question", "social_probe")
 SOCIAL_MANEUVER_KINDS = ("persuade", "intimidate", "deceive", "barter", "recruit")
 
+# Labels the model must not use as invented dialogue speakers unless engine-selected (:func:`build_speaker_selection_contract`).
+SPEAKER_CONTRACT_FORBIDDEN_FALLBACK_LABELS: Tuple[str, ...] = (
+    "ragged stranger",
+    "stranger",
+    "someone nearby",
+    "someone in the crowd",
+    "a voice nearby",
+    "a passerby",
+    "a bystander",
+    "an onlooker",
+    "a figure nearby",
+    "someone anonymous",
+)
+
 # Sources that count as stable explicit in-scene address for promotion triggers (not ambient fallbacks).
 _STABLE_SOCIAL_ADDRESS_SOURCES = frozenset(
     {

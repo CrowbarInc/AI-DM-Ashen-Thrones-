@@ -795,6 +795,27 @@ def reconcile_strict_social_resolution_speaker(
         proposed_reply_speaker_id=str(target_id or "").strip() or None,
     )
     out["social"] = soc
+
+    from game.interaction_context import build_speaker_selection_contract
+
+    speaker_contract = build_speaker_selection_contract(
+        session if isinstance(session, dict) else None,
+        world if isinstance(world, dict) else None,
+        sid,
+        resolution=out,
+        normalized_action=na,
+        scene_envelope=env,
+        merged_player_prompt=merged,
+        _engine_authoritative_target=dict(auth),
+        _engine_grounded_social=dict(soc),
+    )
+    md = out.setdefault("metadata", {})
+    if isinstance(md, dict):
+        em_dbg = md.setdefault("emission_debug", {})
+        if isinstance(em_dbg, dict):
+            # Consumed by :func:`game.final_emission_gate.enforce_emitted_speaker_with_contract` (no re-resolve).
+            em_dbg["speaker_selection_contract"] = speaker_contract
+
     return out
 
 

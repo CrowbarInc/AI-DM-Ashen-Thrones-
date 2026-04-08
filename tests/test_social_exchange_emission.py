@@ -4,6 +4,7 @@ from game.defaults import default_session, default_world
 from game.gm import apply_deterministic_retry_fallback, sanitize_player_facing_text
 from game.final_emission_gate import (
     apply_final_emission_gate,
+    enforce_emitted_speaker_with_contract,
     inspect_answer_completeness_failure,
     validate_answer_completeness,
 )
@@ -25,6 +26,7 @@ from game.social_exchange_emission import (
     hard_reject_social_exchange_text,
     is_route_illegal_global_or_sanitizer_fallback_text,
     normalize_social_exchange_candidate,
+    reconcile_strict_social_resolution_speaker,
     should_apply_strict_social_exchange_emission,
     strict_social_emission_will_apply,
     strict_social_ownership_terminal_fallback,
@@ -1582,3 +1584,76 @@ def test_wait_turn_keeps_strict_social_binding_without_scene_uncertainty_blob():
     low = out.lower()
     assert "from here, no certain answer" not in low
     assert "nothing in the scene points" not in low
+
+
+def test_reconcile_strict_social_stores_speaker_selection_contract_in_emission_debug():
+    session = default_session()
+    world = default_world()
+    sid = "frontier_gate"
+    set_social_target(session, "tavern_runner")
+    rebuild_active_scene_entities(session, world, sid)
+    ic = dict(session.get("interaction_context") or {})
+    ic["engagement_level"] = "engaged"
+    session["interaction_context"] = ic
+    rt = get_scene_runtime(session, sid)
+    rt["last_player_action_text"] = "What happened to the patrol?"
+    resolution = {
+        "kind": "social_probe",
+        "prompt": "What happened to the patrol?",
+        "metadata": {"normalized_action": {"target_id": "tavern_runner", "targetEntityId": "tavern_runner"}},
+        "social": {
+            "social_intent_class": "social_exchange",
+            "npc_id": "tavern_runner",
+            "npc_name": "Tavern Runner",
+        },
+    }
+    out = reconcile_strict_social_resolution_speaker(resolution, session, world, sid)
+    em = out.get("metadata", {}).get("emission_debug", {})
+    contract = em.get("speaker_selection_contract")
+    assert isinstance(contract, dict)
+    assert contract.get("debug", {}).get("contract_missing") is not True
+    assert isinstance(contract.get("allowed_speaker_ids"), list)
+
+
+def test_enforce_speaker_contract_reads_stored_contract_without_calling_build_speaker_selection_contract(
+    monkeypatch,
+):
+    """Downstream enforcement must consume emission_debug.speaker_selection_contract (no re-resolution)."""
+    from game import interaction_context as ic_mod
+
+    calls: list[int] = []
+    _orig_build = ic_mod.build_speaker_selection_contract
+
+    def spy_build(*args, **kwargs):
+        calls.append(1)
+        return _orig_build(*args, **kwargs)
+
+    monkeypatch.setattr(ic_mod, "build_speaker_selection_contract", spy_build)
+
+    session = default_session()
+    world = default_world()
+    sid = "frontier_gate"
+    set_social_target(session, "tavern_runner")
+    rebuild_active_scene_entities(session, world, sid)
+    rt = get_scene_runtime(session, sid)
+    rt["last_player_action_text"] = "Test?"
+    resolution = {
+        "kind": "question",
+        "prompt": "Test?",
+        "metadata": {"normalized_action": {"target_id": "tavern_runner"}},
+        "social": {"social_intent_class": "social_exchange", "npc_id": "tavern_runner", "npc_name": "Tavern Runner"},
+    }
+    eff = reconcile_strict_social_resolution_speaker(resolution, session, world, sid)
+    assert len(calls) == 1
+
+    gm_out = {"metadata": dict(eff.get("metadata") or {}), "trace": {}}
+    calls.clear()
+    enforce_emitted_speaker_with_contract(
+        'Tavern Runner says, "Fine."',
+        gm_output=gm_out,
+        resolution=eff,
+        eff_resolution=eff,
+        world=world,
+        scene_id=sid,
+    )
+    assert len(calls) == 0

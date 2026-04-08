@@ -1857,3 +1857,88 @@ def test_final_emission_gate_repeated_questioning_can_end_clean_refusal(tmp_path
     )
     assert "from here, no certain answer presents itself" not in low
     assert "i'd suggest you" not in low
+
+
+# feature: emission, speaker_contract
+def test_pipeline_strict_social_wrong_opening_speaker_repaired_to_canonical(tmp_path, monkeypatch):
+    """Thin E2E: continuity-locked contract repairs wrong explicit attribution to canonical NPC."""
+    _seed_runner_dialogue_context(tmp_path, monkeypatch)
+    wrong = 'Merchant says, "I know nothing about that."'
+
+    with monkeypatch.context() as m:
+        m.setattr("game.api.call_gpt", lambda _messages: _gm_response(wrong))
+        m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
+        m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
+        m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+        client = TestClient(app)
+        resp = client.post("/api/chat", json={"text": "Who attacked them?"})
+
+    assert resp.status_code == 200
+    data = resp.json()
+    gm_out = data.get("gm_output") or {}
+    text = str(gm_out.get("player_facing_text") or "")
+    low = text.lower()
+    assert "merchant" not in low
+    assert "tavern runner" in low
+    meta = gm_out.get("_final_emission_meta") or {}
+    assert meta.get("speaker_contract_enforcement_reason") in (
+        "continuity_locked_speaker_repair",
+        "canonical_speaker_rewrite",
+        "speaker_contract_match",
+    )
+
+
+# feature: emission, speaker_contract
+def test_pipeline_strict_social_ragged_stranger_fallback_repaired(tmp_path, monkeypatch):
+    """Thin E2E: forbidden generic speaker label is repaired toward canonical ownership."""
+    _seed_runner_dialogue_context(tmp_path, monkeypatch)
+    bad = 'Ragged stranger says, "Maybe you should ask the ward clerk."'
+
+    with monkeypatch.context() as m:
+        m.setattr("game.api.call_gpt", lambda _messages: _gm_response(bad))
+        m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
+        m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
+        m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+        client = TestClient(app)
+        resp = client.post("/api/chat", json={"text": "Who attacked them?"})
+
+    assert resp.status_code == 200
+    data = resp.json()
+    gm_out = data.get("gm_output") or {}
+    text = str(gm_out.get("player_facing_text") or "")
+    low = text.lower()
+    assert "ragged stranger" not in low
+    assert "tavern runner" in low
+    meta = gm_out.get("_final_emission_meta") or {}
+    assert meta.get("speaker_contract_enforcement_reason") in (
+        "canonical_speaker_rewrite",
+        "continuity_locked_speaker_repair",
+        "speaker_contract_match",
+    )
+
+
+# feature: emission, interruption
+def test_pipeline_interruption_denial_still_emits_coherent_strict_social(tmp_path, monkeypatch):
+    """Denied-interruption repair: stock advice stripped; strict-social output stays coherent."""
+    _seed_runner_dialogue_context(tmp_path, monkeypatch)
+    blob = (
+        'Tavern Runner says, "No names." Shouting breaks out in the crowd. '
+        "I'd suggest you check the board and ask the captain."
+    )
+
+    with monkeypatch.context() as m:
+        m.setattr("game.api.call_gpt", lambda _messages: _gm_response(blob))
+        m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
+        m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
+        m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+        client = TestClient(app)
+        resp = client.post("/api/chat", json={"text": "Who attacked them?"})
+
+    assert resp.status_code == 200
+    data = resp.json()
+    gm_out = data.get("gm_output") or {}
+    text = str(gm_out.get("player_facing_text") or "")
+    low = text.lower()
+    assert "i'd suggest you" not in low
+    assert "check the board" not in low
+    assert "tavern runner" in low or '"' in text
