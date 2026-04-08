@@ -10,6 +10,8 @@ Contract layers (orthogonal concerns):
   certain (see ``build_narrative_authority_contract``); does not replace visibility rules.
 - **scene_state_anchor** — mandatory grounding in present scene/speaker/action anchors.
 - **answer_completeness** — direct-answer obligations, voice, and bounded-partial shape.
+- **tone_escalation** — caps interpersonal hostility / escalation in narration from published inputs
+  (see ``build_tone_escalation_contract`` in ``game.tone_escalation``).
 """
 from __future__ import annotations
 
@@ -41,6 +43,7 @@ from game.opening_visible_fact_selection import (
 )
 from game.scene_state_anchoring import build_scene_state_anchor_contract
 from game.narrative_authority import build_narrative_authority_contract
+from game.tone_escalation import build_tone_escalation_contract
 
 # Configurable limits for deterministic, inspectable compression
 MAX_RECENT_LOG = 5
@@ -1815,6 +1818,26 @@ def build_response_policy(
     }
 
 
+def _tone_escalation_prompt_debug_anchor(contract: Mapping[str, Any] | None) -> Dict[str, Any]:
+    """Compact mirror of tone_escalation contract for prompt_debug (inspectable, not authoritative)."""
+    c = contract if isinstance(contract, dict) else {}
+    reasons = c.get("justification_reasons")
+    if not isinstance(reasons, list):
+        reasons = []
+    return {
+        "enabled": c.get("enabled"),
+        "active_speaker_id": c.get("active_speaker_id"),
+        "base_tone": c.get("base_tone"),
+        "max_allowed_tone": c.get("max_allowed_tone"),
+        "allow_guarded_refusal": c.get("allow_guarded_refusal"),
+        "allow_verbal_pressure": c.get("allow_verbal_pressure"),
+        "allow_explicit_threat": c.get("allow_explicit_threat"),
+        "allow_physical_hostility": c.get("allow_physical_hostility"),
+        "allow_combat_initiation": c.get("allow_combat_initiation"),
+        "justification_reasons": [str(x) for x in reasons if isinstance(x, str)],
+    }
+
+
 def canonical_interaction_target_npc_id(session: Dict[str, Any] | None, raw_target_id: str | None) -> str:
     """Map session interaction target to promoted world NPC id when ``promoted_actor_npc_map`` binds it."""
     raw = str(raw_target_id or "").strip()
@@ -2355,8 +2378,8 @@ def build_narration_context(
     Returns a dict suitable for JSON serialization as the user message content.
 
     Narration contracts are layered: visibility (reference scope), narrative_authority (certainty
-    and assertion boundaries), scene_state_anchor (grounding), and answer_completeness
-    (answer-shape obligations); see module docstring.
+    and assertion boundaries), scene_state_anchor (grounding), answer_completeness
+    (answer-shape obligations), and tone_escalation (interpersonal intensity caps); see module docstring.
     """
     # Interlocutor lead contract (maintenance): interlocutor_lead_context is the NPC-scoped export from
     # discussion tracking + authoritative lead rows; interlocutor_lead_behavior_hints are derived only
@@ -2715,6 +2738,45 @@ def build_narration_context(
         scene_id_for_speaker,
         resolution=resolution if isinstance(resolution, dict) else None,
     )
+    tone_escalation_build_error: str | None = None
+    try:
+        tone_escalation_contract = build_tone_escalation_contract(
+            session=session if isinstance(session, dict) else None,
+            world=world if isinstance(world, dict) else None,
+            scene_id=str(scene_id_for_speaker or "").strip(),
+            resolution=resolution if isinstance(resolution, dict) else None,
+            speaker_selection_contract=speaker_selection if isinstance(speaker_selection, dict) else None,
+            scene_state_anchor_contract=scene_state_anchor_contract if isinstance(scene_state_anchor_contract, dict) else None,
+            narration_visibility=visibility_contract if isinstance(visibility_contract, dict) else None,
+            recent_log=list(recent_log_for_prompt or []),
+        )
+    except Exception as exc:
+        tone_escalation_build_error = f"{type(exc).__name__}: {exc}"
+        tone_escalation_contract = build_tone_escalation_contract(
+            session=None,
+            world=None,
+            scene_id="",
+            resolution=None,
+            speaker_selection_contract=speaker_selection if isinstance(speaker_selection, dict) else None,
+            scene_state_anchor_contract=None,
+            narration_visibility=None,
+            recent_log=None,
+        )
+        tone_escalation_contract["scene_id"] = str(scene_id_for_speaker or "").strip()
+        tone_escalation_contract["debug_reason"] = (
+            f"prompt_context_tone_escalation_build_failed:{type(exc).__name__}"
+        )
+        _te_df = tone_escalation_contract.get("debug_flags")
+        tone_escalation_contract["debug_flags"] = {
+            **(_te_df if isinstance(_te_df, dict) else {}),
+            "exception": str(exc),
+        }
+    response_policy["tone_escalation"] = tone_escalation_contract
+    _te_dbg = _tone_escalation_prompt_debug_anchor(tone_escalation_contract)
+    if tone_escalation_build_error is not None:
+        _te_dbg = {**_te_dbg, "build_error": tone_escalation_build_error[:500]}
+    prompt_debug_anchor["tone_escalation"] = _te_dbg
+
     _psid = str((speaker_selection or {}).get("primary_speaker_id") or "").strip()
     _allowed_ids = [
         str(x).strip()
@@ -2789,7 +2851,13 @@ def build_narration_context(
         "When certainty is unavailable, defer via a roll/check request, bounded uncertainty, or conditional/branch framing. "
         "Observable visible cues are allowed; omniscient conclusions are not.",
     ]
-    instructions = list(instructions) + _narrative_authority_instr
+    _tone_escalation_instr = [
+        "TONE / ESCALATION (POLICY): Obey response_policy.tone_escalation for interpersonal intensity; that object is the authority—do not override it from general scene mood. "
+        "Do not introduce hostility, explicit threats, physical violence, or combat initiation unless the contract's allowances and published state support it. "
+        "When a higher escalation tier is not allowed, prefer guarded refusal, scrutiny, urgency, consequence framing, or concrete social or procedural pressure. "
+        "Topic pressure or conversational friction alone does not justify threats or violence.",
+    ]
+    instructions = list(instructions) + _narrative_authority_instr + _tone_escalation_instr
 
     payload: Dict[str, Any] = {
         'instructions': instructions,

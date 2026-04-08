@@ -1088,3 +1088,36 @@ def test_strict_social_gate_repairs_motive_overclaim_and_keeps_speaker(monkeypat
     assert "plans to stall" not in text.lower()
     assert "Tavern Runner" in text
     assert meta.get("speaker_contract_enforcement_reason") == "speaker_contract_match"
+
+
+def test_final_emission_gate_marks_non_hostile_escalation_blocked_on_tone_writer_overshoot() -> None:
+    """When pre-repair text violates shipped tone policy, legacy meta records the overshoot."""
+    ctr = {
+        "enabled": True,
+        "scene_id": "hall",
+        "base_tone": "neutral",
+        "max_allowed_tone": "guarded",
+        "allow_guarded_refusal": True,
+        "allow_verbal_pressure": False,
+        "allow_explicit_threat": False,
+        "allow_physical_hostility": False,
+        "allow_combat_initiation": False,
+        "justification_flags": {},
+        "justification_reasons": [],
+        "debug_inputs": {"scene_id": "hall"},
+        "debug_flags": {},
+    }
+    out = apply_final_emission_gate(
+        {
+            "player_facing_text": "Out of nowhere, chaos erupts through the hall.",
+            "tags": [],
+            "response_policy": {"tone_escalation": ctr},
+        },
+        resolution={"kind": "observe", "prompt": "I listen."},
+        session={},
+        scene_id="hall",
+        world={},
+    )
+    meta = out.get("_final_emission_meta") or {}
+    assert meta.get("non_hostile_escalation_blocked") is True
+    assert meta.get("tone_escalation_violation_before_repair") is True

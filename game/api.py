@@ -817,6 +817,7 @@ def _build_gpt_narration_from_authoritative_state(
         retry_instruction = build_retry_prompt_for_failure(
             selected_failure,
             response_policy=response_policy,
+            gm_output=gm,
         )
         print(
             "[RETRY] selected_strategy=",

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 import copy
 import json
 import re
@@ -71,6 +71,79 @@ _SOCIAL_FORCE_ANSWER_CANDIDATE_KINDS: frozenset[str] = frozenset(
     {"structured_fact", "reconciled_fact", "partial_answer"}
 )
 MAX_TARGETED_RETRY_ATTEMPTS = 2
+
+
+def _is_usable_retry_tone_escalation_contract(candidate: Any) -> bool:
+    """True for shipped tone contracts or prompt_debug mirrors that carry allow_* flags."""
+    if not isinstance(candidate, dict):
+        return False
+    if isinstance(candidate.get("debug_inputs"), dict):
+        return True
+    jf = candidate.get("justification_flags")
+    if isinstance(jf, dict) and candidate.get("max_allowed_tone") is not None:
+        return True
+    if (
+        "allow_explicit_threat" in candidate
+        and "allow_physical_hostility" in candidate
+        and "allow_combat_initiation" in candidate
+    ):
+        return True
+    return False
+
+
+def _resolve_retry_tone_escalation_contract(
+    gm_output: Optional[Dict[str, Any]],
+    response_policy: Optional[Dict[str, Any]],
+) -> Optional[Dict[str, Any]]:
+    """Read tone_escalation from response_policy / gm_output only (no contract rebuild)."""
+    candidates: List[Any] = []
+    if isinstance(response_policy, dict):
+        candidates.append(response_policy.get("tone_escalation"))
+    if isinstance(gm_output, dict):
+        pol = gm_output.get("response_policy")
+        if isinstance(pol, dict):
+            candidates.append(pol.get("tone_escalation"))
+        for key in ("narration_payload", "prompt_payload", "_narration_payload"):
+            pl = gm_output.get(key)
+            if not isinstance(pl, dict):
+                continue
+            candidates.append(pl.get("tone_escalation"))
+            rp = pl.get("response_policy")
+            if isinstance(rp, dict):
+                candidates.append(rp.get("tone_escalation"))
+        md = gm_output.get("metadata")
+        if isinstance(md, dict):
+            candidates.append(md.get("tone_escalation"))
+            rp = md.get("response_policy")
+            if isinstance(rp, dict):
+                candidates.append(rp.get("tone_escalation"))
+        tr = gm_output.get("trace")
+        if isinstance(tr, dict):
+            candidates.append(tr.get("tone_escalation"))
+            rp = tr.get("response_policy")
+            if isinstance(rp, dict):
+                candidates.append(rp.get("tone_escalation"))
+    for item in candidates:
+        if _is_usable_retry_tone_escalation_contract(item):
+            return item
+    return None
+
+
+def _retry_allows_hostile_escalation(
+    gm_output: Optional[Dict[str, Any]] = None,
+    *,
+    response_policy: Optional[Dict[str, Any]] = None,
+) -> bool:
+    """True only when shipped policy explicitly allows threat / physical harm / combat initiation."""
+    te = _resolve_retry_tone_escalation_contract(gm_output, response_policy)
+    if te is None:
+        return False
+    if te.get("enabled") is False:
+        return False
+    return bool(te.get("allow_explicit_threat")) or bool(te.get("allow_physical_hostility")) or bool(
+        te.get("allow_combat_initiation")
+    )
+
 
 def prioritize_retry_failures_for_social_answer_candidate(
     failures: List[Dict[str, Any]],
@@ -190,6 +263,7 @@ def build_retry_prompt_for_failure(
     failure: Dict[str, Any],
     *,
     response_policy: Dict[str, Any] | None = None,
+    gm_output: Dict[str, Any] | None = None,
 ) -> str:
     """Build a narrowly scoped retry instruction for one failure class only."""
     failure_class = str((failure or {}).get("failure_class") or "").strip()
@@ -215,7 +289,13 @@ def build_retry_prompt_for_failure(
     if failure_class == "answer":
         patched = dict(failure or {})
         patched["failure_class"] = "unresolved_question"
-        return build_retry_prompt_for_failure(patched, response_policy=response_policy)
+        return build_retry_prompt_for_failure(
+            patched,
+            response_policy=response_policy,
+            gm_output=gm_output,
+        )
+
+    allow_hostile = _retry_allows_hostile_escalation(gm_output, response_policy=response_policy)
 
     if failure_class == "unresolved_question":
         known_fact_context = (failure or {}).get("known_fact_context") if isinstance((failure or {}).get("known_fact_context"), dict) else {}
@@ -312,12 +392,27 @@ def build_retry_prompt_for_failure(
         topic_hint = f" Topic tokens: {topic_tokens}." if topic_tokens else ""
         prev_player_hint = f" Previous player press: {prev_player}." if prev_player else ""
         prev_answer_hint = f" Previous answer snippet (do not recycle): {prev_answer}." if prev_answer else ""
+        hostile_guard = (
+            ""
+            if allow_hostile
+            else (
+                " Do not move to threats, violence, weapons, brandished steel, or hostile interruption—"
+                "topic pressure alone is not justification."
+            )
+        )
+        grounded_hostile = (
+            " If the tone contract allows explicit threat or physical hostility, you may add a grounded confrontation beat "
+            "only when it fits established scene tension or visible authority roles—never arbitrary aggression."
+            if allow_hostile
+            else ""
+        )
         return (
             f"{shared} The player is pressing the same topic again, and your reply repeated the prior answer without escalation."
             f"{topic_hint}{prev_player_hint}{prev_answer_hint} "
             "Do NOT restate the same underlying lead. Escalate with new content: add one concrete detail AND one of "
             "(a) a named person/place/faction/witness (with an in-world source), or (b) a narrowed unknown boundary (time window, location bracket, condition, count). "
             "End with a more actionable immediate next step that uses the new detail. Preserve speaker grounding and diegetic voice."
+            f"{hostile_guard}{grounded_hostile}"
         )
 
     if failure_class == "npc_contract_failure":
@@ -336,17 +431,42 @@ def build_retry_prompt_for_failure(
         repeat_count = int(ctx.get("repeat_count", 0) or 0)
         topic_hint = f" Topic key: {topic_key}." if topic_key else ""
         prev_answer_hint = f" Prior low-gain answer (do not paraphrase): {prev_answer}." if prev_answer else ""
+        if allow_hostile:
+            escalation_menu = (
+                "You MUST escalate now with diegetic motion. Prefer one of: concrete clue tied to an on-screen detail; "
+                "bounded refusal that changes what is at stake; tightened scrutiny or procedural questioning; authority or policy pressure; "
+                "deadline or time cost; environmental shift others notice; social or reputation consequence; narrowing opportunity window; "
+                "or a named lead (NPC, faction, or place) the speaker can credibly cite. "
+                "Only if the tone contract already allows threat or physical hostility—and the scene has established grounds—"
+                "you may add a calibrated confrontation, conditional threat, or physical beat that fits that contract. "
+                "Do not invent random aggression."
+            )
+        else:
+            escalation_menu = (
+                "You MUST escalate now with diegetic motion without threats, violence, weapons, hostile interruption, or physical pressure—"
+                "topic pressure alone does not unlock hostility. "
+                "Choose one: concrete clue tied to an on-screen detail; bounded refusal that changes what is at stake; "
+                "tightened scrutiny or procedural questioning; authority or policy pressure; deadline or time cost; "
+                "environmental shift others notice; social or reputation consequence; narrowing opportunity window; "
+                "or a named lead (NPC, faction, or place) the speaker can credibly cite."
+            )
         return (
             f"{shared} The player has pressed this unresolved topic repeatedly without meaningful progress."
             f"{topic_hint}{prev_answer_hint} Repetition count: {repeat_count}. "
-            "You MUST escalate now with diegetic motion. Choose one: new NPC interruption, refusal that changes the scene, concrete clue, emerging threat, or environmental shift. "
+            f"{escalation_menu} "
             "Include exactly one scene momentum tag and end with a concrete immediate action the player can take."
         )
 
     if failure_class == "scene_stall":
+        hostile_tail = (
+            " If the tone contract allows, you may add a grounded confrontation beat that fits visible tension or authority roles."
+            if allow_hostile
+            else " Do not introduce threats, hostile interruption, violence, or weapons."
+        )
         return (
             f"{shared} Advance the scene by one concrete development now. "
-            "Introduce one actionable reveal, answer, consequence, opportunity, environmental change, or new pressure so the exchange does not remain static. "
+            "Introduce one actionable reveal, answer, consequence, opportunity, environmental change, or procedural/social pressure so the exchange does not remain static."
+            f"{hostile_tail} "
             "Include exactly one matching scene momentum tag in tags: scene_momentum:<kind>."
         )
 

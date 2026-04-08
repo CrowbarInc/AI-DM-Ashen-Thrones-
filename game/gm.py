@@ -5220,6 +5220,7 @@ def apply_response_policy_enforcement(
 from game.gm_retry import (
     MAX_TARGETED_RETRY_ATTEMPTS,
     RETRY_FAILURE_PRIORITY,
+    _retry_allows_hostile_escalation,
     _FINAL_EMISSION_META_CONTINUITY_KEYS,
     _NONSOCIAL_EMPTY_REPAIR_HARD_LINE,
     _NON_SOCIAL_TERMINAL_FINAL_ROUTES,

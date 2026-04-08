@@ -16,6 +16,7 @@ from game.gm import (
 )
 from game.social_exchange_emission import is_route_illegal_global_or_sanitizer_fallback_text
 from game.storage import get_scene_runtime
+from game.tone_escalation import validate_tone_escalation
 
 pytestmark = [pytest.mark.unit, pytest.mark.regression]
 
@@ -210,3 +211,25 @@ def test_contextual_repair_lines_pass_legality_checks(monkeypatch: Any) -> None:
     pft_n = str(out_n.get("player_facing_text") or "")
     _assert_repair_line_legal(pft_n)
     assert "nonsocial_contextual_repair:scene_anchor" in str(out_n.get("debug_notes") or "")
+
+
+def test_minimal_repair_hard_lines_respect_guarded_tone_contract() -> None:
+    """Terminal repair lines must not introduce disallowed threat/violence under a guarded ceiling."""
+    ctr = {
+        "enabled": True,
+        "base_tone": "neutral",
+        "max_allowed_tone": "guarded",
+        "allow_guarded_refusal": True,
+        "allow_verbal_pressure": False,
+        "allow_explicit_threat": False,
+        "allow_physical_hostility": False,
+        "allow_combat_initiation": False,
+        "justification_flags": {},
+        "justification_reasons": [],
+    }
+    for line in (
+        gm_module._SOCIAL_EMPTY_REPAIR_HARD_LINE,
+        gm_module._NONSOCIAL_EMPTY_REPAIR_HARD_LINE,
+    ):
+        v = validate_tone_escalation(line, contract=ctr)
+        assert v.get("ok") is True, (line, v)

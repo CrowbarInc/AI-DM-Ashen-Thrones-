@@ -3,7 +3,7 @@
     "id": "frontier_gate",
     "location": "Cinderwatch Gate District",
     "summary": "Rain spatters soot-dark stone as caravans and refugees choke the eastern gate. Guards watch the crowd with the brittle discipline of men who expect trouble, while old banners rot above the walls.",
-    "mode": "exploration",
+    "mode": "social",
     "visible_facts": [
       "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate.",
       "Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in.",
@@ -448,7 +448,21 @@
       "The tavern runner shouts about warm stew and rumors about the missing patrol, creating a buzz among the townsfolk.",
       "A well-dressed figure near the gate scans the crowd, particularly focused on newcomers.",
       "Nearby patrons seem anxious, whispering about the missing patrol.",
-      "A marked symbol resembling a sigil associated with the Ash Cowl is visible among the disturbed crates."
+      "A marked symbol resembling a sigil associated with the Ash Cowl is visible among the disturbed crates.",
+      "The gate sergeant is notably missing from their post, causing concerns among the guards and crowd.",
+      "The faint footprints appear more pronounced, leading deeper into the thicket, hinting at a hurried escape or concealment.",
+      "Amidst the scattered crates, a torn piece of parchment is partially visible, suggesting it might contain vital information regarding the dead drop's contents.",
+      "A torn piece of parchment wedged between the crates nearby may hold crucial information about the missing patrol.",
+      "Rain continues to intensify, creating a damp atmosphere thick with tension.",
+      "Nearby guards scan the crowd with wary eyes, their postures rigid as they anticipate trouble.",
+      "A notice board at the edge of the square prominently displays warnings about new taxes and the missing patrol.",
+      "The tavern runner is actively calling out offers of warm stew mixed with whispers of rumors surrounding the patrol's fate.",
+      "The atmosphere buzzes with urgent whispers about a missing patrol.",
+      "The tavern runner is calling out offers of warm stew, her expression a mix of urgency and anxiety.",
+      "Nearby patrons are exchanging nervous glances regarding the patrol's fate.",
+      "Nearby, patrons murmur about the missing patrol, their tones laced with urgency.",
+      "Signs of hasty movement disturb the mud near the dead drop; faint footprints lead into the thicket of crates",
+      "Whispers about the missing patrol circulate as patrons exchange nervous glances. The urgency in their voices hints at something significant."
     ],
     "journal_seed_facts": [
       "You arrive at Cinderwatch's eastern gate in cold rain, under frayed banners.",
@@ -578,7 +592,10 @@
       "Among the disturbed crates, a marked symbol resembling a sigil associated with The Ash Cowl is visible, hinting at possible connections to the missing patrol.",
       "A torn piece of parchment wedged between the crates may contain crucial information regarding the missing patrol.",
       "Closer inspection of the notice board may reveal more details about the missing patrol.",
-      "Observing the hooded figure can provide insights into potential secrets they may be hiding."
+      "Observing the hooded figure can provide insights into potential secrets they may be hiding.",
+      "Engaging the tavern runner could yield vital information about the patrol's status.",
+      "A closer look at the parchment could reveal crucial details about what happened at the dead drop.",
+      "Investigating the thicket further may unearth hidden items or signs of a recent struggle."
     ],
     "hidden_facts": [
       "An agent of a noble house is watching new arrivals from the square's edge.",
@@ -593,7 +610,8 @@
       "Nearby whispers suggest that the missing patrol is tied to a significant incident at the old milestone.",
       "The hooded figure has been signaling someone among the crowd, aware of Galinor's presence.",
       "Nearby patrons whisper anxiously about what they might know regarding the missing patrol's fate.",
-      "Nearby patrons seem to know more than they let on regarding the dead drop."
+      "Nearby patrons seem to know more than they let on regarding the dead drop.",
+      "Nearby patrons seem to know more than they let on regarding the missing patrol."
     ],
     "exits": [
       {
@@ -686,10 +704,10 @@
     "entity_presence": {
       "guard_captain": "active",
       "tavern_runner": "active",
-      "refugee": "active",
       "emergent_lord_aldric": "active",
+      "emergent_town_crier": "active",
       "threadbare_watcher": "active",
-      "emergent_town_crier": "active"
+      "refugee": "active"
     },
     "current_interlocutor": null,
     "emergent_addressables": [
