@@ -2226,6 +2226,7 @@ _LEAD_NAME_PATTERN = re.compile(
 )
 _LEAD_POSITION_PATTERN = re.compile(
     r"\b((?:Lady|Lord|Captain|Sergeant|Master|Mistress|Dame|Sir)\s+[A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)\s+"
+    r"(?:(?:waits?|stands?|lingers?|watches?|sits?|leans?|rests?|is|are)\s+)?"
     r"(near|by|at|outside|inside|beside|under)\s+([^.,;!?]+)",
     re.IGNORECASE,
 )
@@ -2797,6 +2798,45 @@ def extract_contextual_leads_from_text(player_facing_text: str) -> List[Dict[str
     return out[:_LEAD_HISTORY_LIMIT]
 
 
+def _merge_lead_subject_prefer_richer(old: str, new: str) -> str:
+    """When extraction re-matches an existing key, keep the more specific subject (e.g. article + noun)."""
+    o, n = str(old or "").strip(), str(new or "").strip()
+    if not n:
+        return o
+    if not o:
+        return n
+    ol, nl = o.lower(), n.lower()
+    if nl in ol and len(o) > len(n):
+        return o
+    if ol in nl and len(n) > len(o):
+        return n
+    return n
+
+
+def _merge_lead_position_prefer_canonical(old: str, new: str) -> str:
+    """Prefer shorter contained position when one string embeds the other (avoids duplicate verb junk)."""
+    o, n = str(old or "").strip(), str(new or "").strip()
+    if not n:
+        return o
+    if not o:
+        return n
+    ol, nl = o.lower(), n.lower()
+    if ol in nl and len(o) < len(n):
+        return o
+    if nl in ol and len(n) < len(o):
+        return n
+    return n
+
+
+def _primary_narration_block_for_lead_extraction(player_facing_text: str) -> str:
+    """First \\n\\n-separated block only — ignores deterministic policy appendices after the GM primary."""
+    t = str(player_facing_text or "").strip()
+    if not t:
+        return ""
+    first = t.split("\n\n")[0].strip()
+    return first if first else t
+
+
 def remember_recent_contextual_leads(
     session: Dict[str, Any],
     scene_id: str,
@@ -2804,7 +2844,7 @@ def remember_recent_contextual_leads(
 ) -> List[Dict[str, Any]]:
     if not scene_id:
         return []
-    discovered = extract_contextual_leads_from_text(player_facing_text)
+    discovered = extract_contextual_leads_from_text(_primary_narration_block_for_lead_extraction(player_facing_text))
     runtime = get_scene_runtime(session, scene_id)
     existing = _recent_contextual_leads(session, scene_id)
     turn_counter = int(session.get("turn_counter", 0) or 0)
@@ -2815,11 +2855,19 @@ def remember_recent_contextual_leads(
             continue
         matched = next((item for item in merged if str(item.get("key") or "").strip() == key), None)
         if matched is not None:
+            merged_subject = _merge_lead_subject_prefer_richer(
+                str(matched.get("subject") or ""),
+                str(lead.get("subject") or ""),
+            )
+            merged_position = _merge_lead_position_prefer_canonical(
+                str(matched.get("position") or ""),
+                str(lead.get("position") or ""),
+            )
             matched.update(
                 {
                     "kind": str(lead.get("kind") or matched.get("kind") or "").strip(),
-                    "subject": str(lead.get("subject") or matched.get("subject") or "").strip(),
-                    "position": str(lead.get("position") or matched.get("position") or "").strip(),
+                    "subject": merged_subject,
+                    "position": merged_position,
                     "named": bool(lead.get("named") or matched.get("named")),
                     "positioned": bool(lead.get("positioned") or matched.get("positioned")),
                     "mentions": int(matched.get("mentions", 1) or 1) + 1,
@@ -4179,6 +4227,19 @@ def build_messages(
         uncertainty_hint=uncertainty_hint,
     )
     if isinstance(resolution, dict):
+        sac = payload.get("scene_state_anchor_contract")
+        if isinstance(sac, dict):
+            md = resolution.setdefault("metadata", {})
+            em = md.setdefault("emission_debug", {})
+            em["scene_state_anchor"] = {
+                "enabled": sac.get("enabled"),
+                "scene_id": sac.get("scene_id"),
+                "counts": {
+                    "location": len(sac.get("location_tokens") or []),
+                    "actor": len(sac.get("actor_tokens") or []),
+                    "player_action": len(sac.get("player_action_tokens") or []),
+                },
+            }
         _soc_esc = (resolution.get("social") or {}).get("social_escalation")
         if isinstance(_soc_esc, dict) and int(_soc_esc.get("escalation_level") or 0) >= 2:
             payload["instructions"] = list(payload.get("instructions", [])) + [

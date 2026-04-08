@@ -71,87 +71,63 @@
       "source": "ordo_pyric"
     }
   ],
-  "world_state": {
-    "flags": {},
-    "counters": {},
-    "clocks": {}
-  },
   "inference_rules": [],
   "clues": {},
   "npcs": [
     {
-      "id": "emergent_lord_aldric",
-      "name": "Lord Aldric",
+      "id": "guard_captain",
+      "name": "Guard Captain",
       "location": "frontier_gate",
-      "scene_id": "frontier_gate",
-      "role": "",
-      "affiliation": "",
-      "availability": "available",
-      "current_agenda": "",
+      "role": "guard",
+      "affiliation": "cinderwatch",
       "disposition": "neutral",
-      "origin_kind": "scene_actor",
-      "origin_scene_id": "frontier_gate",
-      "promoted_from_actor_id": "emergent_lord_aldric",
-      "promotion_reason": "social_auto:stable_explicit_address",
-      "promotion_turn": 7,
-      "knowledge_scope": [
-        "lord",
-        "scene:frontier_gate"
+      "current_agenda": "patrol_gate",
+      "availability": "available",
+      "topics": [
+        {
+          "id": "patrol",
+          "text": "A patrol went missing near the old milestone."
+        }
       ],
+      "stance_toward_player": "neutral",
+      "knowledge_scope": [],
       "information_reliability": "partial",
-      "tags": [],
-      "topics": [],
-      "stance_toward_player": "neutral"
+      "origin_kind": "npc",
+      "origin_scene_id": "frontier_gate",
+      "promoted_from_actor_id": null,
+      "promotion_reason": null,
+      "promotion_turn": null,
+      "tags": []
     },
     {
-      "id": "emergent_town_crier",
-      "name": "Town Crier",
+      "id": "tavern_runner",
+      "name": "Tavern Runner",
       "location": "frontier_gate",
-      "scene_id": "frontier_gate",
-      "role": "",
-      "affiliation": "",
+      "role": "informant",
+      "affiliation": "ash_cowl",
+      "disposition": "friendly",
+      "current_agenda": "sell_rumors",
       "availability": "available",
-      "current_agenda": "",
-      "disposition": "neutral",
-      "origin_kind": "scene_actor",
-      "origin_scene_id": "frontier_gate",
-      "promoted_from_actor_id": "emergent_town_crier",
-      "promotion_reason": "social_auto:stable_explicit_address",
-      "promotion_turn": 7,
-      "knowledge_scope": [
-        "crier",
-        "town crier",
-        "scene:frontier_gate"
+      "topics": [
+        {
+          "id": "stew",
+          "text": "Hot stew and rumors for coin."
+        }
       ],
+      "stance_toward_player": "favorable",
+      "knowledge_scope": [],
       "information_reliability": "partial",
-      "tags": [],
-      "topics": [],
-      "stance_toward_player": "neutral"
-    },
-    {
-      "id": "refugee",
-      "name": "Ragged stranger",
-      "location": "frontier_gate",
-      "scene_id": "frontier_gate",
-      "role": "",
-      "affiliation": "",
-      "availability": "available",
-      "current_agenda": "",
-      "disposition": "neutral",
-      "origin_kind": "scene_actor",
+      "origin_kind": "npc",
       "origin_scene_id": "frontier_gate",
-      "promoted_from_actor_id": "refugee",
-      "promotion_reason": "social_auto:stable_explicit_address",
-      "promotion_turn": 2,
-      "knowledge_scope": [
-        "stranger",
-        "refugee",
-        "scene:frontier_gate"
-      ],
-      "information_reliability": "partial",
-      "tags": [],
-      "topics": [],
-      "stance_toward_player": "neutral"
+      "promoted_from_actor_id": null,
+      "promotion_reason": null,
+      "promotion_turn": null,
+      "tags": []
     }
-  ]
+  ],
+  "world_state": {
+    "flags": {},
+    "counters": {},
+    "clocks": {}
+  }
 }

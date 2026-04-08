@@ -399,7 +399,22 @@
       "The tavern runner continues to shout about warm stew while mixing in urgent rumors regarding the missing patrol.",
       "To the left, two alleyways present themselves: one narrow and shadowy, the other wider, leading toward a bustling tavern.",
       "Nearby crates are piled haphazardly, their contents spilling out, suggesting recent activity that doesn\u2019t align with the bustling atmosphere of the square.",
-      "Nearby patrons whisper among themselves, their expressions indicating they recognize the importance of mentioning the missing patrol."
+      "Nearby patrons whisper among themselves, their expressions indicating they recognize the importance of mentioning the missing patrol.",
+      "The gate sergeant is notably absent, causing concern among the guards and the crowd.",
+      "The faint footprints appear increasingly clear as Galinor examines them closely.",
+      "Among the scattered crates, a torn piece of parchment is wedged, possibly containing critical information.",
+      "The area around the dead drop shows signs of recent activity; footprints are faint but visible in the muddy ground.",
+      "A torn piece of parchment is partially wedged between two crates nearby.",
+      "Nearby patrons whisper among themselves anxiously, glancing at Galinor and the disturbed crates.",
+      "Some patrons appear to know more about the dead drop, their expressions indicating unease.",
+      "Nearby patrons glance nervously at the crates, their expressions indicating concern about recent events.",
+      "The tavern runner continues to shout about warm stew, her voice carrying urgency over the murmurs of the crowd, while nearby patrons whisper anxiously about the missing patrol.",
+      "Several figures in the crowd watch newcomers intently, suggesting a wave of curiosity laced with suspicion.",
+      "A few nearby patrons whisper anxiously, glancing towards Galinor and indicating they recognize something important.",
+      "The atmosphere thickens with murmurs about the missing patrol, making the tavern runner's offers of stew seem almost desperate.",
+      "The muddy ground shows signs of recent activity, indicating potential concealment.",
+      "The rain punctuates the chaotic atmosphere, creating a slick surface underfoot as patrons murmur urgently about a missing patrol.",
+      "The well-dressed figure observes newcomers with keen interest, casting occasional glances toward the guards."
     ],
     "journal_seed_facts": [
       "You arrive at Cinderwatch's eastern gate in cold rain, under frayed banners.",
@@ -508,7 +523,13 @@
       "Closer examination of the thicket may reveal items left behind.",
       "A closer look might uncover what was discarded at the dead drop.",
       "Closer investigation of the thicket may yield more signs of recent activity or items left behind by whoever fled from the dead drop.",
-      "Many locals express concern over the patrol's disappearance, hinting at a deeper connection to recent events."
+      "Many locals express concern over the patrol's disappearance, hinting at a deeper connection to recent events.",
+      "A closer examination might reveal crucial information written on the parchment about the smuggler's intentions.",
+      "Faint footprints lead deeper into the thicket, suggesting other individuals may have been involved.",
+      "Examining the thicket may yield more signs of recent activity or items left behind by whoever fled from the dead drop.",
+      "Several patrons hold hushed conversations about the missing patrol, hinting they may know more about its fate or sightings.",
+      "The well-dressed figure near the gate continues to observe newcomers, suggesting he might possess useful connections or information.",
+      "The tavern runner's anxious demeanor suggests she may have more to offer than just stew; there may be urgent rumors about the missing patrol she's holding back."
     ],
     "hidden_facts": [
       "An agent of a noble house is watching new arrivals from the square's edge.",
@@ -605,23 +626,59 @@
   "scene_state": {
     "active_scene_id": "frontier_gate",
     "active_entities": [
+      "guard_captain",
+      "tavern_runner",
       "emergent_lord_aldric",
       "emergent_town_crier",
       "refugee",
-      "guard_captain",
-      "tavern_runner",
       "threadbare_watcher"
     ],
     "entity_presence": {
+      "guard_captain": "active",
+      "tavern_runner": "active",
       "emergent_lord_aldric": "active",
-      "emergent_town_crier": "active",
       "refugee": "active",
       "threadbare_watcher": "active",
-      "guard_captain": "active",
-      "tavern_runner": "active"
+      "emergent_town_crier": "active"
     },
     "current_interlocutor": null,
-    "emergent_addressables": [],
+    "emergent_addressables": [
+      {
+        "id": "emergent_lord_aldric",
+        "name": "Lord Aldric",
+        "scene_id": "frontier_gate",
+        "address_roles": [
+          "lord"
+        ],
+        "aliases": [
+          "Lord Aldric",
+          "aldric",
+          "lord aldric"
+        ],
+        "kind": "scene_actor",
+        "addressable": true,
+        "address_priority": 40,
+        "emergent_source": "promoted_visible_figure"
+      },
+      {
+        "id": "emergent_town_crier",
+        "name": "Town Crier",
+        "scene_id": "frontier_gate",
+        "address_roles": [
+          "crier",
+          "town crier"
+        ],
+        "aliases": [
+          "town crier",
+          "the town crier",
+          "crier"
+        ],
+        "kind": "scene_actor",
+        "addressable": true,
+        "address_priority": 40,
+        "emergent_source": "promoted_visible_figure"
+      }
+    ],
     "promoted_actor_npc_map": {}
   }
 }

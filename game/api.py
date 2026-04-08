@@ -950,6 +950,11 @@ def _build_gpt_narration_from_authoritative_state(
     gm = _repair_terminal_player_facing_if_needed(
         gm, reason="api_targeted_retry_post_terminal"
     )
+    if isinstance(prompt_payload, dict) and isinstance(gm, dict):
+        sac = prompt_payload.get("scene_state_anchor_contract")
+        if isinstance(sac, dict):
+            gm = dict(gm)
+            gm["scene_state_anchor_contract"] = dict(sac)
     gm = apply_response_policy_enforcement(
         gm,
         response_policy=response_policy,
@@ -2080,6 +2085,11 @@ def action(req: ActionRequest):
             attach_to_resolution=bool(isinstance(resolution, dict)),
         )
 
+    remember_recent_contextual_leads(
+        session,
+        scene['scene']['id'],
+        _player_facing_text_for_lead_extraction(gm),
+    )
     gm, _narr_consistency = _finalize_player_facing_for_turn(
         gm,
         resolution=resolution if isinstance(resolution, dict) else None,
@@ -2098,11 +2108,6 @@ def action(req: ActionRequest):
     for _txt in narration_social_leads:
         if isinstance(_txt, str) and _txt.strip() and _txt.strip() not in authoritative_clue_updates:
             authoritative_clue_updates.append(_txt.strip())
-    remember_recent_contextual_leads(
-        session,
-        scene['scene']['id'],
-        gm.get('player_facing_text') if isinstance(gm.get('player_facing_text'), str) else '',
-    )
     _update_interaction_context_after_action(
         session,
         resolution,
@@ -2732,6 +2737,11 @@ def chat(req: ChatRequest):
             directed_social_entry=canonical_entry,
             attach_to_resolution=bool(isinstance(resolution, dict)),
         )
+    remember_recent_contextual_leads(
+        session,
+        scene['scene']['id'],
+        _player_facing_text_for_lead_extraction(gm),
+    )
     gm, _narr_consistency_chat = _finalize_player_facing_for_turn(
         gm,
         resolution=resolution if isinstance(resolution, dict) else None,
@@ -2750,11 +2760,6 @@ def chat(req: ChatRequest):
     for _txt in narration_social_leads:
         if isinstance(_txt, str) and _txt.strip() and _txt.strip() not in authoritative_clue_updates:
             authoritative_clue_updates.append(_txt.strip())
-    remember_recent_contextual_leads(
-        session,
-        scene['scene']['id'],
-        gm.get('player_facing_text') if isinstance(gm.get('player_facing_text'), str) else '',
-    )
     context_resolution = (
         resolution
         if isinstance(resolution, dict) and resolution.get('kind') and resolution.get('kind') != 'adjudication_query'
@@ -2890,6 +2895,7 @@ from game.api_turn_support import (
     _finalize_player_facing_for_turn,
     _lead_debug_trace_around_authoritative_reconcile,
     _merge_emergent_actor_debug_into_action_debug,
+    _player_facing_text_for_lead_extraction,
     _sanitize_resolution,
     _session_ongoing_social_exchange,
     _snapshot_known_clue_presentations,

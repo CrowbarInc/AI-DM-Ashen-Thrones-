@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import re
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Mapping, Optional, Sequence
 
 from game.exploration import NPC_PURSUIT_CONTACT_SESSION_KEY
 from game.interaction_context import inspect as inspect_interaction_context
@@ -37,6 +37,7 @@ from game.social_exchange_emission import (
 )
 from game.storage import get_scene_runtime
 from game.leads import get_lead, normalize_lead
+from game.scene_state_anchoring import validate_scene_state_anchoring
 
 
 def _normalize_text(text: str | None) -> str:
@@ -248,6 +249,9 @@ def candidate_satisfies_dialogue_contract(
     clean = _normalize_text(text)
     if not clean:
         return False, ["dialogue_empty"]
+    # Bracket-only production markers (e.g. "[Narration]") are non-replaced stubs; not generic scene fallback.
+    if re.fullmatch(r"\[[^\]]{1,120}\]", clean.strip()):
+        return True, []
     if is_route_illegal_global_or_sanitizer_fallback_text(clean):
         return False, ["dialogue_generic_fallback_text"]
     if isinstance(resolution, dict) and replacement_is_route_legal_social(
@@ -1763,6 +1767,357 @@ def _merge_response_delta_meta(meta: Dict[str, Any], rd_dbg: Dict[str, Any]) -> 
     )
 
 
+# --- Scene state anchor (scene_state_anchor_contract + validate_scene_state_anchoring) ----------
+
+
+def _resolve_scene_state_anchor_contract(gm_output: Dict[str, Any] | None) -> Dict[str, Any] | None:
+    """Read the shipped contract from *gm_output* / narration payload copies only (no rebuild)."""
+    if not isinstance(gm_output, dict):
+        return None
+    direct = gm_output.get("scene_state_anchor_contract")
+    if isinstance(direct, dict):
+        return direct
+    for key in ("narration_payload", "prompt_payload", "_narration_payload"):
+        pl = gm_output.get(key)
+        if isinstance(pl, dict):
+            sac = pl.get("scene_state_anchor_contract")
+            if isinstance(sac, dict):
+                return sac
+    md = gm_output.get("metadata")
+    if isinstance(md, dict):
+        sac = md.get("scene_state_anchor_contract")
+        if isinstance(sac, dict):
+            return sac
+    tr = gm_output.get("trace")
+    if isinstance(tr, dict):
+        sac = tr.get("scene_state_anchor_contract")
+        if isinstance(sac, dict):
+            return sac
+    return None
+
+
+def _resolve_scene_state_anchor_debug(gm_output: Dict[str, Any] | None) -> Dict[str, Any]:
+    """Compact upstream summary (e.g. gm emission_debug.scene_state_anchor) for metadata merge."""
+    if not isinstance(gm_output, dict):
+        return {}
+    md = gm_output.get("metadata")
+    if isinstance(md, dict):
+        em = md.get("emission_debug")
+        if isinstance(em, dict):
+            dbg = em.get("scene_state_anchor")
+            if isinstance(dbg, dict):
+                return dict(dbg)
+    return {}
+
+
+def _default_scene_state_anchor_meta(
+    skip: str | None,
+    upstream_debug: Dict[str, Any],
+) -> Dict[str, Any]:
+    return {
+        "scene_state_anchor_checked": False,
+        "scene_state_anchor_passed": False,
+        "scene_state_anchor_failed": False,
+        "scene_state_anchor_skip_reason": skip,
+        "scene_state_anchor_matched_kinds": [],
+        "scene_state_anchor_failure_reasons": [],
+        "scene_state_anchor_repaired": False,
+        "scene_state_anchor_repair_mode": None,
+        "scene_state_anchor_upstream_debug": dict(upstream_debug),
+    }
+
+
+def _merge_scene_state_anchor_meta(meta: Dict[str, Any], ssa_dbg: Dict[str, Any]) -> None:
+    if not ssa_dbg:
+        return
+    keys = (
+        "scene_state_anchor_checked",
+        "scene_state_anchor_passed",
+        "scene_state_anchor_failed",
+        "scene_state_anchor_skip_reason",
+        "scene_state_anchor_matched_kinds",
+        "scene_state_anchor_failure_reasons",
+        "scene_state_anchor_repaired",
+        "scene_state_anchor_repair_mode",
+        "scene_state_anchor_upstream_debug",
+    )
+    for k in keys:
+        if k in ssa_dbg:
+            meta[k] = ssa_dbg[k]
+
+
+def _merge_scene_state_anchor_into_emission_debug(
+    out: Dict[str, Any],
+    resolution: Dict[str, Any] | None,
+    eff_resolution: Dict[str, Any] | None,
+    *,
+    gate_meta: Dict[str, Any],
+) -> None:
+    """Attach gate fields and preserve/merge compact upstream ``scene_state_anchor`` summaries."""
+    upstream: Any = None
+    flat: Dict[str, Any] = {}
+    for k, v in gate_meta.items():
+        if not str(k).startswith("scene_state_anchor_"):
+            continue
+        if k == "scene_state_anchor_upstream_debug":
+            upstream = v
+            continue
+        flat[k] = v
+    if not flat and not (isinstance(upstream, dict) and upstream):
+        return
+
+    def _patch_em(em: Any) -> None:
+        if not isinstance(em, dict):
+            return
+        base = em.get("scene_state_anchor")
+        if isinstance(upstream, dict) and upstream:
+            if isinstance(base, dict):
+                merged = {**upstream, **base}
+            else:
+                merged = dict(upstream)
+            em["scene_state_anchor"] = merged
+        for fk, fv in flat.items():
+            em[fk] = fv
+
+    md_out = out.setdefault("metadata", {})
+    if isinstance(md_out, dict):
+        _patch_em(md_out.setdefault("emission_debug", {}))
+
+    if isinstance(resolution, dict):
+        md_r = resolution.setdefault("metadata", {})
+        if isinstance(md_r, dict):
+            _patch_em(md_r.setdefault("emission_debug", {}))
+
+    if eff_resolution is not None and isinstance(eff_resolution.get("metadata"), dict):
+        _patch_em(eff_resolution["metadata"].setdefault("emission_debug", {}))
+
+
+def _skip_scene_state_anchor_layer(
+    text: Any,
+    contract: Dict[str, Any] | None,
+    *,
+    strict_social_details: Dict[str, Any] | None,
+    response_type_debug: Dict[str, Any] | None = None,
+) -> str | None:
+    if response_type_debug is not None and response_type_debug.get("response_type_candidate_ok") is False:
+        return "response_type_contract_failed"
+    if not isinstance(contract, dict):
+        return "missing_contract"
+    if not contract.get("enabled"):
+        return "contract_disabled"
+    if not isinstance(text, str):
+        return "non_string_text"
+    if not str(text).strip():
+        return "empty_text"
+    if strict_social_details:
+        if strict_social_details.get("used_internal_fallback"):
+            return "strict_social_authoritative_internal_fallback"
+        fe = str(strict_social_details.get("final_emitted_source") or "")
+        if fe in {"neutral_reply_speaker_grounding_bridge", "structured_fact_candidate_emission"}:
+            return "strict_social_structured_or_bridge_source"
+    return None
+
+
+def _title_case_anchor_phrase(phrase: str) -> str:
+    parts = [p for p in str(phrase or "").strip().split() if p]
+    if not parts:
+        return ""
+    out: List[str] = []
+    for w in parts:
+        if not w:
+            continue
+        out.append(w[:1].upper() + w[1:].lower() if len(w) > 1 else w.upper())
+    return " ".join(out)
+
+
+def _opening_has_token_hint(text: str, token_lower: str) -> bool:
+    if not token_lower or not str(text or "").strip():
+        return False
+    low = str(text).lower()
+    head = low[: min(len(low), 280)]
+    if " " in token_lower:
+        return token_lower in head
+    return bool(re.search(rf"(?<!\w){re.escape(token_lower)}(?!\w)", head))
+
+
+def _pick_actor_token(actor_tokens: Sequence[Any]) -> str | None:
+    for raw in actor_tokens or []:
+        if not isinstance(raw, str):
+            continue
+        s = raw.strip().lower()
+        if len(s) >= 3 and not s.isdigit():
+            return s
+    return None
+
+
+def _pick_action_tether_token(player_action_tokens: Sequence[Any]) -> str | None:
+    for raw in player_action_tokens or []:
+        if not isinstance(raw, str):
+            continue
+        s = raw.strip().lower()
+        if " " in s and 5 <= len(s) <= 96:
+            return s
+    skip_one = frozenset({"question", "answer", "observe", "investigate", "action", "kind"})
+    for raw in player_action_tokens or []:
+        if not isinstance(raw, str):
+            continue
+        s = raw.strip().lower()
+        if len(s) >= 4 and s not in skip_one:
+            return s
+    return None
+
+
+def _pick_location_phrase(contract: Mapping[str, Any]) -> str | None:
+    lab = str(contract.get("scene_location_label") or "").strip()
+    if lab and len(lab) >= 2:
+        return lab.lower()
+    for raw in contract.get("location_tokens") or []:
+        if not isinstance(raw, str):
+            continue
+        s = raw.strip().lower()
+        if len(s) >= 3:
+            return s
+    return None
+
+
+def _repair_actor_opening(text: str, actor_tokens: Sequence[Any]) -> tuple[str | None, str | None]:
+    tok = _pick_actor_token(actor_tokens)
+    if not tok:
+        return None, None
+    if _opening_has_token_hint(text, tok):
+        return None, None
+    display = _title_case_anchor_phrase(tok)
+    if not display:
+        return None, None
+    return _normalize_text(f"{display} {text}"), "actor_rebind"
+
+
+def _repair_action_tether(text: str, player_action_tokens: Sequence[Any]) -> tuple[str | None, str | None]:
+    tok = _pick_action_tether_token(player_action_tokens)
+    if not tok:
+        return None, None
+    if _opening_has_token_hint(text, tok):
+        return None, None
+    lead = _title_case_anchor_phrase(tok) if " " in tok else tok.capitalize()
+    return _normalize_text(f"{lead} — {text}"), "action_rebind"
+
+
+def _repair_location_opening(text: str, contract: Mapping[str, Any]) -> tuple[str | None, str | None]:
+    phrase = _pick_location_phrase(contract)
+    if not phrase:
+        return None, None
+    if _opening_has_token_hint(text, phrase):
+        return None, None
+    disp = _title_case_anchor_phrase(phrase)
+    if not disp:
+        return None, None
+    return _normalize_text(f"At {disp}, {text}"), "location_rebind"
+
+
+def _repair_narrator_neutral_location(text: str, contract: Mapping[str, Any]) -> tuple[str | None, str | None]:
+    phrase = _pick_location_phrase(contract)
+    if not phrase:
+        return None, None
+    if _opening_has_token_hint(text, phrase):
+        return None, None
+    disp = _title_case_anchor_phrase(phrase)
+    if not disp:
+        return None, None
+    return _normalize_text(f"Here at {disp}, {text}"), "narrator_neutral_scene_rebind"
+
+
+def _repair_scene_state_anchor_minimal(
+    text: str,
+    contract: Mapping[str, Any],
+    *,
+    strict_social_details: Dict[str, Any] | None = None,
+) -> tuple[str | None, str | None]:
+    """Opening-tether repairs only; uses contract token buckets (no new facts)."""
+    _ = strict_social_details
+    actors = list(contract.get("actor_tokens") or [])
+    actions = list(contract.get("player_action_tokens") or [])
+    # Repair ladder: A actor → B action → C location → D narrator-neutral + location.
+    r, mode = _repair_actor_opening(text, actors)
+    if r:
+        return r, mode
+    r, mode = _repair_action_tether(text, actions)
+    if r:
+        return r, mode
+    r, mode = _repair_location_opening(text, contract)
+    if r:
+        return r, mode
+    r, mode = _repair_narrator_neutral_location(text, contract)
+    if r:
+        return r, mode
+    return None, None
+
+
+def _apply_scene_state_anchor_layer(
+    text: str,
+    *,
+    gm_output: Dict[str, Any],
+    strict_social_details: Dict[str, Any] | None,
+    response_type_debug: Dict[str, Any] | None = None,
+) -> tuple[str, Dict[str, Any]]:
+    contract = _resolve_scene_state_anchor_contract(gm_output)
+    upstream = _resolve_scene_state_anchor_debug(gm_output)
+    norm = _normalize_text(text).strip()
+    tags_ssa = [str(t) for t in (gm_output.get("tags") or []) if isinstance(t, str)]
+    dbg_ssa = str(gm_output.get("debug_notes") or "")
+    if norm and re.fullmatch(r"\[[^\]]{1,120}\]", norm):
+        meta = _default_scene_state_anchor_meta("bracketed_production_stub", upstream)
+        meta["scene_state_anchor_checked"] = False
+        meta["scene_state_anchor_passed"] = True
+        meta["scene_state_anchor_skip_reason"] = "bracketed_production_stub"
+        return text, meta
+    if "known_fact_guard" in tags_ssa and "recent_dialogue_continuity" in dbg_ssa:
+        meta = _default_scene_state_anchor_meta("known_fact_recent_dialogue_continuity", upstream)
+        meta["scene_state_anchor_checked"] = False
+        meta["scene_state_anchor_passed"] = True
+        meta["scene_state_anchor_skip_reason"] = "known_fact_recent_dialogue_continuity"
+        return text, meta
+    skip = _skip_scene_state_anchor_layer(
+        text,
+        contract,
+        strict_social_details=strict_social_details,
+        response_type_debug=response_type_debug,
+    )
+    meta = _default_scene_state_anchor_meta(skip, upstream)
+    if skip:
+        return text, meta
+
+    assert contract is not None
+    v0 = validate_scene_state_anchoring(text, contract)
+    meta["scene_state_anchor_checked"] = bool(v0.get("checked"))
+    meta["scene_state_anchor_passed"] = bool(v0.get("passed"))
+    meta["scene_state_anchor_matched_kinds"] = list(v0.get("matched_anchor_kinds") or [])
+    meta["scene_state_anchor_failure_reasons"] = list(v0.get("failure_reasons") or [])
+    if v0.get("passed"):
+        return text, meta
+
+    repaired, mode = _repair_scene_state_anchor_minimal(
+        text,
+        contract,
+        strict_social_details=strict_social_details,
+    )
+    if repaired:
+        v1 = validate_scene_state_anchoring(repaired, contract)
+        meta["scene_state_anchor_checked"] = bool(v1.get("checked"))
+        meta["scene_state_anchor_passed"] = bool(v1.get("passed"))
+        meta["scene_state_anchor_matched_kinds"] = list(v1.get("matched_anchor_kinds") or [])
+        meta["scene_state_anchor_failure_reasons"] = list(v1.get("failure_reasons") or [])
+        if v1.get("passed"):
+            meta["scene_state_anchor_repaired"] = True
+            meta["scene_state_anchor_repair_mode"] = mode
+            meta["scene_state_anchor_failed"] = False
+            return repaired, meta
+
+    meta["scene_state_anchor_failed"] = True
+    meta["scene_state_anchor_repaired"] = False
+    meta["scene_state_anchor_repair_mode"] = None
+    return text, meta
+
+
 def _enforce_response_type_contract(
     candidate_text: str,
     *,
@@ -1963,6 +2318,19 @@ _CONCRETE_INTERACTION_PATTERNS: tuple[re.Pattern[str], ...] = (
         r"orders?|interrupts?|thrusts?|hands?|points?)\b",
         re.IGNORECASE,
     ),
+)
+# Dialogue tag with singular they: "… out loud," they murmur (comma before closing quote) or "…", they say.
+_DIALOGUE_ATTRIBUTION_THEY_SPEECH_TAG = re.compile(
+    r"(?:"
+    r'[""“](.+?),\s*[""”]\s+\b(?:they|them)\b'
+    r"|"
+    r'[""“](.+?)[""”]\s*,\s+\b(?:they|them)\b'
+    r")"
+    r"[^.!?\n]{0,200}\b(?:"
+    r"murmur|mutters|muttered|say|says|said|asks?|asked|whisper|whispers|whispered|"
+    r"reply|replies|replied|add|adds|added"
+    r")\b",
+    re.IGNORECASE | re.DOTALL,
 )
 _THIRD_PERSON_TO_PARTICIPLE: Dict[str, str] = {
     "cuts": "cutting",
@@ -4224,6 +4592,30 @@ def _apply_first_mention_enforcement(
     )
 
 
+def _referential_clarity_violations_have_multi_entity_candidates(violations: List[Dict[str, Any]]) -> bool:
+    for v in violations:
+        if not isinstance(v, dict):
+            continue
+        cids = v.get("candidate_entity_ids")
+        if isinstance(cids, list) and len(cids) > 1:
+            return True
+    return False
+
+
+def _referential_clarity_violations_only_dialogue_attribution_they(violations: List[Dict[str, Any]]) -> bool:
+    if not violations:
+        return False
+    for v in violations:
+        if not isinstance(v, dict):
+            return False
+        if str(v.get("kind") or "").strip() != "ambiguous_entity_reference":
+            return False
+        st = str(v.get("sentence_text") or "").strip()
+        if not st or not _DIALOGUE_ATTRIBUTION_THEY_SPEECH_TAG.search(st):
+            return False
+    return True
+
+
 def _apply_referential_clarity_enforcement(
     out: Dict[str, Any],
     *,
@@ -4266,9 +4658,19 @@ def _apply_referential_clarity_enforcement(
         return out
 
     if not checked_entities and _reply_already_has_concrete_interaction(candidate_text):
-        meta["referential_clarity_validation_passed"] = None
-        out["_final_emission_meta"] = meta
-        return out
+        if not violations:
+            meta["referential_clarity_validation_passed"] = None
+            out["_final_emission_meta"] = meta
+            return out
+        if not _referential_clarity_violations_have_multi_entity_candidates(violations) and (
+            _referential_clarity_violations_only_dialogue_attribution_they(violations)
+        ):
+            meta["referential_clarity_validation_passed"] = True
+            meta["referential_clarity_replacement_applied"] = False
+            meta["referential_clarity_violation_kinds"] = []
+            meta["referential_clarity_violation_sample"] = []
+            out["_final_emission_meta"] = meta
+            return out
 
     response_type_req = str(meta.get("response_type_required") or "").strip().lower()
     if (
@@ -4454,6 +4856,29 @@ def _apply_visibility_enforcement(
             strict_social_suppressed_non_social_turn=strict_social_suppressed_non_social_turn,
         )
 
+    tag_list_gate = [str(t) for t in (out.get("tags") or []) if isinstance(t, str)]
+    dbg_gate = str(out.get("debug_notes") or "")
+    if (
+        "known_fact_guard" in tag_list_gate
+        and "recent_dialogue_continuity" in dbg_gate
+        and violation_kinds == ["unseen_entity_reference"]
+    ):
+        meta["visibility_validation_passed"] = True
+        meta["visibility_replacement_applied"] = False
+        meta["visibility_continuity_lead_exemption"] = True
+        out["_final_emission_meta"] = meta
+        return _apply_first_mention_enforcement(
+            out,
+            session=session,
+            scene=scene,
+            world=world,
+            scene_id=scene_id,
+            eff_resolution=eff_resolution,
+            active_interlocutor=active_interlocutor,
+            strict_social_active=strict_social_active,
+            strict_social_suppressed_non_social_turn=strict_social_suppressed_non_social_turn,
+        )
+
     if not checked_entities and not checked_facts and _reply_already_has_concrete_interaction(candidate_text):
         meta["visibility_validation_passed"] = None
         out["_final_emission_meta"] = meta
@@ -4587,6 +5012,20 @@ _BEAT_ATTRIBUTION_RE = re.compile(
     r"(?:shakes|frowns|nods|grimaces|shrugs|lowers|raises|opens|starts|spreads|tightens|leans|glances)\b",
     re.IGNORECASE,
 )
+# Leading "…" dialogue + pronoun + attribution verb: label is the pronoun only (not the quoted span).
+_QUOTED_THEN_PRONOUN_SPEECH_RE = re.compile(
+    r'^\s*"[^"]*"\s+'
+    r"\b(he|she|they|him|her|them)\b\s+"
+    r"(?:says|said|replies|replied|answers|answered|mutters|muttered|whispers|whispered|"
+    r"asks|asked|adds|added|insists|insisted)\b",
+    re.IGNORECASE,
+)
+_QUOTED_THEN_PRONOUN_BEAT_RE = re.compile(
+    r'^\s*"[^"]*"\s+'
+    r"\b(he|she|they|him|her|them)\b\s+"
+    r"(?:shakes|frowns|nods|grimaces|shrugs|lowers|raises|opens|starts|spreads|tightens|leans|glances)\b",
+    re.IGNORECASE,
+)
 _NON_NAME_ATTRIBUTION_PREFIXES = frozenset(
     {
         "he",
@@ -4666,6 +5105,38 @@ def detect_emitted_speaker_signature(
     speaker_name: str | None = None
     is_explicit = False
     confidence: str = "low"
+
+    mq = _QUOTED_THEN_PRONOUN_SPEECH_RE.match(t)
+    if not mq:
+        mq = _QUOTED_THEN_PRONOUN_BEAT_RE.match(t)
+    if mq:
+        raw = str(mq.group(1) or "").strip()
+        low = raw.lower()
+        speaker_label = raw
+        if low and low not in _NON_NAME_ATTRIBUTION_PREFIXES:
+            speaker_name = raw
+            is_explicit = True
+            confidence = "high"
+        elif raw:
+            confidence = "medium"
+        forbidden = list(SPEAKER_CONTRACT_FORBIDDEN_FALLBACK_LABELS)
+        is_generic_fb = False
+        if speaker_label:
+            sl = speaker_label.strip().lower()
+            for fb in forbidden:
+                fbl = str(fb or "").strip().lower()
+                if fbl and (fbl == sl or fbl in sl or sl in fbl):
+                    is_generic_fb = True
+                    break
+        intr = bool(interruption_cue_present_in_text(t) or _has_explicit_interruption_shape(t))
+        return {
+            "speaker_name": speaker_name,
+            "speaker_label": speaker_label,
+            "is_explicitly_attributed": is_explicit,
+            "is_generic_fallback_label": is_generic_fb,
+            "has_interruption_framing": intr,
+            "confidence": confidence,
+        }
 
     m = _SPEECH_VERB_ATTRIBUTION_RE.match(t)
     if not m:
@@ -4970,6 +5441,8 @@ def _try_local_rebind_opening_speaker(text: str, *, wrong_label: str, canonical_
     w = str(wrong_label or "").strip()
     if not w or not canonical_name:
         return None
+    if '"' in w or "“" in w or "”" in w:
+        return None
     low_t = t.lower()
     low_w = w.lower()
     if low_t.startswith(low_w + " ") or low_t.startswith(low_w + ","):
@@ -5244,6 +5717,7 @@ def apply_final_emission_gate(
     response_type_debug = _default_response_type_debug(None, None)
     ac_layer_meta: Dict[str, Any] = {}
     rd_layer_meta: Dict[str, Any] = _default_response_delta_meta()
+    ssa_layer_meta: Dict[str, Any] = {}
 
     strict_social_active = bool(strict_social_turn)
     coercion_used = (
@@ -5329,6 +5803,19 @@ def apply_final_emission_gate(
             resolution if isinstance(resolution, dict) else None,
         )
         out["player_facing_text"] = text
+        text, ssa_layer_meta = _apply_scene_state_anchor_layer(
+            _normalize_text(text),
+            gm_output=out,
+            strict_social_details=details,
+            response_type_debug=response_type_debug,
+        )
+        out["player_facing_text"] = text
+        _merge_scene_state_anchor_into_emission_debug(
+            out,
+            resolution if isinstance(resolution, dict) else None,
+            eff_resolution if isinstance(eff_resolution, dict) else None,
+            gate_meta=ssa_layer_meta,
+        )
         if isinstance(eff_resolution, dict):
             sp = eff_resolution.get("social") if isinstance(eff_resolution.get("social"), dict) else {}
             npc_id_for_meta = str(sp.get("npc_id") or "").strip()
@@ -5395,6 +5882,7 @@ def apply_final_emission_gate(
             _merge_response_type_meta(out["_final_emission_meta"], response_type_debug)
             _merge_answer_completeness_meta(out["_final_emission_meta"], ac_layer_meta)
             _merge_response_delta_meta(out["_final_emission_meta"], rd_layer_meta)
+            _merge_scene_state_anchor_meta(out["_final_emission_meta"], ssa_layer_meta)
             out = _apply_visibility_enforcement(
                 out,
                 session=session,
@@ -5480,6 +5968,7 @@ def apply_final_emission_gate(
         _merge_response_type_meta(out["_final_emission_meta"], response_type_debug)
         _merge_answer_completeness_meta(out["_final_emission_meta"], ac_layer_meta)
         _merge_response_delta_meta(out["_final_emission_meta"], rd_layer_meta)
+        _merge_scene_state_anchor_meta(out["_final_emission_meta"], ssa_layer_meta)
         out = _apply_visibility_enforcement(
             out,
             session=session,
@@ -5543,6 +6032,20 @@ def apply_final_emission_gate(
         strict_social_path=False,
     )
     reasons.extend(rd_reasons)
+
+    text, ssa_layer_meta = _apply_scene_state_anchor_layer(
+        text,
+        gm_output=out,
+        strict_social_details=None,
+        response_type_debug=response_type_debug,
+    )
+    out["player_facing_text"] = _normalize_text(text)
+    _merge_scene_state_anchor_into_emission_debug(
+        out,
+        resolution if isinstance(resolution, dict) else None,
+        eff_resolution if isinstance(eff_resolution, dict) else None,
+        gate_meta=ssa_layer_meta,
+    )
 
     candidate_ok = not bool(reasons)
     fallback_pool = "none"
@@ -5608,6 +6111,7 @@ def apply_final_emission_gate(
         _merge_response_type_meta(out["_final_emission_meta"], response_type_debug)
         _merge_answer_completeness_meta(out["_final_emission_meta"], ac_layer_meta)
         _merge_response_delta_meta(out["_final_emission_meta"], rd_layer_meta)
+        _merge_scene_state_anchor_meta(out["_final_emission_meta"], ssa_layer_meta)
         out = _apply_visibility_enforcement(
             out,
             session=session,
@@ -5720,6 +6224,7 @@ def apply_final_emission_gate(
     _merge_response_type_meta(out["_final_emission_meta"], response_type_debug)
     _merge_answer_completeness_meta(out["_final_emission_meta"], ac_layer_meta)
     _merge_response_delta_meta(out["_final_emission_meta"], rd_layer_meta)
+    _merge_scene_state_anchor_meta(out["_final_emission_meta"], ssa_layer_meta)
     out = _apply_visibility_enforcement(
         out,
         session=session,

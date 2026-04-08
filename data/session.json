@@ -24,23 +24,59 @@
   "scene_state": {
     "active_scene_id": "frontier_gate",
     "active_entities": [
+      "guard_captain",
+      "tavern_runner",
       "emergent_lord_aldric",
       "emergent_town_crier",
       "refugee",
-      "guard_captain",
-      "tavern_runner",
       "threadbare_watcher"
     ],
     "entity_presence": {
+      "guard_captain": "active",
+      "tavern_runner": "active",
       "emergent_lord_aldric": "active",
-      "emergent_town_crier": "active",
       "refugee": "active",
       "threadbare_watcher": "active",
-      "guard_captain": "active",
-      "tavern_runner": "active"
+      "emergent_town_crier": "active"
     },
     "current_interlocutor": null,
-    "emergent_addressables": [],
+    "emergent_addressables": [
+      {
+        "id": "emergent_lord_aldric",
+        "name": "Lord Aldric",
+        "scene_id": "frontier_gate",
+        "address_roles": [
+          "lord"
+        ],
+        "aliases": [
+          "Lord Aldric",
+          "aldric",
+          "lord aldric"
+        ],
+        "kind": "scene_actor",
+        "addressable": true,
+        "address_priority": 40,
+        "emergent_source": "promoted_visible_figure"
+      },
+      {
+        "id": "emergent_town_crier",
+        "name": "Town Crier",
+        "scene_id": "frontier_gate",
+        "address_roles": [
+          "crier",
+          "town crier"
+        ],
+        "aliases": [
+          "town crier",
+          "the town crier",
+          "crier"
+        ],
+        "kind": "scene_actor",
+        "addressable": true,
+        "address_priority": 40,
+        "emergent_source": "promoted_visible_figure"
+      }
+    ],
     "promoted_actor_npc_map": {}
   },
   "scene_runtime": {
@@ -55,7 +91,7 @@
       "last_exploration_action_key": "we_leave_the_gatehouse_antechamber_and_s",
       "repeated_action_count": 1,
       "last_resolution_kind": "travel",
-      "last_description_hash": "87f9f9f33a8932d5989713fb4b6a3847",
+      "last_description_hash": "9cf445e954c3b6f17f28f3bfb9cdb894",
       "consumed_action_ids": [],
       "momentum_exchanges_since": 0,
       "momentum_next_due_in": 2,
@@ -81,9 +117,9 @@
       "last_player_action_passive": false,
       "recent_contextual_leads": [
         {
-          "key": "active_event_rain_spatters_soot_dark_stone_while_refugees_wagons_and_foot_traffic_clog_the_muddy_approach",
+          "key": "active_event_square_buzzes_with_the_chaos_of_refugees_and_townsfolk",
           "kind": "active_event",
-          "subject": "rain spatters soot-dark stone while refugees, wagons, and foot traffic clog the muddy approach",
+          "subject": "square buzzes with the chaos of refugees and townsfolk",
           "position": "",
           "named": false,
           "positioned": false,
@@ -91,14 +127,34 @@
           "last_turn": 1
         },
         {
-          "key": "active_event_guard_captain_holds_the_choke_while_the_crowd_presses_in_and_tavern_runner_shouts_offers_of_hot_stew_and_paid_rumor",
-          "kind": "active_event",
-          "subject": "guard captain holds the choke while the crowd presses in, and tavern runner shouts offers of hot stew and paid rumor",
+          "key": "visible_suspicious_figure_he_notices_a_well_dressed_figure_studying_the_crowd_intently_and_nearby_patrons_whisper_anxiously_about_a_missing_patrol",
+          "kind": "visible_suspicious_figure",
+          "subject": "he notices a well-dressed figure studying the crowd intently, and nearby patrons whisper anxiously about a missing patrol",
           "position": "",
           "named": false,
           "positioned": false,
           "mentions": 1,
           "last_turn": 1
+        },
+        {
+          "key": "active_event_meanwhile_the_tavern_runner_still_anxiously_shouting_about_warm_stew_gestures_for_galinors_attention_her_expression_revealing_she_may_have_more_information_about_the_situation_at_hand",
+          "kind": "active_event",
+          "subject": "meanwhile, the tavern runner, still anxiously shouting about warm stew, gestures for galinor's attention, her expression revealing she may have more information about the situation",
+          "position": "at hand",
+          "named": false,
+          "positioned": true,
+          "mentions": 1,
+          "last_turn": 1
+        },
+        {
+          "key": "active_event_nearby_the_tavern_runner_her_anxious_demeanor_apparent_glances_over_at_galinor_clearly_wanting_to_share_something_crucial",
+          "kind": "active_event",
+          "subject": "nearby, the tavern runner, her anxious demeanor apparent, glances over",
+          "position": "at galinor, clearly wanting to share something crucial",
+          "named": false,
+          "positioned": true,
+          "mentions": 1,
+          "last_turn": 2
         },
         {
           "key": "scene_npc_tavern_runner",
@@ -107,8 +163,18 @@
           "position": "",
           "named": true,
           "positioned": false,
+          "mentions": 2,
+          "last_turn": 2
+        },
+        {
+          "key": "active_event_missing_patrol_rumor",
+          "kind": "active_event",
+          "subject": "missing patrol rumor",
+          "position": "",
+          "named": false,
+          "positioned": false,
           "mentions": 1,
-          "last_turn": 1
+          "last_turn": 2
         }
       ]
     }
@@ -141,13 +207,13 @@
         "authoritative_state_allows_escalation"
       ]
     },
-    "emergent_actor_enrolled": false,
-    "emergent_actor_id": null,
-    "emergent_actor_source_text": null
+    "emergent_actor_enrolled": true,
+    "emergent_actor_id": "emergent_town_crier",
+    "emergent_actor_source_text": "the town crier"
   },
   "debug_traces": [
     {
-      "timestamp": "2026-04-08T02:00:34.077260Z",
+      "timestamp": "2026-04-08T12:10:04.697518Z",
       "source": "chat",
       "action_type": "chat",
       "raw_input": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals.",
@@ -213,6 +279,27 @@
               "resolved_world_action_requires_action_outcome",
               "non_hostile_world_action_guard"
             ]
+          },
+          "emission_debug": {
+            "scene_state_anchor": {
+              "enabled": true,
+              "scene_id": "frontier_gate",
+              "counts": {
+                "location": 17,
+                "actor": 6,
+                "player_action": 14
+              }
+            },
+            "scene_state_anchor_checked": true,
+            "scene_state_anchor_passed": true,
+            "scene_state_anchor_failed": false,
+            "scene_state_anchor_skip_reason": null,
+            "scene_state_anchor_matched_kinds": [
+              "actor"
+            ],
+            "scene_state_anchor_failure_reasons": [],
+            "scene_state_anchor_repaired": true,
+            "scene_state_anchor_repair_mode": "actor_rebind"
           }
         },
         "world_tick_events": [
@@ -321,22 +408,16 @@
         },
         "affordances_after": [
           {
-            "id": "question_emergent_lord_aldric",
+            "id": "question_guard_captain",
             "type": "question",
-            "label": "Talk to Lord Aldric",
-            "targetEntityId": "emergent_lord_aldric"
+            "label": "Talk to Guard Captain",
+            "targetEntityId": "guard_captain"
           },
           {
-            "id": "question_emergent_town_crier",
+            "id": "question_tavern_runner",
             "type": "question",
-            "label": "Talk to Town Crier",
-            "targetEntityId": "emergent_town_crier"
-          },
-          {
-            "id": "question_refugee",
-            "type": "question",
-            "label": "Talk to Ragged stranger",
-            "targetEntityId": "refugee"
+            "label": "Talk to Tavern Runner",
+            "targetEntityId": "tavern_runner"
           },
           {
             "id": "examine_the_rain_spatters_soot_dark_stone_frayed",
@@ -347,12 +428,17 @@
             "id": "examine_refugees",
             "type": "investigate",
             "label": "Examine Refugees"
+          },
+          {
+            "id": "examine_a_notice_board_lists_new_taxes",
+            "type": "investigate",
+            "label": "Examine A notice board lists new taxes"
           }
         ],
         "emergent_actor": {
-          "emergent_actor_enrolled": false,
-          "emergent_actor_id": null,
-          "emergent_actor_source_text": null
+          "emergent_actor_enrolled": true,
+          "emergent_actor_id": "emergent_town_crier",
+          "emergent_actor_source_text": "the town crier"
         },
         "leads": {
           "registry_debug": [],
@@ -390,7 +476,7 @@
       }
     },
     {
-      "timestamp": "2026-04-08T02:00:49.678650Z",
+      "timestamp": "2026-04-08T12:10:33.990153Z",
       "source": "chat",
       "action_type": "chat",
       "raw_input": "I circle back to an earlier detail we skipped and insist we resolve it before moving on.",
@@ -420,7 +506,21 @@
             "text": "Ordo Pyric's pressure mounts.",
             "source": "ordo_pyric"
           }
-        ]
+        ],
+        "metadata": {
+          "emission_debug": {
+            "scene_state_anchor_checked": true,
+            "scene_state_anchor_passed": true,
+            "scene_state_anchor_failed": false,
+            "scene_state_anchor_skip_reason": null,
+            "scene_state_anchor_matched_kinds": [
+              "actor"
+            ],
+            "scene_state_anchor_failure_reasons": [],
+            "scene_state_anchor_repaired": true,
+            "scene_state_anchor_repair_mode": "actor_rebind"
+          }
+        }
       },
       "scene_before": "frontier_gate",
       "scene_after": "frontier_gate",
@@ -499,22 +599,16 @@
         },
         "affordances_after": [
           {
-            "id": "question_emergent_lord_aldric",
+            "id": "question_guard_captain",
             "type": "question",
-            "label": "Talk to Lord Aldric",
-            "targetEntityId": "emergent_lord_aldric"
+            "label": "Talk to Guard Captain",
+            "targetEntityId": "guard_captain"
           },
           {
-            "id": "question_emergent_town_crier",
+            "id": "question_tavern_runner",
             "type": "question",
-            "label": "Talk to Town Crier",
-            "targetEntityId": "emergent_town_crier"
-          },
-          {
-            "id": "question_refugee",
-            "type": "question",
-            "label": "Talk to Ragged stranger",
-            "targetEntityId": "refugee"
+            "label": "Talk to Tavern Runner",
+            "targetEntityId": "tavern_runner"
           },
           {
             "id": "examine_the_rain_spatters_soot_dark_stone_frayed",
@@ -525,12 +619,17 @@
             "id": "examine_refugees",
             "type": "investigate",
             "label": "Examine Refugees"
+          },
+          {
+            "id": "examine_a_notice_board_lists_new_taxes",
+            "type": "investigate",
+            "label": "Examine A notice board lists new taxes"
           }
         ],
         "emergent_actor": {
-          "emergent_actor_enrolled": false,
-          "emergent_actor_id": null,
-          "emergent_actor_source_text": null
+          "emergent_actor_enrolled": true,
+          "emergent_actor_id": "emergent_town_crier",
+          "emergent_actor_source_text": "the town crier"
         },
         "leads": {
           "registry_debug": [],
@@ -573,9 +672,9 @@
   ],
   "flags": {},
   "character_name": "Galinor",
-  "campaign_run_id": "4cd3a17ca4416f6e31271d61",
-  "session_id": "4cd3a17ca4416f6e31271d61",
-  "last_saved_at": "2026-04-08T02:01:02.417424Z",
+  "campaign_run_id": "0fc7754814ef04027ae90aac",
+  "session_id": "0fc7754814ef04027ae90aac",
+  "last_saved_at": "2026-04-08T12:10:50.627091Z",
   "last_turn_response_policy": {
     "rule_priority_order": [
       "ANSWER THE PLAYER",
@@ -629,7 +728,9 @@
         "explanation_followup_detected": false,
         "insufficiency_followup_detected": false,
         "short_followup_anchor_detected": false,
-        "anchor_tokens_extracted": [],
+        "anchor_tokens_extracted": [
+          "aldric"
+        ],
         "anchor_token_matched": null,
         "anchor_followup_detected": false,
         "explanation_of_recent_anchor_followup": false,
@@ -715,7 +816,9 @@
         "explanation_followup_detected": false,
         "insufficiency_followup_detected": false,
         "short_followup_anchor_detected": false,
-        "anchor_tokens_extracted": [],
+        "anchor_tokens_extracted": [
+          "aldric"
+        ],
         "anchor_token_matched": null,
         "anchor_followup_detected": false,
         "explanation_of_recent_anchor_followup": false,
@@ -749,8 +852,8 @@
     }
   },
   "emergent_actor_debug": {
-    "emergent_actor_enrolled": false,
-    "emergent_actor_id": null,
-    "emergent_actor_source_text": null
+    "emergent_actor_enrolled": true,
+    "emergent_actor_id": "emergent_town_crier",
+    "emergent_actor_source_text": "the town crier"
   }
 }

@@ -113,6 +113,21 @@ def _strip_internal_gm_keys(gm: dict) -> dict:
     return out
 
 
+def _player_facing_text_for_lead_extraction(gm: dict | None) -> str:
+    """Raw GM player-facing string before emission gate, for deterministic lead extraction."""
+    if not isinstance(gm, dict):
+        return ""
+    raw_text = gm.get("player_facing_text") if isinstance(gm.get("player_facing_text"), str) else ""
+    if resembles_serialized_response_payload(raw_text):
+        extracted = extract_player_text_from_serialized_payload(raw_text)
+        raw_text = (
+            extracted
+            if isinstance(extracted, str) and extracted.strip()
+            else strip_serialized_payload_fragments(raw_text)
+        )
+    return raw_text
+
+
 def _session_ongoing_social_exchange(session: dict | None) -> bool:
     """True when an authoritative social interlocutor is locked (interaction_mode + target)."""
     if not isinstance(session, dict):

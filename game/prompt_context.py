@@ -6,7 +6,7 @@ including only relevant elements.
 """
 from __future__ import annotations
 
-from typing import Any, Dict, List, Mapping
+from typing import Any, Dict, List, Mapping, Set
 import re
 
 from game.leads import (
@@ -27,11 +27,12 @@ from game.social import (
 from game.storage import get_scene_state
 from game.world import get_world_npc_by_id
 from game.interaction_context import build_speaker_selection_contract
-from game.narration_visibility import build_narration_visibility_contract
+from game.narration_visibility import _normalize_visibility_text, build_narration_visibility_contract
 from game.opening_visible_fact_selection import (
     OPENING_NARRATION_VISIBLE_FACT_MAX,
     select_opening_narration_visible_facts,
 )
+from game.scene_state_anchoring import build_scene_state_anchor_contract
 
 # Configurable limits for deterministic, inspectable compression
 MAX_RECENT_LOG = 5
@@ -169,6 +170,13 @@ FIRST_MENTION_MANDATORY_INSTRUCTIONS: tuple[str, ...] = (
     "A first reference MUST include grounding by location, behavior, or relation.",
     "Pronouns MAY be used only after explicit introduction.",
     "You MUST NOT use unearned familiarity phrases (for example, 'you recognize ...', 'you remember ...', 'you know this is ...') unless supported by narration_visibility.visible_facts.",
+)
+
+SCENE_STATE_ANCHOR_MANDATORY_INSTRUCTIONS: tuple[str, ...] = (
+    "SCENE STATE ANCHOR (MANDATORY): Every response must visibly ground itself in the present scene through at least one of: "
+    "current location, a current actor or speaker allowed by authoritative state (see scene_state_anchor_contract), "
+    "or the player's immediate action (turn_summary + mechanical_resolution).",
+    "Avoid floating, abstract, or scene-detached narration.",
 )
 
 _TOPIC_TOKEN_PATTERN = re.compile(r"[a-zA-Z][a-zA-Z']{2,}")
@@ -2407,15 +2415,44 @@ def build_narration_context(
             visible_facts_for_prompt = curated_opening
         else:
             visible_facts_for_prompt = visible_facts_for_prompt[:OPENING_NARRATION_VISIBLE_FACT_MAX]
+    # Opening curation may return display-preserved strings; minimal narration_visibility export
+    # matches build_narration_visibility_contract (normalized, deduped).
+    _seen_visible_fact: Set[str] = set()
+    visible_facts_export: List[str] = []
+    for _vf in visible_facts_for_prompt:
+        if not isinstance(_vf, str):
+            continue
+        _n = _normalize_visibility_text(_vf)
+        if not _n or _n in _seen_visible_fact:
+            continue
+        _seen_visible_fact.add(_n)
+        visible_facts_export.append(_n)
     narration_visibility: Dict[str, Any] = {
         "visible_entities": list(visibility_contract.get("visible_entity_names") or []),
         "active_interlocutor_id": visibility_contract.get("active_interlocutor_id"),
-        "visible_facts": visible_facts_for_prompt,
+        "visible_facts": visible_facts_export,
         "rules": {
             "no_unseen_entities": True,
             "no_hidden_facts": True,
             "no_undiscovered_facts": True,
         },
+    }
+    scene_state_anchor_contract = build_scene_state_anchor_contract(
+        session if isinstance(session, dict) else None,
+        scene if isinstance(scene, dict) else None,
+        world if isinstance(world, dict) else None,
+        resolution=resolution if isinstance(resolution, dict) else None,
+    )
+    prompt_debug_anchor = {
+        "scene_state_anchor": {
+            "enabled": bool(scene_state_anchor_contract.get("enabled")),
+            "scene_id": scene_state_anchor_contract.get("scene_id"),
+            "counts": {
+                "location": len(scene_state_anchor_contract.get("location_tokens") or []),
+                "actor": len(scene_state_anchor_contract.get("actor_tokens") or []),
+                "player_action": len(scene_state_anchor_contract.get("player_action_tokens") or []),
+            },
+        }
     }
     first_mention_contract: Dict[str, Any] = {
         "enabled": True,
@@ -2458,6 +2495,7 @@ def build_narration_context(
         ),
         *NARRATION_VISIBILITY_MANDATORY_INSTRUCTIONS,
         *FIRST_MENTION_MANDATORY_INSTRUCTIONS,
+        *SCENE_STATE_ANCHOR_MANDATORY_INSTRUCTIONS,
         (
             "SCENE MOMENTUM RULE (HARD RULE): Every 2–3 exchanges, you MUST introduce exactly one of: "
             "new_information, new_actor_entering, environmental_change, time_pressure, consequence_or_opportunity. "
@@ -2720,6 +2758,8 @@ def build_narration_context(
         'uncertainty_hint': eff_uncertainty_hint,
         'narration_obligations': narration_obligations,
         'narration_visibility': narration_visibility,
+        'scene_state_anchor_contract': scene_state_anchor_contract,
+        'prompt_debug': prompt_debug_anchor,
         'first_mention_contract': first_mention_contract,
         'discoverable_hinting': True,
         'mechanical_resolution': resolution,
