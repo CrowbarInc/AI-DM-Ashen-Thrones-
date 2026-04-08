@@ -145,6 +145,109 @@ def _retry_allows_hostile_escalation(
     )
 
 
+def _is_shipped_full_anti_railroading_contract(candidate: Any) -> bool:
+    """True for ``build_anti_railroading_contract`` / ``prompt_context`` payloads."""
+    if not isinstance(candidate, dict):
+        return False
+    return "forbid_player_decision_override" in candidate and "enabled" in candidate
+
+
+def _coerce_anti_railroading_contract_dict(maybe: Any) -> Optional[Dict[str, Any]]:
+    if _is_shipped_full_anti_railroading_contract(maybe):
+        return maybe
+    return None
+
+
+def _resolve_anti_railroading_contract_for_retry(
+    response_policy: Optional[Dict[str, Any]],
+    gm_output: Optional[Dict[str, Any]],
+) -> Optional[Dict[str, Any]]:
+    """Prefer policy/contract already attached to narration (aligns with final_emission_gate resolution)."""
+    candidates: List[Any] = []
+    if isinstance(response_policy, dict):
+        candidates.append(response_policy.get("anti_railroading"))
+    if isinstance(gm_output, dict):
+        candidates.append(gm_output.get("anti_railroading_contract"))
+        pol = gm_output.get("response_policy")
+        if isinstance(pol, dict):
+            candidates.append(pol.get("anti_railroading"))
+        pc = gm_output.get("prompt_context")
+        if isinstance(pc, dict):
+            candidates.append(pc.get("anti_railroading_contract"))
+            pol2 = pc.get("response_policy")
+            if isinstance(pol2, dict):
+                candidates.append(pol2.get("anti_railroading"))
+        for key in ("narration_payload", "prompt_payload", "_narration_payload"):
+            pl = gm_output.get(key)
+            if not isinstance(pl, dict):
+                continue
+            candidates.append(pl.get("anti_railroading_contract"))
+            candidates.append(pl.get("anti_railroading"))
+            rp = pl.get("response_policy")
+            if isinstance(rp, dict):
+                candidates.append(rp.get("anti_railroading"))
+        md = gm_output.get("metadata")
+        if isinstance(md, dict):
+            candidates.append(md.get("anti_railroading_contract"))
+            rp = md.get("response_policy")
+            if isinstance(rp, dict):
+                candidates.append(rp.get("anti_railroading"))
+        tr = gm_output.get("trace")
+        if isinstance(tr, dict):
+            candidates.append(tr.get("anti_railroading_contract"))
+            rp = tr.get("response_policy")
+            if isinstance(rp, dict):
+                candidates.append(rp.get("anti_railroading"))
+    for item in candidates:
+        hit = _coerce_anti_railroading_contract_dict(item)
+        if hit:
+            return hit
+    return None
+
+
+def _format_anti_railroading_retry_guidance(arc: Optional[Dict[str, Any]]) -> str:
+    """Compact retry-only instructions; uses shipped contract flags when present (see prompt_context / gate)."""
+    base = (
+        "RETRY AGENCY (ANTI-RAILROADING): Energetic forward motion through more hooks, consequences, tension, "
+        "and concrete world or NPC response—without choosing for the player. Advance using one or more of: "
+        "actionable options, a new clue, a new opening, a consequence, a reaction, social or procedural pressure, "
+        "a bounded refusal, or a clarified hard constraint. "
+        "Do not narrate the PC moving, traveling, deciding, committing, or concluding unless authoritative state "
+        "already settled it or the player explicitly did. "
+        "Avoid auto-travel, auto-commitment, meta-story gravity (e.g. the story wants/pulls/sends you), forced "
+        "conclusions (e.g. it's obvious you must), and momentum language that collapses agency. "
+        "A salient lead may be highlighted as optional; do not convert leads into the only real path unless "
+        "allow_exclusivity_from_authoritative_resolution applies. "
+        "Prefer phrasing like 'one option,' 'another path,' 'two immediate openings,' "
+        "'the obstacle rules out X but leaves Y or Z' over 'you go,' 'you decide,' 'you must,' or 'the only way.' "
+    )
+    if not isinstance(arc, dict) or arc.get("enabled") is False:
+        return base
+
+    extras: List[str] = []
+    if arc.get("allow_directional_language_from_resolved_transition"):
+        extras.append(
+            "If a transition is already resolved in authoritative state, arrival or continuation language may match "
+            "that settled movement (do not reopen it)."
+        )
+    if arc.get("allow_exclusivity_from_authoritative_resolution"):
+        extras.append(
+            "When authoritative state truly collapses alternatives, exclusivity may match that resolution."
+        )
+    if arc.get("allow_commitment_language_when_player_explicitly_committed"):
+        extras.append(
+            "You may echo explicit player-stated commitment; do not invent new PC commitment or decisive action."
+        )
+    ids = arc.get("surfaced_lead_ids") if isinstance(arc.get("surfaced_lead_ids"), list) else []
+    if len(ids) > 1:
+        extras.append(
+            "Multiple leads are in play; keep them salient but optional unless exclusivity is justified."
+        )
+    if extras:
+        return base + "Contract tail: " + " ".join(extras) + " "
+    return base
+
+
 def prioritize_retry_failures_for_social_answer_candidate(
     failures: List[Dict[str, Any]],
     *,
@@ -273,9 +376,13 @@ def build_retry_prompt_for_failure(
         if isinstance((response_policy or {}).get("rule_priority_order"), list)
         else [label for _, label in RESPONSE_RULE_PRIORITY]
     )
+    ar_guidance = _format_anti_railroading_retry_guidance(
+        _resolve_anti_railroading_contract_for_retry(response_policy, gm_output)
+    )
     shared = (
         f"Rule Priority Hierarchy: {priority_order}. "
         f"{RULE_PRIORITY_COMPACT_INSTRUCTION} "
+        f"{ar_guidance}"
         f"Retry target: {failure_class}. Correct only this failure class. Return the same JSON shape."
     )
 
@@ -330,7 +437,8 @@ def build_retry_prompt_for_failure(
                 "First sentence contract: answer the asked question directly in sentence one. "
                 "Do not open with scene summary, atmosphere, or setup. "
                 "No advisory phrasing (do not use: 'you should', 'you could', 'best lead', 'try', 'consider'). "
-                "Do not reroute it into uncertainty, refusal, or generic fallback language."
+                "Do not reroute it into uncertainty, refusal, or generic fallback language. "
+                "Do not narrate the player acting on, accepting, or committing to the answer unless they already did."
                 f"{social_shape_hint}"
             )
         uncertainty_category = str((failure or {}).get("uncertainty_category") or "").strip()
@@ -374,14 +482,16 @@ def build_retry_prompt_for_failure(
             "Do not begin with atmosphere, scene summary, or recap. "
             "Do not ask a question back. Do not refuse, deflect, or explain limitations. "
             "No advisory phrasing (avoid: 'you should', 'you could', 'best lead', 'try', 'consider'). "
-            "If certainty is incomplete, keep uncertainty concrete and bounded to speaker evidence or scene facts."
+            "If certainty is incomplete, keep uncertainty concrete and bounded to speaker evidence or scene facts. "
+            "While fixing answer shape, do not narrate the PC's travel, commitment, or decisive action."
             f"{category_hint}{context_hint}{first_sentence_hint}{speaker_hint}{social_shape_hint}"
         )
 
     if failure_class == "echo_or_repetition":
         return (
             f"{shared} Semantically rewrite the reply so it does not echo the player's wording or quoted speech. "
-            "Change sentence structure and phrasing, and react with new information or consequence instead of restating the input."
+            "Change sentence structure and phrasing, and react with new information or consequence instead of restating the input. "
+            "Keep agency intact: do not slip into narrating the PC's decision, travel, or commitment as you vary the prose."
         )
 
     if failure_class == "followup_soft_repetition":
@@ -411,7 +521,9 @@ def build_retry_prompt_for_failure(
             f"{topic_hint}{prev_player_hint}{prev_answer_hint} "
             "Do NOT restate the same underlying lead. Escalate with new content: add one concrete detail AND one of "
             "(a) a named person/place/faction/witness (with an in-world source), or (b) a narrowed unknown boundary (time window, location bracket, condition, count). "
-            "End with a more actionable immediate next step that uses the new detail. Preserve speaker grounding and diegetic voice."
+            "End with a sharper player-facing opening that uses the new detail (options, leverage, or cost)—without "
+            "narrating the PC's decision, destination, or commitment, and without upgrading one lead into the only real path. "
+            "Preserve speaker grounding and diegetic voice."
             f"{hostile_guard}{grounded_hostile}"
         )
 
@@ -420,7 +532,8 @@ def build_retry_prompt_for_failure(
         missing_hint = f" Missing contract elements: {missing}." if missing else ""
         return (
             f"{shared} Produce a direct NPC answer, reaction, or refusal consistent with the current target. "
-            "Include at least one concrete person, place, faction, next step, or directly usable condition, time, or location."
+            "Include at least one concrete person, place, faction, next step, or directly usable condition, time, or location. "
+            "Deliver NPC-side substance the player can react to; do not narrate the PC deciding, moving, or committing."
             f"{missing_hint}"
         )
 
@@ -454,7 +567,9 @@ def build_retry_prompt_for_failure(
             f"{shared} The player has pressed this unresolved topic repeatedly without meaningful progress."
             f"{topic_hint}{prev_answer_hint} Repetition count: {repeat_count}. "
             f"{escalation_menu} "
-            "Include exactly one scene momentum tag and end with a concrete immediate action the player can take."
+            "Urgency sharpens salience; it does not justify narrating the PC's chosen route or forced pathing. "
+            "Include exactly one scene momentum tag and end with concrete player-facing openings, stakes, or time "
+            "pressure the player can respond to (do not narrate the PC's move or commitment)."
         )
 
     if failure_class == "scene_stall":
@@ -464,8 +579,11 @@ def build_retry_prompt_for_failure(
             else " Do not introduce threats, hostile interruption, violence, or weapons."
         )
         return (
-            f"{shared} Advance the scene by one concrete development now. "
-            "Introduce one actionable reveal, answer, consequence, opportunity, environmental change, or procedural/social pressure so the exchange does not remain static."
+            f"{shared} Scene stall / low progress: advance now with one concrete development—still without choosing for the player. "
+            "Prefer new information plus a player-facing opening, or pressure plus a surfaced choice, or a consequence "
+            "with visible next opportunities, or a bounded refusal with an alternative handle, or a clarified hard "
+            "constraint that removes one avenue while leaving others open. "
+            "Do not auto-travel, auto-commit, or collapse multiple leads into one mandatory path. "
             f"{hostile_tail} "
             "Include exactly one matching scene momentum tag in tags: scene_momentum:<kind>."
         )

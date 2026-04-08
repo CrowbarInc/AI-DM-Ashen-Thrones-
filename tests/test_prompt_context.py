@@ -1947,3 +1947,79 @@ def test_knowledge_scope_and_reliability_change_social_hints_deterministically()
     assert any("INFORMATION_RELIABILITY misleading" in x for x in lines_m)
     assert not any("misleading" in x for x in lines_t)
     assert not any("truthful" in x for x in lines_m)
+
+
+@pytest.mark.unit
+def test_build_narration_context_exports_anti_railroading_contract():
+    ctx = build_narration_context(**_narration_minimal_kwargs())
+    assert "anti_railroading_contract" in ctx
+    arc = ctx["anti_railroading_contract"]
+    assert isinstance(arc, dict)
+    assert arc.get("enabled") is True
+    assert "forbid_player_decision_override" in arc
+    assert "surfaced_lead_ids" in arc and "surfaced_lead_labels" in arc
+    policy = ctx["response_policy"]
+    assert policy.get("anti_railroading") is arc
+    pd = ctx.get("prompt_debug") or {}
+    assert "anti_railroading" in pd
+
+
+@pytest.mark.unit
+def test_anti_railroading_contract_reflects_surfaced_leads_from_prompt_context_state():
+    session = _session_with_registry(
+        {
+            "id": "reg_lead_x",
+            "title": "Harbor Thread",
+            "status": LeadStatus.ACTIVE.value,
+            "lifecycle": LeadLifecycle.COMMITTED.value,
+            "priority": 2,
+            "last_updated_turn": 1,
+        }
+    )
+    session["turn_counter"] = 3
+    session["follow_surface"] = {"lead_ids": ["fs_surface"], "labels": ["Wharf rumor"]}
+    ctx = build_narration_context(
+        **_narration_minimal_kwargs(
+            session=session,
+            pending_leads=[
+                {"authoritative_lead_id": "reg_lead_x", "surface": "pending beat"},
+            ],
+        )
+    )
+    arc = ctx["anti_railroading_contract"]
+    ids = list(arc.get("surfaced_lead_ids") or [])
+    labels = list(arc.get("surfaced_lead_labels") or [])
+    assert "reg_lead_x" in ids
+    assert "fs_surface" in ids
+    assert "Harbor Thread" in labels
+    assert "Wharf rumor" in labels
+
+
+@pytest.mark.unit
+def test_anti_railroading_instruction_text_differentiates_constraint_lead_and_forced_direction():
+    ctx = build_narration_context(**_narration_minimal_kwargs())
+    block = "\n".join(ctx["instructions"])
+    assert "HARD WORLD CONSTRAINT" in block
+    assert "SALIENT LEAD" in block
+    assert "FORCED PLAYER DIRECTION" in block
+
+
+@pytest.mark.unit
+def test_anti_railroading_instructions_preserve_explicit_commitment_exception():
+    ctx = build_narration_context(
+        **_narration_minimal_kwargs(user_text="I'll go to the harbor and look for the contact.")
+    )
+    arc = ctx["anti_railroading_contract"]
+    assert arc.get("allow_commitment_language_when_player_explicitly_committed") is True
+    block = "\n".join(ctx["instructions"])
+    assert "allow_commitment_language_when_player_explicitly_committed" in block
+    assert "explicit commitment" in block.lower()
+
+
+@pytest.mark.unit
+def test_anti_railroading_instructions_forbid_only_unjustified_forced_direction():
+    ctx = build_narration_context(**_narration_minimal_kwargs())
+    block = "\n".join(ctx["instructions"]).lower()
+    assert "not globally banned" in block
+    assert "unjustified forced direction" in block
+    assert "never use directional" not in block

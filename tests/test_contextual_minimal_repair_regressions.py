@@ -17,6 +17,8 @@ from game.gm import (
 from game.social_exchange_emission import is_route_illegal_global_or_sanitizer_fallback_text
 from game.storage import get_scene_runtime
 from game.tone_escalation import validate_tone_escalation
+from game.final_emission_gate import apply_final_emission_gate
+from game.narrative_authority import build_narrative_authority_contract
 
 pytestmark = [pytest.mark.unit, pytest.mark.regression]
 
@@ -211,6 +213,49 @@ def test_contextual_repair_lines_pass_legality_checks(monkeypatch: Any) -> None:
     pft_n = str(out_n.get("player_facing_text") or "")
     _assert_repair_line_legal(pft_n)
     assert "nonsocial_contextual_repair:scene_anchor" in str(out_n.get("debug_notes") or "")
+
+
+def test_final_gate_anti_railroading_runs_with_narrative_authority_and_tone_contracts() -> None:
+    """Block 14 contextual repair suite: anti-railroading coexists with narrative_authority + tone_escalation."""
+    na = build_narrative_authority_contract(
+        resolution={"kind": "observe", "prompt": "I listen."},
+        narration_visibility={},
+        scene_state_anchor_contract=None,
+        speaker_selection_contract=None,
+        session_view=None,
+    )
+    ctr = {
+        "enabled": True,
+        "scene_id": "hall",
+        "base_tone": "neutral",
+        "max_allowed_tone": "tense",
+        "allow_guarded_refusal": True,
+        "allow_verbal_pressure": True,
+        "allow_explicit_threat": False,
+        "allow_physical_hostility": False,
+        "allow_combat_initiation": False,
+        "justification_flags": {},
+        "justification_reasons": [],
+        "debug_inputs": {"scene_id": "hall"},
+        "debug_flags": {},
+    }
+    out = apply_final_emission_gate(
+        {
+            "player_facing_text": "Rain brightens the moss; nothing is decided yet.",
+            "tags": [],
+            "response_policy": {"narrative_authority": na, "tone_escalation": ctr},
+        },
+        resolution={"kind": "observe", "prompt": "I listen."},
+        session={},
+        scene_id="hall",
+        world={},
+    )
+    meta = out.get("_final_emission_meta") or {}
+    assert meta.get("narrative_authority_checked") is True
+    assert meta.get("tone_escalation_checked") is True
+    assert meta.get("anti_railroading_checked") is True
+    em = (out.get("metadata") or {}).get("emission_debug") or {}
+    assert em.get("anti_railroading", {}).get("validation", {}).get("checked") is True
 
 
 def test_minimal_repair_hard_lines_respect_guarded_tone_contract() -> None:

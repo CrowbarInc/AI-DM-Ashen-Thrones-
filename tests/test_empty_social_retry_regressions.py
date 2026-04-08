@@ -10,6 +10,7 @@ from game.api import app
 from game.gm import (
     _gm_has_usable_player_facing_text,
     _is_placeholder_only_player_facing_text,
+    build_retry_prompt_for_failure,
     ensure_minimal_nonsocial_resolution,
     ensure_minimal_social_resolution,
     force_terminal_retry_fallback,
@@ -205,3 +206,40 @@ def test_api_repairs_empty_social_after_force_terminal_retry_fallback(monkeypatc
     pft_api = str(gm_out.get("player_facing_text") or "")
     assert pft_api.strip()
     assert not _is_placeholder_only_player_facing_text(pft_api)
+
+
+def test_stalled_dialogue_retry_prompt_surfaces_openings_not_pc_decision() -> None:
+    """Stall recovery must push options/leverage, not 'you decide to press harder' style pathing."""
+    p = build_retry_prompt_for_failure(
+        {"failure_class": "scene_stall", "reasons": ["scene_stall:momentum_due_without_progress"]},
+        response_policy=None,
+        gm_output=None,
+    ).lower()
+    assert "without choosing for the player" in p
+    assert "actionable options" in p or "new clue" in p
+    assert "do not narrate the pc" in p or "without choosing" in p
+
+
+def test_empty_social_recovery_retry_prompt_no_auto_destination() -> None:
+    """Open/empty social recovery classes must not instruct auto-travel or commitment narration."""
+    for fc in ("scene_stall", "followup_soft_repetition", "npc_contract_failure"):
+        p = build_retry_prompt_for_failure(
+            {
+                "failure_class": fc,
+                "followup_context": {},
+                "missing": [],
+            },
+            response_policy=None,
+            gm_output=None,
+        ).lower()
+        assert "auto-travel" in p
+        assert "without choosing for the player" in p
+
+
+def test_social_dead_air_break_retry_encourages_interruption_or_reaction_paths() -> None:
+    p = build_retry_prompt_for_failure(
+        {"failure_class": "scene_stall"},
+        response_policy=None,
+        gm_output=None,
+    ).lower()
+    assert "npc" in p or "reaction" in p or "consequence" in p or "pressure" in p

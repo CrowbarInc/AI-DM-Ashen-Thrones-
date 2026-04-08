@@ -7,6 +7,7 @@ import game.final_emission_gate as feg
 import game.scene_state_anchoring as ssa
 from game.defaults import default_session, default_world
 from game.final_emission_gate import apply_final_emission_gate, get_speaker_selection_contract
+from game.anti_railroading import build_anti_railroading_contract
 from game.narrative_authority import build_narrative_authority_contract
 from game.interaction_context import rebuild_active_scene_entities, set_social_target
 from game.social_exchange_emission import effective_strict_social_resolution_for_emission
@@ -1121,3 +1122,225 @@ def test_final_emission_gate_marks_non_hostile_escalation_blocked_on_tone_writer
     meta = out.get("_final_emission_meta") or {}
     assert meta.get("non_hostile_escalation_blocked") is True
     assert meta.get("tone_escalation_violation_before_repair") is True
+
+
+# --- Anti-railroading (Objective Block 3) -------------------------------------------------------
+
+
+def _ar_contract(**kwargs):
+    return build_anti_railroading_contract(
+        resolution=kwargs.get("resolution"),
+        prompt_leads=kwargs.get("prompt_leads"),
+        player_text=kwargs.get("player_text"),
+    )
+
+
+def test_anti_railroading_gate_passes_clean_leads_and_constraints():
+    for raw in (
+        "Two leads stand out: the lighthouse keeper and the customs office.",
+        "The bridge is out. The alley and the roofline are still open.",
+        "If you want an immediate answer, confronting the priest publicly is one option.",
+    ):
+        out = apply_final_emission_gate(
+            {"player_facing_text": raw, "tags": [], "anti_railroading_contract": _ar_contract()},
+            resolution={"kind": "observe", "prompt": "I look around."},
+            session={},
+            scene_id="dock",
+            world={},
+        )
+        assert out.get("player_facing_text") == raw
+        meta = out.get("_final_emission_meta") or {}
+        assert meta.get("anti_railroading_repaired") is False
+        em = (out.get("metadata") or {}).get("emission_debug") or {}
+        assert em.get("anti_railroading", {}).get("validation", {}).get("passed") is True
+
+
+def test_anti_railroading_gate_repairs_forced_pathing():
+    out = apply_final_emission_gate(
+        {"player_facing_text": "You head straight to the archive.", "tags": []},
+        resolution={"kind": "observe", "prompt": "I look."},
+        session={},
+        scene_id="s",
+        world={},
+    )
+    text = out.get("player_facing_text") or ""
+    assert "you could head there" in text.lower()
+    meta = out.get("_final_emission_meta") or {}
+    assert meta.get("anti_railroading_repaired") is True
+
+
+def test_anti_railroading_gate_repairs_exclusive_and_meta_hooks():
+    for raw in (
+        "The only real lead is the archive.",
+        "This is where the story wants you to go.",
+        "It's obvious now that you must follow the priest.",
+        "Everything points to Greywake, so you go there.",
+    ):
+        out = apply_final_emission_gate(
+            {"player_facing_text": raw, "tags": []},
+            resolution={"kind": "observe", "prompt": "I listen."},
+            session={},
+            scene_id="s",
+            world={},
+        )
+        meta = out.get("_final_emission_meta") or {}
+        assert meta.get("anti_railroading_repaired") is True, raw
+        assert (out.get("player_facing_text") or "").strip() != raw.strip()
+
+
+def test_anti_railroading_resolved_transition_allows_arrival_language():
+    res = {"kind": "travel", "resolved_transition": True, "prompt": "I enter the ward."}
+    c = _ar_contract(resolution=res)
+    raw = "You step through the arch into the lower ward, noise washing over you."
+    out = apply_final_emission_gate(
+        {"player_facing_text": raw, "tags": [], "anti_railroading_contract": c},
+        resolution=res,
+        session={},
+        scene_id="ward",
+        world={},
+    )
+    assert out.get("player_facing_text") == raw
+    assert (out.get("_final_emission_meta") or {}).get("anti_railroading_repaired") is False
+
+
+def test_anti_railroading_commitment_echo_allowed_when_player_committed():
+    pt = "I'll head to the archives and check the register."
+    c = _ar_contract(player_text=pt)
+    raw = "You head toward the archives, letting the crowd carry you a block at a time."
+    out = apply_final_emission_gate(
+        {"player_facing_text": raw, "tags": [], "anti_railroading_contract": c},
+        resolution={"kind": "observe", "prompt": pt},
+        session={"scene_runtime": {"test_scene": {"last_player_action_text": pt}}},
+        scene_id="test_scene",
+        world={},
+    )
+    assert out.get("player_facing_text") == raw
+
+
+def test_anti_railroading_quoted_dialogue_not_spuriously_flagged():
+    raw = 'The clerk mutters, "You head straight to the archive." Then the door clicks.'
+    out = apply_final_emission_gate(
+        {"player_facing_text": raw, "tags": []},
+        resolution={"kind": "observe", "prompt": "I listen."},
+        session={},
+        scene_id="s",
+        world={},
+    )
+    assert '"' in (out.get("player_facing_text") or "")
+    meta = out.get("_final_emission_meta") or {}
+    assert meta.get("anti_railroading_repaired") is False
+
+
+def test_anti_railroading_prompt_context_contract_resolution():
+    c = _ar_contract()
+    out = apply_final_emission_gate(
+        {
+            "player_facing_text": "You head straight to the pier.",
+            "tags": [],
+            "prompt_context": {"anti_railroading_contract": c},
+        },
+        resolution={"kind": "observe", "prompt": "I walk."},
+        session={},
+        scene_id="pier",
+        world={},
+    )
+    assert (out.get("_final_emission_meta") or {}).get("anti_railroading_repaired") is True
+    assert (out.get("_final_emission_meta") or {}).get("anti_railroading_contract_resolution_source") == "shipped"
+
+
+def test_anti_railroading_coexists_with_narrative_authority_and_tone():
+    na = build_narrative_authority_contract(
+        resolution={"kind": "observe", "prompt": "I look."},
+        narration_visibility={},
+        scene_state_anchor_contract=None,
+        speaker_selection_contract=None,
+        session_view=None,
+    )
+    ctr = {
+        "enabled": True,
+        "scene_id": "hall",
+        "base_tone": "neutral",
+        "max_allowed_tone": "tense",
+        "allow_guarded_refusal": True,
+        "allow_verbal_pressure": True,
+        "allow_explicit_threat": False,
+        "allow_physical_hostility": False,
+        "allow_combat_initiation": False,
+        "justification_flags": {},
+        "justification_reasons": [],
+        "debug_inputs": {"scene_id": "hall"},
+        "debug_flags": {},
+    }
+    out = apply_final_emission_gate(
+        {
+            "player_facing_text": "The only real lead is the cellar door.",
+            "tags": [],
+            "response_policy": {"narrative_authority": na, "tone_escalation": ctr},
+        },
+        resolution={"kind": "observe", "prompt": "I listen."},
+        session={},
+        scene_id="hall",
+        world={},
+    )
+    meta = out.get("_final_emission_meta") or {}
+    assert meta.get("narrative_authority_checked") is True
+    assert meta.get("tone_escalation_checked") is True
+    assert meta.get("anti_railroading_repaired") is True
+    em = (out.get("metadata") or {}).get("emission_debug") or {}
+    assert "narrative_authority_checked" in em
+    assert "tone_escalation_checked" in em
+    assert em.get("anti_railroading", {}).get("validation", {}).get("checked") is True
+
+
+def test_non_strict_gate_runs_anti_railroading_after_na_before_scene_state_anchor(monkeypatch):
+    order: list[str] = []
+    orig_na = feg._apply_narrative_authority_layer
+    orig_ar = feg._apply_anti_railroading_layer
+    orig_ssa = feg._apply_scene_state_anchor_layer
+
+    def na(*args, **kwargs):
+        order.append("narrative_authority")
+        return orig_na(*args, **kwargs)
+
+    def ar(*args, **kwargs):
+        order.append("anti_railroading")
+        return orig_ar(*args, **kwargs)
+
+    def ssa(*args, **kwargs):
+        order.append("scene_state_anchor")
+        return orig_ssa(*args, **kwargs)
+
+    monkeypatch.setattr(feg, "_apply_narrative_authority_layer", na)
+    monkeypatch.setattr(feg, "_apply_anti_railroading_layer", ar)
+    monkeypatch.setattr(feg, "_apply_scene_state_anchor_layer", ssa)
+
+    apply_final_emission_gate(
+        {
+            "player_facing_text": "Fog rolls in.",
+            "tags": [],
+            "scene_state_anchor_contract": _ssa_contract(location_tokens=["granite"]),
+        },
+        resolution={"kind": "observe", "prompt": "I watch."},
+        session={},
+        scene_id="frontier_gate",
+        world={},
+    )
+    assert order.index("narrative_authority") < order.index("anti_railroading")
+    assert order.index("anti_railroading") < order.index("scene_state_anchor")
+
+
+def test_anti_railroading_surfaced_lead_mandatory_repair(monkeypatch):
+    """Surfaced-lead mandatory framing is repaired before visibility enforcement (isolate AR)."""
+    monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
+    c = _ar_contract(prompt_leads=[{"id": "h1", "title": "Harbor warehouse"}])
+    raw = "The Harbor warehouse lead isn't optional; you're going there now."
+    out = apply_final_emission_gate(
+        {"player_facing_text": raw, "tags": [], "anti_railroading_contract": c},
+        resolution={"kind": "observe", "prompt": "I look."},
+        session={},
+        scene_id="s",
+        world={},
+    )
+    assert (out.get("_final_emission_meta") or {}).get("anti_railroading_repaired") is True
+    low = (out.get("player_facing_text") or "").lower()
+    assert "pressure" in low or "option" in low

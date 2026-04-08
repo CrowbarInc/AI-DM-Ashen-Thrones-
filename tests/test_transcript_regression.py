@@ -1039,3 +1039,53 @@ def test_transcript_passive_wait_then_followup_then_departure_stays_coherent(tmp
     ).strip(), (
         "after travel, session should not read as still mid-runner social loop from the wait beat"
     )
+
+
+def test_transcript_retry_prompt_multi_lead_and_urgency_language() -> None:
+    """Transcript-style: retry instructions stay agency-safe under multiple leads and time pressure."""
+    from game.gm import build_retry_prompt_for_failure
+
+    gm = {
+        "anti_railroading_contract": {
+            "enabled": True,
+            "forbid_player_decision_override": True,
+            "forbid_forced_direction": True,
+            "forbid_exclusive_path_claims_without_basis": True,
+            "forbid_lead_to_plot_gravity_upgrade": True,
+            "allow_directional_language_from_resolved_transition": False,
+            "allow_exclusivity_from_authoritative_resolution": False,
+            "allow_commitment_language_when_player_explicitly_committed": False,
+            "surfaced_lead_ids": ["lead_patrol", "lead_river", "lead_gate"],
+            "surfaced_lead_labels": [],
+        }
+    }
+    for fc, extra in (
+        ("scene_stall", {}),
+        (
+            "topic_pressure_escalation",
+            {"topic_context": {"topic_key": "patrol", "repeat_count": 3, "previous_answer_snippet": "Maybe."}},
+        ),
+    ):
+        failure: dict = {"failure_class": fc, **extra}
+        p = build_retry_prompt_for_failure(failure, response_policy=None, gm_output=gm).lower()
+        assert "without choosing for the player" in p
+        assert "the story wants" in p
+        if fc == "topic_pressure_escalation":
+            assert "forced pathing" in p
+        if fc == "scene_stall":
+            assert "multiple leads are in play" in p
+
+
+def test_transcript_retry_prompt_warns_against_known_gate_failure_shapes() -> None:
+    """Retry guidance explicitly discourages phrasing the final gate rejects (anti-railroading)."""
+    from game.gm import build_retry_prompt_for_failure
+
+    p = build_retry_prompt_for_failure(
+        {"failure_class": "scene_stall"},
+        response_policy=None,
+        gm_output=None,
+    ).lower()
+    assert "meta-story gravity" in p or "the story wants" in p
+    assert "forced conclusions" in p or "obvious you must" in p
+    assert "you head straight" not in p
+    assert "so you go there" not in p

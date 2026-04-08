@@ -12,6 +12,8 @@ Contract layers (orthogonal concerns):
 - **answer_completeness** — direct-answer obligations, voice, and bounded-partial shape.
 - **tone_escalation** — caps interpersonal hostility / escalation in narration from published inputs
   (see ``build_tone_escalation_contract`` in ``game.tone_escalation``).
+- **anti_railroading** — player-agency and lead-surfacing policy (inspectable flags and surfaced lead ids;
+  see ``build_anti_railroading_contract`` in ``game.anti_railroading``); does not replace lead registry facts.
 """
 from __future__ import annotations
 
@@ -41,6 +43,7 @@ from game.opening_visible_fact_selection import (
     OPENING_NARRATION_VISIBLE_FACT_MAX,
     select_opening_narration_visible_facts,
 )
+from game.anti_railroading import build_anti_railroading_contract
 from game.scene_state_anchoring import build_scene_state_anchor_contract
 from game.narrative_authority import build_narrative_authority_contract
 from game.tone_escalation import build_tone_escalation_contract
@@ -75,6 +78,10 @@ RESPONSE_RULE_PRIORITY: tuple[tuple[str, str], ...] = (
         "forbid_unjustified_narrative_authority",
         "DO NOT ASSERT UNRESOLVED OUTCOMES, HIDDEN TRUTHS, OR NPC INTENT AS SETTLED FACT",
     ),
+    (
+        "preserve_player_agency",
+        "PRESERVE PLAYER AGENCY — DO NOT DECIDE ACTIONS OR UPGRADE SURFACED LEADS INTO MANDATORY PATHS",
+    ),
     ("allow_partial_answer", "IF FULL CERTAINTY IS UNAVAILABLE, GIVE A BOUNDED PARTIAL ANSWER"),
     (
         "response_delta",
@@ -88,9 +95,10 @@ RESPONSE_RULE_PRIORITY: tuple[tuple[str, str], ...] = (
 RULE_PRIORITY_COMPACT_INSTRUCTION = (
     "When rules conflict, resolve them in this order: answer the player; preserve authoritative "
     "state; avoid leaking hidden facts; avoid unjustified certainty about outcomes, hidden truths, "
-    "and NPC intent (defer per narrative authority policy); if certainty is incomplete, give a bounded partial answer; "
-    "when the player presses the same topic, add net-new value rather than restating; remain diegetic; "
-    "maintain scene momentum; then add specificity."
+    "and NPC intent (defer per narrative authority policy); preserve player agency—do not decide the PC's action "
+    "or treat surfaced leads as mandatory plot gravity (see anti_railroading policy); if certainty is incomplete, "
+    "give a bounded partial answer; when the player presses the same topic, add net-new value rather than restating; "
+    "remain diegetic; maintain scene momentum only after agency constraints; then add specificity."
 )
 
 # Resolution kinds where follow-up “delta vs repetition” is not meaningful (mechanical / transition turns).
@@ -2379,7 +2387,8 @@ def build_narration_context(
 
     Narration contracts are layered: visibility (reference scope), narrative_authority (certainty
     and assertion boundaries), scene_state_anchor (grounding), answer_completeness
-    (answer-shape obligations), and tone_escalation (interpersonal intensity caps); see module docstring.
+    (answer-shape obligations), tone_escalation (interpersonal intensity caps), and anti_railroading
+    (player agency vs surfaced leads); see module docstring.
     """
     # Interlocutor lead contract (maintenance): interlocutor_lead_context is the NPC-scoped export from
     # discussion tracking + authoritative lead rows; interlocutor_lead_behavior_hints are derived only
@@ -2843,6 +2852,35 @@ def build_narration_context(
         "preferred_deferral_order": list(narrative_authority_contract.get("preferred_deferral_order") or []),
     }
 
+    follow_surface = session.get("follow_surface") if isinstance(session, dict) else None
+    anti_railroading_contract = build_anti_railroading_contract(
+        resolution=resolution if isinstance(resolution, dict) else None,
+        narration_obligations=narration_obligations,
+        session_view=session_view if isinstance(session_view, dict) else None,
+        scene_state_anchor_contract=scene_state_anchor_contract if isinstance(scene_state_anchor_contract, dict) else None,
+        speaker_selection_contract=speaker_selection if isinstance(speaker_selection, dict) else None,
+        narrative_authority_contract=narrative_authority_contract if isinstance(narrative_authority_contract, dict) else None,
+        prompt_leads=lead_context,
+        active_pending_leads=active_pending_leads,
+        follow_surface=follow_surface,
+        player_text=str(user_text or ""),
+    )
+    response_policy["anti_railroading"] = anti_railroading_contract
+
+    prompt_debug_anchor["anti_railroading"] = {
+        "enabled": bool(anti_railroading_contract.get("enabled")),
+        "surfaced_lead_count": len(anti_railroading_contract.get("surfaced_lead_ids") or []),
+        "allow_directional_language_from_resolved_transition": anti_railroading_contract.get(
+            "allow_directional_language_from_resolved_transition"
+        ),
+        "allow_exclusivity_from_authoritative_resolution": anti_railroading_contract.get(
+            "allow_exclusivity_from_authoritative_resolution"
+        ),
+        "allow_commitment_language_when_player_explicitly_committed": anti_railroading_contract.get(
+            "allow_commitment_language_when_player_explicitly_committed"
+        ),
+    }
+
     _narrative_authority_instr = [
         "NARRATIVE AUTHORITY (POLICY): Obey response_policy.narrative_authority for assertion boundaries; deterministic enforcement is authoritative. "
         "Do not assert unresolved outcomes as settled fact. "
@@ -2857,7 +2895,25 @@ def build_narration_context(
         "When a higher escalation tier is not allowed, prefer guarded refusal, scrutiny, urgency, consequence framing, or concrete social or procedural pressure. "
         "Topic pressure or conversational friction alone does not justify threats or violence.",
     ]
-    instructions = list(instructions) + _narrative_authority_instr + _tone_escalation_instr
+    _anti_railroading_instr = [
+        "ANTI-RAILROADING (POLICY): Obey top-level anti_railroading_contract and response_policy.anti_railroading. "
+        "Do not decide the player character's action for them. "
+        "Do not turn a surfaced lead into a required path: leads may create options, pressure, urgency, or opportunities; "
+        "they do not create main-plot gravity, destiny, or a single mandatory thread. "
+        "Avoid mandatory-path phrasing such as 'only way,' 'must go,' or 'the story pulls you' unless authoritative state "
+        "truly supports it (see allow_exclusivity_from_authoritative_resolution and allow_directional_language_from_resolved_transition on the contract). "
+        "Differentiate: HARD WORLD CONSTRAINT — state a fixed situation or barrier plainly without selecting the player's next move; "
+        "SALIENT LEAD — highlight as option, rumor, pressure, or opportunity, not fate; "
+        "FORCED PLAYER DIRECTION — never narrate the PC's decision, compulsion to one destination, or one true path without basis. "
+        "A hard world constraint may narrow what is possible; it must not auto-pick the player's response. "
+        "Preserve momentum through consequences, openings, reactions, and constraints—not by seizing player action. "
+        "Precedence (compact): player agency outranks momentum polish; authoritative constraints may narrow possibilities but must not choose the player's next move; "
+        "surfaced leads may be highlighted without being made mandatory. "
+        "Directional language is not globally banned—only unjustified forced direction. "
+        "When anti_railroading_contract.allow_commitment_language_when_player_explicitly_committed is true, narration that follows "
+        "the player's explicit commitment in player_input (movement or intent they stated) is allowed and expected where appropriate.",
+    ]
+    instructions = list(instructions) + _narrative_authority_instr + _tone_escalation_instr + _anti_railroading_instr
 
     payload: Dict[str, Any] = {
         'instructions': instructions,
@@ -2881,6 +2937,7 @@ def build_narration_context(
         'narration_obligations': narration_obligations,
         'narration_visibility': narration_visibility,
         'scene_state_anchor_contract': scene_state_anchor_contract,
+        'anti_railroading_contract': anti_railroading_contract,
         'prompt_debug': prompt_debug_anchor,
         'first_mention_contract': first_mention_contract,
         'discoverable_hinting': True,
