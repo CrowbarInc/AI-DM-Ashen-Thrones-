@@ -3750,6 +3750,254 @@ def _merged_indicates_travel_not_social(merged: str, scene_envelope: Dict[str, A
     return t in ("travel", "scene_transition")
 
 
+_OBSERVATIONAL_ENV_ONLY_RE = re.compile(
+    r"^\s*(?:what\s+do\s+i\s+see|what'?s\s+here|where\s+am\s+i|look\s+around|scan\s+the\s+(?:room|area))\s*\??\s*$",
+    re.IGNORECASE,
+)
+
+_BROAD_ADDRESS_LEXICAL: tuple[tuple[re.Pattern[str], str], ...] = (
+    (re.compile(r"\banyone\b", re.IGNORECASE), "anyone"),
+    (re.compile(r"\banybody\b", re.IGNORECASE), "anybody"),
+    (re.compile(r"\bsomebody\b", re.IGNORECASE), "somebody"),
+    (re.compile(r"\bsomeone\b", re.IGNORECASE), "someone"),
+    (re.compile(r"\bwho\s+here\b", re.IGNORECASE), "who_here"),
+    (re.compile(r"\bwho\s+among\s+(?:you|us|them)\b", re.IGNORECASE), "who_among"),
+    (re.compile(r"\bdoes\s+anyone\b", re.IGNORECASE), "does_anyone"),
+    (re.compile(r"\bdo\s+any\s+of\s+you\b", re.IGNORECASE), "do_any_of_you"),
+    (re.compile(r"\bis\s+anyone\b", re.IGNORECASE), "is_anyone"),
+    (re.compile(r"\bcan\s+anyone\b", re.IGNORECASE), "can_anyone"),
+    (re.compile(r"\bcould\s+anyone\b", re.IGNORECASE), "could_anyone"),
+    (re.compile(r"\bwould\s+anyone\b", re.IGNORECASE), "would_anyone"),
+    (re.compile(r"\bcan\s+somebody\b", re.IGNORECASE), "can_somebody"),
+    (re.compile(r"\bcan\s+someone\b", re.IGNORECASE), "can_someone"),
+    (re.compile(r"\bi\s+call\s+out\b", re.IGNORECASE), "i_call_out"),
+    (re.compile(r"\bwe\s+call\s+out\b", re.IGNORECASE), "we_call_out"),
+    (re.compile(r"\bi\s+shout\b", re.IGNORECASE), "i_shout"),
+    (re.compile(r"\bwe\s+shout\b", re.IGNORECASE), "we_shout"),
+    (re.compile(r"\bi\s+yell\b", re.IGNORECASE), "i_yell"),
+    (re.compile(r"\bi\s+ask\s+the\s+crowd\b", re.IGNORECASE), "i_ask_the_crowd"),
+    (re.compile(r"\bi\s+address\s+the\s+room\b", re.IGNORECASE), "i_address_the_room"),
+    (re.compile(r"\bfor\s+anyone\b", re.IGNORECASE), "for_anyone"),
+    (re.compile(r"\bvolunteer(?:s|ed)?\s+to\s+talk\b", re.IGNORECASE), "volunteer_to_talk"),
+)
+
+
+def _broad_address_has_social_or_question_framing(merged_text: str, low: str) -> bool:
+    t = str(merged_text or "").strip()
+    if not t:
+        return False
+    if "?" in t:
+        return True
+    if _looks_like_information_seeking_player_question(t):
+        return True
+    if '"' in t:
+        return True
+    if any(tok in low for tok in _DIALOGUE_SPEECH_MARKERS_IC):
+        return True
+    if re.search(r"\b(i|we)\s+(?:call\s+out|shout|yell)\b", low):
+        return True
+    if re.search(r"\bchat\b|\btalk\b|\bspeak\b|\bconversation\b", low):
+        return True
+    return False
+
+
+def detect_broad_address_social_bid(
+    merged_text: str,
+    *,
+    low: str | None = None,
+    roster: List[Dict[str, Any]],
+    segmented_turn: Dict[str, Any] | None = None,
+    session: Dict[str, Any] | None = None,
+    scene_envelope: Dict[str, Any] | None = None,
+    world: Dict[str, Any] | None = None,
+) -> Dict[str, Any]:
+    """Conservative lexical detect: crowd / open-address solicitation (not a named vocative).
+
+    Returns dict keys: is_broad_address (bool), phrase_matched (str), reason (str).
+    """
+    t = str(merged_text or "").strip()
+    lo = str(low if low is not None else t.lower()).strip().lower()
+    out = {"is_broad_address": False, "phrase_matched": "", "reason": ""}
+    if not t or not lo:
+        out["reason"] = "empty_text"
+        return out
+    if is_gm_or_system_facing_question(t) or is_rules_or_engine_mechanics_question(t):
+        out["reason"] = "gm_or_mechanics_query"
+        return out
+    if _OBSERVATIONAL_ENV_ONLY_RE.search(t.strip()):
+        out["reason"] = "observational_environment_only"
+        return out
+    if (
+        "?" in t
+        and _SCENE_PRESENCE_OR_SCOPE_QUERY_RE.search(lo)
+        and not any(pat.search(lo) for pat, _ in _BROAD_ADDRESS_LEXICAL)
+    ):
+        out["reason"] = "scene_presence_query_without_broad_cue"
+        return out
+    if scene_envelope and _merged_indicates_travel_not_social(t, scene_envelope):
+        out["reason"] = "travel_or_scene_transition_intent"
+        return out
+    phrase = ""
+    for pat, label in _BROAD_ADDRESS_LEXICAL:
+        if pat.search(lo):
+            phrase = label
+            break
+    if not phrase:
+        out["reason"] = "no_broad_lexical_cue"
+        return out
+    if not _broad_address_has_social_or_question_framing(t, lo):
+        out["reason"] = "no_social_or_question_framing"
+        return out
+    mt_for_voc = merged_text
+    if isinstance(segmented_turn, dict):
+        voc_scan = _text_for_spoken_vocative_scan(segmented_turn, t)
+        if voc_scan:
+            voc_res = resolve_spoken_vocative_target(
+                session=session or {},
+                scene=scene_envelope if isinstance(scene_envelope, dict) else None,
+                spoken_text=voc_scan,
+            )
+            if voc_res.get("has_spoken_vocative"):
+                out["reason"] = "spoken_vocative_present"
+                return out
+    if _explicit_address_or_role_cue_in_line(lo, roster, merged_text=mt_for_voc):
+        out["reason"] = "explicit_address_or_role_cue"
+        return out
+    if session and world and isinstance(scene_envelope, dict):
+        scene_obj = scene_envelope.get("scene")
+        sid = str(scene_obj.get("id") or "").strip() if isinstance(scene_obj, dict) else ""
+        if sid:
+            lead = _npc_id_from_directed_motion_or_ask_phrases(lo, roster)
+            if lead and is_actor_addressable_in_current_scene(
+                session, scene_envelope, lead, world=world
+            ):
+                out["reason"] = "directed_motion_resolves_npc"
+                return out
+    w = world if isinstance(world, dict) else {}
+    for npc in roster:
+        if not isinstance(npc, dict):
+            continue
+        nid = str(npc.get("id") or "").strip()
+        if not nid or len(nid) < 2:
+            continue
+        for ref in sorted(extract_npc_reference_tokens(npc), key=len, reverse=True):
+            if len(ref) < 3:
+                continue
+            esc = re.escape(ref)
+            if re.search(rf",\s*{esc}\b", lo) or re.search(rf"^\s*{esc}\b[,?!]", lo):
+                out["reason"] = "named_vocative_or_address_pattern"
+                return out
+    out["is_broad_address"] = True
+    out["phrase_matched"] = phrase
+    out["reason"] = "broad_lexical_and_framing_ok"
+    return out
+
+
+def _current_valid_social_interlocutor_id(
+    session: Dict[str, Any] | None,
+    scene_envelope: Dict[str, Any] | None,
+    world: Dict[str, Any] | None,
+) -> str:
+    if not isinstance(session, dict) or not isinstance(scene_envelope, dict):
+        return ""
+    ctx = inspect(session)
+    active_id = str(ctx.get("active_interaction_target_id") or "").strip()
+    if not active_id:
+        return ""
+    w = world if isinstance(world, dict) else {}
+    mode = str(ctx.get("interaction_mode") or "").strip().lower()
+    kind = str(ctx.get("active_interaction_kind") or "").strip().lower()
+    social_mode = mode == "social" or kind == "social"
+    if not social_mode:
+        return ""
+    if not assert_valid_speaker(active_id, session, scene_envelope=scene_envelope, world=w):
+        return ""
+    if not is_actor_addressable_in_current_scene(session, scene_envelope, active_id, world=w):
+        return ""
+    return active_id
+
+
+def _emergent_addressable_id_set(session: Dict[str, Any] | None, scene_id: str) -> Set[str]:
+    sid = _clean_string(scene_id) or ""
+    out: Set[str] = set()
+    if not isinstance(session, dict) or not sid:
+        return out
+    st = session.get("scene_state")
+    if not isinstance(st, dict):
+        return out
+    active_sid = str(st.get("active_scene_id") or "").strip()
+    if active_sid and active_sid != sid:
+        return out
+    for row in st.get("emergent_addressables") or []:
+        if not isinstance(row, dict):
+            continue
+        eid = str(row.get("id") or "").strip()
+        rsid = _clean_string(row.get("scene_id"))
+        if not eid or (rsid and rsid != sid):
+            continue
+        out.add(eid)
+    return out
+
+
+def rank_open_social_solicitation_candidates(
+    session: Dict[str, Any] | None,
+    world: Dict[str, Any] | None,
+    scene_id: str,
+    *,
+    scene_envelope: Dict[str, Any] | None = None,
+) -> List[str]:
+    """Ordered addressable ids for an open crowd solicitation (no speaker chosen).
+
+    Tiers: active social interlocutor → direct scene NPCs → emergent addressables → promoted figures.
+    Within a tier, lower ``address_priority`` wins, then lexicographic id.
+    """
+    sid = _clean_string(scene_id) or ""
+    if not sid:
+        return []
+    env = scene_envelope if isinstance(scene_envelope, dict) else None
+    if env is None and isinstance(session, dict):
+        env = _scene_envelope_for_addressability(session, None)
+    roster = canonical_scene_addressable_roster(
+        world if isinstance(world, dict) else {},
+        sid,
+        scene_envelope=env,
+        session=session if isinstance(session, dict) else None,
+    )
+    w = world if isinstance(world, dict) else {}
+    emergent_ids = _emergent_addressable_id_set(session, sid)
+    interlocutor = _current_valid_social_interlocutor_id(session, env, w) if env else ""
+
+    rows: List[tuple[int, int, str]] = []
+    seen: Set[str] = set()
+    for row in roster:
+        if not isinstance(row, dict):
+            continue
+        nid = str(row.get("id") or "").strip()
+        if not nid or nid in seen:
+            continue
+        if not isinstance(session, dict) or env is None:
+            continue
+        if not is_actor_addressable_in_current_scene(session, env, nid, world=w):
+            continue
+        seen.add(nid)
+        try:
+            pri = int(row.get("address_priority", 999))
+        except (TypeError, ValueError):
+            pri = 999
+        tier = 1
+        if interlocutor and nid == interlocutor:
+            tier = 0
+        else:
+            wnpc = npc_dict_by_id(w, nid)
+            if isinstance(wnpc, dict) and str(wnpc.get("promoted_from_actor_id") or "").strip():
+                tier = 3
+            elif nid in emergent_ids or nid.startswith("emergent_"):
+                tier = 2
+        rows.append((tier, pri, nid))
+    rows.sort(key=lambda x: (x[0], x[1], x[2]))
+    return [r[2] for r in rows]
+
+
 def resolve_directed_social_entry(
     *,
     session: dict | None,
@@ -3865,6 +4113,22 @@ def resolve_directed_social_entry(
     if motion_id:
         motion_ok = is_actor_addressable_in_current_scene(sess, scene, motion_id, world=w)
 
+    broad_detect_cache: Optional[Dict[str, Any]] = None
+
+    def _broad_detect() -> Dict[str, Any]:
+        nonlocal broad_detect_cache
+        if broad_detect_cache is None:
+            broad_detect_cache = detect_broad_address_social_bid(
+                t,
+                low=low,
+                roster=roster,
+                segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+                session=sess,
+                scene_envelope=scene,
+                world=w,
+            )
+        return broad_detect_cache
+
     auth = resolve_authoritative_social_target(
         sess,
         w,
@@ -3882,6 +4146,12 @@ def resolve_directed_social_entry(
         and is_actor_addressable_in_current_scene(sess, scene, auth_id, world=w)
         and not auth.get("offscene_target")
     )
+    if (
+        auth_ok
+        and str(auth.get("source") or "").strip() == "continuity"
+        and _broad_detect().get("is_broad_address")
+    ):
+        auth_ok = False
 
     chosen_id = ""
     chosen_source = ""
@@ -3920,8 +4190,9 @@ def resolve_directed_social_entry(
         and not _explicit_address_or_role_cue_in_line(low, roster, merged_text=t)
         and not decl_cue
     ):
-        if _looks_like_information_seeking_player_question(t) or any(
-            phrase in low for phrase in _AMBIGUOUS_DIALOGUE_FOLLOWUP_PHRASES_IC
+        if not _broad_detect().get("is_broad_address") and (
+            _looks_like_information_seeking_player_question(t)
+            or any(phrase in low for phrase in _AMBIGUOUS_DIALOGUE_FOLLOWUP_PHRASES_IC)
         ):
             chosen_id = active_id
             chosen_source = "active_interlocutor"
@@ -3935,13 +4206,55 @@ def resolve_directed_social_entry(
                 chosen_id = fb
                 chosen_source = "scene_address_resolution"
 
+    blocked_open_recovery = (
+        (decl_cue and not decl_ok)
+        or (bool(voc_res.get("has_spoken_vocative")) and not voc_ok)
+        or (bool(motion_id) and not motion_ok)
+    )
+
     if not chosen_id:
+        if blocked_open_recovery:
+            if is_gm_or_system_facing_question(t):
+                out["reason"] = "gm_feasibility"
+                return out
+            if is_rules_or_engine_mechanics_question(t):
+                out["reason"] = "rules_or_mechanics_query"
+                return out
+            out["reason"] = "no_addressable_target"
+            return out
         if is_gm_or_system_facing_question(t):
             out["reason"] = "gm_feasibility"
             return out
         if is_rules_or_engine_mechanics_question(t):
             out["reason"] = "rules_or_mechanics_query"
             return out
+        broad = _broad_detect()
+        if broad.get("is_broad_address"):
+            candidates = rank_open_social_solicitation_candidates(
+                sess, w, scene_id, scene_envelope=scene
+            )
+            if candidates:
+                out["should_route_social"] = True
+                out["target_actor_id"] = None
+                out["target_source"] = "scene_open_bid"
+                out["reason"] = "open_social_solicitation"
+                out["open_social_solicitation"] = True
+                out["broad_address_bid"] = True
+                out["candidate_addressable_ids"] = list(candidates)
+                out["candidate_addressable_count"] = len(candidates)
+                out["broad_address_reason"] = str(broad.get("reason") or "")
+                out["broad_address_phrase_matched"] = str(broad.get("phrase_matched") or "")
+                out["declared_switch_detected"] = bool(decl_sw.get("has_declared_switch"))
+                out["declared_switch_target_actor_id"] = (
+                    decl_sw.get("target_actor_id") if decl_sw.get("has_declared_switch") else None
+                )
+                out["continuity_overridden_by_declared_switch"] = False
+                out["spoken_vocative_detected"] = bool(voc_res.get("has_spoken_vocative"))
+                out["spoken_vocative_target_actor_id"] = (
+                    voc_res.get("target_actor_id") if voc_res.get("has_spoken_vocative") else None
+                )
+                out["continuity_overridden_by_spoken_vocative"] = False
+                return out
         out["reason"] = "no_addressable_target"
         return out
 

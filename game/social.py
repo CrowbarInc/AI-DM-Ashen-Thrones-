@@ -2328,6 +2328,58 @@ def resolve_social_action(
         )
         return _social_result_dict_with_incoming_metadata(result, incoming_action_meta)
 
+    if incoming_action_meta.get("open_social_solicitation") and not (
+        auth.get("target_resolved") and auth.get("npc_id")
+    ):
+        cand_raw = incoming_action_meta.get("candidate_addressable_ids")
+        cand_list: List[str] = []
+        if isinstance(cand_raw, list):
+            cand_list = [str(x).strip() for x in cand_raw if isinstance(x, str) and str(x).strip()]
+        env_addr = scene_envelope if isinstance(scene_envelope, dict) else None
+        cand_f = [
+            c
+            for c in cand_list
+            if is_actor_addressable_in_current_scene(session, env_addr, c, world=world)
+        ]
+        if cand_f:
+            hint_ob = (
+                "Open solicitation to the scene: narrate one concrete social lead, reaction, or volunteer responder "
+                "from among the addressable figures—without treating any single npc_id as the authoritative answerer yet."
+            )
+            try:
+                ccount = int(incoming_action_meta.get("candidate_addressable_count", len(cand_f)))
+            except (TypeError, ValueError):
+                ccount = len(cand_f)
+            result = SocialEngineResult(
+                kind=action_type,
+                action_id=action_id,
+                label=label,
+                prompt=prompt,
+                success=None,
+                hint=hint_ob,
+                social={
+                    "social_intent_class": intent_class,
+                    "skill_check": None,
+                    "npc_reply_expected": False,
+                    "reply_kind": "reaction",
+                    "offscene_target": False,
+                    **dbg,
+                    "npc_id": None,
+                    "npc_name": None,
+                    "target_resolved": False,
+                    "target_source": "scene_open_bid",
+                    "target_reason": "broad_address_to_available_scene_npcs",
+                    "broad_address_bid": True,
+                    "open_social_solicitation": True,
+                    "candidate_addressable_ids": list(cand_f),
+                    "candidate_addressable_count": ccount,
+                    "broad_address_reason": incoming_action_meta.get("broad_address_reason"),
+                    "broad_address_phrase_matched": incoming_action_meta.get("broad_address_phrase_matched"),
+                },
+                requires_check=False,
+            )
+            return _social_result_dict_with_incoming_metadata(result, incoming_action_meta)
+
     if not (auth.get("target_resolved") and auth.get("npc_id")):
         known_target = _find_world_npc_by_target(world, str(target_id or "")) if target_id else None
         known_target_id = str((known_target or {}).get("id") or "").strip()

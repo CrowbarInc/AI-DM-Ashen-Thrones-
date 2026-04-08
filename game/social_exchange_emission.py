@@ -737,6 +737,9 @@ def reconcile_strict_social_resolution_speaker(
     sid = str(scene_id or "").strip()
     if not isinstance(resolution, dict) or not sid:
         return resolution
+    soc0 = resolution.get("social")
+    if isinstance(soc0, dict) and soc0.get("open_social_solicitation"):
+        return resolution
     merged = merged_player_prompt_for_gate(resolution, session, sid)
     meta = resolution.get("metadata") if isinstance(resolution.get("metadata"), dict) else {}
     na = meta.get("normalized_action") if isinstance(meta.get("normalized_action"), dict) else None
@@ -2045,6 +2048,302 @@ def social_fallback_line_for_sanitizer(
     return line
 
 
+_STALL_OPEN_SOCIAL_FRAGMENT_RE = re.compile(
+    r"(?i)^\s*(?:no\s+one\s+answers?|nobody\s+answers?|no\s+one\s+steps\s+forward|nobody\s+steps\s+forward|the\s+moment\s+passes)\.?\s*$"
+)
+_STALL_OPEN_SOCIAL_ANYWHERE_RE = re.compile(
+    r"(?i)\b(?:no\s+one\s+answers?|nobody\s+answers?|no\s+one\s+steps\s+forward|nobody\s+steps\s+forward|the\s+moment\s+passes)\b"
+)
+
+
+def _ensure_sentence_end(text: str) -> str:
+    s = str(text or "").strip()
+    if not s:
+        return ""
+    last = s[-1]
+    if last in ".!?":
+        return s
+    if last in "\"'”’" and len(s) > 1 and s[-2] in ".!?":
+        return s
+    if last in "…":
+        return s
+    return f"{s}."
+
+
+def _open_social_visible_leads_surface(
+    scene_envelope: Dict[str, Any] | None,
+) -> Tuple[List[str], str]:
+    facts: List[str] = []
+    afford_key = ""
+    if not isinstance(scene_envelope, dict):
+        return facts, afford_key
+    scene = scene_envelope.get("scene") if isinstance(scene_envelope.get("scene"), dict) else {}
+    raw = scene.get("visible_facts") if isinstance(scene.get("visible_facts"), list) else []
+    facts = [str(x).strip() for x in raw if isinstance(x, str) and str(x).strip()]
+    for ak in ("social_leads", "leads", "open_threads"):
+        block = scene_envelope.get(ak)
+        if isinstance(block, list) and block:
+            afford_key = ak
+            break
+        if isinstance(scene.get(ak), list) and scene.get(ak):
+            afford_key = ak
+            break
+    return facts, afford_key
+
+
+def _open_social_anchor_phrase(world: Dict[str, Any] | None, scene_id: str, npc_id: str) -> str:
+    nid = str(npc_id or "").strip()
+    if not nid:
+        return "A figure near you"
+    return f"The {nid.replace('_', ' ').strip()}"
+
+
+def _open_social_responder_templates(npc_id: str) -> Tuple[str, ...]:
+    low = str(npc_id or "").lower()
+    guard_cluster = (
+        '{anchor} glances over but stays at the choke. "If it\'s about the patrol, ask straight."',
+        '{anchor} lifts a hand. "Patrol routes aren\'t idle talk—say what you need."',
+    )
+    runner_cluster = (
+        '{anchor} lifts a hand through the rain. "Depends what you\'re buying—stew, rumor, or both?"',
+        '{anchor} hooks a thumb toward the kettle. "Coin buys a bowl; careful questions cost extra."',
+    )
+    if "guard" in low or "watch" in low or "sentry" in low:
+        return guard_cluster
+    if "runner" in low or "merchant" in low or "tavern" in low:
+        return runner_cluster
+    return (
+        '{anchor} looks up from the press of bodies. "Speak plain—I\'m not guessing what you want."',
+        '{anchor} meets your eyes a beat. "One thing at a time—what are you actually offering?"',
+    )
+
+
+def _open_social_lead_templates() -> Tuple[str, ...]:
+    return (
+        "No one answers outright, but {anchor} is already working the crowd for coin and rumor a few paces off.",
+        "The shout earns only flinches; {anchor} is still the clearest face to put a question to.",
+        "Nobody owns the moment—yet {anchor} keeps an open posture, waiting to see if you mean business.",
+    )
+
+
+def _open_social_recovery_passes_anti_stall(text: str, anchor_key: str) -> bool:
+    t = str(text or "").strip()
+    if not t:
+        return False
+    low = t.lower()
+    key = str(anchor_key or "").strip().lower()
+    if key and key not in low:
+        return False
+    if _STALL_OPEN_SOCIAL_FRAGMENT_RE.match(t):
+        return False
+    frag = _STALL_OPEN_SOCIAL_ANYWHERE_RE.search(low)
+    if frag:
+        tail = t[frag.end() :].strip(" \t,;—:-")
+        if len(tail) < 28:
+            return False
+    return True
+
+
+def _shorten_visible_fact_for_lead(fact: str, *, limit: int = 110) -> str:
+    s = str(fact or "").strip()
+    if len(s) <= limit:
+        return s
+    cut = s[:limit].rsplit(" ", 1)[0]
+    return cut.rstrip(",;:") + "…"
+
+
+def _open_social_fact_lead_line(visible_facts: List[str], seed: str) -> Tuple[str, str]:
+    facts = [f for f in visible_facts if isinstance(f, str) and f.strip()]
+    if not facts:
+        return "", ""
+    pick = facts[_deterministic_index(seed, len(facts))]
+    snip = _shorten_visible_fact_for_lead(pick)
+    opener = (
+        "The noise doesn't thin on its own—still, ",
+        "Voices overlap, but ",
+        "Crowd-swell aside, ",
+    )
+    op = opener[_deterministic_index(seed + "|op", len(opener))]
+    body = snip[0].lower() + snip[1:] if len(snip) > 1 else snip.lower()
+    line = f"{op}{body} stays right in front of you as a next handle."
+    return _ensure_sentence_end(line), snip.lower()
+
+
+def _speaker_contract_allows_candidate(
+    contract: Dict[str, Any] | None,
+    candidate_id: str,
+) -> bool:
+    if not isinstance(contract, dict):
+        return True
+    allowed = [str(x).strip() for x in (contract.get("allowed_speaker_ids") or []) if str(x).strip()]
+    if not allowed:
+        return True
+    return str(candidate_id or "").strip() in allowed
+
+
+def _merge_open_social_recovery_emission_debug(
+    out: Dict[str, Any],
+    rec: Dict[str, Any],
+) -> None:
+    md = out.setdefault("metadata", {})
+    if not isinstance(md, dict):
+        return
+    em = md.setdefault("emission_debug", {})
+    if not isinstance(em, dict):
+        return
+    em["open_social_recovery_used"] = bool(rec.get("used"))
+    em["open_social_recovery_mode"] = rec.get("mode")
+    em["open_social_recovery_candidate_id"] = rec.get("candidate_id")
+    em["open_social_recovery_reason"] = rec.get("reason")
+    em["open_social_recovery_suppressed_retry_fallback"] = bool(rec.get("used"))
+
+
+def build_open_social_solicitation_recovery(
+    *,
+    resolution: Dict[str, Any] | None,
+    session: Dict[str, Any] | None,
+    world: Dict[str, Any] | None,
+    scene_id: str,
+    scene_envelope: Dict[str, Any] | None = None,
+    player_text: str = "",
+) -> Dict[str, Any]:
+    """Deterministic rescue for broad-address (open) social solicitation retry/fallback.
+
+    Uses only ``resolution.social`` open-solicitation metadata (already ranked candidates).
+    """
+    empty_out: Dict[str, Any] = {
+        "used": False,
+        "mode": None,
+        "candidate_id": None,
+        "text": None,
+        "reason": "not_applicable",
+    }
+    sid = str(scene_id or "").strip()
+    if not sid or not isinstance(resolution, dict):
+        return {**empty_out, "reason": "not_applicable"}
+    soc = resolution.get("social") if isinstance(resolution.get("social"), dict) else {}
+    if not soc.get("open_social_solicitation"):
+        return {**empty_out, "reason": "not_open_social_solicitation"}
+
+    cands_raw = soc.get("candidate_addressable_ids")
+    ranked: List[str] = []
+    if isinstance(cands_raw, list):
+        ranked = [str(x).strip() for x in cands_raw if isinstance(x, str) and str(x).strip()]
+    try:
+        ccount = int(soc.get("candidate_addressable_count", len(ranked)))
+    except (TypeError, ValueError):
+        ccount = len(ranked)
+
+    w = world if isinstance(world, dict) else {}
+    sess = session if isinstance(session, dict) else None
+    env = scene_envelope if isinstance(scene_envelope, dict) else _scene_envelope_for_strict_social(sess, sid)
+    facts, afford_tag = _open_social_visible_leads_surface(env if isinstance(env, dict) else None)
+    has_surface = bool(ccount > 0 or ranked or facts or afford_tag)
+    if not has_surface:
+        return {**empty_out, "reason": "no_anchor_surface"}
+
+    meta = resolution.get("metadata") if isinstance(resolution.get("metadata"), dict) else {}
+    na = meta.get("normalized_action") if isinstance(meta.get("normalized_action"), dict) else None
+    merged = merged_player_prompt_for_gate(resolution, sess, sid)
+    prompt_seed = _collapse_ws(f"{sid}|{player_text}|{merged}") or sid
+
+    from game.interaction_context import build_speaker_selection_contract
+
+    contract = build_speaker_selection_contract(
+        sess,
+        w,
+        sid,
+        resolution=resolution,
+        normalized_action=na,
+        scene_envelope=env if isinstance(env, dict) else None,
+        merged_player_prompt=str(player_text or "").strip() or merged,
+    )
+
+    auth = resolve_authoritative_social_target(
+        sess,
+        w,
+        sid,
+        player_text=str(player_text or "").strip() or merged,
+        normalized_action=na,
+        merged_player_prompt=merged,
+        scene_envelope=env if isinstance(env, dict) else None,
+        allow_first_roster_fallback=True,
+    )
+    auth, _, _ = _auth_after_social_promotion_binding(
+        sess,
+        w,
+        sid,
+        auth,
+        env if isinstance(env, dict) else None,
+        merged_player_prompt=merged,
+    )
+    tp = topic_pressure_speaker_id_for_social_exchange(sess, sid) if sess is not None else None
+
+    chosen: str | None = None
+    for cid in ranked:
+        if not _speaker_contract_allows_candidate(contract, cid):
+            continue
+        gr = resolve_grounded_social_speaker(
+            sess if sess is not None else {},
+            w,
+            sid,
+            env if isinstance(env, dict) else None,
+            auth,
+            proposed_reply_speaker_id=cid,
+            topic_pressure_speaker_id=tp,
+        )
+        if gr.get("allowed"):
+            chosen = cid
+            break
+
+    anchor_key = ""
+    text_out = ""
+    mode: str | None = None
+    reason = ""
+
+    if chosen:
+        anchor = _open_social_anchor_phrase(w, sid, chosen)
+        anchor_key = anchor.lower()
+        tpls = _open_social_responder_templates(chosen)
+        tpl = tpls[_deterministic_index(prompt_seed + "|rsp|" + chosen, len(tpls))]
+        text_out = tpl.format(anchor=anchor)
+        text_out = _ensure_sentence_end(text_out)
+        mode = "concrete_responder"
+        reason = "concrete_responder"
+    elif ranked:
+        lead_anchor_id = ranked[0]
+        anchor = _open_social_anchor_phrase(w, sid, lead_anchor_id)
+        anchor_key = anchor.lower()
+        ltpl = _open_social_lead_templates()
+        text_out = ltpl[_deterministic_index(prompt_seed + "|lead|" + lead_anchor_id, len(ltpl))].format(anchor=anchor)
+        text_out = _ensure_sentence_end(text_out)
+        mode = "concrete_lead"
+        reason = "concrete_lead_after_speaker_blocked"
+        chosen = None
+    elif facts or afford_tag:
+        text_out, anchor_key = _open_social_fact_lead_line(facts, prompt_seed + "|fact")
+        if afford_tag and not text_out:
+            text_out = _ensure_sentence_end(
+                f"Nothing resolves into a single voice—yet the scene still offers a thread under {afford_tag} worth tightening next."
+            )
+            anchor_key = afford_tag.lower()
+        mode = "concrete_lead"
+        reason = "concrete_lead_visible_surface"
+        chosen = None
+
+    if not text_out or not _open_social_recovery_passes_anti_stall(text_out, anchor_key):
+        return {**empty_out, "reason": "anti_stall_or_missing_anchor" if text_out else "empty_recovery_line"}
+
+    cid_meta = chosen
+    return {
+        "used": True,
+        "mode": mode,
+        "candidate_id": cid_meta,
+        "text": text_out,
+        "reason": reason,
+    }
+
+
 def apply_social_exchange_retry_fallback_gm(
     gm: Dict[str, Any],
     *,
@@ -2058,6 +2357,35 @@ def apply_social_exchange_retry_fallback_gm(
     if not isinstance(gm, dict):
         return gm
     sid_rf = str(scene_id or "").strip()
+    if isinstance(resolution, dict) and isinstance(session, dict) and sid_rf:
+        soc_os = resolution.get("social") if isinstance(resolution.get("social"), dict) else None
+        if isinstance(soc_os, dict) and soc_os.get("open_social_solicitation"):
+            env_os = _scene_envelope_for_strict_social(session, sid_rf)
+            rec = build_open_social_solicitation_recovery(
+                resolution=resolution,
+                session=session,
+                world=world if isinstance(world, dict) else None,
+                scene_id=sid_rf,
+                scene_envelope=env_os if isinstance(env_os, dict) else None,
+                player_text=player_text,
+            )
+            if rec.get("used") and isinstance(rec.get("text"), str) and str(rec.get("text") or "").strip():
+                out = dict(gm)
+                out["player_facing_text"] = _ensure_sentence_end(str(rec.get("text") or "").strip())
+                tags = out.get("tags") if isinstance(out.get("tags"), list) else []
+                tag_list = [str(t) for t in tags if isinstance(t, str)]
+                out["tags"] = tag_list + [
+                    "question_retry_fallback",
+                    "open_social_solicitation_recovery",
+                    "open_social_recovery",
+                ]
+                dbg = out.get("debug_notes") if isinstance(out.get("debug_notes"), str) else ""
+                out["debug_notes"] = (
+                    (dbg + " | " if dbg else "")
+                    + f"retry_fallback:open_social_recovery:{rec.get('mode')}|retry_fallback:suppressed:social_exchange_template"
+                )
+                _merge_open_social_recovery_emission_debug(out, rec)
+                return out
     if isinstance(resolution, dict) and isinstance(session, dict) and sid_rf:
         soc_r = resolution.get("social") if isinstance(resolution.get("social"), dict) else None
         if isinstance(soc_r, dict) and soc_r.get("target_resolved") is True and not soc_r.get("offscene_target"):

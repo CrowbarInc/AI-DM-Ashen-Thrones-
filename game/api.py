@@ -1487,6 +1487,20 @@ def _build_dialogue_first_action(
             resolved_target_id=target_id,
         ),
     }
+    if ce.get("open_social_solicitation"):
+        metadata["open_social_solicitation"] = True
+        metadata["broad_address_bid"] = bool(ce.get("broad_address_bid"))
+        cands = ce.get("candidate_addressable_ids")
+        if isinstance(cands, list):
+            metadata["candidate_addressable_ids"] = list(cands)
+        try:
+            metadata["candidate_addressable_count"] = int(ce.get("candidate_addressable_count", 0))
+        except (TypeError, ValueError):
+            metadata["candidate_addressable_count"] = len(metadata.get("candidate_addressable_ids") or [])
+        if ce.get("broad_address_reason") is not None:
+            metadata["broad_address_reason"] = ce.get("broad_address_reason")
+        if ce.get("broad_address_phrase_matched") is not None:
+            metadata["broad_address_phrase_matched"] = ce.get("broad_address_phrase_matched")
     if target_id:
         metadata["active_interaction_target_id"] = target_id
     out = {
@@ -2326,6 +2340,16 @@ def chat(req: ChatRequest):
             canonical_entry.get('continuity_overridden_by_spoken_vocative')
         ),
     }
+    for _k in (
+        'open_social_solicitation',
+        'broad_address_bid',
+        'candidate_addressable_ids',
+        'candidate_addressable_count',
+        'broad_address_reason',
+        'broad_address_phrase_matched',
+    ):
+        if _k in canonical_entry:
+            trace['canonical_entry'][_k] = canonical_entry.get(_k)
     trace['canonical_entry_path'] = (
         'social' if canonical_entry.get('should_route_social') else 'undecided'
     )

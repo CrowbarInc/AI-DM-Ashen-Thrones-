@@ -160,6 +160,7 @@ def _non_hostile_guard_applies(
     if _authoritative_escalation_required(resolution, normalized_action):
         return False, None
 
+    social = _social_payload(resolution)
     resolution_kind = _clean_str((resolution or {}).get("kind")).lower()
     normalized_type = _clean_str((normalized_action or {}).get("type")).lower()
     raw = _clean_str(raw_player_text)
@@ -167,6 +168,8 @@ def _non_hostile_guard_applies(
     if required_response_type == "answer":
         return True, "informational_query_guard"
     if resolution_kind in _QUESTIONISH_SOCIAL_KINDS:
+        if bool(social.get("open_social_solicitation")):
+            return False, None
         return True, "social_question_guard"
     if resolution_kind in {"observe", "investigate", "travel", "scene_transition", "scene_opening", "already_searched", "discover_clue"}:
         return True, "non_hostile_world_action_guard"

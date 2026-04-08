@@ -301,3 +301,50 @@ def test_explicit_address_never_gets_wiped_by_later_validation(tmp_path, monkeyp
         assert latest_target_not_null_after_bind(snaps[1], payloads[1])
     except AssertionError:
         _fail_transcript("explicit bind + emission fallback metadata check failed", snaps, payloads)
+
+
+def test_transcript_anyone_chat_open_solicitation_not_dead_air(tmp_path, monkeypatch):
+    """Thin slice: broad-address shout + bad GM stall should recover to a concrete responder or lead."""
+    # The retry path emits open-social recovery, but the final emission gate may replace it with a
+    # neutral grounding bridge; bypass the gate here so this transcript asserts the retry layer only.
+    monkeypatch.setattr(
+        "game.api_turn_support.apply_final_emission_gate",
+        lambda gm, **_kwargs: gm,
+    )
+
+    idx = {"n": 0}
+
+    def call_gpt(_messages: list[dict[str, str]]) -> dict[str, Any]:
+        i = idx["n"]
+        idx["n"] += 1
+        if i == 0:
+            return _gm_opening()
+        return {
+            "player_facing_text": "No one answers.",
+            "tags": [],
+            "scene_update": None,
+            "activate_scene_id": None,
+            "new_scene_draft": None,
+            "world_updates": None,
+            "suggested_action": None,
+            "debug_notes": "test_open_solicitation_stall",
+        }
+
+    _patch_call_gpt(monkeypatch, call_gpt)
+    turns = [
+        "Begin.",
+        '"Anyone up for a chat?" Galinor shouts.',
+    ]
+    snaps, payloads = _run_transcript_with_payloads(tmp_path, monkeypatch, turns, chat_fn=chat)
+
+    pft = str((payloads[1].get("gm_output") or {}).get("player_facing_text") or "")
+    low = pft.lower()
+    assert pft.strip()
+    assert not _is_placeholder_only_player_facing_text(pft)
+    assert low.strip() not in {"no one answers.", "nobody answers.", "the moment passes.", "nobody steps forward."}
+    assert "guard captain" in low or "tavern runner" in low
+
+    soc = (payloads[1].get("resolution") or {}).get("social") or {}
+    assert soc.get("open_social_solicitation") is True
+    tags = [str(t).lower() for t in ((payloads[1].get("gm_output") or {}).get("tags") or []) if isinstance(t, str)]
+    assert "open_social_recovery" in tags

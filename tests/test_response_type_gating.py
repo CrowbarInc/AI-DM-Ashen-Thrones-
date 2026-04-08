@@ -74,6 +74,37 @@ def test_adjudication_question_requires_answer_contract() -> None:
     assert contract["allow_escalation"] is False
 
 
+def test_open_social_solicitation_skips_social_question_guard() -> None:
+    contract = derive_response_type_contract(
+        segmented_turn=None,
+        normalized_action={"type": "question"},
+        resolution={
+            "kind": "question",
+            "prompt": "Anyone up for a chat?",
+            "requires_check": False,
+            "social": {
+                "social_intent_class": "social_exchange",
+                "npc_id": None,
+                "target_resolved": False,
+                "open_social_solicitation": True,
+                "npc_reply_expected": False,
+                "reply_kind": "reaction",
+            },
+        },
+        interaction_context={"interaction_mode": "none"},
+        route_choice="dialogue",
+        directed_social_entry={
+            "should_route_social": True,
+            "target_actor_id": None,
+            "reason": "open_social_solicitation",
+        },
+        raw_player_text="Anyone up for a chat?",
+    ).to_dict()
+
+    assert "social_question_guard" not in contract["debug_reasons"]
+    assert contract["allow_escalation"] is True
+
+
 def test_world_action_requires_action_outcome_and_preserves_agency() -> None:
     contract = derive_response_type_contract(
         segmented_turn=None,

@@ -3,6 +3,13 @@
 Builds a concise, structured context from full game state before constructing
 the narration prompt. Reduces token usage and keeps narration coherent by
 including only relevant elements.
+
+Contract layers (orthogonal concerns):
+- **narration_visibility** — which entities and published facts may be referenced.
+- **narrative_authority** — what outcome, hidden-truth, and NPC-intent claims may be stated as
+  certain (see ``build_narrative_authority_contract``); does not replace visibility rules.
+- **scene_state_anchor** — mandatory grounding in present scene/speaker/action anchors.
+- **answer_completeness** — direct-answer obligations, voice, and bounded-partial shape.
 """
 from __future__ import annotations
 
@@ -33,6 +40,7 @@ from game.opening_visible_fact_selection import (
     select_opening_narration_visible_facts,
 )
 from game.scene_state_anchoring import build_scene_state_anchor_contract
+from game.narrative_authority import build_narrative_authority_contract
 
 # Configurable limits for deterministic, inspectable compression
 MAX_RECENT_LOG = 5
@@ -60,6 +68,10 @@ RESPONSE_RULE_PRIORITY: tuple[tuple[str, str], ...] = (
     ("must_answer", "ANSWER THE PLAYER"),
     ("forbid_state_invention", "DO NOT CONTRADICT AUTHORITATIVE STATE"),
     ("forbid_secret_leak", "DO NOT LEAK HIDDEN FACTS / SECRETS"),
+    (
+        "forbid_unjustified_narrative_authority",
+        "DO NOT ASSERT UNRESOLVED OUTCOMES, HIDDEN TRUTHS, OR NPC INTENT AS SETTLED FACT",
+    ),
     ("allow_partial_answer", "IF FULL CERTAINTY IS UNAVAILABLE, GIVE A BOUNDED PARTIAL ANSWER"),
     (
         "response_delta",
@@ -72,7 +84,8 @@ RESPONSE_RULE_PRIORITY: tuple[tuple[str, str], ...] = (
 
 RULE_PRIORITY_COMPACT_INSTRUCTION = (
     "When rules conflict, resolve them in this order: answer the player; preserve authoritative "
-    "state; avoid leaking hidden facts; if certainty is incomplete, give a bounded partial answer; "
+    "state; avoid leaking hidden facts; avoid unjustified certainty about outcomes, hidden truths, "
+    "and NPC intent (defer per narrative authority policy); if certainty is incomplete, give a bounded partial answer; "
     "when the player presses the same topic, add net-new value rather than restating; remain diegetic; "
     "maintain scene momentum; then add specificity."
 )
@@ -2340,6 +2353,10 @@ def build_narration_context(
     hidden facts stay in gm_only only.
 
     Returns a dict suitable for JSON serialization as the user message content.
+
+    Narration contracts are layered: visibility (reference scope), narrative_authority (certainty
+    and assertion boundaries), scene_state_anchor (grounding), and answer_completeness
+    (answer-shape obligations); see module docstring.
     """
     # Interlocutor lead contract (maintenance): interlocutor_lead_context is the NPC-scoped export from
     # discussion tracking + authoritative lead rows; interlocutor_lead_behavior_hints are derived only
@@ -2736,6 +2753,43 @@ def build_narration_context(
             f"(for example {_labels_preview}) as the answer source."
         )
     instructions = list(instructions) + _speaker_contract_instr
+
+    # Machine-readable boundary only; exhaustive checks live outside this module (e.g. emission gate).
+    # narration_visibility= full ``build_narration_visibility_contract`` snapshot (not the slim prompt export).
+    narrative_authority_contract = build_narrative_authority_contract(
+        resolution=resolution if isinstance(resolution, dict) else None,
+        narration_visibility=visibility_contract if isinstance(visibility_contract, dict) else None,
+        scene_state_anchor_contract=scene_state_anchor_contract if isinstance(scene_state_anchor_contract, dict) else None,
+        speaker_selection_contract=speaker_selection if isinstance(speaker_selection, dict) else None,
+        session_view=session_view if isinstance(session_view, dict) else None,
+    )
+    response_policy["narrative_authority"] = narrative_authority_contract
+    response_policy["forbid_unjustified_narrative_authority"] = True
+
+    prompt_debug_anchor["narrative_authority"] = {
+        "enabled": narrative_authority_contract.get("enabled"),
+        "authoritative_outcome_available": narrative_authority_contract.get("authoritative_outcome_available"),
+        "success_state_available": narrative_authority_contract.get("success_state_available"),
+        "mechanical_result_available": narrative_authority_contract.get("mechanical_result_available"),
+        "forbid_unresolved_outcome_assertions": narrative_authority_contract.get(
+            "forbid_unresolved_outcome_assertions"
+        ),
+        "forbid_hidden_fact_assertions": narrative_authority_contract.get("forbid_hidden_fact_assertions"),
+        "forbid_npc_intent_assertions_without_basis": narrative_authority_contract.get(
+            "forbid_npc_intent_assertions_without_basis"
+        ),
+        "preferred_deferral_order": list(narrative_authority_contract.get("preferred_deferral_order") or []),
+    }
+
+    _narrative_authority_instr = [
+        "NARRATIVE AUTHORITY (POLICY): Obey response_policy.narrative_authority for assertion boundaries; deterministic enforcement is authoritative. "
+        "Do not assert unresolved outcomes as settled fact. "
+        "Do not assert hidden causes or hidden truths as confirmed without basis in published visible/engine state. "
+        "Do not assert NPC motives or intentions as fact without explicit basis. "
+        "When certainty is unavailable, defer via a roll/check request, bounded uncertainty, or conditional/branch framing. "
+        "Observable visible cues are allowed; omniscient conclusions are not.",
+    ]
+    instructions = list(instructions) + _narrative_authority_instr
 
     payload: Dict[str, Any] = {
         'instructions': instructions,

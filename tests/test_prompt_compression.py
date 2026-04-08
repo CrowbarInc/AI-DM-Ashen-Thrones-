@@ -702,6 +702,7 @@ def test_prompt_context_exposes_rule_priority_hierarchy():
         "ANSWER THE PLAYER",
         "DO NOT CONTRADICT AUTHORITATIVE STATE",
         "DO NOT LEAK HIDDEN FACTS / SECRETS",
+        "DO NOT ASSERT UNRESOLVED OUTCOMES, HIDDEN TRUTHS, OR NPC INTENT AS SETTLED FACT",
         "IF FULL CERTAINTY IS UNAVAILABLE, GIVE A BOUNDED PARTIAL ANSWER",
         "WHEN THE PLAYER PRESSES THE SAME TOPIC AGAIN, ADD NET-NEW VALUE RATHER THAN RESTATING",
         "MAINTAIN DIEGETIC VOICE (no validator/system voice)",
@@ -712,6 +713,7 @@ def test_prompt_context_exposes_rule_priority_hierarchy():
     assert rd.get("enabled") is False
     assert rd.get("trigger_source") == "none"
     assert RULE_PRIORITY_COMPACT_INSTRUCTION in instructions
+    assert "avoid unjustified certainty" in instructions.lower()
     assert "response_policy.rule_priority_order" in instructions
     assert NO_VALIDATOR_VOICE_RULE in instructions
     assert policy["no_validator_voice"]["enabled"] is True

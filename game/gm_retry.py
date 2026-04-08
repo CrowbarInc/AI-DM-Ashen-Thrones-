@@ -646,6 +646,43 @@ def apply_deterministic_retry_fallback(
         world if isinstance(world, dict) else None,
         scene_id,
     )
+    res_open = resolution if isinstance(resolution, dict) else None
+    soc_open = (
+        res_open.get("social")
+        if isinstance(res_open, dict) and isinstance(res_open.get("social"), dict)
+        else {}
+    )
+    if isinstance(soc_open, dict) and soc_open.get("open_social_solicitation"):
+        from game.social_exchange_emission import (
+            build_open_social_solicitation_recovery,
+            _merge_open_social_recovery_emission_debug,
+        )
+
+        rec_fb = build_open_social_solicitation_recovery(
+            resolution=res_open,
+            session=session if isinstance(session, dict) else None,
+            world=world if isinstance(world, dict) else None,
+            scene_id=scene_id,
+            scene_envelope=scene_envelope if isinstance(scene_envelope, dict) else None,
+            player_text=player_text,
+        )
+        if rec_fb.get("used") and isinstance(rec_fb.get("text"), str) and str(rec_fb.get("text") or "").strip():
+            out = dict(gm)
+            out["player_facing_text"] = _ensure_terminal_punctuation(str(rec_fb.get("text") or "").strip())
+            tags = out.get("tags") if isinstance(out.get("tags"), list) else []
+            tag_list = [str(t) for t in tags if isinstance(t, str)]
+            out["tags"] = tag_list + [
+                "question_retry_fallback",
+                "open_social_solicitation_recovery",
+                "open_social_recovery",
+            ]
+            dbg = out.get("debug_notes") if isinstance(out.get("debug_notes"), str) else ""
+            out["debug_notes"] = (
+                (dbg + " | " if dbg else "")
+                + f"retry_fallback:open_social_recovery:{rec_fb.get('mode')}|retry_fallback:suppressed:uncertainty_pool"
+            )
+            _merge_open_social_recovery_emission_debug(out, rec_fb)
+            return out
     if strict_route and isinstance(eff_res, dict):
         return _gm_binding().apply_social_exchange_retry_fallback_gm(
             out,

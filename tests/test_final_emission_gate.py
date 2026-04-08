@@ -7,6 +7,7 @@ import game.final_emission_gate as feg
 import game.scene_state_anchoring as ssa
 from game.defaults import default_session, default_world
 from game.final_emission_gate import apply_final_emission_gate, get_speaker_selection_contract
+from game.narrative_authority import build_narrative_authority_contract
 from game.interaction_context import rebuild_active_scene_entities, set_social_target
 from game.social_exchange_emission import effective_strict_social_resolution_for_emission
 from game.storage import get_scene_runtime
@@ -869,3 +870,221 @@ def test_strict_and_non_strict_repair_sync_metadata():
     feg._merge_scene_state_anchor_meta(merged, layer_meta)
     assert merged.get("scene_state_anchor_repaired") is True
     assert merged.get("scene_state_anchor_repair_mode") == "location_rebind"
+
+
+# --- Narrative authority (Objective #9 Block 3 contract resolution + strict-social slice) ---------
+
+
+def _na_contract_for_resolution(resolution: dict) -> dict:
+    return build_narrative_authority_contract(
+        resolution=resolution,
+        narration_visibility={},
+        scene_state_anchor_contract=None,
+        speaker_selection_contract=None,
+        session_view=None,
+    )
+
+
+def _response_type_debug(*, candidate_ok: bool | None = True) -> dict:
+    return {
+        "response_type_required": None,
+        "response_type_contract_source": None,
+        "response_type_candidate_ok": candidate_ok,
+        "response_type_repair_used": False,
+        "response_type_repair_kind": None,
+        "response_type_rejection_reasons": [],
+        "non_hostile_escalation_blocked": False,
+    }
+
+
+def test_resolve_narrative_authority_full_contract_from_response_policy():
+    res = {"kind": "observe", "prompt": "I listen."}
+    na = _na_contract_for_resolution(res)
+    gm = {"response_policy": {"narrative_authority": na}}
+    full = feg._resolve_narrative_authority_contract(gm)
+    assert full is na
+    assert feg._is_shipped_full_narrative_authority_contract(full) is True
+
+
+def test_resolve_narrative_authority_slim_prompt_debug_is_not_full_contract():
+    slim = {"enabled": True, "authoritative_outcome_available": False}
+    gm = {"prompt_debug": {"narrative_authority": slim}}
+    assert feg._is_shipped_full_narrative_authority_contract(slim) is False
+    assert feg._resolve_narrative_authority_contract(gm) is None
+
+
+def test_resolve_narrative_authority_full_contract_from_narration_payload():
+    res = {"kind": "observe", "prompt": "I listen."}
+    na = _na_contract_for_resolution(res)
+    gm = {"narration_payload": {"narrative_authority": na}}
+    assert feg._resolve_narrative_authority_contract(gm) is na
+
+
+def test_resolve_narrative_authority_full_contract_from_prompt_payload():
+    res = {"kind": "observe", "prompt": "I listen."}
+    na = _na_contract_for_resolution(res)
+    gm = {"prompt_payload": {"narrative_authority": na}}
+    assert feg._resolve_narrative_authority_contract(gm) is na
+
+
+def test_resolve_narrative_authority_full_contract_from_trace_response_policy():
+    res = {"kind": "observe", "prompt": "I listen."}
+    na = _na_contract_for_resolution(res)
+    gm = {"trace": {"response_policy": {"narrative_authority": na}}}
+    assert feg._resolve_narrative_authority_contract(gm) is na
+
+
+def test_resolve_narrative_authority_full_contract_from_narration_payload_mirror_key():
+    res = {"kind": "observe", "prompt": "I listen."}
+    na = _na_contract_for_resolution(res)
+    gm = {"_narration_payload": {"response_policy": {"narrative_authority": na}}}
+    assert feg._resolve_narrative_authority_contract(gm) is na
+
+
+def test_skip_narrative_authority_when_forbid_unjustified_is_false():
+    res = {"kind": "observe", "prompt": "I listen."}
+    na = _na_contract_for_resolution(res)
+    gm = {
+        "response_policy": {
+            "forbid_unjustified_narrative_authority": False,
+            "narrative_authority": na,
+        }
+    }
+    text, meta, _ = feg._apply_narrative_authority_layer(
+        "The lock clicks open.",
+        gm_output=gm,
+        resolution=res,
+        strict_social_details=None,
+        response_type_debug=_response_type_debug(),
+        answer_completeness_meta={},
+        session={},
+        scene_id="s",
+    )
+    assert meta["narrative_authority_skip_reason"] == "narrative_authority_policy_disabled"
+    assert meta["narrative_authority_checked"] is False
+    assert text == "The lock clicks open."
+
+
+def test_skip_narrative_authority_when_contract_enabled_false():
+    res = {"kind": "observe", "prompt": "I listen."}
+    base = _na_contract_for_resolution(res)
+    na = {**base, "enabled": False}
+    gm = {"response_policy": {"narrative_authority": na}}
+    text, meta, _ = feg._apply_narrative_authority_layer(
+        "The lock clicks open.",
+        gm_output=gm,
+        resolution=res,
+        strict_social_details=None,
+        response_type_debug=_response_type_debug(),
+        answer_completeness_meta={},
+        session={},
+        scene_id="s",
+    )
+    assert meta["narrative_authority_skip_reason"] == "contract_disabled"
+    assert meta["narrative_authority_checked"] is False
+
+
+def test_skip_narrative_authority_when_response_type_candidate_not_ok():
+    res = {"kind": "observe", "prompt": "I listen."}
+    na = _na_contract_for_resolution(res)
+    gm = {"response_policy": {"narrative_authority": na}}
+    text, meta, _ = feg._apply_narrative_authority_layer(
+        "The lock clicks open.",
+        gm_output=gm,
+        resolution=res,
+        strict_social_details=None,
+        response_type_debug=_response_type_debug(candidate_ok=False),
+        answer_completeness_meta={},
+        session={},
+        scene_id="s",
+    )
+    assert meta["narrative_authority_skip_reason"] == "response_type_contract_failed"
+    assert meta["narrative_authority_checked"] is False
+
+
+def test_skip_narrative_authority_only_slim_prompt_debug_no_validation():
+    res = {"kind": "observe", "prompt": "I look."}
+    slim = {"enabled": True, "authoritative_outcome_available": False}
+    gm = {"prompt_debug": {"narrative_authority": slim}, "response_policy": {}}
+    text, meta, _ = feg._apply_narrative_authority_layer(
+        "The lock clicks open.",
+        gm_output=gm,
+        resolution=res,
+        strict_social_details=None,
+        response_type_debug=_response_type_debug(),
+        answer_completeness_meta={},
+        session={},
+        scene_id="s",
+    )
+    assert meta["narrative_authority_skip_reason"] == "no_full_contract"
+    assert meta["narrative_authority_checked"] is False
+    assert text == "The lock clicks open."
+
+
+def test_apply_na_with_full_contract_validates_normally():
+    res = {"kind": "observe", "prompt": "I look at the moss."}
+    na = _na_contract_for_resolution(res)
+    gm = {"response_policy": {"narrative_authority": na}}
+    text, meta, _ = feg._apply_narrative_authority_layer(
+        "Rain brightens the moss; nothing is decided yet.",
+        gm_output=gm,
+        resolution=res,
+        strict_social_details=None,
+        response_type_debug=_response_type_debug(),
+        answer_completeness_meta={},
+        session={},
+        scene_id="s",
+    )
+    assert meta["narrative_authority_skip_reason"] is None
+    assert meta["narrative_authority_checked"] is True
+    assert meta["narrative_authority_failed"] is False
+    assert text == "Rain brightens the moss; nothing is decided yet."
+
+
+def test_strict_social_gate_repairs_motive_overclaim_and_keeps_speaker(monkeypatch):
+    """Slice: strict-social path runs NA before speaker enforcement; repair preserves NPC line."""
+    session, world, sid, resolution = _runner_strict_bundle()
+    eff, route, _ = effective_strict_social_resolution_for_emission(resolution, session, world, sid)
+    assert route is True
+
+    na = _na_contract_for_resolution(eff if isinstance(eff, dict) else resolution)
+    # Newline so intent lives in its own sentence (quoted periods are masked and can
+    # prevent splitting; one merged sentence would replace the whole NPC line on repair).
+    bad = (
+        'Tavern Runner says, "No names yet—only rumors."\n\n'
+        "He plans to stall you until the watch arrives."
+    )
+
+    stub_details = {
+        "used_internal_fallback": False,
+        "final_emitted_source": "test_stub",
+        "rejection_reasons": [],
+        "deterministic_attempted": False,
+        "deterministic_passed": False,
+        "fallback_pool": "none",
+        "fallback_kind": "none",
+        "route_illegal_intercepted": False,
+    }
+
+    def fake_build(_candidate_text, *, resolution, tags, session, scene_id, world):
+        return bad, dict(stub_details)
+
+    monkeypatch.setattr(feg, "build_final_strict_social_response", fake_build)
+
+    out = apply_final_emission_gate(
+        {
+            "player_facing_text": bad,
+            "tags": [],
+            "response_policy": {"narrative_authority": na},
+        },
+        resolution=resolution,
+        session=session,
+        scene_id=sid,
+        world=world,
+    )
+    text = out.get("player_facing_text") or ""
+    meta = out.get("_final_emission_meta") or {}
+    assert meta.get("narrative_authority_repaired") is True
+    assert "plans to stall" not in text.lower()
+    assert "Tavern Runner" in text
+    assert meta.get("speaker_contract_enforcement_reason") == "speaker_contract_match"

@@ -551,6 +551,157 @@ def _person_candidate_ids(
     )
 
 
+def _player_character_coref_aliases(session: Dict[str, Any] | None) -> List[str]:
+    if not isinstance(session, dict):
+        return []
+    raw = str(session.get("character_name") or "").strip()
+    if not raw:
+        return []
+    nn = _normalize_visibility_text(raw)
+    if not nn:
+        return []
+    aliases = [nn]
+    parts = nn.split()
+    if len(parts) > 1:
+        first = parts[0]
+        if first and first not in aliases:
+            aliases.append(first)
+    return _dedupe_preserve_order(aliases)
+
+
+def _resolve_visible_player_entity_id(session: Dict[str, Any] | None, contract: Dict[str, Any]) -> str:
+    """Visible roster entity id whose alias matches session character_name, else ''."""
+    aliases = _player_character_coref_aliases(session)
+    if not aliases:
+        return ""
+    alias_map = contract.get("visible_entity_aliases") if isinstance(contract.get("visible_entity_aliases"), dict) else {}
+    visible_ids = [
+        str(raw).strip()
+        for raw in (contract.get("visible_entity_ids") or [])
+        if isinstance(raw, str) and str(raw).strip()
+    ]
+    for eid in visible_ids:
+        raw_list = alias_map.get(eid) if isinstance(alias_map.get(eid), list) else []
+        for raw in raw_list:
+            if not isinstance(raw, str):
+                continue
+            an = _normalize_visibility_text(raw)
+            if an and an in aliases:
+                return eid
+    return ""
+
+
+def _session_constrained_player_pronoun_tokens(session: Dict[str, Any] | None) -> Optional[Set[str]]:
+    """Optional explicit allow-list of lowercase pronoun tokens for the PC; None = unconstrained."""
+    if not isinstance(session, dict):
+        return None
+    raw = session.get("player_character_pronouns")
+    if raw is None:
+        raw = session.get("character_pronouns")
+    if not isinstance(raw, str) or not raw.strip():
+        return None
+    low = raw.strip().lower()
+    if low in {"he", "him", "his", "masculine", "m", "male", "man"}:
+        return set(_SINGULAR_PERSON_PRONOUNS)
+    if low in {"she", "her", "hers", "feminine", "f", "female", "woman"}:
+        return {"she", "her", "hers", "herself"}
+    if low in {"they", "them", "their", "nonbinary", "nb", "enby"}:
+        return set(_SINGULAR_THEY_PRONOUNS)
+    return None
+
+
+def _pronoun_token_allowed_for_player_presentation(pronoun_token: str, session: Dict[str, Any] | None) -> bool:
+    lowered = str(pronoun_token or "").strip().lower()
+    allowed = _session_constrained_player_pronoun_tokens(session)
+    if allowed is None:
+        return lowered in _SINGULAR_PERSON_PRONOUNS or lowered in _SINGULAR_THEY_PRONOUNS
+    return lowered in allowed
+
+
+def _last_pc_alias_end_before_pronoun(
+    *,
+    normalized_text: str,
+    window_start: int,
+    pronoun_start: int,
+    aliases: List[str],
+) -> Optional[int]:
+    best: Optional[int] = None
+    for alias in aliases:
+        if not alias:
+            continue
+        for match in re.finditer(rf"(?<!\w){re.escape(alias)}(?!\w)", normalized_text):
+            start = int(match.start())
+            end = int(match.end())
+            if start < window_start or end > pronoun_start:
+                continue
+            if best is None or end > best:
+                best = end
+    return best
+
+
+def _competing_person_mention_strictly_between(
+    sentence_mentions: List[Dict[str, Any]],
+    *,
+    candidates_by_id: Dict[str, Dict[str, Any]],
+    pc_alias_end: int,
+    pronoun_start: int,
+    player_entity_id: str,
+) -> bool:
+    """True if a person-like explicit mention starts after the PC alias span and before the pronoun."""
+    for m in sentence_mentions:
+        start = int(m.get("offset", -1))
+        if start <= pc_alias_end or start >= pronoun_start:
+            continue
+        if m.get("is_ambiguous") is True:
+            return True
+        eid = str(m.get("entity_id") or "").strip()
+        if player_entity_id and eid == player_entity_id:
+            continue
+        if _entity_reference_class(str((candidates_by_id.get(eid) or {}).get("entity_kind") or "")) == "person":
+            return True
+    return False
+
+
+def _is_player_character_local_pronoun_reference(
+    *,
+    normalized_text: str,
+    sentence_start: int,
+    pronoun_start: int,
+    pronoun_token: str,
+    session: Dict[str, Any] | None,
+    contract: Dict[str, Any],
+    candidates_by_id: Dict[str, Dict[str, Any]],
+    sentence_mentions: List[Dict[str, Any]],
+) -> bool:
+    """Narrow safe harbor: same-sentence PC name before pronoun, no competing person between, pronoun OK."""
+    pclass = _referential_pronoun_class(pronoun_token)
+    if pclass not in {"singular_person", "singular_they"}:
+        return False
+    if not _pronoun_token_allowed_for_player_presentation(pronoun_token, session):
+        return False
+    aliases = _player_character_coref_aliases(session)
+    if not aliases:
+        return False
+    pc_end = _last_pc_alias_end_before_pronoun(
+        normalized_text=normalized_text,
+        window_start=sentence_start,
+        pronoun_start=pronoun_start,
+        aliases=aliases,
+    )
+    if pc_end is None:
+        return False
+    player_eid = _resolve_visible_player_entity_id(session, contract)
+    if _competing_person_mention_strictly_between(
+        sentence_mentions,
+        candidates_by_id=candidates_by_id,
+        pc_alias_end=pc_end,
+        pronoun_start=pronoun_start,
+        player_entity_id=player_eid,
+    ):
+        return False
+    return True
+
+
 def _candidate_display_labels(
     candidate_entity_ids: List[str],
     candidates_by_id: Dict[str, Dict[str, Any]],
@@ -776,6 +927,7 @@ def validate_player_facing_referential_clarity(
         for candidate in referential_candidates
     ]
     violations: List[Dict[str, Any]] = []
+    player_coref_safe_harbor_tokens: List[str] = []
     previous_sentence_entity_ids: List[str] = []
     previous_sentence_nonperson_labels: List[str] = []
     previous_single_referent: Optional[str] = None
@@ -887,6 +1039,18 @@ def validate_player_facing_referential_clarity(
                     candidate_entity_ids = list(local_candidate_ids)
                 else:
                     violation_kind = "ambiguous_entity_reference"
+                if violation_kind == "ambiguous_entity_reference" and _is_player_character_local_pronoun_reference(
+                    normalized_text=normalized_text,
+                    sentence_start=int(sentence.get("start", 0)),
+                    pronoun_start=pronoun_offset,
+                    pronoun_token=token,
+                    session=session,
+                    contract=contract,
+                    candidates_by_id=candidates_by_id,
+                    sentence_mentions=sentence_mentions,
+                ):
+                    violation_kind = None
+                    player_coref_safe_harbor_tokens.append(token)
             elif pronoun_class == "neuter":
                 if len(local_nonperson_candidate_labels) > 1:
                     violation_kind = "ambiguous_entity_reference"
@@ -926,6 +1090,8 @@ def validate_player_facing_referential_clarity(
         "violations": violations,
         "checked_entities": checked_entities,
         "explicit_mentions": explicit_mentions,
+        "referential_clarity_player_coref_safe_harbor_used": bool(player_coref_safe_harbor_tokens),
+        "referential_clarity_player_coref_safe_harbor_tokens": list(player_coref_safe_harbor_tokens),
     }
 
 
