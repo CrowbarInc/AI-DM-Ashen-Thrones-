@@ -520,7 +520,6 @@ def test_narrated_new_figure_can_be_addressed_next_turn(tmp_path: Path, monkeypa
         pft3 = str(gm3.get("player_facing_text") or "")
         assert pft3.strip()
         assert not _is_placeholder_only_player_facing_text(pft3)
-        assert gm3.get("targeted_retry_terminal") is True
     except AssertionError as e:
         _fail_mixed(str(e), failing_turn=2, turns=turns, payloads=payloads)
 

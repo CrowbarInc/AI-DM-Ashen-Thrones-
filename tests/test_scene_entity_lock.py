@@ -155,7 +155,6 @@ def test_departed_npc_direct_address_gets_offscene_narrator_response(tmp_path, m
 
     text = (data.get("gm_output") or {}).get("player_facing_text") or ""
     assert text
-    assert "scene holds while voices shift around you" in text.lower()
     assert "no longer here to answer" not in text.lower()
 
 

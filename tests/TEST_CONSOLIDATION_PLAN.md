@@ -27,7 +27,13 @@
 
 **Validation:** `pytest --collect-only -q` after doc edits.
 
-**Block 2 applied (2026-04-03):** In `test_prompt_and_guard.py`, the procedural branch of `test_uncertainty_source_modes_render_distinct_voice_and_shape` now asserts `source` / `category` plus a short render smoke (length + terminal punctuation) instead of re-locking procedural fallback phrases owned by `test_output_sanitizer.py`. Validator enforcement tests use `detect_validator_voice(...) == []` plus tags (and diegetic preservation where relevant) instead of duplicating substring legality with `_assert_bounded_uncertainty` / explicit “as an AI” checks. One clarifying comment added on the adjudication procedural sanitizer test.
+**Block 2 applied (2026-04-09):** In `test_prompt_and_guard.py`, the procedural branch of `test_uncertainty_source_modes_render_distinct_voice_and_shape` asserts `source` / `category` plus a short render smoke (length + terminal punctuation) instead of re-locking procedural fallback phrases owned by `test_output_sanitizer.py`. Validator enforcement tests use `detect_validator_voice(...) == []` plus tags (and diegetic preservation where relevant) instead of duplicating substring legality with `_assert_bounded_uncertainty` / explicit “as an AI” checks. `test_social_exchange_uncertainty_stays_npc_grounded_on_repeated_questions` dropped the redundant ban on `"nothing in the scene points to a clear answer yet"` (canonical post-GM phrase ban lives in `test_output_sanitizer.py`). One clarifying comment added on the adjudication procedural sanitizer test.
+
+**Adjacent low-risk overlap trims (2026-04-09):**
+
+- `tests/test_social.py`: generic-addressing “smoke” now avoids locking the exact `source` / `target_source` enum when the **canonical target id** is correct (vocative vs generic-role precedence is owned by `tests/test_social_target_authority_regressions.py`).
+- `tests/test_scene_entity_lock.py`: offscene-npc chat smoke no longer hard-locks the global visibility fallback sentence (canonical phrase contract lives in emission-focused suites); it still asserts **no GPT call** (via monkeypatch), offscene targeting flags, and non-refusal narrator output.
+- `tests/test_mixed_state_recovery_regressions.py`: removed the duplicate `targeted_retry_terminal` expectation from an emergent-actor continuity regression; retry terminal metadata is owned by the retry/repair regression cluster.
 
 **Completed — routing / turn-pipeline cluster:** Restored `test_dialogue_routing_lock.py` as the home for the pure `choose_interaction_route` / dialogue-lock table (`test_choose_interaction_route_dialogue_lock_pure_contract`); removed that duplicate from `test_turn_pipeline_shared.py` and trimmed redundant `kind != adjudication_query` / GM substring checks where stronger assertions already held. `test_directed_social_routing.py` chat smoke cases dropped the redundant adjudication negation when `kind == "question"` already applied.
 

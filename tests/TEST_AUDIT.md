@@ -279,7 +279,7 @@ Concrete “source of truth” examples for recurring themes (prefer extending t
 3. **`test_output_sanitizer.py` vs `test_prompt_and_guard.py` (validator / guard / prose)**  
    - **Overlap:** Legality, validator voice, and sanitization strings.  
    - **Canonical:** `test_output_sanitizer.py` for **emit-time sanitizer**; `test_prompt_and_guard.py` for **prompt construction + guard contracts**.  
-   - **Merge/weaken:** When a failure is “output shape after GM,” add sanitizer tests; when “messages to model,” add prompt/guard tests.
+   - **Merge/weaken:** When a failure is “output shape after GM,” add sanitizer tests; when “messages to model,” add prompt/guard tests. Prefer trimming phrase-level bans in `test_prompt_and_guard.py` when the same phrase is already canonically locked (and more strongly covered) in `test_output_sanitizer.py`.
 
 4. **`test_social.py` vs `test_social_exchange_emission.py` vs `test_social_escalation.py`**  
    - **Overlap:** Broad social behavior, escalation, and emission formatting share vocabulary.  

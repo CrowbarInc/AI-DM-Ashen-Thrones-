@@ -408,7 +408,6 @@ def test_social_exchange_uncertainty_stays_npc_grounded_on_repeated_questions():
         assert uncertainty["source"] == "npc_ignorance"
         assert "captain veyra" in low
         assert '"' in text
-        assert "nothing in the scene points to a clear answer yet" not in low
 
 
 def test_uncertainty_questions_in_same_scene_render_different_contextual_answers():
