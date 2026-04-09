@@ -53,6 +53,13 @@ from game.social_exchange_emission import (
 from game.storage import get_scene_runtime
 from game.leads import get_lead, normalize_lead
 from game.anti_railroading import anti_railroading_repair_hints, build_anti_railroading_contract, validate_anti_railroading
+from game.context_separation import context_separation_repair_hints, validate_context_separation
+from game.player_facing_narration_purity import (
+    minimal_repair_player_facing_narration_purity,
+    player_facing_narration_purity_repair_hints,
+    validate_player_facing_narration_purity,
+)
+from game.diegetic_fallback_narration import render_global_scene_anchor_fallback
 from game.scene_state_anchoring import validate_scene_state_anchoring
 from game.tone_escalation import tone_escalation_repair_hints, validate_tone_escalation
 
@@ -91,6 +98,13 @@ def _normalize_terminal_punctuation(text: str) -> str:
     if not _has_terminal_punctuation(clean):
         clean += "."
     return clean
+
+
+def _global_narrative_fallback_stock_line(scene: Dict[str, Any] | None, *, scene_id: str) -> str:
+    alt = render_global_scene_anchor_fallback(scene, seed_key=scene_id or "fallback")
+    if isinstance(alt, str) and _normalize_text(alt):
+        return _normalize_terminal_punctuation(alt)
+    return "For a breath, the scene holds while voices shift around you."
 
 
 def _has_terminal_punctuation(text: str) -> bool:
@@ -841,6 +855,17 @@ def _skip_answer_completeness_layer(
     """Return skip reason, or None when the layer should run."""
     if response_type_debug.get("response_type_candidate_ok") is False:
         return "response_type_contract_failed"
+    if isinstance(gm_output, dict):
+        tags_ac = gm_output.get("tags") if isinstance(gm_output.get("tags"), list) else []
+        tl = [str(t) for t in tags_ac if isinstance(t, str)]
+        if "question_retry_fallback" in tl and (
+            "known_fact_guard" in tl
+            or "social_answer_retry" in tl
+        ):
+            dbg_ac = gm_output.get("debug_notes") if isinstance(gm_output.get("debug_notes"), str) else ""
+            if "retry_fallback_chosen:nonsocial_uncertainty_pool_after_block1_social_out_of_scope" in dbg_ac:
+                return None
+            return "deterministic_known_fact_retry_fallback"
     if not strict_social_details:
         return None
     if strict_social_details.get("used_internal_fallback"):
@@ -1295,7 +1320,12 @@ def _gm_probe_for_answer_pressure_contracts(
     gm_output: Dict[str, Any],
     session: Dict[str, Any] | None,
 ) -> Dict[str, Any]:
-    """Merge ``session["last_turn_response_policy"]`` when ``gm_output`` lacks ``response_policy`` (API stores policy on session)."""
+    """Merge ``session["last_turn_response_policy"]`` when ``gm_output`` lacks a non-empty ``response_policy``.
+
+    The narration pipeline stores the shipped bundle on the session; retry helpers also receive
+    ``response_policy`` explicitly. :func:`apply_final_emission_gate` uses this so layered contract
+    resolution (context separation, tone escalation, etc.) matches the shipped bundle on fallback paths.
+    """
     pol = gm_output.get("response_policy") if isinstance(gm_output.get("response_policy"), dict) else None
     if isinstance(pol, dict) and pol:
         return gm_output
@@ -3182,6 +3212,1011 @@ def _apply_anti_railroading_layer(
         extra.append("anti_railroading_unsatisfied_after_repair")
     meta["anti_railroading_failed"] = True
     meta["anti_railroading_ok"] = False
+    return text, meta, extra
+
+
+# --- Context separation (shipped context_separation_contract + validate_context_separation) -----
+
+
+def _is_shipped_full_context_separation_contract(candidate: Any) -> bool:
+    """True for ``build_context_separation_contract`` payloads, not ad-hoc dicts."""
+    if not isinstance(candidate, dict):
+        return False
+    if isinstance(candidate.get("debug_inputs"), dict) and "forbid_topic_hijack" in candidate:
+        return True
+    if "forbid_topic_hijack" in candidate and "max_pressure_sentences_without_player_prompt" in candidate:
+        return True
+    return False
+
+
+def _coerce_context_separation_contract_dict(maybe: Any) -> Dict[str, Any] | None:
+    if _is_shipped_full_context_separation_contract(maybe):
+        return maybe
+    return None
+
+
+def _resolve_context_separation_contract(
+    gm_output: Dict[str, Any] | None,
+) -> tuple[Dict[str, Any] | None, str | None]:
+    """Read the shipped contract from *gm_output* / narration / policy mirrors (no rebuild)."""
+    if not isinstance(gm_output, dict):
+        return None, None
+    direct = gm_output.get("context_separation_contract")
+    if isinstance(direct, dict):
+        hit = _coerce_context_separation_contract_dict(direct)
+        if hit:
+            return hit, "context_separation_contract"
+    pol = gm_output.get("response_policy")
+    if isinstance(pol, dict):
+        for key in ("context_separation_contract", "context_separation"):
+            hit = _coerce_context_separation_contract_dict(pol.get(key))
+            if hit:
+                return hit, "response_policy"
+    pc = gm_output.get("prompt_context")
+    if isinstance(pc, dict):
+        hit = _coerce_context_separation_contract_dict(pc.get("context_separation_contract"))
+        if hit:
+            return hit, "prompt_context"
+        pol2 = pc.get("response_policy")
+        if isinstance(pol2, dict):
+            for key in ("context_separation_contract", "context_separation"):
+                hit = _coerce_context_separation_contract_dict(pol2.get(key))
+                if hit:
+                    return hit, "prompt_context.response_policy"
+    for key in ("narration_payload", "prompt_payload", "_narration_payload"):
+        pl = gm_output.get(key)
+        if not isinstance(pl, dict):
+            continue
+        for ck in ("context_separation_contract", "context_separation"):
+            hit = _coerce_context_separation_contract_dict(pl.get(ck))
+            if hit:
+                return hit, f"{key}"
+        rp = pl.get("response_policy")
+        if isinstance(rp, dict):
+            for ck in ("context_separation_contract", "context_separation"):
+                hit = _coerce_context_separation_contract_dict(rp.get(ck))
+                if hit:
+                    return hit, f"{key}.response_policy"
+    md = gm_output.get("metadata")
+    if isinstance(md, dict):
+        hit = _coerce_context_separation_contract_dict(md.get("context_separation_contract"))
+        if hit:
+            return hit, "metadata"
+        rp = md.get("response_policy")
+        if isinstance(rp, dict):
+            for ck in ("context_separation_contract", "context_separation"):
+                hit = _coerce_context_separation_contract_dict(rp.get(ck))
+                if hit:
+                    return hit, "metadata.response_policy"
+    tr = gm_output.get("trace")
+    if isinstance(tr, dict):
+        hit = _coerce_context_separation_contract_dict(tr.get("context_separation_contract"))
+        if hit:
+            return hit, "trace"
+        rp = tr.get("response_policy")
+        if isinstance(rp, dict):
+            for ck in ("context_separation_contract", "context_separation"):
+                hit = _coerce_context_separation_contract_dict(rp.get(ck))
+                if hit:
+                    return hit, "trace.response_policy"
+    return None, None
+
+
+def _default_context_separation_meta() -> Dict[str, Any]:
+    return {
+        "context_separation_contract_resolution_source": None,
+        "context_separation_skip_reason": None,
+        "context_separation_checked": False,
+        "context_separation_ok": True,
+        "context_separation_failed": False,
+        "context_separation_failure_reasons": [],
+        "context_separation_assertion_flags": {},
+        "context_separation_repair_hints": [],
+        "context_separation_repaired": False,
+        "context_separation_repair_mode": None,
+        "context_separation_debug_reason_marker": None,
+        "context_separation_passed_after_repair": None,
+    }
+
+
+def _merge_context_separation_meta(meta: Dict[str, Any], cs_dbg: Dict[str, Any]) -> None:
+    if not cs_dbg:
+        return
+    keys = (
+        "context_separation_contract_resolution_source",
+        "context_separation_skip_reason",
+        "context_separation_checked",
+        "context_separation_ok",
+        "context_separation_failed",
+        "context_separation_failure_reasons",
+        "context_separation_assertion_flags",
+        "context_separation_repair_hints",
+        "context_separation_repaired",
+        "context_separation_repair_mode",
+        "context_separation_debug_reason_marker",
+        "context_separation_passed_after_repair",
+    )
+    for k in keys:
+        if k in cs_dbg:
+            meta[k] = cs_dbg[k]
+
+
+def _merge_context_separation_into_emission_debug(
+    out: Dict[str, Any],
+    resolution: Dict[str, Any] | None,
+    eff_resolution: Dict[str, Any] | None,
+    *,
+    gate_meta: Dict[str, Any],
+) -> None:
+    flat: Dict[str, Any] = {}
+    for k, v in gate_meta.items():
+        if not str(k).startswith("context_separation_"):
+            continue
+        flat[k] = v
+    nested: Dict[str, Any] = {
+        "validation": {
+            "checked": bool(gate_meta.get("context_separation_checked")),
+            "passed": bool(gate_meta.get("context_separation_ok")),
+        },
+        "failure_reasons": list(gate_meta.get("context_separation_failure_reasons") or []),
+        "assertion_flags": dict(gate_meta.get("context_separation_assertion_flags") or {}),
+        "repair_hints": list(gate_meta.get("context_separation_repair_hints") or []),
+    }
+    sr = gate_meta.get("context_separation_skip_reason")
+    if sr:
+        nested["skip_reason"] = sr
+    mr = gate_meta.get("context_separation_debug_reason_marker")
+    if mr:
+        nested["debug_reason_marker"] = mr
+
+    def _patch_em(em: Any) -> None:
+        if not isinstance(em, dict):
+            return
+        em["context_separation"] = nested
+        for fk, fv in flat.items():
+            em[fk] = fv
+
+    md_out = out.setdefault("metadata", {})
+    if isinstance(md_out, dict):
+        _patch_em(md_out.setdefault("emission_debug", {}))
+
+    if isinstance(resolution, dict):
+        md_r = resolution.setdefault("metadata", {})
+        if isinstance(md_r, dict):
+            _patch_em(md_r.setdefault("emission_debug", {}))
+
+    if eff_resolution is not None and isinstance(eff_resolution.get("metadata"), dict):
+        _patch_em(eff_resolution["metadata"].setdefault("emission_debug", {}))
+
+
+def _context_separation_debug_reason_marker(
+    before: str,
+    after: str,
+    *,
+    violations: Sequence[str],
+    repair_applied: bool,
+    passed_after: bool | None,
+) -> str:
+    vkeys = "|".join(str(x) for x in violations if isinstance(x, str) and str(x).strip()) or "none"
+    b = (before[:96] + "…") if len(before) > 96 else before
+    a = (after[:96] + "…") if len(after) > 96 else after
+    return (
+        f"cs_violations={vkeys};repair_applied={repair_applied};pass_after={passed_after};"
+        f"before_len={len(before)};after_len={len(after)};before_head={b!r};after_head={a!r}"
+    )
+
+
+def _repair_context_separation_narrow(
+    text: str,
+    contract: Mapping[str, Any],
+    *,
+    player_text: str,
+    resolution: Mapping[str, Any] | None,
+) -> tuple[str | None, str | None]:
+    """Drop lead sentences (pressure-heavy openers) and re-validate; no invented replacement lines."""
+    t = str(text or "")
+    modes: List[str] = []
+    for i in range(8):
+        v = validate_context_separation(
+            t,
+            contract,
+            player_text=player_text,
+            resolution=resolution if isinstance(resolution, Mapping) else None,
+        )
+        if v.get("passed") or not v.get("checked"):
+            if modes:
+                return t, "|".join(modes)
+            return None, None
+        masked = _mask_dialogue_spans(t)
+        sents = _split_sentences(masked, t)
+        if len(sents) <= 1:
+            return None, None
+        start, end, _s0 = sents[0]
+        t = _normalize_text_preserve_paragraphs((t[:start] + t[end:]).strip())
+        if not t.strip():
+            return None, None
+        modes.append(f"drop_lead_{i + 1}")
+    return None, None
+
+
+def _skip_context_separation_layer(
+    text: Any,
+    contract: Dict[str, Any] | None,
+    *,
+    response_type_debug: Dict[str, Any] | None,
+) -> str | None:
+    if response_type_debug is not None and response_type_debug.get("response_type_candidate_ok") is False:
+        return "response_type_contract_failed"
+    if not isinstance(contract, dict):
+        return "no_shipped_contract"
+    if not isinstance(text, str):
+        return "non_string_text"
+    if not str(text).strip():
+        return "empty_text"
+    return None
+
+
+def _apply_context_separation_layer(
+    text: str,
+    *,
+    gm_output: Dict[str, Any],
+    resolution: Dict[str, Any] | None,
+    session: Dict[str, Any] | None,
+    scene_id: str,
+    response_type_debug: Dict[str, Any] | None,
+    strict_social_details: Dict[str, Any] | None,
+) -> tuple[str, Dict[str, Any], List[str]]:
+    strict_social_path = strict_social_details is not None
+    meta = _default_context_separation_meta()
+    ctr, src = _resolve_context_separation_contract(gm_output if isinstance(gm_output, dict) else None)
+    meta["context_separation_contract_resolution_source"] = src
+
+    skip = _skip_context_separation_layer(text, ctr, response_type_debug=response_type_debug)
+    meta["context_separation_skip_reason"] = skip
+    if skip:
+        meta["context_separation_debug_reason_marker"] = f"skip={skip}"
+        return text, meta, []
+
+    assert ctr is not None
+    sid = str(scene_id or "").strip()
+    player_text = merged_player_prompt_for_gate(
+        resolution if isinstance(resolution, dict) else None,
+        session if isinstance(session, dict) else None,
+        sid,
+    )
+    if not str(player_text or "").strip():
+        player_text = _last_player_input(
+            resolution=resolution if isinstance(resolution, dict) else None,
+            session=session if isinstance(session, dict) else None,
+            scene_id=sid,
+        )
+    pt = str(player_text or "")
+
+    before = str(text or "")
+    v0 = validate_context_separation(
+        before,
+        ctr,
+        player_text=pt,
+        resolution=resolution if isinstance(resolution, Mapping) else None,
+    )
+    meta["context_separation_checked"] = bool(v0.get("checked"))
+    meta["context_separation_ok"] = bool(v0.get("passed"))
+    af0 = v0.get("assertion_flags")
+    meta["context_separation_assertion_flags"] = dict(af0) if isinstance(af0, dict) else {}
+    fails0 = [str(x) for x in (v0.get("failure_reasons") or []) if isinstance(x, str)]
+    meta["context_separation_failure_reasons"] = fails0
+    meta["context_separation_repair_hints"] = context_separation_repair_hints(fails0, contract=ctr)
+
+    if not v0.get("checked") or v0.get("passed"):
+        meta["context_separation_debug_reason_marker"] = _context_separation_debug_reason_marker(
+            before,
+            before,
+            violations=[],
+            repair_applied=False,
+            passed_after=None,
+        )
+        return text, meta, []
+
+    repaired, mode = _repair_context_separation_narrow(
+        before,
+        ctr,
+        player_text=pt,
+        resolution=resolution if isinstance(resolution, Mapping) else None,
+    )
+    if repaired:
+        v1 = validate_context_separation(
+            repaired,
+            ctr,
+            player_text=pt,
+            resolution=resolution if isinstance(resolution, Mapping) else None,
+        )
+        meta["context_separation_checked"] = bool(v1.get("checked"))
+        meta["context_separation_ok"] = bool(v1.get("passed"))
+        af1 = v1.get("assertion_flags")
+        meta["context_separation_assertion_flags"] = dict(af1) if isinstance(af1, dict) else {}
+        meta["context_separation_failure_reasons"] = [str(x) for x in (v1.get("failure_reasons") or []) if isinstance(x, str)]
+        passed_after = bool(v1.get("passed"))
+        meta["context_separation_passed_after_repair"] = passed_after
+        if v1.get("passed"):
+            meta["context_separation_repaired"] = True
+            meta["context_separation_repair_mode"] = mode
+            meta["context_separation_failed"] = False
+            meta["context_separation_debug_reason_marker"] = _context_separation_debug_reason_marker(
+                before,
+                repaired,
+                violations=fails0,
+                repair_applied=True,
+                passed_after=True,
+            )
+            return repaired, meta, []
+        meta["context_separation_failed"] = True
+        meta["context_separation_debug_reason_marker"] = _context_separation_debug_reason_marker(
+            before,
+            repaired,
+            violations=fails0,
+            repair_applied=True,
+            passed_after=False,
+        )
+    else:
+        meta["context_separation_failed"] = True
+        meta["context_separation_passed_after_repair"] = None
+        meta["context_separation_debug_reason_marker"] = _context_separation_debug_reason_marker(
+            before,
+            before,
+            violations=fails0,
+            repair_applied=False,
+            passed_after=False,
+        )
+
+    extra: List[str] = []
+    if not strict_social_path:
+        extra.append("context_separation_unsatisfied_after_repair")
+    meta["context_separation_ok"] = False
+    return text, meta, extra
+
+
+# --- Player-facing narration purity (shipped contract; before scene state anchor) ---------------
+
+_ASP_PRESSURE_LEX_RE = re.compile(
+    r"\b(?:tension|confrontation|crackdown|border\s+war|the\s+war\b|unrest|factions|politics|"
+    r"stakes|consequences|pressure|looms|mounts|swallows|brittle|tear\s+at|invasion|rumors?\s+outrun|"
+    r"everyone\s+on\s+edge|nothing\s+feels\s+clean|the\s+city\s+watches|choose\s+your\s+next)\b",
+    re.IGNORECASE,
+)
+_ASP_OBSERVE_PAYLOAD_RE = re.compile(
+    r"\b(?:see|hear|notice|spot|smell|taste|feel|watch|scan|survey|glimpse|make\s+out)\b",
+    re.IGNORECASE,
+)
+_ASP_SPATIAL_OR_EXISTENTIAL_RE = re.compile(
+    r"\b(?:there\s+is|there\s+are|ahead|behind|above|below|to\s+your\s+(?:left|right)|"
+    r"at\s+the|under\s+the|over\s+the|along\s+the)\b",
+    re.IGNORECASE,
+)
+_ASP_ARRIVAL_RE = re.compile(
+    r"\b(?:step|steps|arrive|arriving|enter|entering|cross|crossing|reach|reaching|pass|passing|emerge)\b",
+    re.IGNORECASE,
+)
+_ASP_SCENE_TEXTURE_RE = re.compile(
+    r"\b(?:rain|mud|cobble|torchlight|torch|smoke|arch|door|cart|boots|slate|roof|gutter|bell|hammer|iron)\b",
+    re.IGNORECASE,
+)
+_ASP_AMBIENT_STATE_RE = re.compile(
+    r"\b(?:silence|stillness|quiet|hush|calm|pause)\b",
+    re.IGNORECASE,
+)
+_ASP_INFORMATIVE_DETAIL_RE = re.compile(
+    r"\b(?:lead|leads|clue|clues|keeper|office|lighthouse|warehouse|checkpoint|register|captain|sergeant|"
+    r"customs|harbor|quay|stall|merchant|barracks|alley|roofline|bridge|fold|archive|priest|cellar)\b",
+    re.IGNORECASE,
+)
+
+_ANSWER_SHAPE_PRIMACY_RESOLUTION_KINDS = frozenset(
+    {
+        "observe",
+        "investigate",
+        "interact",
+        "travel",
+        "scene_transition",
+        "discover_clue",
+        "already_searched",
+        "search",
+        "scene_opening",
+    }
+)
+
+
+def _is_shipped_player_facing_narration_purity_contract(candidate: Any) -> bool:
+    if not isinstance(candidate, dict):
+        return False
+    if "forbid_scaffold_headers" in candidate and "diegetic_only" in candidate:
+        return True
+    dr = str(candidate.get("debug_reason") or "")
+    return "player_facing_narration_purity" in dr
+
+
+def _coerce_player_facing_narration_purity_contract(maybe: Any) -> Dict[str, Any] | None:
+    if _is_shipped_player_facing_narration_purity_contract(maybe):
+        return maybe
+    return None
+
+
+def _resolve_player_facing_narration_purity_contract(
+    gm_output: Dict[str, Any] | None,
+) -> tuple[Dict[str, Any] | None, str | None]:
+    """Read shipped narration-purity policy from gm_output mirrors (no rebuild)."""
+    if not isinstance(gm_output, dict):
+        return None, None
+    direct = gm_output.get("player_facing_narration_purity_contract")
+    if isinstance(direct, dict):
+        hit = _coerce_player_facing_narration_purity_contract(direct)
+        if hit:
+            return hit, "player_facing_narration_purity_contract"
+    pol = gm_output.get("response_policy")
+    if isinstance(pol, dict):
+        hit = _coerce_player_facing_narration_purity_contract(pol.get("player_facing_narration_purity"))
+        if hit:
+            return hit, "response_policy"
+    pc = gm_output.get("prompt_context")
+    if isinstance(pc, dict):
+        hit = _coerce_player_facing_narration_purity_contract(
+            pc.get("player_facing_narration_purity_contract")
+        )
+        if hit:
+            return hit, "prompt_context"
+        pol2 = pc.get("response_policy")
+        if isinstance(pol2, dict):
+            hit = _coerce_player_facing_narration_purity_contract(
+                pol2.get("player_facing_narration_purity")
+            )
+            if hit:
+                return hit, "prompt_context.response_policy"
+    for key in ("narration_payload", "prompt_payload", "_narration_payload"):
+        pl = gm_output.get(key)
+        if not isinstance(pl, dict):
+            continue
+        hit = _coerce_player_facing_narration_purity_contract(
+            pl.get("player_facing_narration_purity_contract")
+        )
+        if hit:
+            return hit, key
+        rp = pl.get("response_policy")
+        if isinstance(rp, dict):
+            hit = _coerce_player_facing_narration_purity_contract(
+                rp.get("player_facing_narration_purity")
+            )
+            if hit:
+                return hit, f"{key}.response_policy"
+    md = gm_output.get("metadata")
+    if isinstance(md, dict):
+        hit = _coerce_player_facing_narration_purity_contract(
+            md.get("player_facing_narration_purity_contract")
+        )
+        if hit:
+            return hit, "metadata"
+        rp = md.get("response_policy")
+        if isinstance(rp, dict):
+            hit = _coerce_player_facing_narration_purity_contract(
+                rp.get("player_facing_narration_purity")
+            )
+            if hit:
+                return hit, "metadata.response_policy"
+    tr = gm_output.get("trace")
+    if isinstance(tr, dict):
+        hit = _coerce_player_facing_narration_purity_contract(
+            tr.get("player_facing_narration_purity_contract")
+        )
+        if hit:
+            return hit, "trace"
+        rp = tr.get("response_policy")
+        if isinstance(rp, dict):
+            hit = _coerce_player_facing_narration_purity_contract(
+                rp.get("player_facing_narration_purity")
+            )
+            if hit:
+                return hit, "trace.response_policy"
+    return None, None
+
+
+def _default_player_facing_narration_purity_meta() -> Dict[str, Any]:
+    return {
+        "player_facing_narration_purity_contract_resolution_source": None,
+        "player_facing_narration_purity_skip_reason": None,
+        "player_facing_narration_purity_checked": False,
+        "player_facing_narration_purity_failed": False,
+        "player_facing_narration_purity_repaired": False,
+        "player_facing_narration_purity_repair_modes": [],
+        "player_facing_narration_purity_violation_keys": [],
+        "player_facing_narration_purity_repair_hints_used": [],
+        "player_facing_narration_purity_collapsed_to_diegetic_core": False,
+        "player_facing_narration_purity_preview_before": None,
+        "player_facing_narration_purity_preview_after": None,
+    }
+
+
+def _merge_player_facing_narration_purity_meta(meta: Dict[str, Any], dbg: Dict[str, Any]) -> None:
+    if not dbg:
+        return
+    for k, v in dbg.items():
+        if str(k).startswith("player_facing_narration_purity_"):
+            meta[k] = v
+
+
+def _merge_player_facing_narration_purity_into_emission_debug(
+    out: Dict[str, Any],
+    resolution: Dict[str, Any] | None,
+    eff_resolution: Dict[str, Any] | None,
+    *,
+    gate_meta: Dict[str, Any],
+) -> None:
+    flat: Dict[str, Any] = {}
+    for k, v in gate_meta.items():
+        if str(k).startswith("player_facing_narration_purity_"):
+            flat[k] = v
+    nested: Dict[str, Any] = {
+        "validation": {
+            "checked": bool(gate_meta.get("player_facing_narration_purity_checked")),
+            "passed": not bool(gate_meta.get("player_facing_narration_purity_failed")),
+        },
+        "violation_keys": list(gate_meta.get("player_facing_narration_purity_violation_keys") or []),
+        "repair_hints": list(gate_meta.get("player_facing_narration_purity_repair_hints_used") or []),
+        "repair_modes": list(gate_meta.get("player_facing_narration_purity_repair_modes") or []),
+    }
+    sr = gate_meta.get("player_facing_narration_purity_skip_reason")
+    if sr:
+        nested["skip_reason"] = sr
+    pb = gate_meta.get("player_facing_narration_purity_preview_before")
+    pa = gate_meta.get("player_facing_narration_purity_preview_after")
+    if pb is not None:
+        nested["preview_before"] = pb
+    if pa is not None:
+        nested["preview_after"] = pa
+
+    def _patch_em(em: Any) -> None:
+        if not isinstance(em, dict):
+            return
+        em["player_facing_narration_purity"] = nested
+        for fk, fv in flat.items():
+            em[fk] = fv
+
+    md_out = out.setdefault("metadata", {})
+    if isinstance(md_out, dict):
+        _patch_em(md_out.setdefault("emission_debug", {}))
+    if isinstance(resolution, dict):
+        md_r = resolution.setdefault("metadata", {})
+        if isinstance(md_r, dict):
+            _patch_em(md_r.setdefault("emission_debug", {}))
+    if eff_resolution is not None and isinstance(eff_resolution.get("metadata"), dict):
+        _patch_em(eff_resolution["metadata"].setdefault("emission_debug", {}))
+
+
+def _gate_text_preview(text: str, limit: int = 96) -> str:
+    t = str(text or "")
+    return (t[:limit] + "…") if len(t) > limit else t
+
+
+def _skip_player_facing_narration_purity_layer(
+    text: Any,
+    contract: Dict[str, Any] | None,
+    *,
+    response_type_debug: Dict[str, Any] | None,
+) -> str | None:
+    if response_type_debug is not None and response_type_debug.get("response_type_candidate_ok") is False:
+        return "response_type_contract_failed"
+    if not isinstance(contract, dict):
+        return "no_shipped_contract"
+    if not isinstance(text, str):
+        return "non_string_text"
+    if not str(text).strip():
+        return "empty_text"
+    return None
+
+
+def _apply_player_facing_narration_purity_layer(
+    text: str,
+    *,
+    gm_output: Dict[str, Any],
+    resolution: Dict[str, Any] | None,
+    response_type_debug: Dict[str, Any] | None,
+) -> tuple[str, Dict[str, Any], List[str]]:
+    meta = _default_player_facing_narration_purity_meta()
+    ctr, src = _resolve_player_facing_narration_purity_contract(
+        gm_output if isinstance(gm_output, dict) else None
+    )
+    meta["player_facing_narration_purity_contract_resolution_source"] = src
+    skip = _skip_player_facing_narration_purity_layer(text, ctr, response_type_debug=response_type_debug)
+    meta["player_facing_narration_purity_skip_reason"] = skip
+    if skip:
+        return text, meta, []
+
+    assert ctr is not None
+    before = str(text or "")
+    meta["player_facing_narration_purity_preview_before"] = _gate_text_preview(before)
+    v0 = validate_player_facing_narration_purity(
+        before,
+        ctr,
+        player_text="",
+        resolution=resolution if isinstance(resolution, Mapping) else None,
+    )
+    if not v0.get("checked"):
+        meta["player_facing_narration_purity_checked"] = False
+        meta["player_facing_narration_purity_failed"] = False
+        meta["player_facing_narration_purity_preview_after"] = _gate_text_preview(before)
+        return text, meta, []
+
+    meta["player_facing_narration_purity_checked"] = True
+    fails = [str(x) for x in (v0.get("failure_reasons") or []) if isinstance(x, str)]
+    meta["player_facing_narration_purity_violation_keys"] = list(dict.fromkeys(fails))
+    hints = player_facing_narration_purity_repair_hints(fails, contract=ctr)
+    meta["player_facing_narration_purity_repair_hints_used"] = hints
+
+    if v0.get("passed"):
+        meta["player_facing_narration_purity_failed"] = False
+        meta["player_facing_narration_purity_preview_after"] = _gate_text_preview(before)
+        return text, meta, []
+
+    repaired, rdbg = minimal_repair_player_facing_narration_purity(before, ctr)
+    modes = list(rdbg.get("modes") or [])
+    meta["player_facing_narration_purity_repair_modes"] = modes
+    if rdbg.get("repaired"):
+        meta["player_facing_narration_purity_repaired"] = True
+    meta["player_facing_narration_purity_collapsed_to_diegetic_core"] = bool(rdbg.get("collapsed_to_core"))
+
+    v1 = validate_player_facing_narration_purity(
+        repaired,
+        ctr,
+        resolution=resolution if isinstance(resolution, Mapping) else None,
+    )
+    meta["player_facing_narration_purity_preview_after"] = _gate_text_preview(repaired)
+    if v1.get("passed"):
+        meta["player_facing_narration_purity_failed"] = False
+        extra: List[str] = []
+        return repaired, meta, extra
+
+    meta["player_facing_narration_purity_failed"] = True
+    fails2 = [str(x) for x in (v1.get("failure_reasons") or []) if isinstance(x, str)]
+    meta["player_facing_narration_purity_violation_keys"] = list(dict.fromkeys(fails2))
+    meta["player_facing_narration_purity_repair_hints_used"] = player_facing_narration_purity_repair_hints(
+        fails2, contract=ctr
+    )
+    extra2: List[str] = []
+    extra2.append("player_facing_narration_purity_unrecoverable")
+    return repaired, meta, extra2
+
+
+def _default_answer_shape_primacy_meta() -> Dict[str, Any]:
+    return {
+        "answer_shape_primacy_skip_reason": None,
+        "answer_shape_primacy_checked": False,
+        "answer_shape_primacy_failed": False,
+        "answer_shape_primacy_repaired": False,
+        "answer_shape_primacy_repair_mode": None,
+        "answer_shape_primacy_failure_reasons": [],
+        "answer_shape_primacy_preview_before": None,
+        "answer_shape_primacy_preview_after": None,
+    }
+
+
+def _merge_answer_shape_primacy_meta(meta: Dict[str, Any], dbg: Dict[str, Any]) -> None:
+    if not dbg:
+        return
+    for k, v in dbg.items():
+        if str(k).startswith("answer_shape_primacy_"):
+            meta[k] = v
+
+
+def _merge_answer_shape_primacy_into_emission_debug(
+    out: Dict[str, Any],
+    resolution: Dict[str, Any] | None,
+    eff_resolution: Dict[str, Any] | None,
+    *,
+    gate_meta: Dict[str, Any],
+) -> None:
+    flat: Dict[str, Any] = {}
+    for k, v in gate_meta.items():
+        if str(k).startswith("answer_shape_primacy_"):
+            flat[k] = v
+    nested: Dict[str, Any] = {
+        "checked": bool(gate_meta.get("answer_shape_primacy_checked")),
+        "passed": not bool(gate_meta.get("answer_shape_primacy_failed")),
+        "failure_reasons": list(gate_meta.get("answer_shape_primacy_failure_reasons") or []),
+    }
+    sr = gate_meta.get("answer_shape_primacy_skip_reason")
+    if sr:
+        nested["skip_reason"] = sr
+
+    def _patch_em(em: Any) -> None:
+        if not isinstance(em, dict):
+            return
+        em["answer_shape_primacy"] = nested
+        for fk, fv in flat.items():
+            em[fk] = fv
+
+    md_out = out.setdefault("metadata", {})
+    if isinstance(md_out, dict):
+        _patch_em(md_out.setdefault("emission_debug", {}))
+    if isinstance(resolution, dict):
+        md_r = resolution.setdefault("metadata", {})
+        if isinstance(md_r, dict):
+            _patch_em(md_r.setdefault("emission_debug", {}))
+    if eff_resolution is not None and isinstance(eff_resolution.get("metadata"), dict):
+        _patch_em(eff_resolution["metadata"].setdefault("emission_debug", {}))
+
+
+def _answer_shape_primacy_applies(
+    *,
+    resolution: Dict[str, Any] | None,
+    response_type_debug: Dict[str, Any] | None,
+    strict_social_details: Dict[str, Any] | None,
+) -> bool:
+    if strict_social_details is not None:
+        return False
+    rtr = str((response_type_debug or {}).get("response_type_required") or "").strip().lower()
+    if rtr in {"action_outcome", "neutral_narration"}:
+        return True
+    if not isinstance(resolution, dict):
+        return False
+    kind = str(resolution.get("kind") or "").strip().lower()
+    return kind in _ANSWER_SHAPE_PRIMACY_RESOLUTION_KINDS
+
+
+def _asp_sentence_has_payload(
+    sentence: str,
+    *,
+    player_tokens: set[str],
+    res_kind: str,
+    required_rt: str,
+    resolution: Dict[str, Any] | None,
+) -> bool:
+    s = str(sentence or "").strip()
+    if not s:
+        return False
+    if len(_content_tokens(s) & player_tokens) >= 2:
+        return True
+    if any(p.search(s) for p in _ACTION_RESULT_PATTERNS):
+        return True
+    if _ASP_OBSERVE_PAYLOAD_RE.search(s):
+        return True
+    if _ASP_SPATIAL_OR_EXISTENTIAL_RE.search(s):
+        return True
+    if _ASP_SCENE_TEXTURE_RE.search(s):
+        return True
+    if _ASP_AMBIENT_STATE_RE.search(s):
+        return True
+    if _ASP_INFORMATIVE_DETAIL_RE.search(s):
+        return True
+    if re.search(r'["“”]', s) and len(s) >= 20:
+        return True
+    if required_rt == "action_outcome" and re.search(r"\b(?:you|your)\b", s, re.IGNORECASE):
+        if any(p.search(s) for p in _ACTION_RESULT_PATTERNS):
+            return True
+        if re.search(
+            r"\b(?:latch|door|lock|hinge|snap|give|gives|hold|holds|refuse|refuses)\b",
+            s,
+            re.IGNORECASE,
+        ):
+            return True
+    st = resolution.get("state_changes") if isinstance(resolution, dict) and isinstance(resolution.get("state_changes"), dict) else {}
+    travelish = bool(
+        isinstance(resolution, dict)
+        and (
+            bool(resolution.get("resolved_transition"))
+            or bool(st.get("scene_transition_occurred"))
+            or bool(st.get("arrived_at_scene"))
+        )
+    )
+    if res_kind in {"travel", "scene_transition"} and travelish and _ASP_ARRIVAL_RE.search(s):
+        return True
+    return False
+
+
+def _asp_sentence_is_pressure_only(
+    sentence: str,
+    *,
+    player_tokens: set[str],
+    res_kind: str,
+    required_rt: str,
+    resolution: Dict[str, Any] | None,
+) -> bool:
+    s = str(sentence or "").strip()
+    if not s:
+        return False
+    if _asp_sentence_has_payload(s, player_tokens=player_tokens, res_kind=res_kind, required_rt=required_rt, resolution=resolution):
+        return False
+    return bool(_ASP_PRESSURE_LEX_RE.search(s))
+
+
+def _validate_answer_shape_primacy(
+    text: str,
+    *,
+    player_input: str,
+    resolution: Dict[str, Any] | None,
+    response_type_debug: Dict[str, Any] | None,
+) -> Dict[str, Any]:
+    out: Dict[str, Any] = {"passed": True, "failure_reasons": [], "repairable_pressure_lead": False}
+    res = resolution if isinstance(resolution, dict) else None
+    res_kind = str((res or {}).get("kind") or "").strip().lower()
+    required_rt = str((response_type_debug or {}).get("response_type_required") or "").strip().lower()
+    player_tokens = _content_tokens(player_input)
+    sentences = _split_sentences_answer_complete(str(text or ""))
+    if not sentences:
+        out["passed"] = False
+        out["failure_reasons"].append("empty_text")
+        return out
+
+    payload_hits = [
+        _asp_sentence_has_payload(
+            sent,
+            player_tokens=player_tokens,
+            res_kind=res_kind,
+            required_rt=required_rt,
+            resolution=res,
+        )
+        for sent in sentences
+    ]
+    if not any(payload_hits):
+        wc = len(_normalize_text(text).split())
+        any_pressure = any(
+            _asp_sentence_is_pressure_only(
+                sent,
+                player_tokens=player_tokens,
+                res_kind=res_kind,
+                required_rt=required_rt,
+                resolution=res,
+            )
+            for sent in sentences
+        )
+        if wc <= 8 and not any_pressure:
+            return out
+        low = _normalize_text(text).lower()
+        if "for a breath" in low and "voices shift" in low:
+            out["passed"] = False
+            out["failure_reasons"].append("missing_observation_or_result_payload")
+            return out
+        if _ASP_INFORMATIVE_DETAIL_RE.search(text) or any(p.search(text) for p in _ANSWER_DIRECT_PATTERNS):
+            return out
+        if wc >= 10 and not any_pressure:
+            return out
+        out["passed"] = False
+        out["failure_reasons"].append("missing_observation_or_result_payload")
+        return out
+
+    opener = sentences[0]
+    opener_payload = payload_hits[0]
+    if not opener_payload and _asp_sentence_is_pressure_only(
+        opener,
+        player_tokens=player_tokens,
+        res_kind=res_kind,
+        required_rt=required_rt,
+        resolution=res,
+    ):
+        out["passed"] = False
+        out["failure_reasons"].append("pressure_or_consequence_before_payload")
+        if any(payload_hits[1:]):
+            out["repairable_pressure_lead"] = True
+        return out
+
+    return out
+
+
+def _repair_answer_shape_primacy_leading_pressure(
+    text: str,
+    *,
+    player_input: str,
+    resolution: Dict[str, Any] | None,
+    response_type_debug: Dict[str, Any] | None,
+) -> tuple[str | None, str | None]:
+    res = resolution if isinstance(resolution, dict) else None
+    res_kind = str((res or {}).get("kind") or "").strip().lower()
+    required_rt = str((response_type_debug or {}).get("response_type_required") or "").strip().lower()
+    player_tokens = _content_tokens(player_input)
+    sentences = _split_sentences_answer_complete(str(text or ""))
+    if len(sentences) < 2:
+        return None, None
+    i = 0
+    while i < len(sentences):
+        s = sentences[i]
+        has_pl = _asp_sentence_has_payload(
+            s,
+            player_tokens=player_tokens,
+            res_kind=res_kind,
+            required_rt=required_rt,
+            resolution=res,
+        )
+        if has_pl:
+            break
+        if not _asp_sentence_is_pressure_only(
+            s,
+            player_tokens=player_tokens,
+            res_kind=res_kind,
+            required_rt=required_rt,
+            resolution=res,
+        ):
+            break
+        i += 1
+    if i <= 0:
+        return None, None
+    rest = " ".join(sentences[i:]).strip()
+    if not rest:
+        return None, None
+    return rest, f"strip_leading_pressure_sentences:{i}"
+
+
+def _apply_answer_shape_primacy_layer(
+    text: str,
+    *,
+    gm_output: Dict[str, Any],
+    resolution: Dict[str, Any] | None,
+    session: Dict[str, Any] | None,
+    scene_id: str,
+    response_type_debug: Dict[str, Any] | None,
+    strict_social_details: Dict[str, Any] | None,
+) -> tuple[str, Dict[str, Any], List[str]]:
+    meta = _default_answer_shape_primacy_meta()
+    if not _answer_shape_primacy_applies(
+        resolution=resolution,
+        response_type_debug=response_type_debug,
+        strict_social_details=strict_social_details,
+    ):
+        meta["answer_shape_primacy_skip_reason"] = "turn_not_in_scope"
+        return text, meta, []
+
+    if response_type_debug is not None and response_type_debug.get("response_type_candidate_ok") is False:
+        meta["answer_shape_primacy_skip_reason"] = "response_type_contract_failed"
+        return text, meta, []
+
+    sid = str(scene_id or "").strip()
+    player_input = merged_player_prompt_for_gate(
+        resolution if isinstance(resolution, dict) else None,
+        session if isinstance(session, dict) else None,
+        sid,
+    )
+    if not str(player_input or "").strip():
+        player_input = _last_player_input(
+            resolution=resolution if isinstance(resolution, dict) else None,
+            session=session if isinstance(session, dict) else None,
+            scene_id=sid,
+        )
+
+    before = str(text or "")
+    meta["answer_shape_primacy_preview_before"] = _gate_text_preview(before)
+    meta["answer_shape_primacy_checked"] = True
+
+    v0 = _validate_answer_shape_primacy(
+        before,
+        player_input=player_input,
+        resolution=resolution,
+        response_type_debug=response_type_debug,
+    )
+    if v0.get("passed"):
+        meta["answer_shape_primacy_failed"] = False
+        meta["answer_shape_primacy_preview_after"] = _gate_text_preview(before)
+        return text, meta, []
+
+    if v0.get("repairable_pressure_lead"):
+        repaired, mode = _repair_answer_shape_primacy_leading_pressure(
+            before,
+            player_input=player_input,
+            resolution=resolution,
+            response_type_debug=response_type_debug,
+        )
+        if repaired:
+            v1 = _validate_answer_shape_primacy(
+                repaired,
+                player_input=player_input,
+                resolution=resolution,
+                response_type_debug=response_type_debug,
+            )
+            if v1.get("passed"):
+                meta["answer_shape_primacy_repaired"] = True
+                meta["answer_shape_primacy_repair_mode"] = mode
+                meta["answer_shape_primacy_failed"] = False
+                meta["answer_shape_primacy_preview_after"] = _gate_text_preview(repaired)
+                return repaired, meta, []
+
+    meta["answer_shape_primacy_failed"] = True
+    meta["answer_shape_primacy_failure_reasons"] = list(v0.get("failure_reasons") or [])
+    meta["answer_shape_primacy_preview_after"] = _gate_text_preview(before)
+    extra: List[str] = ["answer_shape_primacy_violation"]
     return text, meta, extra
 
 
@@ -5771,7 +6806,7 @@ def _standard_visibility_safe_fallback(
     ):
         fallback_candidates.append(
             (
-                "For a breath, the scene holds while voices shift around you.",
+                _global_narrative_fallback_stock_line(scene if isinstance(scene, dict) else None, scene_id=scene_id),
                 "global_scene_narrative",
                 "narrative_safe_fallback",
                 "global_scene_fallback",
@@ -5856,7 +6891,7 @@ def _standard_visibility_safe_fallback(
         )
 
     return (
-        "For a breath, the scene holds while voices shift around you.",
+        _global_narrative_fallback_stock_line(scene if isinstance(scene, dict) else None, scene_id=scene_id),
         "global_scene_narrative",
         "narrative_safe_fallback",
         "global_scene_fallback",
@@ -7059,6 +8094,7 @@ def apply_final_emission_gate(
     if not isinstance(gm_output, dict):
         return gm_output
     out = dict(gm_output)
+    out = _gm_probe_for_answer_pressure_contracts(out, session if isinstance(session, dict) else None)
     pre_gate_text = _normalize_text(out.get("player_facing_text"))
     tags = out.get("tags") if isinstance(out.get("tags"), list) else []
     tag_list = [str(t) for t in tags if isinstance(t, str)]
@@ -7136,6 +8172,9 @@ def apply_final_emission_gate(
     na_layer_meta: Dict[str, Any] = _default_narrative_authority_meta()
     te_layer_meta: Dict[str, Any] = _default_tone_escalation_meta()
     ar_layer_meta: Dict[str, Any] = _default_anti_railroading_meta()
+    cs_layer_meta: Dict[str, Any] = _default_context_separation_meta()
+    purity_layer_meta: Dict[str, Any] = _default_player_facing_narration_purity_meta()
+    asp_layer_meta: Dict[str, Any] = _default_answer_shape_primacy_meta()
     ssa_layer_meta: Dict[str, Any] = {}
 
     strict_social_active = bool(strict_social_turn)
@@ -7254,6 +8293,33 @@ def apply_final_emission_gate(
             strict_social_details=details,
         )
         out["player_facing_text"] = text
+        text, cs_layer_meta, _ = _apply_context_separation_layer(
+            _normalize_text_preserve_paragraphs(text),
+            gm_output=out,
+            resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
+            session=session if isinstance(session, dict) else None,
+            scene_id=sid,
+            response_type_debug=response_type_debug,
+            strict_social_details=details,
+        )
+        out["player_facing_text"] = text
+        text, purity_layer_meta, _ = _apply_player_facing_narration_purity_layer(
+            _normalize_text_preserve_paragraphs(text),
+            gm_output=out,
+            resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
+            response_type_debug=response_type_debug,
+        )
+        out["player_facing_text"] = text
+        text, asp_layer_meta, _ = _apply_answer_shape_primacy_layer(
+            _normalize_text_preserve_paragraphs(text),
+            gm_output=out,
+            resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
+            session=session if isinstance(session, dict) else None,
+            scene_id=sid,
+            response_type_debug=response_type_debug,
+            strict_social_details=details,
+        )
+        out["player_facing_text"] = text
         text, ssa_layer_meta = _apply_scene_state_anchor_layer(
             _normalize_text_preserve_paragraphs(text),
             gm_output=out,
@@ -7288,6 +8354,24 @@ def apply_final_emission_gate(
             gate_meta=ar_layer_meta,
             gm_output=out,
         )
+        _merge_context_separation_into_emission_debug(
+            out,
+            resolution if isinstance(resolution, dict) else None,
+            eff_resolution if isinstance(eff_resolution, dict) else None,
+            gate_meta=cs_layer_meta,
+        )
+        _merge_player_facing_narration_purity_into_emission_debug(
+            out,
+            resolution if isinstance(resolution, dict) else None,
+            eff_resolution if isinstance(eff_resolution, dict) else None,
+            gate_meta=purity_layer_meta,
+        )
+        _merge_answer_shape_primacy_into_emission_debug(
+            out,
+            resolution if isinstance(resolution, dict) else None,
+            eff_resolution if isinstance(eff_resolution, dict) else None,
+            gate_meta=asp_layer_meta,
+        )
         if isinstance(eff_resolution, dict):
             sp = eff_resolution.get("social") if isinstance(eff_resolution.get("social"), dict) else {}
             npc_id_for_meta = str(sp.get("npc_id") or "").strip()
@@ -7317,6 +8401,16 @@ def apply_final_emission_gate(
         if ar_layer_meta.get("anti_railroading_repaired"):
             final_emitted_source = str(
                 ar_layer_meta.get("anti_railroading_repair_mode") or "anti_railroading_repair"
+            )
+        if cs_layer_meta.get("context_separation_repaired"):
+            final_emitted_source = str(
+                cs_layer_meta.get("context_separation_repair_mode") or "context_separation_repair"
+            )
+        if purity_layer_meta.get("player_facing_narration_purity_repaired"):
+            final_emitted_source = "player_facing_narration_purity_repair"
+        if asp_layer_meta.get("answer_shape_primacy_repaired"):
+            final_emitted_source = str(
+                asp_layer_meta.get("answer_shape_primacy_repair_mode") or "answer_shape_primacy_repair"
             )
         gate_out_text = _normalize_text(out.get("player_facing_text"))
         post_gate_mutation_detected = pre_gate_text != gate_out_text
@@ -7376,6 +8470,9 @@ def apply_final_emission_gate(
             _merge_narrative_authority_meta(out["_final_emission_meta"], na_layer_meta)
             _merge_tone_escalation_meta(out["_final_emission_meta"], te_layer_meta)
             _merge_anti_railroading_meta(out["_final_emission_meta"], ar_layer_meta)
+            _merge_context_separation_meta(out["_final_emission_meta"], cs_layer_meta)
+            _merge_player_facing_narration_purity_meta(out["_final_emission_meta"], purity_layer_meta)
+            _merge_answer_shape_primacy_meta(out["_final_emission_meta"], asp_layer_meta)
             _merge_scene_state_anchor_meta(out["_final_emission_meta"], ssa_layer_meta)
             out = _apply_visibility_enforcement(
                 out,
@@ -7472,6 +8569,9 @@ def apply_final_emission_gate(
         _merge_narrative_authority_meta(out["_final_emission_meta"], na_layer_meta)
         _merge_tone_escalation_meta(out["_final_emission_meta"], te_layer_meta)
         _merge_anti_railroading_meta(out["_final_emission_meta"], ar_layer_meta)
+        _merge_context_separation_meta(out["_final_emission_meta"], cs_layer_meta)
+        _merge_player_facing_narration_purity_meta(out["_final_emission_meta"], purity_layer_meta)
+        _merge_answer_shape_primacy_meta(out["_final_emission_meta"], asp_layer_meta)
         _merge_scene_state_anchor_meta(out["_final_emission_meta"], ssa_layer_meta)
         out = _apply_visibility_enforcement(
             out,
@@ -7572,6 +8672,36 @@ def apply_final_emission_gate(
     )
     reasons.extend(ar_reasons)
 
+    text, cs_layer_meta, cs_reasons = _apply_context_separation_layer(
+        text,
+        gm_output=out,
+        resolution=resolution if isinstance(resolution, dict) else None,
+        session=session if isinstance(session, dict) else None,
+        scene_id=sid,
+        response_type_debug=response_type_debug,
+        strict_social_details=None,
+    )
+    reasons.extend(cs_reasons)
+
+    text, purity_layer_meta, purity_extra = _apply_player_facing_narration_purity_layer(
+        text,
+        gm_output=out,
+        resolution=resolution if isinstance(resolution, dict) else None,
+        response_type_debug=response_type_debug,
+    )
+    reasons.extend(purity_extra)
+
+    text, asp_layer_meta, asp_extra = _apply_answer_shape_primacy_layer(
+        text,
+        gm_output=out,
+        resolution=resolution if isinstance(resolution, dict) else None,
+        session=session if isinstance(session, dict) else None,
+        scene_id=sid,
+        response_type_debug=response_type_debug,
+        strict_social_details=None,
+    )
+    reasons.extend(asp_extra)
+
     text, ssa_layer_meta = _apply_scene_state_anchor_layer(
         text,
         gm_output=out,
@@ -7605,6 +8735,24 @@ def apply_final_emission_gate(
         eff_resolution if isinstance(eff_resolution, dict) else None,
         gate_meta=ar_layer_meta,
         gm_output=out,
+    )
+    _merge_context_separation_into_emission_debug(
+        out,
+        resolution if isinstance(resolution, dict) else None,
+        eff_resolution if isinstance(eff_resolution, dict) else None,
+        gate_meta=cs_layer_meta,
+    )
+    _merge_player_facing_narration_purity_into_emission_debug(
+        out,
+        resolution if isinstance(resolution, dict) else None,
+        eff_resolution if isinstance(eff_resolution, dict) else None,
+        gate_meta=purity_layer_meta,
+    )
+    _merge_answer_shape_primacy_into_emission_debug(
+        out,
+        resolution if isinstance(resolution, dict) else None,
+        eff_resolution if isinstance(eff_resolution, dict) else None,
+        gate_meta=asp_layer_meta,
     )
 
     candidate_ok = not bool(reasons)
@@ -7642,6 +8790,16 @@ def apply_final_emission_gate(
         if ar_layer_meta.get("anti_railroading_repaired"):
             final_emitted_source = str(
                 ar_layer_meta.get("anti_railroading_repair_mode") or "anti_railroading_repair"
+            )
+        if cs_layer_meta.get("context_separation_repaired"):
+            final_emitted_source = str(
+                cs_layer_meta.get("context_separation_repair_mode") or "context_separation_repair"
+            )
+        if purity_layer_meta.get("player_facing_narration_purity_repaired"):
+            final_emitted_source = "player_facing_narration_purity_repair"
+        if asp_layer_meta.get("answer_shape_primacy_repaired"):
+            final_emitted_source = str(
+                asp_layer_meta.get("answer_shape_primacy_repair_mode") or "answer_shape_primacy_repair"
             )
 
         gate_out_text = _normalize_text(out.get("player_facing_text"))
@@ -7693,6 +8851,9 @@ def apply_final_emission_gate(
         _merge_narrative_authority_meta(out["_final_emission_meta"], na_layer_meta)
         _merge_tone_escalation_meta(out["_final_emission_meta"], te_layer_meta)
         _merge_anti_railroading_meta(out["_final_emission_meta"], ar_layer_meta)
+        _merge_context_separation_meta(out["_final_emission_meta"], cs_layer_meta)
+        _merge_player_facing_narration_purity_meta(out["_final_emission_meta"], purity_layer_meta)
+        _merge_answer_shape_primacy_meta(out["_final_emission_meta"], asp_layer_meta)
         _merge_scene_state_anchor_meta(out["_final_emission_meta"], ssa_layer_meta)
         out = _apply_visibility_enforcement(
             out,
@@ -7751,7 +8912,7 @@ def apply_final_emission_gate(
             final_emitted_source = "npc_pursuit_neutral_fallback"
         else:
             fallback_pool = "global_scene_narrative"
-            fallback_text = "For a breath, the scene holds while voices shift around you."
+            fallback_text = _global_narrative_fallback_stock_line(scene if isinstance(scene, dict) else None, scene_id=sid)
             fallback_kind = "narrative_safe_fallback"
             final_emitted_source = "global_scene_fallback"
     deterministic_attempted = False
@@ -7816,6 +8977,9 @@ def apply_final_emission_gate(
     _merge_narrative_authority_meta(out["_final_emission_meta"], na_layer_meta)
     _merge_tone_escalation_meta(out["_final_emission_meta"], te_layer_meta)
     _merge_anti_railroading_meta(out["_final_emission_meta"], ar_layer_meta)
+    _merge_context_separation_meta(out["_final_emission_meta"], cs_layer_meta)
+    _merge_player_facing_narration_purity_meta(out["_final_emission_meta"], purity_layer_meta)
+    _merge_answer_shape_primacy_meta(out["_final_emission_meta"], asp_layer_meta)
     _merge_scene_state_anchor_meta(out["_final_emission_meta"], ssa_layer_meta)
     out = _apply_visibility_enforcement(
         out,

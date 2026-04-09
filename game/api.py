@@ -62,12 +62,14 @@ from game.gm import (
     guard_gm_output,
     apply_response_policy_enforcement,
     MAX_TARGETED_RETRY_ATTEMPTS,
+    RETRY_FAILURE_PRIORITY,
     detect_retry_failures,
     choose_retry_strategy,
     prioritize_retry_failures_for_social_answer_candidate,
     build_retry_prompt_for_failure,
     apply_deterministic_retry_fallback,
     force_terminal_retry_fallback,
+    resolution_is_open_crowd_social,
     remember_recent_contextual_leads,
     register_topic_probe,
     _gm_has_usable_player_facing_text,
@@ -110,10 +112,13 @@ from game.interaction_context import (
     clear_emergent_scene_actors_on_scene_change,
     clear_for_scene_change,
     clear_turn_start_interlocutor_snapshot,
+    apply_world_action_social_continuity_break,
     establish_dialogue_interaction_from_input,
+    evaluate_world_action_social_continuity_break,
     find_addressed_npc_id_for_turn,
     find_world_npc_reference_id_in_text,
     inspect as inspect_interaction_context,
+    _looks_like_local_observation_question,
     merge_turn_segments_for_directed_social_entry,
     response_type_context_snapshot,
     resolve_declared_actor_switch,
@@ -743,6 +748,8 @@ def _build_gpt_narration_from_authoritative_state(
             resolution=resolution,
             session=session,
             scene_envelope=scene,
+            world=world,
+            segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
         )
         return prioritized
 
@@ -761,6 +768,8 @@ def _build_gpt_narration_from_authoritative_state(
                 world=world,
                 resolution=resolution if isinstance(resolution, dict) else None,
                 scene_envelope=scene,
+                player_text=user_text,
+                segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
             )
             print("[SOCIAL RESOLUTION REPAIR] terminal empty social output repaired")
             return repaired
@@ -790,6 +799,7 @@ def _build_gpt_narration_from_authoritative_state(
                 session=session,
                 world=world,
                 resolution=resolution,
+                segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
             )
         )
         selected_failure = choose_retry_strategy(failures)
@@ -808,16 +818,20 @@ def _build_gpt_narration_from_authoritative_state(
                 world=world,
                 resolution=resolution,
                 base_gm=gm,
+                segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
             )
             gm = _repair_terminal_player_facing_if_needed(
                 gm, reason="api_post_force_terminal_retry_fallback"
             )
             break
         retry_attempt += 1
+        retry_cs_dbg: dict = {}
         retry_instruction = build_retry_prompt_for_failure(
             selected_failure,
             response_policy=response_policy,
             gm_output=gm,
+            retry_debug_sink=retry_cs_dbg,
+            player_text=user_text,
         )
         print(
             "[RETRY] selected_strategy=",
@@ -841,9 +855,20 @@ def _build_gpt_narration_from_authoritative_state(
         )
         retry_dbg = gm_retry.get('debug_notes') if isinstance(gm_retry.get('debug_notes'), str) else ''
         reason_suffix = ','.join(str(r) for r in (selected_failure.get("reasons") or []) if isinstance(r, str)) or 'unknown'
+        cs_trace = ""
+        if retry_cs_dbg:
+            cs_trace = (
+                f"retry_context_separation_trace:"
+                f"contract_resolved={retry_cs_dbg.get('retry_context_separation_contract_resolved')}:"
+                f"source={retry_cs_dbg.get('retry_context_separation_contract_source')}:"
+                f"prior_trouble={retry_cs_dbg.get('retry_context_separation_prior_trouble')}:"
+                f"local_first={retry_cs_dbg.get('retry_context_separation_local_first_recovery')}:"
+                f"pf_allowed={retry_cs_dbg.get('retry_context_separation_pressure_focus_allowed')}"
+            )
         gm_retry['debug_notes'] = (
             (retry_dbg + ' | ' if retry_dbg else '')
             + f"retry_strategy:selected={selected_failure.get('failure_class')}:attempt={retry_attempt}:reasons={reason_suffix}"
+            + (f" | {cs_trace}" if cs_trace else "")
         )
         retry_failures = _failures_after_social_answer_priority(
             detect_retry_failures(
@@ -853,6 +878,7 @@ def _build_gpt_narration_from_authoritative_state(
                 session=session,
                 world=world,
                 resolution=resolution,
+                segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
             )
         )
         selected_class = str(selected_failure.get("failure_class") or "").strip()
@@ -872,9 +898,14 @@ def _build_gpt_narration_from_authoritative_state(
             ),
             None,
         )
+        use_open_crowd_scene_stall_fallback = (
+            selected_class == "scene_stall"
+            and isinstance(still_failing, dict)
+            and resolution_is_open_crowd_social(resolution)
+        )
         use_question_retry_fallback = (selected_class == "unresolved_question" and still_failing) or (
             selected_class == "answer" and still_unresolved_after_answer_retry
-        )
+        ) or use_open_crowd_scene_stall_fallback
         if use_question_retry_fallback:
             _vf = still_failing if isinstance(still_failing, dict) else still_unresolved_after_answer_retry
             print(
@@ -886,9 +917,16 @@ def _build_gpt_narration_from_authoritative_state(
                 (_vf.get("reasons") if isinstance(_vf, dict) else None),
                 "action=deterministic_fallback",
             )
-            fallback_failure = (
-                still_failing if selected_class == "unresolved_question" else selected_failure
-            )
+            if use_open_crowd_scene_stall_fallback:
+                fallback_failure = {
+                    "failure_class": "unresolved_question",
+                    "priority": int(RETRY_FAILURE_PRIORITY.get("unresolved_question", 10)),
+                    "reasons": ["retry_bridge:open_crowd_scene_stall"],
+                }
+            else:
+                fallback_failure = (
+                    still_failing if selected_class == "unresolved_question" else selected_failure
+                )
             gm_retry = apply_deterministic_retry_fallback(
                 gm_retry,
                 failure=fallback_failure,
@@ -897,6 +935,7 @@ def _build_gpt_narration_from_authoritative_state(
                 session=session,
                 world=world,
                 resolution=resolution,
+                segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
             )
             fallback_failures = _failures_after_social_answer_priority(
                 detect_retry_failures(
@@ -906,10 +945,14 @@ def _build_gpt_narration_from_authoritative_state(
                     session=session,
                     world=world,
                     resolution=resolution,
+                    segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
                 )
             )
+            compare_class = (
+                "unresolved_question" if use_open_crowd_scene_stall_fallback else selected_class
+            )
             fallback_still_failing = any(
-                isinstance(failure, dict) and str(failure.get("failure_class") or "").strip() == selected_class
+                isinstance(failure, dict) and str(failure.get("failure_class") or "").strip() == compare_class
                 for failure in fallback_failures
             )
             print(
@@ -940,6 +983,7 @@ def _build_gpt_narration_from_authoritative_state(
                     world=world,
                     resolution=resolution,
                     base_gm=gm_retry,
+                    segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
                 )
                 gm = _repair_terminal_player_facing_if_needed(
                     gm, reason="api_post_force_terminal_retry_fallback"
@@ -1366,6 +1410,23 @@ def is_directed_dialogue(
     if _has_active_social_interlocutor(session, scene=scene, world=world) and _is_ambiguous_dialogue_followup(
         clause
     ):
+        if evaluate_world_action_social_continuity_break(
+            session=session,
+            scene=scene,
+            world=world,
+            segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+            raw_text=str(text or ""),
+        ):
+            merged_lane = merge_turn_segments_for_directed_social_entry(
+                segmented_turn if isinstance(segmented_turn, dict) else None,
+                str(text or ""),
+            )
+            apply_world_action_social_continuity_break(
+                session,
+                merged_text=merged_lane.strip(),
+                scene=scene,
+            )
+            return False
         return True
 
     scene_npcs = scene_npcs_in_active_scene(scene, world)
@@ -1377,6 +1438,8 @@ def is_directed_dialogue(
 
     if addressed_npc_id:
         return True
+    if _looks_like_local_observation_question(clause):
+        return False
     if has_dialogue_cue and has_world_reference:
         return True
     if has_dialogue_cue and has_present_character:
@@ -1491,6 +1554,8 @@ def _build_dialogue_first_action(
     if ce.get("open_social_solicitation"):
         metadata["open_social_solicitation"] = True
         metadata["broad_address_bid"] = bool(ce.get("broad_address_bid"))
+        if ce.get("broadcast_social_open_call"):
+            metadata["broadcast_social_open_call"] = True
         cands = ce.get("candidate_addressable_ids")
         if isinstance(cands, list):
             metadata["candidate_addressable_ids"] = list(cands)
@@ -1504,11 +1569,12 @@ def _build_dialogue_first_action(
             metadata["broad_address_phrase_matched"] = ce.get("broad_address_phrase_matched")
     if target_id:
         metadata["active_interaction_target_id"] = target_id
+    intent_cls = "open_call" if ce.get("open_social_solicitation") else "social_exchange"
     out = {
         "id": slugify(f"{action_kind}-{target_id or 'npc'}") or "social",
         "label": action_label[:140],
         "type": action_kind,
-        "social_intent_class": "social_exchange",
+        "social_intent_class": intent_cls,
         "prompt": action_label,
         "metadata": metadata,
     }
@@ -2344,6 +2410,7 @@ def chat(req: ChatRequest):
     for _k in (
         'open_social_solicitation',
         'broad_address_bid',
+        'broadcast_social_open_call',
         'candidate_addressable_ids',
         'candidate_addressable_count',
         'broad_address_reason',

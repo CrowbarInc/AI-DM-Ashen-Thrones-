@@ -889,6 +889,16 @@ def parse_freeform_to_action(
     interactables = scene.get("interactables") or []
     visible_facts = scene.get("visible_facts") or []
 
+    from game.interaction_context import _looks_like_local_observation_question
+
+    if _looks_like_local_observation_question(t):
+        return _build_action(
+            "observe",
+            t,
+            t,
+            metadata={"parser_lane": "local_observation_question"},
+        )
+
     # ---- 0. Qualified explicit pursuit (fail-closed) + bare follow-the-lead (session) ----
     q_frag = _extract_qualified_pursuit_target_text(t)
     if q_frag is not None and not isinstance(session, dict):

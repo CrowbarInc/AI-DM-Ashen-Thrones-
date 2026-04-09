@@ -60,6 +60,7 @@ def test_prioritize_suppresses_stall_or_echo_when_structured_candidate_exists(
     anchor_substring: str | None,
 ) -> None:
     session, sid = _session_runner_topic_caden()
+    world = default_world()
     if failure_class == "echo_or_repetition":
         session["clue_knowledge"] = {
             "clue_x": {
@@ -86,6 +87,7 @@ def test_prioritize_suppresses_stall_or_echo_when_structured_candidate_exists(
         resolution=resolution,
         session=session,
         scene_envelope=scene_envelope,
+        world=world,
     )
     assert dbg["strategy_forced_to_answer"] is True
     assert failure_class in dbg["suppressed_fallback_strategies"]
@@ -119,6 +121,7 @@ def test_prioritize_skips_forcing_when_inapplicable() -> None:
         resolution=resolution_stall,
         session=session,
         scene_envelope=scene_envelope,
+        world=default_world(),
     )
     assert dbg["strategy_forced_to_answer"] is False
     assert out == failures
@@ -135,6 +138,7 @@ def test_prioritize_skips_forcing_when_inapplicable() -> None:
         resolution=resolution_question,
         session=session2,
         scene_envelope={"scene": {"id": sid2}},
+        world=default_world(),
     )
     assert dbg2["strategy_forced_to_answer"] is False
     assert out2 == failures

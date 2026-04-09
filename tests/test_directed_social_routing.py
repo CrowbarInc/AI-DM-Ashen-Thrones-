@@ -17,8 +17,10 @@ from game.defaults import (
 )
 from game.interaction_context import (
     enroll_emergent_scene_actor,
+    find_addressed_npc_id_for_turn,
     rebuild_active_scene_entities,
     resolve_declared_actor_switch,
+    resolve_dialogue_lock_action_target_id,
     resolve_directed_social_entry,
     resolve_spoken_vocative_target,
     should_route_addressed_question_to_social,
@@ -606,3 +608,153 @@ def test_chat_quoted_role_address_question_routes_social(tmp_path, monkeypatch):
     assert resolution.get("kind") == "question"
     assert (resolution.get("social") or {}).get("social_intent_class") == "social_exchange"
     assert (resolution.get("social") or {}).get("npc_id") == "runner"
+
+
+def _decl_seg(text: str) -> dict:
+    """Force scan text to match declared-action clause (segmentation-agnostic unit shape)."""
+    return {"declared_action_text": text}
+
+
+def test_residual_declared_switch_suppressed_gaze_turns_before_escape(tmp_path, monkeypatch):
+    _seed_scene_runner_refugee_guard(tmp_path, monkeypatch, clear_interaction=False)
+    session = storage.load_session()
+    scene = storage.load_scene("scene_investigate")
+    raw = "Galinor's gaze turns to the guard for a moment before bolting."
+    sw = resolve_declared_actor_switch(
+        session=session, scene=scene, segmented_turn=_decl_seg(raw), raw_text=raw
+    )
+    assert sw.get("has_declared_switch") is False
+
+
+def test_residual_declared_switch_suppressed_weak_turn_escape_tail(tmp_path, monkeypatch):
+    _seed_scene_runner_refugee_guard(tmp_path, monkeypatch, clear_interaction=False)
+    session = storage.load_session()
+    world = storage.load_world()
+    scene = storage.load_scene("scene_investigate")
+    raw = "Galinor turns to the guard for a moment before bolting."
+    sw = resolve_declared_actor_switch(
+        session=session, scene=scene, segmented_turn=_decl_seg(raw), raw_text=raw
+    )
+    assert sw.get("has_declared_switch") is False
+    ent = resolve_directed_social_entry(
+        session=session, scene=scene, world=world, segmented_turn=_decl_seg(raw), raw_text=raw
+    )
+    assert ent.get("target_source") != "declared_action"
+
+
+def test_residual_glance_at_guard_then_runs_no_declared_switch(tmp_path, monkeypatch):
+    _seed_scene_runner_refugee_guard(tmp_path, monkeypatch, clear_interaction=False)
+    session = storage.load_session()
+    scene = storage.load_scene("scene_investigate")
+    raw = "Galinor glances at the guard, then runs."
+    sw = resolve_declared_actor_switch(
+        session=session, scene=scene, segmented_turn=_decl_seg(raw), raw_text=raw
+    )
+    assert sw.get("has_declared_switch") is False
+
+
+def test_residual_weak_motion_bind_suppressed_turn_to_guard_then_run(tmp_path, monkeypatch):
+    _seed_scene_runner_refugee_guard(tmp_path, monkeypatch, clear_interaction=False)
+    session = storage.load_session()
+    world = storage.load_world()
+    scene = storage.load_scene("scene_investigate")
+    raw = "Galinor turns to the guard, then runs."
+    tid = resolve_dialogue_lock_action_target_id(raw, scene=scene, session=session, world=world)
+    assert tid != "gate_guard"
+
+
+def test_declared_switch_confronts_guard_binds(tmp_path, monkeypatch):
+    _seed_scene_runner_refugee_guard(tmp_path, monkeypatch, clear_interaction=False)
+    session = storage.load_session()
+    world = storage.load_world()
+    scene = storage.load_scene("scene_investigate")
+    raw = "Galinor confronts the guard."
+    sw = resolve_declared_actor_switch(
+        session=session, scene=scene, segmented_turn=_decl_seg(raw), raw_text=raw
+    )
+    assert sw.get("has_declared_switch") is True
+    assert sw.get("target_actor_id") == "gate_guard"
+    ent = resolve_directed_social_entry(
+        session=session, scene=scene, world=world, segmented_turn=_decl_seg(raw), raw_text=raw
+    )
+    assert ent.get("target_actor_id") == "gate_guard"
+    assert ent.get("target_source") == "declared_action"
+
+
+def test_declared_switch_grabs_guard_sleeve_binds(tmp_path, monkeypatch):
+    _seed_scene_runner_refugee_guard(tmp_path, monkeypatch, clear_interaction=False)
+    session = storage.load_session()
+    scene = storage.load_scene("scene_investigate")
+    raw = "Galinor grabs the guard's sleeve."
+    sw = resolve_declared_actor_switch(
+        session=session, scene=scene, segmented_turn=_decl_seg(raw), raw_text=raw
+    )
+    assert sw.get("has_declared_switch") is True
+    assert sw.get("target_actor_id") == "gate_guard"
+
+
+def test_declared_switch_asks_guard_where_binds(tmp_path, monkeypatch):
+    _seed_scene_runner_refugee_guard(tmp_path, monkeypatch, clear_interaction=False)
+    session = storage.load_session()
+    world = storage.load_world()
+    scene = storage.load_scene("scene_investigate")
+    raw = "Galinor asks the guard where the patrol went."
+    sw = resolve_declared_actor_switch(
+        session=session, scene=scene, segmented_turn=_decl_seg(raw), raw_text=raw
+    )
+    assert sw.get("has_declared_switch") is True
+    assert sw.get("target_actor_id") == "gate_guard"
+    tid = resolve_dialogue_lock_action_target_id(raw, scene=scene, session=session, world=world)
+    assert tid == "gate_guard"
+
+
+def test_declared_switch_turn_to_guard_and_demands_binds(tmp_path, monkeypatch):
+    _seed_scene_runner_refugee_guard(tmp_path, monkeypatch, clear_interaction=False)
+    session = storage.load_session()
+    world = storage.load_world()
+    scene = storage.load_scene("scene_investigate")
+    raw = "Galinor turns to the guard and demands an answer."
+    sw = resolve_declared_actor_switch(
+        session=session, scene=scene, segmented_turn=_decl_seg(raw), raw_text=raw
+    )
+    assert sw.get("has_declared_switch") is True
+    assert sw.get("target_actor_id") == "gate_guard"
+    ent = resolve_directed_social_entry(
+        session=session, scene=scene, world=world, segmented_turn=_decl_seg(raw), raw_text=raw
+    )
+    assert ent.get("target_actor_id") == "gate_guard"
+    assert ent.get("target_source") == "declared_action"
+
+
+def test_weak_turn_to_guard_without_escape_still_declared_switch(tmp_path, monkeypatch):
+    _seed_scene_runner_refugee_guard(tmp_path, monkeypatch, clear_interaction=False)
+    session = storage.load_session()
+    scene = storage.load_scene("scene_investigate")
+    raw = "Galinor turns to the guard."
+    sw = resolve_declared_actor_switch(
+        session=session, scene=scene, segmented_turn=_decl_seg(raw), raw_text=raw
+    )
+    assert sw.get("has_declared_switch") is True
+    assert sw.get("target_actor_id") == "gate_guard"
+
+
+def test_residual_watch_guard_while_edging_slug_bind_suppressed(tmp_path, monkeypatch):
+    _seed_scene_runner_refugee_guard(tmp_path, monkeypatch, clear_interaction=False)
+    session = storage.load_session()
+    world = storage.load_world()
+    scene = storage.load_scene("scene_investigate")
+    raw = "He watches the guard while edging away."
+    tid = find_addressed_npc_id_for_turn(raw, session, world, scene)
+    assert tid != "gate_guard"
+
+
+def test_declared_switch_gestures_to_guard_binds(tmp_path, monkeypatch):
+    _seed_scene_runner_refugee_guard(tmp_path, monkeypatch, clear_interaction=False)
+    session = storage.load_session()
+    scene = storage.load_scene("scene_investigate")
+    raw = "Galinor gestures to the guard."
+    sw = resolve_declared_actor_switch(
+        session=session, scene=scene, segmented_turn=_decl_seg(raw), raw_text=raw
+    )
+    assert sw.get("has_declared_switch") is True
+    assert sw.get("target_actor_id") == "gate_guard"

@@ -134,6 +134,11 @@ def _resolution_requires_answer(
     if resolution_kind == "adjudication_query":
         return True
     if resolution_kind in _QUESTIONISH_SOCIAL_KINDS:
+        social = _social_payload(resolution)
+        if bool(social.get("open_social_solicitation")):
+            return False
+        if str(social.get("social_intent_class") or "").strip().lower() == "open_call":
+            return False
         return True
     return _question_like_text(raw_player_text, segmented_turn)
 
@@ -169,6 +174,8 @@ def _non_hostile_guard_applies(
         return True, "informational_query_guard"
     if resolution_kind in _QUESTIONISH_SOCIAL_KINDS:
         if bool(social.get("open_social_solicitation")):
+            return False, None
+        if str(social.get("social_intent_class") or "").strip().lower() == "open_call":
             return False, None
         return True, "social_question_guard"
     if resolution_kind in {"observe", "investigate", "travel", "scene_transition", "scene_opening", "already_searched", "discover_clue"}:

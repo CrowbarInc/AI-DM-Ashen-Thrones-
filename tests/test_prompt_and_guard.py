@@ -1412,7 +1412,11 @@ def test_scene_momentum_enforcement_appends_opportunity_and_tag_when_due():
     }
     out = enforce_scene_momentum(gm, session=session, scene_envelope=scene)
     assert any(isinstance(t, str) and t.startswith("scene_momentum:") for t in out.get("tags", []))
-    assert "Consequence / Opportunity:" in out.get("player_facing_text", "")
+    low = str(out.get("player_facing_text", "")).lower()
+    assert "consequence / opportunity" not in low
+    assert "commit to one concrete move" not in low
+    assert "exit labeled" not in low
+    assert "board" in low or "posted" in low or "tavern runner" in low or "runner" in low
 
     # Runtime update resets the counter when the tag exists.
     update_scene_momentum_runtime(session, "frontier_gate", out)

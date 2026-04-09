@@ -23,6 +23,16 @@ pytestmark = pytest.mark.unit
 
 GLOBAL_VISIBILITY_FALLBACK = "For a breath, the scene holds while voices shift around you."
 VISIBLE_FACT = "A brazier throws orange sparks over the checkpoint."
+
+
+def _assert_grounded_visibility_stock_fallback(text: str) -> None:
+    """Visibility replace path should prefer concrete scene anchors over generic 'scene holds' stock."""
+    low = str(text or "").lower()
+    assert "scene holds" not in low
+    assert "voices shift around you" not in low
+    assert "brazier" in low or "checkpoint" in low or "rain" in low
+
+
 DISCOVERABLE_FACT = "The missing patrol was last seen near the old stone bridge."
 HIDDEN_FACT = "The checkpoint taxes are funding an Ash Cowl payoff."
 
@@ -125,7 +135,7 @@ def test_pipeline_replaces_offscene_known_npc_reference():
         scene=scene,
     )
 
-    assert out["player_facing_text"] == GLOBAL_VISIBILITY_FALLBACK
+    _assert_grounded_visibility_stock_fallback(out["player_facing_text"])
     assert out["tags"] == [
         "final_emission_gate_replaced",
         "visibility_enforcement_replaced",
@@ -203,7 +213,7 @@ def test_pipeline_replaces_hidden_fact_assertion():
         scene=scene,
     )
 
-    assert out["player_facing_text"] == GLOBAL_VISIBILITY_FALLBACK
+    _assert_grounded_visibility_stock_fallback(out["player_facing_text"])
     assert out["tags"] == [
         "final_emission_gate_replaced",
         "visibility_enforcement_replaced",
@@ -233,7 +243,7 @@ def test_pipeline_replaces_discoverable_but_undiscovered_fact_assertion():
         scene=scene,
     )
 
-    assert out["player_facing_text"] == GLOBAL_VISIBILITY_FALLBACK
+    _assert_grounded_visibility_stock_fallback(out["player_facing_text"])
     assert out["tags"] == [
         "final_emission_gate_replaced",
         "visibility_enforcement_replaced",
@@ -288,7 +298,7 @@ def test_pipeline_visibility_metadata_captures_entity_and_fact_matches():
     )
 
     meta = out["_final_emission_meta"]
-    assert out["player_facing_text"] == GLOBAL_VISIBILITY_FALLBACK
+    _assert_grounded_visibility_stock_fallback(out["player_facing_text"])
     assert meta["visibility_validation_passed"] is False
     assert meta["visibility_replacement_applied"] is True
     assert meta["visibility_violation_kinds"] == [
@@ -343,7 +353,7 @@ def test_pipeline_visibility_enforcement_is_read_only_for_discovery_state(monkey
         scene=scene,
     )
 
-    assert out["player_facing_text"] == GLOBAL_VISIBILITY_FALLBACK
+    _assert_grounded_visibility_stock_fallback(out["player_facing_text"])
     assert get_scene_runtime(session, sid) == before_runtime
     assert session["clue_knowledge"] == before_clue_knowledge
     assert session == before_session
@@ -462,7 +472,7 @@ def test_pipeline_visibility_failure_skips_first_mention_but_keeps_default_meta_
 
     out = _finalize_via_turn_support(candidate, session=session, world=world, scene=scene)
 
-    assert out["player_facing_text"] == GLOBAL_VISIBILITY_FALLBACK
+    _assert_grounded_visibility_stock_fallback(out["player_facing_text"])
     meta = out["_final_emission_meta"]
     _assert_first_mention_default_meta_shape(meta)
     _assert_referential_clarity_default_meta_shape(meta)

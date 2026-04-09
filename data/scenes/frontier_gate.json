@@ -470,7 +470,16 @@
       "Several figures in the crowd seem to be watching the area intently.",
       "The tavern runner appears anxious, hinting that she might have more to offer than just stew.",
       "Nearby patrons appear anxious, whispering among themselves about the missing patrol.",
-      "The muddy ground near the dead drop reveals clearer signs of recent activity; several faint footprints lead northwest into the thicket of scattered crates."
+      "The muddy ground near the dead drop reveals clearer signs of recent activity; several faint footprints lead northwest into the thicket of scattered crates.",
+      "The crowd's atmosphere buzzes with urgent whispers about the missing patrol.",
+      "A few refugees are discussing sightings of the patrol near the old milestone.",
+      "Guards exchange nervous glances, suggesting they sense something amiss.",
+      "The tavern runner has urgent information about the missing patrol.",
+      "Nearby patrons seem to be aware of the significance of Galinor's interest.",
+      "Multiple possible exits are visible: a narrow, deserted alleyway leading left and a broader path to a bustling tavern on the right.",
+      "Faint footprints lead northwest into a cluttered thicket of scattered crates, suggesting hurried movements from the dead drop.",
+      "The atmosphere buzzes with urgent whispers from nearby patrons about the missing patrol.",
+      "The tavern runner seems eager to share information, casting anxious glances at Galinor."
     ],
     "journal_seed_facts": [
       "You arrive at Cinderwatch's eastern gate in cold rain, under frayed banners.",
@@ -608,7 +617,8 @@
       "Closer inspection of the disturbed crate may reveal valuable information regarding the dead drop.",
       "The missing patrol is rumored to be connected to strange sightings near the old milestone.",
       "Upon closer examination, a torn piece of parchment is wedged between two crates nearby, possibly containing a note.",
-      "Faint footprints are visible in the muddy ground near the dead drop, suggesting hurried movement leading deeper into the thicket of crates."
+      "Faint footprints are visible in the muddy ground near the dead drop, suggesting hurried movement leading deeper into the thicket of crates.",
+      "Upon closer inspection, Galinor discovers a torn piece of parchment wedged between the crates, possibly containing a note."
     ],
     "hidden_facts": [
       "An agent of a noble house is watching new arrivals from the square's edge.",
@@ -709,17 +719,17 @@
     "active_entities": [
       "guard_captain",
       "tavern_runner",
-      "emergent_lord_aldric",
       "emergent_town_crier",
+      "emergent_lord_aldric",
       "refugee",
       "threadbare_watcher"
     ],
     "entity_presence": {
       "guard_captain": "active",
       "tavern_runner": "active",
-      "refugee": "active",
-      "emergent_lord_aldric": "active",
       "emergent_town_crier": "active",
+      "emergent_lord_aldric": "active",
+      "refugee": "active",
       "threadbare_watcher": "active"
     },
     "current_interlocutor": null,
@@ -735,24 +745,6 @@
           "Lord Aldric",
           "aldric",
           "lord aldric"
-        ],
-        "kind": "scene_actor",
-        "addressable": true,
-        "address_priority": 40,
-        "emergent_source": "promoted_visible_figure"
-      },
-      {
-        "id": "emergent_town_crier",
-        "name": "Town Crier",
-        "scene_id": "frontier_gate",
-        "address_roles": [
-          "crier",
-          "town crier"
-        ],
-        "aliases": [
-          "town crier",
-          "the town crier",
-          "crier"
         ],
         "kind": "scene_actor",
         "addressable": true,

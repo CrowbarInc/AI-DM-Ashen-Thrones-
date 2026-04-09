@@ -2023,3 +2023,105 @@ def test_anti_railroading_instructions_forbid_only_unjustified_forced_direction(
     assert "not globally banned" in block
     assert "unjustified forced direction" in block
     assert "never use directional" not in block
+
+
+@pytest.mark.unit
+def test_context_separation_contract_wired_to_response_policy_and_payload():
+    ctx = build_narration_context(**_narration_minimal_kwargs())
+    rp = ctx["response_policy"]
+    assert "context_separation" in rp
+    assert rp["context_separation"] is ctx["context_separation_contract"]
+    assert isinstance(rp["context_separation"], dict)
+    assert "debug_flags" in rp["context_separation"]
+    pd = ctx["prompt_debug"]
+    assert "context_separation" in pd
+    assert pd["context_separation"].get("enabled") is True
+
+
+@pytest.mark.unit
+def test_context_separation_instruction_priority_and_pressure_rules():
+    ctx = build_narration_context(**_narration_minimal_kwargs())
+    block = "\n".join(ctx["instructions"])
+    assert "CONTEXT SEPARATION (POLICY)" in block
+    assert "local exchange first" in block.lower()
+    assert "briefly color" in block.lower()
+    assert "must not replace the substantive reply" in block.lower()
+    assert "not from generic scene mood alone" in block.lower()
+
+
+@pytest.mark.unit
+def test_context_separation_instructions_no_social_probe_exemption_heuristic():
+    """Instructions must not encode interaction-kind shortcuts (e.g. social_probe as auto world-focus)."""
+    session = _session_with_registry()
+    session["interaction_context"] = {
+        "active_interaction_target_id": "npc_x",
+        "active_interaction_kind": "social_probe",
+        "interaction_mode": "social",
+        "engagement_level": "engaged",
+        "conversation_privacy": None,
+        "player_position_context": None,
+    }
+    ctx = build_narration_context(
+        **_narration_minimal_kwargs(
+            session=session,
+            user_text="What do you charge for a room?",
+            resolution={"kind": "social_probe"},
+            intent={"labels": ["social_probe"]},
+        )
+    )
+    sep_lines = [ln for ln in ctx["instructions"] if "CONTEXT SEPARATION (POLICY)" in ln]
+    assert len(sep_lines) == 1
+    low = sep_lines[0].lower()
+    assert "social_probe" not in low
+    assert "investigation" not in low
+    assert "travel" not in low
+    cs = ctx["response_policy"]["context_separation"]
+    assert cs.get("interaction_kind") == "social_probe"
+    assert cs.get("debug_flags", {}).get("pressure_focus_allowed") is False
+
+
+@pytest.mark.unit
+def test_context_separation_debug_mirror_lists_explicit_relevance_not_mood():
+    ctx = build_narration_context(**_narration_minimal_kwargs())
+    pd_cs = ctx["prompt_debug"]["context_separation"]
+    assert "pressure_focus_allowed" in pd_cs
+
+
+@pytest.mark.unit
+def test_player_facing_narration_purity_contract_wired_to_response_policy_payload_and_debug():
+    ctx = build_narration_context(**_narration_minimal_kwargs())
+    c = ctx["player_facing_narration_purity_contract"]
+    rp = ctx["response_policy"]
+    assert rp["player_facing_narration_purity"] is c
+    assert isinstance(c, dict)
+    assert c.get("enabled") is True
+    assert c.get("diegetic_only") is True
+    assert c.get("forbid_scaffold_headers") is True
+    assert c.get("forbid_coaching_language") is True
+    pd = ctx["prompt_debug"]["player_facing_narration_purity"]
+    assert pd.get("enabled") is True
+    assert "forbid_scaffold_headers" in pd
+
+
+@pytest.mark.unit
+def test_player_facing_narration_purity_instruction_text_forbids_scaffold_menus_and_coaching():
+    ctx = build_narration_context(**_narration_minimal_kwargs())
+    block = "\n".join(ctx["instructions"])
+    low = block.lower()
+    assert "PLAYER-FACING NARRATION PURITY (POLICY)" in block
+    assert "response_policy.player_facing_narration_purity" in block
+    assert "consequence/opportunity" in block
+    assert "speak only in player-facing diegetic prose" in low
+    assert "engine/ui guidance" in low
+    assert "menu labels" in low
+    assert "bulleted/numbered choice lists" in block
+
+
+@pytest.mark.unit
+def test_player_facing_narration_purity_instruction_order_after_context_separation_before_anchoring():
+    ctx = build_narration_context(**_narration_minimal_kwargs())
+    text = "\n".join(ctx["instructions"])
+    idx_sep = text.find("CONTEXT SEPARATION (POLICY)")
+    idx_purity = text.find("PLAYER-FACING NARRATION PURITY (POLICY)")
+    idx_anchor = text.find("SCENE ANCHORING (POLICY)")
+    assert 0 <= idx_sep < idx_purity < idx_anchor

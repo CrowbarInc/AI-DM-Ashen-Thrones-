@@ -14,6 +14,10 @@ Contract layers (orthogonal concerns):
   (see ``build_tone_escalation_contract`` in ``game.tone_escalation``).
 - **anti_railroading** — player-agency and lead-surfacing policy (inspectable flags and surfaced lead ids;
   see ``build_anti_railroading_contract`` in ``game.anti_railroading``); does not replace lead registry facts.
+- **context_separation** — ambient world pressure vs. local interaction focus (see ``build_context_separation_contract``
+  in ``game.context_separation``); enforcement reads the shipped contract, not prompt prose alone.
+- **player_facing_narration_purity** — forbid planner/UI/engine scaffolding in narration (see
+  ``build_player_facing_narration_purity_contract`` in ``game.player_facing_narration_purity``).
 """
 from __future__ import annotations
 
@@ -44,6 +48,8 @@ from game.opening_visible_fact_selection import (
     select_opening_narration_visible_facts,
 )
 from game.anti_railroading import build_anti_railroading_contract
+from game.context_separation import build_context_separation_contract
+from game.player_facing_narration_purity import build_player_facing_narration_purity_contract
 from game.scene_state_anchoring import build_scene_state_anchor_contract
 from game.narrative_authority import build_narrative_authority_contract
 from game.tone_escalation import build_tone_escalation_contract
@@ -88,6 +94,10 @@ RESPONSE_RULE_PRIORITY: tuple[tuple[str, str], ...] = (
         "WHEN THE PLAYER PRESSES THE SAME TOPIC AGAIN, ADD NET-NEW VALUE RATHER THAN RESTATING",
     ),
     ("diegetic_only", "MAINTAIN DIEGETIC VOICE (no validator/system voice)"),
+    (
+        "player_facing_narration_purity",
+        "KEEP NARRATION FREE OF INTERNAL SCAFFOLDS, MENU LABELS, AND ENGINE COACHING",
+    ),
     ("prefer_scene_momentum", "PRESERVE SCENE MOMENTUM"),
     ("prefer_specificity", "ADD SPECIFICITY / FLAVOR / POLISH"),
 )
@@ -98,7 +108,8 @@ RULE_PRIORITY_COMPACT_INSTRUCTION = (
     "and NPC intent (defer per narrative authority policy); preserve player agency—do not decide the PC's action "
     "or treat surfaced leads as mandatory plot gravity (see anti_railroading policy); if certainty is incomplete, "
     "give a bounded partial answer; when the player presses the same topic, add net-new value rather than restating; "
-    "remain diegetic; maintain scene momentum only after agency constraints; then add specificity."
+    "remain diegetic; keep narration free of internal scaffolds, menu-style choice labels, and engine coaching "
+    "(see player_facing_narration_purity policy); maintain scene momentum only after agency constraints; then add specificity."
 )
 
 # Resolution kinds where follow-up “delta vs repetition” is not meaningful (mechanical / transition turns).
@@ -1846,6 +1857,42 @@ def _tone_escalation_prompt_debug_anchor(contract: Mapping[str, Any] | None) -> 
     }
 
 
+def _context_separation_prompt_debug_anchor(contract: Mapping[str, Any] | None) -> Dict[str, Any]:
+    """Compact mirror of context_separation contract for prompt_debug (inspectable, not authoritative)."""
+    c = contract if isinstance(contract, dict) else {}
+    df = c.get("debug_flags")
+    if not isinstance(df, dict):
+        df = {}
+    pt = c.get("primary_topics")
+    if not isinstance(pt, tuple):
+        pt = ()
+    return {
+        "enabled": c.get("enabled"),
+        "interaction_kind": c.get("interaction_kind"),
+        "pressure_focus_allowed": df.get("pressure_focus_allowed"),
+        "player_seeks_world_danger_info": df.get("player_seeks_world_danger_info"),
+        "scene_summary_crisis": df.get("scene_summary_crisis"),
+        "interaction_kind_worldish": df.get("interaction_kind_worldish"),
+        "authoritative_or_consequence_relevant": df.get("authoritative_or_consequence_relevant"),
+        "primary_topic_count": len(pt),
+        "ambient_pressure_topic_count": len(c.get("ambient_pressure_topics") or ()),
+    }
+
+
+def _player_facing_narration_purity_prompt_debug_anchor(contract: Mapping[str, Any] | None) -> Dict[str, Any]:
+    """Compact mirror of player_facing_narration_purity contract for prompt_debug (inspectable, not authoritative)."""
+    c = contract if isinstance(contract, dict) else {}
+    return {
+        "enabled": c.get("enabled"),
+        "diegetic_only": c.get("diegetic_only"),
+        "interaction_kind": c.get("interaction_kind"),
+        "forbid_scaffold_headers": c.get("forbid_scaffold_headers"),
+        "forbid_coaching_language": c.get("forbid_coaching_language"),
+        "forbid_engine_choice_framing": c.get("forbid_engine_choice_framing"),
+        "forbid_non_diegetic_action_prompting": c.get("forbid_non_diegetic_action_prompting"),
+    }
+
+
 def canonical_interaction_target_npc_id(session: Dict[str, Any] | None, raw_target_id: str | None) -> str:
     """Map session interaction target to promoted world NPC id when ``promoted_actor_npc_map`` binds it."""
     raw = str(raw_target_id or "").strip()
@@ -2387,8 +2434,10 @@ def build_narration_context(
 
     Narration contracts are layered: visibility (reference scope), narrative_authority (certainty
     and assertion boundaries), scene_state_anchor (grounding), answer_completeness
-    (answer-shape obligations), tone_escalation (interpersonal intensity caps), and anti_railroading
-    (player agency vs surfaced leads); see module docstring.
+    (answer-shape obligations), tone_escalation (interpersonal intensity caps), anti_railroading
+    (player agency vs surfaced leads), context_separation (ambient pressure vs local exchange),
+    and player_facing_narration_purity (no scaffold/menu/engine coaching in prose);
+    see module docstring.
     """
     # Interlocutor lead contract (maintenance): interlocutor_lead_context is the NPC-scoped export from
     # discussion tracking + authoritative lead rows; interlocutor_lead_behavior_hints are derived only
@@ -2881,6 +2930,84 @@ def build_narration_context(
         ),
     }
 
+    turn_summary_struct = _build_turn_summary(user_text, resolution, intent)
+    _ts_parts = [
+        str(turn_summary_struct.get("action_descriptor") or "").strip(),
+        str(turn_summary_struct.get("resolution_kind") or "").strip(),
+    ]
+    _labels_ts = turn_summary_struct.get("intent_labels")
+    if isinstance(_labels_ts, list) and _labels_ts:
+        _ts_parts.append(", ".join(str(x).strip() for x in _labels_ts if isinstance(x, str) and str(x).strip()))
+    turn_summary_for_contract = " ".join(p for p in _ts_parts if p).strip() or None
+
+    scene_summary_for_contract: str | None = None
+    if isinstance(public_scene, dict):
+        scene_summary_for_contract = str(public_scene.get("summary") or "").strip() or None
+    if not scene_summary_for_contract and isinstance(scene, dict):
+        _inner = scene.get("scene")
+        if isinstance(_inner, dict):
+            scene_summary_for_contract = str(_inner.get("summary") or "").strip() or None
+
+    session_view_for_separation: Dict[str, Any] = dict(session_view)
+    if isinstance(world_state_view, dict):
+        for _k in (
+            "compressed_world_pressures",
+            "world_pressures",
+            "ambient_pressures",
+            "surfaced_pressures",
+            "surfaced_leads",
+            "prompt_leads",
+            "active_pending_leads",
+            "leads_for_prompt",
+        ):
+            if _k in world_state_view and _k not in session_view_for_separation:
+                session_view_for_separation[_k] = world_state_view[_k]
+
+    compressed_world_pressures_arg: List[str] | None = None
+    if isinstance(campaign, dict):
+        _cwp_c = campaign.get("world_pressures")
+        if isinstance(_cwp_c, list) and _cwp_c:
+            compressed_world_pressures_arg = [
+                str(x).strip() for x in _cwp_c if isinstance(x, str) and str(x).strip()
+            ][:MAX_WORLD_PRESSURES]
+    if compressed_world_pressures_arg is None and isinstance(world_state_view, dict):
+        for _k in ("compressed_world_pressures", "world_pressures"):
+            _raw_wp = world_state_view.get(_k)
+            if isinstance(_raw_wp, list) and _raw_wp:
+                compressed_world_pressures_arg = [
+                    str(x).strip() for x in _raw_wp if isinstance(x, str) and str(x).strip()
+                ][:MAX_WORLD_PRESSURES]
+                break
+
+    context_separation_contract = build_context_separation_contract(
+        resolution=resolution if isinstance(resolution, dict) else None,
+        player_text=str(user_text or ""),
+        session_view=session_view_for_separation,
+        scene_envelope=scene if isinstance(scene, dict) else None,
+        scene_summary=scene_summary_for_contract,
+        turn_summary=turn_summary_for_contract,
+        speaker_selection_contract=speaker_selection if isinstance(speaker_selection, dict) else None,
+        scene_state_anchor_contract=scene_state_anchor_contract if isinstance(scene_state_anchor_contract, dict) else None,
+        narration_visibility=visibility_contract if isinstance(visibility_contract, dict) else None,
+        tone_escalation_contract=tone_escalation_contract if isinstance(tone_escalation_contract, dict) else None,
+        compressed_world_pressures=compressed_world_pressures_arg,
+        prompt_leads=lead_context,
+        active_pending_leads=active_pending_leads,
+        follow_surface=follow_surface,
+    )
+    response_policy["context_separation"] = context_separation_contract
+    prompt_debug_anchor["context_separation"] = _context_separation_prompt_debug_anchor(context_separation_contract)
+
+    _pfnp_ik = session_view.get("active_interaction_kind")
+    player_facing_narration_purity_contract = build_player_facing_narration_purity_contract(
+        interaction_kind=str(_pfnp_ik).strip() if isinstance(_pfnp_ik, str) and str(_pfnp_ik).strip() else None,
+        debug_inputs={"scene_id": scene_pub_id or None},
+    )
+    response_policy["player_facing_narration_purity"] = player_facing_narration_purity_contract
+    prompt_debug_anchor["player_facing_narration_purity"] = _player_facing_narration_purity_prompt_debug_anchor(
+        player_facing_narration_purity_contract
+    )
+
     _narrative_authority_instr = [
         "NARRATIVE AUTHORITY (POLICY): Obey response_policy.narrative_authority for assertion boundaries; deterministic enforcement is authoritative. "
         "Do not assert unresolved outcomes as settled fact. "
@@ -2913,7 +3040,33 @@ def build_narration_context(
         "When anti_railroading_contract.allow_commitment_language_when_player_explicitly_committed is true, narration that follows "
         "the player's explicit commitment in player_input (movement or intent they stated) is allowed and expected where appropriate.",
     ]
-    instructions = list(instructions) + _narrative_authority_instr + _tone_escalation_instr + _anti_railroading_instr
+    _context_separation_instr = [
+        "CONTEXT SEPARATION (POLICY): Obey response_policy.context_separation for ambient world pressure versus local interaction focus; deterministic enforcement uses that shipped object. "
+        "Keep the current interaction intent primary: answer or react to the local exchange first. "
+        "Ambient background pressure may briefly color wording or add an optional hook; it must not replace the substantive reply, hijack topic, or substitute vague instability for a direct answer. "
+        "Background tension alone must not harden interpersonal tone beyond what tone_escalation already allows. "
+        "Letting broader ambient pressure lead the reply is allowed only when the player text, scene framing, a resolved consequence, or published pressure inputs make that focus immediately relevant—not from generic scene mood alone.",
+    ]
+    _player_facing_narration_purity_instr = [
+        "PLAYER-FACING NARRATION PURITY (POLICY): Obey response_policy.player_facing_narration_purity; deterministic enforcement uses that shipped object. "
+        "Speak only in player-facing diegetic prose. "
+        "Do not expose internal consequence/opportunity labels, planner headings, or engine-facing scaffolding as narration. "
+        "Do not present action coaching, prompts, or engine/UI guidance as if it were in-world text. "
+        "Do not mention exits or choices as menu labels (for example 'the exit labeled …', 'your options are …', or bulleted/numbered choice lists). "
+        "When branching paths exist, render them as what the character can see, hear, or infer in the moment—not as explicit instructions to the player.",
+    ]
+    _anchoring_polish_instr = [
+        "SCENE ANCHORING (POLICY): After context separation and narration-purity constraints, keep grounding tight: use scene_state_anchor_contract tokens when tightening wording; do not use anchoring to smuggle extra ambient pressure.",
+    ]
+    instructions = (
+        list(instructions)
+        + _tone_escalation_instr
+        + _narrative_authority_instr
+        + _anti_railroading_instr
+        + _context_separation_instr
+        + _player_facing_narration_purity_instr
+        + _anchoring_polish_instr
+    )
 
     payload: Dict[str, Any] = {
         'instructions': instructions,
@@ -2925,7 +3078,7 @@ def build_narration_context(
             'interlocutor_profile': soc_profile,
             'answer_style_hints': list(answer_style_hints_list),
         },
-        'turn_summary': _build_turn_summary(user_text, resolution, intent),
+        'turn_summary': turn_summary_struct,
         'recent_log': recent_log_compact,
         'player_input': str(user_text or ''),
         'follow_up_pressure': follow_up_pressure,
@@ -2938,6 +3091,8 @@ def build_narration_context(
         'narration_visibility': narration_visibility,
         'scene_state_anchor_contract': scene_state_anchor_contract,
         'anti_railroading_contract': anti_railroading_contract,
+        'context_separation_contract': context_separation_contract,
+        'player_facing_narration_purity_contract': player_facing_narration_purity_contract,
         'prompt_debug': prompt_debug_anchor,
         'first_mention_contract': first_mention_contract,
         'discoverable_hinting': True,

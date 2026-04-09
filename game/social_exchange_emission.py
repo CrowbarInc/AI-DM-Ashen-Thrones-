@@ -738,7 +738,10 @@ def reconcile_strict_social_resolution_speaker(
     if not isinstance(resolution, dict) or not sid:
         return resolution
     soc0 = resolution.get("social")
-    if isinstance(soc0, dict) and soc0.get("open_social_solicitation"):
+    if isinstance(soc0, dict) and (
+        soc0.get("open_social_solicitation")
+        or str(soc0.get("social_intent_class") or "").strip().lower() == "open_call"
+    ):
         return resolution
     merged = merged_player_prompt_for_gate(resolution, session, sid)
     meta = resolution.get("metadata") if isinstance(resolution.get("metadata"), dict) else {}

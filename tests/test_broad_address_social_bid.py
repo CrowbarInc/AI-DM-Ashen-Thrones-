@@ -179,6 +179,7 @@ def test_resolve_social_action_open_solicitation_payload():
     )
     soc = res.get("social") or {}
     assert soc.get("open_social_solicitation") is True
+    assert soc.get("social_intent_class") == "open_call"
     assert soc.get("broad_address_bid") is True
     assert soc.get("target_resolved") is False
     assert soc.get("target_source") == "scene_open_bid"
@@ -199,7 +200,7 @@ def test_build_open_social_solicitation_recovery_concrete_responder_top_ranked(m
         "kind": "question",
         "prompt": "Anyone know about the patrol?",
         "social": {
-            "social_intent_class": "social_exchange",
+            "social_intent_class": "open_call",
             "open_social_solicitation": True,
             "candidate_addressable_ids": ["tavern_runner", "guard_captain"],
             "candidate_addressable_count": 2,
@@ -239,7 +240,7 @@ def test_build_open_social_solicitation_recovery_concrete_lead_when_grounding_bl
         "kind": "question",
         "prompt": "Anyone up for a chat?",
         "social": {
-            "social_intent_class": "social_exchange",
+            "social_intent_class": "open_call",
             "open_social_solicitation": True,
             "candidate_addressable_ids": ["tavern_runner", "guard_captain"],
             "candidate_addressable_count": 2,
@@ -296,7 +297,7 @@ def test_build_open_social_solicitation_recovery_rejects_anti_stall_templates(mo
         "kind": "question",
         "prompt": "Anyone?",
         "social": {
-            "social_intent_class": "social_exchange",
+            "social_intent_class": "open_call",
             "open_social_solicitation": True,
             "candidate_addressable_ids": ["tavern_runner"],
             "candidate_addressable_count": 1,
@@ -332,7 +333,7 @@ def test_apply_deterministic_retry_open_social_suppresses_uncertainty_pool(monke
         "kind": "question",
         "prompt": "Anyone here know about the patrol?",
         "social": {
-            "social_intent_class": "social_exchange",
+            "social_intent_class": "open_call",
             "open_social_solicitation": True,
             "candidate_addressable_ids": ["tavern_runner", "guard_captain"],
             "candidate_addressable_count": 2,
@@ -379,7 +380,7 @@ def test_apply_deterministic_retry_known_fact_wins_before_open_social_recovery(m
         "kind": "question",
         "prompt": "What does the notice say?",
         "social": {
-            "social_intent_class": "social_exchange",
+            "social_intent_class": "open_call",
             "open_social_solicitation": True,
             "candidate_addressable_ids": ["tavern_runner", "guard_captain"],
             "candidate_addressable_count": 2,
@@ -457,7 +458,7 @@ def test_anyone_chat_open_solicitation_retry_fallback_not_dead_air(monkeypatch):
         "kind": "question",
         "prompt": "Anyone up for a chat?",
         "social": {
-            "social_intent_class": "social_exchange",
+            "social_intent_class": "open_call",
             "open_social_solicitation": True,
             "candidate_addressable_ids": ["guard_captain", "tavern_runner"],
             "candidate_addressable_count": 2,

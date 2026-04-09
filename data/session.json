@@ -26,17 +26,17 @@
     "active_entities": [
       "guard_captain",
       "tavern_runner",
-      "emergent_lord_aldric",
       "emergent_town_crier",
+      "emergent_lord_aldric",
       "refugee",
       "threadbare_watcher"
     ],
     "entity_presence": {
       "guard_captain": "active",
       "tavern_runner": "active",
-      "refugee": "active",
-      "emergent_lord_aldric": "active",
       "emergent_town_crier": "active",
+      "emergent_lord_aldric": "active",
+      "refugee": "active",
       "threadbare_watcher": "active"
     },
     "current_interlocutor": null,
@@ -52,24 +52,6 @@
           "Lord Aldric",
           "aldric",
           "lord aldric"
-        ],
-        "kind": "scene_actor",
-        "addressable": true,
-        "address_priority": 40,
-        "emergent_source": "promoted_visible_figure"
-      },
-      {
-        "id": "emergent_town_crier",
-        "name": "Town Crier",
-        "scene_id": "frontier_gate",
-        "address_roles": [
-          "crier",
-          "town crier"
-        ],
-        "aliases": [
-          "town crier",
-          "the town crier",
-          "crier"
         ],
         "kind": "scene_actor",
         "addressable": true,
@@ -91,11 +73,11 @@
       "last_exploration_action_key": "we_leave_the_gatehouse_antechamber_and_s",
       "repeated_action_count": 1,
       "last_resolution_kind": "travel",
-      "last_description_hash": "5bd28878eab336fcb1a80aad3e7c5d1f",
+      "last_description_hash": "86322984cd6afed9d0642169ab6a91bd",
       "consumed_action_ids": [],
       "momentum_exchanges_since": 0,
       "momentum_next_due_in": 3,
-      "momentum_last_kind": "new_information",
+      "momentum_last_kind": "consequence_or_opportunity",
       "passive_action_streak": 0,
       "recent_player_actions": [
         {
@@ -117,29 +99,19 @@
       "last_player_action_passive": false,
       "recent_contextual_leads": [
         {
-          "key": "active_event_refugees_and_townsfolk_bustle_around_voices_raised_in_urgent_whispers_about_the_missing_patrol",
+          "key": "active_event_tavern_runners_voice_cuts_through_the_rain_drenched_murmurings_blending_warmth_with_urgency_holds_beside_it_nearby_the_notice_board_details_new_taxes_curfews",
           "kind": "active_event",
-          "subject": "refugees and townsfolk bustle around, voices raised in urgent whispers about the missing patrol",
-          "position": "",
+          "subject": "tavern runner's voice cuts through the rain-drenched murmurings, blending warmth with urgency holds",
+          "position": "beside it, nearby, the notice board details new taxes, curfews",
           "named": false,
-          "positioned": false,
+          "positioned": true,
           "mentions": 1,
-          "last_turn": 1
+          "last_turn": 2
         },
         {
-          "key": "visible_suspicious_figure_well_dressed_figure_observes_the_newcomers_with_keen_interest_while_the_tavern_runner_calls_out_offering_warm_stew_and_spreading_rumors",
-          "kind": "visible_suspicious_figure",
-          "subject": "well-dressed figure observes the newcomers with keen interest, while the tavern runner calls out, offering warm stew and spreading rumors",
-          "position": "",
-          "named": false,
-          "positioned": false,
-          "mentions": 1,
-          "last_turn": 1
-        },
-        {
-          "key": "active_event_tavern_runner_glances_around_clearly_anxious",
-          "kind": "active_event",
-          "subject": "tavern runner glances around, clearly anxious",
+          "key": "notice_board_notice_board",
+          "kind": "notice_board",
+          "subject": "notice board",
           "position": "",
           "named": false,
           "positioned": false,
@@ -153,17 +125,7 @@
           "position": "",
           "named": true,
           "positioned": false,
-          "mentions": 2,
-          "last_turn": 2
-        },
-        {
-          "key": "active_event_missing_patrol_rumor",
-          "kind": "active_event",
-          "subject": "missing patrol rumor",
-          "position": "",
-          "named": false,
-          "positioned": false,
-          "mentions": 2,
+          "mentions": 1,
           "last_turn": 2
         }
       ]
@@ -198,12 +160,12 @@
       ]
     },
     "emergent_actor_enrolled": true,
-    "emergent_actor_id": "emergent_town_crier",
-    "emergent_actor_source_text": "the town crier"
+    "emergent_actor_id": "emergent_lord_aldric",
+    "emergent_actor_source_text": "Lord Aldric"
   },
   "debug_traces": [
     {
-      "timestamp": "2026-04-08T18:35:04.006142Z",
+      "timestamp": "2026-04-09T01:43:17.308776Z",
       "source": "chat",
       "action_type": "chat",
       "raw_input": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals.",
@@ -280,46 +242,75 @@
                 "player_action": 14
               }
             },
+            "context_separation": {
+              "validation": {
+                "checked": true,
+                "passed": true
+              },
+              "failure_reasons": [],
+              "assertion_flags": {
+                "topic_hijack_background_pressure": false,
+                "pressure_answer_substitution": false,
+                "ambient_pressure_forced_tone_shift": false,
+                "scene_focus_displaced_by_world_pressure": false,
+                "pressure_overweighting": false
+              },
+              "repair_hints": [],
+              "debug_reason_marker": "cs_violations=none;repair_applied=False;pass_after=None;before_len=55;after_len=55;before_head='You act on that move, and the attempt meets resistance.';after_head='You act on that move, and the attempt meets resistance.'"
+            },
             "scene_state_anchor_checked": true,
             "scene_state_anchor_passed": true,
             "scene_state_anchor_failed": false,
             "scene_state_anchor_skip_reason": null,
             "scene_state_anchor_matched_kinds": [
-              "location",
-              "actor",
-              "player_action"
+              "actor"
             ],
             "scene_state_anchor_failure_reasons": [],
-            "scene_state_anchor_repaired": false,
-            "scene_state_anchor_repair_mode": null,
-            "tone_escalation_checked": false,
+            "scene_state_anchor_repaired": true,
+            "scene_state_anchor_repair_mode": "actor_rebind",
+            "tone_escalation_checked": true,
             "tone_escalation_ok": true,
             "tone_escalation_failed": false,
             "tone_escalation_failure_reasons": [],
-            "tone_escalation_detected_flags": {},
+            "tone_escalation_detected_flags": {
+              "guarded": false,
+              "verbal_pressure": false,
+              "explicit_threat": false,
+              "physical_hostility": false,
+              "combat_initiation": false
+            },
             "tone_escalation_matched_tone_level": null,
             "tone_escalation_repaired": false,
             "tone_escalation_repair_mode": null,
             "tone_escalation_contract_summary": {
-              "enabled": false,
-              "base_tone": "neutral",
-              "max_allowed_tone": "neutral",
-              "allow_verbal_pressure": false,
+              "enabled": true,
+              "base_tone": "tense",
+              "max_allowed_tone": "tense",
+              "allow_verbal_pressure": true,
               "allow_explicit_threat": false,
               "allow_physical_hostility": false,
               "allow_combat_initiation": false,
-              "justification_reasons": []
+              "justification_reasons": [
+                "visible_facts_or_runtime_topic_pressure_indicate_elevated_tension",
+                "visible_entity_roles_include_authority_guardship",
+                "affiliated_faction_attitude_and_pressure_in_world_state"
+              ]
             },
-            "tone_escalation_contract_resolution_source": "no_shipped_contract_pipeline_skipped",
+            "tone_escalation_contract_resolution_source": "shipped_response_policy",
             "tone_escalation_violation_before_repair": false,
-            "narrative_authority_checked": false,
+            "narrative_authority_checked": true,
             "narrative_authority_failed": false,
             "narrative_authority_failure_reasons": [],
             "narrative_authority_repaired": false,
             "narrative_authority_repair_mode": null,
-            "narrative_authority_skip_reason": "no_full_contract",
+            "narrative_authority_skip_reason": null,
             "narrative_authority_deferral_mode": null,
-            "narrative_authority_assertion_flags": {},
+            "narrative_authority_assertion_flags": {
+              "invented_outcome": false,
+              "invented_hidden_fact": false,
+              "invented_intent": false,
+              "overcertain_unresolved_action": false
+            },
             "anti_railroading": {
               "validation": {
                 "checked": true,
@@ -350,7 +341,60 @@
             "anti_railroading_repaired": false,
             "anti_railroading_repair_mode": null,
             "anti_railroading_skip_reason": null,
-            "anti_railroading_contract_resolution_source": "fallback_build"
+            "anti_railroading_contract_resolution_source": "shipped",
+            "context_separation_contract_resolution_source": "response_policy",
+            "context_separation_skip_reason": null,
+            "context_separation_checked": true,
+            "context_separation_ok": true,
+            "context_separation_failed": false,
+            "context_separation_failure_reasons": [],
+            "context_separation_assertion_flags": {
+              "topic_hijack_background_pressure": false,
+              "pressure_answer_substitution": false,
+              "ambient_pressure_forced_tone_shift": false,
+              "scene_focus_displaced_by_world_pressure": false,
+              "pressure_overweighting": false
+            },
+            "context_separation_repair_hints": [],
+            "context_separation_repaired": false,
+            "context_separation_repair_mode": null,
+            "context_separation_debug_reason_marker": "cs_violations=none;repair_applied=False;pass_after=None;before_len=55;after_len=55;before_head='You act on that move, and the attempt meets resistance.';after_head='You act on that move, and the attempt meets resistance.'",
+            "context_separation_passed_after_repair": null,
+            "player_facing_narration_purity": {
+              "validation": {
+                "checked": true,
+                "passed": true
+              },
+              "violation_keys": [],
+              "repair_hints": [],
+              "repair_modes": [],
+              "preview_before": "You act on that move, and the attempt meets resistance.",
+              "preview_after": "You act on that move, and the attempt meets resistance."
+            },
+            "player_facing_narration_purity_contract_resolution_source": "response_policy",
+            "player_facing_narration_purity_skip_reason": null,
+            "player_facing_narration_purity_checked": true,
+            "player_facing_narration_purity_failed": false,
+            "player_facing_narration_purity_repaired": false,
+            "player_facing_narration_purity_repair_modes": [],
+            "player_facing_narration_purity_violation_keys": [],
+            "player_facing_narration_purity_repair_hints_used": [],
+            "player_facing_narration_purity_collapsed_to_diegetic_core": false,
+            "player_facing_narration_purity_preview_before": "You act on that move, and the attempt meets resistance.",
+            "player_facing_narration_purity_preview_after": "You act on that move, and the attempt meets resistance.",
+            "answer_shape_primacy": {
+              "checked": true,
+              "passed": true,
+              "failure_reasons": []
+            },
+            "answer_shape_primacy_skip_reason": null,
+            "answer_shape_primacy_checked": true,
+            "answer_shape_primacy_failed": false,
+            "answer_shape_primacy_repaired": false,
+            "answer_shape_primacy_repair_mode": null,
+            "answer_shape_primacy_failure_reasons": [],
+            "answer_shape_primacy_preview_before": "You act on that move, and the attempt meets resistance.",
+            "answer_shape_primacy_preview_after": "You act on that move, and the attempt meets resistance."
           }
         },
         "world_tick_events": [
@@ -471,6 +515,12 @@
             "targetEntityId": "tavern_runner"
           },
           {
+            "id": "question_emergent_town_crier",
+            "type": "question",
+            "label": "Talk to Town Crier",
+            "targetEntityId": "emergent_town_crier"
+          },
+          {
             "id": "examine_the_rain_spatters_soot_dark_stone_frayed",
             "type": "investigate",
             "label": "Examine the Rain spatters soot-dark stone; frayed"
@@ -479,17 +529,12 @@
             "id": "examine_refugees",
             "type": "investigate",
             "label": "Examine Refugees"
-          },
-          {
-            "id": "examine_a_notice_board_lists_new_taxes",
-            "type": "investigate",
-            "label": "Examine A notice board lists new taxes"
           }
         ],
         "emergent_actor": {
           "emergent_actor_enrolled": true,
-          "emergent_actor_id": "emergent_town_crier",
-          "emergent_actor_source_text": "the town crier"
+          "emergent_actor_id": "emergent_lord_aldric",
+          "emergent_actor_source_text": "Lord Aldric"
         },
         "leads": {
           "registry_debug": [],
@@ -527,7 +572,7 @@
       }
     },
     {
-      "timestamp": "2026-04-08T18:35:21.856093Z",
+      "timestamp": "2026-04-09T01:43:36.490202Z",
       "source": "chat",
       "action_type": "chat",
       "raw_input": "I circle back to an earlier detail we skipped and insist we resolve it before moving on.",
@@ -565,39 +610,56 @@
             "scene_state_anchor_failed": false,
             "scene_state_anchor_skip_reason": null,
             "scene_state_anchor_matched_kinds": [
-              "actor"
+              "location",
+              "actor",
+              "player_action"
             ],
             "scene_state_anchor_failure_reasons": [],
-            "scene_state_anchor_repaired": true,
-            "scene_state_anchor_repair_mode": "actor_rebind",
-            "tone_escalation_checked": false,
+            "scene_state_anchor_repaired": false,
+            "scene_state_anchor_repair_mode": null,
+            "tone_escalation_checked": true,
             "tone_escalation_ok": true,
             "tone_escalation_failed": false,
             "tone_escalation_failure_reasons": [],
-            "tone_escalation_detected_flags": {},
+            "tone_escalation_detected_flags": {
+              "guarded": false,
+              "verbal_pressure": false,
+              "explicit_threat": false,
+              "physical_hostility": false,
+              "combat_initiation": false
+            },
             "tone_escalation_matched_tone_level": null,
-            "tone_escalation_repaired": false,
-            "tone_escalation_repair_mode": null,
+            "tone_escalation_repaired": true,
+            "tone_escalation_repair_mode": "physical_hostility_soften",
             "tone_escalation_contract_summary": {
-              "enabled": false,
-              "base_tone": "neutral",
-              "max_allowed_tone": "neutral",
-              "allow_verbal_pressure": false,
+              "enabled": true,
+              "base_tone": "tense",
+              "max_allowed_tone": "tense",
+              "allow_verbal_pressure": true,
               "allow_explicit_threat": false,
               "allow_physical_hostility": false,
               "allow_combat_initiation": false,
-              "justification_reasons": []
+              "justification_reasons": [
+                "visible_facts_or_runtime_topic_pressure_indicate_elevated_tension",
+                "visible_entity_roles_include_authority_guardship",
+                "affiliated_faction_attitude_and_pressure_in_world_state"
+              ]
             },
-            "tone_escalation_contract_resolution_source": "no_shipped_contract_pipeline_skipped",
-            "tone_escalation_violation_before_repair": false,
-            "narrative_authority_checked": false,
+            "tone_escalation_contract_resolution_source": "shipped_response_policy",
+            "tone_escalation_violation_before_repair": true,
+            "narrative_authority_checked": true,
             "narrative_authority_failed": false,
             "narrative_authority_failure_reasons": [],
             "narrative_authority_repaired": false,
             "narrative_authority_repair_mode": null,
-            "narrative_authority_skip_reason": "no_full_contract",
+            "narrative_authority_skip_reason": null,
             "narrative_authority_deferral_mode": null,
-            "narrative_authority_assertion_flags": {},
+            "narrative_authority_assertion_flags": {
+              "invented_outcome": false,
+              "invented_hidden_fact": false,
+              "invented_intent": false,
+              "overcertain_unresolved_action": false
+            },
             "anti_railroading": {
               "validation": {
                 "checked": true,
@@ -628,7 +690,76 @@
             "anti_railroading_repaired": false,
             "anti_railroading_repair_mode": null,
             "anti_railroading_skip_reason": null,
-            "anti_railroading_contract_resolution_source": "fallback_build"
+            "anti_railroading_contract_resolution_source": "shipped",
+            "context_separation": {
+              "validation": {
+                "checked": true,
+                "passed": true
+              },
+              "failure_reasons": [],
+              "assertion_flags": {
+                "topic_hijack_background_pressure": false,
+                "pressure_answer_substitution": false,
+                "ambient_pressure_forced_tone_shift": false,
+                "scene_focus_displaced_by_world_pressure": false,
+                "pressure_overweighting": false
+              },
+              "repair_hints": [],
+              "debug_reason_marker": "cs_violations=none;repair_applied=False;pass_after=None;before_len=365;after_len=365;before_head=\"The tavern runner's voice checks the motion before it lands through the rain-drenched murmurings\u2026\";after_head=\"The tavern runner's voice checks the motion before it lands through the rain-drenched murmurings\u2026\""
+            },
+            "context_separation_contract_resolution_source": "response_policy",
+            "context_separation_skip_reason": null,
+            "context_separation_checked": true,
+            "context_separation_ok": true,
+            "context_separation_failed": false,
+            "context_separation_failure_reasons": [],
+            "context_separation_assertion_flags": {
+              "topic_hijack_background_pressure": false,
+              "pressure_answer_substitution": false,
+              "ambient_pressure_forced_tone_shift": false,
+              "scene_focus_displaced_by_world_pressure": false,
+              "pressure_overweighting": false
+            },
+            "context_separation_repair_hints": [],
+            "context_separation_repaired": false,
+            "context_separation_repair_mode": null,
+            "context_separation_debug_reason_marker": "cs_violations=none;repair_applied=False;pass_after=None;before_len=365;after_len=365;before_head=\"The tavern runner's voice checks the motion before it lands through the rain-drenched murmurings\u2026\";after_head=\"The tavern runner's voice checks the motion before it lands through the rain-drenched murmurings\u2026\"",
+            "context_separation_passed_after_repair": null,
+            "player_facing_narration_purity": {
+              "validation": {
+                "checked": true,
+                "passed": true
+              },
+              "violation_keys": [],
+              "repair_hints": [],
+              "repair_modes": [],
+              "preview_before": "The tavern runner's voice checks the motion before it lands through the rain-drenched murmurings\u2026",
+              "preview_after": "The tavern runner's voice checks the motion before it lands through the rain-drenched murmurings\u2026"
+            },
+            "player_facing_narration_purity_contract_resolution_source": "response_policy",
+            "player_facing_narration_purity_skip_reason": null,
+            "player_facing_narration_purity_checked": true,
+            "player_facing_narration_purity_failed": false,
+            "player_facing_narration_purity_repaired": false,
+            "player_facing_narration_purity_repair_modes": [],
+            "player_facing_narration_purity_violation_keys": [],
+            "player_facing_narration_purity_repair_hints_used": [],
+            "player_facing_narration_purity_collapsed_to_diegetic_core": false,
+            "player_facing_narration_purity_preview_before": "The tavern runner's voice checks the motion before it lands through the rain-drenched murmurings\u2026",
+            "player_facing_narration_purity_preview_after": "The tavern runner's voice checks the motion before it lands through the rain-drenched murmurings\u2026",
+            "answer_shape_primacy": {
+              "checked": true,
+              "passed": true,
+              "failure_reasons": []
+            },
+            "answer_shape_primacy_skip_reason": null,
+            "answer_shape_primacy_checked": true,
+            "answer_shape_primacy_failed": false,
+            "answer_shape_primacy_repaired": false,
+            "answer_shape_primacy_repair_mode": null,
+            "answer_shape_primacy_failure_reasons": [],
+            "answer_shape_primacy_preview_before": "The tavern runner's voice checks the motion before it lands through the rain-drenched murmurings\u2026",
+            "answer_shape_primacy_preview_after": "The tavern runner's voice checks the motion before it lands through the rain-drenched murmurings\u2026"
           }
         }
       },
@@ -721,6 +852,12 @@
             "targetEntityId": "tavern_runner"
           },
           {
+            "id": "question_emergent_town_crier",
+            "type": "question",
+            "label": "Talk to Town Crier",
+            "targetEntityId": "emergent_town_crier"
+          },
+          {
             "id": "examine_the_rain_spatters_soot_dark_stone_frayed",
             "type": "investigate",
             "label": "Examine the Rain spatters soot-dark stone; frayed"
@@ -729,17 +866,12 @@
             "id": "examine_refugees",
             "type": "investigate",
             "label": "Examine Refugees"
-          },
-          {
-            "id": "examine_a_notice_board_lists_new_taxes",
-            "type": "investigate",
-            "label": "Examine A notice board lists new taxes"
           }
         ],
         "emergent_actor": {
           "emergent_actor_enrolled": true,
-          "emergent_actor_id": "emergent_town_crier",
-          "emergent_actor_source_text": "the town crier"
+          "emergent_actor_id": "emergent_lord_aldric",
+          "emergent_actor_source_text": "Lord Aldric"
         },
         "leads": {
           "registry_debug": [],
@@ -782,9 +914,9 @@
   ],
   "flags": {},
   "character_name": "Galinor",
-  "campaign_run_id": "f68b3b31d8f27bc80eaf9e2b",
-  "session_id": "f68b3b31d8f27bc80eaf9e2b",
-  "last_saved_at": "2026-04-08T18:35:36.901467Z",
+  "campaign_run_id": "2ec70ab0bb59130215c7ab83",
+  "session_id": "2ec70ab0bb59130215c7ab83",
+  "last_saved_at": "2026-04-09T01:44:32.171032Z",
   "last_turn_response_policy": {
     "rule_priority_order": [
       "ANSWER THE PLAYER",
@@ -795,6 +927,7 @@
       "IF FULL CERTAINTY IS UNAVAILABLE, GIVE A BOUNDED PARTIAL ANSWER",
       "WHEN THE PLAYER PRESSES THE SAME TOPIC AGAIN, ADD NET-NEW VALUE RATHER THAN RESTATING",
       "MAINTAIN DIEGETIC VOICE (no validator/system voice)",
+      "KEEP NARRATION FREE OF INTERNAL SCAFFOLDS, MENU LABELS, AND ENGINE COACHING",
       "PRESERVE SCENE MOMENTUM",
       "ADD SPECIFICITY / FLAVOR / POLISH"
     ],
@@ -840,7 +973,9 @@
         "explanation_followup_detected": false,
         "insufficiency_followup_detected": false,
         "short_followup_anchor_detected": false,
-        "anchor_tokens_extracted": [],
+        "anchor_tokens_extracted": [
+          "aldric"
+        ],
         "anchor_token_matched": null,
         "anchor_followup_detected": false,
         "explanation_of_recent_anchor_followup": false,
@@ -926,7 +1061,9 @@
         "explanation_followup_detected": false,
         "insufficiency_followup_detected": false,
         "short_followup_anchor_detected": false,
-        "anchor_tokens_extracted": [],
+        "anchor_tokens_extracted": [
+          "aldric"
+        ],
         "anchor_token_matched": null,
         "anchor_followup_detected": false,
         "explanation_of_recent_anchor_followup": false,
@@ -1475,7 +1612,16 @@
         "several figures in the crowd seem to be watching the area intently",
         "the tavern runner appears anxious, hinting that she might have more to offer than just stew",
         "nearby patrons appear anxious, whispering among themselves about the missing patrol",
-        "the muddy ground near the dead drop reveals clearer signs of recent activity; several faint footprints lead northwest into the thicket of scattered crates"
+        "the muddy ground near the dead drop reveals clearer signs of recent activity; several faint footprints lead northwest into the thicket of scattered crates",
+        "the crowd's atmosphere buzzes with urgent whispers about the missing patrol",
+        "a few refugees are discussing sightings of the patrol near the old milestone",
+        "guards exchange nervous glances, suggesting they sense something amiss",
+        "the tavern runner has urgent information about the missing patrol",
+        "nearby patrons seem to be aware of the significance of galinor's interest",
+        "multiple possible exits are visible: a narrow, deserted alleyway leading left and a broader path to a bustling tavern on the right",
+        "faint footprints lead northwest into a cluttered thicket of scattered crates, suggesting hurried movements from the dead drop",
+        "the atmosphere buzzes with urgent whispers from nearby patrons about the missing patrol",
+        "the tavern runner seems eager to share information, casting anxious glances at galinor"
       ],
       "hidden_fact_strings_present": true,
       "discoverable_hinting_allowed": true,
@@ -1561,6 +1707,157 @@
         "speaker_contract_present": true
       }
     },
+    "context_separation": {
+      "enabled": true,
+      "scene_focus_summary": "Rain spatters soot-dark stone as caravans and refugees choke the eastern gate. Guards watch the crowd with the brittle discipline of men who expect trouble, while old banners rot above the walls. general general Rain spatters soot-dark stone as caravans and refugees choke the eastern gate. Guards watch the crowd with the brittle discipline of men who expe...",
+      "interaction_kind": "unknown",
+      "player_intent_summary": "I circle back to an earlier detail we skipped and insist we resolve it before moving on.",
+      "primary_topics": [
+        "circle",
+        "back",
+        "earlier",
+        "detail",
+        "skipped",
+        "insist",
+        "resolve",
+        "before",
+        "moving",
+        "frontier_gate",
+        "frontier gate",
+        "cinderwatch gate district",
+        "cinderwatch gate",
+        "gate district",
+        "rain",
+        "spatters",
+        "soot",
+        "dark",
+        "stone",
+        "frayed",
+        "banners",
+        "hang",
+        "above",
+        "cinderwatch",
+        "eastern",
+        "gate",
+        "lord aldric",
+        "town crier",
+        "guard captain",
+        "ragged stranger",
+        "tavern runner",
+        "threadbare watcher",
+        "aldric"
+      ],
+      "allowed_contextual_topics": [],
+      "ambient_pressure_topics": [
+        "Rival noble houses competing for territory and influence.",
+        "Religious orders attempting to control or suppress dangerous magic.",
+        "Criminal syndicates dominating trade, smuggling, and urban power."
+      ],
+      "forbid_topic_hijack": true,
+      "forbid_pressure_answer_substitution": true,
+      "forbid_unearned_tone_shift_from_background_pressure": true,
+      "allow_brief_pressure_coloring": true,
+      "allow_optional_consequence_signposting": true,
+      "max_pressure_sentences_without_player_prompt": 2,
+      "tone_escalation_contract": {
+        "enabled": true,
+        "scene_id": "frontier_gate",
+        "active_speaker_id": null,
+        "base_tone": "tense",
+        "max_allowed_tone": "tense",
+        "allow_guarded_refusal": true,
+        "allow_verbal_pressure": true,
+        "allow_explicit_threat": false,
+        "allow_physical_hostility": false,
+        "allow_combat_initiation": false,
+        "justification_flags": {
+          "player_used_aggressive_action": false,
+          "player_used_coercive_social_action": false,
+          "player_persisted_after_refusal": false,
+          "scene_has_active_tension": true,
+          "scene_has_authority_pressure": true,
+          "scene_has_visible_hostile_actor": false,
+          "combat_active": false,
+          "resolution_is_risky": false,
+          "npc_already_hostile_in_state": false
+        },
+        "justification_reasons": [
+          "visible_facts_or_runtime_topic_pressure_indicate_elevated_tension",
+          "visible_entity_roles_include_authority_guardship",
+          "affiliated_faction_attitude_and_pressure_in_world_state"
+        ],
+        "preferred_deescalations": [
+          "Tighten diction and body language without 'or else' phrasing.",
+          "Use deadlines, policy, or reputation risk as leverage."
+        ],
+        "debug_reason": "tone_escalation: base_rank=2 max_rank=2 combat_active=False hostile_npc=False",
+        "debug_inputs": {
+          "scene_id": "frontier_gate",
+          "has_session": true,
+          "has_world": true,
+          "has_resolution": false,
+          "has_narration_visibility": true,
+          "has_scene_state_anchor_contract": true,
+          "has_speaker_selection_contract": true,
+          "recent_log_len": 1
+        },
+        "debug_flags": {
+          "base_rank": 2,
+          "max_rank": 2,
+          "recent_player_text_latest_len": 153,
+          "resolution_kind": null,
+          "normalized_action_type": null,
+          "prior_refusal_seen_in_log": false,
+          "topic_pressure": 0,
+          "combat_active_inferred": false
+        }
+      },
+      "debug_inputs": {
+        "has_resolution": false,
+        "has_session_view": true,
+        "has_scene_envelope": true,
+        "has_scene_summary": true,
+        "has_turn_summary": true,
+        "has_speaker_selection_contract": true,
+        "has_scene_state_anchor_contract": true,
+        "has_narration_visibility": true,
+        "has_tone_escalation_contract": true,
+        "has_compressed_world_pressures": true,
+        "has_prompt_leads": true,
+        "has_active_pending_leads": true,
+        "has_follow_surface": false,
+        "player_text_nonempty": true,
+        "primary_topic_count": 33,
+        "ambient_pressure_topic_count": 3
+      },
+      "debug_flags": {
+        "player_seeks_world_danger_info": false,
+        "scene_summary_crisis": false,
+        "interaction_kind_worldish": false,
+        "authoritative_or_consequence_relevant": false,
+        "pressure_focus_allowed": false,
+        "tone_allow_verbal_pressure": true,
+        "tone_allow_explicit_threat": false
+      },
+      "debug_reason": "context_separation: pressure_focus_allowed=False primary_topics=33 ambient=3"
+    },
+    "player_facing_narration_purity": {
+      "enabled": true,
+      "diegetic_only": true,
+      "allow_structured_choice_labels": false,
+      "allow_explicit_ui_references": false,
+      "allow_meta_transition_bridges": false,
+      "forbid_scaffold_headers": true,
+      "forbid_coaching_language": true,
+      "forbid_engine_choice_framing": true,
+      "forbid_non_diegetic_action_prompting": true,
+      "response_type_required": null,
+      "interaction_kind": "travel",
+      "debug_inputs": {
+        "scene_id": "frontier_gate"
+      },
+      "debug_reason": "player_facing_narration_purity: default_strict_diegetic"
+    },
     "response_type_contract": {
       "required_response_type": "neutral_narration",
       "source_route": "exploration",
@@ -1573,7 +1870,7 @@
   },
   "emergent_actor_debug": {
     "emergent_actor_enrolled": true,
-    "emergent_actor_id": "emergent_town_crier",
-    "emergent_actor_source_text": "the town crier"
+    "emergent_actor_id": "emergent_lord_aldric",
+    "emergent_actor_source_text": "Lord Aldric"
   }
 }

@@ -38,7 +38,7 @@ def test_apply_social_exchange_retry_fallback_gm_prefers_open_social_recovery(mo
         "kind": "question",
         "prompt": "Anyone listening?",
         "social": {
-            "social_intent_class": "social_exchange",
+            "social_intent_class": "open_call",
             "open_social_solicitation": True,
             "candidate_addressable_ids": ["guard_captain", "tavern_runner"],
             "candidate_addressable_count": 2,

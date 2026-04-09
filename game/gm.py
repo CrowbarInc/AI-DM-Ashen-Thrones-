@@ -27,6 +27,7 @@ from game.storage import (
     SCENE_MOMENTUM_KINDS,
     SCENE_MOMENTUM_TAG_PREFIX,
 )
+from game.diegetic_fallback_narration import render_scene_momentum_diegetic_append
 from game.clues import get_clue_presentation, get_known_clues_with_presentation
 from game.leads import filter_pending_leads_for_active_follow_surface
 from game.interaction_context import (
@@ -3416,12 +3417,169 @@ def _resolve_known_fact_from_context(player_text: str, context: Dict[str, Any]) 
         return None
     scene_snapshot = context.get("scene_snapshot") if isinstance(context.get("scene_snapshot"), dict) else {}
     recent_leads = scene_snapshot.get("recent_contextual_leads") if isinstance(scene_snapshot.get("recent_contextual_leads"), list) else []
-    return (
-        _known_fact_from_recent_leads(player_text, recent_leads)
-        or _known_fact_from_scene_location(player_text, scene_snapshot)
-        or _known_fact_from_visible_figures(player_text, scene_snapshot)
-        or _known_fact_from_visible_scene_fact(player_text, scene_snapshot)
+    candidates: List[Dict[str, Any] | None] = [
+        _known_fact_from_recent_leads(player_text, recent_leads),
+        _known_fact_from_scene_location(player_text, scene_snapshot),
+        _known_fact_from_visible_figures(player_text, scene_snapshot),
+        _known_fact_from_visible_scene_fact(player_text, scene_snapshot),
+    ]
+    for cand in candidates:
+        if not isinstance(cand, dict):
+            continue
+        t = str(cand.get("text") or "").strip()
+        if not t:
+            continue
+        if _is_valid_player_facing_fallback_answer(
+            t,
+            player_text=player_text,
+            known_fact=cand,
+            failure_class="unresolved_question",
+        ):
+            return cand
+    return None
+
+
+def _fallback_known_fact_answer_locally_relevant(
+    answer: str,
+    player_text: str,
+    known_fact: Dict[str, Any] | None,
+    *,
+    failure_class: str = "",
+) -> bool:
+    """Loose token/anchor overlap so continuity snippets are not reused across unrelated questions."""
+    al = answer.lower()
+    player_low = str(player_text or "").strip().lower()
+    fc = str(failure_class or "").strip()
+    if fc == "answer":
+        qtok = _question_content_tokens(player_text)
+        if not qtok:
+            return True
+        return any(tok in al for tok in qtok)
+
+    if any(
+        al.startswith(prefix)
+        for prefix in ("you are in ", "you're in ", "you are at ", "you're at ")
+    ):
+        if "where" in player_low or any(t in player_low for t in _KNOWN_SCENE_LOCATION_PROMPTS):
+            return True
+
+    if al.startswith("you recognize them as "):
+        if re.search(r"\bwho\b", player_low) or "they" in player_low or "them" in player_low:
+            return True
+
+    if isinstance(known_fact, dict):
+        src = str(known_fact.get("source") or "").strip()
+        if src == "recent_dialogue_continuity":
+            subj = str(known_fact.get("subject") or "").strip().lower()
+            if subj and subj in al:
+                if _looks_like_follow_up_find_request(player_low):
+                    return True
+                if any(t in player_low for t in _LEAD_FOLLOW_UP_PRONOUN_TOKENS):
+                    return True
+
+    qtok = _question_content_tokens(player_text)
+    for tok in qtok:
+        if tok in al:
+            return True
+
+    if isinstance(known_fact, dict):
+        for key in ("subject", "position", "fact_text"):
+            chunk = str(known_fact.get(key) or "").strip().lower()
+            if not chunk:
+                continue
+            if chunk in player_low:
+                return True
+            for w in chunk.split():
+                w2 = re.sub(r"[^\w]+", "", w)
+                if len(w2) >= 4 and w2 in player_low:
+                    return True
+    return False
+
+
+def _is_valid_player_facing_fallback_answer(
+    text: str,
+    *,
+    player_text: str = "",
+    known_fact: Dict[str, Any] | None = None,
+    failure_class: str = "",
+) -> bool:
+    """True when *text* is safe to emit or embed as established continuity (not planner residue or malformed glue)."""
+    raw = str(text or "").strip()
+    if len(raw) < 6 or len(raw) > 600:
+        return False
+    low = raw.lower()
+    if detect_validator_voice(raw):
+        return False
+
+    planner_markers = (
+        "concrete turn",
+        "gives you one",
+        "until it gives",
+        "retry target",
+        "rule priority hierarchy",
+        "rule priority",
+        "json shape",
+        "correct only this failure",
+        "same json shape",
+        "best lead",
+        "selected_lead",
+        "validator voice",
+        "system prompt",
+        "as an ai",
+        "established in current scene state or dialogue continuity",
     )
+    for m in planner_markers:
+        if m in low:
+            return False
+    if re.search(r"\bstay with\b.+\buntil\b", low):
+        return False
+    if re.search(r"\b(stay|wait|hold)\b.+\buntil\b.+\b(concrete|turn|beat)\b", low):
+        return False
+
+    if re.search(r"\byou should\b", low) or re.search(r"\byou could\b", low):
+        return False
+    if re.search(r"\btry to\b", low) or re.search(r"\bconsider (doing|trying)\b", low):
+        return False
+
+    mrec = re.match(r"^you recognize them as\s+(.+)$", low)
+    if mrec:
+        tail = mrec.group(1)
+        if re.search(r"\b(stay|until|gives you|concrete|reacting)\b", tail):
+            return False
+        if "rumor" in tail and re.search(r"\b(missing|until|stay|patrol|reacting)\b", tail):
+            return False
+        if tail.count(",") > 4:
+            return False
+
+    words = re.findall(r"[a-zA-Z']+", raw)
+    if len(words) >= 6:
+        long_ratio = sum(1 for w in words if len(w) > 16) / len(words)
+        if long_ratio > 0.2:
+            return False
+
+    pl = str(player_text or "").strip().lower()
+    if pl and not _fallback_known_fact_answer_locally_relevant(
+        raw,
+        player_text,
+        known_fact,
+        failure_class=failure_class,
+    ):
+        return False
+    return True
+
+
+def _question_resolution_exempt_for_open_crowd_social(resolution: Dict[str, Any] | None) -> bool:
+    """Crowd / open-call social turns are not one-to-one question-resolution contracts."""
+    if not isinstance(resolution, dict):
+        return False
+    soc = resolution.get("social")
+    if not isinstance(soc, dict):
+        return False
+    if str(soc.get("social_intent_class") or "").strip().lower() == "open_call":
+        return True
+    if soc.get("open_social_solicitation") and soc.get("npc_reply_expected") is not True:
+        return True
+    return False
 
 
 def resolve_known_fact_before_uncertainty(
@@ -3471,6 +3629,8 @@ def question_resolution_rule_check(
     if not applies:
         return {"applies": False, "ok": True, "reasons": []}
     if is_scene_directed_watch_question(player):
+        return {"applies": False, "ok": True, "reasons": []}
+    if _question_resolution_exempt_for_open_crowd_social(resolution):
         return {"applies": False, "ok": True, "reasons": []}
     if not reply:
         return {"applies": True, "ok": False, "reasons": ["question_rule:empty_reply"]}
@@ -3548,19 +3708,26 @@ def classify_uncertainty(
     )
     known_fact = _resolve_known_fact_from_context(player_text, context)
     if isinstance(known_fact, dict):
-        return {
-            "category": "",
-            "known_fact": known_fact,
-            "known_edge": str(known_fact.get("text") or "").strip(),
-            "unknown_edge": "",
-            "next_lead": "",
-            "speaker": context["speaker"],
-            "turn_context": context["turn_context"],
-            "scene_snapshot": context["scene_snapshot"],
-            "speaker_role": str((context.get("speaker") or {}).get("role") or "narrator").strip().lower(),
-            "speaker_name": str((context.get("speaker") or {}).get("name") or "").strip(),
-            "delivery": "",
-        }
+        ktxt = str(known_fact.get("text") or "").strip()
+        if ktxt and _is_valid_player_facing_fallback_answer(
+            ktxt,
+            player_text=player_text,
+            known_fact=known_fact,
+            failure_class="unresolved_question",
+        ):
+            return {
+                "category": "",
+                "known_fact": known_fact,
+                "known_edge": ktxt,
+                "unknown_edge": "",
+                "next_lead": "",
+                "speaker": context["speaker"],
+                "turn_context": context["turn_context"],
+                "scene_snapshot": context["scene_snapshot"],
+                "speaker_role": str((context.get("speaker") or {}).get("role") or "narrator").strip().lower(),
+                "speaker_name": str((context.get("speaker") or {}).get("name") or "").strip(),
+                "delivery": "",
+            }
     category = _classify_uncertainty_category(player_text)
     rendered = _render_uncertainty_lines(
         category,
@@ -3581,6 +3748,7 @@ def render_uncertainty_response(
     turn_context: Dict[str, Any] | None = None,
     speaker_identity: Dict[str, Any] | None = None,
     scene_snapshot: Dict[str, Any] | None = None,
+    player_text: str = "",
 ) -> str:
     """Render a bounded answer with a known edge, uncertainty edge, and lead."""
     if not isinstance(uncertainty, dict):
@@ -3594,7 +3762,12 @@ def render_uncertainty_response(
         )
     known_fact = uncertainty.get("known_fact") if isinstance(uncertainty.get("known_fact"), dict) else {}
     known_fact_text = str(known_fact.get("text") or "").strip()
-    if known_fact_text:
+    if known_fact_text and _is_valid_player_facing_fallback_answer(
+        known_fact_text,
+        player_text=str(player_text or ""),
+        known_fact=known_fact,
+        failure_class="unresolved_question",
+    ):
         return _ensure_terminal_punctuation(known_fact_text)
     category = str(uncertainty.get("category") or uncertainty_type or "").strip()
     source = str(uncertainty.get("source") or "").strip()
@@ -3678,12 +3851,27 @@ def _apply_uncertainty_to_gm(
     uncertainty: Dict[str, Any],
     reason: str,
     replace_text: bool = False,
+    player_text: str = "",
 ) -> Dict[str, Any]:
     if not isinstance(gm, dict):
         return gm
     gm = dict(gm)
-    known_fact = uncertainty.get("known_fact") if isinstance(uncertainty, dict) and isinstance(uncertainty.get("known_fact"), dict) else {}
-    rendered = render_uncertainty_response(uncertainty)
+    unc = dict(uncertainty) if isinstance(uncertainty, dict) else {}
+    kf = unc.get("known_fact") if isinstance(unc.get("known_fact"), dict) else {}
+    ktxt = str(kf.get("text") or "").strip()
+    if ktxt and not _is_valid_player_facing_fallback_answer(
+        ktxt,
+        player_text=str(player_text or ""),
+        known_fact=kf,
+        failure_class="unresolved_question",
+    ):
+        unc.pop("known_fact", None)
+        ke = str(unc.get("known_edge") or "").strip()
+        if ke == ktxt:
+            unc.pop("known_edge", None)
+            unc.pop("what_can_be_said_now", None)
+    known_fact = unc.get("known_fact") if isinstance(unc.get("known_fact"), dict) else {}
+    rendered = render_uncertainty_response(unc, player_text=str(player_text or ""))
     if not rendered:
         return gm
     existing = gm.get("player_facing_text") if isinstance(gm.get("player_facing_text"), str) else ""
@@ -3727,7 +3915,14 @@ def _bounded_spoiler_safe_text(
             resolution=resolution,
         )
         if isinstance(known_fact, dict) and str(known_fact.get("text") or "").strip():
-            return str(known_fact.get("text") or "").strip()
+            kt = str(known_fact.get("text") or "").strip()
+            if _is_valid_player_facing_fallback_answer(
+                kt,
+                player_text=player_text,
+                known_fact=known_fact,
+                failure_class="unresolved_question",
+            ):
+                return kt
         return render_uncertainty_response(
             classify_uncertainty(
                 player_text,
@@ -3762,7 +3957,14 @@ def _validator_voice_world_fallback(
             resolution=resolution,
         )
         if isinstance(known_fact, dict) and str(known_fact.get("text") or "").strip():
-            return str(known_fact.get("text") or "").strip()
+            kt = str(known_fact.get("text") or "").strip()
+            if _is_valid_player_facing_fallback_answer(
+                kt,
+                player_text=player_text,
+                known_fact=known_fact,
+                failure_class="unresolved_question",
+            ):
+                return kt
         return render_uncertainty_response(
             classify_uncertainty(
                 player_text,
@@ -3818,6 +4020,7 @@ def enforce_question_resolution_rule(
         ),
         reason=f"question_resolution_rule:enforced:{chk.get('reasons')}",
         replace_text=False,
+        player_text=player_text,
     )
     tags = out.get("tags") if isinstance(out.get("tags"), list) else []
     out["tags"] = list(tags) + ["question_resolution_rule"]
@@ -4239,6 +4442,19 @@ def build_messages(
                     "actor": len(sac.get("actor_tokens") or []),
                     "player_action": len(sac.get("player_action_tokens") or []),
                 },
+            }
+        csep = payload.get("context_separation_contract")
+        if isinstance(csep, dict):
+            md = resolution.setdefault("metadata", {})
+            em = md.setdefault("emission_debug", {})
+            _cdf = csep.get("debug_flags")
+            if not isinstance(_cdf, dict):
+                _cdf = {}
+            em["context_separation"] = {
+                "enabled": csep.get("enabled"),
+                "interaction_kind": csep.get("interaction_kind"),
+                "pressure_focus_allowed": _cdf.get("pressure_focus_allowed"),
+                "debug_reason": csep.get("debug_reason"),
             }
         _soc_esc = (resolution.get("social") or {}).get("social_escalation")
         if isinstance(_soc_esc, dict) and int(_soc_esc.get("escalation_level") or 0) >= 2:
@@ -4872,41 +5088,8 @@ def enforce_scene_momentum(gm: Dict[str, Any], *, session: Dict[str, Any], scene
     kind = "consequence_or_opportunity"
     gm["tags"] = list(tags) + [f"{SCENE_MOMENTUM_TAG_PREFIX}{kind}"]
 
-    visible = scene.get("visible_facts") if isinstance(scene.get("visible_facts"), list) else []
-    exits = scene.get("exits") if isinstance(scene.get("exits"), list) else []
-    loc = str(scene.get("location") or "").strip()
-
-    options: list[str] = []
-    if exits and isinstance(exits[0], dict):
-        label = str(exits[0].get("label") or "").strip()
-        if label:
-            options.append(f"take the exit labeled “{label}”")
-    for v in visible:
-        if not isinstance(v, str):
-            continue
-        low = v.lower()
-        if "notice board" in low or "noticeboard" in low:
-            options.append("read the notice board closely for names, times, and requirements")
-            break
-    for v in visible:
-        if not isinstance(v, str):
-            continue
-        low = v.lower()
-        if "tavern" in low or "runner" in low or "rumor" in low or "rumour" in low:
-            options.append("pull the tavern runner aside and buy one specific rumor")
-            break
-    if not options and visible:
-        options.append("pick one detail in the scene and investigate it up close")
-    if not options:
-        options.append("choose a concrete next step and press it immediately")
-
-    loc_phrase = f" in {loc}" if loc else ""
-    opportunity = (
-        "Consequence / Opportunity: the moment doesn’t wait for more small talk—"
-        f"commit to one concrete move{loc_phrase}: "
-        + "; or ".join(options[:2])
-        + "."
-    )
+    envelope = scene_envelope if isinstance(scene_envelope, dict) else {"scene": scene}
+    opportunity = render_scene_momentum_diegetic_append(envelope, seed_key=scene_id or "momentum")
     txt = gm.get("player_facing_text") if isinstance(gm.get("player_facing_text"), str) else ""
     gm["player_facing_text"] = (txt.strip() + ("\n\n" if txt.strip() else "") + opportunity).strip()
 
@@ -5073,6 +5256,7 @@ def enforce_no_validator_voice(
             ),
             reason=f"validator_voice_rewrite:{hits}",
             replace_text=True,
+            player_text=player_text,
         )
         tags = gm.get("tags") if isinstance(gm.get("tags"), list) else []
         gm["tags"] = list(tags) + ["validator_voice_rewrite"]
@@ -5214,12 +5398,15 @@ def apply_response_policy_enforcement(
         scene_envelope=scene_envelope,
         reply_text=str(out.get("player_facing_text") or ""),
     )
+    if isinstance(policy, dict):
+        out["response_policy"] = dict(policy)
     return out
 
 
 from game.gm_retry import (
     MAX_TARGETED_RETRY_ATTEMPTS,
     RETRY_FAILURE_PRIORITY,
+    resolution_is_open_crowd_social,
     _retry_allows_hostile_escalation,
     _FINAL_EMISSION_META_CONTINUITY_KEYS,
     _NONSOCIAL_EMPTY_REPAIR_HARD_LINE,
@@ -5243,6 +5430,7 @@ from game.gm_retry import (
     _stable_u32_from_seed,
     _strip_double_quoted_spans_for_generic_scan,
     _strict_social_speaker_led_opening_for_retry,
+    _social_answer_fallback_in_scope,
     apply_deterministic_retry_fallback,
     build_retry_prompt_for_failure,
     choose_retry_strategy,
@@ -5250,6 +5438,7 @@ from game.gm_retry import (
     ensure_minimal_nonsocial_resolution,
     ensure_minimal_social_resolution,
     force_terminal_retry_fallback,
+    inspect_retry_social_answer_fallback_scope,
     prioritize_retry_failures_for_social_answer_candidate,
     scene_stall_check,
 )

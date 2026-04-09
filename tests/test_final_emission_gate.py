@@ -8,8 +8,10 @@ import game.scene_state_anchoring as ssa
 from game.defaults import default_session, default_world
 from game.final_emission_gate import apply_final_emission_gate, get_speaker_selection_contract
 from game.anti_railroading import build_anti_railroading_contract
+from game.context_separation import build_context_separation_contract
 from game.narrative_authority import build_narrative_authority_contract
 from game.interaction_context import rebuild_active_scene_entities, set_social_target
+from game.player_facing_narration_purity import build_player_facing_narration_purity_contract
 from game.social_exchange_emission import effective_strict_social_resolution_for_emission
 from game.storage import get_scene_runtime
 
@@ -1296,6 +1298,9 @@ def test_non_strict_gate_runs_anti_railroading_after_na_before_scene_state_ancho
     order: list[str] = []
     orig_na = feg._apply_narrative_authority_layer
     orig_ar = feg._apply_anti_railroading_layer
+    orig_cs = feg._apply_context_separation_layer
+    orig_pur = feg._apply_player_facing_narration_purity_layer
+    orig_asp = feg._apply_answer_shape_primacy_layer
     orig_ssa = feg._apply_scene_state_anchor_layer
 
     def na(*args, **kwargs):
@@ -1306,18 +1311,38 @@ def test_non_strict_gate_runs_anti_railroading_after_na_before_scene_state_ancho
         order.append("anti_railroading")
         return orig_ar(*args, **kwargs)
 
+    def cs(*args, **kwargs):
+        order.append("context_separation")
+        return orig_cs(*args, **kwargs)
+
+    def pur(*args, **kwargs):
+        order.append("player_facing_narration_purity")
+        return orig_pur(*args, **kwargs)
+
+    def asp(*args, **kwargs):
+        order.append("answer_shape_primacy")
+        return orig_asp(*args, **kwargs)
+
     def ssa(*args, **kwargs):
         order.append("scene_state_anchor")
         return orig_ssa(*args, **kwargs)
 
     monkeypatch.setattr(feg, "_apply_narrative_authority_layer", na)
     monkeypatch.setattr(feg, "_apply_anti_railroading_layer", ar)
+    monkeypatch.setattr(feg, "_apply_context_separation_layer", cs)
+    monkeypatch.setattr(feg, "_apply_player_facing_narration_purity_layer", pur)
+    monkeypatch.setattr(feg, "_apply_answer_shape_primacy_layer", asp)
     monkeypatch.setattr(feg, "_apply_scene_state_anchor_layer", ssa)
 
+    cs_contract = build_context_separation_contract(
+        player_text="I watch.",
+        resolution={"kind": "observe"},
+    )
     apply_final_emission_gate(
         {
             "player_facing_text": "Fog rolls in.",
             "tags": [],
+            "context_separation_contract": cs_contract,
             "scene_state_anchor_contract": _ssa_contract(location_tokens=["granite"]),
         },
         resolution={"kind": "observe", "prompt": "I watch."},
@@ -1326,7 +1351,10 @@ def test_non_strict_gate_runs_anti_railroading_after_na_before_scene_state_ancho
         world={},
     )
     assert order.index("narrative_authority") < order.index("anti_railroading")
-    assert order.index("anti_railroading") < order.index("scene_state_anchor")
+    assert order.index("anti_railroading") < order.index("context_separation")
+    assert order.index("context_separation") < order.index("player_facing_narration_purity")
+    assert order.index("player_facing_narration_purity") < order.index("answer_shape_primacy")
+    assert order.index("answer_shape_primacy") < order.index("scene_state_anchor")
 
 
 def test_anti_railroading_surfaced_lead_mandatory_repair(monkeypatch):
@@ -1344,3 +1372,465 @@ def test_anti_railroading_surfaced_lead_mandatory_repair(monkeypatch):
     assert (out.get("_final_emission_meta") or {}).get("anti_railroading_repaired") is True
     low = (out.get("player_facing_text") or "").lower()
     assert "pressure" in low or "option" in low
+
+
+def test_apply_final_emission_gate_runs_context_separation_before_scene_state_anchor(monkeypatch):
+    order: list[str] = []
+    orig_cs = feg._apply_context_separation_layer
+    orig_pur = feg._apply_player_facing_narration_purity_layer
+    orig_asp = feg._apply_answer_shape_primacy_layer
+    orig_ssa = feg._apply_scene_state_anchor_layer
+
+    def cs(*args, **kwargs):
+        order.append("context_separation")
+        return orig_cs(*args, **kwargs)
+
+    def pur(*args, **kwargs):
+        order.append("player_facing_narration_purity")
+        return orig_pur(*args, **kwargs)
+
+    def asp(*args, **kwargs):
+        order.append("answer_shape_primacy")
+        return orig_asp(*args, **kwargs)
+
+    def ssa(*args, **kwargs):
+        order.append("scene_state_anchor")
+        return orig_ssa(*args, **kwargs)
+
+    monkeypatch.setattr(feg, "_apply_context_separation_layer", cs)
+    monkeypatch.setattr(feg, "_apply_player_facing_narration_purity_layer", pur)
+    monkeypatch.setattr(feg, "_apply_answer_shape_primacy_layer", asp)
+    monkeypatch.setattr(feg, "_apply_scene_state_anchor_layer", ssa)
+
+    cs_contract = build_context_separation_contract(
+        player_text="I look around.",
+        resolution={"kind": "observe"},
+    )
+    apply_final_emission_gate(
+        {
+            "player_facing_text": "Fog rolls in low over the gate.",
+            "tags": [],
+            "context_separation_contract": cs_contract,
+            "scene_state_anchor_contract": _ssa_contract(location_tokens=["granite"]),
+        },
+        resolution={"kind": "observe", "prompt": "I look around."},
+        session={},
+        scene_id="frontier_gate",
+        world={},
+    )
+    assert order.index("context_separation") < order.index("player_facing_narration_purity")
+    assert order.index("player_facing_narration_purity") < order.index("answer_shape_primacy")
+    assert order.index("answer_shape_primacy") < order.index("scene_state_anchor")
+
+
+def test_gate_context_separation_pass_brief_pressure_after_direct_answer(monkeypatch):
+    monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
+    pt = "What does the loaf cost today?"
+    cs = build_context_separation_contract(player_text=pt, resolution={"kind": "barter"})
+    text = (
+        'She names a price flatly. "Two coppers," she says. '
+        "The ward's tense tonight—patrols everywhere—but bread is still bread."
+    )
+    out = apply_final_emission_gate(
+        {"player_facing_text": text, "tags": [], "context_separation_contract": cs},
+        resolution={"kind": "barter", "prompt": pt},
+        session=None,
+        scene_id="market_stall",
+        world={},
+    )
+    em = (out.get("metadata") or {}).get("emission_debug") or {}
+    assert em.get("context_separation", {}).get("validation", {}).get("passed") is True
+    assert (out.get("_final_emission_meta") or {}).get("final_route") == "accept_candidate"
+
+
+def test_gate_context_separation_pass_crisis_scene_pressure_focus(monkeypatch):
+    monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
+    pt = "Where is the exit?"
+    cs = build_context_separation_contract(
+        player_text=pt,
+        scene_summary="A raid tears through the lower ward; panic and smoke choke the alleys.",
+        resolution={"kind": "travel"},
+    )
+    text = (
+        "A guardsman points past a splintered door. "
+        "The crackdown is still rolling house to house; you move or you are moved."
+    )
+    out = apply_final_emission_gate(
+        {"player_facing_text": text, "tags": [], "context_separation_contract": cs},
+        resolution={"kind": "travel", "prompt": pt},
+        session=None,
+        scene_id="ward_raid",
+        world={},
+    )
+    em = (out.get("metadata") or {}).get("emission_debug") or {}
+    assert em.get("context_separation", {}).get("validation", {}).get("passed") is True
+
+
+def test_gate_context_separation_pass_player_asks_danger(monkeypatch):
+    monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
+    pt = "Is it safe to linger here with the patrols?"
+    cs = build_context_separation_contract(player_text=pt, resolution={"kind": "social_probe"})
+    text = (
+        "He doesn't laugh. 'Safe is a small word for a big war,' he says. "
+        "Unrest has the factions eyeing each other; tonight, nowhere feels clean."
+    )
+    out = apply_final_emission_gate(
+        {"player_facing_text": text, "tags": [], "context_separation_contract": cs},
+        resolution={"kind": "social_probe", "prompt": pt},
+        session=None,
+        scene_id="street",
+        world={},
+    )
+    em = (out.get("metadata") or {}).get("emission_debug") or {}
+    assert em.get("context_separation", {}).get("validation", {}).get("passed") is True
+
+
+def test_gate_context_separation_repair_drops_pressure_lead_in(monkeypatch):
+    monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
+    pt = "What does the loaf cost today?"
+    cs = build_context_separation_contract(player_text=pt, resolution={"kind": "barter"})
+    text = (
+        "The war along the border has everyone on edge, and coin means nothing next to survival. "
+        'She still says, "Two coppers," flat as slate.'
+    )
+    out = apply_final_emission_gate(
+        {"player_facing_text": text, "tags": [], "context_separation_contract": cs},
+        resolution={"kind": "barter", "prompt": pt},
+        session=None,
+        scene_id="market_stall",
+        world={},
+    )
+    meta = out.get("_final_emission_meta") or {}
+    assert meta.get("context_separation_repaired") is True
+    assert "drop_lead" in str(meta.get("context_separation_repair_mode") or "")
+    assert "two coppers" in (out.get("player_facing_text") or "").lower()
+    em = (out.get("metadata") or {}).get("emission_debug") or {}
+    assert em.get("context_separation_passed_after_repair") is True
+
+
+def test_gate_context_separation_fail_pressure_monologue_replaces_non_social(monkeypatch):
+    monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
+    pt = "What does the loaf cost today?"
+    cs = build_context_separation_contract(player_text=pt, resolution={"kind": "barter"})
+    text = (
+        "The war along the border has everyone on edge, and coin means nothing next to survival. "
+        "Factions trade rumors faster than grain, and the capital's politics swallow small questions whole."
+    )
+    out = apply_final_emission_gate(
+        {"player_facing_text": text, "tags": [], "context_separation_contract": cs},
+        resolution={"kind": "barter", "prompt": pt},
+        session=None,
+        scene_id="market_stall",
+        world={},
+    )
+    meta = out.get("_final_emission_meta") or {}
+    assert meta.get("context_separation_failed") is True
+    assert meta.get("final_route") == "replaced"
+
+
+def test_gate_context_separation_tone_escalation_with_city_pressure_fails(monkeypatch):
+    monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
+    pt = "Good morning. A loaf, please."
+    cs = build_context_separation_contract(
+        player_text=pt,
+        resolution={"kind": "barter"},
+        tone_escalation_contract={"allow_verbal_pressure": False, "allow_explicit_threat": False},
+    )
+    text = (
+        "The city is on edge tonight, so back off and drop it—this is not the time for questions."
+    )
+    out = apply_final_emission_gate(
+        {"player_facing_text": text, "tags": [], "context_separation_contract": cs},
+        resolution={"kind": "barter", "prompt": pt},
+        session=None,
+        scene_id="market_stall",
+        world={},
+    )
+    meta = out.get("_final_emission_meta") or {}
+    assert meta.get("context_separation_failed") is True
+    assert "ambient_pressure_forced_tone_shift" in (meta.get("context_separation_failure_reasons") or [])
+
+
+def test_gate_context_separation_substitution_fail_then_replace(monkeypatch):
+    monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
+    pt = "What is the price today?"
+    cs = build_context_separation_contract(player_text=pt, resolution={"kind": "barter"})
+    text = (
+        "It is impossible to say with the unrest what the price is; "
+        "any answer is swallowed by the instability of the war."
+    )
+    out = apply_final_emission_gate(
+        {"player_facing_text": text, "tags": [], "context_separation_contract": cs},
+        resolution={"kind": "barter", "prompt": pt},
+        session=None,
+        scene_id="market_stall",
+        world={},
+    )
+    meta = out.get("_final_emission_meta") or {}
+    assert meta.get("context_separation_failed") is True
+    assert meta.get("final_route") == "replaced"
+
+
+def test_gate_context_separation_pressure_overweight_replaces(monkeypatch):
+    monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
+    pt = "What is your name?"
+    cs = build_context_separation_contract(player_text=pt, resolution={"kind": "social_probe"})
+    text = (
+        "The border war reshapes every oath. "
+        "Unrest makes factions bold and the crown brittle. "
+        "Invasion rumors outrun truth, and politics turns markets into maps. "
+        "Empire scouts watch the passes, and the realm tears at its seams."
+    )
+    out = apply_final_emission_gate(
+        {"player_facing_text": text, "tags": [], "context_separation_contract": cs},
+        resolution={"kind": "social_probe", "prompt": pt},
+        session=None,
+        scene_id="scene",
+        world={},
+    )
+    meta = out.get("_final_emission_meta") or {}
+    assert meta.get("context_separation_failed") is True
+    assert "pressure_overweighting" in (meta.get("context_separation_failure_reasons") or [])
+
+
+# --- Player-facing narration purity + answer-shape primacy (Block 3) ------------------------------
+
+
+def _purity_contract(**kwargs):
+    return build_player_facing_narration_purity_contract(**kwargs)
+
+
+def _response_type_contract(required: str) -> dict:
+    return {
+        "required_response_type": required,
+        "action_must_preserve_agency": required == "action_outcome",
+    }
+
+
+def test_resolve_player_facing_narration_purity_contract_from_response_policy():
+    c = _purity_contract()
+    gm = {"response_policy": {"player_facing_narration_purity": c}}
+    got, src = feg._resolve_player_facing_narration_purity_contract(gm)
+    assert got is c
+    assert src == "response_policy"
+
+
+def test_gate_purity_and_asp_pass_clean_observation(monkeypatch):
+    monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
+    out = apply_final_emission_gate(
+        {
+            "player_facing_text": "Rain hammers the slate roof; torchlight shivers in the gutter below.",
+            "tags": [],
+            "player_facing_narration_purity_contract": _purity_contract(),
+            "response_policy": {"response_type_contract": _response_type_contract("neutral_narration")},
+        },
+        resolution={"kind": "observe", "prompt": "I look around the street."},
+        session={},
+        scene_id="market_lane",
+        world={},
+    )
+    meta = out.get("_final_emission_meta") or {}
+    assert meta.get("player_facing_narration_purity_failed") is False
+    assert meta.get("answer_shape_primacy_failed") is False
+    assert "Rain" in (out.get("player_facing_text") or "")
+
+
+def test_gate_purity_and_asp_pass_scene_transition_arrival(monkeypatch):
+    monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
+    out = apply_final_emission_gate(
+        {
+            "player_facing_text": (
+                "You emerge into the lower ward—smoke, shouted names, the harbor's brine on the wind."
+            ),
+            "tags": [],
+            "player_facing_narration_purity_contract": _purity_contract(),
+            "response_policy": {"response_type_contract": _response_type_contract("neutral_narration")},
+        },
+        resolution={
+            "kind": "travel",
+            "prompt": "I take the postern into the ward.",
+            "resolved_transition": True,
+        },
+        session={},
+        scene_id="lower_ward",
+        world={},
+    )
+    meta = out.get("_final_emission_meta") or {}
+    assert meta.get("answer_shape_primacy_failed") is False
+    assert "emerge" in (out.get("player_facing_text") or "").lower()
+
+
+def test_gate_purity_pass_npc_quoted_command_in_observe(monkeypatch):
+    monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
+    text = (
+        'The sergeant does not raise her voice. "Move toward the gate, now," she says, '
+        "and the line stiffens as if pulled by a single wire."
+    )
+    out = apply_final_emission_gate(
+        {
+            "player_facing_text": text,
+            "tags": [],
+            "player_facing_narration_purity_contract": _purity_contract(),
+            "response_policy": {"response_type_contract": _response_type_contract("neutral_narration")},
+        },
+        resolution={"kind": "observe", "prompt": "I watch the line."},
+        session={},
+        scene_id="gate_yard",
+        world={},
+    )
+    meta = out.get("_final_emission_meta") or {}
+    assert meta.get("player_facing_narration_purity_failed") is False
+    assert "gate" in (out.get("player_facing_text") or "").lower()
+
+
+def test_gate_purity_and_asp_pass_action_outcome_then_brief_consequence(monkeypatch):
+    monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
+    text = (
+        "You thumb the latch; it gives with a dry snap. "
+        "Patrol whistles tighten two streets over, a thin urgent sound against the rain."
+    )
+    out = apply_final_emission_gate(
+        {
+            "player_facing_text": text,
+            "tags": [],
+            "player_facing_narration_purity_contract": _purity_contract(),
+            "response_policy": {"response_type_contract": _response_type_contract("action_outcome")},
+        },
+        resolution={"kind": "interact", "prompt": "I try the latch on the side door."},
+        session={},
+        scene_id="alley_door",
+        world={},
+    )
+    meta = out.get("_final_emission_meta") or {}
+    assert meta.get("answer_shape_primacy_failed") is False
+    assert "latch" in (out.get("player_facing_text") or "").lower()
+
+
+def test_gate_purity_repairs_scaffold_header_leak(monkeypatch):
+    monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
+    raw = "Consequence / Opportunity:\nThe patrol's torchlight sweeps the far arch."
+    out = apply_final_emission_gate(
+        {
+            "player_facing_text": raw,
+            "tags": [],
+            "player_facing_narration_purity_contract": _purity_contract(),
+            "response_policy": {"response_type_contract": _response_type_contract("neutral_narration")},
+        },
+        resolution={"kind": "observe", "prompt": "I glance up the street."},
+        session={},
+        scene_id="arch_lane",
+        world={},
+    )
+    meta = out.get("_final_emission_meta") or {}
+    assert meta.get("player_facing_narration_purity_repaired") is True
+    low = (out.get("player_facing_text") or "").lower()
+    assert "consequence" not in low
+    assert "torchlight" in low or "arch" in low
+
+
+def test_gate_purity_repairs_coaching_language(monkeypatch):
+    monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
+    raw = "You weigh what you just tried near the checkpoint; rain drums on the slate roof."
+    out = apply_final_emission_gate(
+        {
+            "player_facing_text": raw,
+            "tags": [],
+            "player_facing_narration_purity_contract": _purity_contract(),
+            "response_policy": {"response_type_contract": _response_type_contract("neutral_narration")},
+        },
+        resolution={"kind": "observe", "prompt": "I listen at the checkpoint."},
+        session={},
+        scene_id="frontier_gate",
+        world={},
+    )
+    meta = out.get("_final_emission_meta") or {}
+    assert meta.get("player_facing_narration_purity_repaired") is True
+    assert "weigh what you just tried" not in (out.get("player_facing_text") or "").lower()
+
+
+def test_gate_purity_repairs_ui_label_leak(monkeypatch):
+    monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
+    raw = "Take the exit labeled North and you smell cold river air beyond the arch."
+    out = apply_final_emission_gate(
+        {
+            "player_facing_text": raw,
+            "tags": [],
+            "player_facing_narration_purity_contract": _purity_contract(),
+            "response_policy": {"response_type_contract": _response_type_contract("neutral_narration")},
+        },
+        resolution={"kind": "observe", "prompt": "I scan for a way out."},
+        session={},
+        scene_id="river_arch",
+        world={},
+    )
+    meta = out.get("_final_emission_meta") or {}
+    assert meta.get("player_facing_narration_purity_repaired") is True
+    assert "labeled" not in (out.get("player_facing_text") or "").lower()
+
+
+def test_gate_asp_repairs_observe_when_pressure_leads_concrete_observation(monkeypatch):
+    monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
+    raw = (
+        "The ward's tension mounts; confrontation feels inevitable. "
+        "You hear boots on wet cobbles to your left, uneven and hurried."
+    )
+    out = apply_final_emission_gate(
+        {
+            "player_facing_text": raw,
+            "tags": [],
+            "player_facing_narration_purity_contract": _purity_contract(),
+            "response_policy": {"response_type_contract": _response_type_contract("neutral_narration")},
+        },
+        resolution={"kind": "observe", "prompt": "I listen for movement."},
+        session={},
+        scene_id="lower_ward",
+        world={},
+    )
+    meta = out.get("_final_emission_meta") or {}
+    assert meta.get("answer_shape_primacy_repaired") is True
+    text = out.get("player_facing_text") or ""
+    assert text.lower().strip().startswith("you hear")
+
+
+def test_gate_purity_strips_transition_scaffold_on_travel(monkeypatch):
+    monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
+    raw = "The next beat is yours. You emerge onto the quay, ropes creaking, gulls wheeling overhead."
+    out = apply_final_emission_gate(
+        {
+            "player_facing_text": raw,
+            "tags": [],
+            "player_facing_narration_purity_contract": _purity_contract(),
+            "response_policy": {"response_type_contract": _response_type_contract("neutral_narration")},
+        },
+        resolution={"kind": "travel", "prompt": "I head down to the quay.", "resolved_transition": True},
+        session={},
+        scene_id="stone_quay",
+        world={},
+    )
+    meta = out.get("_final_emission_meta") or {}
+    assert meta.get("player_facing_narration_purity_repaired") is True
+    assert "next beat" not in (out.get("player_facing_text") or "").lower()
+    assert "quay" in (out.get("player_facing_text") or "").lower()
+
+
+def test_gate_asp_triggers_replace_when_no_observation_payload(monkeypatch):
+    monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
+    raw = (
+        "Unrest makes factions bold and the crown brittle. "
+        "Invasion rumors outrun truth, and politics turns markets into maps."
+    )
+    out = apply_final_emission_gate(
+        {
+            "player_facing_text": raw,
+            "tags": [],
+            "player_facing_narration_purity_contract": _purity_contract(),
+            "response_policy": {"response_type_contract": _response_type_contract("neutral_narration")},
+        },
+        resolution={"kind": "observe", "prompt": "What do I see on the street?"},
+        session={},
+        scene_id="market_square",
+        world={},
+    )
+    meta = out.get("_final_emission_meta") or {}
+    assert meta.get("answer_shape_primacy_failed") is True
+    assert meta.get("final_route") == "replaced"

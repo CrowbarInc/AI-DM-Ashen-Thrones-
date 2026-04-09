@@ -16,7 +16,16 @@ from game.social import (
     sync_strategy_forced_to_answer_for_valid_followup_alignment,
 )
 from game.storage import load_scene, get_scene_runtime
-from game.interaction_context import inspect as inspect_interaction_context
+from game.interaction_context import (
+    evaluate_world_action_social_continuity_break,
+    inspect as inspect_interaction_context,
+    world_action_turn_suppresses_npc_answer_fallback,
+)
+from game.diegetic_fallback_narration import (
+    render_nonsocial_terminal_anchor_line,
+    render_observe_perception_fallback_line,
+    render_travel_arrival_fallback_line,
+)
 
 from game.gm import (
     _apply_uncertainty_to_gm,
@@ -44,6 +53,7 @@ from game.gm import (
     question_resolution_rule_check,
     render_uncertainty_response,
     resolve_known_fact_before_uncertainty,
+    _is_valid_player_facing_fallback_answer,
 )
 
 
@@ -71,6 +81,43 @@ _SOCIAL_FORCE_ANSWER_CANDIDATE_KINDS: frozenset[str] = frozenset(
     {"structured_fact", "reconciled_fact", "partial_answer"}
 )
 MAX_TARGETED_RETRY_ATTEMPTS = 2
+
+_PERCEPTION_FALLBACK_RESOLUTION_KINDS: frozenset[str] = frozenset(
+    {
+        "observe",
+        "investigate",
+        "search",
+        "already_searched",
+        "discover_clue",
+        "interact",
+        "scene_opening",
+    }
+)
+
+
+def _resolution_implies_destination_arrival(resolution: Dict[str, Any] | None) -> bool:
+    if not isinstance(resolution, dict):
+        return False
+    k = str(resolution.get("kind") or "").strip().lower()
+    if k not in {"scene_transition", "travel"}:
+        return False
+    if resolution.get("resolved_transition") is True:
+        return True
+    sc = resolution.get("state_changes")
+    if isinstance(sc, dict):
+        if sc.get("scene_transition_occurred") or sc.get("scene_changed") or sc.get("arrived_at_scene"):
+            return True
+    return False
+
+
+def resolution_is_open_crowd_social(resolution: Dict[str, Any] | None) -> bool:
+    """True for broadcast / open-call turns (no single addressee, reaction-shaped contract)."""
+    if not isinstance(resolution, dict):
+        return False
+    soc = resolution.get("social") if isinstance(resolution.get("social"), dict) else {}
+    if str(soc.get("social_intent_class") or "").strip().lower() == "open_call":
+        return True
+    return bool(soc.get("open_social_solicitation") and soc.get("npc_reply_expected") is not True)
 
 
 def _is_usable_retry_tone_escalation_contract(candidate: Any) -> bool:
@@ -248,6 +295,569 @@ def _format_anti_railroading_retry_guidance(arc: Optional[Dict[str, Any]]) -> st
     return base
 
 
+# --- Context separation (shipped contract + retry steer; no validation/repair here) -----------------
+
+
+def _is_shipped_context_separation_contract(candidate: Any) -> bool:
+    """True for ``build_context_separation_contract`` payloads (aligned with final_emission_gate)."""
+    if not isinstance(candidate, dict):
+        return False
+    if isinstance(candidate.get("debug_inputs"), dict) and "forbid_topic_hijack" in candidate:
+        return True
+    if "forbid_topic_hijack" in candidate and "max_pressure_sentences_without_player_prompt" in candidate:
+        return True
+    return False
+
+
+def _coerce_context_separation_contract_dict(maybe: Any) -> Optional[Dict[str, Any]]:
+    if _is_shipped_context_separation_contract(maybe):
+        return maybe
+    return None
+
+
+def _context_separation_contract_from_emission_debug(em: Any) -> Optional[Dict[str, Any]]:
+    if not isinstance(em, dict):
+        return None
+    for ck in ("context_separation_contract", "context_separation"):
+        hit = _coerce_context_separation_contract_dict(em.get(ck))
+        if hit:
+            return hit
+    return None
+
+
+def _resolve_context_separation_contract_for_retry(
+    gm_output: Optional[Dict[str, Any]],
+    response_policy: Optional[Dict[str, Any]],
+) -> Tuple[Optional[Dict[str, Any]], Optional[str]]:
+    """Prefer the already-built contract from policy / narration mirrors (same order as final_emission_gate)."""
+    if isinstance(response_policy, dict):
+        for key in ("context_separation_contract", "context_separation"):
+            hit = _coerce_context_separation_contract_dict(response_policy.get(key))
+            if hit:
+                return hit, f"response_policy.{key}"
+    if not isinstance(gm_output, dict):
+        return None, None
+    direct = gm_output.get("context_separation_contract")
+    if isinstance(direct, dict):
+        hit = _coerce_context_separation_contract_dict(direct)
+        if hit:
+            return hit, "context_separation_contract"
+    pol = gm_output.get("response_policy")
+    if isinstance(pol, dict):
+        for key in ("context_separation_contract", "context_separation"):
+            hit = _coerce_context_separation_contract_dict(pol.get(key))
+            if hit:
+                return hit, "response_policy"
+    pc = gm_output.get("prompt_context")
+    if isinstance(pc, dict):
+        hit = _coerce_context_separation_contract_dict(pc.get("context_separation_contract"))
+        if hit:
+            return hit, "prompt_context"
+        pol2 = pc.get("response_policy")
+        if isinstance(pol2, dict):
+            for key in ("context_separation_contract", "context_separation"):
+                hit = _coerce_context_separation_contract_dict(pol2.get(key))
+                if hit:
+                    return hit, "prompt_context.response_policy"
+    for key in ("narration_payload", "prompt_payload", "_narration_payload"):
+        pl = gm_output.get(key)
+        if not isinstance(pl, dict):
+            continue
+        for ck in ("context_separation_contract", "context_separation"):
+            hit = _coerce_context_separation_contract_dict(pl.get(ck))
+            if hit:
+                return hit, f"{key}"
+        rp = pl.get("response_policy")
+        if isinstance(rp, dict):
+            for ck in ("context_separation_contract", "context_separation"):
+                hit = _coerce_context_separation_contract_dict(rp.get(ck))
+                if hit:
+                    return hit, f"{key}.response_policy"
+        hit_ed = _context_separation_contract_from_emission_debug(pl.get("emission_debug"))
+        if hit_ed:
+            return hit_ed, f"{key}.emission_debug"
+    md = gm_output.get("metadata")
+    if isinstance(md, dict):
+        hit = _coerce_context_separation_contract_dict(md.get("context_separation_contract"))
+        if hit:
+            return hit, "metadata"
+        rp = md.get("response_policy")
+        if isinstance(rp, dict):
+            for ck in ("context_separation_contract", "context_separation"):
+                hit = _coerce_context_separation_contract_dict(rp.get(ck))
+                if hit:
+                    return hit, "metadata.response_policy"
+        hit_ed = _context_separation_contract_from_emission_debug(md.get("emission_debug"))
+        if hit_ed:
+            return hit_ed, "metadata.emission_debug"
+    tr = gm_output.get("trace")
+    if isinstance(tr, dict):
+        hit = _coerce_context_separation_contract_dict(tr.get("context_separation_contract"))
+        if hit:
+            return hit, "trace"
+        rp = tr.get("response_policy")
+        if isinstance(rp, dict):
+            for ck in ("context_separation_contract", "context_separation"):
+                hit = _coerce_context_separation_contract_dict(rp.get(ck))
+                if hit:
+                    return hit, "trace.response_policy"
+        hit_ed = _context_separation_contract_from_emission_debug(tr.get("emission_debug"))
+        if hit_ed:
+            return hit_ed, "trace.emission_debug"
+    hit_ed = _context_separation_contract_from_emission_debug(gm_output.get("emission_debug"))
+    if hit_ed:
+        return hit_ed, "emission_debug"
+    return None, None
+
+
+def _pressure_focus_allowed_from_contract(contract: Optional[Dict[str, Any]]) -> bool:
+    if not isinstance(contract, dict):
+        return False
+    df = contract.get("debug_flags")
+    if isinstance(df, dict) and "pressure_focus_allowed" in df:
+        return bool(df.get("pressure_focus_allowed"))
+    return False
+
+
+def _debug_marker_has_nonempty_violations(marker: str) -> bool:
+    if "cs_violations=" not in marker:
+        return False
+    tail = marker.split("cs_violations=", 1)[1]
+    blob = tail.split(";", 1)[0].strip()
+    return bool(blob) and blob != "none"
+
+
+def _scan_dict_for_context_separation_trouble(d: Any, prefix: str, sink: List[str]) -> None:
+    if not isinstance(d, dict):
+        return
+    if d.get("context_separation_failed") is True:
+        sink.append(f"{prefix}:context_separation_failed")
+    if d.get("context_separation_repaired") is True:
+        sink.append(f"{prefix}:context_separation_repaired")
+    fr = d.get("context_separation_failure_reasons")
+    if isinstance(fr, list) and any(isinstance(x, str) and x.strip() for x in fr):
+        sink.append(f"{prefix}:context_separation_failure_reasons")
+    mr = d.get("context_separation_debug_reason_marker")
+    if isinstance(mr, str) and mr.strip():
+        if _debug_marker_has_nonempty_violations(mr):
+            sink.append(f"{prefix}:context_separation_debug_reason_marker_violations")
+        if "repair_applied=True" in mr:
+            sink.append(f"{prefix}:repair_applied_true")
+    em = d.get("emission_debug")
+    if isinstance(em, dict):
+        nested = em.get("context_separation")
+        if isinstance(nested, dict):
+            val = nested.get("validation") if isinstance(nested.get("validation"), dict) else {}
+            if val.get("passed") is False:
+                sink.append(f"{prefix}.emission_debug.context_separation:validation_failed")
+            frn = nested.get("failure_reasons")
+            if isinstance(frn, list) and any(isinstance(x, str) and x.strip() for x in frn):
+                sink.append(f"{prefix}.emission_debug.context_separation:failure_reasons")
+        for fk in (
+            "context_separation_failed",
+            "context_separation_repaired",
+        ):
+            if em.get(fk) is True:
+                sink.append(f"{prefix}.emission_debug:{fk}")
+
+
+def prior_context_separation_trouble_signals(gm_output: Optional[Dict[str, Any]]) -> Tuple[bool, List[str]]:
+    """True when prior attempt metadata/trace suggests context separation failure or repair (retry bias)."""
+    if not isinstance(gm_output, dict):
+        return False, []
+    raw: List[str] = []
+    for blob, prefix in (
+        (gm_output.get("_final_emission_meta"), "_final_emission_meta"),
+        (gm_output.get("metadata"), "metadata"),
+        (gm_output.get("trace"), "trace"),
+        (gm_output, "gm_root"),
+    ):
+        _scan_dict_for_context_separation_trouble(blob, prefix, raw)
+    ordered = list(dict.fromkeys(raw))
+    return (bool(ordered), ordered)
+
+
+def _format_context_separation_retry_guidance(
+    contract: Optional[Dict[str, Any]],
+    *,
+    local_first_recovery: bool,
+    pressure_focus_allowed: bool,
+) -> str:
+    """Compact retry-only steer; does not restate the full contract or perform gate-style repair."""
+    tone_guard = (
+        "Do not escalate harshness, threats, or interpersonal hostility based only on ambient danger or background tension; "
+        "tone caps from the tone contract still apply. "
+    )
+    if pressure_focus_allowed:
+        core = (
+            "CONTEXT SEPARATION (RETRY STEER): Keep the response concrete and interaction-linked. "
+            "Broader pressure may stay central because this turn allows pressure focus under the shipped contract—"
+            "but avoid abstract monologue, generic doom narration, or vagueness in place of actionable local substance. "
+            + tone_guard
+        )
+        if local_first_recovery:
+            core += (
+                "Still open with substantive payoff tied to the present exchange (answer, reaction, or scene-tied consequence)—"
+                "not a detached atmosphere paragraph. "
+            )
+        return core
+
+    if isinstance(contract, dict):
+        scope = (
+            "Broader ambient pressure may dominate only when the shipped contract marks it as locally relevant for this exchange. "
+        )
+    else:
+        scope = "If wider pressure is not clearly grounded in the present interaction, keep it subordinate. "
+
+    base = (
+        "CONTEXT SEPARATION (RETRY STEER): Keep the local exchange primary; answer or react to the immediate interaction first. "
+        "Ambient pressure may briefly color the reply but must not replace it. "
+        "Do not harden tone from background tension alone. "
+        + scope
+        + tone_guard
+    )
+    if local_first_recovery:
+        base += (
+            "LOCAL-FIRST RECOVERY: Open with the answer, reaction, or concrete NPC beat—do not open with atmosphere, city-scale mood, "
+            "or 'the city is tense' style filler. Suppress broad unrest/war/faction exposition as a substitute for substance. "
+            "Use at most one short ambient-pressure clause after local payoff unless the contract explicitly allows pressure focus. "
+        )
+    else:
+        base += (
+            "Bias toward direct local answers, concrete NPC responses, immediate consequences of the player's present action, "
+            "and present-scene sensory detail; keep ambient coloring contract-compatible and subordinate. "
+            "Avoid vague ominous paragraphs and escalation in harshness funded only by ambient pressure. "
+        )
+    return base
+
+
+def _context_separation_local_first_supplement(failure_class: str) -> str:
+    """Extra one-line steer for specific failure classes when recovering from CS trouble (generation bias only)."""
+    fc = str(failure_class or "").strip()
+    if fc == "topic_pressure_escalation":
+        return (
+            " Add concrete escalation through immediate on-screen handles (named detail, procedure, time cost, witness)—"
+            "not a broader war/unrest monologue. "
+        )
+    if fc == "scene_stall":
+        return " Advance the scene with a local beat (visible object, NPC line, sound, constraint) before wide political weather. "
+    if fc == "echo_or_repetition":
+        return " Vary prose with new local information; do not substitute a fresh ambient-threat paragraph for substance. "
+    if fc in ("followup_soft_repetition",):
+        return " Add new local specifics; avoid restating city-scale tension as the escalation. "
+    if fc in ("npc_contract_failure",):
+        return " Ground the NPC reply in immediate interaction stakes before any ambient color. "
+    if fc in ("unresolved_question", "answer"):
+        return " Put the bounded answer in sentence one; do not lead with ambient pressure. "
+    if fc == "forbidden_generic_phrase":
+        return " Replace generics with scene-tied specifics, not with vague tension filler. "
+    return ""
+
+
+def _fill_context_separation_retry_debug_sink(
+    sink: Dict[str, Any],
+    *,
+    contract: Optional[Dict[str, Any]],
+    contract_source: Optional[str],
+    trouble: bool,
+    signals: List[str],
+    local_first_recovery: bool,
+    pressure_focus_allowed: bool,
+    guidance_preview: str,
+) -> None:
+    sink["retry_context_separation_contract_resolved"] = contract is not None
+    sink["retry_context_separation_contract_source"] = contract_source
+    sink["retry_context_separation_prior_trouble"] = trouble
+    sink["retry_context_separation_prior_signals"] = list(signals)
+    sink["retry_context_separation_local_first_recovery"] = local_first_recovery
+    sink["retry_context_separation_pressure_focus_allowed"] = pressure_focus_allowed
+    sink["retry_context_separation_guidance"] = guidance_preview.strip()
+
+
+def build_retry_prompt_for_failure(
+    failure: Dict[str, Any],
+    *,
+    response_policy: Dict[str, Any] | None = None,
+    gm_output: Dict[str, Any] | None = None,
+    retry_debug_sink: Dict[str, Any] | None = None,
+    player_text: str = "",
+) -> str:
+    """Build a narrowly scoped retry instruction for one failure class only."""
+    failure_class = str((failure or {}).get("failure_class") or "").strip()
+    reasons = [str(r).strip() for r in ((failure or {}).get("reasons") or []) if isinstance(r, str) and str(r).strip()]
+    priority_order = (
+        list((response_policy or {}).get("rule_priority_order") or [])
+        if isinstance((response_policy or {}).get("rule_priority_order"), list)
+        else [label for _, label in RESPONSE_RULE_PRIORITY]
+    )
+    ar_guidance = _format_anti_railroading_retry_guidance(
+        _resolve_anti_railroading_contract_for_retry(response_policy, gm_output)
+    )
+    cs_contract, cs_src = _resolve_context_separation_contract_for_retry(gm_output, response_policy)
+    cs_trouble, cs_signals = prior_context_separation_trouble_signals(gm_output)
+    pf_allowed = _pressure_focus_allowed_from_contract(cs_contract)
+    local_first_recovery = bool(cs_trouble)
+    cs_guidance = _format_context_separation_retry_guidance(
+        cs_contract,
+        local_first_recovery=local_first_recovery,
+        pressure_focus_allowed=pf_allowed,
+    )
+    cs_supplement = _context_separation_local_first_supplement(failure_class) if local_first_recovery else ""
+    if retry_debug_sink is not None:
+        _fill_context_separation_retry_debug_sink(
+            retry_debug_sink,
+            contract=cs_contract,
+            contract_source=cs_src,
+            trouble=cs_trouble,
+            signals=cs_signals,
+            local_first_recovery=local_first_recovery,
+            pressure_focus_allowed=pf_allowed,
+            guidance_preview=cs_guidance + cs_supplement,
+        )
+    shared = (
+        f"Rule Priority Hierarchy: {priority_order}. "
+        f"{RULE_PRIORITY_COMPACT_INSTRUCTION} "
+        f"{ar_guidance}"
+        f"{cs_guidance}"
+        f"Retry target: {failure_class}. Correct only this failure class. Return the same JSON shape."
+    )
+
+    if failure_class == "validator_voice":
+        return (
+            f"{shared} Rewrite the reply into diegetic, world-facing phrasing only. "
+            f"{NO_VALIDATOR_VOICE_RULE} "
+            "Remove validator, system, limitation, tool-access, model-identity, and rules-explanation language from standard narration."
+            f"{cs_supplement}"
+        )
+
+    if failure_class == "answer":
+        patched = dict(failure or {})
+        patched["failure_class"] = "unresolved_question"
+        return build_retry_prompt_for_failure(
+            patched,
+            response_policy=response_policy,
+            gm_output=gm_output,
+            retry_debug_sink=retry_debug_sink,
+            player_text=player_text,
+        )
+
+    allow_hostile = _retry_allows_hostile_escalation(gm_output, response_policy=response_policy)
+
+    if failure_class == "unresolved_question":
+        known_fact_context = (failure or {}).get("known_fact_context") if isinstance((failure or {}).get("known_fact_context"), dict) else {}
+        known_answer = str(known_fact_context.get("answer") or "").strip()
+        reasons_low = [
+            str(r).strip().lower()
+            for r in reasons
+            if isinstance(r, str) and str(r).strip()
+        ]
+        first_sentence_failed = any(
+            ("first_sentence_not_explicit_answer" in reason)
+            or reason.startswith("question_rule:social_exchange_first_sentence_")
+            for reason in reasons_low
+        )
+        social_exchange_first_sentence_failed = any(
+            reason.startswith("question_rule:social_exchange_first_sentence_")
+            for reason in reasons_low
+        )
+        val_fc = (
+            "answer"
+            if any(isinstance(r, str) and r.startswith("social_answer_candidate:") for r in reasons)
+            else "unresolved_question"
+        )
+        if known_answer and not _is_valid_player_facing_fallback_answer(
+            known_answer,
+            player_text=str(player_text or ""),
+            known_fact={
+                "source": str(known_fact_context.get("source") or ""),
+                "subject": str(known_fact_context.get("subject") or ""),
+                "position": str(known_fact_context.get("position") or ""),
+            },
+            failure_class=val_fc,
+        ):
+            known_answer = ""
+
+        if known_answer:
+            known_source = str(known_fact_context.get("source") or "").strip()
+            source_hint = f" Established source: {known_source}." if known_source else ""
+            social_shape_hint = (
+                " Social exchange contract: sentence one must be speaker-grounded and substantive "
+                "(usable information: warnings, directions, names, concrete facts, bounded uncertainty, refusal, or pressure—"
+                "not cinematic stall or scene-padding)."
+                if social_exchange_first_sentence_failed
+                else ""
+            )
+            return (
+                f"{shared} A direct answer is already established in current scene state or dialogue continuity. "
+                f"Use this answer or a close paraphrase in the first sentence: {known_answer}.{source_hint} "
+                "First sentence contract: answer the asked question directly in sentence one. "
+                "Do not open with scene summary, atmosphere, or setup. "
+                "No advisory phrasing (do not use: 'you should', 'you could', 'best lead', 'try', 'consider'). "
+                "Do not reroute it into uncertainty, refusal, or generic fallback language. "
+                "Do not narrate the player acting on, accepting, or committing to the answer unless they already did."
+                f"{social_shape_hint}{cs_supplement}"
+            )
+        uncertainty_category = str((failure or {}).get("uncertainty_category") or "").strip()
+        uncertainty_context = (failure or {}).get("uncertainty_context") if isinstance((failure or {}).get("uncertainty_context"), dict) else {}
+        speaker = uncertainty_context.get("speaker") if isinstance(uncertainty_context.get("speaker"), dict) else {}
+        scene_snapshot = uncertainty_context.get("scene_snapshot") if isinstance(uncertainty_context.get("scene_snapshot"), dict) else {}
+        speaker_name = str(speaker.get("name") or "").strip()
+        speaker_role = str(speaker.get("role") or "").strip().lower()
+        location = str(scene_snapshot.get("location") or "").strip()
+        first_visible = str(scene_snapshot.get("first_visible_detail") or "").strip()
+        context_parts: List[str] = []
+        if speaker_role == "npc" and speaker_name:
+            context_parts.append(f"Answer from {speaker_name}'s plausible local perspective.")
+        elif location:
+            context_parts.append(f"Anchor the reply in visible details from {location}.")
+        if first_visible:
+            context_parts.append(f"Use scene specifics like: {first_visible}.")
+        category_hint = f" Uncertainty category: {uncertainty_category}." if uncertainty_category else ""
+        context_hint = (" " + " ".join(context_parts)) if context_parts else ""
+        first_sentence_hint = (
+            " First sentence failed previously: sentence one MUST be an explicit answer with no scene-preface."
+            if first_sentence_failed
+            else ""
+        )
+        speaker_hint = (
+            f" NPC-directed answer contract: sentence one must be explicitly grounded to {speaker_name}'s viewpoint."
+            if speaker_role == "npc" and speaker_name
+            else ""
+        )
+        social_shape_hint = (
+            " Social exchange contract: sentence one must be speaker-grounded and substantive "
+            "(usable information: warnings, directions, concrete facts, bounded uncertainty, refusal, or pressure—"
+            "not cinematic stall or scene-padding)."
+            if social_exchange_first_sentence_failed
+            else ""
+        )
+        return (
+            f"{shared} The player's direct question still lacks a bounded answer. "
+            "Single-purpose rewrite: fix answer shape only. "
+            "Sentence one MUST directly answer the exact player question. "
+            "Do not begin with atmosphere, scene summary, or recap. "
+            "Do not ask a question back. Do not refuse, deflect, or explain limitations. "
+            "No advisory phrasing (avoid: 'you should', 'you could', 'best lead', 'try', 'consider'). "
+            "If certainty is incomplete, keep uncertainty concrete and bounded to speaker evidence or scene facts. "
+            "While fixing answer shape, do not narrate the PC's travel, commitment, or decisive action."
+            f"{category_hint}{context_hint}{first_sentence_hint}{speaker_hint}{social_shape_hint}{cs_supplement}"
+        )
+
+    if failure_class == "echo_or_repetition":
+        return (
+            f"{shared} Semantically rewrite the reply so it does not echo the player's wording or quoted speech. "
+            "Change sentence structure and phrasing, and react with new information or consequence instead of restating the input. "
+            "Keep agency intact: do not slip into narrating the PC's decision, travel, or commitment as you vary the prose."
+            f"{cs_supplement}"
+        )
+
+    if failure_class == "followup_soft_repetition":
+        ctx = (failure or {}).get("followup_context") if isinstance((failure or {}).get("followup_context"), dict) else {}
+        prev_player = str(ctx.get("previous_player_input") or "").strip()
+        prev_answer = str(ctx.get("previous_answer_snippet") or "").strip()
+        topic_tokens = ctx.get("topic_tokens") if isinstance(ctx.get("topic_tokens"), list) else []
+        topic_hint = f" Topic tokens: {topic_tokens}." if topic_tokens else ""
+        prev_player_hint = f" Previous player press: {prev_player}." if prev_player else ""
+        prev_answer_hint = f" Previous answer snippet (do not recycle): {prev_answer}." if prev_answer else ""
+        hostile_guard = (
+            ""
+            if allow_hostile
+            else (
+                " Do not move to threats, violence, weapons, brandished steel, or hostile interruption—"
+                "topic pressure alone is not justification."
+            )
+        )
+        grounded_hostile = (
+            " If the tone contract allows explicit threat or physical hostility, you may add a grounded confrontation beat "
+            "only when it fits established scene tension or visible authority roles—never arbitrary aggression."
+            if allow_hostile
+            else ""
+        )
+        return (
+            f"{shared} The player is pressing the same topic again, and your reply repeated the prior answer without escalation."
+            f"{topic_hint}{prev_player_hint}{prev_answer_hint} "
+            "Do NOT restate the same underlying lead. Escalate with new content: add one concrete detail AND one of "
+            "(a) a named person/place/faction/witness (with an in-world source), or (b) a narrowed unknown boundary (time window, location bracket, condition, count). "
+            "End with a sharper player-facing opening that uses the new detail (options, leverage, or cost)—without "
+            "narrating the PC's decision, destination, or commitment, and without upgrading one lead into the only real path. "
+            "Preserve speaker grounding and diegetic voice."
+            f"{hostile_guard}{grounded_hostile}{cs_supplement}"
+        )
+
+    if failure_class == "npc_contract_failure":
+        missing = [str(x).strip() for x in ((failure or {}).get("missing") or []) if isinstance(x, str) and str(x).strip()]
+        missing_hint = f" Missing contract elements: {missing}." if missing else ""
+        return (
+            f"{shared} Produce a direct NPC answer, reaction, or refusal consistent with the current target. "
+            "Include at least one concrete person, place, faction, next step, or directly usable condition, time, or location. "
+            "Deliver NPC-side substance the player can react to; do not narrate the PC deciding, moving, or committing."
+            f"{missing_hint}{cs_supplement}"
+        )
+
+    if failure_class == "topic_pressure_escalation":
+        ctx = (failure or {}).get("topic_context") if isinstance((failure or {}).get("topic_context"), dict) else {}
+        topic_key = str(ctx.get("topic_key") or "").strip()
+        prev_answer = str(ctx.get("previous_answer_snippet") or "").strip()
+        repeat_count = int(ctx.get("repeat_count", 0) or 0)
+        topic_hint = f" Topic key: {topic_key}." if topic_key else ""
+        prev_answer_hint = f" Prior low-gain answer (do not paraphrase): {prev_answer}." if prev_answer else ""
+        if allow_hostile:
+            escalation_menu = (
+                "You MUST escalate now with diegetic motion. Prefer one of: concrete clue tied to an on-screen detail; "
+                "bounded refusal that changes what is at stake; tightened scrutiny or procedural questioning; authority or policy pressure; "
+                "deadline or time cost; environmental shift others notice; social or reputation consequence; narrowing opportunity window; "
+                "or a named lead (NPC, faction, or place) the speaker can credibly cite. "
+                "Only if the tone contract already allows threat or physical hostility—and the scene has established grounds—"
+                "you may add a calibrated confrontation, conditional threat, or physical beat that fits that contract. "
+                "Do not invent random aggression."
+            )
+        else:
+            escalation_menu = (
+                "You MUST escalate now with diegetic motion without threats, violence, weapons, hostile interruption, or physical pressure—"
+                "topic pressure alone does not unlock hostility. "
+                "Choose one: concrete clue tied to an on-screen detail; bounded refusal that changes what is at stake; "
+                "tightened scrutiny or procedural questioning; authority or policy pressure; deadline or time cost; "
+                "environmental shift others notice; social or reputation consequence; narrowing opportunity window; "
+                "or a named lead (NPC, faction, or place) the speaker can credibly cite."
+            )
+        return (
+            f"{shared} The player has pressed this unresolved topic repeatedly without meaningful progress."
+            f"{topic_hint}{prev_answer_hint} Repetition count: {repeat_count}. "
+            f"{escalation_menu} "
+            "Urgency sharpens salience; it does not justify narrating the PC's chosen route or forced pathing. "
+            "Include exactly one scene momentum tag and end with concrete player-facing openings, stakes, or time "
+            "pressure the player can respond to (do not narrate the PC's move or commitment)."
+            f"{cs_supplement}"
+        )
+
+    if failure_class == "scene_stall":
+        hostile_tail = (
+            " If the tone contract allows, you may add a grounded confrontation beat that fits visible tension or authority roles."
+            if allow_hostile
+            else " Do not introduce threats, hostile interruption, violence, or weapons."
+        )
+        return (
+            f"{shared} Scene stall / low progress: advance now with one concrete development—still without choosing for the player. "
+            "Prefer new information plus a player-facing opening, or pressure plus a surfaced choice, or a consequence "
+            "with visible next opportunities, or a bounded refusal with an alternative handle, or a clarified hard "
+            "constraint that removes one avenue while leaving others open. "
+            "Do not auto-travel, auto-commit, or collapse multiple leads into one mandatory path. "
+            f"{hostile_tail} "
+            "Include exactly one matching scene momentum tag in tags: scene_momentum:<kind>."
+            f"{cs_supplement}"
+        )
+
+    if failure_class == "forbidden_generic_phrase":
+        return (
+            f"{shared} Rewrite only the offending generic phrase or sentence into scene-anchored specifics. "
+            "Keep the rest of the reply intact where possible and avoid flattening the whole response."
+            f"{cs_supplement}"
+        )
+
+    reason_text = f" Reasons: {reasons}." if reasons else ""
+    return f"{shared} Rewrite narrowly to resolve this failure.{reason_text}{cs_supplement}"
+
+
 def prioritize_retry_failures_for_social_answer_candidate(
     failures: List[Dict[str, Any]],
     *,
@@ -255,6 +865,8 @@ def prioritize_retry_failures_for_social_answer_candidate(
     resolution: Dict[str, Any] | None,
     session: Dict[str, Any],
     scene_envelope: Dict[str, Any],
+    world: Dict[str, Any] | None = None,
+    segmented_turn: Dict[str, Any] | None = None,
 ) -> tuple[List[Dict[str, Any]], Dict[str, Any]]:
     """When a structured/reconciled/partial answer exists, drop stall/echo failures and inject an answer retry.
 
@@ -270,6 +882,16 @@ def prioritize_retry_failures_for_social_answer_candidate(
     if not isinstance(soc, dict):
         return list(failures or []), debug
     if str(soc.get("social_intent_class") or "").strip().lower() != "social_exchange":
+        return list(failures or []), debug
+
+    if not _social_answer_fallback_in_scope(
+        player_text=str(player_text or ""),
+        scene_envelope=scene_envelope if isinstance(scene_envelope, dict) else {},
+        session=session if isinstance(session, dict) else {},
+        world=world if isinstance(world, dict) else {},
+        segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+    ):
+        debug["retry_social_answer_priority_skipped"] = "block1_world_action_signal"
         return list(failures or []), debug
 
     scene_id = _resolve_scene_id(scene_envelope)
@@ -329,13 +951,23 @@ def prioritize_retry_failures_for_social_answer_candidate(
         "failure_class": "answer",
         "priority": RETRY_FAILURE_PRIORITY["answer"],
         "reasons": [f"social_answer_candidate:{kind}"],
-        "known_fact_context": {
-            "answer": text,
+    }
+    if _is_valid_player_facing_fallback_answer(
+        text,
+        player_text=str(player_text or ""),
+        known_fact={
             "source": str(best.get("source") or "").strip(),
             "subject": "",
             "position": "",
         },
-    }
+        failure_class="answer",
+    ):
+        synthetic["known_fact_context"] = {
+            "answer": text,
+            "source": str(best.get("source") or "").strip(),
+            "subject": "",
+            "position": "",
+        }
     _merge_valid_followup_strategy_into_debug()
     return [synthetic] + filtered, debug
 
@@ -361,241 +993,6 @@ def choose_retry_strategy(failures: List[Dict[str, Any]]) -> Dict[str, Any] | No
     ranked.sort(key=lambda item: (int(item.get("priority", 999)), str(item.get("failure_class") or "")))
     return ranked[0]
 
-
-def build_retry_prompt_for_failure(
-    failure: Dict[str, Any],
-    *,
-    response_policy: Dict[str, Any] | None = None,
-    gm_output: Dict[str, Any] | None = None,
-) -> str:
-    """Build a narrowly scoped retry instruction for one failure class only."""
-    failure_class = str((failure or {}).get("failure_class") or "").strip()
-    reasons = [str(r).strip() for r in ((failure or {}).get("reasons") or []) if isinstance(r, str) and str(r).strip()]
-    priority_order = (
-        list((response_policy or {}).get("rule_priority_order") or [])
-        if isinstance((response_policy or {}).get("rule_priority_order"), list)
-        else [label for _, label in RESPONSE_RULE_PRIORITY]
-    )
-    ar_guidance = _format_anti_railroading_retry_guidance(
-        _resolve_anti_railroading_contract_for_retry(response_policy, gm_output)
-    )
-    shared = (
-        f"Rule Priority Hierarchy: {priority_order}. "
-        f"{RULE_PRIORITY_COMPACT_INSTRUCTION} "
-        f"{ar_guidance}"
-        f"Retry target: {failure_class}. Correct only this failure class. Return the same JSON shape."
-    )
-
-    if failure_class == "validator_voice":
-        return (
-            f"{shared} Rewrite the reply into diegetic, world-facing phrasing only. "
-            f"{NO_VALIDATOR_VOICE_RULE} "
-            "Remove validator, system, limitation, tool-access, model-identity, and rules-explanation language from standard narration."
-        )
-
-    if failure_class == "answer":
-        patched = dict(failure or {})
-        patched["failure_class"] = "unresolved_question"
-        return build_retry_prompt_for_failure(
-            patched,
-            response_policy=response_policy,
-            gm_output=gm_output,
-        )
-
-    allow_hostile = _retry_allows_hostile_escalation(gm_output, response_policy=response_policy)
-
-    if failure_class == "unresolved_question":
-        known_fact_context = (failure or {}).get("known_fact_context") if isinstance((failure or {}).get("known_fact_context"), dict) else {}
-        known_answer = str(known_fact_context.get("answer") or "").strip()
-        reasons_low = [
-            str(r).strip().lower()
-            for r in reasons
-            if isinstance(r, str) and str(r).strip()
-        ]
-        first_sentence_failed = any(
-            ("first_sentence_not_explicit_answer" in reason)
-            or reason.startswith("question_rule:social_exchange_first_sentence_")
-            for reason in reasons_low
-        )
-        social_exchange_first_sentence_failed = any(
-            reason.startswith("question_rule:social_exchange_first_sentence_")
-            for reason in reasons_low
-        )
-        if known_answer:
-            known_source = str(known_fact_context.get("source") or "").strip()
-            source_hint = f" Established source: {known_source}." if known_source else ""
-            social_shape_hint = (
-                " Social exchange contract: sentence one must be speaker-grounded and substantive "
-                "(usable information: warnings, directions, names, concrete facts, bounded uncertainty, refusal, or pressure—"
-                "not cinematic stall or scene-padding)."
-                if social_exchange_first_sentence_failed
-                else ""
-            )
-            return (
-                f"{shared} A direct answer is already established in current scene state or dialogue continuity. "
-                f"Use this answer or a close paraphrase in the first sentence: {known_answer}.{source_hint} "
-                "First sentence contract: answer the asked question directly in sentence one. "
-                "Do not open with scene summary, atmosphere, or setup. "
-                "No advisory phrasing (do not use: 'you should', 'you could', 'best lead', 'try', 'consider'). "
-                "Do not reroute it into uncertainty, refusal, or generic fallback language. "
-                "Do not narrate the player acting on, accepting, or committing to the answer unless they already did."
-                f"{social_shape_hint}"
-            )
-        uncertainty_category = str((failure or {}).get("uncertainty_category") or "").strip()
-        uncertainty_context = (failure or {}).get("uncertainty_context") if isinstance((failure or {}).get("uncertainty_context"), dict) else {}
-        speaker = uncertainty_context.get("speaker") if isinstance(uncertainty_context.get("speaker"), dict) else {}
-        scene_snapshot = uncertainty_context.get("scene_snapshot") if isinstance(uncertainty_context.get("scene_snapshot"), dict) else {}
-        speaker_name = str(speaker.get("name") or "").strip()
-        speaker_role = str(speaker.get("role") or "").strip().lower()
-        location = str(scene_snapshot.get("location") or "").strip()
-        first_visible = str(scene_snapshot.get("first_visible_detail") or "").strip()
-        context_parts: List[str] = []
-        if speaker_role == "npc" and speaker_name:
-            context_parts.append(f"Answer from {speaker_name}'s plausible local perspective.")
-        elif location:
-            context_parts.append(f"Anchor the reply in visible details from {location}.")
-        if first_visible:
-            context_parts.append(f"Use scene specifics like: {first_visible}.")
-        category_hint = f" Uncertainty category: {uncertainty_category}." if uncertainty_category else ""
-        context_hint = (" " + " ".join(context_parts)) if context_parts else ""
-        first_sentence_hint = (
-            " First sentence failed previously: sentence one MUST be an explicit answer with no scene-preface."
-            if first_sentence_failed
-            else ""
-        )
-        speaker_hint = (
-            f" NPC-directed answer contract: sentence one must be explicitly grounded to {speaker_name}'s viewpoint."
-            if speaker_role == "npc" and speaker_name
-            else ""
-        )
-        social_shape_hint = (
-            " Social exchange contract: sentence one must be speaker-grounded and substantive "
-            "(usable information: warnings, directions, concrete facts, bounded uncertainty, refusal, or pressure—"
-            "not cinematic stall or scene-padding)."
-            if social_exchange_first_sentence_failed
-            else ""
-        )
-        return (
-            f"{shared} The player's direct question still lacks a bounded answer. "
-            "Single-purpose rewrite: fix answer shape only. "
-            "Sentence one MUST directly answer the exact player question. "
-            "Do not begin with atmosphere, scene summary, or recap. "
-            "Do not ask a question back. Do not refuse, deflect, or explain limitations. "
-            "No advisory phrasing (avoid: 'you should', 'you could', 'best lead', 'try', 'consider'). "
-            "If certainty is incomplete, keep uncertainty concrete and bounded to speaker evidence or scene facts. "
-            "While fixing answer shape, do not narrate the PC's travel, commitment, or decisive action."
-            f"{category_hint}{context_hint}{first_sentence_hint}{speaker_hint}{social_shape_hint}"
-        )
-
-    if failure_class == "echo_or_repetition":
-        return (
-            f"{shared} Semantically rewrite the reply so it does not echo the player's wording or quoted speech. "
-            "Change sentence structure and phrasing, and react with new information or consequence instead of restating the input. "
-            "Keep agency intact: do not slip into narrating the PC's decision, travel, or commitment as you vary the prose."
-        )
-
-    if failure_class == "followup_soft_repetition":
-        ctx = (failure or {}).get("followup_context") if isinstance((failure or {}).get("followup_context"), dict) else {}
-        prev_player = str(ctx.get("previous_player_input") or "").strip()
-        prev_answer = str(ctx.get("previous_answer_snippet") or "").strip()
-        topic_tokens = ctx.get("topic_tokens") if isinstance(ctx.get("topic_tokens"), list) else []
-        topic_hint = f" Topic tokens: {topic_tokens}." if topic_tokens else ""
-        prev_player_hint = f" Previous player press: {prev_player}." if prev_player else ""
-        prev_answer_hint = f" Previous answer snippet (do not recycle): {prev_answer}." if prev_answer else ""
-        hostile_guard = (
-            ""
-            if allow_hostile
-            else (
-                " Do not move to threats, violence, weapons, brandished steel, or hostile interruption—"
-                "topic pressure alone is not justification."
-            )
-        )
-        grounded_hostile = (
-            " If the tone contract allows explicit threat or physical hostility, you may add a grounded confrontation beat "
-            "only when it fits established scene tension or visible authority roles—never arbitrary aggression."
-            if allow_hostile
-            else ""
-        )
-        return (
-            f"{shared} The player is pressing the same topic again, and your reply repeated the prior answer without escalation."
-            f"{topic_hint}{prev_player_hint}{prev_answer_hint} "
-            "Do NOT restate the same underlying lead. Escalate with new content: add one concrete detail AND one of "
-            "(a) a named person/place/faction/witness (with an in-world source), or (b) a narrowed unknown boundary (time window, location bracket, condition, count). "
-            "End with a sharper player-facing opening that uses the new detail (options, leverage, or cost)—without "
-            "narrating the PC's decision, destination, or commitment, and without upgrading one lead into the only real path. "
-            "Preserve speaker grounding and diegetic voice."
-            f"{hostile_guard}{grounded_hostile}"
-        )
-
-    if failure_class == "npc_contract_failure":
-        missing = [str(x).strip() for x in ((failure or {}).get("missing") or []) if isinstance(x, str) and str(x).strip()]
-        missing_hint = f" Missing contract elements: {missing}." if missing else ""
-        return (
-            f"{shared} Produce a direct NPC answer, reaction, or refusal consistent with the current target. "
-            "Include at least one concrete person, place, faction, next step, or directly usable condition, time, or location. "
-            "Deliver NPC-side substance the player can react to; do not narrate the PC deciding, moving, or committing."
-            f"{missing_hint}"
-        )
-
-    if failure_class == "topic_pressure_escalation":
-        ctx = (failure or {}).get("topic_context") if isinstance((failure or {}).get("topic_context"), dict) else {}
-        topic_key = str(ctx.get("topic_key") or "").strip()
-        prev_answer = str(ctx.get("previous_answer_snippet") or "").strip()
-        repeat_count = int(ctx.get("repeat_count", 0) or 0)
-        topic_hint = f" Topic key: {topic_key}." if topic_key else ""
-        prev_answer_hint = f" Prior low-gain answer (do not paraphrase): {prev_answer}." if prev_answer else ""
-        if allow_hostile:
-            escalation_menu = (
-                "You MUST escalate now with diegetic motion. Prefer one of: concrete clue tied to an on-screen detail; "
-                "bounded refusal that changes what is at stake; tightened scrutiny or procedural questioning; authority or policy pressure; "
-                "deadline or time cost; environmental shift others notice; social or reputation consequence; narrowing opportunity window; "
-                "or a named lead (NPC, faction, or place) the speaker can credibly cite. "
-                "Only if the tone contract already allows threat or physical hostility—and the scene has established grounds—"
-                "you may add a calibrated confrontation, conditional threat, or physical beat that fits that contract. "
-                "Do not invent random aggression."
-            )
-        else:
-            escalation_menu = (
-                "You MUST escalate now with diegetic motion without threats, violence, weapons, hostile interruption, or physical pressure—"
-                "topic pressure alone does not unlock hostility. "
-                "Choose one: concrete clue tied to an on-screen detail; bounded refusal that changes what is at stake; "
-                "tightened scrutiny or procedural questioning; authority or policy pressure; deadline or time cost; "
-                "environmental shift others notice; social or reputation consequence; narrowing opportunity window; "
-                "or a named lead (NPC, faction, or place) the speaker can credibly cite."
-            )
-        return (
-            f"{shared} The player has pressed this unresolved topic repeatedly without meaningful progress."
-            f"{topic_hint}{prev_answer_hint} Repetition count: {repeat_count}. "
-            f"{escalation_menu} "
-            "Urgency sharpens salience; it does not justify narrating the PC's chosen route or forced pathing. "
-            "Include exactly one scene momentum tag and end with concrete player-facing openings, stakes, or time "
-            "pressure the player can respond to (do not narrate the PC's move or commitment)."
-        )
-
-    if failure_class == "scene_stall":
-        hostile_tail = (
-            " If the tone contract allows, you may add a grounded confrontation beat that fits visible tension or authority roles."
-            if allow_hostile
-            else " Do not introduce threats, hostile interruption, violence, or weapons."
-        )
-        return (
-            f"{shared} Scene stall / low progress: advance now with one concrete development—still without choosing for the player. "
-            "Prefer new information plus a player-facing opening, or pressure plus a surfaced choice, or a consequence "
-            "with visible next opportunities, or a bounded refusal with an alternative handle, or a clarified hard "
-            "constraint that removes one avenue while leaving others open. "
-            "Do not auto-travel, auto-commit, or collapse multiple leads into one mandatory path. "
-            f"{hostile_tail} "
-            "Include exactly one matching scene momentum tag in tags: scene_momentum:<kind>."
-        )
-
-    if failure_class == "forbidden_generic_phrase":
-        return (
-            f"{shared} Rewrite only the offending generic phrase or sentence into scene-anchored specifics. "
-            "Keep the rest of the reply intact where possible and avoid flattening the whole response."
-        )
-
-    reason_text = f" Reasons: {reasons}." if reasons else ""
-    return f"{shared} Rewrite narrowly to resolve this failure.{reason_text}"
 
 def scene_stall_check(
     *,
@@ -644,6 +1041,91 @@ def _strict_social_speaker_led_opening_for_retry(
     return _opening_sentence_should_skip_echo_check(first)
 
 
+def inspect_retry_social_answer_fallback_scope(
+    *,
+    player_text: str,
+    scene_envelope: Dict[str, Any],
+    session: Dict[str, Any],
+    world: Dict[str, Any],
+    segmented_turn: Dict[str, Any] | None = None,
+) -> Dict[str, Any]:
+    """Block #3: scope for deterministic NPC/social-shaped retry fallbacks (Block #1 text signals)."""
+    env = scene_envelope if isinstance(scene_envelope, dict) else {}
+    sess = session if isinstance(session, dict) else None
+    w = world if isinstance(world, dict) else None
+    block1_signal = False
+    canonical_break = False
+    if sess is not None and w is not None:
+        block1_signal = world_action_turn_suppresses_npc_answer_fallback(
+            session=sess,
+            scene=env,
+            world=w,
+            segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+            raw_text=str(player_text or ""),
+        )
+        canonical_break = evaluate_world_action_social_continuity_break(
+            session=sess,
+            scene=env,
+            world=w,
+            segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+            raw_text=str(player_text or ""),
+        )
+    return {
+        "retry_social_fallback_considered": True,
+        "block1_world_action_signal": block1_signal,
+        "block1_canonical_continuity_break": canonical_break,
+        "social_shaped_fallback_in_scope": not block1_signal,
+    }
+
+
+def _social_answer_fallback_in_scope(
+    *,
+    player_text: str,
+    scene_envelope: Dict[str, Any],
+    session: Dict[str, Any],
+    world: Dict[str, Any],
+    segmented_turn: Dict[str, Any] | None = None,
+) -> bool:
+    return bool(
+        inspect_retry_social_answer_fallback_scope(
+            player_text=player_text,
+            scene_envelope=scene_envelope,
+            session=session,
+            world=world,
+            segmented_turn=segmented_turn,
+        ).get("social_shaped_fallback_in_scope")
+    )
+
+
+def _retry_known_fact_is_suppressed_social_shape(
+    known_fact: Dict[str, Any],
+    *,
+    world_action_signal: bool,
+) -> bool:
+    """When Block #1 signals world-action, drop social/dialogue-shaped known facts from retry carry."""
+    if not world_action_signal or not isinstance(known_fact, dict):
+        return False
+    src = str(known_fact.get("source") or "").strip()
+    if src in {"social_answer_candidate", "recent_dialogue_continuity"}:
+        return True
+    sp = dict(known_fact.get("speaker") or {}) if isinstance(known_fact.get("speaker"), dict) else {}
+    if str(sp.get("role") or "").strip().lower() == "npc":
+        return True
+    return False
+
+
+def _append_retry_social_scope_debug(gm_or_out: Dict[str, Any], scope: Dict[str, Any]) -> None:
+    if not isinstance(gm_or_out, dict) or not isinstance(scope, dict):
+        return
+    dbg = gm_or_out.get("debug_notes") if isinstance(gm_or_out.get("debug_notes"), str) else ""
+    tail = (
+        f"retry_social_fallback_scope:block1_signal={scope.get('block1_world_action_signal')}"
+        f":canonical_continuity_break={scope.get('block1_canonical_continuity_break')}"
+        f":social_shaped_in_scope={scope.get('social_shaped_fallback_in_scope')}"
+    )
+    gm_or_out["debug_notes"] = (dbg + " | " if dbg else "") + tail
+
+
 def detect_retry_failures(
     *,
     player_text: str,
@@ -652,6 +1134,7 @@ def detect_retry_failures(
     session: Dict[str, Any],
     world: Dict[str, Any],
     resolution: Dict[str, Any] | None,
+    segmented_turn: Dict[str, Any] | None = None,
 ) -> List[Dict[str, Any]]:
     """Collect inspectable retry failures before deterministic enforcement."""
     if not isinstance(gm_reply, dict):
@@ -695,39 +1178,69 @@ def detect_retry_failures(
             question_rule = {"applies": True, "ok": True, "reasons": []}
 
     if question_rule.get("applies") and not question_rule.get("ok"):
-        known_fact = resolve_known_fact_before_uncertainty(
-            player_text,
-            scene_envelope=scene_envelope,
-            session=session,
-            world=world,
-            resolution=resolution,
+        tags_r = gm_reply.get("tags") if isinstance(gm_reply.get("tags"), list) else []
+        tag_list_q = [str(t) for t in tags_r if isinstance(t, str)]
+        deterministic_known_retry = "question_retry_fallback" in tag_list_q and (
+            "known_fact_guard" in tag_list_q
+            or "social_answer_retry" in tag_list_q
         )
-        failure_payload = {
-            "failure_class": "unresolved_question",
-            "priority": RETRY_FAILURE_PRIORITY["unresolved_question"],
-            "reasons": list(question_rule.get("reasons") or []),
-        }
-        if known_fact:
-            failure_payload["known_fact_context"] = {
-                "answer": str(known_fact.get("text") or "").strip(),
-                "source": str(known_fact.get("source") or "").strip(),
-                "subject": str(known_fact.get("subject") or "").strip(),
-                "position": str(known_fact.get("position") or "").strip(),
-            }
-        else:
-            uncertainty_hint = classify_uncertainty(
+        if not deterministic_known_retry:
+            block1_signal = world_action_turn_suppresses_npc_answer_fallback(
+                session=session if isinstance(session, dict) else {},
+                scene=scene_envelope if isinstance(scene_envelope, dict) else {},
+                world=world if isinstance(world, dict) else {},
+                segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+                raw_text=str(player_text or ""),
+            )
+            known_fact = resolve_known_fact_before_uncertainty(
                 player_text,
                 scene_envelope=scene_envelope,
                 session=session,
                 world=world,
                 resolution=resolution,
             )
-            failure_payload["uncertainty_category"] = str(uncertainty_hint.get("category") or "").strip()
-            failure_payload["uncertainty_context"] = {
-                "speaker": dict(uncertainty_hint.get("speaker") or {}),
-                "scene_snapshot": dict(uncertainty_hint.get("scene_snapshot") or {}),
+            suppressed_kf_carry = False
+            if isinstance(known_fact, dict) and _retry_known_fact_is_suppressed_social_shape(
+                known_fact,
+                world_action_signal=block1_signal,
+            ):
+                known_fact = None
+                suppressed_kf_carry = block1_signal
+            failure_payload = {
+                "failure_class": "unresolved_question",
+                "priority": RETRY_FAILURE_PRIORITY["unresolved_question"],
+                "reasons": list(question_rule.get("reasons") or []),
             }
-        failures.append(failure_payload)
+            if suppressed_kf_carry:
+                failure_payload["retry_social_known_fact_carry_suppressed"] = "block1_world_action_signal"
+            if known_fact:
+                ktxt = str(known_fact.get("text") or "").strip()
+                if ktxt and _is_valid_player_facing_fallback_answer(
+                    ktxt,
+                    player_text=player_text,
+                    known_fact=known_fact if isinstance(known_fact, dict) else None,
+                    failure_class="unresolved_question",
+                ):
+                    failure_payload["known_fact_context"] = {
+                        "answer": ktxt,
+                        "source": str(known_fact.get("source") or "").strip(),
+                        "subject": str(known_fact.get("subject") or "").strip(),
+                        "position": str(known_fact.get("position") or "").strip(),
+                    }
+            if "known_fact_context" not in failure_payload:
+                uncertainty_hint = classify_uncertainty(
+                    player_text,
+                    scene_envelope=scene_envelope,
+                    session=session,
+                    world=world,
+                    resolution=resolution,
+                )
+                failure_payload["uncertainty_category"] = str(uncertainty_hint.get("category") or "").strip()
+                failure_payload["uncertainty_context"] = {
+                    "speaker": dict(uncertainty_hint.get("speaker") or {}),
+                    "scene_snapshot": dict(uncertainty_hint.get("scene_snapshot") or {}),
+                }
+            failures.append(failure_payload)
 
     echo_reasons: List[str] = []
     if opening_sentence_echoes_player_input(reply_text, player_text):
@@ -835,6 +1348,7 @@ def apply_deterministic_retry_fallback(
     session: Dict[str, Any],
     world: Dict[str, Any],
     resolution: Dict[str, Any] | None,
+    segmented_turn: Dict[str, Any] | None = None,
 ) -> Dict[str, Any]:
     """Apply deterministic fallback when targeted retry still fails."""
     if not isinstance(gm, dict):
@@ -843,19 +1357,52 @@ def apply_deterministic_retry_fallback(
     if failure_class not in ("unresolved_question", "answer"):
         return gm
 
+    scene_id = str((scene_envelope.get("scene") or {}).get("id") or "").strip()
+    eff_res, strict_route, _ = _gm_binding().effective_strict_social_resolution_for_emission(
+        resolution if isinstance(resolution, dict) else None,
+        session if isinstance(session, dict) else None,
+        world if isinstance(world, dict) else None,
+        scene_id,
+    )
+    scope = inspect_retry_social_answer_fallback_scope(
+        player_text=str(player_text or ""),
+        scene_envelope=scene_envelope if isinstance(scene_envelope, dict) else {},
+        session=session if isinstance(session, dict) else {},
+        world=world if isinstance(world, dict) else {},
+        segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+    )
+    soc_in_scope = bool(scope.get("social_shaped_fallback_in_scope"))
+    block1_signal = bool(scope.get("block1_world_action_signal"))
+
+    def _tag_retry_scope(out_d: Dict[str, Any]) -> Dict[str, Any]:
+        _append_retry_social_scope_debug(out_d, scope)
+        return out_d
+
     known_fact_ctx = (failure or {}).get("known_fact_context") if isinstance((failure or {}).get("known_fact_context"), dict) else {}
-    if failure_class == "answer" and str(known_fact_ctx.get("answer") or "").strip():
-        out = dict(gm)
-        out["player_facing_text"] = _ensure_terminal_punctuation(str(known_fact_ctx.get("answer") or "").strip())
-        tags = out.get("tags") if isinstance(out.get("tags"), list) else []
-        out["tags"] = list(tags) + ["question_retry_fallback", "known_fact_guard", "social_answer_retry"]
-        dbg = out.get("debug_notes") if isinstance(out.get("debug_notes"), str) else ""
-        source = str(known_fact_ctx.get("source") or "social_answer_candidate").strip()
-        out["debug_notes"] = (
-            (dbg + " | " if dbg else "")
-            + f"retry_fallback:answer:known_fact_guard:{source}"
-        )
-        return out
+    ans_ctx = str(known_fact_ctx.get("answer") or "").strip()
+    if failure_class == "answer" and ans_ctx and soc_in_scope:
+        kf_for_val: Dict[str, Any] = {
+            "source": str(known_fact_ctx.get("source") or ""),
+            "subject": str(known_fact_ctx.get("subject") or ""),
+            "position": str(known_fact_ctx.get("position") or ""),
+        }
+        if _is_valid_player_facing_fallback_answer(
+            ans_ctx,
+            player_text=player_text,
+            known_fact=kf_for_val,
+            failure_class="answer",
+        ):
+            out = dict(gm)
+            out["player_facing_text"] = _ensure_terminal_punctuation(ans_ctx)
+            tags = out.get("tags") if isinstance(out.get("tags"), list) else []
+            out["tags"] = list(tags) + ["question_retry_fallback", "known_fact_guard", "social_answer_retry"]
+            dbg = out.get("debug_notes") if isinstance(out.get("debug_notes"), str) else ""
+            source = str(known_fact_ctx.get("source") or "social_answer_candidate").strip()
+            out["debug_notes"] = (
+                (dbg + " | " if dbg else "")
+                + f"retry_fallback:answer:known_fact_guard:{source}"
+            )
+            return _tag_retry_scope(out)
 
     known_fact = resolve_known_fact_before_uncertainty(
         player_text,
@@ -864,26 +1411,51 @@ def apply_deterministic_retry_fallback(
         world=world,
         resolution=resolution,
     )
+    if isinstance(known_fact, dict) and _retry_known_fact_is_suppressed_social_shape(
+        known_fact,
+        world_action_signal=block1_signal,
+    ):
+        known_fact = None
     out = dict(gm)
-    if isinstance(known_fact, dict) and str(known_fact.get("text") or "").strip():
-        out["player_facing_text"] = _ensure_terminal_punctuation(str(known_fact.get("text") or "").strip())
-        tags = out.get("tags") if isinstance(out.get("tags"), list) else []
-        out["tags"] = list(tags) + ["question_retry_fallback", "known_fact_guard"]
-        dbg = out.get("debug_notes") if isinstance(out.get("debug_notes"), str) else ""
-        source = str(known_fact.get("source") or "known_fact").strip()
-        out["debug_notes"] = (
-            (dbg + " | " if dbg else "")
-            + f"retry_fallback:unresolved_question:known_fact_guard:{source}"
-        )
-        return out
+    ktxt = str((known_fact or {}).get("text") or "").strip() if isinstance(known_fact, dict) else ""
+    if isinstance(known_fact, dict) and ktxt:
+        src_nf = str(known_fact.get("source") or "").strip()
+        vfc = "answer" if src_nf == "social_answer_candidate" else "unresolved_question"
+        if _is_valid_player_facing_fallback_answer(
+            ktxt,
+            player_text=player_text,
+            known_fact=known_fact,
+            failure_class=vfc,
+        ):
+            sp = dict(known_fact.get("speaker") or {}) if isinstance(known_fact.get("speaker"), dict) else {}
+            role = str(sp.get("role") or "").strip().lower()
+            narrator_kf = role in {"", "narrator"}
+            soc_chk: Dict[str, Any] = {}
+            if isinstance(resolution, dict) and isinstance(resolution.get("social"), dict):
+                soc_chk = resolution.get("social") or {}
+            open_social_solicit = bool(soc_chk.get("open_social_solicitation"))
+            block1_out = not soc_in_scope
+            allow_kf = False
+            if block1_out:
+                allow_kf = not _retry_known_fact_is_suppressed_social_shape(
+                    known_fact,
+                    world_action_signal=True,
+                )
+            else:
+                allow_kf = (not (strict_route and narrator_kf)) or open_social_solicit
+            if allow_kf:
+                out["player_facing_text"] = _ensure_terminal_punctuation(ktxt)
+                tags = out.get("tags") if isinstance(out.get("tags"), list) else []
+                out["tags"] = list(tags) + ["question_retry_fallback", "known_fact_guard"]
+                dbg = out.get("debug_notes") if isinstance(out.get("debug_notes"), str) else ""
+                source = str(known_fact.get("source") or "known_fact").strip()
+                won = "narrator_kf_won_before_strict_social" if block1_out and narrator_kf else "known_fact_guard"
+                out["debug_notes"] = (
+                    (dbg + " | " if dbg else "")
+                    + f"retry_fallback:unresolved_question:known_fact_guard:{source}|retry_fallback:{won}"
+                )
+                return _tag_retry_scope(out)
 
-    scene_id = str((scene_envelope.get("scene") or {}).get("id") or "").strip()
-    eff_res, strict_route, _ = _gm_binding().effective_strict_social_resolution_for_emission(
-        resolution if isinstance(resolution, dict) else None,
-        session if isinstance(session, dict) else None,
-        world if isinstance(world, dict) else None,
-        scene_id,
-    )
     res_open = resolution if isinstance(resolution, dict) else None
     soc_open = (
         res_open.get("social")
@@ -920,9 +1492,9 @@ def apply_deterministic_retry_fallback(
                 + f"retry_fallback:open_social_recovery:{rec_fb.get('mode')}|retry_fallback:suppressed:uncertainty_pool"
             )
             _merge_open_social_recovery_emission_debug(out, rec_fb)
-            return out
-    if strict_route and isinstance(eff_res, dict):
-        return _gm_binding().apply_social_exchange_retry_fallback_gm(
+            return _tag_retry_scope(out)
+    if strict_route and isinstance(eff_res, dict) and soc_in_scope:
+        inner = _gm_binding().apply_social_exchange_retry_fallback_gm(
             out,
             player_text=player_text,
             session=session,
@@ -930,6 +1502,7 @@ def apply_deterministic_retry_fallback(
             resolution=eff_res,
             scene_id=scene_id,
         )
+        return _tag_retry_scope(inner)
 
     uncertainty = classify_uncertainty(
         player_text,
@@ -943,10 +1516,17 @@ def apply_deterministic_retry_fallback(
         uncertainty=uncertainty,
         reason="retry_fallback:unresolved_question",
         replace_text=True,
+        player_text=player_text,
     )
     tags = out.get("tags") if isinstance(out.get("tags"), list) else []
     out["tags"] = list(tags) + ["question_retry_fallback"]
-    return out
+    dbg_u = out.get("debug_notes") if isinstance(out.get("debug_notes"), str) else ""
+    if not soc_in_scope:
+        out["debug_notes"] = (
+            (dbg_u + " | " if dbg_u else "")
+            + "retry_fallback_chosen:nonsocial_uncertainty_pool_after_block1_social_out_of_scope"
+        )
+    return _tag_retry_scope(out)
 
 
 def _stable_u32_from_seed(seed: str) -> int:
@@ -965,11 +1545,26 @@ def _nonsocial_forced_retry_progress_line(
     world: Dict[str, Any] | None,
     resolution: Dict[str, Any] | None,
 ) -> str:
-    """Short narrator fallback after retries: acknowledge when possible, one concrete forward beat."""
+    """Short narrator fallback after retries: answer-shape first when possible; diegetic scene anchors only."""
     pt = str(player_text or "").strip()
     env = scene_envelope if isinstance(scene_envelope, dict) else {}
     sess = session if isinstance(session, dict) else {}
     w = world if isinstance(world, dict) else {}
+    res = resolution if isinstance(resolution, dict) else None
+    sid = _resolve_scene_id(env)
+    seed = f"{sid}|{pt[:200]}"
+
+    res_kind = str((res or {}).get("kind") or "").strip().lower()
+    if res_kind in _PERCEPTION_FALLBACK_RESOLUTION_KINDS:
+        obs_line = render_observe_perception_fallback_line(env, seed_key=seed)
+        if isinstance(obs_line, str) and obs_line.strip():
+            return _ensure_terminal_punctuation(obs_line.strip())
+
+    if _resolution_implies_destination_arrival(res):
+        arr_line = render_travel_arrival_fallback_line(env, seed_key=seed)
+        if isinstance(arr_line, str) and arr_line.strip():
+            return _ensure_terminal_punctuation(arr_line.strip())
+
     if _is_direct_player_question(pt):
         known_fact = resolve_known_fact_before_uncertainty(
             pt,
@@ -978,8 +1573,14 @@ def _nonsocial_forced_retry_progress_line(
             world=w,
             resolution=resolution,
         )
-        if isinstance(known_fact, dict) and str(known_fact.get("text") or "").strip():
-            return _ensure_terminal_punctuation(str(known_fact.get("text") or "").strip())
+        ktxt = str(known_fact.get("text") or "").strip() if isinstance(known_fact, dict) else ""
+        if ktxt and _is_valid_player_facing_fallback_answer(
+            ktxt,
+            player_text=pt,
+            known_fact=known_fact if isinstance(known_fact, dict) else None,
+            failure_class="unresolved_question",
+        ):
+            return _ensure_terminal_punctuation(ktxt)
         uncertainty = classify_uncertainty(
             pt,
             scene_envelope=env,
@@ -991,29 +1592,11 @@ def _nonsocial_forced_retry_progress_line(
         if isinstance(line, str) and line.strip():
             return _ensure_terminal_punctuation(line.strip())
 
-    loc = _resolve_scene_location(env)
-    visible = _scene_visible_facts(env)
-    sid = _resolve_scene_id(env)
-    seed = f"{sid}|{pt[:200]}"
-    idx = _stable_u32_from_seed(seed) % 3
-    loc_bit = f" near {loc}" if loc else ""
-    detail = _clean_scene_detail(visible[0]) if visible else ""
-    templates: List[str] = [
-        (
-            f"You weigh what you just tried{loc_bit}; "
-            "the next beat is yours—move toward the clearest face in front of you, let the crowd push you a step, or hold still and listen hard."
-        ),
-        (
-            f"The moment doesn't sharpen on its own{loc_bit}, so you choose footing: "
-            "step aside for a cleaner sightline, trade a flat look with the nearest watcher, or head for the nearest door you already know."
-        ),
-    ]
-    if detail:
-        templates.append(
-            f"{detail[:1].upper()}{detail[1:] if len(detail) > 1 else ''} still reads the same{loc_bit}; "
-            "you can examine it closer, leave it, or change your angle before anyone decides for you."
-        )
-    return _ensure_terminal_punctuation(templates[idx % len(templates)])
+    anchor = render_nonsocial_terminal_anchor_line(env, seed_key=seed)
+    if isinstance(anchor, str) and anchor.strip():
+        return _ensure_terminal_punctuation(anchor.strip())
+
+    return _ensure_terminal_punctuation(str(_NONSOCIAL_EMPTY_REPAIR_HARD_LINE).strip())
 
 
 _SOCIAL_EMPTY_REPAIR_HARD_LINE = "They answer cautiously, keeping it brief."
@@ -1240,7 +1823,7 @@ def _contextual_nonsocial_repair_line(
         lead = detail[0].upper() + (detail[1:] if len(detail) > 1 else "")
         opts: Tuple[str, ...] = (
             f"{lead} catches your eye again as the moment turns toward what happens next.",
-            f"{lead} holds the room while the situation asks for your next move.",
+            f"{lead} still frames the room while pressure keeps moving through the crowd.",
         )
         cand = pick(seed, opts)
         line = _ensure_terminal_punctuation(str(cand).strip())
@@ -1395,6 +1978,8 @@ def ensure_minimal_social_resolution(
     world: Dict[str, Any] | None = None,
     resolution: Dict[str, Any] | None = None,
     scene_envelope: Dict[str, Any] | None = None,
+    player_text: str = "",
+    segmented_turn: Dict[str, Any] | None = None,
 ) -> Dict[str, Any]:
     """
     Return a minimally valid social-resolution-shaped GM payload.
@@ -1425,22 +2010,54 @@ def ensure_minimal_social_resolution(
         scene_id=scene_id,
     )
 
+    pt_min = str(player_text or "").strip()
+    if not pt_min and isinstance(sess, dict):
+        pt_min = str(sess.get("player_input") or "").strip()
+    block1_terminal_social = bool(
+        isinstance(env, dict)
+        and isinstance(sess, dict)
+        and isinstance(w, dict)
+        and world_action_turn_suppresses_npc_answer_fallback(
+            session=sess,
+            scene=env,
+            world=w,
+            segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+            raw_text=pt_min,
+        )
+    )
+
     ctx_mode_social = ""
     if not _gm_has_usable_player_facing_text(out):
-        line = _gm_binding().minimal_social_emergency_fallback_line(
-            res_for_line if isinstance(res_for_line, dict) else None
-        )
+        line = ""
+        if block1_terminal_social:
+            line = _nonsocial_forced_retry_progress_line(
+                pt_min,
+                scene_envelope=env,
+                session=sess,
+                world=w,
+                resolution=res_in,
+            )
+            ctx_mode_social = "nonsocial_progress_after_block1_signal"
+        if not str(line or "").strip():
+            line = _gm_binding().minimal_social_emergency_fallback_line(
+                res_for_line if isinstance(res_for_line, dict) else None
+            )
         if (
             not isinstance(line, str)
             or not line.strip()
             or _gm_binding().is_route_illegal_global_or_sanitizer_fallback_text(line)
             or _is_placeholder_only_player_facing_text(line)
         ):
-            c_line, ctx_mode_social = _contextual_social_repair_line(gm=out, session=sess, world=w)
+            if block1_terminal_social:
+                c_line, ctx_mode_social = _contextual_nonsocial_repair_line(gm=out, session=sess)
+            else:
+                c_line, ctx_mode_social = _contextual_social_repair_line(gm=out, session=sess, world=w)
             if _gm_has_usable_player_facing_text({"player_facing_text": c_line}):
                 line = c_line
             else:
-                line = _SOCIAL_EMPTY_REPAIR_HARD_LINE
+                line = (
+                    _NONSOCIAL_EMPTY_REPAIR_HARD_LINE if block1_terminal_social else _SOCIAL_EMPTY_REPAIR_HARD_LINE
+                )
                 ctx_mode_social = "hard_fallback"
         out["player_facing_text"] = _ensure_terminal_punctuation(str(line).strip())
 
@@ -1470,6 +2087,8 @@ def ensure_minimal_social_resolution(
     suffix = f"{repair_note}|{reason}" if reason else repair_note
     if ctx_mode_social:
         suffix = f"{suffix}|social_contextual_repair:{ctx_mode_social}"
+    if block1_terminal_social:
+        suffix = f"{suffix}|retry_social_minimal_repair:block1_world_action_signal"
     out["debug_notes"] = (dbg + " | " if dbg else "") + suffix
     return out
 
@@ -1575,6 +2194,7 @@ def force_terminal_retry_fallback(
     world: Dict[str, Any] | None = None,
     resolution: Dict[str, Any] | None = None,
     base_gm: Dict[str, Any] | None = None,
+    segmented_turn: Dict[str, Any] | None = None,
 ) -> Dict[str, Any]:
     """
     Produce a terminal fallback payload after targeted retries are exhausted.
@@ -1590,9 +2210,21 @@ def force_terminal_retry_fallback(
     res = resolution if isinstance(resolution, dict) else None
     scene_id = _resolve_scene_id(env)
 
+    soc_terminal_in_scope = bool(
+        w is not None
+        and _social_answer_fallback_in_scope(
+            player_text=str(player_text or ""),
+            scene_envelope=env,
+            session=sess if isinstance(sess, dict) else {},
+            world=w,
+            segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+        )
+    )
+    use_social_terminal = bool(_session_social_authority(sess) and soc_terminal_in_scope)
+
     line = ""
     gm_work: Dict[str, Any] | None = None
-    if _session_social_authority(sess):
+    if use_social_terminal:
         eff_res, _, _ = _gm_binding().effective_strict_social_resolution_for_emission(
             res,
             sess,
@@ -1631,6 +2263,8 @@ def force_terminal_retry_fallback(
                 world=w,
                 resolution=res_for_social if isinstance(res_for_social, dict) else None,
                 scene_envelope=env,
+                player_text=str(player_text or ""),
+                segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
             )
             out["retry_failure_class"] = failure_class or None
             out["retry_failure_reasons"] = list(reason_list)
@@ -1657,6 +2291,8 @@ def force_terminal_retry_fallback(
                     world=w,
                     resolution=res_for_social if isinstance(res_for_social, dict) else None,
                     scene_envelope=env,
+                    player_text=str(player_text or ""),
+                    segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
                 )
                 out["retry_failure_class"] = failure_class or None
                 out["retry_failure_reasons"] = list(reason_list)
@@ -1687,9 +2323,11 @@ def force_terminal_retry_fallback(
         )
 
     if not str(line or "").strip():
-        line = _ensure_terminal_punctuation(
-            "You hold your ground a breath, then choose your next move: step in, step back, or hold still and watch who reacts first."
-        )
+        anchor_dead = render_nonsocial_terminal_anchor_line(env, seed_key=f"term|{scene_id}|{player_text[:120]}")
+        if isinstance(anchor_dead, str) and anchor_dead.strip():
+            line = _ensure_terminal_punctuation(anchor_dead.strip())
+        else:
+            line = _ensure_terminal_punctuation(str(_NONSOCIAL_EMPTY_REPAIR_HARD_LINE).strip())
 
     out["player_facing_text"] = _ensure_terminal_punctuation(str(line).strip())
     out["final_route"] = "forced_retry_fallback"
@@ -1705,10 +2343,10 @@ def force_terminal_retry_fallback(
     tags = out.get("tags") if isinstance(out.get("tags"), list) else []
     out["tags"] = list(tags) + ["retry_escape_hatch", "forced_retry_fallback", "retry_exhausted"]
     dbg = out.get("debug_notes") if isinstance(out.get("debug_notes"), str) else ""
-    out["debug_notes"] = (
-        (dbg + " | " if dbg else "")
-        + f"retry_escape_hatch:class={failure_class or 'unknown'}:reasons={','.join(reason_list[:6])}"
-    )
+    esc_tail = f"retry_escape_hatch:class={failure_class or 'unknown'}:reasons={','.join(reason_list[:6])}"
+    if _session_social_authority(sess) and not soc_terminal_in_scope:
+        esc_tail += "|retry_terminal_skipped_social_terminal:block1_world_action_signal"
+    out["debug_notes"] = (dbg + " | " if dbg else "") + esc_tail
     if gm_work is not None:
         _preserve_social_continuity_fields(
             out,
@@ -1739,6 +2377,8 @@ def force_terminal_retry_fallback(
             world=w,
             resolution=res,
             scene_envelope=env,
+            player_text=str(player_text or ""),
+            segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
         )
         rtags_sweep = out.get("tags") if isinstance(out.get("tags"), list) else []
         rt_sweep = [str(t) for t in rtags_sweep if isinstance(t, str)]

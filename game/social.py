@@ -2358,7 +2358,7 @@ def resolve_social_action(
                 success=None,
                 hint=hint_ob,
                 social={
-                    "social_intent_class": intent_class,
+                    "social_intent_class": "open_call",
                     "skill_check": None,
                     "npc_reply_expected": False,
                     "reply_kind": "reaction",
@@ -2371,6 +2371,7 @@ def resolve_social_action(
                     "target_reason": "broad_address_to_available_scene_npcs",
                     "broad_address_bid": True,
                     "open_social_solicitation": True,
+                    "broadcast_social_open_call": bool(incoming_action_meta.get("broadcast_social_open_call")),
                     "candidate_addressable_ids": list(cand_f),
                     "candidate_addressable_count": ccount,
                     "broad_address_reason": incoming_action_meta.get("broad_address_reason"),
