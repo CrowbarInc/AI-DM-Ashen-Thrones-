@@ -1,6 +1,6 @@
 # Test consolidation plan (Block 15C)
 
-**Status:** Plan + recorded ownership; routing consolidation **pass closed**; **repair/retry cluster closed enough** (Block 3 doc, 2026-04-03 — see *Repair / retry cluster — Block 3*).
+**Status:** Plan + recorded ownership; routing consolidation **pass closed**; **repair/retry cluster closed enough** (Block 3 doc, 2026-04-03 — see *Repair / retry cluster — Block 3*). **Runtime map:** `docs/narrative_integrity_architecture.md` documents the current `game/` ownership for narrative integrity (routing, continuity breaks, targeting, emission validators/repairs, gate orchestration) and **explicit deferrals** (e.g. authoritative resolution in `interaction_context`, large clusters still in `final_emission_gate`).
 
 **Source:** Derived from `tests/TEST_AUDIT.md`, `tests/test_inventory.json` (regenerate via `py -3 tools/test_audit.py`), and spot review of transcript vs pipeline modules.
 

@@ -25,6 +25,10 @@ Diagnostic inventory of `tests/` only: no runtime code or assertions were change
 
 The routing pass closed with a **three-module contract** (details: `tests/TEST_CONSOLIDATION_PLAN.md` → *Block 3 — Routing*). **Intentional overlap:** the same phrase may appear in pure-routing and full-pipeline tests when locking **different layers** — not an automatic duplicate to delete.
 
+### Runtime narrative integrity — `game/` layout (Block 4)
+
+The **post–Block 3** split of validators, repairs, targeting helpers, and gate orchestration is summarized for maintainers in **`docs/narrative_integrity_architecture.md`** (where routing, commitment breaks, vocative vs authoritative resolution, contracts, validators, repairs, and `final_emission_gate` orchestration live). Test canonical owners in this file and in `tests/TEST_CONSOLIDATION_PLAN.md` remain the contract for **what to assert where**; the architecture note is the contract for **where runtime code should live**.
+
 ### Repair / retry consolidation — applied ownership (Block 3 doc, 2026-04-03)
 
 Cluster **closed enough** for this pass: enforced split and intentional overlap are recorded in `tests/TEST_CONSOLIDATION_PLAN.md` → *Repair / retry cluster — Block 3*. **Next batch:** prompt/sanitizer → social/emission → lead/clue (same plan → *Next consolidation order*).

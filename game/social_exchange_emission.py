@@ -17,6 +17,10 @@ from typing import Any, Dict, List, Optional, Tuple
 
 from game.prompt_context import canonical_interaction_target_npc_id
 
+from game.dialogue_targeting import (
+    line_opens_with_comma_vocative,
+    npc_id_from_vocative_line,
+)
 from game.interaction_context import (
     assert_valid_speaker,
     canonical_scene_addressable_roster,
@@ -24,9 +28,7 @@ from game.interaction_context import (
     effective_in_scene_npc_roster,
     get_social_exchange_interruption_tracker,
     inspect as inspect_interaction_context,
-    line_opens_with_comma_vocative,
     npc_id_from_explicit_generic_role_address,
-    npc_id_from_vocative_line,
     resolve_authoritative_social_target,
     scene_addressable_actor_ids,
     session_allows_implicit_social_reply_authority,
