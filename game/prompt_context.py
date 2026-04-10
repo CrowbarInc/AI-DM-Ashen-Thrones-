@@ -20,6 +20,9 @@ Contract layers (orthogonal concerns):
   ``build_player_facing_narration_purity_contract`` in ``game.player_facing_narration_purity``).
 - **social_response_structure** — dialogue-turn spoken shape and anti-monologue caps (see
   ``build_social_response_structure_contract`` in ``game.response_policy_contracts``); gate/repairs TBD.
+- **interaction_continuity** — preserve conversational thread / interlocutor continuity across turns;
+  do not silently drop or switch speakers without a break signal or explicit cue (see
+  ``build_interaction_continuity_contract`` in ``game.interaction_continuity``); gate/repairs TBD.
 """
 from __future__ import annotations
 
@@ -56,6 +59,7 @@ from game.scene_state_anchoring import build_scene_state_anchor_contract
 from game.narrative_authority import build_narrative_authority_contract
 from game.tone_escalation import build_tone_escalation_contract
 from game.response_type_gating import derive_response_type_contract
+from game.interaction_continuity import build_interaction_continuity_contract
 from game.response_policy_contracts import (
     build_social_response_structure_contract,
     peek_response_type_contract_from_resolution,
@@ -1914,6 +1918,21 @@ def _social_response_structure_prompt_debug_anchor(contract: Mapping[str, Any] |
     }
 
 
+def _interaction_continuity_prompt_debug_anchor(contract: Mapping[str, Any] | None) -> Dict[str, Any]:
+    """Compact mirror of interaction_continuity contract for prompt_debug (inspectable, not authoritative)."""
+    c = contract if isinstance(contract, dict) else {}
+    dbg = c.get("debug") if isinstance(c.get("debug"), dict) else {}
+    return {
+        "enabled": c.get("enabled"),
+        "continuity_strength": c.get("continuity_strength"),
+        "anchored_interlocutor_id": c.get("anchored_interlocutor_id"),
+        "drop_interlocutor_requires_explicit_break": c.get("drop_interlocutor_requires_explicit_break"),
+        "speaker_switch_requires_explicit_cue": c.get("speaker_switch_requires_explicit_cue"),
+        "source_of_anchor": dbg.get("source_of_anchor"),
+        "scene_scope_validated": dbg.get("scene_scope_validated"),
+    }
+
+
 def canonical_interaction_target_npc_id(session: Dict[str, Any] | None, raw_target_id: str | None) -> str:
     """Map session interaction target to promoted world NPC id when ``promoted_actor_npc_map`` binds it."""
     raw = str(raw_target_id or "").strip()
@@ -2458,7 +2477,8 @@ def build_narration_context(
     (answer-shape obligations), tone_escalation (interpersonal intensity caps), anti_railroading
     (player agency vs surfaced leads), context_separation (ambient pressure vs local exchange),
     and player_facing_narration_purity (no scaffold/menu/engine coaching in prose),
-    and social_response_structure (dialogue-turn spoken shape when response type requires dialogue);
+    and social_response_structure (dialogue-turn spoken shape when response type requires dialogue),
+    and interaction_continuity (thread / interlocutor anchoring snapshot for enforcement layers);
     see module docstring.
     """
     # Interlocutor lead contract (maintenance): interlocutor_lead_context is the NPC-scoped export from
@@ -3050,6 +3070,18 @@ def build_narration_context(
         social_response_structure_contract
     )
 
+    interaction_continuity_contract = build_interaction_continuity_contract(
+        session if isinstance(session, dict) else None,
+        scene_id=scene_pub_id or None,
+        scene_envelope=scene if isinstance(scene, dict) else None,
+        world=world if isinstance(world, dict) else None,
+        response_type_contract=rtc_for_social_structure if isinstance(rtc_for_social_structure, dict) else None,
+    )
+    response_policy["interaction_continuity"] = interaction_continuity_contract
+    prompt_debug_anchor["interaction_continuity"] = _interaction_continuity_prompt_debug_anchor(
+        interaction_continuity_contract
+    )
+
     _narrative_authority_instr = [
         "NARRATIVE AUTHORITY (POLICY): Obey response_policy.narrative_authority for assertion boundaries; deterministic enforcement is authoritative. "
         "Do not assert unresolved outcomes as settled fact. "
@@ -3144,6 +3176,7 @@ def build_narration_context(
         'context_separation_contract': context_separation_contract,
         'player_facing_narration_purity_contract': player_facing_narration_purity_contract,
         'social_response_structure_contract': social_response_structure_contract,
+        'interaction_continuity_contract': interaction_continuity_contract,
         'prompt_debug': prompt_debug_anchor,
         'first_mention_contract': first_mention_contract,
         'discoverable_hinting': True,

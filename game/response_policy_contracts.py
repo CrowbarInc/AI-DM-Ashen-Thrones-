@@ -7,7 +7,7 @@ asked to produce. **Not** validators (:mod:`game.final_emission_validators`), re
 """
 from __future__ import annotations
 
-from typing import Any, Dict, List, Mapping
+from typing import Any, Dict, List, Mapping, Optional, Tuple
 
 from game.final_emission_text import _RESPONSE_TYPE_VALUES
 from game.storage import get_scene_runtime
@@ -167,3 +167,72 @@ def build_social_response_structure_contract(
         "debug_reason": "response_type_contract_requires_dialogue",
         "debug_inputs": di,
     }
+
+
+def _valid_interaction_continuity_contract(candidate: Any) -> Dict[str, Any] | None:
+    from game.interaction_continuity import CONTINUITY_STRENGTH_VALUES
+
+    if not isinstance(candidate, dict):
+        return None
+    strength = str(candidate.get("continuity_strength") or "").strip().lower()
+    if strength not in CONTINUITY_STRENGTH_VALUES:
+        return None
+    if not isinstance(candidate.get("enabled"), bool):
+        return None
+    out = dict(candidate)
+    out["continuity_strength"] = strength
+    return out
+
+
+def _resolve_interaction_continuity_contract(
+    gm_output: Dict[str, Any] | None,
+    *,
+    resolution: Dict[str, Any] | None,
+    session: Dict[str, Any] | None,
+) -> Tuple[Optional[Dict[str, Any]], Optional[str]]:
+    response_policy = (
+        gm_output.get("response_policy")
+        if isinstance(gm_output, dict) and isinstance(gm_output.get("response_policy"), dict)
+        else None
+    )
+    contract = _valid_interaction_continuity_contract((response_policy or {}).get("interaction_continuity"))
+    if contract:
+        return contract, "response_policy"
+
+    metadata = (
+        resolution.get("metadata")
+        if isinstance(resolution, dict) and isinstance(resolution.get("metadata"), dict)
+        else {}
+    )
+    contract = _valid_interaction_continuity_contract(metadata.get("interaction_continuity_contract"))
+    if contract:
+        return contract, "resolution.metadata"
+
+    debug_candidates: List[Any] = []
+    if isinstance(gm_output, dict):
+        debug_payload = gm_output.get("debug") if isinstance(gm_output.get("debug"), dict) else {}
+        debug_candidates.append(debug_payload.get("interaction_continuity_contract"))
+        debug_candidates.append(gm_output.get("interaction_continuity_contract"))
+    if isinstance(session, dict):
+        last_action_debug = (
+            session.get("last_action_debug") if isinstance(session.get("last_action_debug"), dict) else {}
+        )
+        debug_candidates.append(last_action_debug.get("interaction_continuity_contract"))
+
+    for cand in debug_candidates:
+        contract = _valid_interaction_continuity_contract(cand)
+        if contract:
+            return contract, "debug"
+    return None, None
+
+
+def resolve_interaction_continuity_contract(
+    gm_output: Dict[str, Any] | None,
+    *,
+    resolution: Dict[str, Any] | None,
+    session: Dict[str, Any] | None,
+) -> Tuple[Optional[Dict[str, Any]], Optional[str]]:
+    """Public wrapper for :func:`_resolve_interaction_continuity_contract` (validators / emission debug)."""
+    return _resolve_interaction_continuity_contract(
+        gm_output, resolution=resolution, session=session
+    )

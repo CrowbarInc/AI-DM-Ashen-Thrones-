@@ -2039,6 +2039,23 @@ def test_context_separation_contract_wired_to_response_policy_and_payload():
 
 
 @pytest.mark.unit
+def test_build_narration_context_surfaces_interaction_continuity_contract():
+    ctx = build_narration_context(**_narration_minimal_kwargs())
+    ic = ctx.get("interaction_continuity_contract")
+    assert isinstance(ic, dict)
+    assert ic.get("continuity_strength") in ("none", "soft", "strong")
+    assert isinstance(ic.get("enabled"), bool)
+    assert "anchored_interlocutor_id" in ic
+    assert "continuity_reasons" in ic and isinstance(ic["continuity_reasons"], list)
+    assert "break_signals_present" in ic and isinstance(ic["break_signals_present"], list)
+    rp = ctx["response_policy"]
+    assert rp.get("interaction_continuity") is ic
+    pd = ctx.get("prompt_debug") or {}
+    assert "interaction_continuity" in pd
+    assert "continuity_strength" in pd["interaction_continuity"]
+
+
+@pytest.mark.unit
 def test_context_separation_instruction_priority_and_pressure_rules():
     ctx = build_narration_context(**_narration_minimal_kwargs())
     block = "\n".join(ctx["instructions"])
