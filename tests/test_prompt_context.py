@@ -18,6 +18,8 @@ from game.leads import (
     resolve_lead,
 )
 from game.prompt_context import (
+    CONVERSATIONAL_MEMORY_SOFT_LIMIT,
+    _compress_recent_log,
     build_active_interlocutor_export,
     build_authoritative_lead_prompt_context,
     build_interlocutor_lead_discussion_context,
@@ -2142,3 +2144,242 @@ def test_player_facing_narration_purity_instruction_order_after_context_separati
     idx_purity = text.find("PLAYER-FACING NARRATION PURITY (POLICY)")
     idx_anchor = text.find("SCENE ANCHORING (POLICY)")
     assert 0 <= idx_sep < idx_purity < idx_anchor
+
+
+# --- Objective #15: conversational memory window (prompt integration) ---------
+
+
+@pytest.mark.unit
+def test_narration_payload_includes_conversational_memory_window_and_selection():
+    ctx = build_narration_context(**_narration_minimal_kwargs())
+    assert "conversational_memory_window" in ctx
+    assert "selected_conversational_memory" in ctx
+    assert isinstance(ctx["conversational_memory_window"], dict)
+    assert isinstance(ctx["selected_conversational_memory"], list)
+    pd = ctx.get("prompt_debug") or {}
+    cm = pd.get("conversational_memory") or {}
+    assert "candidate_count" in cm and "selected_count" in cm
+    assert cm["selected_count"] == len(ctx["selected_conversational_memory"])
+
+
+@pytest.mark.unit
+def test_conversational_memory_window_mirrored_on_response_policy_object_identity():
+    ctx = build_narration_context(**_narration_minimal_kwargs())
+    win = ctx["conversational_memory_window"]
+    rp = ctx.get("response_policy") or {}
+    assert rp.get("conversational_memory_window") is win
+    assert "selected_conversational_memory" not in rp
+
+
+@pytest.mark.unit
+@patch("game.prompt_context._compress_recent_log")
+def test_response_policy_path_uses_compress_recent_log(mock_compress):
+    """Policy / lead slices use compressed log; selector still receives the full recent_log_for_prompt."""
+    mock_compress.return_value = [{"player_input": "c1", "gm_snippet": "g1"}]
+    rich = [
+        {
+            "log_meta": {"player_input": "alpha " * 80, "turn_counter": 3},
+            "gm_output": {"player_facing_text": "gm " * 100},
+            "extra_payload": {"should_not": "appear_in_policy_compress_input"},
+        }
+    ]
+    ctx = build_narration_context(**_narration_minimal_kwargs(recent_log_for_prompt=rich))
+    mock_compress.assert_called_once()
+    assert mock_compress.call_args[0][0] is rich
+    pd = ctx.get("prompt_debug") or {}
+    assert pd.get("conversational_memory", {}).get("candidate_count", 0) >= 1
+    assert ctx["recent_log"] != mock_compress.return_value
+
+
+@pytest.mark.unit
+def test_payload_recent_log_is_selector_shaped_not_raw_duplicate_dump():
+    """recent_log in the prompt payload is derived from selection + extras, not a parallel full dump."""
+    log = [
+        {
+            "log_meta": {"player_input": "p0", "turn_counter": 5},
+            "gm_output": {"player_facing_text": "g0"},
+        },
+        {
+            "log_meta": {"player_input": "p1", "turn_counter": 6},
+            "gm_output": {"player_facing_text": "g1"},
+        },
+    ]
+    ctx = build_narration_context(
+        **_narration_minimal_kwargs(session={"turn_counter": 6}, recent_log_for_prompt=log)
+    )
+    for row in ctx["recent_log"]:
+        assert set(row.keys()) <= {"player_input", "gm_snippet"}
+    assert len(ctx["recent_log"]) == len(ctx["selected_conversational_memory"])
+    assert len(ctx["recent_log"]) <= CONVERSATIONAL_MEMORY_SOFT_LIMIT
+
+
+@pytest.mark.unit
+def test_compress_recent_log_trims_to_player_snippet_shape():
+    raw = [
+        {"log_meta": {"player_input": "  ask  "}, "gm_output": {"player_facing_text": "narration " * 50}},
+    ]
+    out = _compress_recent_log(raw)
+    long_gm = "narration " * 50
+    assert out[0]["player_input"] == "  ask  "[:300]
+    assert out[0]["gm_snippet"] == long_gm[:200]
+    assert len(out[0]["gm_snippet"]) == 200
+
+
+@pytest.mark.unit
+def test_recent_log_payload_entries_match_selected_kinds_for_mixed_candidates():
+    """Interlocutor lead rows can contribute when scored into the window."""
+    session = _session_with_registry(
+        {
+            "id": "lead_x",
+            "title": "Harbor Smuggling",
+            "status": LeadStatus.ACTIVE.value,
+            "lifecycle": LeadLifecycle.COMMITTED.value,
+        }
+    )
+    session["active_scene_id"] = "scene_docks"
+    session["turn_counter"] = 20
+    record_npc_lead_discussion(
+        session,
+        "scene_docks",
+        "npc_dock",
+        "lead_x",
+        disclosure_level="hinted",
+        turn_counter=18,
+    )
+    session["interaction_context"] = {
+        "active_interaction_target_id": "npc_dock",
+        "active_interaction_kind": "social",
+        "interaction_mode": "social",
+        "engagement_level": "engaged",
+        "conversation_privacy": None,
+        "player_position_context": None,
+    }
+    log = [
+        {
+            "log_meta": {"player_input": "hello", "turn_counter": 19},
+            "gm_output": {"player_facing_text": "hi"},
+        }
+    ]
+    ctx = build_narration_context(
+        **_narration_minimal_kwargs(
+            session=session,
+            world={},
+            public_scene={"id": "scene_docks", "visible_facts": [], "exits": [], "enemies": []},
+            recent_log_for_prompt=log,
+        )
+    )
+    kinds = [x.get("kind") for x in ctx["selected_conversational_memory"]]
+    assert "recent_turn" in kinds
+    assert "npc_lead_discussion" in kinds
+
+
+@pytest.mark.unit
+def test_runtime_recent_contextual_leads_can_enter_selection():
+    session = _session_with_registry()
+    session["turn_counter"] = 30
+    ctx = build_narration_context(
+        **_narration_minimal_kwargs(
+            session=session,
+            scene_runtime={
+                "recent_contextual_leads": [
+                    {
+                        "subject": "River Crossing",
+                        "key": "crossing:01",
+                        "last_turn": 28,
+                        "kind": "travel",
+                    }
+                ]
+            },
+        )
+    )
+    kinds = [x.get("kind") for x in ctx["selected_conversational_memory"]]
+    assert "contextual_thread" in kinds
+
+
+@pytest.mark.unit
+@patch("game.prompt_context._extract_explicit_reintroductions")
+def test_reintroduced_stale_entity_can_surface_selected_memory(mock_re):
+    """Stale NPC re-grounded via explicit reintroduction lists gets a scoring bonus (contract wiring)."""
+    mock_re.return_value = (["npc_stale"], [], {"matched_entity_ids": ["npc_stale"]})
+    session = _session_with_registry(
+        {
+            "id": "lead_stale",
+            "title": "Cold Harbor Lead",
+            "status": LeadStatus.ACTIVE.value,
+            "lifecycle": LeadLifecycle.COMMITTED.value,
+        }
+    )
+    session["active_scene_id"] = "scene_docks"
+    session["turn_counter"] = 50
+    session["interaction_context"] = {
+        "active_interaction_target_id": "npc_stale",
+        "active_interaction_kind": "social",
+        "interaction_mode": "social",
+        "engagement_level": "engaged",
+        "conversation_privacy": None,
+        "player_position_context": None,
+    }
+    record_npc_lead_discussion(
+        session,
+        "scene_docks",
+        "npc_stale",
+        "lead_stale",
+        disclosure_level="hinted",
+        turn_counter=5,
+    )
+    ctx = build_narration_context(
+        **_narration_minimal_kwargs(
+            session=session,
+            world={},
+            public_scene={"id": "scene_docks", "visible_facts": [], "exits": [], "enemies": []},
+            user_text="we discussed the harbor earlier",
+            recent_log_for_prompt=[],
+        )
+    )
+    win = ctx["conversational_memory_window"]
+    assert "npc_stale" in (win.get("explicit_reintroduced_entity_ids") or [])
+    sel = ctx["selected_conversational_memory"]
+    assert any(
+        "npc_stale" in (s.get("entity_ids") or []) and s.get("kind") == "npc_lead_discussion" for s in sel
+    )
+
+
+@pytest.mark.unit
+@patch("game.prompt_context._extract_explicit_reintroductions")
+def test_non_reintroduced_stale_thread_can_rank_out(mock_re):
+    mock_re.return_value = ([], [], {})
+    session = _session_with_registry()
+    session["turn_counter"] = 100
+    # Only the last MAX_RECENT_LOG lines become candidates; include a very old exchange there
+    # so it competes with newer lines and sinks to the bottom of the ranked window.
+    log = [
+        {
+            "log_meta": {"player_input": "stale side", "turn_counter": 10},
+            "gm_output": {"player_facing_text": "noise"},
+        },
+        {
+            "log_meta": {"player_input": "mid96", "turn_counter": 96},
+            "gm_output": {"player_facing_text": "a"},
+        },
+        {
+            "log_meta": {"player_input": "mid97", "turn_counter": 97},
+            "gm_output": {"player_facing_text": "b"},
+        },
+        {
+            "log_meta": {"player_input": "mid98", "turn_counter": 98},
+            "gm_output": {"player_facing_text": "c"},
+        },
+        {
+            "log_meta": {"player_input": "fresh", "turn_counter": 99},
+            "gm_output": {"player_facing_text": "now"},
+        },
+    ]
+    ctx = build_narration_context(
+        **_narration_minimal_kwargs(session=session, recent_log_for_prompt=log)
+    )
+    sel = ctx["selected_conversational_memory"]
+    assert sel
+    assert sel[0]["source_turn"] == 99
+    by_turn = {s["source_turn"]: s for s in sel if isinstance(s.get("source_turn"), int)}
+    assert by_turn[10]["score"] < by_turn[99]["score"]
+    assert sel[-1]["source_turn"] == 10

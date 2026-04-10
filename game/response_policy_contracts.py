@@ -236,3 +236,72 @@ def resolve_interaction_continuity_contract(
     return _resolve_interaction_continuity_contract(
         gm_output, resolution=resolution, session=session
     )
+
+
+def _valid_conversational_memory_window_contract(candidate: Any) -> Dict[str, Any] | None:
+    """Shape check for :func:`game.conversational_memory_window.build_conversational_memory_window_contract` outputs."""
+    if not isinstance(candidate, dict):
+        return None
+    wv = str(candidate.get("window_version") or "").strip()
+    if not wv:
+        return None
+    if not isinstance(candidate.get("enabled"), bool):
+        return None
+    out = dict(candidate)
+    out["window_version"] = wv
+    return out
+
+
+def _resolve_conversational_memory_window_contract(
+    gm_output: Dict[str, Any] | None,
+    *,
+    resolution: Dict[str, Any] | None,
+    session: Dict[str, Any] | None,
+) -> Tuple[Optional[Dict[str, Any]], Optional[str]]:
+    """Resolve the shipped conversational memory window contract (Objective #15; inspection only)."""
+    response_policy = (
+        gm_output.get("response_policy")
+        if isinstance(gm_output, dict) and isinstance(gm_output.get("response_policy"), dict)
+        else None
+    )
+    contract = _valid_conversational_memory_window_contract((response_policy or {}).get("conversational_memory_window"))
+    if contract:
+        return contract, "response_policy"
+
+    metadata = (
+        resolution.get("metadata")
+        if isinstance(resolution, dict) and isinstance(resolution.get("metadata"), dict)
+        else {}
+    )
+    contract = _valid_conversational_memory_window_contract(metadata.get("conversational_memory_window"))
+    if contract:
+        return contract, "resolution.metadata"
+
+    debug_candidates: List[Any] = []
+    if isinstance(gm_output, dict):
+        debug_payload = gm_output.get("debug") if isinstance(gm_output.get("debug"), dict) else {}
+        debug_candidates.append(debug_payload.get("conversational_memory_window"))
+        debug_candidates.append(gm_output.get("conversational_memory_window"))
+    if isinstance(session, dict):
+        last_action_debug = (
+            session.get("last_action_debug") if isinstance(session.get("last_action_debug"), dict) else {}
+        )
+        debug_candidates.append(last_action_debug.get("conversational_memory_window"))
+
+    for cand in debug_candidates:
+        contract = _valid_conversational_memory_window_contract(cand)
+        if contract:
+            return contract, "debug"
+    return None, None
+
+
+def resolve_conversational_memory_window_contract(
+    gm_output: Dict[str, Any] | None,
+    *,
+    resolution: Dict[str, Any] | None,
+    session: Dict[str, Any] | None,
+) -> Tuple[Optional[Dict[str, Any]], Optional[str]]:
+    """Public wrapper for :func:`_resolve_conversational_memory_window_contract`."""
+    return _resolve_conversational_memory_window_contract(
+        gm_output, resolution=resolution, session=session
+    )

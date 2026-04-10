@@ -4,7 +4,11 @@ from __future__ import annotations
 import pytest
 
 from game.interaction_continuity import build_interaction_continuity_contract
-from game.response_policy_contracts import resolve_interaction_continuity_contract
+from game.conversational_memory_window import build_conversational_memory_window_contract
+from game.response_policy_contracts import (
+    resolve_conversational_memory_window_contract,
+    resolve_interaction_continuity_contract,
+)
 
 pytestmark = pytest.mark.unit
 
@@ -242,3 +246,12 @@ def test_resolve_interaction_continuity_contract_from_response_policy():
     assert src == "response_policy"
     assert resolved is not None
     assert resolved.get("continuity_strength") == ic["continuity_strength"]
+
+
+def test_resolve_conversational_memory_window_contract_from_response_policy():
+    cmw = build_conversational_memory_window_contract(enabled=True)
+    gm = {"response_policy": {"conversational_memory_window": cmw}}
+    resolved, src = resolve_conversational_memory_window_contract(gm, resolution=None, session=None)
+    assert src == "response_policy"
+    assert resolved is not None
+    assert resolved.get("window_version") == cmw["window_version"]

@@ -2299,6 +2299,48 @@ def _merge_answer_shape_primacy_into_emission_debug(
         _patch_em(eff_resolution["metadata"].setdefault("emission_debug", {}))
 
 
+def _merge_conversational_memory_inspection_into_emission_debug(
+    out: Dict[str, Any],
+    resolution: Dict[str, Any] | None,
+    eff_resolution: Dict[str, Any] | None,
+) -> None:
+    """Pass-through Objective #15 (conversational memory window + selection counts); no validation."""
+    cmw = out.get("conversational_memory_window")
+    if not isinstance(cmw, dict):
+        pol = out.get("response_policy")
+        if isinstance(pol, dict):
+            maybe = pol.get("conversational_memory_window")
+            cmw = maybe if isinstance(maybe, dict) else None
+    scm = out.get("selected_conversational_memory") if isinstance(out.get("selected_conversational_memory"), list) else None
+    pd = out.get("prompt_debug")
+    cm_counts = pd.get("conversational_memory") if isinstance(pd, dict) else None
+    if not isinstance(cm_counts, dict):
+        cm_counts = None
+
+    if not isinstance(cmw, dict) and scm is None and cm_counts is None:
+        return
+
+    def _patch_em(em: Any) -> None:
+        if not isinstance(em, dict):
+            return
+        if isinstance(cmw, dict):
+            em["conversational_memory_window"] = dict(cmw)
+        if scm is not None:
+            em["selected_conversational_memory"] = list(scm)
+        if isinstance(cm_counts, dict):
+            em["conversational_memory"] = dict(cm_counts)
+
+    md_out = out.setdefault("metadata", {})
+    if isinstance(md_out, dict):
+        _patch_em(md_out.setdefault("emission_debug", {}))
+    if isinstance(resolution, dict):
+        md_r = resolution.setdefault("metadata", {})
+        if isinstance(md_r, dict):
+            _patch_em(md_r.setdefault("emission_debug", {}))
+    if eff_resolution is not None and isinstance(eff_resolution.get("metadata"), dict):
+        _patch_em(eff_resolution["metadata"].setdefault("emission_debug", {}))
+
+
 def _answer_shape_primacy_applies(
     *,
     resolution: Dict[str, Any] | None,
@@ -7287,6 +7329,11 @@ def apply_final_emission_gate(
             eff_resolution if isinstance(eff_resolution, dict) else None,
             gate_meta=asp_layer_meta,
         )
+        _merge_conversational_memory_inspection_into_emission_debug(
+            out,
+            resolution if isinstance(resolution, dict) else None,
+            eff_resolution if isinstance(eff_resolution, dict) else None,
+        )
         if isinstance(eff_resolution, dict):
             sp = eff_resolution.get("social") if isinstance(eff_resolution.get("social"), dict) else {}
             npc_id_for_meta = str(sp.get("npc_id") or "").strip()
@@ -7722,6 +7769,11 @@ def apply_final_emission_gate(
         resolution if isinstance(resolution, dict) else None,
         eff_resolution if isinstance(eff_resolution, dict) else None,
         gate_meta=asp_layer_meta,
+    )
+    _merge_conversational_memory_inspection_into_emission_debug(
+        out,
+        resolution if isinstance(resolution, dict) else None,
+        eff_resolution if isinstance(eff_resolution, dict) else None,
     )
 
     ic_text, ic_extra_reasons, _ic_strict_fb = _apply_interaction_continuity_emission_step(

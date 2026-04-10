@@ -23,6 +23,8 @@ Contract layers (orthogonal concerns):
 - **interaction_continuity** — preserve conversational thread / interlocutor continuity across turns;
   do not silently drop or switch speakers without a break signal or explicit cue (see
   ``build_interaction_continuity_contract`` in ``game.interaction_continuity``); gate/repairs TBD.
+- **conversational_memory_window** — bounded prior-turn selection for prompts (see
+  :mod:`game.conversational_memory_window`); ``recent_log`` in the payload is derived from the selector output.
 """
 from __future__ import annotations
 
@@ -60,6 +62,11 @@ from game.narrative_authority import build_narrative_authority_contract
 from game.tone_escalation import build_tone_escalation_contract
 from game.response_type_gating import derive_response_type_contract
 from game.interaction_continuity import build_interaction_continuity_contract
+from game.conversational_memory_window import (
+    _extract_explicit_reintroductions,
+    build_conversational_memory_window_contract,
+    select_conversational_memory_window,
+)
 from game.response_policy_contracts import (
     build_social_response_structure_contract,
     peek_response_type_contract_from_resolution,
@@ -73,6 +80,9 @@ MAX_WORLD_PRESSURES = 3
 MAX_LOG_ENTRY_SNIPPET = 200
 MAX_FOLLOW_UP_TOPIC_TOKENS = 6
 MAX_RECENT_CONTEXTUAL_LEADS = 4
+CONVERSATIONAL_MEMORY_SOFT_LIMIT = 12
+CONVERSATIONAL_MEMORY_MAX_CANDIDATES = 36
+_CONV_MEM_TITLE_TOPIC_RE = re.compile(r"[a-z]{4,}", re.IGNORECASE)
 
 SOCIAL_REPLY_KINDS = frozenset({
     'question',
@@ -2246,6 +2256,237 @@ def _compress_recent_log(recent_log: List[Dict[str, Any]]) -> List[Dict[str, Any
     return trimmed
 
 
+def _infer_log_entry_source_turn(
+    entry: Dict[str, Any],
+    *,
+    index_in_window: int,
+    window_len: int,
+    current_turn: int,
+) -> int | None:
+    """Best-effort turn index for a log entry; falls back to position vs session turn_counter."""
+    lm = entry.get("log_meta") if isinstance(entry.get("log_meta"), dict) else {}
+    for key in ("turn_counter", "turn", "session_turn_counter"):
+        raw = lm.get(key)
+        if raw is not None:
+            try:
+                return int(raw)
+            except (TypeError, ValueError):
+                pass
+    res = entry.get("resolution")
+    if isinstance(res, dict):
+        for key in ("turn_counter", "turn"):
+            raw = res.get(key)
+            if raw is not None:
+                try:
+                    return int(raw)
+                except (TypeError, ValueError):
+                    pass
+    if current_turn > 0 and window_len > 0:
+        return int(current_turn) - int(window_len) + int(index_in_window)
+    return None
+
+
+def _memory_window_title_topic_tokens(title: str) -> List[str]:
+    """Conservative tokens from a lead/title string (no invented entities)."""
+    raw = str(title or "").strip().lower()
+    if not raw:
+        return []
+    toks = [m.group(0).lower() for m in _CONV_MEM_TITLE_TOPIC_RE.finditer(raw)]
+    out: List[str] = []
+    seen: Set[str] = set()
+    for t in toks:
+        if t in seen:
+            continue
+        seen.add(t)
+        out.append(t)
+        if len(out) >= 8:
+            break
+    return out
+
+
+def _memory_window_focus_topic_tokens(active_topic_anchor: Mapping[str, Any] | None) -> List[str]:
+    if not isinstance(active_topic_anchor, Mapping):
+        return []
+    focus = str(active_topic_anchor.get("focus_fragment") or "").strip()
+    if not focus:
+        return []
+    return _memory_window_title_topic_tokens(focus)
+
+
+def _collect_interlocutor_lead_candidate_rows(
+    interlocutor_lead_context: Mapping[str, Any] | None,
+    *,
+    max_rows: int,
+) -> List[Dict[str, Any]]:
+    if not isinstance(interlocutor_lead_context, Mapping):
+        return []
+    seen: Set[str] = set()
+    out: List[Dict[str, Any]] = []
+    for key in ("introduced_by_npc", "unacknowledged_from_npc", "recently_discussed_with_npc"):
+        part = interlocutor_lead_context.get(key)
+        if not isinstance(part, list):
+            continue
+        for row in part:
+            if not isinstance(row, dict):
+                continue
+            lid = str(row.get("lead_id") or "").strip()
+            if lid:
+                if lid in seen:
+                    continue
+                seen.add(lid)
+            out.append(row)
+            if len(out) >= max_rows:
+                return out
+    return out
+
+
+def _assemble_conversational_memory_candidates(
+    *,
+    recent_log_for_prompt: List[Dict[str, Any]],
+    current_turn: int,
+    runtime_compressed: Mapping[str, Any] | None,
+    interlocutor_lead_context: Mapping[str, Any] | None,
+    active_npc_id: str | None,
+) -> tuple[List[Dict[str, Any]], List[Dict[str, Any]]]:
+    """Build selector candidates + parallel extras (for legacy recent_log shape). Order: recent turns, leads, runtime."""
+    candidates: List[Dict[str, Any]] = []
+    extras: List[Dict[str, Any]] = []
+
+    entries = (
+        recent_log_for_prompt[-MAX_RECENT_LOG:]
+        if isinstance(recent_log_for_prompt, list) and recent_log_for_prompt
+        else []
+    )
+    window_len = len(entries)
+    for idx, entry in enumerate(entries):
+        if not isinstance(entry, dict):
+            continue
+        log_meta = entry.get("log_meta") if isinstance(entry.get("log_meta"), dict) else {}
+        player_input = str(log_meta.get("player_input", "") or entry.get("request", {}).get("chat", "") or "")[:300]
+        gm_output = entry.get("gm_output") or {}
+        gm_text = gm_output.get("player_facing_text", "") if isinstance(gm_output, dict) else ""
+        gm_snippet = str(gm_text)[:MAX_LOG_ENTRY_SNIPPET] if isinstance(gm_text, str) else ""
+        st = _infer_log_entry_source_turn(
+            entry,
+            index_in_window=idx,
+            window_len=window_len,
+            current_turn=current_turn,
+        )
+        text = f"P: {player_input} | G: {gm_snippet}"
+        if len(text) > 520:
+            text = text[:520]
+        candidates.append(
+            {
+                "kind": "recent_turn",
+                "entity_ids": [],
+                "topic_tokens": [],
+                "source_turn": st,
+                "text": text,
+            }
+        )
+        extras.append({"player_input": player_input, "gm_snippet": gm_snippet})
+
+    npc_id = str(active_npc_id or "").strip()
+    for row in _collect_interlocutor_lead_candidate_rows(
+        interlocutor_lead_context,
+        max_rows=8,
+    ):
+        title = str(row.get("title") or "").strip()
+        lid = str(row.get("lead_id") or "").strip()
+        disc = str(row.get("disclosure_level") or "").strip().lower() or "hinted"
+        st_raw = row.get("last_discussed_turn")
+        st: int | None
+        try:
+            st = int(st_raw) if st_raw is not None else None
+        except (TypeError, ValueError):
+            st = None
+        if st is None:
+            ft = row.get("first_discussed_turn")
+            try:
+                st = int(ft) if ft is not None else None
+            except (TypeError, ValueError):
+                st = None
+        text = f"Lead {lid}: {title} ({disc})" if lid else f"Lead: {title} ({disc})"
+        ent: List[str] = [npc_id] if npc_id else []
+        candidates.append(
+            {
+                "kind": "npc_lead_discussion",
+                "entity_ids": ent,
+                "topic_tokens": _memory_window_title_topic_tokens(title),
+                "source_turn": st,
+                "text": text[:520],
+            }
+        )
+        extras.append({"player_input": "", "gm_snippet": text})
+
+    rt = runtime_compressed if isinstance(runtime_compressed, Mapping) else {}
+    raw_ctx = rt.get("recent_contextual_leads")
+    if isinstance(raw_ctx, list):
+        for item in raw_ctx[-MAX_RECENT_CONTEXTUAL_LEADS:]:
+            if not isinstance(item, dict):
+                continue
+            subject = str(item.get("subject") or "").strip()
+            key = str(item.get("key") or "").strip()
+            if not subject and not key:
+                continue
+            try:
+                lt = int(item.get("last_turn", 0) or 0)
+            except (TypeError, ValueError):
+                lt = 0
+            st2: int | None = lt if lt > 0 else None
+            text2 = f"{subject} [{key}]".strip() if key else subject
+            candidates.append(
+                {
+                    "kind": "contextual_thread",
+                    "entity_ids": [],
+                    "topic_tokens": _memory_window_title_topic_tokens(subject),
+                    "source_turn": st2,
+                    "text": text2[:520],
+                }
+            )
+            extras.append({"player_input": "", "gm_snippet": text2[:MAX_LOG_ENTRY_SNIPPET]})
+
+    while len(candidates) > CONVERSATIONAL_MEMORY_MAX_CANDIDATES:
+        candidates.pop()
+        extras.pop()
+
+    return candidates, extras
+
+
+def _recent_log_payload_from_selected_memory(
+    selected: List[Dict[str, Any]],
+    candidates: List[Dict[str, Any]],
+    extras: List[Dict[str, Any]],
+) -> List[Dict[str, Any]]:
+    """Map selected items to legacy recent_log rows (player_input + gm_snippet)."""
+    out: List[Dict[str, Any]] = []
+    for sel in selected:
+        matched_i: int | None = None
+        for i, c in enumerate(candidates):
+            if (
+                c.get("kind") == sel.get("kind")
+                and c.get("source_turn") == sel.get("source_turn")
+                and c.get("text") == sel.get("text")
+            ):
+                matched_i = i
+                break
+        if matched_i is None:
+            out.append(
+                {
+                    "player_input": "",
+                    "gm_snippet": str(sel.get("text") or "")[:MAX_LOG_ENTRY_SNIPPET],
+                }
+            )
+            continue
+        ex = extras[matched_i] if matched_i < len(extras) else {}
+        if not isinstance(ex, dict):
+            ex = {}
+        pi = str(ex.get("player_input") or "")
+        gm = str(ex.get("gm_snippet") or "")
+        out.append({"player_input": pi, "gm_snippet": gm})
+    return out
+
+
 def _compress_combat(combat: Dict[str, Any]) -> Dict[str, Any] | None:
     """Include combat only when active; otherwise minimal/null."""
     if not combat or not isinstance(combat, dict):
@@ -3082,6 +3323,67 @@ def build_narration_context(
         interaction_continuity_contract
     )
 
+    _ic_dbg = interaction_continuity_contract.get("debug")
+    _ic_dbg_map = _ic_dbg if isinstance(_ic_dbg, dict) else {}
+    _source_of_activity_anchor = str(_ic_dbg_map.get("source_of_anchor") or "").strip()
+    _vis_ids_raw = visibility_contract.get("visible_entity_ids") if isinstance(visibility_contract, dict) else []
+    _active_scene_entity_ids = [
+        str(x).strip() for x in (_vis_ids_raw if isinstance(_vis_ids_raw, list) else []) if isinstance(x, str) and str(x).strip()
+    ]
+    _alias_map = visibility_contract.get("visible_entity_aliases") if isinstance(visibility_contract, dict) else None
+    if not isinstance(_alias_map, dict):
+        _alias_map = {}
+    _re_ent, _re_top, _re_dbg = _extract_explicit_reintroductions(
+        str(user_text or ""),
+        entity_alias_map=_alias_map,
+        topic_anchor_tokens=_memory_window_focus_topic_tokens(active_topic_anchor),
+        anchored_interlocutor_id=str(interaction_continuity_contract.get("anchored_interlocutor_id") or ""),
+        active_interaction_target_id=str(interaction_continuity_contract.get("active_interaction_target_id") or ""),
+    )
+    conversational_memory_window = build_conversational_memory_window_contract(
+        enabled=True,
+        recent_turn_window=6,
+        soft_memory_limit=CONVERSATIONAL_MEMORY_SOFT_LIMIT,
+        stale_after_turns=18,
+        active_scene_entity_ids=_active_scene_entity_ids,
+        anchored_interlocutor_id=str(interaction_continuity_contract.get("anchored_interlocutor_id") or ""),
+        active_interaction_target_id=str(interaction_continuity_contract.get("active_interaction_target_id") or ""),
+        explicit_reintroduced_entity_ids=_re_ent,
+        explicit_reintroduced_topics=_re_top,
+        selection_debug=dict(_re_dbg) if isinstance(_re_dbg, dict) else {},
+        source_of_activity_anchor=_source_of_activity_anchor or "interaction_continuity",
+        source_of_recentness="session.turn_counter",
+        source_of_reintroductions="player_text+visibility_aliases",
+    )
+    _mem_cands, _mem_extras = _assemble_conversational_memory_candidates(
+        recent_log_for_prompt=list(recent_log_for_prompt or []),
+        current_turn=int(session_view.get("turn_counter") or 0),
+        runtime_compressed=runtime,
+        interlocutor_lead_context=interlocutor_lead_context,
+        active_npc_id=active_npc_id,
+    )
+    selected_conversational_memory = select_conversational_memory_window(
+        _mem_cands,
+        conversational_memory_window,
+        current_turn=int(session_view.get("turn_counter") or 0),
+    )
+    recent_log_for_payload = _recent_log_payload_from_selected_memory(
+        selected_conversational_memory,
+        _mem_cands,
+        _mem_extras,
+    )
+    prompt_debug_anchor["conversational_memory"] = {
+        "candidate_count": len(_mem_cands),
+        "selected_count": len(selected_conversational_memory),
+    }
+    # Shipped policy mirror for downstream inspection (same object as payload; no second selector).
+    response_policy["conversational_memory_window"] = conversational_memory_window
+    instructions = list(instructions) + [
+        "CONVERSATIONAL MEMORY WINDOW: Treat `selected_conversational_memory` as the bounded active conversational thread for this turn—prioritize it over older or omitted chat material. "
+        "Do not revive stale side threads unless the player explicitly re-grounds them (see `conversational_memory_window.explicit_reintroduced_*`). "
+        "Omitted older material is background only—not an active unresolved obligation.",
+    ]
+
     _narrative_authority_instr = [
         "NARRATIVE AUTHORITY (POLICY): Obey response_policy.narrative_authority for assertion boundaries; deterministic enforcement is authoritative. "
         "Do not assert unresolved outcomes as settled fact. "
@@ -3161,7 +3463,9 @@ def build_narration_context(
             'answer_style_hints': list(answer_style_hints_list),
         },
         'turn_summary': turn_summary_struct,
-        'recent_log': recent_log_compact,
+        'recent_log': recent_log_for_payload,
+        'conversational_memory_window': conversational_memory_window,
+        'selected_conversational_memory': selected_conversational_memory,
         'player_input': str(user_text or ''),
         'follow_up_pressure': follow_up_pressure,
         'lead_context': lead_context,

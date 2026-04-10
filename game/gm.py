@@ -4456,6 +4456,17 @@ def build_messages(
                 "pressure_focus_allowed": _cdf.get("pressure_focus_allowed"),
                 "debug_reason": csep.get("debug_reason"),
             }
+        cmw = payload.get("conversational_memory_window")
+        if isinstance(cmw, dict):
+            md = resolution.setdefault("metadata", {})
+            em = md.setdefault("emission_debug", {})
+            em["conversational_memory_window"] = dict(cmw)
+            scm = payload.get("selected_conversational_memory")
+            if isinstance(scm, list):
+                em["selected_conversational_memory"] = list(scm)
+            pdbg = payload.get("prompt_debug")
+            if isinstance(pdbg, dict) and isinstance(pdbg.get("conversational_memory"), dict):
+                em["conversational_memory"] = dict(pdbg["conversational_memory"])
         _soc_esc = (resolution.get("social") or {}).get("social_escalation")
         if isinstance(_soc_esc, dict) and int(_soc_esc.get("escalation_level") or 0) >= 2:
             payload["instructions"] = list(payload.get("instructions", [])) + [

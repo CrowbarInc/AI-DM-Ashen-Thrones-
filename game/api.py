@@ -990,10 +990,23 @@ def _build_gpt_narration_from_authoritative_state(
         gm, reason="api_targeted_retry_post_terminal"
     )
     if isinstance(prompt_payload, dict) and isinstance(gm, dict):
+        gm = dict(gm)
         sac = prompt_payload.get("scene_state_anchor_contract")
         if isinstance(sac, dict):
-            gm = dict(gm)
             gm["scene_state_anchor_contract"] = dict(sac)
+        cmw = prompt_payload.get("conversational_memory_window")
+        if isinstance(cmw, dict):
+            gm["conversational_memory_window"] = dict(cmw)
+        scm = prompt_payload.get("selected_conversational_memory")
+        if isinstance(scm, list):
+            gm["selected_conversational_memory"] = list(scm)
+        pd0 = prompt_payload.get("prompt_debug")
+        if isinstance(pd0, dict):
+            cm = pd0.get("conversational_memory")
+            if isinstance(cm, dict):
+                merged_pd = dict(gm["prompt_debug"]) if isinstance(gm.get("prompt_debug"), dict) else {}
+                merged_pd["conversational_memory"] = dict(cm)
+                gm["prompt_debug"] = merged_pd
     gm = apply_response_policy_enforcement(
         gm,
         response_policy=response_policy,
