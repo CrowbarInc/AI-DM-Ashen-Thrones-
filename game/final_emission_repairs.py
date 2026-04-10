@@ -1,7 +1,7 @@
 """Repair and layer wiring for final emission: ``apply_*`` / ``merge_*`` / skip helpers.
 
-Owns skip/repair orchestration for the ``response_policy`` answer-completeness and
-response-delta layers (extracted from :mod:`game.final_emission_gate`). Validators live in
+Owns skip/repair orchestration for the ``response_policy`` answer-completeness,
+response-delta, and social-response-structure layers (extracted from :mod:`game.final_emission_gate`). Validators live in
 :mod:`game.final_emission_validators`; the gate imports these symbols and may re-expose them
 for compatibility.
 """
@@ -16,6 +16,7 @@ from game.final_emission_text import (
     _normalize_text,
 )
 from game.final_emission_validators import (
+    _EXPOSITORY_CONNECTOR_RES,
     _concrete_payload_for_kinds,
     _content_tokens,
     _contract_bool,
@@ -31,8 +32,10 @@ from game.final_emission_validators import (
     _sentence_carries_response_delta,
     _sentence_substantive_for_frontload,
     _split_sentences_answer_complete,
+    inspect_social_response_structure,
     validate_answer_completeness,
     validate_response_delta,
+    validate_social_response_structure,
 )
 from game.leads import get_lead, normalize_lead
 from game.social_exchange_emission import (
@@ -820,5 +823,318 @@ def _merge_response_delta_meta(meta: Dict[str, Any], rd_dbg: Dict[str, Any]) -> 
             "response_delta_echo_overlap_ratio": rd_dbg.get("response_delta_echo_overlap_ratio"),
             "response_delta_skip_reason": rd_dbg.get("response_delta_skip_reason"),
             "response_delta_trigger_source": rd_dbg.get("response_delta_trigger_source"),
+        }
+    )
+
+
+def _srs_word_count(text: str) -> int:
+    return len(re.findall(r"[A-Za-z']+", str(text or "")))
+
+
+def _flatten_list_like_dialogue(text: str) -> str:
+    """Strip list/bullet/numbered prefixes and join lines into prose (no new list items)."""
+    lines = [ln.strip() for ln in str(text or "").splitlines() if ln.strip()]
+    if not lines:
+        return _normalize_text(text or "")
+    out: List[str] = []
+    for ln in lines:
+        s = ln
+        s = re.sub(r"^\s*[\-\*•◦]\s+", "", s)
+        s = re.sub(r"^\s*\d+[\.)]\s+", "", s)
+        s = re.sub(r"^\s*[a-z]\)\s+", "", s, flags=re.IGNORECASE)
+        if re.match(r"^.{6,120}:\s+\S", s):
+            s = re.sub(r"^(.{6,120}):\s+", r"\1 — ", s, count=1)
+        out.append(s.strip())
+    return _normalize_text(" ".join(out))
+
+
+def _collapse_multi_speaker_formatting(text: str) -> str:
+    """Keep a single quoted reply body when multiple Name: \"...\" blocks appear."""
+    pat = re.compile(
+        r"(?:^|\n)\s*[A-Z][a-zA-Z]{1,18}\s*:\s*[\"“]([^\"”]{1,1200})[\"”]",
+        re.MULTILINE,
+    )
+    matches = list(pat.finditer(str(text or "")))
+    if len(matches) < 2:
+        return text
+    best = max((m.group(1).strip() for m in matches), key=len)
+    return _normalize_text(best) if best else _normalize_text(text or "")
+
+
+def _merge_substantive_paragraphs(text: str, *, target_max: int = 1) -> str:
+    raw = str(text or "").strip()
+    if not raw:
+        return _normalize_text(text or "")
+    parts = [p.strip() for p in re.split(r"\n\s*\n+", raw) if p.strip()]
+    if len(parts) <= target_max:
+        return text
+    merged = " ".join(parts)
+    return _normalize_text(merged)
+
+
+def _trim_leading_expository_connectors(text: str, *, max_passes: int = 2) -> str:
+    t = str(text or "").strip()
+    if not t:
+        return t
+    for _ in range(max(1, max_passes)):
+        stripped = False
+        for pat in _EXPOSITORY_CONNECTOR_RES:
+            m = pat.search(t)
+            if m and m.start() < 40:
+                t = (t[: m.start()] + t[m.end() :]).lstrip()
+                t = re.sub(r"^[,:;\-\s]+", "", t)
+                stripped = True
+                break
+        if not stripped:
+            break
+    return _normalize_text(t)
+
+
+def _collapse_soft_line_breaks(text: str) -> str:
+    """Turn single newlines into spaces; keeps blank-line paragraph boundaries."""
+    t = str(text or "")
+    t = re.sub(r"(?<!\n)\n(?!\n)", " ", t)
+    return _normalize_text(t)
+
+
+def _reduce_expository_density(text: str, failure_reasons: List[str]) -> str:
+    reasons = set(str(r) for r in failure_reasons if r)
+    t = str(text or "")
+    if "too_many_contiguous_expository_lines" in reasons:
+        t = _collapse_soft_line_breaks(t)
+    if "expository_monologue_density" in reasons:
+        t = _trim_leading_expository_connectors(t, max_passes=3)
+    return _normalize_text(t)
+
+
+def _normalize_dialogue_cadence(text: str) -> str:
+    t = _normalize_text(str(text or ""))
+    if not t:
+        return t
+    sents = _split_sentences_answer_complete(t)
+    if len(sents) == 1:
+        body = sents[0]
+        wc = _srs_word_count(body)
+        if wc >= 50 and "; " in body:
+            a, b = body.split("; ", 1)
+            return _normalize_terminal_punctuation(
+                _normalize_text(f"{a.strip()}. {b.strip()}")
+            )
+        if wc >= 55 and re.search(r",\s+and\s+", body):
+            m = re.search(r",\s+and\s+", body)
+            if m:
+                a, b = body[: m.start()], body[m.end() :]
+                return _normalize_terminal_punctuation(_normalize_text(f"{a.strip()}. {b.strip()}"))
+        return t
+    if len(sents) >= 4:
+        merged_pairs: List[str] = []
+        i = 0
+        while i < len(sents):
+            if i + 1 < len(sents) and _srs_word_count(sents[i]) < 14 and _srs_word_count(sents[i + 1]) < 14:
+                merged_pairs.append(f"{sents[i].rstrip('.!?')} {sents[i + 1]}")
+                i += 2
+            else:
+                merged_pairs.append(sents[i])
+                i += 1
+        if len(merged_pairs) < len(sents):
+            return _normalize_text(" ".join(_normalize_terminal_punctuation(s) for s in merged_pairs if s))
+    return t
+
+
+def _restore_spoken_opening(text: str) -> str:
+    """Prefer first-person spoken lead without changing factual content."""
+    t = str(text or "").strip()
+    if not t:
+        return _normalize_text(t)
+    head = t[:160].lower()
+    if re.search(r"\b(i|i'?m|i'?ve|i'?ll|we|we'?re|we'?ve)\b", head):
+        return _normalize_text(t)
+    if re.search(r'[\"“]', t[:220]):
+        return _normalize_text(t)
+    if re.search(r"\byou\b", head):
+        lead = "I'll say it plain: "
+    else:
+        lead = "Here's what I can tell you: "
+    rest = t[0].lower() + t[1:] if len(t) > 1 else t
+    return _normalize_terminal_punctuation(_normalize_text(lead + rest))
+
+
+def apply_social_response_structure_repair(
+    text: str,
+    *,
+    failure_reasons: List[str],
+    gm_output: Dict[str, Any] | None = None,
+) -> tuple[str, str | None]:
+    """Structure-only repairs driven by :func:`validate_social_response_structure` failure codes."""
+    reasons = [str(r) for r in (failure_reasons or []) if str(r).strip()]
+    if not reasons:
+        return text, None
+    rset = set(reasons)
+    t = str(text or "")
+    modes: List[str] = []
+
+    if "list_like_or_bulleted_dialogue" in rset:
+        t2 = _flatten_list_like_dialogue(t)
+        if t2 != _normalize_text(t):
+            t = t2
+            modes.append("flatten_list_like_dialogue")
+
+    if "multi_speaker_turn_formatting" in rset:
+        t2 = _collapse_multi_speaker_formatting(t)
+        if t2 != t:
+            t = t2
+            modes.append("collapse_multi_speaker_formatting")
+
+    if "too_many_dialogue_paragraphs_without_break" in rset:
+        t2 = _merge_substantive_paragraphs(t, target_max=1)
+        if t2 != t:
+            t = t2
+            modes.append("merge_dialogue_paragraphs")
+
+    if "too_many_contiguous_expository_lines" in rset or "expository_monologue_density" in rset:
+        t2 = _reduce_expository_density(t, reasons)
+        if t2 != t:
+            t = t2
+            modes.append("reduce_expository_density")
+
+    if "unnatural_monoblob_cadence" in rset or "heavy_expository_sentence_cadence" in rset:
+        t2 = _normalize_dialogue_cadence(t)
+        if t2 != t:
+            t = t2
+            modes.append("normalize_dialogue_cadence")
+
+    if "missing_spoken_dialogue_shape" in rset:
+        t2 = _restore_spoken_opening(t)
+        if t2 != t:
+            t = t2
+            modes.append("restore_spoken_opening")
+
+    t = _normalize_text(t)
+    if not modes:
+        return text, None
+    return t, "+".join(modes)
+
+
+def _default_social_response_structure_meta() -> Dict[str, Any]:
+    return {
+        "social_response_structure_checked": False,
+        "social_response_structure_applicable": False,
+        "social_response_structure_passed": True,
+        "social_response_structure_failure_reasons": [],
+        "social_response_structure_repair_applied": False,
+        "social_response_structure_repair_changed_text": False,
+        "social_response_structure_repair_passed": None,
+        "social_response_structure_repair_mode": None,
+        "social_response_structure_skip_reason": None,
+        "social_response_structure_inspect": None,
+    }
+
+
+def _skip_social_response_structure_layer(
+    *,
+    emitted_text: str,
+    strict_social_details: Dict[str, Any] | None,
+    response_type_debug: Dict[str, Any],
+    answer_completeness_meta: Dict[str, Any],
+    gm_output: Dict[str, Any] | None = None,
+) -> str | None:
+    """Orchestration skips only; applicability remains owned by the validator."""
+    if response_type_debug.get("response_type_candidate_ok") is False:
+        return "response_type_contract_failed"
+    if bool(answer_completeness_meta.get("answer_completeness_failed")):
+        return "answer_completeness_failed"
+    if not _normalize_text(emitted_text or ""):
+        return "empty_emitted_text"
+    if strict_social_details:
+        if strict_social_details.get("used_internal_fallback"):
+            return "strict_social_authoritative_internal_fallback"
+        if response_type_debug.get("response_type_repair_kind") == "strict_social_dialogue_repair":
+            return "strict_social_ownership_terminal_repair"
+        fe = str(strict_social_details.get("final_emitted_source") or "")
+        if fe in {"neutral_reply_speaker_grounding_bridge", "structured_fact_candidate_emission"}:
+            if _strict_social_answer_pressure_rd_contract_active(gm_output):
+                return None
+            return "strict_social_structured_or_bridge_source"
+    return None
+
+
+def _apply_social_response_structure_layer(
+    text: str,
+    *,
+    gm_output: Dict[str, Any],
+    strict_social_details: Dict[str, Any] | None,
+    response_type_debug: Dict[str, Any],
+    answer_completeness_meta: Dict[str, Any],
+    strict_social_path: bool,
+) -> tuple[str, Dict[str, Any], List[str]]:
+    """Dialogue-shape enforcement: depends on prior contracts (response type, answer completeness, delta).
+
+    Runs before downstream policy layers so terminal fallbacks are not asked to preserve bad social form
+    when a minimal structural repair can satisfy ``validate_social_response_structure``.
+    """
+    meta = _default_social_response_structure_meta()
+    skip = _skip_social_response_structure_layer(
+        emitted_text=text,
+        strict_social_details=strict_social_details,
+        response_type_debug=response_type_debug,
+        answer_completeness_meta=answer_completeness_meta,
+        gm_output=gm_output,
+    )
+    meta["social_response_structure_skip_reason"] = skip
+    if skip:
+        return text, meta, []
+
+    v0 = validate_social_response_structure(text, None, gm_output=gm_output)
+    meta["social_response_structure_checked"] = bool(v0.get("checked"))
+    meta["social_response_structure_applicable"] = bool(v0.get("applicable"))
+    meta["social_response_structure_passed"] = bool(v0.get("passed"))
+    meta["social_response_structure_failure_reasons"] = list(v0.get("failure_reasons") or [])
+
+    if not v0.get("checked") or not v0.get("applicable"):
+        return text, meta, []
+
+    if v0.get("passed"):
+        return text, meta, []
+
+    repaired, mode = apply_social_response_structure_repair(
+        text,
+        failure_reasons=list(v0.get("failure_reasons") or []),
+        gm_output=gm_output,
+    )
+    changed = repaired != text and bool(_normalize_text(repaired) != _normalize_text(text))
+    if repaired and mode:
+        meta["social_response_structure_repair_applied"] = True
+        meta["social_response_structure_repair_changed_text"] = changed
+        meta["social_response_structure_repair_mode"] = mode
+
+    v1 = validate_social_response_structure(repaired, None, gm_output=gm_output)
+    meta["social_response_structure_repair_passed"] = bool(v1.get("passed"))
+    if v1.get("passed"):
+        meta["social_response_structure_passed"] = True
+        meta["social_response_structure_failure_reasons"] = []
+        return repaired, meta, []
+
+    meta["social_response_structure_passed"] = False
+    meta["social_response_structure_failure_reasons"] = list(v1.get("failure_reasons") or v0.get("failure_reasons") or [])
+    meta["social_response_structure_inspect"] = inspect_social_response_structure(v1)
+    extra: List[str] = []
+    if not strict_social_path:
+        extra.append("social_response_structure_unsatisfied_after_repair")
+    return text, meta, extra
+
+
+def _merge_social_response_structure_meta(meta: Dict[str, Any], srs_dbg: Dict[str, Any]) -> None:
+    meta.update(
+        {
+            "social_response_structure_checked": bool(srs_dbg.get("social_response_structure_checked")),
+            "social_response_structure_applicable": bool(srs_dbg.get("social_response_structure_applicable")),
+            "social_response_structure_passed": bool(srs_dbg.get("social_response_structure_passed")),
+            "social_response_structure_failure_reasons": list(srs_dbg.get("social_response_structure_failure_reasons") or []),
+            "social_response_structure_repair_applied": bool(srs_dbg.get("social_response_structure_repair_applied")),
+            "social_response_structure_repair_changed_text": bool(srs_dbg.get("social_response_structure_repair_changed_text")),
+            "social_response_structure_repair_passed": srs_dbg.get("social_response_structure_repair_passed"),
+            "social_response_structure_repair_mode": srs_dbg.get("social_response_structure_repair_mode"),
+            "social_response_structure_skip_reason": srs_dbg.get("social_response_structure_skip_reason"),
+            "social_response_structure_inspect": srs_dbg.get("social_response_structure_inspect"),
         }
     )

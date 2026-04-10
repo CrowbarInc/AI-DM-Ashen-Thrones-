@@ -887,3 +887,376 @@ def _sentence_carries_response_delta(
     allowed: set[str],
 ) -> bool:
     return bool(_detect_delta_kinds_in_text(sentence, prior_token_set, allowed=allowed))
+
+
+# --- Social response structure (response_policy.social_response_structure) ---------------
+
+_SOCIAL_STRUCTURE_SNAPSHOT_KEYS: tuple[str, ...] = (
+    "enabled",
+    "applies_to_response_type",
+    "require_spoken_dialogue_shape",
+    "discourage_expository_monologue",
+    "require_natural_cadence",
+    "allow_brief_action_beats",
+    "allow_brief_refusal_or_uncertainty",
+    "max_contiguous_expository_lines",
+    "max_dialogue_paragraphs_before_break",
+    "prefer_single_speaker_turn",
+    "forbid_bulleted_or_list_like_dialogue",
+    "required_response_type",
+)
+
+_EXPOSITORY_CONNECTOR_RES: tuple[re.Pattern[str], ...] = (
+    re.compile(
+        r"\b(?:therefore|furthermore|moreover|consequently|accordingly|in (?:summary|conclusion|short)|"
+        r"notably|importantly|that (?:said|being said)|as (?:a )?result|which (?:meant|means)|"
+        r"for instance|for example|in other words|on (?:the )?other hand)\b",
+        re.IGNORECASE,
+    ),
+)
+_ABSTRACT_EXPOSITION_RES: tuple[re.Pattern[str], ...] = (
+    re.compile(
+        r"\b(?:historically|traditionally|generally speaking|it (?:is|was) (?:often|usually|typically)|"
+        r"the (?:implication|significance|underlying|broader) (?:issue|meaning|theme))\b",
+        re.IGNORECASE,
+    ),
+)
+_UNCERTAINTY_OR_REFUSAL_RES: tuple[re.Pattern[str], ...] = (
+    re.compile(r"\b(?:don'?t know|do not know|can'?t say|cannot say|won'?t say|not (?:at liberty|here))\b", re.IGNORECASE),
+    re.compile(r"\b(?:not sure|unclear|maybe|perhaps|hard to say|no idea)\b", re.IGNORECASE),
+    re.compile(r"\b(?:none of your business|ask someone else|end of discussion)\b", re.IGNORECASE),
+)
+_SPOKEN_CUE_RES: tuple[re.Pattern[str], ...] = (
+    re.compile(r'["“”][^"”]{2,}["“”]'),
+    re.compile(
+        r"\b(?:says|said|replies|replied|answers|answered|mutters|muttered|whispers|whispered|"
+        r"snaps|snapped|asks|asked|spits|spat|grunts|grunted)\b",
+        re.IGNORECASE,
+    ),
+    re.compile(r"\byou\b.{0,120}\?", re.IGNORECASE | re.DOTALL),
+)
+_BULLET_LINE_RES: tuple[re.Pattern[str], ...] = (
+    re.compile(r"^\s*[\-\*•◦]\s+\S", re.MULTILINE),
+    re.compile(r"^\s*\d+[\.)]\s+\S", re.MULTILINE),
+    re.compile(r"^\s*[a-z]\)\s+\S", re.MULTILINE | re.IGNORECASE),
+)
+_COLON_LIST_LINE_RE = re.compile(r"^.{6,120}:\s+\S.{3,}$", re.MULTILINE)
+_MULTI_SPEAKER_LINE_RE = re.compile(
+    r"(?:^|\n)\s*[A-Z][a-zA-Z]{1,18}\s*:\s*[\"“]",
+    re.MULTILINE,
+)
+
+
+def _resolve_social_response_structure_contract(gm_output: Dict[str, Any] | None) -> Dict[str, Any] | None:
+    if not isinstance(gm_output, dict):
+        return None
+    pol = gm_output.get("response_policy")
+    if isinstance(pol, dict):
+        hit = pol.get("social_response_structure")
+        if isinstance(hit, dict):
+            return hit
+    top = gm_output.get("social_response_structure_contract")
+    return top if isinstance(top, dict) else None
+
+
+def _social_response_structure_contract_snapshot(contract: Dict[str, Any]) -> Dict[str, Any]:
+    return {k: contract.get(k) for k in _SOCIAL_STRUCTURE_SNAPSHOT_KEYS}
+
+
+def _social_structure_applicable(contract: Dict[str, Any]) -> bool:
+    if not _contract_bool(contract, "enabled"):
+        return False
+    applies = str(contract.get("applies_to_response_type") or "").strip().lower()
+    if applies and applies != "dialogue":
+        return False
+    req = str(contract.get("required_response_type") or "").strip().lower()
+    if req and req != "dialogue":
+        return False
+    return True
+
+
+def _raw_lines_preserving_breaks(text: str) -> List[str]:
+    raw = str(text or "")
+    return [ln.strip() for ln in raw.splitlines() if ln.strip()]
+
+
+def _paragraph_blocks(text: str) -> List[str]:
+    raw = str(text or "").strip()
+    if not raw:
+        return []
+    parts = re.split(r"\n\s*\n+", raw)
+    return [p.strip() for p in parts if p.strip()]
+
+
+def _word_count(text: str) -> int:
+    return len(re.findall(r"[A-Za-z']+", str(text or "")))
+
+
+def _avg_sentence_length_words(sentences: List[str]) -> float:
+    if not sentences:
+        return 0.0
+    lengths = [_word_count(s) for s in sentences]
+    return float(sum(lengths)) / float(len(lengths))
+
+
+def _max_single_sentence_words(sentences: List[str]) -> int:
+    if not sentences:
+        return 0
+    return max(_word_count(s) for s in sentences)
+
+
+def _connector_hits(text: str, patterns: tuple[re.Pattern[str], ...]) -> int:
+    return sum(1 for p in patterns if p.search(text))
+
+
+def _looks_like_refusal_or_uncertainty(text: str) -> bool:
+    return any(p.search(text) for p in _UNCERTAINTY_OR_REFUSAL_RES)
+
+
+def _first_person_near_you_lead(text: str, *, window: int = 200) -> bool:
+    head = str(text or "")[: max(window, 1)].lower()
+    if "you" not in head:
+        return False
+    return bool(re.search(r"\b(i|i'?m|i'?ve|i'?ll|we|we'?re|we'?ve)\b", head))
+
+
+def _spoken_reply_signals(text: str) -> Dict[str, Any]:
+    t = str(text or "")
+    low = t.lower()
+    return {
+        "has_curly_or_straight_quotes": bool(re.search(r'["“”]', t)),
+        "spoken_cue_hits": sum(1 for p in _SPOKEN_CUE_RES if p.search(t)),
+        "first_person_addresses_you_in_lead": _first_person_near_you_lead(t),
+        "has_you": bool(re.search(r"\byou\b", low)),
+        "word_count": _word_count(t),
+    }
+
+
+def _has_spoken_dialogue_shape(text: str) -> bool:
+    sig = _spoken_reply_signals(text)
+    if sig["spoken_cue_hits"] >= 1:
+        return True
+    if sig.get("first_person_addresses_you_in_lead"):
+        return True
+    wc = int(sig["word_count"])
+    if wc <= 12:
+        return True
+    if sig["has_you"] and wc <= 36:
+        return True
+    if sig["has_curly_or_straight_quotes"]:
+        return True
+    low = str(text or "").lower()
+    if re.search(
+        r"\b(?:says|replies|asks|mutters|whispers|frowns|grimaces|shakes their head|glances past you)\b",
+        low,
+    ):
+        return True
+    return False
+
+
+def _line_reads_expository(line: str) -> bool:
+    s = str(line or "").strip()
+    if not s:
+        return False
+    wc = _word_count(s)
+    if wc >= 22 and not re.search(r'["“”]', s):
+        return True
+    if _connector_hits(s, _EXPOSITORY_CONNECTOR_RES) >= 1 and wc >= 12:
+        return True
+    if _connector_hits(s, _ABSTRACT_EXPOSITION_RES) >= 1:
+        return True
+    return False
+
+
+def _max_contiguous_expository_lines(lines: List[str]) -> int:
+    best = 0
+    cur = 0
+    for ln in lines:
+        if _line_reads_expository(ln):
+            cur += 1
+            best = max(best, cur)
+        else:
+            cur = 0
+    return best
+
+
+def _paragraph_is_brief_action_beat(block: str) -> bool:
+    b = str(block or "").strip()
+    if not b:
+        return False
+    wc = _word_count(b)
+    if wc <= 10 and not re.search(r'["“”]', b):
+        return True
+    if wc <= 14 and re.search(r"\b(?:nods?|shrugs?|sighs?|pauses?|leans?|steps?|eyes?|jaw|hand)\b", b, re.IGNORECASE):
+        return True
+    return False
+
+
+def _list_like_dialogue_signals(text: str) -> Dict[str, Any]:
+    t = str(text or "")
+    bullet_lines = sum(len(list(p.finditer(t))) for p in _BULLET_LINE_RES)
+    colon_list_lines = len(_COLON_LIST_LINE_RE.findall(t))
+    return {
+        "bullet_or_numbered_line_hits": bullet_lines,
+        "colon_list_line_count": colon_list_lines,
+    }
+
+
+def _looks_list_like_dialogue(text: str) -> bool:
+    sig = _list_like_dialogue_signals(text)
+    if sig["bullet_or_numbered_line_hits"] >= 1:
+        return True
+    if sig["colon_list_line_count"] >= 3:
+        return True
+    if sig["colon_list_line_count"] >= 2 and _word_count(text) <= 120:
+        return True
+    return False
+
+
+def _multi_speaker_signals(text: str) -> Dict[str, Any]:
+    t = str(text or "")
+    name_colon = len(_MULTI_SPEAKER_LINE_RE.findall(t))
+    return {"name_colon_quote_opens": name_colon}
+
+
+def _looks_multi_speaker_turn(text: str) -> bool:
+    return _multi_speaker_signals(text)["name_colon_quote_opens"] >= 2
+
+
+def inspect_social_response_structure(result: Dict[str, Any]) -> Dict[str, Any]:
+    """Structured inspect helper for logging / debugging (mirrors ``inspect_*_failure`` style)."""
+    if not isinstance(result, dict):
+        return {"failed": False}
+    if result.get("passed") is not False:
+        return {"failed": False}
+    return {
+        "failed": True,
+        "reasons": list(result.get("reasons") or result.get("failure_reasons") or []),
+        "failure_reasons": list(result.get("failure_reasons") or []),
+        "signals": dict(result.get("signals") or {}),
+        "applicable": bool(result.get("applicable")),
+    }
+
+
+def validate_social_response_structure(
+    emitted_text: str,
+    contract: Dict[str, Any] | None,
+    *,
+    gm_output: Dict[str, Any] | None = None,
+) -> Dict[str, Any]:
+    """Deterministic validation for ``response_policy.social_response_structure`` (text inspection only)."""
+    base: Dict[str, Any] = {
+        "checked": False,
+        "applicable": False,
+        "passed": True,
+        "failure_reasons": [],
+        "reasons": [],
+        "signals": {},
+        "contract_snapshot": None,
+    }
+    c = contract if isinstance(contract, dict) else None
+    if c is None and gm_output is not None:
+        c = _resolve_social_response_structure_contract(gm_output)
+    if not isinstance(c, dict):
+        return base
+
+    base["contract_snapshot"] = _social_response_structure_contract_snapshot(c)
+    if not _social_structure_applicable(c):
+        return base
+
+    base["applicable"] = True
+    base["checked"] = True
+
+    raw = str(emitted_text or "")
+    text = _normalize_text(raw)
+    lines = _raw_lines_preserving_breaks(raw)
+    paragraphs = _paragraph_blocks(raw)
+    sentences = _split_sentences_answer_complete(text)
+
+    allow_beat = _contract_bool(c, "allow_brief_action_beats")
+    allow_unc = _contract_bool(c, "allow_brief_refusal_or_uncertainty")
+    uncertainty_ok = allow_unc and _looks_like_refusal_or_uncertainty(text)
+
+    sig: Dict[str, Any] = {
+        **_spoken_reply_signals(text),
+        "paragraph_count": len(paragraphs),
+        "non_empty_line_count": len(lines),
+        "sentence_count": len(sentences),
+        "avg_sentence_length_words": round(_avg_sentence_length_words(sentences), 3),
+        "max_sentence_words": _max_single_sentence_words(sentences),
+        "expository_connector_hits": _connector_hits(text, _EXPOSITORY_CONNECTOR_RES),
+        "abstract_exposition_hits": _connector_hits(text, _ABSTRACT_EXPOSITION_RES),
+        "max_contiguous_expository_lines_observed": _max_contiguous_expository_lines(lines),
+        **_list_like_dialogue_signals(text),
+        **_multi_speaker_signals(raw),
+        "refusal_or_uncertainty_relaxed": uncertainty_ok,
+    }
+    base["signals"] = sig
+
+    failure_reasons: List[str] = []
+
+    if not text:
+        failure_reasons.append("empty_emitted_text")
+        base["failure_reasons"] = list(failure_reasons)
+        base["reasons"] = list(failure_reasons)
+        base["passed"] = False
+        return base
+
+    if _contract_bool(c, "forbid_bulleted_or_list_like_dialogue") and _looks_list_like_dialogue(text):
+        failure_reasons.append("list_like_or_bulleted_dialogue")
+
+    if _contract_bool(c, "prefer_single_speaker_turn") and _looks_multi_speaker_turn(raw):
+        failure_reasons.append("multi_speaker_turn_formatting")
+
+    max_exp_lines = c.get("max_contiguous_expository_lines")
+    if isinstance(max_exp_lines, int) and max_exp_lines >= 0:
+        streak = int(sig["max_contiguous_expository_lines_observed"])
+        if streak > max_exp_lines:
+            failure_reasons.append("too_many_contiguous_expository_lines")
+
+    max_para = c.get("max_dialogue_paragraphs_before_break")
+    if isinstance(max_para, int) and max_para >= 0 and paragraphs:
+        if allow_beat:
+            substantive_paragraphs = [p for p in paragraphs if not _paragraph_is_brief_action_beat(p)]
+        else:
+            substantive_paragraphs = list(paragraphs)
+        if len(substantive_paragraphs) > max_para:
+            failure_reasons.append("too_many_dialogue_paragraphs_without_break")
+
+    if _contract_bool(c, "require_spoken_dialogue_shape") and not _has_spoken_dialogue_shape(text):
+        failure_reasons.append("missing_spoken_dialogue_shape")
+
+    if _contract_bool(c, "require_natural_cadence"):
+        max_w = int(sig["max_sentence_words"])
+        n_sent = int(sig["sentence_count"])
+        avg_w = float(sig["avg_sentence_length_words"])
+        if n_sent == 1 and max_w >= 95:
+            failure_reasons.append("unnatural_monoblob_cadence")
+        elif n_sent >= 4 and avg_w >= 32:
+            failure_reasons.append("heavy_expository_sentence_cadence")
+
+    if _contract_bool(c, "discourage_expository_monologue") and not uncertainty_ok:
+        wc = int(sig["word_count"])
+        conn = int(sig["expository_connector_hits"]) + int(sig["abstract_exposition_hits"])
+        if wc >= 90 and conn >= 2 and not sig.get("has_curly_or_straight_quotes"):
+            failure_reasons.append("expository_monologue_density")
+        elif wc >= 55 and conn >= 3:
+            failure_reasons.append("expository_monologue_density")
+
+    base["failure_reasons"] = list(dict.fromkeys(str(r) for r in failure_reasons if r))
+    base["reasons"] = list(base["failure_reasons"])
+    base["passed"] = not bool(base["failure_reasons"])
+    return base
+
+
+def candidate_satisfies_social_response_structure(
+    text: str,
+    *,
+    contract: Dict[str, Any] | None = None,
+    gm_output: Dict[str, Any] | None = None,
+) -> tuple[bool, List[str]]:
+    """Tuple helper aligned with ``candidate_satisfies_*`` in this module."""
+    r = validate_social_response_structure(text, contract, gm_output=gm_output)
+    if not r.get("applicable"):
+        return True, []
+    return bool(r.get("passed")), list(r.get("failure_reasons") or [])

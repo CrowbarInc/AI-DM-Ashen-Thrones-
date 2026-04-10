@@ -18,6 +18,8 @@ Contract layers (orthogonal concerns):
   in ``game.context_separation``); enforcement reads the shipped contract, not prompt prose alone.
 - **player_facing_narration_purity** — forbid planner/UI/engine scaffolding in narration (see
   ``build_player_facing_narration_purity_contract`` in ``game.player_facing_narration_purity``).
+- **social_response_structure** — dialogue-turn spoken shape and anti-monologue caps (see
+  ``build_social_response_structure_contract`` in ``game.response_policy_contracts``); gate/repairs TBD.
 """
 from __future__ import annotations
 
@@ -41,7 +43,7 @@ from game.social import (
 )
 from game.storage import get_scene_state
 from game.world import get_world_npc_by_id
-from game.interaction_context import build_speaker_selection_contract
+from game.interaction_context import build_speaker_selection_contract, response_type_context_snapshot
 from game.narration_visibility import _normalize_visibility_text, build_narration_visibility_contract
 from game.opening_visible_fact_selection import (
     OPENING_NARRATION_VISIBLE_FACT_MAX,
@@ -53,6 +55,11 @@ from game.player_facing_narration_purity import build_player_facing_narration_pu
 from game.scene_state_anchoring import build_scene_state_anchor_contract
 from game.narrative_authority import build_narrative_authority_contract
 from game.tone_escalation import build_tone_escalation_contract
+from game.response_type_gating import derive_response_type_contract
+from game.response_policy_contracts import (
+    build_social_response_structure_contract,
+    peek_response_type_contract_from_resolution,
+)
 
 # Configurable limits for deterministic, inspectable compression
 MAX_RECENT_LOG = 5
@@ -1893,6 +1900,20 @@ def _player_facing_narration_purity_prompt_debug_anchor(contract: Mapping[str, A
     }
 
 
+def _social_response_structure_prompt_debug_anchor(contract: Mapping[str, Any] | None) -> Dict[str, Any]:
+    """Compact mirror of social_response_structure contract for prompt_debug (inspectable, not authoritative)."""
+    c = contract if isinstance(contract, dict) else {}
+    return {
+        "enabled": c.get("enabled"),
+        "applies_to_response_type": c.get("applies_to_response_type"),
+        "require_spoken_dialogue_shape": c.get("require_spoken_dialogue_shape"),
+        "max_contiguous_expository_lines": c.get("max_contiguous_expository_lines"),
+        "max_dialogue_paragraphs_before_break": c.get("max_dialogue_paragraphs_before_break"),
+        "prefer_single_speaker_turn": c.get("prefer_single_speaker_turn"),
+        "forbid_bulleted_or_list_like_dialogue": c.get("forbid_bulleted_or_list_like_dialogue"),
+    }
+
+
 def canonical_interaction_target_npc_id(session: Dict[str, Any] | None, raw_target_id: str | None) -> str:
     """Map session interaction target to promoted world NPC id when ``promoted_actor_npc_map`` binds it."""
     raw = str(raw_target_id or "").strip()
@@ -2436,7 +2457,8 @@ def build_narration_context(
     and assertion boundaries), scene_state_anchor (grounding), answer_completeness
     (answer-shape obligations), tone_escalation (interpersonal intensity caps), anti_railroading
     (player agency vs surfaced leads), context_separation (ambient pressure vs local exchange),
-    and player_facing_narration_purity (no scaffold/menu/engine coaching in prose);
+    and player_facing_narration_purity (no scaffold/menu/engine coaching in prose),
+    and social_response_structure (dialogue-turn spoken shape when response type requires dialogue);
     see module docstring.
     """
     # Interlocutor lead contract (maintenance): interlocutor_lead_context is the NPC-scoped export from
@@ -3008,6 +3030,26 @@ def build_narration_context(
         player_facing_narration_purity_contract
     )
 
+    rtc_peeked = peek_response_type_contract_from_resolution(resolution)
+    rtc_source = "resolution.metadata" if rtc_peeked is not None else "derived"
+    rtc_for_social_structure = rtc_peeked or derive_response_type_contract(
+        segmented_turn=None,
+        normalized_action=None,
+        resolution=resolution if isinstance(resolution, dict) else None,
+        interaction_context=response_type_context_snapshot(session if isinstance(session, dict) else None),
+        directed_social_entry=None,
+        route_choice=None,
+        raw_player_text=str(user_text or ""),
+    ).to_dict()
+    social_response_structure_contract = build_social_response_structure_contract(
+        rtc_for_social_structure,
+        debug_inputs={"scene_id": scene_pub_id or None, "response_type_contract_source": rtc_source},
+    )
+    response_policy["social_response_structure"] = social_response_structure_contract
+    prompt_debug_anchor["social_response_structure"] = _social_response_structure_prompt_debug_anchor(
+        social_response_structure_contract
+    )
+
     _narrative_authority_instr = [
         "NARRATIVE AUTHORITY (POLICY): Obey response_policy.narrative_authority for assertion boundaries; deterministic enforcement is authoritative. "
         "Do not assert unresolved outcomes as settled fact. "
@@ -3058,15 +3100,23 @@ def build_narration_context(
     _anchoring_polish_instr = [
         "SCENE ANCHORING (POLICY): After context separation and narration-purity constraints, keep grounding tight: use scene_state_anchor_contract tokens when tightening wording; do not use anchoring to smuggle extra ambient pressure.",
     ]
-    instructions = (
-        list(instructions)
-        + _tone_escalation_instr
+    _social_response_structure_instr = [
+        "SOCIAL RESPONSE STRUCTURE (POLICY): When response_policy.social_response_structure.enabled is true, obey that object; deterministic enforcement will use it later. "
+        "NPC/social lines should sound spoken, not essay-like: answer first, then at most one short supporting detail if needed; avoid stacked explanatory clauses. "
+        "Brief action beats are allowed; keep quoted speech primary. Uncertainty or refusal stays conversational and in-world. "
+        "No bullet-like or numbered-list dialogue.",
+    ]
+    _policy_tail: List[str] = (
+        list(_tone_escalation_instr)
         + _narrative_authority_instr
         + _anti_railroading_instr
         + _context_separation_instr
         + _player_facing_narration_purity_instr
         + _anchoring_polish_instr
     )
+    if social_response_structure_contract.get("enabled"):
+        _policy_tail = list(_policy_tail) + _social_response_structure_instr
+    instructions = list(instructions) + _policy_tail
 
     payload: Dict[str, Any] = {
         'instructions': instructions,
@@ -3093,6 +3143,7 @@ def build_narration_context(
         'anti_railroading_contract': anti_railroading_contract,
         'context_separation_contract': context_separation_contract,
         'player_facing_narration_purity_contract': player_facing_narration_purity_contract,
+        'social_response_structure_contract': social_response_structure_contract,
         'prompt_debug': prompt_debug_anchor,
         'first_mention_contract': first_mention_contract,
         'discoverable_hinting': True,

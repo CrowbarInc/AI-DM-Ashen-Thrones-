@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import game.final_emission_gate as feg
+
 from game.defaults import default_session, default_world
 from game.gm import apply_deterministic_retry_fallback, sanitize_player_facing_text
 from game.final_emission_gate import (
@@ -32,6 +34,7 @@ from game.social_exchange_emission import (
     strict_social_ownership_terminal_fallback,
     synthetic_social_exchange_resolution_for_emission,
 )
+from game.response_policy_contracts import build_social_response_structure_contract
 from game.storage import get_scene_runtime
 
 
@@ -1205,6 +1208,60 @@ def test_strict_social_emission_meta_documents_final_emitted_source():
         "resolved_grounded_social_answer",
     )
     assert meta.get("candidate_validation_passed") is True
+
+
+def test_strict_social_gate_merges_social_response_structure_metadata(monkeypatch):
+    session = default_session()
+    world = default_world()
+    sid = "frontier_gate"
+    set_social_target(session, "tavern_runner")
+    rebuild_active_scene_entities(session, world, sid)
+    rt = get_scene_runtime(session, sid)
+    rt["last_player_action_text"] = "Where is the east gate?"
+    rtc = {"required_response_type": "dialogue", "action_must_preserve_agency": False}
+    srs = build_social_response_structure_contract(rtc)
+    stub_details = {
+        "used_internal_fallback": False,
+        "final_emitted_source": "test_stub",
+        "rejection_reasons": [],
+        "deterministic_attempted": False,
+        "deterministic_passed": False,
+        "fallback_pool": "none",
+        "fallback_kind": "none",
+        "route_illegal_intercepted": False,
+    }
+
+    def fake_build(candidate_text, *, resolution, tags, session, scene_id, world):
+        return (
+            'Runner says "East gate lies two hundred feet south along the market road."',
+            dict(stub_details),
+        )
+
+    monkeypatch.setattr(feg, "build_final_strict_social_response", fake_build)
+    monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
+    out = apply_final_emission_gate(
+        {
+            "player_facing_text": "stub",
+            "tags": [],
+            "response_policy": {"response_type_contract": rtc, "social_response_structure": srs},
+        },
+        resolution=None,
+        session=session,
+        scene_id=sid,
+        world=world,
+    )
+    meta = out.get("_final_emission_meta") or {}
+    assert meta.get("strict_social_active") is True
+    for key in (
+        "social_response_structure_checked",
+        "social_response_structure_applicable",
+        "social_response_structure_passed",
+        "social_response_structure_repair_applied",
+        "social_response_structure_skip_reason",
+    ):
+        assert key in meta
+    assert meta.get("social_response_structure_applicable") is True
+    assert meta.get("social_response_structure_passed") is True
 
 
 def test_strict_social_replacement_never_uses_global_scene_fallback_in_meta():

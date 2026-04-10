@@ -100,10 +100,13 @@ from game.response_policy_contracts import (
 from game.final_emission_repairs import (
     _apply_answer_completeness_layer,
     _apply_response_delta_layer,
+    _apply_social_response_structure_layer,
     _default_response_delta_meta,
+    _default_social_response_structure_meta,
     _gm_probe_for_answer_pressure_contracts,
     _merge_answer_completeness_meta,
     _merge_response_delta_meta,
+    _merge_social_response_structure_meta,
     _minimal_action_outcome_contract_repair,
     _minimal_answer_contract_repair,
     _skip_answer_completeness_layer,
@@ -6529,6 +6532,7 @@ def apply_final_emission_gate(
     response_type_debug = _default_response_type_debug(None, None)
     ac_layer_meta: Dict[str, Any] = {}
     rd_layer_meta: Dict[str, Any] = _default_response_delta_meta()
+    srs_layer_meta: Dict[str, Any] = _default_social_response_structure_meta()
     na_layer_meta: Dict[str, Any] = _default_narrative_authority_meta()
     te_layer_meta: Dict[str, Any] = _default_tone_escalation_meta()
     ar_layer_meta: Dict[str, Any] = _default_anti_railroading_meta()
@@ -6600,6 +6604,14 @@ def apply_final_emission_gate(
             strict_social_path=True,
         )
         text, rd_layer_meta, _ = _apply_response_delta_layer(
+            text,
+            gm_output=out,
+            strict_social_details=details,
+            response_type_debug=response_type_debug,
+            answer_completeness_meta=ac_layer_meta,
+            strict_social_path=True,
+        )
+        text, srs_layer_meta, _ = _apply_social_response_structure_layer(
             text,
             gm_output=out,
             strict_social_details=details,
@@ -6750,6 +6762,13 @@ def apply_final_emission_gate(
             final_emitted_source = str(
                 rd_layer_meta.get("response_delta_repair_mode") or "response_delta_repair"
             )
+        if srs_layer_meta.get("social_response_structure_repair_applied") and srs_layer_meta.get(
+            "social_response_structure_passed"
+        ):
+            final_emitted_source = str(
+                srs_layer_meta.get("social_response_structure_repair_mode")
+                or "social_response_structure_repair"
+            )
         if na_layer_meta.get("narrative_authority_repaired"):
             final_emitted_source = str(
                 na_layer_meta.get("narrative_authority_repair_mode") or "narrative_authority_repair"
@@ -6827,6 +6846,7 @@ def apply_final_emission_gate(
             _merge_response_type_meta(out["_final_emission_meta"], response_type_debug)
             _merge_answer_completeness_meta(out["_final_emission_meta"], ac_layer_meta)
             _merge_response_delta_meta(out["_final_emission_meta"], rd_layer_meta)
+            _merge_social_response_structure_meta(out["_final_emission_meta"], srs_layer_meta)
             _merge_narrative_authority_meta(out["_final_emission_meta"], na_layer_meta)
             _merge_tone_escalation_meta(out["_final_emission_meta"], te_layer_meta)
             _merge_anti_railroading_meta(out["_final_emission_meta"], ar_layer_meta)
@@ -6926,6 +6946,7 @@ def apply_final_emission_gate(
         _merge_response_type_meta(out["_final_emission_meta"], response_type_debug)
         _merge_answer_completeness_meta(out["_final_emission_meta"], ac_layer_meta)
         _merge_response_delta_meta(out["_final_emission_meta"], rd_layer_meta)
+        _merge_social_response_structure_meta(out["_final_emission_meta"], srs_layer_meta)
         _merge_narrative_authority_meta(out["_final_emission_meta"], na_layer_meta)
         _merge_tone_escalation_meta(out["_final_emission_meta"], te_layer_meta)
         _merge_anti_railroading_meta(out["_final_emission_meta"], ar_layer_meta)
@@ -6996,6 +7017,16 @@ def apply_final_emission_gate(
         strict_social_path=False,
     )
     reasons.extend(rd_reasons)
+
+    text, srs_layer_meta, srs_reasons = _apply_social_response_structure_layer(
+        text,
+        gm_output=out,
+        strict_social_details=None,
+        response_type_debug=response_type_debug,
+        answer_completeness_meta=ac_layer_meta,
+        strict_social_path=False,
+    )
+    reasons.extend(srs_reasons)
 
     text, te_layer_meta, te_reasons = _apply_tone_escalation_layer(
         text,
@@ -7139,6 +7170,13 @@ def apply_final_emission_gate(
             final_emitted_source = str(
                 rd_layer_meta.get("response_delta_repair_mode") or "response_delta_repair"
             )
+        if srs_layer_meta.get("social_response_structure_repair_applied") and srs_layer_meta.get(
+            "social_response_structure_passed"
+        ):
+            final_emitted_source = str(
+                srs_layer_meta.get("social_response_structure_repair_mode")
+                or "social_response_structure_repair"
+            )
         if na_layer_meta.get("narrative_authority_repaired"):
             final_emitted_source = str(
                 na_layer_meta.get("narrative_authority_repair_mode") or "narrative_authority_repair"
@@ -7208,6 +7246,7 @@ def apply_final_emission_gate(
         _merge_response_type_meta(out["_final_emission_meta"], response_type_debug)
         _merge_answer_completeness_meta(out["_final_emission_meta"], ac_layer_meta)
         _merge_response_delta_meta(out["_final_emission_meta"], rd_layer_meta)
+        _merge_social_response_structure_meta(out["_final_emission_meta"], srs_layer_meta)
         _merge_narrative_authority_meta(out["_final_emission_meta"], na_layer_meta)
         _merge_tone_escalation_meta(out["_final_emission_meta"], te_layer_meta)
         _merge_anti_railroading_meta(out["_final_emission_meta"], ar_layer_meta)
@@ -7334,6 +7373,7 @@ def apply_final_emission_gate(
     _merge_response_type_meta(out["_final_emission_meta"], response_type_debug)
     _merge_answer_completeness_meta(out["_final_emission_meta"], ac_layer_meta)
     _merge_response_delta_meta(out["_final_emission_meta"], rd_layer_meta)
+    _merge_social_response_structure_meta(out["_final_emission_meta"], srs_layer_meta)
     _merge_narrative_authority_meta(out["_final_emission_meta"], na_layer_meta)
     _merge_tone_escalation_meta(out["_final_emission_meta"], te_layer_meta)
     _merge_anti_railroading_meta(out["_final_emission_meta"], ar_layer_meta)
