@@ -25,16 +25,120 @@ After saving the transcript artifact (CLI) or when logging a UI-only pass, recor
 
 ### Operator CLI (local transcript)
 
-The repo includes a small terminal driver that calls the same `game.api.chat` path as the web UI and writes a timestamped Markdown transcript under `artifacts/manual_gauntlets/` (git branch/commit, gauntlet id, turns, scene and interlocutor snapshots).
+The repo includes a small terminal driver that calls the same `game.api.chat` path as the web UI and writes artifacts under `artifacts/manual_gauntlets/`. At end of run the script prints a block titled **`=== Gauntlet artifacts ===`** with the paths it wrote (transcript always; JSON report files when reporting is enabled; optional raw trace when requested).
+
+**Flags (reporting and naming):**
+
+- `--report` / `--no-report` — JSON report bundle is **on by default**; use `--no-report` for transcript only.
+- `--raw-trace` — additionally writes `{base}_raw_trace.json` (sanitized dump). See [Artifact outputs](#artifact-outputs).
+- `--artifact-prefix NAME` — use `NAME` as the shared basename instead of the default timestamp-based name. `/` and `\` in `NAME` are replaced with `_`; leading/trailing `.` are stripped.
+
+Substitute bracketed placeholders from each scenario before sending. This doc remains authoritative for definitions and rubric; the script only carries compact labels and template lines. Exact filenames and JSON shapes: [Artifact outputs](#artifact-outputs), [`docs/manual_gauntlet_report_format.md`](manual_gauntlet_report_format.md).
+
+### CLI examples
 
 ```bash
+# List gauntlets
 python tools/run_manual_gauntlet.py --list
+
+# Default: transcript + summary, key_events, snippets (report on by default)
 python tools/run_manual_gauntlet.py --gauntlet g5
+
+# Explicit reporting (same as default)
+python tools/run_manual_gauntlet.py --gauntlet g5 --report
+
+# Transcript only (no JSON report bundle)
+python tools/run_manual_gauntlet.py --gauntlet g5 --no-report
+
+# Deep debug: also write raw_trace.json
+python tools/run_manual_gauntlet.py --gauntlet g5 --raw-trace
+
+# Custom shared basename (becomes NAME_transcript.md, NAME_summary.json, …)
+python tools/run_manual_gauntlet.py --gauntlet g3 --artifact-prefix my_g3_smoke
+
+# Other useful combinations (unchanged behavior)
 python tools/run_manual_gauntlet.py --gauntlet g6 --no-reset
 python tools/run_manual_gauntlet.py --gauntlet g3 --freeform
 ```
 
-Substitute bracketed placeholders from each scenario before sending. This doc remains authoritative for definitions and rubric; the script only carries compact labels and template lines.
+## Filename evolution (transcript naming)
+
+Older docs or habits may expect a single file named like `{gauntlet_id}_{YYYYMMDD_HHMMSS}.md`. The current driver uses a **shared basename** so one run produces sibling files:
+
+- **Old pattern (replaced):** `{id}_{YYYYMMDD_HHMMSS}.md`
+- **Current pattern:** `{timestamp}_{id}_transcript.md` (and sibling `{timestamp}_{id}_*.json` files), i.e. `{base}_transcript.md` where `{base}` is `{UTC_timestamp}_{gauntlet_id}` or your `--artifact-prefix`.
+
+The default timestamp is UTC in a filesystem-safe form: `YYYY-MM-DDTHH-MM-SSZ` (hyphens in the time portion instead of colons), e.g. `2026-04-09T14-30-00Z_g5_transcript.md`.
+
+## Artifact outputs
+
+All artifacts live in `artifacts/manual_gauntlets/`. For a given run, let `{base}` be:
+
+- `{UTC_timestamp}_{gauntlet_id}` by default (UTC, `T` and `Z` as shown in [Filename evolution](#filename-evolution-transcript-naming)), or
+- the sanitized `--artifact-prefix` value.
+
+**Always written**
+
+| File | Role |
+|------|------|
+| `{base}_transcript.md` | Full Markdown transcript (git branch/commit, gauntlet id, turns, scene and interlocutor snapshots). |
+
+**Written when reporting is on (default)**
+
+| File | Role |
+|------|------|
+| `{base}_summary.json` | Run header: gauntlet id, git metadata, mode, turn count, path to transcript, report version, key-event count, whether raw trace was requested. |
+| `{base}_key_events.json` | Distilled high-signal events from debug/trace metadata (see companion doc). |
+| `{base}_snippets.json` | Small capped set of illustrative excerpts (repairs, fallbacks, errors, heuristics). |
+
+**Written only with `--raw-trace`**
+
+| File | Role |
+|------|------|
+| `{base}_raw_trace.json` | Optional full per-turn record dump (sanitized/truncated for size/safety). For deep debugging, not routine review. |
+
+- **Transcript-only:** `python tools/run_manual_gauntlet.py ... --no-report` — only `{base}_transcript.md`.
+- **Forensic / deep debug:** add `--raw-trace` to also emit `{base}_raw_trace.json`.
+
+JSON field-level behavior is summarized in [`docs/manual_gauntlet_report_format.md`](manual_gauntlet_report_format.md).
+
+## Recommended review payload (what to send)
+
+For **normal** feedback (issues, regressions, “this gauntlet failed”), include:
+
+1. **Gauntlet id** (e.g. `g5`)
+2. **Brief verdict** (PASS / FAIL / Inconclusive and one line why)
+3. The compact artifacts: **`summary.json`**, **`key_events.json`**, **`snippets.json`** (paths or attached files — keep excerpts short if pasting)
+
+**Do not** treat **`raw_trace.json`** as part of the default bundle. It is for **deep debugging** when the compact artifacts are insufficient.
+
+Do **not** paste full JSON blobs into chat unless the compact artifacts are insufficient and you are intentionally sharing a **small** excerpt. If the compact files plus a short excerpt from `_transcript.md` do not capture the issue, attach files or link to a gist/repo path instead of dumping full `raw_trace` or entire transcripts into a message thread.
+
+## Aggregating manual gauntlet runs
+
+After one or more gauntlet runs, you can roll up many `*_summary.json` files into a single **aggregate report** without re-executing anything. Aggregation is a **standalone, read-only** CLI: [`tools/aggregate_manual_gauntlets.py`](../tools/aggregate_manual_gauntlets.py). It scans disk, normalizes each run, applies filters, computes metrics, and writes JSON (and optionally Markdown) under `artifacts/manual_gauntlets/reports/`.
+
+**Anchor artifact.** Discovery is driven by **`{base}_summary.json`**. Optional siblings in the **same directory** are inferred from the same `{base}`: `{base}_key_events.json`, `{base}_snippets.json`, `{base}_transcript.md`. Only the summary is required; absent optional files are omitted quietly. **Malformed** optional files (unreadable JSON, wrong root type, etc.) produce **warnings** and that file’s data is skipped; a **bad summary** skips that run only — the rest of the aggregate still completes.
+
+**Operator fields.** Each summary’s `operator_verdict` and `operator_notes` feed filters, metrics, and Markdown ordering. For **legacy** summaries that only have `notes`, the tool treats `notes` as operator notes when `operator_notes` is absent, so older artifacts still aggregate sensibly.
+
+**What to use when.** Per-run artifacts (`_transcript.md`, `_summary.json`, `_key_events.json`, `_snippets.json`) are for **deep inspection** of a single pass. Aggregate reports are for **trends**, **failure clustering**, and **objective-readiness** review across many runs. If no runs match your filters, you still get a report with **zero runs** and empty rollups — that is expected, not an error.
+
+**Filter order (exact).** Filters apply in this order: `--gauntlet-id` → `--objective` (substring on **label** or **description**, case-insensitive) → `--verdict` (case-insensitive **exact** match on `operator_verdict`). Then runs are sorted **newest first** by `started_utc` when parseable, else by the summary file’s modification time. Finally `--limit` keeps only the first **N** runs after sorting. **Sorting happens before the limit.**
+
+For discovery rules, metrics fields, Markdown layout, event rollup details, and resilience behavior, see [`docs/manual_gauntlet_aggregation.md`](manual_gauntlet_aggregation.md).
+
+### Aggregation CLI examples
+
+```bash
+# Full rollup: JSON + Markdown, key-event name/stage counts, snippet samples, console summary
+py -3 tools/aggregate_manual_gauntlets.py --include-events --include-snippets --stdout
+
+# Newest 10 FAIL runs for gauntlet g5; JSON only (no .md file)
+py -3 tools/aggregate_manual_gauntlets.py --gauntlet-id g5 --limit 10 --verdict FAIL --json-only
+```
+
+Other useful flags: `--artifacts-dir` (default: repo `artifacts/manual_gauntlets`), `--output-dir` (default: `artifacts/manual_gauntlets/reports`), `--objective SUBSTRING`.
 
 ## Pass / fail rubric (compact)
 

@@ -6,18 +6,21 @@ This script only stores compact labels, one-line intent summaries, and optional 
 so the operator can substitute ``[PLACEHOLDER]`` values and drive turns from the terminal.
 
 Transcripts are written as Markdown under ``artifacts/manual_gauntlets/``.
+A compact JSON report bundle (summary, key events, snippets) is emitted alongside
+each run unless disabled; use ``--raw-trace`` for an optional full record dump.
 """
 
 from __future__ import annotations
 
 import argparse
 import json
+import re
 import subprocess
 import sys
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any
+from typing import Any, Iterator
 
 ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
@@ -122,6 +125,600 @@ GAUNTLETS: dict[str, GauntletSpec] = {
 }
 
 ARTIFACTS_DIR = ROOT / "artifacts" / "manual_gauntlets"
+
+REPORT_VERSION = 1
+
+# High-signal key substrings for generic trace walking (schema-tolerant).
+_SIGNAL_KEY_RE = re.compile(
+    r"(validator|repair|fallback|violation|emission|bridge|continuity|gate|sanitiz|mismatch|coercion)",
+    re.IGNORECASE,
+)
+
+
+@dataclass
+class RunSummary:
+    """Serialization-friendly run header for ``summary.json``."""
+
+    gauntlet_id: str
+    label: str
+    description: str
+    started_utc: str
+    git_branch: str
+    git_commit: str
+    mode: str
+    hard_reset_before_run: bool
+    turn_count: int
+    transcript_path: str
+    report_version: int = REPORT_VERSION
+    event_count: int = 0
+    raw_trace_written: bool = False
+    operator_verdict: str | None = None
+    operator_notes: str | None = None
+
+
+@dataclass
+class KeyEvent:
+    turn: int
+    stage: str
+    name: str
+    status: str
+    details: dict[str, Any] = field(default_factory=dict)
+
+
+@dataclass
+class SnippetRecord:
+    turn: int
+    kind: str
+    before: str | None = None
+    after: str | None = None
+    reason: str | None = None
+
+
+def _json_dump(path: Path, payload: Any) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+
+
+def _artifact_base_name(spec: GauntletSpec, prefix: str | None = None) -> str:
+    if prefix is not None:
+        p = str(prefix).strip()
+        p = p.replace("\\", "_").replace("/", "_").strip(".")
+        if p:
+            return p
+    ts = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H-%M-%SZ")
+    return f"{ts}_{spec.gauntlet_id}"
+
+
+def _safe_get(mapping: Any, *path: str, default: Any = None) -> Any:
+    cur: Any = mapping
+    for key in path:
+        if not isinstance(cur, dict) or key not in cur:
+            return default
+        cur = cur[key]
+    return cur
+
+
+def _normalize_bool(value: Any) -> bool | None:
+    """Coerce common truthy/falsey string forms; return None when unknown."""
+    if isinstance(value, bool):
+        return value
+    if isinstance(value, str):
+        low = value.strip().lower()
+        if low in ("true", "1", "yes", "on"):
+            return True
+        if low in ("false", "0", "no", "off", ""):
+            return False
+    return None
+
+
+def _truncate_text(text: str, max_chars: int) -> str:
+    t = (text or "").strip()
+    if len(t) <= max_chars:
+        return t
+    if max_chars <= 3:
+        return t[:max_chars]
+    return t[: max_chars - 3] + "..."
+
+
+def _record_turn_one_based(record: dict[str, Any]) -> int:
+    try:
+        idx = int(record.get("turn_index", 0))
+    except (TypeError, ValueError):
+        idx = 0
+    return idx + 1
+
+
+def _iter_nested_dicts(obj: Any, *, max_depth: int = 10, _depth: int = 0) -> Iterator[dict[str, Any]]:
+    if _depth > max_depth:
+        return
+    if isinstance(obj, dict):
+        yield obj
+        for v in obj.values():
+            yield from _iter_nested_dicts(v, max_depth=max_depth, _depth=_depth + 1)
+    elif isinstance(obj, list):
+        for item in obj:
+            yield from _iter_nested_dicts(item, max_depth=max_depth, _depth=_depth + 1)
+
+
+def _slim_details(d: dict[str, Any], *, max_keys: int = 12, max_str: int = 200) -> dict[str, Any]:
+    out: dict[str, Any] = {}
+    for i, (k, v) in enumerate(d.items()):
+        if i >= max_keys:
+            out["_truncated_keys"] = max(0, len(d) - max_keys)
+            break
+        if isinstance(v, str):
+            out[str(k)] = _truncate_text(v, max_str)
+        elif isinstance(v, (bool, int, float)) or v is None:
+            out[str(k)] = v
+        elif isinstance(v, list):
+            out[str(k)] = v[:8] if len(v) > 8 else v
+        elif isinstance(v, dict):
+            out[str(k)] = _slim_details(v, max_keys=min(8, max_keys), max_str=max_str)
+        else:
+            out[str(k)] = _truncate_text(str(v), max_str)
+    return out
+
+
+def _scan_emission_debug_events(turn: int, em: dict[str, Any]) -> list[dict[str, Any]]:
+    events: list[dict[str, Any]] = []
+    for key, raw in em.items():
+        ks = str(key)
+        low = ks.lower()
+        if isinstance(raw, bool):
+            if not raw:
+                continue
+            if low.endswith("_failed") or low.endswith("_violation"):
+                st = "failed"
+            elif (
+                low.endswith("_repaired")
+                or low.endswith("_applied")
+                or low.endswith("_enforced")
+                or low.endswith("_blocked")
+                or low.endswith("_replaced")
+                or "fallback_applied" in low
+                or "violation_before_repair" in low
+            ):
+                st = "applied"
+            else:
+                continue
+            events.append(
+                {
+                    "turn": turn,
+                    "stage": "emission_debug",
+                    "name": ks,
+                    "status": st,
+                    "details": {"value": True},
+                }
+            )
+            continue
+        if isinstance(raw, str) and raw.strip() and raw.strip().lower() not in ("none", "null", ""):
+            if low.endswith("_repair_mode") or "fallback" in low or low.endswith("_reason"):
+                events.append(
+                    {
+                        "turn": turn,
+                        "stage": "repair" if "repair" in low else "emission_debug",
+                        "name": ks,
+                        "status": _truncate_text(raw.strip(), 120),
+                        "details": {},
+                    }
+                )
+        if isinstance(raw, list) and raw and low.endswith("_reasons"):
+            events.append(
+                {
+                    "turn": turn,
+                    "stage": "emission_debug",
+                    "name": ks,
+                    "status": "raised",
+                    "details": _slim_details({"items": raw[:12]}, max_keys=2, max_str=160),
+                }
+            )
+        if ks == "interaction_continuity_repair" and isinstance(raw, dict):
+            applied = bool(raw.get("applied"))
+            rtype = raw.get("repair_type")
+            if applied or rtype:
+                events.append(
+                    {
+                        "turn": turn,
+                        "stage": "repair",
+                        "name": "interaction_continuity_repair",
+                        "status": "applied" if applied else "recorded",
+                        "details": _slim_details(
+                            {
+                                "repair_type": rtype,
+                                "violations": raw.get("violations"),
+                                "strategy_notes": raw.get("strategy_notes"),
+                            },
+                            max_keys=6,
+                        ),
+                    }
+                )
+        if ks == "interaction_continuity_validation" and isinstance(raw, dict):
+            ok = raw.get("ok")
+            if ok is False or (raw.get("violations") and isinstance(raw.get("violations"), list)):
+                viol = raw.get("violations") if isinstance(raw.get("violations"), list) else []
+                events.append(
+                    {
+                        "turn": turn,
+                        "stage": "validator",
+                        "name": "interaction_continuity_validation",
+                        "status": "failed" if ok is False else "checked",
+                        "details": _slim_details({"violations": viol[:12]}, max_keys=3),
+                    }
+                )
+        if ks == "interaction_continuity_speaker_binding_bridge" and isinstance(raw, dict):
+            if raw.get("applied") or raw.get("bridge_applied"):
+                events.append(
+                    {
+                        "turn": turn,
+                        "stage": "bridge",
+                        "name": "interaction_continuity_speaker_binding_bridge",
+                        "status": "applied",
+                        "details": _slim_details(raw, max_keys=8),
+                    }
+                )
+        if ks == "interaction_continuity_enforced" and raw is True:
+            events.append(
+                {
+                    "turn": turn,
+                    "stage": "emission",
+                    "name": "interaction_continuity_enforced",
+                    "status": "true",
+                    "details": {},
+                }
+            )
+    return events
+
+
+def _events_from_last_action_debug(turn: int, lad: dict[str, Any]) -> list[dict[str, Any]]:
+    out: list[dict[str, Any]] = []
+    if bool(lad.get("narration_state_mismatch_detected")):
+        out.append(
+            {
+                "turn": turn,
+                "stage": "narration_state",
+                "name": "narration_state_mismatch",
+                "status": "detected",
+                "details": _slim_details(
+                    {
+                        "mismatch_kind": lad.get("mismatch_kind"),
+                        "mismatch_repair_applied": lad.get("mismatch_repair_applied"),
+                        "mismatch_repairs_applied": lad.get("mismatch_repairs_applied"),
+                    },
+                    max_keys=5,
+                ),
+            }
+        )
+    if bool(lad.get("minimum_actionable_lead_enforced")):
+        out.append(
+            {
+                "turn": turn,
+                "stage": "lead",
+                "name": "minimum_actionable_lead_enforced",
+                "status": "applied",
+                "details": _slim_details(
+                    {
+                        "enforced_lead_id": lad.get("enforced_lead_id"),
+                        "enforced_lead_source": lad.get("enforced_lead_source"),
+                    },
+                    max_keys=3,
+                ),
+            }
+        )
+    rtc = lad.get("response_type_contract")
+    if isinstance(rtc, dict) and rtc:
+        out.append(
+            {
+                "turn": turn,
+                "stage": "emission_gate",
+                "name": "response_type_contract",
+                "status": "resolved",
+                "details": _slim_details(rtc, max_keys=10),
+            }
+        )
+    return out
+
+
+def _events_from_turn_trace(turn: int, tt: dict[str, Any]) -> list[dict[str, Any]]:
+    out: list[dict[str, Any]] = []
+    intent = _safe_get(tt, "intent", "implied_context", default={}) or {}
+    if isinstance(intent, dict) and intent.get("commitment_broken"):
+        out.append(
+            {
+                "turn": turn,
+                "stage": "intent",
+                "name": "implied_context_commitment_broken",
+                "status": "true",
+                "details": _slim_details(
+                    {
+                        "break_reason": intent.get("break_reason"),
+                        "target_id": intent.get("target_id"),
+                    },
+                    max_keys=4,
+                ),
+            }
+        )
+    rtc = tt.get("response_type_contract")
+    if isinstance(rtc, dict) and rtc:
+        out.append(
+            {
+                "turn": turn,
+                "stage": "emission_gate",
+                "name": "turn_trace.response_type_contract",
+                "status": "resolved",
+                "details": _slim_details(rtc, max_keys=10),
+            }
+        )
+    return out
+
+
+def _generic_signal_events_from_obj(turn: int, root: Any, *, max_hits: int = 24) -> list[dict[str, Any]]:
+    hits: list[dict[str, Any]] = []
+    for d in _iter_nested_dicts(root, max_depth=9):
+        if len(hits) >= max_hits:
+            break
+        for k, v in d.items():
+            if len(hits) >= max_hits:
+                break
+            ks = str(k)
+            if not _SIGNAL_KEY_RE.search(ks):
+                continue
+            if isinstance(v, bool) and v:
+                hits.append(
+                    {
+                        "turn": turn,
+                        "stage": "trace_signal",
+                        "name": ks,
+                        "status": "true",
+                        "details": {},
+                    }
+                )
+            elif isinstance(v, str) and v.strip() and len(v) < 220:
+                if v.strip().lower() in ("none", "null"):
+                    continue
+                hits.append(
+                    {
+                        "turn": turn,
+                        "stage": "trace_signal",
+                        "name": ks,
+                        "status": _truncate_text(v.strip(), 120),
+                        "details": {},
+                    }
+                )
+    return hits
+
+
+def _extract_candidate_events(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    candidates: list[dict[str, Any]] = []
+    for rec in records:
+        turn = _record_turn_one_based(rec)
+        dbg = rec.get("debug") if isinstance(rec.get("debug"), dict) else {}
+        lad = dbg.get("last_action_debug") if isinstance(dbg.get("last_action_debug"), dict) else {}
+        candidates.extend(_events_from_last_action_debug(turn, lad))
+
+        trace = dbg.get("last_debug_trace")
+        if isinstance(trace, dict):
+            res = trace.get("resolution")
+            if isinstance(res, dict):
+                md = res.get("metadata")
+                if isinstance(md, dict):
+                    em = md.get("emission_debug")
+                    if isinstance(em, dict):
+                        candidates.extend(_scan_emission_debug_events(turn, em))
+            tt = trace.get("turn_trace")
+            if isinstance(tt, dict):
+                candidates.extend(_events_from_turn_trace(turn, tt))
+            candidates.extend(_generic_signal_events_from_obj(turn, trace, max_hits=20))
+
+        if not rec.get("ok"):
+            candidates.append(
+                {
+                    "turn": turn,
+                    "stage": "engine",
+                    "name": "chat_error",
+                    "status": "error",
+                    "details": _slim_details({"error": rec.get("error")}, max_keys=2, max_str=300),
+                }
+            )
+
+    return candidates
+
+
+def _event_fingerprint(ev: dict[str, Any]) -> tuple[Any, ...]:
+    return (
+        ev.get("turn"),
+        ev.get("stage"),
+        ev.get("name"),
+        ev.get("status"),
+        json.dumps(ev.get("details") or {}, sort_keys=True, default=str),
+    )
+
+
+def _collapse_key_events(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    candidates = _extract_candidate_events(records)
+    seen: set[tuple[Any, ...]] = set()
+    out: list[dict[str, Any]] = []
+    for ev in candidates:
+        fp = _event_fingerprint(ev)
+        if fp in seen:
+            continue
+        seen.add(fp)
+        out.append(ev)
+    return out
+
+
+def _serialize_key_events(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    out: list[dict[str, Any]] = []
+    for ev in _collapse_key_events(records):
+        out.append(
+            asdict(
+                KeyEvent(
+                    turn=int(ev.get("turn") or 0),
+                    stage=str(ev.get("stage") or ""),
+                    name=str(ev.get("name") or ""),
+                    status=str(ev.get("status") or ""),
+                    details=dict(ev.get("details") or {}),
+                )
+            )
+        )
+    return out
+
+
+def _build_summary(
+    spec: GauntletSpec,
+    freeform: bool,
+    reset_applied: bool,
+    records: list[dict[str, Any]],
+    *,
+    started_utc: str,
+    transcript_path: Path,
+    raw_trace_written: bool,
+    event_count: int,
+    operator_verdict: str | None = None,
+    operator_notes: str | None = None,
+) -> dict[str, Any]:
+    branch, commit = _git_meta()
+    summary = RunSummary(
+        gauntlet_id=spec.gauntlet_id,
+        label=spec.label,
+        description=spec.description,
+        started_utc=started_utc,
+        git_branch=branch,
+        git_commit=commit,
+        mode="freeform" if freeform else "preset templates",
+        hard_reset_before_run=reset_applied,
+        turn_count=len(records),
+        transcript_path=str(transcript_path.resolve()),
+        report_version=REPORT_VERSION,
+        event_count=event_count,
+        raw_trace_written=raw_trace_written,
+        operator_verdict=operator_verdict,
+        operator_notes=operator_notes,
+    )
+    return asdict(summary)
+
+
+def _extract_snippets(
+    records: list[dict[str, Any]],
+    *,
+    max_items: int = 5,
+    max_chars: int = 400,
+) -> list[dict[str, Any]]:
+    snippets: list[dict[str, Any]] = []
+    for rec in records:
+        if len(snippets) >= max_items:
+            break
+        turn = _record_turn_one_based(rec)
+        dbg = rec.get("debug") if isinstance(rec.get("debug"), dict) else {}
+        trace = dbg.get("last_debug_trace")
+        em: dict[str, Any] | None = None
+        if isinstance(trace, dict):
+            res = trace.get("resolution")
+            if isinstance(res, dict):
+                md = res.get("metadata")
+                if isinstance(md, dict):
+                    hit = md.get("emission_debug")
+                    if isinstance(hit, dict):
+                        em = hit
+        if em:
+            ic_rep = em.get("interaction_continuity_repair")
+            if isinstance(ic_rep, dict) and (ic_rep.get("applied") or ic_rep.get("repair_type")):
+                gm_final = str(rec.get("gm_text") or "")
+                before_t = ic_rep.get("input_text") or ic_rep.get("candidate_text") or ic_rep.get("pre_repair_text")
+                after_t = ic_rep.get("repaired_text") or gm_final
+                b = _truncate_text(str(before_t), max_chars) if before_t else None
+                a = _truncate_text(str(after_t), max_chars) if after_t else None
+                reason = str(ic_rep.get("repair_type") or "interaction_continuity_repair")
+                notes = ic_rep.get("strategy_notes") if isinstance(ic_rep.get("strategy_notes"), list) else []
+                if notes:
+                    reason = f"{reason}: {_truncate_text('; '.join(str(x) for x in notes[:3]), 200)}"
+                snippets.append(
+                    asdict(
+                        SnippetRecord(
+                            turn=turn,
+                            kind="repair_before_after",
+                            before=b,
+                            after=a,
+                            reason=reason,
+                        )
+                    )
+                )
+                continue
+
+        if not rec.get("ok"):
+            err = str(rec.get("error") or "")
+            snippets.append(
+                asdict(
+                    SnippetRecord(
+                        turn=turn,
+                        kind="engine_error",
+                        before=None,
+                        after=None,
+                        reason=_truncate_text(err, max_chars),
+                    )
+                )
+            )
+            continue
+
+        if isinstance(trace, dict):
+            res = trace.get("resolution")
+            md = res.get("metadata") if isinstance(res, dict) and isinstance(res.get("metadata"), dict) else {}
+            em2 = md.get("emission_debug") if isinstance(md.get("emission_debug"), dict) else {}
+            if em2.get("social_emission_integrity_replaced") or (
+                str(em2.get("social_emission_integrity_fallback_kind") or "").strip()
+            ):
+                gm_t = _truncate_text(str(rec.get("gm_text") or ""), max_chars)
+                snippets.append(
+                    asdict(
+                        SnippetRecord(
+                            turn=turn,
+                            kind="fallback_response",
+                            before=None,
+                            after=gm_t,
+                            reason=_truncate_text(
+                                str(em2.get("social_emission_integrity_fallback_kind") or "social_emission_integrity"),
+                                200,
+                            ),
+                        )
+                    )
+                )
+                continue
+
+        gm = str(rec.get("gm_text") or "")
+        if _suspicious_speaker_fragment(gm):
+            snippets.append(
+                asdict(
+                    SnippetRecord(
+                        turn=turn,
+                        kind="suspicious_speaker_fragment",
+                        before=None,
+                        after=_truncate_text(gm, max_chars),
+                        reason="Possible malformed speaker / quote pattern in player-facing text",
+                    )
+                )
+            )
+
+    return snippets[:max_items]
+
+
+def _suspicious_speaker_fragment(text: str) -> bool:
+    if not text or len(text) < 12:
+        return False
+    # Heuristic: multiple quoted segments with different capitalized labels (lightweight).
+    if text.count('"') >= 4 and re.search(r"\b(says|said|asks|replies)\b", text, re.I):
+        return True
+    if re.search(r'[A-Za-z][^.!?"]{0,40}says,\s*"[A-Za-z][^.!?"]{0,40}says,', text):
+        return True
+    return False
+
+
+def _sanitize_raw_trace_payload(obj: Any, *, max_str: int = 12000) -> Any:
+    if isinstance(obj, dict):
+        return {str(k): _sanitize_raw_trace_payload(v, max_str=max_str) for k, v in obj.items()}
+    if isinstance(obj, list):
+        return [_sanitize_raw_trace_payload(x, max_str=max_str) for x in obj]
+    if isinstance(obj, str) and len(obj) > max_str:
+        return obj[:max_str] + f"...(truncated {len(obj) - max_str} chars)"
+    return obj
 
 
 def _git_meta() -> tuple[str, str]:
@@ -300,7 +897,32 @@ def _write_transcript(
         lines.append(_format_turn_markdown(rec))
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text("\n".join(lines), encoding="utf-8")
-    print(f"\nWrote transcript: {path}")
+
+
+def _print_artifact_summary(
+    *,
+    transcript: Path,
+    summary: Path | None,
+    key_events: Path | None,
+    snippets: Path | None,
+    raw_trace: Path | None,
+    operator_verdict: str | None = None,
+    operator_notes: str | None = None,
+) -> None:
+    print("\n=== Gauntlet artifacts ===")
+    print(f"- transcript:    {transcript.resolve()}")
+    if summary is not None:
+        print(f"- summary:       {summary.resolve()}")
+    if key_events is not None:
+        print(f"- key_events:    {key_events.resolve()}")
+    if snippets is not None:
+        print(f"- snippets:      {snippets.resolve()}")
+    if raw_trace is not None:
+        print(f"- raw_trace:     {raw_trace.resolve()}")
+    if operator_verdict:
+        print(f"Verdict: {operator_verdict}")
+    if operator_notes:
+        print(f"Notes: {operator_notes}")
 
 
 def _build_parser() -> argparse.ArgumentParser:
@@ -331,6 +953,35 @@ def _build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Type arbitrary player lines instead of stepping through preset templates.",
     )
+    p.add_argument(
+        "--report",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="Emit summary.json, key_events.json, and snippets.json next to the transcript (default: on).",
+    )
+    p.add_argument(
+        "--raw-trace",
+        action="store_true",
+        help="Also write raw_trace.json (sanitized full per-turn record dump).",
+    )
+    p.add_argument(
+        "--artifact-prefix",
+        default=None,
+        metavar="NAME",
+        help="Override the timestamp-based artifact basename (files become NAME_transcript.md, etc.).",
+    )
+    p.add_argument(
+        "--verdict",
+        default=None,
+        metavar="VALUE",
+        help="Optional operator verdict (e.g. PASS, FAIL, PARTIAL, or freeform). Non-interactive; no prompt.",
+    )
+    p.add_argument(
+        "--notes",
+        default=None,
+        metavar="TEXT",
+        help="Optional short operator notes for summary.json. Non-interactive; no prompt.",
+    )
     return p
 
 
@@ -348,6 +999,7 @@ def main() -> int:
         return 2
 
     spec = GAUNTLETS[args.gauntlet]
+    started_utc = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     reset_applied = False
     if not args.no_reset:
         meta = apply_new_campaign_hard_reset()
@@ -378,14 +1030,82 @@ def main() -> int:
         else:
             print(f"Error: {rec.get('error')}")
 
-    stamp = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
-    out = ARTIFACTS_DIR / f"{spec.gauntlet_id}_{stamp}.md"
+    base = _artifact_base_name(spec, args.artifact_prefix)
+    transcript_path = ARTIFACTS_DIR / f"{base}_transcript.md"
     _write_transcript(
-        out,
+        transcript_path,
         spec=spec,
         freeform=bool(args.freeform),
         reset_applied=reset_applied,
         records=records,
+    )
+
+    summary_path: Path | None = None
+    key_events_path: Path | None = None
+    snippets_path: Path | None = None
+    raw_trace_path: Path | None = None
+    raw_written = bool(args.raw_trace)
+
+    key_events_serialized = _serialize_key_events(records)
+    event_count = len(key_events_serialized)
+
+    operator_verdict: str | None = None
+    operator_notes: str | None = None
+    if args.verdict is not None:
+        v = str(args.verdict).strip()
+        operator_verdict = v if v else None
+    elif sys.stdin.isatty():
+        try:
+            raw_v = input("Enter verdict (PASS / FAIL / PARTIAL / ENTER to skip): ")
+        except EOFError:
+            raw_v = ""
+        v = raw_v.strip()
+        operator_verdict = v if v else None
+        try:
+            raw_n = input("Notes (optional, ENTER to skip): ")
+        except EOFError:
+            raw_n = ""
+        n = raw_n.strip()
+        operator_notes = n if n else None
+    if args.notes is not None:
+        n2 = str(args.notes).strip()
+        operator_notes = n2 if n2 else None
+
+    if args.report:
+        summary_path = ARTIFACTS_DIR / f"{base}_summary.json"
+        key_events_path = ARTIFACTS_DIR / f"{base}_key_events.json"
+        snippets_path = ARTIFACTS_DIR / f"{base}_snippets.json"
+        summary_payload = _build_summary(
+            spec,
+            bool(args.freeform),
+            reset_applied,
+            records,
+            started_utc=started_utc,
+            transcript_path=transcript_path,
+            raw_trace_written=raw_written,
+            event_count=event_count,
+            operator_verdict=operator_verdict,
+            operator_notes=operator_notes,
+        )
+        _json_dump(summary_path, summary_payload)
+        _json_dump(key_events_path, key_events_serialized)
+        _json_dump(snippets_path, _extract_snippets(records))
+
+    if raw_written:
+        raw_trace_path = ARTIFACTS_DIR / f"{base}_raw_trace.json"
+        _json_dump(
+            raw_trace_path,
+            {"records": _sanitize_raw_trace_payload(records), "report_version": REPORT_VERSION},
+        )
+
+    _print_artifact_summary(
+        transcript=transcript_path,
+        summary=summary_path,
+        key_events=key_events_path,
+        snippets=snippets_path,
+        raw_trace=raw_trace_path if raw_written else None,
+        operator_verdict=operator_verdict,
+        operator_notes=operator_notes,
     )
     return 0
 

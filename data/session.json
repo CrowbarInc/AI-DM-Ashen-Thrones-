@@ -4,20 +4,20 @@
     "frontier_gate"
   ],
   "current_date": "Day 1",
-  "turn_counter": 4,
+  "turn_counter": 2,
   "response_mode": "standard",
   "clocks": {
     "suspicion": 0,
     "unrest": 0,
     "danger": 0,
     "occult_instability": 0,
-    "time_pressure": 4
+    "time_pressure": 2
   },
   "interaction_context": {
-    "active_interaction_target_id": "guard_captain",
-    "active_interaction_kind": "social",
-    "interaction_mode": "social",
-    "engagement_level": "engaged",
+    "active_interaction_target_id": null,
+    "active_interaction_kind": "travel",
+    "interaction_mode": "activity",
+    "engagement_level": "focused",
     "conversation_privacy": null,
     "player_position_context": null
   },
@@ -39,7 +39,7 @@
       "threadbare_watcher": "active",
       "emergent_lord_aldric": "active"
     },
-    "current_interlocutor": "guard_captain",
+    "current_interlocutor": null,
     "emergent_addressables": [
       {
         "id": "emergent_lord_aldric",
@@ -63,363 +63,100 @@
   },
   "scene_runtime": {
     "frontier_gate": {
-      "discovered_clues": [
-        "A patrol went missing near the old milestone.",
-        "Investigate the old milestone"
-      ],
-      "discovered_clue_ids": [
-        "social_frontier_gate_guard_captain_patrol",
-        "lead_frontier_gate_old_milestone"
-      ],
-      "pending_leads": [
-        {
-          "clue_id": "lead_frontier_gate_old_milestone",
-          "text": "Investigate the old milestone",
-          "authoritative_lead_id": "lead_frontier_gate_old_milestone",
-          "leads_to_scene": "old_milestone"
-        }
-      ],
+      "discovered_clues": [],
+      "discovered_clue_ids": [],
+      "pending_leads": [],
       "revealed_hidden_facts": [],
       "suspicion_flags": [],
       "searched_targets": [],
       "resolved_interactables": [],
-      "last_exploration_action_key": "social_probe_guard_captain",
+      "last_exploration_action_key": "we_leave_the_gatehouse_antechamber_and_s",
       "repeated_action_count": 1,
-      "last_resolution_kind": "social_probe",
-      "last_description_hash": "ae556a06db8bceba6ab26952dc409812",
+      "last_resolution_kind": "travel",
+      "last_description_hash": "86322984cd6afed9d0642169ab6a91bd",
       "consumed_action_ids": [],
-      "momentum_exchanges_since": 1,
-      "momentum_next_due_in": 2,
-      "momentum_last_kind": null,
+      "momentum_exchanges_since": 0,
+      "momentum_next_due_in": 3,
+      "momentum_last_kind": "consequence_or_opportunity",
       "passive_action_streak": 0,
       "recent_player_actions": [
         {
-          "text": "Begin.",
+          "text": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals.",
           "passive": false,
           "markers": [],
           "resolution_kind": null,
           "turn": 1
         },
         {
-          "text": "Galinor approaches the nearest guard. \"Watchman, what's your name?\"",
-          "passive": true,
-          "markers": [
-            "watch"
-          ],
-          "resolution_kind": null,
-          "turn": 2
-        },
-        {
-          "text": "\"You don't know you own name? I don't know why they trust you to watch the walls.\"",
-          "passive": true,
-          "markers": [
-            "watch"
-          ],
-          "resolution_kind": null,
-          "turn": 3
-        },
-        {
-          "text": "Galinor continues to press the man. \"What. Is. Your. Name.\"",
+          "text": "I circle back to an earlier detail we skipped and insist we resolve it before moving on.",
           "passive": false,
           "markers": [],
           "resolution_kind": null,
-          "turn": 4
+          "turn": 2
         }
       ],
-      "last_player_action_text": "Galinor continues to press the man. \"What. Is. Your. Name.\"",
+      "last_player_action_text": "I circle back to an earlier detail we skipped and insist we resolve it before moving on.",
       "last_player_action_passive": false,
       "recent_contextual_leads": [
         {
-          "key": "active_event_guard_captain_points_down_the_nearest_road",
+          "key": "active_event_tavern_runners_voice_cuts_through_the_rain_drenched_murmurings_blending_warmth_with_urgency_holds_beside_it_nearby_the_notice_board_details_new_taxes_curfews",
           "kind": "active_event",
-          "subject": "guard captain points down the nearest road",
-          "position": "",
+          "subject": "tavern runner's voice cuts through the rain-drenched murmurings, blending warmth with urgency holds",
+          "position": "beside it, nearby, the notice board details new taxes, curfews",
           "named": false,
-          "positioned": false,
-          "mentions": 2,
-          "last_turn": 3
+          "positioned": true,
+          "mentions": 1,
+          "last_turn": 2
         },
         {
-          "key": "active_event_guard_captain_nods_once",
-          "kind": "active_event",
-          "subject": "guard captain nods once",
+          "key": "notice_board_notice_board",
+          "kind": "notice_board",
+          "subject": "notice board",
           "position": "",
           "named": false,
           "positioned": false,
           "mentions": 1,
-          "last_turn": 4
+          "last_turn": 2
+        },
+        {
+          "key": "scene_npc_tavern_runner",
+          "kind": "scene_npc",
+          "subject": "Tavern Runner",
+          "position": "",
+          "named": true,
+          "positioned": false,
+          "mentions": 1,
+          "last_turn": 2
         }
-      ],
-      "npc_lead_discussions": {
-        "guard_captain": {
-          "social_frontier_gate_guard_captain_patrol": {
-            "npc_id": "guard_captain",
-            "lead_id": "social_frontier_gate_guard_captain_patrol",
-            "first_discussed_turn": 2,
-            "last_discussed_turn": 2,
-            "disclosure_level": "explicit",
-            "player_acknowledged": false,
-            "player_acknowledged_turn": null,
-            "mention_count": 1,
-            "last_scene_id": "frontier_gate"
-          },
-          "lead_frontier_gate_old_milestone": {
-            "npc_id": "guard_captain",
-            "lead_id": "lead_frontier_gate_old_milestone",
-            "first_discussed_turn": 2,
-            "last_discussed_turn": 2,
-            "disclosure_level": "explicit",
-            "player_acknowledged": false,
-            "player_acknowledged_turn": null,
-            "mention_count": 1,
-            "last_scene_id": "frontier_gate"
-          }
-        }
-      },
-      "topic_pressure": {
-        "topic:approach_galinor_guard": {
-          "repeat_count": 2,
-          "low_progress_streak": 0,
-          "progress_score_total": 3.1,
-          "last_answer": "Guard Captain nods once. \"Old Millstone. South road.\".",
-          "last_turn": 3,
-          "speaker_targets": {
-            "guard_captain": {
-              "repeat_count": 2,
-              "low_progress_streak": 0,
-              "patience": 3,
-              "last_turn": 3
-            }
-          },
-          "previous_probe_dimension": "general",
-          "last_probe_dimension": "general",
-          "last_player_input": "\"You don't know you own name? I don't know why they trust you to watch the walls.\""
-        }
-      },
-      "topic_pressure_last_topic_key": "topic:approach_galinor_guard",
-      "topic_pressure_current": {
-        "topic_key": "topic:approach_galinor_guard",
-        "speaker_key": "guard_captain",
-        "turn": 3,
-        "player_text": "\"You don't know you own name? I don't know why they trust you to watch the walls.\"",
-        "interaction_kind": "social",
-        "interaction_mode": "social",
-        "social_intent_class": "social_exchange",
-        "npc_name": "Guard Captain"
-      }
+      ]
     }
   },
-  "clue_knowledge": {
-    "social_frontier_gate_guard_captain_patrol": {
-      "state": "discovered",
-      "source_scene": "frontier_gate",
-      "presentation": "explicit",
-      "text": "A patrol went missing near the old milestone."
-    },
-    "lead_frontier_gate_old_milestone": {
-      "state": "discovered",
-      "source_scene": "frontier_gate",
-      "presentation": "actionable",
-      "text": "Investigate the old milestone"
-    }
-  },
-  "lead_registry": {
-    "social_frontier_gate_guard_captain_patrol": {
-      "id": "social_frontier_gate_guard_captain_patrol",
-      "title": "A patrol went missing near the old milestone.",
-      "summary": "A patrol went missing near the old milestone.",
-      "type": "rumor",
-      "lifecycle": "discovered",
-      "status": "active",
-      "confidence": "plausible",
-      "discovery_source": "clue_explicit",
-      "first_discovered_turn": 2,
-      "last_updated_turn": 2,
-      "committed_at_turn": null,
-      "commitment_source": null,
-      "commitment_strength": null,
-      "resolved_at_turn": null,
-      "resolution_type": null,
-      "resolution_summary": null,
-      "obsolete_reason": null,
-      "escalation_level": 0,
-      "escalation_reason": null,
-      "escalated_at_turn": null,
-      "unlocked_by_lead_id": null,
-      "obsolete_by_lead_id": null,
-      "next_step": "",
-      "related_clue_ids": [],
-      "related_npc_ids": [],
-      "related_location_ids": [],
-      "owner_faction_id": null,
-      "priority": 0,
-      "last_touched_turn": 2,
-      "stale_after_turns": null,
-      "parent_lead_id": null,
-      "supersedes": [],
-      "superseded_by": null,
-      "unlocks": [],
-      "blocked_by": [],
-      "related_faction_ids": [],
-      "related_scene_ids": [
-        "frontier_gate"
-      ],
-      "tags": [],
-      "evidence_clue_ids": [
-        "social_frontier_gate_guard_captain_patrol"
-      ],
-      "consequence_ids": [],
-      "metadata": {}
-    },
-    "lead_frontier_gate_old_milestone": {
-      "id": "lead_frontier_gate_old_milestone",
-      "title": "Investigate the old milestone",
-      "summary": "Investigate the old milestone",
-      "type": "investigation",
-      "lifecycle": "discovered",
-      "status": "active",
-      "confidence": "plausible",
-      "discovery_source": "social",
-      "first_discovered_turn": 2,
-      "last_updated_turn": 2,
-      "committed_at_turn": null,
-      "commitment_source": null,
-      "commitment_strength": null,
-      "resolved_at_turn": null,
-      "resolution_type": null,
-      "resolution_summary": null,
-      "obsolete_reason": null,
-      "escalation_level": 0,
-      "escalation_reason": null,
-      "escalated_at_turn": null,
-      "unlocked_by_lead_id": null,
-      "obsolete_by_lead_id": null,
-      "next_step": "",
-      "related_clue_ids": [],
-      "related_npc_ids": [
-        "guard_captain"
-      ],
-      "related_location_ids": [],
-      "owner_faction_id": null,
-      "priority": 0,
-      "last_touched_turn": 2,
-      "stale_after_turns": null,
-      "parent_lead_id": null,
-      "supersedes": [],
-      "superseded_by": null,
-      "unlocks": [],
-      "blocked_by": [],
-      "related_faction_ids": [],
-      "related_scene_ids": [
-        "frontier_gate",
-        "old_milestone"
-      ],
-      "tags": [],
-      "evidence_clue_ids": [
-        "lead_frontier_gate_old_milestone"
-      ],
-      "consequence_ids": [],
-      "metadata": {
-        "social_extraction_source": "topic_text:old_milestone"
-      }
-    }
-  },
-  "npc_runtime": {
-    "guard_captain": {
-      "attitude": 0,
-      "trust": 1,
-      "fear": 0,
-      "suspicion": 0,
-      "known_topics": [],
-      "revealed_topics": [
-        "patrol"
-      ],
-      "last_interaction_turn": 4
-    }
-  },
+  "clue_knowledge": {},
+  "lead_registry": {},
+  "npc_runtime": {},
   "last_action_debug": {
     "last_action_type": "chat",
-    "player_input": "Galinor continues to press the man. \"What. Is. Your. Name.\"",
-    "normalized_action": {
-      "id": "social_probe_guard_captain",
-      "label": "Galinor continues to press the man. \"What. Is. Your. Name.\"",
-      "type": "social_probe",
-      "prompt": "Galinor continues to press the man. \"What. Is. Your. Name.\""
-    },
-    "resolution_kind": "social_probe",
+    "player_input": "I circle back to an earlier detail we skipped and insist we resolve it before moving on.",
+    "normalized_action": null,
+    "resolution_kind": null,
     "target_scene": null,
     "resolver_result": {
-      "kind": "social_probe",
-      "action_id": "social_probe_guard_captain",
-      "label": "Galinor continues to press the man. \"What. Is. Your. Name.\"",
-      "prompt": "Galinor continues to press the man. \"What. Is. Your. Name.\"",
-      "success": null,
-      "resolved_transition": false,
-      "target_scene_id": null,
-      "clue_id": null,
-      "discovered_clues": [],
-      "state_changes": {},
-      "hint": "Player spoke with Guard Captain. No new information was revealed. Narrate a substantive in-turn response (answer, refusal, evasion, or inability), not dead-air stalling.",
-      "social": {
-        "social_intent_class": "social_exchange",
-        "npc_id": "guard_captain",
-        "npc_name": "Guard Captain",
-        "target_resolved": true,
-        "topic_revealed": null,
-        "skill_check": null,
-        "npc_reply_expected": true,
-        "reply_kind": "explanation",
-        "target_source": "explicit_target",
-        "target_reason": "normalized target_id matches scene-addressable roster",
-        "target_candidate_id": "guard_captain",
-        "target_candidate_valid": true,
-        "stale_interlocutor_cleared": false,
-        "addressability_checked_against": [
-          "active_entities",
-          "entity_presence_active_or_nearby",
-          "scene_addressables",
-          "world_roster_in_scene",
-          "interaction_continuity"
-        ],
-        "declared_switch_detected": false,
-        "declared_switch_target_actor_id": null,
-        "continuity_overridden_by_declared_switch": false,
-        "spoken_vocative_detected": false,
-        "spoken_vocative_target_actor_id": null,
-        "continuity_overridden_by_spoken_vocative": false,
-        "actor_addressable": true,
-        "target_binding": {
-          "final_target_kind": "npc",
-          "npc_id": "guard_captain",
-          "target_source": "native_npc",
-          "origin_actor_id": null,
-          "promoted_this_turn": false
-        },
-        "target_profile_hints": {
-          "guardedness": "medium",
-          "answer_reliability_tier": "medium",
-          "speaks_authoritatively_for_scene": false
-        },
-        "authority_source_used": "explicit_target",
-        "proposed_reply_speaker_id": "guard_captain",
-        "grounding_fallback_applied": false,
-        "grounding_reason_code": "authoritative_speaker_topic_pressure_reinforced",
-        "grounded_speaker_id": "guard_captain",
-        "strategy_forced_to_answer": false,
-        "suppressed_fallback_strategies": []
-      },
-      "requires_check": false,
-      "world_tick_events": []
+      "world_tick_events": [
+        {
+          "type": "faction_pressure",
+          "text": "Ordo Pyric's pressure mounts.",
+          "source": "ordo_pyric"
+        }
+      ]
     },
     "scene_transition": null,
     "response_type_contract": {
-      "required_response_type": "dialogue",
-      "source_route": "social",
-      "allow_escalation": false,
+      "required_response_type": "neutral_narration",
+      "source_route": "exploration",
+      "allow_escalation": true,
       "debug_reasons": [
-        "authoritative_social_target_requires_dialogue",
-        "dialogue_turn_contains_question_expectation",
-        "social_question_guard"
+        "no_stricter_authoritative_contract",
+        "authoritative_state_allows_escalation"
       ]
     },
     "emergent_actor_enrolled": true,
@@ -428,10 +165,10 @@
   },
   "debug_traces": [
     {
-      "timestamp": "2026-04-10T02:31:58.321353Z",
+      "timestamp": "2026-04-10T03:34:38.556222Z",
       "source": "chat",
       "action_type": "chat",
-      "raw_input": "Begin.",
+      "raw_input": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals.",
       "turn_stage_order": [
         "player_input",
         "intent_normalization_expansion",
@@ -444,28 +181,83 @@
         "response_debug_packaging"
       ],
       "incoming_payload": {
-        "text": "Begin."
+        "text": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals."
       },
-      "parsed_intent": null,
+      "parsed_intent": {
+        "id": "we_leave_the_gatehouse_antechamber_and_s",
+        "label": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals.",
+        "type": "travel",
+        "prompt": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals.",
+        "targetSceneId": null,
+        "target_scene_id": null
+      },
       "segmented_turn": {
-        "declared_action_text": "Begin."
+        "declared_action_text": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals."
       },
-      "normalized_action": null,
+      "normalized_action": {
+        "id": "we_leave_the_gatehouse_antechamber_and_s",
+        "label": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals.",
+        "type": "travel",
+        "prompt": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals.",
+        "targetSceneId": null
+      },
       "resolution": {
-        "world_tick_events": [
-          {
-            "type": "faction_pressure",
-            "text": "House Verevin's pressure mounts.",
-            "source": "house_verevin"
-          },
-          {
-            "type": "faction_pressure",
-            "text": "The Ash Cowl's pressure mounts.",
-            "source": "ash_cowl"
-          }
-        ],
+        "kind": "travel",
+        "action_id": "we_leave_the_gatehouse_antechamber_and_s",
+        "label": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals.",
+        "prompt": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals.",
+        "success": false,
+        "resolved_transition": false,
+        "target_scene_id": null,
+        "clue_id": null,
+        "discovered_clues": [],
+        "state_changes": {},
+        "hint": "Player expressed travel intent; target scene not resolved. Narrate based on current scene and intent.",
         "metadata": {
+          "prompt": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals.",
+          "turn_segmentation": {
+            "declared_action_text": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals."
+          },
+          "response_type_contract": {
+            "required_response_type": "action_outcome",
+            "source_route": "exploration",
+            "allow_escalation": false,
+            "escalation_block_reason": "non_hostile_world_action_guard",
+            "strict_target_id": null,
+            "strict_answer_expected": true,
+            "strict_dialogue_expected": false,
+            "action_must_preserve_agency": true,
+            "debug_reasons": [
+              "resolved_world_action_requires_action_outcome",
+              "non_hostile_world_action_guard"
+            ]
+          },
           "emission_debug": {
+            "scene_state_anchor": {
+              "enabled": true,
+              "scene_id": "frontier_gate",
+              "counts": {
+                "location": 17,
+                "actor": 6,
+                "player_action": 14
+              }
+            },
+            "context_separation": {
+              "validation": {
+                "checked": true,
+                "passed": true
+              },
+              "failure_reasons": [],
+              "assertion_flags": {
+                "topic_hijack_background_pressure": false,
+                "pressure_answer_substitution": false,
+                "ambient_pressure_forced_tone_shift": false,
+                "scene_focus_displaced_by_world_pressure": false,
+                "pressure_overweighting": false
+              },
+              "repair_hints": [],
+              "debug_reason_marker": "cs_violations=none;repair_applied=False;pass_after=None;before_len=55;after_len=55;before_head='You act on that move, and the attempt meets resistance.';after_head='You act on that move, and the attempt meets resistance.'"
+            },
             "scene_state_anchor_checked": true,
             "scene_state_anchor_passed": true,
             "scene_state_anchor_failed": false,
@@ -550,6 +342,379 @@
             "anti_railroading_repair_mode": null,
             "anti_railroading_skip_reason": null,
             "anti_railroading_contract_resolution_source": "shipped",
+            "context_separation_contract_resolution_source": "response_policy",
+            "context_separation_skip_reason": null,
+            "context_separation_checked": true,
+            "context_separation_ok": true,
+            "context_separation_failed": false,
+            "context_separation_failure_reasons": [],
+            "context_separation_assertion_flags": {
+              "topic_hijack_background_pressure": false,
+              "pressure_answer_substitution": false,
+              "ambient_pressure_forced_tone_shift": false,
+              "scene_focus_displaced_by_world_pressure": false,
+              "pressure_overweighting": false
+            },
+            "context_separation_repair_hints": [],
+            "context_separation_repaired": false,
+            "context_separation_repair_mode": null,
+            "context_separation_debug_reason_marker": "cs_violations=none;repair_applied=False;pass_after=None;before_len=55;after_len=55;before_head='You act on that move, and the attempt meets resistance.';after_head='You act on that move, and the attempt meets resistance.'",
+            "context_separation_passed_after_repair": null,
+            "player_facing_narration_purity": {
+              "validation": {
+                "checked": true,
+                "passed": true
+              },
+              "violation_keys": [],
+              "repair_hints": [],
+              "repair_modes": [],
+              "preview_before": "You act on that move, and the attempt meets resistance.",
+              "preview_after": "You act on that move, and the attempt meets resistance."
+            },
+            "player_facing_narration_purity_contract_resolution_source": "response_policy",
+            "player_facing_narration_purity_skip_reason": null,
+            "player_facing_narration_purity_checked": true,
+            "player_facing_narration_purity_failed": false,
+            "player_facing_narration_purity_repaired": false,
+            "player_facing_narration_purity_repair_modes": [],
+            "player_facing_narration_purity_violation_keys": [],
+            "player_facing_narration_purity_repair_hints_used": [],
+            "player_facing_narration_purity_collapsed_to_diegetic_core": false,
+            "player_facing_narration_purity_preview_before": "You act on that move, and the attempt meets resistance.",
+            "player_facing_narration_purity_preview_after": "You act on that move, and the attempt meets resistance.",
+            "answer_shape_primacy": {
+              "checked": true,
+              "passed": true,
+              "failure_reasons": []
+            },
+            "answer_shape_primacy_skip_reason": null,
+            "answer_shape_primacy_checked": true,
+            "answer_shape_primacy_failed": false,
+            "answer_shape_primacy_repaired": false,
+            "answer_shape_primacy_repair_mode": null,
+            "answer_shape_primacy_failure_reasons": [],
+            "answer_shape_primacy_preview_before": "You act on that move, and the attempt meets resistance.",
+            "answer_shape_primacy_preview_after": "You act on that move, and the attempt meets resistance.",
+            "interaction_continuity_validation": {
+              "ok": true,
+              "enabled": false,
+              "continuity_strength": "none",
+              "violations": [],
+              "warnings": [],
+              "facts": {
+                "anchored_interlocutor_id": "",
+                "anchor_required": false,
+                "speaker_switch_detected": false,
+                "explicit_switch_cue_present": false,
+                "thread_drop_detected": false,
+                "narrator_bridge_present": false,
+                "multi_speaker_pattern_present": false,
+                "dialogue_presence": false
+              },
+              "debug": {
+                "speaker_labels_detected": [],
+                "cue_labels": [],
+                "reason_path": [
+                  "contract_disabled_or_strength_none"
+                ]
+              }
+            }
+          }
+        },
+        "world_tick_events": [
+          {
+            "type": "faction_pressure",
+            "text": "House Verevin's pressure mounts.",
+            "source": "house_verevin"
+          },
+          {
+            "type": "faction_pressure",
+            "text": "The Ash Cowl's pressure mounts.",
+            "source": "ash_cowl"
+          }
+        ]
+      },
+      "scene_before": "frontier_gate",
+      "scene_after": "frontier_gate",
+      "clue_updates": [],
+      "world_flag_updates": [
+        "clock:time_pressure=1"
+      ],
+      "turn_trace": {
+        "source": "chat",
+        "player_input": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals.",
+        "intent": {
+          "parsed": {
+            "id": "we_leave_the_gatehouse_antechamber_and_s",
+            "label": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals.",
+            "type": "travel",
+            "prompt": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals.",
+            "targetSceneId": null,
+            "target_scene_id": null
+          },
+          "segmented_turn": {
+            "declared_action_text": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals."
+          },
+          "normalized": {
+            "id": "we_leave_the_gatehouse_antechamber_and_s",
+            "label": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals.",
+            "type": "travel",
+            "prompt": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals.",
+            "targetSceneId": null,
+            "target_scene_id": null,
+            "targetEntityId": null,
+            "target_id": null
+          },
+          "implied_context": {
+            "applied": false,
+            "cases": [],
+            "target_id": null,
+            "commitment_broken": false,
+            "break_reason": null
+          }
+        },
+        "classification": {
+          "action_type": "chat",
+          "resolved_kind": "travel",
+          "requires_check": false
+        },
+        "response_type_contract": {
+          "required_response_type": "action_outcome",
+          "source_route": "exploration",
+          "allow_escalation": false,
+          "debug_reasons": [
+            "resolved_world_action_requires_action_outcome",
+            "non_hostile_world_action_guard"
+          ]
+        },
+        "resolution_path": "exploration_engine",
+        "authoritative_state_changes": {
+          "scene_transition": null,
+          "resolution_state_changes": {},
+          "resolution_world_updates": [],
+          "check_request": null
+        },
+        "interaction_after": {
+          "active_interaction_target_id": null,
+          "active_interaction_kind": "travel",
+          "interaction_mode": "activity",
+          "engagement_level": "focused",
+          "conversation_privacy": null,
+          "player_position_context": null
+        },
+        "narration_obligations": {
+          "is_opening_scene": true,
+          "must_advance_scene": false,
+          "should_answer_active_npc": false,
+          "avoid_input_echo": true,
+          "avoid_player_action_restatement": true,
+          "prefer_structured_turn_summary": true,
+          "active_npc_reply_expected": false,
+          "active_npc_reply_kind": null,
+          "scene_momentum_due": false,
+          "scene_momentum_exchanges_since": 0,
+          "scene_momentum_next_due_in": 2,
+          "suppress_non_social_emitters": false
+        },
+        "clues": {
+          "discovered_texts": [],
+          "presentation_changes": [],
+          "known_counts": {
+            "implicit": 0,
+            "explicit": 0,
+            "actionable": 0
+          }
+        },
+        "affordances_after": [
+          {
+            "id": "question_guard_captain",
+            "type": "question",
+            "label": "Talk to Guard Captain",
+            "targetEntityId": "guard_captain"
+          },
+          {
+            "id": "question_tavern_runner",
+            "type": "question",
+            "label": "Talk to Tavern Runner",
+            "targetEntityId": "tavern_runner"
+          },
+          {
+            "id": "question_emergent_town_crier",
+            "type": "question",
+            "label": "Talk to Town Crier",
+            "targetEntityId": "emergent_town_crier"
+          },
+          {
+            "id": "examine_the_rain_spatters_soot_dark_stone_frayed",
+            "type": "investigate",
+            "label": "Examine the Rain spatters soot-dark stone; frayed"
+          },
+          {
+            "id": "examine_refugees",
+            "type": "investigate",
+            "label": "Examine Refugees"
+          }
+        ],
+        "emergent_actor": {
+          "emergent_actor_enrolled": true,
+          "emergent_actor_id": "emergent_lord_aldric",
+          "emergent_actor_source_text": "Lord Aldric"
+        },
+        "leads": {
+          "registry_debug": [],
+          "delta_after_reconcile": [],
+          "changed_count": 0
+        }
+      },
+      "gpt_called": true,
+      "response_ok": true,
+      "error": null,
+      "canonical_entry": {
+        "should_route_social": false,
+        "target_actor_id": null,
+        "target_source": null,
+        "reason": "travel_or_scene_transition_intent",
+        "spoken_text": null,
+        "declared_switch_detected": false,
+        "declared_switch_target_actor_id": null,
+        "continuity_overridden_by_declared_switch": false,
+        "spoken_vocative_detected": false,
+        "spoken_vocative_target_actor_id": null,
+        "continuity_overridden_by_spoken_vocative": false
+      },
+      "canonical_entry_path": "undecided",
+      "canonical_entry_reason": "travel_or_scene_transition_intent",
+      "canonical_entry_target_actor_id": null,
+      "response_type_contract": {
+        "required_response_type": "action_outcome",
+        "source_route": "exploration",
+        "allow_escalation": false,
+        "debug_reasons": [
+          "resolved_world_action_requires_action_outcome",
+          "non_hostile_world_action_guard"
+        ]
+      }
+    },
+    {
+      "timestamp": "2026-04-10T03:34:55.574160Z",
+      "source": "chat",
+      "action_type": "chat",
+      "raw_input": "I circle back to an earlier detail we skipped and insist we resolve it before moving on.",
+      "turn_stage_order": [
+        "player_input",
+        "intent_normalization_expansion",
+        "action_classification",
+        "engine_resolution",
+        "authoritative_state_mutation",
+        "prompt_context_construction",
+        "gpt_narration",
+        "affordance_derivation",
+        "response_debug_packaging"
+      ],
+      "incoming_payload": {
+        "text": "I circle back to an earlier detail we skipped and insist we resolve it before moving on."
+      },
+      "parsed_intent": null,
+      "segmented_turn": {
+        "declared_action_text": "I circle back to an earlier detail we skipped and insist we resolve it before moving on."
+      },
+      "normalized_action": null,
+      "resolution": {
+        "world_tick_events": [
+          {
+            "type": "faction_pressure",
+            "text": "Ordo Pyric's pressure mounts.",
+            "source": "ordo_pyric"
+          }
+        ],
+        "metadata": {
+          "emission_debug": {
+            "scene_state_anchor_checked": true,
+            "scene_state_anchor_passed": true,
+            "scene_state_anchor_failed": false,
+            "scene_state_anchor_skip_reason": null,
+            "scene_state_anchor_matched_kinds": [
+              "location",
+              "actor",
+              "player_action"
+            ],
+            "scene_state_anchor_failure_reasons": [],
+            "scene_state_anchor_repaired": false,
+            "scene_state_anchor_repair_mode": null,
+            "tone_escalation_checked": true,
+            "tone_escalation_ok": true,
+            "tone_escalation_failed": false,
+            "tone_escalation_failure_reasons": [],
+            "tone_escalation_detected_flags": {
+              "guarded": false,
+              "verbal_pressure": false,
+              "explicit_threat": false,
+              "physical_hostility": false,
+              "combat_initiation": false
+            },
+            "tone_escalation_matched_tone_level": null,
+            "tone_escalation_repaired": true,
+            "tone_escalation_repair_mode": "physical_hostility_soften",
+            "tone_escalation_contract_summary": {
+              "enabled": true,
+              "base_tone": "tense",
+              "max_allowed_tone": "tense",
+              "allow_verbal_pressure": true,
+              "allow_explicit_threat": false,
+              "allow_physical_hostility": false,
+              "allow_combat_initiation": false,
+              "justification_reasons": [
+                "visible_facts_or_runtime_topic_pressure_indicate_elevated_tension",
+                "visible_entity_roles_include_authority_guardship",
+                "affiliated_faction_attitude_and_pressure_in_world_state"
+              ]
+            },
+            "tone_escalation_contract_resolution_source": "shipped_response_policy",
+            "tone_escalation_violation_before_repair": true,
+            "narrative_authority_checked": true,
+            "narrative_authority_failed": false,
+            "narrative_authority_failure_reasons": [],
+            "narrative_authority_repaired": false,
+            "narrative_authority_repair_mode": null,
+            "narrative_authority_skip_reason": null,
+            "narrative_authority_deferral_mode": null,
+            "narrative_authority_assertion_flags": {
+              "invented_outcome": false,
+              "invented_hidden_fact": false,
+              "invented_intent": false,
+              "overcertain_unresolved_action": false
+            },
+            "anti_railroading": {
+              "validation": {
+                "checked": true,
+                "passed": true
+              },
+              "failure_reasons": [],
+              "assertion_flags": {
+                "player_decision_override": false,
+                "forced_direction": false,
+                "exclusive_path_claim": false,
+                "lead_plot_gravity": false,
+                "forced_conclusion": false
+              },
+              "repair_hints": []
+            },
+            "anti_railroading_checked": true,
+            "anti_railroading_ok": true,
+            "anti_railroading_failed": false,
+            "anti_railroading_failure_reasons": [],
+            "anti_railroading_assertion_flags": {
+              "player_decision_override": false,
+              "forced_direction": false,
+              "exclusive_path_claim": false,
+              "lead_plot_gravity": false,
+              "forced_conclusion": false
+            },
+            "anti_railroading_repair_hints": [],
+            "anti_railroading_repaired": false,
+            "anti_railroading_repair_mode": null,
+            "anti_railroading_skip_reason": null,
+            "anti_railroading_contract_resolution_source": "shipped",
             "context_separation": {
               "validation": {
                 "checked": true,
@@ -564,7 +729,7 @@
                 "pressure_overweighting": false
               },
               "repair_hints": [],
-              "debug_reason_marker": "cs_violations=none;repair_applied=False;pass_after=None;before_len=43;after_len=43;before_head='The game master is temporarily unavailable.';after_head='The game master is temporarily unavailable.'"
+              "debug_reason_marker": "cs_violations=none;repair_applied=False;pass_after=None;before_len=365;after_len=365;before_head=\"The tavern runner's voice checks the motion before it lands through the rain-drenched murmurings\u2026\";after_head=\"The tavern runner's voice checks the motion before it lands through the rain-drenched murmurings\u2026\""
             },
             "context_separation_contract_resolution_source": "response_policy",
             "context_separation_skip_reason": null,
@@ -582,7 +747,7 @@
             "context_separation_repair_hints": [],
             "context_separation_repaired": false,
             "context_separation_repair_mode": null,
-            "context_separation_debug_reason_marker": "cs_violations=none;repair_applied=False;pass_after=None;before_len=43;after_len=43;before_head='The game master is temporarily unavailable.';after_head='The game master is temporarily unavailable.'",
+            "context_separation_debug_reason_marker": "cs_violations=none;repair_applied=False;pass_after=None;before_len=365;after_len=365;before_head=\"The tavern runner's voice checks the motion before it lands through the rain-drenched murmurings\u2026\";after_head=\"The tavern runner's voice checks the motion before it lands through the rain-drenched murmurings\u2026\"",
             "context_separation_passed_after_repair": null,
             "player_facing_narration_purity": {
               "validation": {
@@ -592,8 +757,8 @@
               "violation_keys": [],
               "repair_hints": [],
               "repair_modes": [],
-              "preview_before": "The game master is temporarily unavailable.",
-              "preview_after": "The game master is temporarily unavailable."
+              "preview_before": "The tavern runner's voice checks the motion before it lands through the rain-drenched murmurings\u2026",
+              "preview_after": "The tavern runner's voice checks the motion before it lands through the rain-drenched murmurings\u2026"
             },
             "player_facing_narration_purity_contract_resolution_source": "response_policy",
             "player_facing_narration_purity_skip_reason": null,
@@ -604,8 +769,8 @@
             "player_facing_narration_purity_violation_keys": [],
             "player_facing_narration_purity_repair_hints_used": [],
             "player_facing_narration_purity_collapsed_to_diegetic_core": false,
-            "player_facing_narration_purity_preview_before": "The game master is temporarily unavailable.",
-            "player_facing_narration_purity_preview_after": "The game master is temporarily unavailable.",
+            "player_facing_narration_purity_preview_before": "The tavern runner's voice checks the motion before it lands through the rain-drenched murmurings\u2026",
+            "player_facing_narration_purity_preview_after": "The tavern runner's voice checks the motion before it lands through the rain-drenched murmurings\u2026",
             "answer_shape_primacy": {
               "checked": true,
               "passed": true,
@@ -617,8 +782,8 @@
             "answer_shape_primacy_repaired": false,
             "answer_shape_primacy_repair_mode": null,
             "answer_shape_primacy_failure_reasons": [],
-            "answer_shape_primacy_preview_before": "The game master is temporarily unavailable.",
-            "answer_shape_primacy_preview_after": "The game master is temporarily unavailable.",
+            "answer_shape_primacy_preview_before": "The tavern runner's voice checks the motion before it lands through the rain-drenched murmurings\u2026",
+            "answer_shape_primacy_preview_after": "The tavern runner's voice checks the motion before it lands through the rain-drenched murmurings\u2026",
             "interaction_continuity_validation": {
               "ok": true,
               "enabled": false,
@@ -650,15 +815,15 @@
       "scene_after": "frontier_gate",
       "clue_updates": [],
       "world_flag_updates": [
-        "clock:time_pressure=1"
+        "clock:time_pressure=2"
       ],
       "turn_trace": {
         "source": "chat",
-        "player_input": "Begin.",
+        "player_input": "I circle back to an earlier detail we skipped and insist we resolve it before moving on.",
         "intent": {
           "parsed": null,
           "segmented_turn": {
-            "declared_action_text": "Begin."
+            "declared_action_text": "I circle back to an earlier detail we skipped and insist we resolve it before moving on."
           },
           "normalized": null,
           "implied_context": {
@@ -692,14 +857,14 @@
         },
         "interaction_after": {
           "active_interaction_target_id": null,
-          "active_interaction_kind": null,
-          "interaction_mode": "none",
-          "engagement_level": "none",
+          "active_interaction_kind": "travel",
+          "interaction_mode": "activity",
+          "engagement_level": "focused",
           "conversation_privacy": null,
           "player_position_context": null
         },
         "narration_obligations": {
-          "is_opening_scene": true,
+          "is_opening_scene": false,
           "must_advance_scene": false,
           "should_answer_active_npc": false,
           "avoid_input_echo": true,
@@ -793,2189 +958,13 @@
           "authoritative_state_allows_escalation"
         ]
       }
-    },
-    {
-      "timestamp": "2026-04-10T02:33:16.697864Z",
-      "source": "chat",
-      "action_type": "chat",
-      "raw_input": "Galinor approaches the nearest guard. \"Watchman, what's your name?\"",
-      "turn_stage_order": [
-        "player_input",
-        "intent_normalization_expansion",
-        "action_classification",
-        "engine_resolution",
-        "authoritative_state_mutation",
-        "prompt_context_construction",
-        "gpt_narration",
-        "affordance_derivation",
-        "response_debug_packaging"
-      ],
-      "incoming_payload": {
-        "text": "Galinor approaches the nearest guard. \"Watchman, what's your name?\""
-      },
-      "parsed_intent": {
-        "id": "question_guard_captain",
-        "label": "Galinor approaches the nearest guard. \"Watchman, what's your name?\"",
-        "type": "question",
-        "social_intent_class": "social_exchange",
-        "prompt": "Galinor approaches the nearest guard. \"Watchman, what's your name?\"",
-        "metadata": {
-          "routed_via_dialogue_lock": true,
-          "route": "dialogue",
-          "canonical_entry_path": "social",
-          "canonical_entry_reason": "declared_action_actor_switch",
-          "canonical_entry_target_actor_id": "guard_captain",
-          "intent_route_debug": {
-            "routed_to": "social_exchange",
-            "route_reason": "declared_action_actor_switch",
-            "addressed_actor_id": "guard_captain",
-            "addressed_actor_source": "declared_action"
-          },
-          "active_interaction_target_id": "guard_captain",
-          "segmented_turn": {
-            "spoken_text": "Watchman, what's your name?",
-            "declared_action_text": "Galinor approaches the nearest guard."
-          },
-          "turn_segmentation": {
-            "spoken_text": "Watchman, what's your name?",
-            "declared_action_text": "Galinor approaches the nearest guard."
-          }
-        },
-        "target_id": "guard_captain",
-        "targetEntityId": "guard_captain"
-      },
-      "segmented_turn": {
-        "spoken_text": "Watchman, what's your name?",
-        "declared_action_text": "Galinor approaches the nearest guard."
-      },
-      "normalized_action": {
-        "id": "question_guard_captain",
-        "label": "Galinor approaches the nearest guard. \"Watchman, what's your name?\"",
-        "type": "question",
-        "prompt": "Galinor approaches the nearest guard. \"Watchman, what's your name?\""
-      },
-      "resolution": {
-        "kind": "question",
-        "action_id": "question_guard_captain",
-        "label": "Galinor approaches the nearest guard. \"Watchman, what's your name?\"",
-        "prompt": "Galinor approaches the nearest guard. \"Watchman, what's your name?\"",
-        "success": true,
-        "resolved_transition": false,
-        "target_scene_id": null,
-        "clue_id": null,
-        "discovered_clues": [
-          "A patrol went missing near the old milestone."
-        ],
-        "state_changes": {
-          "topic_revealed": true,
-          "npc_id": "guard_captain"
-        },
-        "hint": "Player questioned Guard Captain and learned: A patrol went missing near the old milestone.. Narrate the revelation.",
-        "social": {
-          "social_intent_class": "social_exchange",
-          "npc_id": "guard_captain",
-          "npc_name": "Guard Captain",
-          "target_resolved": true,
-          "topic_revealed": {
-            "id": "patrol",
-            "text": "A patrol went missing near the old milestone.",
-            "clue_id": null,
-            "clue_text": null
-          },
-          "skill_check": null,
-          "npc_reply_expected": true,
-          "reply_kind": "answer",
-          "target_source": "explicit_target",
-          "target_reason": "normalized target_id matches scene-addressable roster",
-          "target_candidate_id": "guard_captain",
-          "target_candidate_valid": true,
-          "stale_interlocutor_cleared": false,
-          "addressability_checked_against": [
-            "active_entities",
-            "entity_presence_active_or_nearby",
-            "scene_addressables",
-            "world_roster_in_scene",
-            "interaction_continuity"
-          ],
-          "declared_switch_detected": true,
-          "declared_switch_target_actor_id": "guard_captain",
-          "continuity_overridden_by_declared_switch": false,
-          "spoken_vocative_detected": true,
-          "spoken_vocative_target_actor_id": "guard_captain",
-          "continuity_overridden_by_spoken_vocative": false,
-          "actor_addressable": true,
-          "target_binding": {
-            "final_target_kind": "npc",
-            "npc_id": "guard_captain",
-            "target_source": "native_npc",
-            "origin_actor_id": null,
-            "promoted_this_turn": false
-          },
-          "target_profile_hints": {
-            "guardedness": "medium",
-            "answer_reliability_tier": "medium",
-            "speaks_authoritatively_for_scene": false
-          },
-          "authority_source_used": "explicit_target",
-          "proposed_reply_speaker_id": "guard_captain",
-          "grounding_fallback_applied": false,
-          "grounding_reason_code": "authoritative_speaker_eligible",
-          "grounded_speaker_id": "guard_captain",
-          "lead_discussion_updates": [
-            {
-              "npc_id": "guard_captain",
-              "lead_id": "social_frontier_gate_guard_captain_patrol",
-              "disclosure_level": "explicit",
-              "player_acknowledged": false,
-              "mention_count": 1,
-              "acknowledged_updated": false
-            },
-            {
-              "npc_id": "guard_captain",
-              "lead_id": "lead_frontier_gate_old_milestone",
-              "disclosure_level": "explicit",
-              "player_acknowledged": false,
-              "mention_count": 1,
-              "acknowledged_updated": false
-            }
-          ],
-          "anchor_tokens_extracted": [],
-          "anchor_token_matched": null,
-          "anchor_followup_detected": false,
-          "explanation_of_recent_anchor_followup": false,
-          "correction_reask_followup_detected": false,
-          "recent_reference_clarification_detected": false,
-          "recent_reference_kind": null,
-          "recent_reference_phrase_matched": null,
-          "clarification_prompt_shape": null,
-          "social_escalation": {
-            "escalation_level": 1,
-            "escalation_reason": "first_attempt_same_topic",
-            "escalation_effect": "vague_or_guarded_answer_allowed",
-            "force_partial_answer": false,
-            "force_actionable_lead": false,
-            "add_suspicion": false,
-            "trigger_scene_momentum": false,
-            "convert_refusal_to_conditioned_offer": false,
-            "topic_exhausted": false,
-            "effective_reply_kind": null,
-            "social_question_dimension": "general",
-            "topic_exhausted_for_dimension": false,
-            "valid_followup_detected": false,
-            "prior_same_dimension_answer_exists": false
-          },
-          "social_question_dimension": "general",
-          "topic_exhausted_for_dimension": false,
-          "valid_followup_detected": false,
-          "prior_same_dimension_answer_exists": false,
-          "strategy_forced_to_answer": true,
-          "suppressed_fallback_strategies": [
-            "scene_stall"
-          ],
-          "social_answer_retry_candidate_kind": "structured_fact",
-          "social_answer_retry_anchor_text": "A patrol went missing near the old milestone.",
-          "social_answer_retry_candidate_source": "resolution:topic_revealed"
-        },
-        "requires_check": false,
-        "metadata": {
-          "routed_via_dialogue_lock": true,
-          "route": "dialogue",
-          "canonical_entry_path": "social",
-          "canonical_entry_reason": "declared_action_actor_switch",
-          "canonical_entry_target_actor_id": "guard_captain",
-          "intent_route_debug": {
-            "routed_to": "social_exchange",
-            "route_reason": "declared_action_actor_switch",
-            "addressed_actor_id": "guard_captain",
-            "addressed_actor_source": "declared_action"
-          },
-          "active_interaction_target_id": "guard_captain",
-          "segmented_turn": {
-            "spoken_text": "Watchman, what's your name?",
-            "declared_action_text": "Galinor approaches the nearest guard."
-          },
-          "turn_segmentation": {
-            "spoken_text": "Watchman, what's your name?",
-            "declared_action_text": "Galinor approaches the nearest guard."
-          },
-          "lead_landing": {
-            "revealed_lead_ids": [
-              "social_frontier_gate_guard_captain_patrol"
-            ],
-            "already_known_lead_ids": [],
-            "actionable_lead_ids": [
-              "lead_frontier_gate_old_milestone"
-            ],
-            "lead_write_targets": [
-              "clue_knowledge",
-              "scene_runtime.discovered_clue_ids",
-              "event_log",
-              "pending_leads",
-              "lead_registry"
-            ],
-            "extracted_lead_ids": [
-              "lead_frontier_gate_old_milestone"
-            ],
-            "extracted_lead_sources": [
-              "topic_text:old_milestone"
-            ],
-            "extracted_from_text": false,
-            "extracted_from_reconciled_text": false,
-            "authoritative_created_ids": [
-              "lead_frontier_gate_old_milestone"
-            ],
-            "authoritative_updated_ids": [],
-            "authoritative_unchanged_ids": [],
-            "authoritative_promoted_ids": [
-              "lead_frontier_gate_old_milestone"
-            ]
-          },
-          "response_type_contract": {
-            "required_response_type": "dialogue",
-            "source_route": "social",
-            "allow_escalation": false,
-            "escalation_block_reason": "social_question_guard",
-            "strict_target_id": "guard_captain",
-            "strict_answer_expected": true,
-            "strict_dialogue_expected": true,
-            "action_must_preserve_agency": false,
-            "debug_reasons": [
-              "authoritative_social_target_requires_dialogue",
-              "dialogue_turn_contains_question_expectation",
-              "social_question_guard"
-            ]
-          },
-          "emission_debug": {
-            "scene_state_anchor": {
-              "enabled": true,
-              "scene_id": "frontier_gate",
-              "counts": {
-                "location": 17,
-                "actor": 7,
-                "player_action": 12
-              }
-            },
-            "context_separation": {
-              "validation": {
-                "checked": true,
-                "passed": true
-              },
-              "failure_reasons": [],
-              "assertion_flags": {
-                "topic_hijack_background_pressure": false,
-                "pressure_answer_substitution": false,
-                "ambient_pressure_forced_tone_shift": false,
-                "scene_focus_displaced_by_world_pressure": false,
-                "pressure_overweighting": false
-              },
-              "repair_hints": [],
-              "debug_reason_marker": "cs_violations=none;repair_applied=False;pass_after=None;before_len=26;after_len=26;before_head='\"Old crossroads\u2014that way.\"';after_head='\"Old crossroads\u2014that way.\"'"
-            },
-            "speaker_selection_contract": {
-              "primary_speaker_id": "guard_captain",
-              "primary_speaker_name": "Guard Captain",
-              "primary_speaker_source": "declared_action",
-              "allowed_speaker_ids": [
-                "guard_captain"
-              ],
-              "continuity_locked": true,
-              "continuity_lock_reason": "single_grounded_in_scene_speaker",
-              "speaker_switch_allowed": true,
-              "speaker_switch_reason": "declared_actor_switch",
-              "generic_fallback_forbidden": false,
-              "forbidden_fallback_labels": [
-                "ragged stranger",
-                "stranger",
-                "someone nearby",
-                "someone in the crowd",
-                "a voice nearby",
-                "a passerby",
-                "a bystander",
-                "an onlooker",
-                "a figure nearby",
-                "someone anonymous"
-              ],
-              "interruption_allowed": true,
-              "interruption_requires_scene_event": true,
-              "offscene_speakers_forbidden": true,
-              "debug": {
-                "merged_player_prompt_preview": "Galinor approaches the nearest guard. \"Watchman, what's your name?\" Galinor approaches the nearest guard. \"Watchman, what's your name?\"",
-                "strict_social_active": true,
-                "authoritative_source": "declared_action",
-                "authoritative_reason": "declared_action_phrase_resolved_before_vocative_or_continuity",
-                "grounding_reason_code": "authoritative_speaker_topic_pressure_reinforced",
-                "grounding_fallback_applied": false,
-                "neutral_reply_bridge": false,
-                "why_speaker_chosen": "grounded_in_scene_npc:guard_captain;authority_source=declared_action;grounding=authoritative_speaker_topic_pressure_reinforced",
-                "why_continuity_locked_or_not": "single_grounded_in_scene_speaker",
-                "why_switch_permitted_or_not": "declared_actor_switch",
-                "interruption_tracker_active": false,
-                "resolution_path": "engine_reuse_strict_reconcile"
-              }
-            },
-            "speaker_contract_enforcement": {
-              "contract_present": true,
-              "validation": {
-                "ok": true,
-                "reason_code": "speaker_contract_match",
-                "canonical_speaker_id": "guard_captain",
-                "canonical_speaker_name": "Guard Captain",
-                "repair_mode": "none",
-                "details": {
-                  "signature": {
-                    "speaker_name": null,
-                    "speaker_label": null,
-                    "is_explicitly_attributed": false,
-                    "is_generic_fallback_label": false,
-                    "has_interruption_framing": false,
-                    "confidence": "low"
-                  }
-                }
-              },
-              "final_reason_code": "speaker_contract_match"
-            },
-            "scene_state_anchor_checked": true,
-            "scene_state_anchor_passed": true,
-            "scene_state_anchor_failed": false,
-            "scene_state_anchor_skip_reason": null,
-            "scene_state_anchor_matched_kinds": [
-              "actor",
-              "player_action"
-            ],
-            "scene_state_anchor_failure_reasons": [],
-            "scene_state_anchor_repaired": true,
-            "scene_state_anchor_repair_mode": "actor_rebind",
-            "tone_escalation_checked": true,
-            "tone_escalation_ok": true,
-            "tone_escalation_failed": false,
-            "tone_escalation_failure_reasons": [],
-            "tone_escalation_detected_flags": {
-              "guarded": false,
-              "verbal_pressure": false,
-              "explicit_threat": false,
-              "physical_hostility": false,
-              "combat_initiation": false
-            },
-            "tone_escalation_matched_tone_level": null,
-            "tone_escalation_repaired": false,
-            "tone_escalation_repair_mode": null,
-            "tone_escalation_contract_summary": {
-              "enabled": true,
-              "base_tone": "tense",
-              "max_allowed_tone": "tense",
-              "allow_verbal_pressure": true,
-              "allow_explicit_threat": false,
-              "allow_physical_hostility": false,
-              "allow_combat_initiation": false,
-              "justification_reasons": [
-                "visible_facts_or_runtime_topic_pressure_indicate_elevated_tension",
-                "visible_entity_roles_include_authority_guardship",
-                "affiliated_faction_attitude_and_pressure_in_world_state"
-              ]
-            },
-            "tone_escalation_contract_resolution_source": "shipped_response_policy",
-            "tone_escalation_violation_before_repair": false,
-            "narrative_authority_checked": true,
-            "narrative_authority_failed": false,
-            "narrative_authority_failure_reasons": [],
-            "narrative_authority_repaired": false,
-            "narrative_authority_repair_mode": null,
-            "narrative_authority_skip_reason": null,
-            "narrative_authority_deferral_mode": null,
-            "narrative_authority_assertion_flags": {
-              "invented_outcome": false,
-              "invented_hidden_fact": false,
-              "invented_intent": false,
-              "overcertain_unresolved_action": false
-            },
-            "anti_railroading": {
-              "validation": {
-                "checked": true,
-                "passed": true
-              },
-              "failure_reasons": [],
-              "assertion_flags": {
-                "player_decision_override": false,
-                "forced_direction": false,
-                "exclusive_path_claim": false,
-                "lead_plot_gravity": false,
-                "forced_conclusion": false
-              },
-              "repair_hints": []
-            },
-            "anti_railroading_checked": true,
-            "anti_railroading_ok": true,
-            "anti_railroading_failed": false,
-            "anti_railroading_failure_reasons": [],
-            "anti_railroading_assertion_flags": {
-              "player_decision_override": false,
-              "forced_direction": false,
-              "exclusive_path_claim": false,
-              "lead_plot_gravity": false,
-              "forced_conclusion": false
-            },
-            "anti_railroading_repair_hints": [],
-            "anti_railroading_repaired": false,
-            "anti_railroading_repair_mode": null,
-            "anti_railroading_skip_reason": null,
-            "anti_railroading_contract_resolution_source": "shipped",
-            "context_separation_contract_resolution_source": "response_policy",
-            "context_separation_skip_reason": null,
-            "context_separation_checked": true,
-            "context_separation_ok": true,
-            "context_separation_failed": false,
-            "context_separation_failure_reasons": [],
-            "context_separation_assertion_flags": {
-              "topic_hijack_background_pressure": false,
-              "pressure_answer_substitution": false,
-              "ambient_pressure_forced_tone_shift": false,
-              "scene_focus_displaced_by_world_pressure": false,
-              "pressure_overweighting": false
-            },
-            "context_separation_repair_hints": [],
-            "context_separation_repaired": false,
-            "context_separation_repair_mode": null,
-            "context_separation_debug_reason_marker": "cs_violations=none;repair_applied=False;pass_after=None;before_len=26;after_len=26;before_head='\"Old crossroads\u2014that way.\"';after_head='\"Old crossroads\u2014that way.\"'",
-            "context_separation_passed_after_repair": null,
-            "player_facing_narration_purity": {
-              "validation": {
-                "checked": true,
-                "passed": true
-              },
-              "violation_keys": [],
-              "repair_hints": [],
-              "repair_modes": [],
-              "preview_before": "\"Old crossroads\u2014that way.\"",
-              "preview_after": "\"Old crossroads\u2014that way.\""
-            },
-            "player_facing_narration_purity_contract_resolution_source": "response_policy",
-            "player_facing_narration_purity_skip_reason": null,
-            "player_facing_narration_purity_checked": true,
-            "player_facing_narration_purity_failed": false,
-            "player_facing_narration_purity_repaired": false,
-            "player_facing_narration_purity_repair_modes": [],
-            "player_facing_narration_purity_violation_keys": [],
-            "player_facing_narration_purity_repair_hints_used": [],
-            "player_facing_narration_purity_collapsed_to_diegetic_core": false,
-            "player_facing_narration_purity_preview_before": "\"Old crossroads\u2014that way.\"",
-            "player_facing_narration_purity_preview_after": "\"Old crossroads\u2014that way.\"",
-            "answer_shape_primacy": {
-              "checked": false,
-              "passed": true,
-              "failure_reasons": [],
-              "skip_reason": "turn_not_in_scope"
-            },
-            "answer_shape_primacy_skip_reason": "turn_not_in_scope",
-            "answer_shape_primacy_checked": false,
-            "answer_shape_primacy_failed": false,
-            "answer_shape_primacy_repaired": false,
-            "answer_shape_primacy_repair_mode": null,
-            "answer_shape_primacy_failure_reasons": [],
-            "answer_shape_primacy_preview_before": null,
-            "answer_shape_primacy_preview_after": null,
-            "interaction_continuity_validation": {
-              "ok": true,
-              "enabled": true,
-              "continuity_strength": "strong",
-              "violations": [],
-              "warnings": [],
-              "facts": {
-                "anchored_interlocutor_id": "guard_captain",
-                "anchor_required": true,
-                "speaker_switch_detected": false,
-                "explicit_switch_cue_present": false,
-                "thread_drop_detected": false,
-                "narrator_bridge_present": false,
-                "multi_speaker_pattern_present": false,
-                "dialogue_presence": true
-              },
-              "debug": {
-                "speaker_labels_detected": [],
-                "cue_labels": [],
-                "reason_path": [
-                  "contract_active",
-                  "dialogue_shape_expected"
-                ]
-              }
-            }
-          },
-          "minimum_actionable_lead": {
-            "minimum_actionable_lead_enforced": false,
-            "enforced_lead_id": null,
-            "enforced_lead_source": null
-          },
-          "minimum_actionable_lead_enforced": false,
-          "enforced_lead_id": null,
-          "enforced_lead_source": null
-        },
-        "world_tick_events": [
-          {
-            "type": "faction_pressure",
-            "text": "Ordo Pyric's pressure mounts.",
-            "source": "ordo_pyric"
-          }
-        ]
-      },
-      "scene_before": "frontier_gate",
-      "scene_after": "frontier_gate",
-      "clue_updates": [
-        "A patrol went missing near the old milestone.",
-        "Investigate the old milestone"
-      ],
-      "world_flag_updates": [
-        "clock:time_pressure=2"
-      ],
-      "turn_trace": {
-        "source": "chat",
-        "player_input": "Galinor approaches the nearest guard. \"Watchman, what's your name?\"",
-        "intent": {
-          "parsed": {
-            "id": "question_guard_captain",
-            "label": "Galinor approaches the nearest guard. \"Watchman, what's your name?\"",
-            "type": "question",
-            "social_intent_class": "social_exchange",
-            "prompt": "Galinor approaches the nearest guard. \"Watchman, what's your name?\"",
-            "metadata": {
-              "routed_via_dialogue_lock": true,
-              "route": "dialogue",
-              "canonical_entry_path": "social",
-              "canonical_entry_reason": "declared_action_actor_switch",
-              "canonical_entry_target_actor_id": "guard_captain",
-              "intent_route_debug": {
-                "routed_to": "social_exchange",
-                "route_reason": "declared_action_actor_switch",
-                "addressed_actor_id": "guard_captain",
-                "addressed_actor_source": "declared_action"
-              },
-              "active_interaction_target_id": "guard_captain",
-              "segmented_turn": {
-                "spoken_text": "Watchman, what's your name?",
-                "declared_action_text": "Galinor approaches the nearest guard."
-              },
-              "turn_segmentation": {
-                "spoken_text": "Watchman, what's your name?",
-                "declared_action_text": "Galinor approaches the nearest guard."
-              }
-            },
-            "target_id": "guard_captain",
-            "targetEntityId": "guard_captain"
-          },
-          "segmented_turn": {
-            "spoken_text": "Watchman, what's your name?",
-            "declared_action_text": "Galinor approaches the nearest guard."
-          },
-          "normalized": {
-            "id": "question_guard_captain",
-            "label": "Galinor approaches the nearest guard. \"Watchman, what's your name?\"",
-            "type": "question",
-            "prompt": "Galinor approaches the nearest guard. \"Watchman, what's your name?\"",
-            "targetSceneId": null,
-            "target_scene_id": null,
-            "targetEntityId": "guard_captain",
-            "target_id": "guard_captain"
-          },
-          "implied_context": {
-            "applied": false,
-            "cases": [],
-            "target_id": null,
-            "commitment_broken": false,
-            "break_reason": null
-          }
-        },
-        "classification": {
-          "action_type": "chat",
-          "resolved_kind": "question",
-          "requires_check": false
-        },
-        "response_type_contract": {
-          "required_response_type": "dialogue",
-          "source_route": "social",
-          "allow_escalation": false,
-          "debug_reasons": [
-            "authoritative_social_target_requires_dialogue",
-            "dialogue_turn_contains_question_expectation",
-            "social_question_guard"
-          ]
-        },
-        "resolution_path": "social_engine",
-        "authoritative_state_changes": {
-          "scene_transition": null,
-          "resolution_state_changes": {
-            "topic_revealed": true,
-            "npc_id": "guard_captain"
-          },
-          "resolution_world_updates": [],
-          "check_request": null
-        },
-        "interaction_after": {
-          "active_interaction_target_id": "guard_captain",
-          "active_interaction_kind": "social",
-          "interaction_mode": "social",
-          "engagement_level": "engaged",
-          "conversation_privacy": null,
-          "player_position_context": null
-        },
-        "narration_obligations": {
-          "is_opening_scene": false,
-          "must_advance_scene": false,
-          "should_answer_active_npc": true,
-          "avoid_input_echo": true,
-          "avoid_player_action_restatement": true,
-          "prefer_structured_turn_summary": true,
-          "active_npc_reply_expected": true,
-          "active_npc_reply_kind": "answer",
-          "scene_momentum_due": false,
-          "scene_momentum_exchanges_since": 0,
-          "scene_momentum_next_due_in": 2,
-          "suppress_non_social_emitters": true
-        },
-        "clues": {
-          "discovered_texts": [
-            "A patrol went missing near the old milestone.",
-            "Investigate the old milestone"
-          ],
-          "presentation_changes": [
-            {
-              "id": "lead_frontier_gate_old_milestone",
-              "from": null,
-              "to": "actionable"
-            },
-            {
-              "id": "social_frontier_gate_guard_captain_patrol",
-              "from": null,
-              "to": "explicit"
-            }
-          ],
-          "known_counts": {
-            "implicit": 0,
-            "explicit": 1,
-            "actionable": 1
-          }
-        },
-        "affordances_after": [
-          {
-            "id": "question_guard_captain",
-            "type": "question",
-            "label": "Talk to Guard Captain",
-            "targetEntityId": "guard_captain"
-          },
-          {
-            "id": "question_tavern_runner",
-            "type": "question",
-            "label": "Talk to Tavern Runner",
-            "targetEntityId": "tavern_runner"
-          },
-          {
-            "id": "question_emergent_town_crier",
-            "type": "question",
-            "label": "Talk to Town Crier",
-            "targetEntityId": "emergent_town_crier"
-          },
-          {
-            "id": "examine_the_rain_spatters_soot_dark_stone_frayed",
-            "type": "investigate",
-            "label": "Examine the Rain spatters soot-dark stone; frayed"
-          },
-          {
-            "id": "examine_refugees",
-            "type": "investigate",
-            "label": "Examine Refugees"
-          }
-        ],
-        "emergent_actor": {
-          "emergent_actor_enrolled": true,
-          "emergent_actor_id": "emergent_lord_aldric",
-          "emergent_actor_source_text": "Lord Aldric"
-        },
-        "leads": {
-          "registry_debug": [
-            {
-              "id": "lead_frontier_gate_old_milestone",
-              "title": "Investigate the old milestone",
-              "lifecycle": "discovered",
-              "status": "active",
-              "priority": "0",
-              "last_updated_turn": "2",
-              "last_touched_turn": "2",
-              "superseded_by": "",
-              "obsolete_reason": "",
-              "resolution_type": "",
-              "last_transition_reason": "",
-              "last_transition_category": "",
-              "last_transition_turn": "",
-              "last_transition_from_lifecycle": "",
-              "last_transition_to_lifecycle": "",
-              "last_transition_from_status": "",
-              "last_transition_to_status": "",
-              "last_progression_effects": [],
-              "type": "investigation",
-              "confidence": "plausible",
-              "resolved_at_turn": "",
-              "consequence_ids": ""
-            },
-            {
-              "id": "social_frontier_gate_guard_captain_patrol",
-              "title": "A patrol went missing near the old milestone.",
-              "lifecycle": "discovered",
-              "status": "active",
-              "priority": "0",
-              "last_updated_turn": "2",
-              "last_touched_turn": "2",
-              "superseded_by": "",
-              "obsolete_reason": "",
-              "resolution_type": "",
-              "last_transition_reason": "",
-              "last_transition_category": "",
-              "last_transition_turn": "",
-              "last_transition_from_lifecycle": "",
-              "last_transition_to_lifecycle": "",
-              "last_transition_from_status": "",
-              "last_transition_to_status": "",
-              "last_progression_effects": [],
-              "type": "rumor",
-              "confidence": "plausible",
-              "resolved_at_turn": "",
-              "consequence_ids": ""
-            }
-          ],
-          "delta_after_reconcile": [],
-          "changed_count": 0
-        }
-      },
-      "gpt_called": true,
-      "response_ok": true,
-      "error": null,
-      "canonical_entry": {
-        "should_route_social": true,
-        "target_actor_id": "guard_captain",
-        "target_source": "declared_action",
-        "reason": "declared_action_actor_switch",
-        "spoken_text": "Watchman, what's your name?",
-        "declared_switch_detected": true,
-        "declared_switch_target_actor_id": "guard_captain",
-        "continuity_overridden_by_declared_switch": false,
-        "spoken_vocative_detected": true,
-        "spoken_vocative_target_actor_id": "guard_captain",
-        "continuity_overridden_by_spoken_vocative": false
-      },
-      "canonical_entry_path": "social",
-      "canonical_entry_reason": "declared_action_actor_switch",
-      "canonical_entry_target_actor_id": "guard_captain",
-      "declared_travel_override": {
-        "applied": false
-      },
-      "response_type_contract": {
-        "required_response_type": "dialogue",
-        "source_route": "social",
-        "allow_escalation": false,
-        "debug_reasons": [
-          "authoritative_social_target_requires_dialogue",
-          "dialogue_turn_contains_question_expectation",
-          "social_question_guard"
-        ]
-      }
-    },
-    {
-      "timestamp": "2026-04-10T02:36:02.605162Z",
-      "source": "chat",
-      "action_type": "chat",
-      "raw_input": "\"You don't know you own name? I don't know why they trust you to watch the walls.\"",
-      "turn_stage_order": [
-        "player_input",
-        "intent_normalization_expansion",
-        "action_classification",
-        "engine_resolution",
-        "authoritative_state_mutation",
-        "prompt_context_construction",
-        "gpt_narration",
-        "affordance_derivation",
-        "response_debug_packaging"
-      ],
-      "incoming_payload": {
-        "text": "\"You don't know you own name? I don't know why they trust you to watch the walls.\""
-      },
-      "parsed_intent": {
-        "id": "question_guard_captain",
-        "label": "\"You don't know you own name? I don't know why they trust you to watch the walls.\"",
-        "type": "question",
-        "social_intent_class": "social_exchange",
-        "prompt": "\"You don't know you own name? I don't know why they trust you to watch the walls.\"",
-        "metadata": {
-          "routed_via_dialogue_lock": true,
-          "route": "dialogue",
-          "canonical_entry_path": "social",
-          "canonical_entry_reason": "active_interlocutor_followup",
-          "canonical_entry_target_actor_id": "guard_captain",
-          "intent_route_debug": {
-            "routed_to": "social_exchange",
-            "route_reason": "active_interlocutor_followup",
-            "addressed_actor_id": "guard_captain",
-            "addressed_actor_source": "active_interlocutor"
-          },
-          "active_interaction_target_id": "guard_captain",
-          "segmented_turn": {
-            "spoken_text": "You don't know you own name? I don't know why they trust you to watch the walls."
-          },
-          "turn_segmentation": {
-            "spoken_text": "You don't know you own name? I don't know why they trust you to watch the walls."
-          }
-        },
-        "target_id": "guard_captain",
-        "targetEntityId": "guard_captain"
-      },
-      "segmented_turn": {
-        "spoken_text": "You don't know you own name? I don't know why they trust you to watch the walls."
-      },
-      "normalized_action": {
-        "id": "question_guard_captain",
-        "label": "\"You don't know you own name? I don't know why they trust you to watch the walls.\"",
-        "type": "question",
-        "prompt": "\"You don't know you own name? I don't know why they trust you to watch the walls.\""
-      },
-      "resolution": {
-        "kind": "question",
-        "action_id": "question_guard_captain",
-        "label": "\"You don't know you own name? I don't know why they trust you to watch the walls.\"",
-        "prompt": "\"You don't know you own name? I don't know why they trust you to watch the walls.\"",
-        "success": null,
-        "resolved_transition": false,
-        "target_scene_id": null,
-        "clue_id": null,
-        "discovered_clues": [],
-        "state_changes": {},
-        "hint": "Player spoke with Guard Captain. No new information was revealed. Narrate a substantive in-turn response (answer, refusal, evasion, or inability), not dead-air stalling.",
-        "social": {
-          "social_intent_class": "social_exchange",
-          "npc_id": "guard_captain",
-          "npc_name": "Guard Captain",
-          "target_resolved": true,
-          "topic_revealed": null,
-          "skill_check": null,
-          "npc_reply_expected": true,
-          "reply_kind": "explanation",
-          "target_source": "explicit_target",
-          "target_reason": "normalized target_id matches scene-addressable roster",
-          "target_candidate_id": "guard_captain",
-          "target_candidate_valid": true,
-          "stale_interlocutor_cleared": false,
-          "addressability_checked_against": [
-            "active_entities",
-            "entity_presence_active_or_nearby",
-            "scene_addressables",
-            "world_roster_in_scene",
-            "interaction_continuity"
-          ],
-          "declared_switch_detected": false,
-          "declared_switch_target_actor_id": null,
-          "continuity_overridden_by_declared_switch": false,
-          "spoken_vocative_detected": false,
-          "spoken_vocative_target_actor_id": null,
-          "continuity_overridden_by_spoken_vocative": false,
-          "actor_addressable": true,
-          "target_binding": {
-            "final_target_kind": "npc",
-            "npc_id": "guard_captain",
-            "target_source": "native_npc",
-            "origin_actor_id": null,
-            "promoted_this_turn": false
-          },
-          "target_profile_hints": {
-            "guardedness": "medium",
-            "answer_reliability_tier": "medium",
-            "speaks_authoritatively_for_scene": false
-          },
-          "authority_source_used": "explicit_target",
-          "proposed_reply_speaker_id": "guard_captain",
-          "grounding_fallback_applied": false,
-          "grounding_reason_code": "authoritative_speaker_topic_pressure_reinforced",
-          "grounded_speaker_id": "guard_captain",
-          "anchor_tokens_extracted": [],
-          "anchor_token_matched": null,
-          "anchor_followup_detected": false,
-          "explanation_of_recent_anchor_followup": false,
-          "correction_reask_followup_detected": false,
-          "recent_reference_clarification_detected": false,
-          "recent_reference_kind": null,
-          "recent_reference_phrase_matched": null,
-          "clarification_prompt_shape": null,
-          "social_escalation": {
-            "escalation_level": 2,
-            "escalation_reason": "second_attempt_same_topic",
-            "escalation_effect": "redirect_only_no_new_npc_facts",
-            "force_partial_answer": false,
-            "force_actionable_lead": true,
-            "add_suspicion": false,
-            "trigger_scene_momentum": false,
-            "convert_refusal_to_conditioned_offer": false,
-            "topic_exhausted": false,
-            "effective_reply_kind": null,
-            "social_question_dimension": "general",
-            "topic_exhausted_for_dimension": true,
-            "valid_followup_detected": true,
-            "prior_same_dimension_answer_exists": true
-          },
-          "social_question_dimension": "general",
-          "topic_exhausted_for_dimension": true,
-          "valid_followup_detected": true,
-          "prior_same_dimension_answer_exists": true,
-          "strategy_forced_to_answer": false,
-          "suppressed_fallback_strategies": []
-        },
-        "requires_check": false,
-        "metadata": {
-          "routed_via_dialogue_lock": true,
-          "route": "dialogue",
-          "canonical_entry_path": "social",
-          "canonical_entry_reason": "active_interlocutor_followup",
-          "canonical_entry_target_actor_id": "guard_captain",
-          "intent_route_debug": {
-            "routed_to": "social_exchange",
-            "route_reason": "active_interlocutor_followup",
-            "addressed_actor_id": "guard_captain",
-            "addressed_actor_source": "active_interlocutor"
-          },
-          "active_interaction_target_id": "guard_captain",
-          "segmented_turn": {
-            "spoken_text": "You don't know you own name? I don't know why they trust you to watch the walls."
-          },
-          "turn_segmentation": {
-            "spoken_text": "You don't know you own name? I don't know why they trust you to watch the walls."
-          },
-          "lead_landing": {
-            "revealed_lead_ids": [],
-            "already_known_lead_ids": [],
-            "actionable_lead_ids": [],
-            "lead_write_targets": [],
-            "extracted_lead_ids": [],
-            "extracted_lead_sources": [],
-            "extracted_from_text": false,
-            "extracted_from_reconciled_text": false,
-            "authoritative_created_ids": [],
-            "authoritative_updated_ids": [],
-            "authoritative_unchanged_ids": [],
-            "authoritative_promoted_ids": []
-          },
-          "response_type_contract": {
-            "required_response_type": "dialogue",
-            "source_route": "social",
-            "allow_escalation": false,
-            "escalation_block_reason": "social_question_guard",
-            "strict_target_id": "guard_captain",
-            "strict_answer_expected": true,
-            "strict_dialogue_expected": true,
-            "action_must_preserve_agency": false,
-            "debug_reasons": [
-              "authoritative_social_target_requires_dialogue",
-              "dialogue_turn_contains_question_expectation",
-              "social_question_guard"
-            ]
-          },
-          "emission_debug": {
-            "scene_state_anchor": {
-              "enabled": true,
-              "scene_id": "frontier_gate",
-              "counts": {
-                "location": 17,
-                "actor": 7,
-                "player_action": 12
-              }
-            },
-            "context_separation": {
-              "validation": {
-                "checked": true,
-                "passed": true
-              },
-              "failure_reasons": [],
-              "assertion_flags": {
-                "topic_hijack_background_pressure": false,
-                "pressure_answer_substitution": false,
-                "ambient_pressure_forced_tone_shift": false,
-                "scene_focus_displaced_by_world_pressure": false,
-                "pressure_overweighting": false
-              },
-              "repair_hints": [],
-              "debug_reason_marker": "cs_violations=none;repair_applied=False;pass_after=None;before_len=48;after_len=48;before_head='Guard Captain shakes their head. \"I don\\'t know.\"';after_head='Guard Captain shakes their head. \"I don\\'t know.\"'"
-            },
-            "speaker_selection_contract": {
-              "primary_speaker_id": "guard_captain",
-              "primary_speaker_name": "Guard Captain",
-              "primary_speaker_source": "continuity",
-              "allowed_speaker_ids": [
-                "guard_captain"
-              ],
-              "continuity_locked": true,
-              "continuity_lock_reason": "single_grounded_in_scene_speaker",
-              "speaker_switch_allowed": false,
-              "speaker_switch_reason": "continuity_preserves_active_interlocutor",
-              "generic_fallback_forbidden": false,
-              "forbidden_fallback_labels": [
-                "ragged stranger",
-                "stranger",
-                "someone nearby",
-                "someone in the crowd",
-                "a voice nearby",
-                "a passerby",
-                "a bystander",
-                "an onlooker",
-                "a figure nearby",
-                "someone anonymous"
-              ],
-              "interruption_allowed": true,
-              "interruption_requires_scene_event": true,
-              "offscene_speakers_forbidden": true,
-              "debug": {
-                "merged_player_prompt_preview": "\"You don't know you own name? I don't know why they trust you to watch the walls.\" \"You don't know you own name? I don't know why they trust\u2026",
-                "strict_social_active": true,
-                "authoritative_source": "continuity",
-                "authoritative_reason": "active_interaction_target_id is scene-addressable",
-                "grounding_reason_code": "authoritative_speaker_topic_pressure_reinforced",
-                "grounding_fallback_applied": false,
-                "neutral_reply_bridge": false,
-                "why_speaker_chosen": "grounded_in_scene_npc:guard_captain;authority_source=continuity;grounding=authoritative_speaker_topic_pressure_reinforced",
-                "why_continuity_locked_or_not": "single_grounded_in_scene_speaker",
-                "why_switch_permitted_or_not": "continuity_preserves_active_interlocutor",
-                "interruption_tracker_active": false,
-                "resolution_path": "engine_reuse_strict_reconcile"
-              }
-            },
-            "speaker_contract_enforcement": {
-              "contract_present": true,
-              "validation": {
-                "ok": true,
-                "reason_code": "speaker_contract_match",
-                "canonical_speaker_id": "guard_captain",
-                "canonical_speaker_name": "Guard Captain",
-                "repair_mode": "none",
-                "details": {
-                  "signature": {
-                    "speaker_name": "Guard Captain",
-                    "speaker_label": "Guard Captain",
-                    "is_explicitly_attributed": true,
-                    "is_generic_fallback_label": false,
-                    "has_interruption_framing": false,
-                    "confidence": "high"
-                  }
-                }
-              },
-              "final_reason_code": "speaker_contract_match"
-            },
-            "scene_state_anchor_checked": true,
-            "scene_state_anchor_passed": true,
-            "scene_state_anchor_failed": false,
-            "scene_state_anchor_skip_reason": null,
-            "scene_state_anchor_matched_kinds": [
-              "actor",
-              "player_action"
-            ],
-            "scene_state_anchor_failure_reasons": [],
-            "scene_state_anchor_repaired": false,
-            "scene_state_anchor_repair_mode": null,
-            "tone_escalation_checked": true,
-            "tone_escalation_ok": true,
-            "tone_escalation_failed": false,
-            "tone_escalation_failure_reasons": [],
-            "tone_escalation_detected_flags": {
-              "guarded": false,
-              "verbal_pressure": false,
-              "explicit_threat": false,
-              "physical_hostility": false,
-              "combat_initiation": false
-            },
-            "tone_escalation_matched_tone_level": null,
-            "tone_escalation_repaired": false,
-            "tone_escalation_repair_mode": null,
-            "tone_escalation_contract_summary": {
-              "enabled": true,
-              "base_tone": "tense",
-              "max_allowed_tone": "tense",
-              "allow_verbal_pressure": true,
-              "allow_explicit_threat": false,
-              "allow_physical_hostility": false,
-              "allow_combat_initiation": false,
-              "justification_reasons": [
-                "visible_facts_or_runtime_topic_pressure_indicate_elevated_tension",
-                "visible_entity_roles_include_authority_guardship",
-                "affiliated_faction_attitude_and_pressure_in_world_state"
-              ]
-            },
-            "tone_escalation_contract_resolution_source": "shipped_response_policy",
-            "tone_escalation_violation_before_repair": false,
-            "narrative_authority_checked": true,
-            "narrative_authority_failed": false,
-            "narrative_authority_failure_reasons": [],
-            "narrative_authority_repaired": false,
-            "narrative_authority_repair_mode": null,
-            "narrative_authority_skip_reason": null,
-            "narrative_authority_deferral_mode": null,
-            "narrative_authority_assertion_flags": {
-              "invented_outcome": false,
-              "invented_hidden_fact": false,
-              "invented_intent": false,
-              "overcertain_unresolved_action": false
-            },
-            "anti_railroading": {
-              "validation": {
-                "checked": true,
-                "passed": true
-              },
-              "failure_reasons": [],
-              "assertion_flags": {
-                "player_decision_override": false,
-                "forced_direction": false,
-                "exclusive_path_claim": false,
-                "lead_plot_gravity": false,
-                "forced_conclusion": false
-              },
-              "repair_hints": []
-            },
-            "anti_railroading_checked": true,
-            "anti_railroading_ok": true,
-            "anti_railroading_failed": false,
-            "anti_railroading_failure_reasons": [],
-            "anti_railroading_assertion_flags": {
-              "player_decision_override": false,
-              "forced_direction": false,
-              "exclusive_path_claim": false,
-              "lead_plot_gravity": false,
-              "forced_conclusion": false
-            },
-            "anti_railroading_repair_hints": [],
-            "anti_railroading_repaired": false,
-            "anti_railroading_repair_mode": null,
-            "anti_railroading_skip_reason": null,
-            "anti_railroading_contract_resolution_source": "shipped",
-            "context_separation_contract_resolution_source": "response_policy",
-            "context_separation_skip_reason": null,
-            "context_separation_checked": true,
-            "context_separation_ok": true,
-            "context_separation_failed": false,
-            "context_separation_failure_reasons": [],
-            "context_separation_assertion_flags": {
-              "topic_hijack_background_pressure": false,
-              "pressure_answer_substitution": false,
-              "ambient_pressure_forced_tone_shift": false,
-              "scene_focus_displaced_by_world_pressure": false,
-              "pressure_overweighting": false
-            },
-            "context_separation_repair_hints": [],
-            "context_separation_repaired": false,
-            "context_separation_repair_mode": null,
-            "context_separation_debug_reason_marker": "cs_violations=none;repair_applied=False;pass_after=None;before_len=48;after_len=48;before_head='Guard Captain shakes their head. \"I don\\'t know.\"';after_head='Guard Captain shakes their head. \"I don\\'t know.\"'",
-            "context_separation_passed_after_repair": null,
-            "player_facing_narration_purity": {
-              "validation": {
-                "checked": true,
-                "passed": true
-              },
-              "violation_keys": [],
-              "repair_hints": [],
-              "repair_modes": [],
-              "preview_before": "Guard Captain shakes their head. \"I don't know.\"",
-              "preview_after": "Guard Captain shakes their head. \"I don't know.\""
-            },
-            "player_facing_narration_purity_contract_resolution_source": "response_policy",
-            "player_facing_narration_purity_skip_reason": null,
-            "player_facing_narration_purity_checked": true,
-            "player_facing_narration_purity_failed": false,
-            "player_facing_narration_purity_repaired": false,
-            "player_facing_narration_purity_repair_modes": [],
-            "player_facing_narration_purity_violation_keys": [],
-            "player_facing_narration_purity_repair_hints_used": [],
-            "player_facing_narration_purity_collapsed_to_diegetic_core": false,
-            "player_facing_narration_purity_preview_before": "Guard Captain shakes their head. \"I don't know.\"",
-            "player_facing_narration_purity_preview_after": "Guard Captain shakes their head. \"I don't know.\"",
-            "answer_shape_primacy": {
-              "checked": false,
-              "passed": true,
-              "failure_reasons": [],
-              "skip_reason": "turn_not_in_scope"
-            },
-            "answer_shape_primacy_skip_reason": "turn_not_in_scope",
-            "answer_shape_primacy_checked": false,
-            "answer_shape_primacy_failed": false,
-            "answer_shape_primacy_repaired": false,
-            "answer_shape_primacy_repair_mode": null,
-            "answer_shape_primacy_failure_reasons": [],
-            "answer_shape_primacy_preview_before": null,
-            "answer_shape_primacy_preview_after": null,
-            "interaction_continuity_validation": {
-              "ok": true,
-              "enabled": true,
-              "continuity_strength": "strong",
-              "violations": [],
-              "warnings": [],
-              "facts": {
-                "anchored_interlocutor_id": "guard_captain",
-                "anchor_required": true,
-                "speaker_switch_detected": false,
-                "explicit_switch_cue_present": false,
-                "thread_drop_detected": false,
-                "narrator_bridge_present": false,
-                "multi_speaker_pattern_present": false,
-                "dialogue_presence": true
-              },
-              "debug": {
-                "speaker_labels_detected": [],
-                "cue_labels": [],
-                "reason_path": [
-                  "contract_active",
-                  "dialogue_shape_expected"
-                ]
-              }
-            }
-          }
-        },
-        "world_tick_events": []
-      },
-      "scene_before": "frontier_gate",
-      "scene_after": "frontier_gate",
-      "clue_updates": [],
-      "world_flag_updates": [
-        "clock:time_pressure=3"
-      ],
-      "turn_trace": {
-        "source": "chat",
-        "player_input": "\"You don't know you own name? I don't know why they trust you to watch the walls.\"",
-        "intent": {
-          "parsed": {
-            "id": "question_guard_captain",
-            "label": "\"You don't know you own name? I don't know why they trust you to watch the walls.\"",
-            "type": "question",
-            "social_intent_class": "social_exchange",
-            "prompt": "\"You don't know you own name? I don't know why they trust you to watch the walls.\"",
-            "metadata": {
-              "routed_via_dialogue_lock": true,
-              "route": "dialogue",
-              "canonical_entry_path": "social",
-              "canonical_entry_reason": "active_interlocutor_followup",
-              "canonical_entry_target_actor_id": "guard_captain",
-              "intent_route_debug": {
-                "routed_to": "social_exchange",
-                "route_reason": "active_interlocutor_followup",
-                "addressed_actor_id": "guard_captain",
-                "addressed_actor_source": "active_interlocutor"
-              },
-              "active_interaction_target_id": "guard_captain",
-              "segmented_turn": {
-                "spoken_text": "You don't know you own name? I don't know why they trust you to watch the walls."
-              },
-              "turn_segmentation": {
-                "spoken_text": "You don't know you own name? I don't know why they trust you to watch the walls."
-              }
-            },
-            "target_id": "guard_captain",
-            "targetEntityId": "guard_captain"
-          },
-          "segmented_turn": {
-            "spoken_text": "You don't know you own name? I don't know why they trust you to watch the walls."
-          },
-          "normalized": {
-            "id": "question_guard_captain",
-            "label": "\"You don't know you own name? I don't know why they trust you to watch the walls.\"",
-            "type": "question",
-            "prompt": "\"You don't know you own name? I don't know why they trust you to watch the walls.\"",
-            "targetSceneId": null,
-            "target_scene_id": null,
-            "targetEntityId": "guard_captain",
-            "target_id": "guard_captain"
-          },
-          "implied_context": {
-            "applied": false,
-            "cases": [],
-            "target_id": "guard_captain",
-            "commitment_broken": false,
-            "break_reason": null
-          }
-        },
-        "classification": {
-          "action_type": "chat",
-          "resolved_kind": "question",
-          "requires_check": false
-        },
-        "response_type_contract": {
-          "required_response_type": "dialogue",
-          "source_route": "social",
-          "allow_escalation": false,
-          "debug_reasons": [
-            "authoritative_social_target_requires_dialogue",
-            "dialogue_turn_contains_question_expectation",
-            "social_question_guard"
-          ]
-        },
-        "resolution_path": "social_engine",
-        "authoritative_state_changes": {
-          "scene_transition": null,
-          "resolution_state_changes": {},
-          "resolution_world_updates": [],
-          "check_request": null
-        },
-        "interaction_after": {
-          "active_interaction_target_id": "guard_captain",
-          "active_interaction_kind": "social",
-          "interaction_mode": "social",
-          "engagement_level": "engaged",
-          "conversation_privacy": null,
-          "player_position_context": null
-        },
-        "narration_obligations": {
-          "is_opening_scene": false,
-          "must_advance_scene": false,
-          "should_answer_active_npc": true,
-          "avoid_input_echo": true,
-          "avoid_player_action_restatement": true,
-          "prefer_structured_turn_summary": true,
-          "active_npc_reply_expected": true,
-          "active_npc_reply_kind": "explanation",
-          "scene_momentum_due": false,
-          "scene_momentum_exchanges_since": 0,
-          "scene_momentum_next_due_in": 2,
-          "suppress_non_social_emitters": true
-        },
-        "clues": {
-          "discovered_texts": [],
-          "presentation_changes": [],
-          "known_counts": {
-            "implicit": 0,
-            "explicit": 1,
-            "actionable": 1
-          }
-        },
-        "affordances_after": [
-          {
-            "id": "question_guard_captain",
-            "type": "question",
-            "label": "Talk to Guard Captain",
-            "targetEntityId": "guard_captain"
-          },
-          {
-            "id": "question_tavern_runner",
-            "type": "question",
-            "label": "Talk to Tavern Runner",
-            "targetEntityId": "tavern_runner"
-          },
-          {
-            "id": "question_emergent_town_crier",
-            "type": "question",
-            "label": "Talk to Town Crier",
-            "targetEntityId": "emergent_town_crier"
-          },
-          {
-            "id": "examine_the_rain_spatters_soot_dark_stone_frayed",
-            "type": "investigate",
-            "label": "Examine the Rain spatters soot-dark stone; frayed"
-          },
-          {
-            "id": "examine_refugees",
-            "type": "investigate",
-            "label": "Examine Refugees"
-          }
-        ],
-        "emergent_actor": {
-          "emergent_actor_enrolled": true,
-          "emergent_actor_id": "emergent_lord_aldric",
-          "emergent_actor_source_text": "Lord Aldric"
-        },
-        "leads": {
-          "registry_debug": [
-            {
-              "id": "lead_frontier_gate_old_milestone",
-              "title": "Investigate the old milestone",
-              "lifecycle": "discovered",
-              "status": "active",
-              "priority": "0",
-              "last_updated_turn": "2",
-              "last_touched_turn": "2",
-              "superseded_by": "",
-              "obsolete_reason": "",
-              "resolution_type": "",
-              "last_transition_reason": "",
-              "last_transition_category": "",
-              "last_transition_turn": "",
-              "last_transition_from_lifecycle": "",
-              "last_transition_to_lifecycle": "",
-              "last_transition_from_status": "",
-              "last_transition_to_status": "",
-              "last_progression_effects": [],
-              "type": "investigation",
-              "confidence": "plausible",
-              "resolved_at_turn": "",
-              "consequence_ids": ""
-            },
-            {
-              "id": "social_frontier_gate_guard_captain_patrol",
-              "title": "A patrol went missing near the old milestone.",
-              "lifecycle": "discovered",
-              "status": "active",
-              "priority": "0",
-              "last_updated_turn": "2",
-              "last_touched_turn": "2",
-              "superseded_by": "",
-              "obsolete_reason": "",
-              "resolution_type": "",
-              "last_transition_reason": "",
-              "last_transition_category": "",
-              "last_transition_turn": "",
-              "last_transition_from_lifecycle": "",
-              "last_transition_to_lifecycle": "",
-              "last_transition_from_status": "",
-              "last_transition_to_status": "",
-              "last_progression_effects": [],
-              "type": "rumor",
-              "confidence": "plausible",
-              "resolved_at_turn": "",
-              "consequence_ids": ""
-            }
-          ],
-          "delta_after_reconcile": [],
-          "changed_count": 0
-        }
-      },
-      "gpt_called": true,
-      "response_ok": true,
-      "error": null,
-      "canonical_entry": {
-        "should_route_social": true,
-        "target_actor_id": "guard_captain",
-        "target_source": "active_interlocutor",
-        "reason": "active_interlocutor_followup",
-        "spoken_text": "You don't know you own name? I don't know why they trust you to watch the walls.",
-        "declared_switch_detected": false,
-        "declared_switch_target_actor_id": null,
-        "continuity_overridden_by_declared_switch": false,
-        "spoken_vocative_detected": false,
-        "spoken_vocative_target_actor_id": null,
-        "continuity_overridden_by_spoken_vocative": false
-      },
-      "canonical_entry_path": "social",
-      "canonical_entry_reason": "active_interlocutor_followup",
-      "canonical_entry_target_actor_id": "guard_captain",
-      "declared_travel_override": {
-        "applied": false
-      },
-      "response_type_contract": {
-        "required_response_type": "dialogue",
-        "source_route": "social",
-        "allow_escalation": false,
-        "debug_reasons": [
-          "authoritative_social_target_requires_dialogue",
-          "dialogue_turn_contains_question_expectation",
-          "social_question_guard"
-        ]
-      }
-    },
-    {
-      "timestamp": "2026-04-10T02:36:59.043805Z",
-      "source": "chat",
-      "action_type": "chat",
-      "raw_input": "Galinor continues to press the man. \"What. Is. Your. Name.\"",
-      "turn_stage_order": [
-        "player_input",
-        "intent_normalization_expansion",
-        "action_classification",
-        "engine_resolution",
-        "authoritative_state_mutation",
-        "prompt_context_construction",
-        "gpt_narration",
-        "affordance_derivation",
-        "response_debug_packaging"
-      ],
-      "incoming_payload": {
-        "text": "Galinor continues to press the man. \"What. Is. Your. Name.\""
-      },
-      "parsed_intent": {
-        "id": "social_probe_guard_captain",
-        "label": "Galinor continues to press the man. \"What. Is. Your. Name.\"",
-        "type": "social_probe",
-        "social_intent_class": "social_exchange",
-        "prompt": "Galinor continues to press the man. \"What. Is. Your. Name.\"",
-        "metadata": {
-          "routed_via_dialogue_lock": true,
-          "route": "dialogue",
-          "canonical_entry_path": "social",
-          "canonical_entry_reason": "active_interlocutor_followup",
-          "canonical_entry_target_actor_id": "guard_captain",
-          "intent_route_debug": {
-            "routed_to": "social_exchange",
-            "route_reason": "active_interlocutor_followup",
-            "addressed_actor_id": "guard_captain",
-            "addressed_actor_source": "active_interlocutor"
-          },
-          "active_interaction_target_id": "guard_captain",
-          "segmented_turn": {
-            "spoken_text": "What. Is. Your. Name.",
-            "declared_action_text": "Galinor continues to press the man."
-          },
-          "turn_segmentation": {
-            "spoken_text": "What. Is. Your. Name.",
-            "declared_action_text": "Galinor continues to press the man."
-          }
-        },
-        "target_id": "guard_captain",
-        "targetEntityId": "guard_captain"
-      },
-      "segmented_turn": {
-        "spoken_text": "What. Is. Your. Name.",
-        "declared_action_text": "Galinor continues to press the man."
-      },
-      "normalized_action": {
-        "id": "social_probe_guard_captain",
-        "label": "Galinor continues to press the man. \"What. Is. Your. Name.\"",
-        "type": "social_probe",
-        "prompt": "Galinor continues to press the man. \"What. Is. Your. Name.\""
-      },
-      "resolution": {
-        "kind": "social_probe",
-        "action_id": "social_probe_guard_captain",
-        "label": "Galinor continues to press the man. \"What. Is. Your. Name.\"",
-        "prompt": "Galinor continues to press the man. \"What. Is. Your. Name.\"",
-        "success": null,
-        "resolved_transition": false,
-        "target_scene_id": null,
-        "clue_id": null,
-        "discovered_clues": [],
-        "state_changes": {},
-        "hint": "Player spoke with Guard Captain. No new information was revealed. Narrate a substantive in-turn response (answer, refusal, evasion, or inability), not dead-air stalling.",
-        "social": {
-          "social_intent_class": "social_exchange",
-          "npc_id": "guard_captain",
-          "npc_name": "Guard Captain",
-          "target_resolved": true,
-          "topic_revealed": null,
-          "skill_check": null,
-          "npc_reply_expected": true,
-          "reply_kind": "explanation",
-          "target_source": "explicit_target",
-          "target_reason": "normalized target_id matches scene-addressable roster",
-          "target_candidate_id": "guard_captain",
-          "target_candidate_valid": true,
-          "stale_interlocutor_cleared": false,
-          "addressability_checked_against": [
-            "active_entities",
-            "entity_presence_active_or_nearby",
-            "scene_addressables",
-            "world_roster_in_scene",
-            "interaction_continuity"
-          ],
-          "declared_switch_detected": false,
-          "declared_switch_target_actor_id": null,
-          "continuity_overridden_by_declared_switch": false,
-          "spoken_vocative_detected": false,
-          "spoken_vocative_target_actor_id": null,
-          "continuity_overridden_by_spoken_vocative": false,
-          "actor_addressable": true,
-          "target_binding": {
-            "final_target_kind": "npc",
-            "npc_id": "guard_captain",
-            "target_source": "native_npc",
-            "origin_actor_id": null,
-            "promoted_this_turn": false
-          },
-          "target_profile_hints": {
-            "guardedness": "medium",
-            "answer_reliability_tier": "medium",
-            "speaks_authoritatively_for_scene": false
-          },
-          "authority_source_used": "explicit_target",
-          "proposed_reply_speaker_id": "guard_captain",
-          "grounding_fallback_applied": false,
-          "grounding_reason_code": "authoritative_speaker_topic_pressure_reinforced",
-          "grounded_speaker_id": "guard_captain",
-          "strategy_forced_to_answer": false,
-          "suppressed_fallback_strategies": []
-        },
-        "requires_check": false,
-        "metadata": {
-          "routed_via_dialogue_lock": true,
-          "route": "dialogue",
-          "canonical_entry_path": "social",
-          "canonical_entry_reason": "active_interlocutor_followup",
-          "canonical_entry_target_actor_id": "guard_captain",
-          "intent_route_debug": {
-            "routed_to": "social_exchange",
-            "route_reason": "active_interlocutor_followup",
-            "addressed_actor_id": "guard_captain",
-            "addressed_actor_source": "active_interlocutor"
-          },
-          "active_interaction_target_id": "guard_captain",
-          "segmented_turn": {
-            "spoken_text": "What. Is. Your. Name.",
-            "declared_action_text": "Galinor continues to press the man."
-          },
-          "turn_segmentation": {
-            "spoken_text": "What. Is. Your. Name.",
-            "declared_action_text": "Galinor continues to press the man."
-          },
-          "lead_landing": {
-            "revealed_lead_ids": [],
-            "already_known_lead_ids": [],
-            "actionable_lead_ids": [],
-            "lead_write_targets": [],
-            "extracted_lead_ids": [],
-            "extracted_lead_sources": [],
-            "extracted_from_text": false,
-            "extracted_from_reconciled_text": false,
-            "authoritative_created_ids": [],
-            "authoritative_updated_ids": [],
-            "authoritative_unchanged_ids": [],
-            "authoritative_promoted_ids": []
-          },
-          "response_type_contract": {
-            "required_response_type": "dialogue",
-            "source_route": "social",
-            "allow_escalation": false,
-            "escalation_block_reason": "social_question_guard",
-            "strict_target_id": "guard_captain",
-            "strict_answer_expected": true,
-            "strict_dialogue_expected": true,
-            "action_must_preserve_agency": false,
-            "debug_reasons": [
-              "authoritative_social_target_requires_dialogue",
-              "dialogue_turn_contains_question_expectation",
-              "social_question_guard"
-            ]
-          },
-          "emission_debug": {
-            "scene_state_anchor": {
-              "enabled": true,
-              "scene_id": "frontier_gate",
-              "counts": {
-                "location": 17,
-                "actor": 7,
-                "player_action": 10
-              }
-            },
-            "context_separation": {
-              "validation": {
-                "checked": true,
-                "passed": true
-              },
-              "failure_reasons": [],
-              "assertion_flags": {
-                "topic_hijack_background_pressure": false,
-                "pressure_answer_substitution": false,
-                "ambient_pressure_forced_tone_shift": false,
-                "scene_focus_displaced_by_world_pressure": false,
-                "pressure_overweighting": false
-              },
-              "repair_hints": [],
-              "debug_reason_marker": "cs_violations=none;repair_applied=False;pass_after=None;before_len=53;after_len=53;before_head='South road.\" Guard Captain nods once. \"Old Millstone.';after_head='South road.\" Guard Captain nods once. \"Old Millstone.'"
-            },
-            "speaker_selection_contract": {
-              "primary_speaker_id": "guard_captain",
-              "primary_speaker_name": "Guard Captain",
-              "primary_speaker_source": "continuity",
-              "allowed_speaker_ids": [
-                "guard_captain"
-              ],
-              "continuity_locked": true,
-              "continuity_lock_reason": "single_grounded_in_scene_speaker",
-              "speaker_switch_allowed": false,
-              "speaker_switch_reason": "continuity_preserves_active_interlocutor",
-              "generic_fallback_forbidden": false,
-              "forbidden_fallback_labels": [
-                "ragged stranger",
-                "stranger",
-                "someone nearby",
-                "someone in the crowd",
-                "a voice nearby",
-                "a passerby",
-                "a bystander",
-                "an onlooker",
-                "a figure nearby",
-                "someone anonymous"
-              ],
-              "interruption_allowed": true,
-              "interruption_requires_scene_event": true,
-              "offscene_speakers_forbidden": true,
-              "debug": {
-                "merged_player_prompt_preview": "Galinor continues to press the man. \"What. Is. Your. Name.\" Galinor continues to press the man. \"What. Is. Your. Name.\"",
-                "strict_social_active": true,
-                "authoritative_source": "continuity",
-                "authoritative_reason": "active_interaction_target_id is scene-addressable",
-                "grounding_reason_code": "authoritative_speaker_topic_pressure_reinforced",
-                "grounding_fallback_applied": false,
-                "neutral_reply_bridge": false,
-                "why_speaker_chosen": "grounded_in_scene_npc:guard_captain;authority_source=continuity;grounding=authoritative_speaker_topic_pressure_reinforced",
-                "why_continuity_locked_or_not": "single_grounded_in_scene_speaker",
-                "why_switch_permitted_or_not": "continuity_preserves_active_interlocutor",
-                "interruption_tracker_active": false,
-                "resolution_path": "engine_reuse_strict_reconcile"
-              }
-            },
-            "speaker_contract_enforcement": {
-              "contract_present": true,
-              "validation": {
-                "ok": false,
-                "reason_code": "speaker_binding_mismatch",
-                "canonical_speaker_id": "guard_captain",
-                "canonical_speaker_name": "Guard Captain",
-                "repair_mode": "local_rebind",
-                "details": {
-                  "signature": {
-                    "speaker_name": "South road.\" Guard Captain",
-                    "speaker_label": "South road.\" Guard Captain",
-                    "is_explicitly_attributed": true,
-                    "is_generic_fallback_label": false,
-                    "has_interruption_framing": false,
-                    "confidence": "high"
-                  },
-                  "rule": "continuity_locked_explicit_mismatch"
-                }
-              },
-              "repair": {
-                "initial_repair_mode": "local_rebind"
-              },
-              "final_reason_code": "speaker_binding_mismatch",
-              "post_validation": {
-                "ok": false,
-                "reason_code": "speaker_binding_mismatch",
-                "canonical_speaker_id": "guard_captain",
-                "canonical_speaker_name": "Guard Captain",
-                "repair_mode": "local_rebind",
-                "details": {
-                  "signature": {
-                    "speaker_name": "South road.\" Guard Captain",
-                    "speaker_label": "South road.\" Guard Captain",
-                    "is_explicitly_attributed": true,
-                    "is_generic_fallback_label": false,
-                    "has_interruption_framing": false,
-                    "confidence": "high"
-                  },
-                  "rule": "continuity_locked_explicit_mismatch"
-                }
-              }
-            },
-            "scene_state_anchor_checked": true,
-            "scene_state_anchor_passed": true,
-            "scene_state_anchor_failed": false,
-            "scene_state_anchor_skip_reason": null,
-            "scene_state_anchor_matched_kinds": [
-              "actor"
-            ],
-            "scene_state_anchor_failure_reasons": [],
-            "scene_state_anchor_repaired": false,
-            "scene_state_anchor_repair_mode": null,
-            "tone_escalation_checked": true,
-            "tone_escalation_ok": true,
-            "tone_escalation_failed": false,
-            "tone_escalation_failure_reasons": [],
-            "tone_escalation_detected_flags": {
-              "guarded": false,
-              "verbal_pressure": false,
-              "explicit_threat": false,
-              "physical_hostility": false,
-              "combat_initiation": false
-            },
-            "tone_escalation_matched_tone_level": null,
-            "tone_escalation_repaired": false,
-            "tone_escalation_repair_mode": null,
-            "tone_escalation_contract_summary": {
-              "enabled": true,
-              "base_tone": "tense",
-              "max_allowed_tone": "tense",
-              "allow_verbal_pressure": true,
-              "allow_explicit_threat": false,
-              "allow_physical_hostility": false,
-              "allow_combat_initiation": false,
-              "justification_reasons": [
-                "visible_facts_or_runtime_topic_pressure_indicate_elevated_tension",
-                "visible_entity_roles_include_authority_guardship",
-                "affiliated_faction_attitude_and_pressure_in_world_state",
-                "resolution_kind_or_mechanical_payload_is_risky"
-              ]
-            },
-            "tone_escalation_contract_resolution_source": "shipped_response_policy",
-            "tone_escalation_violation_before_repair": false,
-            "narrative_authority_checked": true,
-            "narrative_authority_failed": false,
-            "narrative_authority_failure_reasons": [],
-            "narrative_authority_repaired": false,
-            "narrative_authority_repair_mode": null,
-            "narrative_authority_skip_reason": null,
-            "narrative_authority_deferral_mode": null,
-            "narrative_authority_assertion_flags": {
-              "invented_outcome": false,
-              "invented_hidden_fact": false,
-              "invented_intent": false,
-              "overcertain_unresolved_action": false
-            },
-            "anti_railroading": {
-              "validation": {
-                "checked": true,
-                "passed": true
-              },
-              "failure_reasons": [],
-              "assertion_flags": {
-                "player_decision_override": false,
-                "forced_direction": false,
-                "exclusive_path_claim": false,
-                "lead_plot_gravity": false,
-                "forced_conclusion": false
-              },
-              "repair_hints": []
-            },
-            "anti_railroading_checked": true,
-            "anti_railroading_ok": true,
-            "anti_railroading_failed": false,
-            "anti_railroading_failure_reasons": [],
-            "anti_railroading_assertion_flags": {
-              "player_decision_override": false,
-              "forced_direction": false,
-              "exclusive_path_claim": false,
-              "lead_plot_gravity": false,
-              "forced_conclusion": false
-            },
-            "anti_railroading_repair_hints": [],
-            "anti_railroading_repaired": false,
-            "anti_railroading_repair_mode": null,
-            "anti_railroading_skip_reason": null,
-            "anti_railroading_contract_resolution_source": "shipped",
-            "context_separation_contract_resolution_source": "response_policy",
-            "context_separation_skip_reason": null,
-            "context_separation_checked": true,
-            "context_separation_ok": true,
-            "context_separation_failed": false,
-            "context_separation_failure_reasons": [],
-            "context_separation_assertion_flags": {
-              "topic_hijack_background_pressure": false,
-              "pressure_answer_substitution": false,
-              "ambient_pressure_forced_tone_shift": false,
-              "scene_focus_displaced_by_world_pressure": false,
-              "pressure_overweighting": false
-            },
-            "context_separation_repair_hints": [],
-            "context_separation_repaired": false,
-            "context_separation_repair_mode": null,
-            "context_separation_debug_reason_marker": "cs_violations=none;repair_applied=False;pass_after=None;before_len=53;after_len=53;before_head='South road.\" Guard Captain nods once. \"Old Millstone.';after_head='South road.\" Guard Captain nods once. \"Old Millstone.'",
-            "context_separation_passed_after_repair": null,
-            "player_facing_narration_purity": {
-              "validation": {
-                "checked": true,
-                "passed": true
-              },
-              "violation_keys": [],
-              "repair_hints": [],
-              "repair_modes": [],
-              "preview_before": "South road.\" Guard Captain nods once. \"Old Millstone.",
-              "preview_after": "South road.\" Guard Captain nods once. \"Old Millstone."
-            },
-            "player_facing_narration_purity_contract_resolution_source": "response_policy",
-            "player_facing_narration_purity_skip_reason": null,
-            "player_facing_narration_purity_checked": true,
-            "player_facing_narration_purity_failed": false,
-            "player_facing_narration_purity_repaired": false,
-            "player_facing_narration_purity_repair_modes": [],
-            "player_facing_narration_purity_violation_keys": [],
-            "player_facing_narration_purity_repair_hints_used": [],
-            "player_facing_narration_purity_collapsed_to_diegetic_core": false,
-            "player_facing_narration_purity_preview_before": "South road.\" Guard Captain nods once. \"Old Millstone.",
-            "player_facing_narration_purity_preview_after": "South road.\" Guard Captain nods once. \"Old Millstone.",
-            "answer_shape_primacy": {
-              "checked": false,
-              "passed": true,
-              "failure_reasons": [],
-              "skip_reason": "turn_not_in_scope"
-            },
-            "answer_shape_primacy_skip_reason": "turn_not_in_scope",
-            "answer_shape_primacy_checked": false,
-            "answer_shape_primacy_failed": false,
-            "answer_shape_primacy_repaired": false,
-            "answer_shape_primacy_repair_mode": null,
-            "answer_shape_primacy_failure_reasons": [],
-            "answer_shape_primacy_preview_before": null,
-            "answer_shape_primacy_preview_after": null,
-            "interaction_continuity_speaker_binding_bridge": {
-              "applied": true,
-              "failure_reason": "speaker_binding_mismatch_under_strong_continuity",
-              "synthetic_violation": "malformed_speaker_attribution_under_continuity",
-              "speaker_reason_code": "speaker_binding_mismatch",
-              "malformed_attribution_detected": true
-            },
-            "interaction_continuity_validation": {
-              "ok": true,
-              "enabled": true,
-              "continuity_strength": "strong",
-              "violations": [],
-              "warnings": [],
-              "facts": {
-                "anchored_interlocutor_id": "guard_captain",
-                "anchor_required": true,
-                "speaker_switch_detected": false,
-                "explicit_switch_cue_present": false,
-                "thread_drop_detected": false,
-                "narrator_bridge_present": false,
-                "multi_speaker_pattern_present": false,
-                "dialogue_presence": true
-              },
-              "debug": {
-                "speaker_labels_detected": [],
-                "cue_labels": [],
-                "reason_path": [
-                  "contract_active",
-                  "dialogue_shape_expected"
-                ]
-              }
-            },
-            "interaction_continuity_repair": {
-              "applied": true,
-              "repair_type": "repair_malformed_speaker_attribution",
-              "violations": [
-                "malformed_speaker_attribution_under_continuity"
-              ],
-              "strategy_notes": [
-                "speaker binding mismatch converted into continuity failure",
-                "malformed explicit attribution salvaged into canonical single-speaker dialogue"
-              ]
-            }
-          }
-        },
-        "world_tick_events": []
-      },
-      "scene_before": "frontier_gate",
-      "scene_after": "frontier_gate",
-      "clue_updates": [],
-      "world_flag_updates": [
-        "clock:time_pressure=4"
-      ],
-      "turn_trace": {
-        "source": "chat",
-        "player_input": "Galinor continues to press the man. \"What. Is. Your. Name.\"",
-        "intent": {
-          "parsed": {
-            "id": "social_probe_guard_captain",
-            "label": "Galinor continues to press the man. \"What. Is. Your. Name.\"",
-            "type": "social_probe",
-            "social_intent_class": "social_exchange",
-            "prompt": "Galinor continues to press the man. \"What. Is. Your. Name.\"",
-            "metadata": {
-              "routed_via_dialogue_lock": true,
-              "route": "dialogue",
-              "canonical_entry_path": "social",
-              "canonical_entry_reason": "active_interlocutor_followup",
-              "canonical_entry_target_actor_id": "guard_captain",
-              "intent_route_debug": {
-                "routed_to": "social_exchange",
-                "route_reason": "active_interlocutor_followup",
-                "addressed_actor_id": "guard_captain",
-                "addressed_actor_source": "active_interlocutor"
-              },
-              "active_interaction_target_id": "guard_captain",
-              "segmented_turn": {
-                "spoken_text": "What. Is. Your. Name.",
-                "declared_action_text": "Galinor continues to press the man."
-              },
-              "turn_segmentation": {
-                "spoken_text": "What. Is. Your. Name.",
-                "declared_action_text": "Galinor continues to press the man."
-              }
-            },
-            "target_id": "guard_captain",
-            "targetEntityId": "guard_captain"
-          },
-          "segmented_turn": {
-            "spoken_text": "What. Is. Your. Name.",
-            "declared_action_text": "Galinor continues to press the man."
-          },
-          "normalized": {
-            "id": "social_probe_guard_captain",
-            "label": "Galinor continues to press the man. \"What. Is. Your. Name.\"",
-            "type": "social_probe",
-            "prompt": "Galinor continues to press the man. \"What. Is. Your. Name.\"",
-            "targetSceneId": null,
-            "target_scene_id": null,
-            "targetEntityId": "guard_captain",
-            "target_id": "guard_captain"
-          },
-          "implied_context": {
-            "applied": false,
-            "cases": [],
-            "target_id": "guard_captain",
-            "commitment_broken": false,
-            "break_reason": null
-          }
-        },
-        "classification": {
-          "action_type": "chat",
-          "resolved_kind": "social_probe",
-          "requires_check": false
-        },
-        "response_type_contract": {
-          "required_response_type": "dialogue",
-          "source_route": "social",
-          "allow_escalation": false,
-          "debug_reasons": [
-            "authoritative_social_target_requires_dialogue",
-            "dialogue_turn_contains_question_expectation",
-            "social_question_guard"
-          ]
-        },
-        "resolution_path": "social_engine",
-        "authoritative_state_changes": {
-          "scene_transition": null,
-          "resolution_state_changes": {},
-          "resolution_world_updates": [],
-          "check_request": null
-        },
-        "interaction_after": {
-          "active_interaction_target_id": "guard_captain",
-          "active_interaction_kind": "social",
-          "interaction_mode": "social",
-          "engagement_level": "engaged",
-          "conversation_privacy": null,
-          "player_position_context": null
-        },
-        "narration_obligations": {
-          "is_opening_scene": false,
-          "must_advance_scene": false,
-          "should_answer_active_npc": true,
-          "avoid_input_echo": true,
-          "avoid_player_action_restatement": true,
-          "prefer_structured_turn_summary": true,
-          "active_npc_reply_expected": true,
-          "active_npc_reply_kind": "explanation",
-          "scene_momentum_due": false,
-          "scene_momentum_exchanges_since": 0,
-          "scene_momentum_next_due_in": 2,
-          "suppress_non_social_emitters": true
-        },
-        "clues": {
-          "discovered_texts": [],
-          "presentation_changes": [],
-          "known_counts": {
-            "implicit": 0,
-            "explicit": 1,
-            "actionable": 1
-          }
-        },
-        "affordances_after": [
-          {
-            "id": "question_guard_captain",
-            "type": "question",
-            "label": "Talk to Guard Captain",
-            "targetEntityId": "guard_captain"
-          },
-          {
-            "id": "question_tavern_runner",
-            "type": "question",
-            "label": "Talk to Tavern Runner",
-            "targetEntityId": "tavern_runner"
-          },
-          {
-            "id": "question_emergent_town_crier",
-            "type": "question",
-            "label": "Talk to Town Crier",
-            "targetEntityId": "emergent_town_crier"
-          },
-          {
-            "id": "examine_the_rain_spatters_soot_dark_stone_frayed",
-            "type": "investigate",
-            "label": "Examine the Rain spatters soot-dark stone; frayed"
-          },
-          {
-            "id": "examine_refugees",
-            "type": "investigate",
-            "label": "Examine Refugees"
-          }
-        ],
-        "emergent_actor": {
-          "emergent_actor_enrolled": true,
-          "emergent_actor_id": "emergent_lord_aldric",
-          "emergent_actor_source_text": "Lord Aldric"
-        },
-        "leads": {
-          "registry_debug": [
-            {
-              "id": "lead_frontier_gate_old_milestone",
-              "title": "Investigate the old milestone",
-              "lifecycle": "discovered",
-              "status": "active",
-              "priority": "0",
-              "last_updated_turn": "2",
-              "last_touched_turn": "2",
-              "superseded_by": "",
-              "obsolete_reason": "",
-              "resolution_type": "",
-              "last_transition_reason": "",
-              "last_transition_category": "",
-              "last_transition_turn": "",
-              "last_transition_from_lifecycle": "",
-              "last_transition_to_lifecycle": "",
-              "last_transition_from_status": "",
-              "last_transition_to_status": "",
-              "last_progression_effects": [],
-              "type": "investigation",
-              "confidence": "plausible",
-              "resolved_at_turn": "",
-              "consequence_ids": ""
-            },
-            {
-              "id": "social_frontier_gate_guard_captain_patrol",
-              "title": "A patrol went missing near the old milestone.",
-              "lifecycle": "discovered",
-              "status": "active",
-              "priority": "0",
-              "last_updated_turn": "2",
-              "last_touched_turn": "2",
-              "superseded_by": "",
-              "obsolete_reason": "",
-              "resolution_type": "",
-              "last_transition_reason": "",
-              "last_transition_category": "",
-              "last_transition_turn": "",
-              "last_transition_from_lifecycle": "",
-              "last_transition_to_lifecycle": "",
-              "last_transition_from_status": "",
-              "last_transition_to_status": "",
-              "last_progression_effects": [],
-              "type": "rumor",
-              "confidence": "plausible",
-              "resolved_at_turn": "",
-              "consequence_ids": ""
-            }
-          ],
-          "delta_after_reconcile": [],
-          "changed_count": 0
-        }
-      },
-      "gpt_called": true,
-      "response_ok": true,
-      "error": null,
-      "canonical_entry": {
-        "should_route_social": true,
-        "target_actor_id": "guard_captain",
-        "target_source": "active_interlocutor",
-        "reason": "active_interlocutor_followup",
-        "spoken_text": "What. Is. Your. Name.",
-        "declared_switch_detected": false,
-        "declared_switch_target_actor_id": null,
-        "continuity_overridden_by_declared_switch": false,
-        "spoken_vocative_detected": false,
-        "spoken_vocative_target_actor_id": null,
-        "continuity_overridden_by_spoken_vocative": false
-      },
-      "canonical_entry_path": "social",
-      "canonical_entry_reason": "active_interlocutor_followup",
-      "canonical_entry_target_actor_id": "guard_captain",
-      "declared_travel_override": {
-        "applied": false
-      },
-      "response_type_contract": {
-        "required_response_type": "dialogue",
-        "source_route": "social",
-        "allow_escalation": false,
-        "debug_reasons": [
-          "authoritative_social_target_requires_dialogue",
-          "dialogue_turn_contains_question_expectation",
-          "social_question_guard"
-        ]
-      }
     }
   ],
   "flags": {},
   "character_name": "Galinor",
-  "campaign_run_id": "552783c6b21681e313559bc2",
-  "session_id": "552783c6b21681e313559bc2",
-  "last_saved_at": "2026-04-10T02:37:54.588074Z",
+  "campaign_run_id": "1733f31325c5c25d9cd43ebf",
+  "session_id": "1733f31325c5c25d9cd43ebf",
+  "last_saved_at": "2026-04-10T03:35:49.120596Z",
   "last_turn_response_policy": {
     "rule_priority_order": [
       "ANSWER THE PLAYER",
@@ -3016,13 +1005,14 @@
         "follow_up_press_depth": 0,
         "follow_up_overlap_ratio": null,
         "prior_answer_available": false,
-        "answer_completeness_required": true,
-        "social_lock": true,
-        "active_target_id": "guard_captain",
+        "answer_completeness_required": false,
+        "social_lock": false,
+        "active_target_id": null,
         "answer_pressure_followup_detected": false,
         "strict_social_answer_seek_override": false,
-        "same_interlocutor_followup": true,
+        "same_interlocutor_followup": false,
         "answer_pressure_suppressed_because": [
+          "no_active_interlocutor",
           "not_question_or_answer_pressure"
         ],
         "answer_pressure_family": null,
@@ -3031,7 +1021,9 @@
         "explanation_followup_detected": false,
         "insufficiency_followup_detected": false,
         "short_followup_anchor_detected": false,
-        "anchor_tokens_extracted": [],
+        "anchor_tokens_extracted": [
+          "aldric"
+        ],
         "anchor_token_matched": null,
         "anchor_followup_detected": false,
         "explanation_of_recent_anchor_followup": false,
@@ -3042,16 +1034,16 @@
         "correction_reask_followup_detected": false,
         "answer_pressure_reasons": [],
         "trigger_source": "none",
-        "resolution_kind": "social_probe",
+        "resolution_kind": null,
         "uncertainty_suggests_partial": false,
         "suppressed_because": [
           "no_follow_up_pressure",
-          "social_lock"
+          "not_answer_seeking_turn"
         ]
       }
     },
     "diegetic_only": true,
-    "prefer_scene_momentum": false,
+    "prefer_scene_momentum": true,
     "prefer_specificity": true,
     "no_validator_voice": {
       "enabled": true,
@@ -3070,9 +1062,9 @@
         "adjudication"
       ]
     },
-    "scene_momentum_due": false,
+    "scene_momentum_due": true,
     "uncertainty": {
-      "enabled": false,
+      "enabled": true,
       "categories": [
         "unknown_identity",
         "unknown_location",
@@ -3098,16 +1090,17 @@
       ]
     },
     "answer_completeness": {
-      "enabled": true,
+      "enabled": false,
       "trace": {
-        "trigger_source": "active_npc_answer_obligation",
-        "active_target_id": "guard_captain",
-        "active_npc_reply_kind": "explanation",
+        "trigger_source": "none",
+        "active_target_id": null,
+        "active_npc_reply_kind": null,
         "question_detected_from_player_text": false,
         "answer_pressure_followup_detected": false,
         "strict_social_answer_seek_override": false,
-        "same_interlocutor_followup": true,
+        "same_interlocutor_followup": false,
         "answer_pressure_suppressed_because": [
+          "no_active_interlocutor",
           "not_question_or_answer_pressure"
         ],
         "answer_pressure_family": null,
@@ -3116,7 +1109,9 @@
         "explanation_followup_detected": false,
         "insufficiency_followup_detected": false,
         "short_followup_anchor_detected": false,
-        "anchor_tokens_extracted": [],
+        "anchor_tokens_extracted": [
+          "aldric"
+        ],
         "anchor_token_matched": null,
         "anchor_followup_detected": false,
         "explanation_of_recent_anchor_followup": false,
@@ -3126,34 +1121,23 @@
         "clarification_prompt_shape": null,
         "correction_reask_followup_detected": false,
         "answer_pressure_reasons": [],
-        "partial_answer_permitted": true
+        "partial_answer_permitted": false
       },
       "player_direct_question": false,
-      "answer_required": true,
-      "answer_must_come_first": true,
-      "expected_voice": "npc",
+      "answer_required": false,
+      "answer_must_come_first": false,
+      "expected_voice": "either",
       "expected_answer_shape": "direct",
-      "allowed_partial_reasons": [
-        "uncertainty",
-        "lack_of_knowledge",
-        "gated_information"
-      ],
-      "forbid_deflection": true,
-      "forbid_generic_nonanswer": true,
-      "require_concrete_payload": true,
-      "concrete_payload_any_of": [
-        "name",
-        "place",
-        "fact",
-        "direction",
-        "condition",
-        "next_lead"
-      ]
+      "allowed_partial_reasons": [],
+      "forbid_deflection": false,
+      "forbid_generic_nonanswer": false,
+      "require_concrete_payload": false,
+      "concrete_payload_any_of": []
     },
     "tone_escalation": {
       "enabled": true,
       "scene_id": "frontier_gate",
-      "active_speaker_id": "guard_captain",
+      "active_speaker_id": null,
       "base_tone": "tense",
       "max_allowed_tone": "tense",
       "allow_guarded_refusal": true,
@@ -3169,14 +1153,13 @@
         "scene_has_authority_pressure": true,
         "scene_has_visible_hostile_actor": false,
         "combat_active": false,
-        "resolution_is_risky": true,
+        "resolution_is_risky": false,
         "npc_already_hostile_in_state": false
       },
       "justification_reasons": [
         "visible_facts_or_runtime_topic_pressure_indicate_elevated_tension",
         "visible_entity_roles_include_authority_guardship",
-        "affiliated_faction_attitude_and_pressure_in_world_state",
-        "resolution_kind_or_mechanical_payload_is_risky"
+        "affiliated_faction_attitude_and_pressure_in_world_state"
       ],
       "preferred_deescalations": [
         "Tighten diction and body language without 'or else' phrasing.",
@@ -3187,17 +1170,17 @@
         "scene_id": "frontier_gate",
         "has_session": true,
         "has_world": true,
-        "has_resolution": true,
+        "has_resolution": false,
         "has_narration_visibility": true,
         "has_scene_state_anchor_contract": true,
         "has_speaker_selection_contract": true,
-        "recent_log_len": 3
+        "recent_log_len": 1
       },
       "debug_flags": {
         "base_rank": 2,
         "max_rank": 2,
-        "recent_player_text_latest_len": 82,
-        "resolution_kind": "social_probe",
+        "recent_player_text_latest_len": 153,
+        "resolution_kind": null,
         "normalized_action_type": null,
         "prior_refusal_seen_in_log": false,
         "topic_pressure": 0,
@@ -3207,11 +1190,11 @@
     "narrative_authority": {
       "enabled": true,
       "authoritative_outcome_available": false,
-      "resolution_kind": "social_probe",
+      "resolution_kind": null,
       "success_state_available": false,
       "mechanical_result_available": false,
-      "active_speaker_id": "guard_captain",
-      "active_target_id": "guard_captain",
+      "active_speaker_id": null,
+      "active_target_id": null,
       "visible_fact_strings": [
         "rain spatters soot-dark stone; frayed banners hang above cinderwatch's eastern gate",
         "refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in",
@@ -3700,20 +1683,20 @@
         "branch_outcome"
       ],
       "preferred_deferral_order": [
-        "ask_for_roll",
+        "bounded_uncertainty",
         "branch_outcome",
-        "bounded_uncertainty"
+        "ask_for_roll"
       ],
-      "debug_reason": "narrative_authority: authoritative_outcome=False kind='social_probe' mechanical_risky=True",
+      "debug_reason": "narrative_authority: authoritative_outcome=False kind=None mechanical_risky=False",
       "debug_inputs": {
-        "has_resolution": true,
+        "has_resolution": false,
         "has_narration_visibility": true,
         "has_scene_state_anchor_contract": true,
         "has_speaker_selection_contract": true,
         "has_session_view": true
       },
       "debug_flags": {
-        "mechanical_risky": true,
+        "mechanical_risky": false,
         "pending_player_roll": false,
         "anchor_contract_enabled": true
       }
@@ -3728,14 +1711,8 @@
       "allow_directional_language_from_resolved_transition": false,
       "allow_exclusivity_from_authoritative_resolution": false,
       "allow_commitment_language_when_player_explicitly_committed": false,
-      "surfaced_lead_ids": [
-        "social_frontier_gate_guard_captain_patrol",
-        "lead_frontier_gate_old_milestone"
-      ],
-      "surfaced_lead_labels": [
-        "A patrol went missing near the old milestone.",
-        "Investigate the old milestone"
-      ],
+      "surfaced_lead_ids": [],
+      "surfaced_lead_labels": [],
       "allowed_lead_roles": [
         "option",
         "hook",
@@ -3750,9 +1727,9 @@
         "main_plot",
         "only_real_way_forward"
       ],
-      "debug_reason": "anti_railroading: transition=False authoritative=False commitment=False surfaced_leads=2",
+      "debug_reason": "anti_railroading: transition=False authoritative=False commitment=False surfaced_leads=0",
       "debug_inputs": {
-        "has_resolution": true,
+        "has_resolution": false,
         "has_narration_obligations": true,
         "has_session_view": true,
         "has_scene_state_anchor_contract": true,
@@ -3764,7 +1741,7 @@
         "player_text_nonempty": true,
         "obligation_hints": {
           "must_advance_scene": false,
-          "scene_momentum_due": false,
+          "scene_momentum_due": true,
           "is_opening_scene": false
         }
       },
@@ -3772,7 +1749,7 @@
         "resolved_transition": false,
         "authoritative_resolution_outcome": false,
         "player_commitment_detected": false,
-        "surfaced_lead_count": 2,
+        "surfaced_lead_count": 0,
         "scene_state_anchor_contract_present": true,
         "narrative_authority_contract_present": true,
         "speaker_contract_present": true
@@ -3780,15 +1757,19 @@
     },
     "context_separation": {
       "enabled": true,
-      "scene_focus_summary": "Rain spatters soot-dark stone as caravans and refugees choke the eastern gate. Guards watch the crowd with the brittle discipline of men who expect trouble, while old banners rot above the walls. Galinor continues to press the man. \"What. Is. Your. Name.\" social_probe social_probe Rain spatters soot-dark stone as caravans and refugees choke the eastern ga...",
-      "interaction_kind": "social_probe",
-      "player_intent_summary": "Galinor continues to press the man. \"What. Is. Your. Name.\"",
+      "scene_focus_summary": "Rain spatters soot-dark stone as caravans and refugees choke the eastern gate. Guards watch the crowd with the brittle discipline of men who expect trouble, while old banners rot above the walls. general general Rain spatters soot-dark stone as caravans and refugees choke the eastern gate. Guards watch the crowd with the brittle discipline of men who expe...",
+      "interaction_kind": "unknown",
+      "player_intent_summary": "I circle back to an earlier detail we skipped and insist we resolve it before moving on.",
       "primary_topics": [
-        "galinor",
-        "continues",
-        "press",
-        "man",
-        "name",
+        "circle",
+        "back",
+        "earlier",
+        "detail",
+        "skipped",
+        "insist",
+        "resolve",
+        "before",
+        "moving",
         "frontier_gate",
         "frontier gate",
         "cinderwatch gate district",
@@ -3806,23 +1787,15 @@
         "cinderwatch",
         "eastern",
         "gate",
-        "guard captain",
         "lord aldric",
         "town crier",
+        "guard captain",
         "ragged stranger",
         "tavern runner",
         "threadbare watcher",
-        "aldric",
-        "social_probe",
-        "galinor continues to press the man. \"what. is. your. name",
-        "galinor continues",
-        "social_probe_guard_captain",
-        "social probe guard captain"
+        "aldric"
       ],
-      "allowed_contextual_topics": [
-        "A patrol went missing near the old milestone.",
-        "Investigate the old milestone"
-      ],
+      "allowed_contextual_topics": [],
       "ambient_pressure_topics": [
         "Rival noble houses competing for territory and influence.",
         "Religious orders attempting to control or suppress dangerous magic.",
@@ -3837,7 +1810,7 @@
       "tone_escalation_contract": {
         "enabled": true,
         "scene_id": "frontier_gate",
-        "active_speaker_id": "guard_captain",
+        "active_speaker_id": null,
         "base_tone": "tense",
         "max_allowed_tone": "tense",
         "allow_guarded_refusal": true,
@@ -3853,14 +1826,13 @@
           "scene_has_authority_pressure": true,
           "scene_has_visible_hostile_actor": false,
           "combat_active": false,
-          "resolution_is_risky": true,
+          "resolution_is_risky": false,
           "npc_already_hostile_in_state": false
         },
         "justification_reasons": [
           "visible_facts_or_runtime_topic_pressure_indicate_elevated_tension",
           "visible_entity_roles_include_authority_guardship",
-          "affiliated_faction_attitude_and_pressure_in_world_state",
-          "resolution_kind_or_mechanical_payload_is_risky"
+          "affiliated_faction_attitude_and_pressure_in_world_state"
         ],
         "preferred_deescalations": [
           "Tighten diction and body language without 'or else' phrasing.",
@@ -3871,17 +1843,17 @@
           "scene_id": "frontier_gate",
           "has_session": true,
           "has_world": true,
-          "has_resolution": true,
+          "has_resolution": false,
           "has_narration_visibility": true,
           "has_scene_state_anchor_contract": true,
           "has_speaker_selection_contract": true,
-          "recent_log_len": 3
+          "recent_log_len": 1
         },
         "debug_flags": {
           "base_rank": 2,
           "max_rank": 2,
-          "recent_player_text_latest_len": 82,
-          "resolution_kind": "social_probe",
+          "recent_player_text_latest_len": 153,
+          "resolution_kind": null,
           "normalized_action_type": null,
           "prior_refusal_seen_in_log": false,
           "topic_pressure": 0,
@@ -3889,7 +1861,7 @@
         }
       },
       "debug_inputs": {
-        "has_resolution": true,
+        "has_resolution": false,
         "has_session_view": true,
         "has_scene_envelope": true,
         "has_scene_summary": true,
@@ -3903,7 +1875,7 @@
         "has_active_pending_leads": true,
         "has_follow_surface": false,
         "player_text_nonempty": true,
-        "primary_topic_count": 34,
+        "primary_topic_count": 33,
         "ambient_pressure_topic_count": 3
       },
       "debug_flags": {
@@ -3915,7 +1887,7 @@
         "tone_allow_verbal_pressure": true,
         "tone_allow_explicit_threat": false
       },
-      "debug_reason": "context_separation: pressure_focus_allowed=False primary_topics=34 ambient=3"
+      "debug_reason": "context_separation: pressure_focus_allowed=False primary_topics=33 ambient=3"
     },
     "player_facing_narration_purity": {
       "enabled": true,
@@ -3928,58 +1900,56 @@
       "forbid_engine_choice_framing": true,
       "forbid_non_diegetic_action_prompting": true,
       "response_type_required": null,
-      "interaction_kind": "social",
+      "interaction_kind": "travel",
       "debug_inputs": {
         "scene_id": "frontier_gate"
       },
       "debug_reason": "player_facing_narration_purity: default_strict_diegetic"
     },
     "social_response_structure": {
-      "enabled": true,
+      "enabled": false,
       "applies_to_response_type": "dialogue",
-      "require_spoken_dialogue_shape": true,
-      "discourage_expository_monologue": true,
-      "require_natural_cadence": true,
+      "require_spoken_dialogue_shape": false,
+      "discourage_expository_monologue": false,
+      "require_natural_cadence": false,
       "allow_brief_action_beats": true,
       "allow_brief_refusal_or_uncertainty": true,
-      "max_contiguous_expository_lines": 2,
-      "max_dialogue_paragraphs_before_break": 2,
-      "prefer_single_speaker_turn": true,
-      "forbid_bulleted_or_list_like_dialogue": true,
-      "required_response_type": "dialogue",
-      "debug_reason": "response_type_contract_requires_dialogue",
+      "max_contiguous_expository_lines": null,
+      "max_dialogue_paragraphs_before_break": null,
+      "prefer_single_speaker_turn": false,
+      "forbid_bulleted_or_list_like_dialogue": false,
+      "required_response_type": "neutral_narration",
+      "debug_reason": "response_type_not_dialogue:neutral_narration",
       "debug_inputs": {
         "scene_id": "frontier_gate",
-        "response_type_contract_source": "resolution.metadata"
+        "response_type_contract_source": "derived"
       }
     },
     "interaction_continuity": {
-      "enabled": true,
-      "continuity_strength": "strong",
-      "preserve_conversational_thread": true,
-      "preserve_context_continuity": true,
-      "drop_interlocutor_requires_explicit_break": true,
-      "speaker_switch_requires_explicit_cue": true,
+      "enabled": false,
+      "continuity_strength": "none",
+      "preserve_conversational_thread": false,
+      "preserve_context_continuity": false,
+      "drop_interlocutor_requires_explicit_break": false,
+      "speaker_switch_requires_explicit_cue": false,
       "allow_narrator_bridge": true,
-      "interaction_mode": "social",
-      "interaction_kind": "social",
-      "active_interaction_target_id": "guard_captain",
-      "current_interlocutor": "guard_captain",
-      "anchored_interlocutor_id": "guard_captain",
+      "interaction_mode": "activity",
+      "interaction_kind": "travel",
+      "active_interaction_target_id": "",
+      "current_interlocutor": "",
+      "anchored_interlocutor_id": "",
       "conversation_privacy": "",
-      "engagement_level": "engaged",
+      "engagement_level": "focused",
       "speaker_selection_contract": {
-        "primary_speaker_id": "guard_captain",
-        "primary_speaker_name": "Guard Captain",
-        "primary_speaker_source": "continuity",
-        "allowed_speaker_ids": [
-          "guard_captain"
-        ],
-        "continuity_locked": true,
-        "continuity_lock_reason": "single_grounded_in_scene_speaker",
-        "speaker_switch_allowed": false,
-        "speaker_switch_reason": "continuity_preserves_active_interlocutor",
-        "generic_fallback_forbidden": false,
+        "primary_speaker_id": null,
+        "primary_speaker_name": null,
+        "primary_speaker_source": null,
+        "allowed_speaker_ids": [],
+        "continuity_locked": false,
+        "continuity_lock_reason": null,
+        "speaker_switch_allowed": true,
+        "speaker_switch_reason": "no_authoritative_pin",
+        "generic_fallback_forbidden": true,
         "forbidden_fallback_labels": [
           "ragged stranger",
           "stranger",
@@ -3992,43 +1962,39 @@
           "a figure nearby",
           "someone anonymous"
         ],
-        "interruption_allowed": true,
+        "interruption_allowed": false,
         "interruption_requires_scene_event": false,
         "offscene_speakers_forbidden": true,
         "debug": {
           "merged_player_prompt_preview": "",
           "strict_social_active": false,
-          "authoritative_source": "continuity",
-          "authoritative_reason": "active_interaction_target_id is scene-addressable",
-          "grounding_reason_code": "authoritative_speaker_topic_pressure_reinforced",
+          "authoritative_source": "none",
+          "authoritative_reason": "no addressable target resolved",
+          "grounding_reason_code": "empty_actor_id",
           "grounding_fallback_applied": false,
-          "neutral_reply_bridge": false,
-          "why_speaker_chosen": "grounded_in_scene_npc:guard_captain;authority_source=continuity;grounding=authoritative_speaker_topic_pressure_reinforced",
-          "why_continuity_locked_or_not": "single_grounded_in_scene_speaker",
-          "why_switch_permitted_or_not": "continuity_preserves_active_interlocutor",
+          "neutral_reply_bridge": true,
+          "why_speaker_chosen": "authoritative_target_unresolved",
+          "why_continuity_locked_or_not": null,
+          "why_switch_permitted_or_not": "no_authoritative_pin",
           "interruption_tracker_active": false,
           "resolution_path": "full_authoritative_resolve_plus_grounding"
         }
       },
-      "continuity_reasons": [
-        "social_mode_active",
-        "anchored_to_active_target"
-      ],
+      "continuity_reasons": [],
       "break_signals_present": [],
       "debug": {
-        "source_of_anchor": "active_interaction_target_id",
+        "source_of_anchor": "none",
         "scene_scope_validated": true,
-        "response_type_required": "dialogue"
+        "response_type_required": "neutral_narration"
       }
     },
     "response_type_contract": {
-      "required_response_type": "dialogue",
-      "source_route": "social",
-      "allow_escalation": false,
+      "required_response_type": "neutral_narration",
+      "source_route": "exploration",
+      "allow_escalation": true,
       "debug_reasons": [
-        "authoritative_social_target_requires_dialogue",
-        "dialogue_turn_contains_question_expectation",
-        "social_question_guard"
+        "no_stricter_authoritative_contract",
+        "authoritative_state_allows_escalation"
       ]
     }
   },
@@ -4036,9 +2002,5 @@
     "emergent_actor_enrolled": true,
     "emergent_actor_id": "emergent_lord_aldric",
     "emergent_actor_source_text": "Lord Aldric"
-  },
-  "social_lead_event_ids": [
-    "lead_frontier_gate_old_milestone",
-    "social_frontier_gate_guard_captain_patrol"
-  ]
+  }
 }
