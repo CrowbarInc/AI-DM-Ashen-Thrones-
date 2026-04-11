@@ -26,8 +26,8 @@ from game.final_emission_validators import (
     _contains_diegetic_uncertainty_partial,
     _concrete_payload_for_kinds,
     _content_tokens,
-    _contract_bool,
     _NEXT_LEAD_SNIPPET,
+    _contract_bool,
     _looks_like_single_clarifying_question,
     _opening_carries_allowed_delta,
     _opening_segment,
@@ -1396,26 +1396,98 @@ def _synthesize_known_edge_phrase(
     return f"The {place} noise holds; nothing in view settles the question."
 
 
+def _npc_attribution_for_diegetic_lead(resolution: Dict[str, Any] | None) -> str:
+    """Short attribution for synthesized fallback leads (diegetic, not omniscient narrator imperatives)."""
+    npc = _social_npc_name(resolution)
+    if npc:
+        return npc
+    subj = _fallback_scene_subject(resolution, "")
+    if subj:
+        return subj
+    return "They"
+
+
+def _diegetic_next_lead_from_template(inner_quote: str, resolution: Dict[str, Any] | None, verb: str = "says") -> str:
+    inner = str(inner_quote or "").strip().rstrip(".!?")
+    if not inner:
+        return ""
+    npc = _npc_attribution_for_diegetic_lead(resolution)
+    v = str(verb or "says").strip().lower()
+    low_att = npc.strip().lower()
+    if low_att in ("they", "them"):
+        # Avoid bare "they" attribution (referential-clarity gate flags ambiguous entity references).
+        if v == "mutters":
+            return f'"{inner}," someone nearby mutters.'
+        if v == "adds":
+            return f'"{inner}," a lean voice adds.'
+        if v == "shrugs":
+            return f'"{inner}," someone nearby says with a shrug.'
+        return f'"{inner}," someone nearby says.'
+    if v in ("mutters", "adds", "shrugs"):
+        return f'"{inner}," {npc} {v}.'
+    return f'"{inner}," {npc} says.'
+
+
 def _synthesize_next_lead_phrase(
     contract: Dict[str, Any] | None,
     resolution: Dict[str, Any] | None,
     source_text: str,
+    *,
+    variant: int = 0,
 ) -> str:
+    """Diegetic next-step hints voiced as NPC speech (never bare second-person planner imperatives)."""
     ctr = contract if isinstance(contract, dict) else {}
     source = _fallback_primary_source(ctr)
     prompt = _fallback_resolution_prompt(resolution)
     low = f"{source_text} {prompt}".lower()
+    v = max(0, int(variant)) % 3
+
     if "dock" in low or "harbor" in low:
-        return "Ask the harbor clerk which berth was logged last watch."
+        opts = (
+            "If you need which berth was logged last watch, the harbor clerk keeps that—not me.",
+            "Word on the water is the harbor clerk's ledger names berths; I don't keep it in my head.",
+            "They say the harbor clerk can tell you what was logged last watch—I wouldn't swear to it.",
+        )
+        return _diegetic_next_lead_from_template(opts[v], resolution, "mutters")
+
     if source == "unknown_motive":
-        return "Ask the duty sergeant who had a grudge worth hiding on paper."
+        opts = (
+            "If it's a grudge worth hiding on paper, the duty sergeant hears more of that than I do.",
+            "Rumors point at bad blood, but the duty sergeant's the one who sees it written down.",
+            "I can't pin a motive from here—the duty sergeant might, if anyone does.",
+        )
+        return _diegetic_next_lead_from_template(opts[v], resolution)
+
     if source == "unknown_method":
-        return "Check the watch roster posted by the gate for who was on scene."
+        opts = (
+            "Who was on scene is on the watch roster by the gate—if it's written anywhere, it's there.",
+            "I've heard they post who's on roster by the gate; that's the closest thing to a witness list.",
+            "If you need names tied to the shift, the gate roster is what people actually read.",
+        )
+        return _diegetic_next_lead_from_template(opts[v], resolution, "adds")
+
     if source == "unknown_quantity":
-        return "Ask the quartermaster's clerk for the tally sheet, if you need a hard count."
+        opts = (
+            "A hard count lives in the quartermaster's tally—if you need numbers, that's the paper people mean.",
+            "I've heard the quartermaster's clerk keeps the tally sheet; I won't pretend I memorized it.",
+            "If you want a clean tally, folks say the quartermaster's clerk is the one who holds it.",
+        )
+        return _diegetic_next_lead_from_template(opts[v], resolution)
+
     if source == "unknown_feasibility":
-        return "Press the patrol sergeant for what the watch will actually allow on the street."
-    return "Ask the duty sergeant or check the watch roster posted by the gate."
+        opts = (
+            "What the watch will actually allow on the street—that's the patrol sergeant's say, not mine.",
+            "If you want the rule on what's allowed out here, the patrol sergeant posts it in practice.",
+            "I won't promise what's permitted—the patrol sergeant is the one who enforces it.",
+        )
+        return _diegetic_next_lead_from_template(opts[v], resolution, "mutters")
+
+    opts = (
+        "If you need a name off the watch side, the duty sergeant or the gate roster is where people look.",
+        "Rumor runs through the sergeants and the posted rosters—I'm not your clerk.",
+        "I've heard answers get pinned down at the duty desk or on the roster sheet by the gate.",
+    )
+    return _diegetic_next_lead_from_template(opts[v], resolution)
 
 
 def _fallback_resolution_prompt(resolution: Dict[str, Any] | None) -> str:
@@ -1671,12 +1743,125 @@ def _ensure_known_unknown_shape(
     return _fallback_unique_join(pieces), patch
 
 
+def _topic_fingerprint_for_fallback(resolution: Dict[str, Any] | None) -> str:
+    if not isinstance(resolution, dict):
+        return "none"
+    p = _normalize_text(str(resolution.get("prompt") or ""))[:140]
+    meta = resolution.get("metadata") if isinstance(resolution.get("metadata"), dict) else {}
+    na = meta.get("normalized_action") if isinstance(meta.get("normalized_action"), dict) else {}
+    extra = _normalize_text(str(na.get("kind") or na.get("action_kind") or ""))[:40]
+    return f"{p}|{extra}"
+
+
+def _fallback_lead_state_key(scene_id: str, resolution: Dict[str, Any] | None) -> str:
+    soc = resolution.get("social") if isinstance(resolution, dict) and isinstance(resolution.get("social"), dict) else {}
+    npc_id = str(soc.get("npc_id") or "").strip() or "none"
+    sid = str(scene_id or "").strip() or "none"
+    return f"{sid}|{npc_id}|{_topic_fingerprint_for_fallback(resolution if isinstance(resolution, dict) else None)}"
+
+
+def _get_lead_tail_record(session: Dict[str, Any] | None, key: str) -> Dict[str, Any]:
+    if not isinstance(session, dict):
+        return {}
+    root = session.setdefault("_social_fallback_lead_tail_state", {})
+    if not isinstance(root, dict):
+        root = {}
+        session["_social_fallback_lead_tail_state"] = root
+    ent = root.get(key)
+    if not isinstance(ent, dict):
+        ent = {"last_tail": "", "streak": 0}
+        root[key] = ent
+    return ent
+
+
+def _fallback_lead_tail_should_block(
+    session: Dict[str, Any] | None,
+    scene_id: str,
+    resolution: Dict[str, Any] | None,
+    proposed: str,
+) -> bool:
+    if not isinstance(session, dict) or not str(proposed or "").strip():
+        return False
+    key = _fallback_lead_state_key(scene_id, resolution)
+    ent = _get_lead_tail_record(session, key)
+    norm = _normalize_text(proposed).lower()
+    last = str(ent.get("last_tail") or "").lower()
+    streak = int(ent.get("streak") or 0)
+    return norm == last and streak >= 2
+
+
+def _record_fallback_lead_tail(
+    session: Dict[str, Any] | None,
+    scene_id: str,
+    resolution: Dict[str, Any] | None,
+    emitted: str,
+) -> None:
+    if not isinstance(session, dict) or not str(emitted or "").strip():
+        return
+    key = _fallback_lead_state_key(scene_id, resolution)
+    ent = _get_lead_tail_record(session, key)
+    norm = _normalize_text(emitted).lower()
+    last = str(ent.get("last_tail") or "").lower()
+    if norm == last:
+        ent["streak"] = int(ent.get("streak") or 0) + 1
+    else:
+        ent["streak"] = 1
+    ent["last_tail"] = norm
+
+
+_BARE_IMP_LEAD_RE = re.compile(r"^(?:Press|Ask|Check|Consider)\b", re.IGNORECASE)
+
+
+def _is_bare_imperative_lead_sentence(sentence: str) -> bool:
+    t = str(sentence or "").strip()
+    if not t or t.startswith('"'):
+        return False
+    return bool(_BARE_IMP_LEAD_RE.match(t)) and (
+        _concrete_payload_for_kinds(t, ["next_lead"]) or _NEXT_LEAD_SNIPPET.search(t) is not None
+    )
+
+
+def _wrap_bare_imperative_lead_for_npc_voice(sentence: str, resolution: Dict[str, Any] | None) -> str:
+    inner = str(sentence or "").strip().rstrip(".!?")
+    npc = _npc_attribution_for_diegetic_lead(resolution)
+    if npc.strip().lower() in ("they", "them"):
+        return f'"{inner}," someone nearby says.'
+    return f'"{inner}," {npc} says.'
+
+
+def _voice_extracted_next_lead_sentence(sentence: str, resolution: Dict[str, Any] | None) -> str:
+    s = str(sentence or "").strip()
+    if not s:
+        return ""
+    if _is_bare_imperative_lead_sentence(s):
+        return _wrap_bare_imperative_lead_for_npc_voice(s, resolution)
+    return s
+
+
+def _apply_social_fallback_leak_guard(text: str, resolution: Dict[str, Any] | None) -> str:
+    """Convert bare imperative planner tails in NPC-facing fallback to diegetic quoted speech."""
+    if not isinstance(resolution, dict):
+        return text
+    social = resolution.get("social")
+    if not isinstance(social, dict) or not str(social.get("npc_id") or "").strip():
+        return text
+    parts: List[str] = []
+    for sent in _fallback_sentences(text):
+        if _is_bare_imperative_lead_sentence(sent):
+            parts.append(_wrap_bare_imperative_lead_for_npc_voice(sent, resolution))
+        else:
+            parts.append(sent)
+    return _normalize_text(" ".join(parts))
+
+
 def _append_next_lead_if_allowed(
     text: str,
     *,
     contract: Dict[str, Any] | None,
     source_text: str,
     resolution: Dict[str, Any] | None = None,
+    session: Dict[str, Any] | None = None,
+    scene_id: str = "",
 ) -> Tuple[str, Dict[str, Any]]:
     ctr = contract if isinstance(contract, dict) else {}
     patch: Dict[str, Any] = {}
@@ -1686,12 +1871,26 @@ def _append_next_lead_if_allowed(
     if existing:
         return text, patch
     lead = _fallback_next_lead_sentence(source_text)
+    if lead:
+        lead = _voice_extracted_next_lead_sentence(lead, resolution)
     if not lead:
-        lead = _synthesize_next_lead_phrase(ctr, resolution, source_text)
+        for variant in range(3):
+            cand = _synthesize_next_lead_phrase(ctr, resolution, source_text, variant=variant)
+            if not cand:
+                continue
+            if _fallback_lead_tail_should_block(session, scene_id, resolution, cand):
+                continue
+            lead = cand
+            break
     if not lead:
         return text, patch
+    if _fallback_lead_tail_should_block(session, scene_id, resolution, lead):
+        patch["fallback_behavior_next_lead_suppressed_repeat"] = True
+        return text, patch
     patch["fallback_behavior_next_lead_added"] = True
-    return _fallback_unique_join([text, lead]), patch
+    joined = _fallback_unique_join([text, lead])
+    _record_fallback_lead_tail(session, scene_id, resolution, lead)
+    return joined, patch
 
 
 def _convert_to_single_diegetic_clarifying_question(contract: Dict[str, Any] | None) -> str:
@@ -1705,6 +1904,8 @@ def repair_fallback_behavior(
     *,
     resolution: Dict[str, Any] | None = None,
     strict_social_path: bool = False,
+    session: Dict[str, Any] | None = None,
+    scene_id: str = "",
 ) -> Tuple[str, Dict[str, Any], List[str]]:
     _ = strict_social_path
     meta = _default_fallback_behavior_meta()
@@ -1728,11 +1929,13 @@ def repair_fallback_behavior(
         if not _contains_diegetic_uncertainty_partial(working, resolution=resolution):
             diegetic = _rewrite_meta_fallback_as_diegetic_partial(original or working, contract=ctr, resolution=resolution)
             if diegetic:
+                nl_raw = _fallback_next_lead_sentence(working or original)
+                nl_voice = _voice_extracted_next_lead_sentence(nl_raw, resolution) if nl_raw else ""
                 working = _fallback_unique_join(
                     [
                         diegetic,
                         _fallback_known_edge_sentence(working),
-                        _fallback_next_lead_sentence(working or original),
+                        nl_voice,
                     ]
                 )
                 meta["fallback_behavior_meta_voice_stripped"] = True
@@ -1786,6 +1989,8 @@ def repair_fallback_behavior(
             contract=ctr,
             source_text=working or original,
             resolution=resolution,
+            session=session,
+            scene_id=scene_id,
         )
         meta.update(patch)
         meta.update(patch2)
@@ -1796,19 +2001,29 @@ def repair_fallback_behavior(
         meta["fallback_behavior_clarifying_question_used"] = True
         modes.append("clarifying_question")
     elif not working and partial_allowed:
-        working, patch = _ensure_known_unknown_shape(
+        shaped_empty, patch = _ensure_known_unknown_shape(
             original,
             contract=ctr,
             validation=val,
             resolution=resolution,
         )
+        working, patch2 = _append_next_lead_if_allowed(
+            shaped_empty,
+            contract=ctr,
+            source_text=original,
+            resolution=resolution,
+            session=session,
+            scene_id=scene_id,
+        )
         meta.update(patch)
+        meta.update(patch2)
         meta["fallback_behavior_partial_used"] = True
         modes.append("bounded_partial")
 
     final_text = _normalize_text(working or original)
     if modes:
         final_text = _smooth_repaired_fallback_line(final_text)
+    final_text = _apply_social_fallback_leak_guard(final_text, resolution)
     if _looks_like_single_clarifying_question(final_text):
         meta["fallback_behavior_clarifying_question_used"] = True
     if not meta["fallback_behavior_partial_used"] and not meta["fallback_behavior_clarifying_question_used"]:
@@ -1831,6 +2046,8 @@ def _apply_fallback_behavior_layer(
     gm_output: Dict[str, Any],
     resolution: Dict[str, Any] | None,
     strict_social_path: bool,
+    session: Dict[str, Any] | None = None,
+    scene_id: str = "",
 ) -> Tuple[str, Dict[str, Any], List[str]]:
     contract = _resolve_fallback_behavior_contract(gm_output)
     meta = _default_fallback_behavior_meta()
@@ -1854,6 +2071,8 @@ def _apply_fallback_behavior_layer(
         v0,
         resolution=resolution,
         strict_social_path=strict_social_path,
+        session=session,
+        scene_id=scene_id,
     )
     _merge_fallback_behavior_meta(meta, repair_meta)
 

@@ -2634,6 +2634,11 @@ def _compose_speaker_selection_contract(
         "why_switch_permitted_or_not": speaker_switch_reason,
         "interruption_tracker_active": tracker_substantive,
     }
+    res = resolution if isinstance(resolution, dict) else None
+    md0 = res.get("metadata") if isinstance(res, dict) and isinstance(res.get("metadata"), dict) else {}
+    stc0 = md0.get("social_turn_contract") if isinstance(md0, dict) else None
+    if isinstance(stc0, dict) and stc0:
+        dbg["social_turn_contract"] = dict(stc0)
     if isinstance(debug_extras, dict) and debug_extras:
         dbg = {**dbg, **debug_extras}
 
@@ -4781,6 +4786,206 @@ def world_action_turn_suppresses_npc_answer_fallback(
     )
 
 
+def _local_observation_narrow_social_followup_recovery_status(
+    session: Dict[str, Any],
+    scene: Dict[str, Any],
+    world: Dict[str, Any],
+    merged_player_text: str,
+    segmented_turn: Dict[str, Any] | None,
+) -> Literal["fired", "skipped", "blocked", "not_applicable"]:
+    """Classify Objective #21 recovery: same codes at routing as in follow-up tests."""
+    t = str(merged_player_text or "").strip()
+    if not t or not _looks_like_local_observation_question(t):
+        return "not_applicable"
+    if _should_recover_social_from_local_observation_followup(
+        session=session,
+        scene=scene,
+        world=world,
+        merged_player_text=t,
+        segmented_turn=segmented_turn,
+    ):
+        return "fired"
+    if not _looks_like_local_observation_going_on_happening_question(t):
+        return "skipped"
+    w = world if isinstance(world, dict) else {}
+    scene_obj = scene.get("scene") if isinstance(scene, dict) else None
+    scene_id = str(scene_obj.get("id") or "").strip() if isinstance(scene_obj, dict) else ""
+    if not scene_id:
+        return "skipped"
+    ctx = inspect(session)
+    active_id = str(ctx.get("active_interaction_target_id") or "").strip()
+    mode = str(ctx.get("interaction_mode") or "").strip().lower()
+    kind = str(ctx.get("active_interaction_kind") or "").strip().lower()
+    social_mode = mode == "social" or kind == "social"
+    if not active_id or not social_mode:
+        return "skipped"
+    if not assert_valid_speaker(active_id, session, scene_envelope=scene, world=w):
+        return "skipped"
+    if not is_actor_addressable_in_current_scene(session, scene, active_id, world=w):
+        return "skipped"
+    decl_sw = resolve_declared_actor_switch(
+        session=session,
+        scene=scene,
+        segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+        raw_text=str(merged_player_text or ""),
+    )
+    decl_id = _clean_string(decl_sw.get("target_actor_id")) if decl_sw.get("has_declared_switch") else ""
+    decl_ok = bool(
+        decl_id and is_actor_addressable_in_current_scene(session, scene, decl_id, world=w)
+    )
+    decl_cue = bool(decl_sw.get("has_declared_switch"))
+    if decl_cue and decl_ok and decl_id and decl_id != active_id:
+        return "blocked"
+    voc_scan = _text_for_spoken_vocative_scan(
+        segmented_turn if isinstance(segmented_turn, dict) else None,
+        t,
+    )
+    voc_res = resolve_spoken_vocative_target(
+        session=session,
+        scene=scene,
+        spoken_text=voc_scan,
+    )
+    voc_id = _clean_string(voc_res.get("target_actor_id")) if voc_res.get("has_spoken_vocative") else ""
+    voc_ok = bool(voc_id and is_actor_addressable_in_current_scene(session, scene, voc_id, world=w))
+    if voc_ok and voc_id and voc_id != active_id:
+        return "blocked"
+    return "skipped"
+
+
+def _routing_fallback_anchor_source(target_source: str) -> Literal["active_interlocutor", "visible_speaker", "none"]:
+    """Who anchors reply ownership at routing (emission may still reconcile via merged prompt)."""
+    ts = str(target_source or "").strip()
+    if ts in ("active_interlocutor", "continuity"):
+        return "active_interlocutor"
+    if ts == "visible_speaker":
+        return "visible_speaker"
+    return "none"
+
+
+def _routing_interlocutor_and_continuity_status(
+    *,
+    should_route_social: bool,
+    reason: str,
+    target_actor_id: str | None,
+    target_source: str | None,
+    prior_bind: str,
+    open_social_solicitation: bool,
+    continuity_break_applied: bool,
+    continuity_escape: bool,
+) -> tuple[
+    Literal["retained", "adopted", "none"],
+    Literal["preserved", "redirected", "broken"],
+]:
+    """Normalize reply-owner + continuity interpretation for a routing outcome."""
+    tid = str(target_actor_id or "").strip()
+    pb = str(prior_bind or "").strip()
+    r = str(reason or "")
+
+    if continuity_escape or r == "explicit_non_social_action_escapes_social_lock":
+        return "none", "broken"
+    if continuity_break_applied and not should_route_social:
+        return "none", "broken"
+
+    if not should_route_social:
+        return "none", "broken"
+
+    if open_social_solicitation or not tid:
+        return "none", "redirected"
+
+    if pb and tid == pb:
+        return "retained", "preserved"
+
+    if tid:
+        return "adopted", "redirected"
+
+    return "none", "broken"
+
+
+def finalize_routing_social_turn_contract(
+    out: Dict[str, Any],
+    *,
+    session: Dict[str, Any] | None,
+    scene: Dict[str, Any] | None,
+    world: Dict[str, Any] | None,
+    merged_text: str,
+    segmented_turn: Dict[str, Any] | None,
+    prior_social_target_snapshot: str,
+    prior_bind: str,
+    continuity_break_applied: bool,
+) -> None:
+    """Attach ``social_turn_contract`` to *out* from :func:`resolve_directed_social_entry` results."""
+    sess = session if isinstance(session, dict) else None
+    scn = scene if isinstance(scene, dict) else None
+    w = world if isinstance(world, dict) else {}
+
+    sfr: Literal["fired", "skipped", "blocked", "not_applicable"] = "not_applicable"
+    if sess is not None and scn is not None:
+        sfr = _local_observation_narrow_social_followup_recovery_status(
+            sess, scn, w, merged_text, segmented_turn
+        )
+
+    should_route = bool(out.get("should_route_social"))
+    reason = str(out.get("reason") or "")
+    tid = str(out.get("target_actor_id") or "").strip() or None
+    ts = str(out.get("target_source") or "").strip()
+    open_soc = bool(out.get("open_social_solicitation"))
+    continuity_escape = reason == "explicit_non_social_action_escapes_social_lock"
+
+    pb = str(prior_bind or "").strip()
+    if not pb:
+        pb = str(prior_social_target_snapshot or "").strip()
+
+    ils, cts = _routing_interlocutor_and_continuity_status(
+        should_route_social=should_route,
+        reason=reason,
+        target_actor_id=tid,
+        target_source=ts,
+        prior_bind=pb,
+        open_social_solicitation=open_soc,
+        continuity_break_applied=continuity_break_applied,
+        continuity_escape=continuity_escape,
+    )
+
+    fas = _routing_fallback_anchor_source(ts)
+    if ils == "retained" and tid:
+        fas = "active_interlocutor"
+
+    out["social_turn_contract"] = {
+        "social_followup_recovery": sfr,
+        "interlocutor_status": ils,
+        "continuity_status": cts,
+        "fallback_anchor_source": fas,
+        "reply_owner_actor_id": tid,
+        "routing_reason_code": reason or None,
+    }
+
+
+def _ret_directed_social_entry(
+    out: Dict[str, Any],
+    *,
+    session: Dict[str, Any] | None,
+    scene: Dict[str, Any] | None,
+    world: Dict[str, Any],
+    merged_text: str,
+    segmented_turn: Dict[str, Any] | None,
+    prior_social_target_snapshot: str = "",
+    prior_bind: str = "",
+    continuity_break_applied: bool = False,
+) -> Dict[str, Any]:
+    finalize_routing_social_turn_contract(
+        out,
+        session=session,
+        scene=scene,
+        world=world,
+        merged_text=merged_text,
+        segmented_turn=segmented_turn,
+        prior_social_target_snapshot=prior_social_target_snapshot,
+        prior_bind=prior_bind,
+        continuity_break_applied=continuity_break_applied,
+    )
+    return out
+
+
 def resolve_directed_social_entry(
     *,
     session: dict | None,
@@ -4795,8 +5000,10 @@ def resolve_directed_social_entry(
     :func:`is_actor_addressable_in_current_scene` as the only addressability check for the
     resolved target.
 
-    Returns keys: should_route_social, target_actor_id, target_source, reason, spoken_text.
+    Returns keys: should_route_social, target_actor_id, target_source, reason, spoken_text,
+    and ``social_turn_contract`` (normalized routing handoff for continuity / reply ownership).
     """
+    seg = segmented_turn if isinstance(segmented_turn, dict) else None
     out: Dict[str, Any] = {
         "should_route_social": False,
         "target_actor_id": None,
@@ -4804,48 +5011,64 @@ def resolve_directed_social_entry(
         "reason": "",
         "spoken_text": None,
     }
-    spoken_raw = (
-        segmented_turn.get("spoken_text") if isinstance(segmented_turn, dict) else None
-    )
+    spoken_raw = seg.get("spoken_text") if isinstance(seg, dict) else None
     if isinstance(spoken_raw, str) and spoken_raw.strip():
         out["spoken_text"] = spoken_raw.strip()
 
     merged = merge_turn_segments_for_directed_social_entry(
-        segmented_turn if isinstance(segmented_turn, dict) else None,
+        seg,
         str(raw_text or ""),
     )
     t = merged.strip()
+    scn = scene if isinstance(scene, dict) else None
+    w = world if isinstance(world, dict) else {}
+
     if not t:
         out["reason"] = "empty_turn"
-        return out
+        return _ret_directed_social_entry(
+            out, session=None, scene=scn, world=w, merged_text=t, segmented_turn=seg
+        )
     if _line_marked_explicit_ooc(t):
         out["reason"] = "explicit_ooc"
-        return out
+        return _ret_directed_social_entry(
+            out, session=None, scene=scn, world=w, merged_text=t, segmented_turn=seg
+        )
     if _line_marked_mechanical_table_talk(t):
         out["reason"] = "mechanical_table_talk"
-        return out
+        return _ret_directed_social_entry(
+            out, session=None, scene=scn, world=w, merged_text=t, segmented_turn=seg
+        )
 
     if not isinstance(scene, dict):
         out["reason"] = "no_scene_envelope"
-        return out
+        return _ret_directed_social_entry(
+            out, session=None, scene=None, world=w, merged_text=t, segmented_turn=seg
+        )
     scene_obj = scene.get("scene")
     if not isinstance(scene_obj, dict):
         out["reason"] = "no_scene_object"
-        return out
+        return _ret_directed_social_entry(
+            out, session=None, scene=scn, world=w, merged_text=t, segmented_turn=seg
+        )
     scene_id = str(scene_obj.get("id") or "").strip()
     if not scene_id:
         out["reason"] = "empty_scene_id"
-        return out
+        return _ret_directed_social_entry(
+            out, session=None, scene=scn, world=w, merged_text=t, segmented_turn=seg
+        )
 
     if _merged_indicates_travel_not_social(t, scene):
         out["reason"] = "travel_or_scene_transition_intent"
-        return out
+        return _ret_directed_social_entry(
+            out, session=None, scene=scn, world=w, merged_text=t, segmented_turn=seg
+        )
 
     sess = session if isinstance(session, dict) else None
-    w = world if isinstance(world, dict) else {}
     if sess is None:
         out["reason"] = "no_session"
-        return out
+        return _ret_directed_social_entry(
+            out, session=None, scene=scn, world=w, merged_text=t, segmented_turn=seg
+        )
 
     prior_social_target_snapshot = prior_interlocutor_for_turn_metadata(sess) or str(
         inspect(sess).get("active_interaction_target_id") or ""
@@ -4857,11 +5080,21 @@ def resolve_directed_social_entry(
             scene=scene,
             world=w,
             merged_player_text=t,
-            segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+            segmented_turn=seg,
         ):
             out["reason"] = "local_scene_observation_query"
-            return out
+            return _ret_directed_social_entry(
+                out,
+                session=sess,
+                scene=scn,
+                world=w,
+                merged_text=t,
+                segmented_turn=seg,
+                prior_social_target_snapshot=prior_social_target_snapshot,
+                prior_bind=prior_social_target_snapshot,
+            )
 
+    continuity_break_applied = False
     low = t.lower()
     roster = canonical_scene_addressable_roster(
         w, scene_id, scene_envelope=scene, session=sess
@@ -4870,7 +5103,7 @@ def resolve_directed_social_entry(
     decl_sw = resolve_declared_actor_switch(
         session=sess,
         scene=scene,
-        segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+        segmented_turn=seg,
         raw_text=str(raw_text or ""),
     )
     decl_id = _clean_string(decl_sw.get("target_actor_id")) if decl_sw.get("has_declared_switch") else ""
@@ -4879,10 +5112,7 @@ def resolve_directed_social_entry(
     )
 
     decl_cue = bool(decl_sw.get("has_declared_switch"))
-    voc_scan = _text_for_spoken_vocative_scan(
-        segmented_turn if isinstance(segmented_turn, dict) else None,
-        t,
-    )
+    voc_scan = _text_for_spoken_vocative_scan(seg, t)
     voc_res = resolve_spoken_vocative_target(
         session=sess,
         scene=scene,
@@ -4895,7 +5125,17 @@ def resolve_directed_social_entry(
         low, roster, merged_text=t
     ) and not decl_cue:
         out["reason"] = "non_dialogue_world_action"
-        return out
+        return _ret_directed_social_entry(
+            out,
+            session=sess,
+            scene=scn,
+            world=w,
+            merged_text=t,
+            segmented_turn=seg,
+            prior_social_target_snapshot=prior_social_target_snapshot,
+            prior_bind=prior_social_target_snapshot,
+            continuity_break_applied=continuity_break_applied,
+        )
 
     if "?" in t and _SCENE_PRESENCE_OR_SCOPE_QUERY_RE.search(low):
         if (
@@ -4904,7 +5144,17 @@ def resolve_directed_social_entry(
             and not decl_cue
         ):
             out["reason"] = "scene_presence_or_perception_query"
-            return out
+            return _ret_directed_social_entry(
+                out,
+                session=sess,
+                scene=scn,
+                world=w,
+                merged_text=t,
+                segmented_turn=seg,
+                prior_social_target_snapshot=prior_social_target_snapshot,
+                prior_bind=prior_social_target_snapshot,
+                continuity_break_applied=continuity_break_applied,
+            )
 
     motion_id = _npc_id_from_directed_motion_or_ask_phrases(low, roster)
     motion_ok = False
@@ -4927,7 +5177,7 @@ def resolve_directed_social_entry(
         low=low,
         roster=roster,
         scene=scene,
-        segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+        segmented_turn=seg,
         session=sess,
         world=w,
         decl_cue=decl_cue,
@@ -4936,6 +5186,7 @@ def resolve_directed_social_entry(
         motion_ok=motion_ok,
     ):
         apply_world_action_social_continuity_break(sess, merged_text=t, scene=scene)
+        continuity_break_applied = True
 
     broad_detect_cache: Optional[Dict[str, Any]] = None
 
@@ -4946,7 +5197,7 @@ def resolve_directed_social_entry(
                 t,
                 low=low,
                 roster=roster,
-                segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+                segmented_turn=seg,
                 session=sess,
                 scene_envelope=scene,
                 world=w,
@@ -4962,7 +5213,7 @@ def resolve_directed_social_entry(
         scene_envelope=scene,
         merged_player_prompt=t,
         allow_first_roster_fallback=False,
-        segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+        segmented_turn=seg,
     )
     auth_id = str(auth.get("npc_id") or "").strip() if auth.get("target_resolved") else ""
     auth_ok = bool(
@@ -5040,18 +5291,68 @@ def resolve_directed_social_entry(
         if blocked_open_recovery:
             if is_gm_or_system_facing_question(t):
                 out["reason"] = "gm_feasibility"
-                return out
+                return _ret_directed_social_entry(
+                    out,
+                    session=sess,
+                    scene=scn,
+                    world=w,
+                    merged_text=t,
+                    segmented_turn=seg,
+                    prior_social_target_snapshot=prior_social_target_snapshot,
+                    prior_bind=prior_social_target_snapshot,
+                    continuity_break_applied=continuity_break_applied,
+                )
             if is_rules_or_engine_mechanics_question(t):
                 out["reason"] = "rules_or_mechanics_query"
-                return out
+                return _ret_directed_social_entry(
+                    out,
+                    session=sess,
+                    scene=scn,
+                    world=w,
+                    merged_text=t,
+                    segmented_turn=seg,
+                    prior_social_target_snapshot=prior_social_target_snapshot,
+                    prior_bind=prior_social_target_snapshot,
+                    continuity_break_applied=continuity_break_applied,
+                )
             out["reason"] = "no_addressable_target"
-            return out
+            return _ret_directed_social_entry(
+                out,
+                session=sess,
+                scene=scn,
+                world=w,
+                merged_text=t,
+                segmented_turn=seg,
+                prior_social_target_snapshot=prior_social_target_snapshot,
+                prior_bind=prior_social_target_snapshot,
+                continuity_break_applied=continuity_break_applied,
+            )
         if is_gm_or_system_facing_question(t):
             out["reason"] = "gm_feasibility"
-            return out
+            return _ret_directed_social_entry(
+                out,
+                session=sess,
+                scene=scn,
+                world=w,
+                merged_text=t,
+                segmented_turn=seg,
+                prior_social_target_snapshot=prior_social_target_snapshot,
+                prior_bind=prior_social_target_snapshot,
+                continuity_break_applied=continuity_break_applied,
+            )
         if is_rules_or_engine_mechanics_question(t):
             out["reason"] = "rules_or_mechanics_query"
-            return out
+            return _ret_directed_social_entry(
+                out,
+                session=sess,
+                scene=scn,
+                world=w,
+                merged_text=t,
+                segmented_turn=seg,
+                prior_social_target_snapshot=prior_social_target_snapshot,
+                prior_bind=prior_social_target_snapshot,
+                continuity_break_applied=continuity_break_applied,
+            )
         broad = _broad_detect()
         if broad.get("is_broad_address"):
             open_reason = str(broad.get("reason") or "")
@@ -5062,14 +5363,24 @@ def resolve_directed_social_entry(
                 t,
                 low=low,
                 roster=roster,
-                segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+                segmented_turn=seg,
                 session=sess,
                 scene_envelope=scene,
                 world=w,
             )
             if not broadcast_hit.get("is_broadcast_open_call"):
                 out["reason"] = "no_addressable_target"
-                return out
+                return _ret_directed_social_entry(
+                    out,
+                    session=sess,
+                    scene=scn,
+                    world=w,
+                    merged_text=t,
+                    segmented_turn=seg,
+                    prior_social_target_snapshot=prior_social_target_snapshot,
+                    prior_bind=prior_social_target_snapshot,
+                    continuity_break_applied=continuity_break_applied,
+                )
             open_reason = str(broadcast_hit.get("reason") or "")
             open_phrase = str(broadcast_hit.get("phrase_matched") or "")
             broadcast_flag = True
@@ -5099,20 +5410,70 @@ def resolve_directed_social_entry(
                 voc_res.get("target_actor_id") if voc_res.get("has_spoken_vocative") else None
             )
             out["continuity_overridden_by_spoken_vocative"] = False
-            return out
+            return _ret_directed_social_entry(
+                out,
+                session=sess,
+                scene=scn,
+                world=w,
+                merged_text=t,
+                segmented_turn=seg,
+                prior_social_target_snapshot=prior_social_target_snapshot,
+                prior_bind=prior_social_target_snapshot,
+                continuity_break_applied=continuity_break_applied,
+            )
         out["reason"] = "no_addressable_target"
-        return out
+        return _ret_directed_social_entry(
+            out,
+            session=sess,
+            scene=scn,
+            world=w,
+            merged_text=t,
+            segmented_turn=seg,
+            prior_social_target_snapshot=prior_social_target_snapshot,
+            prior_bind=prior_social_target_snapshot,
+            continuity_break_applied=continuity_break_applied,
+        )
 
     addr_ok = is_actor_addressable_in_current_scene(sess, scene, chosen_id, world=w)
     if not addr_ok:
         if is_gm_or_system_facing_question(t):
             out["reason"] = "gm_feasibility"
-            return out
+            return _ret_directed_social_entry(
+                out,
+                session=sess,
+                scene=scn,
+                world=w,
+                merged_text=t,
+                segmented_turn=seg,
+                prior_social_target_snapshot=prior_social_target_snapshot,
+                prior_bind=prior_bind,
+                continuity_break_applied=continuity_break_applied,
+            )
         if is_rules_or_engine_mechanics_question(t):
             out["reason"] = "rules_or_mechanics_query"
-            return out
+            return _ret_directed_social_entry(
+                out,
+                session=sess,
+                scene=scn,
+                world=w,
+                merged_text=t,
+                segmented_turn=seg,
+                prior_social_target_snapshot=prior_social_target_snapshot,
+                prior_bind=prior_bind,
+                continuity_break_applied=continuity_break_applied,
+            )
         out["reason"] = "target_not_addressable"
-        return out
+        return _ret_directed_social_entry(
+            out,
+            session=sess,
+            scene=scn,
+            world=w,
+            merged_text=t,
+            segmented_turn=seg,
+            prior_social_target_snapshot=prior_social_target_snapshot,
+            prior_bind=prior_bind,
+            continuity_break_applied=continuity_break_applied,
+        )
 
     if is_rules_or_engine_mechanics_question(t) and not (
         addr_ok
@@ -5125,19 +5486,49 @@ def resolve_directed_social_entry(
         )
     ):
         out["reason"] = "rules_or_mechanics_query"
-        return out
+        return _ret_directed_social_entry(
+            out,
+            session=sess,
+            scene=scn,
+            world=w,
+            merged_text=t,
+            segmented_turn=seg,
+            prior_social_target_snapshot=prior_social_target_snapshot,
+            prior_bind=prior_bind,
+            continuity_break_applied=continuity_break_applied,
+        )
 
-    if detect_non_social_continuity_escape(low, merged_text=t, segmented_turn=segmented_turn):
+    if detect_non_social_continuity_escape(low, merged_text=t, segmented_turn=seg):
         out["reason"] = "explicit_non_social_action_escapes_social_lock"
         if prior_social_target_snapshot:
             out["continuity_escape_prior_target_actor_id"] = prior_social_target_snapshot
-        return out
+        return _ret_directed_social_entry(
+            out,
+            session=sess,
+            scene=scn,
+            world=w,
+            merged_text=t,
+            segmented_turn=seg,
+            prior_social_target_snapshot=prior_social_target_snapshot,
+            prior_bind=prior_bind,
+            continuity_break_applied=continuity_break_applied,
+        )
 
     if not _turn_plausibly_addressed_spoken_npc_exchange(
         t, low, chosen_source=str(chosen_source or "")
     ):
         out["reason"] = "not_directed_spoken_interaction"
-        return out
+        return _ret_directed_social_entry(
+            out,
+            session=sess,
+            scene=scn,
+            world=w,
+            merged_text=t,
+            segmented_turn=seg,
+            prior_social_target_snapshot=prior_social_target_snapshot,
+            prior_bind=prior_bind,
+            continuity_break_applied=continuity_break_applied,
+        )
 
     out["should_route_social"] = True
     out["target_actor_id"] = chosen_id
@@ -5180,7 +5571,17 @@ def resolve_directed_social_entry(
         out["reason"] = "directed_social_question"
     else:
         out["reason"] = "directed_social_question"
-    return out
+    return _ret_directed_social_entry(
+        out,
+        session=sess,
+        scene=scn,
+        world=w,
+        merged_text=t,
+        segmented_turn=seg,
+        prior_social_target_snapshot=prior_social_target_snapshot,
+        prior_bind=prior_bind,
+        continuity_break_applied=continuity_break_applied,
+    )
 
 
 def _turn_plausibly_addressed_spoken_npc_exchange(text: str, low: str, *, chosen_source: str) -> bool:
@@ -5222,6 +5623,7 @@ def should_route_addressed_question_to_social(
         "route_reason": None,
         "addressed_actor_id": None,
         "addressed_actor_source": None,
+        "social_turn_contract": None,
     }
     entry = resolve_directed_social_entry(
         session=session,
@@ -5230,6 +5632,9 @@ def should_route_addressed_question_to_social(
         segmented_turn=None,
         raw_text=str(text or ""),
     )
+    stc = entry.get("social_turn_contract")
+    if isinstance(stc, dict):
+        meta["social_turn_contract"] = dict(stc)
     if not entry.get("should_route_social"):
         r = str(entry.get("reason") or "")
         if r in (

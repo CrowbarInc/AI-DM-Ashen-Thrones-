@@ -96,6 +96,21 @@ def _assert_minimal_turn_trace_contract(tt: dict, *, source: str, expect_parsed_
 
     assert isinstance(tt.get("affordances_after"), list)
 
+    sct = tt.get("social_contract_trace")
+    assert isinstance(sct, dict)
+    for key in (
+        "route_selected",
+        "routing_reason_code",
+        "social_followup_recovery",
+        "reply_owner_actor_id",
+        "interlocutor_status",
+        "continuity_status",
+        "fallback_anchor_source",
+        "visible_grounded_speaker",
+        "final_reply_owner",
+    ):
+        assert key in sct
+
 
 # feature: debug trace, routing
 @pytest.mark.parametrize(
@@ -146,6 +161,12 @@ def test_compact_turn_trace_contract_action_and_chat(tmp_path, monkeypatch, endp
     tt = entry.get("turn_trace")
     _assert_minimal_turn_trace_contract(tt, source=source, expect_parsed_intent=expect_parsed)
     _walk_turn_trace_for_leaks(tt)
+
+    sct = tt.get("social_contract_trace") or {}
+    if source == "chat":
+        assert sct.get("route_selected") in ("dialogue", "action", "undecided")
+    else:
+        assert sct.get("route_selected") == "social"
 
     session = storage.load_session()
     disk_traces = session.get("debug_traces") or []

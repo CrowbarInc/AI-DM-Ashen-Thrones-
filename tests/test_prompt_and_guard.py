@@ -66,19 +66,33 @@ def _assert_text_contains_all(text: str, *substrings: str) -> None:
         assert s.lower() in low, (s, text)
 
 
-def _assert_bounded_uncertainty(text: str, *, forbidden_terms: tuple[str, ...] = ()) -> None:
-    low = text.lower()
-    assert "i can't answer" not in low
-    assert "i cannot answer" not in low
-    assert "based on what's established" not in low
-    assert "training data" not in low
-    assert "tools" not in low
-    assert "best lead:" not in low
-    assert "no one here can" not in low
-    assert "no one here will" not in low
-    assert "the exact place is still blurred" not in low
-    assert "the means are still obscured" not in low
-    assert "the effect is plain enough" not in low
+def _assert_uncertainty_render_helper_contract(text: str, *, forbidden_terms: tuple[str, ...] = ()) -> None:
+    """Pre-sanitizer contract for :func:`render_uncertainty_response` (classification + template shape).
+
+    Validator/meta tone is asserted via :func:`game.gm.detect_validator_voice` (policy registry).
+    Phrase-level legality for emitted LLM prose after the full pipeline lives in
+    ``tests/test_output_sanitizer.py``.
+    """
+    from game.gm import detect_validator_voice
+
+    vh = detect_validator_voice(text)
+    assert vh == [], vh
+    low = (text or "").lower()
+    # Narrow stock-template bans not covered by detect_validator_voice (e.g. bare "i can't answer"
+    # without "that", legacy uncertainty line shapes).
+    for phrase in (
+        "i can't answer",
+        "i cannot answer",
+        "training data",
+        "tools",
+        "best lead:",
+        "no one here can",
+        "no one here will",
+        "the exact place is still blurred",
+        "the means are still obscured",
+        "the effect is plain enough",
+    ):
+        assert phrase not in low, (phrase, text)
     for term in forbidden_terms:
         assert term not in low
 
@@ -282,7 +296,7 @@ def test_typed_uncertainty_categories_render_bounded_answers(player_text, expect
     assert uncertainty["known_edge"]
     assert uncertainty["unknown_edge"]
     assert uncertainty["next_lead"]
-    _assert_bounded_uncertainty(
+    _assert_uncertainty_render_helper_contract(
         text,
         forbidden_terms=("noble house", "smuggler", "magical talent"),
     )
@@ -430,7 +444,7 @@ def test_uncertainty_questions_in_same_scene_render_different_contextual_answers
         )
         text = render_uncertainty_response(uncertainty)
         rendered.append(text)
-        _assert_bounded_uncertainty(text)
+        _assert_uncertainty_render_helper_contract(text)
         _assert_local_anchor(text)
         _assert_actionable_lead(text)
 
@@ -1466,7 +1480,7 @@ def test_hidden_discoverable_safeguard_preserved_with_exploration():
 
 
 def test_rule_priority_prefers_bounded_answer_before_specificity():
-    from game.gm import apply_response_policy_enforcement
+    from game.gm import apply_response_policy_enforcement, detect_validator_voice
     from game.prompt_context import build_response_policy
 
     _, world, session, _, _, _ = _dummy_state()
@@ -1494,13 +1508,14 @@ def test_rule_priority_prefers_bounded_answer_before_specificity():
         discovered_clues=[],
     )
     low = out["player_facing_text"].lower()
-    assert "trust is hard to come by" not in out["player_facing_text"].lower()
+    assert "forbidden_generic_rewrite" in out.get("tags", [])
+    assert detect_validator_voice(out["player_facing_text"]) == []
     assert "captain veyra" in low
     _assert_local_anchor(out["player_facing_text"])
 
 
 def test_rule_priority_answers_without_leaking_hidden_facts():
-    from game.gm import apply_response_policy_enforcement
+    from game.gm import apply_response_policy_enforcement, detect_validator_voice
     from game.prompt_context import build_response_policy
 
     _, world, session, _, _, _ = _dummy_state()
@@ -1533,11 +1548,11 @@ def test_rule_priority_answers_without_leaking_hidden_facts():
     assert "magical talent" not in low
     assert "captain veyra" in low
     _assert_local_anchor(out["player_facing_text"])
-    assert "i can't answer" not in low
+    assert detect_validator_voice(out["player_facing_text"]) == []
 
 
 def test_rule_priority_keeps_momentum_when_certainty_is_incomplete():
-    from game.gm import apply_response_policy_enforcement
+    from game.gm import apply_response_policy_enforcement, detect_validator_voice
     from game.prompt_context import build_response_policy
     from game.storage import get_scene_runtime
 
@@ -1568,7 +1583,7 @@ def test_rule_priority_keeps_momentum_when_certainty_is_incomplete():
     low = out["player_facing_text"].lower()
     assert "captain veyra" in low
     _assert_local_anchor(out["player_facing_text"])
-    assert "i can't answer that" not in out["player_facing_text"].lower()
+    assert detect_validator_voice(out["player_facing_text"]) == []
     assert any(isinstance(tag, str) and tag.startswith("scene_momentum:") for tag in out.get("tags", []))
 
 

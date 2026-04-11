@@ -46,6 +46,55 @@ def test_observe_fallback_uses_visible_facts():
     _assert_passes_purity(line)
 
 
+def test_observe_fallback_listen_in_prefers_gossip_over_unrelated_clues():
+    env = {
+        "scene": {
+            "id": "frontier_gate",
+            "location": "Frontier Gate",
+            "visible_facts": [
+                "Muddy footprints trail past a stack of disturbed crates.",
+                "A knot of patrons keeps their voices low over the missing patrol.",
+                "Rain darkens the flagstones around the checkpoint.",
+            ],
+        }
+    }
+    line = render_observe_perception_fallback_line(
+        env,
+        seed_key="unit|listen",
+        player_text="I move closer to the gossiping group and listen in.",
+    )
+    assert line
+    low = line.lower()
+    assert any(token in low for token in ("patron", "voices", "missing patrol", "gossip"))
+    assert "footprint" not in low
+    assert "crate" not in low
+    _assert_passes_purity(line)
+
+
+def test_observe_fallback_inspect_prefers_physical_clues_when_named():
+    env = {
+        "scene": {
+            "id": "quay",
+            "location": "Stone Quay",
+            "visible_facts": [
+                "A knot of patrons keeps their voices low over the missing patrol.",
+                "Muddy footprints trail past a stack of disturbed crates.",
+                "Rain beads on a warped notice board.",
+            ],
+        }
+    }
+    line = render_observe_perception_fallback_line(
+        env,
+        seed_key="unit|inspect",
+        player_text="I inspect the footprints by the disturbed crates.",
+    )
+    assert line
+    low = line.lower()
+    assert "footprint" in low or "crate" in low or "disturbed" in low
+    assert "voices low" not in low
+    _assert_passes_purity(line)
+
+
 def test_scene_transition_fallback_uses_destination_summary_not_prior_scene_voice():
     dest = {
         "scene": {

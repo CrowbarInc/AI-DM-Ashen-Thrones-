@@ -3292,19 +3292,25 @@ def _repair_scene_state_anchor_minimal(
     text: str,
     contract: Mapping[str, Any],
     *,
+    gm_output: Dict[str, Any] | None = None,
     strict_social_details: Dict[str, Any] | None = None,
 ) -> tuple[str | None, str | None]:
     """Opening-tether repairs only; uses contract token buckets (no new facts)."""
-    _ = strict_social_details
+    tags_ssa = [str(t) for t in ((gm_output or {}).get("tags") or []) if isinstance(t, str)]
+    fast_fallback_neutral = (
+        not strict_social_details
+        and any(tag in tags_ssa for tag in ("upstream_api_fast_fallback", "forced_retry_fallback", "retry_escape_hatch"))
+    )
     actors = list(contract.get("actor_tokens") or [])
     actions = list(contract.get("player_action_tokens") or [])
-    # Repair ladder: A actor → B action → C location → D narrator-neutral + location.
-    r, mode = _repair_actor_opening(text, actors)
-    if r:
-        return r, mode
-    r, mode = _repair_action_tether(text, actions)
-    if r:
-        return r, mode
+    if not fast_fallback_neutral:
+        # Repair ladder: A actor → B action → C location → D narrator-neutral + location.
+        r, mode = _repair_actor_opening(text, actors)
+        if r:
+            return r, mode
+        r, mode = _repair_action_tether(text, actions)
+        if r:
+            return r, mode
     r, mode = _repair_location_opening(text, contract)
     if r:
         return r, mode
@@ -3360,6 +3366,7 @@ def _apply_scene_state_anchor_layer(
     repaired, mode = _repair_scene_state_anchor_minimal(
         text,
         contract,
+        gm_output=gm_output,
         strict_social_details=strict_social_details,
     )
     if repaired:
@@ -4041,20 +4048,81 @@ def _decompress_overpacked_sentences(text: str) -> str:
     return _normalize_text(" ".join(rewritten_parts))
 
 
-def _finalize_emission_output(out: Dict[str, Any], *, pre_gate_text: str) -> Dict[str, Any]:
+def _final_emission_fast_path_eligible(out: Dict[str, Any]) -> bool:
+    if not isinstance(out, dict):
+        return False
+    meta = out.get("_final_emission_meta") if isinstance(out.get("_final_emission_meta"), dict) else {}
+    if meta.get("final_route") != "accept_candidate":
+        return False
+    if meta.get("response_type_candidate_ok") is False:
+        return False
+    if meta.get("answer_completeness_failed") or meta.get("narrative_authority_failed"):
+        return False
+    if meta.get("fallback_behavior_failed") or meta.get("fallback_behavior_repaired"):
+        return False
+    if meta.get("fallback_behavior_uncertainty_active"):
+        return False
+    if meta.get("response_type_repair_used"):
+        return False
+    if any(
+        meta.get(key)
+        for key in (
+            "answer_completeness_repaired",
+            "response_delta_repaired",
+            "social_response_structure_repair_applied",
+            "tone_escalation_repaired",
+            "anti_railroading_repaired",
+            "context_separation_repaired",
+            "player_facing_narration_purity_repaired",
+            "answer_shape_primacy_repaired",
+            "candidate_quality_degraded",
+        )
+    ):
+        return False
+    if str(meta.get("speaker_contract_enforcement_reason") or "").strip():
+        return False
+    tags = [str(t).lower() for t in (out.get("tags") or []) if isinstance(t, str)]
+    if any(
+        ("fallback" in tag) or ("retry" in tag)
+        for tag in tags
+    ):
+        return False
+    icv = meta.get("interaction_continuity_validation")
+    if not isinstance(icv, dict):
+        md = out.get("metadata") if isinstance(out.get("metadata"), dict) else {}
+        em = md.get("emission_debug") if isinstance(md.get("emission_debug"), dict) else {}
+        icv = em.get("interaction_continuity_validation")
+    if isinstance(icv, dict) and icv.get("ok") is False:
+        return False
+    return True
+
+
+def _finalize_emission_output(
+    out: Dict[str, Any],
+    *,
+    pre_gate_text: str,
+    fast_path: bool = False,
+) -> Dict[str, Any]:
     final_text = str(out.get("player_facing_text") or "")
     sanitized_text = _sanitize_output_text(final_text)
-    decompressed_text = _decompress_overpacked_sentences(sanitized_text)
-    repaired_text = decompressed_text
-    fragment_repair_applied = False
-    if decompressed_text != sanitized_text:
-        repaired_text, fragment_repair_applied = _repair_fragmentary_participial_splits(decompressed_text)
-    smoothed_text, sentence_micro_smoothing_applied = _micro_smooth_post_repair_sentences(repaired_text)
+    if fast_path:
+        smoothed_text = sanitized_text
+        fragment_repair_applied = False
+        sentence_decompression_applied = False
+        sentence_micro_smoothing_applied = False
+    else:
+        decompressed_text = _decompress_overpacked_sentences(sanitized_text)
+        repaired_text = decompressed_text
+        fragment_repair_applied = False
+        if decompressed_text != sanitized_text:
+            repaired_text, fragment_repair_applied = _repair_fragmentary_participial_splits(decompressed_text)
+        smoothed_text, sentence_micro_smoothing_applied = _micro_smooth_post_repair_sentences(repaired_text)
+        sentence_decompression_applied = decompressed_text != sanitized_text
     sanitization_applied = sanitized_text != final_text
-    sentence_decompression_applied = decompressed_text != sanitized_text
     out["player_facing_text"] = smoothed_text
 
     meta = out.get("_final_emission_meta") if isinstance(out.get("_final_emission_meta"), dict) else {}
+    meta["final_emission_fast_path_used"] = bool(fast_path)
     meta["output_sanitization_applied"] = sanitization_applied
     meta["sentence_decompression_applied"] = sentence_decompression_applied
     meta["sentence_fragment_repair_applied"] = fragment_repair_applied
@@ -4150,6 +4218,205 @@ def _opening_scene_preference_active(session: Dict[str, Any] | None) -> bool:
     turn_counter = int(session.get("turn_counter", 0) or 0)
     visited_scene_ids = session.get("visited_scene_ids") if isinstance(session.get("visited_scene_ids"), list) else []
     return turn_counter <= 1 or (turn_counter == 0 and len(visited_scene_ids) <= 1)
+
+
+_FAST_FALLBACK_NEUTRAL_BAD_JOIN_PATTERNS: tuple[re.Pattern[str], ...] = (
+    re.compile(r"\bholds;\s+beside it\b", flags=re.IGNORECASE),
+    re.compile(r"\bholds;\s+beside them\b", flags=re.IGNORECASE),
+    re.compile(r"\bholds;\s+beside\b", flags=re.IGNORECASE),
+)
+
+_FAST_FALLBACK_NEUTRAL_SUBJECT_VERB_RE = re.compile(
+    r"^(?:"
+    r"is|was|stands?|keeps?|watches?|glances?|lingers?|waits?|looks?|holds?|moves?|speaks?|says?|"
+    r"turns?|steps?|calls?|shouts?|scans?|studies?|gestures?|rests?|leans?|hangs?|offers?|questions?"
+    r")\b",
+    flags=re.IGNORECASE,
+)
+
+
+def _default_fast_fallback_neutral_composition_meta() -> Dict[str, Any]:
+    return {
+        "fast_fallback_neutral_composition_checked": False,
+        "fast_fallback_neutral_composition_applicable": False,
+        "fast_fallback_neutral_composition_malformed_detected": False,
+        "fast_fallback_neutral_composition_failure_reasons": [],
+        "fast_fallback_neutral_composition_repaired": False,
+        "fast_fallback_neutral_composition_repair_mode": None,
+    }
+
+
+def _merge_fast_fallback_neutral_composition_meta(meta: Dict[str, Any], dbg: Dict[str, Any]) -> None:
+    meta.update(
+        {
+            "fast_fallback_neutral_composition_checked": bool(
+                dbg.get("fast_fallback_neutral_composition_checked")
+            ),
+            "fast_fallback_neutral_composition_applicable": bool(
+                dbg.get("fast_fallback_neutral_composition_applicable")
+            ),
+            "fast_fallback_neutral_composition_malformed_detected": bool(
+                dbg.get("fast_fallback_neutral_composition_malformed_detected")
+            ),
+            "fast_fallback_neutral_composition_failure_reasons": list(
+                dbg.get("fast_fallback_neutral_composition_failure_reasons") or []
+            ),
+            "fast_fallback_neutral_composition_repaired": bool(
+                dbg.get("fast_fallback_neutral_composition_repaired")
+            ),
+            "fast_fallback_neutral_composition_repair_mode": dbg.get(
+                "fast_fallback_neutral_composition_repair_mode"
+            ),
+        }
+    )
+
+
+def _fast_fallback_neutral_composition_applicable(
+    gm_output: Dict[str, Any] | None,
+    *,
+    session: Dict[str, Any] | None,
+    strict_social_active: bool,
+) -> bool:
+    if strict_social_active or not _opening_scene_preference_active(session):
+        return False
+    tags = [str(t) for t in ((gm_output or {}).get("tags") or []) if isinstance(t, str)]
+    return any(tag in tags for tag in ("upstream_api_fast_fallback", "forced_retry_fallback", "retry_escape_hatch"))
+
+
+def _fast_fallback_bare_actor_header_detected(text: str, actor_tokens: List[str]) -> bool:
+    clean = _normalize_text(text)
+    if not clean:
+        return False
+    lowered = clean.lower()
+    for raw in actor_tokens:
+        token = str(raw or "").strip().lower()
+        if len(token) < 3:
+            continue
+        display = _title_case_anchor_phrase(token)
+        if not display:
+            continue
+        prefix = f"{display.lower()} "
+        if not lowered.startswith(prefix):
+            continue
+        remainder = clean[len(display) :].lstrip(" ,;:-")
+        if not remainder:
+            return True
+        if _FAST_FALLBACK_NEUTRAL_SUBJECT_VERB_RE.match(remainder):
+            return False
+        if remainder[:1].islower():
+            return False
+        return True
+    return False
+
+
+def _fast_fallback_neutral_composition_failure_reasons(
+    text: str,
+    *,
+    gm_output: Dict[str, Any] | None,
+) -> List[str]:
+    reasons: List[str] = []
+    clean = _normalize_text(text)
+    if not clean:
+        return reasons
+    contract = _resolve_scene_state_anchor_contract(gm_output)
+    actor_tokens = [str(tok) for tok in ((contract or {}).get("actor_tokens") or []) if isinstance(tok, str)]
+    if actor_tokens and _fast_fallback_bare_actor_header_detected(clean, actor_tokens):
+        reasons.append("bare_actor_header")
+    if any(pattern.search(clean) for pattern in _FAST_FALLBACK_NEUTRAL_BAD_JOIN_PATTERNS):
+        reasons.append("fact_fragment_collision")
+    return _dedupe_preserve_order(reasons)
+
+
+def _fast_fallback_opening_clean_scene_summary(scene: Dict[str, Any] | None) -> str:
+    inner = _scene_inner(scene)
+    summary = _normalize_text(str(inner.get("summary") or ""))
+    if not summary:
+        return ""
+    first = re.split(r"(?<=[.!?])\s+", summary, maxsplit=1)[0].strip()
+    if not first:
+        return ""
+    if ";" in first:
+        first = first.split(";", 1)[0].strip(" ,;:-")
+    return _output_sentence(first)
+
+
+def _fast_fallback_opening_detail_candidates(
+    scene: Dict[str, Any] | None,
+    *,
+    gm_output: Dict[str, Any] | None,
+) -> List[str]:
+    contract = _resolve_scene_state_anchor_contract(gm_output)
+    actor_tokens = [str(tok) for tok in ((contract or {}).get("actor_tokens") or []) if isinstance(tok, str)]
+    details: List[str] = []
+    for fact in _scene_visible_facts(scene):
+        clean = _output_sentence(fact)
+        if not clean:
+            continue
+        if any(pattern.search(clean) for pattern in _FAST_FALLBACK_NEUTRAL_BAD_JOIN_PATTERNS):
+            continue
+        if actor_tokens and _fast_fallback_bare_actor_header_detected(clean, actor_tokens):
+            continue
+        details.append(clean)
+    return _dedupe_preserve_order(details)
+
+
+def _build_fast_fallback_opening_scene_template(
+    scene: Dict[str, Any] | None,
+    *,
+    gm_output: Dict[str, Any] | None,
+    scene_id: str,
+) -> str:
+    lead = _fast_fallback_opening_clean_scene_summary(scene)
+    details = _fast_fallback_opening_detail_candidates(scene, gm_output=gm_output)
+    parts: List[str] = []
+    if lead:
+        parts.append(lead)
+    if details:
+        for detail in details:
+            if lead and _normalize_text(detail).lower() == _normalize_text(lead).lower():
+                continue
+            parts.append(detail)
+            break
+    if parts:
+        return _normalize_text(" ".join(parts[:2]))
+    return _normalize_text(
+        _global_narrative_fallback_stock_line(scene if isinstance(scene, dict) else None, scene_id=scene_id)
+    )
+
+
+def _apply_fast_fallback_neutral_composition_layer(
+    text: str,
+    *,
+    gm_output: Dict[str, Any] | None,
+    session: Dict[str, Any] | None,
+    scene: Dict[str, Any] | None,
+    scene_id: str,
+    strict_social_active: bool,
+) -> tuple[str, Dict[str, Any]]:
+    meta = _default_fast_fallback_neutral_composition_meta()
+    if not _fast_fallback_neutral_composition_applicable(
+        gm_output,
+        session=session,
+        strict_social_active=strict_social_active,
+    ):
+        return text, meta
+    meta["fast_fallback_neutral_composition_checked"] = True
+    meta["fast_fallback_neutral_composition_applicable"] = True
+    reasons = _fast_fallback_neutral_composition_failure_reasons(text, gm_output=gm_output)
+    if not reasons:
+        return text, meta
+    meta["fast_fallback_neutral_composition_malformed_detected"] = True
+    meta["fast_fallback_neutral_composition_failure_reasons"] = reasons
+    repaired = _build_fast_fallback_opening_scene_template(
+        scene,
+        gm_output=gm_output,
+        scene_id=scene_id,
+    )
+    if repaired and _normalize_text(repaired) != _normalize_text(text):
+        meta["fast_fallback_neutral_composition_repaired"] = True
+        meta["fast_fallback_neutral_composition_repair_mode"] = "opening_scene_template"
+        return repaired, meta
+    return text, meta
 
 
 def _scene_visible_facts(scene: Dict[str, Any] | None) -> List[str]:
@@ -7660,6 +7927,7 @@ def apply_final_emission_gate(
     purity_layer_meta: Dict[str, Any] = _default_player_facing_narration_purity_meta()
     asp_layer_meta: Dict[str, Any] = _default_answer_shape_primacy_meta()
     ssa_layer_meta: Dict[str, Any] = {}
+    ffnc_layer_meta: Dict[str, Any] = _default_fast_fallback_neutral_composition_meta()
 
     strict_social_active = bool(strict_social_turn)
     coercion_used = (
@@ -7819,6 +8087,15 @@ def apply_final_emission_gate(
             response_type_debug=response_type_debug,
         )
         out["player_facing_text"] = text
+        text, ffnc_layer_meta = _apply_fast_fallback_neutral_composition_layer(
+            _normalize_text_preserve_paragraphs(text),
+            gm_output=out,
+            session=session if isinstance(session, dict) else None,
+            scene=scene if isinstance(scene, dict) else None,
+            scene_id=sid,
+            strict_social_active=strict_social_active,
+        )
+        out["player_facing_text"] = text
         _merge_scene_state_anchor_into_emission_debug(
             out,
             resolution if isinstance(resolution, dict) else None,
@@ -7920,6 +8197,11 @@ def apply_final_emission_gate(
             final_emitted_source = str(
                 asp_layer_meta.get("answer_shape_primacy_repair_mode") or "answer_shape_primacy_repair"
             )
+        if ffnc_layer_meta.get("fast_fallback_neutral_composition_repaired"):
+            final_emitted_source = str(
+                ffnc_layer_meta.get("fast_fallback_neutral_composition_repair_mode")
+                or "fast_fallback_neutral_composition_repair"
+            )
         gate_out_text = _normalize_text(out.get("player_facing_text"))
         post_gate_mutation_detected = pre_gate_text != gate_out_text
 
@@ -7984,6 +8266,7 @@ def apply_final_emission_gate(
             _merge_answer_shape_primacy_meta(out["_final_emission_meta"], asp_layer_meta)
             _merge_scene_state_anchor_meta(out["_final_emission_meta"], ssa_layer_meta)
             _merge_fallback_behavior_meta(out["_final_emission_meta"], fb_layer_meta)
+            _merge_fast_fallback_neutral_composition_meta(out["_final_emission_meta"], ffnc_layer_meta)
             grounded_fm_exempt = _strict_social_terminal_grounded_speaker_first_mention_exemption_entity_id(
                 out,
                 session=session,
@@ -8033,6 +8316,8 @@ def apply_final_emission_gate(
                 gm_output=out,
                 resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
                 strict_social_path=True,
+                session=session if isinstance(session, dict) else None,
+                scene_id=sid,
             )
             out["player_facing_text"] = fb_text
             _merge_fallback_behavior_into_emission_debug(
@@ -8069,7 +8354,11 @@ def apply_final_emission_gate(
                 speaker_contract_enforcement=_speaker_contract_payload,
             )
             log_final_emission_trace({**out["_final_emission_meta"], "stage": "final_emission_gate_accept"})
-            return _finalize_emission_output(out, pre_gate_text=pre_gate_text)
+            return _finalize_emission_output(
+                out,
+                pre_gate_text=pre_gate_text,
+                fast_path=_final_emission_fast_path_eligible(out),
+            )
 
         fb_kind = str(details.get("fallback_kind") or "none")
         deterministic_attempted = bool(details.get("deterministic_attempted"))
@@ -8158,6 +8447,7 @@ def apply_final_emission_gate(
         _merge_answer_shape_primacy_meta(out["_final_emission_meta"], asp_layer_meta)
         _merge_scene_state_anchor_meta(out["_final_emission_meta"], ssa_layer_meta)
         _merge_fallback_behavior_meta(out["_final_emission_meta"], fb_layer_meta)
+        _merge_fast_fallback_neutral_composition_meta(out["_final_emission_meta"], ffnc_layer_meta)
         grounded_fm_exempt = _strict_social_terminal_grounded_speaker_first_mention_exemption_entity_id(
             out,
             session=session,
@@ -8185,6 +8475,8 @@ def apply_final_emission_gate(
             gm_output=out,
             resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
             strict_social_path=True,
+            session=session if isinstance(session, dict) else None,
+            scene_id=sid,
         )
         out["player_facing_text"] = fb_text
         _merge_fallback_behavior_into_emission_debug(
@@ -8220,7 +8512,11 @@ def apply_final_emission_gate(
             speaker_contract_enforcement=_speaker_contract_payload,
         )
         log_final_emission_trace({**out["_final_emission_meta"], "stage": "final_emission_gate_replace"})
-        return _finalize_emission_output(out, pre_gate_text=pre_gate_text)
+        return _finalize_emission_output(
+            out,
+            pre_gate_text=pre_gate_text,
+            fast_path=_final_emission_fast_path_eligible(out),
+        )
 
     low = text.lower()
     banned_any_route = (
@@ -8354,6 +8650,15 @@ def apply_final_emission_gate(
         response_type_debug=response_type_debug,
     )
     out["player_facing_text"] = _normalize_text(text)
+    text, ffnc_layer_meta = _apply_fast_fallback_neutral_composition_layer(
+        _normalize_text(text),
+        gm_output=out,
+        session=session if isinstance(session, dict) else None,
+        scene=scene if isinstance(scene, dict) else None,
+        scene_id=sid,
+        strict_social_active=strict_social_active,
+    )
+    out["player_facing_text"] = _normalize_text(text)
     _merge_scene_state_anchor_into_emission_debug(
         out,
         resolution if isinstance(resolution, dict) else None,
@@ -8422,6 +8727,8 @@ def apply_final_emission_gate(
         gm_output=out,
         resolution=resolution if isinstance(resolution, dict) else None,
         strict_social_path=False,
+        session=session if isinstance(session, dict) else None,
+        scene_id=sid,
     )
     reasons.extend(fb_extra)
     out["player_facing_text"] = _normalize_text(text)
@@ -8489,6 +8796,11 @@ def apply_final_emission_gate(
             final_emitted_source = str(
                 asp_layer_meta.get("answer_shape_primacy_repair_mode") or "answer_shape_primacy_repair"
             )
+        if ffnc_layer_meta.get("fast_fallback_neutral_composition_repaired"):
+            final_emitted_source = str(
+                ffnc_layer_meta.get("fast_fallback_neutral_composition_repair_mode")
+                or "fast_fallback_neutral_composition_repair"
+            )
 
         gate_out_text = _normalize_text(out.get("player_facing_text"))
         post_gate_mutation_detected = pre_gate_text != gate_out_text
@@ -8545,6 +8857,7 @@ def apply_final_emission_gate(
         _merge_answer_shape_primacy_meta(out["_final_emission_meta"], asp_layer_meta)
         _merge_scene_state_anchor_meta(out["_final_emission_meta"], ssa_layer_meta)
         _merge_fallback_behavior_meta(out["_final_emission_meta"], fb_layer_meta)
+        _merge_fast_fallback_neutral_composition_meta(out["_final_emission_meta"], ffnc_layer_meta)
         grounded_fm_exempt = _strict_social_terminal_grounded_speaker_first_mention_exemption_entity_id(
             out,
             session=session,
@@ -8583,7 +8896,11 @@ def apply_final_emission_gate(
             response_type_debug=response_type_debug,
         )
         log_final_emission_trace({**out["_final_emission_meta"], "stage": "final_emission_gate_accept"})
-        return _finalize_emission_output(out, pre_gate_text=pre_gate_text)
+        return _finalize_emission_output(
+            out,
+            pre_gate_text=pre_gate_text,
+            fast_path=_final_emission_fast_path_eligible(out),
+        )
 
     # Non-social replace path only (strict-social replacement is handled in build_final_strict_social_response).
     suppress_intro_replace = anti_reset_suppresses_intro_style_fallbacks(
@@ -8755,4 +9072,8 @@ def apply_final_emission_gate(
         response_type_debug=response_type_debug,
     )
     log_final_emission_trace({**out["_final_emission_meta"], "stage": "final_emission_gate_replace"})
-    return _finalize_emission_output(out, pre_gate_text=pre_gate_text)
+    return _finalize_emission_output(
+        out,
+        pre_gate_text=pre_gate_text,
+        fast_path=_final_emission_fast_path_eligible(out),
+    )

@@ -1,5 +1,18 @@
 from __future__ import annotations
 
+"""Final player-facing string cleanup (post-policy, typically last in the emit path).
+
+Ownership split (see also ``tests/test_output_sanitizer.py`` vs ``tests/test_prompt_and_guard.py``):
+
+- **Prompt / guard** (``game.gm``, ``game.gm_retry``, prompt payloads): model-facing instruction
+  shape, retry classification, source/category tagging, ``detect_validator_voice`` as policy
+  metadata, and bounded uncertainty *render-helper* output before this layer runs.
+- **This module**: canonical phrase-level rules for scaffold stripping, procedural/engine wording,
+  analytical imperatives, serialized-schema leakage, and sentence-level coherence repairs on the
+  text players see. Do not duplicate guard-side validator-voice rewrite logic here; strip scaffold
+  tokens and diegetically rewrite instruction-shaped prose instead.
+"""
+
 import json
 import re
 from typing import Any, Dict

@@ -3,6 +3,7 @@ from contextlib import asynccontextmanager
 from pathlib import Path
 import json
 import re
+import time
 from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -191,6 +192,40 @@ def _sanitize_incoming_payload(req: ActionRequest | None) -> dict:
             if k in exp
         }
     return out
+
+
+_LATENCY_TRACE_KEYS = (
+    "intent_classification",
+    "engine_resolution",
+    "prompt_construction",
+    "gpt_call",
+    "retry_loop_total",
+    "final_emission_gate",
+    "fallback_repair",
+    "total_turn",
+)
+
+
+def _now_perf() -> float:
+    return time.perf_counter()
+
+
+def _elapsed_ms(start: float) -> int:
+    return max(0, int(round((time.perf_counter() - start) * 1000)))
+
+
+def _accumulate_latency(latency_sink: dict | None, key: str, elapsed_ms: int) -> None:
+    if not isinstance(latency_sink, dict) or key not in _LATENCY_TRACE_KEYS:
+        return
+    latency_sink[key] = max(0, int(latency_sink.get(key, 0) or 0)) + max(0, int(elapsed_ms or 0))
+
+
+def _finalize_latency_breakdown(latency_sink: dict | None) -> dict[str, int]:
+    sink = latency_sink if isinstance(latency_sink, dict) else {}
+    return {
+        key: max(0, int(sink.get(key, 0) or 0))
+        for key in _LATENCY_TRACE_KEYS
+    }
 
 
 _COMBAT_IDLE = {'in_combat': False, 'round': 0, 'initiative_order': [], 'turn_index': 0, 'active_actor_id': None, 'player_turn_used': False}
@@ -667,6 +702,7 @@ def _build_gpt_narration_from_authoritative_state(
     route_choice: str | None = None,
     directed_social_entry: dict | None = None,
     response_type_contract: dict | None = None,
+    latency_sink: dict | None = None,
 ) -> dict:
     """Stages 6-7: build prompt context from authoritative state, then narrate with GPT."""
     register_topic_probe(
@@ -685,6 +721,7 @@ def _build_gpt_narration_from_authoritative_state(
             resolution=resolution,
             recent_log=recent_log,
         )
+    prompt_started = _now_perf()
     messages = build_messages(
         campaign,
         world,
@@ -696,6 +733,7 @@ def _build_gpt_narration_from_authoritative_state(
         user_text,
         resolution,
         scene_runtime=scene_runtime,
+        prompt_profile="manual_play_auto",
     )
     prompt_payload: dict = {}
     if isinstance(messages, list) and len(messages) > 1:
@@ -738,6 +776,7 @@ def _build_gpt_narration_from_authoritative_state(
             messages = list(messages)
             messages[1] = dict(messages[1])
             messages[1]["content"] = json.dumps(prompt_payload, ensure_ascii=True)
+    _accumulate_latency(latency_sink, "prompt_construction", _elapsed_ms(prompt_started))
 
     def _failures_after_social_answer_priority(raw: list) -> list:
         prioritized, _dbg = prioritize_retry_failures_for_social_answer_candidate(
@@ -752,11 +791,13 @@ def _build_gpt_narration_from_authoritative_state(
         return prioritized
 
     def _repair_terminal_player_facing_if_needed(gm_dict: dict, *, reason: str) -> dict:
+        repair_started = _now_perf()
         sid = str((scene.get("scene") or {}).get("id") or "").strip()
         social_lane = _session_social_authority(session) or strict_social_emission_will_apply(
             resolution, session, world, sid
         )
         if _gm_has_usable_player_facing_text(gm_dict):
+            _accumulate_latency(latency_sink, "fallback_repair", _elapsed_ms(repair_started))
             return gm_dict
         if social_lane:
             repaired = ensure_minimal_social_resolution(
@@ -770,14 +811,82 @@ def _build_gpt_narration_from_authoritative_state(
                 segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
             )
             print("[SOCIAL RESOLUTION REPAIR] terminal empty social output repaired")
+            _accumulate_latency(latency_sink, "fallback_repair", _elapsed_ms(repair_started))
             return repaired
         repaired_ns = ensure_minimal_nonsocial_resolution(gm=gm_dict, session=session)
         dbg = repaired_ns.get("debug_notes") if isinstance(repaired_ns.get("debug_notes"), str) else ""
         repaired_ns["debug_notes"] = (dbg + " | " if dbg else "") + f"nonsocial_repair_context:{reason}"
         print("[NON-SOCIAL RESOLUTION REPAIR] empty output repaired")
+        _accumulate_latency(latency_sink, "fallback_repair", _elapsed_ms(repair_started))
         return repaired_ns
 
+    def _extract_upstream_api_error(gm_dict: dict | None) -> dict | None:
+        md = gm_dict.get("metadata") if isinstance(gm_dict, dict) and isinstance(gm_dict.get("metadata"), dict) else {}
+        err = md.get("upstream_api_error") if isinstance(md.get("upstream_api_error"), dict) else None
+        return dict(err) if isinstance(err, dict) else None
+
+    def _social_dialogue_turn() -> bool:
+        sid = str((scene.get("scene") or {}).get("id") or "").strip()
+        if route_choice == "dialogue":
+            return True
+        if isinstance(resolution, dict) and isinstance(resolution.get("social"), dict):
+            return True
+        return bool(
+            _session_social_authority(session)
+            or strict_social_emission_will_apply(resolution, session, world, sid)
+        )
+
+    def _fast_fallback_for_upstream_error(
+        gm_dict: dict,
+        api_error: dict,
+        *,
+        reason: str,
+    ) -> dict:
+        failure_class = str(api_error.get("failure_class") or "upstream_api_error").strip() or "upstream_api_error"
+        failure = {
+            "failure_class": failure_class,
+            "priority": -1,
+            "reasons": [reason, str(api_error.get("error_code") or "").strip() or failure_class],
+        }
+        fallback_started = _now_perf()
+        out = force_terminal_retry_fallback(
+            session=session,
+            original_text=str(gm_dict.get("player_facing_text") or ""),
+            failure=failure,
+            retry_failures=[failure],
+            player_text=user_text,
+            scene_envelope=scene,
+            world=world,
+            resolution=resolution,
+            base_gm=gm_dict,
+            segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+        )
+        _accumulate_latency(latency_sink, "fallback_repair", _elapsed_ms(fallback_started))
+        out = _repair_terminal_player_facing_if_needed(
+            out, reason=f"api_upstream_fast_fallback:{failure_class}"
+        )
+        out = dict(out)
+        tags = out.get("tags") if isinstance(out.get("tags"), list) else []
+        tag_list = [str(t) for t in tags if isinstance(t, str)]
+        for extra in ("fast_fallback", "upstream_api_fast_fallback", f"upstream_api_failure:{failure_class}"):
+            if extra not in tag_list:
+                tag_list.append(extra)
+        out["tags"] = tag_list
+        md = out.get("metadata") if isinstance(out.get("metadata"), dict) else {}
+        out["metadata"] = {
+            **md,
+            "upstream_api_error": dict(api_error),
+            "latency_mode": "fast_fallback",
+        }
+        dbg = out.get("debug_notes") if isinstance(out.get("debug_notes"), str) else ""
+        out["debug_notes"] = (
+            (dbg + " | " if dbg else "")
+            + f"upstream_api_fast_fallback:{failure_class}:{reason}"
+        )
+        return out
+
     known_clues = list(get_all_known_clue_texts(session))
+    initial_gpt_started = _now_perf()
     gm = guard_gm_output(
         call_gpt(messages),
         scene,
@@ -787,8 +896,46 @@ def _build_gpt_narration_from_authoritative_state(
         world=world,
         resolution=resolution,
     )
+    _accumulate_latency(latency_sink, "gpt_call", _elapsed_ms(initial_gpt_started))
     retry_attempt = 0
-    while True:
+    retry_loop_started: float | None = None
+    social_dialogue_turn = _social_dialogue_turn()
+    max_targeted_retry_attempts = 1 if social_dialogue_turn else MAX_TARGETED_RETRY_ATTEMPTS
+    fast_fallback_mode = False
+    upstream_api_error = _extract_upstream_api_error(gm)
+    if upstream_api_error:
+        retry_loop_started = _now_perf()
+        allow_direct_api_retry = bool(upstream_api_error.get("retryable")) and not social_dialogue_turn
+        if allow_direct_api_retry:
+            retry_gpt_started = _now_perf()
+            gm_retry = guard_gm_output(
+                call_gpt(messages),
+                scene,
+                user_text,
+                known_clues,
+                session=session,
+                world=world,
+                resolution=resolution,
+            )
+            _ = _elapsed_ms(retry_gpt_started)
+            retried_api_error = _extract_upstream_api_error(gm_retry)
+            if retried_api_error:
+                gm = _fast_fallback_for_upstream_error(
+                    gm_retry,
+                    retried_api_error,
+                    reason="retryable_upstream_error_exhausted",
+                )
+                fast_fallback_mode = True
+            else:
+                gm = gm_retry
+        else:
+            gm = _fast_fallback_for_upstream_error(
+                gm,
+                upstream_api_error,
+                reason="nonretryable_upstream_error" if not upstream_api_error.get("retryable") else "social_retry_suppressed",
+            )
+            fast_fallback_mode = True
+    while not fast_fallback_mode:
         failures = _failures_after_social_answer_priority(
             detect_retry_failures(
                 player_text=user_text,
@@ -803,9 +950,12 @@ def _build_gpt_narration_from_authoritative_state(
         selected_failure = choose_retry_strategy(failures)
         if not selected_failure:
             break
-        if retry_attempt >= MAX_TARGETED_RETRY_ATTEMPTS:
+        if retry_loop_started is None:
+            retry_loop_started = _now_perf()
+        if retry_attempt >= max_targeted_retry_attempts:
             fc = str(selected_failure.get("failure_class") or "").strip()
             print(f"[RETRY ESCAPE HATCH] class={fc} attempts={retry_attempt}")
+            force_started = _now_perf()
             gm = force_terminal_retry_fallback(
                 session=session,
                 original_text=str(gm.get("player_facing_text") or ""),
@@ -818,6 +968,7 @@ def _build_gpt_narration_from_authoritative_state(
                 base_gm=gm,
                 segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
             )
+            _accumulate_latency(latency_sink, "fallback_repair", _elapsed_ms(force_started))
             gm = _repair_terminal_player_facing_if_needed(
                 gm, reason="api_post_force_terminal_retry_fallback"
             )
@@ -842,6 +993,7 @@ def _build_gpt_narration_from_authoritative_state(
         retry_messages = (
             list(messages) if isinstance(messages, list) else []
         ) + [{'role': 'user', 'content': retry_instruction}]
+        retry_gpt_started = _now_perf()
         gm_retry = guard_gm_output(
             call_gpt(retry_messages),
             scene,
@@ -851,6 +1003,7 @@ def _build_gpt_narration_from_authoritative_state(
             world=world,
             resolution=resolution,
         )
+        _ = _elapsed_ms(retry_gpt_started)
         retry_dbg = gm_retry.get('debug_notes') if isinstance(gm_retry.get('debug_notes'), str) else ''
         reason_suffix = ','.join(str(r) for r in (selected_failure.get("reasons") or []) if isinstance(r, str)) or 'unknown'
         cs_trace = ""
@@ -925,6 +1078,7 @@ def _build_gpt_narration_from_authoritative_state(
                 fallback_failure = (
                     still_failing if selected_class == "unresolved_question" else selected_failure
                 )
+            deterministic_started = _now_perf()
             gm_retry = apply_deterministic_retry_fallback(
                 gm_retry,
                 failure=fallback_failure,
@@ -935,6 +1089,7 @@ def _build_gpt_narration_from_authoritative_state(
                 resolution=resolution,
                 segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
             )
+            _accumulate_latency(latency_sink, "fallback_repair", _elapsed_ms(deterministic_started))
             fallback_failures = _failures_after_social_answer_priority(
                 detect_retry_failures(
                     player_text=user_text,
@@ -971,6 +1126,7 @@ def _build_gpt_narration_from_authoritative_state(
                     ),
                     selected_failure,
                 )
+                force_started = _now_perf()
                 gm = force_terminal_retry_fallback(
                     session=session,
                     original_text=str(gm_retry.get("player_facing_text") or ""),
@@ -983,6 +1139,7 @@ def _build_gpt_narration_from_authoritative_state(
                     base_gm=gm_retry,
                     segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
                 )
+                _accumulate_latency(latency_sink, "fallback_repair", _elapsed_ms(force_started))
                 gm = _repair_terminal_player_facing_if_needed(
                     gm, reason="api_post_force_terminal_retry_fallback"
                 )
@@ -990,6 +1147,8 @@ def _build_gpt_narration_from_authoritative_state(
                 gm = gm_retry
             break
         gm = gm_retry
+    if retry_loop_started is not None:
+        _accumulate_latency(latency_sink, "retry_loop_total", _elapsed_ms(retry_loop_started))
     gm = _repair_terminal_player_facing_if_needed(
         gm, reason="api_targeted_retry_post_terminal"
     )
@@ -1011,19 +1170,20 @@ def _build_gpt_narration_from_authoritative_state(
                 merged_pd = dict(gm["prompt_debug"]) if isinstance(gm.get("prompt_debug"), dict) else {}
                 merged_pd["conversational_memory"] = dict(cm)
                 gm["prompt_debug"] = merged_pd
-    gm = apply_response_policy_enforcement(
-        gm,
-        response_policy=response_policy,
-        player_text=user_text,
-        scene_envelope=scene,
-        session=session,
-        world=world,
-        resolution=resolution,
-        discovered_clues=known_clues,
-    )
-    gm = _repair_terminal_player_facing_if_needed(
-        gm, reason="api_post_response_policy_enforcement"
-    )
+    if not fast_fallback_mode:
+        gm = apply_response_policy_enforcement(
+            gm,
+            response_policy=response_policy,
+            player_text=user_text,
+            scene_envelope=scene,
+            session=session,
+            world=world,
+            resolution=resolution,
+            discovered_clues=known_clues,
+        )
+        gm = _repair_terminal_player_facing_if_needed(
+            gm, reason="api_post_response_policy_enforcement"
+        )
     if isinstance(session, dict) and isinstance(response_policy, dict):
         session["last_turn_response_policy"] = dict(response_policy)
     return gm
@@ -1044,12 +1204,14 @@ def _run_resolved_turn_pipeline(
     segmented_turn: dict | None = None,
     route_choice: str | None = None,
     directed_social_entry: dict | None = None,
+    latency_sink: dict | None = None,
 ) -> tuple[dict, dict, dict, dict, list[str], dict]:
     """Shared resolved-turn flow for both `/api/action` and `/api/chat`.
 
     Stage 5: authoritative engine mutation is applied first.
     Stage 6-7: prompt context and GPT narration are built only from that post-resolution state.
     """
+    engine_started = _now_perf()
     scene, session, combat, authoritative_clue_updates, scene_rt = _apply_authoritative_resolution_state_mutation(
         session=session,
         world=world,
@@ -1058,6 +1220,7 @@ def _run_resolved_turn_pipeline(
         resolution=resolution,
         normalized_action=normalized_action,
     )
+    _accumulate_latency(latency_sink, "engine_resolution", _elapsed_ms(engine_started))
 
     user_text = resolution.get('prompt') or fallback_user_text
     response_type_contract = _derive_response_type_contract_for_turn(
@@ -1084,6 +1247,7 @@ def _run_resolved_turn_pipeline(
         route_choice=route_choice,
         directed_social_entry=directed_social_entry,
         response_type_contract=response_type_contract,
+        latency_sink=latency_sink,
     )
     return (scene, session, combat, gm, authoritative_clue_updates, response_type_contract)
 
@@ -1404,6 +1568,7 @@ def api_load_snapshot(payload: dict):
 
 @app.post('/api/action')
 def action(req: ActionRequest):
+    turn_started = _now_perf()
     campaign = load_campaign()
     character = load_character()
     session = load_session()
@@ -1434,6 +1599,7 @@ def action(req: ActionRequest):
         'response_ok': True,
         'error': None,
     }
+    latency_ms: dict[str, int] = {}
     clue_presentation_before = _snapshot_known_clue_presentations(session)
 
     resolution = None
@@ -1453,6 +1619,8 @@ def action(req: ActionRequest):
     elif req.action_type == 'attack':
         # Stages 1-4: input -> classification -> deterministic engine resolution.
         if not player_can_act(character, combat, conditions):
+            latency_ms["total_turn"] = _elapsed_ms(turn_started)
+            trace["latency_ms"] = _finalize_latency_breakdown(latency_ms)
             _finalize_and_append_trace(session, trace, False, 'You cannot act right now.')
             return {'ok': False, 'error': 'You cannot act right now.'}
         resolution = resolve_attack(character, scene, req.attack_id, req.target_id, req.modifiers, conditions)
@@ -1463,6 +1631,8 @@ def action(req: ActionRequest):
     elif req.action_type == 'skill_check':
         # Stages 1-4: input -> classification -> deterministic engine resolution.
         if not player_can_act(character, combat, conditions):
+            latency_ms["total_turn"] = _elapsed_ms(turn_started)
+            trace["latency_ms"] = _finalize_latency_breakdown(latency_ms)
             _finalize_and_append_trace(session, trace, False, 'You cannot act right now.')
             return {'ok': False, 'error': 'You cannot act right now.'}
         resolution = resolve_skill(character, req.skill_id, req.intent or '')
@@ -1472,6 +1642,8 @@ def action(req: ActionRequest):
     elif req.action_type == 'cast_spell':
         # Stages 1-4: input -> classification -> deterministic engine resolution.
         if not player_can_act(character, combat, conditions):
+            latency_ms["total_turn"] = _elapsed_ms(turn_started)
+            trace["latency_ms"] = _finalize_latency_breakdown(latency_ms)
             _finalize_and_append_trace(session, trace, False, 'You cannot act right now.')
             return {'ok': False, 'error': 'You cannot act right now.'}
         resolution = resolve_spell(character, scene, req.spell_id, req.target_id, conditions)
@@ -1481,9 +1653,13 @@ def action(req: ActionRequest):
         run_resolved_pipeline = True
     elif req.action_type == 'end_turn':
         if not combat['in_combat']:
+            latency_ms["total_turn"] = _elapsed_ms(turn_started)
+            trace["latency_ms"] = _finalize_latency_breakdown(latency_ms)
             _finalize_and_append_trace(session, trace, False, 'Combat is not active.')
             return {'ok': False, 'error': 'Combat is not active.'}
         if not combat['player_turn_used']:
+            latency_ms["total_turn"] = _elapsed_ms(turn_started)
+            trace["latency_ms"] = _finalize_latency_breakdown(latency_ms)
             _finalize_and_append_trace(session, trace, False, 'Take an action before ending the turn.')
             return {'ok': False, 'error': 'Take an action before ending the turn.'}
         advance_turn(combat)
@@ -1562,6 +1738,8 @@ def action(req: ActionRequest):
         fallback_user_text = req.intent or resolution.get('label', '')
         run_resolved_pipeline = True
     else:
+        latency_ms["total_turn"] = _elapsed_ms(turn_started)
+        trace["latency_ms"] = _finalize_latency_breakdown(latency_ms)
         _finalize_and_append_trace(session, trace, False, f'Unsupported action type: {req.action_type}')
         return {'ok': False, 'error': f'Unsupported action type: {req.action_type}'}
 
@@ -1612,6 +1790,7 @@ def action(req: ActionRequest):
             resolution=resolution,
             normalized_action=normalized_action,
             fallback_user_text=fallback_user_text,
+            latency_sink=latency_ms,
         )
         authoritative_clue_updates.extend(turn_clue_updates)
     if gm is None:
@@ -1638,6 +1817,7 @@ def action(req: ActionRequest):
         world=world,
         scene=scene,
         include_resolution_in_sanitizer=True,
+        latency_sink=latency_ms,
     )
     for _rt in _narr_consistency.get("repaired_discovered_clue_texts") or []:
         if isinstance(_rt, str) and _rt.strip() and _rt.strip() not in authoritative_clue_updates:
@@ -1659,6 +1839,7 @@ def action(req: ActionRequest):
         ),
     )
     _adopt_dbg = None
+    _stale_inv_dbg = None
     if scene_before_id == scene['scene']['id']:
         _adopt_dbg = apply_post_emission_speaker_adoption(
             session,
@@ -1668,7 +1849,7 @@ def action(req: ActionRequest):
             resolution=resolution if isinstance(resolution, dict) else None,
             scene_changed=False,
         )
-        apply_stale_interlocutor_invalidation_after_emission(
+        _stale_inv_dbg = apply_stale_interlocutor_invalidation_after_emission(
             session,
             world,
             scene,
@@ -1708,6 +1889,7 @@ def action(req: ActionRequest):
             deduped_clue_updates.append(txt.strip())
     trace['clue_updates'] = deduped_clue_updates
     trace['world_flag_updates'] = _trace_world_updates(gm.get('world_updates'))
+    latency_ms["total_turn"] = _elapsed_ms(turn_started)
     trace['turn_trace'] = _build_compact_turn_trace(
         source='action',
         action_type=req.action_type,
@@ -1726,10 +1908,16 @@ def action(req: ActionRequest):
         scene=scene,
         leads_inspection=leads_inspection,
         response_type_contract=response_type_contract,
+        route_selected=req.action_type,
+        directed_social_entry=None,
+        adoption_debug=_adopt_dbg,
+        stale_invalidation_debug=_stale_inv_dbg,
+        latency_ms=_finalize_latency_breakdown(latency_ms),
     )
     trace['gpt_called'] = req.action_type != 'roll_initiative' and not (
         req.action_type == 'end_turn' and gm.get('debug_notes') == 'No enemy response.'
     )
+    trace['latency_ms'] = _finalize_latency_breakdown(latency_ms)
     _finalize_and_append_trace(session, trace, True, None)
 
     save_character(character)
@@ -1791,6 +1979,7 @@ def action(req: ActionRequest):
 
 @app.post('/api/chat')
 def chat(req: ChatRequest):
+    turn_started = _now_perf()
     campaign = load_campaign()
     character = load_character()
     session = load_session()
@@ -1823,6 +2012,7 @@ def chat(req: ChatRequest):
         'response_ok': True,
         'error': None,
     }
+    latency_ms: dict[str, int] = {}
     clue_presentation_before = _snapshot_known_clue_presentations(session)
 
     if session.get('turn_counter') is None:
@@ -1850,6 +2040,7 @@ def chat(req: ChatRequest):
     route_choice: str | None = None
     # Segment + canonical social entry before implied dialogue establishment so prior interlocutor
     # and continuity flags (declared switch / spoken vocative) see pre-turn binding.
+    classify_started = _now_perf()
     segmented_turn = segment_mixed_player_turn(req.text)
     trace['segmented_turn'] = _compact_segmented_turn(segmented_turn)
     canonical_entry = resolve_directed_social_entry(
@@ -1929,6 +2120,7 @@ def chat(req: ChatRequest):
     # Try social first when world has npcs; then exploration; then minimal intent fallback.
     if _is_campaign_start_turn_request(req.text, session, recent_log):
         routed_via_exploration = True
+        route_choice = "action"
         normalized_chat = {
             "id": "campaign_start_opening_scene",
             "label": req.text.strip(),
@@ -1938,6 +2130,7 @@ def chat(req: ChatRequest):
             "target_scene_id": scene["scene"].get("id"),
         }
         resolution = _build_opening_scene_resolution(req.text, scene["scene"].get("id", ""))
+        _accumulate_latency(latency_ms, "intent_classification", _elapsed_ms(classify_started))
         scene, session, combat, gm, turn_clue_updates, response_type_contract = _run_resolved_turn_pipeline(
             campaign=campaign,
             character=character,
@@ -1952,6 +2145,7 @@ def chat(req: ChatRequest):
             segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
             route_choice="action",
             directed_social_entry=canonical_entry,
+            latency_sink=latency_ms,
         )
         authoritative_clue_updates.extend(turn_clue_updates)
         resolution['world_tick_events'] = tick.get('events', [])
@@ -2054,6 +2248,7 @@ def chat(req: ChatRequest):
                 parsed = travel_fallback
             elif "declared_travel_override" not in trace:
                 trace["declared_travel_override"] = {"applied": False}
+        _accumulate_latency(latency_ms, "intent_classification", _elapsed_ms(classify_started))
     _record_scene_pressure_input(
         session,
         scene_before_id,
@@ -2200,6 +2395,7 @@ def chat(req: ChatRequest):
                 segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
                 route_choice=route_choice,
                 directed_social_entry=canonical_entry,
+                latency_sink=latency_ms,
             )
             authoritative_clue_updates.extend(turn_clue_updates)
         resolution['world_tick_events'] = tick.get('events', [])
@@ -2304,6 +2500,7 @@ def chat(req: ChatRequest):
                 route_choice=route_choice,
                 directed_social_entry=canonical_entry,
                 response_type_contract=response_type_contract,
+                latency_sink=latency_ms,
             )
 
     _include_res_chat = bool(
@@ -2332,6 +2529,7 @@ def chat(req: ChatRequest):
         world=world,
         scene=scene,
         include_resolution_in_sanitizer=_include_res_chat,
+        latency_sink=latency_ms,
     )
     for _rt in _narr_consistency_chat.get("repaired_discovered_clue_texts") or []:
         if isinstance(_rt, str) and _rt.strip() and _rt.strip() not in authoritative_clue_updates:
@@ -2358,6 +2556,7 @@ def chat(req: ChatRequest):
         ),
     )
     _adopt_dbg_chat = None
+    _stale_inv_dbg_chat = None
     if scene_before_id == scene['scene']['id']:
         _adopt_dbg_chat = apply_post_emission_speaker_adoption(
             session,
@@ -2367,7 +2566,7 @@ def chat(req: ChatRequest):
             resolution=context_resolution if isinstance(context_resolution, dict) else None,
             scene_changed=False,
         )
-        apply_stale_interlocutor_invalidation_after_emission(
+        _stale_inv_dbg_chat = apply_stale_interlocutor_invalidation_after_emission(
             session,
             world,
             scene,
@@ -2407,6 +2606,7 @@ def chat(req: ChatRequest):
             deduped_clue_updates.append(txt.strip())
     trace['clue_updates'] = deduped_clue_updates
     trace['world_flag_updates'] = _trace_world_updates(gm.get('world_updates'), clocks_changed)
+    latency_ms["total_turn"] = _elapsed_ms(turn_started)
     trace['turn_trace'] = _build_compact_turn_trace(
         source='chat',
         action_type='chat',
@@ -2425,7 +2625,13 @@ def chat(req: ChatRequest):
         scene=scene,
         leads_inspection=leads_inspection,
         response_type_contract=response_type_contract,
+        route_selected=route_choice,
+        directed_social_entry=canonical_entry,
+        adoption_debug=_adopt_dbg_chat,
+        stale_invalidation_debug=_stale_inv_dbg_chat,
+        latency_ms=_finalize_latency_breakdown(latency_ms),
     )
+    trace['latency_ms'] = _finalize_latency_breakdown(latency_ms)
     _finalize_and_append_trace(session, trace, True, None)
 
     clear_turn_start_interlocutor_snapshot(session)

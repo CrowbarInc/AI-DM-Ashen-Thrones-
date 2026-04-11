@@ -423,6 +423,9 @@ def _build_dialogue_first_action(
             resolved_target_id=target_id,
         ),
     }
+    stc = ce.get("social_turn_contract")
+    if isinstance(stc, dict) and stc:
+        metadata["social_turn_contract"] = dict(stc)
     if ce.get("open_social_solicitation"):
         metadata["open_social_solicitation"] = True
         metadata["broad_address_bid"] = bool(ce.get("broad_address_bid"))

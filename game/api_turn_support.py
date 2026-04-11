@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import time
+
 from game.storage import (
     append_debug_trace,
     save_session,
@@ -38,6 +40,20 @@ AUTHORITATIVE_TURN_STAGE_ORDER: tuple[str, ...] = (
     'affordance_derivation',
     'response_debug_packaging',
 )
+
+
+def _now_perf() -> float:
+    return time.perf_counter()
+
+
+def _elapsed_ms(start: float) -> int:
+    return max(0, int(round((time.perf_counter() - start) * 1000)))
+
+
+def _accumulate_latency(latency_sink: dict | None, key: str, elapsed_ms: int) -> None:
+    if not isinstance(latency_sink, dict):
+        return
+    latency_sink[key] = max(0, int(latency_sink.get(key, 0) or 0)) + max(0, int(elapsed_ms or 0))
 
 
 def _merge_emergent_actor_debug_into_action_debug(session: dict) -> None:
@@ -147,6 +163,7 @@ def _finalize_player_facing_for_turn(
     world: dict,
     scene: dict,
     include_resolution_in_sanitizer: bool = True,
+    latency_sink: dict | None = None,
 ) -> tuple[dict | None, dict]:
     """Apply repeated-description guard and scene momentum, then sanitize, emission gate, and mismatch repair.
 
@@ -198,6 +215,7 @@ def _finalize_player_facing_for_turn(
     }
     if strict_social_turn:
         gm_out["player_facing_text"] = raw_text
+        gate_started = _now_perf()
         gm_out = apply_final_emission_gate(
             gm_out,
             resolution=resolution if isinstance(resolution, dict) else None,
@@ -206,8 +224,10 @@ def _finalize_player_facing_for_turn(
             scene=scene,
             world=world,
         )
+        _accumulate_latency(latency_sink, "final_emission_gate", _elapsed_ms(gate_started))
     else:
         gm_out["player_facing_text"] = sanitize_player_facing_output(raw_text, san_ctx_base)
+        gate_started = _now_perf()
         gm_out = apply_final_emission_gate(
             gm_out,
             resolution=resolution if isinstance(resolution, dict) else None,
@@ -216,6 +236,7 @@ def _finalize_player_facing_for_turn(
             scene=scene,
             world=world,
         )
+        _accumulate_latency(latency_sink, "final_emission_gate", _elapsed_ms(gate_started))
 
     narr_meta = reconcile_final_text_with_structured_state(
         session=session,
@@ -331,6 +352,128 @@ def _derive_affordances_from_authoritative_state(scene: dict, session: dict, wor
     return _compact_affordances_for_trace(affordances)
 
 
+def _coalesce_social_turn_contract(
+    resolution: dict | None,
+    normalized_action: dict | None,
+    directed_social_entry: dict | None,
+) -> dict | None:
+    """Prefer ``resolution.metadata``, then normalized action metadata, then directed social entry."""
+    if isinstance(resolution, dict):
+        md = resolution.get("metadata")
+        if isinstance(md, dict):
+            stc = md.get("social_turn_contract")
+            if isinstance(stc, dict) and stc:
+                return dict(stc)
+    if isinstance(normalized_action, dict):
+        md = normalized_action.get("metadata")
+        if isinstance(md, dict):
+            stc = md.get("social_turn_contract")
+            if isinstance(stc, dict) and stc:
+                return dict(stc)
+    if isinstance(directed_social_entry, dict):
+        stc = directed_social_entry.get("social_turn_contract")
+        if isinstance(stc, dict) and stc:
+            return dict(stc)
+    return None
+
+
+def _visible_grounded_speaker_id(
+    adoption_debug: dict | None,
+    stale_invalidation_debug: dict | None,
+) -> str | None:
+    """Reuse post-emission debug ids only (no text parsing)."""
+    if isinstance(stale_invalidation_debug, dict):
+        v = stale_invalidation_debug.get("visible_grounded_speaker_id")
+        if isinstance(v, str) and v.strip():
+            return v.strip()
+    if isinstance(adoption_debug, dict) and adoption_debug.get("adopted") is True:
+        v = adoption_debug.get("npc_id")
+        if isinstance(v, str) and v.strip():
+            return v.strip()
+    return None
+
+
+def _apply_post_emission_contract_overlays(
+    out: dict[str, str | None],
+    adoption_debug: dict | None,
+    stale_invalidation_debug: dict | None,
+) -> None:
+    """Overlay ``interlocutor_status`` / ``fallback_anchor_source`` from adoption/stale debug dicts.
+
+    Stale invalidation runs after adoption; its fields win when it clears or contradicts storage.
+    Does not re-derive routing; copies canonical debug fields only.
+    """
+    if isinstance(adoption_debug, dict):
+        ar = str(adoption_debug.get("reason") or "")
+        adoption_authoritative = bool(adoption_debug.get("adopted") is True) or ar == "already_current_interlocutor"
+        if adoption_authoritative and ar not in ("skipped", "scene_changed_or_bad_inputs", "no_scene"):
+            ils = adoption_debug.get("interlocutor_status")
+            if isinstance(ils, str) and ils.strip():
+                out["interlocutor_status"] = ils.strip()
+            fas = adoption_debug.get("fallback_anchor_source")
+            if isinstance(fas, str) and fas.strip():
+                out["fallback_anchor_source"] = fas.strip()
+    if isinstance(stale_invalidation_debug, dict):
+        if stale_invalidation_debug.get("cleared") or str(
+            stale_invalidation_debug.get("reason") or ""
+        ).strip() in (
+            "visible_speaker_contradicts_stored_interlocutor",
+        ):
+            ils = stale_invalidation_debug.get("interlocutor_status")
+            if isinstance(ils, str) and ils.strip():
+                out["interlocutor_status"] = ils.strip()
+            fas = stale_invalidation_debug.get("fallback_anchor_source")
+            if isinstance(fas, str) and fas.strip():
+                out["fallback_anchor_source"] = fas.strip()
+
+
+def _trace_str(v: object | None) -> str | None:
+    if v is None:
+        return None
+    s = str(v).strip()
+    return s or None
+
+
+def build_social_contract_turn_trace(
+    *,
+    resolution: dict | None,
+    normalized_action: dict | None,
+    directed_social_entry: dict | None,
+    route_selected: str | None,
+    session: dict | None,
+    adoption_debug: dict | None = None,
+    stale_invalidation_debug: dict | None = None,
+) -> dict[str, str | None]:
+    """Compact developer trace: canonical ``social_turn_contract`` + post-emission debug + final owner.
+
+    ``final_reply_owner`` is the persisted ``active_interaction_target_id`` after routing and
+    post-emission adoption/invalidation (same source manual testers inspect in session).
+    """
+    stc = _coalesce_social_turn_contract(resolution, normalized_action, directed_social_entry)
+    rs = _trace_str(route_selected)
+
+    out: dict[str, str | None] = {
+        "route_selected": rs,
+        "routing_reason_code": _trace_str(stc.get("routing_reason_code")) if isinstance(stc, dict) else None,
+        "social_followup_recovery": _trace_str(stc.get("social_followup_recovery")) if isinstance(stc, dict) else None,
+        "reply_owner_actor_id": _trace_str(stc.get("reply_owner_actor_id")) if isinstance(stc, dict) else None,
+        "interlocutor_status": _trace_str(stc.get("interlocutor_status")) if isinstance(stc, dict) else None,
+        "continuity_status": _trace_str(stc.get("continuity_status")) if isinstance(stc, dict) else None,
+        "fallback_anchor_source": _trace_str(stc.get("fallback_anchor_source")) if isinstance(stc, dict) else None,
+        "visible_grounded_speaker": _visible_grounded_speaker_id(adoption_debug, stale_invalidation_debug),
+        "final_reply_owner": None,
+    }
+    _apply_post_emission_contract_overlays(out, adoption_debug, stale_invalidation_debug)
+
+    if isinstance(session, dict):
+        ic = inspect_interaction_context(session)
+        if isinstance(ic, dict):
+            aid = str(ic.get("active_interaction_target_id") or "").strip()
+            out["final_reply_owner"] = aid or None
+
+    return out
+
+
 def _build_compact_turn_trace(
     *,
     source: str,
@@ -350,8 +493,22 @@ def _build_compact_turn_trace(
     scene: dict,
     leads_inspection: dict | None = None,
     response_type_contract: dict | None = None,
+    route_selected: str | None = None,
+    directed_social_entry: dict | None = None,
+    adoption_debug: dict | None = None,
+    stale_invalidation_debug: dict | None = None,
+    latency_ms: dict | None = None,
 ) -> dict:
     """Build compact resolved-turn trace grounded in post-resolution authoritative state."""
+    social_contract_trace = build_social_contract_turn_trace(
+        resolution=resolution if isinstance(resolution, dict) else None,
+        normalized_action=normalized_action if isinstance(normalized_action, dict) else None,
+        directed_social_entry=directed_social_entry if isinstance(directed_social_entry, dict) else None,
+        route_selected=route_selected,
+        session=session if isinstance(session, dict) else None,
+        adoption_debug=adoption_debug if isinstance(adoption_debug, dict) else None,
+        stale_invalidation_debug=stale_invalidation_debug if isinstance(stale_invalidation_debug, dict) else None,
+    )
     interaction_after = inspect_interaction_context(session).copy()
     visited = session.get("visited_scene_ids") if isinstance(session.get("visited_scene_ids"), list) else []
     trace_session_view = {
@@ -412,6 +569,7 @@ def _build_compact_turn_trace(
             "requires_check": bool((resolution or {}).get("requires_check")) if isinstance(resolution, dict) else False,
         },
         "response_type_contract": compact_response_type_contract(response_type_contract),
+        "social_contract_trace": social_contract_trace,
         "resolution_path": _trace_resolution_path(action_type, resolution),
         "authoritative_state_changes": {
             "scene_transition": {"from": scene_before, "to": scene_after} if scene_before != scene_after else None,
@@ -451,6 +609,7 @@ def _build_compact_turn_trace(
                 "changed_count": 0,
             }
         ),
+        "latency_ms": dict(latency_ms) if isinstance(latency_ms, dict) else {},
     }
 
 

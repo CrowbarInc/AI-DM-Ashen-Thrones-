@@ -77,6 +77,11 @@ def test_runner_clue_followup_routes_social_not_observe():
     )
     assert out.get("should_route_social") is True
     assert out.get("target_actor_id") == "tavern_runner"
+    stc = out.get("social_turn_contract") or {}
+    assert stc.get("social_followup_recovery") == "fired"
+    assert stc.get("continuity_status") == "preserved"
+    assert stc.get("interlocutor_status") == "retained"
+    assert stc.get("fallback_anchor_source") == "active_interlocutor"
     act = parse_freeform_to_action(
         text,
         scene,
@@ -103,6 +108,9 @@ def test_same_wording_without_context_stays_observation_exploration():
     )
     assert out.get("should_route_social") is False
     assert out.get("reason") == "local_scene_observation_query"
+    stc = out.get("social_turn_contract") or {}
+    assert stc.get("social_followup_recovery") == "skipped"
+    assert stc.get("continuity_status") == "broken"
     act = parse_freeform_to_action(text, scene, session=session, world=world)
     assert act is not None
     assert act.get("type") == "observe"
@@ -123,6 +131,9 @@ def test_perception_question_at_anchor_not_forcibly_social():
     )
     assert out.get("should_route_social") is False
     assert out.get("reason") == "local_scene_observation_query"
+    stc = out.get("social_turn_contract") or {}
+    assert stc.get("social_followup_recovery") == "skipped"
+    assert stc.get("continuity_status") == "broken"
 
 
 def test_direct_question_to_active_npc_control():
@@ -140,3 +151,8 @@ def test_direct_question_to_active_npc_control():
     )
     assert out.get("should_route_social") is True
     assert out.get("target_actor_id") == "tavern_runner"
+    stc = out.get("social_turn_contract") or {}
+    assert stc.get("social_followup_recovery") == "not_applicable"
+    assert stc.get("continuity_status") == "preserved"
+    assert stc.get("interlocutor_status") == "retained"
+    assert stc.get("fallback_anchor_source") == "active_interlocutor"

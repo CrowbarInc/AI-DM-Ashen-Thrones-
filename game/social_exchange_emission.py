@@ -2468,6 +2468,36 @@ def build_open_social_solicitation_recovery(
     }
 
 
+def _standard_mode_social_retry_payload_floor(
+    line: str,
+    *,
+    resolution: Dict[str, Any] | None,
+    uncertainty_source: str,
+    pressure_active: bool,
+    interruption_active: bool,
+    seed: str,
+    session: Dict[str, Any] | None,
+) -> str:
+    """Under standard response_mode, avoid one-line clipped social retry fallbacks unless pressure/interrupt."""
+    if not isinstance(session, dict):
+        return line
+    if str(session.get("response_mode") or "standard").strip().lower() != "standard":
+        return line
+    if pressure_active or interruption_active:
+        return str(line or "").strip()
+    t = _normalize_gate_text(str(line or "")).strip()
+    if len(t.split()) >= 18:
+        return t
+    speaker = _speaker_label(resolution)
+    extras = (
+        f'{speaker} keeps their voice low. "Hard to swear to anything in this crowd."',
+        f'{speaker} glances toward the street. "You\'re asking for a line I don\'t own."',
+        f'{speaker} hesitates. "I\'ve heard talk, but I won\'t pin it to a name."',
+    )
+    idx = _deterministic_index(seed + f"|{uncertainty_source}|stdfloor", len(extras))
+    return _ensure_sentence_end(_normalize_gate_text(f"{t} {extras[idx]}"))
+
+
 def apply_social_exchange_retry_fallback_gm(
     gm: Dict[str, Any],
     *,
@@ -2495,7 +2525,18 @@ def apply_social_exchange_retry_fallback_gm(
             )
             if rec.get("used") and isinstance(rec.get("text"), str) and str(rec.get("text") or "").strip():
                 out = dict(gm)
-                out["player_facing_text"] = _ensure_sentence_end(str(rec.get("text") or "").strip())
+                os_line = _ensure_sentence_end(str(rec.get("text") or "").strip())
+                tags_pre = gm.get("tags") if isinstance(gm.get("tags"), list) else []
+                tag_list_pre = [str(t) for t in tags_pre if isinstance(t, str)]
+                out["player_facing_text"] = _standard_mode_social_retry_payload_floor(
+                    os_line,
+                    resolution=resolution,
+                    uncertainty_source="open_social_recovery",
+                    pressure_active=_is_pressure_active(tag_list_pre, session, sid_rf),
+                    interruption_active=False,
+                    seed=f"{sid_rf}|osrec|{player_text}",
+                    session=session,
+                )
                 tags = out.get("tags") if isinstance(out.get("tags"), list) else []
                 tag_list = [str(t) for t in tags if isinstance(t, str)]
                 out["tags"] = tag_list + [
@@ -2558,7 +2599,15 @@ def apply_social_exchange_retry_fallback_gm(
         interruption_active=interrupt,
         seed=seed,
     )
-    out["player_facing_text"] = line
+    out["player_facing_text"] = _standard_mode_social_retry_payload_floor(
+        line,
+        resolution=resolution,
+        uncertainty_source=uncertainty_source,
+        pressure_active=pressure,
+        interruption_active=interrupt,
+        seed=seed,
+        session=session,
+    )
     out["tags"] = tag_list + ["question_retry_fallback", "social_exchange_retry_fallback", f"social_exchange_fallback:{kind}"]
     dbg = out.get("debug_notes") if isinstance(out.get("debug_notes"), str) else ""
     out["debug_notes"] = (dbg + " | " if dbg else "") + f"retry_fallback:unresolved_question|retry_fallback:social_exchange:{kind}"

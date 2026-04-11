@@ -272,10 +272,17 @@ def apply_stale_interlocutor_invalidation_after_emission(
     already updated state, when no grounded alternate speaker is resolved, or when output is
     ambiguous multi-speaker (same guard as adoption).
     """
-    dbg: Dict[str, Any] = {"cleared": False, "reason": "skipped"}
+    dbg: Dict[str, Any] = {
+        "cleared": False,
+        "reason": "skipped",
+        "interlocutor_status": "none",
+        "fallback_anchor_source": "none",
+    }
     ad = adoption_debug if isinstance(adoption_debug, dict) else {}
     if ad.get("adopted") is True:
         dbg["reason"] = "adoption_resolved_speaker"
+        dbg["interlocutor_status"] = "adopted"
+        dbg["fallback_anchor_source"] = "visible_speaker"
         return dbg
     if scene_changed or not isinstance(session, dict) or not isinstance(world, dict):
         dbg["reason"] = "scene_changed_or_bad_inputs"
@@ -300,12 +307,16 @@ def apply_stale_interlocutor_invalidation_after_emission(
         return dbg
     if not prior_canon or prior_canon == visible_canon:
         dbg["reason"] = "no_stale_mismatch"
+        dbg["interlocutor_status"] = "retained"
+        dbg["fallback_anchor_source"] = "visible_speaker"
         dbg["visible_grounded_speaker_id"] = visible_canon
         return dbg
 
     clear_stale_social_interlocutor_continuity(session)
     dbg["cleared"] = True
     dbg["reason"] = "visible_speaker_contradicts_stored_interlocutor"
+    dbg["interlocutor_status"] = "invalidated"
+    dbg["fallback_anchor_source"] = "visible_speaker"
     dbg["prior_interlocutor_id"] = prior_canon
     dbg["visible_grounded_speaker_id"] = visible_canon
     return dbg
@@ -321,7 +332,12 @@ def apply_post_emission_speaker_adoption(
     scene_changed: bool = False,
 ) -> Dict[str, Any]:
     """Optionally adopt emitted opening speaker as social interlocutor. Returns debug dict."""
-    dbg: Dict[str, Any] = {"adopted": False, "reason": "skipped"}
+    dbg: Dict[str, Any] = {
+        "adopted": False,
+        "reason": "skipped",
+        "interlocutor_status": "none",
+        "fallback_anchor_source": "none",
+    }
     if scene_changed or not isinstance(session, dict) or not isinstance(world, dict):
         dbg["reason"] = "scene_changed_or_bad_inputs"
         return dbg
@@ -347,6 +363,8 @@ def apply_post_emission_speaker_adoption(
 
     if prior_canon and prior_canon == canon:
         dbg["reason"] = "already_current_interlocutor"
+        dbg["interlocutor_status"] = "retained"
+        dbg["fallback_anchor_source"] = "active_interlocutor"
         dbg["npc_id"] = canon
         return dbg
 
@@ -357,6 +375,8 @@ def apply_post_emission_speaker_adoption(
     set_social_target(session, canon)
     dbg["adopted"] = True
     dbg["reason"] = "emitted_authoritative_takeover"
+    dbg["interlocutor_status"] = "adopted"
+    dbg["fallback_anchor_source"] = "visible_speaker"
     dbg["npc_id"] = canon
     dbg["prior_active_interaction_target_id"] = prior or None
     return dbg

@@ -7,7 +7,7 @@ import pytest
 
 import game.final_emission_gate as feg
 import game.scene_state_anchoring as ssa
-from game.defaults import default_session, default_world
+from game.defaults import default_scene, default_session, default_world
 from game.final_emission_gate import apply_final_emission_gate, get_speaker_selection_contract
 from game.anti_railroading import build_anti_railroading_contract
 from game.context_separation import build_context_separation_contract
@@ -513,6 +513,77 @@ def test_scene_state_anchor_unrecoverable_preserves_text_and_records_failure():
     assert meta.get("scene_state_anchor_repair_mode") is None
     assert meta.get("scene_state_anchor_passed") is False
     assert "no_anchor_match" in (meta.get("scene_state_anchor_failure_reasons") or [])
+
+
+def test_scene_state_anchor_fast_fallback_neutral_prefers_location_rebind_over_actor_prefix():
+    contract = _ssa_contract(
+        scene_location_label="Frontier Gate",
+        location_tokens=["frontier gate", "gate"],
+        actor_tokens=["emergent lord aldric"],
+    )
+    text, meta = feg._apply_scene_state_anchor_layer(
+        "Several patrons exchange furtive glances.",
+        gm_output={
+            "scene_state_anchor_contract": contract,
+            "tags": ["forced_retry_fallback", "upstream_api_fast_fallback"],
+        },
+        strict_social_details=None,
+    )
+    assert "emergent lord aldric several" not in text.lower()
+    assert text.lower().startswith("at frontier gate")
+    assert meta.get("scene_state_anchor_repair_mode") == "location_rebind"
+    assert meta.get("scene_state_anchor_passed") is True
+
+
+def test_apply_final_emission_gate_repairs_malformed_opening_fast_fallback_composition():
+    session = default_session()
+    world = default_world()
+    sid = "frontier_gate"
+    session["active_scene_id"] = sid
+    session["scene_state"]["active_scene_id"] = sid
+    session["turn_counter"] = 0
+    session["visited_scene_ids"] = [sid]
+    scene = default_scene(sid)
+    scene["scene"]["location"] = "Frontier Gate"
+    scene["scene"]["summary"] = "A rain-soaked checkpoint holds a nervous crowd at the gate."
+    scene["scene"]["visible_facts"] = [
+        "Several patrons exchange furtive glances.",
+        "A notice board lists a missing patrol.",
+        "Rain darkens the flagstones around the checkpoint.",
+    ]
+    rebuild_active_scene_entities(session, world, sid, scene_envelope=scene)
+    scene["scene_state"] = dict(session["scene_state"])
+
+    out = apply_final_emission_gate(
+        {
+            "player_facing_text": (
+                "Emergent Lord Aldric Several patrons exchange furtive glances. "
+                "The rain holds; beside it, a notice board lists a missing patrol."
+            ),
+            "tags": ["forced_retry_fallback", "upstream_api_fast_fallback"],
+            "scene_state_anchor_contract": _ssa_contract(
+                scene_id=sid,
+                scene_location_label="Frontier Gate",
+                location_tokens=["frontier gate", "gate", "checkpoint"],
+                actor_tokens=["emergent lord aldric"],
+            ),
+        },
+        resolution={"kind": "observe", "prompt": "Begin."},
+        session=session,
+        scene_id=sid,
+        scene=scene,
+        world=world,
+    )
+
+    text = str(out.get("player_facing_text") or "")
+    low = text.lower()
+    meta = out.get("_final_emission_meta") or {}
+    assert "emergent lord aldric several" not in low
+    assert "holds; beside it" not in low
+    assert any(token in low for token in ("checkpoint", "gate", "patrol", "rain"))
+    assert meta.get("fast_fallback_neutral_composition_repaired") is True
+    assert meta.get("fast_fallback_neutral_composition_repair_mode") == "opening_scene_template"
+    assert meta.get("final_emitted_source") == "opening_scene_template"
 
 
 def test_ssa_layer_skip_reasons_direct():

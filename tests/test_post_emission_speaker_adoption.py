@@ -52,6 +52,8 @@ def test_guard_takeover_with_explicit_speech_adopts_guard():
         scene_changed=False,
     )
     assert out.get("adopted") is True
+    assert out.get("interlocutor_status") == "adopted"
+    assert out.get("fallback_anchor_source") == "visible_speaker"
     assert out.get("npc_id") == "gate_guard"
     assert session["interaction_context"]["active_interaction_target_id"] == "gate_guard"
     assert (session.get("scene_state") or {}).get("current_interlocutor") == "gate_guard"
@@ -66,7 +68,7 @@ def test_anonymous_crowd_voice_does_not_steal_interlocutor():
     gm = {
         "player_facing_text": 'Someone in the crowd shouts, "Fire!" and panic ripples.',
     }
-    apply_post_emission_speaker_adoption(
+    out = apply_post_emission_speaker_adoption(
         session,
         world,
         scene,
@@ -74,6 +76,7 @@ def test_anonymous_crowd_voice_does_not_steal_interlocutor():
         resolution=None,
         scene_changed=False,
     )
+    assert out.get("interlocutor_status") == "none"
     assert session["interaction_context"]["active_interaction_target_id"] == "tavern_runner"
 
 
@@ -118,4 +121,6 @@ def test_same_speaker_reply_keeps_interlocutor():
     )
     assert out.get("adopted") is False
     assert out.get("reason") == "already_current_interlocutor"
+    assert out.get("interlocutor_status") == "retained"
+    assert out.get("fallback_anchor_source") == "active_interlocutor"
     assert session["interaction_context"]["active_interaction_target_id"] == "tavern_runner"

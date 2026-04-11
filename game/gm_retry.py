@@ -1601,7 +1601,7 @@ def _nonsocial_forced_retry_progress_line(
         res,
     )
     if res_kind in _PERCEPTION_FALLBACK_RESOLUTION_KINDS and not suppress_intro:
-        obs_line = render_observe_perception_fallback_line(env, seed_key=seed)
+        obs_line = render_observe_perception_fallback_line(env, seed_key=seed, player_text=pt)
         if isinstance(obs_line, str) and obs_line.strip():
             return _ensure_terminal_punctuation(obs_line.strip())
 
@@ -1637,7 +1637,7 @@ def _nonsocial_forced_retry_progress_line(
         if isinstance(line, str) and line.strip():
             return _ensure_terminal_punctuation(line.strip())
 
-    anchor = render_nonsocial_terminal_anchor_line(env, seed_key=seed)
+    anchor = render_nonsocial_terminal_anchor_line(env, seed_key=seed, player_text=pt)
     if isinstance(anchor, str) and anchor.strip():
         line_out = anchor.strip()
         if suppress_intro and (
@@ -2397,7 +2397,11 @@ def force_terminal_retry_fallback(
         )
 
     if not str(line or "").strip():
-        anchor_dead = render_nonsocial_terminal_anchor_line(env, seed_key=f"term|{scene_id}|{player_text[:120]}")
+        anchor_dead = render_nonsocial_terminal_anchor_line(
+            env,
+            seed_key=f"term|{scene_id}|{player_text[:120]}",
+            player_text=str(player_text or ""),
+        )
         if isinstance(anchor_dead, str) and anchor_dead.strip():
             line = _ensure_terminal_punctuation(anchor_dead.strip())
             sup_ar = anti_reset_suppresses_intro_style_fallbacks(

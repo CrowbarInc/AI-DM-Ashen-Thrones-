@@ -2683,6 +2683,98 @@ def _build_turn_summary(
     }
 
 
+MANUAL_PLAY_COMPACT_VISIBLE_FACT_LIMIT = 5
+MANUAL_PLAY_COMPACT_MEMORY_LIMIT = 6
+MANUAL_PLAY_COMPACT_RECENT_LOG_LIMIT = 4
+
+
+def _should_use_manual_play_compact_prompt(
+    *,
+    prompt_profile: str,
+    narration_obligations: Mapping[str, Any] | None,
+    resolution: Mapping[str, Any] | None,
+    uncertainty_hint: Mapping[str, Any] | None,
+    follow_up_pressure: Mapping[str, Any] | None,
+    active_topic_anchor: Mapping[str, Any] | None,
+) -> bool:
+    if prompt_profile == "manual_play_compact":
+        return True
+    if prompt_profile != "manual_play_auto":
+        return False
+    obligations = narration_obligations if isinstance(narration_obligations, Mapping) else {}
+    res = resolution if isinstance(resolution, Mapping) else {}
+    if obligations.get("is_opening_scene") or obligations.get("must_advance_scene"):
+        return False
+    if res.get("requires_check") or res.get("resolved_transition"):
+        return False
+    state_changes = res.get("state_changes") if isinstance(res.get("state_changes"), Mapping) else {}
+    if any(
+        bool(state_changes.get(key))
+        for key in ("scene_transition_occurred", "arrived_at_scene", "new_scene_context_available")
+    ):
+        return False
+    if isinstance(uncertainty_hint, Mapping) and uncertainty_hint:
+        return False
+    if isinstance(active_topic_anchor, Mapping) and active_topic_anchor.get("active"):
+        return False
+    if isinstance(follow_up_pressure, Mapping) and follow_up_pressure:
+        return False
+    return True
+
+
+def _compact_manual_play_instructions(
+    *,
+    mode_instruction: str,
+    narration_obligations: Mapping[str, Any] | None,
+    response_policy: Mapping[str, Any] | None,
+    has_active_interlocutor: bool,
+    social_authority: bool,
+    has_scene_change_context: bool,
+    naming_line: str | None,
+    answer_style_hints: List[str],
+) -> List[str]:
+    obligations = narration_obligations if isinstance(narration_obligations, Mapping) else {}
+    policy = response_policy if isinstance(response_policy, Mapping) else {}
+    out: List[str] = [
+        RULE_PRIORITY_COMPACT_INSTRUCTION,
+        "Always answer the player first. Prefer a grounded partial answer over refusal. Never output meta explanations.",
+        NO_VALIDATOR_VOICE_RULE,
+        "Follow response_policy.rule_priority_order strictly. Use response_policy as the full authority for answer shape, continuity, and safety boundaries.",
+    ]
+    if has_active_interlocutor:
+        out.append("Keep the active conversation primary over general scene recap.")
+    if social_authority:
+        out.append(
+            "SOCIAL INTERACTION LOCK: The active interlocutor must carry the substantive reply. Do not replace the answer with ambient scene narration."
+        )
+    if obligations.get("active_npc_reply_expected"):
+        out.append("If narration_obligations.active_npc_reply_expected is true, complete that NPC's substantive reply now.")
+    if obligations.get("should_answer_active_npc"):
+        out.append("Prioritize the active interlocutor's answer over broad scene description.")
+    if obligations.get("avoid_input_echo") or obligations.get("avoid_player_action_restatement"):
+        out.append("Do not restate or lightly paraphrase player_input. Continue forward with new information.")
+    if has_scene_change_context:
+        out.append("When transitioning scenes, include a brief bridge from the prior location before describing the new one.")
+    ac = policy.get("answer_completeness") if isinstance(policy.get("answer_completeness"), Mapping) else {}
+    if ac.get("answer_required"):
+        out.append("ANSWER COMPLETENESS: When response_policy.answer_completeness.answer_required is true, lead with the substantive answer in the first sentence.")
+    rd = policy.get("response_delta") if isinstance(policy.get("response_delta"), Mapping) else {}
+    if rd.get("enabled"):
+        out.append("RESPONSE DELTA: Add net-new value. Do not merely restate the prior answer.")
+    if naming_line:
+        out.append(naming_line)
+    if answer_style_hints:
+        out.extend(list(answer_style_hints[:2]))
+    out.append(
+        "CONVERSATIONAL MEMORY WINDOW: Treat selected_conversational_memory as the active thread for this turn and do not revive omitted stale threads unless the player re-grounds them."
+    )
+    out.append(
+        "POLICY TAIL: Obey response_policy.narrative_authority, tone_escalation, anti_railroading, context_separation, player_facing_narration_purity, and scene anchoring without re-explaining them in narration."
+    )
+    out.append(mode_instruction)
+    return out
+
+
 def build_narration_context(
     campaign: Dict[str, Any],
     world: Dict[str, Any],
@@ -2707,6 +2799,7 @@ def build_narration_context(
     mode_instruction: str,
     recent_log_for_prompt: List[Dict[str, Any]],
     uncertainty_hint: Dict[str, Any] | None = None,
+    prompt_profile: str = "full",
 ) -> Dict[str, Any]:
     """Build a compressed narration context payload for GPT.
 
@@ -3059,6 +3152,7 @@ def build_narration_context(
     else:
         follow_up_pressure = None
 
+    naming_line: str | None = None
     if interlocutor_export and str(interlocutor_export.get("npc_id") or "").strip():
         nid = str(interlocutor_export.get("npc_id") or "").strip()
         dn = str(interlocutor_export.get("display_name") or "").strip()
@@ -3481,6 +3575,53 @@ def build_narration_context(
         _policy_tail = list(_policy_tail) + _social_response_structure_instr
     instructions = list(instructions) + _policy_tail
 
+    use_manual_play_compact = _should_use_manual_play_compact_prompt(
+        prompt_profile=prompt_profile,
+        narration_obligations=narration_obligations,
+        resolution=resolution if isinstance(resolution, dict) else None,
+        uncertainty_hint=eff_uncertainty_hint if isinstance(eff_uncertainty_hint, Mapping) else None,
+        follow_up_pressure=follow_up_pressure if isinstance(follow_up_pressure, Mapping) else None,
+        active_topic_anchor=active_topic_anchor if isinstance(active_topic_anchor, Mapping) else None,
+    )
+    public_scene_for_prompt = dict(public_scene) if isinstance(public_scene, dict) else {}
+    if use_manual_play_compact:
+        selected_conversational_memory = list(selected_conversational_memory[:MANUAL_PLAY_COMPACT_MEMORY_LIMIT])
+        recent_log_for_payload = _recent_log_payload_from_selected_memory(
+            selected_conversational_memory,
+            _mem_cands,
+            _mem_extras,
+        )
+        recent_log_for_payload = list(recent_log_for_payload[:MANUAL_PLAY_COMPACT_RECENT_LOG_LIMIT])
+        visible_facts_export = list(visible_facts_export[:MANUAL_PLAY_COMPACT_VISIBLE_FACT_LIMIT])
+        if isinstance(public_scene_for_prompt.get("visible_facts"), list):
+            public_scene_for_prompt["visible_facts"] = list(
+                public_scene_for_prompt.get("visible_facts")[:MANUAL_PLAY_COMPACT_VISIBLE_FACT_LIMIT]
+            )
+        instructions = _compact_manual_play_instructions(
+            mode_instruction=mode_instruction,
+            narration_obligations=narration_obligations,
+            response_policy=response_policy,
+            has_active_interlocutor=has_active_interlocutor,
+            social_authority=social_authority,
+            has_scene_change_context=has_scene_change_context,
+            naming_line=naming_line if isinstance(naming_line, str) else None,
+            answer_style_hints=list(answer_style_hints_list),
+        )
+        prompt_debug_anchor["compact_prompt"] = {
+            "enabled": True,
+            "profile": "manual_play_compact",
+            "visible_fact_limit": MANUAL_PLAY_COMPACT_VISIBLE_FACT_LIMIT,
+            "selected_memory_limit": MANUAL_PLAY_COMPACT_MEMORY_LIMIT,
+            "recent_log_limit": MANUAL_PLAY_COMPACT_RECENT_LOG_LIMIT,
+            "selected_memory_count": len(selected_conversational_memory),
+            "recent_log_count": len(recent_log_for_payload),
+        }
+    else:
+        prompt_debug_anchor["compact_prompt"] = {
+            "enabled": False,
+            "profile": "full",
+        }
+
     payload: Dict[str, Any] = {
         'instructions': instructions,
         'speaker_selection': speaker_selection,
@@ -3534,7 +3675,7 @@ def build_narration_context(
         'world': _compress_world(world),
         'campaign': _compress_campaign(campaign),
         'scene': {
-            'public': public_scene,
+            'public': public_scene_for_prompt if public_scene_for_prompt else public_scene,
             'discoverable_clues': discoverable_clues,
             'gm_only': {
                 'hidden_facts': gm_only_hidden_facts,
@@ -3560,6 +3701,17 @@ def build_narration_context(
             'example': 'Galinor asks, "What changed at the north gate?" while examining the notice board.',
         },
     }
+    if use_manual_play_compact:
+        for key in (
+            'fallback_behavior',
+            'anti_railroading_contract',
+            'context_separation_contract',
+            'player_facing_narration_purity_contract',
+            'social_response_structure_contract',
+            'interaction_continuity_contract',
+            'first_mention_contract',
+        ):
+            payload.pop(key, None)
     return payload
 
 from game.prompt_context_leads import (

@@ -4322,6 +4322,7 @@ def build_messages(
     user_text: str,
     resolution: Dict[str, Any] | None = None,
     scene_runtime: Dict[str, Any] | None = None,
+    prompt_profile: str = "full",
 ) -> List[Dict[str, str]]:
     # Always load scene from session to ensure correct context (no cached/stale scene variable)
     active_id = (session.get('active_scene_id') or '').strip()
@@ -4430,6 +4431,7 @@ def build_messages(
         mode_instruction=mode_instruction,
         recent_log_for_prompt=recent_log_for_prompt,
         uncertainty_hint=uncertainty_hint,
+        prompt_profile=prompt_profile,
     )
     if isinstance(resolution, dict):
         sac = payload.get("scene_state_anchor_contract")
@@ -4593,6 +4595,80 @@ def build_messages(
     ]
 
 
+def _status_code_from_upstream_error(exc: Exception) -> int | None:
+    status = getattr(exc, "status_code", None)
+    if isinstance(status, int):
+        return status
+    response = getattr(exc, "response", None)
+    response_status = getattr(response, "status_code", None)
+    if isinstance(response_status, int):
+        return response_status
+    return None
+
+
+def _error_code_from_upstream_error(exc: Exception) -> str | None:
+    for attr in ("code", "error_code"):
+        raw = getattr(exc, attr, None)
+        if isinstance(raw, str) and raw.strip():
+            return raw.strip()
+    body = getattr(exc, "body", None)
+    if isinstance(body, dict):
+        err = body.get("error")
+        if isinstance(err, dict):
+            raw = err.get("code")
+            if isinstance(raw, str) and raw.strip():
+                return raw.strip()
+    return None
+
+
+def _classify_upstream_gpt_error(exc: Exception) -> Dict[str, Any]:
+    class_name = type(exc).__name__.lower()
+    message = str(exc or "").strip()
+    message_low = message.lower()
+    status_code = _status_code_from_upstream_error(exc)
+    error_code = _error_code_from_upstream_error(exc)
+    error_code_low = str(error_code or "").strip().lower()
+
+    failure_class = "unknown_api_error"
+    retryable = False
+
+    if "insufficient_quota" in message_low or error_code_low == "insufficient_quota":
+        failure_class = "insufficient_quota"
+        retryable = False
+    elif status_code == 429:
+        failure_class = "rate_limit"
+        retryable = True
+    elif status_code in (400, 404, 409, 422):
+        failure_class = "invalid_request"
+        retryable = False
+    elif status_code in (401, 403):
+        failure_class = "auth_failure"
+        retryable = False
+    elif status_code is not None and status_code >= 500:
+        failure_class = "server_error"
+        retryable = True
+    elif "timeout" in class_name or "timeout" in message_low:
+        failure_class = "timeout"
+        retryable = True
+    elif "connection" in class_name or "connect" in message_low:
+        failure_class = "connection_error"
+        retryable = True
+    elif "ratelimit" in class_name or "rate limit" in message_low:
+        failure_class = "rate_limit"
+        retryable = "insufficient_quota" not in message_low
+    elif "authentication" in class_name or "permission" in class_name:
+        failure_class = "auth_failure"
+        retryable = False
+
+    return {
+        "failure_class": failure_class,
+        "retryable": retryable,
+        "status_code": status_code,
+        "error_code": error_code,
+        "message_excerpt": message[:240],
+    }
+
+
 def call_gpt(messages: List[Dict[str, str]]) -> Dict[str, Any]:
     # Wrap the OpenAI call so network/API/model errors do not crash gameplay.
     try:
@@ -4605,17 +4681,28 @@ def call_gpt(messages: List[Dict[str, str]]) -> Dict[str, Any]:
             text = str(resp)
         return _safe_json(text.strip())
     except Exception as e:
+        err = _classify_upstream_gpt_error(e)
         # Return a safe fallback response that preserves the expected schema so
         # callers can continue without special-casing exceptions.
         return {
             'player_facing_text': 'The game master is temporarily unavailable. Please try again.',
-            'tags': ['error'],
+            'tags': [
+                'error',
+                f"gpt_api_error:{err['failure_class']}",
+                'gpt_api_error_retryable' if err['retryable'] else 'gpt_api_error_nonretryable',
+            ],
             'scene_update': None,
             'activate_scene_id': None,
             'new_scene_draft': None,
             'world_updates': None,
             'suggested_action': None,
-            'debug_notes': f'call_gpt error: {repr(e)}'
+            'debug_notes': (
+                f"call_gpt error: {repr(e)} | "
+                f"api_error_class={err['failure_class']}:retryable={err['retryable']}"
+            ),
+            'metadata': {
+                'upstream_api_error': err,
+            },
         }
 
 
@@ -5245,7 +5332,12 @@ def enforce_no_validator_voice(
     world: Dict[str, Any] | None = None,
     resolution: Dict[str, Any] | None = None,
 ) -> Dict[str, Any]:
-    """Deterministically remove system/validator wording from player-facing text."""
+    """Deterministically remove system/validator wording from player-facing text.
+
+    Uses :func:`detect_validator_voice` as the single policy registry for this class of violations.
+    Final scaffold/procedural/analytical phrase cleanup belongs to ``game.output_sanitizer`` after
+    the emission pipeline; this pass runs inside :func:`apply_response_policy_enforcement`.
+    """
     if not isinstance(gm, dict):
         return gm
     gm = dict(gm)
@@ -5308,7 +5400,12 @@ def apply_response_policy_enforcement(
     resolution: Dict[str, Any] | None,
     discovered_clues: List[str] | None = None,
 ) -> Dict[str, Any]:
-    """Apply deterministic post-generation enforcement in documented priority order."""
+    """Apply deterministic post-generation enforcement in documented priority order.
+
+    This is guard/policy on the GM dict before final emission. Player-visible phrase legality for
+    LLM slop (scaffold tokens, procedural imperatives, analytical templates, etc.) is enforced again
+    in ``sanitize_player_facing_output``; tests split accordingly.
+    """
     if not isinstance(gm, dict):
         return gm
 
