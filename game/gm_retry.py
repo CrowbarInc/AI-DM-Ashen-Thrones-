@@ -33,6 +33,13 @@ from game.diegetic_fallback_narration import (
     render_travel_arrival_fallback_line,
 )
 from game.fallback_provenance_debug import preserve_fallback_provenance_metadata
+from game.stage_diff_telemetry import (
+    record_stage_snapshot,
+    record_stage_transition,
+    resolve_gate_turn_packet,
+    snapshot_turn_stage,
+)
+from game.turn_packet import get_turn_packet, resolve_turn_packet_contract
 
 from game.gm import (
     _apply_uncertainty_to_gm,
@@ -62,6 +69,18 @@ from game.gm import (
     resolve_known_fact_before_uncertainty,
     _is_valid_player_facing_fallback_answer,
 )
+
+
+def _retry_resolve_turn_packet(
+    gm_output: Optional[Dict[str, Any]],
+    response_policy: Optional[Dict[str, Any]],
+) -> Optional[Dict[str, Any]]:
+    """Prefer :func:`resolve_gate_turn_packet` on *gm_output*, then :func:`get_turn_packet` with *response_policy*."""
+    if isinstance(gm_output, dict):
+        cached = resolve_gate_turn_packet(gm_output)
+        if isinstance(cached, dict):
+            return cached
+    return get_turn_packet(gm_output or {}, response_policy)
 
 
 def _gm_binding():
@@ -150,6 +169,11 @@ def _resolve_retry_tone_escalation_contract(
     response_policy: Optional[Dict[str, Any]],
 ) -> Optional[Dict[str, Any]]:
     """Read tone_escalation from response_policy / gm_output only (no contract rebuild)."""
+    pkt = _retry_resolve_turn_packet(gm_output, response_policy)
+    if isinstance(pkt, dict):
+        te = resolve_turn_packet_contract(pkt, "tone_escalation")
+        if _is_usable_retry_tone_escalation_contract(te):
+            return te
     candidates: List[Any] = []
     if isinstance(response_policy, dict):
         candidates.append(response_policy.get("tone_escalation"))
@@ -217,6 +241,12 @@ def _resolve_anti_railroading_contract_for_retry(
     gm_output: Optional[Dict[str, Any]],
 ) -> Optional[Dict[str, Any]]:
     """Prefer policy/contract already attached to narration (aligns with final_emission_gate resolution)."""
+    pkt = _retry_resolve_turn_packet(gm_output, response_policy)
+    if isinstance(pkt, dict):
+        arc = resolve_turn_packet_contract(pkt, "anti_railroading")
+        hit_pkt = _coerce_anti_railroading_contract_dict(arc)
+        if hit_pkt:
+            return hit_pkt
     candidates: List[Any] = []
     if isinstance(response_policy, dict):
         candidates.append(response_policy.get("anti_railroading"))
@@ -337,6 +367,12 @@ def _resolve_context_separation_contract_for_retry(
     response_policy: Optional[Dict[str, Any]],
 ) -> Tuple[Optional[Dict[str, Any]], Optional[str]]:
     """Prefer the already-built contract from policy / narration mirrors (same order as final_emission_gate)."""
+    pkt = _retry_resolve_turn_packet(gm_output, response_policy)
+    if isinstance(pkt, dict):
+        csp = resolve_turn_packet_contract(pkt, "context_separation")
+        hit_pkt = _coerce_context_separation_contract_dict(csp)
+        if hit_pkt:
+            return hit_pkt, "turn_packet.contracts.context_separation"
     if isinstance(response_policy, dict):
         for key in ("context_separation_contract", "context_separation"):
             hit = _coerce_context_separation_contract_dict(response_policy.get(key))
@@ -1396,6 +1432,20 @@ def apply_deterministic_retry_fallback(
     if failure_class not in ("unresolved_question", "answer"):
         return gm
 
+    snap_pre_det = snapshot_turn_stage(gm, "retry_pre_deterministic_fallback")
+    record_stage_snapshot(gm, "retry_pre_deterministic_fallback", snapshot=snap_pre_det)
+
+    def _emit_deterministic_retry_result(out_obj: Dict[str, Any]) -> None:
+        snap_post = snapshot_turn_stage(out_obj, "retry_deterministic_fallback_applied", failure_class=failure_class)
+        record_stage_snapshot(out_obj, "retry_deterministic_fallback_applied", snapshot=snap_post)
+        record_stage_transition(
+            out_obj,
+            "retry_pre_deterministic_fallback",
+            "retry_deterministic_fallback_applied",
+            snap_pre_det,
+            snap_post,
+        )
+
     scene_id = str((scene_envelope.get("scene") or {}).get("id") or "").strip()
     eff_res, strict_route, _ = _gm_binding().effective_strict_social_resolution_for_emission(
         resolution if isinstance(resolution, dict) else None,
@@ -1441,6 +1491,7 @@ def apply_deterministic_retry_fallback(
                 (dbg + " | " if dbg else "")
                 + f"retry_fallback:answer:known_fact_guard:{source}"
             )
+            _emit_deterministic_retry_result(out)
             return _tag_retry_scope(out)
 
     known_fact = resolve_known_fact_before_uncertainty(
@@ -1493,6 +1544,7 @@ def apply_deterministic_retry_fallback(
                     (dbg + " | " if dbg else "")
                     + f"retry_fallback:unresolved_question:known_fact_guard:{source}|retry_fallback:{won}"
                 )
+                _emit_deterministic_retry_result(out)
                 return _tag_retry_scope(out)
 
     res_open = resolution if isinstance(resolution, dict) else None
@@ -1531,6 +1583,7 @@ def apply_deterministic_retry_fallback(
                 + f"retry_fallback:open_social_recovery:{rec_fb.get('mode')}|retry_fallback:suppressed:uncertainty_pool"
             )
             _merge_open_social_recovery_emission_debug(out, rec_fb)
+            _emit_deterministic_retry_result(out)
             return _tag_retry_scope(out)
     if strict_route and isinstance(eff_res, dict) and soc_in_scope:
         inner = _gm_binding().apply_social_exchange_retry_fallback_gm(
@@ -1541,6 +1594,7 @@ def apply_deterministic_retry_fallback(
             resolution=eff_res,
             scene_id=scene_id,
         )
+        _emit_deterministic_retry_result(inner)
         return _tag_retry_scope(inner)
 
     uncertainty = classify_uncertainty(
@@ -1565,6 +1619,7 @@ def apply_deterministic_retry_fallback(
             (dbg_u + " | " if dbg_u else "")
             + "retry_fallback_chosen:nonsocial_uncertainty_pool_after_block1_social_out_of_scope"
         )
+    _emit_deterministic_retry_result(out)
     return _tag_retry_scope(out)
 
 
@@ -2281,6 +2336,20 @@ def force_terminal_retry_fallback(
     failure_class = str(fail.get("failure_class") or "").strip()
     reason_list = [str(r) for r in (fail.get("reasons") or []) if isinstance(r, str)]
     out = dict(base_gm) if isinstance(base_gm, dict) else {}
+    snap_terminal_entry = snapshot_turn_stage(out, "retry_terminal_fallback_entry")
+    record_stage_snapshot(out, "retry_terminal_fallback_entry", snapshot=snap_terminal_entry)
+
+    def _emit_terminal_retry_result(out_obj: Dict[str, Any]) -> None:
+        snap_post = snapshot_turn_stage(out_obj, "retry_terminal_fallback_result")
+        record_stage_snapshot(out_obj, "retry_terminal_fallback_result", snapshot=snap_post)
+        record_stage_transition(
+            out_obj,
+            "retry_terminal_fallback_entry",
+            "retry_terminal_fallback_result",
+            snap_terminal_entry,
+            snap_post,
+        )
+
     sess = session if isinstance(session, dict) else None
     env = scene_envelope if isinstance(scene_envelope, dict) else {}
     w = world if isinstance(world, dict) else None
@@ -2389,6 +2458,7 @@ def force_terminal_retry_fallback(
                     scene_id=scene_id,
                 )
             preserve_fallback_provenance_metadata(out, base_gm, gm_work)
+            _emit_terminal_retry_result(out)
             return out
         line = str(gm_work.get("player_facing_text") or "").strip()
     else:
@@ -2545,4 +2615,5 @@ def force_terminal_retry_fallback(
             if did_end:
                 out["player_facing_text"] = _ensure_terminal_punctuation(repaired_end.strip())
 
+    _emit_terminal_retry_result(out)
     return out

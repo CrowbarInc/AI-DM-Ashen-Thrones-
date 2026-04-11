@@ -1,6 +1,11 @@
 """Temporary debug instrumentation: upstream fast-fallback fingerprint + overwrite tracing.
 
 Not used for selection or narration — only logging and metadata markers.
+
+Metadata under ``fallback_provenance`` is merged non-destructively alongside
+``metadata["turn_packet"]`` and ``metadata["stage_diff_telemetry"]``; stage-diff
+helpers may append ``stage_diff_last_transition`` without dropping other provenance
+fields.
 """
 
 from __future__ import annotations
@@ -106,7 +111,12 @@ def record_final_emission_gate_entry(out: Dict[str, Any]) -> None:
     original_stage = str(prov.get("stage") or "fallback_selector")
     entry_fp = fingerprint_player_facing(str(out.get("player_facing_text") or ""))
     entry_match = bool(original_fp) and entry_fp == original_fp
-    prov = {**prov, "gate_entry_fingerprint": entry_fp, "gate_entry_vs_selector_match": entry_match}
+    prov = {
+        **prov,
+        "gate_entry_fingerprint": entry_fp,
+        "gate_entry_vs_selector_match": entry_match,
+        "stage_diff_gate_stage": "final_emission_gate_entry",
+    }
     out["metadata"] = {**md, METADATA_KEY: prov}
     if not entry_match and original_fp:
         msg = {

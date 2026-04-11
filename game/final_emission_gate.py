@@ -11,6 +11,15 @@ repair/layer wiring (:mod:`game.final_emission_repairs`), shared text/normalizat
 (:mod:`game.response_policy_contracts`). Those modules are imported here; some private
 symbols remain importable from this package for historical tests (prefer importing from
 their real module for new code).
+
+**Turn packet vs telemetry:** The turn packet (:mod:`game.turn_packet`) is the canonical
+accessor/snapshot layer for contracts on a turn. Stage-diff telemetry
+(:mod:`game.stage_diff_telemetry`) records bounded stage transitions for observability only.
+:func:`game.stage_diff_telemetry.resolve_gate_turn_packet` is the preferred gate-level
+packet resolver. ``_gate_turn_packet_cache`` is set at :func:`apply_final_emission_gate`
+entry from :func:`game.turn_packet.get_turn_packet` and popped in
+:func:`_finalize_emission_output`; it must never leak into finalized output. Neither layer
+owns engine truth or narration policy.
 """
 from __future__ import annotations
 
@@ -73,6 +82,14 @@ from game.anti_reset_emission_guard import (
 )
 from game.leads import get_lead, normalize_lead
 from game.prompt_context import canonical_interaction_target_npc_id
+from game.stage_diff_telemetry import (
+    diff_turn_stage,
+    record_stage_snapshot,
+    record_stage_transition,
+    resolve_gate_turn_packet,
+    snapshot_turn_stage,
+)
+from game.turn_packet import get_turn_packet, resolve_turn_packet_contract
 from game.anti_railroading import anti_railroading_repair_hints, build_anti_railroading_contract, validate_anti_railroading
 from game.context_separation import context_separation_repair_hints, validate_context_separation
 from game.player_facing_narration_purity import (
@@ -570,6 +587,12 @@ def _resolve_tone_escalation_contract(gm_output: Dict[str, Any] | None) -> Dict[
     """Prefer the full shipped policy path; never substitute prompt_debug for validation."""
     if not isinstance(gm_output, dict):
         return None
+    pkt = resolve_gate_turn_packet(gm_output)
+    if isinstance(pkt, dict):
+        hit = resolve_turn_packet_contract(pkt, "tone_escalation")
+        hit = _coerce_tone_escalation_contract_dict(hit)
+        if hit:
+            return hit
     pol = gm_output.get("response_policy")
     if isinstance(pol, dict):
         hit = _coerce_tone_escalation_contract_dict(pol.get("tone_escalation"))
@@ -1476,6 +1499,12 @@ def _resolve_anti_railroading_contract(gm_output: Dict[str, Any] | None) -> Dict
     """Prefer shipped narration / prompt_context mirrors; never substitute prompt_debug alone."""
     if not isinstance(gm_output, dict):
         return None
+    pkt = resolve_gate_turn_packet(gm_output)
+    if isinstance(pkt, dict):
+        hit = resolve_turn_packet_contract(pkt, "anti_railroading")
+        hit = _coerce_anti_railroading_contract_dict(hit)
+        if hit:
+            return hit
     direct = gm_output.get("anti_railroading_contract")
     if isinstance(direct, dict):
         hit = _coerce_anti_railroading_contract_dict(direct)
@@ -1972,6 +2001,12 @@ def _resolve_context_separation_contract(
     """Read the shipped contract from *gm_output* / narration / policy mirrors (no rebuild)."""
     if not isinstance(gm_output, dict):
         return None, None
+    pkt = resolve_gate_turn_packet(gm_output)
+    if isinstance(pkt, dict):
+        hit = resolve_turn_packet_contract(pkt, "context_separation")
+        hit = _coerce_context_separation_contract_dict(hit)
+        if hit:
+            return hit, "turn_packet.contracts.context_separation"
     direct = gm_output.get("context_separation_contract")
     if isinstance(direct, dict):
         hit = _coerce_context_separation_contract_dict(direct)
@@ -4202,6 +4237,9 @@ def _finalize_emission_output(
     pre_gate_text: str,
     fast_path: bool = False,
 ) -> Dict[str, Any]:
+    if isinstance(out, dict):
+        record_stage_snapshot(out, "final_emission_gate_exit")
+    out.pop("_gate_turn_packet_cache", None)
     final_text = str(out.get("player_facing_text") or "")
     sanitized_text = _sanitize_output_text(final_text)
     if fast_path:
@@ -7945,6 +7983,9 @@ def apply_final_emission_gate(
         return gm_output
     out = dict(gm_output)
     out = _gm_probe_for_answer_pressure_contracts(out, session if isinstance(session, dict) else None)
+    out["_gate_turn_packet_cache"] = get_turn_packet(
+        out, out.get("response_policy"), out.get("prompt_context")
+    )
     pre_gate_text = _normalize_text(out.get("player_facing_text"))
     tags = out.get("tags") if isinstance(out.get("tags"), list) else []
     tag_list = [str(t) for t in tags if isinstance(t, str)]
@@ -8016,8 +8057,21 @@ def apply_final_emission_gate(
     reasons: List[str] = []
     normalization_ran = False
     record_final_emission_gate_entry(out)
+    record_stage_snapshot(out, "final_emission_gate_entry")
+    snap_before_pregate = snapshot_turn_stage(out, "gate_before_pregate_containment")
     if _apply_upstream_fallback_pregate_containment(out):
         pre_gate_text = _normalize_text(out.get("player_facing_text"))
+        snap_after_pregate = snapshot_turn_stage(out, "gate_after_pregate_containment")
+        _pregate_diff = diff_turn_stage(snap_before_pregate, snap_after_pregate)
+        if _pregate_diff.get("text_fingerprint_changed") or _pregate_diff.get("route_changed"):
+            record_stage_snapshot(out, "final_emission_gate_after_pregate_containment")
+            record_stage_transition(
+                out,
+                "gate_before_pregate_containment",
+                "final_emission_gate_after_pregate_containment",
+                snap_before_pregate,
+                snap_after_pregate,
+            )
     text = _normalize_text(out.get("player_facing_text"))
     response_type_debug = _default_response_type_debug(None, None)
     ac_layer_meta: Dict[str, Any] = {}
@@ -8200,6 +8254,7 @@ def apply_final_emission_gate(
             strict_social_active=strict_social_active,
         )
         out["player_facing_text"] = text
+        record_stage_snapshot(out, "final_emission_gate_after_strict_social_composition")
         if ffnc_layer_meta.get("fast_fallback_neutral_composition_repaired"):
             realign_fallback_provenance_selector_to_current_text(
                 out,

@@ -74,6 +74,7 @@ from game.response_policy_contracts import (
     build_social_response_structure_contract,
     peek_response_type_contract_from_resolution,
 )
+from game.turn_packet import build_turn_packet
 
 # Configurable limits for deterministic, inspectable compression
 MAX_RECENT_LOG = 5
@@ -3633,6 +3634,21 @@ def build_narration_context(
             "profile": "full",
         }
 
+    # Canonical snapshot for retry / gate contract lookup (not authoritative engine state).
+    _turn_packet = build_turn_packet(
+        response_policy=response_policy,
+        scene_id=scene_pub_id or None,
+        player_text=str(user_text or ""),
+        resolution=resolution if isinstance(resolution, dict) else None,
+        interaction_continuity=interaction_continuity,
+        narration_obligations=narration_obligations,
+        last_human_adjacent_continuity=(
+            runtime.get("last_human_adjacent_continuity") if isinstance(runtime, dict) else None
+        ),
+        response_type=rtc_for_social_structure if isinstance(rtc_for_social_structure, dict) else None,
+        sources_used=["prompt_context.build_compressed_narration_context"],
+    )
+
     payload: Dict[str, Any] = {
         'instructions': instructions,
         'speaker_selection': speaker_selection,
@@ -3653,6 +3669,7 @@ def build_narration_context(
         'interlocutor_lead_context': interlocutor_lead_context,
         'interlocutor_lead_behavior_hints': interlocutor_lead_behavior_hints,
         'response_policy': response_policy,
+        'turn_packet': _turn_packet,
         'fallback_behavior': fallback_behavior_contract,
         'uncertainty_hint': eff_uncertainty_hint,
         'narration_obligations': narration_obligations,

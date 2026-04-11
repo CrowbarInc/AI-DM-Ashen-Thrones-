@@ -1,0 +1,207 @@
+"""Tests for :mod:`game.stage_diff_telemetry` and gate/retry wiring."""
+
+from __future__ import annotations
+
+from typing import Any, Dict
+
+# Import :mod:`game.gm` before :mod:`game.gm_retry` to avoid partial-init cycles (see test_turn_packet_accessors).
+from game.gm import build_retry_prompt_for_failure as _gm_retry_import_order_anchor  # noqa: F401
+
+from game import stage_diff_telemetry as sdt
+from game.final_emission_gate import apply_final_emission_gate
+from game.gm_retry import apply_deterministic_retry_fallback, force_terminal_retry_fallback
+from game.turn_packet import TURN_PACKET_METADATA_KEY, attach_turn_packet, build_turn_packet
+
+
+def test_snapshot_turn_stage_fingerprints_without_full_text() -> None:
+    long = "word " * 80
+    gm: Dict[str, Any] = {"player_facing_text": long, "metadata": {}}
+    snap = sdt.snapshot_turn_stage(gm, "t1")
+    assert snap["player_facing_fingerprint"] == sdt.compact_text_fingerprint(long)
+    assert len(snap["player_facing_preview"]) <= 120
+    assert long not in snap["player_facing_preview"] or len(long) <= 120
+    assert snap["text_len"] == len(long)
+
+
+def test_diff_turn_stage_detects_changes() -> None:
+    a = sdt.snapshot_turn_stage(
+        {"player_facing_text": "alpha", "metadata": {}, "fallback_kind": None},
+        "s1",
+    )
+    b = sdt.snapshot_turn_stage(
+        {
+            "player_facing_text": "beta",
+            "metadata": {},
+            "final_route": "x",
+            "fallback_kind": "fk",
+        },
+        "s2",
+    )
+    d = sdt.diff_turn_stage(a, b)
+    assert d["text_fingerprint_changed"] is True
+    assert d["route_changed"] is True
+    assert d["fallback_changed"] is True
+
+    r1 = {**a, "repair_flags": ["answer_completeness_repaired"]}
+    r2 = {**a, "repair_flags": ["tone_escalation_repaired"]}
+    dr = sdt.diff_turn_stage(r1, r2)
+    assert dr["repair_flags_changed"] is True
+
+
+def test_record_stage_snapshot_bounded() -> None:
+    gm: Dict[str, Any] = {"metadata": {}}
+    for i in range(20):
+        sdt.record_stage_snapshot(gm, f"st_{i}")
+    tel = gm["metadata"][sdt.STAGE_DIFF_METADATA_KEY]
+    assert len(tel["snapshots"]) == 12
+
+
+def test_record_stage_snapshot_preserves_existing_telemetry_subtrees() -> None:
+    gm: Dict[str, Any] = {
+        "metadata": {
+            sdt.STAGE_DIFF_METADATA_KEY: {
+                "prior_custom": {"k": 1},
+                "snapshots": [],
+                "transitions": [],
+            }
+        }
+    }
+    sdt.record_stage_snapshot(gm, "probe")
+    tel = gm["metadata"][sdt.STAGE_DIFF_METADATA_KEY]
+    assert tel["prior_custom"] == {"k": 1}
+    assert any(s.get("stage") == "probe" for s in tel["snapshots"])
+
+
+def test_record_stage_transition_bounded() -> None:
+    gm: Dict[str, Any] = {"metadata": {}}
+    for i in range(20):
+        sdt.record_stage_transition(
+            gm,
+            f"a_{i}",
+            f"b_{i}",
+            {"stage": f"a_{i}", "player_facing_fingerprint": str(i)},
+            {"stage": f"b_{i}", "player_facing_fingerprint": str(i + 1)},
+        )
+    tel = gm["metadata"][sdt.STAGE_DIFF_METADATA_KEY]
+    assert len(tel["transitions"]) == 12
+
+
+def test_final_emission_gate_entry_exit_snapshots() -> None:
+    out = apply_final_emission_gate(
+        {"player_facing_text": "Rain drums on the slate roof.", "tags": []},
+        resolution={"kind": "observe", "prompt": "I listen to the rain."},
+        session={},
+        scene_id="scene_investigate",
+        world={},
+    )
+    tel = (out.get("metadata") or {}).get(sdt.STAGE_DIFF_METADATA_KEY) or {}
+    stages = [s.get("stage") for s in tel.get("snapshots", [])]
+    assert "final_emission_gate_entry" in stages
+    assert "final_emission_gate_exit" in stages
+
+
+def test_retry_deterministic_accepted_snapshot() -> None:
+    gm: Dict[str, Any] = {
+        "player_facing_text": "stub",
+        "tags": [],
+        "metadata": {},
+    }
+    failure: Dict[str, Any] = {
+        "failure_class": "answer",
+        "priority": 1,
+        "reasons": [],
+        "known_fact_context": {
+            "answer": "The sign reads north.",
+            "source": "test",
+            "subject": "sign",
+            "position": "here",
+        },
+    }
+    scene_envelope: Dict[str, Any] = {"scene": {"id": "s1"}}
+    session: Dict[str, Any] = {"player_input": "What does the sign say?"}
+    world: Dict[str, Any] = {}
+    resolution: Dict[str, Any] = {
+        "kind": "question",
+        "social": {"open_social_solicitation": True, "npc_id": "npc_a", "reply_kind": "answer"},
+    }
+    out = apply_deterministic_retry_fallback(
+        gm,
+        failure=failure,
+        player_text="What does the sign say?",
+        scene_envelope=scene_envelope,
+        session=session,
+        world=world,
+        resolution=resolution,
+        segmented_turn=None,
+    )
+    tel = (out.get("metadata") or {}).get(sdt.STAGE_DIFF_METADATA_KEY) or {}
+    stages = [s.get("stage") for s in tel.get("snapshots", [])]
+    assert "retry_pre_deterministic_fallback" in stages
+    assert "retry_deterministic_fallback_applied" in stages
+
+
+def test_terminal_retry_fallback_snapshot() -> None:
+    base: Dict[str, Any] = {
+        "player_facing_text": "",
+        "tags": [],
+        "metadata": {},
+    }
+    session: Dict[str, Any] = {
+        "player_input": "Where is the door?",
+        "social_authority": True,
+        "active_scene_id": "missing_scene_xyz",
+    }
+    world: Dict[str, Any] = {"places": {}}
+    scene_envelope: Dict[str, Any] = {"scene": {"id": "s1"}}
+    resolution: Dict[str, Any] = {
+        "kind": "question",
+        "social": {"npc_id": "npc_x", "reply_kind": "answer"},
+    }
+    out = force_terminal_retry_fallback(
+        session=session,
+        original_text="",
+        failure={"failure_class": "unresolved_question", "reasons": ["q"]},
+        retry_failures=[],
+        player_text="Where is the door?",
+        scene_envelope=scene_envelope,
+        world=world,
+        resolution=resolution,
+        base_gm=base,
+        segmented_turn=None,
+    )
+    tel = (out.get("metadata") or {}).get(sdt.STAGE_DIFF_METADATA_KEY) or {}
+    stages = [s.get("stage") for s in tel.get("snapshots", [])]
+    assert "retry_terminal_fallback_entry" in stages
+    assert "retry_terminal_fallback_result" in stages
+    assert out.get("retry_exhausted") is True
+
+
+def test_telemetry_coexists_with_existing_metadata() -> None:
+    pkt = build_turn_packet(player_text="hello", scene_id="s9")
+    gm: Dict[str, Any] = {
+        "player_facing_text": "Short line.",
+        "tags": [],
+        "metadata": {"existing_key": 42, TURN_PACKET_METADATA_KEY: pkt},
+    }
+    attach_turn_packet(gm, pkt)
+    sdt.record_stage_snapshot(gm, "coexist_probe")
+    md = gm["metadata"]
+    assert md["existing_key"] == 42
+    assert isinstance(md[TURN_PACKET_METADATA_KEY], dict)
+    assert isinstance(md[sdt.STAGE_DIFF_METADATA_KEY], dict)
+
+
+def test_resolve_gate_turn_packet_prefers_cache() -> None:
+    pkt = build_turn_packet(scene_id="cached")
+    gm: Dict[str, Any] = {
+        "metadata": {TURN_PACKET_METADATA_KEY: build_turn_packet(scene_id="meta")},
+        "_gate_turn_packet_cache": pkt,
+    }
+    assert sdt.resolve_gate_turn_packet(gm) is pkt
+
+
+def test_compact_preview_limit() -> None:
+    t = "abcdefgh" * 20
+    p = sdt.compact_preview(t, limit=25)
+    assert len(p) == 25
+    assert p.endswith("…")
