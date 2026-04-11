@@ -174,6 +174,363 @@ def _response_type_decision_payload(debug: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
+def _default_narration_constraint_debug() -> Dict[str, Any]:
+    """Compact, sanitized narration-constraint diagnostics; not a full trace log."""
+    return {
+        "response_type": {
+            "required": None,
+            "contract_source": None,
+            "candidate_ok": None,
+            "repair_used": False,
+            "repair_kind": None,
+        },
+        "visibility": {
+            "contract_present": False,
+            "decision_mode": None,
+            "visible_entity_count": None,
+            "withheld_fact_count": None,
+            "reason_codes": [],
+        },
+        "speaker_selection": {
+            "speaker_id": None,
+            "speaker_name": None,
+            "selection_source": None,
+            "reason_code": None,
+            "binding_confident": None,
+        },
+    }
+
+
+def _narration_constraint_small_str(value: Any) -> str | None:
+    if not isinstance(value, str):
+        return None
+    clean = value.strip()
+    if not clean or len(clean) > 64 or any(ch in clean for ch in "\r\n\t"):
+        return None
+    return clean
+
+
+_NARRATION_CONSTRAINT_CODE_RE = re.compile(r"^[A-Za-z0-9_.:/-]+$")
+
+
+def _narration_constraint_small_code(value: Any) -> str | None:
+    clean = _narration_constraint_small_str(value)
+    if clean is None or _NARRATION_CONSTRAINT_CODE_RE.fullmatch(clean) is None:
+        return None
+    return clean
+
+
+def _narration_constraint_small_int(value: Any) -> int | None:
+    if isinstance(value, bool) or value is None:
+        return None
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return None
+
+
+def _narration_constraint_reason_codes(*sources: Any, limit: int = 5) -> List[str]:
+    """Keep only small stable codes; never surface raw hidden text or prompt fragments."""
+    out: List[str] = []
+
+    def _push(raw: Any) -> None:
+        if len(out) >= limit:
+            return
+        if isinstance(raw, str):
+            clean = _narration_constraint_small_code(raw)
+            if clean and clean not in out:
+                out.append(clean)
+            return
+        if isinstance(raw, dict):
+            _push(raw.get("reason_code"))
+            _push(raw.get("reason_codes"))
+            kind = raw.get("kind")
+            if isinstance(kind, str):
+                _push(kind)
+            return
+        if isinstance(raw, (list, tuple)):
+            for item in raw:
+                if len(out) >= limit:
+                    break
+                _push(item)
+
+    for source in sources:
+        _push(source)
+        if len(out) >= limit:
+            break
+    return out[:limit]
+
+
+def _narration_constraint_visibility_mode(
+    visibility_meta: Mapping[str, Any] | None,
+    visibility_validation: Mapping[str, Any] | None,
+) -> str | None:
+    vm = visibility_meta if isinstance(visibility_meta, dict) else {}
+    vv = visibility_validation if isinstance(visibility_validation, dict) else {}
+    if vm.get("visibility_replacement_applied") is True:
+        return "replaced"
+    if vm.get("visibility_continuity_lead_exemption") is True:
+        return "continuity_lead_exemption"
+    if vm.get("visibility_validation_passed") is True:
+        return "validated"
+    if vm.get("visibility_validation_passed") is False:
+        return "validation_failed"
+    if isinstance(vv.get("ok"), bool):
+        return "validated" if vv.get("ok") is True else "validation_failed"
+    return None
+
+
+def _narration_constraint_binding_confident(
+    speaker_selection_contract: Mapping[str, Any] | None,
+    speaker_contract_enforcement: Mapping[str, Any] | None,
+    speaker_binding_bridge: Mapping[str, Any] | None,
+) -> bool | None:
+    ssc = speaker_selection_contract if isinstance(speaker_selection_contract, dict) else {}
+    sce = speaker_contract_enforcement if isinstance(speaker_contract_enforcement, dict) else {}
+    bridge = speaker_binding_bridge if isinstance(speaker_binding_bridge, dict) else {}
+    if bridge.get("malformed_attribution_detected") is True:
+        return False
+
+    candidate = sce.get("post_validation")
+    if not isinstance(candidate, dict):
+        candidate = sce.get("validation")
+    details = candidate.get("details") if isinstance(candidate, dict) else {}
+    signature = details.get("signature") if isinstance(details, dict) else {}
+    confidence = _narration_constraint_small_code(signature.get("confidence")) if isinstance(signature, dict) else None
+    if confidence == "high":
+        return True
+    if confidence == "low":
+        return False
+    if ssc.get("continuity_locked") is True:
+        return True
+    if ssc.get("speaker_switch_allowed") is False and _narration_constraint_small_str(ssc.get("primary_speaker_id")):
+        return True
+    return None
+
+
+def _narration_constraint_speaker_reason_code(
+    speaker_selection_contract: Mapping[str, Any] | None,
+    speaker_contract_enforcement: Mapping[str, Any] | None,
+    speaker_binding_bridge: Mapping[str, Any] | None,
+) -> str | None:
+    ssc = speaker_selection_contract if isinstance(speaker_selection_contract, dict) else {}
+    sce = speaker_contract_enforcement if isinstance(speaker_contract_enforcement, dict) else {}
+    bridge = speaker_binding_bridge if isinstance(speaker_binding_bridge, dict) else {}
+    candidate = sce.get("post_validation")
+    if not isinstance(candidate, dict):
+        candidate = sce.get("validation")
+    ssc_debug = ssc.get("debug") if isinstance(ssc.get("debug"), dict) else {}
+    grounded = (
+        _narration_constraint_small_code(sce.get("final_reason_code"))
+        or _narration_constraint_small_code(candidate.get("reason_code") if isinstance(candidate, dict) else None)
+        or _narration_constraint_small_code(bridge.get("speaker_reason_code"))
+        or _narration_constraint_small_code(ssc_debug.get("grounding_reason_code"))
+        or _narration_constraint_small_code(ssc.get("continuity_lock_reason"))
+        or _narration_constraint_small_code(ssc.get("speaker_switch_reason"))
+    )
+    if grounded:
+        return grounded
+
+    selection_source = _narration_constraint_small_code(ssc.get("primary_speaker_source")) or _narration_constraint_small_code(
+        ssc_debug.get("authoritative_source")
+    )
+    if selection_source in {"explicit_target", "declared_action", "spoken_vocative", "vocative"}:
+        return "speaker_from_explicit_target"
+    if selection_source == "continuity":
+        return "speaker_from_continuity"
+    if not _narration_constraint_small_str(ssc.get("primary_speaker_id")):
+        return "speaker_unresolved"
+    return None
+
+
+def _build_narration_constraint_debug(
+    *,
+    response_type_debug: Mapping[str, Any] | None = None,
+    response_type_contract: Mapping[str, Any] | None = None,
+    response_type_contract_source: str | None = None,
+    narration_visibility: Mapping[str, Any] | None = None,
+    visibility_meta: Mapping[str, Any] | None = None,
+    visibility_validation: Mapping[str, Any] | None = None,
+    speaker_selection_contract: Mapping[str, Any] | None = None,
+    speaker_contract_enforcement: Mapping[str, Any] | None = None,
+    speaker_binding_bridge: Mapping[str, Any] | None = None,
+) -> Dict[str, Any]:
+    """Build a lightweight diagnostic surface; keep it compact, stable, and sanitized."""
+    payload = _default_narration_constraint_debug()
+
+    rt_dbg = response_type_debug if isinstance(response_type_debug, dict) else {}
+    rt_contract = response_type_contract if isinstance(response_type_contract, dict) else {}
+    vis_contract = narration_visibility if isinstance(narration_visibility, dict) else {}
+    vis_meta = visibility_meta if isinstance(visibility_meta, dict) else {}
+    vis_validation_map = visibility_validation if isinstance(visibility_validation, dict) else {}
+    ssc = speaker_selection_contract if isinstance(speaker_selection_contract, dict) else {}
+    sce = speaker_contract_enforcement if isinstance(speaker_contract_enforcement, dict) else {}
+    bridge = speaker_binding_bridge if isinstance(speaker_binding_bridge, dict) else {}
+
+    rt_out = payload["response_type"]
+    rt_out["required"] = _narration_constraint_small_code(rt_dbg.get("response_type_required")) or _narration_constraint_small_code(
+        rt_contract.get("required_response_type")
+    )
+    rt_out["contract_source"] = _narration_constraint_small_code(rt_dbg.get("response_type_contract_source")) or _narration_constraint_small_code(
+        response_type_contract_source
+    )
+    candidate_ok = rt_dbg.get("response_type_candidate_ok")
+    rt_out["candidate_ok"] = candidate_ok if isinstance(candidate_ok, bool) else None
+    rt_out["repair_used"] = bool(rt_dbg.get("response_type_repair_used"))
+    rt_out["repair_kind"] = _narration_constraint_small_code(rt_dbg.get("response_type_repair_kind"))
+
+    vis_out = payload["visibility"]
+    vis_out["contract_present"] = bool(vis_contract)
+    vis_out["decision_mode"] = _narration_constraint_visibility_mode(vis_meta, vis_validation_map)
+    vis_out["visible_entity_count"] = (
+        len(vis_contract.get("visible_entity_ids"))
+        if isinstance(vis_contract.get("visible_entity_ids"), list)
+        else None
+    )
+    vis_out["withheld_fact_count"] = (
+        len(vis_contract.get("hidden_fact_strings"))
+        if isinstance(vis_contract.get("hidden_fact_strings"), list)
+        else None
+    )
+    vis_reasons: List[str] = []
+    if vis_meta.get("visibility_continuity_lead_exemption") is True:
+        vis_reasons.append("continuity_lead_exemption")
+    vis_reasons.extend(
+        _narration_constraint_reason_codes(
+            vis_meta.get("visibility_violation_kinds"),
+            vis_validation_map.get("reason_codes"),
+            vis_validation_map.get("violations"),
+            limit=5,
+        )
+    )
+    vis_out["reason_codes"] = _narration_constraint_reason_codes(vis_reasons, limit=5)
+
+    sp_out = payload["speaker_selection"]
+    candidate = sce.get("post_validation")
+    if not isinstance(candidate, dict):
+        candidate = sce.get("validation")
+    sp_out["speaker_id"] = _narration_constraint_small_str(ssc.get("primary_speaker_id")) or _narration_constraint_small_str(
+        candidate.get("canonical_speaker_id") if isinstance(candidate, dict) else None
+    )
+    sp_out["speaker_name"] = _narration_constraint_small_str(ssc.get("primary_speaker_name")) or _narration_constraint_small_str(
+        candidate.get("canonical_speaker_name") if isinstance(candidate, dict) else None
+    )
+    ssc_debug = ssc.get("debug") if isinstance(ssc.get("debug"), dict) else {}
+    sp_out["selection_source"] = _narration_constraint_small_code(ssc.get("primary_speaker_source")) or _narration_constraint_small_code(
+        ssc_debug.get("authoritative_source")
+    )
+    sp_out["reason_code"] = _narration_constraint_speaker_reason_code(ssc, sce, bridge)
+    sp_out["binding_confident"] = _narration_constraint_binding_confident(ssc, sce, bridge)
+
+    return payload
+
+
+def _merge_narration_constraint_debug_meta(
+    metadata: Dict[str, Any],
+    debug_payload: Mapping[str, Any] | None,
+) -> None:
+    """Merge the compact narration diagnostics without disturbing unrelated metadata."""
+    if not isinstance(metadata, dict):
+        return
+    if not isinstance(debug_payload, dict):
+        debug_payload = {}
+
+    emission_debug = metadata.setdefault("emission_debug", {})
+    if not isinstance(emission_debug, dict):
+        return
+
+    # Keep this surface stable and sanitized; it is a summary view, not a full trace.
+    merged = _default_narration_constraint_debug()
+    existing = emission_debug.get("narration_constraint_debug")
+    existing_map = existing if isinstance(existing, dict) else {}
+    for section_name, section_default in merged.items():
+        existing_section = existing_map.get(section_name)
+        payload_section = debug_payload.get(section_name)
+        section = dict(section_default)
+        if isinstance(existing_section, dict):
+            section.update(existing_section)
+        if isinstance(payload_section, dict):
+            section.update(payload_section)
+        merged[section_name] = section
+    for extra_key, extra_value in existing_map.items():
+        if extra_key not in merged:
+            merged[extra_key] = extra_value
+    for extra_key, extra_value in debug_payload.items():
+        if extra_key not in merged:
+            merged[extra_key] = extra_value
+    emission_debug["narration_constraint_debug"] = merged
+
+
+def _resolve_narration_constraint_debug_visibility_contract(
+    *,
+    session: Dict[str, Any] | None,
+    scene: Dict[str, Any] | None,
+    world: Dict[str, Any] | None,
+) -> Dict[str, Any]:
+    try:
+        contract = build_narration_visibility_contract(
+            session=session if isinstance(session, dict) else None,
+            scene=scene if isinstance(scene, dict) else None,
+            world=world if isinstance(world, dict) else None,
+        )
+    except Exception:
+        return {}
+    return contract if isinstance(contract, dict) else {}
+
+
+def _current_speaker_binding_bridge(out: Dict[str, Any]) -> Dict[str, Any]:
+    md = out.get("metadata") if isinstance(out.get("metadata"), dict) else {}
+    em = md.get("emission_debug") if isinstance(md.get("emission_debug"), dict) else {}
+    bridge = em.get("interaction_continuity_speaker_binding_bridge")
+    return bridge if isinstance(bridge, dict) else {}
+
+
+def _merge_narration_constraint_debug_into_outputs(
+    out: Dict[str, Any],
+    resolution: Dict[str, Any] | None,
+    eff_resolution: Dict[str, Any] | None,
+    *,
+    session: Dict[str, Any] | None,
+    scene: Dict[str, Any] | None,
+    world: Dict[str, Any] | None,
+    response_type_debug: Mapping[str, Any] | None,
+    speaker_contract_enforcement: Mapping[str, Any] | None = None,
+) -> None:
+    md_out = out.setdefault("metadata", {})
+    if not isinstance(md_out, dict):
+        return
+
+    visibility_meta = out.get("_final_emission_meta") if isinstance(out.get("_final_emission_meta"), dict) else {}
+    speaker_selection_contract = get_speaker_selection_contract(
+        eff_resolution if isinstance(eff_resolution, dict) else resolution,
+        metadata=md_out,
+        trace=out.get("trace") if isinstance(out.get("trace"), dict) else None,
+    )
+    payload = _build_narration_constraint_debug(
+        response_type_debug=response_type_debug,
+        narration_visibility=_resolve_narration_constraint_debug_visibility_contract(
+            session=session,
+            scene=scene,
+            world=world,
+        ),
+        visibility_meta=visibility_meta,
+        speaker_selection_contract=speaker_selection_contract,
+        speaker_contract_enforcement=speaker_contract_enforcement,
+        speaker_binding_bridge=_current_speaker_binding_bridge(out),
+    )
+    _merge_narration_constraint_debug_meta(md_out, payload)
+
+    if isinstance(resolution, dict):
+        md_r = resolution.setdefault("metadata", {})
+        if isinstance(md_r, dict):
+            _merge_narration_constraint_debug_meta(md_r, payload)
+
+    if eff_resolution is not None and eff_resolution is not resolution:
+        md_eff = eff_resolution.setdefault("metadata", {})
+        if isinstance(md_eff, dict):
+            _merge_narration_constraint_debug_meta(md_eff, payload)
+
+
 # --- Tone escalation (response_policy.tone_escalation shipped contract) -----------------------
 
 
@@ -7559,6 +7916,16 @@ def apply_final_emission_gate(
                 session=session if isinstance(session, dict) else None,
                 preserve_existing_validation=True,
             )
+            _merge_narration_constraint_debug_into_outputs(
+                out,
+                resolution if isinstance(resolution, dict) else None,
+                eff_resolution if isinstance(eff_resolution, dict) else None,
+                session=session if isinstance(session, dict) else None,
+                scene=scene if isinstance(scene, dict) else None,
+                world=world if isinstance(world, dict) else None,
+                response_type_debug=response_type_debug,
+                speaker_contract_enforcement=_speaker_contract_payload,
+            )
             log_final_emission_trace({**out["_final_emission_meta"], "stage": "final_emission_gate_accept"})
             return _finalize_emission_output(out, pre_gate_text=pre_gate_text)
 
@@ -7688,6 +8055,16 @@ def apply_final_emission_gate(
             resolution_for_contracts=eff_resolution if isinstance(eff_resolution, dict) else None,
             eff_resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
             session=session if isinstance(session, dict) else None,
+        )
+        _merge_narration_constraint_debug_into_outputs(
+            out,
+            resolution if isinstance(resolution, dict) else None,
+            eff_resolution if isinstance(eff_resolution, dict) else None,
+            session=session if isinstance(session, dict) else None,
+            scene=scene if isinstance(scene, dict) else None,
+            world=world if isinstance(world, dict) else None,
+            response_type_debug=response_type_debug,
+            speaker_contract_enforcement=_speaker_contract_payload,
         )
         log_final_emission_trace({**out["_final_emission_meta"], "stage": "final_emission_gate_replace"})
         return _finalize_emission_output(out, pre_gate_text=pre_gate_text)
@@ -8032,6 +8409,15 @@ def apply_final_emission_gate(
             eff_resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
             session=session if isinstance(session, dict) else None,
         )
+        _merge_narration_constraint_debug_into_outputs(
+            out,
+            resolution if isinstance(resolution, dict) else None,
+            eff_resolution if isinstance(eff_resolution, dict) else None,
+            session=session if isinstance(session, dict) else None,
+            scene=scene if isinstance(scene, dict) else None,
+            world=world if isinstance(world, dict) else None,
+            response_type_debug=response_type_debug,
+        )
         log_final_emission_trace({**out["_final_emission_meta"], "stage": "final_emission_gate_accept"})
         return _finalize_emission_output(out, pre_gate_text=pre_gate_text)
 
@@ -8165,6 +8551,15 @@ def apply_final_emission_gate(
         resolution_for_contracts=resolution if isinstance(resolution, dict) else None,
         eff_resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
         session=session if isinstance(session, dict) else None,
+    )
+    _merge_narration_constraint_debug_into_outputs(
+        out,
+        resolution if isinstance(resolution, dict) else None,
+        eff_resolution if isinstance(eff_resolution, dict) else None,
+        session=session if isinstance(session, dict) else None,
+        scene=scene if isinstance(scene, dict) else None,
+        world=world if isinstance(world, dict) else None,
+        response_type_debug=response_type_debug,
     )
     log_final_emission_trace({**out["_final_emission_meta"], "stage": "final_emission_gate_replace"})
     return _finalize_emission_output(out, pre_gate_text=pre_gate_text)
