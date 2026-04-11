@@ -8,7 +8,7 @@ for compatibility.
 from __future__ import annotations
 
 import re
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Tuple
 
 from game.final_emission_text import (
     _capitalize_sentence_fragment,
@@ -16,15 +16,23 @@ from game.final_emission_text import (
     _normalize_text,
 )
 from game.final_emission_validators import (
+    _FALLBACK_FABRICATED_AUTHORITY_PATTERNS,
+    _FALLBACK_META_VOICE_PATTERNS,
+    _FALLBACK_OVERCERTAIN_BY_SOURCE,
+    _FALLBACK_OVERCERTAIN_GENERAL_PATTERNS,
     _EXPOSITORY_CONNECTOR_RES,
+    _allowed_hedge_in_text,
+    _contains_diegetic_uncertainty_partial,
     _concrete_payload_for_kinds,
     _content_tokens,
     _contract_bool,
     _NEXT_LEAD_SNIPPET,
+    _looks_like_single_clarifying_question,
     _opening_carries_allowed_delta,
     _opening_segment,
     _partial_reason_in_text,
     _resolve_answer_completeness_contract,
+    _resolve_fallback_behavior_contract,
     _resolve_response_delta_contract,
     _response_delta_snippet_substantive,
     _response_delta_token_overlap_ratio,
@@ -34,6 +42,7 @@ from game.final_emission_validators import (
     _split_sentences_answer_complete,
     inspect_social_response_structure,
     validate_answer_completeness,
+    validate_fallback_behavior,
     validate_response_delta,
     validate_social_response_structure,
 )
@@ -1138,3 +1147,635 @@ def _merge_social_response_structure_meta(meta: Dict[str, Any], srs_dbg: Dict[st
             "social_response_structure_inspect": srs_dbg.get("social_response_structure_inspect"),
         }
     )
+
+
+def _default_fallback_behavior_meta() -> Dict[str, Any]:
+    return {
+        "fallback_behavior_contract_present": False,
+        "fallback_behavior_checked": False,
+        "fallback_behavior_skip_reason": None,
+        "fallback_behavior_uncertainty_active": False,
+        "fallback_behavior_failed": False,
+        "fallback_behavior_failure_reasons": [],
+        "fallback_behavior_repaired": False,
+        "fallback_behavior_repair_mode": "none",
+        "fallback_behavior_clarifying_question_used": False,
+        "fallback_behavior_partial_used": False,
+        "fallback_behavior_known_edge_preserved": False,
+        "fallback_behavior_unknown_edge_added": False,
+        "fallback_behavior_next_lead_added": False,
+        "fallback_behavior_meta_voice_stripped": False,
+    }
+
+
+def _merge_fallback_behavior_meta(meta: Dict[str, Any], fb_dbg: Dict[str, Any]) -> None:
+    meta.update(
+        {
+            "fallback_behavior_contract_present": bool(fb_dbg.get("fallback_behavior_contract_present")),
+            "fallback_behavior_checked": bool(fb_dbg.get("fallback_behavior_checked")),
+            "fallback_behavior_skip_reason": fb_dbg.get("fallback_behavior_skip_reason"),
+            "fallback_behavior_uncertainty_active": bool(fb_dbg.get("fallback_behavior_uncertainty_active")),
+            "fallback_behavior_failed": bool(fb_dbg.get("fallback_behavior_failed")),
+            "fallback_behavior_failure_reasons": list(fb_dbg.get("fallback_behavior_failure_reasons") or []),
+            "fallback_behavior_repaired": bool(fb_dbg.get("fallback_behavior_repaired")),
+            "fallback_behavior_repair_mode": fb_dbg.get("fallback_behavior_repair_mode"),
+            "fallback_behavior_clarifying_question_used": bool(
+                fb_dbg.get("fallback_behavior_clarifying_question_used")
+            ),
+            "fallback_behavior_partial_used": bool(fb_dbg.get("fallback_behavior_partial_used")),
+            "fallback_behavior_known_edge_preserved": bool(
+                fb_dbg.get("fallback_behavior_known_edge_preserved")
+            ),
+            "fallback_behavior_unknown_edge_added": bool(
+                fb_dbg.get("fallback_behavior_unknown_edge_added")
+            ),
+            "fallback_behavior_next_lead_added": bool(fb_dbg.get("fallback_behavior_next_lead_added")),
+            "fallback_behavior_meta_voice_stripped": bool(
+                fb_dbg.get("fallback_behavior_meta_voice_stripped")
+            ),
+        }
+    )
+
+
+def _fallback_word_count(text: str) -> int:
+    return len(re.findall(r"[A-Za-z']+", str(text or "")))
+
+
+def _fallback_allowed_behaviors(contract: Dict[str, Any] | None) -> Dict[str, Any]:
+    if not isinstance(contract, dict):
+        return {}
+    allowed = contract.get("allowed_behaviors")
+    return allowed if isinstance(allowed, dict) else {}
+
+
+def _fallback_sentences(text: str) -> List[str]:
+    return [s for s in _split_sentences_answer_complete(text) if str(s).strip()]
+
+
+_FALLBACK_REPEATED_SUBJECT_RE = re.compile(
+    r"^(?P<subject>(?:"
+    r"[A-Z][\w'.-]+(?:\s+[A-Z][\w'.-]+){0,2}"
+    r"|The\s+[A-Za-z][\w'.-]+(?:\s+[A-Za-z][\w'.-]+){0,2}"
+    r"|A few\s+[A-Za-z][\w'.-]+(?:\s+[A-Za-z][\w'.-]+){0,2}"
+    r"))\s+(?P<predicate>.+)$"
+)
+
+
+def _fallback_subject_predicate(sentence: str) -> Tuple[str, str] | None:
+    trimmed = str(sentence or "").strip().rstrip(".!?")
+    if not trimmed:
+        return None
+    match = _FALLBACK_REPEATED_SUBJECT_RE.match(trimmed)
+    if not match:
+        return None
+    subject = _normalize_text(match.group("subject")).strip()
+    predicate = _normalize_text(match.group("predicate")).strip(" ,;:-")
+    if not subject or not predicate:
+        return None
+    return subject, predicate
+
+
+def _fallback_merge_connector(predicate: str) -> str:
+    low = str(predicate or "").strip().lower()
+    if re.match(
+        r"^(?:does not answer|do not answer|no one answers|none answer|holds (?:his|her|their) tongue|lets the question hang)\b",
+        low,
+    ):
+        return "but"
+    return "and"
+
+
+def _merge_repeated_fallback_subject_pair(first: str, second: str) -> str | None:
+    left = _fallback_subject_predicate(first)
+    right = _fallback_subject_predicate(second)
+    if not left or not right:
+        return None
+    subject1, predicate1 = left
+    subject2, predicate2 = right
+    if subject1.lower() != subject2.lower():
+        return None
+    if _fallback_word_count(first) > 12 or _fallback_word_count(second) > 12:
+        return None
+    if predicate1.lower() == predicate2.lower():
+        return None
+    connector = _fallback_merge_connector(predicate2)
+    merged = f"{subject1} {predicate1}, {connector} {predicate2}" if connector == "but" else f"{subject1} {predicate1} and {predicate2}"
+    return _normalize_terminal_punctuation(_normalize_text(merged))
+
+
+def _smooth_repaired_fallback_line(text: str) -> str:
+    t = _normalize_text(text)
+    if not t:
+        return t
+    t = re.sub(
+        r"\b(hesitates|pauses)\s+and\s+does not answer at once\b",
+        r"\1, but does not answer at once",
+        t,
+        flags=re.IGNORECASE,
+    )
+    sentences = _fallback_sentences(t)
+    if len(sentences) < 2:
+        return _normalize_text(t)
+    smoothed: List[str] = []
+    idx = 0
+    while idx < len(sentences):
+        if idx + 1 < len(sentences):
+            merged = _merge_repeated_fallback_subject_pair(sentences[idx], sentences[idx + 1])
+            if merged:
+                smoothed.append(merged)
+                idx += 2
+                continue
+        smoothed.append(_normalize_terminal_punctuation(sentences[idx]))
+        idx += 1
+    return _normalize_text(" ".join(smoothed))
+
+
+def _fallback_unique_join(parts: List[str]) -> str:
+    deduped: List[str] = []
+    seen: set[str] = set()
+    for part in parts:
+        norm = _normalize_text(part)
+        if not norm:
+            continue
+        key = norm.lower()
+        if key in seen:
+            continue
+        seen.add(key)
+        deduped.append(_normalize_terminal_punctuation(norm))
+    return _normalize_text(" ".join(deduped))
+
+
+def _fallback_known_edge_sentence(text: str) -> str:
+    for sentence in _fallback_sentences(text):
+        if _concrete_payload_for_kinds(sentence, ["name", "place", "direction", "fact", "condition"]):
+            return _normalize_terminal_punctuation(sentence)
+    return ""
+
+
+def _fallback_unknown_edge_sentence(text: str, contract: Dict[str, Any]) -> str:
+    for sentence in _fallback_sentences(text):
+        if _partial_reason_in_text(sentence, ["uncertainty", "lack_of_knowledge", "gated_information"]):
+            return _normalize_terminal_punctuation(sentence)
+        if _allowed_hedge_in_text(sentence, contract=contract):
+            return _normalize_terminal_punctuation(sentence)
+        if _contains_diegetic_uncertainty_partial(sentence):
+            return _normalize_terminal_punctuation(sentence)
+    return ""
+
+
+def _fallback_next_lead_sentence(text: str) -> str:
+    for sentence in _fallback_sentences(text):
+        if _concrete_payload_for_kinds(sentence, ["next_lead"]) or _NEXT_LEAD_SNIPPET.search(sentence):
+            return _normalize_terminal_punctuation(sentence)
+    return ""
+
+
+def _fallback_primary_source(contract: Dict[str, Any] | None) -> str:
+    if not isinstance(contract, dict):
+        return ""
+    raw = contract.get("uncertainty_sources")
+    if not isinstance(raw, list):
+        return ""
+    for item in raw:
+        if isinstance(item, str) and item.strip():
+            return item.strip().lower()
+    return ""
+
+
+def _fallback_resolution_prompt(resolution: Dict[str, Any] | None) -> str:
+    if not isinstance(resolution, dict):
+        return ""
+    return _normalize_text(str(resolution.get("prompt") or ""))
+
+
+def _fallback_scene_subject(resolution: Dict[str, Any] | None, source_text: str) -> str:
+    social = resolution.get("social") if isinstance(resolution, dict) and isinstance(resolution.get("social"), dict) else {}
+    npc_name = str(social.get("npc_name") or "").strip()
+    if npc_name:
+        return npc_name
+    low = f"{source_text} {_fallback_resolution_prompt(resolution)}".lower()
+    if not re.search(r"\b(?:ask|offer|talk|speak|answer|runner|guard|captain|crowd|bystander)\b", low):
+        return ""
+    if "runner" in low:
+        return "The runner"
+    if "captain" in low:
+        return "The captain"
+    if "guard" in low:
+        return "The guard"
+    return ""
+
+
+def _looks_like_open_call_turn(resolution: Dict[str, Any] | None, source_text: str) -> bool:
+    social = resolution.get("social") if isinstance(resolution, dict) and isinstance(resolution.get("social"), dict) else {}
+    social_intent = str(social.get("social_intent_class") or "").strip().lower()
+    low = f"{source_text} {_fallback_resolution_prompt(resolution)}".lower()
+    if social_intent == "open_call":
+        return True
+    return bool(
+        re.search(
+            r"\b(?:anyone willing to talk|anybody willing to talk|bystanders?|crowd|call out|calls out|who'll talk|who will talk)\b",
+            low,
+        )
+    )
+
+
+def _rewrite_meta_fallback_as_diegetic_partial(
+    source_text: str,
+    *,
+    contract: Dict[str, Any] | None,
+    resolution: Dict[str, Any] | None,
+) -> str:
+    source = _fallback_primary_source(contract)
+    prompt = _fallback_resolution_prompt(resolution)
+    low = f"{source_text} {prompt}".lower()
+    subject = _fallback_scene_subject(resolution, source_text)
+    open_call = _looks_like_open_call_turn(resolution, source_text)
+    coin_word = "copper" if "copper" in low else "silver" if "silver" in low else "coin" if "coin" in low else ""
+
+    if open_call:
+        if coin_word:
+            return f"A few heads turn toward the {coin_word}, but no one answers at once."
+        return "A few bystanders glance over, but no one answers at once."
+
+    if subject:
+        if coin_word:
+            return f"{subject} eyes the {coin_word} but does not answer at once."
+        if source == "unknown_feasibility" or re.search(r"\b(?:safe|safely|bribe|rush|force|work|can i|could i|would it)\b", low):
+            if re.search(r"\b(?:gate|checkpoint|choke point|crowd|patrol|watch)\b", low):
+                return f"{subject} keeps attention on the choke point and gives you nothing yet."
+            return f"{subject} does not answer at once."
+        if re.search(r"\b(?:gate|checkpoint|crowd|patrol|watch)\b", low):
+            return f"{subject} starts to answer, then glances past you toward the gate."
+        if source == "unknown_motive":
+            return f"{subject} gives you nothing but a guarded look."
+        return f"{subject} hesitates, but does not answer at once."
+
+    if source == "unknown_location":
+        return "Nothing in sight pins the place down."
+    if source == "unknown_motive":
+        return "They give nothing away about why."
+    if source == "unknown_method":
+        return "Nothing in plain view shows how it was done."
+    if source == "unknown_quantity":
+        return "No clean count shows."
+    if source == "unknown_feasibility":
+        return "No one commits themselves at once."
+    if source == "unknown_identity":
+        return "No name comes clear from what shows."
+    return "The moment yields no answer at once."
+
+
+def _fallback_unknown_edge_phrase(
+    contract: Dict[str, Any] | None,
+    *,
+    resolution: Dict[str, Any] | None = None,
+    source_text: str = "",
+) -> str:
+    mode = str((contract or {}).get("uncertainty_mode") or "").strip().lower()
+    source = _fallback_primary_source(contract)
+    if source == "unknown_identity":
+        return "I don't know the name." if mode == "npc_ignorance" else "No name comes clear from what shows."
+    if source == "unknown_location":
+        return "I don't know where they went." if mode == "npc_ignorance" else "Nothing in sight pins the place down."
+    if source == "unknown_motive":
+        return "I don't know why." if mode == "npc_ignorance" else _rewrite_meta_fallback_as_diegetic_partial(
+            source_text,
+            contract=contract,
+            resolution=resolution,
+        )
+    if source == "unknown_method":
+        return "I don't know how it was done." if mode == "npc_ignorance" else "Nothing in plain view shows how it was done."
+    if source == "unknown_quantity":
+        return "I don't know the count." if mode == "npc_ignorance" else "No clean count presents itself."
+    if source == "unknown_feasibility" or mode == "procedural_insufficiency":
+        return _rewrite_meta_fallback_as_diegetic_partial(source_text, contract=contract, resolution=resolution)
+    if mode == "npc_ignorance":
+        return "I don't know that part."
+    return _rewrite_meta_fallback_as_diegetic_partial(source_text, contract=contract, resolution=resolution)
+
+
+def _fallback_clarifying_question(contract: Dict[str, Any] | None) -> str:
+    source = _fallback_primary_source(contract)
+    if source == "unknown_identity":
+        return "Which one do you mean?"
+    if source == "unknown_location":
+        return "Which place are you asking about?"
+    if source == "unknown_motive":
+        return "Whose motive are you asking after?"
+    if source == "unknown_method":
+        return "Which part are you pressing on?"
+    if source == "unknown_quantity":
+        return "Which count are you asking for?"
+    if source == "unknown_feasibility":
+        return "Which move are you weighing?"
+    return "Which part do you want pinned down?"
+
+
+def _strip_patterns_from_text(
+    text: str,
+    *,
+    patterns: Tuple[re.Pattern[str], ...],
+) -> str:
+    out: List[str] = []
+    for sentence in _fallback_sentences(text):
+        candidate = sentence
+        for pattern in patterns:
+            candidate = pattern.sub("", candidate)
+        candidate = re.sub(r"\s+", " ", candidate).strip(" ,;:-")
+        candidate = re.sub(r"\s+([,.!?;:])", r"\1", candidate).strip()
+        if _fallback_word_count(candidate) >= 2:
+            out.append(_normalize_terminal_punctuation(candidate))
+    return _normalize_text(" ".join(out))
+
+
+def _sentence_matches_overcertain_source(sentence: str, contract: Dict[str, Any]) -> bool:
+    if any(p.search(sentence) for p in _FALLBACK_OVERCERTAIN_GENERAL_PATTERNS):
+        return True
+    for source in [
+        str(item).strip().lower()
+        for item in (contract.get("uncertainty_sources") or [])
+        if isinstance(item, str) and str(item).strip()
+    ]:
+        if any(p.search(sentence) for p in _FALLBACK_OVERCERTAIN_BY_SOURCE.get(source, ())):
+            return True
+    return False
+
+
+def _strip_meta_fallback_voice(text: str, *, contract: Dict[str, Any] | None = None) -> str:
+    cleaned = _strip_patterns_from_text(text, patterns=_FALLBACK_META_VOICE_PATTERNS)
+    forbidden = [
+        re.compile(re.escape(str(item).strip()), re.IGNORECASE)
+        for item in ((contract or {}).get("forbidden_hedge_forms") or [])
+        if isinstance(item, str) and str(item).strip()
+    ]
+    if forbidden:
+        cleaned = _strip_patterns_from_text(cleaned or text, patterns=tuple(forbidden))
+    return cleaned
+
+
+def _remove_fabricated_authority(text: str, *, contract: Dict[str, Any] | None = None) -> str:
+    _ = contract
+    return _strip_patterns_from_text(text, patterns=_FALLBACK_FABRICATED_AUTHORITY_PATTERNS)
+
+
+def _downgrade_overcertain_claims(text: str, *, contract: Dict[str, Any] | None = None) -> str:
+    ctr = contract if isinstance(contract, dict) else {}
+    kept: List[str] = []
+    for sentence in _fallback_sentences(text):
+        if not _sentence_matches_overcertain_source(sentence, ctr):
+            kept.append(_normalize_terminal_punctuation(sentence))
+            continue
+        trimmed = sentence
+        for pattern in _FALLBACK_OVERCERTAIN_GENERAL_PATTERNS:
+            trimmed = pattern.sub("", trimmed)
+        trimmed = re.sub(r"\bdefinitely\b", "", trimmed, flags=re.IGNORECASE)
+        trimmed = re.sub(r"\s+", " ", trimmed).strip(" ,;:-")
+        trimmed = re.sub(r"\s+([,.!?;:])", r"\1", trimmed).strip()
+        if _concrete_payload_for_kinds(trimmed, ["next_lead"]) and _fallback_word_count(trimmed) >= 3:
+            kept.append(_normalize_terminal_punctuation(trimmed))
+            continue
+        if (
+            _concrete_payload_for_kinds(trimmed, ["name", "place", "direction", "fact", "condition"])
+            and not _sentence_matches_overcertain_source(trimmed, ctr)
+            and _fallback_word_count(trimmed) >= 3
+        ):
+            kept.append(_normalize_terminal_punctuation(trimmed))
+    return _normalize_text(" ".join(kept))
+
+
+def _ensure_known_unknown_shape(
+    text: str,
+    *,
+    contract: Dict[str, Any] | None,
+    validation: Dict[str, Any] | None,
+    resolution: Dict[str, Any] | None = None,
+) -> Tuple[str, Dict[str, Any]]:
+    _ = validation
+    ctr = contract if isinstance(contract, dict) else {}
+    patch: Dict[str, Any] = {}
+    sentences = _fallback_sentences(text)
+    known = _fallback_known_edge_sentence(text)
+    unknown = _fallback_unknown_edge_sentence(text, ctr)
+    pieces: List[str] = []
+
+    if known:
+        pieces.append(known)
+        patch["fallback_behavior_known_edge_preserved"] = True
+    elif not _contract_bool(ctr, "require_partial_to_state_known_edge") and sentences:
+        pieces.append(_normalize_terminal_punctuation(sentences[0]))
+
+    if _contract_bool(ctr, "require_partial_to_state_unknown_edge"):
+        if unknown:
+            pieces.append(unknown)
+        else:
+            pieces.append(_fallback_unknown_edge_phrase(ctr, resolution=resolution, source_text=text))
+            patch["fallback_behavior_unknown_edge_added"] = True
+    elif unknown:
+        pieces.append(unknown)
+
+    if not pieces:
+        pieces.append(_fallback_unknown_edge_phrase(ctr, resolution=resolution, source_text=text))
+        patch["fallback_behavior_unknown_edge_added"] = True
+
+    return _fallback_unique_join(pieces), patch
+
+
+def _append_next_lead_if_allowed(
+    text: str,
+    *,
+    contract: Dict[str, Any] | None,
+    source_text: str,
+) -> Tuple[str, Dict[str, Any]]:
+    ctr = contract if isinstance(contract, dict) else {}
+    patch: Dict[str, Any] = {}
+    if not _contract_bool(ctr, "require_partial_to_offer_next_lead"):
+        return text, patch
+    existing = _fallback_next_lead_sentence(text)
+    if existing:
+        return text, patch
+    lead = _fallback_next_lead_sentence(source_text)
+    if not lead:
+        return text, patch
+    patch["fallback_behavior_next_lead_added"] = True
+    return _fallback_unique_join([text, lead]), patch
+
+
+def _convert_to_single_diegetic_clarifying_question(contract: Dict[str, Any] | None) -> str:
+    return _normalize_terminal_punctuation(_fallback_clarifying_question(contract))
+
+
+def repair_fallback_behavior(
+    emitted_text: str,
+    contract: Dict[str, Any] | None,
+    validation: Dict[str, Any] | None,
+    *,
+    resolution: Dict[str, Any] | None = None,
+    strict_social_path: bool = False,
+) -> Tuple[str, Dict[str, Any], List[str]]:
+    _ = strict_social_path
+    meta = _default_fallback_behavior_meta()
+    ctr = contract if isinstance(contract, dict) else {}
+    val = validation if isinstance(validation, dict) else {}
+    original = _normalize_text(emitted_text)
+    working = original
+    modes: List[str] = []
+    failure_reasons = {
+        str(item).strip()
+        for item in (val.get("failure_reasons") or [])
+        if isinstance(item, str) and str(item).strip()
+    }
+
+    if val.get("meta_fallback_voice_detected"):
+        stripped = _strip_meta_fallback_voice(working, contract=ctr)
+        if _normalize_text(stripped) != _normalize_text(working):
+            working = stripped
+            meta["fallback_behavior_meta_voice_stripped"] = True
+            modes.append("strip_meta_voice")
+        if not _contains_diegetic_uncertainty_partial(working, resolution=resolution):
+            diegetic = _rewrite_meta_fallback_as_diegetic_partial(original or working, contract=ctr, resolution=resolution)
+            if diegetic:
+                working = _fallback_unique_join(
+                    [
+                        diegetic,
+                        _fallback_known_edge_sentence(working),
+                        _fallback_next_lead_sentence(working or original),
+                    ]
+                )
+                meta["fallback_behavior_meta_voice_stripped"] = True
+                modes.append("rewrite_meta_as_diegetic_partial")
+
+    if val.get("fabricated_authority_detected"):
+        stripped = _remove_fabricated_authority(working, contract=ctr)
+        if _normalize_text(stripped) != _normalize_text(working):
+            working = stripped
+            modes.append("remove_fabricated_authority")
+
+    if val.get("invented_certainty_detected"):
+        stripped = _downgrade_overcertain_claims(working, contract=ctr)
+        if _normalize_text(stripped) != _normalize_text(working):
+            working = stripped
+            modes.append("downgrade_invented_certainty")
+
+    allowed = _fallback_allowed_behaviors(ctr)
+    partial_allowed = bool(allowed.get("provide_partial_information"))
+    question_allowed = bool(allowed.get("ask_clarifying_question"))
+    prefer_partial = bool(ctr.get("prefer_partial_over_question"))
+    max_questions = ctr.get("max_clarifying_questions")
+    can_question = question_allowed and isinstance(max_questions, int) and max_questions > 0
+    preserve_partial = bool(
+        _fallback_known_edge_sentence(working)
+        or _fallback_next_lead_sentence(working)
+        or _fallback_unknown_edge_sentence(working, ctr)
+    )
+    need_shape = bool(
+        failure_reasons
+        & {
+            "missing_allowed_fallback_shape",
+            "question_used_when_partial_preferred",
+            "too_many_clarifying_questions",
+            "invented_certainty",
+            "fabricated_authority",
+            "meta_fallback_voice",
+        }
+    )
+
+    if need_shape and partial_allowed and (prefer_partial or preserve_partial or not can_question):
+        shaped, patch = _ensure_known_unknown_shape(
+            working or original,
+            contract=ctr,
+            validation=val,
+            resolution=resolution,
+        )
+        working, patch2 = _append_next_lead_if_allowed(
+            shaped,
+            contract=ctr,
+            source_text=working or original,
+        )
+        meta.update(patch)
+        meta.update(patch2)
+        meta["fallback_behavior_partial_used"] = True
+        modes.append("bounded_partial")
+    elif need_shape and can_question:
+        working = _convert_to_single_diegetic_clarifying_question(ctr)
+        meta["fallback_behavior_clarifying_question_used"] = True
+        modes.append("clarifying_question")
+    elif not working and partial_allowed:
+        working, patch = _ensure_known_unknown_shape(
+            original,
+            contract=ctr,
+            validation=val,
+            resolution=resolution,
+        )
+        meta.update(patch)
+        meta["fallback_behavior_partial_used"] = True
+        modes.append("bounded_partial")
+
+    final_text = _normalize_text(working or original)
+    if modes:
+        final_text = _smooth_repaired_fallback_line(final_text)
+    if _looks_like_single_clarifying_question(final_text):
+        meta["fallback_behavior_clarifying_question_used"] = True
+    if not meta["fallback_behavior_partial_used"] and not meta["fallback_behavior_clarifying_question_used"]:
+        partial_shape = _normalize_text(final_text) != _normalize_text(original) and bool(
+            _fallback_known_edge_sentence(final_text) or _fallback_unknown_edge_sentence(final_text, ctr)
+        )
+        if partial_shape:
+            meta["fallback_behavior_partial_used"] = True
+
+    if _normalize_text(final_text) != _normalize_text(original):
+        meta["fallback_behavior_repaired"] = True
+    if modes:
+        meta["fallback_behavior_repair_mode"] = "+".join(dict.fromkeys(modes))
+    return final_text, meta, []
+
+
+def _apply_fallback_behavior_layer(
+    text: str,
+    *,
+    gm_output: Dict[str, Any],
+    resolution: Dict[str, Any] | None,
+    strict_social_path: bool,
+) -> Tuple[str, Dict[str, Any], List[str]]:
+    contract = _resolve_fallback_behavior_contract(gm_output)
+    meta = _default_fallback_behavior_meta()
+    meta["fallback_behavior_contract_present"] = isinstance(contract, dict)
+
+    v0 = validate_fallback_behavior(text, contract, resolution=resolution)
+    meta["fallback_behavior_checked"] = bool(v0.get("checked"))
+    meta["fallback_behavior_skip_reason"] = v0.get("skip_reason")
+    meta["fallback_behavior_uncertainty_active"] = bool(v0.get("uncertainty_active"))
+    if not v0.get("checked"):
+        return text, meta, []
+    if v0.get("passed"):
+        return text, meta, []
+
+    meta["fallback_behavior_failed"] = True
+    meta["fallback_behavior_failure_reasons"] = list(v0.get("failure_reasons") or [])
+
+    repaired_text, repair_meta, _ = repair_fallback_behavior(
+        text,
+        contract,
+        v0,
+        resolution=resolution,
+        strict_social_path=strict_social_path,
+    )
+    _merge_fallback_behavior_meta(meta, repair_meta)
+
+    candidate = repaired_text if _normalize_text(repaired_text) else text
+    v1 = validate_fallback_behavior(candidate, contract, resolution=resolution)
+    meta["fallback_behavior_checked"] = bool(v1.get("checked"))
+    meta["fallback_behavior_skip_reason"] = v1.get("skip_reason")
+    meta["fallback_behavior_uncertainty_active"] = bool(v1.get("uncertainty_active"))
+    if v1.get("passed"):
+        meta["fallback_behavior_failed"] = False
+        meta["fallback_behavior_failure_reasons"] = []
+        return candidate, meta, []
+
+    meta["fallback_behavior_failed"] = bool(v1.get("checked") and not v1.get("passed"))
+    meta["fallback_behavior_failure_reasons"] = list(v1.get("failure_reasons") or v0.get("failure_reasons") or [])
+    if _normalize_text(candidate) != _normalize_text(text):
+        return candidate, meta, []
+    extra: List[str] = []
+    if not strict_social_path:
+        extra.append("fallback_behavior_unsatisfied_after_repair")
+    return text, meta, extra

@@ -10,6 +10,8 @@ Contract layers (orthogonal concerns):
   certain (see ``build_narrative_authority_contract``); does not replace visibility rules.
 - **scene_state_anchor** — mandatory grounding in present scene/speaker/action anchors.
 - **answer_completeness** — direct-answer obligations, voice, and bounded-partial shape.
+- **fallback_behavior** — narrow graceful-degradation policy under meaningful uncertainty pressure;
+  governs bounded partials, diegetic hedging, and the single-question fallback shape.
 - **tone_escalation** — caps interpersonal hostility / escalation in narration from published inputs
   (see ``build_tone_escalation_contract`` in ``game.tone_escalation``).
 - **anti_railroading** — player-agency and lead-surfacing policy (inspectable flags and surfaced lead ids;
@@ -59,6 +61,7 @@ from game.context_separation import build_context_separation_contract
 from game.player_facing_narration_purity import build_player_facing_narration_purity_contract
 from game.scene_state_anchoring import build_scene_state_anchor_contract
 from game.narrative_authority import build_narrative_authority_contract
+from game.fallback_behavior import build_fallback_behavior_contract
 from game.tone_escalation import build_tone_escalation_contract
 from game.response_type_gating import derive_response_type_contract
 from game.interaction_continuity import build_interaction_continuity_contract
@@ -2715,9 +2718,10 @@ def build_narration_context(
 
     Narration contracts are layered: visibility (reference scope), narrative_authority (certainty
     and assertion boundaries), scene_state_anchor (grounding), answer_completeness
-    (answer-shape obligations), tone_escalation (interpersonal intensity caps), anti_railroading
-    (player agency vs surfaced leads), context_separation (ambient pressure vs local exchange),
-    and player_facing_narration_purity (no scaffold/menu/engine coaching in prose),
+    (answer-shape obligations), fallback_behavior (narrow uncertainty fallback shape),
+    tone_escalation (interpersonal intensity caps), anti_railroading (player agency vs surfaced leads),
+    context_separation (ambient pressure vs local exchange), and player_facing_narration_purity
+    (no scaffold/menu/engine coaching in prose),
     and social_response_structure (dialogue-turn spoken shape when response type requires dialogue),
     and interaction_continuity (thread / interlocutor anchoring snapshot for enforcement layers);
     see module docstring.
@@ -3323,6 +3327,25 @@ def build_narration_context(
         interaction_continuity_contract
     )
 
+    fallback_behavior_contract = build_fallback_behavior_contract(
+        session=session if isinstance(session, dict) else None,
+        scene=scene if isinstance(scene, dict) else None,
+        recent_log=recent_log_compact,
+        turn_summary=turn_summary_struct,
+        mechanical_resolution=resolution if isinstance(resolution, dict) else None,
+        response_type_contract=rtc_for_social_structure if isinstance(rtc_for_social_structure, dict) else None,
+        answer_completeness_contract=response_policy.get("answer_completeness"),
+        narrative_authority_contract=narrative_authority_contract,
+        interaction_continuity_contract=interaction_continuity_contract,
+    )
+    response_policy["fallback_behavior"] = fallback_behavior_contract
+    prompt_debug_anchor["fallback_behavior"] = {
+        "enabled": bool(fallback_behavior_contract.get("enabled")),
+        "uncertainty_active": bool(fallback_behavior_contract.get("uncertainty_active")),
+        "uncertainty_mode": fallback_behavior_contract.get("uncertainty_mode"),
+        "uncertainty_sources": list(fallback_behavior_contract.get("uncertainty_sources") or []),
+    }
+
     _ic_dbg = interaction_continuity_contract.get("debug")
     _ic_dbg_map = _ic_dbg if isinstance(_ic_dbg, dict) else {}
     _source_of_activity_anchor = str(_ic_dbg_map.get("source_of_anchor") or "").strip()
@@ -3392,6 +3415,11 @@ def build_narration_context(
         "When certainty is unavailable, defer via a roll/check request, bounded uncertainty, or conditional/branch framing. "
         "Observable visible cues are allowed; omniscient conclusions are not.",
     ]
+    _fallback_behavior_instr = [
+        "FALLBACK BEHAVIOR (MANDATORY): When `fallback_behavior.uncertainty_active` is true, do not invent certainty and do not fabricate authority. "
+        "Either give a bounded partial answer or, only when `fallback_behavior.allowed_behaviors.ask_clarifying_question` is true and a partial would mislead, ask one brief clarifying question. "
+        "Keep uncertainty diegetic, state the strongest grounded known edge plus the unknown edge, and offer a natural next lead when possible.",
+    ]
     _tone_escalation_instr = [
         "TONE / ESCALATION (POLICY): Obey response_policy.tone_escalation for interpersonal intensity; that object is the authority—do not override it from general scene mood. "
         "Do not introduce hostility, explicit threats, physical violence, or combat initiation unless the contract's allowances and published state support it. "
@@ -3443,6 +3471,7 @@ def build_narration_context(
     _policy_tail: List[str] = (
         list(_tone_escalation_instr)
         + _narrative_authority_instr
+        + _fallback_behavior_instr
         + _anti_railroading_instr
         + _context_separation_instr
         + _player_facing_narration_purity_instr
@@ -3472,6 +3501,7 @@ def build_narration_context(
         'interlocutor_lead_context': interlocutor_lead_context,
         'interlocutor_lead_behavior_hints': interlocutor_lead_behavior_hints,
         'response_policy': response_policy,
+        'fallback_behavior': fallback_behavior_contract,
         'uncertainty_hint': eff_uncertainty_hint,
         'narration_obligations': narration_obligations,
         'narration_visibility': narration_visibility,

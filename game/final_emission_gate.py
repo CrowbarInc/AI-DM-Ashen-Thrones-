@@ -101,12 +101,15 @@ from game.response_policy_contracts import (
 
 from game.final_emission_repairs import (
     _apply_answer_completeness_layer,
+    _apply_fallback_behavior_layer,
     _apply_response_delta_layer,
     _apply_social_response_structure_layer,
+    _default_fallback_behavior_meta,
     _default_response_delta_meta,
     _default_social_response_structure_meta,
     _gm_probe_for_answer_pressure_contracts,
     _merge_answer_completeness_meta,
+    _merge_fallback_behavior_meta,
     _merge_response_delta_meta,
     _merge_social_response_structure_meta,
     _minimal_action_outcome_contract_repair,
@@ -2285,6 +2288,49 @@ def _merge_answer_shape_primacy_into_emission_debug(
         if not isinstance(em, dict):
             return
         em["answer_shape_primacy"] = nested
+        for fk, fv in flat.items():
+            em[fk] = fv
+
+    md_out = out.setdefault("metadata", {})
+    if isinstance(md_out, dict):
+        _patch_em(md_out.setdefault("emission_debug", {}))
+    if isinstance(resolution, dict):
+        md_r = resolution.setdefault("metadata", {})
+        if isinstance(md_r, dict):
+            _patch_em(md_r.setdefault("emission_debug", {}))
+    if eff_resolution is not None and isinstance(eff_resolution.get("metadata"), dict):
+        _patch_em(eff_resolution["metadata"].setdefault("emission_debug", {}))
+
+
+def _merge_fallback_behavior_into_emission_debug(
+    out: Dict[str, Any],
+    resolution: Dict[str, Any] | None,
+    eff_resolution: Dict[str, Any] | None,
+    *,
+    gate_meta: Dict[str, Any],
+) -> None:
+    flat: Dict[str, Any] = {}
+    for k, v in gate_meta.items():
+        if str(k).startswith("fallback_behavior_"):
+            flat[k] = v
+    nested: Dict[str, Any] = {
+        "validation": {
+            "contract_present": bool(gate_meta.get("fallback_behavior_contract_present")),
+            "checked": bool(gate_meta.get("fallback_behavior_checked")),
+            "passed": not bool(gate_meta.get("fallback_behavior_failed")),
+            "uncertainty_active": bool(gate_meta.get("fallback_behavior_uncertainty_active")),
+        },
+        "failure_reasons": list(gate_meta.get("fallback_behavior_failure_reasons") or []),
+        "repair_mode": gate_meta.get("fallback_behavior_repair_mode"),
+    }
+    sr = gate_meta.get("fallback_behavior_skip_reason")
+    if sr:
+        nested["skip_reason"] = sr
+
+    def _patch_em(em: Any) -> None:
+        if not isinstance(em, dict):
+            return
+        em["fallback_behavior"] = nested
         for fk, fv in flat.items():
             em[fk] = fv
 
@@ -7118,6 +7164,7 @@ def apply_final_emission_gate(
     ac_layer_meta: Dict[str, Any] = {}
     rd_layer_meta: Dict[str, Any] = _default_response_delta_meta()
     srs_layer_meta: Dict[str, Any] = _default_social_response_structure_meta()
+    fb_layer_meta: Dict[str, Any] = _default_fallback_behavior_meta()
     na_layer_meta: Dict[str, Any] = _default_narrative_authority_meta()
     te_layer_meta: Dict[str, Any] = _default_tone_escalation_meta()
     ar_layer_meta: Dict[str, Any] = _default_anti_railroading_meta()
@@ -7375,6 +7422,10 @@ def apply_final_emission_gate(
             final_emitted_source = str(
                 cs_layer_meta.get("context_separation_repair_mode") or "context_separation_repair"
             )
+        if fb_layer_meta.get("fallback_behavior_repaired"):
+            final_emitted_source = str(
+                fb_layer_meta.get("fallback_behavior_repair_mode") or "fallback_behavior_repair"
+            )
         if purity_layer_meta.get("player_facing_narration_purity_repaired"):
             final_emitted_source = "player_facing_narration_purity_repair"
         if asp_layer_meta.get("answer_shape_primacy_repaired"):
@@ -7444,6 +7495,7 @@ def apply_final_emission_gate(
             _merge_player_facing_narration_purity_meta(out["_final_emission_meta"], purity_layer_meta)
             _merge_answer_shape_primacy_meta(out["_final_emission_meta"], asp_layer_meta)
             _merge_scene_state_anchor_meta(out["_final_emission_meta"], ssa_layer_meta)
+            _merge_fallback_behavior_meta(out["_final_emission_meta"], fb_layer_meta)
             out = _apply_visibility_enforcement(
                 out,
                 session=session,
@@ -7477,6 +7529,29 @@ def apply_final_emission_gate(
                     gtxt = _normalize_text(ic_strict_text)
                     fem_patch["final_text_preview"] = (gtxt[:120] + "…") if len(gtxt) > 120 else gtxt
                     fem_patch["post_gate_mutation_detected"] = pre_gate_text != gtxt
+            fb_text, fb_layer_meta, _ = _apply_fallback_behavior_layer(
+                _normalize_text(out.get("player_facing_text")),
+                gm_output=out,
+                resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
+                strict_social_path=True,
+            )
+            out["player_facing_text"] = fb_text
+            _merge_fallback_behavior_into_emission_debug(
+                out,
+                resolution if isinstance(resolution, dict) else None,
+                eff_resolution if isinstance(eff_resolution, dict) else None,
+                gate_meta=fb_layer_meta,
+            )
+            fem_patch = out.get("_final_emission_meta")
+            if isinstance(fem_patch, dict):
+                _merge_fallback_behavior_meta(fem_patch, fb_layer_meta)
+                gtxt = _normalize_text(fb_text)
+                fem_patch["final_text_preview"] = (gtxt[:120] + "…") if len(gtxt) > 120 else gtxt
+                fem_patch["post_gate_mutation_detected"] = pre_gate_text != gtxt
+                if fb_layer_meta.get("fallback_behavior_repaired"):
+                    fem_patch["final_emitted_source"] = str(
+                        fb_layer_meta.get("fallback_behavior_repair_mode") or "fallback_behavior_repair"
+                    )
             _attach_interaction_continuity_validation(
                 out,
                 resolution_for_contracts=eff_resolution if isinstance(eff_resolution, dict) else None,
@@ -7573,6 +7648,7 @@ def apply_final_emission_gate(
         _merge_player_facing_narration_purity_meta(out["_final_emission_meta"], purity_layer_meta)
         _merge_answer_shape_primacy_meta(out["_final_emission_meta"], asp_layer_meta)
         _merge_scene_state_anchor_meta(out["_final_emission_meta"], ssa_layer_meta)
+        _merge_fallback_behavior_meta(out["_final_emission_meta"], fb_layer_meta)
         out = _apply_visibility_enforcement(
             out,
             session=session,
@@ -7584,6 +7660,29 @@ def apply_final_emission_gate(
             strict_social_active=strict_social_active,
             strict_social_suppressed_non_social_turn=strict_social_suppressed_non_social_turn,
         )
+        fb_text, fb_layer_meta, _ = _apply_fallback_behavior_layer(
+            _normalize_text(out.get("player_facing_text")),
+            gm_output=out,
+            resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
+            strict_social_path=True,
+        )
+        out["player_facing_text"] = fb_text
+        _merge_fallback_behavior_into_emission_debug(
+            out,
+            resolution if isinstance(resolution, dict) else None,
+            eff_resolution if isinstance(eff_resolution, dict) else None,
+            gate_meta=fb_layer_meta,
+        )
+        fem_patch = out.get("_final_emission_meta")
+        if isinstance(fem_patch, dict):
+            _merge_fallback_behavior_meta(fem_patch, fb_layer_meta)
+            gtxt = _normalize_text(fb_text)
+            fem_patch["final_text_preview"] = (gtxt[:120] + "…") if len(gtxt) > 120 else gtxt
+            fem_patch["post_gate_mutation_detected"] = pre_gate_text != gtxt
+            if fb_layer_meta.get("fallback_behavior_repaired"):
+                fem_patch["final_emitted_source"] = str(
+                    fb_layer_meta.get("fallback_behavior_repair_mode") or "fallback_behavior_repair"
+                )
         _attach_interaction_continuity_validation(
             out,
             resolution_for_contracts=eff_resolution if isinstance(eff_resolution, dict) else None,
@@ -7788,6 +7887,20 @@ def apply_final_emission_gate(
     reasons.extend(ic_extra_reasons)
     text = ic_text
     out["player_facing_text"] = _normalize_text(text)
+    text, fb_layer_meta, fb_extra = _apply_fallback_behavior_layer(
+        _normalize_text(text),
+        gm_output=out,
+        resolution=resolution if isinstance(resolution, dict) else None,
+        strict_social_path=False,
+    )
+    reasons.extend(fb_extra)
+    out["player_facing_text"] = _normalize_text(text)
+    _merge_fallback_behavior_into_emission_debug(
+        out,
+        resolution if isinstance(resolution, dict) else None,
+        eff_resolution if isinstance(eff_resolution, dict) else None,
+        gate_meta=fb_layer_meta,
+    )
 
     candidate_ok = not bool(reasons)
     fallback_pool = "none"
@@ -7835,6 +7948,10 @@ def apply_final_emission_gate(
         if cs_layer_meta.get("context_separation_repaired"):
             final_emitted_source = str(
                 cs_layer_meta.get("context_separation_repair_mode") or "context_separation_repair"
+            )
+        if fb_layer_meta.get("fallback_behavior_repaired"):
+            final_emitted_source = str(
+                fb_layer_meta.get("fallback_behavior_repair_mode") or "fallback_behavior_repair"
             )
         if purity_layer_meta.get("player_facing_narration_purity_repaired"):
             final_emitted_source = "player_facing_narration_purity_repair"
@@ -7897,6 +8014,7 @@ def apply_final_emission_gate(
         _merge_player_facing_narration_purity_meta(out["_final_emission_meta"], purity_layer_meta)
         _merge_answer_shape_primacy_meta(out["_final_emission_meta"], asp_layer_meta)
         _merge_scene_state_anchor_meta(out["_final_emission_meta"], ssa_layer_meta)
+        _merge_fallback_behavior_meta(out["_final_emission_meta"], fb_layer_meta)
         out = _apply_visibility_enforcement(
             out,
             session=session,
@@ -8030,6 +8148,7 @@ def apply_final_emission_gate(
     _merge_player_facing_narration_purity_meta(out["_final_emission_meta"], purity_layer_meta)
     _merge_answer_shape_primacy_meta(out["_final_emission_meta"], asp_layer_meta)
     _merge_scene_state_anchor_meta(out["_final_emission_meta"], ssa_layer_meta)
+    _merge_fallback_behavior_meta(out["_final_emission_meta"], fb_layer_meta)
     out = _apply_visibility_enforcement(
         out,
         session=session,

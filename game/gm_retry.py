@@ -574,6 +574,33 @@ def _fill_context_separation_retry_debug_sink(
     sink["retry_context_separation_guidance"] = guidance_preview.strip()
 
 
+def _fill_fallback_behavior_retry_debug_sink(
+    sink: Dict[str, Any],
+    *,
+    response_policy: Dict[str, Any] | None,
+    gm_output: Dict[str, Any] | None,
+) -> None:
+    policy = response_policy if isinstance(response_policy, dict) else {}
+    gm_d = gm_output if isinstance(gm_output, dict) else {}
+    fb_contract = policy.get("fallback_behavior")
+    if not isinstance(fb_contract, dict):
+        rp = gm_d.get("response_policy")
+        if isinstance(rp, dict) and isinstance(rp.get("fallback_behavior"), dict):
+            fb_contract = rp.get("fallback_behavior")
+    sink["retry_fallback_behavior_contract_present"] = isinstance(fb_contract, dict)
+    if isinstance(fb_contract, dict):
+        sink["retry_fallback_behavior_uncertainty_active"] = bool(fb_contract.get("uncertainty_active"))
+        sink["retry_fallback_behavior_uncertainty_mode"] = fb_contract.get("uncertainty_mode")
+        sink["retry_fallback_behavior_prefer_partial"] = bool(fb_contract.get("prefer_partial_over_question"))
+
+    meta = gm_d.get("_final_emission_meta") if isinstance(gm_d.get("_final_emission_meta"), dict) else {}
+    sink["retry_fallback_behavior_checked"] = bool(meta.get("fallback_behavior_checked"))
+    sink["retry_fallback_behavior_failed"] = bool(meta.get("fallback_behavior_failed"))
+    sink["retry_fallback_behavior_repaired"] = bool(meta.get("fallback_behavior_repaired"))
+    sink["retry_fallback_behavior_skip_reason"] = meta.get("fallback_behavior_skip_reason")
+    sink["retry_fallback_behavior_failure_reasons"] = list(meta.get("fallback_behavior_failure_reasons") or [])
+
+
 def build_retry_prompt_for_failure(
     failure: Dict[str, Any],
     *,
@@ -613,6 +640,11 @@ def build_retry_prompt_for_failure(
             local_first_recovery=local_first_recovery,
             pressure_focus_allowed=pf_allowed,
             guidance_preview=cs_guidance + cs_supplement,
+        )
+        _fill_fallback_behavior_retry_debug_sink(
+            retry_debug_sink,
+            response_policy=response_policy,
+            gm_output=gm_output,
         )
     shared = (
         f"Rule Priority Hierarchy: {priority_order}. "

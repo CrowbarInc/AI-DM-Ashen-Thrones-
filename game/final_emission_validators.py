@@ -602,6 +602,302 @@ def inspect_answer_completeness_failure(result: Dict[str, Any]) -> Dict[str, Any
     }
 
 
+# --- Fallback behavior (response_policy.fallback_behavior) -----------------
+
+_FALLBACK_META_VOICE_PATTERNS: tuple[re.Pattern[str], ...] = (
+    re.compile(r"\bi don'?t have enough information\b", re.IGNORECASE),
+    re.compile(r"\bi can'?t verify that\b", re.IGNORECASE),
+    re.compile(r"\binsufficient context\b", re.IGNORECASE),
+    re.compile(r"\b(?:the )?(?:model|system|tool) can'?t tell\b", re.IGNORECASE),
+    re.compile(r"\bnot established\b", re.IGNORECASE),
+    re.compile(r"\bavailable to the model\b", re.IGNORECASE),
+    re.compile(r"\bvisible to tools\b", re.IGNORECASE),
+    re.compile(r"\banswerable by the system\b", re.IGNORECASE),
+    re.compile(r"\b(?:the\s+reason|the\s+outcome|the\s+answer)\s+(?:is\s+)?still\s+unclear\b", re.IGNORECASE),
+    re.compile(r"\b(?:the\s+answer|the\s+outcome)\s+remains\s+unresolved\b", re.IGNORECASE),
+    re.compile(r"\b(?:the\s+answer|the\s+outcome)\s+is\s+unresolved\b", re.IGNORECASE),
+    re.compile(r"\bcannot\s+yet\s+be\s+determined\b", re.IGNORECASE),
+    re.compile(r"\b(?:that|this|it)\s+is\s+not\s+settled\b", re.IGNORECASE),
+    re.compile(r"\bnot\s+settled\s+until\s+the\s+move\s+(?:plays\s+out|resolves)\b", re.IGNORECASE),
+    re.compile(r"\buntil\s+the\s+move\s+(?:plays\s+out|resolves)\b", re.IGNORECASE),
+    re.compile(r"\bthat\s+depends\s+on\s+how\s+the\s+move\s+(?:plays\s+out|resolves)\b", re.IGNORECASE),
+    re.compile(r"\bthat\s+depends\s+on\s+the\s+roll\b", re.IGNORECASE),
+    re.compile(r"\b(?:we|i)\s+don'?t\s+know\s+yet\s+(?:whether|if|who|what|where|why|how)\b", re.IGNORECASE),
+)
+_FALLBACK_FABRICATED_AUTHORITY_PATTERNS: tuple[re.Pattern[str], ...] = (
+    re.compile(r"\bi know\b", re.IGNORECASE),
+    re.compile(r"\b(?:the )?record(?:s)? show(?:s)?\b", re.IGNORECASE),
+    re.compile(r"\bcanon says\b", re.IGNORECASE),
+    re.compile(r"\b(?:the )?(?:system|tool|model) says\b", re.IGNORECASE),
+    re.compile(r"\b(?:the )?evidence proves\b", re.IGNORECASE),
+)
+_FALLBACK_OVERCERTAIN_GENERAL_PATTERNS: tuple[re.Pattern[str], ...] = (
+    re.compile(r"\bhe definitely\b", re.IGNORECASE),
+    re.compile(r"\bshe definitely\b", re.IGNORECASE),
+    re.compile(r"\bthey definitely\b", re.IGNORECASE),
+    re.compile(r"\bthe answer is\b", re.IGNORECASE),
+)
+_FALLBACK_OVERCERTAIN_BY_SOURCE: Dict[str, tuple[re.Pattern[str], ...]] = {
+    "unknown_identity": (
+        re.compile(r"\bit was\s+[A-Z][a-z]+(?:\s+[A-Z][a-z]+){0,2}\b"),
+        re.compile(r"\b(?:the culprit|the one) was\b", re.IGNORECASE),
+        re.compile(r"\b(?:he|she|they) (?:was|were)\s+[A-Z][a-z]+(?:\s+[A-Z][a-z]+){0,2}\b"),
+    ),
+    "unknown_location": (
+        re.compile(r"\b(?:it|he|she|they) (?:is|was|are|were)\s+(?:at|in|inside|under|behind|near|on)\b", re.IGNORECASE),
+        re.compile(r"\b(?:the exact )?(?:location|place) is\b", re.IGNORECASE),
+    ),
+    "unknown_motive": (
+        re.compile(r"\b(?:the motive|the reason) was\b", re.IGNORECASE),
+        re.compile(r"\b(?:he|she|they) did it because\b", re.IGNORECASE),
+    ),
+    "unknown_method": (
+        re.compile(r"\b(?:the method|the way) was\b", re.IGNORECASE),
+        re.compile(r"\b(?:he|she|they) did it by\b", re.IGNORECASE),
+        re.compile(r"\bit was done by\b", re.IGNORECASE),
+    ),
+    "unknown_quantity": (
+        re.compile(r"\b(?:exactly|precisely)\s+\d+\b", re.IGNORECASE),
+        re.compile(r"\b(?:there (?:is|are)|it was)\s+\d+\b", re.IGNORECASE),
+    ),
+    "unknown_feasibility": (
+        re.compile(r"\bit (?:will|would|can) work\b", re.IGNORECASE),
+        re.compile(r"\bit is (?:possible|safe)\b", re.IGNORECASE),
+        re.compile(r"\byou can definitely\b", re.IGNORECASE),
+    ),
+}
+_FALLBACK_QUESTION_LEAD_RE = re.compile(
+    r"^\s*(?:what|where|when|why|how|who|which|whose|do|did|does|can|could|would|will|is|are|was|were)\b",
+    re.IGNORECASE,
+)
+_FALLBACK_DIEGETIC_PARTIAL_PATTERNS: tuple[re.Pattern[str], ...] = (
+    re.compile(r"\b(?:no one|nobody|none)\s+(?:answers?|commits?|steps in|bites)\s+(?:at once|right away|immediately)\b", re.IGNORECASE),
+    re.compile(r"\bdoes not answer(?:\s+(?:at once|right away|directly))?\b", re.IGNORECASE),
+    re.compile(r"\bstarts to answer,\s+then\b", re.IGNORECASE),
+    re.compile(r"\bgives you nothing(?:\s+\w+){0,4}\b", re.IGNORECASE),
+    re.compile(r"\bthey give nothing away about why\b", re.IGNORECASE),
+    re.compile(r"\bnothing in plain view shows how it was done\b", re.IGNORECASE),
+    re.compile(r"\bnothing in sight pins the place down\b", re.IGNORECASE),
+    re.compile(r"\bno clean count shows\b", re.IGNORECASE),
+    re.compile(r"\bno one commits themselves at once\b", re.IGNORECASE),
+)
+
+
+def _resolve_fallback_behavior_contract(gm_output: Dict[str, Any] | None) -> Dict[str, Any] | None:
+    if not isinstance(gm_output, dict):
+        return None
+    response_policy = gm_output.get("response_policy")
+    if isinstance(response_policy, dict):
+        hit = response_policy.get("fallback_behavior")
+        if isinstance(hit, dict):
+            return hit
+    top = gm_output.get("fallback_behavior")
+    return top if isinstance(top, dict) else None
+
+
+def _contains_meta_fallback_voice(text: str) -> bool:
+    return any(p.search(text) for p in _FALLBACK_META_VOICE_PATTERNS)
+
+
+def _contains_fabricated_authority(text: str) -> bool:
+    return any(p.search(text) for p in _FALLBACK_FABRICATED_AUTHORITY_PATTERNS)
+
+
+def _contains_overcertain_claim(text: str, *, contract: Dict[str, Any]) -> bool:
+    if any(p.search(text) for p in _FALLBACK_OVERCERTAIN_GENERAL_PATTERNS):
+        return True
+    sources = {
+        str(src).strip().lower()
+        for src in (contract.get("uncertainty_sources") or [])
+        if isinstance(src, str) and str(src).strip()
+    }
+    for source in sources:
+        for pattern in _FALLBACK_OVERCERTAIN_BY_SOURCE.get(source, ()):
+            if pattern.search(text):
+                return True
+    return False
+
+
+def _allowed_hedge_in_text(text: str, *, contract: Dict[str, Any]) -> bool:
+    low = str(text or "").lower()
+    forms = [
+        str(item).strip().lower()
+        for item in (contract.get("allowed_hedge_forms") or [])
+        if isinstance(item, str) and str(item).strip()
+    ]
+    return any(form in low for form in forms)
+
+
+def _count_terminal_questions(text: str) -> int:
+    return sum(1 for sentence in _split_sentences_answer_complete(text) if sentence.rstrip().endswith("?"))
+
+
+def _looks_like_single_clarifying_question(text: str) -> bool:
+    sentences = _split_sentences_answer_complete(text)
+    question_sentences = [s for s in sentences if s.rstrip().endswith("?")]
+    if len(question_sentences) != 1:
+        return False
+    q = question_sentences[0].strip()
+    if not _FALLBACK_QUESTION_LEAD_RE.search(q):
+        return False
+    if _word_count(q) > 22:
+        return False
+    non_questions = [s for s in sentences if s.strip() != q and not s.rstrip().endswith("?")]
+    if non_questions and any(_word_count(s) >= 8 for s in non_questions):
+        return False
+    return True
+
+
+def _contains_diegetic_uncertainty_partial(
+    text: str,
+    *,
+    resolution: Dict[str, Any] | None = None,
+) -> bool:
+    if any(p.search(text) for p in _FALLBACK_DIEGETIC_PARTIAL_PATTERNS):
+        return True
+    if not isinstance(resolution, dict):
+        return False
+    social = resolution.get("social") if isinstance(resolution.get("social"), dict) else {}
+    social_intent = str(social.get("social_intent_class") or "").strip().lower()
+    prompt = str(resolution.get("prompt") or "")
+    hint_text = f"{prompt} {text}".lower()
+    social_turn = bool(social) or social_intent == "open_call"
+    if not social_turn and not re.search(r"\b(?:ask|offer|talk|answer|bystander|crowd|runner|guard|captain)\b", hint_text):
+        return False
+    return bool(
+        re.search(r"\b(?:eyes?|glances?|hesitates?|pauses?|looks tempted|keeps (?:his|her|their) attention on)\b", text, re.IGNORECASE)
+        and re.search(
+            r"\b(?:does not answer|without answering|instead of answering|no one answers|gives you nothing)\b",
+            text,
+            re.IGNORECASE,
+        )
+    )
+
+
+def _detect_partial_shape(
+    text: str,
+    *,
+    contract: Dict[str, Any],
+    resolution: Dict[str, Any] | None = None,
+) -> Dict[str, bool]:
+    partial_reason = _partial_reason_in_text(
+        text,
+        ["uncertainty", "lack_of_knowledge", "gated_information"],
+    )
+    allowed_hedge = _allowed_hedge_in_text(text, contract=contract)
+    diegetic_partial = _contains_diegetic_uncertainty_partial(text, resolution=resolution)
+    known_edge = _concrete_payload_for_kinds(text, ["name", "place", "direction", "fact", "condition"]) or diegetic_partial
+    unknown_edge = bool(partial_reason or allowed_hedge or diegetic_partial)
+    next_lead = _concrete_payload_for_kinds(text, ["next_lead"]) or bool(_NEXT_LEAD_SNIPPET.search(text))
+
+    partial_detected = True
+    if _contract_bool(contract, "require_partial_to_state_known_edge") and not known_edge:
+        partial_detected = False
+    if _contract_bool(contract, "require_partial_to_state_unknown_edge") and not unknown_edge:
+        partial_detected = False
+    if _contract_bool(contract, "require_partial_to_offer_next_lead") and not next_lead:
+        partial_detected = False
+
+    if not (
+        _contract_bool(contract, "require_partial_to_state_known_edge")
+        or _contract_bool(contract, "require_partial_to_state_unknown_edge")
+        or _contract_bool(contract, "require_partial_to_offer_next_lead")
+    ):
+        partial_detected = bool(known_edge and (unknown_edge or next_lead))
+
+    return {
+        "partial_information_detected": partial_detected,
+        "known_edge_present": known_edge,
+        "unknown_edge_present": unknown_edge,
+        "next_lead_present": next_lead,
+    }
+
+
+def validate_fallback_behavior(
+    emitted_text: str,
+    contract: Dict[str, Any] | None,
+    *,
+    resolution: Dict[str, Any] | None = None,
+) -> Dict[str, Any]:
+    _ = resolution
+    base: Dict[str, Any] = {
+        "checked": False,
+        "passed": True,
+        "uncertainty_active": False,
+        "contract_present": isinstance(contract, dict),
+        "invented_certainty_detected": False,
+        "fabricated_authority_detected": False,
+        "meta_fallback_voice_detected": False,
+        "allowed_hedge_detected": False,
+        "clarifying_question_detected": False,
+        "partial_information_detected": False,
+        "known_edge_present": False,
+        "unknown_edge_present": False,
+        "next_lead_present": False,
+        "question_count": 0,
+        "failure_reasons": [],
+        "skip_reason": None,
+    }
+    if not isinstance(contract, dict):
+        base["skip_reason"] = "no_contract"
+        return base
+    if not bool(contract.get("uncertainty_active")):
+        base["skip_reason"] = "uncertainty_inactive"
+        return base
+
+    base["uncertainty_active"] = True
+    base["checked"] = True
+
+    text = _normalize_text(emitted_text)
+    base["question_count"] = _count_terminal_questions(text)
+    base["meta_fallback_voice_detected"] = _contains_meta_fallback_voice(text)
+    base["fabricated_authority_detected"] = _contains_fabricated_authority(text)
+    base["invented_certainty_detected"] = _contains_overcertain_claim(text, contract=contract)
+    base["allowed_hedge_detected"] = _allowed_hedge_in_text(text, contract=contract)
+    base["clarifying_question_detected"] = _looks_like_single_clarifying_question(text)
+
+    partial_shape = _detect_partial_shape(text, contract=contract, resolution=resolution)
+    base.update(partial_shape)
+
+    failure_reasons: List[str] = []
+    disallowed = contract.get("disallowed_behaviors") if isinstance(contract.get("disallowed_behaviors"), dict) else {}
+    allowed = contract.get("allowed_behaviors") if isinstance(contract.get("allowed_behaviors"), dict) else {}
+
+    if disallowed.get("invented_certainty") and base["invented_certainty_detected"]:
+        failure_reasons.append("invented_certainty")
+    if disallowed.get("fabricated_authority") and base["fabricated_authority_detected"]:
+        failure_reasons.append("fabricated_authority")
+    if disallowed.get("meta_system_explanations") and base["meta_fallback_voice_detected"]:
+        failure_reasons.append("meta_fallback_voice")
+
+    max_questions = contract.get("max_clarifying_questions")
+    if isinstance(max_questions, int) and max_questions >= 0 and base["question_count"] > max_questions:
+        failure_reasons.append("too_many_clarifying_questions")
+
+    partial_allowed = bool(allowed.get("provide_partial_information"))
+    question_allowed = bool(allowed.get("ask_clarifying_question"))
+    hedge_allowed = bool(allowed.get("hedge_appropriately"))
+
+    partial_ok = bool(partial_allowed and base["partial_information_detected"])
+    question_ok = bool(question_allowed and base["clarifying_question_detected"])
+    hedge_partial_ok = bool(hedge_allowed and base["allowed_hedge_detected"] and base["partial_information_detected"])
+
+    if (
+        question_ok
+        and bool(contract.get("prefer_partial_over_question"))
+        and partial_allowed
+        and not (base["known_edge_present"] or base["next_lead_present"])
+    ):
+        failure_reasons.append("question_used_when_partial_preferred")
+
+    if not (partial_ok or question_ok or hedge_partial_ok):
+        failure_reasons.append("missing_allowed_fallback_shape")
+
+    base["failure_reasons"] = list(dict.fromkeys(str(r) for r in failure_reasons if r))
+    base["passed"] = not bool(base["failure_reasons"])
+    return base
+
+
 _RESPONSE_DELTA_STOPWORDS: frozenset[str] = frozenset(
     {
         "what",

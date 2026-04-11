@@ -5411,6 +5411,20 @@ def apply_response_policy_enforcement(
     )
     if isinstance(policy, dict):
         out["response_policy"] = dict(policy)
+        fb = policy.get("fallback_behavior")
+        if isinstance(fb, dict):
+            md = out.setdefault("metadata", {})
+            if isinstance(md, dict):
+                em = md.setdefault("emission_debug", {})
+                if isinstance(em, dict):
+                    em["fallback_behavior_contract"] = {
+                        "enabled": bool(fb.get("enabled")),
+                        "uncertainty_active": bool(fb.get("uncertainty_active")),
+                        "uncertainty_mode": fb.get("uncertainty_mode"),
+                        "uncertainty_sources": list(fb.get("uncertainty_sources") or []),
+                        "allowed_behaviors": dict(fb.get("allowed_behaviors") or {}),
+                        "prefer_partial_over_question": bool(fb.get("prefer_partial_over_question")),
+                    }
     return out
 
 
