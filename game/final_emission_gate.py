@@ -83,6 +83,13 @@ from game.player_facing_narration_purity import (
 from game.scene_state_anchoring import validate_scene_state_anchoring
 from game.tone_escalation import tone_escalation_repair_hints, validate_tone_escalation
 
+from game.fallback_provenance_debug import (
+    realign_fallback_provenance_selector_to_current_text,
+    METADATA_KEY,
+    fingerprint_player_facing,
+    record_final_emission_gate_entry,
+    record_final_emission_gate_exit,
+)
 from game.final_emission_text import (
     _ACTION_RESULT_PATTERNS,
     _AGENCY_SUBSTITUTE_PATTERNS,
@@ -4097,6 +4104,98 @@ def _final_emission_fast_path_eligible(out: Dict[str, Any]) -> bool:
     return True
 
 
+_FALLBACK_MUTATION_HINTS_FINALIZE_CONTAIN: frozenset[str] = frozenset(
+    {
+        "mutation_before_or_during_gate_entry",
+        "mutation_inside_gate_or_finalize",
+        "mutation_unknown",
+    }
+)
+
+
+def _upstream_fallback_canonical_provenance(out: Dict[str, Any]) -> Dict[str, Any] | None:
+    md = out.get("metadata") if isinstance(out.get("metadata"), dict) else {}
+    prov = md.get(METADATA_KEY)
+    if isinstance(prov, dict) and str(prov.get("source") or "") == "fallback":
+        return prov
+    return None
+
+
+def _apply_upstream_fallback_pregate_containment(out: Dict[str, Any]) -> bool:
+    """When canonical provenance shows gate-entry drift vs selector, restore selector text (Block I)."""
+    prov = _upstream_fallback_canonical_provenance(out)
+    if not prov:
+        return False
+    original_fp = str(prov.get("content_fingerprint") or "")
+    if not original_fp or prov.get("gate_entry_vs_selector_match") is not False:
+        return False
+    snap = str(prov.get("selector_player_facing_text") or "")
+    if not snap or fingerprint_player_facing(snap) != original_fp:
+        return False
+    out["player_facing_text"] = snap
+    md = out.get("metadata") if isinstance(out.get("metadata"), dict) else {}
+    prov2 = dict(md.get(METADATA_KEY) or prov)
+    prov2["overwrite_containment_applied"] = "pre_gate"
+    out["metadata"] = {**md, METADATA_KEY: prov2}
+    print("FALLBACK OVERWRITE CONTAINED: pre-gate")
+    record_final_emission_gate_entry(out)
+    return True
+
+
+def _finalize_upstream_fallback_overwrite_containment(
+    out: Dict[str, Any],
+    *,
+    pre_gate_normalized: str,
+) -> bool:
+    """When exit trace proves post-selector divergence, revert to selector snapshot with sanitizer-only cleanup."""
+    md = out.get("metadata") if isinstance(out.get("metadata"), dict) else {}
+    prov = md.get(METADATA_KEY)
+    if not isinstance(prov, dict) or str(prov.get("source") or "") != "fallback":
+        return False
+    if not prov.get("mismatch_detected"):
+        return False
+    hint = str(prov.get("mutation_hint") or "")
+    if hint not in _FALLBACK_MUTATION_HINTS_FINALIZE_CONTAIN:
+        return False
+    snap = str(prov.get("selector_player_facing_text") or "")
+    original_fp = str(prov.get("content_fingerprint") or "")
+    if not snap or not original_fp or fingerprint_player_facing(snap) != original_fp:
+        return False
+    snap_san = _sanitize_output_text(snap)
+    if fingerprint_player_facing(snap_san) == original_fp:
+        chosen = snap_san
+    elif fingerprint_player_facing(snap) == original_fp:
+        chosen = snap
+    else:
+        chosen = snap_san
+    out["player_facing_text"] = chosen
+    gate_norm = _normalize_text(chosen)
+    fem = out.get("_final_emission_meta") if isinstance(out.get("_final_emission_meta"), dict) else {}
+    contained_kind = (
+        "in_gate_finalize"
+        if hint in ("mutation_inside_gate_or_finalize", "mutation_unknown")
+        else "pre_gate"
+    )
+    out["_final_emission_meta"] = {
+        **fem,
+        "fallback_overwrite_contained": contained_kind,
+        "fallback_overwrite_finalize_containment": True,
+        "post_gate_mutation_detected": pre_gate_normalized != gate_norm,
+        "final_text_preview": (gate_norm[:120] + "…") if len(gate_norm) > 120 else gate_norm,
+    }
+    print(
+        "FALLBACK OVERWRITE CONTAINED: in-gate/finalize"
+        if contained_kind == "in_gate_finalize"
+        else "FALLBACK OVERWRITE CONTAINED: pre-gate"
+    )
+    record_final_emission_gate_exit(out, final_normalized_text=gate_norm)
+    md2 = out.get("metadata") if isinstance(out.get("metadata"), dict) else {}
+    prov3 = dict(md2.get(METADATA_KEY) or {})
+    prov3["overwrite_containment_applied"] = contained_kind
+    out["metadata"] = {**md2, METADATA_KEY: prov3}
+    return True
+
+
 def _finalize_emission_output(
     out: Dict[str, Any],
     *,
@@ -4131,6 +4230,8 @@ def _finalize_emission_output(
     meta["post_gate_mutation_detected"] = pre_gate_text != gate_out_text
     meta["final_text_preview"] = (gate_out_text[:120] + "…") if len(gate_out_text) > 120 else gate_out_text
     out["_final_emission_meta"] = meta
+    record_final_emission_gate_exit(out, final_normalized_text=gate_out_text)
+    _finalize_upstream_fallback_overwrite_containment(out, pre_gate_normalized=pre_gate_text)
     return out
 
 
@@ -7914,7 +8015,10 @@ def apply_final_emission_gate(
 
     reasons: List[str] = []
     normalization_ran = False
-    text = pre_gate_text
+    record_final_emission_gate_entry(out)
+    if _apply_upstream_fallback_pregate_containment(out):
+        pre_gate_text = _normalize_text(out.get("player_facing_text"))
+    text = _normalize_text(out.get("player_facing_text"))
     response_type_debug = _default_response_type_debug(None, None)
     ac_layer_meta: Dict[str, Any] = {}
     rd_layer_meta: Dict[str, Any] = _default_response_delta_meta()
@@ -8096,6 +8200,12 @@ def apply_final_emission_gate(
             strict_social_active=strict_social_active,
         )
         out["player_facing_text"] = text
+        if ffnc_layer_meta.get("fast_fallback_neutral_composition_repaired"):
+            realign_fallback_provenance_selector_to_current_text(
+                out,
+                text=str(text or ""),
+                reason="fast_fallback_neutral_composition",
+            )
         _merge_scene_state_anchor_into_emission_debug(
             out,
             resolution if isinstance(resolution, dict) else None,
@@ -8659,6 +8769,12 @@ def apply_final_emission_gate(
         strict_social_active=strict_social_active,
     )
     out["player_facing_text"] = _normalize_text(text)
+    if ffnc_layer_meta.get("fast_fallback_neutral_composition_repaired"):
+        realign_fallback_provenance_selector_to_current_text(
+            out,
+            text=str(out.get("player_facing_text") or ""),
+            reason="fast_fallback_neutral_composition",
+        )
     _merge_scene_state_anchor_into_emission_debug(
         out,
         resolution if isinstance(resolution, dict) else None,

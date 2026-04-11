@@ -21,6 +21,7 @@ from game.leads import (
 from game.scene_graph import build_scene_graph, is_transition_valid
 from game.skill_checks import resolve_skill_check, should_trigger_check
 from game.social import SOCIAL_KINDS as _SOCIAL_ENGINE_KINDS
+from game.human_adjacent_focus import enrich_exploration_resolution_for_human_adjacent_focus
 
 
 EXPLORATION_KINDS = ("scene_transition", "travel", "observe", "investigate", "interact", "custom", "discover_clue", "already_searched")
@@ -435,10 +436,35 @@ def resolve_exploration_action(
     if isinstance(am, dict):
         if transition_candidate:
             res_metadata.update(am)
-        elif am.get("passive_interruption_wait") is True:
-            res_metadata["passive_interruption_wait"] = True
+        else:
+            if am.get("passive_interruption_wait") is True:
+                res_metadata["passive_interruption_wait"] = True
+            for key in (
+                "parser_lane",
+                "human_adjacent_intent_family",
+                "human_adjacent_phrase",
+                "implicit_focus_resolution",
+                "implicit_focus_target_id",
+                "implicit_focus_anchor_fact",
+                "nearby_group_continuity_carryover",
+            ):
+                if key in am:
+                    res_metadata[key] = am[key]
     if skill_check_result:
         res_metadata["skill_check"] = skill_check_result
+
+    hint, res_metadata = enrich_exploration_resolution_for_human_adjacent_focus(
+        scene_envelope=scene_envelope if isinstance(scene_envelope, dict) else {"scene": scene},
+        session=session,
+        world=world,
+        normalized_action=normalized_action,
+        raw_player_text=raw_player_text,
+        prompt=prompt,
+        action_type=action_type,
+        hint=hint,
+        res_metadata=res_metadata,
+        transition_candidate=transition_candidate,
+    )
 
     result = ExplorationEngineResult(
         kind=action_type,

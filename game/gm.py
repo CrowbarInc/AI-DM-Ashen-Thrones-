@@ -4632,13 +4632,67 @@ def _classify_upstream_gpt_error(exc: Exception) -> Dict[str, Any]:
     failure_class = "unknown_api_error"
     retryable = False
 
+    # Hard client / account / model failures: never treat as content-quality retry candidates.
+    _nonretry_error_codes = {
+        "insufficient_quota",
+        "invalid_api_key",
+        "invalid_api_key_provided",
+        "account_deactivated",
+        "billing_not_active",
+        "billing_hard_limit_reached",
+        "model_not_found",
+        "model_removed",
+        "model_not_available",
+        "invalid_model",
+        "unsupported_model",
+        "unsupported_value",
+        "context_length_exceeded",
+        "invalid_request_error",
+        "content_policy_violation",
+    }
+    if error_code_low in _nonretry_error_codes:
+        failure_class = error_code_low if error_code_low != "invalid_request_error" else "invalid_request"
+        retryable = False
+        return {
+            "failure_class": failure_class,
+            "retryable": retryable,
+            "status_code": status_code,
+            "error_code": error_code,
+            "message_excerpt": message[:240],
+        }
+
     if "insufficient_quota" in message_low or error_code_low == "insufficient_quota":
         failure_class = "insufficient_quota"
+        retryable = False
+    elif any(
+        phrase in message_low
+        for phrase in (
+            "incorrect api key",
+            "invalid api key",
+            "invalid authentication",
+            "authenticationerror",
+            "api key provided",
+        )
+    ):
+        failure_class = "invalid_api_key"
+        retryable = False
+    elif any(
+        phrase in message_low
+        for phrase in (
+            "does not exist or you do not have access",
+            "model not found",
+            "unknown model",
+            "unsupported model",
+            "invalid model",
+            "no such model",
+        )
+    ) or ("model" in message_low and "does not exist" in message_low):
+        failure_class = "model_not_found"
         retryable = False
     elif status_code == 429:
         failure_class = "rate_limit"
         retryable = True
-    elif status_code in (400, 404, 409, 422):
+    elif status_code in (400, 404, 409, 413, 414, 415, 422):
         failure_class = "invalid_request"
         retryable = False
     elif status_code in (401, 403):

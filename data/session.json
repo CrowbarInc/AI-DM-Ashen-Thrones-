@@ -4,20 +4,20 @@
     "frontier_gate"
   ],
   "current_date": "Day 1",
-  "turn_counter": 4,
+  "turn_counter": 2,
   "response_mode": "standard",
   "clocks": {
     "suspicion": 0,
     "unrest": 0,
     "danger": 0,
     "occult_instability": 0,
-    "time_pressure": 4
+    "time_pressure": 2
   },
   "interaction_context": {
     "active_interaction_target_id": null,
-    "active_interaction_kind": "social",
-    "interaction_mode": "social",
-    "engagement_level": "engaged",
+    "active_interaction_kind": null,
+    "interaction_mode": "none",
+    "engagement_level": "none",
     "conversation_privacy": null,
     "player_position_context": null
   },
@@ -36,8 +36,8 @@
       "tavern_runner": "active",
       "emergent_town_crier": "active",
       "threadbare_watcher": "active",
-      "refugee": "active",
-      "emergent_lord_aldric": "active"
+      "emergent_lord_aldric": "active",
+      "refugee": "active"
     },
     "current_interlocutor": null,
     "emergent_addressables": [
@@ -70,12 +70,12 @@
       "suspicion_flags": [],
       "searched_targets": [],
       "resolved_interactables": [],
-      "last_exploration_action_key": "question_npc",
-      "repeated_action_count": 1,
-      "last_resolution_kind": "question",
-      "last_description_hash": "80380dec91fa88130843b58abe3886e8",
+      "last_exploration_action_key": null,
+      "repeated_action_count": 0,
+      "last_resolution_kind": null,
+      "last_description_hash": "d77cb6c9e764117306587031c97994a0",
       "consumed_action_ids": [],
-      "momentum_exchanges_since": 4,
+      "momentum_exchanges_since": 2,
       "momentum_next_due_in": 2,
       "momentum_last_kind": null,
       "passive_action_streak": 0,
@@ -88,44 +88,20 @@
           "turn": 1
         },
         {
-          "text": "Galionr moves toward a nearby group to eavesdrop.",
+          "text": "Galinor moves toward a nearby group to eavesdrop.",
           "passive": false,
           "markers": [],
           "resolution_kind": null,
           "turn": 2
-        },
-        {
-          "text": "Galinor follows the footprints. What does he discover in the thicket of crates?",
-          "passive": false,
-          "markers": [],
-          "resolution_kind": null,
-          "turn": 3
-        },
-        {
-          "text": "Galinor sidles up next to the individual who said that. \"What are you talking about?\"",
-          "passive": false,
-          "markers": [],
-          "resolution_kind": null,
-          "turn": 4
         }
       ],
-      "last_player_action_text": "Galinor sidles up next to the individual who said that. \"What are you talking about?\"",
+      "last_player_action_text": "Galinor moves toward a nearby group to eavesdrop.",
       "last_player_action_passive": false,
       "recent_contextual_leads": [
         {
-          "key": "active_event_you_edge_closer_and_catch_it_clearer_a_group_of_nearby_refugees",
+          "key": "active_event_group_of_nearby_refugees",
           "kind": "active_event",
-          "subject": "you edge closer and catch it clearer: a group of nearby refugees",
-          "position": "",
-          "named": false,
-          "positioned": false,
-          "mentions": 1,
-          "last_turn": 2
-        },
-        {
-          "key": "active_event_huddled_group_of_refugees_nearby_murmurs_about_the_missing_patrol_their_expressions_grave",
-          "kind": "active_event",
-          "subject": "huddled group of refugees nearby murmurs about the missing patrol, their expressions grave",
+          "subject": "group of nearby refugees",
           "position": "",
           "named": false,
           "positioned": false,
@@ -141,69 +117,8 @@
           "positioned": false,
           "mentions": 2,
           "last_turn": 2
-        },
-        {
-          "key": "active_event_stay_with_refugees_wagons_and_foot_traffic_clog_the_muddy_approach_guards_hold_the_choke_while_the_crowd_presses_in_until_it_gives_you_one_concrete_turn",
-          "kind": "active_event",
-          "subject": "stay with refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in until it gives you one concrete turn",
-          "position": "",
-          "named": false,
-          "positioned": false,
-          "mentions": 1,
-          "last_turn": 3
-        },
-        {
-          "key": "active_event_press_into_the_guards_reacting_to_the_missing_patrol_rumor_until_one_face_or_voice",
-          "kind": "active_event",
-          "subject": "press into the guards reacting to the missing patrol rumor until one face or voice",
-          "position": "",
-          "named": false,
-          "positioned": false,
-          "mentions": 1,
-          "last_turn": 4
-        },
-        {
-          "key": "notice_board_missing_patrol_notice",
-          "kind": "notice_board",
-          "subject": "missing patrol notice",
-          "position": "",
-          "named": false,
-          "positioned": false,
-          "mentions": 2,
-          "last_turn": 4
         }
-      ],
-      "topic_pressure": {
-        "topic:crat_discover_follow": {
-          "repeat_count": 2,
-          "low_progress_streak": 0,
-          "progress_score_total": 0.0,
-          "last_answer": "",
-          "last_turn": 4,
-          "speaker_targets": {
-            "__scene__": {
-              "repeat_count": 2,
-              "low_progress_streak": 0,
-              "patience": 3,
-              "last_turn": 4
-            }
-          },
-          "previous_probe_dimension": "general",
-          "last_probe_dimension": "identity",
-          "last_player_input": "Galinor sidles up next to the individual who said that. \"What are you talking about?\""
-        }
-      },
-      "topic_pressure_last_topic_key": "topic:crat_discover_follow",
-      "topic_pressure_current": {
-        "topic_key": "topic:crat_discover_follow",
-        "speaker_key": "__scene__",
-        "turn": 4,
-        "player_text": "Galinor sidles up next to the individual who said that. \"What are you talking about?\"",
-        "interaction_kind": "social",
-        "interaction_mode": "social",
-        "social_intent_class": "social_exchange",
-        "npc_name": ""
-      }
+      ]
     }
   },
   "clue_knowledge": {},
@@ -211,64 +126,27 @@
   "npc_runtime": {},
   "last_action_debug": {
     "last_action_type": "chat",
-    "player_input": "Galinor sidles up next to the individual who said that. \"What are you talking about?\"",
-    "normalized_action": {
-      "id": "question_npc",
-      "label": "Galinor sidles up next to the individual who said that. \"What are you talking about?\"",
-      "type": "question",
-      "prompt": "Galinor sidles up next to the individual who said that. \"What are you talking about?\""
-    },
-    "resolution_kind": "question",
+    "player_input": "Galinor moves toward a nearby group to eavesdrop.",
+    "normalized_action": null,
+    "resolution_kind": null,
     "target_scene": null,
     "resolver_result": {
-      "kind": "question",
-      "action_id": "question_npc",
-      "label": "Galinor sidles up next to the individual who said that. \"What are you talking about?\"",
-      "prompt": "Galinor sidles up next to the individual who said that. \"What are you talking about?\"",
-      "success": false,
-      "resolved_transition": false,
-      "target_scene_id": null,
-      "clue_id": null,
-      "discovered_clues": [],
-      "state_changes": {},
-      "hint": "No matching NPC found in this scene. Narrate that the player's social attempt has no clear target or the intended person is not present.",
-      "social": {
-        "social_intent_class": "social_exchange",
-        "target_resolved": false,
-        "skill_check": null,
-        "npc_reply_expected": false,
-        "reply_kind": "reaction",
-        "offscene_target": false,
-        "target_source": "none",
-        "target_reason": "no addressable target resolved",
-        "target_candidate_id": null,
-        "target_candidate_valid": false,
-        "stale_interlocutor_cleared": false,
-        "addressability_checked_against": [
-          "active_entities",
-          "entity_presence_active_or_nearby",
-          "scene_addressables",
-          "world_roster_in_scene"
-        ],
-        "declared_switch_detected": false,
-        "declared_switch_target_actor_id": null,
-        "continuity_overridden_by_declared_switch": false,
-        "spoken_vocative_detected": false,
-        "spoken_vocative_target_actor_id": null,
-        "continuity_overridden_by_spoken_vocative": false,
-        "reply_speaker_grounding_neutral_bridge": true
-      },
-      "requires_check": false,
-      "world_tick_events": []
+      "world_tick_events": [
+        {
+          "type": "faction_pressure",
+          "text": "Ordo Pyric's pressure mounts.",
+          "source": "ordo_pyric"
+        }
+      ]
     },
     "scene_transition": null,
     "response_type_contract": {
       "required_response_type": "neutral_narration",
-      "source_route": "social",
-      "allow_escalation": false,
+      "source_route": "exploration",
+      "allow_escalation": true,
       "debug_reasons": [
         "no_stricter_authoritative_contract",
-        "social_question_guard"
+        "authoritative_state_allows_escalation"
       ]
     },
     "emergent_actor_enrolled": true,
@@ -277,7 +155,7 @@
   },
   "debug_traces": [
     {
-      "timestamp": "2026-04-11T17:36:02.296595Z",
+      "timestamp": "2026-04-11T18:37:12.235070Z",
       "source": "chat",
       "action_type": "chat",
       "raw_input": "Begin.",
@@ -707,14 +585,14 @@
           "changed_count": 0
         },
         "latency_ms": {
-          "intent_classification": 51,
+          "intent_classification": 28,
           "engine_resolution": 0,
-          "prompt_construction": 20,
-          "gpt_call": 23186,
-          "retry_loop_total": 65,
-          "final_emission_gate": 11,
-          "fallback_repair": 66,
-          "total_turn": 23352
+          "prompt_construction": 18,
+          "gpt_call": 21382,
+          "retry_loop_total": 118,
+          "final_emission_gate": 19,
+          "fallback_repair": 119,
+          "total_turn": 21588
         }
       },
       "gpt_called": true,
@@ -749,21 +627,21 @@
         ]
       },
       "latency_ms": {
-        "intent_classification": 51,
+        "intent_classification": 28,
         "engine_resolution": 0,
-        "prompt_construction": 20,
-        "gpt_call": 23186,
-        "retry_loop_total": 65,
-        "final_emission_gate": 11,
-        "fallback_repair": 66,
-        "total_turn": 23352
+        "prompt_construction": 18,
+        "gpt_call": 21382,
+        "retry_loop_total": 118,
+        "final_emission_gate": 19,
+        "fallback_repair": 119,
+        "total_turn": 21588
       }
     },
     {
-      "timestamp": "2026-04-11T17:38:35.852148Z",
+      "timestamp": "2026-04-11T18:38:17.835781Z",
       "source": "chat",
       "action_type": "chat",
-      "raw_input": "Galionr moves toward a nearby group to eavesdrop.",
+      "raw_input": "Galinor moves toward a nearby group to eavesdrop.",
       "turn_stage_order": [
         "player_input",
         "intent_normalization_expansion",
@@ -776,11 +654,11 @@
         "response_debug_packaging"
       ],
       "incoming_payload": {
-        "text": "Galionr moves toward a nearby group to eavesdrop."
+        "text": "Galinor moves toward a nearby group to eavesdrop."
       },
       "parsed_intent": null,
       "segmented_turn": {
-        "declared_action_text": "Galionr moves toward a nearby group to eavesdrop."
+        "declared_action_text": "Galinor moves toward a nearby group to eavesdrop."
       },
       "normalized_action": null,
       "resolution": {
@@ -891,7 +769,7 @@
                 "pressure_overweighting": false
               },
               "repair_hints": [],
-              "debug_reason_marker": "cs_violations=none;repair_applied=False;pass_after=None;before_len=238;after_len=238;before_head='You edge closer and catch it clearer: a group of nearby refugees is whispering anxiously, their \u2026';after_head='You edge closer and catch it clearer: a group of nearby refugees is whispering anxiously, their \u2026'"
+              "debug_reason_marker": "cs_violations=none;repair_applied=False;pass_after=None;before_len=283;after_len=283;before_head='You edge closer and catch it clearer: as the crowd buzzes with urgent whispers about the missing\u2026';after_head='You edge closer and catch it clearer: as the crowd buzzes with urgent whispers about the missing\u2026'"
             },
             "context_separation_contract_resolution_source": "response_policy",
             "context_separation_skip_reason": null,
@@ -909,7 +787,7 @@
             "context_separation_repair_hints": [],
             "context_separation_repaired": false,
             "context_separation_repair_mode": null,
-            "context_separation_debug_reason_marker": "cs_violations=none;repair_applied=False;pass_after=None;before_len=238;after_len=238;before_head='You edge closer and catch it clearer: a group of nearby refugees is whispering anxiously, their \u2026';after_head='You edge closer and catch it clearer: a group of nearby refugees is whispering anxiously, their \u2026'",
+            "context_separation_debug_reason_marker": "cs_violations=none;repair_applied=False;pass_after=None;before_len=283;after_len=283;before_head='You edge closer and catch it clearer: as the crowd buzzes with urgent whispers about the missing\u2026';after_head='You edge closer and catch it clearer: as the crowd buzzes with urgent whispers about the missing\u2026'",
             "context_separation_passed_after_repair": null,
             "player_facing_narration_purity": {
               "validation": {
@@ -919,8 +797,8 @@
               "violation_keys": [],
               "repair_hints": [],
               "repair_modes": [],
-              "preview_before": "You edge closer and catch it clearer: a group of nearby refugees is whispering anxiously, their \u2026",
-              "preview_after": "You edge closer and catch it clearer: a group of nearby refugees is whispering anxiously, their \u2026"
+              "preview_before": "You edge closer and catch it clearer: as the crowd buzzes with urgent whispers about the missing\u2026",
+              "preview_after": "You edge closer and catch it clearer: as the crowd buzzes with urgent whispers about the missing\u2026"
             },
             "player_facing_narration_purity_contract_resolution_source": "response_policy",
             "player_facing_narration_purity_skip_reason": null,
@@ -931,8 +809,8 @@
             "player_facing_narration_purity_violation_keys": [],
             "player_facing_narration_purity_repair_hints_used": [],
             "player_facing_narration_purity_collapsed_to_diegetic_core": false,
-            "player_facing_narration_purity_preview_before": "You edge closer and catch it clearer: a group of nearby refugees is whispering anxiously, their \u2026",
-            "player_facing_narration_purity_preview_after": "You edge closer and catch it clearer: a group of nearby refugees is whispering anxiously, their \u2026",
+            "player_facing_narration_purity_preview_before": "You edge closer and catch it clearer: as the crowd buzzes with urgent whispers about the missing\u2026",
+            "player_facing_narration_purity_preview_after": "You edge closer and catch it clearer: as the crowd buzzes with urgent whispers about the missing\u2026",
             "answer_shape_primacy": {
               "checked": true,
               "passed": true,
@@ -944,8 +822,8 @@
             "answer_shape_primacy_repaired": false,
             "answer_shape_primacy_repair_mode": null,
             "answer_shape_primacy_failure_reasons": [],
-            "answer_shape_primacy_preview_before": "You edge closer and catch it clearer: a group of nearby refugees is whispering anxiously, their \u2026",
-            "answer_shape_primacy_preview_after": "You edge closer and catch it clearer: a group of nearby refugees is whispering anxiously, their \u2026",
+            "answer_shape_primacy_preview_before": "You edge closer and catch it clearer: as the crowd buzzes with urgent whispers about the missing\u2026",
+            "answer_shape_primacy_preview_after": "You edge closer and catch it clearer: as the crowd buzzes with urgent whispers about the missing\u2026",
             "conversational_memory_window": {
               "enabled": true,
               "window_version": "v1",
@@ -1094,11 +972,11 @@
       ],
       "turn_trace": {
         "source": "chat",
-        "player_input": "Galionr moves toward a nearby group to eavesdrop.",
+        "player_input": "Galinor moves toward a nearby group to eavesdrop.",
         "intent": {
           "parsed": null,
           "segmented_turn": {
-            "declared_action_text": "Galionr moves toward a nearby group to eavesdrop."
+            "declared_action_text": "Galinor moves toward a nearby group to eavesdrop."
           },
           "normalized": null,
           "implied_context": {
@@ -1216,11 +1094,11 @@
           "intent_classification": 11,
           "engine_resolution": 0,
           "prompt_construction": 18,
-          "gpt_call": 20316,
-          "retry_loop_total": 142,
+          "gpt_call": 20741,
+          "retry_loop_total": 134,
           "final_emission_gate": 25,
-          "fallback_repair": 143,
-          "total_turn": 20540
+          "fallback_repair": 134,
+          "total_turn": 20956
         }
       },
       "gpt_called": true,
@@ -1258,1516 +1136,19 @@
         "intent_classification": 11,
         "engine_resolution": 0,
         "prompt_construction": 18,
-        "gpt_call": 20316,
-        "retry_loop_total": 142,
+        "gpt_call": 20741,
+        "retry_loop_total": 134,
         "final_emission_gate": 25,
-        "fallback_repair": 143,
-        "total_turn": 20540
-      }
-    },
-    {
-      "timestamp": "2026-04-11T17:40:17.827507Z",
-      "source": "chat",
-      "action_type": "chat",
-      "raw_input": "Galinor follows the footprints. What does he discover in the thicket of crates?",
-      "turn_stage_order": [
-        "player_input",
-        "intent_normalization_expansion",
-        "action_classification",
-        "engine_resolution",
-        "authoritative_state_mutation",
-        "prompt_context_construction",
-        "gpt_narration",
-        "affordance_derivation",
-        "response_debug_packaging"
-      ],
-      "incoming_payload": {
-        "text": "Galinor follows the footprints. What does he discover in the thicket of crates?"
-      },
-      "parsed_intent": {
-        "id": "social_probe_npc",
-        "label": "Galinor follows the footprints. What does he discover in the thicket of crates?",
-        "type": "social_probe",
-        "social_intent_class": "social_exchange",
-        "prompt": "Galinor follows the footprints. What does he discover in the thicket of crates?",
-        "metadata": {
-          "routed_via_dialogue_lock": true,
-          "route": "dialogue",
-          "canonical_entry_path": "social",
-          "canonical_entry_reason": "travel_or_scene_transition_intent",
-          "canonical_entry_target_actor_id": null,
-          "intent_route_debug": {
-            "routed_to": "social_exchange",
-            "route_reason": "dialogue_lane",
-            "addressed_actor_id": null,
-            "addressed_actor_source": null
-          },
-          "social_turn_contract": {
-            "social_followup_recovery": "not_applicable",
-            "interlocutor_status": "none",
-            "continuity_status": "broken",
-            "fallback_anchor_source": "none",
-            "reply_owner_actor_id": null,
-            "routing_reason_code": "travel_or_scene_transition_intent"
-          },
-          "segmented_turn": {
-            "declared_action_text": "Galinor follows the footprints.",
-            "adjudication_question_text": "What does he discover in the thicket of crates?"
-          },
-          "turn_segmentation": {
-            "declared_action_text": "Galinor follows the footprints.",
-            "adjudication_question_text": "What does he discover in the thicket of crates?"
-          }
-        }
-      },
-      "segmented_turn": {
-        "declared_action_text": "Galinor follows the footprints.",
-        "adjudication_question_text": "What does he discover in the thicket of crates?"
-      },
-      "normalized_action": {
-        "id": "social_probe_npc",
-        "label": "Galinor follows the footprints. What does he discover in the thicket of crates?",
-        "type": "social_probe",
-        "prompt": "Galinor follows the footprints. What does he discover in the thicket of crates?"
-      },
-      "resolution": {
-        "kind": "social_probe",
-        "action_id": "social_probe_npc",
-        "label": "Galinor follows the footprints. What does he discover in the thicket of crates?",
-        "prompt": "Galinor follows the footprints. What does he discover in the thicket of crates?",
-        "success": false,
-        "resolved_transition": false,
-        "target_scene_id": null,
-        "clue_id": null,
-        "discovered_clues": [],
-        "state_changes": {},
-        "hint": "No matching NPC found in this scene. Narrate that the player's social attempt has no clear target or the intended person is not present.",
-        "social": {
-          "social_intent_class": "social_exchange",
-          "target_resolved": false,
-          "skill_check": null,
-          "npc_reply_expected": false,
-          "reply_kind": "reaction",
-          "offscene_target": false,
-          "target_source": "none",
-          "target_reason": "no addressable target resolved",
-          "target_candidate_id": null,
-          "target_candidate_valid": false,
-          "stale_interlocutor_cleared": false,
-          "addressability_checked_against": [
-            "active_entities",
-            "entity_presence_active_or_nearby",
-            "scene_addressables",
-            "world_roster_in_scene"
-          ],
-          "declared_switch_detected": false,
-          "declared_switch_target_actor_id": null,
-          "continuity_overridden_by_declared_switch": false,
-          "spoken_vocative_detected": false,
-          "spoken_vocative_target_actor_id": null,
-          "continuity_overridden_by_spoken_vocative": false,
-          "reply_speaker_grounding_neutral_bridge": true
-        },
-        "requires_check": false,
-        "metadata": {
-          "routed_via_dialogue_lock": true,
-          "route": "dialogue",
-          "canonical_entry_path": "social",
-          "canonical_entry_reason": "travel_or_scene_transition_intent",
-          "canonical_entry_target_actor_id": null,
-          "intent_route_debug": {
-            "routed_to": "social_exchange",
-            "route_reason": "dialogue_lane",
-            "addressed_actor_id": null,
-            "addressed_actor_source": null
-          },
-          "social_turn_contract": {
-            "social_followup_recovery": "not_applicable",
-            "interlocutor_status": "none",
-            "continuity_status": "broken",
-            "fallback_anchor_source": "none",
-            "reply_owner_actor_id": null,
-            "routing_reason_code": "travel_or_scene_transition_intent"
-          },
-          "segmented_turn": {
-            "declared_action_text": "Galinor follows the footprints.",
-            "adjudication_question_text": "What does he discover in the thicket of crates?"
-          },
-          "turn_segmentation": {
-            "declared_action_text": "Galinor follows the footprints.",
-            "adjudication_question_text": "What does he discover in the thicket of crates?"
-          },
-          "lead_landing": {
-            "revealed_lead_ids": [],
-            "already_known_lead_ids": [],
-            "actionable_lead_ids": [],
-            "lead_write_targets": [],
-            "extracted_lead_ids": [],
-            "extracted_lead_sources": [],
-            "extracted_from_text": false,
-            "extracted_from_reconciled_text": false,
-            "authoritative_created_ids": [],
-            "authoritative_updated_ids": [],
-            "authoritative_unchanged_ids": [],
-            "authoritative_promoted_ids": []
-          },
-          "response_type_contract": {
-            "required_response_type": "neutral_narration",
-            "source_route": "mixed",
-            "allow_escalation": false,
-            "escalation_block_reason": "social_question_guard",
-            "strict_target_id": null,
-            "strict_answer_expected": true,
-            "strict_dialogue_expected": false,
-            "action_must_preserve_agency": false,
-            "debug_reasons": [
-              "no_stricter_authoritative_contract",
-              "social_question_guard"
-            ]
-          },
-          "emission_debug": {
-            "scene_state_anchor": {
-              "enabled": true,
-              "scene_id": "frontier_gate",
-              "counts": {
-                "location": 17,
-                "actor": 7,
-                "player_action": 12
-              }
-            },
-            "context_separation": {
-              "validation": {
-                "checked": true,
-                "passed": true
-              },
-              "failure_reasons": [],
-              "assertion_flags": {
-                "topic_hijack_background_pressure": false,
-                "pressure_answer_substitution": false,
-                "ambient_pressure_forced_tone_shift": false,
-                "scene_focus_displaced_by_world_pressure": false,
-                "pressure_overweighting": false
-              },
-              "repair_hints": [],
-              "debug_reason_marker": "cs_violations=none;repair_applied=False;pass_after=None;before_len=69;after_len=69;before_head='The moment passes without anyone stepping forward to own that thread.';after_head='The moment passes without anyone stepping forward to own that thread.'"
-            },
-            "conversational_memory_window": {
-              "enabled": true,
-              "window_version": "v1",
-              "prioritize_recent_turns": true,
-              "prioritize_active_scene_entities": true,
-              "deprioritize_stale_inactive_elements": true,
-              "allow_explicit_reintroduction": true,
-              "recent_turn_window": 6,
-              "soft_memory_limit": 12,
-              "stale_after_turns": 18,
-              "active_scene_entity_ids": [
-                "emergent_lord_aldric",
-                "emergent_town_crier",
-                "guard_captain",
-                "refugee",
-                "tavern_runner",
-                "threadbare_watcher"
-              ],
-              "anchored_interlocutor_id": "",
-              "active_interaction_target_id": "",
-              "explicit_reintroduced_entity_ids": [],
-              "explicit_reintroduced_topics": [],
-              "selection_debug": {
-                "matched_entity_ids": [],
-                "matched_topics": [],
-                "matched_grounded_ids": [],
-                "callback_marker_hit": null,
-                "source_of_activity_anchor": "none",
-                "source_of_recentness": "session.turn_counter",
-                "source_of_reintroductions": "player_text+visibility_aliases"
-              }
-            },
-            "selected_conversational_memory": [
-              {
-                "kind": "recent_turn",
-                "entity_ids": [],
-                "topic_tokens": [],
-                "source_turn": 2,
-                "text": "P: Galionr moves toward a nearby group to eavesdrop. | G: Faint footprints lead northwest into a thicket of crates. Suggesting hurried movements sharpens when you look again, and several figures in the crowd watch newcomers intently, suggesting deeper intere",
-                "score": 103.71428571428571,
-                "why_selected": [
-                  "recency",
-                  "recent_turn_kind"
-                ]
-              },
-              {
-                "kind": "recent_turn",
-                "entity_ids": [],
-                "topic_tokens": [],
-                "source_turn": 1,
-                "text": "P: Begin. | G: At Cinderwatch Gate District, Several patrons exchange furtive glances as if aware of something deeper at play holds the eye, while the atmosphere thickens with whispers regarding what else might be h",
-                "score": 89.42857142857143,
-                "why_selected": [
-                  "recency",
-                  "recent_turn_kind"
-                ]
-              },
-              {
-                "kind": "contextual_thread",
-                "entity_ids": [],
-                "topic_tokens": [
-                  "about",
-                  "group",
-                  "huddled",
-                  "missing",
-                  "murmurs",
-                  "nearby",
-                  "patrol",
-                  "refugees"
-                ],
-                "source_turn": 2,
-                "text": "huddled group of refugees nearby murmurs about the missing patrol, their expressions grave [active_event_huddled_group_of_refugees_nearby_murmurs_about_the_missing_patrol_their_expressions_grave]",
-                "score": 85.71428571428571,
-                "why_selected": [
-                  "recency"
-                ]
-              },
-              {
-                "kind": "contextual_thread",
-                "entity_ids": [],
-                "topic_tokens": [
-                  "missing",
-                  "patrol",
-                  "rumor"
-                ],
-                "source_turn": 2,
-                "text": "missing patrol rumor [active_event_missing_patrol_rumor]",
-                "score": 85.71428571428571,
-                "why_selected": [
-                  "recency"
-                ]
-              },
-              {
-                "kind": "contextual_thread",
-                "entity_ids": [],
-                "topic_tokens": [
-                  "catch",
-                  "clearer",
-                  "closer",
-                  "edge",
-                  "group",
-                  "nearby",
-                  "refugees"
-                ],
-                "source_turn": 2,
-                "text": "you edge closer and catch it clearer: a group of nearby refugees [active_event_you_edge_closer_and_catch_it_clearer_a_group_of_nearby_refugees]",
-                "score": 85.71428571428571,
-                "why_selected": [
-                  "recency"
-                ]
-              }
-            ],
-            "conversational_memory": {
-              "candidate_count": 5,
-              "selected_count": 5
-            },
-            "speaker_contract_enforcement": {
-              "contract_present": true,
-              "validation": {
-                "ok": true,
-                "reason_code": "speaker_contract_match",
-                "canonical_speaker_id": null,
-                "canonical_speaker_name": null,
-                "repair_mode": "none",
-                "details": {
-                  "signature": {
-                    "speaker_name": null,
-                    "speaker_label": null,
-                    "is_explicitly_attributed": false,
-                    "is_generic_fallback_label": false,
-                    "has_interruption_framing": false,
-                    "confidence": "low"
-                  }
-                }
-              },
-              "final_reason_code": "speaker_contract_match"
-            },
-            "scene_state_anchor_checked": false,
-            "scene_state_anchor_passed": false,
-            "scene_state_anchor_failed": false,
-            "scene_state_anchor_skip_reason": "strict_social_authoritative_internal_fallback",
-            "scene_state_anchor_matched_kinds": [],
-            "scene_state_anchor_failure_reasons": [],
-            "scene_state_anchor_repaired": false,
-            "scene_state_anchor_repair_mode": null,
-            "tone_escalation_checked": true,
-            "tone_escalation_ok": true,
-            "tone_escalation_failed": false,
-            "tone_escalation_failure_reasons": [],
-            "tone_escalation_detected_flags": {
-              "guarded": false,
-              "verbal_pressure": false,
-              "explicit_threat": false,
-              "physical_hostility": false,
-              "combat_initiation": false
-            },
-            "tone_escalation_matched_tone_level": null,
-            "tone_escalation_repaired": false,
-            "tone_escalation_repair_mode": null,
-            "tone_escalation_contract_summary": {
-              "enabled": true,
-              "base_tone": "tense",
-              "max_allowed_tone": "tense",
-              "allow_verbal_pressure": true,
-              "allow_explicit_threat": false,
-              "allow_physical_hostility": false,
-              "allow_combat_initiation": false,
-              "justification_reasons": [
-                "visible_facts_or_runtime_topic_pressure_indicate_elevated_tension",
-                "visible_entity_roles_include_authority_guardship",
-                "affiliated_faction_attitude_and_pressure_in_world_state",
-                "resolution_kind_or_mechanical_payload_is_risky"
-              ]
-            },
-            "tone_escalation_contract_resolution_source": "shipped_response_policy",
-            "tone_escalation_violation_before_repair": false,
-            "narrative_authority_checked": true,
-            "narrative_authority_failed": false,
-            "narrative_authority_failure_reasons": [],
-            "narrative_authority_repaired": false,
-            "narrative_authority_repair_mode": null,
-            "narrative_authority_skip_reason": null,
-            "narrative_authority_deferral_mode": null,
-            "narrative_authority_assertion_flags": {
-              "invented_outcome": false,
-              "invented_hidden_fact": false,
-              "invented_intent": false,
-              "overcertain_unresolved_action": false
-            },
-            "anti_railroading": {
-              "validation": {
-                "checked": true,
-                "passed": true
-              },
-              "failure_reasons": [],
-              "assertion_flags": {
-                "player_decision_override": false,
-                "forced_direction": false,
-                "exclusive_path_claim": false,
-                "lead_plot_gravity": false,
-                "forced_conclusion": false
-              },
-              "repair_hints": []
-            },
-            "anti_railroading_checked": true,
-            "anti_railroading_ok": true,
-            "anti_railroading_failed": false,
-            "anti_railroading_failure_reasons": [],
-            "anti_railroading_assertion_flags": {
-              "player_decision_override": false,
-              "forced_direction": false,
-              "exclusive_path_claim": false,
-              "lead_plot_gravity": false,
-              "forced_conclusion": false
-            },
-            "anti_railroading_repair_hints": [],
-            "anti_railroading_repaired": false,
-            "anti_railroading_repair_mode": null,
-            "anti_railroading_skip_reason": null,
-            "anti_railroading_contract_resolution_source": "shipped",
-            "context_separation_contract_resolution_source": "response_policy",
-            "context_separation_skip_reason": null,
-            "context_separation_checked": true,
-            "context_separation_ok": true,
-            "context_separation_failed": false,
-            "context_separation_failure_reasons": [],
-            "context_separation_assertion_flags": {
-              "topic_hijack_background_pressure": false,
-              "pressure_answer_substitution": false,
-              "ambient_pressure_forced_tone_shift": false,
-              "scene_focus_displaced_by_world_pressure": false,
-              "pressure_overweighting": false
-            },
-            "context_separation_repair_hints": [],
-            "context_separation_repaired": false,
-            "context_separation_repair_mode": null,
-            "context_separation_debug_reason_marker": "cs_violations=none;repair_applied=False;pass_after=None;before_len=69;after_len=69;before_head='The moment passes without anyone stepping forward to own that thread.';after_head='The moment passes without anyone stepping forward to own that thread.'",
-            "context_separation_passed_after_repair": null,
-            "player_facing_narration_purity": {
-              "validation": {
-                "checked": true,
-                "passed": true
-              },
-              "violation_keys": [],
-              "repair_hints": [],
-              "repair_modes": [],
-              "preview_before": "The moment passes without anyone stepping forward to own that thread.",
-              "preview_after": "The moment passes without anyone stepping forward to own that thread."
-            },
-            "player_facing_narration_purity_contract_resolution_source": "response_policy",
-            "player_facing_narration_purity_skip_reason": null,
-            "player_facing_narration_purity_checked": true,
-            "player_facing_narration_purity_failed": false,
-            "player_facing_narration_purity_repaired": false,
-            "player_facing_narration_purity_repair_modes": [],
-            "player_facing_narration_purity_violation_keys": [],
-            "player_facing_narration_purity_repair_hints_used": [],
-            "player_facing_narration_purity_collapsed_to_diegetic_core": false,
-            "player_facing_narration_purity_preview_before": "The moment passes without anyone stepping forward to own that thread.",
-            "player_facing_narration_purity_preview_after": "The moment passes without anyone stepping forward to own that thread.",
-            "answer_shape_primacy": {
-              "checked": false,
-              "passed": true,
-              "failure_reasons": [],
-              "skip_reason": "turn_not_in_scope"
-            },
-            "answer_shape_primacy_skip_reason": "turn_not_in_scope",
-            "answer_shape_primacy_checked": false,
-            "answer_shape_primacy_failed": false,
-            "answer_shape_primacy_repaired": false,
-            "answer_shape_primacy_repair_mode": null,
-            "answer_shape_primacy_failure_reasons": [],
-            "answer_shape_primacy_preview_before": null,
-            "answer_shape_primacy_preview_after": null,
-            "fallback_behavior": {
-              "validation": {
-                "contract_present": false,
-                "checked": true,
-                "passed": true,
-                "uncertainty_active": true
-              },
-              "failure_reasons": [],
-              "repair_mode": "bounded_partial"
-            },
-            "fallback_behavior_contract_present": false,
-            "fallback_behavior_checked": true,
-            "fallback_behavior_skip_reason": null,
-            "fallback_behavior_uncertainty_active": true,
-            "fallback_behavior_failed": false,
-            "fallback_behavior_failure_reasons": [],
-            "fallback_behavior_repaired": true,
-            "fallback_behavior_repair_mode": "bounded_partial",
-            "fallback_behavior_clarifying_question_used": false,
-            "fallback_behavior_partial_used": true,
-            "fallback_behavior_known_edge_preserved": false,
-            "fallback_behavior_unknown_edge_added": true,
-            "fallback_behavior_next_lead_added": true,
-            "fallback_behavior_meta_voice_stripped": false,
-            "narration_constraint_debug": {
-              "response_type": {
-                "required": "neutral_narration",
-                "contract_source": "response_policy",
-                "candidate_ok": true,
-                "repair_used": false,
-                "repair_kind": null
-              },
-              "visibility": {
-                "contract_present": true,
-                "decision_mode": "validated",
-                "visible_entity_count": 6,
-                "withheld_fact_count": 14,
-                "reason_codes": []
-              },
-              "speaker_selection": {
-                "speaker_id": null,
-                "speaker_name": null,
-                "selection_source": "first_roster",
-                "reason_code": "speaker_contract_match",
-                "binding_confident": false
-              }
-            }
-          }
-        },
-        "world_tick_events": []
-      },
-      "scene_before": "frontier_gate",
-      "scene_after": "frontier_gate",
-      "clue_updates": [],
-      "world_flag_updates": [
-        "clock:time_pressure=3"
-      ],
-      "turn_trace": {
-        "source": "chat",
-        "player_input": "Galinor follows the footprints. What does he discover in the thicket of crates?",
-        "intent": {
-          "parsed": {
-            "id": "social_probe_npc",
-            "label": "Galinor follows the footprints. What does he discover in the thicket of crates?",
-            "type": "social_probe",
-            "social_intent_class": "social_exchange",
-            "prompt": "Galinor follows the footprints. What does he discover in the thicket of crates?",
-            "metadata": {
-              "routed_via_dialogue_lock": true,
-              "route": "dialogue",
-              "canonical_entry_path": "social",
-              "canonical_entry_reason": "travel_or_scene_transition_intent",
-              "canonical_entry_target_actor_id": null,
-              "intent_route_debug": {
-                "routed_to": "social_exchange",
-                "route_reason": "dialogue_lane",
-                "addressed_actor_id": null,
-                "addressed_actor_source": null
-              },
-              "social_turn_contract": {
-                "social_followup_recovery": "not_applicable",
-                "interlocutor_status": "none",
-                "continuity_status": "broken",
-                "fallback_anchor_source": "none",
-                "reply_owner_actor_id": null,
-                "routing_reason_code": "travel_or_scene_transition_intent"
-              },
-              "segmented_turn": {
-                "declared_action_text": "Galinor follows the footprints.",
-                "adjudication_question_text": "What does he discover in the thicket of crates?"
-              },
-              "turn_segmentation": {
-                "declared_action_text": "Galinor follows the footprints.",
-                "adjudication_question_text": "What does he discover in the thicket of crates?"
-              }
-            }
-          },
-          "segmented_turn": {
-            "declared_action_text": "Galinor follows the footprints.",
-            "adjudication_question_text": "What does he discover in the thicket of crates?"
-          },
-          "normalized": {
-            "id": "social_probe_npc",
-            "label": "Galinor follows the footprints. What does he discover in the thicket of crates?",
-            "type": "social_probe",
-            "prompt": "Galinor follows the footprints. What does he discover in the thicket of crates?",
-            "targetSceneId": null,
-            "target_scene_id": null,
-            "targetEntityId": null,
-            "target_id": null
-          },
-          "implied_context": {
-            "applied": false,
-            "cases": [],
-            "target_id": null,
-            "commitment_broken": false,
-            "break_reason": null
-          }
-        },
-        "classification": {
-          "action_type": "chat",
-          "resolved_kind": "social_probe",
-          "requires_check": false
-        },
-        "response_type_contract": {
-          "required_response_type": "neutral_narration",
-          "source_route": "mixed",
-          "allow_escalation": false,
-          "debug_reasons": [
-            "no_stricter_authoritative_contract",
-            "social_question_guard"
-          ]
-        },
-        "social_contract_trace": {
-          "route_selected": "dialogue",
-          "routing_reason_code": "travel_or_scene_transition_intent",
-          "social_followup_recovery": "not_applicable",
-          "reply_owner_actor_id": null,
-          "interlocutor_status": "none",
-          "continuity_status": "broken",
-          "fallback_anchor_source": "none",
-          "visible_grounded_speaker": null,
-          "final_reply_owner": null
-        },
-        "resolution_path": "social_engine",
-        "authoritative_state_changes": {
-          "scene_transition": null,
-          "resolution_state_changes": {},
-          "resolution_world_updates": [],
-          "check_request": null
-        },
-        "interaction_after": {
-          "active_interaction_target_id": null,
-          "active_interaction_kind": "social",
-          "interaction_mode": "social",
-          "engagement_level": "engaged",
-          "conversation_privacy": null,
-          "player_position_context": null
-        },
-        "narration_obligations": {
-          "is_opening_scene": false,
-          "must_advance_scene": false,
-          "should_answer_active_npc": false,
-          "avoid_input_echo": true,
-          "avoid_player_action_restatement": true,
-          "prefer_structured_turn_summary": true,
-          "active_npc_reply_expected": false,
-          "active_npc_reply_kind": null,
-          "scene_momentum_due": false,
-          "scene_momentum_exchanges_since": 0,
-          "scene_momentum_next_due_in": 2,
-          "suppress_non_social_emitters": false
-        },
-        "clues": {
-          "discovered_texts": [],
-          "presentation_changes": [],
-          "known_counts": {
-            "implicit": 0,
-            "explicit": 0,
-            "actionable": 0
-          }
-        },
-        "affordances_after": [
-          {
-            "id": "question_guard_captain",
-            "type": "question",
-            "label": "Talk to Guard Captain",
-            "targetEntityId": "guard_captain"
-          },
-          {
-            "id": "question_tavern_runner",
-            "type": "question",
-            "label": "Talk to Tavern Runner",
-            "targetEntityId": "tavern_runner"
-          },
-          {
-            "id": "question_emergent_town_crier",
-            "type": "question",
-            "label": "Talk to Town Crier",
-            "targetEntityId": "emergent_town_crier"
-          },
-          {
-            "id": "examine_the_rain_spatters_soot_dark_stone_frayed",
-            "type": "investigate",
-            "label": "Examine the Rain spatters soot-dark stone; frayed"
-          },
-          {
-            "id": "examine_refugees",
-            "type": "investigate",
-            "label": "Examine Refugees"
-          }
-        ],
-        "emergent_actor": {
-          "emergent_actor_enrolled": true,
-          "emergent_actor_id": "emergent_lord_aldric",
-          "emergent_actor_source_text": "Lord Aldric"
-        },
-        "leads": {
-          "registry_debug": [],
-          "delta_after_reconcile": [],
-          "changed_count": 0
-        },
-        "latency_ms": {
-          "intent_classification": 11,
-          "engine_resolution": 0,
-          "prompt_construction": 25,
-          "gpt_call": 17436,
-          "retry_loop_total": 32,
-          "final_emission_gate": 27,
-          "fallback_repair": 39,
-          "total_turn": 17578
-        }
-      },
-      "gpt_called": true,
-      "response_ok": true,
-      "error": null,
-      "canonical_entry": {
-        "should_route_social": false,
-        "target_actor_id": null,
-        "target_source": null,
-        "reason": "travel_or_scene_transition_intent",
-        "spoken_text": null,
-        "declared_switch_detected": false,
-        "declared_switch_target_actor_id": null,
-        "continuity_overridden_by_declared_switch": false,
-        "spoken_vocative_detected": false,
-        "spoken_vocative_target_actor_id": null,
-        "continuity_overridden_by_spoken_vocative": false
-      },
-      "canonical_entry_path": "social",
-      "canonical_entry_reason": "travel_or_scene_transition_intent",
-      "canonical_entry_target_actor_id": null,
-      "declared_travel_override": {
-        "applied": false
-      },
-      "response_type_contract": {
-        "required_response_type": "neutral_narration",
-        "source_route": "mixed",
-        "allow_escalation": false,
-        "debug_reasons": [
-          "no_stricter_authoritative_contract",
-          "social_question_guard"
-        ]
-      },
-      "latency_ms": {
-        "intent_classification": 11,
-        "engine_resolution": 0,
-        "prompt_construction": 25,
-        "gpt_call": 17436,
-        "retry_loop_total": 32,
-        "final_emission_gate": 27,
-        "fallback_repair": 39,
-        "total_turn": 17578
-      }
-    },
-    {
-      "timestamp": "2026-04-11T17:41:33.503734Z",
-      "source": "chat",
-      "action_type": "chat",
-      "raw_input": "Galinor sidles up next to the individual who said that. \"What are you talking about?\"",
-      "turn_stage_order": [
-        "player_input",
-        "intent_normalization_expansion",
-        "action_classification",
-        "engine_resolution",
-        "authoritative_state_mutation",
-        "prompt_context_construction",
-        "gpt_narration",
-        "affordance_derivation",
-        "response_debug_packaging"
-      ],
-      "incoming_payload": {
-        "text": "Galinor sidles up next to the individual who said that. \"What are you talking about?\""
-      },
-      "parsed_intent": {
-        "id": "question_npc",
-        "label": "Galinor sidles up next to the individual who said that. \"What are you talking about?\"",
-        "type": "question",
-        "social_intent_class": "social_exchange",
-        "prompt": "Galinor sidles up next to the individual who said that. \"What are you talking about?\"",
-        "metadata": {
-          "routed_via_dialogue_lock": true,
-          "route": "dialogue",
-          "canonical_entry_path": "social",
-          "canonical_entry_reason": "no_addressable_target",
-          "canonical_entry_target_actor_id": null,
-          "intent_route_debug": {
-            "routed_to": "social_exchange",
-            "route_reason": "no_addressable_target",
-            "addressed_actor_id": null,
-            "addressed_actor_source": null
-          },
-          "social_turn_contract": {
-            "social_followup_recovery": "not_applicable",
-            "interlocutor_status": "none",
-            "continuity_status": "broken",
-            "fallback_anchor_source": "none",
-            "reply_owner_actor_id": null,
-            "routing_reason_code": "no_addressable_target"
-          },
-          "segmented_turn": {
-            "spoken_text": "What are you talking about?",
-            "declared_action_text": "Galinor sidles up next to the individual who said that."
-          },
-          "turn_segmentation": {
-            "spoken_text": "What are you talking about?",
-            "declared_action_text": "Galinor sidles up next to the individual who said that."
-          }
-        }
-      },
-      "segmented_turn": {
-        "spoken_text": "What are you talking about?",
-        "declared_action_text": "Galinor sidles up next to the individual who said that."
-      },
-      "normalized_action": {
-        "id": "question_npc",
-        "label": "Galinor sidles up next to the individual who said that. \"What are you talking about?\"",
-        "type": "question",
-        "prompt": "Galinor sidles up next to the individual who said that. \"What are you talking about?\""
-      },
-      "resolution": {
-        "kind": "question",
-        "action_id": "question_npc",
-        "label": "Galinor sidles up next to the individual who said that. \"What are you talking about?\"",
-        "prompt": "Galinor sidles up next to the individual who said that. \"What are you talking about?\"",
-        "success": false,
-        "resolved_transition": false,
-        "target_scene_id": null,
-        "clue_id": null,
-        "discovered_clues": [],
-        "state_changes": {},
-        "hint": "No matching NPC found in this scene. Narrate that the player's social attempt has no clear target or the intended person is not present.",
-        "social": {
-          "social_intent_class": "social_exchange",
-          "target_resolved": false,
-          "skill_check": null,
-          "npc_reply_expected": false,
-          "reply_kind": "reaction",
-          "offscene_target": false,
-          "target_source": "none",
-          "target_reason": "no addressable target resolved",
-          "target_candidate_id": null,
-          "target_candidate_valid": false,
-          "stale_interlocutor_cleared": false,
-          "addressability_checked_against": [
-            "active_entities",
-            "entity_presence_active_or_nearby",
-            "scene_addressables",
-            "world_roster_in_scene"
-          ],
-          "declared_switch_detected": false,
-          "declared_switch_target_actor_id": null,
-          "continuity_overridden_by_declared_switch": false,
-          "spoken_vocative_detected": false,
-          "spoken_vocative_target_actor_id": null,
-          "continuity_overridden_by_spoken_vocative": false,
-          "reply_speaker_grounding_neutral_bridge": true
-        },
-        "requires_check": false,
-        "metadata": {
-          "routed_via_dialogue_lock": true,
-          "route": "dialogue",
-          "canonical_entry_path": "social",
-          "canonical_entry_reason": "no_addressable_target",
-          "canonical_entry_target_actor_id": null,
-          "intent_route_debug": {
-            "routed_to": "social_exchange",
-            "route_reason": "no_addressable_target",
-            "addressed_actor_id": null,
-            "addressed_actor_source": null
-          },
-          "social_turn_contract": {
-            "social_followup_recovery": "not_applicable",
-            "interlocutor_status": "none",
-            "continuity_status": "broken",
-            "fallback_anchor_source": "none",
-            "reply_owner_actor_id": null,
-            "routing_reason_code": "no_addressable_target"
-          },
-          "segmented_turn": {
-            "spoken_text": "What are you talking about?",
-            "declared_action_text": "Galinor sidles up next to the individual who said that."
-          },
-          "turn_segmentation": {
-            "spoken_text": "What are you talking about?",
-            "declared_action_text": "Galinor sidles up next to the individual who said that."
-          },
-          "lead_landing": {
-            "revealed_lead_ids": [],
-            "already_known_lead_ids": [],
-            "actionable_lead_ids": [],
-            "lead_write_targets": [],
-            "extracted_lead_ids": [],
-            "extracted_lead_sources": [],
-            "extracted_from_text": false,
-            "extracted_from_reconciled_text": false,
-            "authoritative_created_ids": [],
-            "authoritative_updated_ids": [],
-            "authoritative_unchanged_ids": [],
-            "authoritative_promoted_ids": []
-          },
-          "response_type_contract": {
-            "required_response_type": "neutral_narration",
-            "source_route": "social",
-            "allow_escalation": false,
-            "escalation_block_reason": "social_question_guard",
-            "strict_target_id": null,
-            "strict_answer_expected": true,
-            "strict_dialogue_expected": false,
-            "action_must_preserve_agency": false,
-            "debug_reasons": [
-              "no_stricter_authoritative_contract",
-              "social_question_guard"
-            ]
-          },
-          "emission_debug": {
-            "scene_state_anchor": {
-              "enabled": true,
-              "scene_id": "frontier_gate",
-              "counts": {
-                "location": 17,
-                "actor": 7,
-                "player_action": 11
-              }
-            },
-            "context_separation": {
-              "validation": {
-                "checked": true,
-                "passed": true
-              },
-              "failure_reasons": [],
-              "assertion_flags": {
-                "topic_hijack_background_pressure": false,
-                "pressure_answer_substitution": false,
-                "ambient_pressure_forced_tone_shift": false,
-                "scene_focus_displaced_by_world_pressure": false,
-                "pressure_overweighting": false
-              },
-              "repair_hints": [],
-              "debug_reason_marker": "cs_violations=none;repair_applied=False;pass_after=None;before_len=69;after_len=69;before_head='The moment passes without anyone stepping forward to own that thread.';after_head='The moment passes without anyone stepping forward to own that thread.'"
-            },
-            "conversational_memory_window": {
-              "enabled": true,
-              "window_version": "v1",
-              "prioritize_recent_turns": true,
-              "prioritize_active_scene_entities": true,
-              "deprioritize_stale_inactive_elements": true,
-              "allow_explicit_reintroduction": true,
-              "recent_turn_window": 6,
-              "soft_memory_limit": 12,
-              "stale_after_turns": 18,
-              "active_scene_entity_ids": [
-                "emergent_lord_aldric",
-                "emergent_town_crier",
-                "guard_captain",
-                "refugee",
-                "tavern_runner",
-                "threadbare_watcher"
-              ],
-              "anchored_interlocutor_id": "",
-              "active_interaction_target_id": "",
-              "explicit_reintroduced_entity_ids": [],
-              "explicit_reintroduced_topics": [],
-              "selection_debug": {
-                "matched_entity_ids": [],
-                "matched_topics": [],
-                "matched_grounded_ids": [],
-                "callback_marker_hit": null,
-                "source_of_activity_anchor": "none",
-                "source_of_recentness": "session.turn_counter",
-                "source_of_reintroductions": "player_text+visibility_aliases"
-              }
-            },
-            "selected_conversational_memory": [
-              {
-                "kind": "recent_turn",
-                "entity_ids": [],
-                "topic_tokens": [],
-                "source_turn": 3,
-                "text": "P: Galinor follows the footprints. What does he discover in the thicket of crates? | G: The road crowd keeps its counsel; the why of it stays off the tongue. They give nothing away about why. \"If it's a grudge worth hiding on paper, the duty sergeant hears more of that than I do,\" someon",
-                "score": 103.71428571428571,
-                "why_selected": [
-                  "recency",
-                  "recent_turn_kind"
-                ]
-              },
-              {
-                "kind": "recent_turn",
-                "entity_ids": [],
-                "topic_tokens": [],
-                "source_turn": 2,
-                "text": "P: Galionr moves toward a nearby group to eavesdrop. | G: Faint footprints lead northwest into a thicket of crates. Suggesting hurried movements sharpens when you look again, and several figures in the crowd watch newcomers intently, suggesting deeper intere",
-                "score": 89.42857142857143,
-                "why_selected": [
-                  "recency",
-                  "recent_turn_kind"
-                ]
-              },
-              {
-                "kind": "contextual_thread",
-                "entity_ids": [],
-                "topic_tokens": [
-                  "missing",
-                  "notice",
-                  "patrol"
-                ],
-                "source_turn": 3,
-                "text": "missing patrol notice [notice_board_missing_patrol_notice]",
-                "score": 85.71428571428571,
-                "why_selected": [
-                  "recency"
-                ]
-              },
-              {
-                "kind": "contextual_thread",
-                "entity_ids": [],
-                "topic_tokens": [
-                  "clog",
-                  "foot",
-                  "muddy",
-                  "refugees",
-                  "stay",
-                  "traffic",
-                  "wagons",
-                  "with"
-                ],
-                "source_turn": 3,
-                "text": "stay with refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in until it gives you one concrete turn [active_event_stay_with_refugees_wagons_and_foot_traffic_clog_the_muddy_approach_guards_hold_the_choke_while_the_crowd_presses_in_until_it_gives_you_one_concrete_turn]",
-                "score": 85.71428571428571,
-                "why_selected": [
-                  "recency"
-                ]
-              },
-              {
-                "kind": "recent_turn",
-                "entity_ids": [],
-                "topic_tokens": [],
-                "source_turn": 1,
-                "text": "P: Begin. | G: At Cinderwatch Gate District, Several patrons exchange furtive glances as if aware of something deeper at play holds the eye, while the atmosphere thickens with whispers regarding what else might be h",
-                "score": 75.14285714285714,
-                "why_selected": [
-                  "recency",
-                  "recent_turn_kind"
-                ]
-              },
-              {
-                "kind": "contextual_thread",
-                "entity_ids": [],
-                "topic_tokens": [
-                  "about",
-                  "group",
-                  "huddled",
-                  "missing",
-                  "murmurs",
-                  "nearby",
-                  "patrol",
-                  "refugees"
-                ],
-                "source_turn": 2,
-                "text": "huddled group of refugees nearby murmurs about the missing patrol, their expressions grave [active_event_huddled_group_of_refugees_nearby_murmurs_about_the_missing_patrol_their_expressions_grave]",
-                "score": 71.42857142857143,
-                "why_selected": [
-                  "recency"
-                ]
-              },
-              {
-                "kind": "contextual_thread",
-                "entity_ids": [],
-                "topic_tokens": [
-                  "missing",
-                  "patrol",
-                  "rumor"
-                ],
-                "source_turn": 2,
-                "text": "missing patrol rumor [active_event_missing_patrol_rumor]",
-                "score": 71.42857142857143,
-                "why_selected": [
-                  "recency"
-                ]
-              }
-            ],
-            "conversational_memory": {
-              "candidate_count": 7,
-              "selected_count": 7
-            },
-            "speaker_contract_enforcement": {
-              "contract_present": true,
-              "validation": {
-                "ok": true,
-                "reason_code": "speaker_contract_match",
-                "canonical_speaker_id": null,
-                "canonical_speaker_name": null,
-                "repair_mode": "none",
-                "details": {
-                  "signature": {
-                    "speaker_name": null,
-                    "speaker_label": null,
-                    "is_explicitly_attributed": false,
-                    "is_generic_fallback_label": false,
-                    "has_interruption_framing": false,
-                    "confidence": "low"
-                  }
-                }
-              },
-              "final_reason_code": "speaker_contract_match"
-            },
-            "scene_state_anchor_checked": false,
-            "scene_state_anchor_passed": false,
-            "scene_state_anchor_failed": false,
-            "scene_state_anchor_skip_reason": "strict_social_authoritative_internal_fallback",
-            "scene_state_anchor_matched_kinds": [],
-            "scene_state_anchor_failure_reasons": [],
-            "scene_state_anchor_repaired": false,
-            "scene_state_anchor_repair_mode": null,
-            "tone_escalation_checked": true,
-            "tone_escalation_ok": true,
-            "tone_escalation_failed": false,
-            "tone_escalation_failure_reasons": [],
-            "tone_escalation_detected_flags": {
-              "guarded": false,
-              "verbal_pressure": false,
-              "explicit_threat": false,
-              "physical_hostility": false,
-              "combat_initiation": false
-            },
-            "tone_escalation_matched_tone_level": null,
-            "tone_escalation_repaired": false,
-            "tone_escalation_repair_mode": null,
-            "tone_escalation_contract_summary": {
-              "enabled": true,
-              "base_tone": "tense",
-              "max_allowed_tone": "tense",
-              "allow_verbal_pressure": true,
-              "allow_explicit_threat": false,
-              "allow_physical_hostility": false,
-              "allow_combat_initiation": false,
-              "justification_reasons": [
-                "visible_facts_or_runtime_topic_pressure_indicate_elevated_tension",
-                "visible_entity_roles_include_authority_guardship",
-                "affiliated_faction_attitude_and_pressure_in_world_state"
-              ]
-            },
-            "tone_escalation_contract_resolution_source": "shipped_response_policy",
-            "tone_escalation_violation_before_repair": false,
-            "narrative_authority_checked": true,
-            "narrative_authority_failed": false,
-            "narrative_authority_failure_reasons": [],
-            "narrative_authority_repaired": false,
-            "narrative_authority_repair_mode": null,
-            "narrative_authority_skip_reason": null,
-            "narrative_authority_deferral_mode": null,
-            "narrative_authority_assertion_flags": {
-              "invented_outcome": false,
-              "invented_hidden_fact": false,
-              "invented_intent": false,
-              "overcertain_unresolved_action": false
-            },
-            "anti_railroading": {
-              "validation": {
-                "checked": true,
-                "passed": true
-              },
-              "failure_reasons": [],
-              "assertion_flags": {
-                "player_decision_override": false,
-                "forced_direction": false,
-                "exclusive_path_claim": false,
-                "lead_plot_gravity": false,
-                "forced_conclusion": false
-              },
-              "repair_hints": []
-            },
-            "anti_railroading_checked": true,
-            "anti_railroading_ok": true,
-            "anti_railroading_failed": false,
-            "anti_railroading_failure_reasons": [],
-            "anti_railroading_assertion_flags": {
-              "player_decision_override": false,
-              "forced_direction": false,
-              "exclusive_path_claim": false,
-              "lead_plot_gravity": false,
-              "forced_conclusion": false
-            },
-            "anti_railroading_repair_hints": [],
-            "anti_railroading_repaired": false,
-            "anti_railroading_repair_mode": null,
-            "anti_railroading_skip_reason": null,
-            "anti_railroading_contract_resolution_source": "shipped",
-            "context_separation_contract_resolution_source": "response_policy",
-            "context_separation_skip_reason": null,
-            "context_separation_checked": true,
-            "context_separation_ok": true,
-            "context_separation_failed": false,
-            "context_separation_failure_reasons": [],
-            "context_separation_assertion_flags": {
-              "topic_hijack_background_pressure": false,
-              "pressure_answer_substitution": false,
-              "ambient_pressure_forced_tone_shift": false,
-              "scene_focus_displaced_by_world_pressure": false,
-              "pressure_overweighting": false
-            },
-            "context_separation_repair_hints": [],
-            "context_separation_repaired": false,
-            "context_separation_repair_mode": null,
-            "context_separation_debug_reason_marker": "cs_violations=none;repair_applied=False;pass_after=None;before_len=69;after_len=69;before_head='The moment passes without anyone stepping forward to own that thread.';after_head='The moment passes without anyone stepping forward to own that thread.'",
-            "context_separation_passed_after_repair": null,
-            "player_facing_narration_purity": {
-              "validation": {
-                "checked": true,
-                "passed": true
-              },
-              "violation_keys": [],
-              "repair_hints": [],
-              "repair_modes": [],
-              "preview_before": "The moment passes without anyone stepping forward to own that thread.",
-              "preview_after": "The moment passes without anyone stepping forward to own that thread."
-            },
-            "player_facing_narration_purity_contract_resolution_source": "response_policy",
-            "player_facing_narration_purity_skip_reason": null,
-            "player_facing_narration_purity_checked": true,
-            "player_facing_narration_purity_failed": false,
-            "player_facing_narration_purity_repaired": false,
-            "player_facing_narration_purity_repair_modes": [],
-            "player_facing_narration_purity_violation_keys": [],
-            "player_facing_narration_purity_repair_hints_used": [],
-            "player_facing_narration_purity_collapsed_to_diegetic_core": false,
-            "player_facing_narration_purity_preview_before": "The moment passes without anyone stepping forward to own that thread.",
-            "player_facing_narration_purity_preview_after": "The moment passes without anyone stepping forward to own that thread.",
-            "answer_shape_primacy": {
-              "checked": false,
-              "passed": true,
-              "failure_reasons": [],
-              "skip_reason": "turn_not_in_scope"
-            },
-            "answer_shape_primacy_skip_reason": "turn_not_in_scope",
-            "answer_shape_primacy_checked": false,
-            "answer_shape_primacy_failed": false,
-            "answer_shape_primacy_repaired": false,
-            "answer_shape_primacy_repair_mode": null,
-            "answer_shape_primacy_failure_reasons": [],
-            "answer_shape_primacy_preview_before": null,
-            "answer_shape_primacy_preview_after": null,
-            "fallback_behavior": {
-              "validation": {
-                "contract_present": false,
-                "checked": true,
-                "passed": true,
-                "uncertainty_active": true
-              },
-              "failure_reasons": [],
-              "repair_mode": "bounded_partial"
-            },
-            "fallback_behavior_contract_present": false,
-            "fallback_behavior_checked": true,
-            "fallback_behavior_skip_reason": null,
-            "fallback_behavior_uncertainty_active": true,
-            "fallback_behavior_failed": false,
-            "fallback_behavior_failure_reasons": [],
-            "fallback_behavior_repaired": true,
-            "fallback_behavior_repair_mode": "bounded_partial",
-            "fallback_behavior_clarifying_question_used": false,
-            "fallback_behavior_partial_used": true,
-            "fallback_behavior_known_edge_preserved": false,
-            "fallback_behavior_unknown_edge_added": true,
-            "fallback_behavior_next_lead_added": true,
-            "fallback_behavior_meta_voice_stripped": false,
-            "narration_constraint_debug": {
-              "response_type": {
-                "required": "neutral_narration",
-                "contract_source": "response_policy",
-                "candidate_ok": true,
-                "repair_used": false,
-                "repair_kind": null
-              },
-              "visibility": {
-                "contract_present": true,
-                "decision_mode": "validated",
-                "visible_entity_count": 6,
-                "withheld_fact_count": 14,
-                "reason_codes": []
-              },
-              "speaker_selection": {
-                "speaker_id": null,
-                "speaker_name": null,
-                "selection_source": "first_roster",
-                "reason_code": "speaker_contract_match",
-                "binding_confident": false
-              }
-            }
-          }
-        },
-        "world_tick_events": []
-      },
-      "scene_before": "frontier_gate",
-      "scene_after": "frontier_gate",
-      "clue_updates": [],
-      "world_flag_updates": [
-        "clock:time_pressure=4"
-      ],
-      "turn_trace": {
-        "source": "chat",
-        "player_input": "Galinor sidles up next to the individual who said that. \"What are you talking about?\"",
-        "intent": {
-          "parsed": {
-            "id": "question_npc",
-            "label": "Galinor sidles up next to the individual who said that. \"What are you talking about?\"",
-            "type": "question",
-            "social_intent_class": "social_exchange",
-            "prompt": "Galinor sidles up next to the individual who said that. \"What are you talking about?\"",
-            "metadata": {
-              "routed_via_dialogue_lock": true,
-              "route": "dialogue",
-              "canonical_entry_path": "social",
-              "canonical_entry_reason": "no_addressable_target",
-              "canonical_entry_target_actor_id": null,
-              "intent_route_debug": {
-                "routed_to": "social_exchange",
-                "route_reason": "no_addressable_target",
-                "addressed_actor_id": null,
-                "addressed_actor_source": null
-              },
-              "social_turn_contract": {
-                "social_followup_recovery": "not_applicable",
-                "interlocutor_status": "none",
-                "continuity_status": "broken",
-                "fallback_anchor_source": "none",
-                "reply_owner_actor_id": null,
-                "routing_reason_code": "no_addressable_target"
-              },
-              "segmented_turn": {
-                "spoken_text": "What are you talking about?",
-                "declared_action_text": "Galinor sidles up next to the individual who said that."
-              },
-              "turn_segmentation": {
-                "spoken_text": "What are you talking about?",
-                "declared_action_text": "Galinor sidles up next to the individual who said that."
-              }
-            }
-          },
-          "segmented_turn": {
-            "spoken_text": "What are you talking about?",
-            "declared_action_text": "Galinor sidles up next to the individual who said that."
-          },
-          "normalized": {
-            "id": "question_npc",
-            "label": "Galinor sidles up next to the individual who said that. \"What are you talking about?\"",
-            "type": "question",
-            "prompt": "Galinor sidles up next to the individual who said that. \"What are you talking about?\"",
-            "targetSceneId": null,
-            "target_scene_id": null,
-            "targetEntityId": null,
-            "target_id": null
-          },
-          "implied_context": {
-            "applied": false,
-            "cases": [],
-            "target_id": null,
-            "commitment_broken": false,
-            "break_reason": null
-          }
-        },
-        "classification": {
-          "action_type": "chat",
-          "resolved_kind": "question",
-          "requires_check": false
-        },
-        "response_type_contract": {
-          "required_response_type": "neutral_narration",
-          "source_route": "social",
-          "allow_escalation": false,
-          "debug_reasons": [
-            "no_stricter_authoritative_contract",
-            "social_question_guard"
-          ]
-        },
-        "social_contract_trace": {
-          "route_selected": "dialogue",
-          "routing_reason_code": "no_addressable_target",
-          "social_followup_recovery": "not_applicable",
-          "reply_owner_actor_id": null,
-          "interlocutor_status": "none",
-          "continuity_status": "broken",
-          "fallback_anchor_source": "none",
-          "visible_grounded_speaker": null,
-          "final_reply_owner": null
-        },
-        "resolution_path": "social_engine",
-        "authoritative_state_changes": {
-          "scene_transition": null,
-          "resolution_state_changes": {},
-          "resolution_world_updates": [],
-          "check_request": null
-        },
-        "interaction_after": {
-          "active_interaction_target_id": null,
-          "active_interaction_kind": "social",
-          "interaction_mode": "social",
-          "engagement_level": "engaged",
-          "conversation_privacy": null,
-          "player_position_context": null
-        },
-        "narration_obligations": {
-          "is_opening_scene": false,
-          "must_advance_scene": false,
-          "should_answer_active_npc": false,
-          "avoid_input_echo": true,
-          "avoid_player_action_restatement": true,
-          "prefer_structured_turn_summary": true,
-          "active_npc_reply_expected": false,
-          "active_npc_reply_kind": null,
-          "scene_momentum_due": false,
-          "scene_momentum_exchanges_since": 0,
-          "scene_momentum_next_due_in": 2,
-          "suppress_non_social_emitters": false
-        },
-        "clues": {
-          "discovered_texts": [],
-          "presentation_changes": [],
-          "known_counts": {
-            "implicit": 0,
-            "explicit": 0,
-            "actionable": 0
-          }
-        },
-        "affordances_after": [
-          {
-            "id": "question_guard_captain",
-            "type": "question",
-            "label": "Talk to Guard Captain",
-            "targetEntityId": "guard_captain"
-          },
-          {
-            "id": "question_tavern_runner",
-            "type": "question",
-            "label": "Talk to Tavern Runner",
-            "targetEntityId": "tavern_runner"
-          },
-          {
-            "id": "question_emergent_town_crier",
-            "type": "question",
-            "label": "Talk to Town Crier",
-            "targetEntityId": "emergent_town_crier"
-          },
-          {
-            "id": "examine_the_rain_spatters_soot_dark_stone_frayed",
-            "type": "investigate",
-            "label": "Examine the Rain spatters soot-dark stone; frayed"
-          },
-          {
-            "id": "examine_refugees",
-            "type": "investigate",
-            "label": "Examine Refugees"
-          }
-        ],
-        "emergent_actor": {
-          "emergent_actor_enrolled": true,
-          "emergent_actor_id": "emergent_lord_aldric",
-          "emergent_actor_source_text": "Lord Aldric"
-        },
-        "leads": {
-          "registry_debug": [],
-          "delta_after_reconcile": [],
-          "changed_count": 0
-        },
-        "latency_ms": {
-          "intent_classification": 19,
-          "engine_resolution": 0,
-          "prompt_construction": 23,
-          "gpt_call": 23047,
-          "retry_loop_total": 34,
-          "final_emission_gate": 25,
-          "fallback_repair": 40,
-          "total_turn": 23191
-        }
-      },
-      "gpt_called": true,
-      "response_ok": true,
-      "error": null,
-      "canonical_entry": {
-        "should_route_social": false,
-        "target_actor_id": null,
-        "target_source": null,
-        "reason": "no_addressable_target",
-        "spoken_text": "What are you talking about?",
-        "declared_switch_detected": false,
-        "declared_switch_target_actor_id": null,
-        "continuity_overridden_by_declared_switch": false,
-        "spoken_vocative_detected": false,
-        "spoken_vocative_target_actor_id": null,
-        "continuity_overridden_by_spoken_vocative": false
-      },
-      "canonical_entry_path": "social",
-      "canonical_entry_reason": "no_addressable_target",
-      "canonical_entry_target_actor_id": null,
-      "declared_travel_override": {
-        "applied": false
-      },
-      "response_type_contract": {
-        "required_response_type": "neutral_narration",
-        "source_route": "social",
-        "allow_escalation": false,
-        "debug_reasons": [
-          "no_stricter_authoritative_contract",
-          "social_question_guard"
-        ]
-      },
-      "latency_ms": {
-        "intent_classification": 19,
-        "engine_resolution": 0,
-        "prompt_construction": 23,
-        "gpt_call": 23047,
-        "retry_loop_total": 34,
-        "final_emission_gate": 25,
-        "fallback_repair": 40,
-        "total_turn": 23191
+        "fallback_repair": 134,
+        "total_turn": 20956
       }
     }
   ],
   "flags": {},
   "character_name": "Galinor",
-  "campaign_run_id": "641b03a01979bd722a5819c8",
-  "session_id": "641b03a01979bd722a5819c8",
-  "last_saved_at": "2026-04-11T17:41:56.707016Z",
+  "campaign_run_id": "ce4804e781db19b033bd08fc",
+  "session_id": "ce4804e781db19b033bd08fc",
+  "last_saved_at": "2026-04-11T18:38:38.802275Z",
   "last_turn_response_policy": {
     "rule_priority_order": [
       "ANSWER THE PLAYER",
@@ -2803,12 +1184,12 @@
       "require_delta_when_answer_required": false,
       "expected_delta_shape": "none",
       "trace": {
-        "question_detected_from_player_text": true,
+        "question_detected_from_player_text": false,
         "follow_up_pressure_detected": false,
         "follow_up_press_depth": 0,
         "follow_up_overlap_ratio": null,
         "prior_answer_available": false,
-        "answer_completeness_required": true,
+        "answer_completeness_required": false,
         "social_lock": false,
         "active_target_id": null,
         "answer_pressure_followup_detected": false,
@@ -2819,12 +1200,16 @@
           "not_question_or_answer_pressure"
         ],
         "answer_pressure_family": null,
-        "answer_pressure_anchor_kind": "gm_snippet_token_or_lexical",
+        "answer_pressure_anchor_kind": null,
         "contradiction_followup_detected": false,
         "explanation_followup_detected": false,
         "insufficiency_followup_detected": false,
         "short_followup_anchor_detected": false,
-        "anchor_tokens_extracted": [],
+        "anchor_tokens_extracted": [
+          "cinderwatch",
+          "gate",
+          "district"
+        ],
         "anchor_token_matched": null,
         "anchor_followup_detected": false,
         "explanation_of_recent_anchor_followup": false,
@@ -2835,10 +1220,11 @@
         "correction_reask_followup_detected": false,
         "answer_pressure_reasons": [],
         "trigger_source": "none",
-        "resolution_kind": "question",
-        "uncertainty_suggests_partial": true,
+        "resolution_kind": null,
+        "uncertainty_suggests_partial": false,
         "suppressed_because": [
-          "no_follow_up_pressure"
+          "no_follow_up_pressure",
+          "not_answer_seeking_turn"
         ]
       }
     },
@@ -2890,12 +1276,12 @@
       ]
     },
     "answer_completeness": {
-      "enabled": true,
+      "enabled": false,
       "trace": {
-        "trigger_source": "player_direct_question",
+        "trigger_source": "none",
         "active_target_id": null,
         "active_npc_reply_kind": null,
-        "question_detected_from_player_text": true,
+        "question_detected_from_player_text": false,
         "answer_pressure_followup_detected": false,
         "strict_social_answer_seek_override": false,
         "same_interlocutor_followup": false,
@@ -2904,12 +1290,16 @@
           "not_question_or_answer_pressure"
         ],
         "answer_pressure_family": null,
-        "answer_pressure_anchor_kind": "gm_snippet_token_or_lexical",
+        "answer_pressure_anchor_kind": null,
         "contradiction_followup_detected": false,
         "explanation_followup_detected": false,
         "insufficiency_followup_detected": false,
         "short_followup_anchor_detected": false,
-        "anchor_tokens_extracted": [],
+        "anchor_tokens_extracted": [
+          "cinderwatch",
+          "gate",
+          "district"
+        ],
         "anchor_token_matched": null,
         "anchor_followup_detected": false,
         "explanation_of_recent_anchor_followup": false,
@@ -2919,29 +1309,18 @@
         "clarification_prompt_shape": null,
         "correction_reask_followup_detected": false,
         "answer_pressure_reasons": [],
-        "partial_answer_permitted": true
+        "partial_answer_permitted": false
       },
-      "player_direct_question": true,
-      "answer_required": true,
-      "answer_must_come_first": true,
-      "expected_voice": "narrator",
-      "expected_answer_shape": "bounded_partial",
-      "allowed_partial_reasons": [
-        "uncertainty",
-        "lack_of_knowledge",
-        "gated_information"
-      ],
-      "forbid_deflection": true,
-      "forbid_generic_nonanswer": true,
-      "require_concrete_payload": true,
-      "concrete_payload_any_of": [
-        "name",
-        "place",
-        "fact",
-        "direction",
-        "condition",
-        "next_lead"
-      ]
+      "player_direct_question": false,
+      "answer_required": false,
+      "answer_must_come_first": false,
+      "expected_voice": "either",
+      "expected_answer_shape": "direct",
+      "allowed_partial_reasons": [],
+      "forbid_deflection": false,
+      "forbid_generic_nonanswer": false,
+      "require_concrete_payload": false,
+      "concrete_payload_any_of": []
     },
     "tone_escalation": {
       "enabled": true,
@@ -2979,17 +1358,17 @@
         "scene_id": "frontier_gate",
         "has_session": true,
         "has_world": true,
-        "has_resolution": true,
+        "has_resolution": false,
         "has_narration_visibility": true,
         "has_scene_state_anchor_contract": true,
         "has_speaker_selection_contract": true,
-        "recent_log_len": 3
+        "recent_log_len": 1
       },
       "debug_flags": {
         "base_rank": 2,
         "max_rank": 2,
-        "recent_player_text_latest_len": 79,
-        "resolution_kind": "question",
+        "recent_player_text_latest_len": 6,
+        "resolution_kind": null,
         "normalized_action_type": null,
         "prior_refusal_seen_in_log": false,
         "topic_pressure": 0,
@@ -2998,9 +1377,9 @@
     },
     "narrative_authority": {
       "enabled": true,
-      "authoritative_outcome_available": true,
-      "resolution_kind": "question",
-      "success_state_available": true,
+      "authoritative_outcome_available": false,
+      "resolution_kind": null,
+      "success_state_available": false,
       "mechanical_result_available": false,
       "active_speaker_id": null,
       "active_target_id": null,
@@ -3482,7 +1861,7 @@
       ],
       "hidden_fact_strings_present": true,
       "discoverable_hinting_allowed": true,
-      "forbid_unresolved_outcome_assertions": false,
+      "forbid_unresolved_outcome_assertions": true,
       "forbid_hidden_fact_assertions": true,
       "forbid_npc_intent_assertions_without_basis": true,
       "allow_bounded_intent_reading_only_when_player_asked": false,
@@ -3496,9 +1875,9 @@
         "branch_outcome",
         "ask_for_roll"
       ],
-      "debug_reason": "narrative_authority: authoritative_outcome=True kind='question' mechanical_risky=False",
+      "debug_reason": "narrative_authority: authoritative_outcome=False kind=None mechanical_risky=False",
       "debug_inputs": {
-        "has_resolution": true,
+        "has_resolution": false,
         "has_narration_visibility": true,
         "has_scene_state_anchor_contract": true,
         "has_speaker_selection_contract": true,
@@ -3518,7 +1897,7 @@
       "forbid_exclusive_path_claims_without_basis": true,
       "forbid_lead_to_plot_gravity_upgrade": true,
       "allow_directional_language_from_resolved_transition": false,
-      "allow_exclusivity_from_authoritative_resolution": true,
+      "allow_exclusivity_from_authoritative_resolution": false,
       "allow_commitment_language_when_player_explicitly_committed": false,
       "surfaced_lead_ids": [],
       "surfaced_lead_labels": [],
@@ -3536,9 +1915,9 @@
         "main_plot",
         "only_real_way_forward"
       ],
-      "debug_reason": "anti_railroading: transition=False authoritative=True commitment=False surfaced_leads=0",
+      "debug_reason": "anti_railroading: transition=False authoritative=False commitment=False surfaced_leads=0",
       "debug_inputs": {
-        "has_resolution": true,
+        "has_resolution": false,
         "has_narration_obligations": true,
         "has_session_view": true,
         "has_scene_state_anchor_contract": true,
@@ -3556,7 +1935,7 @@
       },
       "debug_flags": {
         "resolved_transition": false,
-        "authoritative_resolution_outcome": true,
+        "authoritative_resolution_outcome": false,
         "player_commitment_detected": false,
         "surfaced_lead_count": 0,
         "scene_state_anchor_contract_present": true,
@@ -3566,16 +1945,16 @@
     },
     "context_separation": {
       "enabled": true,
-      "scene_focus_summary": "Rain spatters soot-dark stone as caravans and refugees choke the eastern gate. Guards watch the crowd with the brittle discipline of men who expect trouble, while old banners rot above the walls. Galinor sidles up next to the individual who said that. \"What are you talking about?\" question general Rain spatters soot-dark stone as caravans and refugees cho...",
-      "interaction_kind": "question",
-      "player_intent_summary": "Galinor sidles up next to the individual who said that. \"What are you talking about?\"",
+      "scene_focus_summary": "Rain spatters soot-dark stone as caravans and refugees choke the eastern gate. Guards watch the crowd with the brittle discipline of men who expect trouble, while old banners rot above the walls. general general Rain spatters soot-dark stone as caravans and refugees choke the eastern gate. Guards watch the crowd with the brittle discipline of men who expe...",
+      "interaction_kind": "unknown",
+      "player_intent_summary": "Galinor moves toward a nearby group to eavesdrop.",
       "primary_topics": [
         "galinor",
-        "sidles",
-        "next",
-        "individual",
-        "said",
-        "talking",
+        "moves",
+        "toward",
+        "nearby",
+        "group",
+        "eavesdrop",
         "frontier_gate",
         "frontier gate",
         "cinderwatch gate district",
@@ -3599,12 +1978,7 @@
         "ragged stranger",
         "tavern runner",
         "threadbare watcher",
-        "aldric",
-        "question",
-        "galinor sidles up next to the individual who said that. \"what are you talking about",
-        "galinor sidles",
-        "question_npc",
-        "question npc"
+        "aldric"
       ],
       "allowed_contextual_topics": [],
       "ambient_pressure_topics": [
@@ -3654,17 +2028,17 @@
           "scene_id": "frontier_gate",
           "has_session": true,
           "has_world": true,
-          "has_resolution": true,
+          "has_resolution": false,
           "has_narration_visibility": true,
           "has_scene_state_anchor_contract": true,
           "has_speaker_selection_contract": true,
-          "recent_log_len": 3
+          "recent_log_len": 1
         },
         "debug_flags": {
           "base_rank": 2,
           "max_rank": 2,
-          "recent_player_text_latest_len": 79,
-          "resolution_kind": "question",
+          "recent_player_text_latest_len": 6,
+          "resolution_kind": null,
           "normalized_action_type": null,
           "prior_refusal_seen_in_log": false,
           "topic_pressure": 0,
@@ -3672,7 +2046,7 @@
         }
       },
       "debug_inputs": {
-        "has_resolution": true,
+        "has_resolution": false,
         "has_session_view": true,
         "has_scene_envelope": true,
         "has_scene_summary": true,
@@ -3686,19 +2060,19 @@
         "has_active_pending_leads": true,
         "has_follow_surface": false,
         "player_text_nonempty": true,
-        "primary_topic_count": 35,
+        "primary_topic_count": 30,
         "ambient_pressure_topic_count": 3
       },
       "debug_flags": {
         "player_seeks_world_danger_info": false,
         "scene_summary_crisis": false,
         "interaction_kind_worldish": false,
-        "authoritative_or_consequence_relevant": true,
-        "pressure_focus_allowed": true,
+        "authoritative_or_consequence_relevant": false,
+        "pressure_focus_allowed": false,
         "tone_allow_verbal_pressure": true,
         "tone_allow_explicit_threat": false
       },
-      "debug_reason": "context_separation: pressure_focus_allowed=True primary_topics=35 ambient=3"
+      "debug_reason": "context_separation: pressure_focus_allowed=False primary_topics=30 ambient=3"
     },
     "player_facing_narration_purity": {
       "enabled": true,
@@ -3711,7 +2085,7 @@
       "forbid_engine_choice_framing": true,
       "forbid_non_diegetic_action_prompting": true,
       "response_type_required": null,
-      "interaction_kind": "social",
+      "interaction_kind": null,
       "debug_inputs": {
         "scene_id": "frontier_gate"
       },
@@ -3733,7 +2107,7 @@
       "debug_reason": "response_type_not_dialogue:neutral_narration",
       "debug_inputs": {
         "scene_id": "frontier_gate",
-        "response_type_contract_source": "resolution.metadata"
+        "response_type_contract_source": "derived"
       }
     },
     "interaction_continuity": {
@@ -3744,13 +2118,13 @@
       "drop_interlocutor_requires_explicit_break": false,
       "speaker_switch_requires_explicit_cue": false,
       "allow_narrator_bridge": true,
-      "interaction_mode": "social",
-      "interaction_kind": "social",
+      "interaction_mode": "none",
+      "interaction_kind": "",
       "active_interaction_target_id": "",
       "current_interlocutor": "",
       "anchored_interlocutor_id": "",
       "conversation_privacy": "",
-      "engagement_level": "engaged",
+      "engagement_level": "none",
       "speaker_selection_contract": {
         "primary_speaker_id": null,
         "primary_speaker_name": null,
@@ -3791,9 +2165,7 @@
           "resolution_path": "full_authoritative_resolve_plus_grounding"
         }
       },
-      "continuity_reasons": [
-        "social_mode_active"
-      ],
+      "continuity_reasons": [],
       "break_signals_present": [],
       "debug": {
         "source_of_anchor": "none",
@@ -3803,15 +2175,13 @@
     },
     "fallback_behavior": {
       "enabled": true,
-      "uncertainty_active": true,
-      "uncertainty_sources": [
-        "unknown_identity"
-      ],
-      "uncertainty_mode": "scene_ambiguity",
+      "uncertainty_active": false,
+      "uncertainty_sources": [],
+      "uncertainty_mode": null,
       "allowed_behaviors": {
         "ask_clarifying_question": false,
-        "hedge_appropriately": true,
-        "provide_partial_information": true
+        "hedge_appropriately": false,
+        "provide_partial_information": false
       },
       "disallowed_behaviors": {
         "invented_certainty": true,
@@ -3820,10 +2190,10 @@
       },
       "diegetic_only": true,
       "max_clarifying_questions": 1,
-      "prefer_partial_over_question": true,
-      "require_partial_to_state_known_edge": true,
-      "require_partial_to_state_unknown_edge": true,
-      "require_partial_to_offer_next_lead": true,
+      "prefer_partial_over_question": false,
+      "require_partial_to_state_known_edge": false,
+      "require_partial_to_state_unknown_edge": false,
+      "require_partial_to_offer_next_lead": false,
       "allowed_hedge_forms": [
         "I can't swear to it, but",
         "From what I saw,",
@@ -3852,14 +2222,8 @@
         "system_or_canon_claims"
       ],
       "debug": {
-        "activation_reasons": [
-          "answer_completeness_requires_bounded_partial",
-          "answer_completeness_allows_uncertainty_partial",
-          "answer_completeness_detects_lack_of_knowledge",
-          "answer_completeness_detects_gated_information",
-          "narrative_authority_blocks_hidden_truth_assertion"
-        ],
-        "partial_preferred": true,
+        "activation_reasons": [],
+        "partial_preferred": false,
         "clarifying_question_allowed": false
       }
     },
@@ -3897,11 +2261,11 @@
     },
     "response_type_contract": {
       "required_response_type": "neutral_narration",
-      "source_route": "social",
-      "allow_escalation": false,
+      "source_route": "exploration",
+      "allow_escalation": true,
       "debug_reasons": [
         "no_stricter_authoritative_contract",
-        "social_question_guard"
+        "authoritative_state_allows_escalation"
       ]
     }
   },
@@ -3909,15 +2273,5 @@
     "emergent_actor_enrolled": true,
     "emergent_actor_id": "emergent_lord_aldric",
     "emergent_actor_source_text": "Lord Aldric"
-  },
-  "_social_fallback_lead_tail_state": {
-    "frontier_gate|none|Galinor follows the footprints. What does he discover in the thicket of crates? Galinor follows the footprints. What does he discover in the|": {
-      "last_tail": "\"if it's a grudge worth hiding on paper, the duty sergeant hears more of that than i do,\" someone nearby says.",
-      "streak": 1
-    },
-    "frontier_gate|none|Galinor sidles up next to the individual who said that. \"What are you talking about?\" Galinor sidles up next to the individual who said that|": {
-      "last_tail": "\"if you need a name off the watch side, the duty sergeant or the gate roster is where people look,\" someone nearby says.",
-      "streak": 1
-    }
   }
 }

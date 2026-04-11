@@ -3335,6 +3335,172 @@ _SCENE_PRESENCE_OR_SCOPE_QUERY_RE = re.compile(
     re.IGNORECASE,
 )
 
+
+def _scene_id_from_envelope(scene_envelope: Optional[Dict[str, Any]]) -> str:
+    if not isinstance(scene_envelope, dict):
+        return ""
+    sc = scene_envelope.get("scene")
+    if isinstance(sc, dict):
+        return str(sc.get("id") or "").strip()
+    return ""
+
+
+def _ha_continuity_carryover_safety_ok(
+    merged_text: str,
+    *,
+    session: Dict[str, Any],
+    scene_envelope: Dict[str, Any],
+    world: Dict[str, Any],
+    segmented_turn: Optional[Dict[str, Any]],
+    snap: Dict[str, Any],
+) -> bool:
+    """Block carryover / local-observation suppress when the player clearly redirects or inspects props."""
+    from game.human_adjacent_focus import is_physical_clue_inspection_intent
+
+    t = str(merged_text or "").strip()
+    if not t or is_physical_clue_inspection_intent(t):
+        return False
+    low = t.lower()
+    if detect_non_social_continuity_escape(low, merged_text=t, segmented_turn=segmented_turn):
+        return False
+
+    scene_inner = scene_envelope.get("scene") if isinstance(scene_envelope, dict) else None
+    scene_inner = scene_inner if isinstance(scene_inner, dict) else None
+    w = world if isinstance(world, dict) else {}
+    snap_tier = str(snap.get("implicit_focus_resolution") or "").strip()
+    snap_tid = str(snap.get("implicit_focus_target_id") or "").strip()
+
+    decl_sw = resolve_declared_actor_switch(
+        session=session,
+        scene=scene_envelope,
+        segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+        raw_text=t,
+    )
+    decl_id = _clean_string(decl_sw.get("target_actor_id")) if decl_sw.get("has_declared_switch") else ""
+    decl_ok = bool(
+        decl_id and is_actor_addressable_in_current_scene(session, scene_envelope, decl_id, world=w)
+    )
+    if decl_sw.get("has_declared_switch") and decl_ok and decl_id:
+        if snap_tier == "active_npc" and snap_tid and decl_id == snap_tid:
+            pass
+        else:
+            return False
+
+    voc_scan = _text_for_spoken_vocative_scan(
+        segmented_turn if isinstance(segmented_turn, dict) else None,
+        t,
+    )
+    voc_res = resolve_spoken_vocative_target(
+        session=session,
+        scene=scene_envelope,
+        spoken_text=voc_scan,
+    )
+    voc_id = _clean_string(voc_res.get("target_actor_id")) if voc_res.get("has_spoken_vocative") else ""
+    voc_ok = bool(voc_id and is_actor_addressable_in_current_scene(session, scene_envelope, voc_id, world=w))
+    if voc_ok and voc_id:
+        if snap_tier == "active_npc" and snap_tid and voc_id == snap_tid:
+            pass
+        else:
+            return False
+
+    addressed = find_addressed_npc_id_for_turn(t, session, w, scene_inner)
+    if addressed:
+        if snap_tier == "active_npc" and snap_tid and addressed == snap_tid:
+            pass
+        else:
+            return False
+    return True
+
+
+def human_adjacent_continuity_carryover_metadata_if_eligible(
+    text: str,
+    scene_envelope: Optional[Dict[str, Any]],
+    session: Optional[Dict[str, Any]],
+    world: Optional[Dict[str, Any]],
+    segmented_turn: Optional[Dict[str, Any]],
+) -> Optional[Dict[str, Any]]:
+    """If Block K precedence applies, return observe metadata carrying the prior canonical HA bundle."""
+    from game.human_adjacent_focus import (
+        looks_like_human_adjacent_continuity_followup_text,
+        qualifying_canonical_ha_continuity_bundle,
+    )
+
+    if not isinstance(session, dict) or not isinstance(scene_envelope, dict):
+        return None
+    t = str(text or "").strip()
+    if not t or not looks_like_human_adjacent_continuity_followup_text(t):
+        return None
+    sid = _scene_id_from_envelope(scene_envelope)
+    if not sid:
+        return None
+    rt = get_scene_runtime(session, sid)
+    snap_raw = rt.get("last_human_adjacent_continuity")
+    if not isinstance(snap_raw, dict):
+        return None
+    snap = qualifying_canonical_ha_continuity_bundle(snap_raw)
+    if snap is None:
+        return None
+    merged = merge_turn_segments_for_directed_social_entry(
+        segmented_turn if isinstance(segmented_turn, dict) else None,
+        t,
+    )
+    w = world if isinstance(world, dict) else {}
+    if not _ha_continuity_carryover_safety_ok(
+        merged.strip() or t,
+        session=session,
+        scene_envelope=scene_envelope,
+        world=w,
+        segmented_turn=segmented_turn,
+        snap=snap,
+    ):
+        return None
+    out = dict(snap)
+    out["parser_lane"] = "human_adjacent_observe"
+    out["nearby_group_continuity_carryover"] = True
+    return out
+
+
+def _suppress_local_observation_for_canonical_ha_continuity(
+    text: str,
+    *,
+    session: Optional[Dict[str, Any]],
+    scene_envelope: Optional[Dict[str, Any]],
+    world: Optional[Dict[str, Any]],
+    segmented_turn: Optional[Dict[str, Any]],
+) -> bool:
+    """When True, :func:`_looks_like_local_observation_question` returns False (Block K)."""
+    from game.human_adjacent_focus import (
+        looks_like_human_adjacent_continuity_followup_text,
+        qualifying_canonical_ha_continuity_bundle,
+    )
+
+    if not isinstance(session, dict) or not isinstance(scene_envelope, dict):
+        return False
+    sid = _scene_id_from_envelope(scene_envelope)
+    if not sid:
+        return False
+    rt = get_scene_runtime(session, sid)
+    snap_raw = rt.get("last_human_adjacent_continuity")
+    snap = qualifying_canonical_ha_continuity_bundle(snap_raw) if isinstance(snap_raw, dict) else None
+    if snap is None:
+        return False
+    if not looks_like_human_adjacent_continuity_followup_text(text):
+        return False
+    merged = merge_turn_segments_for_directed_social_entry(
+        segmented_turn if isinstance(segmented_turn, dict) else None,
+        str(text or "").strip(),
+    )
+    w = world if isinstance(world, dict) else {}
+    return _ha_continuity_carryover_safety_ok(
+        merged.strip() or str(text or "").strip(),
+        session=session,
+        scene_envelope=scene_envelope,
+        world=w,
+        segmented_turn=segmented_turn,
+        snap=snap,
+    )
+
+
 # Narrow: scene-local perception / attention questions that should not enter the social pipeline
 # when no NPC is explicitly addressed. Prefer false negatives.
 _LOCAL_OBSERVATION_EXCLUDE_RE = re.compile(
@@ -3372,11 +3538,24 @@ _LOCAL_OBSERVATION_POSITIVE_RE = re.compile(
 )
 
 
-def _looks_like_local_observation_question(text: str) -> bool:
+def _looks_like_local_observation_question(
+    text: str,
+    *,
+    session: Optional[Dict[str, Any]] = None,
+    scene_envelope: Optional[Dict[str, Any]] = None,
+    world: Optional[Dict[str, Any]] = None,
+    segmented_turn: Optional[Dict[str, Any]] = None,
+    apply_ha_continuity_suppress: bool = False,
+) -> bool:
     """True when *text* asks for immediate scene perception, not an NPC knowledge exchange.
 
     Requires a question mark and a tight positive pattern; excludes explicit role/NPC address
     (e.g. 'the guard'), lore/knowledge phrasing, and open social solicitations.
+
+    When *apply_ha_continuity_suppress* is True and *session* / *scene_envelope* are set, Block K
+    may return False so listen follow-ups are not forced through the generic local-observation lane
+    (parser / dialogue classifier only — :func:`resolve_directed_social_entry` keeps the stricter
+    local-observation early exit unless recovery applies).
     """
     raw = str(text or "").strip()
     if not raw or "?" not in raw:
@@ -3384,7 +3563,18 @@ def _looks_like_local_observation_question(text: str) -> bool:
     low = raw.lower()
     if _LOCAL_OBSERVATION_EXCLUDE_RE.search(low):
         return False
-    return bool(_LOCAL_OBSERVATION_POSITIVE_RE.search(low))
+    if not bool(_LOCAL_OBSERVATION_POSITIVE_RE.search(low)):
+        return False
+    if apply_ha_continuity_suppress and isinstance(session, dict) and isinstance(scene_envelope, dict):
+        if _suppress_local_observation_for_canonical_ha_continuity(
+            raw,
+            session=session,
+            scene_envelope=scene_envelope,
+            world=world,
+            segmented_turn=segmented_turn,
+        ):
+            return False
+    return True
 
 
 _LOCAL_OBSERVATION_GOING_ON_HAPPENING_RE = re.compile(
@@ -3468,11 +3658,11 @@ def _should_recover_social_from_local_observation_followup(
     surfaced topic (topic_pressure last_answer), not genuine scene perception queries.
     """
     t = str(merged_player_text or "").strip()
+    w = world if isinstance(world, dict) else {}
     if not t or not _looks_like_local_observation_question(t):
         return False
     if not _looks_like_local_observation_going_on_happening_question(t):
         return False
-    w = world if isinstance(world, dict) else {}
     scene_obj = scene.get("scene") if isinstance(scene, dict) else None
     scene_id = str(scene_obj.get("id") or "").strip() if isinstance(scene_obj, dict) else ""
     if not scene_id:
@@ -3540,7 +3730,14 @@ def should_emit_observe_for_local_observation_parse(
     segmented_turn: Optional[Dict[str, Any]] = None,
 ) -> bool:
     """True when freeform parsing should emit an ``observe`` action for local observation phrasing."""
-    if not _looks_like_local_observation_question(str(text or "").strip()):
+    if not _looks_like_local_observation_question(
+        str(text or "").strip(),
+        session=session if isinstance(session, dict) else None,
+        scene_envelope=scene_envelope if isinstance(scene_envelope, dict) else None,
+        world=world if isinstance(world, dict) else None,
+        segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+        apply_ha_continuity_suppress=True,
+    ):
         return False
     if not isinstance(session, dict) or not isinstance(scene_envelope, dict):
         return True
@@ -4901,6 +5098,52 @@ def _routing_interlocutor_and_continuity_status(
     return "none", "broken"
 
 
+def _ha_continuity_sidecar_for_routing_contract(
+    session: Dict[str, Any] | None,
+    scene: Dict[str, Any] | None,
+    world: Dict[str, Any] | None,
+    merged_text: str,
+    segmented_turn: Dict[str, Any] | None,
+) -> tuple[str, str]:
+    """Block K debug: continuity basis when stored canonical HA focus matches a short follow-up."""
+    from game.human_adjacent_focus import (
+        looks_like_human_adjacent_continuity_followup_text,
+        qualifying_canonical_ha_continuity_bundle,
+    )
+
+    if not isinstance(session, dict) or not isinstance(scene, dict):
+        return "none", "none"
+    sid = _scene_id_from_envelope(scene)
+    if not sid:
+        return "none", "none"
+    w = world if isinstance(world, dict) else {}
+    raw_snap = get_scene_runtime(session, sid).get("last_human_adjacent_continuity")
+    snap = qualifying_canonical_ha_continuity_bundle(raw_snap) if isinstance(raw_snap, dict) else None
+    if snap is None or not looks_like_human_adjacent_continuity_followup_text(merged_text):
+        return "none", "none"
+    m = merge_turn_segments_for_directed_social_entry(
+        segmented_turn if isinstance(segmented_turn, dict) else None,
+        str(merged_text or "").strip(),
+    ).strip() or str(merged_text or "").strip()
+    if not _ha_continuity_carryover_safety_ok(
+        m,
+        session=session,
+        scene_envelope=scene,
+        world=w,
+        segmented_turn=segmented_turn,
+        snap=snap,
+    ):
+        return "none", "none"
+    tier = str(snap.get("implicit_focus_resolution") or "").strip()
+    if tier == "active_npc":
+        if str(snap.get("implicit_focus_target_id") or "").strip():
+            return "active_interlocutor", "active_interlocutor"
+        return "active_interlocutor", "implicit_focus_resolution"
+    if tier in ("speaking_group", "crowd_cluster"):
+        return "nearby_group_focus", "implicit_focus_resolution"
+    return "none", "none"
+
+
 def finalize_routing_social_turn_contract(
     out: Dict[str, Any],
     *,
@@ -4950,6 +5193,10 @@ def finalize_routing_social_turn_contract(
     if ils == "retained" and tid:
         fas = "active_interlocutor"
 
+    cont_basis, ng_src = _ha_continuity_sidecar_for_routing_contract(
+        sess, scn, w, merged_text, segmented_turn
+    )
+
     out["social_turn_contract"] = {
         "social_followup_recovery": sfr,
         "interlocutor_status": ils,
@@ -4957,6 +5204,8 @@ def finalize_routing_social_turn_contract(
         "fallback_anchor_source": fas,
         "reply_owner_actor_id": tid,
         "routing_reason_code": reason or None,
+        "continuity_basis": cont_basis,
+        "nearby_group_focus_source": ng_src,
     }
 
 

@@ -890,7 +890,20 @@ def parse_freeform_to_action(
     interactables = scene.get("interactables") or []
     visible_facts = scene.get("visible_facts") or []
 
-    from game.interaction_context import should_emit_observe_for_local_observation_parse
+    from game.interaction_context import (
+        human_adjacent_continuity_carryover_metadata_if_eligible,
+        should_emit_observe_for_local_observation_parse,
+    )
+
+    co_md = human_adjacent_continuity_carryover_metadata_if_eligible(
+        t,
+        scene_envelope if isinstance(scene_envelope, dict) else None,
+        session,
+        world,
+        segmented_turn if isinstance(segmented_turn, dict) else None,
+    )
+    if co_md:
+        return _build_action("observe", t, t, metadata=co_md)
 
     if should_emit_observe_for_local_observation_parse(
         t,
@@ -928,6 +941,22 @@ def parse_freeform_to_action(
                 "parser_lane": "passive_interruption_wait",
             },
         )
+
+    # ---- 0c. Human-adjacent non-social (listen / approach+listen / group watch) → observe ----
+    from game.human_adjacent_focus import classify_human_adjacent_intent_family, is_physical_clue_inspection_intent
+
+    if not is_physical_clue_inspection_intent(t):
+        ha_fam = classify_human_adjacent_intent_family(t)
+        if ha_fam != "none":
+            return _build_action(
+                "observe",
+                t,
+                t,
+                metadata={
+                    "parser_lane": "human_adjacent_observe",
+                    "human_adjacent_intent_family": ha_fam,
+                },
+            )
 
     # ---- 1. Travel / scene_transition ----
     for prefix in sorted(TRAVEL_PREFIXES, key=len, reverse=True):

@@ -57,6 +57,10 @@ from game.combat import (
     cleanup_player_turn,
     build_end_turn_result,
 )
+from game.fallback_provenance_debug import (
+    attach_upstream_fast_fallback_provenance,
+    preserve_fallback_provenance_metadata,
+)
 from game.gm import (
     build_messages,
     call_gpt,
@@ -621,6 +625,23 @@ def _apply_authoritative_resolution_state_mutation(
     scene_rt['last_exploration_action_key'] = action_key
     scene_rt['last_resolution_kind'] = resolution.get('kind')
 
+    res_md = resolution.get("metadata") if isinstance(resolution.get("metadata"), dict) else {}
+    from game.human_adjacent_focus import is_physical_clue_inspection_intent, qualifying_canonical_ha_continuity_bundle
+
+    _ha_pt = str(resolution.get("prompt") or "")
+    if isinstance(normalized_action, dict):
+        _ha_pt = _ha_pt or str(normalized_action.get("prompt") or normalized_action.get("label") or "")
+    if is_physical_clue_inspection_intent(_ha_pt):
+        scene_rt.pop("last_human_adjacent_continuity", None)
+    else:
+        _ha_snap = qualifying_canonical_ha_continuity_bundle(res_md)
+        if _ha_snap:
+            scene_rt["last_human_adjacent_continuity"] = _ha_snap
+        elif res_kind in SOCIAL_KINDS:
+            scene_rt.pop("last_human_adjacent_continuity", None)
+        elif res_md.get("parser_lane") == "local_observation_question":
+            scene_rt.pop("last_human_adjacent_continuity", None)
+
     if resolution.get('kind') == 'investigate':
         # Skip clue discovery when a skill check was run and failed.
         if not (resolution.get('skill_check') and resolution.get('success') is False):
@@ -684,6 +705,63 @@ def _derive_response_type_contract_for_turn(
     if attach_to_resolution:
         _attach_response_type_contract_to_resolution(resolution, contract)
     return contract
+
+
+# Hard ceiling on OpenAI calls for one manual-play narration turn (initial + upstream retry + content retries).
+MANUAL_PLAY_MAX_CALL_GPT = 6
+
+# Mirror Block J/K resolution metadata onto GM output so fast-fallback paths remain inspectable downstream.
+_RESOLUTION_GM_METADATA_MIRROR_KEYS: frozenset[str] = frozenset(
+    {
+        "human_adjacent_intent_family",
+        "implicit_focus_resolution",
+        "implicit_focus_anchor_fact",
+        "implicit_focus_target_id",
+        "human_adjacent_diegetic_null",
+        "parser_lane",
+        "nearby_group_continuity_carryover",
+    }
+)
+
+
+def _synthetic_manual_play_gpt_budget_gm() -> dict:
+    """Non-retryable stand-in when the manual-play GPT call budget is exhausted."""
+    err = {
+        "failure_class": "manual_play_gpt_budget_exceeded",
+        "retryable": False,
+        "status_code": None,
+        "error_code": "manual_play_gpt_budget_exceeded",
+        "message_excerpt": "Manual play GPT invocation budget exceeded (safety cap).",
+    }
+    return {
+        "player_facing_text": "The game master is temporarily unavailable. Please try again.",
+        "tags": [
+            "error",
+            "gpt_api_error:manual_play_gpt_budget_exceeded",
+            "gpt_api_error_nonretryable",
+        ],
+        "scene_update": None,
+        "activate_scene_id": None,
+        "new_scene_draft": None,
+        "world_updates": None,
+        "suggested_action": None,
+        "debug_notes": "manual_play_gpt_budget_exceeded:safety_cap",
+        "metadata": {"upstream_api_error": err},
+    }
+
+
+def _attach_resolution_contract_metadata_to_gm_output(gm: dict | None, resolution: dict | None) -> None:
+    """Copy Block J/K fields from resolution.metadata onto gm.metadata without clobbering provenance keys."""
+    if not isinstance(gm, dict) or not isinstance(resolution, dict):
+        return
+    res_md = resolution.get("metadata")
+    if not isinstance(res_md, dict):
+        return
+    extra = {k: res_md[k] for k in _RESOLUTION_GM_METADATA_MIRROR_KEYS if k in res_md}
+    if not extra:
+        return
+    md = gm.get("metadata") if isinstance(gm.get("metadata"), dict) else {}
+    gm["metadata"] = {**md, **extra}
 
 
 def _build_gpt_narration_from_authoritative_state(
@@ -812,12 +890,14 @@ def _build_gpt_narration_from_authoritative_state(
             )
             print("[SOCIAL RESOLUTION REPAIR] terminal empty social output repaired")
             _accumulate_latency(latency_sink, "fallback_repair", _elapsed_ms(repair_started))
+            preserve_fallback_provenance_metadata(repaired, gm_dict)
             return repaired
         repaired_ns = ensure_minimal_nonsocial_resolution(gm=gm_dict, session=session)
         dbg = repaired_ns.get("debug_notes") if isinstance(repaired_ns.get("debug_notes"), str) else ""
         repaired_ns["debug_notes"] = (dbg + " | " if dbg else "") + f"nonsocial_repair_context:{reason}"
         print("[NON-SOCIAL RESOLUTION REPAIR] empty output repaired")
         _accumulate_latency(latency_sink, "fallback_repair", _elapsed_ms(repair_started))
+        preserve_fallback_provenance_metadata(repaired_ns, gm_dict)
         return repaired_ns
 
     def _extract_upstream_api_error(gm_dict: dict | None) -> dict | None:
@@ -883,12 +963,31 @@ def _build_gpt_narration_from_authoritative_state(
             (dbg + " | " if dbg else "")
             + f"upstream_api_fast_fallback:{failure_class}:{reason}"
         )
+        attach_upstream_fast_fallback_provenance(out)
+        _attach_resolution_contract_metadata_to_gm_output(out, resolution if isinstance(resolution, dict) else None)
+        print(f"[FAST FALLBACK INVOKED] failure_class={failure_class} reason={reason}")
+        om = out.get("metadata") if isinstance(out.get("metadata"), dict) else {}
+        fam = str(om.get("human_adjacent_intent_family") or "").strip().lower()
+        if fam not in ("", "none"):
+            print("[FAST FALLBACK PRESERVED HUMAN-ADJACENT METADATA]")
+        if om.get("nearby_group_continuity_carryover") is True:
+            print("[FAST FALLBACK PRESERVED NEARBY-GROUP CONTINUITY CONTEXT]")
         return out
 
     known_clues = list(get_all_known_clue_texts(session))
+    gpt_calls_used = 0
+
+    def _bounded_call_gpt(msgs: list):
+        nonlocal gpt_calls_used
+        if gpt_calls_used >= MANUAL_PLAY_MAX_CALL_GPT:
+            print("[RETRY SKIPPED: MANUAL_PLAY_GPT_BUDGET_EXCEEDED]")
+            return _synthetic_manual_play_gpt_budget_gm()
+        gpt_calls_used += 1
+        return call_gpt(msgs)
+
     initial_gpt_started = _now_perf()
     gm = guard_gm_output(
-        call_gpt(messages),
+        _bounded_call_gpt(messages),
         scene,
         user_text,
         known_clues,
@@ -909,7 +1008,7 @@ def _build_gpt_narration_from_authoritative_state(
         if allow_direct_api_retry:
             retry_gpt_started = _now_perf()
             gm_retry = guard_gm_output(
-                call_gpt(messages),
+                _bounded_call_gpt(messages),
                 scene,
                 user_text,
                 known_clues,
@@ -929,6 +1028,10 @@ def _build_gpt_narration_from_authoritative_state(
             else:
                 gm = gm_retry
         else:
+            if not upstream_api_error.get("retryable"):
+                print("[RETRY SKIPPED: NONRETRYABLE UPSTREAM ERROR]")
+            else:
+                print("[RETRY SKIPPED: UPSTREAM RETRY SUPPRESSED] social_dialogue_turn=True")
             gm = _fast_fallback_for_upstream_error(
                 gm,
                 upstream_api_error,
@@ -995,7 +1098,7 @@ def _build_gpt_narration_from_authoritative_state(
         ) + [{'role': 'user', 'content': retry_instruction}]
         retry_gpt_started = _now_perf()
         gm_retry = guard_gm_output(
-            call_gpt(retry_messages),
+            _bounded_call_gpt(retry_messages),
             scene,
             user_text,
             known_clues,
@@ -1004,6 +1107,20 @@ def _build_gpt_narration_from_authoritative_state(
             resolution=resolution,
         )
         _ = _elapsed_ms(retry_gpt_started)
+        loop_api_err = _extract_upstream_api_error(gm_retry)
+        if loop_api_err:
+            fc = str(loop_api_err.get("failure_class") or "")
+            if not loop_api_err.get("retryable"):
+                print(f"[RETRY SKIPPED: NONRETRYABLE UPSTREAM ERROR] class={fc}")
+            else:
+                print(f"[RETRY SKIPPED: UPSTREAM ERROR IN RETRY LOOP] class={fc}")
+            gm = _fast_fallback_for_upstream_error(
+                gm_retry,
+                loop_api_err,
+                reason="retry_loop_upstream_api_error",
+            )
+            fast_fallback_mode = True
+            break
         retry_dbg = gm_retry.get('debug_notes') if isinstance(gm_retry.get('debug_notes'), str) else ''
         reason_suffix = ','.join(str(r) for r in (selected_failure.get("reasons") or []) if isinstance(r, str)) or 'unknown'
         cs_trace = ""

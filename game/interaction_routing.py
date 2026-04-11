@@ -310,7 +310,14 @@ def is_directed_dialogue(
 
     if addressed_npc_id:
         return True
-    if _looks_like_local_observation_question(clause):
+    if _looks_like_local_observation_question(
+        clause,
+        session=session if isinstance(session, dict) else None,
+        scene_envelope=scene if isinstance(scene, dict) else None,
+        world=world if isinstance(world, dict) else None,
+        segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+        apply_ha_continuity_suppress=True,
+    ):
         return False
     if has_dialogue_cue and has_world_reference:
         return True

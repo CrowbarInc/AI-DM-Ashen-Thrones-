@@ -400,10 +400,47 @@ def render_observe_perception_fallback_line(
     *,
     seed_key: str,
     player_text: str = "",
+    resolution: Mapping[str, Any] | None = None,
 ) -> str | None:
     """Concrete observation from visible facts (no coaching / menus)."""
-    scene = _inner_scene(scene_or_envelope)
-    intent_aligned = _intent_aligned_observe_line(scene, player_text=player_text, seed_key=seed_key)
+    scene_inner = _inner_scene(scene_or_envelope)
+    scene: Dict[str, Any] = dict(scene_inner) if isinstance(scene_inner, dict) else {}
+    res_md: Dict[str, Any] = {}
+    if isinstance(resolution, Mapping):
+        md = resolution.get("metadata")
+        if isinstance(md, dict):
+            res_md = md
+    from game.human_adjacent_focus import (
+        classify_human_adjacent_intent_family,
+        diegetic_listen_null_line,
+        is_physical_clue_inspection_intent,
+        prioritize_visible_facts_for_human_adjacent,
+    )
+
+    pt = str(player_text or "")
+    fam = str(res_md.get("human_adjacent_intent_family") or "") or classify_human_adjacent_intent_family(pt)
+    physical = is_physical_clue_inspection_intent(pt)
+    tier = str(res_md.get("implicit_focus_resolution") or "").strip() if isinstance(resolution, Mapping) else ""
+
+    if (
+        isinstance(resolution, Mapping)
+        and fam in {"listen", "approach_listen", "observe_group"}
+        and not physical
+        and (res_md.get("human_adjacent_diegetic_null") is True or tier == "none")
+    ):
+        return diegetic_listen_null_line(seed_key=seed_key)
+
+    if fam in {"listen", "approach_listen", "observe_group"} and not physical and tier not in ("", "none"):
+        vf_list = _visible_fact_strings(scene)
+        if vf_list:
+            scene["visible_facts"] = prioritize_visible_facts_for_human_adjacent(
+                vf_list,
+                player_text=pt,
+                implicit_focus_resolution=tier,
+                human_adjacent_intent_family=fam,
+            )
+
+    intent_aligned = _intent_aligned_observe_line(scene, player_text=pt, seed_key=seed_key)
     if intent_aligned:
         return intent_aligned
     facts = _visible_fact_strings(scene)

@@ -2893,6 +2893,17 @@ def build_narration_context(
             visible_facts_for_prompt = curated_opening
         else:
             visible_facts_for_prompt = visible_facts_for_prompt[:OPENING_NARRATION_VISIBLE_FACT_MAX]
+    res_for_vis = resolution if isinstance(resolution, dict) else {}
+    res_md_vis = res_for_vis.get("metadata") if isinstance(res_for_vis.get("metadata"), dict) else {}
+    if res_md_vis.get("human_adjacent_intent_family") in {"listen", "approach_listen", "observe_group"}:
+        from game.human_adjacent_focus import prioritize_visible_facts_for_human_adjacent
+
+        visible_facts_for_prompt = prioritize_visible_facts_for_human_adjacent(
+            visible_facts_for_prompt,
+            player_text=str(user_text or ""),
+            implicit_focus_resolution=str(res_md_vis.get("implicit_focus_resolution") or ""),
+            human_adjacent_intent_family=str(res_md_vis.get("human_adjacent_intent_family") or ""),
+        )
     # Opening curation may return display-preserved strings; minimal narration_visibility export
     # matches build_narration_visibility_contract (normalized, deduped).
     _seen_visible_fact: Set[str] = set()

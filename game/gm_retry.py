@@ -32,6 +32,7 @@ from game.diegetic_fallback_narration import (
     render_observe_perception_fallback_line,
     render_travel_arrival_fallback_line,
 )
+from game.fallback_provenance_debug import preserve_fallback_provenance_metadata
 
 from game.gm import (
     _apply_uncertainty_to_gm,
@@ -1601,7 +1602,9 @@ def _nonsocial_forced_retry_progress_line(
         res,
     )
     if res_kind in _PERCEPTION_FALLBACK_RESOLUTION_KINDS and not suppress_intro:
-        obs_line = render_observe_perception_fallback_line(env, seed_key=seed, player_text=pt)
+        obs_line = render_observe_perception_fallback_line(
+            env, seed_key=seed, player_text=pt, resolution=res
+        )
         if isinstance(obs_line, str) and obs_line.strip():
             return _ensure_terminal_punctuation(obs_line.strip())
 
@@ -2385,6 +2388,7 @@ def force_terminal_retry_fallback(
                     world=w,
                     scene_id=scene_id,
                 )
+            preserve_fallback_provenance_metadata(out, base_gm, gm_work)
             return out
         line = str(gm_work.get("player_facing_text") or "").strip()
     else:
@@ -2516,6 +2520,8 @@ def force_terminal_retry_fallback(
             world=w,
             scene_id=scene_id,
         )
+
+    preserve_fallback_provenance_metadata(out, base_gm, gm_work)
 
     if use_social_terminal:
         eff_res_final, _, _ = _gm_binding().effective_strict_social_resolution_for_emission(
