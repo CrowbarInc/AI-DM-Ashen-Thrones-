@@ -166,7 +166,7 @@ def test_gate_repairs_meta_fallback_voice_into_bounded_partial() -> None:
 
     assert "enough information" not in low
     assert "ward clerk" in low
-    assert "no name" in low
+    assert "hearsay" in low or "unclear" in low or "no name" in low
     assert meta.get("fallback_behavior_repaired") is True
     assert meta.get("fallback_behavior_meta_voice_stripped") is True
     assert meta.get("fallback_behavior_partial_used") is True

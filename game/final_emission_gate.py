@@ -48,6 +48,7 @@ from game.social import (
     neutral_reply_speaker_grounding_bridge_line,
 )
 from game.social_exchange_emission import (
+    _active_interlocutor_matches_resolution_social_npc,
     _has_explicit_interruption_shape,
     build_final_strict_social_response,
     effective_strict_social_resolution_for_emission,
@@ -65,7 +66,13 @@ from game.social_exchange_emission import (
     _speaker_label,
 )
 from game.storage import get_scene_runtime
+from game.anti_reset_emission_guard import (
+    anti_reset_suppresses_intro_style_fallbacks,
+    local_exchange_continuation_fallback_line,
+    should_replace_candidate_intro_fallback,
+)
 from game.leads import get_lead, normalize_lead
+from game.prompt_context import canonical_interaction_target_npc_id
 from game.anti_railroading import anti_railroading_repair_hints, build_anti_railroading_contract, validate_anti_railroading
 from game.context_separation import context_separation_repair_hints, validate_context_separation
 from game.player_facing_narration_purity import (
@@ -5332,6 +5339,57 @@ def _strict_social_eff_npc_id_matches_interlocutor(
     return True
 
 
+def _strict_social_terminal_grounded_speaker_first_mention_exemption_entity_id(
+    gm_output: Dict[str, Any] | None,
+    *,
+    session: Dict[str, Any] | None,
+    scene: Dict[str, Any] | None,
+    world: Dict[str, Any] | None,
+    scene_id: str,
+    eff_resolution: Dict[str, Any] | None,
+    active_interlocutor: str,
+    strict_social_active: bool,
+) -> str | None:
+    """When strict-social terminal dialogue preconditions hold, treat the grounded NPC as first-mention-grounded."""
+    if not strict_social_active or not isinstance(eff_resolution, dict):
+        return None
+    contract, _src = _resolve_response_type_contract(
+        gm_output if isinstance(gm_output, dict) else None,
+        resolution=eff_resolution,
+        session=session if isinstance(session, dict) else None,
+    )
+    if str((contract or {}).get("required_response_type") or "").strip().lower() != "dialogue":
+        return None
+    sid = str(scene_id or "").strip()
+    if not strict_social_emission_will_apply(
+        eff_resolution,
+        session if isinstance(session, dict) else None,
+        world if isinstance(world, dict) else None,
+        sid,
+    ):
+        return None
+    if not _active_interlocutor_matches_resolution_social_npc(session, eff_resolution):
+        return None
+    if not _strict_social_eff_npc_id_matches_interlocutor(eff_resolution, active_interlocutor):
+        return None
+    if not _active_interlocutor_visible_person_like(
+        active_interlocutor, session=session, scene=scene, world=world
+    ):
+        return None
+    soc = eff_resolution.get("social") if isinstance(eff_resolution.get("social"), dict) else {}
+    npc_raw = str(soc.get("npc_id") or "").strip()
+    if not npc_raw:
+        return None
+    sess = session if isinstance(session, dict) else None
+    if not isinstance(sess, dict):
+        return None
+    canon_npc = canonical_interaction_target_npc_id(sess, npc_raw)
+    canon_active = canonical_interaction_target_npc_id(sess, active_interlocutor)
+    if not canon_npc or canon_npc != canon_active:
+        return None
+    return canon_active
+
+
 def _active_interlocutor_visible_person_like(
     active_interlocutor: str,
     *,
@@ -5421,6 +5479,7 @@ def _try_strict_social_local_pronoun_substitution_repair(
     scene_id: str,
     eff_resolution: Dict[str, Any] | None,
     active_interlocutor: str,
+    grounded_speaker_first_mention_exemption_entity_id: str | None = None,
 ) -> tuple[str | None, Dict[str, Any]]:
     """Replace one ambiguous pronoun with the grounded interlocutor label; no clause moves or paraphrase."""
     dbg: Dict[str, Any] = {
@@ -5480,7 +5539,13 @@ def _try_strict_social_local_pronoun_substitution_repair(
     if ref2.get("ok") is not True:
         dbg["referential_clarity_fallback_after_failed_local_repair"] = True
         return None, dbg
-    fm2 = validate_player_facing_first_mentions(repaired, session=sess, scene=sc, world=w)
+    fm2 = validate_player_facing_first_mentions(
+        repaired,
+        session=sess,
+        scene=sc,
+        world=w,
+        grounded_speaker_first_mention_exemption_entity_id=grounded_speaker_first_mention_exemption_entity_id,
+    )
     if fm2.get("ok") is not True:
         dbg["referential_clarity_fallback_after_failed_local_repair"] = True
         return None, dbg
@@ -5528,6 +5593,13 @@ def _standard_visibility_safe_fallback(
         session=session if isinstance(session, dict) else None,
         scene_id=scene_id,
     )
+    suppress_intro = anti_reset_suppresses_intro_style_fallbacks(
+        session,
+        validation_scene if isinstance(validation_scene, dict) else scene,
+        world,
+        scene_id,
+        eff_resolution,
+    )
     fallback_candidates: List[tuple[str, str, str, str, str, str, Dict[str, Any]]] = []
 
     if strict_social_active and isinstance(eff_resolution, dict):
@@ -5551,7 +5623,7 @@ def _standard_visibility_safe_fallback(
                 scene_id=scene_id,
             )
         )
-        if prefer_grounded_scene_intro:
+        if prefer_grounded_scene_intro and not suppress_intro:
             fallback_candidates.extend(
                 _grounded_scene_intro_fallback_candidates(
                     session=session,
@@ -5606,17 +5678,35 @@ def _standard_visibility_safe_fallback(
         scene=scene,
         scene_id=scene_id,
     ):
-        fallback_candidates.append(
-            (
-                _global_narrative_fallback_stock_line(scene if isinstance(scene, dict) else None, scene_id=scene_id),
-                "global_scene_narrative",
-                "narrative_safe_fallback",
-                "global_scene_fallback",
-                "standard_safe_fallback",
-                "global_scene_fallback",
-                _first_mention_composition_meta(),
+        if suppress_intro:
+            fallback_candidates.append(
+                (
+                    local_exchange_continuation_fallback_line(
+                        session=session if isinstance(session, dict) else None,
+                        world=world if isinstance(world, dict) else None,
+                        scene_id=scene_id,
+                        resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
+                    ),
+                    "anti_reset_local_continuation",
+                    "anti_reset_continuation_fallback",
+                    "anti_reset_local_continuation_fallback",
+                    "standard_safe_fallback",
+                    "anti_reset_local_continuation_fallback",
+                    _first_mention_composition_meta(),
+                )
             )
-        )
+        else:
+            fallback_candidates.append(
+                (
+                    _global_narrative_fallback_stock_line(scene if isinstance(scene, dict) else None, scene_id=scene_id),
+                    "global_scene_narrative",
+                    "narrative_safe_fallback",
+                    "global_scene_fallback",
+                    "standard_safe_fallback",
+                    "global_scene_fallback",
+                    _first_mention_composition_meta(),
+                )
+            )
 
     for (
         fallback_text,
@@ -5628,6 +5718,13 @@ def _standard_visibility_safe_fallback(
         composition_meta,
     ) in fallback_candidates:
         if not _normalize_text(fallback_text):
+            continue
+        if suppress_intro and should_replace_candidate_intro_fallback(
+            fallback_text,
+            scene_envelope=validation_scene if isinstance(validation_scene, dict) else scene,
+            emitter_source=final_emitted_source,
+            suppress_intro=True,
+        ):
             continue
         validation = validate_player_facing_visibility(
             fallback_text,
@@ -5692,6 +5789,21 @@ def _standard_visibility_safe_fallback(
             composition_meta,
         )
 
+    if suppress_intro:
+        return (
+            local_exchange_continuation_fallback_line(
+                session=session if isinstance(session, dict) else None,
+                world=world if isinstance(world, dict) else None,
+                scene_id=scene_id,
+                resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
+            ),
+            "anti_reset_local_continuation",
+            "anti_reset_continuation_fallback",
+            "anti_reset_local_continuation_fallback",
+            "standard_safe_fallback",
+            "anti_reset_local_continuation_fallback",
+            _first_mention_composition_meta(),
+        )
     return (
         _global_narrative_fallback_stock_line(scene if isinstance(scene, dict) else None, scene_id=scene_id),
         "global_scene_narrative",
@@ -5714,6 +5826,7 @@ def _apply_first_mention_enforcement(
     active_interlocutor: str,
     strict_social_active: bool,
     strict_social_suppressed_non_social_turn: bool,
+    grounded_speaker_first_mention_exemption_entity_id: str | None = None,
 ) -> Dict[str, Any]:
     candidate_text = _normalize_text(out.get("player_facing_text"))
     validation = validate_player_facing_first_mentions(
@@ -5721,6 +5834,7 @@ def _apply_first_mention_enforcement(
         session=session if isinstance(session, dict) else None,
         scene=scene if isinstance(scene, dict) else None,
         world=world if isinstance(world, dict) else None,
+        grounded_speaker_first_mention_exemption_entity_id=grounded_speaker_first_mention_exemption_entity_id,
     )
     meta = out.get("_final_emission_meta") if isinstance(out.get("_final_emission_meta"), dict) else {}
     violations = validation.get("violations") if isinstance(validation.get("violations"), list) else []
@@ -5744,6 +5858,9 @@ def _apply_first_mention_enforcement(
     meta["opening_scene_first_mention_preference_used"] = False
     meta["first_mention_composition_used"] = False
     meta["first_mention_composition_layers"] = _default_first_mention_composition_layers()
+    meta["first_mention_strict_social_grounded_speaker_exemption_entity_id"] = (
+        grounded_speaker_first_mention_exemption_entity_id
+    )
     _apply_default_referential_clarity_meta(meta, passed=None)
     out["_final_emission_meta"] = meta
 
@@ -5758,6 +5875,7 @@ def _apply_first_mention_enforcement(
             active_interlocutor=active_interlocutor,
             strict_social_active=strict_social_active,
             strict_social_suppressed_non_social_turn=strict_social_suppressed_non_social_turn,
+            grounded_speaker_first_mention_exemption_entity_id=grounded_speaker_first_mention_exemption_entity_id,
         )
 
     if not checked_entities and _reply_already_has_concrete_interaction(candidate_text):
@@ -5766,7 +5884,14 @@ def _apply_first_mention_enforcement(
         return out
 
     opening_scene_preference_used = _opening_scene_preference_active(session)
-    prefer_grounded_scene_intro = True
+    suppress_intro = anti_reset_suppresses_intro_style_fallbacks(
+        session,
+        scene,
+        world,
+        scene_id,
+        eff_resolution,
+    )
+    prefer_grounded_scene_intro = not suppress_intro
 
     (
         fallback_text,
@@ -5842,6 +5967,7 @@ def _apply_first_mention_enforcement(
         active_interlocutor=active_interlocutor,
         strict_social_active=strict_social_active,
         strict_social_suppressed_non_social_turn=strict_social_suppressed_non_social_turn,
+        grounded_speaker_first_mention_exemption_entity_id=grounded_speaker_first_mention_exemption_entity_id,
     )
 
 
@@ -5880,6 +6006,7 @@ def _apply_referential_clarity_enforcement(
     active_interlocutor: str,
     strict_social_active: bool,
     strict_social_suppressed_non_social_turn: bool,
+    grounded_speaker_first_mention_exemption_entity_id: str | None = None,
 ) -> Dict[str, Any]:
     candidate_text = _normalize_text(out.get("player_facing_text"))
     validation = validate_player_facing_referential_clarity(
@@ -5940,6 +6067,7 @@ def _apply_referential_clarity_enforcement(
             scene_id=scene_id,
             eff_resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
             active_interlocutor=active_interlocutor,
+            grounded_speaker_first_mention_exemption_entity_id=grounded_speaker_first_mention_exemption_entity_id,
         )
         for k, val in subst_dbg.items():
             meta[k] = val
@@ -6052,6 +6180,7 @@ def _apply_visibility_enforcement(
     active_interlocutor: str,
     strict_social_active: bool,
     strict_social_suppressed_non_social_turn: bool,
+    grounded_speaker_first_mention_exemption_entity_id: str | None = None,
 ) -> Dict[str, Any]:
     candidate_text = _normalize_text(out.get("player_facing_text"))
     validation = validate_player_facing_visibility(
@@ -6107,6 +6236,7 @@ def _apply_visibility_enforcement(
             active_interlocutor=active_interlocutor,
             strict_social_active=strict_social_active,
             strict_social_suppressed_non_social_turn=strict_social_suppressed_non_social_turn,
+            grounded_speaker_first_mention_exemption_entity_id=grounded_speaker_first_mention_exemption_entity_id,
         )
 
     tag_list_gate = [str(t) for t in (out.get("tags") or []) if isinstance(t, str)]
@@ -6130,6 +6260,7 @@ def _apply_visibility_enforcement(
             active_interlocutor=active_interlocutor,
             strict_social_active=strict_social_active,
             strict_social_suppressed_non_social_turn=strict_social_suppressed_non_social_turn,
+            grounded_speaker_first_mention_exemption_entity_id=grounded_speaker_first_mention_exemption_entity_id,
         )
 
     if not checked_entities and not checked_facts and _reply_already_has_concrete_interaction(candidate_text):
@@ -7853,6 +7984,16 @@ def apply_final_emission_gate(
             _merge_answer_shape_primacy_meta(out["_final_emission_meta"], asp_layer_meta)
             _merge_scene_state_anchor_meta(out["_final_emission_meta"], ssa_layer_meta)
             _merge_fallback_behavior_meta(out["_final_emission_meta"], fb_layer_meta)
+            grounded_fm_exempt = _strict_social_terminal_grounded_speaker_first_mention_exemption_entity_id(
+                out,
+                session=session,
+                scene=scene,
+                world=world,
+                scene_id=sid,
+                eff_resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
+                active_interlocutor=active_interlocutor,
+                strict_social_active=strict_social_active,
+            )
             out = _apply_visibility_enforcement(
                 out,
                 session=session,
@@ -7863,6 +8004,7 @@ def apply_final_emission_gate(
                 active_interlocutor=active_interlocutor,
                 strict_social_active=strict_social_active,
                 strict_social_suppressed_non_social_turn=strict_social_suppressed_non_social_turn,
+                grounded_speaker_first_mention_exemption_entity_id=grounded_fm_exempt,
             )
             ic_strict_text, _, ic_strict_fb = _apply_interaction_continuity_emission_step(
                 out,
@@ -8016,6 +8158,16 @@ def apply_final_emission_gate(
         _merge_answer_shape_primacy_meta(out["_final_emission_meta"], asp_layer_meta)
         _merge_scene_state_anchor_meta(out["_final_emission_meta"], ssa_layer_meta)
         _merge_fallback_behavior_meta(out["_final_emission_meta"], fb_layer_meta)
+        grounded_fm_exempt = _strict_social_terminal_grounded_speaker_first_mention_exemption_entity_id(
+            out,
+            session=session,
+            scene=scene,
+            world=world,
+            scene_id=sid,
+            eff_resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
+            active_interlocutor=active_interlocutor,
+            strict_social_active=strict_social_active,
+        )
         out = _apply_visibility_enforcement(
             out,
             session=session,
@@ -8026,6 +8178,7 @@ def apply_final_emission_gate(
             active_interlocutor=active_interlocutor,
             strict_social_active=strict_social_active,
             strict_social_suppressed_non_social_turn=strict_social_suppressed_non_social_turn,
+            grounded_speaker_first_mention_exemption_entity_id=grounded_fm_exempt,
         )
         fb_text, fb_layer_meta, _ = _apply_fallback_behavior_layer(
             _normalize_text(out.get("player_facing_text")),
@@ -8392,6 +8545,16 @@ def apply_final_emission_gate(
         _merge_answer_shape_primacy_meta(out["_final_emission_meta"], asp_layer_meta)
         _merge_scene_state_anchor_meta(out["_final_emission_meta"], ssa_layer_meta)
         _merge_fallback_behavior_meta(out["_final_emission_meta"], fb_layer_meta)
+        grounded_fm_exempt = _strict_social_terminal_grounded_speaker_first_mention_exemption_entity_id(
+            out,
+            session=session,
+            scene=scene,
+            world=world,
+            scene_id=sid,
+            eff_resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
+            active_interlocutor=active_interlocutor,
+            strict_social_active=strict_social_active,
+        )
         out = _apply_visibility_enforcement(
             out,
             session=session,
@@ -8402,6 +8565,7 @@ def apply_final_emission_gate(
             active_interlocutor=active_interlocutor,
             strict_social_active=strict_social_active,
             strict_social_suppressed_non_social_turn=strict_social_suppressed_non_social_turn,
+            grounded_speaker_first_mention_exemption_entity_id=grounded_fm_exempt,
         )
         _attach_interaction_continuity_validation(
             out,
@@ -8422,6 +8586,13 @@ def apply_final_emission_gate(
         return _finalize_emission_output(out, pre_gate_text=pre_gate_text)
 
     # Non-social replace path only (strict-social replacement is handled in build_final_strict_social_response).
+    suppress_intro_replace = anti_reset_suppresses_intro_style_fallbacks(
+        session if isinstance(session, dict) else None,
+        scene if isinstance(scene, dict) else None,
+        world if isinstance(world, dict) else None,
+        sid,
+        resolution if isinstance(resolution, dict) else None,
+    )
     mode = str((inspected or {}).get("interaction_mode") or "").strip().lower()
     if (
         active_interlocutor
@@ -8462,6 +8633,16 @@ def apply_final_emission_gate(
             fallback_text = "Nothing confirms progress toward that lead yet—the moment stays unresolved."
             fallback_kind = "npc_pursuit_neutral_nonprogress"
             final_emitted_source = "npc_pursuit_neutral_fallback"
+        elif suppress_intro_replace:
+            fallback_pool = "anti_reset_local_continuation"
+            fallback_text = local_exchange_continuation_fallback_line(
+                session=session if isinstance(session, dict) else None,
+                world=world if isinstance(world, dict) else None,
+                scene_id=sid,
+                resolution=resolution if isinstance(resolution, dict) else None,
+            )
+            fallback_kind = "anti_reset_continuation_fallback"
+            final_emitted_source = "anti_reset_local_continuation_fallback"
         else:
             fallback_pool = "global_scene_narrative"
             fallback_text = _global_narrative_fallback_stock_line(scene if isinstance(scene, dict) else None, scene_id=sid)
@@ -8515,6 +8696,7 @@ def apply_final_emission_gate(
         "rejection_reasons_sample": reasons[:8],
         "strict_social_suppressed_non_social_turn": strict_social_suppressed_non_social_turn,
         "strict_social_suppression_reason": strict_social_suppression_reason,
+        "anti_reset_intro_suppressed": bool(suppress_intro_replace),
     }
     _flag_non_hostile_escalation_from_writer_pregate(
         pre_gate_text,
@@ -8535,6 +8717,16 @@ def apply_final_emission_gate(
     _merge_answer_shape_primacy_meta(out["_final_emission_meta"], asp_layer_meta)
     _merge_scene_state_anchor_meta(out["_final_emission_meta"], ssa_layer_meta)
     _merge_fallback_behavior_meta(out["_final_emission_meta"], fb_layer_meta)
+    grounded_fm_exempt = _strict_social_terminal_grounded_speaker_first_mention_exemption_entity_id(
+        out,
+        session=session,
+        scene=scene,
+        world=world,
+        scene_id=sid,
+        eff_resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
+        active_interlocutor=active_interlocutor,
+        strict_social_active=strict_social_active,
+    )
     out = _apply_visibility_enforcement(
         out,
         session=session,
@@ -8545,6 +8737,7 @@ def apply_final_emission_gate(
         active_interlocutor=active_interlocutor,
         strict_social_active=strict_social_active,
         strict_social_suppressed_non_social_turn=strict_social_suppressed_non_social_turn,
+        grounded_speaker_first_mention_exemption_entity_id=grounded_fm_exempt,
     )
     _attach_interaction_continuity_validation(
         out,

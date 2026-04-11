@@ -993,9 +993,123 @@ def minimal_social_emergency_fallback_line(resolution: Dict[str, Any] | None) ->
     lines = (
         f'{speaker} shakes their head. "I don\'t know."',
         f'{speaker} frowns. "That\'s all I\'ve got."',
-        f"{speaker} starts to answer, then glances past you as shouting breaks out in the crowd.",
+        f'{speaker} grimaces. "Not something I can say here."',
     )
     return lines[idx]
+
+
+def _strict_social_emergency_fallback_npc_dialogue_substantive(
+    text: str,
+    resolution: Dict[str, Any] | None,
+) -> bool:
+    """True when terminal fallback is not interruption-bridge dead air and has grounded NPC dialogue presence."""
+    t = _collapse_ws(str(text or "")).strip()
+    if not t:
+        return False
+    if _looks_like_interruption_breakoff_text(t):
+        return False
+    if is_route_illegal_global_or_sanitizer_fallback_text(t):
+        return False
+    if '"' in t:
+        return True
+    sentences = _split_sentences(t)
+    for s in sentences:
+        if _sentence_opens_with_resolved_npc_beat(s, resolution) and _sentence_is_bounded_social_signal(s):
+            return True
+    return False
+
+
+def lawful_strict_social_dialogue_emergency_fallback_line(resolution: Dict[str, Any] | None) -> str:
+    """Compact NPC reply pool for strict-social terminal repair: always dialogue-shaped, no crowd insertion."""
+    social = resolution.get("social") if isinstance(resolution, dict) and isinstance(resolution.get("social"), dict) else {}
+    npc_id = str(social.get("npc_id") or "").strip()
+    speaker = _speaker_label(resolution)
+    seed = f"lawful_dialogue_emergency|{npc_id}|{speaker}"
+    idx = _deterministic_index(seed, 4)
+    lines = (
+        f'{speaker} shakes their head. "I don\'t know."',
+        f'{speaker} frowns. "That\'s all I\'ve got."',
+        f'{speaker} grimaces. "Not something I can say here."',
+        f'{speaker} shakes their head slowly. "That is all I can give you."',
+    )
+    return lines[idx]
+
+
+def _text_is_strict_social_minimal_emergency_fallback(text: str, resolution: Dict[str, Any] | None) -> bool:
+    """True when *text* matches a deterministic strict-social terminal emergency line (not model progression)."""
+    if not isinstance(resolution, dict):
+        return False
+    t = _normalize_gate_text(str(text or "")).strip()
+    if not t:
+        return False
+    for factory in (minimal_social_emergency_fallback_line, lawful_strict_social_dialogue_emergency_fallback_line):
+        if _normalize_gate_text(factory(resolution)).strip() == t:
+            return True
+    return False
+
+
+def strict_social_terminal_dialogue_fallback_valid(text: str, resolution: Dict[str, Any] | None) -> bool:
+    """Public check: strict-social emergency fallback carries continuity-valid NPC dialogue."""
+    return _strict_social_emergency_fallback_npc_dialogue_substantive(text, resolution)
+
+
+def _active_interlocutor_matches_resolution_social_npc(
+    session: Dict[str, Any] | None,
+    resolution: Dict[str, Any] | None,
+) -> bool:
+    if not isinstance(session, dict) or not isinstance(resolution, dict):
+        return False
+    inspected = inspect_interaction_context(session)
+    active_ic = str(inspected.get("active_interaction_target_id") or "").strip()
+    if not active_ic:
+        return False
+    soc = resolution.get("social") if isinstance(resolution.get("social"), dict) else {}
+    npc_id = str(soc.get("npc_id") or "").strip()
+    if not npc_id:
+        return False
+    a = canonical_interaction_target_npc_id(session, active_ic)
+    n = canonical_interaction_target_npc_id(session, npc_id)
+    return bool(a) and bool(n) and a == n
+
+
+def repair_strict_social_terminal_dialogue_fallback_if_needed(
+    text: str,
+    *,
+    resolution: Dict[str, Any] | None,
+    base_gm: Dict[str, Any] | None,
+    session: Dict[str, Any] | None,
+    world: Dict[str, Any] | None,
+    scene_id: str,
+    retry_terminal: bool,
+) -> tuple[str, bool]:
+    """When strict-social dialogue is contracted, replace interruption/stall terminal lines with lawful NPC speech."""
+    if not retry_terminal or not isinstance(resolution, dict):
+        return text, False
+    from game.response_policy_contracts import _resolve_response_type_contract
+
+    contract, _ = _resolve_response_type_contract(
+        base_gm if isinstance(base_gm, dict) else None,
+        resolution=resolution,
+        session=session if isinstance(session, dict) else None,
+    )
+    required = str((contract or {}).get("required_response_type") or "").strip().lower()
+    if required != "dialogue":
+        return text, False
+    if not strict_social_emission_will_apply(
+        resolution,
+        session if isinstance(session, dict) else None,
+        world if isinstance(world, dict) else None,
+        str(scene_id or "").strip(),
+    ):
+        return text, False
+    if not _active_interlocutor_matches_resolution_social_npc(
+        session if isinstance(session, dict) else None,
+        resolution,
+    ):
+        return text, False
+    if strict_social_terminal_dialogue_fallback_valid(text, resolution):
+        return text, False
+    return lawful_strict_social_dialogue_emergency_fallback_line(resolution), True
 
 
 def strict_social_ownership_terminal_fallback(resolution: Dict[str, Any] | None) -> str:
@@ -1948,7 +2062,12 @@ def _apply_interruption_repeat_guard(
     }
 
     if repeat_count >= _INTERRUPTION_REPEAT_FORCE_THRESHOLD:
-        if source_signature and not final_signature and _social_line_has_playable_npc_substance(text):
+        if (
+            source_signature
+            and not final_signature
+            and _social_line_has_playable_npc_substance(text)
+            and not _text_is_strict_social_minimal_emergency_fallback(text, resolution)
+        ):
             next_tracker["last_emitted_text"] = text
             next_tracker["forced_progression_count"] = int(tracker.get("forced_progression_count", 0) or 0) + 1
             set_social_exchange_interruption_tracker(session, next_tracker)

@@ -21,6 +21,12 @@ from game.interaction_context import (
     inspect as inspect_interaction_context,
     world_action_turn_suppresses_npc_answer_fallback,
 )
+from game.anti_reset_emission_guard import (
+    anti_reset_suppresses_intro_style_fallbacks,
+    local_exchange_continuation_fallback_line,
+    text_matches_observe_opener_templates,
+    text_overlaps_known_scene_intro_sources,
+)
 from game.diegetic_fallback_narration import (
     render_nonsocial_terminal_anchor_line,
     render_observe_perception_fallback_line,
@@ -1587,7 +1593,14 @@ def _nonsocial_forced_retry_progress_line(
     seed = f"{sid}|{pt[:200]}"
 
     res_kind = str((res or {}).get("kind") or "").strip().lower()
-    if res_kind in _PERCEPTION_FALLBACK_RESOLUTION_KINDS:
+    suppress_intro = anti_reset_suppresses_intro_style_fallbacks(
+        sess if isinstance(sess, dict) else None,
+        env,
+        w,
+        sid,
+        res,
+    )
+    if res_kind in _PERCEPTION_FALLBACK_RESOLUTION_KINDS and not suppress_intro:
         obs_line = render_observe_perception_fallback_line(env, seed_key=seed)
         if isinstance(obs_line, str) and obs_line.strip():
             return _ensure_terminal_punctuation(obs_line.strip())
@@ -1626,7 +1639,18 @@ def _nonsocial_forced_retry_progress_line(
 
     anchor = render_nonsocial_terminal_anchor_line(env, seed_key=seed)
     if isinstance(anchor, str) and anchor.strip():
-        return _ensure_terminal_punctuation(anchor.strip())
+        line_out = anchor.strip()
+        if suppress_intro and (
+            text_matches_observe_opener_templates(line_out)
+            or text_overlaps_known_scene_intro_sources(line_out, env)
+        ):
+            line_out = local_exchange_continuation_fallback_line(
+                session=sess if isinstance(sess, dict) else None,
+                world=w,
+                scene_id=sid,
+                resolution=res,
+            )
+        return _ensure_terminal_punctuation(line_out)
 
     return _ensure_terminal_punctuation(str(_NONSOCIAL_EMPTY_REPAIR_HARD_LINE).strip())
 
@@ -2097,6 +2121,24 @@ def ensure_minimal_social_resolution(
         out["player_facing_text"] = _ensure_terminal_punctuation(_SOCIAL_EMPTY_REPAIR_HARD_LINE.strip())
         ctx_mode_social = "hard_fallback"
 
+    if not block1_terminal_social and isinstance(res_for_line, dict) and _gm_has_usable_player_facing_text(out):
+        pft_soc = str(out.get("player_facing_text") or "")
+        repaired_soc, did_soc = _gm_binding().repair_strict_social_terminal_dialogue_fallback_if_needed(
+            pft_soc,
+            resolution=res_for_line,
+            base_gm=out,
+            session=sess,
+            world=w,
+            scene_id=scene_id,
+            retry_terminal=True,
+        )
+        if did_soc:
+            out["player_facing_text"] = _ensure_terminal_punctuation(repaired_soc.strip())
+            if ctx_mode_social and ctx_mode_social != "hard_fallback":
+                ctx_mode_social = f"{ctx_mode_social}|strict_social_dialogue_terminal_repair"
+            elif not ctx_mode_social:
+                ctx_mode_social = "strict_social_dialogue_terminal_repair"
+
     existing_route = str(out.get("final_route") or "").strip()
     if existing_route and existing_route not in _NON_SOCIAL_TERMINAL_FINAL_ROUTES:
         out["final_route"] = existing_route
@@ -2358,6 +2400,25 @@ def force_terminal_retry_fallback(
         anchor_dead = render_nonsocial_terminal_anchor_line(env, seed_key=f"term|{scene_id}|{player_text[:120]}")
         if isinstance(anchor_dead, str) and anchor_dead.strip():
             line = _ensure_terminal_punctuation(anchor_dead.strip())
+            sup_ar = anti_reset_suppresses_intro_style_fallbacks(
+                sess,
+                env,
+                w,
+                scene_id,
+                res,
+            )
+            if sup_ar and (
+                text_matches_observe_opener_templates(line)
+                or text_overlaps_known_scene_intro_sources(line, env)
+            ):
+                line = _ensure_terminal_punctuation(
+                    local_exchange_continuation_fallback_line(
+                        session=sess,
+                        world=w,
+                        scene_id=scene_id,
+                        resolution=res,
+                    ).strip()
+                )
         else:
             line = _ensure_terminal_punctuation(str(_NONSOCIAL_EMPTY_REPAIR_HARD_LINE).strip())
 
@@ -2451,5 +2512,27 @@ def force_terminal_retry_fallback(
             world=w,
             scene_id=scene_id,
         )
+
+    if use_social_terminal:
+        eff_res_final, _, _ = _gm_binding().effective_strict_social_resolution_for_emission(
+            res,
+            sess,
+            w,
+            scene_id,
+        )
+        res_for_repair = eff_res_final if isinstance(eff_res_final, dict) else res
+        if isinstance(res_for_repair, dict) and _gm_has_usable_player_facing_text(out):
+            pft_end = str(out.get("player_facing_text") or "")
+            repaired_end, did_end = _gm_binding().repair_strict_social_terminal_dialogue_fallback_if_needed(
+                pft_end,
+                resolution=res_for_repair,
+                base_gm=out,
+                session=sess,
+                world=w,
+                scene_id=scene_id,
+                retry_terminal=True,
+            )
+            if did_end:
+                out["player_facing_text"] = _ensure_terminal_punctuation(repaired_end.strip())
 
     return out

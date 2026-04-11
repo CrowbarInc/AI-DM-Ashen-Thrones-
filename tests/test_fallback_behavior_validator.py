@@ -149,6 +149,16 @@ def test_validate_fallback_behavior_accepts_bounded_partial_shape() -> None:
     assert out["next_lead_present"] is True
 
 
+def test_validate_fallback_behavior_rejects_bare_thin_identity_line_without_known_and_lead() -> None:
+    out = validate_fallback_behavior(
+        "No name comes clear from what shows.",
+        _fallback_contract(),
+    )
+
+    assert out["passed"] is False
+    assert "bounded_partial_insufficient_substance" in out["failure_reasons"]
+
+
 def test_validate_fallback_behavior_accepts_single_clarifying_question_when_partial_not_allowed() -> None:
     out = validate_fallback_behavior(
         "Which one do you mean?",

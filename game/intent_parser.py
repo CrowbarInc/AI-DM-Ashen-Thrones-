@@ -854,6 +854,7 @@ def parse_freeform_to_action(
     *,
     session: Optional[Dict[str, Any]] = None,
     world: Optional[Dict[str, Any]] = None,
+    segmented_turn: Optional[Dict[str, Any]] = None,
 ) -> Optional[Dict[str, Any]]:
     """Parse freeform player input into a structured engine action.
 
@@ -889,9 +890,15 @@ def parse_freeform_to_action(
     interactables = scene.get("interactables") or []
     visible_facts = scene.get("visible_facts") or []
 
-    from game.interaction_context import _looks_like_local_observation_question
+    from game.interaction_context import should_emit_observe_for_local_observation_parse
 
-    if _looks_like_local_observation_question(t):
+    if should_emit_observe_for_local_observation_parse(
+        t,
+        scene_envelope if isinstance(scene_envelope, dict) else None,
+        session=session,
+        world=world,
+        segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+    ):
         return _build_action(
             "observe",
             t,

@@ -25,7 +25,7 @@ from typing import Any, Dict, List, Literal, Optional, Set, Tuple
 from game.utils import slugify
 
 from game.npc_promotion import maybe_promote_active_social_target, should_promote_scene_actor
-from game.storage import get_interaction_context
+from game.storage import get_interaction_context, get_scene_runtime
 
 
 SOCIAL_INTERACTION_KINDS = frozenset(
@@ -1065,6 +1065,20 @@ def set_social_target(session: Dict[str, Any], target_id: Optional[str]) -> Dict
     return _normalize_context(ctx)
 
 
+def clear_stale_social_interlocutor_continuity(session: Dict[str, Any]) -> Dict[str, Any]:
+    """Drop active interlocutor anchor after a visible speaker mismatch (no scene transition)."""
+    if not isinstance(session, dict):
+        return {}
+    ctx = inspect(session)
+    ctx["active_interaction_target_id"] = None
+    ctx["active_interaction_kind"] = None
+    ctx["interaction_mode"] = "none"
+    ctx["engagement_level"] = "none"
+    _scene_state(session)["current_interlocutor"] = None
+    clear_social_exchange_interruption_tracker(session)
+    return _normalize_context(ctx)
+
+
 def set_privacy(session: Dict[str, Any], privacy: Optional[str]) -> Dict[str, Any]:
     """Set conversation privacy hint; pass None to clear."""
     ctx = inspect(session)
@@ -1278,15 +1292,17 @@ def line_opens_with_comma_vocative(text: str) -> bool:
     return _VOCATIVE_PREFIX_RE.match(str(text or "").strip()) is not None
 
 
-def npc_id_from_vocative_line(text: str, roster: List[Dict[str, Any]]) -> str:
-    """Match leading ``Name, …`` to a roster NPC id (shared with strict-social emission)."""
-    m = _VOCATIVE_PREFIX_RE.match(str(text or "").strip())
-    if not m:
-        return ""
-    raw = m.group(1).strip()
-    voc_slug = slugify(raw)
+def _all_npc_ids_matching_vocative_raw(
+    raw: str,
+    roster: List[Dict[str, Any]],
+    *,
+    addr_ids: Set[str] | None = None,
+) -> List[str]:
+    """Roster NPC ids matching a vocative ``raw`` token/phrase (same rules as comma vocative binding)."""
+    voc_slug = slugify(str(raw or "").strip())
     if not voc_slug:
-        return ""
+        return []
+    out: List[str] = []
     for npc in roster:
         if not isinstance(npc, dict):
             continue
@@ -1294,28 +1310,54 @@ def npc_id_from_vocative_line(text: str, roster: List[Dict[str, Any]]) -> str:
         nm = str(npc.get("name") or "").strip()
         if not nid:
             continue
+        if addr_ids is not None and nid not in addr_ids:
+            continue
+        hit = False
         if slugify(nid) == voc_slug or (nm and slugify(nm) == voc_slug):
-            return nid
-        for word in re.split(r"\s+", nm):
-            w = slugify(word)
-            if w and w == voc_slug:
-                return nid
-        for part in slugify(nid).split("_"):
-            if part and part == voc_slug:
-                return nid
-        for role in npc.get("address_roles") or []:
-            if isinstance(role, str) and slugify(role.strip()) == voc_slug:
-                return nid
-        for alias in npc.get("aliases") or []:
-            if not isinstance(alias, str):
-                continue
-            if slugify(alias.strip()) == voc_slug:
-                return nid
-            for word in re.split(r"\s+", alias.strip()):
+            hit = True
+        if not hit:
+            for word in re.split(r"\s+", nm):
                 w = slugify(word)
                 if w and w == voc_slug:
-                    return nid
-    return ""
+                    hit = True
+                    break
+        if not hit:
+            for part in slugify(nid).split("_"):
+                if part and part == voc_slug:
+                    hit = True
+                    break
+        if not hit:
+            for role in npc.get("address_roles") or []:
+                if isinstance(role, str) and slugify(role.strip()) == voc_slug:
+                    hit = True
+                    break
+        if not hit:
+            for alias in npc.get("aliases") or []:
+                if not isinstance(alias, str):
+                    continue
+                if slugify(alias.strip()) == voc_slug:
+                    hit = True
+                    break
+                for word in re.split(r"\s+", alias.strip()):
+                    w = slugify(word)
+                    if w and w == voc_slug:
+                        hit = True
+                        break
+                if hit:
+                    break
+        if hit and nid not in out:
+            out.append(nid)
+    return out
+
+
+def npc_id_from_vocative_line(text: str, roster: List[Dict[str, Any]]) -> str:
+    """Match leading ``Name, …`` to a roster NPC id (shared with strict-social emission)."""
+    m = _VOCATIVE_PREFIX_RE.match(str(text or "").strip())
+    if not m:
+        return ""
+    raw = m.group(1).strip()
+    ids = _all_npc_ids_matching_vocative_raw(raw, roster, addr_ids=None)
+    return ids[0] if ids else ""
 
 
 # Discourse-softened spoken vocatives:
@@ -1585,6 +1627,96 @@ def _merged_text_has_resolvable_spoken_vocative(merged_text: str, roster: List[D
         if _resolve_vocative_phrase_to_roster_id(phrase, roster, addr_ids):
             return True
     return False
+
+
+# Narrow embedded vocative: "Tell me runner, who …" — leading ``Name,`` regex wrongly captures
+# ``Tell me runner`` (first comma). Recover the addressed name phrase and reuse roster resolution.
+_EMBEDDED_IMPERATIVE_VOCATIVE_RES: tuple[re.Pattern[str], ...] = (
+    re.compile(r"^\s*tell\s+me\s+([^,:\n]{1,64})\s*,", re.IGNORECASE),
+    re.compile(r"^\s*let\s+me\s+ask\s+([^,:\n]{1,64})\s*,", re.IGNORECASE),
+    re.compile(r"^\s*ask\s+([^,:\n]{1,64})\s*,", re.IGNORECASE),
+    re.compile(r"^\s*say\s+to\s+([^,:\n]{1,64})\s*,", re.IGNORECASE),
+)
+_INLINE_TOKEN_COMMA_WH_RE = re.compile(
+    r"(?<![\w-])([a-z][a-z0-9_-]{0,62})\s*,\s*(?:who|what|where|when|why|how|which)\b",
+    re.IGNORECASE,
+)
+
+
+def _normalize_embedded_vocative_phrase(phrase: str) -> str:
+    p = str(phrase or "").strip()
+    if not p:
+        return ""
+    low = p.lower().strip()
+    for art in ("the ", "a ", "an "):
+        if low.startswith(art):
+            return low[len(art) :].strip()
+    return p.strip()
+
+
+def _collect_embedded_direct_address_phrase_candidates(line: str) -> List[str]:
+    raw = str(line or "").strip()
+    if not raw:
+        return []
+    out: List[str] = []
+    sents = _sentences_for_vocative_scan(raw) or [raw]
+    for sent in sents:
+        sl = sent.strip().lower()
+        if not sl:
+            continue
+        for rx in _EMBEDDED_IMPERATIVE_VOCATIVE_RES:
+            m = rx.match(sl)
+            if m:
+                phrase = _normalize_embedded_vocative_phrase(m.group(1))
+                if phrase and _is_plausible_spoken_vocative_label(phrase):
+                    out.append(phrase)
+        for m in _INLINE_TOKEN_COMMA_WH_RE.finditer(sl):
+            phrase = _normalize_embedded_vocative_phrase(m.group(1))
+            if phrase and _is_plausible_spoken_vocative_label(phrase):
+                out.append(phrase)
+    seen: Set[str] = set()
+    uniq: List[str] = []
+    for p in out:
+        key = p.casefold()
+        if key in seen:
+            continue
+        seen.add(key)
+        uniq.append(p)
+    return uniq
+
+
+def _resolve_vocative_phrase_for_embedded_recovery(
+    phrase: str,
+    roster: List[Dict[str, Any]],
+    addr_ids: Set[str],
+) -> str:
+    """Resolve a vocative phrase; fail closed when multiple roster rows match the same raw token."""
+    raw = str(phrase or "").strip()
+    if not raw:
+        return ""
+    raw_matches = _all_npc_ids_matching_vocative_raw(raw, roster, addr_ids=addr_ids)
+    if len(raw_matches) > 1:
+        return ""
+    if len(raw_matches) == 1:
+        return raw_matches[0]
+    return _resolve_vocative_phrase_to_roster_id(phrase, roster, addr_ids)
+
+
+def _resolve_unique_embedded_direct_address_target(
+    line: str,
+    roster: List[Dict[str, Any]],
+    addr_ids: Set[str],
+) -> str:
+    """If embedded cues resolve to exactly one addressable roster id, return it; else ``''``."""
+    resolved_ids: List[str] = []
+    for phrase in _collect_embedded_direct_address_phrase_candidates(line):
+        nid = _resolve_vocative_phrase_for_embedded_recovery(phrase, roster, addr_ids)
+        if nid:
+            resolved_ids.append(nid)
+    uniq = list(dict.fromkeys(resolved_ids))
+    if len(uniq) == 1:
+        return uniq[0]
+    return ""
 
 
 def npc_id_from_substring_line(text: str, roster: List[Dict[str, Any]]) -> str:
@@ -1940,7 +2072,8 @@ def resolve_authoritative_social_target(
     """Single precedence-ordered resolver for who the player is addressing in-scene.
 
     Precedence: explicit normalized target → declared-action actor switch → spoken vocative
-    (comma / discourse-prefixed, roster-aware) → comma vocative / directed name → generic role →
+    (comma / discourse-prefixed, roster-aware) → comma vocative / directed name → embedded direct
+    address (``tell me X, …``, ``X, who|what|…`` when uniquely resolvable) → generic role →
     active interaction continuity → conservative substring → optional first roster → none.
 
     Owns: final ``npc_id`` / ``npc_name`` for engine social resolution and strict-social emission
@@ -2196,6 +2329,22 @@ def resolve_authoritative_social_target(
                 offscene_target=False,
                 source="vocative",
                 reason="comma vocative matched scene-addressable roster",
+            )
+        emb = _resolve_unique_embedded_direct_address_target(p_voc, roster, addr_ids)
+        if emb and emb in addr_ids and is_actor_addressable_in_current_scene(
+            sess or {},
+            env if isinstance(env, dict) else {},
+            emb,
+            world=w,
+        ):
+            npc = next((x for x in roster if str(x.get("id") or "").strip() == emb), None)
+            return _result(
+                emb,
+                _display_name_for_npc_entry(npc if isinstance(npc, dict) else None, emb),
+                target_resolved=True,
+                offscene_target=False,
+                source="vocative",
+                reason="embedded direct address recovered unique scene-addressable target",
             )
         wroster = _world_npc_dicts_for_addressing(w)
         voc_w = npc_id_from_vocative_line(p_voc, wroster)
@@ -3233,6 +3382,174 @@ def _looks_like_local_observation_question(text: str) -> bool:
     return bool(_LOCAL_OBSERVATION_POSITIVE_RE.search(low))
 
 
+_LOCAL_OBSERVATION_GOING_ON_HAPPENING_RE = re.compile(
+    r"\bwhat(?:'s|\s+is)\s+(?:going\s+on|happening)(?:\s+here|\s+now|\s+around\s+(?:us|here))?\b",
+    re.IGNORECASE,
+)
+
+
+def _looks_like_local_observation_going_on_happening_question(text: str) -> bool:
+    """Narrow slice of :func:`_looks_like_local_observation_question` — 'what's going on' / 'what is happening'."""
+    raw = str(text or "").strip()
+    if not raw or "?" not in raw:
+        return False
+    low = raw.lower()
+    if _LOCAL_OBSERVATION_EXCLUDE_RE.search(low):
+        return False
+    return bool(_LOCAL_OBSERVATION_GOING_ON_HAPPENING_RE.search(low))
+
+
+_LOCAL_OBSERVATION_RECOVERY_STOPWORDS = frozenset(
+    {
+        "what",
+        "that",
+        "this",
+        "with",
+        "from",
+        "into",
+        "your",
+        "have",
+        "been",
+        "were",
+        "there",
+        "here",
+        "when",
+        "where",
+        "which",
+        "about",
+        "going",
+        "happening",
+        "does",
+        "doing",
+        "they",
+        "them",
+        "those",
+        "some",
+        "than",
+        "then",
+    }
+)
+
+
+def _significant_tokens_for_topic_overlap(text: str) -> Set[str]:
+    low = re.sub(r"[^a-z0-9\s]", " ", str(text or "").lower())
+    return {
+        w
+        for w in low.split()
+        if len(w) >= 4 and w not in _LOCAL_OBSERVATION_RECOVERY_STOPWORDS
+    }
+
+
+def _player_text_overlaps_surfaced_npc_anchor(player_text: str, anchor_text: str) -> bool:
+    pt = _significant_tokens_for_topic_overlap(player_text)
+    at = _significant_tokens_for_topic_overlap(anchor_text)
+    if not pt or not at:
+        return False
+    return bool(pt & at)
+
+
+def _should_recover_social_from_local_observation_followup(
+    *,
+    session: Dict[str, Any],
+    scene: Dict[str, Any],
+    world: Dict[str, Any],
+    merged_player_text: str,
+    segmented_turn: Dict[str, Any] | None,
+) -> bool:
+    """True when a local-observation-shaped line should stay in the social lane for the active NPC.
+
+    Objective #21 — narrow recovery: interrogative 'what's going on / happening' follow-ups that
+    match :func:`_looks_like_local_observation_question` but continue the same interlocutor's
+    surfaced topic (topic_pressure last_answer), not genuine scene perception queries.
+    """
+    t = str(merged_player_text or "").strip()
+    if not t or not _looks_like_local_observation_question(t):
+        return False
+    if not _looks_like_local_observation_going_on_happening_question(t):
+        return False
+    w = world if isinstance(world, dict) else {}
+    scene_obj = scene.get("scene") if isinstance(scene, dict) else None
+    scene_id = str(scene_obj.get("id") or "").strip() if isinstance(scene_obj, dict) else ""
+    if not scene_id:
+        return False
+    ctx = inspect(session)
+    active_id = str(ctx.get("active_interaction_target_id") or "").strip()
+    mode = str(ctx.get("interaction_mode") or "").strip().lower()
+    kind = str(ctx.get("active_interaction_kind") or "").strip().lower()
+    social_mode = mode == "social" or kind == "social"
+    if not active_id or not social_mode:
+        return False
+    if not assert_valid_speaker(active_id, session, scene_envelope=scene, world=w):
+        return False
+    if not is_actor_addressable_in_current_scene(session, scene, active_id, world=w):
+        return False
+
+    decl_sw = resolve_declared_actor_switch(
+        session=session,
+        scene=scene,
+        segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+        raw_text=str(merged_player_text or ""),
+    )
+    decl_cue = bool(decl_sw.get("has_declared_switch"))
+    decl_id = _clean_string(decl_sw.get("target_actor_id")) if decl_sw.get("has_declared_switch") else ""
+    decl_ok = bool(
+        decl_id and is_actor_addressable_in_current_scene(session, scene, decl_id, world=w)
+    )
+    if decl_cue and decl_ok and decl_id and decl_id != active_id:
+        return False
+
+    voc_scan = _text_for_spoken_vocative_scan(
+        segmented_turn if isinstance(segmented_turn, dict) else None,
+        t,
+    )
+    voc_res = resolve_spoken_vocative_target(
+        session=session,
+        scene=scene,
+        spoken_text=voc_scan,
+    )
+    voc_id = _clean_string(voc_res.get("target_actor_id")) if voc_res.get("has_spoken_vocative") else ""
+    voc_ok = bool(voc_id and is_actor_addressable_in_current_scene(session, scene, voc_id, world=w))
+    if voc_ok and voc_id and voc_id != active_id:
+        return False
+
+    rt = get_scene_runtime(session, scene_id)
+    tcur = rt.get("topic_pressure_current") if isinstance(rt.get("topic_pressure_current"), dict) else {}
+    speaker_key = str(tcur.get("speaker_key") or "").strip()
+    if speaker_key != active_id:
+        return False
+    topic_key = str(rt.get("topic_pressure_last_topic_key") or "").strip()
+    pressure = rt.get("topic_pressure") if isinstance(rt.get("topic_pressure"), dict) else {}
+    entry = pressure.get(topic_key) if topic_key and isinstance(pressure, dict) else None
+    last_answer = str(entry.get("last_answer") or "").strip() if isinstance(entry, dict) else ""
+    if len(last_answer) < 8:
+        return False
+    return _player_text_overlaps_surfaced_npc_anchor(t, last_answer)
+
+
+def should_emit_observe_for_local_observation_parse(
+    text: str,
+    scene_envelope: Optional[Dict[str, Any]],
+    *,
+    session: Optional[Dict[str, Any]] = None,
+    world: Optional[Dict[str, Any]] = None,
+    segmented_turn: Optional[Dict[str, Any]] = None,
+) -> bool:
+    """True when freeform parsing should emit an ``observe`` action for local observation phrasing."""
+    if not _looks_like_local_observation_question(str(text or "").strip()):
+        return False
+    if not isinstance(session, dict) or not isinstance(scene_envelope, dict):
+        return True
+    if _should_recover_social_from_local_observation_followup(
+        session=session,
+        scene=scene_envelope,
+        world=world if isinstance(world, dict) else {},
+        merged_player_text=str(text or "").strip(),
+        segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+    ):
+        return False
+    return True
+
+
 def _text_for_declared_actor_switch_scan(
     segmented_turn: Dict[str, Any] | None,
     raw_text: str,
@@ -4112,6 +4429,125 @@ def _merged_text_has_self_directed_sustained_observation(low: str) -> bool:
     return any(p.search(low) for p in _WORLD_ACTION_SOCIAL_BREAK_SELF_OBSERVE_RES)
 
 
+# Narrow deterministic signals: inspect / manipulate / observe the environment or props,
+# including third-person narration ("Galinor inspects …"), not NPC-directed dialogue.
+_EXPLICIT_NON_SOCIAL_CONTINUITY_ESCAPE_RES: tuple[re.Pattern[str], ...] = (
+    re.compile(
+        r"\b(?:i|we|you|he|she|they)\s+(?:inspect|examine|study|search|investigate)(?:s|d|ing)?\b",
+        re.IGNORECASE,
+    ),
+    re.compile(r"\b\w+\s+(?:inspects|examines|studies|searches|investigates)\b", re.IGNORECASE),
+    re.compile(r"\b(?:look|looks|looking)\s+(?:at|around|over)\b", re.IGNORECASE),
+    re.compile(r"\b(?:glance|glances|glancing)\s+around\b", re.IGNORECASE),
+    re.compile(
+        r"\b(?:scan|scans|scanning)\s+(?:the\s+)?(?:area|room|tavern|street|crowd|scene|surroundings|vicinity)\b",
+        re.IGNORECASE,
+    ),
+    re.compile(r"\b(?:search|searches|searching)\s+(?:the\s+)?(?:area|room|vicinity|nearby|surroundings)\b", re.IGNORECASE),
+    re.compile(r"\b(?:pick|picks|picking)\s+up\b", re.IGNORECASE),
+    re.compile(
+        r"\b(?:open|opens|opening)\s+(?:the|a|an|this|that|it|his|her|their|my|our)\b",
+        re.IGNORECASE,
+    ),
+    re.compile(
+        r"\b(?:unlock|unlocks|unlocking|unlocked)\s+(?:the|a|an|this|that|it)\b",
+        re.IGNORECASE,
+    ),
+    re.compile(
+        r"\b(?:take|takes|taking|took)\s+the\s+(?!east\s+road|west\s+road|north\s+road|south\s+road|main\s+road|high\s+road\b)",
+        re.IGNORECASE,
+    ),
+    re.compile(
+        r"\b(?:take|takes|taking|took)\s+(?:a|an|his|her|their|its|it|this|that)\b",
+        re.IGNORECASE,
+    ),
+    re.compile(
+        r"\b(?:grab|grabs|grabbing|seize|seizes|seizing)\s+(?:the|a|an|his|her|their|its|it|this|that)\b",
+        re.IGNORECASE,
+    ),
+    re.compile(
+        r"\b(?:move|moves|moving|step|steps|stepping)\s+(?:past|aside|away|toward|towards|through)\b",
+        re.IGNORECASE,
+    ),
+    # Avoid matching inter-scene travel ("heads to the waste"); keep positional reorientation.
+    re.compile(r"\bhead(?:s|ed|ing)?\s+(?:toward|towards)\b", re.IGNORECASE),
+    re.compile(
+        r"\b(?:check|checks|checking)\s+(?:the|a|an|his|her|their|its|this|that|my|our)\b",
+        re.IGNORECASE,
+    ),
+)
+
+_DIALOGUE_ACT_BEFORE_ESCAPE_RE = re.compile(
+    r"\b(?:i|we)\s+(?:ask|asks|asking|tell|tells|telling|say|says|saying|shout|whispers?|call\s+out)\b",
+    re.IGNORECASE,
+)
+
+
+def _first_regex_match_start(patterns: tuple[re.Pattern[str], ...], text: str) -> int | None:
+    best: int | None = None
+    for p in patterns:
+        m = p.search(text)
+        if m:
+            pos = m.start()
+            if best is None or pos < best:
+                best = pos
+    return best
+
+
+def detect_explicit_non_social_continuity_escape(
+    low: str,
+    *,
+    merged_text: str,
+    segmented_turn: Dict[str, Any] | None = None,
+) -> bool:
+    """True when the merged turn is clearly a concrete non-dialogue action / observation.
+
+    Used to peel explicit inspect / manipulate / scan turns off active-interlocutor dialogue
+    continuity without broadly weakening directed questions.
+    """
+    lane = str(merged_text or "").strip().lower()
+    if not lane:
+        return False
+    if any(p.search(lane) for p in _EXPLICIT_NON_SOCIAL_CONTINUITY_ESCAPE_RES):
+        return True
+    if isinstance(segmented_turn, dict):
+        obs = _clean_string(segmented_turn.get("observation_intent_text"))
+        if obs and any(p.search(obs.lower()) for p in _EXPLICIT_NON_SOCIAL_CONTINUITY_ESCAPE_RES):
+            return True
+    return False
+
+
+def dialogue_intent_blocks_explicit_non_social_continuity_escape(
+    low: str,
+    *,
+    merged_text: str,
+) -> bool:
+    """When True, dialogue / speech-to-NPC intent should win over continuity escape."""
+    lane = str(merged_text or "").strip().lower()
+    if not lane:
+        return False
+    esc_pos = _first_regex_match_start(_EXPLICIT_NON_SOCIAL_CONTINUITY_ESCAPE_RES, lane)
+    speech_m = _DIALOGUE_ACT_BEFORE_ESCAPE_RE.search(lane)
+    spos = speech_m.start() if speech_m else None
+    if spos is not None and (esc_pos is None or spos < esc_pos):
+        return True
+    return False
+
+
+def detect_non_social_continuity_escape(
+    low: str,
+    *,
+    merged_text: str,
+    segmented_turn: Dict[str, Any] | None = None,
+) -> bool:
+    """Public alias: explicit non-social signal and dialogue does not veto it."""
+    if not detect_explicit_non_social_continuity_escape(low, merged_text=merged_text, segmented_turn=segmented_turn):
+        return False
+    if dialogue_intent_blocks_explicit_non_social_continuity_escape(low, merged_text=merged_text):
+        return False
+    return True
+
+
 def _should_break_social_continuity_for_world_action(
     *,
     merged_text: str,
@@ -4140,6 +4576,10 @@ def _should_break_social_continuity_for_world_action(
         return False
     if motion_ok:
         return False
+    if detect_non_social_continuity_escape(
+        low, merged_text=merged_text, segmented_turn=segmented_turn
+    ):
+        return True
     if _explicit_address_or_role_cue_in_line(low, roster, merged_text=t):
         return False
     if decl_cue:
@@ -4407,9 +4847,20 @@ def resolve_directed_social_entry(
         out["reason"] = "no_session"
         return out
 
+    prior_social_target_snapshot = prior_interlocutor_for_turn_metadata(sess) or str(
+        inspect(sess).get("active_interaction_target_id") or ""
+    ).strip()
+
     if _looks_like_local_observation_question(t):
-        out["reason"] = "local_scene_observation_query"
-        return out
+        if not _should_recover_social_from_local_observation_followup(
+            session=sess,
+            scene=scene,
+            world=w,
+            merged_player_text=t,
+            segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+        ):
+            out["reason"] = "local_scene_observation_query"
+            return out
 
     low = t.lower()
     roster = canonical_scene_addressable_roster(
@@ -4676,6 +5127,12 @@ def resolve_directed_social_entry(
         out["reason"] = "rules_or_mechanics_query"
         return out
 
+    if detect_non_social_continuity_escape(low, merged_text=t, segmented_turn=segmented_turn):
+        out["reason"] = "explicit_non_social_action_escapes_social_lock"
+        if prior_social_target_snapshot:
+            out["continuity_escape_prior_target_actor_id"] = prior_social_target_snapshot
+        return out
+
     if not _turn_plausibly_addressed_spoken_npc_exchange(
         t, low, chosen_source=str(chosen_source or "")
     ):
@@ -4782,6 +5239,7 @@ def should_route_addressed_question_to_social(
             "no_addressable_target",
             "target_not_addressable",
             "not_directed_spoken_interaction",
+            "explicit_non_social_action_escapes_social_lock",
         ):
             meta["route_reason"] = r
         return False, meta

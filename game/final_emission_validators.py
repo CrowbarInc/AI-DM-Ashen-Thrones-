@@ -670,6 +670,17 @@ _FALLBACK_QUESTION_LEAD_RE = re.compile(
     r"^\s*(?:what|where|when|why|how|who|which|whose|do|did|does|can|could|would|will|is|are|was|were)\b",
     re.IGNORECASE,
 )
+# Narrator/meta lines that look like a partial but carry no observable anchor + lead (repair must replace).
+_BOUNDED_PARTIAL_THIN_SUBSTANCE_PATTERNS: tuple[re.Pattern[str], ...] = (
+    re.compile(r"\bno name comes clear from what shows\b", re.IGNORECASE),
+    re.compile(r"\bnothing is known\b", re.IGNORECASE),
+    re.compile(r"\bnothing here names\b", re.IGNORECASE),
+    re.compile(r"\bthe moment yields no answer at once\b", re.IGNORECASE),
+)
+
+
+def _bounded_partial_thin_substance_violation(text: str) -> bool:
+    return any(p.search(str(text or "")) for p in _BOUNDED_PARTIAL_THIN_SUBSTANCE_PATTERNS)
 _FALLBACK_DIEGETIC_PARTIAL_PATTERNS: tuple[re.Pattern[str], ...] = (
     re.compile(r"\b(?:no one|nobody|none)\s+(?:answers?|commits?|steps in|bites)\s+(?:at once|right away|immediately)\b", re.IGNORECASE),
     re.compile(r"\bdoes not answer(?:\s+(?:at once|right away|directly))?\b", re.IGNORECASE),
@@ -892,6 +903,14 @@ def validate_fallback_behavior(
 
     if not (partial_ok or question_ok or hedge_partial_ok):
         failure_reasons.append("missing_allowed_fallback_shape")
+
+    if (
+        _contract_bool(contract, "require_partial_to_state_known_edge")
+        and _contract_bool(contract, "require_partial_to_offer_next_lead")
+        and _bounded_partial_thin_substance_violation(text)
+        and not (base["known_edge_present"] and base["next_lead_present"])
+    ):
+        failure_reasons.append("bounded_partial_insufficient_substance")
 
     base["failure_reasons"] = list(dict.fromkeys(str(r) for r in failure_reasons if r))
     base["passed"] = not bool(base["failure_reasons"])

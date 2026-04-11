@@ -123,6 +123,7 @@ def parse_exploration_intent(
     scene_envelope: Dict[str, Any],
     session: Optional[Dict[str, Any]] = None,
     world: Optional[Dict[str, Any]] = None,
+    segmented_turn: Optional[Dict[str, Any]] = None,
 ) -> Optional[Dict[str, Any]]:
     """Detect exploration patterns in free text. Returns a raw dict compatible with normalize_scene_action, or None.
 
@@ -131,7 +132,13 @@ def parse_exploration_intent(
     """
     from game.intent_parser import parse_freeform_to_action
 
-    result = parse_freeform_to_action(text, scene_envelope, session=session, world=world)
+    result = parse_freeform_to_action(
+        text,
+        scene_envelope,
+        session=session,
+        world=world,
+        segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+    )
     # Exclude combat-only intents (attack) from exploration pipeline; caller handles routing
     if result and (result.get("type") or "").strip().lower() == "attack":
         return None  # API chat will route attack via combat when in_combat

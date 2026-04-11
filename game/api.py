@@ -127,6 +127,10 @@ from game.intent_parser import (
 from game.prompt_context import build_response_policy
 from game.response_type_gating import compact_response_type_contract, derive_response_type_contract
 from game.social_exchange_emission import strict_social_emission_will_apply
+from game.post_emission_speaker_adoption import (
+    apply_post_emission_speaker_adoption,
+    apply_stale_interlocutor_invalidation_after_emission,
+)
 from game.utils import utc_iso_now
 from game.world import advance_world_tick, apply_world_updates, apply_resolution_world_updates
 from game.clocks import get_or_init_clocks, advance_clock, DEFAULT_CLOCKS
@@ -1654,6 +1658,25 @@ def action(req: ActionRequest):
             and not implied_context.get("commitment_broken")
         ),
     )
+    _adopt_dbg = None
+    if scene_before_id == scene['scene']['id']:
+        _adopt_dbg = apply_post_emission_speaker_adoption(
+            session,
+            world,
+            scene,
+            gm,
+            resolution=resolution if isinstance(resolution, dict) else None,
+            scene_changed=False,
+        )
+        apply_stale_interlocutor_invalidation_after_emission(
+            session,
+            world,
+            scene,
+            gm,
+            resolution=resolution if isinstance(resolution, dict) else None,
+            scene_changed=False,
+            adoption_debug=_adopt_dbg,
+        )
     synchronize_scene_addressability(session, scene, world)
     scene["scene_state"] = session.get("scene_state")
 
@@ -1952,7 +1975,13 @@ def chat(req: ChatRequest):
                 raw_player_text=req.text,
             )
         if parsed is None and qualified_pursuit_shaped:
-            parsed = parse_exploration_intent(classification_text, scene, session, world)
+            parsed = parse_exploration_intent(
+                classification_text,
+                scene,
+                session,
+                world,
+                segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+            )
         if parsed is None and not qualified_pursuit_shaped:
             parsed = parse_social_intent(classification_text, scene, world)
         if parsed is None and route_choice != "action" and not qualified_pursuit_shaped:
@@ -1965,7 +1994,13 @@ def chat(req: ChatRequest):
                 canonical_social_entry=canonical_entry,
             )
         if parsed is None and route_choice != "dialogue" and not qualified_pursuit_shaped:
-            parsed = parse_exploration_intent(classification_text, scene, session, world)
+            parsed = parse_exploration_intent(
+                classification_text,
+                scene,
+                session,
+                world,
+                segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+            )
         intent = None
         if parsed is None and route_choice != "dialogue" and not qualified_pursuit_shaped:
             intent = parse_intent(classification_text)
@@ -2322,6 +2357,25 @@ def chat(req: ChatRequest):
             and not implied_context.get("commitment_broken")
         ),
     )
+    _adopt_dbg_chat = None
+    if scene_before_id == scene['scene']['id']:
+        _adopt_dbg_chat = apply_post_emission_speaker_adoption(
+            session,
+            world,
+            scene,
+            gm,
+            resolution=context_resolution if isinstance(context_resolution, dict) else None,
+            scene_changed=False,
+        )
+        apply_stale_interlocutor_invalidation_after_emission(
+            session,
+            world,
+            scene,
+            gm,
+            resolution=context_resolution if isinstance(context_resolution, dict) else None,
+            scene_changed=False,
+            adoption_debug=_adopt_dbg_chat,
+        )
     synchronize_scene_addressability(session, scene, world)
     scene["scene_state"] = session.get("scene_state")
     # Persist world every turn (matches /api/action). Engine paths may mutate event_log / flags

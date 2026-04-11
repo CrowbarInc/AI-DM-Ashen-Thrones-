@@ -1101,8 +1101,10 @@ def validate_player_facing_first_mentions(
     session: Dict[str, Any] | None,
     scene: Dict[str, Any] | None,
     world: Dict[str, Any] | None,
+    grounded_speaker_first_mention_exemption_entity_id: str | None = None,
 ) -> Dict[str, Any]:
     contract = build_narration_visibility_contract(session=session, scene=scene, world=world)
+    exempt_eid = str(grounded_speaker_first_mention_exemption_entity_id or "").strip()
     normalized_text = _normalize_visibility_text(text)
     visible_ids = {
         str(raw).strip()
@@ -1176,6 +1178,8 @@ def validate_player_facing_first_mentions(
         first_offset = int(entry.get("first_offset"))
         sentence_text = _sentence_text_for_offset(normalized_text, first_offset)
         grounding_present = _has_first_mention_grounding(sentence_text)
+        if not grounding_present and exempt_eid and entity_id == exempt_eid:
+            grounding_present = True
         familiarity_phrase = _first_mention_familiarity_phrase(sentence_text)
         entity_violation_kinds: List[str] = []
         if not grounding_present:

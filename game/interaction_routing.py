@@ -15,6 +15,7 @@ from game.interaction_context import (
     apply_world_action_social_continuity_break,
     assert_valid_speaker,
     build_intent_route_debug_social_exchange,
+    detect_non_social_continuity_escape,
     evaluate_world_action_social_continuity_break,
     find_addressed_npc_id_for_turn,
     find_world_npc_reference_id_in_text,
@@ -152,6 +153,9 @@ _WORLD_ACTION_STRONG_PATTERNS: tuple[str, ...] = (
     r"\b(?:i|we)\s+(?:search|sneak|attack|follow|track|cast|inspect|examine|check|investigate)\b",
     r"\b(?:i|we)\s+(?:grab|seize|shove|push|pull|pin|restrain|force|coerce|threaten)\b",
     r"\b(?:i|we)\s+(?:pick up|open|unlock|break|climb|jump|hide|steal|manipulate)\b",
+    # Third-person / narrative action lines (no "I …" prefix).
+    r"\b\w+\s+(?:inspects|examines|searches|investigates|studies)\b",
+    r"\b(?:he|she|they)\s+(?:inspect|examine|search|investigate|study)(?:s|ing)?\b",
 )
 _WORLD_ACTION_FORCEFUL_PATTERNS: tuple[str, ...] = (
     r"\b(?:i|we)\s+(?:grab|seize|attack|strike|cast|force|coerce|threaten|restrain)\b",
@@ -258,6 +262,13 @@ def is_directed_dialogue(
     primary_clause = merged.strip() or str(text or "").strip()
     clause = str(primary_clause or "").strip()
     if not clause:
+        return False
+    low_clause = clause.lower()
+    if detect_non_social_continuity_escape(
+        low_clause,
+        merged_text=clause,
+        segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+    ):
         return False
     if _is_explicit_ooc(clause) or _is_explicit_ooc(text):
         return False

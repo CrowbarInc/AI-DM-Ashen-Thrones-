@@ -21,6 +21,7 @@ from game.final_emission_validators import (
     _FALLBACK_OVERCERTAIN_BY_SOURCE,
     _FALLBACK_OVERCERTAIN_GENERAL_PATTERNS,
     _EXPOSITORY_CONNECTOR_RES,
+    _bounded_partial_thin_substance_violation,
     _allowed_hedge_in_text,
     _contains_diegetic_uncertainty_partial,
     _concrete_payload_for_kinds,
@@ -1342,6 +1343,81 @@ def _fallback_primary_source(contract: Dict[str, Any] | None) -> str:
     return ""
 
 
+def _social_npc_name(resolution: Dict[str, Any] | None) -> str:
+    if not isinstance(resolution, dict):
+        return ""
+    social = resolution.get("social") if isinstance(resolution.get("social"), dict) else {}
+    return str(social.get("npc_name") or "").strip()
+
+
+def _pick_place_hint(low: str) -> str:
+    for w in ("checkpoint", "watchhouse", "dock", "market", "square", "gate", "barracks", "lane", "road", "pier"):
+        if w in low:
+            return w
+    return "road"
+
+
+def _synthesize_known_edge_phrase(
+    contract: Dict[str, Any] | None,
+    resolution: Dict[str, Any] | None,
+    source_text: str,
+) -> str:
+    ctr = contract if isinstance(contract, dict) else {}
+    source = _fallback_primary_source(ctr)
+    prompt = _fallback_resolution_prompt(resolution)
+    low = f"{source_text} {prompt}".lower()
+    npc = _social_npc_name(resolution)
+    place = _pick_place_hint(low)
+
+    if npc:
+        if source == "unknown_identity":
+            return f"{npc} holds near the {place}, but offers no name you can pin down."
+        if source == "unknown_location":
+            return f"{npc} taps the map case, but nothing here marks the exact spot."
+        if source == "unknown_motive":
+            return f"{npc} keeps a flat look; motive does not show at the {place}."
+        if source == "unknown_method":
+            return f"{npc} shrugs; nothing in plain view here shows how it was done."
+        if source == "unknown_quantity":
+            return f"{npc} won't pin a count while the {place} churns."
+        if source == "unknown_feasibility":
+            return f"{npc} hesitates at the {place}, offering no clean yes or no."
+
+    if source == "unknown_identity":
+        return f"Noise along the {place} stays loud, but no face here offers a name you can use."
+    if source == "unknown_location":
+        return f"The {place} stays busy; nothing in sight pins the exact spot."
+    if source == "unknown_motive":
+        return f"The {place} crowd keeps its counsel; the why of it stays off the tongue."
+    if source == "unknown_method":
+        return "Tracks and tools look ordinary; nothing in plain view shows how it was done."
+    if source == "unknown_quantity":
+        return "Headcounts shift with the crowd; no clean tally presents itself here."
+    return f"The {place} noise holds; nothing in view settles the question."
+
+
+def _synthesize_next_lead_phrase(
+    contract: Dict[str, Any] | None,
+    resolution: Dict[str, Any] | None,
+    source_text: str,
+) -> str:
+    ctr = contract if isinstance(contract, dict) else {}
+    source = _fallback_primary_source(ctr)
+    prompt = _fallback_resolution_prompt(resolution)
+    low = f"{source_text} {prompt}".lower()
+    if "dock" in low or "harbor" in low:
+        return "Ask the harbor clerk which berth was logged last watch."
+    if source == "unknown_motive":
+        return "Ask the duty sergeant who had a grudge worth hiding on paper."
+    if source == "unknown_method":
+        return "Check the watch roster posted by the gate for who was on scene."
+    if source == "unknown_quantity":
+        return "Ask the quartermaster's clerk for the tally sheet, if you need a hard count."
+    if source == "unknown_feasibility":
+        return "Press the patrol sergeant for what the watch will actually allow on the street."
+    return "Ask the duty sergeant or check the watch roster posted by the gate."
+
+
 def _fallback_resolution_prompt(resolution: Dict[str, Any] | None) -> str:
     if not isinstance(resolution, dict):
         return ""
@@ -1421,7 +1497,12 @@ def _rewrite_meta_fallback_as_diegetic_partial(
     if source == "unknown_feasibility":
         return "No one commits themselves at once."
     if source == "unknown_identity":
-        return "No name comes clear from what shows."
+        return _fallback_unique_join(
+            [
+                _synthesize_known_edge_phrase(contract, resolution, source_text=source_text),
+                "That name stays unclear; hearsay will not pin anyone yet.",
+            ]
+        )
     return "The moment yields no answer at once."
 
 
@@ -1434,7 +1515,9 @@ def _fallback_unknown_edge_phrase(
     mode = str((contract or {}).get("uncertainty_mode") or "").strip().lower()
     source = _fallback_primary_source(contract)
     if source == "unknown_identity":
-        return "I don't know the name." if mode == "npc_ignorance" else "No name comes clear from what shows."
+        return "I don't know the name." if mode == "npc_ignorance" else (
+            "That name stays unclear; hearsay will not pin anyone yet."
+        )
     if source == "unknown_location":
         return "I don't know where they went." if mode == "npc_ignorance" else "Nothing in sight pins the place down."
     if source == "unknown_motive":
@@ -1556,12 +1639,20 @@ def _ensure_known_unknown_shape(
     sentences = _fallback_sentences(text)
     known = _fallback_known_edge_sentence(text)
     unknown = _fallback_unknown_edge_sentence(text, ctr)
+    if unknown and _bounded_partial_thin_substance_violation(unknown):
+        unknown = ""
+
     pieces: List[str] = []
 
     if known:
         pieces.append(known)
         patch["fallback_behavior_known_edge_preserved"] = True
-    elif not _contract_bool(ctr, "require_partial_to_state_known_edge") and sentences:
+    elif _contract_bool(ctr, "require_partial_to_state_known_edge"):
+        synth_ke = _synthesize_known_edge_phrase(ctr, resolution, source_text=text)
+        if synth_ke:
+            pieces.append(synth_ke)
+            patch["fallback_behavior_known_edge_synthesized"] = True
+    elif sentences:
         pieces.append(_normalize_terminal_punctuation(sentences[0]))
 
     if _contract_bool(ctr, "require_partial_to_state_unknown_edge"):
@@ -1585,6 +1676,7 @@ def _append_next_lead_if_allowed(
     *,
     contract: Dict[str, Any] | None,
     source_text: str,
+    resolution: Dict[str, Any] | None = None,
 ) -> Tuple[str, Dict[str, Any]]:
     ctr = contract if isinstance(contract, dict) else {}
     patch: Dict[str, Any] = {}
@@ -1594,6 +1686,8 @@ def _append_next_lead_if_allowed(
     if existing:
         return text, patch
     lead = _fallback_next_lead_sentence(source_text)
+    if not lead:
+        lead = _synthesize_next_lead_phrase(ctr, resolution, source_text)
     if not lead:
         return text, patch
     patch["fallback_behavior_next_lead_added"] = True
@@ -1676,6 +1770,7 @@ def repair_fallback_behavior(
             "invented_certainty",
             "fabricated_authority",
             "meta_fallback_voice",
+            "bounded_partial_insufficient_substance",
         }
     )
 
@@ -1690,6 +1785,7 @@ def repair_fallback_behavior(
             shaped,
             contract=ctr,
             source_text=working or original,
+            resolution=resolution,
         )
         meta.update(patch)
         meta.update(patch2)

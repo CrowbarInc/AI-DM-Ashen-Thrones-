@@ -225,7 +225,7 @@ def test_repair_adds_unknown_edge_when_contract_requires_it() -> None:
 
     low = repaired.lower()
     assert "ward clerk" in low
-    assert "no name" in low or "don't know the name" in low
+    assert "hearsay" in low or "unclear" in low or "no name" in low or "don't know the name" in low
     assert meta["fallback_behavior_unknown_edge_added"] is True
 
 

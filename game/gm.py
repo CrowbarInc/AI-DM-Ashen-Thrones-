@@ -42,7 +42,9 @@ from game.social_exchange_emission import (
     is_scene_directed_watch_question,
     looks_like_npc_directed_question,
     minimal_social_emergency_fallback_line,
+    repair_strict_social_terminal_dialogue_fallback_if_needed,
     strict_social_emission_will_apply,
+    strict_social_terminal_dialogue_fallback_valid,
 )
 
 COMBAT_KINDS = frozenset({
