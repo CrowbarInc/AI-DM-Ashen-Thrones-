@@ -133,14 +133,17 @@ from game.response_policy_contracts import (
 from game.final_emission_repairs import (
     _apply_answer_completeness_layer,
     _apply_fallback_behavior_layer,
+    _apply_narrative_authenticity_layer,
     _apply_response_delta_layer,
     _apply_social_response_structure_layer,
     _default_fallback_behavior_meta,
+    _default_narrative_authenticity_meta,
     _default_response_delta_meta,
     _default_social_response_structure_meta,
     _gm_probe_for_answer_pressure_contracts,
     _merge_answer_completeness_meta,
     _merge_fallback_behavior_meta,
+    _merge_narrative_authenticity_meta,
     _merge_response_delta_meta,
     _merge_social_response_structure_meta,
     _minimal_action_outcome_contract_repair,
@@ -4098,7 +4101,11 @@ def _final_emission_fast_path_eligible(out: Dict[str, Any]) -> bool:
         return False
     if meta.get("response_type_candidate_ok") is False:
         return False
-    if meta.get("answer_completeness_failed") or meta.get("narrative_authority_failed"):
+    if (
+        meta.get("answer_completeness_failed")
+        or meta.get("narrative_authority_failed")
+        or meta.get("narrative_authenticity_failed")
+    ):
         return False
     if meta.get("fallback_behavior_failed") or meta.get("fallback_behavior_repaired"):
         return False
@@ -4112,6 +4119,7 @@ def _final_emission_fast_path_eligible(out: Dict[str, Any]) -> bool:
             "answer_completeness_repaired",
             "response_delta_repaired",
             "social_response_structure_repair_applied",
+            "narrative_authenticity_repaired",
             "tone_escalation_repaired",
             "anti_railroading_repaired",
             "context_separation_repaired",
@@ -8077,6 +8085,7 @@ def apply_final_emission_gate(
     ac_layer_meta: Dict[str, Any] = {}
     rd_layer_meta: Dict[str, Any] = _default_response_delta_meta()
     srs_layer_meta: Dict[str, Any] = _default_social_response_structure_meta()
+    nat_layer_meta: Dict[str, Any] = _default_narrative_authenticity_meta()
     fb_layer_meta: Dict[str, Any] = _default_fallback_behavior_meta()
     na_layer_meta: Dict[str, Any] = _default_narrative_authority_meta()
     te_layer_meta: Dict[str, Any] = _default_tone_escalation_meta()
@@ -8163,6 +8172,13 @@ def apply_final_emission_gate(
             strict_social_details=details,
             response_type_debug=response_type_debug,
             answer_completeness_meta=ac_layer_meta,
+            strict_social_path=True,
+        )
+        text, nat_layer_meta, _ = _apply_narrative_authenticity_layer(
+            text,
+            gm_output=out,
+            strict_social_details=details,
+            response_type_debug=response_type_debug,
             strict_social_path=True,
         )
         out["player_facing_text"] = text
@@ -8336,6 +8352,10 @@ def apply_final_emission_gate(
                 srs_layer_meta.get("social_response_structure_repair_mode")
                 or "social_response_structure_repair"
             )
+        if nat_layer_meta.get("narrative_authenticity_repaired"):
+            final_emitted_source = str(
+                nat_layer_meta.get("narrative_authenticity_repair_mode") or "narrative_authenticity_repair"
+            )
         if na_layer_meta.get("narrative_authority_repaired"):
             final_emitted_source = str(
                 na_layer_meta.get("narrative_authority_repair_mode") or "narrative_authority_repair"
@@ -8423,6 +8443,7 @@ def apply_final_emission_gate(
             _merge_answer_completeness_meta(out["_final_emission_meta"], ac_layer_meta)
             _merge_response_delta_meta(out["_final_emission_meta"], rd_layer_meta)
             _merge_social_response_structure_meta(out["_final_emission_meta"], srs_layer_meta)
+            _merge_narrative_authenticity_meta(out["_final_emission_meta"], nat_layer_meta)
             _merge_narrative_authority_meta(out["_final_emission_meta"], na_layer_meta)
             _merge_tone_escalation_meta(out["_final_emission_meta"], te_layer_meta)
             _merge_anti_railroading_meta(out["_final_emission_meta"], ar_layer_meta)
@@ -8604,6 +8625,7 @@ def apply_final_emission_gate(
         _merge_answer_completeness_meta(out["_final_emission_meta"], ac_layer_meta)
         _merge_response_delta_meta(out["_final_emission_meta"], rd_layer_meta)
         _merge_social_response_structure_meta(out["_final_emission_meta"], srs_layer_meta)
+        _merge_narrative_authenticity_meta(out["_final_emission_meta"], nat_layer_meta)
         _merge_narrative_authority_meta(out["_final_emission_meta"], na_layer_meta)
         _merge_tone_escalation_meta(out["_final_emission_meta"], te_layer_meta)
         _merge_anti_railroading_meta(out["_final_emission_meta"], ar_layer_meta)
@@ -8742,6 +8764,15 @@ def apply_final_emission_gate(
         strict_social_path=False,
     )
     reasons.extend(srs_reasons)
+
+    text, nat_layer_meta, nat_reasons = _apply_narrative_authenticity_layer(
+        text,
+        gm_output=out,
+        strict_social_details=None,
+        response_type_debug=response_type_debug,
+        strict_social_path=False,
+    )
+    reasons.extend(nat_reasons)
 
     text, te_layer_meta, te_reasons = _apply_tone_escalation_layer(
         text,
@@ -8941,6 +8972,10 @@ def apply_final_emission_gate(
                 srs_layer_meta.get("social_response_structure_repair_mode")
                 or "social_response_structure_repair"
             )
+        if nat_layer_meta.get("narrative_authenticity_repaired"):
+            final_emitted_source = str(
+                nat_layer_meta.get("narrative_authenticity_repair_mode") or "narrative_authenticity_repair"
+            )
         if na_layer_meta.get("narrative_authority_repaired"):
             final_emitted_source = str(
                 na_layer_meta.get("narrative_authority_repair_mode") or "narrative_authority_repair"
@@ -9020,6 +9055,7 @@ def apply_final_emission_gate(
         _merge_answer_completeness_meta(out["_final_emission_meta"], ac_layer_meta)
         _merge_response_delta_meta(out["_final_emission_meta"], rd_layer_meta)
         _merge_social_response_structure_meta(out["_final_emission_meta"], srs_layer_meta)
+        _merge_narrative_authenticity_meta(out["_final_emission_meta"], nat_layer_meta)
         _merge_narrative_authority_meta(out["_final_emission_meta"], na_layer_meta)
         _merge_tone_escalation_meta(out["_final_emission_meta"], te_layer_meta)
         _merge_anti_railroading_meta(out["_final_emission_meta"], ar_layer_meta)
@@ -9197,6 +9233,7 @@ def apply_final_emission_gate(
     _merge_answer_completeness_meta(out["_final_emission_meta"], ac_layer_meta)
     _merge_response_delta_meta(out["_final_emission_meta"], rd_layer_meta)
     _merge_social_response_structure_meta(out["_final_emission_meta"], srs_layer_meta)
+    _merge_narrative_authenticity_meta(out["_final_emission_meta"], nat_layer_meta)
     _merge_narrative_authority_meta(out["_final_emission_meta"], na_layer_meta)
     _merge_tone_escalation_meta(out["_final_emission_meta"], te_layer_meta)
     _merge_anti_railroading_meta(out["_final_emission_meta"], ar_layer_meta)

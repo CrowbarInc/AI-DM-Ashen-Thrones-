@@ -70,6 +70,7 @@ def _repair_flag_list(meta: Mapping[str, Any] | None) -> List[str]:
         "answer_completeness_repaired",
         "response_delta_repaired",
         "social_response_structure_repair_applied",
+        "narrative_authenticity_repaired",
         "tone_escalation_repaired",
         "anti_railroading_repaired",
         "context_separation_repaired",
@@ -128,6 +129,12 @@ def snapshot_turn_stage(
             "targeted_retry_terminal": bool(gm_output.get("targeted_retry_terminal")),
         },
     }
+    na_codes = fem.get("narrative_authenticity_reason_codes")
+    if isinstance(na_codes, list) and na_codes:
+        snap["narrative_authenticity_reason_codes"] = [str(x) for x in na_codes[:8] if str(x).strip()]
+    na_skip = fem.get("narrative_authenticity_skip_reason")
+    if isinstance(na_skip, str) and na_skip.strip():
+        snap["narrative_authenticity_skip_reason"] = na_skip.strip()[:120]
     if timing_ms is not None:
         snap["timing_ms"] = float(timing_ms)
     if kwargs:

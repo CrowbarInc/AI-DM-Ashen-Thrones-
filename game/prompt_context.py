@@ -22,6 +22,9 @@ Contract layers (orthogonal concerns):
   ``build_player_facing_narration_purity_contract`` in ``game.player_facing_narration_purity``).
 - **social_response_structure** — dialogue-turn spoken shape and anti-monologue caps (see
   ``build_social_response_structure_contract`` in ``game.response_policy_contracts``); gate/repairs TBD.
+- **narrative_authenticity** — anti-echo between narration and spoken lines, minimum new-signal pressure on
+  follow-ups, anti-filler heuristics, and diegetic integrity hints (see ``build_narrative_authenticity_contract``
+  in ``game.narrative_authenticity``); gate enforcement in ``game.final_emission_repairs``.
 - **interaction_continuity** — preserve conversational thread / interlocutor continuity across turns;
   do not silently drop or switch speakers without a break signal or explicit cue (see
   ``build_interaction_continuity_contract`` in ``game.interaction_continuity``); gate/repairs TBD.
@@ -118,6 +121,10 @@ RESPONSE_RULE_PRIORITY: tuple[tuple[str, str], ...] = (
         "response_delta",
         "WHEN THE PLAYER PRESSES THE SAME TOPIC AGAIN, ADD NET-NEW VALUE RATHER THAN RESTATING",
     ),
+    (
+        "narrative_authenticity",
+        "KEEP NARRATION AND SPOKEN LINES DISTINCT; PREFER NEW SIGNAL OVER GENERIC FILLER; RESPECT FALLBACK BREVITY",
+    ),
     ("diegetic_only", "MAINTAIN DIEGETIC VOICE (no validator/system voice)"),
     (
         "player_facing_narration_purity",
@@ -133,6 +140,7 @@ RULE_PRIORITY_COMPACT_INSTRUCTION = (
     "and NPC intent (defer per narrative authority policy); preserve player agency—do not decide the PC's action "
     "or treat surfaced leads as mandatory plot gravity (see anti_railroading policy); if certainty is incomplete, "
     "give a bounded partial answer; when the player presses the same topic, add net-new value rather than restating; "
+    "keep narration and quoted speech from recycling the same surface clauses (narrative_authenticity); "
     "remain diegetic; keep narration free of internal scaffolds, menu-style choice labels, and engine coaching "
     "(see player_facing_narration_purity policy); maintain scene momentum only after agency constraints; then add specificity."
 )
@@ -1932,6 +1940,20 @@ def _social_response_structure_prompt_debug_anchor(contract: Mapping[str, Any] |
     }
 
 
+def _narrative_authenticity_prompt_debug_anchor(contract: Mapping[str, Any] | None) -> Dict[str, Any]:
+    """Compact mirror of narrative_authenticity for prompt_debug (inspectable, not authoritative)."""
+    c = contract if isinstance(contract, dict) else {}
+    tr = c.get("trace") if isinstance(c.get("trace"), Mapping) else {}
+    return {
+        "enabled": c.get("enabled"),
+        "version": c.get("version"),
+        "mode": c.get("mode"),
+        "response_delta_contract_active": tr.get("response_delta_contract_active"),
+        "topic_follow_up_active": tr.get("topic_follow_up_active"),
+        "dialogue_shape_expected": tr.get("dialogue_shape_expected"),
+    }
+
+
 def _interaction_continuity_prompt_debug_anchor(contract: Mapping[str, Any] | None) -> Dict[str, Any]:
     """Compact mirror of interaction_continuity contract for prompt_debug (inspectable, not authoritative)."""
     c = contract if isinstance(contract, dict) else {}
@@ -2762,6 +2784,12 @@ def _compact_manual_play_instructions(
     rd = policy.get("response_delta") if isinstance(policy.get("response_delta"), Mapping) else {}
     if rd.get("enabled"):
         out.append("RESPONSE DELTA: Add net-new value. Do not merely restate the prior answer.")
+    na = policy.get("narrative_authenticity") if isinstance(policy.get("narrative_authenticity"), Mapping) else {}
+    if na.get("enabled"):
+        out.append(
+            "NARRATIVE AUTHENTICITY: Do not recycle the same surface clause from narration into quoted speech; "
+            "prefer new signal on follow-ups; stay diegetic."
+        )
     if naming_line:
         out.append(naming_line)
     if answer_style_hints:
@@ -2770,7 +2798,7 @@ def _compact_manual_play_instructions(
         "CONVERSATIONAL MEMORY WINDOW: Treat selected_conversational_memory as the active thread for this turn and do not revive omitted stale threads unless the player re-grounds them."
     )
     out.append(
-        "POLICY TAIL: Obey response_policy.narrative_authority, tone_escalation, anti_railroading, context_separation, player_facing_narration_purity, and scene anchoring without re-explaining them in narration."
+        "POLICY TAIL: Obey response_policy.narrative_authority, narrative_authenticity, tone_escalation, anti_railroading, context_separation, player_facing_narration_purity, and scene anchoring without re-explaining them in narration."
     )
     out.append(mode_instruction)
     return out
@@ -2817,6 +2845,7 @@ def build_narration_context(
     context_separation (ambient pressure vs local exchange), and player_facing_narration_purity
     (no scaffold/menu/engine coaching in prose),
     and social_response_structure (dialogue-turn spoken shape when response type requires dialogue),
+    narrative_authenticity (anti-echo / signal-density / diegetic-shape pressure shipped on response_policy),
     and interaction_continuity (thread / interlocutor anchoring snapshot for enforcement layers);
     see module docstring.
     """
@@ -3452,6 +3481,23 @@ def build_narration_context(
         "uncertainty_sources": list(fallback_behavior_contract.get("uncertainty_sources") or []),
     }
 
+    from game.narrative_authenticity import build_narrative_authenticity_contract
+
+    narrative_authenticity_contract = build_narrative_authenticity_contract(
+        response_delta=response_policy.get("response_delta"),
+        answer_completeness=response_policy.get("answer_completeness"),
+        fallback_behavior=fallback_behavior_contract,
+        social_response_structure=social_response_structure_contract,
+        response_type_contract=rtc_for_social_structure if isinstance(rtc_for_social_structure, dict) else None,
+        follow_up_pressure=follow_up_pressure if isinstance(follow_up_pressure, Mapping) else None,
+        recent_log_compact=recent_log_compact,
+        player_text=str(user_text or ""),
+    )
+    response_policy["narrative_authenticity"] = narrative_authenticity_contract
+    prompt_debug_anchor["narrative_authenticity"] = _narrative_authenticity_prompt_debug_anchor(
+        narrative_authenticity_contract
+    )
+
     _ic_dbg = interaction_continuity_contract.get("debug")
     _ic_dbg_map = _ic_dbg if isinstance(_ic_dbg, dict) else {}
     _source_of_activity_anchor = str(_ic_dbg_map.get("source_of_anchor") or "").strip()
@@ -3574,6 +3620,12 @@ def build_narration_context(
         "Brief action beats are allowed; keep quoted speech primary. Uncertainty or refusal stays conversational and in-world. "
         "No bullet-like or numbered-list dialogue.",
     ]
+    _narrative_authenticity_instr = [
+        "NARRATIVE AUTHENTICITY (POLICY): Obey response_policy.narrative_authenticity. "
+        "Keep narrator-color beats from being pasted into quoted speech; at most one short continuity anchor if needed. "
+        "On follow-up pressure turns, change stance, detail, uncertainty boundary, reaction, or next step—without inventing facts. "
+        "Avoid generic non-answers when a substantive or bounded-partial reply is available; when fallback_behavior.uncertainty_active is true, brevity and honest limits override polish.",
+    ]
     _policy_tail: List[str] = (
         list(_tone_escalation_instr)
         + _narrative_authority_instr
@@ -3582,6 +3634,7 @@ def build_narration_context(
         + _context_separation_instr
         + _player_facing_narration_purity_instr
         + _anchoring_polish_instr
+        + _narrative_authenticity_instr
     )
     if social_response_structure_contract.get("enabled"):
         _policy_tail = list(_policy_tail) + _social_response_structure_instr

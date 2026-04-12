@@ -1,8 +1,9 @@
 """Repair and layer wiring for final emission: ``apply_*`` / ``merge_*`` / skip helpers.
 
 Owns skip/repair orchestration for the ``response_policy`` answer-completeness,
-response-delta, and social-response-structure layers (extracted from :mod:`game.final_emission_gate`). Validators live in
-:mod:`game.final_emission_validators`; the gate imports these symbols and may re-expose them
+response-delta, social-response-structure, and narrative-authenticity layers (extracted from
+:mod:`game.final_emission_gate`). Validators live in
+:mod:`game.final_emission_validators` and :mod:`game.narrative_authenticity` (authenticity checks); the gate imports these symbols and may re-expose them
 for compatibility.
 """
 from __future__ import annotations
@@ -1148,6 +1149,130 @@ def _merge_social_response_structure_meta(meta: Dict[str, Any], srs_dbg: Dict[st
             "social_response_structure_inspect": srs_dbg.get("social_response_structure_inspect"),
         }
     )
+
+
+def _default_narrative_authenticity_meta() -> Dict[str, Any]:
+    return {
+        "narrative_authenticity_checked": False,
+        "narrative_authenticity_failed": False,
+        "narrative_authenticity_failure_reasons": [],
+        "narrative_authenticity_repaired": False,
+        "narrative_authenticity_repair_applied": False,
+        "narrative_authenticity_repair_mode": None,
+        "narrative_authenticity_skip_reason": None,
+        "narrative_authenticity_reason_codes": [],
+        "narrative_authenticity_metrics": None,
+        "narrative_authenticity_evidence": None,
+    }
+
+
+def _merge_narrative_authenticity_meta(meta: Dict[str, Any], na_dbg: Dict[str, Any]) -> None:
+    meta.update(
+        {
+            "narrative_authenticity_checked": bool(na_dbg.get("narrative_authenticity_checked")),
+            "narrative_authenticity_failed": bool(na_dbg.get("narrative_authenticity_failed")),
+            "narrative_authenticity_failure_reasons": list(na_dbg.get("narrative_authenticity_failure_reasons") or []),
+            "narrative_authenticity_repaired": bool(na_dbg.get("narrative_authenticity_repaired")),
+            "narrative_authenticity_repair_applied": bool(na_dbg.get("narrative_authenticity_repair_applied")),
+            "narrative_authenticity_repair_mode": na_dbg.get("narrative_authenticity_repair_mode"),
+            "narrative_authenticity_skip_reason": na_dbg.get("narrative_authenticity_skip_reason"),
+            "narrative_authenticity_reason_codes": list(na_dbg.get("narrative_authenticity_reason_codes") or []),
+            "narrative_authenticity_metrics": na_dbg.get("narrative_authenticity_metrics"),
+            "narrative_authenticity_evidence": na_dbg.get("narrative_authenticity_evidence"),
+        }
+    )
+
+
+def _skip_narrative_authenticity_layer(
+    *,
+    emitted_text: str,
+    strict_social_details: Dict[str, Any] | None,
+    response_type_debug: Dict[str, Any],
+    gm_output: Dict[str, Any] | None = None,
+) -> str | None:
+    if response_type_debug.get("response_type_candidate_ok") is False:
+        return "response_type_contract_failed"
+    if not _normalize_text(emitted_text or ""):
+        return "empty_emitted_text"
+    if strict_social_details:
+        if strict_social_details.get("used_internal_fallback"):
+            return "strict_social_authoritative_internal_fallback"
+        if response_type_debug.get("response_type_repair_kind") == "strict_social_dialogue_repair":
+            return "strict_social_ownership_terminal_repair"
+        fe = str(strict_social_details.get("final_emitted_source") or "")
+        if fe in {"neutral_reply_speaker_grounding_bridge", "structured_fact_candidate_emission"}:
+            return "strict_social_structured_or_bridge_source"
+    if isinstance(gm_output, dict):
+        tags = gm_output.get("tags") if isinstance(gm_output.get("tags"), list) else []
+        tl = [str(t) for t in tags if isinstance(t, str)]
+        if "question_retry_fallback" in tl and ("known_fact_guard" in tl or "social_answer_retry" in tl):
+            return "deterministic_known_fact_retry_fallback"
+    return None
+
+
+def _apply_narrative_authenticity_layer(
+    text: str,
+    *,
+    gm_output: Dict[str, Any],
+    strict_social_details: Dict[str, Any] | None,
+    response_type_debug: Dict[str, Any],
+    strict_social_path: bool,
+) -> tuple[str, Dict[str, Any], List[str]]:
+    from game.narrative_authenticity import (
+        build_narrative_authenticity_emission_trace,
+        repair_narrative_authenticity_minimal,
+        resolve_narrative_authenticity_contract,
+        validate_narrative_authenticity,
+    )
+
+    contract = resolve_narrative_authenticity_contract(gm_output)
+    meta = _default_narrative_authenticity_meta()
+    skip = _skip_narrative_authenticity_layer(
+        emitted_text=text,
+        strict_social_details=strict_social_details,
+        response_type_debug=response_type_debug,
+        gm_output=gm_output,
+    )
+    meta["narrative_authenticity_skip_reason"] = skip
+    if skip:
+        meta.update(build_narrative_authenticity_emission_trace({"skip_reason": skip, "checked": False, "passed": True}))
+        return text, meta, []
+    if not isinstance(contract, dict):
+        meta["narrative_authenticity_skip_reason"] = "no_contract"
+        meta.update(build_narrative_authenticity_emission_trace({"skip_reason": "no_contract", "checked": False, "passed": True}))
+        return text, meta, []
+
+    v0 = validate_narrative_authenticity(text, contract, gm_output=gm_output)
+    meta["narrative_authenticity_checked"] = bool(v0.get("checked"))
+    if v0.get("skip_reason"):
+        meta["narrative_authenticity_skip_reason"] = v0.get("skip_reason")
+    if not v0.get("checked"):
+        meta.update(build_narrative_authenticity_emission_trace(v0))
+        return text, meta, []
+
+    if v0.get("passed"):
+        return text, meta, []
+
+    meta["narrative_authenticity_failed"] = True
+    meta["narrative_authenticity_failure_reasons"] = list(v0.get("failure_reasons") or [])
+    meta.update(build_narrative_authenticity_emission_trace(v0))
+
+    repaired, mode = repair_narrative_authenticity_minimal(text, v0, contract, gm_output=gm_output)
+    if repaired:
+        v1 = validate_narrative_authenticity(repaired, contract, gm_output=gm_output)
+        if v1.get("passed"):
+            meta["narrative_authenticity_repaired"] = True
+            meta["narrative_authenticity_repair_applied"] = True
+            meta["narrative_authenticity_repair_mode"] = mode
+            meta["narrative_authenticity_failed"] = False
+            meta["narrative_authenticity_failure_reasons"] = []
+            return repaired, meta, []
+
+    extra: List[str] = []
+    if not strict_social_path:
+        extra.append("narrative_authenticity_unsatisfied_after_repair")
+    meta["narrative_authenticity_failed"] = True
+    return text, meta, extra
 
 
 def _default_fallback_behavior_meta() -> Dict[str, Any]:

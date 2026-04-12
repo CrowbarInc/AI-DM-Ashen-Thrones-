@@ -1,0 +1,414 @@
+"""Deterministic proof-layer scoring from shipped narrative authenticity telemetry.
+
+Reads ``_final_emission_meta`` / NA merge fields produced by the emission pipeline.
+Does **not** re-run :func:`game.narrative_authenticity.validate_narrative_authenticity` and does not call an LLM.
+"""
+
+from __future__ import annotations
+
+import re
+from typing import Any, Dict, List, Mapping, Sequence, Set
+
+_NA_KEYS: frozenset[str] = frozenset(
+    {
+        "narrative_authenticity_checked",
+        "narrative_authenticity_failed",
+        "narrative_authenticity_failure_reasons",
+        "narrative_authenticity_repaired",
+        "narrative_authenticity_repair_applied",
+        "narrative_authenticity_repair_mode",
+        "narrative_authenticity_skip_reason",
+        "narrative_authenticity_reason_codes",
+        "narrative_authenticity_metrics",
+        "narrative_authenticity_evidence",
+    }
+)
+
+
+def _safe_mapping(value: Any) -> dict[str, Any]:
+    return dict(value) if isinstance(value, Mapping) else {}
+
+
+def _as_float(x: Any) -> float | None:
+    if isinstance(x, bool):
+        return None
+    if isinstance(x, (int, float)):
+        return float(x)
+    return None
+
+
+def _as_int(x: Any) -> int | None:
+    if isinstance(x, bool):
+        return None
+    if isinstance(x, int):
+        return x
+    if isinstance(x, float):
+        return int(round(x))
+    return None
+
+
+def _reason_codes_from_meta(meta: Mapping[str, Any]) -> Set[str]:
+    out: Set[str] = set()
+    for key in ("narrative_authenticity_reason_codes", "narrative_authenticity_failure_reasons"):
+        seq = meta.get(key)
+        if isinstance(seq, Sequence) and not isinstance(seq, (str, bytes)):
+            for x in seq:
+                s = str(x).strip()
+                if s:
+                    out.add(s)
+    return out
+
+
+def _extract_final_emission_meta(response: Mapping[str, Any] | None) -> dict[str, Any]:
+    if not isinstance(response, Mapping):
+        return {}
+    gm = response.get("gm_output")
+    if not isinstance(gm, Mapping):
+        gm = response
+    fem = gm.get("_final_emission_meta")
+    return dict(fem) if isinstance(fem, Mapping) else {}
+
+
+def _merge_na_meta(
+    *,
+    meta: Mapping[str, Any] | None,
+    response: Mapping[str, Any] | None,
+) -> dict[str, Any]:
+    fem = _extract_final_emission_meta(response)
+    merged: dict[str, Any] = {k: fem[k] for k in _NA_KEYS if k in fem}
+    if isinstance(meta, Mapping):
+        for k, v in meta.items():
+            if v is not None:
+                merged[str(k)] = v
+    return merged
+
+
+def _gm_text(response: Mapping[str, Any] | None) -> str:
+    if not isinstance(response, Mapping):
+        return ""
+    gm = response.get("gm_output")
+    if isinstance(gm, Mapping):
+        t = gm.get("player_facing_text")
+        if isinstance(t, str):
+            return t.strip()
+    t2 = response.get("player_facing_text") or response.get("gm_text")
+    return str(t2).strip() if isinstance(t2, str) else ""
+
+
+def _clip_int(n: int, lo: int, hi: int) -> int:
+    return max(lo, min(hi, n))
+
+
+def _supporting_metrics(meta: Mapping[str, Any]) -> dict[str, Any]:
+    out: dict[str, Any] = {}
+    for k in sorted(_NA_KEYS):
+        if k not in meta:
+            continue
+        v = meta.get(k)
+        if k == "narrative_authenticity_metrics" and isinstance(v, Mapping):
+            out[k] = {str(k2): v[k2] for k2 in sorted(v.keys())[:24]}
+        elif k == "narrative_authenticity_evidence" and isinstance(v, Mapping):
+            out[k] = {str(k2): v[k2] for k2 in sorted(v.keys())[:16]}
+        else:
+            out[k] = v
+    return out
+
+
+def _text_npc_grounding_signals(text: str) -> dict[str, Any]:
+    low = text.lower()
+    return {
+        "has_quoted_dialogue": bool(re.search(r'["“][^"”]{4,}["”]', text)),
+        "scene_anchor_hits": sum(
+            1
+            for pat in (
+                re.compile(r"\b(captain|sergeant|guard|clerk|merchant|watch)\b", re.I),
+                re.compile(r"\b(gate|yard|dock|lane|market|ledger|patrol)\b", re.I),
+            )
+            if pat.search(low)
+        ),
+    }
+
+
+def _score_signal_gain(
+    *,
+    checked: bool,
+    failed: bool,
+    repaired: bool,
+    codes: Set[str],
+    metrics: Mapping[str, Any],
+    text_signals: Mapping[str, Any],
+) -> tuple[int, List[str]]:
+    reasons: List[str] = []
+    if not checked:
+        return 3, ["narrative_authenticity_not_checked_neutral_signal_gain"]
+    gfs = _as_float(metrics.get("generic_filler_score"))
+    sm = _as_int(metrics.get("signal_markers_detected")) or 0
+    if failed and not repaired:
+        if "follow_up_missing_signal_shadow_response_delta" in codes:
+            return 1, ["na_reason_follow_up_missing_signal_shadow_response_delta"]
+        if "low_signal_generic_reply" in codes:
+            return 0, ["na_reason_low_signal_generic_reply"]
+        return 1, ["na_gate_failed_signal_gain"]
+    score = 5
+    if gfs is not None:
+        if gfs >= 0.52:
+            score -= 3
+            reasons.append("generic_filler_score_ge_0_52")
+        elif gfs >= 0.38:
+            score -= 2
+            reasons.append("generic_filler_score_ge_0_38")
+        elif gfs >= 0.25:
+            score -= 1
+            reasons.append("generic_filler_score_ge_0_25")
+    if sm >= 2:
+        score = 5
+        reasons.append("signal_markers_detected_ge_2")
+    elif sm == 1 and (gfs is None or gfs < 0.32):
+        score = max(score, 4)
+        reasons.append("signal_markers_detected_eq_1_low_filler")
+    if repaired:
+        reasons.append("narrative_authenticity_repaired_signal_context")
+    if bool(text_signals.get("has_digit")) and score < 5:
+        score += 1
+    return _clip_int(score, 0, 5), reasons
+
+
+def _score_anti_echoing(
+    *,
+    checked: bool,
+    failed: bool,
+    repaired: bool,
+    codes: Set[str],
+    metrics: Mapping[str, Any],
+) -> tuple[int, List[str]]:
+    if not checked:
+        return 3, ["narrative_authenticity_not_checked_neutral_anti_echoing"]
+    if failed and not repaired and "dialogue_echoes_prior_narration" in codes:
+        return 0, ["na_reason_dialogue_echoes_prior_narration"]
+    if failed and not repaired and "adjacent_phrase_reuse" in codes:
+        return 1, ["na_reason_adjacent_phrase_reuse"]
+    qov = _as_float(metrics.get("quote_narration_overlap"))
+    qtg = _as_float(metrics.get("quote_narration_trigram_overlap"))
+    adj = _as_float(metrics.get("adjacent_phrase_overlap"))
+    ap = _as_int(metrics.get("adjacent_structural_pairs"))
+    score = 5
+    reasons: List[str] = []
+    if qov is not None and qov >= 0.5:
+        score -= 2
+        reasons.append("quote_narration_overlap_high")
+    if qtg is not None and qtg >= 0.4:
+        score -= 1
+        reasons.append("quote_narration_trigram_overlap_elevated")
+    if adj is not None and adj >= 0.34:
+        score -= 2
+        reasons.append("adjacent_phrase_overlap_elevated")
+    elif ap is not None and ap >= 2:
+        score -= 1
+        reasons.append("adjacent_structural_pairs_ge_2")
+    if repaired and (
+        "dialogue_echoes_prior_narration" in codes or "adjacent_phrase_reuse" in codes
+    ):
+        reasons.append("narrative_authenticity_repaired_echo_class")
+    return _clip_int(score, 0, 5), reasons
+
+
+def _score_followup_evolution(
+    *,
+    checked: bool,
+    failed: bool,
+    repaired: bool,
+    codes: Set[str],
+    metrics: Mapping[str, Any],
+    turn_packet: Mapping[str, Any] | None,
+) -> tuple[int, List[str]]:
+    prior_gm = ""
+    if isinstance(turn_packet, Mapping):
+        prior_gm = str(turn_packet.get("prior_gm_text") or "").strip()
+    if not checked:
+        return 3, ["narrative_authenticity_not_checked_neutral_followup"]
+    if failed and not repaired and "follow_up_stale_restatement" in codes:
+        return 0, ["na_reason_follow_up_stale_restatement"]
+    if failed and not repaired and "follow_up_missing_signal_shadow_response_delta" in codes:
+        return 1, ["na_reason_follow_up_missing_signal_shadow_response_delta"]
+    fo = _as_float(metrics.get("followup_overlap"))
+    sm = _as_int(metrics.get("signal_markers_detected")) or 0
+    if not prior_gm:
+        return 4, ["no_prior_gm_followup_axis_lenient"]
+    score = 5
+    reasons: List[str] = []
+    if fo is not None:
+        if fo >= 0.68:
+            score -= 3
+            reasons.append("followup_overlap_ge_0_68")
+        elif fo >= 0.55:
+            score -= 1
+            reasons.append("followup_overlap_ge_0_55")
+    if sm >= 1:
+        score = min(5, score + 1)
+        reasons.append("followup_signal_markers_present")
+    if repaired:
+        reasons.append("narrative_authenticity_repaired_followup_context")
+    return _clip_int(score, 0, 5), reasons
+
+
+def _score_non_generic_specificity(
+    *,
+    checked: bool,
+    failed: bool,
+    repaired: bool,
+    codes: Set[str],
+    metrics: Mapping[str, Any],
+    text: str,
+) -> tuple[int, List[str]]:
+    if not checked:
+        return 3, ["narrative_authenticity_not_checked_neutral_specificity"]
+    if failed and not repaired and "low_signal_generic_reply" in codes:
+        return 0, ["na_reason_low_signal_generic_reply"]
+    gfs = _as_float(metrics.get("generic_filler_score"))
+    wc = len(re.findall(r"[A-Za-z']+", text))
+    score = 5
+    reasons: List[str] = []
+    if gfs is not None:
+        if gfs >= 0.52:
+            score = min(score, 1)
+            reasons.append("generic_filler_score_ge_0_52")
+        elif gfs >= 0.38:
+            score = min(score, 3)
+            reasons.append("generic_filler_score_ge_0_38")
+        elif gfs >= 0.25:
+            score = min(score, 4)
+            reasons.append("generic_filler_score_ge_0_25")
+    if wc >= 28 and gfs is not None and gfs < 0.35:
+        score = max(score, 4)
+        reasons.append("substantive_word_count")
+    if '"' in text or "“" in text:
+        score = max(score, 4)
+        reasons.append("quoted_material_present")
+    if repaired:
+        reasons.append("narrative_authenticity_repaired_specificity_context")
+    return _clip_int(score, 0, 5), reasons
+
+
+def _score_npc_voice_grounding(
+    *,
+    checked: bool,
+    failed: bool,
+    repaired: bool,
+    codes: Set[str],
+    text: str,
+    text_signals: Mapping[str, Any],
+) -> tuple[int, List[str]]:
+    if not checked:
+        return 3, ["narrative_authenticity_not_checked_neutral_voice"]
+    if failed and not repaired and "non_diegetic_meta_voice" in codes:
+        return 0, ["na_reason_non_diegetic_meta_voice"]
+    sig = _text_npc_grounding_signals(text)
+    score = 3
+    reasons: List[str] = []
+    if sig["has_quoted_dialogue"]:
+        score += 2
+        reasons.append("quoted_dialogue_detected")
+    if int(sig.get("scene_anchor_hits") or 0) >= 1:
+        score += 1
+        reasons.append("scene_or_role_anchor")
+    if bool(text_signals.get("has_lead_snippet")):
+        score = min(5, score + 1)
+        reasons.append("next_lead_snippet_heuristic")
+    if repaired:
+        reasons.append("narrative_authenticity_repaired_voice_context")
+    return _clip_int(score, 0, 5), reasons
+
+
+def evaluate_narrative_authenticity(
+    turn_packet: Mapping[str, Any] | None,
+    response: Mapping[str, Any] | None,
+    meta: Mapping[str, Any] | None,
+) -> dict[str, Any]:
+    """Score one turn using NA telemetry (and light text flags). Stable, deterministic schema.
+
+    ``meta`` may be partial; missing NA keys are filled from ``response['gm_output']['_final_emission_meta']``.
+    ``turn_packet`` may include ``prior_gm_text`` / ``prior_player_prompt`` for lenient follow-up axis context.
+    """
+    merged = _merge_na_meta(meta=meta, response=response)
+    text = _gm_text(response)
+    metrics = merged.get("narrative_authenticity_metrics")
+    metrics_d = _safe_mapping(metrics)
+
+    checked = bool(merged.get("narrative_authenticity_checked"))
+    failed = bool(merged.get("narrative_authenticity_failed"))
+    repaired = bool(merged.get("narrative_authenticity_repaired") or merged.get("narrative_authenticity_repair_applied"))
+    codes = _reason_codes_from_meta(merged)
+
+    gm_for_trace = response.get("gm_output") if isinstance(response, Mapping) else None
+    has_fem_key = isinstance(gm_for_trace, Mapping) and "_final_emission_meta" in gm_for_trace
+    has_na_in_meta = bool(meta and any(k in meta for k in _NA_KEYS))
+    if not has_fem_key and not has_na_in_meta:
+        return {
+            "passed": False,
+            "scores": {
+                "signal_gain": 0,
+                "anti_echoing": 0,
+                "followup_evolution": 0,
+                "non_generic_specificity": 0,
+                "npc_voice_grounding": 0,
+            },
+            "reasons": ["missing_narrative_authenticity_telemetry"],
+            "supporting_metrics": {},
+        }
+
+    text_signals: dict[str, Any] = {
+        "has_digit": bool(re.search(r"\b\d+\b", text)),
+        "has_lead_snippet": bool(
+            re.search(
+                r"\b(try|ask|check|go to|head to|visit|east|west|north|south)\b",
+                text,
+                re.IGNORECASE,
+            )
+        ),
+    }
+
+    s1, r1 = _score_signal_gain(
+        checked=checked, failed=failed, repaired=repaired, codes=codes, metrics=metrics_d, text_signals=text_signals
+    )
+    s2, r2 = _score_anti_echoing(
+        checked=checked, failed=failed, repaired=repaired, codes=codes, metrics=metrics_d
+    )
+    s3, r3 = _score_followup_evolution(
+        checked=checked,
+        failed=failed,
+        repaired=repaired,
+        codes=codes,
+        metrics=metrics_d,
+        turn_packet=turn_packet,
+    )
+    s4, r4 = _score_non_generic_specificity(
+        checked=checked, failed=failed, repaired=repaired, codes=codes, metrics=metrics_d, text=text
+    )
+    s5, r5 = _score_npc_voice_grounding(
+        checked=checked, failed=failed, repaired=repaired, codes=codes, text=text, text_signals=text_signals
+    )
+
+    scores = {
+        "signal_gain": s1,
+        "anti_echoing": s2,
+        "followup_evolution": s3,
+        "non_generic_specificity": s4,
+        "npc_voice_grounding": s5,
+    }
+    reasons = [*r1, *r2, *r3, *r4, *r5]
+    if checked and failed and not repaired:
+        reasons.insert(0, "narrative_authenticity_gate_failed_unrepaired")
+    skip = merged.get("narrative_authenticity_skip_reason")
+    if isinstance(skip, str) and skip.strip() and not checked:
+        reasons.append(f"narrative_authenticity_skip_reason:{skip.strip()}")
+
+    avg = sum(scores.values()) / 5.0
+    passed = (not (checked and failed and not repaired)) and avg >= 3.0 and min(scores.values()) >= 2
+
+    out: dict[str, Any] = {
+        "passed": bool(passed),
+        "scores": scores,
+        "reasons": list(dict.fromkeys(str(x) for x in reasons if str(x).strip())),
+        "supporting_metrics": _supporting_metrics(merged),
+    }
+    return out

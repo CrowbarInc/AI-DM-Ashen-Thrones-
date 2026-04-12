@@ -76,7 +76,7 @@ Each run writes a directory:
 
 Files:
 
-- **`transcript.json`** — `turns[]` entries each contain `turn_index`, `player_prompt`, `gm_text`, `resolution_kind` (raw `resolution["kind"]` from the API when present), and **`playability_eval`**: the full dict returned by `evaluate_playability(...)`.
+- **`transcript.json`** — `turns[]` entries each contain `turn_index`, `player_prompt`, `gm_text`, `resolution_kind` (raw `resolution["kind"]` from the API when present), **`playability_eval`** (the full dict from `evaluate_playability(...)`), and **`narrative_authenticity_eval`**: the full dict from `game.narrative_authenticity_eval.evaluate_narrative_authenticity(...)` (telemetry-based; **not** a second playability rubric and **not** used for runtime enforcement).
 - **`summary.json`** — Mirrors evaluator fields only (see below). Values are taken from the **last turn’s** `playability_eval` for that scenario (the evaluator always scores a single payload; there is no multi-turn aggregate inside the evaluator).
 - **`run_debug.json`** — Same as transcript plus `api_ok` / `api_error` per turn for troubleshooting.
 
@@ -109,3 +109,5 @@ After each chat response, the runner builds the evaluator input as:
 - `debug_traces` — copied from `session["debug_traces"]` when present (opaque pass-through for immersion-related signals).
 
 Then it sets `playability_eval` to `evaluate_playability(that_dict)`.
+
+It also sets `narrative_authenticity_eval` to `evaluate_narrative_authenticity(turn_packet, payload, _final_emission_meta_from_chat_payload(payload))`. That evaluator is fail-closed if `_final_emission_meta` / NA telemetry is missing (`missing_narrative_authenticity_telemetry`). Authority rule is unchanged: **do not** reinterpret or recompute either evaluator’s scores—read the written dicts only. For NA field meanings and debugging, see **Narrative Authenticity & Signal Quality** in `docs/README.md`.

@@ -22,6 +22,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from game.campaign_reset import apply_new_campaign_hard_reset  # noqa: E402
+from game.narrative_authenticity_eval import evaluate_narrative_authenticity  # noqa: E402
 from game.playability_eval import evaluate_playability  # noqa: E402
 
 
@@ -93,6 +94,14 @@ def _session_debug_traces(payload: Mapping[str, Any]) -> Any:
     if isinstance(sess, Mapping) and "debug_traces" in sess:
         return sess.get("debug_traces")
     return None
+
+
+def _final_emission_meta_from_chat_payload(payload: Mapping[str, Any]) -> dict[str, Any]:
+    gm = payload.get("gm_output")
+    if not isinstance(gm, Mapping):
+        return {}
+    fem = gm.get("_final_emission_meta")
+    return dict(fem) if isinstance(fem, Mapping) else {}
 
 
 def _build_eval_payload(
@@ -194,6 +203,16 @@ def run_scenario(
             debug_traces=_session_debug_traces(payload),
         )
         playability_eval = evaluate_playability(eval_in)
+        turn_packet = {
+            "player_prompt": player_prompt,
+            "prior_player_prompt": prior_player,
+            "prior_gm_text": prior_gm,
+        }
+        na_eval = evaluate_narrative_authenticity(
+            turn_packet,
+            payload,
+            _final_emission_meta_from_chat_payload(payload),
+        )
 
         turns_out.append(
             {
@@ -202,6 +221,7 @@ def run_scenario(
                 "gm_text": gm_text,
                 "resolution_kind": _resolution_kind(payload),
                 "playability_eval": playability_eval,
+                "narrative_authenticity_eval": na_eval,
                 "api_ok": bool(payload.get("ok")),
                 "api_error": payload.get("error"),
             }
@@ -292,6 +312,7 @@ def main(argv: list[str] | None = None) -> int:
                         "gm_text": t["gm_text"],
                         "resolution_kind": t["resolution_kind"],
                         "playability_eval": t["playability_eval"],
+                        "narrative_authenticity_eval": t.get("narrative_authenticity_eval"),
                     }
                     for t in turns
                 ],
