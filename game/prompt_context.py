@@ -1944,6 +1944,7 @@ def _narrative_authenticity_prompt_debug_anchor(contract: Mapping[str, Any] | No
     """Compact mirror of narrative_authenticity for prompt_debug (inspectable, not authoritative)."""
     c = contract if isinstance(contract, dict) else {}
     tr = c.get("trace") if isinstance(c.get("trace"), Mapping) else {}
+    rr = c.get("rumor_realism") if isinstance(c.get("rumor_realism"), Mapping) else {}
     return {
         "enabled": c.get("enabled"),
         "version": c.get("version"),
@@ -1951,6 +1952,9 @@ def _narrative_authenticity_prompt_debug_anchor(contract: Mapping[str, Any] | No
         "response_delta_contract_active": tr.get("response_delta_contract_active"),
         "topic_follow_up_active": tr.get("topic_follow_up_active"),
         "dialogue_shape_expected": tr.get("dialogue_shape_expected"),
+        "rumor_realism_enabled": rr.get("enabled"),
+        "rumor_turn_active": tr.get("rumor_turn_active"),
+        "rumor_trigger_spans": list(tr.get("rumor_trigger_spans") or [])[:6],
     }
 
 
@@ -3624,7 +3628,8 @@ def build_narration_context(
         "NARRATIVE AUTHENTICITY (POLICY): Obey response_policy.narrative_authenticity. "
         "Keep narrator-color beats from being pasted into quoted speech; at most one short continuity anchor if needed. "
         "On follow-up pressure turns, change stance, detail, uncertainty boundary, reaction, or next step—without inventing facts. "
-        "Avoid generic non-answers when a substantive or bounded-partial reply is available; when fallback_behavior.uncertainty_active is true, brevity and honest limits override polish.",
+        "Avoid generic non-answers when a substantive or bounded-partial reply is available; when fallback_behavior.uncertainty_active is true, brevity and honest limits override polish. "
+        "When rumor_realism applies (see trace.rumor_turn_active), do not recycle recent narration or scene setup as quoted rumor without a hearsay realism signal (source limit, uncertainty, bias, or net-new detail).",
     ]
     _policy_tail: List[str] = (
         list(_tone_escalation_instr)

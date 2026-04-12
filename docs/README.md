@@ -113,8 +113,9 @@ All repair modes in `repair_narrative_authenticity_minimal` honor:
 
 - **Inputs** — Merges NA keys from `meta` with `gm_output["_final_emission_meta"]` (`_merge_na_meta`).
 - **No re-validation** — Uses telemetry keys only; does not call `validate_narrative_authenticity`.
-- **Deterministic scoring** — Five axes, each scored 0–5: `signal_gain`, `anti_echoing`, `followup_evolution`, `non_generic_specificity`, `npc_voice_grounding`.
-- **Fail-closed on missing telemetry** — If the response lacks `_final_emission_meta` and the caller did not supply any NA keys, returns `passed: false`, all scores `0`, `reasons: ["missing_narrative_authenticity_telemetry"]`.
+- **Deterministic scoring** — Five legacy axes, each scored 0–5: `signal_gain`, `anti_echoing`, `followup_evolution`, `non_generic_specificity`, `npc_voice_grounding`.
+- **Verdict + rumor axes** — `narrative_authenticity_verdict` (`clean_pass` / `relaxed_pass` / `repaired_pass` / `fail` / `unchecked` / `missing_telemetry`) and `rumor_realism_axes` + `rumor_realism_axis_reasons` summarize shipped NA status, repair modes, relaxation flags, and rumor telemetry without flattening repaired/relaxed into a generic pass. See **`docs/narrative_authenticity_anti_echo_rumor_realism.md`**.
+- **Fail-closed on missing telemetry** — If the response lacks `_final_emission_meta` and the caller did not supply any NA keys, returns `passed: false`, all scores `0`, `reasons: ["missing_narrative_authenticity_telemetry"]`, `narrative_authenticity_verdict: "missing_telemetry"`, and zeroed rumor axes.
 - **Artifacts** — `tools/run_playability_validation.py` writes `narrative_authenticity_eval` next to `playability_eval` in `transcript.json` / `run_debug.json`.
 - **Not enforcement** — Evaluator output is for operators and regression artifacts; it does not feed back into the gate.
 
@@ -134,6 +135,7 @@ All repair modes in `repair_narrative_authenticity_minimal` honor:
    - **Did fallback behavior or a later layer reshape text without full replace?** On the accept path, compare fingerprints/previews in `stage_diff_telemetry`; inspect `fallback_behavior_*` in `_final_emission_meta`, `fallback_kind` / tags on `gm_output`, and snapshot `fallback_source` / `fallback_stage`.
 4. Cross-check **`narrative_authenticity_eval`** (from the runner or by calling `evaluate_narrative_authenticity`):
    - `scores` — per-axis 0–5 view of telemetry.
+   - `narrative_authenticity_verdict` / `rumor_realism_axes` — explicit pass vs relaxed vs repaired vs fail vs unchecked (see `docs/narrative_authenticity_anti_echo_rumor_realism.md`).
    - `reasons` — deterministic explanations (includes `narrative_authenticity_gate_failed_unrepaired` when the gate left a failure in place).
 5. **Classify the failure layer**
    - **NA** — reason codes under `narrative_authenticity_*` with checked true.

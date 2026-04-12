@@ -120,6 +120,289 @@ _RHETORICAL_FRAME_RE = re.compile(
     re.IGNORECASE,
 )
 
+# Player / log cues that this turn is asking for hearsay, gossip, or secondhand street knowledge.
+_RUMOR_PLAYER_SIGNAL_RES: tuple[tuple[str, re.Pattern[str]], ...] = (
+    (
+        "lex_rumor",
+        re.compile(
+            r"\b(?:rumors?|hearsay|gossip|whispers?|scuttlebutt|grapevine|tittle[\s-]?tattle)\b",
+            re.IGNORECASE,
+        ),
+    ),
+    (
+        "lex_reports_talk",
+        re.compile(
+            r"\b(?:reports?|reportedly|people\s+say|folks\s+say|they\s+say|some(?:one|body)\s+says?|"
+            r"anyone\s+saying|going\s+around|making\s+the\s+rounds)\b",
+            re.IGNORECASE,
+        ),
+    ),
+    (
+        "lex_street_word",
+        re.compile(
+            r"\b(?:word\s+on\s+the\s+street|what(?:'s|\s+is)\s+the\s+(?:word|story|talk)|"
+            r"what\s+have\s+you\s+heard|what\s+did\s+you\s+hear|what\s+do\s+people\s+say|"
+            r"what\s+do\s+they\s+say|what\s+are\s+people\s+saying|what\s+is\s+going\s+around)\b",
+            re.IGNORECASE,
+        ),
+    ),
+    (
+        "lex_heard_asking",
+        re.compile(
+            r"\b(?:heard\s+(?:anything|about|that)|hear\s+anything|pick\s+up\s+anything|"
+            r"catch\s+wind|get\s+wind)\b",
+            re.IGNORECASE,
+        ),
+    ),
+)
+
+_DEFAULT_RUMOR_REALISM: Dict[str, Any] = {
+    "enabled": True,
+    "apply_on_secondhand_or_rumor_turns": True,
+    "forbid_verbatim_scene_to_rumor_reuse": True,
+    "forbid_recent_narration_to_dialogue_reuse": True,
+    "require_one_of": [
+        "source_limitation",
+        "uncertainty_or_distortion",
+        "perspective_or_bias",
+        "net_new_detail",
+    ],
+    "allow_partial_fact_overlap": True,
+    "forbid_identical_phrasing_even_when_overlap_allowed": True,
+    "fallback_compatibility": {
+        "allow_brief_bounded_partial_under_uncertainty": True,
+        "do_not_fail_for_brevity_alone": True,
+        "allow_source_limited_refusal": True,
+    },
+}
+
+_RUMOR_SOURCE_LIMITATION_RES: tuple[re.Pattern[str], ...] = (
+    re.compile(
+        r"\b(?:only\s+(?:heard|know|what)|heard\s+(?:it\s+)?from|from\s+a\s+(?:runner|clerk|dockhand|sailor|"
+        r"porter|messenger|stranger|soldier|witness|customer|regular)|second[\s-]?hand|third[\s-]?hand|"
+        r"not\s+firsthand|wasn'?t\s+there|didn'?t\s+see\s+it|can'?t\s+vouch|couldn'?t\s+swear|"
+        r"just\s+what\s+(?:they|people)\s+(?:say|claim)|that'?s\s+only\s+what)\b",
+        re.IGNORECASE,
+    ),
+    re.compile(
+        r"\b(?:one\s+(?:runner|clerk|dockhand|sailor)\s+(?:said|claims?|told)|"
+        r"(?:dock|gate|market|tavern|yard)\s+(?:talk|rumor)|watch\s+runner\s+said)\b",
+        re.IGNORECASE,
+    ),
+)
+
+_RUMOR_UNCERTAINTY_RES: tuple[re.Pattern[str], ...] = (
+    re.compile(
+        r"\b(?:could\s+be\s+(?:drink|wine|ale)\s+talk|might\s+be\s+exaggerated|hard\s+to\s+say|"
+        r"depends\s+who\s+you\s+ask|no\s+telling|might\s+be\s+wrong|could\s+be\s+wrong|"
+        r"take\s+it\s+with\s+salt|grain\s+of\s+salt|shaky\s+story|thin\s+tale)\b",
+        re.IGNORECASE,
+    ),
+    re.compile(
+        r"\b(?:unclear|unconfirmed|unverified|not\s+sure\s+whether|can'?t\s+pin\s+it\s+down|"
+        r"if\s+it'?s\s+true|if\s+that'?s\s+true)\b",
+        re.IGNORECASE,
+    ),
+)
+
+_RUMOR_BIAS_RES: tuple[re.Pattern[str], ...] = (
+    re.compile(
+        r"\b(?:blame\s+(?:the\s+)?|always\s+blame|would\s+say\s+that|in\s+their\s+interest|"
+        r"sailors\s+tell\s+it|clerks\s+tell\s+it|tax\s+(?:men|folk)|customs\s+men|"
+        r"one\s+way\s+to\s+hear\s+it|another\s+way\s+to\s+hear\s+it)\b",
+        re.IGNORECASE,
+    ),
+    re.compile(r"\b(?:biased|slant|angle\s+on\s+it|spin\s+on)\b", re.IGNORECASE),
+)
+
+
+def classify_rumor_secondhand_turn(
+    *,
+    player_text: str | None = None,
+    response_type_contract: Mapping[str, Any] | None = None,
+    recent_log_compact: Sequence[Mapping[str, Any]] | None = None,
+    response_delta: Mapping[str, Any] | None = None,
+    follow_up_pressure: Mapping[str, Any] | None = None,
+) -> Dict[str, Any]:
+    """Deterministic rumor / secondhand-intent classifier (player + light policy context)."""
+    _ = response_delta, follow_up_pressure  # reserved for future coordination; avoids unused warnings.
+    reason_codes: List[str] = []
+    trigger_spans: List[str] = []
+    seen_spans: set[str] = set()
+
+    def _consume_text(label: str, raw: str) -> None:
+        s = str(raw or "").strip()
+        if len(s) < 6:
+            return
+        low = s.lower()
+        for code, pat in _RUMOR_PLAYER_SIGNAL_RES:
+            for m in pat.finditer(low):
+                span = m.group(0).strip()
+                if len(span) >= 4:
+                    key = f"{code}:{span[:64]}"
+                    if key not in seen_spans:
+                        seen_spans.add(key)
+                        trigger_spans.append(span[:72])
+                        tag = f"{label}:{code}"
+                        if tag not in reason_codes:
+                            reason_codes.append(tag)
+
+    _consume_text("player_text", str(player_text or ""))
+    recent = list(recent_log_compact or [])
+    if recent:
+        last = recent[-1] if isinstance(recent[-1], Mapping) else {}
+        prev_player = str((last or {}).get("player_input") or "").strip()
+        if prev_player and prev_player != str(player_text or "").strip():
+            _consume_text("recent_log_player_input", prev_player)
+
+    rtc = response_type_contract if isinstance(response_type_contract, Mapping) else {}
+    rtype = str(rtc.get("required_response_type") or "").strip().lower()
+    if rtype == "dialogue":
+        reason_codes.append("response_type:dialogue")
+    desc = str(rtc.get("response_type_description") or "").lower()
+    if any(k in desc for k in ("hearsay", "rumor", "gossip", "secondhand", "street talk")):
+        reason_codes.append("response_type:description_hearsay_hint")
+        trigger_spans.append("response_type_description")
+
+    lexical_hits = [x for x in reason_codes if x.startswith(("player_text:", "recent_log_player_input:"))]
+    rumor_turn_active = bool(lexical_hits) or "response_type:description_hearsay_hint" in reason_codes
+    return {
+        "rumor_turn_active": rumor_turn_active,
+        "rumor_turn_reason_codes": list(dict.fromkeys(reason_codes)),
+        "trigger_spans": list(dict.fromkeys(trigger_spans))[:12],
+    }
+
+
+def _merge_rumor_realism_policy(base_rr: Mapping[str, Any], ov: Mapping[str, Any] | None) -> Dict[str, Any]:
+    out = dict(base_rr)
+    if not isinstance(ov, Mapping):
+        return out
+    for k, v in ov.items():
+        if k == "fallback_compatibility" and isinstance(v, Mapping) and isinstance(out.get("fallback_compatibility"), dict):
+            merged_fb = dict(out["fallback_compatibility"])
+            merged_fb.update(dict(v))
+            out["fallback_compatibility"] = merged_fb
+        else:
+            out[str(k)] = v
+    return out
+
+
+def _strip_quoted_regions(text: str) -> str:
+    return re.sub(r'["“][^"”]{0,4000}["”]', " ", str(text or ""))
+
+
+def _rumor_substantive_slice(text: str) -> str:
+    spans = _quoted_spans(text)
+    if spans:
+        return " ".join(s for *_, s in spans if s)
+    return str(text or "")
+
+
+def _rumor_reference_token_bag(prior_gm: str, narration_now: str) -> set[str]:
+    bag: set[str] = set()
+    for t in _na_tokens(prior_gm) + _na_tokens(narration_now):
+        if len(t) >= 4:
+            bag.add(t)
+    return bag
+
+
+def _rumor_net_new_detail_count(slice_text: str, ref_bag: set[str]) -> int:
+    n = 0
+    for t in _na_tokens(slice_text):
+        if len(t) < 5:
+            continue
+        if t in ref_bag or t in _CONTINUITY_LEXEMES:
+            continue
+        n += 1
+    return n
+
+
+def _rumor_detect_source_limitation(text: str) -> bool:
+    if any(p.search(text) for p in _RUMOR_SOURCE_LIMITATION_RES):
+        return True
+    for p in _REFUSAL_BOUNDARY_MARKERS:
+        if p.search(text) and re.search(r"\b(?:only|just|more\s+than|than\s+that)\b", text, re.IGNORECASE):
+            return True
+    return False
+
+
+def _rumor_detect_uncertainty(text: str) -> bool:
+    if any(p.search(text) for p in _RUMOR_UNCERTAINTY_RES):
+        return True
+    for p in _FOLLOWUP_NARROW_UNCERTAINTY_MARKERS:
+        if p.search(text):
+            return True
+    if "weak_uncertainty_shell" in _collect_filler_pattern_hits(text):
+        low = text.lower()
+        if any(h in low for h in ("because", "since", "but", "though", "only from", "from the")):
+            return True
+    return False
+
+
+def _rumor_detect_bias(text: str) -> bool:
+    return any(p.search(text) for p in _RUMOR_BIAS_RES)
+
+
+def _rumor_collapsed_substring_hit(a: str, b: str, *, min_chars: int = 38) -> bool:
+    ca, cb = _collapse_ws(a), _collapse_ws(b)
+    if len(ca) < min_chars or len(cb) < min_chars:
+        return False
+    short, long = (ca, cb) if len(ca) <= len(cb) else (cb, ca)
+    return len(short) >= min_chars and short in long
+
+
+def _rumor_consecutive_word_hit(a: str, b: str, *, k: int = 7) -> bool:
+    wa = [w.lower() for w in re.findall(r"[A-Za-z']+", a) if len(w) >= 2]
+    wb = [w.lower() for w in re.findall(r"[A-Za-z']+", b) if len(w) >= 2]
+    if len(wa) < k or len(wb) < k:
+        return False
+    needles = {" ".join(wa[i : i + k]) for i in range(0, len(wa) - k + 1)}
+    hay = " " + " ".join(wb) + " "
+    return any(f" {n} " in hay for n in needles)
+
+
+def _rumor_relaxed_signal_requirement(
+    text: str,
+    *,
+    wc: int,
+    gm_output: Mapping[str, Any] | None,
+    rr_fb: Mapping[str, Any],
+) -> tuple[bool, Dict[str, bool]]:
+    """Return (relaxed_ok, flags) for rumor low-signal / bounded-partial compatibility (policy-owned)."""
+    from game.final_emission_validators import _partial_reason_in_text, _resolve_fallback_behavior_contract
+
+    flags: Dict[str, bool] = {}
+    if bool(rr_fb.get("do_not_fail_for_brevity_alone")) and wc <= 14:
+        flags["brevity_alone"] = True
+        return True, flags
+    if bool(rr_fb.get("allow_brief_bounded_partial_under_uncertainty")):
+        pol = _resolve_fallback_behavior_contract(
+            dict(gm_output) if isinstance(gm_output, Mapping) else None
+        )
+        if bool((pol or {}).get("uncertainty_active")):
+            flags["fallback_uncertainty_active"] = True
+            return True, flags
+    if bool(rr_fb.get("allow_source_limited_refusal")):
+        if _rumor_detect_source_limitation(text) or _partial_reason_in_text(
+            text, ["uncertainty", "lack_of_knowledge", "gated_information"]
+        ):
+            flags["source_limited_or_refusal_language"] = True
+            return True, flags
+        for p in _REFUSAL_BOUNDARY_MARKERS:
+            if p.search(text):
+                flags["source_limited_or_refusal_language"] = True
+                return True, flags
+    ac: Dict[str, Any] = {}
+    if isinstance(gm_output, Mapping):
+        rp = gm_output.get("response_policy")
+        if isinstance(rp, Mapping) and isinstance(rp.get("answer_completeness"), Mapping):
+            ac = dict(rp["answer_completeness"])
+    shape = str(ac.get("expected_answer_shape") or "").strip().lower()
+    if shape in {"bounded_partial", "refusal_with_reason"} and bool(rr_fb.get("allow_brief_bounded_partial_under_uncertainty")):
+        flags["answer_shape_bounded_partial"] = True
+        return True, flags
+    return False, flags
+
 
 def resolve_narrative_authenticity_contract(gm_output: Mapping[str, Any] | None) -> Dict[str, Any] | None:
     """Return ``response_policy.narrative_authenticity`` when present."""
@@ -440,6 +723,14 @@ def build_narrative_authenticity_contract(
     rd_active = bool(rd.get("enabled")) and bool(rd.get("delta_required"))
     dialogue_expected = bool(srs.get("enabled")) or str(rtc.get("required_response_type") or "").strip().lower() == "dialogue"
 
+    rumor_class = classify_rumor_secondhand_turn(
+        player_text=str(player_text or ""),
+        response_type_contract=rtc,
+        recent_log_compact=recent,
+        response_delta=rd,
+        follow_up_pressure=fup,
+    )
+
     base: Dict[str, Any] = {
         "enabled": True,
         "version": NARRATIVE_AUTHENTICITY_VERSION,
@@ -467,6 +758,7 @@ def build_narrative_authenticity_contract(
             "may_refuse_or_partially_answer_if_other_contracts_require": True,
             "brevity_alone_is_not_failure": True,
         },
+        "rumor_realism": _merge_rumor_realism_policy(dict(_DEFAULT_RUMOR_REALISM), None),
         "trace": {
             "response_delta_contract_active": rd_active,
             "topic_follow_up_active": topic_follow_up,
@@ -474,10 +766,18 @@ def build_narrative_authenticity_contract(
             "dialogue_shape_expected": dialogue_expected,
             "prior_turn_gm_snippet_for_overlap": prior_gm or None,
             "player_text_len": len(str(player_text or "").strip()),
+            "rumor_turn_active": bool(rumor_class.get("rumor_turn_active")),
+            "rumor_turn_reason_codes": list(rumor_class.get("rumor_turn_reason_codes") or []),
+            "rumor_trigger_spans": list(rumor_class.get("trigger_spans") or []),
         },
     }
     if isinstance(overrides, Mapping):
+        ov_rr = overrides.get("rumor_realism")
+        if isinstance(ov_rr, Mapping):
+            base["rumor_realism"] = _merge_rumor_realism_policy(dict(_DEFAULT_RUMOR_REALISM), ov_rr)
         for k, v in overrides.items():
+            if k == "rumor_realism":
+                continue
             if k in {"anti_goals", "fallback_compatibility", "trace"} and isinstance(v, Mapping) and isinstance(
                 base.get(k), dict
             ):
@@ -519,8 +819,63 @@ def _slim_na_evidence(evidence: Mapping[str, Any] | None, *, max_str: int = 120,
     return {str(k): clip(v) for k, v in evidence.items()}
 
 
-def build_narrative_authenticity_emission_trace(validation: Mapping[str, Any] | None) -> Dict[str, Any]:
-    """Compact, stable fields for ``_final_emission_meta`` (failure, repair, or contract skip)."""
+def _resolve_narrative_authenticity_emission_status(
+    validation: Mapping[str, Any],
+    *,
+    repaired: bool,
+    repair_failed: bool,
+) -> str | None:
+    """Terminal status for gate/meta (``pass`` / ``relaxed`` / ``repaired`` / ``fail``); None if unchecked or non-terminal."""
+    checked = bool(validation.get("checked"))
+    if not checked:
+        return None
+    if repaired:
+        return "repaired"
+    if repair_failed:
+        return "fail"
+    if bool(validation.get("passed")):
+        return "relaxed" if bool(validation.get("rumor_realism_relaxed_low_signal")) else "pass"
+    # Checked failure before a repair outcome is applied — omit status until the layer finishes.
+    return None
+
+
+def _build_narrative_authenticity_trace_slice(
+    validation: Mapping[str, Any] | None,
+    *,
+    contract: Mapping[str, Any] | None,
+) -> Dict[str, Any]:
+    """Nested compact rumor / classifier context (contract trace + validation relaxation signals)."""
+    trace_out: Dict[str, Any] = {}
+    rumor_turn = False
+    if isinstance(contract, Mapping):
+        tr = contract.get("trace") if isinstance(contract.get("trace"), Mapping) else {}
+        rumor_turn = bool(tr.get("rumor_turn_active"))
+        if rumor_turn:
+            trace_out["rumor_turn_active"] = True
+            rrc = tr.get("rumor_turn_reason_codes")
+            if isinstance(rrc, list) and rrc:
+                trace_out["rumor_turn_reason_codes"] = [str(x) for x in rrc[:10] if str(x).strip()]
+            rts = tr.get("rumor_trigger_spans")
+            if isinstance(rts, list) and rts:
+                trace_out["rumor_trigger_spans"] = rts[:6]
+    if isinstance(validation, Mapping):
+        if validation.get("rumor_realism_relaxed_low_signal"):
+            trace_out["rumor_realism_relaxed_low_signal"] = True
+        vflags = validation.get("rumor_realism_relaxation_flags")
+        if isinstance(vflags, Mapping) and any(vflags.values()):
+            trace_out["rumor_relaxation_flags"] = {str(k): bool(v) for k, v in vflags.items() if v}
+    return trace_out
+
+
+def build_narrative_authenticity_emission_trace(
+    validation: Mapping[str, Any] | None,
+    *,
+    contract: Mapping[str, Any] | None = None,
+    repaired: bool = False,
+    repair_mode: str | None = None,
+    repair_failed: bool = False,
+) -> Dict[str, Any]:
+    """Compact, stable fields for ``_final_emission_meta`` (failure, repair, contract skip, or clean pass)."""
     if not isinstance(validation, Mapping):
         return {}
     out: Dict[str, Any] = {}
@@ -532,9 +887,29 @@ def build_narrative_authenticity_emission_trace(validation: Mapping[str, Any] | 
     reasons = [str(x) for x in (validation.get("failure_reasons") or []) if str(x).strip()]
     if reasons:
         out["narrative_authenticity_reason_codes"] = reasons
-    if checked and (reasons or not passed):
+    metrics_obj = validation.get("metrics")
+    rumor_turn = bool((metrics_obj or {}).get("rumor_turn_active")) if isinstance(metrics_obj, Mapping) else False
+    if checked and (reasons or not passed or rumor_turn):
         out["narrative_authenticity_metrics"] = _slim_na_metrics(validation.get("metrics"))
         out["narrative_authenticity_evidence"] = _slim_na_evidence(validation.get("evidence"))
+    status = _resolve_narrative_authenticity_emission_status(
+        validation, repaired=repaired, repair_failed=repair_failed
+    )
+    if status is not None:
+        out["narrative_authenticity_status"] = status
+    rf = validation.get("rumor_realism_relaxation_flags") if isinstance(validation, Mapping) else None
+    if isinstance(rf, Mapping) and any(rf.values()):
+        out["narrative_authenticity_relaxation_flags"] = {str(k): bool(v) for k, v in rf.items() if v}
+    if bool(validation.get("rumor_realism_relaxed_low_signal")):
+        out["narrative_authenticity_rumor_relaxed_low_signal"] = True
+    slice_trace = _build_narrative_authenticity_trace_slice(validation, contract=contract)
+    if slice_trace:
+        out["narrative_authenticity_trace"] = slice_trace
+    if repair_mode:
+        out["narrative_authenticity_repair_mode"] = repair_mode
+        out["narrative_authenticity_repair_modes"] = [repair_mode]
+    else:
+        out["narrative_authenticity_repair_modes"] = []
     return out
 
 
@@ -576,6 +951,14 @@ def validate_narrative_authenticity(
         "generic_filler_score": 0.0,
         "followup_overlap": None,
         "signal_markers_detected": 0,
+        "rumor_turn_active": None,
+        "rumor_signal_count": None,
+        "rumor_overlap_jaccard": None,
+        "rumor_overlap_trigram": None,
+        "rumor_new_detail_count": None,
+        "rumor_source_limitation_present": None,
+        "rumor_uncertainty_present": None,
+        "rumor_bias_present": None,
     }
     evidence: Dict[str, Any] = {
         "matched_filler_patterns": [],
@@ -583,6 +966,10 @@ def validate_narrative_authenticity(
         "redundant_opening_span": None,
         "prior_gm_reference_snippet": None,
         "adjacent_reuse_detail": None,
+        "rumor_overlapping_spans": [],
+        "rumor_missing_realism_categories": [],
+        "rumor_net_new_candidate_tokens": [],
+        "rumor_recent_comparison_snippet": None,
     }
 
     out: Dict[str, Any] = {
@@ -598,6 +985,8 @@ def validate_narrative_authenticity(
         "response_delta_shadow_failed": None,
         "metrics": metrics,
         "evidence": evidence,
+        "rumor_realism_relaxed_low_signal": False,
+        "rumor_realism_relaxation_flags": {},
     }
     if not isinstance(contract, Mapping) or not bool(contract.get("enabled")):
         out["skip_reason"] = "contract_disabled"
@@ -712,6 +1101,122 @@ def validate_narrative_authenticity(
     if meta_hit:
         reasons.append("non_diegetic_meta_voice")
 
+    rr_pol = contract.get("rumor_realism") if isinstance(contract.get("rumor_realism"), Mapping) else {}
+    rumor_turn = bool(trace.get("rumor_turn_active"))
+    metrics["rumor_turn_active"] = rumor_turn
+    if bool(rr_pol.get("enabled")) and rumor_turn and bool(rr_pol.get("apply_on_secondhand_or_rumor_turns", True)):
+        rr_fb = rr_pol.get("fallback_compatibility") if isinstance(rr_pol.get("fallback_compatibility"), Mapping) else {}
+        relaxed, rumor_relax_flags = _rumor_relaxed_signal_requirement(text, wc=wc, gm_output=gm_output, rr_fb=rr_fb)
+        has_quotes = bool(_quoted_spans(text))
+        narration_now = _normalize_text(_strip_quoted_regions(text)) if has_quotes else ""
+        slice_txt = _rumor_substantive_slice(text).strip() or text
+        prior = prior_trace
+        ref_bag = _rumor_reference_token_bag(prior, narration_now)
+        j_prior = _token_jaccard(_na_tokens(slice_txt), _na_tokens(prior)) if prior else 0.0
+        tg_prior = _trigram_jaccard(slice_txt, prior) if prior else 0.0
+        j_scene = _token_jaccard(_na_tokens(slice_txt), _na_tokens(narration_now)) if narration_now.strip() else 0.0
+        tg_scene = _trigram_jaccard(slice_txt, narration_now) if narration_now.strip() else 0.0
+        metrics["rumor_overlap_jaccard"] = round(max(j_prior, j_scene), 4)
+        metrics["rumor_overlap_trigram"] = round(max(tg_prior, tg_scene), 4)
+
+        src_ok = _rumor_detect_source_limitation(text)
+        unc_ok = _rumor_detect_uncertainty(text)
+        bias_ok = _rumor_detect_bias(text)
+        n_new = _rumor_net_new_detail_count(slice_txt, ref_bag)
+        novel_long = any(
+            t not in ref_bag and t not in _CONTINUITY_LEXEMES
+            for t in _na_tokens(slice_txt)
+            if len(t) >= 8
+        )
+        net_ok = n_new >= 2 or novel_long
+        cats_ok = {"source_limitation": src_ok, "uncertainty_or_distortion": unc_ok, "perspective_or_bias": bias_ok, "net_new_detail": net_ok}
+        signal_count = sum(1 for v in cats_ok.values() if v)
+        metrics["rumor_signal_count"] = signal_count
+        metrics["rumor_new_detail_count"] = n_new
+        metrics["rumor_source_limitation_present"] = src_ok
+        metrics["rumor_uncertainty_present"] = unc_ok
+        metrics["rumor_bias_present"] = bias_ok
+
+        missing = [k for k, v in cats_ok.items() if not v]
+        evidence["rumor_missing_realism_categories"] = missing
+        evidence["rumor_recent_comparison_snippet"] = prior[:220] if prior else None
+        novel_toks = [
+            t
+            for t in _na_tokens(slice_txt)
+            if len(t) >= 5 and t not in ref_bag and t not in _CONTINUITY_LEXEMES
+        ][:8]
+        evidence["rumor_net_new_candidate_tokens"] = novel_toks
+
+        prior_sub = _prior_substantive_for_na(prior) if prior else False
+        narr_sub = has_quotes and _word_count(narration_now) >= 8
+
+        id_ph = bool(rr_pol.get("forbid_identical_phrasing_even_when_overlap_allowed", True))
+        allow_overlap = bool(rr_pol.get("allow_partial_fact_overlap", True))
+        high_sig = allow_overlap and signal_count >= 1
+
+        id_hit_prior = bool(
+            prior_sub
+            and (
+                _rumor_collapsed_substring_hit(slice_txt, prior, min_chars=36)
+                or _rumor_consecutive_word_hit(slice_txt, prior, k=7)
+            )
+        )
+        id_hit_scene = bool(
+            narr_sub
+            and (
+                _rumor_collapsed_substring_hit(slice_txt, narration_now, min_chars=34)
+                or _rumor_consecutive_word_hit(slice_txt, narration_now, k=7)
+            )
+        )
+        identical_prior = id_ph and id_hit_prior
+        identical_scene = id_ph and id_hit_scene
+        if identical_prior or identical_scene:
+            reasons.append("rumor_uses_identical_phrasing_for_known_fact")
+            if identical_prior and prior:
+                evidence["rumor_overlapping_spans"].append(
+                    {"kind": "prior_gm", "reply_excerpt": slice_txt[:140], "ref_excerpt": prior[:140]}
+                )
+            if identical_scene and narration_now.strip():
+                evidence["rumor_overlapping_spans"].append(
+                    {"kind": "same_turn_narration", "reply_excerpt": slice_txt[:140], "ref_excerpt": narration_now[:140]}
+                )
+
+        if bool(rr_pol.get("forbid_recent_narration_to_dialogue_reuse", True)) and prior_sub and not identical_prior:
+            sub_hit = _rumor_collapsed_substring_hit(slice_txt, prior, min_chars=40)
+            heavy = j_prior >= 0.68 and tg_prior >= 0.48 and _word_count(slice_txt) >= 6
+            if sub_hit or (heavy and not high_sig):
+                reasons.append("rumor_repeats_recent_narration")
+                evidence["rumor_overlapping_spans"].append(
+                    {"kind": "recent_narration_echo", "reply_excerpt": slice_txt[:160], "ref_excerpt": prior[:160]}
+                )
+
+        if bool(rr_pol.get("forbid_verbatim_scene_to_rumor_reuse", True)) and narr_sub and not identical_scene:
+            sub_s = _rumor_collapsed_substring_hit(slice_txt, narration_now, min_chars=36)
+            heavy_s = j_scene >= 0.62 and tg_scene >= 0.44 and _word_count(slice_txt) >= 5
+            if (sub_s or (heavy_s and not high_sig)) and narration_now.strip():
+                reasons.append("rumor_restates_scene_description")
+                evidence["rumor_overlapping_spans"].append(
+                    {"kind": "scene_narration_as_rumor", "reply_excerpt": slice_txt[:160], "ref_excerpt": narration_now[:160]}
+                )
+
+        req = list(rr_pol.get("require_one_of") or [])
+        req_ok = not req or any(
+            (k == "source_limitation" and src_ok)
+            or (k == "uncertainty_or_distortion" and unc_ok)
+            or (k == "perspective_or_bias" and bias_ok)
+            or (k == "net_new_detail" and net_ok)
+            for k in req
+        )
+        if not req_ok and not relaxed:
+            reasons.append("rumor_adds_no_new_signal")
+            if not src_ok:
+                reasons.append("secondhand_info_lacks_source_limitation")
+            if not (unc_ok or bias_ok):
+                reasons.append("secondhand_info_lacks_uncertainty_or_bias")
+        if not req_ok and relaxed:
+            out["rumor_realism_relaxed_low_signal"] = True
+            out["rumor_realism_relaxation_flags"] = dict(rumor_relax_flags)
+
     if bool(fb_compat.get("may_refuse_or_partially_answer_if_other_contracts_require")):
         ac = {}
         if isinstance(gm_output, Mapping):
@@ -768,10 +1273,14 @@ def _strip_dialogue_prefix_overlapping_prose(prose: str, inner: str, *, min_over
 
 
 def _rewrite_first_quote_span(text: str, new_inner: str) -> str | None:
+    return _rewrite_nth_quote_span(text, 0, new_inner)
+
+
+def _rewrite_nth_quote_span(text: str, span_index: int, new_inner: str) -> str | None:
     spans = _quoted_spans(text)
-    if not spans:
+    if not spans or span_index < 0 or span_index >= len(spans):
         return None
-    start, end, _old = spans[0]
+    start, end, _old = spans[span_index]
     q0 = text[start]
     q1 = text[end - 1] if end > start else '"'
     inner = new_inner.strip()
@@ -779,6 +1288,403 @@ def _rewrite_first_quote_span(text: str, new_inner: str) -> str | None:
         return None
     rebuilt = text[:start] + q0 + inner + q1 + text[end:]
     return _normalize_text(re.sub(r"\s+", " ", rebuilt))
+
+
+# Bounded rumor-realism repair (AER2): subtractive / reorder only; revalidated per candidate.
+_RUMOR_NA_REPAIR_REASONS: frozenset[str] = frozenset(
+    {
+        "rumor_repeats_recent_narration",
+        "rumor_restates_scene_description",
+        "rumor_uses_identical_phrasing_for_known_fact",
+        "rumor_adds_no_new_signal",
+        "secondhand_info_lacks_source_limitation",
+        "secondhand_info_lacks_uncertainty_or_bias",
+    }
+)
+_RUMOR_LOW_SIGNAL_REPAIR_REASONS: frozenset[str] = frozenset(
+    {
+        "rumor_adds_no_new_signal",
+        "secondhand_info_lacks_source_limitation",
+        "secondhand_info_lacks_uncertainty_or_bias",
+    }
+)
+_RUMOR_ECHO_REPAIR_REASONS: frozenset[str] = frozenset(
+    {
+        "rumor_repeats_recent_narration",
+        "rumor_restates_scene_description",
+        "rumor_uses_identical_phrasing_for_known_fact",
+    }
+)
+
+_RUMOR_GENERIC_REPORT_SHELL_RE = re.compile(
+    r"^(?:\s*)(?:people\s+say|they\s+say|folks\s+say|word\s+is|word\s+was|rumor\s+is|rumor\s+has\s+it|"
+    r"some\s+say|so\s+they\s+say|what\s+they\s+say\s+is|the\s+talk\s+is)\b",
+    re.IGNORECASE,
+)
+
+
+def _split_rumor_inner_clauses(inner: str) -> List[str]:
+    """Deterministic clause boundaries inside reported speech (subtractive repair only)."""
+    s = str(inner or "").strip()
+    if not s:
+        return []
+    parts = re.split(r"\s*;\s*|\s+—\s+", s)
+    out: List[str] = []
+    for p in parts:
+        chunk = str(p or "").strip()
+        if not chunk:
+            continue
+        if _word_count(chunk) > 18:
+            sub = re.split(r",\s+", chunk)
+            if len(sub) >= 2 and all(_word_count(x.strip()) >= 4 for x in sub):
+                out.extend(x.strip() for x in sub if x.strip())
+            else:
+                out.append(chunk)
+        else:
+            out.append(chunk)
+    deduped: List[str] = []
+    seen: set[str] = set()
+    for c in out:
+        if c in seen:
+            continue
+        seen.add(c)
+        deduped.append(c)
+    return deduped
+
+
+def _join_rumor_clauses(clauses: Sequence[str]) -> str:
+    parts = [str(c).strip() for c in clauses if str(c).strip()]
+    if not parts:
+        return ""
+    if len(parts) == 1:
+        return parts[0]
+    return ", ".join(parts)
+
+
+def _clause_echoes_reference(clause: str, ref: str, *, min_sub: int = 30) -> bool:
+    ref = str(ref or "").strip()
+    if not ref:
+        return False
+    c = str(clause or "").strip()
+    if not c:
+        return False
+    if _rumor_collapsed_substring_hit(c, ref, min_chars=min_sub):
+        return True
+    if _rumor_consecutive_word_hit(c, ref, k=6):
+        return True
+    if _word_count(c) >= 5 and _token_jaccard(_na_tokens(c), _na_tokens(ref)) >= 0.72:
+        return True
+    return False
+
+
+def _rumor_clause_generic_shell(clause: str) -> bool:
+    return bool(_RUMOR_GENERIC_REPORT_SHELL_RE.match(str(clause or "").strip()))
+
+
+def _rumor_clause_duplicate_pair(a: str, b: str) -> bool:
+    ca, cb = _collapse_ws(a), _collapse_ws(b)
+    if not ca or not cb:
+        return False
+    if ca == cb:
+        return True
+    short, long = (ca, cb) if len(ca) <= len(cb) else (cb, ca)
+    return len(short) >= 22 and short in long
+
+
+def _rumor_clause_signal_tuple(
+    clause: str,
+    *,
+    prior: str,
+    narration_now: str,
+    ref_bag: set[str],
+) -> tuple[int, int, int, int, int, int]:
+    """Sort key: higher is better for leading position (source/uncertainty/bias/net_new; lower echo)."""
+    c = str(clause or "")
+    src = 1 if _rumor_detect_source_limitation(c) else 0
+    unc = 1 if _rumor_detect_uncertainty(c) else 0
+    bias = 1 if _rumor_detect_bias(c) else 0
+    n_new = _rumor_net_new_detail_count(c, ref_bag)
+    net = 1 if (n_new >= 1 or any(len(t) >= 8 for t in _na_tokens(c) if t not in ref_bag and t not in _CONTINUITY_LEXEMES)) else 0
+    echo_pen = 0
+    if prior.strip() and _clause_echoes_reference(c, prior, min_sub=28):
+        echo_pen += 2
+    if narration_now.strip() and _clause_echoes_reference(c, narration_now, min_sub=26):
+        echo_pen += 2
+    if _rumor_clause_generic_shell(c):
+        echo_pen += 1
+    # tuple orders: prefer low echo_pen, high markers, longer non-generic content
+    wc = _word_count(c)
+    return (-echo_pen, src + unc + bias + net, src, unc + bias, n_new, wc)
+
+
+def _rumor_evidence_priority_drop_indices(clauses: Sequence[str], evidence: Mapping[str, Any]) -> List[int]:
+    spans = evidence.get("rumor_overlapping_spans") if isinstance(evidence, Mapping) else None
+    if not isinstance(spans, list) or not spans:
+        return []
+    excerpts: List[str] = []
+    for item in spans:
+        if not isinstance(item, Mapping):
+            continue
+        ex = str(item.get("reply_excerpt") or "").strip()
+        if len(ex) >= 12:
+            excerpts.append(ex)
+    if not excerpts:
+        return []
+    scored: List[tuple[int, int]] = []
+    for i, c in enumerate(clauses):
+        col = _collapse_ws(c)
+        best = 0
+        for ex in excerpts:
+            e = _collapse_ws(ex)
+            if len(e) >= 12 and e in col:
+                best = max(best, len(e))
+            elif len(e) >= 12 and len(col) >= 12 and (e[:40] in col or col[: min(60, len(col))] in e):
+                best = max(best, 20)
+        if best:
+            scored.append((best, i))
+    scored.sort(key=lambda t: (-t[0], t[1]))
+    return [i for _, i in scored]
+
+
+def _rumor_collect_echo_drop_candidates(
+    clauses: Sequence[str],
+    *,
+    reasons: set[str],
+    prior: str,
+    narration_now: str,
+    evidence: Mapping[str, Any],
+) -> List[int]:
+    n = len(clauses)
+    if n < 2:
+        return []
+    drop: List[int] = []
+    for i, c in enumerate(clauses):
+        hit_prior = bool(prior.strip()) and (
+            "rumor_repeats_recent_narration" in reasons
+            or "rumor_uses_identical_phrasing_for_known_fact" in reasons
+        )
+        hit_scene = bool(narration_now.strip()) and (
+            "rumor_restates_scene_description" in reasons or "rumor_uses_identical_phrasing_for_known_fact" in reasons
+        )
+        echo = False
+        if hit_prior and _clause_echoes_reference(c, prior, min_sub=28):
+            echo = True
+        if hit_scene and _clause_echoes_reference(c, narration_now, min_sub=24):
+            echo = True
+        if echo:
+            drop.append(i)
+    if not drop:
+        return []
+    pri = _rumor_evidence_priority_drop_indices(clauses, evidence)
+    drop_set = set(drop)
+    ordered: List[int] = []
+    seen_i: set[int] = set()
+    for i in pri:
+        if i in drop_set and i not in seen_i:
+            ordered.append(i)
+            seen_i.add(i)
+    for i in drop:
+        if i not in seen_i:
+            ordered.append(i)
+            seen_i.add(i)
+    return [i for i in ordered if 0 <= i < n]
+
+
+def _rumor_compress_duplicate_clauses(clauses: List[str]) -> List[str] | None:
+    if len(clauses) < 2:
+        return None
+    for i in range(len(clauses)):
+        for j in range(i + 1, len(clauses)):
+            if _rumor_clause_duplicate_pair(clauses[i], clauses[j]):
+                scored = [(i, _word_count(clauses[i])), (j, _word_count(clauses[j]))]
+                drop_k = min(scored, key=lambda t: t[1])[0]
+                kept = [c for k, c in enumerate(clauses) if k != drop_k]
+                if len(kept) >= 1 and _word_count(_join_rumor_clauses(kept)) >= 3:
+                    return kept
+    return None
+
+
+def _rumor_try_transforms_on_quote(
+    text: str,
+    span_index: int,
+    inner: str,
+    contract: Mapping[str, Any],
+    gm_output: Mapping[str, Any] | None,
+    *,
+    reasons: set[str],
+    evidence: Mapping[str, Any],
+    prior: str,
+    narration_now: str,
+    ref_bag: set[str],
+    allow_low_signal_repair: bool,
+) -> tuple[str | None, str | None]:
+    """Apply bounded transforms to one quoted span; each candidate is revalidated externally."""
+    clauses = _split_rumor_inner_clauses(inner)
+    if not clauses:
+        return None, None
+
+    def _emit_from(new_clauses: Sequence[str]) -> str | None:
+        joined = _join_rumor_clauses(new_clauses)
+        if not joined or joined.strip() == inner.strip():
+            return None
+        return _rewrite_nth_quote_span(text, span_index, joined)
+
+    # 1) Drop echoed clause(s), evidence-guided order
+    if len(clauses) >= 2:
+        for idx in _rumor_collect_echo_drop_candidates(
+            clauses, reasons=reasons, prior=prior, narration_now=narration_now, evidence=evidence
+        ):
+            kept = [c for k, c in enumerate(clauses) if k != idx]
+            cand = _emit_from(kept)
+            if cand and bool(validate_narrative_authenticity(cand, contract, gm_output=gm_output).get("passed")):
+                return cand, "drop_echoed_rumor_clause"
+
+    # 2) Compress redundant duplicate clauses inside the quote
+    compressed = _rumor_compress_duplicate_clauses(list(clauses))
+    if compressed is not None:
+        cand = _emit_from(compressed)
+        if cand and bool(validate_narrative_authenticity(cand, contract, gm_output=gm_output).get("passed")):
+            return cand, "compress_redundant_reported_speech"
+
+    # 3) Reorder: higher-signal / less echo first
+    if len(clauses) >= 2:
+        order = sorted(
+            range(len(clauses)),
+            key=lambda k: _rumor_clause_signal_tuple(
+                clauses[k], prior=prior, narration_now=narration_now, ref_bag=ref_bag
+            ),
+            reverse=True,
+        )
+        if order != list(range(len(clauses))):
+            reordered = [clauses[k] for k in order]
+            cand = _emit_from(reordered)
+            if cand and bool(validate_narrative_authenticity(cand, contract, gm_output=gm_output).get("passed")):
+                return cand, "reorder_distinct_rumor_clause_first"
+
+    # 4–6) Low-signal compressions (skip under relaxed rumor semantics)
+    if allow_low_signal_repair and len(clauses) >= 2:
+        generic_idxs = [i for i, c in enumerate(clauses) if _rumor_clause_generic_shell(c)]
+        if generic_idxs:
+            for drop_i in sorted(generic_idxs, key=lambda i: -_word_count(clauses[i])):
+                kept = [c for k, c in enumerate(clauses) if k != drop_i]
+                cand = _emit_from(kept)
+                if cand and bool(validate_narrative_authenticity(cand, contract, gm_output=gm_output).get("passed")):
+                    return cand, "compress_generic_rumor_shell"
+
+        src_idxs = [i for i, c in enumerate(clauses) if _rumor_detect_source_limitation(c)]
+        if len(src_idxs) >= 1 and len(clauses) >= 2:
+            kept = [clauses[i] for i in src_idxs]
+            cand = _emit_from(kept)
+            if cand and bool(validate_narrative_authenticity(cand, contract, gm_output=gm_output).get("passed")):
+                return cand, "retain_source_limited_clause_only"
+
+        unc_idxs = [i for i, c in enumerate(clauses) if _rumor_detect_uncertainty(c)]
+        if len(unc_idxs) >= 1 and len(clauses) >= 2:
+            kept = [clauses[i] for i in unc_idxs]
+            cand = _emit_from(kept)
+            if cand and bool(validate_narrative_authenticity(cand, contract, gm_output=gm_output).get("passed")):
+                return cand, "retain_uncertain_clause_only"
+
+        bias_idxs = [i for i, c in enumerate(clauses) if _rumor_detect_bias(c)]
+        if len(bias_idxs) >= 1 and len(clauses) >= 2:
+            kept = [clauses[i] for i in bias_idxs]
+            cand = _emit_from(kept)
+            if cand and bool(validate_narrative_authenticity(cand, contract, gm_output=gm_output).get("passed")):
+                return cand, "retain_biased_clause_only"
+
+    return None, None
+
+
+def _repair_rumor_realism_unquoted_sentences(
+    text: str,
+    contract: Mapping[str, Any],
+    gm_output: Mapping[str, Any] | None,
+    *,
+    reasons: set[str],
+    prior: str,
+    narration_now: str,
+) -> tuple[str | None, str | None]:
+    """Drop echoing sentences when there is no quoted slice to clause-split."""
+    from game.final_emission_validators import _split_sentences_answer_complete
+
+    prior = str(prior or "").strip()
+    narration_now = str(narration_now or "").strip()
+    sents = [s.strip() for s in _split_sentences_answer_complete(text) if str(s).strip()]
+    if len(sents) < 2:
+        return None, None
+    for i, s in enumerate(sents):
+        hit_prior = bool(prior) and (
+            "rumor_repeats_recent_narration" in reasons or "rumor_uses_identical_phrasing_for_known_fact" in reasons
+        )
+        hit_scene = bool(narration_now) and (
+            "rumor_restates_scene_description" in reasons or "rumor_uses_identical_phrasing_for_known_fact" in reasons
+        )
+        echo = (hit_prior and _clause_echoes_reference(s, prior, min_sub=32)) or (
+            hit_scene and _clause_echoes_reference(s, narration_now, min_sub=28)
+        )
+        if not echo:
+            continue
+        kept = [x for k, x in enumerate(sents) if k != i]
+        merged = _normalize_text(" ".join(_normalize_terminal_punctuation(x) for x in kept if x))
+        if not merged.strip():
+            continue
+        if bool(validate_narrative_authenticity(merged, contract, gm_output=gm_output).get("passed")):
+            return merged, "drop_echoed_rumor_clause"
+    return None, None
+
+
+def _repair_rumor_realism_bounded(
+    text: str,
+    contract: Mapping[str, Any],
+    gm_output: Mapping[str, Any] | None,
+    *,
+    reasons: set[str],
+    evidence: Mapping[str, Any],
+) -> tuple[str | None, str | None]:
+    """Bounded subtractive rumor repairs with full revalidation per accepted candidate."""
+    rr_pol = contract.get("rumor_realism") if isinstance(contract.get("rumor_realism"), Mapping) else {}
+    if not bool(rr_pol.get("enabled")):
+        return None, None
+    rumor_hits = reasons & _RUMOR_NA_REPAIR_REASONS
+    if not rumor_hits:
+        return None, None
+
+    t = _normalize_text(text)
+    wc = _word_count(t)
+    rr_fb = rr_pol.get("fallback_compatibility") if isinstance(rr_pol.get("fallback_compatibility"), Mapping) else {}
+    relaxed_low_signal, _ = _rumor_relaxed_signal_requirement(t, wc=wc, gm_output=gm_output, rr_fb=rr_fb)
+    allow_low_signal_repair = bool(rumor_hits & _RUMOR_LOW_SIGNAL_REPAIR_REASONS) and not relaxed_low_signal
+
+    trace = contract.get("trace") if isinstance(contract.get("trace"), Mapping) else {}
+    prior = str(trace.get("prior_turn_gm_snippet_for_overlap") or "").strip()
+    has_quotes = bool(_quoted_spans(t))
+    narration_now = _normalize_text(_strip_quoted_regions(t)) if has_quotes else ""
+    ref_bag = _rumor_reference_token_bag(prior, narration_now)
+
+    spans = _quoted_spans(t)
+    for si, (_st, _en, inner) in enumerate(spans):
+        fixed, mode = _rumor_try_transforms_on_quote(
+            t,
+            si,
+            inner,
+            contract,
+            gm_output,
+            reasons=reasons,
+            evidence=evidence,
+            prior=prior,
+            narration_now=narration_now,
+            ref_bag=ref_bag,
+            allow_low_signal_repair=allow_low_signal_repair,
+        )
+        if fixed and mode:
+            return fixed, mode
+
+    if rumor_hits & _RUMOR_ECHO_REPAIR_REASONS and not spans:
+        return _repair_rumor_realism_unquoted_sentences(
+            t, contract, gm_output, reasons=reasons, prior=prior, narration_now=narration_now
+        )
+
+    return None, None
 
 
 def _sentence_pure_atmospheric(sentence: str) -> bool:
@@ -1011,6 +1917,15 @@ def repair_narrative_authenticity_minimal(
                 rebuilt = _rewrite_first_quote_span(t, compressed_inner)
                 if rebuilt and rebuilt != t and _passes(rebuilt):
                     return rebuilt, "compress_echo_dialogue_tail"
+
+    rumor_subset = reasons & _RUMOR_NA_REPAIR_REASONS
+    if rumor_subset:
+        ev_map = val.get("evidence") if isinstance(val.get("evidence"), Mapping) else {}
+        fixed_rumor, rumor_mode = _repair_rumor_realism_bounded(
+            t, contract, gm_output, reasons=set(reasons), evidence=dict(ev_map)
+        )
+        if fixed_rumor and rumor_mode:
+            return fixed_rumor, rumor_mode
 
     if "adjacent_phrase_reuse" in reasons:
         sents = _split_sentences_answer_complete(t)

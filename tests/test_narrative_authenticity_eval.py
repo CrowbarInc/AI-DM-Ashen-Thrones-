@@ -78,6 +78,125 @@ def test_dialogue_echo_reason_caps_anti_echoing() -> None:
     assert r["passed"] is False
 
 
+def test_supporting_metrics_includes_shipped_na_status_and_trace_for_repaired() -> None:
+    fem = {
+        "narrative_authenticity_checked": True,
+        "narrative_authenticity_failed": False,
+        "narrative_authenticity_repaired": True,
+        "narrative_authenticity_status": "repaired",
+        "narrative_authenticity_trace": {"rumor_turn_active": True},
+        "narrative_authenticity_reason_codes": [],
+        "narrative_authenticity_metrics": {"rumor_turn_active": True},
+        "narrative_authenticity_evidence": {},
+    }
+    r = evaluate_narrative_authenticity({}, _resp(text="He nods toward the yard.", fem=fem), fem)
+    sup = r.get("supporting_metrics") or {}
+    assert sup.get("narrative_authenticity_status") == "repaired"
+    assert (sup.get("narrative_authenticity_trace") or {}).get("rumor_turn_active") is True
+
+
+def test_na_verdict_clean_pass_and_rumor_axes() -> None:
+    fem = {
+        "narrative_authenticity_checked": True,
+        "narrative_authenticity_failed": False,
+        "narrative_authenticity_repaired": False,
+        "narrative_authenticity_status": "pass",
+        "narrative_authenticity_trace": {"rumor_turn_active": True},
+        "narrative_authenticity_metrics": {"rumor_turn_active": True, "rumor_signal_count": 2},
+        "narrative_authenticity_evidence": {},
+    }
+    r = evaluate_narrative_authenticity({}, _resp(text="Dock talk says the gate holds.", fem=fem), fem)
+    assert r["narrative_authenticity_verdict"] == "clean_pass"
+    assert r["rumor_realism_axes"]["rumor_repair_success"] == 5
+
+
+def test_na_verdict_relaxed_pass() -> None:
+    fem = {
+        "narrative_authenticity_checked": True,
+        "narrative_authenticity_failed": False,
+        "narrative_authenticity_repaired": False,
+        "narrative_authenticity_status": "relaxed",
+        "narrative_authenticity_rumor_relaxed_low_signal": True,
+        "narrative_authenticity_relaxation_flags": {"brevity_alone": True},
+        "narrative_authenticity_trace": {"rumor_turn_active": True, "rumor_relaxation_flags": {"brevity_alone": True}},
+        "narrative_authenticity_metrics": {"rumor_turn_active": True},
+        "narrative_authenticity_evidence": {},
+    }
+    r = evaluate_narrative_authenticity({}, _resp(text="They say patrols doubled.", fem=fem), fem)
+    assert r["narrative_authenticity_verdict"] == "relaxed_pass"
+    assert r["rumor_realism_axes"]["rumor_relaxation_correctness"] == 5
+
+
+def test_na_verdict_repaired_pass_low_signal_repair_mode() -> None:
+    fem = {
+        "narrative_authenticity_checked": True,
+        "narrative_authenticity_failed": False,
+        "narrative_authenticity_repaired": True,
+        "narrative_authenticity_status": "repaired",
+        "narrative_authenticity_repair_mode": "compress_generic_rumor_shell",
+        "narrative_authenticity_repair_modes": ["compress_generic_rumor_shell"],
+        "narrative_authenticity_trace": {"rumor_turn_active": True},
+        "narrative_authenticity_metrics": {"rumor_turn_active": True},
+        "narrative_authenticity_evidence": {},
+    }
+    r = evaluate_narrative_authenticity({}, _resp(text="He mutters a tightened rumor line.", fem=fem), fem)
+    assert r["narrative_authenticity_verdict"] == "repaired_pass"
+    assert r["rumor_realism_axes"]["rumor_repair_success"] == 5
+    assert any("compress_generic_rumor_shell" in str(x) for x in r["rumor_realism_axis_reasons"]["rumor_repair_success"])
+
+
+def test_na_verdict_fail_and_distinct_from_unchecked() -> None:
+    fem_fail = {
+        "narrative_authenticity_checked": True,
+        "narrative_authenticity_failed": True,
+        "narrative_authenticity_repaired": False,
+        "narrative_authenticity_status": "fail",
+        "narrative_authenticity_reason_codes": ["low_signal_generic_reply"],
+        "narrative_authenticity_metrics": {"generic_filler_score": 0.7},
+        "narrative_authenticity_evidence": {},
+    }
+    r_fail = evaluate_narrative_authenticity({}, _resp(text="The mist holds.", fem=fem_fail), fem_fail)
+    assert r_fail["narrative_authenticity_verdict"] == "fail"
+    assert r_fail["passed"] is False
+
+    fem_skip = {
+        "narrative_authenticity_checked": False,
+        "narrative_authenticity_skip_reason": "fallback_uncertainty_brief_compat",
+    }
+    r_skip = evaluate_narrative_authenticity({}, _resp(text="hard to say", fem=fem_skip), fem_skip)
+    assert r_skip["narrative_authenticity_verdict"] == "unchecked"
+    assert r_skip["passed"] is True
+
+
+def test_rumor_turn_trace_absent_vs_present_in_state_hygiene() -> None:
+    fem_ok = {
+        "narrative_authenticity_checked": True,
+        "narrative_authenticity_failed": False,
+        "narrative_authenticity_status": "pass",
+        "narrative_authenticity_trace": {},
+        "narrative_authenticity_metrics": {"rumor_turn_active": True},
+        "narrative_authenticity_evidence": {},
+    }
+    r_ok = evaluate_narrative_authenticity({}, _resp(text="No rumor trace slice.", fem=fem_ok), fem_ok)
+    assert r_ok["rumor_realism_axes"]["rumor_state_hygiene"] == 2
+
+    fem_match = {
+        "narrative_authenticity_checked": True,
+        "narrative_authenticity_failed": False,
+        "narrative_authenticity_status": "pass",
+        "narrative_authenticity_trace": {"rumor_turn_active": True},
+        "narrative_authenticity_metrics": {"rumor_turn_active": True},
+        "narrative_authenticity_evidence": {},
+    }
+    r_m = evaluate_narrative_authenticity({}, _resp(text="Rumor trace aligned.", fem=fem_match), fem_match)
+    assert r_m["rumor_realism_axes"]["rumor_state_hygiene"] == 5
+
+
+def test_missing_telemetry_verdict() -> None:
+    r = evaluate_narrative_authenticity({}, {"ok": True, "gm_output": {"player_facing_text": "x"}}, {})
+    assert r["narrative_authenticity_verdict"] == "missing_telemetry"
+
+
 def test_determinism_same_inputs_same_output() -> None:
     fem = {
         "narrative_authenticity_checked": True,

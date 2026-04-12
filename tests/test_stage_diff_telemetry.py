@@ -205,3 +205,23 @@ def test_compact_preview_limit() -> None:
     p = sdt.compact_preview(t, limit=25)
     assert len(p) == 25
     assert p.endswith("…")
+
+
+def test_snapshot_turn_stage_includes_narrative_authenticity_telemetry() -> None:
+    """AER3: ``_final_emission_meta`` NA status / rumor fields surface in turn snapshots."""
+    gm: Dict[str, Any] = {
+        "player_facing_text": "stub",
+        "metadata": {},
+        "_final_emission_meta": {
+            "narrative_authenticity_status": "repaired",
+            "narrative_authenticity_reason_codes": ["rumor_uses_identical_phrasing_for_known_fact"],
+            "narrative_authenticity_skip_reason": "",
+            "narrative_authenticity_rumor_relaxed_low_signal": True,
+            "narrative_authenticity_trace": {"rumor_turn_active": True},
+        },
+    }
+    snap = sdt.snapshot_turn_stage(gm, "na_snap")
+    assert snap["narrative_authenticity_status"] == "repaired"
+    assert snap["narrative_authenticity_rumor_relaxed_low_signal"] is True
+    assert snap["rumor_turn_active"] is True
+    assert "rumor_uses_identical" in snap["narrative_authenticity_reason_codes"][0]

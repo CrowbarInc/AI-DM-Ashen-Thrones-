@@ -1159,10 +1159,15 @@ def _default_narrative_authenticity_meta() -> Dict[str, Any]:
         "narrative_authenticity_repaired": False,
         "narrative_authenticity_repair_applied": False,
         "narrative_authenticity_repair_mode": None,
+        "narrative_authenticity_repair_modes": [],
         "narrative_authenticity_skip_reason": None,
         "narrative_authenticity_reason_codes": [],
         "narrative_authenticity_metrics": None,
         "narrative_authenticity_evidence": None,
+        "narrative_authenticity_status": None,
+        "narrative_authenticity_trace": None,
+        "narrative_authenticity_relaxation_flags": None,
+        "narrative_authenticity_rumor_relaxed_low_signal": False,
     }
 
 
@@ -1175,10 +1180,17 @@ def _merge_narrative_authenticity_meta(meta: Dict[str, Any], na_dbg: Dict[str, A
             "narrative_authenticity_repaired": bool(na_dbg.get("narrative_authenticity_repaired")),
             "narrative_authenticity_repair_applied": bool(na_dbg.get("narrative_authenticity_repair_applied")),
             "narrative_authenticity_repair_mode": na_dbg.get("narrative_authenticity_repair_mode"),
+            "narrative_authenticity_repair_modes": list(na_dbg.get("narrative_authenticity_repair_modes") or []),
             "narrative_authenticity_skip_reason": na_dbg.get("narrative_authenticity_skip_reason"),
             "narrative_authenticity_reason_codes": list(na_dbg.get("narrative_authenticity_reason_codes") or []),
             "narrative_authenticity_metrics": na_dbg.get("narrative_authenticity_metrics"),
             "narrative_authenticity_evidence": na_dbg.get("narrative_authenticity_evidence"),
+            "narrative_authenticity_status": na_dbg.get("narrative_authenticity_status"),
+            "narrative_authenticity_trace": na_dbg.get("narrative_authenticity_trace"),
+            "narrative_authenticity_relaxation_flags": na_dbg.get("narrative_authenticity_relaxation_flags"),
+            "narrative_authenticity_rumor_relaxed_low_signal": bool(
+                na_dbg.get("narrative_authenticity_rumor_relaxed_low_signal")
+            ),
         }
     )
 
@@ -1235,11 +1247,21 @@ def _apply_narrative_authenticity_layer(
     )
     meta["narrative_authenticity_skip_reason"] = skip
     if skip:
-        meta.update(build_narrative_authenticity_emission_trace({"skip_reason": skip, "checked": False, "passed": True}))
+        meta.update(
+            build_narrative_authenticity_emission_trace(
+                {"skip_reason": skip, "checked": False, "passed": True},
+                contract=contract if isinstance(contract, dict) else None,
+            )
+        )
         return text, meta, []
     if not isinstance(contract, dict):
         meta["narrative_authenticity_skip_reason"] = "no_contract"
-        meta.update(build_narrative_authenticity_emission_trace({"skip_reason": "no_contract", "checked": False, "passed": True}))
+        meta.update(
+            build_narrative_authenticity_emission_trace(
+                {"skip_reason": "no_contract", "checked": False, "passed": True},
+                contract=None,
+            )
+        )
         return text, meta, []
 
     v0 = validate_narrative_authenticity(text, contract, gm_output=gm_output)
@@ -1247,15 +1269,22 @@ def _apply_narrative_authenticity_layer(
     if v0.get("skip_reason"):
         meta["narrative_authenticity_skip_reason"] = v0.get("skip_reason")
     if not v0.get("checked"):
-        meta.update(build_narrative_authenticity_emission_trace(v0))
+        meta.update(build_narrative_authenticity_emission_trace(v0, contract=contract))
         return text, meta, []
 
     if v0.get("passed"):
+        meta.update(
+            build_narrative_authenticity_emission_trace(
+                v0, contract=contract, repaired=False, repair_failed=False
+            )
+        )
         return text, meta, []
 
     meta["narrative_authenticity_failed"] = True
     meta["narrative_authenticity_failure_reasons"] = list(v0.get("failure_reasons") or [])
-    meta.update(build_narrative_authenticity_emission_trace(v0))
+    meta.update(
+        build_narrative_authenticity_emission_trace(v0, contract=contract, repaired=False, repair_failed=False)
+    )
 
     repaired, mode = repair_narrative_authenticity_minimal(text, v0, contract, gm_output=gm_output)
     if repaired:
@@ -1266,12 +1295,20 @@ def _apply_narrative_authenticity_layer(
             meta["narrative_authenticity_repair_mode"] = mode
             meta["narrative_authenticity_failed"] = False
             meta["narrative_authenticity_failure_reasons"] = []
+            meta.update(
+                build_narrative_authenticity_emission_trace(
+                    v1, contract=contract, repaired=True, repair_mode=mode, repair_failed=False
+                )
+            )
             return repaired, meta, []
 
     extra: List[str] = []
     if not strict_social_path:
         extra.append("narrative_authenticity_unsatisfied_after_repair")
     meta["narrative_authenticity_failed"] = True
+    meta.update(
+        build_narrative_authenticity_emission_trace(v0, contract=contract, repaired=False, repair_failed=True)
+    )
     return text, meta, extra
 
 

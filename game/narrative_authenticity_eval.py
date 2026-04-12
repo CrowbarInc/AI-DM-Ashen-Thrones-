@@ -17,10 +17,15 @@ _NA_KEYS: frozenset[str] = frozenset(
         "narrative_authenticity_repaired",
         "narrative_authenticity_repair_applied",
         "narrative_authenticity_repair_mode",
+        "narrative_authenticity_repair_modes",
         "narrative_authenticity_skip_reason",
         "narrative_authenticity_reason_codes",
         "narrative_authenticity_metrics",
         "narrative_authenticity_evidence",
+        "narrative_authenticity_status",
+        "narrative_authenticity_trace",
+        "narrative_authenticity_relaxation_flags",
+        "narrative_authenticity_rumor_relaxed_low_signal",
     }
 )
 
@@ -109,6 +114,10 @@ def _supporting_metrics(meta: Mapping[str, Any]) -> dict[str, Any]:
             out[k] = {str(k2): v[k2] for k2 in sorted(v.keys())[:24]}
         elif k == "narrative_authenticity_evidence" and isinstance(v, Mapping):
             out[k] = {str(k2): v[k2] for k2 in sorted(v.keys())[:16]}
+        elif k == "narrative_authenticity_trace" and isinstance(v, Mapping):
+            out[k] = {str(k2): v[k2] for k2 in sorted(v.keys())[:12]}
+        elif k == "narrative_authenticity_relaxation_flags" and isinstance(v, Mapping):
+            out[k] = {str(k2): v[k2] for k2 in sorted(v.keys())[:12]}
         else:
             out[k] = v
     return out
@@ -127,6 +136,232 @@ def _text_npc_grounding_signals(text: str) -> dict[str, Any]:
             if pat.search(low)
         ),
     }
+
+
+_RUMOR_ECHO_REASON_CODES: frozenset[str] = frozenset(
+    {
+        "rumor_repeats_recent_narration",
+        "rumor_restates_scene_description",
+        "rumor_uses_identical_phrasing_for_known_fact",
+    }
+)
+_RUMOR_REALISM_REASON_CODES: frozenset[str] = frozenset(
+    {
+        "rumor_adds_no_new_signal",
+        "secondhand_info_lacks_source_limitation",
+        "secondhand_info_lacks_uncertainty_or_bias",
+    }
+)
+
+
+def _classify_narrative_authenticity_verdict(
+    merged: Mapping[str, Any],
+    *,
+    checked: bool,
+    failed: bool,
+    repaired: bool,
+) -> str:
+    """Explicit terminal / skip label for reporting (does not replace gate booleans)."""
+    skip = merged.get("narrative_authenticity_skip_reason")
+    if not checked:
+        if isinstance(skip, str) and skip.strip():
+            return "unchecked"
+        return "unchecked"
+    st_raw = merged.get("narrative_authenticity_status")
+    st = str(st_raw).strip().lower() if isinstance(st_raw, str) else ""
+    if st == "fail":
+        return "fail"
+    if st == "repaired":
+        return "repaired_pass"
+    if st == "relaxed":
+        return "relaxed_pass"
+    if st == "pass":
+        return "clean_pass"
+    if failed and not repaired:
+        return "fail"
+    if repaired:
+        return "repaired_pass"
+    if not failed and merged.get("narrative_authenticity_rumor_relaxed_low_signal") is True:
+        return "relaxed_pass"
+    if not failed:
+        return "clean_pass"
+    return "unchecked"
+
+
+def _score_rumor_echo_control(
+    *,
+    verdict: str,
+    checked: bool,
+    failed: bool,
+    repaired: bool,
+    codes: Set[str],
+    metrics: Mapping[str, Any],
+    na_trace: Mapping[str, Any],
+) -> tuple[int, List[str]]:
+    reasons: List[str] = []
+    if verdict == "unchecked":
+        return 3, ["na_eval_unchecked_neutral_rumor_echo_control"]
+    if not checked:
+        return 3, ["na_eval_not_checked_neutral_rumor_echo_control"]
+    rumor_turn = bool(metrics.get("rumor_turn_active")) or bool(na_trace.get("rumor_turn_active"))
+    if not rumor_turn:
+        return 4, ["na_eval_no_rumor_turn_echo_axis_lenient"]
+    echo_codes = codes & _RUMOR_ECHO_REASON_CODES
+    if failed and not repaired and echo_codes:
+        return 0, [f"na_eval_rumor_echo_unrepaired:{sorted(echo_codes)[0]}"]
+    jo = _as_float(metrics.get("rumor_overlap_jaccard"))
+    tg = _as_float(metrics.get("rumor_overlap_trigram"))
+    score = 5
+    if jo is not None and jo >= 0.62:
+        score -= 2
+        reasons.append("rumor_overlap_jaccard_elevated")
+    elif jo is not None and jo >= 0.48:
+        score -= 1
+        reasons.append("rumor_overlap_jaccard_moderate")
+    if tg is not None and tg >= 0.48:
+        score -= 1
+        reasons.append("rumor_overlap_trigram_elevated")
+    if repaired and echo_codes:
+        reasons.append("na_eval_repaired_rumor_echo_class")
+    return _clip_int(score, 0, 5), reasons
+
+
+def _score_secondhand_realism(
+    *,
+    verdict: str,
+    checked: bool,
+    failed: bool,
+    repaired: bool,
+    codes: Set[str],
+    metrics: Mapping[str, Any],
+    evidence: Mapping[str, Any],
+    na_trace: Mapping[str, Any],
+) -> tuple[int, List[str]]:
+    reasons: List[str] = []
+    if verdict == "unchecked":
+        return 3, ["na_eval_unchecked_neutral_secondhand_realism"]
+    if not checked:
+        return 3, ["na_eval_not_checked_neutral_secondhand_realism"]
+    rumor_turn = bool(metrics.get("rumor_turn_active")) or bool(na_trace.get("rumor_turn_active"))
+    if not rumor_turn:
+        return 4, ["na_eval_no_rumor_turn_secondhand_axis_lenient"]
+    rr_codes = codes & _RUMOR_REALISM_REASON_CODES
+    if failed and not repaired and rr_codes:
+        return 0, [f"na_eval_secondhand_unrepaired:{sorted(rr_codes)[0]}"]
+    sig = _as_int(metrics.get("rumor_signal_count"))
+    if sig is None:
+        return 3, ["na_eval_rumor_signal_count_absent"]
+    if sig >= 2:
+        reasons.append("rumor_signal_count_ge_2")
+        return 5, reasons
+    if sig == 1:
+        missing = evidence.get("rumor_missing_realism_categories")
+        if isinstance(missing, list) and missing:
+            reasons.append("rumor_missing_realism_categories_present")
+        return 4, reasons
+    reasons.append("rumor_signal_count_zero")
+    return 2, reasons
+
+
+def _score_rumor_repair_success(
+    *,
+    verdict: str,
+    checked: bool,
+    failed: bool,
+    repaired: bool,
+    codes: Set[str],
+    merged: Mapping[str, Any],
+) -> tuple[int, List[str]]:
+    reasons: List[str] = []
+    if verdict == "unchecked":
+        return 3, ["na_eval_unchecked_neutral_rumor_repair_success"]
+    if not checked:
+        return 3, ["na_eval_not_checked_neutral_rumor_repair_success"]
+    mode = merged.get("narrative_authenticity_repair_mode")
+    modes = merged.get("narrative_authenticity_repair_modes")
+    if verdict == "repaired_pass":
+        if isinstance(mode, str) and mode.strip():
+            reasons.append(f"na_eval_repair_mode:{mode.strip()}")
+        elif isinstance(modes, Sequence) and not isinstance(modes, (str, bytes)) and modes:
+            reasons.append(f"na_eval_repair_modes:{modes[0]}")
+        return 5, reasons
+    if verdict == "fail":
+        return 0, ["na_eval_fail_terminal_rumor_repair_success"]
+    rumor_hits = bool(codes & (_RUMOR_ECHO_REASON_CODES | _RUMOR_REALISM_REASON_CODES))
+    if rumor_hits and failed and repaired:
+        return 4, ["na_eval_repaired_other_axes_rumor_context"]
+    return 5, reasons
+
+
+def _score_rumor_relaxation_correctness(
+    *,
+    verdict: str,
+    checked: bool,
+    failed: bool,
+    merged: Mapping[str, Any],
+    na_trace: Mapping[str, Any],
+) -> tuple[int, List[str]]:
+    reasons: List[str] = []
+    if verdict == "unchecked":
+        return 3, ["na_eval_unchecked_neutral_rumor_relaxation_correctness"]
+    if not checked:
+        return 3, ["na_eval_not_checked_neutral_rumor_relaxation_correctness"]
+    relaxed_meta = merged.get("narrative_authenticity_rumor_relaxed_low_signal")
+    top_flags = merged.get("narrative_authenticity_relaxation_flags")
+    nested_flags = na_trace.get("rumor_relaxation_flags")
+    has_flags = (isinstance(top_flags, Mapping) and any(top_flags.values())) or (
+        isinstance(nested_flags, Mapping) and any(nested_flags.values())
+    )
+    if verdict == "relaxed_pass":
+        if relaxed_meta is not True:
+            reasons.append("na_eval_relaxed_pass_missing_rumor_relaxed_low_signal_flag")
+            return 3, reasons
+        if not has_flags:
+            reasons.append("na_eval_relaxed_pass_missing_relaxation_flags")
+            return 3, reasons
+        return 5, reasons
+    if verdict == "fail" and has_flags:
+        reasons.append("na_eval_relaxation_flags_present_under_fail_terminal")
+        return 3, reasons
+    if verdict == "clean_pass" and relaxed_meta is True:
+        reasons.append("na_eval_clean_pass_with_rumor_relaxed_low_signal_inconsistent")
+        return 2, reasons
+    if has_flags and relaxed_meta is not True and verdict == "clean_pass":
+        reasons.append("na_eval_relaxation_flags_without_relaxed_terminal_or_meta")
+        return 3, reasons
+    return 5, reasons
+
+
+def _score_rumor_state_hygiene(
+    *,
+    verdict: str,
+    checked: bool,
+    merged: Mapping[str, Any],
+    metrics: Mapping[str, Any],
+    na_trace: Mapping[str, Any],
+) -> tuple[int, List[str]]:
+    reasons: List[str] = []
+    if verdict == "unchecked":
+        skip = merged.get("narrative_authenticity_skip_reason")
+        if isinstance(skip, str) and skip.strip():
+            reasons.append(f"na_eval_skip_reason_recorded:{skip.strip()}")
+            return 4, reasons
+        return 2, ["na_eval_unchecked_without_skip_reason"]
+    if not checked:
+        return 3, ["na_eval_not_checked_neutral_rumor_state_hygiene"]
+    m_rt = metrics.get("rumor_turn_active")
+    t_rt = na_trace.get("rumor_turn_active")
+    if m_rt is True and t_rt is not True:
+        reasons.append("na_eval_rumor_turn_active_true_in_metrics_but_absent_in_trace")
+        return 2, reasons
+    if t_rt is True and m_rt is not True:
+        reasons.append("na_eval_rumor_turn_active_true_in_trace_but_absent_or_false_in_metrics")
+        return 2, reasons
+    if verdict in {"clean_pass", "relaxed_pass", "repaired_pass"}:
+        return 5, reasons
+    if verdict == "fail":
+        return 1, ["na_eval_fail_terminal_rumor_state_hygiene"]
+    return 3, reasons
 
 
 def _score_signal_gain(
@@ -345,12 +580,27 @@ def evaluate_narrative_authenticity(
     if not has_fem_key and not has_na_in_meta:
         return {
             "passed": False,
+            "narrative_authenticity_verdict": "missing_telemetry",
             "scores": {
                 "signal_gain": 0,
                 "anti_echoing": 0,
                 "followup_evolution": 0,
                 "non_generic_specificity": 0,
                 "npc_voice_grounding": 0,
+            },
+            "rumor_realism_axes": {
+                "rumor_echo_control": 0,
+                "secondhand_realism": 0,
+                "rumor_repair_success": 0,
+                "rumor_relaxation_correctness": 0,
+                "rumor_state_hygiene": 0,
+            },
+            "rumor_realism_axis_reasons": {
+                "rumor_echo_control": ["missing_narrative_authenticity_telemetry"],
+                "secondhand_realism": ["missing_narrative_authenticity_telemetry"],
+                "rumor_repair_success": ["missing_narrative_authenticity_telemetry"],
+                "rumor_relaxation_correctness": ["missing_narrative_authenticity_telemetry"],
+                "rumor_state_hygiene": ["missing_narrative_authenticity_telemetry"],
             },
             "reasons": ["missing_narrative_authenticity_telemetry"],
             "supporting_metrics": {},
@@ -405,9 +655,72 @@ def evaluate_narrative_authenticity(
     avg = sum(scores.values()) / 5.0
     passed = (not (checked and failed and not repaired)) and avg >= 3.0 and min(scores.values()) >= 2
 
+    verdict = _classify_narrative_authenticity_verdict(merged, checked=checked, failed=failed, repaired=repaired)
+    na_trace_d = _safe_mapping(merged.get("narrative_authenticity_trace"))
+    evidence_d = _safe_mapping(merged.get("narrative_authenticity_evidence"))
+
+    rx1, z1 = _score_rumor_echo_control(
+        verdict=verdict,
+        checked=checked,
+        failed=failed,
+        repaired=repaired,
+        codes=codes,
+        metrics=metrics_d,
+        na_trace=na_trace_d,
+    )
+    rx2, z2 = _score_secondhand_realism(
+        verdict=verdict,
+        checked=checked,
+        failed=failed,
+        repaired=repaired,
+        codes=codes,
+        metrics=metrics_d,
+        evidence=evidence_d,
+        na_trace=na_trace_d,
+    )
+    rx3, z3 = _score_rumor_repair_success(
+        verdict=verdict,
+        checked=checked,
+        failed=failed,
+        repaired=repaired,
+        codes=codes,
+        merged=merged,
+    )
+    rx4, z4 = _score_rumor_relaxation_correctness(
+        verdict=verdict,
+        checked=checked,
+        failed=failed,
+        merged=merged,
+        na_trace=na_trace_d,
+    )
+    rx5, z5 = _score_rumor_state_hygiene(
+        verdict=verdict,
+        checked=checked,
+        merged=merged,
+        metrics=metrics_d,
+        na_trace=na_trace_d,
+    )
+    rumor_axes = {
+        "rumor_echo_control": rx1,
+        "secondhand_realism": rx2,
+        "rumor_repair_success": rx3,
+        "rumor_relaxation_correctness": rx4,
+        "rumor_state_hygiene": rx5,
+    }
+    rumor_axis_reasons = {
+        "rumor_echo_control": z1,
+        "secondhand_realism": z2,
+        "rumor_repair_success": z3,
+        "rumor_relaxation_correctness": z4,
+        "rumor_state_hygiene": z5,
+    }
+
     out: dict[str, Any] = {
         "passed": bool(passed),
+        "narrative_authenticity_verdict": verdict,
         "scores": scores,
+        "rumor_realism_axes": rumor_axes,
+        "rumor_realism_axis_reasons": rumor_axis_reasons,
         "reasons": list(dict.fromkeys(str(x) for x in reasons if str(x).strip())),
         "supporting_metrics": _supporting_metrics(merged),
     }

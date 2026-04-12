@@ -135,6 +135,14 @@ def snapshot_turn_stage(
     na_skip = fem.get("narrative_authenticity_skip_reason")
     if isinstance(na_skip, str) and na_skip.strip():
         snap["narrative_authenticity_skip_reason"] = na_skip.strip()[:120]
+    na_status = fem.get("narrative_authenticity_status")
+    if isinstance(na_status, str) and na_status.strip():
+        snap["narrative_authenticity_status"] = na_status.strip()[:24]
+    if fem.get("narrative_authenticity_rumor_relaxed_low_signal"):
+        snap["narrative_authenticity_rumor_relaxed_low_signal"] = True
+    na_trace = fem.get("narrative_authenticity_trace")
+    if isinstance(na_trace, dict) and na_trace.get("rumor_turn_active") is not None:
+        snap["rumor_turn_active"] = bool(na_trace.get("rumor_turn_active"))
     if timing_ms is not None:
         snap["timing_ms"] = float(timing_ms)
     if kwargs:
