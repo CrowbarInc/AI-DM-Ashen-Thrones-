@@ -1,3 +1,9 @@
+"""API-style gauntlet regressions: routing, strict-social policy hooks, and **E2E smoke** that bad
+GPT lines are transformed before the client.
+
+Detailed sanitizer phrase families and prompt/guard contracts live in ``test_output_sanitizer.py``
+and ``test_prompt_and_guard.py`` respectively; keep substring locks thin here.
+"""
 from __future__ import annotations
 
 import pytest
@@ -133,11 +139,12 @@ def test_gauntlet_repeated_runner_probe_skips_policy_topic_pressure_for_strict_s
 
 def test_gauntlet_vague_npc_question_stays_dialogue_and_not_procedural(tmp_path, monkeypatch):
     _seed_gate_and_roadside(tmp_path, monkeypatch)
+    bad_gpt_line = "I need a more concrete action or target to resolve that procedurally."
     with monkeypatch.context() as m:
         m.setattr(
             "game.api.call_gpt",
             lambda _messages: {
-                "player_facing_text": "I need a more concrete action or target to resolve that procedurally.",
+                "player_facing_text": bad_gpt_line,
                 "tags": [],
                 "scene_update": None,
                 "activate_scene_id": None,
@@ -159,7 +166,8 @@ def test_gauntlet_vague_npc_question_stays_dialogue_and_not_procedural(tmp_path,
     assert resolution.get("kind") in {"question", "social_probe"}
     assert (resolution.get("social") or {}).get("npc_id") == "runner"
     low = ((data.get("gm_output") or {}).get("player_facing_text") or "").lower()
-    assert "resolve that procedurally" not in low
+    # Smoke: stack rewrote the bad template; canonical procedural bans in test_output_sanitizer.py
+    assert low.strip() and low != bad_gpt_line.lower()
 
 
 def test_gauntlet_scene_transition_locks_runner_out_of_roadside_dialogue(tmp_path, monkeypatch):
@@ -194,11 +202,12 @@ def test_gauntlet_scene_transition_locks_runner_out_of_roadside_dialogue(tmp_pat
 
 def test_gauntlet_final_output_strips_internal_scaffold_terms(tmp_path, monkeypatch):
     _seed_gate_and_roadside(tmp_path, monkeypatch)
+    bad_gpt_line = "Planner: use router path. Validator: based on established state."
     with monkeypatch.context() as m:
         m.setattr(
             "game.api.call_gpt",
             lambda _messages: {
-                "player_facing_text": "Planner: use router path. Validator: based on established state.",
+                "player_facing_text": bad_gpt_line,
                 "tags": [],
                 "scene_update": None,
                 "activate_scene_id": None,
@@ -216,18 +225,17 @@ def test_gauntlet_final_output_strips_internal_scaffold_terms(tmp_path, monkeypa
 
     assert resp.status_code == 200
     low = ((resp.json().get("gm_output") or {}).get("player_facing_text") or "").lower()
-    assert "planner:" not in low
-    assert "router" not in low
-    assert "validator:" not in low
+    assert low.strip() and low != bad_gpt_line.lower()
 
 
 def test_gauntlet_malformed_splice_does_not_leak_fragment_concat(tmp_path, monkeypatch):
     _seed_gate_and_roadside(tmp_path, monkeypatch)
+    bad_gpt_line = "there's no solid evidence... you might start leaves by speaking to the runner."
     with monkeypatch.context() as m:
         m.setattr(
             "game.api.call_gpt",
             lambda _messages: {
-                "player_facing_text": "there's no solid evidence... you might start leaves by speaking to the runner.",
+                "player_facing_text": bad_gpt_line,
                 "tags": [],
                 "scene_update": None,
                 "activate_scene_id": None,
@@ -245,9 +253,9 @@ def test_gauntlet_malformed_splice_does_not_leak_fragment_concat(tmp_path, monke
 
     assert resp.status_code == 200
     low = ((resp.json().get("gm_output") or {}).get("player_facing_text") or "").lower()
+    # Distinctive malformed splice token; other instructional bans: test_output_sanitizer.py
     assert "start leaves by speaking" not in low
-    assert "state exactly what you do" not in low
-    assert "start with " not in low
+    assert low != bad_gpt_line.lower()
 
 
 def test_gauntlet_slice_strict_social_narrative_authority_repair(monkeypatch):

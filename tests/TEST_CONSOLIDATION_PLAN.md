@@ -1,10 +1,14 @@
-# Test consolidation plan (Block 15C)
+# Test consolidation plan (Block 15C, post-AER Block C1 boundary)
 
-**Status:** Plan + recorded ownership; routing consolidation **pass closed**; **repair/retry cluster closed enough** (Block 3 doc, 2026-04-03 — see *Repair / retry cluster — Block 3*). **Runtime map:** `docs/narrative_integrity_architecture.md` documents the current `game/` ownership for narrative integrity (routing, continuity breaks, targeting, emission validators/repairs, gate orchestration) and **explicit deferrals** (e.g. authoritative resolution in `interaction_context`, large clusters still in `final_emission_gate`).
+**Status:** Plan + recorded ownership; routing consolidation **pass closed**; **repair/retry cluster closed enough** (Block 3 doc — see *Repair / retry cluster — Block 3*). **Behavioral Gauntlet**, **Playability Validation**, and **AER** are **complete** as validation tracks—this document now governs **post-feature consolidation** only (no gameplay expansion in consolidation-only PRs).
+
+**Runtime map:** `docs/narrative_integrity_architecture.md` documents `game/` ownership (routing, continuity breaks, targeting, emission validators/repairs, **`final_emission_gate` orchestration**) and **explicit deferrals**. **Post-AER Consolidation Rules** and the **Consolidation Targets** table live there and in `docs/current_focus.md`.
+
+**Terminology:** use **canonical owner**, **smoke overlap**, **deferred**, **orchestration**, and **deterministic / contract-driven** consistently with `tests/TEST_AUDIT.md`.
 
 **Source:** Derived from `tests/TEST_AUDIT.md`, `tests/test_inventory.json` (regenerate via `py -3 tools/test_audit.py`), and spot review of transcript vs pipeline modules.
 
-**Goal:** A concrete, low-risk roadmap so cleanup can run in small batches with full-suite checks between steps.
+**Goal:** A concrete, low-risk roadmap so cleanup can run in small batches with full-suite checks between steps—prioritizing **final emission metadata packaging**, **telemetry/meta normalization**, and **test ownership** trimming aligned with runtime **orchestration** boundaries.
 
 **Consolidation Block 1 (ownership):** The suite-wide **canonical ownership map** and **deferrals** live in `tests/TEST_AUDIT.md` → section *Consolidation Block 1 — Canonical ownership map & overlap hotspots*. **Prompt/sanitizer boundary** (this cluster) is recorded below so Block 2 can trim without re-deriving it.
 
@@ -29,6 +33,10 @@
 
 **Block 2 applied (2026-04-09):** In `test_prompt_and_guard.py`, the procedural branch of `test_uncertainty_source_modes_render_distinct_voice_and_shape` asserts `source` / `category` plus a short render smoke (length + terminal punctuation) instead of re-locking procedural fallback phrases owned by `test_output_sanitizer.py`. Validator enforcement tests use `detect_validator_voice(...) == []` plus tags (and diegetic preservation where relevant) instead of duplicating substring legality with `_assert_bounded_uncertainty` / explicit “as an AI” checks. `test_social_exchange_uncertainty_stays_npc_grounded_on_repeated_questions` dropped the redundant ban on `"nothing in the scene points to a clear answer yet"` (canonical post-GM phrase ban lives in `test_output_sanitizer.py`). One clarifying comment added on the adjudication procedural sanitizer test.
 
+**Block C3 applied (2026-04-12 — prompt / sanitizer test ownership):** `build_retry_prompt_for_failure` string contracts moved from `test_transcript_regression.py` into `test_prompt_and_guard.py` (`test_retry_prompt_warns_against_known_gate_failure_shapes`, `test_retry_prompt_multi_lead_and_urgency_language`). Transcript retry-exhaustion tests use `detect_validator_voice(...) == []` on final player-facing text instead of locking the exact trap phrase. `test_gauntlet_regressions.py` sanitizer-adjacent cases weakened to “pipeline transformed the mocked GPT line” smoke plus one distinctive splice token; detailed substring families remain in `test_output_sanitizer.py`.
+
+**Block C4 applied (2026-04-12 — social / emission ownership + transcript thinning):** Module docstrings clarify **engine** (`test_social.py`) vs **strict emission** (`test_social_exchange_emission.py`) vs **quality harness** (`test_social_emission_quality.py`). Renamed mislabeled `test_transcript_*` cases in `test_social_emission_quality.py` to `test_emission_quality_*` so transcript modules are not implied owners. `test_transcript_regression.py` social-grounding helper trimmed to a shorter marker set with an explicit “smoke only” comment. `test_lead_lifecycle_block3_transcript_regression.py` dropped a duplicate procedural phrase lock in favor of length + NPC-voice absence checks (sanitizer owns exact fallback strings).
+
 **Adjacent low-risk overlap trims (2026-04-09):**
 
 - `tests/test_social.py`: generic-addressing “smoke” now avoids locking the exact `source` / `target_source` enum when the **canonical target id** is correct (vocative vs generic-role precedence is owned by `tests/test_social_target_authority_regressions.py`).
@@ -49,14 +57,16 @@ The following **routing ownership pattern** is now the explicit contract for new
 
 **Intentional duplication:** Some phrases or scenarios appear in **both** pure-routing / table coverage (`test_dialogue_routing_lock.py`, aspects of `test_directed_social_routing.py`) **and** full-pipeline coverage (`test_turn_pipeline_shared.py`) because they assert **different layers** (unit/table vs HTTP/stack vs resolution). That overlap is expected unless a later pass maps a specific case to a single layer with a replacement strategy.
 
-### Next consolidation order (after routing)
+### Next consolidation order (after routing; Block C1 canonical)
 
 Work the clusters in this order unless a release forces a narrow fix:
 
-1. ~~**Repair / retry cluster**~~ — **Closed enough for now** (2026-04-03): applied ownership recorded in *Repair / retry cluster — Block 3*; no further test refactors required for this cluster pass.
-2. **Prompt / sanitizer cluster** **next** — `test_prompt_and_guard.py`, `test_output_sanitizer.py`, symptom-based split (messages-to-model vs post-GM output).
-3. **Social / emission** after that — `test_social_exchange_emission.py`, `test_social_escalation.py`, `test_social.py` migration, emission-quality harness alignment.
-4. **Lead / clue** last in the batch order — includes `test_social_destination_redirect_leads.py` (destination-redirect / pending-lead contract); treat overlap reduction as normal consolidation, not a blocker for earlier clusters.
+1. ~~**Repair / retry cluster**~~ — **Closed enough for now**: applied ownership recorded in *Repair / retry cluster — Block 3*; further edits are optional thinning only.
+2. **Runtime alignment (parallel doc-driven)** — **Final emission metadata packaging** and **narrative authenticity telemetry shape / reuse** under `apply_final_emission_gate` **orchestration** (see `docs/narrative_integrity_architecture.md` → **Consolidation Targets**). Tests should follow, not lead, ambiguous emit-path moves.
+3. **Prompt / sanitizer cluster** — `test_prompt_and_guard.py`, `test_output_sanitizer.py`, symptom-based split (messages-to-model vs post-GM output); reduce duplicate phrase locks in favor of one **canonical owner** per string family plus **smoke overlap** where layers differ (**Block 2** partial application already recorded above).
+4. **Social / emission** — `test_social_exchange_emission.py`, `test_social_escalation.py`, `test_social.py` migration, emission-quality harness alignment; clarify social vs strict-social **orchestration** test homes.
+5. **Transcript duplicate assertion thinning** — `test_transcript_regression.py`, gauntlet modules, and related harnesses: keep **deterministic** sequencing/state checks; **deferred** heavy deletes until each case has a replacement **contract-driven** owner.
+6. **Lead / clue** — **Deferred** until steps **3–4** complete — includes `test_social_destination_redirect_leads.py` (destination-redirect / pending-lead contract); overlap reduction is normal consolidation, not a blocker for earlier clusters.
 
 ### Repair / retry cluster — Block 1–2 (history)
 
@@ -88,7 +98,7 @@ Work the clusters in this order unless a release forces a narrow fix:
 - `tests/test_output_sanitizer.py` — e.g. post-final gate / `strict_social_terminal_clamp` with empty output returning `gate_sealed_text`: **sanitizer-boundary** contract; keep **thin** relative to `ensure_minimal_*` / `force_terminal_*` in the repair cluster.
 - `tests/test_prompt_and_guard.py` — e.g. `detect_retry_failures`, `build_retry_prompt_for_failure`, validator-voice enforcement: **retry classification and prompt/guard** contracts; **do not** treat as the home for minimal repair line content (symptom split: messages-to-model vs post-GM output stays as in §3 R3).
 
-**Repair cluster files:** Primary owners are the two regression modules above; further thinning is **optional** and **not** part of this closed cluster. **Optional later:** targeted thinning in `tests/test_output_sanitizer.py` or `tests/test_prompt_and_guard.py` only where a specific assertion **duplicates** a repair lock; broader work is the **prompt/sanitizer** batch (*Next consolidation order* item 2).
+**Repair cluster files:** **Canonical owners** are the two regression modules above; further thinning is **optional** and **not** part of this closed cluster. **Optional later:** targeted thinning in `tests/test_output_sanitizer.py` or `tests/test_prompt_and_guard.py` only where a specific assertion **duplicates** a repair lock; broader work is the **prompt/sanitizer** batch (*Next consolidation order* step **3**).
 
 **Validation:** `pytest --collect-only -q` — green after documentation-only passes.
 
@@ -161,11 +171,11 @@ Routing three-module split is **complete** (Block 3 above). Repair/retry pair is
 
 1. ~~`test_turn_pipeline_shared.py`, `test_directed_social_routing.py`, `test_dialogue_routing_lock.py`~~ — **routing pass closed**; only thinning with a replacement strategy if needed later.
 2. ~~`test_contextual_minimal_repair_regressions.py`, `test_empty_social_retry_regressions.py`~~ — **repair/retry cluster closed enough** (applied ownership in Block 3 doc).
-3. **Next:** `test_prompt_and_guard.py`, `test_output_sanitizer.py` (prompt/sanitizer batch).
-4. **Then:** `test_social.py`, `test_social_exchange_emission.py`, `test_social_escalation.py` (social/emission migration).
-5. `test_transcript_regression.py`, `test_lead_lifecycle_block3_transcript_regression.py`, `test_gauntlet_regressions.py`
-6. `test_social_emission_quality.py` (module-level transcript policy)
-7. Lead/clue cluster: `test_social_lead_landing.py`, `test_clue_lead_registry_integration.py`, `test_social_destination_redirect_leads.py` — **last** in the ordered batch (see *Next consolidation order* above).
+3. **Emit-path / telemetry alignment (doc-first)** — keep tests aligned with `final_emission_gate` **orchestration** and metadata packaging decisions (`docs/narrative_integrity_architecture.md` **Consolidation Targets**).
+4. **Next (tests):** `test_prompt_and_guard.py`, `test_output_sanitizer.py` (prompt/sanitizer batch; **canonical owner** per layer, **smoke overlap** only).
+5. **Then:** `test_social.py`, `test_social_exchange_emission.py`, `test_social_escalation.py` (social/emission migration).
+6. **Transcript thinning:** `test_transcript_regression.py`, `test_lead_lifecycle_block3_transcript_regression.py`, `test_gauntlet_regressions.py`, `test_social_emission_quality.py` (module-level transcript policy) — prefer **deterministic** structural checks over duplicate prose locks.
+7. **Lead / clue cluster** — **`deferred`** until **4–5** complete: `test_social_lead_landing.py`, `test_clue_lead_registry_integration.py`, `test_social_destination_redirect_leads.py` (see *Next consolidation order* above).
 
 ---
 

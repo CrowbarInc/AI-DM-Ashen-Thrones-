@@ -8,6 +8,7 @@ from __future__ import annotations
 import re
 from typing import Any, Dict, List, Mapping, Sequence
 
+from game.final_emission_meta import build_narrative_authenticity_emission_trace
 from game.final_emission_text import _normalize_terminal_punctuation, _normalize_text
 
 NARRATIVE_AUTHENTICITY_VERSION = 1
@@ -787,130 +788,6 @@ def build_narrative_authenticity_contract(
             else:
                 base[str(k)] = v
     return base
-
-
-def _slim_na_metrics(metrics: Mapping[str, Any] | None) -> Dict[str, Any]:
-    if not isinstance(metrics, Mapping):
-        return {}
-    out: Dict[str, Any] = {}
-    for k, v in metrics.items():
-        if v is None:
-            continue
-        if isinstance(v, float):
-            out[str(k)] = round(v, 4)
-        elif isinstance(v, (int, str, bool)):
-            out[str(k)] = v
-    return out
-
-
-def _slim_na_evidence(evidence: Mapping[str, Any] | None, *, max_str: int = 120, max_list: int = 6) -> Dict[str, Any]:
-    if not isinstance(evidence, Mapping):
-        return {}
-
-    def clip(x: Any) -> Any:
-        if isinstance(x, str) and len(x) > max_str:
-            return x[: max(0, max_str - 1)] + "…"
-        if isinstance(x, list):
-            return [clip(i) for i in x[:max_list]]
-        if isinstance(x, dict):
-            return {str(k2): clip(v2) for k2, v2 in list(x.items())[:8]}
-        return x
-
-    return {str(k): clip(v) for k, v in evidence.items()}
-
-
-def _resolve_narrative_authenticity_emission_status(
-    validation: Mapping[str, Any],
-    *,
-    repaired: bool,
-    repair_failed: bool,
-) -> str | None:
-    """Terminal status for gate/meta (``pass`` / ``relaxed`` / ``repaired`` / ``fail``); None if unchecked or non-terminal."""
-    checked = bool(validation.get("checked"))
-    if not checked:
-        return None
-    if repaired:
-        return "repaired"
-    if repair_failed:
-        return "fail"
-    if bool(validation.get("passed")):
-        return "relaxed" if bool(validation.get("rumor_realism_relaxed_low_signal")) else "pass"
-    # Checked failure before a repair outcome is applied — omit status until the layer finishes.
-    return None
-
-
-def _build_narrative_authenticity_trace_slice(
-    validation: Mapping[str, Any] | None,
-    *,
-    contract: Mapping[str, Any] | None,
-) -> Dict[str, Any]:
-    """Nested compact rumor / classifier context (contract trace + validation relaxation signals)."""
-    trace_out: Dict[str, Any] = {}
-    rumor_turn = False
-    if isinstance(contract, Mapping):
-        tr = contract.get("trace") if isinstance(contract.get("trace"), Mapping) else {}
-        rumor_turn = bool(tr.get("rumor_turn_active"))
-        if rumor_turn:
-            trace_out["rumor_turn_active"] = True
-            rrc = tr.get("rumor_turn_reason_codes")
-            if isinstance(rrc, list) and rrc:
-                trace_out["rumor_turn_reason_codes"] = [str(x) for x in rrc[:10] if str(x).strip()]
-            rts = tr.get("rumor_trigger_spans")
-            if isinstance(rts, list) and rts:
-                trace_out["rumor_trigger_spans"] = rts[:6]
-    if isinstance(validation, Mapping):
-        if validation.get("rumor_realism_relaxed_low_signal"):
-            trace_out["rumor_realism_relaxed_low_signal"] = True
-        vflags = validation.get("rumor_realism_relaxation_flags")
-        if isinstance(vflags, Mapping) and any(vflags.values()):
-            trace_out["rumor_relaxation_flags"] = {str(k): bool(v) for k, v in vflags.items() if v}
-    return trace_out
-
-
-def build_narrative_authenticity_emission_trace(
-    validation: Mapping[str, Any] | None,
-    *,
-    contract: Mapping[str, Any] | None = None,
-    repaired: bool = False,
-    repair_mode: str | None = None,
-    repair_failed: bool = False,
-) -> Dict[str, Any]:
-    """Compact, stable fields for ``_final_emission_meta`` (failure, repair, contract skip, or clean pass)."""
-    if not isinstance(validation, Mapping):
-        return {}
-    out: Dict[str, Any] = {}
-    sr = validation.get("skip_reason")
-    if isinstance(sr, str) and sr.strip():
-        out["narrative_authenticity_skip_reason"] = sr.strip()
-    checked = bool(validation.get("checked"))
-    passed = bool(validation.get("passed"))
-    reasons = [str(x) for x in (validation.get("failure_reasons") or []) if str(x).strip()]
-    if reasons:
-        out["narrative_authenticity_reason_codes"] = reasons
-    metrics_obj = validation.get("metrics")
-    rumor_turn = bool((metrics_obj or {}).get("rumor_turn_active")) if isinstance(metrics_obj, Mapping) else False
-    if checked and (reasons or not passed or rumor_turn):
-        out["narrative_authenticity_metrics"] = _slim_na_metrics(validation.get("metrics"))
-        out["narrative_authenticity_evidence"] = _slim_na_evidence(validation.get("evidence"))
-    status = _resolve_narrative_authenticity_emission_status(
-        validation, repaired=repaired, repair_failed=repair_failed
-    )
-    if status is not None:
-        out["narrative_authenticity_status"] = status
-    rf = validation.get("rumor_realism_relaxation_flags") if isinstance(validation, Mapping) else None
-    if isinstance(rf, Mapping) and any(rf.values()):
-        out["narrative_authenticity_relaxation_flags"] = {str(k): bool(v) for k, v in rf.items() if v}
-    if bool(validation.get("rumor_realism_relaxed_low_signal")):
-        out["narrative_authenticity_rumor_relaxed_low_signal"] = True
-    slice_trace = _build_narrative_authenticity_trace_slice(validation, contract=contract)
-    if slice_trace:
-        out["narrative_authenticity_trace"] = slice_trace
-    if repair_mode:
-        out["narrative_authenticity_repair_mode"] = repair_mode
-        out["narrative_authenticity_repair_modes"] = [repair_mode]
-    else:
-        out["narrative_authenticity_repair_modes"] = []
-    return out
 
 
 def inspect_narrative_authenticity_failure(result: Mapping[str, Any] | None) -> Dict[str, Any]:

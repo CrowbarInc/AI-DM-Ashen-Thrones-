@@ -12,6 +12,10 @@ repair/layer wiring (:mod:`game.final_emission_repairs`), shared text/normalizat
 symbols remain importable from this package for historical tests (prefer importing from
 their real module for new code).
 
+NA telemetry keys merged into ``_final_emission_meta`` are packaged at write time by
+:mod:`game.final_emission_meta` (single schema); the gate remains the **orchestration owner**
+that calls layer wiring in :mod:`game.final_emission_repairs`.
+
 **Turn packet vs telemetry:** The turn packet (:mod:`game.turn_packet`) is the canonical
 accessor/snapshot layer for contracts on a turn. Stage-diff telemetry
 (:mod:`game.stage_diff_telemetry`) records bounded stage transitions for observability only.

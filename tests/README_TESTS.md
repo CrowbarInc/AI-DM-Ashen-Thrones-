@@ -2,15 +2,17 @@
 
 **Full lane** runs the whole suite. **Fast lane** excludes items marked `transcript` or `slow`. **Stricter fast** also excludes `brittle`. Marker definitions live in `pytest.ini`; scope and ownership notes are in `tests/TEST_AUDIT.md`. Routing and **repair/retry regression** ownership are settled (see `tests/TEST_CONSOLIDATION_PLAN.md` → *Block 3 — Routing* and *Repair / retry cluster — Block 3*).
 
+**Post-AER Block C1:** Behavioral Gauntlet, Playability Validation, and AER are **complete** as validation tracks. Consolidation PRs target **orchestration** clarity, **telemetry/meta** normalization, and **test ownership** (**canonical owner** per module, **smoke overlap** only where layers differ)—see `docs/current_focus.md` and `docs/narrative_integrity_architecture.md` (**Post-AER Consolidation Rules**).
+
 **Windows:** If `pytest` is not on your `PATH`, use `py -3 -m pytest` instead of `pytest` for every command below (for example `py -3 -m pytest -m "not transcript and not slow"`).
 
 ## Manual gauntlets (outside pytest)
 
 Manual gauntlets are **not** part of pytest selection. Use them after changes that can **feel wrong in play** (lead follow-up, narration voice, speaker grounding, scene transitions) even when automated tests pass. Named scenarios, exact player prompt sequences, and pass/fail criteria live in [`docs/manual_gauntlets.md`](../docs/manual_gauntlets.md); the CLI surface is [`tools/run_manual_gauntlet.py`](../tools/run_manual_gauntlet.py).
 
-## Behavioral gauntlet coverage
+## Behavioral gauntlet coverage (complete)
 
-This repo has a **deterministic behavioral gauntlet stack** for compact narration-behavior checks. The main pieces are:
+This repo has a **deterministic**, **contract-driven behavioral gauntlet stack** for compact narration-behavior checks (validation track — **complete**). The main pieces are:
 
 - Evaluator helper: `tests/helpers/behavioral_gauntlet_eval.py`
 - Behavioral smoke tests: `tests/test_behavioral_gauntlet_smoke.py`
@@ -88,11 +90,13 @@ py -3 -m pytest tests/test_manual_gauntlet_report.py tests/test_manual_gauntlet_
 py -3 tools/run_manual_gauntlet.py --list
 ```
 
-## Playability tests
+## Playability tests (complete)
 
 ### Playability Tests
 
 **Location:** `tests/test_playability_smoke.py`
+
+**Status:** **Complete** as a validation layer—the suite remains the **canonical owner** for turn-scoped playability checks.
 
 **Characteristics:**
 
@@ -139,7 +143,7 @@ pytest tests/
 pytest --collect-only -q
 ```
 
-Exact suite counts change over time; use the collect-only output as the source of truth and re-check after large suite changes. See `tests/TEST_AUDIT.md` → *Block 3 — Fast/full workflow verification*.
+Exact suite counts change over time; use the collect-only output as the source of truth and re-check after large suite changes. See `tests/TEST_AUDIT.md` → *Block 3 — Fast/full workflow verification* (Block C1 snapshot: **2214** tests collected; fast lane **2051** selected / **163** deselected as of 2026-04-12).
 
 ## Fast lane
 
@@ -242,7 +246,7 @@ Optional stricter selection: add `and not synthetic` to a local fast-lane comman
 
 ## Where to add new tests
 
-See `tests/TEST_AUDIT.md` → *Consolidation Block 1 — Canonical ownership map & overlap hotspots* for owners by theme. **Next consolidation order:** prompt/sanitizer → social/emission → lead/clue (repair/retry cluster documented and closed enough — see `tests/TEST_CONSOLIDATION_PLAN.md` → *Next consolidation order* and *Repair / retry cluster — Block 3*).
+See `tests/TEST_AUDIT.md` → *Consolidation Block 1 — Canonical ownership map & overlap hotspots* for **canonical owner** themes and **smoke overlap** guidance. **Next consolidation order (Block C1):** emit-path **orchestration** / metadata + **telemetry** alignment (doc-driven) → prompt/sanitizer → social/emission → transcript duplicate assertion thinning → **lead/clue `deferred`** last (repair/retry cluster documented and closed enough — see `tests/TEST_CONSOLIDATION_PLAN.md` → *Next consolidation order* and *Repair / retry cluster — Block 3*).
 
 ## Command cheat sheet
 

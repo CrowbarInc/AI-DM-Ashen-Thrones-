@@ -4,15 +4,19 @@ Compact checklist for re-validating **NPC lead continuity** after social or prom
 
 **Full manual smoke pass** (named scenarios, exact player prompt scripts, pass/fail criteria): [`docs/manual_gauntlets.md`](manual_gauntlets.md).
 
+**Post-AER consolidation:** Behavioral gauntlet, playability validation, and AER are **functionally complete** validation tracks. Ongoing work targets **orchestration** boundaries, **telemetry** normalization, and **test ownership** trimming (each test module should have one **canonical owner** domain; cross-suite checks stay **smoke overlap** unless layers truly differ)—see `docs/current_focus.md` and `docs/narrative_integrity_architecture.md`.
+
 ## Validation layers
 
-**Unit/integration** — Storage, prompt export, behavior hints, and grounding invariants (targeted modules under `tests/`). **Synthetic transcript regression** — Deterministic multi-turn sessions that lock the exported continuity / repeat-suppression contract, not narration wording. **Manual gauntlets** — Spot-check conversational feel and obvious repetition or speaker bleed; use [`docs/manual_gauntlets.md`](manual_gauntlets.md) for the canonical scripted pass.
+**Unit/integration** — Storage, prompt export, behavior hints, and grounding invariants (targeted modules under `tests/`). **Synthetic transcript regression** — **Deterministic** multi-turn sessions that lock the exported continuity / repeat-suppression **contract**, not narration wording. **Manual gauntlets** — Spot-check conversational feel and obvious repetition or speaker bleed; use [`docs/manual_gauntlets.md`](manual_gauntlets.md) for the **canonical** scripted pass.
 
-## Playability validation
+## Playability validation (complete)
 
 ### Playability Validation
 
 **Purpose:** validate end-to-end narrative behavior at the player-facing level.
+
+**Status:** **Complete** as a validation layer (not a pending feature track). It remains the **canonical owner** for turn-scoped playability scoring in CI-style runs.
 
 **Tools:**
 
@@ -52,13 +56,26 @@ Compact checklist for re-validating **NPC lead continuity** after social or prom
 
 **Important:** this is a **test harness** adjustment, not a runtime change and not a system defect.
 
-### Validation Layers (Final Form)
+### Validation Layers (final form)
 
-| Layer | Purpose |
-|------|--------|
-| Contracts | structural correctness |
-| Behavioral Gauntlet | pipeline stability |
-| Playability | human-DM behavioral validation |
+| Layer | Purpose | Status |
+|------|--------|--------|
+| Contracts | Structural correctness | Ongoing (baseline regression) |
+| Behavioral Gauntlet | **Deterministic** pipeline / narration-behavior smoke | **Complete** |
+| Playability | Human-DM behavioral validation via live `/api/chat` | **Complete** |
+| AER (Anti-Echo & Rumor Realism) | Narrative authenticity operator + repairs + telemetry | **Complete** (functionally) |
+
+## Behavioral gauntlet (complete)
+
+The **Behavioral Gauntlet** is **complete** as a compact, **deterministic** adjunct to broader gauntlet and transcript inventory:
+
+- `tests/helpers/behavioral_gauntlet_eval.py` — evaluator helper (`evaluate_behavioral_gauntlet(turns, *, expected_axis=None)`).
+- `tests/test_behavioral_gauntlet_smoke.py` — automated smoke lane (`integration` + `regression`).
+- `tests/test_behavioral_gauntlet_eval.py` — locks the evaluator **contract**.
+- `docs/manual_gauntlets.md` — manual source of truth including behavioral gauntlets `G9` through `G12`.
+- `tools/run_manual_gauntlet.py` — optional advisory `behavioral_eval` attachment to `summary.json`.
+
+Manual `behavioral_eval` output is advisory only: it does not replace operator judgment or determine manual pass/fail by itself.
 
 ## Commands
 
@@ -78,4 +95,4 @@ From repo root (on Windows, use `py -m pytest` if `pytest` is not on your `PATH`
 
 ## Manual continuity gauntlets
 
-Run the **canonical** scripted scenarios (G1–G12), substitution guide, and rubric in [`docs/manual_gauntlets.md`](manual_gauntlets.md). That now includes behavioral slices `G9` through `G12`; their `summary.json` output may include advisory `behavioral_eval` data and warnings, but manual judgment still owns pass/fail. Repeat in the live UI or your usual play harness after lead, prompt-context, narration, routing, or emission changes when you need a human spot-check beyond pytest.
+Run the **canonical** scripted scenarios (G1–G12), substitution guide, and rubric in [`docs/manual_gauntlets.md`](manual_gauntlets.md). Behavioral slices `G9` through `G12` may include advisory `behavioral_eval` data and warnings in `summary.json`, but manual judgment still owns pass/fail. Repeat in the live UI or your usual play harness after lead, prompt-context, narration, routing, or emission changes when you need a human spot-check beyond pytest.

@@ -1,3 +1,11 @@
+"""Canonical owner for post-GM emit hygiene: ``sanitize_player_facing_output``, final validation
+/coherence passes, leaked-payload stripping, and procedural / scaffold phrase rewrites on
+**player-facing** text.
+
+Prompt construction, ``build_messages``, guards, and ``build_retry_prompt_for_failure`` belong in
+``tests/test_prompt_and_guard.py``. Integration suites prove the stack runs; detailed substring
+families stay here.
+"""
 from __future__ import annotations
 
 import game.output_sanitizer as output_sanitizer_module

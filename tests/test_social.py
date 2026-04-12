@@ -1,4 +1,12 @@
-"""Tests for deterministic social resolution engine."""
+"""Deterministic ``resolve_social_action`` / interaction-context engine contracts.
+
+Canonical owners elsewhere (post–Block C4): strict-social **string/shape** emission and
+``build_final_strict_social_response`` / gate coercions live in ``test_social_exchange_emission.py``;
+topic-pressure **escalation ladder** outcomes live in ``test_social_escalation.py``; multi-turn
+**quality / grounding** harnesses live in ``test_social_emission_quality.py``. This file keeps
+engine result shape, targeting continuity, implied heuristics, and promotion glue—**smoke** only
+for vocative vs generic-role precedence when a focused authority regression already owns the table.
+"""
 import copy
 
 from game.social import (

@@ -1,3 +1,8 @@
+"""Canonical owner: strict-social **exchange emission** (coercion, filters, gate hooks, repair tags).
+
+Broader multi-turn **quality** scenarios (topic-pressure restore, transactional probes) live in
+``test_social_emission_quality.py``. **Escalation state** transitions live in ``test_social_escalation.py``.
+``test_social.py`` covers the social **engine** dict contract from ``resolve_social_action``."""
 from __future__ import annotations
 
 import game.final_emission_gate as feg

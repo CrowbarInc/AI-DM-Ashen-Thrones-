@@ -1,4 +1,8 @@
-"""Strict-social emission: grounded answer preservation vs degraded normalized candidates."""
+"""Multi-turn / quality strict-social emission (grounding, probes, gate meta smoke).
+
+**Not** the transcript runner module: several cases use ``@pytest.mark.transcript`` only to stay
+off the fast lane while replaying *story-shaped* sequences. Strict **shape** tables and sanitizer
+families stay in ``test_social_exchange_emission.py`` / ``test_output_sanitizer.py``."""
 
 from __future__ import annotations
 
@@ -51,8 +55,8 @@ def _strict_social_resolution_tavern_runner(*, prompt: str, **social_extras: obj
 @pytest.mark.transcript
 @pytest.mark.emission
 @pytest.mark.social
-def test_transcript_lirael_who_next_then_where_preserves_grounded_location():
-    """Transcript-style Lirael failure (location follow-up).
+def test_emission_quality_lirael_who_next_then_where_preserves_grounded_location():
+    """Emission-quality: Lirael failure (location follow-up).
 
     Turn 1 — Player asks Tavern Runner who to talk to next; engine records ``last_answer`` naming Lirael with
     sheepfold / north-road / milestone grounding (simulated below).
@@ -115,8 +119,8 @@ def test_transcript_lirael_who_next_then_where_preserves_grounded_location():
 @pytest.mark.transcript
 @pytest.mark.emission
 @pytest.mark.social
-def test_transcript_anyone_else_talk_to_manifests_preserves_redirect_not_fragment():
-    """Transcript-style: broad follow-up on manifests; grounded redirect must beat a fragmentary accepted line."""
+def test_emission_quality_anyone_else_talk_to_manifests_preserves_redirect_not_fragment():
+    """Broad follow-up on manifests; grounded redirect must beat a fragmentary accepted line."""
     session, world, sid = _base_session_scene()
     rt = get_scene_runtime(session, sid)
     rt["last_player_action_text"] = "Anyone else I should talk to about the manifests?"

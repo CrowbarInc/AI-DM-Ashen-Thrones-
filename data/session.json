@@ -4,7 +4,7 @@
     "frontier_gate"
   ],
   "current_date": "Day 1",
-  "turn_counter": 10,
+  "turn_counter": 14,
   "response_mode": "standard",
   "clocks": {
     "suspicion": 0,
@@ -35,9 +35,9 @@
       "guard_captain": "active",
       "tavern_runner": "active",
       "emergent_town_crier": "active",
+      "emergent_lord_aldric": "active",
       "threadbare_watcher": "active",
-      "refugee": "active",
-      "emergent_lord_aldric": "active"
+      "refugee": "active"
     },
     "current_interlocutor": null,
     "emergent_addressables": [
@@ -71,14 +71,14 @@
       "searched_targets": [],
       "resolved_interactables": [],
       "last_exploration_action_key": "i_look_around",
-      "repeated_action_count": 8,
+      "repeated_action_count": 12,
       "last_resolution_kind": "observe",
       "last_description_hash": "0ef1f9c363c6724e7d41060c2804f65c",
       "consumed_action_ids": [],
-      "momentum_exchanges_since": 10,
+      "momentum_exchanges_since": 14,
       "momentum_next_due_in": 2,
       "momentum_last_kind": null,
-      "passive_action_streak": 8,
+      "passive_action_streak": 12,
       "recent_player_actions": [
         {
           "text": "I look around.",
@@ -87,7 +87,7 @@
             "observe"
           ],
           "resolution_kind": null,
-          "turn": 7
+          "turn": 11
         },
         {
           "text": "I look around.",
@@ -96,7 +96,7 @@
             "observe"
           ],
           "resolution_kind": null,
-          "turn": 8
+          "turn": 12
         },
         {
           "text": "I look around.",
@@ -105,7 +105,7 @@
             "observe"
           ],
           "resolution_kind": null,
-          "turn": 9
+          "turn": 13
         },
         {
           "text": "I look around.",
@@ -114,7 +114,7 @@
             "observe"
           ],
           "resolution_kind": null,
-          "turn": 10
+          "turn": 14
         }
       ],
       "last_player_action_text": "I look around.",
@@ -127,8 +127,8 @@
           "position": "at a nearby table share uneasy glances, their hushed voices hinting at trouble",
           "named": false,
           "positioned": true,
-          "mentions": 8,
-          "last_turn": 10
+          "mentions": 12,
+          "last_turn": 14
         },
         {
           "key": "active_event_missing_patrol_rumor",
@@ -137,8 +137,8 @@
           "position": "",
           "named": false,
           "positioned": false,
-          "mentions": 8,
-          "last_turn": 10
+          "mentions": 12,
+          "last_turn": 14
         }
       ]
     }
@@ -6132,13 +6132,2501 @@
         "fallback_repair": 121,
         "total_turn": 20949
       }
+    },
+    {
+      "timestamp": "2026-04-12T16:19:09.105973Z",
+      "source": "chat",
+      "action_type": "chat",
+      "raw_input": "I look around.",
+      "turn_stage_order": [
+        "player_input",
+        "intent_normalization_expansion",
+        "action_classification",
+        "engine_resolution",
+        "authoritative_state_mutation",
+        "prompt_context_construction",
+        "gpt_narration",
+        "affordance_derivation",
+        "response_debug_packaging"
+      ],
+      "incoming_payload": {
+        "text": "I look around."
+      },
+      "parsed_intent": {
+        "id": "i_look_around",
+        "label": "I look around.",
+        "type": "observe",
+        "prompt": "I look around.",
+        "targetSceneId": null,
+        "target_scene_id": null
+      },
+      "segmented_turn": {
+        "declared_action_text": "I look around."
+      },
+      "normalized_action": {
+        "id": "i_look_around",
+        "label": "I look around.",
+        "type": "observe",
+        "prompt": "I look around.",
+        "targetSceneId": null
+      },
+      "resolution": {
+        "kind": "observe",
+        "action_id": "i_look_around",
+        "label": "I look around.",
+        "prompt": "I look around.",
+        "success": null,
+        "resolved_transition": false,
+        "target_scene_id": null,
+        "clue_id": null,
+        "discovered_clues": [],
+        "state_changes": {},
+        "hint": "Player is focusing on observing the current scene. Narrate what stands out or what careful observation reveals\u2014avoid repeating the same summary.",
+        "metadata": {
+          "turn_segmentation": {
+            "declared_action_text": "I look around."
+          },
+          "response_type_contract": {
+            "required_response_type": "action_outcome",
+            "source_route": "exploration",
+            "allow_escalation": false,
+            "escalation_block_reason": "non_hostile_world_action_guard",
+            "strict_target_id": null,
+            "strict_answer_expected": false,
+            "strict_dialogue_expected": false,
+            "action_must_preserve_agency": true,
+            "debug_reasons": [
+              "resolved_world_action_requires_action_outcome",
+              "non_hostile_world_action_guard"
+            ]
+          },
+          "emission_debug": {
+            "scene_state_anchor": {
+              "enabled": true,
+              "scene_id": "frontier_gate",
+              "counts": {
+                "location": 17,
+                "actor": 7,
+                "player_action": 7
+              }
+            },
+            "context_separation": {
+              "validation": {
+                "checked": true,
+                "passed": true
+              },
+              "failure_reasons": [],
+              "assertion_flags": {
+                "topic_hijack_background_pressure": false,
+                "pressure_answer_substitution": false,
+                "ambient_pressure_forced_tone_shift": false,
+                "scene_focus_displaced_by_world_pressure": false,
+                "pressure_overweighting": false
+              },
+              "repair_hints": [],
+              "debug_reason_marker": "cs_violations=none;repair_applied=False;pass_after=None;before_len=251;after_len=251;before_head='As you watch the scene, as the crowd buzzes with urgent whispers about the missing patrol, a few\u2026';after_head='As you watch the scene, as the crowd buzzes with urgent whispers about the missing patrol, a few\u2026'"
+            },
+            "conversational_memory_window": {
+              "enabled": true,
+              "window_version": "v1",
+              "prioritize_recent_turns": true,
+              "prioritize_active_scene_entities": true,
+              "deprioritize_stale_inactive_elements": true,
+              "allow_explicit_reintroduction": true,
+              "recent_turn_window": 6,
+              "soft_memory_limit": 12,
+              "stale_after_turns": 18,
+              "active_scene_entity_ids": [
+                "emergent_lord_aldric",
+                "emergent_town_crier",
+                "guard_captain",
+                "refugee",
+                "tavern_runner",
+                "threadbare_watcher"
+              ],
+              "anchored_interlocutor_id": "",
+              "active_interaction_target_id": "",
+              "explicit_reintroduced_entity_ids": [],
+              "explicit_reintroduced_topics": [],
+              "selection_debug": {
+                "matched_entity_ids": [],
+                "matched_topics": [],
+                "matched_grounded_ids": [],
+                "callback_marker_hit": null,
+                "source_of_activity_anchor": "none",
+                "source_of_recentness": "session.turn_counter",
+                "source_of_reintroductions": "player_text+visibility_aliases"
+              }
+            },
+            "selected_conversational_memory": [
+              {
+                "kind": "recent_turn",
+                "entity_ids": [],
+                "topic_tokens": [],
+                "source_turn": 10,
+                "text": "P: I look around. | G: As you watch the scene, as the crowd buzzes with urgent whispers about the missing patrol, a few nearby patrons exchange glances, seemingly aware of Galinor's in... Guards at a nearby table share unea",
+                "score": 103.71428571428571,
+                "why_selected": [
+                  "recency",
+                  "recent_turn_kind"
+                ]
+              },
+              {
+                "kind": "recent_turn",
+                "entity_ids": [],
+                "topic_tokens": [],
+                "source_turn": 9,
+                "text": "P: I look around. | G: As you watch the scene, as the crowd buzzes with urgent whispers about the missing patrol, a few nearby patrons exchange glances, seemingly aware of Galinor's in... Guards at a nearby table share unea",
+                "score": 89.42857142857143,
+                "why_selected": [
+                  "recency",
+                  "recent_turn_kind"
+                ]
+              },
+              {
+                "kind": "contextual_thread",
+                "entity_ids": [],
+                "topic_tokens": [
+                  "guards"
+                ],
+                "source_turn": 10,
+                "text": "guards [active_event_guards_at_a_nearby_table_share_uneasy_glances_their_hushed_voices_hinting_at_trouble]",
+                "score": 85.71428571428571,
+                "why_selected": [
+                  "recency"
+                ]
+              },
+              {
+                "kind": "contextual_thread",
+                "entity_ids": [],
+                "topic_tokens": [
+                  "missing",
+                  "patrol",
+                  "rumor"
+                ],
+                "source_turn": 10,
+                "text": "missing patrol rumor [active_event_missing_patrol_rumor]",
+                "score": 85.71428571428571,
+                "why_selected": [
+                  "recency"
+                ]
+              },
+              {
+                "kind": "recent_turn",
+                "entity_ids": [],
+                "topic_tokens": [],
+                "source_turn": 8,
+                "text": "P: I look around. | G: As you watch the scene, as the crowd buzzes with urgent whispers about the missing patrol, a few nearby patrons exchange glances, seemingly aware of Galinor's in... Guards at a nearby table share unea",
+                "score": 75.14285714285714,
+                "why_selected": [
+                  "recency",
+                  "recent_turn_kind"
+                ]
+              },
+              {
+                "kind": "recent_turn",
+                "entity_ids": [],
+                "topic_tokens": [],
+                "source_turn": 7,
+                "text": "P: I look around. | G: As you watch the scene, as the crowd buzzes with urgent whispers about the missing patrol, a few nearby patrons exchange glances, seemingly aware of Galinor's in... Guards at a nearby table share unea",
+                "score": 60.857142857142854,
+                "why_selected": [
+                  "recency",
+                  "recent_turn_kind"
+                ]
+              },
+              {
+                "kind": "recent_turn",
+                "entity_ids": [],
+                "topic_tokens": [],
+                "source_turn": 6,
+                "text": "P: I look around. | G: As you watch the scene, as the crowd buzzes with urgent whispers about the missing patrol, a few nearby patrons exchange glances, seemingly aware of Galinor's in... Guards at a nearby table share unea",
+                "score": 46.57142857142857,
+                "why_selected": [
+                  "recency",
+                  "recent_turn_kind"
+                ]
+              }
+            ],
+            "conversational_memory": {
+              "candidate_count": 7,
+              "selected_count": 7
+            },
+            "scene_state_anchor_checked": true,
+            "scene_state_anchor_passed": true,
+            "scene_state_anchor_failed": false,
+            "scene_state_anchor_skip_reason": null,
+            "scene_state_anchor_matched_kinds": [
+              "location"
+            ],
+            "scene_state_anchor_failure_reasons": [],
+            "scene_state_anchor_repaired": true,
+            "scene_state_anchor_repair_mode": "location_rebind",
+            "tone_escalation_checked": true,
+            "tone_escalation_ok": true,
+            "tone_escalation_failed": false,
+            "tone_escalation_failure_reasons": [],
+            "tone_escalation_detected_flags": {
+              "guarded": true,
+              "verbal_pressure": false,
+              "explicit_threat": false,
+              "physical_hostility": false,
+              "combat_initiation": false
+            },
+            "tone_escalation_matched_tone_level": "guarded",
+            "tone_escalation_repaired": false,
+            "tone_escalation_repair_mode": null,
+            "tone_escalation_contract_summary": {
+              "enabled": true,
+              "base_tone": "tense",
+              "max_allowed_tone": "tense",
+              "allow_verbal_pressure": true,
+              "allow_explicit_threat": false,
+              "allow_physical_hostility": false,
+              "allow_combat_initiation": false,
+              "justification_reasons": [
+                "visible_facts_or_runtime_topic_pressure_indicate_elevated_tension",
+                "visible_entity_roles_include_authority_guardship",
+                "affiliated_faction_attitude_and_pressure_in_world_state"
+              ]
+            },
+            "tone_escalation_contract_resolution_source": "shipped_response_policy",
+            "tone_escalation_violation_before_repair": false,
+            "narrative_authority_checked": true,
+            "narrative_authority_failed": false,
+            "narrative_authority_failure_reasons": [],
+            "narrative_authority_repaired": false,
+            "narrative_authority_repair_mode": null,
+            "narrative_authority_skip_reason": null,
+            "narrative_authority_deferral_mode": null,
+            "narrative_authority_assertion_flags": {
+              "invented_outcome": false,
+              "invented_hidden_fact": false,
+              "invented_intent": false,
+              "overcertain_unresolved_action": false
+            },
+            "anti_railroading": {
+              "validation": {
+                "checked": true,
+                "passed": true
+              },
+              "failure_reasons": [],
+              "assertion_flags": {
+                "player_decision_override": false,
+                "forced_direction": false,
+                "exclusive_path_claim": false,
+                "lead_plot_gravity": false,
+                "forced_conclusion": false
+              },
+              "repair_hints": []
+            },
+            "anti_railroading_checked": true,
+            "anti_railroading_ok": true,
+            "anti_railroading_failed": false,
+            "anti_railroading_failure_reasons": [],
+            "anti_railroading_assertion_flags": {
+              "player_decision_override": false,
+              "forced_direction": false,
+              "exclusive_path_claim": false,
+              "lead_plot_gravity": false,
+              "forced_conclusion": false
+            },
+            "anti_railroading_repair_hints": [],
+            "anti_railroading_repaired": false,
+            "anti_railroading_repair_mode": null,
+            "anti_railroading_skip_reason": null,
+            "anti_railroading_contract_resolution_source": "shipped",
+            "context_separation_contract_resolution_source": "response_policy",
+            "context_separation_skip_reason": null,
+            "context_separation_checked": true,
+            "context_separation_ok": true,
+            "context_separation_failed": false,
+            "context_separation_failure_reasons": [],
+            "context_separation_assertion_flags": {
+              "topic_hijack_background_pressure": false,
+              "pressure_answer_substitution": false,
+              "ambient_pressure_forced_tone_shift": false,
+              "scene_focus_displaced_by_world_pressure": false,
+              "pressure_overweighting": false
+            },
+            "context_separation_repair_hints": [],
+            "context_separation_repaired": false,
+            "context_separation_repair_mode": null,
+            "context_separation_debug_reason_marker": "cs_violations=none;repair_applied=False;pass_after=None;before_len=251;after_len=251;before_head='As you watch the scene, as the crowd buzzes with urgent whispers about the missing patrol, a few\u2026';after_head='As you watch the scene, as the crowd buzzes with urgent whispers about the missing patrol, a few\u2026'",
+            "context_separation_passed_after_repair": null,
+            "player_facing_narration_purity": {
+              "validation": {
+                "checked": true,
+                "passed": true
+              },
+              "violation_keys": [],
+              "repair_hints": [],
+              "repair_modes": [],
+              "preview_before": "As you watch the scene, as the crowd buzzes with urgent whispers about the missing patrol, a few\u2026",
+              "preview_after": "As you watch the scene, as the crowd buzzes with urgent whispers about the missing patrol, a few\u2026"
+            },
+            "player_facing_narration_purity_contract_resolution_source": "response_policy",
+            "player_facing_narration_purity_skip_reason": null,
+            "player_facing_narration_purity_checked": true,
+            "player_facing_narration_purity_failed": false,
+            "player_facing_narration_purity_repaired": false,
+            "player_facing_narration_purity_repair_modes": [],
+            "player_facing_narration_purity_violation_keys": [],
+            "player_facing_narration_purity_repair_hints_used": [],
+            "player_facing_narration_purity_collapsed_to_diegetic_core": false,
+            "player_facing_narration_purity_preview_before": "As you watch the scene, as the crowd buzzes with urgent whispers about the missing patrol, a few\u2026",
+            "player_facing_narration_purity_preview_after": "As you watch the scene, as the crowd buzzes with urgent whispers about the missing patrol, a few\u2026",
+            "answer_shape_primacy": {
+              "checked": true,
+              "passed": true,
+              "failure_reasons": []
+            },
+            "answer_shape_primacy_skip_reason": null,
+            "answer_shape_primacy_checked": true,
+            "answer_shape_primacy_failed": false,
+            "answer_shape_primacy_repaired": false,
+            "answer_shape_primacy_repair_mode": null,
+            "answer_shape_primacy_failure_reasons": [],
+            "answer_shape_primacy_preview_before": "As you watch the scene, as the crowd buzzes with urgent whispers about the missing patrol, a few\u2026",
+            "answer_shape_primacy_preview_after": "As you watch the scene, as the crowd buzzes with urgent whispers about the missing patrol, a few\u2026",
+            "interaction_continuity_validation": {
+              "ok": true,
+              "enabled": false,
+              "continuity_strength": "none",
+              "violations": [],
+              "warnings": [],
+              "facts": {
+                "anchored_interlocutor_id": "",
+                "anchor_required": false,
+                "speaker_switch_detected": false,
+                "explicit_switch_cue_present": false,
+                "thread_drop_detected": false,
+                "narrator_bridge_present": false,
+                "multi_speaker_pattern_present": false,
+                "dialogue_presence": false
+              },
+              "debug": {
+                "speaker_labels_detected": [],
+                "cue_labels": [],
+                "reason_path": [
+                  "contract_disabled_or_strength_none"
+                ]
+              }
+            },
+            "fallback_behavior": {
+              "validation": {
+                "contract_present": true,
+                "checked": false,
+                "passed": true,
+                "uncertainty_active": false
+              },
+              "failure_reasons": [],
+              "repair_mode": "none",
+              "skip_reason": "uncertainty_inactive"
+            },
+            "fallback_behavior_contract_present": true,
+            "fallback_behavior_checked": false,
+            "fallback_behavior_skip_reason": "uncertainty_inactive",
+            "fallback_behavior_uncertainty_active": false,
+            "fallback_behavior_failed": false,
+            "fallback_behavior_failure_reasons": [],
+            "fallback_behavior_repaired": false,
+            "fallback_behavior_repair_mode": "none",
+            "fallback_behavior_clarifying_question_used": false,
+            "fallback_behavior_partial_used": false,
+            "fallback_behavior_known_edge_preserved": false,
+            "fallback_behavior_unknown_edge_added": false,
+            "fallback_behavior_next_lead_added": false,
+            "fallback_behavior_meta_voice_stripped": false,
+            "narration_constraint_debug": {
+              "response_type": {
+                "required": "action_outcome",
+                "contract_source": "response_policy",
+                "candidate_ok": true,
+                "repair_used": false,
+                "repair_kind": null
+              },
+              "visibility": {
+                "contract_present": true,
+                "decision_mode": "validated",
+                "visible_entity_count": 6,
+                "withheld_fact_count": 14,
+                "reason_codes": []
+              },
+              "speaker_selection": {
+                "speaker_id": null,
+                "speaker_name": null,
+                "selection_source": null,
+                "reason_code": "speaker_unresolved",
+                "binding_confident": null
+              }
+            }
+          }
+        },
+        "world_tick_events": []
+      },
+      "scene_before": "frontier_gate",
+      "scene_after": "frontier_gate",
+      "clue_updates": [],
+      "world_flag_updates": [],
+      "turn_trace": {
+        "source": "chat",
+        "player_input": "I look around.",
+        "intent": {
+          "parsed": {
+            "id": "i_look_around",
+            "label": "I look around.",
+            "type": "observe",
+            "prompt": "I look around.",
+            "targetSceneId": null,
+            "target_scene_id": null
+          },
+          "segmented_turn": {
+            "declared_action_text": "I look around."
+          },
+          "normalized": {
+            "id": "i_look_around",
+            "label": "I look around.",
+            "type": "observe",
+            "prompt": "I look around.",
+            "targetSceneId": null,
+            "target_scene_id": null,
+            "targetEntityId": null,
+            "target_id": null
+          },
+          "implied_context": {
+            "applied": false,
+            "cases": [],
+            "target_id": null,
+            "commitment_broken": false,
+            "break_reason": null
+          }
+        },
+        "classification": {
+          "action_type": "chat",
+          "resolved_kind": "observe",
+          "requires_check": false
+        },
+        "response_type_contract": {
+          "required_response_type": "action_outcome",
+          "source_route": "exploration",
+          "allow_escalation": false,
+          "debug_reasons": [
+            "resolved_world_action_requires_action_outcome",
+            "non_hostile_world_action_guard"
+          ]
+        },
+        "social_contract_trace": {
+          "route_selected": "undecided",
+          "routing_reason_code": "no_addressable_target",
+          "social_followup_recovery": "not_applicable",
+          "reply_owner_actor_id": null,
+          "interlocutor_status": "none",
+          "continuity_status": "broken",
+          "fallback_anchor_source": "none",
+          "visible_grounded_speaker": null,
+          "final_reply_owner": null
+        },
+        "resolution_path": "exploration_engine",
+        "authoritative_state_changes": {
+          "scene_transition": null,
+          "resolution_state_changes": {},
+          "resolution_world_updates": [],
+          "check_request": null
+        },
+        "interaction_after": {
+          "active_interaction_target_id": null,
+          "active_interaction_kind": "observe",
+          "interaction_mode": "activity",
+          "engagement_level": "focused",
+          "conversation_privacy": null,
+          "player_position_context": null
+        },
+        "narration_obligations": {
+          "is_opening_scene": false,
+          "must_advance_scene": false,
+          "should_answer_active_npc": false,
+          "avoid_input_echo": true,
+          "avoid_player_action_restatement": true,
+          "prefer_structured_turn_summary": true,
+          "active_npc_reply_expected": false,
+          "active_npc_reply_kind": null,
+          "scene_momentum_due": false,
+          "scene_momentum_exchanges_since": 0,
+          "scene_momentum_next_due_in": 2,
+          "suppress_non_social_emitters": false
+        },
+        "clues": {
+          "discovered_texts": [],
+          "presentation_changes": [],
+          "known_counts": {
+            "implicit": 0,
+            "explicit": 0,
+            "actionable": 0
+          }
+        },
+        "affordances_after": [
+          {
+            "id": "question_guard_captain",
+            "type": "question",
+            "label": "Talk to Guard Captain",
+            "targetEntityId": "guard_captain"
+          },
+          {
+            "id": "question_tavern_runner",
+            "type": "question",
+            "label": "Talk to Tavern Runner",
+            "targetEntityId": "tavern_runner"
+          },
+          {
+            "id": "question_emergent_town_crier",
+            "type": "question",
+            "label": "Talk to Town Crier",
+            "targetEntityId": "emergent_town_crier"
+          },
+          {
+            "id": "examine_the_rain_spatters_soot_dark_stone_frayed",
+            "type": "investigate",
+            "label": "Examine the Rain spatters soot-dark stone; frayed"
+          },
+          {
+            "id": "examine_refugees",
+            "type": "investigate",
+            "label": "Examine Refugees"
+          }
+        ],
+        "emergent_actor": {
+          "emergent_actor_enrolled": true,
+          "emergent_actor_id": "emergent_lord_aldric",
+          "emergent_actor_source_text": "Lord Aldric"
+        },
+        "leads": {
+          "registry_debug": [],
+          "delta_after_reconcile": [],
+          "changed_count": 0
+        },
+        "latency_ms": {
+          "intent_classification": 26,
+          "engine_resolution": 0,
+          "prompt_construction": 15,
+          "gpt_call": 20062,
+          "retry_loop_total": 127,
+          "final_emission_gate": 26,
+          "fallback_repair": 128,
+          "total_turn": 20292
+        }
+      },
+      "gpt_called": true,
+      "response_ok": true,
+      "error": null,
+      "canonical_entry": {
+        "should_route_social": false,
+        "target_actor_id": null,
+        "target_source": null,
+        "reason": "no_addressable_target",
+        "spoken_text": null,
+        "declared_switch_detected": false,
+        "declared_switch_target_actor_id": null,
+        "continuity_overridden_by_declared_switch": false,
+        "spoken_vocative_detected": false,
+        "spoken_vocative_target_actor_id": null,
+        "continuity_overridden_by_spoken_vocative": false
+      },
+      "canonical_entry_path": "undecided",
+      "canonical_entry_reason": "no_addressable_target",
+      "canonical_entry_target_actor_id": null,
+      "response_type_contract": {
+        "required_response_type": "action_outcome",
+        "source_route": "exploration",
+        "allow_escalation": false,
+        "debug_reasons": [
+          "resolved_world_action_requires_action_outcome",
+          "non_hostile_world_action_guard"
+        ]
+      },
+      "latency_ms": {
+        "intent_classification": 26,
+        "engine_resolution": 0,
+        "prompt_construction": 15,
+        "gpt_call": 20062,
+        "retry_loop_total": 127,
+        "final_emission_gate": 26,
+        "fallback_repair": 128,
+        "total_turn": 20292
+      }
+    },
+    {
+      "timestamp": "2026-04-12T16:19:44.352125Z",
+      "source": "chat",
+      "action_type": "chat",
+      "raw_input": "I look around.",
+      "turn_stage_order": [
+        "player_input",
+        "intent_normalization_expansion",
+        "action_classification",
+        "engine_resolution",
+        "authoritative_state_mutation",
+        "prompt_context_construction",
+        "gpt_narration",
+        "affordance_derivation",
+        "response_debug_packaging"
+      ],
+      "incoming_payload": {
+        "text": "I look around."
+      },
+      "parsed_intent": {
+        "id": "i_look_around",
+        "label": "I look around.",
+        "type": "observe",
+        "prompt": "I look around.",
+        "targetSceneId": null,
+        "target_scene_id": null
+      },
+      "segmented_turn": {
+        "declared_action_text": "I look around."
+      },
+      "normalized_action": {
+        "id": "i_look_around",
+        "label": "I look around.",
+        "type": "observe",
+        "prompt": "I look around.",
+        "targetSceneId": null
+      },
+      "resolution": {
+        "kind": "observe",
+        "action_id": "i_look_around",
+        "label": "I look around.",
+        "prompt": "I look around.",
+        "success": null,
+        "resolved_transition": false,
+        "target_scene_id": null,
+        "clue_id": null,
+        "discovered_clues": [],
+        "state_changes": {},
+        "hint": "Player is focusing on observing the current scene. Narrate what stands out or what careful observation reveals\u2014avoid repeating the same summary.",
+        "metadata": {
+          "turn_segmentation": {
+            "declared_action_text": "I look around."
+          },
+          "response_type_contract": {
+            "required_response_type": "action_outcome",
+            "source_route": "exploration",
+            "allow_escalation": false,
+            "escalation_block_reason": "non_hostile_world_action_guard",
+            "strict_target_id": null,
+            "strict_answer_expected": false,
+            "strict_dialogue_expected": false,
+            "action_must_preserve_agency": true,
+            "debug_reasons": [
+              "resolved_world_action_requires_action_outcome",
+              "non_hostile_world_action_guard"
+            ]
+          },
+          "emission_debug": {
+            "scene_state_anchor": {
+              "enabled": true,
+              "scene_id": "frontier_gate",
+              "counts": {
+                "location": 17,
+                "actor": 7,
+                "player_action": 7
+              }
+            },
+            "context_separation": {
+              "validation": {
+                "checked": true,
+                "passed": true
+              },
+              "failure_reasons": [],
+              "assertion_flags": {
+                "topic_hijack_background_pressure": false,
+                "pressure_answer_substitution": false,
+                "ambient_pressure_forced_tone_shift": false,
+                "scene_focus_displaced_by_world_pressure": false,
+                "pressure_overweighting": false
+              },
+              "repair_hints": [],
+              "debug_reason_marker": "cs_violations=none;repair_applied=False;pass_after=None;before_len=251;after_len=251;before_head='As you watch the scene, as the crowd buzzes with urgent whispers about the missing patrol, a few\u2026';after_head='As you watch the scene, as the crowd buzzes with urgent whispers about the missing patrol, a few\u2026'"
+            },
+            "conversational_memory_window": {
+              "enabled": true,
+              "window_version": "v1",
+              "prioritize_recent_turns": true,
+              "prioritize_active_scene_entities": true,
+              "deprioritize_stale_inactive_elements": true,
+              "allow_explicit_reintroduction": true,
+              "recent_turn_window": 6,
+              "soft_memory_limit": 12,
+              "stale_after_turns": 18,
+              "active_scene_entity_ids": [
+                "emergent_lord_aldric",
+                "emergent_town_crier",
+                "guard_captain",
+                "refugee",
+                "tavern_runner",
+                "threadbare_watcher"
+              ],
+              "anchored_interlocutor_id": "",
+              "active_interaction_target_id": "",
+              "explicit_reintroduced_entity_ids": [],
+              "explicit_reintroduced_topics": [],
+              "selection_debug": {
+                "matched_entity_ids": [],
+                "matched_topics": [],
+                "matched_grounded_ids": [],
+                "callback_marker_hit": null,
+                "source_of_activity_anchor": "none",
+                "source_of_recentness": "session.turn_counter",
+                "source_of_reintroductions": "player_text+visibility_aliases"
+              }
+            },
+            "selected_conversational_memory": [
+              {
+                "kind": "recent_turn",
+                "entity_ids": [],
+                "topic_tokens": [],
+                "source_turn": 11,
+                "text": "P: I look around. | G: As you watch the scene, as the crowd buzzes with urgent whispers about the missing patrol, a few nearby patrons exchange glances, seemingly aware of Galinor's in... Guards at a nearby table share unea",
+                "score": 103.71428571428571,
+                "why_selected": [
+                  "recency",
+                  "recent_turn_kind"
+                ]
+              },
+              {
+                "kind": "recent_turn",
+                "entity_ids": [],
+                "topic_tokens": [],
+                "source_turn": 10,
+                "text": "P: I look around. | G: As you watch the scene, as the crowd buzzes with urgent whispers about the missing patrol, a few nearby patrons exchange glances, seemingly aware of Galinor's in... Guards at a nearby table share unea",
+                "score": 89.42857142857143,
+                "why_selected": [
+                  "recency",
+                  "recent_turn_kind"
+                ]
+              },
+              {
+                "kind": "contextual_thread",
+                "entity_ids": [],
+                "topic_tokens": [
+                  "guards"
+                ],
+                "source_turn": 11,
+                "text": "guards [active_event_guards_at_a_nearby_table_share_uneasy_glances_their_hushed_voices_hinting_at_trouble]",
+                "score": 85.71428571428571,
+                "why_selected": [
+                  "recency"
+                ]
+              },
+              {
+                "kind": "contextual_thread",
+                "entity_ids": [],
+                "topic_tokens": [
+                  "missing",
+                  "patrol",
+                  "rumor"
+                ],
+                "source_turn": 11,
+                "text": "missing patrol rumor [active_event_missing_patrol_rumor]",
+                "score": 85.71428571428571,
+                "why_selected": [
+                  "recency"
+                ]
+              },
+              {
+                "kind": "recent_turn",
+                "entity_ids": [],
+                "topic_tokens": [],
+                "source_turn": 9,
+                "text": "P: I look around. | G: As you watch the scene, as the crowd buzzes with urgent whispers about the missing patrol, a few nearby patrons exchange glances, seemingly aware of Galinor's in... Guards at a nearby table share unea",
+                "score": 75.14285714285714,
+                "why_selected": [
+                  "recency",
+                  "recent_turn_kind"
+                ]
+              },
+              {
+                "kind": "recent_turn",
+                "entity_ids": [],
+                "topic_tokens": [],
+                "source_turn": 8,
+                "text": "P: I look around. | G: As you watch the scene, as the crowd buzzes with urgent whispers about the missing patrol, a few nearby patrons exchange glances, seemingly aware of Galinor's in... Guards at a nearby table share unea",
+                "score": 60.857142857142854,
+                "why_selected": [
+                  "recency",
+                  "recent_turn_kind"
+                ]
+              },
+              {
+                "kind": "recent_turn",
+                "entity_ids": [],
+                "topic_tokens": [],
+                "source_turn": 7,
+                "text": "P: I look around. | G: As you watch the scene, as the crowd buzzes with urgent whispers about the missing patrol, a few nearby patrons exchange glances, seemingly aware of Galinor's in... Guards at a nearby table share unea",
+                "score": 46.57142857142857,
+                "why_selected": [
+                  "recency",
+                  "recent_turn_kind"
+                ]
+              }
+            ],
+            "conversational_memory": {
+              "candidate_count": 7,
+              "selected_count": 7
+            },
+            "scene_state_anchor_checked": true,
+            "scene_state_anchor_passed": true,
+            "scene_state_anchor_failed": false,
+            "scene_state_anchor_skip_reason": null,
+            "scene_state_anchor_matched_kinds": [
+              "location"
+            ],
+            "scene_state_anchor_failure_reasons": [],
+            "scene_state_anchor_repaired": true,
+            "scene_state_anchor_repair_mode": "location_rebind",
+            "tone_escalation_checked": true,
+            "tone_escalation_ok": true,
+            "tone_escalation_failed": false,
+            "tone_escalation_failure_reasons": [],
+            "tone_escalation_detected_flags": {
+              "guarded": true,
+              "verbal_pressure": false,
+              "explicit_threat": false,
+              "physical_hostility": false,
+              "combat_initiation": false
+            },
+            "tone_escalation_matched_tone_level": "guarded",
+            "tone_escalation_repaired": false,
+            "tone_escalation_repair_mode": null,
+            "tone_escalation_contract_summary": {
+              "enabled": true,
+              "base_tone": "tense",
+              "max_allowed_tone": "tense",
+              "allow_verbal_pressure": true,
+              "allow_explicit_threat": false,
+              "allow_physical_hostility": false,
+              "allow_combat_initiation": false,
+              "justification_reasons": [
+                "visible_facts_or_runtime_topic_pressure_indicate_elevated_tension",
+                "visible_entity_roles_include_authority_guardship",
+                "affiliated_faction_attitude_and_pressure_in_world_state"
+              ]
+            },
+            "tone_escalation_contract_resolution_source": "shipped_response_policy",
+            "tone_escalation_violation_before_repair": false,
+            "narrative_authority_checked": true,
+            "narrative_authority_failed": false,
+            "narrative_authority_failure_reasons": [],
+            "narrative_authority_repaired": false,
+            "narrative_authority_repair_mode": null,
+            "narrative_authority_skip_reason": null,
+            "narrative_authority_deferral_mode": null,
+            "narrative_authority_assertion_flags": {
+              "invented_outcome": false,
+              "invented_hidden_fact": false,
+              "invented_intent": false,
+              "overcertain_unresolved_action": false
+            },
+            "anti_railroading": {
+              "validation": {
+                "checked": true,
+                "passed": true
+              },
+              "failure_reasons": [],
+              "assertion_flags": {
+                "player_decision_override": false,
+                "forced_direction": false,
+                "exclusive_path_claim": false,
+                "lead_plot_gravity": false,
+                "forced_conclusion": false
+              },
+              "repair_hints": []
+            },
+            "anti_railroading_checked": true,
+            "anti_railroading_ok": true,
+            "anti_railroading_failed": false,
+            "anti_railroading_failure_reasons": [],
+            "anti_railroading_assertion_flags": {
+              "player_decision_override": false,
+              "forced_direction": false,
+              "exclusive_path_claim": false,
+              "lead_plot_gravity": false,
+              "forced_conclusion": false
+            },
+            "anti_railroading_repair_hints": [],
+            "anti_railroading_repaired": false,
+            "anti_railroading_repair_mode": null,
+            "anti_railroading_skip_reason": null,
+            "anti_railroading_contract_resolution_source": "shipped",
+            "context_separation_contract_resolution_source": "response_policy",
+            "context_separation_skip_reason": null,
+            "context_separation_checked": true,
+            "context_separation_ok": true,
+            "context_separation_failed": false,
+            "context_separation_failure_reasons": [],
+            "context_separation_assertion_flags": {
+              "topic_hijack_background_pressure": false,
+              "pressure_answer_substitution": false,
+              "ambient_pressure_forced_tone_shift": false,
+              "scene_focus_displaced_by_world_pressure": false,
+              "pressure_overweighting": false
+            },
+            "context_separation_repair_hints": [],
+            "context_separation_repaired": false,
+            "context_separation_repair_mode": null,
+            "context_separation_debug_reason_marker": "cs_violations=none;repair_applied=False;pass_after=None;before_len=251;after_len=251;before_head='As you watch the scene, as the crowd buzzes with urgent whispers about the missing patrol, a few\u2026';after_head='As you watch the scene, as the crowd buzzes with urgent whispers about the missing patrol, a few\u2026'",
+            "context_separation_passed_after_repair": null,
+            "player_facing_narration_purity": {
+              "validation": {
+                "checked": true,
+                "passed": true
+              },
+              "violation_keys": [],
+              "repair_hints": [],
+              "repair_modes": [],
+              "preview_before": "As you watch the scene, as the crowd buzzes with urgent whispers about the missing patrol, a few\u2026",
+              "preview_after": "As you watch the scene, as the crowd buzzes with urgent whispers about the missing patrol, a few\u2026"
+            },
+            "player_facing_narration_purity_contract_resolution_source": "response_policy",
+            "player_facing_narration_purity_skip_reason": null,
+            "player_facing_narration_purity_checked": true,
+            "player_facing_narration_purity_failed": false,
+            "player_facing_narration_purity_repaired": false,
+            "player_facing_narration_purity_repair_modes": [],
+            "player_facing_narration_purity_violation_keys": [],
+            "player_facing_narration_purity_repair_hints_used": [],
+            "player_facing_narration_purity_collapsed_to_diegetic_core": false,
+            "player_facing_narration_purity_preview_before": "As you watch the scene, as the crowd buzzes with urgent whispers about the missing patrol, a few\u2026",
+            "player_facing_narration_purity_preview_after": "As you watch the scene, as the crowd buzzes with urgent whispers about the missing patrol, a few\u2026",
+            "answer_shape_primacy": {
+              "checked": true,
+              "passed": true,
+              "failure_reasons": []
+            },
+            "answer_shape_primacy_skip_reason": null,
+            "answer_shape_primacy_checked": true,
+            "answer_shape_primacy_failed": false,
+            "answer_shape_primacy_repaired": false,
+            "answer_shape_primacy_repair_mode": null,
+            "answer_shape_primacy_failure_reasons": [],
+            "answer_shape_primacy_preview_before": "As you watch the scene, as the crowd buzzes with urgent whispers about the missing patrol, a few\u2026",
+            "answer_shape_primacy_preview_after": "As you watch the scene, as the crowd buzzes with urgent whispers about the missing patrol, a few\u2026",
+            "interaction_continuity_validation": {
+              "ok": true,
+              "enabled": false,
+              "continuity_strength": "none",
+              "violations": [],
+              "warnings": [],
+              "facts": {
+                "anchored_interlocutor_id": "",
+                "anchor_required": false,
+                "speaker_switch_detected": false,
+                "explicit_switch_cue_present": false,
+                "thread_drop_detected": false,
+                "narrator_bridge_present": false,
+                "multi_speaker_pattern_present": false,
+                "dialogue_presence": false
+              },
+              "debug": {
+                "speaker_labels_detected": [],
+                "cue_labels": [],
+                "reason_path": [
+                  "contract_disabled_or_strength_none"
+                ]
+              }
+            },
+            "fallback_behavior": {
+              "validation": {
+                "contract_present": true,
+                "checked": false,
+                "passed": true,
+                "uncertainty_active": false
+              },
+              "failure_reasons": [],
+              "repair_mode": "none",
+              "skip_reason": "uncertainty_inactive"
+            },
+            "fallback_behavior_contract_present": true,
+            "fallback_behavior_checked": false,
+            "fallback_behavior_skip_reason": "uncertainty_inactive",
+            "fallback_behavior_uncertainty_active": false,
+            "fallback_behavior_failed": false,
+            "fallback_behavior_failure_reasons": [],
+            "fallback_behavior_repaired": false,
+            "fallback_behavior_repair_mode": "none",
+            "fallback_behavior_clarifying_question_used": false,
+            "fallback_behavior_partial_used": false,
+            "fallback_behavior_known_edge_preserved": false,
+            "fallback_behavior_unknown_edge_added": false,
+            "fallback_behavior_next_lead_added": false,
+            "fallback_behavior_meta_voice_stripped": false,
+            "narration_constraint_debug": {
+              "response_type": {
+                "required": "action_outcome",
+                "contract_source": "response_policy",
+                "candidate_ok": true,
+                "repair_used": false,
+                "repair_kind": null
+              },
+              "visibility": {
+                "contract_present": true,
+                "decision_mode": "validated",
+                "visible_entity_count": 6,
+                "withheld_fact_count": 14,
+                "reason_codes": []
+              },
+              "speaker_selection": {
+                "speaker_id": null,
+                "speaker_name": null,
+                "selection_source": null,
+                "reason_code": "speaker_unresolved",
+                "binding_confident": null
+              }
+            }
+          }
+        },
+        "world_tick_events": []
+      },
+      "scene_before": "frontier_gate",
+      "scene_after": "frontier_gate",
+      "clue_updates": [],
+      "world_flag_updates": [],
+      "turn_trace": {
+        "source": "chat",
+        "player_input": "I look around.",
+        "intent": {
+          "parsed": {
+            "id": "i_look_around",
+            "label": "I look around.",
+            "type": "observe",
+            "prompt": "I look around.",
+            "targetSceneId": null,
+            "target_scene_id": null
+          },
+          "segmented_turn": {
+            "declared_action_text": "I look around."
+          },
+          "normalized": {
+            "id": "i_look_around",
+            "label": "I look around.",
+            "type": "observe",
+            "prompt": "I look around.",
+            "targetSceneId": null,
+            "target_scene_id": null,
+            "targetEntityId": null,
+            "target_id": null
+          },
+          "implied_context": {
+            "applied": false,
+            "cases": [],
+            "target_id": null,
+            "commitment_broken": false,
+            "break_reason": null
+          }
+        },
+        "classification": {
+          "action_type": "chat",
+          "resolved_kind": "observe",
+          "requires_check": false
+        },
+        "response_type_contract": {
+          "required_response_type": "action_outcome",
+          "source_route": "exploration",
+          "allow_escalation": false,
+          "debug_reasons": [
+            "resolved_world_action_requires_action_outcome",
+            "non_hostile_world_action_guard"
+          ]
+        },
+        "social_contract_trace": {
+          "route_selected": "undecided",
+          "routing_reason_code": "no_addressable_target",
+          "social_followup_recovery": "not_applicable",
+          "reply_owner_actor_id": null,
+          "interlocutor_status": "none",
+          "continuity_status": "broken",
+          "fallback_anchor_source": "none",
+          "visible_grounded_speaker": null,
+          "final_reply_owner": null
+        },
+        "resolution_path": "exploration_engine",
+        "authoritative_state_changes": {
+          "scene_transition": null,
+          "resolution_state_changes": {},
+          "resolution_world_updates": [],
+          "check_request": null
+        },
+        "interaction_after": {
+          "active_interaction_target_id": null,
+          "active_interaction_kind": "observe",
+          "interaction_mode": "activity",
+          "engagement_level": "focused",
+          "conversation_privacy": null,
+          "player_position_context": null
+        },
+        "narration_obligations": {
+          "is_opening_scene": false,
+          "must_advance_scene": false,
+          "should_answer_active_npc": false,
+          "avoid_input_echo": true,
+          "avoid_player_action_restatement": true,
+          "prefer_structured_turn_summary": true,
+          "active_npc_reply_expected": false,
+          "active_npc_reply_kind": null,
+          "scene_momentum_due": false,
+          "scene_momentum_exchanges_since": 0,
+          "scene_momentum_next_due_in": 2,
+          "suppress_non_social_emitters": false
+        },
+        "clues": {
+          "discovered_texts": [],
+          "presentation_changes": [],
+          "known_counts": {
+            "implicit": 0,
+            "explicit": 0,
+            "actionable": 0
+          }
+        },
+        "affordances_after": [
+          {
+            "id": "question_guard_captain",
+            "type": "question",
+            "label": "Talk to Guard Captain",
+            "targetEntityId": "guard_captain"
+          },
+          {
+            "id": "question_tavern_runner",
+            "type": "question",
+            "label": "Talk to Tavern Runner",
+            "targetEntityId": "tavern_runner"
+          },
+          {
+            "id": "question_emergent_town_crier",
+            "type": "question",
+            "label": "Talk to Town Crier",
+            "targetEntityId": "emergent_town_crier"
+          },
+          {
+            "id": "examine_the_rain_spatters_soot_dark_stone_frayed",
+            "type": "investigate",
+            "label": "Examine the Rain spatters soot-dark stone; frayed"
+          },
+          {
+            "id": "examine_refugees",
+            "type": "investigate",
+            "label": "Examine Refugees"
+          }
+        ],
+        "emergent_actor": {
+          "emergent_actor_enrolled": true,
+          "emergent_actor_id": "emergent_lord_aldric",
+          "emergent_actor_source_text": "Lord Aldric"
+        },
+        "leads": {
+          "registry_debug": [],
+          "delta_after_reconcile": [],
+          "changed_count": 0
+        },
+        "latency_ms": {
+          "intent_classification": 43,
+          "engine_resolution": 0,
+          "prompt_construction": 25,
+          "gpt_call": 19838,
+          "retry_loop_total": 119,
+          "final_emission_gate": 35,
+          "fallback_repair": 120,
+          "total_turn": 20113
+        }
+      },
+      "gpt_called": true,
+      "response_ok": true,
+      "error": null,
+      "canonical_entry": {
+        "should_route_social": false,
+        "target_actor_id": null,
+        "target_source": null,
+        "reason": "no_addressable_target",
+        "spoken_text": null,
+        "declared_switch_detected": false,
+        "declared_switch_target_actor_id": null,
+        "continuity_overridden_by_declared_switch": false,
+        "spoken_vocative_detected": false,
+        "spoken_vocative_target_actor_id": null,
+        "continuity_overridden_by_spoken_vocative": false
+      },
+      "canonical_entry_path": "undecided",
+      "canonical_entry_reason": "no_addressable_target",
+      "canonical_entry_target_actor_id": null,
+      "response_type_contract": {
+        "required_response_type": "action_outcome",
+        "source_route": "exploration",
+        "allow_escalation": false,
+        "debug_reasons": [
+          "resolved_world_action_requires_action_outcome",
+          "non_hostile_world_action_guard"
+        ]
+      },
+      "latency_ms": {
+        "intent_classification": 43,
+        "engine_resolution": 0,
+        "prompt_construction": 25,
+        "gpt_call": 19838,
+        "retry_loop_total": 119,
+        "final_emission_gate": 35,
+        "fallback_repair": 120,
+        "total_turn": 20113
+      }
+    },
+    {
+      "timestamp": "2026-04-12T16:27:08.716652Z",
+      "source": "chat",
+      "action_type": "chat",
+      "raw_input": "I look around.",
+      "turn_stage_order": [
+        "player_input",
+        "intent_normalization_expansion",
+        "action_classification",
+        "engine_resolution",
+        "authoritative_state_mutation",
+        "prompt_context_construction",
+        "gpt_narration",
+        "affordance_derivation",
+        "response_debug_packaging"
+      ],
+      "incoming_payload": {
+        "text": "I look around."
+      },
+      "parsed_intent": {
+        "id": "i_look_around",
+        "label": "I look around.",
+        "type": "observe",
+        "prompt": "I look around.",
+        "targetSceneId": null,
+        "target_scene_id": null
+      },
+      "segmented_turn": {
+        "declared_action_text": "I look around."
+      },
+      "normalized_action": {
+        "id": "i_look_around",
+        "label": "I look around.",
+        "type": "observe",
+        "prompt": "I look around.",
+        "targetSceneId": null
+      },
+      "resolution": {
+        "kind": "observe",
+        "action_id": "i_look_around",
+        "label": "I look around.",
+        "prompt": "I look around.",
+        "success": null,
+        "resolved_transition": false,
+        "target_scene_id": null,
+        "clue_id": null,
+        "discovered_clues": [],
+        "state_changes": {},
+        "hint": "Player is focusing on observing the current scene. Narrate what stands out or what careful observation reveals\u2014avoid repeating the same summary.",
+        "metadata": {
+          "turn_segmentation": {
+            "declared_action_text": "I look around."
+          },
+          "response_type_contract": {
+            "required_response_type": "action_outcome",
+            "source_route": "exploration",
+            "allow_escalation": false,
+            "escalation_block_reason": "non_hostile_world_action_guard",
+            "strict_target_id": null,
+            "strict_answer_expected": false,
+            "strict_dialogue_expected": false,
+            "action_must_preserve_agency": true,
+            "debug_reasons": [
+              "resolved_world_action_requires_action_outcome",
+              "non_hostile_world_action_guard"
+            ]
+          },
+          "emission_debug": {
+            "scene_state_anchor": {
+              "enabled": true,
+              "scene_id": "frontier_gate",
+              "counts": {
+                "location": 17,
+                "actor": 7,
+                "player_action": 7
+              }
+            },
+            "context_separation": {
+              "validation": {
+                "checked": true,
+                "passed": true
+              },
+              "failure_reasons": [],
+              "assertion_flags": {
+                "topic_hijack_background_pressure": false,
+                "pressure_answer_substitution": false,
+                "ambient_pressure_forced_tone_shift": false,
+                "scene_focus_displaced_by_world_pressure": false,
+                "pressure_overweighting": false
+              },
+              "repair_hints": [],
+              "debug_reason_marker": "cs_violations=none;repair_applied=False;pass_after=None;before_len=251;after_len=251;before_head='As you watch the scene, as the crowd buzzes with urgent whispers about the missing patrol, a few\u2026';after_head='As you watch the scene, as the crowd buzzes with urgent whispers about the missing patrol, a few\u2026'"
+            },
+            "conversational_memory_window": {
+              "enabled": true,
+              "window_version": "v1",
+              "prioritize_recent_turns": true,
+              "prioritize_active_scene_entities": true,
+              "deprioritize_stale_inactive_elements": true,
+              "allow_explicit_reintroduction": true,
+              "recent_turn_window": 6,
+              "soft_memory_limit": 12,
+              "stale_after_turns": 18,
+              "active_scene_entity_ids": [
+                "emergent_lord_aldric",
+                "emergent_town_crier",
+                "guard_captain",
+                "refugee",
+                "tavern_runner",
+                "threadbare_watcher"
+              ],
+              "anchored_interlocutor_id": "",
+              "active_interaction_target_id": "",
+              "explicit_reintroduced_entity_ids": [],
+              "explicit_reintroduced_topics": [],
+              "selection_debug": {
+                "matched_entity_ids": [],
+                "matched_topics": [],
+                "matched_grounded_ids": [],
+                "callback_marker_hit": null,
+                "source_of_activity_anchor": "none",
+                "source_of_recentness": "session.turn_counter",
+                "source_of_reintroductions": "player_text+visibility_aliases"
+              }
+            },
+            "selected_conversational_memory": [
+              {
+                "kind": "recent_turn",
+                "entity_ids": [],
+                "topic_tokens": [],
+                "source_turn": 12,
+                "text": "P: I look around. | G: As you watch the scene, as the crowd buzzes with urgent whispers about the missing patrol, a few nearby patrons exchange glances, seemingly aware of Galinor's in... Guards at a nearby table share unea",
+                "score": 103.71428571428571,
+                "why_selected": [
+                  "recency",
+                  "recent_turn_kind"
+                ]
+              },
+              {
+                "kind": "recent_turn",
+                "entity_ids": [],
+                "topic_tokens": [],
+                "source_turn": 11,
+                "text": "P: I look around. | G: As you watch the scene, as the crowd buzzes with urgent whispers about the missing patrol, a few nearby patrons exchange glances, seemingly aware of Galinor's in... Guards at a nearby table share unea",
+                "score": 89.42857142857143,
+                "why_selected": [
+                  "recency",
+                  "recent_turn_kind"
+                ]
+              },
+              {
+                "kind": "contextual_thread",
+                "entity_ids": [],
+                "topic_tokens": [
+                  "guards"
+                ],
+                "source_turn": 12,
+                "text": "guards [active_event_guards_at_a_nearby_table_share_uneasy_glances_their_hushed_voices_hinting_at_trouble]",
+                "score": 85.71428571428571,
+                "why_selected": [
+                  "recency"
+                ]
+              },
+              {
+                "kind": "contextual_thread",
+                "entity_ids": [],
+                "topic_tokens": [
+                  "missing",
+                  "patrol",
+                  "rumor"
+                ],
+                "source_turn": 12,
+                "text": "missing patrol rumor [active_event_missing_patrol_rumor]",
+                "score": 85.71428571428571,
+                "why_selected": [
+                  "recency"
+                ]
+              },
+              {
+                "kind": "recent_turn",
+                "entity_ids": [],
+                "topic_tokens": [],
+                "source_turn": 10,
+                "text": "P: I look around. | G: As you watch the scene, as the crowd buzzes with urgent whispers about the missing patrol, a few nearby patrons exchange glances, seemingly aware of Galinor's in... Guards at a nearby table share unea",
+                "score": 75.14285714285714,
+                "why_selected": [
+                  "recency",
+                  "recent_turn_kind"
+                ]
+              },
+              {
+                "kind": "recent_turn",
+                "entity_ids": [],
+                "topic_tokens": [],
+                "source_turn": 9,
+                "text": "P: I look around. | G: As you watch the scene, as the crowd buzzes with urgent whispers about the missing patrol, a few nearby patrons exchange glances, seemingly aware of Galinor's in... Guards at a nearby table share unea",
+                "score": 60.857142857142854,
+                "why_selected": [
+                  "recency",
+                  "recent_turn_kind"
+                ]
+              },
+              {
+                "kind": "recent_turn",
+                "entity_ids": [],
+                "topic_tokens": [],
+                "source_turn": 8,
+                "text": "P: I look around. | G: As you watch the scene, as the crowd buzzes with urgent whispers about the missing patrol, a few nearby patrons exchange glances, seemingly aware of Galinor's in... Guards at a nearby table share unea",
+                "score": 46.57142857142857,
+                "why_selected": [
+                  "recency",
+                  "recent_turn_kind"
+                ]
+              }
+            ],
+            "conversational_memory": {
+              "candidate_count": 7,
+              "selected_count": 7
+            },
+            "scene_state_anchor_checked": true,
+            "scene_state_anchor_passed": true,
+            "scene_state_anchor_failed": false,
+            "scene_state_anchor_skip_reason": null,
+            "scene_state_anchor_matched_kinds": [
+              "location"
+            ],
+            "scene_state_anchor_failure_reasons": [],
+            "scene_state_anchor_repaired": true,
+            "scene_state_anchor_repair_mode": "location_rebind",
+            "tone_escalation_checked": true,
+            "tone_escalation_ok": true,
+            "tone_escalation_failed": false,
+            "tone_escalation_failure_reasons": [],
+            "tone_escalation_detected_flags": {
+              "guarded": true,
+              "verbal_pressure": false,
+              "explicit_threat": false,
+              "physical_hostility": false,
+              "combat_initiation": false
+            },
+            "tone_escalation_matched_tone_level": "guarded",
+            "tone_escalation_repaired": false,
+            "tone_escalation_repair_mode": null,
+            "tone_escalation_contract_summary": {
+              "enabled": true,
+              "base_tone": "tense",
+              "max_allowed_tone": "tense",
+              "allow_verbal_pressure": true,
+              "allow_explicit_threat": false,
+              "allow_physical_hostility": false,
+              "allow_combat_initiation": false,
+              "justification_reasons": [
+                "visible_facts_or_runtime_topic_pressure_indicate_elevated_tension",
+                "visible_entity_roles_include_authority_guardship",
+                "affiliated_faction_attitude_and_pressure_in_world_state"
+              ]
+            },
+            "tone_escalation_contract_resolution_source": "shipped_response_policy",
+            "tone_escalation_violation_before_repair": false,
+            "narrative_authority_checked": true,
+            "narrative_authority_failed": false,
+            "narrative_authority_failure_reasons": [],
+            "narrative_authority_repaired": false,
+            "narrative_authority_repair_mode": null,
+            "narrative_authority_skip_reason": null,
+            "narrative_authority_deferral_mode": null,
+            "narrative_authority_assertion_flags": {
+              "invented_outcome": false,
+              "invented_hidden_fact": false,
+              "invented_intent": false,
+              "overcertain_unresolved_action": false
+            },
+            "anti_railroading": {
+              "validation": {
+                "checked": true,
+                "passed": true
+              },
+              "failure_reasons": [],
+              "assertion_flags": {
+                "player_decision_override": false,
+                "forced_direction": false,
+                "exclusive_path_claim": false,
+                "lead_plot_gravity": false,
+                "forced_conclusion": false
+              },
+              "repair_hints": []
+            },
+            "anti_railroading_checked": true,
+            "anti_railroading_ok": true,
+            "anti_railroading_failed": false,
+            "anti_railroading_failure_reasons": [],
+            "anti_railroading_assertion_flags": {
+              "player_decision_override": false,
+              "forced_direction": false,
+              "exclusive_path_claim": false,
+              "lead_plot_gravity": false,
+              "forced_conclusion": false
+            },
+            "anti_railroading_repair_hints": [],
+            "anti_railroading_repaired": false,
+            "anti_railroading_repair_mode": null,
+            "anti_railroading_skip_reason": null,
+            "anti_railroading_contract_resolution_source": "shipped",
+            "context_separation_contract_resolution_source": "response_policy",
+            "context_separation_skip_reason": null,
+            "context_separation_checked": true,
+            "context_separation_ok": true,
+            "context_separation_failed": false,
+            "context_separation_failure_reasons": [],
+            "context_separation_assertion_flags": {
+              "topic_hijack_background_pressure": false,
+              "pressure_answer_substitution": false,
+              "ambient_pressure_forced_tone_shift": false,
+              "scene_focus_displaced_by_world_pressure": false,
+              "pressure_overweighting": false
+            },
+            "context_separation_repair_hints": [],
+            "context_separation_repaired": false,
+            "context_separation_repair_mode": null,
+            "context_separation_debug_reason_marker": "cs_violations=none;repair_applied=False;pass_after=None;before_len=251;after_len=251;before_head='As you watch the scene, as the crowd buzzes with urgent whispers about the missing patrol, a few\u2026';after_head='As you watch the scene, as the crowd buzzes with urgent whispers about the missing patrol, a few\u2026'",
+            "context_separation_passed_after_repair": null,
+            "player_facing_narration_purity": {
+              "validation": {
+                "checked": true,
+                "passed": true
+              },
+              "violation_keys": [],
+              "repair_hints": [],
+              "repair_modes": [],
+              "preview_before": "As you watch the scene, as the crowd buzzes with urgent whispers about the missing patrol, a few\u2026",
+              "preview_after": "As you watch the scene, as the crowd buzzes with urgent whispers about the missing patrol, a few\u2026"
+            },
+            "player_facing_narration_purity_contract_resolution_source": "response_policy",
+            "player_facing_narration_purity_skip_reason": null,
+            "player_facing_narration_purity_checked": true,
+            "player_facing_narration_purity_failed": false,
+            "player_facing_narration_purity_repaired": false,
+            "player_facing_narration_purity_repair_modes": [],
+            "player_facing_narration_purity_violation_keys": [],
+            "player_facing_narration_purity_repair_hints_used": [],
+            "player_facing_narration_purity_collapsed_to_diegetic_core": false,
+            "player_facing_narration_purity_preview_before": "As you watch the scene, as the crowd buzzes with urgent whispers about the missing patrol, a few\u2026",
+            "player_facing_narration_purity_preview_after": "As you watch the scene, as the crowd buzzes with urgent whispers about the missing patrol, a few\u2026",
+            "answer_shape_primacy": {
+              "checked": true,
+              "passed": true,
+              "failure_reasons": []
+            },
+            "answer_shape_primacy_skip_reason": null,
+            "answer_shape_primacy_checked": true,
+            "answer_shape_primacy_failed": false,
+            "answer_shape_primacy_repaired": false,
+            "answer_shape_primacy_repair_mode": null,
+            "answer_shape_primacy_failure_reasons": [],
+            "answer_shape_primacy_preview_before": "As you watch the scene, as the crowd buzzes with urgent whispers about the missing patrol, a few\u2026",
+            "answer_shape_primacy_preview_after": "As you watch the scene, as the crowd buzzes with urgent whispers about the missing patrol, a few\u2026",
+            "interaction_continuity_validation": {
+              "ok": true,
+              "enabled": false,
+              "continuity_strength": "none",
+              "violations": [],
+              "warnings": [],
+              "facts": {
+                "anchored_interlocutor_id": "",
+                "anchor_required": false,
+                "speaker_switch_detected": false,
+                "explicit_switch_cue_present": false,
+                "thread_drop_detected": false,
+                "narrator_bridge_present": false,
+                "multi_speaker_pattern_present": false,
+                "dialogue_presence": false
+              },
+              "debug": {
+                "speaker_labels_detected": [],
+                "cue_labels": [],
+                "reason_path": [
+                  "contract_disabled_or_strength_none"
+                ]
+              }
+            },
+            "fallback_behavior": {
+              "validation": {
+                "contract_present": true,
+                "checked": false,
+                "passed": true,
+                "uncertainty_active": false
+              },
+              "failure_reasons": [],
+              "repair_mode": "none",
+              "skip_reason": "uncertainty_inactive"
+            },
+            "fallback_behavior_contract_present": true,
+            "fallback_behavior_checked": false,
+            "fallback_behavior_skip_reason": "uncertainty_inactive",
+            "fallback_behavior_uncertainty_active": false,
+            "fallback_behavior_failed": false,
+            "fallback_behavior_failure_reasons": [],
+            "fallback_behavior_repaired": false,
+            "fallback_behavior_repair_mode": "none",
+            "fallback_behavior_clarifying_question_used": false,
+            "fallback_behavior_partial_used": false,
+            "fallback_behavior_known_edge_preserved": false,
+            "fallback_behavior_unknown_edge_added": false,
+            "fallback_behavior_next_lead_added": false,
+            "fallback_behavior_meta_voice_stripped": false,
+            "narration_constraint_debug": {
+              "response_type": {
+                "required": "action_outcome",
+                "contract_source": "response_policy",
+                "candidate_ok": true,
+                "repair_used": false,
+                "repair_kind": null
+              },
+              "visibility": {
+                "contract_present": true,
+                "decision_mode": "validated",
+                "visible_entity_count": 6,
+                "withheld_fact_count": 14,
+                "reason_codes": []
+              },
+              "speaker_selection": {
+                "speaker_id": null,
+                "speaker_name": null,
+                "selection_source": null,
+                "reason_code": "speaker_unresolved",
+                "binding_confident": null
+              }
+            }
+          }
+        },
+        "world_tick_events": []
+      },
+      "scene_before": "frontier_gate",
+      "scene_after": "frontier_gate",
+      "clue_updates": [],
+      "world_flag_updates": [],
+      "turn_trace": {
+        "source": "chat",
+        "player_input": "I look around.",
+        "intent": {
+          "parsed": {
+            "id": "i_look_around",
+            "label": "I look around.",
+            "type": "observe",
+            "prompt": "I look around.",
+            "targetSceneId": null,
+            "target_scene_id": null
+          },
+          "segmented_turn": {
+            "declared_action_text": "I look around."
+          },
+          "normalized": {
+            "id": "i_look_around",
+            "label": "I look around.",
+            "type": "observe",
+            "prompt": "I look around.",
+            "targetSceneId": null,
+            "target_scene_id": null,
+            "targetEntityId": null,
+            "target_id": null
+          },
+          "implied_context": {
+            "applied": false,
+            "cases": [],
+            "target_id": null,
+            "commitment_broken": false,
+            "break_reason": null
+          }
+        },
+        "classification": {
+          "action_type": "chat",
+          "resolved_kind": "observe",
+          "requires_check": false
+        },
+        "response_type_contract": {
+          "required_response_type": "action_outcome",
+          "source_route": "exploration",
+          "allow_escalation": false,
+          "debug_reasons": [
+            "resolved_world_action_requires_action_outcome",
+            "non_hostile_world_action_guard"
+          ]
+        },
+        "social_contract_trace": {
+          "route_selected": "undecided",
+          "routing_reason_code": "no_addressable_target",
+          "social_followup_recovery": "not_applicable",
+          "reply_owner_actor_id": null,
+          "interlocutor_status": "none",
+          "continuity_status": "broken",
+          "fallback_anchor_source": "none",
+          "visible_grounded_speaker": null,
+          "final_reply_owner": null
+        },
+        "resolution_path": "exploration_engine",
+        "authoritative_state_changes": {
+          "scene_transition": null,
+          "resolution_state_changes": {},
+          "resolution_world_updates": [],
+          "check_request": null
+        },
+        "interaction_after": {
+          "active_interaction_target_id": null,
+          "active_interaction_kind": "observe",
+          "interaction_mode": "activity",
+          "engagement_level": "focused",
+          "conversation_privacy": null,
+          "player_position_context": null
+        },
+        "narration_obligations": {
+          "is_opening_scene": false,
+          "must_advance_scene": false,
+          "should_answer_active_npc": false,
+          "avoid_input_echo": true,
+          "avoid_player_action_restatement": true,
+          "prefer_structured_turn_summary": true,
+          "active_npc_reply_expected": false,
+          "active_npc_reply_kind": null,
+          "scene_momentum_due": false,
+          "scene_momentum_exchanges_since": 0,
+          "scene_momentum_next_due_in": 2,
+          "suppress_non_social_emitters": false
+        },
+        "clues": {
+          "discovered_texts": [],
+          "presentation_changes": [],
+          "known_counts": {
+            "implicit": 0,
+            "explicit": 0,
+            "actionable": 0
+          }
+        },
+        "affordances_after": [
+          {
+            "id": "question_guard_captain",
+            "type": "question",
+            "label": "Talk to Guard Captain",
+            "targetEntityId": "guard_captain"
+          },
+          {
+            "id": "question_tavern_runner",
+            "type": "question",
+            "label": "Talk to Tavern Runner",
+            "targetEntityId": "tavern_runner"
+          },
+          {
+            "id": "question_emergent_town_crier",
+            "type": "question",
+            "label": "Talk to Town Crier",
+            "targetEntityId": "emergent_town_crier"
+          },
+          {
+            "id": "examine_the_rain_spatters_soot_dark_stone_frayed",
+            "type": "investigate",
+            "label": "Examine the Rain spatters soot-dark stone; frayed"
+          },
+          {
+            "id": "examine_refugees",
+            "type": "investigate",
+            "label": "Examine Refugees"
+          }
+        ],
+        "emergent_actor": {
+          "emergent_actor_enrolled": true,
+          "emergent_actor_id": "emergent_lord_aldric",
+          "emergent_actor_source_text": "Lord Aldric"
+        },
+        "leads": {
+          "registry_debug": [],
+          "delta_after_reconcile": [],
+          "changed_count": 0
+        },
+        "latency_ms": {
+          "intent_classification": 42,
+          "engine_resolution": 0,
+          "prompt_construction": 24,
+          "gpt_call": 19684,
+          "retry_loop_total": 130,
+          "final_emission_gate": 35,
+          "fallback_repair": 131,
+          "total_turn": 19971
+        }
+      },
+      "gpt_called": true,
+      "response_ok": true,
+      "error": null,
+      "canonical_entry": {
+        "should_route_social": false,
+        "target_actor_id": null,
+        "target_source": null,
+        "reason": "no_addressable_target",
+        "spoken_text": null,
+        "declared_switch_detected": false,
+        "declared_switch_target_actor_id": null,
+        "continuity_overridden_by_declared_switch": false,
+        "spoken_vocative_detected": false,
+        "spoken_vocative_target_actor_id": null,
+        "continuity_overridden_by_spoken_vocative": false
+      },
+      "canonical_entry_path": "undecided",
+      "canonical_entry_reason": "no_addressable_target",
+      "canonical_entry_target_actor_id": null,
+      "response_type_contract": {
+        "required_response_type": "action_outcome",
+        "source_route": "exploration",
+        "allow_escalation": false,
+        "debug_reasons": [
+          "resolved_world_action_requires_action_outcome",
+          "non_hostile_world_action_guard"
+        ]
+      },
+      "latency_ms": {
+        "intent_classification": 42,
+        "engine_resolution": 0,
+        "prompt_construction": 24,
+        "gpt_call": 19684,
+        "retry_loop_total": 130,
+        "final_emission_gate": 35,
+        "fallback_repair": 131,
+        "total_turn": 19971
+      }
+    },
+    {
+      "timestamp": "2026-04-12T16:32:33.789008Z",
+      "source": "chat",
+      "action_type": "chat",
+      "raw_input": "I look around.",
+      "turn_stage_order": [
+        "player_input",
+        "intent_normalization_expansion",
+        "action_classification",
+        "engine_resolution",
+        "authoritative_state_mutation",
+        "prompt_context_construction",
+        "gpt_narration",
+        "affordance_derivation",
+        "response_debug_packaging"
+      ],
+      "incoming_payload": {
+        "text": "I look around."
+      },
+      "parsed_intent": {
+        "id": "i_look_around",
+        "label": "I look around.",
+        "type": "observe",
+        "prompt": "I look around.",
+        "targetSceneId": null,
+        "target_scene_id": null
+      },
+      "segmented_turn": {
+        "declared_action_text": "I look around."
+      },
+      "normalized_action": {
+        "id": "i_look_around",
+        "label": "I look around.",
+        "type": "observe",
+        "prompt": "I look around.",
+        "targetSceneId": null
+      },
+      "resolution": {
+        "kind": "observe",
+        "action_id": "i_look_around",
+        "label": "I look around.",
+        "prompt": "I look around.",
+        "success": null,
+        "resolved_transition": false,
+        "target_scene_id": null,
+        "clue_id": null,
+        "discovered_clues": [],
+        "state_changes": {},
+        "hint": "Player is focusing on observing the current scene. Narrate what stands out or what careful observation reveals\u2014avoid repeating the same summary.",
+        "metadata": {
+          "turn_segmentation": {
+            "declared_action_text": "I look around."
+          },
+          "response_type_contract": {
+            "required_response_type": "action_outcome",
+            "source_route": "exploration",
+            "allow_escalation": false,
+            "escalation_block_reason": "non_hostile_world_action_guard",
+            "strict_target_id": null,
+            "strict_answer_expected": false,
+            "strict_dialogue_expected": false,
+            "action_must_preserve_agency": true,
+            "debug_reasons": [
+              "resolved_world_action_requires_action_outcome",
+              "non_hostile_world_action_guard"
+            ]
+          },
+          "emission_debug": {
+            "scene_state_anchor": {
+              "enabled": true,
+              "scene_id": "frontier_gate",
+              "counts": {
+                "location": 17,
+                "actor": 7,
+                "player_action": 7
+              }
+            },
+            "context_separation": {
+              "validation": {
+                "checked": true,
+                "passed": true
+              },
+              "failure_reasons": [],
+              "assertion_flags": {
+                "topic_hijack_background_pressure": false,
+                "pressure_answer_substitution": false,
+                "ambient_pressure_forced_tone_shift": false,
+                "scene_focus_displaced_by_world_pressure": false,
+                "pressure_overweighting": false
+              },
+              "repair_hints": [],
+              "debug_reason_marker": "cs_violations=none;repair_applied=False;pass_after=None;before_len=251;after_len=251;before_head='As you watch the scene, as the crowd buzzes with urgent whispers about the missing patrol, a few\u2026';after_head='As you watch the scene, as the crowd buzzes with urgent whispers about the missing patrol, a few\u2026'"
+            },
+            "conversational_memory_window": {
+              "enabled": true,
+              "window_version": "v1",
+              "prioritize_recent_turns": true,
+              "prioritize_active_scene_entities": true,
+              "deprioritize_stale_inactive_elements": true,
+              "allow_explicit_reintroduction": true,
+              "recent_turn_window": 6,
+              "soft_memory_limit": 12,
+              "stale_after_turns": 18,
+              "active_scene_entity_ids": [
+                "emergent_lord_aldric",
+                "emergent_town_crier",
+                "guard_captain",
+                "refugee",
+                "tavern_runner",
+                "threadbare_watcher"
+              ],
+              "anchored_interlocutor_id": "",
+              "active_interaction_target_id": "",
+              "explicit_reintroduced_entity_ids": [],
+              "explicit_reintroduced_topics": [],
+              "selection_debug": {
+                "matched_entity_ids": [],
+                "matched_topics": [],
+                "matched_grounded_ids": [],
+                "callback_marker_hit": null,
+                "source_of_activity_anchor": "none",
+                "source_of_recentness": "session.turn_counter",
+                "source_of_reintroductions": "player_text+visibility_aliases"
+              }
+            },
+            "selected_conversational_memory": [
+              {
+                "kind": "recent_turn",
+                "entity_ids": [],
+                "topic_tokens": [],
+                "source_turn": 13,
+                "text": "P: I look around. | G: As you watch the scene, as the crowd buzzes with urgent whispers about the missing patrol, a few nearby patrons exchange glances, seemingly aware of Galinor's in... Guards at a nearby table share unea",
+                "score": 103.71428571428571,
+                "why_selected": [
+                  "recency",
+                  "recent_turn_kind"
+                ]
+              },
+              {
+                "kind": "recent_turn",
+                "entity_ids": [],
+                "topic_tokens": [],
+                "source_turn": 12,
+                "text": "P: I look around. | G: As you watch the scene, as the crowd buzzes with urgent whispers about the missing patrol, a few nearby patrons exchange glances, seemingly aware of Galinor's in... Guards at a nearby table share unea",
+                "score": 89.42857142857143,
+                "why_selected": [
+                  "recency",
+                  "recent_turn_kind"
+                ]
+              },
+              {
+                "kind": "contextual_thread",
+                "entity_ids": [],
+                "topic_tokens": [
+                  "guards"
+                ],
+                "source_turn": 13,
+                "text": "guards [active_event_guards_at_a_nearby_table_share_uneasy_glances_their_hushed_voices_hinting_at_trouble]",
+                "score": 85.71428571428571,
+                "why_selected": [
+                  "recency"
+                ]
+              },
+              {
+                "kind": "contextual_thread",
+                "entity_ids": [],
+                "topic_tokens": [
+                  "missing",
+                  "patrol",
+                  "rumor"
+                ],
+                "source_turn": 13,
+                "text": "missing patrol rumor [active_event_missing_patrol_rumor]",
+                "score": 85.71428571428571,
+                "why_selected": [
+                  "recency"
+                ]
+              },
+              {
+                "kind": "recent_turn",
+                "entity_ids": [],
+                "topic_tokens": [],
+                "source_turn": 11,
+                "text": "P: I look around. | G: As you watch the scene, as the crowd buzzes with urgent whispers about the missing patrol, a few nearby patrons exchange glances, seemingly aware of Galinor's in... Guards at a nearby table share unea",
+                "score": 75.14285714285714,
+                "why_selected": [
+                  "recency",
+                  "recent_turn_kind"
+                ]
+              },
+              {
+                "kind": "recent_turn",
+                "entity_ids": [],
+                "topic_tokens": [],
+                "source_turn": 10,
+                "text": "P: I look around. | G: As you watch the scene, as the crowd buzzes with urgent whispers about the missing patrol, a few nearby patrons exchange glances, seemingly aware of Galinor's in... Guards at a nearby table share unea",
+                "score": 60.857142857142854,
+                "why_selected": [
+                  "recency",
+                  "recent_turn_kind"
+                ]
+              },
+              {
+                "kind": "recent_turn",
+                "entity_ids": [],
+                "topic_tokens": [],
+                "source_turn": 9,
+                "text": "P: I look around. | G: As you watch the scene, as the crowd buzzes with urgent whispers about the missing patrol, a few nearby patrons exchange glances, seemingly aware of Galinor's in... Guards at a nearby table share unea",
+                "score": 46.57142857142857,
+                "why_selected": [
+                  "recency",
+                  "recent_turn_kind"
+                ]
+              }
+            ],
+            "conversational_memory": {
+              "candidate_count": 7,
+              "selected_count": 7
+            },
+            "scene_state_anchor_checked": true,
+            "scene_state_anchor_passed": true,
+            "scene_state_anchor_failed": false,
+            "scene_state_anchor_skip_reason": null,
+            "scene_state_anchor_matched_kinds": [
+              "location"
+            ],
+            "scene_state_anchor_failure_reasons": [],
+            "scene_state_anchor_repaired": true,
+            "scene_state_anchor_repair_mode": "location_rebind",
+            "tone_escalation_checked": true,
+            "tone_escalation_ok": true,
+            "tone_escalation_failed": false,
+            "tone_escalation_failure_reasons": [],
+            "tone_escalation_detected_flags": {
+              "guarded": true,
+              "verbal_pressure": false,
+              "explicit_threat": false,
+              "physical_hostility": false,
+              "combat_initiation": false
+            },
+            "tone_escalation_matched_tone_level": "guarded",
+            "tone_escalation_repaired": false,
+            "tone_escalation_repair_mode": null,
+            "tone_escalation_contract_summary": {
+              "enabled": true,
+              "base_tone": "tense",
+              "max_allowed_tone": "tense",
+              "allow_verbal_pressure": true,
+              "allow_explicit_threat": false,
+              "allow_physical_hostility": false,
+              "allow_combat_initiation": false,
+              "justification_reasons": [
+                "visible_facts_or_runtime_topic_pressure_indicate_elevated_tension",
+                "visible_entity_roles_include_authority_guardship",
+                "affiliated_faction_attitude_and_pressure_in_world_state"
+              ]
+            },
+            "tone_escalation_contract_resolution_source": "shipped_response_policy",
+            "tone_escalation_violation_before_repair": false,
+            "narrative_authority_checked": true,
+            "narrative_authority_failed": false,
+            "narrative_authority_failure_reasons": [],
+            "narrative_authority_repaired": false,
+            "narrative_authority_repair_mode": null,
+            "narrative_authority_skip_reason": null,
+            "narrative_authority_deferral_mode": null,
+            "narrative_authority_assertion_flags": {
+              "invented_outcome": false,
+              "invented_hidden_fact": false,
+              "invented_intent": false,
+              "overcertain_unresolved_action": false
+            },
+            "anti_railroading": {
+              "validation": {
+                "checked": true,
+                "passed": true
+              },
+              "failure_reasons": [],
+              "assertion_flags": {
+                "player_decision_override": false,
+                "forced_direction": false,
+                "exclusive_path_claim": false,
+                "lead_plot_gravity": false,
+                "forced_conclusion": false
+              },
+              "repair_hints": []
+            },
+            "anti_railroading_checked": true,
+            "anti_railroading_ok": true,
+            "anti_railroading_failed": false,
+            "anti_railroading_failure_reasons": [],
+            "anti_railroading_assertion_flags": {
+              "player_decision_override": false,
+              "forced_direction": false,
+              "exclusive_path_claim": false,
+              "lead_plot_gravity": false,
+              "forced_conclusion": false
+            },
+            "anti_railroading_repair_hints": [],
+            "anti_railroading_repaired": false,
+            "anti_railroading_repair_mode": null,
+            "anti_railroading_skip_reason": null,
+            "anti_railroading_contract_resolution_source": "shipped",
+            "context_separation_contract_resolution_source": "response_policy",
+            "context_separation_skip_reason": null,
+            "context_separation_checked": true,
+            "context_separation_ok": true,
+            "context_separation_failed": false,
+            "context_separation_failure_reasons": [],
+            "context_separation_assertion_flags": {
+              "topic_hijack_background_pressure": false,
+              "pressure_answer_substitution": false,
+              "ambient_pressure_forced_tone_shift": false,
+              "scene_focus_displaced_by_world_pressure": false,
+              "pressure_overweighting": false
+            },
+            "context_separation_repair_hints": [],
+            "context_separation_repaired": false,
+            "context_separation_repair_mode": null,
+            "context_separation_debug_reason_marker": "cs_violations=none;repair_applied=False;pass_after=None;before_len=251;after_len=251;before_head='As you watch the scene, as the crowd buzzes with urgent whispers about the missing patrol, a few\u2026';after_head='As you watch the scene, as the crowd buzzes with urgent whispers about the missing patrol, a few\u2026'",
+            "context_separation_passed_after_repair": null,
+            "player_facing_narration_purity": {
+              "validation": {
+                "checked": true,
+                "passed": true
+              },
+              "violation_keys": [],
+              "repair_hints": [],
+              "repair_modes": [],
+              "preview_before": "As you watch the scene, as the crowd buzzes with urgent whispers about the missing patrol, a few\u2026",
+              "preview_after": "As you watch the scene, as the crowd buzzes with urgent whispers about the missing patrol, a few\u2026"
+            },
+            "player_facing_narration_purity_contract_resolution_source": "response_policy",
+            "player_facing_narration_purity_skip_reason": null,
+            "player_facing_narration_purity_checked": true,
+            "player_facing_narration_purity_failed": false,
+            "player_facing_narration_purity_repaired": false,
+            "player_facing_narration_purity_repair_modes": [],
+            "player_facing_narration_purity_violation_keys": [],
+            "player_facing_narration_purity_repair_hints_used": [],
+            "player_facing_narration_purity_collapsed_to_diegetic_core": false,
+            "player_facing_narration_purity_preview_before": "As you watch the scene, as the crowd buzzes with urgent whispers about the missing patrol, a few\u2026",
+            "player_facing_narration_purity_preview_after": "As you watch the scene, as the crowd buzzes with urgent whispers about the missing patrol, a few\u2026",
+            "answer_shape_primacy": {
+              "checked": true,
+              "passed": true,
+              "failure_reasons": []
+            },
+            "answer_shape_primacy_skip_reason": null,
+            "answer_shape_primacy_checked": true,
+            "answer_shape_primacy_failed": false,
+            "answer_shape_primacy_repaired": false,
+            "answer_shape_primacy_repair_mode": null,
+            "answer_shape_primacy_failure_reasons": [],
+            "answer_shape_primacy_preview_before": "As you watch the scene, as the crowd buzzes with urgent whispers about the missing patrol, a few\u2026",
+            "answer_shape_primacy_preview_after": "As you watch the scene, as the crowd buzzes with urgent whispers about the missing patrol, a few\u2026",
+            "interaction_continuity_validation": {
+              "ok": true,
+              "enabled": false,
+              "continuity_strength": "none",
+              "violations": [],
+              "warnings": [],
+              "facts": {
+                "anchored_interlocutor_id": "",
+                "anchor_required": false,
+                "speaker_switch_detected": false,
+                "explicit_switch_cue_present": false,
+                "thread_drop_detected": false,
+                "narrator_bridge_present": false,
+                "multi_speaker_pattern_present": false,
+                "dialogue_presence": false
+              },
+              "debug": {
+                "speaker_labels_detected": [],
+                "cue_labels": [],
+                "reason_path": [
+                  "contract_disabled_or_strength_none"
+                ]
+              }
+            },
+            "fallback_behavior": {
+              "validation": {
+                "contract_present": true,
+                "checked": false,
+                "passed": true,
+                "uncertainty_active": false
+              },
+              "failure_reasons": [],
+              "repair_mode": "none",
+              "skip_reason": "uncertainty_inactive"
+            },
+            "fallback_behavior_contract_present": true,
+            "fallback_behavior_checked": false,
+            "fallback_behavior_skip_reason": "uncertainty_inactive",
+            "fallback_behavior_uncertainty_active": false,
+            "fallback_behavior_failed": false,
+            "fallback_behavior_failure_reasons": [],
+            "fallback_behavior_repaired": false,
+            "fallback_behavior_repair_mode": "none",
+            "fallback_behavior_clarifying_question_used": false,
+            "fallback_behavior_partial_used": false,
+            "fallback_behavior_known_edge_preserved": false,
+            "fallback_behavior_unknown_edge_added": false,
+            "fallback_behavior_next_lead_added": false,
+            "fallback_behavior_meta_voice_stripped": false,
+            "narration_constraint_debug": {
+              "response_type": {
+                "required": "action_outcome",
+                "contract_source": "response_policy",
+                "candidate_ok": true,
+                "repair_used": false,
+                "repair_kind": null
+              },
+              "visibility": {
+                "contract_present": true,
+                "decision_mode": "validated",
+                "visible_entity_count": 6,
+                "withheld_fact_count": 14,
+                "reason_codes": []
+              },
+              "speaker_selection": {
+                "speaker_id": null,
+                "speaker_name": null,
+                "selection_source": null,
+                "reason_code": "speaker_unresolved",
+                "binding_confident": null
+              }
+            }
+          }
+        },
+        "world_tick_events": []
+      },
+      "scene_before": "frontier_gate",
+      "scene_after": "frontier_gate",
+      "clue_updates": [],
+      "world_flag_updates": [],
+      "turn_trace": {
+        "source": "chat",
+        "player_input": "I look around.",
+        "intent": {
+          "parsed": {
+            "id": "i_look_around",
+            "label": "I look around.",
+            "type": "observe",
+            "prompt": "I look around.",
+            "targetSceneId": null,
+            "target_scene_id": null
+          },
+          "segmented_turn": {
+            "declared_action_text": "I look around."
+          },
+          "normalized": {
+            "id": "i_look_around",
+            "label": "I look around.",
+            "type": "observe",
+            "prompt": "I look around.",
+            "targetSceneId": null,
+            "target_scene_id": null,
+            "targetEntityId": null,
+            "target_id": null
+          },
+          "implied_context": {
+            "applied": false,
+            "cases": [],
+            "target_id": null,
+            "commitment_broken": false,
+            "break_reason": null
+          }
+        },
+        "classification": {
+          "action_type": "chat",
+          "resolved_kind": "observe",
+          "requires_check": false
+        },
+        "response_type_contract": {
+          "required_response_type": "action_outcome",
+          "source_route": "exploration",
+          "allow_escalation": false,
+          "debug_reasons": [
+            "resolved_world_action_requires_action_outcome",
+            "non_hostile_world_action_guard"
+          ]
+        },
+        "social_contract_trace": {
+          "route_selected": "undecided",
+          "routing_reason_code": "no_addressable_target",
+          "social_followup_recovery": "not_applicable",
+          "reply_owner_actor_id": null,
+          "interlocutor_status": "none",
+          "continuity_status": "broken",
+          "fallback_anchor_source": "none",
+          "visible_grounded_speaker": null,
+          "final_reply_owner": null
+        },
+        "resolution_path": "exploration_engine",
+        "authoritative_state_changes": {
+          "scene_transition": null,
+          "resolution_state_changes": {},
+          "resolution_world_updates": [],
+          "check_request": null
+        },
+        "interaction_after": {
+          "active_interaction_target_id": null,
+          "active_interaction_kind": "observe",
+          "interaction_mode": "activity",
+          "engagement_level": "focused",
+          "conversation_privacy": null,
+          "player_position_context": null
+        },
+        "narration_obligations": {
+          "is_opening_scene": false,
+          "must_advance_scene": false,
+          "should_answer_active_npc": false,
+          "avoid_input_echo": true,
+          "avoid_player_action_restatement": true,
+          "prefer_structured_turn_summary": true,
+          "active_npc_reply_expected": false,
+          "active_npc_reply_kind": null,
+          "scene_momentum_due": false,
+          "scene_momentum_exchanges_since": 0,
+          "scene_momentum_next_due_in": 2,
+          "suppress_non_social_emitters": false
+        },
+        "clues": {
+          "discovered_texts": [],
+          "presentation_changes": [],
+          "known_counts": {
+            "implicit": 0,
+            "explicit": 0,
+            "actionable": 0
+          }
+        },
+        "affordances_after": [
+          {
+            "id": "question_guard_captain",
+            "type": "question",
+            "label": "Talk to Guard Captain",
+            "targetEntityId": "guard_captain"
+          },
+          {
+            "id": "question_tavern_runner",
+            "type": "question",
+            "label": "Talk to Tavern Runner",
+            "targetEntityId": "tavern_runner"
+          },
+          {
+            "id": "question_emergent_town_crier",
+            "type": "question",
+            "label": "Talk to Town Crier",
+            "targetEntityId": "emergent_town_crier"
+          },
+          {
+            "id": "examine_the_rain_spatters_soot_dark_stone_frayed",
+            "type": "investigate",
+            "label": "Examine the Rain spatters soot-dark stone; frayed"
+          },
+          {
+            "id": "examine_refugees",
+            "type": "investigate",
+            "label": "Examine Refugees"
+          }
+        ],
+        "emergent_actor": {
+          "emergent_actor_enrolled": true,
+          "emergent_actor_id": "emergent_lord_aldric",
+          "emergent_actor_source_text": "Lord Aldric"
+        },
+        "leads": {
+          "registry_debug": [],
+          "delta_after_reconcile": [],
+          "changed_count": 0
+        },
+        "latency_ms": {
+          "intent_classification": 42,
+          "engine_resolution": 0,
+          "prompt_construction": 25,
+          "gpt_call": 19931,
+          "retry_loop_total": 125,
+          "final_emission_gate": 36,
+          "fallback_repair": 125,
+          "total_turn": 20217
+        }
+      },
+      "gpt_called": true,
+      "response_ok": true,
+      "error": null,
+      "canonical_entry": {
+        "should_route_social": false,
+        "target_actor_id": null,
+        "target_source": null,
+        "reason": "no_addressable_target",
+        "spoken_text": null,
+        "declared_switch_detected": false,
+        "declared_switch_target_actor_id": null,
+        "continuity_overridden_by_declared_switch": false,
+        "spoken_vocative_detected": false,
+        "spoken_vocative_target_actor_id": null,
+        "continuity_overridden_by_spoken_vocative": false
+      },
+      "canonical_entry_path": "undecided",
+      "canonical_entry_reason": "no_addressable_target",
+      "canonical_entry_target_actor_id": null,
+      "response_type_contract": {
+        "required_response_type": "action_outcome",
+        "source_route": "exploration",
+        "allow_escalation": false,
+        "debug_reasons": [
+          "resolved_world_action_requires_action_outcome",
+          "non_hostile_world_action_guard"
+        ]
+      },
+      "latency_ms": {
+        "intent_classification": 42,
+        "engine_resolution": 0,
+        "prompt_construction": 25,
+        "gpt_call": 19931,
+        "retry_loop_total": 125,
+        "final_emission_gate": 36,
+        "fallback_repair": 125,
+        "total_turn": 20217
+      }
     }
   ],
   "flags": {},
   "character_name": "Galinor",
   "campaign_run_id": "d5ea3e058584cddc794ed2aa",
   "session_id": "d5ea3e058584cddc794ed2aa",
-  "last_saved_at": "2026-04-12T15:59:41.076427Z",
+  "last_saved_at": "2026-04-12T16:32:54.012989Z",
   "last_turn_response_policy": {
     "rule_priority_order": [
       "ANSWER THE PLAYER",

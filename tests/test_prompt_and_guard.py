@@ -1,3 +1,11 @@
+"""Canonical owner for pre-generation contracts: ``build_messages``, system/instruction hooks,
+guards (``guard_gm_output``, NPC contracts, uncertainty/retry classification, policy enforcement
+before final emit), and **retry prompt text** from ``build_retry_prompt_for_failure``.
+
+Post-GM player-string hygiene (``sanitize_player_facing_output`` and related phrase families) is
+owned by ``tests/test_output_sanitizer.py``. Transcript / gauntlet suites should keep **E2E
+smoke** for those boundaries unless exact wording is itself the regression target.
+"""
 import json
 import re
 
@@ -1083,6 +1091,56 @@ def test_detect_retry_failures_flags_social_exchange_first_sentence_contract():
     reasons = unresolved.get("reasons") or []
     assert "question_rule:social_exchange_first_sentence_not_speaker_grounded" in reasons
     assert "question_rule:social_exchange_first_sentence_not_substantive_answer" in reasons
+
+
+def test_retry_prompt_warns_against_known_gate_failure_shapes():
+    """Anti-railroading strings in retry guidance (canonical owner: messages-to-model, not transcript harness)."""
+    from game.gm import build_retry_prompt_for_failure
+
+    p = build_retry_prompt_for_failure(
+        {"failure_class": "scene_stall"},
+        response_policy=None,
+        gm_output=None,
+    ).lower()
+    assert "meta-story gravity" in p or "the story wants" in p
+    assert "forced conclusions" in p or "obvious you must" in p
+    assert "you head straight" not in p
+    assert "so you go there" not in p
+
+
+def test_retry_prompt_multi_lead_and_urgency_language():
+    """Retry instructions stay agency-safe under multiple leads and time pressure (same owner as gate-failure shapes)."""
+    from game.gm import build_retry_prompt_for_failure
+
+    gm = {
+        "anti_railroading_contract": {
+            "enabled": True,
+            "forbid_player_decision_override": True,
+            "forbid_forced_direction": True,
+            "forbid_exclusive_path_claims_without_basis": True,
+            "forbid_lead_to_plot_gravity_upgrade": True,
+            "allow_directional_language_from_resolved_transition": False,
+            "allow_exclusivity_from_authoritative_resolution": False,
+            "allow_commitment_language_when_player_explicitly_committed": False,
+            "surfaced_lead_ids": ["lead_patrol", "lead_river", "lead_gate"],
+            "surfaced_lead_labels": [],
+        }
+    }
+    for fc, extra in (
+        ("scene_stall", {}),
+        (
+            "topic_pressure_escalation",
+            {"topic_context": {"topic_key": "patrol", "repeat_count": 3, "previous_answer_snippet": "Maybe."}},
+        ),
+    ):
+        failure: dict = {"failure_class": fc, **extra}
+        p = build_retry_prompt_for_failure(failure, response_policy=None, gm_output=gm).lower()
+        assert "without choosing for the player" in p
+        assert "the story wants" in p
+        if fc == "topic_pressure_escalation":
+            assert "forced pathing" in p
+        if fc == "scene_stall":
+            assert "multiple leads are in play" in p
 
 
 def test_retry_prompt_for_social_exchange_first_sentence_failure_requests_substantive_shape():

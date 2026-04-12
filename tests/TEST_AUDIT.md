@@ -1,10 +1,20 @@
-# Test suite audit (Block 15A)
+# Test suite audit (Block 15A, post-AER Block C1 boundary)
 
-Diagnostic inventory of `tests/` only: no runtime code or assertions were changed for this pass. **How to run tests (fast/full lanes, collect-only, Windows):** `tests/README_TESTS.md`.
+Diagnostic inventory of `tests/` only. **How to run tests (fast/full lanes, collect-only, Windows):** `tests/README_TESTS.md`.
+
+**Consolidation phase:** Behavioral Gauntlet, Playability Validation, and AER are **complete** as validation tracks. Remaining consolidation targets **test ownership** trimming, **transcript** duplicate assertion thinning, and clearer **canonical owner** boundaries—**without** expanding gameplay behavior in doc-only passes. Runtime **orchestration** ownership for emit paths remains documented in `docs/narrative_integrity_architecture.md`.
+
+**Terminology (use consistently in PRs and reviews):**
+
+- **Canonical owner** — the primary module or file that should own an invariant end-to-end.
+- **Smoke overlap** — a thin cross-layer check where a different harness depth is intentional; not a second full legality suite.
+- **Deferred** — explicitly postponed work (for example, lead/clue batch until after prompt/sanitizer + social/emission).
+- **Orchestration** — ordering and integration of policy layers (especially `apply_final_emission_gate`), distinct from **pure** validators or **metadata-only** helpers.
+- **Deterministic / contract-driven** — tests and evaluators that lock shapes, routes, and contracts—not live-model prose.
 
 **Regenerate artifacts:** from repo root run `py -3 tools/test_audit.py` (or `python tools/test_audit.py`). That refreshes `tests/test_inventory.json` using `pytest --collect-only` plus static heuristics. The script prints a one-line summary of **module-level duplicate `test_*` names** (shadowed defs); details are in JSON under `summary.files_with_shadowed_duplicate_test_defs`. It also prints a short **overlap spread** line (themes by distinct file count; heuristic, not semantic duplicate detection).
 
-**Counts in this markdown** were reconciled with `tests/test_inventory.json` on 2026-04-03. For live numbers after adding tests, re-run the audit and read `summary` / `files` in that JSON (the full per-file table is not duplicated here).
+**Counts in this markdown:** detailed per-file tables drift as the suite grows. For live numbers, prefer `pytest --collect-only` plus `tests/test_inventory.json` (regenerate with `tools/test_audit.py`). A **Block C1 sanity snapshot** (2026-04-12): **2214** tests collected; fast lane `pytest --collect-only -m "not transcript and not slow"` selects **2051** tests (**163** deselected as `transcript` or `slow`); **`tests/test_*.py`** file count is **160** (glob-based). Older inline counts elsewhere in this file may be historical unless refreshed in the same edit pass.
 
 ---
 
@@ -35,10 +45,10 @@ Cluster **closed enough** for this pass: enforced split and intentional overlap 
 
 ### Canonical owners by theme
 
-| Theme | Primary owner(s) | Integration smoke only (examples) |
+| Theme | Canonical owner(s) | Integration smoke only (examples) |
 | --- | --- | --- |
 | **Routing / turn pipeline** | `test_turn_pipeline_shared.py` — full **`/api/chat`** and **`/api/action`** stack, dialogue-lock HTTP, turn-trace-adjacent flow, end-to-end resolution; `test_dialogue_routing_lock.py` — pure `choose_interaction_route` / dialogue-lock **table** (no `TestClient`); `test_directed_social_routing.py` — directed-social precedence, vocative overrides, segmentation, narrow directed `/api/chat`, emergent-actor targeting; `test_intent_parser.py` / `test_intent_and_runtime.py` — parse/runtime intent. | `test_mixed_state_recovery_regressions.py`, `test_exploration_resolution.py`, `test_social.py` — keep **narrative or scenario-specific** routing checks, not a second copy of table locks. |
-| **Social escalation / emission / quality** | `test_social_exchange_emission.py` — strict exchange shape / emission; `test_social_escalation.py` — pressure / escalation state machine; `test_social_answer_retry_prioritization.py` — retry vs stall prioritization; `test_social_target_authority_regressions.py` — authority regressions. | `test_social_emission_quality.py` — multi-turn / quality harness (align module-level `transcript` policy in Block 2); `test_dialogue_interaction_establishment.py` — establishment flows; `test_social.py` — **misc** only until migrated. |
+| **Social escalation / emission / quality** | `test_social_exchange_emission.py` — strict exchange shape / emission; `test_social_escalation.py` — pressure / escalation state machine; `test_social_answer_retry_prioritization.py` — retry vs stall prioritization; `test_social_target_authority_regressions.py` — authority regressions. | `test_social_emission_quality.py` — multi-turn / quality harness (names `test_emission_quality_*` for non-transcript-runner cases; align module-level `transcript` policy in Block 2); `test_dialogue_interaction_establishment.py` — establishment flows; `test_social.py` — **`resolve_social_action` engine + glue** (see module docstring; not strict-social string owner). |
 | **Lead lifecycle / clue / pending / registry** | `test_clue_knowledge.py`, `test_clue_idempotence.py` — clue idempotency / gateway; `test_world_updates_and_clue_normalization.py` — normalization; `test_clue_lead_registry_integration.py` — clue↔lead registry wiring; `test_lead_engine_upsert.py` — engine upsert; `test_follow_lead_commitment_wiring.py` — follow/commitment wiring; focused `test_lead_*.py` modules — obsolescence, payoff, NPC authority, resolution endings, etc.; `test_lead_lifecycle_block3_transcript_regression.py` — **multi-turn** lifecycle story. | `test_social_lead_landing.py`, `test_turn_pipeline_shared.py`, `test_prompt_and_guard.py`, `test_social_exchange_emission.py` — **smoke** or cross-cutting hooks, not a second registry spec. |
 | **Transcript / gauntlet vs smaller tests** | `test_transcript_regression.py` — general play-loop / sequencing; `test_transcript_gauntlet_*.py` — slice-specific harness contracts; `test_transcript_runner_smoke.py` — runner wiring; `test_gauntlet_regressions.py` — API-style gauntlet regressions (name ≠ transcript harness). | `test_lead_lifecycle_block3_transcript_regression.py`, `test_mixed_state_recovery_regressions.py` — own their **story**; avoid duplicating single-turn gates covered elsewhere. |
 | **Repair / fallback / legality / sanitizer** | **`test_contextual_minimal_repair_regressions.py`** — branch-specific repair behavior, `debug_notes` detail, repair-line legality, scene-anchor vs hard-line (nonsocial), payload-shape guards (no unwanted `clues` / `scene_update` / discoverables). **`test_empty_social_retry_regressions.py`** — retry/fallback wiring, `accepted_via`, `targeted_retry_terminal`, `retry_exhausted`, `fallback_kind` / `final_route`, `_final_emission_meta` continuity, `/api/chat` repair integration; nonsocial empty metadata in `test_ensure_minimal_nonsocial_resolution_fills_empty_text`. **`test_output_sanitizer.py`** — emit-time sanitizer; **`test_prompt_and_guard.py`** — prompt + guard; **`test_debug_payload_spoiler_safety.py`** — spoiler/debug safety. | Same helper may appear in **both** repair regression files when **fixtures differ**; phrase checks may split by **branch/layer** — see consolidation plan *Repair / retry cluster — Block 3*. Pipeline/mixed-state **smoke** only, not parallel legality suites. |
@@ -55,7 +65,7 @@ Heuristic tags (`test_inventory.json` → `feature_areas_by_distinct_files`) sho
 
 ### Block 2 — concrete files to touch next
 
-Prioritize **marker normalization + overlap trimming** (not mass deletion). **Routing** and **repair/retry** consolidation passes are **closed enough** for their doc blocks (`TEST_CONSOLIDATION_PLAN.md`). **Suggested batch order** now: **prompt/sanitizer** → **social/emission** → **lead/clue** — see *Next consolidation order* in that plan.
+Prioritize **marker normalization + overlap trimming** (not mass deletion). **Routing** and **repair/retry** consolidation passes are **closed enough** for their doc blocks (`TEST_CONSOLIDATION_PLAN.md`). **Suggested batch order (Block C1):** align **emit-path `orchestration` / metadata + authenticity `telemetry`** decisions in `docs/narrative_integrity_architecture.md` first where runtime moves are ambiguous, then **prompt/sanitizer** → **social/emission** → **transcript** duplicate assertion thinning → **`deferred` lead/clue** — see *Next consolidation order* in that plan.
 
 | Priority | File(s) | Why |
 | --- | --- | --- |
@@ -132,11 +142,11 @@ Tiers describe **expected lane membership** from `transcript` / `slow` (and thus
 
 ### Current marker coverage vs target
 
-- **Module-level `pytestmark` today:** 18 files set lane-related markers (`unit` / `integration` / `regression` / `transcript` / `slow` / `brittle`). The other **60** `test_*.py` files have **no** module-level lane markers yet.
+- **Module-level `pytestmark`:** lane-related marker adoption drifts with the suite. Treat `tests/test_inventory.json` + `pytest.ini` as ground truth; do not rely on stale per-file counts in this markdown unless refreshed alongside `tools/test_audit.py`.
 - **Per-test markers:** `test_turn_pipeline_shared.py` adds `unit`+`regression` on one test while the module is `integration`. `test_social_emission_quality.py` marks `transcript` on a subset of tests only — normalize in Block 2.
 - **`test_prompt_and_guard.py`:** module is `brittle` only — add `integration` (or `unit`) alongside `brittle` so scope is explicit for inventory and optional filters.
 
-**Optional narrow filter:** `pytest -m "(unit or regression) and not transcript"` is **not** the fast lane — it collected **69** tests in **10** files when last checked (2026-04-02) because most modules are not tagged `unit`/`regression` at module level. **Primary fast lane** remains `pytest -m "not transcript and not slow"` (documented in `tests/README_TESTS.md`).
+**Optional narrow filter:** `pytest -m "(unit or regression) and not transcript"` is **not** the fast lane — it omits many integration-only modules because most files are not tagged `unit`/`regression` at module level. Re-run `--collect-only` if you need an exact count. **Primary fast lane** remains `pytest -m "not transcript and not slow"` (documented in `tests/README_TESTS.md`).
 
 ### Block 2 — files likely needing marker cleanup
 
@@ -156,38 +166,34 @@ Tiers describe **expected lane membership** from `transcript` / `slow` (and thus
 
 ### Block 3 — Fast/full workflow verification (recorded baseline)
 
-Verified from repo root with `pytest` / `pytest --collect-only` (2026-04-03):
+Verified from repo root with `pytest --collect-only` (**Block C1 snapshot, 2026-04-12**):
 
 | Command | Result |
 | --- | --- |
-| `pytest --collect-only -q` | **887** tests collected |
-| `pytest --collect-only -m "not transcript and not slow" -q` | **853** collected, **34** deselected |
+| `pytest --collect-only` | **2214** tests collected |
+| `pytest --collect-only -m "not transcript and not slow"` | **2051** collected, **163** deselected |
 
-The **34** deselected items match the **`transcript` or `slow`** slice (`pytest --collect-only -m "transcript or slow"` → 34 collected), so the fast lane is the complement of that slice.
+The **163** deselected items match the **`transcript` or `slow`** slice (complement of the fast lane selection). Re-run after large suite edits; treat `tests/test_inventory.json` as the inventory ground truth.
 
 ---
 
 ## Executive counts
 
-| Metric | Value |
-| --- | ---: |
-| Test files (`tests/test_*.py`) | 78 |
-| Pytest collected items | 887 |
-| Module-level `def test_*` lines (AST, summed per file) | 862 |
-| Unique top-level `test_*` names per file (AST; matches def count when no shadowing) | 862 |
-| Parametrized expansion (collected − AST def lines, suite-wide) | 25 |
-| Items flagged `historically_motivated` (heuristic) | 68 |
-| Assertion style (heuristic, per collected item) | structural 239, behavioral 599, mixed 38, prose-sensitive 11 |
-| Brittleness (heuristic) | low 704, medium 148, high 35 |
-| Redundancy flag `possible_overlap` from identical test names across files | 0 |
+| Metric | Block C1 snapshot (2026-04-12) | Notes |
+| --- | ---: | --- |
+| Test files (`tests/test_*.py`) | 160 | glob-based; audit JSON may differ if nonstandard paths exist |
+| Pytest collected items | 2214 | `pytest --collect-only` |
+| Fast lane (`not transcript and not slow`) | 2051 collected / 163 deselected | marker-complement lane |
+
+**Heuristic breakdowns** (bucket mixes, brittleness histograms, AST duplicate-name summaries): regenerate `tests/test_inventory.json` via `py -3 tools/test_audit.py` and read `summary` / `files` — the suite has outgrown static markdown tables here.
 
 ### Counts by test-level primary bucket
 
-Derived per collected item (filename hint + body heuristics): **integration** 481, **unit** 358, **regression** 41, **transcript_gauntlet** 7.
+Regenerate `tests/test_inventory.json` for current per-item bucket totals (filename hint + body heuristics).
 
 ### Counts by file-level primary bucket
 
-`primary_bucket` on each file record is the **majority** bucket among that file’s collected tests: **integration** 46 files, **unit** 24, **transcript_gauntlet** 2, **regression** 6. The JSON field `filename_bucket` records path-pattern hints only (`transcript_gauntlet`, `regression`, or `mixed/unclear`).
+Regenerate `tests/test_inventory.json` — `primary_bucket` on each file record is the **majority** bucket among that file’s collected tests. The JSON field `filename_bucket` records path-pattern hints only (`transcript_gauntlet`, `regression`, or `mixed/unclear`).
 
 ---
 
@@ -313,7 +319,7 @@ Concrete “source of truth” examples for recurring themes (prefer extending t
 
 `primary_bucket` = majority of tests in that file. `High-brittleness` = count of tests with heuristic `brittleness: high` in that file. Feature tags = top primary feature labels (first keyword hit per test, aggregated).
 
-**Authoritative list:** All `tests/test_*.py` rows (78 files) live in `tests/test_inventory.json` → `files`. The table below is a partial snapshot; rows for newer modules may be missing until this section is expanded.
+**Authoritative list:** All `tests/test_*.py` rows live in `tests/test_inventory.json` → `files`. The table below is a **partial historical snapshot**; prefer JSON + `pytest --collect-only` for current modules.
 
 | File | Collected | Primary bucket (majority of tests) | High-brittleness tests | Top primary feature tags |
 | --- | ---: | --- | ---: | --- |
@@ -380,7 +386,7 @@ Concrete “source of truth” examples for recurring themes (prefer extending t
 
 ## Methodology & limitations
 
-- **Ground truth for “what runs”:** pytest collection (`887` items as of 2026-04-03). AST `def test_*` counts are per-file module-level defs; **duplicate names in the same file** are listed in `summary.files_with_shadowed_duplicate_test_defs` and echoed when running `tools/test_audit.py`.  
+- **Ground truth for “what runs”:** pytest collection (see *Executive counts* / Block C1 snapshot; re-run `pytest --collect-only` after large edits). AST `def test_*` counts are per-file module-level defs; **duplicate names in the same file** are listed in `summary.files_with_shadowed_duplicate_test_defs` and echoed when running `tools/test_audit.py`.  
 - **Buckets:** Test-level buckets use filename patterns (`transcript_gauntlet`, `regression`) then body signals (`TestClient`, `tmp_path`, length).  
 - **Feature areas:** Substring rules on `nodeid`, merged with explicit `# feature:` / ownership `pytest.mark.*` when present; unannotated tests may still land on **general**.  
 - **Assertion style / brittleness:** Regex on function source (long string `==`, `in "..."`, structural calls). Transcript/regression modules biased to **high** brittleness.  

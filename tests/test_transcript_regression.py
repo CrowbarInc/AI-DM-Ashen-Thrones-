@@ -5,6 +5,14 @@ Single-turn routing, discovery shape, and combat engine details are covered by i
 ``test_combat_resolution``). This module locks **ordering** across requests (state from turn N
 must be visible on turn N+1) and a small slice of **retry-budget exhaustion** end-to-end on
 ``/api/action`` (terminal forward progress, not narration wording).
+
+Retry **prompt string** contracts (``build_retry_prompt_for_failure``) live under
+``tests/test_prompt_and_guard.py``; this file only checks retry exhaustion / terminal metadata smoke
+plus player-facing usability (validator-voice detection smoke, not duplicate phrase families).
+
+Strict-social **wording** and topic-pressure restore contracts live under ``test_social_exchange_emission.py``
+and ``test_social_emission_quality.py``; transcript assertions here stay **consequence-first** (scene,
+resolution kind, continuity) with light social-grounding smoke only.
 """
 from __future__ import annotations
 
@@ -20,7 +28,7 @@ from game.defaults import (
     default_session,
     default_world,
 )
-from game.gm import MAX_TARGETED_RETRY_ATTEMPTS
+from game.gm import MAX_TARGETED_RETRY_ATTEMPTS, detect_validator_voice
 from game.storage import get_scene_runtime
 from fastapi.testclient import TestClient
 
@@ -383,6 +391,11 @@ def _assert_not_repeated_interruption_beat(text: str) -> None:
 
 
 def _assert_socially_grounded_progression(text: str, *extra_markers: str) -> None:
+    """Smoke: response still ties to the tavern/patrol thread (not a generic stub).
+
+    Detailed NPC-voice / strict-social substring families belong in ``test_social_exchange_emission.py``
+    and ``test_social_emission_quality.py``; callers may pass *extra_markers* for beat-specific tokens.
+    """
     low = str(text or "").lower()
     markers = (
         "runner",
@@ -393,15 +406,8 @@ def _assert_socially_grounded_progression(text: str, *extra_markers: str) -> Non
         "ward clerk",
         "watchmen",
         "east gate",
-        "short version",
-        "cart",
-        "fishmonger",
-        "flinch",
-        "grimace",
         "leans closer",
-        "jerks their chin",
         "stay with me",
-        "catch the",
     ) + tuple(m.lower() for m in extra_markers)
     assert any(marker in low for marker in markers), f"expected socially grounded progression in {text!r}"
 
@@ -534,8 +540,9 @@ def test_transcript_social_retry_exhaustion_terminal_forward_progress(tmp_path, 
     assert data.get("ok") is True
     gm = data.get("gm_output") or {}
     pft = gm.get("player_facing_text")
-    _assert_player_facing_text_is_usable(str(pft or ""))
-    assert _VALIDATOR_VOICE_TRAP_TEXT.lower() not in str(pft or "").lower()
+    pft_s = str(pft or "")
+    _assert_player_facing_text_is_usable(pft_s)
+    assert detect_validator_voice(pft_s) == []
     _assert_terminal_retry_or_repair_metadata(gm)
 
     assert len(gpt_calls) == 1 + MAX_TARGETED_RETRY_ATTEMPTS
@@ -582,7 +589,9 @@ def test_transcript_nonsocial_retry_exhaustion_terminal_forward_progress(tmp_pat
     data = resp.json()
     assert data.get("ok") is True
     gm = data.get("gm_output") or {}
-    _assert_player_facing_text_is_usable(str(gm.get("player_facing_text") or ""))
+    pft_ns = str(gm.get("player_facing_text") or "")
+    _assert_player_facing_text_is_usable(pft_ns)
+    assert detect_validator_voice(pft_ns) == []
     _assert_terminal_retry_or_repair_metadata(gm)
     assert len(gpt_calls) == 1 + MAX_TARGETED_RETRY_ATTEMPTS
 
@@ -812,7 +821,14 @@ def test_transcript_runner_repeated_interruption_beat_forces_progression(tmp_pat
         gm1 = d1.get("gm_output") or {}
         txt1 = str(gm1.get("player_facing_text") or "")
         low1 = txt1.lower()
-        assert "shouting" in low1 or "breaks out" in low1 or "breaks off" in low1
+        # Consequence-first: first beat is still an interrupted/deflected patrol reply (raw mock or repair).
+        assert (
+            "shouting" in low1
+            or "breaks out" in low1
+            or "breaks off" in low1
+            or "starts to answer" in low1
+            or "glances past" in low1
+        )
         res1 = d1.get("resolution") or {}
         assert res1.get("kind") in ("question", "social_probe")
         assert (res1.get("social") or {}).get("npc_id") == "tavern_runner"
@@ -1039,53 +1055,3 @@ def test_transcript_passive_wait_then_followup_then_departure_stays_coherent(tmp
     ).strip(), (
         "after travel, session should not read as still mid-runner social loop from the wait beat"
     )
-
-
-def test_transcript_retry_prompt_multi_lead_and_urgency_language() -> None:
-    """Transcript-style: retry instructions stay agency-safe under multiple leads and time pressure."""
-    from game.gm import build_retry_prompt_for_failure
-
-    gm = {
-        "anti_railroading_contract": {
-            "enabled": True,
-            "forbid_player_decision_override": True,
-            "forbid_forced_direction": True,
-            "forbid_exclusive_path_claims_without_basis": True,
-            "forbid_lead_to_plot_gravity_upgrade": True,
-            "allow_directional_language_from_resolved_transition": False,
-            "allow_exclusivity_from_authoritative_resolution": False,
-            "allow_commitment_language_when_player_explicitly_committed": False,
-            "surfaced_lead_ids": ["lead_patrol", "lead_river", "lead_gate"],
-            "surfaced_lead_labels": [],
-        }
-    }
-    for fc, extra in (
-        ("scene_stall", {}),
-        (
-            "topic_pressure_escalation",
-            {"topic_context": {"topic_key": "patrol", "repeat_count": 3, "previous_answer_snippet": "Maybe."}},
-        ),
-    ):
-        failure: dict = {"failure_class": fc, **extra}
-        p = build_retry_prompt_for_failure(failure, response_policy=None, gm_output=gm).lower()
-        assert "without choosing for the player" in p
-        assert "the story wants" in p
-        if fc == "topic_pressure_escalation":
-            assert "forced pathing" in p
-        if fc == "scene_stall":
-            assert "multiple leads are in play" in p
-
-
-def test_transcript_retry_prompt_warns_against_known_gate_failure_shapes() -> None:
-    """Retry guidance explicitly discourages phrasing the final gate rejects (anti-railroading)."""
-    from game.gm import build_retry_prompt_for_failure
-
-    p = build_retry_prompt_for_failure(
-        {"failure_class": "scene_stall"},
-        response_policy=None,
-        gm_output=None,
-    ).lower()
-    assert "meta-story gravity" in p or "the story wants" in p
-    assert "forced conclusions" in p or "obvious you must" in p
-    assert "you head straight" not in p
-    assert "so you go there" not in p

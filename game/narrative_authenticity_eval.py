@@ -9,25 +9,12 @@ from __future__ import annotations
 import re
 from typing import Any, Dict, List, Mapping, Sequence, Set
 
-_NA_KEYS: frozenset[str] = frozenset(
-    {
-        "narrative_authenticity_checked",
-        "narrative_authenticity_failed",
-        "narrative_authenticity_failure_reasons",
-        "narrative_authenticity_repaired",
-        "narrative_authenticity_repair_applied",
-        "narrative_authenticity_repair_mode",
-        "narrative_authenticity_repair_modes",
-        "narrative_authenticity_skip_reason",
-        "narrative_authenticity_reason_codes",
-        "narrative_authenticity_metrics",
-        "narrative_authenticity_evidence",
-        "narrative_authenticity_status",
-        "narrative_authenticity_trace",
-        "narrative_authenticity_relaxation_flags",
-        "narrative_authenticity_rumor_relaxed_low_signal",
-    }
+from game.final_emission_meta import (
+    NARRATIVE_AUTHENTICITY_FEM_KEYS,
+    normalize_merged_na_telemetry_for_eval,
 )
+
+_NA_KEYS = NARRATIVE_AUTHENTICITY_FEM_KEYS
 
 
 def _safe_mapping(value: Any) -> dict[str, Any]:
@@ -564,7 +551,7 @@ def evaluate_narrative_authenticity(
     ``meta`` may be partial; missing NA keys are filled from ``response['gm_output']['_final_emission_meta']``.
     ``turn_packet`` may include ``prior_gm_text`` / ``prior_player_prompt`` for lenient follow-up axis context.
     """
-    merged = _merge_na_meta(meta=meta, response=response)
+    merged = normalize_merged_na_telemetry_for_eval(_merge_na_meta(meta=meta, response=response))
     text = _gm_text(response)
     metrics = merged.get("narrative_authenticity_metrics")
     metrics_d = _safe_mapping(metrics)

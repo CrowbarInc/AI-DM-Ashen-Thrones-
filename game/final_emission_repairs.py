@@ -11,6 +11,11 @@ from __future__ import annotations
 import re
 from typing import Any, Dict, List, Tuple
 
+from game.final_emission_meta import (
+    build_narrative_authenticity_emission_trace,
+    default_narrative_authenticity_layer_meta,
+    merge_narrative_authenticity_into_final_emission_meta,
+)
 from game.final_emission_text import (
     _capitalize_sentence_fragment,
     _normalize_terminal_punctuation,
@@ -1152,47 +1157,13 @@ def _merge_social_response_structure_meta(meta: Dict[str, Any], srs_dbg: Dict[st
 
 
 def _default_narrative_authenticity_meta() -> Dict[str, Any]:
-    return {
-        "narrative_authenticity_checked": False,
-        "narrative_authenticity_failed": False,
-        "narrative_authenticity_failure_reasons": [],
-        "narrative_authenticity_repaired": False,
-        "narrative_authenticity_repair_applied": False,
-        "narrative_authenticity_repair_mode": None,
-        "narrative_authenticity_repair_modes": [],
-        "narrative_authenticity_skip_reason": None,
-        "narrative_authenticity_reason_codes": [],
-        "narrative_authenticity_metrics": None,
-        "narrative_authenticity_evidence": None,
-        "narrative_authenticity_status": None,
-        "narrative_authenticity_trace": None,
-        "narrative_authenticity_relaxation_flags": None,
-        "narrative_authenticity_rumor_relaxed_low_signal": False,
-    }
+    """Deferred to :mod:`game.final_emission_meta` (metadata-only NA defaults)."""
+    return default_narrative_authenticity_layer_meta()
 
 
 def _merge_narrative_authenticity_meta(meta: Dict[str, Any], na_dbg: Dict[str, Any]) -> None:
-    meta.update(
-        {
-            "narrative_authenticity_checked": bool(na_dbg.get("narrative_authenticity_checked")),
-            "narrative_authenticity_failed": bool(na_dbg.get("narrative_authenticity_failed")),
-            "narrative_authenticity_failure_reasons": list(na_dbg.get("narrative_authenticity_failure_reasons") or []),
-            "narrative_authenticity_repaired": bool(na_dbg.get("narrative_authenticity_repaired")),
-            "narrative_authenticity_repair_applied": bool(na_dbg.get("narrative_authenticity_repair_applied")),
-            "narrative_authenticity_repair_mode": na_dbg.get("narrative_authenticity_repair_mode"),
-            "narrative_authenticity_repair_modes": list(na_dbg.get("narrative_authenticity_repair_modes") or []),
-            "narrative_authenticity_skip_reason": na_dbg.get("narrative_authenticity_skip_reason"),
-            "narrative_authenticity_reason_codes": list(na_dbg.get("narrative_authenticity_reason_codes") or []),
-            "narrative_authenticity_metrics": na_dbg.get("narrative_authenticity_metrics"),
-            "narrative_authenticity_evidence": na_dbg.get("narrative_authenticity_evidence"),
-            "narrative_authenticity_status": na_dbg.get("narrative_authenticity_status"),
-            "narrative_authenticity_trace": na_dbg.get("narrative_authenticity_trace"),
-            "narrative_authenticity_relaxation_flags": na_dbg.get("narrative_authenticity_relaxation_flags"),
-            "narrative_authenticity_rumor_relaxed_low_signal": bool(
-                na_dbg.get("narrative_authenticity_rumor_relaxed_low_signal")
-            ),
-        }
-    )
+    """Deferred to :mod:`game.final_emission_meta` (single merge schema into ``_final_emission_meta``)."""
+    merge_narrative_authenticity_into_final_emission_meta(meta, na_dbg)
 
 
 def _skip_narrative_authenticity_layer(
@@ -1231,7 +1202,6 @@ def _apply_narrative_authenticity_layer(
     strict_social_path: bool,
 ) -> tuple[str, Dict[str, Any], List[str]]:
     from game.narrative_authenticity import (
-        build_narrative_authenticity_emission_trace,
         repair_narrative_authenticity_minimal,
         resolve_narrative_authenticity_contract,
         validate_narrative_authenticity,
