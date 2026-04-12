@@ -184,6 +184,16 @@ def test_normalize_event_count_from_key_events_array_length(agg_mod, tmp_path: P
 # --- 4) Filter semantics + pipeline order (filter → sort → limit) ---
 
 
+def test_filter_runs_includes_g9_when_gauntlet_id_matches(agg_mod):
+    runs = [
+        {"gauntlet_id": "g9", "label": "L", "description": "", "operator_verdict": "PASS"},
+        {"gauntlet_id": "g1", "label": "L", "description": "", "operator_verdict": "PASS"},
+    ]
+    out = agg_mod.filter_runs(runs, gauntlet_id="g9", objective=None, verdict=None)
+    assert len(out) == 1
+    assert out[0]["gauntlet_id"] == "g9"
+
+
 def test_filter_runs_gauntlet_objective_verdict_semantics(agg_mod):
     runs = [
         {"gauntlet_id": "g1", "label": "Alpha", "description": "", "operator_verdict": "PASS"},

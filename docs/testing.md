@@ -26,4 +26,4 @@ From repo root (on Windows, use `py -m pytest` if `pytest` is not on your `PATH`
 
 ## Manual continuity gauntlets
 
-Run the **canonical** scripted scenarios (G1–G8), substitution guide, and rubric in [`docs/manual_gauntlets.md`](manual_gauntlets.md). Repeat in the live UI or your usual play harness after lead, prompt-context, narration, routing, or emission changes when you need a human spot-check beyond pytest.
+Run the **canonical** scripted scenarios (G1–G12), substitution guide, and rubric in [`docs/manual_gauntlets.md`](manual_gauntlets.md). That now includes behavioral slices `G9` through `G12`; their `summary.json` output may include advisory `behavioral_eval` data and warnings, but manual judgment still owns pass/fail. Repeat in the live UI or your usual play harness after lead, prompt-context, narration, routing, or emission changes when you need a human spot-check beyond pytest.

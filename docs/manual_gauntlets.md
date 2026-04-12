@@ -87,7 +87,7 @@ All artifacts live in `artifacts/manual_gauntlets/`. For a given run, let `{base
 
 | File | Role |
 |------|------|
-| `{base}_summary.json` | Run header: gauntlet id, git metadata, mode, turn count, path to transcript, report version, key-event count, whether raw trace was requested. |
+| `{base}_summary.json` | Run header: gauntlet id, git metadata, mode, turn count, path to transcript, report version, key-event count, whether raw trace was requested. May also include optional `axis_tags` (behavioral gauntlets G9–G12), advisory `behavioral_eval` (deterministic shallow checks; **not** a substitute for your verdict), and `behavioral_eval_warning` if that pass could not be attached. |
 | `{base}_key_events.json` | Distilled high-signal events from debug/trace metadata (see companion doc). |
 | `{base}_snippets.json` | Small capped set of illustrative excerpts (repairs, fallbacks, errors, heuristics). |
 
@@ -307,6 +307,82 @@ Then (to `[NPC_B]`, without quoting A’s private lines as if B heard them)
 **Failure** — `[NPC_OLD]` answers as primary speaker in the new scene without an in-fiction reason, or social resolution still locks to the old NPC ID after the transition.
 
 **Notes / likely subsystem if it fails** — `active_scene_id` / scene state; social target clearing on transition; session carryover of `social` resolution into the wrong scene.
+
+---
+
+## G9 — Neutral prompt should not provoke ungrounded hostility
+
+**Target behavior** — Calm, observational, or informational player lines should not be met with **socially hostile** GM prose (accusations, insults, “how dare you”) **unless** the fiction clearly grounds that tone (orders, reports, prior provocation called out in the same reply).
+
+**Setup** — Any grounded speaker `[NPC]` or narrator context where a neutral look-around or read-aloud is natural.
+
+**Exact player prompt sequence**
+
+1. `What do I see at [LOCATION]?`
+2. `I read the posted notice calmly — what does it actually say?`
+
+**What should happen** — Replies stay proportionate: description, mild wariness, or grounded pushback tied to visible facts — not a personal attack stack with no diegetic cause.
+
+**Failure** — GM voice piles on insults, “traitor,” “liar,” or similar **without** grounding cues (patrol orders, witnessed acts, faction policy) after neutral input.
+
+**Notes / likely subsystem if it fails** — Prompt tone routing, social strictness, or model drift; compare advisory `behavioral_eval` → `neutrality` in `summary.json` (tests-only evaluator; see `tests/helpers/behavioral_gauntlet_eval.py`).
+
+---
+
+## G10 — Escalation should track player pressure, not jump or flatten
+
+**Target behavior** — When the player stays **neutral**, the GM should **not** snap to combat-grade violence or arrest beats without transition. When the player is clearly **hostile or violent**, the GM should **not** respond with fawning compliance that ignores the threat.
+
+**Setup** — `[NPC]` who can speak in-character under mild and strong pressure.
+
+**Exact player prompt sequence**
+
+1. `I listen quietly — what can you tell me about the mood here?`
+2. `I'm done being patient: I curse you and draw steel; this ends now.`
+
+**What should happen** — Turn 1: informative or lightly tense, not blood/combat initiation. Turn 2: meets the threat with plausible resistance, fear, combat framing, or refusal — not “anything you wish, master.”
+
+**Failure** — Neutral line (turn 1) triggers attacks/combat/arrest-with-shackles escalation; or hostile line (turn 2) gets only uncritical subservience with no acknowledgment of danger.
+
+**Notes / likely subsystem if it fails** — Resolution kind routing, intent classification, social vs exploration narration merge; advisory `behavioral_eval` → `escalation_correctness`.
+
+---
+
+## G11 — Re-engagement after uncertainty should progress the exchange
+
+**Target behavior** — If the GM asks for **clarification**, the next GM beat after the player narrows the scope should **advance** (specific detail, direction, stakes) — not another generic “be more specific” stall.
+
+**Setup** — `[NPC]` with local knowledge who may reasonably ask which quarter, time, or topic you mean.
+
+**Exact player prompt sequence**
+
+1. `What rumors matter around [PLACE]?`
+2. `The [WARD] quarter, last night — be concrete.`
+
+**What should happen** — Turn 2 receives a **new** concrete hook (place, person, sensory detail, or next step), not a duplicate clarification loop.
+
+**Failure** — Second GM reply is another empty clarification request with no new fiction.
+
+**Notes / likely subsystem if it fails** — Discussion continuity, lead export into GM context; advisory `behavioral_eval` → `reengagement_quality`.
+
+---
+
+## G12 — Multi-turn dialogue should remain locally coherent
+
+**Target behavior** — Across **adjacent** turns in the same scene, the GM should not **contradict** a focal object without cause, inject **tutorial/session-reset** breaks, or **swap speaking NPC identity** without a player handoff cue (addressing another NPC, “I turn to the clerk,” etc.).
+
+**Setup** — Stay in one scene with one primary `[NPC]` for both lines (or explicitly hand off if testing a two-NPC desk).
+
+**Exact player prompt sequence**
+
+1. `What is posted at [GATE_OR_POSTING]?`
+2. `I acknowledge that — what happens if we ignore it?`
+
+**What should happen** — Turn 2 treats turn 1’s content as **shared** and pushes consequences or options; same implied speaker unless you clearly pivot.
+
+**Failure** — Adjacent GM lines deny then affirm the same object, reset to “tutorial” voice, or answer as a different NPC mid-thread with no player cue.
+
+**Notes / likely subsystem if it fails** — Speaker binding, continuity repairs, scene/session state; advisory `behavioral_eval` → `dialogue_coherence`.
 
 ---
 

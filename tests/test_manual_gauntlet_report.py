@@ -11,6 +11,8 @@ from unittest.mock import patch
 
 import pytest
 
+from tests.helpers.behavioral_gauntlet_eval import SCHEMA_VERSION as BEHAVIORAL_SCHEMA_VERSION
+
 ROOT = Path(__file__).resolve().parents[1]
 
 # Documented snippet cap / truncation (keep in sync with run_manual_gauntlet defaults).
@@ -442,3 +444,170 @@ def test_normalize_bool(rmg_mod):
     assert rmg_mod._normalize_bool("OFF") is False
     assert rmg_mod._normalize_bool(None) is None
     assert rmg_mod._normalize_bool(7) is None
+
+
+# --- G9–G12 registry + advisory behavioral_eval ---
+
+
+def test_gauntlet_registry_includes_g1_through_g12(rmg_mod):
+    assert set(rmg_mod.GAUNTLETS.keys()) == {f"g{i}" for i in range(1, 13)}
+
+
+def test_g9_through_g12_axis_tags_match_spec(rmg_mod):
+    assert rmg_mod.GAUNTLETS["g9"].axis_tags == ("neutrality",)
+    assert rmg_mod.GAUNTLETS["g10"].axis_tags == ("escalation_correctness",)
+    assert rmg_mod.GAUNTLETS["g11"].axis_tags == ("reengagement_quality",)
+    assert rmg_mod.GAUNTLETS["g12"].axis_tags == ("dialogue_coherence",)
+    assert rmg_mod.GAUNTLETS["g1"].axis_tags == ()
+
+
+def test_build_summary_axis_tags_serialized_when_present(rmg_mod, tmp_path):
+    spec = rmg_mod.GAUNTLETS["g10"]
+    transcript = tmp_path / "t.md"
+    with patch.object(rmg_mod, "_git_meta", return_value=("b", "c")):
+        s = rmg_mod._build_summary(
+            spec,
+            False,
+            True,
+            [{"turn_index": 0, "ok": True}],
+            started_utc="2026-04-09T12:00:00Z",
+            transcript_path=transcript,
+            raw_trace_written=False,
+            event_count=0,
+        )
+    assert s["axis_tags"] == ["escalation_correctness"]
+    assert "behavioral_eval" not in s
+
+
+def test_build_summary_g1_has_no_axis_tags_key_without_tags(rmg_mod, tmp_path):
+    spec = rmg_mod.GAUNTLETS["g1"]
+    with patch.object(rmg_mod, "_git_meta", return_value=("b", "c")):
+        s = rmg_mod._build_summary(
+            spec,
+            False,
+            True,
+            [],
+            started_utc="2026-04-09T12:00:00Z",
+            transcript_path=tmp_path / "t.md",
+            raw_trace_written=False,
+            event_count=0,
+        )
+    assert "axis_tags" not in s
+
+
+def test_build_summary_behavioral_eval_preserved_evaluator_shape(rmg_mod, tmp_path):
+    spec = rmg_mod.GAUNTLETS["g1"]
+    be = {
+        "schema_version": BEHAVIORAL_SCHEMA_VERSION,
+        "overall_passed": True,
+        "axes": {
+            "neutrality": {
+                "axis": "neutrality",
+                "passed": True,
+                "score": 2,
+                "reason_codes": ["neutral_ok"],
+                "summary": "ok",
+                "evidence_turn_indexes": [],
+            }
+        },
+    }
+    with patch.object(rmg_mod, "_git_meta", return_value=("b", "c")):
+        s = rmg_mod._build_summary(
+            spec,
+            False,
+            True,
+            [{"turn_index": 0, "ok": True, "player_text": "Hi", "gm_text": "Hello."}],
+            started_utc="2026-04-09T12:00:00Z",
+            transcript_path=tmp_path / "t.md",
+            raw_trace_written=False,
+            event_count=0,
+            behavioral_eval=be,
+        )
+    assert s["behavioral_eval"] == be
+    assert s["behavioral_eval"]["schema_version"] == BEHAVIORAL_SCHEMA_VERSION
+    assert "axes" in s["behavioral_eval"] and "overall_passed" in s["behavioral_eval"]
+
+
+def test_try_behavioral_eval_expected_axis_filter_single_axis(rmg_mod):
+    spec = rmg_mod.GAUNTLETS["g9"]
+    records = [
+        {"turn_index": 0, "ok": True, "player_text": "What do I see?", "gm_text": "Quiet mist; no insults."},
+    ]
+    be, warn = rmg_mod.try_behavioral_eval_for_run(spec, records)
+    assert warn is None
+    assert be is not None
+    assert be["schema_version"] == BEHAVIORAL_SCHEMA_VERSION
+    assert set(be["axes"]) == {"neutrality"}
+
+
+def test_try_behavioral_eval_g1_runs_all_axes(rmg_mod):
+    spec = rmg_mod.GAUNTLETS["g1"]
+    records = [
+        {"turn_index": 0, "ok": True, "player_text": "Hi", "gm_text": "Hello traveler.", "metadata": {}},
+    ]
+    be, warn = rmg_mod.try_behavioral_eval_for_run(spec, records)
+    assert warn is None
+    assert be is not None
+    assert set(be["axes"]) == {"dialogue_coherence", "escalation_correctness", "neutrality", "reengagement_quality"}
+
+
+def test_try_behavioral_eval_accepts_gauntlet_style_snapshot_rows(rmg_mod):
+    from tests.helpers.transcript_runner import snapshot_from_chat_payload
+
+    spec = rmg_mod.GAUNTLETS["g12"]
+
+    def _payload(gm: str, scene_id: str | None = "gate") -> dict:
+        scene_block: dict = {}
+        if scene_id:
+            scene_block = {"scene": {"id": scene_id}}
+        return {
+            "gm_output": {"player_facing_text": gm},
+            "scene": {"scene": scene_block.get("scene", {})},
+            "session": {"scene_state": {}},
+            "resolution": None,
+            "journal": None,
+            "world": None,
+        }
+
+    rows = [
+        snapshot_from_chat_payload(0, "What is posted?", _payload("Orders are posted; curfew is strict.")),
+        snapshot_from_chat_payload(1, "And fines?", _payload("Coin or labor; clerk records both.")),
+    ]
+    be, warn = rmg_mod.try_behavioral_eval_for_run(spec, rows)
+    assert warn is None
+    assert be is not None
+    assert set(be["axes"]) == {"dialogue_coherence"}
+
+
+def test_try_behavioral_eval_warning_non_fatal_on_evaluator_error(rmg_mod, monkeypatch):
+    spec = rmg_mod.GAUNTLETS["g1"]
+
+    def _boom(*_a, **_k):
+        raise RuntimeError("simulated")
+
+    monkeypatch.setattr(rmg_mod, "evaluate_behavioral_gauntlet", _boom)
+    be, warn = rmg_mod.try_behavioral_eval_for_run(spec, [{"turn_index": 0, "ok": True}])
+    assert be is None
+    assert warn is not None
+    assert "behavioral_eval skipped" in warn
+    assert "RuntimeError" in warn
+
+
+def test_try_behavioral_eval_valueerror_axis_tags_compact_warning(rmg_mod):
+    spec = rmg_mod.GauntletSpec(
+        "gx",
+        "x",
+        "d",
+        ("one",),
+        axis_tags=("not_a_real_axis",),
+    )
+    be, warn = rmg_mod.try_behavioral_eval_for_run(spec, [{"turn_index": 0, "ok": True, "player_text": "a", "gm_text": "b"}])
+    assert be is None
+    assert warn is not None
+    assert "behavioral_eval axis_tags" in warn
+
+
+def test_parser_accepts_g12(rmg_mod):
+    p = rmg_mod._build_parser()
+    a = p.parse_args(["--gauntlet", "g12"])
+    assert a.gauntlet == "g12"

@@ -22,6 +22,16 @@ All paths live under `artifacts/manual_gauntlets/` and share a common basename w
 - `event_count` — number of distilled key events
 - `raw_trace_written` — whether `_raw_trace.json` was emitted this run
 - `operator_verdict`, `notes` — reserved for human follow-up; often `null` until filled in
+- `axis_tags` — optional behavioral axis tags for targeted behavioral gauntlets such as `G9` through `G12`
+- `behavioral_eval` — optional advisory deterministic behavioral-evaluator payload attached during `--report` runs
+- `behavioral_eval_warning` — optional compact warning when advisory behavioral evaluation could not be attached
+
+**Behavioral notes:**
+
+- `behavioral_eval` is **advisory only**; it does **not** determine manual pass/fail by itself.
+- For gauntlets with `axis_tags`, the attached behavioral evaluation is filtered to those tagged axes.
+- For gauntlets without `axis_tags`, the attached behavioral evaluation covers the full axis set.
+- The runner prefers simplified behavioral rows shaped from snapshot-like records; if shaping fails for a row, it falls back to the raw dict row and continues.
 
 ---
 

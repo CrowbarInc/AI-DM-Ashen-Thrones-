@@ -6,7 +6,87 @@
 
 ## Manual gauntlets (outside pytest)
 
-Manual gauntlets are **not** part of pytest selection. Use them after changes that can **feel wrong in play** (lead follow-up, narration voice, speaker grounding, scene transitions) even when automated tests pass. Named scenarios, exact player prompt sequences, and pass/fail criteria: [`docs/manual_gauntlets.md`](../docs/manual_gauntlets.md).
+Manual gauntlets are **not** part of pytest selection. Use them after changes that can **feel wrong in play** (lead follow-up, narration voice, speaker grounding, scene transitions) even when automated tests pass. Named scenarios, exact player prompt sequences, and pass/fail criteria live in [`docs/manual_gauntlets.md`](../docs/manual_gauntlets.md); the CLI surface is [`tools/run_manual_gauntlet.py`](../tools/run_manual_gauntlet.py).
+
+## Behavioral gauntlet coverage
+
+This repo has a **deterministic behavioral gauntlet stack** for compact narration-behavior checks. The main pieces are:
+
+- Evaluator helper: `tests/helpers/behavioral_gauntlet_eval.py`
+- Behavioral smoke tests: `tests/test_behavioral_gauntlet_smoke.py`
+- Manual gauntlet source of truth: `docs/manual_gauntlets.md`
+- Manual gauntlet runner: `tools/run_manual_gauntlet.py`
+
+The evaluator covers four explicit axes:
+
+- `neutrality`
+- `escalation_correctness`
+- `reengagement_quality`
+- `dialogue_coherence`
+
+### Automated smoke lane
+
+`tests/test_behavioral_gauntlet_smoke.py` is marked `integration` and `regression`.
+
+- **Layer A** uses direct simplified transcript rows.
+- **Layer B** uses gauntlet-style payload compatibility slices.
+- The lane is deterministic.
+- It makes **no GPT calls**.
+- It has **no transcript-runner dependency**.
+
+The helper contract lives in `evaluate_behavioral_gauntlet(turns, *, expected_axis=None) -> dict` and is locked directly by `tests/test_behavioral_gauntlet_eval.py`.
+
+### Manual gauntlet integration
+
+Behavioral gauntlets `G9` through `G12` are available in the manual gauntlet registry.
+
+`summary.json` may include:
+
+- `axis_tags`
+- advisory `behavioral_eval`
+- `behavioral_eval_warning`
+
+Behavioral evaluation in manual reports is **advisory only**. It helps reviewers spot narration-behavior seams, but it does **not** determine manual pass/fail by itself.
+
+- For `G9` through `G12`, `behavioral_eval` is filtered to the gauntlet's tagged axis or axes.
+- For gauntlets without `axis_tags`, `behavioral_eval` includes the full axis set.
+
+### Transcript shaping behavior
+
+Manual report attachment prefers simplified behavioral rows derived from snapshot-shaped records. If that shaping path fails for a row, the fallback path preserves the raw dict row instead. Evaluator failures are turned into compact warnings in `behavioral_eval_warning` and do **not** fail the gauntlet run.
+
+### What this is / is not
+
+**What this is:**
+
+- deterministic behavior-in-motion smoke coverage
+- advisory behavioral scoring for manual gauntlet reports
+- compact transcript-slice evaluation
+- regression support for narration-behavior seams
+
+**What this is not:**
+
+- not a live-model evaluation lane
+- not a full transcript-runner lane
+- not a replacement for human feel checks
+- not a full playability certification
+- not a new runtime architecture layer
+
+### Recommended validation order
+
+After narration / behavior changes:
+
+1. Run the behavioral evaluator and smoke tests.
+2. Run gauntlet regressions and manual report tests.
+3. Run manual gauntlet spot-checks if prose feel materially changed.
+
+Copy/paste commands:
+
+```bash
+py -3 -m pytest tests/test_behavioral_gauntlet_eval.py tests/test_behavioral_gauntlet_smoke.py -q
+py -3 -m pytest tests/test_manual_gauntlet_report.py tests/test_manual_gauntlet_aggregation.py -q
+py -3 tools/run_manual_gauntlet.py --list
+```
 
 ## Full lane
 
@@ -30,7 +110,7 @@ pytest tests/
 pytest --collect-only -q
 ```
 
-Expect **889** tests collected (no marker deselection). Re-check after large suite changes; see `tests/TEST_AUDIT.md` → *Block 3 — Fast/full workflow verification*.
+Exact suite counts change over time; use the collect-only output as the source of truth and re-check after large suite changes. See `tests/TEST_AUDIT.md` → *Block 3 — Fast/full workflow verification*.
 
 ## Fast lane
 
@@ -48,7 +128,7 @@ pytest -m "not transcript and not slow"
 pytest --collect-only -m "not transcript and not slow" -q
 ```
 
-Expect **855** tests collected and **34** deselected (889 total). Re-verify after adding tests.
+Exact counts drift as modules are added; prefer the live collect-only output over hard-coded numbers.
 
 ## Optional stricter fast lane (`brittle`)
 

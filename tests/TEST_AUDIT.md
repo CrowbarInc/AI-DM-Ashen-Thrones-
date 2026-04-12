@@ -235,6 +235,7 @@ Use as starting points when deciding where new coverage should live first.
 | --- | --- |
 | End-to-end / session transcript flows | `test_transcript_regression.py`, `test_gauntlet_regressions.py` |
 | Transcript gauntlet (LTC slice / harness) | `test_transcript_gauntlet_*.py`, `test_transcript_runner_smoke.py` |
+| Behavioral gauntlet coverage | `test_behavioral_gauntlet_eval.py`, `test_behavioral_gauntlet_smoke.py`, `docs/manual_gauntlets.md`, `tools/run_manual_gauntlet.py` |
 | Mixed-state & social continuity | `test_mixed_state_recovery_regressions.py`, `test_dialogue_interaction_establishment.py` |
 | Retry / empty social / terminal fallback | `test_empty_social_retry_regressions.py`, `test_social_answer_retry_prioritization.py` |
 | Contextual minimal repair | `test_contextual_minimal_repair_regressions.py` |
@@ -244,6 +245,17 @@ Use as starting points when deciding where new coverage should live first.
 | Clue knowledge & inference | `test_clue_knowledge.py`, `test_world_updates_and_clue_normalization.py` |
 | Output / legality | `test_output_sanitizer.py`, `test_prompt_and_guard.py`, `test_debug_payload_spoiler_safety.py` |
 | Exploration resolution | `test_exploration_resolution.py`, `test_exploration_skill_checks.py` |
+
+### Behavioral gauntlet stack
+
+The behavioral gauntlet stack is a compact, deterministic adjunct to the broader gauntlet and transcript inventory:
+
+- `tests/helpers/behavioral_gauntlet_eval.py` is the evaluator helper (`evaluate_behavioral_gauntlet(turns, *, expected_axis=None)`).
+- `tests/test_behavioral_gauntlet_smoke.py` is the automated smoke lane (`integration` + `regression`), using direct simplified rows plus gauntlet-style payload compatibility slices.
+- `docs/manual_gauntlets.md` is the manual source of truth and includes behavioral gauntlets `G9` through `G12`.
+- `tools/run_manual_gauntlet.py` can attach advisory `behavioral_eval` data to `summary.json`, along with optional `axis_tags` and `behavioral_eval_warning`.
+
+Manual `behavioral_eval` output is advisory only: it does not replace operator judgment or determine manual pass/fail by itself.
 
 ---
 

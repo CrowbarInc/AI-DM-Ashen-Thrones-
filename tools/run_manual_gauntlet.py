@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Interactive CLI to run manual gauntlets G1–G8 against the real ``game.api.chat`` path.
+"""Interactive CLI to run manual gauntlets G1–G12 against the real ``game.api.chat`` path.
 
 Full scenarios, rubric, and placeholders live in ``docs/manual_gauntlets.md`` (source of truth).
 This script only stores compact labels, one-line intent summaries, and optional template lines
@@ -29,6 +29,7 @@ if str(ROOT) not in sys.path:
 from game.api import chat  # noqa: E402
 from game.campaign_reset import apply_new_campaign_hard_reset  # noqa: E402
 from game.models import ChatRequest  # noqa: E402
+from tests.helpers.behavioral_gauntlet_eval import evaluate_behavioral_gauntlet  # noqa: E402
 from tests.helpers.transcript_runner import (  # noqa: E402
     latest_target_id,
     latest_target_source,
@@ -42,6 +43,7 @@ class GauntletSpec:
     label: str
     description: str
     prompt_templates: tuple[str, ...]
+    axis_tags: tuple[str, ...] = ()
 
 
 # Compact mapping only — see docs/manual_gauntlets.md for setup, rubric, and subsystems.
@@ -121,6 +123,46 @@ GAUNTLETS: dict[str, GauntletSpec] = {
             "so you are no longer in the same scene as [NPC_OLD].]",
             "What's going on here?",
         ),
+    ),
+    "g9": GauntletSpec(
+        "g9",
+        "Neutral prompt should not provoke ungrounded hostility",
+        "Calm look-around or read-aloud should not meet insults or accusations without grounding.",
+        (
+            "What do I see at [LOCATION]?",
+            "I read the posted notice calmly — what does it actually say?",
+        ),
+        axis_tags=("neutrality",),
+    ),
+    "g10": GauntletSpec(
+        "g10",
+        "Escalation should track player pressure, not jump or flatten",
+        "Neutral beats stay non-combat; clear hostility should not be met with fawning compliance alone.",
+        (
+            "I listen quietly — what can you tell me about the mood here?",
+            "I'm done being patient: I curse you and draw steel; this ends now.",
+        ),
+        axis_tags=("escalation_correctness",),
+    ),
+    "g11": GauntletSpec(
+        "g11",
+        "Re-engagement after uncertainty should progress the exchange",
+        "After the player narrows scope, GM should add new fiction — not repeat generic clarification.",
+        (
+            "What rumors matter around [PLACE]?",
+            "The [WARD] quarter, last night — be concrete.",
+        ),
+        axis_tags=("reengagement_quality",),
+    ),
+    "g12": GauntletSpec(
+        "g12",
+        "Multi-turn dialogue should remain locally coherent",
+        "Adjacent beats should not contradict, tutorial-reset, or drift speaker without a player handoff cue.",
+        (
+            "What is posted at [GATE_OR_POSTING]?",
+            "I acknowledge that — what happens if we ignore it?",
+        ),
+        axis_tags=("dialogue_coherence",),
     ),
 }
 
@@ -563,6 +605,76 @@ def _serialize_key_events(records: list[dict[str, Any]]) -> list[dict[str, Any]]
     return out
 
 
+def _behavioral_turn_rows_from_records(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Shape per-turn records for ``evaluate_behavioral_gauntlet`` (D2 Layer A preferred).
+
+    Input rows are already chat snapshot dicts (D2 Layer B compatible); we still emit
+    compact simplified rows when possible so sparse/minimal paths match smoke tests.
+    """
+    rows: list[dict[str, Any]] = []
+    for rec in records:
+        if not isinstance(rec, dict):
+            continue
+        try:
+            player = str(rec.get("player_text") or "").strip()
+            ok = bool(rec.get("ok", True))
+            gm = str(rec.get("gm_text") or "").strip()
+            if not ok:
+                gm = gm or ""
+
+            dbg = rec.get("debug") if isinstance(rec.get("debug"), dict) else {}
+            rc_compact = dbg.get("resolution_compact") if isinstance(dbg.get("resolution_compact"), dict) else {}
+            rk_raw = rc_compact.get("kind")
+            resolution_kind = str(rk_raw).strip() if rk_raw is not None and str(rk_raw).strip() else None
+
+            sc = rec.get("scene_id")
+            scene_id = str(sc).strip() if sc is not None and str(sc).strip() else None
+
+            sid_src = latest_target_id(rec) or rec.get("current_interlocutor")
+            speaker_id = str(sid_src).strip() if sid_src is not None and str(sid_src).strip() else None
+
+            ti = rec.get("turn_index")
+            metadata: dict[str, Any] = {"ok": ok}
+            if ti is not None:
+                metadata["turn_index"] = ti
+
+            rows.append(
+                {
+                    "player_text": player,
+                    "gm_text": gm,
+                    "resolution_kind": resolution_kind,
+                    "speaker_id": speaker_id,
+                    "scene_id": scene_id,
+                    "metadata": metadata,
+                }
+            )
+        except Exception:
+            rows.append(rec)
+    return rows
+
+
+def try_behavioral_eval_for_run(
+    spec: GauntletSpec, records: list[dict[str, Any]]
+) -> tuple[dict[str, Any] | None, str | None]:
+    """Advisory behavioral bundle for ``summary.json``; never raises."""
+    try:
+        if not records:
+            return None, None
+        turns = _behavioral_turn_rows_from_records(records)
+        if not turns:
+            return None, None
+        expected_axis: set[str] | None = set(spec.axis_tags) if spec.axis_tags else None
+        result = evaluate_behavioral_gauntlet(turns, expected_axis=expected_axis)
+        return result, None
+    except ValueError as exc:
+        return None, f"behavioral_eval axis_tags: {exc}"
+    except Exception as exc:
+        msg = f"{type(exc).__name__}: {exc}".strip()
+        if len(msg) > 180:
+            msg = msg[:177] + "..."
+        return None, f"behavioral_eval skipped ({msg})"
+
+
 def _build_summary(
     spec: GauntletSpec,
     freeform: bool,
@@ -575,6 +687,8 @@ def _build_summary(
     event_count: int,
     operator_verdict: str | None = None,
     operator_notes: str | None = None,
+    behavioral_eval: dict[str, Any] | None = None,
+    behavioral_eval_warning: str | None = None,
 ) -> dict[str, Any]:
     branch, commit = _git_meta()
     summary = RunSummary(
@@ -594,7 +708,14 @@ def _build_summary(
         operator_verdict=operator_verdict,
         operator_notes=operator_notes,
     )
-    return asdict(summary)
+    out: dict[str, Any] = asdict(summary)
+    if spec.axis_tags:
+        out["axis_tags"] = list(spec.axis_tags)
+    if behavioral_eval is not None:
+        out["behavioral_eval"] = behavioral_eval
+    if behavioral_eval_warning:
+        out["behavioral_eval_warning"] = behavioral_eval_warning
+    return out
 
 
 def _extract_snippets(
@@ -928,7 +1049,7 @@ def _print_artifact_summary(
 def _build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(
         description=(
-            "Run a manual gauntlet (G1–G8) through the real chat pipeline and save a Markdown transcript."
+            "Run a manual gauntlet (G1–G12) through the real chat pipeline and save a Markdown transcript."
         ),
         epilog="Canonical definitions: docs/manual_gauntlets.md",
     )
@@ -941,7 +1062,7 @@ def _build_parser() -> argparse.ArgumentParser:
         "--gauntlet",
         choices=sorted(GAUNTLETS.keys()),
         metavar="ID",
-        help="Gauntlet id (g1 … g8). Required unless --list.",
+        help="Gauntlet id (g1 … g12). Required unless --list.",
     )
     p.add_argument(
         "--no-reset",
@@ -1075,6 +1196,7 @@ def main() -> int:
         summary_path = ARTIFACTS_DIR / f"{base}_summary.json"
         key_events_path = ARTIFACTS_DIR / f"{base}_key_events.json"
         snippets_path = ARTIFACTS_DIR / f"{base}_snippets.json"
+        be_payload, be_warn = try_behavioral_eval_for_run(spec, records)
         summary_payload = _build_summary(
             spec,
             bool(args.freeform),
@@ -1086,6 +1208,8 @@ def main() -> int:
             event_count=event_count,
             operator_verdict=operator_verdict,
             operator_notes=operator_notes,
+            behavioral_eval=be_payload,
+            behavioral_eval_warning=be_warn,
         )
         _json_dump(summary_path, summary_payload)
         _json_dump(key_events_path, key_events_serialized)
