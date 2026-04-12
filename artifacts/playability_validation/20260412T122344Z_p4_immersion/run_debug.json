@@ -1,0 +1,115 @@
+{
+  "report_version": 1,
+  "scenario_id": "p4_immersion",
+  "turns": [
+    {
+      "turn_index": 0,
+      "player_prompt": "I glance at the notice.",
+      "gm_text": "The atmosphere thickens with murmurs about the missing patrol, making the tavern runner's offers of stew seem almost desperate holds the eye, while a hooded figure stands close to the entrance, drawing the watchful gaze of the guards stays impossible to ignore.",
+      "resolution_kind": "observe",
+      "playability_eval": {
+        "version": 1,
+        "overall": {
+          "score": 74,
+          "rating": "acceptable",
+          "passed": true
+        },
+        "axes": {
+          "direct_answer": {
+            "score": 23,
+            "passed": true,
+            "reasons": [
+              "No explicit question detected; scored leniently for directness."
+            ],
+            "signals": {
+              "has_question": false,
+              "deflection_hits": 0,
+              "procedure_hits": 0,
+              "echo_jaccard": 0.0,
+              "gm_word_count": 42,
+              "bounded_partial": false,
+              "next_lead": false,
+              "answer_markers": 1
+            }
+          },
+          "player_intent": {
+            "score": 9,
+            "passed": false,
+            "reasons": [
+              "GM misses obvious player topic anchors."
+            ],
+            "signals": {
+              "narrowing": false,
+              "topic_overlap_count": 0,
+              "topic_overlap_ratio": 0.0,
+              "forced_action_hits": 0,
+              "prior_present": false
+            }
+          },
+          "logical_escalation": {
+            "score": 19,
+            "passed": true,
+            "reasons": [
+              "No prior GM text; continuity pressure not observed."
+            ],
+            "signals": {
+              "prior_gm_present": false,
+              "prior_player_present": false,
+              "gm_repeat_jaccard": 0.0,
+              "player_presses_thread": false,
+              "gm_word_count": 42
+            }
+          },
+          "immersion": {
+            "score": 23,
+            "passed": true,
+            "reasons": [
+              "Diegetic scene grounding or voiced dialogue present."
+            ],
+            "signals": {
+              "leak_hits": 0,
+              "menu_hits": 0,
+              "system_voice_hits": 0,
+              "quoted_dialogue": false,
+              "scene_anchor_hits": 1
+            }
+          }
+        },
+        "summary": {
+          "strengths": [
+            "direct_answer: strong (23/25).",
+            "logical_escalation: acceptable (19/25).",
+            "immersion: strong (23/25)."
+          ],
+          "failures": [
+            "player_intent: weak (9/25).",
+            "player_intent: GM misses obvious player topic anchors."
+          ],
+          "warnings": []
+        }
+      },
+      "api_ok": true,
+      "api_error": null
+    }
+  ],
+  "summary": {
+    "report_version": 1,
+    "scenario_id": "p4_immersion",
+    "overall": {
+      "score": 74,
+      "rating": "acceptable",
+      "passed": true
+    },
+    "axis_scores": {
+      "direct_answer": 23,
+      "player_intent": 9,
+      "logical_escalation": 19,
+      "immersion": 23
+    },
+    "failures": [
+      "player_intent: weak (9/25).",
+      "player_intent: GM misses obvious player topic anchors."
+    ],
+    "warnings": []
+  }
+}

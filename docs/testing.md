@@ -8,6 +8,58 @@ Compact checklist for re-validating **NPC lead continuity** after social or prom
 
 **Unit/integration** — Storage, prompt export, behavior hints, and grounding invariants (targeted modules under `tests/`). **Synthetic transcript regression** — Deterministic multi-turn sessions that lock the exported continuity / repeat-suppression contract, not narration wording. **Manual gauntlets** — Spot-check conversational feel and obvious repetition or speaker bleed; use [`docs/manual_gauntlets.md`](manual_gauntlets.md) for the canonical scripted pass.
 
+## Playability validation
+
+### Playability Validation
+
+**Purpose:** validate end-to-end narrative behavior at the player-facing level.
+
+**Tools:**
+
+1. **Integration tests** — `pytest tests/test_playability_smoke.py`
+   - Drives real `POST /api/chat`
+   - Uses `evaluate_playability(...)` as the **only** scoring authority
+   - Asserts axis-level behavioral success
+
+2. **CLI validation runner** — `python tools/run_playability_validation.py --scenario <id>`
+   - Executes multi-turn scenarios
+   - Emits transcript and evaluator artifacts
+   - Summary is derived from the **final turn** evaluation
+
+### Key Design Rules
+
+**Evaluator authority**
+
+- `evaluate_playability(...)` is the only source of truth
+- Tests and CLI **must not**:
+  - rescore behavior
+  - reinterpret thresholds
+  - duplicate heuristics
+
+**Turn-based evaluation**
+
+- Each turn is evaluated independently
+- Session summaries use the final turn as the representative output
+
+### Known Testing Constraints
+
+**Escalation vs emission gate**
+
+- Strict-social emission repair can collapse repeated pressure turns
+- That can suppress observable escalation signals
+
+**Resolution:** the escalation test bypasses `apply_final_emission_gate` **only** within that test, so the evaluator can assess real pipeline variation.
+
+**Important:** this is a **test harness** adjustment, not a runtime change and not a system defect.
+
+### Validation Layers (Final Form)
+
+| Layer | Purpose |
+|------|--------|
+| Contracts | structural correctness |
+| Behavioral Gauntlet | pipeline stability |
+| Playability | human-DM behavioral validation |
+
 ## Commands
 
 From repo root (on Windows, use `py -m pytest` if `pytest` is not on your `PATH`; see `tests/README_TESTS.md`).

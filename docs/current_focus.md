@@ -82,3 +82,34 @@
 - UI supports decision-making, not exploration overload
 - Ordinary conversational turns can proceed without unnecessary roll prompts
 - When a check is required, the engine surfaces a clear check prompt in payload (`requires_check`, `check_request`) without relying on GPT to infer or announce rolls
+
+---
+
+## Final validation layer
+
+### Playability Validation Pass
+
+Final validation that the system behaves like a competent human DM.
+
+This is a **validation and observability** layer, not a new runtime system.
+
+Backed by:
+
+- Deterministic evaluator (`game/playability_eval.py`)
+- Transcript-backed integration tests (`tests/test_playability_smoke.py`)
+- Scenario runner and artifacts (`tools/run_playability_validation.py`)
+
+**Evaluation scope:** turn-level behavioral quality (not system architecture).
+
+**Pass criteria:**
+
+- answers questions directly
+- respects player intent
+- escalates logically
+- maintains immersion
+
+**Important:**
+
+- Evaluation is **turn-scoped**
+- Session-level summaries are **derived** from per-turn evaluations
+- No runtime behavior changes are introduced at this stage

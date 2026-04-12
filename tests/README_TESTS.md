@@ -88,6 +88,35 @@ py -3 -m pytest tests/test_manual_gauntlet_report.py tests/test_manual_gauntlet_
 py -3 tools/run_manual_gauntlet.py --list
 ```
 
+## Playability tests
+
+### Playability Tests
+
+**Location:** `tests/test_playability_smoke.py`
+
+**Characteristics:**
+
+- integration-level
+- evaluator-driven
+- non-brittle assertions
+
+These tests:
+
+- validate behavioral quality
+- do **not** enforce exact phrasing
+- rely entirely on `evaluate_playability(...)`
+
+### Important Notes
+
+- The escalation test includes a **scoped** emission-gate bypass (`apply_final_emission_gate`), required to observe meaningful variation across pressured turns
+- Other tests use the full pipeline unmodified
+
+### Commands
+
+```bash
+pytest tests/test_playability_smoke.py -q
+```
+
 ## Full lane
 
 **When:** Pre-merge, milestones, or whenever you need the full regression surface (transcript harnesses, gauntlets, expensive flows).
