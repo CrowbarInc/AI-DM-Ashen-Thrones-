@@ -22,6 +22,10 @@ from game.scene_graph import build_scene_graph, is_transition_valid
 from game.skill_checks import resolve_skill_check, should_trigger_check
 from game.social import SOCIAL_KINDS as _SOCIAL_ENGINE_KINDS
 from game.human_adjacent_focus import enrich_exploration_resolution_for_human_adjacent_focus
+from game.scene_destination_binding import (
+    evaluate_destination_semantic_compatibility,
+    reconcile_scene_transition_destination,
+)
 
 
 EXPLORATION_KINDS = ("scene_transition", "travel", "observe", "investigate", "interact", "custom", "discover_clue", "already_searched")
@@ -191,8 +195,51 @@ def resolve_exploration_action(
 
     current_scene_id = str(scene.get("id") or "").strip()
     transition_candidate = action_type in {"scene_transition", "travel"}
-    if transition_candidate and not target_scene_id:
-        target_scene_id = _infer_transition_target_from_prompt(prompt, scene.get("exits") or [], known_set)
+    binding_meta_subset: Dict[str, Any] = {}
+    blocked_incompatible_scene_transition = False
+    if transition_candidate:
+        proposed_target = target_scene_id
+        inferred_target: Optional[str] = None
+        if not target_scene_id:
+            inferred_target = _infer_transition_target_from_prompt(
+                prompt, scene.get("exits") or [], known_set
+            )
+        rebind = reconcile_scene_transition_destination(
+            normalized_action=normalized_action,
+            prompt=prompt,
+            raw_player_text=raw_player_text,
+            exits=scene.get("exits") or [],
+            known_scene_ids=known_set,
+            proposed_target_scene_id=proposed_target,
+            inferred_target_scene_id=inferred_target,
+        )
+        target_scene_id = str(rebind.get("effective_target_scene_id") or "").strip() or None
+        binding_meta_subset = {
+            k: rebind[k]
+            for k in (
+                "destination_binding_source",
+                "destination_binding_conflict",
+                "destination_binding_conflict_candidates",
+                "destination_binding_resolution_reason",
+                "destination_semantic_kind",
+            )
+            if k in rebind
+        }
+        if target_scene_id:
+            compat = evaluate_destination_semantic_compatibility(
+                normalized_action=normalized_action,
+                raw_player_text=raw_player_text,
+                prompt=prompt,
+                effective_target_scene_id=target_scene_id,
+                destination_semantic_kind=str(rebind.get("destination_semantic_kind") or ""),
+                exits=scene.get("exits") or [],
+                load_scene_fn=load_scene_fn,
+            )
+            clear_t = bool(compat.pop("compatibility_clear_target", False))
+            binding_meta_subset.update(compat)
+            if clear_t:
+                blocked_incompatible_scene_transition = True
+                target_scene_id = None
 
     resolved_transition = False
     if transition_candidate and target_scene_id and target_scene_id in known_set:
@@ -342,6 +389,11 @@ def resolve_exploration_action(
     if transition_candidate:
         if resolved_transition:
             hint = f"Player has moved to scene {target_scene_id}. Narrate arrival and what they see there."
+        elif blocked_incompatible_scene_transition:
+            hint = (
+                "Player declared a specific destination that does not match the resolved scene transition "
+                "(semantic mismatch). Narrate the mismatch or blocked movement without changing location."
+            )
         elif target_scene_id and target_scene_id in known_set:
             hint = (
                 f"Player attempted to travel to {target_scene_id}, but that path is not reachable from here. "
@@ -452,6 +504,8 @@ def resolve_exploration_action(
                     res_metadata[key] = am[key]
     if skill_check_result:
         res_metadata["skill_check"] = skill_check_result
+    if transition_candidate and binding_meta_subset:
+        res_metadata.update(binding_meta_subset)
 
     hint, res_metadata = enrich_exploration_resolution_for_human_adjacent_focus(
         scene_envelope=scene_envelope if isinstance(scene_envelope, dict) else {"scene": scene},

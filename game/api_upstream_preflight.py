@@ -14,7 +14,7 @@ SKIP_UPSTREAM_API_PREFLIGHT_ENV = "ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT"
 
 from openai import APIConnectionError, APITimeoutError, AuthenticationError, PermissionDeniedError
 
-from game.config import MODEL_NAME, OPENAI_API_KEY
+from game.config import DEFAULT_MODEL_NAME, OPENAI_API_KEY
 from game.gm import _classify_upstream_gpt_error, _error_code_from_upstream_error, _status_code_from_upstream_error
 
 _PREFLIGHT_LOCK = threading.Lock()
@@ -211,7 +211,7 @@ def run_upstream_api_preflight(
 ) -> UpstreamApiPreflightStatus:
     """Perform a minimal ``responses.create`` probe; store and return canonical status."""
     key = (api_key or OPENAI_API_KEY or "").strip()
-    mdl = (model or MODEL_NAME or "").strip()
+    mdl = (model or DEFAULT_MODEL_NAME or "").strip()
     checked_at = _utc_checked_at()
     factory = client_factory or _default_openai_client_factory
 

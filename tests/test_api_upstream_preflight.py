@@ -54,6 +54,27 @@ def test_preflight_healthy_mocked_upstream(monkeypatch: pytest.MonkeyPatch) -> N
     assert cached["health_class"] == "healthy"
 
 
+def test_preflight_defaults_to_configured_default_model(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.delenv("ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT", raising=False)
+    captured: list[dict[str, Any]] = []
+    monkeypatch.setattr(pre, "DEFAULT_MODEL_NAME", "default-route-model")
+
+    class _Client:
+        def __init__(self, *_a: Any, **_k: Any) -> None:
+            pass
+
+        class responses:
+            @staticmethod
+            def create(**kwargs: Any) -> object:
+                captured.append(dict(kwargs))
+                return object()
+
+    run_upstream_api_preflight(api_key="sk-test", client_factory=lambda _k: _Client())
+
+    assert captured
+    assert captured[0]["model"] == "default-route-model"
+
+
 def test_preflight_insufficient_quota_classified(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.delenv("ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT", raising=False)
     exc = APIStatusError(

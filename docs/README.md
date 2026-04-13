@@ -37,6 +37,34 @@ python run.py
 Open:
 `http://127.0.0.1:8000`
 
+## Model Configuration
+Environment variables define the routing defaults and fallback chain, but the actual model is selected per request in `game.gm.call_gpt(...)` from explicit route inputs such as `purpose`, `retry_attempt`, `retry_reason`, `strict_social`, and `force_high_precision`.
+
+Legacy or single-model-compatible setup:
+
+```powershell
+$env:MODEL_NAME="gpt-4o-mini"
+$env:ENABLE_MODEL_ROUTING="true"
+```
+
+Hybrid setup:
+
+```powershell
+$env:MODEL_NAME="gpt-4o-mini"
+$env:DEFAULT_MODEL_NAME="gpt-4o-mini"
+$env:HIGH_PRECISION_MODEL_NAME="gpt-4.1-mini"
+$env:RETRY_ESCALATION_MODEL_NAME="gpt-4.1-mini"
+$env:ENABLE_MODEL_ROUTING="true"
+```
+
+- `MODEL_NAME` remains backward compatible and seeds `DEFAULT_MODEL_NAME` when newer vars are omitted.
+- `DEFAULT_MODEL_NAME`, `HIGH_PRECISION_MODEL_NAME`, and `RETRY_ESCALATION_MODEL_NAME` define the default lane and its stronger fallbacks.
+- Strict-social turns and retry escalation can route a GPT call to the stronger configured model.
+- Setting `ENABLE_MODEL_ROUTING=false` keeps calls on `DEFAULT_MODEL_NAME` without changing player-facing schemas.
+- Deterministic and non-GPT repair paths stay outside the routing system.
+
+See `docs/model_routing_architecture.md` for the current routing note.
+
 ## Notes
 - The engine owns mechanics and persistence.
 - GPT owns narration, scene drafting, world suggestions, and narrative consequences.

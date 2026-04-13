@@ -133,6 +133,21 @@ def test_ensure_minimal_nonsocial_resolution_fills_empty_text() -> None:
     assert out.get("final_route") == "nonsocial_fallback_minimal"
 
 
+def test_nongpt_local_repair_does_not_fabricate_model_route_metadata() -> None:
+    out = ensure_minimal_nonsocial_resolution(
+        gm={"player_facing_text": "", "tags": []},
+        session={"active_scene_id": ""},
+    )
+
+    md = out.get("metadata") if isinstance(out.get("metadata"), dict) else {}
+    assert "selected_model" not in md
+    assert "model_route_reason" not in md
+    assert "model_route_family" not in md
+    assert "model_route_purpose" not in md
+    assert "model_escalated" not in md
+    assert "model_escalation_trigger" not in md
+
+
 def test_nonsocial_contextual_repair_pressure_forward_without_scene_detail() -> None:
     out = ensure_minimal_nonsocial_resolution(
         gm={"player_facing_text": ""},
@@ -164,6 +179,33 @@ def test_ensure_minimal_social_resolution_survives_total_minimal_helper_failure(
     assert out.get("accepted_via") == "social_resolution_repair"
     assert out.get("targeted_retry_terminal") is True
     assert out.get("retry_exhausted") is True
+
+
+def test_force_terminal_retry_fallback_does_not_fabricate_model_route_metadata(monkeypatch: Any) -> None:
+    monkeypatch.setattr("game.gm.apply_social_exchange_retry_fallback_gm", lambda *a, **k: {})
+    monkeypatch.setattr(
+        "game.gm.minimal_social_emergency_fallback_line",
+        lambda _resolution: 'Renna says, "Hard to say."',
+    )
+
+    out = force_terminal_retry_fallback(
+        session=_social_authority_session(),
+        original_text="",
+        failure={"failure_class": "scene_stall", "reasons": ["stall"]},
+        player_text="What did you hear?",
+        scene_envelope=_scene_envelope(),
+        world={},
+        resolution=_minimal_social_resolution(),
+        base_gm={"player_facing_text": "", "tags": []},
+    )
+
+    md = out.get("metadata") if isinstance(out.get("metadata"), dict) else {}
+    assert "selected_model" not in md
+    assert "model_route_reason" not in md
+    assert "model_route_family" not in md
+    assert "model_route_purpose" not in md
+    assert "model_escalated" not in md
+    assert "model_escalation_trigger" not in md
 
 
 def test_api_repairs_empty_social_after_force_terminal_retry_fallback(monkeypatch: Any, tmp_path: Any) -> None:

@@ -1,6 +1,7 @@
 from __future__ import annotations
 from contextlib import asynccontextmanager
 from pathlib import Path
+import inspect
 import json
 import re
 import time
@@ -718,6 +719,26 @@ def _derive_response_type_contract_for_turn(
 # Hard ceiling on OpenAI calls for one manual-play narration turn (initial + upstream retry + content retries).
 MANUAL_PLAY_MAX_CALL_GPT = 6
 
+_MODEL_ROUTE_METADATA_KEYS: tuple[str, ...] = (
+    "selected_model",
+    "model_route_reason",
+    "model_route_family",
+    "model_retry_attempt",
+    "model_route_purpose",
+    "model_escalated",
+    "model_escalation_trigger",
+)
+
+_RETRY_ESCALATION_ROUTE_REASONS: frozenset[str] = frozenset(
+    {
+        "unresolved_question",
+        "npc_contract_failure",
+        "validator_voice",
+        "followup_soft_repetition",
+        "echo_or_repetition",
+    }
+)
+
 # Mirror Block J/K resolution metadata onto GM output so fast-fallback paths remain inspectable downstream.
 _RESOLUTION_GM_METADATA_MIRROR_KEYS: frozenset[str] = frozenset(
     {
@@ -770,6 +791,33 @@ def _attach_resolution_contract_metadata_to_gm_output(gm: dict | None, resolutio
         return
     md = gm.get("metadata") if isinstance(gm.get("metadata"), dict) else {}
     gm["metadata"] = {**md, **extra}
+
+
+def _preserve_model_route_metadata(
+    dst: dict | None,
+    *sources: dict | None,
+    mark_upstream_preserved: bool = False,
+) -> None:
+    if not isinstance(dst, dict):
+        return
+    md_dst = dst.get("metadata") if isinstance(dst.get("metadata"), dict) else {}
+    merged = dict(md_dst)
+    found_route_source = False
+    for src in sources:
+        if not isinstance(src, dict):
+            continue
+        md_src = src.get("metadata") if isinstance(src.get("metadata"), dict) else {}
+        if any(key in md_src for key in _MODEL_ROUTE_METADATA_KEYS):
+            found_route_source = True
+        for key in _MODEL_ROUTE_METADATA_KEYS:
+            if key not in merged and key in md_src:
+                merged[key] = md_src[key]
+    if mark_upstream_preserved:
+        merged["upstream_model_route_preserved"] = bool(
+            found_route_source and any(key in merged for key in _MODEL_ROUTE_METADATA_KEYS)
+        )
+    if merged != md_dst:
+        dst["metadata"] = merged
 
 
 def _build_gpt_narration_from_authoritative_state(
@@ -876,12 +924,14 @@ def _build_gpt_narration_from_authoritative_state(
         )
         return prioritized
 
-    def _repair_terminal_player_facing_if_needed(gm_dict: dict, *, reason: str) -> dict:
+    def _repair_terminal_player_facing_if_needed(
+        gm_dict: dict,
+        *,
+        reason: str,
+        preserve_upstream_model_route: bool = False,
+    ) -> dict:
         repair_started = _now_perf()
-        sid = str((scene.get("scene") or {}).get("id") or "").strip()
-        social_lane = _session_social_authority(session) or strict_social_emission_will_apply(
-            resolution, session, world, sid
-        )
+        social_lane = _strict_social_route_signal()
         if _gm_has_usable_player_facing_text(gm_dict):
             _accumulate_latency(latency_sink, "fallback_repair", _elapsed_ms(repair_started))
             return gm_dict
@@ -899,6 +949,11 @@ def _build_gpt_narration_from_authoritative_state(
             print("[SOCIAL RESOLUTION REPAIR] terminal empty social output repaired")
             _accumulate_latency(latency_sink, "fallback_repair", _elapsed_ms(repair_started))
             preserve_fallback_provenance_metadata(repaired, gm_dict)
+            _preserve_model_route_metadata(
+                repaired,
+                gm_dict,
+                mark_upstream_preserved=preserve_upstream_model_route,
+            )
             return repaired
         repaired_ns = ensure_minimal_nonsocial_resolution(gm=gm_dict, session=session)
         dbg = repaired_ns.get("debug_notes") if isinstance(repaired_ns.get("debug_notes"), str) else ""
@@ -906,6 +961,11 @@ def _build_gpt_narration_from_authoritative_state(
         print("[NON-SOCIAL RESOLUTION REPAIR] empty output repaired")
         _accumulate_latency(latency_sink, "fallback_repair", _elapsed_ms(repair_started))
         preserve_fallback_provenance_metadata(repaired_ns, gm_dict)
+        _preserve_model_route_metadata(
+            repaired_ns,
+            gm_dict,
+            mark_upstream_preserved=preserve_upstream_model_route,
+        )
         return repaired_ns
 
     def _extract_upstream_api_error(gm_dict: dict | None) -> dict | None:
@@ -913,18 +973,21 @@ def _build_gpt_narration_from_authoritative_state(
         err = md.get("upstream_api_error") if isinstance(md.get("upstream_api_error"), dict) else None
         return dict(err) if isinstance(err, dict) else None
 
-    def _social_dialogue_turn() -> bool:
+    def _strict_social_route_signal() -> bool:
         sid = str((scene.get("scene") or {}).get("id") or "").strip()
+        return bool(
+            _session_social_authority(session)
+            or strict_social_emission_will_apply(resolution, session, world, sid)
+        )
+
+    def _social_dialogue_turn() -> bool:
         if route_choice == "dialogue":
             return True
         # Engine-resolved turns (``/api/action`` and structured ``/api/chat``) carry a concrete
         # ``kind``; keep the full targeted-retry budget for validator_voice / question-shape races.
         if isinstance(resolution, dict) and str(resolution.get("kind") or "").strip():
             return False
-        return bool(
-            _session_social_authority(session)
-            or strict_social_emission_will_apply(resolution, session, world, sid)
-        )
+        return _strict_social_route_signal()
 
     def _fast_fallback_for_upstream_error(
         gm_dict: dict,
@@ -953,7 +1016,9 @@ def _build_gpt_narration_from_authoritative_state(
         )
         _accumulate_latency(latency_sink, "fallback_repair", _elapsed_ms(fallback_started))
         out = _repair_terminal_player_facing_if_needed(
-            out, reason=f"api_upstream_fast_fallback:{failure_class}"
+            out,
+            reason=f"api_upstream_fast_fallback:{failure_class}",
+            preserve_upstream_model_route=True,
         )
         out = dict(out)
         tags = out.get("tags") if isinstance(out.get("tags"), list) else []
@@ -973,6 +1038,7 @@ def _build_gpt_narration_from_authoritative_state(
             (dbg + " | " if dbg else "")
             + f"upstream_api_fast_fallback:{failure_class}:{reason}"
         )
+        _preserve_model_route_metadata(out, gm_dict, mark_upstream_preserved=True)
         attach_upstream_fast_fallback_provenance(out)
         _attach_resolution_contract_metadata_to_gm_output(out, resolution if isinstance(resolution, dict) else None)
         print(f"[FAST FALLBACK INVOKED] failure_class={failure_class} reason={reason}")
@@ -987,12 +1053,53 @@ def _build_gpt_narration_from_authoritative_state(
     known_clues = list(get_all_known_clue_texts(session))
     gpt_calls_used = 0
 
-    def _bounded_call_gpt(msgs: list):
+    def _call_gpt_route_kwargs(
+        *,
+        retry_attempt: int = 0,
+        retry_reason: str | None = None,
+    ) -> dict[str, Any]:
+        normalized_retry_reason = str(retry_reason or "").strip()
+        purpose = "primary_turn"
+        strict_social = False
+        if retry_attempt >= 1 or normalized_retry_reason in _RETRY_ESCALATION_ROUTE_REASONS:
+            purpose = "retry_escalation"
+        elif _strict_social_route_signal():
+            purpose = "strict_social"
+            strict_social = True
+        return {
+            "purpose": purpose,
+            "response_policy": response_policy if isinstance(response_policy, dict) else None,
+            "segmented_turn": segmented_turn if isinstance(segmented_turn, dict) else None,
+            "retry_attempt": int(retry_attempt or 0),
+            "retry_reason": normalized_retry_reason or None,
+            "strict_social": strict_social,
+        }
+
+    def _bounded_call_gpt(
+        msgs: list,
+        *,
+        retry_attempt: int = 0,
+        retry_reason: str | None = None,
+    ):
         nonlocal gpt_calls_used
         if gpt_calls_used >= MANUAL_PLAY_MAX_CALL_GPT:
             print("[RETRY SKIPPED: MANUAL_PLAY_GPT_BUDGET_EXCEEDED]")
             return _synthetic_manual_play_gpt_budget_gm()
         gpt_calls_used += 1
+        call_kwargs = _call_gpt_route_kwargs(
+            retry_attempt=retry_attempt,
+            retry_reason=retry_reason,
+        )
+        try:
+            sig = inspect.signature(call_gpt)
+            accepts_route_context = any(
+                param.kind == inspect.Parameter.VAR_KEYWORD
+                for param in sig.parameters.values()
+            ) or all(name in sig.parameters for name in call_kwargs)
+        except (TypeError, ValueError):
+            accepts_route_context = True
+        if accepts_route_context:
+            return call_gpt(msgs, **call_kwargs)
         return call_gpt(msgs)
 
     initial_gpt_started = _now_perf()
@@ -1022,7 +1129,12 @@ def _build_gpt_narration_from_authoritative_state(
         if allow_direct_api_retry:
             retry_gpt_started = _now_perf()
             gm_retry = guard_gm_output(
-                _bounded_call_gpt(messages),
+                _bounded_call_gpt(
+                    messages,
+                    retry_attempt=1,
+                    retry_reason=str(upstream_api_error.get("failure_class") or "").strip()
+                    or "retryable_upstream_error",
+                ),
                 scene,
                 user_text,
                 known_clues,
@@ -1092,6 +1204,7 @@ def _build_gpt_narration_from_authoritative_state(
             break
         retry_attempt += 1
         retry_cs_dbg: dict = {}
+        selected_class = str(selected_failure.get("failure_class") or "").strip()
         retry_instruction = build_retry_prompt_for_failure(
             selected_failure,
             response_policy=response_policy,
@@ -1112,7 +1225,11 @@ def _build_gpt_narration_from_authoritative_state(
         ) + [{'role': 'user', 'content': retry_instruction}]
         retry_gpt_started = _now_perf()
         gm_retry = guard_gm_output(
-            _bounded_call_gpt(retry_messages),
+            _bounded_call_gpt(
+                retry_messages,
+                retry_attempt=retry_attempt,
+                retry_reason=selected_class or None,
+            ),
             scene,
             user_text,
             known_clues,
@@ -1163,7 +1280,6 @@ def _build_gpt_narration_from_authoritative_state(
                 segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
             )
         )
-        selected_class = str(selected_failure.get("failure_class") or "").strip()
         still_failing = next(
             (
                 failure for failure in retry_failures

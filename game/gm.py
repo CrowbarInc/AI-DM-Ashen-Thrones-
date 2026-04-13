@@ -1,9 +1,10 @@
 from __future__ import annotations
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 import copy
 import json
 import re
-from game.config import MODEL_NAME, OPENAI_API_KEY
+from game.config import OPENAI_API_KEY
+from game.model_routing import resolve_model_route
 from game.utils import slugify
 from game.exploration import EXPLORATION_KINDS
 from game.social import (
@@ -4723,22 +4724,157 @@ def _classify_upstream_gpt_error(exc: Exception) -> Dict[str, Any]:
     }
 
 
-def call_gpt(messages: List[Dict[str, str]]) -> Dict[str, Any]:
+def _attach_model_route_metadata(
+    gm: Dict[str, Any],
+    *,
+    selected_model: str,
+    route_reason: str,
+    route_family: str,
+    purpose: str,
+    retry_attempt: int,
+    retry_reason: str | None = None,
+    strict_social: bool = False,
+    force_high_precision: bool = False,
+) -> Dict[str, Any]:
+    normalized_purpose = str(purpose or "primary_turn").strip() or "primary_turn"
+    normalized_retry_reason = str(retry_reason or "").strip()
+    escalation_trigger = _resolve_model_escalation_trigger(
+        purpose=normalized_purpose,
+        retry_attempt=retry_attempt,
+        retry_reason=normalized_retry_reason or None,
+        strict_social=strict_social,
+        force_high_precision=force_high_precision,
+    )
+    escalated = escalation_trigger is not None
+    md = gm.get("metadata") if isinstance(gm.get("metadata"), dict) else {}
+    gm["metadata"] = {
+        **md,
+        "selected_model": selected_model,
+        "model_route_reason": route_reason,
+        "model_route_family": route_family,
+        "model_route_purpose": normalized_purpose,
+        "model_retry_attempt": int(retry_attempt or 0),
+        "model_escalated": escalated,
+        "model_escalation_trigger": escalation_trigger,
+    }
+    dbg = gm.get("debug_notes") if isinstance(gm.get("debug_notes"), str) else ""
+    token = f"model_route:{route_family}:{route_reason}:{selected_model}"
+    gm["debug_notes"] = (dbg + " | " if dbg else "") + token
+    if escalated and escalation_trigger:
+        gm["debug_notes"] += f" | model_escalated:{escalation_trigger}"
+    return gm
+
+
+def _resolve_model_escalation_trigger(
+    *,
+    purpose: str,
+    retry_attempt: int,
+    retry_reason: str | None = None,
+    strict_social: bool = False,
+    force_high_precision: bool = False,
+) -> str | None:
+    normalized_purpose = str(purpose or "primary_turn").strip() or "primary_turn"
+    normalized_retry_reason = str(retry_reason or "").strip()
+    if force_high_precision:
+        return "force_high_precision"
+    if strict_social or normalized_purpose == "strict_social":
+        return "strict_social"
+    if normalized_purpose != "retry_escalation":
+        return None
+    if normalized_retry_reason in {
+        "unresolved_question",
+        "npc_contract_failure",
+        "validator_voice",
+        "followup_soft_repetition",
+        "echo_or_repetition",
+    }:
+        return f"retry_reason:{normalized_retry_reason}"
+    if int(retry_attempt or 0) >= 1:
+        return "retry_attempt"
+    return None
+
+
+def _log_model_route(
+    *,
+    selected_model: str,
+    route_family: str,
+    purpose: str,
+    retry_attempt: int,
+    retry_reason: str | None = None,
+    strict_social: bool = False,
+    force_high_precision: bool = False,
+) -> None:
+    normalized_purpose = str(purpose or "primary_turn").strip() or "primary_turn"
+    escalation_trigger = _resolve_model_escalation_trigger(
+        purpose=normalized_purpose,
+        retry_attempt=retry_attempt,
+        retry_reason=retry_reason,
+        strict_social=strict_social,
+        force_high_precision=force_high_precision,
+    )
+    escalated = "true" if escalation_trigger is not None else "false"
+    print(
+        f"[MODEL ROUTE] purpose={normalized_purpose} "
+        f"selected={selected_model} "
+        f"family={route_family} "
+        f"retry={int(retry_attempt or 0)} "
+        f"escalated={escalated}"
+    )
+
+
+def call_gpt(
+    messages: List[Dict[str, str]],
+    *,
+    purpose: str = "primary_turn",
+    response_policy: Optional[Dict[str, Any]] = None,
+    segmented_turn: Optional[Dict[str, Any]] = None,
+    retry_attempt: int = 0,
+    retry_reason: Optional[str] = None,
+    strict_social: bool = False,
+    force_high_precision: bool = False,
+) -> Dict[str, Any]:
     # Wrap the OpenAI call so network/API/model errors do not crash gameplay.
+    route = resolve_model_route(
+        purpose=purpose,
+        response_policy=response_policy,
+        segmented_turn=segmented_turn,
+        retry_attempt=retry_attempt,
+        strict_social=strict_social,
+        force_high_precision=force_high_precision,
+    )
     try:
         from openai import OpenAI
         client = OpenAI(api_key=OPENAI_API_KEY)
-        resp = client.responses.create(model=MODEL_NAME, input=messages)
+        _log_model_route(
+            selected_model=route.selected_model,
+            route_family=route.route_family,
+            purpose=purpose,
+            retry_attempt=retry_attempt,
+            retry_reason=retry_reason,
+            strict_social=strict_social,
+            force_high_precision=force_high_precision,
+        )
+        resp = client.responses.create(model=route.selected_model, input=messages)
         text = getattr(resp, 'output_text', None)
         if text is None:
             # Fallback to stringifying the response if expected attribute missing.
             text = str(resp)
-        return _safe_json(text.strip())
+        return _attach_model_route_metadata(
+            _safe_json(text.strip()),
+            selected_model=route.selected_model,
+            route_reason=route.route_reason,
+            route_family=route.route_family,
+            purpose=purpose,
+            retry_attempt=retry_attempt,
+            retry_reason=retry_reason,
+            strict_social=strict_social,
+            force_high_precision=force_high_precision,
+        )
     except Exception as e:
         err = _classify_upstream_gpt_error(e)
         # Return a safe fallback response that preserves the expected schema so
         # callers can continue without special-casing exceptions.
-        return {
+        return _attach_model_route_metadata({
             'player_facing_text': 'The game master is temporarily unavailable. Please try again.',
             'tags': [
                 'error',
@@ -4757,7 +4893,16 @@ def call_gpt(messages: List[Dict[str, str]]) -> Dict[str, Any]:
             'metadata': {
                 'upstream_api_error': err,
             },
-        }
+        },
+            selected_model=route.selected_model,
+            route_reason=route.route_reason,
+            route_family=route.route_family,
+            purpose=purpose,
+            retry_attempt=retry_attempt,
+            retry_reason=retry_reason,
+            strict_social=strict_social,
+            force_high_precision=force_high_precision,
+        )
 
 
 def normalize_scene_draft(draft: Dict[str, Any]) -> Dict[str, Any]:

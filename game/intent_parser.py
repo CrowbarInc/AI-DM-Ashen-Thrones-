@@ -958,6 +958,13 @@ def parse_freeform_to_action(
                 },
             )
 
+    # ---- 0d. Embedded named-place movement ("… entering the Stone Boar") before generic travel/follow ----
+    from game.scene_destination_binding import try_embedded_named_place_scene_action
+
+    emb = try_embedded_named_place_scene_action(t, scene)
+    if emb is not None:
+        return emb
+
     # ---- 1. Travel / scene_transition ----
     for prefix in sorted(TRAVEL_PREFIXES, key=len, reverse=True):
         if low.startswith(prefix):
@@ -1072,10 +1079,24 @@ def parse_freeform_to_action(
             )
 
     # ---- 6. Legacy fallbacks from original parse_intent ----
-    if "follow" in low and exits:
-        target_id = _match_exit(low.replace("follow", "").strip(), exits) or _match_exit("follow", exits)
+    # Use word-boundary "follow" so "follows" (third person) does not arm this path; never
+    # `_match_exit("follow", …)` on unrelated prose — that can latch onto "Follow the … rumor" exits.
+    m_follow = re.search(r"\bfollow\b", low)
+    if m_follow and exits:
+        tail = low[m_follow.end() :].strip()
+        target_id = _match_exit(tail, exits)
+        if not target_id and re.match(r"^\s*the\s+", tail):
+            target_id = _match_exit(tail[4:].lstrip(), exits)
+        if not target_id and re.match(r"^\s*follow\s*[\s\.,;?!]*$", low):
+            target_id = _match_exit("follow", exits)
         if target_id:
-            return _build_action("scene_transition", t, t, target_scene_id=target_id)
+            return _build_action(
+                "scene_transition",
+                t,
+                t,
+                target_scene_id=target_id,
+                metadata={"parser_lane": "legacy_follow_exit_match"},
+            )
         return _build_action("interact", t, t, metadata={"intent": "follow_target"})
     if "leave" in low or "exit" in low:
         target_id = _match_exit(low, exits)
@@ -1348,6 +1369,10 @@ _DECLARED_TRAVEL_WITH_DEST_PATTERNS: Tuple[Tuple[re.Pattern[str], str], ...] = t
             "walk_run_to_Y",
         ),
         (
+            r"\benter(?:s|ing)?\s+(?:the\s+)?(.+?)(?:\s*[.,;?!]|$)",
+            "enter_Y",
+        ),
+        (
             r"\b(?:depart|departs|departing)\s+for\s+(?:the\s+)?(.+?)(?:\s*[.,;?!]|$)",
             "depart_for_Y",
         ),
@@ -1479,6 +1504,8 @@ def maybe_build_declared_travel_action(
     if not declared:
         return None
 
+    from game.scene_destination_binding import extract_last_explicit_named_place
+
     low_decl = declared.lower()
     if re.match(r"^\s*(?:what|where|why|how|who|which|when)\b", low_decl):
         return None
@@ -1531,6 +1558,10 @@ def maybe_build_declared_travel_action(
             row = _resolve_qualified_pursuit_target_to_row(dest, scene, session, world, actionable)
         row_scene = _pending_row_resolved_scene_id(row, world) if row else None
 
+        if tid is None and extract_last_explicit_named_place(declared) is not None:
+            row = None
+            row_scene = None
+
         # Affirmed exit/scene resolution wins; attach lead metadata only when the lead's destination matches.
         if tid and tid in known_scene_ids:
             if row and row_scene and row_scene == tid:
@@ -1576,7 +1607,7 @@ def parse_intent(text: str) -> Optional[Dict[str, Any]]:
     if not low:
         return None
 
-    if "follow" in low:
+    if re.search(r"\bfollow\b", low):
         return _build_action("interact", text.strip(), text.strip(), metadata={"intent": "follow_target"})
     if "leave" in low or "exit" in low:
         return _build_action("travel", text.strip(), text.strip(), metadata={"intent": "leave_area"})
