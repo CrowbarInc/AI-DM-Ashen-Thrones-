@@ -33,6 +33,18 @@ def _assert_stable_schema(out: dict) -> None:
     assert set(summ) == {"strengths", "failures", "warnings"}
     for k in summ:
         assert isinstance(summ[k], list)
+    gv = out.get("gameplay_validation")
+    assert isinstance(gv, dict)
+    for key in (
+        "run_valid",
+        "excluded_from_scoring",
+        "invalidation_reason",
+        "dead_turn_count",
+        "infra_failure_count",
+        "dead_turn",
+    ):
+        assert key in gv
+    assert isinstance(gv.get("dead_turn"), dict)
 
 
 def test_direct_answer_high_for_clear_question_and_answer():
@@ -131,3 +143,57 @@ def test_malformed_minimal_payload_returns_valid_schema():
     for payload in [None, {}, [], "not-a-dict", {"gm_output": object()}]:
         out = evaluate_playability(payload)  # type: ignore[arg-type]
         _assert_stable_schema(out)
+
+
+def test_dead_turn_excludes_from_scoring_but_preserves_axis_diagnostics():
+    """DTD1 ``validation_playable: false`` must zero overall pass/score; axes remain for inspection."""
+    fem = {
+        "dead_turn": {
+            "is_dead_turn": True,
+            "dead_turn_reason_codes": ["upstream_api_error"],
+            "dead_turn_class": "upstream_api_failure",
+            "validation_playable": False,
+            "manual_test_valid": False,
+        }
+    }
+    out = evaluate_playability(
+        {
+            "player_prompt": "Who commands the watch here?",
+            "gm_text": "Captain Halvar commands the watch; sergeants rotate shifts.",
+            "gm_output": {"player_facing_text": "x", "_final_emission_meta": fem},
+        }
+    )
+    _assert_stable_schema(out)
+    assert out["overall"]["score"] == 0
+    assert out["overall"]["passed"] is False
+    assert out["gameplay_validation"]["excluded_from_scoring"] is True
+    assert out["gameplay_validation"]["dead_turn_count"] == 1
+    assert out["gameplay_validation"]["raw_overall"]["score"] > 0
+    assert out["axes"]["direct_answer"]["score"] >= 15
+
+
+def test_synthetic_terminal_fallback_without_upstream_not_dead_stays_scoreable():
+    """DTD1 marks non-dead; evaluator must not infer dead from tags/routes here."""
+    fem = {
+        "dead_turn": {
+            "is_dead_turn": False,
+            "dead_turn_class": "none",
+            "validation_playable": True,
+            "dead_turn_reason_codes": [],
+            "manual_test_valid": True,
+        }
+    }
+    out = evaluate_playability(
+        {
+            "player_prompt": "What happened?",
+            "gm_text": "A forced terminal fallback line without upstream metadata.",
+            "gm_output": {
+                "player_facing_text": "Fallback prose.",
+                "tags": ["forced_retry_fallback", "retry_escape_hatch"],
+                "_final_emission_meta": fem,
+            },
+        }
+    )
+    _assert_stable_schema(out)
+    assert out["gameplay_validation"]["run_valid"] is True
+    assert out["overall"]["passed"] is True

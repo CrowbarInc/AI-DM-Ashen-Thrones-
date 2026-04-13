@@ -1,6 +1,8 @@
 """Deterministic, shallow behavioral checks for narration-style transcripts (tests/tooling only).
 
-Inspects only caller-supplied turn dicts; no GPT calls and no ``game/`` imports.
+Inspects only caller-supplied turn dicts; no GPT calls. Dead-turn policy reads
+``gm_output['_final_emission_meta']['dead_turn']`` (or top-level ``_final_emission_meta``) via
+:func:`game.final_emission_meta.read_dead_turn_from_gm_output` — no local classification.
 """
 
 from __future__ import annotations
@@ -8,7 +10,10 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any, Iterable, Mapping, Sequence
 
-SCHEMA_VERSION = "behavioral_gauntlet_eval.v1"
+from game.dead_turn_report_visibility import build_dead_turn_run_report
+from game.final_emission_meta import read_dead_turn_from_gm_output, summarize_gameplay_validation_for_turn
+
+SCHEMA_VERSION = "behavioral_gauntlet_eval.v2"
 MAX_EVIDENCE_TURNS = 5
 
 _ALL_AXIS_NAMES = frozenset(
@@ -481,11 +486,53 @@ def _axis_to_mapping(result: BehavioralAxisResult) -> dict[str, Any]:
     }
 
 
-def _result_to_mapping(result: BehavioralGauntletResult) -> dict[str, Any]:
+def _gm_output_slice_from_row(raw: Mapping[str, Any]) -> Mapping[str, Any] | None:
+    go = raw.get("gm_output")
+    if isinstance(go, Mapping):
+        return go
+    fem = raw.get("_final_emission_meta")
+    if isinstance(fem, Mapping) and isinstance(fem.get("dead_turn"), Mapping):
+        return {"_final_emission_meta": fem}
+    return None
+
+
+def _aggregate_gameplay_validation(rows: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
+    per_turn: list[dict[str, Any]] = []
+    dead_turn_count = 0
+    infra_failure_count = 0
+    exclusions: list[str] = []
+    dead_indexes: list[int] = []
+    for i, row in enumerate(rows):
+        dt = read_dead_turn_from_gm_output(_gm_output_slice_from_row(row))
+        gvi = summarize_gameplay_validation_for_turn(dt)
+        gvi["turn_index"] = i
+        per_turn.append(gvi)
+        dead_turn_count += int(gvi.get("dead_turn_count") or 0)
+        infra_failure_count += int(gvi.get("infra_failure_count") or 0)
+        if gvi.get("excluded_from_scoring"):
+            ir = gvi.get("invalidation_reason")
+            if isinstance(ir, str) and ir.strip():
+                exclusions.append(ir.strip())
+            if bool(dt.get("is_dead_turn")):
+                dead_indexes.append(i)
+    any_excluded = any(bool(g.get("excluded_from_scoring")) for g in per_turn)
+    return {
+        "run_valid": not any_excluded,
+        "excluded_from_scoring": any_excluded,
+        "invalidation_reason": exclusions[0] if exclusions else None,
+        "dead_turn_count": dead_turn_count,
+        "infra_failure_count": infra_failure_count,
+        "dead_turn_indexes": dead_indexes,
+        "per_turn": per_turn,
+    }
+
+
+def _result_to_mapping(result: BehavioralGauntletResult, *, gameplay_validation: Mapping[str, Any]) -> dict[str, Any]:
     return {
         "schema_version": result.schema_version,
         "overall_passed": result.overall_passed,
         "axes": {name: _axis_to_mapping(axis) for name, axis in result.axes.items()},
+        "gameplay_validation": dict(gameplay_validation),
     }
 
 
@@ -516,9 +563,19 @@ def evaluate_behavioral_gauntlet(
         axis_results[name] = runners[name](slices)
 
     overall = all(r.passed for r in axis_results.values())
+    gv = _aggregate_gameplay_validation(turns)
+    if gv.get("excluded_from_scoring"):
+        overall = False
+    dead_rep = build_dead_turn_run_report(turns)
+    gv["dead_turn_by_class"] = dead_rep.get("dead_turn_by_class") or {}
+    gv["dead_turn_banner"] = dead_rep.get("banner")
+    gv["invalid_for_gameplay_conclusions"] = bool(dead_rep.get("invalid_for_gameplay_conclusions"))
+    gv["invalid_run_explanation"] = dead_rep.get("invalid_run_explanation")
     bundle = BehavioralGauntletResult(
         schema_version=SCHEMA_VERSION,
         axes=axis_results,
         overall_passed=overall,
     )
-    return _result_to_mapping(bundle)
+    out = _result_to_mapping(bundle, gameplay_validation=gv)
+    out["dead_turn_run_report"] = dead_rep
+    return out

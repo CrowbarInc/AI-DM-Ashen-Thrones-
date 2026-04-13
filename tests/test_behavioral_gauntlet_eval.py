@@ -25,6 +25,11 @@ def test_evaluate_behavioral_gauntlet_shape_and_expected_axis_filter():
     out = evaluate_behavioral_gauntlet(turns, expected_axis={"neutrality", "dialogue_coherence"})
     assert out["schema_version"] == SCHEMA_VERSION
     assert out["overall_passed"] is True
+    assert isinstance(out.get("gameplay_validation"), dict)
+    assert isinstance(out.get("dead_turn_run_report"), dict)
+    assert out["dead_turn_run_report"]["dead_turn_count"] == 0
+    assert out["dead_turn_run_report"]["banner"] is None
+    assert out["gameplay_validation"]["run_valid"] is True
     assert set(out["axes"]) == {"dialogue_coherence", "neutrality"}
     for axis in out["axes"].values():
         assert set(axis) == {"axis", "passed", "score", "reason_codes", "summary", "evidence_turn_indexes"}

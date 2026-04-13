@@ -12,6 +12,8 @@ from typing import Any, Dict, List, Mapping, Sequence, Set
 from game.final_emission_meta import (
     NARRATIVE_AUTHENTICITY_FEM_KEYS,
     normalize_merged_na_telemetry_for_eval,
+    read_dead_turn_from_gm_output,
+    summarize_gameplay_validation_for_turn,
 )
 
 _NA_KEYS = NARRATIVE_AUTHENTICITY_FEM_KEYS
@@ -59,6 +61,41 @@ def _extract_final_emission_meta(response: Mapping[str, Any] | None) -> dict[str
         gm = response
     fem = gm.get("_final_emission_meta")
     return dict(fem) if isinstance(fem, Mapping) else {}
+
+
+def _finalize_na_eval_with_dead_turn_policy(
+    out: dict[str, Any],
+    response: Mapping[str, Any] | None,
+) -> dict[str, Any]:
+    """Attach DTD1 gameplay_validation; strip positive NA scores when ``validation_playable`` is false."""
+    dt = read_dead_turn_from_gm_output(response.get("gm_output") if isinstance(response, Mapping) else None)
+    gv = summarize_gameplay_validation_for_turn(dt)
+    if gv["excluded_from_scoring"]:
+        gv = {
+            **gv,
+            "diagnostic_scores": dict(out.get("scores") or {}) if isinstance(out.get("scores"), dict) else {},
+            "diagnostic_rumor_realism_axes": dict(out.get("rumor_realism_axes") or {})
+            if isinstance(out.get("rumor_realism_axes"), dict)
+            else {},
+        }
+        if isinstance(out.get("scores"), dict):
+            for k in list(out["scores"].keys()):
+                out["scores"][k] = 0
+        if isinstance(out.get("rumor_realism_axes"), dict):
+            for k in list(out["rumor_realism_axes"].keys()):
+                out["rumor_realism_axes"][k] = 0
+        if isinstance(out.get("rumor_realism_axis_reasons"), dict):
+            for k, v in list(out["rumor_realism_axis_reasons"].items()):
+                base = list(v) if isinstance(v, list) else []
+                base.append("gameplay_excluded_non_playable_turn")
+                out["rumor_realism_axis_reasons"][k] = list(dict.fromkeys(str(x) for x in base if str(x).strip()))
+        out["passed"] = False
+        merged_reasons = list(out.get("reasons") or [])
+        merged_reasons.append("gameplay_excluded_non_playable_turn")
+        out["reasons"] = list(dict.fromkeys(str(x) for x in merged_reasons if str(x).strip()))
+        out["narrative_authenticity_verdict"] = "excluded_from_scoring"
+    out["gameplay_validation"] = gv
+    return out
 
 
 def _merge_na_meta(
@@ -565,33 +602,36 @@ def evaluate_narrative_authenticity(
     has_fem_key = isinstance(gm_for_trace, Mapping) and "_final_emission_meta" in gm_for_trace
     has_na_in_meta = bool(meta and any(k in meta for k in _NA_KEYS))
     if not has_fem_key and not has_na_in_meta:
-        return {
-            "passed": False,
-            "narrative_authenticity_verdict": "missing_telemetry",
-            "scores": {
-                "signal_gain": 0,
-                "anti_echoing": 0,
-                "followup_evolution": 0,
-                "non_generic_specificity": 0,
-                "npc_voice_grounding": 0,
+        return _finalize_na_eval_with_dead_turn_policy(
+            {
+                "passed": False,
+                "narrative_authenticity_verdict": "missing_telemetry",
+                "scores": {
+                    "signal_gain": 0,
+                    "anti_echoing": 0,
+                    "followup_evolution": 0,
+                    "non_generic_specificity": 0,
+                    "npc_voice_grounding": 0,
+                },
+                "rumor_realism_axes": {
+                    "rumor_echo_control": 0,
+                    "secondhand_realism": 0,
+                    "rumor_repair_success": 0,
+                    "rumor_relaxation_correctness": 0,
+                    "rumor_state_hygiene": 0,
+                },
+                "rumor_realism_axis_reasons": {
+                    "rumor_echo_control": ["missing_narrative_authenticity_telemetry"],
+                    "secondhand_realism": ["missing_narrative_authenticity_telemetry"],
+                    "rumor_repair_success": ["missing_narrative_authenticity_telemetry"],
+                    "rumor_relaxation_correctness": ["missing_narrative_authenticity_telemetry"],
+                    "rumor_state_hygiene": ["missing_narrative_authenticity_telemetry"],
+                },
+                "reasons": ["missing_narrative_authenticity_telemetry"],
+                "supporting_metrics": {},
             },
-            "rumor_realism_axes": {
-                "rumor_echo_control": 0,
-                "secondhand_realism": 0,
-                "rumor_repair_success": 0,
-                "rumor_relaxation_correctness": 0,
-                "rumor_state_hygiene": 0,
-            },
-            "rumor_realism_axis_reasons": {
-                "rumor_echo_control": ["missing_narrative_authenticity_telemetry"],
-                "secondhand_realism": ["missing_narrative_authenticity_telemetry"],
-                "rumor_repair_success": ["missing_narrative_authenticity_telemetry"],
-                "rumor_relaxation_correctness": ["missing_narrative_authenticity_telemetry"],
-                "rumor_state_hygiene": ["missing_narrative_authenticity_telemetry"],
-            },
-            "reasons": ["missing_narrative_authenticity_telemetry"],
-            "supporting_metrics": {},
-        }
+            response,
+        )
 
     text_signals: dict[str, Any] = {
         "has_digit": bool(re.search(r"\b\d+\b", text)),
@@ -711,4 +751,4 @@ def evaluate_narrative_authenticity(
         "reasons": list(dict.fromkeys(str(x) for x in reasons if str(x).strip())),
         "supporting_metrics": _supporting_metrics(merged),
     }
-    return out
+    return _finalize_na_eval_with_dead_turn_policy(out, response)

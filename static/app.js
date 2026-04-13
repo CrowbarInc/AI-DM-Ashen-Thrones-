@@ -1,6 +1,29 @@
 const API = '/api';
 let state = null;
 
+/** Developer-facing copy for blocked new campaign (infra/billing/preflight — not narrative). */
+function formatBlockedNewCampaignMessage(data){
+  const err = (data && data.error) ? String(data.error) : 'Could not start a new campaign.';
+  const op = data && data.upstream_dependent_run_gate_operator;
+  const lines = [err, '', 'This is an infrastructure, billing, or upstream preflight issue — not a narrative failure.'];
+  if(op){
+    if(op.compact_banner) lines.push(String(op.compact_banner));
+    lines.push('upstream_gate_disposition: ' + String(op.upstream_gate_disposition || ''));
+    lines.push('gameplay_conclusions_valid: ' + String(!!op.gameplay_conclusions_valid));
+    if(op.block_reason != null && op.block_reason !== '') lines.push('block_reason: ' + String(op.block_reason));
+    if(op.preflight_health_class != null && op.preflight_health_class !== '') lines.push('preflight_health_class: ' + String(op.preflight_health_class));
+    if(op.action_hint) lines.push('action_hint: ' + String(op.action_hint));
+  }
+  return lines.join('\n');
+}
+
+function newCampaignBlockedDetails(data){
+  const out = {};
+  if(data && data.upstream_dependent_run_gate_operator) out.upstream_dependent_run_gate_operator = data.upstream_dependent_run_gate_operator;
+  if(data && data.upstream_dependent_run_gate) out.upstream_dependent_run_gate = data.upstream_dependent_run_gate;
+  return Object.keys(out).length ? out : null;
+}
+
 function $(id){ return document.getElementById(id); }
 function esc(s){ return String(s ?? '').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;'); }
 
@@ -331,6 +354,11 @@ $('clearLogBtn').addEventListener('click', async ()=>{ await fetchJSON(API+'/cle
 $('resetCombatBtn').addEventListener('click', async ()=>{ await fetchJSON(API+'/reset_combat',{method:'POST'}); await loadState(); });
 $('newCampaignBtn').addEventListener('click', async ()=>{
   const data = await fetchJSON(API+'/new_campaign', {method:'POST'});
+  if (!data || data.ok === false || data.status === 'blocked' || data.status !== 'ok'){
+    const msg = formatBlockedNewCampaignMessage(data);
+    addMessage('error', 'System', msg, newCampaignBlockedDetails(data));
+    return;
+  }
   console.log('Campaign reset complete', data.campaign_run_id || '');
   state = null;
   location.reload();

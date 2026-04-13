@@ -27,7 +27,17 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from game.api import chat  # noqa: E402
+from game.api_upstream_preflight import (  # noqa: E402
+    get_latest_upstream_api_preflight,
+    log_upstream_api_preflight_at_startup,
+)
+from game.upstream_dependent_run_gate import compute_upstream_dependent_run_gate  # noqa: E402
+from game.upstream_dependent_run_gate_presentation import build_upstream_dependent_run_gate_operator  # noqa: E402
 from game.campaign_reset import apply_new_campaign_hard_reset  # noqa: E402
+from game.dead_turn_report_visibility import (  # noqa: E402
+    build_dead_turn_run_report,
+    markdown_dead_turn_header_block,
+)
 from game.models import ChatRequest  # noqa: E402
 from tests.helpers.behavioral_gauntlet_eval import evaluate_behavioral_gauntlet  # noqa: E402
 from tests.helpers.transcript_runner import (  # noqa: E402
@@ -168,7 +178,7 @@ GAUNTLETS: dict[str, GauntletSpec] = {
 
 ARTIFACTS_DIR = ROOT / "artifacts" / "manual_gauntlets"
 
-REPORT_VERSION = 1
+REPORT_VERSION = 2
 
 # High-signal key substrings for generic trace walking (schema-tolerant).
 _SIGNAL_KEY_RE = re.compile(
@@ -638,16 +648,18 @@ def _behavioral_turn_rows_from_records(records: list[dict[str, Any]]) -> list[di
             if ti is not None:
                 metadata["turn_index"] = ti
 
-            rows.append(
-                {
-                    "player_text": player,
-                    "gm_text": gm,
-                    "resolution_kind": resolution_kind,
-                    "speaker_id": speaker_id,
-                    "scene_id": scene_id,
-                    "metadata": metadata,
-                }
-            )
+            row_out: dict[str, Any] = {
+                "player_text": player,
+                "gm_text": gm,
+                "resolution_kind": resolution_kind,
+                "speaker_id": speaker_id,
+                "scene_id": scene_id,
+                "metadata": metadata,
+            }
+            fem = rec.get("_final_emission_meta") if isinstance(rec.get("_final_emission_meta"), dict) else {}
+            if fem:
+                row_out["_final_emission_meta"] = fem
+            rows.append(row_out)
         except Exception:
             rows.append(rec)
     return rows
@@ -689,6 +701,8 @@ def _build_summary(
     operator_notes: str | None = None,
     behavioral_eval: dict[str, Any] | None = None,
     behavioral_eval_warning: str | None = None,
+    dead_turn_report: dict[str, Any] | None = None,
+    upstream_dependent_run_gate: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     branch, commit = _git_meta()
     summary = RunSummary(
@@ -715,6 +729,13 @@ def _build_summary(
         out["behavioral_eval"] = behavioral_eval
     if behavioral_eval_warning:
         out["behavioral_eval_warning"] = behavioral_eval_warning
+    if dead_turn_report is not None:
+        out["dead_turn_report"] = dead_turn_report
+    if upstream_dependent_run_gate is not None:
+        out["upstream_dependent_run_gate"] = dict(upstream_dependent_run_gate)
+        out["upstream_dependent_run_gate_operator"] = build_upstream_dependent_run_gate_operator(
+            upstream_dependent_run_gate
+        )
     return out
 
 
@@ -951,6 +972,16 @@ def _format_turn_markdown(record: dict[str, Any]) -> str:
 
     gm = str(record.get("gm_text") or "")
     parts.extend([f"**GM (player-facing):**", _md_fence(gm), ""])
+    fem_dt = record.get("_final_emission_meta") if isinstance(record.get("_final_emission_meta"), dict) else {}
+    dead = fem_dt.get("dead_turn") if isinstance(fem_dt.get("dead_turn"), dict) else {}
+    if dead.get("is_dead_turn"):
+        parts.append("#### Dead turn (test metadata — not player-facing)")
+        parts.append(f"- **Class:** `{dead.get('dead_turn_class')}`")
+        rc = dead.get("dead_turn_reason_codes")
+        if isinstance(rc, list) and rc:
+            parts.append(f"- **Reason codes:** `{', '.join(str(x) for x in rc[:16])}`")
+        parts.append(f"- **manual_test_valid:** `{dead.get('manual_test_valid')}`")
+        parts.append("")
     parts.append(f"- `scene_id` (envelope): `{record.get('scene_id')}`")
     parts.append(f"- `session.active_scene_id`: `{record.get('active_scene_id')}`")
     parts.append(f"- `current_interlocutor`: `{record.get('current_interlocutor')}`")
@@ -992,28 +1023,71 @@ def _write_transcript(
     freeform: bool,
     reset_applied: bool,
     records: list[dict[str, Any]],
+    dead_turn_markdown_block: str | None = None,
+    upstream_dependent_run_gate: dict[str, Any] | None = None,
 ) -> None:
     branch, commit = _git_meta()
     started = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
     lines = [
         f"# Manual gauntlet transcript — {spec.gauntlet_id}",
         "",
-        f"- **Started:** {started}",
-        f"- **Git branch:** `{branch}`",
-        f"- **Git commit:** `{commit}`",
-        f"- **Label:** {spec.label}",
-        f"- **Mode:** {'freeform' if freeform else 'preset templates'}",
-        f"- **Hard reset before run:** {'yes' if reset_applied else 'no'}",
-        "",
-        "## Summary",
-        "",
-        spec.description,
-        "",
-        "> Full scenario, rubric, and failure modes: `docs/manual_gauntlets.md`.",
-        "",
-        "## Turns",
-        "",
     ]
+    gate_op: dict[str, Any] | None = None
+    if upstream_dependent_run_gate:
+        gate_op = build_upstream_dependent_run_gate_operator(upstream_dependent_run_gate)
+        banner = gate_op.get("compact_banner")
+        if isinstance(banner, str) and banner.strip():
+            lines.append(f"**{banner.strip()}**")
+            lines.append("")
+    lines.extend(
+        [
+            f"- **Started:** {started}",
+            f"- **Git branch:** `{branch}`",
+            f"- **Git commit:** `{commit}`",
+            f"- **Label:** {spec.label}",
+            f"- **Mode:** {'freeform' if freeform else 'preset templates'}",
+            f"- **Hard reset before run:** {'yes' if reset_applied else 'no'}",
+            "",
+        ]
+    )
+    if upstream_dependent_run_gate and gate_op is not None:
+        op = gate_op
+        disp = op.get("upstream_gate_disposition")
+        if disp != "healthy":
+            lines.extend(
+                [
+                    "## Operator upstream gate surface (BHC3)",
+                    "",
+                    _md_fence(json.dumps(op, indent=2, sort_keys=True)),
+                    "",
+                ]
+            )
+        lines.extend(
+            [
+                "## Upstream-dependent run gate (BHC2)",
+                "",
+                _md_fence(json.dumps(upstream_dependent_run_gate, indent=2, sort_keys=True)),
+                "",
+            ]
+        )
+    lines.extend(
+        [
+            "## Summary",
+            "",
+            spec.description,
+            "",
+            "> Full scenario, rubric, and failure modes: `docs/manual_gauntlets.md`.",
+            "",
+        ]
+    )
+    if dead_turn_markdown_block:
+        lines.extend([dead_turn_markdown_block.rstrip(), ""])
+    lines.extend(
+        [
+            "## Turns",
+            "",
+        ]
+    )
     for rec in records:
         lines.append(_format_turn_markdown(rec))
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -1029,8 +1103,16 @@ def _print_artifact_summary(
     raw_trace: Path | None,
     operator_verdict: str | None = None,
     operator_notes: str | None = None,
+    dead_turn_banner: str | None = None,
+    upstream_gate_banner: str | None = None,
 ) -> None:
     print("\n=== Gauntlet artifacts ===")
+    if upstream_gate_banner:
+        print(f"\n*** {upstream_gate_banner} ***")
+        print("(See summary upstream_dependent_run_gate_operator for disposition and action_hint.)\n")
+    if dead_turn_banner:
+        print(f"\n*** {dead_turn_banner} ***")
+        print("(This run is not valid for gameplay-quality conclusions; see summary dead_turn_report.)\n")
     print(f"- transcript:    {transcript.resolve()}")
     if summary is not None:
         print(f"- summary:       {summary.resolve()}")
@@ -1108,6 +1190,8 @@ def _build_parser() -> argparse.ArgumentParser:
 
 def main() -> int:
     args = _build_parser().parse_args()
+    if not args.list and get_latest_upstream_api_preflight() is None:
+        log_upstream_api_preflight_at_startup()
     if args.list:
         for gid in sorted(GAUNTLETS.keys()):
             g = GAUNTLETS[gid]
@@ -1118,6 +1202,31 @@ def main() -> int:
     if not args.gauntlet:
         print("error: --gauntlet is required unless using --list", file=sys.stderr)
         return 2
+
+    gate = compute_upstream_dependent_run_gate()
+    gate_op = build_upstream_dependent_run_gate_operator(gate)
+    if gate.get("manual_testing_blocked"):
+        b = gate_op.get("compact_banner")
+        if isinstance(b, str) and b.strip():
+            print(f"[upstream_dependent_run_gate] {b.strip()}", file=sys.stderr)
+        print(f"[upstream_dependent_run_gate] action_hint: {gate_op.get('action_hint')}", file=sys.stderr)
+        print(
+            "[upstream_dependent_run_gate] Manual gauntlet blocked: cached upstream preflight "
+            f"invalidates live narration (health_class={gate.get('preflight_health_class')!r}).",
+            file=sys.stderr,
+        )
+        return 1
+    if not gate.get("preflight_available"):
+        b = gate_op.get("compact_banner")
+        if isinstance(b, str) and b.strip():
+            print(f"[upstream_dependent_run_gate] {b.strip()}", file=sys.stderr)
+        print(f"[upstream_dependent_run_gate] action_hint: {gate_op.get('action_hint')}", file=sys.stderr)
+        print(
+            "[upstream_dependent_run_gate] Preflight unavailable — startup_run_valid is false; "
+            "do not treat this run as authoritative live-upstream validation "
+            f"(block_reason={gate.get('block_reason')!r}).",
+            file=sys.stderr,
+        )
 
     spec = GAUNTLETS[args.gauntlet]
     started_utc = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
@@ -1153,12 +1262,16 @@ def main() -> int:
 
     base = _artifact_base_name(spec, args.artifact_prefix)
     transcript_path = ARTIFACTS_DIR / f"{base}_transcript.md"
+    dead_turn_report_payload = build_dead_turn_run_report(records)
+    dead_md = markdown_dead_turn_header_block(dead_turn_report_payload)
     _write_transcript(
         transcript_path,
         spec=spec,
         freeform=bool(args.freeform),
         reset_applied=reset_applied,
         records=records,
+        dead_turn_markdown_block=dead_md,
+        upstream_dependent_run_gate=gate,
     )
 
     summary_path: Path | None = None
@@ -1210,6 +1323,8 @@ def main() -> int:
             operator_notes=operator_notes,
             behavioral_eval=be_payload,
             behavioral_eval_warning=be_warn,
+            dead_turn_report=dead_turn_report_payload,
+            upstream_dependent_run_gate=gate,
         )
         _json_dump(summary_path, summary_payload)
         _json_dump(key_events_path, key_events_serialized)
@@ -1222,6 +1337,8 @@ def main() -> int:
             {"records": _sanitize_raw_trace_payload(records), "report_version": REPORT_VERSION},
         )
 
+    ug_banner = build_upstream_dependent_run_gate_operator(gate).get("compact_banner")
+    ug_banner_s = str(ug_banner).strip() if isinstance(ug_banner, str) else None
     _print_artifact_summary(
         transcript=transcript_path,
         summary=summary_path,
@@ -1230,6 +1347,8 @@ def main() -> int:
         raw_trace=raw_trace_path if raw_written else None,
         operator_verdict=operator_verdict,
         operator_notes=operator_notes,
+        dead_turn_banner=str(dead_turn_report_payload.get("banner") or "").strip() or None,
+        upstream_gate_banner=ug_banner_s,
     )
     return 0
 

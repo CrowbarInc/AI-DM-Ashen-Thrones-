@@ -100,6 +100,7 @@ def snapshot_from_chat_payload(turn_index: int, player_text: str, payload: dict[
     """Build a single turn snapshot from ``chat``'s return value (``_build_turn_response_payload`` shape)."""
     gm = payload.get("gm_output") if isinstance(payload.get("gm_output"), dict) else {}
     gm_text = gm.get("player_facing_text") if isinstance(gm.get("player_facing_text"), str) else ""
+    fem = gm.get("_final_emission_meta") if isinstance(gm.get("_final_emission_meta"), dict) else {}
 
     scene = payload.get("scene") if isinstance(payload.get("scene"), dict) else {}
     scene_inner = scene.get("scene") if isinstance(scene.get("scene"), dict) else {}
@@ -128,6 +129,7 @@ def snapshot_from_chat_payload(turn_index: int, player_text: str, payload: dict[
         "turn_index": turn_index,
         "player_text": player_text,
         "gm_text": gm_text,
+        "_final_emission_meta": fem,
         "scene_id": scene_id,
         "current_interlocutor": current_interlocutor,
         "interaction_context": dict(ic),
@@ -189,10 +191,16 @@ def compact_snapshot_summary(snap: dict[str, Any], *, gm_chars: int = 120) -> st
         gm = gm[: gm_chars - 3] + "..."
     tgt = latest_target_id(snap) or "—"
     src = latest_target_source(snap) or "—"
+    fem = snap.get("_final_emission_meta") if isinstance(snap.get("_final_emission_meta"), dict) else {}
+    dt = fem.get("dead_turn") if isinstance(fem.get("dead_turn"), dict) else {}
+    dead_hint = ""
+    if dt.get("is_dead_turn"):
+        cls = dt.get("dead_turn_class")
+        dead_hint = f" dead_turn_class={cls!r}"
     return (
         f"t{snap.get('turn_index')!r} scene={snap.get('scene_id')!r} "
         f"interlocutor={snap.get('current_interlocutor')!r} "
-        f"target={tgt!r}({src}) gm={gm!r}"
+        f"target={tgt!r}({src}) gm={gm!r}{dead_hint}"
     )
 
 

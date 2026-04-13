@@ -2671,3 +2671,82 @@ def test_social_response_structure_coexists_with_tone_escalation_layer(monkeypat
     meta = out.get("_final_emission_meta") or {}
     assert "tone_escalation_checked" in meta
     assert meta.get("candidate_validation_passed") is True
+
+
+# --- Appended global-visibility stock: last-mile owner is _finalize_emission_output (not sanitizer-only). ---
+
+
+def test_strip_appended_global_visibility_stock_multi_sentence_trailing():
+    raw = (
+        "The clerk taps the ledger. "
+        "For a breath, the scene holds while voices shift around you."
+    )
+    stripped = feg._strip_appended_route_illegal_contamination_sentences(raw)
+    assert stripped == "The clerk taps the ledger."
+
+
+def test_strip_appended_global_visibility_stock_alt_sentence_variant():
+    raw = "Fog hugs the river tents. For a breath, the scene stays still."
+    assert feg._strip_appended_route_illegal_contamination_sentences(raw) == "Fog hugs the river tents."
+
+
+def test_strip_placeholder_stock_single_sentence_output_unchanged():
+    solo = "For a breath, the scene stays still."
+    assert feg._strip_appended_route_illegal_contamination_sentences(solo) == solo
+
+
+def test_strip_preserves_dialogue_sentence_containing_for_a_breath_stock_phrase():
+    text = 'The runner shrugs. "For a breath, the scene stays still," she adds with a smirk.'
+    assert feg._strip_appended_route_illegal_contamination_sentences(text) == text
+
+
+def test_strip_preserves_interruption_setup_strips_only_trailing_stock_sentence():
+    intr = (
+        "The clerk starts to answer, but a shout from the square cuts across the room. "
+        "For a breath, the scene holds while voices shift around you."
+    )
+    out = feg._strip_appended_route_illegal_contamination_sentences(intr)
+    assert "shout from the square" in out.lower()
+    assert "voices shift around you" not in out.lower()
+
+
+def test_strip_preserves_paragraph_break_when_stripping_within_second_block():
+    raw = "First block line.\n\nSecond block body. For a breath, the scene stays still."
+    got = feg._strip_appended_route_illegal_contamination_sentences(raw)
+    assert "\n\n" in got
+    assert "First block line." in got
+    assert "Second block body." in got
+    assert "scene stays still" not in got.lower()
+
+
+def test_strip_does_not_remove_unrelated_multi_sentence_atmosphere():
+    raw = (
+        "Mist threads between the tents. "
+        "Somewhere a dog barks once, and the sound thins in damp air."
+    )
+    assert feg._strip_appended_route_illegal_contamination_sentences(raw) == raw
+
+
+def test_finalize_emission_output_post_containment_reseals_appended_stock(monkeypatch):
+    """Block I containment can revert to selector text after exit fingerprinting; stock strip must still win."""
+    selector = (
+        "Rain drums steady on the slate roof above. "
+        "For a breath, the scene stays still."
+    )
+    out = {
+        "player_facing_text": selector,
+        "_final_emission_meta": {"final_route": "accept_candidate"},
+        "tags": [],
+        "metadata": {},
+    }
+
+    def _simulate_containment_revert(o: dict, **kwargs):
+        o["player_facing_text"] = selector
+        return False
+
+    monkeypatch.setattr(feg, "_finalize_upstream_fallback_overwrite_containment", _simulate_containment_revert)
+    pre = feg._normalize_text(selector)
+    finalized = feg._finalize_emission_output(out, pre_gate_text=pre, fast_path=True)
+    pft = (finalized.get("player_facing_text") or "").lower()
+    assert "rain drums" in pft
+    assert "scene stays still" not in pft

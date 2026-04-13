@@ -2,14 +2,21 @@
 
 **Canonical boundary (post–Block C2):** :func:`game.final_emission_gate.apply_final_emission_gate` remains the
 **orchestration owner** — sequencing layers, repairs, and merges. This module is **metadata-only**:
-stable dict shapes for FEM / NA fields, slimming, and read-side coercion for deterministic consumers.
+stable dict shapes for FEM / NA fields, slimming, read-side coercion for deterministic consumers,
+and :func:`classify_dead_turn` (written into ``_final_emission_meta["dead_turn"]`` at gate exit).
 
 Validation criteria and repair control stay in :mod:`game.narrative_authenticity` /
 :mod:`game.final_emission_repairs` (orchestration wiring), not here.
 """
 from __future__ import annotations
 
-from typing import Any, Dict, Mapping
+from typing import Any, Dict, Mapping, MutableMapping
+
+# ``accepted_via`` values that can carry ``retry_exhausted`` / terminal flags from legitimate
+# deterministic repairs without implying an upstream API / infra failure by themselves.
+_LEGITIMATE_RESOLUTION_REPAIR_ACCEPTED_VIA: frozenset[str] = frozenset(
+    {"social_resolution_repair", "nonsocial_resolution_repair"}
+)
 
 # Keys merged from NA layer debug into ``gm_output['_final_emission_meta']`` (contract-driven, stable names).
 NARRATIVE_AUTHENTICITY_FEM_KEYS: frozenset[str] = frozenset(
@@ -205,6 +212,215 @@ def build_narrative_authenticity_emission_trace(
     else:
         out["narrative_authenticity_repair_modes"] = []
     return out
+
+
+def _tag_set(gm_output: Mapping[str, Any]) -> frozenset[str]:
+    raw = gm_output.get("tags") if isinstance(gm_output.get("tags"), list) else []
+    return frozenset(str(t).strip() for t in raw if isinstance(t, str) and str(t).strip())
+
+
+def _upstream_api_error(md: Mapping[str, Any]) -> Dict[str, Any] | None:
+    err = md.get("upstream_api_error")
+    return dict(err) if isinstance(err, dict) and err else None
+
+
+def _infra_error_tags(tags: frozenset[str]) -> bool:
+    if "gpt_api_error_nonretryable" in tags:
+        return True
+    return any(t.startswith("upstream_api_failure:") for t in tags)
+
+
+def _fast_fallback_lane(*, md: Mapping[str, Any], tags: frozenset[str]) -> bool:
+    if str(md.get("latency_mode") or "").strip() == "fast_fallback":
+        return True
+    if "upstream_api_fast_fallback" in tags:
+        return True
+    if "fast_fallback" in tags:
+        return True
+    return False
+
+
+def _forced_retry_terminal_route(gm_output: Mapping[str, Any]) -> bool:
+    return str(gm_output.get("accepted_via") or "").strip() == "forced_fallback" and str(
+        gm_output.get("final_route") or ""
+    ).strip() == "forced_retry_fallback"
+
+
+def _strong_infra_dead_signals(
+    *,
+    has_upstream: bool,
+    fast_fallback_lane: bool,
+    forced_terminal: bool,
+    tags: frozenset[str],
+) -> bool:
+    """Explicit infra / API failure bundle (not merely ``retry_exhausted`` on a repair path)."""
+    if has_upstream and (fast_fallback_lane or _infra_error_tags(tags) or forced_terminal):
+        return True
+    return False
+
+
+def classify_dead_turn(gm_output: Mapping[str, Any] | None) -> Dict[str, Any]:
+    """Deterministic classifier: turns that did not run through the intended model path.
+
+    Policy is intentionally narrow: generic ``forced_retry_fallback`` text or tags alone
+    never mark a dead turn without explicit upstream / fast-fallback / forced-terminal
+    metadata defined in this function.
+    """
+    base = {
+        "is_dead_turn": False,
+        "dead_turn_reason_codes": [],
+        "dead_turn_class": "none",
+        "validation_playable": True,
+        "manual_test_valid": True,
+    }
+    if not isinstance(gm_output, Mapping):
+        return dict(base)
+
+    md = gm_output.get("metadata") if isinstance(gm_output.get("metadata"), dict) else {}
+    tags = _tag_set(gm_output)
+    upstream = _upstream_api_error(md)
+    has_upstream = upstream is not None
+    fast_fb = _fast_fallback_lane(md=md, tags=tags)
+    forced_terminal = _forced_retry_terminal_route(gm_output)
+    retry_bundle = gm_output.get("retry_exhausted") is True and gm_output.get("targeted_retry_terminal") is True
+    malformed = md.get("malformed_emergency_output") is True
+
+    reason_codes: list[str] = []
+    if malformed:
+        reason_codes.append("malformed_emergency_output")
+    if has_upstream:
+        reason_codes.append("upstream_api_error")
+        fc = str((upstream or {}).get("failure_class") or "").strip()
+        if fc:
+            reason_codes.append(f"upstream_failure_class:{fc}")
+    if fast_fb:
+        reason_codes.append("fast_fallback_lane")
+    if forced_terminal:
+        reason_codes.append("forced_retry_terminal_route")
+    if retry_bundle:
+        reason_codes.append("retry_exhausted_targeted_retry_terminal")
+    if _infra_error_tags(tags):
+        reason_codes.append("infra_error_tags")
+
+    if malformed:
+        out = dict(base)
+        out["is_dead_turn"] = True
+        out["dead_turn_reason_codes"] = reason_codes
+        out["dead_turn_class"] = "malformed_emergency_output"
+        out["validation_playable"] = False
+        out["manual_test_valid"] = False
+        return out
+
+    accepted = str(gm_output.get("accepted_via") or "").strip()
+    if accepted in _LEGITIMATE_RESOLUTION_REPAIR_ACCEPTED_VIA:
+        if not _strong_infra_dead_signals(
+            has_upstream=has_upstream,
+            fast_fallback_lane=fast_fb,
+            forced_terminal=forced_terminal,
+            tags=tags,
+        ):
+            return dict(base)
+
+    is_dead = bool(
+        has_upstream
+        and (
+            fast_fb
+            or _infra_error_tags(tags)
+            or (forced_terminal and retry_bundle)
+        )
+    )
+
+    if not is_dead:
+        return dict(base)
+
+    dead_class = "upstream_api_failure"
+    if forced_terminal and retry_bundle and (fast_fb or "retry_escape_hatch" in tags):
+        dead_class = "retry_terminal_fallback"
+    elif has_upstream and forced_terminal and not (retry_bundle and (fast_fb or "retry_escape_hatch" in tags)):
+        dead_class = "forced_fallback_nonplayable"
+
+    out = dict(base)
+    out["is_dead_turn"] = True
+    out["dead_turn_reason_codes"] = reason_codes
+    out["dead_turn_class"] = dead_class
+    out["validation_playable"] = False
+    out["manual_test_valid"] = False
+    return out
+
+
+def merge_dead_turn_classification_into_final_emission_meta(gm_output: MutableMapping[str, Any]) -> None:
+    """Write :func:`classify_dead_turn` result to ``gm_output['_final_emission_meta']['dead_turn']`` (single SOT)."""
+    if not isinstance(gm_output, MutableMapping):
+        return
+    status = classify_dead_turn(gm_output)
+    meta = gm_output.get("_final_emission_meta")
+    if not isinstance(meta, dict):
+        meta = {}
+        gm_output["_final_emission_meta"] = meta
+    meta["dead_turn"] = status
+
+
+_DEAD_TURN_READ_DEFAULTS: Dict[str, Any] = {
+    "is_dead_turn": False,
+    "dead_turn_reason_codes": [],
+    "dead_turn_class": "none",
+    "validation_playable": True,
+    "manual_test_valid": True,
+}
+
+
+def read_dead_turn_from_gm_output(gm_output: Mapping[str, Any] | None) -> Dict[str, Any]:
+    """Read-only view of DTD1 status from ``gm_output['_final_emission_meta']['dead_turn']``.
+
+    Does **not** classify or merge; missing keys yield stable defaults (validation_playable=True).
+    """
+    out = dict(_DEAD_TURN_READ_DEFAULTS)
+    if not isinstance(gm_output, Mapping):
+        return out
+    fem = gm_output.get("_final_emission_meta")
+    if not isinstance(fem, Mapping):
+        return out
+    snap = fem.get("dead_turn")
+    if not isinstance(snap, Mapping):
+        return out
+    if "is_dead_turn" in snap:
+        out["is_dead_turn"] = bool(snap.get("is_dead_turn"))
+    rc = snap.get("dead_turn_reason_codes")
+    if isinstance(rc, list):
+        out["dead_turn_reason_codes"] = [str(x) for x in rc if str(x).strip()]
+    dc = snap.get("dead_turn_class")
+    if isinstance(dc, str) and dc.strip():
+        out["dead_turn_class"] = dc.strip()
+    if "validation_playable" in snap:
+        out["validation_playable"] = bool(snap.get("validation_playable"))
+    if "manual_test_valid" in snap:
+        out["manual_test_valid"] = bool(snap.get("manual_test_valid"))
+    return out
+
+
+def summarize_gameplay_validation_for_turn(dt: Mapping[str, Any] | None) -> Dict[str, Any]:
+    """Aggregate evaluation policy fields from a DTD1 ``dead_turn`` snapshot (already read from FEM)."""
+    row = dict(dt or _DEAD_TURN_READ_DEFAULTS)
+    validation_playable = bool(row.get("validation_playable", True))
+    is_dead = bool(row.get("is_dead_turn"))
+    excluded = not validation_playable
+    dead_turn_count = 1 if is_dead else 0
+    infra_failure_count = 1 if is_dead else 0
+    invalidation_reason: str | None = None
+    if excluded:
+        if is_dead:
+            cls = str(row.get("dead_turn_class") or "unknown").strip() or "unknown"
+            invalidation_reason = f"excluded_from_score:dead_turn:{cls}"
+        else:
+            invalidation_reason = "excluded_from_score:non_playable_turn"
+    return {
+        "run_valid": not excluded,
+        "excluded_from_scoring": excluded,
+        "invalidation_reason": invalidation_reason,
+        "dead_turn_count": dead_turn_count,
+        "infra_failure_count": infra_failure_count,
+        "dead_turn": dict(row),
+    }
 
 
 def normalize_merged_na_telemetry_for_eval(merged: Mapping[str, Any] | None) -> dict[str, Any]:

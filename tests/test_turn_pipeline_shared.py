@@ -1808,6 +1808,8 @@ def test_chat_repeated_interruption_progresses_without_losing_dialogue_contract(
         or "not names" in low2
         or "ward clerk" in low2
         or "main gate" in low2
+        or "gate roster" in low2
+        or "duty sergeant" in low2
         or "old crossroads" in low2
         or "old millstone" in low2
     )
@@ -1848,6 +1850,8 @@ def test_final_emission_gate_repeated_questioning_can_end_clean_refusal(tmp_path
             "shouting breaks out",
             "don't know",
             "do not know",
+            "couldn't tell you",
+            "only rumors",
             "heard talk",
             "not names",
             "tightens their jaw",

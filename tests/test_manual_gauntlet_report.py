@@ -11,6 +11,8 @@ from unittest.mock import patch
 
 import pytest
 
+from game.dead_turn_report_visibility import build_dead_turn_run_report
+
 from tests.helpers.behavioral_gauntlet_eval import SCHEMA_VERSION as BEHAVIORAL_SCHEMA_VERSION
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -201,6 +203,7 @@ def test_build_summary_stable_fields_and_defaults(rmg_mod, tmp_path):
     spec = _spec(rmg_mod, "g4")
     transcript = tmp_path / "dummy_transcript.md"
     records = [{"turn_index": 0, "ok": True}, {"turn_index": 1, "ok": True}]
+    dtr = build_dead_turn_run_report(records)
     with patch.object(rmg_mod, "_git_meta", return_value=("fixture-branch", "fixture-commit")):
         summary = rmg_mod._build_summary(
             spec,
@@ -211,8 +214,11 @@ def test_build_summary_stable_fields_and_defaults(rmg_mod, tmp_path):
             transcript_path=transcript,
             raw_trace_written=True,
             event_count=7,
+            dead_turn_report=dtr,
         )
     assert summary["report_version"] == rmg_mod.REPORT_VERSION
+    assert summary["dead_turn_report"] == dtr
+    assert summary["dead_turn_report"]["schema_version"] == "dead_turn_report_visibility.v1"
     assert summary["gauntlet_id"] == "g4"
     assert summary["label"] == spec.label
     assert summary["description"] == spec.description
@@ -431,6 +437,23 @@ def test_simulated_run_uses_single_basename_for_all_artifacts(rmg_mod):
 
 
 # --- Existing small helpers ---
+
+
+def test_write_transcript_inserts_dead_turn_markdown_block(rmg_mod, tmp_path):
+    spec = _spec(rmg_mod, "g1")
+    dead_md = "## Dead turn / run validity (test report)\n\n> **DEAD TURN DETECTED — x**\n"
+    path = tmp_path / "t.md"
+    rmg_mod._write_transcript(
+        path,
+        spec=spec,
+        freeform=False,
+        reset_applied=False,
+        records=[{"turn_index": 0, "ok": True, "player_text": "Hi", "gm_text": "Hello.", "debug": {}}],
+        dead_turn_markdown_block=dead_md,
+    )
+    text = path.read_text(encoding="utf-8")
+    assert "DEAD TURN DETECTED" in text
+    assert "## Turns" in text
 
 
 def test_safe_get(rmg_mod):

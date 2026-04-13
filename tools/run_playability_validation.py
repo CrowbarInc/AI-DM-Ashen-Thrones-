@@ -21,9 +21,20 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+from game.api_upstream_preflight import (  # noqa: E402
+    get_latest_upstream_api_preflight,
+    log_upstream_api_preflight_at_startup,
+)
 from game.campaign_reset import apply_new_campaign_hard_reset  # noqa: E402
+from game.upstream_dependent_run_gate import compute_upstream_dependent_run_gate  # noqa: E402
+from game.upstream_dependent_run_gate_presentation import build_upstream_dependent_run_gate_operator  # noqa: E402
+from game.dead_turn_report_visibility import (  # noqa: E402
+    build_dead_turn_run_report,
+    enrich_playability_rollup_dict,
+    per_turn_dead_turn_visibility,
+)
 from game.narrative_authenticity_eval import evaluate_narrative_authenticity  # noqa: E402
-from game.playability_eval import evaluate_playability  # noqa: E402
+from game.playability_eval import evaluate_playability, rollup_playability_gameplay_validation  # noqa: E402
 
 
 @dataclass(frozen=True)
@@ -111,6 +122,7 @@ def _build_eval_payload(
     prior_player: str,
     prior_gm: str,
     debug_traces: Any,
+    gm_output: Mapping[str, Any] | None,
 ) -> dict[str, Any]:
     out: dict[str, Any] = {
         "player_prompt": player_prompt,
@@ -122,10 +134,19 @@ def _build_eval_payload(
         out["prior_gm_text"] = prior_gm
     if debug_traces is not None:
         out["debug_traces"] = debug_traces
+    if isinstance(gm_output, Mapping):
+        out["gm_output"] = dict(gm_output)
     return out
 
 
-def summary_from_eval(scenario_id: str, eval_out: Mapping[str, Any]) -> dict[str, Any]:
+def summary_from_eval(
+    scenario_id: str,
+    eval_out: Mapping[str, Any],
+    *,
+    run_gameplay_validation: Mapping[str, Any] | None = None,
+    dead_turn_report: Mapping[str, Any] | None = None,
+    upstream_dependent_run_gate: Mapping[str, Any] | None = None,
+) -> dict[str, Any]:
     """Session summary JSON: thin mirror of evaluator top-level fields (no reinterpretation)."""
     axes = eval_out.get("axes")
     axis_scores: dict[str, Any] = {}
@@ -134,14 +155,24 @@ def summary_from_eval(scenario_id: str, eval_out: Mapping[str, Any]) -> dict[str
             if isinstance(v, Mapping) and "score" in v:
                 axis_scores[str(k)] = v.get("score")
     summ = eval_out.get("summary") if isinstance(eval_out.get("summary"), Mapping) else {}
-    return {
-        "report_version": 1,
+    out: dict[str, Any] = {
+        "report_version": 3,
         "scenario_id": scenario_id,
         "overall": eval_out.get("overall"),
         "axis_scores": axis_scores,
         "failures": summ.get("failures"),
         "warnings": summ.get("warnings"),
     }
+    if isinstance(run_gameplay_validation, Mapping):
+        out["run_gameplay_validation"] = dict(run_gameplay_validation)
+    if isinstance(dead_turn_report, Mapping):
+        out["dead_turn_report"] = dict(dead_turn_report)
+    if isinstance(upstream_dependent_run_gate, Mapping):
+        out["upstream_dependent_run_gate"] = dict(upstream_dependent_run_gate)
+        out["upstream_dependent_run_gate_operator"] = build_upstream_dependent_run_gate_operator(
+            upstream_dependent_run_gate
+        )
+    return out
 
 
 ChatCaller = Callable[[str], dict[str, Any]]
@@ -180,6 +211,7 @@ def run_scenario(
     *,
     chat_call: ChatCaller,
     apply_reset: bool,
+    upstream_dependent_run_gate: Mapping[str, Any] | None = None,
 ) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     """Return (turn_records, summary_json_dict)."""
     if apply_reset:
@@ -195,12 +227,14 @@ def run_scenario(
             payload = {"ok": False, "error": "chat caller returned non-dict"}
 
         gm_text = _gm_text_from_chat_payload(payload)
+        gm_out = payload.get("gm_output") if isinstance(payload.get("gm_output"), dict) else {}
         eval_in = _build_eval_payload(
             player_prompt=player_prompt,
             gm_text=gm_text,
             prior_player=prior_player,
             prior_gm=prior_gm,
             debug_traces=_session_debug_traces(payload),
+            gm_output=gm_out,
         )
         playability_eval = evaluate_playability(eval_in)
         turn_packet = {
@@ -208,11 +242,14 @@ def run_scenario(
             "prior_player_prompt": prior_player,
             "prior_gm_text": prior_gm,
         }
+        fem = _final_emission_meta_from_chat_payload(payload)
         na_eval = evaluate_narrative_authenticity(
             turn_packet,
             payload,
-            _final_emission_meta_from_chat_payload(payload),
+            fem,
         )
+        api_ok = bool(payload.get("ok"))
+        dead_vis = per_turn_dead_turn_visibility({"_final_emission_meta": fem, "ok": api_ok}, turn_index=idx)
 
         turns_out.append(
             {
@@ -222,8 +259,10 @@ def run_scenario(
                 "resolution_kind": _resolution_kind(payload),
                 "playability_eval": playability_eval,
                 "narrative_authenticity_eval": na_eval,
-                "api_ok": bool(payload.get("ok")),
+                "api_ok": api_ok,
                 "api_error": payload.get("error"),
+                "_final_emission_meta": fem,
+                "dead_turn_visibility": dead_vis,
             }
         )
 
@@ -231,7 +270,16 @@ def run_scenario(
         prior_gm = gm_text
 
     last_eval = turns_out[-1]["playability_eval"] if turns_out else evaluate_playability({})
-    summary = summary_from_eval(spec.scenario_id, last_eval)
+    rollup = rollup_playability_gameplay_validation(turns_out)
+    rollup = enrich_playability_rollup_dict(turns_out, rollup)
+    dead_rep = build_dead_turn_run_report(turns_out)
+    summary = summary_from_eval(
+        spec.scenario_id,
+        last_eval,
+        run_gameplay_validation=rollup,
+        dead_turn_report=dead_rep,
+        upstream_dependent_run_gate=upstream_dependent_run_gate,
+    )
     return turns_out, summary
 
 
@@ -293,6 +341,33 @@ def main(argv: list[str] | None = None) -> int:
         _build_parser().print_help()
         return 2
 
+    if get_latest_upstream_api_preflight() is None:
+        log_upstream_api_preflight_at_startup()
+    gate = compute_upstream_dependent_run_gate()
+    gate_op = build_upstream_dependent_run_gate_operator(gate)
+    if gate.get("manual_testing_blocked"):
+        b = gate_op.get("compact_banner")
+        if isinstance(b, str) and b.strip():
+            print(f"[upstream_dependent_run_gate] {b.strip()}", file=sys.stderr)
+        print(f"[upstream_dependent_run_gate] action_hint: {gate_op.get('action_hint')}", file=sys.stderr)
+        print(
+            "[upstream_dependent_run_gate] Playability validation blocked: cached upstream preflight "
+            f"invalidates live narration (health_class={gate.get('preflight_health_class')!r}).",
+            file=sys.stderr,
+        )
+        return 1
+    if not gate.get("preflight_available"):
+        b = gate_op.get("compact_banner")
+        if isinstance(b, str) and b.strip():
+            print(f"[upstream_dependent_run_gate] {b.strip()}", file=sys.stderr)
+        print(f"[upstream_dependent_run_gate] action_hint: {gate_op.get('action_hint')}", file=sys.stderr)
+        print(
+            "[upstream_dependent_run_gate] Preflight unavailable — startup_run_valid is false; "
+            "artifacts record block_reason for downstream review "
+            f"({gate.get('block_reason')!r}).",
+            file=sys.stderr,
+        )
+
     apply_reset = not args.no_reset
     stamp = _utc_slug()
     base_dir: Path = args.artifact_dir
@@ -300,11 +375,19 @@ def main(argv: list[str] | None = None) -> int:
     def _run_batch(chat_call: ChatCaller) -> None:
         for spec in to_run:
             run_dir = base_dir / f"{stamp}_{spec.scenario_id}"
-            turns, summary = run_scenario(spec, chat_call=chat_call, apply_reset=apply_reset)
+            turns, summary = run_scenario(
+                spec,
+                chat_call=chat_call,
+                apply_reset=apply_reset,
+                upstream_dependent_run_gate=gate,
+            )
             transcript = {
-                "report_version": 1,
+                "report_version": 2,
                 "scenario_id": spec.scenario_id,
                 "scenario_description": spec.description,
+                "upstream_dependent_run_gate": dict(gate),
+                "upstream_dependent_run_gate_operator": build_upstream_dependent_run_gate_operator(gate),
+                "dead_turn_report": summary.get("dead_turn_report"),
                 "turns": [
                     {
                         "turn_index": t["turn_index"],
@@ -313,6 +396,7 @@ def main(argv: list[str] | None = None) -> int:
                         "resolution_kind": t["resolution_kind"],
                         "playability_eval": t["playability_eval"],
                         "narrative_authenticity_eval": t.get("narrative_authenticity_eval"),
+                        "dead_turn_visibility": t.get("dead_turn_visibility"),
                     }
                     for t in turns
                 ],

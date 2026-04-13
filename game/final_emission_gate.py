@@ -24,6 +24,12 @@ packet resolver. ``_gate_turn_packet_cache`` is set at :func:`apply_final_emissi
 entry from :func:`game.turn_packet.get_turn_packet` and popped in
 :func:`_finalize_emission_output`; it must never leak into finalized output. Neither layer
 owns engine truth or narration policy.
+
+**Last-mile player text:** :func:`_finalize_emission_output` is the canonical exit owner for
+deterministic cleanup after sanitizer + optional decompress / fragment repair / micro-smooth
+(including :func:`_strip_appended_route_illegal_contamination_sentences` for the known
+global-visibility stock sentence family). :func:`game.output_sanitizer.sanitize_player_facing_output`
+does not carry sole responsibility for that family on the non-strict-social accept path.
 """
 from __future__ import annotations
 
@@ -111,6 +117,7 @@ from game.fallback_provenance_debug import (
     record_final_emission_gate_entry,
     record_final_emission_gate_exit,
 )
+from game.final_emission_meta import merge_dead_turn_classification_into_final_emission_meta
 from game.final_emission_text import (
     _ACTION_RESULT_PATTERNS,
     _AGENCY_SUBSTITUTE_PATTERNS,
@@ -4243,6 +4250,57 @@ def _finalize_upstream_fallback_overwrite_containment(
     return True
 
 
+_GLOBAL_VISIBILITY_PLACEHOLDER_STOCK_RES: tuple[re.Pattern[str], ...] = (
+    # Mirrors ``_global_narrative_fallback_stock_line`` and the empty-sanitizer stock in output_sanitizer.
+    re.compile(
+        r"^for\s+a\s+breath,?\s+the\s+scene\s+holds\s+while\s+voices\s+shift\s+around\s+you\.?$",
+        re.IGNORECASE,
+    ),
+    re.compile(r"^for\s+a\s+breath,?\s+the\s+scene\s+stays\s+still\.?$", re.IGNORECASE),
+)
+
+
+def _sentence_is_global_visibility_placeholder_stock(sentence: str) -> bool:
+    """True only for the known global visibility stock *sentence* (not quoted 'for a breath' asides)."""
+    t = _normalize_text(str(sentence or "").strip()).rstrip(".!?").strip()
+    if not t:
+        return False
+    return any(p.match(t) for p in _GLOBAL_VISIBILITY_PLACEHOLDER_STOCK_RES)
+
+
+def _strip_appended_route_illegal_contamination_sentences(text: str) -> str:
+    """Drop matching global-visibility stock sentences when other sentences remain in the same block.
+
+    Late-stage composition often appends ``_global_narrative_fallback_stock_line`` as its own sentence
+    after valid narration; the same patterns may appear as a non-final sentence in a contaminated
+    bundle. Strict-social paths reject this family upstream; generic narration relies on this
+    helper from :func:`_finalize_emission_output` so mixed bundles never reach players. Per-block
+    single-sentence outputs are left unchanged. Paragraph breaks (``\\n\\n``) are preserved.
+    """
+    raw = str(text or "").strip()
+    if not raw:
+        return raw
+    blocks = [b.strip() for b in raw.split("\n\n") if b.strip()]
+    if not blocks:
+        return raw
+    out_blocks: List[str] = []
+    changed = False
+    for block in blocks:
+        sents = [s.strip() for s in _split_sentences_answer_complete(block) if str(s).strip()]
+        if len(sents) <= 1:
+            out_blocks.append(block)
+            continue
+        kept = [s for s in sents if not _sentence_is_global_visibility_placeholder_stock(s)]
+        if not kept or len(kept) == len(sents):
+            out_blocks.append(block)
+            continue
+        changed = True
+        out_blocks.append(_normalize_text(" ".join(kept)))
+    if not changed:
+        return raw
+    return "\n\n".join(out_blocks).strip()
+
+
 def _finalize_emission_output(
     out: Dict[str, Any],
     *,
@@ -4267,6 +4325,7 @@ def _finalize_emission_output(
             repaired_text, fragment_repair_applied = _repair_fragmentary_participial_splits(decompressed_text)
         smoothed_text, sentence_micro_smoothing_applied = _micro_smooth_post_repair_sentences(repaired_text)
         sentence_decompression_applied = decompressed_text != sanitized_text
+    smoothed_text = _strip_appended_route_illegal_contamination_sentences(smoothed_text)
     sanitization_applied = sanitized_text != final_text
     out["player_facing_text"] = smoothed_text
 
@@ -4282,6 +4341,21 @@ def _finalize_emission_output(
     out["_final_emission_meta"] = meta
     record_final_emission_gate_exit(out, final_normalized_text=gate_out_text)
     _finalize_upstream_fallback_overwrite_containment(out, pre_gate_normalized=pre_gate_text)
+    # Block I containment restores the upstream selector snapshot when exit fingerprints diverge.
+    # Legitimate finalize-time edits (including appended stock removal) must not be undone, so
+    # re-apply the same narrow strip as the absolute last write on ``player_facing_text``.
+    pre_seal = str(out.get("player_facing_text") or "")
+    sealed = _strip_appended_route_illegal_contamination_sentences(pre_seal)
+    if sealed != pre_seal:
+        out["player_facing_text"] = sealed
+        meta2 = out.get("_final_emission_meta") if isinstance(out.get("_final_emission_meta"), dict) else {}
+        gate_norm_final = _normalize_text(sealed)
+        out["_final_emission_meta"] = {
+            **meta2,
+            "post_gate_mutation_detected": pre_gate_text != gate_norm_final,
+            "final_text_preview": (gate_norm_final[:120] + "…") if len(gate_norm_final) > 120 else gate_norm_final,
+        }
+    merge_dead_turn_classification_into_final_emission_meta(out)
     return out
 
 
@@ -7794,10 +7868,14 @@ def _apply_interaction_continuity_emission_step(
     if not isinstance(payload, dict) or not payload.get("enabled") or payload.get("ok") is True:
         return norm, [], False
 
+    ic_variation = ""
+    if isinstance(session, dict):
+        ic_variation = str(session.get("turn_counter") or "").strip()
     repair_result = repair_interaction_continuity(
         norm,
         validation=payload,
         interaction_continuity_contract=ic_contract,
+        variation_salt=ic_variation,
     )
     pre_violations = list(payload.get("violations") or [])
 

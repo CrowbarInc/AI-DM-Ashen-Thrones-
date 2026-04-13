@@ -7,7 +7,7 @@ import time
 from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, JSONResponse
 
 from game.models import ActionRequest, ChatRequest, ResponseModeUpdate, SnapshotCreateRequest
 from game.storage import (
@@ -152,6 +152,12 @@ from game.clues import (
     get_known_clues_with_presentation,
 )
 from game.final_emission_gate import apply_spoken_state_refinement_cash_out
+from game.api_upstream_preflight import log_upstream_api_preflight_at_startup
+from game.upstream_dependent_run_gate import compute_upstream_dependent_run_gate
+from game.upstream_dependent_run_gate_presentation import (
+    build_upstream_dependent_run_gate_operator,
+    print_upstream_gate_startup_operator_summary,
+)
 from game.interaction_routing import (
     _build_dialogue_first_action,
     _merged_text_for_dialogue_routing,
@@ -165,6 +171,8 @@ from game.interaction_routing import (
 async def lifespan(app: FastAPI):
     """Lifespan context manager: startup (ensure data files) and optional shutdown."""
     ensure_data_files_exist()
+    log_upstream_api_preflight_at_startup()
+    print_upstream_gate_startup_operator_summary(compute_upstream_dependent_run_gate())
     yield
 
 
@@ -909,8 +917,10 @@ def _build_gpt_narration_from_authoritative_state(
         sid = str((scene.get("scene") or {}).get("id") or "").strip()
         if route_choice == "dialogue":
             return True
-        if isinstance(resolution, dict) and isinstance(resolution.get("social"), dict):
-            return True
+        # Engine-resolved turns (``/api/action`` and structured ``/api/chat``) carry a concrete
+        # ``kind``; keep the full targeted-retry budget for validator_voice / question-shape races.
+        if isinstance(resolution, dict) and str(resolution.get("kind") or "").strip():
+            return False
         return bool(
             _session_social_authority(session)
             or strict_social_emission_will_apply(resolution, session, world, sid)
@@ -999,7 +1009,11 @@ def _build_gpt_narration_from_authoritative_state(
     retry_attempt = 0
     retry_loop_started: float | None = None
     social_dialogue_turn = _social_dialogue_turn()
-    max_targeted_retry_attempts = 1 if social_dialogue_turn else MAX_TARGETED_RETRY_ATTEMPTS
+    # Cap social-dialogue retries at one when the global budget allows it, but honor a test or
+    # manual monkeypatch that sets MAX_TARGETED_RETRY_ATTEMPTS to 0 (escape hatch on first failure).
+    max_targeted_retry_attempts = (
+        min(1, int(MAX_TARGETED_RETRY_ATTEMPTS)) if social_dialogue_turn else int(MAX_TARGETED_RETRY_ATTEMPTS)
+    )
     fast_fallback_mode = False
     upstream_api_error = _extract_upstream_api_error(gm)
     if upstream_api_error:
@@ -1173,7 +1187,9 @@ def _build_gpt_narration_from_authoritative_state(
         )
         use_question_retry_fallback = (selected_class == "unresolved_question" and still_failing) or (
             selected_class == "answer" and still_unresolved_after_answer_retry
-        ) or use_open_crowd_scene_stall_fallback
+        ) or use_open_crowd_scene_stall_fallback or (
+            selected_class == "followup_soft_repetition" and isinstance(still_failing, dict)
+        )
         if use_question_retry_fallback:
             _vf = still_failing if isinstance(still_failing, dict) else still_unresolved_after_answer_retry
             print(
@@ -1192,9 +1208,21 @@ def _build_gpt_narration_from_authoritative_state(
                     "reasons": ["retry_bridge:open_crowd_scene_stall"],
                 }
             else:
-                fallback_failure = (
-                    still_failing if selected_class == "unresolved_question" else selected_failure
-                )
+                if selected_class == "followup_soft_repetition" and isinstance(still_failing, dict):
+                    fallback_failure = {
+                        "failure_class": "unresolved_question",
+                        "priority": int(RETRY_FAILURE_PRIORITY.get("unresolved_question", 10)),
+                        "reasons": list(still_failing.get("reasons") or []),
+                        "followup_context": (
+                            still_failing.get("followup_context")
+                            if isinstance(still_failing.get("followup_context"), dict)
+                            else {}
+                        ),
+                    }
+                else:
+                    fallback_failure = (
+                        still_failing if selected_class == "unresolved_question" else selected_failure
+                    )
             deterministic_started = _now_perf()
             gm_retry = apply_deterministic_retry_fallback(
                 gm_retry,
@@ -1219,7 +1247,9 @@ def _build_gpt_narration_from_authoritative_state(
                 )
             )
             compare_class = (
-                "unresolved_question" if use_open_crowd_scene_stall_fallback else selected_class
+                "unresolved_question"
+                if use_open_crowd_scene_stall_fallback or selected_class == "followup_soft_repetition"
+                else selected_class
             )
             fallback_still_failing = any(
                 isinstance(failure, dict) and str(failure.get("failure_class") or "").strip() == compare_class
@@ -1637,11 +1667,27 @@ def api_reset_combat():
 @app.post('/api/new_campaign')
 def new_campaign():
     """Hard reset: new session graph, fresh combat, world playthrough cleared, transcript empty."""
+    gate = compute_upstream_dependent_run_gate()
+    gate_operator = build_upstream_dependent_run_gate_operator(gate)
+    if gate.get("manual_testing_blocked"):
+        return JSONResponse(
+            status_code=503,
+            content={
+                "ok": False,
+                "status": "blocked",
+                "error": (
+                    "Upstream API preflight indicates live narration is unhealthy; "
+                    "new campaign start is disabled until upstream recovers."
+                ),
+                "upstream_dependent_run_gate": gate,
+                "upstream_dependent_run_gate_operator": gate_operator,
+            },
+        )
     meta = apply_new_campaign_hard_reset()
     # When ASHEN_THRONES_DEV_VERIFY=1, ``campaign_reset`` prints a compact runtime-clean summary.
     if "dev_verify_ok" not in meta:
         print("[API] New campaign started", meta.get("campaign_run_id"))
-    return {"status": "ok", **meta}
+    return {"status": "ok", "upstream_dependent_run_gate": gate, "upstream_dependent_run_gate_operator": gate_operator, **meta}
 
 
 @app.post('/api/reset_session')

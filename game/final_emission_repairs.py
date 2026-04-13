@@ -2185,6 +2185,12 @@ def _apply_fallback_behavior_layer(
     meta = _default_fallback_behavior_meta()
     meta["fallback_behavior_contract_present"] = isinstance(contract, dict)
 
+    tags = gm_output.get("tags") if isinstance(gm_output.get("tags"), list) else []
+    tag_set = {str(t) for t in tags if isinstance(t, str)}
+    if "known_fact_guard" in tag_set and "question_retry_fallback" in tag_set:
+        meta["fallback_behavior_skip_reason"] = "deterministic_known_fact_retry_answer"
+        return text, meta, []
+
     v0 = validate_fallback_behavior(text, contract, resolution=resolution)
     meta["fallback_behavior_checked"] = bool(v0.get("checked"))
     meta["fallback_behavior_skip_reason"] = v0.get("skip_reason")

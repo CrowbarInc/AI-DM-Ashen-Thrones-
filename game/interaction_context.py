@@ -295,7 +295,9 @@ def get_social_exchange_interruption_tracker(session: Dict[str, Any] | None) -> 
     """Return exchange-local interruption tracking for the active scene."""
     if not isinstance(session, dict):
         return {}
-    tracker = _scene_state(session).get(_SOCIAL_EXCHANGE_INTERRUPTION_TRACKER_KEY)
+    st_tr = _scene_state(session).get(_SOCIAL_EXCHANGE_INTERRUPTION_TRACKER_KEY)
+    root_tr = session.get(_SOCIAL_EXCHANGE_INTERRUPTION_TRACKER_KEY)
+    tracker = st_tr if isinstance(st_tr, dict) and st_tr else root_tr
     if not isinstance(tracker, dict):
         return {}
     return dict(tracker)
@@ -310,9 +312,12 @@ def set_social_exchange_interruption_tracker(
         return
     state = _scene_state(session)
     if isinstance(tracker, dict) and tracker:
-        state[_SOCIAL_EXCHANGE_INTERRUPTION_TRACKER_KEY] = dict(tracker)
+        payload = dict(tracker)
+        state[_SOCIAL_EXCHANGE_INTERRUPTION_TRACKER_KEY] = payload
+        session[_SOCIAL_EXCHANGE_INTERRUPTION_TRACKER_KEY] = payload
         return
     state.pop(_SOCIAL_EXCHANGE_INTERRUPTION_TRACKER_KEY, None)
+    session.pop(_SOCIAL_EXCHANGE_INTERRUPTION_TRACKER_KEY, None)
 
 
 def clear_social_exchange_interruption_tracker(session: Dict[str, Any] | None) -> None:
@@ -4733,6 +4738,11 @@ def dialogue_intent_blocks_explicit_non_social_continuity_escape(
     spos = speech_m.start() if speech_m else None
     if spos is not None and (esc_pos is None or spos < esc_pos):
         return True
+    # Mixed turns: brief inspect/scan framing then an in-character question ("… while asking who …").
+    if esc_pos is not None and _looks_like_information_seeking_player_question(merged_text):
+        conj_m = re.search(r"\b(?:while|and)\s+(?:ask|asks|asking|tell|tells|saying)\b", lane)
+        if conj_m and conj_m.start() > esc_pos:
+            return True
     return False
 
 

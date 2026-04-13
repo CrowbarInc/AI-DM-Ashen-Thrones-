@@ -40,6 +40,8 @@ def test_transcript_runner_smoke_single_begin_turn(tmp_path, monkeypatch):
     low = gm_text.lower()
     assert "frontier" in low or "gate" in low
     assert snaps[0].get("scene_id") == "frontier_gate"
+    assert "_final_emission_meta" in snaps[0]
+    assert isinstance(snaps[0].get("_final_emission_meta"), dict)
 
     summary = compact_snapshot_summary(snaps[0])
     assert "frontier_gate" in summary

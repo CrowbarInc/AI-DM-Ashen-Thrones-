@@ -407,8 +407,9 @@ _NARRATION_WRAP_ACTION_VERBS_RE = re.compile(
 )
 
 
-def _pick_bridge_template(text: str) -> str:
-    h = int(hashlib.md5(text.encode("utf-8"), usedforsecurity=False).hexdigest(), 16)
+def _pick_bridge_template(text: str, *, variation_salt: str = "") -> str:
+    salt = f"{text}\n{str(variation_salt or '').strip()}"
+    h = int(hashlib.md5(salt.encode("utf-8"), usedforsecurity=False).hexdigest(), 16)
     return BRIDGE_TEMPLATES[h % len(BRIDGE_TEMPLATES)]
 
 
@@ -862,6 +863,7 @@ def _try_insert_explicit_bridge(
     text: str,
     *,
     interaction_continuity_contract: Dict[str, Any] | None = None,
+    variation_salt: str = "",
 ) -> tuple[str, bool, List[str]]:
     """Explicit narrator cue (validator-visible) + primary quoted utterance."""
     notes: List[str] = []
@@ -874,7 +876,7 @@ def _try_insert_explicit_bridge(
     frag = (primary.group(0) or "").strip()
     if not frag:
         return text, False, notes
-    cue = _pick_bridge_template(text)
+    cue = _pick_bridge_template(text, variation_salt=variation_salt)
     notes.append("prepended_explicit_cue_with_primary_quote")
     return cue + frag, True, notes
 
@@ -973,6 +975,7 @@ def repair_interaction_continuity(
     *,
     validation: Dict[str, Any],
     interaction_continuity_contract: Dict[str, Any] | None,
+    variation_salt: str = "",
 ) -> Dict[str, Any]:
     """Deterministic, minimal repair using only ``validation`` (+ optional contract for labels).
 
@@ -1041,7 +1044,9 @@ def repair_interaction_continuity(
             }
         if (v_multi or v_switch) and destroy:
             bridged, did_bridge, bn = _try_insert_explicit_bridge(
-                text, interaction_continuity_contract=interaction_continuity_contract
+                text,
+                interaction_continuity_contract=interaction_continuity_contract,
+                variation_salt=variation_salt,
             )
             notes.extend(bn)
             if did_bridge:

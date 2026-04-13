@@ -19,6 +19,11 @@ if __name__ == "__main__":
     # Set UVICORN_RELOAD=false temporarily when diagnosing env/reloader issues.
     reload_enabled = os.getenv("UVICORN_RELOAD", "true").strip().lower() in {"1", "true", "yes", "on"}
     print("Uvicorn reload enabled:", reload_enabled)
+    print(
+        "OpenAI API billing/health preflight runs during FastAPI worker startup; watch for [API preflight] lines "
+        "and the following [upstream_dependent_run_gate] summary (BHC3 operator surface).",
+        flush=True,
+    )
 
     uvicorn.run(
         "game.api:app",

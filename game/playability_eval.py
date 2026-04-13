@@ -1,15 +1,18 @@
 """Deterministic playability scoring for validation and gauntlets (advisory only).
 
-No LLM calls, no engine imports beyond stdlib. Tolerates missing/malformed payload
-fields and always returns a stable top-level schema.
+No LLM calls. Reads dead-turn policy from ``_final_emission_meta['dead_turn']`` via
+:mod:`game.final_emission_meta` (DTD1 single source of truth). Tolerates missing/malformed
+payload fields and always returns a stable top-level schema.
 """
 
 from __future__ import annotations
 
 import re
-from typing import Any, Mapping
+from typing import Any, Mapping, Sequence
 
-SCHEMA_VERSION = 1
+from game.final_emission_meta import read_dead_turn_from_gm_output, summarize_gameplay_validation_for_turn
+
+SCHEMA_VERSION = 2
 
 _STOPWORDS = frozenset(
     """
@@ -180,6 +183,16 @@ def _extract_gm_text(payload: Mapping[str, Any]) -> str:
 
 def _extract_player_text(payload: Mapping[str, Any]) -> str:
     return _safe_str(payload.get("player_prompt"))
+
+
+def _gm_output_for_dead_turn_read(payload: Mapping[str, Any]) -> Mapping[str, Any] | None:
+    go = payload.get("gm_output")
+    if isinstance(go, Mapping):
+        return go
+    fem = payload.get("_final_emission_meta")
+    if isinstance(fem, Mapping) and isinstance(fem.get("dead_turn"), Mapping):
+        return {"_final_emission_meta": fem}
+    return None
 
 
 def _extract_prior_pair(payload: Mapping[str, Any]) -> tuple[str, str]:
@@ -491,6 +504,7 @@ def evaluate_playability(payload: Any) -> dict[str, Any]:
     player = _extract_player_text(data)
     gm = _extract_gm_text(data)
     prior_player, prior_gm = _extract_prior_pair(data)
+    dt = read_dead_turn_from_gm_output(_gm_output_for_dead_turn_read(data))
 
     direct = _score_direct_answer(player=player, gm=gm)
     intent = _score_player_intent(player=player, gm=gm, prior_player=prior_player)
@@ -529,9 +543,43 @@ def evaluate_playability(payload: Any) -> dict[str, Any]:
     overall = _finalize_overall(direct=direct, intent=intent, escalation=escalation, immersion=immersion)
     summary = _summarize(axes_out)
 
+    raw_overall = dict(overall)
+    gameplay_validation = summarize_gameplay_validation_for_turn(dt)
+    gameplay_validation["raw_overall"] = raw_overall
+    if gameplay_validation.get("excluded_from_scoring"):
+        overall = {"score": 0, "rating": "weak", "passed": False}
+
     return {
         "version": SCHEMA_VERSION,
         "overall": overall,
         "axes": axes_out,
         "summary": summary,
+        "gameplay_validation": gameplay_validation,
+    }
+
+
+def rollup_playability_gameplay_validation(turns_out: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
+    """Aggregate per-turn ``gameplay_validation`` blocks from ``evaluate_playability`` results."""
+    dead_turn_count = 0
+    infra_failure_count = 0
+    exclusions: list[str] = []
+    for row in turns_out:
+        pe = row.get("playability_eval") if isinstance(row.get("playability_eval"), Mapping) else {}
+        gv = pe.get("gameplay_validation") if isinstance(pe.get("gameplay_validation"), Mapping) else {}
+        dead_turn_count += int(gv.get("dead_turn_count") or 0)
+        infra_failure_count += int(gv.get("infra_failure_count") or 0)
+        if not gv.get("run_valid", True):
+            ir = gv.get("invalidation_reason")
+            if isinstance(ir, str) and ir.strip():
+                exclusions.append(ir.strip())
+    all_valid = all(
+        bool((t.get("playability_eval") or {}).get("gameplay_validation", {}).get("run_valid", True))
+        for t in turns_out
+    )
+    return {
+        "run_valid": bool(all_valid),
+        "excluded_from_scoring": not bool(all_valid),
+        "invalidation_reason": exclusions[0] if exclusions else None,
+        "dead_turn_count": dead_turn_count,
+        "infra_failure_count": infra_failure_count,
     }

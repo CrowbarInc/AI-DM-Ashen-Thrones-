@@ -185,8 +185,21 @@ def _finalize_player_facing_for_turn(
         }
     gm_out = dict(gm)
     scene_id = str((scene.get("scene") or {}).get("id") or "").strip()
+    tag_list = gm_out.get("tags") if isinstance(gm_out.get("tags"), list) else []
+    tag_list = [str(t) for t in tag_list if isinstance(t, str)]
+    strict_social_turn = strict_social_emission_will_apply(
+        resolution if isinstance(resolution, dict) else None,
+        session,
+        world,
+        scene_id,
+    )
     if scene_id:
-        apply_repeated_description_guard(gm_out, session, scene_id)
+        # Repeated-description replacement is exploration-oriented. For strict-social turns
+        # under a locked interlocutor, swapping duplicate model output for a generic summary
+        # strips interruption cues before build_final / repeat tracking (stall + tracker loss).
+        # Non-strict social still runs the guard so repeated stale blobs can converge cleanly.
+        if not (_session_ongoing_social_exchange(session) and strict_social_turn):
+            apply_repeated_description_guard(gm_out, session, scene_id)
         if not _session_ongoing_social_exchange(session):
             update_scene_momentum_runtime(session, scene_id, gm_out)
     raw_text = gm_out.get("player_facing_text") if isinstance(gm_out.get("player_facing_text"), str) else ""
@@ -197,14 +210,6 @@ def _finalize_player_facing_for_turn(
             if isinstance(extracted, str) and extracted.strip()
             else strip_serialized_payload_fragments(raw_text)
         )
-    tag_list = gm_out.get("tags") if isinstance(gm_out.get("tags"), list) else []
-    tag_list = [str(t) for t in tag_list if isinstance(t, str)]
-    strict_social_turn = strict_social_emission_will_apply(
-        resolution if isinstance(resolution, dict) else None,
-        session,
-        world,
-        scene_id,
-    )
     san_ctx_base = {
         "resolution": resolution if isinstance(resolution, dict) else None,
         "include_resolution": bool(include_resolution_in_sanitizer),

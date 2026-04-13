@@ -8,6 +8,7 @@ from game.prompt_context import (
     MAX_GM_GUIDANCE,
     MAX_RECENT_EVENTS,
     NO_VALIDATOR_VOICE_RULE,
+    RESPONSE_RULE_PRIORITY,
     RULE_PRIORITY_COMPACT_INSTRUCTION,
     build_narration_context,
 )
@@ -698,19 +699,7 @@ def test_prompt_context_exposes_rule_priority_hierarchy():
     policy = ctx["response_policy"]
     instructions = " ".join(ctx.get("instructions", []))
 
-    assert policy["rule_priority_order"] == [
-        "ANSWER THE PLAYER",
-        "DO NOT CONTRADICT AUTHORITATIVE STATE",
-        "DO NOT LEAK HIDDEN FACTS / SECRETS",
-        "DO NOT ASSERT UNRESOLVED OUTCOMES, HIDDEN TRUTHS, OR NPC INTENT AS SETTLED FACT",
-        "PRESERVE PLAYER AGENCY — DO NOT DECIDE ACTIONS OR UPGRADE SURFACED LEADS INTO MANDATORY PATHS",
-        "IF FULL CERTAINTY IS UNAVAILABLE, GIVE A BOUNDED PARTIAL ANSWER",
-        "WHEN THE PLAYER PRESSES THE SAME TOPIC AGAIN, ADD NET-NEW VALUE RATHER THAN RESTATING",
-        "MAINTAIN DIEGETIC VOICE (no validator/system voice)",
-        "KEEP NARRATION FREE OF INTERNAL SCAFFOLDS, MENU LABELS, AND ENGINE COACHING",
-        "PRESERVE SCENE MOMENTUM",
-        "ADD SPECIFICITY / FLAVOR / POLISH",
-    ]
+    assert policy["rule_priority_order"] == [label for _, label in RESPONSE_RULE_PRIORITY]
     rd = policy.get("response_delta") or {}
     assert rd.get("enabled") is False
     assert rd.get("trigger_source") == "none"

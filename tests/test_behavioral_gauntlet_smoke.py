@@ -196,7 +196,8 @@ def test_behavioral_smoke_accepts_gauntlet_style_transcript_slice():
         ),
     ]
     result = evaluate_behavioral_gauntlet(slice_rows)
-    assert result["schema_version"] == "behavioral_gauntlet_eval.v1"
+    assert result["schema_version"] == SCHEMA_VERSION
+    assert result["gameplay_validation"]["run_valid"] is True
     assert result["axes"]["dialogue_coherence"]["passed"] is False
     assert "local_reset" in result["axes"]["dialogue_coherence"]["reason_codes"]
     assert result["overall_passed"] is False

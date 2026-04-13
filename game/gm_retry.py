@@ -108,6 +108,17 @@ _SOCIAL_FORCE_ANSWER_CANDIDATE_KINDS: frozenset[str] = frozenset(
 )
 MAX_TARGETED_RETRY_ATTEMPTS = 2
 
+# Deterministic known facts from scene/leads (not model improvisation) may use narrator-shaped
+# delivery metadata while still being the correct bounded answer under strict-social coercion.
+_RETRY_ENGINE_OWNED_KNOWN_FACT_SOURCES: frozenset[str] = frozenset(
+    {
+        "recent_dialogue_continuity",
+        "current_scene_state",
+        "observable_scene_fact",
+        "visible_entity_descriptor",
+    }
+)
+
 _PERCEPTION_FALLBACK_RESOLUTION_KINDS: frozenset[str] = frozenset(
     {
         "observe",
@@ -1066,6 +1077,12 @@ def choose_retry_strategy(failures: List[Dict[str, Any]]) -> Dict[str, Any] | No
     if not ranked:
         return None
     ranked.sort(key=lambda item: (int(item.get("priority", 999)), str(item.get("failure_class") or "")))
+    fu = next((f for f in ranked if str(f.get("failure_class") or "").strip() == "followup_soft_repetition"), None)
+    uq = next((f for f in ranked if str(f.get("failure_class") or "").strip() == "unresolved_question"), None)
+    if fu and uq:
+        fu_reasons = [str(r) for r in (fu.get("reasons") or []) if isinstance(r, str)]
+        if any("followup_soft_repetition:no_new_detail_detected" in r for r in fu_reasons):
+            return fu
     return ranked[0]
 
 
@@ -1526,13 +1543,18 @@ def apply_deterministic_retry_fallback(
             open_social_solicit = bool(soc_chk.get("open_social_solicitation"))
             block1_out = not soc_in_scope
             allow_kf = False
+            engine_owned = str(known_fact.get("source") or "").strip() in _RETRY_ENGINE_OWNED_KNOWN_FACT_SOURCES
             if block1_out:
                 allow_kf = not _retry_known_fact_is_suppressed_social_shape(
                     known_fact,
                     world_action_signal=True,
                 )
             else:
-                allow_kf = (not (strict_route and narrator_kf)) or open_social_solicit
+                allow_kf = (
+                    (not (strict_route and narrator_kf))
+                    or open_social_solicit
+                    or (strict_route and narrator_kf and engine_owned)
+                )
             if allow_kf:
                 out["player_facing_text"] = _ensure_terminal_punctuation(ktxt)
                 tags = out.get("tags") if isinstance(out.get("tags"), list) else []
@@ -1585,6 +1607,14 @@ def apply_deterministic_retry_fallback(
             _merge_open_social_recovery_emission_debug(out, rec_fb)
             _emit_deterministic_retry_result(out)
             return _tag_retry_scope(out)
+    fu_ctx_for_variation = (
+        (failure or {}).get("followup_context")
+        if isinstance((failure or {}).get("followup_context"), dict)
+        else {}
+    )
+    prev_snip_v = str(fu_ctx_for_variation.get("previous_answer_snippet") or "").strip()
+    variation_salt = f"followup_repeat|{len(prev_snip_v)}|{prev_snip_v[:160]}" if prev_snip_v else ""
+
     if strict_route and isinstance(eff_res, dict) and soc_in_scope:
         inner = _gm_binding().apply_social_exchange_retry_fallback_gm(
             out,
@@ -1593,6 +1623,7 @@ def apply_deterministic_retry_fallback(
             world=world,
             resolution=eff_res,
             scene_id=scene_id,
+            variation_salt=variation_salt,
         )
         _emit_deterministic_retry_result(inner)
         return _tag_retry_scope(inner)

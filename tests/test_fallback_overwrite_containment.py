@@ -90,3 +90,22 @@ def test_non_fallback_output_has_no_fallback_containment():
     )
     assert "fallback_provenance" not in (out.get("metadata") or {})
     assert (out.get("_final_emission_meta") or {}).get("fallback_overwrite_contained") is None
+
+
+def test_upstream_fallback_finalize_strip_survives_containment_fingerprint_mismatch():
+    """Selector may include appended global stock; finalize strips it even if Block I reverts to selector."""
+    selector = (
+        "Rain drums steady on the slate roof above. "
+        "For a breath, the scene stays still."
+    )
+    gm = _fallback_gm(selector)
+    out = apply_final_emission_gate(
+        gm,
+        resolution={"kind": "observe", "prompt": "I listen to the rain."},
+        session={},
+        scene_id="test_scene",
+        world={},
+    )
+    pft = (out.get("player_facing_text") or "").lower()
+    assert "rain drums" in pft
+    assert "scene stays still" not in pft

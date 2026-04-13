@@ -6,6 +6,9 @@ scene/ambient uncertainty pools except as an explicit interruption breakoff.
 Speaker identity for strict emission aligns with
 :func:`game.interaction_context.resolve_authoritative_social_target`; do not resolve a competing
 NPC id in this module except through that helper (or thin wrappers around it).
+
+Appended global-visibility *stock sentence* cleanup on generic narration accept paths is owned by
+:func:`game.final_emission_gate._finalize_emission_output`, not duplicated here.
 """
 
 from __future__ import annotations
@@ -1925,6 +1928,7 @@ def _forced_interruption_progression_line(
     world: Dict[str, Any] | None,
     tag_list: List[str],
     signature: str,
+    repeat_count: int = 0,
 ) -> tuple[str | None, str | None]:
     sid = str(scene_id or "").strip()
     structured = _try_emit_structured_fact_strict_line(
@@ -1938,7 +1942,7 @@ def _forced_interruption_progression_line(
         return structured, "forced_progression_structured_fact"
 
     merged_pt = merged_player_prompt_for_gate(resolution, session, sid)
-    seed = f"{sid}|interrupt_progression|{signature}|{merged_pt}"
+    seed = f"{sid}|interrupt_progression|{signature}|{merged_pt}|rc={int(repeat_count)}"
     topic = _integrity_topic_hook(merged_pt) or "that"
     speaker = _speaker_label(resolution)
     candidates = _social_integrity_fallback_line_candidates(
@@ -1979,7 +1983,10 @@ def _forced_interruption_progression_line(
             scene_id=sid,
         )
         norm = _normalize_gate_text(filtered)
-        if not norm or _interruption_signature_for_text(norm, resolution=resolution):
+        if not norm:
+            continue
+        sig_hit = _interruption_signature_for_text(norm, resolution=resolution)
+        if sig_hit and int(repeat_count) < 2:
             continue
         if not _social_line_has_playable_npc_substance(norm):
             continue
@@ -2029,7 +2036,8 @@ def _apply_interruption_repeat_guard(
     final_signature = _interruption_signature_for_text(text, resolution=resolution)
     signature = source_signature or final_signature
     if not signature:
-        clear_social_exchange_interruption_tracker(session)
+        # Empty signature is not proof the exchange ended (upstream may have replaced raw text
+        # before this guard); keep tracker so interruption repeat / progression can still fire.
         return text, meta
 
     sid = str(scene_id or "").strip()
@@ -2081,6 +2089,7 @@ def _apply_interruption_repeat_guard(
             world=world if isinstance(world, dict) else None,
             tag_list=tags,
             signature=signature,
+            repeat_count=repeat_count,
         )
         if progressed and _normalize_gate_text(progressed) != _normalize_gate_text(text):
             next_tracker["last_emitted_text"] = progressed
@@ -2506,6 +2515,7 @@ def apply_social_exchange_retry_fallback_gm(
     world: Dict[str, Any],
     resolution: Dict[str, Any] | None,
     scene_id: str,
+    variation_salt: str = "",
 ) -> Dict[str, Any]:
     """Replace GM text with a compact social fallback (no uncertainty renderer blob)."""
     if not isinstance(gm, dict):
@@ -2591,7 +2601,11 @@ def apply_social_exchange_retry_fallback_gm(
     uncertainty_source = _extract_uncertainty_source_from_tags(tag_list, prior_text)
     pressure = _is_pressure_active(tag_list, session, scene_id)
     interrupt = interruption_cue_present_in_text(prior_text)
-    seed = f"{scene_id}|retry|{player_text}|{uncertainty_source}|{pressure}|{interrupt}"
+    vs = str(variation_salt or "").strip()
+    # Follow-up repetition uses ``variation_salt``; do not pin the template to the interruption-only floor.
+    if vs:
+        interrupt = False
+    seed = f"{scene_id}|retry|{player_text}|{uncertainty_source}|{pressure}|{interrupt}|{vs}"
     line, kind = deterministic_social_fallback_line(
         resolution=resolution,
         uncertainty_source=uncertainty_source,

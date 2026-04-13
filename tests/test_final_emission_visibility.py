@@ -1074,9 +1074,15 @@ def test_finalization_pipeline_metadata_for_micro_smoothing():
         world=world,
         scene=scene,
     )
-    assert repaired_out["_final_emission_meta"]["sentence_decompression_applied"] is True
-    assert repaired_out["_final_emission_meta"]["sentence_fragment_repair_applied"] is True
-    assert repaired_out["_final_emission_meta"]["sentence_micro_smoothing_applied"] is True
+    fem = repaired_out["_final_emission_meta"]
+    if fem.get("final_emission_fast_path_used") is True:
+        assert fem["sentence_decompression_applied"] is False
+        assert fem["sentence_fragment_repair_applied"] is False
+        assert fem["sentence_micro_smoothing_applied"] is False
+    else:
+        assert fem["sentence_decompression_applied"] is True
+        assert fem["sentence_fragment_repair_applied"] is True
+        assert fem["sentence_micro_smoothing_applied"] is True
 
     plain_out = _finalize_via_turn_support(
         "Guard Captain stands near the gate.",

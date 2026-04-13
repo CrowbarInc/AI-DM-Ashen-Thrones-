@@ -298,6 +298,11 @@ def is_directed_dialogue(
                 merged_text=merged_lane.strip(),
                 scene=scene,
             )
+            clause_after = str(merged_lane or text or "").strip()
+            if _is_information_seeking_clause(clause_after) and _has_dialogue_cue(
+                text=text, segmented_turn=segmented_turn
+            ):
+                return True
             return False
         return True
 
