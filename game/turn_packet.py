@@ -1,15 +1,17 @@
-"""Canonical turn packet: snapshot / accessor layer for policy contracts on a turn.
+"""Canonical owner for the turn-packet contract boundary.
 
-The turn packet is **not** authoritative engine state and does not replace runtime
-resolution or validators. It is a compact, versioned snapshot so retry logic,
-emission gates, and diagnostics can share one lookup path and avoid seam drift
-from duplicated mirror scans. It does not own narration policy.
+This module is the **packet contract owner**: compact versioned packet construction,
+stable accessors, and gate-side packet resolution. The turn packet is **not**
+authoritative engine state and does not replace runtime resolution or validators.
+It exists so retry logic, emission gates, and diagnostics can share one lookup path
+and avoid seam drift from duplicated mirror scans. It does not own narration policy
+or telemetry.
 
 :mod:`game.stage_diff_telemetry` complements this layer with **mutation observability**
 (bounded snapshots/transitions under ``metadata["stage_diff_telemetry"]``). Telemetry
-reads the packet via :func:`game.stage_diff_telemetry.resolve_gate_turn_packet` inside
-the gate (preferring the ephemeral ``_gate_turn_packet_cache`` populated at gate entry)
-and via :func:`get_turn_packet` elsewhere.
+is a packet **consumer** that derives its read path from this module; it is not a
+parallel packet owner. The gate may use an intentionally ephemeral
+``_gate_turn_packet_cache`` populated at entry and removed before finalized output.
 
 Resolution order for consumers should be: (1) canonical packet, (2) direct
 authoritative fields on the GM output, (3) legacy mirror / back-compat scans.
@@ -20,6 +22,7 @@ from __future__ import annotations
 from typing import Any, Dict, List, Mapping, Optional
 
 TURN_PACKET_METADATA_KEY = "turn_packet"
+_GATE_TURN_PACKET_CACHE_KEY = "_gate_turn_packet_cache"
 
 _PACKET_VERSION = 1
 
@@ -154,6 +157,26 @@ def get_turn_packet(*sources: Any) -> Optional[Dict[str, Any]]:
             if _looks_like_turn_packet(pc.get("turn_packet")):
                 return pc["turn_packet"]
     return None
+
+
+def resolve_turn_packet_for_gate(gm_output: Mapping[str, Any] | None) -> Optional[Dict[str, Any]]:
+    """Canonical gate-side packet accessor.
+
+    Packet boundary owner: prefer the ephemeral gate cache when present, otherwise
+    fall back to :func:`get_turn_packet`. Telemetry/retry callers derive from this
+    accessor; they do not own the packet boundary.
+    """
+    if not isinstance(gm_output, dict):
+        return None
+    cached = gm_output.get(_GATE_TURN_PACKET_CACHE_KEY)
+    if _looks_like_turn_packet(cached):
+        return cached
+    hit = get_turn_packet(
+        gm_output,
+        gm_output.get("response_policy"),
+        gm_output.get("prompt_context"),
+    )
+    return hit if _looks_like_turn_packet(hit) else None
 
 
 def ensure_turn_packet(gm_output: Dict[str, Any], **kwargs: Any) -> Dict[str, Any]:

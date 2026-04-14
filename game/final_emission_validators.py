@@ -18,6 +18,12 @@ from game.final_emission_text import (
     _normalize_terminal_punctuation,
     _normalize_text,
 )
+from game.response_policy_contracts import (
+    resolve_answer_completeness_contract as _policy_resolve_answer_completeness_contract,
+    resolve_fallback_behavior_contract as _policy_resolve_fallback_behavior_contract,
+    resolve_response_delta_contract as _policy_resolve_response_delta_contract,
+    resolve_social_response_structure_contract as _policy_resolve_social_response_structure_contract,
+)
 from game.social_exchange_emission import (
     is_route_illegal_global_or_sanitizer_fallback_text,
     replacement_is_route_legal_social,
@@ -306,13 +312,8 @@ _NEXT_LEAD_SNIPPET = re.compile(
 
 
 def _resolve_answer_completeness_contract(gm_output: Dict[str, Any] | None) -> Dict[str, Any] | None:
-    if not isinstance(gm_output, dict):
-        return None
-    pol = gm_output.get("response_policy")
-    if not isinstance(pol, dict):
-        return None
-    ac = pol.get("answer_completeness")
-    return ac if isinstance(ac, dict) else None
+    """Compatibility residue: canonical accessor now lives in ``game.response_policy_contracts``."""
+    return _policy_resolve_answer_completeness_contract(gm_output)
 
 
 def _split_sentences_answer_complete(text: str) -> List[str]:
@@ -695,15 +696,8 @@ _FALLBACK_DIEGETIC_PARTIAL_PATTERNS: tuple[re.Pattern[str], ...] = (
 
 
 def _resolve_fallback_behavior_contract(gm_output: Dict[str, Any] | None) -> Dict[str, Any] | None:
-    if not isinstance(gm_output, dict):
-        return None
-    response_policy = gm_output.get("response_policy")
-    if isinstance(response_policy, dict):
-        hit = response_policy.get("fallback_behavior")
-        if isinstance(hit, dict):
-            return hit
-    top = gm_output.get("fallback_behavior")
-    return top if isinstance(top, dict) else None
+    """Compatibility residue: canonical accessor now lives in ``game.response_policy_contracts``."""
+    return _policy_resolve_fallback_behavior_contract(gm_output)
 
 
 def _contains_meta_fallback_voice(text: str) -> bool:
@@ -1025,13 +1019,8 @@ def _response_delta_token_overlap_ratio(a: List[str], b: List[str]) -> float:
 
 
 def _resolve_response_delta_contract(gm_output: Dict[str, Any] | None) -> Dict[str, Any] | None:
-    if not isinstance(gm_output, dict):
-        return None
-    pol = gm_output.get("response_policy")
-    if not isinstance(pol, dict):
-        return None
-    rd = pol.get("response_delta")
-    return rd if isinstance(rd, dict) else None
+    """Compatibility residue: canonical accessor now lives in ``game.response_policy_contracts``."""
+    return _policy_resolve_response_delta_contract(gm_output)
 
 
 def _detect_delta_kinds_in_text(
@@ -1263,15 +1252,8 @@ _MULTI_SPEAKER_LINE_RE = re.compile(
 
 
 def _resolve_social_response_structure_contract(gm_output: Dict[str, Any] | None) -> Dict[str, Any] | None:
-    if not isinstance(gm_output, dict):
-        return None
-    pol = gm_output.get("response_policy")
-    if isinstance(pol, dict):
-        hit = pol.get("social_response_structure")
-        if isinstance(hit, dict):
-            return hit
-    top = gm_output.get("social_response_structure_contract")
-    return top if isinstance(top, dict) else None
+    """Compatibility residue: canonical accessor now lives in ``game.response_policy_contracts``."""
+    return _policy_resolve_social_response_structure_contract(gm_output)
 
 
 def _social_response_structure_contract_snapshot(contract: Dict[str, Any]) -> Dict[str, Any]:

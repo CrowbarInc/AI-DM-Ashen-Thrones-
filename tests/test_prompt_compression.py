@@ -1,17 +1,15 @@
-"""Tests for the prompt compression layer (game.prompt_context)."""
+"""Secondary integration coverage for prompt assembly and compression.
+
+Direct prompt-contract semantics, exported policy bundles, and prompt-facing
+helper ownership live in ``tests/test_prompt_context.py``. This module keeps
+downstream serialization and compression checks once those contracts are already
+owned upstream.
+"""
 from __future__ import annotations
 
+import importlib
 import json
 
-from game.prompt_context import (
-    MAX_RECENT_LOG,
-    MAX_GM_GUIDANCE,
-    MAX_RECENT_EVENTS,
-    NO_VALIDATOR_VOICE_RULE,
-    RESPONSE_RULE_PRIORITY,
-    RULE_PRIORITY_COMPACT_INSTRUCTION,
-    build_narration_context,
-)
 from game.gm import build_messages
 from game.storage import get_scene_runtime
 
@@ -19,6 +17,12 @@ from game.storage import get_scene_runtime
 import pytest
 
 pytestmark = pytest.mark.integration
+
+_prompt_context = importlib.import_module("game.prompt_context")
+MAX_GM_GUIDANCE = _prompt_context.MAX_GM_GUIDANCE
+MAX_RECENT_EVENTS = _prompt_context.MAX_RECENT_EVENTS
+MAX_RECENT_LOG = _prompt_context.MAX_RECENT_LOG
+build_narration_context = _prompt_context.build_narration_context
 
 def _dummy_campaign():
     return {
@@ -77,8 +81,8 @@ def _dummy_public_scene():
     }
 
 
-def test_prompt_generation_without_full_world_state():
-    """Prompt generation works with compressed world; no full settlements/factions dump."""
+def test_compressed_prompt_context_keeps_world_summary_without_full_dump():
+    """Compressed context keeps summarized world data instead of a full world dump."""
     ctx = build_narration_context(
         _dummy_campaign(),
         _dummy_world(),
@@ -114,8 +118,8 @@ def test_prompt_generation_without_full_world_state():
     assert obligations["avoid_input_echo"] is True
 
 
-def test_narration_context_includes_engine_result_and_scene_summary():
-    """Compressed context includes mechanical_resolution and scene summary."""
+def test_compressed_prompt_context_carries_engine_result_and_public_scene_summary():
+    """Compressed context carries engine results and public scene summary fields."""
     resolution = {"kind": "observe", "action_id": "observe", "label": "Observe", "prompt": "I look around."}
     ctx = build_narration_context(
         _dummy_campaign(),
@@ -202,8 +206,8 @@ def test_build_messages_produces_compressed_payload():
     assert "chat_history" not in payload["session"]
 
 
-def test_build_messages_preserves_third_person_player_declaration_with_quote():
-    """Prompt payload preserves third-person declarations and embedded quoted speech."""
+def test_build_messages_preserves_player_input_text_with_embedded_dialogue():
+    """Serialized payload preserves the player's raw wording, including quoted speech."""
     campaign = _dummy_campaign()
     world = _dummy_world()
     session = {"active_scene_id": "", "scene_runtime": {}}
@@ -227,14 +231,11 @@ def test_build_messages_preserves_third_person_player_declaration_with_quote():
     )
     payload = json.loads(msgs[1]["content"])
     assert payload["player_input"] == user_text
-    assert payload["player_expression_contract"]["default_action_style"] == "third_person"
-    assert payload["player_expression_contract"]["quoted_speech_allowed"] is True
-    assert payload["player_expression_contract"]["preserve_user_expression_format"] is True
     assert '"Who signed this order?"' in payload["player_input"]
 
 
-def test_prompt_assembly_with_missing_optional_data():
-    """build_narration_context does not crash when optional data is missing or empty."""
+def test_compressed_prompt_context_handles_missing_optional_data():
+    """Compressed context stays shape-safe when optional inputs are missing or empty."""
     ctx = build_narration_context(
         {},
         None,
@@ -339,7 +340,7 @@ def test_world_events_limited():
     assert len(ctx["world"]["recent_events"]) <= MAX_RECENT_EVENTS
 
 
-def test_narration_obligations_mark_campaign_start_opening_scene():
+def test_compressed_prompt_context_carries_opening_scene_obligation():
     session = {
         "active_scene_id": "frontier_gate",
         "response_mode": "standard",
@@ -374,7 +375,7 @@ def test_narration_obligations_mark_campaign_start_opening_scene():
     assert obligations["must_advance_scene"] is False
 
 
-def test_narration_obligations_mark_arrival_turns():
+def test_compressed_prompt_context_carries_arrival_bridge_guidance():
     resolution = {
         "kind": "scene_transition",
         "action_id": "go-market",
@@ -414,7 +415,7 @@ def test_narration_obligations_mark_arrival_turns():
     assert "brief bridge from the prior location" in instructions
 
 
-def test_scene_transition_bridge_guidance_only_when_scene_change_context_exists():
+def test_compressed_prompt_context_only_adds_transition_bridge_when_scene_changes():
     no_transition_ctx = build_narration_context(
         _dummy_campaign(),
         _dummy_world(),
@@ -476,7 +477,7 @@ def test_scene_transition_bridge_guidance_only_when_scene_change_context_exists(
     assert "brief bridge from the prior location" in transition_instructions
 
 
-def test_narration_obligations_mark_active_npc_reply_turns():
+def test_compressed_prompt_context_carries_active_npc_reply_flags():
     session = {
         "active_scene_id": "frontier_gate",
         "response_mode": "standard",
@@ -523,7 +524,7 @@ def test_narration_obligations_mark_active_npc_reply_turns():
     assert obligations["active_npc_reply_expected"] is True
 
 
-def test_narration_obligations_use_explicit_social_reply_signal():
+def test_compressed_prompt_context_preserves_explicit_social_reply_signal():
     session = {
         "active_scene_id": "frontier_gate",
         "response_mode": "standard",
@@ -574,7 +575,7 @@ def test_narration_obligations_use_explicit_social_reply_signal():
     assert obligations["active_npc_reply_kind"] == "explanation"
 
 
-def test_refusal_reply_kind_adds_substantive_non_stalling_guidance():
+def test_compressed_prompt_context_carries_refusal_guidance_without_stalling():
     session = {
         "active_scene_id": "frontier_gate",
         "response_mode": "standard",
@@ -626,7 +627,7 @@ def test_refusal_reply_kind_adds_substantive_non_stalling_guidance():
     assert "rather than empty stalling" in instructions
 
 
-def test_prompt_context_includes_structured_turn_summary_and_no_restatement_guidance():
+def test_build_messages_serializes_turn_summary_without_rewriting_player_input():
     resolution = {
         "kind": "question",
         "action_id": "ask-guard",
@@ -636,273 +637,23 @@ def test_prompt_context_includes_structured_turn_summary_and_no_restatement_guid
         "requires_check": False,
     }
     user_text = 'Galinor asks, "Who signed this order?" while examining the notice board.'
-    ctx = build_narration_context(
+    scene_rt = get_scene_runtime({"active_scene_id": "", "scene_runtime": {}}, "frontier_gate")
+    msgs = build_messages(
         _dummy_campaign(),
         _dummy_world(),
-        _dummy_session(),
+        {"active_scene_id": "", "scene_runtime": {}},
         _dummy_character(),
         _dummy_scene(),
         {"in_combat": False},
         [],
         user_text,
         resolution,
-        {},
-        public_scene=_dummy_public_scene(),
-        discoverable_clues=[],
-        gm_only_hidden_facts=[],
-        gm_only_discoverable_locked=[],
-        discovered_clue_records=[],
-        undiscovered_clue_records=[],
-        pending_leads=[],
-        intent={"labels": ["social_probe"]},
-        world_state_view={"flags": {}, "counters": {}, "clocks_summary": []},
-        mode_instruction="Standard.",
-        recent_log_for_prompt=[],
+        scene_runtime=scene_rt,
     )
-    turn_summary = ctx["turn_summary"]
-    obligations = ctx["narration_obligations"]
-    instructions = " ".join(ctx.get("instructions", [])).lower()
+    payload = json.loads(msgs[1]["content"])
+    turn_summary = payload["turn_summary"]
 
     assert turn_summary["action_descriptor"] == "Question the guard"
     assert turn_summary["resolution_kind"] == "question"
     assert turn_summary["raw_player_input"] == user_text
-    assert obligations["avoid_player_action_restatement"] is True
-    assert obligations["prefer_structured_turn_summary"] is True
-    assert "avoid_player_action_restatement" in instructions
-    assert "prefer_structured_turn_summary" in instructions
-
-
-def test_prompt_context_exposes_rule_priority_hierarchy():
-    ctx = build_narration_context(
-        _dummy_campaign(),
-        _dummy_world(),
-        _dummy_session(),
-        _dummy_character(),
-        _dummy_scene(),
-        {"in_combat": False},
-        [],
-        'Galinor asks, "Who signed this order?"',
-        None,
-        {},
-        public_scene=_dummy_public_scene(),
-        discoverable_clues=[],
-        gm_only_hidden_facts=[],
-        gm_only_discoverable_locked=[],
-        discovered_clue_records=[],
-        undiscovered_clue_records=[],
-        pending_leads=[],
-        intent={"labels": ["social_probe"]},
-        world_state_view={"flags": {}, "counters": {}, "clocks_summary": []},
-        mode_instruction="Standard.",
-        recent_log_for_prompt=[],
-    )
-    policy = ctx["response_policy"]
-    instructions = " ".join(ctx.get("instructions", []))
-
-    assert policy["rule_priority_order"] == [label for _, label in RESPONSE_RULE_PRIORITY]
-    rd = policy.get("response_delta") or {}
-    assert rd.get("enabled") is False
-    assert rd.get("trigger_source") == "none"
-    assert RULE_PRIORITY_COMPACT_INSTRUCTION in instructions
-    assert "avoid unjustified certainty" in instructions.lower()
-    assert "response_policy.rule_priority_order" in instructions
-    assert NO_VALIDATOR_VOICE_RULE in instructions
-    assert policy["no_validator_voice"]["enabled"] is True
-    assert policy["no_validator_voice"]["applies_to"] == "standard_narration"
-    assert policy["no_validator_voice"]["rules_explanation_only_in"] == ["oc", "adjudication"]
-    assert "rules_explanation_outside_oc_or_adjudication" in policy["no_validator_voice"]["prohibited_perspectives"]
-
-
-def test_response_delta_contract_enables_on_same_topic_follow_up_question():
-    prior_chat = (
-        "What did the guards report about the north gate before the gates were barred?"
-    )
-    prior_gm = (
-        "The night sergeant filed a short report noting extra cart traffic and one sealed "
-        "warrant shown at the north gate before compline bells."
-    )
-    recent_log_for_prompt = [
-        {
-            "log_meta": {"player_input": prior_chat},
-            "gm_output": {"player_facing_text": prior_gm},
-        }
-    ]
-    ctx = build_narration_context(
-        _dummy_campaign(),
-        _dummy_world(),
-        _dummy_session(),
-        _dummy_character(),
-        _dummy_scene(),
-        {"in_combat": False},
-        [],
-        "Okay but what happened at the north gate after that?",
-        None,
-        {},
-        public_scene=_dummy_public_scene(),
-        discoverable_clues=[],
-        gm_only_hidden_facts=[],
-        gm_only_discoverable_locked=[],
-        discovered_clue_records=[],
-        undiscovered_clue_records=[],
-        pending_leads=[],
-        intent={"labels": ["social_probe"]},
-        world_state_view={"flags": {}, "counters": {}, "clocks_summary": []},
-        mode_instruction="Standard.",
-        recent_log_for_prompt=recent_log_for_prompt,
-    )
-    rd = ctx["response_policy"].get("response_delta") or {}
-    assert rd.get("enabled") is True
-    assert rd.get("delta_required") is True
-    assert rd.get("trigger_source") == "same_topic_direct_question"
-    assert rd.get("forbid_semantic_restatement") is True
-    assert set(rd.get("allowed_delta_kinds") or []) == {
-        "new_information",
-        "refinement",
-        "consequence",
-        "clarified_uncertainty",
-    }
-    tr = rd.get("trace") or {}
-    assert tr.get("follow_up_pressure_detected") is True
-    assert tr.get("prior_answer_available") is True
-    assert "response_policy.response_delta.enabled" in " ".join(ctx.get("instructions", [])).lower()
-
-
-def test_prompt_context_exposes_typed_uncertainty_policy_and_hint():
-    ctx = build_narration_context(
-        _dummy_campaign(),
-        _dummy_world(),
-        _dummy_session(),
-        _dummy_character(),
-        _dummy_scene(),
-        {"in_combat": False},
-        [],
-        "Where is the patrol report?",
-        None,
-        {},
-        public_scene=_dummy_public_scene(),
-        discoverable_clues=[],
-        gm_only_hidden_facts=[],
-        gm_only_discoverable_locked=[],
-        discovered_clue_records=[],
-        undiscovered_clue_records=[],
-        pending_leads=[],
-        intent={"labels": ["social_probe"]},
-        world_state_view={"flags": {}, "counters": {}, "clocks_summary": []},
-        mode_instruction="Standard.",
-        recent_log_for_prompt=[],
-        uncertainty_hint={
-            "category": "unknown_location",
-            "known_edge": "The trail points past the notice board, not to a final door.",
-            "unknown_edge": "After that, the last stop drops into rumor.",
-            "next_lead": "Start at the missing patrol notice and pin down the last sighting tied to it.",
-        },
-    )
-    policy = ctx["response_policy"]
-    instructions = " ".join(ctx.get("instructions", [])).lower()
-
-    assert policy["uncertainty"]["enabled"] is True
-    assert policy["uncertainty"]["categories"] == [
-        "unknown_identity",
-        "unknown_location",
-        "unknown_motive",
-        "unknown_method",
-        "unknown_quantity",
-        "unknown_feasibility",
-    ]
-    assert policy["uncertainty"]["answer_shape"] == [
-        "known_edge",
-        "unknown_edge",
-        "next_lead",
-    ]
-    assert policy["uncertainty"]["sources"] == [
-        "npc_ignorance",
-        "scene_ambiguity",
-        "procedural_insufficiency",
-    ]
-    assert policy["uncertainty"]["context_inputs"] == [
-        "turn_context",
-        "speaker",
-        "scene_snapshot",
-    ]
-    assert ctx["uncertainty_hint"]["category"] == "unknown_location"
-    assert "response_policy.uncertainty.categories" in instructions
-    assert "response_policy.uncertainty.sources" in instructions
-    assert "response_policy.uncertainty.answer_shape" in instructions
-    assert "uncertainty_hint.turn_context" in instructions
-    assert "uncertainty_hint.speaker" in instructions
-    assert "uncertainty_hint.scene_snapshot" in instructions
-    assert "frame uncertainty as world-facing limits only" in instructions
-    assert "vary sentence count and cadence naturally" in instructions
-
-
-def test_narration_context_uses_canonical_promoted_npc_and_social_profile():
-    """Prompt session + social_context prefer promoted world npc_id and engine social fields."""
-    world = {
-        **_dummy_world(),
-        "npcs": [
-            {
-                "id": "frontier_gate__ragged_stranger",
-                "name": "Keene",
-                "location": "frontier_gate",
-                "stance_toward_player": "wary",
-                "information_reliability": "partial",
-                "knowledge_scope": ["scene:frontier_gate", "rumor"],
-                "affiliation": "",
-                "current_agenda": "watch the gate",
-                "promoted_from_actor_id": "ragged_stranger",
-                "origin_kind": "scene_actor",
-            }
-        ],
-    }
-    session = {
-        "active_scene_id": "frontier_gate",
-        "response_mode": "standard",
-        "turn_counter": 3,
-        "interaction_context": {
-            "active_interaction_target_id": "ragged_stranger",
-            "active_interaction_kind": "social",
-            "interaction_mode": "social",
-            "engagement_level": "engaged",
-        },
-        "scene_state": {
-            "promoted_actor_npc_map": {"ragged_stranger": "frontier_gate__ragged_stranger"},
-        },
-    }
-    ctx = build_narration_context(
-        _dummy_campaign(),
-        world,
-        session,
-        _dummy_character(),
-        _dummy_scene(),
-        {"in_combat": False},
-        [],
-        "What did you hear?",
-        None,
-        {},
-        public_scene=_dummy_public_scene(),
-        discoverable_clues=[],
-        gm_only_hidden_facts=["A secret motivation."],
-        gm_only_discoverable_locked=["A discoverable clue."],
-        discovered_clue_records=[],
-        undiscovered_clue_records=[{"id": "c1", "text": "A discoverable clue."}],
-        pending_leads=[],
-        intent={"labels": ["question"], "allow_discoverable_clues": False},
-        world_state_view={"flags": {"flag1": True}, "counters": {"c1": 5}, "clocks_summary": []},
-        mode_instruction="Narration mode: standard.",
-        recent_log_for_prompt=[],
-    )
-    assert ctx["session"]["active_interaction_target_id"] == "frontier_gate__ragged_stranger"
-    assert ctx["session"]["active_interaction_target_name"] == "Keene"
-    prof = ctx["social_context"]["interlocutor_profile"]
-    assert prof["npc_is_promoted"] is True
-    assert prof["reliability"] == "partial"
-    assert prof["stance"] == "wary"
-    assert "scene:frontier_gate" in prof["knowledge_scope"]
-    ai = ctx["active_interlocutor"]
-    assert ai["npc_id"] == "frontier_gate__ragged_stranger"
-    assert ai["raw_interaction_target_id"] == "ragged_stranger"
-    assert ai["promoted_from_actor_id"] == "ragged_stranger"
-    hints = ctx["social_context"]["answer_style_hints"]
-    assert any("INFORMATION_RELIABILITY partial" in h for h in hints)
-    assert any("INTERLOCUTOR KNOWLEDGE GATE" in h for h in hints)
-    assert any("NAMING CONTINUITY (engine)" in x for x in ctx["instructions"])
+    assert payload["player_input"] == user_text

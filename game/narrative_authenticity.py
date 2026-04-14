@@ -370,14 +370,15 @@ def _rumor_relaxed_signal_requirement(
     rr_fb: Mapping[str, Any],
 ) -> tuple[bool, Dict[str, bool]]:
     """Return (relaxed_ok, flags) for rumor low-signal / bounded-partial compatibility (policy-owned)."""
-    from game.final_emission_validators import _partial_reason_in_text, _resolve_fallback_behavior_contract
+    from game.final_emission_validators import _partial_reason_in_text
+    from game.response_policy_contracts import resolve_fallback_behavior_contract
 
     flags: Dict[str, bool] = {}
     if bool(rr_fb.get("do_not_fail_for_brevity_alone")) and wc <= 14:
         flags["brevity_alone"] = True
         return True, flags
     if bool(rr_fb.get("allow_brief_bounded_partial_under_uncertainty")):
-        pol = _resolve_fallback_behavior_contract(
+        pol = resolve_fallback_behavior_contract(
             dict(gm_output) if isinstance(gm_output, Mapping) else None
         )
         if bool((pol or {}).get("uncertainty_active")):
@@ -815,10 +816,10 @@ def validate_narrative_authenticity(
     from game.final_emission_validators import (
         _GENERIC_NONANSWER_SNIPPET,
         _contains_meta_fallback_voice,
-        _resolve_fallback_behavior_contract,
         _split_sentences_answer_complete,
         validate_response_delta,
     )
+    from game.response_policy_contracts import resolve_fallback_behavior_contract
 
     metrics: Dict[str, Any] = {
         "quote_narration_overlap": None,
@@ -869,7 +870,7 @@ def validate_narrative_authenticity(
         out["skip_reason"] = "contract_disabled"
         return out
 
-    fb_pol = _resolve_fallback_behavior_contract(gm_output if isinstance(gm_output, Mapping) else None)
+    fb_pol = resolve_fallback_behavior_contract(gm_output if isinstance(gm_output, Mapping) else None)
     fb_compat = contract.get("fallback_compatibility") if isinstance(contract.get("fallback_compatibility"), Mapping) else {}
     uncertainty_active = bool((fb_pol or {}).get("uncertainty_active"))
     if uncertainty_active and bool(fb_compat.get("may_be_brief_under_uncertainty")):

@@ -1,10 +1,18 @@
-"""Prompt-layer exports for promoted interlocutors (Block 2 profile + hint contracts)."""
+"""Canonical owner for prompt-context assembly and prompt-contract bundle semantics.
+
+Direct prompt-contract semantics live here, including the canonical prompt-facing
+public homes for shipped helpers such as ``build_social_response_structure_contract()``
+and ``peek_response_type_contract_from_resolution()``. Downstream gate, emission,
+and transcript suites may keep smoke/regression coverage, but should not read as
+the primary semantic owner for prompt contracts.
+"""
 from __future__ import annotations
 
 import copy
 from types import SimpleNamespace
 from unittest.mock import patch
 
+import game.response_policy_contracts as response_policy_contracts
 from game.campaign_state import create_fresh_session_document
 from game.interaction_context import set_social_target
 from game.leads import (
@@ -19,14 +27,21 @@ from game.leads import (
 )
 from game.prompt_context import (
     CONVERSATIONAL_MEMORY_SOFT_LIMIT,
+    NO_VALIDATOR_VOICE_RULE,
+    RESPONSE_RULE_PRIORITY,
+    RULE_PRIORITY_COMPACT_INSTRUCTION,
     _compress_recent_log,
     build_active_interlocutor_export,
     build_authoritative_lead_prompt_context,
     build_interlocutor_lead_discussion_context,
     build_narration_context,
+    build_response_policy,
+    build_social_response_structure_contract,
     build_social_interlocutor_profile,
+    derive_narration_obligations,
     deterministic_interlocutor_answer_style_hints,
     deterministic_interlocutor_lead_behavior_hints,
+    peek_response_type_contract_from_resolution,
 )
 from game.social import (
     compute_social_target_profile_hints,
@@ -87,6 +102,373 @@ def _expected_follow_up_pressure_from_leads(**overrides: bool) -> dict:
     }
     base.update(overrides)
     return base
+
+
+def test_prompt_contract_owner_canonical_public_home_preserves_compatibility_with_downstream_helpers() -> None:
+    rtc = {"required_response_type": "dialogue"}
+    resolution = {"metadata": {"response_type_contract": dict(rtc)}}
+
+    assert build_social_response_structure_contract(
+        rtc,
+        debug_inputs={"scene_id": "s1"},
+    ) == response_policy_contracts.build_social_response_structure_contract(
+        rtc,
+        debug_inputs={"scene_id": "s1"},
+    )
+    assert peek_response_type_contract_from_resolution(
+        resolution
+    ) == response_policy_contracts.peek_response_type_contract_from_resolution(resolution)
+
+
+def test_prompt_contract_owner_peeks_validated_response_type_contract_from_resolution_metadata() -> None:
+    resolution = {"metadata": {"response_type_contract": {"required_response_type": "Dialogue"}}}
+
+    assert peek_response_type_contract_from_resolution(resolution) == {
+        "required_response_type": "dialogue"
+    }
+
+
+def test_prompt_contract_owner_peek_rejects_invalid_response_type_contract_metadata() -> None:
+    resolution = {"metadata": {"response_type_contract": {"required_response_type": "soliloquy"}}}
+
+    assert peek_response_type_contract_from_resolution(resolution) is None
+
+
+def test_prompt_contract_owner_social_response_structure_contract_requires_dialogue() -> None:
+    contract = build_social_response_structure_contract(
+        {"required_response_type": "Dialogue"},
+        debug_inputs={"scene_id": "gate_yard"},
+    )
+
+    assert contract == {
+        "enabled": True,
+        "applies_to_response_type": "dialogue",
+        "require_spoken_dialogue_shape": True,
+        "discourage_expository_monologue": True,
+        "require_natural_cadence": True,
+        "allow_brief_action_beats": True,
+        "allow_brief_refusal_or_uncertainty": True,
+        "max_contiguous_expository_lines": 2,
+        "max_dialogue_paragraphs_before_break": 2,
+        "prefer_single_speaker_turn": True,
+        "forbid_bulleted_or_list_like_dialogue": True,
+        "required_response_type": "dialogue",
+        "debug_reason": "response_type_contract_requires_dialogue",
+        "debug_inputs": {"scene_id": "gate_yard"},
+    }
+
+
+def test_prompt_contract_owner_social_response_structure_contract_disables_non_dialogue_turns() -> None:
+    contract = build_social_response_structure_contract(
+        {"required_response_type": "action_outcome"},
+        debug_inputs={"scene_id": "alley"},
+    )
+
+    assert contract == {
+        "enabled": False,
+        "applies_to_response_type": "dialogue",
+        "require_spoken_dialogue_shape": False,
+        "discourage_expository_monologue": False,
+        "require_natural_cadence": False,
+        "allow_brief_action_beats": True,
+        "allow_brief_refusal_or_uncertainty": True,
+        "max_contiguous_expository_lines": None,
+        "max_dialogue_paragraphs_before_break": None,
+        "prefer_single_speaker_turn": False,
+        "forbid_bulleted_or_list_like_dialogue": False,
+        "required_response_type": "action_outcome",
+        "debug_reason": "response_type_not_dialogue:action_outcome",
+        "debug_inputs": {"scene_id": "alley"},
+    }
+
+
+def test_prompt_contract_owner_includes_structured_turn_summary_and_no_restatement_guidance() -> None:
+    resolution = {
+        "kind": "question",
+        "action_id": "ask-guard",
+        "label": "Question the guard",
+        "prompt": 'Galinor asks, "Who signed this order?"',
+        "social": {"target_id": "guard_captain"},
+        "requires_check": False,
+    }
+    user_text = 'Galinor asks, "Who signed this order?" while examining the notice board.'
+    ctx = build_narration_context(
+        **_narration_minimal_kwargs(
+            user_text=user_text,
+            resolution=resolution,
+            intent={"labels": ["social_probe"]},
+        )
+    )
+    turn_summary = ctx["turn_summary"]
+    obligations = ctx["narration_obligations"]
+    instructions = " ".join(ctx.get("instructions", [])).lower()
+
+    assert turn_summary["action_descriptor"] == "Question the guard"
+    assert turn_summary["resolution_kind"] == "question"
+    assert turn_summary["raw_player_input"] == user_text
+    assert obligations["avoid_player_action_restatement"] is True
+    assert obligations["prefer_structured_turn_summary"] is True
+    assert "avoid_player_action_restatement" in instructions
+    assert "prefer_structured_turn_summary" in instructions
+
+
+@pytest.mark.unit
+def test_prompt_contract_owner_marks_wait_turn_as_active_reply_expected_when_social_engagement_is_live() -> None:
+    obligations = derive_narration_obligations(
+        {
+            "turn_counter": 5,
+            "visited_scene_count": 2,
+            "active_interaction_target_id": "rian",
+            "active_interaction_kind": "social",
+            "interaction_mode": "social",
+        },
+        resolution={"kind": "observe", "action_id": "wait"},
+        intent={"labels": ["passive_pause", "observation"]},
+        recent_log_for_prompt=[],
+        scene_runtime={},
+    )
+    assert obligations["active_npc_reply_expected"] is True
+
+
+def test_prompt_contract_owner_exports_player_expression_contract_for_quoted_third_person_input() -> None:
+    user_text = 'Galinor asks, "Who signed this order?" while examining the notice board.'
+    ctx = build_narration_context(**_narration_minimal_kwargs(user_text=user_text))
+
+    contract = ctx["player_expression_contract"]
+    assert contract["default_action_style"] == "third_person"
+    assert contract["quoted_speech_allowed"] is True
+    assert contract["preserve_user_expression_format"] is True
+    assert ctx["player_input"] == user_text
+
+
+def test_prompt_contract_owner_exposes_rule_priority_hierarchy() -> None:
+    ctx = build_narration_context(
+        **_narration_minimal_kwargs(
+            user_text='Galinor asks, "Who signed this order?"',
+            intent={"labels": ["social_probe"]},
+        )
+    )
+    policy = ctx["response_policy"]
+    instructions = " ".join(ctx.get("instructions", []))
+
+    assert policy["rule_priority_order"] == [label for _, label in RESPONSE_RULE_PRIORITY]
+    rd = policy.get("response_delta") or {}
+    assert rd.get("enabled") is False
+    assert rd.get("trigger_source") == "none"
+    assert RULE_PRIORITY_COMPACT_INSTRUCTION in instructions
+    assert "avoid unjustified certainty" in instructions.lower()
+    assert "response_policy.rule_priority_order" in instructions
+    assert NO_VALIDATOR_VOICE_RULE in instructions
+    assert policy["no_validator_voice"]["enabled"] is True
+    assert policy["no_validator_voice"]["applies_to"] == "standard_narration"
+    assert policy["no_validator_voice"]["rules_explanation_only_in"] == ["oc", "adjudication"]
+    assert (
+        "rules_explanation_outside_oc_or_adjudication"
+        in policy["no_validator_voice"]["prohibited_perspectives"]
+    )
+
+
+def test_prompt_contract_owner_enables_response_delta_for_same_topic_follow_up_question() -> None:
+    prior_chat = "What did the guards report about the north gate before the gates were barred?"
+    prior_gm = (
+        "The night sergeant filed a short report noting extra cart traffic and one sealed "
+        "warrant shown at the north gate before compline bells."
+    )
+    recent_log_for_prompt = [
+        {
+            "log_meta": {"player_input": prior_chat},
+            "gm_output": {"player_facing_text": prior_gm},
+        }
+    ]
+    ctx = build_narration_context(
+        {
+            "title": "Test Campaign",
+            "premise": "A test premise.",
+            "character_role": "A test role.",
+            "gm_guidance": ["g1", "g2", "g3", "g4", "g5"],
+            "world_pressures": ["p1", "p2", "p3", "p4"],
+            "magic_style": "Rare and mysterious.",
+        },
+        {
+            "settlements": [{"id": "s1", "name": "City"}],
+            "factions": [{"id": "f1", "name": "Faction A"}, {"id": "f2", "name": "Faction B"}],
+            "event_log": [
+                {"type": "event", "text": "Event 1"},
+                {"type": "event", "text": "Event 2"},
+            ],
+            "world_state": {"flags": {"flag1": True}, "counters": {"c1": 5}, "clocks": {}},
+        },
+        {"active_scene_id": "frontier_gate", "response_mode": "standard", "turn_counter": 10},
+        {"name": "Galinor", "hp": {"current": 8, "max": 8}, "ac": {"normal": 12}},
+        {
+            "scene": {
+                "id": "frontier_gate",
+                "location": "Gate District",
+                "summary": "A crowded gate.",
+                "visible_facts": ["Fact 1", "Fact 2"],
+                "discoverable_clues": [{"id": "c1", "text": "A discoverable clue."}],
+                "hidden_facts": ["A secret motivation."],
+                "exits": [],
+                "enemies": [],
+            }
+        },
+        {"in_combat": False},
+        [],
+        "Okay but what happened at the north gate after that?",
+        None,
+        {},
+        public_scene={
+            "id": "frontier_gate",
+            "location": "Gate District",
+            "summary": "A crowded gate.",
+            "visible_facts": ["Fact 1", "Fact 2"],
+            "exits": [],
+            "enemies": [],
+        },
+        discoverable_clues=[],
+        gm_only_hidden_facts=[],
+        gm_only_discoverable_locked=[],
+        discovered_clue_records=[],
+        undiscovered_clue_records=[],
+        pending_leads=[],
+        intent={"labels": ["social_probe"]},
+        world_state_view={"flags": {}, "counters": {}, "clocks_summary": []},
+        mode_instruction="Standard.",
+        recent_log_for_prompt=recent_log_for_prompt,
+    )
+    rd = ctx["response_policy"].get("response_delta") or {}
+    assert rd.get("enabled") is True
+    assert rd.get("delta_required") is True
+    assert rd.get("trigger_source") == "same_topic_direct_question"
+    assert rd.get("forbid_semantic_restatement") is True
+    assert set(rd.get("allowed_delta_kinds") or []) == {
+        "new_information",
+        "refinement",
+        "consequence",
+        "clarified_uncertainty",
+    }
+    trace = rd.get("trace") or {}
+    assert trace.get("follow_up_pressure_detected") is True
+    assert trace.get("prior_answer_available") is True
+    assert "response_policy.response_delta.enabled" in " ".join(ctx.get("instructions", [])).lower()
+
+
+def test_prompt_contract_owner_exposes_typed_uncertainty_policy_and_hint() -> None:
+    ctx = build_narration_context(
+        **_narration_minimal_kwargs(
+            user_text="Where is the patrol report?",
+            intent={"labels": ["social_probe"]},
+            uncertainty_hint={
+                "category": "unknown_location",
+                "known_edge": "The trail points past the notice board, not to a final door.",
+                "unknown_edge": "After that, the last stop drops into rumor.",
+                "next_lead": "Start at the missing patrol notice and pin down the last sighting tied to it.",
+            },
+        )
+    )
+    policy = ctx["response_policy"]
+    instructions = " ".join(ctx.get("instructions", [])).lower()
+
+    assert policy["uncertainty"]["enabled"] is True
+    assert policy["uncertainty"]["categories"] == [
+        "unknown_identity",
+        "unknown_location",
+        "unknown_motive",
+        "unknown_method",
+        "unknown_quantity",
+        "unknown_feasibility",
+    ]
+    assert policy["uncertainty"]["answer_shape"] == [
+        "known_edge",
+        "unknown_edge",
+        "next_lead",
+    ]
+    assert policy["uncertainty"]["sources"] == [
+        "npc_ignorance",
+        "scene_ambiguity",
+        "procedural_insufficiency",
+    ]
+    assert policy["uncertainty"]["context_inputs"] == [
+        "turn_context",
+        "speaker",
+        "scene_snapshot",
+    ]
+    assert ctx["uncertainty_hint"]["category"] == "unknown_location"
+    assert "response_policy.uncertainty.categories" in instructions
+    assert "response_policy.uncertainty.sources" in instructions
+    assert "response_policy.uncertainty.answer_shape" in instructions
+    assert "uncertainty_hint.turn_context" in instructions
+    assert "uncertainty_hint.speaker" in instructions
+    assert "uncertainty_hint.scene_snapshot" in instructions
+    assert "frame uncertainty as world-facing limits only" in instructions
+    assert "vary sentence count and cadence naturally" in instructions
+
+
+def test_prompt_contract_owner_exports_promoted_npc_identity_and_social_profile() -> None:
+    world = {
+        "settlements": [{"id": "s1", "name": "City"}],
+        "factions": [{"id": "f1", "name": "Faction A"}, {"id": "f2", "name": "Faction B"}],
+        "event_log": [
+            {"type": "event", "text": "Event 1"},
+            {"type": "event", "text": "Event 2"},
+        ],
+        "world_state": {"flags": {"flag1": True}, "counters": {"c1": 5}, "clocks": {}},
+        "npcs": [
+            {
+                "id": "frontier_gate__ragged_stranger",
+                "name": "Keene",
+                "location": "frontier_gate",
+                "stance_toward_player": "wary",
+                "information_reliability": "partial",
+                "knowledge_scope": ["scene:frontier_gate", "rumor"],
+                "affiliation": "",
+                "current_agenda": "watch the gate",
+                "promoted_from_actor_id": "ragged_stranger",
+                "origin_kind": "scene_actor",
+            }
+        ],
+    }
+    session = {
+        "active_scene_id": "frontier_gate",
+        "response_mode": "standard",
+        "turn_counter": 3,
+        "interaction_context": {
+            "active_interaction_target_id": "ragged_stranger",
+            "active_interaction_kind": "social",
+            "interaction_mode": "social",
+            "engagement_level": "engaged",
+        },
+        "scene_state": {
+            "promoted_actor_npc_map": {"ragged_stranger": "frontier_gate__ragged_stranger"},
+        },
+    }
+    ctx = build_narration_context(
+        **_narration_minimal_kwargs(
+            world=world,
+            session=session,
+            user_text="What did you hear?",
+            intent={"labels": ["question"], "allow_discoverable_clues": False},
+            gm_only_hidden_facts=["A secret motivation."],
+            gm_only_discoverable_locked=["A discoverable clue."],
+            undiscovered_clue_records=[{"id": "c1", "text": "A discoverable clue."}],
+            mode_instruction="Narration mode: standard.",
+        )
+    )
+    assert ctx["session"]["active_interaction_target_id"] == "frontier_gate__ragged_stranger"
+    assert ctx["session"]["active_interaction_target_name"] == "Keene"
+    profile = ctx["social_context"]["interlocutor_profile"]
+    assert profile["npc_is_promoted"] is True
+    assert profile["reliability"] == "partial"
+    assert profile["stance"] == "wary"
+    assert "scene:frontier_gate" in profile["knowledge_scope"]
+    active = ctx["active_interlocutor"]
+    assert active["npc_id"] == "frontier_gate__ragged_stranger"
+    assert active["raw_interaction_target_id"] == "ragged_stranger"
+    assert active["promoted_from_actor_id"] == "ragged_stranger"
+    hints = ctx["social_context"]["answer_style_hints"]
+    assert any("INFORMATION_RELIABILITY partial" in hint for hint in hints)
+    assert any("INTERLOCUTOR KNOWLEDGE GATE" in hint for hint in hints)
+    assert any("NAMING CONTINUITY (engine)" in line for line in ctx["instructions"])
 
 
 def _session_with_registry(*leads: dict) -> dict:
@@ -1376,6 +1758,37 @@ def test_build_narration_context_exposes_lead_context_and_preserves_pending_surf
     assert ctx["scene"]["runtime"]["pending_leads"] == [{"hint": "legacy pending"}]
 
 
+def test_build_narration_context_filters_terminal_pending_leads_from_prompt_export():
+    session = _session_with_registry(
+        {
+            "id": "done_pl",
+            "title": "Done",
+            "status": LeadStatus.RESOLVED.value,
+            "lifecycle": LeadLifecycle.RESOLVED.value,
+            "resolution_type": "confirmed",
+            "resolved_at_turn": 1,
+        }
+    )
+    pending = [
+        {
+            "clue_id": "c",
+            "authoritative_lead_id": "done_pl",
+            "text": "Should not surface as active",
+            "leads_to_scene": "x",
+        }
+    ]
+    ctx = build_narration_context(
+        **_narration_minimal_kwargs(
+            session=session,
+            scene_runtime={"pending_leads": pending},
+            pending_leads=pending,
+        )
+    )
+    scene_block = ctx["scene"]
+    assert scene_block["pending_leads"] == []
+    assert scene_block["runtime"]["pending_leads"] == []
+
+
 def test_build_narration_context_repeat_continuity_alignment_across_export_and_hints():
     session = _session_with_registry(
         {
@@ -1423,6 +1836,59 @@ def test_build_narration_context_repeat_continuity_alignment_across_export_and_h
     assert ilc["repeat_suppression"]["has_recent_repeat_risk"] is True
     assert ilc["repeat_suppression"]["recent_lead_ids"] == ["lead_smuggler_drop"]
     assert any("prefer advancement" in h and "over repetition" in h for h in ctx["interlocutor_lead_behavior_hints"])
+
+
+def test_build_narration_context_recent_discussion_flags_repeat_risk_without_filtering_npc_relevant_leads():
+    session = _session_with_registry(
+        {
+            "id": "lead_recent",
+            "title": "Recent Lead",
+            "status": LeadStatus.ACTIVE.value,
+            "lifecycle": LeadLifecycle.COMMITTED.value,
+            "related_npc_ids": ["npc_dockmaster"],
+            "priority": 1,
+        },
+        {
+            "id": "lead_other",
+            "title": "Other Lead",
+            "status": LeadStatus.ACTIVE.value,
+            "lifecycle": LeadLifecycle.COMMITTED.value,
+            "related_npc_ids": ["npc_dockmaster"],
+            "priority": 0,
+        },
+    )
+    session["active_scene_id"] = "scene_docks"
+    session["turn_counter"] = 11
+    session["interaction_context"] = {
+        "active_interaction_target_id": "npc_dockmaster",
+        "active_interaction_kind": "social",
+        "interaction_mode": "social",
+        "engagement_level": "engaged",
+        "conversation_privacy": None,
+        "player_position_context": None,
+    }
+    _record_discussion(
+        session,
+        scene_id="scene_docks",
+        npc_id="npc_dockmaster",
+        lead_id="lead_recent",
+        turn=10,
+        disclosure_level="hinted",
+    )
+    ctx = build_narration_context(
+        **_narration_minimal_kwargs(
+            session=session,
+            world={},
+            public_scene={"id": "scene_docks", "visible_facts": [], "exits": [], "enemies": []},
+        )
+    )
+    ilc = ctx["interlocutor_lead_context"]
+    assert [r["lead_id"] for r in ilc["recently_discussed_with_npc"]] == ["lead_recent"]
+    assert ilc["repeat_suppression"]["recent_lead_ids"] == ["lead_recent"]
+    assert {r["id"] for r in ctx["lead_context"]["npc_relevant_leads"]} == {
+        "lead_recent",
+        "lead_other",
+    }
 
 
 def test_build_narration_context_disclosure_upgrade_and_acknowledgement_behavior_alignment():
@@ -2038,6 +2504,21 @@ def test_context_separation_contract_wired_to_response_policy_and_payload():
     pd = ctx["prompt_debug"]
     assert "context_separation" in pd
     assert pd["context_separation"].get("enabled") is True
+
+
+@pytest.mark.unit
+def test_prompt_contract_owner_materializes_response_policy_bundle_for_downstream_consumers():
+    policy = build_response_policy(
+        narration_obligations={"scene_momentum_due": True},
+        player_text="I study the gate.",
+        resolution={"kind": "observe", "prompt": "I study the gate."},
+        session_view={"turn_counter": 2, "visited_scene_count": 1},
+        recent_log_compact=[],
+    )
+    assert policy["rule_priority_order"] == [label for _, label in RESPONSE_RULE_PRIORITY]
+    assert isinstance(policy["response_delta"], dict)
+    assert isinstance(policy["answer_completeness"], dict)
+    assert policy["uncertainty"]["enabled"] is True
 
 
 @pytest.mark.unit

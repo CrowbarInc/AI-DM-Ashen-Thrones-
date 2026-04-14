@@ -10,7 +10,7 @@ from game.gm import build_retry_prompt_for_failure as _gm_retry_import_order_anc
 from game import stage_diff_telemetry as sdt
 from game.final_emission_gate import apply_final_emission_gate
 from game.gm_retry import apply_deterministic_retry_fallback, force_terminal_retry_fallback
-from game.turn_packet import TURN_PACKET_METADATA_KEY, attach_turn_packet, build_turn_packet
+from game.turn_packet import TURN_PACKET_METADATA_KEY, attach_turn_packet, build_turn_packet, resolve_turn_packet_for_gate
 
 
 def test_snapshot_turn_stage_fingerprints_without_full_text() -> None:
@@ -197,6 +197,7 @@ def test_resolve_gate_turn_packet_prefers_cache() -> None:
         "metadata": {TURN_PACKET_METADATA_KEY: build_turn_packet(scene_id="meta")},
         "_gate_turn_packet_cache": pkt,
     }
+    assert resolve_turn_packet_for_gate(gm) is pkt
     assert sdt.resolve_gate_turn_packet(gm) is pkt
 
 

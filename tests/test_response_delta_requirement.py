@@ -1,9 +1,14 @@
 """Regression suite for ``response_policy.response_delta`` (Block 2) in ``final_emission_gate``.
 
 Tests the implemented skip logic, ``validate_response_delta``, minimal repair modes, and
-``apply_final_emission_gate`` integration — aligned to current code, not prompt-context derivation.
+``apply_final_emission_gate`` integration. Direct response-policy accessor and bundle
+materialization ownership lives in ``tests/test_response_policy_contracts.py``; this file
+keeps downstream gate application and regression coverage aligned to current code rather
+than prompt-context derivation.
 """
 from __future__ import annotations
+
+import importlib
 
 import pytest
 
@@ -16,7 +21,10 @@ from game.final_emission_gate import (
     inspect_response_delta_failure,
     validate_response_delta,
 )
-from game.prompt_context import ANSWER_COMPLETENESS_PARTIAL_REASONS, build_answer_completeness_contract
+
+_prompt_context = importlib.import_module("game.prompt_context")
+ANSWER_COMPLETENESS_PARTIAL_REASONS = _prompt_context.ANSWER_COMPLETENESS_PARTIAL_REASONS
+build_answer_completeness_contract = _prompt_context.build_answer_completeness_contract
 
 pytestmark = pytest.mark.unit
 

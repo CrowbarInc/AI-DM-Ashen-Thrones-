@@ -1,11 +1,11 @@
-"""Final player-facing emission: orchestration, policy layers, and compatibility imports.
+"""Canonical orchestration owner for final player-facing emission.
 
 **Orchestration home:** :func:`apply_final_emission_gate` sequences sanitizer integration,
 strict-social coordination (via :mod:`game.social_exchange_emission`), shipped contracts
 (tone, narrative authority, anti-railroading, context separation, scene anchor, speaker
 selection), logging, and metadata merges.
 
-**Not the ownership home for:** deterministic validators (:mod:`game.final_emission_validators`),
+**Not the canonical owner for:** deterministic validators (:mod:`game.final_emission_validators`),
 repair/layer wiring (:mod:`game.final_emission_repairs`), shared text/normalization patterns
 (:mod:`game.final_emission_text`), or ``response_type`` contract resolution
 (:mod:`game.response_policy_contracts`). Those modules are imported here; some private
@@ -13,17 +13,18 @@ symbols remain importable from this package for historical tests (prefer importi
 their real module for new code).
 
 NA telemetry keys merged into ``_final_emission_meta`` are packaged at write time by
-:mod:`game.final_emission_meta` (single schema); the gate remains the **orchestration owner**
+:mod:`game.final_emission_meta` (single schema); the gate remains the **canonical orchestration owner**
 that calls layer wiring in :mod:`game.final_emission_repairs`.
 
 **Turn packet vs telemetry:** The turn packet (:mod:`game.turn_packet`) is the canonical
 accessor/snapshot layer for contracts on a turn. Stage-diff telemetry
 (:mod:`game.stage_diff_telemetry`) records bounded stage transitions for observability only.
-:func:`game.stage_diff_telemetry.resolve_gate_turn_packet` is the preferred gate-level
-packet resolver. ``_gate_turn_packet_cache`` is set at :func:`apply_final_emission_gate`
-entry from :func:`game.turn_packet.get_turn_packet` and popped in
-:func:`_finalize_emission_output`; it must never leak into finalized output. Neither layer
-owns engine truth or narration policy.
+:func:`game.turn_packet.resolve_turn_packet_for_gate` is the preferred gate-level packet
+resolver. ``_gate_turn_packet_cache`` is set at :func:`apply_final_emission_gate` entry
+from :func:`game.turn_packet.get_turn_packet` and popped in
+:func:`_finalize_emission_output`; it must never leak into finalized output. Telemetry is
+derived from the packet boundary and does not own it. Neither layer owns engine truth or
+narration policy.
 
 **Last-mile player text:** :func:`_finalize_emission_output` is the canonical exit owner for
 deterministic cleanup after sanitizer + optional decompress / fragment repair / micro-smooth
@@ -96,10 +97,9 @@ from game.stage_diff_telemetry import (
     diff_turn_stage,
     record_stage_snapshot,
     record_stage_transition,
-    resolve_gate_turn_packet,
     snapshot_turn_stage,
 )
-from game.turn_packet import get_turn_packet, resolve_turn_packet_contract
+from game.turn_packet import get_turn_packet, resolve_turn_packet_contract, resolve_turn_packet_for_gate
 from game.anti_railroading import anti_railroading_repair_hints, build_anti_railroading_contract, validate_anti_railroading
 from game.context_separation import context_separation_repair_hints, validate_context_separation
 from game.player_facing_narration_purity import (
@@ -117,7 +117,11 @@ from game.fallback_provenance_debug import (
     record_final_emission_gate_entry,
     record_final_emission_gate_exit,
 )
-from game.final_emission_meta import merge_dead_turn_classification_into_final_emission_meta
+from game.final_emission_meta import (
+    default_narrative_authenticity_layer_meta,
+    merge_narrative_authenticity_into_final_emission_meta,
+    package_dead_turn_snapshot_into_final_emission_meta,
+)
 from game.final_emission_text import (
     _ACTION_RESULT_PATTERNS,
     _AGENCY_SUBSTITUTE_PATTERNS,
@@ -137,6 +141,7 @@ from game.response_policy_contracts import (
     _last_player_input,
     _resolve_response_type_contract,
     _valid_response_type_contract,
+    materialize_response_policy_bundle,
     resolve_interaction_continuity_contract,
 )
 
@@ -148,13 +153,10 @@ from game.final_emission_repairs import (
     _apply_response_delta_layer,
     _apply_social_response_structure_layer,
     _default_fallback_behavior_meta,
-    _default_narrative_authenticity_meta,
     _default_response_delta_meta,
     _default_social_response_structure_meta,
-    _gm_probe_for_answer_pressure_contracts,
     _merge_answer_completeness_meta,
     _merge_fallback_behavior_meta,
-    _merge_narrative_authenticity_meta,
     _merge_response_delta_meta,
     _merge_social_response_structure_meta,
     _minimal_action_outcome_contract_repair,
@@ -601,7 +603,7 @@ def _resolve_tone_escalation_contract(gm_output: Dict[str, Any] | None) -> Dict[
     """Prefer the full shipped policy path; never substitute prompt_debug for validation."""
     if not isinstance(gm_output, dict):
         return None
-    pkt = resolve_gate_turn_packet(gm_output)
+    pkt = resolve_turn_packet_for_gate(gm_output)
     if isinstance(pkt, dict):
         hit = resolve_turn_packet_contract(pkt, "tone_escalation")
         hit = _coerce_tone_escalation_contract_dict(hit)
@@ -1513,7 +1515,7 @@ def _resolve_anti_railroading_contract(gm_output: Dict[str, Any] | None) -> Dict
     """Prefer shipped narration / prompt_context mirrors; never substitute prompt_debug alone."""
     if not isinstance(gm_output, dict):
         return None
-    pkt = resolve_gate_turn_packet(gm_output)
+    pkt = resolve_turn_packet_for_gate(gm_output)
     if isinstance(pkt, dict):
         hit = resolve_turn_packet_contract(pkt, "anti_railroading")
         hit = _coerce_anti_railroading_contract_dict(hit)
@@ -2015,7 +2017,7 @@ def _resolve_context_separation_contract(
     """Read the shipped contract from *gm_output* / narration / policy mirrors (no rebuild)."""
     if not isinstance(gm_output, dict):
         return None, None
-    pkt = resolve_gate_turn_packet(gm_output)
+    pkt = resolve_turn_packet_for_gate(gm_output)
     if isinstance(pkt, dict):
         hit = resolve_turn_packet_contract(pkt, "context_separation")
         hit = _coerce_context_separation_contract_dict(hit)
@@ -4358,7 +4360,7 @@ def _finalize_emission_output(
             "post_gate_mutation_detected": pre_gate_text != gate_norm_final,
             "final_text_preview": (gate_norm_final[:120] + "…") if len(gate_norm_final) > 120 else gate_norm_final,
         }
-    merge_dead_turn_classification_into_final_emission_meta(out)
+    package_dead_turn_snapshot_into_final_emission_meta(out)
     return out
 
 
@@ -8321,7 +8323,7 @@ def apply_final_emission_gate(
     if not isinstance(gm_output, dict):
         return gm_output
     out = dict(gm_output)
-    out = _gm_probe_for_answer_pressure_contracts(out, session if isinstance(session, dict) else None)
+    out = materialize_response_policy_bundle(out, session if isinstance(session, dict) else None)
     out["_gate_turn_packet_cache"] = get_turn_packet(
         out, out.get("response_policy"), out.get("prompt_context")
     )
@@ -8417,7 +8419,7 @@ def apply_final_emission_gate(
     ac_layer_meta: Dict[str, Any] = {}
     rd_layer_meta: Dict[str, Any] = _default_response_delta_meta()
     srs_layer_meta: Dict[str, Any] = _default_social_response_structure_meta()
-    nat_layer_meta: Dict[str, Any] = _default_narrative_authenticity_meta()
+    nat_layer_meta: Dict[str, Any] = default_narrative_authenticity_layer_meta()
     fb_layer_meta: Dict[str, Any] = _default_fallback_behavior_meta()
     na_layer_meta: Dict[str, Any] = _default_narrative_authority_meta()
     te_layer_meta: Dict[str, Any] = _default_tone_escalation_meta()
@@ -8783,7 +8785,7 @@ def apply_final_emission_gate(
             _merge_answer_completeness_meta(out["_final_emission_meta"], ac_layer_meta)
             _merge_response_delta_meta(out["_final_emission_meta"], rd_layer_meta)
             _merge_social_response_structure_meta(out["_final_emission_meta"], srs_layer_meta)
-            _merge_narrative_authenticity_meta(out["_final_emission_meta"], nat_layer_meta)
+            merge_narrative_authenticity_into_final_emission_meta(out["_final_emission_meta"], nat_layer_meta)
             _merge_narrative_authority_meta(out["_final_emission_meta"], na_layer_meta)
             _merge_tone_escalation_meta(out["_final_emission_meta"], te_layer_meta)
             _merge_anti_railroading_meta(out["_final_emission_meta"], ar_layer_meta)
@@ -8969,7 +8971,7 @@ def apply_final_emission_gate(
         _merge_answer_completeness_meta(out["_final_emission_meta"], ac_layer_meta)
         _merge_response_delta_meta(out["_final_emission_meta"], rd_layer_meta)
         _merge_social_response_structure_meta(out["_final_emission_meta"], srs_layer_meta)
-        _merge_narrative_authenticity_meta(out["_final_emission_meta"], nat_layer_meta)
+        merge_narrative_authenticity_into_final_emission_meta(out["_final_emission_meta"], nat_layer_meta)
         _merge_narrative_authority_meta(out["_final_emission_meta"], na_layer_meta)
         _merge_tone_escalation_meta(out["_final_emission_meta"], te_layer_meta)
         _merge_anti_railroading_meta(out["_final_emission_meta"], ar_layer_meta)
@@ -9411,7 +9413,7 @@ def apply_final_emission_gate(
         _merge_answer_completeness_meta(out["_final_emission_meta"], ac_layer_meta)
         _merge_response_delta_meta(out["_final_emission_meta"], rd_layer_meta)
         _merge_social_response_structure_meta(out["_final_emission_meta"], srs_layer_meta)
-        _merge_narrative_authenticity_meta(out["_final_emission_meta"], nat_layer_meta)
+        merge_narrative_authenticity_into_final_emission_meta(out["_final_emission_meta"], nat_layer_meta)
         _merge_narrative_authority_meta(out["_final_emission_meta"], na_layer_meta)
         _merge_tone_escalation_meta(out["_final_emission_meta"], te_layer_meta)
         _merge_anti_railroading_meta(out["_final_emission_meta"], ar_layer_meta)
@@ -9606,7 +9608,7 @@ def apply_final_emission_gate(
     _merge_answer_completeness_meta(out["_final_emission_meta"], ac_layer_meta)
     _merge_response_delta_meta(out["_final_emission_meta"], rd_layer_meta)
     _merge_social_response_structure_meta(out["_final_emission_meta"], srs_layer_meta)
-    _merge_narrative_authenticity_meta(out["_final_emission_meta"], nat_layer_meta)
+    merge_narrative_authenticity_into_final_emission_meta(out["_final_emission_meta"], nat_layer_meta)
     _merge_narrative_authority_meta(out["_final_emission_meta"], na_layer_meta)
     _merge_tone_escalation_meta(out["_final_emission_meta"], te_layer_meta)
     _merge_anti_railroading_meta(out["_final_emission_meta"], ar_layer_meta)

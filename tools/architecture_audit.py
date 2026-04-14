@@ -77,12 +77,12 @@ SEVERITY_RANK = {
 }
 HOTSPOT_NAMES = (
     "prompt contracts conflict",
-    "response policy contracts partial drift toward repairs",
+    "response policy contracts localized residue",
     "final emission gate orchestration partial mismatch",
     "stage diff telemetry partial mismatch",
     "test ownership / inventory docs still unclear",
     "prompt_context_leads residue",
-    "turn_packet mixed contract/telemetry role",
+    "turn_packet telemetry adjacency residue",
     "social_exchange_emission mixed repair/contract role",
 )
 
@@ -113,6 +113,28 @@ STRONG_OWNER_RE = re.compile(
 MARKDOWN_LINK_RE = re.compile(r"\[[^\]]*\]\(([^)]+)\)")
 REPO_PATH_RE = re.compile(r"\b(?:docs|game|tests|tools)/[A-Za-z0-9_.\-/]+\b")
 INTERNAL_IMPORT_PREFIXES = ("game", "tests", "tools")
+OWNERSHIP_LEDGER_PATH = "docs/architecture_ownership_ledger.md"
+LEDGER_SECTION_RE = re.compile(r"^##\s+(.+?)\s*$", re.MULTILINE)
+OWNER_DECLARATION_RE = re.compile(
+    r"\b(canonical owner for|canonical orchestration owner for|canonical metadata-only owner for|canonical telemetry-only owner for|orchestration owner for|orchestration home)\b",
+    re.IGNORECASE,
+)
+NON_OWNER_DECLARATION_RE = re.compile(
+    r"\b(support-only|helper-only|metadata-only|telemetry-only|not the canonical owner|not the ownership home|non-owner|transitional residue)\b",
+    re.IGNORECASE,
+)
+OWNER_DECLARATION_PHRASES = (
+    "canonical owner for",
+    "canonical orchestration owner for",
+    "canonical metadata-only owner for",
+    "canonical telemetry-only owner for",
+    "orchestration owner for",
+    "orchestration home",
+)
+NEGATED_OWNER_PHRASES = (
+    "not the canonical owner",
+    "not the ownership home",
+)
 
 
 @dataclass
@@ -487,6 +509,131 @@ def _find_doc_reference_issues(records: dict[str, FileRecord], repo_root: Path) 
                 }
             )
     return issues
+
+
+def _path_mentions(text: str) -> list[str]:
+    return sorted(set(REPO_PATH_RE.findall(text)))
+
+
+def _parse_ownership_ledger(records: dict[str, FileRecord]) -> dict[str, Any]:
+    record = records.get(OWNERSHIP_LEDGER_PATH)
+    if not record:
+        return {
+            "exists": False,
+            "entries": [],
+            "owner_paths": [],
+            "support_paths": [],
+        }
+    text = record.text
+    sections = list(LEDGER_SECTION_RE.finditer(text))
+    entries: list[dict[str, Any]] = []
+    for idx, match in enumerate(sections):
+        start = match.end()
+        end = sections[idx + 1].start() if idx + 1 < len(sections) else len(text)
+        body = text[start:end]
+        owner_paths = []
+        support_paths = []
+        current_state = "unknown"
+        for raw_line in body.splitlines():
+            line = raw_line.strip()
+            if line.startswith("- Canonical owner module:"):
+                owner_paths = _path_mentions(line)
+            elif line.startswith("- Non-owner supporting modules:"):
+                support_paths = _path_mentions(line)
+            elif line.startswith("- Current state:"):
+                current_state = line.split(":", 1)[1].strip().strip("`") or "unknown"
+        entries.append(
+            {
+                "concern_name": match.group(1).strip(),
+                "owner_paths": owner_paths,
+                "support_paths": support_paths,
+                "current_state": current_state,
+            }
+        )
+    owner_paths = sorted({path for entry in entries for path in entry["owner_paths"]})
+    support_paths = sorted({path for entry in entries for path in entry["support_paths"]})
+    return {
+        "exists": True,
+        "entries": entries,
+        "owner_paths": owner_paths,
+        "support_paths": support_paths,
+    }
+
+
+def _ownership_declaration_consistency(records: dict[str, FileRecord]) -> dict[str, Any]:
+    ledger = _parse_ownership_ledger(records)
+    if not ledger["exists"]:
+        return {
+            "status": "missing",
+            "ledger_path": OWNERSHIP_LEDGER_PATH,
+            "issues": [],
+            "checked_owner_modules": 0,
+            "checked_support_only_modules": 0,
+            "summary": "Ownership ledger not present in this repo snapshot.",
+        }
+
+    owner_paths = {
+        path for path in ledger["owner_paths"] if path.startswith("game/") and path.endswith(".py")
+    }
+    support_only_paths = {
+        path
+        for path in (set(ledger["support_paths"]) - owner_paths)
+        if path.startswith("game/") and path.endswith(".py")
+    }
+    issues: list[dict[str, str]] = []
+
+    for path in sorted(owner_paths):
+        record = records.get(path)
+        if not record:
+            issues.append({"path": path, "issue": "ledger_owner_missing_from_repo"})
+            continue
+        docstring = record.docstring or ""
+        if not _has_explicit_owner_declaration(docstring):
+            issues.append({"path": path, "issue": "owner_missing_explicit_owner_language"})
+
+    for path in sorted(support_only_paths):
+        record = records.get(path)
+        if not record:
+            issues.append({"path": path, "issue": "ledger_support_module_missing_from_repo"})
+            continue
+        docstring = record.docstring or ""
+        if _has_explicit_owner_declaration(docstring):
+            issues.append({"path": path, "issue": "support_only_module_claims_owner_language"})
+        if not _has_explicit_non_owner_declaration(docstring):
+            issues.append({"path": path, "issue": "support_only_module_missing_non_owner_language"})
+
+    mismatch_count = len(issues)
+    if mismatch_count == 0:
+        status = "aligned"
+        summary = "Ownership ledger and module docstrings agree on owner vs support-only declarations."
+    else:
+        status = "mismatch"
+        summary = f"Ownership ledger and module docstrings disagree in {mismatch_count} place(s)."
+    return {
+        "status": status,
+        "ledger_path": OWNERSHIP_LEDGER_PATH,
+        "issues": issues[:20],
+        "checked_owner_modules": len(owner_paths),
+        "checked_support_only_modules": len(support_only_paths),
+        "summary": summary,
+    }
+
+
+def _has_explicit_owner_declaration(docstring: str) -> bool:
+    for raw_line in str(docstring or "").splitlines():
+        line = re.sub(r"[*`_]", "", raw_line.strip().lower())
+        if not line:
+            continue
+        if any(phrase in line for phrase in NEGATED_OWNER_PHRASES):
+            continue
+        if any(phrase in line for phrase in OWNER_DECLARATION_PHRASES):
+            return True
+    return False
+
+
+def _has_explicit_non_owner_declaration(docstring: str) -> bool:
+    normalized = re.sub(r"[*`_]", "", str(docstring or ""))
+    return bool(NON_OWNER_DECLARATION_RE.search(normalized))
 
 
 def _first_owner_line(record: FileRecord) -> str | None:
@@ -944,21 +1091,60 @@ def _classify_hotspot(
     runtime_owner = report.get("inferred_owner", "unknown")
 
     if label == "test ownership / inventory docs still unclear":
-        classification = "unclear / needs human review"
-        why = "Inventory docs still read authoritatively while practical ownership remains unresolved."
+        if alignment_status == "partial":
+            classification = "localized under-consolidation"
+            why = "Governance docs are materially clearer, but this docs-led concern still relies on heuristic practical-affinity mapping."
+        else:
+            classification = "unclear / needs human review"
+            why = "Inventory docs still read authoritatively while practical ownership remains unresolved."
+    elif label == "prompt contracts conflict" and alignment_status == "partial":
+        classification = "localized under-consolidation"
+        why = "The runtime owner and practical direct-owner suite are visible again, but prompt-adjacent coverage remains broader than ideal."
     elif label == "prompt_context_leads residue":
         classification = "transitional residue"
         why = "This hotspot is anchored in extraction residue rather than a fresh owner split."
-    elif label in {
-        "turn_packet mixed contract/telemetry role",
-        "social_exchange_emission mixed repair/contract role",
-    }:
-        classification = "possible ownership smear"
-        why = "The named module still carries mixed role signals that should be split before growth."
+    elif label == "social_exchange_emission mixed repair/contract role":
+        if (
+            "mixed_owner" not in role_labels
+            and alignment_status in {"aligned", "partial"}
+            and (
+                "compatibility_exports_after_extraction" in overlap_types
+                or any(
+                    marker.get("kind") in {"compatibility", "historical", "extracted_from", "not_owner"}
+                    for marker in module_archaeology
+                )
+            )
+        ):
+            classification = "transitional residue"
+            why = "The seam now has a visible downstream owner story; remaining spread reads like compatibility residue and gate/retry adjacency."
+        else:
+            classification = "possible ownership smear"
+            why = "The named module still carries mixed role signals that should be split before growth."
+    elif label == "turn_packet telemetry adjacency residue":
+        if alignment_status == "conflict" or coverage_spread >= 8:
+            classification = "possible ownership smear"
+            why = "Packet-boundary and telemetry signals still spread widely enough to blur the owner."
+        elif (
+            "compatibility_exports_after_extraction" in overlap_types
+            or any(marker.get("kind") in {"compatibility", "historical", "extracted_from"} for marker in module_archaeology)
+            or any(marker.get("kind") in {"compatibility", "historical", "extracted_from"} for marker in archaeology_markers)
+        ):
+            classification = "transitional residue"
+            why = "The packet owner remains visible; residual overlap reads like compatibility preservation rather than active co-ownership."
+        else:
+            classification = "localized under-consolidation"
+            why = "The packet owner is visible, but tests/docs still have not fully re-converged around the boundary."
     elif alignment_status == "unclear" or runtime_owner == "unknown":
         classification = "unclear / needs human review"
         why = "The audit still cannot reconcile a stable owner path with practical tests/docs."
     elif label in {
+        "response policy contracts localized residue",
+        "response policy contracts partial drift toward repairs",
+    } and alignment_status == "aligned":
+        classification = "transitional residue"
+        why = "The runtime owner and practical direct-owner suite now align; remaining spread reads like compatibility or adjacency residue."
+    elif label in {
+        "response policy contracts localized residue",
         "response policy contracts partial drift toward repairs",
         "final emission gate orchestration partial mismatch",
     } and alignment_status == "partial":
@@ -1020,12 +1206,12 @@ def _build_hotspot_reviews(subsystem_reports: list[dict[str, Any]]) -> list[dict
     by_name = {item["subsystem_name"]: item for item in subsystem_reports}
     hotspot_specs = [
         ("prompt contracts conflict", "prompt contracts", None),
-        ("response policy contracts partial drift toward repairs", "response policy contracts", None),
+        ("response policy contracts localized residue", "response policy contracts", None),
         ("final emission gate orchestration partial mismatch", "final emission gate orchestration", None),
         ("stage diff telemetry partial mismatch", "stage diff telemetry", None),
         ("test ownership / inventory docs still unclear", "test ownership / inventory docs", None),
         ("prompt_context_leads residue", "prompt contracts", "game/prompt_context_leads.py"),
-        ("turn_packet mixed contract/telemetry role", "stage diff telemetry", "game/turn_packet.py"),
+        ("turn_packet telemetry adjacency residue", "stage diff telemetry", "game/turn_packet.py"),
         ("social_exchange_emission mixed repair/contract role", "final emission gate orchestration", "game/social_exchange_emission.py"),
     ]
     items = []
@@ -1230,10 +1416,11 @@ def _pick_patch_accumulation_evidence(
 
 def _cleanup_recommendation_for_hotspot(hotspot_name: str) -> str | None:
     mapping = {
-        "response policy contracts partial drift toward repairs": "Re-anchor response-policy ownership between `game/response_policy_contracts.py` and `game/final_emission_repairs.py`, then relink the canonical test/doc home to that choice.",
+        "response policy contracts localized residue": "Keep `game/response_policy_contracts.py` as the runtime owner and `tests/test_response_policy_contracts.py` as the direct-owner suite; treat remaining downstream usage as compatibility/adjacency residue only.",
         "final emission gate orchestration partial mismatch": "Thin the `final_emission_gate` vs `final_emission_meta` overlap so orchestration remains primary and metadata packaging stays secondary.",
         "prompt_context_leads residue": "Convert `game/prompt_context_leads.py` from residue wording into a clearly subordinate helper or document it as retired sediment only.",
-        "stage diff telemetry partial mismatch": "Re-state whether `game/stage_diff_telemetry.py` or `game/turn_packet.py` owns the contract boundary, then tighten tests to that owner.",
+        "stage diff telemetry partial mismatch": "Tighten tests/docs so `game/stage_diff_telemetry.py` stays the telemetry owner while `game.turn_packet.py` remains the packet-boundary owner.",
+        "turn_packet telemetry adjacency residue": "Continue trimming compatibility wrappers/import paths so telemetry derives from `game.turn_packet.py` without implying a second packet owner.",
     }
     return mapping.get(hotspot_name)
 
@@ -1241,7 +1428,6 @@ def _cleanup_recommendation_for_hotspot(hotspot_name: str) -> str | None:
 def _stop_warning_for_hotspot(hotspot_name: str) -> str | None:
     mapping = {
         "prompt contracts conflict": "Stop before adding new prompt-contract obligations until `game/prompt_context.py`, `game/prompt_context_leads.py`, and `game/response_policy_contracts.py` stop co-presenting as owners.",
-        "turn_packet mixed contract/telemetry role": "Stop before growing telemetry-dependent features until `game/turn_packet.py` stops carrying both packet-contract and telemetry-home signals.",
         "social_exchange_emission mixed repair/contract role": "Stop before adding more social-emission repair behavior until `game/social_exchange_emission.py` is either a contract owner or a repair consumer, not both.",
         "test ownership / inventory docs still unclear": "Stop before treating inventory docs as canonical governance while practical test ownership remains unclear.",
     }
@@ -1514,6 +1700,7 @@ def analyze_repo(repo_root: Path) -> dict[str, Any]:
     records, warnings = _collect_records(repo_root)
     fan_in, fan_out = _build_fan_maps(records)
     doc_issues = _find_doc_reference_issues(records, repo_root)
+    ownership_consistency = _ownership_declaration_consistency(records)
     runtime_analysis = analyze_runtime_findings(
         records=records,
         subsystem_seeds=SUBSYSTEM_SEEDS,
@@ -1544,6 +1731,10 @@ def analyze_repo(repo_root: Path) -> dict[str, Any]:
         f"Broken documentation reference: {issue['source']} -> {issue['reference']}"
         for issue in doc_issues
     )
+    warnings.extend(
+        f"Ownership declaration mismatch: {item['path']} -> {item['issue']}"
+        for item in ownership_consistency.get("issues", [])
+    )
     report = {
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "repo_root": str(repo_root.resolve()),
@@ -1554,6 +1745,10 @@ def analyze_repo(repo_root: Path) -> dict[str, Any]:
         "summary": _build_summary(subsystem_reports, records, fan_in, fan_out, doc_issues, runtime_analysis, test_analysis),
         "warnings": sorted(dict.fromkeys(warnings)),
     }
+    report["summary"]["ownership_declaration_consistency"] = ownership_consistency
+    report["summary"]["schema_notes"] = report["summary"].get("schema_notes", []) + [
+        "summary now includes ownership_declaration_consistency for ledger-vs-module declaration checks."
+    ]
     return report
 
 

@@ -1,13 +1,4 @@
-"""NPC lead discussion recency vs authoritative npc_relevant_leads (separate prompt-layer seams).
-
-Repeat suppression and recently_discussed live on build_interlocutor_lead_discussion_context.
-build_authoritative_lead_prompt_context(..., active_npc_id=...) lists npc_relevant_leads without
-filtering recently discussed leads.
-
-Run:
-  pytest -q tests/test_lead_lifecycle_npc_repeat_suppression.py
-  pytest -q tests/test_lead_lifecycle_npc_repeat_suppression.py -k "repeat or recency or npc"
-"""
+"""Lead-lifecycle recency stays aligned in exported narration context for NPC follow-up flows."""
 
 from __future__ import annotations
 
@@ -15,11 +6,7 @@ import pytest
 
 from game.exploration import process_investigation_discovery
 from game.leads import add_lead_relation
-from game.prompt_context import (
-    INTERLOCUTOR_DISCUSSION_RECENCY_WINDOW,
-    build_authoritative_lead_prompt_context,
-    build_interlocutor_lead_discussion_context,
-)
+from game.prompt_context import build_narration_context
 from game.social import record_npc_lead_discussion
 
 pytestmark = pytest.mark.integration
@@ -40,30 +27,48 @@ def _base_scene(scene_id: str, discoverable_clues: list | None = None) -> dict:
     return {"scene": scene}
 
 
-def _ids_npc_relevant(pc: dict) -> list[str]:
-    return [str(r.get("id") or "") for r in (pc.get("npc_relevant_leads") or []) if isinstance(r, dict)]
+def _exported_npc_relevant_ids(ctx: dict) -> list[str]:
+    lead_context = ctx.get("lead_context") or {}
+    return [str(r.get("id") or "") for r in (lead_context.get("npc_relevant_leads") or []) if isinstance(r, dict)]
 
 
-def _interlocutor_context(session: dict, world: dict, scene_id: str, npc_id: str) -> dict:
-    public_scene = {"id": scene_id}
-    return build_interlocutor_lead_discussion_context(
-        session=session,
+def _exported_narration_context(session: dict, world: dict, scene_id: str, npc_id: str) -> dict:
+    session["active_scene_id"] = scene_id
+    session["interaction_context"] = {
+        "active_interaction_target_id": npc_id,
+        "active_interaction_kind": "social",
+        "interaction_mode": "social",
+        "engagement_level": "engaged",
+        "conversation_privacy": None,
+        "player_position_context": None,
+    }
+    return build_narration_context(
+        campaign={"title": "", "premise": "", "character_role": "", "gm_guidance": [], "world_pressures": []},
         world=world,
-        public_scene=public_scene,
+        session=session,
+        character={"name": "Hero", "hp": {}, "ac": {}},
+        scene={"scene": {"id": scene_id, "visible_facts": [], "exits": [], "enemies": [], "mode": "exploration"}},
+        combat={"in_combat": False},
         recent_log=[],
-        active_npc_id=npc_id,
+        user_text="Ask about the lead.",
+        resolution=None,
+        scene_runtime={},
+        public_scene={"id": scene_id, "visible_facts": [], "exits": [], "enemies": []},
+        discoverable_clues=[],
+        gm_only_hidden_facts=[],
+        gm_only_discoverable_locked=[],
+        discovered_clue_records=[],
+        undiscovered_clue_records=[],
+        pending_leads=[],
+        intent={"labels": ["social_probe"]},
+        world_state_view={"flags": {}, "counters": {}, "clocks_summary": []},
+        mode_instruction="",
+        recent_log_for_prompt=[],
     )
 
 
-def _authoritative_npc_slice(session: dict, world: dict, scene_id: str, npc_id: str) -> dict:
-    return build_authoritative_lead_prompt_context(
-        session,
-        world,
-        public_scene={"id": scene_id},
-        runtime={},
-        recent_log=[],
-        active_npc_id=npc_id,
-    )
+def _exported_interlocutor_context(ctx: dict) -> dict:
+    return ctx.get("interlocutor_lead_context") or {}
 
 
 def _assert_repeat_suppression_flags(ilc: dict, lead_id: str) -> None:
@@ -100,17 +105,13 @@ def _discover_two_leads(session: dict, world: dict, scene_id: str, clue_a: str, 
     return clue_a, clue_b
 
 
-# --- npc discussion recency (interlocutor context) ---
-
-
-def test_npc_repeat_suppression_blocks_recently_discussed_lead():
+def test_exported_narration_context_marks_recent_discussion_for_repeat_suppression():
     scene_id = "npc_repeat_scene_a"
     npc_id = "npc_repeat_alice"
     lead_a = "repeat_lifecycle_clue_a"
     lead_b = "repeat_lifecycle_clue_b"
     current_turn = 10
     session = _base_session(turn=current_turn)
-    session["active_scene_id"] = scene_id
     world = _base_world()
 
     la, lb = _discover_two_leads(session, world, scene_id, lead_a, lead_b)
@@ -128,33 +129,24 @@ def test_npc_repeat_suppression_blocks_recently_discussed_lead():
         turn_counter=current_turn - 1,
     )
 
-    ilc = _interlocutor_context(session, world, scene_id, npc_id)
+    ctx = _exported_narration_context(session, world, scene_id, npc_id)
+    ilc = _exported_interlocutor_context(ctx)
     _assert_repeat_suppression_flags(ilc, lead_a)
-
-    # --- authoritative npc relevance (does not strip discussed leads) ---
-    pc = _authoritative_npc_slice(session, world, scene_id, npc_id)
-    rel_ids = _ids_npc_relevant(pc)
+    rel_ids = _exported_npc_relevant_ids(ctx)
     assert lead_b in rel_ids, (
-        f"npc_relevant_leads: expected non-discussed NPC-linked lead {lead_b!r}; ids={rel_ids!r}"
-    )
-    assert lead_a in rel_ids, (
-        f"npc_relevant_leads: discussed lead {lead_a!r} still listed (no interlocutor filter here); ids={rel_ids!r}"
+        f"exported npc_relevant_leads: expected non-discussed NPC-linked lead {lead_b!r}; ids={rel_ids!r}"
     )
 
 
-# --- INTERLOCUTOR_DISCUSSION_RECENCY_WINDOW expiry ---
-
-
-def test_npc_repeat_suppression_expires_after_recency_window():
+def test_exported_narration_context_clears_repeat_suppression_after_old_discussion():
     scene_id = "npc_repeat_scene_b"
     npc_id = "npc_repeat_bob"
     lead_a = "repeat_lifecycle_clue_c"
     lead_b = "repeat_lifecycle_clue_d"
-    last_discussed = 5
-    expired_turn = last_discussed + INTERLOCUTOR_DISCUSSION_RECENCY_WINDOW + 1
+    last_discussed = 1
+    expired_turn = 20
 
     session = _base_session(turn=expired_turn)
-    session["active_scene_id"] = scene_id
     world = _base_world()
 
     _discover_two_leads(session, world, scene_id, lead_a, lead_b)
@@ -170,15 +162,15 @@ def test_npc_repeat_suppression_expires_after_recency_window():
         turn_counter=last_discussed,
     )
 
-    ilc = _interlocutor_context(session, world, scene_id, npc_id)
+    ctx = _exported_narration_context(session, world, scene_id, npc_id)
+    ilc = _exported_interlocutor_context(ctx)
     rs = ilc.get("repeat_suppression")
     assert isinstance(rs, dict)
     assert rs.get("has_recent_repeat_risk") is False
     recent = rs.get("recent_lead_ids")
     assert recent in ([], None) or recent == [], (
-        f"repeat_suppression.recent_lead_ids: expected empty after "
-        f"INTERLOCUTOR_DISCUSSION_RECENCY_WINDOW (last_discussed={last_discussed!r}, "
-        f"current_turn={expired_turn!r}); got {recent!r}"
+        f"repeat_suppression.recent_lead_ids: expected empty for an old discussion "
+        f"(last_discussed={last_discussed!r}, current_turn={expired_turn!r}); got {recent!r}"
     )
     assert rs.get("prefer_progress_over_restatement") is False
 
@@ -187,25 +179,19 @@ def test_npc_repeat_suppression_expires_after_recency_window():
     assert row_a is not None
     assert row_a.get("recently_discussed") is False
 
-    # --- authoritative npc relevance ---
-    pc = _authoritative_npc_slice(session, world, scene_id, npc_id)
-    rel_ids = _ids_npc_relevant(pc)
+    rel_ids = _exported_npc_relevant_ids(ctx)
     assert lead_a in rel_ids, (
-        f"npc_relevant_leads: expected {lead_a!r} still eligible after recency expiry; ids={rel_ids!r}"
+        f"exported npc_relevant_leads: expected {lead_a!r} still eligible after recency expiry; ids={rel_ids!r}"
     )
 
 
-# --- repeat_suppression scoped to active_npc_id ---
-
-
-def test_npc_repeat_suppression_is_specific_to_the_active_npc():
+def test_exported_narration_context_scopes_repeat_suppression_to_active_npc():
     scene_id = "npc_repeat_scene_c"
     npc_a = "npc_repeat_carl"
     npc_b = "npc_repeat_dana"
     lead_shared = "repeat_lifecycle_clue_e"
 
     session = _base_session(turn=11)
-    session["active_scene_id"] = scene_id
     world = _base_world()
 
     envelope = _base_scene(
@@ -227,10 +213,12 @@ def test_npc_repeat_suppression_is_specific_to_the_active_npc():
         turn_counter=10,
     )
 
-    ilc_a = _interlocutor_context(session, world, scene_id, npc_a)
+    ctx_a = _exported_narration_context(session, world, scene_id, npc_a)
+    ilc_a = _exported_interlocutor_context(ctx_a)
     _assert_repeat_suppression_flags(ilc_a, lead_shared)
 
-    ilc_b = _interlocutor_context(session, world, scene_id, npc_b)
+    ctx_b = _exported_narration_context(session, world, scene_id, npc_b)
+    ilc_b = _exported_interlocutor_context(ctx_b)
     rs_b = ilc_b.get("repeat_suppression")
     assert isinstance(rs_b, dict)
     assert rs_b.get("has_recent_repeat_risk") is False
@@ -240,17 +228,13 @@ def test_npc_repeat_suppression_is_specific_to_the_active_npc():
         f"npc_b={npc_b!r}, got {recent_b!r}"
     )
 
-    pc_b = _authoritative_npc_slice(session, world, scene_id, npc_b)
-    rel_b = _ids_npc_relevant(pc_b)
+    rel_b = _exported_npc_relevant_ids(ctx_b)
     assert lead_shared in rel_b, (
-        f"npc_relevant_leads for npc_b: expected shared lead {lead_shared!r}; ids={rel_b!r}"
+        f"exported npc_relevant_leads for npc_b: expected shared lead {lead_shared!r}; ids={rel_b!r}"
     )
 
 
-# --- interlocutor flags vs full npc_relevant_leads list ---
-
-
-def test_npc_repeat_suppression_does_not_hide_other_eligible_leads():
+def test_exported_narration_context_marks_only_discussed_lead_as_recent_repeat_risk():
     scene_id = "npc_repeat_scene_d"
     npc_id = "npc_repeat_erin"
     lead_hot = "repeat_lifecycle_clue_f"
@@ -258,7 +242,6 @@ def test_npc_repeat_suppression_does_not_hide_other_eligible_leads():
     turn = 20
 
     session = _base_session(turn=turn)
-    session["active_scene_id"] = scene_id
     world = _base_world()
 
     _discover_two_leads(session, world, scene_id, lead_hot, lead_cold)
@@ -274,7 +257,8 @@ def test_npc_repeat_suppression_does_not_hide_other_eligible_leads():
         turn_counter=turn - 1,
     )
 
-    ilc = _interlocutor_context(session, world, scene_id, npc_id)
+    ctx = _exported_narration_context(session, world, scene_id, npc_id)
+    ilc = _exported_interlocutor_context(ctx)
     rs = ilc.get("repeat_suppression")
     assert isinstance(rs, dict)
     recent = list(rs.get("recent_lead_ids") or [])
@@ -290,9 +274,8 @@ def test_npc_repeat_suppression_does_not_hide_other_eligible_leads():
         f"lead_ids={list(by_id)!r}"
     )
 
-    pc = _authoritative_npc_slice(session, world, scene_id, npc_id)
-    rel_ids = _ids_npc_relevant(pc)
+    rel_ids = _exported_npc_relevant_ids(ctx)
     rel_set = set(rel_ids)
     assert lead_hot in rel_set and lead_cold in rel_set, (
-        f"npc_relevant_leads: expected both {lead_hot!r} and {lead_cold!r}; ids={rel_ids!r}"
+        f"exported npc_relevant_leads: expected both {lead_hot!r} and {lead_cold!r}; ids={rel_ids!r}"
     )

@@ -46,7 +46,7 @@ OWNER_TERMS_RE = re.compile(
 REPO_PATH_RE = re.compile(r"\b(?:docs|game|tests|tools)/[A-Za-z0-9_.\-/]+\b")
 BACKTICK_PATH_RE = re.compile(r"`([^`]+(?:\.py|\.md))`")
 TRANSCRIPT_STRING_RE = re.compile(
-    r"(turn\s+\d+|session\s+continuity|\"[^\"]{8,120}\"|'[^']{8,120}'|speaker|npc|player)",
+    r"(turn\s+\d+|session\s+continuity|player asks|npc answers|speaker\s*[:=]|run_transcript)",
     re.IGNORECASE,
 )
 API_USAGE_RE = re.compile(r"(/api/(?:chat|action)|status_code|json\(\)|testclient|client\.post\()", re.IGNORECASE)
@@ -418,16 +418,38 @@ def _path_affinity(test_info: dict[str, Any], target_path: str) -> tuple[int, li
     return score, evidence[:3], direct
 
 
+def _is_prompt_lifecycle_adjacency(
+    test_info: dict[str, Any],
+    subsystem_report: dict[str, Any],
+    target_path: str,
+) -> bool:
+    if subsystem_report.get("subsystem_name") != "prompt contracts":
+        return False
+    if target_path != "game/prompt_context.py":
+        return False
+    path_tokens = set(_stem_tokens(test_info["path"]))
+    if {"prompt", "context"} & path_tokens:
+        return False
+    if not {"lead", "lifecycle", "vertical", "pipeline", "progression", "repeat", "npc"} & path_tokens:
+        return False
+    imported_symbols = {
+        "game.prompt_context.build_authoritative_lead_prompt_context",
+        "game.prompt_context.build_narration_context",
+    }
+    return bool(imported_symbols & set(test_info.get("import_names", [])))
+
+
 def _subsystem_test_affinity(test_info: dict[str, Any], subsystem_report: dict[str, Any]) -> dict[str, Any]:
     target_paths: list[str] = []
     runtime_owner = subsystem_report.get("inferred_owner")
     if isinstance(runtime_owner, str) and runtime_owner.startswith("game/"):
         target_paths.append(runtime_owner)
-    target_paths.extend(
-        path
-        for path in subsystem_report.get("primary_files", [])
-        if isinstance(path, str) and path.startswith("game/")
-    )
+    else:
+        target_paths.extend(
+            path
+            for path in subsystem_report.get("primary_files", [])
+            if isinstance(path, str) and path.startswith("game/")
+        )
     target_paths = list(dict.fromkeys(target_paths))
 
     score = 0
@@ -435,6 +457,9 @@ def _subsystem_test_affinity(test_info: dict[str, Any], subsystem_report: dict[s
     direct_runtime_match = False
     for target_path in target_paths:
         path_score, path_evidence, is_direct = _path_affinity(test_info, target_path)
+        if _is_prompt_lifecycle_adjacency(test_info, subsystem_report, target_path):
+            path_score = max(0, path_score - 3)
+            path_evidence.append("downstream lifecycle import of exported prompt-context builder")
         score += path_score
         evidence.extend(path_evidence)
         if target_path == runtime_owner and is_direct:
@@ -553,7 +578,14 @@ def _alignment_for_subsystem(
         evidence.append("Docs still point at a different runtime owner than AR2's inferred owner.")
 
     if subsystem_report["subsystem_name"] == "test ownership / inventory docs":
-        if not docs_test_claims and spread >= 4:
+        if docs_test_claims and practical_owner == "unknown":
+            alignment_status = "partial"
+            mismatch_type = "inventory_docs_authority_unclear"
+            severity = "medium"
+            evidence.append(
+                "Inventory docs now describe the governance map more coherently, but practical test affinity remains weak because this concern is docs-led rather than runtime-owned."
+            )
+        elif not docs_test_claims and spread >= 4:
             alignment_status = "unclear"
             mismatch_type = "inventory_docs_authority_unclear"
             severity = "high"
@@ -612,7 +644,7 @@ def _inventory_docs_authority_status(item: dict[str, Any] | None) -> dict[str, A
         summary = "Inventory docs and practical test homes mostly agree on where ownership lives."
     elif item["alignment_status"] == "partial":
         status = "partially clearer"
-        summary = "Inventory docs identify owners, but practical coverage still drifts toward adjacent homes."
+        summary = "Inventory docs identify owners more clearly now, but adjacent-home heuristics still over-read some practical coverage."
     else:
         status = "remains unclear"
         summary = "Inventory docs still read as canonical prose while practical ownership stays diffuse or shifted."

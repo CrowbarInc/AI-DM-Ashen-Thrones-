@@ -14,7 +14,7 @@ Diagnostic inventory of `tests/` only. **How to run tests (fast/full lanes, coll
 
 **Regenerate artifacts:** from repo root run `py -3 tools/test_audit.py` (or `python tools/test_audit.py`). That refreshes `tests/test_inventory.json` using `pytest --collect-only` plus static heuristics. The script prints a one-line summary of **module-level duplicate `test_*` names** (shadowed defs); details are in JSON under `summary.files_with_shadowed_duplicate_test_defs`. It also prints a short **overlap spread** line (themes by distinct file count; heuristic, not semantic duplicate detection).
 
-**Counts in this markdown:** detailed per-file tables drift as the suite grows. For live numbers, prefer `pytest --collect-only` plus `tests/test_inventory.json` (regenerate with `tools/test_audit.py`). A **Block C1 sanity snapshot** (2026-04-12): **2214** tests collected; fast lane `pytest --collect-only -m "not transcript and not slow"` selects **2051** tests (**163** deselected as `transcript` or `slow`); **`tests/test_*.py`** file count is **160** (glob-based). Older inline counts elsewhere in this file may be historical unless refreshed in the same edit pass.
+**Counts in this markdown:** detailed per-file tables drift as the suite grows. For live numbers, prefer `pytest --collect-only` plus `tests/test_inventory.json` (regenerate with `tools/test_audit.py`). The Block C1 figures below are a dated sanity snapshot from `2026-04-12`, not a standing authority. For file totals, read the JSON inventory or count collected modules under `tests/` that match `test_*.py`.
 
 ---
 
@@ -48,12 +48,73 @@ Cluster **closed enough** for this pass: enforced split and intentional overlap 
 | Theme | Canonical owner(s) | Integration smoke only (examples) |
 | --- | --- | --- |
 | **Routing / turn pipeline** | `test_turn_pipeline_shared.py` — full **`/api/chat`** and **`/api/action`** stack, dialogue-lock HTTP, turn-trace-adjacent flow, end-to-end resolution; `test_dialogue_routing_lock.py` — pure `choose_interaction_route` / dialogue-lock **table** (no `TestClient`); `test_directed_social_routing.py` — directed-social precedence, vocative overrides, segmentation, narrow directed `/api/chat`, emergent-actor targeting; `test_intent_parser.py` / `test_intent_and_runtime.py` — parse/runtime intent. | `test_mixed_state_recovery_regressions.py`, `test_exploration_resolution.py`, `test_social.py` — keep **narrative or scenario-specific** routing checks, not a second copy of table locks. |
-| **Social escalation / emission / quality** | `test_social_exchange_emission.py` — strict exchange shape / emission; `test_social_escalation.py` — pressure / escalation state machine; `test_social_answer_retry_prioritization.py` — retry vs stall prioritization; `test_social_target_authority_regressions.py` — authority regressions. | `test_social_emission_quality.py` — multi-turn / quality harness (names `test_emission_quality_*` for non-transcript-runner cases; align module-level `transcript` policy in Block 2); `test_dialogue_interaction_establishment.py` — establishment flows; `test_social.py` — **`resolve_social_action` engine + glue** (see module docstring; not strict-social string owner). |
+| **Prompt-context assembly / prompt-contract bundle** | `test_prompt_context.py` — practical primary direct-owner suite for direct prompt-contract semantics, canonical prompt-facing helper accessors, and compatibility-preserving wrapper ownership; `test_prompt_compression.py` — secondary prompt assembly / compression integration once the bundle shape is already owned. | `test_final_emission_gate.py`, `test_social_exchange_emission.py`, `test_prompt_and_guard.py`, `test_answer_completeness_rules.py`, `test_narration_transcript_regressions.py` — downstream gate/emission/policy/transcript smoke or regression checks; they may consume shipped prompt contracts but should not read as the semantic owner. |
+| **Response-policy contract read side** | `test_response_policy_contracts.py` — practical primary direct-owner suite for canonical `game.response_policy_contracts` accessors and `materialize_response_policy_bundle()` behavior once policy has already been shipped. | `test_fallback_shipped_contract_propagation.py`, `test_response_delta_requirement.py`, `test_final_emission_gate.py`, `test_social_exchange_emission.py`, `test_final_emission_validators.py` — downstream compatibility, consumer/application, validator, and integration coverage only; they may consume shipped response-policy contracts but should not read as the semantic owner. |
+| **Social escalation / emission / quality** | `test_social_exchange_emission.py` — practical primary direct-owner suite for downstream strict-social exchange emission semantics, including terminal dialogue **application** once dialogue-contract resolution is already decided elsewhere; `test_social_escalation.py` — pressure / escalation state machine; `test_social_answer_retry_prioritization.py` — retry vs stall prioritization; `test_social_target_authority_regressions.py` — authority regressions. | `test_social_emission_quality.py` — multi-turn / quality harness (names `test_emission_quality_*` for non-transcript-runner cases; align module-level `transcript` policy in Block 2); `test_dialogue_interaction_establishment.py` — establishment flows; `test_strict_social_emergency_fallback_dialogue.py` — downstream retry-terminal / first-mention / compatibility-alias coverage only; `test_social.py` — **`resolve_social_action` engine + glue** (see module docstring; not strict-social string owner). |
 | **Lead lifecycle / clue / pending / registry** | `test_clue_knowledge.py`, `test_clue_idempotence.py` — clue idempotency / gateway; `test_world_updates_and_clue_normalization.py` — normalization; `test_clue_lead_registry_integration.py` — clue↔lead registry wiring; `test_lead_engine_upsert.py` — engine upsert; `test_follow_lead_commitment_wiring.py` — follow/commitment wiring; focused `test_lead_*.py` modules — obsolescence, payoff, NPC authority, resolution endings, etc.; `test_lead_lifecycle_block3_transcript_regression.py` — **multi-turn** lifecycle story. | `test_social_lead_landing.py`, `test_turn_pipeline_shared.py`, `test_prompt_and_guard.py`, `test_social_exchange_emission.py` — **smoke** or cross-cutting hooks, not a second registry spec. |
 | **Transcript / gauntlet vs smaller tests** | `test_transcript_regression.py` — general play-loop / sequencing; `test_transcript_gauntlet_*.py` — slice-specific harness contracts; `test_transcript_runner_smoke.py` — runner wiring; `test_gauntlet_regressions.py` — API-style gauntlet regressions (name ≠ transcript harness). | `test_lead_lifecycle_block3_transcript_regression.py`, `test_mixed_state_recovery_regressions.py` — own their **story**; avoid duplicating single-turn gates covered elsewhere. |
 | **Repair / fallback / legality / sanitizer** | **`test_contextual_minimal_repair_regressions.py`** — branch-specific repair behavior, `debug_notes` detail, repair-line legality, scene-anchor vs hard-line (nonsocial), payload-shape guards (no unwanted `clues` / `scene_update` / discoverables). **`test_empty_social_retry_regressions.py`** — retry/fallback wiring, `accepted_via`, `targeted_retry_terminal`, `retry_exhausted`, `fallback_kind` / `final_route`, `_final_emission_meta` continuity, `/api/chat` repair integration; nonsocial empty metadata in `test_ensure_minimal_nonsocial_resolution_fills_empty_text`. **`test_output_sanitizer.py`** — emit-time sanitizer; **`test_prompt_and_guard.py`** — prompt + guard; **`test_debug_payload_spoiler_safety.py`** — spoiler/debug safety. | Same helper may appear in **both** repair regression files when **fixtures differ**; phrase checks may split by **branch/layer** — see consolidation plan *Repair / retry cluster — Block 3*. Pipeline/mixed-state **smoke** only, not parallel legality suites. |
 
 ### Overlap hotspots (short list)
+
+### Prompt-contract governance note (PC2-R)
+
+For the prompt seam, treat `game/prompt_context.py` as the canonical runtime owner and
+`tests/test_prompt_context.py` as the practical primary direct-owner suite. Keep
+`test_prompt_compression.py` as secondary prompt-assembly/compression integration coverage, with
+direct exported policy, uncertainty, response-delta, and promoted-interlocutor contract assertions
+re-centered in `test_prompt_context.py`. Treat `test_final_emission_gate.py`,
+`test_social_exchange_emission.py`, `test_narration_transcript_regressions.py`,
+`test_prompt_and_guard.py`, and `test_answer_completeness_rules.py` as downstream evidence that
+shipped prompt contracts are consumed correctly. In those downstream suites, prefer local shipped
+fixtures, module-local wrapper handles, or smoke assertions over re-importing prompt-owner helper
+builders when the direct contract semantics are not under test.
+Keep prompt-adjacent establishment and fallback suites narrow too: `test_dialogue_interaction_establishment.py`
+should read as dialogue/social establishment flow coverage, and
+`test_fallback_shipped_contract_propagation.py` should use local shipped-policy fixtures rather than
+prompt-bundle builders when only downstream propagation is under test.
+`test_prompt_and_guard.py` remains prompt-adjacent for pre-generation guard behavior, but it is not
+the semantic owner of the prompt bundle itself. When adding new prompt-contract semantics, prefer
+the direct owner suite first; use broader harnesses only for smoke, orchestration, or historical
+regression locks.
+Keep lead-adjacent suites narrow too: `test_follow_lead_commitment_wiring.py` should read as
+follow/commitment lifecycle wiring, and `test_lead_lifecycle_npc_repeat_suppression.py` should read
+as lead-lifecycle repeat-suppression consumption of exported narration context. Re-center direct
+prompt-export filtering or prompt-slice ownership assertions in `test_prompt_context.py` when those
+lead-adjacent suites start sounding like prompt-contract homes.
+
+### Response-policy governance note (RP2-R)
+
+For the response-policy seam, treat `game/response_policy_contracts.py` as the canonical
+runtime owner and `tests/test_response_policy_contracts.py` as the practical primary
+direct-owner suite. Keep `test_fallback_shipped_contract_propagation.py` as secondary
+fallback/compatibility coverage, `test_response_delta_requirement.py` as downstream
+gate-application coverage, `test_final_emission_gate.py` and
+`test_social_exchange_emission.py` as orchestration/emission integration coverage, and
+`test_final_emission_validators.py` as validator-side application coverage. When adding
+new response-policy accessor or bundle-materialization semantics, prefer the direct owner
+suite first; use broader harnesses only for downstream consumption, compatibility-path,
+consumer/application, or regression locks.
+
+Compatibility residue note:
+
+- private compatibility accessors may remain importable;
+- top-level `fallback_behavior` fallback remains supported;
+- top-level `social_response_structure_contract` fallback remains supported.
+
+Treat that residue as compatibility/adjacency only, not as a reason to reclassify repair,
+gate, validator, or emission suites as semantic co-owners.
+
+### Strict-social exchange emission governance note (SE2-R)
+
+For the downstream strict-social exchange emission seam, treat `game/social_exchange_emission.py`
+as the canonical runtime owner and `tests/test_social_exchange_emission.py` as the practical
+primary direct-owner suite. Keep `tests/test_strict_social_emergency_fallback_dialogue.py` as
+secondary downstream retry-terminal / first-mention / compatibility coverage, with legacy
+`repair_*` helper assertions labeled as historical-path coverage rather than semantic ownership.
+`tests/test_social_emission_quality.py`, `tests/test_dialogue_interaction_establishment.py`,
+and gate/retry-oriented suites may continue to exercise the seam, but they should read as
+consumer/application, harness, or regression evidence rather than co-equal authorities.
 
 Heuristic tags (`test_inventory.json` → `feature_areas_by_distinct_files`) show **many files** touching the same themes; the hotspots below are the highest-risk *semantic* overlap areas for double-locking:
 
@@ -120,7 +181,7 @@ Declared in `pytest.ini`. For **lane membership**:
 Use this order when tagging in Block 2:
 
 1. **Full-lane anchor (tag `transcript` and usually `slow` if multi-turn or expensive):**  
-   - Path matches `tests/test_transcript_gauntlet_*.py`.  
+   - Path matches `test_transcript_gauntlet_*.py` under `tests/`.  
    - Module uses `run_transcript` / transcript runner as the primary harness (`test_transcript_regression.py`, `test_transcript_runner_smoke.py`, `test_mixed_state_recovery_regressions.py`, `test_lead_lifecycle_block3_transcript_regression.py`).  
    - Re-evaluate **`test_social_emission_quality.py`**: some tests already carry `transcript`; align with **module-level** `pytestmark` so behavior matches intent.
 2. **Mark `slow` without `transcript` when:** a module is integration-weighted but unusually expensive (many sequential API turns, huge fixtures) and should drop out of fast lane even if not “transcript” by naming.
@@ -181,7 +242,7 @@ The **163** deselected items match the **`transcript` or `slow`** slice (complem
 
 | Metric | Block C1 snapshot (2026-04-12) | Notes |
 | --- | ---: | --- |
-| Test files (`tests/test_*.py`) | 160 | glob-based; audit JSON may differ if nonstandard paths exist |
+| Test files (`tests/` modules matching `test_*.py`) | 160 | dated snapshot only; prefer fresh JSON inventory for current counts |
 | Pytest collected items | 2214 | `pytest --collect-only` |
 | Fast lane (`not transcript and not slow`) | 2051 collected / 163 deselected | marker-complement lane |
 
@@ -246,7 +307,7 @@ Use as starting points when deciding where new coverage should live first.
 | Retry / empty social / terminal fallback | `test_empty_social_retry_regressions.py`, `test_social_answer_retry_prioritization.py` |
 | Contextual minimal repair | `test_contextual_minimal_repair_regressions.py` |
 | Shared chat/action pipeline | `test_turn_pipeline_shared.py` |
-| Social emission / strict social | `test_social_exchange_emission.py`, `test_social_answer_candidate.py` |
+| Social emission / strict social | `test_social_exchange_emission.py` (practical primary direct-owner), `test_social_answer_candidate.py`; keep `test_strict_social_emergency_fallback_dialogue.py` as downstream retry/compatibility coverage only |
 | Directed routing & dialogue lock | `test_directed_social_routing.py`, `test_dialogue_routing_lock.py` |
 | Clue knowledge & inference | `test_clue_knowledge.py`, `test_world_updates_and_clue_normalization.py` |
 | Output / legality | `test_output_sanitizer.py`, `test_prompt_and_guard.py`, `test_debug_payload_spoiler_safety.py` |
@@ -319,7 +380,7 @@ Concrete “source of truth” examples for recurring themes (prefer extending t
 
 `primary_bucket` = majority of tests in that file. `High-brittleness` = count of tests with heuristic `brittleness: high` in that file. Feature tags = top primary feature labels (first keyword hit per test, aggregated).
 
-**Authoritative list:** All `tests/test_*.py` rows live in `tests/test_inventory.json` → `files`. The table below is a **partial historical snapshot**; prefer JSON + `pytest --collect-only` for current modules.
+**Authoritative list:** All collected `test_*.py` module rows under `tests/` live in `tests/test_inventory.json` → `files`. The table below is a **partial historical snapshot**; prefer JSON + `pytest --collect-only` for current modules.
 
 | File | Collected | Primary bucket (majority of tests) | High-brittleness tests | Top primary feature tags |
 | --- | ---: | --- | ---: | --- |

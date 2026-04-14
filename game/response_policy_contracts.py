@@ -1,9 +1,16 @@
-"""Writer contract resolution for the emission gate: ``response_type_contract`` + last player input.
+"""Canonical owner for response-policy contract resolution and downstream accessors.
 
-Reads ``response_policy`` / resolution metadata / debug fallbacks to learn what the model was
-asked to produce. **Not** validators (:mod:`game.final_emission_validators`), repairs
-(:mod:`game.final_emission_repairs`), or strict-social enforcement
-(:mod:`game.social_exchange_emission`).
+This module is the repo-facing semantic home for deterministic helpers that read
+shipped ``response_policy`` data, resolution metadata, or debug fallbacks to
+recover what contract the model owed. It is a downstream policy consumer and
+read-side accessor home, not the owner of prompt-contract bundling. Prompt
+assembly may surface these policies, and validators / repairs may consume them,
+but prompt-facing public bundle surfaces should remain anchored in
+``game.prompt_context``.
+
+It is **not** the prompt-context bundle owner (:mod:`game.prompt_context`),
+**not** the repair owner (:mod:`game.final_emission_repairs`), and **not** the
+final-emission orchestration owner (:mod:`game.final_emission_gate`).
 """
 from __future__ import annotations
 
@@ -11,6 +18,27 @@ from typing import Any, Dict, List, Mapping, Optional, Tuple
 
 from game.final_emission_text import _RESPONSE_TYPE_VALUES
 from game.storage import get_scene_runtime
+
+
+def _policy_subcontract(
+    gm_output: Dict[str, Any] | None,
+    *,
+    key: str,
+    allow_top_level_fallback: bool = False,
+) -> Dict[str, Any] | None:
+    """Read a shipped response-policy child contract from its canonical bundle."""
+    if not isinstance(gm_output, dict):
+        return None
+    response_policy = gm_output.get("response_policy")
+    if isinstance(response_policy, Mapping):
+        hit = response_policy.get(key)
+        if isinstance(hit, dict):
+            return hit
+    if allow_top_level_fallback:
+        hit = gm_output.get(key)
+        if isinstance(hit, dict):
+            return hit
+    return None
 
 
 def _valid_response_type_contract(candidate: Any) -> Dict[str, Any] | None:
@@ -60,6 +88,27 @@ def _resolve_response_type_contract(
     return None, None
 
 
+def response_type_contract_requires_dialogue(
+    gm_output: Dict[str, Any] | None,
+    *,
+    resolution: Dict[str, Any] | None,
+    session: Dict[str, Any] | None,
+) -> bool:
+    """Canonical read-side helper for downstream dialogue-contract consumers.
+
+    This module owns response-policy contract reads. Emission / fallback consumers
+    may ask whether the current turn requires dialogue, but they should not
+    re-home contract semantics or duplicate contract resolution logic.
+    """
+    contract, _ = _resolve_response_type_contract(
+        gm_output,
+        resolution=resolution,
+        session=session,
+    )
+    required = str((contract or {}).get("required_response_type") or "").strip().lower()
+    return required == "dialogue"
+
+
 def _last_player_input(
     *,
     resolution: Dict[str, Any] | None,
@@ -84,13 +133,112 @@ def _last_player_input(
 
 
 def peek_response_type_contract_from_resolution(resolution: Any) -> Dict[str, Any] | None:
-    """Return a validated ``response_type_contract`` from ``resolution.metadata`` when present."""
+    """Return a validated ``response_type_contract`` from ``resolution.metadata``.
+
+    Prompt-facing callers should prefer ``game.prompt_context`` as the canonical
+    public home for this bundle seam. This function remains here as downstream
+    policy support and compatibility residue.
+    """
     if not isinstance(resolution, dict):
         return None
     metadata = resolution.get("metadata")
     if not isinstance(metadata, dict):
         return None
     return _valid_response_type_contract(metadata.get("response_type_contract"))
+
+
+def resolve_answer_completeness_contract(
+    gm_output: Dict[str, Any] | None,
+) -> Dict[str, Any] | None:
+    """Return shipped ``response_policy.answer_completeness`` when present."""
+    return _policy_subcontract(gm_output, key="answer_completeness")
+
+
+def resolve_response_delta_contract(
+    gm_output: Dict[str, Any] | None,
+) -> Dict[str, Any] | None:
+    """Return shipped ``response_policy.response_delta`` when present."""
+    return _policy_subcontract(gm_output, key="response_delta")
+
+
+def resolve_fallback_behavior_contract(
+    gm_output: Dict[str, Any] | None,
+) -> Dict[str, Any] | None:
+    """Return shipped ``response_policy.fallback_behavior`` when present.
+
+    Top-level ``gm_output["fallback_behavior"]`` remains supported as compatibility
+    residue for older payload shapes.
+    """
+    return _policy_subcontract(
+        gm_output,
+        key="fallback_behavior",
+        allow_top_level_fallback=True,
+    )
+
+
+def resolve_social_response_structure_contract(
+    gm_output: Dict[str, Any] | None,
+) -> Dict[str, Any] | None:
+    """Canonical read-side accessor for ``response_policy.social_response_structure``.
+
+    Top-level ``gm_output["social_response_structure_contract"]`` remains supported as
+    compatibility residue for older payload shapes.
+    """
+    contract = _policy_subcontract(gm_output, key="social_response_structure")
+    if isinstance(contract, dict):
+        return contract
+    if not isinstance(gm_output, dict):
+        return None
+    top = gm_output.get("social_response_structure_contract")
+    return top if isinstance(top, dict) else None
+
+
+def materialize_response_policy_bundle(
+    gm_output: Dict[str, Any] | None,
+    session: Dict[str, Any] | None,
+) -> Dict[str, Any]:
+    """Canonical read-side bundle materializer for downstream consumers.
+
+    Canonical response-policy owner / read-side accessor home:
+    prefer shipped ``gm_output["response_policy"]`` and only fall back to
+    ``session["last_turn_response_policy"]`` as explicit compatibility residue when
+    downstream consumers need the bundle materialized on retry / fallback paths.
+    """
+    out = dict(gm_output) if isinstance(gm_output, dict) else {}
+    pol = out.get("response_policy") if isinstance(out.get("response_policy"), dict) else None
+    if isinstance(pol, dict) and pol:
+        return out
+    if isinstance(session, dict):
+        lp = session.get("last_turn_response_policy")
+        if isinstance(lp, dict) and lp:
+            out["response_policy"] = lp
+    return out
+
+
+# Compatibility residue: older internal imports still reach for the private
+# validator-era names. Keep them importable while the canonical accessors live here.
+def _resolve_answer_completeness_contract(
+    gm_output: Dict[str, Any] | None,
+) -> Dict[str, Any] | None:
+    return resolve_answer_completeness_contract(gm_output)
+
+
+def _resolve_response_delta_contract(
+    gm_output: Dict[str, Any] | None,
+) -> Dict[str, Any] | None:
+    return resolve_response_delta_contract(gm_output)
+
+
+def _resolve_fallback_behavior_contract(
+    gm_output: Dict[str, Any] | None,
+) -> Dict[str, Any] | None:
+    return resolve_fallback_behavior_contract(gm_output)
+
+
+def _resolve_social_response_structure_contract(
+    gm_output: Dict[str, Any] | None,
+) -> Dict[str, Any] | None:
+    return resolve_social_response_structure_contract(gm_output)
 
 
 def _social_response_structure_disabled(
@@ -122,8 +270,11 @@ def build_social_response_structure_contract(
     *,
     debug_inputs: Mapping[str, Any] | None = None,
 ) -> Dict[str, Any]:
-    """Inspectable dialogue-only policy for social reply shape (prompt surfacing; gate/repairs elsewhere).
+    """Downstream policy helper for dialogue-only social reply shape.
 
+    ``game.prompt_context`` is the canonical prompt-contract owner and public
+    bundle home for this surface. Keep prompt-facing ownership cues there; this
+    module remains the downstream policy consumer / compatibility implementation.
     Enabled only when ``response_type_contract`` (validated) requires ``dialogue``.
     """
     di: Dict[str, Any] = {}

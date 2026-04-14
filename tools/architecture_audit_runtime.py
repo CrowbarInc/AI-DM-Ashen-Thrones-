@@ -507,15 +507,37 @@ def _mixed_owner_overlap(file_findings: dict[str, dict[str, Any]]) -> list[dict[
     return findings
 
 
-def _pick_inferred_owner(primary_files: list[str], file_findings: dict[str, dict[str, Any]]) -> tuple[str, str, list[str], list[str], str | None]:
+def _preferred_roles_for_subsystem(subsystem_name: str) -> tuple[str, ...]:
+    name = subsystem_name.lower()
+    if "telemetry" in name:
+        return ("telemetry_owner",)
+    if "validator" in name:
+        return ("validator_owner",)
+    if "repair" in name:
+        return ("repair_owner",)
+    if "gate" in name or "orchestration" in name:
+        return ("orchestration_owner",)
+    if "contract" in name or "prompt" in name:
+        return ("contract_owner",)
+    return ()
+
+
+def _pick_inferred_owner(
+    subsystem_name: str,
+    primary_files: list[str],
+    file_findings: dict[str, dict[str, Any]],
+) -> tuple[str, str, list[str], list[str], str | None]:
+    preferred_roles = _preferred_roles_for_subsystem(subsystem_name)
     candidates: list[tuple[int, int, str, dict[str, Any]]] = []
     for path in primary_files:
         info = file_findings.get(path)
         if not info:
             continue
         top_role_score = max(info["role_scores"].values(), default=0)
+        preferred_role_score = max((info["role_scores"].get(role, 0) for role in preferred_roles), default=0)
         candidates.append(
             (
+                preferred_role_score,
                 top_role_score,
                 CONFIDENCE_RANK[info["ownership_confidence"]],
                 path,
@@ -525,12 +547,19 @@ def _pick_inferred_owner(primary_files: list[str], file_findings: dict[str, dict
     if not candidates:
         return "unknown", "unclear", [], [], None
     candidates.sort(key=lambda item: (-item[0], -item[1], item[2]))
-    top_score, _top_conf_rank, top_path, top_info = candidates[0]
-    second_score = candidates[1][0] if len(candidates) > 1 else -1
+    top_preferred_score, top_score, _top_conf_rank, top_path, top_info = candidates[0]
+    second_preferred_score = candidates[1][0] if len(candidates) > 1 else -1
+    second_score = candidates[1][1] if len(candidates) > 1 else -1
     substantive_roles = [role for role in top_info["role_labels"] if role not in {"mixed_owner", "unclear_owner"}]
     declared_owner_path = top_info.get("declared_owner_path")
-    if "mixed_owner" in top_info["role_labels"] or (len(candidates) > 1 and second_score >= top_score - 1 and top_score > 0):
-        mixed_paths = _rel_path_list([top_path] + ([candidates[1][2]] if len(candidates) > 1 else []))
+    should_mix = "mixed_owner" in top_info["role_labels"]
+    if not should_mix and len(candidates) > 1 and top_score > 0:
+        if preferred_roles and top_preferred_score != second_preferred_score:
+            should_mix = False
+        else:
+            should_mix = second_score >= top_score - 1
+    if should_mix:
+        mixed_paths = _rel_path_list([top_path] + ([candidates[1][3]] if len(candidates) > 1 else []))
         role_labels = sorted(
             {
                 role
@@ -650,6 +679,7 @@ def analyze_runtime_findings(
     for subsystem_name, primary_files in sorted(primary_by_subsystem.items()):
         ownership_findings = [file_findings[path] for path in primary_files if path in file_findings]
         inferred_owner, confidence, role_labels, owner_evidence, declared_owner_path = _pick_inferred_owner(
+            subsystem_name,
             primary_files,
             file_findings,
         )

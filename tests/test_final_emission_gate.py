@@ -1,4 +1,11 @@
-"""Integration tests for apply_final_emission_gate speaker-contract enforcement ordering and metadata."""
+"""Integration tests for ``apply_final_emission_gate`` orchestration ordering and metadata.
+
+Direct prompt-contract semantics belong in ``tests/test_prompt_context.py`` and
+direct response-policy accessor/materialization semantics belong in
+``tests/test_response_policy_contracts.py``. This module keeps downstream
+integration coverage for how shipped contracts are consumed by the final-emission
+gate.
+"""
 from __future__ import annotations
 
 import json
@@ -14,7 +21,6 @@ from game.context_separation import build_context_separation_contract
 from game.narrative_authority import build_narrative_authority_contract
 from game.interaction_context import rebuild_active_scene_entities, set_social_target
 from game.player_facing_narration_purity import build_player_facing_narration_purity_contract
-from game.response_policy_contracts import build_social_response_structure_contract
 from game.social_exchange_emission import effective_strict_social_resolution_for_emission
 from game.storage import get_scene_runtime
 
@@ -2422,7 +2428,9 @@ def test_gate_asp_triggers_replace_when_no_observation_payload(monkeypatch):
     assert meta.get("final_route") == "replaced"
 
 
-# --- Social response structure (orchestration + metadata) ----------------------------------------
+# --- Social response structure downstream integration (orchestration + metadata) -----------------
+# Direct prompt-contract semantics live in tests/test_prompt_context.py; these checks verify
+# gate ordering, metadata merge paths, and repair behavior after the prompt bundle is shipped.
 
 
 def _monoblob_dialogue_quote() -> str:
@@ -2430,9 +2438,38 @@ def _monoblob_dialogue_quote() -> str:
     return f'Tavern Runner says "{core}."'
 
 
+def _secondary_social_response_structure_contract(
+    required_response_type: str,
+    **overrides,
+):
+    # Downstream gate tests consume the shipped shape without re-importing the prompt owner helper.
+    contract = {
+        "enabled": required_response_type == "dialogue",
+        "applies_to_response_type": "dialogue",
+        "require_spoken_dialogue_shape": required_response_type == "dialogue",
+        "discourage_expository_monologue": required_response_type == "dialogue",
+        "require_natural_cadence": required_response_type == "dialogue",
+        "allow_brief_action_beats": True,
+        "allow_brief_refusal_or_uncertainty": True,
+        "max_contiguous_expository_lines": 2 if required_response_type == "dialogue" else None,
+        "max_dialogue_paragraphs_before_break": 2 if required_response_type == "dialogue" else None,
+        "prefer_single_speaker_turn": required_response_type == "dialogue",
+        "forbid_bulleted_or_list_like_dialogue": required_response_type == "dialogue",
+        "required_response_type": required_response_type,
+        "debug_reason": (
+            "response_type_contract_requires_dialogue"
+            if required_response_type == "dialogue"
+            else f"response_type_not_dialogue:{required_response_type}"
+        ),
+        "debug_inputs": {},
+    }
+    contract.update(overrides)
+    return contract
+
+
 def _dialogue_response_policy_with_social_structure(**srs_overrides):
     rtc = _response_type_contract("dialogue")
-    srs = build_social_response_structure_contract(rtc)
+    srs = _secondary_social_response_structure_contract("dialogue")
     srs.update(srs_overrides)
     return {"response_type_contract": rtc, "social_response_structure": srs}
 
@@ -2588,7 +2625,7 @@ def test_social_response_structure_metadata_merged_on_layer_execution(monkeypatc
 
 def test_social_response_structure_skip_path_records_skip_reason_on_answer_completeness_failed():
     rtc = _response_type_contract("dialogue")
-    srs = build_social_response_structure_contract(rtc)
+    srs = _secondary_social_response_structure_contract("dialogue")
     gm = {"response_policy": {"response_type_contract": rtc, "social_response_structure": srs}}
     raw = '- "East gate is south," he says.\n- "Patrols watch it nightly."'
     text, meta, extra = feg._apply_social_response_structure_layer(
@@ -2625,7 +2662,7 @@ def test_response_type_failure_skips_social_response_structure_layer(monkeypatch
 def test_action_outcome_turn_social_response_structure_not_applicable(monkeypatch):
     monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
     rtc = _response_type_contract("action_outcome")
-    srs = build_social_response_structure_contract(rtc)
+    srs = _secondary_social_response_structure_contract("action_outcome")
     raw = "You lift the bar; it groans, and the side door eases open a finger's width."
     out = apply_final_emission_gate(
         {"player_facing_text": raw, "tags": [], "response_policy": {"response_type_contract": rtc, "social_response_structure": srs}},

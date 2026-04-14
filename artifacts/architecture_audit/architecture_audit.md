@@ -7,12 +7,12 @@
 - Recommended action mode: **needs targeted ownership cleanup before more features**
 - Legacy subsystem roll-up color: **red**
 - Modules analyzed: **86**
-- Docs analyzed: **18**
-- Test files analyzed: **185**
+- Docs analyzed: **20**
+- Test files analyzed: **186**
 
 - Repo-level verdict: **mixed / caution** with scorecard total 9/18.
 - Action mode: **needs targeted ownership cleanup before more features**.
-- Hotspot mix: 3 localized, 1 transitional, 3 possible smear, 1 unclear.
+- Hotspot mix: 5 localized, 3 transitional, 0 possible smear, 0 unclear.
 
 ## Repo-level scorecard
 
@@ -20,23 +20,23 @@
 | --- | --- | ---: |
 | ownership clarity | clear | 3/3 |
 | overlap severity | localized hotspots | 2/3 |
-| archaeology burden | moderate | 2/3 |
+| archaeology burden | heavy | 0/3 |
 | coupling centrality | highly central | 0/3 |
 | test alignment | drifting | 2/3 |
-| documentation coherence | weak | 0/3 |
+| documentation coherence | patchy | 2/3 |
 
 ## Subsystem verdicts
 
 | Subsystem | Verdict | Owner | Test alignment |
 | --- | --- | --- | --- |
-| prompt contracts | red | game/prompt_context.py | conflict |
-| response policy contracts | red | game/final_emission_repairs.py | partial |
+| prompt contracts | red | game/prompt_context.py | partial |
+| response policy contracts | red | game/response_policy_contracts.py | partial |
 | final emission validators | yellow | game/final_emission_validators.py | partial |
 | final emission repairs | red | game/final_emission_repairs.py | partial |
 | final emission gate orchestration | red | game/final_emission_gate.py | partial |
 | narrative authenticity | red | game/narrative_authenticity.py | partial |
 | stage diff telemetry | yellow | game/stage_diff_telemetry.py | partial |
-| test ownership / inventory docs | red | unknown | unclear |
+| test ownership / inventory docs | yellow | unknown | partial |
 
 ## Strongest evidence that the architecture is real
 
@@ -46,58 +46,51 @@
 
 ## Strongest evidence that the architecture may be patch-accumulating
 
-- `prompt contracts` is `conflict` with practical tests centered in `mixed: tests/test_response_delta_requirement.py, tests/test_opening_visible_fact_selection.py, tests/test_prompt_context.py`; evidence: Transcript-style tests dominate a concern that looks contract-owned at runtime.
-- `response policy contracts` is `partial` with practical tests centered in `mixed: tests/test_fallback_behavior_repairs.py, tests/test_bounded_partial_quality.py, tests/test_final_emission_validators.py`; evidence: Docs name a canonical test owner, but practical coverage concentrates elsewhere.
-- 4 hotspot(s) still look like ownership-smear or unclear-review candidates, led by `prompt contracts conflict`.
-- Documentation coherence is still weak enough to add uncertainty: 18 broken reference(s).
+- `final emission gate orchestration` is `partial` with practical tests centered in `mixed: tests/test_final_emission_gate.py, tests/test_final_emission_scene_integrity.py, tests/test_final_emission_visibility.py`; evidence: Coverage is spread across many homes rather than anchored in one direct owner suite.
+- `prompt contracts` is `partial` with practical tests centered in `mixed: tests/test_prompt_context.py, tests/test_social_escalation.py, tests/test_social_interaction_authority.py`; evidence: Coverage is spread across many homes rather than anchored in one direct owner suite.
 
 ## Known ambiguity hotspots
 
-- `prompt contracts conflict` -> possible ownership smear; Transcript-style tests dominate a concern that looks contract-owned at runtime.
-- `response policy contracts partial drift toward repairs` -> localized under-consolidation; Docs name a canonical test owner, but practical coverage concentrates elsewhere.
-- `final emission gate orchestration partial mismatch` -> localized under-consolidation; Docs name a canonical test owner, but practical coverage concentrates elsewhere.
+- `prompt contracts conflict` -> localized under-consolidation; Coverage is spread across many homes rather than anchored in one direct owner suite.
+- `response policy contracts localized residue` -> localized under-consolidation; Coverage is spread across many homes rather than anchored in one direct owner suite.
+- `final emission gate orchestration partial mismatch` -> localized under-consolidation; Coverage is spread across many homes rather than anchored in one direct owner suite.
 - `stage diff telemetry partial mismatch` -> localized under-consolidation; Docs name a canonical test owner, but practical coverage concentrates elsewhere.
-- `test ownership / inventory docs still unclear` -> unclear / needs human review; No related test file accumulated enough concern-specific affinity.
-- `prompt_context_leads residue` -> transitional residue; Transcript-style tests dominate a concern that looks contract-owned at runtime.
-- `turn_packet mixed contract/telemetry role` -> possible ownership smear; Docs name a canonical test owner, but practical coverage concentrates elsewhere.
-- `social_exchange_emission mixed repair/contract role` -> possible ownership smear; Docs name a canonical test owner, but practical coverage concentrates elsewhere.
+- `test ownership / inventory docs still unclear` -> localized under-consolidation; No related test file accumulated enough concern-specific affinity.
+- `prompt_context_leads residue` -> transitional residue; Coverage is spread across many homes rather than anchored in one direct owner suite.
+- `turn_packet telemetry adjacency residue` -> transitional residue; Docs name a canonical test owner, but practical coverage concentrates elsewhere.
+- `social_exchange_emission mixed repair/contract role` -> transitional residue; Coverage is spread across many homes rather than anchored in one direct owner suite.
 
 ## Runtime/test/doc mismatch review
 
-- `prompt contracts` -> runtime `game/prompt_context.py` vs practical `mixed: tests/test_response_delta_requirement.py, tests/test_opening_visible_fact_selection.py, tests/test_prompt_context.py` (conflict; high; spread 9); evidence: Transcript-style tests dominate a concern that looks contract-owned at runtime.
-- `response policy contracts` -> runtime `game/final_emission_repairs.py` vs practical `mixed: tests/test_fallback_behavior_repairs.py, tests/test_bounded_partial_quality.py, tests/test_final_emission_validators.py` (partial; high; spread 9); evidence: Docs name a canonical test owner, but practical coverage concentrates elsewhere.
-- `final emission gate orchestration` -> runtime `game/final_emission_gate.py` vs practical `mixed: tests/test_final_emission_meta.py, tests/test_final_emission_gate.py` (partial; high; spread 8); evidence: Docs name a canonical test owner, but practical coverage concentrates elsewhere.
-- `stage diff telemetry` -> runtime `game/stage_diff_telemetry.py` vs practical `mixed: tests/test_turn_packet_stage_diff_integration.py, tests/test_stage_diff_telemetry.py, tests/test_narrative_authenticity_aer4.py` (partial; high; spread 5); evidence: Docs name a canonical test owner, but practical coverage concentrates elsewhere.
-- `test ownership / inventory docs` -> runtime `unknown` vs practical `unknown` (unclear; high; spread 0); evidence: No related test file accumulated enough concern-specific affinity.
+- `final emission gate orchestration` -> runtime `game/final_emission_gate.py` vs practical `mixed: tests/test_final_emission_gate.py, tests/test_final_emission_scene_integrity.py, tests/test_final_emission_visibility.py` (partial; high; spread 10); evidence: Coverage is spread across many homes rather than anchored in one direct owner suite.
+- `prompt contracts` -> runtime `game/prompt_context.py` vs practical `mixed: tests/test_prompt_context.py, tests/test_social_escalation.py, tests/test_social_interaction_authority.py` (partial; high; spread 10); evidence: Coverage is spread across many homes rather than anchored in one direct owner suite.
+- `response policy contracts` -> runtime `game/response_policy_contracts.py` vs practical `mixed: tests/test_response_policy_contracts.py, tests/test_interaction_continuity_contract.py, tests/test_interaction_continuity_validation.py` (partial; high; spread 6); evidence: Coverage is spread across many homes rather than anchored in one direct owner suite.
+- `stage diff telemetry` -> runtime `game/stage_diff_telemetry.py` vs practical `mixed: tests/test_turn_packet_stage_diff_integration.py, tests/test_stage_diff_telemetry.py, tests/test_narrative_authenticity_aer4.py` (partial; high; spread 4); evidence: Docs name a canonical test owner, but practical coverage concentrates elsewhere.
+- `test ownership / inventory docs` -> runtime `unknown` vs practical `unknown` (partial; high; spread 0); evidence: No related test file accumulated enough concern-specific affinity.
 
 ## Transcript-lock vs contract-lock risk summary
 
-- Transcript-style protection is starting to compete with direct contract-owner tests.
-- Transcript-heavy seam: `final emission gate orchestration` -> Docs name a canonical test owner, but practical coverage concentrates elsewhere.
-- Transcript-heavy seam: `prompt contracts` -> Transcript-style tests dominate a concern that looks contract-owned at runtime.
-- Transcript-heavy seam: `stage diff telemetry` -> Docs name a canonical test owner, but practical coverage concentrates elsewhere.
+- Transcript locks look secondary to direct owner tests in this pass.
 
 ## Manual spot-check list
 
-- `test ownership / inventory docs` -> runtime `unknown`, practical `unknown` (unclear; high)
-- `response policy contracts` -> runtime `game/final_emission_repairs.py`, practical `mixed: tests/test_fallback_behavior_repairs.py, tests/test_bounded_partial_quality.py, tests/test_final_emission_validators.py` (partial; high)
-- `prompt contracts` -> runtime `game/prompt_context.py`, practical `mixed: tests/test_response_delta_requirement.py, tests/test_opening_visible_fact_selection.py, tests/test_prompt_context.py` (conflict; high)
+- `test ownership / inventory docs` -> runtime `unknown`, practical `unknown` (partial; high)
+- `response policy contracts` -> runtime `game/response_policy_contracts.py`, practical `mixed: tests/test_response_policy_contracts.py, tests/test_interaction_continuity_contract.py, tests/test_interaction_continuity_validation.py` (partial; high)
+- `prompt contracts` -> runtime `game/prompt_context.py`, practical `mixed: tests/test_prompt_context.py, tests/test_social_escalation.py, tests/test_social_interaction_authority.py` (partial; high)
 - `stage diff telemetry` -> runtime `game/stage_diff_telemetry.py`, practical `mixed: tests/test_turn_packet_stage_diff_integration.py, tests/test_stage_diff_telemetry.py, tests/test_narrative_authenticity_aer4.py` (partial; high)
-- `final emission gate orchestration` -> runtime `game/final_emission_gate.py`, practical `mixed: tests/test_final_emission_meta.py, tests/test_final_emission_gate.py` (partial; high)
+- `final emission gate orchestration` -> runtime `game/final_emission_gate.py`, practical `mixed: tests/test_final_emission_gate.py, tests/test_final_emission_scene_integrity.py, tests/test_final_emission_visibility.py` (partial; high)
 
 ## Cleanup-only opportunities
 
-- Re-anchor response-policy ownership between `game/response_policy_contracts.py` and `game/final_emission_repairs.py`, then relink the canonical test/doc home to that choice.
+- Keep `game/response_policy_contracts.py` as the runtime owner and `tests/test_response_policy_contracts.py` as the direct-owner suite; treat remaining downstream usage as compatibility/adjacency residue only.
 - Thin the `final_emission_gate` vs `final_emission_meta` overlap so orchestration remains primary and metadata packaging stays secondary.
-- Re-state whether `game/stage_diff_telemetry.py` or `game/turn_packet.py` owns the contract boundary, then tighten tests to that owner.
+- Tighten tests/docs so `game/stage_diff_telemetry.py` stays the telemetry owner while `game.turn_packet.py` remains the packet-boundary owner.
 - Convert `game/prompt_context_leads.py` from residue wording into a clearly subordinate helper or document it as retired sediment only.
+- Continue trimming compatibility wrappers/import paths so telemetry derives from `game.turn_packet.py` without implying a second packet owner.
 
 ## Stop-before-feature warnings
 
-- Stop before adding new prompt-contract obligations until `game/prompt_context.py`, `game/prompt_context_leads.py`, and `game/response_policy_contracts.py` stop co-presenting as owners.
-- Stop before treating inventory docs as canonical governance while practical test ownership remains unclear.
-- Stop before growing telemetry-dependent features until `game/turn_packet.py` stops carrying both packet-contract and telemetry-home signals.
-- Stop before adding more social-emission repair behavior until `game/social_exchange_emission.py` is either a contract owner or a repair consumer, not both.
+- No stop-before-feature warnings were triggered by the current rubric.
 
 ## Schema notes
 
@@ -107,3 +100,4 @@
 - subsystem_reports now include test_ownership_alignment with runtime/doc/test reconciliation fields.
 - tests_analyzed now includes deterministic file/test category counts and per-file inferred categories.
 - summary now includes top_test_runtime_doc_mismatches, concerns_with_widest_test_ownership_spread, likely_transcript_lock_seams, likely_contract_owned_seams_with_weak_direct_tests, inventory_docs_authority_status, and manual_review_shortlist.
+- summary now includes ownership_declaration_consistency for ledger-vs-module declaration checks.

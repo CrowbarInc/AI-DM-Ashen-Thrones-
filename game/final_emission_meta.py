@@ -1,12 +1,14 @@
-"""Metadata-only helpers for ``_final_emission_meta`` and narrative authenticity (NA) telemetry.
+"""Canonical metadata-only owner for ``_final_emission_meta`` packaging.
 
-**Canonical boundary (post–Block C2):** :func:`game.final_emission_gate.apply_final_emission_gate` remains the
-**orchestration owner** — sequencing layers, repairs, and merges. This module is **metadata-only**:
-stable dict shapes for FEM / NA fields, slimming, read-side coercion for deterministic consumers,
-and :func:`classify_dead_turn` (written into ``_final_emission_meta["dead_turn"]`` at gate exit).
+**Canonical boundary (post-OC2):** :func:`game.final_emission_gate.apply_final_emission_gate`
+remains the **orchestration owner** for layer order and integration. This module is
+**metadata-only**: stable dict shapes for FEM / NA fields, slimming, read-side coercion
+for deterministic consumers, and dead-turn packaging for
+``_final_emission_meta["dead_turn"]``.
 
 Validation criteria and repair control stay in :mod:`game.narrative_authenticity` /
-:mod:`game.final_emission_repairs` (orchestration wiring), not here.
+:mod:`game.final_emission_repairs`, not here. Transitional overlap in import sites does
+not make this file the orchestration owner.
 """
 from __future__ import annotations
 
@@ -41,7 +43,7 @@ NARRATIVE_AUTHENTICITY_FEM_KEYS: frozenset[str] = frozenset(
 
 
 def default_narrative_authenticity_layer_meta() -> Dict[str, Any]:
-    """Write-time defaults for the NA layer debug dict before validation / trace merge."""
+    """Metadata-only owner for NA layer write-time defaults before merge/package steps."""
     return {
         "narrative_authenticity_checked": False,
         "narrative_authenticity_failed": False,
@@ -62,7 +64,7 @@ def default_narrative_authenticity_layer_meta() -> Dict[str, Any]:
 
 
 def merge_narrative_authenticity_into_final_emission_meta(meta: Dict[str, Any], na_dbg: Dict[str, Any]) -> None:
-    """Copy NA layer fields from ``na_dbg`` into ``_final_emission_meta`` (in place)."""
+    """Metadata-only packager for NA fields into ``_final_emission_meta`` (in place)."""
     meta.update(
         {
             "narrative_authenticity_checked": bool(na_dbg.get("narrative_authenticity_checked")),
@@ -348,8 +350,8 @@ def classify_dead_turn(gm_output: Mapping[str, Any] | None) -> Dict[str, Any]:
     return out
 
 
-def merge_dead_turn_classification_into_final_emission_meta(gm_output: MutableMapping[str, Any]) -> None:
-    """Write :func:`classify_dead_turn` result to ``gm_output['_final_emission_meta']['dead_turn']`` (single SOT)."""
+def package_dead_turn_snapshot_into_final_emission_meta(gm_output: MutableMapping[str, Any]) -> None:
+    """Metadata-only dead-turn packager used by the gate at finalize time."""
     if not isinstance(gm_output, MutableMapping):
         return
     status = classify_dead_turn(gm_output)
@@ -358,6 +360,11 @@ def merge_dead_turn_classification_into_final_emission_meta(gm_output: MutableMa
         meta = {}
         gm_output["_final_emission_meta"] = meta
     meta["dead_turn"] = status
+
+
+def merge_dead_turn_classification_into_final_emission_meta(gm_output: MutableMapping[str, Any]) -> None:
+    """Compatibility residue alias for older call sites; canonical owner stays in this module."""
+    package_dead_turn_snapshot_into_final_emission_meta(gm_output)
 
 
 _DEAD_TURN_READ_DEFAULTS: Dict[str, Any] = {

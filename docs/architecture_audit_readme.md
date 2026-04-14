@@ -23,6 +23,18 @@ It does not import runtime modules from `game/`, does not make gameplay changes,
 
 Treat it as a deterministic triage layer, not as a formal proof system.
 
+## Ownership Ledger
+
+The canonical ownership declaration for ambiguous seams now lives in `docs/architecture_ownership_ledger.md`.
+
+Important operator note:
+
+- ownership declarations do not prove the code is already clean
+- they establish the cleanup target
+- future code movement should converge toward the declared owners instead of re-opening the seam
+
+For governance-heavy seams, read the ledger and audit docs as **maps that follow runtime and practical test owners**, not as a stronger authority layer. If docs disagree with the runtime owner or the practical direct-owner suite, the docs should be corrected to match the code/test structure rather than treated as equal co-owners.
+
 ## How To Run It
 
 Use the normal repo command:
@@ -89,7 +101,7 @@ Possible repo verdicts:
 - `structurally real, under-consolidated`: ownership is mostly real and hotspots are localized cleanup work.
 - `transitional but coherent`: the architecture still looks intentional, but extraction residue and drift are still active.
 - `mixed / caution`: some seams look real, but important areas drift enough that new features should wait for targeted ownership cleanup.
-- `high ambiguity / architecture risk`: ownership smear, unclear docs/tests, or broad drift are strong enough that growth should pause.
+- `high ambiguity / architecture risk`: ownership smear, unclear docs and tests, or broad drift are strong enough that growth should pause.
 
 The repo-level scorecard is the first place to look when you want to know whether problems are local or systemic.
 
@@ -112,6 +124,21 @@ Alignment states mean:
 - `unclear`: the audit cannot yet identify a stable owner/test/doc triangle.
 
 Important: `unclear` lowers confidence, but does not automatically force the harshest repo verdict. The repo verdict also distinguishes localized hotspots from system-wide smear.
+
+Prompt-contract operator note:
+
+- Canonical runtime owner: `game/prompt_context.py`.
+- Practical primary direct-owner suite: `tests/test_prompt_context.py`.
+- Secondary prompt coverage: `tests/test_prompt_compression.py`, `tests/test_final_emission_gate.py`, `tests/test_social_exchange_emission.py`, `tests/test_narration_transcript_regressions.py`, and `tests/test_prompt_and_guard.py`.
+- If the audit still sees wider prompt spread, interpret these secondary suites as downstream integration, smoke, or historical regression evidence unless they become the place where new prompt-contract semantics are directly specified.
+
+Response-policy operator note:
+
+- Canonical runtime owner: `game/response_policy_contracts.py`.
+- Practical primary direct-owner suite: `tests/test_response_policy_contracts.py`.
+- Secondary downstream coverage: `tests/test_fallback_shipped_contract_propagation.py`, `tests/test_response_delta_requirement.py`, `tests/test_final_emission_gate.py`, `tests/test_social_exchange_emission.py`, and `tests/test_final_emission_validators.py`.
+- Compatibility residue can remain importable through private accessors plus top-level `fallback_behavior` and `social_response_structure_contract` fallbacks, but those paths should be interpreted as compatibility/adjacency rather than equal semantic homes.
+- If the audit still sees response-policy spread, interpret repair, gate, validator, and emission suites as downstream consumption evidence unless they become the place where new accessor or bundle-materialization semantics are directly specified.
 
 ## Transcript-Lock Vs Contract-Lock Risk
 

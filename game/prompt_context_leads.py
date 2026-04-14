@@ -1,4 +1,12 @@
-"""Lead/interlocutor prompt-context helpers extracted from prompt_context."""
+"""Support-only lead/interlocutor prompt-context helpers extracted from `prompt_context`.
+
+This module is an extracted helper for lead-focused prompt-context slices. The
+public import home for these helpers remains :mod:`game.prompt_context`; this
+file is support-only and must not accumulate prompt-contract semantics.
+
+The file is transitional residue from prompt-context extraction work: useful helper
+surface, but not a second ownership home for the surrounding prompt bundle.
+"""
 from __future__ import annotations
 
 from typing import Any, Dict, List, Mapping
@@ -22,6 +30,7 @@ INTERLOCUTOR_DISCUSSION_RECENCY_WINDOW = 2
 
 
 def _prompt_context_attr(name: str, fallback: Any) -> Any:
+    """Compatibility residue bridge to canonical prompt-contract owner ``game.prompt_context``."""
     try:
         from game import prompt_context as prompt_context_module
     except Exception:
@@ -160,7 +169,11 @@ def build_authoritative_lead_prompt_context(
     recent_log: Any,
     active_npc_id: str | None = None,
 ) -> Dict[str, Any]:
-    """Deterministic, registry-only lead slice for prompts (read-only; no journal, no session mutation)."""
+    """Support-only extracted implementation for ``game.prompt_context`` lead slices.
+
+    This helper is compatibility residue behind the canonical prompt-contract
+    owner. Keep it read-only and do not add prompt-contract semantics here.
+    """
     _ = (world, public_scene, runtime, recent_log)
     list_session_leads_fn = _prompt_context_attr("list_session_leads", list_session_leads)
     is_lead_terminal_fn = _prompt_context_attr("is_lead_terminal", is_lead_terminal)
@@ -365,10 +378,12 @@ def build_interlocutor_lead_discussion_context(
     *,
     active_npc_id: str | None,
 ) -> Dict[str, Any]:
-    """Read-only active-NPC lead discussion context from scene runtime Block 1 memory.
+    """Support-only extracted implementation for NPC lead discussion prompt slices.
 
-    Source of truth: Block 1 npc_lead_discussions joined to get_lead; strict active_npc_id scoping;
-    terminal leads only in recent_terminal_reference; missing registry rows skipped. No writes.
+    Canonical prompt-contract ownership remains in ``game.prompt_context``.
+    Source of truth: Block 1 npc_lead_discussions joined to get_lead; strict
+    active_npc_id scoping; terminal leads only in recent_terminal_reference;
+    missing registry rows skipped. No writes.
     """
     _ = (world, recent_log)
     lead_get = _prompt_context_attr("_lead_get", _lead_get)
@@ -469,10 +484,11 @@ def build_interlocutor_lead_discussion_context(
 def deterministic_interlocutor_lead_behavior_hints(
     interlocutor_lead_context: Mapping[str, Any] | None,
 ) -> List[str]:
-    """Return compact deterministic behavior hints from interlocutor lead context.
+    """Support-only helper for prompt-context lead behavior hints.
 
-    Input is interlocutor_lead_context only—no persistence or new inference; must not affect speaker
-    grounding. Tests should assert contract / hint triggers, not exact narration prose.
+    Input is interlocutor_lead_context only - no persistence or new inference;
+    must not affect speaker grounding. Do not add prompt-contract semantics here.
+    Tests should assert contract / hint triggers, not exact narration prose.
     """
     if not isinstance(interlocutor_lead_context, Mapping):
         return []

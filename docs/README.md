@@ -97,13 +97,13 @@ Operator-facing map of the **implemented** narrative authenticity (NA) stack: de
 
 End-to-end order of responsibility:
 
-1. **Contract (prompt layer)** — `game/prompt_context.py` builds `response_policy.narrative_authenticity` via `game/narrative_authenticity.build_narrative_authenticity_contract` (lazy import at contract assembly to avoid import cycles). The same object is shipped on the turn for prompts and gate reads. `RESPONSE_RULE_PRIORITY` / `RULE_PRIORITY_COMPACT_INSTRUCTION` encode precedence relative to other policies (e.g. answer completeness, response delta, fallback brevity).
-2. **Validator** — `game/narrative_authenticity.validate_narrative_authenticity`: multi-signal, deterministic checks only (no LLM). Uses helpers from `game/final_emission_validators` where shared primitives exist; NA-specific logic stays in this module.
-3. **Repair** — `game/narrative_authenticity.repair_narrative_authenticity_minimal` (same module as validator): bounded, multi-pass, subtractive-first; re-validates after each successful repair path.
-4. **Gate integration** — `game/final_emission_gate.apply_final_emission_gate` calls `game/final_emission_repairs._apply_narrative_authenticity_layer` in a fixed position relative to other emission layers (see **System interactions**).
-5. **Meta / trace emission** — `game/final_emission_repairs` merges NA fields into `gm_output["_final_emission_meta"]` via `_merge_narrative_authenticity_meta`; compact trace slices come from `game/narrative_authenticity.build_narrative_authenticity_emission_trace`.
+1. **Contract (prompt layer)** — `game/prompt_context.py` builds `response_policy.narrative_authenticity` via `game.narrative_authenticity.build_narrative_authenticity_contract()` (lazy import at contract assembly to avoid import cycles). The same object is shipped on the turn for prompts and gate reads. `RESPONSE_RULE_PRIORITY` / `RULE_PRIORITY_COMPACT_INSTRUCTION` encode precedence relative to other policies (e.g. answer completeness, response delta, fallback brevity).
+2. **Validator** — `game.narrative_authenticity.validate_narrative_authenticity()`: multi-signal, deterministic checks only (no LLM). Uses helpers from `game.final_emission_validators` where shared primitives exist; NA-specific logic stays in this module.
+3. **Repair** — `game.narrative_authenticity.repair_narrative_authenticity_minimal()` (same module as validator): bounded, multi-pass, subtractive-first; re-validates after each successful repair path.
+4. **Gate integration** — `game.final_emission_gate.apply_final_emission_gate()` calls `game.final_emission_repairs._apply_narrative_authenticity_layer()` in a fixed position relative to other emission layers (see **System interactions**).
+5. **Meta / trace emission** — `game.final_emission_repairs` merges NA fields into `gm_output["_final_emission_meta"]` via `_merge_narrative_authenticity_meta`; compact trace slices come from `game.narrative_authenticity.build_narrative_authenticity_emission_trace()`.
 6. **Stage diff visibility** — `game/stage_diff_telemetry.py` records gate-stage snapshots; NA skip/reason codes from `_final_emission_meta` are copied into snapshots for diffing (observability only, not policy).
-7. **Evaluator (offline)** — `game/narrative_authenticity_eval.evaluate_narrative_authenticity`: deterministic 0–5 scores on five axes from telemetry (+ light text heuristics); **does not** re-run the validator and **does not** affect the live pipeline.
+7. **Evaluator (offline)** — `game.narrative_authenticity_eval.evaluate_narrative_authenticity()`: deterministic 0–5 scores on five axes from telemetry (+ light text heuristics); **does not** re-run the validator and **does not** affect the live pipeline.
 8. **Validation runner** — `tools/run_playability_validation.py` drives real `POST /api/chat` (FastAPI `TestClient` or `--base-url`), writes artifacts under `artifacts/playability_validation/`, and attaches both `playability_eval` and `narrative_authenticity_eval` per turn. See `docs/playability_validation.md`.
 
 ### Enforced behaviors (when the layer runs)
@@ -114,7 +114,7 @@ With contract enabled and not skipped for fallback compatibility, validation tar
 - **No low-signal filler responses** — Generic padding / thin atmospheric-only beats fail as `low_signal_generic_reply` when heuristics fire and negative controls do not excuse them; brevity with real dialogue can be allowed via `fallback_compatibility`.
 - **No adjacent structural repetition** — Consecutive sentences with scaffold overlap beyond `max_anchor_reuse_clauses` (with continuity allowance) → `adjacent_phrase_reuse`.
 - **No follow-up stagnation** — On topic follow-up, overlap with prior GM snippet without meaningful change markers → `follow_up_stale_restatement`; when response-delta is active, a **shadow** `validate_response_delta` failure surfaces as `follow_up_missing_signal_shadow_response_delta` (NA reads delta outcome; it does not implement delta repair).
-- **Escalation / follow-up must introduce meaningful change** — Contract flag `require_meaningful_change_on_followup` combines token overlap, `signal_markers_detected`, and `_meaningful_followup_change_vs_prior` heuristics (not interpersonal tone escalation; that is `game/tone_escalation`).
+- **Escalation / follow-up must introduce meaningful change** — Contract flag `require_meaningful_change_on_followup` combines token overlap, `signal_markers_detected`, and `_meaningful_followup_change_vs_prior` heuristics (not interpersonal tone escalation; that logic lives in `game.tone_escalation`).
 - **NPC dialogue grounded and contextual** — `non_diegetic_meta_voice` rejects validator/system-style fallback voice in player-facing text.
 
 ### Anti-goals (do not regress these)
@@ -169,7 +169,7 @@ All repair modes in `repair_narrative_authenticity_minimal` honor:
    - **NA** — reason codes under `narrative_authenticity_*` with checked true.
    - **response_delta** — primary ownership: `response_delta_*` meta; NA may only cite `follow_up_missing_signal_shadow_response_delta`.
    - **fallback** — `narrative_authenticity_skip_reason` of `fallback_uncertainty_brief_compat` or strong `fallback_behavior_*` / provenance traces after NA ran.
-   - **continuity / other** — `game/interaction_continuity` and strict-social paths are separate; use their meta and `social_response_structure_*` fields, not NA codes.
+  - **continuity / other** — `game.interaction_continuity` and strict-social paths are separate; use their meta and `social_response_structure_*` fields, not NA codes.
 
 ### Telemetry field reference (`narrative_authenticity_metrics` / `evidence`)
 
@@ -191,11 +191,11 @@ All repair modes in `repair_narrative_authenticity_minimal` honor:
 - **`narrative_authority`** — Applied **after** NA (tone escalation sits between them in the main pipeline).
 - **Evaluator** — Consumes merged NA telemetry only; never mutates pipeline output.
 
-Canonical emission order for the policy stack around NA (see `final_emission_gate.apply_final_emission_gate`): answer completeness → response delta → social response structure → **narrative authenticity** → tone escalation → narrative authority → anti-railroading → context separation → player-facing narration purity → answer shape primacy → scene state anchor → fast fallback neutral composition → … → fallback behavior (late pass; can override earlier repairs).
+Canonical emission order for the policy stack around NA (see `game.final_emission_gate.apply_final_emission_gate()`): answer completeness → response delta → social response structure → **narrative authenticity** → tone escalation → narrative authority → anti-railroading → context separation → player-facing narration purity → answer shape primacy → scene state anchor → fast fallback neutral composition → … → fallback behavior (late pass; can override earlier repairs).
 
 ### Circular import constraint
 
-**Why lazy imports exist** — `game/narrative_authenticity` must import shared sentence splitting and related helpers from `game/final_emission_validators` inside `validate_narrative_authenticity` (and repair helpers), while `final_emission_validators` / `final_emission_repairs` / `final_emission_gate` already depend on the NA surface. Eager top-level imports would create a cycle.
+**Why lazy imports exist** — `game.narrative_authenticity` must import shared sentence splitting and related helpers from `game.final_emission_validators` inside `validate_narrative_authenticity()` (and repair helpers), while `final_emission_validators` / `final_emission_repairs` / `final_emission_gate` already depend on the NA surface. Eager top-level imports would create a cycle.
 
 **Dependency risk** — Moving imports to module top level can hard-fail import of `game` or produce partial initialization.
 

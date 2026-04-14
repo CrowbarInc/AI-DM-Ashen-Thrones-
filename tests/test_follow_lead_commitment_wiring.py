@@ -1,4 +1,4 @@
-"""Follow-lead affordance metadata → successful scene_transition → commit_session_lead_with_context."""
+"""Follow-lead affordances feed lead-commitment and lifecycle transitions."""
 from __future__ import annotations
 
 import pytest
@@ -12,7 +12,6 @@ from game.exploration import (
 )
 from game.intent_parser import is_qualified_pursuit_shaped, parse_freeform_to_action
 from game.leads import LeadLifecycle, LeadStatus, create_lead, get_lead, upsert_lead
-from game.prompt_context import build_narration_context
 from game.scene_actions import normalize_scene_action
 from game.storage import get_scene_runtime
 
@@ -731,52 +730,3 @@ def test_finalize_followed_lead_missing_registry_row_raises():
         )
 
 
-def test_prompt_export_filters_terminal_pending_leads():
-    session: dict = {}
-    upsert_lead(
-        session,
-        create_lead(
-            title="Done",
-            summary="",
-            id="done_pl",
-            lifecycle=LeadLifecycle.RESOLVED,
-            status=LeadStatus.RESOLVED,
-            resolution_type="confirmed",
-            resolved_at_turn=1,
-        ),
-    )
-    pending = [
-        {
-            "clue_id": "c",
-            "authoritative_lead_id": "done_pl",
-            "text": "Should not surface as active",
-            "leads_to_scene": "x",
-        }
-    ]
-    payload = build_narration_context(
-        campaign={},
-        world={},
-        session=session,
-        character={},
-        scene={},
-        combat={},
-        recent_log=[],
-        user_text="",
-        resolution=None,
-        scene_runtime={"pending_leads": pending},
-        public_scene={"id": "gate"},
-        discoverable_clues=[],
-        gm_only_hidden_facts=[],
-        gm_only_discoverable_locked=[],
-        discovered_clue_records=[],
-        undiscovered_clue_records=[],
-        pending_leads=pending,
-        intent={},
-        world_state_view={},
-        mode_instruction="",
-        recent_log_for_prompt=[],
-    )
-    scene_block = payload.get("scene") or {}
-    assert scene_block.get("pending_leads") == []
-    rt_block = scene_block.get("runtime") or {}
-    assert rt_block.get("pending_leads") == []

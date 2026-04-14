@@ -37,6 +37,7 @@ from game.interaction_context import (
     inspect as inspect_interaction_context,
 )
 from game.social_exchange_emission import (
+    apply_strict_social_terminal_dialogue_fallback_if_needed,
     apply_social_exchange_retry_fallback_gm,
     effective_strict_social_resolution_for_emission,
     is_route_illegal_global_or_sanitizer_fallback_text,

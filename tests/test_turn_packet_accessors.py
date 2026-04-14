@@ -15,6 +15,7 @@ from game.turn_packet import (
     build_turn_packet,
     ensure_turn_packet,
     get_turn_packet,
+    resolve_turn_packet_for_gate,
     resolve_turn_packet_contract,
     resolve_turn_packet_field,
 )
@@ -80,6 +81,15 @@ def test_ensure_turn_packet_builds_once() -> None:
     b = ensure_turn_packet(gm, player_text="ignored")
     assert a is b
     assert get_turn_packet(gm) is a
+
+
+def test_resolve_turn_packet_for_gate_prefers_cache() -> None:
+    pkt = build_turn_packet(scene_id="cached")
+    gm: Dict[str, Any] = {
+        "metadata": {TURN_PACKET_METADATA_KEY: build_turn_packet(scene_id="meta")},
+        "_gate_turn_packet_cache": pkt,
+    }
+    assert resolve_turn_packet_for_gate(gm) is pkt
 
 
 def _usable_tone() -> Dict[str, Any]:

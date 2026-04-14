@@ -173,7 +173,7 @@ pytest -m "not transcript and not slow and not brittle"
 
 ## Synthetic-player harness (`synthetic`)
 
-The helpers under `tests/helpers/synthetic_*.py` are **test/tooling infrastructure only** (no `game/` coupling in the scaffold). They are meant to drive or evaluate automated “synthetic players” alongside patterns like `tests/helpers/transcript_runner.py`, not to add gameplay modes.
+The synthetic-player helpers under `tests/helpers/` are **test/tooling infrastructure only** (no `game/` coupling in the scaffold). They are meant to drive or evaluate automated “synthetic players” alongside `tests/helpers/transcript_runner.py`, not to add gameplay modes.
 
 - **`py -m pytest -q` includes synthetic-player tests:** `pytest.ini` only adds `-q` (no marker filter). You get `tests/test_synthetic_sessions.py`, `tests/test_synthetic_policy.py`, and `tests/test_synthetic_smoke.py` (the last is `slow`). The fast lane `-m "not transcript and not slow"` skips `test_synthetic_smoke.py` but still runs the two lighter synthetic modules.
 - The primary harness runner surface is `run_synthetic_session(...)`; `run_placeholder_session(...)` remains compatibility-only.

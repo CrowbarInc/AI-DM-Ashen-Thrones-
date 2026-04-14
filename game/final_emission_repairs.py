@@ -1,10 +1,13 @@
-"""Repair and layer wiring for final emission: ``apply_*`` / ``merge_*`` / skip helpers.
+"""Support-only repair owner for final emission.
 
-Owns skip/repair orchestration for the ``response_policy`` answer-completeness,
-response-delta, social-response-structure, and narrative-authenticity layers (extracted from
-:mod:`game.final_emission_gate`). Validators live in
-:mod:`game.final_emission_validators` and :mod:`game.narrative_authenticity` (authenticity checks); the gate imports these symbols and may re-expose them
-for compatibility.
+This module owns deterministic repair logic, skip helpers, and extracted layer wiring
+for final emission. It is **not** the canonical owner for response-policy contracts
+(:mod:`game.response_policy_contracts`) and **not** the top-level orchestration owner
+(:mod:`game.final_emission_gate`).
+
+It remains an extracted helper layer with transitional residue from earlier gate-local
+implementations; that residue does not make this module the boundary authority for the
+contracts it consumes.
 """
 from __future__ import annotations
 
@@ -38,9 +41,6 @@ from game.final_emission_validators import (
     _opening_carries_allowed_delta,
     _opening_segment,
     _partial_reason_in_text,
-    _resolve_answer_completeness_contract,
-    _resolve_fallback_behavior_contract,
-    _resolve_response_delta_contract,
     _response_delta_snippet_substantive,
     _response_delta_token_overlap_ratio,
     _response_delta_tokens,
@@ -54,6 +54,12 @@ from game.final_emission_validators import (
     validate_social_response_structure,
 )
 from game.leads import get_lead, normalize_lead
+from game.response_policy_contracts import (
+    materialize_response_policy_bundle,
+    resolve_answer_completeness_contract,
+    resolve_fallback_behavior_contract,
+    resolve_response_delta_contract,
+)
 from game.social_exchange_emission import (
     minimal_social_emergency_fallback_line,
     strict_social_emission_will_apply,
@@ -297,7 +303,7 @@ def _apply_answer_completeness_layer(
     response_type_debug: Dict[str, Any],
     strict_social_path: bool,
 ) -> tuple[str, Dict[str, Any], List[str]]:
-    contract = _resolve_answer_completeness_contract(gm_output)
+    contract = resolve_answer_completeness_contract(gm_output)
     skip = _skip_answer_completeness_layer(
         strict_social_details=strict_social_details,
         response_type_debug=response_type_debug,
@@ -377,7 +383,7 @@ def _default_response_delta_meta() -> Dict[str, Any]:
 
 def _strict_social_answer_pressure_ac_contract_active(gm_output: Dict[str, Any] | None) -> bool:
     """True when prompt_context activated answer-completeness for strict-social answer-pressure (Block 1)."""
-    ac = _resolve_answer_completeness_contract(gm_output)
+    ac = resolve_answer_completeness_contract(gm_output)
     if not isinstance(ac, dict):
         return False
     if not _contract_bool(ac, "enabled") or not _contract_bool(ac, "answer_required"):
@@ -388,7 +394,7 @@ def _strict_social_answer_pressure_ac_contract_active(gm_output: Dict[str, Any] 
 
 def _strict_social_answer_pressure_rd_contract_active(gm_output: Dict[str, Any] | None) -> bool:
     """True when response_delta is enabled with strict_social_answer_pressure trigger (Block 1)."""
-    rd = _resolve_response_delta_contract(gm_output)
+    rd = resolve_response_delta_contract(gm_output)
     if not isinstance(rd, dict) or not _contract_bool(rd, "enabled"):
         return False
     ts = str(rd.get("trigger_source") or "").strip()
@@ -516,26 +522,20 @@ def _emitted_covers_refinement_spoken(emitted: str, refinement: str) -> bool:
     return hit >= need
 
 
+def _repair_probe_for_answer_pressure_policy(
+    gm_output: Dict[str, Any],
+    session: Dict[str, Any] | None,
+) -> Dict[str, Any]:
+    """Compatibility residue: canonical bundle read-side helper lives in ``game.response_policy_contracts``."""
+    return materialize_response_policy_bundle(gm_output, session)
+
+
+# Compatibility residue: older repair/gate imports may still use the earlier helper name.
 def _gm_probe_for_answer_pressure_contracts(
     gm_output: Dict[str, Any],
     session: Dict[str, Any] | None,
 ) -> Dict[str, Any]:
-    """Merge ``session["last_turn_response_policy"]`` when ``gm_output`` lacks a non-empty ``response_policy``.
-
-    The narration pipeline stores the shipped bundle on the session; retry helpers also receive
-    ``response_policy`` explicitly. :func:`apply_final_emission_gate` uses this so layered contract
-    resolution (context separation, tone escalation, etc.) matches the shipped bundle on fallback paths.
-    """
-    pol = gm_output.get("response_policy") if isinstance(gm_output.get("response_policy"), dict) else None
-    if isinstance(pol, dict) and pol:
-        return gm_output
-    if isinstance(session, dict):
-        lp = session.get("last_turn_response_policy")
-        if isinstance(lp, dict) and lp:
-            merged = dict(gm_output)
-            merged["response_policy"] = lp
-            return merged
-    return gm_output
+    return _repair_probe_for_answer_pressure_policy(gm_output, session)
 
 
 def apply_spoken_state_refinement_cash_out(
@@ -548,8 +548,9 @@ def apply_spoken_state_refinement_cash_out(
 ) -> Dict[str, Any]:
     """After state promotes a lead/clue, ensure spoken dialogue surfaces that refinement on answer-pressure turns.
 
-    Uses ``response_policy`` on ``gm_output`` when present; otherwise ``session["last_turn_response_policy"]``
-    from the narration pipeline (see :func:`game.api._build_gpt_narration_from_authoritative_state`).
+    Downstream repair consumer only: use the canonical response-policy bundle reader from
+    :mod:`game.response_policy_contracts`, which prefers shipped ``gm_output["response_policy"]``
+    and falls back to ``session["last_turn_response_policy"]`` only as compatibility residue.
     """
     if not isinstance(gm_output, dict) or not isinstance(session, dict):
         return gm_output
@@ -558,7 +559,7 @@ def apply_spoken_state_refinement_cash_out(
         return gm_output
     if not strict_social_emission_will_apply(resolution, session, world, sid):
         return gm_output
-    probe = _gm_probe_for_answer_pressure_contracts(gm_output, session)
+    probe = materialize_response_policy_bundle(gm_output, session)
     if not (
         _strict_social_answer_pressure_ac_contract_active(probe)
         or _strict_social_answer_pressure_rd_contract_active(probe)
@@ -778,7 +779,7 @@ def _apply_response_delta_layer(
     answer_completeness_meta: Dict[str, Any],
     strict_social_path: bool,
 ) -> tuple[str, Dict[str, Any], List[str]]:
-    contract = _resolve_response_delta_contract(gm_output)
+    contract = resolve_response_delta_contract(gm_output)
     meta = _default_response_delta_meta()
     trace = contract.get("trace") if isinstance(contract, dict) else None
     if isinstance(trace, dict):
@@ -1157,12 +1158,12 @@ def _merge_social_response_structure_meta(meta: Dict[str, Any], srs_dbg: Dict[st
 
 
 def _default_narrative_authenticity_meta() -> Dict[str, Any]:
-    """Deferred to :mod:`game.final_emission_meta` (metadata-only NA defaults)."""
+    """Compatibility residue wrapper derived from :mod:`game.final_emission_meta` defaults."""
     return default_narrative_authenticity_layer_meta()
 
 
 def _merge_narrative_authenticity_meta(meta: Dict[str, Any], na_dbg: Dict[str, Any]) -> None:
-    """Deferred to :mod:`game.final_emission_meta` (single merge schema into ``_final_emission_meta``)."""
+    """Compatibility residue wrapper; metadata schema ownership stays in :mod:`game.final_emission_meta`."""
     merge_narrative_authenticity_into_final_emission_meta(meta, na_dbg)
 
 
@@ -2181,7 +2182,7 @@ def _apply_fallback_behavior_layer(
     session: Dict[str, Any] | None = None,
     scene_id: str = "",
 ) -> Tuple[str, Dict[str, Any], List[str]]:
-    contract = _resolve_fallback_behavior_contract(gm_output)
+    contract = resolve_fallback_behavior_contract(gm_output)
     meta = _default_fallback_behavior_meta()
     meta["fallback_behavior_contract_present"] = isinstance(contract, dict)
 

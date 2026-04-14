@@ -1,4 +1,11 @@
-"""Shipped response_policy / context_separation contract propagation through retry fallback and final gate."""
+"""Secondary downstream coverage for shipped response-policy fallback propagation.
+
+Direct prompt-bundle construction lives in ``tests/test_prompt_context.py`` and
+direct response-policy accessor semantics live in
+``tests/test_response_policy_contracts.py``. This module keeps compatibility and
+integration coverage for retry fallback, enforcement, and final-gate
+consumption of already-shipped policy.
+"""
 from __future__ import annotations
 
 import pytest
@@ -9,7 +16,6 @@ from game.final_emission_gate import apply_final_emission_gate
 from game.gm import apply_deterministic_retry_fallback, apply_response_policy_enforcement
 from game.gm_retry import force_terminal_retry_fallback
 from game.interaction_context import rebuild_active_scene_entities
-from game.prompt_context import build_response_policy
 from game.social_exchange_emission import strict_social_emission_will_apply
 from game.storage import load_scene
 
@@ -23,14 +29,10 @@ def _shipped_cs_contract(*, kind: str = "observe", player_text: str = "I study t
     )
 
 
-def _policy_with_context_separation(cs: dict) -> dict:
-    pol = build_response_policy(
-        player_text="probe",
-        resolution={"kind": "observe", "prompt": "probe"},
-    )
-    pol = dict(pol)
-    pol["context_separation"] = cs
-    return pol
+def _shipped_response_policy(cs: dict) -> dict:
+    # Local shipped-fixture stand-in: this suite covers downstream fallback/gate
+    # consumption after the policy already exists, not prompt-side bundle assembly.
+    return {"context_separation": cs}
 
 
 def _gate_session_scene_frontier():
@@ -64,8 +66,11 @@ def _emission_cs_meta(out: dict) -> dict:
     }
 
 
-def test_apply_response_policy_enforcement_mirrors_policy_onto_gm() -> None:
-    pol = _policy_with_context_separation(_shipped_cs_contract())
+# Secondary downstream coverage only: these tests verify fallback / gate
+# consumption of already-owned response-policy data after retries or repair
+# paths, not the canonical accessor semantics themselves.
+def test_apply_response_policy_enforcement_mirrors_shipped_policy_onto_gm() -> None:
+    pol = _shipped_response_policy(_shipped_cs_contract())
     gm = apply_response_policy_enforcement(
         {"player_facing_text": "Rain threads along the slate."},
         response_policy=pol,
@@ -79,9 +84,9 @@ def test_apply_response_policy_enforcement_mirrors_policy_onto_gm() -> None:
     assert gm["response_policy"].get("context_separation") is pol.get("context_separation")
 
 
-def test_final_gate_resolves_context_separation_from_gm_response_policy() -> None:
+def test_final_gate_resolves_context_separation_from_shipped_gm_policy() -> None:
     cs = _shipped_cs_contract()
-    pol = _policy_with_context_separation(cs)
+    pol = _shipped_response_policy(cs)
     out = apply_final_emission_gate(
         {
             "player_facing_text": "Rain threads along the slate; the gate's iron has gone velvet with rust.",
@@ -100,9 +105,9 @@ def test_final_gate_resolves_context_separation_from_gm_response_policy() -> Non
     assert m["em_flat_source"] == "response_policy"
 
 
-def test_final_gate_merges_session_last_turn_policy_when_gm_lacks_it() -> None:
+def test_final_gate_merges_session_last_turn_shipped_policy_when_gm_lacks_it() -> None:
     cs = _shipped_cs_contract()
-    pol = _policy_with_context_separation(cs)
+    pol = _shipped_response_policy(cs)
     session: dict = {"last_turn_response_policy": pol}
     out = apply_final_emission_gate(
         {
@@ -123,7 +128,7 @@ def test_final_gate_merges_session_last_turn_policy_when_gm_lacks_it() -> None:
 
 def test_explore_observe_resolution_stays_non_social_in_metadata() -> None:
     cs = _shipped_cs_contract(kind="observe", player_text="I scan the courtyard.")
-    session = {"last_turn_response_policy": _policy_with_context_separation(cs)}
+    session = {"last_turn_response_policy": _shipped_response_policy(cs)}
     out = apply_final_emission_gate(
         {
             "player_facing_text": "Courtyard stones hold last night's ash in their seams.",
@@ -141,9 +146,9 @@ def test_explore_observe_resolution_stays_non_social_in_metadata() -> None:
     assert "speaker_contract_enforcement" not in em
 
 
-def test_force_terminal_fallback_plus_enforcement_then_gate_retains_cs_contract() -> None:
+def test_force_terminal_fallback_plus_enforcement_then_gate_retains_shipped_cs_contract() -> None:
     cs = _shipped_cs_contract(kind="observe", player_text="I look around.")
-    pol = _policy_with_context_separation(cs)
+    pol = _shipped_response_policy(cs)
     scene_envelope = {"scene": {"id": "s1", "summary": "A muddy yard by the gate."}}
     base = force_terminal_retry_fallback(
         session={},
@@ -178,7 +183,9 @@ def test_force_terminal_fallback_plus_enforcement_then_gate_retains_cs_contract(
     assert m["resolution_source"] == "response_policy"
 
 
-def test_open_call_recovery_path_gate_merges_session_policy(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_open_call_recovery_path_gate_merges_session_shipped_policy(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     import game.gm_retry as gm_retry_mod
 
     monkeypatch.setattr(
@@ -188,7 +195,7 @@ def test_open_call_recovery_path_gate_merges_session_policy(monkeypatch: pytest.
     )
     session, scene, world = _gate_session_scene_frontier()
     cs = _shipped_cs_contract(kind="question", player_text="Anyone here know about the patrol?")
-    session["last_turn_response_policy"] = _policy_with_context_separation(cs)
+    session["last_turn_response_policy"] = _shipped_response_policy(cs)
 
     resolution = {
         "kind": "question",

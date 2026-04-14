@@ -1,12 +1,19 @@
-"""Regression tests for opening-scene visible fact curation (prompt layer)."""
+"""Regression tests for opening-scene visible fact curation.
+
+This module owns `game.opening_visible_fact_selection`, while any prompt-context
+calls here are downstream smoke for opening-turn integration only.
+"""
 from __future__ import annotations
+
+import importlib
 
 from game.opening_visible_fact_selection import (
     OPENING_NARRATION_VISIBLE_FACT_MAX,
     opening_fact_primary_category,
     select_opening_narration_visible_facts,
 )
-from game.prompt_context import build_narration_context
+
+build_narration_context = importlib.import_module("game.prompt_context").build_narration_context
 
 
 def _opening_session() -> dict:

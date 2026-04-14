@@ -1,9 +1,12 @@
-"""Focused tests for answer-completeness contract derivation and gate behavior.
+"""Downstream tests for shipped answer-completeness and response-delta behavior.
 
-Complements tests/test_social_exchange_emission.py without duplicating question-first,
-front-load repair, or inspect_* meta cases already covered there.
+Direct prompt-bundle ownership stays in ``tests/test_prompt_context.py``. This
+module exercises how shipped contracts drive answer-pressure derivation, social
+escalation eligibility, and final-emission gate behavior.
 """
 from __future__ import annotations
+
+import importlib
 
 import pytest
 
@@ -15,19 +18,22 @@ from game.final_emission_gate import (
     validate_answer_completeness,
 )
 from game.narration_visibility import validate_player_facing_referential_clarity
-from game.prompt_context import (
-    ANSWER_COMPLETENESS_PARTIAL_REASONS,
-    _answer_pressure_followup_details,
-    build_answer_completeness_contract,
-    build_response_delta_contract,
-    question_detected_from_player_text,
-)
 from game.social import determine_social_escalation_outcome
 from tests.test_social_escalation import _session_with_pressure
+
+_prompt_contracts = importlib.import_module("game.prompt_context")
+# Consume shipped contracts through a local module handle so this suite reads as
+# a downstream consumer of prompt-derived policy, not as a prompt-owner home.
+ANSWER_COMPLETENESS_PARTIAL_REASONS = _prompt_contracts.ANSWER_COMPLETENESS_PARTIAL_REASONS
+_answer_pressure_followup_details = _prompt_contracts._answer_pressure_followup_details
+build_answer_completeness_contract = _prompt_contracts.build_answer_completeness_contract
+build_response_delta_contract = _prompt_contracts.build_response_delta_contract
+question_detected_from_player_text = _prompt_contracts.question_detected_from_player_text
 
 pytestmark = pytest.mark.unit
 
 
+# feature: emission, social, fallback
 def _obligations_explore_no_npc() -> dict:
     return {
         "suppress_non_social_emitters": False,
@@ -46,12 +52,12 @@ def _obligations_social_answer(active_reply_expected: bool = True) -> dict:
     }
 
 
-def test_question_detected_from_player_text_direct_question():
+def test_answer_completeness_question_detector_flags_direct_questions():
     assert question_detected_from_player_text("Where did they go?") is True
     assert question_detected_from_player_text("I head toward the gate.") is False
 
 
-def test_build_answer_contract_player_question_sets_trace_and_player_direct_question():
+def test_answer_completeness_contract_tracks_player_direct_question_trace():
     c = build_answer_completeness_contract(
         player_input="Who took the ledger?",
         narration_obligations=_obligations_explore_no_npc(),
@@ -69,7 +75,7 @@ def test_build_answer_contract_player_question_sets_trace_and_player_direct_ques
     assert "partial_answer_permitted" in tr
 
 
-def test_build_answer_contract_active_target_and_question_expects_npc_voice():
+def test_answer_completeness_contract_prefers_npc_voice_for_active_target_questions():
     c = build_answer_completeness_contract(
         player_input="Runner, which way?",
         narration_obligations=_obligations_social_answer(),
@@ -82,7 +88,7 @@ def test_build_answer_contract_active_target_and_question_expects_npc_voice():
     assert c["trace"]["active_npc_reply_kind"] == "answer"
 
 
-def test_build_answer_contract_action_turn_answer_not_required():
+def test_answer_completeness_contract_disables_action_only_turns():
     c = build_answer_completeness_contract(
         player_input="I drag the crate aside and search the straw.",
         narration_obligations=_obligations_explore_no_npc(),
@@ -356,7 +362,7 @@ def test_clarification_recent_reference_generic_roles_insufficient_without_watch
     assert ap.get("recent_reference_clarification_detected") is not True
 
 
-def test_build_answer_allowed_partial_reasons_only_grounded_buckets():
+def test_answer_completeness_contract_uses_grounded_partial_reason_buckets():
     direct = build_answer_completeness_contract(
         player_input="What happened?",
         narration_obligations=_obligations_explore_no_npc(),

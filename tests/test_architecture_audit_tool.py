@@ -35,7 +35,7 @@ def _mini_repo(tmp_path: Path) -> Path:
     repo = tmp_path / "mini_repo"
     _write(
         repo / "game" / "prompt_context.py",
-        '"""Prompt layer contract assembly for emitted response policy hints."""\n\n'
+        '"""Canonical owner for prompt-context assembly and prompt contracts."""\n\n'
         "def build_prompt_contract():\n"
         "    return {'prompt': True}\n",
     )
@@ -54,7 +54,7 @@ def _mini_repo(tmp_path: Path) -> Path:
     )
     _write(
         repo / "game" / "final_emission_repairs.py",
-        '"""Repair and layer wiring extracted from the gate for compatibility."""\n'
+        '"""Support-only repair owner extracted from the gate for compatibility."""\n'
         "from game.final_emission_validators import validate_answer\n\n"
         "def repair_answer():\n"
         "    return validate_answer()\n\n"
@@ -88,19 +88,19 @@ def _mini_repo(tmp_path: Path) -> Path:
     )
     _write(
         repo / "game" / "stage_diff_telemetry.py",
-        '"""Telemetry helpers only."""\n\n'
+        '"""Canonical telemetry-only owner for stage-diff observability."""\n\n'
         "def record_stage_snapshot():\n"
         "    return None\n",
     )
     _write(
         repo / "game" / "turn_packet.py",
-        '"""Turn packet single source of truth."""\n\n'
+        '"""Canonical owner for the turn-packet contract boundary."""\n\n'
         "def get_turn_packet():\n"
         "    return {}\n",
     )
     _write(
         repo / "game" / "prompt_context_leads.py",
-        '"""Prompt-context lead helpers only."""\n\n'
+        '"""Support-only prompt-context helper extracted from the canonical owner."""\n\n'
         "def build_authoritative_lead_prompt_context():\n"
         "    return {'leads': []}\n",
     )
@@ -170,6 +170,32 @@ def _mini_repo(tmp_path: Path) -> Path:
         "The orchestration owner is `game/final_emission_gate.py`.\n"
         "The canonical owner for response policy contracts is `game/response_policy_contracts.py`.\n"
         "See `tests/TEST_AUDIT.md` and `docs/missing_doc.md`.\n",
+    )
+    _write(
+        repo / "docs" / "architecture_ownership_ledger.md",
+        "# Architecture Ownership Ledger\n\n"
+        "## Operator Note\n\n"
+        "Ownership declarations do not prove the code is already clean.\n\n"
+        "## Response Policy Contracts\n\n"
+        "- Canonical owner module: `game/response_policy_contracts.py`\n"
+        "- Non-owner supporting modules: `game/final_emission_repairs.py`, `game/prompt_context.py`\n"
+        "- Current state: `targeted cleanup in progress`\n\n"
+        "## Prompt Contracts\n\n"
+        "- Canonical owner module: `game/prompt_context.py`\n"
+        "- Non-owner supporting modules: `game/prompt_context_leads.py`, `game/response_policy_contracts.py`\n"
+        "- Current state: `targeted cleanup in progress`\n\n"
+        "## Final Emission Gate Orchestration\n\n"
+        "- Canonical owner module: `game/final_emission_gate.py`\n"
+        "- Non-owner supporting modules: `game/final_emission_repairs.py`\n"
+        "- Current state: `targeted cleanup in progress`\n\n"
+        "## Stage Diff Telemetry\n\n"
+        "- Canonical owner module: `game/stage_diff_telemetry.py`\n"
+        "- Non-owner supporting modules: `game/final_emission_gate.py`\n"
+        "- Current state: `targeted cleanup in progress`\n\n"
+        "## Turn Packet Contract Boundary\n\n"
+        "- Canonical owner module: `game/turn_packet.py`\n"
+        "- Non-owner supporting modules: `game/stage_diff_telemetry.py`\n"
+        "- Current state: `targeted cleanup in progress`\n",
     )
     _write(
         repo / "docs" / "current_focus.md",
@@ -360,6 +386,7 @@ def test_architecture_audit_report_shape_is_stable(audit_mod, tmp_path):
     assert "likely_contract_owned_seams_with_weak_direct_tests" in report["summary"]
     assert "inventory_docs_authority_status" in report["summary"]
     assert "manual_review_shortlist" in report["summary"]
+    assert "ownership_declaration_consistency" in report["summary"]
     assert "repo_level_verdict" in report["summary"]
     assert "repo_level_confidence" in report["summary"]
     assert "recommended_action_mode" in report["summary"]
@@ -485,6 +512,44 @@ def test_architecture_audit_focus_subsystem_rendering(audit_mod, tmp_path):
     assert "Key evidence lines:" in text
 
 
+def test_architecture_audit_checks_ownership_ledger_consistency(audit_mod, tmp_path):
+    repo = _mini_repo(tmp_path)
+    report = audit_mod.analyze_repo(repo)
+
+    consistency = report["summary"]["ownership_declaration_consistency"]
+
+    assert consistency["ledger_path"] == "docs/architecture_ownership_ledger.md"
+    assert consistency["status"] == "aligned"
+    assert consistency["checked_owner_modules"] >= 4
+    assert consistency["checked_support_only_modules"] >= 2
+    assert consistency["issues"] == []
+
+
+def test_repo_ownership_ledger_and_target_docstrings_are_explicit():
+    ledger = (ROOT / "docs" / "architecture_ownership_ledger.md").read_text(encoding="utf-8")
+    assert "## Response Policy Contracts" in ledger
+    assert "## Prompt Contracts" in ledger
+    assert "## Final Emission Gate Orchestration" in ledger
+    assert "## Final Emission Metadata Packaging" in ledger
+    assert "## Stage Diff Telemetry" in ledger
+    assert "## Turn Packet Contract Boundary" in ledger
+    assert "## Test Inventory And Governance Docs" in ledger
+
+    explicit_language = {
+        "game/response_policy_contracts.py": "Canonical owner for response-policy contract resolution",
+        "game/final_emission_repairs.py": "Support-only repair owner",
+        "game/prompt_context.py": "Canonical owner for prompt-context assembly",
+        "game/prompt_context_leads.py": "Support-only lead/interlocutor prompt-context helpers",
+        "game/final_emission_gate.py": "Canonical orchestration owner",
+        "game/final_emission_meta.py": "Canonical metadata-only owner",
+        "game/stage_diff_telemetry.py": "Canonical telemetry-only owner",
+        "game/turn_packet.py": "Canonical owner for the turn-packet contract boundary",
+    }
+    for rel_path, needle in explicit_language.items():
+        text = (ROOT / rel_path).read_text(encoding="utf-8")
+        assert needle in text
+
+
 def test_architecture_audit_rubric_distinguishes_localized_vs_systemwide(audit_mod):
     localized_reports = [
         _synthetic_subsystem(audit_mod, subsystem_name="prompt contracts", alignment_status="partial", mismatch_type="docs_runtime_owner_drift", severity="medium", coverage_spread=3, verdict="yellow"),
@@ -587,11 +652,50 @@ def test_architecture_audit_hotspot_classification_is_stable(audit_mod):
         severity="medium",
         coverage_spread=3,
     )
+    turn_packet_residue_report = _synthetic_subsystem(
+        audit_mod,
+        subsystem_name="stage diff telemetry",
+        alignment_status="partial",
+        mismatch_type="docs_runtime_owner_drift",
+        severity="medium",
+        coverage_spread=3,
+        archaeology_markers=[{"path": "game/turn_packet.py", "kind": "compatibility", "excerpt": "compatibility"}],
+    )
+    social_emission_residue_report = _synthetic_subsystem(
+        audit_mod,
+        subsystem_name="final emission gate orchestration",
+        inferred_owner="game/final_emission_gate.py",
+        role_labels=["orchestration_owner"],
+        alignment_status="partial",
+        mismatch_type="ownership_spread_wide",
+        severity="high",
+        coverage_spread=6,
+        archaeology_markers=[
+            {"path": "game/social_exchange_emission.py", "kind": "compatibility", "excerpt": "compatibility residue"}
+        ],
+        overlap_findings=[
+            {
+                "overlap_type": "compatibility_exports_after_extraction",
+                "severity": "medium",
+                "evidence": ["compatibility residue"],
+            }
+        ],
+    )
 
     assert audit_mod._classify_hotspot(smear_report, label="prompt contracts conflict")["classification"] == "possible ownership smear"
     assert audit_mod._classify_hotspot(residue_report, label="prompt_context_leads residue", module_path="game/prompt_context_leads.py")["classification"] == "transitional residue"
     assert audit_mod._classify_hotspot(unclear_report, label="test ownership / inventory docs still unclear")["classification"] == "unclear / needs human review"
     assert audit_mod._classify_hotspot(local_report, label="stage diff telemetry partial mismatch")["classification"] == "localized under-consolidation"
+    assert audit_mod._classify_hotspot(
+        turn_packet_residue_report,
+        label="turn_packet telemetry adjacency residue",
+        module_path="game/turn_packet.py",
+    )["classification"] == "transitional residue"
+    assert audit_mod._classify_hotspot(
+        social_emission_residue_report,
+        label="social_exchange_emission mixed repair/contract role",
+        module_path="game/social_exchange_emission.py",
+    )["classification"] == "transitional residue"
 
 
 def test_architecture_audit_handles_sparse_unknown_synthesis(audit_mod):

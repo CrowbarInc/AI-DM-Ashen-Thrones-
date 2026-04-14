@@ -1,4 +1,8 @@
-"""Interaction target establishment for freeform NPC dialogue (engine-owned)."""
+"""Dialogue/social establishment flow coverage for freeform NPC turns.
+
+These tests keep downstream binding and strict-social consumer coverage centered on
+interaction establishment, not prompt-contract ownership.
+"""
 
 from game.defaults import default_session, default_world
 from game.interaction_context import (
@@ -7,7 +11,6 @@ from game.interaction_context import (
     rebuild_active_scene_entities,
     set_social_target,
 )
-from game.prompt_context import derive_narration_obligations
 from game.social_exchange_emission import (
     player_line_triggers_strict_social_emission,
     reconcile_strict_social_resolution_speaker,
@@ -254,21 +257,3 @@ def test_strict_social_resolution_prefers_active_over_substring():
     )
     assert target_id == "tavern_runner"
     assert basis == "active"
-
-
-def test_wait_idle_while_engaged_expects_npc_reply():
-    session_view = {
-        "turn_counter": 5,
-        "visited_scene_count": 2,
-        "active_interaction_target_id": "rian",
-        "active_interaction_kind": "social",
-        "interaction_mode": "social",
-    }
-    obligations = derive_narration_obligations(
-        session_view,
-        resolution={"kind": "observe", "action_id": "wait"},
-        intent={"labels": ["passive_pause", "observation"]},
-        recent_log_for_prompt=[],
-        scene_runtime={},
-    )
-    assert obligations["active_npc_reply_expected"] is True

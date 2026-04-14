@@ -36,10 +36,9 @@ from game.fallback_provenance_debug import preserve_fallback_provenance_metadata
 from game.stage_diff_telemetry import (
     record_stage_snapshot,
     record_stage_transition,
-    resolve_gate_turn_packet,
     snapshot_turn_stage,
 )
-from game.turn_packet import get_turn_packet, resolve_turn_packet_contract
+from game.turn_packet import get_turn_packet, resolve_turn_packet_contract, resolve_turn_packet_for_gate
 
 from game.gm import (
     _apply_uncertainty_to_gm,
@@ -75,9 +74,9 @@ def _retry_resolve_turn_packet(
     gm_output: Optional[Dict[str, Any]],
     response_policy: Optional[Dict[str, Any]],
 ) -> Optional[Dict[str, Any]]:
-    """Prefer :func:`resolve_gate_turn_packet` on *gm_output*, then :func:`get_turn_packet` with *response_policy*."""
+    """Prefer the packet-owner gate resolver on *gm_output*, then :func:`get_turn_packet` with *response_policy*."""
     if isinstance(gm_output, dict):
-        cached = resolve_gate_turn_packet(gm_output)
+        cached = resolve_turn_packet_for_gate(gm_output)
         if isinstance(cached, dict):
             return cached
     return get_turn_packet(gm_output or {}, response_policy)

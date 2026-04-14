@@ -1,4 +1,4 @@
-"""Route-isolated emission helpers for active social_exchange turns.
+"""Route-isolated downstream emission helpers for active social_exchange turns.
 
 Ensures player-facing text is speaker-owned, single-form, and never pulled from
 scene/ambient uncertainty pools except as an explicit interruption breakoff.
@@ -6,6 +6,16 @@ scene/ambient uncertainty pools except as an explicit interruption breakoff.
 Speaker identity for strict emission aligns with
 :func:`game.interaction_context.resolve_authoritative_social_target`; do not resolve a competing
 NPC id in this module except through that helper (or thin wrappers around it).
+
+This module is a downstream emission consumer and application layer for strict-social
+turns. It is not the contract owner, not the repair owner, and should not accumulate
+new contract semantics here. Read-side response-policy ownership lives in
+:mod:`game.response_policy_contracts`; broader repair/orchestration ownership lives in
+:mod:`game.final_emission_repairs` and :mod:`game.final_emission_gate`.
+
+Compatibility residue remains importable from this module where older callers still
+reach for historical helper names, but new code should prefer emission/application
+names over repair-owner framing.
 
 Appended global-visibility *stock sentence* cleanup on generic narration accept paths is owned by
 :func:`game.final_emission_gate._finalize_emission_output`, not duplicated here.
@@ -52,6 +62,7 @@ from game.social import (
     topic_pressure_speaker_id_for_social_exchange,
 )
 from game.exploration import EXPLORATION_KINDS
+from game.response_policy_contracts import response_type_contract_requires_dialogue
 from game.social import SOCIAL_KINDS
 from game.utils import slugify
 
@@ -1023,7 +1034,7 @@ def _strict_social_emergency_fallback_npc_dialogue_substantive(
 
 
 def lawful_strict_social_dialogue_emergency_fallback_line(resolution: Dict[str, Any] | None) -> str:
-    """Compact NPC reply pool for strict-social terminal repair: always dialogue-shaped, no crowd insertion."""
+    """Compact NPC reply pool for strict-social terminal fallback application."""
     social = resolution.get("social") if isinstance(resolution, dict) and isinstance(resolution.get("social"), dict) else {}
     npc_id = str(social.get("npc_id") or "").strip()
     speaker = _speaker_label(resolution)
@@ -1075,7 +1086,7 @@ def _active_interlocutor_matches_resolution_social_npc(
     return bool(a) and bool(n) and a == n
 
 
-def repair_strict_social_terminal_dialogue_fallback_if_needed(
+def apply_strict_social_terminal_dialogue_fallback_if_needed(
     text: str,
     *,
     resolution: Dict[str, Any] | None,
@@ -1085,18 +1096,18 @@ def repair_strict_social_terminal_dialogue_fallback_if_needed(
     scene_id: str,
     retry_terminal: bool,
 ) -> tuple[str, bool]:
-    """When strict-social dialogue is contracted, replace interruption/stall terminal lines with lawful NPC speech."""
+    """Apply strict-social terminal dialogue fallback when a dialogue contract is already active.
+
+    This is a downstream emission/application step. Contract resolution stays in
+    :mod:`game.response_policy_contracts`; this helper only consumes that verdict.
+    """
     if not retry_terminal or not isinstance(resolution, dict):
         return text, False
-    from game.response_policy_contracts import _resolve_response_type_contract
-
-    contract, _ = _resolve_response_type_contract(
+    if not response_type_contract_requires_dialogue(
         base_gm if isinstance(base_gm, dict) else None,
         resolution=resolution,
         session=session if isinstance(session, dict) else None,
-    )
-    required = str((contract or {}).get("required_response_type") or "").strip().lower()
-    if required != "dialogue":
+    ):
         return text, False
     if not strict_social_emission_will_apply(
         resolution,
@@ -1113,6 +1124,32 @@ def repair_strict_social_terminal_dialogue_fallback_if_needed(
     if strict_social_terminal_dialogue_fallback_valid(text, resolution):
         return text, False
     return lawful_strict_social_dialogue_emergency_fallback_line(resolution), True
+
+
+def repair_strict_social_terminal_dialogue_fallback_if_needed(
+    text: str,
+    *,
+    resolution: Dict[str, Any] | None,
+    base_gm: Dict[str, Any] | None,
+    session: Dict[str, Any] | None,
+    world: Dict[str, Any] | None,
+    scene_id: str,
+    retry_terminal: bool,
+) -> tuple[str, bool]:
+    """Compatibility residue for older repair-shaped imports.
+
+    Prefer :func:`apply_strict_social_terminal_dialogue_fallback_if_needed`.
+    Do not add new contract semantics here.
+    """
+    return apply_strict_social_terminal_dialogue_fallback_if_needed(
+        text,
+        resolution=resolution,
+        base_gm=base_gm,
+        session=session,
+        world=world,
+        scene_id=scene_id,
+        retry_terminal=retry_terminal,
+    )
 
 
 def strict_social_ownership_terminal_fallback(resolution: Dict[str, Any] | None) -> str:

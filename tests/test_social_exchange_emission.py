@@ -1,8 +1,18 @@
-"""Canonical owner: strict-social **exchange emission** (coercion, filters, gate hooks, repair tags).
+"""Practical primary direct-owner suite for downstream strict-social **exchange emission**.
 
-Broader multi-turn **quality** scenarios (topic-pressure restore, transactional probes) live in
-``test_social_emission_quality.py``. **Escalation state** transitions live in ``test_social_escalation.py``.
-``test_social.py`` covers the social **engine** dict contract from ``resolve_social_action``."""
+Terminal strict-social dialogue **application** semantics belong here once contract resolution
+is already decided elsewhere. Broader multi-turn **quality** scenarios (topic-pressure restore,
+transactional probes) live in ``test_social_emission_quality.py``. Establishment-flow coverage
+lives in ``test_dialogue_interaction_establishment.py``. **Escalation state** transitions live in
+``test_social_escalation.py``. ``test_social.py`` covers the social **engine** dict contract from
+``resolve_social_action``.
+
+Direct prompt-contract semantics for shipped ``social_response_structure`` remain owned by
+``tests/test_prompt_context.py``. Direct response-policy accessor and bundle semantics remain
+owned by ``tests/test_response_policy_contracts.py``. ``tests/test_strict_social_emergency_fallback_dialogue.py``
+remains secondary downstream retry / compatibility coverage, including the historical repair-shaped
+alias. Keep adjacent contract/read-side or repair-owner semantics out of this file unless they are
+needed to prove downstream emission-consumer behavior."""
 from __future__ import annotations
 
 import game.final_emission_gate as feg
@@ -25,6 +35,7 @@ from game.output_sanitizer import (
 )
 from game.social_exchange_emission import (
     _apply_interruption_repeat_guard,
+    apply_strict_social_terminal_dialogue_fallback_if_needed,
     apply_strict_social_ownership_enforcement,
     apply_strict_social_sentence_ownership_filter,
     build_final_strict_social_response,
@@ -37,15 +48,40 @@ from game.social_exchange_emission import (
     should_apply_strict_social_exchange_emission,
     strict_social_emission_will_apply,
     strict_social_ownership_terminal_fallback,
+    strict_social_terminal_dialogue_fallback_valid,
     synthetic_social_exchange_resolution_for_emission,
 )
-from game.response_policy_contracts import build_social_response_structure_contract
 from game.storage import get_scene_runtime
 
 
 import pytest
 
 pytestmark = pytest.mark.unit
+
+
+def _secondary_social_response_structure_contract(required_response_type: str) -> dict:
+    # Downstream emission tests consume the shipped prompt contract shape without acting as its owner.
+    return {
+        "enabled": required_response_type == "dialogue",
+        "applies_to_response_type": "dialogue",
+        "require_spoken_dialogue_shape": required_response_type == "dialogue",
+        "discourage_expository_monologue": required_response_type == "dialogue",
+        "require_natural_cadence": required_response_type == "dialogue",
+        "allow_brief_action_beats": True,
+        "allow_brief_refusal_or_uncertainty": True,
+        "max_contiguous_expository_lines": 2 if required_response_type == "dialogue" else None,
+        "max_dialogue_paragraphs_before_break": 2 if required_response_type == "dialogue" else None,
+        "prefer_single_speaker_turn": required_response_type == "dialogue",
+        "forbid_bulleted_or_list_like_dialogue": required_response_type == "dialogue",
+        "required_response_type": required_response_type,
+        "debug_reason": (
+            "response_type_contract_requires_dialogue"
+            if required_response_type == "dialogue"
+            else f"response_type_not_dialogue:{required_response_type}"
+        ),
+        "debug_inputs": {},
+    }
+
 
 def _strict_social_resolution() -> dict:
     return {
@@ -662,6 +698,73 @@ def test_apply_strict_social_never_emits_scene_hold_sentence():
     assert "for a breath" not in out.lower() and "scene holds" not in out.lower()
 
 
+def test_terminal_dialogue_application_repairs_invalid_bridge_for_active_dialogue_contract():
+    session = default_session()
+    world = default_world()
+    sid = "frontier_gate"
+    set_social_target(session, "tavern_runner")
+    rebuild_active_scene_entities(session, world, sid)
+    resolution = {
+        "kind": "question",
+        "prompt": "Who saw it?",
+        "metadata": {
+            "response_type_contract": {"required_response_type": "dialogue"},
+        },
+        "social": {
+            "social_intent_class": "social_exchange",
+            "npc_id": "tavern_runner",
+            "npc_name": "Tavern Runner",
+            "npc_reply_expected": True,
+        },
+    }
+    text, did = apply_strict_social_terminal_dialogue_fallback_if_needed(
+        "Tavern Runner answers with visible caution.",
+        resolution=resolution,
+        base_gm={"response_policy": {"response_type_contract": {"required_response_type": "dialogue"}}},
+        session=session,
+        world=world,
+        scene_id=sid,
+        retry_terminal=True,
+    )
+    assert did is True
+    assert strict_social_terminal_dialogue_fallback_valid(text, resolution) is True
+    assert "tavern runner" in text.lower()
+    assert '"' in text
+
+
+def test_terminal_dialogue_application_skips_when_contract_is_not_dialogue():
+    session = default_session()
+    world = default_world()
+    sid = "frontier_gate"
+    set_social_target(session, "tavern_runner")
+    rebuild_active_scene_entities(session, world, sid)
+    resolution = {
+        "kind": "question",
+        "prompt": "Who saw it?",
+        "metadata": {
+            "response_type_contract": {"required_response_type": "answer"},
+        },
+        "social": {
+            "social_intent_class": "social_exchange",
+            "npc_id": "tavern_runner",
+            "npc_name": "Tavern Runner",
+            "npc_reply_expected": True,
+        },
+    }
+    original = "Tavern Runner answers with visible caution."
+    text, did = apply_strict_social_terminal_dialogue_fallback_if_needed(
+        original,
+        resolution=resolution,
+        base_gm={"response_policy": {"response_type_contract": {"required_response_type": "answer"}}},
+        session=session,
+        world=world,
+        scene_id=sid,
+        retry_terminal=True,
+    )
+    assert did is False
+    assert text == original
+
+
 def test_gate_replaces_when_all_sentences_non_social_strict_social():
     session = default_session()
     world = default_world()
@@ -1226,7 +1329,7 @@ def test_strict_social_gate_merges_social_response_structure_metadata(monkeypatc
     rt = get_scene_runtime(session, sid)
     rt["last_player_action_text"] = "Where is the east gate?"
     rtc = {"required_response_type": "dialogue", "action_must_preserve_agency": False}
-    srs = build_social_response_structure_contract(rtc)
+    srs = _secondary_social_response_structure_contract("dialogue")
     stub_details = {
         "used_internal_fallback": False,
         "final_emitted_source": "test_stub",

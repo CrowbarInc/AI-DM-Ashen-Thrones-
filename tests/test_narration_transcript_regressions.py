@@ -25,6 +25,10 @@ current canonical speaker, and safety (anonymous crowd / ambiguous multi-speaker
 Production code is not patched except where a test passes ``patch_final_emission_helpers`` for
 determinism (mirrors other transcript regression tests), or uses small targeted monkeypatches for
 forced fallback / retry exhaustion (same spirit as ``test_strict_social_emergency_fallback_dialogue``).
+
+Prompt-contract semantics stay owned by ``tests/test_prompt_context.py``. This module may consume
+shipped prompt contracts inside transcript fixtures, but only as regression evidence for
+cross-layer routing / gate behavior, not as the primary prompt-contract authority.
 """
 from __future__ import annotations
 

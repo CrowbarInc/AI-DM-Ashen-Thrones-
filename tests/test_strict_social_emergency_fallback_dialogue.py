@@ -1,4 +1,9 @@
-"""Strict-social terminal fallback: dialogue continuity under retry exhaustion (18a block 2)."""
+"""Secondary downstream coverage for strict-social terminal dialogue fallback.
+
+Direct seam semantics for the downstream strict-social exchange emission helper now live in
+``tests/test_social_exchange_emission.py``. This module keeps retry-exhaustion wiring,
+first-mention gate integration, and historical compatibility alias coverage only.
+"""
 from __future__ import annotations
 
 from typing import Any
@@ -10,12 +15,15 @@ from game.final_emission_gate import apply_final_emission_gate
 from game.gm import (
     ensure_minimal_social_resolution,
     force_terminal_retry_fallback,
-    repair_strict_social_terminal_dialogue_fallback_if_needed,
-    strict_social_terminal_dialogue_fallback_valid,
 )
 from game.interaction_context import rebuild_active_scene_entities, set_social_target
 from game.narration_visibility import validate_player_facing_first_mentions
-from game.social_exchange_emission import lawful_strict_social_dialogue_emergency_fallback_line
+from game.social_exchange_emission import (
+    apply_strict_social_terminal_dialogue_fallback_if_needed,
+    lawful_strict_social_dialogue_emergency_fallback_line,
+    repair_strict_social_terminal_dialogue_fallback_if_needed,
+    strict_social_terminal_dialogue_fallback_valid,
+)
 from game.storage import get_scene_runtime
 
 pytestmark = pytest.mark.unit
@@ -88,23 +96,6 @@ def test_strict_social_retry_exhaustion_emits_dialogue_presence(monkeypatch: Any
     assert strict_social_terminal_dialogue_fallback_valid(text, _dialogue_contract_resolution())
 
 
-def test_grounded_interlocutor_remains_speaker() -> None:
-    """Active interlocutor matches resolution NPC; repair attributes speech to that speaker."""
-    res = _dialogue_contract_resolution()
-    text, did = repair_strict_social_terminal_dialogue_fallback_if_needed(
-        "Tavern Runner answers with visible caution.",
-        resolution=res,
-        base_gm={"response_policy": {"response_type_contract": {"required_response_type": "dialogue"}}},
-        session=_session(),
-        world=_world(),
-        scene_id="scene_investigate",
-        retry_terminal=True,
-    )
-    assert did is True
-    assert "tavern runner" in text.lower()
-    assert '"' in text
-
-
 def test_interruption_bridge_rejected_and_replaced() -> None:
     """Interruption-shaped emergency text fails validation; lawful repair is dialogue-shaped."""
     res = _dialogue_contract_resolution()
@@ -115,24 +106,6 @@ def test_interruption_bridge_rejected_and_replaced() -> None:
     fixed = lawful_strict_social_dialogue_emergency_fallback_line(res)
     assert strict_social_terminal_dialogue_fallback_valid(fixed, res) is True
     assert "crowd" not in fixed.lower()
-
-
-def test_non_dialogue_contract_skips_repair() -> None:
-    """Answer (non-dialogue) contract does not invoke strict-social dialogue terminal repair."""
-    res = _dialogue_contract_resolution()
-    res["metadata"] = {"response_type_contract": {"required_response_type": "answer"}}
-    original = "Tavern Runner answers with visible caution."
-    text, did = repair_strict_social_terminal_dialogue_fallback_if_needed(
-        original,
-        resolution=res,
-        base_gm={},
-        session=_session(),
-        world=_world(),
-        scene_id="scene_investigate",
-        retry_terminal=True,
-    )
-    assert did is False
-    assert text == original
 
 
 def test_strict_social_terminal_fallback_grimace_line_survives_first_mention_gate() -> None:
@@ -220,7 +193,7 @@ def test_retry_terminal_repaired_dialogue_survives_first_mention_gate(monkeypatc
     monkeypatch.setattr("game.gm.apply_social_exchange_retry_fallback_gm", lambda *a, **k: {})
 
     res = _dialogue_contract_resolution()
-    repaired, did = repair_strict_social_terminal_dialogue_fallback_if_needed(
+    repaired, did = apply_strict_social_terminal_dialogue_fallback_if_needed(
         "Tavern Runner answers with visible caution.",
         resolution=res,
         base_gm={"response_policy": {"response_type_contract": {"required_response_type": "dialogue"}}},
@@ -254,6 +227,30 @@ def test_retry_terminal_repaired_dialogue_survives_first_mention_gate(monkeypatc
     meta = out.get("_final_emission_meta") or {}
     assert meta.get("first_mention_replacement_applied") is False
     assert meta.get("first_mention_validation_passed") is True
+
+
+def test_legacy_repair_named_alias_remains_available_for_compatibility() -> None:
+    """Historical repair-shaped alias remains available as compatibility residue only."""
+    res = _dialogue_contract_resolution()
+    text_new, did_new = apply_strict_social_terminal_dialogue_fallback_if_needed(
+        "Tavern Runner answers with visible caution.",
+        resolution=res,
+        base_gm={"response_policy": {"response_type_contract": {"required_response_type": "dialogue"}}},
+        session=_session(),
+        world=_world(),
+        scene_id="scene_investigate",
+        retry_terminal=True,
+    )
+    text_old, did_old = repair_strict_social_terminal_dialogue_fallback_if_needed(
+        "Tavern Runner answers with visible caution.",
+        resolution=res,
+        base_gm={"response_policy": {"response_type_contract": {"required_response_type": "dialogue"}}},
+        session=_session(),
+        world=_world(),
+        scene_id="scene_investigate",
+        retry_terminal=True,
+    )
+    assert (text_old, did_old) == (text_new, did_new)
 
 
 def test_ensure_minimal_social_repairs_stall_bridge_for_dialogue_contract(monkeypatch: Any) -> None:

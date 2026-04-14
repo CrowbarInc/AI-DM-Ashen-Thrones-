@@ -1,16 +1,16 @@
-"""Compact, bounded stage-diff telemetry for GM outputs (observability only).
+"""Canonical telemetry-only owner for bounded stage-diff observability.
 
 Stage-diff telemetry records **mutation observability** (snapshots and transitions) under
-``metadata["stage_diff_telemetry"]``. It does not own engine truth or narration policy.
+``metadata["stage_diff_telemetry"]``. It does not own engine truth, narration policy, or the
+turn-packet contract boundary.
 
-Snapshots reuse :func:`game.turn_packet.get_turn_packet` and, in the emission gate,
-:func:`resolve_gate_turn_packet` so the same canonical **turn packet** accessor layer is
-used everywhere — no parallel turn-state authority.
+Snapshots consume the canonical packet accessors in :mod:`game.turn_packet` so the same
+packet boundary is reused everywhere. This module is therefore a **telemetry consumer**
+derived from the packet owner, not a second packet home.
 
-At the gate, :func:`resolve_gate_turn_packet` is the preferred resolver: it prefers the
-intentionally ephemeral ``_gate_turn_packet_cache`` (see :mod:`game.final_emission_gate`),
-then falls back to :func:`game.turn_packet.get_turn_packet`. The cache must not appear in
-finalized player-facing output; callers pop it during finalize.
+``resolve_gate_turn_packet`` remains here only as a compatibility residue wrapper for older
+call sites/tests. The canonical gate-side packet resolver now lives in
+:func:`game.turn_packet.resolve_turn_packet_for_gate`.
 
 Appends to telemetry merge with any pre-existing ``stage_diff_telemetry`` dict keys
 (beyond ``snapshots`` / ``transitions``) so nested subtrees are not clobbered.
@@ -23,7 +23,7 @@ import json
 import logging
 from typing import Any, Dict, List, Mapping, MutableMapping, Optional
 
-from game.turn_packet import get_turn_packet
+from game.turn_packet import resolve_turn_packet_for_gate
 
 STAGE_DIFF_METADATA_KEY = "stage_diff_telemetry"
 _MAX_SNAPSHOTS = 12
@@ -32,23 +32,9 @@ _MAX_TRANSITIONS = 12
 _LOG = logging.getLogger(__name__)
 
 
-def _looks_like_packet(d: Any) -> bool:
-    return isinstance(d, dict) and isinstance(d.get("contracts"), dict) and isinstance(d.get("version"), int)
-
-
 def resolve_gate_turn_packet(gm_output: Mapping[str, Any] | None) -> Optional[Dict[str, Any]]:
-    """Prefer ``_gate_turn_packet_cache`` when valid, else :func:`get_turn_packet`."""
-    if not isinstance(gm_output, dict):
-        return None
-    cached = gm_output.get("_gate_turn_packet_cache")
-    if _looks_like_packet(cached):
-        return cached
-    hit = get_turn_packet(
-        gm_output,
-        gm_output.get("response_policy"),
-        gm_output.get("prompt_context"),
-    )
-    return hit if _looks_like_packet(hit) else None
+    """Compatibility residue wrapper around the packet-owner gate accessor."""
+    return resolve_turn_packet_for_gate(gm_output)
 
 
 def compact_text_fingerprint(text: str | None) -> str:
@@ -97,7 +83,7 @@ def snapshot_turn_stage(
     if not isinstance(gm_output, dict):
         return {"stage": stage, "player_facing_fingerprint": None, "player_facing_preview": "", "text_len": 0}
     pft = str(gm_output.get("player_facing_text") or "")
-    pkt = resolve_gate_turn_packet(gm_output)
+    pkt = resolve_turn_packet_for_gate(gm_output)
     route = pkt.get("route") if isinstance(pkt, dict) else None
     route_d = route if isinstance(route, dict) else {}
     fb = pkt.get("fallback") if isinstance(pkt, dict) else None

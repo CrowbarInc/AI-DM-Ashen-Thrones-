@@ -1,8 +1,16 @@
-"""Prompt compression layer for GPT narration.
+"""Canonical owner for prompt-context assembly and prompt-contract bundling.
 
-Builds a concise, structured context from full game state before constructing
-the narration prompt. Reduces token usage and keeps narration coherent by
-including only relevant elements.
+Builds the structured prompt-context payload from game state before narration prompt
+construction. This module is the canonical prompt-contract owner and repo-facing
+owner of the full prompt-contract bundle that narration receives.
+
+It is **not** the canonical owner for extracted lead-only helpers
+(:mod:`game.prompt_context_leads`) and **not** the post-prompt contract-resolution owner
+for emitted-response policy accessors (:mod:`game.response_policy_contracts`).
+
+Prompt contracts still show transitional residue across adjacent helpers, so future
+cleanup should converge those helpers toward this boundary rather than re-creating
+co-owners.
 
 Contract layers (orthogonal concerns):
 - **narration_visibility** — which entities and published facts may be referenced.
@@ -20,8 +28,9 @@ Contract layers (orthogonal concerns):
   in ``game.context_separation``); enforcement reads the shipped contract, not prompt prose alone.
 - **player_facing_narration_purity** — forbid planner/UI/engine scaffolding in narration (see
   ``build_player_facing_narration_purity_contract`` in ``game.player_facing_narration_purity``).
-- **social_response_structure** — dialogue-turn spoken shape and anti-monologue caps (see
-  ``build_social_response_structure_contract`` in ``game.response_policy_contracts``); gate/repairs TBD.
+- **social_response_structure** — dialogue-turn spoken shape and anti-monologue caps. The
+  canonical prompt-facing public home for this shipped bundle surface remains this module;
+  downstream policy helpers live in ``game.response_policy_contracts``; gate/repairs TBD.
 - **narrative_authenticity** — anti-echo between narration and spoken lines, minimum new-signal pressure on
   follow-ups, anti-filler heuristics, and diegetic integrity hints (see ``build_narrative_authenticity_contract``
   in ``game.narrative_authenticity``); gate enforcement in ``game.final_emission_repairs``.
@@ -74,8 +83,8 @@ from game.conversational_memory_window import (
     select_conversational_memory_window,
 )
 from game.response_policy_contracts import (
-    build_social_response_structure_contract,
-    peek_response_type_contract_from_resolution,
+    build_social_response_structure_contract as _build_social_response_structure_contract_impl,
+    peek_response_type_contract_from_resolution as _peek_response_type_contract_from_resolution_impl,
 )
 from game.turn_packet import build_turn_packet
 
@@ -1820,6 +1829,8 @@ def build_response_policy(
 
     This keeps the precedence ladder explicit in one place so prompt assembly
     and post-generation enforcement can share it instead of re-encoding order.
+    This module remains the canonical prompt-contract bundling home; downstream
+    consumers should read the shipped bundle rather than redefine it elsewhere.
     """
     obligations = narration_obligations if isinstance(narration_obligations, dict) else {}
     suppress = bool(obligations.get("suppress_non_social_emitters"))
@@ -1868,6 +1879,33 @@ def build_response_policy(
         },
         "answer_completeness": answer_completeness,
     }
+
+
+def peek_response_type_contract_from_resolution(resolution: Any) -> Dict[str, Any] | None:
+    """Canonical prompt-facing accessor for response-type contract peeking.
+
+    ``game.prompt_context`` is the canonical prompt-contract owner and public bundle
+    home. The implementation remains delegated to the downstream policy consumer
+    module as compatibility residue; do not add prompt-contract semantics there.
+    """
+    return _peek_response_type_contract_from_resolution_impl(resolution)
+
+
+def build_social_response_structure_contract(
+    response_type_contract: Mapping[str, Any] | None = None,
+    *,
+    debug_inputs: Mapping[str, Any] | None = None,
+) -> Dict[str, Any]:
+    """Canonical prompt-facing home for shipped ``social_response_structure``.
+
+    Prompt-contract bundling belongs here. The implementation currently lives in
+    the downstream policy consumer module as compatibility residue so existing
+    imports continue to work without changing runtime behavior.
+    """
+    return _build_social_response_structure_contract_impl(
+        response_type_contract,
+        debug_inputs=debug_inputs,
+    )
 
 
 def _tone_escalation_prompt_debug_anchor(contract: Mapping[str, Any] | None) -> Dict[str, Any]:
@@ -3434,6 +3472,9 @@ def build_narration_context(
         player_facing_narration_purity_contract
     )
 
+    # Canonical prompt-contract owner path: ``game.prompt_context`` ships this
+    # policy in the prompt bundle. The implementation remains delegated to the
+    # downstream policy consumer module as compatibility residue only.
     rtc_peeked = peek_response_type_contract_from_resolution(resolution)
     rtc_source = "resolution.metadata" if rtc_peeked is not None else "derived"
     rtc_for_social_structure = rtc_peeked or derive_response_type_contract(
@@ -3800,6 +3841,9 @@ def build_narration_context(
             payload.pop(key, None)
     return payload
 
+# Compatibility residue: ``prompt_context`` remains the public import home for
+# these helpers while implementations live in support-only
+# ``game.prompt_context_leads``. Do not add prompt-contract semantics there.
 from game.prompt_context_leads import (
     INTERLOCUTOR_DISCUSSION_RECENCY_WINDOW,
     _lead_get,

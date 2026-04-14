@@ -6,7 +6,7 @@ This audit is an operator-facing durability check for the repo's deterministic i
 
 ### Ownership clarity
 
-- Green: one file or module family is the clearly documented owner, and nearby docs/tests agree.
+- Green: one file or module family is the clearly documented owner, and nearby docs and tests agree.
 - Yellow: an owner is implied, but neighboring modules still share language or partial responsibilities.
 - Red: multiple modules appear to co-own the same rule, or no owner is documented.
 - Repo example: `game/final_emission_gate.py` is explicitly documented as the orchestration owner, while `game/final_emission_validators.py` and `game/final_emission_repairs.py` are split into pure validation and deterministic repair roles.

@@ -1,4 +1,9 @@
-"""Unit tests for ``validate_social_response_structure`` (failure reasons + result shape)."""
+"""Validator-side downstream coverage for ``validate_social_response_structure``.
+
+Direct shipped-contract ownership for social-response-structure and other response-policy
+accessors lives in ``tests/test_response_policy_contracts.py``. This file only verifies
+validator application behavior once those already-owned contracts have been supplied.
+"""
 from __future__ import annotations
 
 import pytest

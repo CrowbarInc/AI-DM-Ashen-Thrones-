@@ -2,16 +2,24 @@
 guards (``guard_gm_output``, NPC contracts, uncertainty/retry classification, policy enforcement
 before final emit), and **retry prompt text** from ``build_retry_prompt_for_failure``.
 
+Prompt-contract bundle semantics themselves are owned by ``tests/test_prompt_context.py``; this
+module is prompt-adjacent, not the direct owner of shipped prompt-context payload shape.
+
 Post-GM player-string hygiene (``sanitize_player_facing_output`` and related phrase families) is
 owned by ``tests/test_output_sanitizer.py``. Transcript / gauntlet suites should keep **E2E
 smoke** for those boundaries unless exact wording is itself the regression target.
 """
+import importlib
 import json
 import re
 
 import pytest
 
 pytestmark = [pytest.mark.brittle, pytest.mark.integration]
+
+
+def _build_secondary_response_policy(**kwargs):
+    return importlib.import_module("game.prompt_context").build_response_policy(**kwargs)
 
 FRONTIER_GATE_SCENE = {
     "scene": {
@@ -1539,7 +1547,6 @@ def test_hidden_discoverable_safeguard_preserved_with_exploration():
 
 def test_rule_priority_prefers_bounded_answer_before_specificity():
     from game.gm import apply_response_policy_enforcement, detect_validator_voice
-    from game.prompt_context import build_response_policy
 
     _, world, session, _, _, _ = _dummy_state()
     gm = {
@@ -1554,7 +1561,7 @@ def test_rule_priority_prefers_bounded_answer_before_specificity():
     }
     out = apply_response_policy_enforcement(
         gm,
-        response_policy=build_response_policy(),
+        response_policy=_build_secondary_response_policy(),
         player_text="Who signed the order?",
         scene_envelope=FRONTIER_GATE_SCENE,
         session=session,
@@ -1574,7 +1581,6 @@ def test_rule_priority_prefers_bounded_answer_before_specificity():
 
 def test_rule_priority_answers_without_leaking_hidden_facts():
     from game.gm import apply_response_policy_enforcement, detect_validator_voice
-    from game.prompt_context import build_response_policy
 
     _, world, session, _, _, _ = _dummy_state()
     gm = {
@@ -1589,7 +1595,7 @@ def test_rule_priority_answers_without_leaking_hidden_facts():
     }
     out = apply_response_policy_enforcement(
         gm,
-        response_policy=build_response_policy(),
+        response_policy=_build_secondary_response_policy(),
         player_text="Who is really watching the new arrivals?",
         scene_envelope=FRONTIER_GATE_SCENE,
         session=session,
@@ -1611,7 +1617,6 @@ def test_rule_priority_answers_without_leaking_hidden_facts():
 
 def test_rule_priority_keeps_momentum_when_certainty_is_incomplete():
     from game.gm import apply_response_policy_enforcement, detect_validator_voice
-    from game.prompt_context import build_response_policy
     from game.storage import get_scene_runtime
 
     _, world, session, _, _, _ = _dummy_state()
@@ -1630,7 +1635,9 @@ def test_rule_priority_keeps_momentum_when_certainty_is_incomplete():
     }
     out = apply_response_policy_enforcement(
         gm,
-        response_policy=build_response_policy(narration_obligations={"scene_momentum_due": True}),
+        response_policy=_build_secondary_response_policy(
+            narration_obligations={"scene_momentum_due": True}
+        ),
         player_text="Where did the patrol go?",
         scene_envelope=FRONTIER_GATE_SCENE,
         session=session,
@@ -1714,7 +1721,6 @@ def test_topic_pressure_triggers_escalation_by_third_low_progress_probe():
 
 def test_topic_pressure_does_not_escalate_when_each_answer_adds_concrete_info():
     from game.gm import apply_response_policy_enforcement, detect_retry_failures, register_topic_probe
-    from game.prompt_context import build_response_policy
 
     _, world, session, _, _, _ = _dummy_state()
     resolution = {
@@ -1764,7 +1770,7 @@ def test_topic_pressure_does_not_escalate_when_each_answer_adds_concrete_info():
         assert not any(f.get("failure_class") == "topic_pressure_escalation" for f in failures if isinstance(f, dict))
         apply_response_policy_enforcement(
             gm,
-            response_policy=build_response_policy(),
+            response_policy=_build_secondary_response_policy(),
             player_text=prompt,
             scene_envelope=FRONTIER_GATE_SCENE,
             session=session,
@@ -1886,7 +1892,6 @@ def test_topic_pressure_does_not_escalate_across_clearly_different_topics():
 def test_topic_pressure_escalation_skipped_for_strict_social_exchange(monkeypatch):
     """Strict-social turns bypass topic_pressure_escalation so the final emission gate sees the raw candidate."""
     from game.gm import apply_response_policy_enforcement, register_topic_probe
-    from game.prompt_context import build_response_policy
 
     _, world, session, _, _, _ = _dummy_state()
     monkeypatch.setattr("game.gm.enforce_question_resolution_rule", lambda gm, **_kwargs: gm)
@@ -1923,7 +1928,7 @@ def test_topic_pressure_escalation_skipped_for_strict_social_exchange(monkeypatc
         )
         out = apply_response_policy_enforcement(
             dict(stale_gm),
-            response_policy=build_response_policy(),
+            response_policy=_build_secondary_response_policy(),
             player_text=prompt,
             scene_envelope=FRONTIER_GATE_SCENE,
             session=session,
@@ -1942,7 +1947,6 @@ def test_topic_pressure_escalation_skipped_for_strict_social_exchange(monkeypatc
 def test_apply_response_policy_enforcement_strict_social_bypasses_upstream_narrative_mutators():
     """Strict social: no uncertainty prepend, momentum/pressure, next-step patches, spoiler/validator rewrites, or generic rewrites."""
     from game.gm import apply_response_policy_enforcement
-    from game.prompt_context import build_response_policy
     from game.storage import get_scene_runtime
 
     _, world, session, _, _, _ = _dummy_state()
@@ -1974,7 +1978,7 @@ def test_apply_response_policy_enforcement_strict_social_bypasses_upstream_narra
     }
     out = apply_response_policy_enforcement(
         dict(thin_reply),
-        response_policy=build_response_policy(),
+        response_policy=_build_secondary_response_policy(),
         player_text="Who signed the order?",
         scene_envelope=FRONTIER_GATE_SCENE,
         session=session,
@@ -2009,7 +2013,7 @@ def test_apply_response_policy_enforcement_strict_social_bypasses_upstream_narra
     }
     out2 = apply_response_policy_enforcement(
         dict(generic_gm),
-        response_policy=build_response_policy(),
+        response_policy=_build_secondary_response_policy(),
         player_text="Who signed the order?",
         scene_envelope=FRONTIER_GATE_SCENE,
         session=session,
@@ -2034,7 +2038,7 @@ def test_apply_response_policy_enforcement_strict_social_bypasses_upstream_narra
     }
     out3 = apply_response_policy_enforcement(
         dict(leaky_gm),
-        response_policy=build_response_policy(),
+        response_policy=_build_secondary_response_policy(),
         player_text="Who is really watching the new arrivals?",
         scene_envelope=FRONTIER_GATE_SCENE,
         session=session,
