@@ -3,8 +3,9 @@
 Direct prompt-contract semantics live here, including the canonical prompt-facing
 public homes for shipped helpers such as ``build_social_response_structure_contract()``
 and ``peek_response_type_contract_from_resolution()``. Downstream gate, emission,
-and transcript suites may keep smoke/regression coverage, but should not read as
-the primary semantic owner for prompt contracts.
+social-adjacent, guard, and transcript suites should consume shipped/exported
+behavior rather than re-own helper semantics; they may keep smoke/regression
+coverage, but should not read as the primary semantic owner for prompt contracts.
 """
 from __future__ import annotations
 
@@ -14,7 +15,8 @@ from unittest.mock import patch
 
 import game.response_policy_contracts as response_policy_contracts
 from game.campaign_state import create_fresh_session_document
-from game.interaction_context import set_social_target
+from game.defaults import default_session, default_world
+from game.interaction_context import rebuild_active_scene_entities, set_social_target
 from game.leads import (
     SESSION_LEAD_REGISTRY_KEY,
     LeadLifecycle,
@@ -30,7 +32,9 @@ from game.prompt_context import (
     NO_VALIDATOR_VOICE_RULE,
     RESPONSE_RULE_PRIORITY,
     RULE_PRIORITY_COMPACT_INSTRUCTION,
+    _answer_pressure_followup_details,
     _compress_recent_log,
+    _extract_npc_introduced_anchor_tokens,
     build_active_interlocutor_export,
     build_authoritative_lead_prompt_context,
     build_interlocutor_lead_discussion_context,
@@ -102,6 +106,15 @@ def _expected_follow_up_pressure_from_leads(**overrides: bool) -> dict:
     }
     base.update(overrides)
     return base
+
+
+def _answer_pressure_details(player: str, recent_compact: list, *, active_id: str = "runner") -> dict:
+    return _answer_pressure_followup_details(
+        player_input=player,
+        recent_log_compact=recent_compact,
+        narration_obligations={},
+        session_view={"active_interaction_target_id": active_id},
+    )
 
 
 def test_prompt_contract_owner_canonical_public_home_preserves_compatibility_with_downstream_helpers() -> None:
@@ -228,6 +241,8 @@ def test_prompt_contract_owner_marks_wait_turn_as_active_reply_expected_when_soc
         scene_runtime={},
     )
     assert obligations["active_npc_reply_expected"] is True
+    assert obligations["suppress_non_social_emitters"] is True
+    assert obligations["scene_momentum_due"] is False
 
 
 def test_prompt_contract_owner_exports_player_expression_contract_for_quoted_third_person_input() -> None:
@@ -2212,6 +2227,223 @@ def test_social_lock_merges_log_escalation_when_answer_pressure_followup():
         has_pursued=True, npc_has_relevant=True
     )
     assert fup.get("pressed") is True
+
+
+@pytest.mark.unit
+def test_prompt_contract_owner_detects_anchor_followup_for_recent_milestone_explanation():
+    prev_gm = (
+        "The watch captain jerks his chin toward the treeline. Most folk hurry past the old milestone; "
+        "few linger after dark."
+    )
+    compact = [{"player_input": "What marks the patrol route?", "gm_snippet": prev_gm}]
+    ap = _answer_pressure_details("What's so special about the old milestone?", compact)
+    assert ap["explanation_of_recent_anchor_followup"] is True
+    assert ap["anchor_followup_detected"] is True
+    assert ap["answer_pressure_followup_detected"] is True
+    assert "milestone" in ap["anchor_tokens_extracted"] or "old milestone" in ap["anchor_tokens_extracted"]
+    assert ap["anchor_token_matched"] == "milestone"
+    assert ap["answer_pressure_family"] == "explanation_of_recent_anchor_followup"
+
+
+@pytest.mark.unit
+def test_prompt_contract_owner_matches_short_anchor_followups_to_recent_npc_tokens():
+    g1 = _answer_pressure_details(
+        "Why the milestone?",
+        [{"player_input": "x", "gm_snippet": "Keep clear of the old milestone after dusk; caravans don't stop there."}],
+    )
+    assert g1["anchor_followup_detected"] is True
+    assert g1["anchor_token_matched"] == "milestone"
+
+    g2 = _answer_pressure_details(
+        "Ghost stories?",
+        [{"player_input": "x", "gm_snippet": "Sailors swap ghost stories about the alley behind the seal-house."}],
+    )
+    assert g2["anchor_followup_detected"] is True
+    assert g2["anchor_token_matched"] == "ghost"
+
+
+@pytest.mark.unit
+def test_prompt_contract_owner_detects_deictic_anchor_followups():
+    prev_gm = "Everyone knows the checkpoint by the east pier; guards gossip about what happened there last week."
+    ap = _answer_pressure_details(
+        "What happened there?",
+        [{"player_input": "Tell me about the pier.", "gm_snippet": prev_gm}],
+    )
+    assert ap["anchor_followup_detected"] is True
+    assert "checkpoint" in ap["anchor_tokens_extracted"]
+
+
+@pytest.mark.unit
+def test_prompt_contract_owner_requires_anchor_overlap_for_anchor_followups():
+    prev_gm = "The road is muddy and the wind is cold tonight."
+    ap = _answer_pressure_details(
+        "What's the tax rate in the capital?",
+        [{"player_input": "How is business?", "gm_snippet": prev_gm}],
+    )
+    assert ap["anchor_followup_detected"] is False
+    assert ap["explanation_of_recent_anchor_followup"] is False
+    assert ap["anchor_tokens_extracted"] == []
+
+
+@pytest.mark.unit
+def test_prompt_contract_owner_ignores_non_questions_even_when_anchor_words_repeat():
+    ap = _answer_pressure_details(
+        "The old milestone is just a rock.",
+        [{"player_input": "x", "gm_snippet": "Folk call it the old milestone near the north bend."}],
+    )
+    assert ap["anchor_followup_detected"] is False
+
+
+@pytest.mark.unit
+def test_prompt_contract_owner_excludes_generic_roles_from_anchor_followup_detection():
+    prev_gm = (
+        "The Tavern Runner squints at you. The watch captain said little; travelers hurry past "
+        "the tavern sign and the road stays quiet."
+    )
+    compact = [{"player_input": "Anything unusual on the north road tonight?", "gm_snippet": prev_gm}]
+    ap = _answer_pressure_details("What did the captain say exactly?", compact)
+    assert ap["explanation_of_recent_anchor_followup"] is False
+    assert ap["anchor_followup_detected"] is False
+    assert "captain" not in ap["anchor_tokens_extracted"]
+    assert "tavern" not in ap["anchor_tokens_extracted"]
+    assert "runner" not in ap["anchor_tokens_extracted"]
+
+
+@pytest.mark.unit
+def test_prompt_contract_owner_excludes_generic_roles_from_anchor_token_extraction():
+    s = "The watch captain jerks his chin; the Tavern Runner listens by the tavern door."
+    toks = _extract_npc_introduced_anchor_tokens(s)
+    assert "captain" not in toks
+    assert "runner" not in toks
+    assert "tavern" not in toks
+
+
+@pytest.mark.unit
+def test_prompt_contract_owner_does_not_pair_unmatched_role_words_with_real_clues():
+    prev_gm = "The guard at the checkpoint shrugs; runners come and go."
+    compact = [{"player_input": "Tell me about the pier.", "gm_snippet": prev_gm}]
+    for q in ("Why the runner?", "What about the captain?", "And the guard?"):
+        ap = _answer_pressure_details(q, compact)
+        assert ap["explanation_of_recent_anchor_followup"] is False, q
+        assert ap["anchor_followup_detected"] is False, q
+
+
+@pytest.mark.unit
+def test_prompt_contract_owner_suppresses_uncertainty_hint_during_live_social_lock():
+    session = default_session()
+    session["active_scene_id"] = "frontier_gate"
+    session["interaction_context"] = {
+        "active_interaction_target_id": "tavern_runner",
+        "active_interaction_kind": "social",
+        "interaction_mode": "social",
+        "engagement_level": "engaged",
+        "conversation_privacy": None,
+        "player_position_context": None,
+    }
+    world = default_world()
+    scene = {
+        "scene": {
+            "id": "frontier_gate",
+            "visible_facts": [],
+            "discoverable_clues": [],
+            "exits": [],
+            "enemies": [],
+        }
+    }
+    rebuild_active_scene_entities(session, world, "frontier_gate", scene_envelope=scene)
+    ctx = build_narration_context(
+        **_narration_minimal_kwargs(
+            world=world,
+            session=session,
+            scene=scene,
+            public_scene=scene["scene"],
+            user_text="What do you know?",
+            resolution={"kind": "question", "social": {"npc_id": "tavern_runner"}},
+            scene_runtime={"momentum_exchanges_since": 3, "momentum_next_due_in": 2},
+            intent={"labels": ["social_probe"]},
+            uncertainty_hint={"speaker": {"role": "narrator"}, "turn_context": {}},
+        )
+    )
+    assert ctx["uncertainty_hint"] is None
+    assert ctx["response_policy"]["uncertainty"]["enabled"] is False
+    assert ctx["response_policy"]["prefer_scene_momentum"] is False
+    assert any("SOCIAL INTERACTION LOCK" in line for line in ctx["instructions"])
+
+
+@pytest.mark.unit
+def test_prompt_contract_owner_filters_absent_lead_salience_from_interlocutor_export():
+    session = _session_with_registry(
+        {
+            "id": "lead_runner_thread",
+            "title": "Runner Thread",
+            "summary": "Local watch movement near the gate.",
+            "related_npc_ids": ["tavern_runner"],
+        },
+        {
+            "id": "lead_aldric_thread",
+            "title": "Aldric Thread",
+            "summary": "Lord Aldric influence over patrol choices.",
+            "related_npc_ids": ["lord_aldric"],
+        },
+    )
+    sid = "frontier_gate"
+    session["active_scene_id"] = sid
+    session["turn_counter"] = 6
+    session["interaction_context"] = {
+        "active_interaction_target_id": "tavern_runner",
+        "active_interaction_kind": "social",
+        "interaction_mode": "social",
+        "engagement_level": "engaged",
+        "conversation_privacy": None,
+        "player_position_context": None,
+    }
+    record_npc_lead_discussion(
+        session,
+        sid,
+        "lord_aldric",
+        "lead_aldric_thread",
+        disclosure_level="explicit",
+        turn_counter=3,
+    )
+    record_npc_lead_discussion(
+        session,
+        sid,
+        "lord_aldric",
+        "lead_aldric_thread",
+        disclosure_level="explicit",
+        turn_counter=4,
+    )
+    record_npc_lead_discussion(
+        session,
+        sid,
+        "lord_aldric",
+        "lead_aldric_thread",
+        disclosure_level="explicit",
+        turn_counter=5,
+    )
+    record_npc_lead_discussion(
+        session,
+        sid,
+        "tavern_runner",
+        "lead_runner_thread",
+        disclosure_level="hinted",
+        turn_counter=6,
+    )
+    ctx = build_narration_context(
+        **_narration_minimal_kwargs(
+            session=session,
+            user_text="Runner, does Aldric still inspect the east road?",
+            scene_runtime={},
+            pending_leads=[],
+            recent_log=[],
+            recent_log_for_prompt=[],
+            intent={"labels": ["question"]},
+        )
+    )
+    ilc = ctx["interlocutor_lead_context"]
+    assert ilc["active_npc_id"] == "tavern_runner"
+    assert all(r.get("lead_id") != "lead_aldric_thread" for r in ilc["introduced_by_npc"])
+    assert all("Aldric" not in h for h in (ctx.get("interlocutor_lead_behavior_hints") or []))
 
 
 def test_active_npc_id_from_interlocutor_export_npc_id():

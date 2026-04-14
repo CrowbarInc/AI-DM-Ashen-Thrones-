@@ -48,7 +48,7 @@ Cluster **closed enough** for this pass: enforced split and intentional overlap 
 | Theme | Canonical owner(s) | Integration smoke only (examples) |
 | --- | --- | --- |
 | **Routing / turn pipeline** | `test_turn_pipeline_shared.py` — full **`/api/chat`** and **`/api/action`** stack, dialogue-lock HTTP, turn-trace-adjacent flow, end-to-end resolution; `test_dialogue_routing_lock.py` — pure `choose_interaction_route` / dialogue-lock **table** (no `TestClient`); `test_directed_social_routing.py` — directed-social precedence, vocative overrides, segmentation, narrow directed `/api/chat`, emergent-actor targeting; `test_intent_parser.py` / `test_intent_and_runtime.py` — parse/runtime intent. | `test_mixed_state_recovery_regressions.py`, `test_exploration_resolution.py`, `test_social.py` — keep **narrative or scenario-specific** routing checks, not a second copy of table locks. |
-| **Prompt-context assembly / prompt-contract bundle** | `test_prompt_context.py` — practical primary direct-owner suite for direct prompt-contract semantics, canonical prompt-facing helper accessors, and compatibility-preserving wrapper ownership; `test_prompt_compression.py` — secondary prompt assembly / compression integration once the bundle shape is already owned. | `test_final_emission_gate.py`, `test_social_exchange_emission.py`, `test_prompt_and_guard.py`, `test_answer_completeness_rules.py`, `test_narration_transcript_regressions.py` — downstream gate/emission/policy/transcript smoke or regression checks; they may consume shipped prompt contracts but should not read as the semantic owner. |
+| **Prompt-context assembly / prompt-contract bundle** | `test_prompt_context.py` — practical primary direct-owner suite for direct prompt-contract semantics, canonical prompt-facing helper accessors, and exported helper/bundle ownership; `test_prompt_compression.py` — secondary prompt assembly / compression integration once the bundle shape is already owned. | `test_prompt_and_guard.py`, `test_dialogue_interaction_establishment.py`, `test_fallback_shipped_contract_propagation.py`, `test_social_escalation.py`, `test_social_interaction_authority.py`, `test_social_speaker_grounding.py`, plus relevant gate/emission/transcript suites such as `test_final_emission_gate.py`, `test_social_exchange_emission.py`, and `test_narration_transcript_regressions.py` — downstream consumer, smoke, or regression checks; they may consume shipped prompt contracts but should not read as the semantic owner. |
 | **Response-policy contract read side** | `test_response_policy_contracts.py` — practical primary direct-owner suite for canonical `game.response_policy_contracts` accessors and `materialize_response_policy_bundle()` behavior once policy has already been shipped. | `test_fallback_shipped_contract_propagation.py`, `test_response_delta_requirement.py`, `test_final_emission_gate.py`, `test_social_exchange_emission.py`, `test_final_emission_validators.py` — downstream compatibility, consumer/application, validator, and integration coverage only; they may consume shipped response-policy contracts but should not read as the semantic owner. |
 | **Social escalation / emission / quality** | `test_social_exchange_emission.py` — practical primary direct-owner suite for downstream strict-social exchange emission semantics, including terminal dialogue **application** once dialogue-contract resolution is already decided elsewhere; `test_social_escalation.py` — pressure / escalation state machine; `test_social_answer_retry_prioritization.py` — retry vs stall prioritization; `test_social_target_authority_regressions.py` — authority regressions. | `test_social_emission_quality.py` — multi-turn / quality harness (names `test_emission_quality_*` for non-transcript-runner cases; align module-level `transcript` policy in Block 2); `test_dialogue_interaction_establishment.py` — establishment flows; `test_strict_social_emergency_fallback_dialogue.py` — downstream retry-terminal / first-mention / compatibility-alias coverage only; `test_social.py` — **`resolve_social_action` engine + glue** (see module docstring; not strict-social string owner). |
 | **Lead lifecycle / clue / pending / registry** | `test_clue_knowledge.py`, `test_clue_idempotence.py` — clue idempotency / gateway; `test_world_updates_and_clue_normalization.py` — normalization; `test_clue_lead_registry_integration.py` — clue↔lead registry wiring; `test_lead_engine_upsert.py` — engine upsert; `test_follow_lead_commitment_wiring.py` — follow/commitment wiring; focused `test_lead_*.py` modules — obsolescence, payoff, NPC authority, resolution endings, etc.; `test_lead_lifecycle_block3_transcript_regression.py` — **multi-turn** lifecycle story. | `test_social_lead_landing.py`, `test_turn_pipeline_shared.py`, `test_prompt_and_guard.py`, `test_social_exchange_emission.py` — **smoke** or cross-cutting hooks, not a second registry spec. |
@@ -65,10 +65,18 @@ For the prompt seam, treat `game/prompt_context.py` as the canonical runtime own
 direct exported policy, uncertainty, response-delta, and promoted-interlocutor contract assertions
 re-centered in `test_prompt_context.py`. Treat `test_final_emission_gate.py`,
 `test_social_exchange_emission.py`, `test_narration_transcript_regressions.py`,
-`test_prompt_and_guard.py`, and `test_answer_completeness_rules.py` as downstream evidence that
-shipped prompt contracts are consumed correctly. In those downstream suites, prefer local shipped
-fixtures, module-local wrapper handles, or smoke assertions over re-importing prompt-owner helper
-builders when the direct contract semantics are not under test.
+`test_prompt_and_guard.py`, `test_dialogue_interaction_establishment.py`,
+`test_fallback_shipped_contract_propagation.py`, `test_social_escalation.py`,
+`test_social_interaction_authority.py`, and `test_social_speaker_grounding.py` as downstream
+evidence that shipped prompt contracts are consumed correctly. In those downstream suites, prefer
+local shipped fixtures, module-local wrapper handles, or smoke assertions over re-importing
+prompt-owner helper builders when the direct contract semantics are not under test.
+Keep social-adjacent suites narrow too: `test_social_escalation.py` should read as escalation /
+pressure state-machine coverage, `test_social_interaction_authority.py` as downstream authority /
+routing consumption, and `test_social_speaker_grounding.py` as downstream speaker-grounding
+consumption. Re-center direct follow-up helper, narration-obligation, uncertainty-lock, and
+interlocutor-export ownership assertions in `test_prompt_context.py` when those social suites start
+sounding like prompt-contract homes.
 Keep prompt-adjacent establishment and fallback suites narrow too: `test_dialogue_interaction_establishment.py`
 should read as dialogue/social establishment flow coverage, and
 `test_fallback_shipped_contract_propagation.py` should use local shipped-policy fixtures rather than
@@ -82,6 +90,9 @@ follow/commitment lifecycle wiring, and `test_lead_lifecycle_npc_repeat_suppress
 as lead-lifecycle repeat-suppression consumption of exported narration context. Re-center direct
 prompt-export filtering or prompt-slice ownership assertions in `test_prompt_context.py` when those
 lead-adjacent suites start sounding like prompt-contract homes.
+Support/compatibility residue may remain in `game/prompt_context_leads.py` and in exported
+consumer paths that consume prompt-owned bundles without co-owning them; treat those paths as
+support/consumption residue, not equal prompt-semantic homes.
 
 ### Response-policy governance note (RP2-R)
 

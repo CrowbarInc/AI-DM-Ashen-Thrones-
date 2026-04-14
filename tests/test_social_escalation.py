@@ -1,4 +1,4 @@
-"""Tests for refusal/evasion escalation ladder (topic pressure + social engine)."""
+"""Social escalation consumer coverage for topic pressure and follow-up state transitions."""
 from game.gm import register_topic_probe
 from game.social import (
     apply_social_topic_escalation_to_resolution,
@@ -524,113 +524,7 @@ def test_repeated_same_dimension_after_answer_can_mark_exhausted():
     assert out["topic_exhausted"] is True
 
 
-def _answer_pressure_details(player: str, recent_compact: list, *, active_id: str = "runner") -> dict:
-    from game.prompt_context import _answer_pressure_followup_details
-
-    return _answer_pressure_followup_details(
-        player_input=player,
-        recent_log_compact=recent_compact,
-        narration_obligations={},
-        session_view={"active_interaction_target_id": active_id},
-    )
-
-
-def test_anchor_followup_detects_milestone_explanation_question():
-    prev_gm = (
-        "The watch captain jerks his chin toward the treeline. Most folk hurry past the old milestone; "
-        "few linger after dark."
-    )
-    compact = [{"player_input": "What marks the patrol route?", "gm_snippet": prev_gm}]
-    ap = _answer_pressure_details("What's so special about the old milestone?", compact)
-    assert ap["explanation_of_recent_anchor_followup"] is True
-    assert ap["anchor_followup_detected"] is True
-    assert ap["answer_pressure_followup_detected"] is True
-    assert "milestone" in ap["anchor_tokens_extracted"] or "old milestone" in ap["anchor_tokens_extracted"]
-    assert ap["anchor_token_matched"] == "milestone"
-    assert ap["answer_pressure_family"] == "explanation_of_recent_anchor_followup"
-
-
-def test_anchor_followup_why_the_milestone_and_ghost_stories():
-    g1 = _answer_pressure_details(
-        "Why the milestone?",
-        [{"player_input": "x", "gm_snippet": "Keep clear of the old milestone after dusk; caravans don't stop there."}],
-    )
-    assert g1["anchor_followup_detected"] is True
-    assert g1["anchor_token_matched"] == "milestone"
-
-    g2 = _answer_pressure_details(
-        "Ghost stories?",
-        [{"player_input": "x", "gm_snippet": "Sailors swap ghost stories about the alley behind the seal-house."}],
-    )
-    assert g2["anchor_followup_detected"] is True
-    assert g2["anchor_token_matched"] == "ghost"
-
-
-def test_anchor_followup_deictic_what_happened_there():
-    prev_gm = "Everyone knows the checkpoint by the east pier; guards gossip about what happened there last week."
-    ap = _answer_pressure_details(
-        "What happened there?",
-        [{"player_input": "Tell me about the pier.", "gm_snippet": prev_gm}],
-    )
-    assert ap["anchor_followup_detected"] is True
-    assert "checkpoint" in ap["anchor_tokens_extracted"]
-
-
-def test_anchor_followup_not_triggered_without_anchor_overlap():
-    prev_gm = "The road is muddy and the wind is cold tonight."
-    ap = _answer_pressure_details(
-        "What's the tax rate in the capital?",
-        [{"player_input": "How is business?", "gm_snippet": prev_gm}],
-    )
-    assert ap["anchor_followup_detected"] is False
-    assert ap["explanation_of_recent_anchor_followup"] is False
-    assert ap["anchor_tokens_extracted"] == []
-
-
-def test_anchor_followup_not_triggered_for_non_question_with_anchor_word():
-    ap = _answer_pressure_details(
-        "The old milestone is just a rock.",
-        [{"player_input": "x", "gm_snippet": "Folk call it the old milestone near the north bend."}],
-    )
-    assert ap["anchor_followup_detected"] is False
-
-
-def test_anchor_followup_not_on_first_question_when_only_generic_roles_in_npc_line():
-    """Opening-style NPC line with captain/tavern/runner must not yield anchor follow-up pressure."""
-    prev_gm = (
-        "The Tavern Runner squints at you. The watch captain said little—travelers hurry past "
-        "the tavern sign and the road stays quiet."
-    )
-    compact = [{"player_input": "Anything unusual on the north road tonight?", "gm_snippet": prev_gm}]
-    ap = _answer_pressure_details("What did the captain say exactly?", compact)
-    assert ap["explanation_of_recent_anchor_followup"] is False
-    assert ap["anchor_followup_detected"] is False
-    assert "captain" not in ap["anchor_tokens_extracted"]
-    assert "tavern" not in ap["anchor_tokens_extracted"]
-    assert "runner" not in ap["anchor_tokens_extracted"]
-
-
-def test_anchor_tokens_exclude_generic_roles_from_extraction():
-    from game.prompt_context import _extract_npc_introduced_anchor_tokens
-
-    s = "The watch captain jerks his chin; the Tavern Runner listens by the tavern door."
-    toks = _extract_npc_introduced_anchor_tokens(s)
-    assert "captain" not in toks
-    assert "runner" not in toks
-    assert "tavern" not in toks
-
-
-def test_anchor_followup_not_triggered_by_role_words_when_clue_present_but_unmatched():
-    """Player asks about runner/captain/guard alone; prior line's clue must not spuriously pair."""
-    prev_gm = "The guard at the checkpoint shrugs; runners come and go."
-    compact = [{"player_input": "Tell me about the pier.", "gm_snippet": prev_gm}]
-    for q in ("Why the runner?", "What about the captain?", "And the guard?"):
-        ap = _answer_pressure_details(q, compact)
-        assert ap["explanation_of_recent_anchor_followup"] is False, q
-        assert ap["anchor_followup_detected"] is False, q
-
-
-def test_answer_pressure_anchor_escalation_reason_at_repeat_one():
+def test_escalation_consumes_anchor_followup_pressure_at_repeat_one():
     session = _session_with_pressure("scene_investigate", "crossroads_incident", "runner", 1)
     ap = {
         "answer_pressure_followup_detected": True,
@@ -653,8 +547,8 @@ def test_answer_pressure_anchor_escalation_reason_at_repeat_one():
     assert out["valid_followup_detected"] is True
 
 
-def test_milestone_explanation_followup_reuses_topic_bucket():
-    """NPC-introduced anchor (milestone) keeps topic_pressure on the same bucket as the opening question."""
+def test_anchor_followup_reuses_topic_bucket_for_escalation_consumer():
+    """NPC-introduced anchor keeps topic pressure on the existing social escalation bucket."""
     from game.storage import get_scene_runtime
 
     scene = {"scene": {"id": "scene_investigate", "location": "Road", "visible_facts": []}}

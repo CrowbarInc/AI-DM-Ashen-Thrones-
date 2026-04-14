@@ -160,9 +160,9 @@ SUBSYSTEM_SEEDS: list[dict[str, Any]] = [
     {
         "subsystem_name": "prompt contracts",
         "primary_hints": [
-            "game/response_policy_contracts.py",
             "game/prompt_context.py",
             "game/prompt_context_leads.py",
+            "game/response_policy_contracts.py",
         ],
         "doc_hints": [
             "docs/ai_gm_contract.md",

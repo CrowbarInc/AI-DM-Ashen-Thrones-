@@ -129,8 +129,9 @@ Prompt-contract operator note:
 
 - Canonical runtime owner: `game/prompt_context.py`.
 - Practical primary direct-owner suite: `tests/test_prompt_context.py`.
-- Secondary prompt coverage: `tests/test_prompt_compression.py`, `tests/test_final_emission_gate.py`, `tests/test_social_exchange_emission.py`, `tests/test_narration_transcript_regressions.py`, and `tests/test_prompt_and_guard.py`.
-- If the audit still sees wider prompt spread, interpret these secondary suites as downstream integration, smoke, or historical regression evidence unless they become the place where new prompt-contract semantics are directly specified.
+- Secondary prompt coverage: `tests/test_prompt_compression.py`, `tests/test_prompt_and_guard.py`, `tests/test_dialogue_interaction_establishment.py`, `tests/test_fallback_shipped_contract_propagation.py`, `tests/test_social_escalation.py`, `tests/test_social_interaction_authority.py`, `tests/test_social_speaker_grounding.py`, plus relevant gate/emission/transcript suites such as `tests/test_final_emission_gate.py`, `tests/test_social_exchange_emission.py`, and `tests/test_narration_transcript_regressions.py`.
+- Support/compatibility residue may remain in `game/prompt_context_leads.py` and in exported consumer paths that consume prompt-owned bundles without co-owning them.
+- If the audit still sees wider prompt spread, interpret these secondary suites and support paths as downstream integration, smoke, compatibility, or historical regression evidence unless they become the place where new prompt-contract semantics are directly specified.
 
 Response-policy operator note:
 

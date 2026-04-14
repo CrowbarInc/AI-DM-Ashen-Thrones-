@@ -47,7 +47,7 @@
 ## Strongest evidence that the architecture may be patch-accumulating
 
 - `final emission gate orchestration` is `partial` with practical tests centered in `mixed: tests/test_final_emission_gate.py, tests/test_final_emission_scene_integrity.py, tests/test_final_emission_visibility.py`; evidence: Coverage is spread across many homes rather than anchored in one direct owner suite.
-- `prompt contracts` is `partial` with practical tests centered in `mixed: tests/test_prompt_context.py, tests/test_social_escalation.py, tests/test_social_interaction_authority.py`; evidence: Coverage is spread across many homes rather than anchored in one direct owner suite.
+- `prompt contracts` is `partial` with practical tests centered in `mixed: tests/test_prompt_context.py, tests/test_social_topic_anchor.py, tests/test_stale_interlocutor_invalidation_block3.py`; evidence: Coverage is spread across many homes rather than anchored in one direct owner suite.
 
 ## Known ambiguity hotspots
 
@@ -63,7 +63,7 @@
 ## Runtime/test/doc mismatch review
 
 - `final emission gate orchestration` -> runtime `game/final_emission_gate.py` vs practical `mixed: tests/test_final_emission_gate.py, tests/test_final_emission_scene_integrity.py, tests/test_final_emission_visibility.py` (partial; high; spread 10); evidence: Coverage is spread across many homes rather than anchored in one direct owner suite.
-- `prompt contracts` -> runtime `game/prompt_context.py` vs practical `mixed: tests/test_prompt_context.py, tests/test_social_escalation.py, tests/test_social_interaction_authority.py` (partial; high; spread 10); evidence: Coverage is spread across many homes rather than anchored in one direct owner suite.
+- `prompt contracts` -> runtime `game/prompt_context.py` vs practical `mixed: tests/test_prompt_context.py, tests/test_social_topic_anchor.py, tests/test_stale_interlocutor_invalidation_block3.py` (partial; high; spread 10); evidence: Coverage is spread across many homes rather than anchored in one direct owner suite.
 - `response policy contracts` -> runtime `game/response_policy_contracts.py` vs practical `mixed: tests/test_response_policy_contracts.py, tests/test_interaction_continuity_contract.py, tests/test_interaction_continuity_validation.py` (partial; high; spread 6); evidence: Coverage is spread across many homes rather than anchored in one direct owner suite.
 - `stage diff telemetry` -> runtime `game/stage_diff_telemetry.py` vs practical `mixed: tests/test_turn_packet_stage_diff_integration.py, tests/test_stage_diff_telemetry.py, tests/test_narrative_authenticity_aer4.py` (partial; high; spread 4); evidence: Docs name a canonical test owner, but practical coverage concentrates elsewhere.
 - `test ownership / inventory docs` -> runtime `unknown` vs practical `unknown` (partial; high; spread 0); evidence: No related test file accumulated enough concern-specific affinity.
@@ -76,7 +76,7 @@
 
 - `test ownership / inventory docs` -> runtime `unknown`, practical `unknown` (partial; high)
 - `response policy contracts` -> runtime `game/response_policy_contracts.py`, practical `mixed: tests/test_response_policy_contracts.py, tests/test_interaction_continuity_contract.py, tests/test_interaction_continuity_validation.py` (partial; high)
-- `prompt contracts` -> runtime `game/prompt_context.py`, practical `mixed: tests/test_prompt_context.py, tests/test_social_escalation.py, tests/test_social_interaction_authority.py` (partial; high)
+- `prompt contracts` -> runtime `game/prompt_context.py`, practical `mixed: tests/test_prompt_context.py, tests/test_social_topic_anchor.py, tests/test_stale_interlocutor_invalidation_block3.py` (partial; high)
 - `stage diff telemetry` -> runtime `game/stage_diff_telemetry.py`, practical `mixed: tests/test_turn_packet_stage_diff_integration.py, tests/test_stage_diff_telemetry.py, tests/test_narrative_authenticity_aer4.py` (partial; high)
 - `final emission gate orchestration` -> runtime `game/final_emission_gate.py`, practical `mixed: tests/test_final_emission_gate.py, tests/test_final_emission_scene_integrity.py, tests/test_final_emission_visibility.py` (partial; high)
 

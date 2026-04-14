@@ -1,4 +1,4 @@
-"""Speaker grounding policy: who may be the in-character reply speaker (central invariants)."""
+"""Downstream speaker-grounding coverage for social reply attribution and authority consumption."""
 
 from __future__ import annotations
 
@@ -13,7 +13,6 @@ from game.interaction_context import (
     set_social_target,
 )
 from game.leads import ensure_lead_registry, normalize_lead
-from game.prompt_context import build_narration_context
 from game.social import (
     apply_social_reply_speaker_grounding,
     can_actor_speak_in_current_exchange,
@@ -703,34 +702,6 @@ def test_absent_lead_salience_does_not_override_grounded_speaker(frontier_gate_s
         disclosure_level="hinted",
         turn_counter=6,
     )
-
-    ctx = build_narration_context(
-        campaign={"title": "", "premise": "", "character_role": "", "gm_guidance": [], "world_pressures": []},
-        world=world,
-        session=session,
-        character=default_character(),
-        scene=env,
-        combat={"in_combat": False},
-        recent_log=[],
-        user_text="Runner, does Aldric still inspect the east road?",
-        resolution=None,
-        scene_runtime=get_scene_runtime(session, sid),
-        public_scene={"id": sid, "visible_facts": [], "exits": [], "enemies": []},
-        discoverable_clues=[],
-        gm_only_hidden_facts=[],
-        gm_only_discoverable_locked=[],
-        discovered_clue_records=[],
-        undiscovered_clue_records=[],
-        pending_leads=[],
-        intent={"labels": ["question"]},
-        world_state_view={"flags": {}, "counters": {}, "clocks_summary": []},
-        mode_instruction="Standard.",
-        recent_log_for_prompt=[],
-    )
-    ilc = ctx["interlocutor_lead_context"]
-    assert ilc["active_npc_id"] == "tavern_runner"
-    assert all(r.get("lead_id") != "lead_aldric_thread" for r in ilc["introduced_by_npc"])
-    assert all("Aldric" not in h for h in (ctx.get("interlocutor_lead_behavior_hints") or []))
 
     line = "Runner, does Aldric still inspect the east road?"
     action = {
