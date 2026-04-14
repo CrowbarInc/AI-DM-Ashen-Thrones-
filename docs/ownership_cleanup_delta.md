@@ -458,7 +458,7 @@ This follow-up was intentionally wording-only and did not change runtime behavio
 
 - Canonical runtime owner remains `game/prompt_context.py`.
 - Practical primary direct-owner suite remains `tests/test_prompt_context.py`.
-- Secondary downstream coverage should read consistently as `tests/test_prompt_compression.py`, `tests/test_prompt_and_guard.py`, `tests/test_dialogue_interaction_establishment.py`, `tests/test_fallback_shipped_contract_propagation.py`, `tests/test_social_escalation.py`, `tests/test_social_interaction_authority.py`, `tests/test_social_speaker_grounding.py`, plus relevant gate/emission/transcript suites such as `tests/test_final_emission_gate.py`, `tests/test_social_exchange_emission.py`, and `tests/test_narration_transcript_regressions.py`.
+- Secondary downstream coverage should read consistently as `tests/test_prompt_compression.py`, `tests/test_prompt_and_guard.py`, `tests/test_dialogue_interaction_establishment.py`, `tests/test_fallback_shipped_contract_propagation.py`, `tests/test_social_escalation.py`, `tests/test_social_interaction_authority.py`, `tests/test_social_speaker_grounding.py`, `tests/test_social_topic_anchor.py`, `tests/test_stale_interlocutor_invalidation_block3.py`, plus relevant gate/emission/transcript suites such as `tests/test_final_emission_gate.py`, `tests/test_social_exchange_emission.py`, and `tests/test_narration_transcript_regressions.py`.
 - Remaining residue is support/compatibility only: `game/prompt_context_leads.py` may remain as extraction residue, and exported consumer paths may continue to consume prompt-owned bundles without co-owning prompt semantics.
 - Historical notes above remain a record of earlier audit states; the current governance target for this seam is `runtime owner -> direct-owner suite -> downstream secondary/support residue`.
 
@@ -544,3 +544,97 @@ Most valuable next tightening, based on this rerun:
 
 - keep `game/prompt_context.py` as the singular visible prompt owner and `tests/test_prompt_context.py` as the practical direct-owner suite
 - trim the remaining direct prompt-owner imports/assertions now surfacing in `tests/test_social_topic_anchor.py` and `tests/test_stale_interlocutor_invalidation_block3.py` unless they are truly owner-level obligations
+
+## PC8 prompt-width narrowing note
+
+This pass was intentionally surgical and did not change runtime behavior.
+
+- `tests/test_social_topic_anchor.py` no longer imports `build_narration_context()` or carries the direct prompt-instruction ownership check for the active topic-anchor rule; that owner assertion now lives in `tests/test_prompt_context.py`, leaving the suite focused on downstream topic-anchor behavior and answer-selection consumption.
+- `tests/test_stale_interlocutor_invalidation_block3.py` no longer imports `canonical_interaction_target_npc_id()` as a prompt-owner helper. It now reads as stale-interlocutor invalidation and next-turn follow-up routing regression coverage, while the direct canonical-target helper assertion now lives in `tests/test_prompt_context.py`.
+- The prompt seam should now read materially narrower again around these two newly surfaced suites, with `tests/test_prompt_context.py` remaining the practical primary direct-owner suite and the other two files reading as downstream social/regression consumers rather than prompt-contract homes.
+
+## AR10-R2 final prompt-width audit gate after PT1 and PT2
+
+Final audit rerun after the PT1 prompt-width narrowing pass and the PT2 governance-only wording alignment. No feature/runtime changes were made in this gate; only audit artifacts were regenerated and this delta was updated.
+
+### Evidence used
+
+- `py -3 tools/architecture_audit.py --print-summary`
+- `py -3 tools/architecture_audit.py --focus-subsystem "prompt contracts"`
+- `py -3 tools/architecture_audit.py --focus-subsystem "response policy contracts"`
+- `py -3 -m pytest tests/test_architecture_audit_tool.py`
+- `py -3 -m pytest tests/test_prompt_context.py tests/test_social_topic_anchor.py tests/test_stale_interlocutor_invalidation_block3.py tests/test_prompt_compression.py tests/test_prompt_and_guard.py`
+- `py -3 -m pytest tests/test_strict_social_answer_pressure_cashout.py`
+- `py -3 -m pytest tests/test_synthetic_sessions.py`
+
+### Fresh audit result
+
+- Repo verdict: `mixed / caution`
+- Recommended action mode: `needs targeted ownership cleanup before more features`
+- Hotspot mix: `5 localized under-consolidation`, `3 transitional residue`, `0 possible ownership smear`, `0 unclear`
+- Prompt hotspot state: `localized under-consolidation`
+- Response-policy hotspot state: `localized under-consolidation`
+- `social_exchange_emission mixed repair/contract role`: `transitional residue`
+
+### What changed for real vs wording vs artifact refresh
+
+Real architecture improvement from PT1:
+
+- `tests/test_social_topic_anchor.py` no longer reads like a prompt-owner home in the refreshed audit.
+- `tests/test_stale_interlocutor_invalidation_block3.py` no longer reads like a prompt-owner home in the refreshed audit.
+- `tests/test_prompt_context.py` remains the dominant practical direct-owner suite for prompt contracts.
+
+Governance/report alignment from PT2 only:
+
+- `docs/architecture_ownership_ledger.md`, `docs/architecture_audit_readme.md`, and `tests/TEST_AUDIT.md` consistently declare `game/prompt_context.py` as runtime owner and `tests/test_prompt_context.py` as the practical primary direct-owner suite.
+- This helped the owner story read more consistently, but it did not by itself improve the repo verdict or action mode.
+
+Artifact refresh / newly exposed residual width:
+
+- The regenerated audit artifacts no longer surface `tests/test_social_topic_anchor.py` and `tests/test_stale_interlocutor_invalidation_block3.py` as the practical-owner spread.
+- Instead, prompt practical ownership now reads as `mixed: tests/test_prompt_context.py, tests/test_strict_social_answer_pressure_cashout.py, tests/test_synthetic_sessions.py`.
+- That means PT1 did produce real narrowing, but the rerun exposed a different remaining prompt-width seam rather than clearing the gate.
+
+### Prompt-width interpretation after the rerun
+
+- `tests/test_prompt_context.py` is still the clearest and strongest prompt direct-owner suite.
+- `tests/test_social_topic_anchor.py` now reads clearly as downstream topic-anchor behavior coverage.
+- `tests/test_stale_interlocutor_invalidation_block3.py` now reads clearly as stale-interlocutor invalidation / follow-up routing regression coverage.
+- The remaining width is no longer mainly topic-anchor / stale-interlocutor adjacency.
+- The fresh practical spread instead comes from direct prompt helper/contract assertions still present in `tests/test_strict_social_answer_pressure_cashout.py`, plus transcript-backed prompt export inspection in `tests/test_synthetic_sessions.py`.
+
+### Stable adjacent seams
+
+- `response policy contracts` remains stable but not fully consolidated: runtime owner still resolves cleanly to `game/response_policy_contracts.py`, yet practical coverage is still spread enough to stay `localized under-consolidation`.
+- `social_exchange_emission` remains stable as `transitional residue`, not a blocker-shaped hotspot.
+- `game/prompt_context_leads.py` still reads as support/extraction residue rather than a competing prompt owner.
+
+### Residue vs blockage
+
+Mostly residue now:
+
+- broad but governed secondary prompt coverage in `tests/test_prompt_compression.py`, `tests/test_prompt_and_guard.py`, and the previously narrowed social/regression suites
+- `game/prompt_context_leads.py` support/extraction residue
+- `social_exchange_emission` compatibility/retry adjacency
+
+Still real blockage:
+
+- prompt practical-owner spread is still not singular enough to call the seam structurally settled
+- the refreshed audit still reports `ownership_spread_wide` for prompt contracts, with scorecard drag from heavy archaeology, high coupling centrality, and drifting test alignment
+
+### Final decision gate
+
+- Best current repo label: `mixed / caution`
+- Threshold crossed to `structurally real, under-consolidated`: `not yet`
+- Limited feature work justified now: `no`
+- Operator call: `one more cleanup seam first`
+
+### Single highest-value remaining seam
+
+- `prompt contracts`
+
+Most valuable next tightening, based on this rerun only:
+
+- keep `game/prompt_context.py` as the singular visible prompt owner and `tests/test_prompt_context.py` as the practical direct-owner suite
+- trim the remaining direct prompt-owner/helper assertions now surfacing in `tests/test_strict_social_answer_pressure_cashout.py`
+- keep `tests/test_synthetic_sessions.py` framed as transcript/harness persistence coverage unless it truly needs direct prompt-owner helper inspection

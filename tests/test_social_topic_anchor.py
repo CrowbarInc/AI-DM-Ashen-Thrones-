@@ -1,12 +1,10 @@
-"""Active topic anchor: explicit player corrections must not be overridden by mystery/lead salience."""
+"""Downstream social topic-anchor coverage for explicit player corrections."""
 
 from __future__ import annotations
 
 from game.defaults import default_session, default_world
 from game.gm import register_topic_probe
 from game.interaction_context import rebuild_active_scene_entities, set_social_target
-from game.leads import SESSION_LEAD_REGISTRY_KEY, LeadLifecycle, LeadStatus
-from game.prompt_context import build_narration_context
 from game.social import explicit_player_topic_anchor_state, select_best_social_answer_candidate
 from game.storage import get_scene_runtime
 
@@ -213,78 +211,3 @@ def test_mystery_question_still_matches_topic_pressure_without_anchor():
     assert "Caden" in (cand.get("text") or "")
 
 
-def _session_with_pursued_patrol_lead() -> dict:
-    return {
-        "active_scene_id": "frontier_gate",
-        "turn_counter": 5,
-        "interaction_context": {
-            "active_interaction_target_id": "tavern_runner",
-            "active_interaction_kind": "question",
-            "interaction_mode": "social",
-            "engagement_level": "engaged",
-            "conversation_privacy": None,
-            "player_position_context": None,
-        },
-        SESSION_LEAD_REGISTRY_KEY: {
-            "lead_missing_patrol": {
-                "id": "lead_missing_patrol",
-                "title": "Missing patrol",
-                "summary": "Patrol vanished near crossroads.",
-                "type": "mystery",
-                "status": LeadStatus.PURSUED.value,
-                "lifecycle": LeadLifecycle.COMMITTED.value,
-                "confidence": 0.9,
-                "priority": 5,
-                "next_step": "Ask the Watch",
-                "last_updated_turn": 4,
-                "last_touched_turn": 3,
-                "related_npc_ids": ["tavern_runner"],
-                "related_location_ids": [],
-            }
-        },
-    }
-
-
-def test_narration_context_includes_anchor_rule_under_social_authority():
-    session = _session_with_pursued_patrol_lead()
-    world = {
-        "npcs": [
-            {
-                "id": "tavern_runner",
-                "name": "Tavern Runner",
-                "location": "frontier_gate",
-                "stance_toward_player": "wary",
-                "information_reliability": "partial",
-                "knowledge_scope": ["scene:frontier_gate", "rumors"],
-                "origin_kind": "scene_actor",
-            }
-        ]
-    }
-    public_scene = {"id": "frontier_gate", "visible_facts": [], "exits": [], "enemies": []}
-    ctx = build_narration_context(
-        campaign={"title": "", "premise": "", "character_role": "", "gm_guidance": [], "world_pressures": []},
-        world=world,
-        session=session,
-        character={"name": "Hero", "hp": {}, "ac": {}},
-        scene={"scene": public_scene},
-        combat={"in_combat": False},
-        recent_log=[],
-        user_text="No, I meant the refugees—what are they saying?",
-        resolution=None,
-        scene_runtime={"pending_leads": []},
-        public_scene=public_scene,
-        discoverable_clues=[],
-        gm_only_hidden_facts=[],
-        gm_only_discoverable_locked=[],
-        discovered_clue_records=[],
-        undiscovered_clue_records=[],
-        pending_leads=[],
-        intent={"labels": ["question"]},
-        world_state_view={"flags": {}, "counters": {}, "clocks_summary": []},
-        mode_instruction="Standard.",
-        recent_log_for_prompt=[],
-    )
-    assert ctx["active_topic_anchor"]["active"] is True
-    joined = "\n".join(ctx["instructions"])
-    assert "ACTIVE TOPIC ANCHOR" in joined
-    assert "currently_pursued_lead" in joined

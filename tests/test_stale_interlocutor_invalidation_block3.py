@@ -1,4 +1,4 @@
-"""Objective #21 block 3: stale interlocutor invalidation after visible speaker mismatch."""
+"""Stale interlocutor invalidation regression coverage after visible speaker mismatch."""
 from __future__ import annotations
 
 import pytest
@@ -9,7 +9,6 @@ from game.interaction_context import (
     rebuild_active_scene_entities,
     resolve_directed_social_entry,
 )
-from game.prompt_context import canonical_interaction_target_npc_id
 from game.post_emission_speaker_adoption import (
     apply_post_emission_speaker_adoption,
     apply_stale_interlocutor_invalidation_after_emission,
@@ -159,8 +158,8 @@ def test_ambiguous_multi_speaker_does_not_clear_stale_anchor():
     assert inspect_interaction_context(session).get("active_interaction_target_id") == "tavern_runner"
 
 
-def test_adopted_speaker_is_authority_for_strict_social_continuity_fill():
-    """D. After successful adoption, canonical interlocutor matches strict-social / retry consumers."""
+def test_adopted_visible_speaker_drives_next_social_follow_up_target():
+    """D. After successful adoption, downstream follow-up routing stays with the visible speaker."""
     scene, world = _scene_world()
     session = _session_social("tavern_runner")
     rebuild_active_scene_entities(session, world, "scene_investigate", scene_envelope=scene)
@@ -189,5 +188,15 @@ def test_adopted_speaker_is_authority_for_strict_social_continuity_fill():
 
     ic = inspect_interaction_context(session)
     aid = str(ic.get("active_interaction_target_id") or "").strip()
-    assert canonical_interaction_target_npc_id(session, aid) == "gate_guard"
+    assert aid == "gate_guard"
     assert (session.get("scene_state") or {}).get("current_interlocutor") == "gate_guard"
+
+    out = resolve_directed_social_entry(
+        session=session,
+        scene=scene,
+        world=world,
+        segmented_turn=None,
+        raw_text="Why the halt?",
+    )
+    assert out.get("reason") == "active_interlocutor_followup"
+    assert out.get("target_actor_id") == "gate_guard"

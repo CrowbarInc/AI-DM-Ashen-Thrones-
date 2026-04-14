@@ -42,6 +42,7 @@ from game.prompt_context import (
     build_response_policy,
     build_social_response_structure_contract,
     build_social_interlocutor_profile,
+    canonical_interaction_target_npc_id,
     derive_narration_obligations,
     deterministic_interlocutor_answer_style_hints,
     deterministic_interlocutor_lead_behavior_hints,
@@ -484,6 +485,18 @@ def test_prompt_contract_owner_exports_promoted_npc_identity_and_social_profile(
     assert any("INFORMATION_RELIABILITY partial" in hint for hint in hints)
     assert any("INTERLOCUTOR KNOWLEDGE GATE" in hint for hint in hints)
     assert any("NAMING CONTINUITY (engine)" in line for line in ctx["instructions"])
+
+
+def test_prompt_contract_owner_canonicalizes_promoted_interaction_target_ids() -> None:
+    session = {
+        "scene_state": {
+            "promoted_actor_npc_map": {
+                "ragged_stranger": "frontier_gate__ragged_stranger",
+            }
+        }
+    }
+    assert canonical_interaction_target_npc_id(session, "ragged_stranger") == "frontier_gate__ragged_stranger"
+    assert canonical_interaction_target_npc_id(session, "gate_guard") == "gate_guard"
 
 
 def _session_with_registry(*leads: dict) -> dict:
@@ -2368,6 +2381,66 @@ def test_prompt_contract_owner_suppresses_uncertainty_hint_during_live_social_lo
     assert ctx["response_policy"]["uncertainty"]["enabled"] is False
     assert ctx["response_policy"]["prefer_scene_momentum"] is False
     assert any("SOCIAL INTERACTION LOCK" in line for line in ctx["instructions"])
+
+
+@pytest.mark.unit
+def test_prompt_contract_owner_surfaces_active_topic_anchor_rule_under_social_authority():
+    session = _session_with_registry(
+        {
+            "id": "lead_missing_patrol",
+            "title": "Missing patrol",
+            "summary": "Patrol vanished near crossroads.",
+            "type": LeadType.INVESTIGATION.value,
+            "status": LeadStatus.PURSUED.value,
+            "lifecycle": LeadLifecycle.COMMITTED.value,
+            "confidence": 0.9,
+            "priority": 5,
+            "next_step": "Ask the Watch",
+            "last_updated_turn": 4,
+            "last_touched_turn": 3,
+            "related_npc_ids": ["tavern_runner"],
+            "related_location_ids": [],
+        }
+    )
+    session["turn_counter"] = 5
+    session["interaction_context"] = {
+        "active_interaction_target_id": "tavern_runner",
+        "active_interaction_kind": "question",
+        "interaction_mode": "social",
+        "engagement_level": "engaged",
+        "conversation_privacy": None,
+        "player_position_context": None,
+    }
+    world = {
+        "npcs": [
+            {
+                "id": "tavern_runner",
+                "name": "Tavern Runner",
+                "location": "frontier_gate",
+                "stance_toward_player": "wary",
+                "information_reliability": "partial",
+                "knowledge_scope": ["scene:frontier_gate", "rumors"],
+                "origin_kind": "scene_actor",
+            }
+        ]
+    }
+    public_scene = {"id": "frontier_gate", "visible_facts": [], "exits": [], "enemies": []}
+    ctx = build_narration_context(
+        **_narration_minimal_kwargs(
+            world=world,
+            session=session,
+            scene={"scene": public_scene},
+            public_scene=public_scene,
+            user_text="No, I meant the refugees—what are they saying?",
+            pending_leads=[],
+            scene_runtime={"pending_leads": []},
+            intent={"labels": ["question"]},
+        )
+    )
+    assert ctx["active_topic_anchor"]["active"] is True
+    joined = "\n".join(ctx["instructions"])
+    assert "ACTIVE TOPIC ANCHOR" in joined
+    assert "currently_pursued_lead" in joined
 
 
 @pytest.mark.unit
