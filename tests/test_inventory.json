@@ -1,6 +1,6 @@
 {
   "summary": {
-    "generated_utc": "2026-04-15T22:36:23.496091+00:00",
+    "generated_utc": "2026-04-15T23:04:59.911477+00:00",
     "test_file_count": 173,
     "pytest_collected_items": 2377,
     "ast_test_function_def_lines_total": 2292,
@@ -27,10 +27,10 @@
     }
   },
   "counts_by_majority_file_bucket": {
-    "integration": 87,
-    "regression": 8,
     "unit": 76,
-    "transcript_gauntlet": 2
+    "integration": 87,
+    "transcript_gauntlet": 2,
+    "regression": 8
   },
   "top_high_brittleness_files": [
     [
@@ -99,10 +99,10 @@
   "feature_area_primary_counts": {
     "general": 614,
     "resolution/emission": 345,
-    "fallback": 268,
+    "fallback": 267,
     "lead extraction": 262,
     "transcript regression": 178,
-    "social continuity": 176,
+    "social continuity": 177,
     "routing": 158,
     "retry": 139,
     "legality/sanitizer": 94,
@@ -1874,7 +1874,8 @@
         "integration": 1
       },
       "primary_feature_area_breakdown": {
-        "fallback": 3
+        "fallback": 2,
+        "social continuity": 1
       },
       "high_brittleness_test_count": 0,
       "prose_sensitive_test_count": 0
@@ -16566,10 +16567,10 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_interaction_continuity_repair.py::test_repair_strips_crowd_interruption_after_labeled_anchor",
+      "nodeid": "tests/test_interaction_continuity_repair.py::test_output_exhibits_stripped_uncued_interruption_with_labeled_anchor",
       "file": "tests/test_interaction_continuity_repair.py",
-      "name": "test_repair_strips_crowd_interruption_after_labeled_anchor",
-      "base_name": "test_repair_strips_crowd_interruption_after_labeled_anchor",
+      "name": "test_output_exhibits_stripped_uncued_interruption_with_labeled_anchor",
+      "base_name": "test_output_exhibits_stripped_uncued_interruption_with_labeled_anchor",
       "parametrized": false,
       "primary_bucket": "unit",
       "feature_areas": [
@@ -16582,10 +16583,10 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_interaction_continuity_repair.py::test_repair_narration_to_dialogue_strong_short_line",
+      "nodeid": "tests/test_interaction_continuity_repair.py::test_output_exhibits_continuity_repaired_structure_narration_to_dialogue",
       "file": "tests/test_interaction_continuity_repair.py",
-      "name": "test_repair_narration_to_dialogue_strong_short_line",
-      "base_name": "test_repair_narration_to_dialogue_strong_short_line",
+      "name": "test_output_exhibits_continuity_repaired_structure_narration_to_dialogue",
+      "base_name": "test_output_exhibits_continuity_repaired_structure_narration_to_dialogue",
       "parametrized": false,
       "primary_bucket": "unit",
       "feature_areas": [
@@ -16598,10 +16599,10 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_interaction_continuity_repair.py::test_gate_strong_narration_repaired_no_fallback",
+      "nodeid": "tests/test_interaction_continuity_repair.py::test_emitted_output_exhibits_continuity_repaired_structure_strong_short_narration",
       "file": "tests/test_interaction_continuity_repair.py",
-      "name": "test_gate_strong_narration_repaired_no_fallback",
-      "base_name": "test_gate_strong_narration_repaired_no_fallback",
+      "name": "test_emitted_output_exhibits_continuity_repaired_structure_strong_short_narration",
+      "base_name": "test_emitted_output_exhibits_continuity_repaired_structure_strong_short_narration",
       "parametrized": false,
       "primary_bucket": "integration",
       "feature_areas": [
@@ -16614,10 +16615,10 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_interaction_continuity_repair.py::test_gate_strong_complex_failure_triggers_fallback_and_enforced_flag",
+      "nodeid": "tests/test_interaction_continuity_repair.py::test_emitted_output_preserves_continuity_constraints_under_strong_complex_narration",
       "file": "tests/test_interaction_continuity_repair.py",
-      "name": "test_gate_strong_complex_failure_triggers_fallback_and_enforced_flag",
-      "base_name": "test_gate_strong_complex_failure_triggers_fallback_and_enforced_flag",
+      "name": "test_emitted_output_preserves_continuity_constraints_under_strong_complex_narration",
+      "base_name": "test_emitted_output_preserves_continuity_constraints_under_strong_complex_narration",
       "parametrized": false,
       "primary_bucket": "integration",
       "feature_areas": [
@@ -16630,10 +16631,10 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_interaction_continuity_repair.py::test_soft_continuity_does_not_trigger_fallback_for_violation",
+      "nodeid": "tests/test_interaction_continuity_repair.py::test_emitted_output_preserves_continuity_constraints_soft_strength_on_violation",
       "file": "tests/test_interaction_continuity_repair.py",
-      "name": "test_soft_continuity_does_not_trigger_fallback_for_violation",
-      "base_name": "test_soft_continuity_does_not_trigger_fallback_for_violation",
+      "name": "test_emitted_output_preserves_continuity_constraints_soft_strength_on_violation",
+      "base_name": "test_emitted_output_preserves_continuity_constraints_soft_strength_on_violation",
       "parametrized": false,
       "primary_bucket": "integration",
       "feature_areas": [
@@ -16646,10 +16647,10 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_interaction_continuity_repair.py::test_gate_emits_repair_metadata_for_stripped_interruption",
+      "nodeid": "tests/test_interaction_continuity_repair.py::test_emitted_output_surfaces_stripped_interruption_repair_metadata",
       "file": "tests/test_interaction_continuity_repair.py",
-      "name": "test_gate_emits_repair_metadata_for_stripped_interruption",
-      "base_name": "test_gate_emits_repair_metadata_for_stripped_interruption",
+      "name": "test_emitted_output_surfaces_stripped_interruption_repair_metadata",
+      "base_name": "test_emitted_output_surfaces_stripped_interruption_repair_metadata",
       "parametrized": false,
       "primary_bucket": "integration",
       "feature_areas": [
@@ -16662,10 +16663,10 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_interaction_continuity_speaker_bridge.py::test_malformed_dialogue_needs_bridge_shaped_validation_before_repair_can_help",
+      "nodeid": "tests/test_interaction_continuity_speaker_bridge.py::test_malformed_dialogue_output_preserves_continuity_constraints_without_repair",
       "file": "tests/test_interaction_continuity_speaker_bridge.py",
-      "name": "test_malformed_dialogue_needs_bridge_shaped_validation_before_repair_can_help",
-      "base_name": "test_malformed_dialogue_needs_bridge_shaped_validation_before_repair_can_help",
+      "name": "test_malformed_dialogue_output_preserves_continuity_constraints_without_repair",
+      "base_name": "test_malformed_dialogue_output_preserves_continuity_constraints_without_repair",
       "parametrized": false,
       "primary_bucket": "unit",
       "feature_areas": [
@@ -16678,10 +16679,10 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_interaction_continuity_speaker_bridge.py::test_bridge_shaped_failure_can_still_be_salvaged_by_continuity_repair",
+      "nodeid": "tests/test_interaction_continuity_speaker_bridge.py::test_output_exhibits_continuity_repaired_structure_for_bridge_shaped_failure",
       "file": "tests/test_interaction_continuity_speaker_bridge.py",
-      "name": "test_bridge_shaped_failure_can_still_be_salvaged_by_continuity_repair",
-      "base_name": "test_bridge_shaped_failure_can_still_be_salvaged_by_continuity_repair",
+      "name": "test_output_exhibits_continuity_repaired_structure_for_bridge_shaped_failure",
+      "base_name": "test_output_exhibits_continuity_repaired_structure_for_bridge_shaped_failure",
       "parametrized": false,
       "primary_bucket": "integration",
       "feature_areas": [
@@ -16694,14 +16695,13 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_interaction_continuity_speaker_bridge.py::test_bridge_shaped_failure_without_canonical_anchor_remains_unrepaired",
+      "nodeid": "tests/test_interaction_continuity_speaker_bridge.py::test_output_preserves_continuity_constraints_when_anchor_is_not_canonical",
       "file": "tests/test_interaction_continuity_speaker_bridge.py",
-      "name": "test_bridge_shaped_failure_without_canonical_anchor_remains_unrepaired",
-      "base_name": "test_bridge_shaped_failure_without_canonical_anchor_remains_unrepaired",
+      "name": "test_output_preserves_continuity_constraints_when_anchor_is_not_canonical",
+      "base_name": "test_output_preserves_continuity_constraints_when_anchor_is_not_canonical",
       "parametrized": false,
       "primary_bucket": "unit",
       "feature_areas": [
-        "fallback",
         "social continuity"
       ],
       "historically_motivated": false,

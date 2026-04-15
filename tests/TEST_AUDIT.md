@@ -2,7 +2,7 @@
 
 Diagnostic inventory of `tests/` only. **How to run tests (fast/full lanes, collect-only, Windows):** `tests/README_TESTS.md`.
 
-**Consolidation phase:** Behavioral Gauntlet, Playability Validation, and AER are **complete** as validation tracks. Remaining consolidation targets **test ownership** trimming, **transcript** duplicate assertion thinning, and clearer **canonical owner** boundaries—**without** expanding gameplay behavior in doc-only passes. Runtime **orchestration** ownership for emit paths remains documented in `docs/narrative_integrity_architecture.md`.
+**Consolidation phase:** Behavioral Gauntlet, Playability Validation, and AER are **complete** as validation tracks. Emit-path **ownership** for prompt, response-policy, gate, repairs, telemetry, and strict-social emission is **governance-resolved** (singular runtime owner + practical direct-owner suite + intentional downstream consumers per `docs/architecture_ownership_ledger.md`). Optional follow-ups: **transcript** duplicate assertion thinning, deferred **lead/clue** batch, and marker tidy—**without** expanding gameplay behavior in doc-only passes. Runtime **orchestration** layout remains in `docs/narrative_integrity_architecture.md`.
 
 **Terminology (use consistently in PRs and reviews):**
 
@@ -12,9 +12,18 @@ Diagnostic inventory of `tests/` only. **How to run tests (fast/full lanes, coll
 - **Orchestration** — ordering and integration of policy layers (especially `apply_final_emission_gate`), distinct from **pure** validators or **metadata-only** helpers.
 - **Deterministic / contract-driven** — tests and evaluators that lock shapes, routes, and contracts—not live-model prose.
 
+**Ownership scan legend (governed seams):** When scanning theme rows and governance notes, read four roles the same way as `docs/architecture_ownership_ledger.md`:
+
+| Role | Meaning |
+| --- | --- |
+| **Runtime owner** | Canonical `game/` module for the contract or orchestration invariant. |
+| **Practical primary direct-owner suite** | Pytest module that should own **direct** semantic assertions for that runtime surface first. |
+| **Downstream consumer coverage** | Other suites that ship, observe, or regress behavior **through** the owner boundary; they are not alternate semantic homes. |
+| **Compatibility residue** | Supported legacy paths, aliases, or read-side helpers that may remain importable without splitting authority. |
+
 **Regenerate artifacts:** from repo root run `py -3 tools/test_audit.py` (or `python tools/test_audit.py`). That refreshes `tests/test_inventory.json` using `pytest --collect-only` plus static heuristics. The script prints a one-line summary of **module-level duplicate `test_*` names** (shadowed defs); details are in JSON under `summary.files_with_shadowed_duplicate_test_defs`. It also prints a short **overlap spread** line (themes by distinct file count; heuristic, not semantic duplicate detection).
 
-**Counts in this markdown:** detailed per-file tables drift as the suite grows. For live numbers, prefer `pytest --collect-only` plus `tests/test_inventory.json` (regenerate with `tools/test_audit.py`). The Block C1 figures below are a dated sanity snapshot from `2026-04-12`, not a standing authority. For file totals, read the JSON inventory or count collected modules under `tests/` that match `test_*.py`.
+**Counts in this markdown:** detailed per-file tables drift as the suite grows. For live numbers, prefer `pytest --collect-only` plus `tests/test_inventory.json` (regenerate with `tools/test_audit.py`). Dated sanity snapshots in later sections are **illustrative**; `summary.generated_utc` in JSON is the inventory timestamp. For file totals, read the JSON inventory or count collected modules under `tests/` that match `test_*.py`.
 
 ---
 
@@ -45,12 +54,14 @@ Cluster **closed enough** for this pass: enforced split and intentional overlap 
 
 ### Canonical owners by theme
 
-| Theme | Canonical owner(s) | Integration smoke only (examples) |
+**How to read this table:** the middle column names the **practical primary direct-owner suite(s)** (and occasionally a co-listed peer that owns a **different layer** of the same theme, e.g. routing). The right column lists **downstream consumer / smoke** homes only—they should not accumulate new direct contract semantics for seams already owned in the middle column.
+
+| Theme | Primary direct-owner suite(s) | Downstream / smoke only (examples) |
 | --- | --- | --- |
 | **Routing / turn pipeline** | `test_turn_pipeline_shared.py` — full **`/api/chat`** and **`/api/action`** stack, dialogue-lock HTTP, turn-trace-adjacent flow, end-to-end resolution; `test_dialogue_routing_lock.py` — pure `choose_interaction_route` / dialogue-lock **table** (no `TestClient`); `test_directed_social_routing.py` — directed-social precedence, vocative overrides, segmentation, narrow directed `/api/chat`, emergent-actor targeting; `test_intent_parser.py` / `test_intent_and_runtime.py` — parse/runtime intent. | `test_mixed_state_recovery_regressions.py`, `test_exploration_resolution.py`, `test_social.py` — keep **narrative or scenario-specific** routing checks, not a second copy of table locks. |
 | **Prompt-context assembly / prompt-contract bundle** | `test_prompt_context.py` — practical primary direct-owner suite for direct prompt-contract semantics, canonical prompt-facing helper accessors, and exported helper/bundle ownership; `test_prompt_compression.py` — secondary prompt assembly / compression integration once the bundle shape is already owned. | `test_prompt_and_guard.py`, `test_dialogue_interaction_establishment.py`, `test_fallback_shipped_contract_propagation.py`, `test_social_escalation.py`, `test_social_interaction_authority.py`, `test_social_speaker_grounding.py`, `test_social_topic_anchor.py`, `test_stale_interlocutor_invalidation_block3.py`, `test_strict_social_answer_pressure_cashout.py`, `test_synthetic_sessions.py`, `test_answer_completeness_rules.py`, plus relevant gate/emission/transcript suites such as `test_final_emission_gate.py`, `test_social_exchange_emission.py`, and `test_narration_transcript_regressions.py` — downstream consumer, smoke, or regression checks; they may consume shipped prompt contracts but should not read as the semantic owner. |
 | **Response-policy contract read side** | `test_response_policy_contracts.py` — practical primary direct-owner suite for canonical `game.response_policy_contracts` accessors and `materialize_response_policy_bundle()` behavior once policy has already been shipped. | `test_fallback_shipped_contract_propagation.py`, `test_response_delta_requirement.py`, `test_final_emission_gate.py`, `test_social_exchange_emission.py`, `test_final_emission_validators.py`, `test_interaction_continuity_contract.py`, `test_interaction_continuity_validation.py` — downstream compatibility, consumer/application, validator, continuity, and integration coverage only; they may consume shipped response-policy contracts but should not read as the semantic owner. |
-| **Final-emission gate orchestration** | `test_final_emission_gate.py` — practical primary direct-owner suite for direct `apply_final_emission_gate` layer ordering, final-route integration, continuity-adjacent gate-step semantics, and orchestration semantics. | `test_social_exchange_emission.py`, `test_turn_pipeline_shared.py`, `test_stage_diff_telemetry.py`, `test_social_emission_quality.py`, `test_dead_turn_detection.py`, `test_final_emission_scene_integrity.py`, `test_interaction_continuity_speaker_bridge.py`, `test_interaction_continuity_validation.py`, `test_interaction_continuity_repair.py`, and transcript/regression suites such as `test_narration_transcript_regressions.py` — downstream emission application, API smoke, telemetry observability, metadata consumption, scene-integrity, bridge/validation/repair consumption, or regression coverage only; they may pass through the gate but should not read as orchestration co-owners. |
+| **Final-emission gate orchestration** | `test_final_emission_gate.py` — practical primary direct-owner suite for direct `apply_final_emission_gate` layer ordering, final-route integration, continuity-adjacent gate-step semantics, and orchestration semantics. | `test_social_exchange_emission.py`, `test_turn_pipeline_shared.py`, `test_stage_diff_telemetry.py`, `test_social_emission_quality.py`, `test_dead_turn_detection.py`, `test_final_emission_scene_integrity.py`, `test_interaction_continuity_speaker_bridge.py`, `test_interaction_continuity_validation.py`, `test_interaction_continuity_repair.py`, and transcript/regression suites such as `test_narration_transcript_regressions.py` — downstream emission application, API smoke, telemetry observability, metadata consumption, scene-integrity, bridge/validation/repair consumption, or regression coverage only; they may pass through the gate but should not accumulate new **orchestration-order** ownership there. |
 | **Final-emission repairs** | Repair semantics: runtime `game.final_emission_repairs`; practical owner suite `tests/test_final_emission_repairs.py` (derivation, helper/accessor semantics, materialization). | Downstream consumption coverage only — e.g. `test_fallback_behavior_repairs.py` (fallback/gate/retry consumers of repaired outputs and meta); `test_fallback_behavior_gate.py`, `test_bounded_partial_quality.py`, `test_social_fallback_leak_containment.py` (gate application, quality, leak/regression); they must not re-own derivation or private repair helpers. |
 | **Stage-diff telemetry / observability** | `test_stage_diff_telemetry.py` — practical primary direct-owner suite for direct `game.stage_diff_telemetry` helper/accessor semantics, snapshot/transition packaging, bounded telemetry storage, and telemetry-owned observability fields. | `test_turn_packet_stage_diff_integration.py` — downstream turn-packet + gate/retry consumer coverage; `test_narrative_authenticity_aer4.py` — downstream narrative-authenticity regression and evaluator-consumer coverage. They may consume shipped telemetry fields, but should not read as the semantic owner of stage-diff packaging or helper semantics. |
 | **Social escalation / emission / quality** | `test_social_exchange_emission.py` — practical primary direct-owner suite for downstream strict-social exchange emission semantics, including terminal dialogue **application** once dialogue-contract resolution is already decided elsewhere; `test_social_escalation.py` — pressure / escalation state machine; `test_social_answer_retry_prioritization.py` — retry vs stall prioritization; `test_social_target_authority_regressions.py` — authority regressions. | `test_social_emission_quality.py` — multi-turn / quality harness (names `test_emission_quality_*` for non-transcript-runner cases; align module-level `transcript` policy in Block 2); `test_dialogue_interaction_establishment.py` — establishment flows; `test_strict_social_emergency_fallback_dialogue.py` — downstream retry-terminal / first-mention / compatibility-alias coverage only; `test_social.py` — **`resolve_social_action` engine + glue** (see module docstring; not strict-social string owner). |
@@ -139,7 +150,7 @@ Compatibility residue note:
 - top-level `social_response_structure_contract` fallback remains supported.
 
 Treat that residue as compatibility/adjacency only, not as a reason to reclassify repair,
-gate, validator, or emission suites as semantic co-owners.
+gate, validator, or emission suites as parallel semantic owners for response-policy accessors.
 
 ### Final-emission orchestration governance note (FG1-R)
 
@@ -205,9 +216,9 @@ secondary downstream retry-terminal / first-mention / compatibility coverage, wi
 `repair_*` helper assertions labeled as historical-path coverage rather than semantic ownership.
 `tests/test_social_emission_quality.py`, `tests/test_dialogue_interaction_establishment.py`,
 and gate/retry-oriented suites may continue to exercise the seam, but they should read as
-consumer/application, harness, or regression evidence rather than co-equal authorities.
+consumer/application, harness, or regression evidence rather than alternate semantic owners for the same seam.
 
-Heuristic tags (`test_inventory.json` → `feature_areas_by_distinct_files`) show **many files** touching the same themes; the hotspots below are the highest-risk *semantic* overlap areas for double-locking:
+Heuristic tags (`test_inventory.json` → `feature_areas_by_distinct_files`) show **many files** touching the same themes (breadth diagnostic, not proof of duplicate ownership). The hotspots below are the highest-risk *semantic* overlap areas for double-locking:
 
 1. **Lead extraction + clue system** — **26** / **24** files respectively; many `test_lead_*.py` modules plus `test_social_lead_landing.py`, `test_clue_lead_registry_integration.py`, pipeline, and prompt/guard.
 2. **Resolution / emission** — **21** files; `test_social_exchange_emission.py`, `test_turn_pipeline_shared.py`, `test_social_emission_quality.py`, `test_social.py`, and several lead payoff modules.
@@ -318,24 +329,24 @@ Tiers describe **expected lane membership** from `transcript` / `slow` (and thus
 
 ### Block 3 — Fast/full workflow verification (recorded baseline)
 
-Verified from repo root with `pytest --collect-only` (**Block C1 snapshot, 2026-04-12**):
+Example `pytest --collect-only` check from repo root (replace counts after large suite edits):
 
 | Command | Result |
 | --- | --- |
-| `pytest --collect-only` | **2214** tests collected |
-| `pytest --collect-only -m "not transcript and not slow"` | **2051** collected, **163** deselected |
+| `pytest --collect-only` | matches `summary.pytest_collected_items` in `tests/test_inventory.json` when inventory was regenerated the same day |
+| `pytest --collect-only -m "not transcript and not slow"` | marker-complement fast lane; deselected = `transcript` or `slow` |
 
-The **163** deselected items match the **`transcript` or `slow`** slice (complement of the fast lane selection). Re-run after large suite edits; treat `tests/test_inventory.json` as the inventory ground truth.
+Re-run after large suite edits; treat `tests/test_inventory.json` as the inventory ground truth.
 
 ---
 
 ## Executive counts
 
-| Metric | Block C1 snapshot (2026-04-12) | Notes |
+| Metric | Latest `test_inventory.json` summary (regenerate locally) | Notes |
 | --- | ---: | --- |
-| Test files (`tests/` modules matching `test_*.py`) | 160 | dated snapshot only; prefer fresh JSON inventory for current counts |
-| Pytest collected items | 2214 | `pytest --collect-only` |
-| Fast lane (`not transcript and not slow`) | 2051 collected / 163 deselected | marker-complement lane |
+| Test files (`tests/` modules matching `test_*.py`) | 173 | from `summary.test_file_count` as of `2026-04-15` refresh in-repo |
+| Pytest collected items | 2377 | from `summary.pytest_collected_items` |
+| Fast lane (`not transcript and not slow`) | *(re-run)* | `pytest --collect-only -m "not transcript and not slow"` — counts drift with markers |
 
 **Heuristic breakdowns** (bucket mixes, brittleness histograms, AST duplicate-name summaries): regenerate `tests/test_inventory.json` via `py -3 tools/test_audit.py` and read `summary` / `files` — the suite has outgrown static markdown tables here.
 

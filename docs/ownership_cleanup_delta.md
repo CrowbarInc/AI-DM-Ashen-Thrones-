@@ -1,5 +1,15 @@
 # Ownership Cleanup Delta
 
+Chronological record of ownership cleanup passes and audit reruns.
+
+## Governance navigation (read this first)
+
+- **Current-state ownership** (where to add tests today): `docs/architecture_ownership_ledger.md` and `tests/TEST_AUDIT.md` — aligned on runtime owner → direct-owner suite → downstream consumers.
+- **Structural conclusions after repairs + gate convergence:** [AR18 — Final repairs convergence](#ar18--final-repairs-convergence) and [AR19 — Final structural convergence](#ar19--final-structural-convergence).
+- **One-page current truth:** [Current truth — governance snapshot](#current-truth--governance-snapshot-post-ar18--ar19) (end of file).
+
+Everything below is **historical evidence** unless a subsection is explicitly labeled as a fresh rerun. Early blocks retain dated `Repo verdict` lines from their pass; they are **not** a substitute for reading AR18/AR19 for ownership resolution.
+
 Final audit re-run after the OC2 and OC3 cleanup passes.
 
 ## Evidence used
@@ -8,18 +18,17 @@ Final audit re-run after the OC2 and OC3 cleanup passes.
 - `py -3 -m pytest tests/test_architecture_audit_tool.py`
 - `py -3 -m pytest tests/test_fallback_shipped_contract_propagation.py tests/test_stage_diff_telemetry.py tests/test_turn_packet_accessors.py`
 
-Current audit result:
+Current audit result (**historical — OC2/OC3-era opener; superseded for ownership by AR18–AR19**):
 
 - Repo verdict: `mixed / caution`
 - Recommended action mode: `needs targeted ownership cleanup before more features`
 - Hotspot mix: `3 localized`, `2 transitional residue`, `2 possible ownership smear`, `1 unclear`
 
-Interpretation:
+Interpretation (at time of this opener):
 
-- The repo has moved materially toward `structurally real, under-consolidated`.
-- It has not crossed that line yet.
-- The formerly central gate/meta and turn-packet/telemetry contradictions now read as localized boundary cleanup plus compatibility residue, not active co-ownership.
-- The remaining real blocker is the prompt-contract seam, with test-governance drift still lowering confidence.
+- The repo had moved materially toward `structurally real, under-consolidated`.
+- Gate/meta and turn-packet/telemetry contradictions were already reading as localized boundary cleanup plus compatibility residue, not active split ownership.
+- Prompt width and test-governance drift were the main **open** concerns in this snapshot; later passes (see AR18–AR19) record **resolved** ownership for repairs, gate orchestration, and related seams. For **today’s** governance read, use the ledger + `TEST_AUDIT.md` + AR18/AR19.
 
 ## Seam-by-seam convergence delta
 
@@ -125,7 +134,7 @@ LC1 continuity de-ownership note:
 - Compatibility residue still present: some historical counts remain snapshot-only, heuristic spread can still over-read downstream prompt-adjacent suites, and the audit may lag until artifacts are regenerated.
 - Recommended next cleanup: re-run the audit after these doc repairs, then keep trimming any remaining stale references or wording that makes downstream suites sound like semantic owners.
 
-## Residue vs blockage
+## Residue vs blockage (historical — OC2/OC3 framing)
 
 Mostly residue now:
 
@@ -134,11 +143,9 @@ Mostly residue now:
 - support-only extraction residue in `game/prompt_context_leads.py`
 - compatibility wrappers / old import paths around packet and response-policy accessors
 
-Still real blockage:
+**Superseded governance read:** prompt-contract **runtime** authority remains `game/prompt_context.py` with `tests/test_prompt_context.py` as the practical primary direct-owner suite; remaining width is **governed downstream adjacency** and drift-watch, not an unresolved “two equal homes” split. See AR19 and the ledger.
 
-- prompt-contract ownership is not yet converged enough to treat as a settled boundary
-
-Still confidence-reducing, but not the same as runtime ownership smear:
+Still confidence-reducing at the time of this section (audit hygiene, not co-equal owners):
 
 - governance docs are subordinate maps, but still need a fresh audit pass to confirm the wording cleanup landed
 - documentation coherence was weak enough to matter in the last audit (`18` broken references reported before this cleanup pass)
@@ -1201,11 +1208,11 @@ Still real blockage:
 
 - `stage diff telemetry`
 
-Why this is now the best next seam from refreshed evidence:
+Why this is now the best next seam from refreshed evidence (pre-TD1 / pre-AR17 wording):
 
 - final-emission gate orchestration no longer reads as the blocker; it downgraded from smear-shaped concern to localized under-consolidation with aligned practical ownership
 - prompt remains broad-but-owned and response policy remains transitional residue
-- the refreshed audit's strongest patch-accumulation evidence is now led by `stage diff telemetry`, where the runtime owner is visible but practical coverage still concentrates across `tests/test_turn_packet_stage_diff_integration.py`, `tests/test_stage_diff_telemetry.py`, and `tests/test_narrative_authenticity_aer4.py` instead of one clearly converged telemetry-owner test home
+- the refreshed audit's strongest patch-accumulation evidence was then led by `stage diff telemetry`, where the runtime owner was visible but **audit-facing** signals still treated helper usage in packet and narrative suites as ambiguous. **TD1/TD2-R** later re-centered direct telemetry semantics in `tests/test_stage_diff_telemetry.py` and reframed the other two files as **downstream consumers** (see AR17-R2 and AR19).
 
 ## TD1 stage-diff telemetry narrowing note
 
@@ -1394,3 +1401,33 @@ import **private** symbols from `game.final_emission_repairs` for unrelated whit
 **The repository now qualifies as structurally real, under-consolidated. Remaining issues are governed adjacency and compatibility residue, not ownership ambiguity.**
 
 Fresh evidence still surfaces one **non-orchestration, non-blocking** seam in the audit summary: **`test ownership / inventory docs still unclear`** (documentation/inventory coherence, not a second runtime owner for the gate).
+
+---
+
+## AR20 — Post-polish closeout
+
+- **What OP1 improved:** Governance docs now use a consistent ownership presentation (runtime owner → practical primary direct-owner suite → secondary downstream suites → compatibility / support residue). Parser-required ledger lines were restored so `tools/architecture_audit.py` keeps working. `docs/ownership_cleanup_delta.md` distinguishes historical campaign evidence from current truth. `tests/TEST_AUDIT.md` gained clearer legend/table framing and less blocker-shaped wording for resolved seams. `tests/test_inventory.json` and architecture audit artifacts were refreshed.
+- **“Test ownership / inventory docs still unclear” residue:** **Reduced to minor-only** (not a reopened ownership campaign). The raw audit summary may still surface that string as a hotspot; interpret it as **documentation/inventory coherence weight**, not as evidence of a second runtime owner or a new co-equal direct-owner suite. Current truth is easier to find via the governance navigation block, `docs/architecture_ownership_ledger.md`, `tests/TEST_AUDIT.md`, and the **Current truth** snapshot below than by reading historical opener verdicts alone.
+- **Regression check (AR20-R2):** Focused runs for prompt contracts, response policy contracts, final emission gate orchestration, final emission repairs, and stage diff telemetry show **no governance regression** into split ownership: ledger + `TEST_AUDIT.md` still declare singular runtime owners and a clear direct-owner suite per seam, with downstream suites framed as consumers. Focused alignment for repairs can still read `partial / docs_claim_owner_tests_target_other_home` when affinity ties **`tests/test_final_emission_validators.py`** into a **mixed** primary-home string alongside `tests/test_final_emission_repairs.py` — that is **scorecard mechanics**, not a contradiction of the ledger’s declared direct-owner suite. `py -3 -m pytest tests/test_architecture_audit_tool.py -q` passed.
+- **Architectural hardening status:** The consolidation narrative in AR18–AR19 stands; the repository remains **structurally real, under-consolidated**. Future doc or inventory alignment is **maintenance-level / opportunistic**, not a prerequisite to resume feature work.
+
+**Architectural hardening is complete. Further cleanup is optional maintenance, not a prerequisite for feature development.**
+
+---
+
+## Current truth — governance snapshot (post AR18 & AR19)
+
+Use this section when you need the **present-tense** story without replaying the full campaign.
+
+| Seam | Runtime owner | Practical primary direct-owner suite | Secondary downstream suites | Compatibility / support residue (if any) |
+| --- | --- | --- | --- | --- |
+| Prompt contracts | `game/prompt_context.py` | `tests/test_prompt_context.py` | Listed in ledger / `TEST_AUDIT.md` (compression, guard, social-adjacent, gate, emission, transcript, pipeline) | `game/prompt_context_leads.py`; consumer re-exports |
+| Response policy contracts | `game/response_policy_contracts.py` | `tests/test_response_policy_contracts.py` | Fallback, gate, validator, emission, continuity suites | Private accessors; legacy top-level fallbacks |
+| Final emission gate orchestration | `game/final_emission_gate.py` | `tests/test_final_emission_gate.py` | Emission, pipeline, telemetry observability, continuity, transcript suites | `game/final_emission_meta.py` packaging; pass-through consumers |
+| Final emission repairs | `game/final_emission_repairs.py` | `tests/test_final_emission_repairs.py` | Fallback/gate/quality/leak suites | Black-box `repair_fallback_behavior` use downstream |
+| Stage diff telemetry | `game/stage_diff_telemetry.py` | `tests/test_stage_diff_telemetry.py` | `tests/test_turn_packet_stage_diff_integration.py`, `tests/test_narrative_authenticity_aer4.py` | `resolve_gate_turn_packet(...)` wrapper |
+| Strict-social exchange emission | `game/social_exchange_emission.py` | `tests/test_social_exchange_emission.py` | Emergency fallback dialogue, emission quality, establishment flows | Legacy repair alias coverage |
+
+**Resolved at ownership level:** Repairs (AR18), gate orchestration + continuity adjacency (AR19), and the prior telemetry-vs-packet **semantic** ambiguity (TD1/TD2-R + AR17-R2 narrative in this file). Audit scorecard may still show `mixed / caution`, `partial mismatch` strings, or **inventory-docs** flags — interpret those as **heuristic / prose / archaeology weight**, not as evidence of co-equal test homes for the same contract.
+
+**Remaining non-blocking polish:** keep `tests/TEST_AUDIT.md`, `tests/test_inventory.json`, and `tools/test_audit.py` outputs aligned with the ledger; refresh inventory after large suite edits (`py -3 tools/test_audit.py`).

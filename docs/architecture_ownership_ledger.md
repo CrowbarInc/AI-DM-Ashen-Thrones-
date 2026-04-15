@@ -10,116 +10,145 @@ They establish the cleanup target: future moves, trims, and test/doc realignment
 
 If current code shape still contradicts a declaration, treat that contradiction as cleanup work to reduce, not as a reason to blur the boundary again.
 
+## Standard seam presentation
+
+Each governed seam below uses the same four rows (plus boundary notes where helpful):
+
+1. **Runtime owner** — canonical `game/` module for the invariant.
+2. **Practical primary direct-owner suite** — pytest module that should own direct semantic assertions first.
+3. **Secondary downstream suites** — integration, smoke, validators, transcripts, or compatibility consumers; they exercise shipped behavior but are not alternate semantic homes.
+4. **Compatibility / support residue** — supported read paths, historical aliases, or extracted helpers that may remain importable without re-opening co-equal ownership.
+
+**Current governance read:** Major emit-path seams below are **resolved at the ownership level** (singular runtime owner + direct-owner suite + intentional downstream consumers). Remaining work is **drift-watch**, audit heuristics, archaeology/coupling on the scorecard, and keeping `tests/TEST_AUDIT.md` / inventory artifacts aligned—not unresolved split ownership between co-equal test homes.
+
 ## Response Policy Contracts
 
-- Concern name: `response policy contracts`
 - Canonical owner module: `game/response_policy_contracts.py`
 - Non-owner supporting modules: `game/final_emission_repairs.py`, `game/final_emission_gate.py`, `game/prompt_context.py`
-- Forbidden owner interpretations: `game/final_emission_repairs.py` is not the contract authority; `game/final_emission_gate.py` is not the place to redefine contract rules; `game/prompt_context.py` is not the canonical home for post-prompt contract resolution helpers.
-- Belongs here: response-policy contract shape builders, resolution helpers, and read-only contract accessors that tell downstream layers what was shipped.
-- Does not belong here: validator verdicts, repair strategies, layer ordering, or final-emission metadata packaging.
-- Compatibility residue still allowed: private compatibility accessors may remain importable, and top-level `fallback_behavior` / `social_response_structure_contract` fallbacks may remain supported for older payload shapes.
-- Compatibility residue interpretation: these paths are tolerated read-side residue, not equal semantic homes or a reason to re-center authority on repair, gate, validator, or prompt-adjacent modules.
-- Practical primary direct-owner suite: `tests/test_response_policy_contracts.py`
-- Secondary response-policy coverage only: `tests/test_fallback_shipped_contract_propagation.py`, `tests/test_response_delta_requirement.py`, `tests/test_final_emission_gate.py`, `tests/test_social_exchange_emission.py`, `tests/test_final_emission_validators.py`, `tests/test_interaction_continuity_contract.py`, `tests/test_interaction_continuity_validation.py`
-- Governance note: docs should describe this seam as `runtime owner -> direct-owner suite -> downstream secondary coverage`, not as repair-, validator-, or gate-centered co-ownership.
-- Current state: `targeted cleanup in progress`
+- Current state: `governance-aligned; drift-watch`
+- **Concern name:** `response policy contracts`
+- **Runtime owner:** `game/response_policy_contracts.py`
+- **Practical primary direct-owner suite:** `tests/test_response_policy_contracts.py`
+- **Secondary downstream suites:** `tests/test_fallback_shipped_contract_propagation.py`, `tests/test_response_delta_requirement.py`, `tests/test_final_emission_gate.py`, `tests/test_social_exchange_emission.py`, `tests/test_final_emission_validators.py`, `tests/test_interaction_continuity_contract.py`, `tests/test_interaction_continuity_validation.py`
+- **Compatibility / support residue:** private compatibility accessors may remain importable; top-level `fallback_behavior` / `social_response_structure_contract` fallbacks may remain supported for older payload shapes. Interpret as read-side tolerance, not equal semantic homes.
+- **Non-owner adjacent modules:** `game/final_emission_repairs.py`, `game/final_emission_gate.py`, `game/prompt_context.py` (must not become the contract authority, gate rule source, or post-prompt resolver owner).
+- **Belongs in runtime owner:** response-policy contract shape builders, resolution helpers, and read-only accessors that tell downstream layers what was shipped.
+- **Does not belong in runtime owner:** validator verdicts, repair strategies, layer ordering, final-emission metadata packaging.
+- **Governance note:** describe as `runtime owner → direct-owner suite → downstream suites`, not repair-, validator-, or gate-centered parallel authority.
 
 ## Prompt Contracts
 
-- Concern name: `prompt contracts`
 - Canonical owner module: `game/prompt_context.py`
 - Non-owner supporting modules: `game/prompt_context_leads.py`, `game/response_policy_contracts.py`
-- Forbidden owner interpretations: `game/prompt_context_leads.py` is not a second prompt-contract owner; `game/response_policy_contracts.py` is not the owner of the full prompt-context bundle.
-- Belongs here: prompt-context assembly, prompt-facing contract bundling, and deterministic export of the contract payload that narration receives.
-- Does not belong here: extracted lead-only helper logic as a rival owner, validator/repair policy, or emit-order orchestration.
-- Compatibility residue still allowed: support-only extraction residue may remain in `game/prompt_context_leads.py`, and exported consumer paths may continue to consume prompt-owned bundles without becoming prompt owners themselves.
-- Compatibility residue interpretation: those paths are support/consumption residue, not equal semantic homes or a reason to re-center prompt authority away from `game/prompt_context.py`.
-- Practical primary direct-owner suite: `tests/test_prompt_context.py`
-- Secondary prompt coverage only: `tests/test_prompt_compression.py`, `tests/test_prompt_and_guard.py`, `tests/test_dialogue_interaction_establishment.py`, `tests/test_fallback_shipped_contract_propagation.py`, `tests/test_social_escalation.py`, `tests/test_social_interaction_authority.py`, `tests/test_social_speaker_grounding.py`, `tests/test_social_topic_anchor.py`, `tests/test_stale_interlocutor_invalidation_block3.py`, `tests/test_strict_social_answer_pressure_cashout.py`, `tests/test_synthetic_sessions.py`, `tests/test_answer_completeness_rules.py`, `tests/test_turn_pipeline_shared.py`, plus relevant gate/emission/transcript suites such as `tests/test_final_emission_gate.py`, `tests/test_social_exchange_emission.py`, and `tests/test_narration_transcript_regressions.py`
-- Governance note: docs should describe this seam as `runtime owner -> direct-owner suite -> downstream secondary coverage`, not as several equal prompt authorities.
-- Current state: `targeted cleanup in progress`
+- Current state: `governance-aligned; drift-watch`
+- **Concern name:** `prompt contracts`
+- **Runtime owner:** `game/prompt_context.py`
+- **Practical primary direct-owner suite:** `tests/test_prompt_context.py`
+- **Secondary downstream suites:** `tests/test_prompt_compression.py`, `tests/test_prompt_and_guard.py`, `tests/test_dialogue_interaction_establishment.py`, `tests/test_fallback_shipped_contract_propagation.py`, `tests/test_social_escalation.py`, `tests/test_social_interaction_authority.py`, `tests/test_social_speaker_grounding.py`, `tests/test_social_topic_anchor.py`, `tests/test_stale_interlocutor_invalidation_block3.py`, `tests/test_strict_social_answer_pressure_cashout.py`, `tests/test_synthetic_sessions.py`, `tests/test_answer_completeness_rules.py`, `tests/test_turn_pipeline_shared.py`, plus gate/emission/transcript suites such as `tests/test_final_emission_gate.py`, `tests/test_social_exchange_emission.py`, and `tests/test_narration_transcript_regressions.py`
+- **Compatibility / support residue:** support-only extraction in `game/prompt_context_leads.py`; exported consumer paths may consume prompt-owned bundles without becoming prompt owners.
+- **Non-owner adjacent modules:** `game/prompt_context_leads.py`, `game/response_policy_contracts.py` (not rival owners of the full prompt bundle).
+- **Belongs in runtime owner:** prompt-context assembly, prompt-facing contract bundling, deterministic export of the contract payload narration receives.
+- **Does not belong in runtime owner:** extracted lead-only logic as a rival owner, validator/repair policy, emit-order orchestration.
+- **Governance note:** describe as `runtime owner → direct-owner suite → downstream suites`, not several equal prompt authorities.
 
 ## Strict-social Exchange Emission Seam
 
-- Concern name: `strict-social exchange emission seam`
 - Canonical owner module: `game/social_exchange_emission.py`
 - Non-owner supporting modules: `game/final_emission_gate.py`, `game/gm.py`, `game/gm_retry.py`
-- Forbidden owner interpretations: `game/gm.py` is not the semantic owner of terminal strict-social dialogue application; `game/gm_retry.py` is not a second authority for the seam just because retry-terminal wiring passes through it; `game/final_emission_gate.py` is not the place to redefine strict-social exchange emission semantics.
-- Belongs here: downstream strict-social exchange emission normalization, ownership filtering, deterministic fallback shaping, and terminal dialogue application once the dialogue-contract verdict is already known.
-- Does not belong here: canonical response-policy contract resolution, general repair governance, or top-level gate orchestration.
-- Compatibility residue still allowed: the legacy `repair_strict_social_terminal_dialogue_fallback_if_needed(...)` helper may remain importable as an explicit compatibility alias.
-- Compatibility residue interpretation: historical-path coverage for that alias should stay labeled as compatibility evidence, not as a reason to treat retry/repair-heavy suites as co-equal semantic owners.
-- Practical primary direct-owner suite: `tests/test_social_exchange_emission.py`
-- Secondary strict-social exchange coverage only: `tests/test_strict_social_emergency_fallback_dialogue.py`, `tests/test_social_emission_quality.py`, `tests/test_dialogue_interaction_establishment.py`
-- Governance note: docs should describe this seam as `runtime owner -> direct-owner suite -> downstream secondary / compatibility coverage`, not as mixed emission-vs-repair co-ownership.
-- Current state: `targeted cleanup in progress`
+- Current state: `governance-aligned; drift-watch`
+- **Concern name:** `strict-social exchange emission seam`
+- **Runtime owner:** `game/social_exchange_emission.py`
+- **Practical primary direct-owner suite:** `tests/test_social_exchange_emission.py`
+- **Secondary downstream suites:** `tests/test_strict_social_emergency_fallback_dialogue.py`, `tests/test_social_emission_quality.py`, `tests/test_dialogue_interaction_establishment.py`
+- **Compatibility / support residue:** legacy `repair_strict_social_terminal_dialogue_fallback_if_needed(...)` may remain importable as an explicit compatibility alias; historical-path tests should label alias coverage as compatibility, not semantic ownership.
+- **Non-owner adjacent modules:** `game/final_emission_gate.py`, `game/gm.py`, `game/gm_retry.py` (not owners of terminal strict-social dialogue semantics).
+- **Belongs in runtime owner:** strict-social exchange emission normalization, ownership filtering, deterministic fallback shaping, terminal dialogue application once the dialogue-contract verdict is known.
+- **Does not belong in runtime owner:** canonical response-policy resolution, general repair governance, top-level gate orchestration.
+- **Governance note:** describe as `runtime owner → direct-owner suite → downstream / compatibility coverage`, not mixed emission-vs-repair parallel authority.
 
 ## Final Emission Gate Orchestration
 
-- Concern name: `final emission gate orchestration`
 - Canonical owner module: `game/final_emission_gate.py`
 - Non-owner supporting modules: `game/final_emission_repairs.py`, `game/final_emission_meta.py`
-- Forbidden owner interpretations: `game/final_emission_meta.py` is not the orchestration owner; `game/final_emission_repairs.py` is not the top-level layer-order authority.
-- Belongs here: final-emission layer ordering, gate-level integration, last-mile finalize flow, and calls into validators, repairs, sanitizer, and metadata packaging.
-- Does not belong here: canonical metadata schema ownership, standalone contract-authority logic, or telemetry ownership.
-- Compatibility residue still allowed: `game/final_emission_meta.py` may remain as metadata packaging / read-side support, and retry / observability / pipeline-adjacent consumers may continue to pass through the gate without becoming orchestration owners.
-- Compatibility residue interpretation: metadata packaging/read-side helpers and retry/telemetry/pipeline adjacency are support-only residue, not equal orchestration homes.
-- Practical primary direct-owner suite: `tests/test_final_emission_gate.py`
-- Secondary downstream coverage only: `tests/test_social_exchange_emission.py`, `tests/test_turn_pipeline_shared.py`, `tests/test_stage_diff_telemetry.py`, `tests/test_social_emission_quality.py`, `tests/test_dead_turn_detection.py`, `tests/test_interaction_continuity_speaker_bridge.py`, `tests/test_interaction_continuity_validation.py`, `tests/test_interaction_continuity_repair.py`, plus transcript/regression suites such as `tests/test_narration_transcript_regressions.py`
-- Governance note: docs should describe this seam as `runtime owner -> direct-owner suite -> downstream secondary / support coverage`, not as mixed gate/meta/telemetry/pipeline co-ownership.
-- Current state: `targeted cleanup in progress`
+- Current state: `governance-aligned; drift-watch`
+- **Concern name:** `final emission gate orchestration`
+- **Runtime owner:** `game/final_emission_gate.py`
+- **Practical primary direct-owner suite:** `tests/test_final_emission_gate.py`
+- **Secondary downstream suites:** `tests/test_social_exchange_emission.py`, `tests/test_turn_pipeline_shared.py`, `tests/test_stage_diff_telemetry.py`, `tests/test_social_emission_quality.py`, `tests/test_dead_turn_detection.py`, `tests/test_interaction_continuity_speaker_bridge.py`, `tests/test_interaction_continuity_validation.py`, `tests/test_interaction_continuity_repair.py`, plus transcript/regression suites such as `tests/test_narration_transcript_regressions.py`
+- **Compatibility / support residue:** `game/final_emission_meta.py` as metadata packaging / read-side support; retry / observability / pipeline consumers may pass through the gate without owning orchestration order.
+- **Non-owner adjacent modules:** `game/final_emission_repairs.py`, `game/final_emission_meta.py` (not layer-order or orchestration authorities).
+- **Belongs in runtime owner:** final-emission layer ordering, gate-level integration, last-mile finalize flow, calls into validators, repairs, sanitizer, metadata packaging.
+- **Does not belong in runtime owner:** canonical metadata schema ownership, standalone contract-authority logic, telemetry field semantics.
+- **Governance note:** describe as `runtime owner → direct-owner suite → downstream suites`, not mixed gate/meta/telemetry/pipeline parallel ownership.
 
 ## Final Emission Repairs
 
-final emission repairs:  
-runtime owner: `game.final_emission_repairs`  
-practical owner suite: `tests/test_final_emission_repairs.py`  
-secondary suites: downstream consumers only (fallback, gate, retry)
+- Canonical owner module: `game/final_emission_repairs.py`
+- Non-owner supporting modules: `game/final_emission_gate.py`, `game/final_emission_meta.py`
+- Current state: `governance-aligned; drift-watch`
+- **Concern name:** `final emission repairs`
+- **Runtime owner:** `game/final_emission_repairs.py`
+- **Practical primary direct-owner suite:** `tests/test_final_emission_repairs.py`
+- **Secondary downstream suites:** `tests/test_fallback_behavior_repairs.py`, `tests/test_fallback_behavior_gate.py`, `tests/test_bounded_partial_quality.py`, `tests/test_social_fallback_leak_containment.py` — fallback, gate, retry, quality, and leak **consumers** of repaired outputs and metadata only.
+- **Compatibility / support residue:** downstream suites may call `repair_fallback_behavior(...)` as a black box or observe repair-shaped metadata without re-owning derivation helpers.
+- **Governance note:** repair derivation and private helper semantics stay in the direct-owner suite; adjacent files stay framed as downstream consumption.
 
 ## Final Emission Metadata Packaging
 
-- Concern name: `final emission metadata packaging`
 - Canonical owner module: `game/final_emission_meta.py`
 - Non-owner supporting modules: `game/final_emission_gate.py`, `game/final_emission_repairs.py`
-- Forbidden owner interpretations: `game/final_emission_gate.py` is not the metadata-schema owner; `game/final_emission_repairs.py` is not the place to define durable `_final_emission_meta` field shapes.
-- Belongs here: metadata-only field defaults, merge helpers, slimming/coercion helpers, and stable packaging/read-side helpers for `_final_emission_meta`.
-- Does not belong here: gate sequencing, validator decisions, repair control flow, or prompt-contract ownership.
-- Current state: `targeted cleanup in progress`
+- Current state: `governance-aligned; drift-watch`
+- **Concern name:** `final emission metadata packaging`
+- **Runtime owner:** `game/final_emission_meta.py`
+- **Practical primary direct-owner suite:** `tests/test_final_emission_meta.py`
+- **Secondary downstream suites:** gate, validator, and emission suites that assert packaged `_final_emission_meta` outcomes without owning merge/schema policy.
+- **Compatibility / support residue:** historical tests may touch both gate and meta; treat meta helpers as write-time/read-side packaging, subordinate to gate orchestration.
+- **Non-owner adjacent modules:** `game/final_emission_gate.py`, `game/final_emission_repairs.py` (not metadata-schema owners).
+- **Belongs in runtime owner:** metadata-only field defaults, merge helpers, slimming/coercion, stable packaging/read-side helpers for `_final_emission_meta`.
+- **Does not belong in runtime owner:** gate sequencing, validator decisions, repair control flow, prompt-contract ownership.
 
 ## Stage Diff Telemetry
 
-- Concern name: `stage diff telemetry`
 - Canonical owner module: `game/stage_diff_telemetry.py`
 - Non-owner supporting modules: `game/turn_packet.py`, `game/final_emission_gate.py`
-- Forbidden owner interpretations: `game/turn_packet.py` is not the telemetry owner; `game/final_emission_gate.py` is not a parallel telemetry schema authority.
-- Belongs here: bounded stage snapshots, transition records, compact previews/fingerprints, and telemetry merge/write helpers.
-- Does not belong here: canonical packet contract definition, engine truth, or narration-policy ownership.
-- Compatibility residue still allowed: `game.stage_diff_telemetry.resolve_gate_turn_packet(...)` may remain as a compatibility wrapper over packet-owned resolution, and packet/gate/retry consumers may continue to read emitted telemetry without becoming telemetry owners.
-- Compatibility residue interpretation: packet-boundary adjacency and gate/retry observability paths are support/consumption residue, not equal semantic homes or a reason to re-center telemetry authority away from `game/stage_diff_telemetry.py`.
-- Practical primary direct-owner suite: `tests/test_stage_diff_telemetry.py`
-- Secondary downstream coverage only: `tests/test_turn_packet_stage_diff_integration.py`, `tests/test_narrative_authenticity_aer4.py`
-- Governance note: docs should describe this seam as `runtime owner -> direct-owner suite -> downstream secondary / compatibility coverage`, while keeping `game/turn_packet.py` explicit as the packet-boundary owner rather than a telemetry co-owner.
-- Current state: `targeted cleanup in progress`
+- Current state: `governance-aligned; drift-watch`
+- **Concern name:** `stage diff telemetry`
+- **Runtime owner:** `game/stage_diff_telemetry.py`
+- **Practical primary direct-owner suite:** `tests/test_stage_diff_telemetry.py`
+- **Secondary downstream suites:** `tests/test_turn_packet_stage_diff_integration.py`, `tests/test_narrative_authenticity_aer4.py`
+- **Compatibility / support residue:** `game.stage_diff_telemetry.resolve_gate_turn_packet(...)` as a compatibility wrapper over packet-owned resolution; packet/gate/retry consumers may read emitted telemetry without owning snapshot/diff helper semantics.
+- **Packet-boundary owner (related seam):** `game/turn_packet.py` owns the packet contract; it is not the telemetry semantic owner.
+- **Non-owner adjacent modules:** `game/turn_packet.py`, `game/final_emission_gate.py` (not parallel telemetry schema authorities).
+- **Belongs in runtime owner:** bounded stage snapshots, transition records, compact previews/fingerprints, telemetry merge/write helpers.
+- **Does not belong in runtime owner:** canonical packet contract definition, engine truth, narration-policy ownership.
+- **Governance note:** describe as `runtime owner → direct-owner suite → downstream suites`, with `game/turn_packet.py` explicit as packet-boundary owner, not telemetry co-owner.
 
 ## Turn Packet Contract Boundary
 
-- Concern name: `turn packet contract boundary`
 - Canonical owner module: `game/turn_packet.py`
 - Non-owner supporting modules: `game/stage_diff_telemetry.py`, `game/final_emission_gate.py`
-- Forbidden owner interpretations: `game/stage_diff_telemetry.py` is not the packet-contract owner; `game/final_emission_gate.py` is not a second packet schema home.
-- Belongs here: compact versioned packet construction, packet accessors, packet fallback resolution, and the declared packet lookup order for consumers.
-- Does not belong here: telemetry ownership, gate orchestration, or validator/repair behavior.
-- Current state: `targeted cleanup in progress`
+- Current state: `governance-aligned; drift-watch`
+- **Concern name:** `turn packet contract boundary`
+- **Runtime owner:** `game/turn_packet.py`
+- **Practical primary direct-owner suite:** focused packet tests (e.g. `tests/test_turn_packet_accessors.py` and related modules per `tests/TEST_AUDIT.md` / inventory).
+- **Secondary downstream suites:** gate, telemetry integration, and narrative-authenticity suites that consume resolved packets without owning packet schema policy.
+- **Compatibility / support residue:** telemetry compatibility wrappers that delegate packet resolution to this owner.
+- **Non-owner adjacent modules:** `game/stage_diff_telemetry.py`, `game/final_emission_gate.py` (not packet-contract owners).
+- **Belongs in runtime owner:** compact versioned packet construction, accessors, packet fallback resolution, declared packet lookup order.
+- **Does not belong in runtime owner:** telemetry ownership, gate orchestration, validator/repair behavior.
 
 ## Test Inventory And Governance Docs
 
-- Concern name: `test inventory / governance docs`
 - Canonical owner module: `tests/TEST_AUDIT.md`
 - Non-owner supporting modules: `tests/README_TESTS.md`, `tests/TEST_CONSOLIDATION_PLAN.md`, `tools/test_audit.py`
-- Forbidden owner interpretations: `tests/README_TESTS.md` is not the canonical governance map; `tools/test_audit.py` is not the prose authority for suite governance by itself; `tests/TEST_CONSOLIDATION_PLAN.md` is not the day-to-day ownership ledger.
-- Belongs here: canonical ownership map for test themes, overlap-hotspot guidance, and governance language about where new tests should live.
-- Does not belong here: procedural command reference, implementation details of inventory generation, or long-range consolidation execution steps.
-- Authority note: these docs are subordinate governance maps. They should mirror runtime owners and practical direct-owner suites rather than act as a second authority layer above them.
-- Prompt-governance note: for prompt contracts, `tests/TEST_AUDIT.md` should point first to `game/prompt_context.py` and `tests/test_prompt_context.py`, then classify `tests/test_prompt_compression.py`, `tests/test_prompt_and_guard.py`, `tests/test_strict_social_answer_pressure_cashout.py`, `tests/test_synthetic_sessions.py`, `tests/test_answer_completeness_rules.py`, `tests/test_turn_pipeline_shared.py`, `tests/test_final_emission_gate.py`, `tests/test_social_exchange_emission.py`, and `tests/test_narration_transcript_regressions.py` as secondary coverage.
-- Current state: `targeted cleanup in progress`
+- Current state: `governance map; refresh inventory with tools/test_audit.py`
+- **Concern name:** `test inventory / governance docs`
+- **Runtime owner:** (prose contract) `tests/TEST_AUDIT.md` — canonical **map** of where pytest coverage should land by theme.
+- **Practical primary direct-owner suite:** governance tables and notes in `tests/TEST_AUDIT.md`; regenerate numbers via `tools/test_audit.py` → `tests/test_inventory.json`.
+- **Secondary downstream suites:** `tests/README_TESTS.md` (how to run), `tests/TEST_CONSOLIDATION_PLAN.md` (campaign / execution history), `tools/test_audit.py` (inventory generator only).
+- **Compatibility / support residue:** dated markdown snapshots coexisting with JSON inventory until refreshed; heuristic tags may over-count files touching a theme—interpret as spread diagnostics, not proof of duplicate tests.
+- **Forbidden owner interpretations:** README is not the canonical governance map; `test_audit.py` is not the prose authority for suite semantics; consolidation plan is not the day-to-day ledger.
+- **Belongs here:** ownership map for test themes, overlap-hotspot guidance, language for where new tests should live.
+- **Does not belong here:** long procedural command reference (defer to README), inventory implementation details, long-range consolidation execution steps.
+- **Authority note:** subordinate maps must mirror runtime owners and practical direct-owner suites from this ledger, not compete as a higher authority layer.
+- **Prompt pointer:** for prompt contracts, `tests/TEST_AUDIT.md` points first to `game/prompt_context.py` and `tests/test_prompt_context.py`, then lists downstream suites as consumers.

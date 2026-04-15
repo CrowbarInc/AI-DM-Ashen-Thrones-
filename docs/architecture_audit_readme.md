@@ -27,6 +27,13 @@ Treat it as a deterministic triage layer, not as a formal proof system.
 
 The canonical ownership declaration for ambiguous seams now lives in `docs/architecture_ownership_ledger.md`.
 
+Each governed seam in the ledger is presented in the same four-row shape (also used in `tests/TEST_AUDIT.md` theme rows):
+
+1. **Runtime owner** — canonical `game/` module.
+2. **Practical primary direct-owner suite** — pytest module for direct semantic assertions first.
+3. **Secondary downstream suites** — consumers (integration, smoke, validators, transcripts).
+4. **Compatibility / support residue** — tolerated read paths or aliases that must not re-open co-equal ownership.
+
 Important operator note:
 
 - ownership declarations do not prove the code is already clean
