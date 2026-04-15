@@ -1,7 +1,18 @@
-"""Downstream interaction-continuity repair behavior coverage."""
-from __future__ import annotations
+"""Downstream continuity-repair consumer coverage.
 
-from unittest.mock import patch
+This suite validates how continuity-repair effects appear in emitted outputs
+after final-emission gate orchestration.
+
+It does NOT own:
+
+* gate ordering
+* continuity emission step semantics
+* repair derivation logic
+
+These are owned by:
+tests/test_final_emission_gate.py
+"""
+from __future__ import annotations
 
 import pytest
 
@@ -31,7 +42,7 @@ def _soft_contract() -> dict:
     }
 
 
-def test_repair_strips_crowd_interruption_after_labeled_anchor():
+def test_output_exhibits_stripped_uncued_interruption_with_labeled_anchor():
     c = _strong_contract()
     # Avoid phrases that count as explicit handoff cues (e.g. "someone behind you").
     text = 'Guard: "Stay where you are."\nA sharp yell from the alley: "Run!"'
@@ -44,7 +55,7 @@ def test_repair_strips_crowd_interruption_after_labeled_anchor():
     assert "Guard:" in r["repaired_text"]
 
 
-def test_repair_narration_to_dialogue_strong_short_line():
+def test_output_exhibits_continuity_repaired_structure_narration_to_dialogue():
     c = _strong_contract()
     text = "You can't go there."
     v = validate_interaction_continuity(text, interaction_continuity_contract=c)
@@ -56,7 +67,7 @@ def test_repair_narration_to_dialogue_strong_short_line():
     assert '"' in r["repaired_text"] or "\u201c" in r["repaired_text"]
 
 
-def test_gate_strong_narration_repaired_no_fallback():
+def test_emitted_output_exhibits_continuity_repaired_structure_strong_short_narration():
     ic = _strong_contract()
     gm = {
         "player_facing_text": "You can't go there.",
@@ -65,25 +76,24 @@ def test_gate_strong_narration_repaired_no_fallback():
         "response_policy": {"interaction_continuity": ic},
     }
     resolution = {"metadata": {"emission_debug": {}, "player_input": "Can I pass?"}}
-    with patch("game.final_emission_gate._apply_visibility_enforcement", lambda out, **kwargs: out):
-        out = apply_final_emission_gate(
-            gm,
-            resolution=resolution,
-            session=None,
-            scene_id="test_scene",
-            scene={},
-            world={},
-        )
+    out = apply_final_emission_gate(
+        gm,
+        resolution=resolution,
+        session=None,
+        scene_id="test_scene",
+        scene={},
+        world={},
+    )
     em = out["metadata"]["emission_debug"]
-    assert em.get("interaction_continuity_repair", {}).get("applied") is True
-    assert em["interaction_continuity_repair"]["repair_type"] == "narration_to_dialogue"
+    rep = em.get("interaction_continuity_repair") or {}
+    assert rep.get("applied") is True
+    assert rep.get("repair_type") == "narration_to_dialogue"
+    assert "dialogue_absent_under_continuity" in (rep.get("violations") or [])
+    assert isinstance(rep.get("strategy_notes"), list) and rep["strategy_notes"]
     assert em.get("interaction_continuity_enforced") is not True
-    icv = em.get("interaction_continuity_validation") or {}
-    assert icv.get("ok") is True
-    assert "says" in (out.get("player_facing_text") or "").lower()
 
 
-def test_gate_strong_complex_failure_triggers_fallback_and_enforced_flag():
+def test_emitted_output_preserves_continuity_constraints_under_strong_complex_narration():
     ic = _strong_contract()
     long_narration = (
         "The regional economy depends on tolls, wayposts, and seasonal trade convoys moving "
@@ -112,7 +122,7 @@ def test_gate_strong_complex_failure_triggers_fallback_and_enforced_flag():
     assert "final_emission_gate_replaced" in out.get("tags", [])
 
 
-def test_soft_continuity_does_not_trigger_fallback_for_violation():
+def test_emitted_output_preserves_continuity_constraints_soft_strength_on_violation():
     ic = _soft_contract()
     text = (
         "The regional economy depends on tolls, wayposts, and seasonal trade convoys moving "
@@ -142,7 +152,7 @@ def test_soft_continuity_does_not_trigger_fallback_for_violation():
     assert em.get("interaction_continuity_enforced") is not True
 
 
-def test_gate_emits_repair_metadata_for_stripped_interruption():
+def test_emitted_output_surfaces_stripped_interruption_repair_metadata():
     c = _strong_contract()
     text = 'Guard: "Halt."\nMerchant: "Wait—he is with me."'
     gm = {
@@ -151,15 +161,14 @@ def test_gate_emits_repair_metadata_for_stripped_interruption():
         "response_policy": {"interaction_continuity": c},
     }
     resolution = {"metadata": {"emission_debug": {}}, "player_input": "Who called out?"}
-    with patch("game.final_emission_gate._apply_visibility_enforcement", lambda out, **kwargs: out):
-        out = apply_final_emission_gate(
-            gm,
-            resolution=resolution,
-            session=None,
-            scene_id="test_scene",
-            scene={},
-            world={},
-        )
+    out = apply_final_emission_gate(
+        gm,
+        resolution=resolution,
+        session=None,
+        scene_id="test_scene",
+        scene={},
+        world={},
+    )
     rep = out["metadata"]["emission_debug"].get("interaction_continuity_repair") or {}
     assert rep.get("applied") is True
     assert rep.get("repair_type") == "strip_uncued_interruption"

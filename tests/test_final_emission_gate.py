@@ -10,6 +10,15 @@ rather than re-own orchestration order or gate-private attachment behavior there
 those files stay consumer, smoke, observability, packaged-snapshot, or regression
 coverage once the orchestration contract is already owned here.
 """
+
+# === PRACTICAL OWNER SUITE ===
+# This suite owns:
+# - gate orchestration order
+# - continuity step placement
+# - repair-before-validation guarantees
+#
+# All other suites must consume outputs only.
+
 from __future__ import annotations
 
 import json

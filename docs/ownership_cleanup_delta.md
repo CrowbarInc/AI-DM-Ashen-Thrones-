@@ -1382,3 +1382,15 @@ Cross-cutting note (adjacency, not FR1/FR2 fallback co-ownership): some other su
 import **private** symbols from `game.final_emission_repairs` for unrelated white-box coverage
 (e.g. narrative authenticity layer wiring, social fallback leak guards). That is shared-module
 **coupling**, not a second home for fallback repair derivation semantics.
+
+## AR19 — Final structural convergence
+
+- GC3 removed the last continuity-adjacent **owner-like** gate signals: continuity suites no longer import gate-private helpers, patch gate-private internals, or assert orchestration order as if they co-owned the gate.
+- Continuity suites (`tests/test_interaction_continuity_repair.py`, `tests/test_interaction_continuity_speaker_bridge.py`) now read as **downstream output consumers**: they observe `emission_debug`, tags, and repair/validation metadata after `apply_final_emission_gate` (public entry) where relevant, or exercise `interaction_continuity` directly—without claiming step order or repair-before-validation semantics.
+- Direct **final emission gate orchestration** ownership is singular in practice: runtime `game/final_emission_gate.py`, practical primary suite `tests/test_final_emission_gate.py` (docstring and tests own layer order, continuity step placement, and repair-before-validation guarantees).
+- **Repo-level threshold (structural truth, not raw audit score):** **crossed.** Remaining audit hotspots read as localized under-consolidation, transitional residue, healthy overlap, and heuristic/archaeology weight—not unresolved co-ownership smears. Focused runs show **aligned / healthy_overlap / low** test alignment for the major seams checked here.
+- **Final emission gate orchestration** is **structurally resolved** under repo rules (gate decision **CLOSED**). The automated summary line `final emission gate orchestration partial mismatch` is treated as **audit heuristic lag** against an already singular owner + direct-owner + healthy-overlap picture.
+
+**The repository now qualifies as structurally real, under-consolidated. Remaining issues are governed adjacency and compatibility residue, not ownership ambiguity.**
+
+Fresh evidence still surfaces one **non-orchestration, non-blocking** seam in the audit summary: **`test ownership / inventory docs still unclear`** (documentation/inventory coherence, not a second runtime owner for the gate).

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-15T22:39:20.950872+00:00",
+  "generated_at": "2026-04-15T22:53:43.088302+00:00",
   "repo_root": "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm",
   "modules_analyzed": {
     "count": 86,
@@ -1981,7 +1981,7 @@
       },
       {
         "path": "docs/ownership_cleanup_delta.md",
-        "line_count": 1358,
+        "line_count": 1384,
         "ownership_terms": [
           "canonical",
           "orchestration",
@@ -3130,7 +3130,7 @@
       },
       {
         "path": "tests/test_final_emission_gate.py",
-        "line_count": 3030,
+        "line_count": 3039,
         "test_function_count": 165,
         "import_count": 14,
         "ownership_terms": [
@@ -3485,10 +3485,11 @@
       },
       {
         "path": "tests/test_interaction_continuity_repair.py",
-        "line_count": 170,
+        "line_count": 179,
         "test_function_count": 8,
-        "import_count": 5,
+        "import_count": 4,
         "ownership_terms": [
+          "orchestration",
           "repair"
         ],
         "residue_terms": [],
@@ -3504,7 +3505,7 @@
       },
       {
         "path": "tests/test_interaction_continuity_speaker_bridge.py",
-        "line_count": 70,
+        "line_count": 79,
         "test_function_count": 5,
         "import_count": 3,
         "ownership_terms": [
@@ -8955,7 +8956,7 @@
         "docs/narrative_integrity_architecture.md: - **`game/final_emission_gate.py` remains the `apply_final_emission_gate` orchestration owner** \u2014 helpers may be split out when they are clearly **pure** (validators), **deterministic** repairs, shared text utilities, or **metadata-only** glue; anything that orders layers, integrates sanitizer paths, or seals strict-social emit paths stays in **orchestration** unless a later pass proves a zero-ambiguity move.",
         "docs/ownership_cleanup_delta.md: - Current apparent owner shape: `game/final_emission_gate.py` is again the visible orchestration owner; `game/final_emission_meta.py` reads as a subordinate metadata-only support layer.",
         "documentation references: 6",
-        "test references (metadata only): 4"
+        "test references (metadata only): 5"
       ],
       "role_labels": [
         "orchestration_owner"
@@ -9077,7 +9078,7 @@
             "docs/narrative_integrity_architecture.md: - **`game/final_emission_gate.py` remains the `apply_final_emission_gate` orchestration owner** \u2014 helpers may be split out when they are clearly **pure** (validators), **deterministic** repairs, shared text utilities, or **metadata-only** glue; anything that orders layers, integrates sanitizer paths, or seals strict-social emit paths stays in **orchestration** unless a later pass proves a zero-ambiguity move.",
             "docs/ownership_cleanup_delta.md: - Current apparent owner shape: `game/final_emission_gate.py` is again the visible orchestration owner; `game/final_emission_meta.py` reads as a subordinate metadata-only support layer.",
             "documentation references: 6",
-            "test references (metadata only): 4"
+            "test references (metadata only): 5"
           ],
           "role_labels": [
             "orchestration_owner"
@@ -9154,6 +9155,9 @@
             },
             {
               "source": "tests/test_architecture_audit_tool.py"
+            },
+            {
+              "source": "tests/test_interaction_continuity_repair.py"
             },
             {
               "source": "tests/test_narrative_authority_rules.py"
@@ -10148,6 +10152,7 @@
         "docs/current_focus.md",
         "docs/narrative_authenticity_anti_echo_rumor_realism.md",
         "docs/narrative_integrity_architecture.md",
+        "docs/ownership_cleanup_delta.md",
         "docs/playability_validation.md",
         "docs/testing.md",
         "tests/TEST_CONSOLIDATION_PLAN.md"
@@ -10567,60 +10572,67 @@
             "excerpt": "See **`tests/TEST_AUDIT.md`** for the current governance map and **`tests/TEST_CONSOLIDATION_PLAN.md`** for recorded consolidation boundaries. Those docs should follow runtime owners and practical direct-owner suites rat"
           },
           {
+            "source": "docs/ownership_cleanup_delta.md",
+            "claimed_owner": "tests/TEST_AUDIT.md",
+            "owner_type": "test",
+            "strength": "soft",
+            "excerpt": "- Declared owner: `tests/TEST_AUDIT.md`"
+          },
+          {
+            "source": "docs/ownership_cleanup_delta.md",
+            "claimed_owner": "tests/TEST_AUDIT.md",
+            "owner_type": "test",
+            "strength": "soft",
+            "excerpt": "- Current apparent owner shape: still a governance map rather than a runtime owner, but less self-contradictory. `tests/TEST_AUDIT.md` now more clearly points to actual runtime/test owners instead of sounding like a comp"
+          },
+          {
+            "source": "docs/ownership_cleanup_delta.md",
+            "claimed_owner": "tests/TEST_AUDIT.md",
+            "owner_type": "test",
+            "strength": "soft",
+            "excerpt": "- `docs/architecture_ownership_ledger.md`, `docs/narrative_integrity_architecture.md`, `docs/architecture_audit_readme.md`, and `tests/TEST_AUDIT.md` now tell the same owner story."
+          },
+          {
+            "source": "docs/ownership_cleanup_delta.md",
+            "claimed_owner": "tests/TEST_AUDIT.md",
+            "owner_type": "test",
+            "strength": "soft",
+            "excerpt": "- `tests/TEST_AUDIT.md` now reinforces the same owner story instead of treating retry-terminal or quality coverage as equal semantic owners"
+          },
+          {
+            "source": "docs/ownership_cleanup_delta.md",
+            "claimed_owner": "tests/TEST_AUDIT.md",
+            "owner_type": "test",
+            "strength": "soft",
+            "excerpt": "- `docs/architecture_ownership_ledger.md`, `docs/architecture_audit_readme.md`, and `tests/TEST_AUDIT.md` consistently declare `game/prompt_context.py` as runtime owner and `tests/test_prompt_context.py` as the practical"
+          },
+          {
+            "source": "docs/ownership_cleanup_delta.md",
+            "claimed_owner": "tests/TEST_AUDIT.md",
+            "owner_type": "test",
+            "strength": "soft",
+            "excerpt": "- `docs/architecture_ownership_ledger.md`, `docs/narrative_integrity_architecture.md`, and `tests/TEST_AUDIT.md` now consistently describe the seam as `runtime owner -> direct-owner suite -> downstream secondary coverage"
+          },
+          {
+            "source": "docs/ownership_cleanup_delta.md",
+            "claimed_owner": "tests/TEST_AUDIT.md",
+            "owner_type": "test",
+            "strength": "soft",
+            "excerpt": "- `tests/TEST_AUDIT.md` now records the intended split explicitly: `tests/test_stage_diff_telemetry.py` as the practical primary direct-owner suite, `tests/test_turn_packet_stage_diff_integration.py` as downstream packet"
+          },
+          {
+            "source": "docs/ownership_cleanup_delta.md",
+            "claimed_owner": "tests/TEST_AUDIT.md",
+            "owner_type": "test",
+            "strength": "soft",
+            "excerpt": "- `tests/TEST_AUDIT.md` now states a single owner narrative: repair semantics are owned by"
+          },
+          {
             "source": "docs/current_focus.md",
             "claimed_owner": "tests/TEST_CONSOLIDATION_PLAN.md",
             "owner_type": "test",
             "strength": "soft",
             "excerpt": "| **Prompt / sanitizer ownership boundaries** | Pre-generation vs post-GM paths stay split; **smoke overlap** only for cross-layer integration, not duplicate phrase legality suites (see `tests/TEST_CONSOLIDATION_PLAN.md`"
-          },
-          {
-            "source": "docs/narrative_integrity_architecture.md",
-            "claimed_owner": "tests/TEST_CONSOLIDATION_PLAN.md",
-            "owner_type": "test",
-            "strength": "soft",
-            "excerpt": "See **`tests/TEST_AUDIT.md`** for the current governance map and **`tests/TEST_CONSOLIDATION_PLAN.md`** for recorded consolidation boundaries. Those docs should follow runtime owners and practical direct-owner suites rat"
-          },
-          {
-            "source": "docs/narrative_integrity_architecture.md",
-            "claimed_owner": "tests/test_narrative_authenticity_aer4.py",
-            "owner_type": "test",
-            "strength": "soft",
-            "excerpt": "| Stage-diff telemetry / observability | `test_stage_diff_telemetry.py` (practical primary direct-owner suite for direct `game.stage_diff_telemetry` helper/accessor semantics, snapshot/transition packaging, bounded telem"
-          },
-          {
-            "source": "tests/TEST_CONSOLIDATION_PLAN.md",
-            "claimed_owner": "tests/test_narrative_authenticity_aer4.py",
-            "owner_type": "test",
-            "strength": "soft",
-            "excerpt": "**TD2-R applied (2026-04-15 \u2014 stage-diff telemetry governance alignment):** `game/stage_diff_telemetry.py` remains the canonical runtime owner for telemetry semantics, while `game/turn_packet.py` remains the packet-bound"
-          },
-          {
-            "source": "docs/narrative_integrity_architecture.md",
-            "claimed_owner": "tests/test_stage_diff_telemetry.py",
-            "owner_type": "test",
-            "strength": "soft",
-            "excerpt": "| Stage-diff telemetry / observability | `test_stage_diff_telemetry.py` (practical primary direct-owner suite for direct `game.stage_diff_telemetry` helper/accessor semantics, snapshot/transition packaging, bounded telem"
-          },
-          {
-            "source": "docs/narrative_integrity_architecture.md",
-            "claimed_owner": "tests/test_stage_diff_telemetry.py",
-            "owner_type": "test",
-            "strength": "soft",
-            "excerpt": "| Final emission gate ordering / contracts | `test_final_emission_gate.py` (practical primary direct-owner suite for direct orchestration-order, final-route, and continuity-adjacent gate-step semantics); downstream suite"
-          },
-          {
-            "source": "tests/TEST_CONSOLIDATION_PLAN.md",
-            "claimed_owner": "tests/test_stage_diff_telemetry.py",
-            "owner_type": "test",
-            "strength": "soft",
-            "excerpt": "**FG2-R applied (2026-04-15 \u2014 final-emission gate governance alignment):** `game/final_emission_gate.py` remains the canonical runtime owner and `tests/test_final_emission_gate.py` remains the practical primary direct-ow"
-          },
-          {
-            "source": "tests/TEST_CONSOLIDATION_PLAN.md",
-            "claimed_owner": "tests/test_stage_diff_telemetry.py",
-            "owner_type": "test",
-            "strength": "soft",
-            "excerpt": "**TD2-R applied (2026-04-15 \u2014 stage-diff telemetry governance alignment):** `game/stage_diff_telemetry.py` remains the canonical runtime owner for telemetry semantics, while `game/turn_packet.py` remains the packet-bound"
           }
         ],
         "practical_test_owner": "mixed: tests/test_narrative_authenticity.py, tests/test_narrative_authenticity_aer4.py, tests/test_narrative_authenticity_aer5.py",
@@ -10693,7 +10705,7 @@
           "subsystem token overlap: authenticity, narrative",
           "primary home `tests/test_narrative_authenticity_aer4.py` (unit / pure-rule; score 13.8)",
           "primary home `tests/test_narrative_authenticity_aer5.py` (integration / layer interaction; score 12.0)",
-          "docs test claims: `tests/TEST_AUDIT.md`, `tests/TEST_CONSOLIDATION_PLAN.md`, `tests/test_narrative_authenticity_aer4.py`"
+          "docs test claims: `tests/TEST_AUDIT.md`, `tests/TEST_CONSOLIDATION_PLAN.md`"
         ]
       }
     },
@@ -12557,60 +12569,67 @@
             "excerpt": "See **`tests/TEST_AUDIT.md`** for the current governance map and **`tests/TEST_CONSOLIDATION_PLAN.md`** for recorded consolidation boundaries. Those docs should follow runtime owners and practical direct-owner suites rat"
           },
           {
+            "source": "docs/ownership_cleanup_delta.md",
+            "claimed_owner": "tests/TEST_AUDIT.md",
+            "owner_type": "test",
+            "strength": "soft",
+            "excerpt": "- Declared owner: `tests/TEST_AUDIT.md`"
+          },
+          {
+            "source": "docs/ownership_cleanup_delta.md",
+            "claimed_owner": "tests/TEST_AUDIT.md",
+            "owner_type": "test",
+            "strength": "soft",
+            "excerpt": "- Current apparent owner shape: still a governance map rather than a runtime owner, but less self-contradictory. `tests/TEST_AUDIT.md` now more clearly points to actual runtime/test owners instead of sounding like a comp"
+          },
+          {
+            "source": "docs/ownership_cleanup_delta.md",
+            "claimed_owner": "tests/TEST_AUDIT.md",
+            "owner_type": "test",
+            "strength": "soft",
+            "excerpt": "- `docs/architecture_ownership_ledger.md`, `docs/narrative_integrity_architecture.md`, `docs/architecture_audit_readme.md`, and `tests/TEST_AUDIT.md` now tell the same owner story."
+          },
+          {
+            "source": "docs/ownership_cleanup_delta.md",
+            "claimed_owner": "tests/TEST_AUDIT.md",
+            "owner_type": "test",
+            "strength": "soft",
+            "excerpt": "- `tests/TEST_AUDIT.md` now reinforces the same owner story instead of treating retry-terminal or quality coverage as equal semantic owners"
+          },
+          {
+            "source": "docs/ownership_cleanup_delta.md",
+            "claimed_owner": "tests/TEST_AUDIT.md",
+            "owner_type": "test",
+            "strength": "soft",
+            "excerpt": "- `docs/architecture_ownership_ledger.md`, `docs/architecture_audit_readme.md`, and `tests/TEST_AUDIT.md` consistently declare `game/prompt_context.py` as runtime owner and `tests/test_prompt_context.py` as the practical"
+          },
+          {
+            "source": "docs/ownership_cleanup_delta.md",
+            "claimed_owner": "tests/TEST_AUDIT.md",
+            "owner_type": "test",
+            "strength": "soft",
+            "excerpt": "- `docs/architecture_ownership_ledger.md`, `docs/narrative_integrity_architecture.md`, and `tests/TEST_AUDIT.md` now consistently describe the seam as `runtime owner -> direct-owner suite -> downstream secondary coverage"
+          },
+          {
+            "source": "docs/ownership_cleanup_delta.md",
+            "claimed_owner": "tests/TEST_AUDIT.md",
+            "owner_type": "test",
+            "strength": "soft",
+            "excerpt": "- `tests/TEST_AUDIT.md` now records the intended split explicitly: `tests/test_stage_diff_telemetry.py` as the practical primary direct-owner suite, `tests/test_turn_packet_stage_diff_integration.py` as downstream packet"
+          },
+          {
+            "source": "docs/ownership_cleanup_delta.md",
+            "claimed_owner": "tests/TEST_AUDIT.md",
+            "owner_type": "test",
+            "strength": "soft",
+            "excerpt": "- `tests/TEST_AUDIT.md` now states a single owner narrative: repair semantics are owned by"
+          },
+          {
             "source": "docs/current_focus.md",
             "claimed_owner": "tests/TEST_CONSOLIDATION_PLAN.md",
             "owner_type": "test",
             "strength": "soft",
             "excerpt": "| **Prompt / sanitizer ownership boundaries** | Pre-generation vs post-GM paths stay split; **smoke overlap** only for cross-layer integration, not duplicate phrase legality suites (see `tests/TEST_CONSOLIDATION_PLAN.md`"
-          },
-          {
-            "source": "docs/narrative_integrity_architecture.md",
-            "claimed_owner": "tests/TEST_CONSOLIDATION_PLAN.md",
-            "owner_type": "test",
-            "strength": "soft",
-            "excerpt": "See **`tests/TEST_AUDIT.md`** for the current governance map and **`tests/TEST_CONSOLIDATION_PLAN.md`** for recorded consolidation boundaries. Those docs should follow runtime owners and practical direct-owner suites rat"
-          },
-          {
-            "source": "docs/narrative_integrity_architecture.md",
-            "claimed_owner": "tests/test_narrative_authenticity_aer4.py",
-            "owner_type": "test",
-            "strength": "soft",
-            "excerpt": "| Stage-diff telemetry / observability | `test_stage_diff_telemetry.py` (practical primary direct-owner suite for direct `game.stage_diff_telemetry` helper/accessor semantics, snapshot/transition packaging, bounded telem"
-          },
-          {
-            "source": "tests/TEST_CONSOLIDATION_PLAN.md",
-            "claimed_owner": "tests/test_narrative_authenticity_aer4.py",
-            "owner_type": "test",
-            "strength": "soft",
-            "excerpt": "**TD2-R applied (2026-04-15 \u2014 stage-diff telemetry governance alignment):** `game/stage_diff_telemetry.py` remains the canonical runtime owner for telemetry semantics, while `game/turn_packet.py` remains the packet-bound"
-          },
-          {
-            "source": "docs/narrative_integrity_architecture.md",
-            "claimed_owner": "tests/test_stage_diff_telemetry.py",
-            "owner_type": "test",
-            "strength": "soft",
-            "excerpt": "| Stage-diff telemetry / observability | `test_stage_diff_telemetry.py` (practical primary direct-owner suite for direct `game.stage_diff_telemetry` helper/accessor semantics, snapshot/transition packaging, bounded telem"
-          },
-          {
-            "source": "docs/narrative_integrity_architecture.md",
-            "claimed_owner": "tests/test_stage_diff_telemetry.py",
-            "owner_type": "test",
-            "strength": "soft",
-            "excerpt": "| Final emission gate ordering / contracts | `test_final_emission_gate.py` (practical primary direct-owner suite for direct orchestration-order, final-route, and continuity-adjacent gate-step semantics); downstream suite"
-          },
-          {
-            "source": "tests/TEST_CONSOLIDATION_PLAN.md",
-            "claimed_owner": "tests/test_stage_diff_telemetry.py",
-            "owner_type": "test",
-            "strength": "soft",
-            "excerpt": "**FG2-R applied (2026-04-15 \u2014 final-emission gate governance alignment):** `game/final_emission_gate.py` remains the canonical runtime owner and `tests/test_final_emission_gate.py` remains the practical primary direct-ow"
-          },
-          {
-            "source": "tests/TEST_CONSOLIDATION_PLAN.md",
-            "claimed_owner": "tests/test_stage_diff_telemetry.py",
-            "owner_type": "test",
-            "strength": "soft",
-            "excerpt": "**TD2-R applied (2026-04-15 \u2014 stage-diff telemetry governance alignment):** `game/stage_diff_telemetry.py` remains the canonical runtime owner for telemetry semantics, while `game/turn_packet.py` remains the packet-bound"
           }
         ],
         "practical_test_owner": "mixed: tests/test_narrative_authenticity.py, tests/test_narrative_authenticity_aer4.py, tests/test_narrative_authenticity_aer5.py",
@@ -12683,7 +12702,7 @@
           "subsystem token overlap: authenticity, narrative",
           "primary home `tests/test_narrative_authenticity_aer4.py` (unit / pure-rule; score 13.8)",
           "primary home `tests/test_narrative_authenticity_aer5.py` (integration / layer interaction; score 12.0)",
-          "docs test claims: `tests/TEST_AUDIT.md`, `tests/TEST_CONSOLIDATION_PLAN.md`, `tests/test_narrative_authenticity_aer4.py`"
+          "docs test claims: `tests/TEST_AUDIT.md`, `tests/TEST_CONSOLIDATION_PLAN.md`"
         ]
       }
     ],

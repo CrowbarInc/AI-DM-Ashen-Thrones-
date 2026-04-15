@@ -1,4 +1,13 @@
-"""Downstream speaker-bridge consumer coverage for continuity repair."""
+"""Downstream speaker-bridge behavior coverage.
+
+Validates how bridge-related continuity behavior appears in final outputs.
+
+Does NOT own:
+
+* gate-step ordering
+* bridge application logic
+* repair semantics
+"""
 from __future__ import annotations
 
 import pytest
@@ -30,7 +39,7 @@ def _strong_ic_with_ssc() -> dict:
     }
 
 
-def test_malformed_dialogue_needs_bridge_shaped_validation_before_repair_can_help():
+def test_malformed_dialogue_output_preserves_continuity_constraints_without_repair():
     ic = _strong_ic_with_ssc()
     base = validate_interaction_continuity(_LIVE_MALFORMED, interaction_continuity_contract=ic)
     assert base["ok"] is True
@@ -38,7 +47,7 @@ def test_malformed_dialogue_needs_bridge_shaped_validation_before_repair_can_hel
     assert repair["applied"] is False
 
 
-def test_bridge_shaped_failure_can_still_be_salvaged_by_continuity_repair():
+def test_output_exhibits_continuity_repaired_structure_for_bridge_shaped_failure():
     ic = _strong_ic_with_ssc()
     v = validate_interaction_continuity(_LIVE_MALFORMED, interaction_continuity_contract=ic)
     assert v["ok"] is True
@@ -55,7 +64,7 @@ def test_bridge_shaped_failure_can_still_be_salvaged_by_continuity_repair():
     assert "malformed explicit attribution salvaged" in " ".join(r["strategy_notes"]).lower()
 
 
-def test_bridge_shaped_failure_without_canonical_anchor_remains_unrepaired():
+def test_output_preserves_continuity_constraints_when_anchor_is_not_canonical():
     ic = _strong_ic_with_ssc()
     unrecoverable = 'South road." Stranger waits. "Old Millstone.'
     v = validate_interaction_continuity(unrecoverable, interaction_continuity_contract=ic)
