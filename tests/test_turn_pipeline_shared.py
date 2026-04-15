@@ -5,8 +5,9 @@ These tests verify both endpoints exercise the same resolved-turn orchestration.
 Per-test ``# feature: ...`` comments tag ownership for ``tools/test_audit.py``:
 routing, retry, fallback, social, continuity, clues, leads, emission, legality.
 
-Parametrized blocks (same setup + assertion shape): dialogue-lock prompt variants;
-OOC adjudication without GPT; action vs chat runtime mutation before prompt build.
+Parametrized blocks (same setup + assertion shape): dialogue-lock route/output
+variants; OOC adjudication without GPT; action vs chat runtime mutation before
+model-request assembly.
 Table-style dialogue-lock routing (pure ``choose_interaction_route``) lives in
 ``test_dialogue_routing_lock.py``; this module keeps HTTP pipeline locks only.
 Explicit multi-turn / retry / emission-gate bug locks stay non-parametrized.
@@ -29,8 +30,6 @@ from game.defaults import (
     default_session,
     default_world,
 )
-from game.prompt_context import NO_VALIDATOR_VOICE_RULE
-
 pytestmark = pytest.mark.integration
 
 FAKE_GPT_RESPONSE = {
@@ -304,7 +303,7 @@ def test_chat_targeted_retry_validator_voice_only(tmp_path, monkeypatch):
 
 
 # feature: legality
-def test_chat_prompt_carries_no_validator_voice_policy(tmp_path, monkeypatch):
+def test_chat_pipeline_ships_no_validator_voice_policy(tmp_path, monkeypatch):
     _seed_shared_world(tmp_path, monkeypatch)
     captured_inputs = []
 
@@ -322,17 +321,14 @@ def test_chat_prompt_carries_no_validator_voice_policy(tmp_path, monkeypatch):
 
     assert resp.status_code == 200
     assert len(captured_inputs) == 1
-    system_prompt = captured_inputs[0][0]["content"]
     payload = json.loads(captured_inputs[0][1]["content"])
-    instructions = " ".join(payload.get("instructions", []))
-    assert NO_VALIDATOR_VOICE_RULE in system_prompt
-    assert NO_VALIDATOR_VOICE_RULE in instructions
+    assert "no_validator_voice" in (payload.get("response_policy") or {})
     assert payload["response_policy"]["no_validator_voice"]["enabled"] is True
     assert payload["response_policy"]["no_validator_voice"]["applies_to"] == "standard_narration"
 
 
 # feature: routing, emission
-def test_chat_prompt_and_debug_carry_response_type_contract(tmp_path, monkeypatch):
+def test_chat_social_route_ships_dialogue_contract_through_request_debug_and_trace(tmp_path, monkeypatch):
     _seed_runner_dialogue_context(tmp_path, monkeypatch)
     captured_inputs = []
 
@@ -352,14 +348,12 @@ def test_chat_prompt_and_debug_carry_response_type_contract(tmp_path, monkeypatc
     data = resp.json()
     assert captured_inputs
     payload = json.loads(captured_inputs[0][1]["content"])
-    prompt_contract = payload.get("response_type_contract") or {}
+    payload_contract = payload.get("response_type_contract") or {}
     policy_contract = (payload.get("response_policy") or {}).get("response_type_contract") or {}
     debug_contract = (data.get("debug") or {}).get("response_type_contract") or {}
     trace_contract = (((data.get("debug_traces") or [])[-1]).get("turn_trace") or {}).get("response_type_contract") or {}
 
-    assert prompt_contract.get("required_response_type") == "dialogue"
-    assert prompt_contract.get("source_route") == "social"
-    assert prompt_contract.get("allow_escalation") is False
+    assert payload_contract.get("required_response_type") == "dialogue"
     assert policy_contract.get("required_response_type") == "dialogue"
     assert debug_contract.get("required_response_type") == "dialogue"
     assert trace_contract.get("required_response_type") == "dialogue"
@@ -1484,10 +1478,10 @@ def test_resolved_turn_trace_is_compact_and_authoritative(tmp_path, monkeypatch)
         pytest.param("chat", id="via_api_chat"),
     ],
 )
-def test_action_and_chat_mutate_runtime_before_prompt_context_construction(
+def test_action_and_chat_mutate_runtime_before_request_build(
     tmp_path, monkeypatch, channel
 ):
-    """Exploration resolution updates scene_runtime before build_messages sees it (action and chat)."""
+    """Exploration resolution updates scene_runtime before request assembly sees it."""
     explore_action = {
         "id": "desk",
         "label": "Investigate the desk",
@@ -1565,7 +1559,7 @@ def test_affordances_are_state_derived_not_from_gpt_text(tmp_path, monkeypatch):
 
 
 # feature: social
-def test_chat_implied_lowered_voice_is_applied_before_prompt_context(tmp_path, monkeypatch):
+def test_chat_implied_lowered_voice_reaches_request_build_context(tmp_path, monkeypatch):
     _seed_shared_world(tmp_path, monkeypatch)
     captured: dict = {}
 
@@ -1589,7 +1583,7 @@ def test_chat_implied_lowered_voice_is_applied_before_prompt_context(tmp_path, m
 
 
 # feature: social
-def test_chat_implied_sit_with_target_is_applied_before_prompt_context(tmp_path, monkeypatch):
+def test_chat_implied_sit_with_target_reaches_request_build_context(tmp_path, monkeypatch):
     _seed_shared_world(tmp_path, monkeypatch)
     world = storage.load_world()
     world["npcs"] = [

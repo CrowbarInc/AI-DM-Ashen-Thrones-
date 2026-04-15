@@ -635,6 +635,15 @@ def test_architecture_audit_hotspot_classification_is_stable(audit_mod):
         severity="medium",
         archaeology_markers=[{"path": "game/prompt_context_leads.py", "kind": "extracted_from", "excerpt": "extracted"}],
     )
+    healthy_prompt_report = _synthetic_subsystem(
+        audit_mod,
+        subsystem_name="prompt contracts",
+        alignment_status="aligned",
+        mismatch_type="healthy_overlap",
+        severity="low",
+        coverage_spread=7,
+        overlap_findings=[{"overlap_type": "shared_concern_language", "severity": "high", "evidence": ["shared owner language"]}],
+    )
     unclear_report = _synthetic_subsystem(
         audit_mod,
         subsystem_name="test ownership / inventory docs",
@@ -683,6 +692,7 @@ def test_architecture_audit_hotspot_classification_is_stable(audit_mod):
     )
 
     assert audit_mod._classify_hotspot(smear_report, label="prompt contracts conflict")["classification"] == "possible ownership smear"
+    assert audit_mod._classify_hotspot(healthy_prompt_report, label="prompt contracts conflict")["classification"] == "localized under-consolidation"
     assert audit_mod._classify_hotspot(residue_report, label="prompt_context_leads residue", module_path="game/prompt_context_leads.py")["classification"] == "transitional residue"
     assert audit_mod._classify_hotspot(unclear_report, label="test ownership / inventory docs still unclear")["classification"] == "unclear / needs human review"
     assert audit_mod._classify_hotspot(local_report, label="stage diff telemetry partial mismatch")["classification"] == "localized under-consolidation"

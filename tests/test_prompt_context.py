@@ -36,9 +36,11 @@ from game.prompt_context import (
     _compress_recent_log,
     _extract_npc_introduced_anchor_tokens,
     build_active_interlocutor_export,
+    build_answer_completeness_contract,
     build_authoritative_lead_prompt_context,
     build_interlocutor_lead_discussion_context,
     build_narration_context,
+    build_response_delta_contract,
     build_response_policy,
     build_social_response_structure_contract,
     build_social_interlocutor_profile,
@@ -367,6 +369,95 @@ def test_prompt_contract_owner_enables_response_delta_for_same_topic_follow_up_q
     assert trace.get("follow_up_pressure_detected") is True
     assert trace.get("prior_answer_available") is True
     assert "response_policy.response_delta.enabled" in " ".join(ctx.get("instructions", [])).lower()
+
+
+def test_prompt_contract_owner_enables_strict_social_answer_pressure_contract_bundle() -> None:
+    log = [
+        {
+            "player_input": "Runner, what do you know about the missing patrol?",
+            "gm_snippet": 'The runner keeps his voice low. "Word is thin; watch circles rumors, not names."',
+        },
+        {
+            "player_input": "Answer directly.",
+            "gm_snippet": 'He exhales. "I can\'t give you ink-and-seal truth; too many ears."',
+        },
+        {
+            "player_input": "Can you confirm anything?",
+            "gm_snippet": "He spreads his hands. Hard to pin anything down without naming names.",
+        },
+    ]
+    obligations = {
+        "suppress_non_social_emitters": True,
+        "should_answer_active_npc": True,
+        "active_npc_reply_expected": True,
+        "active_npc_reply_kind": "answer",
+    }
+    session_view = {"active_interaction_target_id": "tavern_runner"}
+    resolution = {
+        "kind": "question",
+        "prompt": "Then what can you confirm?",
+        "social": {"npc_id": "tavern_runner", "npc_name": "Tavern Runner"},
+    }
+    ac = build_answer_completeness_contract(
+        player_input="Then what can you confirm?",
+        narration_obligations=obligations,
+        resolution=resolution,
+        session_view=session_view,
+        uncertainty_hint=None,
+        recent_log_compact=log,
+    )
+    rd = build_response_delta_contract(
+        player_input="Then what can you confirm?",
+        recent_log_compact=log,
+        narration_obligations=obligations,
+        resolution=resolution,
+        answer_completeness=ac,
+        session_view=session_view,
+    )
+    assert ac["answer_required"] is True
+    assert ac["trace"].get("strict_social_answer_seek_override") is True
+    assert rd["enabled"] is True
+    assert rd["trigger_source"] == "strict_social_answer_pressure"
+
+
+def test_prompt_contract_owner_keeps_non_answer_seeking_social_lock_out_of_override() -> None:
+    log = [
+        {
+            "player_input": "Runner, what do you know about the missing patrol?",
+            "gm_snippet": 'The runner keeps his voice low. "Word is thin; watch circles rumors, not names."',
+        }
+    ]
+    obligations = {
+        "suppress_non_social_emitters": True,
+        "should_answer_active_npc": True,
+        "active_npc_reply_expected": True,
+        "active_npc_reply_kind": "answer",
+    }
+    session_view = {"active_interaction_target_id": "tavern_runner"}
+    resolution = {
+        "kind": "question",
+        "prompt": "I nod and let the crowd noise fill the silence.",
+        "social": {"npc_id": "tavern_runner"},
+    }
+    ac = build_answer_completeness_contract(
+        player_input="I nod and let the crowd noise fill the silence.",
+        narration_obligations=obligations,
+        resolution=resolution,
+        session_view=session_view,
+        uncertainty_hint=None,
+        recent_log_compact=log,
+    )
+    rd = build_response_delta_contract(
+        player_input="I nod and let the crowd noise fill the silence.",
+        recent_log_compact=log,
+        narration_obligations=obligations,
+        resolution=resolution,
+        answer_completeness=ac,
+        session_view=session_view,
+    )
+    assert ac["trace"].get("strict_social_answer_seek_override") is not True
+    assert rd["enabled"] is False
+    assert "social_lock" in (rd.get("trace") or {}).get("suppressed_because", [])
 
 
 def test_prompt_contract_owner_exposes_typed_uncertainty_policy_and_hint() -> None:
@@ -2240,6 +2331,34 @@ def test_social_lock_merges_log_escalation_when_answer_pressure_followup():
         has_pursued=True, npc_has_relevant=True
     )
     assert fup.get("pressed") is True
+
+
+@pytest.mark.unit
+def test_prompt_contract_owner_detects_correction_reask_answer_pressure_followup():
+    compact = [
+        {
+            "player_input": "Runner, anything interesting going on?",
+            "gm_snippet": (
+                "The Tavern Runner wipes a glass. Folk whisper about the north road; caravans "
+                "tighten their tarps when the wind turns cold."
+            ),
+        },
+        {
+            "player_input": "Why is that?",
+            "gm_snippet": (
+                'He lowers his voice. "If you want a lead, watch who slips into the seal-house '
+                'after the bell; there\'s a private drop rumored for tonight."'
+            ),
+        },
+    ]
+    ap = _answer_pressure_details(
+        "What? I asked you why people here wouldn't be friendly to newcomers.",
+        compact,
+        active_id="tavern_runner",
+    )
+    assert ap["correction_reask_followup_detected"] is True
+    assert ap["answer_pressure_followup_detected"] is True
+    assert ap["answer_pressure_family"] == "correction_reask_followup"
 
 
 @pytest.mark.unit

@@ -12,9 +12,9 @@ synthetic coverage still runs from this file and ``test_synthetic_policy.py``.
 
 NPC / social **lead disclosure continuity** (same NPC + same lead advances ``mention_count``,
 ``npc_lead_discussions`` stays NPC-scoped) is not asserted by the fake-GM smoke lane, which only
-checks policy template slugs and player-facing hygiene. Engine-level locks live in
-``tests/test_social_lead_landing.py`` and ``tests/test_prompt_context.py``; the transcript-backed
-``run_synthetic_session`` regression below anchors the harness to that persistence.
+checks policy template slugs and player-facing hygiene. Engine-level prompt export ownership lives in
+``tests/test_prompt_context.py``; the transcript-backed ``run_synthetic_session`` regression below
+anchors the harness to persisted discussion memory instead.
 """
 from __future__ import annotations
 
@@ -220,18 +220,15 @@ def test_synthetic_transcript_npc_lead_discussion_continuity_same_npc(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    """``run_synthetic_session`` + real chat: same-NPC follow-up keeps interlocutor lead continuity.
+    """``run_synthetic_session`` + real chat: same-NPC follow-up persists discussion continuity.
 
     Deterministic GM via patched ``call_gpt``. A second Guard Captain line may not re-populate
-    ``lead_landing`` (so ``apply_social_lead_discussion_tracking`` can no-op), but
-    :func:`game.prompt_context.build_interlocutor_lead_discussion_context` must still surface
-    **progress-over-restatement** for leads this NPC already introduced; this is the export hook
-    that blocks treating recent leads like brand-new intros on immediate follow-ups. Also asserts
-    NPC-scoped storage
+    ``lead_landing`` (so ``apply_social_lead_discussion_tracking`` can no-op), but the persisted
+    same-NPC discussion row must still survive the follow-up turn for downstream prompt exports to
+    consume it as an existing thread rather than a brand-new introduction. Also asserts NPC-scoped storage
     (no mirror row under ``tavern_runner`` for the same lead id).
     """
-    from game.prompt_context import build_interlocutor_lead_discussion_context
-    from game.social import get_npc_lead_discussion
+    from game.social import get_npc_lead_discussion, list_recent_npc_lead_discussions
     from game.storage import load_session
 
     from tests.helpers.synthetic_runner import run_synthetic_session
@@ -279,26 +276,19 @@ def test_synthetic_transcript_npc_lead_discussion_continuity_same_npc(
 
     session = load_session()
     scene_id = "frontier_gate"
-
-    ilc = build_interlocutor_lead_discussion_context(
-        session=session,
-        world={},
-        public_scene={"id": scene_id},
-        recent_log=[],
-        active_npc_id="guard_captain",
-    )
-    assert ilc.get("active_npc_id") == "guard_captain"
-    actionable = ilc.get("introduced_by_npc") if isinstance(ilc.get("introduced_by_npc"), list) else []
-    assert actionable, f"expected>=1 actionable interlocutor lead row; got {ilc!r}"
-    repeat = ilc.get("repeat_suppression") if isinstance(ilc.get("repeat_suppression"), dict) else {}
-    assert repeat.get("prefer_progress_over_restatement") is True, (
-        f"expected progress-over-restatement after same-NPC follow-up window; repeat={repeat!r}"
-    )
-    assert repeat.get("has_recent_repeat_risk") is True
+    rows = list_recent_npc_lead_discussions(session, scene_id, npc_id="guard_captain")
+    assert rows, "expected>=1 persisted guard_captain lead discussion row"
 
     scene_state = session.get("scene_state") if isinstance(session.get("scene_state"), dict) else {}
     assert str(scene_state.get("current_interlocutor") or "").strip() == "guard_captain"
 
-    lead_id = str(actionable[0].get("lead_id") or "").strip()
+    row = rows[0]
+    lead_id = str(row.get("lead_id") or "").strip()
     assert lead_id
+    assert row.get("npc_id") == "guard_captain"
+    assert int(row.get("mention_count") or 0) >= 1
+    assert int(row.get("last_discussed_turn") or 0) >= 2
+    assert int(row.get("last_discussed_turn") or 0) >= int(row.get("first_discussed_turn") or 0)
+    assert row.get("last_scene_id") == scene_id
+    assert get_npc_lead_discussion(session, scene_id, "guard_captain", lead_id) == row
     assert get_npc_lead_discussion(session, scene_id, "tavern_runner", lead_id) is None

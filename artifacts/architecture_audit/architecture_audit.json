@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-14T23:16:48.117383+00:00",
+  "generated_at": "2026-04-15T01:59:10.342799+00:00",
   "repo_root": "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm",
   "modules_analyzed": {
     "count": 86,
@@ -1076,7 +1076,7 @@
         "class_count": 0,
         "import_count": 25,
         "private_helper_count": 54,
-        "fan_in": 16,
+        "fan_in": 13,
         "fan_out": 22,
         "ownership_terms": [
           "canonical",
@@ -1094,7 +1094,7 @@
           "contract_owner"
         ],
         "coupling_indicators": {
-          "fan_in": 16,
+          "fan_in": 13,
           "fan_out": 22,
           "private_helper_count": 54,
           "concern_keyword_density": 0.1198,
@@ -1110,7 +1110,7 @@
           "historical_marker_count": 0,
           "possible_centrality_hotspot": true,
           "centrality_reasons": [
-            "fan-in 16",
+            "fan-in 13",
             "fan-out 22",
             "private helpers 54",
             "concern density 0.1198"
@@ -1694,7 +1694,7 @@
       },
       {
         "path": "tools/architecture_audit.py",
-        "line_count": 1994,
+        "line_count": 2002,
         "function_count": 47,
         "class_count": 1,
         "import_count": 13,
@@ -1980,7 +1980,7 @@
       },
       {
         "path": "docs/ownership_cleanup_delta.md",
-        "line_count": 554,
+        "line_count": 850,
         "ownership_terms": [
           "canonical",
           "orchestration",
@@ -2035,7 +2035,7 @@
       },
       {
         "path": "tests/TEST_AUDIT.md",
-        "line_count": 477,
+        "line_count": 488,
         "ownership_terms": [
           "canonical",
           "deferred",
@@ -2405,7 +2405,7 @@
       },
       {
         "path": "tests/test_architecture_audit_tool.py",
-        "line_count": 733,
+        "line_count": 743,
         "test_function_count": 17,
         "import_count": 6,
         "ownership_terms": [
@@ -4346,8 +4346,8 @@
       },
       {
         "path": "tests/test_prompt_context.py",
-        "line_count": 3171,
-        "test_function_count": 108,
+        "line_count": 3290,
+        "test_function_count": 111,
         "import_count": 13,
         "ownership_terms": [
           "canonical",
@@ -5168,11 +5168,12 @@
       },
       {
         "path": "tests/test_strict_social_answer_pressure_cashout.py",
-        "line_count": 808,
-        "test_function_count": 18,
-        "import_count": 6,
+        "line_count": 761,
+        "test_function_count": 20,
+        "import_count": 5,
         "ownership_terms": [
-          "repair"
+          "repair",
+          "validator"
         ],
         "residue_terms": [],
         "inferred_category": "integration / layer interaction",
@@ -5181,7 +5182,6 @@
         ],
         "direct_runtime_imports": [
           "game/final_emission_gate.py",
-          "game/prompt_context.py",
           "game/social.py"
         ],
         "transcript_like_case_count": 0
@@ -5230,9 +5230,9 @@
       },
       {
         "path": "tests/test_synthetic_sessions.py",
-        "line_count": 304,
+        "line_count": 294,
         "test_function_count": 18,
-        "import_count": 22,
+        "import_count": 21,
         "ownership_terms": [],
         "residue_terms": [],
         "inferred_category": "integration / layer interaction",
@@ -5241,7 +5241,6 @@
           "synthetic"
         ],
         "direct_runtime_imports": [
-          "game/prompt_context.py",
           "game/social.py",
           "game/storage.py"
         ],
@@ -5415,9 +5414,9 @@
       },
       {
         "path": "tests/test_turn_pipeline_shared.py",
-        "line_count": 1951,
+        "line_count": 1945,
         "test_function_count": 70,
-        "import_count": 8,
+        "import_count": 7,
         "ownership_terms": [
           "canonical",
           "orchestration",
@@ -5432,8 +5431,7 @@
         "direct_runtime_imports": [
           "game/__init__.py",
           "game/api.py",
-          "game/defaults.py",
-          "game/prompt_context.py"
+          "game/defaults.py"
         ],
         "transcript_like_case_count": 0
       },
@@ -5643,7 +5641,7 @@
       "transcript / scenario lock": 251,
       "regression / bug class": 107,
       "smoke / overlap": 5,
-      "integration / layer interaction": 1446,
+      "integration / layer interaction": 1449,
       "unit / pure-rule": 474,
       "unclear": 6
     },
@@ -5834,7 +5832,7 @@
         "game/fallback_behavior.py"
       ],
       "likely_overlap_points": [
-        "cross-cutting import surface: game/prompt_context.py (fan-in 16, fan-out 22)",
+        "cross-cutting import surface: game/prompt_context.py (fan-in 13, fan-out 22)",
         "cross-cutting import surface: game/response_policy_contracts.py (fan-in 10, fan-out 3)",
         "shared primary file: game/response_policy_contracts.py -> response policy contracts"
       ],
@@ -5939,7 +5937,7 @@
             }
           ],
           "coupling_indicators": {
-            "fan_in": 16,
+            "fan_in": 13,
             "fan_out": 22,
             "private_helper_count": 54,
             "concern_keyword_density": 0.1198,
@@ -5955,7 +5953,7 @@
             "historical_marker_count": 0,
             "possible_centrality_hotspot": true,
             "centrality_reasons": [
-              "fan-in 16",
+              "fan-in 13",
               "fan-out 22",
               "private helpers 54",
               "concern density 0.1198"
@@ -6386,16 +6384,16 @@
       ],
       "coupling_indicators": {
         "total_private_helpers": 82,
-        "max_fan_in": 16,
+        "max_fan_in": 13,
         "max_fan_out": 22,
         "average_concern_keyword_density": 0.1746,
         "possible_centrality_hotspots": [
           {
             "path": "game/prompt_context.py",
-            "fan_in": 16,
+            "fan_in": 13,
             "fan_out": 22,
             "reasons": [
-              "fan-in 16",
+              "fan-in 13",
               "fan-out 22",
               "private helpers 54",
               "concern density 0.1198"
@@ -6497,7 +6495,7 @@
           "reason": "Docs and tests are the deterministic visibility surface for structural cost."
         },
         "test alignment": {
-          "score": "yellow",
+          "score": "green",
           "reason": "Reconciles runtime owner, documented owner, and practical test home instead of counting test links alone."
         },
         "historical residue / archaeology risk": {
@@ -6514,7 +6512,7 @@
             "class_count": 0,
             "import_count": 25,
             "private_helper_count": 54,
-            "fan_in": 16,
+            "fan_in": 13,
             "fan_out": 22
           },
           {
@@ -6590,9 +6588,9 @@
         "related_doc_reference_issues": []
       },
       "warnings": [
+        "Healthy overlap detected: focused owner tests remain primary and cross-layer suites look secondary.",
         "Historical residue markers are dense enough to raise archaeology risk.",
-        "Runtime overlap heuristics flagged 8 possible responsibility smear point(s).",
-        "Test ownership reconciliation is partial: ownership_spread_wide."
+        "Runtime overlap heuristics flagged 8 possible responsibility smear point(s)."
       ],
       "verdict": "red",
       "test_ownership_alignment": {
@@ -6685,7 +6683,7 @@
             "excerpt": "- Canonical runtime owner remains `game/prompt_context.py`."
           }
         ],
-        "practical_test_owner": "mixed: tests/test_prompt_context.py, tests/test_strict_social_answer_pressure_cashout.py, tests/test_synthetic_sessions.py",
+        "practical_test_owner": "tests/test_prompt_context.py",
         "primary_test_homes": [
           {
             "path": "tests/test_prompt_context.py",
@@ -6696,36 +6694,6 @@
             "evidence": [
               "direct import `game/prompt_context.py`",
               "subsystem token overlap: prompt"
-            ]
-          },
-          {
-            "path": "tests/test_strict_social_answer_pressure_cashout.py",
-            "category": "integration / layer interaction",
-            "score": 8.0,
-            "raw_score": 8,
-            "direct_runtime_match": true,
-            "evidence": [
-              "direct import `game/prompt_context.py`"
-            ]
-          },
-          {
-            "path": "tests/test_synthetic_sessions.py",
-            "category": "integration / layer interaction",
-            "score": 8.0,
-            "raw_score": 8,
-            "direct_runtime_match": true,
-            "evidence": [
-              "direct import `game/prompt_context.py`"
-            ]
-          },
-          {
-            "path": "tests/test_turn_pipeline_shared.py",
-            "category": "integration / layer interaction",
-            "score": 8.0,
-            "raw_score": 8,
-            "direct_runtime_match": true,
-            "evidence": [
-              "direct import `game/prompt_context.py`"
             ]
           }
         ],
@@ -6797,28 +6765,22 @@
           }
         ],
         "direct_runtime_owner_test_homes": [
-          "tests/test_prompt_context.py",
-          "tests/test_strict_social_answer_pressure_cashout.py",
-          "tests/test_synthetic_sessions.py",
-          "tests/test_turn_pipeline_shared.py"
+          "tests/test_prompt_context.py"
         ],
-        "alignment_status": "partial",
-        "mismatch_type": "ownership_spread_wide",
-        "severity": "high",
-        "healthy_overlap": false,
-        "coverage_spread": 10,
+        "alignment_status": "aligned",
+        "mismatch_type": "healthy_overlap",
+        "severity": "low",
+        "healthy_overlap": true,
+        "coverage_spread": 7,
         "category_counts": {
-          "integration / layer interaction": 12,
+          "integration / layer interaction": 9,
           "unit / pure-rule": 1,
           "transcript / scenario lock": 1
         },
         "evidence": [
-          "Coverage is spread across many homes rather than anchored in one direct owner suite.",
           "primary home `tests/test_prompt_context.py` (integration / layer interaction; score 10.0)",
           "direct import `game/prompt_context.py`",
           "subsystem token overlap: prompt",
-          "primary home `tests/test_strict_social_answer_pressure_cashout.py` (integration / layer interaction; score 8.0)",
-          "primary home `tests/test_synthetic_sessions.py` (integration / layer interaction; score 8.0)",
           "docs runtime claims: `game/prompt_context.py`, `game/response_policy_contracts.py`"
         ]
       }
@@ -7874,6 +7836,7 @@
       "inferred_role": "Owns pure deterministic legality and contract checks for emitted text.",
       "related_tests": [
         "tests/TEST_AUDIT.md",
+        "tests/TEST_CONSOLIDATION_PLAN.md",
         "tests/test_answer_completeness_rules.py",
         "tests/test_architecture_audit_tool.py",
         "tests/test_bounded_partial_quality.py",
@@ -8245,6 +8208,13 @@
           },
           {
             "source": "docs/narrative_integrity_architecture.md",
+            "claimed_owner": "tests/TEST_CONSOLIDATION_PLAN.md",
+            "owner_type": "test",
+            "strength": "strong",
+            "excerpt": "| **Prompt / sanitizer ownership boundaries** | Keep **pre-generation** contracts in prompt/guard paths vs **post-GM** string hygiene in sanitizer paths; document **smoke overlap** vs **canonical owner** for each invaria"
+          },
+          {
+            "source": "docs/narrative_integrity_architecture.md",
             "claimed_owner": "tests/test_prompt_context.py",
             "owner_type": "test",
             "strength": "strong",
@@ -8294,17 +8264,10 @@
           },
           {
             "source": "docs/ownership_cleanup_delta.md",
-            "claimed_owner": "tests/test_answer_completeness_rules.py",
+            "claimed_owner": "tests/TEST_AUDIT.md",
             "owner_type": "test",
             "strength": "soft",
-            "excerpt": "- `tests/test_answer_completeness_rules.py` now frames shipped answer-completeness and response-delta contracts as downstream gate / escalation consumers, using a module-local prompt-contract handle instead of a broad pr"
-          },
-          {
-            "source": "docs/narrative_integrity_architecture.md",
-            "claimed_owner": "tests/test_final_emission_gate.py",
-            "owner_type": "test",
-            "strength": "soft",
-            "excerpt": "| Prompt-context bundle / shipped prompt contracts | `test_prompt_context.py` (practical primary direct-owner suite); `test_prompt_compression.py`, `test_final_emission_gate.py`, `test_social_exchange_emission.py`, `test"
+            "excerpt": "- `docs/architecture_ownership_ledger.md`, `docs/architecture_audit_readme.md`, and `tests/TEST_AUDIT.md` consistently declare `game/prompt_context.py` as runtime owner and `tests/test_prompt_context.py` as the practical"
           }
         ],
         "practical_test_owner": "tests/test_final_emission_validators.py",
@@ -8403,7 +8366,7 @@
           "direct import `game/final_emission_validators.py`",
           "subsystem token overlap: emission, final, validators",
           "docs runtime claims: `game/final_emission_validators.py`",
-          "docs test claims: `tests/TEST_AUDIT.md`, `tests/test_prompt_context.py`, `tests/test_social_exchange_emission.py`"
+          "docs test claims: `tests/TEST_AUDIT.md`, `tests/TEST_CONSOLIDATION_PLAN.md`, `tests/test_prompt_context.py`"
         ]
       }
     },
@@ -9042,6 +9005,7 @@
         "tests/test_playability_eval.py",
         "tests/test_playability_smoke.py",
         "tests/test_prompt_and_guard.py",
+        "tests/test_prompt_context.py",
         "tests/test_referential_clarity_player_coref.py",
         "tests/test_referential_clarity_strict_social_local_repair.py",
         "tests/test_response_delta_requirement.py",
@@ -9134,7 +9098,7 @@
             {
               "source": "docs/architecture_audit_readme.md",
               "matches": [
-                "- Secondary prompt coverage: `tests/test_prompt_compression.py`, `tests/test_prompt_and_guard.py`, `tests/test_dialogue_interaction_establishment.py`, `tests/test_fallback_shipped_contract_propagation.py`, `tests/test_social_escalation.py`, `tests/test_social_interaction_authority.py`, `tests/test_social_speaker_grounding.py`, `tests/test_social_topic_anchor.py`, `tests/test_stale_interlocutor_invalidation_block3.py`, plus relevant gate/emission/transcript suites such as `tests/test_final_emission_gate.py`, `tests/test_social_exchange_emission.py`, and `tests/test_narration_transcript_regressions.py`.",
+                "- Secondary prompt coverage: `tests/test_prompt_compression.py`, `tests/test_prompt_and_guard.py`, `tests/test_dialogue_interaction_establishment.py`, `tests/test_fallback_shipped_contract_propagation.py`, `tests/test_social_escalation.py`, `tests/test_social_interaction_authority.py`, `tests/test_social_speaker_grounding.py`, `tests/test_social_topic_anchor.py`, `tests/test_stale_interlocutor_invalidation_block3.py`, `tests/test_strict_social_answer_pressure_cashout.py`, `tests/test_synthetic_sessions.py`, `tests/test_answer_completeness_rules.py`, `tests/test_turn_pipeline_shared.py`, plus relevant gate/emission/transcript suites such as `tests/test_final_emission_gate.py`, `tests/test_social_exchange_emission.py`, and `tests/test_narration_transcript_regressions.py`.",
                 "- Secondary downstream coverage: `tests/test_fallback_shipped_contract_propagation.py`, `tests/test_response_delta_requirement.py`, `tests/test_final_emission_gate.py`, `tests/test_social_exchange_emission.py`, and `tests/test_final_emission_validators.py`."
               ]
             },
@@ -9144,7 +9108,7 @@
                 "- Non-owner supporting modules: `game/final_emission_repairs.py`, `game/final_emission_gate.py`, `game/prompt_context.py`",
                 "- Forbidden owner interpretations: `game/final_emission_repairs.py` is not the contract authority; `game/final_emission_gate.py` is not the place to redefine contract rules; `game/prompt_context.py` is not the canonical home for post-prompt contract resolution helpers.",
                 "- Secondary response-policy coverage only: `tests/test_fallback_shipped_contract_propagation.py`, `tests/test_response_delta_requirement.py`, `tests/test_final_emission_gate.py`, `tests/test_social_exchange_emission.py`, `tests/test_final_emission_validators.py`",
-                "- Secondary prompt coverage only: `tests/test_prompt_compression.py`, `tests/test_prompt_and_guard.py`, `tests/test_dialogue_interaction_establishment.py`, `tests/test_fallback_shipped_contract_propagation.py`, `tests/test_social_escalation.py`, `tests/test_social_interaction_authority.py`, `tests/test_social_speaker_grounding.py`, `tests/test_social_topic_anchor.py`, `tests/test_stale_interlocutor_invalidation_block3.py`, plus relevant gate/emission/transcript suites such as `tests/test_final_emission_gate.py`, `tests/test_social_exchange_emission.py`, and `tests/test_narration_transcript_regressions.py`",
+                "- Secondary prompt coverage only: `tests/test_prompt_compression.py`, `tests/test_prompt_and_guard.py`, `tests/test_dialogue_interaction_establishment.py`, `tests/test_fallback_shipped_contract_propagation.py`, `tests/test_social_escalation.py`, `tests/test_social_interaction_authority.py`, `tests/test_social_speaker_grounding.py`, `tests/test_social_topic_anchor.py`, `tests/test_stale_interlocutor_invalidation_block3.py`, `tests/test_strict_social_answer_pressure_cashout.py`, `tests/test_synthetic_sessions.py`, `tests/test_answer_completeness_rules.py`, `tests/test_turn_pipeline_shared.py`, plus relevant gate/emission/transcript suites such as `tests/test_final_emission_gate.py`, `tests/test_social_exchange_emission.py`, and `tests/test_narration_transcript_regressions.py`",
                 "- Non-owner supporting modules: `game/final_emission_gate.py`, `game/gm.py`, `game/gm_retry.py`"
               ]
             },
@@ -9440,7 +9404,7 @@
             {
               "source": "docs/architecture_audit_readme.md",
               "matches": [
-                "- Secondary prompt coverage: `tests/test_prompt_compression.py`, `tests/test_prompt_and_guard.py`, `tests/test_dialogue_interaction_establishment.py`, `tests/test_fallback_shipped_contract_propagation.py`, `tests/test_social_escalation.py`, `tests/test_social_interaction_authority.py`, `tests/test_social_speaker_grounding.py`, `tests/test_social_topic_anchor.py`, `tests/test_stale_interlocutor_invalidation_block3.py`, plus relevant gate/emission/transcript suites such as `tests/test_final_emission_gate.py`, `tests/test_social_exchange_emission.py`, and `tests/test_narration_transcript_regressions.py`.",
+                "- Secondary prompt coverage: `tests/test_prompt_compression.py`, `tests/test_prompt_and_guard.py`, `tests/test_dialogue_interaction_establishment.py`, `tests/test_fallback_shipped_contract_propagation.py`, `tests/test_social_escalation.py`, `tests/test_social_interaction_authority.py`, `tests/test_social_speaker_grounding.py`, `tests/test_social_topic_anchor.py`, `tests/test_stale_interlocutor_invalidation_block3.py`, `tests/test_strict_social_answer_pressure_cashout.py`, `tests/test_synthetic_sessions.py`, `tests/test_answer_completeness_rules.py`, `tests/test_turn_pipeline_shared.py`, plus relevant gate/emission/transcript suites such as `tests/test_final_emission_gate.py`, `tests/test_social_exchange_emission.py`, and `tests/test_narration_transcript_regressions.py`.",
                 "- Secondary downstream coverage: `tests/test_fallback_shipped_contract_propagation.py`, `tests/test_response_delta_requirement.py`, `tests/test_final_emission_gate.py`, `tests/test_social_exchange_emission.py`, and `tests/test_final_emission_validators.py`."
               ]
             },
@@ -9448,10 +9412,10 @@
               "source": "docs/architecture_ownership_ledger.md",
               "matches": [
                 "- Secondary response-policy coverage only: `tests/test_fallback_shipped_contract_propagation.py`, `tests/test_response_delta_requirement.py`, `tests/test_final_emission_gate.py`, `tests/test_social_exchange_emission.py`, `tests/test_final_emission_validators.py`",
-                "- Secondary prompt coverage only: `tests/test_prompt_compression.py`, `tests/test_prompt_and_guard.py`, `tests/test_dialogue_interaction_establishment.py`, `tests/test_fallback_shipped_contract_propagation.py`, `tests/test_social_escalation.py`, `tests/test_social_interaction_authority.py`, `tests/test_social_speaker_grounding.py`, `tests/test_social_topic_anchor.py`, `tests/test_stale_interlocutor_invalidation_block3.py`, plus relevant gate/emission/transcript suites such as `tests/test_final_emission_gate.py`, `tests/test_social_exchange_emission.py`, and `tests/test_narration_transcript_regressions.py`",
+                "- Secondary prompt coverage only: `tests/test_prompt_compression.py`, `tests/test_prompt_and_guard.py`, `tests/test_dialogue_interaction_establishment.py`, `tests/test_fallback_shipped_contract_propagation.py`, `tests/test_social_escalation.py`, `tests/test_social_interaction_authority.py`, `tests/test_social_speaker_grounding.py`, `tests/test_social_topic_anchor.py`, `tests/test_stale_interlocutor_invalidation_block3.py`, `tests/test_strict_social_answer_pressure_cashout.py`, `tests/test_synthetic_sessions.py`, `tests/test_answer_completeness_rules.py`, `tests/test_turn_pipeline_shared.py`, plus relevant gate/emission/transcript suites such as `tests/test_final_emission_gate.py`, `tests/test_social_exchange_emission.py`, and `tests/test_narration_transcript_regressions.py`",
                 "- Canonical owner module: `game/social_exchange_emission.py`",
                 "- Practical primary direct-owner suite: `tests/test_social_exchange_emission.py`",
-                "- Prompt-governance note: for prompt contracts, `tests/TEST_AUDIT.md` should point first to `game/prompt_context.py` and `tests/test_prompt_context.py`, then classify `tests/test_prompt_compression.py`, `tests/test_final_emission_gate.py`, `tests/test_social_exchange_emission.py`, `tests/test_narration_transcript_regressions.py`, and `tests/test_prompt_and_guard.py` as secondary coverage."
+                "- Prompt-governance note: for prompt contracts, `tests/TEST_AUDIT.md` should point first to `game/prompt_context.py` and `tests/test_prompt_context.py`, then classify `tests/test_prompt_compression.py`, `tests/test_prompt_and_guard.py`, `tests/test_strict_social_answer_pressure_cashout.py`, `tests/test_synthetic_sessions.py`, `tests/test_answer_completeness_rules.py`, `tests/test_turn_pipeline_shared.py`, `tests/test_final_emission_gate.py`, `tests/test_social_exchange_emission.py`, and `tests/test_narration_transcript_regressions.py` as secondary coverage."
               ]
             },
             {
@@ -11400,7 +11364,7 @@
         "file_metrics": [
           {
             "path": "tests/TEST_AUDIT.md",
-            "line_count": 477,
+            "line_count": 488,
             "function_count": 0,
             "class_count": 0,
             "import_count": 0,
@@ -11847,12 +11811,12 @@
       },
       {
         "path": "game/prompt_context.py",
-        "fan_in": 16,
+        "fan_in": 13,
         "fan_out": 22,
         "private_helper_count": 54,
         "concern_keyword_density": 0.1198,
         "reasons": [
-          "fan-in 16",
+          "fan-in 13",
           "fan-out 22",
           "private helpers 54",
           "concern density 0.1198"
@@ -12023,7 +11987,7 @@
       "transcript / scenario lock": 251,
       "regression / bug class": 107,
       "smoke / overlap": 5,
-      "integration / layer interaction": 1446,
+      "integration / layer interaction": 1449,
       "unit / pure-rule": 474,
       "unclear": 6
     },
@@ -12036,7 +12000,8 @@
       "unclear": 13
     },
     "test_alignment_overview": {
-      "partial": 8
+      "aligned": 1,
+      "partial": 7
     },
     "top_test_runtime_doc_mismatches": [
       {
@@ -12264,233 +12229,6 @@
           "subsystem token overlap: emission, final",
           "primary home `tests/test_final_emission_visibility.py` (integration / layer interaction; score 12.0)",
           "docs runtime claims: `game/final_emission_gate.py`, `game/final_emission_meta.py`, `game/social_exchange_emission.py`"
-        ]
-      },
-      {
-        "concern_name": "prompt contracts",
-        "runtime_owner": "game/prompt_context.py",
-        "declared_runtime_owner": "module docstring: Canonical owner for prompt-context assembly and prompt-contract bundling.",
-        "doc_canonical_owners": [
-          {
-            "source": "docs/architecture_ownership_ledger.md",
-            "claimed_owner": "game/prompt_context.py",
-            "owner_type": "runtime",
-            "strength": "strong",
-            "excerpt": "- Canonical owner module: `game/prompt_context.py`"
-          },
-          {
-            "source": "docs/narrative_integrity_architecture.md",
-            "claimed_owner": "game/prompt_context.py",
-            "owner_type": "runtime",
-            "strength": "strong",
-            "excerpt": "| **Prompt / sanitizer ownership boundaries** | Keep **pre-generation** contracts in prompt/guard paths vs **post-GM** string hygiene in sanitizer paths; document **smoke overlap** vs **canonical owner** for each invaria"
-          },
-          {
-            "source": "docs/architecture_ownership_ledger.md",
-            "claimed_owner": "game/response_policy_contracts.py",
-            "owner_type": "runtime",
-            "strength": "strong",
-            "excerpt": "- Canonical owner module: `game/response_policy_contracts.py`"
-          },
-          {
-            "source": "docs/ownership_cleanup_delta.md",
-            "claimed_owner": "game/response_policy_contracts.py",
-            "owner_type": "runtime",
-            "strength": "strong",
-            "excerpt": "- Runtime ownership is now visibly centered on `game/response_policy_contracts.py`, with the audit resolving that module as the canonical owner instead of reading repairs as a co-owner."
-          },
-          {
-            "source": "docs/architecture_audit_readme.md",
-            "claimed_owner": "game/prompt_context.py",
-            "owner_type": "runtime",
-            "strength": "soft",
-            "excerpt": "- Canonical runtime owner: `game/prompt_context.py`."
-          },
-          {
-            "source": "docs/architecture_ownership_ledger.md",
-            "claimed_owner": "game/prompt_context.py",
-            "owner_type": "runtime",
-            "strength": "soft",
-            "excerpt": "- Non-owner supporting modules: `game/final_emission_repairs.py`, `game/final_emission_gate.py`, `game/prompt_context.py`"
-          },
-          {
-            "source": "docs/architecture_ownership_ledger.md",
-            "claimed_owner": "game/prompt_context.py",
-            "owner_type": "runtime",
-            "strength": "soft",
-            "excerpt": "- Forbidden owner interpretations: `game/final_emission_repairs.py` is not the contract authority; `game/final_emission_gate.py` is not the place to redefine contract rules; `game/prompt_context.py` is not the canonical "
-          },
-          {
-            "source": "docs/ownership_cleanup_delta.md",
-            "claimed_owner": "game/prompt_context.py",
-            "owner_type": "runtime",
-            "strength": "soft",
-            "excerpt": "- Declared owner: `game/prompt_context.py`"
-          },
-          {
-            "source": "docs/ownership_cleanup_delta.md",
-            "claimed_owner": "game/prompt_context.py",
-            "owner_type": "runtime",
-            "strength": "soft",
-            "excerpt": "- Recommended next cleanup: keep collapsing prompt-contract ownership back onto `game/prompt_context.py`, preserve `tests/test_prompt_context.py` as the direct-owner suite, and continue treating downstream suites as seco"
-          },
-          {
-            "source": "docs/ownership_cleanup_delta.md",
-            "claimed_owner": "game/prompt_context.py",
-            "owner_type": "runtime",
-            "strength": "soft",
-            "excerpt": "- `prompt contracts` - finish converging `game/prompt_context.py`, `game/prompt_context_leads.py`, and adjacent response-policy touchpoints into one clearly dominant prompt-contract owner while keeping `tests/test_prompt"
-          },
-          {
-            "source": "docs/ownership_cleanup_delta.md",
-            "claimed_owner": "game/prompt_context.py",
-            "owner_type": "runtime",
-            "strength": "soft",
-            "excerpt": "- `game/prompt_context.py` remains the visible canonical runtime owner."
-          },
-          {
-            "source": "docs/ownership_cleanup_delta.md",
-            "claimed_owner": "game/prompt_context.py",
-            "owner_type": "runtime",
-            "strength": "soft",
-            "excerpt": "- Canonical runtime owner remains `game/prompt_context.py`."
-          }
-        ],
-        "practical_test_owner": "mixed: tests/test_prompt_context.py, tests/test_strict_social_answer_pressure_cashout.py, tests/test_synthetic_sessions.py",
-        "primary_test_homes": [
-          {
-            "path": "tests/test_prompt_context.py",
-            "category": "integration / layer interaction",
-            "score": 10.0,
-            "raw_score": 10,
-            "direct_runtime_match": true,
-            "evidence": [
-              "direct import `game/prompt_context.py`",
-              "subsystem token overlap: prompt"
-            ]
-          },
-          {
-            "path": "tests/test_strict_social_answer_pressure_cashout.py",
-            "category": "integration / layer interaction",
-            "score": 8.0,
-            "raw_score": 8,
-            "direct_runtime_match": true,
-            "evidence": [
-              "direct import `game/prompt_context.py`"
-            ]
-          },
-          {
-            "path": "tests/test_synthetic_sessions.py",
-            "category": "integration / layer interaction",
-            "score": 8.0,
-            "raw_score": 8,
-            "direct_runtime_match": true,
-            "evidence": [
-              "direct import `game/prompt_context.py`"
-            ]
-          },
-          {
-            "path": "tests/test_turn_pipeline_shared.py",
-            "category": "integration / layer interaction",
-            "score": 8.0,
-            "raw_score": 8,
-            "direct_runtime_match": true,
-            "evidence": [
-              "direct import `game/prompt_context.py`"
-            ]
-          }
-        ],
-        "secondary_test_homes": [
-          {
-            "path": "tests/test_narration_transcript_regressions.py",
-            "category": "transcript / scenario lock",
-            "score": 5.2,
-            "raw_score": 8,
-            "direct_runtime_match": true,
-            "evidence": [
-              "direct import `game/prompt_context.py`"
-            ]
-          },
-          {
-            "path": "tests/test_lead_lifecycle_npc_repeat_suppression.py",
-            "category": "integration / layer interaction",
-            "score": 5.0,
-            "raw_score": 5,
-            "direct_runtime_match": true,
-            "evidence": [
-              "direct import `game/prompt_context.py`",
-              "downstream lifecycle import of exported prompt-context builder"
-            ]
-          },
-          {
-            "path": "tests/test_lead_lifecycle_vertical_slice.py",
-            "category": "integration / layer interaction",
-            "score": 5.0,
-            "raw_score": 5,
-            "direct_runtime_match": true,
-            "evidence": [
-              "direct import `game/prompt_context.py`",
-              "downstream lifecycle import of exported prompt-context builder"
-            ]
-          },
-          {
-            "path": "tests/test_lead_progression_turn_pipeline_integration.py",
-            "category": "integration / layer interaction",
-            "score": 5.0,
-            "raw_score": 5,
-            "direct_runtime_match": true,
-            "evidence": [
-              "direct import `game/prompt_context.py`",
-              "downstream lifecycle import of exported prompt-context builder"
-            ]
-          },
-          {
-            "path": "tests/test_prompt_and_guard.py",
-            "category": "integration / layer interaction",
-            "score": 4.0,
-            "raw_score": 4,
-            "direct_runtime_match": false,
-            "evidence": [
-              "filename overlap with `prompt_context.py`",
-              "subsystem token overlap: prompt"
-            ]
-          },
-          {
-            "path": "tests/test_prompt_compression.py",
-            "category": "integration / layer interaction",
-            "score": 4.0,
-            "raw_score": 4,
-            "direct_runtime_match": false,
-            "evidence": [
-              "filename overlap with `prompt_context.py`",
-              "subsystem token overlap: prompt"
-            ]
-          }
-        ],
-        "direct_runtime_owner_test_homes": [
-          "tests/test_prompt_context.py",
-          "tests/test_strict_social_answer_pressure_cashout.py",
-          "tests/test_synthetic_sessions.py",
-          "tests/test_turn_pipeline_shared.py"
-        ],
-        "alignment_status": "partial",
-        "mismatch_type": "ownership_spread_wide",
-        "severity": "high",
-        "healthy_overlap": false,
-        "coverage_spread": 10,
-        "category_counts": {
-          "integration / layer interaction": 12,
-          "unit / pure-rule": 1,
-          "transcript / scenario lock": 1
-        },
-        "evidence": [
-          "Coverage is spread across many homes rather than anchored in one direct owner suite.",
-          "primary home `tests/test_prompt_context.py` (integration / layer interaction; score 10.0)",
-          "direct import `game/prompt_context.py`",
-          "subsystem token overlap: prompt",
-          "primary home `tests/test_strict_social_answer_pressure_cashout.py` (integration / layer interaction; score 8.0)",
-          "primary home `tests/test_synthetic_sessions.py` (integration / layer interaction; score 8.0)",
-          "docs runtime claims: `game/prompt_context.py`, `game/response_policy_contracts.py`"
         ]
       },
       {
@@ -13173,6 +12911,13 @@
           },
           {
             "source": "docs/narrative_integrity_architecture.md",
+            "claimed_owner": "tests/TEST_CONSOLIDATION_PLAN.md",
+            "owner_type": "test",
+            "strength": "strong",
+            "excerpt": "| **Prompt / sanitizer ownership boundaries** | Keep **pre-generation** contracts in prompt/guard paths vs **post-GM** string hygiene in sanitizer paths; document **smoke overlap** vs **canonical owner** for each invaria"
+          },
+          {
+            "source": "docs/narrative_integrity_architecture.md",
             "claimed_owner": "tests/test_prompt_context.py",
             "owner_type": "test",
             "strength": "strong",
@@ -13222,17 +12967,10 @@
           },
           {
             "source": "docs/ownership_cleanup_delta.md",
-            "claimed_owner": "tests/test_answer_completeness_rules.py",
+            "claimed_owner": "tests/TEST_AUDIT.md",
             "owner_type": "test",
             "strength": "soft",
-            "excerpt": "- `tests/test_answer_completeness_rules.py` now frames shipped answer-completeness and response-delta contracts as downstream gate / escalation consumers, using a module-local prompt-contract handle instead of a broad pr"
-          },
-          {
-            "source": "docs/narrative_integrity_architecture.md",
-            "claimed_owner": "tests/test_final_emission_gate.py",
-            "owner_type": "test",
-            "strength": "soft",
-            "excerpt": "| Prompt-context bundle / shipped prompt contracts | `test_prompt_context.py` (practical primary direct-owner suite); `test_prompt_compression.py`, `test_final_emission_gate.py`, `test_social_exchange_emission.py`, `test"
+            "excerpt": "- `docs/architecture_ownership_ledger.md`, `docs/architecture_audit_readme.md`, and `tests/TEST_AUDIT.md` consistently declare `game/prompt_context.py` as runtime owner and `tests/test_prompt_context.py` as the practical"
           }
         ],
         "practical_test_owner": "tests/test_final_emission_validators.py",
@@ -13331,7 +13069,7 @@
           "direct import `game/final_emission_validators.py`",
           "subsystem token overlap: emission, final, validators",
           "docs runtime claims: `game/final_emission_validators.py`",
-          "docs test claims: `tests/TEST_AUDIT.md`, `tests/test_prompt_context.py`, `tests/test_social_exchange_emission.py`"
+          "docs test claims: `tests/TEST_AUDIT.md`, `tests/TEST_CONSOLIDATION_PLAN.md`, `tests/test_prompt_context.py`"
         ]
       },
       {
@@ -13470,25 +13208,6 @@
         ]
       },
       {
-        "concern_name": "prompt contracts",
-        "runtime_owner": "game/prompt_context.py",
-        "coverage_spread": 10,
-        "primary_test_homes": [
-          "tests/test_prompt_context.py",
-          "tests/test_strict_social_answer_pressure_cashout.py",
-          "tests/test_synthetic_sessions.py",
-          "tests/test_turn_pipeline_shared.py"
-        ],
-        "secondary_test_homes": [
-          "tests/test_narration_transcript_regressions.py",
-          "tests/test_lead_lifecycle_npc_repeat_suppression.py",
-          "tests/test_lead_lifecycle_vertical_slice.py",
-          "tests/test_lead_progression_turn_pipeline_integration.py",
-          "tests/test_prompt_and_guard.py",
-          "tests/test_prompt_compression.py"
-        ]
-      },
-      {
         "concern_name": "final emission repairs",
         "runtime_owner": "game/final_emission_repairs.py",
         "coverage_spread": 8,
@@ -13519,6 +13238,22 @@
           "tests/test_final_emission_gate.py",
           "tests/test_social_exchange_emission.py",
           "tests/test_architecture_audit_tool.py"
+        ]
+      },
+      {
+        "concern_name": "prompt contracts",
+        "runtime_owner": "game/prompt_context.py",
+        "coverage_spread": 7,
+        "primary_test_homes": [
+          "tests/test_prompt_context.py"
+        ],
+        "secondary_test_homes": [
+          "tests/test_narration_transcript_regressions.py",
+          "tests/test_lead_lifecycle_npc_repeat_suppression.py",
+          "tests/test_lead_lifecycle_vertical_slice.py",
+          "tests/test_lead_progression_turn_pipeline_integration.py",
+          "tests/test_prompt_and_guard.py",
+          "tests/test_prompt_compression.py"
         ]
       },
       {
@@ -13611,15 +13346,14 @@
       {
         "concern_name": "prompt contracts",
         "runtime_owner": "game/prompt_context.py",
-        "practical_test_owner": "mixed: tests/test_prompt_context.py, tests/test_strict_social_answer_pressure_cashout.py, tests/test_synthetic_sessions.py",
-        "alignment_status": "partial",
-        "severity": "high",
+        "practical_test_owner": "tests/test_prompt_context.py",
+        "alignment_status": "aligned",
+        "severity": "low",
         "evidence": [
-          "Coverage is spread across many homes rather than anchored in one direct owner suite.",
           "primary home `tests/test_prompt_context.py` (integration / layer interaction; score 10.0)",
           "direct import `game/prompt_context.py`",
           "subsystem token overlap: prompt",
-          "primary home `tests/test_strict_social_answer_pressure_cashout.py` (integration / layer interaction; score 8.0)"
+          "docs runtime claims: `game/prompt_context.py`, `game/response_policy_contracts.py`"
         ]
       },
       {
@@ -13729,12 +13463,13 @@
         "status": "drifting",
         "points": 2,
         "evidence": [
-          "Alignment states: aligned 0, partial 8, conflict 0, unclear 0.",
+          "Alignment states: aligned 1, partial 7, conflict 0, unclear 0.",
           "final emission gate orchestration -> partial",
-          "prompt contracts -> partial"
+          "response policy contracts -> partial"
         ],
         "counts": {
-          "partial": 8
+          "aligned": 1,
+          "partial": 7
         },
         "confidence_effect": "neutral"
       },
@@ -13758,13 +13493,13 @@
         "hotspot_name": "prompt contracts conflict",
         "source_subsystem": "prompt contracts",
         "classification": "localized under-consolidation",
-        "why": "The runtime owner and practical direct-owner suite are visible again, but prompt-adjacent coverage remains broader than ideal.",
+        "why": "A dominant prompt owner and direct-owner suite are visible; remaining spread reads as governed downstream adjacency rather than owner smear.",
         "runtime_owner": "game/prompt_context.py",
-        "test_alignment_status": "partial",
-        "severity": "high",
+        "test_alignment_status": "aligned",
+        "severity": "low",
         "evidence": [
-          "Coverage is spread across many homes rather than anchored in one direct owner suite.",
           "primary home `tests/test_prompt_context.py` (integration / layer interaction; score 10.0)",
+          "direct import `game/prompt_context.py`",
           "game/prompt_context.py: contract_owner (high)",
           "game/prompt_context.py: module as compatibility residue; do not add prompt-contract semantics there."
         ]
@@ -13833,11 +13568,11 @@
         "classification": "transitional residue",
         "why": "This hotspot is anchored in extraction residue rather than a fresh owner split.",
         "runtime_owner": "game/prompt_context.py",
-        "test_alignment_status": "partial",
-        "severity": "high",
+        "test_alignment_status": "aligned",
+        "severity": "low",
         "evidence": [
-          "Coverage is spread across many homes rather than anchored in one direct owner suite.",
           "primary home `tests/test_prompt_context.py` (integration / layer interaction; score 10.0)",
+          "direct import `game/prompt_context.py`",
           "game/prompt_context.py: contract_owner (high)",
           "game/prompt_context_leads.py: \"\"\"Support-only lead/interlocutor prompt-context helpers extracted from `prompt_context`."
         ]
@@ -13874,13 +13609,13 @@
       }
     ],
     "strongest_evidence_architecture_real": [
+      "`prompt contracts` still resolves to `game/prompt_context.py` (high ownership confidence; test alignment `aligned`).",
       "`final emission gate orchestration` still resolves to `game/final_emission_gate.py` (high ownership confidence; test alignment `partial`).",
-      "`final emission repairs` still resolves to `game/final_emission_repairs.py` (high ownership confidence; test alignment `partial`).",
-      "`final emission validators` still resolves to `game/final_emission_validators.py` (high ownership confidence; test alignment `partial`)."
+      "`final emission repairs` still resolves to `game/final_emission_repairs.py` (high ownership confidence; test alignment `partial`)."
     ],
     "strongest_evidence_patch_accumulating": [
       "`final emission gate orchestration` is `partial` with practical tests centered in `mixed: tests/test_final_emission_gate.py, tests/test_final_emission_scene_integrity.py, tests/test_final_emission_visibility.py`; evidence: Coverage is spread across many homes rather than anchored in one direct owner suite.",
-      "`prompt contracts` is `partial` with practical tests centered in `mixed: tests/test_prompt_context.py, tests/test_strict_social_answer_pressure_cashout.py, tests/test_synthetic_sessions.py`; evidence: Coverage is spread across many homes rather than anchored in one direct owner suite."
+      "`response policy contracts` is `partial` with practical tests centered in `mixed: tests/test_response_policy_contracts.py, tests/test_interaction_continuity_contract.py, tests/test_interaction_continuity_validation.py`; evidence: Coverage is spread across many homes rather than anchored in one direct owner suite."
     ],
     "runtime_test_doc_mismatch_review": [
       {
@@ -13895,20 +13630,6 @@
           "primary home `tests/test_final_emission_gate.py` (integration / layer interaction; score 12.0)",
           "direct import `game/final_emission_gate.py`",
           "subsystem token overlap: emission, final, gate"
-        ]
-      },
-      {
-        "concern_name": "prompt contracts",
-        "alignment_status": "partial",
-        "severity": "high",
-        "runtime_owner": "game/prompt_context.py",
-        "practical_test_owner": "mixed: tests/test_prompt_context.py, tests/test_strict_social_answer_pressure_cashout.py, tests/test_synthetic_sessions.py",
-        "coverage_spread": 10,
-        "evidence": [
-          "Coverage is spread across many homes rather than anchored in one direct owner suite.",
-          "primary home `tests/test_prompt_context.py` (integration / layer interaction; score 10.0)",
-          "direct import `game/prompt_context.py`",
-          "subsystem token overlap: prompt"
         ]
       },
       {
@@ -13950,6 +13671,20 @@
           "No related test file accumulated enough concern-specific affinity.",
           "Inventory docs now describe the governance map more coherently, but practical test affinity remains weak because this concern is docs-led rather than runtime-owned.",
           "docs test claims: `tests/TEST_AUDIT.md`, `tests/TEST_CONSOLIDATION_PLAN.md`, `tests/test_lead_lifecycle_block3_transcript_regression.py`"
+        ]
+      },
+      {
+        "concern_name": "final emission repairs",
+        "alignment_status": "partial",
+        "severity": "medium",
+        "runtime_owner": "game/final_emission_repairs.py",
+        "practical_test_owner": "mixed: tests/test_final_emission_repairs.py, tests/test_fallback_behavior_repairs.py",
+        "coverage_spread": 8,
+        "evidence": [
+          "Docs name a canonical test owner, but practical coverage concentrates elsewhere.",
+          "primary home `tests/test_final_emission_repairs.py` (unit / pure-rule; score 13.8)",
+          "direct import `game/final_emission_repairs.py`",
+          "subsystem token overlap: emission, final, repairs"
         ]
       }
     ],
@@ -13998,15 +13733,14 @@
       {
         "concern_name": "prompt contracts",
         "runtime_owner": "game/prompt_context.py",
-        "practical_test_owner": "mixed: tests/test_prompt_context.py, tests/test_strict_social_answer_pressure_cashout.py, tests/test_synthetic_sessions.py",
-        "alignment_status": "partial",
-        "severity": "high",
+        "practical_test_owner": "tests/test_prompt_context.py",
+        "alignment_status": "aligned",
+        "severity": "low",
         "evidence": [
-          "Coverage is spread across many homes rather than anchored in one direct owner suite.",
           "primary home `tests/test_prompt_context.py` (integration / layer interaction; score 10.0)",
           "direct import `game/prompt_context.py`",
           "subsystem token overlap: prompt",
-          "primary home `tests/test_strict_social_answer_pressure_cashout.py` (integration / layer interaction; score 8.0)"
+          "docs runtime claims: `game/prompt_context.py`, `game/response_policy_contracts.py`"
         ]
       },
       {

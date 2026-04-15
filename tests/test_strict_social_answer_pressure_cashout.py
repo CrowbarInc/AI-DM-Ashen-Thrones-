@@ -1,7 +1,8 @@
-"""Block 4: strict-social answer-pressure + spoken refinement cash-out regression suite.
+"""Downstream strict-social answer-pressure + spoken cash-out regression suite.
 
-End-to-end transcript shape, cash-out branches, session policy probe, and guardrails
-against over-firing — no new game logic; locks behavior in final_emission_gate / api.
+Locks strict-social escalation, validator-layer application, and spoken cash-out
+behavior once prompt contracts are already shipped. This module consumes local
+contract-shaped fixtures rather than owning prompt-contract derivation.
 """
 from __future__ import annotations
 
@@ -14,25 +15,12 @@ from game.final_emission_gate import (
     _skip_response_delta_layer,
     apply_spoken_state_refinement_cash_out,
 )
-from game.prompt_context import (
-    ANSWER_COMPLETENESS_PARTIAL_REASONS,
-    _answer_pressure_followup_details,
-    build_answer_completeness_contract,
-    build_response_delta_contract,
-)
 from game.social import determine_social_escalation_outcome
 from tests.test_social_escalation import _session_with_pressure
 
 pytestmark = pytest.mark.unit
 
-
-def _obligations_social_answer(active_reply_expected: bool = True) -> dict:
-    return {
-        "suppress_non_social_emitters": True,
-        "should_answer_active_npc": True,
-        "active_npc_reply_expected": active_reply_expected,
-        "active_npc_reply_kind": "answer",
-    }
+_STRICT_SOCIAL_ALLOWED_PARTIAL_REASONS = ("uncertainty", "lack_of_knowledge", "gated_information")
 
 
 def _response_type_debug_ok() -> dict:
@@ -79,37 +67,59 @@ def _tavern_patrol_pressure_log() -> list[dict]:
     ]
 
 
-# --- A. End-to-end transcript regression (contracts + layers + cash-out) ----------
+def _correction_reask_answer_pressure_details() -> dict:
+    return {
+        "same_interlocutor_followup": True,
+        "prior_answer_substantive": True,
+        "answer_pressure_followup_detected": True,
+        "correction_reask_followup_detected": True,
+        "answer_pressure_family": "correction_reask_followup",
+    }
 
 
-def test_transcript_runner_why_redirect_then_correction_reask_followup_recognition():
-    """Objective #6: correction/re-ask turn must not classify as a fresh first attempt."""
-    log_compact = [
-        {
-            "player_input": "Runner, anything interesting going on?",
-            "gm_snippet": (
-                "The Tavern Runner wipes a glass. Folk whisper about the north road—caravans "
-                "tighten their tarps when the wind turns cold."
-            ),
+def _strict_social_answer_completeness_contract(
+    *,
+    answer_required: bool = True,
+    strict_social_override: bool = True,
+) -> dict:
+    return {
+        "enabled": bool(answer_required),
+        "answer_required": bool(answer_required),
+        "trace": {
+            "strict_social_answer_seek_override": bool(strict_social_override),
         },
-        {
-            "player_input": "Why is that?",
-            "gm_snippet": (
-                'He lowers his voice. "If you want a lead, watch who slips into the seal-house '
-                'after the bell—there\'s a private drop rumored for tonight."'
-            ),
+    }
+
+
+def _strict_social_response_delta_contract(
+    *,
+    previous_answer_snippet: str,
+    enabled: bool = True,
+) -> dict:
+    return {
+        "enabled": bool(enabled),
+        "delta_required": bool(enabled),
+        "trigger_source": "strict_social_answer_pressure" if enabled else "none",
+        "previous_answer_snippet": previous_answer_snippet,
+        "allowed_delta_kinds": ["refinement"],
+        "delta_must_come_early": False,
+        "allow_short_bridge_before_delta": True,
+        "forbid_semantic_restatement": bool(enabled),
+        "trace": {
+            "trigger_source": "strict_social_answer_pressure" if enabled else "none",
+            "strict_social_answer_seek_override": bool(enabled),
+            "suppressed_because": [] if enabled else ["social_lock"],
         },
-    ]
+    }
+
+
+# --- A. Transcript regression (downstream layers + cash-out) ----------
+
+
+def test_transcript_runner_correction_reask_followup_drives_downstream_escalation():
+    """Correction/re-ask follow-up must stay on the existing strict-social thread."""
     correction = "What? I asked you why people here wouldn't be friendly to newcomers."
-    ap = _answer_pressure_followup_details(
-        player_input=correction,
-        recent_log_compact=log_compact,
-        narration_obligations={},
-        session_view={"active_interaction_target_id": "tavern_runner"},
-    )
-    assert ap["correction_reask_followup_detected"] is True
-    assert ap["answer_pressure_followup_detected"] is True
-    assert ap["answer_pressure_family"] == "correction_reask_followup"
+    ap = _correction_reask_answer_pressure_details()
 
     session = _session_with_pressure("scene_tavern", "runner_local_gossip", "tavern_runner", 1)
     soc = determine_social_escalation_outcome(
@@ -127,39 +137,9 @@ def test_transcript_runner_why_redirect_then_correction_reask_followup_recogniti
     assert soc["escalation_reason"] != "first_attempt_same_topic"
     assert soc["escalation_reason"] == "explicit_question_reassertion"
 
-    obligations = _obligations_social_answer()
-    session_view = {"active_interaction_target_id": "tavern_runner"}
-    resolution = {
-        "kind": "question",
-        "social": {"npc_id": "tavern_runner", "npc_name": "Tavern Runner"},
-    }
-    ac = build_answer_completeness_contract(
-        player_input=correction,
-        narration_obligations=obligations,
-        resolution=resolution,
-        session_view=session_view,
-        uncertainty_hint=None,
-        recent_log_compact=log_compact,
-    )
-    rd = build_response_delta_contract(
-        player_input=correction,
-        recent_log_compact=log_compact,
-        narration_obligations=obligations,
-        resolution=resolution,
-        answer_completeness=ac,
-        session_view=session_view,
-    )
-    assert ac["answer_required"] is True
-    assert ac["trace"].get("strict_social_answer_seek_override") is True
-    assert rd["enabled"] is True
-    assert rd["trigger_source"] == "strict_social_answer_pressure"
-
-
-def test_transcript_missing_patrol_turn4_answer_pressure_contracts_layers_and_cashout(monkeypatch):
+def test_transcript_missing_patrol_turn4_applies_layers_and_cashout(monkeypatch):
     log = _tavern_patrol_pressure_log()
     turn4 = "Then what can you confirm?"
-    obligations = _obligations_social_answer()
-    session_view = {"active_interaction_target_id": "tavern_runner"}
     resolution = {
         "kind": "question",
         "prompt": turn4,
@@ -174,29 +154,10 @@ def test_transcript_missing_patrol_turn4_answer_pressure_contracts_layers_and_ca
             "lead_landing": {"authoritative_promoted_ids": ["lid_patrol_milestone"]},
         },
     }
-    ac = build_answer_completeness_contract(
-        player_input=turn4,
-        narration_obligations=obligations,
-        resolution=resolution,
-        session_view=session_view,
-        uncertainty_hint=None,
-        recent_log_compact=log,
-    )
-    rd = build_response_delta_contract(
-        player_input=turn4,
-        recent_log_compact=log,
-        narration_obligations=obligations,
-        resolution=resolution,
-        answer_completeness=ac,
-        session_view=session_view,
-    )
-    assert ac["trace"]["strict_social_answer_seek_override"] is True
-    assert ac["answer_required"] is True
-    assert rd["enabled"] is True
-    assert rd["trigger_source"] == "strict_social_answer_pressure"
-
-    prior = str(rd.get("previous_answer_snippet") or "")
+    prior = str(log[-1]["gm_snippet"] or "")
     assert len(prior) >= 12
+    ac = _strict_social_answer_completeness_contract()
+    rd = _strict_social_response_delta_contract(previous_answer_snippet=prior)
     # Echo prior answer to exercise RD under bridge ownership (Block 2 bypass).
     gm_line = f'Tavern Runner says, "{prior}"'
     gm = {
@@ -586,9 +547,6 @@ def test_non_answer_seeking_social_turn_does_not_cash_out_despite_promoted_lead(
         "game.final_emission_gate.strict_social_emission_will_apply",
         lambda *a, **k: True,
     )
-    log = _tavern_patrol_pressure_log()
-    obligations = _obligations_social_answer()
-    session_view = {"active_interaction_target_id": "tavern_runner"}
     resolution = {
         "kind": "question",
         "prompt": "I nod and let the crowd noise fill the silence.",
@@ -597,15 +555,10 @@ def test_non_answer_seeking_social_turn_does_not_cash_out_despite_promoted_lead(
             "lead_landing": {"authoritative_promoted_ids": ["lid_xyzzy"]},
         },
     }
-    ac = build_answer_completeness_contract(
-        player_input="I nod and let the crowd noise fill the silence.",
-        narration_obligations=obligations,
-        resolution=resolution,
-        session_view=session_view,
-        uncertainty_hint=None,
-        recent_log_compact=log,
+    ac = _strict_social_answer_completeness_contract(
+        answer_required=False,
+        strict_social_override=False,
     )
-    assert ac["trace"].get("strict_social_answer_seek_override") is not True
     session = {
         "lead_registry": {
             "lid_xyzzy": {"id": "lid_xyzzy", "title": "Secret ledger under the hearth", "summary": ""}
@@ -694,7 +647,7 @@ def test_block2_ac_and_rd_skip_bypass_together_under_bridge_answer_pressure():
         "answer_must_come_first": True,
         "expected_voice": "npc",
         "expected_answer_shape": "direct",
-        "allowed_partial_reasons": list(ANSWER_COMPLETENESS_PARTIAL_REASONS),
+        "allowed_partial_reasons": list(_STRICT_SOCIAL_ALLOWED_PARTIAL_REASONS),
         "forbid_deflection": True,
         "forbid_generic_nonanswer": True,
         "require_concrete_payload": True,

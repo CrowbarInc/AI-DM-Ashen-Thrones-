@@ -638,3 +638,213 @@ Most valuable next tightening, based on this rerun only:
 - keep `game/prompt_context.py` as the singular visible prompt owner and `tests/test_prompt_context.py` as the practical direct-owner suite
 - trim the remaining direct prompt-owner/helper assertions now surfacing in `tests/test_strict_social_answer_pressure_cashout.py`
 - keep `tests/test_synthetic_sessions.py` framed as transcript/harness persistence coverage unless it truly needs direct prompt-owner helper inspection
+
+## PA1 prompt-width narrowing note
+
+This pass was intentionally surgical and did not change runtime behavior.
+
+- `tests/test_strict_social_answer_pressure_cashout.py` no longer imports direct `game.prompt_context` helpers or asserts prompt-contract derivation inline. The correction/re-ask follow-up helper check and the strict-social answer-completeness / response-delta owner assertions were re-centered in `tests/test_prompt_context.py`, leaving the suite focused on downstream strict-social escalation, layer application, and spoken cash-out behavior with local shipped-contract fixtures.
+- `tests/test_synthetic_sessions.py` no longer calls `build_interlocutor_lead_discussion_context()` directly. It now reads as transcript/harness persistence coverage by asserting persisted same-NPC discussion memory (`mention_count`, scene continuity, NPC scoping) that downstream prompt exports consume, while prompt-export semantics remain owned in `tests/test_prompt_context.py`.
+- The prompt seam should now read materially narrower again around these two suites, with `tests/test_prompt_context.py` remaining the dominant practical direct-owner suite and the remaining spread looking more like downstream adjacency than co-ownership.
+- PA2 / AR11 should still watch for any fresh prompt-owner drift in `tests/test_answer_completeness_rules.py`, `tests/test_prompt_compression.py`, or future transcript/harness suites that re-import direct prompt helper internals instead of consuming shipped fixtures or persisted state.
+
+## PA2-R governance alignment note
+
+This follow-up was wording-only and did not change runtime behavior.
+
+- Canonical runtime owner remains `game/prompt_context.py`.
+- Practical primary direct-owner suite remains `tests/test_prompt_context.py`.
+- Governance docs now name `tests/test_strict_social_answer_pressure_cashout.py`, `tests/test_synthetic_sessions.py`, and `tests/test_answer_completeness_rules.py` consistently as downstream secondary prompt coverage rather than prompt-owner homes.
+- `game/prompt_context_leads.py` remains support/extraction residue, and exported consumer paths remain support/consumption residue rather than co-equal prompt owners.
+- Remaining watch items stay narrow: future drift in `tests/test_answer_completeness_rules.py`, `tests/test_prompt_compression.py`, or transcript/harness suites that start re-owning prompt helper/export semantics.
+
+## AR11-R2 final prompt-width audit gate after PA1/PA2
+
+Final audit rerun after the PA1 narrowing pass and the PA2 governance-only wording alignment. No feature or runtime behavior changes were made in this gate; audit artifacts were regenerated, focused prompt verification was rerun, and this delta was updated.
+
+### Evidence used
+
+- `py -3 tools/architecture_audit.py --print-summary`
+- `py -3 tools/architecture_audit.py --focus-subsystem "prompt contracts"`
+- `py -3 tools/architecture_audit.py --focus-subsystem "response policy contracts"`
+- `py -3 -m pytest tests/test_architecture_audit_tool.py tests/test_prompt_context.py tests/test_strict_social_answer_pressure_cashout.py tests/test_synthetic_sessions.py tests/test_answer_completeness_rules.py tests/test_prompt_compression.py`
+- `py -3 -m pytest tests/test_turn_pipeline_shared.py tests/test_prompt_and_guard.py`
+
+### Fresh audit result
+
+- Repo verdict: `mixed / caution`
+- Recommended action mode: `needs targeted ownership cleanup before more features`
+- Hotspot mix: `5 localized under-consolidation`, `3 transitional residue`, `0 possible ownership smear`, `0 unclear`
+- Prompt hotspot state: `localized under-consolidation`
+- Response-policy hotspot state: `localized under-consolidation`
+- `social_exchange_emission mixed repair/contract role`: `transitional residue`
+
+### What changed for real vs wording vs artifact refresh
+
+Real architecture improvement from PA1:
+
+- Prompt practical-owner spread narrowed again. The rerun no longer surfaces `tests/test_strict_social_answer_pressure_cashout.py` or `tests/test_synthetic_sessions.py` as practical prompt-owner homes.
+- `tests/test_prompt_context.py` remains the dominant practical direct-owner suite for prompt contracts.
+- `tests/test_strict_social_answer_pressure_cashout.py` now reads cleanly as downstream strict-social escalation / layer-application / cash-out coverage using local contract-shaped fixtures.
+- `tests/test_synthetic_sessions.py` now reads cleanly as transcript/harness persistence coverage for same-NPC discussion memory and NPC-scoped storage.
+
+Governance/report alignment from PA2 only:
+
+- `docs/architecture_audit_readme.md`, `docs/architecture_ownership_ledger.md`, and related governance text consistently describe `game/prompt_context.py` as the runtime owner and `tests/test_prompt_context.py` as the practical primary direct-owner suite.
+- That wording alignment helps interpret the rerun correctly, but it did not by itself improve the repo verdict or action mode.
+
+Artifact refresh / newly exposed residual width:
+
+- The regenerated audit artifacts now show prompt practical ownership as `mixed: tests/test_prompt_context.py, tests/test_turn_pipeline_shared.py`.
+- This is a real rerun result, but it does **not** look like a new prompt-owner contradiction on the same level as the pre-PA1 strict-social / synthetic spread. `tests/test_turn_pipeline_shared.py` is exercising pipeline timing, shared endpoint behavior, and one imported prompt constant, not acting as the place where new prompt-contract semantics are authored.
+- `tests/test_answer_completeness_rules.py` and `tests/test_prompt_compression.py` still look prompt-adjacent, but in this rerun they stayed below the practical-owner cutoff and read as downstream consumer / serialization coverage rather than the next dominant owner seam.
+
+### Prompt-width interpretation after the rerun
+
+- `game/prompt_context.py` remains the visible canonical runtime owner.
+- `tests/test_prompt_context.py` remains the strongest and clearest practical direct-owner suite.
+- The practical-owner spread did narrow materially again; the remaining width is no longer driven by the previously watched strict-social or synthetic-session suites.
+- `tests/test_answer_completeness_rules.py` remains a downstream watch item, not the next confirmed owner seam. It still directly exercises prompt-owned contract builders, so it should stay watched for future drift, but this rerun did not elevate it into the dominant blocker.
+- `tests/test_prompt_compression.py` remains secondary prompt-adjacent coverage for serialization/compression shape, not a co-equal prompt owner.
+
+### Stable adjacent seams
+
+- `response policy contracts` remains stable at runtime and in docs, but still scores as `localized under-consolidation` because practical coverage remains spread across `tests/test_response_policy_contracts.py`, `tests/test_interaction_continuity_contract.py`, and `tests/test_interaction_continuity_validation.py`.
+- `social_exchange_emission` remains stable as `transitional residue`, not a blocker-shaped hotspot.
+- `game/prompt_context_leads.py` still reads as support/extraction residue rather than a competing prompt owner.
+
+### Residue vs blockage
+
+Mostly residue now:
+
+- broad but governed secondary prompt coverage in `tests/test_prompt_compression.py`, `tests/test_prompt_and_guard.py`, `tests/test_strict_social_answer_pressure_cashout.py`, `tests/test_synthetic_sessions.py`, and other already-narrowed downstream suites
+- `game/prompt_context_leads.py` support/extraction residue
+- `social_exchange_emission` compatibility/retry adjacency
+- prompt-adjacent pipeline checks in `tests/test_turn_pipeline_shared.py` that verify prompt timing or shipped policy presence without becoming the semantic owner
+
+Still real blockage:
+
+- repo-level under-consolidation remains broad enough that the audit still holds the repo at `mixed / caution`
+- prompt practical ownership is cleaner and more honest than before, but not yet singular enough in the refreshed artifacts to move the repo-level action mode on its own
+
+### Final decision gate
+
+- Best current repo label: `mixed / caution`
+- Closest alternate label: `structurally real, under-consolidated`, but the repo has not crossed that threshold yet
+- Limited feature work justified now: `no`
+- Operator call: `one more cleanup seam first`
+
+### Single highest-value remaining seam
+
+- `prompt contracts`
+
+Why this remains the best next seam from refreshed evidence:
+
+- PA1 delivered real narrowing, but the rerun still leaves prompt contracts as the widest practical-owner spread in the audit summary
+- the remaining width now looks more like broad downstream adjacency plus one over-broad pipeline-affinity signal than like active co-ownership, which is real progress
+- even so, the repo-level verdict and action mode did not improve, so prompt remains the single highest-value place where one more convergence pass could change the gate
+
+## TP1 prompt-width narrowing note
+
+This pass was intentionally surgical and did not change runtime behavior.
+
+- `tests/test_turn_pipeline_shared.py` no longer imports `NO_VALIDATOR_VOICE_RULE` from `game.prompt_context`, and its prompt-adjacent request assertions now read as shipped-policy / pipeline propagation coverage rather than direct prompt-rule ownership.
+- The most owner-like pipeline wording was tightened toward request assembly, trace, and endpoint sequencing: module framing now describes route/output variants and model-request assembly, and prompt-context-timing tests were renamed so they read as request-build integration locks instead of prompt-owner homes.
+- The response-type shipping lock in `tests/test_turn_pipeline_shared.py` now stays on downstream propagation of the already-owned dialogue contract across request/debug/trace surfaces, while direct route-derivation details stop making the file read like a prompt-contract home.
+- `tests/test_prompt_context.py` remains the practical primary direct-owner suite; no broad expansion was needed in this pass because the direct no-validator and prompt-policy ownership assertions already live there.
+- Future TP2 / AR12 watch items remain narrow: `tests/test_answer_completeness_rules.py`, `tests/test_prompt_compression.py`, and any new broad pipeline/transcript suites that start asserting direct prompt-bundle derivation instead of downstream shipped consumption.
+
+## TP2-R prompt governance alignment note
+
+This follow-up was wording-only and did not change runtime behavior.
+
+- Canonical runtime owner remains `game/prompt_context.py`.
+- Practical primary direct-owner suite remains `tests/test_prompt_context.py`.
+- Historical notes above remain a record of earlier audit states; the current governance target for this seam is `runtime owner -> direct-owner suite -> downstream secondary/support residue`.
+- Secondary downstream coverage should now read consistently as `tests/test_prompt_compression.py`, `tests/test_prompt_and_guard.py`, `tests/test_dialogue_interaction_establishment.py`, `tests/test_fallback_shipped_contract_propagation.py`, `tests/test_social_escalation.py`, `tests/test_social_interaction_authority.py`, `tests/test_social_speaker_grounding.py`, `tests/test_social_topic_anchor.py`, `tests/test_stale_interlocutor_invalidation_block3.py`, `tests/test_strict_social_answer_pressure_cashout.py`, `tests/test_synthetic_sessions.py`, `tests/test_answer_completeness_rules.py`, `tests/test_turn_pipeline_shared.py`, plus relevant gate/emission/transcript suites such as `tests/test_final_emission_gate.py`, `tests/test_social_exchange_emission.py`, and `tests/test_narration_transcript_regressions.py`.
+- `tests/test_prompt_compression.py`, `tests/test_answer_completeness_rules.py`, and `tests/test_turn_pipeline_shared.py` should be read as downstream serialization, shipped-contract consumption, and request/pipeline propagation coverage rather than prompt-owner homes.
+- Remaining residue is support/compatibility only: `game/prompt_context_leads.py` remains extraction residue, and exported consumer paths may keep consuming prompt-owned bundles without becoming co-equal prompt owners.
+
+## AR12-R2 final prompt-width audit gate after TP1/TP2
+
+Final audit rerun after the TP1 prompt-width narrowing pass and the TP2 governance-only wording alignment. No feature or runtime behavior changes were made in this gate. Audit artifacts were regenerated, focused prompt verification was rerun, and one tiny audit-only interpretation polish was applied so a prompt seam with an explicit dominant owner and low-severity healthy overlap is not still mislabeled as smear-shaped.
+
+### Evidence used
+
+- `py -3 tools/architecture_audit.py --print-summary`
+- `py -3 tools/architecture_audit.py --focus-subsystem "prompt contracts"`
+- `py -3 tools/architecture_audit.py --focus-subsystem "response policy contracts"`
+- `py -3 -m pytest tests/test_architecture_audit_tool.py tests/test_prompt_context.py tests/test_turn_pipeline_shared.py tests/test_answer_completeness_rules.py tests/test_prompt_compression.py`
+
+### Fresh audit result
+
+- Repo verdict: `mixed / caution`
+- Recommended action mode: `needs targeted ownership cleanup before more features`
+- Hotspot mix: `5 localized under-consolidation`, `3 transitional residue`, `0 possible ownership smear`, `0 unclear`
+- Prompt hotspot state: `localized under-consolidation`, with focused prompt alignment `aligned / healthy_overlap / low`
+- Response-policy hotspot state: `localized under-consolidation`
+- `social_exchange_emission mixed repair/contract role`: `transitional residue`
+
+### What changed for real vs wording vs artifact refresh
+
+Real architecture improvement from TP1:
+
+- Prompt practical-owner spread narrowed again. The refreshed audit keeps `tests/test_prompt_context.py` as the dominant practical direct-owner suite and no longer elevates `tests/test_turn_pipeline_shared.py` into the practical-owner mix.
+- `tests/test_turn_pipeline_shared.py` now reads as downstream request-shipping / sequencing / propagation coverage. The direct `game.prompt_context` import is gone, the direct `NO_VALIDATOR_VOICE_RULE` owner assertion is gone, and the remaining response-type checks stay on already-shaped contract propagation through request/debug/trace surfaces.
+
+Governance/report alignment from TP2 only:
+
+- Docs and ownership summaries now consistently describe the prompt seam as `runtime owner -> direct-owner suite -> downstream secondary/support residue`.
+- That alignment helped the rerun read prompt coverage more honestly, but it did not by itself change runtime architecture.
+
+Artifact refresh and tiny audit-only polish:
+
+- The regenerated artifacts now reflect the post-TP1 narrowed prompt-owner story instead of the pre-rerun owner mix.
+- AR12-R2 applied only a small audit-classification correction so prompt healthy-overlap cases with a dominant owner are not still escalated into a smear-shaped hotspot in the repo summary.
+
+### Prompt-width interpretation after the rerun
+
+- `game/prompt_context.py` remains the visible canonical runtime owner.
+- `tests/test_prompt_context.py` remains the dominant and practical direct-owner suite.
+- `tests/test_turn_pipeline_shared.py` now reads clearly as secondary pipeline coverage, not prompt-bundle derivation ownership.
+- `tests/test_answer_completeness_rules.py` remains a downstream watch item, not the next confirmed prompt-owner seam. It still directly exercises prompt-owned builders through a local module handle, but in this rerun it stayed downstream rather than displacing `tests/test_prompt_context.py`.
+- `tests/test_prompt_compression.py` remains secondary prompt-adjacent serialization/compression coverage. It still imports prompt-owner surfaces, but the audit keeps it in secondary homes rather than the practical-owner center.
+
+### Stable adjacent seams
+
+- `response policy contracts` remains runtime-stable in `game/response_policy_contracts.py`, but the rerun still reports practical spread across `tests/test_response_policy_contracts.py`, `tests/test_interaction_continuity_contract.py`, and `tests/test_interaction_continuity_validation.py`, so the seam remains `localized under-consolidation`.
+- `social_exchange_emission` remains stable as `transitional residue`, not a blocker-shaped hotspot.
+- `game/prompt_context_leads.py` remains extraction/support residue rather than a competing prompt owner.
+
+### Residue vs blockage
+
+Mostly residue now:
+
+- broad but clearly governed secondary prompt coverage
+- adjacency through shipped/exported prompt bundles
+- compatibility/support residue in `game/prompt_context_leads.py`
+- downstream consumption in pipeline, answer-completeness, and compression suites
+- `social_exchange_emission` compatibility/retry adjacency
+
+Still real blockage:
+
+- the repo as a whole is still under-consolidated enough to stay at `mixed / caution`
+- the strongest remaining practical spread now sits in `response policy contracts`, not prompt width
+- heavy archaeology and high centrality still keep the overall action mode conservative even after the prompt rerun improved
+
+### Final decision gate
+
+- Best current repo label: `mixed / caution`
+- Closest alternate label: `structurally real, under-consolidated`, but the repo has not crossed that threshold yet
+- Limited feature work justified now: `no`
+- Operator call: `one more cleanup seam first`
+
+### Single highest-value remaining seam
+
+- `response policy contracts`
+
+Why this is now the best next seam from refreshed evidence:
+
+- prompt width narrowed again and now reads primarily as owned-with-residue rather than blocker-shaped ambiguity
+- `tests/test_answer_completeness_rules.py` and `tests/test_prompt_compression.py` stayed downstream in the refreshed prompt evidence instead of becoming the next dominant prompt-owner homes
+- the rerun still shows response-policy practical ownership spread across its direct owner suite plus the interaction-continuity suites, so that seam is now the clearest remaining under-consolidation blocker

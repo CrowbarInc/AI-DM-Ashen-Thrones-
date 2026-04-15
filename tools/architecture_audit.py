@@ -1097,6 +1097,14 @@ def _classify_hotspot(
         else:
             classification = "unclear / needs human review"
             why = "Inventory docs still read authoritatively while practical ownership remains unresolved."
+    elif (
+        label == "prompt contracts conflict"
+        and alignment_status == "aligned"
+        and alignment.get("healthy_overlap")
+        and alignment.get("severity") == "low"
+    ):
+        classification = "localized under-consolidation"
+        why = "A dominant prompt owner and direct-owner suite are visible; remaining spread reads as governed downstream adjacency rather than owner smear."
     elif label == "prompt contracts conflict" and alignment_status == "partial":
         classification = "localized under-consolidation"
         why = "The runtime owner and practical direct-owner suite are visible again, but prompt-adjacent coverage remains broader than ideal."
