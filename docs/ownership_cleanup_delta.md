@@ -33,6 +33,12 @@ Interpretation:
 - Compatibility residue still present: private compatibility accessors remain importable; top-level `fallback_behavior` fallback remains supported for older payloads; top-level `social_response_structure_contract` fallback remains supported for older payloads.
 - Recommended next cleanup: rerun the architecture audit and keep watching for any new direct contract assertions drifting back into repair/gate/validator/emission suites.
 
+RP5 narrowing note:
+
+- `tests/test_interaction_continuity_contract.py` no longer imports direct `game.response_policy_contracts` resolver helpers or carries shipped response-policy accessor assertions. Those owner-side checks now live in `tests/test_response_policy_contracts.py`, leaving the suite focused on downstream interaction-continuity contract building and consumption.
+- `tests/test_interaction_continuity_validation.py` no longer performs the direct public-wrapper resolution check for shipped interaction-continuity policy. It now reads as downstream continuity validation and emission-gate enforcement coverage, while the response-policy owner suite keeps the direct resolver assertion.
+- The remaining response-policy breadth should now read more as adjacency from continuity consumers than as practical co-ownership, though future audit reruns should still watch for direct resolver/materialization assertions drifting back into interaction-continuity suites.
+
 ### Prompt contracts
 
 - Prior contradiction / hotspot: `game/prompt_context.py`, `game/prompt_context_leads.py`, and `game/response_policy_contracts.py` all read like competing homes for prompt-facing obligations.
@@ -78,6 +84,20 @@ PC7-R1 narrowing note:
 - Current status: `improved / localized residue`
 - Compatibility residue still present: historical tests and broad integration coverage still touch both files, so practical test authority is wider than the ideal boundary.
 - Recommended next cleanup: tighten test and doc wording so gate ordering stays primary and metadata packaging remains a secondary helper seam.
+
+FG1 narrowing note:
+
+- `tests/test_final_emission_gate.py` now declares itself as the practical primary direct-owner suite for direct `apply_final_emission_gate` orchestration semantics, making the test-side home of layer-order and final-route assertions explicit.
+- Adjacent suites that still pass through the gate were renamed/documented to read as downstream consumers instead of orchestration homes: `tests/test_social_exchange_emission.py` for strict-social emission application, `tests/test_turn_pipeline_shared.py` for API smoke, `tests/test_stage_diff_telemetry.py` for observability, `tests/test_social_emission_quality.py` for quality/meta smoke, and `tests/test_dead_turn_detection.py` for packaged FEM snapshot consumption.
+- No direct orchestration-order assertions had to move in this pass because they were already concentrated in `tests/test_final_emission_gate.py`; the width reduction came from removing owner-like naming and reinforcing the primary/secondary split in governance text.
+
+FG2-R governance alignment note:
+
+- This follow-up was wording-only and did not change runtime behavior.
+- Canonical runtime owner remains `game/final_emission_gate.py`.
+- Practical primary direct-owner suite remains `tests/test_final_emission_gate.py`.
+- Secondary downstream coverage now reads consistently as emission consumer suites, telemetry/retry observability suites, transcript/regression suites, dead-turn packaged-snapshot suites, and pipeline/request-shipping suites, including `tests/test_social_exchange_emission.py`, `tests/test_turn_pipeline_shared.py`, `tests/test_stage_diff_telemetry.py`, `tests/test_social_emission_quality.py`, and `tests/test_dead_turn_detection.py`.
+- `game/final_emission_meta.py` remains metadata packaging/read-side support only, and retry/compatibility adjacency remains support residue rather than orchestration co-ownership.
 
 ### Turn packet vs telemetry
 
@@ -848,3 +868,167 @@ Why this is now the best next seam from refreshed evidence:
 - prompt width narrowed again and now reads primarily as owned-with-residue rather than blocker-shaped ambiguity
 - `tests/test_answer_completeness_rules.py` and `tests/test_prompt_compression.py` stayed downstream in the refreshed prompt evidence instead of becoming the next dominant prompt-owner homes
 - the rerun still shows response-policy practical ownership spread across its direct owner suite plus the interaction-continuity suites, so that seam is now the clearest remaining under-consolidation blocker
+
+## RP6-R response-policy governance alignment note
+
+This follow-up was intentionally wording-only and did not change runtime behavior.
+
+- Canonical runtime owner remains `game/response_policy_contracts.py`.
+- Practical primary direct-owner suite remains `tests/test_response_policy_contracts.py`.
+- Secondary downstream coverage should now read consistently as `tests/test_fallback_shipped_contract_propagation.py`, `tests/test_response_delta_requirement.py`, `tests/test_final_emission_gate.py`, `tests/test_social_exchange_emission.py`, `tests/test_final_emission_validators.py`, `tests/test_interaction_continuity_contract.py`, and `tests/test_interaction_continuity_validation.py`.
+- `tests/test_interaction_continuity_contract.py` and `tests/test_interaction_continuity_validation.py` remain downstream continuity consumer / enforcement coverage, not semantic response-policy owner homes.
+- Compatibility/support residue remains support-only: private compatibility accessors may remain importable, and top-level `fallback_behavior` / `social_response_structure_contract` fallbacks may remain supported without reintroducing co-ownership.
+
+## AR13-R2 final response-policy audit gate after RP5/RP6
+
+Final audit rerun after the RP5 narrowing pass and the RP6 governance-only wording alignment. No feature or runtime behavior changes were made in this gate; audit artifacts were regenerated, focused verification was rerun, and this delta was updated.
+
+### Evidence used
+
+- `py -3 tools/architecture_audit.py --print-summary`
+- `py -3 tools/architecture_audit.py --focus-subsystem "prompt contracts"`
+- `py -3 tools/architecture_audit.py --focus-subsystem "response policy contracts"`
+- `py -3 -m pytest tests/test_architecture_audit_tool.py`
+- `py -3 -m pytest tests/test_response_policy_contracts.py tests/test_interaction_continuity_contract.py tests/test_interaction_continuity_validation.py`
+
+### Fresh audit result
+
+- Repo verdict: `mixed / caution`
+- Recommended action mode: `needs targeted ownership cleanup before more features`
+- Hotspot mix: `4 localized under-consolidation`, `4 transitional residue`, `0 possible ownership smear`, `0 unclear`
+- Prompt hotspot state: `localized under-consolidation`, with focused prompt alignment `aligned / healthy_overlap / low`
+- Response-policy hotspot state: `transitional residue`, with focused response-policy alignment `aligned / healthy_overlap / low`
+- `social_exchange_emission mixed repair/contract role`: `transitional residue`
+
+### What improved for real vs wording vs rerender
+
+Real architecture improvement from RP5:
+
+- Response-policy practical-owner spread narrowed again. The refreshed audit keeps `tests/test_response_policy_contracts.py` as the dominant practical direct-owner suite and no longer needs the interaction-continuity suites to explain direct accessor or shipped-policy materialization semantics.
+- `tests/test_interaction_continuity_contract.py` now reads as downstream contract-building / consumption coverage for `game.interaction_continuity`, not as a second home for direct `game.response_policy_contracts` resolver semantics.
+- `tests/test_interaction_continuity_validation.py` now reads as downstream validation / gate-enforcement coverage, not as a direct owner-side public-wrapper check for shipped response-policy accessors.
+
+Wording / governance alignment from RP6 only:
+
+- `docs/architecture_ownership_ledger.md`, `docs/narrative_integrity_architecture.md`, and `tests/TEST_AUDIT.md` now consistently describe the seam as `runtime owner -> direct-owner suite -> downstream secondary coverage`.
+- That wording alignment helps the rerun read the seam more honestly, but it did not by itself improve runtime architecture.
+
+Artifact refresh only:
+
+- The rerun regenerated `artifacts/architecture_audit/architecture_audit.json` and `artifacts/architecture_audit/architecture_audit.md`.
+- A stale machine inventory snapshot still contains older interaction-continuity node names, but the current response-policy tests, docs, and modules all match the narrowed owner story; that inventory lag does not read like a live response-policy ownership contradiction.
+
+### Response-policy interpretation after the rerun
+
+- Canonical runtime owner remains `game/response_policy_contracts.py`.
+- Practical primary direct-owner suite remains `tests/test_response_policy_contracts.py`.
+- `tests/test_interaction_continuity_contract.py` and `tests/test_interaction_continuity_validation.py` now read clearly as secondary downstream continuity coverage.
+- Remaining width is mostly broad-but-governed secondary coverage, adjacency through shipped/exported response-policy bundles, and compatibility residue in read-side accessors.
+- The seam now looks structurally real but still somewhat under-consolidated, not repair-centered or owner-ambiguous.
+
+### Why the repo still does not cross the feature threshold
+
+- The refreshed audit does **not** leave response policy as the highest-value blocker; that seam now classifies as `transitional residue`.
+- Prompt remains stable as broad-but-owned, not the dominant blocker in this rerun.
+- The repo-level verdict stays at `mixed / caution` because broader high-centrality / archaeology-heavy seams still carry partial test-owner mismatch, especially `final emission gate orchestration`, with `stage diff telemetry` and test-governance inventory interpretation still adding drag.
+
+### Final decision gate
+
+- Best current repo label: `mixed / caution`
+- Closest alternate label: `structurally real, under-consolidated`, but the repo has not crossed that threshold yet
+- Limited feature work justified now: `no`
+- Operator call: `one more cleanup seam first`
+
+### Single highest-value remaining seam
+
+- `final emission gate orchestration`
+
+Why this is now the best next seam from refreshed evidence:
+
+- response policy has narrowed to `transitional residue`
+- prompt remains broad but clearly owned rather than blocker-shaped in the focused rerun
+- `final emission gate orchestration` is now the highest-severity remaining partial mismatch in the refreshed audit, with practical coverage still spread across several homes instead of one clearly dominant direct-owner suite
+- FG1 narrows that practical spread by making `tests/test_final_emission_gate.py` visibly dominant and by relabeling nearby emission, telemetry, and metadata suites as intentional downstream consumers rather than orchestration co-owners.
+
+## AR14-R2 final gate-orchestration audit gate after FG1/FG2
+
+Final audit rerun after FG1 and FG2. No feature or runtime behavior changes were made in this gate. Audit artifacts were regenerated, focused verification was rerun, and this delta was updated. A tiny AR14-R2 audit-only interpretation polish was also applied so obvious layer-specific downstream gate-consumer suites do not tie with the direct-owner suite purely because they import `apply_final_emission_gate`.
+
+### Evidence used
+
+- `py -3 tools/architecture_audit.py --print-summary`
+- `py -3 tools/architecture_audit.py --focus-subsystem "prompt contracts"`
+- `py -3 tools/architecture_audit.py --focus-subsystem "response policy contracts"`
+- `py -3 tools/architecture_audit.py --focus-subsystem "final emission gate orchestration"`
+- `py -3 -m pytest tests/test_architecture_audit_tool.py`
+- `py -3 -m pytest tests/test_final_emission_gate.py tests/test_social_exchange_emission.py tests/test_turn_pipeline_shared.py tests/test_stage_diff_telemetry.py tests/test_social_emission_quality.py tests/test_dead_turn_detection.py`
+
+### Fresh audit result
+
+- Repo verdict: `mixed / caution`
+- Recommended action mode: `needs targeted ownership cleanup before more features`
+- Hotspot mix: `4 localized under-consolidation`, `4 transitional residue`, `0 possible ownership smear`, `0 unclear`
+- Score total: `9/18`
+- Final-emission gate hotspot state: still `localized under-consolidation`
+
+### What improved for real vs wording vs artifact refresh
+
+Real architecture improvement from FG1:
+
+- The practical-owner spread narrowed materially. The refreshed audit no longer centers the gate concern on broad downstream suites such as `tests/test_social_exchange_emission.py`, `tests/test_turn_pipeline_shared.py`, `tests/test_stage_diff_telemetry.py`, `tests/test_social_emission_quality.py`, or `tests/test_dead_turn_detection.py`.
+- After the refreshed rerun, the remaining practical-owner mix is narrower and centered on `tests/test_final_emission_gate.py` plus two interaction-continuity-adjacent suites: `tests/test_interaction_continuity_speaker_bridge.py` and `tests/test_interaction_continuity_validation.py`.
+- `tests/test_final_emission_gate.py` remains the dominant practical direct-owner suite and the clearest home for direct orchestration-order / final-route semantics.
+
+Governance/report alignment from FG2 only:
+
+- `docs/architecture_ownership_ledger.md`, `docs/narrative_integrity_architecture.md`, and the refreshed audit artifacts consistently describe `game/final_emission_gate.py` as the runtime orchestration owner, `tests/test_final_emission_gate.py` as the practical primary direct-owner suite, and metadata/emission/telemetry/pipeline/dead-turn/transcript suites as secondary coverage.
+- That wording alignment helped the rerun read the seam more honestly, but it did not by itself change the repo verdict or action mode.
+
+Artifact refresh and tiny audit-only polish:
+
+- The rerun regenerated `artifacts/architecture_audit/architecture_audit.json` and `artifacts/architecture_audit/architecture_audit.md`.
+- AR14-R2 added only a small static test-affinity adjustment so obvious downstream gate-consumer suites are no longer mistaken for co-equal orchestration-owner homes just because they pass through the gate.
+- This polish did not change runtime behavior. It exposed a narrower remaining seam instead of manufacturing a clean pass.
+
+### Gate-orchestration interpretation after the rerun
+
+- Runtime ownership remains explicit and stable in `game/final_emission_gate.py`.
+- `game/final_emission_meta.py` now reads consistently as metadata packaging/read-side support only, not as orchestration authority.
+- Metadata / validator / emission / transcript / pipeline / dead-turn secondary coverage now reads more clearly as governed adjacency rather than practical gate co-ownership.
+- The remaining width is no longer broad gate-vs-meta/pipeline/telemetry/emission spread. It is now concentrated in interaction-continuity-adjacent tests that still import gate-private continuity emission helpers and therefore retain owner-like affinity.
+
+### Residue vs remaining blockage
+
+Mostly residue now:
+
+- broad but governed secondary coverage through metadata packaging, strict-social emission, telemetry, pipeline, quality, dead-turn packaging, and transcript/regression consumers
+- compatibility residue in `game/final_emission_meta.py`
+- honest centrality of `apply_final_emission_gate` as the final orchestrator
+
+Still real blockage:
+
+- `final emission gate orchestration` remains `partial / ownership_spread_wide / high` because `tests/test_interaction_continuity_speaker_bridge.py` and `tests/test_interaction_continuity_validation.py` still read close enough to gate-private continuity emission ownership to keep practical authority from collapsing onto one clearly singular test home
+
+### Stable adjacent seams
+
+- `response policy contracts` remains stable as `transitional residue`, with `tests/test_response_policy_contracts.py` still the practical direct-owner suite.
+- `prompt contracts` remains broad-but-owned and stable at `aligned / healthy_overlap / low` in the focused rerun, even though the subsystem remains large and archaeology-heavy.
+- `social_exchange_emission mixed repair/contract role` remains `transitional residue`, not a blocker-shaped hotspot.
+- `stage diff telemetry` remains `localized under-consolidation`, but it is not the highest-value remaining seam in this rerun.
+
+### Final decision gate
+
+- Best current repo label: `mixed / caution`
+- Closest alternate label: `structurally real, under-consolidated`, but the repo has not crossed that threshold yet
+- Limited feature work justified now: `no`
+- Operator call: `one more cleanup seam first`
+
+### Single highest-value remaining seam
+
+- `final emission gate orchestration`
+
+Why this remains the best next seam from refreshed evidence:
+
+- FG1 delivered real narrowing: the gate no longer reads as broadly co-owned by emission, telemetry, pipeline, dead-turn, or metadata-adjacent suites.
+- FG2 plus the refreshed audit now make the primary/secondary split visible in artifacts instead of only in docs.
+- But the rerun still does not produce a singular practical gate-owner home; the remaining spread is narrower but still real, and it is now concentrated specifically in the interaction-continuity adjacency around `tests/test_interaction_continuity_speaker_bridge.py` and `tests/test_interaction_continuity_validation.py`.

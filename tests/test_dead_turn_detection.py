@@ -1,4 +1,8 @@
-"""Unit and light integration tests for deterministic dead-turn classification."""
+"""Unit and light integration tests for dead-turn classification and packaged FEM snapshots.
+
+The classifier/read-side owner is ``game.final_emission_meta``. The gate call in
+this file only proves downstream packaging into ``_final_emission_meta``.
+"""
 from __future__ import annotations
 
 import pytest
@@ -60,7 +64,7 @@ def test_nonretryable_upstream_forced_fallback_is_dead() -> None:
     assert d["dead_turn_class"] == "retry_terminal_fallback"
 
 
-def test_ordinary_candidate_through_gate_is_not_dead() -> None:
+def test_gate_packages_non_dead_snapshot_for_ordinary_candidate() -> None:
     out = apply_final_emission_gate(
         {"player_facing_text": "Rain drums on the slate roof.", "tags": []},
         resolution={"kind": "observe", "prompt": "I listen to the rain."},

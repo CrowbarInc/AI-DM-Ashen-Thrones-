@@ -439,6 +439,56 @@ def _is_prompt_lifecycle_adjacency(
     return bool(imported_symbols & set(test_info.get("import_names", [])))
 
 
+def _is_gate_downstream_adjacency(
+    test_info: dict[str, Any],
+    subsystem_report: dict[str, Any],
+    target_path: str,
+) -> bool:
+    if subsystem_report.get("subsystem_name") != "final emission gate orchestration":
+        return False
+    if target_path != "game/final_emission_gate.py":
+        return False
+    path_tokens = set(_stem_tokens(test_info["path"]))
+    if {"final", "emission", "gate"} <= path_tokens:
+        return False
+    downstream_runtime_imports = {
+        "game/anti_railroading.py",
+        "game/anti_reset_emission_guard.py",
+        "game/final_emission_meta.py",
+        "game/final_emission_repairs.py",
+        "game/final_emission_validators.py",
+        "game/social_exchange_emission.py",
+        "game/stage_diff_telemetry.py",
+        "game/api_turn_support.py",
+    }
+    if downstream_runtime_imports & set(test_info.get("direct_runtime_imports", [])):
+        return True
+    return bool(
+        path_tokens
+        & {
+            "scene",
+            "integrity",
+            "visibility",
+            "telemetry",
+            "pipeline",
+            "dead",
+            "social",
+            "exchange",
+            "quality",
+            "transcript",
+            "anti",
+            "reset",
+            "guard",
+            "railroading",
+            "retry",
+            "alignment",
+            "validator",
+            "repair",
+            "meta",
+        }
+    )
+
+
 def _subsystem_test_affinity(test_info: dict[str, Any], subsystem_report: dict[str, Any]) -> dict[str, Any]:
     target_paths: list[str] = []
     runtime_owner = subsystem_report.get("inferred_owner")
@@ -460,6 +510,9 @@ def _subsystem_test_affinity(test_info: dict[str, Any], subsystem_report: dict[s
         if _is_prompt_lifecycle_adjacency(test_info, subsystem_report, target_path):
             path_score = max(0, path_score - 3)
             path_evidence.append("downstream lifecycle import of exported prompt-context builder")
+        if _is_gate_downstream_adjacency(test_info, subsystem_report, target_path):
+            path_score = max(0, path_score - 4)
+            path_evidence.append("downstream gate-consumer suite around a layer-specific concern")
         score += path_score
         evidence.extend(path_evidence)
         if target_path == runtime_owner and is_direct:

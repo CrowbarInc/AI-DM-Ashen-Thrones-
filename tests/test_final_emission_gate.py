@@ -1,10 +1,13 @@
-"""Integration tests for ``apply_final_emission_gate`` orchestration ordering and metadata.
+"""Practical primary direct-owner suite for ``apply_final_emission_gate`` orchestration.
 
-Direct prompt-contract semantics belong in ``tests/test_prompt_context.py`` and
-direct response-policy accessor/materialization semantics belong in
-``tests/test_response_policy_contracts.py``. This module keeps downstream
-integration coverage for how shipped contracts are consumed by the final-emission
-gate.
+This file owns direct layer-order and final gate-integration semantics. Direct
+prompt-contract semantics belong in ``tests/test_prompt_context.py`` and direct
+response-policy accessor/materialization semantics belong in
+``tests/test_response_policy_contracts.py``. Downstream emission, telemetry,
+metadata, pipeline, and transcript suites should consume already-owned gate
+behavior here rather than re-own orchestration order there; those files stay
+consumer, smoke, observability, packaged-snapshot, or regression coverage once
+the orchestration contract is already owned here.
 """
 from __future__ import annotations
 

@@ -21,7 +21,7 @@ If current code shape still contradicts a declaration, treat that contradiction 
 - Compatibility residue still allowed: private compatibility accessors may remain importable, and top-level `fallback_behavior` / `social_response_structure_contract` fallbacks may remain supported for older payload shapes.
 - Compatibility residue interpretation: these paths are tolerated read-side residue, not equal semantic homes or a reason to re-center authority on repair, gate, validator, or prompt-adjacent modules.
 - Practical primary direct-owner suite: `tests/test_response_policy_contracts.py`
-- Secondary response-policy coverage only: `tests/test_fallback_shipped_contract_propagation.py`, `tests/test_response_delta_requirement.py`, `tests/test_final_emission_gate.py`, `tests/test_social_exchange_emission.py`, `tests/test_final_emission_validators.py`
+- Secondary response-policy coverage only: `tests/test_fallback_shipped_contract_propagation.py`, `tests/test_response_delta_requirement.py`, `tests/test_final_emission_gate.py`, `tests/test_social_exchange_emission.py`, `tests/test_final_emission_validators.py`, `tests/test_interaction_continuity_contract.py`, `tests/test_interaction_continuity_validation.py`
 - Governance note: docs should describe this seam as `runtime owner -> direct-owner suite -> downstream secondary coverage`, not as repair-, validator-, or gate-centered co-ownership.
 - Current state: `targeted cleanup in progress`
 
@@ -63,6 +63,11 @@ If current code shape still contradicts a declaration, treat that contradiction 
 - Forbidden owner interpretations: `game/final_emission_meta.py` is not the orchestration owner; `game/final_emission_repairs.py` is not the top-level layer-order authority.
 - Belongs here: final-emission layer ordering, gate-level integration, last-mile finalize flow, and calls into validators, repairs, sanitizer, and metadata packaging.
 - Does not belong here: canonical metadata schema ownership, standalone contract-authority logic, or telemetry ownership.
+- Compatibility residue still allowed: `game/final_emission_meta.py` may remain as metadata packaging / read-side support, and retry / observability / pipeline-adjacent consumers may continue to pass through the gate without becoming orchestration owners.
+- Compatibility residue interpretation: metadata packaging/read-side helpers and retry/telemetry/pipeline adjacency are support-only residue, not equal orchestration homes.
+- Practical primary direct-owner suite: `tests/test_final_emission_gate.py`
+- Secondary downstream coverage only: `tests/test_social_exchange_emission.py`, `tests/test_turn_pipeline_shared.py`, `tests/test_stage_diff_telemetry.py`, `tests/test_social_emission_quality.py`, `tests/test_dead_turn_detection.py`, plus transcript/regression suites such as `tests/test_narration_transcript_regressions.py`
+- Governance note: docs should describe this seam as `runtime owner -> direct-owner suite -> downstream secondary / support coverage`, not as mixed gate/meta/telemetry/pipeline co-ownership.
 - Current state: `targeted cleanup in progress`
 
 ## Final Emission Metadata Packaging

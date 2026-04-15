@@ -459,6 +459,42 @@ def test_architecture_audit_classifies_test_categories_stably(audit_mod, tmp_pat
     assert report["tests_analyzed"]["category_counts"]["transcript / scenario lock"] >= 1
 
 
+def test_architecture_audit_keeps_layer_specific_gate_suites_secondary(audit_mod, tmp_path):
+    repo = _mini_repo(tmp_path)
+    _write(
+        repo / "tests" / "test_final_emission_gate.py",
+        "import pytest\n"
+        "from game.final_emission_gate import apply_final_emission_gate\n\n"
+        "pytestmark = pytest.mark.integration\n\n"
+        "def test_gate_owner_path():\n"
+        "    assert apply_final_emission_gate() is True\n",
+    )
+    _write(
+        repo / "tests" / "test_final_emission_visibility.py",
+        "import pytest\n"
+        "from game.final_emission_gate import apply_final_emission_gate\n\n"
+        "pytestmark = pytest.mark.integration\n\n"
+        "def test_visibility_smoke():\n"
+        "    assert apply_final_emission_gate() is True\n",
+    )
+    _write(
+        repo / "tests" / "test_final_emission_scene_integrity.py",
+        "import pytest\n"
+        "from game.final_emission_gate import apply_final_emission_gate\n\n"
+        "pytestmark = pytest.mark.integration\n\n"
+        "def test_scene_integrity_smoke():\n"
+        "    assert apply_final_emission_gate() is True\n",
+    )
+
+    report = audit_mod.analyze_repo(repo)
+    by_name = {item["subsystem_name"]: item for item in report["subsystem_reports"]}
+    gate_alignment = by_name["final emission gate orchestration"]["test_ownership_alignment"]
+
+    assert gate_alignment["practical_test_owner"] == "tests/test_final_emission_gate.py"
+    assert any(item["path"] == "tests/test_final_emission_visibility.py" for item in gate_alignment["secondary_test_homes"])
+    assert any(item["path"] == "tests/test_final_emission_scene_integrity.py" for item in gate_alignment["secondary_test_homes"])
+
+
 def test_architecture_audit_never_imports_game_modules(audit_mod, tmp_path):
     repo = _mini_repo(tmp_path)
     before = {name for name in sys.modules if name == "game" or name.startswith("game.")}

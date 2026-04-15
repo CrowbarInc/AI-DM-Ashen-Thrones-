@@ -1,4 +1,4 @@
-"""Tests for :mod:`game.stage_diff_telemetry` and gate/retry wiring."""
+"""Tests for :mod:`game.stage_diff_telemetry` and downstream gate/retry observability."""
 
 from __future__ import annotations
 
@@ -86,7 +86,7 @@ def test_record_stage_transition_bounded() -> None:
     assert len(tel["transitions"]) == 12
 
 
-def test_final_emission_gate_entry_exit_snapshots() -> None:
+def test_stage_diff_telemetry_records_gate_entry_exit_snapshots() -> None:
     out = apply_final_emission_gate(
         {"player_facing_text": "Rain drums on the slate roof.", "tags": []},
         resolution={"kind": "observe", "prompt": "I listen to the rain."},

@@ -1,10 +1,10 @@
 {
   "summary": {
-    "generated_utc": "2026-04-14T11:09:50.773796+00:00",
+    "generated_utc": "2026-04-15T10:07:38.510757+00:00",
     "test_file_count": 173,
-    "pytest_collected_items": 2370,
-    "ast_test_function_def_lines_total": 2285,
-    "ast_unique_test_names_module_level": 2281,
+    "pytest_collected_items": 2376,
+    "ast_test_function_def_lines_total": 2291,
+    "ast_unique_test_names_module_level": 2287,
     "parametrized_extra_items": 89,
     "files_with_shadowed_duplicate_test_defs": [
       {
@@ -20,15 +20,15 @@
       }
     ],
     "counts_by_primary_bucket": {
-      "integration": 1087,
-      "unit": 1169,
+      "integration": 1089,
+      "unit": 1173,
       "regression": 106,
       "transcript_gauntlet": 8
     }
   },
   "counts_by_majority_file_bucket": {
-    "unit": 78,
-    "integration": 85,
+    "unit": 77,
+    "integration": 86,
     "regression": 8,
     "transcript_gauntlet": 2
   },
@@ -78,6 +78,10 @@
       2
     ],
     [
+      "tests/test_stale_interlocutor_invalidation_block3.py",
+      2
+    ],
+    [
       "tests/test_agenda_simulation.py",
       1
     ],
@@ -88,33 +92,29 @@
     [
       "tests/test_clue_discovery.py",
       1
-    ],
-    [
-      "tests/test_emergent_scene_actors.py",
-      1
     ]
   ],
   "cross_file_same_base_name_count": 0,
   "cross_file_same_base_names_sample": [],
   "feature_area_primary_counts": {
-    "general": 625,
-    "resolution/emission": 315,
-    "fallback": 271,
+    "general": 611,
+    "resolution/emission": 345,
+    "fallback": 267,
     "lead extraction": 261,
-    "social continuity": 181,
-    "transcript regression": 179,
+    "social continuity": 180,
+    "transcript regression": 178,
     "routing": 158,
     "retry": 139,
-    "legality/sanitizer": 95,
-    "clue system": 86,
-    "world/state": 31,
+    "legality/sanitizer": 94,
+    "clue system": 85,
+    "world/state": 29,
     "combat/skill": 15,
     "mixed-state recovery": 14
   },
   "feature_areas_by_distinct_files": [
     {
       "area": "fallback",
-      "distinct_files": 71,
+      "distinct_files": 70,
       "files": [
         "tests/test_answer_completeness_rules.py",
         "tests/test_anti_railroading.py",
@@ -145,7 +145,6 @@
         "tests/test_gm_retry.py",
         "tests/test_gm_retry_context_separation.py",
         "tests/test_intent_parser.py",
-        "tests/test_interaction_continuity_contract.py",
         "tests/test_interaction_continuity_repair.py",
         "tests/test_interaction_continuity_speaker_bridge.py",
         "tests/test_lead_npc_payoff_and_fallback.py",
@@ -191,11 +190,10 @@
     },
     {
       "area": "general",
-      "distinct_files": 63,
+      "distinct_files": 62,
       "files": [
         "tests/test_affordance_generation.py",
         "tests/test_agenda_simulation.py",
-        "tests/test_answer_completeness_rules.py",
         "tests/test_anti_railroading.py",
         "tests/test_api_upstream_preflight.py",
         "tests/test_architecture_audit_tool.py",
@@ -263,6 +261,7 @@
       "distinct_files": 54,
       "files": [
         "tests/test_activate_scene_validation_and_get_persistence.py",
+        "tests/test_answer_completeness_rules.py",
         "tests/test_anti_railroading.py",
         "tests/test_anti_reset_emission_guard.py",
         "tests/test_behavioral_gauntlet_eval.py",
@@ -310,7 +309,6 @@
         "tests/test_social_speaker_grounding.py",
         "tests/test_social_target_authority_regressions.py",
         "tests/test_speaker_contract_enforcement.py",
-        "tests/test_stage_diff_telemetry.py",
         "tests/test_synthetic_smoke.py",
         "tests/test_tone_escalation_rules.py",
         "tests/test_turn_pipeline_shared.py",
@@ -376,7 +374,7 @@
     },
     {
       "area": "social continuity",
-      "distinct_files": 44,
+      "distinct_files": 45,
       "files": [
         "tests/test_answer_completeness_rules.py",
         "tests/test_behavioral_gauntlet_eval.py",
@@ -404,6 +402,7 @@
         "tests/test_post_emission_speaker_adoption.py",
         "tests/test_project_schema.py",
         "tests/test_prompt_context.py",
+        "tests/test_response_policy_contracts.py",
         "tests/test_retry_social_fallback_block3_scope.py",
         "tests/test_scene_entity_lock.py",
         "tests/test_social.py",
@@ -500,12 +499,12 @@
         "tests/test_manual_play_latency.py",
         "tests/test_narration_state_consistency.py",
         "tests/test_prompt_and_guard.py",
+        "tests/test_prompt_context.py",
         "tests/test_save_load.py",
         "tests/test_scene_destination_binding.py",
         "tests/test_scene_layers.py",
         "tests/test_scene_validation.py",
         "tests/test_social.py",
-        "tests/test_social_escalation.py",
         "tests/test_social_exchange_emission.py",
         "tests/test_social_lead_landing.py",
         "tests/test_strict_social_answer_pressure_cashout.py",
@@ -627,14 +626,13 @@
     },
     {
       "area": "world/state",
-      "distinct_files": 14,
+      "distinct_files": 13,
       "files": [
         "tests/test_campaign_reset.py",
         "tests/test_campaign_state_factory.py",
         "tests/test_clue_knowledge.py",
         "tests/test_discovery_memory.py",
         "tests/test_lead_debug_inspection.py",
-        "tests/test_prompt_compression.py",
         "tests/test_save_load.py",
         "tests/test_scene_advancement_signals.py",
         "tests/test_scene_graph.py",
@@ -738,13 +736,7 @@
         "integration": 16
       },
       "primary_feature_area_breakdown": {
-        "general": 23,
-        "fallback": 3,
-        "legality/sanitizer": 1,
-        "social continuity": 1,
-        "transcript regression": 1,
-        "lead extraction": 1,
-        "clue system": 1
+        "resolution/emission": 31
       },
       "high_brittleness_test_count": 1,
       "prose_sensitive_test_count": 1
@@ -1253,17 +1245,17 @@
     {
       "path": "tests/test_dialogue_interaction_establishment.py",
       "filename_bucket": "mixed/unclear",
-      "pytest_collected": 10,
-      "ast_test_def_lines": 10,
-      "ast_unique_test_names": 10,
+      "pytest_collected": 9,
+      "ast_test_def_lines": 9,
+      "ast_unique_test_names": 9,
       "has_shadowed_duplicate_names": false,
       "primary_bucket": "integration",
       "bucket_distribution": {
         "integration": 7,
-        "unit": 3
+        "unit": 2
       },
       "primary_feature_area_breakdown": {
-        "social continuity": 10
+        "social continuity": 9
       },
       "high_brittleness_test_count": 0,
       "prose_sensitive_test_count": 0
@@ -1642,18 +1634,18 @@
     {
       "path": "tests/test_follow_lead_commitment_wiring.py",
       "filename_bucket": "mixed/unclear",
-      "pytest_collected": 25,
-      "ast_test_def_lines": 25,
-      "ast_unique_test_names": 25,
+      "pytest_collected": 24,
+      "ast_test_def_lines": 24,
+      "ast_unique_test_names": 24,
       "has_shadowed_duplicate_names": false,
       "primary_bucket": "integration",
       "bucket_distribution": {
-        "integration": 18,
+        "integration": 17,
         "unit": 7
       },
       "primary_feature_area_breakdown": {
         "lead extraction": 20,
-        "retry": 4,
+        "retry": 3,
         "routing": 1
       },
       "high_brittleness_test_count": 0,
@@ -1820,18 +1812,16 @@
     {
       "path": "tests/test_interaction_continuity_contract.py",
       "filename_bucket": "mixed/unclear",
-      "pytest_collected": 8,
-      "ast_test_def_lines": 8,
-      "ast_unique_test_names": 8,
+      "pytest_collected": 6,
+      "ast_test_def_lines": 6,
+      "ast_unique_test_names": 6,
       "has_shadowed_duplicate_names": false,
       "primary_bucket": "integration",
       "bucket_distribution": {
-        "integration": 7,
-        "unit": 1
+        "integration": 6
       },
       "primary_feature_area_breakdown": {
-        "social continuity": 7,
-        "fallback": 1
+        "social continuity": 6
       },
       "high_brittleness_test_count": 0,
       "prose_sensitive_test_count": 0
@@ -1893,16 +1883,16 @@
     {
       "path": "tests/test_interaction_continuity_validation.py",
       "filename_bucket": "mixed/unclear",
-      "pytest_collected": 11,
-      "ast_test_def_lines": 11,
-      "ast_unique_test_names": 11,
+      "pytest_collected": 10,
+      "ast_test_def_lines": 10,
+      "ast_unique_test_names": 10,
       "has_shadowed_duplicate_names": false,
       "primary_bucket": "unit",
       "bucket_distribution": {
-        "unit": 11
+        "unit": 10
       },
       "primary_feature_area_breakdown": {
-        "social continuity": 11
+        "social continuity": 10
       },
       "high_brittleness_test_count": 0,
       "prose_sensitive_test_count": 0
@@ -2688,8 +2678,7 @@
         "integration": 15
       },
       "primary_feature_area_breakdown": {
-        "general": 13,
-        "world/state": 2
+        "general": 15
       },
       "high_brittleness_test_count": 0,
       "prose_sensitive_test_count": 0
@@ -2697,22 +2686,23 @@
     {
       "path": "tests/test_prompt_context.py",
       "filename_bucket": "mixed/unclear",
-      "pytest_collected": 85,
-      "ast_test_def_lines": 85,
-      "ast_unique_test_names": 85,
+      "pytest_collected": 105,
+      "ast_test_def_lines": 105,
+      "ast_unique_test_names": 105,
       "has_shadowed_duplicate_names": false,
       "primary_bucket": "integration",
       "bucket_distribution": {
-        "unit": 29,
-        "integration": 56
+        "unit": 40,
+        "integration": 65
       },
       "primary_feature_area_breakdown": {
-        "general": 39,
-        "lead extraction": 24,
-        "social continuity": 15,
-        "retry": 4,
-        "fallback": 2,
-        "resolution/emission": 1
+        "general": 53,
+        "lead extraction": 25,
+        "social continuity": 17,
+        "retry": 5,
+        "fallback": 3,
+        "resolution/emission": 1,
+        "clue system": 1
       },
       "high_brittleness_test_count": 2,
       "prose_sensitive_test_count": 2
@@ -2793,18 +2783,19 @@
     {
       "path": "tests/test_response_policy_contracts.py",
       "filename_bucket": "mixed/unclear",
-      "pytest_collected": 6,
-      "ast_test_def_lines": 6,
-      "ast_unique_test_names": 6,
+      "pytest_collected": 8,
+      "ast_test_def_lines": 8,
+      "ast_unique_test_names": 8,
       "has_shadowed_duplicate_names": false,
       "primary_bucket": "unit",
       "bucket_distribution": {
         "integration": 1,
-        "unit": 5
+        "unit": 7
       },
       "primary_feature_area_breakdown": {
-        "general": 5,
-        "fallback": 1
+        "general": 6,
+        "fallback": 1,
+        "social continuity": 1
       },
       "high_brittleness_test_count": 0,
       "prose_sensitive_test_count": 0
@@ -3203,18 +3194,17 @@
     {
       "path": "tests/test_social_escalation.py",
       "filename_bucket": "mixed/unclear",
-      "pytest_collected": 28,
-      "ast_test_def_lines": 28,
-      "ast_unique_test_names": 28,
+      "pytest_collected": 20,
+      "ast_test_def_lines": 20,
+      "ast_unique_test_names": 20,
       "has_shadowed_duplicate_names": false,
-      "primary_bucket": "unit",
+      "primary_bucket": "integration",
       "bucket_distribution": {
-        "unit": 14,
-        "integration": 14
+        "unit": 8,
+        "integration": 12
       },
       "primary_feature_area_breakdown": {
-        "general": 27,
-        "clue system": 1
+        "general": 20
       },
       "high_brittleness_test_count": 0,
       "prose_sensitive_test_count": 0
@@ -3264,19 +3254,19 @@
     {
       "path": "tests/test_social_interaction_authority.py",
       "filename_bucket": "mixed/unclear",
-      "pytest_collected": 7,
-      "ast_test_def_lines": 7,
-      "ast_unique_test_names": 7,
+      "pytest_collected": 5,
+      "ast_test_def_lines": 5,
+      "ast_unique_test_names": 5,
       "has_shadowed_duplicate_names": false,
       "primary_bucket": "integration",
       "bucket_distribution": {
-        "integration": 5,
+        "integration": 3,
         "unit": 2
       },
       "primary_feature_area_breakdown": {
-        "general": 4,
-        "fallback": 2,
-        "resolution/emission": 1
+        "general": 3,
+        "resolution/emission": 1,
+        "fallback": 1
       },
       "high_brittleness_test_count": 0,
       "prose_sensitive_test_count": 0
@@ -3381,17 +3371,17 @@
     {
       "path": "tests/test_social_topic_anchor.py",
       "filename_bucket": "mixed/unclear",
-      "pytest_collected": 7,
-      "ast_test_def_lines": 7,
-      "ast_unique_test_names": 7,
+      "pytest_collected": 6,
+      "ast_test_def_lines": 6,
+      "ast_unique_test_names": 6,
       "has_shadowed_duplicate_names": false,
       "primary_bucket": "integration",
       "bucket_distribution": {
         "unit": 2,
-        "integration": 5
+        "integration": 4
       },
       "primary_feature_area_breakdown": {
-        "general": 7
+        "general": 6
       },
       "high_brittleness_test_count": 0,
       "prose_sensitive_test_count": 0
@@ -3430,9 +3420,8 @@
         "integration": 3
       },
       "primary_feature_area_breakdown": {
-        "general": 9,
-        "retry": 2,
-        "resolution/emission": 1
+        "general": 10,
+        "retry": 2
       },
       "high_brittleness_test_count": 0,
       "prose_sensitive_test_count": 0
@@ -3451,8 +3440,8 @@
       "primary_feature_area_breakdown": {
         "social continuity": 4
       },
-      "high_brittleness_test_count": 1,
-      "prose_sensitive_test_count": 1
+      "high_brittleness_test_count": 2,
+      "prose_sensitive_test_count": 2
     },
     {
       "path": "tests/test_startup_and_timestamps.py",
@@ -3489,8 +3478,8 @@
         "transcript regression": 2,
         "clue system": 2
       },
-      "high_brittleness_test_count": 1,
-      "prose_sensitive_test_count": 1
+      "high_brittleness_test_count": 0,
+      "prose_sensitive_test_count": 0
     },
     {
       "path": "tests/test_strict_social_emergency_fallback_dialogue.py",
@@ -4318,14 +4307,16 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_answer_completeness_rules.py::test_question_detected_from_player_text_direct_question",
+      "nodeid": "tests/test_answer_completeness_rules.py::test_answer_completeness_question_detector_flags_direct_questions",
       "file": "tests/test_answer_completeness_rules.py",
-      "name": "test_question_detected_from_player_text_direct_question",
-      "base_name": "test_question_detected_from_player_text_direct_question",
+      "name": "test_answer_completeness_question_detector_flags_direct_questions",
+      "base_name": "test_answer_completeness_question_detector_flags_direct_questions",
       "parametrized": false,
       "primary_bucket": "unit",
       "feature_areas": [
-        "general"
+        "resolution/emission",
+        "social continuity",
+        "fallback"
       ],
       "historically_motivated": false,
       "assertion_style": "behavioral",
@@ -4333,14 +4324,16 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_answer_completeness_rules.py::test_build_answer_contract_player_question_sets_trace_and_player_direct_question",
+      "nodeid": "tests/test_answer_completeness_rules.py::test_answer_completeness_contract_tracks_player_direct_question_trace",
       "file": "tests/test_answer_completeness_rules.py",
-      "name": "test_build_answer_contract_player_question_sets_trace_and_player_direct_question",
-      "base_name": "test_build_answer_contract_player_question_sets_trace_and_player_direct_question",
+      "name": "test_answer_completeness_contract_tracks_player_direct_question_trace",
+      "base_name": "test_answer_completeness_contract_tracks_player_direct_question_trace",
       "parametrized": false,
       "primary_bucket": "unit",
       "feature_areas": [
-        "general"
+        "resolution/emission",
+        "social continuity",
+        "fallback"
       ],
       "historically_motivated": false,
       "assertion_style": "behavioral",
@@ -4348,14 +4341,16 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_answer_completeness_rules.py::test_build_answer_contract_active_target_and_question_expects_npc_voice",
+      "nodeid": "tests/test_answer_completeness_rules.py::test_answer_completeness_contract_prefers_npc_voice_for_active_target_questions",
       "file": "tests/test_answer_completeness_rules.py",
-      "name": "test_build_answer_contract_active_target_and_question_expects_npc_voice",
-      "base_name": "test_build_answer_contract_active_target_and_question_expects_npc_voice",
+      "name": "test_answer_completeness_contract_prefers_npc_voice_for_active_target_questions",
+      "base_name": "test_answer_completeness_contract_prefers_npc_voice_for_active_target_questions",
       "parametrized": false,
       "primary_bucket": "unit",
       "feature_areas": [
-        "general"
+        "resolution/emission",
+        "social continuity",
+        "fallback"
       ],
       "historically_motivated": false,
       "assertion_style": "behavioral",
@@ -4363,14 +4358,16 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_answer_completeness_rules.py::test_build_answer_contract_action_turn_answer_not_required",
+      "nodeid": "tests/test_answer_completeness_rules.py::test_answer_completeness_contract_disables_action_only_turns",
       "file": "tests/test_answer_completeness_rules.py",
-      "name": "test_build_answer_contract_action_turn_answer_not_required",
-      "base_name": "test_build_answer_contract_action_turn_answer_not_required",
+      "name": "test_answer_completeness_contract_disables_action_only_turns",
+      "base_name": "test_answer_completeness_contract_disables_action_only_turns",
       "parametrized": false,
       "primary_bucket": "unit",
       "feature_areas": [
-        "general"
+        "resolution/emission",
+        "social continuity",
+        "fallback"
       ],
       "historically_motivated": false,
       "assertion_style": "behavioral",
@@ -4385,7 +4382,9 @@
       "parametrized": false,
       "primary_bucket": "unit",
       "feature_areas": [
-        "general"
+        "resolution/emission",
+        "social continuity",
+        "fallback"
       ],
       "historically_motivated": false,
       "assertion_style": "behavioral",
@@ -4400,7 +4399,9 @@
       "parametrized": false,
       "primary_bucket": "integration",
       "feature_areas": [
-        "general"
+        "resolution/emission",
+        "social continuity",
+        "fallback"
       ],
       "historically_motivated": false,
       "assertion_style": "behavioral",
@@ -4415,7 +4416,9 @@
       "parametrized": false,
       "primary_bucket": "integration",
       "feature_areas": [
-        "general"
+        "resolution/emission",
+        "social continuity",
+        "fallback"
       ],
       "historically_motivated": false,
       "assertion_style": "behavioral",
@@ -4430,7 +4433,9 @@
       "parametrized": false,
       "primary_bucket": "integration",
       "feature_areas": [
-        "general"
+        "resolution/emission",
+        "social continuity",
+        "fallback"
       ],
       "historically_motivated": false,
       "assertion_style": "mixed",
@@ -4445,6 +4450,9 @@
       "parametrized": false,
       "primary_bucket": "unit",
       "feature_areas": [
+        "resolution/emission",
+        "social continuity",
+        "fallback",
         "legality/sanitizer"
       ],
       "historically_motivated": false,
@@ -4460,7 +4468,9 @@
       "parametrized": false,
       "primary_bucket": "unit",
       "feature_areas": [
-        "social continuity"
+        "resolution/emission",
+        "social continuity",
+        "fallback"
       ],
       "historically_motivated": false,
       "assertion_style": "behavioral",
@@ -4475,7 +4485,9 @@
       "parametrized": false,
       "primary_bucket": "integration",
       "feature_areas": [
-        "general"
+        "resolution/emission",
+        "social continuity",
+        "fallback"
       ],
       "historically_motivated": false,
       "assertion_style": "mixed",
@@ -4490,7 +4502,9 @@
       "parametrized": false,
       "primary_bucket": "integration",
       "feature_areas": [
-        "general"
+        "resolution/emission",
+        "social continuity",
+        "fallback"
       ],
       "historically_motivated": false,
       "assertion_style": "mixed",
@@ -4505,7 +4519,9 @@
       "parametrized": false,
       "primary_bucket": "unit",
       "feature_areas": [
-        "general"
+        "resolution/emission",
+        "social continuity",
+        "fallback"
       ],
       "historically_motivated": false,
       "assertion_style": "behavioral",
@@ -4520,7 +4536,9 @@
       "parametrized": false,
       "primary_bucket": "unit",
       "feature_areas": [
-        "general"
+        "resolution/emission",
+        "social continuity",
+        "fallback"
       ],
       "historically_motivated": false,
       "assertion_style": "behavioral",
@@ -4528,14 +4546,16 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_answer_completeness_rules.py::test_build_answer_allowed_partial_reasons_only_grounded_buckets",
+      "nodeid": "tests/test_answer_completeness_rules.py::test_answer_completeness_contract_uses_grounded_partial_reason_buckets",
       "file": "tests/test_answer_completeness_rules.py",
-      "name": "test_build_answer_allowed_partial_reasons_only_grounded_buckets",
-      "base_name": "test_build_answer_allowed_partial_reasons_only_grounded_buckets",
+      "name": "test_answer_completeness_contract_uses_grounded_partial_reason_buckets",
+      "base_name": "test_answer_completeness_contract_uses_grounded_partial_reason_buckets",
       "parametrized": false,
       "primary_bucket": "integration",
       "feature_areas": [
-        "general"
+        "resolution/emission",
+        "social continuity",
+        "fallback"
       ],
       "historically_motivated": false,
       "assertion_style": "behavioral",
@@ -4550,7 +4570,9 @@
       "parametrized": false,
       "primary_bucket": "unit",
       "feature_areas": [
-        "general"
+        "resolution/emission",
+        "social continuity",
+        "fallback"
       ],
       "historically_motivated": false,
       "assertion_style": "structural",
@@ -4565,7 +4587,9 @@
       "parametrized": false,
       "primary_bucket": "unit",
       "feature_areas": [
-        "general"
+        "resolution/emission",
+        "social continuity",
+        "fallback"
       ],
       "historically_motivated": false,
       "assertion_style": "behavioral",
@@ -4580,6 +4604,8 @@
       "parametrized": false,
       "primary_bucket": "integration",
       "feature_areas": [
+        "resolution/emission",
+        "social continuity",
         "fallback"
       ],
       "historically_motivated": false,
@@ -4595,7 +4621,9 @@
       "parametrized": false,
       "primary_bucket": "integration",
       "feature_areas": [
-        "general"
+        "resolution/emission",
+        "social continuity",
+        "fallback"
       ],
       "historically_motivated": false,
       "assertion_style": "behavioral",
@@ -4610,6 +4638,8 @@
       "parametrized": false,
       "primary_bucket": "integration",
       "feature_areas": [
+        "resolution/emission",
+        "social continuity",
         "fallback"
       ],
       "historically_motivated": false,
@@ -4625,8 +4655,10 @@
       "parametrized": false,
       "primary_bucket": "integration",
       "feature_areas": [
-        "transcript regression",
-        "fallback"
+        "resolution/emission",
+        "social continuity",
+        "fallback",
+        "transcript regression"
       ],
       "historically_motivated": false,
       "assertion_style": "structural",
@@ -4641,6 +4673,8 @@
       "parametrized": false,
       "primary_bucket": "integration",
       "feature_areas": [
+        "resolution/emission",
+        "social continuity",
         "fallback"
       ],
       "historically_motivated": false,
@@ -4656,7 +4690,9 @@
       "parametrized": false,
       "primary_bucket": "integration",
       "feature_areas": [
-        "general"
+        "resolution/emission",
+        "social continuity",
+        "fallback"
       ],
       "historically_motivated": false,
       "assertion_style": "behavioral",
@@ -4671,7 +4707,9 @@
       "parametrized": false,
       "primary_bucket": "integration",
       "feature_areas": [
-        "general"
+        "resolution/emission",
+        "social continuity",
+        "fallback"
       ],
       "historically_motivated": false,
       "assertion_style": "behavioral",
@@ -4686,6 +4724,9 @@
       "parametrized": false,
       "primary_bucket": "integration",
       "feature_areas": [
+        "resolution/emission",
+        "social continuity",
+        "fallback",
         "lead extraction"
       ],
       "historically_motivated": false,
@@ -4701,6 +4742,9 @@
       "parametrized": false,
       "primary_bucket": "unit",
       "feature_areas": [
+        "resolution/emission",
+        "social continuity",
+        "fallback",
         "clue system"
       ],
       "historically_motivated": false,
@@ -4716,7 +4760,9 @@
       "parametrized": false,
       "primary_bucket": "unit",
       "feature_areas": [
-        "general"
+        "resolution/emission",
+        "social continuity",
+        "fallback"
       ],
       "historically_motivated": false,
       "assertion_style": "mixed",
@@ -4731,7 +4777,9 @@
       "parametrized": false,
       "primary_bucket": "unit",
       "feature_areas": [
-        "general"
+        "resolution/emission",
+        "social continuity",
+        "fallback"
       ],
       "historically_motivated": false,
       "assertion_style": "behavioral",
@@ -4746,7 +4794,9 @@
       "parametrized": false,
       "primary_bucket": "unit",
       "feature_areas": [
-        "general"
+        "resolution/emission",
+        "social continuity",
+        "fallback"
       ],
       "historically_motivated": false,
       "assertion_style": "behavioral",
@@ -4761,7 +4811,9 @@
       "parametrized": false,
       "primary_bucket": "integration",
       "feature_areas": [
-        "general"
+        "resolution/emission",
+        "social continuity",
+        "fallback"
       ],
       "historically_motivated": false,
       "assertion_style": "mixed",
@@ -4776,7 +4828,9 @@
       "parametrized": false,
       "primary_bucket": "integration",
       "feature_areas": [
-        "general"
+        "resolution/emission",
+        "social continuity",
+        "fallback"
       ],
       "historically_motivated": false,
       "assertion_style": "mixed",
@@ -8276,10 +8330,10 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_dead_turn_detection.py::test_ordinary_candidate_through_gate_is_not_dead",
+      "nodeid": "tests/test_dead_turn_detection.py::test_gate_packages_non_dead_snapshot_for_ordinary_candidate",
       "file": "tests/test_dead_turn_detection.py",
-      "name": "test_ordinary_candidate_through_gate_is_not_dead",
-      "base_name": "test_ordinary_candidate_through_gate_is_not_dead",
+      "name": "test_gate_packages_non_dead_snapshot_for_ordinary_candidate",
+      "base_name": "test_gate_packages_non_dead_snapshot_for_ordinary_candidate",
       "parametrized": false,
       "primary_bucket": "unit",
       "feature_areas": [
@@ -8774,21 +8828,6 @@
       "feature_areas": [
         "social continuity",
         "resolution/emission"
-      ],
-      "historically_motivated": false,
-      "assertion_style": "behavioral",
-      "brittleness": "low",
-      "redundancy_flag": "likely_unique"
-    },
-    {
-      "nodeid": "tests/test_dialogue_interaction_establishment.py::test_wait_idle_while_engaged_expects_npc_reply",
-      "file": "tests/test_dialogue_interaction_establishment.py",
-      "name": "test_wait_idle_while_engaged_expects_npc_reply",
-      "base_name": "test_wait_idle_while_engaged_expects_npc_reply",
-      "parametrized": false,
-      "primary_bucket": "unit",
-      "feature_areas": [
-        "social continuity"
       ],
       "historically_motivated": false,
       "assertion_style": "behavioral",
@@ -11531,10 +11570,10 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_fallback_shipped_contract_propagation.py::test_apply_response_policy_enforcement_mirrors_policy_onto_gm",
+      "nodeid": "tests/test_fallback_shipped_contract_propagation.py::test_apply_response_policy_enforcement_mirrors_shipped_policy_onto_gm",
       "file": "tests/test_fallback_shipped_contract_propagation.py",
-      "name": "test_apply_response_policy_enforcement_mirrors_policy_onto_gm",
-      "base_name": "test_apply_response_policy_enforcement_mirrors_policy_onto_gm",
+      "name": "test_apply_response_policy_enforcement_mirrors_shipped_policy_onto_gm",
+      "base_name": "test_apply_response_policy_enforcement_mirrors_shipped_policy_onto_gm",
       "parametrized": false,
       "primary_bucket": "unit",
       "feature_areas": [
@@ -11546,10 +11585,10 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_fallback_shipped_contract_propagation.py::test_final_gate_resolves_context_separation_from_gm_response_policy",
+      "nodeid": "tests/test_fallback_shipped_contract_propagation.py::test_final_gate_resolves_context_separation_from_shipped_gm_policy",
       "file": "tests/test_fallback_shipped_contract_propagation.py",
-      "name": "test_final_gate_resolves_context_separation_from_gm_response_policy",
-      "base_name": "test_final_gate_resolves_context_separation_from_gm_response_policy",
+      "name": "test_final_gate_resolves_context_separation_from_shipped_gm_policy",
+      "base_name": "test_final_gate_resolves_context_separation_from_shipped_gm_policy",
       "parametrized": false,
       "primary_bucket": "unit",
       "feature_areas": [
@@ -11561,10 +11600,10 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_fallback_shipped_contract_propagation.py::test_final_gate_merges_session_last_turn_policy_when_gm_lacks_it",
+      "nodeid": "tests/test_fallback_shipped_contract_propagation.py::test_final_gate_merges_session_last_turn_shipped_policy_when_gm_lacks_it",
       "file": "tests/test_fallback_shipped_contract_propagation.py",
-      "name": "test_final_gate_merges_session_last_turn_policy_when_gm_lacks_it",
-      "base_name": "test_final_gate_merges_session_last_turn_policy_when_gm_lacks_it",
+      "name": "test_final_gate_merges_session_last_turn_shipped_policy_when_gm_lacks_it",
+      "base_name": "test_final_gate_merges_session_last_turn_shipped_policy_when_gm_lacks_it",
       "parametrized": false,
       "primary_bucket": "unit",
       "feature_areas": [
@@ -11592,10 +11631,10 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_fallback_shipped_contract_propagation.py::test_force_terminal_fallback_plus_enforcement_then_gate_retains_cs_contract",
+      "nodeid": "tests/test_fallback_shipped_contract_propagation.py::test_force_terminal_fallback_plus_enforcement_then_gate_retains_shipped_cs_contract",
       "file": "tests/test_fallback_shipped_contract_propagation.py",
-      "name": "test_force_terminal_fallback_plus_enforcement_then_gate_retains_cs_contract",
-      "base_name": "test_force_terminal_fallback_plus_enforcement_then_gate_retains_cs_contract",
+      "name": "test_force_terminal_fallback_plus_enforcement_then_gate_retains_shipped_cs_contract",
+      "base_name": "test_force_terminal_fallback_plus_enforcement_then_gate_retains_shipped_cs_contract",
       "parametrized": false,
       "primary_bucket": "integration",
       "feature_areas": [
@@ -11608,10 +11647,10 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_fallback_shipped_contract_propagation.py::test_open_call_recovery_path_gate_merges_session_policy",
+      "nodeid": "tests/test_fallback_shipped_contract_propagation.py::test_open_call_recovery_path_gate_merges_session_shipped_policy",
       "file": "tests/test_fallback_shipped_contract_propagation.py",
-      "name": "test_open_call_recovery_path_gate_merges_session_policy",
-      "base_name": "test_open_call_recovery_path_gate_merges_session_policy",
+      "name": "test_open_call_recovery_path_gate_merges_session_shipped_policy",
+      "base_name": "test_open_call_recovery_path_gate_merges_session_shipped_policy",
       "parametrized": false,
       "primary_bucket": "integration",
       "feature_areas": [
@@ -14937,22 +14976,6 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_follow_lead_commitment_wiring.py::test_prompt_export_filters_terminal_pending_leads",
-      "file": "tests/test_follow_lead_commitment_wiring.py",
-      "name": "test_prompt_export_filters_terminal_pending_leads",
-      "base_name": "test_prompt_export_filters_terminal_pending_leads",
-      "parametrized": false,
-      "primary_bucket": "integration",
-      "feature_areas": [
-        "retry",
-        "lead extraction"
-      ],
-      "historically_motivated": false,
-      "assertion_style": "structural",
-      "brittleness": "low",
-      "redundancy_flag": "likely_unique"
-    },
-    {
       "nodeid": "tests/test_gauntlet_regressions.py::test_gauntlet_repeated_runner_probe_skips_policy_topic_pressure_for_strict_social",
       "file": "tests/test_gauntlet_regressions.py",
       "name": "test_gauntlet_repeated_runner_probe_skips_policy_topic_pressure_for_strict_social",
@@ -16228,10 +16251,10 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_interaction_continuity_contract.py::test_strong_continuity_from_active_social_target",
+      "nodeid": "tests/test_interaction_continuity_contract.py::test_build_contract_anchors_to_active_social_target",
       "file": "tests/test_interaction_continuity_contract.py",
-      "name": "test_strong_continuity_from_active_social_target",
-      "base_name": "test_strong_continuity_from_active_social_target",
+      "name": "test_build_contract_anchors_to_active_social_target",
+      "base_name": "test_build_contract_anchors_to_active_social_target",
       "parametrized": false,
       "primary_bucket": "integration",
       "feature_areas": [
@@ -16243,26 +16266,10 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_interaction_continuity_contract.py::test_fallback_to_current_interlocutor_when_active_target_missing",
+      "nodeid": "tests/test_interaction_continuity_contract.py::test_build_contract_falls_back_to_current_interlocutor",
       "file": "tests/test_interaction_continuity_contract.py",
-      "name": "test_fallback_to_current_interlocutor_when_active_target_missing",
-      "base_name": "test_fallback_to_current_interlocutor_when_active_target_missing",
-      "parametrized": false,
-      "primary_bucket": "integration",
-      "feature_areas": [
-        "fallback",
-        "social continuity"
-      ],
-      "historically_motivated": false,
-      "assertion_style": "behavioral",
-      "brittleness": "low",
-      "redundancy_flag": "likely_unique"
-    },
-    {
-      "nodeid": "tests/test_interaction_continuity_contract.py::test_invalid_off_scene_target_does_not_anchor_without_dialogue_rtc",
-      "file": "tests/test_interaction_continuity_contract.py",
-      "name": "test_invalid_off_scene_target_does_not_anchor_without_dialogue_rtc",
-      "base_name": "test_invalid_off_scene_target_does_not_anchor_without_dialogue_rtc",
+      "name": "test_build_contract_falls_back_to_current_interlocutor",
+      "base_name": "test_build_contract_falls_back_to_current_interlocutor",
       "parametrized": false,
       "primary_bucket": "integration",
       "feature_areas": [
@@ -16274,10 +16281,10 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_interaction_continuity_contract.py::test_invalid_target_soft_when_dialogue_response_type",
+      "nodeid": "tests/test_interaction_continuity_contract.py::test_build_contract_rejects_off_scene_target_without_dialogue_contract",
       "file": "tests/test_interaction_continuity_contract.py",
-      "name": "test_invalid_target_soft_when_dialogue_response_type",
-      "base_name": "test_invalid_target_soft_when_dialogue_response_type",
+      "name": "test_build_contract_rejects_off_scene_target_without_dialogue_contract",
+      "base_name": "test_build_contract_rejects_off_scene_target_without_dialogue_contract",
       "parametrized": false,
       "primary_bucket": "integration",
       "feature_areas": [
@@ -16289,10 +16296,10 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_interaction_continuity_contract.py::test_dialogue_without_hard_anchor_soft_continuity",
+      "nodeid": "tests/test_interaction_continuity_contract.py::test_build_contract_allows_soft_continuity_for_dialogue_without_anchor",
       "file": "tests/test_interaction_continuity_contract.py",
-      "name": "test_dialogue_without_hard_anchor_soft_continuity",
-      "base_name": "test_dialogue_without_hard_anchor_soft_continuity",
+      "name": "test_build_contract_allows_soft_continuity_for_dialogue_without_anchor",
+      "base_name": "test_build_contract_allows_soft_continuity_for_dialogue_without_anchor",
       "parametrized": false,
       "primary_bucket": "integration",
       "feature_areas": [
@@ -16304,10 +16311,10 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_interaction_continuity_contract.py::test_non_social_activity_no_continuity_contract",
+      "nodeid": "tests/test_interaction_continuity_contract.py::test_build_contract_keeps_soft_dialogue_continuity_without_hard_anchor",
       "file": "tests/test_interaction_continuity_contract.py",
-      "name": "test_non_social_activity_no_continuity_contract",
-      "base_name": "test_non_social_activity_no_continuity_contract",
+      "name": "test_build_contract_keeps_soft_dialogue_continuity_without_hard_anchor",
+      "base_name": "test_build_contract_keeps_soft_dialogue_continuity_without_hard_anchor",
       "parametrized": false,
       "primary_bucket": "integration",
       "feature_areas": [
@@ -16319,27 +16326,12 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_interaction_continuity_contract.py::test_resolve_interaction_continuity_contract_from_response_policy",
+      "nodeid": "tests/test_interaction_continuity_contract.py::test_build_contract_disables_continuity_for_non_social_activity",
       "file": "tests/test_interaction_continuity_contract.py",
-      "name": "test_resolve_interaction_continuity_contract_from_response_policy",
-      "base_name": "test_resolve_interaction_continuity_contract_from_response_policy",
+      "name": "test_build_contract_disables_continuity_for_non_social_activity",
+      "base_name": "test_build_contract_disables_continuity_for_non_social_activity",
       "parametrized": false,
       "primary_bucket": "integration",
-      "feature_areas": [
-        "social continuity"
-      ],
-      "historically_motivated": false,
-      "assertion_style": "behavioral",
-      "brittleness": "low",
-      "redundancy_flag": "likely_unique"
-    },
-    {
-      "nodeid": "tests/test_interaction_continuity_contract.py::test_resolve_conversational_memory_window_contract_from_response_policy",
-      "file": "tests/test_interaction_continuity_contract.py",
-      "name": "test_resolve_conversational_memory_window_contract_from_response_policy",
-      "base_name": "test_resolve_conversational_memory_window_contract_from_response_policy",
-      "parametrized": false,
-      "primary_bucket": "unit",
       "feature_areas": [
         "social continuity"
       ],
@@ -16674,10 +16666,10 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_interaction_continuity_validation.py::test_validator_noop_when_contract_missing_or_invalid",
+      "nodeid": "tests/test_interaction_continuity_validation.py::test_validation_is_inert_when_contract_missing_or_invalid",
       "file": "tests/test_interaction_continuity_validation.py",
-      "name": "test_validator_noop_when_contract_missing_or_invalid",
-      "base_name": "test_validator_noop_when_contract_missing_or_invalid",
+      "name": "test_validation_is_inert_when_contract_missing_or_invalid",
+      "base_name": "test_validation_is_inert_when_contract_missing_or_invalid",
       "parametrized": false,
       "primary_bucket": "unit",
       "feature_areas": [
@@ -16689,10 +16681,10 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_interaction_continuity_validation.py::test_validator_noop_when_contract_disabled",
+      "nodeid": "tests/test_interaction_continuity_validation.py::test_validation_is_inert_when_contract_disabled",
       "file": "tests/test_interaction_continuity_validation.py",
-      "name": "test_validator_noop_when_contract_disabled",
-      "base_name": "test_validator_noop_when_contract_disabled",
+      "name": "test_validation_is_inert_when_contract_disabled",
+      "base_name": "test_validation_is_inert_when_contract_disabled",
       "parametrized": false,
       "primary_bucket": "unit",
       "feature_areas": [
@@ -16704,10 +16696,10 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_interaction_continuity_validation.py::test_strong_continuity_single_anchored_dialogue_passes",
+      "nodeid": "tests/test_interaction_continuity_validation.py::test_validation_accepts_single_anchored_dialogue_under_strong_continuity",
       "file": "tests/test_interaction_continuity_validation.py",
-      "name": "test_strong_continuity_single_anchored_dialogue_passes",
-      "base_name": "test_strong_continuity_single_anchored_dialogue_passes",
+      "name": "test_validation_accepts_single_anchored_dialogue_under_strong_continuity",
+      "base_name": "test_validation_accepts_single_anchored_dialogue_under_strong_continuity",
       "parametrized": false,
       "primary_bucket": "unit",
       "feature_areas": [
@@ -16719,10 +16711,10 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_interaction_continuity_validation.py::test_strong_pure_narration_flags_dialogue_and_thread",
+      "nodeid": "tests/test_interaction_continuity_validation.py::test_validation_flags_pure_narration_under_strong_continuity",
       "file": "tests/test_interaction_continuity_validation.py",
-      "name": "test_strong_pure_narration_flags_dialogue_and_thread",
-      "base_name": "test_strong_pure_narration_flags_dialogue_and_thread",
+      "name": "test_validation_flags_pure_narration_under_strong_continuity",
+      "base_name": "test_validation_flags_pure_narration_under_strong_continuity",
       "parametrized": false,
       "primary_bucket": "unit",
       "feature_areas": [
@@ -16734,10 +16726,10 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_interaction_continuity_validation.py::test_strong_uncued_crowd_interruption_flags_multi_speaker_and_switch",
+      "nodeid": "tests/test_interaction_continuity_validation.py::test_validation_flags_uncued_multi_speaker_interruption_under_strong_continuity",
       "file": "tests/test_interaction_continuity_validation.py",
-      "name": "test_strong_uncued_crowd_interruption_flags_multi_speaker_and_switch",
-      "base_name": "test_strong_uncued_crowd_interruption_flags_multi_speaker_and_switch",
+      "name": "test_validation_flags_uncued_multi_speaker_interruption_under_strong_continuity",
+      "base_name": "test_validation_flags_uncued_multi_speaker_interruption_under_strong_continuity",
       "parametrized": false,
       "primary_bucket": "unit",
       "feature_areas": [
@@ -16749,10 +16741,10 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_interaction_continuity_validation.py::test_strong_explicit_handoff_allows_second_voice",
+      "nodeid": "tests/test_interaction_continuity_validation.py::test_validation_allows_explicit_handoff_under_strong_continuity",
       "file": "tests/test_interaction_continuity_validation.py",
-      "name": "test_strong_explicit_handoff_allows_second_voice",
-      "base_name": "test_strong_explicit_handoff_allows_second_voice",
+      "name": "test_validation_allows_explicit_handoff_under_strong_continuity",
+      "base_name": "test_validation_allows_explicit_handoff_under_strong_continuity",
       "parametrized": false,
       "primary_bucket": "unit",
       "feature_areas": [
@@ -16764,10 +16756,10 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_interaction_continuity_validation.py::test_soft_narrator_bridge_with_dialogue_ok_or_warning_only",
+      "nodeid": "tests/test_interaction_continuity_validation.py::test_validation_allows_soft_narrator_bridge_with_warning_only",
       "file": "tests/test_interaction_continuity_validation.py",
-      "name": "test_soft_narrator_bridge_with_dialogue_ok_or_warning_only",
-      "base_name": "test_soft_narrator_bridge_with_dialogue_ok_or_warning_only",
+      "name": "test_validation_allows_soft_narrator_bridge_with_warning_only",
+      "base_name": "test_validation_allows_soft_narrator_bridge_with_warning_only",
       "parametrized": false,
       "primary_bucket": "unit",
       "feature_areas": [
@@ -16779,10 +16771,10 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_interaction_continuity_validation.py::test_soft_detached_exposition_flags_context",
+      "nodeid": "tests/test_interaction_continuity_validation.py::test_validation_flags_detached_exposition_under_soft_continuity",
       "file": "tests/test_interaction_continuity_validation.py",
-      "name": "test_soft_detached_exposition_flags_context",
-      "base_name": "test_soft_detached_exposition_flags_context",
+      "name": "test_validation_flags_detached_exposition_under_soft_continuity",
+      "base_name": "test_validation_flags_detached_exposition_under_soft_continuity",
       "parametrized": false,
       "primary_bucket": "unit",
       "feature_areas": [
@@ -16794,10 +16786,10 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_interaction_continuity_validation.py::test_strong_multi_speaker_labels_flags_interruption",
+      "nodeid": "tests/test_interaction_continuity_validation.py::test_validation_flags_multi_speaker_labels_under_strong_continuity",
       "file": "tests/test_interaction_continuity_validation.py",
-      "name": "test_strong_multi_speaker_labels_flags_interruption",
-      "base_name": "test_strong_multi_speaker_labels_flags_interruption",
+      "name": "test_validation_flags_multi_speaker_labels_under_strong_continuity",
+      "base_name": "test_validation_flags_multi_speaker_labels_under_strong_continuity",
       "parametrized": false,
       "primary_bucket": "unit",
       "feature_areas": [
@@ -16809,25 +16801,10 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_interaction_continuity_validation.py::test_resolve_public_wrapper_matches_embedded_policy",
+      "nodeid": "tests/test_interaction_continuity_validation.py::test_emission_gate_attaches_interaction_continuity_validation_metadata",
       "file": "tests/test_interaction_continuity_validation.py",
-      "name": "test_resolve_public_wrapper_matches_embedded_policy",
-      "base_name": "test_resolve_public_wrapper_matches_embedded_policy",
-      "parametrized": false,
-      "primary_bucket": "unit",
-      "feature_areas": [
-        "social continuity"
-      ],
-      "historically_motivated": false,
-      "assertion_style": "behavioral",
-      "brittleness": "low",
-      "redundancy_flag": "likely_unique"
-    },
-    {
-      "nodeid": "tests/test_interaction_continuity_validation.py::test_emission_gate_wires_interaction_continuity_validation_metadata",
-      "file": "tests/test_interaction_continuity_validation.py",
-      "name": "test_emission_gate_wires_interaction_continuity_validation_metadata",
-      "base_name": "test_emission_gate_wires_interaction_continuity_validation_metadata",
+      "name": "test_emission_gate_attaches_interaction_continuity_validation_metadata",
+      "base_name": "test_emission_gate_attaches_interaction_continuity_validation_metadata",
       "parametrized": false,
       "primary_bucket": "unit",
       "feature_areas": [
@@ -17912,10 +17889,10 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_lead_lifecycle_npc_repeat_suppression.py::test_npc_repeat_suppression_blocks_recently_discussed_lead",
+      "nodeid": "tests/test_lead_lifecycle_npc_repeat_suppression.py::test_exported_narration_context_marks_recent_discussion_for_repeat_suppression",
       "file": "tests/test_lead_lifecycle_npc_repeat_suppression.py",
-      "name": "test_npc_repeat_suppression_blocks_recently_discussed_lead",
-      "base_name": "test_npc_repeat_suppression_blocks_recently_discussed_lead",
+      "name": "test_exported_narration_context_marks_recent_discussion_for_repeat_suppression",
+      "base_name": "test_exported_narration_context_marks_recent_discussion_for_repeat_suppression",
       "parametrized": false,
       "primary_bucket": "integration",
       "feature_areas": [
@@ -17927,10 +17904,10 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_lead_lifecycle_npc_repeat_suppression.py::test_npc_repeat_suppression_expires_after_recency_window",
+      "nodeid": "tests/test_lead_lifecycle_npc_repeat_suppression.py::test_exported_narration_context_clears_repeat_suppression_after_old_discussion",
       "file": "tests/test_lead_lifecycle_npc_repeat_suppression.py",
-      "name": "test_npc_repeat_suppression_expires_after_recency_window",
-      "base_name": "test_npc_repeat_suppression_expires_after_recency_window",
+      "name": "test_exported_narration_context_clears_repeat_suppression_after_old_discussion",
+      "base_name": "test_exported_narration_context_clears_repeat_suppression_after_old_discussion",
       "parametrized": false,
       "primary_bucket": "integration",
       "feature_areas": [
@@ -17942,10 +17919,10 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_lead_lifecycle_npc_repeat_suppression.py::test_npc_repeat_suppression_is_specific_to_the_active_npc",
+      "nodeid": "tests/test_lead_lifecycle_npc_repeat_suppression.py::test_exported_narration_context_scopes_repeat_suppression_to_active_npc",
       "file": "tests/test_lead_lifecycle_npc_repeat_suppression.py",
-      "name": "test_npc_repeat_suppression_is_specific_to_the_active_npc",
-      "base_name": "test_npc_repeat_suppression_is_specific_to_the_active_npc",
+      "name": "test_exported_narration_context_scopes_repeat_suppression_to_active_npc",
+      "base_name": "test_exported_narration_context_scopes_repeat_suppression_to_active_npc",
       "parametrized": false,
       "primary_bucket": "integration",
       "feature_areas": [
@@ -17957,10 +17934,10 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_lead_lifecycle_npc_repeat_suppression.py::test_npc_repeat_suppression_does_not_hide_other_eligible_leads",
+      "nodeid": "tests/test_lead_lifecycle_npc_repeat_suppression.py::test_exported_narration_context_marks_only_discussed_lead_as_recent_repeat_risk",
       "file": "tests/test_lead_lifecycle_npc_repeat_suppression.py",
-      "name": "test_npc_repeat_suppression_does_not_hide_other_eligible_leads",
-      "base_name": "test_npc_repeat_suppression_does_not_hide_other_eligible_leads",
+      "name": "test_exported_narration_context_marks_only_discussed_lead_as_recent_repeat_risk",
+      "base_name": "test_exported_narration_context_marks_only_discussed_lead_as_recent_repeat_risk",
       "parametrized": false,
       "primary_bucket": "integration",
       "feature_areas": [
@@ -26403,14 +26380,14 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_prompt_compression.py::test_prompt_generation_without_full_world_state",
+      "nodeid": "tests/test_prompt_compression.py::test_compressed_prompt_context_keeps_world_summary_without_full_dump",
       "file": "tests/test_prompt_compression.py",
-      "name": "test_prompt_generation_without_full_world_state",
-      "base_name": "test_prompt_generation_without_full_world_state",
+      "name": "test_compressed_prompt_context_keeps_world_summary_without_full_dump",
+      "base_name": "test_compressed_prompt_context_keeps_world_summary_without_full_dump",
       "parametrized": false,
       "primary_bucket": "integration",
       "feature_areas": [
-        "world/state"
+        "general"
       ],
       "historically_motivated": false,
       "assertion_style": "behavioral",
@@ -26418,10 +26395,10 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_prompt_compression.py::test_narration_context_includes_engine_result_and_scene_summary",
+      "nodeid": "tests/test_prompt_compression.py::test_compressed_prompt_context_carries_engine_result_and_public_scene_summary",
       "file": "tests/test_prompt_compression.py",
-      "name": "test_narration_context_includes_engine_result_and_scene_summary",
-      "base_name": "test_narration_context_includes_engine_result_and_scene_summary",
+      "name": "test_compressed_prompt_context_carries_engine_result_and_public_scene_summary",
+      "base_name": "test_compressed_prompt_context_carries_engine_result_and_public_scene_summary",
       "parametrized": false,
       "primary_bucket": "integration",
       "feature_areas": [
@@ -26463,10 +26440,10 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_prompt_compression.py::test_build_messages_preserves_third_person_player_declaration_with_quote",
+      "nodeid": "tests/test_prompt_compression.py::test_build_messages_preserves_player_input_text_with_embedded_dialogue",
       "file": "tests/test_prompt_compression.py",
-      "name": "test_build_messages_preserves_third_person_player_declaration_with_quote",
-      "base_name": "test_build_messages_preserves_third_person_player_declaration_with_quote",
+      "name": "test_build_messages_preserves_player_input_text_with_embedded_dialogue",
+      "base_name": "test_build_messages_preserves_player_input_text_with_embedded_dialogue",
       "parametrized": false,
       "primary_bucket": "integration",
       "feature_areas": [
@@ -26478,10 +26455,10 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_prompt_compression.py::test_prompt_assembly_with_missing_optional_data",
+      "nodeid": "tests/test_prompt_compression.py::test_compressed_prompt_context_handles_missing_optional_data",
       "file": "tests/test_prompt_compression.py",
-      "name": "test_prompt_assembly_with_missing_optional_data",
-      "base_name": "test_prompt_assembly_with_missing_optional_data",
+      "name": "test_compressed_prompt_context_handles_missing_optional_data",
+      "base_name": "test_compressed_prompt_context_handles_missing_optional_data",
       "parametrized": false,
       "primary_bucket": "integration",
       "feature_areas": [
@@ -26523,25 +26500,10 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_prompt_compression.py::test_narration_obligations_mark_campaign_start_opening_scene",
+      "nodeid": "tests/test_prompt_compression.py::test_compressed_prompt_context_carries_opening_scene_obligation",
       "file": "tests/test_prompt_compression.py",
-      "name": "test_narration_obligations_mark_campaign_start_opening_scene",
-      "base_name": "test_narration_obligations_mark_campaign_start_opening_scene",
-      "parametrized": false,
-      "primary_bucket": "integration",
-      "feature_areas": [
-        "world/state"
-      ],
-      "historically_motivated": false,
-      "assertion_style": "behavioral",
-      "brittleness": "low",
-      "redundancy_flag": "likely_unique"
-    },
-    {
-      "nodeid": "tests/test_prompt_compression.py::test_narration_obligations_mark_arrival_turns",
-      "file": "tests/test_prompt_compression.py",
-      "name": "test_narration_obligations_mark_arrival_turns",
-      "base_name": "test_narration_obligations_mark_arrival_turns",
+      "name": "test_compressed_prompt_context_carries_opening_scene_obligation",
+      "base_name": "test_compressed_prompt_context_carries_opening_scene_obligation",
       "parametrized": false,
       "primary_bucket": "integration",
       "feature_areas": [
@@ -26553,10 +26515,10 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_prompt_compression.py::test_scene_transition_bridge_guidance_only_when_scene_change_context_exists",
+      "nodeid": "tests/test_prompt_compression.py::test_compressed_prompt_context_carries_arrival_bridge_guidance",
       "file": "tests/test_prompt_compression.py",
-      "name": "test_scene_transition_bridge_guidance_only_when_scene_change_context_exists",
-      "base_name": "test_scene_transition_bridge_guidance_only_when_scene_change_context_exists",
+      "name": "test_compressed_prompt_context_carries_arrival_bridge_guidance",
+      "base_name": "test_compressed_prompt_context_carries_arrival_bridge_guidance",
       "parametrized": false,
       "primary_bucket": "integration",
       "feature_areas": [
@@ -26568,10 +26530,10 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_prompt_compression.py::test_narration_obligations_mark_active_npc_reply_turns",
+      "nodeid": "tests/test_prompt_compression.py::test_compressed_prompt_context_only_adds_transition_bridge_when_scene_changes",
       "file": "tests/test_prompt_compression.py",
-      "name": "test_narration_obligations_mark_active_npc_reply_turns",
-      "base_name": "test_narration_obligations_mark_active_npc_reply_turns",
+      "name": "test_compressed_prompt_context_only_adds_transition_bridge_when_scene_changes",
+      "base_name": "test_compressed_prompt_context_only_adds_transition_bridge_when_scene_changes",
       "parametrized": false,
       "primary_bucket": "integration",
       "feature_areas": [
@@ -26583,10 +26545,10 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_prompt_compression.py::test_narration_obligations_use_explicit_social_reply_signal",
+      "nodeid": "tests/test_prompt_compression.py::test_compressed_prompt_context_carries_active_npc_reply_flags",
       "file": "tests/test_prompt_compression.py",
-      "name": "test_narration_obligations_use_explicit_social_reply_signal",
-      "base_name": "test_narration_obligations_use_explicit_social_reply_signal",
+      "name": "test_compressed_prompt_context_carries_active_npc_reply_flags",
+      "base_name": "test_compressed_prompt_context_carries_active_npc_reply_flags",
       "parametrized": false,
       "primary_bucket": "integration",
       "feature_areas": [
@@ -26598,10 +26560,10 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_prompt_compression.py::test_refusal_reply_kind_adds_substantive_non_stalling_guidance",
+      "nodeid": "tests/test_prompt_compression.py::test_compressed_prompt_context_preserves_explicit_social_reply_signal",
       "file": "tests/test_prompt_compression.py",
-      "name": "test_refusal_reply_kind_adds_substantive_non_stalling_guidance",
-      "base_name": "test_refusal_reply_kind_adds_substantive_non_stalling_guidance",
+      "name": "test_compressed_prompt_context_preserves_explicit_social_reply_signal",
+      "base_name": "test_compressed_prompt_context_preserves_explicit_social_reply_signal",
       "parametrized": false,
       "primary_bucket": "integration",
       "feature_areas": [
@@ -26613,10 +26575,25 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_prompt_compression.py::test_compressed_prompt_payload_includes_structured_turn_summary_and_no_restatement_guidance",
+      "nodeid": "tests/test_prompt_compression.py::test_compressed_prompt_context_carries_refusal_guidance_without_stalling",
       "file": "tests/test_prompt_compression.py",
-      "name": "test_compressed_prompt_payload_includes_structured_turn_summary_and_no_restatement_guidance",
-      "base_name": "test_compressed_prompt_payload_includes_structured_turn_summary_and_no_restatement_guidance",
+      "name": "test_compressed_prompt_context_carries_refusal_guidance_without_stalling",
+      "base_name": "test_compressed_prompt_context_carries_refusal_guidance_without_stalling",
+      "parametrized": false,
+      "primary_bucket": "integration",
+      "feature_areas": [
+        "general"
+      ],
+      "historically_motivated": false,
+      "assertion_style": "behavioral",
+      "brittleness": "low",
+      "redundancy_flag": "likely_unique"
+    },
+    {
+      "nodeid": "tests/test_prompt_compression.py::test_build_messages_serializes_turn_summary_without_rewriting_player_input",
+      "file": "tests/test_prompt_compression.py",
+      "name": "test_build_messages_serializes_turn_summary_without_rewriting_player_input",
+      "base_name": "test_build_messages_serializes_turn_summary_without_rewriting_player_input",
       "parametrized": false,
       "primary_bucket": "integration",
       "feature_areas": [
@@ -26718,6 +26695,36 @@
       "redundancy_flag": "likely_unique"
     },
     {
+      "nodeid": "tests/test_prompt_context.py::test_prompt_contract_owner_marks_wait_turn_as_active_reply_expected_when_social_engagement_is_live",
+      "file": "tests/test_prompt_context.py",
+      "name": "test_prompt_contract_owner_marks_wait_turn_as_active_reply_expected_when_social_engagement_is_live",
+      "base_name": "test_prompt_contract_owner_marks_wait_turn_as_active_reply_expected_when_social_engagement_is_live",
+      "parametrized": false,
+      "primary_bucket": "unit",
+      "feature_areas": [
+        "social continuity"
+      ],
+      "historically_motivated": false,
+      "assertion_style": "behavioral",
+      "brittleness": "low",
+      "redundancy_flag": "likely_unique"
+    },
+    {
+      "nodeid": "tests/test_prompt_context.py::test_prompt_contract_owner_exports_player_expression_contract_for_quoted_third_person_input",
+      "file": "tests/test_prompt_context.py",
+      "name": "test_prompt_contract_owner_exports_player_expression_contract_for_quoted_third_person_input",
+      "base_name": "test_prompt_contract_owner_exports_player_expression_contract_for_quoted_third_person_input",
+      "parametrized": false,
+      "primary_bucket": "unit",
+      "feature_areas": [
+        "general"
+      ],
+      "historically_motivated": false,
+      "assertion_style": "behavioral",
+      "brittleness": "low",
+      "redundancy_flag": "likely_unique"
+    },
+    {
       "nodeid": "tests/test_prompt_context.py::test_prompt_contract_owner_exposes_rule_priority_hierarchy",
       "file": "tests/test_prompt_context.py",
       "name": "test_prompt_contract_owner_exposes_rule_priority_hierarchy",
@@ -26748,6 +26755,36 @@
       "redundancy_flag": "likely_unique"
     },
     {
+      "nodeid": "tests/test_prompt_context.py::test_prompt_contract_owner_enables_strict_social_answer_pressure_contract_bundle",
+      "file": "tests/test_prompt_context.py",
+      "name": "test_prompt_contract_owner_enables_strict_social_answer_pressure_contract_bundle",
+      "base_name": "test_prompt_contract_owner_enables_strict_social_answer_pressure_contract_bundle",
+      "parametrized": false,
+      "primary_bucket": "integration",
+      "feature_areas": [
+        "general"
+      ],
+      "historically_motivated": false,
+      "assertion_style": "mixed",
+      "brittleness": "medium",
+      "redundancy_flag": "likely_unique"
+    },
+    {
+      "nodeid": "tests/test_prompt_context.py::test_prompt_contract_owner_keeps_non_answer_seeking_social_lock_out_of_override",
+      "file": "tests/test_prompt_context.py",
+      "name": "test_prompt_contract_owner_keeps_non_answer_seeking_social_lock_out_of_override",
+      "base_name": "test_prompt_contract_owner_keeps_non_answer_seeking_social_lock_out_of_override",
+      "parametrized": false,
+      "primary_bucket": "integration",
+      "feature_areas": [
+        "general"
+      ],
+      "historically_motivated": false,
+      "assertion_style": "structural",
+      "brittleness": "low",
+      "redundancy_flag": "likely_unique"
+    },
+    {
       "nodeid": "tests/test_prompt_context.py::test_prompt_contract_owner_exposes_typed_uncertainty_policy_and_hint",
       "file": "tests/test_prompt_context.py",
       "name": "test_prompt_contract_owner_exposes_typed_uncertainty_policy_and_hint",
@@ -26775,6 +26812,21 @@
       "historically_motivated": false,
       "assertion_style": "prose-sensitive",
       "brittleness": "high",
+      "redundancy_flag": "likely_unique"
+    },
+    {
+      "nodeid": "tests/test_prompt_context.py::test_prompt_contract_owner_canonicalizes_promoted_interaction_target_ids",
+      "file": "tests/test_prompt_context.py",
+      "name": "test_prompt_contract_owner_canonicalizes_promoted_interaction_target_ids",
+      "base_name": "test_prompt_contract_owner_canonicalizes_promoted_interaction_target_ids",
+      "parametrized": false,
+      "primary_bucket": "unit",
+      "feature_areas": [
+        "general"
+      ],
+      "historically_motivated": false,
+      "assertion_style": "mixed",
+      "brittleness": "medium",
       "redundancy_flag": "likely_unique"
     },
     {
@@ -27379,6 +27431,22 @@
       "redundancy_flag": "likely_unique"
     },
     {
+      "nodeid": "tests/test_prompt_context.py::test_build_narration_context_filters_terminal_pending_leads_from_prompt_export",
+      "file": "tests/test_prompt_context.py",
+      "name": "test_build_narration_context_filters_terminal_pending_leads_from_prompt_export",
+      "base_name": "test_build_narration_context_filters_terminal_pending_leads_from_prompt_export",
+      "parametrized": false,
+      "primary_bucket": "integration",
+      "feature_areas": [
+        "retry",
+        "lead extraction"
+      ],
+      "historically_motivated": false,
+      "assertion_style": "behavioral",
+      "brittleness": "low",
+      "redundancy_flag": "likely_unique"
+    },
+    {
       "nodeid": "tests/test_prompt_context.py::test_build_narration_context_repeat_continuity_alignment_across_export_and_hints",
       "file": "tests/test_prompt_context.py",
       "name": "test_build_narration_context_repeat_continuity_alignment_across_export_and_hints",
@@ -27387,6 +27455,21 @@
       "primary_bucket": "integration",
       "feature_areas": [
         "social continuity"
+      ],
+      "historically_motivated": false,
+      "assertion_style": "behavioral",
+      "brittleness": "low",
+      "redundancy_flag": "likely_unique"
+    },
+    {
+      "nodeid": "tests/test_prompt_context.py::test_build_narration_context_recent_discussion_flags_repeat_risk_without_filtering_npc_relevant_leads",
+      "file": "tests/test_prompt_context.py",
+      "name": "test_build_narration_context_recent_discussion_flags_repeat_risk_without_filtering_npc_relevant_leads",
+      "base_name": "test_build_narration_context_recent_discussion_flags_repeat_risk_without_filtering_npc_relevant_leads",
+      "parametrized": false,
+      "primary_bucket": "integration",
+      "feature_areas": [
+        "lead extraction"
       ],
       "historically_motivated": false,
       "assertion_style": "behavioral",
@@ -27492,6 +27575,187 @@
       "primary_bucket": "integration",
       "feature_areas": [
         "general"
+      ],
+      "historically_motivated": false,
+      "assertion_style": "behavioral",
+      "brittleness": "low",
+      "redundancy_flag": "likely_unique"
+    },
+    {
+      "nodeid": "tests/test_prompt_context.py::test_prompt_contract_owner_detects_correction_reask_answer_pressure_followup",
+      "file": "tests/test_prompt_context.py",
+      "name": "test_prompt_contract_owner_detects_correction_reask_answer_pressure_followup",
+      "base_name": "test_prompt_contract_owner_detects_correction_reask_answer_pressure_followup",
+      "parametrized": false,
+      "primary_bucket": "integration",
+      "feature_areas": [
+        "general"
+      ],
+      "historically_motivated": false,
+      "assertion_style": "mixed",
+      "brittleness": "medium",
+      "redundancy_flag": "likely_unique"
+    },
+    {
+      "nodeid": "tests/test_prompt_context.py::test_prompt_contract_owner_detects_anchor_followup_for_recent_milestone_explanation",
+      "file": "tests/test_prompt_context.py",
+      "name": "test_prompt_contract_owner_detects_anchor_followup_for_recent_milestone_explanation",
+      "base_name": "test_prompt_contract_owner_detects_anchor_followup_for_recent_milestone_explanation",
+      "parametrized": false,
+      "primary_bucket": "integration",
+      "feature_areas": [
+        "general"
+      ],
+      "historically_motivated": false,
+      "assertion_style": "mixed",
+      "brittleness": "medium",
+      "redundancy_flag": "likely_unique"
+    },
+    {
+      "nodeid": "tests/test_prompt_context.py::test_prompt_contract_owner_matches_short_anchor_followups_to_recent_npc_tokens",
+      "file": "tests/test_prompt_context.py",
+      "name": "test_prompt_contract_owner_matches_short_anchor_followups_to_recent_npc_tokens",
+      "base_name": "test_prompt_contract_owner_matches_short_anchor_followups_to_recent_npc_tokens",
+      "parametrized": false,
+      "primary_bucket": "unit",
+      "feature_areas": [
+        "general"
+      ],
+      "historically_motivated": false,
+      "assertion_style": "behavioral",
+      "brittleness": "low",
+      "redundancy_flag": "likely_unique"
+    },
+    {
+      "nodeid": "tests/test_prompt_context.py::test_prompt_contract_owner_detects_deictic_anchor_followups",
+      "file": "tests/test_prompt_context.py",
+      "name": "test_prompt_contract_owner_detects_deictic_anchor_followups",
+      "base_name": "test_prompt_contract_owner_detects_deictic_anchor_followups",
+      "parametrized": false,
+      "primary_bucket": "unit",
+      "feature_areas": [
+        "general"
+      ],
+      "historically_motivated": false,
+      "assertion_style": "behavioral",
+      "brittleness": "low",
+      "redundancy_flag": "likely_unique"
+    },
+    {
+      "nodeid": "tests/test_prompt_context.py::test_prompt_contract_owner_requires_anchor_overlap_for_anchor_followups",
+      "file": "tests/test_prompt_context.py",
+      "name": "test_prompt_contract_owner_requires_anchor_overlap_for_anchor_followups",
+      "base_name": "test_prompt_contract_owner_requires_anchor_overlap_for_anchor_followups",
+      "parametrized": false,
+      "primary_bucket": "unit",
+      "feature_areas": [
+        "general"
+      ],
+      "historically_motivated": false,
+      "assertion_style": "behavioral",
+      "brittleness": "low",
+      "redundancy_flag": "likely_unique"
+    },
+    {
+      "nodeid": "tests/test_prompt_context.py::test_prompt_contract_owner_ignores_non_questions_even_when_anchor_words_repeat",
+      "file": "tests/test_prompt_context.py",
+      "name": "test_prompt_contract_owner_ignores_non_questions_even_when_anchor_words_repeat",
+      "base_name": "test_prompt_contract_owner_ignores_non_questions_even_when_anchor_words_repeat",
+      "parametrized": false,
+      "primary_bucket": "unit",
+      "feature_areas": [
+        "general"
+      ],
+      "historically_motivated": false,
+      "assertion_style": "behavioral",
+      "brittleness": "low",
+      "redundancy_flag": "likely_unique"
+    },
+    {
+      "nodeid": "tests/test_prompt_context.py::test_prompt_contract_owner_excludes_generic_roles_from_anchor_followup_detection",
+      "file": "tests/test_prompt_context.py",
+      "name": "test_prompt_contract_owner_excludes_generic_roles_from_anchor_followup_detection",
+      "base_name": "test_prompt_contract_owner_excludes_generic_roles_from_anchor_followup_detection",
+      "parametrized": false,
+      "primary_bucket": "unit",
+      "feature_areas": [
+        "general"
+      ],
+      "historically_motivated": false,
+      "assertion_style": "behavioral",
+      "brittleness": "low",
+      "redundancy_flag": "likely_unique"
+    },
+    {
+      "nodeid": "tests/test_prompt_context.py::test_prompt_contract_owner_excludes_generic_roles_from_anchor_token_extraction",
+      "file": "tests/test_prompt_context.py",
+      "name": "test_prompt_contract_owner_excludes_generic_roles_from_anchor_token_extraction",
+      "base_name": "test_prompt_contract_owner_excludes_generic_roles_from_anchor_token_extraction",
+      "parametrized": false,
+      "primary_bucket": "unit",
+      "feature_areas": [
+        "general"
+      ],
+      "historically_motivated": false,
+      "assertion_style": "behavioral",
+      "brittleness": "low",
+      "redundancy_flag": "likely_unique"
+    },
+    {
+      "nodeid": "tests/test_prompt_context.py::test_prompt_contract_owner_does_not_pair_unmatched_role_words_with_real_clues",
+      "file": "tests/test_prompt_context.py",
+      "name": "test_prompt_contract_owner_does_not_pair_unmatched_role_words_with_real_clues",
+      "base_name": "test_prompt_contract_owner_does_not_pair_unmatched_role_words_with_real_clues",
+      "parametrized": false,
+      "primary_bucket": "unit",
+      "feature_areas": [
+        "clue system"
+      ],
+      "historically_motivated": false,
+      "assertion_style": "behavioral",
+      "brittleness": "low",
+      "redundancy_flag": "likely_unique"
+    },
+    {
+      "nodeid": "tests/test_prompt_context.py::test_prompt_contract_owner_suppresses_uncertainty_hint_during_live_social_lock",
+      "file": "tests/test_prompt_context.py",
+      "name": "test_prompt_contract_owner_suppresses_uncertainty_hint_during_live_social_lock",
+      "base_name": "test_prompt_contract_owner_suppresses_uncertainty_hint_during_live_social_lock",
+      "parametrized": false,
+      "primary_bucket": "integration",
+      "feature_areas": [
+        "fallback"
+      ],
+      "historically_motivated": false,
+      "assertion_style": "behavioral",
+      "brittleness": "low",
+      "redundancy_flag": "likely_unique"
+    },
+    {
+      "nodeid": "tests/test_prompt_context.py::test_prompt_contract_owner_surfaces_active_topic_anchor_rule_under_social_authority",
+      "file": "tests/test_prompt_context.py",
+      "name": "test_prompt_contract_owner_surfaces_active_topic_anchor_rule_under_social_authority",
+      "base_name": "test_prompt_contract_owner_surfaces_active_topic_anchor_rule_under_social_authority",
+      "parametrized": false,
+      "primary_bucket": "integration",
+      "feature_areas": [
+        "general"
+      ],
+      "historically_motivated": false,
+      "assertion_style": "behavioral",
+      "brittleness": "low",
+      "redundancy_flag": "likely_unique"
+    },
+    {
+      "nodeid": "tests/test_prompt_context.py::test_prompt_contract_owner_filters_absent_lead_salience_from_interlocutor_export",
+      "file": "tests/test_prompt_context.py",
+      "name": "test_prompt_contract_owner_filters_absent_lead_salience_from_interlocutor_export",
+      "base_name": "test_prompt_contract_owner_filters_absent_lead_salience_from_interlocutor_export",
+      "parametrized": false,
+      "primary_bucket": "integration",
+      "feature_areas": [
+        "social continuity",
+        "lead extraction"
       ],
       "historically_motivated": false,
       "assertion_style": "behavioral",
@@ -27668,6 +27932,21 @@
       "file": "tests/test_prompt_context.py",
       "name": "test_context_separation_contract_wired_to_response_policy_and_payload",
       "base_name": "test_context_separation_contract_wired_to_response_policy_and_payload",
+      "parametrized": false,
+      "primary_bucket": "unit",
+      "feature_areas": [
+        "general"
+      ],
+      "historically_motivated": false,
+      "assertion_style": "behavioral",
+      "brittleness": "low",
+      "redundancy_flag": "likely_unique"
+    },
+    {
+      "nodeid": "tests/test_prompt_context.py::test_prompt_contract_owner_materializes_response_policy_bundle_for_downstream_consumers",
+      "file": "tests/test_prompt_context.py",
+      "name": "test_prompt_contract_owner_materializes_response_policy_bundle_for_downstream_consumers",
+      "base_name": "test_prompt_contract_owner_materializes_response_policy_bundle_for_downstream_consumers",
       "parametrized": false,
       "primary_bucket": "unit",
       "feature_areas": [
@@ -29022,6 +29301,36 @@
       "file": "tests/test_response_policy_contracts.py",
       "name": "test_response_type_contract_requires_dialogue_reads_canonical_contract",
       "base_name": "test_response_type_contract_requires_dialogue_reads_canonical_contract",
+      "parametrized": false,
+      "primary_bucket": "unit",
+      "feature_areas": [
+        "general"
+      ],
+      "historically_motivated": false,
+      "assertion_style": "behavioral",
+      "brittleness": "low",
+      "redundancy_flag": "likely_unique"
+    },
+    {
+      "nodeid": "tests/test_response_policy_contracts.py::test_interaction_continuity_accessor_reads_shipped_response_policy_contract",
+      "file": "tests/test_response_policy_contracts.py",
+      "name": "test_interaction_continuity_accessor_reads_shipped_response_policy_contract",
+      "base_name": "test_interaction_continuity_accessor_reads_shipped_response_policy_contract",
+      "parametrized": false,
+      "primary_bucket": "unit",
+      "feature_areas": [
+        "social continuity"
+      ],
+      "historically_motivated": false,
+      "assertion_style": "behavioral",
+      "brittleness": "low",
+      "redundancy_flag": "likely_unique"
+    },
+    {
+      "nodeid": "tests/test_response_policy_contracts.py::test_conversational_memory_window_accessor_reads_shipped_response_policy_contract",
+      "file": "tests/test_response_policy_contracts.py",
+      "name": "test_conversational_memory_window_accessor_reads_shipped_response_policy_contract",
+      "base_name": "test_conversational_memory_window_accessor_reads_shipped_response_policy_contract",
       "parametrized": false,
       "primary_bucket": "unit",
       "feature_areas": [
@@ -31668,10 +31977,10 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_social_emission_quality.py::test_final_emission_gate_meta_records_preference_decision",
+      "nodeid": "tests/test_social_emission_quality.py::test_strict_social_emission_meta_records_preference_decision",
       "file": "tests/test_social_emission_quality.py",
-      "name": "test_final_emission_gate_meta_records_preference_decision",
-      "base_name": "test_final_emission_gate_meta_records_preference_decision",
+      "name": "test_strict_social_emission_meta_records_preference_decision",
+      "base_name": "test_strict_social_emission_meta_records_preference_decision",
       "parametrized": false,
       "primary_bucket": "integration",
       "feature_areas": [
@@ -32049,10 +32358,10 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_social_escalation.py::test_anchor_followup_detects_milestone_explanation_question",
+      "nodeid": "tests/test_social_escalation.py::test_escalation_consumes_anchor_followup_pressure_at_repeat_one",
       "file": "tests/test_social_escalation.py",
-      "name": "test_anchor_followup_detects_milestone_explanation_question",
-      "base_name": "test_anchor_followup_detects_milestone_explanation_question",
+      "name": "test_escalation_consumes_anchor_followup_pressure_at_repeat_one",
+      "base_name": "test_escalation_consumes_anchor_followup_pressure_at_repeat_one",
       "parametrized": false,
       "primary_bucket": "integration",
       "feature_areas": [
@@ -32064,130 +32373,10 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_social_escalation.py::test_anchor_followup_why_the_milestone_and_ghost_stories",
+      "nodeid": "tests/test_social_escalation.py::test_anchor_followup_reuses_topic_bucket_for_escalation_consumer",
       "file": "tests/test_social_escalation.py",
-      "name": "test_anchor_followup_why_the_milestone_and_ghost_stories",
-      "base_name": "test_anchor_followup_why_the_milestone_and_ghost_stories",
-      "parametrized": false,
-      "primary_bucket": "unit",
-      "feature_areas": [
-        "general"
-      ],
-      "historically_motivated": false,
-      "assertion_style": "behavioral",
-      "brittleness": "low",
-      "redundancy_flag": "likely_unique"
-    },
-    {
-      "nodeid": "tests/test_social_escalation.py::test_anchor_followup_deictic_what_happened_there",
-      "file": "tests/test_social_escalation.py",
-      "name": "test_anchor_followup_deictic_what_happened_there",
-      "base_name": "test_anchor_followup_deictic_what_happened_there",
-      "parametrized": false,
-      "primary_bucket": "unit",
-      "feature_areas": [
-        "general"
-      ],
-      "historically_motivated": false,
-      "assertion_style": "behavioral",
-      "brittleness": "low",
-      "redundancy_flag": "likely_unique"
-    },
-    {
-      "nodeid": "tests/test_social_escalation.py::test_anchor_followup_not_triggered_without_anchor_overlap",
-      "file": "tests/test_social_escalation.py",
-      "name": "test_anchor_followup_not_triggered_without_anchor_overlap",
-      "base_name": "test_anchor_followup_not_triggered_without_anchor_overlap",
-      "parametrized": false,
-      "primary_bucket": "unit",
-      "feature_areas": [
-        "general"
-      ],
-      "historically_motivated": false,
-      "assertion_style": "behavioral",
-      "brittleness": "low",
-      "redundancy_flag": "likely_unique"
-    },
-    {
-      "nodeid": "tests/test_social_escalation.py::test_anchor_followup_not_triggered_for_non_question_with_anchor_word",
-      "file": "tests/test_social_escalation.py",
-      "name": "test_anchor_followup_not_triggered_for_non_question_with_anchor_word",
-      "base_name": "test_anchor_followup_not_triggered_for_non_question_with_anchor_word",
-      "parametrized": false,
-      "primary_bucket": "unit",
-      "feature_areas": [
-        "general"
-      ],
-      "historically_motivated": false,
-      "assertion_style": "behavioral",
-      "brittleness": "low",
-      "redundancy_flag": "likely_unique"
-    },
-    {
-      "nodeid": "tests/test_social_escalation.py::test_anchor_followup_not_on_first_question_when_only_generic_roles_in_npc_line",
-      "file": "tests/test_social_escalation.py",
-      "name": "test_anchor_followup_not_on_first_question_when_only_generic_roles_in_npc_line",
-      "base_name": "test_anchor_followup_not_on_first_question_when_only_generic_roles_in_npc_line",
-      "parametrized": false,
-      "primary_bucket": "integration",
-      "feature_areas": [
-        "general"
-      ],
-      "historically_motivated": false,
-      "assertion_style": "behavioral",
-      "brittleness": "low",
-      "redundancy_flag": "likely_unique"
-    },
-    {
-      "nodeid": "tests/test_social_escalation.py::test_anchor_tokens_exclude_generic_roles_from_extraction",
-      "file": "tests/test_social_escalation.py",
-      "name": "test_anchor_tokens_exclude_generic_roles_from_extraction",
-      "base_name": "test_anchor_tokens_exclude_generic_roles_from_extraction",
-      "parametrized": false,
-      "primary_bucket": "unit",
-      "feature_areas": [
-        "general"
-      ],
-      "historically_motivated": false,
-      "assertion_style": "behavioral",
-      "brittleness": "low",
-      "redundancy_flag": "likely_unique"
-    },
-    {
-      "nodeid": "tests/test_social_escalation.py::test_anchor_followup_not_triggered_by_role_words_when_clue_present_but_unmatched",
-      "file": "tests/test_social_escalation.py",
-      "name": "test_anchor_followup_not_triggered_by_role_words_when_clue_present_but_unmatched",
-      "base_name": "test_anchor_followup_not_triggered_by_role_words_when_clue_present_but_unmatched",
-      "parametrized": false,
-      "primary_bucket": "unit",
-      "feature_areas": [
-        "clue system"
-      ],
-      "historically_motivated": false,
-      "assertion_style": "behavioral",
-      "brittleness": "low",
-      "redundancy_flag": "likely_unique"
-    },
-    {
-      "nodeid": "tests/test_social_escalation.py::test_answer_pressure_anchor_escalation_reason_at_repeat_one",
-      "file": "tests/test_social_escalation.py",
-      "name": "test_answer_pressure_anchor_escalation_reason_at_repeat_one",
-      "base_name": "test_answer_pressure_anchor_escalation_reason_at_repeat_one",
-      "parametrized": false,
-      "primary_bucket": "integration",
-      "feature_areas": [
-        "general"
-      ],
-      "historically_motivated": false,
-      "assertion_style": "mixed",
-      "brittleness": "medium",
-      "redundancy_flag": "likely_unique"
-    },
-    {
-      "nodeid": "tests/test_social_escalation.py::test_milestone_explanation_followup_reuses_topic_bucket",
-      "file": "tests/test_social_escalation.py",
-      "name": "test_milestone_explanation_followup_reuses_topic_bucket",
-      "base_name": "test_milestone_explanation_followup_reuses_topic_bucket",
+      "name": "test_anchor_followup_reuses_topic_bucket_for_escalation_consumer",
+      "base_name": "test_anchor_followup_reuses_topic_bucket_for_escalation_consumer",
       "parametrized": false,
       "primary_bucket": "integration",
       "feature_areas": [
@@ -32324,10 +32513,10 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_social_exchange_emission.py::test_final_emission_gate_answer_contract_prefers_response_policy_surface_and_repairs_scene_prose",
+      "nodeid": "tests/test_social_exchange_emission.py::test_strict_social_emission_answer_contract_prefers_response_policy_surface_and_repairs_scene_prose",
       "file": "tests/test_social_exchange_emission.py",
-      "name": "test_final_emission_gate_answer_contract_prefers_response_policy_surface_and_repairs_scene_prose",
-      "base_name": "test_final_emission_gate_answer_contract_prefers_response_policy_surface_and_repairs_scene_prose",
+      "name": "test_strict_social_emission_answer_contract_prefers_response_policy_surface_and_repairs_scene_prose",
+      "base_name": "test_strict_social_emission_answer_contract_prefers_response_policy_surface_and_repairs_scene_prose",
       "parametrized": false,
       "primary_bucket": "integration",
       "feature_areas": [
@@ -32355,10 +32544,10 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_social_exchange_emission.py::test_final_emission_gate_answer_completeness_repairs_frontloaded_direct_answer",
+      "nodeid": "tests/test_social_exchange_emission.py::test_strict_social_emission_answer_completeness_repairs_frontloaded_direct_answer",
       "file": "tests/test_social_exchange_emission.py",
-      "name": "test_final_emission_gate_answer_completeness_repairs_frontloaded_direct_answer",
-      "base_name": "test_final_emission_gate_answer_completeness_repairs_frontloaded_direct_answer",
+      "name": "test_strict_social_emission_answer_completeness_repairs_frontloaded_direct_answer",
+      "base_name": "test_strict_social_emission_answer_completeness_repairs_frontloaded_direct_answer",
       "parametrized": false,
       "primary_bucket": "integration",
       "feature_areas": [
@@ -32371,10 +32560,10 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_social_exchange_emission.py::test_final_emission_gate_action_outcome_contract_repairs_exposition_only_candidate",
+      "nodeid": "tests/test_social_exchange_emission.py::test_strict_social_emission_action_outcome_contract_repairs_exposition_only_candidate",
       "file": "tests/test_social_exchange_emission.py",
-      "name": "test_final_emission_gate_action_outcome_contract_repairs_exposition_only_candidate",
-      "base_name": "test_final_emission_gate_action_outcome_contract_repairs_exposition_only_candidate",
+      "name": "test_strict_social_emission_action_outcome_contract_repairs_exposition_only_candidate",
+      "base_name": "test_strict_social_emission_action_outcome_contract_repairs_exposition_only_candidate",
       "parametrized": false,
       "primary_bucket": "integration",
       "feature_areas": [
@@ -32387,10 +32576,10 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_social_exchange_emission.py::test_final_emission_gate_non_hostile_contract_blocks_sudden_aggression",
+      "nodeid": "tests/test_social_exchange_emission.py::test_strict_social_emission_non_hostile_contract_blocks_sudden_aggression",
       "file": "tests/test_social_exchange_emission.py",
-      "name": "test_final_emission_gate_non_hostile_contract_blocks_sudden_aggression",
-      "base_name": "test_final_emission_gate_non_hostile_contract_blocks_sudden_aggression",
+      "name": "test_strict_social_emission_non_hostile_contract_blocks_sudden_aggression",
+      "base_name": "test_strict_social_emission_non_hostile_contract_blocks_sudden_aggression",
       "parametrized": false,
       "primary_bucket": "integration",
       "feature_areas": [
@@ -32402,10 +32591,10 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_social_exchange_emission.py::test_final_emission_gate_non_hostile_answer_contract_stays_non_escalatory_with_active_interlocutor",
+      "nodeid": "tests/test_social_exchange_emission.py::test_strict_social_emission_non_hostile_answer_contract_stays_non_escalatory_with_active_interlocutor",
       "file": "tests/test_social_exchange_emission.py",
-      "name": "test_final_emission_gate_non_hostile_answer_contract_stays_non_escalatory_with_active_interlocutor",
-      "base_name": "test_final_emission_gate_non_hostile_answer_contract_stays_non_escalatory_with_active_interlocutor",
+      "name": "test_strict_social_emission_non_hostile_answer_contract_stays_non_escalatory_with_active_interlocutor",
+      "base_name": "test_strict_social_emission_non_hostile_answer_contract_stays_non_escalatory_with_active_interlocutor",
       "parametrized": false,
       "primary_bucket": "integration",
       "feature_areas": [
@@ -32418,10 +32607,10 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_social_exchange_emission.py::test_final_emission_gate_dialogue_contract_can_repair_from_debug_surface",
+      "nodeid": "tests/test_social_exchange_emission.py::test_strict_social_emission_dialogue_contract_can_repair_from_debug_surface",
       "file": "tests/test_social_exchange_emission.py",
-      "name": "test_final_emission_gate_dialogue_contract_can_repair_from_debug_surface",
-      "base_name": "test_final_emission_gate_dialogue_contract_can_repair_from_debug_surface",
+      "name": "test_strict_social_emission_dialogue_contract_can_repair_from_debug_surface",
+      "base_name": "test_strict_social_emission_dialogue_contract_can_repair_from_debug_surface",
       "parametrized": false,
       "primary_bucket": "integration",
       "feature_areas": [
@@ -33357,36 +33546,6 @@
       "primary_bucket": "unit",
       "feature_areas": [
         "general"
-      ],
-      "historically_motivated": false,
-      "assertion_style": "behavioral",
-      "brittleness": "low",
-      "redundancy_flag": "likely_unique"
-    },
-    {
-      "nodeid": "tests/test_social_interaction_authority.py::test_derive_narration_obligations_reply_expected_locked_in_social",
-      "file": "tests/test_social_interaction_authority.py",
-      "name": "test_derive_narration_obligations_reply_expected_locked_in_social",
-      "base_name": "test_derive_narration_obligations_reply_expected_locked_in_social",
-      "parametrized": false,
-      "primary_bucket": "integration",
-      "feature_areas": [
-        "general"
-      ],
-      "historically_motivated": false,
-      "assertion_style": "behavioral",
-      "brittleness": "low",
-      "redundancy_flag": "likely_unique"
-    },
-    {
-      "nodeid": "tests/test_social_interaction_authority.py::test_build_narration_context_suppresses_uncertainty_hint_in_social",
-      "file": "tests/test_social_interaction_authority.py",
-      "name": "test_build_narration_context_suppresses_uncertainty_hint_in_social",
-      "base_name": "test_build_narration_context_suppresses_uncertainty_hint_in_social",
-      "parametrized": false,
-      "primary_bucket": "integration",
-      "feature_areas": [
-        "fallback"
       ],
       "historically_motivated": false,
       "assertion_style": "behavioral",
@@ -34439,7 +34598,7 @@
         "lead extraction"
       ],
       "historically_motivated": false,
-      "assertion_style": "structural",
+      "assertion_style": "behavioral",
       "brittleness": "low",
       "redundancy_flag": "likely_unique"
     },
@@ -34746,21 +34905,6 @@
       "historically_motivated": false,
       "assertion_style": "mixed",
       "brittleness": "medium",
-      "redundancy_flag": "likely_unique"
-    },
-    {
-      "nodeid": "tests/test_social_topic_anchor.py::test_narration_context_includes_anchor_rule_under_social_authority",
-      "file": "tests/test_social_topic_anchor.py",
-      "name": "test_narration_context_includes_anchor_rule_under_social_authority",
-      "base_name": "test_narration_context_includes_anchor_rule_under_social_authority",
-      "parametrized": false,
-      "primary_bucket": "integration",
-      "feature_areas": [
-        "general"
-      ],
-      "historically_motivated": false,
-      "assertion_style": "behavioral",
-      "brittleness": "low",
       "redundancy_flag": "likely_unique"
     },
     {
@@ -35214,14 +35358,14 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_stage_diff_telemetry.py::test_final_emission_gate_entry_exit_snapshots",
+      "nodeid": "tests/test_stage_diff_telemetry.py::test_stage_diff_telemetry_records_gate_entry_exit_snapshots",
       "file": "tests/test_stage_diff_telemetry.py",
-      "name": "test_final_emission_gate_entry_exit_snapshots",
-      "base_name": "test_final_emission_gate_entry_exit_snapshots",
+      "name": "test_stage_diff_telemetry_records_gate_entry_exit_snapshots",
+      "base_name": "test_stage_diff_telemetry_records_gate_entry_exit_snapshots",
       "parametrized": false,
       "primary_bucket": "unit",
       "feature_areas": [
-        "resolution/emission"
+        "general"
       ],
       "historically_motivated": false,
       "assertion_style": "structural",
@@ -35366,18 +35510,18 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_stale_interlocutor_invalidation_block3.py::test_adopted_speaker_is_authority_for_strict_social_continuity_fill",
+      "nodeid": "tests/test_stale_interlocutor_invalidation_block3.py::test_adopted_visible_speaker_drives_next_social_follow_up_target",
       "file": "tests/test_stale_interlocutor_invalidation_block3.py",
-      "name": "test_adopted_speaker_is_authority_for_strict_social_continuity_fill",
-      "base_name": "test_adopted_speaker_is_authority_for_strict_social_continuity_fill",
+      "name": "test_adopted_visible_speaker_drives_next_social_follow_up_target",
+      "base_name": "test_adopted_visible_speaker_drives_next_social_follow_up_target",
       "parametrized": false,
       "primary_bucket": "integration",
       "feature_areas": [
         "social continuity"
       ],
       "historically_motivated": false,
-      "assertion_style": "mixed",
-      "brittleness": "medium",
+      "assertion_style": "prose-sensitive",
+      "brittleness": "high",
       "redundancy_flag": "likely_unique"
     },
     {
@@ -35441,25 +35585,10 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_strict_social_answer_pressure_cashout.py::test_transcript_runner_why_redirect_then_correction_reask_followup_recognition",
+      "nodeid": "tests/test_strict_social_answer_pressure_cashout.py::test_transcript_runner_correction_reask_followup_drives_downstream_escalation",
       "file": "tests/test_strict_social_answer_pressure_cashout.py",
-      "name": "test_transcript_runner_why_redirect_then_correction_reask_followup_recognition",
-      "base_name": "test_transcript_runner_why_redirect_then_correction_reask_followup_recognition",
-      "parametrized": false,
-      "primary_bucket": "integration",
-      "feature_areas": [
-        "transcript regression"
-      ],
-      "historically_motivated": false,
-      "assertion_style": "prose-sensitive",
-      "brittleness": "high",
-      "redundancy_flag": "likely_unique"
-    },
-    {
-      "nodeid": "tests/test_strict_social_answer_pressure_cashout.py::test_transcript_missing_patrol_turn4_answer_pressure_contracts_layers_and_cashout",
-      "file": "tests/test_strict_social_answer_pressure_cashout.py",
-      "name": "test_transcript_missing_patrol_turn4_answer_pressure_contracts_layers_and_cashout",
-      "base_name": "test_transcript_missing_patrol_turn4_answer_pressure_contracts_layers_and_cashout",
+      "name": "test_transcript_runner_correction_reask_followup_drives_downstream_escalation",
+      "base_name": "test_transcript_runner_correction_reask_followup_drives_downstream_escalation",
       "parametrized": false,
       "primary_bucket": "integration",
       "feature_areas": [
@@ -35468,6 +35597,21 @@
       "historically_motivated": false,
       "assertion_style": "mixed",
       "brittleness": "medium",
+      "redundancy_flag": "likely_unique"
+    },
+    {
+      "nodeid": "tests/test_strict_social_answer_pressure_cashout.py::test_transcript_missing_patrol_turn4_applies_layers_and_cashout",
+      "file": "tests/test_strict_social_answer_pressure_cashout.py",
+      "name": "test_transcript_missing_patrol_turn4_applies_layers_and_cashout",
+      "base_name": "test_transcript_missing_patrol_turn4_applies_layers_and_cashout",
+      "parametrized": false,
+      "primary_bucket": "integration",
+      "feature_areas": [
+        "transcript regression"
+      ],
+      "historically_motivated": false,
+      "assertion_style": "structural",
+      "brittleness": "low",
       "redundancy_flag": "likely_unique"
     },
     {
@@ -37922,10 +38066,10 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_turn_pipeline_shared.py::test_chat_prompt_carries_no_validator_voice_policy",
+      "nodeid": "tests/test_turn_pipeline_shared.py::test_chat_pipeline_ships_no_validator_voice_policy",
       "file": "tests/test_turn_pipeline_shared.py",
-      "name": "test_chat_prompt_carries_no_validator_voice_policy",
-      "base_name": "test_chat_prompt_carries_no_validator_voice_policy",
+      "name": "test_chat_pipeline_ships_no_validator_voice_policy",
+      "base_name": "test_chat_pipeline_ships_no_validator_voice_policy",
       "parametrized": false,
       "primary_bucket": "integration",
       "feature_areas": [
@@ -37937,10 +38081,10 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_turn_pipeline_shared.py::test_chat_prompt_and_debug_carry_response_type_contract",
+      "nodeid": "tests/test_turn_pipeline_shared.py::test_chat_social_route_ships_dialogue_contract_through_request_debug_and_trace",
       "file": "tests/test_turn_pipeline_shared.py",
-      "name": "test_chat_prompt_and_debug_carry_response_type_contract",
-      "base_name": "test_chat_prompt_and_debug_carry_response_type_contract",
+      "name": "test_chat_social_route_ships_dialogue_contract_through_request_debug_and_trace",
+      "base_name": "test_chat_social_route_ships_dialogue_contract_through_request_debug_and_trace",
       "parametrized": false,
       "primary_bucket": "integration",
       "feature_areas": [
@@ -38622,10 +38766,10 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_turn_pipeline_shared.py::test_action_and_chat_mutate_runtime_before_prompt_context_construction[via_api_action]",
+      "nodeid": "tests/test_turn_pipeline_shared.py::test_action_and_chat_mutate_runtime_before_request_build[via_api_action]",
       "file": "tests/test_turn_pipeline_shared.py",
-      "name": "test_action_and_chat_mutate_runtime_before_prompt_context_construction[via_api_action]",
-      "base_name": "test_action_and_chat_mutate_runtime_before_prompt_context_construction",
+      "name": "test_action_and_chat_mutate_runtime_before_request_build[via_api_action]",
+      "base_name": "test_action_and_chat_mutate_runtime_before_request_build",
       "parametrized": true,
       "primary_bucket": "integration",
       "feature_areas": [
@@ -38638,10 +38782,10 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_turn_pipeline_shared.py::test_action_and_chat_mutate_runtime_before_prompt_context_construction[via_api_chat]",
+      "nodeid": "tests/test_turn_pipeline_shared.py::test_action_and_chat_mutate_runtime_before_request_build[via_api_chat]",
       "file": "tests/test_turn_pipeline_shared.py",
-      "name": "test_action_and_chat_mutate_runtime_before_prompt_context_construction[via_api_chat]",
-      "base_name": "test_action_and_chat_mutate_runtime_before_prompt_context_construction",
+      "name": "test_action_and_chat_mutate_runtime_before_request_build[via_api_chat]",
+      "base_name": "test_action_and_chat_mutate_runtime_before_request_build",
       "parametrized": true,
       "primary_bucket": "integration",
       "feature_areas": [
@@ -38669,10 +38813,10 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_turn_pipeline_shared.py::test_chat_implied_lowered_voice_is_applied_before_prompt_context",
+      "nodeid": "tests/test_turn_pipeline_shared.py::test_chat_implied_lowered_voice_reaches_request_build_context",
       "file": "tests/test_turn_pipeline_shared.py",
-      "name": "test_chat_implied_lowered_voice_is_applied_before_prompt_context",
-      "base_name": "test_chat_implied_lowered_voice_is_applied_before_prompt_context",
+      "name": "test_chat_implied_lowered_voice_reaches_request_build_context",
+      "base_name": "test_chat_implied_lowered_voice_reaches_request_build_context",
       "parametrized": false,
       "primary_bucket": "integration",
       "feature_areas": [
@@ -38684,10 +38828,10 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_turn_pipeline_shared.py::test_chat_implied_sit_with_target_is_applied_before_prompt_context",
+      "nodeid": "tests/test_turn_pipeline_shared.py::test_chat_implied_sit_with_target_reaches_request_build_context",
       "file": "tests/test_turn_pipeline_shared.py",
-      "name": "test_chat_implied_sit_with_target_is_applied_before_prompt_context",
-      "base_name": "test_chat_implied_sit_with_target_is_applied_before_prompt_context",
+      "name": "test_chat_implied_sit_with_target_reaches_request_build_context",
+      "base_name": "test_chat_implied_sit_with_target_reaches_request_build_context",
       "parametrized": false,
       "primary_bucket": "integration",
       "feature_areas": [
@@ -38699,14 +38843,15 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_turn_pipeline_shared.py::test_final_emission_gate_replaces_invalid_social_exchange_blob_before_emit",
+      "nodeid": "tests/test_turn_pipeline_shared.py::test_chat_social_exchange_invalid_blob_is_repaired_before_emit",
       "file": "tests/test_turn_pipeline_shared.py",
-      "name": "test_final_emission_gate_replaces_invalid_social_exchange_blob_before_emit",
-      "base_name": "test_final_emission_gate_replaces_invalid_social_exchange_blob_before_emit",
+      "name": "test_chat_social_exchange_invalid_blob_is_repaired_before_emit",
+      "base_name": "test_chat_social_exchange_invalid_blob_is_repaired_before_emit",
       "parametrized": false,
       "primary_bucket": "integration",
       "feature_areas": [
-        "resolution/emission"
+        "resolution/emission",
+        "fallback"
       ],
       "historically_motivated": false,
       "assertion_style": "structural",
@@ -38714,10 +38859,10 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_turn_pipeline_shared.py::test_final_emission_gate_blocks_advisory_prose_inside_social_exchange",
+      "nodeid": "tests/test_turn_pipeline_shared.py::test_chat_social_exchange_blocks_advisory_prose_before_emit",
       "file": "tests/test_turn_pipeline_shared.py",
-      "name": "test_final_emission_gate_blocks_advisory_prose_inside_social_exchange",
-      "base_name": "test_final_emission_gate_blocks_advisory_prose_inside_social_exchange",
+      "name": "test_chat_social_exchange_blocks_advisory_prose_before_emit",
+      "base_name": "test_chat_social_exchange_blocks_advisory_prose_before_emit",
       "parametrized": false,
       "primary_bucket": "integration",
       "feature_areas": [
@@ -38730,10 +38875,10 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_turn_pipeline_shared.py::test_final_emission_gate_strips_unresolved_stock_phrases_from_social_output",
+      "nodeid": "tests/test_turn_pipeline_shared.py::test_chat_social_exchange_strips_unresolved_stock_phrases",
       "file": "tests/test_turn_pipeline_shared.py",
-      "name": "test_final_emission_gate_strips_unresolved_stock_phrases_from_social_output",
-      "base_name": "test_final_emission_gate_strips_unresolved_stock_phrases_from_social_output",
+      "name": "test_chat_social_exchange_strips_unresolved_stock_phrases",
+      "base_name": "test_chat_social_exchange_strips_unresolved_stock_phrases",
       "parametrized": false,
       "primary_bucket": "integration",
       "feature_areas": [
@@ -38745,10 +38890,10 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_turn_pipeline_shared.py::test_final_emission_gate_keeps_interruption_output_coherent",
+      "nodeid": "tests/test_turn_pipeline_shared.py::test_chat_social_exchange_interruption_output_stays_coherent",
       "file": "tests/test_turn_pipeline_shared.py",
-      "name": "test_final_emission_gate_keeps_interruption_output_coherent",
-      "base_name": "test_final_emission_gate_keeps_interruption_output_coherent",
+      "name": "test_chat_social_exchange_interruption_output_stays_coherent",
+      "base_name": "test_chat_social_exchange_interruption_output_stays_coherent",
       "parametrized": false,
       "primary_bucket": "integration",
       "feature_areas": [
@@ -38776,14 +38921,15 @@
       "redundancy_flag": "likely_unique"
     },
     {
-      "nodeid": "tests/test_turn_pipeline_shared.py::test_final_emission_gate_repeated_questioning_can_end_clean_refusal",
+      "nodeid": "tests/test_turn_pipeline_shared.py::test_chat_repeated_questioning_can_end_clean_refusal_after_emit_repair",
       "file": "tests/test_turn_pipeline_shared.py",
-      "name": "test_final_emission_gate_repeated_questioning_can_end_clean_refusal",
-      "base_name": "test_final_emission_gate_repeated_questioning_can_end_clean_refusal",
+      "name": "test_chat_repeated_questioning_can_end_clean_refusal_after_emit_repair",
+      "base_name": "test_chat_repeated_questioning_can_end_clean_refusal_after_emit_repair",
       "parametrized": false,
       "primary_bucket": "integration",
       "feature_areas": [
-        "resolution/emission"
+        "resolution/emission",
+        "fallback"
       ],
       "historically_motivated": false,
       "assertion_style": "structural",

@@ -1,11 +1,10 @@
-"""Deterministic interaction continuity validation (Objective #14 Block #2)."""
+"""Downstream interaction-continuity validation and enforcement coverage."""
 from __future__ import annotations
 
 import pytest
 
 from game.final_emission_gate import _attach_interaction_continuity_validation
 from game.interaction_continuity import validate_interaction_continuity
-from game.response_policy_contracts import resolve_interaction_continuity_contract
 
 pytestmark = pytest.mark.unit
 
@@ -60,7 +59,7 @@ def _assert_validation_shape(v: dict) -> None:
     assert "reason_path" in v["debug"]
 
 
-def test_validator_noop_when_contract_missing_or_invalid():
+def test_validation_is_inert_when_contract_missing_or_invalid():
     v = validate_interaction_continuity("any", interaction_continuity_contract=None)
     _assert_validation_shape(v)
     assert v["ok"] is True
@@ -82,7 +81,7 @@ def test_validator_noop_when_contract_missing_or_invalid():
     assert v3["enabled"] is False
 
 
-def test_validator_noop_when_contract_disabled():
+def test_validation_is_inert_when_contract_disabled():
     c = {**_strong_contract(), "enabled": False}
     v = validate_interaction_continuity('"Hello," she says.', interaction_continuity_contract=c)
     assert v["ok"] is True
@@ -90,7 +89,7 @@ def test_validator_noop_when_contract_disabled():
     assert v["violations"] == []
 
 
-def test_strong_continuity_single_anchored_dialogue_passes():
+def test_validation_accepts_single_anchored_dialogue_under_strong_continuity():
     c = _strong_contract()
     text = '"The east road is watched," Melka says, holding your gaze.'
     v = validate_interaction_continuity(text, interaction_continuity_contract=c)
@@ -103,7 +102,7 @@ def test_strong_continuity_single_anchored_dialogue_passes():
     assert v["facts"]["anchor_required"] is True
 
 
-def test_strong_pure_narration_flags_dialogue_and_thread():
+def test_validation_flags_pure_narration_under_strong_continuity():
     c = _strong_contract()
     text = (
         "The weather shifted and clouds gathered over the market square while distant bells "
@@ -116,7 +115,7 @@ def test_strong_pure_narration_flags_dialogue_and_thread():
     assert "conversational_thread_dropped" in v["violations"]
 
 
-def test_strong_uncued_crowd_interruption_flags_multi_speaker_and_switch():
+def test_validation_flags_uncued_multi_speaker_interruption_under_strong_continuity():
     c = _strong_contract()
     text = 'Someone from the crowd shouts, "Watch out!"'
     v = validate_interaction_continuity(text, interaction_continuity_contract=c)
@@ -125,7 +124,7 @@ def test_strong_uncued_crowd_interruption_flags_multi_speaker_and_switch():
     assert "speaker_switch_without_explicit_cue" in v["violations"]
 
 
-def test_strong_explicit_handoff_allows_second_voice():
+def test_validation_allows_explicit_handoff_under_strong_continuity():
     c = _strong_contract()
     text = (
         'A voice from the crowd cuts in before Melka can answer. "Watch out!" the stranger snaps.'
@@ -135,7 +134,7 @@ def test_strong_explicit_handoff_allows_second_voice():
     assert "multi_speaker_interruption_under_continuity" not in v["violations"]
 
 
-def test_soft_narrator_bridge_with_dialogue_ok_or_warning_only():
+def test_validation_allows_soft_narrator_bridge_with_warning_only():
     c = _soft_contract()
     text = 'Nearby, the air shifts. Melka says, "Yes—we move at dusk."'
     v = validate_interaction_continuity(text, interaction_continuity_contract=c)
@@ -143,7 +142,7 @@ def test_soft_narrator_bridge_with_dialogue_ok_or_warning_only():
     assert "narrator_bridge_used" in v["warnings"]
 
 
-def test_soft_detached_exposition_flags_context():
+def test_validation_flags_detached_exposition_under_soft_continuity():
     c = _soft_contract()
     text = (
         "The regional economy depends on tolls, wayposts, and seasonal trade convoys moving "
@@ -158,24 +157,14 @@ def test_soft_detached_exposition_flags_context():
     assert "context_continuity_missing" in v["violations"]
 
 
-def test_strong_multi_speaker_labels_flags_interruption():
+def test_validation_flags_multi_speaker_labels_under_strong_continuity():
     c = _strong_contract()
     text = 'Guard: "Halt."\nMerchant: "Wait—he is with me."'
     v = validate_interaction_continuity(text, interaction_continuity_contract=c)
     assert "multi_speaker_interruption_under_continuity" in v["violations"]
 
 
-def test_resolve_public_wrapper_matches_embedded_policy():
-    ic = _strong_contract()
-    gm = {"response_policy": {"interaction_continuity": ic}}
-    resolved, src = resolve_interaction_continuity_contract(gm, resolution=None, session=None)
-    assert src == "response_policy"
-    assert resolved is not None
-    v = validate_interaction_continuity('"Hi."', interaction_continuity_contract=resolved)
-    assert v["enabled"] is True
-
-
-def test_emission_gate_wires_interaction_continuity_validation_metadata():
+def test_emission_gate_attaches_interaction_continuity_validation_metadata():
     out: dict = {
         "player_facing_text": "The scene holds.",
         "_final_emission_meta": {},

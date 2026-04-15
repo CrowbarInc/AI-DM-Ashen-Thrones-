@@ -1,14 +1,9 @@
-"""Unit tests for ``game.interaction_continuity`` contract builder and policy resolution."""
+"""Downstream interaction-continuity contract consumption coverage."""
 from __future__ import annotations
 
 import pytest
 
 from game.interaction_continuity import build_interaction_continuity_contract
-from game.conversational_memory_window import build_conversational_memory_window_contract
-from game.response_policy_contracts import (
-    resolve_conversational_memory_window_contract,
-    resolve_interaction_continuity_contract,
-)
 
 pytestmark = pytest.mark.unit
 
@@ -23,7 +18,7 @@ def _scene_envelope(scene_id: str = _SCENE_ID) -> dict:
     return {"scene": {"id": scene_id, "active_entities": [], "exits": []}}
 
 
-def test_strong_continuity_from_active_social_target():
+def test_build_contract_anchors_to_active_social_target():
     world = _world_with_npc("npc_bob")
     session = {
         "active_scene_id": _SCENE_ID,
@@ -59,7 +54,7 @@ def test_strong_continuity_from_active_social_target():
     assert "anchored_to_active_target" in c["continuity_reasons"]
 
 
-def test_fallback_to_current_interlocutor_when_active_target_missing():
+def test_build_contract_falls_back_to_current_interlocutor():
     world = _world_with_npc("npc_cara")
     session = {
         "active_scene_id": _SCENE_ID,
@@ -92,7 +87,7 @@ def test_fallback_to_current_interlocutor_when_active_target_missing():
     assert "anchored_to_scene_interlocutor" in c["continuity_reasons"]
 
 
-def test_invalid_off_scene_target_does_not_anchor_without_dialogue_rtc():
+def test_build_contract_rejects_off_scene_target_without_dialogue_contract():
     world = _world_with_npc("npc_bob")
     session = {
         "active_scene_id": _SCENE_ID,
@@ -125,7 +120,7 @@ def test_invalid_off_scene_target_does_not_anchor_without_dialogue_rtc():
     assert "no_valid_continuity_anchor" in c["continuity_reasons"]
 
 
-def test_invalid_target_soft_when_dialogue_response_type():
+def test_build_contract_allows_soft_continuity_for_dialogue_without_anchor():
     world = _world_with_npc("npc_bob")
     session = {
         "active_scene_id": _SCENE_ID,
@@ -160,7 +155,7 @@ def test_invalid_target_soft_when_dialogue_response_type():
     assert "no_valid_continuity_anchor" in c["continuity_reasons"]
 
 
-def test_dialogue_without_hard_anchor_soft_continuity():
+def test_build_contract_keeps_soft_dialogue_continuity_without_hard_anchor():
     session = {
         "active_scene_id": _SCENE_ID,
         "interaction_context": {
@@ -190,7 +185,7 @@ def test_dialogue_without_hard_anchor_soft_continuity():
     assert c["drop_interlocutor_requires_explicit_break"] is False
 
 
-def test_non_social_activity_no_continuity_contract():
+def test_build_contract_disables_continuity_for_non_social_activity():
     session = {
         "active_scene_id": _SCENE_ID,
         "interaction_context": {
@@ -218,40 +213,3 @@ def test_non_social_activity_no_continuity_contract():
     assert c["enabled"] is False
 
 
-def test_resolve_interaction_continuity_contract_from_response_policy():
-    ic = build_interaction_continuity_contract(
-        {
-            "active_scene_id": _SCENE_ID,
-            "interaction_context": {
-                "active_interaction_target_id": None,
-                "active_interaction_kind": None,
-                "interaction_mode": "none",
-                "engagement_level": "none",
-                "conversation_privacy": None,
-                "player_position_context": None,
-            },
-            "scene_state": {
-                "active_scene_id": _SCENE_ID,
-                "active_entities": [],
-                "current_interlocutor": None,
-            },
-        },
-        scene_id=_SCENE_ID,
-        scene_envelope=_scene_envelope(),
-        world={},
-        response_type_contract=None,
-    )
-    gm = {"response_policy": {"interaction_continuity": ic}}
-    resolved, src = resolve_interaction_continuity_contract(gm, resolution=None, session=None)
-    assert src == "response_policy"
-    assert resolved is not None
-    assert resolved.get("continuity_strength") == ic["continuity_strength"]
-
-
-def test_resolve_conversational_memory_window_contract_from_response_policy():
-    cmw = build_conversational_memory_window_contract(enabled=True)
-    gm = {"response_policy": {"conversational_memory_window": cmw}}
-    resolved, src = resolve_conversational_memory_window_contract(gm, resolution=None, session=None)
-    assert src == "response_policy"
-    assert resolved is not None
-    assert resolved.get("window_version") == cmw["window_version"]

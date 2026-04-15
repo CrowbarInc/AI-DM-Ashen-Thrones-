@@ -1,9 +1,9 @@
 """Practical primary direct-owner suite for ``game.response_policy_contracts``.
 
 This file owns direct read-side response-policy accessors and canonical bundle
-materialization semantics. Downstream fallback, validator, emission, and gate
-tests may still consume these contracts, but they should remain secondary
-coverage rather than the semantic authority for the seam.
+materialization semantics. Downstream fallback, validator, emission, gate, and
+interaction-continuity tests may still consume these contracts, but they should
+remain secondary coverage rather than the semantic authority for the seam.
 """
 from __future__ import annotations
 
@@ -12,7 +12,9 @@ import pytest
 from game.response_policy_contracts import (
     materialize_response_policy_bundle,
     resolve_answer_completeness_contract,
+    resolve_conversational_memory_window_contract,
     resolve_fallback_behavior_contract,
+    resolve_interaction_continuity_contract,
     resolve_response_delta_contract,
     resolve_social_response_structure_contract,
     response_type_contract_requires_dialogue,
@@ -78,3 +80,38 @@ def test_response_type_contract_requires_dialogue_reads_canonical_contract() -> 
     }
     assert response_type_contract_requires_dialogue(gm, resolution=None, session=None) is True
     assert response_type_contract_requires_dialogue({}, resolution=None, session=None) is False
+
+
+def test_interaction_continuity_accessor_reads_shipped_response_policy_contract() -> None:
+    ic = {
+        "enabled": True,
+        "continuity_strength": "strong",
+        "anchored_interlocutor_id": "npc_melka",
+    }
+    gm = {"response_policy": {"interaction_continuity": ic}}
+
+    resolved, src = resolve_interaction_continuity_contract(
+        gm,
+        resolution=None,
+        session=None,
+    )
+
+    assert src == "response_policy"
+    assert resolved == ic
+
+
+def test_conversational_memory_window_accessor_reads_shipped_response_policy_contract() -> None:
+    cmw = {
+        "enabled": True,
+        "window_version": "v1",
+    }
+    gm = {"response_policy": {"conversational_memory_window": cmw}}
+
+    resolved, src = resolve_conversational_memory_window_contract(
+        gm,
+        resolution=None,
+        session=None,
+    )
+
+    assert src == "response_policy"
+    assert resolved == cmw

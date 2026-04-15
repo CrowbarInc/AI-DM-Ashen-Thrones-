@@ -137,9 +137,17 @@ Response-policy operator note:
 
 - Canonical runtime owner: `game/response_policy_contracts.py`.
 - Practical primary direct-owner suite: `tests/test_response_policy_contracts.py`.
-- Secondary downstream coverage: `tests/test_fallback_shipped_contract_propagation.py`, `tests/test_response_delta_requirement.py`, `tests/test_final_emission_gate.py`, `tests/test_social_exchange_emission.py`, and `tests/test_final_emission_validators.py`.
+- Secondary downstream coverage: `tests/test_fallback_shipped_contract_propagation.py`, `tests/test_response_delta_requirement.py`, `tests/test_final_emission_gate.py`, `tests/test_social_exchange_emission.py`, `tests/test_final_emission_validators.py`, `tests/test_interaction_continuity_contract.py`, and `tests/test_interaction_continuity_validation.py`.
 - Compatibility residue can remain importable through private accessors plus top-level `fallback_behavior` and `social_response_structure_contract` fallbacks, but those paths should be interpreted as compatibility/adjacency rather than equal semantic homes.
-- If the audit still sees response-policy spread, interpret repair, gate, validator, and emission suites as downstream consumption evidence unless they become the place where new accessor or bundle-materialization semantics are directly specified.
+- If the audit still sees response-policy spread, interpret fallback, gate, validator, emission, and interaction-continuity suites as downstream consumption evidence unless they become the place where new accessor or bundle-materialization semantics are directly specified.
+
+Final-emission gate operator note:
+
+- Canonical runtime owner: `game/final_emission_gate.py`.
+- Practical primary direct-owner suite: `tests/test_final_emission_gate.py`.
+- Secondary downstream coverage: `tests/test_social_exchange_emission.py`, `tests/test_turn_pipeline_shared.py`, `tests/test_stage_diff_telemetry.py`, `tests/test_social_emission_quality.py`, `tests/test_dead_turn_detection.py`, plus relevant transcript/regression suites such as `tests/test_narration_transcript_regressions.py`.
+- Support/compatibility residue may remain in `game/final_emission_meta.py` as metadata packaging/read-side support and in retry/observability/pipeline-adjacent consumers that pass through the gate without co-owning orchestration order.
+- If the audit still sees gate breadth, interpret adjacent emission, telemetry, transcript, dead-turn, and pipeline suites as downstream application, observability, regression, or packaged-snapshot evidence unless they become the place where new direct orchestration-order semantics are specified.
 
 ## Transcript-Lock Vs Contract-Lock Risk
 

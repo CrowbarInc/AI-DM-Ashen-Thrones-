@@ -11,6 +11,8 @@ model-request assembly.
 Table-style dialogue-lock routing (pure ``choose_interaction_route``) lives in
 ``test_dialogue_routing_lock.py``; this module keeps HTTP pipeline locks only.
 Explicit multi-turn / retry / emission-gate bug locks stay non-parametrized.
+Final-emission assertions here are API-level downstream smoke for emitted chat
+results, not the practical owner for gate orchestration order.
 """
 from __future__ import annotations
 
@@ -1620,7 +1622,7 @@ def test_chat_implied_sit_with_target_reaches_request_build_context(tmp_path, mo
 
 
 # feature: emission
-def test_final_emission_gate_replaces_invalid_social_exchange_blob_before_emit(tmp_path, monkeypatch):
+def test_chat_social_exchange_invalid_blob_is_repaired_before_emit(tmp_path, monkeypatch):
     _seed_runner_dialogue_context(tmp_path, monkeypatch)
 
     with monkeypatch.context() as m:
@@ -1657,7 +1659,7 @@ def test_final_emission_gate_replaces_invalid_social_exchange_blob_before_emit(t
 
 
 # feature: emission, legality
-def test_final_emission_gate_blocks_advisory_prose_inside_social_exchange(tmp_path, monkeypatch):
+def test_chat_social_exchange_blocks_advisory_prose_before_emit(tmp_path, monkeypatch):
     _seed_runner_dialogue_context(tmp_path, monkeypatch)
 
     with monkeypatch.context() as m:
@@ -1693,7 +1695,7 @@ def test_final_emission_gate_blocks_advisory_prose_inside_social_exchange(tmp_pa
 
 
 # feature: emission
-def test_final_emission_gate_strips_unresolved_stock_phrases_from_social_output(tmp_path, monkeypatch):
+def test_chat_social_exchange_strips_unresolved_stock_phrases(tmp_path, monkeypatch):
     _seed_runner_dialogue_context(tmp_path, monkeypatch)
 
     with monkeypatch.context() as m:
@@ -1729,7 +1731,7 @@ def test_final_emission_gate_strips_unresolved_stock_phrases_from_social_output(
 
 
 # feature: emission
-def test_final_emission_gate_keeps_interruption_output_coherent(tmp_path, monkeypatch):
+def test_chat_social_exchange_interruption_output_stays_coherent(tmp_path, monkeypatch):
     _seed_runner_dialogue_context(tmp_path, monkeypatch)
 
     with monkeypatch.context() as m:
@@ -1813,7 +1815,7 @@ def test_chat_repeated_interruption_progresses_without_losing_dialogue_contract(
 
 
 # feature: emission
-def test_final_emission_gate_repeated_questioning_can_end_clean_refusal(tmp_path, monkeypatch):
+def test_chat_repeated_questioning_can_end_clean_refusal_after_emit_repair(tmp_path, monkeypatch):
     _seed_runner_dialogue_context(tmp_path, monkeypatch)
 
     stale_blob = _gm_response(

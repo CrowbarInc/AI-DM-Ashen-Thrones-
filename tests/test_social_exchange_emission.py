@@ -245,7 +245,7 @@ def test_deterministic_retry_fallback_never_injects_uncertainty_templates_on_gua
     assert "social_exchange_retry_fallback" in tags
 
 
-def test_final_emission_gate_answer_contract_prefers_response_policy_surface_and_repairs_scene_prose():
+def test_strict_social_emission_answer_contract_prefers_response_policy_surface_and_repairs_scene_prose():
     resolution = {
         "kind": "adjudication_query",
         "prompt": "Is Sleight of Hand needed?",
@@ -326,7 +326,7 @@ def test_validate_answer_completeness_flags_question_before_substance():
     assert "opening_question_before_answer" in fail["failure_reasons"]
 
 
-def test_final_emission_gate_answer_completeness_repairs_frontloaded_direct_answer():
+def test_strict_social_emission_answer_completeness_repairs_frontloaded_direct_answer():
     contract = dict(_SAMPLE_ANSWER_COMPLETENESS_CONTRACT)
     out = apply_final_emission_gate(
         {
@@ -347,7 +347,7 @@ def test_final_emission_gate_answer_completeness_repairs_frontloaded_direct_answ
     assert "rain beads" in low
 
 
-def test_final_emission_gate_action_outcome_contract_repairs_exposition_only_candidate():
+def test_strict_social_emission_action_outcome_contract_repairs_exposition_only_candidate():
     resolution = {
         "kind": "investigate",
         "prompt": "I investigate the desk.",
@@ -380,7 +380,7 @@ def test_final_emission_gate_action_outcome_contract_repairs_exposition_only_can
     assert meta.get("response_type_repair_kind") == "action_outcome_minimal_repair"
 
 
-def test_final_emission_gate_non_hostile_contract_blocks_sudden_aggression():
+def test_strict_social_emission_non_hostile_contract_blocks_sudden_aggression():
     resolution = {
         "kind": "adjudication_query",
         "prompt": "Is Sleight of Hand needed?",
@@ -415,7 +415,7 @@ def test_final_emission_gate_non_hostile_contract_blocks_sudden_aggression():
     assert meta.get("response_type_candidate_ok") is True
 
 
-def test_final_emission_gate_non_hostile_answer_contract_stays_non_escalatory_with_active_interlocutor():
+def test_strict_social_emission_non_hostile_answer_contract_stays_non_escalatory_with_active_interlocutor():
     session = default_session()
     world = default_world()
     sid = "frontier_gate"
@@ -460,7 +460,7 @@ def test_final_emission_gate_non_hostile_answer_contract_stays_non_escalatory_wi
     assert meta.get("non_hostile_escalation_blocked") is True
 
 
-def test_final_emission_gate_dialogue_contract_can_repair_from_debug_surface():
+def test_strict_social_emission_dialogue_contract_can_repair_from_debug_surface():
     session = default_session()
     world = default_world()
     sid = "frontier_gate"

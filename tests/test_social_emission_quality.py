@@ -366,7 +366,7 @@ def test_stronger_answer_not_chosen_when_it_fails_strict_legality():
     assert details.get("final_emitted_source") != "resolved_grounded_social_answer"
 
 
-def test_final_emission_gate_meta_records_preference_decision():
+def test_strict_social_emission_meta_records_preference_decision():
     session, world, sid = _base_session_scene()
     rt = get_scene_runtime(session, sid)
     rt["last_player_action_text"] = "Which way from the east market?"

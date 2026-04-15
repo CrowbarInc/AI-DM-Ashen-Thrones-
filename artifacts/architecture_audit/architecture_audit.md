@@ -12,7 +12,7 @@
 
 - Repo-level verdict: **mixed / caution** with scorecard total 9/18.
 - Action mode: **needs targeted ownership cleanup before more features**.
-- Hotspot mix: 5 localized, 3 transitional, 0 possible smear, 0 unclear.
+- Hotspot mix: 4 localized, 4 transitional, 0 possible smear, 0 unclear.
 
 ## Repo-level scorecard
 
@@ -30,7 +30,7 @@
 | Subsystem | Verdict | Owner | Test alignment |
 | --- | --- | --- | --- |
 | prompt contracts | red | game/prompt_context.py | aligned |
-| response policy contracts | red | game/response_policy_contracts.py | partial |
+| response policy contracts | red | game/response_policy_contracts.py | aligned |
 | final emission validators | yellow | game/final_emission_validators.py | partial |
 | final emission repairs | red | game/final_emission_repairs.py | partial |
 | final emission gate orchestration | red | game/final_emission_gate.py | partial |
@@ -41,18 +41,18 @@
 ## Strongest evidence that the architecture is real
 
 - `prompt contracts` still resolves to `game/prompt_context.py` (high ownership confidence; test alignment `aligned`).
+- `response policy contracts` still resolves to `game/response_policy_contracts.py` (high ownership confidence; test alignment `aligned`).
 - `final emission gate orchestration` still resolves to `game/final_emission_gate.py` (high ownership confidence; test alignment `partial`).
-- `final emission repairs` still resolves to `game/final_emission_repairs.py` (high ownership confidence; test alignment `partial`).
 
 ## Strongest evidence that the architecture may be patch-accumulating
 
-- `final emission gate orchestration` is `partial` with practical tests centered in `mixed: tests/test_final_emission_gate.py, tests/test_final_emission_scene_integrity.py, tests/test_final_emission_visibility.py`; evidence: Coverage is spread across many homes rather than anchored in one direct owner suite.
-- `response policy contracts` is `partial` with practical tests centered in `mixed: tests/test_response_policy_contracts.py, tests/test_interaction_continuity_contract.py, tests/test_interaction_continuity_validation.py`; evidence: Coverage is spread across many homes rather than anchored in one direct owner suite.
+- `final emission gate orchestration` is `partial` with practical tests centered in `mixed: tests/test_final_emission_gate.py, tests/test_interaction_continuity_speaker_bridge.py, tests/test_interaction_continuity_validation.py`; evidence: Coverage is spread across many homes rather than anchored in one direct owner suite.
+- `stage diff telemetry` is `partial` with practical tests centered in `mixed: tests/test_turn_packet_stage_diff_integration.py, tests/test_stage_diff_telemetry.py, tests/test_narrative_authenticity_aer4.py`; evidence: Docs name a canonical test owner, but practical coverage concentrates elsewhere.
 
 ## Known ambiguity hotspots
 
 - `prompt contracts conflict` -> localized under-consolidation; primary home `tests/test_prompt_context.py` (integration / layer interaction; score 10.0)
-- `response policy contracts localized residue` -> localized under-consolidation; Coverage is spread across many homes rather than anchored in one direct owner suite.
+- `response policy contracts localized residue` -> transitional residue; primary home `tests/test_response_policy_contracts.py` (integration / layer interaction; score 12.0)
 - `final emission gate orchestration partial mismatch` -> localized under-consolidation; Coverage is spread across many homes rather than anchored in one direct owner suite.
 - `stage diff telemetry partial mismatch` -> localized under-consolidation; Docs name a canonical test owner, but practical coverage concentrates elsewhere.
 - `test ownership / inventory docs still unclear` -> localized under-consolidation; No related test file accumulated enough concern-specific affinity.
@@ -62,11 +62,11 @@
 
 ## Runtime/test/doc mismatch review
 
-- `final emission gate orchestration` -> runtime `game/final_emission_gate.py` vs practical `mixed: tests/test_final_emission_gate.py, tests/test_final_emission_scene_integrity.py, tests/test_final_emission_visibility.py` (partial; high; spread 10); evidence: Coverage is spread across many homes rather than anchored in one direct owner suite.
-- `response policy contracts` -> runtime `game/response_policy_contracts.py` vs practical `mixed: tests/test_response_policy_contracts.py, tests/test_interaction_continuity_contract.py, tests/test_interaction_continuity_validation.py` (partial; high; spread 6); evidence: Coverage is spread across many homes rather than anchored in one direct owner suite.
+- `final emission gate orchestration` -> runtime `game/final_emission_gate.py` vs practical `mixed: tests/test_final_emission_gate.py, tests/test_interaction_continuity_speaker_bridge.py, tests/test_interaction_continuity_validation.py` (partial; high; spread 10); evidence: Coverage is spread across many homes rather than anchored in one direct owner suite.
 - `stage diff telemetry` -> runtime `game/stage_diff_telemetry.py` vs practical `mixed: tests/test_turn_packet_stage_diff_integration.py, tests/test_stage_diff_telemetry.py, tests/test_narrative_authenticity_aer4.py` (partial; high; spread 4); evidence: Docs name a canonical test owner, but practical coverage concentrates elsewhere.
 - `test ownership / inventory docs` -> runtime `unknown` vs practical `unknown` (partial; high; spread 0); evidence: No related test file accumulated enough concern-specific affinity.
 - `final emission repairs` -> runtime `game/final_emission_repairs.py` vs practical `mixed: tests/test_final_emission_repairs.py, tests/test_fallback_behavior_repairs.py` (partial; medium; spread 8); evidence: Docs name a canonical test owner, but practical coverage concentrates elsewhere.
+- `final emission validators` -> runtime `game/final_emission_validators.py` vs practical `tests/test_final_emission_validators.py` (partial; medium; spread 7); evidence: Docs name a canonical test owner, but practical coverage concentrates elsewhere.
 
 ## Transcript-lock vs contract-lock risk summary
 
@@ -75,10 +75,10 @@
 ## Manual spot-check list
 
 - `test ownership / inventory docs` -> runtime `unknown`, practical `unknown` (partial; high)
-- `response policy contracts` -> runtime `game/response_policy_contracts.py`, practical `mixed: tests/test_response_policy_contracts.py, tests/test_interaction_continuity_contract.py, tests/test_interaction_continuity_validation.py` (partial; high)
+- `response policy contracts` -> runtime `game/response_policy_contracts.py`, practical `tests/test_response_policy_contracts.py` (aligned; low)
 - `prompt contracts` -> runtime `game/prompt_context.py`, practical `tests/test_prompt_context.py` (aligned; low)
 - `stage diff telemetry` -> runtime `game/stage_diff_telemetry.py`, practical `mixed: tests/test_turn_packet_stage_diff_integration.py, tests/test_stage_diff_telemetry.py, tests/test_narrative_authenticity_aer4.py` (partial; high)
-- `final emission gate orchestration` -> runtime `game/final_emission_gate.py`, practical `mixed: tests/test_final_emission_gate.py, tests/test_final_emission_scene_integrity.py, tests/test_final_emission_visibility.py` (partial; high)
+- `final emission gate orchestration` -> runtime `game/final_emission_gate.py`, practical `mixed: tests/test_final_emission_gate.py, tests/test_interaction_continuity_speaker_bridge.py, tests/test_interaction_continuity_validation.py` (partial; high)
 
 ## Cleanup-only opportunities
 
