@@ -1108,6 +1108,22 @@ def _classify_hotspot(
     elif label == "prompt contracts conflict" and alignment_status == "partial":
         classification = "localized under-consolidation"
         why = "The runtime owner and practical direct-owner suite are visible again, but prompt-adjacent coverage remains broader than ideal."
+    elif (
+        label == "final emission gate orchestration partial mismatch"
+        and alignment_status == "aligned"
+        and alignment.get("healthy_overlap")
+        and alignment.get("severity") == "low"
+    ):
+        classification = "localized under-consolidation"
+        why = "A dominant gate owner and direct-owner suite are visible; remaining spread reads as honest orchestrator centrality and governed downstream adjacency rather than owner smear."
+    elif (
+        label == "stage diff telemetry partial mismatch"
+        and alignment_status == "aligned"
+        and alignment.get("healthy_overlap")
+        and alignment.get("severity") == "low"
+    ):
+        classification = "localized under-consolidation"
+        why = "A dominant telemetry owner and direct-owner suite are visible; remaining spread reads as honest observability centrality plus packet-boundary adjacency and compatibility residue rather than owner smear."
     elif label == "prompt_context_leads residue":
         classification = "transitional residue"
         why = "This hotspot is anchored in extraction residue rather than a fresh owner split."

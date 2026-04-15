@@ -1,4 +1,9 @@
-"""Tests for :mod:`game.stage_diff_telemetry` and downstream gate/retry observability."""
+"""Practical primary direct-owner tests for stage-diff telemetry observability semantics.
+
+Direct `game.stage_diff_telemetry` helper/accessor behavior belongs here.
+Packet/gate/retry and narrative-authenticity suites may consume emitted telemetry,
+but they should not re-own snapshot/diff packaging semantics.
+"""
 
 from __future__ import annotations
 
@@ -13,6 +18,7 @@ from game.gm_retry import apply_deterministic_retry_fallback, force_terminal_ret
 from game.turn_packet import TURN_PACKET_METADATA_KEY, attach_turn_packet, build_turn_packet, resolve_turn_packet_for_gate
 
 
+# Direct telemetry helper/accessor semantics belong in this suite.
 def test_snapshot_turn_stage_fingerprints_without_full_text() -> None:
     long = "word " * 80
     gm: Dict[str, Any] = {"player_facing_text": long, "metadata": {}}
@@ -46,6 +52,45 @@ def test_diff_turn_stage_detects_changes() -> None:
     r2 = {**a, "repair_flags": ["tone_escalation_repaired"]}
     dr = sdt.diff_turn_stage(r1, r2)
     assert dr["repair_flags_changed"] is True
+
+
+def test_snapshot_turn_stage_reads_packet_fields_for_observability() -> None:
+    pkt = build_turn_packet(
+        scene_id="scene_investigate",
+        resolution={"kind": "observe"},
+        interaction_continuity={"active_interaction_target_id": "npc_route_probe"},
+        narration_obligations={"active_npc_reply_kind": "observe"},
+        response_policy={"response_type": "observe"},
+    )
+    gm: Dict[str, Any] = {
+        "player_facing_text": "Rain drums on the slate roof.",
+        "metadata": {TURN_PACKET_METADATA_KEY: pkt},
+    }
+
+    snap = sdt.snapshot_turn_stage(gm, "packet_probe")
+
+    assert snap["resolution_kind"] == "observe"
+    assert snap["active_target_id"] == "npc_route_probe"
+    assert snap["reply_kind"] == "observe"
+    assert snap["response_type"] == "observe"
+
+
+def test_snapshot_turn_stage_handles_partial_packet_fields_safely() -> None:
+    partial = build_turn_packet(scene_id="partial_scene")
+    partial.pop("resolution_kind", None)
+    partial["route"] = {"active_target_id": None}
+    gm: Dict[str, Any] = {
+        "player_facing_text": "A short line.",
+        "metadata": {TURN_PACKET_METADATA_KEY: partial},
+    }
+
+    snap = sdt.snapshot_turn_stage(gm, "partial_probe")
+
+    assert snap["stage"] == "partial_probe"
+    assert snap["text_len"] == len("A short line.")
+    assert snap["resolution_kind"] is None
+    assert snap["active_target_id"] is None
+    assert snap["reply_kind"] is None
 
 
 def test_record_stage_snapshot_bounded() -> None:

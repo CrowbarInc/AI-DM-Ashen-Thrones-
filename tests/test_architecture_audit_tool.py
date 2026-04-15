@@ -495,6 +495,34 @@ def test_architecture_audit_keeps_layer_specific_gate_suites_secondary(audit_mod
     assert any(item["path"] == "tests/test_final_emission_scene_integrity.py" for item in gate_alignment["secondary_test_homes"])
 
 
+def test_architecture_audit_keeps_response_delta_gate_suite_secondary(audit_mod, tmp_path):
+    repo = _mini_repo(tmp_path)
+    _write(
+        repo / "tests" / "test_final_emission_gate.py",
+        "import pytest\n"
+        "from game.final_emission_gate import apply_final_emission_gate\n\n"
+        "pytestmark = pytest.mark.integration\n\n"
+        "def test_gate_owner_path():\n"
+        "    assert apply_final_emission_gate() is True\n",
+    )
+    _write(
+        repo / "tests" / "test_response_delta_requirement.py",
+        "import pytest\n"
+        "from game.final_emission_gate import _apply_response_delta_layer, apply_final_emission_gate\n\n"
+        "pytestmark = pytest.mark.unit\n\n"
+        "def test_response_delta_gate_application():\n"
+        "    assert _apply_response_delta_layer is not None\n"
+        "    assert apply_final_emission_gate() is True\n",
+    )
+
+    report = audit_mod.analyze_repo(repo)
+    by_name = {item["subsystem_name"]: item for item in report["subsystem_reports"]}
+    gate_alignment = by_name["final emission gate orchestration"]["test_ownership_alignment"]
+
+    assert gate_alignment["practical_test_owner"] == "tests/test_final_emission_gate.py"
+    assert any(item["path"] == "tests/test_response_delta_requirement.py" for item in gate_alignment["secondary_test_homes"])
+
+
 def test_architecture_audit_never_imports_game_modules(audit_mod, tmp_path):
     repo = _mini_repo(tmp_path)
     before = {name for name in sys.modules if name == "game" or name.startswith("game.")}
@@ -726,11 +754,26 @@ def test_architecture_audit_hotspot_classification_is_stable(audit_mod):
             }
         ],
     )
+    healthy_gate_report = _synthetic_subsystem(
+        audit_mod,
+        subsystem_name="final emission gate orchestration",
+        inferred_owner="game/final_emission_gate.py",
+        role_labels=["orchestration_owner"],
+        alignment_status="aligned",
+        mismatch_type="healthy_overlap",
+        severity="low",
+        coverage_spread=7,
+        archaeology_markers=[
+            {"path": "game/final_emission_gate.py", "kind": "compatibility", "excerpt": "historical tests"}
+        ],
+        overlap_findings=[{"overlap_type": "shared_concern_language", "severity": "medium", "evidence": ["shared gate language"]}],
+    )
 
     assert audit_mod._classify_hotspot(smear_report, label="prompt contracts conflict")["classification"] == "possible ownership smear"
     assert audit_mod._classify_hotspot(healthy_prompt_report, label="prompt contracts conflict")["classification"] == "localized under-consolidation"
     assert audit_mod._classify_hotspot(residue_report, label="prompt_context_leads residue", module_path="game/prompt_context_leads.py")["classification"] == "transitional residue"
     assert audit_mod._classify_hotspot(unclear_report, label="test ownership / inventory docs still unclear")["classification"] == "unclear / needs human review"
+    assert audit_mod._classify_hotspot(healthy_gate_report, label="final emission gate orchestration partial mismatch")["classification"] == "localized under-consolidation"
     assert audit_mod._classify_hotspot(local_report, label="stage diff telemetry partial mismatch")["classification"] == "localized under-consolidation"
     assert audit_mod._classify_hotspot(
         turn_packet_residue_report,

@@ -1,3 +1,9 @@
+"""Downstream gate application coverage for shipped fallback-behavior contracts.
+
+Direct ``game.final_emission_repairs`` helper semantics live in
+``tests/test_final_emission_repairs.py``. This file keeps gate ordering, application,
+and emitted-metadata behavior focused on downstream orchestration.
+"""
 from __future__ import annotations
 
 import pytest
@@ -6,8 +12,6 @@ import game.final_emission_gate as feg
 import game.final_emission_repairs as fer
 from game.defaults import default_session, default_world
 from game.final_emission_gate import apply_final_emission_gate
-from game.gm import apply_response_policy_enforcement
-from game.gm_retry import build_retry_prompt_for_failure
 from game.interaction_context import rebuild_active_scene_entities, set_social_target
 from game.storage import get_scene_runtime
 
@@ -204,85 +208,6 @@ def test_gate_skips_fallback_behavior_when_uncertainty_inactive() -> None:
     assert emission_debug.get("skip_reason") == "uncertainty_inactive"
 
 
-def test_fallback_behavior_contract_and_retry_debug_are_propagated() -> None:
-    contract = _fallback_contract()
-    gm = apply_response_policy_enforcement(
-        {"player_facing_text": "The line inches forward."},
-        response_policy={"fallback_behavior": contract},
-        player_text="Who did it?",
-        scene_envelope={"scene": {"id": "frontier_gate"}},
-        session={},
-        world={},
-        resolution={"kind": "adjudication_query", "prompt": "Who did it?"},
-    )
-
-    em = ((gm.get("metadata") or {}).get("emission_debug") or {}).get("fallback_behavior_contract") or {}
-    assert em.get("enabled") is True
-    assert em.get("uncertainty_active") is True
-    assert em.get("prefer_partial_over_question") is True
-
-    retry_debug: dict = {}
-    gm_with_meta = dict(gm)
-    gm_with_meta["_final_emission_meta"] = {
-        "fallback_behavior_checked": True,
-        "fallback_behavior_failed": True,
-        "fallback_behavior_repaired": True,
-        "fallback_behavior_skip_reason": None,
-        "fallback_behavior_failure_reasons": ["missing_allowed_fallback_shape"],
-    }
-    build_retry_prompt_for_failure(
-        {"failure_class": "scene_stall", "reasons": ["test"]},
-        response_policy=gm.get("response_policy"),
-        gm_output=gm_with_meta,
-        retry_debug_sink=retry_debug,
-        player_text="Who did it?",
-    )
-
-    assert retry_debug.get("retry_fallback_behavior_contract_present") is True
-    assert retry_debug.get("retry_fallback_behavior_uncertainty_active") is True
-    assert retry_debug.get("retry_fallback_behavior_checked") is True
-    assert retry_debug.get("retry_fallback_behavior_repaired") is True
-    assert retry_debug.get("retry_fallback_behavior_failure_reasons") == [
-        "missing_allowed_fallback_shape"
-    ]
-
-
-def test_retry_debug_mirrors_upstream_fallback_meta_without_recomputing() -> None:
-    retry_debug: dict = {}
-    build_retry_prompt_for_failure(
-        {"failure_class": "scene_stall", "reasons": ["test"]},
-        response_policy={"fallback_behavior": _fallback_contract()},
-        gm_output={
-            "response_policy": {"fallback_behavior": _fallback_contract(uncertainty_active=False)},
-            "_final_emission_meta": {
-                "fallback_behavior_checked": False,
-                "fallback_behavior_failed": True,
-                "fallback_behavior_repaired": False,
-                "fallback_behavior_skip_reason": "upstream_skip",
-                "fallback_behavior_failure_reasons": ["residual_shape_gap"],
-            },
-            "metadata": {
-                "emission_debug": {
-                    "fallback_behavior": {
-                        "validation": {"checked": True, "passed": True},
-                        "skip_reason": "conflicting_nested_value",
-                    }
-                }
-            },
-        },
-        retry_debug_sink=retry_debug,
-        player_text="No. Exactly who?",
-    )
-
-    assert retry_debug.get("retry_fallback_behavior_contract_present") is True
-    assert retry_debug.get("retry_fallback_behavior_uncertainty_active") is True
-    assert retry_debug.get("retry_fallback_behavior_checked") is False
-    assert retry_debug.get("retry_fallback_behavior_failed") is True
-    assert retry_debug.get("retry_fallback_behavior_repaired") is False
-    assert retry_debug.get("retry_fallback_behavior_skip_reason") == "upstream_skip"
-    assert retry_debug.get("retry_fallback_behavior_failure_reasons") == ["residual_shape_gap"]
-
-
 def test_gate_runs_fallback_behavior_after_interaction_continuity_non_strict(monkeypatch: pytest.MonkeyPatch) -> None:
     order: list[str] = []
     orig_ic = feg._apply_interaction_continuity_emission_step
@@ -372,128 +297,6 @@ def test_gate_runs_fallback_behavior_after_strict_social_continuity(monkeypatch:
     assert "enough information" not in str(out.get("player_facing_text") or "").lower()
     assert meta.get("fallback_behavior_repaired") is True
     assert meta.get("final_emitted_source") == meta.get("fallback_behavior_repair_mode")
-
-
-def test_gate_fallback_repair_does_not_clobber_response_type_or_answer_completeness_meta() -> None:
-    out = apply_final_emission_gate(
-        {
-            "player_facing_text": (
-                "No names yet. Check the ward clerk at the east gate office. "
-                "I don't have enough information to answer confidently."
-            ),
-            "tags": [],
-            "response_policy": {
-                "response_type_contract": _response_type_contract("answer"),
-                "answer_completeness": _answer_contract(),
-                "fallback_behavior": _fallback_contract(),
-            },
-        },
-        resolution={"kind": "adjudication_query", "prompt": "No. Exactly who?"},
-        session={},
-        scene_id="frontier_gate",
-        scene={},
-        world={},
-    )
-
-    meta = out.get("_final_emission_meta") or {}
-    assert meta.get("response_type_required") == "answer"
-    assert meta.get("response_type_candidate_ok") is True
-    assert meta.get("answer_completeness_checked") is True
-    assert meta.get("answer_completeness_failed") is False
-    assert meta.get("fallback_behavior_repaired") is True
-    assert "enough information" not in str(out.get("player_facing_text") or "").lower()
-
-
-def test_fallback_behavior_layer_revalidates_once_after_repair(monkeypatch: pytest.MonkeyPatch) -> None:
-    calls: list[str] = []
-    orig_validate = fer.validate_fallback_behavior
-
-    def spy_validate(*args, **kwargs):
-        calls.append(str(args[0]))
-        return orig_validate(*args, **kwargs)
-
-    monkeypatch.setattr(fer, "validate_fallback_behavior", spy_validate)
-
-    text, meta, extra = fer._apply_fallback_behavior_layer(
-        "I don't have enough information to answer confidently. Check the ward clerk at the east gate office.",
-        gm_output={"response_policy": {"fallback_behavior": _fallback_contract()}},
-        resolution={"kind": "adjudication_query", "prompt": "No. Exactly who?"},
-        strict_social_path=False,
-    )
-
-    assert len(calls) == 2
-    assert calls[0].startswith("I don't have enough information")
-    assert text == calls[1]
-    assert meta["fallback_behavior_repaired"] is True
-    assert meta["fallback_behavior_failed"] is False
-    assert extra == []
-
-
-@pytest.mark.xfail(reason="current residual repair paths append honest uncertainty but can still retain the original unsupported claim")
-def test_gate_retains_safest_repaired_text_when_revalidation_still_fails() -> None:
-    text, meta, extra = fer._apply_fallback_behavior_layer(
-        "They are under Dock Seven by the customs gate.",
-        gm_output={
-            "response_policy": {
-                "fallback_behavior": _fallback_contract(
-                    uncertainty_sources=["unknown_location"],
-                    require_partial_to_state_known_edge=False,
-                    require_partial_to_offer_next_lead=True,
-                )
-            }
-        },
-        resolution={"kind": "adjudication_query", "prompt": "No. Exactly who?"},
-        strict_social_path=False,
-    )
-
-    low = text.lower()
-    assert "dock seven" not in low
-    assert "exact place is still unclear" in low or "don't know where" in low
-    assert meta.get("fallback_behavior_repaired") is True
-    assert meta.get("fallback_behavior_failed") is True
-    assert meta.get("fallback_behavior_failure_reasons") == ["missing_allowed_fallback_shape"]
-    assert extra == []
-
-
-@pytest.mark.parametrize(
-    ("raw", "prompt"),
-    [
-        ("The culprit was Captain Verrick at the gate.", "Who did it?"),
-        ("They are at Dock Seven near the customs gate.", "Which dock exactly?"),
-        ("There were 3 guards in the yard.", "How many were there?"),
-    ],
-)
-def test_gate_non_overfire_grounded_answers_remain_untouched_when_uncertainty_is_inactive(
-    raw: str,
-    prompt: str,
-) -> None:
-    text, meta, extra = fer._apply_fallback_behavior_layer(
-        raw,
-        gm_output={"response_policy": {"fallback_behavior": _fallback_contract(uncertainty_active=False)}},
-        resolution={"kind": "adjudication_query", "prompt": prompt},
-        strict_social_path=False,
-    )
-
-    assert text == raw
-    assert meta.get("fallback_behavior_repaired") is False
-    assert meta.get("fallback_behavior_skip_reason") == "uncertainty_inactive"
-    assert extra == []
-
-
-def test_gate_does_not_synthesize_fallback_without_contract_from_forceful_tone_alone() -> None:
-    raw = "He slams a finger onto the patrol map and marks Dock Seven by the east gate."
-    text, meta, extra = fer._apply_fallback_behavior_layer(
-        raw,
-        gm_output={},
-        resolution={"kind": "adjudication_query", "prompt": "Which dock exactly?"},
-        strict_social_path=False,
-    )
-
-    assert text == raw
-    assert meta.get("fallback_behavior_contract_present") is False
-    assert meta.get("fallback_behavior_checked") is False
-    assert meta.get("fallback_behavior_skip_reason") == "no_contract"
-    assert extra == []
 
 
 @pytest.mark.parametrize(

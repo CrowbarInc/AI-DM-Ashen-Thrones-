@@ -5,8 +5,8 @@ Stage-diff telemetry records **mutation observability** (snapshots and transitio
 turn-packet contract boundary.
 
 Snapshots consume the canonical packet accessors in :mod:`game.turn_packet` so the same
-packet boundary is reused everywhere. This module is therefore a **telemetry consumer**
-derived from the packet owner, not a second packet home.
+packet boundary is reused everywhere. This module remains the **telemetry owner** while
+acting as a packet consumer, not a second packet home.
 
 ``resolve_gate_turn_packet`` remains here only as a compatibility residue wrapper for older
 call sites/tests. The canonical gate-side packet resolver now lives in

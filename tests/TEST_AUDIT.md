@@ -50,7 +50,9 @@ Cluster **closed enough** for this pass: enforced split and intentional overlap 
 | **Routing / turn pipeline** | `test_turn_pipeline_shared.py` — full **`/api/chat`** and **`/api/action`** stack, dialogue-lock HTTP, turn-trace-adjacent flow, end-to-end resolution; `test_dialogue_routing_lock.py` — pure `choose_interaction_route` / dialogue-lock **table** (no `TestClient`); `test_directed_social_routing.py` — directed-social precedence, vocative overrides, segmentation, narrow directed `/api/chat`, emergent-actor targeting; `test_intent_parser.py` / `test_intent_and_runtime.py` — parse/runtime intent. | `test_mixed_state_recovery_regressions.py`, `test_exploration_resolution.py`, `test_social.py` — keep **narrative or scenario-specific** routing checks, not a second copy of table locks. |
 | **Prompt-context assembly / prompt-contract bundle** | `test_prompt_context.py` — practical primary direct-owner suite for direct prompt-contract semantics, canonical prompt-facing helper accessors, and exported helper/bundle ownership; `test_prompt_compression.py` — secondary prompt assembly / compression integration once the bundle shape is already owned. | `test_prompt_and_guard.py`, `test_dialogue_interaction_establishment.py`, `test_fallback_shipped_contract_propagation.py`, `test_social_escalation.py`, `test_social_interaction_authority.py`, `test_social_speaker_grounding.py`, `test_social_topic_anchor.py`, `test_stale_interlocutor_invalidation_block3.py`, `test_strict_social_answer_pressure_cashout.py`, `test_synthetic_sessions.py`, `test_answer_completeness_rules.py`, plus relevant gate/emission/transcript suites such as `test_final_emission_gate.py`, `test_social_exchange_emission.py`, and `test_narration_transcript_regressions.py` — downstream consumer, smoke, or regression checks; they may consume shipped prompt contracts but should not read as the semantic owner. |
 | **Response-policy contract read side** | `test_response_policy_contracts.py` — practical primary direct-owner suite for canonical `game.response_policy_contracts` accessors and `materialize_response_policy_bundle()` behavior once policy has already been shipped. | `test_fallback_shipped_contract_propagation.py`, `test_response_delta_requirement.py`, `test_final_emission_gate.py`, `test_social_exchange_emission.py`, `test_final_emission_validators.py`, `test_interaction_continuity_contract.py`, `test_interaction_continuity_validation.py` — downstream compatibility, consumer/application, validator, continuity, and integration coverage only; they may consume shipped response-policy contracts but should not read as the semantic owner. |
-| **Final-emission gate orchestration** | `test_final_emission_gate.py` — practical primary direct-owner suite for direct `apply_final_emission_gate` layer ordering, final-route integration, and orchestration semantics. | `test_social_exchange_emission.py`, `test_turn_pipeline_shared.py`, `test_stage_diff_telemetry.py`, `test_social_emission_quality.py`, `test_dead_turn_detection.py`, `test_final_emission_scene_integrity.py`, and transcript/regression suites such as `test_narration_transcript_regressions.py` — downstream emission application, API smoke, telemetry observability, metadata consumption, scene-integrity, or regression coverage only; they may pass through the gate but should not read as orchestration co-owners. |
+| **Final-emission gate orchestration** | `test_final_emission_gate.py` — practical primary direct-owner suite for direct `apply_final_emission_gate` layer ordering, final-route integration, continuity-adjacent gate-step semantics, and orchestration semantics. | `test_social_exchange_emission.py`, `test_turn_pipeline_shared.py`, `test_stage_diff_telemetry.py`, `test_social_emission_quality.py`, `test_dead_turn_detection.py`, `test_final_emission_scene_integrity.py`, `test_interaction_continuity_speaker_bridge.py`, `test_interaction_continuity_validation.py`, `test_interaction_continuity_repair.py`, and transcript/regression suites such as `test_narration_transcript_regressions.py` — downstream emission application, API smoke, telemetry observability, metadata consumption, scene-integrity, bridge/validation/repair consumption, or regression coverage only; they may pass through the gate but should not read as orchestration co-owners. |
+| **Final-emission repairs** | Repair semantics: runtime `game.final_emission_repairs`; practical owner suite `tests/test_final_emission_repairs.py` (derivation, helper/accessor semantics, materialization). | Downstream consumption coverage only — e.g. `test_fallback_behavior_repairs.py` (fallback/gate/retry consumers of repaired outputs and meta); `test_fallback_behavior_gate.py`, `test_bounded_partial_quality.py`, `test_social_fallback_leak_containment.py` (gate application, quality, leak/regression); they must not re-own derivation or private repair helpers. |
+| **Stage-diff telemetry / observability** | `test_stage_diff_telemetry.py` — practical primary direct-owner suite for direct `game.stage_diff_telemetry` helper/accessor semantics, snapshot/transition packaging, bounded telemetry storage, and telemetry-owned observability fields. | `test_turn_packet_stage_diff_integration.py` — downstream turn-packet + gate/retry consumer coverage; `test_narrative_authenticity_aer4.py` — downstream narrative-authenticity regression and evaluator-consumer coverage. They may consume shipped telemetry fields, but should not read as the semantic owner of stage-diff packaging or helper semantics. |
 | **Social escalation / emission / quality** | `test_social_exchange_emission.py` — practical primary direct-owner suite for downstream strict-social exchange emission semantics, including terminal dialogue **application** once dialogue-contract resolution is already decided elsewhere; `test_social_escalation.py` — pressure / escalation state machine; `test_social_answer_retry_prioritization.py` — retry vs stall prioritization; `test_social_target_authority_regressions.py` — authority regressions. | `test_social_emission_quality.py` — multi-turn / quality harness (names `test_emission_quality_*` for non-transcript-runner cases; align module-level `transcript` policy in Block 2); `test_dialogue_interaction_establishment.py` — establishment flows; `test_strict_social_emergency_fallback_dialogue.py` — downstream retry-terminal / first-mention / compatibility-alias coverage only; `test_social.py` — **`resolve_social_action` engine + glue** (see module docstring; not strict-social string owner). |
 | **Lead lifecycle / clue / pending / registry** | `test_clue_knowledge.py`, `test_clue_idempotence.py` — clue idempotency / gateway; `test_world_updates_and_clue_normalization.py` — normalization; `test_clue_lead_registry_integration.py` — clue↔lead registry wiring; `test_lead_engine_upsert.py` — engine upsert; `test_follow_lead_commitment_wiring.py` — follow/commitment wiring; focused `test_lead_*.py` modules — obsolescence, payoff, NPC authority, resolution endings, etc.; `test_lead_lifecycle_block3_transcript_regression.py` — **multi-turn** lifecycle story. | `test_social_lead_landing.py`, `test_turn_pipeline_shared.py`, `test_prompt_and_guard.py`, `test_social_exchange_emission.py` — **smoke** or cross-cutting hooks, not a second registry spec. |
 | **Transcript / gauntlet vs smaller tests** | `test_transcript_regression.py` — general play-loop / sequencing; `test_transcript_gauntlet_*.py` — slice-specific harness contracts; `test_transcript_runner_smoke.py` — runner wiring; `test_gauntlet_regressions.py` — API-style gauntlet regressions (name ≠ transcript harness). | `test_lead_lifecycle_block3_transcript_regression.py`, `test_mixed_state_recovery_regressions.py` — own their **story**; avoid duplicating single-turn gates covered elsewhere. |
@@ -148,8 +150,51 @@ direct layer-order, final-route integration, and orchestration assertions there 
 application coverage, `tests/test_turn_pipeline_shared.py` as API-level smoke, and
 `tests/test_stage_diff_telemetry.py`, `tests/test_social_emission_quality.py`, and
 `tests/test_dead_turn_detection.py` as telemetry, quality, and metadata-consumer coverage.
+Keep `tests/test_interaction_continuity_speaker_bridge.py` as downstream continuity
+speaker-bridge behavior coverage and `tests/test_interaction_continuity_validation.py`
+as downstream continuity-validation coverage; re-center direct
+`_apply_interaction_continuity_emission_step(...)` and
+`_attach_interaction_continuity_validation(...)` ownership assertions in
+`tests/test_final_emission_gate.py` when those continuity-adjacent files start sounding
+like gate-orchestration homes.
+Keep `tests/test_interaction_continuity_repair.py` as downstream continuity-repair /
+gate-consumer coverage only: prefer public emitted outcomes, repair metadata, and
+downstream enforcement effects there rather than direct gate-private step imports or
+layer-order assertions. Keep any direct continuity-adjacent gate-step ownership in
+`tests/test_final_emission_gate.py`.
+Keep `tests/test_interaction_continuity_speaker_bridge.py` focused on downstream
+consumer behavior for bridge-shaped continuity failures rather than direct
+gate-private bridge/heuristic helper semantics.
 When adjacent suites need gate setup, prefer consumer framing and shipped/local fixtures over
 owner-like `test_final_emission_gate_*` naming unless they are actually asserting orchestration.
+
+### Final-emission repairs governance note (FR1-R)
+
+Repair semantics are owned by runtime `game.final_emission_repairs` and tests
+`tests/test_final_emission_repairs.py`. All other suites provide downstream consumption
+coverage (fallback, gate, retry, quality, leak). Keep direct helper/accessor semantics,
+repair materialization behavior, and `_apply_fallback_behavior_layer(...)` assertions in
+`tests/test_final_emission_repairs.py` first. Keep `tests/test_fallback_behavior_repairs.py`
+as downstream fallback-consumer coverage only; `tests/test_fallback_behavior_gate.py` as
+downstream gate application coverage; `tests/test_bounded_partial_quality.py` as
+bounded-partial quality coverage; and `tests/test_social_fallback_leak_containment.py`
+as social fallback leak containment coverage. When adjacent suites need repair fixtures,
+prefer local shipped contracts, black-box `repair_fallback_behavior(...)` inputs,
+repaired-output assertions, or consumer metadata checks over direct
+`game.final_emission_repairs` private helper imports unless the helper semantics themselves
+are under test in the owner suite.
+
+### Stage-diff telemetry governance note (TD1-R)
+
+For this seam, treat `game/stage_diff_telemetry.py` as the canonical runtime owner and
+`tests/test_stage_diff_telemetry.py` as the practical primary direct-owner suite. Keep
+direct `snapshot_turn_stage(...)`, `diff_turn_stage(...)`, `record_stage_snapshot(...)`,
+`record_stage_transition(...)`, and packet-derived telemetry-field assertions there first.
+Keep `tests/test_turn_packet_stage_diff_integration.py` as downstream turn-packet + gate/retry
+consumer coverage and `tests/test_narrative_authenticity_aer4.py` as downstream
+narrative-authenticity regression / evaluator-consumer coverage. When adjacent suites need
+telemetry fixtures, prefer consumer framing and emitted metadata assertions over direct
+telemetry-helper imports unless the helper semantics themselves are under test.
 
 ### Strict-social exchange emission governance note (SE2-R)
 

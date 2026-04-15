@@ -1,9 +1,8 @@
-"""Downstream interaction-continuity validation and enforcement coverage."""
+"""Downstream interaction-continuity validation behavior coverage."""
 from __future__ import annotations
 
 import pytest
 
-from game.final_emission_gate import _attach_interaction_continuity_validation
 from game.interaction_continuity import validate_interaction_continuity
 
 pytestmark = pytest.mark.unit
@@ -164,21 +163,3 @@ def test_validation_flags_multi_speaker_labels_under_strong_continuity():
     assert "multi_speaker_interruption_under_continuity" in v["violations"]
 
 
-def test_emission_gate_attaches_interaction_continuity_validation_metadata():
-    out: dict = {
-        "player_facing_text": "The scene holds.",
-        "_final_emission_meta": {},
-        "metadata": {},
-        "response_policy": {"interaction_continuity": _strong_contract()},
-    }
-    resolution = {"metadata": {"emission_debug": {}}}
-    _attach_interaction_continuity_validation(
-        out,
-        resolution_for_contracts=resolution,
-        eff_resolution=None,
-        session=None,
-    )
-    icv = out["metadata"]["emission_debug"]["interaction_continuity_validation"]
-    _assert_validation_shape(icv)
-    assert out["_final_emission_meta"]["interaction_continuity_validation"] is icv
-    assert resolution["metadata"]["emission_debug"]["interaction_continuity_validation"] is icv

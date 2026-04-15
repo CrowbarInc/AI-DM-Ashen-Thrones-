@@ -66,9 +66,16 @@ If current code shape still contradicts a declaration, treat that contradiction 
 - Compatibility residue still allowed: `game/final_emission_meta.py` may remain as metadata packaging / read-side support, and retry / observability / pipeline-adjacent consumers may continue to pass through the gate without becoming orchestration owners.
 - Compatibility residue interpretation: metadata packaging/read-side helpers and retry/telemetry/pipeline adjacency are support-only residue, not equal orchestration homes.
 - Practical primary direct-owner suite: `tests/test_final_emission_gate.py`
-- Secondary downstream coverage only: `tests/test_social_exchange_emission.py`, `tests/test_turn_pipeline_shared.py`, `tests/test_stage_diff_telemetry.py`, `tests/test_social_emission_quality.py`, `tests/test_dead_turn_detection.py`, plus transcript/regression suites such as `tests/test_narration_transcript_regressions.py`
+- Secondary downstream coverage only: `tests/test_social_exchange_emission.py`, `tests/test_turn_pipeline_shared.py`, `tests/test_stage_diff_telemetry.py`, `tests/test_social_emission_quality.py`, `tests/test_dead_turn_detection.py`, `tests/test_interaction_continuity_speaker_bridge.py`, `tests/test_interaction_continuity_validation.py`, `tests/test_interaction_continuity_repair.py`, plus transcript/regression suites such as `tests/test_narration_transcript_regressions.py`
 - Governance note: docs should describe this seam as `runtime owner -> direct-owner suite -> downstream secondary / support coverage`, not as mixed gate/meta/telemetry/pipeline co-ownership.
 - Current state: `targeted cleanup in progress`
+
+## Final Emission Repairs
+
+final emission repairs:  
+runtime owner: `game.final_emission_repairs`  
+practical owner suite: `tests/test_final_emission_repairs.py`  
+secondary suites: downstream consumers only (fallback, gate, retry)
 
 ## Final Emission Metadata Packaging
 
@@ -88,6 +95,11 @@ If current code shape still contradicts a declaration, treat that contradiction 
 - Forbidden owner interpretations: `game/turn_packet.py` is not the telemetry owner; `game/final_emission_gate.py` is not a parallel telemetry schema authority.
 - Belongs here: bounded stage snapshots, transition records, compact previews/fingerprints, and telemetry merge/write helpers.
 - Does not belong here: canonical packet contract definition, engine truth, or narration-policy ownership.
+- Compatibility residue still allowed: `game.stage_diff_telemetry.resolve_gate_turn_packet(...)` may remain as a compatibility wrapper over packet-owned resolution, and packet/gate/retry consumers may continue to read emitted telemetry without becoming telemetry owners.
+- Compatibility residue interpretation: packet-boundary adjacency and gate/retry observability paths are support/consumption residue, not equal semantic homes or a reason to re-center telemetry authority away from `game/stage_diff_telemetry.py`.
+- Practical primary direct-owner suite: `tests/test_stage_diff_telemetry.py`
+- Secondary downstream coverage only: `tests/test_turn_packet_stage_diff_integration.py`, `tests/test_narrative_authenticity_aer4.py`
+- Governance note: docs should describe this seam as `runtime owner -> direct-owner suite -> downstream secondary / compatibility coverage`, while keeping `game/turn_packet.py` explicit as the packet-boundary owner rather than a telemetry co-owner.
 - Current state: `targeted cleanup in progress`
 
 ## Turn Packet Contract Boundary

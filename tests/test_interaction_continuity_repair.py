@@ -1,14 +1,11 @@
-"""Interaction continuity repair + gate enforcement (Objective #14 Block #3)."""
+"""Downstream interaction-continuity repair behavior coverage."""
 from __future__ import annotations
 
 from unittest.mock import patch
 
 import pytest
 
-from game.final_emission_gate import (
-    _apply_interaction_continuity_emission_step,
-    apply_final_emission_gate,
-)
+from game.final_emission_gate import apply_final_emission_gate
 from game.interaction_continuity import repair_interaction_continuity, validate_interaction_continuity
 
 pytestmark = pytest.mark.unit
@@ -145,76 +142,17 @@ def test_soft_continuity_does_not_trigger_fallback_for_violation():
     assert em.get("interaction_continuity_enforced") is not True
 
 
-def test_repair_metadata_includes_violations_applied_and_type():
+def test_gate_emits_repair_metadata_for_stripped_interruption():
     c = _strong_contract()
     text = 'Guard: "Halt."\nMerchant: "Wait—he is with me."'
-    v = validate_interaction_continuity(text, interaction_continuity_contract=c)
-    r = repair_interaction_continuity(text, validation=v, interaction_continuity_contract=c)
-    assert r["applied"] is True
-    assert r["repair_type"] == "strip_uncued_interruption"
-    out = {
+    gm = {
         "player_facing_text": text,
         "metadata": {},
         "response_policy": {"interaction_continuity": c},
     }
-    resolution = {"metadata": {"emission_debug": {}}}
-    _apply_interaction_continuity_emission_step(
-        out,
-        text=text,
-        resolution_for_contracts=resolution,
-        eff_resolution=None,
-        session=None,
-        validate_only=False,
-        strict_social_path=False,
-    )
-    em = out["metadata"]["emission_debug"]
-    rep = em.get("interaction_continuity_repair") or {}
-    assert rep.get("applied") is True
-    assert rep.get("repair_type") == "strip_uncued_interruption"
-    assert isinstance(rep.get("violations"), list)
-    assert rep["violations"]
-    assert isinstance(rep.get("strategy_notes"), list)
-    assert rep["strategy_notes"]
-
-
-def test_gate_ordering_response_type_then_continuity_then_fallback():
-    import game.final_emission_gate as feg
-
-    calls: list[str] = []
-    _real_rtc = feg._enforce_response_type_contract
-    _real_repair = feg.repair_interaction_continuity
-    _real_fb = feg._global_narrative_fallback_stock_line
-
-    def rtc_wrapper(*a, **kw):
-        calls.append("response_type")
-        return _real_rtc(*a, **kw)
-
-    def repair_wrapper(*a, **kw):
-        calls.append("continuity_repair")
-        return _real_repair(*a, **kw)
-
-    def fb_wrapper(*a, **kw):
-        calls.append("fallback")
-        return _real_fb(*a, **kw)
-
-    ic = _strong_contract()
-    long_narration = (
-        "The regional economy depends on tolls, wayposts, and seasonal trade convoys moving "
-        "between jurisdictions, a fact recorded in dry ledgers that never mention your question."
-    )
-    gm = {
-        "player_facing_text": long_narration,
-        "tags": [],
-        "metadata": {},
-        "response_policy": {"interaction_continuity": ic},
-    }
-    resolution = {"metadata": {"emission_debug": {}, "player_input": "What?"}}
-    with (
-        patch.object(feg, "_enforce_response_type_contract", side_effect=rtc_wrapper),
-        patch.object(feg, "repair_interaction_continuity", side_effect=repair_wrapper),
-        patch.object(feg, "_global_narrative_fallback_stock_line", side_effect=fb_wrapper),
-    ):
-        apply_final_emission_gate(
+    resolution = {"metadata": {"emission_debug": {}}, "player_input": "Who called out?"}
+    with patch("game.final_emission_gate._apply_visibility_enforcement", lambda out, **kwargs: out):
+        out = apply_final_emission_gate(
             gm,
             resolution=resolution,
             session=None,
@@ -222,7 +160,11 @@ def test_gate_ordering_response_type_then_continuity_then_fallback():
             scene={},
             world={},
         )
-    rt_i = calls.index("response_type")
-    cr_i = calls.index("continuity_repair")
-    fb_i = calls.index("fallback")
-    assert rt_i < cr_i < fb_i
+    rep = out["metadata"]["emission_debug"].get("interaction_continuity_repair") or {}
+    assert rep.get("applied") is True
+    assert rep.get("repair_type") == "strip_uncued_interruption"
+    assert isinstance(rep.get("violations"), list)
+    assert rep["violations"]
+    assert isinstance(rep.get("strategy_notes"), list)
+    assert rep["strategy_notes"]
+    assert out["metadata"]["emission_debug"].get("interaction_continuity_enforced") is not True

@@ -145,9 +145,18 @@ Final-emission gate operator note:
 
 - Canonical runtime owner: `game/final_emission_gate.py`.
 - Practical primary direct-owner suite: `tests/test_final_emission_gate.py`.
-- Secondary downstream coverage: `tests/test_social_exchange_emission.py`, `tests/test_turn_pipeline_shared.py`, `tests/test_stage_diff_telemetry.py`, `tests/test_social_emission_quality.py`, `tests/test_dead_turn_detection.py`, plus relevant transcript/regression suites such as `tests/test_narration_transcript_regressions.py`.
+- Secondary downstream coverage: `tests/test_social_exchange_emission.py`, `tests/test_turn_pipeline_shared.py`, `tests/test_stage_diff_telemetry.py`, `tests/test_social_emission_quality.py`, `tests/test_dead_turn_detection.py`, `tests/test_interaction_continuity_speaker_bridge.py`, `tests/test_interaction_continuity_validation.py`, `tests/test_interaction_continuity_repair.py`, plus relevant transcript/regression suites such as `tests/test_narration_transcript_regressions.py`.
 - Support/compatibility residue may remain in `game/final_emission_meta.py` as metadata packaging/read-side support and in retry/observability/pipeline-adjacent consumers that pass through the gate without co-owning orchestration order.
-- If the audit still sees gate breadth, interpret adjacent emission, telemetry, transcript, dead-turn, and pipeline suites as downstream application, observability, regression, or packaged-snapshot evidence unless they become the place where new direct orchestration-order semantics are specified.
+- If the audit still sees gate breadth, interpret adjacent emission, telemetry, transcript, dead-turn, pipeline, and interaction-continuity suites as downstream application, observability, regression, packaged-snapshot, bridge, validation, or repair evidence unless they become the place where new direct orchestration-order semantics are specified.
+
+Stage-diff telemetry operator note:
+
+- Canonical runtime owner: `game/stage_diff_telemetry.py`.
+- Packet-boundary owner remains: `game/turn_packet.py`.
+- Practical primary direct-owner suite: `tests/test_stage_diff_telemetry.py`.
+- Secondary downstream coverage: `tests/test_turn_packet_stage_diff_integration.py` and `tests/test_narrative_authenticity_aer4.py`.
+- Support/compatibility residue may remain in `game.stage_diff_telemetry.resolve_gate_turn_packet(...)` plus packet/gate/retry observability paths that consume emitted telemetry without co-owning its helper or packaging semantics.
+- If the audit still sees telemetry spread, interpret packet/gate/retry and narrative-authenticity suites as downstream consumer, integration, regression, or evaluator evidence unless they become the place where new direct snapshot/diff/telemetry-field semantics are specified.
 
 ## Transcript-Lock Vs Contract-Lock Risk
 

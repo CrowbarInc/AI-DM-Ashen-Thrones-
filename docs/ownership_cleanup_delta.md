@@ -99,15 +99,21 @@ FG2-R governance alignment note:
 - Secondary downstream coverage now reads consistently as emission consumer suites, telemetry/retry observability suites, transcript/regression suites, dead-turn packaged-snapshot suites, and pipeline/request-shipping suites, including `tests/test_social_exchange_emission.py`, `tests/test_turn_pipeline_shared.py`, `tests/test_stage_diff_telemetry.py`, `tests/test_social_emission_quality.py`, and `tests/test_dead_turn_detection.py`.
 - `game/final_emission_meta.py` remains metadata packaging/read-side support only, and retry/compatibility adjacency remains support residue rather than orchestration co-ownership.
 
+LC1 continuity de-ownership note:
+
+- `tests/test_interaction_continuity_repair.py` no longer imports `_apply_interaction_continuity_emission_step(...)` and no longer carries the direct continuity-adjacent gate-order assertion; it now reads as downstream repair behavior and public emitted-metadata coverage.
+- The direct response-type -> continuity-repair -> fallback ordering assertion now lives in `tests/test_final_emission_gate.py`, keeping continuity-adjacent gate-step semantics centered in the practical owner suite.
+- `tests/test_interaction_continuity_speaker_bridge.py` no longer touches gate-private bridge/heuristic helpers directly; it now consumes already-shaped bridge failures as downstream repair behavior coverage instead of reading like a second bridge-owner home.
+
 ### Turn packet vs telemetry
 
 - Prior contradiction / hotspot: `game/turn_packet.py` and `game/stage_diff_telemetry.py` looked like they might both own the packet/telemetry boundary.
 - Declared owner: `game/turn_packet.py` for the packet contract boundary, `game/stage_diff_telemetry.py` for telemetry-only observability
 - What changed in OC3: gate-side packet resolution was explicitly re-homed to `game.turn_packet.resolve_turn_packet_for_gate`; `game.stage_diff_telemetry.resolve_gate_turn_packet` is now documented as compatibility residue only; focused regressions include `tests/test_stage_diff_telemetry.py` and `tests/test_turn_packet_accessors.py`.
-- Current apparent owner shape: `game/stage_diff_telemetry.py` now reads as a telemetry consumer, while the packet boundary remains in `game/turn_packet.py`. The audit classifies the stage-diff seam as localized under-consolidation and the turn-packet-specific hotspot as transitional residue.
+- Current apparent owner shape: `game/stage_diff_telemetry.py` now reads as the runtime owner for telemetry semantics, while the packet boundary remains in `game/turn_packet.py`. The audit classifies the stage-diff seam as localized under-consolidation and the turn-packet-specific hotspot as transitional residue.
 - Current status: `improved / localized residue`
 - Compatibility residue still present: compatibility wrapper/accessor paths and mixed integration tests still make the seam look wider than it should.
-- Recommended next cleanup: keep trimming telemetry-side compatibility entry points and relink tests and docs so packet-owner vs telemetry-consumer authority is unmistakable.
+- Recommended next cleanup: keep trimming telemetry-side compatibility entry points and relink tests and docs so packet-boundary vs telemetry-owner authority is unmistakable.
 
 ### Test inventory / governance docs
 
@@ -1032,3 +1038,347 @@ Why this remains the best next seam from refreshed evidence:
 - FG1 delivered real narrowing: the gate no longer reads as broadly co-owned by emission, telemetry, pipeline, dead-turn, or metadata-adjacent suites.
 - FG2 plus the refreshed audit now make the primary/secondary split visible in artifacts instead of only in docs.
 - But the rerun still does not produce a singular practical gate-owner home; the remaining spread is narrower but still real, and it is now concentrated specifically in the interaction-continuity adjacency around `tests/test_interaction_continuity_speaker_bridge.py` and `tests/test_interaction_continuity_validation.py`.
+
+## GC1 gate-width narrowing note
+
+This pass was intentionally surgical and did not change runtime behavior.
+
+- `tests/test_interaction_continuity_speaker_bridge.py` no longer carries direct gate-step application assertions. It now reads as downstream speaker-bridge detection and continuity-repair behavior, using a local bridge wrapper over `game.final_emission_gate` instead of importing the gate-private helpers directly into the test namespace.
+- `tests/test_interaction_continuity_validation.py` no longer imports `_attach_interaction_continuity_validation(...)`; the suite now reads as downstream validation behavior coverage rather than a gate-attachment owner home.
+- Direct `_apply_interaction_continuity_emission_step(...)` and `_attach_interaction_continuity_validation(...)` assertions were re-centered into `tests/test_final_emission_gate.py`, which now explicitly owns bridge metadata attachment, malformed-bridge repair-before-enforcement, unrecoverable bridge enforcement, and validation payload attachment.
+- The remaining final-emission gate breadth should now read more as interaction-continuity adjacency than as practical co-ownership, though GC2 / AR15 should still watch `tests/test_interaction_continuity_repair.py` and any future continuity-adjacent suites for fresh direct gate-private helper imports or order assertions drifting back out of `tests/test_final_emission_gate.py`.
+
+## GC2-R final gate governance alignment note
+
+This follow-up was intentionally wording-only and did not change runtime behavior.
+
+- Canonical runtime owner remains `game/final_emission_gate.py`.
+- Practical primary direct-owner suite remains `tests/test_final_emission_gate.py`.
+- `tests/test_interaction_continuity_speaker_bridge.py`, `tests/test_interaction_continuity_validation.py`, and `tests/test_interaction_continuity_repair.py` now read consistently as downstream bridge / validation / repair consumer coverage rather than orchestration-owner homes.
+- `game/final_emission_meta.py` remains metadata packaging/read-side support only, and retry/compatibility adjacency remains support residue rather than orchestration co-ownership.
+- Remaining watch residue stays narrow: `tests/test_interaction_continuity_repair.py` still imports `_apply_interaction_continuity_emission_step(...)`, so future passes should keep watching for any fresh direct gate-private helper imports or direct gate-order assertions drifting out of `tests/test_final_emission_gate.py`.
+
+## AR15-R2 final continuity-adjacency gate audit after GC1/GC2
+
+Final audit rerun after GC1 and GC2, with one tiny AR15-R2 audit-only heuristic polish so layer-specific `response_delta` gate suites no longer inflate top-level gate ownership spread. No feature or runtime behavior changes were made in this gate.
+
+### Evidence used
+
+- `py -3 tools/architecture_audit.py --print-summary`
+- `py -3 tools/architecture_audit.py --focus-subsystem "prompt contracts"`
+- `py -3 tools/architecture_audit.py --focus-subsystem "response policy contracts"`
+- `py -3 tools/architecture_audit.py --focus-subsystem "final emission gate orchestration"`
+- `py -3 -m pytest tests/test_architecture_audit_tool.py`
+- `py -3 -m pytest tests/test_final_emission_gate.py tests/test_interaction_continuity_speaker_bridge.py tests/test_interaction_continuity_validation.py tests/test_interaction_continuity_repair.py`
+
+### Fresh audit result
+
+- Repo verdict: `mixed / caution`
+- Recommended action mode: `needs targeted ownership cleanup before more features`
+- Hotspot mix: `4 localized`, `4 transitional`, `0 possible smear`, `0 unclear`
+- Final-emission gate hotspot state: still `localized under-consolidation`
+
+### What changed materially vs AR14
+
+Real narrowing from GC1:
+
+- The practical-owner spread narrowed again. The refreshed audit no longer centers the gate seam on `tests/test_response_delta_requirement.py`; the top practical mix is now `tests/test_final_emission_gate.py` plus `tests/test_interaction_continuity_speaker_bridge.py`.
+- `tests/test_final_emission_gate.py` still reads as the dominant practical direct-owner suite for direct gate-step assertions.
+- `tests/test_interaction_continuity_validation.py` now reads cleanly as secondary downstream validation coverage rather than a direct gate-step owner home.
+
+Governance alignment from GC2 only:
+
+- The runtime/test/doc story remains consistent across `docs/architecture_ownership_ledger.md`, `docs/narrative_integrity_architecture.md`, `game/final_emission_gate.py`, and `game/final_emission_meta.py`: orchestration lives in `game/final_emission_gate.py`, the practical primary direct-owner suite is `tests/test_final_emission_gate.py`, and `game/final_emission_meta.py` stays metadata packaging/read-side support only.
+- This improved readability, but it did not by itself change the repo verdict or action mode.
+
+Artifact refresh plus tiny audit-only polish:
+
+- Regenerating the audit artifacts alone did not create the narrower owner story.
+- AR15-R2 added only a small static affinity adjustment so obvious `response_delta` gate-consumer suites stay secondary when scoring top-level gate orchestration ownership.
+- That polish did not change runtime behavior or the repo-level verdict; it simply stopped overstating a layer-specific downstream suite as a gate-owner signal.
+
+### Width vs blockage after the rerun
+
+Mostly width / governed adjacency now:
+
+- prompt contracts remain broad-but-owned and stable at `aligned / healthy_overlap / low`
+- response policy contracts remain stable as `transitional residue`
+- social_exchange_emission remains stable as `transitional residue`
+- gate centrality is still honest centrality from `apply_final_emission_gate`, not evidence that metadata, telemetry, or response-delta suites co-own orchestration
+
+Still real blockage:
+
+- `final emission gate orchestration` remains `partial / ownership_spread_wide / high`
+- live code review still shows one unresolved continuity-adjacent seam in `tests/test_interaction_continuity_repair.py`, which keeps a gate-private `_apply_interaction_continuity_emission_step(...)` import and one direct gate-order assertion
+- `tests/test_interaction_continuity_speaker_bridge.py` still touches gate-private bridge/heuristic helpers through the module handle, so the remaining spread is narrower but not fully collapsed onto one direct-owner suite
+
+### Final decision gate
+
+- Best current repo label: `mixed / caution`
+- Closest alternate label: `structurally real, under-consolidated`, but the repo has still not crossed that threshold
+- Limited feature work justified now: `no`
+- Operator call: `one more cleanup seam first`
+
+### Single highest-value remaining seam
+
+- final continuity-adjacent gate residue centered on `tests/test_interaction_continuity_repair.py` and secondarily `tests/test_interaction_continuity_speaker_bridge.py`
+
+Why this remains the best next seam from refreshed evidence:
+
+- the broad gate-vs-meta/pipeline/telemetry/emission spread is no longer the blocker
+- the remaining issue is now narrow and concrete rather than diffuse: gate-private continuity-step imports and owner-like ordering assertions still leak outside `tests/test_final_emission_gate.py`
+- until that last continuity-adjacent residue collapses further, the refreshed audit still supports `mixed / caution` rather than `structurally real, under-consolidated`
+
+## AR16-R final architectural decision gate after LC1
+
+Final audit rerun after LC1. No feature or runtime behavior changes were made in this gate. Audit artifacts were regenerated, focused verification was rerun, and this delta was updated. A tiny AR16-R-only audit-classification polish was also applied so an explicitly aligned final gate owner with healthy downstream overlap is no longer mislabeled as a smear solely because the orchestrator remains historically broad and central.
+
+### Evidence used
+
+- `py -3 tools/architecture_audit.py --print-summary`
+- `py -3 tools/architecture_audit.py --focus-subsystem "prompt contracts"`
+- `py -3 tools/architecture_audit.py --focus-subsystem "response policy contracts"`
+- `py -3 tools/architecture_audit.py --focus-subsystem "final emission gate orchestration"`
+- `py -3 -m pytest tests/test_architecture_audit_tool.py`
+- `py -3 -m pytest tests/test_final_emission_gate.py tests/test_interaction_continuity_repair.py tests/test_interaction_continuity_speaker_bridge.py tests/test_interaction_continuity_validation.py`
+
+### Fresh audit result
+
+- Repo verdict: `mixed / caution`
+- Recommended action mode: `needs targeted ownership cleanup before more features`
+- Score total: `10/18`
+- Hotspot mix: `4 localized under-consolidation`, `4 transitional residue`, `0 possible ownership smear`, `0 unclear`
+- Prompt hotspot state: stable `localized under-consolidation`, with focused prompt alignment `aligned / healthy_overlap / low`
+- Response-policy hotspot state: stable `transitional residue`, with focused response-policy alignment `aligned / healthy_overlap / low`
+- Final-emission gate hotspot state: now `localized under-consolidation`, with focused gate alignment `aligned / healthy_overlap / low`
+
+### What changed materially vs AR15-R2
+
+Real improvement from LC1:
+
+- Final-emission gate practical-owner spread narrowed again. `tests/test_final_emission_gate.py` is now singular enough to count as the practical direct-owner home for direct gate-order and continuity-adjacent gate-step semantics in the refreshed audit evidence.
+- `tests/test_interaction_continuity_repair.py` now reads as downstream repair / public emitted-metadata coverage, not a gate-owner home.
+- `tests/test_interaction_continuity_speaker_bridge.py` now reads as downstream bridge-shaped repair behavior coverage, not a gate-private helper home.
+- The remaining continuity-adjacent residue fully downgraded from blocker-shaped gate leakage to governed downstream secondary coverage.
+
+Wording / governance alignment only:
+
+- The current docs and ledger already match the runtime owner story: `game/final_emission_gate.py` as canonical gate owner, `tests/test_final_emission_gate.py` as practical primary direct-owner suite, continuity-adjacent suites as secondary downstream coverage.
+
+AR16-R tiny audit-only polish:
+
+- The audit classifier now treats `final emission gate orchestration` the same way it already treats prompt healthy-overlap cases: aligned owner + aligned direct-owner suite + low-severity overlap downgrades to `localized under-consolidation` instead of staying a false smear candidate.
+- This did not change runtime behavior. It only stopped the refreshed report from over-penalizing honest orchestrator centrality plus historical compatibility residue.
+
+Artifact refresh only:
+
+- `artifacts/architecture_audit/architecture_audit.json` and `artifacts/architecture_audit/architecture_audit.md` were regenerated to reflect the post-LC1 state.
+
+### Residue vs remaining blockage
+
+Mostly residue now:
+
+- honest centrality of `game/final_emission_gate.py` as the final orchestrator
+- broad but clearly governed downstream secondary coverage around prompt, response-policy, and final gate concerns
+- support/compatibility residue in `game/prompt_context_leads.py`, `game/final_emission_meta.py`, and response-policy read-side fallbacks
+- `social_exchange_emission` remains stable as `transitional residue`
+
+Still real blockage:
+
+- the repo-level gate does **not** stay closed because of final-emission continuity residue anymore
+- the strongest live runtime/test/doc mismatch is now `stage diff telemetry`, which still reports `partial; high; spread 4`
+- governance/inventory docs remain `partial; high` and keep documentation coherence at `patchy`
+- heavy archaeology burden and high coupling centrality still keep the repo score at `10/18`
+
+### Final decision gate
+
+- Best current repo label: `mixed / caution`
+- Threshold crossed to `structurally real, under-consolidated`: `no`
+- Limited feature work justified now: `no`
+- Operator call: `one more cleanup seam first`
+
+### Single highest-value remaining seam
+
+- `stage diff telemetry`
+
+Why this is now the best next seam from refreshed evidence:
+
+- final-emission gate orchestration no longer reads as the blocker; it downgraded from smear-shaped concern to localized under-consolidation with aligned practical ownership
+- prompt remains broad-but-owned and response policy remains transitional residue
+- the refreshed audit's strongest patch-accumulation evidence is now led by `stage diff telemetry`, where the runtime owner is visible but practical coverage still concentrates across `tests/test_turn_packet_stage_diff_integration.py`, `tests/test_stage_diff_telemetry.py`, and `tests/test_narrative_authenticity_aer4.py` instead of one clearly converged telemetry-owner test home
+
+## TD1 stage-diff telemetry narrowing note
+
+This pass was intentionally surgical and did not change runtime behavior.
+
+- `tests/test_stage_diff_telemetry.py` now reads more explicitly as the practical primary direct-owner suite for direct `game.stage_diff_telemetry` semantics. Owner-level assertions for packet-derived snapshot fields, partial-packet-safe snapshot behavior, and narrative-authenticity telemetry fields now live there.
+- `tests/test_turn_packet_stage_diff_integration.py` now reads more narrowly as downstream turn-packet + gate/retry consumer coverage. Direct `snapshot_turn_stage(...)` calls and repeated bounded-storage helper assertions were removed from that file, and the remaining test names/docstrings emphasize consumer-facing integration outcomes rather than telemetry-helper ownership.
+- `tests/test_narrative_authenticity_aer4.py` no longer imports `snapshot_turn_stage(...)` for a direct telemetry-helper assertion. That file now reads more cleanly as downstream narrative-authenticity regression and evaluator-consumer coverage while the telemetry-owner suite keeps the direct snapshot-field semantics.
+- `tests/TEST_AUDIT.md` now records the intended split explicitly: `tests/test_stage_diff_telemetry.py` as the practical primary direct-owner suite, `tests/test_turn_packet_stage_diff_integration.py` as downstream packet/gate/retry integration coverage, and `tests/test_narrative_authenticity_aer4.py` as downstream narrative/regression coverage.
+- Remaining watch residue stays narrow: `game.stage_diff_telemetry.resolve_gate_turn_packet(...)` still exists as compatibility residue, and gate/retry/narrative suites will continue to consume emitted telemetry without becoming co-equal owner homes.
+
+## TD2-R stage-diff telemetry governance alignment note
+
+This follow-up was intentionally wording-only and did not change runtime behavior.
+
+- Canonical runtime owner remains `game/stage_diff_telemetry.py`.
+- Packet-boundary owner remains `game/turn_packet.py`.
+- Practical primary direct-owner suite remains `tests/test_stage_diff_telemetry.py`.
+- Secondary downstream coverage should now read consistently as `tests/test_turn_packet_stage_diff_integration.py` for packet/gate/retry consumer coverage and `tests/test_narrative_authenticity_aer4.py` for narrative-authenticity regression / evaluator-consumer coverage.
+- `game.stage_diff_telemetry.resolve_gate_turn_packet(...)` remains compatibility residue only, and packet/gate/retry adjacency remains support/consumption residue rather than telemetry co-ownership.
+
+## AR17-R2 final telemetry decision gate after TD1/TD2
+
+Final audit rerun after TD1 and TD2. No feature or runtime behavior changes were made in this gate. Audit artifacts were regenerated, focused telemetry verification was rerun, and this delta was updated. One tiny AR17-R2 audit-only interpretation polish was also applied so an aligned telemetry seam with healthy downstream overlap is not still mislabeled as a smear candidate in the repo summary.
+
+### Evidence used
+
+- `py -3 tools/architecture_audit.py --print-summary`
+- `py -3 tools/architecture_audit.py --focus-subsystem "prompt contracts"`
+- `py -3 tools/architecture_audit.py --focus-subsystem "response policy contracts"`
+- `py -3 tools/architecture_audit.py --focus-subsystem "final emission gate orchestration"`
+- `py -3 tools/architecture_audit.py --focus-subsystem "stage diff telemetry"`
+- `py -3 -m pytest tests/test_architecture_audit_tool.py`
+- `py -3 -m pytest tests/test_stage_diff_telemetry.py tests/test_turn_packet_stage_diff_integration.py tests/test_narrative_authenticity_aer4.py`
+
+### Fresh audit result
+
+- Repo verdict: `mixed / caution`
+- Recommended action mode: `needs targeted ownership cleanup before more features`
+- Score total: `10/18`
+- Hotspot mix: `4 localized under-consolidation`, `4 transitional residue`, `0 possible ownership smear`, `0 unclear`
+- Stage-diff telemetry hotspot state: `localized under-consolidation`
+- Focused telemetry alignment: `aligned / healthy_overlap / low`
+
+### What changed for real vs wording vs artifact refresh
+
+Real architecture improvement from TD1:
+
+- Stage-diff telemetry practical-owner spread narrowed materially again.
+- `tests/test_stage_diff_telemetry.py` is now singular enough to count as the practical primary direct-owner suite for direct telemetry helper/accessor and snapshot-field semantics.
+- `tests/test_turn_packet_stage_diff_integration.py` now reads as downstream turn-packet + gate/retry consumer coverage instead of a co-owner home for direct telemetry semantics.
+- `tests/test_narrative_authenticity_aer4.py` now reads as downstream narrative-authenticity regression / evaluator-consumer coverage rather than a second telemetry-owner suite.
+- `game.stage_diff_telemetry.resolve_gate_turn_packet(...)` still exists, but now reads as narrow compatibility residue rather than live owner spread.
+
+Wording-only effect from TD2:
+
+- Docs and suite framing now tell the same owner story: `game/stage_diff_telemetry.py` as runtime owner, `game/turn_packet.py` as packet-boundary owner, `tests/test_stage_diff_telemetry.py` as practical primary direct-owner suite, and the packet/narrative suites as downstream consumers.
+- This improved interpretation consistency, but it did not change runtime behavior.
+
+Artifact refresh only:
+
+- `artifacts/architecture_audit/architecture_audit.json` and `artifacts/architecture_audit/architecture_audit.md` were regenerated to reflect the post-TD1/TD2 state.
+
+AR17-R2 tiny audit-only polish:
+
+- The hotspot classifier now treats `stage diff telemetry partial mismatch` the same way prompt and final-gate healthy-overlap cases are treated: aligned owner + aligned direct-owner suite + low-severity overlap downgrades to `localized under-consolidation` instead of staying a false smear candidate.
+- This did not change runtime behavior. It only stopped the refreshed report from over-penalizing honest telemetry observability centrality plus packet-boundary adjacency.
+
+### Telemetry decision after the rerun
+
+- Canonical runtime owner remains `game/stage_diff_telemetry.py`.
+- Packet-boundary owner remains `game/turn_packet.py`.
+- Practical primary direct-owner suite remains `tests/test_stage_diff_telemetry.py`.
+- `tests/test_turn_packet_stage_diff_integration.py` and `tests/test_narrative_authenticity_aer4.py` now read clearly as secondary downstream coverage.
+- Telemetry residue has downgraded fully from blocker-shaped smear risk to governed localized under-consolidation plus compatibility residue.
+
+### Why the repo still does not cross the feature threshold
+
+- The telemetry seam is no longer the blocker.
+- `final emission gate orchestration` remains stable as `localized under-consolidation`.
+- `prompt contracts` remains broad-but-owned with aligned practical ownership.
+- `response policy contracts` remains `transitional residue`.
+- The repo-level verdict still stays at `mixed / caution` because the overall score remains `10/18`, archaeology burden is still `heavy`, coupling centrality is still `highly central`, and the refreshed audit's strongest remaining patch-accumulation evidence now sits outside telemetry.
+
+### Final decision gate
+
+- Best current repo label: `mixed / caution`
+- Threshold crossed to `structurally real, under-consolidated`: `no`
+- Limited feature work justified now: `no`
+- Operator call: `one more cleanup seam first`
+
+### Single highest-value remaining seam
+
+- `final emission repairs` (pre-FR1 target)
+
+Why this is now the best next seam from refreshed evidence:
+
+- telemetry is no longer a smear candidate and now reads as governed owner-plus-residue;
+- prompt remains broad but owned, response policy remains transitional residue, and final gate remains stable localized under-consolidation;
+- before FR1, the refreshed audit's strongest remaining runtime/test mismatch was `final emission repairs`, where audit-facing cues still blurred the boundary between derivation ownership and downstream consumption;
+- FR1 re-centered direct repair helper/materialization assertions in `tests/test_final_emission_repairs.py` and narrowed `tests/test_fallback_behavior_repairs.py` to downstream fallback compatibility coverage; FR2-R then collapsed remaining audit-visible co-ownership wording and imports so only `tests/test_final_emission_repairs.py` reads as the practical owner suite.
+
+## FR1 - final-emission repairs practical-owner narrowing
+
+This pass narrowed the practical final-emission repairs seam without changing runtime
+behavior. The goal was to make `tests/test_final_emission_repairs.py` read as the
+clearly dominant direct-owner suite while leaving adjacent fallback suites as downstream
+consumers of already-owned repair behavior.
+
+What changed:
+
+- `tests/test_final_emission_repairs.py` now explicitly presents itself as the practical
+  primary direct-owner suite for `game.final_emission_repairs.py`.
+- Direct fallback-repair helper/materialization assertions were re-centered there,
+  including `_smooth_repaired_fallback_line(...)`,
+  `repair_fallback_behavior(...)`, and `_apply_fallback_behavior_layer(...)`.
+- `tests/test_fallback_behavior_repairs.py` was narrowed into downstream fallback
+  compatibility coverage for retry and gate consumers. It no longer imports direct
+  `game.final_emission_repairs` helpers or reads like a co-equal semantic owner.
+- `tests/test_fallback_behavior_gate.py` was narrowed back toward gate application and
+  ordering coverage by moving direct `_apply_fallback_behavior_layer(...)` ownership
+  checks out of that file.
+- `tests/TEST_AUDIT.md` now states a single owner narrative: repair semantics are owned by
+  runtime `game.final_emission_repairs` and tests `tests/test_final_emission_repairs.py`;
+  all other suites provide downstream consumption coverage only.
+
+Resulting owner read:
+
+- repair semantics — runtime: `game/final_emission_repairs.py`
+- repair semantics — tests: `tests/test_final_emission_repairs.py`
+- all other suites: downstream consumption coverage only (e.g. `tests/test_fallback_behavior_repairs.py`,
+  `tests/test_fallback_behavior_gate.py`, `tests/test_bounded_partial_quality.py`,
+  `tests/test_social_fallback_leak_containment.py`)
+
+Remaining watch residue for AR18:
+
+- filename-level archaeology remains: `tests/test_fallback_behavior_repairs.py` still has a
+  repair-shaped name even though its contents now read as downstream consumer-only coverage;
+- adjacent suites can still drift if they re-introduce direct `game.final_emission_repairs`
+  helper imports or `_apply_fallback_behavior_layer(...)` assertions outside the owner suite;
+- `tests/test_bounded_partial_quality.py` and `tests/test_social_fallback_leak_containment.py`
+  should stay framed as downstream quality/leak-consumer coverage rather than owner homes.
+
+## FR2-R — final-emission repairs signal collapse
+
+Docstring, test naming, and governance prose only: no runtime or test-logic moves beyond FR1.
+Repair semantics are owned by runtime `game.final_emission_repairs` and
+`tests/test_final_emission_repairs.py`; `tests/test_fallback_behavior_repairs.py` and peers
+are downstream consumers only. `docs/architecture_ownership_ledger.md` carries an explicit
+audit breadcrumb for this seam.
+
+## AR18 — Final repairs convergence
+
+- FR2 eliminated all **co-ownership** signals for the **fallback / primary repair-derivation**
+  story: no second suite competes with `tests/test_final_emission_repairs.py` for owning how
+  fallback repairs are derived or materialized.
+- The **fallback** suite (`tests/test_fallback_behavior_repairs.py`) is fully downgraded to a
+  downstream consumer: it exercises gate, retry, and policy surfaces without importing private
+  repair helpers or asserting repair derivation invariants.
+- Ownership is **singular in practice** for that seam:
+  - **Runtime:** `game/final_emission_repairs.py` is the sole home of repair helpers, repair
+    logic, and repair materialization for final emission.
+  - **Tests:** `tests/test_final_emission_repairs.py` is the sole practical owner of
+    helper-level and derivation-level assertions for that repair surface.
+- Remaining audit flags for this subsystem are **non-ownership** signals:
+  - filename / keyword heuristics (e.g. `*_repairs.py`, audit `test_keywords` tuples),
+  - metadata observation strings in downstream tests,
+  - adjacency (gate tests that patch repair-layer callables for orchestration, quality suites
+    calling `repair_fallback_behavior` as a black box).
+
+**Final-emission repairs is structurally resolved; remaining spread is adjacency, not ownership ambiguity.**
+
+Cross-cutting note (adjacency, not FR1/FR2 fallback co-ownership): some other suites still
+import **private** symbols from `game.final_emission_repairs` for unrelated white-box coverage
+(e.g. narrative authenticity layer wiring, social fallback leak guards). That is shared-module
+**coupling**, not a second home for fallback repair derivation semantics.

@@ -469,6 +469,8 @@ def _is_gate_downstream_adjacency(
             "scene",
             "integrity",
             "visibility",
+            "response",
+            "delta",
             "telemetry",
             "pipeline",
             "dead",

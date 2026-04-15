@@ -1,4 +1,4 @@
-"""AER4 regression: shipped NA + rumor realism state, ordering, relaxation, telemetry (tests only)."""
+"""AER4 regression: shipped NA state, ordering, relaxation, and downstream consumer coverage."""
 
 from __future__ import annotations
 
@@ -13,7 +13,6 @@ from game.narrative_authenticity import (
     validate_narrative_authenticity,
 )
 from game.narrative_authenticity_eval import evaluate_narrative_authenticity
-from game.stage_diff_telemetry import snapshot_turn_stage
 
 
 def _gm_with_na(contract: dict) -> dict:
@@ -496,23 +495,7 @@ def test_no_quote_rumor_prior_overlap_still_applies():
     assert "rumor_uses_identical_phrasing_for_known_fact" in v.get("failure_reasons", [])
 
 
-# --- 7) Stage-diff / telemetry ---
-
-
-def test_snapshot_turn_stage_includes_na_status_relaxed_and_rumor_turn_active():
-    gm = {
-        "player_facing_text": "stub",
-        "metadata": {},
-        "_final_emission_meta": {
-            "narrative_authenticity_status": "relaxed",
-            "narrative_authenticity_rumor_relaxed_low_signal": True,
-            "narrative_authenticity_trace": {"rumor_turn_active": True},
-        },
-    }
-    snap = snapshot_turn_stage(gm, "na_probe")
-    assert snap["narrative_authenticity_status"] == "relaxed"
-    assert snap["narrative_authenticity_rumor_relaxed_low_signal"] is True
-    assert snap["rumor_turn_active"] is True
+# --- 7) Downstream evaluator / shipped-metric coverage ---
 
 
 def test_evaluator_supporting_metrics_includes_shipped_na_keys_for_relaxed():

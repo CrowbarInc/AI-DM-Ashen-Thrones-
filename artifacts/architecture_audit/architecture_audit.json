@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-15T10:28:09.423696+00:00",
+  "generated_at": "2026-04-15T22:39:20.950872+00:00",
   "repo_root": "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm",
   "modules_analyzed": {
     "count": 86,
@@ -343,7 +343,7 @@
         "class_count": 0,
         "import_count": 28,
         "private_helper_count": 232,
-        "fan_in": 38,
+        "fan_in": 37,
         "fan_out": 25,
         "ownership_terms": [
           "canonical",
@@ -363,7 +363,7 @@
           "orchestration_owner"
         ],
         "coupling_indicators": {
-          "fan_in": 38,
+          "fan_in": 37,
           "fan_out": 25,
           "private_helper_count": 232,
           "concern_keyword_density": 0.237,
@@ -379,7 +379,7 @@
           "historical_marker_count": 0,
           "possible_centrality_hotspot": true,
           "centrality_reasons": [
-            "fan-in 38",
+            "fan-in 37",
             "fan-out 25",
             "private helpers 232",
             "concern density 0.237"
@@ -466,7 +466,7 @@
         "class_count": 0,
         "import_count": 10,
         "private_helper_count": 85,
-        "fan_in": 8,
+        "fan_in": 7,
         "fan_out": 7,
         "ownership_terms": [
           "canonical",
@@ -484,7 +484,7 @@
           "repair_owner"
         ],
         "coupling_indicators": {
-          "fan_in": 8,
+          "fan_in": 7,
           "fan_out": 7,
           "private_helper_count": 85,
           "concern_keyword_density": 0.2922,
@@ -500,7 +500,7 @@
           "historical_marker_count": 0,
           "possible_centrality_hotspot": true,
           "centrality_reasons": [
-            "fan-in 8",
+            "fan-in 7",
             "fan-out 7",
             "private helpers 85",
             "concern density 0.2922"
@@ -1491,7 +1491,7 @@
         "class_count": 0,
         "import_count": 6,
         "private_helper_count": 6,
-        "fan_in": 4,
+        "fan_in": 2,
         "fan_out": 1,
         "ownership_terms": [
           "canonical",
@@ -1506,7 +1506,7 @@
           "telemetry_owner"
         ],
         "coupling_indicators": {
-          "fan_in": 4,
+          "fan_in": 2,
           "fan_out": 1,
           "private_helper_count": 6,
           "concern_keyword_density": 0.4725,
@@ -1585,11 +1585,9 @@
           "legacy"
         ],
         "declared_owner": "module docstring: Canonical owner for the turn-packet contract boundary.",
-        "ownership_confidence": "low",
+        "ownership_confidence": "high",
         "role_labels": [
-          "contract_owner",
-          "telemetry_owner",
-          "mixed_owner"
+          "telemetry_owner"
         ],
         "coupling_indicators": {
           "fan_in": 7,
@@ -1694,7 +1692,7 @@
       },
       {
         "path": "tools/architecture_audit.py",
-        "line_count": 2002,
+        "line_count": 2018,
         "function_count": 47,
         "class_count": 1,
         "import_count": 13,
@@ -1745,7 +1743,7 @@
       },
       {
         "path": "tools/architecture_audit_tests.py",
-        "line_count": 848,
+        "line_count": 850,
         "function_count": 23,
         "class_count": 0,
         "import_count": 6,
@@ -1869,11 +1867,12 @@
       },
       {
         "path": "docs/architecture_audit_readme.md",
-        "line_count": 197,
+        "line_count": 206,
         "ownership_terms": [
           "canonical",
           "orchestration",
           "owner",
+          "repair",
           "validator"
         ],
         "residue_terms": [
@@ -1883,7 +1882,7 @@
       },
       {
         "path": "docs/architecture_ownership_ledger.md",
-        "line_count": 113,
+        "line_count": 125,
         "ownership_terms": [
           "canonical",
           "orchestration",
@@ -1965,7 +1964,7 @@
       },
       {
         "path": "docs/narrative_integrity_architecture.md",
-        "line_count": 90,
+        "line_count": 91,
         "ownership_terms": [
           "canonical",
           "deferred",
@@ -1982,7 +1981,7 @@
       },
       {
         "path": "docs/ownership_cleanup_delta.md",
-        "line_count": 951,
+        "line_count": 1358,
         "ownership_terms": [
           "canonical",
           "orchestration",
@@ -2037,7 +2036,7 @@
       },
       {
         "path": "tests/TEST_AUDIT.md",
-        "line_count": 508,
+        "line_count": 553,
         "ownership_terms": [
           "canonical",
           "deferred",
@@ -2055,7 +2054,7 @@
       },
       {
         "path": "tests/TEST_CONSOLIDATION_PLAN.md",
-        "line_count": 268,
+        "line_count": 272,
         "ownership_terms": [
           "canonical",
           "deferred",
@@ -2407,8 +2406,8 @@
       },
       {
         "path": "tests/test_architecture_audit_tool.py",
-        "line_count": 779,
-        "test_function_count": 18,
+        "line_count": 822,
+        "test_function_count": 19,
         "import_count": 6,
         "ownership_terms": [
           "canonical",
@@ -2465,11 +2464,12 @@
       },
       {
         "path": "tests/test_bounded_partial_quality.py",
-        "line_count": 114,
+        "line_count": 119,
         "test_function_count": 5,
         "import_count": 4,
         "ownership_terms": [
-          "repair"
+          "repair",
+          "validator"
         ],
         "residue_terms": [],
         "inferred_category": "integration / layer interaction",
@@ -3008,10 +3008,11 @@
       },
       {
         "path": "tests/test_fallback_behavior_gate.py",
-        "line_count": 681,
-        "test_function_count": 27,
-        "import_count": 10,
+        "line_count": 484,
+        "test_function_count": 19,
+        "import_count": 8,
         "ownership_terms": [
+          "orchestration",
           "repair"
         ],
         "residue_terms": [],
@@ -3023,8 +3024,6 @@
           "game/defaults.py",
           "game/final_emission_gate.py",
           "game/final_emission_repairs.py",
-          "game/gm.py",
-          "game/gm_retry.py",
           "game/interaction_context.py",
           "game/storage.py"
         ],
@@ -3032,20 +3031,21 @@
       },
       {
         "path": "tests/test_fallback_behavior_repairs.py",
-        "line_count": 352,
-        "test_function_count": 17,
-        "import_count": 4,
+        "line_count": 213,
+        "test_function_count": 6,
+        "import_count": 5,
         "ownership_terms": [
           "repair"
         ],
         "residue_terms": [],
-        "inferred_category": "unit / pure-rule",
+        "inferred_category": "integration / layer interaction",
         "module_markers": [
           "unit"
         ],
         "direct_runtime_imports": [
-          "game/final_emission_repairs.py",
-          "game/final_emission_validators.py"
+          "game/final_emission_gate.py",
+          "game/gm.py",
+          "game/gm_retry.py"
         ],
         "transcript_like_case_count": 0
       },
@@ -3130,8 +3130,8 @@
       },
       {
         "path": "tests/test_final_emission_gate.py",
-        "line_count": 2792,
-        "test_function_count": 151,
+        "line_count": 3030,
+        "test_function_count": 165,
         "import_count": 14,
         "ownership_terms": [
           "canonical",
@@ -3176,19 +3176,24 @@
       },
       {
         "path": "tests/test_final_emission_repairs.py",
-        "line_count": 70,
-        "test_function_count": 6,
-        "import_count": 3,
+        "line_count": 523,
+        "test_function_count": 28,
+        "import_count": 5,
         "ownership_terms": [
+          "canonical",
+          "owner",
           "repair"
         ],
-        "residue_terms": [],
+        "residue_terms": [
+          "compatibility"
+        ],
         "inferred_category": "unit / pure-rule",
         "module_markers": [
           "unit"
         ],
         "direct_runtime_imports": [
-          "game/final_emission_repairs.py"
+          "game/final_emission_repairs.py",
+          "game/final_emission_validators.py"
         ],
         "transcript_like_case_count": 0
       },
@@ -3480,9 +3485,9 @@
       },
       {
         "path": "tests/test_interaction_continuity_repair.py",
-        "line_count": 228,
-        "test_function_count": 12,
-        "import_count": 6,
+        "line_count": 170,
+        "test_function_count": 8,
+        "import_count": 5,
         "ownership_terms": [
           "repair"
         ],
@@ -3499,26 +3504,27 @@
       },
       {
         "path": "tests/test_interaction_continuity_speaker_bridge.py",
-        "line_count": 235,
-        "test_function_count": 12,
-        "import_count": 4,
-        "ownership_terms": [],
+        "line_count": 70,
+        "test_function_count": 5,
+        "import_count": 3,
+        "ownership_terms": [
+          "repair"
+        ],
         "residue_terms": [],
         "inferred_category": "unit / pure-rule",
         "module_markers": [
           "unit"
         ],
         "direct_runtime_imports": [
-          "game/final_emission_gate.py",
           "game/interaction_continuity.py"
         ],
         "transcript_like_case_count": 0
       },
       {
         "path": "tests/test_interaction_continuity_validation.py",
-        "line_count": 184,
-        "test_function_count": 13,
-        "import_count": 4,
+        "line_count": 165,
+        "test_function_count": 12,
+        "import_count": 3,
         "ownership_terms": [],
         "residue_terms": [],
         "inferred_category": "unit / pure-rule",
@@ -3526,7 +3532,6 @@
           "unit"
         ],
         "direct_runtime_imports": [
-          "game/final_emission_gate.py",
           "game/interaction_continuity.py"
         ],
         "transcript_like_case_count": 0
@@ -4079,9 +4084,9 @@
       },
       {
         "path": "tests/test_narrative_authenticity_aer4.py",
-        "line_count": 587,
-        "test_function_count": 32,
-        "import_count": 7,
+        "line_count": 570,
+        "test_function_count": 31,
+        "import_count": 6,
         "ownership_terms": [
           "repair",
           "validator"
@@ -4092,8 +4097,7 @@
         "direct_runtime_imports": [
           "game/final_emission_repairs.py",
           "game/narrative_authenticity.py",
-          "game/narrative_authenticity_eval.py",
-          "game/stage_diff_telemetry.py"
+          "game/narrative_authenticity_eval.py"
         ],
         "transcript_like_case_count": 0
       },
@@ -5114,10 +5118,12 @@
       },
       {
         "path": "tests/test_stage_diff_telemetry.py",
-        "line_count": 228,
-        "test_function_count": 12,
+        "line_count": 273,
+        "test_function_count": 14,
         "import_count": 7,
-        "ownership_terms": [],
+        "ownership_terms": [
+          "owner"
+        ],
         "residue_terms": [],
         "inferred_category": "integration / layer interaction",
         "module_markers": [],
@@ -5392,9 +5398,9 @@
       },
       {
         "path": "tests/test_turn_packet_stage_diff_integration.py",
-        "line_count": 235,
+        "line_count": 222,
         "test_function_count": 7,
-        "import_count": 11,
+        "import_count": 10,
         "ownership_terms": [
           "canonical"
         ],
@@ -5408,7 +5414,6 @@
           "game/final_emission_gate.py",
           "game/gm.py",
           "game/gm_retry.py",
-          "game/stage_diff_telemetry.py",
           "game/turn_packet.py"
         ],
         "transcript_like_case_count": 0
@@ -5641,18 +5646,18 @@
     ],
     "category_counts": {
       "transcript / scenario lock": 251,
-      "regression / bug class": 107,
+      "regression / bug class": 106,
       "smoke / overlap": 5,
-      "integration / layer interaction": 1449,
-      "unit / pure-rule": 474,
+      "integration / layer interaction": 1452,
+      "unit / pure-rule": 472,
       "unclear": 6
     },
     "file_category_counts": {
       "transcript / scenario lock": 14,
       "regression / bug class": 9,
       "smoke / overlap": 1,
-      "integration / layer interaction": 111,
-      "unit / pure-rule": 38,
+      "integration / layer interaction": 112,
+      "unit / pure-rule": 37,
       "unclear": 13
     }
   },
@@ -5718,6 +5723,7 @@
         "tests/test_fallback_shipped_contract_propagation.py",
         "tests/test_final_emission_gate.py",
         "tests/test_final_emission_meta.py",
+        "tests/test_final_emission_repairs.py",
         "tests/test_final_emission_scene_integrity.py",
         "tests/test_final_emission_validators.py",
         "tests/test_final_emission_visibility.py",
@@ -6829,8 +6835,6 @@
         "tests/test_final_emission_validators.py",
         "tests/test_gm_retry_context_separation.py",
         "tests/test_interaction_continuity_repair.py",
-        "tests/test_interaction_continuity_speaker_bridge.py",
-        "tests/test_interaction_continuity_validation.py",
         "tests/test_manual_play_latency.py",
         "tests/test_mixed_state_recovery_regressions.py",
         "tests/test_model_routing_escalation.py",
@@ -6885,7 +6889,7 @@
         "game/narrative_authenticity.py"
       ],
       "likely_overlap_points": [
-        "cross-cutting import surface: game/final_emission_repairs.py (fan-in 8, fan-out 7)",
+        "cross-cutting import surface: game/final_emission_repairs.py (fan-in 7, fan-out 7)",
         "cross-cutting import surface: game/final_emission_validators.py (fan-in 7, fan-out 3)",
         "cross-cutting import surface: game/response_policy_contracts.py (fan-in 8, fan-out 3)",
         "shared primary file: game/final_emission_repairs.py -> final emission repairs",
@@ -7173,9 +7177,9 @@
             "docstring declaration: \\bdeterministic repair\\b",
             "docs/architecture_audit_framework.md: - Repo example: `game/final_emission_gate.py` is explicitly documented as the orchestration owner, while `game/final_emission_validators.py` and `game/final_emission_repairs.py` are split into pure validation and deterministic repair roles.",
             "docs/narrative_integrity_architecture.md: | How to repair or skip a policy layer | `final_emission_repairs.py` |",
-            "layer wiring prefix: `_apply_answer_completeness_layer`",
+            "docs/ownership_cleanup_delta.md: - FR1 re-centered direct repair helper/materialization assertions in `tests/test_final_emission_repairs.py` and narrowed `tests/test_fallback_behavior_repairs.py` to downstream fallback compatibility coverage; FR2-R then collapsed remaining audit-visible co-ownership wording and imports so only `tests/test_final_emission_repairs.py` reads as the practical owner suite.",
             "documentation references: 4",
-            "test references (metadata only): 1"
+            "test references (metadata only): 5"
           ],
           "role_labels": [
             "repair_owner"
@@ -7183,7 +7187,7 @@
           "role_scores": {
             "orchestration_owner": 16,
             "validator_owner": 3,
-            "repair_owner": 31,
+            "repair_owner": 35,
             "text_utility_owner": 3,
             "contract_owner": 11,
             "telemetry_owner": 3
@@ -7202,7 +7206,7 @@
                 "- Forbidden owner interpretations: `game/final_emission_repairs.py` is not the contract authority; `game/final_emission_gate.py` is not the place to redefine contract rules; `game/prompt_context.py` is not the canonical home for post-prompt contract resolution helpers.",
                 "- Non-owner supporting modules: `game/final_emission_repairs.py`, `game/final_emission_meta.py`",
                 "- Forbidden owner interpretations: `game/final_emission_meta.py` is not the orchestration owner; `game/final_emission_repairs.py` is not the top-level layer-order authority.",
-                "- Non-owner supporting modules: `game/final_emission_gate.py`, `game/final_emission_repairs.py`"
+                "practical owner suite: `tests/test_final_emission_repairs.py`"
               ]
             },
             {
@@ -7215,17 +7219,32 @@
               "source": "docs/ownership_cleanup_delta.md",
               "matches": [
                 "- Prior contradiction / hotspot: response-policy ownership was split across `game/response_policy_contracts.py`, `game/final_emission_repairs.py`, and adjacent prompt-facing helpers.",
-                "- `game/final_emission_repairs.py` and `game/final_emission_validators.py` read as downstream consumers, not contract authorities."
+                "- `game/final_emission_repairs.py` and `game/final_emission_validators.py` read as downstream consumers, not contract authorities.",
+                "- FR1 re-centered direct repair helper/materialization assertions in `tests/test_final_emission_repairs.py` and narrowed `tests/test_fallback_behavior_repairs.py` to downstream fallback compatibility coverage; FR2-R then collapsed remaining audit-visible co-ownership wording and imports so only `tests/test_final_emission_repairs.py` reads as the practical owner suite.",
+                "behavior. The goal was to make `tests/test_final_emission_repairs.py` read as the",
+                "- `tests/test_final_emission_repairs.py` now explicitly presents itself as the practical"
               ]
             }
           ],
           "test_references": [
             {
+              "source": "tests/TEST_AUDIT.md"
+            },
+            {
               "source": "tests/test_architecture_audit_tool.py"
+            },
+            {
+              "source": "tests/test_bounded_partial_quality.py"
+            },
+            {
+              "source": "tests/test_fallback_behavior_gate.py"
+            },
+            {
+              "source": "tests/test_fallback_behavior_repairs.py"
             }
           ],
           "coupling_indicators": {
-            "fan_in": 8,
+            "fan_in": 7,
             "fan_out": 7,
             "private_helper_count": 85,
             "concern_keyword_density": 0.2922,
@@ -7241,7 +7260,7 @@
             "historical_marker_count": 0,
             "possible_centrality_hotspot": true,
             "centrality_reasons": [
-              "fan-in 8",
+              "fan-in 7",
               "fan-out 7",
               "private helpers 85",
               "concern density 0.2922"
@@ -7447,10 +7466,10 @@
           },
           {
             "path": "game/final_emission_repairs.py",
-            "fan_in": 8,
+            "fan_in": 7,
             "fan_out": 7,
             "reasons": [
-              "fan-in 8",
+              "fan-in 7",
               "fan-out 7",
               "private helpers 85",
               "concern density 0.2922"
@@ -7571,7 +7590,7 @@
             "class_count": 0,
             "import_count": 10,
             "private_helper_count": 85,
-            "fan_in": 8,
+            "fan_in": 7,
             "fan_out": 7
           }
         ],
@@ -7818,10 +7837,10 @@
         "tests/test_architecture_audit_tool.py",
         "tests/test_bounded_partial_quality.py",
         "tests/test_dead_turn_detection.py",
-        "tests/test_fallback_behavior_gate.py",
         "tests/test_fallback_behavior_repairs.py",
         "tests/test_fallback_behavior_validator.py",
         "tests/test_final_emission_gate.py",
+        "tests/test_final_emission_repairs.py",
         "tests/test_final_emission_validators.py",
         "tests/test_manual_play_latency.py",
         "tests/test_narration_transcript_regressions.py",
@@ -8192,6 +8211,20 @@
             "excerpt": "| **Prompt / sanitizer ownership boundaries** | Keep **pre-generation** contracts in prompt/guard paths vs **post-GM** string hygiene in sanitizer paths; document **smoke overlap** vs **canonical owner** for each invaria"
           },
           {
+            "source": "docs/ownership_cleanup_delta.md",
+            "claimed_owner": "tests/test_final_emission_gate.py",
+            "owner_type": "test",
+            "strength": "strong",
+            "excerpt": "- `docs/architecture_ownership_ledger.md`, `docs/narrative_integrity_architecture.md`, and the refreshed audit artifacts consistently describe `game/final_emission_gate.py` as the runtime orchestration owner, `tests/test"
+          },
+          {
+            "source": "docs/ownership_cleanup_delta.md",
+            "claimed_owner": "tests/test_final_emission_gate.py",
+            "owner_type": "test",
+            "strength": "strong",
+            "excerpt": "- Direct `_apply_interaction_continuity_emission_step(...)` and `_attach_interaction_continuity_validation(...)` assertions were re-centered into `tests/test_final_emission_gate.py`, which now explicitly owns bridge meta"
+          },
+          {
             "source": "docs/narrative_integrity_architecture.md",
             "claimed_owner": "tests/test_prompt_context.py",
             "owner_type": "test",
@@ -8232,24 +8265,21 @@
             "owner_type": "test",
             "strength": "soft",
             "excerpt": "- `docs/architecture_ownership_ledger.md`, `docs/narrative_integrity_architecture.md`, `docs/architecture_audit_readme.md`, and `tests/TEST_AUDIT.md` now tell the same owner story."
-          },
-          {
-            "source": "docs/ownership_cleanup_delta.md",
-            "claimed_owner": "tests/TEST_AUDIT.md",
-            "owner_type": "test",
-            "strength": "soft",
-            "excerpt": "- `tests/TEST_AUDIT.md` now reinforces the same owner story instead of treating retry-terminal or quality coverage as equal semantic owners"
-          },
-          {
-            "source": "docs/ownership_cleanup_delta.md",
-            "claimed_owner": "tests/TEST_AUDIT.md",
-            "owner_type": "test",
-            "strength": "soft",
-            "excerpt": "- `docs/architecture_ownership_ledger.md`, `docs/architecture_audit_readme.md`, and `tests/TEST_AUDIT.md` consistently declare `game/prompt_context.py` as runtime owner and `tests/test_prompt_context.py` as the practical"
           }
         ],
-        "practical_test_owner": "tests/test_final_emission_validators.py",
+        "practical_test_owner": "mixed: tests/test_final_emission_repairs.py, tests/test_final_emission_validators.py",
         "primary_test_homes": [
+          {
+            "path": "tests/test_final_emission_repairs.py",
+            "category": "unit / pure-rule",
+            "score": 13.8,
+            "raw_score": 12,
+            "direct_runtime_match": true,
+            "evidence": [
+              "direct import `game/final_emission_validators.py`",
+              "subsystem token overlap: emission, final"
+            ]
+          },
           {
             "path": "tests/test_final_emission_validators.py",
             "category": "unit / pure-rule",
@@ -8263,16 +8293,6 @@
           }
         ],
         "secondary_test_homes": [
-          {
-            "path": "tests/test_fallback_behavior_repairs.py",
-            "category": "unit / pure-rule",
-            "score": 9.2,
-            "raw_score": 8,
-            "direct_runtime_match": true,
-            "evidence": [
-              "direct import `game/final_emission_validators.py`"
-            ]
-          },
           {
             "path": "tests/test_fallback_behavior_validator.py",
             "category": "unit / pure-rule",
@@ -8327,6 +8347,7 @@
           }
         ],
         "direct_runtime_owner_test_homes": [
+          "tests/test_final_emission_repairs.py",
           "tests/test_final_emission_validators.py"
         ],
         "alignment_status": "partial",
@@ -8340,11 +8361,13 @@
         },
         "evidence": [
           "Docs name a canonical test owner, but practical coverage concentrates elsewhere.",
-          "primary home `tests/test_final_emission_validators.py` (unit / pure-rule; score 13.8)",
+          "primary home `tests/test_final_emission_repairs.py` (unit / pure-rule; score 13.8)",
           "direct import `game/final_emission_validators.py`",
+          "subsystem token overlap: emission, final",
+          "primary home `tests/test_final_emission_validators.py` (unit / pure-rule; score 13.8)",
           "subsystem token overlap: emission, final, validators",
           "docs runtime claims: `game/final_emission_validators.py`",
-          "docs test claims: `tests/TEST_AUDIT.md`, `tests/TEST_CONSOLIDATION_PLAN.md`, `tests/test_prompt_context.py`"
+          "docs test claims: `tests/TEST_AUDIT.md`, `tests/TEST_CONSOLIDATION_PLAN.md`, `tests/test_final_emission_gate.py`"
         ]
       }
     },
@@ -8361,9 +8384,9 @@
         "docstring declaration: \\bdeterministic repair\\b",
         "docs/architecture_audit_framework.md: - Repo example: `game/final_emission_gate.py` is explicitly documented as the orchestration owner, while `game/final_emission_validators.py` and `game/final_emission_repairs.py` are split into pure validation and deterministic repair roles.",
         "docs/narrative_integrity_architecture.md: | How to repair or skip a policy layer | `final_emission_repairs.py` |",
-        "layer wiring prefix: `_apply_answer_completeness_layer`",
+        "docs/ownership_cleanup_delta.md: - FR1 re-centered direct repair helper/materialization assertions in `tests/test_final_emission_repairs.py` and narrowed `tests/test_fallback_behavior_repairs.py` to downstream fallback compatibility coverage; FR2-R then collapsed remaining audit-visible co-ownership wording and imports so only `tests/test_final_emission_repairs.py` reads as the practical owner suite.",
         "documentation references: 4",
-        "test references (metadata only): 1"
+        "test references (metadata only): 5"
       ],
       "role_labels": [
         "repair_owner"
@@ -8385,6 +8408,7 @@
       "related_docs": [
         "docs/README.md",
         "docs/architecture_audit_framework.md",
+        "docs/architecture_audit_readme.md",
         "docs/architecture_ownership_ledger.md",
         "docs/current_focus.md",
         "docs/manual_gauntlet_report_format.md",
@@ -8408,7 +8432,7 @@
         "game/social_exchange_emission.py"
       ],
       "likely_overlap_points": [
-        "cross-cutting import surface: game/final_emission_repairs.py (fan-in 8, fan-out 7)",
+        "cross-cutting import surface: game/final_emission_repairs.py (fan-in 7, fan-out 7)",
         "shared primary file: game/final_emission_repairs.py -> response policy contracts"
       ],
       "ownership_findings": [
@@ -8422,9 +8446,9 @@
             "docstring declaration: \\bdeterministic repair\\b",
             "docs/architecture_audit_framework.md: - Repo example: `game/final_emission_gate.py` is explicitly documented as the orchestration owner, while `game/final_emission_validators.py` and `game/final_emission_repairs.py` are split into pure validation and deterministic repair roles.",
             "docs/narrative_integrity_architecture.md: | How to repair or skip a policy layer | `final_emission_repairs.py` |",
-            "layer wiring prefix: `_apply_answer_completeness_layer`",
+            "docs/ownership_cleanup_delta.md: - FR1 re-centered direct repair helper/materialization assertions in `tests/test_final_emission_repairs.py` and narrowed `tests/test_fallback_behavior_repairs.py` to downstream fallback compatibility coverage; FR2-R then collapsed remaining audit-visible co-ownership wording and imports so only `tests/test_final_emission_repairs.py` reads as the practical owner suite.",
             "documentation references: 4",
-            "test references (metadata only): 1"
+            "test references (metadata only): 5"
           ],
           "role_labels": [
             "repair_owner"
@@ -8432,7 +8456,7 @@
           "role_scores": {
             "orchestration_owner": 16,
             "validator_owner": 3,
-            "repair_owner": 31,
+            "repair_owner": 35,
             "text_utility_owner": 3,
             "contract_owner": 11,
             "telemetry_owner": 3
@@ -8451,7 +8475,7 @@
                 "- Forbidden owner interpretations: `game/final_emission_repairs.py` is not the contract authority; `game/final_emission_gate.py` is not the place to redefine contract rules; `game/prompt_context.py` is not the canonical home for post-prompt contract resolution helpers.",
                 "- Non-owner supporting modules: `game/final_emission_repairs.py`, `game/final_emission_meta.py`",
                 "- Forbidden owner interpretations: `game/final_emission_meta.py` is not the orchestration owner; `game/final_emission_repairs.py` is not the top-level layer-order authority.",
-                "- Non-owner supporting modules: `game/final_emission_gate.py`, `game/final_emission_repairs.py`"
+                "practical owner suite: `tests/test_final_emission_repairs.py`"
               ]
             },
             {
@@ -8464,17 +8488,32 @@
               "source": "docs/ownership_cleanup_delta.md",
               "matches": [
                 "- Prior contradiction / hotspot: response-policy ownership was split across `game/response_policy_contracts.py`, `game/final_emission_repairs.py`, and adjacent prompt-facing helpers.",
-                "- `game/final_emission_repairs.py` and `game/final_emission_validators.py` read as downstream consumers, not contract authorities."
+                "- `game/final_emission_repairs.py` and `game/final_emission_validators.py` read as downstream consumers, not contract authorities.",
+                "- FR1 re-centered direct repair helper/materialization assertions in `tests/test_final_emission_repairs.py` and narrowed `tests/test_fallback_behavior_repairs.py` to downstream fallback compatibility coverage; FR2-R then collapsed remaining audit-visible co-ownership wording and imports so only `tests/test_final_emission_repairs.py` reads as the practical owner suite.",
+                "behavior. The goal was to make `tests/test_final_emission_repairs.py` read as the",
+                "- `tests/test_final_emission_repairs.py` now explicitly presents itself as the practical"
               ]
             }
           ],
           "test_references": [
             {
+              "source": "tests/TEST_AUDIT.md"
+            },
+            {
               "source": "tests/test_architecture_audit_tool.py"
+            },
+            {
+              "source": "tests/test_bounded_partial_quality.py"
+            },
+            {
+              "source": "tests/test_fallback_behavior_gate.py"
+            },
+            {
+              "source": "tests/test_fallback_behavior_repairs.py"
             }
           ],
           "coupling_indicators": {
-            "fan_in": 8,
+            "fan_in": 7,
             "fan_out": 7,
             "private_helper_count": 85,
             "concern_keyword_density": 0.2922,
@@ -8490,7 +8529,7 @@
             "historical_marker_count": 0,
             "possible_centrality_hotspot": true,
             "centrality_reasons": [
-              "fan-in 8",
+              "fan-in 7",
               "fan-out 7",
               "private helpers 85",
               "concern density 0.2922"
@@ -8593,16 +8632,16 @@
       ],
       "coupling_indicators": {
         "total_private_helpers": 85,
-        "max_fan_in": 8,
+        "max_fan_in": 7,
         "max_fan_out": 7,
         "average_concern_keyword_density": 0.2922,
         "possible_centrality_hotspots": [
           {
             "path": "game/final_emission_repairs.py",
-            "fan_in": 8,
+            "fan_in": 7,
             "fan_out": 7,
             "reasons": [
-              "fan-in 8",
+              "fan-in 7",
               "fan-out 7",
               "private helpers 85",
               "concern density 0.2922"
@@ -8678,7 +8717,7 @@
             "class_count": 0,
             "import_count": 10,
             "private_helper_count": 85,
-            "fan_in": 8,
+            "fan_in": 7,
             "fan_out": 7
           }
         ],
@@ -8799,7 +8838,7 @@
             "excerpt": "See `tests/TEST_AUDIT.md` \u2192 *Consolidation Block 1 \u2014 Canonical ownership map & overlap hotspots* for **canonical owner** themes and **smoke overlap** guidance. **Next consolidation order (Block C1):** emit-path **orchest"
           }
         ],
-        "practical_test_owner": "mixed: tests/test_final_emission_repairs.py, tests/test_fallback_behavior_repairs.py",
+        "practical_test_owner": "tests/test_final_emission_repairs.py",
         "primary_test_homes": [
           {
             "path": "tests/test_final_emission_repairs.py",
@@ -8810,17 +8849,6 @@
             "evidence": [
               "direct import `game/final_emission_repairs.py`",
               "subsystem token overlap: emission, final, repairs"
-            ]
-          },
-          {
-            "path": "tests/test_fallback_behavior_repairs.py",
-            "category": "unit / pure-rule",
-            "score": 11.5,
-            "raw_score": 10,
-            "direct_runtime_match": true,
-            "evidence": [
-              "direct import `game/final_emission_repairs.py`",
-              "subsystem token overlap: repairs"
             ]
           }
         ],
@@ -8876,36 +8904,34 @@
             ]
           },
           {
-            "path": "tests/test_architecture_audit_tool.py",
+            "path": "tests/test_fallback_behavior_repairs.py",
             "category": "integration / layer interaction",
-            "score": 3.0,
-            "raw_score": 3,
+            "score": 4.0,
+            "raw_score": 4,
             "direct_runtime_match": false,
             "evidence": [
-              "text mentions `game/final_emission_repairs.py`"
+              "filename overlap with `final_emission_repairs.py`",
+              "subsystem token overlap: repairs"
             ]
           }
         ],
         "direct_runtime_owner_test_homes": [
-          "tests/test_final_emission_repairs.py",
-          "tests/test_fallback_behavior_repairs.py"
+          "tests/test_final_emission_repairs.py"
         ],
         "alignment_status": "partial",
         "mismatch_type": "docs_claim_owner_tests_target_other_home",
         "severity": "medium",
         "healthy_overlap": false,
-        "coverage_spread": 8,
+        "coverage_spread": 7,
         "category_counts": {
-          "integration / layer interaction": 4,
-          "unit / pure-rule": 4
+          "integration / layer interaction": 5,
+          "unit / pure-rule": 3
         },
         "evidence": [
           "Docs name a canonical test owner, but practical coverage concentrates elsewhere.",
           "primary home `tests/test_final_emission_repairs.py` (unit / pure-rule; score 13.8)",
           "direct import `game/final_emission_repairs.py`",
           "subsystem token overlap: emission, final, repairs",
-          "primary home `tests/test_fallback_behavior_repairs.py` (unit / pure-rule; score 11.5)",
-          "subsystem token overlap: repairs",
           "docs runtime claims: `game/final_emission_repairs.py`",
           "docs test claims: `tests/TEST_AUDIT.md`, `tests/TEST_CONSOLIDATION_PLAN.md`"
         ]
@@ -8955,18 +8981,18 @@
         "tests/test_diegetic_fallback_block4.py",
         "tests/test_empty_social_retry_regressions.py",
         "tests/test_fallback_behavior_gate.py",
+        "tests/test_fallback_behavior_repairs.py",
         "tests/test_fallback_overwrite_containment.py",
         "tests/test_fallback_shipped_contract_propagation.py",
         "tests/test_final_emission_gate.py",
         "tests/test_final_emission_meta.py",
+        "tests/test_final_emission_repairs.py",
         "tests/test_final_emission_scene_integrity.py",
         "tests/test_final_emission_visibility.py",
         "tests/test_gauntlet_regressions.py",
         "tests/test_gm_retry.py",
         "tests/test_gm_retry_context_separation.py",
         "tests/test_interaction_continuity_repair.py",
-        "tests/test_interaction_continuity_speaker_bridge.py",
-        "tests/test_interaction_continuity_validation.py",
         "tests/test_lead_lifecycle_block3_transcript_regression.py",
         "tests/test_lead_npc_payoff_and_fallback.py",
         "tests/test_manual_play_latency.py",
@@ -9033,7 +9059,7 @@
         "game/anti_reset_emission_guard.py"
       ],
       "likely_overlap_points": [
-        "cross-cutting import surface: game/final_emission_gate.py (fan-in 38, fan-out 25)",
+        "cross-cutting import surface: game/final_emission_gate.py (fan-in 37, fan-out 25)",
         "cross-cutting import surface: game/final_emission_meta.py (fan-in 9, fan-out 0)",
         "cross-cutting import surface: game/final_emission_text.py (fan-in 7, fan-out 1)",
         "cross-cutting import surface: game/social_exchange_emission.py (fan-in 27, fan-out 11)"
@@ -9104,7 +9130,7 @@
                 "- **`game/final_emission_gate.py` remains the `apply_final_emission_gate` orchestration owner** \u2014 helpers may be split out when they are clearly **pure** (validators), **deterministic** repairs, shared text utilities, or **metadata-only** glue; anything that orders layers, integrates sanitizer paths, or seals strict-social emit paths stays in **orchestration** unless a later pass proves a zero-ambiguity move.",
                 "| Prompt-context bundle / shipped prompt contracts | `test_prompt_context.py` (practical primary direct-owner suite); `test_prompt_compression.py`, `test_final_emission_gate.py`, `test_social_exchange_emission.py`, `test_narration_transcript_regressions.py`, and `test_prompt_and_guard.py` remain secondary coverage |",
                 "| Response-policy contract read side | `test_response_policy_contracts.py` (practical primary direct-owner suite for direct accessor and bundle-materialization semantics); `test_fallback_shipped_contract_propagation.py`, `test_response_delta_requirement.py`, `test_final_emission_gate.py`, `test_social_exchange_emission.py`, `test_final_emission_validators.py`, `test_interaction_continuity_contract.py`, and `test_interaction_continuity_validation.py` remain secondary downstream consumer/application/regression/continuity coverage |",
-                "| Final emission gate ordering / contracts | `test_final_emission_gate.py` (practical primary direct-owner suite for direct orchestration-order and final-route semantics); downstream suites such as `test_social_exchange_emission.py`, `test_turn_pipeline_shared.py`, `test_stage_diff_telemetry.py`, `test_social_emission_quality.py`, `test_dead_turn_detection.py`, `test_answer_completeness_rules.py`, `test_response_delta_requirement.py`, and transcript/regression harnesses remain secondary consumer / observability / regression coverage |",
+                "| Final emission gate ordering / contracts | `test_final_emission_gate.py` (practical primary direct-owner suite for direct orchestration-order, final-route, and continuity-adjacent gate-step semantics); downstream suites such as `test_social_exchange_emission.py`, `test_turn_pipeline_shared.py`, `test_stage_diff_telemetry.py`, `test_social_emission_quality.py`, `test_dead_turn_detection.py`, `test_answer_completeness_rules.py`, `test_response_delta_requirement.py`, `test_interaction_continuity_speaker_bridge.py`, `test_interaction_continuity_validation.py`, `test_interaction_continuity_repair.py`, and transcript/regression harnesses remain secondary consumer / observability / regression / continuity-consumer coverage |",
                 "- **Large policy-layer clusters** (tone escalation, narrative authority, anti-railroading, scene anchor, speaker enforcement, etc.) remain **in** `final_emission_gate.py` for **orchestration** \u2014 only validators/repairs/text/contracts were split out; further extraction is **deferred** optional work unless it clearly reduces ambiguity."
               ]
             },
@@ -9134,7 +9160,7 @@
             }
           ],
           "coupling_indicators": {
-            "fan_in": 38,
+            "fan_in": 37,
             "fan_out": 25,
             "private_helper_count": 232,
             "concern_keyword_density": 0.237,
@@ -9150,7 +9176,7 @@
             "historical_marker_count": 0,
             "possible_centrality_hotspot": true,
             "centrality_reasons": [
-              "fan-in 38",
+              "fan-in 37",
               "fan-out 25",
               "private helpers 232",
               "concern density 0.237"
@@ -9403,7 +9429,7 @@
               "matches": [
                 "- Secondary prompt coverage: `tests/test_prompt_compression.py`, `tests/test_prompt_and_guard.py`, `tests/test_dialogue_interaction_establishment.py`, `tests/test_fallback_shipped_contract_propagation.py`, `tests/test_social_escalation.py`, `tests/test_social_interaction_authority.py`, `tests/test_social_speaker_grounding.py`, `tests/test_social_topic_anchor.py`, `tests/test_stale_interlocutor_invalidation_block3.py`, `tests/test_strict_social_answer_pressure_cashout.py`, `tests/test_synthetic_sessions.py`, `tests/test_answer_completeness_rules.py`, `tests/test_turn_pipeline_shared.py`, plus relevant gate/emission/transcript suites such as `tests/test_final_emission_gate.py`, `tests/test_social_exchange_emission.py`, and `tests/test_narration_transcript_regressions.py`.",
                 "- Secondary downstream coverage: `tests/test_fallback_shipped_contract_propagation.py`, `tests/test_response_delta_requirement.py`, `tests/test_final_emission_gate.py`, `tests/test_social_exchange_emission.py`, `tests/test_final_emission_validators.py`, `tests/test_interaction_continuity_contract.py`, and `tests/test_interaction_continuity_validation.py`.",
-                "- Secondary downstream coverage: `tests/test_social_exchange_emission.py`, `tests/test_turn_pipeline_shared.py`, `tests/test_stage_diff_telemetry.py`, `tests/test_social_emission_quality.py`, `tests/test_dead_turn_detection.py`, plus relevant transcript/regression suites such as `tests/test_narration_transcript_regressions.py`."
+                "- Secondary downstream coverage: `tests/test_social_exchange_emission.py`, `tests/test_turn_pipeline_shared.py`, `tests/test_stage_diff_telemetry.py`, `tests/test_social_emission_quality.py`, `tests/test_dead_turn_detection.py`, `tests/test_interaction_continuity_speaker_bridge.py`, `tests/test_interaction_continuity_validation.py`, `tests/test_interaction_continuity_repair.py`, plus relevant transcript/regression suites such as `tests/test_narration_transcript_regressions.py`."
               ]
             },
             {
@@ -9413,7 +9439,7 @@
                 "- Secondary prompt coverage only: `tests/test_prompt_compression.py`, `tests/test_prompt_and_guard.py`, `tests/test_dialogue_interaction_establishment.py`, `tests/test_fallback_shipped_contract_propagation.py`, `tests/test_social_escalation.py`, `tests/test_social_interaction_authority.py`, `tests/test_social_speaker_grounding.py`, `tests/test_social_topic_anchor.py`, `tests/test_stale_interlocutor_invalidation_block3.py`, `tests/test_strict_social_answer_pressure_cashout.py`, `tests/test_synthetic_sessions.py`, `tests/test_answer_completeness_rules.py`, `tests/test_turn_pipeline_shared.py`, plus relevant gate/emission/transcript suites such as `tests/test_final_emission_gate.py`, `tests/test_social_exchange_emission.py`, and `tests/test_narration_transcript_regressions.py`",
                 "- Canonical owner module: `game/social_exchange_emission.py`",
                 "- Practical primary direct-owner suite: `tests/test_social_exchange_emission.py`",
-                "- Secondary downstream coverage only: `tests/test_social_exchange_emission.py`, `tests/test_turn_pipeline_shared.py`, `tests/test_stage_diff_telemetry.py`, `tests/test_social_emission_quality.py`, `tests/test_dead_turn_detection.py`, plus transcript/regression suites such as `tests/test_narration_transcript_regressions.py`"
+                "- Secondary downstream coverage only: `tests/test_social_exchange_emission.py`, `tests/test_turn_pipeline_shared.py`, `tests/test_stage_diff_telemetry.py`, `tests/test_social_emission_quality.py`, `tests/test_dead_turn_detection.py`, `tests/test_interaction_continuity_speaker_bridge.py`, `tests/test_interaction_continuity_validation.py`, `tests/test_interaction_continuity_repair.py`, plus transcript/regression suites such as `tests/test_narration_transcript_regressions.py`"
               ]
             },
             {
@@ -9429,7 +9455,7 @@
                 "| Prompt-context bundle / shipped prompt contracts | `test_prompt_context.py` (practical primary direct-owner suite); `test_prompt_compression.py`, `test_final_emission_gate.py`, `test_social_exchange_emission.py`, `test_narration_transcript_regressions.py`, and `test_prompt_and_guard.py` remain secondary coverage |",
                 "| Response-policy contract read side | `test_response_policy_contracts.py` (practical primary direct-owner suite for direct accessor and bundle-materialization semantics); `test_fallback_shipped_contract_propagation.py`, `test_response_delta_requirement.py`, `test_final_emission_gate.py`, `test_social_exchange_emission.py`, `test_final_emission_validators.py`, `test_interaction_continuity_contract.py`, and `test_interaction_continuity_validation.py` remain secondary downstream consumer/application/regression/continuity coverage |",
                 "| Strict-social exchange emission seam | `test_social_exchange_emission.py` (practical primary direct-owner suite for downstream emission semantics, including terminal dialogue application once contract resolution is already known); `test_strict_social_emergency_fallback_dialogue.py`, `test_social_emission_quality.py`, and `test_dialogue_interaction_establishment.py` remain secondary downstream / compatibility / harness coverage |",
-                "| Final emission gate ordering / contracts | `test_final_emission_gate.py` (practical primary direct-owner suite for direct orchestration-order and final-route semantics); downstream suites such as `test_social_exchange_emission.py`, `test_turn_pipeline_shared.py`, `test_stage_diff_telemetry.py`, `test_social_emission_quality.py`, `test_dead_turn_detection.py`, `test_answer_completeness_rules.py`, `test_response_delta_requirement.py`, and transcript/regression harnesses remain secondary consumer / observability / regression coverage |"
+                "| Final emission gate ordering / contracts | `test_final_emission_gate.py` (practical primary direct-owner suite for direct orchestration-order, final-route, and continuity-adjacent gate-step semantics); downstream suites such as `test_social_exchange_emission.py`, `test_turn_pipeline_shared.py`, `test_stage_diff_telemetry.py`, `test_social_emission_quality.py`, `test_dead_turn_detection.py`, `test_answer_completeness_rules.py`, `test_response_delta_requirement.py`, `test_interaction_continuity_speaker_bridge.py`, `test_interaction_continuity_validation.py`, `test_interaction_continuity_repair.py`, and transcript/regression harnesses remain secondary consumer / observability / regression / continuity-consumer coverage |"
               ]
             },
             {
@@ -9647,16 +9673,16 @@
       ],
       "coupling_indicators": {
         "total_private_helpers": 330,
-        "max_fan_in": 38,
+        "max_fan_in": 37,
         "max_fan_out": 25,
         "average_concern_keyword_density": 0.2069,
         "possible_centrality_hotspots": [
           {
             "path": "game/final_emission_gate.py",
-            "fan_in": 38,
+            "fan_in": 37,
             "fan_out": 25,
             "reasons": [
-              "fan-in 38",
+              "fan-in 37",
               "fan-out 25",
               "private helpers 232",
               "concern density 0.237"
@@ -9769,7 +9795,7 @@
           "reason": "Docs and tests are the deterministic visibility surface for structural cost."
         },
         "test alignment": {
-          "score": "yellow",
+          "score": "green",
           "reason": "Reconciles runtime owner, documented owner, and practical test home instead of counting test links alone."
         },
         "historical residue / archaeology risk": {
@@ -9786,7 +9812,7 @@
             "class_count": 0,
             "import_count": 28,
             "private_helper_count": 232,
-            "fan_in": 38,
+            "fan_in": 37,
             "fan_out": 25
           },
           {
@@ -9883,9 +9909,9 @@
         "related_doc_reference_issues": []
       },
       "warnings": [
+        "Healthy overlap detected: focused owner tests remain primary and cross-layer suites look secondary.",
         "Historical residue markers are dense enough to raise archaeology risk.",
-        "Runtime overlap heuristics flagged 7 possible responsibility smear point(s).",
-        "Test ownership reconciliation is partial: ownership_spread_wide."
+        "Runtime overlap heuristics flagged 7 possible responsibility smear point(s)."
       ],
       "verdict": "red",
       "test_ownership_alignment": {
@@ -9929,6 +9955,13 @@
             "excerpt": "- Practical orchestration owner for the wider final-emission subsystem remains `game/final_emission_gate.py`"
           },
           {
+            "source": "docs/ownership_cleanup_delta.md",
+            "claimed_owner": "game/final_emission_gate.py",
+            "owner_type": "runtime",
+            "strength": "strong",
+            "excerpt": "- `docs/architecture_ownership_ledger.md`, `docs/narrative_integrity_architecture.md`, and the refreshed audit artifacts consistently describe `game/final_emission_gate.py` as the runtime orchestration owner, `tests/test"
+          },
+          {
             "source": "docs/architecture_ownership_ledger.md",
             "claimed_owner": "game/final_emission_meta.py",
             "owner_type": "runtime",
@@ -9969,16 +10002,9 @@
             "owner_type": "runtime",
             "strength": "soft",
             "excerpt": "- Non-owner supporting modules: `game/final_emission_repairs.py`, `game/final_emission_gate.py`, `game/prompt_context.py`"
-          },
-          {
-            "source": "docs/architecture_ownership_ledger.md",
-            "claimed_owner": "game/final_emission_gate.py",
-            "owner_type": "runtime",
-            "strength": "soft",
-            "excerpt": "- Forbidden owner interpretations: `game/final_emission_repairs.py` is not the contract authority; `game/final_emission_gate.py` is not the place to redefine contract rules; `game/prompt_context.py` is not the canonical "
           }
         ],
-        "practical_test_owner": "mixed: tests/test_final_emission_gate.py, tests/test_interaction_continuity_speaker_bridge.py, tests/test_interaction_continuity_validation.py",
+        "practical_test_owner": "tests/test_final_emission_gate.py",
         "primary_test_homes": [
           {
             "path": "tests/test_final_emission_gate.py",
@@ -9989,36 +10015,6 @@
             "evidence": [
               "direct import `game/final_emission_gate.py`",
               "subsystem token overlap: emission, final, gate"
-            ]
-          },
-          {
-            "path": "tests/test_interaction_continuity_speaker_bridge.py",
-            "category": "unit / pure-rule",
-            "score": 9.2,
-            "raw_score": 8,
-            "direct_runtime_match": true,
-            "evidence": [
-              "direct import `game/final_emission_gate.py`"
-            ]
-          },
-          {
-            "path": "tests/test_interaction_continuity_validation.py",
-            "category": "unit / pure-rule",
-            "score": 9.2,
-            "raw_score": 8,
-            "direct_runtime_match": true,
-            "evidence": [
-              "direct import `game/final_emission_gate.py`"
-            ]
-          },
-          {
-            "path": "tests/test_response_delta_requirement.py",
-            "category": "unit / pure-rule",
-            "score": 9.2,
-            "raw_score": 8,
-            "direct_runtime_match": true,
-            "evidence": [
-              "direct import `game/final_emission_gate.py`"
             ]
           }
         ],
@@ -10035,6 +10031,16 @@
           },
           {
             "path": "tests/test_diegetic_fallback_block4.py",
+            "category": "integration / layer interaction",
+            "score": 8.0,
+            "raw_score": 8,
+            "direct_runtime_match": true,
+            "evidence": [
+              "direct import `game/final_emission_gate.py`"
+            ]
+          },
+          {
+            "path": "tests/test_fallback_behavior_repairs.py",
             "category": "integration / layer interaction",
             "score": 8.0,
             "raw_score": 8,
@@ -10076,42 +10082,26 @@
               "downstream gate-consumer suite around a layer-specific concern",
               "subsystem token overlap: emission, final"
             ]
-          },
-          {
-            "path": "tests/test_lead_npc_payoff_and_fallback.py",
-            "category": "integration / layer interaction",
-            "score": 8.0,
-            "raw_score": 8,
-            "direct_runtime_match": true,
-            "evidence": [
-              "direct import `game/final_emission_gate.py`"
-            ]
           }
         ],
         "direct_runtime_owner_test_homes": [
-          "tests/test_final_emission_gate.py",
-          "tests/test_interaction_continuity_speaker_bridge.py",
-          "tests/test_interaction_continuity_validation.py",
-          "tests/test_response_delta_requirement.py"
+          "tests/test_final_emission_gate.py"
         ],
-        "alignment_status": "partial",
-        "mismatch_type": "ownership_spread_wide",
-        "severity": "high",
-        "healthy_overlap": false,
-        "coverage_spread": 10,
+        "alignment_status": "aligned",
+        "mismatch_type": "healthy_overlap",
+        "severity": "low",
+        "healthy_overlap": true,
+        "coverage_spread": 7,
         "category_counts": {
-          "integration / layer interaction": 26,
-          "unit / pure-rule": 6,
+          "integration / layer interaction": 27,
+          "unit / pure-rule": 5,
           "transcript / scenario lock": 3,
           "regression / bug class": 2
         },
         "evidence": [
-          "Coverage is spread across many homes rather than anchored in one direct owner suite.",
           "primary home `tests/test_final_emission_gate.py` (integration / layer interaction; score 12.0)",
           "direct import `game/final_emission_gate.py`",
           "subsystem token overlap: emission, final, gate",
-          "primary home `tests/test_interaction_continuity_speaker_bridge.py` (unit / pure-rule; score 9.2)",
-          "primary home `tests/test_interaction_continuity_validation.py` (unit / pure-rule; score 9.2)",
           "docs runtime claims: `game/final_emission_gate.py`, `game/final_emission_meta.py`, `game/social_exchange_emission.py`"
         ]
       }
@@ -10592,10 +10582,31 @@
           },
           {
             "source": "docs/narrative_integrity_architecture.md",
+            "claimed_owner": "tests/test_narrative_authenticity_aer4.py",
+            "owner_type": "test",
+            "strength": "soft",
+            "excerpt": "| Stage-diff telemetry / observability | `test_stage_diff_telemetry.py` (practical primary direct-owner suite for direct `game.stage_diff_telemetry` helper/accessor semantics, snapshot/transition packaging, bounded telem"
+          },
+          {
+            "source": "tests/TEST_CONSOLIDATION_PLAN.md",
+            "claimed_owner": "tests/test_narrative_authenticity_aer4.py",
+            "owner_type": "test",
+            "strength": "soft",
+            "excerpt": "**TD2-R applied (2026-04-15 \u2014 stage-diff telemetry governance alignment):** `game/stage_diff_telemetry.py` remains the canonical runtime owner for telemetry semantics, while `game/turn_packet.py` remains the packet-bound"
+          },
+          {
+            "source": "docs/narrative_integrity_architecture.md",
             "claimed_owner": "tests/test_stage_diff_telemetry.py",
             "owner_type": "test",
             "strength": "soft",
-            "excerpt": "| Final emission gate ordering / contracts | `test_final_emission_gate.py` (practical primary direct-owner suite for direct orchestration-order and final-route semantics); downstream suites such as `test_social_exchange_"
+            "excerpt": "| Stage-diff telemetry / observability | `test_stage_diff_telemetry.py` (practical primary direct-owner suite for direct `game.stage_diff_telemetry` helper/accessor semantics, snapshot/transition packaging, bounded telem"
+          },
+          {
+            "source": "docs/narrative_integrity_architecture.md",
+            "claimed_owner": "tests/test_stage_diff_telemetry.py",
+            "owner_type": "test",
+            "strength": "soft",
+            "excerpt": "| Final emission gate ordering / contracts | `test_final_emission_gate.py` (practical primary direct-owner suite for direct orchestration-order, final-route, and continuity-adjacent gate-step semantics); downstream suite"
           },
           {
             "source": "tests/TEST_CONSOLIDATION_PLAN.md",
@@ -10603,6 +10614,13 @@
             "owner_type": "test",
             "strength": "soft",
             "excerpt": "**FG2-R applied (2026-04-15 \u2014 final-emission gate governance alignment):** `game/final_emission_gate.py` remains the canonical runtime owner and `tests/test_final_emission_gate.py` remains the practical primary direct-ow"
+          },
+          {
+            "source": "tests/TEST_CONSOLIDATION_PLAN.md",
+            "claimed_owner": "tests/test_stage_diff_telemetry.py",
+            "owner_type": "test",
+            "strength": "soft",
+            "excerpt": "**TD2-R applied (2026-04-15 \u2014 stage-diff telemetry governance alignment):** `game/stage_diff_telemetry.py` remains the canonical runtime owner for telemetry semantics, while `game/turn_packet.py` remains the packet-bound"
           }
         ],
         "practical_test_owner": "mixed: tests/test_narrative_authenticity.py, tests/test_narrative_authenticity_aer4.py, tests/test_narrative_authenticity_aer5.py",
@@ -10675,7 +10693,7 @@
           "subsystem token overlap: authenticity, narrative",
           "primary home `tests/test_narrative_authenticity_aer4.py` (unit / pure-rule; score 13.8)",
           "primary home `tests/test_narrative_authenticity_aer5.py` (integration / layer interaction; score 12.0)",
-          "docs test claims: `tests/TEST_AUDIT.md`, `tests/TEST_CONSOLIDATION_PLAN.md`, `tests/test_stage_diff_telemetry.py`"
+          "docs test claims: `tests/TEST_AUDIT.md`, `tests/TEST_CONSOLIDATION_PLAN.md`, `tests/test_narrative_authenticity_aer4.py`"
         ]
       }
     },
@@ -10693,7 +10711,7 @@
         "docstring declaration: \\bstage[- ]diff telemetry\\b",
         "docs/README.md: 6. **Stage diff visibility** \u2014 `game/stage_diff_telemetry.py` records gate-stage snapshots; NA skip/reason codes from `_final_emission_meta` are copied into snapshots for diffing (observability only, not policy).",
         "docs/architecture_audit_framework.md: - Repo example: `game/narrative_authenticity.py`, `game/final_emission_meta.py`, and `game/stage_diff_telemetry.py` show active work to keep telemetry and meta shapes explicit rather than implicit.",
-        "docs/ownership_cleanup_delta.md: - Adjacent suites that still pass through the gate were renamed/documented to read as downstream consumers instead of orchestration homes: `tests/test_social_exchange_emission.py` for strict-social emission application, `tests/test_turn_pipeline_shared.py` for API smoke, `tests/test_stage_diff_telemetry.py` for observability, `tests/test_social_emission_quality.py` for quality/meta smoke, and `tests/test_dead_turn_detection.py` for packaged FEM snapshot consumption.",
+        "docs/architecture_ownership_ledger.md: - Compatibility residue interpretation: packet-boundary adjacency and gate/retry observability paths are support/consumption residue, not equal semantic homes or a reason to re-center telemetry authority away from `game/stage_diff_telemetry.py`.",
         "documentation references: 6",
         "test references (metadata only): 3"
       ],
@@ -10708,7 +10726,6 @@
         "tests/test_architecture_audit_tool.py",
         "tests/test_final_emission_gate.py",
         "tests/test_final_emission_meta.py",
-        "tests/test_narrative_authenticity_aer4.py",
         "tests/test_narrative_authenticity_eval.py",
         "tests/test_stage_diff_telemetry.py",
         "tests/test_turn_packet_accessors.py",
@@ -10745,7 +10762,7 @@
             "docstring declaration: \\bstage[- ]diff telemetry\\b",
             "docs/README.md: 6. **Stage diff visibility** \u2014 `game/stage_diff_telemetry.py` records gate-stage snapshots; NA skip/reason codes from `_final_emission_meta` are copied into snapshots for diffing (observability only, not policy).",
             "docs/architecture_audit_framework.md: - Repo example: `game/narrative_authenticity.py`, `game/final_emission_meta.py`, and `game/stage_diff_telemetry.py` show active work to keep telemetry and meta shapes explicit rather than implicit.",
-            "docs/ownership_cleanup_delta.md: - Adjacent suites that still pass through the gate were renamed/documented to read as downstream consumers instead of orchestration homes: `tests/test_social_exchange_emission.py` for strict-social emission application, `tests/test_turn_pipeline_shared.py` for API smoke, `tests/test_stage_diff_telemetry.py` for observability, `tests/test_social_emission_quality.py` for quality/meta smoke, and `tests/test_dead_turn_detection.py` for packaged FEM snapshot consumption.",
+            "docs/architecture_ownership_ledger.md: - Compatibility residue interpretation: packet-boundary adjacency and gate/retry observability paths are support/consumption residue, not equal semantic homes or a reason to re-center telemetry authority away from `game/stage_diff_telemetry.py`.",
             "documentation references: 6",
             "test references (metadata only): 3"
           ],
@@ -10756,8 +10773,8 @@
             "orchestration_owner": 3,
             "repair_owner": 4,
             "text_utility_owner": 2,
-            "contract_owner": 17,
-            "telemetry_owner": 26
+            "contract_owner": 13,
+            "telemetry_owner": 34
           },
           "doc_references": [
             {
@@ -10776,22 +10793,26 @@
             {
               "source": "docs/architecture_audit_readme.md",
               "matches": [
-                "- Secondary downstream coverage: `tests/test_social_exchange_emission.py`, `tests/test_turn_pipeline_shared.py`, `tests/test_stage_diff_telemetry.py`, `tests/test_social_emission_quality.py`, `tests/test_dead_turn_detection.py`, plus relevant transcript/regression suites such as `tests/test_narration_transcript_regressions.py`."
+                "- Secondary downstream coverage: `tests/test_social_exchange_emission.py`, `tests/test_turn_pipeline_shared.py`, `tests/test_stage_diff_telemetry.py`, `tests/test_social_emission_quality.py`, `tests/test_dead_turn_detection.py`, `tests/test_interaction_continuity_speaker_bridge.py`, `tests/test_interaction_continuity_validation.py`, `tests/test_interaction_continuity_repair.py`, plus relevant transcript/regression suites such as `tests/test_narration_transcript_regressions.py`.",
+                "- Canonical runtime owner: `game/stage_diff_telemetry.py`.",
+                "- Practical primary direct-owner suite: `tests/test_stage_diff_telemetry.py`."
               ]
             },
             {
               "source": "docs/architecture_ownership_ledger.md",
               "matches": [
-                "- Secondary downstream coverage only: `tests/test_social_exchange_emission.py`, `tests/test_turn_pipeline_shared.py`, `tests/test_stage_diff_telemetry.py`, `tests/test_social_emission_quality.py`, `tests/test_dead_turn_detection.py`, plus transcript/regression suites such as `tests/test_narration_transcript_regressions.py`",
+                "- Secondary downstream coverage only: `tests/test_social_exchange_emission.py`, `tests/test_turn_pipeline_shared.py`, `tests/test_stage_diff_telemetry.py`, `tests/test_social_emission_quality.py`, `tests/test_dead_turn_detection.py`, `tests/test_interaction_continuity_speaker_bridge.py`, `tests/test_interaction_continuity_validation.py`, `tests/test_interaction_continuity_repair.py`, plus transcript/regression suites such as `tests/test_narration_transcript_regressions.py`",
                 "- Canonical owner module: `game/stage_diff_telemetry.py`",
-                "- Non-owner supporting modules: `game/stage_diff_telemetry.py`, `game/final_emission_gate.py`",
-                "- Forbidden owner interpretations: `game/stage_diff_telemetry.py` is not the packet-contract owner; `game/final_emission_gate.py` is not a second packet schema home."
+                "- Compatibility residue interpretation: packet-boundary adjacency and gate/retry observability paths are support/consumption residue, not equal semantic homes or a reason to re-center telemetry authority away from `game/stage_diff_telemetry.py`.",
+                "- Practical primary direct-owner suite: `tests/test_stage_diff_telemetry.py`",
+                "- Non-owner supporting modules: `game/stage_diff_telemetry.py`, `game/final_emission_gate.py`"
               ]
             },
             {
               "source": "docs/narrative_integrity_architecture.md",
               "matches": [
-                "| Final emission gate ordering / contracts | `test_final_emission_gate.py` (practical primary direct-owner suite for direct orchestration-order and final-route semantics); downstream suites such as `test_social_exchange_emission.py`, `test_turn_pipeline_shared.py`, `test_stage_diff_telemetry.py`, `test_social_emission_quality.py`, `test_dead_turn_detection.py`, `test_answer_completeness_rules.py`, `test_response_delta_requirement.py`, and transcript/regression harnesses remain secondary consumer / observability / regression coverage |"
+                "| Stage-diff telemetry / observability | `test_stage_diff_telemetry.py` (practical primary direct-owner suite for direct `game.stage_diff_telemetry` helper/accessor semantics, snapshot/transition packaging, bounded telemetry storage, and telemetry-owned observability fields); `test_turn_packet_stage_diff_integration.py` remains downstream turn-packet + gate/retry consumer coverage, and `test_narrative_authenticity_aer4.py` remains downstream narrative-authenticity regression / evaluator-consumer coverage. `game/turn_packet.py` remains the packet-boundary owner, while `game.stage_diff_telemetry.resolve_gate_turn_packet(...)` remains compatibility residue only |",
+                "| Final emission gate ordering / contracts | `test_final_emission_gate.py` (practical primary direct-owner suite for direct orchestration-order, final-route, and continuity-adjacent gate-step semantics); downstream suites such as `test_social_exchange_emission.py`, `test_turn_pipeline_shared.py`, `test_stage_diff_telemetry.py`, `test_social_emission_quality.py`, `test_dead_turn_detection.py`, `test_answer_completeness_rules.py`, `test_response_delta_requirement.py`, `test_interaction_continuity_speaker_bridge.py`, `test_interaction_continuity_validation.py`, `test_interaction_continuity_repair.py`, and transcript/regression harnesses remain secondary consumer / observability / regression / continuity-consumer coverage |"
               ]
             },
             {
@@ -10817,7 +10838,7 @@
             }
           ],
           "coupling_indicators": {
-            "fan_in": 4,
+            "fan_in": 2,
             "fan_out": 1,
             "private_helper_count": 6,
             "concern_keyword_density": 0.4725,
@@ -10861,35 +10882,45 @@
           "path": "game/turn_packet.py",
           "declared_owner": "module docstring: Canonical owner for the turn-packet contract boundary.",
           "declared_owner_path": "game/turn_packet.py",
-          "ownership_confidence": "low",
+          "ownership_confidence": "high",
           "owner_evidence": [
-            "docstring declaration: \\bcontract\\b",
-            "docs/ownership_cleanup_delta.md: - Declared owner: `game/turn_packet.py` for the packet contract boundary, `game/stage_diff_telemetry.py` for telemetry-only observability",
-            "function prefix: `build_turn_packet`",
-            "function prefix: `resolve_turn_packet_contract`",
-            "function prefix: `resolve_turn_packet_field`",
             "docstring declaration: \\btelemetry\\b",
             "docs/architecture_ownership_ledger.md: - Forbidden owner interpretations: `game/turn_packet.py` is not the telemetry owner; `game/final_emission_gate.py` is not a parallel telemetry schema authority.",
-            "docs/ownership_cleanup_delta.md: - Prior contradiction / hotspot: `game/turn_packet.py` and `game/stage_diff_telemetry.py` looked like they might both own the packet/telemetry boundary."
+            "docs/narrative_integrity_architecture.md: | Stage-diff telemetry / observability | `test_stage_diff_telemetry.py` (practical primary direct-owner suite for direct `game.stage_diff_telemetry` helper/accessor semantics, snapshot/transition packaging, bounded telemetry storage, and telemetry-owned observability fields); `test_turn_packet_stage_diff_integration.py` remains downstream turn-packet + gate/retry consumer coverage, and `test_narrative_authenticity_aer4.py` remains downstream narrative-authenticity regression / evaluator-consumer coverage. `game/turn_packet.py` remains the packet-boundary owner, while `game.stage_diff_telemetry.resolve_gate_turn_packet(...)` remains compatibility residue only |",
+            "docs/ownership_cleanup_delta.md: - Prior contradiction / hotspot: `game/turn_packet.py` and `game/stage_diff_telemetry.py` looked like they might both own the packet/telemetry boundary.",
+            "concern language density: 10",
+            "documentation references: 4",
+            "test references (metadata only): 2"
           ],
           "role_labels": [
-            "contract_owner",
-            "telemetry_owner",
-            "mixed_owner"
+            "telemetry_owner"
           ],
           "role_scores": {
             "orchestration_owner": 3,
             "validator_owner": 1,
             "contract_owner": 16,
-            "telemetry_owner": 16
+            "telemetry_owner": 20
           },
           "doc_references": [
+            {
+              "source": "docs/architecture_audit_readme.md",
+              "matches": [
+                "- Packet-boundary owner remains: `game/turn_packet.py`."
+              ]
+            },
             {
               "source": "docs/architecture_ownership_ledger.md",
               "matches": [
                 "- Non-owner supporting modules: `game/turn_packet.py`, `game/final_emission_gate.py`",
                 "- Forbidden owner interpretations: `game/turn_packet.py` is not the telemetry owner; `game/final_emission_gate.py` is not a parallel telemetry schema authority.",
+                "- Governance note: docs should describe this seam as `runtime owner -> direct-owner suite -> downstream secondary / compatibility coverage`, while keeping `game/turn_packet.py` explicit as the packet-boundary owner rather than a telemetry co-owner.",
                 "- Canonical owner module: `game/turn_packet.py`"
+              ]
+            },
+            {
+              "source": "docs/narrative_integrity_architecture.md",
+              "matches": [
+                "| Stage-diff telemetry / observability | `test_stage_diff_telemetry.py` (practical primary direct-owner suite for direct `game.stage_diff_telemetry` helper/accessor semantics, snapshot/transition packaging, bounded telemetry storage, and telemetry-owned observability fields); `test_turn_packet_stage_diff_integration.py` remains downstream turn-packet + gate/retry consumer coverage, and `test_narrative_authenticity_aer4.py` remains downstream narrative-authenticity regression / evaluator-consumer coverage. `game/turn_packet.py` remains the packet-boundary owner, while `game.stage_diff_telemetry.resolve_gate_turn_packet(...)` remains compatibility residue only |"
               ]
             },
             {
@@ -10897,12 +10928,16 @@
               "matches": [
                 "- Prior contradiction / hotspot: `game/turn_packet.py` and `game/stage_diff_telemetry.py` looked like they might both own the packet/telemetry boundary.",
                 "- Declared owner: `game/turn_packet.py` for the packet contract boundary, `game/stage_diff_telemetry.py` for telemetry-only observability",
-                "- Current apparent owner shape: `game/stage_diff_telemetry.py` now reads as a telemetry consumer, while the packet boundary remains in `game/turn_packet.py`. The audit classifies the stage-diff seam as localized under-consolidation and the turn-packet-specific hotspot as transitional residue.",
-                "- `game/turn_packet.py` vs `game/stage_diff_telemetry.py`"
+                "- Current apparent owner shape: `game/stage_diff_telemetry.py` now reads as the runtime owner for telemetry semantics, while the packet boundary remains in `game/turn_packet.py`. The audit classifies the stage-diff seam as localized under-consolidation and the turn-packet-specific hotspot as transitional residue.",
+                "- `game/turn_packet.py` vs `game/stage_diff_telemetry.py`",
+                "- Packet-boundary owner remains `game/turn_packet.py`."
               ]
             }
           ],
           "test_references": [
+            {
+              "source": "tests/TEST_CONSOLIDATION_PLAN.md"
+            },
             {
               "source": "tests/test_architecture_audit_tool.py"
             }
@@ -10973,22 +11008,7 @@
           "severity": "medium",
           "evidence": [
             "game/stage_diff_telemetry.py: telemetry_owner (high)",
-            "game/turn_packet.py: contract_owner, telemetry_owner, mixed_owner (low)"
-          ]
-        },
-        {
-          "concern_name": "turn packet",
-          "involved_files": [
-            "game/turn_packet.py"
-          ],
-          "overlap_type": "mixed_concern_language_in_single_module",
-          "severity": "medium",
-          "evidence": [
-            "docstring declaration: \\bcontract\\b",
-            "docs/ownership_cleanup_delta.md: - Declared owner: `game/turn_packet.py` for the packet contract boundary, `game/stage_diff_telemetry.py` for telemetry-only observability",
-            "function prefix: `build_turn_packet`",
-            "function prefix: `resolve_turn_packet_contract`",
-            "function prefix: `resolve_turn_packet_field`"
+            "game/turn_packet.py: telemetry_owner (high)"
           ]
         }
       ],
@@ -11000,7 +11020,7 @@
         "possible_centrality_hotspots": [
           {
             "path": "game/stage_diff_telemetry.py",
-            "fan_in": 4,
+            "fan_in": 2,
             "fan_out": 1,
             "reasons": [
               "concern density 0.4725"
@@ -11053,7 +11073,7 @@
           "reason": "Docs and tests are the deterministic visibility surface for structural cost."
         },
         "test alignment": {
-          "score": "yellow",
+          "score": "green",
           "reason": "Reconciles runtime owner, documented owner, and practical test home instead of counting test links alone."
         },
         "historical residue / archaeology risk": {
@@ -11070,7 +11090,7 @@
             "class_count": 0,
             "import_count": 6,
             "private_helper_count": 6,
-            "fan_in": 4,
+            "fan_in": 2,
             "fan_out": 1
           },
           {
@@ -11117,8 +11137,8 @@
         "related_doc_reference_issues": []
       },
       "warnings": [
-        "Runtime overlap heuristics flagged 4 possible responsibility smear point(s).",
-        "Test ownership reconciliation is partial: docs_claim_owner_tests_target_other_home."
+        "Healthy overlap detected: focused owner tests remain primary and cross-layer suites look secondary.",
+        "Runtime overlap heuristics flagged 3 possible responsibility smear point(s)."
       ],
       "verdict": "yellow",
       "test_ownership_alignment": {
@@ -11139,6 +11159,13 @@
             "owner_type": "runtime",
             "strength": "strong",
             "excerpt": "- Canonical owner module: `game/turn_packet.py`"
+          },
+          {
+            "source": "docs/architecture_audit_readme.md",
+            "claimed_owner": "game/stage_diff_telemetry.py",
+            "owner_type": "runtime",
+            "strength": "soft",
+            "excerpt": "- Canonical runtime owner: `game/stage_diff_telemetry.py`."
           },
           {
             "source": "docs/architecture_ownership_ledger.md",
@@ -11166,64 +11193,46 @@
             "claimed_owner": "game/stage_diff_telemetry.py",
             "owner_type": "runtime",
             "strength": "soft",
-            "excerpt": "- Current apparent owner shape: `game/stage_diff_telemetry.py` now reads as a telemetry consumer, while the packet boundary remains in `game/turn_packet.py`. The audit classifies the stage-diff seam as localized under-co"
-          },
-          {
-            "source": "docs/architecture_ownership_ledger.md",
-            "claimed_owner": "game/turn_packet.py",
-            "owner_type": "runtime",
-            "strength": "soft",
-            "excerpt": "- Non-owner supporting modules: `game/turn_packet.py`, `game/final_emission_gate.py`"
-          },
-          {
-            "source": "docs/architecture_ownership_ledger.md",
-            "claimed_owner": "game/turn_packet.py",
-            "owner_type": "runtime",
-            "strength": "soft",
-            "excerpt": "- Forbidden owner interpretations: `game/turn_packet.py` is not the telemetry owner; `game/final_emission_gate.py` is not a parallel telemetry schema authority."
+            "excerpt": "- Current apparent owner shape: `game/stage_diff_telemetry.py` now reads as the runtime owner for telemetry semantics, while the packet boundary remains in `game/turn_packet.py`. The audit classifies the stage-diff seam "
           },
           {
             "source": "docs/ownership_cleanup_delta.md",
-            "claimed_owner": "game/turn_packet.py",
+            "claimed_owner": "game/stage_diff_telemetry.py",
             "owner_type": "runtime",
             "strength": "soft",
-            "excerpt": "- Declared owner: `game/turn_packet.py` for the packet contract boundary, `game/stage_diff_telemetry.py` for telemetry-only observability"
+            "excerpt": "- Canonical runtime owner remains `game/stage_diff_telemetry.py`."
           },
           {
             "source": "docs/ownership_cleanup_delta.md",
+            "claimed_owner": "game/stage_diff_telemetry.py",
+            "owner_type": "runtime",
+            "strength": "soft",
+            "excerpt": "- Docs and suite framing now tell the same owner story: `game/stage_diff_telemetry.py` as runtime owner, `game/turn_packet.py` as packet-boundary owner, `tests/test_stage_diff_telemetry.py` as practical primary direct-ow"
+          },
+          {
+            "source": "tests/TEST_AUDIT.md",
+            "claimed_owner": "game/stage_diff_telemetry.py",
+            "owner_type": "runtime",
+            "strength": "soft",
+            "excerpt": "For this seam, treat `game/stage_diff_telemetry.py` as the canonical runtime owner and"
+          },
+          {
+            "source": "tests/TEST_CONSOLIDATION_PLAN.md",
+            "claimed_owner": "game/stage_diff_telemetry.py",
+            "owner_type": "runtime",
+            "strength": "soft",
+            "excerpt": "**TD2-R applied (2026-04-15 \u2014 stage-diff telemetry governance alignment):** `game/stage_diff_telemetry.py` remains the canonical runtime owner for telemetry semantics, while `game/turn_packet.py` remains the packet-bound"
+          },
+          {
+            "source": "docs/architecture_audit_readme.md",
             "claimed_owner": "game/turn_packet.py",
             "owner_type": "runtime",
             "strength": "soft",
-            "excerpt": "- Current apparent owner shape: `game/stage_diff_telemetry.py` now reads as a telemetry consumer, while the packet boundary remains in `game/turn_packet.py`. The audit classifies the stage-diff seam as localized under-co"
-          },
-          {
-            "source": "docs/architecture_ownership_ledger.md",
-            "claimed_owner": "tests/TEST_AUDIT.md",
-            "owner_type": "test",
-            "strength": "strong",
-            "excerpt": "- Canonical owner module: `tests/TEST_AUDIT.md`"
-          },
-          {
-            "source": "tests/README_TESTS.md",
-            "claimed_owner": "tests/TEST_AUDIT.md",
-            "owner_type": "test",
-            "strength": "strong",
-            "excerpt": "See `tests/TEST_AUDIT.md` \u2192 *Consolidation Block 1 \u2014 Canonical ownership map & overlap hotspots* for **canonical owner** themes and **smoke overlap** guidance. **Next consolidation order (Block C1):** emit-path **orchest"
+            "excerpt": "- Packet-boundary owner remains: `game/turn_packet.py`."
           }
         ],
-        "practical_test_owner": "mixed: tests/test_turn_packet_stage_diff_integration.py, tests/test_stage_diff_telemetry.py, tests/test_narrative_authenticity_aer4.py",
+        "practical_test_owner": "mixed: tests/test_stage_diff_telemetry.py, tests/test_turn_packet_stage_diff_integration.py",
         "primary_test_homes": [
-          {
-            "path": "tests/test_turn_packet_stage_diff_integration.py",
-            "category": "integration / layer interaction",
-            "score": 12.0,
-            "raw_score": 12,
-            "direct_runtime_match": true,
-            "evidence": [
-              "direct import `game/stage_diff_telemetry.py`",
-              "subsystem token overlap: diff, stage"
-            ]
-          },
           {
             "path": "tests/test_stage_diff_telemetry.py",
             "category": "integration / layer interaction",
@@ -11236,13 +11245,14 @@
             ]
           },
           {
-            "path": "tests/test_narrative_authenticity_aer4.py",
-            "category": "unit / pure-rule",
-            "score": 9.2,
+            "path": "tests/test_turn_packet_stage_diff_integration.py",
+            "category": "integration / layer interaction",
+            "score": 8.0,
             "raw_score": 8,
-            "direct_runtime_match": true,
+            "direct_runtime_match": false,
             "evidence": [
-              "direct import `game/stage_diff_telemetry.py`"
+              "filename overlap with `stage_diff_telemetry.py`",
+              "subsystem token overlap: diff, stage"
             ]
           }
         ],
@@ -11259,30 +11269,24 @@
           }
         ],
         "direct_runtime_owner_test_homes": [
-          "tests/test_turn_packet_stage_diff_integration.py",
-          "tests/test_stage_diff_telemetry.py",
-          "tests/test_narrative_authenticity_aer4.py"
+          "tests/test_stage_diff_telemetry.py"
         ],
-        "alignment_status": "partial",
-        "mismatch_type": "docs_claim_owner_tests_target_other_home",
-        "severity": "high",
-        "healthy_overlap": false,
-        "coverage_spread": 4,
+        "alignment_status": "aligned",
+        "mismatch_type": "healthy_overlap",
+        "severity": "low",
+        "healthy_overlap": true,
+        "coverage_spread": 3,
         "category_counts": {
-          "integration / layer interaction": 3,
-          "unit / pure-rule": 1
+          "integration / layer interaction": 3
         },
         "evidence": [
-          "Docs name a canonical test owner, but practical coverage concentrates elsewhere.",
-          "primary home `tests/test_turn_packet_stage_diff_integration.py` (integration / layer interaction; score 12.0)",
-          "direct import `game/stage_diff_telemetry.py`",
-          "subsystem token overlap: diff, stage",
           "primary home `tests/test_stage_diff_telemetry.py` (integration / layer interaction; score 10.0)",
           "filename mirrors `stage_diff_telemetry.py`",
           "subsystem token overlap: diff, stage, telemetry",
-          "primary home `tests/test_narrative_authenticity_aer4.py` (unit / pure-rule; score 9.2)",
-          "docs runtime claims: `game/stage_diff_telemetry.py`, `game/turn_packet.py`",
-          "docs test claims: `tests/TEST_AUDIT.md`"
+          "primary home `tests/test_turn_packet_stage_diff_integration.py` (integration / layer interaction; score 8.0)",
+          "filename overlap with `stage_diff_telemetry.py`",
+          "subsystem token overlap: diff, stage",
+          "docs runtime claims: `game/stage_diff_telemetry.py`, `game/turn_packet.py`"
         ]
       }
     },
@@ -11399,7 +11403,7 @@
         "file_metrics": [
           {
             "path": "tests/TEST_AUDIT.md",
-            "line_count": 508,
+            "line_count": 553,
             "function_count": 0,
             "class_count": 0,
             "import_count": 0,
@@ -11409,7 +11413,7 @@
           },
           {
             "path": "tests/TEST_CONSOLIDATION_PLAN.md",
-            "line_count": 268,
+            "line_count": 272,
             "function_count": 0,
             "class_count": 0,
             "import_count": 0,
@@ -11561,6 +11565,20 @@
             "excerpt": "See `tests/TEST_AUDIT.md` \u2192 *Consolidation Block 1 \u2014 Canonical ownership map & overlap hotspots* for **canonical owner** themes and **smoke overlap** guidance. **Next consolidation order (Block C1):** emit-path **orchest"
           },
           {
+            "source": "docs/ownership_cleanup_delta.md",
+            "claimed_owner": "tests/test_final_emission_gate.py",
+            "owner_type": "test",
+            "strength": "strong",
+            "excerpt": "- `docs/architecture_ownership_ledger.md`, `docs/narrative_integrity_architecture.md`, and the refreshed audit artifacts consistently describe `game/final_emission_gate.py` as the runtime orchestration owner, `tests/test"
+          },
+          {
+            "source": "docs/ownership_cleanup_delta.md",
+            "claimed_owner": "tests/test_final_emission_gate.py",
+            "owner_type": "test",
+            "strength": "strong",
+            "excerpt": "- Direct `_apply_interaction_continuity_emission_step(...)` and `_attach_interaction_continuity_validation(...)` assertions were re-centered into `tests/test_final_emission_gate.py`, which now explicitly owns bridge meta"
+          },
+          {
             "source": "tests/TEST_AUDIT.md",
             "claimed_owner": "tests/test_lead_lifecycle_block3_transcript_regression.py",
             "owner_type": "test",
@@ -11594,20 +11612,6 @@
             "owner_type": "test",
             "strength": "strong",
             "excerpt": "4. **Next (tests):** `test_prompt_and_guard.py`, `test_output_sanitizer.py` (prompt/sanitizer batch; **canonical owner** per layer, **smoke overlap** only)."
-          },
-          {
-            "source": "tests/TEST_CONSOLIDATION_PLAN.md",
-            "claimed_owner": "tests/test_prompt_and_guard.py",
-            "owner_type": "test",
-            "strength": "strong",
-            "excerpt": "2. **Validator / analyst tone in player-facing text.** `enforce_no_validator_voice` + `_assert_bounded_uncertainty` in `test_prompt_and_guard.py` overlaps sanitizer tests that strip **role prefixes** and **validator/rout"
-          },
-          {
-            "source": "tests/TEST_CONSOLIDATION_PLAN.md",
-            "claimed_owner": "tests/test_prompt_and_guard.py",
-            "owner_type": "test",
-            "strength": "strong",
-            "excerpt": "3. **Prompt / sanitizer cluster** \u2014 `test_prompt_and_guard.py`, `test_output_sanitizer.py`, symptom-based split (messages-to-model vs post-GM output); reduce duplicate phrase locks in favor of one **canonical owner** per"
           }
         ],
         "practical_test_owner": "unknown",
@@ -11623,7 +11627,7 @@
         "evidence": [
           "No related test file accumulated enough concern-specific affinity.",
           "Inventory docs now describe the governance map more coherently, but practical test affinity remains weak because this concern is docs-led rather than runtime-owned.",
-          "docs test claims: `tests/TEST_AUDIT.md`, `tests/TEST_CONSOLIDATION_PLAN.md`, `tests/test_lead_lifecycle_block3_transcript_regression.py`"
+          "docs test claims: `tests/TEST_AUDIT.md`, `tests/TEST_CONSOLIDATION_PLAN.md`, `tests/test_final_emission_gate.py`"
         ]
       }
     }
@@ -11657,7 +11661,7 @@
       },
       {
         "path": "game/final_emission_gate.py",
-        "fan_in": 38,
+        "fan_in": 37,
         "fan_out": 25
       },
       {
@@ -11820,12 +11824,12 @@
     "top_coupling_hotspots": [
       {
         "path": "game/final_emission_gate.py",
-        "fan_in": 38,
+        "fan_in": 37,
         "fan_out": 25,
         "private_helper_count": 232,
         "concern_keyword_density": 0.237,
         "reasons": [
-          "fan-in 38",
+          "fan-in 37",
           "fan-out 25",
           "private helpers 232",
           "concern density 0.237"
@@ -11859,12 +11863,12 @@
       },
       {
         "path": "game/final_emission_repairs.py",
-        "fan_in": 8,
+        "fan_in": 7,
         "fan_out": 7,
         "private_helper_count": 85,
         "concern_keyword_density": 0.2922,
         "reasons": [
-          "fan-in 8",
+          "fan-in 7",
           "fan-out 7",
           "private helpers 85",
           "concern density 0.2922"
@@ -12020,416 +12024,25 @@
     "broken_doc_reference_count": 0,
     "test_category_counts": {
       "transcript / scenario lock": 251,
-      "regression / bug class": 107,
+      "regression / bug class": 106,
       "smoke / overlap": 5,
-      "integration / layer interaction": 1449,
-      "unit / pure-rule": 474,
+      "integration / layer interaction": 1452,
+      "unit / pure-rule": 472,
       "unclear": 6
     },
     "test_file_category_counts": {
       "transcript / scenario lock": 14,
       "regression / bug class": 9,
       "smoke / overlap": 1,
-      "integration / layer interaction": 111,
-      "unit / pure-rule": 38,
+      "integration / layer interaction": 112,
+      "unit / pure-rule": 37,
       "unclear": 13
     },
     "test_alignment_overview": {
-      "aligned": 2,
-      "partial": 6
+      "aligned": 4,
+      "partial": 4
     },
     "top_test_runtime_doc_mismatches": [
-      {
-        "concern_name": "final emission gate orchestration",
-        "runtime_owner": "game/final_emission_gate.py",
-        "declared_runtime_owner": "module docstring: Canonical orchestration owner for final player-facing emission.",
-        "doc_canonical_owners": [
-          {
-            "source": "docs/architecture_audit_framework.md",
-            "claimed_owner": "game/final_emission_gate.py",
-            "owner_type": "runtime",
-            "strength": "strong",
-            "excerpt": "- Repo example: `game/final_emission_gate.py` is explicitly documented as the orchestration owner, while `game/final_emission_validators.py` and `game/final_emission_repairs.py` are split into pure validation and determi"
-          },
-          {
-            "source": "docs/architecture_ownership_ledger.md",
-            "claimed_owner": "game/final_emission_gate.py",
-            "owner_type": "runtime",
-            "strength": "strong",
-            "excerpt": "- Canonical owner module: `game/final_emission_gate.py`"
-          },
-          {
-            "source": "docs/narrative_integrity_architecture.md",
-            "claimed_owner": "game/final_emission_gate.py",
-            "owner_type": "runtime",
-            "strength": "strong",
-            "excerpt": "- **`game/final_emission_gate.py` remains the `apply_final_emission_gate` orchestration owner** \u2014 helpers may be split out when they are clearly **pure** (validators), **deterministic** repairs, shared text utilities, or"
-          },
-          {
-            "source": "docs/ownership_cleanup_delta.md",
-            "claimed_owner": "game/final_emission_gate.py",
-            "owner_type": "runtime",
-            "strength": "strong",
-            "excerpt": "- Current apparent owner shape: `game/final_emission_gate.py` is again the visible orchestration owner; `game/final_emission_meta.py` reads as a subordinate metadata-only support layer."
-          },
-          {
-            "source": "docs/ownership_cleanup_delta.md",
-            "claimed_owner": "game/final_emission_gate.py",
-            "owner_type": "runtime",
-            "strength": "strong",
-            "excerpt": "- Practical orchestration owner for the wider final-emission subsystem remains `game/final_emission_gate.py`"
-          },
-          {
-            "source": "docs/architecture_ownership_ledger.md",
-            "claimed_owner": "game/final_emission_meta.py",
-            "owner_type": "runtime",
-            "strength": "strong",
-            "excerpt": "- Forbidden owner interpretations: `game/final_emission_meta.py` is not the orchestration owner; `game/final_emission_repairs.py` is not the top-level layer-order authority."
-          },
-          {
-            "source": "docs/architecture_ownership_ledger.md",
-            "claimed_owner": "game/final_emission_meta.py",
-            "owner_type": "runtime",
-            "strength": "strong",
-            "excerpt": "- Canonical owner module: `game/final_emission_meta.py`"
-          },
-          {
-            "source": "docs/ownership_cleanup_delta.md",
-            "claimed_owner": "game/final_emission_meta.py",
-            "owner_type": "runtime",
-            "strength": "strong",
-            "excerpt": "- Current apparent owner shape: `game/final_emission_gate.py` is again the visible orchestration owner; `game/final_emission_meta.py` reads as a subordinate metadata-only support layer."
-          },
-          {
-            "source": "docs/architecture_ownership_ledger.md",
-            "claimed_owner": "game/social_exchange_emission.py",
-            "owner_type": "runtime",
-            "strength": "strong",
-            "excerpt": "- Canonical owner module: `game/social_exchange_emission.py`"
-          },
-          {
-            "source": "docs/architecture_audit_readme.md",
-            "claimed_owner": "game/final_emission_gate.py",
-            "owner_type": "runtime",
-            "strength": "soft",
-            "excerpt": "- Canonical runtime owner: `game/final_emission_gate.py`."
-          },
-          {
-            "source": "docs/architecture_ownership_ledger.md",
-            "claimed_owner": "game/final_emission_gate.py",
-            "owner_type": "runtime",
-            "strength": "soft",
-            "excerpt": "- Non-owner supporting modules: `game/final_emission_repairs.py`, `game/final_emission_gate.py`, `game/prompt_context.py`"
-          },
-          {
-            "source": "docs/architecture_ownership_ledger.md",
-            "claimed_owner": "game/final_emission_gate.py",
-            "owner_type": "runtime",
-            "strength": "soft",
-            "excerpt": "- Forbidden owner interpretations: `game/final_emission_repairs.py` is not the contract authority; `game/final_emission_gate.py` is not the place to redefine contract rules; `game/prompt_context.py` is not the canonical "
-          }
-        ],
-        "practical_test_owner": "mixed: tests/test_final_emission_gate.py, tests/test_interaction_continuity_speaker_bridge.py, tests/test_interaction_continuity_validation.py",
-        "primary_test_homes": [
-          {
-            "path": "tests/test_final_emission_gate.py",
-            "category": "integration / layer interaction",
-            "score": 12.0,
-            "raw_score": 12,
-            "direct_runtime_match": true,
-            "evidence": [
-              "direct import `game/final_emission_gate.py`",
-              "subsystem token overlap: emission, final, gate"
-            ]
-          },
-          {
-            "path": "tests/test_interaction_continuity_speaker_bridge.py",
-            "category": "unit / pure-rule",
-            "score": 9.2,
-            "raw_score": 8,
-            "direct_runtime_match": true,
-            "evidence": [
-              "direct import `game/final_emission_gate.py`"
-            ]
-          },
-          {
-            "path": "tests/test_interaction_continuity_validation.py",
-            "category": "unit / pure-rule",
-            "score": 9.2,
-            "raw_score": 8,
-            "direct_runtime_match": true,
-            "evidence": [
-              "direct import `game/final_emission_gate.py`"
-            ]
-          },
-          {
-            "path": "tests/test_response_delta_requirement.py",
-            "category": "unit / pure-rule",
-            "score": 9.2,
-            "raw_score": 8,
-            "direct_runtime_match": true,
-            "evidence": [
-              "direct import `game/final_emission_gate.py`"
-            ]
-          }
-        ],
-        "secondary_test_homes": [
-          {
-            "path": "tests/test_answer_completeness_rules.py",
-            "category": "integration / layer interaction",
-            "score": 8.0,
-            "raw_score": 8,
-            "direct_runtime_match": true,
-            "evidence": [
-              "direct import `game/final_emission_gate.py`"
-            ]
-          },
-          {
-            "path": "tests/test_diegetic_fallback_block4.py",
-            "category": "integration / layer interaction",
-            "score": 8.0,
-            "raw_score": 8,
-            "direct_runtime_match": true,
-            "evidence": [
-              "direct import `game/final_emission_gate.py`"
-            ]
-          },
-          {
-            "path": "tests/test_fallback_overwrite_containment.py",
-            "category": "integration / layer interaction",
-            "score": 8.0,
-            "raw_score": 8,
-            "direct_runtime_match": true,
-            "evidence": [
-              "direct import `game/final_emission_gate.py`"
-            ]
-          },
-          {
-            "path": "tests/test_final_emission_scene_integrity.py",
-            "category": "integration / layer interaction",
-            "score": 8.0,
-            "raw_score": 8,
-            "direct_runtime_match": true,
-            "evidence": [
-              "direct import `game/final_emission_gate.py`",
-              "downstream gate-consumer suite around a layer-specific concern",
-              "subsystem token overlap: emission, final"
-            ]
-          },
-          {
-            "path": "tests/test_final_emission_visibility.py",
-            "category": "integration / layer interaction",
-            "score": 8.0,
-            "raw_score": 8,
-            "direct_runtime_match": true,
-            "evidence": [
-              "direct import `game/final_emission_gate.py`",
-              "downstream gate-consumer suite around a layer-specific concern",
-              "subsystem token overlap: emission, final"
-            ]
-          },
-          {
-            "path": "tests/test_lead_npc_payoff_and_fallback.py",
-            "category": "integration / layer interaction",
-            "score": 8.0,
-            "raw_score": 8,
-            "direct_runtime_match": true,
-            "evidence": [
-              "direct import `game/final_emission_gate.py`"
-            ]
-          }
-        ],
-        "direct_runtime_owner_test_homes": [
-          "tests/test_final_emission_gate.py",
-          "tests/test_interaction_continuity_speaker_bridge.py",
-          "tests/test_interaction_continuity_validation.py",
-          "tests/test_response_delta_requirement.py"
-        ],
-        "alignment_status": "partial",
-        "mismatch_type": "ownership_spread_wide",
-        "severity": "high",
-        "healthy_overlap": false,
-        "coverage_spread": 10,
-        "category_counts": {
-          "integration / layer interaction": 26,
-          "unit / pure-rule": 6,
-          "transcript / scenario lock": 3,
-          "regression / bug class": 2
-        },
-        "evidence": [
-          "Coverage is spread across many homes rather than anchored in one direct owner suite.",
-          "primary home `tests/test_final_emission_gate.py` (integration / layer interaction; score 12.0)",
-          "direct import `game/final_emission_gate.py`",
-          "subsystem token overlap: emission, final, gate",
-          "primary home `tests/test_interaction_continuity_speaker_bridge.py` (unit / pure-rule; score 9.2)",
-          "primary home `tests/test_interaction_continuity_validation.py` (unit / pure-rule; score 9.2)",
-          "docs runtime claims: `game/final_emission_gate.py`, `game/final_emission_meta.py`, `game/social_exchange_emission.py`"
-        ]
-      },
-      {
-        "concern_name": "stage diff telemetry",
-        "runtime_owner": "game/stage_diff_telemetry.py",
-        "declared_runtime_owner": "module docstring: Canonical telemetry-only owner for bounded stage-diff observability.",
-        "doc_canonical_owners": [
-          {
-            "source": "docs/architecture_ownership_ledger.md",
-            "claimed_owner": "game/stage_diff_telemetry.py",
-            "owner_type": "runtime",
-            "strength": "strong",
-            "excerpt": "- Canonical owner module: `game/stage_diff_telemetry.py`"
-          },
-          {
-            "source": "docs/architecture_ownership_ledger.md",
-            "claimed_owner": "game/turn_packet.py",
-            "owner_type": "runtime",
-            "strength": "strong",
-            "excerpt": "- Canonical owner module: `game/turn_packet.py`"
-          },
-          {
-            "source": "docs/architecture_ownership_ledger.md",
-            "claimed_owner": "game/stage_diff_telemetry.py",
-            "owner_type": "runtime",
-            "strength": "soft",
-            "excerpt": "- Non-owner supporting modules: `game/stage_diff_telemetry.py`, `game/final_emission_gate.py`"
-          },
-          {
-            "source": "docs/architecture_ownership_ledger.md",
-            "claimed_owner": "game/stage_diff_telemetry.py",
-            "owner_type": "runtime",
-            "strength": "soft",
-            "excerpt": "- Forbidden owner interpretations: `game/stage_diff_telemetry.py` is not the packet-contract owner; `game/final_emission_gate.py` is not a second packet schema home."
-          },
-          {
-            "source": "docs/ownership_cleanup_delta.md",
-            "claimed_owner": "game/stage_diff_telemetry.py",
-            "owner_type": "runtime",
-            "strength": "soft",
-            "excerpt": "- Declared owner: `game/turn_packet.py` for the packet contract boundary, `game/stage_diff_telemetry.py` for telemetry-only observability"
-          },
-          {
-            "source": "docs/ownership_cleanup_delta.md",
-            "claimed_owner": "game/stage_diff_telemetry.py",
-            "owner_type": "runtime",
-            "strength": "soft",
-            "excerpt": "- Current apparent owner shape: `game/stage_diff_telemetry.py` now reads as a telemetry consumer, while the packet boundary remains in `game/turn_packet.py`. The audit classifies the stage-diff seam as localized under-co"
-          },
-          {
-            "source": "docs/architecture_ownership_ledger.md",
-            "claimed_owner": "game/turn_packet.py",
-            "owner_type": "runtime",
-            "strength": "soft",
-            "excerpt": "- Non-owner supporting modules: `game/turn_packet.py`, `game/final_emission_gate.py`"
-          },
-          {
-            "source": "docs/architecture_ownership_ledger.md",
-            "claimed_owner": "game/turn_packet.py",
-            "owner_type": "runtime",
-            "strength": "soft",
-            "excerpt": "- Forbidden owner interpretations: `game/turn_packet.py` is not the telemetry owner; `game/final_emission_gate.py` is not a parallel telemetry schema authority."
-          },
-          {
-            "source": "docs/ownership_cleanup_delta.md",
-            "claimed_owner": "game/turn_packet.py",
-            "owner_type": "runtime",
-            "strength": "soft",
-            "excerpt": "- Declared owner: `game/turn_packet.py` for the packet contract boundary, `game/stage_diff_telemetry.py` for telemetry-only observability"
-          },
-          {
-            "source": "docs/ownership_cleanup_delta.md",
-            "claimed_owner": "game/turn_packet.py",
-            "owner_type": "runtime",
-            "strength": "soft",
-            "excerpt": "- Current apparent owner shape: `game/stage_diff_telemetry.py` now reads as a telemetry consumer, while the packet boundary remains in `game/turn_packet.py`. The audit classifies the stage-diff seam as localized under-co"
-          },
-          {
-            "source": "docs/architecture_ownership_ledger.md",
-            "claimed_owner": "tests/TEST_AUDIT.md",
-            "owner_type": "test",
-            "strength": "strong",
-            "excerpt": "- Canonical owner module: `tests/TEST_AUDIT.md`"
-          },
-          {
-            "source": "tests/README_TESTS.md",
-            "claimed_owner": "tests/TEST_AUDIT.md",
-            "owner_type": "test",
-            "strength": "strong",
-            "excerpt": "See `tests/TEST_AUDIT.md` \u2192 *Consolidation Block 1 \u2014 Canonical ownership map & overlap hotspots* for **canonical owner** themes and **smoke overlap** guidance. **Next consolidation order (Block C1):** emit-path **orchest"
-          }
-        ],
-        "practical_test_owner": "mixed: tests/test_turn_packet_stage_diff_integration.py, tests/test_stage_diff_telemetry.py, tests/test_narrative_authenticity_aer4.py",
-        "primary_test_homes": [
-          {
-            "path": "tests/test_turn_packet_stage_diff_integration.py",
-            "category": "integration / layer interaction",
-            "score": 12.0,
-            "raw_score": 12,
-            "direct_runtime_match": true,
-            "evidence": [
-              "direct import `game/stage_diff_telemetry.py`",
-              "subsystem token overlap: diff, stage"
-            ]
-          },
-          {
-            "path": "tests/test_stage_diff_telemetry.py",
-            "category": "integration / layer interaction",
-            "score": 10.0,
-            "raw_score": 10,
-            "direct_runtime_match": true,
-            "evidence": [
-              "filename mirrors `stage_diff_telemetry.py`",
-              "subsystem token overlap: diff, stage, telemetry"
-            ]
-          },
-          {
-            "path": "tests/test_narrative_authenticity_aer4.py",
-            "category": "unit / pure-rule",
-            "score": 9.2,
-            "raw_score": 8,
-            "direct_runtime_match": true,
-            "evidence": [
-              "direct import `game/stage_diff_telemetry.py`"
-            ]
-          }
-        ],
-        "secondary_test_homes": [
-          {
-            "path": "tests/test_architecture_audit_tool.py",
-            "category": "integration / layer interaction",
-            "score": 3.0,
-            "raw_score": 3,
-            "direct_runtime_match": false,
-            "evidence": [
-              "text mentions `game/stage_diff_telemetry.py`"
-            ]
-          }
-        ],
-        "direct_runtime_owner_test_homes": [
-          "tests/test_turn_packet_stage_diff_integration.py",
-          "tests/test_stage_diff_telemetry.py",
-          "tests/test_narrative_authenticity_aer4.py"
-        ],
-        "alignment_status": "partial",
-        "mismatch_type": "docs_claim_owner_tests_target_other_home",
-        "severity": "high",
-        "healthy_overlap": false,
-        "coverage_spread": 4,
-        "category_counts": {
-          "integration / layer interaction": 3,
-          "unit / pure-rule": 1
-        },
-        "evidence": [
-          "Docs name a canonical test owner, but practical coverage concentrates elsewhere.",
-          "primary home `tests/test_turn_packet_stage_diff_integration.py` (integration / layer interaction; score 12.0)",
-          "direct import `game/stage_diff_telemetry.py`",
-          "subsystem token overlap: diff, stage",
-          "primary home `tests/test_stage_diff_telemetry.py` (integration / layer interaction; score 10.0)",
-          "filename mirrors `stage_diff_telemetry.py`",
-          "subsystem token overlap: diff, stage, telemetry",
-          "primary home `tests/test_narrative_authenticity_aer4.py` (unit / pure-rule; score 9.2)",
-          "docs runtime claims: `game/stage_diff_telemetry.py`, `game/turn_packet.py`",
-          "docs test claims: `tests/TEST_AUDIT.md`"
-        ]
-      },
       {
         "concern_name": "test ownership / inventory docs",
         "runtime_owner": "unknown",
@@ -12471,6 +12084,20 @@
             "excerpt": "See `tests/TEST_AUDIT.md` \u2192 *Consolidation Block 1 \u2014 Canonical ownership map & overlap hotspots* for **canonical owner** themes and **smoke overlap** guidance. **Next consolidation order (Block C1):** emit-path **orchest"
           },
           {
+            "source": "docs/ownership_cleanup_delta.md",
+            "claimed_owner": "tests/test_final_emission_gate.py",
+            "owner_type": "test",
+            "strength": "strong",
+            "excerpt": "- `docs/architecture_ownership_ledger.md`, `docs/narrative_integrity_architecture.md`, and the refreshed audit artifacts consistently describe `game/final_emission_gate.py` as the runtime orchestration owner, `tests/test"
+          },
+          {
+            "source": "docs/ownership_cleanup_delta.md",
+            "claimed_owner": "tests/test_final_emission_gate.py",
+            "owner_type": "test",
+            "strength": "strong",
+            "excerpt": "- Direct `_apply_interaction_continuity_emission_step(...)` and `_attach_interaction_continuity_validation(...)` assertions were re-centered into `tests/test_final_emission_gate.py`, which now explicitly owns bridge meta"
+          },
+          {
             "source": "tests/TEST_AUDIT.md",
             "claimed_owner": "tests/test_lead_lifecycle_block3_transcript_regression.py",
             "owner_type": "test",
@@ -12504,20 +12131,6 @@
             "owner_type": "test",
             "strength": "strong",
             "excerpt": "4. **Next (tests):** `test_prompt_and_guard.py`, `test_output_sanitizer.py` (prompt/sanitizer batch; **canonical owner** per layer, **smoke overlap** only)."
-          },
-          {
-            "source": "tests/TEST_CONSOLIDATION_PLAN.md",
-            "claimed_owner": "tests/test_prompt_and_guard.py",
-            "owner_type": "test",
-            "strength": "strong",
-            "excerpt": "2. **Validator / analyst tone in player-facing text.** `enforce_no_validator_voice` + `_assert_bounded_uncertainty` in `test_prompt_and_guard.py` overlaps sanitizer tests that strip **role prefixes** and **validator/rout"
-          },
-          {
-            "source": "tests/TEST_CONSOLIDATION_PLAN.md",
-            "claimed_owner": "tests/test_prompt_and_guard.py",
-            "owner_type": "test",
-            "strength": "strong",
-            "excerpt": "3. **Prompt / sanitizer cluster** \u2014 `test_prompt_and_guard.py`, `test_output_sanitizer.py`, symptom-based split (messages-to-model vs post-GM output); reduce duplicate phrase locks in favor of one **canonical owner** per"
           }
         ],
         "practical_test_owner": "unknown",
@@ -12533,7 +12146,7 @@
         "evidence": [
           "No related test file accumulated enough concern-specific affinity.",
           "Inventory docs now describe the governance map more coherently, but practical test affinity remains weak because this concern is docs-led rather than runtime-owned.",
-          "docs test claims: `tests/TEST_AUDIT.md`, `tests/TEST_CONSOLIDATION_PLAN.md`, `tests/test_lead_lifecycle_block3_transcript_regression.py`"
+          "docs test claims: `tests/TEST_AUDIT.md`, `tests/TEST_CONSOLIDATION_PLAN.md`, `tests/test_final_emission_gate.py`"
         ]
       },
       {
@@ -12626,7 +12239,7 @@
             "excerpt": "See `tests/TEST_AUDIT.md` \u2192 *Consolidation Block 1 \u2014 Canonical ownership map & overlap hotspots* for **canonical owner** themes and **smoke overlap** guidance. **Next consolidation order (Block C1):** emit-path **orchest"
           }
         ],
-        "practical_test_owner": "mixed: tests/test_final_emission_repairs.py, tests/test_fallback_behavior_repairs.py",
+        "practical_test_owner": "tests/test_final_emission_repairs.py",
         "primary_test_homes": [
           {
             "path": "tests/test_final_emission_repairs.py",
@@ -12637,17 +12250,6 @@
             "evidence": [
               "direct import `game/final_emission_repairs.py`",
               "subsystem token overlap: emission, final, repairs"
-            ]
-          },
-          {
-            "path": "tests/test_fallback_behavior_repairs.py",
-            "category": "unit / pure-rule",
-            "score": 11.5,
-            "raw_score": 10,
-            "direct_runtime_match": true,
-            "evidence": [
-              "direct import `game/final_emission_repairs.py`",
-              "subsystem token overlap: repairs"
             ]
           }
         ],
@@ -12703,36 +12305,34 @@
             ]
           },
           {
-            "path": "tests/test_architecture_audit_tool.py",
+            "path": "tests/test_fallback_behavior_repairs.py",
             "category": "integration / layer interaction",
-            "score": 3.0,
-            "raw_score": 3,
+            "score": 4.0,
+            "raw_score": 4,
             "direct_runtime_match": false,
             "evidence": [
-              "text mentions `game/final_emission_repairs.py`"
+              "filename overlap with `final_emission_repairs.py`",
+              "subsystem token overlap: repairs"
             ]
           }
         ],
         "direct_runtime_owner_test_homes": [
-          "tests/test_final_emission_repairs.py",
-          "tests/test_fallback_behavior_repairs.py"
+          "tests/test_final_emission_repairs.py"
         ],
         "alignment_status": "partial",
         "mismatch_type": "docs_claim_owner_tests_target_other_home",
         "severity": "medium",
         "healthy_overlap": false,
-        "coverage_spread": 8,
+        "coverage_spread": 7,
         "category_counts": {
-          "integration / layer interaction": 4,
-          "unit / pure-rule": 4
+          "integration / layer interaction": 5,
+          "unit / pure-rule": 3
         },
         "evidence": [
           "Docs name a canonical test owner, but practical coverage concentrates elsewhere.",
           "primary home `tests/test_final_emission_repairs.py` (unit / pure-rule; score 13.8)",
           "direct import `game/final_emission_repairs.py`",
           "subsystem token overlap: emission, final, repairs",
-          "primary home `tests/test_fallback_behavior_repairs.py` (unit / pure-rule; score 11.5)",
-          "subsystem token overlap: repairs",
           "docs runtime claims: `game/final_emission_repairs.py`",
           "docs test claims: `tests/TEST_AUDIT.md`, `tests/TEST_CONSOLIDATION_PLAN.md`"
         ]
@@ -12769,6 +12369,20 @@
             "owner_type": "test",
             "strength": "strong",
             "excerpt": "| **Prompt / sanitizer ownership boundaries** | Keep **pre-generation** contracts in prompt/guard paths vs **post-GM** string hygiene in sanitizer paths; document **smoke overlap** vs **canonical owner** for each invaria"
+          },
+          {
+            "source": "docs/ownership_cleanup_delta.md",
+            "claimed_owner": "tests/test_final_emission_gate.py",
+            "owner_type": "test",
+            "strength": "strong",
+            "excerpt": "- `docs/architecture_ownership_ledger.md`, `docs/narrative_integrity_architecture.md`, and the refreshed audit artifacts consistently describe `game/final_emission_gate.py` as the runtime orchestration owner, `tests/test"
+          },
+          {
+            "source": "docs/ownership_cleanup_delta.md",
+            "claimed_owner": "tests/test_final_emission_gate.py",
+            "owner_type": "test",
+            "strength": "strong",
+            "excerpt": "- Direct `_apply_interaction_continuity_emission_step(...)` and `_attach_interaction_continuity_validation(...)` assertions were re-centered into `tests/test_final_emission_gate.py`, which now explicitly owns bridge meta"
           },
           {
             "source": "docs/narrative_integrity_architecture.md",
@@ -12811,24 +12425,21 @@
             "owner_type": "test",
             "strength": "soft",
             "excerpt": "- `docs/architecture_ownership_ledger.md`, `docs/narrative_integrity_architecture.md`, `docs/architecture_audit_readme.md`, and `tests/TEST_AUDIT.md` now tell the same owner story."
-          },
-          {
-            "source": "docs/ownership_cleanup_delta.md",
-            "claimed_owner": "tests/TEST_AUDIT.md",
-            "owner_type": "test",
-            "strength": "soft",
-            "excerpt": "- `tests/TEST_AUDIT.md` now reinforces the same owner story instead of treating retry-terminal or quality coverage as equal semantic owners"
-          },
-          {
-            "source": "docs/ownership_cleanup_delta.md",
-            "claimed_owner": "tests/TEST_AUDIT.md",
-            "owner_type": "test",
-            "strength": "soft",
-            "excerpt": "- `docs/architecture_ownership_ledger.md`, `docs/architecture_audit_readme.md`, and `tests/TEST_AUDIT.md` consistently declare `game/prompt_context.py` as runtime owner and `tests/test_prompt_context.py` as the practical"
           }
         ],
-        "practical_test_owner": "tests/test_final_emission_validators.py",
+        "practical_test_owner": "mixed: tests/test_final_emission_repairs.py, tests/test_final_emission_validators.py",
         "primary_test_homes": [
+          {
+            "path": "tests/test_final_emission_repairs.py",
+            "category": "unit / pure-rule",
+            "score": 13.8,
+            "raw_score": 12,
+            "direct_runtime_match": true,
+            "evidence": [
+              "direct import `game/final_emission_validators.py`",
+              "subsystem token overlap: emission, final"
+            ]
+          },
           {
             "path": "tests/test_final_emission_validators.py",
             "category": "unit / pure-rule",
@@ -12842,16 +12453,6 @@
           }
         ],
         "secondary_test_homes": [
-          {
-            "path": "tests/test_fallback_behavior_repairs.py",
-            "category": "unit / pure-rule",
-            "score": 9.2,
-            "raw_score": 8,
-            "direct_runtime_match": true,
-            "evidence": [
-              "direct import `game/final_emission_validators.py`"
-            ]
-          },
           {
             "path": "tests/test_fallback_behavior_validator.py",
             "category": "unit / pure-rule",
@@ -12906,6 +12507,7 @@
           }
         ],
         "direct_runtime_owner_test_homes": [
+          "tests/test_final_emission_repairs.py",
           "tests/test_final_emission_validators.py"
         ],
         "alignment_status": "partial",
@@ -12919,11 +12521,13 @@
         },
         "evidence": [
           "Docs name a canonical test owner, but practical coverage concentrates elsewhere.",
-          "primary home `tests/test_final_emission_validators.py` (unit / pure-rule; score 13.8)",
+          "primary home `tests/test_final_emission_repairs.py` (unit / pure-rule; score 13.8)",
           "direct import `game/final_emission_validators.py`",
+          "subsystem token overlap: emission, final",
+          "primary home `tests/test_final_emission_validators.py` (unit / pure-rule; score 13.8)",
           "subsystem token overlap: emission, final, validators",
           "docs runtime claims: `game/final_emission_validators.py`",
-          "docs test claims: `tests/TEST_AUDIT.md`, `tests/TEST_CONSOLIDATION_PLAN.md`, `tests/test_prompt_context.py`"
+          "docs test claims: `tests/TEST_AUDIT.md`, `tests/TEST_CONSOLIDATION_PLAN.md`, `tests/test_final_emission_gate.py`"
         ]
       },
       {
@@ -12968,10 +12572,31 @@
           },
           {
             "source": "docs/narrative_integrity_architecture.md",
+            "claimed_owner": "tests/test_narrative_authenticity_aer4.py",
+            "owner_type": "test",
+            "strength": "soft",
+            "excerpt": "| Stage-diff telemetry / observability | `test_stage_diff_telemetry.py` (practical primary direct-owner suite for direct `game.stage_diff_telemetry` helper/accessor semantics, snapshot/transition packaging, bounded telem"
+          },
+          {
+            "source": "tests/TEST_CONSOLIDATION_PLAN.md",
+            "claimed_owner": "tests/test_narrative_authenticity_aer4.py",
+            "owner_type": "test",
+            "strength": "soft",
+            "excerpt": "**TD2-R applied (2026-04-15 \u2014 stage-diff telemetry governance alignment):** `game/stage_diff_telemetry.py` remains the canonical runtime owner for telemetry semantics, while `game/turn_packet.py` remains the packet-bound"
+          },
+          {
+            "source": "docs/narrative_integrity_architecture.md",
             "claimed_owner": "tests/test_stage_diff_telemetry.py",
             "owner_type": "test",
             "strength": "soft",
-            "excerpt": "| Final emission gate ordering / contracts | `test_final_emission_gate.py` (practical primary direct-owner suite for direct orchestration-order and final-route semantics); downstream suites such as `test_social_exchange_"
+            "excerpt": "| Stage-diff telemetry / observability | `test_stage_diff_telemetry.py` (practical primary direct-owner suite for direct `game.stage_diff_telemetry` helper/accessor semantics, snapshot/transition packaging, bounded telem"
+          },
+          {
+            "source": "docs/narrative_integrity_architecture.md",
+            "claimed_owner": "tests/test_stage_diff_telemetry.py",
+            "owner_type": "test",
+            "strength": "soft",
+            "excerpt": "| Final emission gate ordering / contracts | `test_final_emission_gate.py` (practical primary direct-owner suite for direct orchestration-order, final-route, and continuity-adjacent gate-step semantics); downstream suite"
           },
           {
             "source": "tests/TEST_CONSOLIDATION_PLAN.md",
@@ -12979,6 +12604,13 @@
             "owner_type": "test",
             "strength": "soft",
             "excerpt": "**FG2-R applied (2026-04-15 \u2014 final-emission gate governance alignment):** `game/final_emission_gate.py` remains the canonical runtime owner and `tests/test_final_emission_gate.py` remains the practical primary direct-ow"
+          },
+          {
+            "source": "tests/TEST_CONSOLIDATION_PLAN.md",
+            "claimed_owner": "tests/test_stage_diff_telemetry.py",
+            "owner_type": "test",
+            "strength": "soft",
+            "excerpt": "**TD2-R applied (2026-04-15 \u2014 stage-diff telemetry governance alignment):** `game/stage_diff_telemetry.py` remains the canonical runtime owner for telemetry semantics, while `game/turn_packet.py` remains the packet-bound"
           }
         ],
         "practical_test_owner": "mixed: tests/test_narrative_authenticity.py, tests/test_narrative_authenticity_aer4.py, tests/test_narrative_authenticity_aer5.py",
@@ -13051,7 +12683,7 @@
           "subsystem token overlap: authenticity, narrative",
           "primary home `tests/test_narrative_authenticity_aer4.py` (unit / pure-rule; score 13.8)",
           "primary home `tests/test_narrative_authenticity_aer5.py` (integration / layer interaction; score 12.0)",
-          "docs test claims: `tests/TEST_AUDIT.md`, `tests/TEST_CONSOLIDATION_PLAN.md`, `tests/test_stage_diff_telemetry.py`"
+          "docs test claims: `tests/TEST_AUDIT.md`, `tests/TEST_CONSOLIDATION_PLAN.md`, `tests/test_narrative_authenticity_aer4.py`"
         ]
       }
     ],
@@ -13059,29 +12691,25 @@
       {
         "concern_name": "final emission gate orchestration",
         "runtime_owner": "game/final_emission_gate.py",
-        "coverage_spread": 10,
+        "coverage_spread": 7,
         "primary_test_homes": [
-          "tests/test_final_emission_gate.py",
-          "tests/test_interaction_continuity_speaker_bridge.py",
-          "tests/test_interaction_continuity_validation.py",
-          "tests/test_response_delta_requirement.py"
+          "tests/test_final_emission_gate.py"
         ],
         "secondary_test_homes": [
           "tests/test_answer_completeness_rules.py",
           "tests/test_diegetic_fallback_block4.py",
+          "tests/test_fallback_behavior_repairs.py",
           "tests/test_fallback_overwrite_containment.py",
           "tests/test_final_emission_scene_integrity.py",
-          "tests/test_final_emission_visibility.py",
-          "tests/test_lead_npc_payoff_and_fallback.py"
+          "tests/test_final_emission_visibility.py"
         ]
       },
       {
         "concern_name": "final emission repairs",
         "runtime_owner": "game/final_emission_repairs.py",
-        "coverage_spread": 8,
+        "coverage_spread": 7,
         "primary_test_homes": [
-          "tests/test_final_emission_repairs.py",
-          "tests/test_fallback_behavior_repairs.py"
+          "tests/test_final_emission_repairs.py"
         ],
         "secondary_test_homes": [
           "tests/test_narrative_authenticity.py",
@@ -13089,7 +12717,7 @@
           "tests/test_bounded_partial_quality.py",
           "tests/test_fallback_behavior_gate.py",
           "tests/test_social_fallback_leak_containment.py",
-          "tests/test_architecture_audit_tool.py"
+          "tests/test_fallback_behavior_repairs.py"
         ]
       },
       {
@@ -13097,10 +12725,10 @@
         "runtime_owner": "game/final_emission_validators.py",
         "coverage_spread": 7,
         "primary_test_homes": [
+          "tests/test_final_emission_repairs.py",
           "tests/test_final_emission_validators.py"
         ],
         "secondary_test_homes": [
-          "tests/test_fallback_behavior_repairs.py",
           "tests/test_fallback_behavior_validator.py",
           "tests/test_bounded_partial_quality.py",
           "tests/test_final_emission_gate.py",
@@ -13153,11 +12781,10 @@
       {
         "concern_name": "stage diff telemetry",
         "runtime_owner": "game/stage_diff_telemetry.py",
-        "coverage_spread": 4,
+        "coverage_spread": 3,
         "primary_test_homes": [
-          "tests/test_turn_packet_stage_diff_integration.py",
           "tests/test_stage_diff_telemetry.py",
-          "tests/test_narrative_authenticity_aer4.py"
+          "tests/test_turn_packet_stage_diff_integration.py"
         ],
         "secondary_test_homes": [
           "tests/test_architecture_audit_tool.py"
@@ -13179,7 +12806,7 @@
       "evidence": [
         "No related test file accumulated enough concern-specific affinity.",
         "Inventory docs now describe the governance map more coherently, but practical test affinity remains weak because this concern is docs-led rather than runtime-owned.",
-        "docs test claims: `tests/TEST_AUDIT.md`, `tests/TEST_CONSOLIDATION_PLAN.md`, `tests/test_lead_lifecycle_block3_transcript_regression.py`"
+        "docs test claims: `tests/TEST_AUDIT.md`, `tests/TEST_CONSOLIDATION_PLAN.md`, `tests/test_final_emission_gate.py`"
       ]
     },
     "manual_review_shortlist": [
@@ -13192,7 +12819,7 @@
         "evidence": [
           "No related test file accumulated enough concern-specific affinity.",
           "Inventory docs now describe the governance map more coherently, but practical test affinity remains weak because this concern is docs-led rather than runtime-owned.",
-          "docs test claims: `tests/TEST_AUDIT.md`, `tests/TEST_CONSOLIDATION_PLAN.md`, `tests/test_lead_lifecycle_block3_transcript_regression.py`"
+          "docs test claims: `tests/TEST_AUDIT.md`, `tests/TEST_CONSOLIDATION_PLAN.md`, `tests/test_final_emission_gate.py`"
         ]
       },
       {
@@ -13224,29 +12851,28 @@
       {
         "concern_name": "stage diff telemetry",
         "runtime_owner": "game/stage_diff_telemetry.py",
-        "practical_test_owner": "mixed: tests/test_turn_packet_stage_diff_integration.py, tests/test_stage_diff_telemetry.py, tests/test_narrative_authenticity_aer4.py",
-        "alignment_status": "partial",
-        "severity": "high",
+        "practical_test_owner": "mixed: tests/test_stage_diff_telemetry.py, tests/test_turn_packet_stage_diff_integration.py",
+        "alignment_status": "aligned",
+        "severity": "low",
         "evidence": [
-          "Docs name a canonical test owner, but practical coverage concentrates elsewhere.",
-          "primary home `tests/test_turn_packet_stage_diff_integration.py` (integration / layer interaction; score 12.0)",
-          "direct import `game/stage_diff_telemetry.py`",
-          "subsystem token overlap: diff, stage",
-          "primary home `tests/test_stage_diff_telemetry.py` (integration / layer interaction; score 10.0)"
+          "primary home `tests/test_stage_diff_telemetry.py` (integration / layer interaction; score 10.0)",
+          "filename mirrors `stage_diff_telemetry.py`",
+          "subsystem token overlap: diff, stage, telemetry",
+          "primary home `tests/test_turn_packet_stage_diff_integration.py` (integration / layer interaction; score 8.0)",
+          "filename overlap with `stage_diff_telemetry.py`"
         ]
       },
       {
         "concern_name": "final emission gate orchestration",
         "runtime_owner": "game/final_emission_gate.py",
-        "practical_test_owner": "mixed: tests/test_final_emission_gate.py, tests/test_interaction_continuity_speaker_bridge.py, tests/test_interaction_continuity_validation.py",
-        "alignment_status": "partial",
-        "severity": "high",
+        "practical_test_owner": "tests/test_final_emission_gate.py",
+        "alignment_status": "aligned",
+        "severity": "low",
         "evidence": [
-          "Coverage is spread across many homes rather than anchored in one direct owner suite.",
           "primary home `tests/test_final_emission_gate.py` (integration / layer interaction; score 12.0)",
           "direct import `game/final_emission_gate.py`",
           "subsystem token overlap: emission, final, gate",
-          "primary home `tests/test_interaction_continuity_speaker_bridge.py` (unit / pure-rule; score 9.2)"
+          "docs runtime claims: `game/final_emission_gate.py`, `game/final_emission_meta.py`, `game/social_exchange_emission.py`"
         ]
       }
     ],
@@ -13314,7 +12940,7 @@
         "points": 0,
         "evidence": [
           "7 subsystem(s) include centrality hotspots by existing runtime indicators.",
-          "game/final_emission_gate.py (fan-in 38, fan-out 25)",
+          "game/final_emission_gate.py (fan-in 37, fan-out 25)",
           "game/social_exchange_emission.py (fan-in 27, fan-out 11)"
         ],
         "counts": {
@@ -13325,16 +12951,16 @@
       },
       {
         "dimension": "test alignment",
-        "status": "drifting",
-        "points": 2,
+        "status": "aligned",
+        "points": 3,
         "evidence": [
-          "Alignment states: aligned 2, partial 6, conflict 0, unclear 0.",
-          "final emission gate orchestration -> partial",
-          "stage diff telemetry -> partial"
+          "Alignment states: aligned 4, partial 4, conflict 0, unclear 0.",
+          "test ownership / inventory docs -> partial",
+          "final emission repairs -> partial"
         ],
         "counts": {
-          "aligned": 2,
-          "partial": 6
+          "aligned": 4,
+          "partial": 4
         },
         "confidence_effect": "neutral"
       },
@@ -13388,13 +13014,13 @@
         "hotspot_name": "final emission gate orchestration partial mismatch",
         "source_subsystem": "final emission gate orchestration",
         "classification": "localized under-consolidation",
-        "why": "The owner is still visible, but practical tests and docs still drift around the boundary.",
+        "why": "A dominant gate owner and direct-owner suite are visible; remaining spread reads as honest orchestrator centrality and governed downstream adjacency rather than owner smear.",
         "runtime_owner": "game/final_emission_gate.py",
-        "test_alignment_status": "partial",
-        "severity": "high",
+        "test_alignment_status": "aligned",
+        "severity": "low",
         "evidence": [
-          "Coverage is spread across many homes rather than anchored in one direct owner suite.",
           "primary home `tests/test_final_emission_gate.py` (integration / layer interaction; score 12.0)",
+          "direct import `game/final_emission_gate.py`",
           "symbols remain importable from this package for historical tests (prefer importing from",
           "game/final_emission_gate.py: symbols remain importable from this package for historical tests (prefer importing from"
         ]
@@ -13403,13 +13029,13 @@
         "hotspot_name": "stage diff telemetry partial mismatch",
         "source_subsystem": "stage diff telemetry",
         "classification": "localized under-consolidation",
-        "why": "Telemetry ownership is visible, but practical coverage still leaks into adjacent packet seams.",
+        "why": "A dominant telemetry owner and direct-owner suite are visible; remaining spread reads as honest observability centrality plus packet-boundary adjacency and compatibility residue rather than owner smear.",
         "runtime_owner": "game/stage_diff_telemetry.py",
-        "test_alignment_status": "partial",
-        "severity": "high",
+        "test_alignment_status": "aligned",
+        "severity": "low",
         "evidence": [
-          "Docs name a canonical test owner, but practical coverage concentrates elsewhere.",
-          "primary home `tests/test_turn_packet_stage_diff_integration.py` (integration / layer interaction; score 12.0)",
+          "primary home `tests/test_stage_diff_telemetry.py` (integration / layer interaction; score 10.0)",
+          "filename mirrors `stage_diff_telemetry.py`",
           "module as compatibility residue; do not add prompt-contract semantics there.",
           "game/stage_diff_telemetry.py: ``resolve_gate_turn_packet`` remains here only as a compatibility residue wrapper for older"
         ]
@@ -13448,11 +13074,11 @@
         "classification": "transitional residue",
         "why": "The packet owner remains visible; residual overlap reads like compatibility preservation rather than active co-ownership.",
         "runtime_owner": "game/stage_diff_telemetry.py",
-        "test_alignment_status": "partial",
-        "severity": "high",
+        "test_alignment_status": "aligned",
+        "severity": "low",
         "evidence": [
-          "Docs name a canonical test owner, but practical coverage concentrates elsewhere.",
-          "primary home `tests/test_turn_packet_stage_diff_integration.py` (integration / layer interaction; score 12.0)",
+          "primary home `tests/test_stage_diff_telemetry.py` (integration / layer interaction; score 10.0)",
+          "filename mirrors `stage_diff_telemetry.py`",
           "module as compatibility residue; do not add prompt-contract semantics there.",
           "cross-cutting import surface: game/turn_packet.py (fan-in 7, fan-out 0)"
         ]
@@ -13463,54 +13089,26 @@
         "classification": "transitional residue",
         "why": "The seam now has a visible downstream owner story; remaining spread reads like compatibility residue and gate/retry adjacency.",
         "runtime_owner": "game/final_emission_gate.py",
-        "test_alignment_status": "partial",
-        "severity": "high",
+        "test_alignment_status": "aligned",
+        "severity": "low",
         "evidence": [
-          "Coverage is spread across many homes rather than anchored in one direct owner suite.",
           "primary home `tests/test_final_emission_gate.py` (integration / layer interaction; score 12.0)",
+          "direct import `game/final_emission_gate.py`",
           "\"\"\"Compatibility residue: canonical accessor now lives in ``game.response_policy_contracts``.\"\"\"",
           "game/social_exchange_emission.py: Compatibility residue remains importable from this module where older callers still"
         ]
       }
     ],
     "strongest_evidence_architecture_real": [
+      "`final emission gate orchestration` still resolves to `game/final_emission_gate.py` (high ownership confidence; test alignment `aligned`).",
       "`prompt contracts` still resolves to `game/prompt_context.py` (high ownership confidence; test alignment `aligned`).",
-      "`response policy contracts` still resolves to `game/response_policy_contracts.py` (high ownership confidence; test alignment `aligned`).",
-      "`final emission gate orchestration` still resolves to `game/final_emission_gate.py` (high ownership confidence; test alignment `partial`)."
+      "`response policy contracts` still resolves to `game/response_policy_contracts.py` (high ownership confidence; test alignment `aligned`)."
     ],
     "strongest_evidence_patch_accumulating": [
-      "`final emission gate orchestration` is `partial` with practical tests centered in `mixed: tests/test_final_emission_gate.py, tests/test_interaction_continuity_speaker_bridge.py, tests/test_interaction_continuity_validation.py`; evidence: Coverage is spread across many homes rather than anchored in one direct owner suite.",
-      "`stage diff telemetry` is `partial` with practical tests centered in `mixed: tests/test_turn_packet_stage_diff_integration.py, tests/test_stage_diff_telemetry.py, tests/test_narrative_authenticity_aer4.py`; evidence: Docs name a canonical test owner, but practical coverage concentrates elsewhere."
+      "`test ownership / inventory docs` is `partial` with practical tests centered in `unknown`; evidence: No related test file accumulated enough concern-specific affinity.",
+      "`final emission repairs` is `partial` with practical tests centered in `tests/test_final_emission_repairs.py`; evidence: Docs name a canonical test owner, but practical coverage concentrates elsewhere."
     ],
     "runtime_test_doc_mismatch_review": [
-      {
-        "concern_name": "final emission gate orchestration",
-        "alignment_status": "partial",
-        "severity": "high",
-        "runtime_owner": "game/final_emission_gate.py",
-        "practical_test_owner": "mixed: tests/test_final_emission_gate.py, tests/test_interaction_continuity_speaker_bridge.py, tests/test_interaction_continuity_validation.py",
-        "coverage_spread": 10,
-        "evidence": [
-          "Coverage is spread across many homes rather than anchored in one direct owner suite.",
-          "primary home `tests/test_final_emission_gate.py` (integration / layer interaction; score 12.0)",
-          "direct import `game/final_emission_gate.py`",
-          "subsystem token overlap: emission, final, gate"
-        ]
-      },
-      {
-        "concern_name": "stage diff telemetry",
-        "alignment_status": "partial",
-        "severity": "high",
-        "runtime_owner": "game/stage_diff_telemetry.py",
-        "practical_test_owner": "mixed: tests/test_turn_packet_stage_diff_integration.py, tests/test_stage_diff_telemetry.py, tests/test_narrative_authenticity_aer4.py",
-        "coverage_spread": 4,
-        "evidence": [
-          "Docs name a canonical test owner, but practical coverage concentrates elsewhere.",
-          "primary home `tests/test_turn_packet_stage_diff_integration.py` (integration / layer interaction; score 12.0)",
-          "direct import `game/stage_diff_telemetry.py`",
-          "subsystem token overlap: diff, stage"
-        ]
-      },
       {
         "concern_name": "test ownership / inventory docs",
         "alignment_status": "partial",
@@ -13521,7 +13119,7 @@
         "evidence": [
           "No related test file accumulated enough concern-specific affinity.",
           "Inventory docs now describe the governance map more coherently, but practical test affinity remains weak because this concern is docs-led rather than runtime-owned.",
-          "docs test claims: `tests/TEST_AUDIT.md`, `tests/TEST_CONSOLIDATION_PLAN.md`, `tests/test_lead_lifecycle_block3_transcript_regression.py`"
+          "docs test claims: `tests/TEST_AUDIT.md`, `tests/TEST_CONSOLIDATION_PLAN.md`, `tests/test_final_emission_gate.py`"
         ]
       },
       {
@@ -13529,8 +13127,8 @@
         "alignment_status": "partial",
         "severity": "medium",
         "runtime_owner": "game/final_emission_repairs.py",
-        "practical_test_owner": "mixed: tests/test_final_emission_repairs.py, tests/test_fallback_behavior_repairs.py",
-        "coverage_spread": 8,
+        "practical_test_owner": "tests/test_final_emission_repairs.py",
+        "coverage_spread": 7,
         "evidence": [
           "Docs name a canonical test owner, but practical coverage concentrates elsewhere.",
           "primary home `tests/test_final_emission_repairs.py` (unit / pure-rule; score 13.8)",
@@ -13543,13 +13141,27 @@
         "alignment_status": "partial",
         "severity": "medium",
         "runtime_owner": "game/final_emission_validators.py",
-        "practical_test_owner": "tests/test_final_emission_validators.py",
+        "practical_test_owner": "mixed: tests/test_final_emission_repairs.py, tests/test_final_emission_validators.py",
         "coverage_spread": 7,
         "evidence": [
           "Docs name a canonical test owner, but practical coverage concentrates elsewhere.",
-          "primary home `tests/test_final_emission_validators.py` (unit / pure-rule; score 13.8)",
+          "primary home `tests/test_final_emission_repairs.py` (unit / pure-rule; score 13.8)",
           "direct import `game/final_emission_validators.py`",
-          "subsystem token overlap: emission, final, validators"
+          "subsystem token overlap: emission, final"
+        ]
+      },
+      {
+        "concern_name": "narrative authenticity",
+        "alignment_status": "partial",
+        "severity": "medium",
+        "runtime_owner": "game/narrative_authenticity.py",
+        "practical_test_owner": "mixed: tests/test_narrative_authenticity.py, tests/test_narrative_authenticity_aer4.py, tests/test_narrative_authenticity_aer5.py",
+        "coverage_spread": 4,
+        "evidence": [
+          "Docs name a canonical test owner, but practical coverage concentrates elsewhere.",
+          "primary home `tests/test_narrative_authenticity.py` (unit / pure-rule; score 13.8)",
+          "direct import `game/narrative_authenticity.py`",
+          "subsystem token overlap: authenticity, narrative"
         ]
       }
     ],
@@ -13578,7 +13190,7 @@
         "evidence": [
           "No related test file accumulated enough concern-specific affinity.",
           "Inventory docs now describe the governance map more coherently, but practical test affinity remains weak because this concern is docs-led rather than runtime-owned.",
-          "docs test claims: `tests/TEST_AUDIT.md`, `tests/TEST_CONSOLIDATION_PLAN.md`, `tests/test_lead_lifecycle_block3_transcript_regression.py`"
+          "docs test claims: `tests/TEST_AUDIT.md`, `tests/TEST_CONSOLIDATION_PLAN.md`, `tests/test_final_emission_gate.py`"
         ]
       },
       {
@@ -13610,29 +13222,28 @@
       {
         "concern_name": "stage diff telemetry",
         "runtime_owner": "game/stage_diff_telemetry.py",
-        "practical_test_owner": "mixed: tests/test_turn_packet_stage_diff_integration.py, tests/test_stage_diff_telemetry.py, tests/test_narrative_authenticity_aer4.py",
-        "alignment_status": "partial",
-        "severity": "high",
+        "practical_test_owner": "mixed: tests/test_stage_diff_telemetry.py, tests/test_turn_packet_stage_diff_integration.py",
+        "alignment_status": "aligned",
+        "severity": "low",
         "evidence": [
-          "Docs name a canonical test owner, but practical coverage concentrates elsewhere.",
-          "primary home `tests/test_turn_packet_stage_diff_integration.py` (integration / layer interaction; score 12.0)",
-          "direct import `game/stage_diff_telemetry.py`",
-          "subsystem token overlap: diff, stage",
-          "primary home `tests/test_stage_diff_telemetry.py` (integration / layer interaction; score 10.0)"
+          "primary home `tests/test_stage_diff_telemetry.py` (integration / layer interaction; score 10.0)",
+          "filename mirrors `stage_diff_telemetry.py`",
+          "subsystem token overlap: diff, stage, telemetry",
+          "primary home `tests/test_turn_packet_stage_diff_integration.py` (integration / layer interaction; score 8.0)",
+          "filename overlap with `stage_diff_telemetry.py`"
         ]
       },
       {
         "concern_name": "final emission gate orchestration",
         "runtime_owner": "game/final_emission_gate.py",
-        "practical_test_owner": "mixed: tests/test_final_emission_gate.py, tests/test_interaction_continuity_speaker_bridge.py, tests/test_interaction_continuity_validation.py",
-        "alignment_status": "partial",
-        "severity": "high",
+        "practical_test_owner": "tests/test_final_emission_gate.py",
+        "alignment_status": "aligned",
+        "severity": "low",
         "evidence": [
-          "Coverage is spread across many homes rather than anchored in one direct owner suite.",
           "primary home `tests/test_final_emission_gate.py` (integration / layer interaction; score 12.0)",
           "direct import `game/final_emission_gate.py`",
           "subsystem token overlap: emission, final, gate",
-          "primary home `tests/test_interaction_continuity_speaker_bridge.py` (unit / pure-rule; score 9.2)"
+          "docs runtime claims: `game/final_emission_gate.py`, `game/final_emission_meta.py`, `game/social_exchange_emission.py`"
         ]
       }
     ],
@@ -13641,9 +13252,9 @@
     "possible_ownership_smear_count": 0,
     "unclear_hotspot_count": 0,
     "system_wide_smear": false,
-    "score_total": 9,
+    "score_total": 10,
     "rationale": [
-      "Repo-level verdict: **mixed / caution** with scorecard total 9/18.",
+      "Repo-level verdict: **mixed / caution** with scorecard total 10/18.",
       "Action mode: **needs targeted ownership cleanup before more features**.",
       "Hotspot mix: 4 localized, 4 transitional, 0 possible smear, 0 unclear."
     ],

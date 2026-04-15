@@ -1,4 +1,9 @@
-"""Bounded-partial substance when directed questions stay unresolved (repair + validation only)."""
+"""Downstream bounded-partial quality coverage for unresolved fallback outputs.
+
+Direct ``game.final_emission_repairs`` helper semantics live in
+``tests/test_final_emission_repairs.py``. This file checks quality and validator-facing
+acceptance of already-owned repair behavior under unresolved-question pressure.
+"""
 from __future__ import annotations
 
 import pytest
@@ -48,7 +53,7 @@ def _contract(**overrides: object) -> dict:
     return base
 
 
-def test_unresolved_identity_repair_includes_unknown_and_next_lead() -> None:
+def test_unresolved_identity_quality_accepts_unknown_and_next_lead_consumer_shape() -> None:
     ctr = _contract()
     resolution = {"kind": "question", "prompt": "Who was the buyer, exactly?"}
     raw = "No name comes clear from what shows."

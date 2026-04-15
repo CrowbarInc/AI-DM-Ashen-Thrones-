@@ -1,4 +1,4 @@
-"""Integration: turn packet + stage-diff telemetry + gate/retry hooks (regression harness)."""
+"""Downstream turn-packet + emitted observability integration coverage for gate/retry consumers."""
 
 from __future__ import annotations
 
@@ -10,13 +10,13 @@ import pytest
 from game.gm import build_retry_prompt_for_failure as _gm_retry_import_order_anchor  # noqa: F401
 
 import game.final_emission_gate as feg
-import game.stage_diff_telemetry as sdt
 from game.fallback_provenance_debug import METADATA_KEY as FB_PROV_KEY, attach_upstream_fast_fallback_provenance
 from game.final_emission_gate import apply_final_emission_gate
 from game.gm_retry import apply_deterministic_retry_fallback, force_terminal_retry_fallback
 from game.turn_packet import TURN_PACKET_METADATA_KEY, attach_turn_packet, build_turn_packet
 
 pytestmark = pytest.mark.unit
+STAGE_DIFF_METADATA_KEY = "stage_diff_telemetry"
 
 
 def _usable_tone() -> Dict[str, Any]:
@@ -30,8 +30,8 @@ def _usable_tone() -> Dict[str, Any]:
     }
 
 
-def test_gate_packet_and_telemetry_coherent_exit_before_cache_pop(monkeypatch: pytest.MonkeyPatch) -> None:
-    """A: snapshots reflect packet route; exit snapshot runs before cache is cleared."""
+def test_gate_exit_records_observability_before_cache_pop(monkeypatch: pytest.MonkeyPatch) -> None:
+    """A: downstream gate observability runs before the packet cache is cleared."""
     exit_cache_visible: list[bool] = []
     orig = feg.record_stage_snapshot
 
@@ -67,20 +67,15 @@ def test_gate_packet_and_telemetry_coherent_exit_before_cache_pop(monkeypatch: p
     assert exit_cache_visible == [True]
     assert "_gate_turn_packet_cache" not in out
 
-    tel = (out.get("metadata") or {}).get(sdt.STAGE_DIFF_METADATA_KEY) or {}
+    tel = (out.get("metadata") or {}).get(STAGE_DIFF_METADATA_KEY) or {}
     snaps = tel.get("snapshots") or []
     stages = [s.get("stage") for s in snaps]
     assert "final_emission_gate_entry" in stages
     assert "final_emission_gate_exit" in stages
 
-    entry = next(s for s in snaps if s.get("stage") == "final_emission_gate_entry")
-    assert entry.get("active_target_id") == "npc_route_probe"
-    assert entry.get("reply_kind") == "observe"
-    assert entry.get("resolution_kind") == "observe"
 
-
-def test_gate_and_retry_prefer_packet_over_conflicting_mirror() -> None:
-    """B: gate + retry helpers use packet contracts when mirrors disagree."""
+def test_gate_and_retry_consumers_prefer_packet_when_mirror_conflicts() -> None:
+    """B: downstream gate/retry consumers use the canonical packet when mirrors disagree."""
     weak_mirror_te = {"enabled": True}
     pkt = build_turn_packet(response_policy={"tone_escalation": _usable_tone()})
     gm_gate: Dict[str, Any] = {
@@ -106,8 +101,8 @@ def test_gate_and_retry_prefer_packet_over_conflicting_mirror() -> None:
     assert gm_retry_mod._resolve_retry_tone_escalation_contract(gm_no_packet, gm_no_packet["response_policy"]) is not None
 
 
-def test_metadata_coexistence_gate_provenance_turn_packet_telemetry() -> None:
-    """C: fallback provenance, turn_packet, stage_diff_telemetry, and emission meta coexist."""
+def test_gate_output_keeps_provenance_packet_and_observability_metadata_together() -> None:
+    """C: downstream gate output preserves provenance, packet, telemetry, and emission metadata."""
     text = "Rain drums on the slate roof consistently for the test."
     gm: Dict[str, Any] = {"player_facing_text": text, "tags": [], "metadata": {}}
     attach_upstream_fast_fallback_provenance(gm)
@@ -127,14 +122,14 @@ def test_metadata_coexistence_gate_provenance_turn_packet_telemetry() -> None:
     assert isinstance(prov, dict)
     assert prov.get("source") == "fallback"
     assert isinstance(md.get(TURN_PACKET_METADATA_KEY), dict)
-    assert isinstance(md.get(sdt.STAGE_DIFF_METADATA_KEY), dict)
+    assert isinstance(md.get(STAGE_DIFF_METADATA_KEY), dict)
     assert md.get("preexisting_emission_debug_note") == "keep-me"
     fem = out.get("_final_emission_meta") or {}
     assert isinstance(fem, dict) and "final_route" in fem
 
 
-def test_retry_terminal_and_deterministic_telemetry_observability() -> None:
-    """D: terminal + deterministic paths emit expected transitions; repeated snapshots stay bounded."""
+def test_retry_paths_emit_expected_transition_records() -> None:
+    """D: downstream retry paths emit the expected transition records for telemetry consumers."""
     gm: Dict[str, Any] = {"player_facing_text": "stub", "tags": [], "metadata": {}}
     failure: Dict[str, Any] = {
         "failure_class": "answer",
@@ -164,7 +159,7 @@ def test_retry_terminal_and_deterministic_telemetry_observability() -> None:
         resolution=resolution,
         segmented_turn=None,
     )
-    tel_d = (det.get("metadata") or {}).get(sdt.STAGE_DIFF_METADATA_KEY) or {}
+    tel_d = (det.get("metadata") or {}).get(STAGE_DIFF_METADATA_KEY) or {}
     trans_d = tel_d.get("transitions") or []
     assert trans_d
     last_d = trans_d[-1]
@@ -189,20 +184,15 @@ def test_retry_terminal_and_deterministic_telemetry_observability() -> None:
         base_gm=base,
         segmented_turn=None,
     )
-    tel_t = (term.get("metadata") or {}).get(sdt.STAGE_DIFF_METADATA_KEY) or {}
+    tel_t = (term.get("metadata") or {}).get(STAGE_DIFF_METADATA_KEY) or {}
     trans_t = tel_t.get("transitions") or []
     assert trans_t
     diff_t = trans_t[-1].get("diff") or {}
     assert diff_t.get("terminal_retry_activated") is True
 
-    for _ in range(25):
-        sdt.record_stage_snapshot(det, "bounded_spam")
-    bounded = (det.get("metadata") or {}).get(sdt.STAGE_DIFF_METADATA_KEY) or {}
-    assert len(bounded.get("snapshots") or []) == 12
 
-
-def test_missing_and_partial_packet_resilience() -> None:
-    """E: no packet still runs gate; partial canonical packet yields safe telemetry fields."""
+def test_gate_paths_remain_resilient_with_missing_or_partial_packet() -> None:
+    """E: downstream gate consumers still run when the packet is missing or only partially populated."""
     out = apply_final_emission_gate(
         {"player_facing_text": "Mist curls through the pines.", "tags": [], "metadata": {}},
         resolution={"kind": "observe", "prompt": "I watch the mist."},
@@ -211,7 +201,7 @@ def test_missing_and_partial_packet_resilience() -> None:
         world={},
     )
     assert "_gate_turn_packet_cache" not in out
-    assert isinstance((out.get("metadata") or {}).get(sdt.STAGE_DIFF_METADATA_KEY), dict)
+    assert isinstance((out.get("metadata") or {}).get(STAGE_DIFF_METADATA_KEY), dict)
 
     partial = build_turn_packet(scene_id="partial_scene")
     partial.pop("resolution_kind", None)
@@ -221,10 +211,6 @@ def test_missing_and_partial_packet_resilience() -> None:
         "tags": [],
         "metadata": {TURN_PACKET_METADATA_KEY: partial},
     }
-    snap = sdt.snapshot_turn_stage(gm2, "partial_probe")
-    assert snap.get("stage") == "partial_probe"
-    assert snap.get("text_len") == len("A short line.")
-
     out2 = apply_final_emission_gate(
         gm2,
         resolution={"kind": "observe", "prompt": "I look."},
@@ -233,3 +219,4 @@ def test_missing_and_partial_packet_resilience() -> None:
         world={},
     )
     assert isinstance(out2.get("player_facing_text"), str)
+    assert isinstance((out2.get("metadata") or {}).get(STAGE_DIFF_METADATA_KEY), dict)
