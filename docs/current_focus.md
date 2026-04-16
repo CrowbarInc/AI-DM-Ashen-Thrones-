@@ -62,6 +62,13 @@ The authoritative, compact rule block lives in **`docs/narrative_integrity_archi
 
 ---
 
+## Opening / Start Campaign regression lock-in (OF2-F)
+
+Brief ownership pointer (see also **`docs/narrative_integrity_architecture.md`** → *Opening + structured start*):
+
+- First-turn **opening_scene_realization** + **opening_narration_obligations** stay on the **`game/prompt_context.py`** stack for both chat openings and **`POST /api/start_campaign`**.
+- **Shared seams under test:** `_opening_scene_normalized_action_and_resolution`, `_complete_opening_turn_persistence_like_chat`, and `session.campaign_started` / `ui.*` mirrors — regressions live in `tests/test_opening_start_seam_regressions.py`, `tests/test_start_campaign_api.py`, and related suites.
+
 ## Architecture invariants preserved during consolidation
 
 These remain true while consolidation proceeds; they are not new feature goals:

@@ -31,6 +31,15 @@ These rules apply while the repo is in **post-AER consolidation** (see `docs/cur
 
 ---
 
+## Opening + structured start (UX1 / OF1 seam)
+
+- **Opening-scene realization** (deterministic contract + basis) is owned by `game/opening_scene_realization.py` and wired through **`game/prompt_context.py`** on the normal narration stack — not by final-emission construction.
+- **Structured “Start Campaign”** is a bootstrap HTTP path (`POST /api/start_campaign`) that feeds the same **`_run_resolved_turn_pipeline`** as chat; it does not introduce a parallel prompt assembler.
+- **Shared normalization:** `_opening_scene_normalized_action_and_resolution(...)` in `game/api.py` is the single bundle for internal bootstrap vs player-typed campaign-start cues (transcript-facing fields differ; action id / type / target scene stay aligned).
+- **Shared persistence tail:** `_complete_opening_turn_persistence_like_chat(...)` appends the transcript row, traces, and optional `campaign_started` latch for both chat and structured start after GM output exists.
+- **Session/UI latch:** `session.campaign_started` is authoritative; `compose_state()` exposes `ui.campaign_started` and `ui.campaign_can_start` (fresh transcript + turn index zero only).
+- **Final emission** (`apply_final_emission_gate`, sanitizer) remains a **downstream** consumer of opening/start construction — not a co-owner of opening basis assembly.
+
 ## Flow (high level)
 
 1. **Turn input** hits `game.api` / `game.api_turn_support` (not detailed here).

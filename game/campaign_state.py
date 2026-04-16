@@ -98,6 +98,8 @@ def create_fresh_session_document() -> Dict[str, Any]:
         "character_name": None,
         "campaign_run_id": run_id,
         "session_id": run_id,
+        # True only after a successful first opening emission (see /api/start_campaign).
+        "campaign_started": False,
     }
 
 

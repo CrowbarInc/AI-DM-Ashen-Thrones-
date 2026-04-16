@@ -73,6 +73,55 @@ def test_preflight_defaults_to_configured_default_model(monkeypatch: pytest.Monk
 
     assert captured
     assert captured[0]["model"] == "default-route-model"
+    assert captured[0].get("max_output_tokens", 0) >= 16
+
+
+def test_preflight_responses_create_max_output_tokens_meets_api_minimum(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Regression: OpenAI rejects max_output_tokens < 16; probe must not self-invalidate startup."""
+    monkeypatch.delenv("ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT", raising=False)
+    captured: list[dict[str, Any]] = []
+
+    class _Client:
+        def __init__(self, *_a: Any, **_k: Any) -> None:
+            pass
+
+        class responses:
+            @staticmethod
+            def create(**kwargs: Any) -> object:
+                captured.append(dict(kwargs))
+                return object()
+
+    run_upstream_api_preflight(api_key="sk-test", model="gpt-4o-mini", client_factory=lambda _k: _Client())
+
+    assert len(captured) == 1
+    kwargs = captured[0]
+    assert "max_output_tokens" in kwargs
+    assert kwargs["max_output_tokens"] >= 16
+    assert kwargs["max_output_tokens"] == pre._clamp_preflight_max_output_tokens(pre._PREFLIGHT_MAX_OUTPUT_TOKENS)
+
+
+def test_preflight_max_output_tokens_clamped_when_constant_below_api_minimum(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.delenv("ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT", raising=False)
+    monkeypatch.setattr(pre, "_PREFLIGHT_MAX_OUTPUT_TOKENS", 8, raising=False)
+    captured: list[dict[str, Any]] = []
+
+    class _Client:
+        def __init__(self, *_a: Any, **_k: Any) -> None:
+            pass
+
+        class responses:
+            @staticmethod
+            def create(**kwargs: Any) -> object:
+                captured.append(dict(kwargs))
+                return object()
+
+    run_upstream_api_preflight(api_key="sk-test", model="m", client_factory=lambda _k: _Client())
+
+    assert captured[0]["max_output_tokens"] == 16
 
 
 def test_preflight_insufficient_quota_classified(monkeypatch: pytest.MonkeyPatch) -> None:

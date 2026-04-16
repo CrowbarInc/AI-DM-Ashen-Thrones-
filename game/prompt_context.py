@@ -68,6 +68,11 @@ from game.opening_visible_fact_selection import (
     OPENING_NARRATION_VISIBLE_FACT_MAX,
     select_opening_narration_visible_facts,
 )
+from game.opening_scene_realization import (
+    build_opening_scene_realization,
+    merge_opening_instructions,
+    opening_realization_none,
+)
 from game.anti_railroading import build_anti_railroading_contract
 from game.context_separation import build_context_separation_contract
 from game.player_facing_narration_purity import build_player_facing_narration_purity_contract
@@ -2976,6 +2981,17 @@ def build_narration_context(
             implicit_focus_resolution=str(res_md_vis.get("implicit_focus_resolution") or ""),
             human_adjacent_intent_family=str(res_md_vis.get("human_adjacent_intent_family") or ""),
         )
+    opening_scene_export: Dict[str, Any] = opening_realization_none()
+    if narration_obligations.get("is_opening_scene") and isinstance(public_scene, Mapping):
+        opening_scene_export = build_opening_scene_realization(
+            public_scene=public_scene,
+            curated_visible_fact_strings=visible_facts_for_prompt,
+            visibility_contract=visibility_contract,
+        )
+        _opening_basis = (opening_scene_export.get("contract") or {}).get("narration_basis_visible_facts")
+        # Empty opening basis is intentional (OF1): do not fall back to unfiltered curated facts.
+        if isinstance(_opening_basis, list):
+            visible_facts_for_prompt = list(_opening_basis)
     # Opening curation may return display-preserved strings; minimal narration_visibility export
     # matches build_narration_visibility_contract (normalized, deduped).
     _seen_visible_fact: Set[str] = set()
@@ -3013,7 +3029,15 @@ def build_narration_context(
                 "actor": len(scene_state_anchor_contract.get("actor_tokens") or []),
                 "player_action": len(scene_state_anchor_contract.get("player_action_tokens") or []),
             },
-        }
+        },
+        "opening_scene_realization": {
+            "opening_mode": bool(opening_scene_export.get("opening_mode"))
+            if isinstance(opening_scene_export, dict)
+            else False,
+            "validator": (opening_scene_export.get("contract") or {}).get("validator")
+            if isinstance(opening_scene_export, dict) and isinstance(opening_scene_export.get("contract"), dict)
+            else None,
+        },
     }
     first_mention_contract: Dict[str, Any] = {
         "enabled": True,
@@ -3087,7 +3111,7 @@ def build_narration_context(
         'Treat player input as an action declaration: default to third-person phrasing and preserve the user\'s expression format instead of rewriting it.',
         'Quoted in-character dialogue is valid inside an action declaration (for example: Galinor says, "Keep your voice down."); do not treat the quote alone as the entire action when surrounding action context exists.',
         'Follow narration_obligations as output requirements only: they shape wording and focus, but never grant authority to mutate state or decide mechanics.',
-        'If narration_obligations.is_opening_scene is true, establish immediate environment plus actionable social/world hooks the player can engage now.',
+        'If narration_obligations.is_opening_scene is true, establish immediate environment plus actionable social/world hooks the player can engage now (see opening_narration_obligations and opening_scene_realization.contract for diegetic first-shot shape).',
         'If narration_obligations.must_advance_scene is true, do not stop at movement text alone; narrate arrival, changed state, and at least one concrete opportunity or pressure in the destination context.',
         'If narration_obligations.active_npc_reply_expected is true, complete the active NPC\'s substantive in-turn reply now unless a pending engine check prompt already takes precedence, or authoritative state indicates refusal/evasion/interruption/inability.',
         'If narration_obligations.should_answer_active_npc is true, prioritize the active interlocutor\'s reply and the immediate exchange over general scene recap.',
@@ -3108,6 +3132,14 @@ def build_narration_context(
         instructions.append(
             'When transitioning scenes, include a brief bridge from the prior location before describing the new one.'
         )
+
+    _opening_contract = opening_scene_export.get("contract") if isinstance(opening_scene_export, dict) else None
+    if (
+        narration_obligations.get("is_opening_scene")
+        and isinstance(_opening_contract, dict)
+        and _opening_contract.get("narration_basis_visible_facts") is not None
+    ):
+        merge_opening_instructions(instructions, contract=_opening_contract)
 
     if social_authority:
         _skip_instr = (
@@ -3772,6 +3804,12 @@ def build_narration_context(
         'fallback_behavior': fallback_behavior_contract,
         'uncertainty_hint': eff_uncertainty_hint,
         'narration_obligations': narration_obligations,
+        'opening_narration_obligations': (
+            opening_scene_export.get("opening_narration_obligations")
+            if isinstance(opening_scene_export, dict)
+            else None
+        ),
+        'opening_scene_realization': opening_scene_export if isinstance(opening_scene_export, dict) else opening_realization_none(),
         'narration_visibility': narration_visibility,
         'scene_state_anchor_contract': scene_state_anchor_contract,
         'anti_railroading_contract': anti_railroading_contract,

@@ -1608,13 +1608,22 @@ def _is_campaign_start_turn_request(text: str | None, session: dict, recent_log:
     return any(cue in low for cue in cues)
 
 
-def _build_opening_scene_resolution(user_text: str, scene_id: str) -> dict:
-    """Engine-owned opening-scene resolution for explicit campaign start requests."""
-    text = (user_text or "").strip() or "Begin the campaign."
+def _build_opening_scene_resolution(user_text: str, scene_id: str, *, internal_bootstrap: bool = False) -> dict:
+    """Engine-owned opening-scene resolution for explicit campaign start requests.
+
+    When ``internal_bootstrap`` is True (``POST /api/start_campaign``), ``prompt``/``label`` are
+    transcript-neutral: no synthetic player line such as "Begin" is implied.
+    """
+    if internal_bootstrap:
+        text = ""
+        label = "start_campaign"
+    else:
+        text = (user_text or "").strip() or "Begin the campaign."
+        label = text
     return {
         "kind": "scene_opening",
         "action_id": "campaign_start_opening_scene",
-        "label": text,
+        "label": label,
         "prompt": text,
         "success": True,
         "resolved_transition": False,
@@ -1632,6 +1641,54 @@ def _build_opening_scene_resolution(user_text: str, scene_id: str) -> dict:
             "with concrete opportunities grounded in the current scene state."
         ),
     }
+
+
+def _opening_scene_normalized_action_and_resolution(
+    *,
+    scene: dict,
+    player_text: str | None,
+    internal_bootstrap: bool,
+) -> tuple[dict, dict]:
+    """Shared opening-scene engine bundle for chat campaign-start cues and ``/api/start_campaign``."""
+    scene_obj = scene.get("scene") if isinstance(scene.get("scene"), dict) else {}
+    sid = str(scene_obj.get("id") or "").strip()
+    if internal_bootstrap:
+        resolution = _build_opening_scene_resolution("", sid, internal_bootstrap=True)
+        normalized = {
+            "id": "campaign_start_opening_scene",
+            "label": "start_campaign",
+            "type": "scene_opening",
+            "prompt": "",
+            "targetSceneId": sid or None,
+            "target_scene_id": sid or None,
+        }
+        return normalized, resolution
+    pt = (player_text or "").strip()
+    resolution = _build_opening_scene_resolution(pt, sid, internal_bootstrap=False)
+    normalized = {
+        "id": "campaign_start_opening_scene",
+        "label": pt,
+        "type": "scene_opening",
+        "prompt": pt,
+        "targetSceneId": sid or None,
+        "target_scene_id": sid or None,
+    }
+    return normalized, resolution
+
+
+def _session_allows_structured_start_campaign(session: dict, recent_log: list | None) -> bool:
+    """Fresh run: no prior opening emission, empty transcript, first chat-scale turn index.
+
+    Drives ``ui.campaign_can_start`` only; ``session.campaign_started`` is the separate latch
+    set after a successful first opening (see ``_complete_opening_turn_persistence_like_chat``).
+    """
+    if bool(session.get("campaign_started")):
+        return False
+    if recent_log:
+        return False
+    if int(session.get("turn_counter", 0) or 0) != 0:
+        return False
+    return True
 
 
 def compose_state():
@@ -1665,6 +1722,11 @@ def compose_state():
             },
         }
     }
+    _log_entries = load_log()
+    _can_start = _session_allows_structured_start_campaign(session, _log_entries)
+    # Mirrors persisted session (authoritative). Do not infer from transcript alone.
+    state['ui']['campaign_started'] = bool(session.get('campaign_started'))
+    state['ui']['campaign_can_start'] = bool(_can_start)
     state['ui']['clues']['implicit'] = [c for c in state['ui']['clues']['known'] if c.get('presentation') == 'implicit']
     state['ui']['clues']['explicit'] = [c for c in state['ui']['clues']['known'] if c.get('presentation') == 'explicit']
     state['ui']['clues']['actionable'] = [c for c in state['ui']['clues']['known'] if c.get('presentation') == 'actionable']
@@ -2268,6 +2330,482 @@ def action(req: ActionRequest):
     return _build_turn_response_payload(gm=gm, resolution=resolution, include_resolution=True)
 
 
+def _complete_opening_turn_persistence_like_chat(
+    *,
+    turn_started: float,
+    campaign: dict,
+    character: dict,
+    session: dict,
+    world: dict,
+    combat: dict,
+    scene: dict,
+    scene_before_id: str,
+    trace: dict,
+    latency_ms: dict[str, int],
+    clue_presentation_before: dict,
+    clocks_before: dict,
+    time_pressure_after: int,
+    tick: dict,
+    recent_log: list,
+    routed_via_exploration: bool,
+    routed_via_adjudication: bool,
+    normalized_chat: dict | None,
+    resolution: dict | None,
+    gm: dict,
+    response_type_contract: dict | None,
+    route_choice: str | None,
+    parsed: dict | None,
+    segmented_turn: dict | None,
+    compact_segmented: dict | None,
+    canonical_entry: dict,
+    implied_context: dict,
+    authoritative_clue_updates: list[str],
+    player_text_for_eval: str,
+    debug_action_kind: str,
+    trace_source: str,
+    trace_action_type: str,
+    request_log_payload: dict,
+    mark_campaign_started: bool,
+) -> dict:
+    """Shared tail of ``/api/chat`` after GM output exists (opening / exploration / adjudication paths).
+
+    ``POST /api/start_campaign`` reuses this tail with ``mark_campaign_started`` so bootstrap
+    persistence matches chat openings; final-emission layers remain downstream consumers only.
+    """
+    from game.gm import classify_player_intent
+
+    _include_res_chat = bool(
+        (routed_via_exploration or routed_via_adjudication) and isinstance(resolution, dict)
+    )
+    if response_type_contract is None:
+        response_type_contract = _derive_response_type_contract_for_turn(
+            session=session,
+            segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+            normalized_action=normalized_chat,
+            resolution=resolution if isinstance(resolution, dict) else None,
+            raw_player_text=player_text_for_eval,
+            route_choice=route_choice,
+            directed_social_entry=canonical_entry,
+            attach_to_resolution=bool(isinstance(resolution, dict)),
+        )
+    remember_recent_contextual_leads(
+        session,
+        scene["scene"]["id"],
+        _player_facing_text_for_lead_extraction(gm),
+    )
+    gm, _narr_consistency_chat = _finalize_player_facing_for_turn(
+        gm,
+        resolution=resolution if isinstance(resolution, dict) else None,
+        session=session,
+        world=world,
+        scene=scene,
+        include_resolution_in_sanitizer=_include_res_chat,
+        latency_sink=latency_ms,
+    )
+    for _rt in _narr_consistency_chat.get("repaired_discovered_clue_texts") or []:
+        if isinstance(_rt, str) and _rt.strip() and _rt.strip() not in authoritative_clue_updates:
+            authoritative_clue_updates.append(_rt.strip())
+
+    scene, session, combat, surfaced_clue_telemetry, narration_social_leads = _apply_post_gm_updates(
+        gm, scene, session, world, combat, resolution=resolution if isinstance(resolution, dict) else None
+    )
+    for _txt in narration_social_leads:
+        if isinstance(_txt, str) and _txt.strip() and _txt.strip() not in authoritative_clue_updates:
+            authoritative_clue_updates.append(_txt.strip())
+    context_resolution = (
+        resolution
+        if isinstance(resolution, dict) and resolution.get("kind") and resolution.get("kind") != "adjudication_query"
+        else None
+    )
+    _update_interaction_context_after_action(
+        session,
+        context_resolution,
+        scene_changed=scene_before_id != scene["scene"]["id"],
+        preserve_continuity=bool(
+            (implied_context.get("applied") or implied_context.get("interaction_established"))
+            and not implied_context.get("commitment_broken")
+        ),
+    )
+    _adopt_dbg_chat = None
+    _stale_inv_dbg_chat = None
+    if scene_before_id == scene["scene"]["id"]:
+        _adopt_dbg_chat = apply_post_emission_speaker_adoption(
+            session,
+            world,
+            scene,
+            gm,
+            resolution=context_resolution if isinstance(context_resolution, dict) else None,
+            scene_changed=False,
+        )
+        _stale_inv_dbg_chat = apply_stale_interlocutor_invalidation_after_emission(
+            session,
+            world,
+            scene,
+            gm,
+            resolution=context_resolution if isinstance(context_resolution, dict) else None,
+            scene_changed=False,
+            adoption_debug=_adopt_dbg_chat,
+        )
+    synchronize_scene_addressability(session, scene, world)
+    scene["scene_state"] = session.get("scene_state")
+    save_world(world)
+
+    leads_inspection = _lead_debug_trace_around_authoritative_reconcile(session)
+
+    session["last_action_debug"] = _build_action_debug(
+        debug_action_kind, player_text_for_eval, normalized_chat, resolution, response_type_contract
+    )
+    _merge_emergent_actor_debug_into_action_debug(session)
+    maybe_attach_intent_fulfillment_eval(
+        session,
+        player_input=player_text_for_eval,
+        final_output=str(gm.get("player_facing_text") or ""),
+        response_type=compact_response_type_contract(response_type_contract),
+    )
+    maybe_attach_player_agency_eval(
+        session,
+        final_output=str(gm.get("player_facing_text") or ""),
+    )
+
+    clocks_changed = {"time_pressure": time_pressure_after} if clocks_before.get("time_pressure") != time_pressure_after else {}
+
+    trace["parsed_intent"] = parsed if parsed is not None else None
+    trace["normalized_action"] = (
+        {
+            k: normalized_chat[k]
+            for k in ("id", "label", "type", "prompt", "targetSceneId", "target_scene_id")
+            if k in (normalized_chat or {})
+        }
+        if normalized_chat and isinstance(normalized_chat, dict)
+        else None
+    )
+    trace["resolution"] = _sanitize_resolution(resolution)
+    trace["response_type_contract"] = compact_response_type_contract(response_type_contract)
+    trace["scene_after"] = scene["scene"]["id"]
+    deduped_clue_updates: list[str] = []
+    for txt in authoritative_clue_updates:
+        if isinstance(txt, str) and txt.strip() and txt.strip() not in deduped_clue_updates:
+            deduped_clue_updates.append(txt.strip())
+    trace["clue_updates"] = deduped_clue_updates
+    trace["world_flag_updates"] = _trace_world_updates(gm.get("world_updates"), clocks_changed)
+    latency_ms["total_turn"] = _elapsed_ms(turn_started)
+    trace["turn_trace"] = _build_compact_turn_trace(
+        source=trace_source,
+        action_type=trace_action_type,
+        raw_input=trace["raw_input"],
+        parsed_intent=parsed if isinstance(parsed, dict) else None,
+        segmented_turn=compact_segmented,
+        normalized_action=normalized_chat,
+        implied_context=implied_context,
+        resolution=resolution,
+        scene_before=trace["scene_before"],
+        scene_after=trace["scene_after"],
+        authoritative_clue_updates=deduped_clue_updates,
+        clue_presentation_before=clue_presentation_before,
+        session=session,
+        world=world,
+        scene=scene,
+        leads_inspection=leads_inspection,
+        response_type_contract=response_type_contract,
+        route_selected=route_choice,
+        directed_social_entry=canonical_entry,
+        adoption_debug=_adopt_dbg_chat,
+        stale_invalidation_debug=_stale_inv_dbg_chat,
+        latency_ms=_finalize_latency_breakdown(latency_ms),
+    )
+    trace["latency_ms"] = _finalize_latency_breakdown(latency_ms)
+    _finalize_and_append_trace(session, trace, True, None)
+
+    clear_turn_start_interlocutor_snapshot(session)
+    # First successful opening only (structured start or chat scene_opening); never set on failed turns.
+    if mark_campaign_started:
+        session["campaign_started"] = True
+    save_session(session)
+    save_scene(scene)
+    save_combat(combat)
+
+    intent = classify_player_intent(player_text_for_eval)
+    if (routed_via_exploration or routed_via_adjudication) and isinstance(resolution, dict):
+        resolution.setdefault("world_tick_events", tick.get("events", []))
+
+    gm_prompt_summary: dict = {
+        "scene_id": scene["scene"].get("id"),
+        "scene_mode": scene["scene"].get("mode"),
+        "response_mode": session.get("response_mode", "standard"),
+        "response_type_contract": compact_response_type_contract(response_type_contract),
+    }
+    if routed_via_exploration and isinstance(resolution, dict):
+        gm_prompt_summary["exploration"] = {
+            "action_id": resolution.get("action_id"),
+            "kind": resolution.get("kind"),
+            "scene_transition_occurred": bool(resolution.get("resolved_transition")),
+        }
+    if routed_via_adjudication and isinstance(resolution, dict):
+        gm_prompt_summary["adjudication"] = dict(resolution.get("adjudication") or {})
+
+    log_meta = dict(request_log_payload.get("log_meta") or {})
+    log_meta.setdefault("intent_classification", intent)
+    log_meta.setdefault("gm_prompt_context_summary", gm_prompt_summary)
+    log_meta.setdefault("gm_raw_output_meta", {"has_output": True})
+    log_meta.setdefault("approved_state_updates", {
+        "scene_update": gm.get("scene_update"),
+        "world_updates": gm.get("world_updates"),
+        "new_scene_draft": gm.get("new_scene_draft"),
+    })
+    log_meta.setdefault("rejected_state_updates", [])
+    log_meta.setdefault("discovered_clues_added", deduped_clue_updates)
+    log_meta.setdefault("surfaced_clues_in_narration_non_authoritative", list(surfaced_clue_telemetry))
+    log_meta.setdefault("clocks_changed", clocks_changed)
+    log_meta.setdefault("response_type_contract", compact_response_type_contract(response_type_contract))
+
+    append_log(
+        {
+            "timestamp": utc_iso_now(),
+            "request": dict(request_log_payload.get("request") or {}),
+            "resolution": resolution,
+            "gm_output": gm,
+            "log_meta": log_meta,
+        }
+    )
+    return _build_turn_response_payload(
+        gm=gm,
+        resolution=resolution if (routed_via_exploration or routed_via_adjudication) and isinstance(resolution, dict) else None,
+        include_resolution=bool((routed_via_exploration or routed_via_adjudication) and isinstance(resolution, dict)),
+    )
+
+
+@app.post('/api/start_campaign')
+def start_campaign():
+    """First opening via internal bootstrap intent; same narration stack as chat opening (OF1 path)."""
+    gate = compute_upstream_dependent_run_gate()
+    gate_operator = build_upstream_dependent_run_gate_operator(gate)
+    if gate.get("manual_testing_blocked"):
+        return JSONResponse(
+            status_code=503,
+            content={
+                "ok": False,
+                "status": "blocked",
+                "error": (
+                    "Upstream API preflight indicates live narration is unhealthy; "
+                    "starting the campaign is disabled until upstream recovers."
+                ),
+                "upstream_dependent_run_gate": gate,
+                "upstream_dependent_run_gate_operator": gate_operator,
+            },
+        )
+
+    campaign = load_campaign()
+    character = load_character()
+    session = load_session()
+    recent_log = load_log()
+    if not _session_allows_structured_start_campaign(session, recent_log):
+        return JSONResponse(
+            status_code=409,
+            content={
+                "ok": False,
+                "status": "already_started",
+                "error": "Campaign has already started, or the transcript is not empty.",
+                "upstream_dependent_run_gate": gate,
+                "upstream_dependent_run_gate_operator": gate_operator,
+                **compose_state(),
+            },
+        )
+
+    turn_started = _now_perf()
+    snapshot_turn_start_interlocutor(session)
+    world = load_world()
+    combat = load_combat()
+    conditions = load_conditions()
+    scene = load_active_scene()
+    synchronize_scene_addressability(session, scene, world)
+    scene["scene_state"] = session.get("scene_state")
+    scene_before_id = scene["scene"]["id"]
+
+    trace: dict = {
+        "timestamp": utc_iso_now(),
+        "source": "start_campaign",
+        "action_type": "start_campaign",
+        "raw_input": "",
+        "turn_stage_order": list(AUTHORITATIVE_TURN_STAGE_ORDER),
+        "incoming_payload": {"start_campaign": True},
+        "parsed_intent": None,
+        "segmented_turn": None,
+        "normalized_action": None,
+        "resolution": None,
+        "scene_before": scene["scene"]["id"],
+        "scene_after": None,
+        "clue_updates": [],
+        "world_flag_updates": [],
+        "turn_trace": None,
+        "gpt_called": True,
+        "response_ok": True,
+        "error": None,
+    }
+    latency_ms: dict[str, int] = {}
+    clue_presentation_before = _snapshot_known_clue_presentations(session)
+
+    if session.get("turn_counter") is None:
+        session["turn_counter"] = 0
+    session["turn_counter"] += 1
+
+    tick = advance_world_tick(world, campaign)
+    save_world(world)
+
+    clocks_before = dict(get_or_init_clocks(session))
+    time_pressure_after = advance_clock(session, "time_pressure", 1)
+
+    recent_log = load_log()
+    scene_rt = get_scene_runtime(session, scene["scene"]["id"])
+
+    routed_via_exploration = True
+    routed_via_adjudication = False
+    route_choice = "action"
+    authoritative_clue_updates: list[str] = []
+
+    classify_started = _now_perf()
+    segmented_turn = segment_mixed_player_turn("")
+    trace["segmented_turn"] = _compact_segmented_turn(segmented_turn)
+    canonical_entry = resolve_directed_social_entry(
+        session=session,
+        scene=scene,
+        world=world,
+        segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+        raw_text="",
+    )
+    declared_switch_meta = resolve_declared_actor_switch(
+        session=session,
+        scene=scene,
+        segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+        raw_text="",
+    )
+    trace["canonical_entry"] = {
+        "should_route_social": bool(canonical_entry.get("should_route_social")),
+        "target_actor_id": canonical_entry.get("target_actor_id"),
+        "target_source": canonical_entry.get("target_source"),
+        "reason": canonical_entry.get("reason"),
+        "spoken_text": canonical_entry.get("spoken_text"),
+        "declared_switch_detected": bool(declared_switch_meta.get("has_declared_switch")),
+        "declared_switch_target_actor_id": (
+            declared_switch_meta.get("target_actor_id")
+            if declared_switch_meta.get("has_declared_switch")
+            else None
+        ),
+        "continuity_overridden_by_declared_switch": bool(
+            canonical_entry.get("continuity_overridden_by_declared_switch")
+        ),
+        "spoken_vocative_detected": bool(canonical_entry.get("spoken_vocative_detected")),
+        "spoken_vocative_target_actor_id": canonical_entry.get("spoken_vocative_target_actor_id"),
+        "continuity_overridden_by_spoken_vocative": bool(
+            canonical_entry.get("continuity_overridden_by_spoken_vocative")
+        ),
+    }
+    for _k in (
+        "open_social_solicitation",
+        "broad_address_bid",
+        "broadcast_social_open_call",
+        "candidate_addressable_ids",
+        "candidate_addressable_count",
+        "broad_address_reason",
+        "broad_address_phrase_matched",
+    ):
+        if _k in canonical_entry:
+            trace["canonical_entry"][_k] = canonical_entry.get(_k)
+    trace["canonical_entry_path"] = (
+        "social" if canonical_entry.get("should_route_social") else "undecided"
+    )
+    trace["canonical_entry_reason"] = canonical_entry.get("reason")
+    trace["canonical_entry_target_actor_id"] = canonical_entry.get("target_actor_id")
+    implied_context = _prepare_interaction_from_turn_input(session, world, scene_before_id, "", scene=scene)
+    compact_segmented = _compact_segmented_turn(segmented_turn)
+
+    normalized_chat, resolution = _opening_scene_normalized_action_and_resolution(
+        scene=scene,
+        player_text=None,
+        internal_bootstrap=True,
+    )
+    parsed = normalized_chat
+    _accumulate_latency(latency_ms, "intent_classification", _elapsed_ms(classify_started))
+
+    try:
+        scene, session, combat, gm, turn_clue_updates, response_type_contract = _run_resolved_turn_pipeline(
+            campaign=campaign,
+            character=character,
+            session=session,
+            world=world,
+            combat=combat,
+            scene=scene,
+            recent_log=recent_log,
+            resolution=resolution,
+            normalized_action=normalized_chat,
+            fallback_user_text="",
+            segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+            route_choice="action",
+            directed_social_entry=canonical_entry,
+            latency_sink=latency_ms,
+        )
+    except Exception:
+        session["turn_counter"] = max(0, int(session.get("turn_counter", 0) or 0) - 1)
+        save_session(session)
+        raise
+
+    authoritative_clue_updates.extend(turn_clue_updates)
+    if isinstance(resolution, dict):
+        resolution["world_tick_events"] = tick.get("events", [])
+
+    _record_scene_pressure_input(
+        session,
+        scene_before_id,
+        "",
+        normalized_action=parsed if isinstance(parsed, dict) else None,
+        resolution=None,
+    )
+
+    request_log = {
+        "request": {"start_campaign": True, "action_type": "start_campaign"},
+        "log_meta": {
+            "bootstrap_intent": "start_campaign",
+            "player_input": "",
+        },
+    }
+
+    return _complete_opening_turn_persistence_like_chat(
+        turn_started=turn_started,
+        campaign=campaign,
+        character=character,
+        session=session,
+        world=world,
+        combat=combat,
+        scene=scene,
+        scene_before_id=scene_before_id,
+        trace=trace,
+        latency_ms=latency_ms,
+        clue_presentation_before=clue_presentation_before,
+        clocks_before=clocks_before,
+        time_pressure_after=time_pressure_after,
+        tick=tick,
+        recent_log=recent_log,
+        routed_via_exploration=routed_via_exploration,
+        routed_via_adjudication=routed_via_adjudication,
+        normalized_chat=normalized_chat,
+        resolution=resolution,
+        gm=gm,
+        response_type_contract=response_type_contract,
+        route_choice=route_choice,
+        parsed=parsed,
+        segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+        compact_segmented=compact_segmented,
+        canonical_entry=canonical_entry,
+        implied_context=implied_context,
+        authoritative_clue_updates=authoritative_clue_updates,
+        player_text_for_eval="",
+        debug_action_kind="start_campaign",
+        trace_source="start_campaign",
+        trace_action_type="start_campaign",
+        request_log_payload=request_log,
+        mark_campaign_started=True,
+    )
+
+
 @app.post('/api/chat')
 def chat(req: ChatRequest):
     turn_started = _now_perf()
@@ -2412,15 +2950,11 @@ def chat(req: ChatRequest):
     if _is_campaign_start_turn_request(req.text, session, recent_log):
         routed_via_exploration = True
         route_choice = "action"
-        normalized_chat = {
-            "id": "campaign_start_opening_scene",
-            "label": req.text.strip(),
-            "type": "scene_opening",
-            "prompt": req.text.strip(),
-            "targetSceneId": scene["scene"].get("id"),
-            "target_scene_id": scene["scene"].get("id"),
-        }
-        resolution = _build_opening_scene_resolution(req.text, scene["scene"].get("id", ""))
+        normalized_chat, resolution = _opening_scene_normalized_action_and_resolution(
+            scene=scene,
+            player_text=req.text,
+            internal_bootstrap=False,
+        )
         _accumulate_latency(latency_ms, "intent_classification", _elapsed_ms(classify_started))
         scene, session, combat, gm, turn_clue_updates, response_type_contract = _run_resolved_turn_pipeline(
             campaign=campaign,
@@ -2794,200 +3328,47 @@ def chat(req: ChatRequest):
                 latency_sink=latency_ms,
             )
 
-    _include_res_chat = bool(
-        (routed_via_exploration or routed_via_adjudication) and isinstance(resolution, dict)
-    )
-    if response_type_contract is None:
-        response_type_contract = _derive_response_type_contract_for_turn(
-            session=session,
-            segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
-            normalized_action=normalized_chat,
-            resolution=resolution if isinstance(resolution, dict) else None,
-            raw_player_text=req.text,
-            route_choice=route_choice,
-            directed_social_entry=canonical_entry,
-            attach_to_resolution=bool(isinstance(resolution, dict)),
-        )
-    remember_recent_contextual_leads(
-        session,
-        scene['scene']['id'],
-        _player_facing_text_for_lead_extraction(gm),
-    )
-    gm, _narr_consistency_chat = _finalize_player_facing_for_turn(
-        gm,
-        resolution=resolution if isinstance(resolution, dict) else None,
-        session=session,
-        world=world,
-        scene=scene,
-        include_resolution_in_sanitizer=_include_res_chat,
-        latency_sink=latency_ms,
-    )
-    for _rt in _narr_consistency_chat.get("repaired_discovered_clue_texts") or []:
-        if isinstance(_rt, str) and _rt.strip() and _rt.strip() not in authoritative_clue_updates:
-            authoritative_clue_updates.append(_rt.strip())
-
-    scene, session, combat, surfaced_clue_telemetry, narration_social_leads = _apply_post_gm_updates(
-        gm, scene, session, world, combat, resolution=resolution if isinstance(resolution, dict) else None
-    )
-    for _txt in narration_social_leads:
-        if isinstance(_txt, str) and _txt.strip() and _txt.strip() not in authoritative_clue_updates:
-            authoritative_clue_updates.append(_txt.strip())
-    context_resolution = (
-        resolution
-        if isinstance(resolution, dict) and resolution.get('kind') and resolution.get('kind') != 'adjudication_query'
-        else None
-    )
-    _update_interaction_context_after_action(
-        session,
-        context_resolution,
-        scene_changed=scene_before_id != scene['scene']['id'],
-        preserve_continuity=bool(
-            (implied_context.get("applied") or implied_context.get("interaction_established"))
-            and not implied_context.get("commitment_broken")
-        ),
-    )
-    _adopt_dbg_chat = None
-    _stale_inv_dbg_chat = None
-    if scene_before_id == scene['scene']['id']:
-        _adopt_dbg_chat = apply_post_emission_speaker_adoption(
-            session,
-            world,
-            scene,
-            gm,
-            resolution=context_resolution if isinstance(context_resolution, dict) else None,
-            scene_changed=False,
-        )
-        _stale_inv_dbg_chat = apply_stale_interlocutor_invalidation_after_emission(
-            session,
-            world,
-            scene,
-            gm,
-            resolution=context_resolution if isinstance(context_resolution, dict) else None,
-            scene_changed=False,
-            adoption_debug=_adopt_dbg_chat,
-        )
-    synchronize_scene_addressability(session, scene, world)
-    scene["scene_state"] = session.get("scene_state")
-    # Persist world every turn (matches /api/action). Engine paths may mutate event_log / flags
-    # without GM-proposed world_updates (e.g. social lead landing).
-    save_world(world)
-
-    leads_inspection = _lead_debug_trace_around_authoritative_reconcile(session)
-
-    # Build action pipeline debug for chat (no hidden facts or secrets).
-    session['last_action_debug'] = _build_action_debug(
-        'chat', req.text, normalized_chat, resolution, response_type_contract
-    )
-    _merge_emergent_actor_debug_into_action_debug(session)
-    maybe_attach_intent_fulfillment_eval(
-        session,
-        player_input=req.text,
-        final_output=str(gm.get("player_facing_text") or ""),
-        response_type=compact_response_type_contract(response_type_contract),
-    )
-    maybe_attach_player_agency_eval(
-        session,
-        final_output=str(gm.get("player_facing_text") or ""),
-    )
-
-    clocks_changed = {"time_pressure": time_pressure_after} if clocks_before.get("time_pressure") != time_pressure_after else {}
-
-    # Populate trace for chat success path.
-    trace['parsed_intent'] = parsed if parsed is not None else None
-    trace['normalized_action'] = (
-        {k: normalized_chat[k] for k in ('id', 'label', 'type', 'prompt', 'targetSceneId', 'target_scene_id') if k in (normalized_chat or {})}
-        if normalized_chat and isinstance(normalized_chat, dict) else None
-    )
-    trace['resolution'] = _sanitize_resolution(resolution)
-    trace['response_type_contract'] = compact_response_type_contract(response_type_contract)
-    trace['scene_after'] = scene['scene']['id']
-    deduped_clue_updates: list[str] = []
-    for txt in authoritative_clue_updates:
-        if isinstance(txt, str) and txt.strip() and txt.strip() not in deduped_clue_updates:
-            deduped_clue_updates.append(txt.strip())
-    trace['clue_updates'] = deduped_clue_updates
-    trace['world_flag_updates'] = _trace_world_updates(gm.get('world_updates'), clocks_changed)
-    latency_ms["total_turn"] = _elapsed_ms(turn_started)
-    trace['turn_trace'] = _build_compact_turn_trace(
-        source='chat',
-        action_type='chat',
-        raw_input=trace['raw_input'],
-        parsed_intent=parsed if isinstance(parsed, dict) else None,
-        segmented_turn=compact_segmented,
-        normalized_action=normalized_chat,
-        implied_context=implied_context,
-        resolution=resolution,
-        scene_before=trace['scene_before'],
-        scene_after=trace['scene_after'],
-        authoritative_clue_updates=deduped_clue_updates,
-        clue_presentation_before=clue_presentation_before,
-        session=session,
-        world=world,
-        scene=scene,
-        leads_inspection=leads_inspection,
-        response_type_contract=response_type_contract,
-        route_selected=route_choice,
-        directed_social_entry=canonical_entry,
-        adoption_debug=_adopt_dbg_chat,
-        stale_invalidation_debug=_stale_inv_dbg_chat,
-        latency_ms=_finalize_latency_breakdown(latency_ms),
-    )
-    trace['latency_ms'] = _finalize_latency_breakdown(latency_ms)
-    _finalize_and_append_trace(session, trace, True, None)
-
-    clear_turn_start_interlocutor_snapshot(session)
-    save_session(session)
-    save_scene(scene)
-    save_combat(combat)
-    from game.gm import classify_player_intent
-
-    intent = classify_player_intent(req.text)
-    if (routed_via_exploration or routed_via_adjudication) and isinstance(resolution, dict):
-        resolution.setdefault('world_tick_events', tick.get('events', []))
-
-    gm_prompt_summary: dict = {
-        'scene_id': scene['scene'].get('id'),
-        'scene_mode': scene['scene'].get('mode'),
-        'response_mode': session.get('response_mode', 'standard'),
-        'response_type_contract': compact_response_type_contract(response_type_contract),
+    request_log = {
+        "request": {"chat": req.text},
+        "log_meta": {"player_input": req.text},
     }
-    if routed_via_exploration and isinstance(resolution, dict):
-        gm_prompt_summary['exploration'] = {
-            'action_id': resolution.get('action_id'),
-            'kind': resolution.get('kind'),
-            'scene_transition_occurred': bool(resolution.get('resolved_transition')),
-        }
-    if routed_via_adjudication and isinstance(resolution, dict):
-        gm_prompt_summary['adjudication'] = dict(resolution.get('adjudication') or {})
-
-    append_log(
-        {
-            'timestamp': utc_iso_now(),
-            'request': {'chat': req.text},
-            'resolution': resolution,
-            'gm_output': gm,
-            'log_meta': {
-                'player_input': req.text,
-                'intent_classification': intent,
-                'gm_prompt_context_summary': gm_prompt_summary,
-                'gm_raw_output_meta': {'has_output': True},
-                'approved_state_updates': {
-                    'scene_update': gm.get('scene_update'),
-                    'world_updates': gm.get('world_updates'),
-                    'new_scene_draft': gm.get('new_scene_draft'),
-                },
-                'rejected_state_updates': [],
-                'discovered_clues_added': deduped_clue_updates,
-                'surfaced_clues_in_narration_non_authoritative': surfaced_clue_telemetry,
-                'clocks_changed': clocks_changed,
-                'response_type_contract': compact_response_type_contract(response_type_contract),
-            },
-        }
-    )
-    return _build_turn_response_payload(
+    return _complete_opening_turn_persistence_like_chat(
+        turn_started=turn_started,
+        campaign=campaign,
+        character=character,
+        session=session,
+        world=world,
+        combat=combat,
+        scene=scene,
+        scene_before_id=scene_before_id,
+        trace=trace,
+        latency_ms=latency_ms,
+        clue_presentation_before=clue_presentation_before,
+        clocks_before=clocks_before,
+        time_pressure_after=time_pressure_after,
+        tick=tick,
+        recent_log=recent_log,
+        routed_via_exploration=routed_via_exploration,
+        routed_via_adjudication=routed_via_adjudication,
+        normalized_chat=normalized_chat,
+        resolution=resolution,
         gm=gm,
-        resolution=resolution if (routed_via_exploration or routed_via_adjudication) and isinstance(resolution, dict) else None,
-        include_resolution=bool((routed_via_exploration or routed_via_adjudication) and isinstance(resolution, dict)),
+        response_type_contract=response_type_contract,
+        route_choice=route_choice,
+        parsed=parsed,
+        segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+        compact_segmented=compact_segmented,
+        canonical_entry=canonical_entry,
+        implied_context=implied_context,
+        authoritative_clue_updates=authoritative_clue_updates,
+        player_text_for_eval=req.text,
+        debug_action_kind="chat",
+        trace_source="chat",
+        trace_action_type="chat",
+        request_log_payload=request_log,
+        mark_campaign_started=bool(
+            isinstance(resolution, dict) and resolution.get("action_id") == "campaign_start_opening_scene"
+        ),
     )
 
 

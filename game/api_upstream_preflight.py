@@ -34,6 +34,16 @@ class UpstreamApiPreflightStatus(TypedDict, total=False):
     invalidates_upstream_dependent_runs: bool
 
 
+# OpenAI Responses API requires max_output_tokens >= 16; lower values fail validation locally.
+_OPENAI_RESPONSES_MIN_MAX_OUTPUT_TOKENS = 16
+_PREFLIGHT_MAX_OUTPUT_TOKENS = 16
+
+
+def _clamp_preflight_max_output_tokens(requested: int) -> int:
+    """Ensure preflight never sends a sub-minimum token budget (API rejects < 16)."""
+    return max(int(requested), _OPENAI_RESPONSES_MIN_MAX_OUTPUT_TOKENS)
+
+
 _MODEL_ACCESS_FAILURE_CLASSES: frozenset[str] = frozenset(
     {
         "model_not_found",
@@ -226,7 +236,7 @@ def run_upstream_api_preflight(
         client.responses.create(
             model=mdl,
             input=probe_input,
-            max_output_tokens=8,
+            max_output_tokens=_clamp_preflight_max_output_tokens(_PREFLIGHT_MAX_OUTPUT_TOKENS),
             temperature=0,
             timeout=timeout,
         )

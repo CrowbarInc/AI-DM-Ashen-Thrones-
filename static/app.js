@@ -1,5 +1,6 @@
 const API = '/api';
 let state = null;
+let startCampaignBusy = false;
 
 /** Developer-facing copy for blocked new campaign (infra/billing/preflight — not narrative). */
 function formatBlockedNewCampaignMessage(data){
@@ -166,6 +167,7 @@ function renderState(s){
   renderAffordances(s.ui.affordances || []);
   renderComposer();
   renderEngineDebug(s);
+  updateCampaignBootstrapUI(s);
 
   // Save Slots: list snapshots with Load buttons
   const listEl = $('snapshotsList');
@@ -292,13 +294,33 @@ async function loadState(){
   renderState(s);
 }
 
+function updateCampaignBootstrapUI(s){
+  const panel = $('campaignBootstrapPanel');
+  const btn = $('startCampaignBtn');
+  const can = !!(s && s.ui && s.ui.campaign_can_start);
+  if(panel){
+    if(can){
+      panel.style.display = 'block';
+      panel.textContent = 'Fresh campaign loaded. Click Start Campaign to receive the opening scene.';
+    } else {
+      panel.style.display = 'none';
+      panel.textContent = '';
+    }
+  }
+  if(btn){
+    btn.style.display = can ? '' : 'none';
+    btn.disabled = !can || startCampaignBusy;
+  }
+}
+
 async function loadLog(){
   const {entries} = await fetchJSON(API+'/log');
   $('chatLog').innerHTML = '';
-  if(!entries.length) addMessage('system','System','GM ready.');
+  // Empty transcript after New Campaign / clear: no synthetic GM or system narration here (NC2).
   for(const entry of entries){
     addMessage('gm','GM',entry.gm_output?.player_facing_text || '(no narration)', entry.resolution);
   }
+  if(state) updateCampaignBootstrapUI(state);
 }
 
 async function reloadAll(){ await loadState(); await loadLog(); }
@@ -363,6 +385,40 @@ $('newCampaignBtn').addEventListener('click', async ()=>{
   state = null;
   location.reload();
 });
+
+const startCampaignBtn = $('startCampaignBtn');
+if(startCampaignBtn){
+  startCampaignBtn.addEventListener('click', async ()=>{
+    if(startCampaignBusy) return;
+    if(!state?.ui?.campaign_can_start) return;
+    startCampaignBusy = true;
+    startCampaignBtn.disabled = true;
+    const thinking = addMessage('system','System','Preparing opening…');
+    try {
+      const res = await fetch(API+'/start_campaign', {method:'POST'});
+      const data = await res.json();
+      if(res.status === 503 || data.status === 'blocked'){
+        replaceMessage(thinking,'error','System', formatBlockedNewCampaignMessage(data), newCampaignBlockedDetails(data));
+        return;
+      }
+      if(res.status === 409 || data.ok === false){
+        replaceMessage(thinking,'error','System', data.error || 'Could not start campaign.');
+        await reloadAll();
+        return;
+      }
+      if(!data.ok){
+        replaceMessage(thinking,'error','System', data.error || 'Unknown error');
+        return;
+      }
+      replaceMessage(thinking,'gm','GM', data.gm_output?.player_facing_text || '(no narration)', data.resolution);
+      renderState(data);
+      await loadLog();
+    } finally {
+      startCampaignBusy = false;
+      if(state) updateCampaignBootstrapUI(state);
+    }
+  });
+}
 $('saveCampaignBtn').addEventListener('click', saveCampaign);
 $('saveSceneBtn').addEventListener('click', saveScene);
 $('activateSceneBtn').addEventListener('click', activateScene);

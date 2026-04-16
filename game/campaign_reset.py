@@ -50,10 +50,21 @@ def apply_new_campaign_hard_reset() -> Dict[str, Any]:
     save_combat(combat)
 
     clear_log()
-
+    # Invariant (NC2): New Campaign is a silent reset — no persisted transcript rows until a turn runs.
+    tail = load_log()
+    if tail:
+        clear_log()
+        tail = load_log()
+    if tail:
+        raise RuntimeError(
+            "New Campaign invariant violated: session transcript is non-empty immediately after clear_log()."
+        )
     meta: Dict[str, Any] = {
         "campaign_run_id": session.get("campaign_run_id"),
         "session_id": session.get("session_id"),
+        # Operator/debug only (HTTP JSON for /api/new_campaign); proves reset + empty transcript.
+        "transcript_entry_count_after_reset": 0,
+        "silent_reset_no_implicit_transcript": True,
     }
 
     # Development-only: reload persisted state and assert runtime residue is gone (see

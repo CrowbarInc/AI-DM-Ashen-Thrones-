@@ -34,6 +34,18 @@ def _setup_data_dir(tmp_path, monkeypatch):
         )
 
 
+def test_apply_new_campaign_hard_reset_clears_campaign_started(tmp_path, monkeypatch):
+    """UX1: successful-start flag must not survive a hard reset."""
+    _setup_data_dir(tmp_path, monkeypatch)
+    session = load_session()
+    session["campaign_started"] = True
+    save_session(session)
+
+    apply_new_campaign_hard_reset()
+
+    assert load_session().get("campaign_started") is False
+
+
 def test_apply_new_campaign_hard_reset_clears_runtime_and_rotates_run_id(tmp_path, monkeypatch):
     _setup_data_dir(tmp_path, monkeypatch)
 
@@ -55,6 +67,8 @@ def test_apply_new_campaign_hard_reset_clears_runtime_and_rotates_run_id(tmp_pat
     meta = apply_new_campaign_hard_reset()
     assert meta.get("campaign_run_id")
     assert meta.get("session_id") == meta.get("campaign_run_id")
+    assert meta.get("silent_reset_no_implicit_transcript") is True
+    assert meta.get("transcript_entry_count_after_reset") == 0
 
     session2 = load_session()
     assert "legacy_leak" not in session2
