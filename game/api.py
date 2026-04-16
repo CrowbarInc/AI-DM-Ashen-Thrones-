@@ -132,6 +132,8 @@ from game.intent_parser import (
 )
 from game.prompt_context import build_response_policy
 from game.response_type_gating import compact_response_type_contract, derive_response_type_contract
+from game.behavioral_evaluators.intent_fulfillment import maybe_attach_intent_fulfillment_eval
+from game.behavioral_evaluators.player_agency import maybe_attach_player_agency_eval
 from game.social_exchange_emission import strict_social_emission_will_apply
 from game.post_emission_speaker_adoption import (
     apply_post_emission_speaker_adoption,
@@ -2153,6 +2155,16 @@ def action(req: ActionRequest):
         req.action_type, _player_input, normalized_action, resolution, response_type_contract
     )
     _merge_emergent_actor_debug_into_action_debug(session)
+    maybe_attach_intent_fulfillment_eval(
+        session,
+        player_input=_player_input,
+        final_output=str(gm.get("player_facing_text") or ""),
+        response_type=compact_response_type_contract(response_type_contract),
+    )
+    maybe_attach_player_agency_eval(
+        session,
+        final_output=str(gm.get("player_facing_text") or ""),
+    )
 
     # Populate trace for success path.
     trace['normalized_action'] = (
@@ -2867,6 +2879,16 @@ def chat(req: ChatRequest):
         'chat', req.text, normalized_chat, resolution, response_type_contract
     )
     _merge_emergent_actor_debug_into_action_debug(session)
+    maybe_attach_intent_fulfillment_eval(
+        session,
+        player_input=req.text,
+        final_output=str(gm.get("player_facing_text") or ""),
+        response_type=compact_response_type_contract(response_type_contract),
+    )
+    maybe_attach_player_agency_eval(
+        session,
+        final_output=str(gm.get("player_facing_text") or ""),
+    )
 
     clocks_changed = {"time_pressure": time_pressure_after} if clocks_before.get("time_pressure") != time_pressure_after else {}
 

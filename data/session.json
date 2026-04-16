@@ -35,9 +35,9 @@
       "guard_captain": "active",
       "tavern_runner": "active",
       "emergent_town_crier": "active",
+      "threadbare_watcher": "active",
       "refugee": "active",
-      "emergent_lord_aldric": "active",
-      "threadbare_watcher": "active"
+      "emergent_lord_aldric": "active"
     },
     "current_interlocutor": null,
     "emergent_addressables": [
@@ -73,10 +73,10 @@
       "last_exploration_action_key": "we_leave_the_gatehouse_antechamber_and_s",
       "repeated_action_count": 1,
       "last_resolution_kind": "travel",
-      "last_description_hash": "99bedc54581c0db21231c9e29dd08e8c",
+      "last_description_hash": "20ca0b31e19efc2812438d7d272374be",
       "consumed_action_ids": [],
       "momentum_exchanges_since": 0,
-      "momentum_next_due_in": 2,
+      "momentum_next_due_in": 3,
       "momentum_last_kind": "new_information",
       "passive_action_streak": 0,
       "recent_player_actions": [
@@ -99,53 +99,63 @@
       "last_player_action_passive": false,
       "recent_contextual_leads": [
         {
-          "key": "active_event_refugees_crowd_the_area_some_pressing_towards_the_guarded_choke_point_while_others",
+          "key": "active_event_stepping_into_the_open_yard_outside_the_gatehouse_antechamber_you_find_yourself_in_a_cluttered_rain_slicked_space_thick_with_refugees_wagons",
           "kind": "active_event",
-          "subject": "refugees crowd the area, some pressing towards the guarded choke point, while others",
-          "position": "",
+          "subject": "stepping into the open yard",
+          "position": "outside the gatehouse antechamber, you find yourself in a cluttered, rain-slicked space thick with refugees, wagons",
           "named": false,
-          "positioned": false,
+          "positioned": true,
           "mentions": 1,
           "last_turn": 1
         },
         {
-          "key": "active_event_two_alleyways",
+          "key": "recent_named_figure_captain_thoran",
+          "kind": "recent_named_figure",
+          "subject": "Captain Thoran",
+          "position": "",
+          "named": true,
+          "positioned": false,
+          "mentions": 1,
+          "last_turn": 2
+        },
+        {
+          "key": "active_event_detail_you_pressed_on_was_the_chain_of_command_for_patrols_tonight",
           "kind": "active_event",
-          "subject": "two alleyways",
+          "subject": "detail you pressed on was the chain of command for patrols tonight",
           "position": "",
           "named": false,
           "positioned": false,
           "mentions": 1,
-          "last_turn": 1
+          "last_turn": 2
         },
         {
-          "key": "active_event_near_the_gate_a_figure_in_threadbare_clothes",
+          "key": "visible_named_figure_captain_thoran_at_the_gate",
+          "kind": "visible_named_figure",
+          "subject": "Captain Thoran",
+          "position": "at the gate",
+          "named": true,
+          "positioned": true,
+          "mentions": 1,
+          "last_turn": 2
+        },
+        {
+          "key": "active_event_however_he_has_not_been_seen_in_the_yard_recently_and_at_the_guardhouse_inside_the_gate",
           "kind": "active_event",
-          "subject": "near the gate, a figure in threadbare clothes",
+          "subject": "however, he has not been seen in the yard recently and",
+          "position": "at the guardhouse inside the gate",
+          "named": false,
+          "positioned": true,
+          "mentions": 1,
+          "last_turn": 2
+        },
+        {
+          "key": "active_event_missing_patrol_rumor",
+          "kind": "active_event",
+          "subject": "missing patrol rumor",
           "position": "",
           "named": false,
           "positioned": false,
           "mentions": 1,
-          "last_turn": 1
-        },
-        {
-          "key": "visible_suspicious_figure_well_dressed_observer",
-          "kind": "visible_suspicious_figure",
-          "subject": "well-dressed observer",
-          "position": "",
-          "named": false,
-          "positioned": false,
-          "mentions": 1,
-          "last_turn": 1
-        },
-        {
-          "key": "notice_board_notice_board",
-          "kind": "notice_board",
-          "subject": "notice board",
-          "position": "",
-          "named": false,
-          "positioned": false,
-          "mentions": 2,
           "last_turn": 2
         }
       ]
@@ -185,7 +195,7 @@
   },
   "debug_traces": [
     {
-      "timestamp": "2026-04-13T04:09:50.441937Z",
+      "timestamp": "2026-04-16T00:09:50.300040Z",
       "source": "chat",
       "action_type": "chat",
       "raw_input": "We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals.",
@@ -281,7 +291,7 @@
                 "pressure_overweighting": false
               },
               "repair_hints": [],
-              "debug_reason_marker": "cs_violations=none;repair_applied=False;pass_after=None;before_len=971;after_len=971;before_head='Stepping out from the cramped gatehouse antechamber, rain spatters against soot-dark stones, and\u2026';after_head='Stepping out from the cramped gatehouse antechamber, rain spatters against soot-dark stones, and\u2026'"
+              "debug_reason_marker": "cs_violations=none;repair_applied=False;pass_after=None;before_len=1283;after_len=1283;before_head='Stepping into the open yard outside the gatehouse antechamber, you find yourself in a cluttered,\u2026';after_head='Stepping into the open yard outside the gatehouse antechamber, you find yourself in a cluttered,\u2026'"
             },
             "conversational_memory_window": {
               "enabled": true,
@@ -326,6 +336,7 @@
             "scene_state_anchor_skip_reason": null,
             "scene_state_anchor_matched_kinds": [
               "location",
+              "actor",
               "player_action"
             ],
             "scene_state_anchor_failure_reasons": [],
@@ -421,7 +432,7 @@
             "context_separation_repair_hints": [],
             "context_separation_repaired": false,
             "context_separation_repair_mode": null,
-            "context_separation_debug_reason_marker": "cs_violations=none;repair_applied=False;pass_after=None;before_len=971;after_len=971;before_head='Stepping out from the cramped gatehouse antechamber, rain spatters against soot-dark stones, and\u2026';after_head='Stepping out from the cramped gatehouse antechamber, rain spatters against soot-dark stones, and\u2026'",
+            "context_separation_debug_reason_marker": "cs_violations=none;repair_applied=False;pass_after=None;before_len=1283;after_len=1283;before_head='Stepping into the open yard outside the gatehouse antechamber, you find yourself in a cluttered,\u2026';after_head='Stepping into the open yard outside the gatehouse antechamber, you find yourself in a cluttered,\u2026'",
             "context_separation_passed_after_repair": null,
             "player_facing_narration_purity": {
               "validation": {
@@ -431,8 +442,8 @@
               "violation_keys": [],
               "repair_hints": [],
               "repair_modes": [],
-              "preview_before": "Stepping out from the cramped gatehouse antechamber, rain spatters against soot-dark stones, and\u2026",
-              "preview_after": "Stepping out from the cramped gatehouse antechamber, rain spatters against soot-dark stones, and\u2026"
+              "preview_before": "Stepping into the open yard outside the gatehouse antechamber, you find yourself in a cluttered,\u2026",
+              "preview_after": "Stepping into the open yard outside the gatehouse antechamber, you find yourself in a cluttered,\u2026"
             },
             "player_facing_narration_purity_contract_resolution_source": "response_policy",
             "player_facing_narration_purity_skip_reason": null,
@@ -443,8 +454,8 @@
             "player_facing_narration_purity_violation_keys": [],
             "player_facing_narration_purity_repair_hints_used": [],
             "player_facing_narration_purity_collapsed_to_diegetic_core": false,
-            "player_facing_narration_purity_preview_before": "Stepping out from the cramped gatehouse antechamber, rain spatters against soot-dark stones, and\u2026",
-            "player_facing_narration_purity_preview_after": "Stepping out from the cramped gatehouse antechamber, rain spatters against soot-dark stones, and\u2026",
+            "player_facing_narration_purity_preview_before": "Stepping into the open yard outside the gatehouse antechamber, you find yourself in a cluttered,\u2026",
+            "player_facing_narration_purity_preview_after": "Stepping into the open yard outside the gatehouse antechamber, you find yourself in a cluttered,\u2026",
             "answer_shape_primacy": {
               "checked": true,
               "passed": true,
@@ -456,8 +467,8 @@
             "answer_shape_primacy_repaired": false,
             "answer_shape_primacy_repair_mode": null,
             "answer_shape_primacy_failure_reasons": [],
-            "answer_shape_primacy_preview_before": "Stepping out from the cramped gatehouse antechamber, rain spatters against soot-dark stones, and\u2026",
-            "answer_shape_primacy_preview_after": "Stepping out from the cramped gatehouse antechamber, rain spatters against soot-dark stones, and\u2026",
+            "answer_shape_primacy_preview_before": "Stepping into the open yard outside the gatehouse antechamber, you find yourself in a cluttered,\u2026",
+            "answer_shape_primacy_preview_after": "Stepping into the open yard outside the gatehouse antechamber, you find yourself in a cluttered,\u2026",
             "interaction_continuity_validation": {
               "ok": true,
               "enabled": false,
@@ -688,14 +699,14 @@
           "changed_count": 0
         },
         "latency_ms": {
-          "intent_classification": 7,
+          "intent_classification": 6,
           "engine_resolution": 0,
-          "prompt_construction": 37,
-          "gpt_call": 24982,
+          "prompt_construction": 40,
+          "gpt_call": 27671,
           "retry_loop_total": 0,
-          "final_emission_gate": 49,
+          "final_emission_gate": 1459,
           "fallback_repair": 16,
-          "total_turn": 25155
+          "total_turn": 29245
         }
       },
       "gpt_called": true,
@@ -727,18 +738,18 @@
         ]
       },
       "latency_ms": {
-        "intent_classification": 7,
+        "intent_classification": 6,
         "engine_resolution": 0,
-        "prompt_construction": 37,
-        "gpt_call": 24982,
+        "prompt_construction": 40,
+        "gpt_call": 27671,
         "retry_loop_total": 0,
-        "final_emission_gate": 49,
+        "final_emission_gate": 1459,
         "fallback_repair": 16,
-        "total_turn": 25155
+        "total_turn": 29245
       }
     },
     {
-      "timestamp": "2026-04-13T04:10:15.637534Z",
+      "timestamp": "2026-04-16T00:10:19.588711Z",
       "source": "chat",
       "action_type": "chat",
       "raw_input": "I circle back to an earlier detail we skipped and insist we resolve it before moving on.",
@@ -819,7 +830,7 @@
             "narrative_authority_repaired": false,
             "narrative_authority_repair_mode": null,
             "narrative_authority_skip_reason": null,
-            "narrative_authority_deferral_mode": null,
+            "narrative_authority_deferral_mode": "bounded_uncertainty",
             "narrative_authority_assertion_flags": {
               "invented_outcome": false,
               "invented_hidden_fact": false,
@@ -871,7 +882,7 @@
                 "pressure_overweighting": false
               },
               "repair_hints": [],
-              "debug_reason_marker": "cs_violations=none;repair_applied=False;pass_after=None;before_len=761;after_len=761;before_head='The detail you decided to revisit centers on the notice board near the gate. Stepping closer, yo\u2026';after_head='The detail you decided to revisit centers on the notice board near the gate. Stepping closer, yo\u2026'"
+              "debug_reason_marker": "cs_violations=none;repair_applied=False;pass_after=None;before_len=889;after_len=889;before_head='The detail you pressed on was the chain of command for patrols tonight. The Guard Captain at the\u2026';after_head='The detail you pressed on was the chain of command for patrols tonight. The Guard Captain at the\u2026'"
             },
             "context_separation_contract_resolution_source": "response_policy",
             "context_separation_skip_reason": null,
@@ -889,7 +900,7 @@
             "context_separation_repair_hints": [],
             "context_separation_repaired": false,
             "context_separation_repair_mode": null,
-            "context_separation_debug_reason_marker": "cs_violations=none;repair_applied=False;pass_after=None;before_len=761;after_len=761;before_head='The detail you decided to revisit centers on the notice board near the gate. Stepping closer, yo\u2026';after_head='The detail you decided to revisit centers on the notice board near the gate. Stepping closer, yo\u2026'",
+            "context_separation_debug_reason_marker": "cs_violations=none;repair_applied=False;pass_after=None;before_len=889;after_len=889;before_head='The detail you pressed on was the chain of command for patrols tonight. The Guard Captain at the\u2026';after_head='The detail you pressed on was the chain of command for patrols tonight. The Guard Captain at the\u2026'",
             "context_separation_passed_after_repair": null,
             "player_facing_narration_purity": {
               "validation": {
@@ -899,8 +910,8 @@
               "violation_keys": [],
               "repair_hints": [],
               "repair_modes": [],
-              "preview_before": "The detail you decided to revisit centers on the notice board near the gate. Stepping closer, yo\u2026",
-              "preview_after": "The detail you decided to revisit centers on the notice board near the gate. Stepping closer, yo\u2026"
+              "preview_before": "The detail you pressed on was the chain of command for patrols tonight. The Guard Captain at the\u2026",
+              "preview_after": "The detail you pressed on was the chain of command for patrols tonight. The Guard Captain at the\u2026"
             },
             "player_facing_narration_purity_contract_resolution_source": "response_policy",
             "player_facing_narration_purity_skip_reason": null,
@@ -911,8 +922,8 @@
             "player_facing_narration_purity_violation_keys": [],
             "player_facing_narration_purity_repair_hints_used": [],
             "player_facing_narration_purity_collapsed_to_diegetic_core": false,
-            "player_facing_narration_purity_preview_before": "The detail you decided to revisit centers on the notice board near the gate. Stepping closer, yo\u2026",
-            "player_facing_narration_purity_preview_after": "The detail you decided to revisit centers on the notice board near the gate. Stepping closer, yo\u2026",
+            "player_facing_narration_purity_preview_before": "The detail you pressed on was the chain of command for patrols tonight. The Guard Captain at the\u2026",
+            "player_facing_narration_purity_preview_after": "The detail you pressed on was the chain of command for patrols tonight. The Guard Captain at the\u2026",
             "answer_shape_primacy": {
               "checked": true,
               "passed": true,
@@ -924,8 +935,8 @@
             "answer_shape_primacy_repaired": false,
             "answer_shape_primacy_repair_mode": null,
             "answer_shape_primacy_failure_reasons": [],
-            "answer_shape_primacy_preview_before": "The detail you decided to revisit centers on the notice board near the gate. Stepping closer, yo\u2026",
-            "answer_shape_primacy_preview_after": "The detail you decided to revisit centers on the notice board near the gate. Stepping closer, yo\u2026",
+            "answer_shape_primacy_preview_before": "The detail you pressed on was the chain of command for patrols tonight. The Guard Captain at the\u2026",
+            "answer_shape_primacy_preview_after": "The detail you pressed on was the chain of command for patrols tonight. The Guard Captain at the\u2026",
             "conversational_memory_window": {
               "enabled": true,
               "window_version": "v1",
@@ -964,7 +975,7 @@
                 "entity_ids": [],
                 "topic_tokens": [],
                 "source_turn": 1,
-                "text": "P: We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals. | G: Stepping out from the cramped gatehouse antechamber, rain spatters against soot-dark stones, and Cinderwatch's eastern gate yard stretches wide before you. The muddy ground squelches underfoot, clutte",
+                "text": "P: We leave the gatehouse antechamber and step into the yard; I stop querying the clerk and re-orient on sightlines, cover, and what the open space reveals. | G: Rain spatters soot-dark stone while refugees, wagons, and foot traffic clog the muddy approach. Guard Captain indicates that Captain Thoran controls patrol assignments tonight, while Tavern Runner sho",
                 "score": 103.71428571428571,
                 "why_selected": [
                   "recency",
@@ -975,56 +986,13 @@
                 "kind": "contextual_thread",
                 "entity_ids": [],
                 "topic_tokens": [
-                  "clothes",
-                  "figure",
-                  "gate",
-                  "near",
-                  "threadbare"
+                  "into",
+                  "open",
+                  "stepping",
+                  "yard"
                 ],
                 "source_turn": 1,
-                "text": "near the gate, a figure in threadbare clothes [active_event_near_the_gate_a_figure_in_threadbare_clothes]",
-                "score": 85.71428571428571,
-                "why_selected": [
-                  "recency"
-                ]
-              },
-              {
-                "kind": "contextual_thread",
-                "entity_ids": [],
-                "topic_tokens": [
-                  "board",
-                  "notice"
-                ],
-                "source_turn": 1,
-                "text": "notice board [notice_board_notice_board]",
-                "score": 85.71428571428571,
-                "why_selected": [
-                  "recency"
-                ]
-              },
-              {
-                "kind": "contextual_thread",
-                "entity_ids": [],
-                "topic_tokens": [
-                  "alleyways"
-                ],
-                "source_turn": 1,
-                "text": "two alleyways [active_event_two_alleyways]",
-                "score": 85.71428571428571,
-                "why_selected": [
-                  "recency"
-                ]
-              },
-              {
-                "kind": "contextual_thread",
-                "entity_ids": [],
-                "topic_tokens": [
-                  "dressed",
-                  "observer",
-                  "well"
-                ],
-                "source_turn": 1,
-                "text": "well-dressed observer [visible_suspicious_figure_well_dressed_observer]",
+                "text": "stepping into the open yard [active_event_stepping_into_the_open_yard_outside_the_gatehouse_antechamber_you_find_yourself_in_a_cluttered_rain_slicked_space_thick_with_refugees_wagons]",
                 "score": 85.71428571428571,
                 "why_selected": [
                   "recency"
@@ -1032,8 +1000,8 @@
               }
             ],
             "conversational_memory": {
-              "candidate_count": 5,
-              "selected_count": 5
+              "candidate_count": 2,
+              "selected_count": 2
             },
             "interaction_continuity_validation": {
               "ok": true,
@@ -1155,7 +1123,7 @@
           "interlocutor_status": "none",
           "continuity_status": "broken",
           "fallback_anchor_source": "none",
-          "visible_grounded_speaker": "guard_captain",
+          "visible_grounded_speaker": null,
           "final_reply_owner": null
         },
         "resolution_path": "chat_engine",
@@ -1237,14 +1205,14 @@
           "changed_count": 0
         },
         "latency_ms": {
-          "intent_classification": 41,
+          "intent_classification": 43,
           "engine_resolution": 0,
-          "prompt_construction": 20,
-          "gpt_call": 24140,
+          "prompt_construction": 19,
+          "gpt_call": 31328,
           "retry_loop_total": 0,
-          "final_emission_gate": 35,
+          "final_emission_gate": 28,
           "fallback_repair": 3,
-          "total_turn": 24278
+          "total_turn": 31460
         }
       },
       "gpt_called": true,
@@ -1279,22 +1247,22 @@
         ]
       },
       "latency_ms": {
-        "intent_classification": 41,
+        "intent_classification": 43,
         "engine_resolution": 0,
-        "prompt_construction": 20,
-        "gpt_call": 24140,
+        "prompt_construction": 19,
+        "gpt_call": 31328,
         "retry_loop_total": 0,
-        "final_emission_gate": 35,
+        "final_emission_gate": 28,
         "fallback_repair": 3,
-        "total_turn": 24278
+        "total_turn": 31460
       }
     }
   ],
   "flags": {},
   "character_name": "Galinor",
-  "campaign_run_id": "dcb61ba39dd0d0f0694cc2ba",
-  "session_id": "dcb61ba39dd0d0f0694cc2ba",
-  "last_saved_at": "2026-04-13T04:10:39.923606Z",
+  "campaign_run_id": "89d732dfb3c69e4c4ed017f6",
+  "session_id": "89d732dfb3c69e4c4ed017f6",
+  "last_saved_at": "2026-04-16T00:10:51.059422Z",
   "last_turn_response_policy": {
     "rule_priority_order": [
       "ANSWER THE PLAYER",
@@ -1347,14 +1315,14 @@
           "not_question_or_answer_pressure"
         ],
         "answer_pressure_family": null,
-        "answer_pressure_anchor_kind": "gm_snippet_token_or_lexical",
+        "answer_pressure_anchor_kind": null,
         "contradiction_followup_detected": false,
         "explanation_followup_detected": false,
         "insufficiency_followup_detected": false,
         "short_followup_anchor_detected": false,
         "anchor_tokens_extracted": [
-          "gatehouse",
-          "cinderwatch's"
+          "thoran",
+          "patrol"
         ],
         "anchor_token_matched": null,
         "anchor_followup_detected": false,
@@ -1394,7 +1362,7 @@
         "adjudication"
       ]
     },
-    "scene_momentum_due": false,
+    "scene_momentum_due": true,
     "uncertainty": {
       "enabled": true,
       "categories": [
@@ -1436,14 +1404,14 @@
           "not_question_or_answer_pressure"
         ],
         "answer_pressure_family": null,
-        "answer_pressure_anchor_kind": "gm_snippet_token_or_lexical",
+        "answer_pressure_anchor_kind": null,
         "contradiction_followup_detected": false,
         "explanation_followup_detected": false,
         "insufficiency_followup_detected": false,
         "short_followup_anchor_detected": false,
         "anchor_tokens_extracted": [
-          "gatehouse",
-          "cinderwatch's"
+          "thoran",
+          "patrol"
         ],
         "anchor_token_matched": null,
         "anchor_followup_detected": false,
@@ -2076,7 +2044,7 @@
         "player_text_nonempty": true,
         "obligation_hints": {
           "must_advance_scene": false,
-          "scene_momentum_due": false,
+          "scene_momentum_due": true,
           "is_opening_scene": false
         }
       },
@@ -2428,7 +2396,7 @@
         "topic_follow_up_active": false,
         "answer_completeness_required": false,
         "dialogue_shape_expected": false,
-        "prior_turn_gm_snippet_for_overlap": "Stepping out from the cramped gatehouse antechamber, rain spatters against soot-dark stones, and Cinderwatch's eastern gate yard stretches wide before you. The muddy ground squelches underfoot, clutte",
+        "prior_turn_gm_snippet_for_overlap": "Rain spatters soot-dark stone while refugees, wagons, and foot traffic clog the muddy approach. Guard Captain indicates that Captain Thoran controls patrol assignments tonight, while Tavern Runner sho",
         "player_text_len": 88,
         "rumor_turn_active": false,
         "rumor_turn_reason_codes": [],
