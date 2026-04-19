@@ -154,6 +154,12 @@ from game.clues import (
     get_all_known_clue_texts,
     get_known_clues_with_presentation,
 )
+from game.ctir_runtime import (
+    build_runtime_ctir_for_narration,
+    detach_ctir,
+    ensure_ctir_for_turn,
+    narration_ctir_turn_stamp,
+)
 from game.final_emission_gate import apply_spoken_state_refinement_cash_out
 from game.api_upstream_preflight import log_upstream_api_preflight_at_startup
 from game.upstream_dependent_run_gate import compute_upstream_dependent_run_gate
@@ -832,15 +838,23 @@ def _build_gpt_narration_from_authoritative_state(
     combat: dict,
     recent_log: list,
     user_text: str,
-    resolution: dict,
+    resolution: dict | None,
     scene_runtime: dict,
     segmented_turn: dict | None = None,
     route_choice: str | None = None,
     directed_social_entry: dict | None = None,
     response_type_contract: dict | None = None,
     latency_sink: dict | None = None,
+    normalized_action: dict | None = None,
 ) -> dict:
-    """Stages 6-7: build prompt context from authoritative state, then narrate with GPT."""
+    """Stages 6-7: build prompt context from authoritative state, then narrate with GPT.
+
+    **CTIR seam:** Mutation and stale detach already ran in :func:`_run_resolved_turn_pipeline`. Here,
+    resolution-facing hygiene (e.g. topic probe registration, social escalation on ``resolution``) runs
+    before ``ensure_ctir_for_turn`` snapshots CTIR for this stamp. Prompt construction reads that attachment
+    via :mod:`game.prompt_context`—it does not rebuild meaning. Targeted retries keep the same stamp so CTIR
+    is reused. If ``resolution`` is not a dict, CTIR is detached and not rebuilt for this path.
+    """
     register_topic_probe(
         session=session,
         scene_envelope=scene,
@@ -856,6 +870,27 @@ def _build_gpt_narration_from_authoritative_state(
             user_text=user_text,
             resolution=resolution,
             recent_log=recent_log,
+        )
+    else:
+        # No authoritative resolution dict: drop any stale CTIR; prompt_context will use caller fallbacks.
+        detach_ctir(session)
+    if isinstance(resolution, dict):
+        _ctir_stamp = narration_ctir_turn_stamp(session=session, resolution=resolution, user_text=user_text)
+        _scene_id_for_ctir = str((scene.get("scene") or {}).get("id") or "").strip() or None
+        # Single build per stamp; retries inside this function reuse the attached object (see ctir_runtime).
+        ensure_ctir_for_turn(
+            session,
+            turn_stamp=_ctir_stamp,
+            builder=lambda: build_runtime_ctir_for_narration(
+                turn_id=session.get("turn_counter"),
+                scene_id=_scene_id_for_ctir,
+                player_input=user_text,
+                builder_source="game.api._build_gpt_narration_from_authoritative_state",
+                resolution=resolution,
+                normalized_action=normalized_action if isinstance(normalized_action, dict) else None,
+                combat=combat if isinstance(combat, dict) else None,
+                session=session if isinstance(session, dict) else None,
+            ),
         )
     prompt_started = _now_perf()
     messages = build_messages(
@@ -890,7 +925,7 @@ def _build_gpt_narration_from_authoritative_state(
         else _derive_response_type_contract_for_turn(
             session=session,
             segmented_turn=segmented_turn,
-            normalized_action=None,
+            normalized_action=normalized_action if isinstance(normalized_action, dict) else None,
             resolution=resolution if isinstance(resolution, dict) else None,
             raw_player_text=user_text,
             route_choice=route_choice,
@@ -1475,7 +1510,13 @@ def _run_resolved_turn_pipeline(
 
     Stage 5: authoritative engine mutation is applied first.
     Stage 6-7: prompt context and GPT narration are built only from that post-resolution state.
+
+    **CTIR:** ``detach_ctir`` is the first step so any prior turn's session-backed CTIR cannot leak into
+    this mutation. Fresh CTIR for this turn is attached later inside
+    :func:`_build_gpt_narration_from_authoritative_state` (after hygiene on ``resolution``). Do not attach
+    CTIR here—keep build/attach next to prompt construction for retry-stable stamps.
     """
+    detach_ctir(session)
     engine_started = _now_perf()
     scene, session, combat, authoritative_clue_updates, scene_rt = _apply_authoritative_resolution_state_mutation(
         session=session,
@@ -1513,6 +1554,7 @@ def _run_resolved_turn_pipeline(
         directed_social_entry=directed_social_entry,
         response_type_contract=response_type_contract,
         latency_sink=latency_sink,
+        normalized_action=normalized_action,
     )
     return (scene, session, combat, gm, authoritative_clue_updates, response_type_contract)
 

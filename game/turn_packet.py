@@ -1,5 +1,10 @@
 """Canonical owner for the turn-packet contract boundary.
 
+**Not CTIR:** Session-backed CTIR (:mod:`game.ctir_runtime`, :mod:`game.ctir`) is the bounded resolved-turn
+*meaning* layer attached for narration. The turn packet remains a **separate** compact artifact: contracts,
+route hints, continuity snapshots, and debug metadata for gates and retries. Do not embed CTIR sections,
+mirror full CTIR trees, or promote the packet to a second semantic authority alongside CTIR.
+
 This module is the **packet contract owner**: compact versioned packet construction,
 stable accessors, and gate-side packet resolution. The turn packet is **not**
 authoritative engine state and does not replace runtime resolution or validators.

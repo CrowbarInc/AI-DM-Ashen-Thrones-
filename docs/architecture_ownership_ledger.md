@@ -51,6 +51,18 @@ Each governed seam below uses the same four rows (plus boundary notes where help
 - **Does not belong in runtime owner:** extracted lead-only logic as a rival owner, validator/repair policy, emit-order orchestration.
 - **Governance note:** describe as `runtime owner → direct-owner suite → downstream suites`, not several equal prompt authorities.
 
+## CTIR (resolved-turn meaning) and prompt adapter
+
+- Canonical owner modules: `game/ctir.py` (normalized meaning shape), `game/ctir_runtime.py` (session attach + stamp + ensure), `game/api.py` (build timing after authoritative mutation and hygiene)
+- Non-owner consumers: `game/prompt_context.py` (reads session CTIR once per narration-context build; maps via adapter helpers only), `game/turn_packet.py` (separate contracts/debug packet—must not embed CTIR)
+- **Concern name:** `resolved-turn CTIR vs prompt-context adapter`
+- **Runtime owner:** `game/ctir.py` + `game/ctir_runtime.py` for the meaning object; `game/api.py` for orchestration of detach → mutate → hygiene → attach
+- **Practical primary direct-owner suites:** `tests/test_ctir_pipeline_integration.py`, `tests/test_prompt_context_ctir_consumption.py`, `tests/test_ctir_runtime_lifecycle.py`, `tests/test_ctir_retry_stability.py`, `tests/test_ctir_turn_packet_boundary.py`, `tests/test_ctir_snapshot_examples.py`, `tests/test_prompt_context_ctir_boundary.py`
+- **Secondary downstream suites:** prompt and pipeline suites that assume post-resolution payloads remain stable
+- **Compatibility / support residue:** when CTIR is absent, `prompt_context` may fall back to caller `resolution` / `intent`; bounded canonical reads remain for data CTIR does not own (see module comments)
+- **Design reference:** `docs/ctir_prompt_adapter_architecture.md`
+- **Governance note:** `prompt_context` is not a second semantic authority over the resolved turn when CTIR is present; `turn_packet` is not CTIR.
+
 ## Strict-social Exchange Emission Seam
 
 - Canonical owner module: `game/social_exchange_emission.py`

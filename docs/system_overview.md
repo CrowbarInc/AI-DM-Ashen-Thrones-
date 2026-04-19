@@ -45,6 +45,10 @@ Each system owns a responsibility, not an implementation.
 | Prompt Layer | Narration constraints and context |
 | GPT | Narrative expression only |
 
+### Resolved-turn meaning vs prompt contracts (CTIR)
+
+For **post-resolution** narration, turn meaning is snapshotted once into **CTIR** (session-backed, retry-stable), then **consumed** by `game.prompt_context` through a small adapter. That is separate from the **turn packet** (contracts/debug/transport). See [CTIR and prompt adapter architecture](ctir_prompt_adapter_architecture.md) for the full lifecycle, four-layer split, and boundary rules that guard against semantic co-ownership regressions.
+
 ---
 
 ## Ownership Rules

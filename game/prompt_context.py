@@ -1,5 +1,14 @@
 """Canonical owner for prompt-context assembly and prompt-contract bundling.
 
+**CTIR-first seam:** For resolved turns, session-backed CTIR (see :mod:`game.ctir_runtime`) is the canonical
+resolved-turn *meaning* snapshot. This module resolves it once per ``build_narration_context`` call via
+``get_attached_ctir(session)`` and maps it through :func:`_ctir_to_prompt_semantics` and related overlays.
+When CTIR exists, downstream contract code **consumes** that meaning—it must not re-decide outcomes already
+encoded in CTIR, and this module must **not** invoke CTIR construction from :mod:`game.ctir`. When CTIR is absent, caller
+``resolution`` / ``intent`` supply legacy fallback shapes only for that path. Bounded reads of canonical engine
+state are reserved for data CTIR intentionally does not own (see call-site comments, e.g. roster/name
+resolution).
+
 Builds the structured prompt-context payload from game state before narration prompt
 construction. This module is the canonical prompt-contract owner and repo-facing
 owner of the full prompt-contract bundle that narration receives.
@@ -92,6 +101,7 @@ from game.response_policy_contracts import (
     peek_response_type_contract_from_resolution as _peek_response_type_contract_from_resolution_impl,
 )
 from game.turn_packet import build_turn_packet
+from game.ctir_runtime import get_attached_ctir
 
 # Configurable limits for deterministic, inspectable compression
 MAX_RECENT_LOG = 5
@@ -115,6 +125,9 @@ SOCIAL_REPLY_KINDS = frozenset({
     'social_probe',
 })
 NPC_REPLY_KIND_VALUES = frozenset({'answer', 'explanation', 'reaction', 'refusal'})
+
+# Classifier-owned intent keys not duplicated into CTIR; preserve from caller for payload only.
+_CLASSIFIER_ONLY_INTENT_KEYS: frozenset[str] = frozenset({"allow_discoverable_clues"})
 
 # Single source of truth for narration-rule precedence. Prompting and
 # deterministic enforcement both read this so conflicts resolve the same way.
@@ -195,6 +208,83 @@ CONCRETE_PAYLOAD_KINDS: tuple[str, ...] = (
     "condition",
     "next_lead",
 )
+
+
+def _promote_ctir_resolution_for_engine_reads(resolution_block: dict[str, Any]) -> dict[str, Any]:
+    """Copy CTIR ``resolution`` and promote common authoritative_outputs keys for legacy readers."""
+    out = dict(resolution_block)
+    auth = out.get("authoritative_outputs")
+    if isinstance(auth, dict):
+        for k in ("resolved_transition", "target_scene_id", "action_id", "originating_scene_id", "clue_id"):
+            if k in auth and k not in out:
+                out[k] = auth[k]
+    return out
+
+
+def _ctir_to_prompt_semantics(ctir_obj: Mapping[str, Any] | None) -> dict[str, Any]:
+    """Map CTIR sections to prompt-local semantics (read-only; never mutates *ctir_obj*)."""
+    if not isinstance(ctir_obj, dict):
+        return {}
+    raw_res = ctir_obj.get("resolution") if isinstance(ctir_obj.get("resolution"), dict) else {}
+    resolution_engine = _promote_ctir_resolution_for_engine_reads(raw_res)
+    intent_block = ctir_obj.get("intent") if isinstance(ctir_obj.get("intent"), dict) else {}
+    interaction_block = ctir_obj.get("interaction") if isinstance(ctir_obj.get("interaction"), dict) else {}
+    world_block = ctir_obj.get("world") if isinstance(ctir_obj.get("world"), dict) else {}
+    anchors_block = ctir_obj.get("narrative_anchors") if isinstance(ctir_obj.get("narrative_anchors"), dict) else {}
+    return {
+        "intent": dict(intent_block),
+        "resolution": resolution_engine,
+        "interaction": dict(interaction_block),
+        "world": dict(world_block),
+        "narrative_anchors": dict(anchors_block),
+    }
+
+
+def _session_view_overlay_from_ctir_interaction(
+    session_view: dict[str, Any],
+    interaction_sem: Mapping[str, Any] | None,
+    *,
+    session: dict[str, Any] | None,
+    world: Mapping[str, Any] | None,
+    public_scene: Mapping[str, Any] | None,
+) -> dict[str, Any]:
+    """Apply CTIR ``interaction`` over compressed session_view for turn-local semantics."""
+    if not isinstance(interaction_sem, dict) or not interaction_sem:
+        return session_view
+    out = dict(session_view)
+    at = str(interaction_sem.get("active_target_id") or "").strip()
+    if at and session is not None:
+        # CTIR intentionally does not own roster canonicalization; reading canonical state
+        canon = canonical_interaction_target_npc_id(session, at)
+        eff = canon or at
+        out["active_interaction_target_id"] = eff
+        out["active_interaction_target_name"] = (
+            _resolve_active_interaction_target_name(session, world or {}, public_scene or {}, npc_id=eff)
+            if eff
+            else None
+        )
+    mode = interaction_sem.get("interaction_mode")
+    if isinstance(mode, str) and mode.strip():
+        out["interaction_mode"] = str(mode).strip()
+    ikind = interaction_sem.get("interaction_kind")
+    if isinstance(ikind, str) and ikind.strip():
+        out["active_interaction_kind"] = str(ikind).strip()
+    return out
+
+
+def _interaction_context_snapshot_from_ctir_semantics(interaction_sem: Mapping[str, Any] | None) -> dict[str, Any]:
+    """Shape CTIR interaction into the compact dict used by response-type derivation."""
+    if not isinstance(interaction_sem, dict):
+        return {}
+    return {
+        "active_interaction_target_id": str(interaction_sem.get("active_target_id") or "").strip() or None,
+        "active_interaction_kind": str(interaction_sem.get("interaction_kind") or "").strip() or None,
+        "interaction_mode": str(interaction_sem.get("interaction_mode") or "").strip() or None,
+        "engagement_level": None,
+        "conversation_privacy": None,
+        "player_position_context": None,
+    }
+
 
 _QUESTION_LINE_PATTERN = re.compile(
     r"(^\s*(what|where|when|why|how|who|which|whose)\b)|\?|"
@@ -2896,6 +2986,23 @@ def build_narration_context(
     and interaction_continuity (thread / interlocutor anchoring snapshot for enforcement layers);
     see module docstring.
     """
+    # One session read per narration-context build; adapter below is the mapping seam (not a second authority).
+    ctir_obj = get_attached_ctir(session if isinstance(session, dict) else None)
+    if ctir_obj is not None:
+        prompt_sem = _ctir_to_prompt_semantics(ctir_obj)
+        resolution_sem: Dict[str, Any] | None = prompt_sem["resolution"]
+        intent_sem: Dict[str, Any] = prompt_sem["intent"]
+        interaction_sem: Dict[str, Any] = prompt_sem["interaction"]
+    else:
+        prompt_sem = None
+        resolution_sem = resolution if isinstance(resolution, dict) else None
+        intent_sem = intent if isinstance(intent, dict) else {}
+        interaction_sem = {}
+    intent_for_scene_payload: Dict[str, Any] = dict(intent_sem) if ctir_obj is not None else (intent if isinstance(intent, dict) else {})
+    if ctir_obj is not None and isinstance(intent, dict):
+        for _ik in _CLASSIFIER_ONLY_INTENT_KEYS:
+            if _ik in intent:
+                intent_for_scene_payload[_ik] = intent[_ik]
     # Interlocutor lead contract (maintenance): interlocutor_lead_context is the NPC-scoped export from
     # discussion tracking + authoritative lead rows; interlocutor_lead_behavior_hints are derived only
     # from that dict. Keep both separate from lead_context and pending_leads. Synthetic regression targets
@@ -2907,10 +3014,18 @@ def build_narration_context(
     )
     runtime = _compress_scene_runtime(scene_runtime or {}, session=session if isinstance(session, dict) else None)
     session_view = _compress_session(session, world, public_scene)
+    if ctir_obj is not None:
+        session_view = _session_view_overlay_from_ctir_interaction(
+            session_view,
+            interaction_sem,
+            session=session if isinstance(session, dict) else None,
+            world=world if isinstance(world, dict) else None,
+            public_scene=public_scene if isinstance(public_scene, dict) else None,
+        )
     narration_obligations = derive_narration_obligations(
         session_view=session_view,
-        resolution=resolution,
-        intent=intent,
+        resolution=resolution_sem,
+        intent=intent_sem,
         recent_log_for_prompt=recent_log_for_prompt,
         scene_runtime=runtime,
     )
@@ -2922,12 +3037,12 @@ def build_narration_context(
     response_policy = build_response_policy(
         narration_obligations=narration_obligations,
         player_text=str(user_text or ""),
-        resolution=resolution,
+        resolution=resolution_sem,
         session_view=session_view,
         uncertainty_hint=eff_uncertainty_hint,
         recent_log_compact=recent_log_compact,
     )
-    res = resolution if isinstance(resolution, dict) else {}
+    res = resolution_sem if isinstance(resolution_sem, dict) else {}
     state_changes = res.get("state_changes") if isinstance(res.get("state_changes"), dict) else {}
     scene_advancement = {
         "scene_transition_occurred": bool(res.get("resolved_transition")) or bool(state_changes.get("scene_transition_occurred")),
@@ -2970,7 +3085,7 @@ def build_narration_context(
             visible_facts_for_prompt = curated_opening
         else:
             visible_facts_for_prompt = visible_facts_for_prompt[:OPENING_NARRATION_VISIBLE_FACT_MAX]
-    res_for_vis = resolution if isinstance(resolution, dict) else {}
+    res_for_vis = resolution_sem if isinstance(resolution_sem, dict) else {}
     res_md_vis = res_for_vis.get("metadata") if isinstance(res_for_vis.get("metadata"), dict) else {}
     if res_md_vis.get("human_adjacent_intent_family") in {"listen", "approach_listen", "observe_group"}:
         from game.human_adjacent_focus import prioritize_visible_facts_for_human_adjacent
@@ -3018,7 +3133,7 @@ def build_narration_context(
         session if isinstance(session, dict) else None,
         scene if isinstance(scene, dict) else None,
         world if isinstance(world, dict) else None,
-        resolution=resolution if isinstance(resolution, dict) else None,
+        resolution=resolution_sem if isinstance(resolution_sem, dict) else None,
     )
     prompt_debug_anchor = {
         "scene_state_anchor": {
@@ -3290,7 +3405,7 @@ def build_narration_context(
         session if isinstance(session, dict) else None,
         world if isinstance(world, dict) else None,
         scene_id_for_speaker,
-        resolution=resolution if isinstance(resolution, dict) else None,
+        resolution=resolution_sem if isinstance(resolution_sem, dict) else None,
     )
     tone_escalation_build_error: str | None = None
     try:
@@ -3298,7 +3413,7 @@ def build_narration_context(
             session=session if isinstance(session, dict) else None,
             world=world if isinstance(world, dict) else None,
             scene_id=str(scene_id_for_speaker or "").strip(),
-            resolution=resolution if isinstance(resolution, dict) else None,
+            resolution=resolution_sem if isinstance(resolution_sem, dict) else None,
             speaker_selection_contract=speaker_selection if isinstance(speaker_selection, dict) else None,
             scene_state_anchor_contract=scene_state_anchor_contract if isinstance(scene_state_anchor_contract, dict) else None,
             narration_visibility=visibility_contract if isinstance(visibility_contract, dict) else None,
@@ -3373,7 +3488,7 @@ def build_narration_context(
     # Machine-readable boundary only; exhaustive checks live outside this module (e.g. emission gate).
     # narration_visibility= full ``build_narration_visibility_contract`` snapshot (not the slim prompt export).
     narrative_authority_contract = build_narrative_authority_contract(
-        resolution=resolution if isinstance(resolution, dict) else None,
+        resolution=resolution_sem if isinstance(resolution_sem, dict) else None,
         narration_visibility=visibility_contract if isinstance(visibility_contract, dict) else None,
         scene_state_anchor_contract=scene_state_anchor_contract if isinstance(scene_state_anchor_contract, dict) else None,
         speaker_selection_contract=speaker_selection if isinstance(speaker_selection, dict) else None,
@@ -3399,7 +3514,7 @@ def build_narration_context(
 
     follow_surface = session.get("follow_surface") if isinstance(session, dict) else None
     anti_railroading_contract = build_anti_railroading_contract(
-        resolution=resolution if isinstance(resolution, dict) else None,
+        resolution=resolution_sem if isinstance(resolution_sem, dict) else None,
         narration_obligations=narration_obligations,
         session_view=session_view if isinstance(session_view, dict) else None,
         scene_state_anchor_contract=scene_state_anchor_contract if isinstance(scene_state_anchor_contract, dict) else None,
@@ -3426,7 +3541,7 @@ def build_narration_context(
         ),
     }
 
-    turn_summary_struct = _build_turn_summary(user_text, resolution, intent)
+    turn_summary_struct = _build_turn_summary(user_text, resolution_sem, intent_sem)
     _ts_parts = [
         str(turn_summary_struct.get("action_descriptor") or "").strip(),
         str(turn_summary_struct.get("resolution_kind") or "").strip(),
@@ -3476,7 +3591,7 @@ def build_narration_context(
                 break
 
     context_separation_contract = build_context_separation_contract(
-        resolution=resolution if isinstance(resolution, dict) else None,
+        resolution=resolution_sem if isinstance(resolution_sem, dict) else None,
         player_text=str(user_text or ""),
         session_view=session_view_for_separation,
         scene_envelope=scene if isinstance(scene, dict) else None,
@@ -3507,13 +3622,18 @@ def build_narration_context(
     # Canonical prompt-contract owner path: ``game.prompt_context`` ships this
     # policy in the prompt bundle. The implementation remains delegated to the
     # downstream policy consumer module as compatibility residue only.
-    rtc_peeked = peek_response_type_contract_from_resolution(resolution)
+    rtc_peeked = peek_response_type_contract_from_resolution(resolution_sem)
     rtc_source = "resolution.metadata" if rtc_peeked is not None else "derived"
+    interaction_for_rtc = (
+        _interaction_context_snapshot_from_ctir_semantics(interaction_sem)
+        if ctir_obj is not None
+        else response_type_context_snapshot(session if isinstance(session, dict) else None)
+    )
     rtc_for_social_structure = rtc_peeked or derive_response_type_contract(
         segmented_turn=None,
         normalized_action=None,
-        resolution=resolution if isinstance(resolution, dict) else None,
-        interaction_context=response_type_context_snapshot(session if isinstance(session, dict) else None),
+        resolution=resolution_sem if isinstance(resolution_sem, dict) else None,
+        interaction_context=interaction_for_rtc,
         directed_social_entry=None,
         route_choice=None,
         raw_player_text=str(user_text or ""),
@@ -3544,6 +3664,7 @@ def build_narration_context(
         scene=scene if isinstance(scene, dict) else None,
         recent_log=recent_log_compact,
         turn_summary=turn_summary_struct,
+        # CTIR intentionally does not own this; reading canonical state
         mechanical_resolution=resolution if isinstance(resolution, dict) else None,
         response_type_contract=rtc_for_social_structure if isinstance(rtc_for_social_structure, dict) else None,
         answer_completeness_contract=response_policy.get("answer_completeness"),
@@ -3721,7 +3842,7 @@ def build_narration_context(
     use_manual_play_compact = _should_use_manual_play_compact_prompt(
         prompt_profile=prompt_profile,
         narration_obligations=narration_obligations,
-        resolution=resolution if isinstance(resolution, dict) else None,
+        resolution=resolution_sem if isinstance(resolution_sem, dict) else None,
         uncertainty_hint=eff_uncertainty_hint if isinstance(eff_uncertainty_hint, Mapping) else None,
         follow_up_pressure=follow_up_pressure if isinstance(follow_up_pressure, Mapping) else None,
         active_topic_anchor=active_topic_anchor if isinstance(active_topic_anchor, Mapping) else None,
@@ -3770,7 +3891,7 @@ def build_narration_context(
         response_policy=response_policy,
         scene_id=scene_pub_id or None,
         player_text=str(user_text or ""),
-        resolution=resolution if isinstance(resolution, dict) else None,
+        resolution=resolution_sem if isinstance(resolution_sem, dict) else None,
         interaction_continuity=interaction_continuity,
         narration_obligations=narration_obligations,
         last_human_adjacent_continuity=(
@@ -3820,6 +3941,7 @@ def build_narration_context(
         'prompt_debug': prompt_debug_anchor,
         'first_mention_contract': first_mention_contract,
         'discoverable_hinting': True,
+        # CTIR intentionally does not own this; reading canonical state
         'mechanical_resolution': resolution,
         'scene_advancement': scene_advancement,
         'session': session_view,
@@ -3852,7 +3974,7 @@ def build_narration_context(
             'clue_visibility': clue_visibility,
             'pending_leads': active_pending_leads,
             'runtime': runtime,
-            'intent': intent,
+            'intent': intent_for_scene_payload,
             'layering_rules': {
                 'visible_facts': 'Only visible facts may be directly asserted; align with narration_visibility.visible_facts.',
                 'discoverable_clues': 'Reveal only when player investigates/searches/questions/observes closely; with discoverable_hinting, hint without asserting as confirmed truth.',
