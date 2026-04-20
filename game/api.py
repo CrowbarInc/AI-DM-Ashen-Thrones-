@@ -1,4 +1,14 @@
+"""HTTP and turn-pipeline orchestration (FastAPI).
+
+Asserts ``game.state_authority`` guards at selected **authoritative** ``scene_state`` /
+``world_state`` mutation seams (scene transitions, GM staging, resolution mutation).
+Domain semantics and publication views live in ``game.world``, ``game.interaction_context``,
+``game.journal``, and related owners; composed client payloads and prompt-facing text are
+**not** canonical truth stores.
+"""
+
 from __future__ import annotations
+
 from contextlib import asynccontextmanager
 from pathlib import Path
 import inspect
@@ -85,6 +95,12 @@ from game.gm import (
 )
 from game import leads as leads_module
 from game.journal import build_player_journal
+from game.state_authority import (
+    SCENE_STATE,
+    WORLD_STATE,
+    assert_owner_can_mutate_domain,
+    build_state_mutation_trace,
+)
 from game.affordances import get_available_affordances
 from game.scene_actions import normalize_scene_action
 from game.exploration import (
@@ -269,6 +285,7 @@ def _apply_authoritative_scene_transition(
     All runtime transition effects (activation, scene/combat reload, combat reset,
     and interaction-context clear) flow through this helper.
     """
+    assert_owner_can_mutate_domain(__name__, SCENE_STATE, operation="authoritative_scene_transition")
     sid = (target_scene_id or "").strip()
     if not sid:
         return scene, session, combat
@@ -471,6 +488,7 @@ def _apply_post_gm_updates(
 
     Returns (scene, session, combat, surfaced_in_text, narration_social_lead_clue_texts)."""
     if gm.get('scene_update'):
+        assert_owner_can_mutate_domain(__name__, SCENE_STATE, operation="apply_gm_scene_update_layers")
         su = gm['scene_update']
         scene['scene'].setdefault('visible_facts', [])
         scene['scene'].setdefault('discoverable_clues', [])
@@ -495,6 +513,7 @@ def _apply_post_gm_updates(
         gm['debug_notes'] = (dbg + ' | ' if dbg else '') + reason
 
     if gm.get('world_updates'):
+        assert_owner_can_mutate_domain(__name__, WORLD_STATE, operation="apply_gm_world_updates")
         updates = gm['world_updates']
         if updates.get('append_events'):
             updates['append_events'] = [{'type': 'gm_event', 'text': t} if isinstance(t, str) else t for t in updates['append_events']]
@@ -570,6 +589,8 @@ def _apply_authoritative_resolution_state_mutation(
     normalized_action: dict | None,
 ) -> tuple[dict, dict, dict, list[str], dict]:
     """Stage 5: apply deterministic state mutation from resolved engine output."""
+    assert_owner_can_mutate_domain(__name__, WORLD_STATE, operation="authoritative_resolution_mutation")
+    assert_owner_can_mutate_domain(__name__, SCENE_STATE, operation="authoritative_resolution_mutation")
     authoritative_clue_updates: list[str] = []
 
     if resolution.get("world_updates"):
@@ -580,7 +601,7 @@ def _apply_authoritative_resolution_state_mutation(
     if resolution.get('resolved_transition') and resolution.get('target_scene_id'):
         target_scene_id = str(resolution['target_scene_id'] or '').strip()
         resolution['originating_scene_id'] = originating_scene_id
-        # Block 2: authoritative same-scene — no reload/re-entry; skip follow-lead hook.
+        # Authoritative same-scene transition: suppress reload/re-entry; skip follow-lead hook.
         if originating_scene_id and target_scene_id and originating_scene_id == target_scene_id:
             resolution['same_scene_transition_suppressed'] = True
             resolution['transition_applied'] = False
@@ -1526,6 +1547,19 @@ def _run_resolved_turn_pipeline(
         resolution=resolution,
         normalized_action=normalized_action,
     )
+    if isinstance(session, dict):
+        append_debug_trace(
+            session,
+            build_state_mutation_trace(
+                domain=SCENE_STATE,
+                owner_module=__name__,
+                operation="authoritative_resolution_mutation",
+                extra={
+                    "changed_area": "session+world+scene_runtime",
+                    "resolution_kind": str((resolution or {}).get("kind") or ""),
+                },
+            ),
+        )
     _accumulate_latency(latency_sink, "engine_resolution", _elapsed_ms(engine_started))
 
     user_text = resolution.get('prompt') or fallback_user_text
@@ -1734,6 +1768,12 @@ def _session_allows_structured_start_campaign(session: dict, recent_log: list | 
 
 
 def compose_state():
+    """Assemble the client-visible state snapshot (reads + derived views).
+
+    ``journal`` from ``build_player_journal`` and mirrored ``scene_state`` are
+    **publication** fields for the UI—not alternate persistence roots for authoritative
+    domains (see ``docs/state_authority_model.md``).
+    """
     campaign = load_campaign()
     character = load_character()
     session = load_session()

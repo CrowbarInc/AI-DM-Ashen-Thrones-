@@ -1,7 +1,8 @@
-"""Single source of truth for scene-state anchoring (prompting + future enforcement).
+"""Scene-state anchoring contract (read-side assembly for prompts and enforcement consumers).
 
 Builds a compact, deterministic contract from authoritative session/scene/world state only.
-Does not read hidden facts, undiscovered clues, or non-public scene layers.
+Does not read hidden facts, undiscovered clues, or non-public scene layers. Output is a
+**contract / view**, not a persistence root for authoritative domains.
 """
 from __future__ import annotations
 

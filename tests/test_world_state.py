@@ -7,7 +7,13 @@ from game.storage import (
     load_world,
     save_world,
 )
-from game.world import apply_world_updates, ensure_defaults
+from game.world import (
+    advance_world_tick,
+    apply_resolution_world_updates,
+    apply_world_updates,
+    ensure_defaults,
+    upsert_world_npc,
+)
 
 
 import pytest
@@ -134,3 +140,47 @@ def test_hidden_keys_excluded_from_gm_updates():
     })
     assert get_world_flag(world, "_internal") is None
     assert get_world_flag(world, "public") == "visible"
+
+
+def test_upsert_world_npc_world_state_owner_path():
+    world: dict = {"npcs": [], "world_state": {"flags": {}, "counters": {}, "clocks": {}}}
+    ensure_defaults(world)
+    rec = upsert_world_npc(
+        world,
+        {
+            "id": "test_npc_authority",
+            "name": "Authority NPC",
+            "location": "frontier_gate",
+            "topics": [],
+        },
+    )
+    assert rec.get("id") == "test_npc_authority"
+    assert any(n.get("id") == "test_npc_authority" for n in world.get("npcs", []) if isinstance(n, dict))
+
+
+def test_apply_resolution_world_updates_merges_flags_and_counters():
+    world: dict = {"world_state": {"flags": {}, "counters": {}, "clocks": {}}}
+    ensure_defaults(world)
+    apply_resolution_world_updates(
+        world,
+        {
+            "set_flags": {"resolved_probe": True},
+            "increment_counters": {"ticks": 2},
+        },
+    )
+    assert world["world_state"]["flags"].get("resolved_probe") is True
+    assert world["world_state"]["counters"].get("ticks") == 2
+
+
+def test_advance_world_tick_advances_under_world_state_owner():
+    world: dict = {
+        "npcs": [],
+        "factions": [{"id": "f_test", "name": "Test Faction", "pressure": 0, "agenda_progress": 0}],
+        "projects": [],
+        "event_log": [],
+        "world_state": {"flags": {}, "counters": {}, "clocks": {}},
+    }
+    ensure_defaults(world)
+    out = advance_world_tick(world, {})
+    assert "world" in out
+    assert isinstance(out.get("events"), list)

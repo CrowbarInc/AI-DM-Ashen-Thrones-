@@ -149,6 +149,22 @@ Each governed seam below uses the same four rows (plus boundary notes where help
 - **Belongs in runtime owner:** compact versioned packet construction, accessors, packet fallback resolution, declared packet lookup order.
 - **Does not belong in runtime owner:** telemetry ownership, gate orchestration, validator/repair behavior.
 
+## Unified State Authority Model
+
+- Canonical owner module: `game/state_authority.py`
+- Non-owner supporting modules: `game/storage.py`, `game/world.py`, `game/interaction_context.py`, `game/narration_visibility.py`, `game/scene_state_anchoring.py`, `game/prompt_context.py`, `game/journal.py`, `game/api.py` (domain mutators, lazy session roots, and publication paths remain in these modules; `state_authority` stays **registry + guard helpers only**)
+- Current state: `governance-aligned; Objective #3 shipped—registry/guards locked by tests/test_state_authority.py; further call sites are drift-watch only`
+- **Concern name:** `unified state authority (runtime domains)`
+- **Runtime owner:** `game/state_authority.py` for domain ids, `StateDomainSpec` registry, read matrix, cross-domain write allow-list, and deterministic guard helpers (`assert_owner_can_mutate_domain`, `assert_cross_domain_write_allowed`, `build_state_mutation_trace`)
+- **Practical primary direct-owner suite:** `tests/test_state_authority.py` — registry shape, read matrix, allow-list operations (including `journal_merge_revealed_hidden_facts` and `interaction_state` → `scene_state` edges), pseudo-owner rejection, and **documented deferrals** (`_scene_state` lazy init, `get_interaction_context` first-touch init)
+- **Secondary downstream suites:** domain-owner suites (`tests/test_interaction_context.py`, `tests/test_world_state.py`, `tests/test_validation_journal_affordances.py`, `tests/test_world_updates_and_clue_normalization.py`, `tests/test_prompt_context.py`, pipeline suites) own runtime behavior; they assert guards where wired without replacing the registry contract
+- **Compatibility / support residue:** lazy session-root helpers may materialize dicts before guarded owner entry points; that is an **intentional scope boundary**, not a second policy home—see `docs/state_authority_model.md` *Shipped guard adoption* / *Intentionally deferred*
+- **Non-owner adjacent modules:** `game/prompt_context.py`, `game/gm.py` (must not become alternate declarative owners of domain policy; prompts, narration text, and model I/O stay non-authoritative for mutating authoritative domains)
+- **Belongs in runtime owner:** domain constants, `StateDomainSpec` rows, `can_domain_read_domain`, cross-domain write allow-list entries, `StateAuthorityError` messages, compact mutation trace builder
+- **Does not belong in runtime owner:** world/scene/session persistence logic, prompt assembly, visibility math, CTIR semantics, emission repairs
+- **Publication seam (owner adjacent):** `game/journal.py` — `hidden_state` → `player_visible_state` via `journal_merge_revealed_hidden_facts` (cross-domain) plus same-domain `player_visible_state` owner check for `journal_known_facts_merge` traces; `known_facts` remains derived only
+- **Governance note:** describe as `runtime owner (registry + guards) → tests/test_state_authority.py → guarded canonical mutators / publication seams`, not prompt-centered or GPT-centered state policy
+
 ## Test Inventory And Governance Docs
 
 - Canonical owner module: `tests/TEST_AUDIT.md`

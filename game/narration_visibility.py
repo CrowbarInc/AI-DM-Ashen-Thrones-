@@ -1,7 +1,8 @@
 """Engine-owned narration visibility contract (read-only).
 
 Builds a conservative snapshot of what entities and scene-layer facts are in scope
-for narration matching. Does not enforce, rewrite, or mutate runtime state.
+for narration matching. Does not enforce, rewrite, or mutate runtime truth; the
+contract is a **view** for matching and prompts, not a persistence root.
 """
 from __future__ import annotations
 

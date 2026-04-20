@@ -2,6 +2,7 @@ from __future__ import annotations
 import copy
 from typing import Any, Dict, List, Optional
 
+from game.state_authority import WORLD_STATE, assert_owner_can_mutate_domain
 from game.npc_promotion import (
     ensure_npc_social_fields,
     normalize_promoted_npc_record,
@@ -22,6 +23,11 @@ PRESSURE_MAX = 10            # cap faction pressure
 
 
 def ensure_defaults(world: Dict[str, Any]) -> Dict[str, Any]:
+    """Ensure expected top-level keys exist on a world dict (read-time / save-time shape).
+
+    Idempotent ``setdefault`` only—not an authoritative semantic mutation path and
+    not a substitute for guarded world updates (see callers such as ``load_world``).
+    """
     world.setdefault('settlements', [])
     world.setdefault('factions', [])
     world.setdefault('npcs', [])
@@ -59,6 +65,7 @@ def get_world_npc_by_id(world: Dict[str, Any], npc_id: str) -> Optional[Dict[str
 
 def upsert_world_npc(world: Dict[str, Any], npc_record: Dict[str, Any]) -> Dict[str, Any]:
     """Insert or merge an NPC by ``id`` into ``world[\"npcs\"]``. Idempotent for identical input."""
+    assert_owner_can_mutate_domain(__name__, WORLD_STATE, operation="upsert_world_npc")
     ensure_defaults(world)
     if not isinstance(npc_record, dict):
         raise TypeError("npc_record must be a dict")
@@ -120,6 +127,7 @@ def _ensure_npc_agenda(npc: Dict[str, Any]) -> None:
 def advance_world_tick(world: Dict[str, Any], campaign: Dict[str, Any]) -> Dict[str, Any]:
     """Advance world by one tick. Project progression unchanged. Adds deterministic
     faction agenda, pressure thresholds, NPC movement. Return shape preserved."""
+    assert_owner_can_mutate_domain(__name__, WORLD_STATE, operation="advance_world_tick")
     ensure_defaults(world)
     generated: List[Dict[str, Any]] = []
     ws = world['world_state']
@@ -271,6 +279,7 @@ def apply_world_updates(world: Dict[str, Any], updates: Dict[str, Any]) -> None:
     - world_state: flags, counters, clocks merged; keys starting with _ are internal and skipped.
     - settlements, factions, assets, world_flags: not replaced from updates (avoid wiping state).
     """
+    assert_owner_can_mutate_domain(__name__, WORLD_STATE, operation="apply_world_updates")
     if not updates:
         return
     if 'append_events' in updates and isinstance(updates['append_events'], list):
@@ -310,6 +319,7 @@ def apply_resolution_world_updates(world: Dict[str, Any], resolution_updates: Di
         increment_counters: {key: amount} — add amount to counter (amount defaults to 1)
         advance_clocks: {clock_name: amount} — advance clock progress by amount
     """
+    assert_owner_can_mutate_domain(__name__, WORLD_STATE, operation="apply_resolution_world_updates")
     if not resolution_updates or not isinstance(resolution_updates, dict):
         return
     ensure_defaults(world)
@@ -356,6 +366,7 @@ def reset_world_playthrough_state(world: Dict[str, Any]) -> None:
     world document because settlements/factions/npcs may be author-edited; we reset only layers that
     the engine appends during play and realign known IDs with ``default_world()`` defaults.
     """
+    assert_owner_can_mutate_domain(__name__, WORLD_STATE, operation="reset_world_playthrough_state")
     from game.defaults import default_world
 
     ensure_defaults(world)

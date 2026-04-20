@@ -11,7 +11,9 @@ resolution).
 
 Builds the structured prompt-context payload from game state before narration prompt
 construction. This module is the canonical prompt-contract owner and repo-facing
-owner of the full prompt-contract bundle that narration receives.
+owner of the full prompt-contract bundle that narration receives. Prompt bundles are
+**read-side instruction carriers** assembled from authoritative inputs—they are not
+canonical stores for ``world_state`` or ``hidden_state``.
 
 It is **not** the canonical owner for extracted lead-only helpers
 (:mod:`game.prompt_context_leads`) and **not** the post-prompt contract-resolution owner

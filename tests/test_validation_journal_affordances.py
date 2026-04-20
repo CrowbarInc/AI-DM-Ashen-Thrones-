@@ -1,7 +1,7 @@
 import json
 
 from game.gm import validate_gm_state_update, build_messages
-from game.journal import build_player_journal
+from game.journal import build_player_journal, merge_player_journal_known_facts_publication
 from game.affordances import generate_scene_affordances
 from game.storage import get_scene_runtime
 from game.scene_actions import normalize_scene_action, normalize_scene_actions_list
@@ -89,6 +89,19 @@ def test_journal_merges_revealed_hidden_facts():
     journal = build_player_journal(session, world, envelope)
     assert "Only visible." in journal["known_facts"]
     assert "A revealed secret." in journal["known_facts"]
+    traces = session.get("debug_traces") or []
+    assert traces, "Publication merge should emit a compact mutation trace when reveals exist"
+    trace = traces[-1]
+    assert trace.get("kind") == "state_mutation"
+    assert trace.get("domain") == "player_visible_state"
+    assert trace.get("owner_module") == "game.journal"
+    assert trace.get("operation") == "journal_known_facts_merge"
+    assert trace.get("cross_domain", {}).get("operation") == "journal_merge_revealed_hidden_facts"
+
+
+def test_merge_player_journal_known_facts_publication_invokes_allow_list_when_reveals_present():
+    merged = merge_player_journal_known_facts_publication(["Bootstrap."], ["Runtime reveal."])
+    assert merged == ["Bootstrap.", "Runtime reveal."]
 
 
 def test_journal_includes_discovered_clues_player_safe():

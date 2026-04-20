@@ -1,10 +1,15 @@
 """Persistence: static/bootstrap files vs runtime documents.
 
+This module is the **I/O and document-shape** layer: load, save, and lazy
+initialization of session roots. It is **not** a semantic policy owner for
+``interaction_state`` or authoritative domain mutation (see ``game.interaction_context``,
+``game.world``, ``game.api``, and ``docs/state_authority_model.md``).
+
 Static + bootstrap (authored defaults; not wiped by ``create_fresh_session_document``):
 ``campaign.json``, ``world.json``, ``character.json``, ``data/scenes/*.json``,
 ``conditions.json``.
 
-Runtime (canonical fresh shape in ``game/campaign_state.py``): ``session.json``,
+Runtime (canonical fresh shape in ``game.campaign_state.py``): ``session.json``,
 ``combat.json``, ``session_log.jsonl``. A full New Campaign also clears world
 playthrough fields via ``game.world.reset_world_playthrough_state`` (see
 ``game.campaign_reset.apply_new_campaign_hard_reset``).
@@ -217,7 +222,13 @@ def _ensure_scene_runtime_root(session: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def get_interaction_context(session: Dict[str, Any]) -> Dict[str, Any]:
-    """Return mutable interaction context, initializing deterministic default keys."""
+    """Return mutable interaction context, initializing deterministic default keys.
+
+    First-touch initialization lives here as a **historical lazy-root seam** (no
+    ``state_authority`` guard on empty-session materialization—see
+    ``tests/test_state_authority.py``). This establishes session **shape** only;
+    semantic writes remain in ``game.interaction_context``.
+    """
     ctx = session.get("interaction_context")
     if not isinstance(ctx, dict):
         ctx = {}

@@ -1,18 +1,30 @@
 from __future__ import annotations
 
-"""Player-facing journal snapshot.
+"""Player-facing journal snapshot (``player_visible_state`` publication).
 
 Lead-related fields are derived from the session ``lead_registry`` (via
 ``list_session_leads``), not from clue text. ``discovered_clues`` comes from the
 clue knowledge layer and is intentionally independent of lead buckets.
 ``unresolved_leads`` is a backward-compatibility alias: sorted titles of
 non-terminal (active / pursued / stale) registry rows only.
+
+Merging runtime ``revealed_hidden_facts`` into ``known_facts`` is an explicit
+**publication seam** (``journal_merge_revealed_hidden_facts``); the journal remains
+a derived view and must not back-write ``hidden_state`` or ``world_state``.
 """
 
 from typing import Any, Dict, List, Tuple
 
 from game.clues import get_all_known_clue_texts
 from game.leads import LeadLifecycle, LeadStatus, list_session_leads
+from game.state_authority import (
+    HIDDEN_STATE,
+    PLAYER_VISIBLE_STATE,
+    assert_cross_domain_write_allowed,
+    assert_owner_can_mutate_domain,
+    build_state_mutation_trace,
+)
+from game.storage import append_debug_trace
 
 # When a scene has no ``journal_seed_facts``, only this many ``visible_facts`` lines
 # are copied into the journal. Full ``visible_facts`` may be long (GM/debug/prompt
@@ -258,6 +270,25 @@ def _merge_known_fact_lines(bootstrap: List[str], revealed: List[str]) -> List[s
     return out
 
 
+def merge_player_journal_known_facts_publication(
+    bootstrap: List[str],
+    revealed_hidden_runtime: List[str],
+) -> List[str]:
+    """Publication seam: merge ``scene_runtime.revealed_hidden_facts`` into journal ``known_facts``.
+
+    ``known_facts`` is a derived player-facing view only; must not be written back as hidden or world truth.
+    """
+    rev = [x for x in revealed_hidden_runtime if isinstance(x, str) and x.strip()]
+    if rev:
+        assert_cross_domain_write_allowed(
+            HIDDEN_STATE,
+            PLAYER_VISIBLE_STATE,
+            operation="journal_merge_revealed_hidden_facts",
+        )
+    assert_owner_can_mutate_domain(__name__, PLAYER_VISIBLE_STATE, operation="journal_known_facts_merge")
+    return _merge_known_fact_lines(bootstrap, rev)
+
+
 def build_player_journal(session: Dict[str, Any], world: Dict[str, Any] | None = None, scene_envelope: Dict[str, Any] | None = None) -> Dict[str, Any]:
     """Construct a lightweight, player-facing journal/codex view.
 
@@ -282,7 +313,18 @@ def build_player_journal(session: Dict[str, Any], world: Dict[str, Any] | None =
     scene_dict = scene if isinstance(scene, dict) else {}
     bootstrap = _journal_bootstrap_known_facts(scene_dict)
     revealed = _runtime_revealed_hidden_facts(session)
-    known_facts = _merge_known_fact_lines(bootstrap, revealed)
+    known_facts = merge_player_journal_known_facts_publication(bootstrap, revealed)
+    if isinstance(session, dict) and revealed:
+        append_debug_trace(
+            session,
+            build_state_mutation_trace(
+                domain=PLAYER_VISIBLE_STATE,
+                owner_module=__name__,
+                operation="journal_known_facts_merge",
+                cross_domain=(HIDDEN_STATE, PLAYER_VISIBLE_STATE, "journal_merge_revealed_hidden_facts"),
+                extra={"changed_area": "journal.known_facts"},
+            ),
+        )
 
     # Clue texts from ``clue_knowledge``; not merged with or filtered by lead buckets.
     discovered_clues = list(get_all_known_clue_texts(session))

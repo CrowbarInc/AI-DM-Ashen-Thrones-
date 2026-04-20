@@ -1,7 +1,8 @@
 """Tests for world_updates hardening and clue surfaced detection normalization."""
 from game.world import apply_world_updates, ensure_defaults
 from game.gm import detect_surfaced_clues, _normalize_clue_match_text
-from game.api import _apply_post_gm_updates
+from game.api import _apply_authoritative_resolution_state_mutation, _apply_post_gm_updates
+from game.campaign_state import create_fresh_combat_state, create_fresh_session_document
 
 
 import pytest
@@ -154,3 +155,73 @@ def test_gpt_narration_surfacing_does_not_mutate_clue_state():
     assert surfaced == ["A coded mark is carved beneath the bridge rail."]
     assert session_after.get("clue_knowledge") == {}
     assert (session_after.get("scene_runtime", {}).get("gate", {}).get("discovered_clue_ids") or []) == []
+
+
+def test_apply_post_gm_updates_scene_update_runs_under_api_scene_state_guard():
+    """``game.api`` asserts SCENE_STATE ownership before merging GM scene_update layers."""
+    scene = {
+        "scene": {
+            "id": "gate",
+            "visible_facts": ["Existing."],
+            "discoverable_clues": [],
+            "hidden_facts": [],
+            "mode": "exploration",
+            "exits": [],
+            "enemies": [],
+        }
+    }
+    session = {"scene_runtime": {}, "clue_knowledge": {}}
+    world = {"event_log": []}
+    combat = {"in_combat": False}
+    gm = {
+        "player_facing_text": "",
+        "tags": [],
+        "scene_update": {
+            "visible_facts_add": ["New fact from GM layer."],
+            "discoverable_clues_add": [],
+            "hidden_facts_add": [],
+        },
+        "activate_scene_id": None,
+        "new_scene_draft": None,
+        "world_updates": None,
+        "suggested_action": None,
+        "debug_notes": "",
+    }
+    scene_out, _, _, _, _ = _apply_post_gm_updates(gm, scene, session, world, combat)
+    facts = scene_out["scene"]["visible_facts"]
+    assert "Existing." in facts
+    assert "New fact from GM layer." in facts
+
+
+def test_apply_authoritative_resolution_state_mutation_world_and_scene_guards_observe():
+    """Non-transition resolution exercises dual assert_owner for world_state + scene_state in api."""
+    session = create_fresh_session_document()
+    session["active_scene_id"] = "gate"
+    session["scene_state"]["active_scene_id"] = "gate"
+    world: dict = {"npcs": [], "world_state": {"flags": {}, "counters": {}, "clocks": {}}}
+    combat = create_fresh_combat_state()
+    scene = {
+        "scene": {
+            "id": "gate",
+            "visible_facts": [],
+            "discoverable_clues": [],
+            "hidden_facts": [],
+            "mode": "exploration",
+            "exits": [],
+            "enemies": [],
+        }
+    }
+    resolution = {"kind": "observe", "success": True, "action_id": "act-observe"}
+    normalized_action = {"id": "act-observe", "type": "observe", "prompt": "Look around."}
+
+    _apply_authoritative_resolution_state_mutation(
+        session=session,
+        world=world,
+        combat=combat,
+        scene=scene,
+        resolution=resolution,
+        normalized_action=normalized_action,
+    )
+    rt = session.get("scene_runtime", {}).get("gate", {})
+    assert isinstance(rt, dict)
+    assert rt.get("last_resolution_kind") == "observe"

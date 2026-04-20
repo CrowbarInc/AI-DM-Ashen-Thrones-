@@ -15,6 +15,7 @@ The purpose of this consolidation phase is to make later refactors safer by **fr
 | **Behavioral Gauntlet** | Deterministic narration-behavior smoke (axes, no live GPT) | `tests/helpers/behavioral_gauntlet_eval.py`, `tests/test_behavioral_gauntlet_smoke.py`, `tests/test_behavioral_gauntlet_eval.py`, `docs/manual_gauntlets.md` (G9–G12), `tools/run_manual_gauntlet.py` |
 | **Playability Validation** | Turn-scoped “competent human DM” behavioral checks via real `/api/chat` | `game/playability_eval.py`, `tests/test_playability_smoke.py`, `tools/run_playability_validation.py`, `docs/testing.md` |
 | **AER (Anti-Echo & Rumor Realism)** | Narrative authenticity operator model + repairs + telemetry | `docs/narrative_authenticity_anti_echo_rumor_realism.md`, narrative authenticity tests under `tests/` (e.g. `test_narrative_authenticity_*.py`) |
+| **Unified State Authority (Objective #3)** | Declarative domains + guard registry; journal publication seam; allow-listed cross-domain writes | `docs/state_authority_model.md`, `docs/architecture_ownership_ledger.md` → *Unified State Authority Model*, `game/state_authority.py`, **direct-owner suite** `tests/test_state_authority.py` |
 
 ---
 
@@ -78,7 +79,8 @@ These remain true while consolidation proceeds; they are not new feature goals:
 - **Check prompting** stays engine-owned (`requires_check` / `check_request`) with clear player-facing payloads.
 - **`narration_obligations` and prompt-context obligations** remain **contract-driven** exports from authoritative turn state—not narrator-invented mechanics.
 - **Clue mutation** stays in engine clue gateways; narration text must not create or mutate clue state.
-- **Interaction-state mutation** has a single owner: `game/interaction_context.py`.
+- **Interaction-state mutation** has a single owner: `game/interaction_context.py` (with **narrow, allow-listed** `interaction_state` → `scene_state` writes where scene-adjacent keys are updated—see `docs/state_authority_model.md`).
+- **Unified state authority:** `game/state_authority.py` is registry + guards only; `player_visible_state` stays derived; `hidden_state` stays unpublished until reveal/publication seams.
 - **Implied-action handling** stays narrow, **deterministic**, and runs during normalized turn preparation (before prompt-context assembly).
 
 ---

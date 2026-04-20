@@ -1,8 +1,14 @@
 """Authoritative interaction-context mutation API.
 
-This module is the single owner for interaction-context runtime mutations.
-Callers may read context elsewhere, but all writes should route through these
-functions so behavior remains deterministic and inspectable.
+This module is the single **semantic** owner for ``interaction_state`` mutations
+(``session['interaction_context']``). Callers may read context elsewhere, but writes
+should route through these functions so behavior remains deterministic and inspectable.
+
+Selected **scene_state** keys are updated here only under **allow-listed** cross-domain
+operations (see ``game.state_authority``)—for example promotion maps, runtime hygiene,
+and exchange-local counters mirrored under ``session['scene_state']``. That does not
+merge ``scene_state`` into ``interaction_state``; scene templates and ``scene_runtime``
+remain distinct concerns owned elsewhere.
 
 **Authoritative social target resolution** (precedence-ordered binding for strict-social
 and dialogue) lives in :func:`resolve_authoritative_social_target` **here** — not in
@@ -25,7 +31,14 @@ from typing import Any, Dict, List, Literal, Optional, Set, Tuple
 from game.utils import slugify
 
 from game.npc_promotion import maybe_promote_active_social_target, should_promote_scene_actor
-from game.storage import get_interaction_context, get_scene_runtime
+from game.state_authority import (
+    INTERACTION_STATE,
+    SCENE_STATE,
+    assert_cross_domain_write_allowed,
+    assert_owner_can_mutate_domain,
+    build_state_mutation_trace,
+)
+from game.storage import append_debug_trace, get_interaction_context, get_scene_runtime
 
 
 SOCIAL_INTERACTION_KINDS = frozenset(
@@ -269,6 +282,13 @@ def scene_addressables_from_envelope(scene_envelope: Dict[str, Any] | None) -> L
 
 
 def _scene_state(session: Dict[str, Any]) -> Dict[str, Any]:
+    """Lazily ensure ``session['scene_state']`` exists with deterministic defaults.
+
+    First-touch dict creation intentionally **does not** call
+    ``assert_owner_can_mutate_domain`` (documented deferral; see
+    ``tests/test_state_authority.py``). Guarded mutators apply once callers enter
+    owner APIs that assert ``SCENE_STATE`` / cross-domain seams.
+    """
     state = session.get("scene_state")
     if not isinstance(state, dict):
         state = {}
@@ -310,6 +330,12 @@ def set_social_exchange_interruption_tracker(
     """Persist or clear exchange-local interruption tracking for the active scene."""
     if not isinstance(session, dict):
         return
+    assert_owner_can_mutate_domain(__name__, INTERACTION_STATE, operation="set_social_exchange_interruption_tracker")
+    assert_cross_domain_write_allowed(
+        INTERACTION_STATE,
+        SCENE_STATE,
+        operation="exchange_interruption_tracker_slot",
+    )
     state = _scene_state(session)
     if isinstance(tracker, dict) and tracker:
         payload = dict(tracker)
@@ -342,6 +368,7 @@ def enroll_emergent_scene_actor(
     rebuilds-friendly via :func:`rebuild_active_scene_entities` and dialogue via
     :func:`canonical_scene_addressable_roster`. Callers must pass conservative hints only.
     """
+    assert_owner_can_mutate_domain(__name__, SCENE_STATE, operation="enroll_emergent_scene_actor")
     if not isinstance(session, dict) or not isinstance(scene, dict) or not isinstance(actor_hint, dict):
         return None
     sc = scene.get("scene")
@@ -783,6 +810,7 @@ def synchronize_scene_addressability(
     world: Dict[str, Any],
 ) -> Dict[str, Any]:
     """Rebuild active scope, align ``entity_presence`` for scene actors, clear only truly invalid interlocutors."""
+    assert_owner_can_mutate_domain(__name__, SCENE_STATE, operation="synchronize_scene_addressability")
     meta: Dict[str, Any] = {
         "stale_interlocutor_cleared": False,
         "addressability_checked_against": [],
@@ -815,6 +843,11 @@ def synchronize_scene_addressability(
     else:
         st = _scene_state(session)
         if tgt:
+            assert_cross_domain_write_allowed(
+                INTERACTION_STATE,
+                SCENE_STATE,
+                operation="interlocutor_binding",
+            )
             st["current_interlocutor"] = tgt
     return meta
 
@@ -861,6 +894,7 @@ def rebuild_active_scene_entities(
     scene_envelope: Optional[Dict[str, Any]] = None,
 ) -> Dict[str, Any]:
     """Rebuild explicit active-scene entity scope and invalidate stale interlocutors."""
+    assert_owner_can_mutate_domain(__name__, SCENE_STATE, operation="rebuild_active_scene_entities")
     sid = _clean_string(scene_id) or ""
     state = _scene_state(session)
     active_ids: List[str] = []
@@ -914,6 +948,16 @@ def rebuild_active_scene_entities(
         current_target = None
 
     state["current_interlocutor"] = current_target if current_target in active_set else None
+    if isinstance(session, dict):
+        append_debug_trace(
+            session,
+            build_state_mutation_trace(
+                domain=SCENE_STATE,
+                owner_module=__name__,
+                operation="rebuild_active_scene_entities",
+                extra={"changed_area": "scene_state.active_entities"},
+            ),
+        )
     return state
 
 
@@ -1034,6 +1078,7 @@ def prior_interlocutor_for_turn_metadata(session: Dict[str, Any] | None) -> Opti
 
 def set_interaction_mode(session: Dict[str, Any], mode: Optional[str]) -> Dict[str, Any]:
     """Set interaction mode to one of: none, social, activity."""
+    assert_owner_can_mutate_domain(__name__, INTERACTION_STATE, operation="set_interaction_mode")
     ctx = inspect(session)
     clean_mode = str(mode).strip().lower() if isinstance(mode, str) else "none"
     if clean_mode not in INTERACTION_MODES:
@@ -1046,6 +1091,7 @@ def set_interaction_mode(session: Dict[str, Any], mode: Optional[str]) -> Dict[s
 
 def set_engagement_level(session: Dict[str, Any], level: Optional[str]) -> Dict[str, Any]:
     """Set engagement level to one of: none, engaged, focused."""
+    assert_owner_can_mutate_domain(__name__, INTERACTION_STATE, operation="set_engagement_level")
     ctx = inspect(session)
     clean_level = str(level).strip().lower() if isinstance(level, str) else "none"
     if clean_level not in ENGAGEMENT_LEVELS:
@@ -1056,6 +1102,12 @@ def set_engagement_level(session: Dict[str, Any], level: Optional[str]) -> Dict[
 
 def set_social_target(session: Dict[str, Any], target_id: Optional[str]) -> Dict[str, Any]:
     """Set or clear the active social target; marks interaction kind as social."""
+    assert_owner_can_mutate_domain(__name__, INTERACTION_STATE, operation="set_social_target")
+    assert_cross_domain_write_allowed(
+        INTERACTION_STATE,
+        SCENE_STATE,
+        operation="interlocutor_binding",
+    )
     ctx = inspect(session)
     prior_target = _clean_string(ctx.get("active_interaction_target_id"))
     ctx["active_interaction_target_id"] = _clean_string(target_id)
@@ -1067,13 +1119,30 @@ def set_social_target(session: Dict[str, Any], target_id: Optional[str]) -> Dict
     if tid != prior_target:
         clear_social_exchange_interruption_tracker(session)
     st["current_interlocutor"] = tid if tid else None
-    return _normalize_context(ctx)
+    out = _normalize_context(ctx)
+    if isinstance(session, dict):
+        append_debug_trace(
+            session,
+            build_state_mutation_trace(
+                domain=INTERACTION_STATE,
+                owner_module=__name__,
+                operation="set_social_target",
+                extra={"changed_area": "interaction_context+scene_state.current_interlocutor"},
+            ),
+        )
+    return out
 
 
 def clear_stale_social_interlocutor_continuity(session: Dict[str, Any]) -> Dict[str, Any]:
     """Drop active interlocutor anchor after a visible speaker mismatch (no scene transition)."""
     if not isinstance(session, dict):
         return {}
+    assert_owner_can_mutate_domain(__name__, INTERACTION_STATE, operation="clear_stale_social_interlocutor_continuity")
+    assert_cross_domain_write_allowed(
+        INTERACTION_STATE,
+        SCENE_STATE,
+        operation="interlocutor_binding",
+    )
     ctx = inspect(session)
     ctx["active_interaction_target_id"] = None
     ctx["active_interaction_kind"] = None
@@ -1086,6 +1155,7 @@ def clear_stale_social_interlocutor_continuity(session: Dict[str, Any]) -> Dict[
 
 def set_privacy(session: Dict[str, Any], privacy: Optional[str]) -> Dict[str, Any]:
     """Set conversation privacy hint; pass None to clear."""
+    assert_owner_can_mutate_domain(__name__, INTERACTION_STATE, operation="set_privacy")
     ctx = inspect(session)
     clean_privacy = str(privacy).strip().lower() if isinstance(privacy, str) else ""
     ctx["conversation_privacy"] = clean_privacy if clean_privacy in CONVERSATION_PRIVACY_VALUES else None
@@ -1094,6 +1164,7 @@ def set_privacy(session: Dict[str, Any], privacy: Optional[str]) -> Dict[str, An
 
 def set_position_context(session: Dict[str, Any], position_context: Optional[str]) -> Dict[str, Any]:
     """Set or clear player position context."""
+    assert_owner_can_mutate_domain(__name__, INTERACTION_STATE, operation="set_position_context")
     ctx = inspect(session)
     ctx["player_position_context"] = _clean_string(position_context)
     return _normalize_context(ctx)
@@ -1101,11 +1172,18 @@ def set_position_context(session: Dict[str, Any], position_context: Optional[str
 
 def clear_emergent_scene_actors_on_scene_change(session: Dict[str, Any]) -> None:
     """Drop session-local emergent addressables when the active location changes."""
+    assert_owner_can_mutate_domain(__name__, SCENE_STATE, operation="clear_emergent_scene_actors_on_scene_change")
     _clear_emergent_addressables(session)
 
 
 def clear_for_scene_change(session: Dict[str, Any]) -> Dict[str, Any]:
     """Clear all interaction continuity fields during scene transitions."""
+    assert_owner_can_mutate_domain(__name__, INTERACTION_STATE, operation="clear_for_scene_change")
+    assert_cross_domain_write_allowed(
+        INTERACTION_STATE,
+        SCENE_STATE,
+        operation="interlocutor_binding",
+    )
     ctx = inspect(session)
     ctx["active_interaction_target_id"] = None
     ctx["active_interaction_kind"] = None
@@ -1128,6 +1206,12 @@ def set_non_social_activity(session: Dict[str, Any], kind: Optional[str]) -> Dic
     clean_kind = str(kind).strip().lower() if isinstance(kind, str) else ""
     if clean_kind not in NON_SOCIAL_ACTIVITY_KINDS:
         return ctx
+    assert_owner_can_mutate_domain(__name__, INTERACTION_STATE, operation="set_non_social_activity")
+    assert_cross_domain_write_allowed(
+        INTERACTION_STATE,
+        SCENE_STATE,
+        operation="interlocutor_binding",
+    )
     ctx["active_interaction_target_id"] = None
     ctx["active_interaction_kind"] = clean_kind
     ctx["interaction_mode"] = "activity"
@@ -1152,6 +1236,7 @@ def update_after_resolved_action(
     - non-social kinds clear active target unless continuity is explicitly preserved.
     - unknown kinds are ignored.
     """
+    assert_owner_can_mutate_domain(__name__, INTERACTION_STATE, operation="update_after_resolved_action")
     clean_kind = str(kind).strip().lower() if isinstance(kind, str) else ""
     ctx = inspect(session)
     if clean_kind in SOCIAL_INTERACTION_KINDS:
