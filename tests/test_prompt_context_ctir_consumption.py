@@ -92,6 +92,67 @@ def test_no_ctir_session_still_builds() -> None:
     detach_ctir(session)
     ctx = build_narration_context(**_minimal_narration_kwargs(session=session))
     assert ctx["turn_summary"]["resolution_kind"] == "travel"
+    assert ctx.get("narrative_plan") is None
+    pd = ctx.get("prompt_debug") or {}
+    assert isinstance(pd, dict)
+    npd = pd.get("narrative_plan") or {}
+    assert npd.get("present") is False
+
+
+def test_ctir_session_attaches_narrative_plan_and_stable_on_repeat() -> None:
+    session = dict(_minimal_narration_kwargs()["session"])
+    _attach_question_ctir(session)
+    kw = _minimal_narration_kwargs(session=session)
+    try:
+        ctx_a = build_narration_context(**kw)
+        ctx_b = build_narration_context(**kw)
+    finally:
+        detach_ctir(session)
+    plan = ctx_a.get("narrative_plan")
+    assert isinstance(plan, dict)
+    assert plan.get("version") == 1
+    assert plan.get("narrative_mode") in {"dialogue", "outcome", "transition", "exposition", "consequence"}
+    assert plan.get("narrative_mode") == "dialogue"
+    assert ctx_a.get("narrative_plan") == ctx_b.get("narrative_plan")
+    pd = ctx_a.get("prompt_debug") or {}
+    npd = pd.get("narrative_plan") or {}
+    assert npd.get("present") is True
+    assert npd.get("narrative_mode") == plan.get("narrative_mode")
+    assert isinstance(npd.get("derivation_codes"), list)
+
+
+def test_public_scene_convenience_slice_does_not_drift_narrative_mode() -> None:
+    """Bounded public_scene fields may relabel anchors; coarse ``narrative_mode`` stays CTIR-derived."""
+    session = dict(_minimal_narration_kwargs()["session"])
+    _attach_question_ctir(session)
+    base_ps = {"id": "s1", "name": "First Title", "location_tokens": ["dock"]}
+    alt_ps = {"id": "s1", "name": "Different Title", "location_tokens": ["market", "square"]}
+    try:
+        ctx_a = build_narration_context(**_minimal_narration_kwargs(session=session, public_scene=base_ps))
+        ctx_b = build_narration_context(**_minimal_narration_kwargs(session=session, public_scene=alt_ps))
+    finally:
+        detach_ctir(session)
+    pa = ctx_a.get("narrative_plan")
+    pb = ctx_b.get("narrative_plan")
+    assert isinstance(pa, dict) and isinstance(pb, dict)
+    assert pa.get("narrative_mode") == pb.get("narrative_mode") == "dialogue"
+    assert (pa.get("scene_anchors") or {}).get("scene_name") == "First Title"
+    assert (pb.get("scene_anchors") or {}).get("scene_name") == "Different Title"
+
+
+def test_legacy_resolution_kwargs_do_not_override_ctir_or_plan_semantics() -> None:
+    """Caller ``resolution`` may differ for legacy paths; CTIR-backed summary and plan follow CTIR."""
+    session = dict(_minimal_narration_kwargs()["session"])
+    _attach_question_ctir(session)
+    kw = _minimal_narration_kwargs(session=session, resolution={"kind": "travel", "action_id": "legacy"})
+    try:
+        ctx = build_narration_context(**kw)
+    finally:
+        detach_ctir(session)
+    assert ctx["turn_summary"]["resolution_kind"] == "question"
+    plan = ctx.get("narrative_plan")
+    assert isinstance(plan, dict)
+    assert plan.get("narrative_mode") == "dialogue"
 
 
 def test_prompt_context_module_has_no_build_ctir() -> None:

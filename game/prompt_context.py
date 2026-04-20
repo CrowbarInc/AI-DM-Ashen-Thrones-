@@ -48,10 +48,17 @@ Contract layers (orthogonal concerns):
   ``build_interaction_continuity_contract`` in ``game.interaction_continuity``); gate/repairs TBD.
 - **conversational_memory_window** — bounded prior-turn selection for prompts (see
   :mod:`game.conversational_memory_window`); ``recent_log`` in the payload is derived from the selector output.
+- **narrative_plan** — deterministic structural bridge from CTIR to narration (see
+  :func:`game.narrative_planning.build_narrative_plan`). Owned by :mod:`game.narrative_planning`; this module only
+  calls that builder once and attaches the JSON-safe artifact for **structural narration guidance** (anchors,
+  emphasis weights, category reminders). It is **not** consulted for adjudication, routing, policy, or
+  ``turn_summary`` / resolution semantics—those remain CTIR-first (when attached), ``response_policy``, and
+  ``narration_visibility``. If CTIR and the plan ever disagree, **CTIR wins**; the plan is derivative and
+  rebuildable from CTIR plus the same bounded slices passed into the builder.
 """
 from __future__ import annotations
 
-from typing import Any, Dict, List, Mapping, Set
+from typing import Any, Dict, List, Mapping, Sequence, Set
 import re
 
 from game.leads import (
@@ -102,6 +109,7 @@ from game.response_policy_contracts import (
 )
 from game.turn_packet import build_turn_packet
 from game.ctir_runtime import get_attached_ctir
+from game.narrative_planning import build_narrative_plan
 
 # Configurable limits for deterministic, inspectable compression
 MAX_RECENT_LOG = 5
@@ -284,6 +292,162 @@ def _interaction_context_snapshot_from_ctir_semantics(interaction_sem: Mapping[s
         "conversation_privacy": None,
         "player_position_context": None,
     }
+
+
+def _published_entities_slice_for_narrative_planning(
+    visibility_contract: Mapping[str, Any] | None,
+) -> List[Dict[str, Any]]:
+    """Map narration visibility into ``build_narrative_plan(..., published_entities=...)`` rows (strict allowlist).
+
+    Feeds the plan's ``allowable_entity_references``: with this slice passed, that
+    field enumerates the **full** visible entity-id universe (sorted outer boundary
+    for named handles), not a CTIR-only focal subset. Plan derivation remains in
+    :mod:`game.narrative_planning`.
+    """
+    if not isinstance(visibility_contract, Mapping):
+        return []
+    ids_raw = visibility_contract.get("visible_entity_ids") or []
+    names_raw = visibility_contract.get("visible_entity_names") or []
+    if not isinstance(ids_raw, list):
+        return []
+    names_list = names_raw if isinstance(names_raw, list) else []
+    rows: List[Dict[str, Any]] = []
+    seen: Set[str] = set()
+    for i, raw_id in enumerate(ids_raw):
+        eid = str(raw_id or "").strip()
+        if not eid or eid in seen:
+            continue
+        seen.add(eid)
+        row: Dict[str, Any] = {"entity_id": eid}
+        if i < len(names_list):
+            nm = str(names_list[i] or "").strip()
+            if nm:
+                row["display_name"] = nm
+        rows.append(row)
+        if len(rows) >= 48:
+            break
+    rows.sort(key=lambda r: str(r.get("entity_id") or ""))
+    return rows
+
+
+def _public_scene_slice_for_narrative_plan(
+    public_scene: Mapping[str, Any] | None,
+    scene_state_anchor_contract: Mapping[str, Any] | None,
+) -> Dict[str, Any]:
+    """Bounded public-scene fields for :func:`game.narrative_planning.build_narrative_plan` (no hidden layers)."""
+    ps = public_scene if isinstance(public_scene, Mapping) else {}
+    out: Dict[str, Any] = {}
+    sid = str(ps.get("id") or "").strip()
+    if sid:
+        out["scene_id"] = sid
+    title = str(ps.get("name") or ps.get("title") or "").strip()
+    if title:
+        out["scene_name"] = title[:160]
+    loc = ps.get("location_tokens") or ps.get("location_anchors")
+    if isinstance(loc, (list, tuple)):
+        toks = [str(x).strip() for x in loc if isinstance(x, str) and str(x).strip()]
+        if toks:
+            out["location_tokens"] = toks[:16]
+    elif isinstance(loc, str) and loc.strip():
+        out["location_tokens"] = [loc.strip()[:160]]
+    elif isinstance(scene_state_anchor_contract, Mapping):
+        lt = scene_state_anchor_contract.get("location_tokens")
+        if isinstance(lt, list) and lt:
+            out["location_tokens"] = [
+                str(x).strip() for x in lt if isinstance(x, str) and str(x).strip()
+            ][:16]
+    return out
+
+
+def _pending_lead_ids_from_active_pending(rows: Sequence[Any] | None) -> List[str]:
+    """Stable id list from filtered pending lead dicts (ids only; no prose)."""
+    if not rows:
+        return []
+    out: List[str] = []
+    seen: Set[str] = set()
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        lid = str(
+            row.get("authoritative_lead_id") or row.get("lead_id") or row.get("id") or ""
+        ).strip()
+        if not lid or lid in seen:
+            continue
+        seen.add(lid)
+        out.append(lid)
+        if len(out) >= 48:
+            break
+    return sorted(out)
+
+
+def _session_interaction_slice_for_narrative_plan(
+    session_view: Mapping[str, Any] | None,
+    pending_lead_ids: Sequence[str],
+) -> Dict[str, Any]:
+    """Session fields already mirrored at the prompt seam; no extra engine reads."""
+    sv = session_view if isinstance(session_view, Mapping) else {}
+    out: Dict[str, Any] = {}
+    at = str(sv.get("active_interaction_target_id") or "").strip()
+    if at:
+        out["active_interaction_target_id"] = at
+    pids = [str(x).strip() for x in pending_lead_ids if str(x).strip()]
+    if pids:
+        out["pending_lead_ids"] = pids[:48]
+    return out
+
+
+def _narrative_plan_prompt_debug_anchor(
+    plan: Mapping[str, Any] | None,
+    *,
+    build_error: str | None = None,
+) -> Dict[str, Any]:
+    """Compact inspect-only mirror for ``prompt_debug`` (not authoritative; no plan blob duplication)."""
+    if build_error:
+        return {"present": False, "build_error": build_error[:500]}
+    if not isinstance(plan, Mapping) or not plan:
+        return {"present": False}
+    dbg = plan.get("debug") if isinstance(plan.get("debug"), dict) else {}
+    dc = dbg.get("derivation_codes")
+    codes = [str(c) for c in (dc if isinstance(dc, list) else [])][:24]
+    sa = plan.get("scene_anchors") if isinstance(plan.get("scene_anchors"), dict) else {}
+    ap = plan.get("active_pressures") if isinstance(plan.get("active_pressures"), dict) else {}
+    rni = plan.get("required_new_information") if isinstance(plan.get("required_new_information"), list) else []
+    aer = plan.get("allowable_entity_references") if isinstance(plan.get("allowable_entity_references"), list) else []
+    ra = sa.get("relevant_actors") if isinstance(sa.get("relevant_actors"), list) else []
+    pl = ap.get("pending_lead_ids") if isinstance(ap.get("pending_lead_ids"), list) else []
+    return {
+        "present": True,
+        "version": plan.get("version"),
+        "narrative_mode": plan.get("narrative_mode"),
+        "role_allocation": plan.get("role_allocation") if isinstance(plan.get("role_allocation"), dict) else None,
+        "derivation_codes": codes,
+        "derivation_code_count": len(dc) if isinstance(dc, list) else 0,
+        "counts": {
+            "required_new_information": len(rni),
+            "allowable_entity_references": len(aer),
+            "relevant_actors": len(ra),
+            "pending_lead_ids": len(pl),
+        },
+    }
+
+
+_NARRATIVE_PLAN_STRUCT_GUIDANCE: tuple[str, ...] = (
+    "NARRATIVE PLAN (STRUCTURAL GUIDANCE): When top-level `narrative_plan` is present, prefer it for bounded structural "
+    "shaping alongside existing contracts. It does not replace CTIR, response_policy, or narration_visibility; "
+    "on any conflict, follow CTIR and the shipped contracts, not the plan.",
+    "Anchoring: prefer `narrative_plan.scene_anchors` for scene/interlocutor grounding tokens together with "
+    "`scene_state_anchor_contract` and narration visibility—do not contradict authoritative visibility.",
+    "Momentum / pressure: prefer `narrative_plan.active_pressures` (pending lead ids, interaction_pressure, "
+    "scene_tension_codes, world/clock summaries) together with `narration_obligations.scene_momentum_due` and registry slices.",
+    "Must-carry novelty: surface categories listed in `narrative_plan.required_new_information` when they apply to this "
+    "turn—without inventing facts beyond visibility and narrative authority.",
+    "Entity handle boundaries: `narrative_plan.allowable_entity_references` is the visible narration-universe (outer boundary) "
+    "for published entity_id handles when non-empty—not whom to focus on. Use `scene_anchors.active_interlocutor`, "
+    "`scene_anchors` generally, `narrative_mode`, `active_pressures`, `required_new_information`, and `role_allocation` for "
+    "narrower focality. narration_visibility remains the hard visibility scope—never reference entities outside both contracts.",
+    "High-level shaping: use `narrative_plan.narrative_mode` and the integer weights in `narrative_plan.role_allocation` "
+    "(dialogue, exposition, consequence, transition; they sum to 100) as emphasis guidance only.",
+)
 
 
 _QUESTION_LINE_PATTERN = re.compile(
@@ -2892,6 +3056,7 @@ def _compact_manual_play_instructions(
     has_scene_change_context: bool,
     naming_line: str | None,
     answer_style_hints: List[str],
+    narrative_plan_present: bool = False,
 ) -> List[str]:
     obligations = narration_obligations if isinstance(narration_obligations, Mapping) else {}
     policy = response_policy if isinstance(response_policy, Mapping) else {}
@@ -2937,6 +3102,13 @@ def _compact_manual_play_instructions(
     out.append(
         "POLICY TAIL: Obey response_policy.narrative_authority, narrative_authenticity, tone_escalation, anti_railroading, context_separation, player_facing_narration_purity, and scene anchoring without re-explaining them in narration."
     )
+    if narrative_plan_present:
+        out.append(
+            "NARRATIVE PLAN: When `narrative_plan` is on the payload, use its scene_anchors, active_pressures, "
+            "required_new_information, allowable_entity_references (visible handle boundary only—not focality), "
+            "narrative_mode, and role_allocation for structural emphasis only—same precedence as full prompts "
+            "(visibility and response_policy still win conflicts)."
+        )
     out.append(mode_instruction)
     return out
 
@@ -3135,6 +3307,42 @@ def build_narration_context(
         world if isinstance(world, dict) else None,
         resolution=resolution_sem if isinstance(resolution_sem, dict) else None,
     )
+    # Narrative plan (Objective #2): single consumer call into :mod:`game.narrative_planning` at the CTIR seam.
+    # Uses only bounded inputs already assembled for this build (CTIR + visibility allowlist + compressed log slice).
+    #
+    # Consumer note: ``allowable_entity_references`` = visible handle *boundary* when the published slice is passed;
+    # objectives must not use it as a proxy for interlocutor or scene focus (see ``scene_anchors``, ``narrative_mode``, etc.).
+    #
+    # Seam authority (do not regress):
+    # - ``narrative_plan`` is emitted verbatim from :func:`build_narrative_plan` and attached to the payload only.
+    #   It must never be merged into ``resolution_sem``, ``intent_sem``, ``turn_summary``, ``response_policy``, or
+    #   visibility exports — those domains stay CTIR- and contract-rooted.
+    # - Prompt instructions may reference the plan for *structure* (see ``_NARRATIVE_PLAN_STRUCT_GUIDANCE``); they
+    #   must not treat plan fields as alternate resolved-turn truth when CTIR or policy contradicts them.
+    narrative_plan: Dict[str, Any] | None = None
+    narrative_plan_build_error: str | None = None
+    if ctir_obj is not None:
+        try:
+            _pub_ent = _published_entities_slice_for_narrative_planning(visibility_contract)
+            _pub_scene_slice = _public_scene_slice_for_narrative_plan(
+                public_scene if isinstance(public_scene, dict) else None,
+                scene_state_anchor_contract if isinstance(scene_state_anchor_contract, dict) else None,
+            )
+            _plids = _pending_lead_ids_from_active_pending(active_pending_leads)
+            _sess_int = _session_interaction_slice_for_narrative_plan(session_view, _plids)
+            narrative_plan = build_narrative_plan(
+                ctir=ctir_obj,
+                session_interaction=_sess_int or None,
+                public_scene_slice=_pub_scene_slice or None,
+                published_entities=_pub_ent,
+                recent_compressed_events=list(recent_log_compact or []),
+            )
+            # Defensive invariant: builder output only (catch accidental reassignment / shadowing bugs).
+            assert narrative_plan is None or isinstance(narrative_plan, dict)
+        except Exception as exc:
+            narrative_plan_build_error = f"{type(exc).__name__}: {exc}"
+            narrative_plan = None
+
     prompt_debug_anchor = {
         "scene_state_anchor": {
             "enabled": bool(scene_state_anchor_contract.get("enabled")),
@@ -3153,6 +3361,10 @@ def build_narration_context(
             if isinstance(opening_scene_export, dict) and isinstance(opening_scene_export.get("contract"), dict)
             else None,
         },
+        "narrative_plan": _narrative_plan_prompt_debug_anchor(
+            narrative_plan,
+            build_error=narrative_plan_build_error,
+        ),
     }
     first_mention_contract: Dict[str, Any] = {
         "enabled": True,
@@ -3196,6 +3408,7 @@ def build_narration_context(
         *NARRATION_VISIBILITY_MANDATORY_INSTRUCTIONS,
         *FIRST_MENTION_MANDATORY_INSTRUCTIONS,
         *SCENE_STATE_ANCHOR_MANDATORY_INSTRUCTIONS,
+        *(_NARRATIVE_PLAN_STRUCT_GUIDANCE if narrative_plan is not None else ()),
         (
             "SCENE MOMENTUM RULE (HARD RULE): Every 2–3 exchanges, you MUST introduce exactly one of: "
             "new_information, new_actor_entering, environmental_change, time_pressure, consequence_or_opportunity. "
@@ -3870,6 +4083,7 @@ def build_narration_context(
             has_scene_change_context=has_scene_change_context,
             naming_line=naming_line if isinstance(naming_line, str) else None,
             answer_style_hints=list(answer_style_hints_list),
+            narrative_plan_present=narrative_plan is not None,
         )
         prompt_debug_anchor["compact_prompt"] = {
             "enabled": True,
@@ -3903,6 +4117,7 @@ def build_narration_context(
 
     payload: Dict[str, Any] = {
         'instructions': instructions,
+        'narrative_plan': narrative_plan,
         'speaker_selection': speaker_selection,
         'active_topic_anchor': active_topic_anchor,
         'interaction_continuity': interaction_continuity,
