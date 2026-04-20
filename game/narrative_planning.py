@@ -14,9 +14,9 @@ information* narration should respect, not *how* it is phrased.
   published handles may narration name this turn?”, **not** “whom should narration
   center on?”. Narrow turn focality lives in ``scene_anchors`` (e.g.
   ``active_interlocutor``, ``relevant_actors``, location tokens),
-  ``narrative_mode``, ``active_pressures``, ``required_new_information``, and
-  ``role_allocation``—consumers must not treat this list as a substitute for those
-  fields.
+  ``narrative_mode`` / ``narrative_mode_contract``, ``active_pressures``,
+  ``required_new_information``, and ``role_allocation``—consumers must not treat
+  this list as a substitute for those fields.
 - When ``published_entities`` is omitted (``None``), the field falls back to
   **CTIR-addressed** entity ids only (no visibility slice at the builder seam);
   integrated callers should normally pass the published slice from
@@ -60,10 +60,13 @@ import json
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
 from game.ctir import looks_like_ctir
+from game.narrative_mode_contract import (
+    NARRATIVE_MODES,
+    build_narrative_mode_contract,
+    validate_narrative_mode_contract,
+)
 
 NARRATIVE_PLAN_VERSION = 1
-
-NARRATIVE_MODES = frozenset({"dialogue", "outcome", "transition", "exposition", "consequence"})
 
 # ``required_new_information[].kind`` values emitted by :func:`_derive_required_new_information` only.
 # Used in strict validation so plans cannot carry invented semantic categories.
@@ -433,7 +436,7 @@ def _derive_allowable_entity_references(
     row's id that passes bounds), merged with any CTIR descriptors for those same
     ids—**not** a CTIR-only subset. CTIR ids outside the allowlist are dropped.
     This field is an **outer boundary** for named handles; focality is elsewhere
-    on the plan (``scene_anchors.active_interlocutor``, ``narrative_mode``, etc.).
+    on the plan (``scene_anchors.active_interlocutor``, ``narrative_mode``, ``narrative_mode_contract``, etc.).
     """
     codes: List[str] = []
     publish_filter = published_entities is not None
@@ -492,75 +495,26 @@ def _derive_allowable_entity_references(
     return refs[:_MAX_ID_LIST], codes
 
 
-def _derive_narrative_mode(ctir: Mapping[str, Any]) -> Tuple[str, List[str]]:
-    codes: List[str] = []
-    res = _mapping(ctir.get("resolution"))
-    sc = res.get("state_changes")
-    scd = sc if isinstance(sc, Mapping) else {}
-    kind = _as_str(res.get("kind")).lower()
-
-    if kind == "scene_transition" or scd.get("scene_transition_occurred") or scd.get("arrived_at_scene"):
-        codes.append("mode:transition")
-        return "transition", codes
-
-    soc = res.get("social")
-    if isinstance(soc, Mapping) and (bool(soc.get("npc_reply_expected")) or kind in {"question", "dialogue", "social"}):
-        codes.append("mode:dialogue")
-        return "dialogue", codes
-
-    ic = _mapping(ctir.get("interaction"))
-    if _as_str(ic.get("interaction_mode")).lower() == "social" and kind in {"", "question", "social"}:
-        codes.append("mode:dialogue_social")
-        return "dialogue", codes
-
-    if kind in {"attack", "defend", "contest", "save", "check"}:
-        codes.append("mode:outcome")
-        return "outcome", codes
-
-    if _as_str(res.get("clue_id")) or scd.get("clue_surface") or scd.get("new_scene_context_available"):
-        codes.append("mode:exposition")
-        return "exposition", codes
-
-    sm = _mapping(ctir.get("state_mutations"))
-    for block_name in ("scene", "session", "combat", "clues_leads"):
-        block = sm.get(block_name)
-        if isinstance(block, Mapping) and block.get("changed_keys"):
-            codes.append("mode:consequence_mutations")
-            return "consequence", codes
-
-    if kind in {"observe", "search", "examine"}:
-        codes.append("mode:exposition_action")
-        return "exposition", codes
-
-    cons = res.get("consequences")
-    if isinstance(cons, list) and cons:
-        codes.append("mode:consequence_list")
-        return "consequence", codes
-    if isinstance(cons, Mapping) and cons:
-        codes.append("mode:consequence_map")
-        return "consequence", codes
-
-    codes.append("mode:default_exposition")
-    return "exposition", codes
-
-
-# Integer weights for dialogue / exposition / consequence / transition (sum = 100).
+# Integer weights (sum = 100): dialogue, exposition, outcome_forward, transition.
+# These keys are role_allocation emphasis axes only (Objective #2 planning weights), not Objective #6 ``narrative_mode`` labels.
+# ``outcome_forward`` is planning emphasis for resolved-result / state-change salience—not ``action_outcome`` mode.
 _ROLE_WEIGHTS_BY_MODE: Dict[str, Tuple[int, int, int, int]] = {
-    "dialogue": (55, 25, 12, 8),
-    "outcome": (8, 12, 68, 12),
-    "transition": (6, 22, 12, 60),
-    "exposition": (8, 72, 15, 5),
-    "consequence": (10, 28, 52, 10),
+    "opening": (12, 62, 14, 12),
+    "continuation": (28, 32, 22, 18),
+    "action_outcome": (8, 20, 62, 10),
+    "dialogue": (58, 22, 12, 8),
+    "transition": (8, 18, 12, 62),
+    "exposition_answer": (12, 66, 12, 10),
 }
 
 
 def _derive_role_allocation(mode: str) -> Dict[str, int]:
-    w = _ROLE_WEIGHTS_BY_MODE.get(mode) or _ROLE_WEIGHTS_BY_MODE["exposition"]
-    d, e, c, t = w
+    w = _ROLE_WEIGHTS_BY_MODE.get(mode) or _ROLE_WEIGHTS_BY_MODE["continuation"]
+    d, e, o, t = w
     return {
         "dialogue": d,
         "exposition": e,
-        "consequence": c,
+        "outcome_forward": o,
         "transition": t,
     }
 
@@ -601,6 +555,9 @@ def build_narrative_plan(
     published_entities: Sequence[Mapping[str, Any]] | None = None,
     recent_compressed_events: Sequence[Mapping[str, Any]] | None = None,
     resolution_meta: Mapping[str, Any] | None = None,
+    turn_packet: Mapping[str, Any] | None = None,
+    narration_obligations: Mapping[str, Any] | None = None,
+    response_policy: Mapping[str, Any] | None = None,
 ) -> Dict[str, Any]:
     """Assemble a deterministic narrative-plan dict from CTIR-centered inputs.
 
@@ -619,6 +576,11 @@ def build_narrative_plan(
       prose.
     - ``resolution_meta``: optional bounded resolution-facing metadata dict; never
       prompt fragments.
+    - ``turn_packet``, ``narration_obligations``, ``response_policy``: optional
+      already-resolved seam slices passed through to
+      :func:`game.narrative_mode_contract.build_narrative_mode_contract` only (no
+      local mode re-derivation). Omitted branches default to empty mappings at the
+      contract builder.
 
     This function does not load engine/session/world objects or hidden stores.
     """
@@ -633,7 +595,21 @@ def build_narrative_plan(
     allowable_entity_references, c4 = _derive_allowable_entity_references(
         ctir, published_entities=published_entities
     )
-    narrative_mode, c5 = _derive_narrative_mode(ctir)
+    narrative_mode_contract = build_narrative_mode_contract(
+        ctir=ctir,
+        turn_packet=turn_packet,
+        narration_obligations=narration_obligations,
+        response_policy=response_policy,
+    )
+    ok_contract, contract_reasons = validate_narrative_mode_contract(narrative_mode_contract)
+    if not ok_contract:
+        raise ValueError(f"narrative_mode_contract validation failed: {contract_reasons}")
+    narrative_mode = _as_str(narrative_mode_contract.get("mode"))
+    c5 = list(narrative_mode_contract.get("source_signals") or [])
+    if isinstance(narrative_mode_contract.get("debug"), Mapping):
+        dbg_dc = narrative_mode_contract["debug"].get("derivation_codes")
+        if isinstance(dbg_dc, list):
+            c5 = list(dbg_dc)
     role_allocation = _derive_role_allocation(narrative_mode)
 
     meta = _bounded_shallow_map(resolution_meta, max_keys=12) if resolution_meta else {}
@@ -653,8 +629,9 @@ def build_narrative_plan(
     #   full published slice ids (+ CTIR descriptors for same ids); without: CTIR-addressed ids only.
     #   Not a focality list—use scene_anchors / narrative_mode / active_pressures / required_new_information /
     #   role_allocation for narrower structural focus.
-    # - narrative_mode: direct derived projection (coarse narration-shape bucket from CTIR resolution/
-    #   interaction/mutation shape only).
+    # - narrative_mode / narrative_mode_contract: derivative narrative-mode contract from
+    #   :mod:`game.narrative_mode_contract` (CTIR + optional turn_packet / narration_obligations / response_policy);
+    #   narrative_mode is the compact alias of narrative_mode_contract["mode"].
     # - role_allocation: bounded planning convenience (deterministic integer weights from narrative_mode).
     # - recent_compressed_events: bounded planning convenience (caller-supplied bounded summaries;
     #   not canonical turn history).
@@ -667,6 +644,7 @@ def build_narrative_plan(
         "required_new_information": required_new_information,
         "allowable_entity_references": allowable_entity_references,
         "narrative_mode": narrative_mode,
+        "narrative_mode_contract": narrative_mode_contract,
         "role_allocation": role_allocation,
         "recent_compressed_events": recent,
         "resolution_meta": meta,
@@ -689,12 +667,18 @@ def narrative_plan_matches_ctir_derivation(
     published_entities: Sequence[Mapping[str, Any]] | None = None,
     recent_compressed_events: Sequence[Mapping[str, Any]] | None = None,
     resolution_meta: Mapping[str, Any] | None = None,
+    turn_packet: Mapping[str, Any] | None = None,
+    narration_obligations: Mapping[str, Any] | None = None,
+    response_policy: Mapping[str, Any] | None = None,
 ) -> bool:
     """Return True iff *plan* is byte-identical to a fresh :func:`build_narrative_plan` for the same inputs.
 
     Narrow invariant helper: detects tampering or alternate-truth plans that no
     longer match CTIR-centered derivation. Does **not** replace
     :func:`looks_like_ctir` or engine validation.
+
+    Pass the same optional ``turn_packet`` / ``narration_obligations`` / ``response_policy``
+    arguments given to :func:`build_narrative_plan` when those slices were used to build the plan.
     """
     if not isinstance(plan, Mapping):
         return False
@@ -708,6 +692,9 @@ def narrative_plan_matches_ctir_derivation(
             published_entities=published_entities,
             recent_compressed_events=recent_compressed_events,
             resolution_meta=resolution_meta,
+            turn_packet=turn_packet,
+            narration_obligations=narration_obligations,
+            response_policy=response_policy,
         )
     except ValueError:
         return False
@@ -754,6 +741,7 @@ def validate_narrative_plan(plan: Any, *, strict: bool = True) -> Optional[str]:
         "required_new_information",
         "allowable_entity_references",
         "narrative_mode",
+        "narrative_mode_contract",
         "role_allocation",
         "recent_compressed_events",
         "resolution_meta",
@@ -770,13 +758,23 @@ def validate_narrative_plan(plan: Any, *, strict: bool = True) -> Optional[str]:
             return f"banned_key_path:{banned}"
 
     mode = plan.get("narrative_mode")
-    if mode not in NARRATIVE_MODES:
+    if not isinstance(mode, str) or mode.strip() not in NARRATIVE_MODES:
         return "bad_narrative_mode"
+
+    nmc = plan.get("narrative_mode_contract")
+    if not isinstance(nmc, Mapping):
+        return "missing_narrative_mode_contract"
+    ok_nmc, nmc_reasons = validate_narrative_mode_contract(nmc)
+    if not ok_nmc:
+        code = nmc_reasons[0] if nmc_reasons else "unknown"
+        return f"narrative_mode_contract_invalid:{code}"
+    if _as_str(mode) != _as_str(nmc.get("mode")):
+        return "narrative_mode_contract_mode_mismatch"
 
     ra = plan.get("role_allocation")
     if not isinstance(ra, Mapping):
         return "role_allocation_not_mapping"
-    keys_needed = ("dialogue", "exposition", "consequence", "transition")
+    keys_needed = ("dialogue", "exposition", "outcome_forward", "transition")
     for k in keys_needed:
         if k not in ra:
             return f"role_allocation_missing:{k}"

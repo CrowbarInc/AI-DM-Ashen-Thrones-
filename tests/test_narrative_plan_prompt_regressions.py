@@ -167,7 +167,8 @@ def test_social_follow_up_attaches_plan_dialogue_and_interlocutor_when_visible()
     assert "resolution_kind" in _rni_kinds(plan)
     assert _allowable_ids(plan) == ["npc_captain"]
     ra = plan.get("role_allocation") or {}
-    assert sum(int(ra[k]) for k in ("dialogue", "exposition", "consequence", "transition")) == 100
+    assert plan.get("narrative_mode") == plan.get("narrative_mode_contract", {}).get("mode")
+    assert sum(int(ra[k]) for k in ("dialogue", "exposition", "outcome_forward", "transition")) == 100
     assert int(ra.get("dialogue", 0)) > int(ra.get("exposition", 0))
 
 
@@ -195,7 +196,8 @@ def test_consequence_turn_surfaces_atoms_without_invented_mutations_or_clues() -
         detach_ctir(session)
 
     plan = ctx["narrative_plan"]
-    assert plan.get("narrative_mode") == "consequence"
+    assert plan.get("narrative_mode") not in {"consequence", "outcome", "exposition"}
+    assert plan.get("narrative_mode") == plan.get("narrative_mode_contract", {}).get("mode")
     atom_row = _find_rni(plan, "consequence_atoms")
     assert atom_row is not None
     assert "portcullis slams shut behind you" in (atom_row.get("values") or [])
@@ -262,7 +264,7 @@ def test_transition_reanchors_scene_without_stale_interlocutor() -> None:
 
 
 def test_exposition_not_default_for_structural_non_social_turns() -> None:
-    """Mechanical / mutation-heavy turns keep non-exposition modes; observe still maps to exposition."""
+    """Mechanical / mutation-heavy turns stay on the six-mode contract (no legacy coarse buckets)."""
     world = _world_npcs()
     session = dict(_base_narration_kwargs(world=world)["session"])
 
@@ -278,9 +280,9 @@ def test_exposition_not_default_for_structural_non_social_turns() -> None:
     finally:
         detach_ctir(session)
 
-    assert ctx_check["narrative_plan"]["narrative_mode"] == "outcome"
+    assert ctx_check["narrative_plan"]["narrative_mode"] == "continuation"
     ra_o = ctx_check["narrative_plan"]["role_allocation"]
-    assert int(ra_o["exposition"]) < int(ra_o["dialogue"]) + int(ra_o["consequence"])
+    assert int(ra_o["exposition"]) < int(ra_o["dialogue"]) + int(ra_o["outcome_forward"])
 
     session2 = dict(_base_narration_kwargs(world=world)["session"])
     _attach_ctir(
@@ -296,7 +298,7 @@ def test_exposition_not_default_for_structural_non_social_turns() -> None:
     finally:
         detach_ctir(session2)
 
-    assert ctx_mut["narrative_plan"]["narrative_mode"] == "consequence"
+    assert ctx_mut["narrative_plan"]["narrative_mode"] == "continuation"
 
     session3 = dict(_base_narration_kwargs(world=world)["session"])
     _attach_ctir(
@@ -311,7 +313,7 @@ def test_exposition_not_default_for_structural_non_social_turns() -> None:
     finally:
         detach_ctir(session3)
 
-    assert ctx_obs["narrative_plan"]["narrative_mode"] == "exposition"
+    assert ctx_obs["narrative_plan"]["narrative_mode"] == "continuation"
 
 
 def test_visibility_allowlist_empty_partial_and_hidden_ctir_entity() -> None:

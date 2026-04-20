@@ -34,7 +34,7 @@ from tests.test_narrative_plan_prompt_regressions import (
     _world_npcs,
 )
 
-_ROLE_KEYS = ("dialogue", "exposition", "consequence", "transition")
+_ROLE_KEYS = ("dialogue", "exposition", "outcome_forward", "transition")
 
 # Mirrors ``_narrative_plan_prompt_debug_anchor`` public keys; catches accidental
 # duplication of full plan subtrees into ``prompt_debug``.
@@ -44,6 +44,9 @@ _ALLOWED_PROMPT_DEBUG_NARRATIVE_PLAN_KEYS = frozenset(
         "build_error",
         "version",
         "narrative_mode",
+        "narrative_mode_contract_valid",
+        "narrative_mode_contract_validation_codes",
+        "narrative_mode_contract_derivation_codes",
         "role_allocation",
         "derivation_codes",
         "derivation_code_count",
@@ -176,7 +179,8 @@ def test_readiness_consequence_state_change() -> None:
     )
     with _narration_payload(kw, session) as ctx:
         plan = ctx["narrative_plan"]
-        assert plan.get("narrative_mode") == "consequence"
+        assert plan.get("narrative_mode") == "continuation"
+        assert plan.get("narrative_mode") == plan.get("narrative_mode_contract", {}).get("mode")
         atom = _find_rni(plan, "consequence_atoms")
         assert atom is not None
         assert "portcullis slams shut behind you" in (atom.get("values") or [])
@@ -242,7 +246,7 @@ def test_readiness_transition_reanchor() -> None:
 
 
 @pytest.mark.regression
-def test_readiness_exposition_plain_observation() -> None:
+def test_readiness_plain_observation_continuation_forward() -> None:
     world = _world_npcs()
     kw = _base_narration_kwargs(world=world, scene=_scene_envelope("s1"))
     session = dict(kw["session"])
@@ -255,7 +259,8 @@ def test_readiness_exposition_plain_observation() -> None:
     )
     with _narration_payload(kw, session) as ctx:
         plan = ctx["narrative_plan"]
-        assert plan.get("narrative_mode") == "exposition"
+        assert plan.get("narrative_mode") == "continuation"
+        assert plan.get("narrative_mode") == plan.get("narrative_mode_contract", {}).get("mode")
         assert _find_rni(plan, "consequence_atoms") is None
         assert "mutation" not in _rni_kinds(plan)
         ra = plan.get("role_allocation") or {}

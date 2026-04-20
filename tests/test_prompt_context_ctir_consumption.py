@@ -113,14 +113,39 @@ def test_ctir_session_attaches_narrative_plan_and_stable_on_repeat() -> None:
     plan = ctx_a.get("narrative_plan")
     assert isinstance(plan, dict)
     assert plan.get("version") == 1
-    assert plan.get("narrative_mode") in {"dialogue", "outcome", "transition", "exposition", "consequence"}
+    assert plan.get("narrative_mode") in {
+        "opening",
+        "continuation",
+        "action_outcome",
+        "dialogue",
+        "transition",
+        "exposition_answer",
+    }
     assert plan.get("narrative_mode") == "dialogue"
+    assert plan.get("narrative_mode") == plan.get("narrative_mode_contract", {}).get("mode")
     assert ctx_a.get("narrative_plan") == ctx_b.get("narrative_plan")
     pd = ctx_a.get("prompt_debug") or {}
     npd = pd.get("narrative_plan") or {}
     assert npd.get("present") is True
     assert npd.get("narrative_mode") == plan.get("narrative_mode")
     assert isinstance(npd.get("derivation_codes"), list)
+    nmi = pd.get("narrative_mode_instructions") or {}
+    assert nmi.get("mode") == plan.get("narrative_mode")
+    assert nmi.get("instruction_count", 0) > 0
+
+
+def test_response_policy_carries_response_type_contract_when_ctir_present() -> None:
+    """Narrative mode derivation must see the same RTC slice shipped on response_policy (Objective #6 seam)."""
+    session = dict(_minimal_narration_kwargs()["session"])
+    _attach_question_ctir(session)
+    try:
+        ctx = build_narration_context(**_minimal_narration_kwargs(session=session, include_non_public_prompt_keys=True))
+    finally:
+        detach_ctir(session)
+    rp = ctx.get("response_policy") or {}
+    rtc = rp.get("response_type_contract")
+    assert isinstance(rtc, dict)
+    assert rtc.get("required_response_type") == "dialogue"
 
 
 def test_public_scene_convenience_slice_does_not_drift_narrative_mode() -> None:

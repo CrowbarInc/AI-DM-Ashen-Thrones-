@@ -53,10 +53,11 @@ Contract layers (orthogonal concerns):
 - **narrative_plan** — deterministic structural bridge from CTIR to narration (see
   :func:`game.narrative_planning.build_narrative_plan`). Owned by :mod:`game.narrative_planning`; this module only
   calls that builder once and attaches the JSON-safe artifact for **structural narration guidance** (anchors,
-  emphasis weights, category reminders). It is **not** consulted for adjudication, routing, policy, or
-  ``turn_summary`` / resolution semantics—those remain CTIR-first (when attached), ``response_policy``, and
-  ``narration_visibility``. If CTIR and the plan ever disagree, **CTIR wins**; the plan is derivative and
-  rebuildable from CTIR plus the same bounded slices passed into the builder.
+  ``narrative_mode`` / ``narrative_mode_contract``, emphasis weights, category reminders). It is **not** consulted
+  for adjudication, routing, policy, or ``turn_summary`` / resolution semantics—those remain CTIR-first (when attached),
+  ``response_policy``, and ``narration_visibility``. If CTIR and the plan ever disagree, **CTIR wins**; the plan is
+  derivative and rebuildable from CTIR plus the same bounded slices passed into the builder (including shipped
+  ``narration_obligations`` and ``response_policy`` for the mode contract).
 """
 from __future__ import annotations
 
@@ -111,6 +112,7 @@ from game.response_policy_contracts import (
 )
 from game.turn_packet import build_turn_packet
 from game.ctir_runtime import get_attached_ctir
+from game.narrative_mode_contract import NARRATIVE_MODES, validate_narrative_mode_contract
 from game.narrative_planning import build_narrative_plan
 from game.state_channels import (
     assert_no_debug_keys_in_prompt_payload,
@@ -421,10 +423,20 @@ def _narrative_plan_prompt_debug_anchor(
     aer = plan.get("allowable_entity_references") if isinstance(plan.get("allowable_entity_references"), list) else []
     ra = sa.get("relevant_actors") if isinstance(sa.get("relevant_actors"), list) else []
     pl = ap.get("pending_lead_ids") if isinstance(ap.get("pending_lead_ids"), list) else []
+    nmc = plan.get("narrative_mode_contract") if isinstance(plan.get("narrative_mode_contract"), dict) else None
+    nmc_ok, nmc_reasons = validate_narrative_mode_contract(nmc)
+    nmc_dbg: List[str] = []
+    if isinstance(nmc, dict):
+        _nmc_dbg = (nmc.get("debug") or {}).get("derivation_codes") if isinstance(nmc.get("debug"), dict) else None
+        if isinstance(_nmc_dbg, list):
+            nmc_dbg = [str(x) for x in _nmc_dbg[:16]]
     return {
         "present": True,
         "version": plan.get("version"),
         "narrative_mode": plan.get("narrative_mode"),
+        "narrative_mode_contract_valid": bool(nmc_ok),
+        "narrative_mode_contract_validation_codes": list(nmc_reasons[:16]) if not nmc_ok else [],
+        "narrative_mode_contract_derivation_codes": nmc_dbg,
         "role_allocation": plan.get("role_allocation") if isinstance(plan.get("role_allocation"), dict) else None,
         "derivation_codes": codes,
         "derivation_code_count": len(dc) if isinstance(dc, list) else 0,
@@ -437,10 +449,156 @@ def _narrative_plan_prompt_debug_anchor(
     }
 
 
+_MAX_NARRATIVE_MODE_INSTRUCTIONS = 22
+_MAX_NARRATIVE_MODE_CONTRACT_CODE_EMBED = 8
+
+
+def _narrative_mode_instruction_prompt_debug(
+    narrative_mode_contract: Mapping[str, Any] | None,
+    *,
+    instruction_lines: Sequence[str],
+) -> Dict[str, Any]:
+    """Compact inspect-only slice for ``prompt_debug`` (counts + symbolic codes only)."""
+    if not isinstance(narrative_mode_contract, Mapping):
+        return {
+            "present": bool(instruction_lines),
+            "mode": None,
+            "instruction_count": len(list(instruction_lines)),
+            "sample_prompt_obligation_keys": [],
+            "sample_forbidden_moves": [],
+        }
+    mode = str(narrative_mode_contract.get("mode") or "").strip() or None
+    po = (
+        narrative_mode_contract.get("prompt_obligations")
+        if isinstance(narrative_mode_contract.get("prompt_obligations"), Mapping)
+        else {}
+    )
+    fm = narrative_mode_contract.get("forbidden_moves")
+    fm_list = [str(x).strip() for x in (fm if isinstance(fm, list) else []) if isinstance(x, str) and str(x).strip()]
+    ob_keys = sorted(str(k) for k in po.keys() if isinstance(k, str) and str(k).strip())[:8]
+    return {
+        "present": bool(instruction_lines),
+        "mode": mode,
+        "instruction_count": len(list(instruction_lines)),
+        "sample_prompt_obligation_keys": ob_keys,
+        "sample_forbidden_moves": sorted(set(fm_list))[:8],
+    }
+
+
+def _build_narrative_mode_instructions(
+    *,
+    narrative_mode_contract: Mapping[str, Any] | None,
+    response_policy: Mapping[str, Any] | None,
+    narration_obligations: Mapping[str, Any] | None,
+    resolution_sem: Mapping[str, Any] | None,
+) -> List[str]:
+    """Bounded structural mode instructions derived from ``narrative_mode_contract`` only.
+
+    Uses ``mode``, ``prompt_obligations``, and ``forbidden_moves`` from the integrated
+    contract; does not infer a separate mode. Call after shipped slices (including
+    ``response_policy.social_response_structure``) are attached when dialogue shaping
+    must reflect that contract.
+
+    ``narration_obligations`` / ``resolution_sem`` are accepted for seam symmetry with
+    planning inputs; the integrated contract remains authoritative over local re-derivation.
+    """
+    _ = (narration_obligations, resolution_sem)
+    if not isinstance(narrative_mode_contract, Mapping):
+        return []
+    ok, _reasons = validate_narrative_mode_contract(narrative_mode_contract)
+    if not ok:
+        return []
+    mode = str(narrative_mode_contract.get("mode") or "").strip()
+    if mode not in NARRATIVE_MODES:
+        return []
+    po = (
+        narrative_mode_contract.get("prompt_obligations")
+        if isinstance(narrative_mode_contract.get("prompt_obligations"), Mapping)
+        else {}
+    )
+    fm = narrative_mode_contract.get("forbidden_moves")
+    fm_list = sorted(
+        {
+            str(x).strip()
+            for x in (fm if isinstance(fm, list) else [])
+            if isinstance(x, str) and str(x).strip()
+        }
+    )[:_MAX_NARRATIVE_MODE_CONTRACT_CODE_EMBED]
+
+    rp = response_policy if isinstance(response_policy, Mapping) else {}
+    ac = rp.get("answer_completeness") if isinstance(rp.get("answer_completeness"), Mapping) else {}
+    srs = rp.get("social_response_structure") if isinstance(rp.get("social_response_structure"), Mapping) else {}
+
+    out: List[str] = [
+        "NARRATIVE MODE (STRUCTURAL DELTA): Canonical mode is `narrative_plan.narrative_mode_contract.mode` "
+        f"({mode}); obey its prompt_obligations and forbidden_moves as machine codes. "
+        "Shipped response_policy and CTIR win on any conflict.",
+    ]
+
+    if mode == "opening":
+        out.append("struct:opening:first_impression_and_immediate_location_salience")
+        out.append(
+            "struct:opening:distinct_from_continuation_establish_now_do_not_continue_mid_thread_tableau_as_a_fresh_opening"
+        )
+        if bool(ac.get("answer_required")):
+            out.append(
+                "struct:opening:answer_completeness_if_active_keep_the_core_reply_unburied_by_scene_paint"
+            )
+    elif mode == "continuation":
+        out.append("struct:continuation:carry_active_thread_forward_without_reopening_a_fresh_intro_tableau")
+        out.append("struct:continuation:prefer_local_continuity_and_forward_motion_over_scene_wide_recap")
+        out.append("struct:continuation:suppress_language_that_resets_the_scene_like_a_first_shot_opening")
+    elif mode == "action_outcome":
+        out.append(
+            "struct:action_outcome:lead_early_with_the_authoritative_result_signal_before_atmosphere_or_scene_setting_padding"
+        )
+        out.append("struct:action_outcome:foreground_state_change_salience")
+        out.append(
+            "struct:action_outcome:do_not_treat_unresolved_engine_check_prompts_as_if_the_outcome_already_landed"
+        )
+    elif mode == "dialogue":
+        out.append("struct:dialogue:preserve_active_interlocutor_and_speaker_continuity")
+        out.append("struct:dialogue:suppress_scenic_recap_unless_scene_change_signals_apply_this_turn")
+        if bool(srs.get("enabled")):
+            out.append(
+                "struct:dialogue:social_response_structure_enabled_obey_shipped_response_policy_object_shape_only"
+            )
+    elif mode == "transition":
+        out.append("struct:transition:foreground_departure_arrival_or_other_scene_change_motion")
+        out.append(
+            "struct:transition:allowed_reground_in_new_setting_distinct_from_static_mid_scene_continuation"
+        )
+    elif mode == "exposition_answer":
+        out.append("struct:exposition_answer:lead_with_clear_information_when_answer_completeness_requires_it")
+        out.append("struct:exposition_answer:prioritize_direct_information_delivery_over_mood_setting")
+        out.append(
+            "struct:exposition_answer:avoid_implying_a_mechanical_action_resolution_beat_if_none_occurred"
+        )
+
+    ob_lines: List[str] = []
+    for k in sorted(str(x) for x in po.keys() if isinstance(x, str) and str(x).strip()):
+        v = po.get(k)
+        if v is True:
+            ob_lines.append(f"struct:contract_obligation:{k}")
+        elif isinstance(v, list) and v:
+            items = sorted({str(x).strip() for x in v if isinstance(x, str) and str(x).strip()})[:4]
+            if items:
+                ob_lines.append(f"struct:contract_obligation:{k}:{'|'.join(items)}")
+    out.extend(ob_lines[:6])
+
+    if fm_list:
+        out.append("struct:contract_forbidden_moves:" + "|".join(fm_list))
+
+    return out[:_MAX_NARRATIVE_MODE_INSTRUCTIONS]
+
+
 _NARRATIVE_PLAN_STRUCT_GUIDANCE: tuple[str, ...] = (
     "NARRATIVE PLAN (STRUCTURAL GUIDANCE): When top-level `narrative_plan` is present, prefer it for bounded structural "
     "shaping alongside existing contracts. It does not replace CTIR, response_policy, or narration_visibility; "
     "on any conflict, follow CTIR and the shipped contracts, not the plan.",
+    "Narrative mode contract: `narrative_plan.narrative_mode_contract` is a deterministic, JSON-safe derivative of CTIR plus "
+    "the same-turn shipped slices already used at this seam (`response_policy`, `narration_obligations`, optional `turn_packet`). "
+    "It is downstream shaping guidance only—not adjudication and not a second authority over CTIR or policy.",
     "Anchoring: prefer `narrative_plan.scene_anchors` for scene/interlocutor grounding tokens together with "
     "`scene_state_anchor_contract` and narration visibility—do not contradict authoritative visibility.",
     "Momentum / pressure: prefer `narrative_plan.active_pressures` (pending lead ids, interaction_pressure, "
@@ -449,10 +607,11 @@ _NARRATIVE_PLAN_STRUCT_GUIDANCE: tuple[str, ...] = (
     "turn—without inventing facts beyond visibility and narrative authority.",
     "Entity handle boundaries: `narrative_plan.allowable_entity_references` is the visible narration-universe (outer boundary) "
     "for published entity_id handles when non-empty—not whom to focus on. Use `scene_anchors.active_interlocutor`, "
-    "`scene_anchors` generally, `narrative_mode`, `active_pressures`, `required_new_information`, and `role_allocation` for "
-    "narrower focality. narration_visibility remains the hard visibility scope—never reference entities outside both contracts.",
-    "High-level shaping: use `narrative_plan.narrative_mode` and the integer weights in `narrative_plan.role_allocation` "
-    "(dialogue, exposition, consequence, transition; they sum to 100) as emphasis guidance only.",
+    "`scene_anchors` generally, `narrative_plan.narrative_mode`, `narrative_plan.narrative_mode_contract`, `active_pressures`, "
+    "`required_new_information`, and `role_allocation` for narrower focality. narration_visibility remains the hard visibility scope—never reference entities outside both contracts.",
+    "Mode deltas: follow the `NARRATIVE MODE (STRUCTURAL DELTA)` instruction lines derived from "
+    "`narrative_plan.narrative_mode_contract` (machine prompt_obligations + forbidden_moves). "
+    "Use `narrative_plan.role_allocation` integer weights only as bounded emphasis alongside that block—never as a substitute for shipped policy.",
 )
 
 
@@ -3067,6 +3226,7 @@ def _compact_manual_play_instructions(
     naming_line: str | None,
     answer_style_hints: List[str],
     narrative_plan_present: bool = False,
+    narrative_mode_instruction_lines: Sequence[str] | None = None,
 ) -> List[str]:
     obligations = narration_obligations if isinstance(narration_obligations, Mapping) else {}
     policy = response_policy if isinstance(response_policy, Mapping) else {}
@@ -3115,10 +3275,12 @@ def _compact_manual_play_instructions(
     if narrative_plan_present:
         out.append(
             "NARRATIVE PLAN: When `narrative_plan` is on the payload, use its scene_anchors, active_pressures, "
-            "required_new_information, allowable_entity_references (visible handle boundary only—not focality), "
-            "narrative_mode, and role_allocation for structural emphasis only—same precedence as full prompts "
+            "required_new_information, and allowable_entity_references (visible handle boundary only—not focality) "
+            "together with the `NARRATIVE MODE (STRUCTURAL DELTA)` lines and role_allocation weights—same precedence as full prompts "
             "(visibility and response_policy still win conflicts)."
         )
+    if narrative_mode_instruction_lines:
+        out.extend(list(narrative_mode_instruction_lines))
     out.append(mode_instruction)
     return out
 
@@ -3324,8 +3486,9 @@ def build_narration_context(
         world if isinstance(world, dict) else None,
         resolution=resolution_sem if isinstance(resolution_sem, dict) else None,
     )
-    # Narrative plan (Objective #2): single consumer call into :mod:`game.narrative_planning` at the CTIR seam.
-    # Uses only bounded inputs already assembled for this build (CTIR + visibility allowlist + compressed log slice).
+    # Narrative plan (Objective #2 / #6): single consumer call into :mod:`game.narrative_planning` at the CTIR seam.
+    # Uses bounded inputs already assembled for this build (CTIR + visibility allowlist + compressed log slice +
+    # narration_obligations + response_policy aligned with the shipped prompt bundle).
     #
     # Consumer note: ``allowable_entity_references`` = visible handle *boundary* when the published slice is passed;
     # objectives must not use it as a proxy for interlocutor or scene focus (see ``scene_anchors``, ``narrative_mode``, etc.).
@@ -3339,6 +3502,23 @@ def build_narration_context(
     narrative_plan: Dict[str, Any] | None = None
     narrative_plan_build_error: str | None = None
     if ctir_obj is not None:
+        # Objective #6: ``build_narrative_mode_contract`` reads ``response_policy.response_type_contract``.
+        # Attach the same peek/derive used later for social_structure so narrative_mode matches shipped RTC
+        # (not only narration_obligations heuristics).
+        if isinstance(resolution_sem, dict):
+            _rtc_peek_plan = peek_response_type_contract_from_resolution(resolution_sem)
+            _ic_rtc_plan = _interaction_context_snapshot_from_ctir_semantics(interaction_sem)
+            _rtc_plan_dict = _rtc_peek_plan or derive_response_type_contract(
+                segmented_turn=None,
+                normalized_action=None,
+                resolution=resolution_sem,
+                interaction_context=_ic_rtc_plan,
+                directed_social_entry=None,
+                route_choice=None,
+                raw_player_text=str(user_text or ""),
+            ).to_dict()
+            if isinstance(_rtc_plan_dict, dict):
+                response_policy["response_type_contract"] = _rtc_plan_dict
         try:
             _pub_ent = _published_entities_slice_for_narrative_planning(visibility_contract)
             _pub_scene_slice = _public_scene_slice_for_narrative_plan(
@@ -3353,6 +3533,8 @@ def build_narration_context(
                 public_scene_slice=_pub_scene_slice or None,
                 published_entities=_pub_ent,
                 recent_compressed_events=list(recent_log_compact or []),
+                narration_obligations=narration_obligations,
+                response_policy=response_policy,
             )
             # Defensive invariant: builder output only (catch accidental reassignment / shadowing bugs).
             assert narrative_plan is None or isinstance(narrative_plan, dict)
@@ -3852,22 +4034,27 @@ def build_narration_context(
     # Canonical prompt-contract owner path: ``game.prompt_context`` ships this
     # policy in the prompt bundle. The implementation remains delegated to the
     # downstream policy consumer module as compatibility residue only.
-    rtc_peeked = peek_response_type_contract_from_resolution(resolution_sem)
-    rtc_source = "resolution.metadata" if rtc_peeked is not None else "derived"
     interaction_for_rtc = (
         _interaction_context_snapshot_from_ctir_semantics(interaction_sem)
         if ctir_obj is not None
         else response_type_context_snapshot(session if isinstance(session, dict) else None)
     )
-    rtc_for_social_structure = rtc_peeked or derive_response_type_contract(
-        segmented_turn=None,
-        normalized_action=None,
-        resolution=resolution_sem if isinstance(resolution_sem, dict) else None,
-        interaction_context=interaction_for_rtc,
-        directed_social_entry=None,
-        route_choice=None,
-        raw_player_text=str(user_text or ""),
-    ).to_dict()
+    _rtc_policy = response_policy.get("response_type_contract")
+    if isinstance(_rtc_policy, dict):
+        rtc_for_social_structure = _rtc_policy
+        rtc_source = "response_policy"
+    else:
+        rtc_peeked = peek_response_type_contract_from_resolution(resolution_sem)
+        rtc_source = "resolution.metadata" if rtc_peeked is not None else "derived"
+        rtc_for_social_structure = rtc_peeked or derive_response_type_contract(
+            segmented_turn=None,
+            normalized_action=None,
+            resolution=resolution_sem if isinstance(resolution_sem, dict) else None,
+            interaction_context=interaction_for_rtc,
+            directed_social_entry=None,
+            route_choice=None,
+            raw_player_text=str(user_text or ""),
+        ).to_dict()
     social_response_structure_contract = build_social_response_structure_contract(
         rtc_for_social_structure,
         debug_inputs={"scene_id": scene_pub_id or None, "response_type_contract_source": rtc_source},
@@ -4067,7 +4254,20 @@ def build_narration_context(
     )
     if social_response_structure_contract.get("enabled"):
         _policy_tail = list(_policy_tail) + _social_response_structure_instr
-    instructions = list(instructions) + _policy_tail
+
+    narrative_mode_instruction_lines = _build_narrative_mode_instructions(
+        narrative_mode_contract=(
+            narrative_plan.get("narrative_mode_contract") if isinstance(narrative_plan, dict) else None
+        ),
+        response_policy=response_policy,
+        narration_obligations=narration_obligations,
+        resolution_sem=resolution_sem if isinstance(resolution_sem, dict) else None,
+    )
+    prompt_debug_anchor["narrative_mode_instructions"] = _narrative_mode_instruction_prompt_debug(
+        narrative_plan.get("narrative_mode_contract") if isinstance(narrative_plan, dict) else None,
+        instruction_lines=narrative_mode_instruction_lines,
+    )
+    instructions = list(instructions) + list(narrative_mode_instruction_lines) + _policy_tail
 
     use_manual_play_compact = _should_use_manual_play_compact_prompt(
         prompt_profile=prompt_profile,
@@ -4101,6 +4301,7 @@ def build_narration_context(
             naming_line=naming_line if isinstance(naming_line, str) else None,
             answer_style_hints=list(answer_style_hints_list),
             narrative_plan_present=narrative_plan is not None,
+            narrative_mode_instruction_lines=narrative_mode_instruction_lines,
         )
         prompt_debug_anchor["compact_prompt"] = {
             "enabled": True,
