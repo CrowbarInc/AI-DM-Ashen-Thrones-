@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import Any, Dict, List
 
+from game.schema_contracts import adapt_legacy_project, normalize_project, validate_project
 from game.utils import slugify
 
 
@@ -55,7 +56,10 @@ def list_projects(world: Dict[str, Any]) -> List[Dict[str, Any]]:
 
 def create_project(world: Dict[str, Any], data: Dict[str, Any]) -> Dict[str, Any]:
     """Create a new project in world['projects'] and return it."""
-    normalized = _normalize_project_shape(data or {})
+    normalized = normalize_project(adapt_legacy_project(data or {}))
+    ok, _ = validate_project(normalized)
+    if not ok:
+        normalized = _normalize_project_shape(data or {})
     projects = world.setdefault("projects", [])
     if not isinstance(projects, list):
         projects = []
@@ -74,7 +78,10 @@ def update_project(world: Dict[str, Any], project_id: str, patch: Dict[str, Any]
         if proj.get("id") == project_id:
             merged = proj.copy()
             merged.update(patch or {})
-            normalized = _normalize_project_shape(merged)
+            normalized = normalize_project(adapt_legacy_project(merged))
+            ok, _ = validate_project(normalized)
+            if not ok:
+                normalized = _normalize_project_shape(merged)
             world["projects"][idx] = normalized
             return normalized
     return None

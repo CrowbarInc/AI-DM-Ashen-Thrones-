@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from typing import Any, Dict
 
+from game.schema_contracts import adapt_legacy_clock, normalize_clock, validate_clock
+
 
 DEFAULT_CLOCKS = {
     "suspicion": 0,
@@ -34,10 +36,26 @@ def advance_clock(
     min_value: int = 0,
     max_value: int = 10,
 ) -> int:
-    """Advance a named clock by delta and return the new value."""
+    """Advance a named clock by delta and return the new value.
+
+    Session pressure clocks remain stored as plain ints for persistence size; coercion
+    uses :func:`game.schema_contracts.normalize_clock` / ``validate_clock`` for bounds.
+    """
     clocks = get_or_init_clocks(session)
     current = int(clocks.get(name, 0))
-    new_val = _clamp(current + int(delta), min_value, max_value)
+    work = adapt_legacy_clock(
+        {
+            "id": name,
+            "value": current,
+            "min_value": min_value,
+            "max_value": max_value,
+            "scope": "session",
+            "metadata": {},
+        }
+    )
+    canon = normalize_clock(work)
+    validate_clock(canon)
+    new_val = _clamp(int(canon["value"]) + int(delta), int(canon["min_value"]), int(canon["max_value"]))
     clocks[name] = new_val
     return new_val
 
@@ -51,7 +69,19 @@ def set_clock(
 ) -> int:
     """Set a named clock to a specific value."""
     clocks = get_or_init_clocks(session)
-    new_val = _clamp(int(value), min_value, max_value)
+    work = adapt_legacy_clock(
+        {
+            "id": name,
+            "value": int(value),
+            "min_value": min_value,
+            "max_value": max_value,
+            "scope": "session",
+            "metadata": {},
+        }
+    )
+    canon = normalize_clock(work)
+    validate_clock(canon)
+    new_val = _clamp(int(value), int(canon["min_value"]), int(canon["max_value"]))
     clocks[name] = new_val
     return new_val
 

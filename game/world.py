@@ -9,7 +9,16 @@ from game.npc_promotion import (
     promote_scene_actor_to_npc,
     promoted_npc_id_for_actor,
 )
-from game.projects import normalize_project_entry
+from game.schema_contracts import (
+    adapt_legacy_clue,
+    adapt_legacy_project,
+    coerce_world_state_clock_row,
+    normalize_clue,
+    normalize_project,
+    validate_clue,
+    validate_clock,
+    validate_project,
+)
 
 
 # -----------------------------------------------------------------------------
@@ -138,21 +147,30 @@ def advance_world_tick(world: Dict[str, Any], campaign: Dict[str, Any]) -> Dict[
         flags = {}
         ws['flags'] = flags
 
-    # --- Project progression (unchanged) ---
-    for project in world.get('projects') or []:
+    # --- Project progression (schema-contract canonical rows) ---
+    projects = world.get('projects') or []
+    if not isinstance(projects, list):
+        projects = []
+        world['projects'] = projects
+    for i, project in enumerate(projects):
         if not isinstance(project, dict):
             continue
         if project.get('status', 'active') == 'active':
-            target_val = max(1, int(project.get('target') or project.get('goal', 1) or 1))
-            progress_val = int(project.get('progress', 0) or 0)
-            project['progress'] = min(target_val, progress_val + 1)
-            project['target'] = target_val
-            if project['progress'] >= target_val:
-                project['status'] = 'complete'
+            canon_proj = normalize_project(adapt_legacy_project(project))
+            okp, _ = validate_project(canon_proj)
+            if not okp:
+                continue
+            target_val = max(1, int(canon_proj.get('target') or 1))
+            progress_val = int(canon_proj.get('progress', 0) or 0)
+            canon_proj['progress'] = min(target_val, progress_val + 1)
+            canon_proj['target'] = target_val
+            if canon_proj['progress'] >= target_val:
+                canon_proj['status'] = 'complete'
                 generated.append({
                     'type': 'project_completed',
-                    'text': f"Project completed: {project.get('name', 'Project')}"
+                    'text': f"Project completed: {canon_proj.get('name', 'Project')}"
                 })
+            world['projects'][i] = canon_proj
 
     # --- Faction agenda simulation ---
     for faction in world.get('factions') or []:
@@ -262,14 +280,10 @@ def _apply_world_state_updates(world: Dict[str, Any], ws_updates: Dict[str, Any]
             ws.setdefault('clocks', {})
             if not isinstance(ws['clocks'], dict):
                 ws['clocks'] = {}
-            progress = entry.get('progress')
-            max_val = entry.get('max')
-            try:
-                progress = int(progress) if progress is not None else 0
-                max_val = max(1, int(max_val)) if max_val is not None else 10
-            except (TypeError, ValueError):
-                progress, max_val = 0, 10
-            ws['clocks'][name] = {'progress': progress, 'max': max_val}
+            canon = coerce_world_state_clock_row(name, entry)
+            okc, _ = validate_clock(canon)
+            if okc:
+                ws['clocks'][str(canon['id'])] = canon
 
 
 def apply_world_updates(world: Dict[str, Any], updates: Dict[str, Any]) -> None:
@@ -291,24 +305,175 @@ def apply_world_updates(world: Dict[str, Any], updates: Dict[str, Any]) -> None:
         if not isinstance(world['projects'], list):
             world['projects'] = []
         for entry in projects_list:
-            normalized = normalize_project_entry(entry)
-            if not normalized:
+            if not isinstance(entry, dict):
                 continue
-            pid = normalized.get('id')
+            row = normalize_project(adapt_legacy_project(entry))
+            okp, _ = validate_project(row)
+            if not okp:
+                continue
+            pid = row.get('id')
             if not pid:
                 continue
             found = False
             for i, p in enumerate(world['projects']):
                 if isinstance(p, dict) and p.get('id') == pid:
-                    world['projects'][i] = normalized
+                    world['projects'][i] = row
                     found = True
                     break
             if not found:
-                world['projects'].append(normalized)
+                world['projects'].append(row)
 
     ws_updates = updates.get('world_state')
     if isinstance(ws_updates, dict):
         _apply_world_state_updates(world, ws_updates)
+
+
+def apply_normalized_world_updates(
+    world: Dict[str, Any],
+    normalized: Dict[str, Any],
+    *,
+    session: Optional[Dict[str, Any]] = None,
+    scene_id: Optional[str] = None,
+) -> None:
+    """Apply a :func:`game.schema_contracts.normalize_world_update` / ``adapt_legacy_world_update`` payload.
+
+    Merges patch fields into ``world_state``, upserts projects, merges ``world[\"clues\"]``,
+    upserts NPC rows, and optionally appends pending leads when *session* and *scene_id* are set.
+    Imperative deltas parked as ``metadata.legacy_increment_counters`` / ``legacy_advance_clocks``
+    or present under ``metadata.unknown_legacy_keys`` for those spellings are applied using the
+    same deterministic rules as :func:`apply_resolution_world_updates`.
+    """
+    assert_owner_can_mutate_domain(__name__, WORLD_STATE, operation="apply_normalized_world_updates")
+    if not normalized or not isinstance(normalized, dict):
+        return
+    ensure_defaults(world)
+    ws = world["world_state"]
+    if not isinstance(ws, dict):
+        ws = world.setdefault("world_state", {"flags": {}, "counters": {}, "clocks": {}})
+
+    evs = normalized.get("append_events")
+    if isinstance(evs, list) and evs:
+        world.setdefault("event_log", []).extend(
+            [copy.deepcopy(x) if isinstance(x, dict) else x for x in evs]
+        )
+
+    fp = normalized.get("flags_patch")
+    if isinstance(fp, dict) and fp:
+        ws.setdefault("flags", {})
+        if isinstance(ws["flags"], dict):
+            for k, v in fp.items():
+                if isinstance(k, str) and k.strip() and not k.startswith("_"):
+                    ws["flags"][k] = v
+
+    cp = normalized.get("counters_patch")
+    if isinstance(cp, dict) and cp:
+        ws.setdefault("counters", {})
+        if isinstance(ws["counters"], dict):
+            for k, v in cp.items():
+                if not isinstance(k, str) or not k.strip() or k.startswith("_"):
+                    continue
+                try:
+                    ws["counters"][k] = int(v)
+                except (TypeError, ValueError):
+                    pass
+
+    clk = normalized.get("clocks_patch")
+    if isinstance(clk, dict) and clk:
+        ws.setdefault("clocks", {})
+        if not isinstance(ws["clocks"], dict):
+            ws["clocks"] = {}
+        for name, entry in clk.items():
+            if not isinstance(name, str) or not name.strip() or name.startswith("_"):
+                continue
+            if not isinstance(entry, dict):
+                continue
+            canon = coerce_world_state_clock_row(name, entry)
+            okc, _ = validate_clock(canon)
+            if okc:
+                ws["clocks"][str(canon["id"])] = canon
+
+    projects_list = normalized.get("projects_patch")
+    if isinstance(projects_list, list) and projects_list:
+        world.setdefault("projects", [])
+        if not isinstance(world["projects"], list):
+            world["projects"] = []
+        for entry in projects_list:
+            if not isinstance(entry, dict):
+                continue
+            row = normalize_project(adapt_legacy_project(entry))
+            okp, _ = validate_project(row)
+            if not okp:
+                continue
+            pid = row.get("id")
+            if not pid:
+                continue
+            found = False
+            for i, p in enumerate(world["projects"]):
+                if isinstance(p, dict) and p.get("id") == pid:
+                    world["projects"][i] = row
+                    found = True
+                    break
+            if not found:
+                world["projects"].append(row)
+
+    clues_patch = normalized.get("clues_patch")
+    if isinstance(clues_patch, dict) and clues_patch:
+        world.setdefault("clues", {})
+        if isinstance(world["clues"], dict):
+            for k, v in clues_patch.items():
+                if not isinstance(k, str) or not k.strip() or not isinstance(v, dict):
+                    continue
+                merged = {**v, "id": str(v.get("id") or k).strip()}
+                clue_row = normalize_clue(adapt_legacy_clue(merged))
+                okc, _ = validate_clue(clue_row)
+                if not okc:
+                    continue
+                cid = str(clue_row.get("id") or k).strip()
+                if cid:
+                    world["clues"][cid] = clue_row
+
+    npcs_patch = normalized.get("npcs_patch")
+    if isinstance(npcs_patch, list) and npcs_patch:
+        for row in npcs_patch:
+            if isinstance(row, dict) and str(row.get("id") or "").strip():
+                upsert_world_npc(world, row)
+
+    leads_patch = normalized.get("leads_patch")
+    if (
+        isinstance(leads_patch, list)
+        and leads_patch
+        and isinstance(session, dict)
+        and isinstance(scene_id, str)
+        and scene_id.strip()
+    ):
+        from game.storage import add_pending_lead
+
+        sid = scene_id.strip()
+        for lead in leads_patch:
+            if isinstance(lead, dict):
+                add_pending_lead(session, sid, lead)
+
+    md = normalized.get("metadata") if isinstance(normalized.get("metadata"), dict) else {}
+    res_frag: Dict[str, Any] = {}
+    lic = md.get("legacy_increment_counters")
+    lac = md.get("legacy_advance_clocks")
+    unk = md.get("unknown_legacy_keys")
+    incr: Dict[str, Any] = {}
+    if isinstance(lic, dict):
+        incr.update(copy.deepcopy(lic))
+    if isinstance(unk, dict) and isinstance(unk.get("increment_counters"), dict):
+        incr.update(copy.deepcopy(unk["increment_counters"]))
+    if incr:
+        res_frag["increment_counters"] = incr
+    adv: Dict[str, Any] = {}
+    if isinstance(lac, dict):
+        adv.update(copy.deepcopy(lac))
+    if isinstance(unk, dict) and isinstance(unk.get("advance_clocks"), dict):
+        adv.update(copy.deepcopy(unk["advance_clocks"]))
+    if adv:
+        res_frag["advance_clocks"] = adv
+    if res_frag:
+        apply_resolution_world_updates(world, res_frag)
 
 
 def apply_resolution_world_updates(world: Dict[str, Any], resolution_updates: Dict[str, Any]) -> None:

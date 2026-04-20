@@ -25,6 +25,7 @@ from game.leads import (
     create_lead,
     resolve_lead,
 )
+from tests.debug_trace_utils import latest_compact_debug_trace_entry
 
 pytestmark = pytest.mark.integration
 
@@ -75,7 +76,7 @@ def _seed_minimal_play(tmp_path, monkeypatch):
 def _last_turn_leads_section(tmp_path, monkeypatch) -> dict:
     traces = storage.load_session().get("debug_traces") or []
     assert traces, "expected debug_traces on session"
-    tt = traces[-1].get("turn_trace") or {}
+    tt = latest_compact_debug_trace_entry(traces).get("turn_trace") or {}
     sec = tt.get("leads")
     assert isinstance(sec, dict), "turn_trace.leads missing or not a dict"
     return sec

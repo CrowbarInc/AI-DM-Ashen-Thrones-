@@ -271,3 +271,80 @@ class ResponseModeUpdate(BaseModel):
 class SnapshotCreateRequest(BaseModel):
     """Optional label for a new snapshot."""
     label: Optional[str] = None
+
+
+# --- Objective 4 — runtime boundary helpers (schema_contracts adoption) ---
+
+_ENGINE_RESOLUTION_WORLD_UPDATE_KEYS = frozenset({"set_flags", "increment_counters", "advance_clocks"})
+
+
+def normalize_runtime_engine_result(raw: Any) -> Dict[str, Any]:
+    """Normalize an engine resolution dict at API/GM boundaries (legacy spellings, unknown top-level keys)."""
+    from game.schema_contracts import adapt_legacy_engine_result
+
+    return adapt_legacy_engine_result(raw if isinstance(raw, dict) else {})
+
+
+def normalize_runtime_world_updates(raw: Any) -> Dict[str, Any]:
+    """Normalize inbound GM / mixed ``world_updates`` through ``adapt_legacy_world_update``."""
+    from game.schema_contracts import adapt_legacy_world_update, normalize_world_update
+
+    if not isinstance(raw, dict):
+        return normalize_world_update(adapt_legacy_world_update({}))
+    work = dict(raw)
+    ae = work.get("append_events")
+    if isinstance(ae, list):
+        clipped: List[Any] = []
+        for item in ae[:32]:
+            if isinstance(item, str):
+                s = item.strip()
+                if not s:
+                    continue
+                clipped.append(s[:500])
+            elif isinstance(item, dict):
+                clipped.append(item)
+        work["append_events"] = clipped
+    return normalize_world_update(adapt_legacy_world_update(work))
+
+
+def resolution_world_updates_use_engine_apply_only(wu: Any) -> bool:
+    """True when ``world_updates`` is only ``set_flags`` / ``increment_counters`` / ``advance_clocks`` (engine fragment)."""
+    if not isinstance(wu, dict) or not wu:
+        return False
+    return frozenset(wu.keys()) <= _ENGINE_RESOLUTION_WORLD_UPDATE_KEYS
+
+
+def canonical_world_update_is_effectively_empty(normalized: Dict[str, Any]) -> bool:
+    """True when a normalized world-update dict carries no apply-able or inspectable payload."""
+    if not isinstance(normalized, dict):
+        return True
+    if normalized.get("append_events"):
+        return False
+    for k in ("flags_patch", "counters_patch", "clocks_patch", "clues_patch"):
+        if normalized.get(k):
+            return False
+    if normalized.get("projects_patch") or normalized.get("npcs_patch") or normalized.get("leads_patch"):
+        return False
+    md = normalized.get("metadata") if isinstance(normalized.get("metadata"), dict) else {}
+    if md.get("legacy_increment_counters") or md.get("legacy_advance_clocks"):
+        return False
+    if md.get("unknown_legacy_keys"):
+        return False
+    if md.get("legacy_rejected_counters"):
+        return False
+    if isinstance(md, dict) and md:
+        return False
+    return True
+
+
+def apply_normalized_world_updates(
+    world: Dict[str, Any],
+    normalized: Dict[str, Any],
+    *,
+    session: Optional[Dict[str, Any]] = None,
+    scene_id: Optional[str] = None,
+) -> None:
+    """Delegate to :func:`game.world.apply_normalized_world_updates` (canonical bundle application)."""
+    from game.world import apply_normalized_world_updates as _apply_normalized_world_updates_world
+
+    _apply_normalized_world_updates_world(world, normalized, session=session, scene_id=scene_id)

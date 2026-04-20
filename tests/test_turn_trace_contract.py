@@ -11,6 +11,7 @@ from fastapi.testclient import TestClient
 from game import storage
 from game.api import app
 from game.output_sanitizer import resembles_serialized_response_payload
+from tests.debug_trace_utils import latest_compact_debug_trace_entry
 from tests.test_turn_pipeline_shared import FAKE_GPT_RESPONSE, _seed_shared_world
 
 pytestmark = pytest.mark.integration
@@ -155,7 +156,7 @@ def test_compact_turn_trace_contract_action_and_chat(tmp_path, monkeypatch, endp
 
     api_traces = body.get("debug_traces") or []
     assert api_traces, "turn API responses should include debug_traces via compose_state"
-    entry = api_traces[-1]
+    entry = latest_compact_debug_trace_entry(api_traces)
     assert entry.get("response_ok") is True
     assert "error" in entry
     tt = entry.get("turn_trace")
@@ -171,7 +172,7 @@ def test_compact_turn_trace_contract_action_and_chat(tmp_path, monkeypatch, endp
     session = storage.load_session()
     disk_traces = session.get("debug_traces") or []
     assert disk_traces, "trace should be persisted to session storage"
-    disk_entry = disk_traces[-1]
+    disk_entry = latest_compact_debug_trace_entry(disk_traces)
     assert disk_entry.get("response_ok") is True
     _assert_minimal_turn_trace_contract(
         disk_entry.get("turn_trace"),

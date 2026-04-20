@@ -32,6 +32,7 @@ from game.prompt_context import (
     build_authoritative_lead_prompt_context,
     build_narration_context,
 )
+from tests.debug_trace_utils import latest_compact_debug_trace_entry
 
 pytestmark = pytest.mark.integration
 
@@ -342,7 +343,7 @@ def test_chat_single_reconcile_and_response_session_matches_disk(tmp_path, monke
     assert api_reg.get("t", {}).get("escalation_level") == disk_reg.get("t", {}).get("escalation_level")
     traces = storage.load_session().get("debug_traces") or []
     assert traces
-    tt = traces[-1].get("turn_trace") or {}
+    tt = latest_compact_debug_trace_entry(traces).get("turn_trace") or {}
     assert isinstance(tt, dict) and tt.get("interaction_after") is not None
 
 

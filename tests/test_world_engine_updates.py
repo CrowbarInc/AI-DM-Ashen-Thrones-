@@ -55,12 +55,12 @@ def test_apply_resolution_world_updates_increment_counters():
 
 
 def test_apply_resolution_world_updates_advance_clocks():
-    """Resolution world_updates advance_clocks advances clock progress."""
+    """Resolution world_updates advance_clocks advances canonical clock value."""
     world = _world()
     apply_resolution_world_updates(world, {"advance_clocks": {"city_tension": 2}})
-    assert world["world_state"]["clocks"]["city_tension"]["progress"] == 2
+    assert world["world_state"]["clocks"]["city_tension"]["value"] == 2
     apply_resolution_world_updates(world, {"advance_clocks": {"city_tension": 1}})
-    assert world["world_state"]["clocks"]["city_tension"]["progress"] == 3
+    assert world["world_state"]["clocks"]["city_tension"]["value"] == 3
 
 
 def test_apply_resolution_world_updates_combined():
@@ -73,7 +73,7 @@ def test_apply_resolution_world_updates_combined():
     })
     assert world["world_state"]["flags"]["patrol_route_known"] is True
     assert world["world_state"]["counters"]["clues_found"] == 1
-    assert world["world_state"]["clocks"]["danger"]["progress"] == 1
+    assert world["world_state"]["clocks"]["danger"]["value"] == 1
 
 
 def test_resolution_returns_world_updates_from_interactable():

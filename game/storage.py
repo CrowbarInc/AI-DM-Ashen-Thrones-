@@ -693,21 +693,35 @@ def get_save_summary() -> Dict[str, Any]:
 
 
 def advance_world_clock(world: Dict[str, Any], clock_name: str, amount: int = 1) -> int:
-    """Advance a world clock by amount. Creates clock if missing (max=10). Returns new progress (clamped to max)."""
+    """Advance a world clock by amount. Creates clock if missing (max=10). Returns new value (clamped).
+
+    Authoritative storage is ``world_state.clocks[clock_id]`` as a canonical clock row
+    (``id``, ``value``, ``min_value``, ``max_value``, ``scope``, ``metadata``).
+    """
+    from game.schema_contracts import coerce_world_state_clock_row, normalize_clock, validate_clock
+
     if not clock_name or not isinstance(clock_name, str):
         return 0
     ws = _ensure_world_state(world)
     clocks = ws['clocks']
-    entry = clocks.get(clock_name)
-    if not isinstance(entry, dict):
-        entry = {'progress': 0, 'max': 10}
-        clocks[clock_name] = entry
-    progress = int(entry.get('progress', 0) or 0)
-    max_val = max(1, int(entry.get('max', 10) or 10))
-    new_progress = min(max_val, progress + int(amount))
-    entry['progress'] = new_progress
-    entry['max'] = max_val
-    return new_progress
+    if not isinstance(clocks, dict):
+        clocks = {}
+        ws['clocks'] = clocks
+    raw = clocks.get(clock_name)
+    canon = coerce_world_state_clock_row(clock_name, raw if isinstance(raw, dict) else {})
+    ok, _ = validate_clock(canon)
+    if not ok:
+        return 0
+    new_val = min(
+        int(canon["max_value"]),
+        max(int(canon["min_value"]), int(canon["value"]) + int(amount)),
+    )
+    out = normalize_clock({**canon, "value": new_val})
+    cid = str(out["id"])
+    clocks[cid] = out
+    if cid != clock_name and clock_name in clocks:
+        del clocks[clock_name]
+    return int(out["value"])
 
 
 # -----------------------------------------------------------------------------

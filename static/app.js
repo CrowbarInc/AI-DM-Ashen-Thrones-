@@ -467,9 +467,9 @@ async function submitExplorationAction(affordance){
     id: affordance.id,
     label: affordance.label,
     type: actionType || 'custom',
-    targetSceneId: affordance.targetSceneId || null,
+    targetSceneId: affordance.targetSceneId || affordance.target_scene_id || null,
     targetEntityId: affordance.targetEntityId || affordance.target_id || null,
-    targetLocationId: affordance.targetLocationId || null,
+    targetLocationId: affordance.targetLocationId || affordance.target_location_id || null,
     prompt: prompt,
     metadata: affordance.metadata || {}
   };

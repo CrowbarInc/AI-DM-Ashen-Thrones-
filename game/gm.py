@@ -4407,12 +4407,16 @@ def build_messages(
             return {'flags': {}, 'counters': {}, 'clocks_summary': []}
         flags = {k: v for k, v in (ws.get('flags') or {}).items() if isinstance(k, str) and not k.startswith('_')}
         counters = {k: v for k, v in (ws.get('counters') or {}).items() if isinstance(k, str) and not k.startswith('_')}
+        from game.schema_contracts import world_clock_row_summary_line
+
         clocks_raw = ws.get('clocks') or {}
-        clocks_summary = [
-            f"{k}: {int(c.get('progress', 0))}/{int(c.get('max', 10))}"
-            for k, c in clocks_raw.items()
-            if isinstance(k, str) and not k.startswith('_') and isinstance(c, dict)
-        ]
+        clocks_summary: List[str] = []
+        for k, c in clocks_raw.items():
+            if not isinstance(k, str) or k.startswith('_') or not isinstance(c, dict):
+                continue
+            seg = world_clock_row_summary_line(k, c)
+            if seg:
+                clocks_summary.append(seg)
         return {'flags': flags, 'counters': counters, 'clocks_summary': clocks_summary}
 
     world_state_view = _build_world_state_prompt_view(world)
@@ -5021,27 +5025,10 @@ def validate_gm_state_update(gm: Dict[str, Any], session: Dict[str, Any], scene_
 
     wu = gm.get('world_updates')
     if isinstance(wu, dict):
-        cleaned_wu: Dict[str, Any] = {}
-        events = _norm_str_list(wu.get('append_events'), max_len=500, max_items=32)
-        if events:
-            cleaned_wu['append_events'] = events
-        # Pass through projects/assets/factions only if they are lists; leave structure unchanged.
-        for key in ('projects', 'assets', 'factions'):
-            val = wu.get(key)
-            if isinstance(val, list):
-                cleaned_wu[key] = val
-        # world_state: flags, counters, clocks — keys starting with _ are internal and dropped.
-        ws_up = wu.get('world_state')
-        if isinstance(ws_up, dict):
-            out_ws: Dict[str, Any] = {}
-            for sub in ('flags', 'counters', 'clocks'):
-                raw = ws_up.get(sub)
-                if not isinstance(raw, dict):
-                    continue
-                out_ws[sub] = {k: v for k, v in raw.items() if isinstance(k, str) and k.strip() and not k.startswith('_')}
-            if out_ws:
-                cleaned_wu['world_state'] = out_ws
-        gm['world_updates'] = cleaned_wu or None
+        from game.models import canonical_world_update_is_effectively_empty, normalize_runtime_world_updates
+
+        norm = normalize_runtime_world_updates(wu)
+        gm['world_updates'] = None if canonical_world_update_is_effectively_empty(norm) else norm
 
     nd = gm.get('new_scene_draft')
     if isinstance(nd, dict):

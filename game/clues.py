@@ -10,6 +10,7 @@ from collections import OrderedDict
 from typing import Any, Dict, List, Set, Tuple
 
 from game.leads import SESSION_LEAD_REGISTRY_KEY, LeadType, apply_engine_lead_signal, is_valid_type
+from game.schema_contracts import adapt_legacy_clue, normalize_clue, validate_clue
 from game.storage import add_pending_lead, get_scene_runtime, is_known_scene_id, mark_clue_discovered
 from game.utils import slugify
 
@@ -58,29 +59,55 @@ def _world_clue_row(world: Dict[str, Any] | None, clue_id: str) -> Dict[str, Any
     return raw if isinstance(raw, dict) else None
 
 
+def _canonical_clue_view(
+    world: Dict[str, Any] | None,
+    clue_id: str,
+    structured_clue: Dict[str, Any] | None,
+) -> Dict[str, Any] | None:
+    """Merge ``world.clues`` + optional scene discoverable clue; adapt/normalize/validate."""
+    if not clue_id or not str(clue_id).strip():
+        return None
+    cid = str(clue_id).strip()
+    pieces: Dict[str, Any] = {}
+    row = _world_clue_row(world, cid)
+    if row and isinstance(row, dict):
+        pieces.update(row)
+    if structured_clue and isinstance(structured_clue, dict):
+        # Normalized clues include explicit ``None`` for optional fields; do not let those
+        # erase world-authored anchors (e.g. ``canonical_lead_id`` on ``world.clues`` rows).
+        slim = {k: v for k, v in structured_clue.items() if v is not None}
+        pieces.update(slim)
+    if not pieces:
+        return None
+    merged = {**pieces, "id": str(pieces.get("id") or cid).strip()}
+    can = normalize_clue(adapt_legacy_clue(merged))
+    ok, _ = validate_clue(can)
+    return can if ok else None
+
+
+def _engine_lead_type_hint_from_canonical(can: Dict[str, Any] | None) -> Any:
+    if not can:
+        return None
+    meta = can.get("metadata") if isinstance(can.get("metadata"), dict) else {}
+    eng = meta.get("engine_lead_type")
+    if eng is not None and str(eng).strip():
+        return str(eng).strip().lower()
+    lt = str(can.get("lead_type") or "").strip().lower()
+    return lt or None
+
+
 def _effective_clue_targets_and_type(
     world: Dict[str, Any] | None,
     clue_id: str,
     structured_clue: Dict[str, Any] | None,
 ) -> Tuple[str | None, str | None, Any]:
-    """Scene discoverable record wins for targets; world.clues fills gaps and type."""
-    ts: str | None = None
-    tn: str | None = None
-    lead_type: Any = None
-    if structured_clue and isinstance(structured_clue, dict):
-        s1 = str(structured_clue.get("leads_to_scene") or "").strip()
-        ts = s1 or None
-        s2 = str(structured_clue.get("leads_to_npc") or "").strip()
-        tn = s2 or None
-    row = _world_clue_row(world, clue_id)
-    if row:
-        lead_type = row.get("type")
-        if ts is None:
-            s = str(row.get("leads_to_scene") or "").strip()
-            ts = s or None
-        if tn is None:
-            n = str(row.get("leads_to_npc") or "").strip()
-            tn = n or None
+    """Return ``(leads_to_scene_id, leads_to_npc_id, lead_type_hint)`` from canonical merged clue."""
+    can = _canonical_clue_view(world, clue_id, structured_clue if isinstance(structured_clue, dict) else None)
+    if not can:
+        return None, None, None
+    ts = str(can.get("leads_to_scene_id") or "").strip() or None
+    tn = str(can.get("leads_to_npc_id") or "").strip() or None
+    lead_type = _engine_lead_type_hint_from_canonical(can)
     return ts, tn, lead_type
 
 
@@ -89,14 +116,10 @@ def _canonical_registry_lead_id(
     world: Dict[str, Any] | None,
     structured_clue: Dict[str, Any] | None,
 ) -> str:
-    """Optional ``canonical_lead_id`` on scene clue or ``world.clues`` row; default ``clue_id``."""
-    if structured_clue and isinstance(structured_clue, dict):
-        s = str(structured_clue.get("canonical_lead_id") or "").strip()
-        if s:
-            return s
-    row = _world_clue_row(world, clue_id)
-    if row:
-        s = str(row.get("canonical_lead_id") or "").strip()
+    """Optional ``canonical_lead_id`` on merged clue view; default ``clue_id``."""
+    can = _canonical_clue_view(world, clue_id, structured_clue if isinstance(structured_clue, dict) else None)
+    if can:
+        s = str(can.get("canonical_lead_id") or "").strip()
         if s:
             return s
     return clue_id
@@ -142,7 +165,8 @@ def _registry_lead_id_for_extracted_social_lead(
     if primary:
         prow = _world_clue_row(w, primary)
         if prow and ts:
-            pts = str(prow.get("leads_to_scene") or "").strip()
+            pcan = _canonical_clue_view(w, primary, None)
+            pts = str(pcan.get("leads_to_scene_id") or "").strip() if pcan else ""
             if pts and ts == pts:
                 return _canonical_registry_lead_id(primary, w, None)
         p_can = _canonical_registry_lead_id(primary, w, None)

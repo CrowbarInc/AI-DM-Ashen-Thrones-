@@ -20,7 +20,16 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, JSONResponse
 
-from game.models import ActionRequest, ChatRequest, ResponseModeUpdate, SnapshotCreateRequest
+from game.models import (
+    ActionRequest,
+    ChatRequest,
+    ResponseModeUpdate,
+    SnapshotCreateRequest,
+    apply_normalized_world_updates,
+    normalize_runtime_engine_result,
+    normalize_runtime_world_updates,
+    resolution_world_updates_use_engine_apply_only,
+)
 from game.storage import (
     BASE_DIR,
     create_snapshot,
@@ -156,7 +165,7 @@ from game.post_emission_speaker_adoption import (
     apply_stale_interlocutor_invalidation_after_emission,
 )
 from game.utils import utc_iso_now
-from game.world import advance_world_tick, apply_world_updates, apply_resolution_world_updates
+from game.world import advance_world_tick, apply_resolution_world_updates
 from game.clocks import get_or_init_clocks, advance_clock, DEFAULT_CLOCKS
 from game.importers.pf_json_importer import import_sheet
 from game.session import reset_session_state
@@ -225,7 +234,17 @@ def _sanitize_incoming_payload(req: ActionRequest | None) -> dict:
     if isinstance(exp, dict):
         out['exploration_action'] = {
             k: exp.get(k)
-            for k in ('id', 'label', 'type', 'targetSceneId', 'targetEntityId', 'targetLocationId')
+            for k in (
+                'id',
+                'label',
+                'type',
+                'targetSceneId',
+                'targetEntityId',
+                'targetLocationId',
+                'target_id',
+                'target_scene_id',
+                'target_location_id',
+            )
             if k in exp
         }
     return out
@@ -514,10 +533,18 @@ def _apply_post_gm_updates(
 
     if gm.get('world_updates'):
         assert_owner_can_mutate_domain(__name__, WORLD_STATE, operation="apply_gm_world_updates")
-        updates = gm['world_updates']
-        if updates.get('append_events'):
-            updates['append_events'] = [{'type': 'gm_event', 'text': t} if isinstance(t, str) else t for t in updates['append_events']]
-        apply_world_updates(world, updates)
+        normalized_wu = normalize_runtime_world_updates(gm['world_updates'])
+        new_events: list = []
+        for ev in normalized_wu.get('append_events') or []:
+            if isinstance(ev, dict) and ev.get('type') == 'note' and isinstance(ev.get('text'), str):
+                new_events.append({'type': 'gm_event', 'text': ev['text']})
+            elif isinstance(ev, str) and ev.strip():
+                new_events.append({'type': 'gm_event', 'text': ev.strip()})
+            else:
+                new_events.append(ev)
+        normalized_wu['append_events'] = new_events
+        scene_id = str(scene.get('scene', {}).get('id') or '').strip() or None
+        apply_normalized_world_updates(world, normalized_wu, session=session, scene_id=scene_id)
 
     if not gm.get("_player_facing_emission_finalized"):
         apply_repeated_description_guard(gm, session, scene['scene']['id'])
@@ -593,8 +620,18 @@ def _apply_authoritative_resolution_state_mutation(
     assert_owner_can_mutate_domain(__name__, SCENE_STATE, operation="authoritative_resolution_mutation")
     authoritative_clue_updates: list[str] = []
 
-    if resolution.get("world_updates"):
-        apply_resolution_world_updates(world, resolution["world_updates"])
+    merged_res = normalize_runtime_engine_result(resolution)
+    resolution.clear()
+    resolution.update(merged_res)
+
+    wu = resolution.get('world_updates')
+    if isinstance(wu, dict) and wu:
+        if resolution_world_updates_use_engine_apply_only(wu):
+            apply_resolution_world_updates(world, wu)
+        else:
+            normalized_wu = normalize_runtime_world_updates(wu)
+            scene_id = str(scene.get('scene', {}).get('id') or '').strip() or None
+            apply_normalized_world_updates(world, normalized_wu, session=session, scene_id=scene_id)
         save_world(world)
 
     originating_scene_id = str(scene['scene']['id'] or '').strip()

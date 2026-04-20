@@ -24,6 +24,7 @@ from game.interaction_context import (
 )
 from game.models import ChatRequest
 from game.storage import get_npc_runtime, get_scene_runtime
+from tests.debug_trace_utils import latest_compact_debug_trace_entry
 from tests.helpers.transcript_runner import (
     latest_target_id,
     latest_target_source,
@@ -92,9 +93,7 @@ def _pending_leads_snapshot(session: dict[str, Any], scene_id: str) -> list[dict
 
 def _last_debug_trace(session: dict[str, Any]) -> dict[str, Any]:
     dt = session.get("debug_traces") if isinstance(session.get("debug_traces"), list) else []
-    if dt and isinstance(dt[-1], dict):
-        return dt[-1]
-    return {}
+    return latest_compact_debug_trace_entry(dt)
 
 
 def _mixed_state_failure_block(

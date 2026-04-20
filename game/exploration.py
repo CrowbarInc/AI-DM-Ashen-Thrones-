@@ -922,6 +922,7 @@ def process_investigation_discovery(
     Mutates session (discovered_clues, pending_leads). Returns list of newly revealed clue records.
     """
     from game.gm import normalize_clue_record  # avoid circular import
+    from game.schema_contracts import adapt_legacy_clue, normalize_clue, validate_clue
 
     scene = (scene_envelope or {}).get("scene", {}) if isinstance(scene_envelope, dict) else {}
     scene_id = scene.get("id")
@@ -955,6 +956,11 @@ def process_investigation_discovery(
             continue
         # Next undiscovered clue: reveal it once through the shared clue gateway.
         clue_id = str(rec.get("id", "") or "").strip() or None
+        cid_merge = str(rec.get("id") or "").strip() or "clue"
+        canon = normalize_clue(adapt_legacy_clue({**rec, "id": cid_merge}))
+        ok_clue, _ = validate_clue(canon)
+        structured_for_gateway = canon if ok_clue else rec
+
         added_texts = apply_authoritative_clue_discovery(
             session,
             scene_id,
@@ -962,14 +968,24 @@ def process_investigation_discovery(
             clue_text=text.strip(),
             discovered_clues=[text.strip()],
             world=world,
-            structured_clue=rec,
+            structured_clue=structured_for_gateway,
         )
         if added_texts:
             lead: Dict[str, Any] = {"clue_id": rec.get("id", ""), "text": text.strip()}
-            for key in ("leads_to_scene", "leads_to_npc", "leads_to_rumor"):
-                v = rec.get(key)
-                if v and isinstance(v, str) and v.strip():
-                    lead[key] = v.strip()
+            if ok_clue:
+                if canon.get("leads_to_scene_id"):
+                    lead["leads_to_scene"] = str(canon["leads_to_scene_id"]).strip()
+                if canon.get("leads_to_npc_id"):
+                    lead["leads_to_npc"] = str(canon["leads_to_npc_id"]).strip()
+                meta_c = canon.get("metadata") if isinstance(canon.get("metadata"), dict) else {}
+                lr = meta_c.get("legacy_lead_rumor")
+                if lr and isinstance(lr, str) and lr.strip():
+                    lead["leads_to_rumor"] = lr.strip()
+            else:
+                for key in ("leads_to_scene", "leads_to_npc", "leads_to_rumor"):
+                    v = rec.get(key)
+                    if v and isinstance(v, str) and v.strip():
+                        lead[key] = v.strip()
             if lead.get("leads_to_scene") or lead.get("leads_to_npc") or lead.get("leads_to_rumor"):
                 add_pending_lead(session, scene_id, lead)
                 # Lead-bearing clues are explicitly actionable for affordance/context packaging.
@@ -978,7 +994,7 @@ def process_investigation_discovery(
             if superseded_id:
                 cid_for_registry = str(rec.get("id") or clue_id or "").strip()
                 w = world if isinstance(world, dict) else None
-                new_registry_id = _canonical_registry_lead_id(cid_for_registry, w, rec)
+                new_registry_id = _canonical_registry_lead_id(cid_for_registry, w, structured_for_gateway)
                 if (
                     new_registry_id
                     and superseded_id != new_registry_id
@@ -993,5 +1009,11 @@ def process_investigation_discovery(
                         )
                     except ValueError:
                         pass
-            return [rec]
+            out = dict(canon if ok_clue else rec)
+            if ok_clue:
+                if canon.get("leads_to_scene_id"):
+                    out["leads_to_scene"] = canon["leads_to_scene_id"]
+                if canon.get("leads_to_npc_id"):
+                    out["leads_to_npc"] = canon["leads_to_npc_id"]
+            return [out]
     return []

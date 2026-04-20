@@ -75,7 +75,7 @@ def test_objects_generate_investigation_affordances():
     assert "Examine" in (chest.get("label") or "")
     assert "chest" in (chest.get("label") or "").lower()
     assert "prompt" in chest
-    assert chest.get("targetEntityId") == "dusty_chest"
+    assert chest.get("target_id") == "dusty_chest"
 
     table = next((a for a in affs if a.get("id") == "old_table"), None)
     assert table is not None
@@ -206,8 +206,8 @@ def test_affordances_serialize_correctly_for_frontend():
     obj_aff = next((a for a in affs if a.get("id") == "test_obj"), None)
     assert obj_aff is not None
 
-    # Required keys for engine / frontend
-    required = {"id", "label", "type", "prompt", "targetSceneId", "targetEntityId", "targetLocationId"}
+    # Required keys for engine / frontend (canonical target fields)
+    required = {"id", "label", "type", "prompt", "target_scene_id", "target_id", "target_location_id"}
     for k in required:
         assert k in obj_aff, f"Missing key: {k}"
     assert obj_aff.get("id")
@@ -246,7 +246,7 @@ def test_duplicate_npc_talk_affordances_are_removed():
         "npcs": [{"id": "lirael", "name": "Lirael", "location": "test_scene"}],
     }
     affs = get_available_affordances(scene, session, world)
-    social = [a for a in affs if a.get("targetEntityId") == "lirael" and a.get("type") in ("question", "interact")]
+    social = [a for a in affs if a.get("target_id") == "lirael" and a.get("type") in ("question", "interact")]
     assert len(social) == 1
     assert social[0].get("label") == "Talk to Lirael"
 
@@ -292,7 +292,7 @@ def test_explicit_scene_authored_actions_preserved_unless_true_duplicate():
     """Scene-authored actions should survive pruning and dedupe unless they are obvious duplicates."""
     scene = _scene({
         "actions": [
-            {"id": "talk_lirael_custom", "label": "Talk to Lirael", "type": "question", "prompt": "I talk to Lirael.", "targetEntityId": "lirael"},
+            {"id": "talk_lirael_custom", "label": "Talk to Lirael", "type": "question", "prompt": "I talk to Lirael.", "target_id": "lirael"},
             {"id": "inspect_board_custom", "label": "Examine the notice board", "type": "investigate", "prompt": "I examine the notice board."},
         ],
     })
@@ -306,4 +306,4 @@ def test_explicit_scene_authored_actions_preserved_unless_true_duplicate():
     assert "talk_lirael_custom" in ids
     assert "inspect_board_custom" in ids
     # Auto-generated duplicate for Lirael should be suppressed by dedupe.
-    assert len([a for a in affs if (a.get("targetEntityId") or "") == "lirael"]) == 1
+    assert len([a for a in affs if (a.get("target_id") or "") == "lirael"]) == 1

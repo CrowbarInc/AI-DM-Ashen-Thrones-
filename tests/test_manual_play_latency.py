@@ -12,6 +12,7 @@ from game.api import app
 from game.defaults import default_campaign, default_character, default_world
 from game.gm import build_messages
 from game.storage import get_scene_runtime
+from tests.debug_trace_utils import latest_compact_debug_trace_entry
 from tests.test_turn_pipeline_shared import _seed_shared_world
 
 pytestmark = [pytest.mark.integration]
@@ -121,7 +122,7 @@ def test_chat_nonretryable_quota_fails_fast_and_emits_latency_fields(tmp_path, m
 
     traces = body.get("debug_traces") or []
     assert traces
-    latency = ((traces[-1].get("turn_trace") or {}).get("latency_ms") or {})
+    latency = ((latest_compact_debug_trace_entry(traces).get("turn_trace") or {}).get("latency_ms") or {})
     assert latency
     for key in (
         "intent_classification",
@@ -184,7 +185,7 @@ def test_chat_begin_nonretryable_quota_repairs_malformed_opening_fast_fallback(t
 
     traces = body.get("debug_traces") or []
     assert traces
-    latency = ((traces[-1].get("turn_trace") or {}).get("latency_ms") or {})
+    latency = ((latest_compact_debug_trace_entry(traces).get("turn_trace") or {}).get("latency_ms") or {})
     assert isinstance(latency.get("gpt_call"), int)
     assert isinstance(latency.get("total_turn"), int)
     assert latency.get("total_turn") >= 0

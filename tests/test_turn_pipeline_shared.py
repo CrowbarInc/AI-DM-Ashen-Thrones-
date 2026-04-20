@@ -32,6 +32,8 @@ from game.defaults import (
     default_session,
     default_world,
 )
+from tests.debug_trace_utils import latest_compact_debug_trace_entry
+
 pytestmark = pytest.mark.integration
 
 FAKE_GPT_RESPONSE = {
@@ -353,7 +355,10 @@ def test_chat_social_route_ships_dialogue_contract_through_request_debug_and_tra
     payload_contract = payload.get("response_type_contract") or {}
     policy_contract = (payload.get("response_policy") or {}).get("response_type_contract") or {}
     debug_contract = (data.get("debug") or {}).get("response_type_contract") or {}
-    trace_contract = (((data.get("debug_traces") or [])[-1]).get("turn_trace") or {}).get("response_type_contract") or {}
+    trace_contract = (
+        (latest_compact_debug_trace_entry(data.get("debug_traces") or []).get("turn_trace") or {}).get("response_type_contract")
+        or {}
+    )
 
     assert payload_contract.get("required_response_type") == "dialogue"
     assert policy_contract.get("required_response_type") == "dialogue"
@@ -396,9 +401,10 @@ def test_chat_dialogue_lock_final_output_beats_generic_fillers_and_keeps_contrac
     low = text.lower()
     meta = gm_output.get("_final_emission_meta") or {}
     debug_contract = (data.get("debug") or {}).get("response_type_contract") or {}
-    trace_contract = (((data.get("debug_traces") or [])[-1]).get("turn_trace") or {}).get(
-        "response_type_contract"
-    ) or {}
+    trace_contract = (
+        (latest_compact_debug_trace_entry(data.get("debug_traces") or []).get("turn_trace") or {}).get("response_type_contract")
+        or {}
+    )
     resolution_contract = (resolution.get("metadata") or {}).get("response_type_contract") or {}
 
     assert resolution.get("kind") == "question"
@@ -1452,7 +1458,7 @@ def test_resolved_turn_trace_is_compact_and_authoritative(tmp_path, monkeypatch)
     data = resp.json()
     traces = data.get("debug_traces") or []
     assert traces
-    latest = traces[-1]
+    latest = latest_compact_debug_trace_entry(traces)
     turn_trace = latest.get("turn_trace") or {}
 
     assert turn_trace.get("player_input") == "I investigate the desk."

@@ -47,8 +47,13 @@ def test_validate_gm_state_update_strips_unexpected_and_blocks_hidden_promotion(
     assert "unexpected_key" not in su
 
     wu = out["world_updates"]
-    assert "append_events" in wu
+    assert wu is not None
+    assert wu.get("append_events")
     assert "unexpected" not in wu
+    assert wu["metadata"]["unknown_legacy_keys"].get("unexpected") == "x"
+    first_ev = wu["append_events"][0]
+    ev_text = first_ev["text"] if isinstance(first_ev, dict) else str(first_ev)
+    assert len(ev_text) <= 500
 
     nd = out["new_scene_draft"]
     assert "extra" not in nd

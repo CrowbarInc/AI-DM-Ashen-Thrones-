@@ -87,7 +87,7 @@ def test_clue_leads_generate_exploration_affordances():
     labels = [a.get("label", "") for a in affs]
     follow_leads = [l for l in labels if "Follow lead" in l]
     assert len(follow_leads) >= 1
-    market_aff = next((a for a in affs if a.get("targetSceneId") == "market_quarter" and "lead" in a.get("label", "").lower()), None)
+    market_aff = next((a for a in affs if a.get("target_scene_id") == "market_quarter" and "lead" in a.get("label", "").lower()), None)
     assert market_aff is not None
 
 

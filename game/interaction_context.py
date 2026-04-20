@@ -30,6 +30,7 @@ from typing import Any, Dict, List, Literal, Optional, Set, Tuple
 
 from game.utils import slugify
 
+from game import schema_contracts as _schema_contracts
 from game.npc_promotion import maybe_promote_active_social_target, should_promote_scene_actor
 from game.state_authority import (
     INTERACTION_STATE,
@@ -206,55 +207,29 @@ def _scene_authored_entity_ids(scene_envelope: Dict[str, Any] | None) -> List[st
     return authored
 
 
+def _legacy_addressable_field(spec: Dict[str, Any], key: str) -> Any:
+    """Read legacy scene-authored fields from top-level or from ``metadata.legacy_addressable_fields``."""
+    v = spec.get(key)
+    if v is not None:
+        return v
+    leg = (spec.get("metadata") or {}).get("legacy_addressable_fields") or {}
+    if isinstance(leg, dict):
+        return leg.get(key)
+    return None
+
+
 def _normalize_scene_addressable_actor(raw: Dict[str, Any], scene_id: str) -> Optional[Dict[str, Any]]:
-    """Normalize scene JSON into the canonical addressable-actor shape (lightweight roster row)."""
+    """Normalize scene JSON into the canonical interaction-target shape (lightweight roster row)."""
     if not isinstance(raw, dict):
         return None
-    eid = _clean_string(raw.get("id"))
-    if not eid:
+    sid = _clean_string(scene_id) or ""
+    norm = _schema_contracts.adapt_legacy_interaction_target(raw, scene_id_fallback=sid)
+    ok, _ = _schema_contracts.validate_interaction_target(norm)
+    if not ok or not str(norm.get("id") or "").strip():
         return None
-    sid = _clean_string(raw.get("scene_id")) or _clean_string(scene_id) or ""
-    name = _clean_string(raw.get("name")) or eid.replace("_", " ").replace("-", " ").title()
-    kind = str(raw.get("kind") or "scene_actor").strip().lower()
-    if kind not in SCENE_ADDRESSABLE_KINDS:
-        kind = "scene_actor"
-    roles_in: Any = raw.get("address_roles")
-    roles: List[str] = []
-    if isinstance(roles_in, list):
-        for r in roles_in:
-            if isinstance(r, str) and r.strip():
-                roles.append(r.strip().lower())
-    aliases_in: Any = raw.get("aliases")
-    aliases: List[str] = []
-    if isinstance(aliases_in, list):
-        for a in aliases_in:
-            if isinstance(a, str) and a.strip():
-                aliases.append(a.strip())
-    addressable = raw.get("addressable")
-    if addressable is None:
-        addressable = True
-    priority_raw = raw.get("address_priority")
-    try:
-        address_priority = int(priority_raw) if priority_raw is not None else 100
-    except (TypeError, ValueError):
-        address_priority = 100
-    row: Dict[str, Any] = {
-        "id": eid,
-        "name": name,
-        "scene_id": sid,
-        "address_roles": roles,
-        "aliases": aliases,
-        "kind": kind,
-        "addressable": bool(addressable),
-        "address_priority": address_priority,
-    }
-    if "role" in raw and isinstance(raw.get("role"), str) and raw["role"].strip():
-        row["role"] = raw["role"].strip()
-    if "topics" in raw:
-        row["topics"] = raw["topics"]
-    if "disposition" in raw:
-        row["disposition"] = raw["disposition"]
-    return row
+    if not norm.get("addressable", True):
+        return None
+    return norm
 
 
 def scene_addressables_from_envelope(scene_envelope: Dict[str, Any] | None) -> List[Dict[str, Any]]:
@@ -1913,8 +1888,9 @@ def _merge_addressable_spec_onto_row(base: Dict[str, Any], spec: Dict[str, Any])
     if not isinstance(spec, dict):
         return out
     for k in ("name", "role", "topics", "disposition", "affiliation"):
-        if spec.get(k) is not None and (k not in out or out.get(k) in (None, "", [])):
-            out[k] = spec[k]
+        lv = _legacy_addressable_field(spec, k)
+        if lv is not None and (k not in out or out.get(k) in (None, "", [])):
+            out[k] = lv
     ar: List[str] = []
     for src in (out.get("address_roles"), spec.get("address_roles")):
         if not isinstance(src, list):
@@ -2324,9 +2300,9 @@ def resolve_authoritative_social_target(
     )
 
     na = normalized_action if isinstance(normalized_action, dict) else {}
-    explicit = _clean_string(na.get("target_id")) or _clean_string(na.get("targetEntityId"))
+    explicit = _clean_string(na.get("target_id"))
 
-    # --- A. Explicit normalized target_id / targetEntityId ---
+    # --- A. Explicit normalized target_id ---
     if explicit:
         if explicit in addr_ids:
             npc = npc_dict_by_id(w, explicit) or next(

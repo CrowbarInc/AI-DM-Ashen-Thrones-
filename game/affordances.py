@@ -6,6 +6,7 @@ from typing import Any, Dict, List, Optional, Set, Tuple
 from game.utils import slugify
 from game.leads import pending_lead_surfaces_as_active_follow_opportunity
 from game.scene_actions import normalize_scene_action
+from game.schema_contracts import adapt_legacy_affordance, normalize_affordance
 from game.scene_graph import get_reachable_from
 from game.clues import get_all_known_clue_ids as get_known_clue_ids, get_all_known_clue_texts as get_known_clue_texts
 from game.storage import (
@@ -13,6 +14,13 @@ from game.storage import (
     get_world_flag,
     list_scene_ids as _list_scene_ids,
 )
+
+
+def _ingress_affordance(raw: Any) -> Dict[str, Any]:
+    """Normalize one affordance dict at subsystem ingress (legacy spellings via ``adapt_legacy_affordance`` only)."""
+    if not isinstance(raw, dict):
+        return normalize_affordance({})
+    return adapt_legacy_affordance(raw)
 
 
 def _humanize_id(obj_id: str) -> str:
@@ -169,9 +177,9 @@ def _is_explicit_action(scene: Dict[str, Any], action: Dict[str, Any]) -> bool:
 
 def _affordance_dedupe_key(action: Dict[str, Any]) -> str:
     action_type = str(action.get("type") or "").strip().lower()
-    target_entity = str(action.get("targetEntityId") or action.get("target_entity_id") or action.get("target_id") or "").strip().lower()
-    target_scene = str(action.get("targetSceneId") or action.get("target_scene_id") or "").strip().lower()
-    target_location = str(action.get("targetLocationId") or action.get("target_location_id") or "").strip().lower()
+    target_entity = str(action.get("target_id") or "").strip().lower()
+    target_scene = str(action.get("target_scene_id") or "").strip().lower()
+    target_location = str(action.get("target_location_id") or "").strip().lower()
     target = target_entity or target_scene or target_location
 
     label_key = _normalize_text_key(str(action.get("label") or ""))
@@ -187,8 +195,8 @@ def _affordance_dedupe_key(action: Dict[str, Any]) -> str:
 def _affordance_rank(action: Dict[str, Any], scene: Dict[str, Any]) -> int:
     action_type = str(action.get("type") or "").strip().lower()
     label = str(action.get("label") or "").strip().lower()
-    target_entity = str(action.get("targetEntityId") or action.get("target_entity_id") or action.get("target_id") or "").strip()
-    target_scene = str(action.get("targetSceneId") or action.get("target_scene_id") or "").strip()
+    target_entity = str(action.get("target_id") or "").strip()
+    target_scene = str(action.get("target_scene_id") or "").strip()
 
     score = 0
     if _is_explicit_action(scene, action):
@@ -240,15 +248,17 @@ def _affordance_for_interactable(interactable: Dict[str, Any]) -> Dict[str, Any]
 
     if itype == "investigate":
         target = _with_article(label)
-        return {
-            "id": obj_id,
-            "label": f"Examine {target}",
-            "type": "investigate",
-            "prompt": f"I examine {target}.",
-            "targetEntityId": obj_id,
-            "targetSceneId": None,
-            "targetLocationId": None,
-        }
+        return normalize_affordance(
+            {
+                "id": obj_id,
+                "label": f"Examine {target}",
+                "type": "investigate",
+                "prompt": f"I examine {target}.",
+                "target_id": obj_id,
+                "target_scene_id": None,
+                "target_location_id": None,
+            }
+        )
     if itype == "interact":
         if _looks_like_person(label):
             action_label = f"Talk to {_normalize_noun_phrase(label)}"
@@ -257,37 +267,43 @@ def _affordance_for_interactable(interactable: Dict[str, Any]) -> Dict[str, Any]
             target = _with_article(label)
             action_label = f"Approach {target}"
             prompt = f"I approach {target}."
-        return {
-            "id": obj_id,
-            "label": action_label,
-            "type": "interact",
-            "prompt": prompt,
-            "targetEntityId": obj_id,
-            "targetSceneId": None,
-            "targetLocationId": None,
-        }
+        return normalize_affordance(
+            {
+                "id": obj_id,
+                "label": action_label,
+                "type": "interact",
+                "prompt": prompt,
+                "target_id": obj_id,
+                "target_scene_id": None,
+                "target_location_id": None,
+            }
+        )
     if itype == "observe":
         target = _with_article(label)
-        return {
-            "id": obj_id,
-            "label": f"Inspect {target}",
-            "type": "observe",
-            "prompt": f"I inspect {target}.",
-            "targetEntityId": obj_id,
-            "targetSceneId": None,
-            "targetLocationId": None,
-        }
+        return normalize_affordance(
+            {
+                "id": obj_id,
+                "label": f"Inspect {target}",
+                "type": "observe",
+                "prompt": f"I inspect {target}.",
+                "target_id": obj_id,
+                "target_scene_id": None,
+                "target_location_id": None,
+            }
+        )
     # Default to investigate
     target = _with_article(label)
-    return {
-        "id": obj_id,
-        "label": f"Examine {target}",
-        "type": "investigate",
-        "prompt": f"I examine {target}.",
-        "targetEntityId": obj_id,
-        "targetSceneId": None,
-        "targetLocationId": None,
-    }
+    return normalize_affordance(
+        {
+            "id": obj_id,
+            "label": f"Examine {target}",
+            "type": "investigate",
+            "prompt": f"I examine {target}.",
+            "target_id": obj_id,
+            "target_scene_id": None,
+            "target_location_id": None,
+        }
+    )
 
 
 def _affordance_for_object(obj: Dict[str, Any]) -> Dict[str, Any] | None:
@@ -304,15 +320,17 @@ def _affordance_for_object(obj: Dict[str, Any]) -> Dict[str, Any] | None:
 
     if itype == "investigate":
         target = _with_article(label)
-        return {
-            "id": obj_id,
-            "label": f"Examine {target}",
-            "type": "investigate",
-            "prompt": f"I examine {target}.",
-            "targetEntityId": obj_id,
-            "targetSceneId": None,
-            "targetLocationId": None,
-        }
+        return normalize_affordance(
+            {
+                "id": obj_id,
+                "label": f"Examine {target}",
+                "type": "investigate",
+                "prompt": f"I examine {target}.",
+                "target_id": obj_id,
+                "target_scene_id": None,
+                "target_location_id": None,
+            }
+        )
     if itype == "interact":
         if _looks_like_person(label):
             action_label = f"Talk to {_normalize_noun_phrase(label)}"
@@ -321,25 +339,29 @@ def _affordance_for_object(obj: Dict[str, Any]) -> Dict[str, Any] | None:
             target = _with_article(label)
             action_label = f"Approach {target}"
             prompt = f"I approach {target}."
-        return {
-            "id": obj_id,
-            "label": action_label,
-            "type": "interact",
-            "prompt": prompt,
-            "targetEntityId": obj_id,
-            "targetSceneId": None,
-            "targetLocationId": None,
-        }
+        return normalize_affordance(
+            {
+                "id": obj_id,
+                "label": action_label,
+                "type": "interact",
+                "prompt": prompt,
+                "target_id": obj_id,
+                "target_scene_id": None,
+                "target_location_id": None,
+            }
+        )
     target = _with_article(label)
-    return {
-        "id": obj_id,
-        "label": f"Inspect {target}",
-        "type": "observe",
-        "prompt": f"I inspect {target}.",
-        "targetEntityId": obj_id,
-        "targetSceneId": None,
-        "targetLocationId": None,
-    }
+    return normalize_affordance(
+        {
+            "id": obj_id,
+            "label": f"Inspect {target}",
+            "type": "observe",
+            "prompt": f"I inspect {target}.",
+            "target_id": obj_id,
+            "target_scene_id": None,
+            "target_location_id": None,
+        }
+    )
 
 
 def _generate_affordances_from_interactables(scene: Dict[str, Any]) -> List[Dict[str, Any]]:
@@ -392,10 +414,11 @@ def get_available_affordances(
     for raw in raw_scene_actions:
         if not isinstance(raw, dict):
             continue
-        raw_type = str(raw.get("type") or "").strip().lower()
-        raw_label = str(raw.get("label") or "").strip().lower()
-        raw_prompt = str(raw.get("prompt") or "").strip().lower()
-        target = str(raw.get("targetEntityId") or raw.get("target_entity_id") or raw.get("target_id") or "").strip()
+        ing = _ingress_affordance(normalize_scene_action(raw))
+        raw_type = str(ing.get("type") or "").strip().lower()
+        raw_label = str(ing.get("label") or "").strip().lower()
+        raw_prompt = str(ing.get("prompt") or "").strip().lower()
+        target = str(ing.get("target_id") or "").strip()
         if target and (raw_type in SOCIAL_ACTION_TYPES or "talk" in raw_label or "ask" in raw_label or "talk" in raw_prompt or "ask" in raw_prompt):
             authored_social_targets.add(target)
 
@@ -410,15 +433,19 @@ def get_available_affordances(
             continue
         if nid in authored_social_targets:
             continue
-        all_affs.append({
-            "id": slugify(f"question-{nid}") or f"question-{nid}",
-            "label": f"Talk to {name}",
-            "type": "question",
-            "prompt": f"I talk to {name}.",
-            "targetSceneId": None,
-            "targetEntityId": nid,
-            "targetLocationId": None,
-        })
+        all_affs.append(
+            normalize_affordance(
+                {
+                    "id": slugify(f"question-{nid}") or f"question-{nid}",
+                    "label": f"Talk to {name}",
+                    "type": "question",
+                    "prompt": f"I talk to {name}.",
+                    "target_id": nid,
+                    "target_scene_id": None,
+                    "target_location_id": None,
+                }
+            )
+        )
     scene_rt = get_scene_runtime(session, scene_id) if scene_id and isinstance(session, dict) else {}
     consumed = set(str(x) for x in (scene_rt.get("consumed_action_ids") or []) if x)
     searched = set(str(x) for x in (scene_rt.get("searched_targets") or []) if x)
@@ -435,7 +462,7 @@ def get_available_affordances(
             continue
         # Scene graph filter: only show scene_transition affordances whose target is reachable
         if scene_graph and (a.get("type") or "").strip().lower() == "scene_transition":
-            tid = (a.get("targetSceneId") or a.get("target_scene_id") or "").strip()
+            tid = str(a.get("target_scene_id") or "").strip()
             if tid and tid not in reachable:
                 continue
         # Relabel investigate actions whose target was already searched
@@ -475,13 +502,13 @@ def generate_scene_affordances(scene_envelope: Dict[str, Any], mode: str, sessio
             "label": label,
             "type": action_type,
             "prompt": prompt,
-            "targetSceneId": target_scene_id,
-            "targetEntityId": target_entity_id,
-            "targetLocationId": target_location_id,
+            "target_scene_id": target_scene_id,
+            "target_id": target_entity_id,
+            "target_location_id": target_location_id,
         }
         if metadata:
             row["metadata"] = dict(metadata)
-        actions.append(row)
+        actions.append(normalize_affordance(row))
 
     # Small baseline set: keep one generic look action.
     add_action("Observe the area", "observe", "I look around and take in the area.")
@@ -507,17 +534,19 @@ def generate_scene_affordances(scene_envelope: Dict[str, Any], mode: str, sessio
         label = str(ex.get("label", "Travel")).strip() or "Travel"
         target = (ex.get("target_scene_id") or ex.get("targetSceneId") or "").strip() or None
         short_label = label if len(label) <= 44 else label[:41] + "..."
-        exit_action: Dict[str, Any] = {
-            "id": slugify(f"Leave for {short_label}") or "leave",
-            "label": f"Leave for {short_label}",
-            "type": "scene_transition" if target else "travel",
-            "prompt": f"I leave for {label}.",
-            "targetSceneId": target,
-            "targetEntityId": None,
-            "targetLocationId": None,
-        }
+        exit_action: Dict[str, Any] = normalize_affordance(
+            {
+                "id": slugify(f"Leave for {short_label}") or "leave",
+                "label": f"Leave for {short_label}",
+                "type": "scene_transition" if target else "travel",
+                "prompt": f"I leave for {label}.",
+                "target_scene_id": target,
+                "target_id": None,
+                "target_location_id": None,
+            }
+        )
         if ex.get("conditions") and isinstance(ex["conditions"], dict):
-            exit_action["conditions"] = ex["conditions"]
+            exit_action = normalize_affordance({**exit_action, "conditions": ex["conditions"]})
         actions.append(exit_action)
 
     # From pending leads (clue leads_to_scene): exploration affordances
@@ -566,25 +595,27 @@ def generate_scene_affordances(scene_envelope: Dict[str, Any], mode: str, sessio
     # Build by id: generated first, scene.actions override (allows conditional overrides e.g. scan-for-details with excludes_clues).
     by_id: Dict[str, Dict[str, Any]] = {}
     for a in actions:
-        norm = normalize_scene_action(a)
-        if norm.get("id"):
-            by_id[norm["id"]] = norm
+        aff = _ingress_affordance(a)
+        if aff.get("id"):
+            by_id[aff["id"]] = aff
     raw_actions = scene.get("actions") or scene.get("suggested_actions") or []
     for raw in raw_actions:
-        norm = normalize_scene_action(raw)
-        if norm.get("id") and norm.get("label"):
-            by_id[norm["id"]] = norm
+        merged = dict(normalize_scene_action(raw))
+        aff = _ingress_affordance(merged)
+        if aff.get("id") and aff.get("label"):
+            by_id[aff["id"]] = aff
     # Preserve order: scene.actions first (explicit author intent), then generated
     seen: set = set()
     result: List[Dict[str, Any]] = []
     for raw in raw_actions:
-        norm = normalize_scene_action(raw)
-        aid = norm.get("id")
+        aff = _ingress_affordance(dict(normalize_scene_action(raw)))
+        aid = aff.get("id")
         if aid and aid not in seen:
             seen.add(aid)
-            result.append(norm)
+            result.append(aff)
     for a in actions:
-        norm = by_id.get(normalize_scene_action(a).get("id", "") or "")
+        aid = _ingress_affordance(a).get("id", "") or ""
+        norm = by_id.get(aid)
         if norm and norm.get("id") not in seen:
             seen.add(norm["id"])
             result.append(norm)

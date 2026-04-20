@@ -42,6 +42,9 @@ def normalize_scene_action(raw: Any) -> Dict[str, Any]:
         "targetSceneId": None,
         "targetEntityId": None,
         "targetLocationId": None,
+        "target_scene_id": None,
+        "target_id": None,
+        "target_location_id": None,
     }
     if raw is None:
         return out
@@ -71,15 +74,17 @@ def normalize_scene_action(raw: Any) -> Dict[str, Any]:
             out["type"] = "interact"
         else:
             out["type"] = infer_action_type_from_label(out["label"])
-    out["targetSceneId"] = raw.get("targetSceneId") or raw.get("target_scene_id") or None
-    if out["targetSceneId"] is not None:
-        out["targetSceneId"] = str(out["targetSceneId"]).strip() or None
-    out["targetEntityId"] = raw.get("targetEntityId") or raw.get("target_entity_id") or None
-    if out["targetEntityId"] is not None:
-        out["targetEntityId"] = str(out["targetEntityId"]).strip() or None
-    out["targetLocationId"] = raw.get("targetLocationId") or raw.get("target_location_id") or None
-    if out["targetLocationId"] is not None:
-        out["targetLocationId"] = str(out["targetLocationId"]).strip() or None
+    # Canonical target keys win; legacy spellings remain for older payloads.
+    ts_raw = raw.get("target_scene_id") or raw.get("targetSceneId")
+    out["targetSceneId"] = str(ts_raw).strip() or None if ts_raw is not None else None
+    te_raw = raw.get("target_id") or raw.get("targetEntityId") or raw.get("target_entity_id")
+    out["targetEntityId"] = str(te_raw).strip() or None if te_raw is not None else None
+    tl_raw = raw.get("target_location_id") or raw.get("targetLocationId")
+    out["targetLocationId"] = str(tl_raw).strip() or None if tl_raw is not None else None
+    # Mirror canonical names for consumers that do not use camelCase.
+    out["target_scene_id"] = out["targetSceneId"]
+    out["target_id"] = out["targetEntityId"]
+    out["target_location_id"] = out["targetLocationId"]
     out["metadata"] = dict(raw.get("metadata") or {})
     # Legacy: preserve prompt for UI (fill chat input)
     if raw.get("prompt") and "prompt" not in out["metadata"]:
@@ -100,7 +105,14 @@ def normalize_scene_action(raw: Any) -> Dict[str, Any]:
         if not out["conditions"]:
             del out["conditions"]
     # Drop None keys for a lean payload; keep metadata and stable target keys.
-    preserve_none = {"targetSceneId", "targetEntityId", "targetLocationId"}
+    preserve_none = {
+        "targetSceneId",
+        "targetEntityId",
+        "targetLocationId",
+        "target_scene_id",
+        "target_id",
+        "target_location_id",
+    }
     for k in list(out):
         if out[k] is None and k not in ("metadata",) and k not in preserve_none:
             del out[k]

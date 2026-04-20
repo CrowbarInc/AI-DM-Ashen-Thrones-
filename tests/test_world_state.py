@@ -79,7 +79,8 @@ def test_advance_world_clock_advances_and_clamps():
     world = {"world_state": {"flags": {}, "counters": {}, "clocks": {}}}
     p1 = advance_world_clock(world, "sahuagin_war", 2)
     assert p1 == 2
-    assert world["world_state"]["clocks"]["sahuagin_war"] == {"progress": 2, "max": 10}
+    c = world["world_state"]["clocks"]["sahuagin_war"]
+    assert c["id"] == "sahuagin_war" and c["value"] == 2 and c["max_value"] == 10 and c["scope"] == "world"
 
     # Advance more
     p2 = advance_world_clock(world, "sahuagin_war", 5)
@@ -88,8 +89,8 @@ def test_advance_world_clock_advances_and_clamps():
     # Clamp to max: advance past max
     p3 = advance_world_clock(world, "sahuagin_war", 10)
     assert p3 == 10
-    assert world["world_state"]["clocks"]["sahuagin_war"]["progress"] == 10
-    assert world["world_state"]["clocks"]["sahuagin_war"]["max"] == 10
+    assert world["world_state"]["clocks"]["sahuagin_war"]["value"] == 10
+    assert world["world_state"]["clocks"]["sahuagin_war"]["max_value"] == 10
 
 
 def test_advance_world_clock_with_custom_max():
@@ -101,7 +102,7 @@ def test_advance_world_clock_with_custom_max():
             "clocks": {"invasion": {"progress": 0, "max": 8}},
         },
     })
-    assert world["world_state"]["clocks"]["invasion"]["max"] == 8
+    assert world["world_state"]["clocks"]["invasion"]["max_value"] == 8
 
     p1 = advance_world_clock(world, "invasion", 3)
     assert p1 == 3
@@ -124,8 +125,8 @@ def test_gm_world_state_updates_apply():
 
     assert get_world_flag(world, "quest_started") is True
     assert world["world_state"]["counters"]["clues_found"] == 2
-    assert world["world_state"]["clocks"]["sahuagin_war"]["progress"] == 2
-    assert world["world_state"]["clocks"]["sahuagin_war"]["max"] == 8
+    assert world["world_state"]["clocks"]["sahuagin_war"]["value"] == 2
+    assert world["world_state"]["clocks"]["sahuagin_war"]["max_value"] == 8
 
 
 def test_hidden_keys_excluded_from_gm_updates():

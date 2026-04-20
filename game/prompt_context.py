@@ -2493,12 +2493,16 @@ def _compress_world(world: Dict[str, Any]) -> Dict[str, Any]:
         ws = {}
     flags = {k: v for k, v in (ws.get('flags') or {}).items() if isinstance(k, str) and not k.startswith('_')}
     counters = {k: v for k, v in (ws.get('counters') or {}).items() if isinstance(k, str) and not k.startswith('_')}
+    from game.schema_contracts import world_clock_row_summary_line
+
     clocks_raw = ws.get('clocks') or {}
-    clocks_summary = [
-        f"{k}: {int(c.get('progress', 0))}/{int(c.get('max', 10))}"
-        for k, c in clocks_raw.items()
-        if isinstance(k, str) and not k.startswith('_') and isinstance(c, dict)
-    ]
+    clocks_summary: List[str] = []
+    for k, c in clocks_raw.items():
+        if not isinstance(k, str) or k.startswith('_') or not isinstance(c, dict):
+            continue
+        seg = world_clock_row_summary_line(k, c)
+        if seg:
+            clocks_summary.append(seg)
     world_state_view = {'flags': flags, 'counters': counters, 'clocks_summary': clocks_summary}
 
     event_log = world.get('event_log') or []
