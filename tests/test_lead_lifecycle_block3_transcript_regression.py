@@ -5,6 +5,10 @@ the engine must stay deterministic (explicit pursuit parse, same-scene suppressi
 """
 from __future__ import annotations
 
+from game.final_emission_meta import read_final_emission_meta_dict
+
+from game.narrative_authenticity_eval import _extract_final_emission_meta
+
 import pytest
 from fastapi.testclient import TestClient
 
@@ -185,7 +189,7 @@ def test_block3_gate_bare_question_after_redirect_activity_mode_no_strict_social
     }
     resolution = {"kind": "question", "prompt": rt["last_player_action_text"]}
     out = apply_final_emission_gate(gm, resolution=resolution, session=session, scene_id=sid, world=world)
-    meta = out.get("_final_emission_meta") or {}
+    meta = read_final_emission_meta_dict(out) or {}
     # Bare question shape without social payload: strict-social must not activate on an activity-mode turn.
     assert meta.get("strict_social_active") is False
     assert meta.get("coercion_reason") == "strict_social_inactive"
@@ -231,7 +235,8 @@ def test_block3_boundary_post_dialogue_reflective_non_social_strict_suppression(
     assert "mutters" not in low
     assert "whispers" not in low
     assert "tavern runner" not in low
-    meta = gm.get("_final_emission_meta") or {}
+    # API/public gm_output is public-only; meta lives in gm_output_debug.
+    meta = _extract_final_emission_meta(data) or {}
     assert meta.get("strict_social_active") is False
     if meta.get("strict_social_suppressed_non_social_turn"):
         assert meta.get("strict_social_suppression_reason") == "exploration_resolution_kind"
@@ -257,7 +262,7 @@ def test_block3_boundary_post_dialogue_gate_unit_reflective_question_without_soc
     }
     resolution = {"kind": "question", "prompt": rt["last_player_action_text"]}
     out = apply_final_emission_gate(gm, resolution=resolution, session=session, scene_id=sid, world=world)
-    meta = out.get("_final_emission_meta") or {}
+    meta = read_final_emission_meta_dict(out) or {}
     assert meta.get("strict_social_suppressed_non_social_turn") is True
     assert meta.get("strict_social_suppression_reason") == "reflective_or_world_action_prompt"
     assert "mutters" not in out["player_facing_text"].lower()
@@ -281,7 +286,7 @@ def test_block3_boundary_post_dialogue_gate_unit_invalid_blob_uses_global_not_np
     }
     resolution = {"kind": "observe", "prompt": rt["last_player_action_text"]}
     out = apply_final_emission_gate(gm, resolution=resolution, session=session, scene_id=sid, world=world)
-    meta = out.get("_final_emission_meta") or {}
+    meta = read_final_emission_meta_dict(out) or {}
     assert meta.get("strict_social_suppressed_non_social_turn") is True
     low = out["player_facing_text"].lower()
     assert "mutters" not in low
@@ -493,7 +498,7 @@ def test_block3_boundary_native_social_control_still_allows_speaker_owned_emissi
     }
     out = apply_final_emission_gate(gm, resolution=resolution, session=session, scene_id=sid, world=world)
     assert "Tavern Runner" in out["player_facing_text"] or "tavern runner" in out["player_facing_text"].lower()
-    meta = out.get("_final_emission_meta") or {}
+    meta = read_final_emission_meta_dict(out) or {}
     assert meta.get("strict_social_active") is True
     assert meta.get("strict_social_suppressed_non_social_turn") is False
 

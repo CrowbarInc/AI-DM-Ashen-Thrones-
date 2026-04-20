@@ -121,7 +121,9 @@ from game.final_emission_meta import (
     default_narrative_authenticity_layer_meta,
     merge_narrative_authenticity_into_final_emission_meta,
     package_dead_turn_snapshot_into_final_emission_meta,
+    package_emission_channel_sidecar,
 )
+from game.state_channels import project_author_payload, project_debug_payload, project_public_payload
 from game.final_emission_text import (
     _ACTION_RESULT_PATTERNS,
     _AGENCY_SUBSTITUTE_PATTERNS,
@@ -4361,7 +4363,13 @@ def _finalize_emission_output(
             "final_text_preview": (gate_norm_final[:120] + "…") if len(gate_norm_final) > 120 else gate_norm_final,
         }
     package_dead_turn_snapshot_into_final_emission_meta(out)
-    return out
+    debug_lane = project_debug_payload(out)
+    author_lane = project_author_payload(out)
+    public_out = project_public_payload(out)
+    sidecar = package_emission_channel_sidecar(debug_top_level=debug_lane, author_top_level=author_lane)
+    if sidecar:
+        public_out["internal_state"] = sidecar
+    return public_out
 
 
 def _question_prompt_for_resolution(resolution: Dict[str, Any] | None) -> str:

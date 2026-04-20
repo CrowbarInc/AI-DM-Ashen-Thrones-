@@ -2843,7 +2843,7 @@ def test_knowledge_scope_and_reliability_change_social_hints_deterministically()
 
 @pytest.mark.unit
 def test_build_narration_context_exports_anti_railroading_contract():
-    ctx = build_narration_context(**_narration_minimal_kwargs())
+    ctx = build_narration_context(**_narration_minimal_kwargs(include_non_public_prompt_keys=True))
     assert "anti_railroading_contract" in ctx
     arc = ctx["anti_railroading_contract"]
     assert isinstance(arc, dict)
@@ -2919,7 +2919,7 @@ def test_anti_railroading_instructions_forbid_only_unjustified_forced_direction(
 
 @pytest.mark.unit
 def test_context_separation_contract_wired_to_response_policy_and_payload():
-    ctx = build_narration_context(**_narration_minimal_kwargs())
+    ctx = build_narration_context(**_narration_minimal_kwargs(include_non_public_prompt_keys=True))
     rp = ctx["response_policy"]
     assert "context_separation" in rp
     assert rp["context_separation"] is ctx["context_separation_contract"]
@@ -2947,7 +2947,7 @@ def test_prompt_contract_owner_materializes_response_policy_bundle_for_downstrea
 
 @pytest.mark.unit
 def test_build_narration_context_surfaces_interaction_continuity_contract():
-    ctx = build_narration_context(**_narration_minimal_kwargs())
+    ctx = build_narration_context(**_narration_minimal_kwargs(include_non_public_prompt_keys=True))
     ic = ctx.get("interaction_continuity_contract")
     assert isinstance(ic, dict)
     assert ic.get("continuity_strength") in ("none", "soft", "strong")
@@ -3006,18 +3006,19 @@ def test_context_separation_instructions_no_social_probe_exemption_heuristic():
 
 @pytest.mark.unit
 def test_context_separation_debug_mirror_lists_explicit_relevance_not_mood():
-    ctx = build_narration_context(**_narration_minimal_kwargs())
+    ctx = build_narration_context(**_narration_minimal_kwargs(include_non_public_prompt_keys=True))
     pd_cs = ctx["prompt_debug"]["context_separation"]
     assert "pressure_focus_allowed" in pd_cs
 
 
 @pytest.mark.unit
 def test_player_facing_narration_purity_contract_wired_to_response_policy_payload_and_debug():
-    ctx = build_narration_context(**_narration_minimal_kwargs())
+    ctx = build_narration_context(**_narration_minimal_kwargs(include_non_public_prompt_keys=True))
     c = ctx["player_facing_narration_purity_contract"]
     rp = ctx["response_policy"]
     assert rp["player_facing_narration_purity"] is c
     assert isinstance(c, dict)
+    assert "debug_inputs" not in c and "debug_reason" not in c
     assert c.get("enabled") is True
     assert c.get("diegetic_only") is True
     assert c.get("forbid_scaffold_headers") is True
@@ -3056,7 +3057,7 @@ def test_player_facing_narration_purity_instruction_order_after_context_separati
 
 @pytest.mark.unit
 def test_narration_payload_includes_conversational_memory_window_and_selection():
-    ctx = build_narration_context(**_narration_minimal_kwargs())
+    ctx = build_narration_context(**_narration_minimal_kwargs(include_non_public_prompt_keys=True))
     assert "conversational_memory_window" in ctx
     assert "selected_conversational_memory" in ctx
     assert isinstance(ctx["conversational_memory_window"], dict)
@@ -3088,7 +3089,9 @@ def test_response_policy_path_uses_compress_recent_log(mock_compress):
             "extra_payload": {"should_not": "appear_in_policy_compress_input"},
         }
     ]
-    ctx = build_narration_context(**_narration_minimal_kwargs(recent_log_for_prompt=rich))
+    ctx = build_narration_context(
+        **_narration_minimal_kwargs(recent_log_for_prompt=rich, include_non_public_prompt_keys=True)
+    )
     mock_compress.assert_called_once()
     assert mock_compress.call_args[0][0] is rich
     pd = ctx.get("prompt_debug") or {}

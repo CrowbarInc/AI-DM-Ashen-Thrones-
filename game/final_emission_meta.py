@@ -1,10 +1,16 @@
-"""Canonical metadata-only owner for ``_final_emission_meta`` packaging.
+"""Debug / meta packaging for final emission (FEM) and related read-side helpers.
 
 **Canonical boundary (post-OC2):** :func:`game.final_emission_gate.apply_final_emission_gate`
 remains the **orchestration owner** for layer order and integration. This module is
-**metadata-only**: stable dict shapes for FEM / NA fields, slimming, read-side coercion
+**Canonical metadata-only owner**: stable dict shapes for FEM / NA fields, slimming, read-side coercion
 for deterministic consumers, and dead-turn packaging for
-``_final_emission_meta["dead_turn"]``.
+``_final_emission_meta["dead_turn"]``. It does **not** orchestrate gates, prompts, or API
+surfaces—only shapes, merges, and **channel-sidecar** helpers used at the emission exit seam.
+
+After the final emission boundary, observability keys (including ``_final_emission_meta``)
+live under ``gm_output["internal_state"]["emission_debug_lane"]`` (see
+:func:`package_emission_channel_sidecar`). Use :func:`read_final_emission_meta_dict` /
+:func:`read_emission_debug_lane` instead of assuming a top-level ``_final_emission_meta`` key.
 
 Validation criteria and repair control stay in :mod:`game.narrative_authenticity` /
 :mod:`game.final_emission_repairs`, not here. Transitional overlap in import sites does
@@ -13,6 +19,8 @@ not make this file the orchestration owner.
 from __future__ import annotations
 
 from typing import Any, Dict, Mapping, MutableMapping
+
+from game.state_channels import project_debug_payload
 
 # ``accepted_via`` values that can carry ``retry_exhausted`` / terminal flags from legitimate
 # deterministic repairs without implying an upstream API / infra failure by themselves.
@@ -61,6 +69,83 @@ def default_narrative_authenticity_layer_meta() -> Dict[str, Any]:
         "narrative_authenticity_relaxation_flags": None,
         "narrative_authenticity_rumor_relaxed_low_signal": False,
     }
+
+
+def package_emission_channel_sidecar(
+    *,
+    debug_top_level: Mapping[str, Any] | None,
+    author_top_level: Mapping[str, Any] | None,
+) -> dict[str, Any]:
+    """Normalize debug/meta sidecar content stored under ``gm_output['internal_state']`` (author channel).
+
+    Values are shallow copies suitable for deterministic inspection; not a second classifier.
+    """
+    out: dict[str, Any] = {}
+    if isinstance(debug_top_level, Mapping) and debug_top_level:
+        out["emission_debug_lane"] = dict(debug_top_level)
+    if isinstance(author_top_level, Mapping) and author_top_level:
+        out["emission_author_lane"] = dict(author_top_level)
+    return out
+
+
+def read_debug_notes_from_turn_payload(payload: Mapping[str, Any] | None) -> str:
+    """Return concatenated ``debug_notes`` from an API envelope or a post-gate ``gm_output`` dict.
+
+    Prefers ``gm_output_debug.emission_debug_lane`` when present (HTTP responses), then legacy
+    top-level ``gm_output['debug_notes']``, then the emission debug lane on a gate-shaped dict.
+    """
+    if not isinstance(payload, Mapping):
+        return ""
+    dpkg = payload.get("gm_output_debug")
+    if isinstance(dpkg, Mapping):
+        lane = dpkg.get("emission_debug_lane")
+        if isinstance(lane, Mapping):
+            s = lane.get("debug_notes")
+            if isinstance(s, str) and s.strip():
+                return s
+    gm = payload.get("gm_output")
+    if isinstance(gm, Mapping):
+        top = gm.get("debug_notes")
+        if isinstance(top, str) and top.strip():
+            return top
+        lane2 = read_emission_debug_lane(gm)
+        s2 = lane2.get("debug_notes")
+        if isinstance(s2, str) and s2.strip():
+            return s2
+    if "player_facing_text" in payload:
+        lane3 = read_emission_debug_lane(payload)
+        s3 = lane3.get("debug_notes")
+        if isinstance(s3, str):
+            return str(s3)
+    return ""
+
+
+def read_emission_debug_lane(gm_output: Mapping[str, Any] | None) -> dict[str, Any]:
+    """Shallow read of debug-classified top-level keys from a post-gate ``gm_output`` (or legacy mixed dict)."""
+    if not isinstance(gm_output, Mapping):
+        return {}
+    internal = gm_output.get("internal_state")
+    if isinstance(internal, Mapping):
+        lane = internal.get("emission_debug_lane")
+        if isinstance(lane, Mapping):
+            return dict(lane)
+    return project_debug_payload(gm_output)
+
+
+def read_final_emission_meta_dict(gm_output: Mapping[str, Any] | None) -> dict[str, Any]:
+    """Read FEM dict from post-gate sidecar, else legacy top-level ``_final_emission_meta``.
+
+    Precedence is **sidecar first** to align with the post-finalization contract. Legacy top-level
+    FEM is accepted as a compatibility fallback for older/mixed dicts and unit fixtures.
+    """
+    if not isinstance(gm_output, Mapping):
+        return {}
+    lane = read_emission_debug_lane(gm_output)
+    nested = lane.get("_final_emission_meta")
+    if isinstance(nested, Mapping):
+        return dict(nested)
+    fem = gm_output.get("_final_emission_meta")
+    return dict(fem) if isinstance(fem, Mapping) else {}
 
 
 def merge_narrative_authenticity_into_final_emission_meta(meta: Dict[str, Any], na_dbg: Dict[str, Any]) -> None:
@@ -377,15 +462,15 @@ _DEAD_TURN_READ_DEFAULTS: Dict[str, Any] = {
 
 
 def read_dead_turn_from_gm_output(gm_output: Mapping[str, Any] | None) -> Dict[str, Any]:
-    """Read-only view of DTD1 status from ``gm_output['_final_emission_meta']['dead_turn']``.
+    """Read-only view of DTD1 status from FEM ``dead_turn`` (sidecar or legacy top-level).
 
     Does **not** classify or merge; missing keys yield stable defaults (validation_playable=True).
     """
     out = dict(_DEAD_TURN_READ_DEFAULTS)
     if not isinstance(gm_output, Mapping):
         return out
-    fem = gm_output.get("_final_emission_meta")
-    if not isinstance(fem, Mapping):
+    fem = read_final_emission_meta_dict(gm_output)
+    if not fem:
         return out
     snap = fem.get("dead_turn")
     if not isinstance(snap, Mapping):

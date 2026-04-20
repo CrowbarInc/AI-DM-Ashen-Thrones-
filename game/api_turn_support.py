@@ -126,6 +126,8 @@ def _build_action_debug(
 def _strip_internal_gm_keys(gm: dict) -> dict:
     out = dict(gm)
     out.pop("_player_facing_emission_finalized", None)
+    # Emission debug/meta sidecar (author channel); must not ship on the public gm_output surface.
+    out.pop("internal_state", None)
     return out
 
 
@@ -663,9 +665,13 @@ def _build_turn_response_payload(
     scene_obj = state_scene.get("scene") if isinstance(state_scene.get("scene"), dict) else {}
     scene_id = str(scene_obj.get("id") or "").strip()
 
+    gm_output_debug: dict | None = None
     if isinstance(gm, dict):
         gm = dict(gm)
         if gm.get("_player_facing_emission_finalized"):
+            ist = gm.get("internal_state")
+            if isinstance(ist, dict) and isinstance(ist.get("emission_debug_lane"), dict):
+                gm_output_debug = {"emission_debug_lane": dict(ist["emission_debug_lane"])}
             gm = _strip_internal_gm_keys(gm)
         else:
             raw_text = gm.get("player_facing_text") if isinstance(gm.get("player_facing_text"), str) else ""
@@ -715,8 +721,14 @@ def _build_turn_response_payload(
                     scene=state_scene,
                     world=state_world,
                 )
+            ist = gm.get("internal_state")
+            if isinstance(ist, dict) and isinstance(ist.get("emission_debug_lane"), dict):
+                gm_output_debug = {"emission_debug_lane": dict(ist["emission_debug_lane"])}
+            gm = _strip_internal_gm_keys(gm)
 
     payload: dict = {'ok': True, 'gm_output': gm, **state}
+    if gm_output_debug:
+        payload["gm_output_debug"] = gm_output_debug
     if include_resolution:
         payload['resolution'] = resolution
     return payload

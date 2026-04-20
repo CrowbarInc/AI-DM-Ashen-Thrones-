@@ -1552,10 +1552,39 @@ def _run_transcript_probe(
     *,
     max_turns: int,
     seed: int,
+    tmp_path,
+    monkeypatch,
 ) -> tuple[SyntheticScenario, SyntheticRunResult]:
     """Run a bounded transcript-backed probe with shared real-path wiring."""
+    idx = {"n": 0}
+
+    def _stub_gm(text: str) -> dict:
+        return {
+            "player_facing_text": text,
+            "tags": [],
+            "scene_update": None,
+            "activate_scene_id": None,
+            "new_scene_draft": None,
+            "world_updates": None,
+            "suggested_action": None,
+            "debug_notes": "",
+        }
+
+    def call_gpt(_messages: list[dict[str, str]]) -> dict:
+        idx["n"] += 1
+        # Keep output deterministic and contract-safe; these transcript probes assert wiring only.
+        return _stub_gm(f"[Transcript probe stub] Turn {idx['n']}: The rain hisses on the gate torches.")
+
+    # Transcript probes must never hit live upstream APIs in the default test lane.
+    monkeypatch.setattr("game.api.call_gpt", call_gpt)
+    monkeypatch.setattr("game.api.detect_retry_failures", lambda **kwargs: [])
+
     tuned_scenario = replace(scenario, max_turns=max_turns, seed=seed)
-    run_result = run_synthetic_session(**tuned_scenario.run_kwargs(use_fake_gm=False))
+    kw = dict(tuned_scenario.run_kwargs(use_fake_gm=False))
+    kw["tmp_path"] = tmp_path
+    kw["monkeypatch"] = monkeypatch
+    kw["starting_scene_id"] = "frontier_gate"
+    run_result = run_synthetic_session(**kw)
     _assert_transcript_probe_invariants(run_result, max_turns=max_turns)
     return tuned_scenario, run_result
 
@@ -1565,9 +1594,15 @@ def _run_transcript_probe(
 @pytest.mark.synthetic
 @pytest.mark.slow
 @pytest.mark.transcript
-def test_synthetic_transcript_probe_cautious_profile_runs_sanely():
+def test_synthetic_transcript_probe_cautious_profile_runs_sanely(tmp_path, monkeypatch):
     max_turns = 2
-    scenario, run_result = _run_transcript_probe(default_opening(), max_turns=max_turns, seed=515)
+    scenario, run_result = _run_transcript_probe(
+        default_opening(),
+        max_turns=max_turns,
+        seed=515,
+        tmp_path=tmp_path,
+        monkeypatch=monkeypatch,
+    )
     _assert_transcript_soft_policy_signal(
         scenario=scenario,
         run_result=run_result,
@@ -1581,9 +1616,15 @@ def test_synthetic_transcript_probe_cautious_profile_runs_sanely():
 @pytest.mark.synthetic
 @pytest.mark.slow
 @pytest.mark.transcript
-def test_synthetic_transcript_probe_social_profile_runs_sanely():
+def test_synthetic_transcript_probe_social_profile_runs_sanely(tmp_path, monkeypatch):
     max_turns = 2
-    scenario, run_result = _run_transcript_probe(social_opening(), max_turns=max_turns, seed=616)
+    scenario, run_result = _run_transcript_probe(
+        social_opening(),
+        max_turns=max_turns,
+        seed=616,
+        tmp_path=tmp_path,
+        monkeypatch=monkeypatch,
+    )
     _assert_transcript_soft_policy_signal(
         scenario=scenario,
         run_result=run_result,
@@ -1596,9 +1637,15 @@ def test_synthetic_transcript_probe_social_profile_runs_sanely():
 @pytest.mark.synthetic
 @pytest.mark.slow
 @pytest.mark.transcript
-def test_synthetic_transcript_probe_directed_social_profile_runs_sanely():
+def test_synthetic_transcript_probe_directed_social_profile_runs_sanely(tmp_path, monkeypatch):
     max_turns = 2
-    scenario, run_result = _run_transcript_probe(directed_social_opening(), max_turns=max_turns, seed=626)
+    scenario, run_result = _run_transcript_probe(
+        directed_social_opening(),
+        max_turns=max_turns,
+        seed=626,
+        tmp_path=tmp_path,
+        monkeypatch=monkeypatch,
+    )
     bug_class = "directed_social_routing_confusion"
     _assert_transcript_soft_policy_signal(
         scenario=scenario,
@@ -1612,13 +1659,15 @@ def test_synthetic_transcript_probe_directed_social_profile_runs_sanely():
 @pytest.mark.synthetic
 @pytest.mark.slow
 @pytest.mark.transcript
-def test_synthetic_transcript_probe_who_next_where_opener_runs_sanely():
+def test_synthetic_transcript_probe_who_next_where_opener_runs_sanely(tmp_path, monkeypatch):
     """Single soft structural check: who/where social seed still yields a social-leaning policy slug."""
     max_turns = 2
     scenario, run_result = _run_transcript_probe(
         who_next_where_followup_opening(),
         max_turns=max_turns,
         seed=636,
+        tmp_path=tmp_path,
+        monkeypatch=monkeypatch,
     )
     bug_class = "social_target_location_followup"
     _assert_transcript_soft_policy_signal(
@@ -1633,13 +1682,15 @@ def test_synthetic_transcript_probe_who_next_where_opener_runs_sanely():
 @pytest.mark.synthetic
 @pytest.mark.slow
 @pytest.mark.transcript
-def test_synthetic_transcript_probe_lead_commitment_followthrough_runs_sanely() -> None:
+def test_synthetic_transcript_probe_lead_commitment_followthrough_runs_sanely(tmp_path, monkeypatch) -> None:
     """Soft structural check: committed lead seed still yields cautious/investigative policy signal."""
     max_turns = 2
     scenario, run_result = _run_transcript_probe(
         lead_commitment_followthrough_opening(),
         max_turns=max_turns,
         seed=646,
+        tmp_path=tmp_path,
+        monkeypatch=monkeypatch,
     )
     bug_class = "lead_commitment_followthrough_stall"
     _assert_transcript_soft_policy_signal(
@@ -1654,13 +1705,15 @@ def test_synthetic_transcript_probe_lead_commitment_followthrough_runs_sanely() 
 @pytest.mark.synthetic
 @pytest.mark.slow
 @pytest.mark.transcript
-def test_synthetic_transcript_probe_scene_transition_followup_runs_sanely() -> None:
+def test_synthetic_transcript_probe_scene_transition_followup_runs_sanely(tmp_path, monkeypatch) -> None:
     """Structural check only: spatial transition seed still yields exploration-forward policy slugs."""
     max_turns = 2
     scenario, run_result = _run_transcript_probe(
         scene_transition_followup_opening(),
         max_turns=max_turns,
         seed=656,
+        tmp_path=tmp_path,
+        monkeypatch=monkeypatch,
     )
     bug_class = "exploration_scene_transition_followup_stall"
     _assert_transcript_soft_policy_signal(

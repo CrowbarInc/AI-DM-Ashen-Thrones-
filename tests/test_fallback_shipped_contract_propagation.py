@@ -8,6 +8,8 @@ consumption of already-shipped policy.
 """
 from __future__ import annotations
 
+from game.final_emission_meta import read_final_emission_meta_dict
+
 import pytest
 
 from game.campaign_state import create_fresh_session_document
@@ -56,7 +58,7 @@ def _gate_session_scene_frontier():
 
 
 def _emission_cs_meta(out: dict) -> dict:
-    meta = out.get("_final_emission_meta") if isinstance(out.get("_final_emission_meta"), dict) else {}
+    meta = read_final_emission_meta_dict(out) if isinstance(read_final_emission_meta_dict(out), dict) else {}
     return {
         "resolution_source": meta.get("context_separation_contract_resolution_source"),
         "skip_reason": meta.get("context_separation_skip_reason"),
@@ -140,7 +142,7 @@ def test_explore_observe_resolution_stays_non_social_in_metadata() -> None:
         scene={},
         world={},
     )
-    meta = out.get("_final_emission_meta") if isinstance(out.get("_final_emission_meta"), dict) else {}
+    meta = read_final_emission_meta_dict(out) if isinstance(read_final_emission_meta_dict(out), dict) else {}
     assert meta.get("context_separation_skip_reason") != "no_shipped_contract"
     em = (out.get("metadata") or {}).get("emission_debug") or {}
     assert "speaker_contract_enforcement" not in em

@@ -14,6 +14,7 @@ import re
 from typing import Any, Dict, List, Optional
 
 from game.final_emission_gate import detect_emitted_speaker_signature
+from game.final_emission_meta import read_final_emission_meta_dict
 from game.interaction_context import (
     canonical_scene_addressable_roster,
     clear_stale_social_interlocutor_continuity,
@@ -41,8 +42,8 @@ def _final_emission_enforcement_reason(gm: Dict[str, Any] | None) -> str:
     """Return speaker_contract final_reason_code when recorded by :func:`apply_final_emission_gate`."""
     if not isinstance(gm, dict):
         return ""
-    fem = gm.get("_final_emission_meta")
-    if isinstance(fem, dict):
+    fem = read_final_emission_meta_dict(gm)
+    if fem:
         r = str(fem.get("speaker_contract_enforcement_reason") or "").strip()
         if r:
             return r

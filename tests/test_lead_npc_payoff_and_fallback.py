@@ -1,6 +1,8 @@
 """Block 5B — NPC-target lead payoff on grounded contact + neutral fallback for failed pursuit turns."""
 from __future__ import annotations
 
+from game.final_emission_meta import read_final_emission_meta_dict
+
 from game.api import _apply_authoritative_resolution_state_mutation
 from game.exploration import (
     NPC_PURSUIT_CONTACT_SESSION_KEY,
@@ -278,7 +280,7 @@ def test_emission_gate_replaces_stock_global_fallback_for_failed_npc_pursuit_soc
     assert "For a breath, the scene holds while voices shift around you." not in text
     assert "voices shift around you" not in text.lower()
     assert "unresolved" in text.lower() or "nothing confirms" in text.lower()
-    meta = out.get("_final_emission_meta") or {}
+    meta = read_final_emission_meta_dict(out) or {}
     assert meta.get("final_emitted_source") == "npc_pursuit_neutral_fallback"
 
 

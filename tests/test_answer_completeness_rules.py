@@ -6,6 +6,8 @@ escalation eligibility, and final-emission gate behavior.
 """
 from __future__ import annotations
 
+from game.final_emission_meta import read_final_emission_meta_dict
+
 import importlib
 
 import pytest
@@ -397,7 +399,7 @@ def test_gate_skips_answer_completeness_when_contract_disabled(action_turn_contr
         scene_id="frontier_gate",
         world={},
     )
-    meta = out.get("_final_emission_meta") or {}
+    meta = read_final_emission_meta_dict(out) or {}
     assert out["player_facing_text"] == raw
     assert meta.get("answer_completeness_checked") is False
     assert meta.get("answer_completeness_repaired") is False
@@ -431,7 +433,7 @@ def test_gate_neutral_narration_not_mutated_when_no_player_question_contract():
         world={},
     )
     assert out["player_facing_text"] == raw
-    meta = out.get("_final_emission_meta") or {}
+    meta = read_final_emission_meta_dict(out) or {}
     assert meta.get("answer_completeness_repaired") is not True
 
 
@@ -467,7 +469,7 @@ def test_frontload_repair_keeps_referential_clarity_explicit_npc_in_opening():
         scene_id="frontier_gate",
         world={},
     )
-    meta = out.get("_final_emission_meta") or {}
+    meta = read_final_emission_meta_dict(out) or {}
     assert meta.get("answer_completeness_repaired") is True
     low = out["player_facing_text"].lower()
     east_at = low.find("east")
@@ -517,7 +519,7 @@ def test_mixed_player_turn_question_plus_action_still_frontloads_answer():
     run_at = low.find("the runners used")
     fog_at = low.find("fog thickens")
     assert run_at != -1 and fog_at != -1 and run_at < fog_at
-    meta = out.get("_final_emission_meta") or {}
+    meta = read_final_emission_meta_dict(out) or {}
     assert meta.get("answer_completeness_repaired") is True
 
 
@@ -592,7 +594,7 @@ def test_transcript_style_dodge_opening_repaired_with_meta_flags():
         scene_id="frontier_gate",
         world={},
     )
-    meta = out.get("_final_emission_meta") or {}
+    meta = read_final_emission_meta_dict(out) or {}
     assert meta.get("answer_completeness_checked") is True
     assert meta.get("answer_completeness_repaired") is True
     first = out["player_facing_text"].split(". ")[0].lower()

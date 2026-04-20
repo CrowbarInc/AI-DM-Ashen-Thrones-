@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from game.final_emission_meta import read_final_emission_meta_dict
+
 import pytest
 
 from game.narrative_authenticity_eval import evaluate_narrative_authenticity
@@ -38,7 +40,7 @@ def test_transcript_snapshot_carries_final_emission_meta_for_manual_gauntlet_row
         "world": None,
     }
     snap = snapshot_from_chat_payload(0, "What do I see?", payload)
-    fem = snap.get("_final_emission_meta")
+    fem = read_final_emission_meta_dict(snap)
     assert isinstance(fem, dict)
     dt = (fem.get("dead_turn") or {})
     assert dt.get("is_dead_turn") is True

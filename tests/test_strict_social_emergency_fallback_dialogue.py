@@ -6,6 +6,8 @@ first-mention gate integration, and historical compatibility alias coverage only
 """
 from __future__ import annotations
 
+from game.final_emission_meta import read_final_emission_meta_dict
+
 from typing import Any
 
 import pytest
@@ -131,7 +133,7 @@ def test_strict_social_terminal_fallback_grimace_line_survives_first_mention_gat
         scene=default_scene(sid),
     )
     assert "grimaces" in out["player_facing_text"].lower()
-    meta = out.get("_final_emission_meta") or {}
+    meta = read_final_emission_meta_dict(out) or {}
     assert meta.get("first_mention_validation_passed") is True
     assert meta.get("first_mention_replacement_applied") is False
     assert meta.get("first_mention_strict_social_grounded_speaker_exemption_entity_id") == "tavern_runner"
@@ -224,7 +226,7 @@ def test_retry_terminal_repaired_dialogue_survives_first_mention_gate(monkeypatc
         scene=_scene_env(),
     )
     assert '"' in out["player_facing_text"]
-    meta = out.get("_final_emission_meta") or {}
+    meta = read_final_emission_meta_dict(out) or {}
     assert meta.get("first_mention_replacement_applied") is False
     assert meta.get("first_mention_validation_passed") is True
 

@@ -1,3 +1,4 @@
+from game.final_emission_meta import read_final_emission_meta_dict
 """Social interaction authority coverage for continuity, routing, and downstream emission behavior."""
 
 from game.api import (
@@ -106,7 +107,7 @@ def test_final_gate_emits_social_minimal_not_ambient_scene_when_engaged():
         world=world,
     )
     text = str(out.get("player_facing_text") or "")
-    meta = out.get("_final_emission_meta") or {}
+    meta = read_final_emission_meta_dict(out) or {}
     assert meta.get("strict_social_suppressed_non_social_turn") is True
     # Banned stock phrase is stripped; suppressed non-social turns use global narrative fallback (not NPC-owned).
     assert "from here, no certain answer presents itself" not in text.lower()

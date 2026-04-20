@@ -149,7 +149,7 @@ All repair modes in `repair_narrative_authenticity_minimal` honor:
 
 ### Debugging workflow: how to debug a bad response
 
-1. Open `gm_output["_final_emission_meta"]` on the finalized chat payload (same structure whether you inspect API JSON or runner artifacts).
+1. Read FEM on finalized outputs via the helper (`read_final_emission_meta_dict(...)`) or from API payload debug lane (`gm_output_debug.emission_debug_lane["_final_emission_meta"]`).
 2. Check NA fields:
    - `narrative_authenticity_reason_codes` — failing codes when checked and failed; also mirrored from validator `failure_reasons`.
    - `narrative_authenticity_metrics` — numeric overlap/filler/signal summaries (slimmed for emission).
@@ -159,7 +159,7 @@ All repair modes in `repair_narrative_authenticity_minimal` honor:
 3. Decide:
    - **Was NA triggered?** `narrative_authenticity_checked` true; if false, read `narrative_authenticity_skip_reason`.
    - **Was it repaired?** `narrative_authenticity_repaired` or `narrative_authenticity_repair_applied` true; `narrative_authenticity_repair_mode` names the winning strategy.
-   - **Did the gate replace the whole candidate?** If `_final_emission_meta["final_route"] == "replaced"`, the emitted text is a deterministic fallback, not the model line NA saw. Check `rejection_reasons_sample` and `gm_output["debug_notes"]` for the `final_emission_gate:replaced:` prefix (may include `narrative_authenticity_unsatisfied_after_repair` when repair could not clear failures).
+   - **Did the gate replace the whole candidate?** If FEM `final_route == "replaced"`, the emitted text is a deterministic fallback, not the model line NA saw. Check `rejection_reasons_sample` and `debug_notes` (via `read_debug_notes_from_turn_payload(...)`) for the `final_emission_gate:replaced:` prefix (may include `narrative_authenticity_unsatisfied_after_repair` when repair could not clear failures).
    - **Did fallback behavior or a later layer reshape text without full replace?** On the accept path, compare fingerprints/previews in `stage_diff_telemetry`; inspect `fallback_behavior_*` in `_final_emission_meta`, `fallback_kind` / tags on `gm_output`, and snapshot `fallback_source` / `fallback_stage`.
 4. Cross-check **`narrative_authenticity_eval`** (from the runner or by calling `evaluate_narrative_authenticity`):
    - `scores` — per-axis 0–5 view of telemetry.
@@ -170,6 +170,16 @@ All repair modes in `repair_narrative_authenticity_minimal` honor:
    - **response_delta** — primary ownership: `response_delta_*` meta; NA may only cite `follow_up_missing_signal_shadow_response_delta`.
    - **fallback** — `narrative_authenticity_skip_reason` of `fallback_uncertainty_brief_compat` or strong `fallback_behavior_*` / provenance traces after NA ran.
   - **continuity / other** — `game.interaction_continuity` and strict-social paths are separate; use their meta and `social_response_structure_*` fields, not NA codes.
+
+> **Post-C contract reminder (Objective #5)**
+>
+> - **Public `gm_output`** is public-only (no top-level `_final_emission_meta`, `debug_notes`, `stage_diff_telemetry`, `reason_codes`, `dead_turn`, `internal_state`, `prompt_debug`, etc.).
+> - **Finalized in-process `gm_output`** may carry an author-channel `internal_state` sidecar with `emission_debug_lane`.
+> - **API turn payloads** carry debug/meta under `gm_output_debug.emission_debug_lane`; consumers should read via helpers:
+>   - `read_final_emission_meta_dict(...)`
+>   - `read_emission_debug_lane(...)`
+>   - `read_dead_turn_from_gm_output(...)`
+>   - `read_debug_notes_from_turn_payload(...)`
 
 ### Telemetry field reference (`narrative_authenticity_metrics` / `evidence`)
 

@@ -23,6 +23,7 @@ import json
 import logging
 from typing import Any, Dict, List, Mapping, MutableMapping, Optional
 
+from game.final_emission_meta import read_final_emission_meta_dict
 from game.turn_packet import resolve_turn_packet_for_gate
 
 STAGE_DIFF_METADATA_KEY = "stage_diff_telemetry"
@@ -92,7 +93,7 @@ def snapshot_turn_stage(
     md = gm_output.get("metadata") if isinstance(gm_output.get("metadata"), dict) else {}
     md_fb = md.get("fallback_provenance") if isinstance(md.get("fallback_provenance"), dict) else {}
     prov = fprov or md_fb
-    fem = gm_output.get("_final_emission_meta") if isinstance(gm_output.get("_final_emission_meta"), dict) else {}
+    fem = read_final_emission_meta_dict(gm_output if isinstance(gm_output, Mapping) else None)
     contracts = pkt.get("contracts") if isinstance(pkt, dict) else None
     c = contracts if isinstance(contracts, dict) else {}
     snap: Dict[str, Any] = {

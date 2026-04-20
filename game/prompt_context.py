@@ -112,6 +112,10 @@ from game.response_policy_contracts import (
 from game.turn_packet import build_turn_packet
 from game.ctir_runtime import get_attached_ctir
 from game.narrative_planning import build_narrative_plan
+from game.state_channels import (
+    assert_no_debug_keys_in_prompt_payload,
+    project_public_payload,
+)
 
 # Configurable limits for deterministic, inspectable compression
 MAX_RECENT_LOG = 5
@@ -3144,6 +3148,7 @@ def build_narration_context(
     recent_log_for_prompt: List[Dict[str, Any]],
     uncertainty_hint: Dict[str, Any] | None = None,
     prompt_profile: str = "full",
+    include_non_public_prompt_keys: bool = False,
 ) -> Dict[str, Any]:
     """Build a compressed narration context payload for GPT.
 
@@ -3163,6 +3168,12 @@ def build_narration_context(
     narrative_authenticity (anti-echo / signal-density / diegetic-shape pressure shipped on response_policy),
     and interaction_continuity (thread / interlocutor anchoring snapshot for enforcement layers);
     see module docstring.
+
+    By default the returned mapping is the **model-facing** bundle: top-level keys are
+    shallow-projected through :func:`game.state_channels.project_public_payload` and
+    checked with :func:`game.state_channels.assert_no_debug_keys_in_prompt_payload`.
+    Set ``include_non_public_prompt_keys=True`` only for tests or tooling that must
+    inspect builder-local mirrors such as ``prompt_debug`` (never for live model input).
     """
     # One session read per narration-context build; adapter below is the mapping seam (not a second authority).
     ctir_obj = get_attached_ctir(session if isinstance(session, dict) else None)
@@ -4220,7 +4231,11 @@ def build_narration_context(
             'first_mention_contract',
         ):
             payload.pop(key, None)
-    return payload
+    if include_non_public_prompt_keys:
+        return payload
+    shipped = project_public_payload(payload)
+    assert_no_debug_keys_in_prompt_payload(shipped)
+    return shipped
 
 # Compatibility residue: ``prompt_context`` remains the public import home for
 # these helpers while implementations live in support-only

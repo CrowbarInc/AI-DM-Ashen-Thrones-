@@ -8,7 +8,11 @@ from __future__ import annotations
 from collections import Counter
 from typing import Any, Mapping, MutableMapping, Sequence
 
-from game.final_emission_meta import read_dead_turn_from_gm_output, summarize_gameplay_validation_for_turn
+from game.final_emission_meta import (
+    read_dead_turn_from_gm_output,
+    read_final_emission_meta_dict,
+    summarize_gameplay_validation_for_turn,
+)
 
 SCHEMA_VERSION = "dead_turn_report_visibility.v1"
 
@@ -24,8 +28,8 @@ def _gm_output_shim_from_snapshot_record(record: Mapping[str, Any]) -> Mapping[s
         return {"_final_emission_meta": fem}
     go = record.get("gm_output")
     if isinstance(go, Mapping):
-        fem2 = go.get("_final_emission_meta")
-        if isinstance(fem2, Mapping):
+        fem2 = read_final_emission_meta_dict(go)
+        if fem2:
             return {"_final_emission_meta": fem2}
     return {}
 

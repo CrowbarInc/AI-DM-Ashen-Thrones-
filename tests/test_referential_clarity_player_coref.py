@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from game.final_emission_meta import read_final_emission_meta_dict
+
 import pytest
 
 from game.interaction_context import rebuild_active_scene_entities
@@ -123,6 +125,6 @@ def test_integration_exploration_alley_doorways_not_replaced():
     out = _finalize_via_turn_support(candidate, session=session, world=world, scene=scene)
     assert out["player_facing_text"] == candidate
     assert "doorway" in out["player_facing_text"].lower()
-    meta = out["_final_emission_meta"]
+    meta = read_final_emission_meta_dict(out)
     assert meta.get("referential_clarity_validation_passed") is True
     assert meta.get("referential_clarity_replacement_applied") is False

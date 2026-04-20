@@ -35,8 +35,7 @@ def test_build_contract_shape_and_defaults():
     assert c["forbid_non_diegetic_action_prompting"] is True
     assert c["response_type_required"] == "neutral_narration"
     assert c["interaction_kind"] == "explore"
-    assert c["debug_inputs"]["source"] == "test"
-    assert c["debug_reason"] == "unit_test"
+    assert "debug_inputs" not in c and "debug_reason" not in c
 
 
 # --- PASS cases ---

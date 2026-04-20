@@ -140,13 +140,17 @@ def build_player_facing_narration_purity_contract(
     debug_inputs: Mapping[str, Any] | None = None,
     debug_reason: str | None = None,
 ) -> Dict[str, Any]:
-    """Assemble inspectable narration-purity policy (deterministic, no world mutation)."""
+    """Assemble inspectable narration-purity policy (deterministic, no world mutation).
+
+    ``debug_inputs`` / ``debug_reason`` are accepted for call-site compatibility but are
+    not included in the returned mapping (prompt-lane public contract only).
+    """
     ik = _clean_str(interaction_kind).lower() or None
     rtr = _clean_str(response_type_required) if response_type_required is not None else ""
-    di: Dict[str, Any] = {}
-    if isinstance(debug_inputs, Mapping):
-        di = {str(k): v for k, v in debug_inputs.items()}
-    dr = _clean_str(debug_reason) if debug_reason else "player_facing_narration_purity: default_strict_diegetic"
+    # debug_inputs / debug_reason are accepted for call-site compatibility and local
+    # inspection only; they are intentionally omitted from the shipped prompt-facing dict.
+    _ = debug_inputs
+    _ = debug_reason
     return {
         "enabled": bool(enabled),
         "diegetic_only": bool(diegetic_only),
@@ -159,8 +163,6 @@ def build_player_facing_narration_purity_contract(
         "forbid_non_diegetic_action_prompting": bool(forbid_non_diegetic_action_prompting),
         "response_type_required": rtr or None,
         "interaction_kind": ik,
-        "debug_inputs": di,
-        "debug_reason": dr,
     }
 
 

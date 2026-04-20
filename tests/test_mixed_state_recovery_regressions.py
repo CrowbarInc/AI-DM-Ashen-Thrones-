@@ -4,6 +4,10 @@ Failure blocks intentionally echo the fields needed when manual runs disagree wi
 """
 from __future__ import annotations
 
+from game.final_emission_meta import read_final_emission_meta_dict
+
+from game.narrative_authenticity_eval import _extract_final_emission_meta
+
 import json
 from pathlib import Path
 from typing import Any, Callable
@@ -409,7 +413,8 @@ def test_emergent_vocative_repair_keeps_owner_under_dialogue_contract(
     pl = payloads[2]
     res = pl.get("resolution") if isinstance(pl.get("resolution"), dict) else {}
     gm = pl.get("gm_output") if isinstance(pl.get("gm_output"), dict) else {}
-    meta = gm.get("_final_emission_meta") if isinstance(gm.get("_final_emission_meta"), dict) else {}
+    # API/public gm_output is public-only; meta lives in gm_output_debug.
+    meta = _extract_final_emission_meta(pl) or {}
     try:
         assert res.get("kind") in {"question", "social_probe"}
         soc = res.get("social") if isinstance(res.get("social"), dict) else {}

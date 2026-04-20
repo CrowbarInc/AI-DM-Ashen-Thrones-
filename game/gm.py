@@ -4477,6 +4477,9 @@ def build_messages(
             pdbg = payload.get("prompt_debug")
             if isinstance(pdbg, dict) and isinstance(pdbg.get("conversational_memory"), dict):
                 em["conversational_memory"] = dict(pdbg["conversational_memory"])
+            elif isinstance(scm, list):
+                # Model-facing narration payloads omit ``prompt_debug``; preserve a minimal mirror.
+                em["conversational_memory"] = {"selected_count": len(scm)}
         _soc_esc = (resolution.get("social") or {}).get("social_escalation")
         if isinstance(_soc_esc, dict) and int(_soc_esc.get("escalation_level") or 0) >= 2:
             payload["instructions"] = list(payload.get("instructions", [])) + [

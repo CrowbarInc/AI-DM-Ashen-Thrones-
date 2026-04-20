@@ -33,6 +33,7 @@ from game.diegetic_fallback_narration import (
     render_travel_arrival_fallback_line,
 )
 from game.fallback_provenance_debug import preserve_fallback_provenance_metadata
+from game.final_emission_meta import read_final_emission_meta_dict
 from game.stage_diff_telemetry import (
     record_stage_snapshot,
     record_stage_transition,
@@ -520,7 +521,7 @@ def prior_context_separation_trouble_signals(gm_output: Optional[Dict[str, Any]]
         return False, []
     raw: List[str] = []
     for blob, prefix in (
-        (gm_output.get("_final_emission_meta"), "_final_emission_meta"),
+        (read_final_emission_meta_dict(gm_output), "_final_emission_meta"),
         (gm_output.get("metadata"), "metadata"),
         (gm_output.get("trace"), "trace"),
         (gm_output, "gm_root"),
@@ -646,7 +647,7 @@ def _fill_fallback_behavior_retry_debug_sink(
         sink["retry_fallback_behavior_uncertainty_mode"] = fb_contract.get("uncertainty_mode")
         sink["retry_fallback_behavior_prefer_partial"] = bool(fb_contract.get("prefer_partial_over_question"))
 
-    meta = gm_d.get("_final_emission_meta") if isinstance(gm_d.get("_final_emission_meta"), dict) else {}
+    meta = read_final_emission_meta_dict(gm_d)
     sink["retry_fallback_behavior_checked"] = bool(meta.get("fallback_behavior_checked"))
     sink["retry_fallback_behavior_failed"] = bool(meta.get("fallback_behavior_failed"))
     sink["retry_fallback_behavior_repaired"] = bool(meta.get("fallback_behavior_repaired"))
@@ -1829,7 +1830,7 @@ def _minimal_repair_context(
     raw_first = visible[0] if visible else ""
     first_visible = _clean_scene_detail(raw_first) if raw_first else ""
 
-    meta = gm_d.get("_final_emission_meta") if isinstance(gm_d.get("_final_emission_meta"), dict) else {}
+    meta = read_final_emission_meta_dict(gm_d)
     ic = inspect_interaction_context(sess) if sess else {}
     interlocutor_raw = str(
         meta.get("active_interlocutor_id")
@@ -2038,15 +2039,15 @@ def _preserve_social_continuity_fields(
 
     preserved: List[str] = []
     merged: Dict[str, Any] = {}
-    cur = dst.get("_final_emission_meta")
-    if isinstance(cur, dict):
+    cur = read_final_emission_meta_dict(dst)
+    if cur:
         merged = dict(cur)
 
     for src in sources:
         if not isinstance(src, dict):
             continue
-        sm = src.get("_final_emission_meta")
-        if not isinstance(sm, dict):
+        sm = read_final_emission_meta_dict(src)
+        if not sm:
             continue
         for key in _FINAL_EMISSION_META_CONTINUITY_KEYS:
             if key not in sm:

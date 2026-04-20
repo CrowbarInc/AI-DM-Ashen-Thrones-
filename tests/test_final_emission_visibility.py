@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from game.final_emission_meta import read_final_emission_meta_dict
+
 from copy import deepcopy
 
 import pytest
@@ -141,12 +143,12 @@ def test_pipeline_replaces_offscene_known_npc_reference():
         "visibility_enforcement_replaced",
         "visibility_violation:unseen_entity_reference",
     ]
-    assert out["_final_emission_meta"]["visibility_validation_passed"] is False
-    assert out["_final_emission_meta"]["visibility_replacement_applied"] is True
-    assert out["_final_emission_meta"]["visibility_violation_kinds"] == [
+    assert read_final_emission_meta_dict(out)["visibility_validation_passed"] is False
+    assert read_final_emission_meta_dict(out)["visibility_replacement_applied"] is True
+    assert read_final_emission_meta_dict(out)["visibility_violation_kinds"] == [
         "unseen_entity_reference",
     ]
-    assert out["_final_emission_meta"]["visibility_checked_entities"] == [
+    assert read_final_emission_meta_dict(out)["visibility_checked_entities"] == [
         {
             "entity_id": "lord_aldric",
             "matched_aliases": ["lord aldric"],
@@ -167,10 +169,10 @@ def test_pipeline_allows_visible_npc_reference():
 
     assert out["player_facing_text"] == candidate
     assert out["tags"] == []
-    assert out["_final_emission_meta"]["visibility_validation_passed"] is True
-    assert out["_final_emission_meta"]["visibility_replacement_applied"] is False
-    assert out["_final_emission_meta"]["visibility_violation_kinds"] == []
-    assert out["_final_emission_meta"]["visibility_checked_entities"] == [
+    assert read_final_emission_meta_dict(out)["visibility_validation_passed"] is True
+    assert read_final_emission_meta_dict(out)["visibility_replacement_applied"] is False
+    assert read_final_emission_meta_dict(out)["visibility_violation_kinds"] == []
+    assert read_final_emission_meta_dict(out)["visibility_checked_entities"] == [
         {
             "entity_id": "guard_captain",
             "matched_aliases": ["guard captain"],
@@ -192,10 +194,10 @@ def test_pipeline_allows_active_interlocutor_reference():
 
     assert out["player_facing_text"] == candidate
     assert out["tags"] == []
-    assert out["_final_emission_meta"]["active_interlocutor_id"] == "tavern_runner"
-    assert out["_final_emission_meta"]["visibility_validation_passed"] is True
-    assert out["_final_emission_meta"]["visibility_replacement_applied"] is False
-    assert out["_final_emission_meta"]["visibility_checked_entities"] == [
+    assert read_final_emission_meta_dict(out)["active_interlocutor_id"] == "tavern_runner"
+    assert read_final_emission_meta_dict(out)["visibility_validation_passed"] is True
+    assert read_final_emission_meta_dict(out)["visibility_replacement_applied"] is False
+    assert read_final_emission_meta_dict(out)["visibility_checked_entities"] == [
         {
             "entity_id": "tavern_runner",
             "matched_aliases": ["tavern runner"],
@@ -219,12 +221,12 @@ def test_pipeline_replaces_hidden_fact_assertion():
         "visibility_enforcement_replaced",
         "visibility_violation:undiscovered_fact_assertion",
     ]
-    assert out["_final_emission_meta"]["visibility_validation_passed"] is False
-    assert out["_final_emission_meta"]["visibility_replacement_applied"] is True
-    assert out["_final_emission_meta"]["visibility_violation_kinds"] == [
+    assert read_final_emission_meta_dict(out)["visibility_validation_passed"] is False
+    assert read_final_emission_meta_dict(out)["visibility_replacement_applied"] is True
+    assert read_final_emission_meta_dict(out)["visibility_violation_kinds"] == [
         "undiscovered_fact_assertion",
     ]
-    assert out["_final_emission_meta"]["visibility_checked_facts"] == [
+    assert read_final_emission_meta_dict(out)["visibility_checked_facts"] == [
         {
             "kind": "hidden_fact_strings",
             "fact": "the checkpoint taxes are funding an ash cowl payoff",
@@ -249,12 +251,12 @@ def test_pipeline_replaces_discoverable_but_undiscovered_fact_assertion():
         "visibility_enforcement_replaced",
         "visibility_violation:undiscovered_fact_assertion",
     ]
-    assert out["_final_emission_meta"]["visibility_validation_passed"] is False
-    assert out["_final_emission_meta"]["visibility_replacement_applied"] is True
-    assert out["_final_emission_meta"]["visibility_violation_kinds"] == [
+    assert read_final_emission_meta_dict(out)["visibility_validation_passed"] is False
+    assert read_final_emission_meta_dict(out)["visibility_replacement_applied"] is True
+    assert read_final_emission_meta_dict(out)["visibility_violation_kinds"] == [
         "undiscovered_fact_assertion",
     ]
-    assert out["_final_emission_meta"]["visibility_checked_facts"] == [
+    assert read_final_emission_meta_dict(out)["visibility_checked_facts"] == [
         {
             "kind": "discoverable_fact_strings",
             "fact": "the missing patrol was last seen near the old stone bridge",
@@ -275,10 +277,10 @@ def test_pipeline_allows_visible_fact_assertion():
 
     assert out["player_facing_text"] == VISIBLE_FACT
     assert out["tags"] == []
-    assert out["_final_emission_meta"]["visibility_validation_passed"] is True
-    assert out["_final_emission_meta"]["visibility_replacement_applied"] is False
-    assert out["_final_emission_meta"]["visibility_violation_kinds"] == []
-    assert out["_final_emission_meta"]["visibility_checked_facts"] == [
+    assert read_final_emission_meta_dict(out)["visibility_validation_passed"] is True
+    assert read_final_emission_meta_dict(out)["visibility_replacement_applied"] is False
+    assert read_final_emission_meta_dict(out)["visibility_violation_kinds"] == []
+    assert read_final_emission_meta_dict(out)["visibility_checked_facts"] == [
         {
             "kind": "visible_fact_strings",
             "fact": "a brazier throws orange sparks over the checkpoint",
@@ -297,7 +299,7 @@ def test_pipeline_visibility_metadata_captures_entity_and_fact_matches():
         scene=scene,
     )
 
-    meta = out["_final_emission_meta"]
+    meta = read_final_emission_meta_dict(out)
     _assert_grounded_visibility_stock_fallback(out["player_facing_text"])
     assert meta["visibility_validation_passed"] is False
     assert meta["visibility_replacement_applied"] is True
@@ -368,7 +370,7 @@ def test_pipeline_replaces_pronoun_before_first_explicit_entity():
     out = _finalize_via_turn_support(candidate, session=session, world=world, scene=scene)
 
     assert out["player_facing_text"] != candidate
-    meta = out["_final_emission_meta"]
+    meta = read_final_emission_meta_dict(out)
     assert meta["first_mention_validation_passed"] is False
     assert meta["first_mention_replacement_applied"] is True
     assert "pronoun_before_first_explicit_entity" in meta["first_mention_violation_kinds"]
@@ -386,7 +388,7 @@ def test_pipeline_replaces_unearned_familiarity_first_intro():
     out = _finalize_via_turn_support(candidate, session=session, world=world, scene=scene)
 
     assert out["player_facing_text"] != candidate
-    meta = out["_final_emission_meta"]
+    meta = read_final_emission_meta_dict(out)
     assert meta["first_mention_validation_passed"] is False
     assert meta["first_mention_replacement_applied"] is True
     assert "first_mention_unearned_familiarity" in meta["first_mention_violation_kinds"]
@@ -399,7 +401,7 @@ def test_pipeline_replaces_first_mention_missing_grounding():
     out = _finalize_via_turn_support(candidate, session=session, world=world, scene=scene)
 
     assert out["player_facing_text"] != candidate
-    meta = out["_final_emission_meta"]
+    meta = read_final_emission_meta_dict(out)
     assert meta["first_mention_validation_passed"] is False
     assert meta["first_mention_replacement_applied"] is True
     assert "first_mention_missing_grounding" in meta["first_mention_violation_kinds"]
@@ -412,7 +414,7 @@ def test_pipeline_allows_grounded_explicit_first_intro():
     out = _finalize_via_turn_support(candidate, session=session, world=world, scene=scene)
 
     assert out["player_facing_text"] == candidate
-    meta = out["_final_emission_meta"]
+    meta = read_final_emission_meta_dict(out)
     assert meta["first_mention_validation_passed"] is True
     assert meta["first_mention_replacement_applied"] is False
     assert meta["first_mention_violation_kinds"] == []
@@ -426,7 +428,7 @@ def test_pipeline_allows_grounded_active_interlocutor_intro():
     out = _finalize_via_turn_support(candidate, session=session, world=world, scene=scene)
 
     assert out["player_facing_text"] == candidate
-    meta = out["_final_emission_meta"]
+    meta = read_final_emission_meta_dict(out)
     assert meta["first_mention_validation_passed"] is True
     assert meta["first_mention_replacement_applied"] is False
     assert meta["active_interlocutor_id"] == "tavern_runner"
@@ -442,7 +444,7 @@ def test_pipeline_allows_opening_scene_composition_with_later_grounded_first_ent
     out = _finalize_via_turn_support(candidate, session=session, world=world, scene=scene)
 
     assert out["player_facing_text"] == candidate
-    meta = out["_final_emission_meta"]
+    meta = read_final_emission_meta_dict(out)
     assert meta["first_mention_validation_passed"] is True
     assert meta["first_mention_replacement_applied"] is False
     assert meta["first_mention_violation_kinds"] == []
@@ -454,7 +456,7 @@ def test_pipeline_first_mention_metadata_records_checked_entities():
 
     out = _finalize_via_turn_support(candidate, session=session, world=world, scene=scene)
 
-    meta = out["_final_emission_meta"]
+    meta = read_final_emission_meta_dict(out)
     checked = meta["first_mention_checked_entities"]
     assert isinstance(checked, list)
     assert checked
@@ -473,7 +475,7 @@ def test_pipeline_visibility_failure_skips_first_mention_but_keeps_default_meta_
     out = _finalize_via_turn_support(candidate, session=session, world=world, scene=scene)
 
     _assert_grounded_visibility_stock_fallback(out["player_facing_text"])
-    meta = out["_final_emission_meta"]
+    meta = read_final_emission_meta_dict(out)
     _assert_first_mention_default_meta_shape(meta)
     _assert_referential_clarity_default_meta_shape(meta)
     assert meta["visibility_validation_passed"] is False
@@ -500,7 +502,7 @@ def test_pipeline_first_mention_fallback_also_satisfies_gate_when_replacement_ne
 
     out = _finalize_via_turn_support(candidate, session=session, world=world, scene=scene)
 
-    meta = out["_final_emission_meta"]
+    meta = read_final_emission_meta_dict(out)
     assert meta["first_mention_replacement_applied"] is True
     validation = validate_player_facing_first_mentions(
         out["player_facing_text"],
@@ -517,7 +519,7 @@ def test_pipeline_opening_scene_pronoun_failure_prefers_grounded_visible_scene_f
 
     out = _finalize_via_turn_support(candidate, session=session, world=world, scene=scene)
 
-    meta = out["_final_emission_meta"]
+    meta = read_final_emission_meta_dict(out)
     assert meta["first_mention_replacement_applied"] is True
     assert out["player_facing_text"] != GLOBAL_VISIBILITY_FALLBACK
     assert "guard captain" in out["player_facing_text"].lower()
@@ -535,7 +537,7 @@ def test_pipeline_composed_scene_intro_avoids_repeated_trivial_verbs_when_fact_b
     out = _finalize_via_turn_support(candidate, session=session, world=world, scene=scene)
 
     text = out["player_facing_text"].lower()
-    meta = out["_final_emission_meta"]
+    meta = read_final_emission_meta_dict(out)
     assert meta["first_mention_replacement_applied"] is True
     assert meta["first_mention_fallback_strategy"] == "composed_visible_scene_intro"
     assert meta["final_emitted_source"] == "composed_visible_scene_intro"
@@ -558,7 +560,7 @@ def test_pipeline_visibility_and_first_mention_metadata_coexist():
 
     out = _finalize_via_turn_support(candidate, session=session, world=world, scene=scene)
 
-    meta = out["_final_emission_meta"]
+    meta = read_final_emission_meta_dict(out)
     assert "visibility_validation_passed" in meta
     assert "visibility_replacement_applied" in meta
     assert "visibility_violation_kinds" in meta
@@ -576,7 +578,7 @@ def test_pipeline_referential_clarity_allows_single_named_referent_followed_by_p
     out = _finalize_via_turn_support(candidate, session=session, world=world, scene=scene)
 
     assert out["player_facing_text"] == candidate
-    meta = out["_final_emission_meta"]
+    meta = read_final_emission_meta_dict(out)
     _assert_referential_clarity_default_meta_shape(meta)
     assert meta["referential_clarity_validation_passed"] is True
     assert meta["referential_clarity_replacement_applied"] is False
@@ -591,7 +593,7 @@ def test_pipeline_referential_clarity_allows_singular_they_for_single_local_pers
     out = _finalize_via_turn_support(candidate, session=session, world=world, scene=scene)
 
     assert out["player_facing_text"] == candidate
-    meta = out["_final_emission_meta"]
+    meta = read_final_emission_meta_dict(out)
     _assert_referential_clarity_default_meta_shape(meta)
     assert meta["referential_clarity_validation_passed"] is True
     assert meta["referential_clarity_replacement_applied"] is False
@@ -605,7 +607,7 @@ def test_pipeline_referential_clarity_replaces_same_sentence_ambiguous_pronoun()
     out = _finalize_via_turn_support(candidate, session=session, world=world, scene=scene)
 
     assert out["player_facing_text"] != candidate
-    meta = out["_final_emission_meta"]
+    meta = read_final_emission_meta_dict(out)
     assert meta["referential_clarity_validation_passed"] is False
     assert meta["referential_clarity_replacement_applied"] is True
     assert "ambiguous_entity_reference" in meta["referential_clarity_violation_kinds"]
@@ -620,7 +622,7 @@ def test_pipeline_referential_clarity_replaces_next_sentence_ambiguous_pronoun()
     out = _finalize_via_turn_support(candidate, session=session, world=world, scene=scene)
 
     assert out["player_facing_text"] != candidate
-    meta = out["_final_emission_meta"]
+    meta = read_final_emission_meta_dict(out)
     assert meta["referential_clarity_validation_passed"] is False
     assert meta["referential_clarity_replacement_applied"] is True
     assert "ambiguous_entity_reference" in meta["referential_clarity_violation_kinds"]
@@ -633,7 +635,7 @@ def test_pipeline_referential_clarity_allows_explicit_reanchor():
     out = _finalize_via_turn_support(candidate, session=session, world=world, scene=scene)
 
     assert out["player_facing_text"] == candidate
-    meta = out["_final_emission_meta"]
+    meta = read_final_emission_meta_dict(out)
     assert meta["referential_clarity_validation_passed"] is True
     assert meta["referential_clarity_replacement_applied"] is False
 
@@ -644,7 +646,7 @@ def test_pipeline_referential_clarity_allows_descriptor_reanchor_when_unique():
 
     out = _finalize_via_turn_support(candidate, session=session, world=world, scene=scene)
 
-    meta = out["_final_emission_meta"]
+    meta = read_final_emission_meta_dict(out)
     _assert_referential_clarity_default_meta_shape(meta)
     assert out["player_facing_text"] == candidate
     assert meta["referential_clarity_validation_passed"] is True
@@ -669,7 +671,7 @@ def test_pipeline_referential_clarity_replaces_ambiguous_descriptor_reanchor():
 
     out = _finalize_via_turn_support(candidate, session=session, world=world, scene=scene)
 
-    meta = out["_final_emission_meta"]
+    meta = read_final_emission_meta_dict(out)
     _assert_referential_clarity_default_meta_shape(meta)
     assert out["player_facing_text"] != candidate
     assert meta["referential_clarity_validation_passed"] is False
@@ -684,7 +686,7 @@ def test_pipeline_referential_clarity_allows_unique_nonperson_pronoun():
 
     out = _finalize_via_turn_support(candidate, session=session, world=world, scene=scene)
 
-    meta = out["_final_emission_meta"]
+    meta = read_final_emission_meta_dict(out)
     _assert_referential_clarity_default_meta_shape(meta)
     assert out["player_facing_text"] == candidate
     assert meta["referential_clarity_validation_passed"] is True
@@ -697,7 +699,7 @@ def test_pipeline_referential_clarity_replaces_ambiguous_nonperson_pronoun():
 
     out = _finalize_via_turn_support(candidate, session=session, world=world, scene=scene)
 
-    meta = out["_final_emission_meta"]
+    meta = read_final_emission_meta_dict(out)
     _assert_referential_clarity_default_meta_shape(meta)
     assert out["player_facing_text"] != candidate
     assert meta["referential_clarity_validation_passed"] is False
@@ -712,7 +714,7 @@ def test_pipeline_referential_clarity_replaces_neuter_pronoun_in_person_only_con
 
     out = _finalize_via_turn_support(candidate, session=session, world=world, scene=scene)
 
-    meta = out["_final_emission_meta"]
+    meta = read_final_emission_meta_dict(out)
     assert out["player_facing_text"] != candidate
     assert meta["referential_clarity_validation_passed"] is False
     assert meta["referential_clarity_replacement_applied"] is True
@@ -725,7 +727,7 @@ def test_pipeline_referential_clarity_allows_clear_quoted_speaker_tag():
 
     out = _finalize_via_turn_support(candidate, session=session, world=world, scene=scene)
 
-    meta = out["_final_emission_meta"]
+    meta = read_final_emission_meta_dict(out)
     _assert_referential_clarity_default_meta_shape(meta)
     assert out["player_facing_text"] == candidate
     assert meta["referential_clarity_validation_passed"] is True
@@ -738,7 +740,7 @@ def test_pipeline_referential_clarity_replaces_ambiguous_quoted_speaker_tag():
 
     out = _finalize_via_turn_support(candidate, session=session, world=world, scene=scene)
 
-    meta = out["_final_emission_meta"]
+    meta = read_final_emission_meta_dict(out)
     assert out["player_facing_text"] != candidate
     assert meta["referential_clarity_validation_passed"] is False
     assert meta["referential_clarity_replacement_applied"] is True
@@ -753,7 +755,7 @@ def test_pipeline_referential_clarity_replaces_referent_drift_after_new_competit
     out = _finalize_via_turn_support(candidate, session=session, world=world, scene=scene)
 
     assert out["player_facing_text"] != candidate
-    meta = out["_final_emission_meta"]
+    meta = read_final_emission_meta_dict(out)
     assert meta["referential_clarity_validation_passed"] is False
     assert meta["referential_clarity_replacement_applied"] is True
     assert any(kind in meta["referential_clarity_violation_kinds"] for kind in ("referent_drift", "ambiguous_entity_reference"))
@@ -765,7 +767,7 @@ def test_pipeline_referential_clarity_replaces_singular_they_with_multiple_activ
 
     out = _finalize_via_turn_support(candidate, session=session, world=world, scene=scene)
 
-    meta = out["_final_emission_meta"]
+    meta = read_final_emission_meta_dict(out)
     _assert_referential_clarity_default_meta_shape(meta)
     assert out["player_facing_text"] != candidate
     assert meta["referential_clarity_validation_passed"] is False
@@ -780,7 +782,7 @@ def test_pipeline_referential_clarity_metadata_shape_always_present_on_pass():
 
     out = _finalize_via_turn_support(candidate, session=session, world=world, scene=scene)
 
-    meta = out["_final_emission_meta"]
+    meta = read_final_emission_meta_dict(out)
     _assert_referential_clarity_default_meta_shape(meta)
     assert isinstance(meta["referential_clarity_checked_entities"], list)
     assert isinstance(meta["referential_clarity_violation_sample"], list)
@@ -1074,7 +1076,7 @@ def test_finalization_pipeline_metadata_for_micro_smoothing():
         world=world,
         scene=scene,
     )
-    fem = repaired_out["_final_emission_meta"]
+    fem = read_final_emission_meta_dict(repaired_out)
     if fem.get("final_emission_fast_path_used") is True:
         assert fem["sentence_decompression_applied"] is False
         assert fem["sentence_fragment_repair_applied"] is False
@@ -1090,6 +1092,6 @@ def test_finalization_pipeline_metadata_for_micro_smoothing():
         world=world,
         scene=scene,
     )
-    assert plain_out["_final_emission_meta"]["sentence_decompression_applied"] is False
-    assert plain_out["_final_emission_meta"]["sentence_fragment_repair_applied"] is False
-    assert plain_out["_final_emission_meta"]["sentence_micro_smoothing_applied"] is False
+    assert read_final_emission_meta_dict(plain_out)["sentence_decompression_applied"] is False
+    assert read_final_emission_meta_dict(plain_out)["sentence_fragment_repair_applied"] is False
+    assert read_final_emission_meta_dict(plain_out)["sentence_micro_smoothing_applied"] is False

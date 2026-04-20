@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from game.final_emission_meta import read_final_emission_meta_dict
+
 import pytest
 
 from game.fallback_provenance_debug import attach_upstream_fast_fallback_provenance
@@ -48,7 +50,7 @@ def test_upstream_fast_fallback_pregate_overwrite_contained():
     assert "gate stands closed" in (out.get("player_facing_text") or "").lower()
     prov = (out.get("metadata") or {}).get("fallback_provenance") or {}
     assert prov.get("overwrite_containment_applied") == "pre_gate"
-    trace = (out.get("_final_emission_meta") or {}).get("fallback_provenance_trace") or {}
+    trace = (read_final_emission_meta_dict(out) or {}).get("fallback_provenance_trace") or {}
     assert trace.get("gate_exit_vs_selector_match") is True
 
 
@@ -72,7 +74,7 @@ def test_upstream_fast_fallback_in_finalize_overwrite_contained(monkeypatch: pyt
     assert "Rain drums" in (out.get("player_facing_text") or "")
     prov = (out.get("metadata") or {}).get("fallback_provenance") or {}
     assert prov.get("overwrite_containment_applied") == "in_gate_finalize"
-    trace = (out.get("_final_emission_meta") or {}).get("fallback_provenance_trace") or {}
+    trace = (read_final_emission_meta_dict(out) or {}).get("fallback_provenance_trace") or {}
     assert trace.get("gate_exit_vs_selector_match") is True
 
 
@@ -89,7 +91,7 @@ def test_non_fallback_output_has_no_fallback_containment():
         world={},
     )
     assert "fallback_provenance" not in (out.get("metadata") or {})
-    assert (out.get("_final_emission_meta") or {}).get("fallback_overwrite_contained") is None
+    assert (read_final_emission_meta_dict(out) or {}).get("fallback_overwrite_contained") is None
 
 
 def test_upstream_fallback_finalize_strip_survives_containment_fingerprint_mismatch():

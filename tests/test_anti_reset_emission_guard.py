@@ -1,6 +1,8 @@
 """Anti-reset guard: opener-style stock fallbacks must not replay during established local exchange."""
 from __future__ import annotations
 
+from game.final_emission_meta import read_final_emission_meta_dict
+
 import pytest
 
 import game.final_emission_gate as _feg
@@ -100,7 +102,7 @@ def test_non_social_replace_uses_anti_reset_not_global_anchor(monkeypatch: pytes
         scene=scene,
         world=world,
     )
-    meta = out.get("_final_emission_meta") if isinstance(out.get("_final_emission_meta"), dict) else {}
+    meta = read_final_emission_meta_dict(out) if isinstance(read_final_emission_meta_dict(out), dict) else {}
     assert meta.get("final_emitted_source") == "anti_reset_local_continuation_fallback"
     assert meta.get("anti_reset_intro_suppressed") is True
     text_norm = " ".join(str(out.get("player_facing_text") or "").lower().split())

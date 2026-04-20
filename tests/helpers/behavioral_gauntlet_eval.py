@@ -7,6 +7,8 @@ Inspects only caller-supplied turn dicts; no GPT calls. Dead-turn policy reads
 
 from __future__ import annotations
 
+from game.final_emission_meta import read_final_emission_meta_dict
+
 from dataclasses import dataclass, field
 from typing import Any, Iterable, Mapping, Sequence
 
@@ -490,7 +492,7 @@ def _gm_output_slice_from_row(raw: Mapping[str, Any]) -> Mapping[str, Any] | Non
     go = raw.get("gm_output")
     if isinstance(go, Mapping):
         return go
-    fem = raw.get("_final_emission_meta")
+    fem = read_final_emission_meta_dict(raw)
     if isinstance(fem, Mapping) and isinstance(fem.get("dead_turn"), Mapping):
         return {"_final_emission_meta": fem}
     return None

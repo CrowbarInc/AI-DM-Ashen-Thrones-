@@ -8,6 +8,8 @@ than prompt-context derivation.
 """
 from __future__ import annotations
 
+from game.final_emission_meta import read_final_emission_meta_dict
+
 import importlib
 
 import pytest
@@ -648,7 +650,7 @@ def test_response_delta_runs_after_answer_completeness_non_social():
         scene_id="frontier_gate",
         world={},
     )
-    meta = out.get("_final_emission_meta") or {}
+    meta = read_final_emission_meta_dict(out) or {}
     assert meta.get("answer_completeness_failed") is True
     assert meta.get("response_delta_skip_reason") == "answer_completeness_failed"
 
@@ -682,7 +684,7 @@ def test_ac_repair_precedence_then_delta_on_repaired_text():
         scene_id="frontier_gate",
         world={},
     )
-    meta = out.get("_final_emission_meta") or {}
+    meta = read_final_emission_meta_dict(out) or {}
     assert meta.get("answer_completeness_repaired") is True
     assert meta.get("response_delta_checked") is True
     assert meta.get("response_delta_failed") is False
@@ -702,7 +704,7 @@ def test_final_emitted_source_reflects_response_delta_repair_mode():
         scene_id="frontier_gate",
         world={},
     )
-    meta = out.get("_final_emission_meta") or {}
+    meta = read_final_emission_meta_dict(out) or {}
     assert meta.get("response_delta_repaired") is True
     assert meta.get("final_emitted_source") == meta.get("response_delta_repair_mode")
 
@@ -724,7 +726,7 @@ def test_response_delta_unrepaired_failure_triggers_gate_replace_reason():
         scene_id="frontier_gate",
         world={},
     )
-    meta = out.get("_final_emission_meta") or {}
+    meta = read_final_emission_meta_dict(out) or {}
     assert meta.get("final_route") == "replaced"
     sample = meta.get("rejection_reasons_sample") or []
     assert "response_delta_unsatisfied_after_repair" in sample

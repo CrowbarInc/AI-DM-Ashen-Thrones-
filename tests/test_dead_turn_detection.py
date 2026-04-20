@@ -72,7 +72,9 @@ def test_gate_packages_non_dead_snapshot_for_ordinary_candidate() -> None:
         scene_id="scene_investigate",
         world={},
     )
-    dt = (out.get("_final_emission_meta") or {}).get("dead_turn") or {}
+    from game.final_emission_meta import read_final_emission_meta_dict
+
+    dt = (read_final_emission_meta_dict(out) or {}).get("dead_turn") or {}
     assert dt.get("is_dead_turn") is False
     assert dt.get("dead_turn_class") == "none"
     assert dt.get("validation_playable") is True

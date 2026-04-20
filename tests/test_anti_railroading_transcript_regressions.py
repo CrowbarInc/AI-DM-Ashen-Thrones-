@@ -1,6 +1,8 @@
 """Transcript-style regressions for anti-railroading + final gate (quoted dialogue, hard constraints)."""
 from __future__ import annotations
 
+from game.final_emission_meta import read_final_emission_meta_dict
+
 import pytest
 
 import game.final_emission_gate as feg
@@ -22,7 +24,7 @@ def test_quoted_npc_line_does_not_trigger_forced_direction_on_outer_narration(mo
         scene_id="dock",
         world={},
     )
-    meta = out.get("_final_emission_meta") or {}
+    meta = read_final_emission_meta_dict(out) or {}
     assert meta.get("anti_railroading_repaired") is False
     assert '"' in (out.get("player_facing_text") or "")
 

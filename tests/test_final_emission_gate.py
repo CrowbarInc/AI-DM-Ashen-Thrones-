@@ -21,6 +21,8 @@ coverage once the orchestration contract is already owned here.
 
 from __future__ import annotations
 
+from game.final_emission_meta import read_emission_debug_lane, read_final_emission_meta_dict
+
 import json
 
 import pytest
@@ -194,7 +196,7 @@ def test_attach_interaction_continuity_validation_populates_debug_and_final_meta
 
     icv = out["metadata"]["emission_debug"]["interaction_continuity_validation"]
     _assert_interaction_continuity_validation_shape(icv)
-    assert out["_final_emission_meta"]["interaction_continuity_validation"] is icv
+    assert read_final_emission_meta_dict(out)["interaction_continuity_validation"] is icv
     assert resolution["metadata"]["emission_debug"]["interaction_continuity_validation"] is icv
 
 
@@ -357,7 +359,7 @@ def test_apply_final_emission_gate_runs_response_delta_before_speaker_enforcemen
     assert order.index("response_delta") < order.index("speaker_contract")
     em = (out.get("metadata") or {}).get("emission_debug") or {}
     assert "speaker_contract_enforcement" in em
-    reason = (out.get("_final_emission_meta") or {}).get("speaker_contract_enforcement_reason")
+    reason = (read_final_emission_meta_dict(out) or {}).get("speaker_contract_enforcement_reason")
     assert reason == em["speaker_contract_enforcement"]["final_reason_code"]
 
 
@@ -395,7 +397,7 @@ def test_apply_final_emission_gate_strict_social_contract_missing_skips_tighteni
     )
     text = out.get("player_facing_text") or ""
     assert "Ragged stranger" in text
-    assert (out.get("_final_emission_meta") or {}).get("speaker_contract_enforcement_reason") == "speaker_contract_match"
+    assert (read_final_emission_meta_dict(out) or {}).get("speaker_contract_enforcement_reason") == "speaker_contract_match"
     payload = ((out.get("metadata") or {}).get("emission_debug") or {}).get("speaker_contract_enforcement") or {}
     assert payload.get("validation", {}).get("details", {}).get("skipped") == "no_contract"
 
@@ -485,7 +487,7 @@ def test_apply_final_emission_gate_scene_state_anchor_location_repair_non_strict
     )
     text = out.get("player_facing_text") or ""
     assert "checkpoint" in text.lower() or "frontier" in text.lower()
-    meta = out.get("_final_emission_meta") or {}
+    meta = read_final_emission_meta_dict(out) or {}
     assert meta.get("scene_state_anchor_repaired") is True
     assert meta.get("scene_state_anchor_repair_mode") in {"location_rebind", "narrator_neutral_scene_rebind"}
     assert meta.get("scene_state_anchor_passed") is True
@@ -561,7 +563,7 @@ def test_strict_social_preserves_speaker_repair_then_applies_anchor_repair(monke
     text = (out.get("player_facing_text") or "").lower()
     assert "tavern runner" in text
     assert "investigate" in text or "scene" in text
-    meta = out.get("_final_emission_meta") or {}
+    meta = read_final_emission_meta_dict(out) or {}
     assert meta.get("scene_state_anchor_repaired") is True
     assert meta.get("scene_state_anchor_repair_mode") == "location_rebind"
 
@@ -650,7 +652,7 @@ def test_non_strict_scene_state_anchor_does_not_strip_prior_objective_repairs(mo
     assert "|AC_OK|" in text
     assert "|RD_OK|" in text
     assert "checkpoint" in text.lower()
-    meta = out.get("_final_emission_meta") or {}
+    meta = read_final_emission_meta_dict(out) or {}
     assert meta.get("answer_completeness_repaired") is True
     assert meta.get("response_delta_repaired") is True
     assert meta.get("scene_state_anchor_repaired") is True
@@ -674,7 +676,7 @@ def test_scene_state_anchor_pass_path_flags_and_matched_kinds():
         world={},
     )
     assert out.get("player_facing_text") == raw
-    meta = out.get("_final_emission_meta") or {}
+    meta = read_final_emission_meta_dict(out) or {}
     assert meta.get("scene_state_anchor_checked") is True
     assert meta.get("scene_state_anchor_passed") is True
     assert meta.get("scene_state_anchor_failed") is False
@@ -833,7 +835,7 @@ def test_apply_final_emission_gate_repairs_malformed_opening_fast_fallback_compo
 
     text = str(out.get("player_facing_text") or "")
     low = text.lower()
-    meta = out.get("_final_emission_meta") or {}
+    meta = read_final_emission_meta_dict(out) or {}
     assert "emergent lord aldric several" not in low
     assert "holds; beside it" not in low
     assert any(token in low for token in ("checkpoint", "gate", "patrol", "rain"))
@@ -907,7 +909,7 @@ def test_final_emission_meta_and_emission_debug_merge_scene_state_anchor(monkeyp
         scene_id="frontier_gate",
         world={},
     )
-    meta = out.get("_final_emission_meta") or {}
+    meta = read_final_emission_meta_dict(out) or {}
     assert meta.get("scene_state_anchor_checked") is True
     assert meta.get("scene_state_anchor_upstream_debug") == upstream
     em = (out.get("metadata") or {}).get("emission_debug") or {}
@@ -954,7 +956,7 @@ def test_validate_scene_state_anchoring_invoked_and_reinvoked_on_repair(monkeypa
     assert len(calls) >= 2
     assert calls[0] == "Fog rolls in."
     assert "beacon" in calls[1].lower()
-    assert out.get("_final_emission_meta", {}).get("scene_state_anchor_passed") is True
+    assert (read_final_emission_meta_dict(out) or {}).get("scene_state_anchor_passed") is True
 
 
 def test_gate_never_invokes_build_scene_state_anchor_contract(monkeypatch):
@@ -1036,7 +1038,7 @@ def test_strict_social_npc_line_with_actor_token_passes_without_anchor_rewrite(m
         scene_id=sid,
         world=world,
     )
-    meta = out.get("_final_emission_meta") or {}
+    meta = read_final_emission_meta_dict(out) or {}
     assert meta.get("scene_state_anchor_repaired") is False
     assert meta.get("scene_state_anchor_passed") is True
 
@@ -1058,7 +1060,7 @@ def test_floating_narration_silence_line_fails_until_repaired():
         world={},
     )
     assert out.get("player_facing_text") != raw
-    assert out.get("_final_emission_meta", {}).get("scene_state_anchor_repaired") is True
+    assert (read_final_emission_meta_dict(out) or {}).get("scene_state_anchor_repaired") is True
 
 
 def test_contract_actor_only_player_action_only_location_only():
@@ -1079,7 +1081,7 @@ def test_contract_actor_only_player_action_only_location_only():
             scene_id="granary_scene",
             world={},
         )
-        meta = out.get("_final_emission_meta") or {}
+        meta = read_final_emission_meta_dict(out) or {}
         assert meta.get("scene_state_anchor_passed") is True
         assert kind in (meta.get("scene_state_anchor_matched_kinds") or [])
 
@@ -1101,7 +1103,7 @@ def test_scene_transition_prefers_location_when_no_actor_tokens():
         scene_id="crossroads",
         world={},
     )
-    m = out.get("_final_emission_meta") or {}
+    m = read_final_emission_meta_dict(out) or {}
     assert m.get("scene_state_anchor_repair_mode") == "location_rebind"
 
 
@@ -1151,7 +1153,7 @@ def test_short_npc_line_grounded_by_actor_token_passes_without_rewrite():
         world={},
     )
     assert "Kara" in (out.get("player_facing_text") or "")
-    m = out.get("_final_emission_meta") or {}
+    m = read_final_emission_meta_dict(out) or {}
     assert m.get("scene_state_anchor_repaired") is False
     assert m.get("scene_state_anchor_passed") is True
 
@@ -1171,7 +1173,7 @@ def test_observational_follow_up_grounded_by_player_action_token():
         scene_id="storeroom",
         world={},
     )
-    m = out.get("_final_emission_meta") or {}
+    m = read_final_emission_meta_dict(out) or {}
     assert m.get("scene_state_anchor_passed") is True
     assert "player_action" in (m.get("scene_state_anchor_matched_kinds") or [])
 
@@ -1189,7 +1191,7 @@ def test_strict_and_non_strict_repair_sync_metadata():
         scene_id="pier",
         world={},
     )
-    ns = non_strict.get("_final_emission_meta") or {}
+    ns = read_final_emission_meta_dict(non_strict) or {}
     em_ns = (non_strict.get("metadata") or {}).get("emission_debug") or {}
     assert ns.get("scene_state_anchor_repaired") is True
     assert em_ns.get("scene_state_anchor_repaired") is True
@@ -1928,7 +1930,7 @@ def test_strict_social_gate_repairs_motive_overclaim_and_keeps_speaker(monkeypat
         world=world,
     )
     text = out.get("player_facing_text") or ""
-    meta = out.get("_final_emission_meta") or {}
+    meta = read_final_emission_meta_dict(out) or {}
     assert meta.get("narrative_authority_repaired") is True
     assert "plans to stall" not in text.lower()
     assert "Tavern Runner" in text
@@ -1963,7 +1965,7 @@ def test_final_emission_gate_marks_non_hostile_escalation_blocked_on_tone_writer
         scene_id="hall",
         world={},
     )
-    meta = out.get("_final_emission_meta") or {}
+    meta = read_final_emission_meta_dict(out) or {}
     assert meta.get("non_hostile_escalation_blocked") is True
     assert meta.get("tone_escalation_violation_before_repair") is True
 
@@ -1993,7 +1995,7 @@ def test_anti_railroading_gate_passes_clean_leads_and_constraints():
             world={},
         )
         assert out.get("player_facing_text") == raw
-        meta = out.get("_final_emission_meta") or {}
+        meta = read_final_emission_meta_dict(out) or {}
         assert meta.get("anti_railroading_repaired") is False
         em = (out.get("metadata") or {}).get("emission_debug") or {}
         assert em.get("anti_railroading", {}).get("validation", {}).get("passed") is True
@@ -2009,7 +2011,7 @@ def test_anti_railroading_gate_repairs_forced_pathing():
     )
     text = out.get("player_facing_text") or ""
     assert "you could head there" in text.lower()
-    meta = out.get("_final_emission_meta") or {}
+    meta = read_final_emission_meta_dict(out) or {}
     assert meta.get("anti_railroading_repaired") is True
 
 
@@ -2027,7 +2029,7 @@ def test_anti_railroading_gate_repairs_exclusive_and_meta_hooks():
             scene_id="s",
             world={},
         )
-        meta = out.get("_final_emission_meta") or {}
+        meta = read_final_emission_meta_dict(out) or {}
         assert meta.get("anti_railroading_repaired") is True, raw
         assert (out.get("player_facing_text") or "").strip() != raw.strip()
 
@@ -2044,7 +2046,7 @@ def test_anti_railroading_resolved_transition_allows_arrival_language():
         world={},
     )
     assert out.get("player_facing_text") == raw
-    assert (out.get("_final_emission_meta") or {}).get("anti_railroading_repaired") is False
+    assert (read_final_emission_meta_dict(out) or {}).get("anti_railroading_repaired") is False
 
 
 def test_anti_railroading_commitment_echo_allowed_when_player_committed():
@@ -2071,7 +2073,7 @@ def test_anti_railroading_quoted_dialogue_not_spuriously_flagged():
         world={},
     )
     assert '"' in (out.get("player_facing_text") or "")
-    meta = out.get("_final_emission_meta") or {}
+    meta = read_final_emission_meta_dict(out) or {}
     assert meta.get("anti_railroading_repaired") is False
 
 
@@ -2088,8 +2090,8 @@ def test_anti_railroading_prompt_context_contract_resolution():
         scene_id="pier",
         world={},
     )
-    assert (out.get("_final_emission_meta") or {}).get("anti_railroading_repaired") is True
-    assert (out.get("_final_emission_meta") or {}).get("anti_railroading_contract_resolution_source") == "shipped"
+    assert (read_final_emission_meta_dict(out) or {}).get("anti_railroading_repaired") is True
+    assert (read_final_emission_meta_dict(out) or {}).get("anti_railroading_contract_resolution_source") == "shipped"
 
 
 def test_anti_railroading_coexists_with_narrative_authority_and_tone():
@@ -2126,7 +2128,7 @@ def test_anti_railroading_coexists_with_narrative_authority_and_tone():
         scene_id="hall",
         world={},
     )
-    meta = out.get("_final_emission_meta") or {}
+    meta = read_final_emission_meta_dict(out) or {}
     assert meta.get("narrative_authority_checked") is True
     assert meta.get("tone_escalation_checked") is True
     assert meta.get("anti_railroading_repaired") is True
@@ -2211,7 +2213,7 @@ def test_anti_railroading_surfaced_lead_mandatory_repair(monkeypatch):
         scene_id="s",
         world={},
     )
-    assert (out.get("_final_emission_meta") or {}).get("anti_railroading_repaired") is True
+    assert (read_final_emission_meta_dict(out) or {}).get("anti_railroading_repaired") is True
     low = (out.get("player_facing_text") or "").lower()
     assert "pressure" in low or "option" in low
 
@@ -2282,7 +2284,7 @@ def test_gate_context_separation_pass_brief_pressure_after_direct_answer(monkeyp
     )
     em = (out.get("metadata") or {}).get("emission_debug") or {}
     assert em.get("context_separation", {}).get("validation", {}).get("passed") is True
-    assert (out.get("_final_emission_meta") or {}).get("final_route") == "accept_candidate"
+    assert (read_final_emission_meta_dict(out) or {}).get("final_route") == "accept_candidate"
 
 
 def test_gate_context_separation_pass_crisis_scene_pressure_focus(monkeypatch):
@@ -2342,7 +2344,7 @@ def test_gate_context_separation_repair_drops_pressure_lead_in(monkeypatch):
         scene_id="market_stall",
         world={},
     )
-    meta = out.get("_final_emission_meta") or {}
+    meta = read_final_emission_meta_dict(out) or {}
     assert meta.get("context_separation_repaired") is True
     assert "drop_lead" in str(meta.get("context_separation_repair_mode") or "")
     assert "two coppers" in (out.get("player_facing_text") or "").lower()
@@ -2365,7 +2367,7 @@ def test_gate_context_separation_fail_pressure_monologue_replaces_non_social(mon
         scene_id="market_stall",
         world={},
     )
-    meta = out.get("_final_emission_meta") or {}
+    meta = read_final_emission_meta_dict(out) or {}
     assert meta.get("context_separation_failed") is True
     assert meta.get("final_route") == "replaced"
 
@@ -2388,7 +2390,7 @@ def test_gate_context_separation_tone_escalation_with_city_pressure_fails(monkey
         scene_id="market_stall",
         world={},
     )
-    meta = out.get("_final_emission_meta") or {}
+    meta = read_final_emission_meta_dict(out) or {}
     assert meta.get("context_separation_failed") is True
     assert "ambient_pressure_forced_tone_shift" in (meta.get("context_separation_failure_reasons") or [])
 
@@ -2408,7 +2410,7 @@ def test_gate_context_separation_substitution_fail_then_replace(monkeypatch):
         scene_id="market_stall",
         world={},
     )
-    meta = out.get("_final_emission_meta") or {}
+    meta = read_final_emission_meta_dict(out) or {}
     assert meta.get("context_separation_failed") is True
     assert meta.get("final_route") == "replaced"
 
@@ -2430,7 +2432,7 @@ def test_gate_context_separation_pressure_overweight_replaces(monkeypatch):
         scene_id="scene",
         world={},
     )
-    meta = out.get("_final_emission_meta") or {}
+    meta = read_final_emission_meta_dict(out) or {}
     assert meta.get("context_separation_failed") is True
     assert "pressure_overweighting" in (meta.get("context_separation_failure_reasons") or [])
 
@@ -2471,7 +2473,7 @@ def test_gate_purity_and_asp_pass_clean_observation(monkeypatch):
         scene_id="market_lane",
         world={},
     )
-    meta = out.get("_final_emission_meta") or {}
+    meta = read_final_emission_meta_dict(out) or {}
     assert meta.get("player_facing_narration_purity_failed") is False
     assert meta.get("answer_shape_primacy_failed") is False
     assert "Rain" in (out.get("player_facing_text") or "")
@@ -2497,7 +2499,7 @@ def test_gate_purity_and_asp_pass_scene_transition_arrival(monkeypatch):
         scene_id="lower_ward",
         world={},
     )
-    meta = out.get("_final_emission_meta") or {}
+    meta = read_final_emission_meta_dict(out) or {}
     assert meta.get("answer_shape_primacy_failed") is False
     assert "emerge" in (out.get("player_facing_text") or "").lower()
 
@@ -2520,7 +2522,7 @@ def test_gate_purity_pass_npc_quoted_command_in_observe(monkeypatch):
         scene_id="gate_yard",
         world={},
     )
-    meta = out.get("_final_emission_meta") or {}
+    meta = read_final_emission_meta_dict(out) or {}
     assert meta.get("player_facing_narration_purity_failed") is False
     assert "gate" in (out.get("player_facing_text") or "").lower()
 
@@ -2543,7 +2545,7 @@ def test_gate_purity_and_asp_pass_action_outcome_then_brief_consequence(monkeypa
         scene_id="alley_door",
         world={},
     )
-    meta = out.get("_final_emission_meta") or {}
+    meta = read_final_emission_meta_dict(out) or {}
     assert meta.get("answer_shape_primacy_failed") is False
     assert "latch" in (out.get("player_facing_text") or "").lower()
 
@@ -2563,7 +2565,7 @@ def test_gate_purity_repairs_scaffold_header_leak(monkeypatch):
         scene_id="arch_lane",
         world={},
     )
-    meta = out.get("_final_emission_meta") or {}
+    meta = read_final_emission_meta_dict(out) or {}
     assert meta.get("player_facing_narration_purity_repaired") is True
     low = (out.get("player_facing_text") or "").lower()
     assert "consequence" not in low
@@ -2585,7 +2587,7 @@ def test_gate_purity_repairs_coaching_language(monkeypatch):
         scene_id="frontier_gate",
         world={},
     )
-    meta = out.get("_final_emission_meta") or {}
+    meta = read_final_emission_meta_dict(out) or {}
     assert meta.get("player_facing_narration_purity_repaired") is True
     assert "weigh what you just tried" not in (out.get("player_facing_text") or "").lower()
 
@@ -2605,7 +2607,7 @@ def test_gate_purity_repairs_ui_label_leak(monkeypatch):
         scene_id="river_arch",
         world={},
     )
-    meta = out.get("_final_emission_meta") or {}
+    meta = read_final_emission_meta_dict(out) or {}
     assert meta.get("player_facing_narration_purity_repaired") is True
     assert "labeled" not in (out.get("player_facing_text") or "").lower()
 
@@ -2628,7 +2630,7 @@ def test_gate_asp_repairs_observe_when_pressure_leads_concrete_observation(monke
         scene_id="lower_ward",
         world={},
     )
-    meta = out.get("_final_emission_meta") or {}
+    meta = read_final_emission_meta_dict(out) or {}
     assert meta.get("answer_shape_primacy_repaired") is True
     text = out.get("player_facing_text") or ""
     assert text.lower().strip().startswith("you hear")
@@ -2649,7 +2651,7 @@ def test_gate_purity_strips_transition_scaffold_on_travel(monkeypatch):
         scene_id="stone_quay",
         world={},
     )
-    meta = out.get("_final_emission_meta") or {}
+    meta = read_final_emission_meta_dict(out) or {}
     assert meta.get("player_facing_narration_purity_repaired") is True
     assert "next beat" not in (out.get("player_facing_text") or "").lower()
     assert "quay" in (out.get("player_facing_text") or "").lower()
@@ -2673,7 +2675,7 @@ def test_gate_asp_triggers_replace_when_no_observation_payload(monkeypatch):
         scene_id="market_square",
         world={},
     )
-    meta = out.get("_final_emission_meta") or {}
+    meta = read_final_emission_meta_dict(out) or {}
     assert meta.get("answer_shape_primacy_failed") is True
     assert meta.get("final_route") == "replaced"
 
@@ -2775,8 +2777,8 @@ def test_non_strict_social_failed_repair_adds_unsatisfied_after_repair_reason(mo
         scene_id="checkpoint",
         world={},
     )
-    meta = out.get("_final_emission_meta") or {}
-    dbg = out.get("debug_notes") or ""
+    meta = read_final_emission_meta_dict(out) or {}
+    dbg = str(read_emission_debug_lane(out).get("debug_notes") or "")
     assert "social_response_structure_unsatisfied_after_repair" in dbg
     assert meta.get("final_route") == "replaced"
     assert "social_response_structure_unsatisfied_after_repair" in (meta.get("rejection_reasons_sample") or [])
@@ -2809,7 +2811,7 @@ def test_strict_social_failed_repair_does_not_add_unsatisfied_after_repair_reaso
         scene_id=sid,
         world=world,
     )
-    meta = out.get("_final_emission_meta") or {}
+    meta = read_final_emission_meta_dict(out) or {}
     txt = out.get("player_facing_text") or ""
     assert "w0" in txt and "w50" in txt
     assert meta.get("social_response_structure_passed") is False
@@ -2831,7 +2833,7 @@ def test_successful_social_response_structure_repair_updates_final_emitted_sourc
         scene_id="gate_yard",
         world={},
     )
-    meta = out.get("_final_emission_meta") or {}
+    meta = read_final_emission_meta_dict(out) or {}
     assert meta.get("social_response_structure_repair_applied") is True
     assert meta.get("social_response_structure_passed") is True
     assert meta.get("final_emitted_source") == "flatten_list_like_dialogue"
@@ -2854,7 +2856,7 @@ def test_social_response_structure_metadata_merged_on_layer_execution(monkeypatc
         scene_id="lane",
         world={},
     )
-    meta = out.get("_final_emission_meta") or {}
+    meta = read_final_emission_meta_dict(out) or {}
     for key in (
         "social_response_structure_checked",
         "social_response_structure_applicable",
@@ -2903,7 +2905,7 @@ def test_response_type_failure_skips_social_response_structure_layer(monkeypatch
         scene_id="lane",
         world={},
     )
-    meta = out.get("_final_emission_meta") or {}
+    meta = read_final_emission_meta_dict(out) or {}
     assert meta.get("social_response_structure_skip_reason") == "response_type_contract_failed"
     assert meta.get("social_response_structure_checked") is False
     assert meta.get("final_route") == "replaced"
@@ -2921,7 +2923,7 @@ def test_action_outcome_turn_social_response_structure_not_applicable(monkeypatc
         scene_id="alley",
         world={},
     )
-    meta = out.get("_final_emission_meta") or {}
+    meta = read_final_emission_meta_dict(out) or {}
     assert meta.get("social_response_structure_applicable") is False
     assert meta.get("social_response_structure_failure_reasons") == []
 
@@ -2955,7 +2957,7 @@ def test_social_response_structure_coexists_with_tone_escalation_layer(monkeypat
         world={},
     )
     assert order.index("social_response_structure") < order.index("tone_escalation")
-    meta = out.get("_final_emission_meta") or {}
+    meta = read_final_emission_meta_dict(out) or {}
     assert "tone_escalation_checked" in meta
     assert meta.get("candidate_validation_passed") is True
 

@@ -13,6 +13,7 @@ from game.final_emission_meta import (
     NARRATIVE_AUTHENTICITY_FEM_KEYS,
     normalize_merged_na_telemetry_for_eval,
     read_dead_turn_from_gm_output,
+    read_final_emission_meta_dict,
     summarize_gameplay_validation_for_turn,
 )
 
@@ -56,11 +57,17 @@ def _reason_codes_from_meta(meta: Mapping[str, Any]) -> Set[str]:
 def _extract_final_emission_meta(response: Mapping[str, Any] | None) -> dict[str, Any]:
     if not isinstance(response, Mapping):
         return {}
+    dbg = response.get("gm_output_debug")
+    if isinstance(dbg, Mapping):
+        lane = dbg.get("emission_debug_lane")
+        if isinstance(lane, Mapping):
+            fem = lane.get("_final_emission_meta")
+            if isinstance(fem, Mapping):
+                return dict(fem)
     gm = response.get("gm_output")
     if not isinstance(gm, Mapping):
         gm = response
-    fem = gm.get("_final_emission_meta")
-    return dict(fem) if isinstance(fem, Mapping) else {}
+    return read_final_emission_meta_dict(gm if isinstance(gm, Mapping) else None)
 
 
 def _finalize_na_eval_with_dead_turn_policy(
@@ -598,8 +605,7 @@ def evaluate_narrative_authenticity(
     repaired = bool(merged.get("narrative_authenticity_repaired") or merged.get("narrative_authenticity_repair_applied"))
     codes = _reason_codes_from_meta(merged)
 
-    gm_for_trace = response.get("gm_output") if isinstance(response, Mapping) else None
-    has_fem_key = isinstance(gm_for_trace, Mapping) and "_final_emission_meta" in gm_for_trace
+    has_fem_key = bool(_extract_final_emission_meta(response))
     has_na_in_meta = bool(meta and any(k in meta for k in _NA_KEYS))
     if not has_fem_key and not has_na_in_meta:
         return _finalize_na_eval_with_dead_turn_policy(

@@ -403,8 +403,12 @@ def test_retry_regeneration_plan_and_prompt_debug_stable() -> None:
         },
     )
     try:
-        ctx_a = build_narration_context(**{**kw, "session": session})
-        ctx_b = build_narration_context(**{**kw, "session": session})
+        ctx_a = build_narration_context(
+            **{**kw, "session": session, "include_non_public_prompt_keys": True}
+        )
+        ctx_b = build_narration_context(
+            **{**kw, "session": session, "include_non_public_prompt_keys": True}
+        )
     finally:
         detach_ctir(session)
 

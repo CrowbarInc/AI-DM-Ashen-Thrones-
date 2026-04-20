@@ -90,7 +90,9 @@ def test_ctir_first_turn_summary_ignores_raw_resolution_kind() -> None:
 def test_no_ctir_session_still_builds() -> None:
     session = dict(_minimal_narration_kwargs()["session"])
     detach_ctir(session)
-    ctx = build_narration_context(**_minimal_narration_kwargs(session=session))
+    ctx = build_narration_context(
+        **_minimal_narration_kwargs(session=session, include_non_public_prompt_keys=True)
+    )
     assert ctx["turn_summary"]["resolution_kind"] == "travel"
     assert ctx.get("narrative_plan") is None
     pd = ctx.get("prompt_debug") or {}
@@ -102,7 +104,7 @@ def test_no_ctir_session_still_builds() -> None:
 def test_ctir_session_attaches_narrative_plan_and_stable_on_repeat() -> None:
     session = dict(_minimal_narration_kwargs()["session"])
     _attach_question_ctir(session)
-    kw = _minimal_narration_kwargs(session=session)
+    kw = _minimal_narration_kwargs(session=session, include_non_public_prompt_keys=True)
     try:
         ctx_a = build_narration_context(**kw)
         ctx_b = build_narration_context(**kw)

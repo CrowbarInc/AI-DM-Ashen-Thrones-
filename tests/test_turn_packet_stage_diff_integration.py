@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from game.final_emission_meta import read_final_emission_meta_dict
+
 from typing import Any, Dict
 
 import pytest
@@ -124,7 +126,7 @@ def test_gate_output_keeps_provenance_packet_and_observability_metadata_together
     assert isinstance(md.get(TURN_PACKET_METADATA_KEY), dict)
     assert isinstance(md.get(STAGE_DIFF_METADATA_KEY), dict)
     assert md.get("preexisting_emission_debug_note") == "keep-me"
-    fem = out.get("_final_emission_meta") or {}
+    fem = read_final_emission_meta_dict(out) or {}
     assert isinstance(fem, dict) and "final_route" in fem
 
 

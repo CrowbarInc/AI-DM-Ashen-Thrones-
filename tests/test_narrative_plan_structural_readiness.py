@@ -96,7 +96,9 @@ def assert_prompt_debug_narrative_plan_is_compact(ctx: dict) -> None:
 def _narration_payload(kw: dict, session: dict):
     """Build ``build_narration_context`` output while CTIR remains attached, then detach."""
     try:
-        yield build_narration_context(**{**kw, "session": session})
+        yield build_narration_context(
+            **{**kw, "session": session, "include_non_public_prompt_keys": True}
+        )
     finally:
         detach_ctir(session)
 

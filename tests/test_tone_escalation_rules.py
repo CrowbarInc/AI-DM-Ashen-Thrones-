@@ -1,6 +1,8 @@
 """Regression tests for tone escalation contract, validator, final gate, and pregate audit."""
 from __future__ import annotations
 
+from game.final_emission_meta import read_final_emission_meta_dict
+
 import pytest
 
 import game.final_emission_gate as feg
@@ -113,7 +115,7 @@ def test_final_gate_downgrades_unsupported_threat() -> None:
         world={},
     )
     text = str(out.get("player_facing_text") or "").lower()
-    meta = out.get("_final_emission_meta") or {}
+    meta = read_final_emission_meta_dict(out) or {}
     assert meta.get("tone_escalation_repaired") is True or "regret" not in text
 
 
@@ -132,7 +134,7 @@ def test_final_gate_downgrades_unsupported_physical() -> None:
         world={},
     )
     text = str(out.get("player_facing_text") or "").lower()
-    assert "shoves" not in text or out.get("_final_emission_meta", {}).get("tone_escalation_repaired") is True
+    assert "shoves" not in text or (read_final_emission_meta_dict(out) or {}).get("tone_escalation_repaired") is True
 
 
 def test_final_gate_repairs_forced_drama_to_grounded_friction() -> None:
@@ -151,7 +153,7 @@ def test_final_gate_repairs_forced_drama_to_grounded_friction() -> None:
     )
     text = str(out.get("player_facing_text") or "").lower()
     assert "chaos erupts" not in text
-    meta = out.get("_final_emission_meta") or {}
+    meta = read_final_emission_meta_dict(out) or {}
     assert meta.get("tone_escalation_violation_before_repair") is True
 
 

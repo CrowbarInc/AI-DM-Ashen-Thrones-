@@ -16,6 +16,9 @@ results, not the practical owner for gate orchestration order.
 """
 from __future__ import annotations
 
+from game.final_emission_meta import read_debug_notes_from_turn_payload, read_final_emission_meta_dict
+from game.narrative_authenticity_eval import _extract_final_emission_meta
+
 import json
 
 import pytest
@@ -303,7 +306,7 @@ def test_chat_targeted_retry_validator_voice_only(tmp_path, monkeypatch):
     low = (data.get("gm_output") or {}).get("player_facing_text", "").lower()
     assert "based on what's established" not in low
     assert "we can determine" not in low
-    assert "retry_strategy:selected=validator_voice" in ((data.get("gm_output") or {}).get("debug_notes") or "")
+    assert "retry_strategy:selected=validator_voice" in read_debug_notes_from_turn_payload(data)
 
 
 # feature: legality
@@ -399,7 +402,7 @@ def test_chat_dialogue_lock_final_output_beats_generic_fillers_and_keeps_contrac
     gm_output = data.get("gm_output") or {}
     text = str(gm_output.get("player_facing_text") or "")
     low = text.lower()
-    meta = gm_output.get("_final_emission_meta") or {}
+    meta = _extract_final_emission_meta(data) or {}
     debug_contract = (data.get("debug") or {}).get("response_type_contract") or {}
     trace_contract = (
         (latest_compact_debug_trace_entry(data.get("debug_traces") or []).get("turn_trace") or {}).get("response_type_contract")
@@ -479,7 +482,7 @@ def test_chat_known_follow_up_bypasses_uncertainty_fallback(tmp_path, monkeypatc
     assert (gm_output.get("player_facing_text") or "").startswith("Lady Misia is near the tavern entrance.")
     assert "known_fact_guard" in (gm_output.get("tags") or [])
     assert not any(str(tag).startswith("uncertainty:") for tag in (gm_output.get("tags") or []))
-    assert "known_fact_guard:recent_dialogue_continuity" in (gm_output.get("debug_notes") or "")
+    assert "known_fact_guard:recent_dialogue_continuity" in read_debug_notes_from_turn_payload(data)
 
 
 # feature: retry, legality
@@ -517,7 +520,7 @@ def test_chat_targeted_retry_unresolved_question_only(tmp_path, monkeypatch):
     assert "i can't answer" not in low
     assert "answer the player" not in low
     assert low.startswith("the report is")
-    assert "retry_strategy:selected=unresolved_question" in ((data.get("gm_output") or {}).get("debug_notes") or "")
+    assert "retry_strategy:selected=unresolved_question" in read_debug_notes_from_turn_payload(data)
 
 
 # feature: retry
@@ -551,7 +554,7 @@ def test_chat_targeted_retry_prefers_highest_priority_failure_first(tmp_path, mo
     low = (data.get("gm_output") or {}).get("player_facing_text", "").lower()
     assert "i can't answer" not in low
     assert "based on what's established" not in low
-    assert "retry_strategy:selected=unresolved_question" in ((data.get("gm_output") or {}).get("debug_notes") or "")
+    assert "retry_strategy:selected=unresolved_question" in read_debug_notes_from_turn_payload(data)
 
 
 # feature: retry, fallback
@@ -582,7 +585,7 @@ def test_chat_unresolved_retry_failure_uses_deterministic_known_fact_fallback(tm
     assert "checkpoint feels tense" not in text
     assert "question_retry_fallback" in (gm_output.get("tags") or [])
     assert "known_fact_guard" in (gm_output.get("tags") or [])
-    dbg = gm_output.get("debug_notes") or ""
+    dbg = read_debug_notes_from_turn_payload(data)
     assert "retry_strategy:selected=unresolved_question" in dbg
     assert "retry_fallback:unresolved_question:known_fact_guard:current_scene_state" in dbg
 
@@ -615,8 +618,8 @@ def test_chat_unresolved_retry_failure_uses_speaker_grounded_uncertainty_fallbac
     assert "fog hangs low" not in low
     assert "tavern runner" in low
     assert "question_retry_fallback" in (gm_output.get("tags") or [])
-    assert "retry_fallback:unresolved_question" in (gm_output.get("debug_notes") or "")
-    assert "retry_strategy:selected=unresolved_question" in (gm_output.get("debug_notes") or "")
+    assert "retry_fallback:unresolved_question" in read_debug_notes_from_turn_payload(data)
+    assert "retry_strategy:selected=unresolved_question" in read_debug_notes_from_turn_payload(data)
 
 
 # feature: retry
@@ -656,7 +659,7 @@ def test_chat_targeted_retry_scene_stall_only(tmp_path, monkeypatch):
     low = (data.get("gm_output") or {}).get("player_facing_text", "").lower()
     assert "answer the player" not in low
     assert "rule priority" not in low
-    assert "retry_strategy:selected=scene_stall" in ((data.get("gm_output") or {}).get("debug_notes") or "")
+    assert "retry_strategy:selected=scene_stall" in read_debug_notes_from_turn_payload(data)
 
 
 # feature: social, continuity
@@ -708,7 +711,7 @@ def test_chat_repeated_passive_actions_do_not_stall_into_atmosphere(tmp_path, mo
     data = second.json()
     text = (data.get("gm_output") or {}).get("player_facing_text") or ""
     _assert_concrete_pressure(text)
-    debug_notes = (((data.get("gm_output") or {}).get("debug_notes")) or "")
+    debug_notes = read_debug_notes_from_turn_payload(data)
     assert "passive_scene_pressure:" in debug_notes
     assert "streak=2" in debug_notes
 
@@ -745,7 +748,7 @@ def test_chat_passive_scene_prefers_already_introduced_suspicious_figure(tmp_pat
     text = (data.get("gm_output") or {}).get("player_facing_text") or ""
     assert "the tattered man" in text.lower()
     _assert_concrete_pressure(text)
-    assert "passive_scene_pressure:lead_figure" in (((data.get("gm_output") or {}).get("debug_notes")) or "")
+    assert "passive_scene_pressure:lead_figure" in read_debug_notes_from_turn_payload(data)
 
 
 def test_chat_passive_wait_with_recent_suspicious_figure_replaces_weak_atmosphere(tmp_path, monkeypatch):
@@ -830,7 +833,7 @@ def test_chat_adjudication_question_with_active_interlocutor_stays_answer_shaped
     gm_output = data.get("gm_output") or {}
     text = str(gm_output.get("player_facing_text") or "")
     low = text.lower()
-    meta = gm_output.get("_final_emission_meta") or {}
+    meta = _extract_final_emission_meta(data) or {}
 
     assert resolution.get("kind") == "adjudication_query"
     assert "tavern runner" not in low
@@ -1252,7 +1255,7 @@ def test_chat_action_outcome_contract_survives_inside_active_social_scene(tmp_pa
     gm_output = data.get("gm_output") or {}
     text = str(gm_output.get("player_facing_text") or "")
     low = text.lower()
-    meta = gm_output.get("_final_emission_meta") or {}
+    meta = _extract_final_emission_meta(data) or {}
 
     assert resolution.get("kind") == "discover_clue"
     assert "for a breath" not in low
@@ -1654,7 +1657,7 @@ def test_chat_social_exchange_invalid_blob_is_repaired_before_emit(tmp_path, mon
     assert "truth is still buried beneath rumor and rain" not in low
     assert "tavern runner" in low
     tags = gm_out.get("tags") or []
-    dbg = str(gm_out.get("debug_notes") or "").lower()
+    dbg = read_debug_notes_from_turn_payload(data).lower()
     assert (
         "final_emission_gate_replaced" in tags
         or "question_retry_fallback" in tags
@@ -1690,7 +1693,7 @@ def test_chat_social_exchange_blocks_advisory_prose_before_emit(tmp_path, monkey
     assert "you could" not in low
     gm_out = data.get("gm_output") or {}
     gtags = gm_out.get("tags") or []
-    dbg = str(gm_out.get("debug_notes") or "").lower()
+    dbg = read_debug_notes_from_turn_payload(data).lower()
     assert (
         "final_emission_gate_replaced" in gtags
         or "question_retry_fallback" in gtags
@@ -1726,7 +1729,7 @@ def test_chat_social_exchange_strips_unresolved_stock_phrases(tmp_path, monkeypa
     assert "answer has not formed yet" not in low
     gm_out = data.get("gm_output") or {}
     gtags = gm_out.get("tags") or []
-    dbg = str(gm_out.get("debug_notes") or "").lower()
+    dbg = read_debug_notes_from_turn_payload(data).lower()
     assert (
         "final_emission_gate_replaced" in gtags
         or "question_retry_fallback" in gtags
@@ -1797,7 +1800,7 @@ def test_chat_repeated_interruption_progresses_without_losing_dialogue_contract(
     second_text = str(second_output.get("player_facing_text") or "")
     low1 = first_text.lower()
     low2 = second_text.lower()
-    meta = second_output.get("_final_emission_meta") or {}
+    meta = _extract_final_emission_meta(second_data) or {}
 
     assert "tavern runner" in low1
     assert second_text != first_text
@@ -1887,7 +1890,7 @@ def test_pipeline_strict_social_wrong_opening_speaker_repaired_to_canonical(tmp_
     low = text.lower()
     assert "merchant" not in low
     assert "tavern runner" in low
-    meta = gm_out.get("_final_emission_meta") or {}
+    meta = _extract_final_emission_meta(data) or {}
     assert meta.get("speaker_contract_enforcement_reason") in (
         "continuity_locked_speaker_repair",
         "canonical_speaker_rewrite",
@@ -1917,7 +1920,7 @@ def test_pipeline_strict_social_ragged_stranger_fallback_repaired(tmp_path, monk
     low = text.lower()
     assert "ragged stranger" not in low
     assert "tavern runner" in low
-    meta = gm_out.get("_final_emission_meta") or {}
+    meta = _extract_final_emission_meta(data) or {}
     assert meta.get("speaker_contract_enforcement_reason") in (
         "canonical_speaker_rewrite",
         "continuity_locked_speaker_repair",

@@ -13,6 +13,8 @@ tests/test_final_emission_repairs.py
 """
 from __future__ import annotations
 
+from game.final_emission_meta import read_final_emission_meta_dict
+
 import pytest
 
 from game.final_emission_gate import apply_final_emission_gate
@@ -204,7 +206,7 @@ def test_downstream_gate_observes_answer_contract_meta_when_output_exhibits_smoo
         world={},
     )
 
-    meta = out.get("_final_emission_meta") or {}
+    meta = read_final_emission_meta_dict(out) or {}
     assert meta.get("response_type_required") == "answer"
     assert meta.get("response_type_candidate_ok") is True
     assert meta.get("answer_completeness_checked") is True

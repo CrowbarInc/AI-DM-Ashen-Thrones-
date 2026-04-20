@@ -4,6 +4,8 @@ Uses stable internal entrypoints (``apply_new_campaign_hard_reset``, ``chat``) �
 """
 from __future__ import annotations
 
+from game.final_emission_meta import read_final_emission_meta_dict
+
 from pathlib import Path
 from typing import Any, Callable
 
@@ -12,6 +14,7 @@ from game.api import chat
 from game.campaign_reset import apply_new_campaign_hard_reset
 from game.defaults import default_scene
 from game.interaction_context import inspect as inspect_interaction_context
+from game.narrative_authenticity_eval import _extract_final_emission_meta
 from game.models import ChatRequest
 
 
@@ -100,7 +103,7 @@ def snapshot_from_chat_payload(turn_index: int, player_text: str, payload: dict[
     """Build a single turn snapshot from ``chat``'s return value (``_build_turn_response_payload`` shape)."""
     gm = payload.get("gm_output") if isinstance(payload.get("gm_output"), dict) else {}
     gm_text = gm.get("player_facing_text") if isinstance(gm.get("player_facing_text"), str) else ""
-    fem = gm.get("_final_emission_meta") if isinstance(gm.get("_final_emission_meta"), dict) else {}
+    fem = _extract_final_emission_meta(payload) or {}
 
     scene = payload.get("scene") if isinstance(payload.get("scene"), dict) else {}
     scene_inner = scene.get("scene") if isinstance(scene.get("scene"), dict) else {}
@@ -191,7 +194,7 @@ def compact_snapshot_summary(snap: dict[str, Any], *, gm_chars: int = 120) -> st
         gm = gm[: gm_chars - 3] + "..."
     tgt = latest_target_id(snap) or "—"
     src = latest_target_source(snap) or "—"
-    fem = snap.get("_final_emission_meta") if isinstance(snap.get("_final_emission_meta"), dict) else {}
+    fem = read_final_emission_meta_dict(snap) if isinstance(read_final_emission_meta_dict(snap), dict) else {}
     dt = fem.get("dead_turn") if isinstance(fem.get("dead_turn"), dict) else {}
     dead_hint = ""
     if dt.get("is_dead_turn"):

@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+from game.final_emission_meta import read_final_emission_meta_dict
+from game.narrative_authenticity_eval import _extract_final_emission_meta
+
 import json
 import re
 
@@ -179,7 +182,7 @@ def test_chat_begin_nonretryable_quota_repairs_malformed_opening_fast_fallback(t
     assert any(token in low for token in ("checkpoint", "gate", "patrol", "rain"))
     assert len([s for s in re.split(r"(?<=[.!?])\s+", text) if s.strip()]) <= 2
 
-    meta = gm.get("_final_emission_meta") or {}
+    meta = _extract_final_emission_meta(body) or {}
     assert meta.get("fast_fallback_neutral_composition_repaired") is True
     assert meta.get("final_emitted_source") == "opening_scene_template"
 
@@ -350,7 +353,8 @@ def test_manual_play_compact_prompt_keeps_continuity_and_shrinks_payload():
     compact_payload = json.loads(compact_msgs[1]["content"])
     full_payload = json.loads(full_msgs[1]["content"])
 
-    assert compact_payload["prompt_debug"]["compact_prompt"]["enabled"] is True
+    assert "prompt_debug" not in compact_payload
+    assert "prompt_debug" not in full_payload
     assert compact_payload["active_interlocutor"]["npc_id"] == "guard_captain"
     assert compact_payload["interaction_continuity"]["active_interaction_target_id"] == "guard_captain"
     assert compact_payload["scene_state_anchor_contract"]["enabled"] is True
@@ -396,7 +400,7 @@ def test_final_emission_fast_path_skips_optional_smoothing():
         pre_gate_text=out["player_facing_text"],
         fast_path=feg._final_emission_fast_path_eligible(out),
     )
-    meta = finalized.get("_final_emission_meta") or {}
+    meta = read_final_emission_meta_dict(finalized) or {}
     assert meta.get("final_emission_fast_path_used") is True
     assert meta.get("sentence_decompression_applied") is False
     assert meta.get("sentence_fragment_repair_applied") is False

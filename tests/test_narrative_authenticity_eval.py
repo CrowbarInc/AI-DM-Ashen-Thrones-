@@ -227,7 +227,21 @@ def test_api_chat_includes_fem_for_eval() -> None:
     assert isinstance(data, dict)
     gm = data.get("gm_output")
     assert isinstance(gm, dict)
-    assert "_final_emission_meta" in gm
+    # Public surface invariant: no debug/meta keys on gm_output.
+    for forbidden in (
+        "_final_emission_meta",
+        "debug_notes",
+        "stage_diff_telemetry",
+        "dead_turn",
+        "reason_codes",
+        "internal_state",
+        "prompt_debug",
+    ):
+        assert forbidden not in gm
+    dbg = data.get("gm_output_debug")
+    assert isinstance(dbg, dict)
+    assert isinstance(dbg.get("emission_debug_lane"), dict)
+    assert "_final_emission_meta" in dbg["emission_debug_lane"]
     na = evaluate_narrative_authenticity({}, data, {})
     assert "scores" in na and "passed" in na
     assert set(na["scores"]) == {

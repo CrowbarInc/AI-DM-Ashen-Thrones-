@@ -6,6 +6,8 @@ and emitted-metadata behavior focused on downstream orchestration.
 """
 from __future__ import annotations
 
+from game.final_emission_meta import read_final_emission_meta_dict
+
 import pytest
 
 import game.final_emission_gate as feg
@@ -165,7 +167,7 @@ def test_gate_repairs_meta_fallback_voice_into_bounded_partial() -> None:
 
     text = str(out.get("player_facing_text") or "")
     low = text.lower()
-    meta = out.get("_final_emission_meta") or {}
+    meta = read_final_emission_meta_dict(out) or {}
     emission_debug = ((out.get("metadata") or {}).get("emission_debug") or {}).get("fallback_behavior") or {}
 
     assert "enough information" not in low
@@ -196,7 +198,7 @@ def test_gate_skips_fallback_behavior_when_uncertainty_inactive() -> None:
         world={},
     )
 
-    meta = out.get("_final_emission_meta") or {}
+    meta = read_final_emission_meta_dict(out) or {}
     emission_debug = ((out.get("metadata") or {}).get("emission_debug") or {}).get("fallback_behavior") or {}
     assert out.get("player_facing_text") == raw
     assert meta.get("fallback_behavior_checked") is False
@@ -292,7 +294,7 @@ def test_gate_runs_fallback_behavior_after_strict_social_continuity(monkeypatch:
         world=world,
     )
 
-    meta = out.get("_final_emission_meta") or {}
+    meta = read_final_emission_meta_dict(out) or {}
     assert order.index("interaction_continuity") < order.index("fallback_behavior")
     assert "enough information" not in str(out.get("player_facing_text") or "").lower()
     assert meta.get("fallback_behavior_repaired") is True
@@ -353,7 +355,7 @@ def test_gate_repairs_adversarial_uncertainty_followups_without_fabricating_cert
 
     text = str(out.get("player_facing_text") or "")
     low = text.lower()
-    meta = out.get("_final_emission_meta") or {}
+    meta = read_final_emission_meta_dict(out) or {}
 
     assert forbidden not in low
     _assert_no_meta_bits(text)
@@ -428,7 +430,7 @@ def test_gate_rewrites_open_call_move_plays_out_meta_leak_into_diegetic_partial(
 
     text = str(out.get("player_facing_text") or "")
     low = text.lower()
-    meta = out.get("_final_emission_meta") or {}
+    meta = read_final_emission_meta_dict(out) or {}
 
     assert ("no one answers at once" in low or "glance over" in low or "heads turn toward the copper" in low)
     _assert_no_meta_bits(text)
@@ -474,7 +476,7 @@ def test_gate_smooths_repaired_repeated_subject_social_line(monkeypatch: pytest.
 
     text = str(out.get("player_facing_text") or "")
     low = text.lower()
-    meta = out.get("_final_emission_meta") or {}
+    meta = read_final_emission_meta_dict(out) or {}
 
     assert "system" not in low
     assert "unclear" not in low
