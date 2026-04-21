@@ -105,6 +105,9 @@ def _slice_resolution(resolution: dict | None) -> dict[str, Any]:
     if not isinstance(resolution, dict):
         return {}
     out: dict[str, Any] = {"kind": resolution.get("kind")}
+    ncr = resolution.get("noncombat_resolution")
+    if isinstance(ncr, dict):
+        out["noncombat_resolution"] = ncr
     if "outcome_type" in resolution:
         out["outcome_type"] = resolution.get("outcome_type")
     if "success" in resolution:

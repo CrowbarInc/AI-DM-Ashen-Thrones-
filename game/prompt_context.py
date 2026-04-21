@@ -249,6 +249,16 @@ def _ctir_to_prompt_semantics(ctir_obj: Mapping[str, Any] | None) -> dict[str, A
         return {}
     raw_res = ctir_obj.get("resolution") if isinstance(ctir_obj.get("resolution"), dict) else {}
     resolution_engine = _promote_ctir_resolution_for_engine_reads(raw_res)
+    nc_block = ctir_obj.get("noncombat") if isinstance(ctir_obj.get("noncombat"), dict) else {}
+    nc_narr = nc_block.get("narration_constraints") if isinstance(nc_block.get("narration_constraints"), dict) else {}
+    if nc_narr:
+        # Passthrough only: map engine-authored ``narration_constraints`` into the legacy
+        # ``resolution.social`` slots read by obligation helpers—no free-text inference.
+        soc = dict(resolution_engine.get("social") or {}) if isinstance(resolution_engine.get("social"), dict) else {}
+        for k in ("npc_reply_expected", "reply_kind", "information_gate", "gated_information"):
+            if k in nc_narr:
+                soc[k] = nc_narr[k]
+        resolution_engine = {**resolution_engine, "social": soc}
     intent_block = ctir_obj.get("intent") if isinstance(ctir_obj.get("intent"), dict) else {}
     interaction_block = ctir_obj.get("interaction") if isinstance(ctir_obj.get("interaction"), dict) else {}
     world_block = ctir_obj.get("world") if isinstance(ctir_obj.get("world"), dict) else {}
@@ -256,6 +266,7 @@ def _ctir_to_prompt_semantics(ctir_obj: Mapping[str, Any] | None) -> dict[str, A
     return {
         "intent": dict(intent_block),
         "resolution": resolution_engine,
+        "noncombat": dict(nc_block),
         "interaction": dict(interaction_block),
         "world": dict(world_block),
         "narrative_anchors": dict(anchors_block),

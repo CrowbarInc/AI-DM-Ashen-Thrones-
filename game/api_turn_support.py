@@ -743,7 +743,8 @@ def _sanitize_resolution(res: dict | None) -> dict | None:
             'action_id', 'label', 'prompt', 'hint', 'attack_id', 'skill_id', 'spell_id',
             'roll', 'damage', 'total', 'hit', 'round', 'active_actor_id', 'world_tick_events',
             'clue_id', 'clue_text', 'discovered_clues', 'state_changes', 'success', 'metadata',
-            'combat', 'social', 'adjudication', 'requires_check', 'check_request'}
+            'combat', 'social', 'adjudication', 'requires_check', 'check_request',
+            'noncombat_resolution'}
     return {k: v for k, v in res.items() if k in safe}
 
 

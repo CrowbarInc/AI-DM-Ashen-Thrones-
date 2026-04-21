@@ -51,7 +51,7 @@ Each system owns a responsibility, not an implementation.
 
 ### Resolved-turn meaning vs prompt contracts (CTIR)
 
-For **post-resolution** narration, turn meaning is snapshotted once into **CTIR** (session-backed, retry-stable), then **consumed** by `game.prompt_context` through a small adapter. That is separate from the **turn packet** (contracts/debug/transport). See [CTIR and prompt adapter architecture](ctir_prompt_adapter_architecture.md) for the full lifecycle, four-layer split, and boundary rules that guard against semantic co-ownership regressions.
+For **post-resolution** narration, turn meaning is snapshotted once into **CTIR** (session-backed, retry-stable), then **consumed** by `game.prompt_context` through a small adapter. That is separate from the **turn packet** (contracts/debug/transport). Structured **non-combat** semantics flow **engine contract →** `resolution["noncombat_resolution"]` **→ CTIR `noncombat`** (no backfill from raw social/exploration keys when the contract is missing). See [CTIR and prompt adapter architecture](ctir_prompt_adapter_architecture.md) for the full lifecycle, Objective #8 authority flow, four-layer split, and boundary rules that guard against semantic co-ownership regressions.
 
 ---
 

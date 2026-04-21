@@ -1630,6 +1630,68 @@ def _run_resolved_turn_pipeline(
     return (scene, session, combat, gm, authoritative_clue_updates, response_type_contract)
 
 
+def _resolve_engine_noncombat_seam(
+    scene: dict,
+    session: dict,
+    world: dict,
+    normalized_action: dict,
+    *,
+    raw_player_text: str | None,
+    character: dict | None,
+    turn_counter: int,
+    exploration_kwargs: dict,
+    explicit_route: str | None = None,
+) -> dict:
+    """Single runtime seam for structured non-combat: classify fail-closed, delegate when routable.
+
+    When :func:`game.noncombat_resolution.classify_noncombat_kind` routes to ``exploration`` or
+    ``social``, delegates through :func:`game.noncombat_resolution.resolve_noncombat_action` (domain
+    owners unchanged). Otherwise preserves legacy exploration/social delegation for backward
+    compatibility and embeds ``noncombat_resolution`` via :func:`game.noncombat_resolution.attach_noncombat_contract`.
+    """
+    from game.noncombat_resolution import (
+        attach_noncombat_contract,
+        classify_noncombat_kind,
+        resolve_noncombat_action,
+    )
+
+    classification = classify_noncombat_kind(normalized_action, explicit_route=explicit_route)
+    if classification.route in ("exploration", "social"):
+        return resolve_noncombat_action(
+            scene,
+            session,
+            world,
+            normalized_action,
+            raw_player_text=raw_player_text,
+            character=character,
+            explicit_route=explicit_route,
+            turn_counter=turn_counter,
+            exploration_kwargs=exploration_kwargs,
+        )
+    ntype = (normalized_action.get("type") or "").strip().lower()
+    if ntype in SOCIAL_KINDS:
+        raw = resolve_social_action(
+            scene,
+            session,
+            world,
+            normalized_action,
+            raw_player_text=raw_player_text,
+            character=character,
+            turn_counter=turn_counter,
+        )
+    else:
+        raw = resolve_exploration_action(
+            scene,
+            session,
+            world,
+            normalized_action,
+            raw_player_text=raw_player_text,
+            character=character,
+            **exploration_kwargs,
+        )
+    return attach_noncombat_contract(raw, normalized_action, explicit_route=explicit_route)
+
+
 def _is_pending_check_resolution(resolution: dict | None) -> bool:
     """True when resolution asks player for a roll instead of a resolved outcome."""
     if not isinstance(resolution, dict):
@@ -2160,20 +2222,18 @@ def action(req: ActionRequest):
             normalized_type = raw_type
         if normalized_type in SOCIAL_KINDS:
             normalized_action['type'] = normalized_type
-            resolution = resolve_social_action(
-                scene, session, world, normalized_action,
-                raw_player_text=req.intent or None,
-                character=character,
-                turn_counter=session.get('turn_counter', 0),
-            )
-        else:
-            resolution = resolve_exploration_action(
-                scene, session, world, normalized_action,
-                raw_player_text=req.intent or None,
-                list_scene_ids=list_scene_ids,
-                character=character,
-                load_scene_fn=load_scene,
-            )
+        _ex_kw = {"list_scene_ids": list_scene_ids, "load_scene_fn": load_scene}
+        resolution = _resolve_engine_noncombat_seam(
+            scene,
+            session,
+            world,
+            normalized_action,
+            raw_player_text=req.intent or None,
+            character=character,
+            turn_counter=int(session.get("turn_counter", 0) or 0),
+            exploration_kwargs=_ex_kw,
+            explicit_route=None,
+        )
         fallback_user_text = req.intent or resolution.get('label', '')
         run_resolved_pipeline = True
     elif req.action_type == 'social':
@@ -2191,11 +2251,17 @@ def action(req: ActionRequest):
         )
         if raw and (raw.get('type') or '').strip().lower() in SOCIAL_KINDS:
             normalized_action['type'] = (raw.get('type') or 'social_probe').strip().lower()
-        resolution = resolve_social_action(
-            scene, session, world, normalized_action,
+        _ex_kw_social = {"list_scene_ids": list_scene_ids, "load_scene_fn": load_scene}
+        resolution = _resolve_engine_noncombat_seam(
+            scene,
+            session,
+            world,
+            normalized_action,
             raw_player_text=req.intent or None,
             character=character,
-            turn_counter=session.get('turn_counter', 0),
+            turn_counter=int(session.get("turn_counter", 0) or 0),
+            exploration_kwargs=_ex_kw_social,
+            explicit_route="social",
         )
         fallback_user_text = req.intent or resolution.get('label', '')
         run_resolved_pipeline = True
@@ -3244,11 +3310,17 @@ def chat(req: ChatRequest):
             if isinstance(compact_segmented, dict) and compact_segmented:
                 _sm.setdefault("segmented_turn", compact_segmented)
             trace["canonical_entry_path"] = "social"
-            resolution = resolve_social_action(
-                scene, session, world, normalized,
+            _ex_kw_chat = {"list_scene_ids": list_scene_ids, "load_scene_fn": load_scene}
+            resolution = _resolve_engine_noncombat_seam(
+                scene,
+                session,
+                world,
+                normalized,
                 raw_player_text=req.text,
                 character=character,
-                turn_counter=session.get('turn_counter', 0),
+                turn_counter=int(session.get("turn_counter", 0) or 0),
+                exploration_kwargs=_ex_kw_chat,
+                explicit_route=None,
             )
         else:
             routed_via_exploration = True
@@ -3259,12 +3331,17 @@ def chat(req: ChatRequest):
                     session, world, scene_before_id, req.text, normalized, scene_envelope=scene
                 )
             )
-            resolution = resolve_exploration_action(
-                scene, session, world, normalized,
+            _ex_kw_chat2 = {"list_scene_ids": list_scene_ids, "load_scene_fn": load_scene}
+            resolution = _resolve_engine_noncombat_seam(
+                scene,
+                session,
+                world,
+                normalized,
                 raw_player_text=req.text,
-                list_scene_ids=list_scene_ids,
                 character=character,
-                load_scene_fn=load_scene,
+                turn_counter=int(session.get("turn_counter", 0) or 0),
+                exploration_kwargs=_ex_kw_chat2,
+                explicit_route=None,
             )
         if isinstance(normalized, dict) and compact_segmented:
             meta = normalized.get("metadata")

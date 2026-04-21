@@ -118,6 +118,10 @@ Guards (`assert_owner_can_mutate_domain`, `assert_cross_domain_write_allowed`, o
 4. For cross-domain effects, call `assert_cross_domain_write_allowed(source_domain, target_domain, operation="...")` **before** mutating the target store, and `assert_owner_can_mutate_domain(__name__, domain, operation=...)` for same-domain writes when the call graph is broad.
 5. Never infer state from **published** `player_facing_text` or prompt echo strings—rehydrate from authoritative stores or CTIR/resolution payloads only.
 
+### Objective #8 pointer (non-combat semantics)
+
+Structured non-combat outcomes are owned by **`game.noncombat_resolution`**, embedded at runtime via **`game.api._resolve_engine_noncombat_seam`** as `resolution["noncombat_resolution"]`, then projected into **CTIR** by **`game.ctir.build_ctir`** (root `noncombat` only from that contract). Prompt and narrative layers **read** those signals; they must not invent mechanics from prose or legacy raw fields when the contract exists. When the contract is absent, CTIR `noncombat` remains **empty** by design—no silent reconstruction. Full flow, anti-drift rules, and deferred boundaries: **`docs/ctir_prompt_adapter_architecture.md`** (Objective #8 section).
+
 ## Anti-goals
 
 - **Not** replacing existing module owners listed in `docs/architecture_ownership_ledger.md`—this model names domains and guards; it does not subsume `game.world`, `game.storage`, or `game.prompt_context`.

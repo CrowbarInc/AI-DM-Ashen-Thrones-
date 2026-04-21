@@ -259,6 +259,8 @@ def _derive_active_pressures(
     codes: List[str] = []
     si = session_interaction if isinstance(session_interaction, Mapping) else {}
     res = _mapping(ctir.get("resolution"))
+    nc = _mapping(ctir.get("noncombat"))
+    nc_narr = nc.get("narration_constraints") if isinstance(nc.get("narration_constraints"), Mapping) else {}
     world = _mapping(ctir.get("world"))
     clues_block = _mapping(_mapping(ctir.get("state_mutations")).get("clues_leads"))
 
@@ -273,18 +275,27 @@ def _derive_active_pressures(
 
     interaction_pressure = "none"
     soc = res.get("social")
-    if isinstance(soc, Mapping) and bool(soc.get("npc_reply_expected")):
+    reply_expected = False
+    if nc_narr and "npc_reply_expected" in nc_narr:
+        reply_expected = bool(nc_narr.get("npc_reply_expected"))
+    elif isinstance(soc, Mapping):
+        reply_expected = bool(soc.get("npc_reply_expected"))
+    if reply_expected:
         interaction_pressure = "reply_expected"
         codes.append("pressure:reply_expected")
-    elif bool(res.get("requires_check")) or bool(res.get("check_request")):
+    elif bool(nc.get("requires_check")) or bool(res.get("requires_check")) or bool(res.get("check_request")):
         interaction_pressure = "check_pending"
         codes.append("pressure:check_pending")
 
     tension_codes: List[str] = []
-    if isinstance(soc, Mapping):
-        rk = _as_str(soc.get("reply_kind"))
-        if rk:
-            tension_codes.append(_clip(f"social.reply_kind:{rk}", max_len=_MAX_STR_CLIP))
+    rk_src = None
+    if isinstance(nc_narr, Mapping):
+        rk_src = nc_narr.get("reply_kind")
+    if rk_src is None and isinstance(soc, Mapping):
+        rk_src = soc.get("reply_kind")
+    rk = _as_str(rk_src)
+    if rk:
+        tension_codes.append(_clip(f"social.reply_kind:{rk}", max_len=_MAX_STR_CLIP))
     intent = _mapping(ctir.get("intent"))
     if bool(intent.get("requires_check")):
         tension_codes.append("intent.requires_check")

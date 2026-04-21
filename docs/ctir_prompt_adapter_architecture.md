@@ -13,6 +13,7 @@ This document locks the **landed** architecture for Objective #1: where meaning 
 ### B. CTIR (canonical resolved-turn meaning)
 
 - **What it is:** A single **bounded**, **JSON-serializable**, **deterministic** snapshot of what the engine resolved for **one** narration attempt on a resolved turn. Built in `game.ctir` / `game.ctir_runtime` from explicit slices, not from whole engine blobs.
+- **Non-combat:** When `resolution` carries `noncombat_resolution` from the runtime seam (`game.noncombat_resolution`), CTIR includes a root `noncombat` slice (`game.ctir.normalize_noncombat_slice`) as the canonical non-combat semantics; `game.ctir.normalize_resolution` overlays outcome/check fields from that contract and omits raw `resolution.social` mirrors. `game.prompt_context._ctir_to_prompt_semantics` maps `noncombat.narration_constraints` into the legacy `resolution.social` slots obligation code already reads (passthrough only).
 - **Who owns it:** `game.ctir` (normalization + schema) and `game.ctir_runtime` (attach / stamp / ensure for one turn).
 - **Runtime rule:** CTIR is **attached to the session** for the lifetime of that resolved-turn narration (including targeted retries that share the same stamp).
 - **Hard limits:** No prose, no prompt fragments, no full mirrors of canonical state—only bounded summaries and identifiers needed for deterministic downstream reads.
@@ -56,6 +57,35 @@ If `resolution` is not a dict, `_build_gpt_narration_from_authoritative_state` *
 | Raw engine reads are allowed **only** where CTIR intentionally does not own that slice | Document at the call site; keep reads narrow. |
 | Turn packet must not embed CTIR or become a duplicate meaning object | Preserves a clear debug/contract transport layer vs meaning layer. |
 
+## Objective #8 — non-combat authority flow (landed)
+
+**Goal:** one engine-owned contract for structured non-combat outcomes, embedded on the authoritative `resolution` dict, projected into CTIR without re-deriving semantics from legacy raw keys or prose.
+
+### Canonical chain (read order for maintainers)
+
+1. **Contract definition** — `game/noncombat_resolution.py` defines classification, `resolve_noncombat_action`, `normalize_noncombat_resolution`, and `attach_noncombat_contract`. This is the **vocabulary and normalization owner** for non-combat semantics (no LLM calls, no narration-driven mechanics inside the contract).
+2. **Runtime seam** — `game.api._resolve_engine_noncombat_seam` is the **single orchestration entry** for structured non-combat on the action path: classify fail-closed, delegate to exploration/social owners when routable, otherwise attach the contract onto the legacy domain result.
+3. **Authoritative embedding** — Successful delegation and compatibility paths set `resolution["noncombat_resolution"]` to the canonical dict. Downstream code treats that key as the **non-combat source of truth** for the turn.
+4. **CTIR construction** — `game.ctir.build_ctir` is still the **only** CTIR construction site. Root `noncombat` is populated exclusively from `normalize_noncombat_slice(resolution["noncombat_resolution"])`; that helper is a **bounded projection**, not a semantic re-interpreter.
+5. **Transitional fallback** — `game.ctir.legacy_transitional_noncombat_from_resolution` is **intentionally empty** (`{}`). When `noncombat_resolution` is absent, CTIR **`noncombat` stays `{}`** even if legacy `social`, exploration metadata, or hints exist on `resolution`. Do not “helpfully” backfill from those fields.
+6. **Resolution overlay** — `game.ctir.normalize_resolution` gives **canonical contract precedence** over parallel raw fields for `outcome_type`, `success_state`, `requires_check`, and `check_request` when `noncombat_resolution` is present. Legacy `resolution.social` is **omitted** from the normalized CTIR `resolution` block in that case so adapters do not double-read conflicting mirrors.
+7. **Downstream preference** — `game.prompt_context._ctir_to_prompt_semantics` maps `noncombat.narration_constraints` into the legacy `resolution.social` slots that obligation helpers already read (**passthrough only**). `game.narrative_planning` prefers `noncombat` signals (including `narration_constraints` and `requires_check`) over stale raw `resolution.social` / raw check hints when both shapes appear in the pre-normalized engine dict; after `build_ctir`, the normalized `resolution` slice should already reflect the contract.
+
+### Anti-drift rules (explicit)
+
+- **GPT narrates; the engine resolves mechanics.** Prompt adapters must not infer rolls, targets, blockers, or success from model prose when canonical structured data exists on `resolution` / CTIR.
+- **CTIR consumes canonical non-combat semantics from the runtime**, not from reconstructed hints. If `noncombat_resolution` is absent, **do not** silently recreate non-combat meaning from `hint`, free text, or exploratory raw keys—present `{}` at the CTIR `noncombat` root and keep any legacy fields as compatibility-only mirrors where they still exist on the engine dict.
+- **Downtime** in the classifier is still **reserved / unsupported** until a real engine subsystem owns it (`downtime_engine_not_wired` and similar codes are honest fail-closed signals—not something to paper over in `prompt_context` or `narrative_planning`).
+- **Future downtime or new non-combat categories** need a **real engine owner** and contract fields; prompt or narrative heuristics must not stand in as a substitute authority.
+
+### Deferred / honest boundaries
+
+- **Downtime:** taxonomy exists; **structured resolution is not wired** to a simulation owner yet. Do not describe downtime as fully playable engine surface.
+- **Legacy fields:** some paths still carry historical `resolution` keys for compatibility. They are **not** sources of truth when `noncombat_resolution` is present; removing duplicate readers remains a **possible future cleanup pass**, not a promise in this block.
+- **Transitional fallback:** intentionally **empty**; tests lock the absence of reconstruction.
+- **`route == "none"`:** classification can yield contract-only normalization without domain delegation; some branches remain **contract-first** without a full domain payload—callers should not assume a routable owner ran.
+- **Combat and other domains:** resolutions that never attach `noncombat_resolution` (typical combat) should leave CTIR `noncombat` as `{}`; combat must not pick up fabricated social/perception slices through CTIR.
+
 ## Related tests
 
 - `tests/test_ctir_runtime_lifecycle.py` — detach at pipeline entry, per-turn build, new turn lifecycle.
@@ -64,3 +94,5 @@ If `resolution` is not a dict, `_build_gpt_narration_from_authoritative_state` *
 - `tests/test_ctir_snapshot_examples.py` — small shape/serialization discipline examples.
 - `tests/test_prompt_context_ctir_boundary.py` — single session read, no `build_ctir`, fallback when absent.
 - `tests/test_ctir_pipeline_integration.py`, `tests/test_prompt_context_ctir_consumption.py` — integration and consumption regressions.
+- `tests/test_noncombat_resolution.py`, `tests/test_noncombat_runtime_integration.py`, `tests/test_ctir_noncombat_consumption.py` — contract, runtime seam, and CTIR consumption (Objective #8 Blocks A–C).
+- `tests/test_objective8_block_d_authority_lock.py` — end-to-end seam, canonical-over-raw precedence, anti-reconstruction, and combat isolation regressions (Objective #8 Block D).

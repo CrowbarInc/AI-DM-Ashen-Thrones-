@@ -10,6 +10,10 @@ text, no model instructions, and no prompt fragments). It is **not** a narration
 object, **not** a policy engine, and **not** a replacement for domain ownership in
 engine modules.
 
+When the runtime embeds ``resolution["noncombat_resolution"]`` (see
+:mod:`game.noncombat_resolution`), CTIR carries a bounded root ``noncombat`` slice
+built only from that contract (plus an empty transitional fallback when absent).
+
 It does **not** duplicate canonical state owned elsewhere except for **bounded**
 summaries and identifiers needed for downstream deterministic reads and tests.
 
@@ -50,6 +54,10 @@ _MAX_CHANGED_KEYS = 48
 _MAX_STR_CLIP = 256
 _MAX_DEPTH_DEFAULT = 3
 _MAX_DICT_KEYS_SCAN = 32
+_MAX_NONCOMBAT_ENTITIES = 32
+_MAX_NONCOMBAT_FACTS = 32
+_MAX_NONCOMBAT_AUTH_OUTPUTS = 16
+_MAX_NONCOMBAT_REASON_CODES = 16
 
 
 def ctir_version() -> int:
@@ -132,6 +140,104 @@ def _bounded_mapping(
     return out
 
 
+def legacy_transitional_noncombat_from_resolution(raw: Mapping[str, Any] | None) -> Dict[str, Any]:
+    """Transitional CTIR ``noncombat`` fill when ``resolution["noncombat_resolution"]`` is absent.
+
+    Intentionally returns an empty dict: do not reconstruct non-combat semantics from raw
+    exploration/social keys or hint-like payloads. Callers attach ``noncombat_resolution`` at
+    the runtime seam instead (:mod:`game.noncombat_resolution`).
+    """
+    _ = raw
+    return {}
+
+
+def normalize_noncombat_slice(noncombat_resolution: Any) -> Dict[str, Any]:
+    """Project engine ``noncombat_resolution`` into a bounded CTIR ``noncombat`` slice (no prose).
+
+    Thin mapping only—no re-interpretation of hints or domain-specific raw keys.
+    """
+    if not isinstance(noncombat_resolution, Mapping):
+        return {}
+    nc = noncombat_resolution
+    out: Dict[str, Any] = {}
+    fv = _as_str(nc.get("framework_version"))
+    if fv:
+        out["framework_version"] = fv
+    kind = _as_str(nc.get("kind")) or None
+    if kind:
+        out["kind"] = kind
+    sub = _as_str(nc.get("subkind")) or None
+    if sub:
+        out["subkind"] = sub
+    ad = _as_str(nc.get("authority_domain")) or None
+    if ad:
+        out["authority_domain"] = ad
+    if "deterministic_resolved" in nc:
+        out["deterministic_resolved"] = bool(nc.get("deterministic_resolved"))
+    if "requires_check" in nc:
+        out["requires_check"] = bool(nc.get("requires_check"))
+    cr = nc.get("check_request")
+    if isinstance(cr, Mapping):
+        out["check_request"] = _bounded_mapping(cr, max_depth=3)
+    ot = _as_str(nc.get("outcome_type")) or None
+    if ot:
+        out["outcome_type"] = ot
+    ss = _as_str(nc.get("success_state")) or None
+    if ss:
+        out["success_state"] = ss
+
+    blocked = nc.get("blocked_reason_codes")
+    amb = nc.get("ambiguous_reason_codes")
+    unsup = nc.get("unsupported_reason_codes")
+    rc: Dict[str, List[str]] = {}
+    if isinstance(blocked, (list, tuple)):
+        rc["blocked"] = _sorted_unique_strs(list(blocked), limit=_MAX_NONCOMBAT_REASON_CODES)
+    if isinstance(amb, (list, tuple)):
+        rc["ambiguous"] = _sorted_unique_strs(list(amb), limit=_MAX_NONCOMBAT_REASON_CODES)
+    if isinstance(unsup, (list, tuple)):
+        rc["unsupported"] = _sorted_unique_strs(list(unsup), limit=_MAX_NONCOMBAT_REASON_CODES)
+    if rc:
+        out["reason_codes"] = rc
+
+    de = nc.get("discovered_entities")
+    if isinstance(de, (list, tuple)):
+        ent: List[Any] = []
+        for item in list(de)[:_MAX_NONCOMBAT_ENTITIES]:
+            if isinstance(item, Mapping):
+                ent.append(_bounded_mapping(item, max_depth=2))
+            else:
+                ent.append(_json_safe_atom(item))
+        if ent:
+            out["discovered_entities"] = ent
+
+    sf = nc.get("surfaced_facts")
+    if isinstance(sf, (list, tuple)):
+        facts = [_clip_str(_as_str(x)) for x in list(sf)[:_MAX_NONCOMBAT_FACTS] if _as_str(x)]
+        if facts:
+            out["surfaced_facts"] = facts
+
+    st = nc.get("state_changes")
+    if isinstance(st, Mapping) and st:
+        out["state_changes"] = _bounded_mapping(st, max_depth=2)
+
+    ao = nc.get("authoritative_outputs")
+    if isinstance(ao, (list, tuple)):
+        rows: List[Any] = []
+        for item in list(ao)[:_MAX_NONCOMBAT_AUTH_OUTPUTS]:
+            if isinstance(item, Mapping):
+                rows.append(_bounded_mapping(item, max_depth=2))
+            else:
+                rows.append(_json_safe_atom(item))
+        if rows:
+            out["authoritative_outputs"] = rows
+
+    narr = nc.get("narration_constraints")
+    if isinstance(narr, Mapping) and narr:
+        out["narration_constraints"] = _bounded_mapping(narr, max_depth=2)
+
+    return out
+
+
 def normalize_intent(raw: Mapping[str, Any] | None) -> Dict[str, Any]:
     """Normalize ``intent`` (classifier / routing snapshot; no prose)."""
     r = raw if isinstance(raw, dict) else {}
@@ -176,6 +282,7 @@ def normalize_intent(raw: Mapping[str, Any] | None) -> Dict[str, Any]:
 def normalize_resolution(raw: Mapping[str, Any] | None) -> Dict[str, Any]:
     """Normalize ``resolution`` (engine outcome summary; no prose blobs)."""
     r = raw if isinstance(raw, dict) else {}
+    nc = r.get("noncombat_resolution") if isinstance(r.get("noncombat_resolution"), Mapping) else None
     kind = _as_str(r.get("kind")) or None
     outcome_type = _as_str(r.get("outcome_type")) or None
     success_state = _as_str(r.get("success_state")) or None
@@ -204,7 +311,7 @@ def normalize_resolution(raw: Mapping[str, Any] | None) -> Dict[str, Any]:
     }
     # Optional bounded engine mirrors preserved for CTIR-first prompt reads (no prose blobs).
     soc = r.get("social")
-    if isinstance(soc, Mapping):
+    if isinstance(soc, Mapping) and nc is None:
         out["social"] = _bounded_mapping(soc, max_depth=2)
     sc = r.get("state_changes")
     if isinstance(sc, Mapping):
@@ -233,6 +340,22 @@ def normalize_resolution(raw: Mapping[str, Any] | None) -> Dict[str, Any]:
     pr = r.get("prompt")
     if isinstance(pr, str) and pr.strip():
         out["prompt"] = _clip_str(_as_str(pr))
+
+    # Canonical non-combat contract overlays resolution semantics when embedded by the runtime seam.
+    if nc is not None:
+        nco = _as_str(nc.get("outcome_type"))
+        if nco:
+            out["outcome_type"] = nco
+        ncs = _as_str(nc.get("success_state"))
+        if ncs:
+            out["success_state"] = ncs
+        if "requires_check" in nc:
+            out["requires_check"] = bool(nc.get("requires_check"))
+        cr_nc = nc.get("check_request")
+        if isinstance(cr_nc, Mapping):
+            out["check_request"] = _bounded_mapping(cr_nc, max_depth=3)
+        elif not bool(nc.get("requires_check")):
+            out.pop("check_request", None)
     return out
 
 
@@ -468,6 +591,11 @@ def build_ctir(
         builder_source=builder_source,
     )
     n_intent = normalize_intent(intent)
+    r_res = resolution if isinstance(resolution, dict) else {}
+    nc_src = r_res.get("noncombat_resolution")
+    n_noncombat = normalize_noncombat_slice(nc_src)
+    if not n_noncombat:
+        n_noncombat = legacy_transitional_noncombat_from_resolution(r_res)
     n_resolution = normalize_resolution(resolution)
     n_state = normalize_state_mutations(state_mutations)
     n_interaction = normalize_interaction(interaction)
@@ -511,6 +639,7 @@ def build_ctir(
         "player_input": pin,
         "intent": n_intent,
         "resolution": n_resolution,
+        "noncombat": n_noncombat,
         "state_mutations": n_state,
         "interaction": n_interaction,
         "world": n_world,
@@ -532,6 +661,7 @@ def looks_like_ctir(obj: Any) -> bool:
         "player_input",
         "intent",
         "resolution",
+        "noncombat",
         "state_mutations",
         "interaction",
         "world",
@@ -544,6 +674,9 @@ def looks_like_ctir(obj: Any) -> bool:
             return False
     prov = obj.get("provenance")
     if not isinstance(prov, dict) or not _as_str(prov.get("builder_source")):
+        return False
+    nc = obj.get("noncombat")
+    if nc is not None and not isinstance(nc, dict):
         return False
     return True
 
