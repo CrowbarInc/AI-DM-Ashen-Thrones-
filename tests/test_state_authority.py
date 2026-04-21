@@ -87,6 +87,7 @@ def test_pseudo_owners_fail_can_owner_mutate_domain():
 def test_declared_module_owners_can_mutate_expected_domains():
     assert_owner_can_mutate_domain("game.interaction_context", INTERACTION_STATE)
     assert_owner_can_mutate_domain("game.world", WORLD_STATE)
+    assert_owner_can_mutate_domain("game.world_progression", WORLD_STATE)
     assert_owner_can_mutate_domain("game.api", SCENE_STATE)
     assert_owner_can_mutate_domain("game.api", WORLD_STATE)
     assert_owner_can_mutate_domain("game.journal", PLAYER_VISIBLE_STATE)

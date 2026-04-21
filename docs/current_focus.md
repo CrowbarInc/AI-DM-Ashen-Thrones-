@@ -1,8 +1,10 @@
-# Current focus — post-AER consolidation (Block C1 boundary)
+# Current focus — post-AER consolidation + Objective #9 shipped
 
 ## Phase
 
 This branch is in **consolidation**, not feature expansion. **Anti-Echo & Rumor Realism (AER)** is **functionally complete** and treated as shipped behavior for cleanup purposes. **Behavioral Gauntlet** and **Playability Validation** are **complete** as **deterministic**, **contract-driven** validation layers (they do not add new runtime gameplay systems).
+
+**Objective #9 (world simulation backbone + bounded CTIR/prompt progression transport)** is **landed** (Blocks A–D). Persistent progression stays on native world roots; CTIR/prompt carry a **bounded read projection** only. Do not reintroduce shadow JSON roots, session-clock or counter nodes, or player-facing `world_progression` helper rows on silent-sink paths.
 
 The purpose of this consolidation phase is to make later refactors safer by **freezing ownership**, **codifying deferrals**, and trimming **orchestration** ambiguity—**without** changing player-facing behavior in consolidation-only passes.
 
@@ -17,6 +19,7 @@ The purpose of this consolidation phase is to make later refactors safer by **fr
 | **AER (Anti-Echo & Rumor Realism)** | Narrative authenticity operator model + repairs + telemetry | `docs/narrative_authenticity_anti_echo_rumor_realism.md`, narrative authenticity tests under `tests/` (e.g. `test_narrative_authenticity_*.py`) |
 | **Unified State Authority (Objective #3)** | Declarative domains + guard registry; journal publication seam; allow-listed cross-domain writes | `docs/state_authority_model.md`, `docs/architecture_ownership_ledger.md` → *Unified State Authority Model*, `game/state_authority.py`, **direct-owner suite** `tests/test_state_authority.py` |
 | **Objective #7 — Referent tracking + post-GM referent clarity (Block D)** | Derivative-only artifact + compact packet mirror + FEM validator/repair seam; **not** a second resolver over `interaction_context` | `docs/narrative_integrity_architecture.md` → *Objective #7*, `game/referent_tracking.py`, `game/prompt_context.py`, `game/final_emission_validators.py` / `game/final_emission_repairs.py` / `game/final_emission_gate.py`, tests noted in that section |
+| **Objective #9 — World simulation backbone + bounded progression transport (Blocks A–D)** | Single seam `game/world_progression.py`; native-root writes; silent progression sinks; fingerprint-after-prompt timing; CTIR `world.progression` + prompt fallback without `prompt_context` calling `build_ctir`; duplicate faction UID compatibility | `docs/world_simulation_backbone.md`, `docs/system_overview.md` → *Persistent world simulation*, `game/world_progression.py`, `game/world.py`, `game/ctir_runtime.py`, `game/api.py` (`store_progression_fingerprint_on_session` after prompt/message build), `tests/test_world_simulation_backbone_regressions.py`, `tests/test_world_simulation_backbone_ownership.py`, plus focused suites `tests/test_world_progression_*.py`, `tests/test_ctir_world_progression_projection.py`, `tests/test_prompt_context_world_progression_consumption.py` |
 
 ---
 
@@ -84,6 +87,7 @@ These remain true while consolidation proceeds; they are not new feature goals:
 - **Unified state authority:** `game/state_authority.py` is registry + guards only; `player_visible_state` stays derived; `hidden_state` stays unpublished until reveal/publication seams.
 - **Implied-action handling** stays narrow, **deterministic**, and runs during normalized turn preparation (before prompt-context assembly).
 - **Objective #7 referent seam:** full artifact is built once in `referent_tracking` and shipped on prompt context; the turn packet carries a **compact mirror only**; post-GM clarity uses the full artifact first and abstains without it — see **`docs/narrative_integrity_architecture.md` → *Objective #7***.
+- **Objective #9 world progression seam:** supported persistent progression writes route through `game/world_progression`; tick/resolution paths keep internal helper events off `world["event_log"]`; `store_progression_fingerprint_on_session` runs **after** prompt/message assembly in `_build_gpt_narration_from_authoritative_state`; CTIR/prompt progression is **bounded** and sourced from the backbone read model (see **`docs/world_simulation_backbone.md`**).
 
 ---
 

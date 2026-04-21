@@ -59,6 +59,9 @@ _MAX_NONCOMBAT_FACTS = 32
 _MAX_NONCOMBAT_AUTH_OUTPUTS = 16
 _MAX_NONCOMBAT_REASON_CODES = 16
 
+# ``world.progression`` bounded lists (must stay aligned with :mod:`game.world_progression` caps)
+_MAX_PROGRESSION_LIST = 64
+
 
 def ctir_version() -> int:
     """Return the active CTIR schema version (integer)."""
@@ -436,6 +439,29 @@ def normalize_interaction(raw: Mapping[str, Any] | None) -> Dict[str, Any]:
     }
 
 
+def _normalize_world_progression_slice(raw: Mapping[str, Any] | None) -> Dict[str, Any]:
+    """Bounded copy of CTIR ``world.progression`` rows (already compact; no metadata/source_ref)."""
+    if not isinstance(raw, Mapping):
+        raw = {}
+    out: Dict[str, Any] = {}
+    ch = raw.get("changed_node_ids")
+    if isinstance(ch, (list, tuple)):
+        out["changed_node_ids"] = _sorted_unique_strs(list(ch), limit=_MAX_PROGRESSION_LIST)
+    else:
+        out["changed_node_ids"] = []
+    for key in ("active_projects", "faction_pressure", "faction_agenda", "world_clocks", "set_flags"):
+        block = raw.get(key)
+        rows: List[Any] = []
+        if isinstance(block, (list, tuple)):
+            for item in list(block)[:_MAX_PROGRESSION_LIST]:
+                if isinstance(item, Mapping):
+                    rows.append(_bounded_mapping(item, max_keys=8, max_depth=2))
+                else:
+                    rows.append(_json_safe_atom(item))
+        out[key] = rows
+    return out
+
+
 def normalize_world(raw: Mapping[str, Any] | None) -> Dict[str, Any]:
     """Normalize bounded world deltas resolved this turn (no full world dump)."""
     r = raw if isinstance(raw, dict) else {}
@@ -463,6 +489,8 @@ def normalize_world(raw: Mapping[str, Any] | None) -> Dict[str, Any]:
         else:
             s = _clip_str(_as_str(n), max_len=128)
             out["notes"] = [s] if s else []
+    if "progression" in r and isinstance(r.get("progression"), Mapping):
+        out["progression"] = _normalize_world_progression_slice(r["progression"])
     return out
 
 

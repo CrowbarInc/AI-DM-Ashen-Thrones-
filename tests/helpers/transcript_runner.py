@@ -74,11 +74,25 @@ def _world_summary(world: Any) -> dict[str, Any]:
     flags = ws.get("flags") if isinstance(ws.get("flags"), dict) else {}
     ev = world.get("event_log") if isinstance(world.get("event_log"), list) else []
     proj = world.get("projects") if isinstance(world.get("projects"), list) else []
-    return {
+    out: dict[str, Any] = {
         "event_log_count": len(ev),
         "projects_count": len(proj),
         "flag_keys": sorted(flags.keys()),
     }
+    try:
+        from game.world_progression import compose_ctir_world_progression_slice
+
+        _pe = compose_ctir_world_progression_slice(world, changed_node_ids=())
+        out["progression_row_counts"] = {
+            "active_projects": len(_pe.get("active_projects") or []),
+            "faction_pressure": len(_pe.get("faction_pressure") or []),
+            "faction_agenda": len(_pe.get("faction_agenda") or []),
+            "world_clocks": len(_pe.get("world_clocks") or []),
+            "set_flags": len(_pe.get("set_flags") or []),
+        }
+    except Exception:
+        pass
+    return out
 
 
 def _compact_resolution(res: Any) -> dict[str, Any] | None:

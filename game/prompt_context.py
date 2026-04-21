@@ -117,6 +117,11 @@ from game.response_policy_contracts import (
 )
 from game.turn_packet import build_turn_packet
 from game.ctir_runtime import get_attached_ctir
+from game.world_progression import (
+    build_prompt_world_progression_hints,
+    compose_ctir_world_progression_slice,
+    merge_progression_changed_node_signals,
+)
 from game.narrative_mode_contract import NARRATIVE_MODES, validate_narrative_mode_contract
 from game.narrative_planning import build_narrative_plan
 from game.referent_tracking import build_referent_tracking_artifact
@@ -2701,11 +2706,56 @@ def _compress_world(world: Dict[str, Any]) -> Dict[str, Any]:
             if isinstance(f, dict) and isinstance(f.get('name'), str):
                 faction_names.append(f['name'])
 
-    return {
+    prog_counts: Dict[str, int] | None = None
+    if isinstance(world, dict):
+        _wp = compose_ctir_world_progression_slice(
+            world,
+            changed_node_ids=merge_progression_changed_node_signals(
+                resolution=None,
+                world=world,
+                session=None,
+            ),
+        )
+        prog_counts = {
+            "active_projects": len(_wp.get("active_projects") or []),
+            "faction_pressure": len(_wp.get("faction_pressure") or []),
+            "faction_agenda": len(_wp.get("faction_agenda") or []),
+            "world_clocks": len(_wp.get("world_clocks") or []),
+            "set_flags": len(_wp.get("set_flags") or []),
+        }
+    out: Dict[str, Any] = {
         'world_state': world_state_view,
         'recent_events': recent_events,
         'faction_names': faction_names,
     }
+    if prog_counts is not None:
+        out["progression_counts"] = prog_counts
+    return out
+
+
+def _world_progression_projection_for_prompt(
+    *,
+    ctir_obj: Mapping[str, Any] | None,
+    world: Mapping[str, Any] | None,
+    resolution: Mapping[str, Any] | None,
+    session: Mapping[str, Any] | None,
+) -> tuple[Dict[str, Any] | None, List[str]]:
+    """Prefer CTIR ``world.progression``; else bounded backbone export (not a second authority)."""
+    prog: Dict[str, Any] | None = None
+    if ctir_obj is not None:
+        wb = ctir_obj.get("world") if isinstance(ctir_obj.get("world"), dict) else {}
+        pr = wb.get("progression") if isinstance(wb.get("progression"), dict) else None
+        if pr:
+            prog = dict(pr)
+    if prog is None and isinstance(world, dict):
+        merged = merge_progression_changed_node_signals(
+            resolution=resolution if isinstance(resolution, dict) else None,
+            world=world,
+            session=session if isinstance(session, dict) else None,
+        )
+        prog = compose_ctir_world_progression_slice(world, changed_node_ids=merged)
+    lines = build_prompt_world_progression_hints(prog)
+    return prog, lines
 
 
 def _compress_session(
@@ -3371,6 +3421,12 @@ def build_narration_context(
         for _ik in _CLASSIFIER_ONLY_INTENT_KEYS:
             if _ik in intent:
                 intent_for_scene_payload[_ik] = intent[_ik]
+    wp_projection, wp_hint_lines = _world_progression_projection_for_prompt(
+        ctir_obj=ctir_obj,
+        world=world if isinstance(world, dict) else None,
+        resolution=resolution if isinstance(resolution, dict) else None,
+        session=session if isinstance(session, dict) else None,
+    )
     # Interlocutor lead contract (maintenance): interlocutor_lead_context is the NPC-scoped export from
     # discussion tracking + authoritative lead rows; interlocutor_lead_behavior_hints are derived only
     # from that dict. Keep both separate from lead_context and pending_leads. Synthetic regression targets
@@ -3581,6 +3637,21 @@ def build_narration_context(
             narrative_plan,
             build_error=narrative_plan_build_error,
         ),
+        "world_progression": {
+            "read_source": "ctir"
+            if (
+                ctir_obj is not None
+                and isinstance((ctir_obj.get("world") or {}).get("progression"), dict)
+            )
+            else "backbone_fallback",
+            "changed_node_count": len((wp_projection or {}).get("changed_node_ids") or []),
+            "changed_node_ids_head": list((wp_projection or {}).get("changed_node_ids") or [])[:8],
+            "active_projects_n": len((wp_projection or {}).get("active_projects") or []),
+            "faction_pressure_n": len((wp_projection or {}).get("faction_pressure") or []),
+            "faction_agenda_n": len((wp_projection or {}).get("faction_agenda") or []),
+            "world_clocks_n": len((wp_projection or {}).get("world_clocks") or []),
+            "set_flags_n": len((wp_projection or {}).get("set_flags") or []),
+        },
     }
     first_mention_contract: Dict[str, Any] = {
         "enabled": True,
@@ -3591,12 +3662,21 @@ def build_narration_context(
     }
 
     instructions: List[str] = (
-        [
-            'Prioritize the active conversation over general scene recap.',
-            'Do not fall back to base scene description unless the location materially changes, a new threat emerges, the player explicitly surveys the environment, or the scene needs a transition beat.',
-        ]
-        if has_active_interlocutor
-        else []
+        (
+            [
+                "WORLD SIMULATION (bounded engine slice): " + " | ".join(wp_hint_lines),
+            ]
+            if wp_hint_lines
+            else []
+        )
+        + (
+            [
+                'Prioritize the active conversation over general scene recap.',
+                'Do not fall back to base scene description unless the location materially changes, a new threat emerges, the player explicitly surveys the environment, or the scene needs a transition beat.',
+            ]
+            if has_active_interlocutor
+            else []
+        )
     ) + [
         RULE_PRIORITY_COMPACT_INSTRUCTION,
         'Always answer the player. Prefer partial truth over refusal. Never output meta explanations.',
@@ -4370,6 +4450,16 @@ def build_narration_context(
             "referential_ambiguity_class": referent_tracking.get("referential_ambiguity_class"),
             "ambiguity_risk": referent_tracking.get("ambiguity_risk"),
         }
+        _tp_dbg = _turn_packet.get("debug")
+        if isinstance(_tp_dbg, dict):
+            _turn_packet["debug"] = {
+                **_tp_dbg,
+                "world_progression": {
+                    "changed_nodes_head": list((wp_projection or {}).get("changed_node_ids") or [])[:8],
+                    "active_projects_n": len((wp_projection or {}).get("active_projects") or []),
+                    "world_clocks_n": len((wp_projection or {}).get("world_clocks") or []),
+                },
+            }
 
     payload: Dict[str, Any] = {
         'instructions': instructions,
@@ -4432,6 +4522,7 @@ def build_narration_context(
         'combat': _compress_combat(combat),
         'world_state': world_state_view,
         'world': _compress_world(world),
+        'world_progression_summary': list(wp_hint_lines),
         'campaign': _compress_campaign(campaign),
         'scene': {
             'public': public_scene_for_prompt if public_scene_for_prompt else public_scene,

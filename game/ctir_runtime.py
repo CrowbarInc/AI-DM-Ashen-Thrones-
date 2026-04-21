@@ -20,6 +20,10 @@ from collections.abc import Callable, MutableMapping
 from typing import Any
 
 from game import ctir
+from game.world_progression import (
+    compose_ctir_world_progression_slice,
+    merge_progression_changed_node_signals,
+)
 
 SESSION_CTIR_KEY = "_runtime_canonical_ctir_v1"
 SESSION_CTIR_STAMP_KEY = "_runtime_canonical_ctir_stamp_v1"
@@ -209,13 +213,25 @@ def _slice_interaction(session: dict | None) -> dict[str, Any]:
     return out
 
 
-def _slice_world(resolution: dict | None) -> dict[str, Any]:
-    if not isinstance(resolution, dict):
-        return {}
-    ev = resolution.get("world_tick_events")
-    if isinstance(ev, list) and ev:
-        return {"events": list(ev)[:32]}
-    return {}
+def _slice_world(
+    resolution: dict | None,
+    *,
+    world: dict | None,
+    session: dict | None,
+) -> dict[str, Any]:
+    out: dict[str, Any] = {}
+    if isinstance(resolution, dict):
+        ev = resolution.get("world_tick_events")
+        if isinstance(ev, list) and ev:
+            out["events"] = list(ev)[:32]
+    if isinstance(world, dict):
+        changed = merge_progression_changed_node_signals(
+            resolution=resolution if isinstance(resolution, dict) else None,
+            world=world,
+            session=session if isinstance(session, dict) else None,
+        )
+        out["progression"] = compose_ctir_world_progression_slice(world, changed_node_ids=changed)
+    return out
 
 
 def build_runtime_ctir_for_narration(
@@ -228,6 +244,7 @@ def build_runtime_ctir_for_narration(
     normalized_action: dict | None,
     combat: dict | None,
     session: dict | None,
+    world: dict | None = None,
 ) -> dict[str, Any]:
     """Assemble explicit bounded kwargs for :func:`game.ctir.build_ctir`."""
     return ctir.build_ctir(
@@ -244,7 +261,7 @@ def build_runtime_ctir_for_narration(
             session=session,
         ),
         interaction=_slice_interaction(session),
-        world=_slice_world(resolution),
+        world=_slice_world(resolution, world=world, session=session),
         narrative_anchors=None,
         source_modules=("game.ctir_runtime", "game.api"),
         signals_used=None,

@@ -1,6 +1,6 @@
 from __future__ import annotations
 import copy
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Mapping, Optional
 
 from game.state_authority import WORLD_STATE, assert_owner_can_mutate_domain
 from game.npc_promotion import (
@@ -14,6 +14,7 @@ from game.schema_contracts import (
     adapt_legacy_project,
     coerce_world_state_clock_row,
     normalize_clue,
+    normalize_id,
     normalize_project,
     validate_clue,
     validate_clock,
@@ -133,87 +134,218 @@ def _ensure_npc_agenda(npc: Dict[str, Any]) -> None:
     ensure_npc_social_fields(npc)
 
 
+# Imported after ``ensure_defaults`` / faction helpers because ``game.world_progression`` imports this module.
+# Backbone seam: persistent projects, faction pressure/agenda, ``world_state`` clocks/flags only.
+# Session-scoped clocks and counters are intentionally not modeled as progression nodes here.
+from game import world_progression as wp
+
+
+def _faction_progression_uid(faction: Mapping[str, Any]) -> str:
+    """Stable uid for ``game.world_progression`` node ids (matches backbone faction resolution)."""
+    uid = normalize_id(faction.get("id"))
+    if uid:
+        return uid
+    return normalize_id(faction.get("name")) or "unknown"
+
+
+def _faction_progression_uid_counts(world: Mapping[str, Any]) -> Dict[str, int]:
+    counts: Dict[str, int] = {}
+    for faction in world.get("factions") or []:
+        if isinstance(faction, dict):
+            u = _faction_progression_uid(faction)
+            counts[u] = counts.get(u, 0) + 1
+    return counts
+
+
+def _tick_direct_faction_row_advance(faction: Dict[str, Any]) -> None:
+    """Per-list-row +1 pressure/agenda when uid collisions prevent disambiguated backbone node ids."""
+    _ensure_faction_agenda(faction)
+    try:
+        op = int(faction.get("pressure", 0) or 0)
+    except (TypeError, ValueError):
+        op = 0
+    try:
+        oa = int(faction.get("agenda_progress", 0) or 0)
+    except (TypeError, ValueError):
+        oa = 0
+    faction["pressure"] = min(PRESSURE_MAX, op + 1)
+    faction["agenda_progress"] = min(AGENDA_PROGRESS_MAX, oa + 1)
+
+
+def _merge_validated_clock_row(world: Dict[str, Any], name: str, entry: Dict[str, Any]) -> bool:
+    """Merge one GM/template clock row into ``world_state.clocks`` (full row, not a tick advance).
+
+    Persistent world clocks in JSON are the source of truth; session-scoped clocks live on the
+    session document and are intentionally excluded from the progression backbone.
+    """
+    if not isinstance(name, str) or not name.strip() or name.startswith("_"):
+        return False
+    if not isinstance(entry, dict):
+        return False
+    ensure_defaults(world)
+    ws = world["world_state"]
+    if not isinstance(ws, dict):
+        return False
+    ws.setdefault("clocks", {})
+    if not isinstance(ws["clocks"], dict):
+        ws["clocks"] = {}
+    canon = coerce_world_state_clock_row(name, entry)
+    okc, _ = validate_clock(canon)
+    if not okc:
+        return False
+    ws["clocks"][str(canon["id"])] = canon
+    return True
+
+
+def _upsert_canonical_project_row(world: Dict[str, Any], entry: Dict[str, Any]) -> None:
+    """Normalize and merge one project row into ``world[\"projects\"]`` by id."""
+    row = normalize_project(adapt_legacy_project(entry))
+    okp, _ = validate_project(row)
+    if not okp:
+        return
+    pid = row.get("id")
+    if not pid:
+        return
+    world.setdefault("projects", [])
+    if not isinstance(world["projects"], list):
+        world["projects"] = []
+    found = False
+    for i, p in enumerate(world["projects"]):
+        if isinstance(p, dict) and p.get("id") == pid:
+            world["projects"][i] = row
+            found = True
+            break
+    if not found:
+        world["projects"].append(row)
+
+
+def _tick_advance_active_projects(
+    world: Dict[str, Any], progression_sink: List[Dict[str, Any]], generated: List[Dict[str, Any]]
+) -> None:
+    """+1 progress per active valid project via ``advance_progression_node``; legacy ``project_completed`` events only."""
+    projects = world.get("projects") or []
+    if not isinstance(projects, list):
+        world["projects"] = []
+        projects = world["projects"]
+    for project in projects:
+        if not isinstance(project, dict):
+            continue
+        if project.get("status", "active") != "active":
+            continue
+        canon_proj = normalize_project(adapt_legacy_project(project))
+        okp, _ = validate_project(canon_proj)
+        if not okp:
+            continue
+        pid = str(canon_proj.get("id") or "").strip()
+        if not pid:
+            continue
+        target_val = max(1, int(canon_proj.get("target") or 1))
+        progress_val = int(canon_proj.get("progress", 0) or 0)
+        before_complete = progress_val >= target_val
+        node = wp.advance_progression_node(
+            world, f"project:{pid}", 1, reason="world_tick", event_log=progression_sink
+        )
+        if not node:
+            continue
+        if not before_complete and str(node.get("status") or "") == "complete":
+            generated.append(
+                {
+                    "type": "project_completed",
+                    "text": f"Project completed: {canon_proj.get('name', 'Project')}",
+                }
+            )
+
+
+def _tick_advance_factions_one_step(
+    world: Dict[str, Any], progression_sink: List[Dict[str, Any]], generated: List[Dict[str, Any]]
+) -> None:
+    """+1 pressure and agenda per faction via backbone; threshold triggers preserve legacy shapes."""
+    uid_counts = _faction_progression_uid_counts(world)
+    for faction in world.get("factions") or []:
+        if not isinstance(faction, dict):
+            continue
+        _ensure_faction_agenda(faction)
+        fid = faction.get("id", "") or str(faction.get("name", "unknown"))
+        uid = _faction_progression_uid(faction)
+        old_pressure = int(faction.get("pressure", 0) or 0)
+        old_agenda = int(faction.get("agenda_progress", 0) or 0)
+
+        if uid_counts.get(uid, 0) > 1:
+            _tick_direct_faction_row_advance(faction)
+        else:
+            wp.advance_progression_node(
+                world,
+                wp.faction_pressure_node_id(uid),
+                1,
+                reason="world_tick",
+                event_log=progression_sink,
+            )
+            wp.advance_progression_node(
+                world,
+                wp.faction_agenda_node_id(uid),
+                1,
+                reason="world_tick",
+                event_log=progression_sink,
+            )
+
+        new_pressure = int(faction.get("pressure", 0) or 0)
+        new_agenda = int(faction.get("agenda_progress", 0) or 0)
+
+        if old_pressure < PRESSURE_THRESHOLD_EVENT and new_pressure >= PRESSURE_THRESHOLD_EVENT:
+            fname = faction.get("name", fid)
+            generated.append(
+                {
+                    "type": "faction_pressure",
+                    "text": f"{fname}'s pressure mounts.",
+                    "source": fid,
+                }
+            )
+
+        if old_agenda < AGENDA_THRESHOLD_FLAG and new_agenda >= AGENDA_THRESHOLD_FLAG:
+            flag_key = f"faction_{fid}_agenda_advanced"
+            wp.set_progression_node_value(
+                world,
+                f"world_flag:{flag_key}",
+                True,
+                reason="world_tick_agenda_threshold",
+                event_log=progression_sink,
+            )
+
+        if old_agenda < AGENDA_THRESHOLD_OP_COMPLETE and new_agenda >= AGENDA_THRESHOLD_OP_COMPLETE:
+            fname = faction.get("name", fid)
+            generated.append(
+                {
+                    "type": "faction_operation_complete",
+                    "text": f"{fname} completes an off-screen operation.",
+                    "source": fid,
+                }
+            )
+
+
 def advance_world_tick(world: Dict[str, Any], campaign: Dict[str, Any]) -> Dict[str, Any]:
-    """Advance world by one tick. Project progression unchanged. Adds deterministic
-    faction agenda, pressure thresholds, NPC movement. Return shape preserved."""
+    """Advance persistent world simulation by one deterministic tick.
+
+    Active projects and faction pressure/agenda move through ``game.world_progression``
+    with a detached progression-event sink so helper rows do not enter ``event_log``.
+    Legacy threshold events (pressure, agenda milestones, project completion) and
+    eligible NPC moves are appended to the player-facing ``event_log``. Return shape preserved.
+    """
     assert_owner_can_mutate_domain(__name__, WORLD_STATE, operation="advance_world_tick")
     ensure_defaults(world)
     generated: List[Dict[str, Any]] = []
     ws = world['world_state']
     if not isinstance(ws, dict):
         ws = world.setdefault('world_state', {'flags': {}, 'counters': {}, 'clocks': {}})
-    flags = ws.setdefault('flags', {})
-    if not isinstance(flags, dict):
-        flags = {}
-        ws['flags'] = flags
 
-    # --- Project progression (schema-contract canonical rows) ---
-    projects = world.get('projects') or []
-    if not isinstance(projects, list):
-        projects = []
-        world['projects'] = projects
-    for i, project in enumerate(projects):
-        if not isinstance(project, dict):
-            continue
-        if project.get('status', 'active') == 'active':
-            canon_proj = normalize_project(adapt_legacy_project(project))
-            okp, _ = validate_project(canon_proj)
-            if not okp:
-                continue
-            target_val = max(1, int(canon_proj.get('target') or 1))
-            progress_val = int(canon_proj.get('progress', 0) or 0)
-            canon_proj['progress'] = min(target_val, progress_val + 1)
-            canon_proj['target'] = target_val
-            if canon_proj['progress'] >= target_val:
-                canon_proj['status'] = 'complete'
-                generated.append({
-                    'type': 'project_completed',
-                    'text': f"Project completed: {canon_proj.get('name', 'Project')}"
-                })
-            world['projects'][i] = canon_proj
+    # Routine backbone writes attach ``world_progression`` rows only to ``progression_sink``;
+    # player-facing ``event_log`` carries legacy threshold shapes instead.
+    progression_sink: List[Dict[str, Any]] = []
 
-    # --- Faction agenda simulation ---
-    for faction in world.get('factions') or []:
-        if not isinstance(faction, dict):
-            continue
-        _ensure_faction_agenda(faction)
-        fid = faction.get('id', '') or str(faction.get('name', 'unknown'))
-
-        old_pressure = int(faction.get('pressure', 0) or 0)
-        old_agenda = int(faction.get('agenda_progress', 0) or 0)
-
-        # Pressure: +1 per tick (deterministic). Original stalled at 3; extended for agenda simulation.
-        new_pressure = min(PRESSURE_MAX, old_pressure + 1)
-        faction['pressure'] = new_pressure
-
-        # Agenda progress: +1 per tick (deterministic)
-        new_agenda = min(AGENDA_PROGRESS_MAX, old_agenda + 1)
-        faction['agenda_progress'] = new_agenda
-
-        # Threshold: pressure crosses PRESSURE_THRESHOLD_EVENT -> event once
-        if old_pressure < PRESSURE_THRESHOLD_EVENT and new_pressure >= PRESSURE_THRESHOLD_EVENT:
-            fname = faction.get('name', fid)
-            generated.append({
-                'type': 'faction_pressure',
-                'text': f"{fname}'s pressure mounts.",
-                'source': fid,
-            })
-
-        # Threshold: agenda crosses AGENDA_THRESHOLD_FLAG -> set world flag once
-        if old_agenda < AGENDA_THRESHOLD_FLAG and new_agenda >= AGENDA_THRESHOLD_FLAG:
-            flag_key = f"faction_{fid}_agenda_advanced"
-            flags[flag_key] = True
-
-        # Threshold: agenda crosses AGENDA_THRESHOLD_OP_COMPLETE -> operation complete event once
-        if old_agenda < AGENDA_THRESHOLD_OP_COMPLETE and new_agenda >= AGENDA_THRESHOLD_OP_COMPLETE:
-            fname = faction.get('name', fid)
-            generated.append({
-                'type': 'faction_operation_complete',
-                'text': f"{fname} completes an off-screen operation.",
-                'source': fid,
-            })
+    _tick_advance_active_projects(world, progression_sink, generated)
+    _tick_advance_factions_one_step(world, progression_sink, generated)
 
     # --- NPC movement (deterministic: mobile + agenda_move_to_scene_id) ---
+    # Not a supported progression node kind; remains local to this tick until unified elsewhere.
     for npc in world.get('npcs') or []:
         if not isinstance(npc, dict):
             continue
@@ -253,13 +385,15 @@ def _apply_world_state_updates(world: Dict[str, Any], ws_updates: Dict[str, Any]
         return
     ensure_defaults(world)
     ws = world['world_state']
+    progression_sink: List[Dict[str, Any]] = []
     flags_up = ws_updates.get('flags')
     if isinstance(flags_up, dict):
+        ops: List[Dict[str, Any]] = []
         for k, v in flags_up.items():
             if isinstance(k, str) and k.strip() and not k.startswith('_'):
-                ws.setdefault('flags', {})
-                if isinstance(ws['flags'], dict):
-                    ws['flags'][k] = v
+                ops.append({"op": "set_value", "node_id": f"world_flag:{k}", "value": v})
+        if ops:
+            wp.apply_progression_delta(world, {"ops": ops}, event_log=progression_sink)
     counters_up = ws_updates.get('counters')
     if isinstance(counters_up, dict):
         for k, v in counters_up.items():
@@ -277,13 +411,7 @@ def _apply_world_state_updates(world: Dict[str, Any], ws_updates: Dict[str, Any]
                 continue
             if not isinstance(entry, dict):
                 continue
-            ws.setdefault('clocks', {})
-            if not isinstance(ws['clocks'], dict):
-                ws['clocks'] = {}
-            canon = coerce_world_state_clock_row(name, entry)
-            okc, _ = validate_clock(canon)
-            if okc:
-                ws['clocks'][str(canon['id'])] = canon
+            _merge_validated_clock_row(world, name, entry)
 
 
 def apply_world_updates(world: Dict[str, Any], updates: Dict[str, Any]) -> None:
@@ -301,27 +429,9 @@ def apply_world_updates(world: Dict[str, Any], updates: Dict[str, Any]) -> None:
 
     projects_list = updates.get('projects')
     if isinstance(projects_list, list):
-        world.setdefault('projects', [])
-        if not isinstance(world['projects'], list):
-            world['projects'] = []
         for entry in projects_list:
-            if not isinstance(entry, dict):
-                continue
-            row = normalize_project(adapt_legacy_project(entry))
-            okp, _ = validate_project(row)
-            if not okp:
-                continue
-            pid = row.get('id')
-            if not pid:
-                continue
-            found = False
-            for i, p in enumerate(world['projects']):
-                if isinstance(p, dict) and p.get('id') == pid:
-                    world['projects'][i] = row
-                    found = True
-                    break
-            if not found:
-                world['projects'].append(row)
+            if isinstance(entry, dict):
+                _upsert_canonical_project_row(world, entry)
 
     ws_updates = updates.get('world_state')
     if isinstance(ws_updates, dict):
@@ -359,11 +469,12 @@ def apply_normalized_world_updates(
 
     fp = normalized.get("flags_patch")
     if isinstance(fp, dict) and fp:
-        ws.setdefault("flags", {})
-        if isinstance(ws["flags"], dict):
-            for k, v in fp.items():
-                if isinstance(k, str) and k.strip() and not k.startswith("_"):
-                    ws["flags"][k] = v
+        ops_fp: List[Dict[str, Any]] = []
+        for k, v in fp.items():
+            if isinstance(k, str) and k.strip() and not k.startswith("_"):
+                ops_fp.append({"op": "set_value", "node_id": f"world_flag:{k}", "value": v})
+        if ops_fp:
+            wp.apply_progression_delta(world, {"ops": ops_fp}, event_log=[])
 
     cp = normalized.get("counters_patch")
     if isinstance(cp, dict) and cp:
@@ -379,42 +490,18 @@ def apply_normalized_world_updates(
 
     clk = normalized.get("clocks_patch")
     if isinstance(clk, dict) and clk:
-        ws.setdefault("clocks", {})
-        if not isinstance(ws["clocks"], dict):
-            ws["clocks"] = {}
         for name, entry in clk.items():
             if not isinstance(name, str) or not name.strip() or name.startswith("_"):
                 continue
             if not isinstance(entry, dict):
                 continue
-            canon = coerce_world_state_clock_row(name, entry)
-            okc, _ = validate_clock(canon)
-            if okc:
-                ws["clocks"][str(canon["id"])] = canon
+            _merge_validated_clock_row(world, name, entry)
 
     projects_list = normalized.get("projects_patch")
     if isinstance(projects_list, list) and projects_list:
-        world.setdefault("projects", [])
-        if not isinstance(world["projects"], list):
-            world["projects"] = []
         for entry in projects_list:
-            if not isinstance(entry, dict):
-                continue
-            row = normalize_project(adapt_legacy_project(entry))
-            okp, _ = validate_project(row)
-            if not okp:
-                continue
-            pid = row.get("id")
-            if not pid:
-                continue
-            found = False
-            for i, p in enumerate(world["projects"]):
-                if isinstance(p, dict) and p.get("id") == pid:
-                    world["projects"][i] = row
-                    found = True
-                    break
-            if not found:
-                world["projects"].append(row)
+            if isinstance(entry, dict):
+                _upsert_canonical_project_row(world, entry)
 
     clues_patch = normalized.get("clues_patch")
     if isinstance(clues_patch, dict) and clues_patch:
@@ -490,13 +577,15 @@ def apply_resolution_world_updates(world: Dict[str, Any], resolution_updates: Di
     ensure_defaults(world)
     ws = world['world_state']
 
+    progression_sink: List[Dict[str, Any]] = []
     set_flags = resolution_updates.get('set_flags')
     if isinstance(set_flags, dict):
+        ops_sf: List[Dict[str, Any]] = []
         for k, v in set_flags.items():
             if isinstance(k, str) and k.strip() and not k.startswith('_'):
-                ws.setdefault('flags', {})
-                if isinstance(ws['flags'], dict):
-                    ws['flags'][k] = v
+                ops_sf.append({"op": "set_value", "node_id": f"world_flag:{k}", "value": v})
+        if ops_sf:
+            wp.apply_progression_delta(world, {"ops": ops_sf}, event_log=progression_sink)
 
     incr = resolution_updates.get('increment_counters')
     if isinstance(incr, dict):
@@ -513,14 +602,16 @@ def apply_resolution_world_updates(world: Dict[str, Any], resolution_updates: Di
 
     advance = resolution_updates.get('advance_clocks')
     if isinstance(advance, dict):
-        from game.storage import advance_world_clock
+        ops_clk: List[Dict[str, Any]] = []
         for name, amt in advance.items():
             if isinstance(name, str) and name.strip() and not name.startswith('_'):
                 try:
                     amount = int(amt) if amt is not None else 1
                 except (TypeError, ValueError):
                     amount = 1
-                advance_world_clock(world, name, amount)
+                ops_clk.append({"op": "advance", "node_id": f"world_clock:{name.strip()}", "amount": amount})
+        if ops_clk:
+            wp.apply_progression_delta(world, {"ops": ops_clk}, event_log=progression_sink)
 
 
 def reset_world_playthrough_state(world: Dict[str, Any]) -> None:

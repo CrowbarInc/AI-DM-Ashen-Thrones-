@@ -159,7 +159,7 @@ _REGISTRY: Final[Dict[str, StateDomainSpec]] = {
         visibility_class="mixed",
         may_be_directly_narrated=False,
         gpt_may_mutate=False,
-        mutable_by_modules=frozenset({"game.world", "game.storage", "game.api"}),
+        mutable_by_modules=frozenset({"game.world", "game.world_progression", "game.storage", "game.api"}),
     ),
     SCENE_STATE: StateDomainSpec(
         domain_id=SCENE_STATE,

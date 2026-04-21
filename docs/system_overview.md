@@ -35,6 +35,14 @@ Engine state is split into non-overlapping **domains** (`world_state`, `scene_st
 - Includes scene + interaction context
 - Enforces narration constraints
 
+### Persistent world simulation (Objective #9)
+
+**Canonical seam:** `game/world_progression.py` normalizes and mutates **native** `world.json` roots only (`projects`, faction `pressure` / `agenda_progress`, `world_state.flags`, `world_state.clocks`). `game/world.py` routes supported writes through that seam. There is **no** `world["progression"]` or `session["world_progression"]` shadow store.
+
+**Transport:** Bounded `world.progression` for CTIR is composed by `compose_ctir_world_progression_slice(...)` from the backbone read model plus merged `changed_node_ids` (resolution/update signals and optional session fingerprint diff). `game/prompt_context.py` **prefers** CTIR’s slice when attached and otherwise **falls back** to the same composer over live `world` state—it does not rebuild CTIR or become a second authority.
+
+**Excluded by design:** Session-local clocks, `world_state.counters`, and session documents are **not** progression nodes. Internal backbone helper events must **not** be mirrored into the player-facing `world["event_log"]` on tick or resolution paths that use detached sinks; regression coverage lives in `tests/test_world_simulation_backbone_regressions.py` and `tests/test_world_simulation_backbone_ownership.py`. See [World simulation backbone](world_simulation_backbone.md).
+
 ---
 
 ## Ownership Boundaries

@@ -166,6 +166,7 @@ from game.post_emission_speaker_adoption import (
 )
 from game.utils import utc_iso_now
 from game.world import advance_world_tick, apply_resolution_world_updates
+from game.world_progression import store_progression_fingerprint_on_session
 from game.clocks import get_or_init_clocks, advance_clock, DEFAULT_CLOCKS
 from game.importers.pf_json_importer import import_sheet
 from game.session import reset_session_state
@@ -948,6 +949,7 @@ def _build_gpt_narration_from_authoritative_state(
                 normalized_action=normalized_action if isinstance(normalized_action, dict) else None,
                 combat=combat if isinstance(combat, dict) else None,
                 session=session if isinstance(session, dict) else None,
+                world=world if isinstance(world, dict) else None,
             ),
         )
     prompt_started = _now_perf()
@@ -1544,6 +1546,10 @@ def _build_gpt_narration_from_authoritative_state(
         )
     if isinstance(session, dict) and isinstance(response_policy, dict):
         session["last_turn_response_policy"] = dict(response_policy)
+    store_progression_fingerprint_on_session(
+        session if isinstance(session, dict) else None,
+        world if isinstance(world, dict) else None,
+    )
     return gm
 
 
