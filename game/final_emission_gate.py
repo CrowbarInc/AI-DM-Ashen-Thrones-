@@ -152,6 +152,7 @@ from game.final_emission_repairs import (
     _apply_answer_completeness_layer,
     _apply_fallback_behavior_layer,
     _apply_narrative_authenticity_layer,
+    _apply_referent_clarity_emission_layer,
     _apply_response_delta_layer,
     _apply_social_response_structure_layer,
     _default_fallback_behavior_meta,
@@ -159,6 +160,7 @@ from game.final_emission_repairs import (
     _default_social_response_structure_meta,
     _merge_answer_completeness_meta,
     _merge_fallback_behavior_meta,
+    _merge_referent_clarity_meta,
     _merge_response_delta_meta,
     _merge_social_response_structure_meta,
     _minimal_action_outcome_contract_repair,
@@ -8310,6 +8312,24 @@ def _reply_kind(resolution: Dict[str, Any] | None) -> str:
     return str(sp.get("reply_kind") or "").strip().lower()
 
 
+def _apply_referent_clarity_pre_finalize(out: Dict[str, Any], *, pre_gate_text: str) -> None:
+    """Prompt-artifact referent clarity: last safe text pass before narration-constraint meta sealing."""
+    if not isinstance(out, dict):
+        return
+    text_in = str(out.get("player_facing_text") or "")
+    text_out, dbg, _ = _apply_referent_clarity_emission_layer(text_in, gm_output=out)
+    out["player_facing_text"] = text_out
+    fem = out.get("_final_emission_meta")
+    if not isinstance(fem, dict):
+        fem = {}
+        out["_final_emission_meta"] = fem
+    _merge_referent_clarity_meta(fem, dbg)
+    gtxt = _normalize_text(text_out)
+    if gtxt:
+        fem["final_text_preview"] = (gtxt[:120] + "…") if len(gtxt) > 120 else gtxt
+        fem["post_gate_mutation_detected"] = _normalize_text(pre_gate_text) != gtxt
+
+
 # --- Main entry: wires extracted validators/repairs + remaining in-module policy layers ---
 
 
@@ -8875,6 +8895,7 @@ def apply_final_emission_gate(
                     fem_patch["final_emitted_source"] = str(
                         fb_layer_meta.get("fallback_behavior_repair_mode") or "fallback_behavior_repair"
                     )
+            _apply_referent_clarity_pre_finalize(out, pre_gate_text=pre_gate_text)
             _attach_interaction_continuity_validation(
                 out,
                 resolution_for_contracts=eff_resolution if isinstance(eff_resolution, dict) else None,
@@ -9039,6 +9060,7 @@ def apply_final_emission_gate(
                 fem_patch["final_emitted_source"] = str(
                     fb_layer_meta.get("fallback_behavior_repair_mode") or "fallback_behavior_repair"
                 )
+        _apply_referent_clarity_pre_finalize(out, pre_gate_text=pre_gate_text)
         _attach_interaction_continuity_validation(
             out,
             resolution_for_contracts=eff_resolution if isinstance(eff_resolution, dict) else None,
@@ -9456,6 +9478,7 @@ def apply_final_emission_gate(
             emit_integrity_res_kind=res_kind,
             emit_integrity_response_type_required=str(response_type_debug.get("response_type_required") or ""),
         )
+        _apply_referent_clarity_pre_finalize(out, pre_gate_text=pre_gate_text)
         _attach_interaction_continuity_validation(
             out,
             resolution_for_contracts=resolution if isinstance(resolution, dict) else None,
@@ -9650,6 +9673,7 @@ def apply_final_emission_gate(
         emit_integrity_res_kind=res_kind,
         emit_integrity_response_type_required=str(response_type_debug.get("response_type_required") or ""),
     )
+    _apply_referent_clarity_pre_finalize(out, pre_gate_text=pre_gate_text)
     _attach_interaction_continuity_validation(
         out,
         resolution_for_contracts=resolution if isinstance(resolution, dict) else None,

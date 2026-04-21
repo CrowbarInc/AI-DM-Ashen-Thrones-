@@ -10,6 +10,17 @@ Compact checklist for re-validating **NPC lead continuity** after social or prom
 
 **Unit/integration** — Storage, prompt export, behavior hints, and grounding invariants (targeted modules under `tests/`). **Synthetic transcript regression** — **Deterministic** multi-turn sessions that lock the exported continuity / repeat-suppression **contract**, not narration wording. **Manual gauntlets** — Spot-check conversational feel and obvious repetition or speaker bleed; use [`docs/manual_gauntlets.md`](manual_gauntlets.md) for the **canonical** scripted pass.
 
+### Objective #7 (referent artifact + post-GM clarity)
+
+Regression coverage for the **derivative** referent seam (not player-visibility `validate_player_facing_referential_clarity`, which remains `narration_visibility`-owned):
+
+- **`tests/test_referent_tracking.py`** — deterministic `build_referent_tracking_artifact` / schema invariants.
+- **`tests/test_prompt_context.py`** — prompt bundle includes full `referent_tracking`; `turn_packet["referent_tracking_compact"]` stays the **four-field** mirror only (no drift toward duplicating the full artifact).
+- **`tests/test_final_emission_validators.py`** — `validate_referent_clarity` prefers the full artifact; compact-only observability + repair abstention; at-most-one pronoun repair; forbidden-name / category abstention rules.
+- **`tests/test_final_emission_gate.py`** — `_apply_referent_clarity_pre_finalize` merges `_final_emission_meta` and keeps `final_text_preview` / `post_gate_mutation_detected` coherent after repair.
+
+Shared JSON-safe stubs (optional): `tests/helpers/objective7_referent_fixtures.py`.
+
 ## Playability validation (complete)
 
 ### Playability Validation

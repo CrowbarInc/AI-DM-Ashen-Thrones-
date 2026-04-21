@@ -25,6 +25,7 @@ from game.final_emission_text import (
     _normalize_text,
 )
 from game.final_emission_validators import (
+    _text_mentions_forbidden_name,
     _FALLBACK_FABRICATED_AUTHORITY_PATTERNS,
     _FALLBACK_META_VOICE_PATTERNS,
     _FALLBACK_OVERCERTAIN_BY_SOURCE,
@@ -51,6 +52,7 @@ from game.final_emission_validators import (
     validate_answer_completeness,
     validate_fallback_behavior,
     validate_response_delta,
+    validate_referent_clarity,
     validate_social_response_structure,
 )
 from game.leads import get_lead, normalize_lead
@@ -60,6 +62,7 @@ from game.response_policy_contracts import (
     resolve_fallback_behavior_contract,
     resolve_response_delta_contract,
 )
+from game.turn_packet import TURN_PACKET_METADATA_KEY, resolve_turn_packet_for_gate
 from game.social_exchange_emission import (
     minimal_social_emergency_fallback_line,
     strict_social_emission_will_apply,
@@ -2233,3 +2236,200 @@ def _apply_fallback_behavior_layer(
     if not strict_social_path:
         extra.append("fallback_behavior_unsatisfied_after_repair")
     return text, meta, extra
+
+
+# --- Referent clarity (prompt artifact primary; compact packet observability only) ----------
+
+_REFERENT_REPLACE_PRONOUN_RE = re.compile(
+    r"\b(he|she|they|him|her|them)\b",
+    re.IGNORECASE,
+)
+
+
+def _default_referent_clarity_layer_meta() -> Dict[str, Any]:
+    return {
+        "referent_validation_ran": False,
+        "referent_validation_input_source": None,
+        "referent_violation_categories": [],
+        "referent_repair_allowed_label": None,
+        "referent_repair_label_source": None,
+        "referent_repair_applied": False,
+        "referent_repair_strategy": None,
+        "referent_repair_skipped_reason": None,
+        "unresolved_referent_ambiguity": False,
+    }
+
+
+def _merge_referent_clarity_meta(meta: Dict[str, Any], dbg: Dict[str, Any]) -> None:
+    meta.update(
+        {
+            "referent_validation_ran": bool(dbg.get("referent_validation_ran")),
+            "referent_validation_input_source": dbg.get("referent_validation_input_source"),
+            "referent_violation_categories": list(dbg.get("referent_violation_categories") or []),
+            "referent_repair_allowed_label": dbg.get("referent_repair_allowed_label"),
+            "referent_repair_label_source": dbg.get("referent_repair_label_source"),
+            "referent_repair_applied": bool(dbg.get("referent_repair_applied")),
+            "referent_repair_strategy": dbg.get("referent_repair_strategy"),
+            "referent_repair_skipped_reason": dbg.get("referent_repair_skipped_reason"),
+            "unresolved_referent_ambiguity": bool(dbg.get("unresolved_referent_ambiguity")),
+        }
+    )
+
+
+def _resolve_referent_tracking_compact(gm_output: Dict[str, Any]) -> Dict[str, Any] | None:
+    tp = resolve_turn_packet_for_gate(gm_output)
+    if isinstance(tp, dict):
+        c = tp.get("referent_tracking_compact")
+        if isinstance(c, dict):
+            return c
+    md = gm_output.get("metadata")
+    if isinstance(md, dict):
+        nested = md.get(TURN_PACKET_METADATA_KEY)
+        if isinstance(nested, dict):
+            c = nested.get("referent_tracking_compact")
+            if isinstance(c, dict):
+                return c
+    pc = gm_output.get("prompt_context")
+    if isinstance(pc, dict):
+        nested = pc.get("turn_packet") or pc.get(TURN_PACKET_METADATA_KEY)
+        if isinstance(nested, dict):
+            c = nested.get("referent_tracking_compact")
+            if isinstance(c, dict):
+                return c
+    cached = gm_output.get("_gate_turn_packet_cache")
+    if isinstance(cached, dict):
+        c = cached.get("referent_tracking_compact")
+        if isinstance(c, dict):
+            return c
+    return None
+
+
+def _resolve_referent_tracking_inputs(gm_output: Dict[str, Any]) -> tuple[Dict[str, Any] | None, Dict[str, Any] | None]:
+    pc = gm_output.get("prompt_context") if isinstance(gm_output.get("prompt_context"), dict) else None
+    full: Dict[str, Any] | None = None
+    if pc:
+        rt = pc.get("referent_tracking")
+        if isinstance(rt, dict):
+            full = rt
+    compact = _resolve_referent_tracking_compact(gm_output)
+    return full, compact
+
+
+def _referent_forbidden_name_lc_set(artifact: Dict[str, Any]) -> set[str]:
+    from game.final_emission_validators import _referent_forbidden_display_names
+
+    return _referent_forbidden_display_names(artifact)
+
+
+def _referent_insert_label_allowed(artifact: Dict[str, Any], label: str) -> bool:
+    lab = str(label or "").strip().lower()
+    if not lab:
+        return False
+    if lab in _referent_forbidden_name_lc_set(artifact):
+        return False
+    for row in artifact.get("allowed_named_references") or []:
+        if isinstance(row, dict) and str(row.get("display_name") or "").strip().lower() == lab:
+            return True
+    for row in artifact.get("safe_explicit_fallback_labels") or []:
+        if isinstance(row, dict) and str(row.get("safe_explicit_label") or "").strip().lower() == lab:
+            return True
+    sue = artifact.get("single_unambiguous_entity")
+    if isinstance(sue, dict) and str(sue.get("label") or "").strip().lower() == lab:
+        return True
+    cs = artifact.get("continuity_subject")
+    if isinstance(cs, dict) and str(cs.get("display_name") or "").strip().lower() == lab:
+        eid = str(cs.get("entity_id") or "").strip()
+        active = str(artifact.get("active_interaction_target") or "").strip()
+        itc = artifact.get("interaction_target_continuity") if isinstance(artifact.get("interaction_target_continuity"), dict) else {}
+        if eid and active and eid == active and bool(itc.get("target_visible")) and not bool(itc.get("drift_detected")):
+            return True
+    return False
+
+
+def _repair_referent_clarity_minimal(
+    text: str,
+    validation: Dict[str, Any],
+    artifact: Dict[str, Any],
+) -> tuple[str | None, str | None]:
+    cats = {str(c) for c in (validation.get("referent_violation_categories") or []) if str(c).strip()}
+    if "disallowed_named_reference_in_text" in cats or "unsupported_target_switch" in cats:
+        return None, None
+    label = str(validation.get("referent_repair_allowed_label") or "").strip()
+    if not label or not _referent_insert_label_allowed(artifact, label):
+        return None, None
+    if not cats.intersection(
+        {
+            "pronoun_before_anchor",
+            "ambiguous_pronoun_environment",
+            "target_continuity_drift",
+            "explicit_subject_substitution_eligible",
+        }
+    ):
+        return None, None
+    if "target_continuity_drift" in cats and validation.get("referent_repair_label_source") != "active_interaction_target_pinned":
+        if artifact.get("single_unambiguous_entity") is None:
+            return None, None
+    t = str(text or "")
+    m = _REFERENT_REPLACE_PRONOUN_RE.search(t)
+    if not m:
+        return None, None
+    merged = t[: m.start()] + label + t[m.end() :]
+    return _normalize_text(merged), "replace_first_risky_pronoun_with_explicit_label"
+
+
+def _apply_referent_clarity_emission_layer(
+    text: str,
+    *,
+    gm_output: Dict[str, Any],
+) -> tuple[str, Dict[str, Any], List[str]]:
+    meta = _default_referent_clarity_layer_meta()
+    full, compact = _resolve_referent_tracking_inputs(gm_output)
+    v0 = validate_referent_clarity(
+        text,
+        referent_tracking=full,
+        referent_tracking_compact=compact,
+    )
+    meta["referent_validation_ran"] = bool(v0.get("referent_validation_ran"))
+    meta["referent_validation_input_source"] = v0.get("referent_validation_input_source")
+    meta["referent_violation_categories"] = list(v0.get("referent_violation_categories") or [])
+    meta["referent_repair_allowed_label"] = v0.get("referent_repair_allowed_label")
+    meta["referent_repair_label_source"] = v0.get("referent_repair_label_source")
+    meta["unresolved_referent_ambiguity"] = bool(v0.get("unresolved_referent_ambiguity"))
+
+    src = str(v0.get("referent_validation_input_source") or "")
+    if src == "missing":
+        meta["referent_repair_skipped_reason"] = "no_referent_inputs"
+        return text, meta, []
+    if src == "packet_compact":
+        meta["referent_repair_skipped_reason"] = "limited_input_no_full_artifact"
+        return text, meta, []
+
+    if not isinstance(full, dict):
+        meta["referent_repair_skipped_reason"] = "no_full_artifact"
+        return text, meta, []
+
+    if not v0.get("referent_violation_categories"):
+        return text, meta, []
+
+    repaired, mode = _repair_referent_clarity_minimal(text, v0, full)
+    if not repaired or not mode:
+        meta["referent_repair_skipped_reason"] = "no_safe_deterministic_repair"
+        return text, meta, []
+
+    v1 = validate_referent_clarity(
+        repaired,
+        referent_tracking=full,
+        referent_tracking_compact=compact,
+    )
+    v1_cats = set(v1.get("referent_violation_categories") or [])
+    if "disallowed_named_reference_in_text" in v1_cats:
+        meta["referent_repair_skipped_reason"] = "repair_introduced_or_retained_forbidden_reference"
+        return text, meta, []
+    forb = _referent_forbidden_name_lc_set(full)
+    if forb and _text_mentions_forbidden_name(repaired, forb):
+        meta["referent_repair_skipped_reason"] = "post_repair_forbidden_name_signal"
+        return text, meta, []
+
+    meta["referent_repair_applied"] = _normalize_text(repaired) != _normalize_text(text)
+    meta["referent_repair_strategy"] = mode
+    return repaired, meta, []

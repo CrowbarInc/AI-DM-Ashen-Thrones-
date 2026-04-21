@@ -28,6 +28,7 @@ These rules apply while the repo is in **post-AER consolidation** (see `docs/cur
 | **Social / emission ownership boundaries** | Keep strict-social emission, escalation machinery, retry-terminal fallback suites, and catch-all social tests from competing as co-equal **canonical owners** of the same string families. |
 | **Transcript duplicate assertion thinning** | Transcripts prove sequencing and cross-turn state; reduce duplicate substring locks where a smaller **contract-driven** test already owns the gate. |
 | **Lead / clue cleanup** | **Deferred** until after **prompt/sanitizer** and **social/emission** batches — see `tests/TEST_CONSOLIDATION_PLAN.md` → *Next consolidation order*. |
+| **Objective #7 referent seam** | **Documented + regression-hardened (Block D):** deterministic artifact owner `referent_tracking.py`; prompt ship + compact mirror; post-GM validator/repair/gate wiring per *Objective #7* section above. |
 
 ---
 
@@ -39,6 +40,38 @@ These rules apply while the repo is in **post-AER consolidation** (see `docs/cur
 - **Shared persistence tail:** `_complete_opening_turn_persistence_like_chat(...)` appends the transcript row, traces, and optional `campaign_started` latch for both chat and structured start after GM output exists.
 - **Session/UI latch:** `session.campaign_started` is authoritative; `compose_state()` exposes `ui.campaign_started` and `ui.campaign_can_start` (fresh transcript + turn index zero only).
 - **Final emission** (`apply_final_emission_gate`, sanitizer) remains a **downstream** consumer of opening/start construction — not a co-owner of opening basis assembly.
+
+## Objective #7 — Referent tracking & post-GM referent clarity (derivative seam)
+
+This seam is **derivative-only**: it records bounded, JSON-safe projections and applies **deterministic** post-GM checks/repairs. It is **not** a general referent resolver, clause parser, semantic NLP engine, or a layer that overrides `interaction_context`, CTIR, visibility contracts, or other upstream authorities. **Upstream wins on conflict.**
+
+### Ownership map (runtime)
+
+| Concern | Canonical owner |
+| --- | --- |
+| Deterministic construction + schema validation of the **full** referent artifact | `game/referent_tracking.py` (`build_referent_tracking_artifact`, `validate_referent_tracking_artifact`) |
+| Build **once** per prompt bundle and ship the full artifact on the prompt contract | `game/prompt_context.py` — exports `referent_tracking` on the narration / prompt context |
+| **Compact** turn-packet mirror (observability / transport only; **not** a second full artifact) | `game/turn_packet.py` (packet boundary) — field `referent_tracking_compact` holds only: `referent_artifact_version`, `active_interaction_target`, `referential_ambiguity_class`, `ambiguity_risk` |
+| Post-GM **validation** (prefers full artifact; compact-only paths abstain from repair-driving semantics) | `game/final_emission_validators.py` — `validate_referent_clarity` |
+| Post-GM **bounded repair** (at most one safe pronoun substitution; no new names beyond allow-lists) | `game/final_emission_repairs.py` — `_apply_referent_clarity_emission_layer` and helpers |
+| **Orchestration** (wire the layer on all finalize paths before final sealing / downstream debug attachment) | `game/final_emission_gate.py` — `_apply_referent_clarity_pre_finalize` |
+| Authoritative **social / addressee** resolution and interaction-state mutation | **`game/interaction_context.py`** (unchanged; referent artifact **reads** bounded slices, it does not re-resolve targets) |
+
+### Implemented behavior (precise)
+
+- **Visibility-gated named references:** forbidden/off-visible ids contribute to `_referent_forbidden_display_names` so the validator can flag **disallowed_named_reference_in_text**; repair never inserts those strings.
+- **Conservative pronoun handling:** opening-window pronoun heuristics (`_opening_has_pronoun_risk`) combined with `pronoun_resolution.strategy == "unresolved"` and `referential_ambiguity_class` drive **ambiguous_pronoun_environment** / **pronoun_before_anchor** signals — no GPT, no deep parse.
+- **Structural ambiguity signaling:** `referential_ambiguity_class`, `ambiguity_risk`, and `forbidden_or_unresolved_patterns` are carried on the **full** artifact only; the compact mirror repeats **class + risk** for observability.
+- **Interaction-target continuity support:** `interaction_target_continuity` on the full artifact records drift/prior/current/signal ids; **target_continuity_drift** / **unsupported_target_switch** categories gate repairs conservatively.
+- **Full prompt artifact priority:** `validate_referent_clarity` sets `referent_validation_input_source` to `full_artifact` whenever a valid full artifact is present; violation categories are derived from the **full** artifact even if a compact mirror is also attached.
+- **Compact packet observability only:** if only `referent_tracking_compact` exists, validation runs with **empty** `referent_violation_categories` and records `unresolved_referent_ambiguity` from the compact class — repair **abstains** (`limited_input_no_full_artifact`); no reconstruction of the full artifact from the mirror.
+- **Bounded repair:** `_repair_referent_clarity_minimal` performs **at most one** pronoun→explicit-label substitution (first regex match only); no chaining.
+- **Pinned active-target label:** `referent_repair_label_source == "active_interaction_target_pinned"` only when the validator’s visibility-safe, drift-free conditions hold (continuity subject entity matches visible `active_interaction_target`, etc.).
+- **No second semantic authority:** no model inference; no dependency on free-form clausal semantics beyond bounded string/id checks already described.
+
+### What was explicitly not built
+
+Do **not** describe this seam as: a general referent resolver; a clause parser; a semantic NLP engine; or an authority that overrides `interaction_context`, CTIR, or visibility owners. Packet consumers must **not** treat `referent_tracking_compact` as equivalent to `prompt_context["referent_tracking"]`.
 
 ## Flow (high level)
 
@@ -76,6 +109,7 @@ Examples aligned with this layout:
 | Contextual minimal repair | `test_contextual_minimal_repair_regressions.py` |
 | Empty social / retry / terminal fallback | `test_empty_social_retry_regressions.py` |
 | Final emission gate ordering / contracts | `test_final_emission_gate.py` (practical primary direct-owner suite for direct orchestration-order, final-route, and continuity-adjacent gate-step semantics); downstream suites such as `test_social_exchange_emission.py`, `test_turn_pipeline_shared.py`, `test_stage_diff_telemetry.py`, `test_social_emission_quality.py`, `test_dead_turn_detection.py`, `test_answer_completeness_rules.py`, `test_response_delta_requirement.py`, `test_interaction_continuity_speaker_bridge.py`, `test_interaction_continuity_validation.py`, `test_interaction_continuity_repair.py`, and transcript/regression harnesses remain secondary consumer / observability / regression / continuity-consumer coverage |
+| **Objective #7 referent artifact + post-GM clarity** | `test_referent_tracking.py` — construction/schema of `build_referent_tracking_artifact`; `test_prompt_context.py` — prompt bundle + **compact** `turn_packet.referent_tracking_compact` shape (no full-artifact duplication); `test_final_emission_validators.py` + `test_final_emission_gate.py` — `validate_referent_clarity` + `_apply_referent_clarity_emission_layer` / `_apply_referent_clarity_pre_finalize` seam locks. Optional tiny shared fixtures: `tests/helpers/objective7_referent_fixtures.py`. Player-facing **visibility** referential clarity (`validate_player_facing_referential_clarity`) remains owned by `game/narration_visibility.py` with suites such as `test_referential_clarity_*.py` — a separate, older seam from the prompt-artifact referent pack. |
 
 ## Intentionally deferred (non-goals for this consolidation)
 
@@ -98,3 +132,6 @@ Examples aligned with this layout:
 | How to repair or skip a policy layer | `final_emission_repairs.py` |
 | Normalization / shared patterns | `final_emission_text.py` |
 | Layer order, sanitizer integration, strict-social path, logging | `final_emission_gate.py` (**orchestration** owner) |
+| Referent tracking **artifact** construction / JSON schema | `referent_tracking.py` |
+| Where the full referent artifact is attached to the prompt bundle | `prompt_context.py` |
+| Post-GM referent clarity validation / bounded pronoun repair | `final_emission_validators.py` / `final_emission_repairs.py` (wired by `final_emission_gate.py`) |

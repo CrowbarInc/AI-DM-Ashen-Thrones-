@@ -47,6 +47,8 @@
 
 **TD2-R applied (2026-04-15 — stage-diff telemetry governance alignment):** `game/stage_diff_telemetry.py` remains the canonical runtime owner for telemetry semantics, while `game/turn_packet.py` remains the packet-boundary owner. `tests/test_stage_diff_telemetry.py` is now the practical primary direct-owner suite for direct snapshot/diff/helper semantics and telemetry-owned observability fields. `tests/test_turn_packet_stage_diff_integration.py` remains downstream turn-packet + gate/retry consumer coverage, and `tests/test_narrative_authenticity_aer4.py` remains downstream narrative-authenticity regression / evaluator-consumer coverage. `game.stage_diff_telemetry.resolve_gate_turn_packet(...)` remains compatibility residue only, and packet/gate/retry adjacency remains support/consumption residue rather than telemetry co-ownership.
 
+**RT7-R applied (2026-04-20 — Objective #7 referent seam: docs + regressions):** Runtime ownership and compact-vs-full boundaries are recorded in `docs/narrative_integrity_architecture.md` (*Objective #7*) and `tests/TEST_AUDIT.md` (*RT7-R*). Focused regressions extend `tests/test_final_emission_validators.py`, `tests/test_final_emission_gate.py`, and `tests/test_prompt_context.py`, with optional `tests/helpers/objective7_referent_fixtures.py` for JSON-safe stubs. Keep `validate_player_facing_referential_clarity` (`narration_visibility`) narratively separate from the prompt-artifact referent pack.
+
 **Adjacent low-risk overlap trims (2026-04-09):**
 
 - `tests/test_social.py`: generic-addressing “smoke” now avoids locking the exact `source` / `target_source` enum when the **canonical target id** is correct (vocative vs generic-role precedence is owned by `tests/test_social_target_authority_regressions.py`).

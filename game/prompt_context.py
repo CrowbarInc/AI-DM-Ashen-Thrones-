@@ -58,6 +58,11 @@ Contract layers (orthogonal concerns):
   ``response_policy``, and ``narration_visibility``. If CTIR and the plan ever disagree, **CTIR wins**; the plan is
   derivative and rebuildable from CTIR plus the same bounded slices passed into the builder (including shipped
   ``narration_obligations`` and ``response_policy`` for the mode contract).
+- **referent_tracking** — JSON-safe referent/clause artifact from :func:`game.referent_tracking.build_referent_tracking_artifact`
+  only. Owned by :mod:`game.referent_tracking`; this module calls that constructor once per build with the same bounded
+  inputs already present at the prompt seam (visibility contract, speaker selection, interaction continuity contract,
+  session interaction slice, narrative plan, turn packet snapshot). It does **not** re-derive targets or pronouns locally.
+  Kept separate from CTIR, ``response_policy``, slim ``narration_visibility`` export, social routing, and planning truth.
 """
 from __future__ import annotations
 
@@ -114,6 +119,7 @@ from game.turn_packet import build_turn_packet
 from game.ctir_runtime import get_attached_ctir
 from game.narrative_mode_contract import NARRATIVE_MODES, validate_narrative_mode_contract
 from game.narrative_planning import build_narrative_plan
+from game.referent_tracking import build_referent_tracking_artifact
 from game.state_channels import (
     assert_no_debug_keys_in_prompt_payload,
     project_public_payload,
@@ -4332,6 +4338,27 @@ def build_narration_context(
         response_type=rtc_for_social_structure if isinstance(rtc_for_social_structure, dict) else None,
         sources_used=["prompt_context.build_compressed_narration_context"],
     )
+    # Objective #7: single call into referent_tracking owner; visibility remains the narration_visibility *contract* slice.
+    _plids_for_referent = _pending_lead_ids_from_active_pending(active_pending_leads)
+    _session_interaction_for_referent = _session_interaction_slice_for_narrative_plan(
+        session_view if isinstance(session_view, dict) else None,
+        _plids_for_referent,
+    )
+    referent_tracking = build_referent_tracking_artifact(
+        narration_visibility=visibility_contract if isinstance(visibility_contract, dict) else None,
+        speaker_selection=speaker_selection if isinstance(speaker_selection, dict) else None,
+        interaction_continuity=interaction_continuity_contract if isinstance(interaction_continuity_contract, dict) else None,
+        session_interaction=_session_interaction_for_referent if _session_interaction_for_referent else None,
+        narrative_plan=narrative_plan if isinstance(narrative_plan, dict) else None,
+        turn_packet=_turn_packet if isinstance(_turn_packet, dict) else None,
+    )
+    if isinstance(_turn_packet, dict):
+        _turn_packet["referent_tracking_compact"] = {
+            "referent_artifact_version": referent_tracking.get("version"),
+            "active_interaction_target": referent_tracking.get("active_interaction_target"),
+            "referential_ambiguity_class": referent_tracking.get("referential_ambiguity_class"),
+            "ambiguity_risk": referent_tracking.get("ambiguity_risk"),
+        }
 
     payload: Dict[str, Any] = {
         'instructions': instructions,
@@ -4354,6 +4381,7 @@ def build_narration_context(
         'interlocutor_lead_context': interlocutor_lead_context,
         'interlocutor_lead_behavior_hints': interlocutor_lead_behavior_hints,
         'response_policy': response_policy,
+        'referent_tracking': referent_tracking,
         'turn_packet': _turn_packet,
         'fallback_behavior': fallback_behavior_contract,
         'uncertainty_hint': eff_uncertainty_hint,

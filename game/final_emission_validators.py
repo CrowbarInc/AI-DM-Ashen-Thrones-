@@ -6,7 +6,7 @@ Pure checks only — no ``apply_*`` / merge orchestration. Callers:
 from __future__ import annotations
 
 import re
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Mapping
 
 from game.final_emission_text import (
     _ACTION_STOPWORDS,
@@ -24,6 +24,7 @@ from game.response_policy_contracts import (
     resolve_response_delta_contract as _policy_resolve_response_delta_contract,
     resolve_social_response_structure_contract as _policy_resolve_social_response_structure_contract,
 )
+from game.referent_tracking import REFERENT_TRACKING_ARTIFACT_VERSION
 from game.social_exchange_emission import (
     is_route_illegal_global_or_sanitizer_fallback_text,
     replacement_is_route_legal_social,
@@ -1557,3 +1558,233 @@ def candidate_satisfies_social_response_structure(
     if not r.get("applicable"):
         return True, []
     return bool(r.get("passed")), list(r.get("failure_reasons") or [])
+
+
+# --- Referent clarity (prompt ``referent_tracking`` artifact; deterministic) -----------------
+
+_REFERENT_PRONOUN_RE = re.compile(
+    r"\b(he|she|they|him|her|them|their|his|hers|theirs)\b",
+    re.IGNORECASE,
+)
+_REFERENT_LEAD_WINDOW = 220
+
+
+def _is_full_referent_artifact(obj: Any) -> bool:
+    if not isinstance(obj, Mapping):
+        return False
+    if obj.get("version") != REFERENT_TRACKING_ARTIFACT_VERSION:
+        return False
+    rac = obj.get("referential_ambiguity_class")
+    return rac in ("none", "ambiguous_plural", "ambiguous_singular", "no_anchor")
+
+
+def _referent_active_entity_names(artifact: Mapping[str, Any]) -> Dict[str, str]:
+    out: Dict[str, str] = {}
+    for row in artifact.get("active_entities") or []:
+        if not isinstance(row, Mapping):
+            continue
+        eid = str(row.get("entity_id") or "").strip()
+        nm = str(row.get("display_name") or "").strip()
+        if eid and nm:
+            out[eid] = nm
+    return out
+
+
+def _referent_forbidden_display_names(artifact: Mapping[str, Any]) -> set[str]:
+    """Lowercased display strings tied to forbidden / off-visible ids (observability only)."""
+    id_to_name = _referent_active_entity_names(artifact)
+    names: set[str] = set()
+    for row in artifact.get("forbidden_or_unresolved_patterns") or []:
+        if not isinstance(row, Mapping):
+            continue
+        kind = str(row.get("kind") or "").strip().lower()
+        if kind not in {
+            "memory_entity_not_visible",
+            "ctir_addressed_not_visible",
+            "target_id_not_visible",
+            "continuity_object_not_visible",
+            "interaction_target_drift",
+        }:
+            continue
+        eid = str(
+            row.get("entity_id") or row.get("prior_target_id") or row.get("current_target_id") or ""
+        ).strip()
+        nm = str(row.get("display_name") or "").strip()
+        if not nm and eid:
+            nm = id_to_name.get(eid, "")
+        if nm:
+            names.add(nm.lower())
+    return names
+
+
+def _referent_allowed_display_tokens(artifact: Mapping[str, Any]) -> set[str]:
+    toks: set[str] = set()
+    for row in artifact.get("allowed_named_references") or []:
+        if not isinstance(row, Mapping):
+            continue
+        nm = str(row.get("display_name") or "").strip()
+        eid = str(row.get("entity_id") or "").strip()
+        if nm:
+            toks.add(nm.lower())
+        if eid:
+            toks.add(eid.lower().replace("_", " "))
+    for row in artifact.get("safe_explicit_fallback_labels") or []:
+        if not isinstance(row, Mapping):
+            continue
+        lab = str(row.get("safe_explicit_label") or "").strip()
+        if lab:
+            toks.add(lab.lower())
+    sue = artifact.get("single_unambiguous_entity")
+    if isinstance(sue, Mapping):
+        lab = str(sue.get("label") or "").strip()
+        if lab:
+            toks.add(lab.lower())
+    return toks
+
+
+def _opening_has_pronoun_risk(text: str) -> bool:
+    t = str(text or "").strip()
+    if not t:
+        return False
+    head = t[:_REFERENT_LEAD_WINDOW]
+    return bool(_REFERENT_PRONOUN_RE.search(head))
+
+
+def _text_mentions_forbidden_name(text: str, forbidden_lc: set[str]) -> bool:
+    if not forbidden_lc:
+        return False
+    low = str(text or "").lower()
+    for name in forbidden_lc:
+        if not name or len(name) < 2:
+            continue
+        if re.search(rf"(?<![a-z0-9_]){re.escape(name)}(?![a-z0-9_])", low):
+            return True
+    return False
+
+
+def _unsupported_target_switch_signal(artifact: Mapping[str, Any]) -> bool:
+    itc = artifact.get("interaction_target_continuity")
+    if not isinstance(itc, Mapping):
+        return False
+    if bool(itc.get("drift_detected")):
+        return True
+    cur = str(itc.get("current_target_id") or "").strip()
+    sig = str(itc.get("signal_target_id") or "").strip()
+    if cur and sig and cur != sig:
+        return True
+    return False
+
+
+def validate_referent_clarity(
+    emitted_text: str,
+    *,
+    referent_tracking: Dict[str, Any] | None,
+    referent_tracking_compact: Dict[str, Any] | None,
+) -> Dict[str, Any]:
+    """Deterministic referent checks using the full prompt artifact when present.
+
+    When only ``referent_tracking_compact`` exists, records observability and abstains
+    from repair-driving violations (no reconstruction of the full artifact).
+    """
+    base: Dict[str, Any] = {
+        "referent_validation_ran": False,
+        "referent_validation_input_source": None,
+        "referent_violation_categories": [],
+        "unresolved_referent_ambiguity": False,
+        "referent_repair_allowed_label": None,
+        "referent_repair_label_source": None,
+    }
+    text = _normalize_text(emitted_text)
+    if not text:
+        base["referent_validation_input_source"] = "missing"
+        return base
+
+    full = referent_tracking if _is_full_referent_artifact(referent_tracking) else None
+    compact = referent_tracking_compact if isinstance(referent_tracking_compact, Mapping) else None
+
+    if full is not None:
+        base["referent_validation_input_source"] = "full_artifact"
+    elif compact:
+        base["referent_validation_input_source"] = "packet_compact"
+    else:
+        base["referent_validation_input_source"] = "missing"
+        return base
+
+    base["referent_validation_ran"] = True
+
+    if full is None:
+        rac = str((compact or {}).get("referential_ambiguity_class") or "").strip().lower() or None
+        base["referent_violation_categories"] = []
+        base["unresolved_referent_ambiguity"] = rac not in (None, "", "none")
+        return base
+
+    categories: List[str] = []
+    sue = full.get("single_unambiguous_entity")
+    sue_ok = isinstance(sue, Mapping) and bool(str(sue.get("label") or "").strip())
+    safe_rows = [r for r in (full.get("safe_explicit_fallback_labels") or []) if isinstance(r, Mapping)]
+    exactly_one_safe = len(safe_rows) == 1 and bool(str(safe_rows[0].get("safe_explicit_label") or "").strip())
+
+    if sue_ok:
+        base["referent_repair_allowed_label"] = str(sue.get("label") or "").strip()
+        base["referent_repair_label_source"] = "single_unambiguous_entity"
+    elif exactly_one_safe:
+        base["referent_repair_allowed_label"] = str(safe_rows[0].get("safe_explicit_label") or "").strip()
+        base["referent_repair_label_source"] = "safe_explicit_fallback_labels"
+    else:
+        cs = full.get("continuity_subject")
+        itc = full.get("interaction_target_continuity")
+        active_tgt = str(full.get("active_interaction_target") or "").strip()
+        if (
+            isinstance(cs, Mapping)
+            and isinstance(itc, Mapping)
+            and active_tgt
+            and str(cs.get("entity_id") or "").strip() == active_tgt
+            and bool(itc.get("target_visible"))
+            and not bool(itc.get("drift_detected"))
+        ):
+            lab = str(cs.get("display_name") or "").strip()
+            if lab:
+                base["referent_repair_allowed_label"] = lab
+                base["referent_repair_label_source"] = "active_interaction_target_pinned"
+
+    rac = str(full.get("referential_ambiguity_class") or "").strip().lower()
+    risk = int(full.get("ambiguity_risk") or 0) if isinstance(full.get("ambiguity_risk"), int) else 0
+    pr = full.get("pronoun_resolution") if isinstance(full.get("pronoun_resolution"), Mapping) else {}
+    strat = str(pr.get("strategy") or "").strip().lower()
+
+    if rac in ("ambiguous_plural", "ambiguous_singular", "no_anchor") and _opening_has_pronoun_risk(text):
+        categories.append("ambiguous_pronoun_environment")
+    if strat == "unresolved" and _opening_has_pronoun_risk(text):
+        categories.append("ambiguous_pronoun_environment")
+
+    if sue_ok and _opening_has_pronoun_risk(text):
+        categories.append("explicit_subject_substitution_eligible")
+
+    if (not sue_ok) and (not exactly_one_safe) and _opening_has_pronoun_risk(text):
+        categories.append("pronoun_before_anchor")
+
+    if _unsupported_target_switch_signal(full) and _opening_has_pronoun_risk(text):
+        categories.append("target_continuity_drift")
+
+    active_tgt = str(full.get("active_interaction_target") or "").strip()
+    itc = full.get("interaction_target_continuity") if isinstance(full.get("interaction_target_continuity"), Mapping) else {}
+    if (
+        active_tgt
+        and isinstance(itc, Mapping)
+        and bool(itc.get("drift_detected"))
+        and sue_ok
+        and str((sue or {}).get("entity_id") or "").strip() != active_tgt
+    ):
+        categories.append("unsupported_target_switch")
+
+    forb_names = _referent_forbidden_display_names(full)
+    if forb_names and _text_mentions_forbidden_name(text, forb_names):
+        categories.append("disallowed_named_reference_in_text")
+
+    base["referent_violation_categories"] = list(dict.fromkeys(categories))
+    base["unresolved_referent_ambiguity"] = bool(
+        categories
+        or rac in ("ambiguous_plural", "ambiguous_singular", "no_anchor")
+        or risk >= 55
+    )
+    return base

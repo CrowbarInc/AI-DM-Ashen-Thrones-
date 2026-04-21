@@ -16,6 +16,7 @@ The purpose of this consolidation phase is to make later refactors safer by **fr
 | **Playability Validation** | Turn-scoped “competent human DM” behavioral checks via real `/api/chat` | `game/playability_eval.py`, `tests/test_playability_smoke.py`, `tools/run_playability_validation.py`, `docs/testing.md` |
 | **AER (Anti-Echo & Rumor Realism)** | Narrative authenticity operator model + repairs + telemetry | `docs/narrative_authenticity_anti_echo_rumor_realism.md`, narrative authenticity tests under `tests/` (e.g. `test_narrative_authenticity_*.py`) |
 | **Unified State Authority (Objective #3)** | Declarative domains + guard registry; journal publication seam; allow-listed cross-domain writes | `docs/state_authority_model.md`, `docs/architecture_ownership_ledger.md` → *Unified State Authority Model*, `game/state_authority.py`, **direct-owner suite** `tests/test_state_authority.py` |
+| **Objective #7 — Referent tracking + post-GM referent clarity (Block D)** | Derivative-only artifact + compact packet mirror + FEM validator/repair seam; **not** a second resolver over `interaction_context` | `docs/narrative_integrity_architecture.md` → *Objective #7*, `game/referent_tracking.py`, `game/prompt_context.py`, `game/final_emission_validators.py` / `game/final_emission_repairs.py` / `game/final_emission_gate.py`, tests noted in that section |
 
 ---
 
@@ -82,6 +83,7 @@ These remain true while consolidation proceeds; they are not new feature goals:
 - **Interaction-state mutation** has a single owner: `game/interaction_context.py` (with **narrow, allow-listed** `interaction_state` → `scene_state` writes where scene-adjacent keys are updated—see `docs/state_authority_model.md`).
 - **Unified state authority:** `game/state_authority.py` is registry + guards only; `player_visible_state` stays derived; `hidden_state` stays unpublished until reveal/publication seams.
 - **Implied-action handling** stays narrow, **deterministic**, and runs during normalized turn preparation (before prompt-context assembly).
+- **Objective #7 referent seam:** full artifact is built once in `referent_tracking` and shipped on prompt context; the turn packet carries a **compact mirror only**; post-GM clarity uses the full artifact first and abstains without it — see **`docs/narrative_integrity_architecture.md` → *Objective #7***.
 
 ---
 

@@ -10,6 +10,7 @@ coverage, but should not read as the primary semantic owner for prompt contracts
 from __future__ import annotations
 
 import copy
+import json
 from types import SimpleNamespace
 from unittest.mock import patch
 
@@ -27,6 +28,7 @@ from game.leads import (
     refresh_lead_touch,
     resolve_lead,
 )
+from game.narration_visibility import build_narration_visibility_contract
 from game.prompt_context import (
     CONVERSATIONAL_MEMORY_SOFT_LIMIT,
     NO_VALIDATOR_VOICE_RULE,
@@ -55,6 +57,8 @@ from game.social import (
     mark_player_acknowledged_npc_lead,
     record_npc_lead_discussion,
 )
+from game.referent_tracking import validate_referent_tracking_artifact
+from tests.helpers.objective7_referent_fixtures import REFERENT_TRACKING_COMPACT_KEYS
 from game.world import upsert_world_npc
 
 
@@ -1835,6 +1839,85 @@ def test_build_narration_context_keeps_narration_visibility_separate_from_first_
     assert "first_mention_contract" not in nv
     assert "requires_explicit_intro" not in nv
     assert "disallow_pronoun_first_reference" not in nv
+
+
+@pytest.mark.unit
+def test_build_narration_context_emits_referent_tracking_deterministic_and_turn_packet_compact() -> None:
+    kwargs = _narration_minimal_kwargs()
+    ctx_a = build_narration_context(**kwargs)
+    ctx_b = build_narration_context(**kwargs)
+    rt = ctx_a["referent_tracking"]
+    assert validate_referent_tracking_artifact(rt) is None
+    assert json.dumps(rt, sort_keys=True) == json.dumps(ctx_b["referent_tracking"], sort_keys=True)
+    compact = ctx_a["turn_packet"].get("referent_tracking_compact")
+    assert compact == {
+        "referent_artifact_version": rt.get("version"),
+        "active_interaction_target": rt.get("active_interaction_target"),
+        "referential_ambiguity_class": rt.get("referential_ambiguity_class"),
+        "ambiguity_risk": rt.get("ambiguity_risk"),
+    }
+    assert set(compact.keys()) == REFERENT_TRACKING_COMPACT_KEYS
+    assert REFERENT_TRACKING_COMPACT_KEYS.isdisjoint(
+        {
+            "active_entities",
+            "forbidden_or_unresolved_patterns",
+            "allowed_named_references",
+            "pronoun_resolution",
+            "debug",
+        }
+    )
+
+
+@pytest.mark.unit
+def test_build_narration_context_referent_active_entities_subset_of_visibility_contract() -> None:
+    kwargs = _narration_minimal_kwargs()
+    ctx = build_narration_context(**kwargs)
+    vis = build_narration_visibility_contract(
+        session=kwargs["session"],
+        scene=kwargs["scene"],
+        world=kwargs["world"],
+    )
+    allowed = set(vis.get("visible_entity_ids") or [])
+    rt = ctx["referent_tracking"]
+    emitted = {row["entity_id"] for row in rt.get("active_entities", []) if isinstance(row, dict)}
+    assert emitted <= allowed
+
+
+@pytest.mark.unit
+def test_build_narration_context_referent_gates_active_target_when_not_visible() -> None:
+    world: dict = {"npcs": []}
+    upsert_world_npc(
+        world,
+        {
+            "id": "npc_visible_gate_guard",
+            "name": "Gate guard",
+            "location": "frontier_gate",
+            "role": "guard",
+            "availability": "available",
+            "topics": [],
+        },
+    )
+    session = _session_with_registry()
+    session["interaction_context"] = {
+        "active_interaction_target_id": "npc_not_in_addressable_universe_xyz",
+        "active_interaction_kind": "social",
+        "interaction_mode": "social",
+        "engagement_level": "engaged",
+        "conversation_privacy": None,
+        "player_position_context": None,
+    }
+    # Do not call rebuild_active_scene_entities here: it clears targets outside active_set,
+    # which would erase the off-roster signal this test needs.
+    ctx = build_narration_context(**_narration_minimal_kwargs(session=session, world=world))
+    rt = ctx["referent_tracking"]
+    assert rt["active_interaction_target"] is None
+    assert any(
+        isinstance(p, dict) and p.get("kind") == "target_id_not_visible"
+        for p in (rt.get("forbidden_or_unresolved_patterns") or [])
+    )
+    visible_ids = {e["entity_id"] for e in rt.get("active_entities", []) if isinstance(e, dict)}
+    assert visible_ids == {"npc_visible_gate_guard"}
+    assert "npc_not_in_addressable_universe_xyz" not in visible_ids
 
 
 def test_build_narration_context_exposes_lead_context_and_preserves_pending_surfaces():
