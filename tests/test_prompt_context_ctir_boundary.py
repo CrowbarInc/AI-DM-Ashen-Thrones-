@@ -9,8 +9,9 @@ from unittest.mock import patch
 import pytest
 
 from game import ctir
-from game.ctir_runtime import attach_ctir, detach_ctir
+from game.ctir_runtime import SESSION_CTIR_STAMP_KEY, attach_ctir, detach_ctir
 from game.prompt_context import build_narration_context
+from tests.helpers.ctir_narration_bundle import ensure_narration_plan_bundle_for_manual_ctir_tests
 
 
 def _base_kwargs() -> dict:
@@ -49,6 +50,7 @@ def _base_kwargs() -> dict:
 
 
 def test_get_attached_ctir_called_once_per_build_narration_context() -> None:
+    """``get_attached_ctir`` is read during bundle planning and again during ``build_narration_context``."""
     session = dict(_base_kwargs()["session"])
     c = ctir.build_ctir(
         turn_id=2,
@@ -66,6 +68,8 @@ def test_get_attached_ctir_called_once_per_build_narration_context() -> None:
         },
     )
     attach_ctir(session, c)
+    if not str(session.get(SESSION_CTIR_STAMP_KEY) or "").strip():
+        session[SESSION_CTIR_STAMP_KEY] = "non_production_test_ctir_bundle_stamp_v1"
     calls = 0
 
     def counting_get(sess: object) -> dict | None:
@@ -77,10 +81,13 @@ def test_get_attached_ctir_called_once_per_build_narration_context() -> None:
 
     try:
         with patch("game.prompt_context.get_attached_ctir", side_effect=counting_get):
-            build_narration_context(**{**_base_kwargs(), "session": session})
+            _bk = {**_base_kwargs(), "session": session}
+            ensure_narration_plan_bundle_for_manual_ctir_tests(session, _bk)
+            build_narration_context(**_bk)
     finally:
         detach_ctir(session)
-    assert calls == 1
+    # Bundle seam calls ``get_attached_ctir`` during upstream plan construction, then again in ``build_narration_context``.
+    assert calls == 2
 
 
 def test_classifier_only_intent_merged_when_ctir_present() -> None:
@@ -102,8 +109,12 @@ def test_classifier_only_intent_merged_when_ctir_present() -> None:
         },
     )
     attach_ctir(session, c)
+    if not str(session.get(SESSION_CTIR_STAMP_KEY) or "").strip():
+        session[SESSION_CTIR_STAMP_KEY] = "non_production_test_ctir_bundle_stamp_v1"
     try:
-        ctx = build_narration_context(**{**_base_kwargs(), "session": session})
+        _bk = {**_base_kwargs(), "session": session}
+        ensure_narration_plan_bundle_for_manual_ctir_tests(session, _bk)
+        ctx = build_narration_context(**_bk)
     finally:
         detach_ctir(session)
     scene_block = ctx.get("scene")

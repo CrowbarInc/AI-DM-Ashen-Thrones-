@@ -1,4 +1,4 @@
-"""Canonical owner for prompt-context assembly and prompt-contract bundling.
+"""Prompt-context **renderer and packager** for model-facing narration payloads.
 
 **CTIR-first seam:** For resolved turns, session-backed CTIR (see :mod:`game.ctir_runtime`) is the canonical
 resolved-turn *meaning* snapshot. This module resolves it once per ``build_narration_context`` call via
@@ -9,10 +9,16 @@ encoded in CTIR, and this module must **not** invoke CTIR construction from :mod
 state are reserved for data CTIR intentionally does not own (see call-site comments, e.g. roster/name
 resolution).
 
+**Semantic planning is upstream (C1):** For normal CTIR-backed narration, the session-attached
+**narration plan bundle** from :mod:`game.narration_plan_bundle` (matching :data:`game.ctir_runtime.SESSION_CTIR_STAMP_KEY`)
+is the **required** handoff for narrative plan structure and plan-adjacent ``renderer_inputs`` (including
+``turn_packet`` / ``referent_tracking`` when present on the bundle). This module formats, clips, and
+projects those shipped artifacts; it does **not** compute a narrative plan locally for that path, and a
+missing or stamp-mismatched bundle is a visible seam failure (see ``narration_seam_audit`` / bounded traces),
+not a silent replan from raw state.
+
 Builds the structured prompt-context payload from game state before narration prompt
-construction. This module is the canonical prompt-contract owner and repo-facing
-owner of the full prompt-contract bundle that narration receives. Prompt bundles are
-**read-side instruction carriers** assembled from authoritative inputs—they are not
+construction. Prompt bundles are **read-side instruction carriers** assembled from authoritative inputs—they are not
 canonical stores for ``world_state`` or ``hidden_state``.
 
 It is **not** the canonical owner for extracted lead-only helpers
@@ -56,13 +62,12 @@ Contract layers (orthogonal concerns):
 - **conversational_memory_window** — bounded prior-turn selection for prompts (see
   :mod:`game.conversational_memory_window`); ``recent_log`` in the payload is derived from the selector output.
 - **narrative_plan** — deterministic structural bridge from CTIR to narration (see
-  :func:`game.narrative_planning.build_narrative_plan`). Owned by :mod:`game.narrative_planning`; this module only
-  calls that builder once and attaches the JSON-safe artifact for **structural narration guidance** (anchors,
-  ``narrative_mode`` / ``narrative_mode_contract``, emphasis weights, category reminders). It is **not** consulted
-  for adjudication, routing, policy, or ``turn_summary`` / resolution semantics—those remain CTIR-first (when attached),
-  ``response_policy``, and ``narration_visibility``. If CTIR and the plan ever disagree, **CTIR wins**; the plan is
-  derivative and rebuildable from CTIR plus the same bounded slices passed into the builder (including shipped
-  ``narration_obligations`` and ``response_policy`` for the mode contract).
+  :func:`game.narrative_planning.build_narrative_plan`). Built only upstream at the :mod:`game.narration_plan_bundle`
+  seam for CTIR-backed turns; this module **consumes** the bundled plan for the active stamp (no local replan).
+  It is **not** consulted for adjudication, routing, policy, or ``turn_summary`` / resolution semantics—those remain
+  CTIR-first (when attached), ``response_policy``, and ``narration_visibility``. If CTIR and the plan ever disagree,
+  **CTIR wins**; the plan is derivative and owned upstream from CTIR plus the same bounded slices passed into the
+  builder (including shipped ``narration_obligations`` and ``response_policy`` for the mode contract).
 - **referent_tracking** — JSON-safe referent/clause artifact from :func:`game.referent_tracking.build_referent_tracking_artifact`
   only. Owned by :mod:`game.referent_tracking`; this module calls that constructor once per build with the same bounded
   inputs already present at the prompt seam (visibility contract, speaker selection, interaction continuity contract,
@@ -71,6 +76,7 @@ Contract layers (orthogonal concerns):
 """
 from __future__ import annotations
 
+import copy
 from typing import Any, Dict, List, Mapping, Sequence, Set
 import re
 
@@ -121,14 +127,19 @@ from game.response_policy_contracts import (
     peek_response_type_contract_from_resolution as _peek_response_type_contract_from_resolution_impl,
 )
 from game.turn_packet import build_turn_packet
-from game.ctir_runtime import get_attached_ctir
+from game.ctir_runtime import SESSION_CTIR_STAMP_KEY, get_attached_ctir
+from game.narrative_plan_upstream import (
+    interaction_context_snapshot_from_ctir_semantics,
+    pending_lead_ids_from_active_pending,
+    session_interaction_slice_for_narrative_plan,
+)
+from game.narration_plan_bundle import get_attached_narration_plan_bundle, get_narration_plan_bundle_stamp
 from game.world_progression import (
     build_prompt_world_progression_hints,
     compose_ctir_world_progression_slice,
     merge_progression_changed_node_signals,
 )
 from game.narrative_mode_contract import NARRATIVE_MODES, validate_narrative_mode_contract
-from game.narrative_planning import build_narrative_plan
 from game.referent_tracking import build_referent_tracking_artifact
 from game.state_channels import (
     assert_no_debug_keys_in_prompt_payload,
@@ -312,122 +323,6 @@ def _session_view_overlay_from_ctir_interaction(
     ikind = interaction_sem.get("interaction_kind")
     if isinstance(ikind, str) and ikind.strip():
         out["active_interaction_kind"] = str(ikind).strip()
-    return out
-
-
-def _interaction_context_snapshot_from_ctir_semantics(interaction_sem: Mapping[str, Any] | None) -> dict[str, Any]:
-    """Shape CTIR interaction into the compact dict used by response-type derivation."""
-    if not isinstance(interaction_sem, dict):
-        return {}
-    return {
-        "active_interaction_target_id": str(interaction_sem.get("active_target_id") or "").strip() or None,
-        "active_interaction_kind": str(interaction_sem.get("interaction_kind") or "").strip() or None,
-        "interaction_mode": str(interaction_sem.get("interaction_mode") or "").strip() or None,
-        "engagement_level": None,
-        "conversation_privacy": None,
-        "player_position_context": None,
-    }
-
-
-def _published_entities_slice_for_narrative_planning(
-    visibility_contract: Mapping[str, Any] | None,
-) -> List[Dict[str, Any]]:
-    """Map narration visibility into ``build_narrative_plan(..., published_entities=...)`` rows (strict allowlist).
-
-    Feeds the plan's ``allowable_entity_references``: with this slice passed, that
-    field enumerates the **full** visible entity-id universe (sorted outer boundary
-    for named handles), not a CTIR-only focal subset. Plan derivation remains in
-    :mod:`game.narrative_planning`.
-    """
-    if not isinstance(visibility_contract, Mapping):
-        return []
-    ids_raw = visibility_contract.get("visible_entity_ids") or []
-    names_raw = visibility_contract.get("visible_entity_names") or []
-    if not isinstance(ids_raw, list):
-        return []
-    names_list = names_raw if isinstance(names_raw, list) else []
-    rows: List[Dict[str, Any]] = []
-    seen: Set[str] = set()
-    for i, raw_id in enumerate(ids_raw):
-        eid = str(raw_id or "").strip()
-        if not eid or eid in seen:
-            continue
-        seen.add(eid)
-        row: Dict[str, Any] = {"entity_id": eid}
-        if i < len(names_list):
-            nm = str(names_list[i] or "").strip()
-            if nm:
-                row["display_name"] = nm
-        rows.append(row)
-        if len(rows) >= 48:
-            break
-    rows.sort(key=lambda r: str(r.get("entity_id") or ""))
-    return rows
-
-
-def _public_scene_slice_for_narrative_plan(
-    public_scene: Mapping[str, Any] | None,
-    scene_state_anchor_contract: Mapping[str, Any] | None,
-) -> Dict[str, Any]:
-    """Bounded public-scene fields for :func:`game.narrative_planning.build_narrative_plan` (no hidden layers)."""
-    ps = public_scene if isinstance(public_scene, Mapping) else {}
-    out: Dict[str, Any] = {}
-    sid = str(ps.get("id") or "").strip()
-    if sid:
-        out["scene_id"] = sid
-    title = str(ps.get("name") or ps.get("title") or "").strip()
-    if title:
-        out["scene_name"] = title[:160]
-    loc = ps.get("location_tokens") or ps.get("location_anchors")
-    if isinstance(loc, (list, tuple)):
-        toks = [str(x).strip() for x in loc if isinstance(x, str) and str(x).strip()]
-        if toks:
-            out["location_tokens"] = toks[:16]
-    elif isinstance(loc, str) and loc.strip():
-        out["location_tokens"] = [loc.strip()[:160]]
-    elif isinstance(scene_state_anchor_contract, Mapping):
-        lt = scene_state_anchor_contract.get("location_tokens")
-        if isinstance(lt, list) and lt:
-            out["location_tokens"] = [
-                str(x).strip() for x in lt if isinstance(x, str) and str(x).strip()
-            ][:16]
-    return out
-
-
-def _pending_lead_ids_from_active_pending(rows: Sequence[Any] | None) -> List[str]:
-    """Stable id list from filtered pending lead dicts (ids only; no prose)."""
-    if not rows:
-        return []
-    out: List[str] = []
-    seen: Set[str] = set()
-    for row in rows:
-        if not isinstance(row, dict):
-            continue
-        lid = str(
-            row.get("authoritative_lead_id") or row.get("lead_id") or row.get("id") or ""
-        ).strip()
-        if not lid or lid in seen:
-            continue
-        seen.add(lid)
-        out.append(lid)
-        if len(out) >= 48:
-            break
-    return sorted(out)
-
-
-def _session_interaction_slice_for_narrative_plan(
-    session_view: Mapping[str, Any] | None,
-    pending_lead_ids: Sequence[str],
-) -> Dict[str, Any]:
-    """Session fields already mirrored at the prompt seam; no extra engine reads."""
-    sv = session_view if isinstance(session_view, Mapping) else {}
-    out: Dict[str, Any] = {}
-    at = str(sv.get("active_interaction_target_id") or "").strip()
-    if at:
-        out["active_interaction_target_id"] = at
-    pids = [str(x).strip() for x in pending_lead_ids if str(x).strip()]
-    if pids:
-        out["pending_lead_ids"] = pids[:48]
     return out
 
 
@@ -3363,7 +3258,7 @@ def _compact_manual_play_instructions(
     return out
 
 
-def build_narration_context(
+def _build_narration_context_head_state(
     campaign: Dict[str, Any],
     world: Dict[str, Any],
     session: Dict[str, Any],
@@ -3390,32 +3285,11 @@ def build_narration_context(
     prompt_profile: str = "full",
     include_non_public_prompt_keys: bool = False,
 ) -> Dict[str, Any]:
-    """Build a compressed narration context payload for GPT.
+    """Assemble prompt-context head state through ``scene_state_anchor_contract`` (bundle / plan seam).
 
-    Caller must precompute scene layers (public_scene, clues, hidden, etc.)
-    and pass them in. This avoids duplicating _scene_layers logic and ensures
-    hidden facts stay in gm_only only.
-
-    Returns a dict suitable for JSON serialization as the user message content.
-
-    Narration contracts are layered: visibility (reference scope), narrative_authority (certainty
-    and assertion boundaries), scene_state_anchor (grounding), answer_completeness
-    (answer-shape obligations), fallback_behavior (narrow uncertainty fallback shape),
-    tone_escalation (interpersonal intensity caps), anti_railroading (player agency vs surfaced leads),
-    context_separation (ambient pressure vs local exchange), and player_facing_narration_purity
-    (no scaffold/menu/engine coaching in prose),
-    and social_response_structure (dialogue-turn spoken shape when response type requires dialogue),
-    narrative_authenticity (anti-echo / signal-density / diegetic-shape pressure shipped on response_policy),
-    and interaction_continuity (thread / interlocutor anchoring snapshot for enforcement layers);
-    see module docstring.
-
-    By default the returned mapping is the **model-facing** bundle: top-level keys are
-    shallow-projected through :func:`game.state_channels.project_public_payload` and
-    checked with :func:`game.state_channels.assert_no_debug_keys_in_prompt_payload`.
-    Set ``include_non_public_prompt_keys=True`` only for tests or tooling that must
-    inspect builder-local mirrors such as ``prompt_debug`` (never for live model input).
+    Used by :mod:`game.narration_plan_bundle` and :func:`build_narration_context` so the narration plan
+    attachment shares one code path with the renderer.
     """
-    # One session read per narration-context build; adapter below is the mapping seam (not a second authority).
     ctir_obj = get_attached_ctir(session if isinstance(session, dict) else None)
     if ctir_obj is not None:
         prompt_sem = _ctir_to_prompt_semantics(ctir_obj)
@@ -3438,10 +3312,6 @@ def build_narration_context(
         resolution=resolution if isinstance(resolution, dict) else None,
         session=session if isinstance(session, dict) else None,
     )
-    # Interlocutor lead contract (maintenance): interlocutor_lead_context is the NPC-scoped export from
-    # discussion tracking + authoritative lead rows; interlocutor_lead_behavior_hints are derived only
-    # from that dict. Keep both separate from lead_context and pending_leads. Synthetic regression targets
-    # this export for continuity / repeat suppression—not fixed narration wording.
     active_pending_leads = (
         filter_pending_leads_for_active_follow_surface(session, pending_leads)
         if isinstance(session, dict)
@@ -3539,11 +3409,8 @@ def build_narration_context(
             visibility_contract=visibility_contract,
         )
         _opening_basis = (opening_scene_export.get("contract") or {}).get("narration_basis_visible_facts")
-        # Empty opening basis is intentional (OF1): do not fall back to unfiltered curated facts.
         if isinstance(_opening_basis, list):
             visible_facts_for_prompt = list(_opening_basis)
-    # Opening curation may return display-preserved strings; minimal narration_visibility export
-    # matches build_narration_visibility_contract (normalized, deduped).
     _seen_visible_fact: Set[str] = set()
     visible_facts_export: List[str] = []
     for _vf in visible_facts_for_prompt:
@@ -3570,61 +3437,208 @@ def build_narration_context(
         world if isinstance(world, dict) else None,
         resolution=resolution_sem if isinstance(resolution_sem, dict) else None,
     )
-    # Narrative plan (Objective #2 / #6): single consumer call into :mod:`game.narrative_planning` at the CTIR seam.
-    # Uses bounded inputs already assembled for this build (CTIR + visibility allowlist + compressed log slice +
-    # narration_obligations + response_policy aligned with the shipped prompt bundle).
-    #
-    # Consumer note: ``allowable_entity_references`` = visible handle *boundary* when the published slice is passed;
-    # objectives must not use it as a proxy for interlocutor or scene focus (see ``scene_anchors``, ``narrative_mode``, etc.).
-    #
-    # Seam authority (do not regress):
-    # - ``narrative_plan`` is emitted verbatim from :func:`build_narrative_plan` and attached to the payload only.
-    #   It must never be merged into ``resolution_sem``, ``intent_sem``, ``turn_summary``, ``response_policy``, or
-    #   visibility exports — those domains stay CTIR- and contract-rooted.
-    # - Prompt instructions may reference the plan for *structure* (see ``_NARRATIVE_PLAN_STRUCT_GUIDANCE``); they
-    #   must not treat plan fields as alternate resolved-turn truth when CTIR or policy contradicts them.
+    return {
+        "ctir_obj": ctir_obj,
+        "prompt_sem": prompt_sem,
+        "resolution_sem": resolution_sem,
+        "intent_sem": intent_sem,
+        "interaction_sem": interaction_sem,
+        "intent_for_scene_payload": intent_for_scene_payload,
+        "wp_projection": wp_projection,
+        "wp_hint_lines": wp_hint_lines,
+        "active_pending_leads": active_pending_leads,
+        "runtime": runtime,
+        "session_view": session_view,
+        "narration_obligations": narration_obligations,
+        "social_authority": social_authority,
+        "eff_uncertainty_hint": eff_uncertainty_hint,
+        "recent_log_compact": recent_log_compact,
+        "response_policy": response_policy,
+        "res": res,
+        "state_changes": state_changes,
+        "scene_advancement": scene_advancement,
+        "has_scene_change_context": has_scene_change_context,
+        "interaction_continuity": interaction_continuity,
+        "has_active_interlocutor": has_active_interlocutor,
+        "scene_pub_id": scene_pub_id,
+        "interlocutor_export": interlocutor_export,
+        "answer_style_hints_list": answer_style_hints_list,
+        "clue_records_all": clue_records_all,
+        "clue_visibility": clue_visibility,
+        "visibility_contract": visibility_contract,
+        "visible_facts_for_prompt": visible_facts_for_prompt,
+        "res_for_vis": res_for_vis,
+        "res_md_vis": res_md_vis,
+        "opening_scene_export": opening_scene_export,
+        "visible_facts_export": visible_facts_export,
+        "narration_visibility": narration_visibility,
+        "scene_state_anchor_contract": scene_state_anchor_contract,
+        "public_scene": public_scene,
+    }
+
+
+def build_narration_context(
+    campaign: Dict[str, Any],
+    world: Dict[str, Any],
+    session: Dict[str, Any],
+    character: Dict[str, Any],
+    scene: Dict[str, Any],
+    combat: Dict[str, Any],
+    recent_log: List[Dict[str, Any]],
+    user_text: str,
+    resolution: Dict[str, Any] | None,
+    scene_runtime: Dict[str, Any] | None,
+    *,
+    public_scene: Dict[str, Any],
+    discoverable_clues: List[str],
+    gm_only_hidden_facts: List[str],
+    gm_only_discoverable_locked: List[str],
+    discovered_clue_records: List[Dict[str, Any]],
+    undiscovered_clue_records: List[Dict[str, Any]],
+    pending_leads: List[Any],
+    intent: Dict[str, Any],
+    world_state_view: Dict[str, Any],
+    mode_instruction: str,
+    recent_log_for_prompt: List[Dict[str, Any]],
+    uncertainty_hint: Dict[str, Any] | None = None,
+    prompt_profile: str = "full",
+    include_non_public_prompt_keys: bool = False,
+) -> Dict[str, Any]:
+    """Build a compressed narration context payload for GPT.
+
+    Caller must precompute scene layers (public_scene, clues, hidden, etc.)
+    and pass them in. This avoids duplicating _scene_layers logic and ensures
+    hidden facts stay in gm_only only.
+
+    Returns a dict suitable for JSON serialization as the user message content.
+
+    Narration contracts are layered: visibility (reference scope), narrative_authority (certainty
+    and assertion boundaries), scene_state_anchor (grounding), answer_completeness
+    (answer-shape obligations), fallback_behavior (narrow uncertainty fallback shape),
+    tone_escalation (interpersonal intensity caps), anti_railroading (player agency vs surfaced leads),
+    context_separation (ambient pressure vs local exchange), and player_facing_narration_purity
+    (no scaffold/menu/engine coaching in prose),
+    and social_response_structure (dialogue-turn spoken shape when response type requires dialogue),
+    narrative_authenticity (anti-echo / signal-density / diegetic-shape pressure shipped on response_policy),
+    and interaction_continuity (thread / interlocutor anchoring snapshot for enforcement layers);
+    see module docstring.
+
+    By default the returned mapping is the **model-facing** bundle: top-level keys are
+    shallow-projected through :func:`game.state_channels.project_public_payload` and
+    checked with :func:`game.state_channels.assert_no_debug_keys_in_prompt_payload`.
+    Set ``include_non_public_prompt_keys=True`` only for tests or tooling that must
+    inspect builder-local mirrors such as ``prompt_debug`` (never for live model input).
+    """
+    # Head state through scene anchor: shared with :mod:`game.narration_plan_bundle` (renderer-only downstream).
+    _head = _build_narration_context_head_state(
+        campaign,
+        world,
+        session,
+        character,
+        scene,
+        combat,
+        recent_log,
+        user_text,
+        resolution,
+        scene_runtime,
+        public_scene=public_scene,
+        discoverable_clues=discoverable_clues,
+        gm_only_hidden_facts=gm_only_hidden_facts,
+        gm_only_discoverable_locked=gm_only_discoverable_locked,
+        discovered_clue_records=discovered_clue_records,
+        undiscovered_clue_records=undiscovered_clue_records,
+        pending_leads=pending_leads,
+        intent=intent,
+        world_state_view=world_state_view,
+        mode_instruction=mode_instruction,
+        recent_log_for_prompt=recent_log_for_prompt,
+        uncertainty_hint=uncertainty_hint,
+        prompt_profile=prompt_profile,
+        include_non_public_prompt_keys=include_non_public_prompt_keys,
+    )
+    ctir_obj = _head["ctir_obj"]
+    prompt_sem = _head["prompt_sem"]
+    resolution_sem = _head["resolution_sem"]
+    intent_sem = _head["intent_sem"]
+    interaction_sem = _head["interaction_sem"]
+    intent_for_scene_payload = _head["intent_for_scene_payload"]
+    wp_projection = _head["wp_projection"]
+    wp_hint_lines = _head["wp_hint_lines"]
+    active_pending_leads = _head["active_pending_leads"]
+    runtime = _head["runtime"]
+    session_view = _head["session_view"]
+    narration_obligations = _head["narration_obligations"]
+    social_authority = _head["social_authority"]
+    eff_uncertainty_hint = _head["eff_uncertainty_hint"]
+    recent_log_compact = _head["recent_log_compact"]
+    response_policy = _head["response_policy"]
+    res = _head["res"]
+    state_changes = _head["state_changes"]
+    scene_advancement = _head["scene_advancement"]
+    has_scene_change_context = _head["has_scene_change_context"]
+    interaction_continuity = _head["interaction_continuity"]
+    has_active_interlocutor = _head["has_active_interlocutor"]
+    scene_pub_id = _head["scene_pub_id"]
+    interlocutor_export = _head["interlocutor_export"]
+    answer_style_hints_list = _head["answer_style_hints_list"]
+    clue_records_all = _head["clue_records_all"]
+    clue_visibility = _head["clue_visibility"]
+    visibility_contract = _head["visibility_contract"]
+    visible_facts_for_prompt = _head["visible_facts_for_prompt"]
+    res_for_vis = _head["res_for_vis"]
+    res_md_vis = _head["res_md_vis"]
+    opening_scene_export = _head["opening_scene_export"]
+    visible_facts_export = _head["visible_facts_export"]
+    narration_visibility = _head["narration_visibility"]
+    scene_state_anchor_contract = _head["scene_state_anchor_contract"]
+    public_scene = _head["public_scene"]
+
+    # Narrative plan (C1): CTIR-backed narration requires a stamp-matched session bundle; no local replan.
     narrative_plan: Dict[str, Any] | None = None
     narrative_plan_build_error: str | None = None
+    _bundle = get_attached_narration_plan_bundle(session if isinstance(session, dict) else None)
+    _ctir_stamp = str((session or {}).get(SESSION_CTIR_STAMP_KEY) or "").strip() if isinstance(session, dict) else ""
+    _bundle_stamp = get_narration_plan_bundle_stamp(session if isinstance(session, dict) else None)
+    _bundle_renderer_inputs: Dict[str, Any] = {}
+    bundle_stamp_ok = False
     if ctir_obj is not None:
-        # Objective #6: ``build_narrative_mode_contract`` reads ``response_policy.response_type_contract``.
-        # Attach the same peek/derive used later for social_structure so narrative_mode matches shipped RTC
-        # (not only narration_obligations heuristics).
-        if isinstance(resolution_sem, dict):
-            _rtc_peek_plan = peek_response_type_contract_from_resolution(resolution_sem)
-            _ic_rtc_plan = _interaction_context_snapshot_from_ctir_semantics(interaction_sem)
-            _rtc_plan_dict = _rtc_peek_plan or derive_response_type_contract(
-                segmented_turn=None,
-                normalized_action=None,
-                resolution=resolution_sem,
-                interaction_context=_ic_rtc_plan,
-                directed_social_entry=None,
-                route_choice=None,
-                raw_player_text=str(user_text or ""),
-            ).to_dict()
-            if isinstance(_rtc_plan_dict, dict):
-                response_policy["response_type_contract"] = _rtc_plan_dict
-        try:
-            _pub_ent = _published_entities_slice_for_narrative_planning(visibility_contract)
-            _pub_scene_slice = _public_scene_slice_for_narrative_plan(
-                public_scene if isinstance(public_scene, dict) else None,
-                scene_state_anchor_contract if isinstance(scene_state_anchor_contract, dict) else None,
-            )
-            _plids = _pending_lead_ids_from_active_pending(active_pending_leads)
-            _sess_int = _session_interaction_slice_for_narrative_plan(session_view, _plids)
-            narrative_plan = build_narrative_plan(
-                ctir=ctir_obj,
-                session_interaction=_sess_int or None,
-                public_scene_slice=_pub_scene_slice or None,
-                published_entities=_pub_ent,
-                recent_compressed_events=list(recent_log_compact or []),
-                narration_obligations=narration_obligations,
-                response_policy=response_policy,
-            )
-            # Defensive invariant: builder output only (catch accidental reassignment / shadowing bugs).
-            assert narrative_plan is None or isinstance(narrative_plan, dict)
-        except Exception as exc:
-            narrative_plan_build_error = f"{type(exc).__name__}: {exc}"
+        bundle_stamp_ok = (
+            isinstance(_bundle, dict)
+            and bool(_bundle_stamp)
+            and bool(_ctir_stamp)
+            and _bundle_stamp == _ctir_stamp
+        )
+        if bundle_stamp_ok:
+            np = _bundle.get("narrative_plan")
+            narrative_plan = np if isinstance(np, dict) else None
+            pm = _bundle.get("plan_metadata") if isinstance(_bundle.get("plan_metadata"), dict) else {}
+            err_raw = pm.get("narration_plan_bundle_error")
+            narrative_plan_build_error = str(err_raw).strip() if err_raw else None
+            if narrative_plan is None and not narrative_plan_build_error:
+                narrative_plan_build_error = "narration_plan_bundle_missing_plan"
+            _ri = _bundle.get("renderer_inputs")
+            _bundle_renderer_inputs = dict(_ri) if isinstance(_ri, dict) else {}
+        else:
             narrative_plan = None
+            if not _ctir_stamp:
+                narrative_plan_build_error = "narration_plan_bundle_required:missing_ctir_stamp"
+            elif not isinstance(_bundle, dict):
+                narrative_plan_build_error = "narration_plan_bundle_required:bundle_absent"
+            elif not _bundle_stamp or _bundle_stamp != _ctir_stamp:
+                narrative_plan_build_error = "narration_plan_bundle_required:stamp_mismatch_or_stale"
+            else:
+                narrative_plan_build_error = "narration_plan_bundle_required"
+
+    if (
+        ctir_obj is not None
+        and bundle_stamp_ok
+        and isinstance(response_policy, dict)
+        and isinstance(_bundle_renderer_inputs.get("response_policy"), dict)
+    ):
+        brp = _bundle_renderer_inputs["response_policy"]
+        rtc_override = brp.get("response_type_contract")
+        if isinstance(rtc_override, dict):
+            response_policy["response_type_contract"] = copy.deepcopy(rtc_override)
 
     prompt_debug_anchor = {
         "scene_state_anchor": {
@@ -3672,6 +3686,15 @@ def build_narration_context(
         "disallow_unearned_familiarity": True,
     }
 
+    narration_seam_audit: Dict[str, Any] | None = None
+    if ctir_obj is not None and narrative_plan is None:
+        narration_seam_audit = {
+            "narrative_plan_mandatory_seam": True,
+            "narrative_plan_present": False,
+            "narration_plan_bundle_error": narrative_plan_build_error or "unknown_narrative_plan_failure",
+            "semantic_bypass_blocked": True,
+        }
+
     instructions: List[str] = (
         (
             [
@@ -3685,7 +3708,7 @@ def build_narration_context(
                 'Prioritize the active conversation over general scene recap.',
                 'Do not fall back to base scene description unless the location materially changes, a new threat emerges, the player explicitly surveys the environment, or the scene needs a transition beat.',
             ]
-            if has_active_interlocutor
+            if has_active_interlocutor and narrative_plan is None
             else []
         )
     ) + [
@@ -3715,6 +3738,15 @@ def build_narration_context(
         *NARRATION_VISIBILITY_MANDATORY_INSTRUCTIONS,
         *FIRST_MENTION_MANDATORY_INSTRUCTIONS,
         *SCENE_STATE_ANCHOR_MANDATORY_INSTRUCTIONS,
+        *(
+            [
+                "OPERATOR / AUDIT — NARRATION PIPELINE: narrative_plan was mandatory for this CTIR-attached turn but is absent. "
+                "Treat this as a visible pipeline failure (semantic_bypass_blocked in narration_seam_audit when present); "
+                "obey CTIR + shipped response_policy for facts; do not invent an alternate structural plan from raw scene text.",
+            ]
+            if ctir_obj is not None and narrative_plan is None
+            else []
+        ),
         *(_NARRATIVE_PLAN_STRUCT_GUIDANCE if narrative_plan is not None else ()),
         (
             "SCENE MOMENTUM RULE (HARD RULE): Every 2–3 exchanges, you MUST introduce exactly one of: "
@@ -4143,7 +4175,7 @@ def build_narration_context(
     # policy in the prompt bundle. The implementation remains delegated to the
     # downstream policy consumer module as compatibility residue only.
     interaction_for_rtc = (
-        _interaction_context_snapshot_from_ctir_semantics(interaction_sem)
+        interaction_context_snapshot_from_ctir_semantics(interaction_sem)
         if ctir_obj is not None
         else response_type_context_snapshot(session if isinstance(session, dict) else None)
     )
@@ -4427,33 +4459,39 @@ def build_narration_context(
         }
 
     # Canonical snapshot for retry / gate contract lookup (not authoritative engine state).
-    _turn_packet = build_turn_packet(
-        response_policy=response_policy,
-        scene_id=scene_pub_id or None,
-        player_text=str(user_text or ""),
-        resolution=resolution_sem if isinstance(resolution_sem, dict) else None,
-        interaction_continuity=interaction_continuity,
-        narration_obligations=narration_obligations,
-        last_human_adjacent_continuity=(
-            runtime.get("last_human_adjacent_continuity") if isinstance(runtime, dict) else None
-        ),
-        response_type=rtc_for_social_structure if isinstance(rtc_for_social_structure, dict) else None,
-        sources_used=["prompt_context.build_compressed_narration_context"],
-    )
-    # Objective #7: single call into referent_tracking owner; visibility remains the narration_visibility *contract* slice.
-    _plids_for_referent = _pending_lead_ids_from_active_pending(active_pending_leads)
-    _session_interaction_for_referent = _session_interaction_slice_for_narrative_plan(
-        session_view if isinstance(session_view, dict) else None,
-        _plids_for_referent,
-    )
-    referent_tracking = build_referent_tracking_artifact(
-        narration_visibility=visibility_contract if isinstance(visibility_contract, dict) else None,
-        speaker_selection=speaker_selection if isinstance(speaker_selection, dict) else None,
-        interaction_continuity=interaction_continuity_contract if isinstance(interaction_continuity_contract, dict) else None,
-        session_interaction=_session_interaction_for_referent if _session_interaction_for_referent else None,
-        narrative_plan=narrative_plan if isinstance(narrative_plan, dict) else None,
-        turn_packet=_turn_packet if isinstance(_turn_packet, dict) else None,
-    )
+    _btp = _bundle_renderer_inputs.get("turn_packet") if isinstance(_bundle_renderer_inputs, dict) else None
+    _brt = _bundle_renderer_inputs.get("referent_tracking") if isinstance(_bundle_renderer_inputs, dict) else None
+    if ctir_obj is not None and bundle_stamp_ok and isinstance(_btp, dict) and isinstance(_brt, dict):
+        _turn_packet = copy.deepcopy(_btp)
+        referent_tracking = copy.deepcopy(_brt)
+    else:
+        _turn_packet = build_turn_packet(
+            response_policy=response_policy,
+            scene_id=scene_pub_id or None,
+            player_text=str(user_text or ""),
+            resolution=resolution_sem if isinstance(resolution_sem, dict) else None,
+            interaction_continuity=interaction_continuity,
+            narration_obligations=narration_obligations,
+            last_human_adjacent_continuity=(
+                runtime.get("last_human_adjacent_continuity") if isinstance(runtime, dict) else None
+            ),
+            response_type=rtc_for_social_structure if isinstance(rtc_for_social_structure, dict) else None,
+            sources_used=["prompt_context.build_compressed_narration_context"],
+        )
+        # Objective #7: single call into referent_tracking owner; visibility remains the narration_visibility *contract* slice.
+        _plids_for_referent = pending_lead_ids_from_active_pending(active_pending_leads)
+        _session_interaction_for_referent = session_interaction_slice_for_narrative_plan(
+            session_view if isinstance(session_view, dict) else None,
+            _plids_for_referent,
+        )
+        referent_tracking = build_referent_tracking_artifact(
+            narration_visibility=visibility_contract if isinstance(visibility_contract, dict) else None,
+            speaker_selection=speaker_selection if isinstance(speaker_selection, dict) else None,
+            interaction_continuity=interaction_continuity_contract if isinstance(interaction_continuity_contract, dict) else None,
+            session_interaction=_session_interaction_for_referent if _session_interaction_for_referent else None,
+            narrative_plan=narrative_plan if isinstance(narrative_plan, dict) else None,
+            turn_packet=_turn_packet if isinstance(_turn_packet, dict) else None,
+        )
     if isinstance(_turn_packet, dict):
         _turn_packet["referent_tracking_compact"] = {
             "referent_artifact_version": referent_tracking.get("version"),
@@ -4562,6 +4600,8 @@ def build_narration_context(
             'example': 'Galinor asks, "What changed at the north gate?" while examining the notice board.',
         },
     }
+    if narration_seam_audit is not None:
+        payload["narration_seam_audit"] = narration_seam_audit
     if use_manual_play_compact:
         for key in (
             'fallback_behavior',

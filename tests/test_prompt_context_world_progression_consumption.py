@@ -2,8 +2,9 @@
 from __future__ import annotations
 
 from game import ctir
-from game.ctir_runtime import attach_ctir, detach_ctir
+from game.ctir_runtime import SESSION_CTIR_STAMP_KEY, attach_ctir, detach_ctir
 from game.prompt_context import build_narration_context
+from tests.helpers.ctir_narration_bundle import ensure_narration_plan_bundle_for_manual_ctir_tests
 from game.world import ensure_defaults
 from game.world_progression import compose_ctir_world_progression_slice
 
@@ -85,11 +86,14 @@ def test_prompt_prefers_ctir_progression_over_backbone_recompute():
         },
     )
     attach_ctir(session, c)
+    if not str(session.get(SESSION_CTIR_STAMP_KEY) or "").strip():
+        session[SESSION_CTIR_STAMP_KEY] = "non_production_test_ctir_bundle_stamp_v1"
     try:
         kw = _base_kw()
         kw["world"] = world
         kw["session"] = session
         kw["include_non_public_prompt_keys"] = True
+        ensure_narration_plan_bundle_for_manual_ctir_tests(session, kw)
         ctx = build_narration_context(**kw)
     finally:
         detach_ctir(session)

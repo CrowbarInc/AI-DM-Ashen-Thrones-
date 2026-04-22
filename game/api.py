@@ -83,6 +83,7 @@ from game.fallback_provenance_debug import (
 )
 from game.gm import (
     build_messages,
+    collect_narration_context_call_kwargs,
     call_gpt,
     guard_gm_output,
     apply_response_policy_enforcement,
@@ -116,6 +117,7 @@ from game.ui_mode_policy import (
     assert_mode_allows_runtime_action,
 )
 from game.state_authority import (
+    PLAYER_VISIBLE_STATE,
     SCENE_STATE,
     WORLD_STATE,
     assert_owner_can_mutate_domain,
@@ -195,7 +197,19 @@ from game.ctir_runtime import (
     build_runtime_ctir_for_narration,
     detach_ctir,
     ensure_ctir_for_turn,
+    get_attached_ctir,
     narration_ctir_turn_stamp,
+)
+from game.narration_plan_bundle import (
+    build_narration_plan_bundle,
+    ensure_narration_plan_bundle_for_turn,
+)
+from game.narration_seam_guards import (
+    annotate_narration_path_kind,
+    record_emergency_nonplan_output,
+    record_explicit_nonplan_model_narration,
+    require_narration_plan_bundle_for_ctir_turn,
+    verify_same_turn_narration_stamp_for_retry,
 )
 from game.final_emission_gate import apply_spoken_state_refinement_cash_out
 from game.api_upstream_preflight import log_upstream_api_preflight_at_startup
@@ -921,9 +935,12 @@ def _build_gpt_narration_from_authoritative_state(
 
     **CTIR seam:** Mutation and stale detach already ran in :func:`_run_resolved_turn_pipeline`. Here,
     resolution-facing hygiene (e.g. topic probe registration, social escalation on ``resolution``) runs
-    before ``ensure_ctir_for_turn`` snapshots CTIR for this stamp. Prompt construction reads that attachment
-    via :mod:`game.prompt_context`—it does not rebuild meaning. Targeted retries keep the same stamp so CTIR
-    is reused. If ``resolution`` is not a dict, CTIR is detached and not rebuilt for this path.
+    before ``ensure_ctir_for_turn`` snapshots CTIR for this stamp. The narration plan bundle is then
+    ensured for the same stamp via :mod:`game.narration_plan_bundle` (CTIR → plan → session attachment).
+    :mod:`game.prompt_context` / :func:`game.gm.build_messages` **render** that bundle for the model;
+    they do not rebuild alternate plan semantics for the same stamp. Targeted retries keep the same
+    stamp so CTIR and the bundle are reused. If ``resolution`` is not a dict, CTIR is detached and not
+    rebuilt for this path (no mandatory plan bundle).
     """
     register_topic_probe(
         session=session,
@@ -944,6 +961,9 @@ def _build_gpt_narration_from_authoritative_state(
     else:
         # No authoritative resolution dict: drop any stale CTIR; prompt_context will use caller fallbacks.
         detach_ctir(session)
+    _nc_kw: dict | None = None
+    _seam_stamp_for_retry = ""
+    bundle_seam_requirement: dict[str, Any] = {"ok": True, "skipped": "not_applicable"}
     if isinstance(resolution, dict):
         _ctir_stamp = narration_ctir_turn_stamp(session=session, resolution=resolution, user_text=user_text)
         _scene_id_for_ctir = str((scene.get("scene") or {}).get("id") or "").strip() or None
@@ -963,6 +983,53 @@ def _build_gpt_narration_from_authoritative_state(
                 world=world if isinstance(world, dict) else None,
             ),
         )
+        _nc_kw = collect_narration_context_call_kwargs(
+            campaign,
+            world,
+            session,
+            character,
+            scene,
+            combat,
+            recent_log,
+            user_text,
+            resolution=resolution,
+            scene_runtime=scene_runtime,
+            prompt_profile="manual_play_auto",
+        )
+        _nc_kw.pop("known_answer_hint", None)
+        ensure_narration_plan_bundle_for_turn(
+            session,
+            turn_stamp=_ctir_stamp,
+            builder=lambda: build_narration_plan_bundle(
+                session=session,
+                narration_context_kwargs=_nc_kw,
+            ),
+        )
+        _b = session.get("_runtime_narration_plan_bundle_v1")
+        if isinstance(_b, dict):
+            pm = _b.get("plan_metadata") if isinstance(_b.get("plan_metadata"), dict) else {}
+            if pm.get("semantic_bypass_blocked") or (
+                get_attached_ctir(session) and not isinstance(_b.get("narrative_plan"), dict)
+            ):
+                append_debug_trace(
+                    session,
+                    build_state_mutation_trace(
+                        domain=PLAYER_VISIBLE_STATE,
+                        owner_module=__name__,
+                        operation="narration_plan_bundle_error",
+                        extra={
+                            "narration_plan_bundle_error": pm.get("narration_plan_bundle_error"),
+                            "semantic_bypass_blocked": bool(pm.get("semantic_bypass_blocked")),
+                            "ctir_stamp": pm.get("ctir_stamp"),
+                        },
+                    ),
+                )
+        bundle_seam_requirement = require_narration_plan_bundle_for_ctir_turn(
+            session,
+            turn_stamp=_ctir_stamp,
+            owner_module=__name__,
+        )
+        _seam_stamp_for_retry = _ctir_stamp
     prompt_started = _now_perf()
     messages = build_messages(
         campaign,
@@ -976,6 +1043,7 @@ def _build_gpt_narration_from_authoritative_state(
         resolution,
         scene_runtime=scene_runtime,
         prompt_profile="manual_play_auto",
+        narration_context_call_kwargs=_nc_kw,
     )
     prompt_payload: dict = {}
     if isinstance(messages, list) and len(messages) > 1:
@@ -1149,6 +1217,12 @@ def _build_gpt_narration_from_authoritative_state(
         _preserve_model_route_metadata(out, gm_dict, mark_upstream_preserved=True)
         attach_upstream_fast_fallback_provenance(out)
         _attach_resolution_contract_metadata_to_gm_output(out, resolution if isinstance(resolution, dict) else None)
+        record_emergency_nonplan_output(
+            session,
+            reason=f"upstream_api_fast_fallback:{failure_class}",
+            owner_module=__name__,
+            extra={"failure_class": failure_class, "reason": reason},
+        )
         print(f"[FAST FALLBACK INVOKED] failure_class={failure_class} reason={reason}")
         om = out.get("metadata") if isinstance(out.get("metadata"), dict) else {}
         fam = str(om.get("human_adjacent_intent_family") or "").strip().lower()
@@ -1193,6 +1267,12 @@ def _build_gpt_narration_from_authoritative_state(
         if gpt_calls_used >= MANUAL_PLAY_MAX_CALL_GPT:
             print("[RETRY SKIPPED: MANUAL_PLAY_GPT_BUDGET_EXCEEDED]")
             return _synthetic_manual_play_gpt_budget_gm()
+        if int(retry_attempt or 0) > 0 and _seam_stamp_for_retry:
+            verify_same_turn_narration_stamp_for_retry(
+                session,
+                expected_ctir_stamp=_seam_stamp_for_retry,
+                owner_module=__name__,
+            )
         gpt_calls_used += 1
         call_kwargs = _call_gpt_route_kwargs(
             retry_attempt=retry_attempt,
@@ -1230,6 +1310,7 @@ def _build_gpt_narration_from_authoritative_state(
         min(1, int(MAX_TARGETED_RETRY_ATTEMPTS)) if social_dialogue_turn else int(MAX_TARGETED_RETRY_ATTEMPTS)
     )
     fast_fallback_mode = False
+    used_force_terminal_fallback = False
     upstream_api_error = _extract_upstream_api_error(gm)
     if upstream_api_error:
         retry_loop_started = _now_perf()
@@ -1308,6 +1389,13 @@ def _build_gpt_narration_from_authoritative_state(
             _accumulate_latency(latency_sink, "fallback_repair", _elapsed_ms(force_started))
             gm = _repair_terminal_player_facing_if_needed(
                 gm, reason="api_post_force_terminal_retry_fallback"
+            )
+            used_force_terminal_fallback = True
+            record_emergency_nonplan_output(
+                session,
+                reason="force_terminal_retry_fallback",
+                owner_module=__name__,
+                extra={"failure_class": fc, "retry_attempt": retry_attempt},
             )
             break
         retry_attempt += 1
@@ -1514,6 +1602,13 @@ def _build_gpt_narration_from_authoritative_state(
                 gm = _repair_terminal_player_facing_if_needed(
                     gm, reason="api_post_force_terminal_retry_fallback"
                 )
+                used_force_terminal_fallback = True
+                record_emergency_nonplan_output(
+                    session,
+                    reason="force_terminal_retry_fallback_after_deterministic",
+                    owner_module=__name__,
+                    extra={"failure_class": str(selected_class or ""), "retry_attempt": retry_attempt},
+                )
             else:
                 gm = gm_retry
             break
@@ -1561,6 +1656,62 @@ def _build_gpt_narration_from_authoritative_state(
         session if isinstance(session, dict) else None,
         world if isinstance(world, dict) else None,
     )
+    _tag_list = [str(t) for t in (gm.get("tags") or []) if isinstance(t, str)]
+    _gpt_budget_exceeded = any("manual_play_gpt_budget_exceeded" in t for t in _tag_list)
+    if _gpt_budget_exceeded:
+        annotate_narration_path_kind(
+            gm,
+            path_kind="manual_play_gpt_budget_exceeded",
+            ctir_backed=False,
+            bundle_required=False,
+            plan_driven=False,
+            emergency_nonplan_output=True,
+            same_turn_retry_messages_reused=gpt_calls_used > 1,
+        )
+        record_emergency_nonplan_output(
+            session,
+            reason="manual_play_gpt_budget_exceeded",
+            owner_module=__name__,
+        )
+    elif isinstance(resolution, dict):
+        _emergency_exit = bool(fast_fallback_mode or used_force_terminal_fallback)
+        _bundle_seam_ok = bundle_seam_requirement.get("ok") is True
+        annotate_narration_path_kind(
+            gm,
+            path_kind=(
+                "resolved_turn_ctir_upstream_fast_fallback"
+                if fast_fallback_mode
+                else (
+                    "resolved_turn_ctir_force_terminal_fallback"
+                    if used_force_terminal_fallback
+                    else "resolved_turn_ctir_bundle"
+                )
+            ),
+            ctir_backed=True,
+            bundle_required=True,
+            plan_driven=(not _emergency_exit) and _bundle_seam_ok,
+            emergency_nonplan_output=_emergency_exit or (not _bundle_seam_ok),
+            same_turn_retry_messages_reused=gpt_calls_used > 1,
+            extra=(
+                None
+                if _bundle_seam_ok
+                else {
+                    "bundle_seam_requirement_failed": True,
+                    "bundle_seam_error": bundle_seam_requirement.get("error"),
+                    "bundle_seam_skipped": bundle_seam_requirement.get("skipped"),
+                }
+            ),
+        )
+    else:
+        annotate_narration_path_kind(
+            gm,
+            path_kind="non_resolution_model_narration",
+            ctir_backed=False,
+            bundle_required=False,
+            plan_driven=False,
+            explicit_nonplan_model_narration=True,
+            same_turn_retry_messages_reused=gpt_calls_used > 1,
+        )
     return gm
 
 
@@ -2279,6 +2430,13 @@ def action(req: ActionRequest, ui_mode: str = "player"):
         # Stage 4 (engine resolution) only; no GPT narration for initiative start.
         resolution = roll_initiative(character, scene, combat, conditions)
         gm = {'player_facing_text': 'Initiative is rolled.', 'tags': ['initiative'], 'scene_update': None, 'activate_scene_id': None, 'new_scene_draft': None, 'world_updates': None, 'suggested_action': None, 'debug_notes': 'Initiative app-side.'}
+        annotate_narration_path_kind(
+            gm,
+            path_kind="engine_combat_initiative_message",
+            ctir_backed=False,
+            bundle_required=False,
+            plan_driven=False,
+        )
     elif req.action_type == 'attack':
         # Stages 1-4: input -> classification -> deterministic engine resolution.
         if not player_can_act(character, combat, conditions):
@@ -2341,6 +2499,13 @@ def action(req: ActionRequest, ui_mode: str = "player"):
             combat['player_turn_used'] = False
             resolution = build_end_turn_result(combat)
             gm = {'player_facing_text': f'Round {combat["round"]}. Your turn.', 'tags': ['end_turn'], 'scene_update': None, 'activate_scene_id': None, 'new_scene_draft': None, 'world_updates': None, 'suggested_action': None, 'debug_notes': 'No enemy response.'}
+            annotate_narration_path_kind(
+                gm,
+                path_kind="engine_combat_end_turn_message",
+                ctir_backed=False,
+                bundle_required=False,
+                plan_driven=False,
+            )
     elif req.action_type == 'exploration':
         raw = req.exploration_action if isinstance(req.exploration_action, dict) else None
         if not raw and req.intent:
@@ -2429,6 +2594,13 @@ def action(req: ActionRequest, ui_mode: str = "player"):
             raw_player_text=fallback_user_text,
         )
         gm = _build_offscene_target_gm_output(resolution)
+        annotate_narration_path_kind(
+            gm,
+            path_kind="engine_offscene_social_target",
+            ctir_backed=False,
+            bundle_required=False,
+            plan_driven=False,
+        )
         run_resolved_pipeline = False
         trace['gpt_called'] = False
 
@@ -2441,6 +2613,13 @@ def action(req: ActionRequest, ui_mode: str = "player"):
             raw_player_text=fallback_user_text,
         )
         gm = _build_check_prompt_gm_output(resolution)
+        annotate_narration_path_kind(
+            gm,
+            path_kind="engine_check_required_prompt",
+            ctir_backed=False,
+            bundle_required=False,
+            plan_driven=False,
+        )
         run_resolved_pipeline = False
         trace['gpt_called'] = False
 
@@ -2462,6 +2641,14 @@ def action(req: ActionRequest, ui_mode: str = "player"):
         authoritative_clue_updates.extend(turn_clue_updates)
     if gm is None:
         gm = {'player_facing_text': '', 'tags': [], 'scene_update': None, 'activate_scene_id': None, 'new_scene_draft': None, 'world_updates': None, 'suggested_action': None, 'debug_notes': 'No narration generated.'}
+        annotate_narration_path_kind(
+            gm,
+            path_kind="engine_empty_narration_placeholder",
+            ctir_backed=False,
+            bundle_required=False,
+            plan_driven=False,
+            extra={"note": "gm was None after action pipeline"},
+        )
     if response_type_contract is None:
         response_type_contract = _derive_response_type_contract_for_turn(
             session=session,
@@ -3543,6 +3730,13 @@ def chat(req: ChatRequest, ui_mode: str = "player"):
                 directed_social_entry=canonical_entry,
             )
             gm = _build_offscene_target_gm_output(resolution)
+            annotate_narration_path_kind(
+                gm,
+                path_kind="engine_offscene_social_target",
+                ctir_backed=False,
+                bundle_required=False,
+                plan_driven=False,
+            )
         elif _is_pending_check_resolution(resolution):
             trace['gpt_called'] = False
             response_type_contract = _derive_response_type_contract_for_turn(
@@ -3555,6 +3749,13 @@ def chat(req: ChatRequest, ui_mode: str = "player"):
                 directed_social_entry=canonical_entry,
             )
             gm = _build_check_prompt_gm_output(resolution)
+            annotate_narration_path_kind(
+                gm,
+                path_kind="engine_check_required_prompt",
+                ctir_backed=False,
+                bundle_required=False,
+                plan_driven=False,
+            )
         else:
             scene, session, combat, gm, turn_clue_updates, response_type_contract = _run_resolved_turn_pipeline(
                 campaign=campaign,
@@ -3648,6 +3849,13 @@ def chat(req: ChatRequest, ui_mode: str = "player"):
                 directed_social_entry=canonical_entry,
             )
             gm = _build_adjudication_gm_output(adjudication)
+            annotate_narration_path_kind(
+                gm,
+                path_kind="engine_adjudication_query",
+                ctir_backed=False,
+                bundle_required=False,
+                plan_driven=False,
+            )
         else:
             trace['canonical_entry_path'] = 'procedural'
             response_type_contract = _derive_response_type_contract_for_turn(
@@ -3676,6 +3884,11 @@ def chat(req: ChatRequest, ui_mode: str = "player"):
                 directed_social_entry=canonical_entry,
                 response_type_contract=response_type_contract,
                 latency_sink=latency_ms,
+            )
+            record_explicit_nonplan_model_narration(
+                session,
+                reason="chat_procedural_unparsed_freeform",
+                owner_module=__name__,
             )
 
     request_log = {

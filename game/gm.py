@@ -4313,7 +4313,7 @@ def _social_escalation_prompt_instruction(se: Dict[str, Any]) -> str:
     return " ".join(parts)
 
 
-def build_messages(
+def collect_narration_context_call_kwargs(
     campaign: Dict[str, Any],
     world: Dict[str, Any],
     session: Dict[str, Any],
@@ -4325,16 +4325,14 @@ def build_messages(
     resolution: Dict[str, Any] | None = None,
     scene_runtime: Dict[str, Any] | None = None,
     prompt_profile: str = "full",
-) -> List[Dict[str, str]]:
-    # Always load scene from session to ensure correct context (no cached/stale scene variable)
-    active_id = (session.get('active_scene_id') or '').strip()
+) -> Dict[str, Any]:
+    """Collect keyword arguments for :func:`game.prompt_context.build_narration_context` (shared with API bundle seam)."""
+    active_id = (session.get("active_scene_id") or "").strip()
     if active_id:
         scene = load_scene(active_id)
-    # else: use passed scene for backward compatibility (e.g. tests with incomplete session)
 
-    # Fresh campaign: do not inject prior chat logs or cached conversation history
     if session.get("chat_history") == []:
-        recent_log_for_prompt = []
+        recent_log_for_prompt: List[Dict[str, Any]] = []
         session.pop("chat_history", None)
         print("[PROMPT] fresh campaign prompt constructed")
     else:
@@ -4342,15 +4340,19 @@ def build_messages(
 
     public_scene, discoverable_raw, hidden = _scene_layers(scene)
     intent = classify_player_intent(user_text)
-    allow_disc = bool(intent.get('allow_discoverable_clues'))
+    allow_disc = bool(intent.get("allow_discoverable_clues"))
     social_authority = _session_social_authority(session)
-    known_answer_hint = resolve_known_fact_before_uncertainty(
-        user_text,
-        scene_envelope=scene,
-        session=session,
-        world=world,
-        resolution=resolution,
-    ) if _is_direct_player_question(user_text) else None
+    known_answer_hint = (
+        resolve_known_fact_before_uncertainty(
+            user_text,
+            scene_envelope=scene,
+            session=session,
+            world=world,
+            resolution=resolution,
+        )
+        if _is_direct_player_question(user_text)
+        else None
+    )
     uncertainty_hint = None
     if (
         not social_authority
@@ -4367,11 +4369,9 @@ def build_messages(
 
     normalized_clues = [normalize_clue_record(c) for c in discoverable_raw]
     runtime_for_scene = scene_runtime or {}
-    discovered_texts = {
-        s for s in runtime_for_scene.get('discovered_clues', []) if isinstance(s, str)
-    }
-    discovered = [c for c in normalized_clues if c['text'] in discovered_texts]
-    undiscovered = [c for c in normalized_clues if c['text'] not in discovered_texts]
+    discovered_texts = {s for s in runtime_for_scene.get("discovered_clues", []) if isinstance(s, str)}
+    discovered = [c for c in normalized_clues if c["text"] in discovered_texts]
+    undiscovered = [c for c in normalized_clues if c["text"] not in discovered_texts]
 
     def _with_presentation(records: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         out: List[Dict[str, Any]] = []
@@ -4387,58 +4387,102 @@ def build_messages(
 
     discovered = _with_presentation(discovered)
     undiscovered = _with_presentation(undiscovered)
-    response_mode = session.get('response_mode', 'standard')
+    response_mode = session.get("response_mode", "standard")
     mode_instructions = {
-        'terse': 'Narration mode: terse. Use short, minimal sentences focused on clear outcomes.',
-        'standard': 'Narration mode: standard. Use 1-4 concise paragraphs with a balance of description and pacing.',
-        'vivid': 'Narration mode: vivid. Emphasize sensory detail and mood while staying within 1-4 paragraphs.',
-        'tactical': 'Narration mode: tactical. Emphasize positions, options, risks, and consequences in the scene.',
-        'investigative': 'Narration mode: investigative. Emphasize clues, leads, and what careful observation reveals.',
+        "terse": "Narration mode: terse. Use short, minimal sentences focused on clear outcomes.",
+        "standard": "Narration mode: standard. Use 1-4 concise paragraphs with a balance of description and pacing.",
+        "vivid": "Narration mode: vivid. Emphasize sensory detail and mood while staying within 1-4 paragraphs.",
+        "tactical": "Narration mode: tactical. Emphasize positions, options, risks, and consequences in the scene.",
+        "investigative": "Narration mode: investigative. Emphasize clues, leads, and what careful observation reveals.",
     }
-    mode_instruction = mode_instructions.get(response_mode, mode_instructions['standard'])
-
-    # Social topic escalation is applied in :func:`game.social.apply_social_topic_escalation_to_resolution`
-    # (API narration path, after :func:`register_topic_probe`) so repeat_count matches the current turn.
+    mode_instruction = mode_instructions.get(response_mode, mode_instructions["standard"])
 
     def _build_world_state_prompt_view(w: Dict[str, Any]) -> Dict[str, Any]:
-        """Build a sanitized world_state view for the prompt. Keys starting with _ are hidden."""
-        ws = w.get('world_state') or {}
+        ws = w.get("world_state") or {}
         if not isinstance(ws, dict):
-            return {'flags': {}, 'counters': {}, 'clocks_summary': []}
-        flags = {k: v for k, v in (ws.get('flags') or {}).items() if isinstance(k, str) and not k.startswith('_')}
-        counters = {k: v for k, v in (ws.get('counters') or {}).items() if isinstance(k, str) and not k.startswith('_')}
+            return {"flags": {}, "counters": {}, "clocks_summary": []}
+        flags = {k: v for k, v in (ws.get("flags") or {}).items() if isinstance(k, str) and not k.startswith("_")}
+        counters = {k: v for k, v in (ws.get("counters") or {}).items() if isinstance(k, str) and not k.startswith("_")}
         from game.schema_contracts import world_clock_row_summary_line
 
-        clocks_raw = ws.get('clocks') or {}
+        clocks_raw = ws.get("clocks") or {}
         clocks_summary: List[str] = []
         for k, c in clocks_raw.items():
-            if not isinstance(k, str) or k.startswith('_') or not isinstance(c, dict):
+            if not isinstance(k, str) or k.startswith("_") or not isinstance(c, dict):
                 continue
             seg = world_clock_row_summary_line(k, c)
             if seg:
                 clocks_summary.append(seg)
-        return {'flags': flags, 'counters': counters, 'clocks_summary': clocks_summary}
+        return {"flags": flags, "counters": counters, "clocks_summary": clocks_summary}
 
     world_state_view = _build_world_state_prompt_view(world)
-    payload = build_narration_context(
-        campaign, world, session, character, scene, combat, recent_log, user_text,
-        resolution, scene_runtime,
-        public_scene=public_scene,
-        discoverable_clues=[c['text'] for c in undiscovered] if allow_disc else [],
-        gm_only_hidden_facts=hidden,
-        gm_only_discoverable_locked=[c['text'] for c in undiscovered] if not allow_disc else [],
-        discovered_clue_records=discovered,
-        undiscovered_clue_records=undiscovered,
-        pending_leads=filter_pending_leads_for_active_follow_surface(
-            session, list(runtime_for_scene.get('pending_leads') or [])
+    return {
+        "campaign": campaign,
+        "world": world,
+        "session": session,
+        "character": character,
+        "scene": scene,
+        "combat": combat,
+        "recent_log": recent_log,
+        "user_text": user_text,
+        "resolution": resolution,
+        "scene_runtime": scene_runtime,
+        "public_scene": public_scene,
+        "discoverable_clues": [c["text"] for c in undiscovered] if allow_disc else [],
+        "gm_only_hidden_facts": hidden,
+        "gm_only_discoverable_locked": [c["text"] for c in undiscovered] if not allow_disc else [],
+        "discovered_clue_records": discovered,
+        "undiscovered_clue_records": undiscovered,
+        "pending_leads": filter_pending_leads_for_active_follow_surface(
+            session, list(runtime_for_scene.get("pending_leads") or [])
         ),
-        intent=intent,
-        world_state_view=world_state_view,
-        mode_instruction=mode_instruction,
-        recent_log_for_prompt=recent_log_for_prompt,
-        uncertainty_hint=uncertainty_hint,
-        prompt_profile=prompt_profile,
-    )
+        "intent": intent,
+        "world_state_view": world_state_view,
+        "mode_instruction": mode_instruction,
+        "recent_log_for_prompt": recent_log_for_prompt,
+        "uncertainty_hint": uncertainty_hint,
+        "prompt_profile": prompt_profile,
+        "known_answer_hint": known_answer_hint,
+    }
+
+
+def build_messages(
+    campaign: Dict[str, Any],
+    world: Dict[str, Any],
+    session: Dict[str, Any],
+    character: Dict[str, Any],
+    scene: Dict[str, Any],
+    combat: Dict[str, Any],
+    recent_log: List[Dict[str, Any]],
+    user_text: str,
+    resolution: Dict[str, Any] | None = None,
+    scene_runtime: Dict[str, Any] | None = None,
+    prompt_profile: str = "full",
+    narration_context_call_kwargs: Dict[str, Any] | None = None,
+) -> List[Dict[str, str]]:
+    """When *narration_context_call_kwargs* is set, use it as the single prelude for ``build_narration_context`` (API/bundle seam)."""
+    if narration_context_call_kwargs is not None:
+        nc_kwargs = dict(narration_context_call_kwargs)
+    else:
+        nc_kwargs = collect_narration_context_call_kwargs(
+            campaign,
+            world,
+            session,
+            character,
+            scene,
+            combat,
+            recent_log,
+            user_text,
+            resolution=resolution,
+            scene_runtime=scene_runtime,
+            prompt_profile=prompt_profile,
+        )
+    known_answer_hint = nc_kwargs.pop("known_answer_hint", None)
+    public_scene = nc_kwargs["public_scene"]
+    intent = nc_kwargs["intent"]
+    runtime_for_scene = nc_kwargs.get("scene_runtime") or {}
+    social_authority = _session_social_authority(session)
+    payload = build_narration_context(**nc_kwargs)
     if isinstance(resolution, dict):
         sac = payload.get("scene_state_anchor_contract")
         if isinstance(sac, dict):

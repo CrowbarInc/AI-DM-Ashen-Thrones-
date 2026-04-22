@@ -8,8 +8,9 @@ from pathlib import Path
 import pytest
 
 from game import world_progression as wp
-from game.ctir_runtime import build_runtime_ctir_for_narration
+from game.ctir_runtime import SESSION_CTIR_STAMP_KEY, build_runtime_ctir_for_narration
 from game.prompt_context import build_narration_context
+from tests.helpers.ctir_narration_bundle import ensure_narration_plan_bundle_for_manual_ctir_tests
 from game.world import advance_world_tick, apply_resolution_world_updates, ensure_defaults
 from game.world_progression import (
     SESSION_PROGRESSION_FINGERPRINT_KEY,
@@ -308,31 +309,35 @@ def test_prompt_context_reads_ctir_progression_not_reconstructed_event_log():
         },
     )
     attach_ctir(session, c)
+    if not str(session.get(SESSION_CTIR_STAMP_KEY) or "").strip():
+        session[SESSION_CTIR_STAMP_KEY] = "non_production_test_ctir_bundle_stamp_v1"
+    _nc = {
+        "campaign": {"title": "", "premise": "", "character_role": "", "gm_guidance": [], "world_pressures": []},
+        "session": session,
+        "character": {"name": "Hero", "hp": {}, "ac": {}},
+        "scene": {"scene": {"id": "s1", "visible_facts": [], "exits": [], "enemies": []}},
+        "world": world,
+        "combat": {"in_combat": False},
+        "recent_log": [],
+        "user_text": "look",
+        "resolution": {"kind": "observe", "label": "look"},
+        "scene_runtime": {},
+        "public_scene": {"id": "s1", "visible_facts": [], "exits": [], "enemies": []},
+        "discoverable_clues": [],
+        "gm_only_hidden_facts": [],
+        "gm_only_discoverable_locked": [],
+        "discovered_clue_records": [],
+        "undiscovered_clue_records": [],
+        "pending_leads": [],
+        "intent": {"labels": ["general"]},
+        "world_state_view": {"flags": {}, "counters": {}, "clocks_summary": []},
+        "mode_instruction": "Standard.",
+        "recent_log_for_prompt": [],
+        "include_non_public_prompt_keys": True,
+    }
     try:
-        ctx = build_narration_context(
-            campaign={"title": "", "premise": "", "character_role": "", "gm_guidance": [], "world_pressures": []},
-            session=session,
-            character={"name": "Hero", "hp": {}, "ac": {}},
-            scene={"scene": {"id": "s1", "visible_facts": [], "exits": [], "enemies": []}},
-            world=world,
-            combat={"in_combat": False},
-            recent_log=[],
-            user_text="look",
-            resolution={"kind": "observe", "label": "look"},
-            scene_runtime={},
-            public_scene={"id": "s1", "visible_facts": [], "exits": [], "enemies": []},
-            discoverable_clues=[],
-            gm_only_hidden_facts=[],
-            gm_only_discoverable_locked=[],
-            discovered_clue_records=[],
-            undiscovered_clue_records=[],
-            pending_leads=[],
-            intent={"labels": ["general"]},
-            world_state_view={"flags": {}, "counters": {}, "clocks_summary": []},
-            mode_instruction="Standard.",
-            recent_log_for_prompt=[],
-            include_non_public_prompt_keys=True,
-        )
+        ensure_narration_plan_bundle_for_manual_ctir_tests(session, _nc)
+        ctx = build_narration_context(**_nc)
     finally:
         detach_ctir(session)
     pd = ctx.get("prompt_debug") or {}

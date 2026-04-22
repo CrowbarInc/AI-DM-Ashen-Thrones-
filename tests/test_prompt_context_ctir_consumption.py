@@ -8,8 +8,9 @@ from pathlib import Path
 import pytest
 
 from game import ctir
-from game.ctir_runtime import attach_ctir, detach_ctir
+from game.ctir_runtime import SESSION_CTIR_STAMP_KEY, attach_ctir, detach_ctir
 from game.prompt_context import _ctir_to_prompt_semantics, build_narration_context
+from tests.helpers.ctir_narration_bundle import ensure_narration_plan_bundle_for_manual_ctir_tests
 
 
 def _minimal_narration_kwargs(**overrides: object) -> dict:
@@ -74,12 +75,15 @@ def _attach_question_ctir(session: dict) -> None:
         },
     )
     attach_ctir(session, c)
+    if not str(session.get(SESSION_CTIR_STAMP_KEY) or "").strip():
+        session[SESSION_CTIR_STAMP_KEY] = "non_production_test_ctir_bundle_stamp_v1"
 
 
 def test_ctir_first_turn_summary_ignores_raw_resolution_kind() -> None:
     session = dict(_minimal_narration_kwargs()["session"])
     _attach_question_ctir(session)
     try:
+        ensure_narration_plan_bundle_for_manual_ctir_tests(session, _minimal_narration_kwargs(session=session))
         ctx = build_narration_context(**_minimal_narration_kwargs(session=session))
     finally:
         detach_ctir(session)
@@ -106,6 +110,7 @@ def test_ctir_session_attaches_narrative_plan_and_stable_on_repeat() -> None:
     _attach_question_ctir(session)
     kw = _minimal_narration_kwargs(session=session, include_non_public_prompt_keys=True)
     try:
+        ensure_narration_plan_bundle_for_manual_ctir_tests(session, kw)
         ctx_a = build_narration_context(**kw)
         ctx_b = build_narration_context(**kw)
     finally:
@@ -139,6 +144,9 @@ def test_response_policy_carries_response_type_contract_when_ctir_present() -> N
     session = dict(_minimal_narration_kwargs()["session"])
     _attach_question_ctir(session)
     try:
+        ensure_narration_plan_bundle_for_manual_ctir_tests(
+            session, _minimal_narration_kwargs(session=session, include_non_public_prompt_keys=True)
+        )
         ctx = build_narration_context(**_minimal_narration_kwargs(session=session, include_non_public_prompt_keys=True))
     finally:
         detach_ctir(session)
@@ -155,7 +163,14 @@ def test_public_scene_convenience_slice_does_not_drift_narrative_mode() -> None:
     base_ps = {"id": "s1", "name": "First Title", "location_tokens": ["dock"]}
     alt_ps = {"id": "s1", "name": "Different Title", "location_tokens": ["market", "square"]}
     try:
+        ensure_narration_plan_bundle_for_manual_ctir_tests(
+            session, _minimal_narration_kwargs(session=session, public_scene=base_ps)
+        )
         ctx_a = build_narration_context(**_minimal_narration_kwargs(session=session, public_scene=base_ps))
+        session[SESSION_CTIR_STAMP_KEY] = "non_production_test_ctir_public_scene_alt_stamp_v1"
+        ensure_narration_plan_bundle_for_manual_ctir_tests(
+            session, _minimal_narration_kwargs(session=session, public_scene=alt_ps)
+        )
         ctx_b = build_narration_context(**_minimal_narration_kwargs(session=session, public_scene=alt_ps))
     finally:
         detach_ctir(session)
@@ -173,6 +188,7 @@ def test_legacy_resolution_kwargs_do_not_override_ctir_or_plan_semantics() -> No
     _attach_question_ctir(session)
     kw = _minimal_narration_kwargs(session=session, resolution={"kind": "travel", "action_id": "legacy"})
     try:
+        ensure_narration_plan_bundle_for_manual_ctir_tests(session, kw)
         ctx = build_narration_context(**kw)
     finally:
         detach_ctir(session)
@@ -209,7 +225,10 @@ def test_empty_narrative_anchors_does_not_break_assembly() -> None:
         },
     )
     attach_ctir(session, c)
+    if not str(session.get(SESSION_CTIR_STAMP_KEY) or "").strip():
+        session[SESSION_CTIR_STAMP_KEY] = "non_production_test_ctir_bundle_stamp_v1"
     try:
+        ensure_narration_plan_bundle_for_manual_ctir_tests(session, _minimal_narration_kwargs(session=session, resolution=None))
         ctx = build_narration_context(**_minimal_narration_kwargs(session=session, resolution=None))
     finally:
         detach_ctir(session)

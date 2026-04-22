@@ -48,6 +48,9 @@ def detach_ctir(container: MutableMapping[str, Any] | None) -> None:
         return
     container.pop(SESSION_CTIR_KEY, None)
     container.pop(SESSION_CTIR_STAMP_KEY, None)
+    # Narration plan bundle shares the same resolved-turn stamp lifecycle as CTIR (see game.narration_plan_bundle).
+    container.pop("_runtime_narration_plan_bundle_v1", None)
+    container.pop("_runtime_narration_plan_bundle_stamp_v1", None)
 
 
 def narration_ctir_turn_stamp(

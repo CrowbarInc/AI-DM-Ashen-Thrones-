@@ -5,9 +5,10 @@ from __future__ import annotations
 import pytest
 
 from game import ctir
-from game.ctir_runtime import attach_ctir, detach_ctir
+from game.ctir_runtime import SESSION_CTIR_STAMP_KEY, attach_ctir, detach_ctir
 from game.narrative_mode_contract import build_narrative_mode_contract
 from game.prompt_context import _build_narrative_mode_instructions, build_narration_context
+from tests.helpers.ctir_narration_bundle import ensure_narration_plan_bundle_for_manual_ctir_tests
 
 
 def _minimal_narration_kwargs(**overrides: object) -> dict:
@@ -49,6 +50,14 @@ def _minimal_narration_kwargs(**overrides: object) -> dict:
 
 def _attach_ctir(session: dict, c: dict) -> None:
     attach_ctir(session, c)
+    if not str(session.get(SESSION_CTIR_STAMP_KEY) or "").strip():
+        session[SESSION_CTIR_STAMP_KEY] = "non_production_test_ctir_bundle_stamp_v1"
+
+
+def _bundle_then_build(session: dict, **nc_overrides: object) -> dict:
+    kw = _minimal_narration_kwargs(session=session, **nc_overrides)
+    ensure_narration_plan_bundle_for_manual_ctir_tests(session, kw)
+    return build_narration_context(**kw)
 
 
 def _instr_blob(ctx: dict) -> str:
@@ -159,12 +168,10 @@ def test_opening_scene_with_player_question_stays_opening_mode_and_merges_answer
     )
     _attach_ctir(session, c)
     try:
-        ctx = build_narration_context(
-            **_minimal_narration_kwargs(
-                session=session,
-                user_text="Who runs the docks?",
-                include_non_public_prompt_keys=True,
-            )
+        ctx = _bundle_then_build(
+            session,
+            user_text="Who runs the docks?",
+            include_non_public_prompt_keys=True,
         )
     finally:
         detach_ctir(session)
@@ -205,12 +212,10 @@ def test_transition_beats_active_npc_reply_pressure_for_narrative_mode() -> None
     )
     _attach_ctir(session, c)
     try:
-        ctx = build_narration_context(
-            **_minimal_narration_kwargs(
-                session=session,
-                user_text="I push through the crowd into the hall.",
-                include_non_public_prompt_keys=True,
-            )
+        ctx = _bundle_then_build(
+            session,
+            user_text="I push through the crowd into the hall.",
+            include_non_public_prompt_keys=True,
         )
     finally:
         detach_ctir(session)
@@ -242,8 +247,10 @@ def test_opening_integration_excludes_continuation_framing() -> None:
     )
     _attach_ctir(session, c)
     try:
-        ctx = build_narration_context(
-            **_minimal_narration_kwargs(session=session, user_text="I look around.", include_non_public_prompt_keys=True)
+        ctx = _bundle_then_build(
+            session,
+            user_text="I look around.",
+            include_non_public_prompt_keys=True,
         )
     finally:
         detach_ctir(session)
@@ -275,8 +282,10 @@ def test_continuation_integration_suppresses_opening_framing_markers() -> None:
     )
     _attach_ctir(session, c)
     try:
-        ctx = build_narration_context(
-            **_minimal_narration_kwargs(session=session, user_text="I nod.", include_non_public_prompt_keys=True)
+        ctx = _bundle_then_build(
+            session,
+            user_text="I nod.",
+            include_non_public_prompt_keys=True,
         )
     finally:
         detach_ctir(session)
@@ -312,8 +321,10 @@ def test_action_outcome_integration_has_result_first_guidance() -> None:
     )
     _attach_ctir(session, c)
     try:
-        ctx = build_narration_context(
-            **_minimal_narration_kwargs(session=session, user_text="I strike.", include_non_public_prompt_keys=True)
+        ctx = _bundle_then_build(
+            session,
+            user_text="I strike.",
+            include_non_public_prompt_keys=True,
         )
     finally:
         detach_ctir(session)
@@ -354,12 +365,10 @@ def test_dialogue_integration_has_speaker_continuity_guidance() -> None:
     )
     _attach_ctir(session, c)
     try:
-        ctx = build_narration_context(
-            **_minimal_narration_kwargs(
-                session=session,
-                user_text="What do you hear?",
-                include_non_public_prompt_keys=True,
-            )
+        ctx = _bundle_then_build(
+            session,
+            user_text="What do you hear?",
+            include_non_public_prompt_keys=True,
         )
     finally:
         detach_ctir(session)
@@ -393,12 +402,10 @@ def test_transition_integration_has_scene_change_guidance() -> None:
     )
     _attach_ctir(session, c)
     try:
-        ctx = build_narration_context(
-            **_minimal_narration_kwargs(
-                session=session,
-                user_text="I enter the hall.",
-                include_non_public_prompt_keys=True,
-            )
+        ctx = _bundle_then_build(
+            session,
+            user_text="I enter the hall.",
+            include_non_public_prompt_keys=True,
         )
     finally:
         detach_ctir(session)
@@ -428,12 +435,10 @@ def test_exposition_answer_integration_has_answer_first_guidance() -> None:
     )
     _attach_ctir(session, c)
     try:
-        ctx = build_narration_context(
-            **_minimal_narration_kwargs(
-                session=session,
-                user_text="When was the north gate sealed?",
-                include_non_public_prompt_keys=True,
-            )
+        ctx = _bundle_then_build(
+            session,
+            user_text="When was the north gate sealed?",
+            include_non_public_prompt_keys=True,
         )
     finally:
         detach_ctir(session)
@@ -468,12 +473,10 @@ def test_pending_check_does_not_emit_action_outcome_style_instructions() -> None
     )
     _attach_ctir(session, c)
     try:
-        ctx = build_narration_context(
-            **_minimal_narration_kwargs(
-                session=session,
-                user_text="I try to pick the lock.",
-                include_non_public_prompt_keys=True,
-            )
+        ctx = _bundle_then_build(
+            session,
+            user_text="I try to pick the lock.",
+            include_non_public_prompt_keys=True,
         )
     finally:
         detach_ctir(session)
@@ -508,8 +511,10 @@ def test_prompt_debug_narrative_mode_instructions_is_compact() -> None:
     )
     _attach_ctir(session, c)
     try:
-        ctx = build_narration_context(
-            **_minimal_narration_kwargs(session=session, user_text="Hello there.", include_non_public_prompt_keys=True)
+        ctx = _bundle_then_build(
+            session,
+            user_text="Hello there.",
+            include_non_public_prompt_keys=True,
         )
     finally:
         detach_ctir(session)

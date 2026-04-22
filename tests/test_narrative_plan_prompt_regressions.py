@@ -11,9 +11,10 @@ import json
 import pytest
 
 from game import ctir
-from game.ctir_runtime import attach_ctir, detach_ctir
+from game.ctir_runtime import SESSION_CTIR_STAMP_KEY, attach_ctir, detach_ctir
 from game.narration_visibility import build_narration_visibility_contract
 from game.prompt_context import build_narration_context
+from tests.helpers.ctir_narration_bundle import ensure_narration_plan_bundle_for_manual_ctir_tests
 
 
 def _anchors_empty() -> dict:
@@ -104,6 +105,8 @@ def _attach_ctir(session: dict, **ctir_fields: object) -> None:
     )
     defaults.update(ctir_fields)
     attach_ctir(session, ctir.build_ctir(**defaults))
+    if not str(session.get(SESSION_CTIR_STAMP_KEY) or "").strip():
+        session[SESSION_CTIR_STAMP_KEY] = "non_production_test_ctir_bundle_stamp_v1"
 
 
 def _rni_kinds(plan: dict) -> list[str]:
@@ -155,6 +158,7 @@ def test_social_follow_up_attaches_plan_dialogue_and_interlocutor_when_visible()
             "actors_speakers": [{"id": "npc_captain", "name": "Captain Rhea"}],
         },
     )
+    ensure_narration_plan_bundle_for_manual_ctir_tests(session, {**kw, "session": session})
     try:
         ctx = build_narration_context(**{**kw, "session": session})
     finally:
@@ -190,6 +194,7 @@ def test_consequence_turn_surfaces_atoms_without_invented_mutations_or_clues() -
             "actors_speakers": [{"id": "npc_witness", "name": "Witness"}],
         },
     )
+    ensure_narration_plan_bundle_for_manual_ctir_tests(session, {**kw, "session": session})
     try:
         ctx = build_narration_context(**{**kw, "session": session})
     finally:
@@ -246,6 +251,7 @@ def test_transition_reanchors_scene_without_stale_interlocutor() -> None:
         interaction={"interaction_mode": "none"},
         narrative_anchors=_anchors_empty(),
     )
+    ensure_narration_plan_bundle_for_manual_ctir_tests(session, {**kw, "session": session})
     try:
         ctx = build_narration_context(**{**kw, "session": session})
     finally:
@@ -275,6 +281,7 @@ def test_exposition_not_default_for_structural_non_social_turns() -> None:
         intent={"raw_text": "roll", "labels": ["check"], "mode": "activity"},
         narrative_anchors=_anchors_empty(),
     )
+    ensure_narration_plan_bundle_for_manual_ctir_tests(session, {**_base_narration_kwargs(world=world), "session": session})
     try:
         ctx_check = build_narration_context(**{**_base_narration_kwargs(world=world), "session": session})
     finally:
@@ -293,6 +300,7 @@ def test_exposition_not_default_for_structural_non_social_turns() -> None:
         intent={"raw_text": "clarify", "labels": ["general"], "mode": "activity"},
         narrative_anchors=_anchors_empty(),
     )
+    ensure_narration_plan_bundle_for_manual_ctir_tests(session2, {**_base_narration_kwargs(world=world), "session": session2})
     try:
         ctx_mut = build_narration_context(**{**_base_narration_kwargs(world=world), "session": session2})
     finally:
@@ -308,6 +316,7 @@ def test_exposition_not_default_for_structural_non_social_turns() -> None:
         intent={"raw_text": "look", "labels": ["observe"], "mode": "activity"},
         narrative_anchors=_anchors_empty(),
     )
+    ensure_narration_plan_bundle_for_manual_ctir_tests(session3, {**_base_narration_kwargs(world=world), "session": session3})
     try:
         ctx_obs = build_narration_context(**{**_base_narration_kwargs(world=world), "session": session3})
     finally:
@@ -323,6 +332,7 @@ def test_visibility_allowlist_empty_partial_and_hidden_ctir_entity() -> None:
     kw0 = _base_narration_kwargs(world=world_empty, scene=_scene_envelope("s1"))
     s0 = dict(kw0["session"])
     _attach_ctir(s0, interaction={"active_target_id": "npc_phantom", "interaction_mode": "social"})
+    ensure_narration_plan_bundle_for_manual_ctir_tests(s0, {**kw0, "session": s0})
     try:
         ctx0 = build_narration_context(**{**kw0, "session": s0})
     finally:
@@ -345,6 +355,7 @@ def test_visibility_allowlist_empty_partial_and_hidden_ctir_entity() -> None:
         interaction={"active_target_id": "npc_bob", "interaction_mode": "social"},
         narrative_anchors={**_anchors_empty(), "actors_speakers": [{"id": "npc_bob", "name": "Bob"}]},
     )
+    ensure_narration_plan_bundle_for_manual_ctir_tests(s2, {**kw2, "session": s2})
     try:
         ctx2 = build_narration_context(**{**kw2, "session": s2})
     finally:
@@ -365,6 +376,7 @@ def test_visibility_allowlist_empty_partial_and_hidden_ctir_entity() -> None:
         interaction={"active_target_id": "npc_shadow", "interaction_mode": "social"},
         narrative_anchors={**_anchors_empty(), "actors_speakers": [{"id": "npc_alice", "name": "Alice"}]},
     )
+    ensure_narration_plan_bundle_for_manual_ctir_tests(s3, {**kw3, "session": s3})
     try:
         ctx3 = build_narration_context(**{**kw3, "session": s3})
     finally:
@@ -404,6 +416,7 @@ def test_retry_regeneration_plan_and_prompt_debug_stable() -> None:
             ],
         },
     )
+    ensure_narration_plan_bundle_for_manual_ctir_tests(session, {**kw, "session": session})
     try:
         ctx_a = build_narration_context(
             **{**kw, "session": session, "include_non_public_prompt_keys": True}

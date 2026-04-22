@@ -23,6 +23,7 @@ import pytest
 from game.ctir_runtime import detach_ctir
 from game.narration_visibility import build_narration_visibility_contract
 from game.prompt_context import build_narration_context
+from tests.helpers.ctir_narration_bundle import ensure_narration_plan_bundle_for_manual_ctir_tests
 from tests.test_narrative_plan_prompt_regressions import (
     _allowable_ids,
     _anchors_empty,
@@ -98,10 +99,10 @@ def assert_prompt_debug_narrative_plan_is_compact(ctx: dict) -> None:
 @contextmanager
 def _narration_payload(kw: dict, session: dict):
     """Build ``build_narration_context`` output while CTIR remains attached, then detach."""
+    merged = {**kw, "session": session, "include_non_public_prompt_keys": True}
+    ensure_narration_plan_bundle_for_manual_ctir_tests(session, merged)
     try:
-        yield build_narration_context(
-            **{**kw, "session": session, "include_non_public_prompt_keys": True}
-        )
+        yield build_narration_context(**merged)
     finally:
         detach_ctir(session)
 
