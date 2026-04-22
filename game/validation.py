@@ -60,49 +60,64 @@ def _valid_clue_refs(scene: Dict[str, Any]) -> Set[str]:
     return refs
 
 
-def validate_scene(
+def collect_scene_validation_issues(
     scene_envelope: Dict[str, Any],
     scene_id: str,
     known_scene_ids: Set[str],
-) -> None:
-    """Validate a single scene. Raises SceneValidationError on failure."""
+) -> List[SceneValidationError]:
+    """Return all strict validation issues for a scene (same rules as :func:`validate_scene`).
+
+    Order matches the first error :func:`validate_scene` would raise, but every issue is collected.
+    """
+    issues: List[SceneValidationError] = []
     scene = _scene_data(scene_envelope)
     if not scene:
-        raise SceneValidationError(
-            f"Scene envelope missing 'scene' root object",
-            scene_id=scene_id,
-            field="scene",
+        issues.append(
+            SceneValidationError(
+                f"Scene envelope missing 'scene' root object",
+                scene_id=scene_id,
+                field="scene",
+            )
         )
+        return issues
 
     # 1) Scene id present and matches
     sid = scene.get("id")
     if not sid or not isinstance(sid, str) or not str(sid).strip():
-        raise SceneValidationError(
-            f"Scene id is missing or empty",
-            scene_id=str(scene_id),
-            field="scene.id",
+        issues.append(
+            SceneValidationError(
+                f"Scene id is missing or empty",
+                scene_id=str(scene_id),
+                field="scene.id",
+            )
         )
-    if str(sid).strip() != str(scene_id).strip():
-        raise SceneValidationError(
-            f"Scene id '{sid}' does not match file scene_id '{scene_id}'",
-            scene_id=str(scene_id),
-            field="scene.id",
+    elif str(sid).strip() != str(scene_id).strip():
+        issues.append(
+            SceneValidationError(
+                f"Scene id '{sid}' does not match file scene_id '{scene_id}'",
+                scene_id=str(scene_id),
+                field="scene.id",
+            )
         )
 
     # 2) Required fields: location, summary (architecture uses both)
     location = scene.get("location")
     if location is None or (isinstance(location, str) and not location.strip()):
-        raise SceneValidationError(
-            f"Scene '{scene_id}' is missing required field 'location'",
-            scene_id=str(scene_id),
-            field="scene.location",
+        issues.append(
+            SceneValidationError(
+                f"Scene '{scene_id}' is missing required field 'location'",
+                scene_id=str(scene_id),
+                field="scene.location",
+            )
         )
     summary = scene.get("summary")
     if summary is None or (isinstance(summary, str) and not summary.strip()):
-        raise SceneValidationError(
-            f"Scene '{scene_id}' is missing required field 'summary'",
-            scene_id=str(scene_id),
-            field="scene.summary",
+        issues.append(
+            SceneValidationError(
+                f"Scene '{scene_id}' is missing required field 'summary'",
+                scene_id=str(scene_id),
+                field="scene.summary",
+            )
         )
 
     # 3) Exits: target_scene_id must reference known scene when present
@@ -117,10 +132,12 @@ def validate_scene(
         if tid and tid not in known_scene_ids:
             label = ex.get("label", "")
             exit_label = f"'{label}'" if label else f"at index {idx}"
-            raise SceneValidationError(
-                f"Invalid scene '{scene_id}': exit {exit_label} points to missing target_scene_id '{tid}'",
-                scene_id=str(scene_id),
-                field=f"scene.exits[{idx}].target_scene_id",
+            issues.append(
+                SceneValidationError(
+                    f"Invalid scene '{scene_id}': exit {exit_label} points to missing target_scene_id '{tid}'",
+                    scene_id=str(scene_id),
+                    field=f"scene.exits[{idx}].target_scene_id",
+                )
             )
 
     # 4) Affordance (scene.actions) ids unique within scene; targetSceneId references known scene
@@ -131,11 +148,14 @@ def validate_scene(
         if not aid:
             continue
         if aid in seen_action_ids:
-            raise SceneValidationError(
-                f"Invalid scene '{scene_id}': duplicate affordance action id '{aid}' in actions",
-                scene_id=str(scene_id),
-                field=f"scene.actions[{idx}].id",
+            issues.append(
+                SceneValidationError(
+                    f"Invalid scene '{scene_id}': duplicate affordance action id '{aid}' in actions",
+                    scene_id=str(scene_id),
+                    field=f"scene.actions[{idx}].id",
+                )
             )
+            continue
         seen_action_ids.add(aid)
 
         # Action with targetSceneId must point to known scene
@@ -144,10 +164,12 @@ def validate_scene(
             if tid and isinstance(tid, str) and tid.strip():
                 tid = tid.strip()
                 if tid not in known_scene_ids:
-                    raise SceneValidationError(
-                        f"Invalid scene '{scene_id}': action '{aid}' points to missing targetSceneId '{tid}'",
-                        scene_id=str(scene_id),
-                        field=f"scene.actions[{idx}].targetSceneId",
+                    issues.append(
+                        SceneValidationError(
+                            f"Invalid scene '{scene_id}': action '{aid}' points to missing targetSceneId '{tid}'",
+                            scene_id=str(scene_id),
+                            field=f"scene.actions[{idx}].targetSceneId",
+                        )
                     )
 
     # 5) Interactables: required id, no duplicates; if reveals_clue, reference valid clue
@@ -157,24 +179,33 @@ def validate_scene(
 
     for idx, i in enumerate(interactables):
         if not isinstance(i, dict):
-            raise SceneValidationError(
-                f"Invalid scene '{scene_id}': interactable at index {idx} is not a dict",
-                scene_id=str(scene_id),
-                field=f"scene.interactables[{idx}]",
+            issues.append(
+                SceneValidationError(
+                    f"Invalid scene '{scene_id}': interactable at index {idx} is not a dict",
+                    scene_id=str(scene_id),
+                    field=f"scene.interactables[{idx}]",
+                )
             )
+            continue
         iid = str(i.get("id") or "").strip()
         if not iid:
-            raise SceneValidationError(
-                f"Invalid scene '{scene_id}': interactable at index {idx} is missing required field 'id'",
-                scene_id=str(scene_id),
-                field=f"scene.interactables[{idx}].id",
+            issues.append(
+                SceneValidationError(
+                    f"Invalid scene '{scene_id}': interactable at index {idx} is missing required field 'id'",
+                    scene_id=str(scene_id),
+                    field=f"scene.interactables[{idx}].id",
+                )
             )
+            continue
         if iid in seen_interactable_ids:
-            raise SceneValidationError(
-                f"Invalid scene '{scene_id}': duplicate interactable id '{iid}'",
-                scene_id=str(scene_id),
-                field=f"scene.interactables[{idx}].id",
+            issues.append(
+                SceneValidationError(
+                    f"Invalid scene '{scene_id}': duplicate interactable id '{iid}'",
+                    scene_id=str(scene_id),
+                    field=f"scene.interactables[{idx}].id",
+                )
             )
+            continue
         seen_interactable_ids.add(iid)
 
         # If interactable has reveals_clue and type investigate, validate clue reference
@@ -185,11 +216,26 @@ def validate_scene(
                 r_slug = slugify(reveals.strip()) or ""
                 r_raw = reveals.strip()
                 if r_slug not in valid_clue_refs and r_raw not in valid_clue_refs:
-                    raise SceneValidationError(
-                        f"Invalid scene '{scene_id}': interactable '{iid}' references unknown clue '{reveals.strip()}' (not in discoverable_clues)",
-                        scene_id=str(scene_id),
-                        field=f"scene.interactables[{idx}].reveals_clue",
+                    issues.append(
+                        SceneValidationError(
+                            f"Invalid scene '{scene_id}': interactable '{iid}' references unknown clue '{reveals.strip()}' (not in discoverable_clues)",
+                            scene_id=str(scene_id),
+                            field=f"scene.interactables[{idx}].reveals_clue",
+                        )
                     )
+
+    return issues
+
+
+def validate_scene(
+    scene_envelope: Dict[str, Any],
+    scene_id: str,
+    known_scene_ids: Set[str],
+) -> None:
+    """Validate a single scene. Raises SceneValidationError on failure."""
+    issues = collect_scene_validation_issues(scene_envelope, scene_id, known_scene_ids)
+    if issues:
+        raise issues[0]
 
 
 def validate_all_scenes(

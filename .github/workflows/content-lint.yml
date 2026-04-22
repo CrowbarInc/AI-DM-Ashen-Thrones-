@@ -1,0 +1,58 @@
+# Content lint (author-time only): runs on every push and pull request.
+# Phase 1 is non-blocking (observer): the lint always runs and uploads JSON; the job does not
+# fail on findings. Phase 2 is an optional warning gate — disabled until you opt in.
+name: Content lint
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  content-lint:
+    name: content-lint
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          # Repo has no pinned interpreter file; 3.11+ matches typical project expectations.
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements.txt
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run content lint (Phase 1 — informational, non-blocking)
+        # Observer: always produce logs + JSON; do not fail the workflow on errors or warnings.
+        continue-on-error: true
+        run: >-
+          python tools/run_content_lint.py
+          --json-out artifacts/content_lint/ci_report.json
+
+      - name: Summarize content lint report
+        run: python tools/summarize_content_lint.py --input artifacts/content_lint/ci_report.json
+
+      - name: Upload content lint report
+        uses: actions/upload-artifact@v4
+        with:
+          name: content-lint-ci-report
+          path: artifacts/content_lint/ci_report.json
+          if-no-files-found: warn
+
+      # Phase 2 — optional blocking gate (warnings): disabled by default.
+      # When your content is clean enough to enforce in CI, enable one of:
+      #   - Replace `if: false` with: if: ${{ vars.CONTENT_LINT_FAIL_ON_WARNINGS == 'true' }}
+      #     (set repository variable CONTENT_LINT_FAIL_ON_WARNINGS to true in GitHub settings), or
+      #   - Flip the condition below to `true` for a hard-coded enable.
+      - name: Run content lint (Phase 2 — optional fail on warnings)
+        if: false
+        run: python tools/run_content_lint.py --fail-on-warnings

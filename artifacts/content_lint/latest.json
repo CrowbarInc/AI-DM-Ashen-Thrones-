@@ -1,0 +1,1609 @@
+{
+  "ok": true,
+  "error_count": 0,
+  "warning_count": 155,
+  "messages": [
+    {
+      "severity": "warning",
+      "code": "scene.missing_player_anchor",
+      "message": "alley: scene has no visible facts and no exits; may lack obvious player anchors",
+      "scene_id": "alley",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_sensory_grounding",
+      "message": "alley: scene may lack sensory grounding words",
+      "scene_id": "alley",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_player_anchor",
+      "message": "alley_door: scene has no visible facts and no exits; may lack obvious player anchors",
+      "scene_id": "alley_door",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_sensory_grounding",
+      "message": "alley_door: scene may lack sensory grounding words",
+      "scene_id": "alley_door",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_player_anchor",
+      "message": "arch_lane: scene has no visible facts and no exits; may lack obvious player anchors",
+      "scene_id": "arch_lane",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_sensory_grounding",
+      "message": "arch_lane: scene may lack sensory grounding words",
+      "scene_id": "arch_lane",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_player_anchor",
+      "message": "beacon_yard: scene has no visible facts and no exits; may lack obvious player anchors",
+      "scene_id": "beacon_yard",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_sensory_grounding",
+      "message": "beacon_yard: scene may lack sensory grounding words",
+      "scene_id": "beacon_yard",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_player_anchor",
+      "message": "bridge: scene has no visible facts and no exits; may lack obvious player anchors",
+      "scene_id": "bridge",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_sensory_grounding",
+      "message": "bridge: scene may lack sensory grounding words",
+      "scene_id": "bridge",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_player_anchor",
+      "message": "checkpoint: scene has no visible facts and no exits; may lack obvious player anchors",
+      "scene_id": "checkpoint",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_sensory_grounding",
+      "message": "checkpoint: scene may lack sensory grounding words",
+      "scene_id": "checkpoint",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_player_anchor",
+      "message": "crossroads: scene has no visible facts and no exits; may lack obvious player anchors",
+      "scene_id": "crossroads",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_sensory_grounding",
+      "message": "crossroads: scene may lack sensory grounding words",
+      "scene_id": "crossroads",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_player_anchor",
+      "message": "dock: scene has no visible facts and no exits; may lack obvious player anchors",
+      "scene_id": "dock",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_sensory_grounding",
+      "message": "dock: scene may lack sensory grounding words",
+      "scene_id": "dock",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_player_anchor",
+      "message": "eastern_square: scene has no visible facts and no exits; may lack obvious player anchors",
+      "scene_id": "eastern_square",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_sensory_grounding",
+      "message": "eastern_square: scene may lack sensory grounding words",
+      "scene_id": "eastern_square",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "clue.overlaps_hidden_fact",
+      "message": "Discoverable clue may directly mirror a hidden fact in scene 'frontier_gate'",
+      "scene_id": "frontier_gate",
+      "path": "scene.discoverable_clues[3]",
+      "evidence": {
+        "discoverable": "A rough customer in the press keeps sizing up travelers with unusual packs or sigils—enough attention might expose black-market or arcane interest.",
+        "hidden_norm": "a rough customer in the press keeps sizing up travelers with unusual packs or sigils—enough attention might expose black-market or arcane interest."
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "clue.overlaps_hidden_fact",
+      "message": "Discoverable clue may directly mirror a hidden fact in scene 'frontier_gate'",
+      "scene_id": "frontier_gate",
+      "path": "scene.discoverable_clues[106]",
+      "evidence": {
+        "discoverable": "Nearby patrons seem to know more than they let on regarding the missing patrol.",
+        "hidden_norm": "nearby patrons seem to know more than they let on regarding the missing patrol."
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "clue.similar_to_visible",
+      "message": "frontier_gate: discoverable clue 'Faint footprints lead northwest into a thicket of crates near the dead drop, suggesting hurried movements.' is very similar to a visible fact",
+      "scene_id": "frontier_gate",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "clue.similar_to_visible",
+      "message": "frontier_gate: discoverable clue 'Several nearby patrons glance nervously at the crates, suggesting they might know more about the dead drop.' is very similar to a visible fact",
+      "scene_id": "frontier_gate",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "clue.similar_to_visible",
+      "message": "frontier_gate: discoverable clue 'A marked symbol resembling a sigil associated with The Ash Cowl is visible among the disturbed crates.' is very similar to a visible fact",
+      "scene_id": "frontier_gate",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "clue.similar_to_visible",
+      "message": "frontier_gate: discoverable clue 'The tavern runner's anxious demeanor suggests she may have more than just stew to offer in terms of news.' is very similar to a visible fact",
+      "scene_id": "frontier_gate",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "clue.similar_to_visible",
+      "message": "frontier_gate: discoverable clue 'Faint footprints lead northwest into a thicket of crates, suggesting hurried movements.' is very similar to a visible fact",
+      "scene_id": "frontier_gate",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "clue.similar_to_visible",
+      "message": "frontier_gate: discoverable clue 'A torn piece of parchment wedged between the crates nearby may hold crucial information about the missing patrol.' is very similar to a visible fact",
+      "scene_id": "frontier_gate",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "clue.similar_to_visible",
+      "message": "frontier_gate: discoverable clue 'Faint footprints are visible in the muddy ground near the dead drop, suggesting hurried movement leading deeper into the thicket of crates.' is very similar to a visible fact",
+      "scene_id": "frontier_gate",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "clue.similar_to_visible",
+      "message": "frontier_gate: discoverable clue 'Upon closer inspection, Galinor discovers a torn piece of parchment wedged between the crates, possibly containing a note.' is very similar to a visible fact",
+      "scene_id": "frontier_gate",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "hidden.similar_to_visible",
+      "message": "frontier_gate: hidden fact 'Nearby patrons whisper anxiously about what they might know regarding the missing patrol's fate.' is very similar to a visible fact",
+      "scene_id": "frontier_gate",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "clue.overlaps_hidden_fact",
+      "message": "frontier_gate: discoverable clue 'A rough customer in the press keeps sizing up travelers with unusual packs or sigils—enough attention might expose black-market or arcane interest.' may directly state a hidden fact",
+      "scene_id": "frontier_gate",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "clue.overlaps_hidden_fact",
+      "message": "frontier_gate: discoverable clue 'Nearby patrons seem to know more than they let on regarding the missing patrol.' may directly state a hidden fact",
+      "scene_id": "frontier_gate",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_player_anchor",
+      "message": "gate: scene has no visible facts and no exits; may lack obvious player anchors",
+      "scene_id": "gate",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_sensory_grounding",
+      "message": "gate: scene may lack sensory grounding words",
+      "scene_id": "gate",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_player_anchor",
+      "message": "gate_yard: scene has no visible facts and no exits; may lack obvious player anchors",
+      "scene_id": "gate_yard",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_sensory_grounding",
+      "message": "gate_yard: scene may lack sensory grounding words",
+      "scene_id": "gate_yard",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_player_anchor",
+      "message": "granary_scene: scene has no visible facts and no exits; may lack obvious player anchors",
+      "scene_id": "granary_scene",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_sensory_grounding",
+      "message": "granary_scene: scene may lack sensory grounding words",
+      "scene_id": "granary_scene",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_player_anchor",
+      "message": "hall: scene has no visible facts and no exits; may lack obvious player anchors",
+      "scene_id": "hall",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_sensory_grounding",
+      "message": "hall: scene may lack sensory grounding words",
+      "scene_id": "hall",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_player_anchor",
+      "message": "hut: scene has no visible facts and no exits; may lack obvious player anchors",
+      "scene_id": "hut",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_sensory_grounding",
+      "message": "hut: scene may lack sensory grounding words",
+      "scene_id": "hut",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_player_anchor",
+      "message": "lane: scene has no visible facts and no exits; may lack obvious player anchors",
+      "scene_id": "lane",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_sensory_grounding",
+      "message": "lane: scene may lack sensory grounding words",
+      "scene_id": "lane",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_player_anchor",
+      "message": "lane_scene: scene has no visible facts and no exits; may lack obvious player anchors",
+      "scene_id": "lane_scene",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_sensory_grounding",
+      "message": "lane_scene: scene may lack sensory grounding words",
+      "scene_id": "lane_scene",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_player_anchor",
+      "message": "lower_ward: scene has no visible facts and no exits; may lack obvious player anchors",
+      "scene_id": "lower_ward",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_sensory_grounding",
+      "message": "lower_ward: scene may lack sensory grounding words",
+      "scene_id": "lower_ward",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_player_anchor",
+      "message": "m: scene has no visible facts and no exits; may lack obvious player anchors",
+      "scene_id": "m",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_sensory_grounding",
+      "message": "m: scene may lack sensory grounding words",
+      "scene_id": "m",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_player_anchor",
+      "message": "market: scene has no visible facts and no exits; may lack obvious player anchors",
+      "scene_id": "market",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_sensory_grounding",
+      "message": "market: scene may lack sensory grounding words",
+      "scene_id": "market",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_player_anchor",
+      "message": "market_lane: scene has no visible facts and no exits; may lack obvious player anchors",
+      "scene_id": "market_lane",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_sensory_grounding",
+      "message": "market_lane: scene may lack sensory grounding words",
+      "scene_id": "market_lane",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_player_anchor",
+      "message": "market_square: scene has no visible facts and no exits; may lack obvious player anchors",
+      "scene_id": "market_square",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_sensory_grounding",
+      "message": "market_square: scene may lack sensory grounding words",
+      "scene_id": "market_square",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_player_anchor",
+      "message": "npc_repeat_scene_a: scene has no visible facts and no exits; may lack obvious player anchors",
+      "scene_id": "npc_repeat_scene_a",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_sensory_grounding",
+      "message": "npc_repeat_scene_a: scene may lack sensory grounding words",
+      "scene_id": "npc_repeat_scene_a",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_player_anchor",
+      "message": "npc_repeat_scene_b: scene has no visible facts and no exits; may lack obvious player anchors",
+      "scene_id": "npc_repeat_scene_b",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_sensory_grounding",
+      "message": "npc_repeat_scene_b: scene may lack sensory grounding words",
+      "scene_id": "npc_repeat_scene_b",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_player_anchor",
+      "message": "npc_repeat_scene_c: scene has no visible facts and no exits; may lack obvious player anchors",
+      "scene_id": "npc_repeat_scene_c",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_sensory_grounding",
+      "message": "npc_repeat_scene_c: scene may lack sensory grounding words",
+      "scene_id": "npc_repeat_scene_c",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_player_anchor",
+      "message": "npc_repeat_scene_d: scene has no visible facts and no exits; may lack obvious player anchors",
+      "scene_id": "npc_repeat_scene_d",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_sensory_grounding",
+      "message": "npc_repeat_scene_d: scene may lack sensory grounding words",
+      "scene_id": "npc_repeat_scene_d",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_player_anchor",
+      "message": "office: scene has no visible facts and no exits; may lack obvious player anchors",
+      "scene_id": "office",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_sensory_grounding",
+      "message": "office: scene may lack sensory grounding words",
+      "scene_id": "office",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_player_anchor",
+      "message": "partial_scene: scene has no visible facts and no exits; may lack obvious player anchors",
+      "scene_id": "partial_scene",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_sensory_grounding",
+      "message": "partial_scene: scene may lack sensory grounding words",
+      "scene_id": "partial_scene",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_player_anchor",
+      "message": "pier: scene has no visible facts and no exits; may lack obvious player anchors",
+      "scene_id": "pier",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_sensory_grounding",
+      "message": "pier: scene may lack sensory grounding words",
+      "scene_id": "pier",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_player_anchor",
+      "message": "river_arch: scene has no visible facts and no exits; may lack obvious player anchors",
+      "scene_id": "river_arch",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_sensory_grounding",
+      "message": "river_arch: scene may lack sensory grounding words",
+      "scene_id": "river_arch",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_player_anchor",
+      "message": "rope_bridge: scene has no visible facts and no exits; may lack obvious player anchors",
+      "scene_id": "rope_bridge",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_sensory_grounding",
+      "message": "rope_bridge: scene may lack sensory grounding words",
+      "scene_id": "rope_bridge",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_player_anchor",
+      "message": "s: scene has no visible facts and no exits; may lack obvious player anchors",
+      "scene_id": "s",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_sensory_grounding",
+      "message": "s: scene may lack sensory grounding words",
+      "scene_id": "s",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_player_anchor",
+      "message": "s1: scene has no visible facts and no exits; may lack obvious player anchors",
+      "scene_id": "s1",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_sensory_grounding",
+      "message": "s1: scene may lack sensory grounding words",
+      "scene_id": "s1",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_player_anchor",
+      "message": "s_inn: scene has no visible facts and no exits; may lack obvious player anchors",
+      "scene_id": "s_inn",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_sensory_grounding",
+      "message": "s_inn: scene may lack sensory grounding words",
+      "scene_id": "s_inn",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_player_anchor",
+      "message": "scene: scene has no visible facts and no exits; may lack obvious player anchors",
+      "scene_id": "scene",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_sensory_grounding",
+      "message": "scene: scene may lack sensory grounding words",
+      "scene_id": "scene",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_player_anchor",
+      "message": "scene_docks: scene has no visible facts and no exits; may lack obvious player anchors",
+      "scene_id": "scene_docks",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_sensory_grounding",
+      "message": "scene_docks: scene may lack sensory grounding words",
+      "scene_id": "scene_docks",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_player_anchor",
+      "message": "scene_investigate: scene has no visible facts and no exits; may lack obvious player anchors",
+      "scene_id": "scene_investigate",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_sensory_grounding",
+      "message": "scene_investigate: scene may lack sensory grounding words",
+      "scene_id": "scene_investigate",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_player_anchor",
+      "message": "stone_quay: scene has no visible facts and no exits; may lack obvious player anchors",
+      "scene_id": "stone_quay",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_sensory_grounding",
+      "message": "stone_quay: scene may lack sensory grounding words",
+      "scene_id": "stone_quay",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_player_anchor",
+      "message": "storeroom: scene has no visible facts and no exits; may lack obvious player anchors",
+      "scene_id": "storeroom",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_sensory_grounding",
+      "message": "storeroom: scene may lack sensory grounding words",
+      "scene_id": "storeroom",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_player_anchor",
+      "message": "street: scene has no visible facts and no exits; may lack obvious player anchors",
+      "scene_id": "street",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_sensory_grounding",
+      "message": "street: scene may lack sensory grounding words",
+      "scene_id": "street",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_player_anchor",
+      "message": "t_scene: scene has no visible facts and no exits; may lack obvious player anchors",
+      "scene_id": "t_scene",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_sensory_grounding",
+      "message": "t_scene: scene may lack sensory grounding words",
+      "scene_id": "t_scene",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_player_anchor",
+      "message": "test: scene has no visible facts and no exits; may lack obvious player anchors",
+      "scene_id": "test",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_sensory_grounding",
+      "message": "test: scene may lack sensory grounding words",
+      "scene_id": "test",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_player_anchor",
+      "message": "test_scene: scene has no visible facts and no exits; may lack obvious player anchors",
+      "scene_id": "test_scene",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_sensory_grounding",
+      "message": "test_scene: scene may lack sensory grounding words",
+      "scene_id": "test_scene",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_player_anchor",
+      "message": "ward: scene has no visible facts and no exits; may lack obvious player anchors",
+      "scene_id": "ward",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_sensory_grounding",
+      "message": "ward: scene may lack sensory grounding words",
+      "scene_id": "ward",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_player_anchor",
+      "message": "ward_raid: scene has no visible facts and no exits; may lack obvious player anchors",
+      "scene_id": "ward_raid",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_sensory_grounding",
+      "message": "ward_raid: scene may lack sensory grounding words",
+      "scene_id": "ward_raid",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_player_anchor",
+      "message": "watchtower: scene has no visible facts and no exits; may lack obvious player anchors",
+      "scene_id": "watchtower",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_sensory_grounding",
+      "message": "watchtower: scene may lack sensory grounding words",
+      "scene_id": "watchtower",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_player_anchor",
+      "message": "wild_moors: scene has no visible facts and no exits; may lack obvious player anchors",
+      "scene_id": "wild_moors",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "scene.missing_sensory_grounding",
+      "message": "wild_moors: scene may lack sensory grounding words",
+      "scene_id": "wild_moors",
+      "evidence": {
+        "source": "scene_lint"
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "graph.unreachable_scene",
+      "message": "Scene 'alley_door' is not reachable from graph seeds ['alley']",
+      "scene_id": "alley_door",
+      "path": "graph",
+      "evidence": {
+        "seeds": [
+          "alley"
+        ]
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "graph.unreachable_scene",
+      "message": "Scene 'arch_lane' is not reachable from graph seeds ['alley']",
+      "scene_id": "arch_lane",
+      "path": "graph",
+      "evidence": {
+        "seeds": [
+          "alley"
+        ]
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "graph.unreachable_scene",
+      "message": "Scene 'beacon_yard' is not reachable from graph seeds ['alley']",
+      "scene_id": "beacon_yard",
+      "path": "graph",
+      "evidence": {
+        "seeds": [
+          "alley"
+        ]
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "graph.unreachable_scene",
+      "message": "Scene 'bridge' is not reachable from graph seeds ['alley']",
+      "scene_id": "bridge",
+      "path": "graph",
+      "evidence": {
+        "seeds": [
+          "alley"
+        ]
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "graph.unreachable_scene",
+      "message": "Scene 'checkpoint' is not reachable from graph seeds ['alley']",
+      "scene_id": "checkpoint",
+      "path": "graph",
+      "evidence": {
+        "seeds": [
+          "alley"
+        ]
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "graph.unreachable_scene",
+      "message": "Scene 'crossroads' is not reachable from graph seeds ['alley']",
+      "scene_id": "crossroads",
+      "path": "graph",
+      "evidence": {
+        "seeds": [
+          "alley"
+        ]
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "graph.unreachable_scene",
+      "message": "Scene 'dock' is not reachable from graph seeds ['alley']",
+      "scene_id": "dock",
+      "path": "graph",
+      "evidence": {
+        "seeds": [
+          "alley"
+        ]
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "graph.unreachable_scene",
+      "message": "Scene 'eastern_square' is not reachable from graph seeds ['alley']",
+      "scene_id": "eastern_square",
+      "path": "graph",
+      "evidence": {
+        "seeds": [
+          "alley"
+        ]
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "graph.unreachable_scene",
+      "message": "Scene 'frontier_gate' is not reachable from graph seeds ['alley']",
+      "scene_id": "frontier_gate",
+      "path": "graph",
+      "evidence": {
+        "seeds": [
+          "alley"
+        ]
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "graph.unreachable_scene",
+      "message": "Scene 'gate' is not reachable from graph seeds ['alley']",
+      "scene_id": "gate",
+      "path": "graph",
+      "evidence": {
+        "seeds": [
+          "alley"
+        ]
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "graph.unreachable_scene",
+      "message": "Scene 'gate_yard' is not reachable from graph seeds ['alley']",
+      "scene_id": "gate_yard",
+      "path": "graph",
+      "evidence": {
+        "seeds": [
+          "alley"
+        ]
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "graph.unreachable_scene",
+      "message": "Scene 'granary_scene' is not reachable from graph seeds ['alley']",
+      "scene_id": "granary_scene",
+      "path": "graph",
+      "evidence": {
+        "seeds": [
+          "alley"
+        ]
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "graph.unreachable_scene",
+      "message": "Scene 'hall' is not reachable from graph seeds ['alley']",
+      "scene_id": "hall",
+      "path": "graph",
+      "evidence": {
+        "seeds": [
+          "alley"
+        ]
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "graph.unreachable_scene",
+      "message": "Scene 'hidden_meeting_room' is not reachable from graph seeds ['alley']",
+      "scene_id": "hidden_meeting_room",
+      "path": "graph",
+      "evidence": {
+        "seeds": [
+          "alley"
+        ]
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "graph.unreachable_scene",
+      "message": "Scene 'hut' is not reachable from graph seeds ['alley']",
+      "scene_id": "hut",
+      "path": "graph",
+      "evidence": {
+        "seeds": [
+          "alley"
+        ]
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "graph.unreachable_scene",
+      "message": "Scene 'lane' is not reachable from graph seeds ['alley']",
+      "scene_id": "lane",
+      "path": "graph",
+      "evidence": {
+        "seeds": [
+          "alley"
+        ]
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "graph.unreachable_scene",
+      "message": "Scene 'lane_scene' is not reachable from graph seeds ['alley']",
+      "scene_id": "lane_scene",
+      "path": "graph",
+      "evidence": {
+        "seeds": [
+          "alley"
+        ]
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "graph.unreachable_scene",
+      "message": "Scene 'lower_ward' is not reachable from graph seeds ['alley']",
+      "scene_id": "lower_ward",
+      "path": "graph",
+      "evidence": {
+        "seeds": [
+          "alley"
+        ]
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "graph.unreachable_scene",
+      "message": "Scene 'm' is not reachable from graph seeds ['alley']",
+      "scene_id": "m",
+      "path": "graph",
+      "evidence": {
+        "seeds": [
+          "alley"
+        ]
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "graph.unreachable_scene",
+      "message": "Scene 'market' is not reachable from graph seeds ['alley']",
+      "scene_id": "market",
+      "path": "graph",
+      "evidence": {
+        "seeds": [
+          "alley"
+        ]
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "graph.unreachable_scene",
+      "message": "Scene 'market_lane' is not reachable from graph seeds ['alley']",
+      "scene_id": "market_lane",
+      "path": "graph",
+      "evidence": {
+        "seeds": [
+          "alley"
+        ]
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "graph.unreachable_scene",
+      "message": "Scene 'market_quarter' is not reachable from graph seeds ['alley']",
+      "scene_id": "market_quarter",
+      "path": "graph",
+      "evidence": {
+        "seeds": [
+          "alley"
+        ]
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "graph.unreachable_scene",
+      "message": "Scene 'market_square' is not reachable from graph seeds ['alley']",
+      "scene_id": "market_square",
+      "path": "graph",
+      "evidence": {
+        "seeds": [
+          "alley"
+        ]
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "graph.unreachable_scene",
+      "message": "Scene 'npc_repeat_scene_a' is not reachable from graph seeds ['alley']",
+      "scene_id": "npc_repeat_scene_a",
+      "path": "graph",
+      "evidence": {
+        "seeds": [
+          "alley"
+        ]
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "graph.unreachable_scene",
+      "message": "Scene 'npc_repeat_scene_b' is not reachable from graph seeds ['alley']",
+      "scene_id": "npc_repeat_scene_b",
+      "path": "graph",
+      "evidence": {
+        "seeds": [
+          "alley"
+        ]
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "graph.unreachable_scene",
+      "message": "Scene 'npc_repeat_scene_c' is not reachable from graph seeds ['alley']",
+      "scene_id": "npc_repeat_scene_c",
+      "path": "graph",
+      "evidence": {
+        "seeds": [
+          "alley"
+        ]
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "graph.unreachable_scene",
+      "message": "Scene 'npc_repeat_scene_d' is not reachable from graph seeds ['alley']",
+      "scene_id": "npc_repeat_scene_d",
+      "path": "graph",
+      "evidence": {
+        "seeds": [
+          "alley"
+        ]
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "graph.unreachable_scene",
+      "message": "Scene 'office' is not reachable from graph seeds ['alley']",
+      "scene_id": "office",
+      "path": "graph",
+      "evidence": {
+        "seeds": [
+          "alley"
+        ]
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "graph.unreachable_scene",
+      "message": "Scene 'old_milestone' is not reachable from graph seeds ['alley']",
+      "scene_id": "old_milestone",
+      "path": "graph",
+      "evidence": {
+        "seeds": [
+          "alley"
+        ]
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "graph.unreachable_scene",
+      "message": "Scene 'partial_scene' is not reachable from graph seeds ['alley']",
+      "scene_id": "partial_scene",
+      "path": "graph",
+      "evidence": {
+        "seeds": [
+          "alley"
+        ]
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "graph.unreachable_scene",
+      "message": "Scene 'pier' is not reachable from graph seeds ['alley']",
+      "scene_id": "pier",
+      "path": "graph",
+      "evidence": {
+        "seeds": [
+          "alley"
+        ]
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "graph.unreachable_scene",
+      "message": "Scene 'river_arch' is not reachable from graph seeds ['alley']",
+      "scene_id": "river_arch",
+      "path": "graph",
+      "evidence": {
+        "seeds": [
+          "alley"
+        ]
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "graph.unreachable_scene",
+      "message": "Scene 'rope_bridge' is not reachable from graph seeds ['alley']",
+      "scene_id": "rope_bridge",
+      "path": "graph",
+      "evidence": {
+        "seeds": [
+          "alley"
+        ]
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "graph.unreachable_scene",
+      "message": "Scene 's' is not reachable from graph seeds ['alley']",
+      "scene_id": "s",
+      "path": "graph",
+      "evidence": {
+        "seeds": [
+          "alley"
+        ]
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "graph.unreachable_scene",
+      "message": "Scene 's1' is not reachable from graph seeds ['alley']",
+      "scene_id": "s1",
+      "path": "graph",
+      "evidence": {
+        "seeds": [
+          "alley"
+        ]
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "graph.unreachable_scene",
+      "message": "Scene 's_inn' is not reachable from graph seeds ['alley']",
+      "scene_id": "s_inn",
+      "path": "graph",
+      "evidence": {
+        "seeds": [
+          "alley"
+        ]
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "graph.unreachable_scene",
+      "message": "Scene 'scene' is not reachable from graph seeds ['alley']",
+      "scene_id": "scene",
+      "path": "graph",
+      "evidence": {
+        "seeds": [
+          "alley"
+        ]
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "graph.unreachable_scene",
+      "message": "Scene 'scene_docks' is not reachable from graph seeds ['alley']",
+      "scene_id": "scene_docks",
+      "path": "graph",
+      "evidence": {
+        "seeds": [
+          "alley"
+        ]
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "graph.unreachable_scene",
+      "message": "Scene 'scene_investigate' is not reachable from graph seeds ['alley']",
+      "scene_id": "scene_investigate",
+      "path": "graph",
+      "evidence": {
+        "seeds": [
+          "alley"
+        ]
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "graph.unreachable_scene",
+      "message": "Scene 'stone_quay' is not reachable from graph seeds ['alley']",
+      "scene_id": "stone_quay",
+      "path": "graph",
+      "evidence": {
+        "seeds": [
+          "alley"
+        ]
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "graph.unreachable_scene",
+      "message": "Scene 'storeroom' is not reachable from graph seeds ['alley']",
+      "scene_id": "storeroom",
+      "path": "graph",
+      "evidence": {
+        "seeds": [
+          "alley"
+        ]
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "graph.unreachable_scene",
+      "message": "Scene 'street' is not reachable from graph seeds ['alley']",
+      "scene_id": "street",
+      "path": "graph",
+      "evidence": {
+        "seeds": [
+          "alley"
+        ]
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "graph.unreachable_scene",
+      "message": "Scene 't_scene' is not reachable from graph seeds ['alley']",
+      "scene_id": "t_scene",
+      "path": "graph",
+      "evidence": {
+        "seeds": [
+          "alley"
+        ]
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "graph.unreachable_scene",
+      "message": "Scene 'tavern' is not reachable from graph seeds ['alley']",
+      "scene_id": "tavern",
+      "path": "graph",
+      "evidence": {
+        "seeds": [
+          "alley"
+        ]
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "graph.unreachable_scene",
+      "message": "Scene 'test' is not reachable from graph seeds ['alley']",
+      "scene_id": "test",
+      "path": "graph",
+      "evidence": {
+        "seeds": [
+          "alley"
+        ]
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "graph.unreachable_scene",
+      "message": "Scene 'test_scene' is not reachable from graph seeds ['alley']",
+      "scene_id": "test_scene",
+      "path": "graph",
+      "evidence": {
+        "seeds": [
+          "alley"
+        ]
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "graph.unreachable_scene",
+      "message": "Scene 'ward' is not reachable from graph seeds ['alley']",
+      "scene_id": "ward",
+      "path": "graph",
+      "evidence": {
+        "seeds": [
+          "alley"
+        ]
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "graph.unreachable_scene",
+      "message": "Scene 'ward_raid' is not reachable from graph seeds ['alley']",
+      "scene_id": "ward_raid",
+      "path": "graph",
+      "evidence": {
+        "seeds": [
+          "alley"
+        ]
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "graph.unreachable_scene",
+      "message": "Scene 'watchtower' is not reachable from graph seeds ['alley']",
+      "scene_id": "watchtower",
+      "path": "graph",
+      "evidence": {
+        "seeds": [
+          "alley"
+        ]
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "graph.unreachable_scene",
+      "message": "Scene 'wild_moors' is not reachable from graph seeds ['alley']",
+      "scene_id": "wild_moors",
+      "path": "graph",
+      "evidence": {
+        "seeds": [
+          "alley"
+        ]
+      }
+    }
+  ],
+  "scene_ids_checked": [
+    "alley",
+    "alley_door",
+    "arch_lane",
+    "beacon_yard",
+    "bridge",
+    "checkpoint",
+    "crossroads",
+    "dock",
+    "eastern_square",
+    "frontier_gate",
+    "gate",
+    "gate_yard",
+    "granary_scene",
+    "hall",
+    "hidden_meeting_room",
+    "hut",
+    "lane",
+    "lane_scene",
+    "lower_ward",
+    "m",
+    "market",
+    "market_lane",
+    "market_quarter",
+    "market_square",
+    "npc_repeat_scene_a",
+    "npc_repeat_scene_b",
+    "npc_repeat_scene_c",
+    "npc_repeat_scene_d",
+    "office",
+    "old_milestone",
+    "partial_scene",
+    "pier",
+    "river_arch",
+    "rope_bridge",
+    "s",
+    "s1",
+    "s_inn",
+    "scene",
+    "scene_docks",
+    "scene_investigate",
+    "stone_quay",
+    "storeroom",
+    "street",
+    "t_scene",
+    "tavern",
+    "test",
+    "test_scene",
+    "ward",
+    "ward_raid",
+    "watchtower",
+    "wild_moors"
+  ]
+}

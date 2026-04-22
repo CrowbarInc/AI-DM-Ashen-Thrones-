@@ -43,6 +43,10 @@ Engine state is split into non-overlapping **domains** (`world_state`, `scene_st
 
 **Excluded by design:** Session-local clocks, `world_state.counters`, and session documents are **not** progression nodes. Internal backbone helper events must **not** be mirrored into the player-facing `world["event_log"]` on tick or resolution paths that use detached sinks; regression coverage lives in `tests/test_world_simulation_backbone_regressions.py` and `tests/test_world_simulation_backbone_ownership.py`. See [World simulation backbone](world_simulation_backbone.md).
 
+### Author-time scene content lint (Objective #10)
+
+**Canonical author-time engine:** `game/content_lint.py` (deterministic report, not on the gameplay hot path). **Strict scene rules** remain owned by `game/validation.py` (runtime fail-fast where invoked). **Operator CLI:** `tools/run_content_lint.py` (flags, exit codes, subset semantics, JSON shape) is documented in [Content lint pipeline](content_lint_pipeline.md) and regression-tested in `tests/test_content_lint_tool.py`.
+
 ---
 
 ## Ownership Boundaries
