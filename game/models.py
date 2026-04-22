@@ -229,6 +229,7 @@ def social_result_to_dict(r: SocialEngineResult) -> Dict[str, Any]:
 
 class ActionRequest(BaseModel):
     action_type: str
+    ui_mode: Optional[str] = None
     actor_id: Optional[str] = None
     target_id: Optional[str] = None
     attack_id: Optional[str] = None
@@ -242,6 +243,7 @@ class ActionRequest(BaseModel):
 
 class ChatRequest(BaseModel):
     text: str
+    ui_mode: Optional[str] = None
 
 
 class CampaignUpdate(BaseModel):

@@ -135,7 +135,7 @@ def test_debug_trace_endpoint_returns_safe_data(tmp_path, monkeypatch):
     storage._save_json(storage.SESSION_PATH, session)
 
     client = TestClient(app)
-    r = client.get("/api/debug_trace")
+    r = client.get("/api/debug_trace?ui_mode=debug")
     assert r.status_code == 200
     data = r.json()
     assert "traces" in data
@@ -144,7 +144,7 @@ def test_debug_trace_endpoint_returns_safe_data(tmp_path, monkeypatch):
 
 
 def test_state_includes_debug_when_present(tmp_path, monkeypatch):
-    """GET /api/state includes debug and debug_traces when session has last_action_debug."""
+    """GET /api/state includes debug lanes only in debug ui_mode."""
     _seed_minimal(tmp_path, monkeypatch)
     session = storage.load_session()
     session["last_action_debug"] = {"player_input": "test", "resolution_kind": "observe"}
@@ -152,10 +152,11 @@ def test_state_includes_debug_when_present(tmp_path, monkeypatch):
     storage._save_json(storage.SESSION_PATH, session)
 
     client = TestClient(app)
-    r = client.get("/api/state")
+    r = client.get("/api/state?ui_mode=debug")
     assert r.status_code == 200
     data = r.json()
-    assert "debug" in data
-    assert data["debug"]["player_input"] == "test"
-    assert "debug_traces" in data
-    assert len(data["debug_traces"]) >= 1
+    assert data.get("ui_mode") == "debug"
+    assert "public_state" in data
+    assert "debug_state" in data
+    assert data["debug_state"]["debug"]["player_input"] == "test"
+    assert len(data["debug_state"].get("debug_traces") or []) >= 1

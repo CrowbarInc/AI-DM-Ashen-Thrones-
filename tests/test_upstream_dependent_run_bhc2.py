@@ -112,12 +112,12 @@ def test_new_campaign_blocked_before_reset_when_preflight_unhealthy(
     with TestClient(app) as client:
         before = client.get("/api/state")
         assert before.status_code == 200
-        rid_before = before.json().get("campaign_run_id")
+        rid_before = (before.json().get("public_state") or {}).get("campaign_run_id")
         r = client.post("/api/new_campaign")
         assert r.status_code == 503
         after = client.get("/api/state")
         assert after.status_code == 200
-        rid_after = after.json().get("campaign_run_id")
+        rid_after = (after.json().get("public_state") or {}).get("campaign_run_id")
     body = r.json()
     assert body.get("ok") is False
     assert body.get("upstream_dependent_run_gate", {}).get("manual_testing_blocked") is True

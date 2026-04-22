@@ -37,6 +37,14 @@ pre { white-space: pre-wrap; word-wrap: break-word; margin: 0; font-size: 12px; 
 .simple-list li { margin-bottom: 2px; }
 .journal-section h4 { margin: 6px 0 2px; font-size: 13px; color: #d1d5db; }
 
+/* UI mode selector (Objective #15) */
+.ui-mode-selector { margin-bottom: 10px; padding: 10px; border-radius: 12px; border: 1px solid #3a404d; background: #262b34; }
+.ui-mode-selector label { margin-top: 0; }
+.ui-mode-selector select { font-weight: 600; }
+.ui-mode-selector[data-mode="player"] { border-left: 4px solid #5aa4ff; }
+.ui-mode-selector[data-mode="author"] { border-left: 4px solid #fbbf24; }
+.ui-mode-selector[data-mode="debug"] { border-left: 4px solid #c686ff; }
+
 /* Action Pipeline Debug */
 .action-pipeline-debug .debug-row { margin-bottom: 10px; font-size: 13px; }
 .action-pipeline-debug .debug-row strong { display: block; color: #9ca3af; margin-bottom: 2px; }

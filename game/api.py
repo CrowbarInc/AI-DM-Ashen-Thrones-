@@ -15,7 +15,7 @@ import inspect
 import json
 import re
 import time
-from fastapi import FastAPI, UploadFile, File
+from fastapi import FastAPI, Request, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, JSONResponse
@@ -104,6 +104,17 @@ from game.gm import (
 )
 from game import leads as leads_module
 from game.journal import build_player_journal
+from game.api_ui_mode import UiModePolicyError, resolve_requested_ui_mode
+from game.state_channels import (
+    deep_project_author_payload,
+    deep_project_debug_payload,
+    deep_project_public_payload,
+)
+from game.ui_mode_policy import (
+    assert_mode_allows_author_write,
+    assert_mode_allows_debug_read,
+    assert_mode_allows_runtime_action,
+)
 from game.state_authority import (
     SCENE_STATE,
     WORLD_STATE,
@@ -1938,42 +1949,95 @@ def compose_state():
     return state
 
 
+def _ui_mode_error_response(err: UiModePolicyError) -> JSONResponse:
+    msg = str(err) or "ui mode policy violation"
+    lowered = msg.lower()
+    if "unknown ui mode" in lowered:
+        return JSONResponse(status_code=400, content={"ok": False, "error": msg})
+    return JSONResponse(status_code=403, content={"ok": False, "error": msg})
+
+
+def _project_state_for_ui_mode(full_state: dict, ui_mode: str) -> dict:
+    # Always compute projections from the single internal snapshot.
+    public_state = deep_project_public_payload(full_state)
+    out: dict = {"ui_mode": ui_mode, "public_state": public_state}
+    if ui_mode == "author":
+        out["author_state"] = deep_project_author_payload(full_state)
+    elif ui_mode == "debug":
+        out["debug_state"] = deep_project_debug_payload(full_state)
+    return out
+
+
 @app.get('/api/state')
-def get_state():
-    return compose_state()
+def get_state(request: Request):
+    try:
+        ui_mode = resolve_requested_ui_mode(request)
+        st = compose_state()
+        return _project_state_for_ui_mode(st, ui_mode)
+    except UiModePolicyError as e:
+        return _ui_mode_error_response(e)
 
 
 @app.get('/api/log')
-def get_log():
-    return {'entries': load_log()}
+def get_log(request: Request):
+    try:
+        ui_mode = resolve_requested_ui_mode(request)
+    except UiModePolicyError as e:
+        return _ui_mode_error_response(e)
+    return {'ok': True, 'ui_mode': ui_mode, 'entries': load_log()}
 
 
 @app.get('/api/debug_trace')
-def get_debug_trace():
+def get_debug_trace(request: Request):
+    try:
+        ui_mode = resolve_requested_ui_mode(request)
+        assert_mode_allows_debug_read(ui_mode)
+    except UiModePolicyError as e:
+        return _ui_mode_error_response(e)
     session = load_session()
-    return {'traces': session.get('debug_traces') or []}
+    return {'ok': True, 'ui_mode': ui_mode, 'traces': session.get('debug_traces') or []}
 
 
 @app.post('/api/clear_log')
-def api_clear_log():
+def api_clear_log(request: Request):
+    try:
+        ui_mode = resolve_requested_ui_mode(request)
+        assert_mode_allows_runtime_action(ui_mode)
+    except UiModePolicyError as e:
+        return _ui_mode_error_response(e)
     clear_log()
-    return {'ok': True}
+    return {'ok': True, 'ui_mode': ui_mode}
 
 
 @app.post('/api/campaign')
-def update_campaign(payload: dict):
+def update_campaign(request: Request, payload: dict):
+    try:
+        ui_mode = resolve_requested_ui_mode(request, payload)
+        assert_mode_allows_author_write(ui_mode)
+    except UiModePolicyError as e:
+        return _ui_mode_error_response(e)
     save_campaign(payload)
-    return {'ok': True, 'campaign': load_campaign()}
+    return {'ok': True, 'ui_mode': ui_mode, 'campaign': load_campaign()}
 
 
 @app.post('/api/scene')
-def update_scene(payload: dict):
+def update_scene(request: Request, payload: dict):
+    try:
+        ui_mode = resolve_requested_ui_mode(request, payload)
+        assert_mode_allows_author_write(ui_mode)
+    except UiModePolicyError as e:
+        return _ui_mode_error_response(e)
     save_scene(payload)
-    return {'ok': True, 'scene': payload}
+    return {'ok': True, 'ui_mode': ui_mode, 'scene': payload}
 
 
 @app.post('/api/scene/activate')
-def api_activate_scene(payload: dict):
+def api_activate_scene(request: Request, payload: dict):
+    try:
+        ui_mode = resolve_requested_ui_mode(request, payload)
+        assert_mode_allows_runtime_action(ui_mode)
+    except UiModePolicyError as e:
+        return _ui_mode_error_response(e)
     scene_id = (payload.get('scene_id') or '').strip()
     if not is_known_scene_id(scene_id):
         return {'ok': False, 'error': 'Unknown or invalid scene ID.'}
@@ -1984,33 +2048,53 @@ def api_activate_scene(payload: dict):
     scene, session, combat = _apply_authoritative_scene_transition(scene_id, scene, session, combat, world)
     save_session(session)
     save_combat(combat)
-    return {'ok': True, 'scene': scene, 'session': session}
+    return {'ok': True, 'ui_mode': ui_mode, 'scene': scene, 'session': session}
 
 
 @app.post('/api/character')
-def update_character(payload: dict):
+def update_character(request: Request, payload: dict):
+    try:
+        ui_mode = resolve_requested_ui_mode(request, payload)
+        assert_mode_allows_runtime_action(ui_mode)
+    except UiModePolicyError as e:
+        return _ui_mode_error_response(e)
     save_character(payload)
-    return {'ok': True, 'character': payload}
+    return {'ok': True, 'ui_mode': ui_mode, 'character': payload}
 
 
 @app.post('/api/world')
-def update_world(payload: dict):
+def update_world(request: Request, payload: dict):
+    try:
+        ui_mode = resolve_requested_ui_mode(request, payload)
+        assert_mode_allows_author_write(ui_mode)
+    except UiModePolicyError as e:
+        return _ui_mode_error_response(e)
     save_world(payload)
-    return {'ok': True, 'world': payload}
+    return {'ok': True, 'ui_mode': ui_mode, 'world': payload}
 
 
 @app.post('/api/import_sheet')
-def api_import_sheet(file: UploadFile = File(...)):
+def api_import_sheet(request: Request, file: UploadFile = File(...)):
+    try:
+        ui_mode = resolve_requested_ui_mode(request)
+        assert_mode_allows_runtime_action(ui_mode)
+    except UiModePolicyError as e:
+        return _ui_mode_error_response(e)
     temp_path = BASE_DIR / 'data' / '_import_temp.json'
     temp_path.write_bytes(file.file.read())
     character = import_sheet(temp_path)
     save_character(character)
     temp_path.unlink(missing_ok=True)
-    return {'ok': True, 'character': character}
+    return {'ok': True, 'ui_mode': ui_mode, 'character': character}
 
 
 @app.post('/api/response_mode')
-def update_response_mode(req: ResponseModeUpdate):
+def update_response_mode(request: Request, req: ResponseModeUpdate):
+    try:
+        ui_mode = resolve_requested_ui_mode(request, req.model_dump())
+        assert_mode_allows_runtime_action(ui_mode)
+    except UiModePolicyError as e:
+        return _ui_mode_error_response(e)
     session = load_session()
     allowed = {'terse', 'standard', 'vivid', 'tactical', 'investigative'}
     mode = req.mode if isinstance(req.mode, str) else 'standard'
@@ -2018,22 +2102,32 @@ def update_response_mode(req: ResponseModeUpdate):
         mode = 'standard'
     session['response_mode'] = mode
     save_session(session)
-    return {'ok': True, 'session': session}
+    return {'ok': True, 'ui_mode': ui_mode, 'session': session}
 
 
 
 @app.post('/api/reset_combat')
-def api_reset_combat():
+def api_reset_combat(request: Request):
+    try:
+        ui_mode = resolve_requested_ui_mode(request)
+        assert_mode_allows_runtime_action(ui_mode)
+    except UiModePolicyError as e:
+        return _ui_mode_error_response(e)
     combat = load_combat()
     combat.clear()
     combat.update(create_fresh_combat_state())
     save_combat(combat)
-    return {'ok': True}
+    return {'ok': True, 'ui_mode': ui_mode}
 
 
 @app.post('/api/new_campaign')
-def new_campaign():
+def new_campaign(request: Request):
     """Hard reset: new session graph, fresh combat, world playthrough cleared, transcript empty."""
+    try:
+        ui_mode = resolve_requested_ui_mode(request)
+        assert_mode_allows_runtime_action(ui_mode)
+    except UiModePolicyError as e:
+        return _ui_mode_error_response(e)
     gate = compute_upstream_dependent_run_gate()
     gate_operator = build_upstream_dependent_run_gate_operator(gate)
     if gate.get("manual_testing_blocked"):
@@ -2054,12 +2148,24 @@ def new_campaign():
     # When ASHEN_THRONES_DEV_VERIFY=1, ``campaign_reset`` prints a compact runtime-clean summary.
     if "dev_verify_ok" not in meta:
         print("[API] New campaign started", meta.get("campaign_run_id"))
-    return {"status": "ok", "upstream_dependent_run_gate": gate, "upstream_dependent_run_gate_operator": gate_operator, **meta}
+    return {
+        "status": "ok",
+        "ok": True,
+        "ui_mode": ui_mode,
+        "upstream_dependent_run_gate": gate,
+        "upstream_dependent_run_gate_operator": gate_operator,
+        **meta,
+    }
 
 
 @app.post('/api/reset_session')
-def api_reset_session():
+def api_reset_session(request: Request):
     """Reset runtime session state; preserves campaign/world data."""
+    try:
+        ui_mode = resolve_requested_ui_mode(request)
+        assert_mode_allows_runtime_action(ui_mode)
+    except UiModePolicyError as e:
+        return _ui_mode_error_response(e)
     session = load_session()
     reset_session_state(session)
     save_session(session)
@@ -2068,36 +2174,63 @@ def api_reset_session():
     combat.clear()
     combat.update(create_fresh_combat_state())
     save_combat(combat)
-    return {'ok': True, **compose_state()}
+    st = compose_state()
+    return {'ok': True, **_project_state_for_ui_mode(st, ui_mode)}
 
 
 @app.get('/api/snapshots')
-def api_list_snapshots():
+def api_list_snapshots(request: Request):
     """List all save snapshots (id, created_at, label)."""
-    return {'snapshots': list_snapshots()}
+    try:
+        ui_mode = resolve_requested_ui_mode(request)
+        assert_mode_allows_runtime_action(ui_mode)
+    except UiModePolicyError as e:
+        return _ui_mode_error_response(e)
+    return {'ok': True, 'ui_mode': ui_mode, 'snapshots': list_snapshots()}
 
 
 @app.post('/api/snapshots')
-def api_create_snapshot(req: SnapshotCreateRequest):
+def api_create_snapshot(request: Request, req: SnapshotCreateRequest):
     """Create a snapshot of current runtime state. Optional label for playtesting."""
+    try:
+        ui_mode = resolve_requested_ui_mode(request, req.model_dump())
+        assert_mode_allows_runtime_action(ui_mode)
+    except UiModePolicyError as e:
+        return _ui_mode_error_response(e)
     meta = create_snapshot(label=req.label)
-    return {'ok': True, 'snapshot': meta, **compose_state()}
+    st = compose_state()
+    return {'ok': True, 'ui_mode': ui_mode, 'snapshot': meta, **_project_state_for_ui_mode(st, ui_mode)}
 
 
 @app.post('/api/snapshots/load')
-def api_load_snapshot(payload: dict):
+def api_load_snapshot(request: Request, payload: dict):
     """Load a snapshot by id. Restores session, world, combat, character, log."""
+    try:
+        ui_mode = resolve_requested_ui_mode(request, payload)
+        assert_mode_allows_runtime_action(ui_mode)
+    except UiModePolicyError as e:
+        return _ui_mode_error_response(e)
     snapshot_id = (payload.get('snapshot_id') or payload.get('id') or '').strip()
     if not snapshot_id:
         return {'ok': False, 'error': 'snapshot_id required'}
     meta = load_snapshot(snapshot_id)
     if meta is None:
         return {'ok': False, 'error': 'Snapshot not found'}
-    return {'ok': True, 'snapshot': meta, **compose_state()}
+    st = compose_state()
+    return {'ok': True, 'ui_mode': ui_mode, 'snapshot': meta, **_project_state_for_ui_mode(st, ui_mode)}
 
 
 @app.post('/api/action')
-def action(req: ActionRequest):
+def api_action(request: Request, req: ActionRequest):
+    try:
+        ui_mode = resolve_requested_ui_mode(request, req.model_dump())
+        return action(req, ui_mode=ui_mode)
+    except UiModePolicyError as e:
+        return _ui_mode_error_response(e)
+
+
+def action(req: ActionRequest, ui_mode: str = "player"):
+    assert_mode_allows_runtime_action(ui_mode)
     turn_started = _now_perf()
     campaign = load_campaign()
     character = load_character()
@@ -2766,8 +2899,13 @@ def _complete_opening_turn_persistence_like_chat(
 
 
 @app.post('/api/start_campaign')
-def start_campaign():
+def start_campaign(request: Request):
     """First opening via internal bootstrap intent; same narration stack as chat opening (OF1 path)."""
+    try:
+        ui_mode = resolve_requested_ui_mode(request)
+        assert_mode_allows_runtime_action(ui_mode)
+    except UiModePolicyError as e:
+        return _ui_mode_error_response(e)
     gate = compute_upstream_dependent_run_gate()
     gate_operator = build_upstream_dependent_run_gate_operator(gate)
     if gate.get("manual_testing_blocked"):
@@ -2790,6 +2928,7 @@ def start_campaign():
     session = load_session()
     recent_log = load_log()
     if not _session_allows_structured_start_campaign(session, recent_log):
+        st = compose_state()
         return JSONResponse(
             status_code=409,
             content={
@@ -2798,7 +2937,7 @@ def start_campaign():
                 "error": "Campaign has already started, or the transcript is not empty.",
                 "upstream_dependent_run_gate": gate,
                 "upstream_dependent_run_gate_operator": gate_operator,
-                **compose_state(),
+                **_project_state_for_ui_mode(st, ui_mode),
             },
         )
 
@@ -2998,7 +3137,16 @@ def start_campaign():
 
 
 @app.post('/api/chat')
-def chat(req: ChatRequest):
+def api_chat(request: Request, req: ChatRequest):
+    try:
+        ui_mode = resolve_requested_ui_mode(request, req.model_dump())
+        return chat(req, ui_mode=ui_mode)
+    except UiModePolicyError as e:
+        return _ui_mode_error_response(e)
+
+
+def chat(req: ChatRequest, ui_mode: str = "player"):
+    assert_mode_allows_runtime_action(ui_mode)
     turn_started = _now_perf()
     campaign = load_campaign()
     character = load_character()

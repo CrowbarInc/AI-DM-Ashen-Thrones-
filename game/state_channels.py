@@ -30,6 +30,8 @@ class ChannelSeparationError(ValueError):
 
 _DEBUG_EXACT_KEYS = frozenset(
     {
+        "debug",
+        "debug_traces",
         "_final_emission_meta",
         "stage_diff_telemetry",
         "dead_turn",
@@ -156,6 +158,81 @@ def project_author_payload(payload: Mapping[str, Any] | None) -> dict[str, Any]:
     return _project(payload, is_author_key)
 
 
+def _deep_project(value: Any, predicate: Callable[[str], bool]) -> Any:
+    """Recursively project mappings using *predicate* on mapping keys.
+
+    This is still **classification-by-key only** (no value inspection). Lists are
+    preserved with their items recursively processed; scalars are returned as-is.
+    """
+
+    if value is None:
+        return None
+    if isinstance(value, dict):
+        out: dict[str, Any] = {}
+        for raw_k, v in value.items():
+            k = _str_key(raw_k)
+            if predicate(k):
+                out[k] = _deep_project(v, predicate)
+        return out
+    if isinstance(value, list):
+        return [_deep_project(v, predicate) for v in value]
+    return value
+
+
+def deep_project_public_payload(payload: Mapping[str, Any] | None) -> dict[str, Any]:
+    """Return a recursive projection containing only **public** mapping keys."""
+    if not payload:
+        return {}
+    projected = _deep_project(dict(payload), is_public_key)
+    return projected if isinstance(projected, dict) else {}
+
+
+def _deep_pick_subtrees(value: Any, predicate: Callable[[str], bool]) -> Any:
+    """Recursively pick subtrees rooted at keys matching *predicate*.
+
+    Unlike :func:`_deep_project`, once a key matches, the entire value subtree is
+    included verbatim (no further filtering). This is useful for lane payloads
+    like ``debug_state`` where the lane boundary is the key, not the nested
+    structure under that key.
+    """
+
+    if value is None:
+        return None
+    if isinstance(value, dict):
+        out: dict[str, Any] = {}
+        for raw_k, v in value.items():
+            k = _str_key(raw_k)
+            if predicate(k):
+                out[k] = v
+            else:
+                picked = _deep_pick_subtrees(v, predicate)
+                if isinstance(picked, dict) and picked:
+                    out[k] = picked
+                elif isinstance(picked, list) and picked:
+                    out[k] = picked
+        return out
+    if isinstance(value, list):
+        items = [_deep_pick_subtrees(v, predicate) for v in value]
+        return [v for v in items if v not in (None, {}, [])]
+    return None
+
+
+def deep_project_debug_payload(payload: Mapping[str, Any] | None) -> dict[str, Any]:
+    """Return a recursive projection containing only **debug** mapping keys."""
+    if not payload:
+        return {}
+    projected = _deep_pick_subtrees(dict(payload), is_debug_key)
+    return projected if isinstance(projected, dict) else {}
+
+
+def deep_project_author_payload(payload: Mapping[str, Any] | None) -> dict[str, Any]:
+    """Return a recursive projection containing only **author** mapping keys."""
+    if not payload:
+        return {}
+    projected = _deep_pick_subtrees(dict(payload), is_author_key)
+    return projected if isinstance(projected, dict) else {}
+
+
 def strip_non_public_payload(payload: Mapping[str, Any] | None) -> dict[str, Any]:
     """Strip debug and author keys; same result as :func:`project_public_payload`."""
     return project_public_payload(payload)
@@ -196,6 +273,9 @@ __all__ = (
     "project_public_payload",
     "project_debug_payload",
     "project_author_payload",
+    "deep_project_public_payload",
+    "deep_project_debug_payload",
+    "deep_project_author_payload",
     "strip_non_public_payload",
     "assert_no_debug_keys_in_prompt_payload",
     "assert_no_author_keys_in_player_output",

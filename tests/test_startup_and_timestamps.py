@@ -66,9 +66,10 @@ def test_lifespan_startup_initializes_app(tmp_path, monkeypatch):
         resp = client.get("/api/state")
     assert resp.status_code == 200
     data = resp.json()
-    assert "campaign" in data
-    assert "session" in data
-    assert "character" in data
+    public_state = data.get("public_state") or {}
+    assert "campaign" in public_state
+    assert "session" in public_state
+    assert "character" in public_state
 
 
 def test_save_session_sets_last_saved_at(tmp_path, monkeypatch):

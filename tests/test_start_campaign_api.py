@@ -46,8 +46,9 @@ def test_compose_state_ui_campaign_flags_fresh_vs_started(tmp_path: Path, monkey
     with TestClient(app) as client:
         assert client.post("/api/new_campaign").status_code == 200
         st0 = client.get("/api/state").json()
-        assert st0["ui"]["campaign_can_start"] is True
-        assert st0["ui"]["campaign_started"] is False
+        public0 = st0["public_state"]
+        assert public0["ui"]["campaign_can_start"] is True
+        assert public0["ui"]["campaign_started"] is False
         monkeypatch.setattr("game.api.call_gpt", lambda *_a, **_k: dict(FAKE_GPT_RESPONSE))
         assert client.post("/api/start_campaign").status_code == 200
         st1 = compose_state()

@@ -236,12 +236,14 @@ def test_first_chat_non_opening_does_not_mark_campaign_started(tmp_path: Path, m
     with TestClient(app) as client:
         assert client.post("/api/new_campaign").status_code == 200
         st0 = client.get("/api/state").json()
-        assert st0["ui"]["campaign_can_start"] is True
-        assert st0["ui"]["campaign_started"] is False
+        public0 = st0["public_state"]
+        assert public0["ui"]["campaign_can_start"] is True
+        assert public0["ui"]["campaign_started"] is False
         assert client.post("/api/chat", json={"text": "I look around quietly."}).status_code == 200
         st1 = client.get("/api/state").json()
-        assert st1["ui"]["campaign_started"] is False
-        assert st1["ui"]["campaign_can_start"] is False
+        public1 = st1["public_state"]
+        assert public1["ui"]["campaign_started"] is False
+        assert public1["ui"]["campaign_can_start"] is False
 
 
 def test_start_then_chat_keeps_campaign_started_true(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
@@ -254,7 +256,7 @@ def test_start_then_chat_keeps_campaign_started_true(tmp_path: Path, monkeypatch
         assert client.post("/api/start_campaign").status_code == 200
         assert client.post("/api/chat", json={"text": "I nod to the nearest guard."}).status_code == 200
         st = client.get("/api/state").json()
-    assert st["ui"]["campaign_started"] is True
+    assert st["public_state"]["ui"]["campaign_started"] is True
     assert load_session().get("campaign_started") is True
 
 
