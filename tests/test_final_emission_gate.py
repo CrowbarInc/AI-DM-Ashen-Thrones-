@@ -21,6 +21,14 @@ coverage once the orchestration contract is already owned here.
 
 from __future__ import annotations
 
+from typing import Any
+from unittest.mock import MagicMock
+
+from game.acceptance_quality import (
+    ACCEPTANCE_QUALITY_VERSION,
+    build_acceptance_quality_contract,
+    validate_and_repair_acceptance_quality,
+)
 from game.final_emission_meta import read_emission_debug_lane, read_final_emission_meta_dict
 
 import json
@@ -47,6 +55,399 @@ from tests.helpers.objective7_referent_fixtures import (
 from tests.test_narrative_mode_output_validator import _minimal_ctir_continuation
 
 pytestmark = pytest.mark.unit
+
+
+def _minimal_n4_narrative_plan(*, acceptance_quality: dict[str, Any] | None = None) -> dict[str, Any]:
+    """Minimal ``prompt_context.narrative_plan`` for N4 gate tests (CTIR-backed ``narrative_mode_contract``).
+
+    Omit *acceptance_quality* to assert N4 defaults when the plan ships no ``acceptance_quality_contract``.
+    """
+    nmc = build_narrative_mode_contract(ctir=_minimal_ctir_continuation())
+    plan: dict[str, Any] = {"narrative_mode_contract": nmc}
+    if acceptance_quality is not None:
+        plan["acceptance_quality_contract"] = acceptance_quality
+    return plan
+
+
+_N4_TRAILER_LINE = "Nothing will ever be the same."
+_N4_GROUNDED_LEAD = (
+    "You still hold the sergeant's gaze while torchlight picks out wet cobbles on the east lane. "
+)
+_N4_REPAIRABLE_TWO_SENTENCE = f"{_N4_GROUNDED_LEAD}{_N4_TRAILER_LINE}"
+
+
+def test_acceptance_quality_n4_off_when_narrative_plan_absent() -> None:
+    out = apply_final_emission_gate(
+        {"player_facing_text": "Wind rises.", "tags": []},
+        resolution={"kind": "observe", "prompt": "I wait."},
+        session=None,
+        scene_id="s1",
+        world={},
+    )
+    fem = read_final_emission_meta_dict(out) or {}
+    assert fem.get("acceptance_quality_checked") is False
+
+
+def test_acceptance_quality_n4_subtractive_repair_when_plan_enabled() -> None:
+    plan = _minimal_n4_narrative_plan(acceptance_quality={"enabled": True})
+    out = apply_final_emission_gate(
+        {"player_facing_text": _N4_REPAIRABLE_TWO_SENTENCE, "tags": [], "prompt_context": {"narrative_plan": plan}},
+        resolution={"kind": "narrate", "prompt": "I hold position."},
+        session=None,
+        scene_id="lane_scene",
+        world={},
+    )
+    fem = read_final_emission_meta_dict(out) or {}
+    assert fem.get("acceptance_quality_checked") is True
+    assert fem.get("acceptance_quality_passed") is True
+    assert fem.get("acceptance_quality_repair_applied") is True
+    assert "nothing will ever be the same" not in (out.get("player_facing_text") or "").lower()
+    assert "sergeant" in (out.get("player_facing_text") or "").lower()
+
+
+def test_acceptance_quality_n4_replace_when_floor_still_fails() -> None:
+    plan = _minimal_n4_narrative_plan(acceptance_quality={"enabled": True})
+    out = apply_final_emission_gate(
+        {
+            "player_facing_text": _N4_TRAILER_LINE,
+            "tags": [],
+            "prompt_context": {"narrative_plan": plan},
+        },
+        resolution={"kind": "narrate", "prompt": "I wait."},
+        session=None,
+        scene_id="lane_scene",
+        world={},
+    )
+    fem = read_final_emission_meta_dict(out) or {}
+    assert fem.get("acceptance_quality_gate_replaced_candidate") is True
+    assert fem.get("final_route") == "replaced"
+    assert "nothing will ever be the same" not in (out.get("player_facing_text") or "").lower()
+
+
+def test_acceptance_quality_n4_legacy_trailer_phrase_passthrough_without_plan() -> None:
+    raw = _N4_TRAILER_LINE
+    out = apply_final_emission_gate(
+        {"player_facing_text": raw, "tags": []},
+        resolution={"kind": "narrate", "prompt": "I wait."},
+        session=None,
+        scene_id="lane_scene",
+        world={},
+    )
+    assert _normalize_text(out.get("player_facing_text") or "") == _normalize_text(raw)
+    fem = read_final_emission_meta_dict(out) or {}
+    assert fem.get("acceptance_quality_checked") is False
+    assert fem.get("acceptance_quality_gate_replaced_candidate") is not True
+
+
+def test_acceptance_quality_n4_respects_explicit_disable_with_plan() -> None:
+    raw = _N4_TRAILER_LINE
+    plan = _minimal_n4_narrative_plan(acceptance_quality={"enabled": False})
+    out = apply_final_emission_gate(
+        {"player_facing_text": raw, "tags": [], "prompt_context": {"narrative_plan": plan}},
+        resolution={"kind": "narrate", "prompt": "I wait."},
+        session=None,
+        scene_id="lane_scene",
+        world={},
+    )
+    assert _normalize_text(out.get("player_facing_text") or "") == _normalize_text(raw)
+    fem = read_final_emission_meta_dict(out) or {}
+    assert fem.get("acceptance_quality_checked") is False
+    assert fem.get("acceptance_quality_passed") is True
+    assert fem.get("acceptance_quality_gate_replaced_candidate") is not True
+
+
+def test_acceptance_quality_n4_defaults_on_when_plan_has_no_shipped_aq_contract() -> None:
+    plan = _minimal_n4_narrative_plan()
+    out = apply_final_emission_gate(
+        {"player_facing_text": _N4_REPAIRABLE_TWO_SENTENCE, "tags": [], "prompt_context": {"narrative_plan": plan}},
+        resolution={"kind": "narrate", "prompt": "I hold position."},
+        session=None,
+        scene_id="lane_scene",
+        world={},
+    )
+    fem = read_final_emission_meta_dict(out) or {}
+    assert fem.get("acceptance_quality_checked") is True
+    assert fem.get("acceptance_quality_passed") is True
+
+
+def test_acceptance_quality_gate_invokes_canonical_seam_and_emits_its_text(monkeypatch) -> None:
+    plan = _minimal_n4_narrative_plan(acceptance_quality={"enabled": True})
+    trace = {
+        "acceptance_quality_version": ACCEPTANCE_QUALITY_VERSION,
+        "acceptance_quality_checked": True,
+        "acceptance_quality_passed": True,
+        "acceptance_quality_reason_codes": [],
+        "acceptance_quality_repair_applied": False,
+        "acceptance_quality_evidence": {},
+    }
+    bundle = {
+        "text": "SEAM_CANONICAL_LINE_ONLY",
+        "validation": {"passed": True, "failure_reasons": [], "reason_codes": [], "evidence": {}},
+        "repair": {"repair_applied": False, "repair_modes": []},
+        "acceptance_quality_emission_trace": trace,
+    }
+    mock = MagicMock(return_value=bundle)
+    monkeypatch.setattr(feg, "validate_and_repair_acceptance_quality", mock)
+    monkeypatch.setattr(feg, "_attach_interaction_continuity_validation", lambda *a, **k: None)
+    out = apply_final_emission_gate(
+        {
+            "player_facing_text": "Any candidate would be ignored while mock is active.",
+            "tags": [],
+            "prompt_context": {"narrative_plan": plan},
+        },
+        resolution={"kind": "narrate", "prompt": "I wait."},
+        session=None,
+        scene_id="lane_scene",
+        world={},
+    )
+    mock.assert_called()
+    assert out.get("player_facing_text") == "SEAM_CANONICAL_LINE_ONLY"
+    fem = read_final_emission_meta_dict(out) or {}
+    assert fem.get("acceptance_quality_passed") is True
+    assert fem.get("acceptance_quality_trace") == trace
+
+
+def test_acceptance_quality_seam_disabled_contract_without_plan(monkeypatch) -> None:
+    seen: list[bool] = []
+
+    def _spy(text: str, contract: dict) -> dict:
+        seen.append(bool(contract.get("enabled")))
+        return validate_and_repair_acceptance_quality(text, contract)
+
+    monkeypatch.setattr(feg, "validate_and_repair_acceptance_quality", _spy)
+    apply_final_emission_gate(
+        {"player_facing_text": "Wind rises.", "tags": []},
+        resolution={"kind": "observe", "prompt": "I wait."},
+        session=None,
+        scene_id="s1",
+        world={},
+    )
+    assert seen and all(enabled is False for enabled in seen)
+
+
+def test_acceptance_quality_seam_enabled_with_plan_bundle(monkeypatch) -> None:
+    plan = _minimal_n4_narrative_plan(acceptance_quality={"enabled": True})
+    seen: list[bool] = []
+
+    def _spy(text: str, contract: dict) -> dict:
+        seen.append(bool(contract.get("enabled")))
+        return validate_and_repair_acceptance_quality(text, contract)
+
+    monkeypatch.setattr(feg, "validate_and_repair_acceptance_quality", _spy)
+    apply_final_emission_gate(
+        {"player_facing_text": _N4_REPAIRABLE_TWO_SENTENCE, "tags": [], "prompt_context": {"narrative_plan": plan}},
+        resolution={"kind": "narrate", "prompt": "I hold position."},
+        session=None,
+        scene_id="lane_scene",
+        world={},
+    )
+    assert any(enabled is True for enabled in seen)
+
+
+def test_acceptance_quality_n4_repair_path_fem_nested_and_flattened_align() -> None:
+    plan = _minimal_n4_narrative_plan(acceptance_quality={"enabled": True})
+    out = apply_final_emission_gate(
+        {"player_facing_text": _N4_REPAIRABLE_TWO_SENTENCE, "tags": [], "prompt_context": {"narrative_plan": plan}},
+        resolution={"kind": "narrate", "prompt": "I hold position."},
+        session=None,
+        scene_id="lane_scene",
+        world={},
+    )
+    fem = read_final_emission_meta_dict(out) or {}
+    tr = fem.get("acceptance_quality_trace")
+    assert isinstance(tr, dict)
+    for k in (
+        "acceptance_quality_version",
+        "acceptance_quality_checked",
+        "acceptance_quality_passed",
+        "acceptance_quality_reason_codes",
+        "acceptance_quality_repair_applied",
+        "acceptance_quality_evidence",
+    ):
+        assert k in tr
+        assert fem.get(k) == tr.get(k)
+    assert isinstance(fem.get("acceptance_quality_reason_codes"), list)
+    assert isinstance(fem.get("acceptance_quality_failure_reasons"), list)
+    assert isinstance(fem.get("acceptance_quality_repair_modes"), list)
+    assert isinstance(fem.get("acceptance_quality_evidence"), dict)
+    assert fem.get("acceptance_quality_version") == ACCEPTANCE_QUALITY_VERSION
+    assert fem.get("acceptance_quality_failure_reasons") == []
+    assert fem.get("acceptance_quality_passed") is True
+    assert fem.get("acceptance_quality_repair_applied") is True
+
+
+def test_acceptance_quality_n4_replace_path_reruns_seam_on_fallback_and_fem_terminal(monkeypatch) -> None:
+    plan = _minimal_n4_narrative_plan(acceptance_quality={"enabled": True})
+    calls: list[str] = []
+
+    def _spy(text: str, contract: dict) -> dict:
+        calls.append(str(text or ""))
+        return validate_and_repair_acceptance_quality(text, contract)
+
+    monkeypatch.setattr(feg, "validate_and_repair_acceptance_quality", _spy)
+    out = apply_final_emission_gate(
+        {
+            "player_facing_text": _N4_TRAILER_LINE,
+            "tags": [],
+            "prompt_context": {"narrative_plan": plan},
+        },
+        resolution={"kind": "narrate", "prompt": "I wait."},
+        session=None,
+        scene_id="lane_scene",
+        world={},
+    )
+
+    assert len(calls) == 2
+    assert calls[0].lower().strip() == _N4_TRAILER_LINE.lower().strip()
+    assert calls[0] != calls[1]
+    fem = read_final_emission_meta_dict(out) or {}
+    assert fem.get("acceptance_quality_gate_replaced_candidate") is True
+    assert fem.get("acceptance_quality_rejected_reason_codes")
+    assert isinstance(fem.get("acceptance_quality_rejected_reason_codes"), list)
+    assert fem.get("candidate_validation_passed") is False
+    assert fem.get("final_emitted_source") == "acceptance_quality_global_scene_fallback"
+    aq_contract = build_acceptance_quality_contract(overrides=plan["acceptance_quality_contract"])
+    ref = validate_and_repair_acceptance_quality(str(out.get("player_facing_text") or ""), aq_contract)
+    assert fem.get("acceptance_quality_passed") == bool(ref["validation"]["passed"])
+    tags = list(out.get("tags") or [])
+    assert "final_emission_gate:acceptance_quality" in tags
+    assert "nothing will ever be the same" not in (out.get("player_facing_text") or "").lower()
+
+
+def test_acceptance_quality_unknown_trailer_version_passes_through_on_shipped_plan() -> None:
+    plan = _minimal_n4_narrative_plan(
+        acceptance_quality={"enabled": True, "trailer_phrase_patterns_version": 999},
+    )
+    out = apply_final_emission_gate(
+        {"player_facing_text": _N4_REPAIRABLE_TWO_SENTENCE, "tags": [], "prompt_context": {"narrative_plan": plan}},
+        resolution={"kind": "narrate", "prompt": "I hold position."},
+        session=None,
+        scene_id="lane_scene",
+        world={},
+    )
+    fem = read_final_emission_meta_dict(out) or {}
+    ev = fem.get("acceptance_quality_evidence") or {}
+    assert ev.get("trailer_phrase_patterns_version_unresolved") == 999
+    assert ev.get("trailer_phrase_patterns_version") != 1
+    assert "nothing will ever be the same" in (out.get("player_facing_text") or "").lower()
+
+
+def test_acceptance_quality_n4_does_not_invent_grounding_when_floor_fails() -> None:
+    plan = _minimal_n4_narrative_plan(acceptance_quality={"enabled": True})
+    out = apply_final_emission_gate(
+        {
+            "player_facing_text": "Yes.",
+            "tags": [],
+            "prompt_context": {"narrative_plan": plan},
+        },
+        resolution={"kind": "narrate", "prompt": "I wait."},
+        session=None,
+        scene_id="lane_scene",
+        world={},
+    )
+    text = _normalize_text(out.get("player_facing_text") or "")
+    assert "yes." != text.lower()
+    assert "sergeant" not in text.lower()
+    assert "torchlight" not in text.lower()
+    fem = read_final_emission_meta_dict(out) or {}
+    assert fem.get("acceptance_quality_gate_replaced_candidate") is True
+
+
+def test_acceptance_quality_n4_strict_social_and_non_strict_attach_consistent_fem_shape(monkeypatch) -> None:
+    plan = _minimal_n4_narrative_plan(acceptance_quality={"enabled": True})
+
+    non_strict = apply_final_emission_gate(
+        {
+            "player_facing_text": _N4_REPAIRABLE_TWO_SENTENCE,
+            "tags": [],
+            "prompt_context": {"narrative_plan": plan},
+        },
+        resolution={"kind": "narrate", "prompt": "I hold position."},
+        session=None,
+        scene_id="lane_scene",
+        world={},
+    )
+    fem_ns = read_final_emission_meta_dict(non_strict) or {}
+
+    session, world, sid, resolution = _runner_strict_bundle()
+    stub_details = {
+        "used_internal_fallback": False,
+        "final_emitted_source": "test_stub",
+        "rejection_reasons": [],
+        "deterministic_attempted": False,
+        "deterministic_passed": False,
+        "fallback_pool": "none",
+        "fallback_kind": "none",
+        "route_illegal_intercepted": False,
+    }
+
+    def fake_build(candidate_text, *, resolution, tags, session, scene_id, world):
+        return _N4_REPAIRABLE_TWO_SENTENCE, dict(stub_details)
+
+    monkeypatch.setattr(feg, "build_final_strict_social_response", fake_build)
+    strict_out = apply_final_emission_gate(
+        {
+            "player_facing_text": 'Tavern Runner says, "East lanes."',
+            "tags": [],
+            "prompt_context": {"narrative_plan": plan},
+        },
+        resolution=resolution,
+        session=session,
+        scene_id=sid,
+        world=world,
+    )
+    fem_s = read_final_emission_meta_dict(strict_out) or {}
+
+    for fem in (fem_ns, fem_s):
+        assert fem.get("acceptance_quality_checked") is True
+        assert isinstance(fem.get("acceptance_quality_trace"), dict)
+        assert isinstance(fem.get("acceptance_quality_reason_codes"), list)
+        assert isinstance(fem.get("acceptance_quality_evidence"), dict)
+
+
+def test_acceptance_quality_n4_runs_before_interaction_continuity_attachment(monkeypatch) -> None:
+    plan = _minimal_n4_narrative_plan(acceptance_quality={"enabled": True})
+    order: list[str] = []
+
+    def _spy(text: str, contract: dict) -> dict:
+        order.append("n4")
+        return validate_and_repair_acceptance_quality(text, contract)
+
+    monkeypatch.setattr(feg, "validate_and_repair_acceptance_quality", _spy)
+
+    _orig_ic = feg._attach_interaction_continuity_validation
+
+    def _ic_hook(
+        out: dict,
+        *,
+        resolution_for_contracts=None,
+        eff_resolution=None,
+        session=None,
+        preserve_existing_validation: bool = False,
+    ) -> None:
+        order.append("ic")
+        return _orig_ic(
+            out,
+            resolution_for_contracts=resolution_for_contracts,
+            eff_resolution=eff_resolution,
+            session=session,
+            preserve_existing_validation=preserve_existing_validation,
+        )
+
+    monkeypatch.setattr(feg, "_attach_interaction_continuity_validation", _ic_hook)
+
+    apply_final_emission_gate(
+        {
+            "player_facing_text": _N4_REPAIRABLE_TWO_SENTENCE,
+            "tags": [],
+            "prompt_context": {"narrative_plan": plan},
+        },
+        resolution={"kind": "narrate", "prompt": "I hold position."},
+        session=None,
+        scene_id="lane_scene",
+        world={},
+    )
+    assert order.index("n4") < order.index("ic")
 
 
 def _runner_strict_bundle():

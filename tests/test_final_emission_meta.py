@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from game.final_emission_meta import (
+    EVALUATOR_FEM_KEY_PREFIX_FAMILIES,
     EMISSION_DEBUG_LANE_KEY,
     FINAL_EMISSION_META_KEY,
     INTERNAL_STATE_KEY,
@@ -49,6 +50,10 @@ def test_default_layer_meta_has_all_fem_keys() -> None:
 def test_default_narrative_mode_output_layer_meta_covers_registry() -> None:
     d = default_narrative_mode_output_layer_meta()
     assert set(d.keys()) == NARRATIVE_MODE_OUTPUT_FEM_KEYS
+
+
+def test_evaluator_fem_prefix_registry_includes_acceptance_quality_family() -> None:
+    assert "acceptance_quality_" in EVALUATOR_FEM_KEY_PREFIX_FAMILIES
 
 
 def test_merge_narrative_mode_output_into_final_emission_meta() -> None:

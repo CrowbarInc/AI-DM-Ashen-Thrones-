@@ -16,8 +16,11 @@ Post-finalization, FEM is usually under ``gm_output["internal_state"]["emission_
 
 Validator/repair **wiring** remains in :mod:`game.narrative_authenticity` and
 :mod:`game.final_emission_repairs`; narrative-mode **output** legality is
-:mod:`game.narrative_mode_contract`. This file packages **metadata shapes** and observational
-read paths, not legality verdicts.
+:mod:`game.narrative_mode_contract`.
+
+N4 (Acceptance Quality) orchestration and FEM merge are owned by :mod:`game.final_emission_gate`,
+which calls :func:`game.acceptance_quality.validate_and_repair_acceptance_quality` once per wired
+path. This module packages **metadata shapes** and observational read paths, not legality verdicts.
 """
 from __future__ import annotations
 
@@ -106,6 +109,7 @@ STAGE_DIFF_ALLOWED_NA_PROJECTION_KEYS: frozenset[str] = frozenset(
 
 # Evaluator/debug consumers may want a normalized FEM slice without importing every gate module.
 # Prefix-based families are explicit registries (telemetry-only) and do not imply policy ownership here.
+# ``acceptance_quality_*`` keys are legality-shaped N4 traces (reason codes + slim evidence), not numeric scores.
 EVALUATOR_FEM_KEY_PREFIX_FAMILIES: tuple[str, ...] = (
     "answer_completeness_",
     "response_delta_",
@@ -114,6 +118,7 @@ EVALUATOR_FEM_KEY_PREFIX_FAMILIES: tuple[str, ...] = (
     "referent_",
     "narrative_authenticity_",
     "narrative_mode_output_",
+    "acceptance_quality_",
     "response_type_",
 )
 

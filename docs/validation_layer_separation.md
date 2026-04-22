@@ -42,6 +42,13 @@ Maintainer-facing contract for **Objective #11**: strict separation of validatio
 - **Deterministic validators** and **inspectors** (`game.final_emission_validators` and peers).
 - **Bounded deterministic repairs** (`game.final_emission_repairs` and peers).
 - **Orchestration** that orders layers, integrates the sanitizer, and seals strict-social / emission paths (`game.final_emission_gate.apply_final_emission_gate` as orchestration owner per ledger).
+- **Objective N4 (Acceptance Quality floor)** — `game.acceptance_quality` supplies a **data-shaped**
+  contract and the canonical `validate_and_repair_acceptance_quality` loop; `apply_final_emission_gate`
+  calls that seam (no duplicated orchestration), merges `acceptance_quality_*` / `acceptance_quality_trace`
+  into FEM, and may swap to a deterministic sealed line if the floor still fails after bounded repair.
+  It is **not** scoring, not an evaluator substitute, and not a second NA stack; unknown trailer
+  pattern table versions are recorded as observational evidence, not silently “fixed” at the gate.
+  See `docs/acceptance_quality_layer.md`.
 
 **C2 shipped boundary (post Block B/D1/D2):** Resolved-turn **meaning** and contract-shaped **answer/action** fallback **prose** are decided **upstream** (`game.upstream_response_repairs` merged as `upstream_prepared_emission`; planner/CTIR context). The gate + default **strip-only** sanitizer path own **legality-preserving** cleanup, **visibility/route-illegal** stripping, serialized-field **packaging** recovery, and explicit **trace/meta** when prepared text is absent—not silent “finish the thought” narration. **Strict-social** terminal dialogue shaping stays the **`game.social_exchange_emission`** seam. **Evaluators** score offline; they do not perform live semantic repair at this boundary (see `docs/final_emission_ownership_convergence.md`).
 
@@ -83,6 +90,11 @@ The matrix helpers `layer_may_read_layer`, `allowed_reader_layers_for_writer`, a
 - **GPT reads planner contracts** to generate constrained prose/JSON.
 - **Gate reads GPT candidate text** plus shipped contracts to run deterministic checks and bounded repairs.
 - **Narrative authenticity (NA)** contributes deterministic checks and **NA-scoped** bounded repairs **under gate orchestration**. NA does **not** seal pass/fail for `response_delta`, does **not** author canonical `response_delta_*` legality metadata, and does **not** own primary delta repair—that remains the gate stack (`final_emission_repairs`). Where documented, NA may **shadow-read** the same delta predicate for diagnostics only (see `NA_SHADOW_RESPONSE_DELTA_FAILURE_REASON` in `game/validation_layer_contracts.py`).
+- **Acceptance quality (N4)** contributes **floor** predicates (anti-collapse / grounding / trailer
+  idiom tables) and **bounded subtractive** repairs **under gate orchestration** via the shipped
+  `validate_and_repair_acceptance_quality` entrypoint; it does **not** attach numeric scores, does
+  **not** call offline evaluators, and does **not** replace NA’s echo or filler ownership (see
+  `docs/acceptance_quality_layer.md`).
 - **Evaluator reads gate telemetry** and finalized meta for offline scores (artifacts only; no live enforcement).
 
 ### Invalid (anti-patterns)

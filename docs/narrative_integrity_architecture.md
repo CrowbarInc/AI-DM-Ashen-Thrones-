@@ -4,6 +4,16 @@ Concise map for “where does this belong?” after the Block 3 split and Block 
 
 For **validation-layer phase ownership** (engine truth vs planner structure vs GPT expression vs gate legality vs offline evaluator scoring), see `docs/validation_layer_separation.md` and the executable leaf registry `game/validation_layer_contracts.py`.
 
+**Objective N4 (Acceptance Quality floor):** deterministic anti-collapse / playability-floor checks
+(contract + pure validation + bounded subtractive repairs) live in `game/acceptance_quality.py`.
+This is **adjacent** to Narrative Authenticity (NA): NA keeps anti-echo / signal-density / diegetic
+shape ownership; N4 targets thin grounding, single-anchor collapse, abstract-only terminals, and
+plot-trailer closes. Maintainer map: `docs/acceptance_quality_layer.md`. **Gate wiring:** after C4
+`narrative_mode_output` (and referent/visibility where applicable), `apply_final_emission_gate`
+calls `validate_and_repair_acceptance_quality` once per exit path and merges the returned trace
+into `_final_emission_meta`. **Activation:** default-off without `prompt_context.narrative_plan`;
+default-on with a plan unless `acceptance_quality_contract` disables the layer.
+
 **Block C1 (post-AER):** This file is a maintainer-facing consolidation map alongside `docs/current_focus.md` and the governance docs in `tests/TEST_AUDIT.md` / `tests/TEST_CONSOLIDATION_PLAN.md`.
 
 ---
@@ -120,8 +130,9 @@ Do **not** describe this seam as: a general referent resolver; a clause parser; 
 6. **Strict-social and emission helpers:** `game.social_exchange_emission` (downstream strict-social emission application consumed by the gate; not the validator/repair home and not the owner of gate layer ordering).
 7. **Deterministic validation:** `game.final_emission_validators` (`validate_*`, `inspect_*`, `candidate_satisfies_*`).
 8. **Repairs / layer wiring:** `game.final_emission_repairs` (`apply_*`, `merge_*`, skip helpers, and repair-side consumers of shipped policy contracts).
-9. **Shared text / patterns:** `game.final_emission_text` (normalization, regex scaffolding — no policy **orchestration**).
-10. **Orchestration + compatibility:** `game.final_emission_gate.apply_final_emission_gate` wires sanitizer, remaining in-module policy layers (tone, narrative authority, anti-railroading, context separation, scene anchor, speaker selection, etc.), logging, and metadata. `game.final_emission_meta.py` remains metadata-only packaging/read-side support rather than a co-equal orchestration home. **Historical tests** may still import private helpers from `final_emission_gate` even though implementation lives in extracted modules — prefer importing from the real **canonical owner** for new code.
+9. **Acceptance quality (N4) floor:** `game.acceptance_quality` — contract + `validate_and_repair_acceptance_quality`; `game.final_emission_gate` owns ordering and FEM merge (not a second NA layer; see `docs/acceptance_quality_layer.md`).
+10. **Shared text / patterns:** `game.final_emission_text` (normalization, regex scaffolding — no policy **orchestration**).
+11. **Orchestration + compatibility:** `game.final_emission_gate.apply_final_emission_gate` wires sanitizer, remaining in-module policy layers (tone, narrative authority, anti-railroading, context separation, scene anchor, speaker selection, etc.), logging, and metadata. `game.final_emission_meta.py` remains metadata-only packaging/read-side support rather than a co-equal orchestration home. **Historical tests** may still import private helpers from `final_emission_gate` even though implementation lives in extracted modules — prefer importing from the real **canonical owner** for new code.
 
 Post-gate sanitization and other emit-path modules (`game.output_sanitizer`, etc.) stay as documented in existing suites.
 
@@ -167,6 +178,7 @@ Examples aligned with this layout:
 | Who is the authoritative addressee | `interaction_context.resolve_authoritative_social_target` |
 | What response shape the writer owed | `response_policy_contracts.py` |
 | Whether text satisfies a contract (no side effects) | `final_emission_validators.py` |
+| N4 acceptance-quality contract / floor checks / canonical validate+repair+revalidate seam | `acceptance_quality.py` (orchestrated via `validate_and_repair_acceptance_quality` from `final_emission_gate.py`) |
 | How to repair or skip a policy layer | `final_emission_repairs.py` |
 | Normalization / shared patterns | `final_emission_text.py` |
 | Layer order, sanitizer integration, strict-social path, logging | `final_emission_gate.py` (**orchestration** owner) |

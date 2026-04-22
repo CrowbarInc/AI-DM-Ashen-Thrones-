@@ -97,6 +97,8 @@ Operator-facing map of the **implemented** narrative authenticity (NA) stack: de
 
 For the **canonical five-layer validation separation** (engine / planner / GPT / gate / evaluator) and anti-overlap rules, see `docs/validation_layer_separation.md` (`game/validation_layer_contracts.py`).
 
+**Acceptance Quality (Objective N4)** — Runtime **anti-collapse / playability floor** (contract + `validate_and_repair_acceptance_quality`): `game/acceptance_quality.py`, invoked from `game/final_emission_gate.py` after C4 narrative-mode output checks. **Default-off** without a shipped `prompt_context.narrative_plan`; **default-on** in plan-backed flows unless `acceptance_quality_contract.enabled` is false. Adjacent to NA, not a second evaluator or prose-quality scorer; maintainer map `docs/acceptance_quality_layer.md`.
+
 ### Layer stack (architecture)
 
 End-to-end order of responsibility:
