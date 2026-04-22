@@ -354,13 +354,36 @@ def _narrative_plan_prompt_debug_anchor(
         _nmc_dbg = (nmc.get("debug") or {}).get("derivation_codes") if isinstance(nmc.get("debug"), dict) else None
         if isinstance(_nmc_dbg, list):
             nmc_dbg = [str(x) for x in _nmc_dbg[:16]]
+    plan_nm = str(plan.get("narrative_mode") or "").strip() if isinstance(plan.get("narrative_mode"), str) else ""
+    nmc_mode = str(nmc.get("mode") or "").strip() if isinstance(nmc, dict) else ""
+    nmc_enabled = bool(nmc.get("enabled")) if isinstance(nmc, dict) and isinstance(nmc.get("enabled"), bool) else None
+    plan_alias_match: bool | None = None
+    if nmc_ok and isinstance(nmc, dict):
+        plan_alias_match = plan_nm == nmc_mode
+    _po = (nmc.get("prompt_obligations") if isinstance(nmc, dict) and isinstance(nmc.get("prompt_obligations"), dict) else {}) or {}
+    _fm = nmc.get("forbidden_moves") if isinstance(nmc, dict) else None
+    _fm_l = _fm if isinstance(_fm, list) else []
+    nmc_ship_trace = None
+    if isinstance(nmc, dict):
+        nmc_ship_trace = {
+            "mode": nmc_mode or None,
+            "enabled": nmc_enabled,
+            "contract_valid": bool(nmc_ok),
+            "ob_keys_head": sorted(str(k) for k in _po.keys() if isinstance(k, str) and str(k).strip())[:6],
+            "fm_head": sorted(
+                {str(x).strip() for x in _fm_l if isinstance(x, str) and str(x).strip()}
+            )[:6],
+        }
     return {
         "present": True,
         "version": plan.get("version"),
         "narrative_mode": plan.get("narrative_mode"),
         "narrative_mode_contract_valid": bool(nmc_ok),
+        "narrative_mode_contract_enabled": nmc_enabled,
         "narrative_mode_contract_validation_codes": list(nmc_reasons[:16]) if not nmc_ok else [],
         "narrative_mode_contract_derivation_codes": nmc_dbg,
+        "narrative_plan_mode_alias_matches_contract_mode": plan_alias_match,
+        "nmc_ship_trace": nmc_ship_trace,
         "role_allocation": plan.get("role_allocation") if isinstance(plan.get("role_allocation"), dict) else None,
         "derivation_codes": codes,
         "derivation_code_count": len(dc) if isinstance(dc, list) else 0,
@@ -381,17 +404,28 @@ def _narrative_mode_instruction_prompt_debug(
     narrative_mode_contract: Mapping[str, Any] | None,
     *,
     instruction_lines: Sequence[str],
+    narrative_plan_present: bool = False,
+    plan_narrative_mode: str | None = None,
 ) -> Dict[str, Any]:
     """Compact inspect-only slice for ``prompt_debug`` (counts + symbolic codes only)."""
+    lines = list(instruction_lines)
     if not isinstance(narrative_mode_contract, Mapping):
         return {
-            "present": bool(instruction_lines),
+            "present": bool(lines),
             "mode": None,
-            "instruction_count": len(list(instruction_lines)),
+            "contract_valid": False,
+            "contract_enabled": None,
+            "instruction_count": len(lines),
             "sample_prompt_obligation_keys": [],
             "sample_forbidden_moves": [],
+            "plan_narrative_mode_field": (str(plan_narrative_mode).strip() or None) if plan_narrative_mode else None,
+            "narrative_plan_present": bool(narrative_plan_present),
+            "seam_codes": (["nmc_missing_contract"] if narrative_plan_present else []),
         }
     mode = str(narrative_mode_contract.get("mode") or "").strip() or None
+    nmc_ok, nmc_reasons = validate_narrative_mode_contract(narrative_mode_contract)
+    nmc_en = narrative_mode_contract.get("enabled")
+    contract_enabled = bool(nmc_en) if isinstance(nmc_en, bool) else None
     po = (
         narrative_mode_contract.get("prompt_obligations")
         if isinstance(narrative_mode_contract.get("prompt_obligations"), Mapping)
@@ -400,13 +434,46 @@ def _narrative_mode_instruction_prompt_debug(
     fm = narrative_mode_contract.get("forbidden_moves")
     fm_list = [str(x).strip() for x in (fm if isinstance(fm, list) else []) if isinstance(x, str) and str(x).strip()]
     ob_keys = sorted(str(k) for k in po.keys() if isinstance(k, str) and str(k).strip())[:8]
+    pn = str(plan_narrative_mode or "").strip() or None
+    drift = bool(pn and mode and pn != mode)
+    seam_codes: List[str] = []
+    if narrative_plan_present and not nmc_ok:
+        seam_codes.append("nmc_contract_invalid|" + "|".join(str(x) for x in (nmc_reasons or [])[:8]))
+    if narrative_plan_present and nmc_ok and drift:
+        seam_codes.append(f"nmc_plan_field_drift|plan={pn}|contract={mode}")
     return {
-        "present": bool(instruction_lines),
+        "present": bool(lines),
         "mode": mode,
-        "instruction_count": len(list(instruction_lines)),
+        "contract_valid": bool(nmc_ok),
+        "contract_enabled": contract_enabled,
+        "instruction_count": len(lines),
         "sample_prompt_obligation_keys": ob_keys,
         "sample_forbidden_moves": sorted(set(fm_list))[:8],
+        "plan_narrative_mode_field": pn,
+        "narrative_plan_present": bool(narrative_plan_present),
+        "seam_codes": seam_codes,
     }
+
+
+def _nmc_continuation_delta_lines() -> List[str]:
+    """Machine continuation lane (canonical default when no special mode applies)."""
+    return [
+        "struct:continuation:carry_active_thread_forward_without_reopening_a_fresh_intro_tableau",
+        "struct:continuation:prefer_local_continuity_and_forward_motion_over_scene_wide_recap",
+        "struct:continuation:suppress_language_that_resets_the_scene_like_a_first_shot_opening",
+    ]
+
+
+def _nmc_seam_floor_when_contract_unusable(*, reasons: Sequence[str] | None = None, missing: bool = False) -> List[str]:
+    """Explicit continuation floor — not a mode-agnostic narration escape hatch."""
+    head = (
+        "struct:nmc_seam:narrative_mode_contract_missing"
+        if missing
+        else "struct:nmc_seam:narrative_mode_contract_invalid|" + "|".join(str(x) for x in (reasons or [])[:8])
+    )
+    out = [head, "struct:nmc_floor:use_continuation_lane_pending_gate_skip_on_c4"]
+    out.extend(_nmc_continuation_delta_lines())
+    return out[:_MAX_NARRATIVE_MODE_INSTRUCTIONS]
 
 
 def _build_narrative_mode_instructions(
@@ -415,6 +482,8 @@ def _build_narrative_mode_instructions(
     response_policy: Mapping[str, Any] | None,
     narration_obligations: Mapping[str, Any] | None,
     resolution_sem: Mapping[str, Any] | None,
+    narrative_plan_present: bool = False,
+    plan_narrative_mode: str | None = None,
 ) -> List[str]:
     """Bounded structural mode instructions derived from ``narrative_mode_contract`` only.
 
@@ -425,15 +494,27 @@ def _build_narrative_mode_instructions(
 
     ``narration_obligations`` / ``resolution_sem`` are accepted for seam symmetry with
     planning inputs; the integrated contract remains authoritative over local re-derivation.
+
+    When ``narrative_plan_present`` is true (payload carries ``narrative_plan``), a missing
+    or invalid contract is surfaced with compact ``struct:nmc_seam:*`` markers plus an
+    explicit continuation floor — never an empty mode-guidance block.
     """
     _ = (narration_obligations, resolution_sem)
     if not isinstance(narrative_mode_contract, Mapping):
+        if narrative_plan_present:
+            return _nmc_seam_floor_when_contract_unusable(reasons=None, missing=True)
         return []
-    ok, _reasons = validate_narrative_mode_contract(narrative_mode_contract)
+    ok, reasons = validate_narrative_mode_contract(narrative_mode_contract)
     if not ok:
+        if narrative_plan_present:
+            return _nmc_seam_floor_when_contract_unusable(reasons=list(reasons or []), missing=False)
         return []
     mode = str(narrative_mode_contract.get("mode") or "").strip()
     if mode not in NARRATIVE_MODES:
+        if narrative_plan_present:
+            return _nmc_seam_floor_when_contract_unusable(
+                reasons=[f"narrative_mode_contract:unknown_mode:{mode}"], missing=False
+            )
         return []
     po = (
         narrative_mode_contract.get("prompt_obligations")
@@ -458,6 +539,14 @@ def _build_narrative_mode_instructions(
         f"({mode}); obey its prompt_obligations and forbidden_moves as machine codes. "
         "Shipped response_policy and CTIR win on any conflict.",
     ]
+    seam_preface: List[str] = []
+    if narrative_plan_present and narrative_mode_contract.get("enabled") is False:
+        seam_preface.append("struct:nmc_contract:disabled|c4_gate_skips_nmo|shipped_continuation_lane")
+    pn_field = str(plan_narrative_mode or "").strip()
+    if narrative_plan_present and pn_field and pn_field != mode:
+        seam_preface.append(f"struct:nmc_seam:plan_narrative_mode_field_drift|plan={pn_field}|contract={mode}")
+    for i, line in enumerate(seam_preface):
+        out.insert(1 + i, line)
 
     if mode == "opening":
         out.append("struct:opening:first_impression_and_immediate_location_salience")
@@ -469,9 +558,7 @@ def _build_narrative_mode_instructions(
                 "struct:opening:answer_completeness_if_active_keep_the_core_reply_unburied_by_scene_paint"
             )
     elif mode == "continuation":
-        out.append("struct:continuation:carry_active_thread_forward_without_reopening_a_fresh_intro_tableau")
-        out.append("struct:continuation:prefer_local_continuity_and_forward_motion_over_scene_wide_recap")
-        out.append("struct:continuation:suppress_language_that_resets_the_scene_like_a_first_shot_opening")
+        out.extend(_nmc_continuation_delta_lines())
     elif mode == "action_outcome":
         out.append(
             "struct:action_outcome:lead_early_with_the_authoritative_result_signal_before_atmosphere_or_scene_setting_padding"
@@ -489,6 +576,7 @@ def _build_narrative_mode_instructions(
             )
     elif mode == "transition":
         out.append("struct:transition:foreground_departure_arrival_or_other_scene_change_motion")
+        out.append("struct:transition:require_motion_or_spatial_change_signal_not_static_scene_hold")
         out.append(
             "struct:transition:allowed_reground_in_new_setting_distinct_from_static_mid_scene_continuation"
         )
@@ -4397,6 +4485,8 @@ def build_narration_context(
     if social_response_structure_contract.get("enabled"):
         _policy_tail = list(_policy_tail) + _social_response_structure_instr
 
+    _np_for_mode = narrative_plan if isinstance(narrative_plan, dict) else None
+    _pnm = str(_np_for_mode.get("narrative_mode") or "").strip() if isinstance(_np_for_mode, dict) else ""
     narrative_mode_instruction_lines = _build_narrative_mode_instructions(
         narrative_mode_contract=(
             narrative_plan.get("narrative_mode_contract") if isinstance(narrative_plan, dict) else None
@@ -4404,10 +4494,14 @@ def build_narration_context(
         response_policy=response_policy,
         narration_obligations=narration_obligations,
         resolution_sem=resolution_sem if isinstance(resolution_sem, dict) else None,
+        narrative_plan_present=_np_for_mode is not None,
+        plan_narrative_mode=_pnm or None,
     )
     prompt_debug_anchor["narrative_mode_instructions"] = _narrative_mode_instruction_prompt_debug(
         narrative_plan.get("narrative_mode_contract") if isinstance(narrative_plan, dict) else None,
         instruction_lines=narrative_mode_instruction_lines,
+        narrative_plan_present=_np_for_mode is not None,
+        plan_narrative_mode=_pnm or None,
     )
     instructions = list(instructions) + list(narrative_mode_instruction_lines) + _policy_tail
 

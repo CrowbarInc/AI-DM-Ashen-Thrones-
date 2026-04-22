@@ -15,7 +15,10 @@ live under ``gm_output["internal_state"]["emission_debug_lane"]`` (see
 Validator implementations and emission repair wiring live in :mod:`game.narrative_authenticity`
 and :mod:`game.final_emission_repairs` (canonical ``response_delta_*`` legality keys remain
 owned by the gate stack’s delta layer); this file only packages **metadata shapes**, not
-legality verdicts. Transitional overlap in import sites does not make this file the orchestration owner.
+legality verdicts. Narrative-mode **output** legality is computed in
+:mod:`game.narrative_mode_contract` (``validate_narrative_mode_output``); this module may package
+``narrative_mode_output_*`` FEM fields the same way as other contract traces. Transitional overlap
+in import sites does not make this file the orchestration owner.
 """
 from __future__ import annotations
 
@@ -98,6 +101,7 @@ EVALUATOR_FEM_KEY_PREFIX_FAMILIES: tuple[str, ...] = (
     "fallback_behavior_",
     "referent_",
     "narrative_authenticity_",
+    "narrative_mode_output_",
     "response_type_",
 )
 
@@ -166,6 +170,56 @@ _LEGITIMATE_RESOLUTION_REPAIR_ACCEPTED_VIA: frozenset[str] = frozenset(
 
 # Keys merged from NA layer debug into ``gm_output['_final_emission_meta']`` (contract-driven, stable names).
 # Distinct from ``response_delta_*`` legality keys (gate delta layer) and from offline ``narrative_authenticity_eval``.
+NARRATIVE_MODE_OUTPUT_FEM_KEYS: frozenset[str] = frozenset(
+    {
+        "narrative_mode_output_validator_version",
+        "narrative_mode_output_checked",
+        "narrative_mode_output_passed",
+        "narrative_mode_output_mode",
+        "narrative_mode_output_failure_reasons",
+        "narrative_mode_output_repairable",
+        "narrative_mode_output_observed_signals",
+        "narrative_mode_output_skip_reason",
+        "narrative_mode_contract_version",
+        "narrative_mode_contract_mode",
+    }
+)
+
+
+def default_narrative_mode_output_layer_meta() -> Dict[str, Any]:
+    """Metadata-only defaults for C4 narrative-mode output validation (FEM merge)."""
+    return {
+        "narrative_mode_output_validator_version": None,
+        "narrative_mode_output_checked": False,
+        "narrative_mode_output_passed": True,
+        "narrative_mode_output_mode": None,
+        "narrative_mode_output_failure_reasons": [],
+        "narrative_mode_output_repairable": False,
+        "narrative_mode_output_observed_signals": {},
+        "narrative_mode_output_skip_reason": None,
+        "narrative_mode_contract_version": None,
+        "narrative_mode_contract_mode": None,
+    }
+
+
+def merge_narrative_mode_output_into_final_emission_meta(meta: Dict[str, Any], nmo: Mapping[str, Any]) -> None:
+    """Shallow-merge narrative-mode output trace fields into ``_final_emission_meta`` (in place)."""
+    if not isinstance(meta, dict) or not isinstance(nmo, Mapping) or not nmo:
+        return
+    for k in NARRATIVE_MODE_OUTPUT_FEM_KEYS:
+        if k not in nmo:
+            continue
+        v = nmo.get(k)
+        if k == "narrative_mode_output_failure_reasons" and isinstance(v, (list, tuple)):
+            meta[k] = [str(x) for x in v if str(x).strip()]
+        elif k == "narrative_mode_output_observed_signals" and isinstance(v, Mapping):
+            meta[k] = {str(k2): bool(v2) for k2, v2 in v.items()}
+        elif k == "narrative_mode_output_skip_reason" and v is not None:
+            meta[k] = str(v).strip() or None
+        else:
+            meta[k] = v
+
+
 NARRATIVE_AUTHENTICITY_FEM_KEYS: frozenset[str] = frozenset(
     {
         "narrative_authenticity_checked",

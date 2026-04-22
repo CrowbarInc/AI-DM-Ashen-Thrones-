@@ -85,6 +85,23 @@ def test_plan_carries_validated_mode_contract() -> None:
     assert plan["narrative_mode_contract"]["mode"] == plan["narrative_mode"]
 
 
+def test_plan_debug_nmc_ship_trace_is_compact_and_aligned_with_contract() -> None:
+    c = _minimal_ctir(
+        resolution={"kind": "question", "social": {"npc_reply_expected": True}},
+        interaction={"active_target_id": "npc_guard", "interaction_mode": "social"},
+    )
+    plan = build_narrative_plan(ctir=c, **_DIALOGUE_CONTRACT_INPUTS)
+    tr = (plan.get("debug") or {}).get("nmc_ship_trace")
+    assert isinstance(tr, dict)
+    assert tr.get("mode") == "dialogue"
+    assert tr.get("enabled") is True
+    assert tr.get("contract_ok") is True
+    assert isinstance(tr.get("ob_keys_head"), list)
+    assert isinstance(tr.get("fm_head"), list)
+    nmc = plan["narrative_mode_contract"]
+    assert tr["mode"] == nmc["mode"]
+
+
 def test_validate_rejects_legacy_narrative_mode_values() -> None:
     c = _minimal_ctir()
     plan = build_narrative_plan(ctir=c)

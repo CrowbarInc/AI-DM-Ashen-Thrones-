@@ -7,12 +7,15 @@ from game.final_emission_meta import (
     FINAL_EMISSION_META_KEY,
     INTERNAL_STATE_KEY,
     NARRATIVE_AUTHENTICITY_FEM_KEYS,
+    NARRATIVE_MODE_OUTPUT_FEM_KEYS,
     build_narrative_authenticity_emission_trace,
     build_narrative_authenticity_trace_slice,
     default_narrative_authenticity_layer_meta,
+    default_narrative_mode_output_layer_meta,
     default_response_type_debug,
     ensure_final_emission_meta_dict,
     merge_narrative_authenticity_into_final_emission_meta,
+    merge_narrative_mode_output_into_final_emission_meta,
     merge_response_type_meta,
     normalize_final_emission_meta_for_observability,
     normalize_merged_na_telemetry_for_eval,
@@ -28,11 +31,34 @@ from game.final_emission_meta import (
     stage_diff_narrative_authenticity_projection,
 )
 
+from game.narrative_mode_contract import (
+    build_narrative_mode_contract,
+    build_narrative_mode_emission_trace,
+    validate_narrative_mode_output,
+)
+
 
 def test_default_layer_meta_has_all_fem_keys() -> None:
     d = default_narrative_authenticity_layer_meta()
     for k in NARRATIVE_AUTHENTICITY_FEM_KEYS:
         assert k in d
+
+
+def test_default_narrative_mode_output_layer_meta_covers_registry() -> None:
+    d = default_narrative_mode_output_layer_meta()
+    assert set(d.keys()) == NARRATIVE_MODE_OUTPUT_FEM_KEYS
+
+
+def test_merge_narrative_mode_output_into_final_emission_meta() -> None:
+    c = build_narrative_mode_contract(narration_obligations={"is_opening_scene": True})
+    v = validate_narrative_mode_output("As before, the gate waits.", c)
+    trace = build_narrative_mode_emission_trace(v, narrative_mode_contract=c)
+    fem: dict = {"final_route": "accept_candidate"}
+    merge_narrative_mode_output_into_final_emission_meta(fem, trace)
+    assert fem["final_route"] == "accept_candidate"
+    assert fem.get("narrative_mode_output_checked") is True
+    assert fem.get("narrative_mode_output_passed") is False
+    assert isinstance(fem.get("narrative_mode_output_failure_reasons"), list)
 
 
 def test_merge_into_final_emission_meta_round_trip() -> None:

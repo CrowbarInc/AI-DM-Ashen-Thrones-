@@ -114,7 +114,15 @@ _RESPONSIBILITY_DOMAINS: Final[Tuple[ResponsibilityDomainSpec, ...]] = (
     ResponsibilityDomainSpec(
         "deterministic_post_generation_checks",
         KIND_LEGALITY,
-        "Pure validators and inspectors over emitted or candidate text/artifacts.",
+        "Pure validators and inspectors over emitted or candidate text/artifacts "
+        "(including :func:`game.narrative_mode_contract.validate_narrative_mode_output` vs shipped "
+        "``narrative_mode_contract``; gate orchestrates enforcement timing).",
+    ),
+    ResponsibilityDomainSpec(
+        "narrative_mode_output_legality_checks",
+        KIND_LEGALITY,
+        "Deterministic emitted-text checks against planner-derived ``narrative_mode_contract`` "
+        "(C4); planner owns contract derivation, prompt consumes it, gate may orchestrate.",
     ),
     ResponsibilityDomainSpec(
         "bounded_deterministic_repairs",

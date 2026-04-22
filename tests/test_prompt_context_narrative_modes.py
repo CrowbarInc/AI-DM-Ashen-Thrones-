@@ -107,7 +107,11 @@ def _instr_blob(ctx: dict) -> str:
             {
                 "narration_obligations": {"must_advance_scene": True},
             },
-            ("struct:transition:foreground_departure", "struct:contract_obligation:foreground_scene_change"),
+            (
+                "struct:transition:foreground_departure",
+                "struct:transition:require_motion_or_spatial_change_signal_not_static_scene_hold",
+                "struct:contract_obligation:foreground_scene_change",
+            ),
             ("struct:continuation:suppress_language_that_resets_the_scene",),
         ),
         (
@@ -136,6 +140,7 @@ def test_build_narrative_mode_instructions_distinct_by_contract_mode(
         resolution_sem=(contract_kwargs.get("ctir") or {}).get("resolution")
         if isinstance(contract_kwargs.get("ctir"), dict)
         else None,
+        narrative_plan_present=False,
     )
     blob = "\n".join(lines)
     for frag in required_markers:
@@ -222,6 +227,7 @@ def test_transition_beats_active_npc_reply_pressure_for_narrative_mode() -> None
     assert ctx.get("narrative_plan", {}).get("narrative_mode") == "transition"
     blob = _instr_blob(ctx)
     assert "struct:transition:foreground_departure" in blob
+    assert "struct:transition:require_motion_or_spatial_change_signal_not_static_scene_hold" in blob
     assert "struct:dialogue:preserve_active_interlocutor" not in blob
 
 
@@ -521,9 +527,90 @@ def test_prompt_debug_narrative_mode_instructions_is_compact() -> None:
     dbg = (ctx.get("prompt_debug") or {}).get("narrative_mode_instructions") or {}
     assert dbg.get("present") is True
     assert dbg.get("mode") == "dialogue"
+    assert dbg.get("contract_valid") is True
+    assert dbg.get("contract_enabled") is True
     assert isinstance(dbg.get("instruction_count"), int) and dbg["instruction_count"] > 0
     assert isinstance(dbg.get("sample_prompt_obligation_keys"), list)
     assert isinstance(dbg.get("sample_forbidden_moves"), list)
+    np_dbg = (ctx.get("prompt_debug") or {}).get("narrative_plan") or {}
+    assert np_dbg.get("narrative_mode_contract_enabled") is True
+    assert np_dbg.get("narrative_plan_mode_alias_matches_contract_mode") is True
+    assert isinstance(np_dbg.get("nmc_ship_trace"), dict)
+    assert np_dbg["nmc_ship_trace"].get("mode") == "dialogue"
+
+
+def test_invalid_mode_contract_without_narrative_plan_returns_empty_instructions() -> None:
+    c = build_narrative_mode_contract(ctir={"version": 1, "resolution": {}})
+    bad = dict(c)
+    bad["mode"] = "not_a_real_mode"
+    lines = _build_narrative_mode_instructions(
+        narrative_mode_contract=bad,
+        response_policy=None,
+        narration_obligations=None,
+        resolution_sem=None,
+        narrative_plan_present=False,
+    )
+    assert lines == []
+
+
+def test_invalid_mode_contract_with_narrative_plan_emits_seam_codes_and_continuation_floor() -> None:
+    c = build_narrative_mode_contract(ctir={"version": 1, "resolution": {}})
+    bad = dict(c)
+    bad["mode"] = "bogus_mode"
+    lines = _build_narrative_mode_instructions(
+        narrative_mode_contract=bad,
+        response_policy=None,
+        narration_obligations=None,
+        resolution_sem=None,
+        narrative_plan_present=True,
+    )
+    blob = "\n".join(lines)
+    assert "struct:nmc_seam:narrative_mode_contract_invalid" in blob
+    assert "struct:nmc_floor:use_continuation_lane_pending_gate_skip_on_c4" in blob
+    assert "struct:continuation:carry_active_thread_forward" in blob
+
+
+def test_missing_mode_contract_with_narrative_plan_emits_missing_seam_and_floor() -> None:
+    lines = _build_narrative_mode_instructions(
+        narrative_mode_contract=None,
+        response_policy=None,
+        narration_obligations=None,
+        resolution_sem=None,
+        narrative_plan_present=True,
+    )
+    blob = "\n".join(lines)
+    assert "struct:nmc_seam:narrative_mode_contract_missing" in blob
+    assert "struct:continuation:carry_active_thread_forward" in blob
+
+
+def test_plan_narrative_mode_field_drift_emits_symbolic_marker() -> None:
+    c = build_narrative_mode_contract(
+        narration_obligations={"active_npc_reply_expected": True},
+        ctir={"version": 1, "resolution": {}},
+    )
+    assert c.get("mode") == "dialogue"
+    lines = _build_narrative_mode_instructions(
+        narrative_mode_contract=c,
+        response_policy={"social_response_structure": {"enabled": True}},
+        narration_obligations=None,
+        resolution_sem=None,
+        narrative_plan_present=True,
+        plan_narrative_mode="opening",
+    )
+    assert any("struct:nmc_seam:plan_narrative_mode_field_drift" in ln for ln in lines)
+
+
+def test_disabled_contract_with_plan_emits_disabled_marker() -> None:
+    c = build_narrative_mode_contract(ctir={"version": 1, "resolution": {}}, enabled=False)
+    lines = _build_narrative_mode_instructions(
+        narrative_mode_contract=c,
+        response_policy=None,
+        narration_obligations=None,
+        resolution_sem=None,
+        narrative_plan_present=True,
+    )
+    assert any("struct:nmc_contract:disabled" in ln for ln in lines)
+    assert any("struct:continuation:carry_active_thread_forward" in ln for ln in lines)
 
 
 def test_no_narrative_mode_instruction_contains_generic_narration_fallback_phrase() -> None:
@@ -550,6 +637,7 @@ def test_no_narrative_mode_instruction_contains_generic_narration_fallback_phras
             response_policy={"social_response_structure": {"enabled": True}},
             narration_obligations=None,
             resolution_sem=None,
+            narrative_plan_present=False,
         )
         blob = "\n".join(lines).lower()
         assert "generic narration" not in blob

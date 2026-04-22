@@ -46,8 +46,11 @@ _ALLOWED_PROMPT_DEBUG_NARRATIVE_PLAN_KEYS = frozenset(
         "version",
         "narrative_mode",
         "narrative_mode_contract_valid",
+        "narrative_mode_contract_enabled",
         "narrative_mode_contract_validation_codes",
         "narrative_mode_contract_derivation_codes",
+        "narrative_plan_mode_alias_matches_contract_mode",
+        "nmc_ship_trace",
         "role_allocation",
         "derivation_codes",
         "derivation_code_count",
@@ -93,7 +96,7 @@ def assert_prompt_debug_narrative_plan_is_compact(ctx: dict) -> None:
         assert "allowable_entity_references" not in pd_np
         assert "debug" not in pd_np
         # Guardrail: compact mirror stays small (counts, not duplicated rows).
-        assert len(json.dumps(pd_np, sort_keys=True)) < 1200
+        assert len(json.dumps(pd_np, sort_keys=True)) < 2000
 
 
 @contextmanager

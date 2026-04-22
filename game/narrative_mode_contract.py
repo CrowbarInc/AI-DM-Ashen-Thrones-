@@ -10,14 +10,35 @@ The contract is meant to be prompt-safe and machine-readable:
 - no fallback to vague "generic narration" (use ``continuation`` instead)
 - on conflict, CTIR / shipped response_policy remain authoritative; this contract
   is a downstream shaping hint only
+
+**Objective C4 / ownership (post-generation legality):**
+
+- **Planner** (:mod:`game.narrative_planning`): derives ``narrative_mode_contract`` from CTIR
+  and bounded planner-visible inputs only; does not judge emitted prose.
+- **Prompt** (:mod:`game.prompt_context`): consumes the contract for structural instruction
+  deltas; does not re-derive adjudication or CTIR meaning.
+- **Validator** (this module, ``validate_narrative_mode_output``): deterministic legality
+  checks of *emitted text* against the shipped contract; symbolic reason codes only; no LLM.
+- **Gate** (:mod:`game.final_emission_gate`): may orchestrate when this validator runs and
+  merge telemetry; must not semantically re-author the turn as a second planner.
 """
 
 from __future__ import annotations
 
 import json
+import re
 from typing import Any, Dict, List, Mapping, MutableMapping, Optional, Sequence, Tuple
 
+from game.final_emission_text import (
+    _ACTION_RESULT_PATTERNS,
+    _ANSWER_FILLER_PATTERNS,
+    _normalize_text,
+)
+
 NARRATIVE_MODE_CONTRACT_VERSION = 1
+
+# Deterministic emitted-text checks (C4); bump when predicate sets or semantics change.
+NARRATIVE_MODE_OUTPUT_VALIDATOR_VERSION = 1
 
 NARRATIVE_MODES = frozenset(
     {
@@ -462,3 +483,313 @@ def validate_narrative_mode_contract(contract: Mapping[str, Any] | None) -> Tupl
 
     return (not reasons), reasons
 
+
+# ---------------------------------------------------------------------------
+# C4 — emitted text vs narrative_mode_contract (deterministic; no LLM)
+# ---------------------------------------------------------------------------
+
+_MAX_OUTPUT_FAILURE_REASONS = 12
+_MAX_OBSERVED_SIGNAL_KEYS = 24
+_EARLY_CHAR_WINDOW = 380
+_EARLY_SENTENCE_COUNT = 2
+
+_REPAIRABLE_OUTPUT_REASONS = frozenset(
+    {
+        "nmo:opening:answer_buried_under_tableau",
+        "nmo:action_outcome:result_not_frontloaded",
+        "nmo:action_outcome:atmosphere_before_result",
+        "nmo:exposition_answer:answer_buried",
+    }
+)
+
+_MID_THREAD_CUES = re.compile(
+    r"\b(?:as (?:we|i) discussed|as before|like (?:you|i) said|picked up where|continuing from|"
+    r"you remember|you already|same question|after that last|where we left)\b",
+    re.IGNORECASE,
+)
+_FRESH_OPENING_RESET_CUES = re.compile(
+    r"\b(?:for the first time (?:you|in)|you wake|a new day|you find yourself standing|"
+    r"everything begins again|the tale begins)\b",
+    re.IGNORECASE,
+)
+_TRANSITION_MOTION_CUES = re.compile(
+    r"\b(?:arrive|arriving|arrived|step(?:s|ped)? through|cross(?:ed|es|ing)?|"
+    r"enter(?:ed|s|ing)?|leave|leaving|left behind|ushered|escorted|beyond the|through the gate|"
+    r"into the (?:hall|room|yard|street)|down the corridor|up the stairs|threshold|"
+    r"path opens|road carries you|gate (?:swings|yields))\b",
+    re.IGNORECASE,
+)
+_THREAD_CONTINUATION_CUES = re.compile(
+    r"\b(?:you still|remains|same (?:lane|post|guard|face)|picks up|the earlier|since you|"
+    r"without breaking stride|as you left it)\b",
+    re.IGNORECASE,
+)
+_SCENIC_REGROUND_HEAVY = re.compile(
+    r"\b(?:the (?:mist|rain|square|market|torchlight|crowd)|voices (?:rise|carry)|"
+    r"dawn|dusk|evening|morning)\b.{0,120}\b(?:stretches|holds|fills|presses|gathers)\b",
+    re.IGNORECASE | re.DOTALL,
+)
+_TABLEAU_LEAD = re.compile(
+    r"^\s*(?:the\s+)?(?:mist|rain|dawn|dusk|evening|morning|square|crowd|torchlight)\b",
+    re.IGNORECASE,
+)
+_UNRESOLVED_CHECK_LANGUAGE = re.compile(
+    r"\b(?:requires? a check|need(?:s)? a check|rolls? (?:are|is)|not yet resolved|until (?:the|your) roll|"
+    r"cannot\s+yet\s+be\s+determined|still unclear|remains unresolved|depends on the roll|"
+    r"outcome (?:is )?unresolved|awaiting (?:a|the) roll)\b",
+    re.IGNORECASE,
+)
+_ACTION_RESOLUTION_BEAT = re.compile(
+    r"\b(?:your (?:blow|strike) lands|the attack (?:hits|misses)|attack roll|damage roll|"
+    r"saving throw|you (?:succeed|fail) (?:the|your)|rolls? a \d+|natural 20|critical (?:hit|miss)|"
+    r"deals \d+)\b",
+    re.IGNORECASE,
+)
+_DIALOGUE_CARRY = re.compile(
+    r'["“”][^"”]{2,}["“”]|'
+    r"\b(?:says|said|replies|replied|answers|answered|mutters|muttered|whispers|whispered|"
+    r"snaps|snapped|asks|asked)\b",
+    re.IGNORECASE,
+)
+_GENERIC_META_FALLBACK = re.compile(
+    r"\b(?:i don'?t have enough information|insufficient context|not established|"
+    r"available to the model|visible to tools)\b",
+    re.IGNORECASE,
+)
+
+
+def _split_sentences_norm(text: str) -> List[str]:
+    t = _normalize_text(text)
+    if not t:
+        return []
+    parts = re.split(r"(?<=[.!?])\s+", t)
+    return [p.strip() for p in parts if p.strip()]
+
+
+def _early_joined_sentences(text: str, *, n: int = _EARLY_SENTENCE_COUNT) -> str:
+    sents = _split_sentences_norm(text)
+    if not sents:
+        return ""
+    return " ".join(sents[: max(1, n)])
+
+
+def _head_window(text: str, *, limit: int = _EARLY_CHAR_WINDOW) -> str:
+    t = _normalize_text(text)
+    return t[: max(1, limit)] if t else ""
+
+
+def _any_action_result_match(fragment: str) -> bool:
+    return any(p.search(fragment) for p in _ACTION_RESULT_PATTERNS)
+
+
+def _opening_is_scene_tableau(sentence: str) -> bool:
+    s = str(sentence or "").strip()
+    if not s:
+        return False
+    if _TABLEAU_LEAD.search(s):
+        return True
+    return any(p.search(s) for p in _ANSWER_FILLER_PATTERNS)
+
+
+def _answer_pressure_from_inputs(
+    *,
+    narrative_mode_contract: Mapping[str, Any],
+    response_policy: Mapping[str, Any] | None,
+    strict_social_details: bool | None,
+) -> bool:
+    if strict_social_details is True:
+        return True
+    rp = response_policy if isinstance(response_policy, Mapping) else {}
+    ac = rp.get("answer_completeness") if isinstance(rp.get("answer_completeness"), Mapping) else {}
+    if bool(ac.get("answer_required")):
+        return True
+    po = narrative_mode_contract.get("prompt_obligations")
+    po = po if isinstance(po, Mapping) else {}
+    if bool(po.get("answer_first")):
+        return True
+    return False
+
+
+def _resolution_requires_pending_check(resolution: Mapping[str, Any] | None) -> bool:
+    if not isinstance(resolution, Mapping):
+        return False
+    res = resolution.get("resolution") if isinstance(resolution.get("resolution"), Mapping) else resolution
+    if not isinstance(res, Mapping):
+        return False
+    if bool(res.get("requires_check")):
+        return True
+    sc = res.get("skill_check")
+    if isinstance(sc, Mapping) and sc and not _skill_check_mapping_shows_resolved_roll(sc):
+        return True
+    return False
+
+
+def validate_narrative_mode_output(
+    text: str,
+    narrative_mode_contract: Mapping[str, Any] | None,
+    *,
+    resolution: Mapping[str, Any] | None = None,
+    response_policy: Mapping[str, Any] | None = None,
+    strict_social_details: bool | None = None,
+) -> Dict[str, Any]:
+    """Deterministic legality of emitted prose vs ``narrative_mode_contract`` (no CTIR re-derivation).
+
+    Returns a compact dict:
+    ``checked``, ``passed``, ``mode``, ``failure_reasons``, ``observed_signals``,
+    ``repairable``, ``validator_version``.
+
+    Skips (``checked`` false) when the contract is missing, invalid, or disabled—callers
+    treat as non-enforcement at the boundary.
+    """
+    base: Dict[str, Any] = {
+        "checked": False,
+        "passed": True,
+        "mode": None,
+        "failure_reasons": [],
+        "observed_signals": {},
+        "repairable": False,
+        "validator_version": NARRATIVE_MODE_OUTPUT_VALIDATOR_VERSION,
+    }
+    if not isinstance(narrative_mode_contract, Mapping):
+        return base
+    ok_shape, _shape_reasons = validate_narrative_mode_contract(narrative_mode_contract)
+    if not ok_shape:
+        return base
+    if not bool(narrative_mode_contract.get("enabled", True)):
+        return base
+
+    clean = _normalize_text(text)
+    mode = str(narrative_mode_contract.get("mode") or "").strip()
+    base["checked"] = True
+    base["mode"] = mode or None
+    if not clean:
+        base["passed"] = False
+        base["failure_reasons"] = ["nmo:empty_emitted_text"]
+        return base
+
+    head = _head_window(clean)
+    early_two = _early_joined_sentences(clean, n=_EARLY_SENTENCE_COUNT)
+    sents = _split_sentences_norm(clean)
+    open_sent = sents[0] if sents else clean
+
+    sig: Dict[str, Any] = {
+        "mid_thread_cues": bool(_MID_THREAD_CUES.search(clean)),
+        "fresh_opening_reset_cues": bool(_FRESH_OPENING_RESET_CUES.search(head)),
+        "transition_motion_cues": bool(_TRANSITION_MOTION_CUES.search(clean)),
+        "thread_continuation_cues": bool(_THREAD_CONTINUATION_CUES.search(head)),
+        "scenic_reground_heavy": bool(_SCENIC_REGROUND_HEAVY.search(early_two)),
+        "dialogue_carry_cues": bool(_DIALOGUE_CARRY.search(head)),
+        "outcome_signal_early": bool(_any_action_result_match(early_two)),
+        "unresolved_check_language": bool(_UNRESOLVED_CHECK_LANGUAGE.search(clean)),
+        "action_resolution_beat_early": bool(_ACTION_RESOLUTION_BEAT.search(early_two)),
+        "tableau_lead": bool(_opening_is_scene_tableau(open_sent)),
+        "generic_meta_fallback": bool(_GENERIC_META_FALLBACK.search(clean)),
+    }
+    # Lazy import: avoids import cycle with planner/prompt_context during module init.
+    from game.final_emission_validators import candidate_satisfies_answer_contract as _answer_ok
+
+    ok_ans_open, _ = _answer_ok(open_sent)
+    ok_ans_early, _ = _answer_ok(early_two)
+    sig["answer_substance_opening"] = bool(ok_ans_open)
+    sig["answer_substance_early_window"] = bool(ok_ans_early)
+
+    failures: List[str] = []
+    wc = len(re.findall(r"[A-Za-z']+", clean))
+    sig["word_count"] = wc
+
+    if sig["generic_meta_fallback"]:
+        failures.append("nmo:generic_meta_fallback_voice")
+
+    if mode == "opening":
+        if sig["mid_thread_cues"]:
+            failures.append("nmo:opening:mid_thread_continuation_shape")
+        ap = _answer_pressure_from_inputs(
+            narrative_mode_contract=narrative_mode_contract,
+            response_policy=response_policy,
+            strict_social_details=strict_social_details,
+        )
+        sig["answer_pressure_active"] = bool(ap)
+        if ap and sig["tableau_lead"] and not sig["answer_substance_opening"]:
+            failures.append("nmo:opening:answer_buried_under_tableau")
+    elif mode == "continuation":
+        if sig["fresh_opening_reset_cues"] and not sig["thread_continuation_cues"]:
+            failures.append("nmo:continuation:fresh_opening_reset_shape")
+        if (
+            sig["scenic_reground_heavy"]
+            and not sig["transition_motion_cues"]
+            and not sig["thread_continuation_cues"]
+        ):
+            failures.append("nmo:continuation:scenic_regrounding_without_transition")
+    elif mode == "action_outcome":
+        if not sig["outcome_signal_early"]:
+            failures.append("nmo:action_outcome:result_not_frontloaded")
+        if _opening_is_scene_tableau(open_sent) and not _any_action_result_match(open_sent):
+            failures.append("nmo:action_outcome:atmosphere_before_result")
+        if sig["unresolved_check_language"]:
+            pending = _resolution_requires_pending_check(resolution)
+            if (sig["outcome_signal_early"] and pending) or (not pending):
+                failures.append("nmo:action_outcome:unresolved_check_treated_as_result")
+    elif mode == "dialogue":
+        if not sig["dialogue_carry_cues"]:
+            if wc >= 58:
+                failures.append("nmo:dialogue:scenic_recap_dominates")
+            elif wc > 24:
+                failures.append("nmo:dialogue:missing_reply_continuity")
+    elif mode == "transition":
+        if not sig["transition_motion_cues"]:
+            failures.append("nmo:transition:no_scene_change_motion")
+        if not sig["transition_motion_cues"] and (
+            sig["thread_continuation_cues"] or sig["mid_thread_cues"]
+        ) and not sig["scenic_reground_heavy"]:
+            failures.append("nmo:transition:reads_as_static_continuation")
+    elif mode == "exposition_answer":
+        po = narrative_mode_contract.get("prompt_obligations")
+        po = po if isinstance(po, Mapping) else {}
+        must_first = bool(po.get("answer_first"))
+        sig["answer_first_obligation"] = bool(must_first)
+        if must_first and not sig["answer_substance_opening"]:
+            failures.append("nmo:exposition_answer:answer_buried")
+        elif (not sig["answer_substance_early_window"]) and wc >= 28:
+            failures.append("nmo:exposition_answer:answer_buried")
+        if sig["action_resolution_beat_early"]:
+            failures.append("nmo:exposition_answer:fabricated_action_resolution")
+
+    failures = list(dict.fromkeys(str(x) for x in failures if x))[:_MAX_OUTPUT_FAILURE_REASONS]
+    obs = {str(k): bool(v) for k, v in sig.items() if k != "word_count"}
+    if len(obs) > _MAX_OBSERVED_SIGNAL_KEYS:
+        obs = dict(sorted(obs.items(), key=lambda kv: kv[0])[:_MAX_OBSERVED_SIGNAL_KEYS])
+
+    base["failure_reasons"] = failures
+    base["observed_signals"] = obs
+    base["passed"] = not bool(failures)
+    base["repairable"] = bool(failures) and bool(set(failures) <= _REPAIRABLE_OUTPUT_REASONS)
+    return base
+
+
+def build_narrative_mode_emission_trace(
+    validation: Mapping[str, Any] | None,
+    *,
+    narrative_mode_contract: Mapping[str, Any] | None = None,
+) -> Dict[str, Any]:
+    """Compact, JSON-safe trace for FEM / debug lanes (stable keys; no prose diagnostics)."""
+    if not isinstance(validation, Mapping):
+        return {}
+    out: Dict[str, Any] = {
+        "narrative_mode_output_validator_version": int(
+            validation.get("validator_version") or NARRATIVE_MODE_OUTPUT_VALIDATOR_VERSION
+        ),
+        "narrative_mode_output_checked": bool(validation.get("checked")),
+        "narrative_mode_output_passed": bool(validation.get("passed")),
+        "narrative_mode_output_mode": validation.get("mode"),
+        "narrative_mode_output_failure_reasons": list(validation.get("failure_reasons") or []),
+        "narrative_mode_output_repairable": bool(validation.get("repairable")),
+    }
+    obs = validation.get("observed_signals")
+    if isinstance(obs, Mapping) and obs:
+        out["narrative_mode_output_observed_signals"] = {str(k): bool(v) for k, v in obs.items()}
+    if isinstance(narrative_mode_contract, Mapping) and narrative_mode_contract.get("version") == NARRATIVE_MODE_CONTRACT_VERSION:
+        out["narrative_mode_contract_version"] = NARRATIVE_MODE_CONTRACT_VERSION
+        mode = str(narrative_mode_contract.get("mode") or "").strip()
+        if mode:
+            out["narrative_mode_contract_mode"] = mode
+    return out

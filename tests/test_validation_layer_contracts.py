@@ -130,3 +130,10 @@ def test_forbidden_claims_tuple_matches_derived_set() -> None:
         if layer != vlc.KIND_TO_CANONICAL_LAYER[kind]
     }
     assert set(vlc.forbidden_layer_kind_claims()) == derived
+
+
+def test_narrative_mode_output_legality_domain_registered() -> None:
+    spec = vlc.RESPONSIBILITY_DOMAIN_BY_ID.get("narrative_mode_output_legality_checks")
+    assert spec is not None
+    assert spec.kind == vlc.KIND_LEGALITY
+    assert vlc.owner_layer_for_responsibility_domain("narrative_mode_output_legality_checks") == vlc.GATE

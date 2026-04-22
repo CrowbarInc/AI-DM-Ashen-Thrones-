@@ -2,7 +2,8 @@
 
 **Orchestration home:** :func:`apply_final_emission_gate` sequences sanitizer integration,
 strict-social coordination (via :mod:`game.social_exchange_emission`), shipped contracts
-(validators + legality metadata), logging, and metadata merges. Semantic sentence repairs for tone,
+(validators + legality metadata), **C4 narrative-mode output** checks vs shipped ``narrative_mode_contract``
+(``validate_narrative_mode_output``; ``narrative_mode_output_*`` FEM), logging, and metadata merges. Semantic sentence repairs for tone,
 authority, anti-railroading, context separation, scene anchors, answer-shape primacy, and fast-fallback
 composition are **disabled at the boundary** (Objective C2 Block C); violations surface as reason codes
 without boundary rewrites.
@@ -130,6 +131,7 @@ from game.final_emission_meta import (
     default_response_type_debug as _default_response_type_debug,
     ensure_final_emission_meta_dict,
     merge_narrative_authenticity_into_final_emission_meta,
+    merge_narrative_mode_output_into_final_emission_meta,
     merge_response_type_meta as _merge_response_type_meta,
     patch_final_emission_meta,
     package_dead_turn_snapshot_into_final_emission_meta,
@@ -196,6 +198,11 @@ from game.final_emission_validators import (
     inspect_response_delta_failure,
     validate_answer_completeness,
     validate_response_delta,
+)
+from game.narrative_mode_contract import (
+    build_narrative_mode_emission_trace,
+    validate_narrative_mode_contract,
+    validate_narrative_mode_output,
 )
 
 # --- Policy layers & helpers (large clusters live here; validators/repairs are extracted) ---
@@ -8136,7 +8143,119 @@ def _apply_referent_clarity_pre_finalize(out: Dict[str, Any], *, pre_gate_text: 
         fem["post_gate_mutation_detected"] = _normalize_text(pre_gate_text) != gtxt
 
 
+def _shipped_narrative_mode_contract_from_gm_output(gm_output: Mapping[str, Any] | None) -> Dict[str, Any] | None:
+    """Return planner-shipped ``narrative_mode_contract`` from the plan / ``prompt_context`` seam only."""
+    if not isinstance(gm_output, Mapping):
+        return None
+    pc = gm_output.get("prompt_context")
+    if not isinstance(pc, Mapping):
+        return None
+    plan = pc.get("narrative_plan")
+    if not isinstance(plan, Mapping):
+        return None
+    raw = plan.get("narrative_mode_contract")
+    return dict(raw) if isinstance(raw, dict) else None
+
+
+def _merge_narrative_mode_output_trace_into_gate_fem(out: Dict[str, Any], trace: Mapping[str, Any] | None) -> None:
+    if not isinstance(out, dict) or not trace:
+        return
+    fem = ensure_final_emission_meta_dict(out)
+    merge_narrative_mode_output_into_final_emission_meta(fem, trace)
+
+
+def _narrative_mode_output_legality_assessment(
+    text: str,
+    gm_output: Mapping[str, Any] | None,
+    *,
+    resolution_for_nmo: Mapping[str, Any] | None,
+    strict_social_details_flag: bool | None,
+) -> Dict[str, Any]:
+    """C4 — deterministic narrative-mode **output** legality vs shipped contract (telemetry + enforcement bits).
+
+    Ownership (do not blur roles):
+    - **Planner** derives ``narrative_mode_contract`` (``game.narrative_planning``); the gate never re-derives mode.
+    - **Prompt** consumes that contract upstream (``game.prompt_context``).
+    - **Validator** — :func:`game.narrative_mode_contract.validate_narrative_mode_output` — judges emitted prose
+      legality against the shipped contract only (symbolic ``nmo:`` / contract codes).
+    - **Gate** orchestrates when this runs, merges ``narrative_mode_output_*`` / contract echo fields into FEM,
+      and applies the acceptance policy below. The gate does **not** semantically re-author prose as a second planner.
+
+    **C4 acceptance policy (aligned with other hard-contract layers):** no LLM repair, no semantic rewrites,
+    and no subtractive repair pass is wired here (``repairable`` on the validation dict is observational only).
+    When ``checked`` is true and ``passed`` is false, the generic (non–strict-social) path appends failure reason
+    codes to the gate ``reasons`` list (hard replace). The strict-social path uses the same validator after the
+    last deterministic text pass and, on failure only, swaps to ``minimal_social_emergency_fallback_line`` with
+    explicit ``final_emission_gate:narrative_mode_output`` tagging (terminal deterministic fallback, not a replan).
+    """
+    rp = gm_output.get("response_policy") if isinstance(gm_output, Mapping) else None
+    rp = rp if isinstance(rp, Mapping) else None
+
+    def _pack(
+        *,
+        validation: Mapping[str, Any],
+        contract_for_trace: Mapping[str, Any] | None,
+        skip_reason: str | None,
+    ) -> Dict[str, Any]:
+        trace = dict(build_narrative_mode_emission_trace(validation, narrative_mode_contract=contract_for_trace))
+        if skip_reason:
+            trace["narrative_mode_output_skip_reason"] = skip_reason
+        elif bool(validation.get("checked")):
+            trace["narrative_mode_output_skip_reason"] = None
+        enf = bool(validation.get("checked")) and not bool(validation.get("passed"))
+        nms = [str(x) for x in (validation.get("failure_reasons") or []) if str(x).strip()] if enf else []
+        return {"trace": trace, "non_strict_gate_reasons": nms, "nmo_enforcement_fail": enf}
+
+    shipped = _shipped_narrative_mode_contract_from_gm_output(gm_output)
+    if shipped is None:
+        v = validate_narrative_mode_output(
+            str(text or ""),
+            None,
+            resolution=resolution_for_nmo,
+            response_policy=rp,
+            strict_social_details=strict_social_details_flag,
+        )
+        return _pack(validation=v, contract_for_trace=None, skip_reason="narrative_mode_contract_absent")
+
+    ok_shape, shape_reasons = validate_narrative_mode_contract(shipped)
+    if not ok_shape:
+        v = validate_narrative_mode_output(
+            str(text or ""),
+            shipped,
+            resolution=resolution_for_nmo,
+            response_policy=rp,
+            strict_social_details=strict_social_details_flag,
+        )
+        fr0 = str(shape_reasons[0]).strip() if shape_reasons else "narrative_mode_contract_invalid"
+        return _pack(validation=v, contract_for_trace=None, skip_reason=f"narrative_mode_contract_invalid:{fr0}")
+
+    if not bool(shipped.get("enabled", True)):
+        v = validate_narrative_mode_output(
+            str(text or ""),
+            shipped,
+            resolution=resolution_for_nmo,
+            response_policy=rp,
+            strict_social_details=strict_social_details_flag,
+        )
+        return _pack(validation=v, contract_for_trace=shipped, skip_reason="narrative_mode_contract_disabled")
+
+    v = validate_narrative_mode_output(
+        str(text or ""),
+        shipped,
+        resolution=resolution_for_nmo,
+        response_policy=rp,
+        strict_social_details=strict_social_details_flag,
+    )
+    return _pack(validation=v, contract_for_trace=shipped, skip_reason=None)
+
+
 # --- Main entry: wires extracted validators/repairs + remaining in-module policy layers ---
+# Deterministic post-generation ordering (non–strict-social trunk): response_type → answer_completeness →
+# response_delta → social_response_structure → narrative_authenticity → tone → narrative_authority →
+# anti_railroading → context_separation → narration_purity → answer_shape_primacy → scene_state_anchor →
+# fast_fallback_neutral_composition → interaction_continuity (validate_only) → fallback_behavior →
+# **narrative_mode_output (C4; shipped ``narrative_mode_contract`` vs emitted text)** → visibility →
+# referent_clarity → interaction_continuity validation attach → finalize.
 
 
 def apply_final_emission_gate(
@@ -8274,6 +8393,7 @@ def apply_final_emission_gate(
     asp_layer_meta: Dict[str, Any] = _default_answer_shape_primacy_meta()
     ssa_layer_meta: Dict[str, Any] = {}
     ffnc_layer_meta: Dict[str, Any] = _default_fast_fallback_neutral_composition_meta()
+    nmo_fem_trace_override: Dict[str, Any] | None = None
 
     strict_social_active = bool(strict_social_turn)
     coercion_used = (
@@ -8713,6 +8833,37 @@ def apply_final_emission_gate(
                         fb_layer_meta.get("fallback_behavior_repair_mode") or "fallback_behavior_repair"
                     )
             _apply_referent_clarity_pre_finalize(out, pre_gate_text=pre_gate_text)
+            _nmo_strict = _narrative_mode_output_legality_assessment(
+                str(out.get("player_facing_text") or ""),
+                out,
+                resolution_for_nmo=eff_resolution if isinstance(eff_resolution, dict) else None,
+                strict_social_details_flag=True,
+            )
+            _merge_narrative_mode_output_trace_into_gate_fem(out, _nmo_strict["trace"])
+            if _nmo_strict["nmo_enforcement_fail"]:
+                em_fb = minimal_social_emergency_fallback_line(
+                    eff_resolution if isinstance(eff_resolution, dict) else None
+                )
+                out["player_facing_text"] = em_fb
+                out["tags"] = list(out.get("tags") or []) + [
+                    "final_emission_gate_replaced",
+                    "final_emission_gate:narrative_mode_output",
+                ]
+                fem_nmo = out.get(FINAL_EMISSION_META_KEY)
+                if isinstance(fem_nmo, dict):
+                    fem_nmo["final_route"] = "replaced"
+                    fem_nmo["candidate_validation_passed"] = False
+                    fem_nmo["final_emitted_source"] = "minimal_social_emergency_fallback"
+                    gtn = _normalize_text(em_fb)
+                    fem_nmo["final_text_preview"] = (gtn[:120] + "…") if len(gtn) > 120 else gtn
+                    fem_nmo["post_gate_mutation_detected"] = pre_gate_text != gtn
+                _nmo_post_fb = _narrative_mode_output_legality_assessment(
+                    str(out.get("player_facing_text") or ""),
+                    out,
+                    resolution_for_nmo=eff_resolution if isinstance(eff_resolution, dict) else None,
+                    strict_social_details_flag=True,
+                )
+                _merge_narrative_mode_output_trace_into_gate_fem(out, _nmo_post_fb["trace"])
             _attach_interaction_continuity_validation(
                 out,
                 resolution_for_contracts=eff_resolution if isinstance(eff_resolution, dict) else None,
@@ -8878,6 +9029,13 @@ def apply_final_emission_gate(
                     fb_layer_meta.get("fallback_behavior_repair_mode") or "fallback_behavior_repair"
                 )
         _apply_referent_clarity_pre_finalize(out, pre_gate_text=pre_gate_text)
+        _nmo_strict_rep = _narrative_mode_output_legality_assessment(
+            str(out.get("player_facing_text") or ""),
+            out,
+            resolution_for_nmo=eff_resolution if isinstance(eff_resolution, dict) else None,
+            strict_social_details_flag=True,
+        )
+        _merge_narrative_mode_output_trace_into_gate_fem(out, _nmo_strict_rep["trace"])
         _attach_interaction_continuity_validation(
             out,
             resolution_for_contracts=eff_resolution if isinstance(eff_resolution, dict) else None,
@@ -9146,6 +9304,16 @@ def apply_final_emission_gate(
         gate_meta=fb_layer_meta,
     )
 
+    _nmo_pre = _narrative_mode_output_legality_assessment(
+        str(out.get("player_facing_text") or ""),
+        out,
+        resolution_for_nmo=resolution if isinstance(resolution, dict) else None,
+        strict_social_details_flag=None,
+    )
+    reasons.extend(_nmo_pre["non_strict_gate_reasons"])
+    if _nmo_pre["non_strict_gate_reasons"]:
+        nmo_fem_trace_override = dict(_nmo_pre["trace"])
+
     candidate_ok = not bool(reasons)
     fallback_pool = "none"
     fallback_kind = "none"
@@ -9296,6 +9464,13 @@ def apply_final_emission_gate(
             emit_integrity_response_type_required=str(response_type_debug.get("response_type_required") or ""),
         )
         _apply_referent_clarity_pre_finalize(out, pre_gate_text=pre_gate_text)
+        _nmo_final = _narrative_mode_output_legality_assessment(
+            str(out.get("player_facing_text") or ""),
+            out,
+            resolution_for_nmo=resolution if isinstance(resolution, dict) else None,
+            strict_social_details_flag=None,
+        )
+        _merge_narrative_mode_output_trace_into_gate_fem(out, _nmo_final["trace"])
         _attach_interaction_continuity_validation(
             out,
             resolution_for_contracts=resolution if isinstance(resolution, dict) else None,
@@ -9491,6 +9666,16 @@ def apply_final_emission_gate(
         emit_integrity_response_type_required=str(response_type_debug.get("response_type_required") or ""),
     )
     _apply_referent_clarity_pre_finalize(out, pre_gate_text=pre_gate_text)
+    if nmo_fem_trace_override is not None:
+        _merge_narrative_mode_output_trace_into_gate_fem(out, nmo_fem_trace_override)
+    else:
+        _nmo_gen_rep = _narrative_mode_output_legality_assessment(
+            str(out.get("player_facing_text") or ""),
+            out,
+            resolution_for_nmo=resolution if isinstance(resolution, dict) else None,
+            strict_social_details_flag=None,
+        )
+        _merge_narrative_mode_output_trace_into_gate_fem(out, _nmo_gen_rep["trace"])
     _attach_interaction_continuity_validation(
         out,
         resolution_for_contracts=resolution if isinstance(resolution, dict) else None,

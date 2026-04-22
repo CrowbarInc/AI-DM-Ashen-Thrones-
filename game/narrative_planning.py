@@ -614,7 +614,8 @@ def build_narrative_plan(
     )
     ok_contract, contract_reasons = validate_narrative_mode_contract(narrative_mode_contract)
     if not ok_contract:
-        raise ValueError(f"narrative_mode_contract validation failed: {contract_reasons}")
+        codes = "|".join(str(x) for x in (contract_reasons or [])[:16])
+        raise ValueError(f"narrative_mode_contract_invalid|{codes}")
     narrative_mode = _as_str(narrative_mode_contract.get("mode"))
     c5 = list(narrative_mode_contract.get("source_signals") or [])
     if isinstance(narrative_mode_contract.get("debug"), Mapping):
@@ -627,6 +628,22 @@ def build_narrative_plan(
     recent = _compress_recent_events(recent_compressed_events)
 
     derivation_codes = _merge_derivation_codes([c1, c2, c3, c4, c5])
+    _po = (
+        narrative_mode_contract.get("prompt_obligations")
+        if isinstance(narrative_mode_contract.get("prompt_obligations"), Mapping)
+        else {}
+    )
+    _fm = narrative_mode_contract.get("forbidden_moves")
+    _fm_list = _fm if isinstance(_fm, list) else []
+    nmc_ship_trace = {
+        "mode": narrative_mode,
+        "enabled": bool(narrative_mode_contract.get("enabled")),
+        "contract_ok": True,
+        "ob_keys_head": sorted(str(k) for k in _po.keys() if isinstance(k, str) and str(k).strip())[:6],
+        "fm_head": sorted(
+            {str(x).strip() for x in _fm_list if isinstance(x, str) and str(x).strip()}
+        )[:6],
+    }
 
     # Per-field classification (CTIR primacy — all plan fields are non-authoritative):
     # - version: bounded planning convenience (schema transport only).
@@ -661,6 +678,7 @@ def build_narrative_plan(
         "resolution_meta": meta,
         "debug": {
             "derivation_codes": derivation_codes,
+            "nmc_ship_trace": nmc_ship_trace,
         },
     }
     err = validate_narrative_plan(plan, strict=True)
