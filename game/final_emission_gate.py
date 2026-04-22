@@ -123,9 +123,12 @@ from game.fallback_provenance_debug import (
 )
 from game.final_emission_meta import (
     default_narrative_authenticity_layer_meta,
+    default_response_type_debug as _default_response_type_debug,
     merge_narrative_authenticity_into_final_emission_meta,
+    merge_response_type_meta as _merge_response_type_meta,
     package_dead_turn_snapshot_into_final_emission_meta,
     package_emission_channel_sidecar,
+    response_type_decision_payload as _response_type_decision_payload,
 )
 from game.state_channels import project_author_payload, project_debug_payload, project_public_payload
 from game.final_emission_text import (
@@ -189,44 +192,6 @@ from game.final_emission_validators import (
 )
 
 # --- Policy layers & helpers (large clusters live here; validators/repairs are extracted) ---
-
-
-def _default_response_type_debug(contract: Dict[str, Any] | None, source: str | None) -> Dict[str, Any]:
-    return {
-        "response_type_required": str((contract or {}).get("required_response_type") or "") or None,
-        "response_type_contract_source": source,
-        "response_type_candidate_ok": None if not contract else True,
-        "response_type_repair_used": False,
-        "response_type_repair_kind": None,
-        "response_type_rejection_reasons": [],
-        "non_hostile_escalation_blocked": False,
-    }
-
-
-def _merge_response_type_meta(meta: Dict[str, Any], debug: Dict[str, Any]) -> None:
-    meta.update(
-        {
-            "response_type_required": debug.get("response_type_required"),
-            "response_type_contract_source": debug.get("response_type_contract_source"),
-            "response_type_candidate_ok": debug.get("response_type_candidate_ok"),
-            "response_type_repair_used": debug.get("response_type_repair_used"),
-            "response_type_repair_kind": debug.get("response_type_repair_kind"),
-            "response_type_rejection_reasons": list(debug.get("response_type_rejection_reasons") or []),
-            "non_hostile_escalation_blocked": bool(debug.get("non_hostile_escalation_blocked")),
-        }
-    )
-
-
-def _response_type_decision_payload(debug: Dict[str, Any]) -> Dict[str, Any]:
-    return {
-        "response_type_required": debug.get("response_type_required"),
-        "response_type_contract_source": debug.get("response_type_contract_source"),
-        "response_type_candidate_ok": debug.get("response_type_candidate_ok"),
-        "response_type_repair_used": debug.get("response_type_repair_used"),
-        "response_type_repair_kind": debug.get("response_type_repair_kind"),
-        "response_type_rejection_reasons": list(debug.get("response_type_rejection_reasons") or []),
-        "non_hostile_escalation_blocked": bool(debug.get("non_hostile_escalation_blocked")),
-    }
 
 
 def _default_narration_constraint_debug() -> Dict[str, Any]:

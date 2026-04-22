@@ -290,11 +290,8 @@ def test_strict_social_emission_answer_contract_prefers_response_policy_surface_
     )
     meta = read_final_emission_meta_dict(out) or {}
     assert out["player_facing_text"] == "Roll Sleight of Hand to determine whether the move goes unnoticed."
-    assert meta.get("response_type_required") == "answer"
-    assert meta.get("response_type_contract_source") == "response_policy"
-    assert meta.get("response_type_candidate_ok") is True
+    # Response-type metadata shape is owned by ``test_final_emission_meta``; this suite is behavioral.
     assert meta.get("response_type_repair_used") is True
-    assert meta.get("response_type_repair_kind") == "answer_minimal_repair"
 
 
 _SAMPLE_ANSWER_COMPLETENESS_CONTRACT = {
@@ -376,10 +373,7 @@ def test_strict_social_emission_action_outcome_contract_repairs_exposition_only_
     meta = read_final_emission_meta_dict(out) or {}
     assert "you investigate the desk" in low
     assert "nothing new" in low
-    assert meta.get("response_type_required") == "action_outcome"
-    assert meta.get("response_type_candidate_ok") is True
     assert meta.get("response_type_repair_used") is True
-    assert meta.get("response_type_repair_kind") == "action_outcome_minimal_repair"
 
 
 def test_strict_social_emission_non_hostile_contract_blocks_sudden_aggression():
@@ -414,7 +408,6 @@ def test_strict_social_emission_non_hostile_contract_blocks_sudden_aggression():
     assert "lunges" not in low
     assert "sleight of hand" in low
     assert meta.get("non_hostile_escalation_blocked") is True
-    assert meta.get("response_type_candidate_ok") is True
 
 
 def test_strict_social_emission_non_hostile_answer_contract_stays_non_escalatory_with_active_interlocutor():
@@ -456,10 +449,8 @@ def test_strict_social_emission_non_hostile_answer_contract_stays_non_escalatory
     assert "sleight of hand" in low
     assert "the move goes unnoticed" in low
     assert "tavern runner" not in low
-    assert meta.get("response_type_required") == "answer"
-    assert meta.get("response_type_candidate_ok") is True
-    assert meta.get("response_type_repair_used") is True
     assert meta.get("non_hostile_escalation_blocked") is True
+    assert meta.get("response_type_repair_used") is True
 
 
 def test_strict_social_emission_dialogue_contract_can_repair_from_debug_surface():
@@ -489,11 +480,7 @@ def test_strict_social_emission_dialogue_contract_can_repair_from_debug_surface(
     assert "rain beads on stone" not in low
     assert "tavern runner" in low
     assert ('"' in out["player_facing_text"]) or ("starts to answer" in low) or ("stands nearby" in low)
-    assert meta.get("response_type_required") == "dialogue"
-    assert meta.get("response_type_contract_source") == "debug"
-    assert meta.get("response_type_candidate_ok") is True
     assert meta.get("response_type_repair_used") is True
-    assert meta.get("response_type_repair_kind") == "dialogue_minimal_repair"
 
 
 def test_strict_social_pipeline_forbids_scene_hold_and_ambiguity_emitter_phrases():

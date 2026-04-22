@@ -7,8 +7,11 @@ from game.final_emission_meta import (
     build_narrative_authenticity_emission_trace,
     build_narrative_authenticity_trace_slice,
     default_narrative_authenticity_layer_meta,
+    default_response_type_debug,
     merge_narrative_authenticity_into_final_emission_meta,
+    merge_response_type_meta,
     normalize_merged_na_telemetry_for_eval,
+    response_type_decision_payload,
     resolve_narrative_authenticity_emission_status,
     slim_na_evidence,
     slim_na_metrics,
@@ -87,3 +90,38 @@ def test_normalize_merged_na_for_eval_fills_none_nested() -> None:
     assert n["narrative_authenticity_trace"] == {}
     # Original mapping unchanged
     assert raw.get("narrative_authenticity_metrics") is None
+
+
+def test_response_type_debug_defaults_and_fem_merge_are_stable() -> None:
+    dbg = default_response_type_debug({"required_response_type": "dialogue"}, "resolution.metadata")
+    assert dbg == {
+        "response_type_required": "dialogue",
+        "response_type_contract_source": "resolution.metadata",
+        "response_type_candidate_ok": True,
+        "response_type_repair_used": False,
+        "response_type_repair_kind": None,
+        "response_type_rejection_reasons": [],
+        "non_hostile_escalation_blocked": False,
+    }
+
+    fem: dict = {"final_route": "accept_candidate"}
+    merge_response_type_meta(fem, dbg)
+    assert fem["final_route"] == "accept_candidate"
+    assert fem["response_type_required"] == "dialogue"
+    assert fem["response_type_contract_source"] == "resolution.metadata"
+    assert fem["response_type_candidate_ok"] is True
+    assert fem["response_type_repair_used"] is False
+    assert fem["response_type_repair_kind"] is None
+    assert fem["response_type_rejection_reasons"] == []
+    assert fem["non_hostile_escalation_blocked"] is False
+
+    # Payload used by trace/log sinks is canonical and shallow.
+    assert response_type_decision_payload(dbg) == {
+        "response_type_required": "dialogue",
+        "response_type_contract_source": "resolution.metadata",
+        "response_type_candidate_ok": True,
+        "response_type_repair_used": False,
+        "response_type_repair_kind": None,
+        "response_type_rejection_reasons": [],
+        "non_hostile_escalation_blocked": False,
+    }

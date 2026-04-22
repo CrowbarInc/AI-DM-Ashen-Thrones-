@@ -23,6 +23,53 @@ from typing import Any, Dict, Mapping, MutableMapping
 
 from game.state_channels import project_debug_payload
 
+# --- Response-type debug/meta shaping (metadata-only; orchestration decides when to attach) ---
+
+
+def default_response_type_debug(contract: Dict[str, Any] | None, source: str | None) -> Dict[str, Any]:
+    """Metadata-only helper for the canonical response-type debug dict (RTD1).
+
+    This shapes *descriptive* fields used by the gate for observability and FEM merge, but does not
+    decide whether the response-type contract should run or what repair is applied.
+    """
+    return {
+        "response_type_required": str((contract or {}).get("required_response_type") or "") or None,
+        "response_type_contract_source": source,
+        "response_type_candidate_ok": None if not contract else True,
+        "response_type_repair_used": False,
+        "response_type_repair_kind": None,
+        "response_type_rejection_reasons": [],
+        "non_hostile_escalation_blocked": False,
+    }
+
+
+def merge_response_type_meta(meta: Dict[str, Any], debug: Dict[str, Any]) -> None:
+    """Metadata-only merge of response-type debug fields into ``_final_emission_meta``."""
+    meta.update(
+        {
+            "response_type_required": debug.get("response_type_required"),
+            "response_type_contract_source": debug.get("response_type_contract_source"),
+            "response_type_candidate_ok": debug.get("response_type_candidate_ok"),
+            "response_type_repair_used": debug.get("response_type_repair_used"),
+            "response_type_repair_kind": debug.get("response_type_repair_kind"),
+            "response_type_rejection_reasons": list(debug.get("response_type_rejection_reasons") or []),
+            "non_hostile_escalation_blocked": bool(debug.get("non_hostile_escalation_blocked")),
+        }
+    )
+
+
+def response_type_decision_payload(debug: Dict[str, Any]) -> Dict[str, Any]:
+    """Metadata-only compact view suitable for logs/telemetry sinks (stable keys)."""
+    return {
+        "response_type_required": debug.get("response_type_required"),
+        "response_type_contract_source": debug.get("response_type_contract_source"),
+        "response_type_candidate_ok": debug.get("response_type_candidate_ok"),
+        "response_type_repair_used": debug.get("response_type_repair_used"),
+        "response_type_repair_kind": debug.get("response_type_repair_kind"),
+        "response_type_rejection_reasons": list(debug.get("response_type_rejection_reasons") or []),
+        "non_hostile_escalation_blocked": bool(debug.get("non_hostile_escalation_blocked")),
+    }
+
 # ``accepted_via`` values that can carry ``retry_exhausted`` / terminal flags from legitimate
 # deterministic repairs without implying an upstream API / infra failure by themselves.
 _LEGITIMATE_RESOLUTION_REPAIR_ACCEPTED_VIA: frozenset[str] = frozenset(

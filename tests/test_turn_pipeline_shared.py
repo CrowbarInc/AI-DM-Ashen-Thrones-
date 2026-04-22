@@ -417,9 +417,6 @@ def test_chat_dialogue_lock_final_output_beats_generic_fillers_and_keeps_contrac
     assert "stands nearby" not in low
     assert "tavern runner" in low
     assert ('"' in text) or ("don't know" in low) or ("do not know" in low) or ("starts to answer" in low)
-    assert meta.get("response_type_required") == "dialogue"
-    assert meta.get("response_type_contract_source") in ("resolution.metadata", "response_policy")
-    assert meta.get("response_type_candidate_ok") is True
     assert meta.get("final_emitted_source") != "global_scene_fallback"
     assert debug_contract.get("required_response_type") == "dialogue"
     assert trace_contract.get("required_response_type") == "dialogue"

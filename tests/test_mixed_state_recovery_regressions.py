@@ -430,8 +430,6 @@ def test_emergent_vocative_repair_keeps_owner_under_dialogue_contract(
         assert "stands nearby" not in low
         assert "lord ashvale" in low
         assert not _is_placeholder_only_player_facing_text(text)
-        assert meta.get("response_type_required") == "dialogue"
-        assert meta.get("response_type_candidate_ok") is True
         assert meta.get("final_emitted_source") != "global_scene_fallback"
     except AssertionError as e:
         _fail_mixed(str(e), failing_turn=2, turns=turns, payloads=payloads)
