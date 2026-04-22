@@ -1,5 +1,34 @@
 # Running tests
 
+## Objective #12 — validation coverage (contributor workflow)
+
+Objective #12 is **governance and tooling only**: it does **not** add a runtime layer, a policy engine, or a new scoring path.
+
+- **`tests/validation_coverage_registry.py`** is the **canonical declaration layer** — one row per feature/domain, with `required_surfaces` and typed pointers (transcript modules, behavioral axes, manual gauntlet IDs, playability smoke node IDs, unit/integration paths). Human intent and machine checks both anchor here; update this file when coverage ownership changes.
+- **`tools/validation_coverage_audit.py`** is the **canonical inspection layer** — reads the committed registry, runs `validate_entries`, prints summaries, per-feature views, surface filters, and declarative “likely commands”. It does **not** import `game/` or run evaluators.
+- **Existing evaluators and harnesses** (for example `evaluate_playability`, `evaluate_behavioral_gauntlet`, transcript runners, manual rubrics) remain the **only scoring authorities**. The registry maps *what to run*; it does not rescore turns.
+- **`optional_smoke_overlap`** is **secondary** to canonical ownership: use it for extra smoke pointers without pretending they own the feature’s defense.
+
+**Repeatable loop:** validation-sensitive change → declare/update `tests/validation_coverage_registry.py` → `py -3 -m pytest tests/test_validation_coverage_registry.py -q` → `python tools/validation_coverage_audit.py --feature <feature_id>` → run the emitted tests/tools/scenarios → manual gauntlets when feel, prose, or player-facing behavior changed materially. Contract detail: [`docs/objective12_validation_contract.md`](../docs/objective12_validation_contract.md).
+
+**Copy/paste — registry pytest and audit CLI** (repo root; if `pytest` is not on `PATH`, use `py -3 -m pytest`):
+
+```bash
+py -3 -m pytest tests/test_validation_coverage_registry.py -q
+
+python tools/validation_coverage_audit.py
+python tools/validation_coverage_audit.py --strict
+
+python tools/validation_coverage_audit.py --feature <feature_id>
+
+python tools/validation_coverage_audit.py --missing transcript
+python tools/validation_coverage_audit.py --missing behavioral_gauntlet
+
+python tools/validation_coverage_audit.py --surface playability
+```
+
+`--surface` / `--missing` accept the same surface ids as the registry: `transcript`, `behavioral_gauntlet`, `manual_gauntlet`, `playability`, `unit_contract`, `integration_smoke` (the CLI also accepts hyphenated forms, e.g. `behavioral-gauntlet`). **`--strict`:** exit code **2** if `validate_entries` finds issues. For **`--feature`**, **`--surface`**, and **`--missing`**, when `--strict` is set and there are errors, the tool writes errors to **stderr** and exits **2** before printing the requested feature/surface list; the default **summary** (no mode flags) prints the full summary first, then reports validation OK/FAIL.
+
 **Full lane** runs the whole suite. **Fast lane** excludes items marked `transcript` or `slow`. **Stricter fast** also excludes `brittle`. Marker definitions live in `pytest.ini`; scope and ownership notes are in `tests/TEST_AUDIT.md`. Routing and **repair/retry regression** ownership are settled (see `tests/TEST_CONSOLIDATION_PLAN.md` → *Block 3 — Routing* and *Repair / retry cluster — Block 3*).
 
 **Post-AER Block C1:** Behavioral Gauntlet, Playability Validation, and AER are **complete** as validation tracks. Consolidation PRs target **orchestration** clarity, **telemetry/meta** normalization, and **test ownership** (**canonical owner** per module, **smoke overlap** only where layers differ)—see `docs/current_focus.md` and `docs/narrative_integrity_architecture.md` (**Post-AER Consolidation Rules**).
@@ -245,6 +274,8 @@ Optional stricter selection: add `and not synthetic` to a local fast-lane comman
 **Lane trustworthiness is about composition and selection** — which tests the marker expression includes or excludes — **not** about the whole fast lane being green. A red test in the fast lane is still a real failure; it is **orthogonal** to whether the fast/full split matches intent (exclude transcript + slow from fast; run everything on full).
 
 ## Where to add new tests
+
+When recording **which scenarios defend which feature** (Objective #12), update `tests/validation_coverage_registry.py` per [`docs/objective12_validation_contract.md`](../docs/objective12_validation_contract.md).
 
 See `tests/TEST_AUDIT.md` → *Consolidation Block 1 — Canonical ownership map & overlap hotspots* for **canonical owner** themes and **smoke overlap** guidance. **Next consolidation order (Block C1):** emit-path **orchestration** / metadata + **telemetry** alignment (doc-driven) → prompt/sanitizer → social/emission → transcript duplicate assertion thinning → **lead/clue `deferred`** last (repair/retry cluster documented and closed enough — see `tests/TEST_CONSOLIDATION_PLAN.md` → *Next consolidation order* and *Repair / retry cluster — Block 3*).
 
