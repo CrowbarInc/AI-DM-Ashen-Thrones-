@@ -2,15 +2,13 @@ from __future__ import annotations
 
 """Final player-facing string cleanup (post-policy, typically last in the emit path).
 
-Ownership split (see also ``tests/test_output_sanitizer.py`` vs ``tests/test_prompt_and_guard.py``):
+**Default (Objective C2 Block C):** ``sanitizer_boundary_mode`` defaults to **strip-only**
+(legality strip + packaging). Sentence-template diegetic rewrites require explicit
+``sanitizer_boundary_mode="legacy_sentence_rewrite"`` (unit tests and rare diagnostics only).
 
-- **Prompt / guard** (``game.gm``, ``game.gm_retry``, prompt payloads): model-facing instruction
-  shape, retry classification, source/category tagging, ``detect_validator_voice`` as policy
-  metadata, and bounded uncertainty *render-helper* output before this layer runs.
-- **This module**: canonical phrase-level rules for scaffold stripping, procedural/engine wording,
-  analytical imperatives, serialized-schema leakage, and sentence-level coherence repairs on the
-  text players see. Do not duplicate guard-side validator-voice rewrite logic here; strip scaffold
-  tokens and diegetically rewrite instruction-shaped prose instead.
+- **Prompt / guard**: model-facing instruction shape and bounded uncertainty render helpers.
+- **This module (strip-only)**: serialized-schema extraction, internal-prefix strip, illegal-surface
+  drops, coherence punctuation—**not** authoring substitute narrative prose.
 """
 
 import json
@@ -178,6 +176,9 @@ _FINAL_INTERNAL_STYLE_PATTERNS: tuple[re.Pattern[str], ...] = (
     re.compile(r"\b(?:planner|router|validator|adjudication|scaffold)\b", re.IGNORECASE),
     re.compile(r"\b(?:the scene suggests|it can be inferred|no clear answer)\b", re.IGNORECASE),
 )
+
+# Explicit opt-in for the historical sentence-atomic rewrite pipeline (tests only by default).
+SANITIZER_BOUNDARY_LEGACY_SENTENCE_REWRITE = "legacy_sentence_rewrite"
 
 _RESPONSE_SCHEMA_KEYS: tuple[str, ...] = (
     "player_facing_text",
@@ -1266,6 +1267,136 @@ def final_validation_pass(text: str, context: Dict[str, Any] | None = None) -> s
     return " ".join(_cohere_sentences(validated)).strip()
 
 
+def _prepared_upstream_empty_fallback_text(context: Dict[str, Any] | None) -> str:
+    if not isinstance(context, dict):
+        return ""
+    up = context.get("upstream_prepared_emission")
+    if isinstance(up, dict):
+        t = up.get("prepared_sanitizer_empty_fallback_text")
+        if isinstance(t, str) and t.strip():
+            return t.strip()
+    return ""
+
+
+def _sanitizer_must_rewrite_sentence(sentence: str, *, has_previous_kept_sentence: bool) -> bool:
+    """Mirror ``_classify_sentence_action`` rewrite triggers without performing rewrites."""
+    s = _strip_internal_prefixes(sentence).strip()
+    if not s:
+        return False
+    if re.fullmatch(r"\[[^\]]+\]", s):
+        return False
+    if any(phrase.lower() in s.lower() for phrase in DISALLOWED_EXACT_PHRASES):
+        return True
+    if any(pattern.search(s) for pattern in DISALLOWED_HEURISTIC_PATTERNS):
+        return True
+    if any(p.search(s) for p in _IMPERATIVE_OR_META_PATTERNS):
+        return True
+    if _detect_analytical_phrases(s):
+        return True
+    if _contains_directive_phrase(s) or _contains_implicit_instruction(s):
+        return True
+    if any(p.search(s) for p in _IDENTITY_SYSTEM_PATTERNS):
+        return True
+    if _contains_template_fragment(s) or _conjunction_collision_hits(s):
+        return True
+    if _is_spliced_or_malformed(s) or _has_orphan_quote_shape(s):
+        return True
+    if _has_orphan_pronoun_lead(s, has_previous=has_previous_kept_sentence):
+        return True
+    return False
+
+
+def _final_validation_pass_strip_only(text: str, context: Dict[str, Any] | None = None) -> str:
+    if not isinstance(text, str):
+        return ""
+    ctx = context if isinstance(context, dict) else {}
+    validated: list[str] = []
+    for sentence in _split_sentences(text):
+        s = (sentence or "").strip()
+        if not s:
+            continue
+        if not _fails_final_validation_heuristics(s):
+            validated.append(s)
+            continue
+        if _is_active_social_exchange_context(ctx):
+            line = social_fallback_line_for_sanitizer(ctx, source_text=s)
+            if line and not _fails_final_validation_heuristics(line):
+                validated.append(line)
+    return " ".join(_cohere_sentences(validated)).strip()
+
+
+def _sanitize_player_facing_output_strip_only(text: str, context: Dict[str, Any]) -> str:
+    """Legality strip / packaging only: no diegetic template substitution except strict-social owner fallbacks."""
+    out = str(text)
+    if resembles_serialized_response_payload(out):
+        extracted = extract_player_text_from_serialized_payload(out)
+        out = extracted if isinstance(extracted, str) and extracted.strip() else strip_serialized_payload_fragments(out)
+
+    for pattern, replacement in _FULL_TEXT_REWRITES:
+        out = pattern.sub(replacement, out)
+
+    processed: list[str] = []
+    for sentence in _split_sentences(out):
+        for chunk in _split_consecutive_attributed_quote_chunks(sentence):
+            s = _strip_internal_prefixes(chunk).strip()
+            if not s:
+                continue
+            if re.fullmatch(r"\[[^\]]+\]", s):
+                processed.append(s)
+                continue
+            if _has_unrecoverable_fragment_shape(s) and not _looks_like_dialogue(s):
+                _log_sanitizer_event(context, "strip_only_dropped_unrecoverable", chunk)
+                continue
+
+            must = _sanitizer_must_rewrite_sentence(s, has_previous_kept_sentence=bool(processed))
+            if must:
+                if _is_active_social_exchange_context(context):
+                    line = social_fallback_line_for_sanitizer(context, source_text=s)
+                    if isinstance(line, str) and line.strip():
+                        processed.append(line.strip())
+                        continue
+                _log_sanitizer_event(context, "strip_only_dropped_rewrite_candidate", chunk)
+                continue
+
+            if not _is_diegetic_sentence(s) or _looks_like_sentence_fragment(s):
+                _log_sanitizer_event(context, "strip_only_dropped_non_diegetic", chunk)
+                continue
+            processed.append(s)
+
+    rebuilt = " ".join(_cohere_sentences(processed)).strip()
+    rebuilt = _final_validation_pass_strip_only(rebuilt, context)
+    rebuilt = final_coherence_pass(rebuilt)
+
+    if resembles_serialized_response_payload(rebuilt):
+        extracted = extract_player_text_from_serialized_payload(rebuilt)
+        rebuilt = extracted if isinstance(extracted, str) and extracted.strip() else strip_serialized_payload_fragments(rebuilt)
+        rebuilt = re.sub(r"\s+", " ", rebuilt).strip()
+
+    res = context.get("resolution") if isinstance(context.get("resolution"), dict) else None
+    sess = context.get("session") if isinstance(context.get("session"), dict) else None
+    world = context.get("world") if isinstance(context.get("world"), dict) else None
+    scene_id = str(context.get("scene_id") or "").strip()
+    strict_clamp = bool(context.get("strict_social_terminal_clamp"))
+    eff_res, strict_social, _coercion = effective_strict_social_resolution_for_emission(res, sess, world, scene_id)
+
+    if not rebuilt:
+        if strict_clamp and isinstance(context.get("gate_sealed_text"), str) and str(context.get("gate_sealed_text") or "").strip():
+            return str(context.get("gate_sealed_text") or "").strip()
+        if strict_social and isinstance(eff_res, dict):
+            fb_ctx = dict(context)
+            fb_ctx["resolution"] = eff_res
+            return social_fallback_line_for_sanitizer(fb_ctx, source_text=out)
+        prepared = _prepared_upstream_empty_fallback_text(context)
+        if prepared:
+            return prepared
+        trace = context.setdefault("sanitizer_trace", {})
+        if isinstance(trace, dict):
+            trace["strip_only_empty_after_upstream_strip"] = True
+        return ""
+
+    return rebuilt
+
+
 def sanitize_player_facing_output(text: str, context: Dict[str, Any] | None = None) -> str:
     """Hard final sanitization pass for player-facing output.
 
@@ -1277,6 +1408,7 @@ def sanitize_player_facing_output(text: str, context: Dict[str, Any] | None = No
 
     ctx = context if isinstance(context, dict) else {}
     # Strict-social turns after apply_final_emission_gate: no further sentence rewrites or coherence passes.
+    # C2_OWNER_AUDIT: packaging-only — sealed text path; keep aligned with docs/final_emission_ownership_convergence.md.
     if bool(ctx.get("post_final_emission_gate")) and bool(ctx.get("strict_social_terminal_clamp")):
         sealed = ctx.get("gate_sealed_text")
         if isinstance(sealed, str) and sealed.strip():
@@ -1286,6 +1418,9 @@ def sanitize_player_facing_output(text: str, context: Dict[str, Any] | None = No
         return ""
 
     out = str(text)
+    mode = str(ctx.get("sanitizer_boundary_mode") or "").strip().lower()
+    if mode != SANITIZER_BOUNDARY_LEGACY_SENTENCE_REWRITE:
+        return _sanitize_player_facing_output_strip_only(out, ctx)
 
     # STEP 1: structured firewall.
     if resembles_serialized_response_payload(out):
@@ -1297,6 +1432,7 @@ def sanitize_player_facing_output(text: str, context: Dict[str, Any] | None = No
         out = pattern.sub(replacement, out)
 
     # STEP 3: sentence-atomic sanitizer.
+    # C2_OWNER_AUDIT: move-upstream — diegetic rewrites / template fallbacks belong pre-final or strict-social owner; see docs/final_emission_ownership_convergence.md.
     processed: list[str] = []
     for sentence in _split_sentences(out):
         for chunk in _split_consecutive_attributed_quote_chunks(sentence):

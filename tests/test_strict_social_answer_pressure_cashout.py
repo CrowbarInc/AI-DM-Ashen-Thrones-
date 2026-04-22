@@ -13,8 +13,8 @@ from game.final_emission_gate import (
     _apply_response_delta_layer,
     _skip_answer_completeness_layer,
     _skip_response_delta_layer,
-    apply_spoken_state_refinement_cash_out,
 )
+from game.upstream_response_repairs import apply_spoken_state_refinement_cash_out
 from game.social import determine_social_escalation_outcome
 from tests.test_social_escalation import _session_with_pressure
 

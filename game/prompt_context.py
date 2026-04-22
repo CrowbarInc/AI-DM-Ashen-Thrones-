@@ -1,5 +1,7 @@
 """Prompt-context **renderer and packager** for model-facing narration payloads.
 
+Canonical owner for prompt-context assembly.
+
 **CTIR-first seam:** For resolved turns, session-backed CTIR (see :mod:`game.ctir_runtime`) is the canonical
 resolved-turn *meaning* snapshot. This module resolves it once per ``build_narration_context`` call via
 ``get_attached_ctir(session)`` and maps it through :func:`_ctir_to_prompt_semantics` and related overlays.

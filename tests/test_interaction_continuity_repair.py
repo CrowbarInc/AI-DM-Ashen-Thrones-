@@ -17,6 +17,7 @@ from __future__ import annotations
 import pytest
 
 from game.final_emission_gate import apply_final_emission_gate
+from game.final_emission_meta import read_final_emission_meta_dict
 from game.interaction_continuity import repair_interaction_continuity, validate_interaction_continuity
 
 pytestmark = pytest.mark.unit
@@ -68,6 +69,7 @@ def test_output_exhibits_continuity_repaired_structure_narration_to_dialogue():
 
 
 def test_emitted_output_exhibits_continuity_repaired_structure_strong_short_narration():
+    """C2: gate records continuity validation; structural repairs are upstream-owned."""
     ic = _strong_contract()
     gm = {
         "player_facing_text": "You can't go there.",
@@ -85,12 +87,11 @@ def test_emitted_output_exhibits_continuity_repaired_structure_strong_short_narr
         world={},
     )
     em = out["metadata"]["emission_debug"]
+    icv = em.get("interaction_continuity_validation") or {}
+    assert icv.get("ok") is False
     rep = em.get("interaction_continuity_repair") or {}
-    assert rep.get("applied") is True
-    assert rep.get("repair_type") == "narration_to_dialogue"
-    assert "dialogue_absent_under_continuity" in (rep.get("violations") or [])
-    assert isinstance(rep.get("strategy_notes"), list) and rep["strategy_notes"]
-    assert em.get("interaction_continuity_enforced") is not True
+    assert rep.get("applied") is not True
+    assert out.get("player_facing_text") == "You can't go there."
 
 
 def test_emitted_output_preserves_continuity_constraints_under_strong_complex_narration():
@@ -118,8 +119,9 @@ def test_emitted_output_preserves_continuity_constraints_under_strong_complex_na
     assert em.get("interaction_continuity_repair") is None or em.get("interaction_continuity_repair", {}).get(
         "applied"
     ) is not True
-    assert em.get("interaction_continuity_enforced") is True
-    assert "final_emission_gate_replaced" in out.get("tags", [])
+    icv = em.get("interaction_continuity_validation") or {}
+    assert icv.get("ok") is False
+    assert (read_final_emission_meta_dict(out) or {}).get("final_route") == "accept_candidate"
 
 
 def test_emitted_output_preserves_continuity_constraints_soft_strength_on_violation():
@@ -169,11 +171,10 @@ def test_emitted_output_surfaces_stripped_interruption_repair_metadata():
         scene={},
         world={},
     )
-    rep = out["metadata"]["emission_debug"].get("interaction_continuity_repair") or {}
-    assert rep.get("applied") is True
-    assert rep.get("repair_type") == "strip_uncued_interruption"
-    assert isinstance(rep.get("violations"), list)
-    assert rep["violations"]
-    assert isinstance(rep.get("strategy_notes"), list)
-    assert rep["strategy_notes"]
-    assert out["metadata"]["emission_debug"].get("interaction_continuity_enforced") is not True
+    em = out["metadata"]["emission_debug"]
+    icv = em.get("interaction_continuity_validation") or {}
+    assert icv.get("ok") is False
+    rep = em.get("interaction_continuity_repair") or {}
+    assert rep.get("applied") is not True
+    assert (read_final_emission_meta_dict(out) or {}).get("final_route") == "replaced"
+    assert "final_emission_gate_replaced" in out.get("tags", [])

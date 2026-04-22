@@ -1,18 +1,15 @@
-"""Support-only repair owner for final emission.
+"""Final-emission **legality + packaging** helpers (Objective C2 Block C).
 
-This module owns deterministic repair logic, skip helpers, and extracted layer wiring
-for final emission. It is **not** the canonical owner for response-policy contracts
-(:mod:`game.response_policy_contracts`) and **not** the top-level orchestration owner
-(:mod:`game.final_emission_gate`).
+Support-only repair owner for the gate: deterministic strip/remove/substitute and layer wiring only.
 
-**Response delta:** primary legality, bounded repair, and canonical ``response_delta_*`` meta come
-from :func:`_apply_response_delta_layer` (same canonical layer as other gate validators). Narrative
-authenticity may shadow-read the same predicate for diagnostics but does not replace delta repair
-ownership.
+Validators and metadata wiring for the gate live here. Final emission is **not** a planner,
+semantic repair owner, or contract-shaped prose author: answer/action fallbacks and spoken
+refinement cash-out moved to :mod:`game.upstream_response_repairs`; strict-social terminal shaping
+stays in :mod:`game.social_exchange_emission`.
 
-It remains an extracted helper layer with transitional residue from earlier gate-local
-implementations; that residue does not make this module the boundary authority for the
-contracts it consumes.
+This module keeps strip/remove/substitute surfaces, referent-clarity allow-list substitution,
+narrative-authenticity delegation, and observability merges only—no reorder-for-meaning or template
+synthesis at the boundary.
 """
 from __future__ import annotations
 
@@ -25,7 +22,6 @@ from game.final_emission_meta import (
     merge_narrative_authenticity_into_final_emission_meta,
 )
 from game.final_emission_text import (
-    _capitalize_sentence_fragment,
     _normalize_terminal_punctuation,
     _normalize_text,
 )
@@ -60,7 +56,6 @@ from game.final_emission_validators import (
     validate_referent_clarity,
     validate_social_response_structure,
 )
-from game.leads import get_lead, normalize_lead
 from game.response_policy_contracts import (
     materialize_response_policy_bundle,
     resolve_answer_completeness_contract,
@@ -68,119 +63,7 @@ from game.response_policy_contracts import (
     resolve_response_delta_contract,
 )
 from game.turn_packet import TURN_PACKET_METADATA_KEY, resolve_turn_packet_for_gate
-from game.social_exchange_emission import (
-    minimal_social_emergency_fallback_line,
-    strict_social_emission_will_apply,
-    _npc_display_name_for_emission,
-)
 
-def _social_fallback_resolution(
-    *,
-    resolution: Dict[str, Any] | None,
-    active_interlocutor: str,
-    world: Dict[str, Any] | None,
-    scene_id: str,
-) -> Dict[str, Any] | None:
-    if isinstance(resolution, dict) and isinstance(resolution.get("social"), dict):
-        return resolution
-    if not active_interlocutor or not isinstance(world, dict):
-        return None
-    return {
-        "kind": "question",
-        "social": {
-            "npc_id": active_interlocutor,
-            "npc_name": _npc_display_name_for_emission(world, scene_id, active_interlocutor),
-            "social_intent_class": "social_exchange",
-        },
-    }
-
-
-def _to_second_person_action_clause(player_input: str, resolution: Dict[str, Any] | None) -> str:
-    raw = _normalize_text(player_input or str((resolution or {}).get("prompt") or "")).rstrip(".!?")
-    if not raw:
-        return "You act"
-    low = raw.lower()
-    if low.startswith("you "):
-        return _capitalize_sentence_fragment(raw)
-    if low.startswith("i am "):
-        return f"You are {raw[5:]}"
-    if low.startswith("i'm "):
-        return f"You are {raw[4:]}"
-    if low.startswith("i "):
-        return f"You {raw[2:]}"
-    if re.match(
-        r"^(?:go|move|travel|investigate|inspect|search|open|close|take|grab|climb|follow|approach|look|examine|head|ask|speak|draw|attack|strike|cast|use|push|pull|listen|wait)\b",
-        low,
-    ):
-        return f"You {raw}"
-    return "You act on that move"
-
-
-def _action_result_summary(resolution: Dict[str, Any] | None) -> str:
-    if not isinstance(resolution, dict):
-        return "the scene answers with an immediate change"
-    state_changes = resolution.get("state_changes") if isinstance(resolution.get("state_changes"), dict) else {}
-    check_request = resolution.get("check_request") if isinstance(resolution.get("check_request"), dict) else {}
-    kind = str(resolution.get("kind") or "").strip().lower()
-    if bool(resolution.get("resolved_transition")) or state_changes.get("scene_transition_occurred") or state_changes.get("arrived_at_scene"):
-        return "the scene shifts with that movement"
-    if state_changes.get("already_searched"):
-        if kind in {"investigate", "observe", "search"}:
-            return "the search turns up nothing new"
-        return "the attempt turns up nothing new"
-    if state_changes.get("clue_revealed") or resolution.get("clue_id") or resolution.get("discovered_clues"):
-        return "you turn up a concrete clue"
-    if state_changes.get("skill_check_failed"):
-        return "the attempt catches and fails to land cleanly"
-    if bool(resolution.get("requires_check")) or bool(check_request.get("requires_check")):
-        return "the attempt now calls for a check"
-    if resolution.get("success") is False:
-        return "the attempt meets resistance"
-    if resolution.get("success") is True:
-        return "the attempt produces an immediate result"
-    if kind in {"investigate", "observe"}:
-        return "you get an immediate read on what is there"
-    if kind in {"travel", "scene_transition"}:
-        return "your position in the scene changes"
-    return "the situation answers that move right away"
-
-
-def _minimal_answer_contract_repair(
-    *,
-    resolution: Dict[str, Any] | None,
-    active_interlocutor: str,
-    world: Dict[str, Any] | None,
-    scene_id: str,
-) -> str | None:
-    social_resolution = _social_fallback_resolution(
-        resolution=resolution,
-        active_interlocutor=active_interlocutor,
-        world=world,
-        scene_id=scene_id,
-    )
-    if isinstance(social_resolution, dict):
-        return minimal_social_emergency_fallback_line(social_resolution)
-    check_request = resolution.get("check_request") if isinstance(resolution, dict) and isinstance(resolution.get("check_request"), dict) else {}
-    prompt = _normalize_terminal_punctuation(str(check_request.get("player_prompt") or "").strip())
-    if prompt:
-        return prompt
-    adjudication = resolution.get("adjudication") if isinstance(resolution, dict) and isinstance(resolution.get("adjudication"), dict) else {}
-    answer_type = str(adjudication.get("answer_type") or "").strip().lower()
-    if answer_type == "needs_concrete_action":
-        return "You need a more concrete in-scene action or target before that can be answered."
-    if answer_type == "check_required" or bool((resolution or {}).get("requires_check")):
-        return "That cannot be answered cleanly until the required check is resolved."
-    return "No direct answer is established from the current state yet."
-
-
-def _minimal_action_outcome_contract_repair(
-    *,
-    player_input: str,
-    resolution: Dict[str, Any] | None,
-) -> str:
-    action_clause = _to_second_person_action_clause(player_input, resolution)
-    result_clause = _action_result_summary(resolution)
-    return _normalize_terminal_punctuation(f"{action_clause}, and {result_clause}")
 
 def _skip_answer_completeness_layer(
     *,
@@ -216,92 +99,6 @@ def _skip_answer_completeness_layer(
     return None
 
 
-def _repair_answer_completeness_minimal(
-    text: str,
-    validation: Dict[str, Any],
-    contract: Dict[str, Any],
-    *,
-    resolution: Dict[str, Any] | None,
-) -> tuple[str | None, str | None]:
-    """Reorder or compress existing sentences only; no new facts."""
-    sentences = _split_sentences_answer_complete(text)
-    exp_shape = str(contract.get("expected_answer_shape") or "").strip().lower()
-    exp_voice = str(contract.get("expected_voice") or "").strip().lower()
-    soc = resolution.get("social") if isinstance(resolution, dict) and isinstance(resolution.get("social"), dict) else {}
-    gate_line = str(soc.get("information_gate") or "").strip()
-    partial_now = validation.get("partial_reason_detected")
-
-    if validation.get("direct_answer_found_later") and len(sentences) > 1:
-        pick: str | None = None
-        pick_idx = -1
-        for idx, sent in enumerate(sentences):
-            if idx == 0:
-                continue
-            if _sentence_substantive_for_frontload(sent, contract=contract):
-                pick = sent
-                pick_idx = idx
-                break
-        if pick and pick_idx > 0:
-            rest = sentences[:pick_idx] + sentences[pick_idx + 1 :]
-            merged = _normalize_terminal_punctuation(pick) + " " + " ".join(
-                _normalize_terminal_punctuation(s) for s in rest if s
-            )
-            return _normalize_text(merged), "frontload_direct_answer"
-
-    reason_sents: List[str] = []
-    partial_sents: List[str] = []
-    lead_sents: List[str] = []
-    for sent in sentences:
-        if _partial_reason_in_text(sent, list(contract.get("allowed_partial_reasons") or [])):
-            reason_sents.append(sent)
-        if _concrete_payload_for_kinds(sent, list(contract.get("concrete_payload_any_of") or [])):
-            partial_sents.append(sent)
-        if _NEXT_LEAD_SNIPPET.search(sent):
-            lead_sents.append(sent)
-
-    if exp_shape in {"bounded_partial", "refusal_with_reason"} or partial_now:
-        ordered: List[str] = []
-        if partial_sents:
-            ordered.append(partial_sents[0])
-        if reason_sents:
-            ordered.append(reason_sents[0])
-        if lead_sents:
-            ordered.append(lead_sents[0])
-        if len(ordered) >= 2:
-            tail_pool = [s for s in sentences if s not in ordered]
-            body = " ".join(_normalize_terminal_punctuation(s) for s in ordered + tail_pool if s)
-            return _normalize_text(body), "normalize_bounded_partial_order"
-
-    if partial_now == "gated_information" or soc.get("gated_information") or gate_line:
-        boundary = gate_line
-        if not boundary:
-            m = re.search(
-                r"\b(?:orders|sworn|quiet|here|now|captain|command)\b[^.!?]{0,80}",
-                text,
-                re.IGNORECASE,
-            )
-            if m:
-                boundary = _normalize_text(m.group(0))
-        nucleus = sentences[0] if sentences else text
-        if boundary and nucleus and boundary.lower() not in nucleus.lower():
-            glue = _normalize_terminal_punctuation(f"{nucleus} ({boundary}).")
-            rest = " ".join(sentences[1:] if len(sentences) > 1 else [])
-            if rest:
-                return _normalize_text(f"{glue} {rest}"), "surface_gated_boundary"
-        if gate_line:
-            head = sentences[0] if sentences else text
-            return _normalize_text(f"{head.rstrip('.!?')}—{gate_line}."), "inject_resolution_gate_phrase"
-
-    if exp_voice == "npc" and partial_now == "lack_of_knowledge":
-        lead = next((s for s in lead_sents), "")
-        head0 = sentences[0] if sentences else text
-        if lead:
-            pack = _normalize_terminal_punctuation(head0) + " " + _normalize_terminal_punctuation(lead)
-            return _normalize_text(pack), "npc_ignorance_pair_compress"
-
-    return None, None
-
-
 def _apply_answer_completeness_layer(
     text: str,
     *,
@@ -325,6 +122,7 @@ def _apply_answer_completeness_layer(
         "answer_completeness_repair_mode": None,
         "answer_completeness_expected_voice": None,
         "answer_completeness_skip_reason": skip,
+        "answer_completeness_boundary_semantic_repair_disabled": True,
     }
     if skip or not isinstance(contract, dict):
         return text, meta, []
@@ -341,24 +139,9 @@ def _apply_answer_completeness_layer(
     meta["answer_completeness_failed"] = True
     meta["answer_completeness_failure_reasons"] = list(v0.get("failure_reasons") or [])
 
-    repaired, mode = _repair_answer_completeness_minimal(
-        text,
-        v0,
-        contract,
-        resolution=resolution,
-    )
-    if repaired:
-        v1 = validate_answer_completeness(repaired, contract, resolution=resolution)
-        if v1.get("passed"):
-            meta["answer_completeness_repaired"] = True
-            meta["answer_completeness_repair_mode"] = mode
-            meta["answer_completeness_failed"] = False
-            meta["answer_completeness_failure_reasons"] = []
-            return repaired, meta, []
-
     extra: List[str] = []
     if not strict_social_path:
-        extra.append("answer_completeness_unsatisfied_after_repair")
+        extra.append("answer_completeness_unsatisfied_at_boundary_no_reorder")
     meta["answer_completeness_failed"] = True
     return text, meta, extra
 
@@ -389,6 +172,7 @@ def _default_response_delta_meta() -> Dict[str, Any]:
         "response_delta_echo_overlap_ratio": None,
         "response_delta_skip_reason": None,
         "response_delta_trigger_source": None,
+        "response_delta_boundary_semantic_repair_disabled": True,
     }
 
 
@@ -415,124 +199,6 @@ def _strict_social_answer_pressure_rd_contract_active(gm_output: Dict[str, Any] 
     return str(tr.get("trigger_source") or "").strip() == "strict_social_answer_pressure"
 
 
-def _clue_text_for_spoken_cash_out(session: Dict[str, Any], clue_id: str | None) -> str:
-    if not clue_id or not isinstance(session, dict):
-        return ""
-    ck = session.get("clue_knowledge") if isinstance(session.get("clue_knowledge"), dict) else {}
-    entry = ck.get(str(clue_id).strip())
-    if not isinstance(entry, dict):
-        return ""
-    t = entry.get("text")
-    return str(t).strip()[:400] if isinstance(t, str) and t.strip() else ""
-
-
-def _lead_row_phrase_for_spoken_cash_out(session: Dict[str, Any], lead_id: str | None) -> str:
-    if not lead_id:
-        return ""
-    row = get_lead(session, lead_id)
-    if not isinstance(row, dict):
-        return ""
-    ld = normalize_lead(dict(row))
-    for key in ("next_step", "summary", "title"):
-        v = str(ld.get(key) or "").strip()
-        if len(v) >= 6:
-            return v[:400]
-    return ""
-
-
-def _refinement_phrase_for_lead_or_clue_id(session: Dict[str, Any], lead_or_clue_id: str | None) -> str:
-    """Non-inventive phrase: prefer clue text, then registry row, then registry row matched by evidence clue id."""
-    cid = str(lead_or_clue_id or "").strip()
-    if not cid or not isinstance(session, dict):
-        return ""
-    t = _clue_text_for_spoken_cash_out(session, cid)
-    if t:
-        return t
-    lp = _lead_row_phrase_for_spoken_cash_out(session, cid)
-    if lp:
-        return lp
-    reg = session.get("lead_registry")
-    if not isinstance(reg, dict):
-        return ""
-    for row in reg.values():
-        if not isinstance(row, dict):
-            continue
-        ev = row.get("evidence_clue_ids") if isinstance(row.get("evidence_clue_ids"), list) else []
-        evs = {str(x).strip() for x in ev if x}
-        if cid not in evs:
-            continue
-        ld = normalize_lead(dict(row))
-        for key in ("title", "summary", "next_step"):
-            v = str(ld.get(key) or "").strip()
-            if len(v) >= 6:
-                return v[:400]
-    return ""
-
-
-def _topic_press_context_tokens(resolution: Dict[str, Any] | None) -> set[str]:
-    toks: set[str] = set()
-    if not isinstance(resolution, dict):
-        return toks
-    toks |= _content_tokens(str(resolution.get("prompt") or "").lower())
-    soc = resolution.get("social") if isinstance(resolution.get("social"), dict) else {}
-    tr = soc.get("topic_revealed") if isinstance(soc.get("topic_revealed"), dict) else {}
-    for key in ("title", "summary", "label", "topic_id"):
-        toks |= _content_tokens(str(tr.get(key) or "").lower())
-    return {t for t in toks if len(t) >= 4}
-
-
-def _refinement_relevant_to_answer_pressure(
-    resolution: Dict[str, Any] | None,
-    refinement: str,
-    *,
-    enforced_source: str | None,
-    enforced_lead_id: str | None,
-    promoted_ids: List[str],
-) -> bool:
-    if not str(refinement or "").strip():
-        return False
-    res = resolution if isinstance(resolution, dict) else {}
-    clue_id = str(res.get("clue_id") or "").strip()
-    press = _topic_press_context_tokens(res)
-    ref_toks = _content_tokens(str(refinement).lower())
-    inter = press & ref_toks
-
-    if str(enforced_source or "").strip() == "extracted_social":
-        return True
-    if clue_id and enforced_lead_id and clue_id == enforced_lead_id:
-        return True
-    if clue_id and clue_id in promoted_ids:
-        return True
-    if enforced_lead_id and enforced_lead_id in promoted_ids:
-        return True
-    if len(inter) >= 2:
-        return True
-    if len(inter) == 1 and len(ref_toks) <= 4:
-        return True
-    src = str(enforced_source or "").strip()
-    if src in ("discoverable_clue", "exit", "author_exit"):
-        return len(inter) >= 1
-    if promoted_ids:
-        return len(inter) >= 1
-    return False
-
-
-def _emitted_covers_refinement_spoken(emitted: str, refinement: str) -> bool:
-    e = _normalize_text(emitted).lower()
-    r = _normalize_text(refinement).lower()
-    if not r:
-        return True
-    if r in e:
-        return True
-    rtoks = _content_tokens(r)
-    etoks = _content_tokens(e)
-    if not rtoks:
-        return True
-    hit = len(rtoks & etoks)
-    need = min(2, len(rtoks))
-    return hit >= need
-
-
 def _repair_probe_for_answer_pressure_policy(
     gm_output: Dict[str, Any],
     session: Dict[str, Any] | None,
@@ -548,107 +214,6 @@ def _gm_probe_for_answer_pressure_contracts(
 ) -> Dict[str, Any]:
     return _repair_probe_for_answer_pressure_policy(gm_output, session)
 
-
-def apply_spoken_state_refinement_cash_out(
-    gm_output: Dict[str, Any],
-    *,
-    resolution: Dict[str, Any] | None,
-    session: Dict[str, Any] | None,
-    world: Dict[str, Any] | None,
-    scene_id: str,
-) -> Dict[str, Any]:
-    """After state promotes a lead/clue, ensure spoken dialogue surfaces that refinement on answer-pressure turns.
-
-    Downstream repair consumer only: use the canonical response-policy bundle reader from
-    :mod:`game.response_policy_contracts`, which prefers shipped ``gm_output["response_policy"]``
-    and falls back to ``session["last_turn_response_policy"]`` only as compatibility residue.
-    """
-    if not isinstance(gm_output, dict) or not isinstance(session, dict):
-        return gm_output
-    sid = str(scene_id or "").strip()
-    if not sid:
-        return gm_output
-    if not strict_social_emission_will_apply(resolution, session, world, sid):
-        return gm_output
-    probe = materialize_response_policy_bundle(gm_output, session)
-    if not (
-        _strict_social_answer_pressure_ac_contract_active(probe)
-        or _strict_social_answer_pressure_rd_contract_active(probe)
-    ):
-        return gm_output
-    if not isinstance(resolution, dict):
-        return gm_output
-
-    emitted = str(gm_output.get("player_facing_text") or "")
-    if not _normalize_text(emitted):
-        return gm_output
-
-    meta = resolution.get("metadata") if isinstance(resolution.get("metadata"), dict) else {}
-    mal = meta.get("minimum_actionable_lead") if isinstance(meta.get("minimum_actionable_lead"), dict) else {}
-    ll = meta.get("lead_landing") if isinstance(meta.get("lead_landing"), dict) else {}
-
-    enforced = bool(mal.get("minimum_actionable_lead_enforced"))
-    enforced_id = str(mal.get("enforced_lead_id") or "").strip() or None
-    enforced_src = str(mal.get("enforced_lead_source") or "").strip() or None
-
-    promoted_raw = ll.get("authoritative_promoted_ids") or []
-    promoted_ids = [str(x).strip() for x in promoted_raw if isinstance(x, str) and str(x).strip()]
-
-    if not enforced and not promoted_ids:
-        return gm_output
-
-    refinement = ""
-    source = ""
-
-    if enforced and enforced_id:
-        refinement = _refinement_phrase_for_lead_or_clue_id(session, enforced_id)
-        source = enforced_src or "minimum_actionable_lead"
-
-    if not refinement.strip() and promoted_ids:
-        pick = None
-        res_cid = str(resolution.get("clue_id") or "").strip()
-        if res_cid and res_cid in promoted_ids:
-            pick = res_cid
-        else:
-            pick = promoted_ids[0]
-        refinement = _refinement_phrase_for_lead_or_clue_id(session, pick)
-        source = "authoritative_promotion"
-
-    refinement = _normalize_text(refinement).strip()
-    if not refinement:
-        return gm_output
-
-    if not _refinement_relevant_to_answer_pressure(
-        resolution,
-        refinement,
-        enforced_source=enforced_src,
-        enforced_lead_id=enforced_id,
-        promoted_ids=promoted_ids,
-    ):
-        return gm_output
-
-    if _emitted_covers_refinement_spoken(emitted, refinement):
-        return gm_output
-
-    templates = (
-        "I can only add this: {ref}.",
-        "What I can say is: {ref}.",
-        "I don't know more than this: {ref}.",
-    )
-    idx = len(refinement) % 3
-    ref_clean = refinement.rstrip().rstrip(".")
-    tail = templates[idx].format(ref=ref_clean)
-    new_text = _normalize_text(emitted.rstrip() + " " + tail)
-    out = dict(gm_output)
-    out["player_facing_text"] = new_text
-    dbg = out.get("debug_notes") if isinstance(out.get("debug_notes"), str) else ""
-    out["debug_notes"] = (dbg + " | " if dbg else "") + f"spoken_state_refinement_cash_out:{source}"
-    out["_spoken_refinement_cash_out"] = {
-        "applied": True,
-        "source": source,
-        "refinement_preview": refinement[:160],
-    }
-    return out
 
 def _skip_response_delta_layer(
     *,
@@ -693,94 +258,6 @@ def _skip_response_delta_layer(
     return None
 
 
-def _repair_response_delta_minimal(
-    text: str,
-    _validation: Dict[str, Any],
-    contract: Dict[str, Any],
-) -> tuple[str | None, str | None]:
-    """Reorder / trim existing sentences only; never invent facts."""
-    prev = str(contract.get("previous_answer_snippet") or "").strip()
-    prior_token_set = set(_response_delta_tokens(prev))
-    allowed_list = [str(x).strip().lower() for x in (contract.get("allowed_delta_kinds") or []) if str(x).strip()]
-    allowed = set(allowed_list)
-    sentences = _split_sentences_answer_complete(text)
-    if len(sentences) < 2:
-        return None, None
-
-    # 1) Front-load first later sentence that already carries a valid delta.
-    for idx in range(1, len(sentences)):
-        if _sentence_carries_response_delta(sentences[idx], prior_token_set, allowed=allowed):
-            pick = sentences[idx]
-            rest = sentences[:idx] + sentences[idx + 1 :]
-            merged = _normalize_terminal_punctuation(pick) + " " + " ".join(
-                _normalize_terminal_punctuation(s) for s in rest if s
-            )
-            candidate = _normalize_text(merged)
-            v2 = validate_response_delta(candidate, contract)
-            if v2.get("passed"):
-                return candidate, "frontload_delta_sentence"
-
-    # 2) Trim echoed opening when the remainder validates.
-    open_ov = _response_delta_token_overlap_ratio(_response_delta_tokens(sentences[0]), list(prior_token_set))
-    if open_ov >= 0.5 and not _opening_carries_allowed_delta(sentences[0], prior_token_set, allowed=allowed):
-        tail = " ".join(_normalize_terminal_punctuation(s) for s in sentences[1:] if s)
-        candidate = _normalize_text(tail)
-        v2 = validate_response_delta(candidate, contract)
-        if v2.get("passed"):
-            return candidate, "trim_echo_opening"
-
-    # 3) Prioritize refinement / delta sentence before uncertainty caveat (swap s0/s1).
-    if len(sentences) >= 2:
-        s0, s1 = sentences[0], sentences[1]
-        if _partial_reason_in_text(s0, ["uncertainty", "lack_of_knowledge"]) and _sentence_carries_response_delta(
-            s1, prior_token_set, allowed=allowed
-        ):
-            merged = _normalize_terminal_punctuation(s1) + " " + _normalize_terminal_punctuation(s0)
-            candidate = _normalize_text(merged)
-            rest = " ".join(_normalize_terminal_punctuation(s) for s in sentences[2:] if s)
-            if rest:
-                candidate = _normalize_text(candidate + " " + rest)
-            v2 = validate_response_delta(candidate, contract)
-            if v2.get("passed"):
-                return candidate, "prioritize_refinement_before_caveat"
-
-    # 4) Compress: drop duplicate partial opener + keep first delta sentence.
-    if len(sentences) >= 2:
-        dup_ov = _response_delta_token_overlap_ratio(
-            _response_delta_tokens(sentences[0]),
-            _response_delta_tokens(sentences[1]),
-        )
-        if dup_ov >= 0.72:
-            trimmed = sentences[1:]
-            candidate = _normalize_text(
-                " ".join(_normalize_terminal_punctuation(s) for s in trimmed if s)
-            )
-            v2 = validate_response_delta(candidate, contract)
-            if v2.get("passed"):
-                return candidate, "drop_duplicate_partial_prefix"
-
-    # 5) Compress echoed opener + substantive later line (two sentences -> delta first, opener shortened).
-    if len(sentences) >= 2:
-        for idx in range(1, len(sentences)):
-            if not _sentence_carries_response_delta(sentences[idx], prior_token_set, allowed=allowed):
-                continue
-            delta_s = sentences[idx]
-            head = sentences[0]
-            rest = [s for i, s in enumerate(sentences) if i not in (0, idx)]
-            merged = (
-                _normalize_terminal_punctuation(delta_s)
-                + " "
-                + _normalize_terminal_punctuation(head)
-                + (" " + " ".join(_normalize_terminal_punctuation(s) for s in rest if s) if rest else "")
-            )
-            candidate = _normalize_text(merged)
-            v2 = validate_response_delta(candidate, contract)
-            if v2.get("passed"):
-                return candidate, "compress_echo_plus_delta"
-
-    return None, None
-
-
 def _apply_response_delta_layer(
     text: str,
     *,
@@ -820,21 +297,9 @@ def _apply_response_delta_layer(
     meta["response_delta_failed"] = True
     meta["response_delta_failure_reasons"] = list(v0.get("failure_reasons") or [])
 
-    repaired, mode = _repair_response_delta_minimal(text, v0, contract)
-    if repaired:
-        v1 = validate_response_delta(repaired, contract)
-        if v1.get("passed"):
-            meta["response_delta_repaired"] = True
-            meta["response_delta_repair_mode"] = mode
-            meta["response_delta_failed"] = False
-            meta["response_delta_failure_reasons"] = []
-            meta["response_delta_kind_detected"] = v1.get("delta_kind_detected")
-            meta["response_delta_echo_overlap_ratio"] = v1.get("echo_overlap_ratio")
-            return repaired, meta, []
-
     extra: List[str] = []
     if not strict_social_path:
-        extra.append("response_delta_unsatisfied_after_repair")
+        extra.append("response_delta_unsatisfied_at_boundary_no_reorder")
     meta["response_delta_failed"] = True
     return text, meta, extra
 
@@ -993,7 +458,8 @@ def apply_social_response_structure_repair(
     failure_reasons: List[str],
     gm_output: Dict[str, Any] | None = None,
 ) -> tuple[str, str | None]:
-    """Structure-only repairs driven by :func:`validate_social_response_structure` failure codes."""
+    """Packaging-only fixes (bullets → prose, soft line breaks). No cadence/density/opening authorship."""
+    _ = gm_output
     reasons = [str(r) for r in (failure_reasons or []) if str(r).strip()]
     if not reasons:
         return text, None
@@ -1007,35 +473,11 @@ def apply_social_response_structure_repair(
             t = t2
             modes.append("flatten_list_like_dialogue")
 
-    if "multi_speaker_turn_formatting" in rset:
-        t2 = _collapse_multi_speaker_formatting(t)
+    if "too_many_contiguous_expository_lines" in rset:
+        t2 = _collapse_soft_line_breaks(t)
         if t2 != t:
             t = t2
-            modes.append("collapse_multi_speaker_formatting")
-
-    if "too_many_dialogue_paragraphs_without_break" in rset:
-        t2 = _merge_substantive_paragraphs(t, target_max=1)
-        if t2 != t:
-            t = t2
-            modes.append("merge_dialogue_paragraphs")
-
-    if "too_many_contiguous_expository_lines" in rset or "expository_monologue_density" in rset:
-        t2 = _reduce_expository_density(t, reasons)
-        if t2 != t:
-            t = t2
-            modes.append("reduce_expository_density")
-
-    if "unnatural_monoblob_cadence" in rset or "heavy_expository_sentence_cadence" in rset:
-        t2 = _normalize_dialogue_cadence(t)
-        if t2 != t:
-            t = t2
-            modes.append("normalize_dialogue_cadence")
-
-    if "missing_spoken_dialogue_shape" in rset:
-        t2 = _restore_spoken_opening(t)
-        if t2 != t:
-            t = t2
-            modes.append("restore_spoken_opening")
+            modes.append("collapse_soft_line_breaks_only")
 
     t = _normalize_text(t)
     if not modes:
@@ -2042,6 +1484,7 @@ def _convert_to_single_diegetic_clarifying_question(contract: Dict[str, Any] | N
     return _normalize_terminal_punctuation(_fallback_clarifying_question(contract))
 
 
+# C2_OWNER_AUDIT: move-upstream — template synthesis / shape construction should converge out of final emission; see docs/final_emission_ownership_convergence.md.
 def repair_fallback_behavior(
     emitted_text: str,
     contract: Dict[str, Any] | None,
@@ -2059,11 +1502,6 @@ def repair_fallback_behavior(
     original = _normalize_text(emitted_text)
     working = original
     modes: List[str] = []
-    failure_reasons = {
-        str(item).strip()
-        for item in (val.get("failure_reasons") or [])
-        if isinstance(item, str) and str(item).strip()
-    }
 
     if val.get("meta_fallback_voice_detected"):
         stripped = _strip_meta_fallback_voice(working, contract=ctr)
@@ -2071,20 +1509,6 @@ def repair_fallback_behavior(
             working = stripped
             meta["fallback_behavior_meta_voice_stripped"] = True
             modes.append("strip_meta_voice")
-        if not _contains_diegetic_uncertainty_partial(working, resolution=resolution):
-            diegetic = _rewrite_meta_fallback_as_diegetic_partial(original or working, contract=ctr, resolution=resolution)
-            if diegetic:
-                nl_raw = _fallback_next_lead_sentence(working or original)
-                nl_voice = _voice_extracted_next_lead_sentence(nl_raw, resolution) if nl_raw else ""
-                working = _fallback_unique_join(
-                    [
-                        diegetic,
-                        _fallback_known_edge_sentence(working),
-                        nl_voice,
-                    ]
-                )
-                meta["fallback_behavior_meta_voice_stripped"] = True
-                modes.append("rewrite_meta_as_diegetic_partial")
 
     if val.get("fabricated_authority_detected"):
         stripped = _remove_fabricated_authority(working, contract=ctr)
@@ -2098,86 +1522,11 @@ def repair_fallback_behavior(
             working = stripped
             modes.append("downgrade_invented_certainty")
 
-    allowed = _fallback_allowed_behaviors(ctr)
-    partial_allowed = bool(allowed.get("provide_partial_information"))
-    question_allowed = bool(allowed.get("ask_clarifying_question"))
-    prefer_partial = bool(ctr.get("prefer_partial_over_question"))
-    max_questions = ctr.get("max_clarifying_questions")
-    can_question = question_allowed and isinstance(max_questions, int) and max_questions > 0
-    preserve_partial = bool(
-        _fallback_known_edge_sentence(working)
-        or _fallback_next_lead_sentence(working)
-        or _fallback_unknown_edge_sentence(working, ctr)
-    )
-    need_shape = bool(
-        failure_reasons
-        & {
-            "missing_allowed_fallback_shape",
-            "question_used_when_partial_preferred",
-            "too_many_clarifying_questions",
-            "invented_certainty",
-            "fabricated_authority",
-            "meta_fallback_voice",
-            "bounded_partial_insufficient_substance",
-        }
-    )
-
-    if need_shape and partial_allowed and (prefer_partial or preserve_partial or not can_question):
-        shaped, patch = _ensure_known_unknown_shape(
-            working or original,
-            contract=ctr,
-            validation=val,
-            resolution=resolution,
-        )
-        working, patch2 = _append_next_lead_if_allowed(
-            shaped,
-            contract=ctr,
-            source_text=working or original,
-            resolution=resolution,
-            session=session,
-            scene_id=scene_id,
-        )
-        meta.update(patch)
-        meta.update(patch2)
-        meta["fallback_behavior_partial_used"] = True
-        modes.append("bounded_partial")
-    elif need_shape and can_question:
-        working = _convert_to_single_diegetic_clarifying_question(ctr)
-        meta["fallback_behavior_clarifying_question_used"] = True
-        modes.append("clarifying_question")
-    elif not working and partial_allowed:
-        shaped_empty, patch = _ensure_known_unknown_shape(
-            original,
-            contract=ctr,
-            validation=val,
-            resolution=resolution,
-        )
-        working, patch2 = _append_next_lead_if_allowed(
-            shaped_empty,
-            contract=ctr,
-            source_text=original,
-            resolution=resolution,
-            session=session,
-            scene_id=scene_id,
-        )
-        meta.update(patch)
-        meta.update(patch2)
-        meta["fallback_behavior_partial_used"] = True
-        modes.append("bounded_partial")
+    meta["fallback_behavior_boundary_semantic_synthesis_skipped"] = True
 
     final_text = _normalize_text(working or original)
-    if modes:
-        final_text = _smooth_repaired_fallback_line(final_text)
-    final_text = _apply_social_fallback_leak_guard(final_text, resolution)
     if _looks_like_single_clarifying_question(final_text):
         meta["fallback_behavior_clarifying_question_used"] = True
-    if not meta["fallback_behavior_partial_used"] and not meta["fallback_behavior_clarifying_question_used"]:
-        partial_shape = _normalize_text(final_text) != _normalize_text(original) and bool(
-            _fallback_known_edge_sentence(final_text) or _fallback_unknown_edge_sentence(final_text, ctr)
-        )
-        if partial_shape:
-            meta["fallback_behavior_partial_used"] = True
-
     if _normalize_text(final_text) != _normalize_text(original):
         meta["fallback_behavior_repaired"] = True
     if modes:

@@ -211,7 +211,7 @@ from game.narration_seam_guards import (
     require_narration_plan_bundle_for_ctir_turn,
     verify_same_turn_narration_stamp_for_retry,
 )
-from game.final_emission_gate import apply_spoken_state_refinement_cash_out
+from game.upstream_response_repairs import apply_spoken_state_refinement_cash_out
 from game.api_upstream_preflight import log_upstream_api_preflight_at_startup
 from game.upstream_dependent_run_gate import compute_upstream_dependent_run_gate
 from game.upstream_dependent_run_gate_presentation import (

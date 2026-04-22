@@ -43,6 +43,8 @@ Maintainer-facing contract for **Objective #11**: strict separation of validatio
 - **Bounded deterministic repairs** (`game.final_emission_repairs` and peers).
 - **Orchestration** that orders layers, integrates the sanitizer, and seals strict-social / emission paths (`game.final_emission_gate.apply_final_emission_gate` as orchestration owner per ledger).
 
+**C2 shipped boundary (post Block B/D1/D2):** Resolved-turn **meaning** and contract-shaped **answer/action** fallback **prose** are decided **upstream** (`game.upstream_response_repairs` merged as `upstream_prepared_emission`; planner/CTIR context). The gate + default **strip-only** sanitizer path own **legality-preserving** cleanup, **visibility/route-illegal** stripping, serialized-field **packaging** recovery, and explicit **trace/meta** when prepared text is absent—not silent “finish the thought” narration. **Strict-social** terminal dialogue shaping stays the **`game.social_exchange_emission`** seam. **Evaluators** score offline; they do not perform live semantic repair at this boundary (see `docs/final_emission_ownership_convergence.md`).
+
 ### Evaluator (`evaluator`)
 
 - **Offline** scoring axes, verdict summaries, and harness judgments (for example `game.narrative_authenticity_eval`, playability artifacts).

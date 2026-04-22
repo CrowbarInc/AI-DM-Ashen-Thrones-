@@ -183,7 +183,7 @@ def test_sparse_opening_basis_does_not_reintroduce_curated_bad_lines(tmp_path: P
 
 
 def test_contaminated_gm_opening_emission_scrubs_operational_backstage(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
-    """Transcript-level: named operational backstage (Thoran / patrol assignments) must not ship; scene texture remains."""
+    """Transcript-level: Thoran/patrol-assignment backstage must not ship; safe texture, terminal social, or explicit fallback is acceptable."""
     _write_scenes_default(monkeypatch, tmp_path, frontier_overrides={"visible_facts": _frontier_visible_facts_mixed()})
     monkeypatch.setattr(api_mod, "log_upstream_api_preflight_at_startup", lambda: None)
     world = default_world()
@@ -202,12 +202,23 @@ def test_contaminated_gm_opening_emission_scrubs_operational_backstage(tmp_path:
         assert client.post("/api/new_campaign").status_code == 200
         r = client.post("/api/start_campaign")
         assert r.status_code == 200
-        text = (r.json().get("gm_output") or {}).get("player_facing_text") or ""
-    low = text.lower()
+        gm = r.json().get("gm_output") or {}
+        text = gm.get("player_facing_text") or ""
+    low = str(text).lower()
     assert "captain thoran" not in low
     assert "patrol assignments" not in low
     assert "controls patrol assignments tonight" not in low
-    assert any(tok in low for tok in ("rain", "soot", "mud", "wagon", "refugee", "lantern", "gate", "smoke"))
+    scene_texture = any(tok in low for tok in ("rain", "soot", "mud", "wagon", "refugee", "lantern", "gate", "smoke"))
+    strict_social_terminal = "tavern runner" in low and (
+        "frown" in low or "grimace" in low or "that's all" in low or "all i've got" in low
+    )
+    # C2: contaminated upstream may be rejected; pipeline can emit explicit nonsocial minimal fallback instead of minting scene prose.
+    explicit_nonsocial_fallback = (
+        gm.get("final_route") == "nonsocial_fallback_minimal"
+        or gm.get("fallback_kind") == "nonsocial_empty_resolution_repair"
+        or any(str(t) == "nonsocial_empty_resolution_repair" for t in (gm.get("tags") or []))
+    )
+    assert scene_texture or strict_social_terminal or explicit_nonsocial_fallback
 
 
 def test_opening_scene_normalized_action_internal_vs_chat_parity() -> None:

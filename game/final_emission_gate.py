@@ -2,12 +2,15 @@
 
 **Orchestration home:** :func:`apply_final_emission_gate` sequences sanitizer integration,
 strict-social coordination (via :mod:`game.social_exchange_emission`), shipped contracts
-(tone, narrative authority, anti-railroading, context separation, scene anchor, speaker
-selection), logging, and metadata merges.
+(validators + legality metadata), logging, and metadata merges. Semantic sentence repairs for tone,
+authority, anti-railroading, context separation, scene anchors, answer-shape primacy, and fast-fallback
+composition are **disabled at the boundary** (Objective C2 Block C); violations surface as reason codes
+without boundary rewrites.
 
-**Legality vs scoring:** pass/fail here is driven by deterministic reason codes and bounded repairs.
-Numeric ``*_score`` / overlap metrics inside NA or other traces are **telemetry or diagnostics** for
-read-side consumers—not evaluator-style quality enforcement and not a second legality system.
+**Legality vs scoring:** pass/fail is driven by deterministic reason codes and **strip-only** or
+upstream-prepared repairs where applicable. Numeric ``*_score`` / overlap metrics inside NA or other
+traces are **telemetry or diagnostics** for read-side consumers—not evaluator-style quality enforcement
+and not a second legality system.
 
 **Not the canonical owner for:** deterministic validators (:mod:`game.final_emission_validators`),
 repair/layer wiring (:mod:`game.final_emission_repairs`), shared text/normalization patterns
@@ -30,11 +33,11 @@ from :func:`game.turn_packet.get_turn_packet` and popped in
 derived from the packet boundary and does not own it. Neither layer owns engine truth or
 narration policy.
 
-**Last-mile player text:** :func:`_finalize_emission_output` is the canonical exit owner for
-deterministic cleanup after sanitizer + optional decompress / fragment repair / micro-smooth
-(including :func:`_strip_appended_route_illegal_contamination_sentences` for the known
-global-visibility stock sentence family). :func:`game.output_sanitizer.sanitize_player_facing_output`
-does not carry sole responsibility for that family on the non-strict-social accept path.
+**Last-mile player text:** :func:`_finalize_emission_output` applies packaging-only normalization
+(whitespace / route-illegal stock stripping via :func:`_strip_appended_route_illegal_contamination_sentences`).
+It does **not** decompress, repair participial fragments, or micro-smooth for meaning at the boundary
+(Objective C2 Block C). :func:`game.output_sanitizer.sanitize_player_facing_output` remains the
+pre-gate scaffold/serialization firewall; final emission is not a planner or semantic repair owner.
 """
 from __future__ import annotations
 
@@ -173,14 +176,15 @@ from game.final_emission_repairs import (
     _merge_referent_clarity_meta,
     _merge_response_delta_meta,
     _merge_social_response_structure_meta,
-    _minimal_action_outcome_contract_repair,
-    _minimal_answer_contract_repair,
     _skip_answer_completeness_layer,
     _skip_response_delta_layer,
-    _social_fallback_resolution,
-    apply_spoken_state_refinement_cash_out,
     _strict_social_answer_pressure_ac_contract_active,
     _strict_social_answer_pressure_rd_contract_active,
+)
+from game.upstream_response_repairs import (
+    UPSTREAM_PREPARED_EMISSION_KEY,
+    build_social_fallback_resolution,
+    merge_upstream_prepared_emission_into_gm_output,
 )
 from game.final_emission_validators import (
     _content_tokens,
@@ -206,6 +210,7 @@ def _default_narration_constraint_debug() -> Dict[str, Any]:
             "candidate_ok": None,
             "repair_used": False,
             "repair_kind": None,
+            "upstream_prepared_absent": None,
         },
         "visibility": {
             "contract_present": False,
@@ -401,6 +406,8 @@ def _build_narration_constraint_debug(
     rt_out["candidate_ok"] = candidate_ok if isinstance(candidate_ok, bool) else None
     rt_out["repair_used"] = bool(rt_dbg.get("response_type_repair_used"))
     rt_out["repair_kind"] = _narration_constraint_small_code(rt_dbg.get("response_type_repair_kind"))
+    absent = rt_dbg.get("response_type_upstream_prepared_absent")
+    rt_out["upstream_prepared_absent"] = bool(absent) if isinstance(absent, bool) else None
 
     vis_out = payload["visibility"]
     vis_out["contract_present"] = bool(vis_contract)
@@ -978,23 +985,9 @@ def _apply_tone_escalation_layer(
         return text, meta, []
 
     meta["tone_escalation_violation_before_repair"] = True
-    repaired, mode = _repair_tone_escalation_narrow(text, contract=ctr, validation=v0)
-    if repaired:
-        v1 = validate_tone_escalation(repaired, contract=ctr)
-        meta["tone_escalation_checked"] = bool(v1.get("checked"))
-        meta["tone_escalation_ok"] = bool(v1.get("ok"))
-        d1 = v1.get("detected_assertion_flags")
-        meta["tone_escalation_detected_flags"] = dict(d1) if isinstance(d1, dict) else {}
-        meta["tone_escalation_matched_tone_level"] = v1.get("matched_tone_level")
-        meta["tone_escalation_failure_reasons"] = list(v1.get("failure_reasons") or [])
-        if v1.get("ok"):
-            meta["tone_escalation_repaired"] = True
-            meta["tone_escalation_repair_mode"] = mode
-            meta["tone_escalation_failed"] = False
-            return repaired, meta, []
-
+    meta["tone_escalation_boundary_semantic_repair_disabled"] = True
     meta["tone_escalation_failed"] = True
-    return text, meta, ["tone_escalation_unsatisfied_after_repair"]
+    return text, meta, ["tone_escalation_unsatisfied_at_boundary_no_rewrite"]
 
 
 def _flag_non_hostile_escalation_from_writer_pregate(
@@ -1440,33 +1433,11 @@ def _apply_narrative_authority_layer(
 
     meta["narrative_authority_failed"] = True
     meta["narrative_authority_failure_reasons"] = list(v0.get("failure_reasons") or [])
-
-    repaired, mode = _repair_narrative_authority_narrow(
-        text,
-        v0,
-        resolution=resolution if isinstance(resolution, Mapping) else None,
-        player_text=player_text,
-    )
-    if repaired:
-        v1 = validate_narrative_authority(
-            repaired,
-            contract,
-            resolution=resolution if isinstance(resolution, Mapping) else None,
-            player_text=player_text,
-        )
-        if v1.get("passed"):
-            meta["narrative_authority_repaired"] = True
-            meta["narrative_authority_repair_mode"] = mode
-            meta["narrative_authority_failed"] = False
-            meta["narrative_authority_failure_reasons"] = []
-            meta["narrative_authority_deferral_mode"] = v1.get("matched_deferral_mode")
-            af1 = v1.get("assertion_flags")
-            meta["narrative_authority_assertion_flags"] = dict(af1) if isinstance(af1, dict) else {}
-            return repaired, meta, []
+    meta["narrative_authority_boundary_semantic_repair_disabled"] = True
 
     extra: List[str] = []
     if not strict_social_path:
-        extra.append("narrative_authority_unsatisfied_after_repair")
+        extra.append("narrative_authority_unsatisfied_at_boundary_no_rewrite")
     meta["narrative_authority_failed"] = True
     return text, meta, extra
 
@@ -1933,35 +1904,11 @@ def _apply_anti_railroading_layer(
         return text, meta, []
 
     meta["anti_railroading_failed"] = True
-    repaired, mode = _repair_anti_railroading_narrow(
-        text,
-        v0,
-        contract=ctr,
-        player_text=player_text,
-        resolution=resolution if isinstance(resolution, Mapping) else None,
-    )
-    if repaired:
-        v1 = validate_anti_railroading(
-            repaired,
-            ctr,
-            player_text=player_text,
-            resolution=resolution if isinstance(resolution, Mapping) else None,
-        )
-        meta["anti_railroading_checked"] = bool(v1.get("checked"))
-        meta["anti_railroading_ok"] = bool(v1.get("passed"))
-        meta["anti_railroading_failure_reasons"] = list(v1.get("failure_reasons") or [])
-        af1 = v1.get("assertion_flags")
-        meta["anti_railroading_assertion_flags"] = dict(af1) if isinstance(af1, dict) else {}
-        meta["anti_railroading_repair_hints"] = anti_railroading_repair_hints(v1)
-        if v1.get("passed"):
-            meta["anti_railroading_repaired"] = True
-            meta["anti_railroading_repair_mode"] = mode
-            meta["anti_railroading_failed"] = False
-            return repaired, meta, []
+    meta["anti_railroading_boundary_semantic_repair_disabled"] = True
 
     extra: List[str] = []
     if not strict_social_path:
-        extra.append("anti_railroading_unsatisfied_after_repair")
+        extra.append("anti_railroading_unsatisfied_at_boundary_no_rewrite")
     meta["anti_railroading_failed"] = True
     meta["anti_railroading_ok"] = False
     return text, meta, extra
@@ -2275,60 +2222,20 @@ def _apply_context_separation_layer(
         )
         return text, meta, []
 
-    repaired, mode = _repair_context_separation_narrow(
+    meta["context_separation_boundary_semantic_repair_disabled"] = True
+    meta["context_separation_failed"] = True
+    meta["context_separation_passed_after_repair"] = None
+    meta["context_separation_debug_reason_marker"] = _context_separation_debug_reason_marker(
         before,
-        ctr,
-        player_text=pt,
-        resolution=resolution if isinstance(resolution, Mapping) else None,
+        before,
+        violations=fails0,
+        repair_applied=False,
+        passed_after=False,
     )
-    if repaired:
-        v1 = validate_context_separation(
-            repaired,
-            ctr,
-            player_text=pt,
-            resolution=resolution if isinstance(resolution, Mapping) else None,
-        )
-        meta["context_separation_checked"] = bool(v1.get("checked"))
-        meta["context_separation_ok"] = bool(v1.get("passed"))
-        af1 = v1.get("assertion_flags")
-        meta["context_separation_assertion_flags"] = dict(af1) if isinstance(af1, dict) else {}
-        meta["context_separation_failure_reasons"] = [str(x) for x in (v1.get("failure_reasons") or []) if isinstance(x, str)]
-        passed_after = bool(v1.get("passed"))
-        meta["context_separation_passed_after_repair"] = passed_after
-        if v1.get("passed"):
-            meta["context_separation_repaired"] = True
-            meta["context_separation_repair_mode"] = mode
-            meta["context_separation_failed"] = False
-            meta["context_separation_debug_reason_marker"] = _context_separation_debug_reason_marker(
-                before,
-                repaired,
-                violations=fails0,
-                repair_applied=True,
-                passed_after=True,
-            )
-            return repaired, meta, []
-        meta["context_separation_failed"] = True
-        meta["context_separation_debug_reason_marker"] = _context_separation_debug_reason_marker(
-            before,
-            repaired,
-            violations=fails0,
-            repair_applied=True,
-            passed_after=False,
-        )
-    else:
-        meta["context_separation_failed"] = True
-        meta["context_separation_passed_after_repair"] = None
-        meta["context_separation_debug_reason_marker"] = _context_separation_debug_reason_marker(
-            before,
-            before,
-            violations=fails0,
-            repair_applied=False,
-            passed_after=False,
-        )
 
     extra: List[str] = []
     if not strict_social_path:
-        extra.append("context_separation_unsatisfied_after_repair")
+        extra.append("context_separation_unsatisfied_at_boundary_no_lead_drop")
     meta["context_separation_ok"] = False
     return text, meta, extra
 
@@ -2612,33 +2519,11 @@ def _apply_player_facing_narration_purity_layer(
         meta["player_facing_narration_purity_preview_after"] = _gate_text_preview(before)
         return text, meta, []
 
-    repaired, rdbg = minimal_repair_player_facing_narration_purity(before, ctr)
-    modes = list(rdbg.get("modes") or [])
-    meta["player_facing_narration_purity_repair_modes"] = modes
-    if rdbg.get("repaired"):
-        meta["player_facing_narration_purity_repaired"] = True
-    meta["player_facing_narration_purity_collapsed_to_diegetic_core"] = bool(rdbg.get("collapsed_to_core"))
-
-    v1 = validate_player_facing_narration_purity(
-        repaired,
-        ctr,
-        resolution=resolution if isinstance(resolution, Mapping) else None,
-    )
-    meta["player_facing_narration_purity_preview_after"] = _gate_text_preview(repaired)
-    if v1.get("passed"):
-        meta["player_facing_narration_purity_failed"] = False
-        extra: List[str] = []
-        return repaired, meta, extra
-
+    meta["player_facing_narration_purity_boundary_semantic_repair_disabled"] = True
     meta["player_facing_narration_purity_failed"] = True
-    fails2 = [str(x) for x in (v1.get("failure_reasons") or []) if isinstance(x, str)]
-    meta["player_facing_narration_purity_violation_keys"] = list(dict.fromkeys(fails2))
-    meta["player_facing_narration_purity_repair_hints_used"] = player_facing_narration_purity_repair_hints(
-        fails2, contract=ctr
-    )
-    extra2: List[str] = []
-    extra2.append("player_facing_narration_purity_unrecoverable")
-    return repaired, meta, extra2
+    meta["player_facing_narration_purity_preview_after"] = _gate_text_preview(before)
+    extra2: List[str] = ["player_facing_narration_purity_unsatisfied_at_boundary_no_minimal_repair"]
+    return text, meta, extra2
 
 
 def _default_answer_shape_primacy_meta() -> Dict[str, Any]:
@@ -3035,27 +2920,7 @@ def _apply_answer_shape_primacy_layer(
         meta["answer_shape_primacy_preview_after"] = _gate_text_preview(before)
         return text, meta, []
 
-    if v0.get("repairable_pressure_lead"):
-        repaired, mode = _repair_answer_shape_primacy_leading_pressure(
-            before,
-            player_input=player_input,
-            resolution=resolution,
-            response_type_debug=response_type_debug,
-        )
-        if repaired:
-            v1 = _validate_answer_shape_primacy(
-                repaired,
-                player_input=player_input,
-                resolution=resolution,
-                response_type_debug=response_type_debug,
-            )
-            if v1.get("passed"):
-                meta["answer_shape_primacy_repaired"] = True
-                meta["answer_shape_primacy_repair_mode"] = mode
-                meta["answer_shape_primacy_failed"] = False
-                meta["answer_shape_primacy_preview_after"] = _gate_text_preview(repaired)
-                return repaired, meta, []
-
+    meta["answer_shape_primacy_boundary_semantic_repair_disabled"] = True
     meta["answer_shape_primacy_failed"] = True
     meta["answer_shape_primacy_failure_reasons"] = list(v0.get("failure_reasons") or [])
     meta["answer_shape_primacy_preview_after"] = _gate_text_preview(before)
@@ -3397,24 +3262,7 @@ def _apply_scene_state_anchor_layer(
     if v0.get("passed"):
         return text, meta
 
-    repaired, mode = _repair_scene_state_anchor_minimal(
-        text,
-        contract,
-        gm_output=gm_output,
-        strict_social_details=strict_social_details,
-    )
-    if repaired:
-        v1 = validate_scene_state_anchoring(repaired, contract)
-        meta["scene_state_anchor_checked"] = bool(v1.get("checked"))
-        meta["scene_state_anchor_passed"] = bool(v1.get("passed"))
-        meta["scene_state_anchor_matched_kinds"] = list(v1.get("matched_anchor_kinds") or [])
-        meta["scene_state_anchor_failure_reasons"] = list(v1.get("failure_reasons") or [])
-        if v1.get("passed"):
-            meta["scene_state_anchor_repaired"] = True
-            meta["scene_state_anchor_repair_mode"] = mode
-            meta["scene_state_anchor_failed"] = False
-            return repaired, meta
-
+    meta["scene_state_anchor_boundary_semantic_repair_disabled"] = True
     meta["scene_state_anchor_failed"] = True
     meta["scene_state_anchor_repaired"] = False
     meta["scene_state_anchor_repair_mode"] = None
@@ -3433,6 +3281,7 @@ def _enforce_response_type_contract(
     strict_social_suppressed_non_social_turn: bool,
     active_interlocutor: str,
 ) -> tuple[str, Dict[str, Any]]:
+    # C2 Block B: answer/action contract-shaped fallback text is read from ``upstream_prepared_emission`` (see :mod:`game.upstream_response_repairs`); gate does not synthesize those lines here.
     contract, source = _resolve_response_type_contract(
         gm_output if isinstance(gm_output, dict) else None,
         resolution=resolution,
@@ -3485,8 +3334,15 @@ def _enforce_response_type_contract(
 
     repaired: str | None = None
     repair_kind: str | None = None
+    upstream = (
+        gm_output.get(UPSTREAM_PREPARED_EMISSION_KEY)
+        if isinstance(gm_output, dict)
+        else None
+    )
+    if not isinstance(upstream, dict):
+        upstream = {}
     if required == "dialogue":
-        social_resolution = _social_fallback_resolution(
+        social_resolution = build_social_fallback_resolution(
             resolution=resolution,
             active_interlocutor=active_interlocutor,
             world=world,
@@ -3499,20 +3355,19 @@ def _enforce_response_type_contract(
             repaired = minimal_social_emergency_fallback_line(social_resolution)
             repair_kind = "dialogue_minimal_repair"
     elif required == "answer":
-        repaired = _minimal_answer_contract_repair(
-            resolution=resolution,
-            active_interlocutor=active_interlocutor,
-            world=world,
-            scene_id=scene_id,
-        )
-        if repaired:
-            repair_kind = "answer_minimal_repair"
+        cand = upstream.get("prepared_answer_fallback_text")
+        if isinstance(cand, str) and cand.strip():
+            repaired = cand.strip()
+            repair_kind = "answer_upstream_prepared_repair"
+        else:
+            debug["response_type_upstream_prepared_absent"] = True
     elif required == "action_outcome":
-        repaired = _minimal_action_outcome_contract_repair(
-            player_input=player_input,
-            resolution=resolution,
-        )
-        repair_kind = "action_outcome_minimal_repair"
+        cand = upstream.get("prepared_action_fallback_text")
+        if isinstance(cand, str) and cand.strip():
+            repaired = cand.strip()
+            repair_kind = "action_outcome_upstream_prepared_repair"
+        else:
+            debug["response_type_upstream_prepared_absent"] = True
 
     if repaired:
         repaired = _norm(repaired)
@@ -4298,13 +4153,11 @@ def _finalize_emission_output(
         sentence_decompression_applied = False
         sentence_micro_smoothing_applied = False
     else:
-        decompressed_text = _decompress_overpacked_sentences(sanitized_text)
-        repaired_text = decompressed_text
+        # C2 Block C: no decompress / participial / micro-smooth semantic finalize at the boundary.
+        smoothed_text = sanitized_text
         fragment_repair_applied = False
-        if decompressed_text != sanitized_text:
-            repaired_text, fragment_repair_applied = _repair_fragmentary_participial_splits(decompressed_text)
-        smoothed_text, sentence_micro_smoothing_applied = _micro_smooth_post_repair_sentences(repaired_text)
-        sentence_decompression_applied = decompressed_text != sanitized_text
+        sentence_decompression_applied = False
+        sentence_micro_smoothing_applied = False
     smoothed_text = _strip_appended_route_illegal_contamination_sentences(smoothed_text)
     sanitization_applied = sanitized_text != final_text
     out["player_facing_text"] = smoothed_text
@@ -4624,15 +4477,7 @@ def _apply_fast_fallback_neutral_composition_layer(
         return text, meta
     meta["fast_fallback_neutral_composition_malformed_detected"] = True
     meta["fast_fallback_neutral_composition_failure_reasons"] = reasons
-    repaired = _build_fast_fallback_opening_scene_template(
-        scene,
-        gm_output=gm_output,
-        scene_id=scene_id,
-    )
-    if repaired and _normalize_text(repaired) != _normalize_text(text):
-        meta["fast_fallback_neutral_composition_repaired"] = True
-        meta["fast_fallback_neutral_composition_repair_mode"] = "opening_scene_template"
-        return repaired, meta
+    meta["fast_fallback_neutral_composition_boundary_semantic_repair_disabled"] = True
     return text, meta
 
 
@@ -8316,6 +8161,13 @@ def apply_final_emission_gate(
     out["_gate_turn_packet_cache"] = get_turn_packet(
         out, out.get("response_policy"), out.get("prompt_context")
     )
+    merge_upstream_prepared_emission_into_gm_output(
+        out,
+        resolution=resolution if isinstance(resolution, dict) else None,
+        session=session if isinstance(session, dict) else None,
+        world=world if isinstance(world, dict) else None,
+        scene_id=str(scene_id or "").strip(),
+    )
     pre_gate_text = _normalize_text(out.get("player_facing_text"))
     tags = out.get("tags") if isinstance(out.get("tags"), list) else []
     tag_list = [str(t) for t in tags if isinstance(t, str)]
@@ -8364,6 +8216,10 @@ def apply_final_emission_gate(
                         "scene_id": sid,
                         "world": world if isinstance(world, dict) else None,
                         "tags": tag_list,
+                        "sanitizer_boundary_mode": "strip_only",
+                        "upstream_prepared_emission": out.get(UPSTREAM_PREPARED_EMISSION_KEY)
+                        if isinstance(out.get(UPSTREAM_PREPARED_EMISSION_KEY), dict)
+                        else None,
                     },
                 )
             )
@@ -8815,7 +8671,7 @@ def apply_final_emission_gate(
                 resolution_for_contracts=eff_resolution if isinstance(eff_resolution, dict) else None,
                 eff_resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
                 session=session if isinstance(session, dict) else None,
-                validate_only=False,
+                validate_only=True,
                 strict_social_path=True,
                 strict_fallback_resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
             )
@@ -9267,7 +9123,7 @@ def apply_final_emission_gate(
         resolution_for_contracts=resolution if isinstance(resolution, dict) else None,
         eff_resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
         session=session if isinstance(session, dict) else None,
-        validate_only=False,
+        validate_only=True,
         strict_social_path=False,
     )
     reasons.extend(ic_extra_reasons)

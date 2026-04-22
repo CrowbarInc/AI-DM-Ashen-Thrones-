@@ -364,21 +364,17 @@ def test_pipeline_visibility_enforcement_is_read_only_for_discovery_state(monkey
 
 
 def test_pipeline_replaces_pronoun_before_first_explicit_entity():
+    """C2: leading pronoun clause is dropped (strip/visibility), not replaced with composed intro."""
     session, world, scene, _sid = _base_visibility_bundle()
     candidate = "He leans closer through the rain. Guard Captain studies your face."
 
     out = _finalize_via_turn_support(candidate, session=session, world=world, scene=scene)
 
-    assert out["player_facing_text"] != candidate
+    assert out["player_facing_text"] == "Guard Captain studies your face."
     meta = read_final_emission_meta_dict(out)
-    assert meta["first_mention_validation_passed"] is False
-    assert meta["first_mention_replacement_applied"] is True
-    assert "pronoun_before_first_explicit_entity" in meta["first_mention_violation_kinds"]
-    assert meta["first_mention_leading_pronoun_detected"] is True
-    assert meta["first_mention_fallback_strategy"] == "composed_visible_scene_intro"
-    assert meta["first_mention_fallback_candidate_source"] == "visible_scene_composed_intro"
-    assert meta["opening_scene_first_mention_preference_used"] is True
-    assert "first_mention_enforcement_replaced" in out["tags"]
+    assert meta["first_mention_validation_passed"] is True
+    assert meta["first_mention_replacement_applied"] is False
+    assert meta["first_mention_violation_kinds"] == []
 
 
 def test_pipeline_replaces_unearned_familiarity_first_intro():
@@ -503,7 +499,8 @@ def test_pipeline_first_mention_fallback_also_satisfies_gate_when_replacement_ne
     out = _finalize_via_turn_support(candidate, session=session, world=world, scene=scene)
 
     meta = read_final_emission_meta_dict(out)
-    assert meta["first_mention_replacement_applied"] is True
+    assert meta["first_mention_replacement_applied"] is False
+    assert meta["first_mention_validation_passed"] is True
     validation = validate_player_facing_first_mentions(
         out["player_facing_text"],
         session=session,
@@ -520,14 +517,12 @@ def test_pipeline_opening_scene_pronoun_failure_prefers_grounded_visible_scene_f
     out = _finalize_via_turn_support(candidate, session=session, world=world, scene=scene)
 
     meta = read_final_emission_meta_dict(out)
-    assert meta["first_mention_replacement_applied"] is True
+    assert meta["first_mention_replacement_applied"] is False
     assert out["player_facing_text"] != GLOBAL_VISIBILITY_FALLBACK
+    assert out["player_facing_text"] == "Guard Captain studies the press at the gate."
     assert "guard captain" in out["player_facing_text"].lower()
-    assert any(token in out["player_facing_text"].lower() for token in ("gate", "rain", "approach", "crowd"))
-    assert meta["first_mention_fallback_strategy"] == "composed_visible_scene_intro"
-    assert meta["first_mention_fallback_candidate_source"] == "visible_scene_composed_intro"
-    assert meta["final_emitted_source"] == "composed_visible_scene_intro"
-    assert meta["opening_scene_first_mention_preference_used"] is True
+    assert "gate" in out["player_facing_text"].lower()
+    assert meta["final_emitted_source"] == "generated_candidate"
 
 
 def test_pipeline_composed_scene_intro_avoids_repeated_trivial_verbs_when_fact_backed_actions_exist():
@@ -538,13 +533,9 @@ def test_pipeline_composed_scene_intro_avoids_repeated_trivial_verbs_when_fact_b
 
     text = out["player_facing_text"].lower()
     meta = read_final_emission_meta_dict(out)
-    assert meta["first_mention_replacement_applied"] is True
-    assert meta["first_mention_fallback_strategy"] == "composed_visible_scene_intro"
-    assert meta["final_emitted_source"] == "composed_visible_scene_intro"
-    assert any(token in text for token in ("rain", "gate", "muddy", "crowd"))
-    assert any(name in text for name in ("guard captain", "tavern runner", "threadbare watcher", "ragged stranger"))
-    assert "guard captain shouts, while tavern runner shouts" not in text
-    assert text.count(" shouts") <= 1
+    assert meta["first_mention_replacement_applied"] is False
+    assert meta["final_emitted_source"] == "generated_candidate"
+    assert "guard captain" in text
     validation = validate_player_facing_first_mentions(
         out["player_facing_text"],
         session=session,

@@ -92,6 +92,8 @@ Do **not** describe this seam as: a general referent resolver; a clause parser; 
 
 Post-gate sanitization and other emit-path modules (`game.output_sanitizer`, etc.) stay as documented in existing suites.
 
+**Objective C2 (Block D2 lock-in):** Final-emission **ownership** (upstream meaning vs boundary legality/packaging vs strict-social seam) is summarized in `docs/final_emission_ownership_convergence.md`. Regression locks: `tests/test_final_emission_boundary_convergence.py` and `tools/final_emission_ownership_audit.py` (advisory drift scan; `--strict` optional).
+
 ## Test ownership (canonical)
 
 See **`tests/TEST_AUDIT.md`** for the current governance map and **`tests/TEST_CONSOLIDATION_PLAN.md`** for recorded consolidation boundaries. Those docs should follow runtime owners and practical direct-owner suites rather than overrule them. **`tests/test_inventory.json`** is the machine-readable inventory (regenerate with `py -3 tools/test_audit.py`).
@@ -111,6 +113,7 @@ Examples aligned with this layout:
 | Contextual minimal repair | `test_contextual_minimal_repair_regressions.py` |
 | Empty social / retry / terminal fallback | `test_empty_social_retry_regressions.py` |
 | Final emission gate ordering / contracts | `test_final_emission_gate.py` (practical primary direct-owner suite for direct orchestration-order, final-route, and continuity-adjacent gate-step semantics); downstream suites such as `test_social_exchange_emission.py`, `test_turn_pipeline_shared.py`, `test_stage_diff_telemetry.py`, `test_social_emission_quality.py`, `test_dead_turn_detection.py`, `test_answer_completeness_rules.py`, `test_response_delta_requirement.py`, `test_interaction_continuity_speaker_bridge.py`, `test_interaction_continuity_validation.py`, `test_interaction_continuity_repair.py`, and transcript/regression harnesses remain secondary consumer / observability / regression / continuity-consumer coverage |
+| **Objective C2 final-boundary ownership** (upstream prepared emission, strip-only sanitizer, explicit absent-prepared traces) | `tests/test_final_emission_boundary_convergence.py` (scenario + repair-layer invariants); `test_final_emission_gate.py` / `test_upstream_response_repairs.py` remain orchestration and upstream-payload owners; `tools/final_emission_ownership_audit.py` is a maintainer advisory scan |
 | **Objective #7 referent artifact + post-GM clarity** | `test_referent_tracking.py` — construction/schema of `build_referent_tracking_artifact`; `test_prompt_context.py` — prompt bundle + **compact** `turn_packet.referent_tracking_compact` shape (no full-artifact duplication); `test_final_emission_validators.py` + `test_final_emission_gate.py` — `validate_referent_clarity` + `_apply_referent_clarity_emission_layer` / `_apply_referent_clarity_pre_finalize` seam locks. Optional tiny shared fixtures: `tests/helpers/objective7_referent_fixtures.py`. Player-facing **visibility** referential clarity (`validate_player_facing_referential_clarity`) remains owned by `game/narration_visibility.py` with suites such as `test_referential_clarity_*.py` — a separate, older seam from the prompt-artifact referent pack. |
 
 ## Intentionally deferred (non-goals for this consolidation)

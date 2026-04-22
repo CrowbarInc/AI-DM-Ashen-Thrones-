@@ -304,22 +304,18 @@ def test_apply_interaction_continuity_step_enforces_when_bridge_failure_is_unrep
 
 
 def test_apply_final_emission_gate_runs_response_type_then_continuity_then_fallback():
+    """C2: continuity at the gate is validate-only; ``repair_interaction_continuity`` is not invoked."""
     calls: list[str] = []
     real_response_type = feg._enforce_response_type_contract
-    real_repair = feg.repair_interaction_continuity
-    real_fallback = feg._global_narrative_fallback_stock_line
+    real_ic_step = feg._apply_interaction_continuity_emission_step
 
     def response_type_wrapper(*args, **kwargs):
         calls.append("response_type")
         return real_response_type(*args, **kwargs)
 
-    def continuity_repair_wrapper(*args, **kwargs):
-        calls.append("continuity_repair")
-        return real_repair(*args, **kwargs)
-
-    def fallback_wrapper(*args, **kwargs):
-        calls.append("fallback")
-        return real_fallback(*args, **kwargs)
+    def continuity_validate_wrapper(*args, **kwargs):
+        calls.append("interaction_continuity_validate")
+        return real_ic_step(*args, **kwargs)
 
     long_narration = (
         "The regional economy depends on tolls, wayposts, and seasonal trade convoys moving "
@@ -337,8 +333,7 @@ def test_apply_final_emission_gate_runs_response_type_then_continuity_then_fallb
         pytest.MonkeyPatch.context() as mp,
     ):
         mp.setattr(feg, "_enforce_response_type_contract", response_type_wrapper)
-        mp.setattr(feg, "repair_interaction_continuity", continuity_repair_wrapper)
-        mp.setattr(feg, "_global_narrative_fallback_stock_line", fallback_wrapper)
+        mp.setattr(feg, "_apply_interaction_continuity_emission_step", continuity_validate_wrapper)
         apply_final_emission_gate(
             gm,
             resolution=resolution,
@@ -348,7 +343,7 @@ def test_apply_final_emission_gate_runs_response_type_then_continuity_then_fallb
             world={},
         )
 
-    assert calls.index("response_type") < calls.index("continuity_repair") < calls.index("fallback")
+    assert calls.index("response_type") < calls.index("interaction_continuity_validate")
 
 
 def test_apply_final_emission_gate_runs_response_delta_before_speaker_enforcement(monkeypatch):
@@ -498,7 +493,7 @@ def test_apply_final_emission_gate_runs_scene_state_anchor_after_speaker_enforce
 
 
 def test_apply_final_emission_gate_scene_state_anchor_location_repair_non_strict():
-    """Floating narration is minimally tethered when the shipped contract supplies location tokens."""
+    """C2: floating narration that fails anchoring is not tethered at the boundary (validate-only)."""
     contract = {
         "enabled": True,
         "required_any_of": ["location", "actor", "player_action"],
@@ -525,11 +520,13 @@ def test_apply_final_emission_gate_scene_state_anchor_location_repair_non_strict
         world={},
     )
     text = out.get("player_facing_text") or ""
-    assert "checkpoint" in text.lower() or "frontier" in text.lower()
+    assert text.strip() == raw.strip()
     meta = read_final_emission_meta_dict(out) or {}
-    assert meta.get("scene_state_anchor_repaired") is True
-    assert meta.get("scene_state_anchor_repair_mode") in {"location_rebind", "narrator_neutral_scene_rebind"}
-    assert meta.get("scene_state_anchor_passed") is True
+    em = (out.get("metadata") or {}).get("emission_debug") or {}
+    assert meta.get("scene_state_anchor_checked") is True
+    assert meta.get("scene_state_anchor_failed") is True
+    assert meta.get("scene_state_anchor_repaired") is False
+    assert em.get("scene_state_anchor_boundary_semantic_repair_disabled") is True
 
 
 def _ssa_contract(**overrides):
@@ -551,7 +548,7 @@ def _ssa_contract(**overrides):
 
 
 def test_strict_social_preserves_speaker_repair_then_applies_anchor_repair(monkeypatch):
-    """After speaker enforcement rewrites to the canonical NPC line, SSA may still tether floating tails."""
+    """Speaker enforcement still runs; SSA is validate-only and may record anchor failure without rewriting."""
     session, world, sid, resolution = _runner_strict_bundle()
 
     stub_details = {
@@ -601,10 +598,11 @@ def test_strict_social_preserves_speaker_repair_then_applies_anchor_repair(monke
     )
     text = (out.get("player_facing_text") or "").lower()
     assert "tavern runner" in text
-    assert "investigate" in text or "scene" in text
     meta = read_final_emission_meta_dict(out) or {}
-    assert meta.get("scene_state_anchor_repaired") is True
-    assert meta.get("scene_state_anchor_repair_mode") == "location_rebind"
+    em = (out.get("metadata") or {}).get("emission_debug") or {}
+    assert meta.get("scene_state_anchor_checked") is True
+    assert meta.get("scene_state_anchor_repaired") is False
+    assert em.get("scene_state_anchor_boundary_semantic_repair_disabled") is True
 
 
 def test_non_strict_runs_answer_completeness_and_response_delta_before_scene_state_anchor(monkeypatch):
@@ -650,7 +648,7 @@ def test_non_strict_runs_answer_completeness_and_response_delta_before_scene_sta
 
 
 def test_non_strict_scene_state_anchor_does_not_strip_prior_objective_repairs(monkeypatch):
-    """Anchor repair prepends/tethers without removing answer-completeness or response-delta markers."""
+    """Earlier layers may decorate text; SSA validate-only must not strip those markers."""
 
     def fake_ac(text, **kwargs):
         meta = {
@@ -690,11 +688,11 @@ def test_non_strict_scene_state_anchor_does_not_strip_prior_objective_repairs(mo
     text = out.get("player_facing_text") or ""
     assert "|AC_OK|" in text
     assert "|RD_OK|" in text
-    assert "checkpoint" in text.lower()
     meta = read_final_emission_meta_dict(out) or {}
     assert meta.get("answer_completeness_repaired") is True
     assert meta.get("response_delta_repaired") is True
-    assert meta.get("scene_state_anchor_repaired") is True
+    assert meta.get("scene_state_anchor_repaired") is False
+    assert meta.get("scene_state_anchor_failed") is True
 
 
 def test_scene_state_anchor_pass_path_flags_and_matched_kinds():
@@ -731,10 +729,10 @@ def test_scene_state_anchor_actor_rebind_repair_metadata():
         gm_output={"scene_state_anchor_contract": contract},
         strict_social_details=None,
     )
-    assert "Mara" in text or "mara" in text.lower()
-    assert meta.get("scene_state_anchor_repaired") is True
-    assert meta.get("scene_state_anchor_repair_mode") == "actor_rebind"
-    assert meta.get("scene_state_anchor_passed") is True
+    assert text == "The hammer rings once."
+    assert meta.get("scene_state_anchor_failed") is True
+    assert meta.get("scene_state_anchor_repaired") is False
+    assert meta.get("scene_state_anchor_boundary_semantic_repair_disabled") is True
 
 
 def test_scene_state_anchor_action_rebind_repair_metadata():
@@ -747,10 +745,9 @@ def test_scene_state_anchor_action_rebind_repair_metadata():
         gm_output={"scene_state_anchor_contract": contract},
         strict_social_details=None,
     )
-    assert "—" in text
-    assert "north gate" in text.lower()
-    assert meta.get("scene_state_anchor_repair_mode") == "action_rebind"
-    assert meta.get("scene_state_anchor_passed") is True
+    assert text == "The guards exchange a look."
+    assert meta.get("scene_state_anchor_failed") is True
+    assert meta.get("scene_state_anchor_repaired") is False
 
 
 def test_scene_state_anchor_location_rebind_repair_metadata():
@@ -763,14 +760,13 @@ def test_scene_state_anchor_location_rebind_repair_metadata():
         gm_output={"scene_state_anchor_contract": contract},
         strict_social_details=None,
     )
-    assert text.lower().startswith("at ")
-    assert "quay" in text.lower()
-    assert meta.get("scene_state_anchor_repair_mode") == "location_rebind"
-    assert meta.get("scene_state_anchor_passed") is True
+    assert text == "Gulls wheel overhead."
+    assert meta.get("scene_state_anchor_failed") is True
+    assert meta.get("scene_state_anchor_repaired") is False
 
 
 def test_scene_state_anchor_narrator_neutral_only_when_location_rebind_unavailable(monkeypatch):
-    """If `location_rebind` cannot run, the ladder may still reach narrator-neutral scene rebind."""
+    """C2: with anchor validation failing, boundary repair helpers are not invoked."""
 
     def no_location_opening(*args, **kwargs):
         return None, None
@@ -785,9 +781,9 @@ def test_scene_state_anchor_narrator_neutral_only_when_location_rebind_unavailab
         gm_output={"scene_state_anchor_contract": contract},
         strict_social_details=None,
     )
-    assert text.lower().startswith("here at ")
-    assert meta.get("scene_state_anchor_repair_mode") == "narrator_neutral_scene_rebind"
-    assert meta.get("scene_state_anchor_passed") is True
+    assert text == "Salt stings the air."
+    assert meta.get("scene_state_anchor_failed") is True
+    assert meta.get("scene_state_anchor_repaired") is False
 
 
 def test_scene_state_anchor_unrecoverable_preserves_text_and_records_failure():
@@ -826,10 +822,9 @@ def test_scene_state_anchor_fast_fallback_neutral_prefers_location_rebind_over_a
         },
         strict_social_details=None,
     )
-    assert "emergent lord aldric several" not in text.lower()
-    assert text.lower().startswith("at frontier gate")
-    assert meta.get("scene_state_anchor_repair_mode") == "location_rebind"
-    assert meta.get("scene_state_anchor_passed") is True
+    assert text == "Several patrons exchange furtive glances."
+    assert meta.get("scene_state_anchor_failed") is True
+    assert meta.get("scene_state_anchor_repaired") is False
 
 
 def test_apply_final_emission_gate_repairs_malformed_opening_fast_fallback_composition():
@@ -875,12 +870,11 @@ def test_apply_final_emission_gate_repairs_malformed_opening_fast_fallback_compo
     text = str(out.get("player_facing_text") or "")
     low = text.lower()
     meta = read_final_emission_meta_dict(out) or {}
-    assert "emergent lord aldric several" not in low
-    assert "holds; beside it" not in low
-    assert any(token in low for token in ("checkpoint", "gate", "patrol", "rain"))
-    assert meta.get("fast_fallback_neutral_composition_repaired") is True
-    assert meta.get("fast_fallback_neutral_composition_repair_mode") == "opening_scene_template"
-    assert meta.get("final_emitted_source") == "opening_scene_template"
+    assert "emergent lord aldric several" in low
+    assert "holds; beside it" in low
+    assert meta.get("fast_fallback_neutral_composition_malformed_detected") is True
+    assert meta.get("fast_fallback_neutral_composition_repaired") is False
+    assert meta.get("scene_state_anchor_passed") is True
 
 
 def test_ssa_layer_skip_reasons_direct():
@@ -954,29 +948,23 @@ def test_final_emission_meta_and_emission_debug_merge_scene_state_anchor(monkeyp
     em = (out.get("metadata") or {}).get("emission_debug") or {}
     merged = em.get("scene_state_anchor") or {}
     assert merged.get("counts") == {"location": 2, "actor": 1, "player_action": 0}
-    assert em.get("scene_state_anchor_passed") is True or em.get("scene_state_anchor_repaired") is True
+    assert meta.get("scene_state_anchor_failed") is True
+    assert em.get("scene_state_anchor_boundary_semantic_repair_disabled") is True
     assert em.get("prior_debug_counts") == {"x": 1}
     flat_ok = any(k.startswith("scene_state_anchor_") for k in em.keys())
     assert flat_ok
 
 
-def test_validate_scene_state_anchoring_invoked_and_reinvoked_on_repair(monkeypatch):
+def test_validate_scene_state_anchoring_invoked_once_without_boundary_repair(monkeypatch):
     calls: list[str] = []
 
     def tracking_validate(t, c):
         calls.append(str(t))
-        if len(calls) == 1:
-            return {
-                "checked": True,
-                "passed": False,
-                "matched_anchor_kinds": [],
-                "failure_reasons": ["no_anchor_match"],
-            }
         return {
             "checked": True,
-            "passed": True,
-            "matched_anchor_kinds": ["location"],
-            "failure_reasons": [],
+            "passed": False,
+            "matched_anchor_kinds": [],
+            "failure_reasons": ["no_anchor_match"],
         }
 
     monkeypatch.setattr(feg, "validate_scene_state_anchoring", tracking_validate)
@@ -992,10 +980,10 @@ def test_validate_scene_state_anchoring_invoked_and_reinvoked_on_repair(monkeypa
         scene_id="beacon_yard",
         world={},
     )
-    assert len(calls) >= 2
-    assert calls[0] == "Fog rolls in."
-    assert "beacon" in calls[1].lower()
-    assert (read_final_emission_meta_dict(out) or {}).get("scene_state_anchor_passed") is True
+    assert calls == ["Fog rolls in."]
+    fem = read_final_emission_meta_dict(out) or {}
+    assert fem.get("scene_state_anchor_failed") is True
+    assert fem.get("scene_state_anchor_repaired") is False
 
 
 def test_gate_never_invokes_build_scene_state_anchor_contract(monkeypatch):
@@ -1044,7 +1032,11 @@ def test_contract_resolution_from_gm_output_nested_paths(attach_key, attach_payl
         scene_id="rope_bridge",
         world={},
     )
-    assert "rope" in (out.get("player_facing_text") or "").lower()
+    assert feg._resolve_scene_state_anchor_contract(out) is not None
+    fem = read_final_emission_meta_dict(out) or {}
+    assert fem.get("scene_state_anchor_checked") is True
+    assert fem.get("scene_state_anchor_failed") is True
+    assert (out.get("player_facing_text") or "").strip() == "Wind rises."
 
 
 def test_strict_social_npc_line_with_actor_token_passes_without_anchor_rewrite(monkeypatch):
@@ -1082,7 +1074,7 @@ def test_strict_social_npc_line_with_actor_token_passes_without_anchor_rewrite(m
     assert meta.get("scene_state_anchor_passed") is True
 
 
-def test_floating_narration_silence_line_fails_until_repaired():
+def test_floating_narration_silence_line_records_anchor_failure_without_boundary_repair():
     raw = "The silence stretches for a moment."
     out = apply_final_emission_gate(
         {
@@ -1098,12 +1090,14 @@ def test_floating_narration_silence_line_fails_until_repaired():
         scene_id="frontier_gate",
         world={},
     )
-    assert out.get("player_facing_text") != raw
-    assert (read_final_emission_meta_dict(out) or {}).get("scene_state_anchor_repaired") is True
+    assert out.get("player_facing_text") == raw
+    fem = read_final_emission_meta_dict(out) or {}
+    assert fem.get("scene_state_anchor_failed") is True
+    assert fem.get("scene_state_anchor_repaired") is False
 
 
 def test_contract_actor_only_player_action_only_location_only():
-    for tokens, kind in (
+    for tokens, _kind in (
         ({"actor_tokens": ["yrsa"]}, "actor"),
         ({"player_action_tokens": ["barter check", "question"]}, "player_action"),
         ({"location_tokens": ["granary"], "scene_location_label": "Old Granary"}, "location"),
@@ -1121,8 +1115,8 @@ def test_contract_actor_only_player_action_only_location_only():
             world={},
         )
         meta = read_final_emission_meta_dict(out) or {}
-        assert meta.get("scene_state_anchor_passed") is True
-        assert kind in (meta.get("scene_state_anchor_matched_kinds") or [])
+        assert meta.get("scene_state_anchor_failed") is True
+        assert meta.get("scene_state_anchor_passed") is False
 
 
 def test_scene_transition_prefers_location_when_no_actor_tokens():
@@ -1143,7 +1137,8 @@ def test_scene_transition_prefers_location_when_no_actor_tokens():
         world={},
     )
     m = read_final_emission_meta_dict(out) or {}
-    assert m.get("scene_state_anchor_repair_mode") == "location_rebind"
+    assert m.get("scene_state_anchor_failed") is True
+    assert m.get("scene_state_anchor_repaired") is False
 
 
 def test_scene_location_label_used_when_location_tokens_sparse():
@@ -1157,8 +1152,8 @@ def test_scene_location_label_used_when_location_tokens_sparse():
         gm_output={"scene_state_anchor_contract": contract},
         strict_social_details=None,
     )
-    assert "salt" in text.lower()
-    assert meta.get("scene_state_anchor_repair_mode") == "location_rebind"
+    assert text == "Ropes creak."
+    assert meta.get("scene_state_anchor_failed") is True
 
 
 def test_repaired_output_excludes_hidden_bucket_strings():
@@ -1232,8 +1227,9 @@ def test_strict_and_non_strict_repair_sync_metadata():
     )
     ns = read_final_emission_meta_dict(non_strict) or {}
     em_ns = (non_strict.get("metadata") or {}).get("emission_debug") or {}
-    assert ns.get("scene_state_anchor_repaired") is True
-    assert em_ns.get("scene_state_anchor_repaired") is True
+    assert ns.get("scene_state_anchor_failed") is True
+    assert ns.get("scene_state_anchor_repaired") is False
+    assert em_ns.get("scene_state_anchor_failed") is True
 
     text, layer_meta = feg._apply_scene_state_anchor_layer(
         "Fog.",
@@ -1242,8 +1238,9 @@ def test_strict_and_non_strict_repair_sync_metadata():
     )
     merged = {}
     feg._merge_scene_state_anchor_meta(merged, layer_meta)
-    assert merged.get("scene_state_anchor_repaired") is True
-    assert merged.get("scene_state_anchor_repair_mode") == "location_rebind"
+    assert merged.get("scene_state_anchor_failed") is True
+    assert merged.get("scene_state_anchor_repaired") is False
+    assert text == "Fog."
 
 
 def _iter_narration_constraint_strings(value):
@@ -1267,6 +1264,7 @@ def _assert_narration_constraint_payload_is_compact(payload: dict) -> None:
         "candidate_ok",
         "repair_used",
         "repair_kind",
+        "upstream_prepared_absent",
     }
     assert set(payload["visibility"]) == {
         "contract_present",
@@ -1308,6 +1306,7 @@ def test_narration_constraint_debug_default_shape_is_stable():
             "candidate_ok": None,
             "repair_used": False,
             "repair_kind": None,
+            "upstream_prepared_absent": None,
         },
         "visibility": {
             "contract_present": False,
@@ -1375,6 +1374,7 @@ def test_narration_constraint_debug_builder_and_merge_are_null_safe():
             "candidate_ok": True,
             "repair_used": False,
             "repair_kind": None,
+            "upstream_prepared_absent": None,
         },
         "visibility": {
             "contract_present": True,
@@ -1778,6 +1778,7 @@ def _response_type_debug(*, candidate_ok: bool | None = True) -> dict:
         "response_type_candidate_ok": candidate_ok,
         "response_type_repair_used": False,
         "response_type_repair_kind": None,
+        "response_type_upstream_prepared_absent": False,
         "response_type_rejection_reasons": [],
         "non_hostile_escalation_blocked": False,
     }
@@ -1928,7 +1929,7 @@ def test_apply_na_with_full_contract_validates_normally():
 
 
 def test_strict_social_gate_repairs_motive_overclaim_and_keeps_speaker(monkeypatch):
-    """Slice: strict-social path runs NA before speaker enforcement; repair preserves NPC line."""
+    """Strict-social: NA is validate-only; motive overclaim remains visible in meta, not silently rewritten."""
     session, world, sid, resolution = _runner_strict_bundle()
     eff, route, _ = effective_strict_social_resolution_for_emission(resolution, session, world, sid)
     assert route is True
@@ -1970,8 +1971,11 @@ def test_strict_social_gate_repairs_motive_overclaim_and_keeps_speaker(monkeypat
     )
     text = out.get("player_facing_text") or ""
     meta = read_final_emission_meta_dict(out) or {}
-    assert meta.get("narrative_authority_repaired") is True
-    assert "plans to stall" not in text.lower()
+    em = (out.get("metadata") or {}).get("emission_debug") or {}
+    assert meta.get("narrative_authority_repaired") is False
+    assert meta.get("narrative_authority_failed") is True
+    assert em.get("narrative_authority_boundary_semantic_repair_disabled") is True
+    assert "plans to stall" in text.lower()
     assert "Tavern Runner" in text
     assert meta.get("speaker_contract_enforcement_reason") == "speaker_contract_match"
 
@@ -2048,10 +2052,13 @@ def test_anti_railroading_gate_repairs_forced_pathing():
         scene_id="s",
         world={},
     )
-    text = out.get("player_facing_text") or ""
-    assert "you could head there" in text.lower()
     meta = read_final_emission_meta_dict(out) or {}
-    assert meta.get("anti_railroading_repaired") is True
+    em = (out.get("metadata") or {}).get("emission_debug") or {}
+    assert meta.get("final_route") == "replaced"
+    assert meta.get("anti_railroading_failed") is True
+    assert meta.get("anti_railroading_repaired") is False
+    assert em.get("anti_railroading_boundary_semantic_repair_disabled") is True
+    assert "anti_railroading_unsatisfied_at_boundary_no_rewrite" in (meta.get("rejection_reasons_sample") or [])
 
 
 def test_anti_railroading_gate_repairs_exclusive_and_meta_hooks():
@@ -2069,8 +2076,9 @@ def test_anti_railroading_gate_repairs_exclusive_and_meta_hooks():
             world={},
         )
         meta = read_final_emission_meta_dict(out) or {}
-        assert meta.get("anti_railroading_repaired") is True, raw
-        assert (out.get("player_facing_text") or "").strip() != raw.strip()
+        assert meta.get("anti_railroading_failed") is True, raw
+        assert meta.get("anti_railroading_repaired") is False, raw
+        assert meta.get("final_route") == "replaced", raw
 
 
 def test_anti_railroading_resolved_transition_allows_arrival_language():
@@ -2129,8 +2137,11 @@ def test_anti_railroading_prompt_context_contract_resolution():
         scene_id="pier",
         world={},
     )
-    assert (read_final_emission_meta_dict(out) or {}).get("anti_railroading_repaired") is True
-    assert (read_final_emission_meta_dict(out) or {}).get("anti_railroading_contract_resolution_source") == "shipped"
+    fem = read_final_emission_meta_dict(out) or {}
+    assert fem.get("anti_railroading_failed") is True
+    assert fem.get("anti_railroading_repaired") is False
+    assert fem.get("anti_railroading_contract_resolution_source") == "shipped"
+    assert fem.get("final_route") == "replaced"
 
 
 def test_anti_railroading_coexists_with_narrative_authority_and_tone():
@@ -2170,7 +2181,9 @@ def test_anti_railroading_coexists_with_narrative_authority_and_tone():
     meta = read_final_emission_meta_dict(out) or {}
     assert meta.get("narrative_authority_checked") is True
     assert meta.get("tone_escalation_checked") is True
-    assert meta.get("anti_railroading_repaired") is True
+    assert meta.get("anti_railroading_failed") is True
+    assert meta.get("anti_railroading_repaired") is False
+    assert meta.get("final_route") == "replaced"
     em = (out.get("metadata") or {}).get("emission_debug") or {}
     assert "narrative_authority_checked" in em
     assert "tone_escalation_checked" in em
@@ -2241,7 +2254,7 @@ def test_non_strict_gate_runs_anti_railroading_after_na_before_scene_state_ancho
 
 
 def test_anti_railroading_surfaced_lead_mandatory_repair(monkeypatch):
-    """Surfaced-lead mandatory framing is repaired before visibility enforcement (isolate AR)."""
+    """Surfaced-lead mandatory framing fails AR validation and triggers non-social replace."""
     monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
     c = _ar_contract(prompt_leads=[{"id": "h1", "title": "Harbor warehouse"}])
     raw = "The Harbor warehouse lead isn't optional; you're going there now."
@@ -2252,9 +2265,9 @@ def test_anti_railroading_surfaced_lead_mandatory_repair(monkeypatch):
         scene_id="s",
         world={},
     )
-    assert (read_final_emission_meta_dict(out) or {}).get("anti_railroading_repaired") is True
-    low = (out.get("player_facing_text") or "").lower()
-    assert "pressure" in low or "option" in low
+    fem = read_final_emission_meta_dict(out) or {}
+    assert fem.get("anti_railroading_failed") is True
+    assert fem.get("final_route") == "replaced"
 
 
 def test_apply_final_emission_gate_runs_context_separation_before_scene_state_anchor(monkeypatch):
@@ -2384,11 +2397,10 @@ def test_gate_context_separation_repair_drops_pressure_lead_in(monkeypatch):
         world={},
     )
     meta = read_final_emission_meta_dict(out) or {}
-    assert meta.get("context_separation_repaired") is True
-    assert "drop_lead" in str(meta.get("context_separation_repair_mode") or "")
-    assert "two coppers" in (out.get("player_facing_text") or "").lower()
-    em = (out.get("metadata") or {}).get("emission_debug") or {}
-    assert em.get("context_separation_passed_after_repair") is True
+    assert meta.get("context_separation_failed") is True
+    assert meta.get("context_separation_repaired") is False
+    assert meta.get("final_route") == "replaced"
+    assert "context_separation_unsatisfied_at_boundary_no_lead_drop" in (meta.get("rejection_reasons_sample") or [])
 
 
 def test_gate_context_separation_fail_pressure_monologue_replaces_non_social(monkeypatch):
@@ -2488,6 +2500,26 @@ def _response_type_contract(required: str) -> dict:
         "required_response_type": required,
         "action_must_preserve_agency": required == "action_outcome",
     }
+
+
+def test_enforce_response_type_contract_marks_upstream_absent_for_answer_without_prepared_text():
+    text, dbg = feg._enforce_response_type_contract(
+        "Only mist between the torches.",
+        gm_output={
+            "response_policy": {"response_type_contract": _response_type_contract("answer")},
+            "upstream_prepared_emission": {},
+        },
+        resolution={"kind": "observe", "prompt": "What do I see?"},
+        session={},
+        scene_id="yard",
+        world={},
+        strict_social_turn=False,
+        strict_social_suppressed_non_social_turn=False,
+        active_interlocutor="",
+    )
+    assert dbg.get("response_type_upstream_prepared_absent") is True
+    assert dbg.get("response_type_candidate_ok") is False
+    assert text == "Only mist between the torches."
 
 
 def test_resolve_player_facing_narration_purity_contract_from_response_policy():
@@ -2605,10 +2637,9 @@ def test_gate_purity_repairs_scaffold_header_leak(monkeypatch):
         world={},
     )
     meta = read_final_emission_meta_dict(out) or {}
-    assert meta.get("player_facing_narration_purity_repaired") is True
-    low = (out.get("player_facing_text") or "").lower()
-    assert "consequence" not in low
-    assert "torchlight" in low or "arch" in low
+    assert meta.get("player_facing_narration_purity_failed") is True
+    assert meta.get("player_facing_narration_purity_repaired") is False
+    assert meta.get("final_route") == "replaced"
 
 
 def test_gate_purity_repairs_coaching_language(monkeypatch):
@@ -2627,8 +2658,8 @@ def test_gate_purity_repairs_coaching_language(monkeypatch):
         world={},
     )
     meta = read_final_emission_meta_dict(out) or {}
-    assert meta.get("player_facing_narration_purity_repaired") is True
-    assert "weigh what you just tried" not in (out.get("player_facing_text") or "").lower()
+    assert meta.get("player_facing_narration_purity_failed") is True
+    assert meta.get("final_route") == "replaced"
 
 
 def test_gate_purity_repairs_ui_label_leak(monkeypatch):
@@ -2647,8 +2678,8 @@ def test_gate_purity_repairs_ui_label_leak(monkeypatch):
         world={},
     )
     meta = read_final_emission_meta_dict(out) or {}
-    assert meta.get("player_facing_narration_purity_repaired") is True
-    assert "labeled" not in (out.get("player_facing_text") or "").lower()
+    assert meta.get("player_facing_narration_purity_failed") is True
+    assert meta.get("final_route") == "replaced"
 
 
 def test_gate_asp_repairs_observe_when_pressure_leads_concrete_observation(monkeypatch):
@@ -2670,9 +2701,8 @@ def test_gate_asp_repairs_observe_when_pressure_leads_concrete_observation(monke
         world={},
     )
     meta = read_final_emission_meta_dict(out) or {}
-    assert meta.get("answer_shape_primacy_repaired") is True
-    text = out.get("player_facing_text") or ""
-    assert text.lower().strip().startswith("you hear")
+    assert meta.get("answer_shape_primacy_failed") is True
+    assert meta.get("final_route") == "replaced"
 
 
 def test_gate_purity_strips_transition_scaffold_on_travel(monkeypatch):
@@ -2691,9 +2721,8 @@ def test_gate_purity_strips_transition_scaffold_on_travel(monkeypatch):
         world={},
     )
     meta = read_final_emission_meta_dict(out) or {}
-    assert meta.get("player_facing_narration_purity_repaired") is True
-    assert "next beat" not in (out.get("player_facing_text") or "").lower()
-    assert "quay" in (out.get("player_facing_text") or "").lower()
+    assert meta.get("player_facing_narration_purity_failed") is True
+    assert meta.get("final_route") == "replaced"
 
 
 def test_gate_asp_triggers_replace_when_no_observation_payload(monkeypatch):

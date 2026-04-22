@@ -113,6 +113,7 @@ def test_response_type_debug_defaults_and_fem_merge_are_stable() -> None:
         "response_type_repair_kind": None,
         "response_type_rejection_reasons": [],
         "non_hostile_escalation_blocked": False,
+        "response_type_upstream_prepared_absent": False,
     }
 
     fem: dict = {"final_route": "accept_candidate"}
@@ -125,6 +126,7 @@ def test_response_type_debug_defaults_and_fem_merge_are_stable() -> None:
     assert fem["response_type_repair_kind"] is None
     assert fem["response_type_rejection_reasons"] == []
     assert fem["non_hostile_escalation_blocked"] is False
+    assert fem["response_type_upstream_prepared_absent"] is False
 
     # Payload used by trace/log sinks is canonical and shallow.
     assert response_type_decision_payload(dbg) == {
@@ -135,6 +137,7 @@ def test_response_type_debug_defaults_and_fem_merge_are_stable() -> None:
         "response_type_repair_kind": None,
         "response_type_rejection_reasons": [],
         "non_hostile_escalation_blocked": False,
+        "response_type_upstream_prepared_absent": False,
     }
 
 

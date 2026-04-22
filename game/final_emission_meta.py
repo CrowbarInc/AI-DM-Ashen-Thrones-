@@ -125,6 +125,7 @@ def default_response_type_debug(contract: Dict[str, Any] | None, source: str | N
         "response_type_repair_kind": None,
         "response_type_rejection_reasons": [],
         "non_hostile_escalation_blocked": False,
+        "response_type_upstream_prepared_absent": False,
     }
 
 
@@ -139,6 +140,7 @@ def merge_response_type_meta(meta: Dict[str, Any], debug: Dict[str, Any]) -> Non
             "response_type_repair_kind": debug.get("response_type_repair_kind"),
             "response_type_rejection_reasons": list(debug.get("response_type_rejection_reasons") or []),
             "non_hostile_escalation_blocked": bool(debug.get("non_hostile_escalation_blocked")),
+            "response_type_upstream_prepared_absent": bool(debug.get("response_type_upstream_prepared_absent")),
         }
     )
 
@@ -153,6 +155,7 @@ def response_type_decision_payload(debug: Dict[str, Any]) -> Dict[str, Any]:
         "response_type_repair_kind": debug.get("response_type_repair_kind"),
         "response_type_rejection_reasons": list(debug.get("response_type_rejection_reasons") or []),
         "non_hostile_escalation_blocked": bool(debug.get("non_hostile_escalation_blocked")),
+        "response_type_upstream_prepared_absent": bool(debug.get("response_type_upstream_prepared_absent")),
     }
 
 # ``accepted_via`` values that can carry ``retry_exhausted`` / terminal flags from legitimate

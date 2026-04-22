@@ -821,13 +821,14 @@ def test_transcript_runner_repeated_interruption_beat_forces_progression(tmp_pat
         gm1 = d1.get("gm_output") or {}
         txt1 = str(gm1.get("player_facing_text") or "")
         low1 = txt1.lower()
-        # Consequence-first: first beat is still an interrupted/deflected patrol reply (raw mock or repair).
+        # C2: first beat may be raw upstream interruption prose, or validate/replace terminal social stock.
         assert (
             "shouting" in low1
             or "breaks out" in low1
             or "breaks off" in low1
             or "starts to answer" in low1
             or "glances past" in low1
+            or ("tavern runner" in low1 and ("frown" in low1 or "that's all i've got" in low1))
         )
         res1 = d1.get("resolution") or {}
         assert res1.get("kind") in ("question", "social_probe")

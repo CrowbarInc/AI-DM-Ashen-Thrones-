@@ -16,7 +16,7 @@ Cross-cutting **phase responsibilities** (truth vs structure vs expression vs le
 
 **Governed seam:** Treat validation-layer separation as **review discipline**, not a second runtime policy engine. Canonical phase ownership is the pair **prose contract + registry** above. **Block B** runtime clarifications (NA non-owning shadow read of `response_delta`, gate split across multiple files, offline evaluator naming, NA numeric diagnostics vs gate scoring) are **first-class**; they should not be silently regressed. **Multiple modules under one canonical layer** does not imply duplicate ownership when the split is intentional (see `docs/validation_layer_separation_block_b_residue.md`).
 
-**Drift audit:** `tools/validation_layer_audit.py` runs heuristic checks (imports and a few wording patterns) to help catch ownership mistakes early. It is a maintainer aid; see `docs/validation_layer_audit.md` for how to run it and how to read “benign split” vs “likely drift.” Block B residue is **monitored** by the audit output, not ignored.
+**Drift audit:** `tools/validation_layer_audit.py` runs heuristic checks (imports and a few wording patterns) to help catch ownership mistakes early. It is a maintainer aid; see `docs/validation_layer_audit.md` for how to run it and how to read “benign split” vs “likely drift.” Block B residue is **monitored** by the audit output, not ignored. **Final-emission boundary drift (C2):** `tools/final_emission_ownership_audit.py` (advisory; optional `--strict`) complements that tool on a different seam.
 
 ## Standard seam presentation
 
@@ -88,6 +88,9 @@ Each governed seam below uses the same four rows (plus boundary notes where help
 
 ## Final Emission Gate Orchestration
 
+- **C2 (Objective C2, Block A):** Final-emission **repair ownership is transitional**. In-module policy layers (`tone_escalation`, `narrative_authority`, `anti_railroading`, `context_separation`, `answer_shape_primacy`, `scene_state_anchor`, participial repair, fast-fallback composition, and response-type **minimal** repairs) still **mutate player-visible meaning** for compliance; convergence target is **legality-preserving-only** repair at this boundary plus **packaging** (see `docs/final_emission_ownership_convergence.md`). **Semantic** fallback construction, template cash-out, and contract-shaped sentence synthesis belong **upstream** (planner / CTIR–API packaging / strict-social owner), not as silent gate behavior.
+- **C2 Block B (2026-04-22):** Response-type **answer** / **action_outcome** contract-shaped fallback text is owned by `game/upstream_response_repairs.py` (merged onto GM output as `upstream_prepared_emission` before final emission). Gate orchestration **reads** those fields; API turn support enables **strip-only** sanitizer mode with upstream-provided empty fallback. Remaining gate policy layers above are still drift-watch per Block A.
+- **C2 Block D2 (2026-04-22):** Shipped boundary doctrine is **regression-locked in tests** (`tests/test_final_emission_boundary_convergence.py`) plus an **advisory** scan (`tools/final_emission_ownership_audit.py`). Runtime ownership was not re-opened on this pass; further semantic repair churn remains upstream / drift-watch per the convergence doc.
 - Canonical owner module: `game/final_emission_gate.py`
 - Non-owner supporting modules: `game/final_emission_repairs.py`, `game/final_emission_meta.py`
 - Current state: `governance-aligned; drift-watch`
@@ -103,6 +106,7 @@ Each governed seam below uses the same four rows (plus boundary notes where help
 
 ## Final Emission Repairs
 
+- **C2 (Objective C2, Block A):** This module remains the **runtime repair orchestration home**, but several paths (`repair_fallback_behavior`, answer-completeness **reordering**, response-delta **reordering/compression**, spoken refinement **cash-out**, social-response-structure **density** edits) are **semantic mutation at the boundary** today. Convergence: **strip / validate / bounded visibility-safe substitutions only** at final emission; move **synthesis and meaning-order fixes** upstream per `docs/final_emission_ownership_convergence.md`. Gate wiring stays here until moves are deliberate and test-backed.
 - Canonical owner module: `game/final_emission_repairs.py`
 - Non-owner supporting modules: `game/final_emission_gate.py`, `game/final_emission_meta.py`
 - Current state: `governance-aligned; drift-watch`

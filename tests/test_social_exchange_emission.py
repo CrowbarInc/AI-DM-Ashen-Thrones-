@@ -29,6 +29,7 @@ from game.final_emission_gate import (
 )
 from game.interaction_context import rebuild_active_scene_entities, set_social_target
 from game.output_sanitizer import (
+    SANITIZER_BOUNDARY_LEGACY_SENTENCE_REWRITE,
     _already_has_terminal_punctuation,
     _cohere_sentences,
     _contains_template_fragment,
@@ -138,7 +139,9 @@ def test_passive_pressure_merged_text_survives_sanitize_and_gate():
         '"You\'re asking the wrong questions out loud," they murmur. "Walk with me if you want the next name."'
     )
     merged = gpt + "\n\n" + beat
-    san = sanitize_player_facing_output(merged, {})
+    san = sanitize_player_facing_output(
+        merged, {"sanitizer_boundary_mode": SANITIZER_BOUNDARY_LEGACY_SENTENCE_REWRITE}
+    )
     low = san.lower()
     assert "tattered man" in low
     assert "the truth is still buried" not in low
@@ -326,6 +329,7 @@ def test_validate_answer_completeness_flags_question_before_substance():
 
 
 def test_strict_social_emission_answer_completeness_repairs_frontloaded_direct_answer():
+    """C2 Block C: gate does not front-load answers; failures surface and may trigger replace."""
     contract = dict(_SAMPLE_ANSWER_COMPLETENESS_CONTRACT)
     out = apply_final_emission_gate(
         {
@@ -339,11 +343,11 @@ def test_strict_social_emission_answer_completeness_repairs_frontloaded_direct_a
         world={},
     )
     meta = read_final_emission_meta_dict(out) or {}
-    assert meta.get("answer_completeness_repaired") is True
-    assert meta.get("answer_completeness_repair_mode") == "frontload_direct_answer"
-    low = out["player_facing_text"].lower()
-    assert low.startswith("the east road")
-    assert "rain beads" in low
+    assert meta.get("answer_completeness_repaired") is False
+    assert meta.get("answer_completeness_failed") is True
+    assert meta.get("final_route") == "replaced"
+    sample = meta.get("rejection_reasons_sample") or []
+    assert "answer_completeness_unsatisfied_at_boundary_no_reorder" in sample
 
 
 def test_strict_social_emission_action_outcome_contract_repairs_exposition_only_candidate():

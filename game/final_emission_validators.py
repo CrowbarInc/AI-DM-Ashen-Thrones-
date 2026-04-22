@@ -14,7 +14,6 @@ from game.final_emission_text import (
     _AGENCY_SUBSTITUTE_PATTERNS,
     _ANSWER_DIRECT_PATTERNS,
     _ANSWER_FILLER_PATTERNS,
-    _capitalize_sentence_fragment,
     _normalize_terminal_punctuation,
     _normalize_text,
 )
@@ -120,115 +119,6 @@ def candidate_satisfies_action_outcome_contract(
     return True, []
 
 
-def _social_fallback_resolution(
-    *,
-    resolution: Dict[str, Any] | None,
-    active_interlocutor: str,
-    world: Dict[str, Any] | None,
-    scene_id: str,
-) -> Dict[str, Any] | None:
-    if isinstance(resolution, dict) and isinstance(resolution.get("social"), dict):
-        return resolution
-    if not active_interlocutor or not isinstance(world, dict):
-        return None
-    return {
-        "kind": "question",
-        "social": {
-            "npc_id": active_interlocutor,
-            "npc_name": _npc_display_name_for_emission(world, scene_id, active_interlocutor),
-            "social_intent_class": "social_exchange",
-        },
-    }
-
-
-def _to_second_person_action_clause(player_input: str, resolution: Dict[str, Any] | None) -> str:
-    raw = _normalize_text(player_input or str((resolution or {}).get("prompt") or "")).rstrip(".!?")
-    if not raw:
-        return "You act"
-    low = raw.lower()
-    if low.startswith("you "):
-        return _capitalize_sentence_fragment(raw)
-    if low.startswith("i am "):
-        return f"You are {raw[5:]}"
-    if low.startswith("i'm "):
-        return f"You are {raw[4:]}"
-    if low.startswith("i "):
-        return f"You {raw[2:]}"
-    if re.match(
-        r"^(?:go|move|travel|investigate|inspect|search|open|close|take|grab|climb|follow|approach|look|examine|head|ask|speak|draw|attack|strike|cast|use|push|pull|listen|wait)\b",
-        low,
-    ):
-        return f"You {raw}"
-    return "You act on that move"
-
-
-def _action_result_summary(resolution: Dict[str, Any] | None) -> str:
-    if not isinstance(resolution, dict):
-        return "the scene answers with an immediate change"
-    state_changes = resolution.get("state_changes") if isinstance(resolution.get("state_changes"), dict) else {}
-    check_request = resolution.get("check_request") if isinstance(resolution.get("check_request"), dict) else {}
-    kind = str(resolution.get("kind") or "").strip().lower()
-    if bool(resolution.get("resolved_transition")) or state_changes.get("scene_transition_occurred") or state_changes.get("arrived_at_scene"):
-        return "the scene shifts with that movement"
-    if state_changes.get("already_searched"):
-        if kind in {"investigate", "observe", "search"}:
-            return "the search turns up nothing new"
-        return "the attempt turns up nothing new"
-    if state_changes.get("clue_revealed") or resolution.get("clue_id") or resolution.get("discovered_clues"):
-        return "you turn up a concrete clue"
-    if state_changes.get("skill_check_failed"):
-        return "the attempt catches and fails to land cleanly"
-    if bool(resolution.get("requires_check")) or bool(check_request.get("requires_check")):
-        return "the attempt now calls for a check"
-    if resolution.get("success") is False:
-        return "the attempt meets resistance"
-    if resolution.get("success") is True:
-        return "the attempt produces an immediate result"
-    if kind in {"investigate", "observe"}:
-        return "you get an immediate read on what is there"
-    if kind in {"travel", "scene_transition"}:
-        return "your position in the scene changes"
-    return "the situation answers that move right away"
-
-
-def _minimal_answer_contract_repair(
-    *,
-    resolution: Dict[str, Any] | None,
-    active_interlocutor: str,
-    world: Dict[str, Any] | None,
-    scene_id: str,
-) -> str | None:
-    social_resolution = _social_fallback_resolution(
-        resolution=resolution,
-        active_interlocutor=active_interlocutor,
-        world=world,
-        scene_id=scene_id,
-    )
-    if isinstance(social_resolution, dict):
-        return minimal_social_emergency_fallback_line(social_resolution)
-    check_request = resolution.get("check_request") if isinstance(resolution, dict) and isinstance(resolution.get("check_request"), dict) else {}
-    prompt = _normalize_terminal_punctuation(str(check_request.get("player_prompt") or "").strip())
-    if prompt:
-        return prompt
-    adjudication = resolution.get("adjudication") if isinstance(resolution, dict) and isinstance(resolution.get("adjudication"), dict) else {}
-    answer_type = str(adjudication.get("answer_type") or "").strip().lower()
-    if answer_type == "needs_concrete_action":
-        return "You need a more concrete in-scene action or target before that can be answered."
-    if answer_type == "check_required" or bool((resolution or {}).get("requires_check")):
-        return "That cannot be answered cleanly until the required check is resolved."
-    return "No direct answer is established from the current state yet."
-
-
-def _minimal_action_outcome_contract_repair(
-    *,
-    player_input: str,
-    resolution: Dict[str, Any] | None,
-) -> str:
-    action_clause = _to_second_person_action_clause(player_input, resolution)
-    result_clause = _action_result_summary(resolution)
-    return _normalize_terminal_punctuation(f"{action_clause}, and {result_clause}")
-
-
 def _default_response_type_debug(contract: Dict[str, Any] | None, source: str | None) -> Dict[str, Any]:
     return {
         "response_type_required": str((contract or {}).get("required_response_type") or "") or None,
@@ -238,6 +128,7 @@ def _default_response_type_debug(contract: Dict[str, Any] | None, source: str | 
         "response_type_repair_kind": None,
         "response_type_rejection_reasons": [],
         "non_hostile_escalation_blocked": False,
+        "response_type_upstream_prepared_absent": False,
     }
 
 
@@ -251,6 +142,7 @@ def _merge_response_type_meta(meta: Dict[str, Any], debug: Dict[str, Any]) -> No
             "response_type_repair_kind": debug.get("response_type_repair_kind"),
             "response_type_rejection_reasons": list(debug.get("response_type_rejection_reasons") or []),
             "non_hostile_escalation_blocked": bool(debug.get("non_hostile_escalation_blocked")),
+            "response_type_upstream_prepared_absent": bool(debug.get("response_type_upstream_prepared_absent")),
         }
     )
 
@@ -264,6 +156,7 @@ def _response_type_decision_payload(debug: Dict[str, Any]) -> Dict[str, Any]:
         "response_type_repair_kind": debug.get("response_type_repair_kind"),
         "response_type_rejection_reasons": list(debug.get("response_type_rejection_reasons") or []),
         "non_hostile_escalation_blocked": bool(debug.get("non_hostile_escalation_blocked")),
+        "response_type_upstream_prepared_absent": bool(debug.get("response_type_upstream_prepared_absent")),
     }
 
 

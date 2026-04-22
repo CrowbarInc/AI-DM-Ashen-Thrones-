@@ -1,10 +1,8 @@
 """Regression suite for ``response_policy.response_delta`` (Block 2) in ``final_emission_gate``.
 
-Tests the implemented skip logic, ``validate_response_delta``, minimal repair modes, and
-``apply_final_emission_gate`` integration. Direct response-policy accessor and bundle
-materialization ownership lives in ``tests/test_response_policy_contracts.py``; this file
-keeps downstream gate application and regression coverage aligned to current code rather
-than prompt-context derivation.
+Tests skip logic, ``validate_response_delta``, and ``apply_final_emission_gate`` integration.
+Objective C2 Block C: response-delta **reordering/compression repair is disabled** at the boundary;
+this file asserts validate-only behavior and explicit ``*_at_boundary_no_reorder`` trace strings.
 """
 from __future__ import annotations
 
@@ -532,11 +530,8 @@ def test_response_delta_allows_late_delta_when_early_not_required():
 
 
 # =============================================================================
-# 5. Minimal repair tests
+# 5. Boundary validate-only (no reorder/compress repair)
 # =============================================================================
-# ``_repair_response_delta_minimal`` tries ``frontload_delta_sentence`` before
-# ``trim_echo_opening`` / ``prioritize_refinement_before_caveat`` / ``drop_duplicate_partial_prefix`` /
-# ``compress_echo_plus_delta``. Most two-sentence fixes surface as frontload in practice.
 
 
 def test_response_delta_frontloads_existing_delta_sentence():
@@ -547,15 +542,15 @@ def test_response_delta_frontloads_existing_delta_sentence():
         "Specifically the bonded warehouse sits past the customs ditch."
     )
     out, meta, extra = _apply_rd(raw, c)
-    assert meta["response_delta_repaired"] is True
-    assert meta["response_delta_repair_mode"] == "frontload_delta_sentence"
-    assert out.startswith("Specifically the bonded warehouse")
-    assert meta["response_delta_failed"] is False
-    assert extra == []
+    assert out == raw
+    assert meta["response_delta_repaired"] is False
+    assert meta["response_delta_repair_mode"] is None
+    assert meta["response_delta_failed"] is True
+    assert extra == ["response_delta_unsatisfied_at_boundary_no_reorder"]
 
 
 def test_response_delta_trim_echo_opening():
-    """Echo-first layout plus later substantive line: Block 2 resolves via ``frontload_delta_sentence`` first."""
+    """Echo-first layout still fails opening_semantic_restatement; boundary does not reorder."""
     c = _base_rd_contract(allowed_delta_kinds=["new_information"])
     c["previous_answer_snippet"] = "The watch keeps a lane open on the east road past the mill."
     c["delta_must_come_early"] = False
@@ -564,13 +559,14 @@ def test_response_delta_trim_echo_opening():
         "Twelve guards hold the bonded warehouse past the customs ditch tonight."
     )
     out, meta, extra = _apply_rd(raw, c)
-    assert meta["response_delta_repair_mode"] == "frontload_delta_sentence"
-    assert "Twelve guards hold" in out
-    assert out.lower().startswith("twelve guards")
+    assert out == raw
+    assert meta["response_delta_repaired"] is False
+    assert meta["response_delta_failed"] is True
+    assert extra == ["response_delta_unsatisfied_at_boundary_no_reorder"]
 
 
 def test_response_delta_prioritize_refinement_before_caveat():
-    """Caveat-first layout can violate early-delta; repair front-loads the refinement (step 3 mirrors this swap)."""
+    """Early-delta contract: boundary surfaces failure without sentence reordering."""
     c = _base_rd_contract(allowed_delta_kinds=["refinement"])
     c["previous_answer_snippet"] = "He works the quay near the riverfront market district."
     c["delta_must_come_early"] = True
@@ -580,8 +576,10 @@ def test_response_delta_prioritize_refinement_before_caveat():
         "Specifically he works the bonded warehouse by the south crane."
     )
     out, meta, extra = _apply_rd(raw, c)
-    assert meta["response_delta_repair_mode"] == "frontload_delta_sentence"
-    assert out.lower().index("specifically") < out.lower().index("do not know")
+    assert out == raw
+    assert meta["response_delta_repaired"] is False
+    assert meta["response_delta_failed"] is True
+    assert extra == ["response_delta_unsatisfied_at_boundary_no_reorder"]
 
 
 def test_response_delta_drop_duplicate_partial_prefix():
@@ -593,8 +591,10 @@ def test_response_delta_drop_duplicate_partial_prefix():
         "but the quartermaster calls him Brick."
     )
     out, meta, extra = _apply_rd(raw, c)
-    assert meta["response_delta_repair_mode"] == "frontload_delta_sentence"
-    assert "Brick" in out
+    assert out == raw
+    assert meta["response_delta_repaired"] is False
+    assert meta["response_delta_failed"] is True
+    assert extra == ["response_delta_unsatisfied_at_boundary_no_reorder"]
 
 
 def test_response_delta_compress_echo_plus_delta():
@@ -605,8 +605,10 @@ def test_response_delta_compress_echo_plus_delta():
         "Specifically the bonded warehouse by the south crane handles the cargo."
     )
     out, meta, extra = _apply_rd(raw, c)
-    assert meta["response_delta_repair_mode"] == "frontload_delta_sentence"
-    assert "bonded warehouse" in out.lower()
+    assert out == raw
+    assert meta["response_delta_repaired"] is False
+    assert meta["response_delta_failed"] is True
+    assert extra == ["response_delta_unsatisfied_at_boundary_no_reorder"]
 
 
 def test_response_delta_no_fabricated_repair_when_no_valid_later_delta():
@@ -623,7 +625,7 @@ def test_response_delta_no_fabricated_repair_when_no_valid_later_delta():
     assert out == raw
     assert meta["response_delta_repaired"] is False
     assert meta["response_delta_failed"] is True
-    assert extra == ["response_delta_unsatisfied_after_repair"]
+    assert extra == ["response_delta_unsatisfied_at_boundary_no_reorder"]
 
 
 # =============================================================================
@@ -656,7 +658,7 @@ def test_response_delta_runs_after_answer_completeness_non_social():
 
 
 def test_ac_repair_precedence_then_delta_on_repaired_text():
-    """AC minimal repair runs first; response-delta validates the post-AC string."""
+    """AC failure skips response-delta; boundary does not reorder for answer-first."""
     ac_contract = {
         "enabled": True,
         "answer_required": True,
@@ -685,28 +687,27 @@ def test_ac_repair_precedence_then_delta_on_repaired_text():
         world={},
     )
     meta = read_final_emission_meta_dict(out) or {}
-    assert meta.get("answer_completeness_repaired") is True
-    assert meta.get("response_delta_checked") is True
-    assert meta.get("response_delta_failed") is False
+    assert meta.get("answer_completeness_repaired") is False
+    assert meta.get("answer_completeness_failed") is True
+    assert meta.get("response_delta_skip_reason") == "answer_completeness_failed"
 
 
 def test_final_emitted_source_reflects_response_delta_repair_mode():
     c = _base_rd_contract(allowed_delta_kinds=["refinement"])
+    c["delta_must_come_early"] = True
     c["previous_answer_snippet"] = "The watch keeps a lane open on the east road past the mill."
-    raw = (
-        "The watch keeps a lane open on the east road past the mill. "
-        "Specifically the bonded warehouse sits past the customs ditch."
-    )
+    emitted = "Specifically the bonded warehouse sits just past the customs ditch on that lane."
     out = apply_final_emission_gate(
-        {"player_facing_text": raw, "tags": [], "response_policy": {"response_delta": c}},
+        {"player_facing_text": emitted, "tags": [], "response_policy": {"response_delta": c}},
         resolution={"kind": "adjudication_query", "prompt": "Same road detail?"},
         session=None,
         scene_id="frontier_gate",
         world={},
     )
     meta = read_final_emission_meta_dict(out) or {}
-    assert meta.get("response_delta_repaired") is True
-    assert meta.get("final_emitted_source") == meta.get("response_delta_repair_mode")
+    assert meta.get("response_delta_repaired") is False
+    assert meta.get("response_delta_failed") is False
+    assert meta.get("final_emitted_source") == "generated_candidate"
 
 
 def test_response_delta_unrepaired_failure_triggers_gate_replace_reason():
@@ -729,7 +730,7 @@ def test_response_delta_unrepaired_failure_triggers_gate_replace_reason():
     meta = read_final_emission_meta_dict(out) or {}
     assert meta.get("final_route") == "replaced"
     sample = meta.get("rejection_reasons_sample") or []
-    assert "response_delta_unsatisfied_after_repair" in sample
+    assert "response_delta_unsatisfied_at_boundary_no_reorder" in sample
 
 
 def test_response_delta_strict_social_owned_path_adds_no_extra_reason():
@@ -754,8 +755,9 @@ def test_response_delta_repair_preserves_npc_voice_trim():
         '"Twelve guards tonight," she mutters, "past the bonded warehouse."'
     )
     out, meta, extra = _apply_rd(raw, c)
-    if meta.get("response_delta_repaired"):
-        assert '"' in out or "mutters" in out.lower()
+    assert meta.get("response_delta_repaired") is False
+    assert out == raw
+    assert extra == ["response_delta_unsatisfied_at_boundary_no_reorder"]
 
 
 def test_response_delta_repair_preserves_pronoun_referent_order():
@@ -766,9 +768,10 @@ def test_response_delta_repair_preserves_pronoun_referent_order():
         "Specifically he works the bonded warehouse by the south crane."
     )
     out, meta, extra = _apply_rd(raw, c)
-    if meta.get("response_delta_repaired"):
-        assert "he" in out.lower()
-        assert "specifically" in out.lower()
+    assert meta.get("response_delta_repaired") is False
+    assert out == raw
+    assert "he" in out.lower()
+    assert "specifically" in out.lower()
 
 
 def test_response_delta_repair_does_not_invent_gated_facts():
@@ -779,6 +782,7 @@ def test_response_delta_repair_does_not_invent_gated_facts():
         "Specifically the bonded warehouse sits past the customs ditch."
     )
     out, meta, extra = _apply_rd(raw, c)
-    if meta.get("response_delta_repaired"):
-        for token in ("secret", "hidden", "underground"):
-            assert token not in out.lower()
+    assert meta.get("response_delta_repaired") is False
+    assert out == raw
+    for token in ("secret", "hidden", "underground"):
+        assert token not in out.lower()

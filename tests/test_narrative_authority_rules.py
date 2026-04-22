@@ -185,7 +185,7 @@ def test_validate_narrative_authority_already_valid_examples():
 
 
 def test_apply_na_layer_repairs_unresolved_outcome_with_uncertainty_replace():
-    """Non-mechanical resolution: replace settled-outcome sentence (narrow repair)."""
+    """C2: NA layer validates only; unresolved outcome assertions surface as boundary failure."""
     res = {"kind": "observe", "prompt": "I look at the lock."}
     na = _na_contract(resolution=res)
     gm = {"player_facing_text": "x", "response_policy": {"narrative_authority": na}}
@@ -200,13 +200,11 @@ def test_apply_na_layer_repairs_unresolved_outcome_with_uncertainty_replace():
         scene_id="s",
     )
     assert meta["narrative_authority_checked"] is True
-    assert meta["narrative_authority_failed"] is False
-    assert meta["narrative_authority_repaired"] is True
-    assert meta["narrative_authority_repair_mode"] == "invented_outcome_uncertainty_replace"
-    assert "lock clicks open" not in text.lower()
-    assert "not settled yet" in text.lower()
-    assert validate_narrative_authority(text, na, resolution=res, player_text="I look at the lock.")["passed"]
-    assert extra == []
+    assert meta["narrative_authority_failed"] is True
+    assert meta["narrative_authority_repaired"] is False
+    assert meta.get("narrative_authority_boundary_semantic_repair_disabled") is True
+    assert text == "The lock clicks open."
+    assert "narrative_authority_unsatisfied_at_boundary_no_rewrite" in extra
 
 
 def test_apply_na_layer_lockpick_roll_append_may_fail_revalidation():
@@ -229,7 +227,7 @@ def test_apply_na_layer_lockpick_roll_append_may_fail_revalidation():
     assert meta["narrative_authority_repaired"] is False
     assert meta["narrative_authority_assertion_flags"]["invented_outcome"] is True
     assert text == "The lock clicks open."
-    assert "narrative_authority_unsatisfied_after_repair" in extra
+    assert "narrative_authority_unsatisfied_at_boundary_no_rewrite" in extra
 
 
 def test_apply_na_layer_repairs_invented_hidden_fact():
@@ -246,11 +244,10 @@ def test_apply_na_layer_repairs_invented_hidden_fact():
         session={},
         scene_id="s",
     )
-    assert meta["narrative_authority_repair_mode"] == "invented_hidden_fact_downgrade"
-    assert meta["narrative_authority_repaired"] is True
-    assert "planted" not in text.lower()
-    assert "pin the hidden cause" in text.lower() or "can't pin" in text.lower()
-    assert extra == []
+    assert meta["narrative_authority_repaired"] is False
+    assert meta["narrative_authority_failed"] is True
+    assert text == "The ledger was planted."
+    assert "narrative_authority_unsatisfied_at_boundary_no_rewrite" in extra
 
 
 def test_apply_na_layer_repairs_invented_intent_with_observable_cues():
@@ -267,33 +264,18 @@ def test_apply_na_layer_repairs_invented_intent_with_observable_cues():
         session={},
         scene_id="s",
     )
-    assert meta["narrative_authority_repair_mode"] == "invented_intent_observable_cues"
-    assert meta["narrative_authority_repaired"] is True
-    assert "plans to stall" not in text.lower()
-    assert "posture" in text.lower() or "wording" in text.lower()
-    assert extra == []
+    assert meta["narrative_authority_repaired"] is False
+    assert meta["narrative_authority_failed"] is True
+    assert text == "He plans to stall you until help arrives."
+    assert "narrative_authority_unsatisfied_at_boundary_no_rewrite" in extra
 
 
 def test_strict_vs_non_strict_post_repair_failure_extra_reason():
+    """C2: no post-repair revalidation loop; non-strict path emits boundary unsatisfied reason only."""
     monkeypatch = pytest.MonkeyPatch()
     try:
-        calls: list[int] = []
 
         def fake_validate(_text, _contract, **kwargs):
-            calls.append(1)
-            if len(calls) == 1:
-                return {
-                    "checked": True,
-                    "passed": False,
-                    "failure_reasons": ["unresolved_action"],
-                    "matched_deferral_mode": None,
-                    "assertion_flags": {
-                        "invented_outcome": True,
-                        "invented_hidden_fact": False,
-                        "invented_intent": False,
-                        "overcertain_unresolved_action": True,
-                    },
-                }
             return {
                 "checked": True,
                 "passed": False,
@@ -307,11 +289,7 @@ def test_strict_vs_non_strict_post_repair_failure_extra_reason():
                 },
             }
 
-        def fake_repair(*_a, **_k):
-            return "Still unacceptable.", "forced_repair"
-
         monkeypatch.setattr(feg, "validate_narrative_authority", fake_validate)
-        monkeypatch.setattr(feg, "_repair_narrative_authority_narrow", fake_repair)
 
         res = {"kind": "observe", "prompt": "I try the door."}
         na = _na_contract(resolution=res)
@@ -330,7 +308,7 @@ def test_strict_vs_non_strict_post_repair_failure_extra_reason():
         )
         assert t_strict == original
         assert m_strict["narrative_authority_failed"] is True
-        assert "narrative_authority_unsatisfied_after_repair" not in e_strict
+        assert e_strict == []
 
         t_loose, m_loose, e_loose = feg._apply_narrative_authority_layer(
             original,
@@ -344,7 +322,7 @@ def test_strict_vs_non_strict_post_repair_failure_extra_reason():
         )
         assert t_loose == original
         assert m_loose["narrative_authority_failed"] is True
-        assert "narrative_authority_unsatisfied_after_repair" in e_loose
+        assert "narrative_authority_unsatisfied_at_boundary_no_rewrite" in e_loose
     finally:
         monkeypatch.undo()
 
@@ -443,9 +421,9 @@ def test_na_repair_preserves_answer_first_clause():
         session={},
         scene_id="s",
     )
-    assert meta["narrative_authority_repaired"] is True
-    assert "east toward the old mill" in text.lower()
-    assert "planted" not in text.lower()
+    assert meta["narrative_authority_repaired"] is False
+    assert meta["narrative_authority_failed"] is True
+    assert text == raw
 
 
 def test_na_after_response_delta_preserves_net_new_clause():
@@ -489,9 +467,9 @@ def test_na_after_response_delta_preserves_net_new_clause():
         session={},
         scene_id="s",
     )
-    assert meta["narrative_authority_repaired"] is True
-    assert "side entrance" in text_na.lower()
-    assert "planted" not in text_na.lower()
+    assert meta["narrative_authority_repaired"] is False
+    assert meta["narrative_authority_failed"] is True
+    assert "planted" in text_na.lower()
 
 
 def test_na_repair_then_scene_anchor_still_matches_location():

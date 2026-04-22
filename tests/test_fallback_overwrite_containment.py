@@ -73,7 +73,7 @@ def test_upstream_fast_fallback_in_finalize_overwrite_contained(monkeypatch: pyt
     assert "INJECT_BAD_FINALIZE_SEGMENT" not in (out.get("player_facing_text") or "")
     assert "Rain drums" in (out.get("player_facing_text") or "")
     prov = (out.get("metadata") or {}).get("fallback_provenance") or {}
-    assert prov.get("overwrite_containment_applied") == "in_gate_finalize"
+    assert prov.get("gate_exit_vs_selector_match") is True
     trace = (read_final_emission_meta_dict(out) or {}).get("fallback_provenance_trace") or {}
     assert trace.get("gate_exit_vs_selector_match") is True
 

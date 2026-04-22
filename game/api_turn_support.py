@@ -16,6 +16,10 @@ from game.output_sanitizer import (
     sanitize_player_facing_output,
     strip_serialized_payload_fragments,
 )
+from game.upstream_response_repairs import (
+    SANITIZER_BOUNDARY_STRIP_ONLY,
+    merge_upstream_prepared_emission_into_gm_output,
+)
 from game.final_emission_gate import apply_final_emission_gate
 from game.narration_state_consistency import reconcile_final_text_with_structured_state
 from game.social_exchange_emission import strict_social_emission_will_apply
@@ -212,6 +216,13 @@ def _finalize_player_facing_for_turn(
             if isinstance(extracted, str) and extracted.strip()
             else strip_serialized_payload_fragments(raw_text)
         )
+    merge_upstream_prepared_emission_into_gm_output(
+        gm_out,
+        resolution=resolution if isinstance(resolution, dict) else None,
+        session=session,
+        world=world,
+        scene_id=scene_id,
+    )
     san_ctx_base = {
         "resolution": resolution if isinstance(resolution, dict) else None,
         "include_resolution": bool(include_resolution_in_sanitizer),
@@ -219,6 +230,8 @@ def _finalize_player_facing_for_turn(
         "scene_id": scene_id,
         "world": world,
         "tags": tag_list,
+        "sanitizer_boundary_mode": SANITIZER_BOUNDARY_STRIP_ONLY,
+        "upstream_prepared_emission": gm_out.get("upstream_prepared_emission"),
     }
     if strict_social_turn:
         gm_out["player_facing_text"] = raw_text
@@ -691,6 +704,13 @@ def _build_turn_response_payload(
                 scene_id,
             )
 
+            merge_upstream_prepared_emission_into_gm_output(
+                gm,
+                resolution=resolution if isinstance(resolution, dict) else None,
+                session=state_session,
+                world=state_world,
+                scene_id=scene_id,
+            )
             san_ctx_base = {
                 "resolution": resolution if isinstance(resolution, dict) else None,
                 "include_resolution": bool(include_resolution),
@@ -698,6 +718,8 @@ def _build_turn_response_payload(
                 "scene_id": scene_id,
                 "world": state_world,
                 "tags": tag_list,
+                "sanitizer_boundary_mode": SANITIZER_BOUNDARY_STRIP_ONLY,
+                "upstream_prepared_emission": gm.get("upstream_prepared_emission"),
             }
 
             if strict_social_turn:

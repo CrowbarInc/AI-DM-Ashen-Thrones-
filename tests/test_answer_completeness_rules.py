@@ -12,14 +12,12 @@ import importlib
 
 import pytest
 
-from game.defaults import default_session, default_world
 from game.final_emission_gate import (
     _apply_answer_completeness_layer,
     apply_final_emission_gate,
-    apply_spoken_state_refinement_cash_out,
     validate_answer_completeness,
 )
-from game.narration_visibility import validate_player_facing_referential_clarity
+from game.upstream_response_repairs import apply_spoken_state_refinement_cash_out
 from game.social import determine_social_escalation_outcome
 from tests.test_social_escalation import _session_with_pressure
 
@@ -438,7 +436,7 @@ def test_gate_neutral_narration_not_mutated_when_no_player_question_contract():
 
 
 def test_frontload_repair_keeps_referential_clarity_explicit_npc_in_opening():
-    """Substantive sentence with explicit entity should lead after repair."""
+    """C2 Block C: answer-first violations are not repaired at the boundary (trace + replace)."""
     contract = {
         "enabled": True,
         "answer_required": True,
@@ -470,22 +468,15 @@ def test_frontload_repair_keeps_referential_clarity_explicit_npc_in_opening():
         world={},
     )
     meta = read_final_emission_meta_dict(out) or {}
-    assert meta.get("answer_completeness_repaired") is True
-    low = out["player_facing_text"].lower()
-    east_at = low.find("east")
-    breath_at = low.find("holds its breath")
-    assert east_at != -1 and (breath_at == -1 or east_at < breath_at)
-    assert meta.get("answer_completeness_expected_voice") == "npc"
-    session = default_session()
-    world = default_world()
-    scene = {"scene": {"id": "frontier_gate", "location": "gate", "visible_facts": []}}
-    ref = validate_player_facing_referential_clarity(
-        out["player_facing_text"], session=session, scene=scene, world=world
-    )
-    assert ref.get("ok") is not False
+    assert meta.get("answer_completeness_repaired") is False
+    assert meta.get("answer_completeness_failed") is True
+    assert meta.get("final_route") == "replaced"
+    sample = meta.get("rejection_reasons_sample") or []
+    assert "answer_completeness_unsatisfied_at_boundary_no_reorder" in sample
 
 
 def test_mixed_player_turn_question_plus_action_still_frontloads_answer():
+    """C2 Block C: ambient-before-answer is not reordered at final emission."""
     contract = {
         "enabled": True,
         "answer_required": True,
@@ -515,15 +506,15 @@ def test_mixed_player_turn_question_plus_action_still_frontloads_answer():
         scene_id="frontier_gate",
         world={},
     )
-    low = out["player_facing_text"].lower()
-    run_at = low.find("the runners used")
-    fog_at = low.find("fog thickens")
-    assert run_at != -1 and fog_at != -1 and run_at < fog_at
     meta = read_final_emission_meta_dict(out) or {}
-    assert meta.get("answer_completeness_repaired") is True
+    assert meta.get("answer_completeness_repaired") is False
+    assert meta.get("answer_completeness_failed") is True
+    assert meta.get("final_route") == "replaced"
+    assert "answer_completeness_unsatisfied_at_boundary_no_reorder" in (meta.get("rejection_reasons_sample") or [])
 
 
 def test_authoritative_refusal_stays_substantive_after_repair():
+    """C2 Block C: NPC refusal with a beat before quoted speech is not front-loaded at the boundary."""
     contract = {
         "enabled": True,
         "answer_required": True,
@@ -554,6 +545,10 @@ def test_authoritative_refusal_stays_substantive_after_repair():
         '"I can\'t say here - the captain has not released that thread. '
         'Check with the ward sergeant at the barracks door."'
     )
+    v = validate_answer_completeness(raw, contract, resolution=resolution)
+    assert v.get("passed") is False
+    assert "direct_answer_not_frontloaded" in (v.get("failure_reasons") or [])
+
     out = apply_final_emission_gate(
         {"player_facing_text": raw, "tags": [], "response_policy": {"answer_completeness": contract}},
         resolution=resolution,
@@ -561,13 +556,14 @@ def test_authoritative_refusal_stays_substantive_after_repair():
         scene_id="frontier_gate",
         world={},
     )
-    opening = out["player_facing_text"].split(". ")[0]
-    assert "?" not in opening[:40]
-    low = out["player_facing_text"].lower()
-    assert ("won't" in low or "can't" in low or "not" in low) and ("captain" in low or "sergeant" in low or "barracks" in low)
+    meta = read_final_emission_meta_dict(out) or {}
+    assert meta.get("answer_completeness_repaired") is False
+    assert meta.get("final_route") == "replaced"
+    assert "answer_completeness_unsatisfied_at_boundary_no_reorder" in (meta.get("rejection_reasons_sample") or [])
 
 
 def test_transcript_style_dodge_opening_repaired_with_meta_flags():
+    """C2 Block C: dodge openings fail AC without boundary reorder repair."""
     contract = {
         "enabled": True,
         "answer_required": True,
@@ -596,14 +592,14 @@ def test_transcript_style_dodge_opening_repaired_with_meta_flags():
     )
     meta = read_final_emission_meta_dict(out) or {}
     assert meta.get("answer_completeness_checked") is True
-    assert meta.get("answer_completeness_repaired") is True
-    first = out["player_facing_text"].split(". ")[0].lower()
-    assert "east" in first or "road" in first or "gate" in first
-    assert not first.strip().startswith("why do you ask")
+    assert meta.get("answer_completeness_repaired") is False
+    assert meta.get("answer_completeness_failed") is True
+    assert meta.get("final_route") == "replaced"
+    assert "answer_completeness_unsatisfied_at_boundary_no_reorder" in (meta.get("rejection_reasons_sample") or [])
 
 
 def test_strict_social_path_preserves_npc_voice_after_answer_completeness_repair():
-    """Strict-social post-process layer: frontload repair keeps NPC dialogue first (expected_voice npc)."""
+    """Strict-social path: AC validates only; no boundary reorder (extras suppressed on strict path)."""
     contract = {
         "enabled": True,
         "answer_required": True,
@@ -635,11 +631,12 @@ def test_strict_social_path_preserves_npc_voice_after_answer_completeness_repair
         response_type_debug={"response_type_candidate_ok": True},
         strict_social_path=True,
     )
-    assert not extra
-    assert meta.get("answer_completeness_repaired") is True
+    assert extra == []
+    assert meta.get("answer_completeness_repaired") is False
+    assert meta.get("answer_completeness_failed") is True
     assert meta.get("answer_completeness_expected_voice") == "npc"
+    assert repaired == text
     low = repaired.lower()
-    assert low.startswith("tavern runner says") or '"' in repaired
     assert "east" in low
 
 

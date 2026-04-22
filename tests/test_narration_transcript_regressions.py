@@ -756,7 +756,7 @@ def test_gate_integration_anti_reset_no_opener_on_forced_non_social_replace(monk
 
 @pytest.mark.emission
 def test_gate_integration_bounded_partial_thin_line_repaired_full_path(monkeypatch: pytest.MonkeyPatch) -> None:
-    """Thin identity line fails substance checks; repair yields known edge + uncertainty + next lead; not global fallback."""
+    """C2: thin adjudication line fails stacked contracts; gate replaces with stock, not bounded-partial synthesis."""
     scenario = NarrationTranscriptScenario(
         id="obj20_bounded_partial_unresolved_buyer_question",
         player_text="Who was the buyer, exactly?",
@@ -768,26 +768,22 @@ def test_gate_integration_bounded_partial_thin_line_repaired_full_path(monkeypat
         scene_id="frontier_gate",
         patch_visibility_enforcement=False,
         assertions=NarrationTranscriptAssertions(
-            required_substrings=("hearsay", "sergeant"),
+            required_substrings=("for a breath", "voices shift"),
             forbidden_substrings=("no name comes clear from what shows.",),
             meta_exact={
-                "fallback_behavior_repaired": True,
-                "fallback_behavior_failed": False,
-                "final_emitted_source": "bounded_partial",
-            },
-            meta_value_fragments={
-                "fallback_behavior_repair_mode": "bounded_partial",
+                "fallback_behavior_repaired": False,
+                "final_route": "replaced",
             },
         ),
     )
     out = _run_object20_bounded_gate_case(scenario, monkeypatch, with_answer_contract=True)
     meta = read_final_emission_meta_dict(out) if isinstance(read_final_emission_meta_dict(out), dict) else {}
-    assert meta.get("final_emitted_source") != "global_scene_fallback"
+    assert meta.get("final_emitted_source") != "bounded_partial"
 
 
 @pytest.mark.emission
 def test_gate_integration_bounded_partial_safety_no_invented_culprit_or_signer(monkeypatch: pytest.MonkeyPatch) -> None:
-    """Synthesis from thin partial must not assert a specific unsupported identity or guilt."""
+    """C2: no boundary synthesis of culprits; thin output is replaced without inventing signers."""
     scenario = NarrationTranscriptScenario(
         id="obj20_bounded_partial_safety_who_signed",
         player_text="Who signed the order?",
@@ -799,13 +795,14 @@ def test_gate_integration_bounded_partial_safety_no_invented_culprit_or_signer(m
         scene_id="frontier_gate",
         patch_visibility_enforcement=False,
         assertions=NarrationTranscriptAssertions(
+            required_substrings=("for a breath",),
             forbidden_substrings=(
                 "verrick",
                 "culprit was",
                 "signed by",
                 "the order was signed by",
             ),
-            meta_exact={"fallback_behavior_repaired": True, "fallback_behavior_failed": False},
+            meta_exact={"fallback_behavior_repaired": False, "final_route": "replaced"},
         ),
     )
     _ = _run_object20_bounded_gate_case(scenario, monkeypatch, with_answer_contract=False)
@@ -1431,14 +1428,12 @@ def _scenario_mixed_obj20_bounded_partial() -> NarrationTranscriptScenario:
         scene_id="frontier_gate",
         patch_visibility_enforcement=False,
         assertions=NarrationTranscriptAssertions(
-            required_substrings=("hearsay", "sergeant"),
+            required_substrings=("for a breath", "voices shift"),
             forbidden_substrings=("no name comes clear from what shows.",),
             meta_exact={
-                "fallback_behavior_repaired": True,
-                "fallback_behavior_failed": False,
-                "final_emitted_source": "bounded_partial",
+                "fallback_behavior_repaired": False,
+                "final_route": "replaced",
             },
-            meta_value_fragments={"fallback_behavior_repair_mode": "bounded_partial"},
         ),
     )
 
@@ -1455,13 +1450,14 @@ def _scenario_mixed_obj20_safety() -> NarrationTranscriptScenario:
         scene_id="frontier_gate",
         patch_visibility_enforcement=False,
         assertions=NarrationTranscriptAssertions(
+            required_substrings=("for a breath",),
             forbidden_substrings=(
                 "verrick",
                 "culprit was",
                 "signed by",
                 "the order was signed by",
             ),
-            meta_exact={"fallback_behavior_repaired": True, "fallback_behavior_failed": False},
+            meta_exact={"fallback_behavior_repaired": False, "final_route": "replaced"},
         ),
     )
 
@@ -1541,7 +1537,7 @@ def test_transcript_mixed_regression_table(
     elif runner_kind == "gate_bounded_partial_obj20":
         out = _run_object20_bounded_gate_case(scenario, monkeypatch, with_answer_contract=True)
         meta = read_final_emission_meta_dict(out) if isinstance(read_final_emission_meta_dict(out), dict) else {}
-        assert meta.get("final_emitted_source") != "global_scene_fallback"
+        assert meta.get("final_emitted_source") != "bounded_partial"
     elif runner_kind == "gate_safety_obj20":
         _ = _run_object20_bounded_gate_case(scenario, monkeypatch, with_answer_contract=False)
     elif runner_kind == "pipeline_obj21_followup":

@@ -142,6 +142,7 @@ def test_chat_nonretryable_quota_fails_fast_and_emits_latency_fields(tmp_path, m
 
 
 def test_chat_begin_nonretryable_quota_repairs_malformed_opening_fast_fallback(tmp_path, monkeypatch):
+    """C2: fast-fallback composition is validate-only; malformed upstream join may ship with trace, not boundary rewrite."""
     _seed_shared_world(tmp_path, monkeypatch)
     _seed_opening_fast_fallback_scene()
 
@@ -177,14 +178,12 @@ def test_chat_begin_nonretryable_quota_repairs_malformed_opening_fast_fallback(t
 
     text = str(gm.get("player_facing_text") or "")
     low = text.lower()
-    assert "emergent lord aldric several" not in low
-    assert "holds; beside it" not in low
-    assert any(token in low for token in ("checkpoint", "gate", "patrol", "rain"))
-    assert len([s for s in re.split(r"(?<=[.!?])\s+", text) if s.strip()]) <= 2
+    assert any(token in low for token in ("checkpoint", "gate", "patrol", "rain", "patrons"))
+    assert len([s for s in re.split(r"(?<=[.!?])\s+", text) if s.strip()]) <= 3
 
     meta = _extract_final_emission_meta(body) or {}
-    assert meta.get("fast_fallback_neutral_composition_repaired") is True
-    assert meta.get("final_emitted_source") == "opening_scene_template"
+    assert meta.get("fast_fallback_neutral_composition_malformed_detected") is True
+    assert meta.get("fast_fallback_neutral_composition_repaired") is False
 
     traces = body.get("debug_traces") or []
     assert traces

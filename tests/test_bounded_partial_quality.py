@@ -1,8 +1,8 @@
-"""Downstream bounded-partial quality coverage for unresolved fallback outputs.
+"""Bounded-partial **validator** coverage under unresolved-question pressure.
 
-Direct ``game.final_emission_repairs`` helper semantics live in
-``tests/test_final_emission_repairs.py``. This file checks quality and validator-facing
-acceptance of already-owned repair behavior under unresolved-question pressure.
+Objective C2 Block C: ``repair_fallback_behavior`` is strip-only at the boundary; synthesis
+that made thin lines pass ``validate_fallback_behavior`` lives upstream. These tests assert
+validator signals and strip-only non-authorship where still applicable.
 """
 from __future__ import annotations
 
@@ -61,24 +61,10 @@ def test_unresolved_identity_quality_accepts_unknown_and_next_lead_consumer_shap
     assert v0.get("passed") is False
     repaired, meta, _ = repair_fallback_behavior(raw, ctr, v0, resolution=resolution)
     v1 = validate_fallback_behavior(repaired, ctr, resolution=resolution)
-    assert v1.get("passed") is True
-    low = repaired.lower()
-    assert "hearsay" in low or "unclear" in low or "rumor" in low
-    assert any(
-        x in low
-        for x in (
-            "ask",
-            "check",
-            "clerk",
-            "sergeant",
-            "roster",
-            "watch",
-            "gate",
-            "harbor",
-            "quartermaster",
-        )
-    )
-    assert meta.get("fallback_behavior_partial_used") is True
+    assert repaired == raw
+    assert v1.get("passed") is False
+    assert meta.get("fallback_behavior_partial_used") is False
+    assert meta.get("fallback_behavior_boundary_semantic_synthesis_skipped") is True
 
 
 def test_thin_generic_identity_line_triggers_substance_failure() -> None:
@@ -89,17 +75,19 @@ def test_thin_generic_identity_line_triggers_substance_failure() -> None:
 
 
 def test_synthesis_from_thin_line_does_not_introduce_new_named_culprits() -> None:
-    """Bounded-partial repair from empty/thin output must not assert a specific person's guilt."""
+    """Strip-only repair must not mint new named culprits."""
     ctr = _contract()
     resolution = {"kind": "adjudication_query", "prompt": "Who signed the order?"}
     raw = "No name comes clear from what shows."
     v0 = validate_fallback_behavior(raw, ctr, resolution=resolution)
     repaired, _, _ = repair_fallback_behavior(raw, ctr, v0, resolution=resolution)
     low = repaired.lower()
+    assert repaired == raw
     assert "verrick" not in low
     assert "culprit was" not in low
 
 
+@pytest.mark.skip(reason="C2 Block C: NPC-vocative bounded-partial synthesis moved upstream from final emission")
 def test_recovered_vocative_uses_npc_specific_known_edge_not_generic_crowd_noise() -> None:
     ctr = _contract()
     resolution = {
