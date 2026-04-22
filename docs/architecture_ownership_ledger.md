@@ -10,6 +10,14 @@ They establish the cleanup target: future moves, trims, and test/doc realignment
 
 If current code shape still contradicts a declaration, treat that contradiction as cleanup work to reduce, not as a reason to blur the boundary again.
 
+## Validation layer separation (phase contract)
+
+Cross-cutting **phase responsibilities** (truth vs structure vs expression vs legality vs offline scoring) are declared in `docs/validation_layer_separation.md`. The machine-readable, import-light registry lives in `game/validation_layer_contracts.py` (stable layer ids, governed domains, pure predicates). It **does not** replace this ledger’s **module** owners; it constrains how new concerns should map onto existing owners without inventing a parallel policy stack.
+
+**Governed seam:** Treat validation-layer separation as **review discipline**, not a second runtime policy engine. Canonical phase ownership is the pair **prose contract + registry** above. **Block B** runtime clarifications (NA non-owning shadow read of `response_delta`, gate split across multiple files, offline evaluator naming, NA numeric diagnostics vs gate scoring) are **first-class**; they should not be silently regressed. **Multiple modules under one canonical layer** does not imply duplicate ownership when the split is intentional (see `docs/validation_layer_separation_block_b_residue.md`).
+
+**Drift audit:** `tools/validation_layer_audit.py` runs heuristic checks (imports and a few wording patterns) to help catch ownership mistakes early. It is a maintainer aid; see `docs/validation_layer_audit.md` for how to run it and how to read “benign split” vs “likely drift.” Block B residue is **monitored** by the audit output, not ignored.
+
 ## Standard seam presentation
 
 Each governed seam below uses the same four rows (plus boundary notes where helpful):

@@ -5,6 +5,10 @@ strict-social coordination (via :mod:`game.social_exchange_emission`), shipped c
 (tone, narrative authority, anti-railroading, context separation, scene anchor, speaker
 selection), logging, and metadata merges.
 
+**Legality vs scoring:** pass/fail here is driven by deterministic reason codes and bounded repairs.
+Numeric ``*_score`` / overlap metrics inside NA or other traces are **telemetry or diagnostics** for
+read-side consumers—not evaluator-style quality enforcement and not a second legality system.
+
 **Not the canonical owner for:** deterministic validators (:mod:`game.final_emission_validators`),
 repair/layer wiring (:mod:`game.final_emission_repairs`), shared text/normalization patterns
 (:mod:`game.final_emission_text`), or ``response_type`` contract resolution

@@ -4,6 +4,8 @@ This document is the maintainer-facing contract for **runtime state domains**: w
 
 The executable registry and guard helpers live in `game/state_authority.py`.
 
+Validation **phase** ownership (truth vs structure vs expression vs legality vs offline scoring) is a separate, complementary contract: `docs/validation_layer_separation.md` with the leaf registry `game/validation_layer_contracts.py`. State-domain guards here govern **which runtime stores may mutate**; the validation-layer doc governs **which pipeline phase may own checks, repairs, and scores** without collapsing those concerns.
+
 ## Domain ids (canonical)
 
 | Domain id | Meaning |

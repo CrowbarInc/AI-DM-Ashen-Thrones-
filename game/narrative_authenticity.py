@@ -1,7 +1,10 @@
 """Narrative authenticity contract: prompt + gate policy for anti-echo, signal density, and diegetic shape.
 
-Orthogonal to ``response_delta`` / ``answer_completeness`` but may read their shipped traces on
-``response_policy`` for inspection and light coordination (no duplication of their repair paths).
+Consumes shipped ``response_policy`` slices (including ``response_delta`` **contract shape**) for
+trace and **non-owning** shadow reads. Canonical ``response_delta`` legality, bounded repair, and
+``response_delta_*`` metadata are owned exclusively by the gate stack
+(:mod:`game.final_emission_repairs`); NA must not become an alternate repair path or canonical
+metadata owner for delta (see :mod:`game.validation_layer_contracts`).
 """
 from __future__ import annotations
 
@@ -9,6 +12,7 @@ import re
 from typing import Any, Dict, List, Mapping, Sequence
 
 from game.final_emission_meta import build_narrative_authenticity_emission_trace
+from game.validation_layer_contracts import NA_SHADOW_RESPONSE_DELTA_FAILURE_REASON
 from game.final_emission_text import _normalize_terminal_punctuation, _normalize_text
 
 NARRATIVE_AUTHENTICITY_VERSION = 1
@@ -707,7 +711,12 @@ def build_narrative_authenticity_contract(
     player_text: str | None = None,
     overrides: Mapping[str, Any] | None = None,
 ) -> Dict[str, Any]:
-    """Deterministic shipped contract for prompts, gate validation, and telemetry."""
+    """Deterministic shipped contract for prompts, gate validation, and telemetry.
+
+    ``response_delta`` is accepted here only to populate trace flags (e.g. coordination with rumor
+    classification). It does **not** transfer response-delta legality or repair ownership away from
+    the gate-owned delta layer.
+    """
     rd = response_delta if isinstance(response_delta, Mapping) else {}
     ac = answer_completeness if isinstance(answer_completeness, Mapping) else {}
     fb = fallback_behavior if isinstance(fallback_behavior, Mapping) else {}
@@ -812,7 +821,14 @@ def validate_narrative_authenticity(
     *,
     gm_output: Mapping[str, Any] | None = None,
 ) -> Dict[str, Any]:
-    """Deterministic checks for ``response_policy.narrative_authenticity`` (no LLM)."""
+    """Deterministic checks for ``response_policy.narrative_authenticity`` (no LLM).
+
+    When ``response_delta`` is active, this may **shadow-call** :func:`~game.final_emission_validators.validate_response_delta`
+    to attach diagnostics and :data:`~game.validation_layer_contracts.NA_SHADOW_RESPONSE_DELTA_FAILURE_REASON`.
+    That shadow path is **not** authoritative for pass/fail on delta: the canonical delta verdict and
+    repairs are applied earlier in the gate stack; :func:`repair_narrative_authenticity_minimal` does
+    **not** attempt to repair shadow delta failures.
+    """
     from game.final_emission_validators import (
         _GENERIC_NONANSWER_SNIPPET,
         _contains_meta_fallback_voice,
@@ -956,11 +972,13 @@ def validate_narrative_authenticity(
         pol = (gm_output or {}).get("response_policy") if isinstance(gm_output, Mapping) else None
         rd = pol.get("response_delta") if isinstance(pol, Mapping) and isinstance(pol.get("response_delta"), Mapping) else {}
         if rd_active and isinstance(rd, Mapping) and bool(rd.get("enabled")):
+            # Non-owning duplicate of the gate predicate for NA diagnostics only; canonical
+            # response_delta_* legality meta is written by ``_apply_response_delta_layer``.
             rd_val = validate_response_delta(text, dict(rd))
             rd_checked = bool(rd_val.get("checked"))
             out["response_delta_shadow_failed"] = bool(rd_checked and not rd_val.get("passed"))
             if rd_checked and not rd_val.get("passed"):
-                reasons.append("follow_up_missing_signal_shadow_response_delta")
+                reasons.append(NA_SHADOW_RESPONSE_DELTA_FAILURE_REASON)
         elif bool(trace.get("topic_follow_up_active")):
             prior = prior_trace
             if prior and _prior_substantive_for_na(prior):
@@ -1767,7 +1785,11 @@ def repair_narrative_authenticity_minimal(
     *,
     gm_output: Mapping[str, Any] | None = None,
 ) -> tuple[str | None, str | None]:
-    """Subtract/reorder only; never invent facts."""
+    """Subtract/reorder only; never invent facts.
+
+    Does **not** repair :data:`~game.validation_layer_contracts.NA_SHADOW_RESPONSE_DELTA_FAILURE_REASON`
+    (gate-owned delta repair applies in ``_apply_response_delta_layer`` before this runs).
+    """
     from game.final_emission_validators import _split_sentences_answer_complete
 
     if not isinstance(contract, Mapping) or not bool(contract.get("enabled")):

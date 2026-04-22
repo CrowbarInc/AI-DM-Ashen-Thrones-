@@ -5,6 +5,11 @@ for final emission. It is **not** the canonical owner for response-policy contra
 (:mod:`game.response_policy_contracts`) and **not** the top-level orchestration owner
 (:mod:`game.final_emission_gate`).
 
+**Response delta:** primary legality, bounded repair, and canonical ``response_delta_*`` meta come
+from :func:`_apply_response_delta_layer` (same canonical layer as other gate validators). Narrative
+authenticity may shadow-read the same predicate for diagnostics but does not replace delta repair
+ownership.
+
 It remains an extracted helper layer with transitional residue from earlier gate-local
 implementations; that residue does not make this module the boundary authority for the
 contracts it consumes.
@@ -370,7 +375,10 @@ def _merge_answer_completeness_meta(meta: Dict[str, Any], ac_dbg: Dict[str, Any]
             "answer_completeness_skip_reason": ac_dbg.get("answer_completeness_skip_reason"),
         }
     )
+
+
 def _default_response_delta_meta() -> Dict[str, Any]:
+    """Canonical **legality** metadata keys for the gate-owned response-delta layer (not NA/evaluator)."""
     return {
         "response_delta_checked": False,
         "response_delta_failed": False,
@@ -1205,6 +1213,7 @@ def _apply_narrative_authenticity_layer(
     response_type_debug: Dict[str, Any],
     strict_social_path: bool,
 ) -> tuple[str, Dict[str, Any], List[str]]:
+    """NA layer runs **after** ``_apply_response_delta_layer``; NA repairs must not subsume delta repair."""
     from game.narrative_authenticity import (
         repair_narrative_authenticity_minimal,
         resolve_narrative_authenticity_contract,

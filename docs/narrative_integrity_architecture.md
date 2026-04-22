@@ -2,6 +2,8 @@
 
 Concise map for “where does this belong?” after the Block 3 split and Block 4 documentation pass. **Behavior is unchanged by this document**; it reflects `game/` as of the consolidation boundary. For **anti-echo + rumor realism** operator detail (status model, repairs, telemetry, evaluator verdicts), see `docs/narrative_authenticity_anti_echo_rumor_realism.md`.
 
+For **validation-layer phase ownership** (engine truth vs planner structure vs GPT expression vs gate legality vs offline evaluator scoring), see `docs/validation_layer_separation.md` and the executable leaf registry `game/validation_layer_contracts.py`.
+
 **Block C1 (post-AER):** This file is a maintainer-facing consolidation map alongside `docs/current_focus.md` and the governance docs in `tests/TEST_AUDIT.md` / `tests/TEST_CONSOLIDATION_PLAN.md`.
 
 ---

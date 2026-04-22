@@ -23,6 +23,8 @@ Diagnostic inventory of `tests/` only. **How to run tests (fast/full lanes, coll
 
 **Regenerate artifacts:** from repo root run `py -3 tools/test_audit.py` (or `python tools/test_audit.py`). That refreshes `tests/test_inventory.json` using `pytest --collect-only` plus static heuristics. The script prints a one-line summary of **module-level duplicate `test_*` names** (shadowed defs); details are in JSON under `summary.files_with_shadowed_duplicate_test_defs`. It also prints a short **overlap spread** line (themes by distinct file count; heuristic, not semantic duplicate detection).
 
+**Validation layer drift (Objective #11):** For the five-layer phase contract (truth / structure / expression / legality / offline scoring), run `py -3 tools/validation_layer_audit.py` and read `docs/validation_layer_audit.md`. The audit uses `game/validation_layer_contracts.py` plus `docs/validation_layer_separation.md` and surfaces Block B residue as tolerated context; it does not replace semantic review. Smoke tests: `tests/test_validation_layer_audit_smoke.py`.
+
 **Counts in this markdown:** detailed per-file tables drift as the suite grows. For live numbers, prefer `pytest --collect-only` plus `tests/test_inventory.json` (regenerate with `tools/test_audit.py`). Dated sanity snapshots in later sections are **illustrative**; `summary.generated_utc` in JSON is the inventory timestamp. For file totals, read the JSON inventory or count collected modules under `tests/` that match `test_*.py`.
 
 ---

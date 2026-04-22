@@ -12,9 +12,10 @@ live under ``gm_output["internal_state"]["emission_debug_lane"]`` (see
 :func:`package_emission_channel_sidecar`). Use :func:`read_final_emission_meta_dict` /
 :func:`read_emission_debug_lane` instead of assuming a top-level ``_final_emission_meta`` key.
 
-Validation criteria and repair control stay in :mod:`game.narrative_authenticity` /
-:mod:`game.final_emission_repairs`, not here. Transitional overlap in import sites does
-not make this file the orchestration owner.
+Validator implementations and emission repair wiring live in :mod:`game.narrative_authenticity`
+and :mod:`game.final_emission_repairs` (canonical ``response_delta_*`` legality keys remain
+owned by the gate stack’s delta layer); this file only packages **metadata shapes**, not
+legality verdicts. Transitional overlap in import sites does not make this file the orchestration owner.
 """
 from __future__ import annotations
 
@@ -29,6 +30,7 @@ _LEGITIMATE_RESOLUTION_REPAIR_ACCEPTED_VIA: frozenset[str] = frozenset(
 )
 
 # Keys merged from NA layer debug into ``gm_output['_final_emission_meta']`` (contract-driven, stable names).
+# Distinct from ``response_delta_*`` legality keys (gate delta layer) and from offline ``narrative_authenticity_eval``.
 NARRATIVE_AUTHENTICITY_FEM_KEYS: frozenset[str] = frozenset(
     {
         "narrative_authenticity_checked",

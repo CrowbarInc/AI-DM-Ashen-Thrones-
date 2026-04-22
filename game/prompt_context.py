@@ -29,6 +29,11 @@ Contract layers (orthogonal concerns):
   certain (see ``build_narrative_authority_contract``); does not replace visibility rules.
 - **scene_state_anchor** — mandatory grounding in present scene/speaker/action anchors.
 - **answer_completeness** — direct-answer obligations, voice, and bounded-partial shape.
+- **response_delta** — shipped **structure** for follow-up net-new value pressure (see
+  ``build_response_delta_contract``). Deterministic enforcement, bounded repair, and canonical
+  ``response_delta_*`` legality metadata are gate-owned (:mod:`game.final_emission_repairs`); prompt
+  assembly **consumes** engine/session inputs to build the contract shape—it does not issue parallel
+  legality verdicts for delta.
 - **fallback_behavior** — narrow graceful-degradation policy under meaningful uncertainty pressure;
   governs bounded partials, diegetic hedging, and the single-question fallback shape.
 - **tone_escalation** — caps interpersonal hostility / escalation in narration from published inputs
@@ -1966,6 +1971,12 @@ def build_response_delta_contract(
     when :func:`_answer_pressure_followup_details` detects an answer-seeking follow-up.
     "Refinement" is an allowed delta kind when the reply narrows or sharpens an earlier answer
     (tighter identity, place, qualifier, or uncertainty boundary)—not when it only paraphrases.
+
+    **Ownership:** this function **materializes the shipped contract shape** for prompts and downstream
+    readers (planner/structure). Authoritative post-generation checks, bounded repairs, and
+    ``response_delta_*`` legality metadata are owned by the gate stack
+    (``response_delta_enforcement_and_repair`` in :mod:`game.validation_layer_contracts`), not by
+    prompt assembly.
     """
     obligations = narration_obligations if isinstance(narration_obligations, dict) else {}
     res = resolution if isinstance(resolution, dict) else {}

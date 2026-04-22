@@ -88,10 +88,13 @@ See `docs/model_routing_architecture.md` for the current routing note.
 - `data/scenes/` scene registry
 - `static/` browser UI
 - `docs/README.md` this file
+- `tools/validation_layer_audit.py` — optional heuristic drift check for Objective #11 validation-layer ownership (`docs/validation_layer_audit.md`)
 
 ## Narrative Authenticity & Signal Quality
 
 Operator-facing map of the **implemented** narrative authenticity (NA) stack: deterministic contract, validation, bounded repair, gate wiring, telemetry, offline evaluator, and how to debug a bad turn. For broader “where does emission logic live?” routing, see `docs/narrative_integrity_architecture.md`.
+
+For the **canonical five-layer validation separation** (engine / planner / GPT / gate / evaluator) and anti-overlap rules, see `docs/validation_layer_separation.md` (`game/validation_layer_contracts.py`).
 
 ### Layer stack (architecture)
 

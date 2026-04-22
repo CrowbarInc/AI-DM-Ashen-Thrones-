@@ -4,6 +4,8 @@
 
 **Runtime map:** `docs/narrative_integrity_architecture.md` documents `game/` ownership (routing, continuity breaks, targeting, emission validators/repairs, **`final_emission_gate` orchestration**) and **explicit deferrals**. **Post-AER Consolidation Rules** and the **Consolidation Targets** table live there and in `docs/current_focus.md`.
 
+**Validation layer seam (Objective #11):** Phase ownership (engine / planner / GPT / gate / evaluator) is governed by `docs/validation_layer_separation.md` and `game/validation_layer_contracts.py`. Block B residue and import/wording drift are optionally checked with `tools/validation_layer_audit.py` (see `docs/validation_layer_audit.md`); multiple files may implement one canonical layer without implying duplicate ownership.
+
 **Terminology:** use **canonical owner**, **smoke overlap**, **deferred**, **orchestration**, and **deterministic / contract-driven** consistently with `tests/TEST_AUDIT.md`.
 
 **Source:** Derived from `tests/TEST_AUDIT.md`, `tests/test_inventory.json` (regenerate via `py -3 tools/test_audit.py`), and spot review of transcript vs pipeline modules.

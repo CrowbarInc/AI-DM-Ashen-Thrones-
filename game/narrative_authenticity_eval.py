@@ -2,6 +2,10 @@
 
 Reads ``_final_emission_meta`` / NA merge fields produced by the emission pipeline.
 Does **not** re-run :func:`game.narrative_authenticity.validate_narrative_authenticity` and does not call an LLM.
+
+**Live runtime boundary:** this module is for **offline / harness** scoring artifacts only. The live
+narration API and :mod:`game.final_emission_gate` must not consult these scores for legality,
+routing, retries, repairs, or emitted text. No evaluator output may feed back into gate decisions.
 """
 
 from __future__ import annotations
@@ -16,6 +20,7 @@ from game.final_emission_meta import (
     read_final_emission_meta_dict,
     summarize_gameplay_validation_for_turn,
 )
+from game.validation_layer_contracts import NA_SHADOW_RESPONSE_DELTA_FAILURE_REASON
 
 _NA_KEYS = NARRATIVE_AUTHENTICITY_FEM_KEYS
 
@@ -410,7 +415,7 @@ def _score_signal_gain(
     gfs = _as_float(metrics.get("generic_filler_score"))
     sm = _as_int(metrics.get("signal_markers_detected")) or 0
     if failed and not repaired:
-        if "follow_up_missing_signal_shadow_response_delta" in codes:
+        if NA_SHADOW_RESPONSE_DELTA_FAILURE_REASON in codes:
             return 1, ["na_reason_follow_up_missing_signal_shadow_response_delta"]
         if "low_signal_generic_reply" in codes:
             return 0, ["na_reason_low_signal_generic_reply"]
@@ -494,7 +499,7 @@ def _score_followup_evolution(
         return 3, ["narrative_authenticity_not_checked_neutral_followup"]
     if failed and not repaired and "follow_up_stale_restatement" in codes:
         return 0, ["na_reason_follow_up_stale_restatement"]
-    if failed and not repaired and "follow_up_missing_signal_shadow_response_delta" in codes:
+    if failed and not repaired and NA_SHADOW_RESPONSE_DELTA_FAILURE_REASON in codes:
         return 1, ["na_reason_follow_up_missing_signal_shadow_response_delta"]
     fo = _as_float(metrics.get("followup_overlap"))
     sm = _as_int(metrics.get("signal_markers_detected")) or 0
