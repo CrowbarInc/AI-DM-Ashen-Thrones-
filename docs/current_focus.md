@@ -28,7 +28,7 @@ The purpose of this consolidation phase is to make later refactors safer by **fr
 Work proceeds in this order unless a release forces a narrow bugfix:
 
 1. **Final emission orchestration boundaries** — how emit-time policy, sanitizer integration, strict-social paths, logging, and **metadata packaging** compose under a single **orchestration** owner; clarify pure helpers vs side-effecting layers.
-2. **Telemetry / meta normalization** — narrative authenticity **telemetry** shape, reuse, and naming so meta/debug surfaces stay **deterministic** and do not accrete parallel “policy by JSON.”
+2. **Telemetry / meta normalization (Objective #13)** — **completed consolidation**: a single canonical telemetry schema + normalization seam is owned by `game/final_emission_meta.py`, with write-time packaging owned by `game/final_emission_gate.py`, bounded projections owned by `game/stage_diff_telemetry.py`, and offline evaluator/reporting tooling consuming the canonical normalized read path.
 3. **Test ownership trimming** — enforce **one primary ownership domain per test module** where practical; allow only **smoke overlap** when two layers genuinely need different harness depth.
 
 Detailed rules and runtime module boundaries: **`docs/narrative_integrity_architecture.md`** (includes **Post-AER Consolidation Rules** and the **Consolidation Targets** table).

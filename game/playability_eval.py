@@ -10,7 +10,7 @@ from __future__ import annotations
 import re
 from typing import Any, Mapping, Sequence
 
-from game.final_emission_meta import read_dead_turn_from_gm_output, summarize_gameplay_validation_for_turn
+from game.final_emission_meta import normalized_observational_telemetry_bundle, summarize_gameplay_validation_for_turn
 
 SCHEMA_VERSION = 2
 
@@ -183,16 +183,6 @@ def _extract_gm_text(payload: Mapping[str, Any]) -> str:
 
 def _extract_player_text(payload: Mapping[str, Any]) -> str:
     return _safe_str(payload.get("player_prompt"))
-
-
-def _gm_output_for_dead_turn_read(payload: Mapping[str, Any]) -> Mapping[str, Any] | None:
-    go = payload.get("gm_output")
-    if isinstance(go, Mapping):
-        return go
-    fem = payload.get("_final_emission_meta")
-    if isinstance(fem, Mapping) and isinstance(fem.get("dead_turn"), Mapping):
-        return {"_final_emission_meta": fem}
-    return None
 
 
 def _extract_prior_pair(payload: Mapping[str, Any]) -> tuple[str, str]:
@@ -504,7 +494,8 @@ def evaluate_playability(payload: Any) -> dict[str, Any]:
     player = _extract_player_text(data)
     gm = _extract_gm_text(data)
     prior_player, prior_gm = _extract_prior_pair(data)
-    dt = read_dead_turn_from_gm_output(_gm_output_for_dead_turn_read(data))
+    bundle = normalized_observational_telemetry_bundle(data)
+    dt = bundle.get("dead_turn") if isinstance(bundle.get("dead_turn"), Mapping) else {}
 
     direct = _score_direct_answer(player=player, gm=gm)
     intent = _score_player_intent(player=player, gm=gm, prior_player=prior_player)

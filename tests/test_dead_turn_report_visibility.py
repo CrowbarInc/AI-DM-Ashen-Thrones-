@@ -159,3 +159,27 @@ def test_chat_error_count_engine_failures() -> None:
         ]
     )
     assert rep["chat_error_count"] == 1
+
+
+def test_sidecar_lane_dead_turn_supported_for_reports() -> None:
+    rec = {
+        "ok": True,
+        "gm_output": {"player_facing_text": "x"},
+        "gm_output_debug": {
+            "emission_debug_lane": {
+                "_final_emission_meta": {
+                    "dead_turn": {
+                        "is_dead_turn": True,
+                        "dead_turn_class": "upstream_api_failure",
+                        "dead_turn_reason_codes": ["upstream_api_error"],
+                        "validation_playable": False,
+                        "manual_test_valid": False,
+                    }
+                }
+            }
+        },
+    }
+    row = per_turn_dead_turn_visibility(rec, turn_index=0)
+    assert row["dead_turn_detected"] is True
+    assert row["dead_turn_class"] == "upstream_api_failure"
+    assert row["excluded_from_scoring"] is True

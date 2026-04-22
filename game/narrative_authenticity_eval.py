@@ -16,13 +16,22 @@ from typing import Any, Dict, List, Mapping, Sequence, Set
 from game.final_emission_meta import (
     NARRATIVE_AUTHENTICITY_FEM_KEYS,
     normalize_merged_na_telemetry_for_eval,
-    read_dead_turn_from_gm_output,
-    read_final_emission_meta_dict,
+    normalized_observational_telemetry_bundle,
+    read_final_emission_meta_from_turn_payload,
     summarize_gameplay_validation_for_turn,
 )
 from game.validation_layer_contracts import NA_SHADOW_RESPONSE_DELTA_FAILURE_REASON
 
 _NA_KEYS = NARRATIVE_AUTHENTICITY_FEM_KEYS
+
+
+def _extract_final_emission_meta(payload: Mapping[str, Any] | None) -> dict[str, Any]:
+    """Compatibility read helper retained for older tests/harnesses.
+
+    Canonical ownership for FEM read normalization lives in :mod:`game.final_emission_meta`.
+    This shim preserves import stability without reintroducing ad hoc telemetry mutation.
+    """
+    return read_final_emission_meta_from_turn_payload(payload)
 
 
 def _safe_mapping(value: Any) -> dict[str, Any]:
@@ -59,28 +68,14 @@ def _reason_codes_from_meta(meta: Mapping[str, Any]) -> Set[str]:
     return out
 
 
-def _extract_final_emission_meta(response: Mapping[str, Any] | None) -> dict[str, Any]:
-    if not isinstance(response, Mapping):
-        return {}
-    dbg = response.get("gm_output_debug")
-    if isinstance(dbg, Mapping):
-        lane = dbg.get("emission_debug_lane")
-        if isinstance(lane, Mapping):
-            fem = lane.get("_final_emission_meta")
-            if isinstance(fem, Mapping):
-                return dict(fem)
-    gm = response.get("gm_output")
-    if not isinstance(gm, Mapping):
-        gm = response
-    return read_final_emission_meta_dict(gm if isinstance(gm, Mapping) else None)
-
-
 def _finalize_na_eval_with_dead_turn_policy(
     out: dict[str, Any],
     response: Mapping[str, Any] | None,
 ) -> dict[str, Any]:
     """Attach DTD1 gameplay_validation; strip positive NA scores when ``validation_playable`` is false."""
-    dt = read_dead_turn_from_gm_output(response.get("gm_output") if isinstance(response, Mapping) else None)
+    # Canonical read path: accept either an API envelope or a gate-shaped gm_output dict.
+    bundle = normalized_observational_telemetry_bundle(response if isinstance(response, Mapping) else None)
+    dt = bundle.get("dead_turn") if isinstance(bundle.get("dead_turn"), Mapping) else {}
     gv = summarize_gameplay_validation_for_turn(dt)
     if gv["excluded_from_scoring"]:
         gv = {
@@ -115,7 +110,7 @@ def _merge_na_meta(
     meta: Mapping[str, Any] | None,
     response: Mapping[str, Any] | None,
 ) -> dict[str, Any]:
-    fem = _extract_final_emission_meta(response)
+    fem = read_final_emission_meta_from_turn_payload(response)
     merged: dict[str, Any] = {k: fem[k] for k in _NA_KEYS if k in fem}
     if isinstance(meta, Mapping):
         for k, v in meta.items():
@@ -597,7 +592,8 @@ def evaluate_narrative_authenticity(
 ) -> dict[str, Any]:
     """Score one turn using NA telemetry (and light text flags). Stable, deterministic schema.
 
-    ``meta`` may be partial; missing NA keys are filled from ``response['gm_output']['_final_emission_meta']``.
+    ``meta`` may be partial; missing NA keys are filled from shipped FEM via
+    :func:`game.final_emission_meta.read_final_emission_meta_from_turn_payload`.
     ``turn_packet`` may include ``prior_gm_text`` / ``prior_player_prompt`` for lenient follow-up axis context.
     """
     merged = normalize_merged_na_telemetry_for_eval(_merge_na_meta(meta=meta, response=response))
@@ -610,7 +606,7 @@ def evaluate_narrative_authenticity(
     repaired = bool(merged.get("narrative_authenticity_repaired") or merged.get("narrative_authenticity_repair_applied"))
     codes = _reason_codes_from_meta(merged)
 
-    has_fem_key = bool(_extract_final_emission_meta(response))
+    has_fem_key = bool(read_final_emission_meta_from_turn_payload(response))
     has_na_in_meta = bool(meta and any(k in meta for k in _NA_KEYS))
     if not has_fem_key and not has_na_in_meta:
         return _finalize_na_eval_with_dead_turn_policy(

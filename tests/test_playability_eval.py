@@ -197,3 +197,27 @@ def test_synthetic_terminal_fallback_without_upstream_not_dead_stays_scoreable()
     _assert_stable_schema(out)
     assert out["gameplay_validation"]["run_valid"] is True
     assert out["overall"]["passed"] is True
+
+
+def test_dead_turn_read_via_sidecar_lane_is_supported() -> None:
+    """Evaluator consumes canonical normalized telemetry bundle (sidecar lane), not bespoke local shims."""
+    fem = {
+        "dead_turn": {
+            "is_dead_turn": True,
+            "dead_turn_reason_codes": ["upstream_api_error"],
+            "dead_turn_class": "upstream_api_failure",
+            "validation_playable": False,
+            "manual_test_valid": False,
+        }
+    }
+    out = evaluate_playability(
+        {
+            "player_prompt": "Who commands the watch here?",
+            "gm_text": "Captain Halvar commands the watch; sergeants rotate shifts.",
+            "gm_output": {"player_facing_text": "x"},
+            "gm_output_debug": {"emission_debug_lane": {"_final_emission_meta": fem}},
+        }
+    )
+    _assert_stable_schema(out)
+    assert out["gameplay_validation"]["excluded_from_scoring"] is True
+    assert out["overall"]["score"] == 0

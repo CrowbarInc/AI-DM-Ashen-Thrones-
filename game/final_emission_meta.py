@@ -23,6 +23,91 @@ from typing import Any, Dict, Mapping, MutableMapping
 
 from game.state_channels import project_debug_payload
 
+# --- Canonical key registries (telemetry-only; not policy owners) ---
+
+# Post-gate contract: debug/meta observability lives under gm_output["internal_state"] lanes.
+INTERNAL_STATE_KEY: str = "internal_state"
+EMISSION_DEBUG_LANE_KEY: str = "emission_debug_lane"
+EMISSION_AUTHOR_LANE_KEY: str = "emission_author_lane"
+
+# Canonical nested dict name for final-emission metadata (FEM). Legacy top-level fallback is supported
+# at read time for mixed dicts/fixtures but is not the intended post-gate storage location.
+FINAL_EMISSION_META_KEY: str = "_final_emission_meta"
+DEBUG_NOTES_KEY: str = "debug_notes"
+
+# FEM subtrees / well-known nested keys.
+FEM_DEAD_TURN_KEY: str = "dead_turn"
+
+
+def ensure_final_emission_meta_dict(gm_output: MutableMapping[str, Any]) -> Dict[str, Any]:
+    """Write-time helper: ensure and return the FEM dict on a gate-shaped ``gm_output`` mapping.
+
+    This centralizes the canonical key spelling (``FINAL_EMISSION_META_KEY``) and avoids ad hoc
+    get-or-create patterns scattered across gate/repair instrumentation.
+    """
+    if not isinstance(gm_output, MutableMapping):
+        return {}
+    meta = gm_output.get(FINAL_EMISSION_META_KEY)
+    if not isinstance(meta, dict):
+        meta = {}
+        gm_output[FINAL_EMISSION_META_KEY] = meta
+    return meta
+
+
+def patch_final_emission_meta(gm_output: MutableMapping[str, Any], patch: Mapping[str, Any] | None) -> None:
+    """Write-time helper: shallow-merge *patch* into ``_final_emission_meta`` (in place)."""
+    if not isinstance(gm_output, MutableMapping):
+        return
+    if not isinstance(patch, Mapping) or not patch:
+        return
+    meta = ensure_final_emission_meta_dict(gm_output)
+    meta.update(dict(patch))
+
+# Response-type debug fields (RTD1) that may be merged into FEM for observability.
+FEM_RESPONSE_TYPE_KEYS: frozenset[str] = frozenset(
+    {
+        "response_type_required",
+        "response_type_contract_source",
+        "response_type_candidate_ok",
+        "response_type_repair_used",
+        "response_type_repair_kind",
+        "response_type_rejection_reasons",
+        "non_hostile_escalation_blocked",
+    }
+)
+
+# Stage-diff is intentionally bounded; it may project a compact NA subset for observability only.
+# This is not a second owner of NA semantics; it is an explicitly-allowed projection surface.
+STAGE_DIFF_ALLOWED_NA_PROJECTION_KEYS: frozenset[str] = frozenset(
+    {
+        "narrative_authenticity_reason_codes",
+        "narrative_authenticity_skip_reason",
+        "narrative_authenticity_status",
+        "narrative_authenticity_rumor_relaxed_low_signal",
+        # Optional: repair mode is observational and compact; stage-diff does not consume full evidence/metrics.
+        "narrative_authenticity_repair_mode",
+    }
+)
+
+# Evaluator/debug consumers may want a normalized FEM slice without importing every gate module.
+# Prefix-based families are explicit registries (telemetry-only) and do not imply policy ownership here.
+EVALUATOR_FEM_KEY_PREFIX_FAMILIES: tuple[str, ...] = (
+    "answer_completeness_",
+    "response_delta_",
+    "social_response_structure_",
+    "fallback_behavior_",
+    "referent_",
+    "narrative_authenticity_",
+    "response_type_",
+)
+
+# Explicit non-prefix evaluator keys (nested dicts / stable aliases).
+EVALUATOR_FEM_EXPLICIT_KEYS: frozenset[str] = frozenset(
+    {
+        FEM_DEAD_TURN_KEY,
+    }
+)
+
 # --- Response-type debug/meta shaping (metadata-only; orchestration decides when to attach) ---
 
 
@@ -173,9 +258,9 @@ def read_emission_debug_lane(gm_output: Mapping[str, Any] | None) -> dict[str, A
     """Shallow read of debug-classified top-level keys from a post-gate ``gm_output`` (or legacy mixed dict)."""
     if not isinstance(gm_output, Mapping):
         return {}
-    internal = gm_output.get("internal_state")
+    internal = gm_output.get(INTERNAL_STATE_KEY)
     if isinstance(internal, Mapping):
-        lane = internal.get("emission_debug_lane")
+        lane = internal.get(EMISSION_DEBUG_LANE_KEY)
         if isinstance(lane, Mapping):
             return dict(lane)
     return project_debug_payload(gm_output)
@@ -190,11 +275,51 @@ def read_final_emission_meta_dict(gm_output: Mapping[str, Any] | None) -> dict[s
     if not isinstance(gm_output, Mapping):
         return {}
     lane = read_emission_debug_lane(gm_output)
-    nested = lane.get("_final_emission_meta")
+    nested = lane.get(FINAL_EMISSION_META_KEY)
     if isinstance(nested, Mapping):
         return dict(nested)
-    fem = gm_output.get("_final_emission_meta")
+    fem = gm_output.get(FINAL_EMISSION_META_KEY)
     return dict(fem) if isinstance(fem, Mapping) else {}
+
+
+def read_emission_debug_lane_from_turn_payload(payload: Mapping[str, Any] | None) -> dict[str, Any]:
+    """Read emission debug lane from an API envelope or a gate-shaped ``gm_output`` mapping.
+
+    Ownership boundary:
+    - **Write-time packaging** of sidecars is owned by :func:`game.final_emission_gate.apply_final_emission_gate`
+      (via :func:`package_emission_channel_sidecar`).
+    - **Read-time normalization** is owned here.
+    - This function is observational-only and must not drive legality/routing.
+    """
+    if not isinstance(payload, Mapping):
+        return {}
+    dbg = payload.get("gm_output_debug")
+    if isinstance(dbg, Mapping):
+        lane = dbg.get(EMISSION_DEBUG_LANE_KEY)
+        if isinstance(lane, Mapping):
+            return dict(lane)
+    gm = payload.get("gm_output")
+    if not isinstance(gm, Mapping):
+        gm = payload
+    return read_emission_debug_lane(gm if isinstance(gm, Mapping) else None)
+
+
+def read_final_emission_meta_from_turn_payload(payload: Mapping[str, Any] | None) -> dict[str, Any]:
+    """Read FEM dict from an API envelope or from a gate-shaped ``gm_output`` mapping.
+
+    This is a pure, read-side helper that preserves the legacy top-level
+    ``_final_emission_meta`` fallback already supported by :func:`read_final_emission_meta_dict`.
+    """
+    if not isinstance(payload, Mapping):
+        return {}
+    dbg_lane = read_emission_debug_lane_from_turn_payload(payload)
+    nested = dbg_lane.get(FINAL_EMISSION_META_KEY)
+    if isinstance(nested, Mapping):
+        return dict(nested)
+    gm = payload.get("gm_output")
+    if not isinstance(gm, Mapping):
+        gm = payload
+    return read_final_emission_meta_dict(gm if isinstance(gm, Mapping) else None)
 
 
 def merge_narrative_authenticity_into_final_emission_meta(meta: Dict[str, Any], na_dbg: Dict[str, Any]) -> None:
@@ -582,3 +707,84 @@ def normalize_merged_na_telemetry_for_eval(merged: Mapping[str, Any] | None) -> 
         else:
             out[str(k)] = dict(v)
     return out
+
+
+def stage_diff_narrative_authenticity_projection(fem: Mapping[str, Any] | None) -> dict[str, Any]:
+    """Curated NA projection allowed for bounded stage-diff observability.
+
+    This returns a compact dict with a small, explicit key whitelist. It never returns raw,
+    arbitrary pass-through JSON from FEM, and it does not infer legality.
+    """
+    if not isinstance(fem, Mapping):
+        return {}
+    out: dict[str, Any] = {}
+    for k in STAGE_DIFF_ALLOWED_NA_PROJECTION_KEYS:
+        v = fem.get(k)
+        if v is None:
+            continue
+        if k in {"narrative_authenticity_reason_codes", "narrative_authenticity_failure_reasons"}:
+            if isinstance(v, list) and v:
+                out[k] = [str(x) for x in v if str(x).strip()]
+        elif isinstance(v, (str, bool, int, float)) or v is None:
+            out[k] = v
+        else:
+            # Explicitly avoid widening the surface with nested dicts/lists.
+            continue
+    trace = fem.get("narrative_authenticity_trace")
+    if isinstance(trace, Mapping) and "rumor_turn_active" in trace:
+        out["rumor_turn_active"] = bool(trace.get("rumor_turn_active"))
+    return out
+
+
+def normalize_final_emission_meta_for_observability(fem: Mapping[str, Any] | None) -> dict[str, Any]:
+    """Read-side normalizer for FEM telemetry (observational-only; no policy inference).
+
+    - Pure function.
+    - Fills missing nested dict/list fields deterministically for evaluator/debug consumers.
+    - Does not broaden payloads with arbitrary pass-through keys; it only coerces known nested subtrees.
+    """
+    base = dict(fem or {}) if isinstance(fem, Mapping) else {}
+
+    # Dead-turn subtree: fill stable defaults if absent or malformed.
+    snap = base.get(FEM_DEAD_TURN_KEY)
+    if not isinstance(snap, Mapping):
+        base[FEM_DEAD_TURN_KEY] = dict(_DEAD_TURN_READ_DEFAULTS)
+    else:
+        merged = dict(_DEAD_TURN_READ_DEFAULTS)
+        merged.update(dict(snap))
+        base[FEM_DEAD_TURN_KEY] = merged
+
+    # NA nested dicts: stable empty mappings (no policy inference).
+    base = normalize_merged_na_telemetry_for_eval(base)
+
+    # Ensure common NA lists are stable lists when present-but-nullish.
+    for lk in ("narrative_authenticity_reason_codes", "narrative_authenticity_failure_reasons"):
+        v = base.get(lk)
+        if v is None:
+            continue
+        if not isinstance(v, list):
+            base[lk] = []
+        else:
+            base[lk] = [str(x) for x in v if str(x).strip()]
+    return base
+
+
+def normalized_observational_telemetry_bundle(payload: Mapping[str, Any] | None) -> dict[str, Any]:
+    """Produce a normalized, observational-only telemetry bundle for evaluator/debug consumers.
+
+    Ownership boundaries:
+    - **Write-time packaging** (what gets written into gm_output/internal_state) is owned by the gate.
+    - **Read-time normalization** (stable empty subtrees + curated projections) is owned here.
+    - This is explicitly **not** a policy/legality surface and must not be used to drive orchestration.
+    """
+    fem_raw = read_final_emission_meta_from_turn_payload(payload)
+    fem = normalize_final_emission_meta_for_observability(fem_raw)
+    lane = read_emission_debug_lane_from_turn_payload(payload)
+    return {
+        "final_emission_meta": fem,
+        "dead_turn": dict(fem.get(FEM_DEAD_TURN_KEY) or _DEAD_TURN_READ_DEFAULTS),
+        "debug_notes": read_debug_notes_from_turn_payload(payload),
+        "stage_diff_na_projection": stage_diff_narrative_authenticity_projection(fem),
+        # Keep the lane available for debugging, but never pass through arbitrary nested keys as canonical state.
+        "emission_debug_lane_keys": sorted(str(k) for k in lane.keys()),
+    }

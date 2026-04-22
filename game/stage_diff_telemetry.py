@@ -23,7 +23,7 @@ import json
 import logging
 from typing import Any, Dict, List, Mapping, MutableMapping, Optional
 
-from game.final_emission_meta import read_final_emission_meta_dict
+from game.final_emission_meta import read_final_emission_meta_dict, stage_diff_narrative_authenticity_projection
 from game.turn_packet import resolve_turn_packet_for_gate
 
 STAGE_DIFF_METADATA_KEY = "stage_diff_telemetry"
@@ -116,20 +116,21 @@ def snapshot_turn_stage(
             "targeted_retry_terminal": bool(gm_output.get("targeted_retry_terminal")),
         },
     }
-    na_codes = fem.get("narrative_authenticity_reason_codes")
-    if isinstance(na_codes, list) and na_codes:
-        snap["narrative_authenticity_reason_codes"] = [str(x) for x in na_codes[:8] if str(x).strip()]
-    na_skip = fem.get("narrative_authenticity_skip_reason")
-    if isinstance(na_skip, str) and na_skip.strip():
-        snap["narrative_authenticity_skip_reason"] = na_skip.strip()[:120]
-    na_status = fem.get("narrative_authenticity_status")
-    if isinstance(na_status, str) and na_status.strip():
-        snap["narrative_authenticity_status"] = na_status.strip()[:24]
-    if fem.get("narrative_authenticity_rumor_relaxed_low_signal"):
-        snap["narrative_authenticity_rumor_relaxed_low_signal"] = True
-    na_trace = fem.get("narrative_authenticity_trace")
-    if isinstance(na_trace, dict) and na_trace.get("rumor_turn_active") is not None:
-        snap["rumor_turn_active"] = bool(na_trace.get("rumor_turn_active"))
+    na_proj = stage_diff_narrative_authenticity_projection(fem)
+    if na_proj:
+        na_codes = na_proj.get("narrative_authenticity_reason_codes")
+        if isinstance(na_codes, list) and na_codes:
+            snap["narrative_authenticity_reason_codes"] = [str(x) for x in na_codes[:8] if str(x).strip()]
+        na_skip = na_proj.get("narrative_authenticity_skip_reason")
+        if isinstance(na_skip, str) and na_skip.strip():
+            snap["narrative_authenticity_skip_reason"] = na_skip.strip()[:120]
+        na_status = na_proj.get("narrative_authenticity_status")
+        if isinstance(na_status, str) and na_status.strip():
+            snap["narrative_authenticity_status"] = na_status.strip()[:24]
+        if na_proj.get("narrative_authenticity_rumor_relaxed_low_signal"):
+            snap["narrative_authenticity_rumor_relaxed_low_signal"] = True
+        if na_proj.get("rumor_turn_active") is not None:
+            snap["rumor_turn_active"] = bool(na_proj.get("rumor_turn_active"))
     if timing_ms is not None:
         snap["timing_ms"] = float(timing_ms)
     if kwargs:

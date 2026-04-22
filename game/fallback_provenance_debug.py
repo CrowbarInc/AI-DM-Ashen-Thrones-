@@ -16,6 +16,7 @@ import logging
 from typing import Any, Dict, Optional
 
 from game.final_emission_text import _normalize_text
+from game.final_emission_meta import patch_final_emission_meta
 
 _LOG = logging.getLogger(__name__)
 
@@ -181,7 +182,4 @@ def record_final_emission_gate_exit(out: Dict[str, Any], *, final_normalized_tex
         "mismatch_detected": mismatch_detected,
     }
     out["metadata"] = {**md, METADATA_KEY: prov}
-
-    meta = out.get("_final_emission_meta") if isinstance(out.get("_final_emission_meta"), dict) else {}
-    meta = {**meta, "fallback_provenance_trace": dict(prov)}
-    out["_final_emission_meta"] = meta
+    patch_final_emission_meta(out, {"fallback_provenance_trace": dict(prov)})

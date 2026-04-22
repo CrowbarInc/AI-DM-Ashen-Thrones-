@@ -122,10 +122,13 @@ from game.fallback_provenance_debug import (
     record_final_emission_gate_exit,
 )
 from game.final_emission_meta import (
+    FINAL_EMISSION_META_KEY,
     default_narrative_authenticity_layer_meta,
     default_response_type_debug as _default_response_type_debug,
+    ensure_final_emission_meta_dict,
     merge_narrative_authenticity_into_final_emission_meta,
     merge_response_type_meta as _merge_response_type_meta,
+    patch_final_emission_meta,
     package_dead_turn_snapshot_into_final_emission_meta,
     package_emission_channel_sidecar,
     response_type_decision_payload as _response_type_decision_payload,
@@ -4082,7 +4085,7 @@ def _decompress_overpacked_sentences(text: str) -> str:
 def _final_emission_fast_path_eligible(out: Dict[str, Any]) -> bool:
     if not isinstance(out, dict):
         return False
-    meta = out.get("_final_emission_meta") if isinstance(out.get("_final_emission_meta"), dict) else {}
+    meta = ensure_final_emission_meta_dict(out)
     if meta.get("final_route") != "accept_candidate":
         return False
     if meta.get("response_type_candidate_ok") is False:
@@ -4199,19 +4202,20 @@ def _finalize_upstream_fallback_overwrite_containment(
         chosen = snap_san
     out["player_facing_text"] = chosen
     gate_norm = _normalize_text(chosen)
-    fem = out.get("_final_emission_meta") if isinstance(out.get("_final_emission_meta"), dict) else {}
     contained_kind = (
         "in_gate_finalize"
         if hint in ("mutation_inside_gate_or_finalize", "mutation_unknown")
         else "pre_gate"
     )
-    out["_final_emission_meta"] = {
-        **fem,
-        "fallback_overwrite_contained": contained_kind,
-        "fallback_overwrite_finalize_containment": True,
-        "post_gate_mutation_detected": pre_gate_normalized != gate_norm,
-        "final_text_preview": (gate_norm[:120] + "…") if len(gate_norm) > 120 else gate_norm,
-    }
+    patch_final_emission_meta(
+        out,
+        {
+            "fallback_overwrite_contained": contained_kind,
+            "fallback_overwrite_finalize_containment": True,
+            "post_gate_mutation_detected": pre_gate_normalized != gate_norm,
+            "final_text_preview": (gate_norm[:120] + "…") if len(gate_norm) > 120 else gate_norm,
+        },
+    )
     print(
         "FALLBACK OVERWRITE CONTAINED: in-gate/finalize"
         if contained_kind == "in_gate_finalize"
@@ -4305,18 +4309,21 @@ def _finalize_emission_output(
     sanitization_applied = sanitized_text != final_text
     out["player_facing_text"] = smoothed_text
 
-    meta = out.get("_final_emission_meta") if isinstance(out.get("_final_emission_meta"), dict) else {}
-    if isinstance(scene_emit_integrity_bundle, dict) and scene_emit_integrity_bundle:
-        meta = {**meta, **scene_emit_integrity_bundle}
-    meta["final_emission_fast_path_used"] = bool(fast_path)
-    meta["output_sanitization_applied"] = sanitization_applied
-    meta["sentence_decompression_applied"] = sentence_decompression_applied
-    meta["sentence_fragment_repair_applied"] = fragment_repair_applied
-    meta["sentence_micro_smoothing_applied"] = sentence_micro_smoothing_applied
     gate_out_text = _normalize_text(smoothed_text)
-    meta["post_gate_mutation_detected"] = pre_gate_text != gate_out_text
-    meta["final_text_preview"] = (gate_out_text[:120] + "…") if len(gate_out_text) > 120 else gate_out_text
-    out["_final_emission_meta"] = meta
+    meta = ensure_final_emission_meta_dict(out)
+    if isinstance(scene_emit_integrity_bundle, dict) and scene_emit_integrity_bundle:
+        meta.update(dict(scene_emit_integrity_bundle))
+    meta.update(
+        {
+            "final_emission_fast_path_used": bool(fast_path),
+            "output_sanitization_applied": sanitization_applied,
+            "sentence_decompression_applied": sentence_decompression_applied,
+            "sentence_fragment_repair_applied": fragment_repair_applied,
+            "sentence_micro_smoothing_applied": sentence_micro_smoothing_applied,
+            "post_gate_mutation_detected": pre_gate_text != gate_out_text,
+            "final_text_preview": (gate_out_text[:120] + "…") if len(gate_out_text) > 120 else gate_out_text,
+        }
+    )
     record_final_emission_gate_exit(out, final_normalized_text=gate_out_text)
     _finalize_upstream_fallback_overwrite_containment(out, pre_gate_normalized=pre_gate_text)
     # Block I containment restores the upstream selector snapshot when exit fingerprints diverge.
@@ -4326,13 +4333,14 @@ def _finalize_emission_output(
     sealed = _strip_appended_route_illegal_contamination_sentences(pre_seal)
     if sealed != pre_seal:
         out["player_facing_text"] = sealed
-        meta2 = out.get("_final_emission_meta") if isinstance(out.get("_final_emission_meta"), dict) else {}
         gate_norm_final = _normalize_text(sealed)
-        out["_final_emission_meta"] = {
-            **meta2,
-            "post_gate_mutation_detected": pre_gate_text != gate_norm_final,
-            "final_text_preview": (gate_norm_final[:120] + "…") if len(gate_norm_final) > 120 else gate_norm_final,
-        }
+        patch_final_emission_meta(
+            out,
+            {
+                "post_gate_mutation_detected": pre_gate_text != gate_norm_final,
+                "final_text_preview": (gate_norm_final[:120] + "…") if len(gate_norm_final) > 120 else gate_norm_final,
+            },
+        )
     package_dead_turn_snapshot_into_final_emission_meta(out)
     debug_lane = project_debug_payload(out)
     author_lane = project_author_payload(out)
@@ -6551,7 +6559,6 @@ def _apply_first_mention_enforcement(
         grounded_speaker_first_mention_exemption_entity_id
     )
     _apply_default_referential_clarity_meta(meta, passed=None)
-    out["_final_emission_meta"] = meta
 
     if validation.get("ok") is True:
         return _apply_referential_clarity_enforcement(
@@ -6572,7 +6579,6 @@ def _apply_first_mention_enforcement(
 
     if not checked_entities and _reply_already_has_concrete_interaction(candidate_text):
         meta["first_mention_validation_passed"] = None
-        out["_final_emission_meta"] = meta
         return out
 
     opening_scene_preference_used = _opening_scene_preference_active(session)
@@ -6640,7 +6646,6 @@ def _apply_first_mention_enforcement(
         "first_mention_composition_layers",
         _default_first_mention_composition_layers(),
     )
-    out["_final_emission_meta"] = meta
 
     log_final_emission_decision(
         {
@@ -6718,7 +6723,7 @@ def _apply_referential_clarity_enforcement(
         scene=scene if isinstance(scene, dict) else None,
         world=world if isinstance(world, dict) else None,
     )
-    meta = out.get("_final_emission_meta") if isinstance(out.get("_final_emission_meta"), dict) else {}
+    meta = ensure_final_emission_meta_dict(out)
     violations = validation.get("violations") if isinstance(validation.get("violations"), list) else []
     checked_entities = validation.get("checked_entities") if isinstance(validation.get("checked_entities"), list) else []
     violation_kinds = _dedupe_preserve_order(
@@ -6735,7 +6740,6 @@ def _apply_referential_clarity_enforcement(
     meta["referential_clarity_local_substitution_replacement"] = None
     meta["referential_clarity_fallback_avoided"] = False
     meta["referential_clarity_fallback_after_failed_local_repair"] = False
-    out["_final_emission_meta"] = meta
 
     if validation.get("ok") is True:
         return out
@@ -6743,7 +6747,6 @@ def _apply_referential_clarity_enforcement(
     if not checked_entities and _reply_already_has_concrete_interaction(candidate_text):
         if not violations:
             meta["referential_clarity_validation_passed"] = None
-            out["_final_emission_meta"] = meta
             return out
         if not _referential_clarity_violations_have_multi_entity_candidates(violations) and (
             _referential_clarity_violations_only_dialogue_attribution_they(violations)
@@ -6752,7 +6755,6 @@ def _apply_referential_clarity_enforcement(
             meta["referential_clarity_replacement_applied"] = False
             meta["referential_clarity_violation_kinds"] = []
             meta["referential_clarity_violation_sample"] = []
-            out["_final_emission_meta"] = meta
             return out
 
     response_type_req = str(meta.get("response_type_required") or "").strip().lower()
@@ -6789,7 +6791,6 @@ def _apply_referential_clarity_enforcement(
                 candidate_text != gate_out_text
             )
             meta["final_text_preview"] = (gate_out_text[:120] + "…") if len(gate_out_text) > 120 else gate_out_text
-            out["_final_emission_meta"] = meta
             log_final_emission_decision(
                 {
                     "stage": "final_emission_gate_referential_clarity",
@@ -6857,7 +6858,6 @@ def _apply_referential_clarity_enforcement(
         "first_mention_composition_layers",
         _default_first_mention_composition_layers(),
     )
-    out["_final_emission_meta"] = meta
 
     log_final_emission_decision(
         {
@@ -6900,7 +6900,7 @@ def _apply_visibility_enforcement(
         scene=scene if isinstance(scene, dict) else None,
         world=world if isinstance(world, dict) else None,
     )
-    meta = out.get("_final_emission_meta") if isinstance(out.get("_final_emission_meta"), dict) else {}
+    meta = ensure_final_emission_meta_dict(out)
     violations = validation.get("violations") if isinstance(validation.get("violations"), list) else []
     checked_entities = (
         validation.get("visibility_checked_entities")
@@ -6934,7 +6934,6 @@ def _apply_visibility_enforcement(
     meta["visibility_violation_sample"] = _build_visibility_violation_sample(violations)
     meta["visibility_checked_entities"] = checked_entities
     meta["visibility_checked_facts"] = checked_facts
-    out["_final_emission_meta"] = meta
 
     if validation.get("ok") is True:
         return _apply_first_mention_enforcement(
@@ -6963,7 +6962,6 @@ def _apply_visibility_enforcement(
         meta["visibility_validation_passed"] = True
         meta["visibility_replacement_applied"] = False
         meta["visibility_continuity_lead_exemption"] = True
-        out["_final_emission_meta"] = meta
         return _apply_first_mention_enforcement(
             out,
             session=session,
@@ -6982,7 +6980,6 @@ def _apply_visibility_enforcement(
 
     if not checked_entities and not checked_facts and _reply_already_has_concrete_interaction(candidate_text):
         meta["visibility_validation_passed"] = None
-        out["_final_emission_meta"] = meta
         return out
 
     (
@@ -7036,7 +7033,6 @@ def _apply_visibility_enforcement(
         "first_mention_composition_layers",
         _default_first_mention_composition_layers(),
     )
-    out["_final_emission_meta"] = meta
 
     log_final_emission_decision(
         {
@@ -8179,9 +8175,8 @@ def _attach_interaction_continuity_validation(
         em = md_out.get("emission_debug") if isinstance(md_out.get("emission_debug"), dict) else {}
         icv = em.get("interaction_continuity_validation")
         if isinstance(icv, dict):
-            fem = out.setdefault("_final_emission_meta", {})
-            if isinstance(fem, dict):
-                fem["interaction_continuity_validation"] = icv
+            fem = ensure_final_emission_meta_dict(out)
+            fem["interaction_continuity_validation"] = icv
         return
     final_text = _normalize_text(out.get("player_facing_text"))
     _apply_interaction_continuity_emission_step(
@@ -8288,10 +8283,7 @@ def _apply_referent_clarity_pre_finalize(out: Dict[str, Any], *, pre_gate_text: 
     text_in = str(out.get("player_facing_text") or "")
     text_out, dbg, _ = _apply_referent_clarity_emission_layer(text_in, gm_output=out)
     out["player_facing_text"] = text_out
-    fem = out.get("_final_emission_meta")
-    if not isinstance(fem, dict):
-        fem = {}
-        out["_final_emission_meta"] = fem
+    fem = ensure_final_emission_meta_dict(out)
     _merge_referent_clarity_meta(fem, dbg)
     gtxt = _normalize_text(text_out)
     if gtxt:
@@ -8745,7 +8737,7 @@ def apply_final_emission_gate(
                     **_response_type_decision_payload(response_type_debug),
                 }
             )
-            out["_final_emission_meta"] = {
+            out[FINAL_EMISSION_META_KEY] = {
                 "final_route": "accept_candidate",
                 "reply_kind": _reply_kind(eff_resolution if isinstance(eff_resolution, dict) else None),
                 "strict_social_active": strict_social_active,
@@ -8778,20 +8770,20 @@ def apply_final_emission_gate(
                 session=session if isinstance(session, dict) else None,
                 response_type_debug=response_type_debug,
             )
-            _merge_response_type_meta(out["_final_emission_meta"], response_type_debug)
-            _merge_answer_completeness_meta(out["_final_emission_meta"], ac_layer_meta)
-            _merge_response_delta_meta(out["_final_emission_meta"], rd_layer_meta)
-            _merge_social_response_structure_meta(out["_final_emission_meta"], srs_layer_meta)
-            merge_narrative_authenticity_into_final_emission_meta(out["_final_emission_meta"], nat_layer_meta)
-            _merge_narrative_authority_meta(out["_final_emission_meta"], na_layer_meta)
-            _merge_tone_escalation_meta(out["_final_emission_meta"], te_layer_meta)
-            _merge_anti_railroading_meta(out["_final_emission_meta"], ar_layer_meta)
-            _merge_context_separation_meta(out["_final_emission_meta"], cs_layer_meta)
-            _merge_player_facing_narration_purity_meta(out["_final_emission_meta"], purity_layer_meta)
-            _merge_answer_shape_primacy_meta(out["_final_emission_meta"], asp_layer_meta)
-            _merge_scene_state_anchor_meta(out["_final_emission_meta"], ssa_layer_meta)
-            _merge_fallback_behavior_meta(out["_final_emission_meta"], fb_layer_meta)
-            _merge_fast_fallback_neutral_composition_meta(out["_final_emission_meta"], ffnc_layer_meta)
+            _merge_response_type_meta(out[FINAL_EMISSION_META_KEY], response_type_debug)
+            _merge_answer_completeness_meta(out[FINAL_EMISSION_META_KEY], ac_layer_meta)
+            _merge_response_delta_meta(out[FINAL_EMISSION_META_KEY], rd_layer_meta)
+            _merge_social_response_structure_meta(out[FINAL_EMISSION_META_KEY], srs_layer_meta)
+            merge_narrative_authenticity_into_final_emission_meta(out[FINAL_EMISSION_META_KEY], nat_layer_meta)
+            _merge_narrative_authority_meta(out[FINAL_EMISSION_META_KEY], na_layer_meta)
+            _merge_tone_escalation_meta(out[FINAL_EMISSION_META_KEY], te_layer_meta)
+            _merge_anti_railroading_meta(out[FINAL_EMISSION_META_KEY], ar_layer_meta)
+            _merge_context_separation_meta(out[FINAL_EMISSION_META_KEY], cs_layer_meta)
+            _merge_player_facing_narration_purity_meta(out[FINAL_EMISSION_META_KEY], purity_layer_meta)
+            _merge_answer_shape_primacy_meta(out[FINAL_EMISSION_META_KEY], asp_layer_meta)
+            _merge_scene_state_anchor_meta(out[FINAL_EMISSION_META_KEY], ssa_layer_meta)
+            _merge_fallback_behavior_meta(out[FINAL_EMISSION_META_KEY], fb_layer_meta)
+            _merge_fast_fallback_neutral_composition_meta(out[FINAL_EMISSION_META_KEY], ffnc_layer_meta)
             grounded_fm_exempt = _strict_social_terminal_grounded_speaker_first_mention_exemption_entity_id(
                 out,
                 session=session,
@@ -8882,7 +8874,7 @@ def apply_final_emission_gate(
                 response_type_debug=response_type_debug,
                 speaker_contract_enforcement=_speaker_contract_payload,
             )
-            log_final_emission_trace({**out["_final_emission_meta"], "stage": "final_emission_gate_accept"})
+            log_final_emission_trace({**out[FINAL_EMISSION_META_KEY], "stage": "final_emission_gate_accept"})
             return _finalize_emission_output(
                 out,
                 pre_gate_text=pre_gate_text,
@@ -8934,7 +8926,7 @@ def apply_final_emission_gate(
         gate_out_text = _normalize_text(out.get("player_facing_text"))
         post_gate_mutation_detected = pre_gate_text != gate_out_text
 
-        out["_final_emission_meta"] = {
+        out[FINAL_EMISSION_META_KEY] = {
             "final_route": "replaced",
             "reply_kind": _reply_kind(eff_resolution if isinstance(eff_resolution, dict) else None),
             "strict_social_active": strict_social_active,
@@ -8965,20 +8957,20 @@ def apply_final_emission_gate(
             session=session if isinstance(session, dict) else None,
             response_type_debug=response_type_debug,
         )
-        _merge_response_type_meta(out["_final_emission_meta"], response_type_debug)
-        _merge_answer_completeness_meta(out["_final_emission_meta"], ac_layer_meta)
-        _merge_response_delta_meta(out["_final_emission_meta"], rd_layer_meta)
-        _merge_social_response_structure_meta(out["_final_emission_meta"], srs_layer_meta)
-        merge_narrative_authenticity_into_final_emission_meta(out["_final_emission_meta"], nat_layer_meta)
-        _merge_narrative_authority_meta(out["_final_emission_meta"], na_layer_meta)
-        _merge_tone_escalation_meta(out["_final_emission_meta"], te_layer_meta)
-        _merge_anti_railroading_meta(out["_final_emission_meta"], ar_layer_meta)
-        _merge_context_separation_meta(out["_final_emission_meta"], cs_layer_meta)
-        _merge_player_facing_narration_purity_meta(out["_final_emission_meta"], purity_layer_meta)
-        _merge_answer_shape_primacy_meta(out["_final_emission_meta"], asp_layer_meta)
-        _merge_scene_state_anchor_meta(out["_final_emission_meta"], ssa_layer_meta)
-        _merge_fallback_behavior_meta(out["_final_emission_meta"], fb_layer_meta)
-        _merge_fast_fallback_neutral_composition_meta(out["_final_emission_meta"], ffnc_layer_meta)
+        _merge_response_type_meta(out[FINAL_EMISSION_META_KEY], response_type_debug)
+        _merge_answer_completeness_meta(out[FINAL_EMISSION_META_KEY], ac_layer_meta)
+        _merge_response_delta_meta(out[FINAL_EMISSION_META_KEY], rd_layer_meta)
+        _merge_social_response_structure_meta(out[FINAL_EMISSION_META_KEY], srs_layer_meta)
+        merge_narrative_authenticity_into_final_emission_meta(out[FINAL_EMISSION_META_KEY], nat_layer_meta)
+        _merge_narrative_authority_meta(out[FINAL_EMISSION_META_KEY], na_layer_meta)
+        _merge_tone_escalation_meta(out[FINAL_EMISSION_META_KEY], te_layer_meta)
+        _merge_anti_railroading_meta(out[FINAL_EMISSION_META_KEY], ar_layer_meta)
+        _merge_context_separation_meta(out[FINAL_EMISSION_META_KEY], cs_layer_meta)
+        _merge_player_facing_narration_purity_meta(out[FINAL_EMISSION_META_KEY], purity_layer_meta)
+        _merge_answer_shape_primacy_meta(out[FINAL_EMISSION_META_KEY], asp_layer_meta)
+        _merge_scene_state_anchor_meta(out[FINAL_EMISSION_META_KEY], ssa_layer_meta)
+        _merge_fallback_behavior_meta(out[FINAL_EMISSION_META_KEY], fb_layer_meta)
+        _merge_fast_fallback_neutral_composition_meta(out[FINAL_EMISSION_META_KEY], ffnc_layer_meta)
         grounded_fm_exempt = _strict_social_terminal_grounded_speaker_first_mention_exemption_entity_id(
             out,
             session=session,
@@ -9046,7 +9038,7 @@ def apply_final_emission_gate(
             response_type_debug=response_type_debug,
             speaker_contract_enforcement=_speaker_contract_payload,
         )
-        log_final_emission_trace({**out["_final_emission_meta"], "stage": "final_emission_gate_replace"})
+        log_final_emission_trace({**out[FINAL_EMISSION_META_KEY], "stage": "final_emission_gate_replace"})
         return _finalize_emission_output(
             out,
             pre_gate_text=pre_gate_text,
@@ -9383,7 +9375,7 @@ def apply_final_emission_gate(
                 **_response_type_decision_payload(response_type_debug),
             }
         )
-        out["_final_emission_meta"] = {
+        out[FINAL_EMISSION_META_KEY] = {
             "final_route": "accept_candidate",
             "reply_kind": _reply_kind(eff_resolution if isinstance(eff_resolution, dict) else None),
             "strict_social_active": strict_social_active,
@@ -9408,20 +9400,20 @@ def apply_final_emission_gate(
             session=session if isinstance(session, dict) else None,
             response_type_debug=response_type_debug,
         )
-        _merge_response_type_meta(out["_final_emission_meta"], response_type_debug)
-        _merge_answer_completeness_meta(out["_final_emission_meta"], ac_layer_meta)
-        _merge_response_delta_meta(out["_final_emission_meta"], rd_layer_meta)
-        _merge_social_response_structure_meta(out["_final_emission_meta"], srs_layer_meta)
-        merge_narrative_authenticity_into_final_emission_meta(out["_final_emission_meta"], nat_layer_meta)
-        _merge_narrative_authority_meta(out["_final_emission_meta"], na_layer_meta)
-        _merge_tone_escalation_meta(out["_final_emission_meta"], te_layer_meta)
-        _merge_anti_railroading_meta(out["_final_emission_meta"], ar_layer_meta)
-        _merge_context_separation_meta(out["_final_emission_meta"], cs_layer_meta)
-        _merge_player_facing_narration_purity_meta(out["_final_emission_meta"], purity_layer_meta)
-        _merge_answer_shape_primacy_meta(out["_final_emission_meta"], asp_layer_meta)
-        _merge_scene_state_anchor_meta(out["_final_emission_meta"], ssa_layer_meta)
-        _merge_fallback_behavior_meta(out["_final_emission_meta"], fb_layer_meta)
-        _merge_fast_fallback_neutral_composition_meta(out["_final_emission_meta"], ffnc_layer_meta)
+        _merge_response_type_meta(out[FINAL_EMISSION_META_KEY], response_type_debug)
+        _merge_answer_completeness_meta(out[FINAL_EMISSION_META_KEY], ac_layer_meta)
+        _merge_response_delta_meta(out[FINAL_EMISSION_META_KEY], rd_layer_meta)
+        _merge_social_response_structure_meta(out[FINAL_EMISSION_META_KEY], srs_layer_meta)
+        merge_narrative_authenticity_into_final_emission_meta(out[FINAL_EMISSION_META_KEY], nat_layer_meta)
+        _merge_narrative_authority_meta(out[FINAL_EMISSION_META_KEY], na_layer_meta)
+        _merge_tone_escalation_meta(out[FINAL_EMISSION_META_KEY], te_layer_meta)
+        _merge_anti_railroading_meta(out[FINAL_EMISSION_META_KEY], ar_layer_meta)
+        _merge_context_separation_meta(out[FINAL_EMISSION_META_KEY], cs_layer_meta)
+        _merge_player_facing_narration_purity_meta(out[FINAL_EMISSION_META_KEY], purity_layer_meta)
+        _merge_answer_shape_primacy_meta(out[FINAL_EMISSION_META_KEY], asp_layer_meta)
+        _merge_scene_state_anchor_meta(out[FINAL_EMISSION_META_KEY], ssa_layer_meta)
+        _merge_fallback_behavior_meta(out[FINAL_EMISSION_META_KEY], fb_layer_meta)
+        _merge_fast_fallback_neutral_composition_meta(out[FINAL_EMISSION_META_KEY], ffnc_layer_meta)
         grounded_fm_exempt = _strict_social_terminal_grounded_speaker_first_mention_exemption_entity_id(
             out,
             session=session,
@@ -9463,7 +9455,7 @@ def apply_final_emission_gate(
             world=world if isinstance(world, dict) else None,
             response_type_debug=response_type_debug,
         )
-        log_final_emission_trace({**out["_final_emission_meta"], "stage": "final_emission_gate_accept"})
+        log_final_emission_trace({**out[FINAL_EMISSION_META_KEY], "stage": "final_emission_gate_accept"})
         return _finalize_emission_output(
             out,
             pre_gate_text=pre_gate_text,
@@ -9577,7 +9569,7 @@ def apply_final_emission_gate(
     gate_out_text = _normalize_text(out.get("player_facing_text"))
     post_gate_mutation_detected = pre_gate_text != gate_out_text
 
-    out["_final_emission_meta"] = {
+    out[FINAL_EMISSION_META_KEY] = {
         "final_route": "replaced",
         "reply_kind": _reply_kind(eff_resolution if isinstance(eff_resolution, dict) else None),
         "strict_social_active": strict_social_active,
@@ -9604,19 +9596,19 @@ def apply_final_emission_gate(
         session=session if isinstance(session, dict) else None,
         response_type_debug=response_type_debug,
     )
-    _merge_response_type_meta(out["_final_emission_meta"], response_type_debug)
-    _merge_answer_completeness_meta(out["_final_emission_meta"], ac_layer_meta)
-    _merge_response_delta_meta(out["_final_emission_meta"], rd_layer_meta)
-    _merge_social_response_structure_meta(out["_final_emission_meta"], srs_layer_meta)
-    merge_narrative_authenticity_into_final_emission_meta(out["_final_emission_meta"], nat_layer_meta)
-    _merge_narrative_authority_meta(out["_final_emission_meta"], na_layer_meta)
-    _merge_tone_escalation_meta(out["_final_emission_meta"], te_layer_meta)
-    _merge_anti_railroading_meta(out["_final_emission_meta"], ar_layer_meta)
-    _merge_context_separation_meta(out["_final_emission_meta"], cs_layer_meta)
-    _merge_player_facing_narration_purity_meta(out["_final_emission_meta"], purity_layer_meta)
-    _merge_answer_shape_primacy_meta(out["_final_emission_meta"], asp_layer_meta)
-    _merge_scene_state_anchor_meta(out["_final_emission_meta"], ssa_layer_meta)
-    _merge_fallback_behavior_meta(out["_final_emission_meta"], fb_layer_meta)
+    _merge_response_type_meta(out[FINAL_EMISSION_META_KEY], response_type_debug)
+    _merge_answer_completeness_meta(out[FINAL_EMISSION_META_KEY], ac_layer_meta)
+    _merge_response_delta_meta(out[FINAL_EMISSION_META_KEY], rd_layer_meta)
+    _merge_social_response_structure_meta(out[FINAL_EMISSION_META_KEY], srs_layer_meta)
+    merge_narrative_authenticity_into_final_emission_meta(out[FINAL_EMISSION_META_KEY], nat_layer_meta)
+    _merge_narrative_authority_meta(out[FINAL_EMISSION_META_KEY], na_layer_meta)
+    _merge_tone_escalation_meta(out[FINAL_EMISSION_META_KEY], te_layer_meta)
+    _merge_anti_railroading_meta(out[FINAL_EMISSION_META_KEY], ar_layer_meta)
+    _merge_context_separation_meta(out[FINAL_EMISSION_META_KEY], cs_layer_meta)
+    _merge_player_facing_narration_purity_meta(out[FINAL_EMISSION_META_KEY], purity_layer_meta)
+    _merge_answer_shape_primacy_meta(out[FINAL_EMISSION_META_KEY], asp_layer_meta)
+    _merge_scene_state_anchor_meta(out[FINAL_EMISSION_META_KEY], ssa_layer_meta)
+    _merge_fallback_behavior_meta(out[FINAL_EMISSION_META_KEY], fb_layer_meta)
     grounded_fm_exempt = _strict_social_terminal_grounded_speaker_first_mention_exemption_entity_id(
         out,
         session=session,
@@ -9658,7 +9650,7 @@ def apply_final_emission_gate(
         world=world if isinstance(world, dict) else None,
         response_type_debug=response_type_debug,
     )
-    log_final_emission_trace({**out["_final_emission_meta"], "stage": "final_emission_gate_replace"})
+    log_final_emission_trace({**out[FINAL_EMISSION_META_KEY], "stage": "final_emission_gate_replace"})
     return _finalize_emission_output(
         out,
         pre_gate_text=pre_gate_text,

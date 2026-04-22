@@ -11,6 +11,15 @@ def _resp(*, text: str, fem: dict) -> dict:
     return {"ok": True, "gm_output": {"player_facing_text": text, "_final_emission_meta": fem}}
 
 
+def _resp_sidecar(*, text: str, fem: dict) -> dict:
+    """Emit canonical post-gate envelope shape (FEM in gm_output_debug.emission_debug_lane)."""
+    return {
+        "ok": True,
+        "gm_output": {"player_facing_text": text},
+        "gm_output_debug": {"emission_debug_lane": {"_final_emission_meta": fem}},
+    }
+
+
 def test_missing_telemetry_fails_closed() -> None:
     r = evaluate_narrative_authenticity({}, {"ok": True, "gm_output": {"player_facing_text": "x"}}, {})
     assert r["passed"] is False
@@ -212,6 +221,24 @@ def test_determinism_same_inputs_same_output() -> None:
     a = evaluate_narrative_authenticity({"prior_gm_text": "x" * 40}, payload, fem)
     b = evaluate_narrative_authenticity({"prior_gm_text": "x" * 40}, payload, fem)
     assert a == b
+
+
+def test_eval_reads_fem_from_sidecar_lane_not_only_legacy_top_level() -> None:
+    fem = {
+        "narrative_authenticity_checked": True,
+        "narrative_authenticity_failed": False,
+        "narrative_authenticity_status": "pass",
+        "narrative_authenticity_trace": {"rumor_turn_active": True},
+        "narrative_authenticity_metrics": {"rumor_turn_active": True, "rumor_signal_count": 2},
+        "narrative_authenticity_evidence": {},
+    }
+    payload = _resp_sidecar(text="Dock talk says the gate holds.", fem=fem)
+    r = evaluate_narrative_authenticity({}, payload, {})
+    assert r["passed"] is True
+    assert r["narrative_authenticity_verdict"] in {"clean_pass", "relaxed_pass", "repaired_pass"}
+    sup = r.get("supporting_metrics") or {}
+    assert sup.get("narrative_authenticity_status") == "pass"
+    assert (sup.get("narrative_authenticity_trace") or {}).get("rumor_turn_active") is True
 
 
 @pytest.mark.integration

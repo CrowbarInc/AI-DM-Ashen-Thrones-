@@ -9,8 +9,7 @@ from collections import Counter
 from typing import Any, Mapping, MutableMapping, Sequence
 
 from game.final_emission_meta import (
-    read_dead_turn_from_gm_output,
-    read_final_emission_meta_dict,
+    normalized_observational_telemetry_bundle,
     summarize_gameplay_validation_for_turn,
 )
 
@@ -21,22 +20,10 @@ INVALID_FOR_GAMEPLAY_QUALITY_EXPLAINER = (
 )
 
 
-def _gm_output_shim_from_snapshot_record(record: Mapping[str, Any]) -> Mapping[str, Any]:
-    """Treat transcript / manual snapshot rows as ``gm_output``-shaped for :func:`read_dead_turn_from_gm_output`."""
-    fem = record.get("_final_emission_meta")
-    if isinstance(fem, Mapping):
-        return {"_final_emission_meta": fem}
-    go = record.get("gm_output")
-    if isinstance(go, Mapping):
-        fem2 = read_final_emission_meta_dict(go)
-        if fem2:
-            return {"_final_emission_meta": fem2}
-    return {}
-
-
 def per_turn_dead_turn_visibility(record: Mapping[str, Any], *, turn_index: int) -> dict[str, Any]:
     """Single row: FEM → dead_turn fields + gameplay_validation summary (evaluation policy mirror)."""
-    dt = read_dead_turn_from_gm_output(_gm_output_shim_from_snapshot_record(record))
+    bundle = normalized_observational_telemetry_bundle(record)
+    dt = bundle.get("dead_turn") if isinstance(bundle.get("dead_turn"), Mapping) else {}
     gv = summarize_gameplay_validation_for_turn(dt)
     return {
         "turn_index": int(turn_index),

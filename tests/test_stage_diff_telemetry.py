@@ -271,3 +271,26 @@ def test_snapshot_turn_stage_includes_narrative_authenticity_telemetry() -> None
     assert snap["narrative_authenticity_rumor_relaxed_low_signal"] is True
     assert snap["rumor_turn_active"] is True
     assert "rumor_uses_identical" in snap["narrative_authenticity_reason_codes"][0]
+
+
+def test_snapshot_turn_stage_does_not_widen_na_surface_with_nested_dicts_or_unknown_keys() -> None:
+    """Stage-diff must only consume the curated NA projection surface."""
+    gm: Dict[str, Any] = {
+        "player_facing_text": "stub",
+        "metadata": {},
+        "_final_emission_meta": {
+            "narrative_authenticity_status": "pass",
+            "narrative_authenticity_reason_codes": ["a"],
+            # Nested telemetry should not be passed through into stage snapshots.
+            "narrative_authenticity_metrics": {"generic_filler_score": 0.2},
+            "narrative_authenticity_evidence": {"blob": {"nested": "nope"}},
+            # Unknown keys should never appear.
+            "narrative_authenticity_private_blob": {"x": 1},
+        },
+    }
+    snap = sdt.snapshot_turn_stage(gm, "na_surface_probe")
+    assert snap.get("narrative_authenticity_status") == "pass"
+    assert snap.get("narrative_authenticity_reason_codes") == ["a"]
+    assert "narrative_authenticity_metrics" not in snap
+    assert "narrative_authenticity_evidence" not in snap
+    assert "narrative_authenticity_private_blob" not in snap
