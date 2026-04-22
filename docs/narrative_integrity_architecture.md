@@ -25,12 +25,45 @@ These rules apply while the repo is in **post-AER consolidation** (see `docs/cur
 | Domain | Cleanup intent |
 | --- | --- |
 | **Final emission metadata packaging** | Normalize `_final_emission_meta` (and related) packaging so emit **orchestration** owns composition; avoid duplicate meta mutation sites. |
-| **Telemetry normalization seam (Objective #13)** | **Completed consolidation**: `game/final_emission_meta.py` is the **canonical telemetry schema/normalization/mutation seam** for `_final_emission_meta` (FEM) and related helpers; `game/final_emission_gate.py` remains the **orchestration/write-timing owner**; `game/stage_diff_telemetry.py` remains **observational projection only**; evaluator/playability/reporting tooling are **offline consumers** only. Do not reintroduce ad hoc `_final_emission_meta` mutation or bespoke local consumer shaping. No policy by JSON. |
+| **Telemetry normalization seam (Objective #13)** | **Completed consolidation**: `game/final_emission_meta.py` owns **FEM packaging + read-side normalization** for `_final_emission_meta` (and helpers such as :func:`~game.final_emission_meta.assemble_unified_observational_telemetry_bundle`); `game/telemetry_vocab.py` owns the **shared canonical event vocabulary** (phase/action/scope/reasons + envelope); `game/final_emission_gate.py` remains **orchestration/write-timing**; `game/stage_diff_telemetry.py` owns **bounded raw snapshots/transitions** plus its own canonical event projection; `game/narrative_authenticity_eval.py` owns **offline scores** plus evaluator canonical events. All telemetry projections are **observational** — they must not drive gate legality. No policy by JSON. |
 | **Prompt / sanitizer ownership boundaries** | Keep **pre-generation** contracts in prompt/guard paths vs **post-GM** string hygiene in sanitizer paths; document **smoke overlap** vs **canonical owner** for each invariant. For prompt-contract assembly specifically, the canonical runtime owner is `game/prompt_context.py`, the practical primary direct-owner suite is `tests/test_prompt_context.py`, and downstream prompt consumers stay secondary. **Applied (C3):** prompt/guard vs sanitizer pytest homes remain split per ``tests/TEST_CONSOLIDATION_PLAN.md`` (*Block C3 applied*). |
 | **Social / emission ownership boundaries** | Keep strict-social emission, escalation machinery, retry-terminal fallback suites, and catch-all social tests from competing as co-equal **canonical owners** of the same string families. |
 | **Transcript duplicate assertion thinning** | Transcripts prove sequencing and cross-turn state; reduce duplicate substring locks where a smaller **contract-driven** test already owns the gate. |
 | **Lead / clue cleanup** | **Deferred** until after **prompt/sanitizer** and **social/emission** batches — see `tests/TEST_CONSOLIDATION_PLAN.md` → *Next consolidation order*. |
 | **Objective #7 referent seam** | **Documented + regression-hardened (Block D):** deterministic artifact owner `referent_tracking.py`; prompt ship + compact mirror; post-GM validator/repair/gate wiring per *Objective #7* section above. |
+
+---
+
+## Observational telemetry pipeline (Block C)
+
+**Hard rule:** telemetry is **observational only** — it records what ran for debugging, audits, and
+offline harnesses. It must **never** decide legality, layer order, retries, repairs, or emitted
+text. Do not encode new policy by adding JSON keys and branching on them in orchestration.
+
+**Vocabulary owner:** :mod:`game.telemetry_vocab` defines the shared phase/action/scope tokens,
+reason-list shaping, and the single ``build_telemetry_event`` envelope. FEM, stage-diff, and the
+evaluator keep their **raw** field semantics; projections only normalize into that envelope.
+
+**Layers:**
+
+1. **Raw / source** — Pipeline-owned dicts unchanged at rest: FEM under the emission debug lane
+   (and legacy top-level compatibility), ``metadata["stage_diff_telemetry"]`` snapshots/transitions,
+   validator internal ``failure_reasons`` / ``skip_reason`` shapes before they are packaged into FEM.
+2. **Normalized read helpers** — :func:`game.final_emission_meta.normalize_final_emission_meta_for_observability`
+   and :func:`game.final_emission_meta.normalize_merged_na_telemetry_for_eval` coerce **known**
+   nested subtrees to stable empty dict/list forms without inventing new policy fields.
+3. **Canonical observational projections** — :func:`game.telemetry_vocab.build_telemetry_event` is the only
+   envelope for cross-domain comparison. Each projection (FEM, stage-diff, evaluator) supplies
+   ``phase``, ``owner``, ``action``, ``reasons``, ``scope``, and a bounded ``data`` allow-list.
+   Multiple raw reason families (for example FEM ``narrative_authenticity_failure_reasons`` vs
+   ``narrative_authenticity_reason_codes``) should be **merged** into canonical ``reasons`` at
+   projection time, not duplicated as parallel top-level event keys.
+4. **Unified observational bundle** — :func:`game.final_emission_meta.assemble_unified_observational_telemetry_bundle`
+   joins normalized FEM, FEM events, stage-diff events + curated ``stage_diff_surface``, and
+   evaluator events for **read-side** inspection only; it is not a runtime policy bus.
+
+**Canonical event fields** (see :mod:`game.telemetry_vocab`): ``phase``, ``owner``, ``action``,
+``reasons``, ``scope``, ``data``.
 
 ---
 

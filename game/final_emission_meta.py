@@ -1,32 +1,44 @@
-"""Debug / meta packaging for final emission (FEM) and related read-side helpers.
+"""FEM packaging, read-side normalization, and FEM-centric observational projections.
 
-**Canonical boundary (post-OC2):** :func:`game.final_emission_gate.apply_final_emission_gate`
-remains the **orchestration owner** for layer order and integration. This module is
-**Canonical metadata-only owner**: stable dict shapes for FEM / NA fields, slimming, read-side coercion
-for deterministic consumers, and dead-turn packaging for
-``_final_emission_meta["dead_turn"]``. It does **not** orchestrate gates, prompts, or API
-surfaces—only shapes, merges, and **channel-sidecar** helpers used at the emission exit seam.
+:func:`game.final_emission_gate.apply_final_emission_gate` owns **orchestration** (layer order,
+integration). This module owns **FEM dict shapes**, merges, slim NA traces, dead-turn
+snapshots under ``_final_emission_meta["dead_turn"]``, and **read helpers** / sidecar accessors
+— not gates, prompts, or API surfaces.
 
-After the final emission boundary, observability keys (including ``_final_emission_meta``)
-live under ``gm_output["internal_state"]["emission_debug_lane"]`` (see
-:func:`package_emission_channel_sidecar`). Use :func:`read_final_emission_meta_dict` /
-:func:`read_emission_debug_lane` instead of assuming a top-level ``_final_emission_meta`` key.
+Shared **vocabulary** (phase/action/scope + event envelope) lives in :mod:`game.telemetry_vocab`.
+**Raw semantics** for stage-diff snapshots/transitions and offline evaluator rows stay in
+:mod:`game.stage_diff_telemetry` and :mod:`game.narrative_authenticity_eval`; helpers here
+project FEM into canonical events via :func:`game.telemetry_vocab.build_telemetry_event` only.
 
-Validator implementations and emission repair wiring live in :mod:`game.narrative_authenticity`
-and :mod:`game.final_emission_repairs` (canonical ``response_delta_*`` legality keys remain
-owned by the gate stack’s delta layer); this file only packages **metadata shapes**, not
-legality verdicts. Narrative-mode **output** legality is computed in
-:mod:`game.narrative_mode_contract` (``validate_narrative_mode_output``); this module may package
-``narrative_mode_output_*`` FEM fields the same way as other contract traces. Transitional overlap
-in import sites does not make this file the orchestration owner.
+Post-finalization, FEM is usually under ``gm_output["internal_state"]["emission_debug_lane"]``
+(see :func:`package_emission_channel_sidecar`). Prefer :func:`read_final_emission_meta_dict` /
+:func:`read_emission_debug_lane` over assuming top-level ``_final_emission_meta``.
+
+Validator/repair **wiring** remains in :mod:`game.narrative_authenticity` and
+:mod:`game.final_emission_repairs`; narrative-mode **output** legality is
+:mod:`game.narrative_mode_contract`. This file packages **metadata shapes** and observational
+read paths, not legality verdicts.
 """
 from __future__ import annotations
 
+import importlib
 from typing import Any, Dict, Mapping, MutableMapping
 
 from game.state_channels import project_debug_payload
+from game.telemetry_vocab import (
+    TELEMETRY_ACTION_OBSERVED,
+    TELEMETRY_ACTION_REPAIRED,
+    TELEMETRY_ACTION_SKIPPED,
+    TELEMETRY_ACTION_UNKNOWN,
+    TELEMETRY_PHASE_GATE,
+    TELEMETRY_SCOPE_TURN,
+    build_telemetry_event,
+    normalize_reason_list,
+)
 
-# --- Canonical key registries (telemetry-only; not policy owners) ---
+# --- Canonical key registries (telemetry-only; not policy) ---
+# Vocabulary / envelope: :mod:`game.telemetry_vocab`. FEM shapes + read normalization: this module.
+#
 
 # Post-gate contract: debug/meta observability lives under gm_output["internal_state"] lanes.
 INTERNAL_STATE_KEY: str = "internal_state"
@@ -220,6 +232,9 @@ def merge_narrative_mode_output_into_final_emission_meta(meta: Dict[str, Any], n
             meta[k] = v
 
 
+# Raw NA merge keys on FEM (gate/write path). ``failure_reasons`` mirrors validator ``failure_reasons``;
+# ``reason_codes`` is the packaged list used in traces; both may coexist — canonical **events**
+# merge them; do not delete either stable raw key.
 NARRATIVE_AUTHENTICITY_FEM_KEYS: frozenset[str] = frozenset(
     {
         "narrative_authenticity_checked",
@@ -324,7 +339,11 @@ def read_emission_debug_lane(gm_output: Mapping[str, Any] | None) -> dict[str, A
 
 
 def read_final_emission_meta_dict(gm_output: Mapping[str, Any] | None) -> dict[str, Any]:
-    """Read FEM dict from post-gate sidecar, else legacy top-level ``_final_emission_meta``.
+    """Read **raw** FEM dict from post-gate sidecar, else legacy top-level ``_final_emission_meta``.
+
+    Returns a shallow copy of whatever the pipeline wrote (stable key names, but no
+    coercion of nested subtrees). For **normalized** FEM intended for evaluator-style
+    consumers, use :func:`normalize_final_emission_meta_for_observability` on the result.
 
     Precedence is **sidecar first** to align with the post-finalization contract. Legacy top-level
     FEM is accepted as a compatibility fallback for older/mixed dicts and unit fixtures.
@@ -362,10 +381,10 @@ def read_emission_debug_lane_from_turn_payload(payload: Mapping[str, Any] | None
 
 
 def read_final_emission_meta_from_turn_payload(payload: Mapping[str, Any] | None) -> dict[str, Any]:
-    """Read FEM dict from an API envelope or from a gate-shaped ``gm_output`` mapping.
+    """Read **raw** FEM from an API envelope or gate-shaped ``gm_output`` (pure read-side).
 
-    This is a pure, read-side helper that preserves the legacy top-level
-    ``_final_emission_meta`` fallback already supported by :func:`read_final_emission_meta_dict`.
+    Same precedence and legacy fallback as :func:`read_final_emission_meta_dict`; does not
+    normalize nested NA or dead-turn defaults — that is a separate observational step.
     """
     if not isinstance(payload, Mapping):
         return {}
@@ -749,7 +768,10 @@ def summarize_gameplay_validation_for_turn(dt: Mapping[str, Any] | None) -> Dict
 def normalize_merged_na_telemetry_for_eval(merged: Mapping[str, Any] | None) -> dict[str, Any]:
     """Read-side: shallow copy with stable empty mappings for nested NA telemetry (no policy inference).
 
-    Proof-layer consumers treat absent vs ``None`` nested dicts consistently without duplicating guards.
+    Input is typically a **raw** merged NA dict (FEM keys + optional harness overrides); output
+    keeps the same keys but replaces ``None`` / non-mapping nested payloads with ``{}`` for
+    metrics/trace/evidence/relaxation flags. Proof-layer consumers treat absent vs ``None`` nested
+    dicts consistently without duplicating guards.
     """
     out = dict(merged or {})
     for k in (
@@ -771,18 +793,35 @@ def stage_diff_narrative_authenticity_projection(fem: Mapping[str, Any] | None) 
 
     This returns a compact dict with a small, explicit key whitelist. It never returns raw,
     arbitrary pass-through JSON from FEM, and it does not infer legality.
+
+    **Reason-list alias collapse (read-side):** FEM may carry both
+    ``narrative_authenticity_reason_codes`` and ``narrative_authenticity_failure_reasons``.
+    They are the same semantic family as gate ``failure_reasons`` vs packaged ``reason_codes``;
+    this projection merges them into a **single** deduped ``narrative_authenticity_reason_codes``
+    list so stage snapshots do not double-track codes. Raw FEM keys on disk are unchanged —
+    only this bounded read surface collapses duplicates.
     """
     if not isinstance(fem, Mapping):
         return {}
     out: dict[str, Any] = {}
-    for k in STAGE_DIFF_ALLOWED_NA_PROJECTION_KEYS:
+    merged_codes: list[str] = []
+    merged_codes.extend(normalize_reason_list(fem.get("narrative_authenticity_reason_codes")))
+    merged_codes.extend(normalize_reason_list(fem.get("narrative_authenticity_failure_reasons")))
+    merged_codes = list(dict.fromkeys(merged_codes))[:16]
+
+    for k in sorted(STAGE_DIFF_ALLOWED_NA_PROJECTION_KEYS):
+        if k == "narrative_authenticity_reason_codes":
+            if merged_codes:
+                out[k] = [str(x) for x in merged_codes if str(x).strip()]
+            continue
         v = fem.get(k)
         if v is None:
             continue
-        if k in {"narrative_authenticity_reason_codes", "narrative_authenticity_failure_reasons"}:
-            if isinstance(v, list) and v:
-                out[k] = [str(x) for x in v if str(x).strip()]
-        elif isinstance(v, (str, bool, int, float)) or v is None:
+        if isinstance(v, bool):
+            out[k] = v
+        elif isinstance(v, str):
+            out[k] = v
+        elif isinstance(v, (int, float)):
             out[k] = v
         else:
             # Explicitly avoid widening the surface with nested dicts/lists.
@@ -794,7 +833,11 @@ def stage_diff_narrative_authenticity_projection(fem: Mapping[str, Any] | None) 
 
 
 def normalize_final_emission_meta_for_observability(fem: Mapping[str, Any] | None) -> dict[str, Any]:
-    """Read-side normalizer for FEM telemetry (observational-only; no policy inference).
+    """Read-side **normalized** FEM view for observability (observational-only; no policy inference).
+
+    **Raw vs normalized:** :func:`read_final_emission_meta_dict` returns pipeline-shaped FEM;
+    this function returns a shallow-normalized copy with stable defaults for nested NA and
+    dead-turn subtrees so offline tools need fewer null guards.
 
     - Pure function.
     - Fills missing nested dict/list fields deterministically for evaluator/debug consumers.
@@ -826,8 +869,343 @@ def normalize_final_emission_meta_for_observability(fem: Mapping[str, Any] | Non
     return base
 
 
+_FEM_OBS_NA_SIGNAL_KEYS: frozenset[str] = frozenset(
+    {
+        "narrative_authenticity_checked",
+        "narrative_authenticity_failed",
+        "narrative_authenticity_repaired",
+        "narrative_authenticity_repair_applied",
+        "narrative_authenticity_skip_reason",
+        "narrative_authenticity_status",
+        "narrative_authenticity_reason_codes",
+        "narrative_authenticity_failure_reasons",
+        "narrative_authenticity_rumor_relaxed_low_signal",
+    }
+)
+
+_FEM_OBS_AC_SIGNAL_KEYS: frozenset[str] = frozenset(
+    {
+        "answer_completeness_checked",
+        "answer_completeness_failed",
+        "answer_completeness_repaired",
+        "answer_completeness_skip_reason",
+        "answer_completeness_failure_reasons",
+    }
+)
+
+_FEM_OBS_RD_SIGNAL_KEYS: frozenset[str] = frozenset(
+    {
+        "response_delta_checked",
+        "response_delta_failed",
+        "response_delta_repaired",
+        "response_delta_skip_reason",
+        "response_delta_failure_reasons",
+    }
+)
+
+_FEM_OBS_FB_SIGNAL_KEYS: frozenset[str] = frozenset(
+    {
+        "fallback_behavior_contract_present",
+        "fallback_behavior_checked",
+        "fallback_behavior_failed",
+        "fallback_behavior_repaired",
+        "fallback_behavior_skip_reason",
+        "fallback_behavior_failure_reasons",
+        "fallback_behavior_uncertainty_active",
+    }
+)
+
+
+def _fem_clip_str(value: Any, *, limit: int = 120) -> str | None:
+    if not isinstance(value, str):
+        return None
+    s = value.strip()
+    if not s:
+        return None
+    if len(s) <= limit:
+        return s
+    return s[: max(0, limit - 1)] + "…"
+
+
+def _fem_na_action(fem: Mapping[str, Any]) -> str:
+    skip = fem.get("narrative_authenticity_skip_reason")
+    if isinstance(skip, str) and skip.strip() and not bool(fem.get("narrative_authenticity_checked")):
+        return TELEMETRY_ACTION_SKIPPED
+    if bool(fem.get("narrative_authenticity_repaired")) or bool(fem.get("narrative_authenticity_repair_applied")):
+        return TELEMETRY_ACTION_REPAIRED
+    if bool(fem.get("narrative_authenticity_checked")):
+        return TELEMETRY_ACTION_OBSERVED
+    return TELEMETRY_ACTION_UNKNOWN
+
+
+def _fem_layer_action(
+    fem: Mapping[str, Any],
+    *,
+    checked_key: str,
+    skip_key: str,
+    repaired_key: str,
+) -> str:
+    skip = fem.get(skip_key)
+    if isinstance(skip, str) and skip.strip() and not bool(fem.get(checked_key)):
+        return TELEMETRY_ACTION_SKIPPED
+    if bool(fem.get(repaired_key)):
+        return TELEMETRY_ACTION_REPAIRED
+    if bool(fem.get(checked_key)):
+        return TELEMETRY_ACTION_OBSERVED
+    return TELEMETRY_ACTION_UNKNOWN
+
+
+def _fem_response_type_action(fem: Mapping[str, Any]) -> str:
+    if bool(fem.get("response_type_repair_used")):
+        return TELEMETRY_ACTION_REPAIRED
+    if fem.get("response_type_candidate_ok") is False:
+        return TELEMETRY_ACTION_SKIPPED
+    if fem.get("response_type_required") is not None and str(fem.get("response_type_required") or "").strip():
+        return TELEMETRY_ACTION_OBSERVED
+    return TELEMETRY_ACTION_UNKNOWN
+
+
+def build_fem_observability_events(fem: Mapping[str, Any] | None) -> list[dict[str, Any]]:
+    """Project FEM into a bounded list of canonical observational events (:mod:`game.telemetry_vocab`).
+
+    ``phase`` is ``gate`` because FEM carries post-gate validator/repair traces, not because this
+    function gates anything. Read-side only: no legality interpretation, no stage-diff/evaluator
+    semantic ownership, no arbitrary FEM pass-through in ``data``. NA ``reasons`` merge
+    ``narrative_authenticity_failure_reasons`` with ``narrative_authenticity_reason_codes``.
+    """
+    if not isinstance(fem, Mapping):
+        return []
+
+    events: list[dict[str, Any]] = []
+
+    if any(k in fem for k in _FEM_OBS_NA_SIGNAL_KEYS):
+        na_reasons = normalize_reason_list(fem.get("narrative_authenticity_failure_reasons")) + normalize_reason_list(
+            fem.get("narrative_authenticity_reason_codes")
+        )
+        na_reasons = list(dict.fromkeys(na_reasons))[:16]
+        events.append(
+            build_telemetry_event(
+                phase=TELEMETRY_PHASE_GATE,
+                owner="narrative_authenticity",
+                action=_fem_na_action(fem),
+                reasons=na_reasons,
+                scope=TELEMETRY_SCOPE_TURN,
+                data={
+                    "checked": bool(fem.get("narrative_authenticity_checked")),
+                    "failed": bool(fem.get("narrative_authenticity_failed")),
+                    "repaired": bool(fem.get("narrative_authenticity_repaired"))
+                    or bool(fem.get("narrative_authenticity_repair_applied")),
+                    "status": _fem_clip_str(fem.get("narrative_authenticity_status"), limit=24),
+                    "skip_reason": _fem_clip_str(fem.get("narrative_authenticity_skip_reason")),
+                    "rumor_relaxed_low_signal": bool(fem.get("narrative_authenticity_rumor_relaxed_low_signal")),
+                },
+            )
+        )
+
+    if any(k in fem for k in _FEM_OBS_AC_SIGNAL_KEYS):
+        ac_reasons = normalize_reason_list(fem.get("answer_completeness_failure_reasons"))[:16]
+        events.append(
+            build_telemetry_event(
+                phase=TELEMETRY_PHASE_GATE,
+                owner="answer_completeness",
+                action=_fem_layer_action(
+                    fem,
+                    checked_key="answer_completeness_checked",
+                    skip_key="answer_completeness_skip_reason",
+                    repaired_key="answer_completeness_repaired",
+                ),
+                reasons=ac_reasons,
+                scope=TELEMETRY_SCOPE_TURN,
+                data={
+                    "checked": bool(fem.get("answer_completeness_checked")),
+                    "failed": bool(fem.get("answer_completeness_failed")),
+                    "repaired": bool(fem.get("answer_completeness_repaired")),
+                    "repair_mode": _fem_clip_str(fem.get("answer_completeness_repair_mode")),
+                    "skip_reason": _fem_clip_str(fem.get("answer_completeness_skip_reason")),
+                    "expected_voice": _fem_clip_str(fem.get("answer_completeness_expected_voice")),
+                },
+            )
+        )
+
+    if any(k in fem for k in _FEM_OBS_RD_SIGNAL_KEYS):
+        rd_reasons = normalize_reason_list(fem.get("response_delta_failure_reasons"))[:16]
+        echo_ratio_raw = fem.get("response_delta_echo_overlap_ratio")
+        echo_out: float | None
+        if isinstance(echo_ratio_raw, bool) or echo_ratio_raw is None:
+            echo_out = None
+        elif isinstance(echo_ratio_raw, (int, float)):
+            echo_out = float(echo_ratio_raw)
+        else:
+            echo_out = None
+        events.append(
+            build_telemetry_event(
+                phase=TELEMETRY_PHASE_GATE,
+                owner="response_delta",
+                action=_fem_layer_action(
+                    fem,
+                    checked_key="response_delta_checked",
+                    skip_key="response_delta_skip_reason",
+                    repaired_key="response_delta_repaired",
+                ),
+                reasons=rd_reasons,
+                scope=TELEMETRY_SCOPE_TURN,
+                data={
+                    "checked": bool(fem.get("response_delta_checked")),
+                    "failed": bool(fem.get("response_delta_failed")),
+                    "repaired": bool(fem.get("response_delta_repaired")),
+                    "kind_detected": _fem_clip_str(fem.get("response_delta_kind_detected"), limit=48),
+                    "echo_overlap_ratio": echo_out,
+                    "skip_reason": _fem_clip_str(fem.get("response_delta_skip_reason")),
+                    "trigger_source": _fem_clip_str(fem.get("response_delta_trigger_source")),
+                },
+            )
+        )
+
+    if any(k in fem for k in _FEM_OBS_FB_SIGNAL_KEYS):
+        fb_reasons = normalize_reason_list(fem.get("fallback_behavior_failure_reasons"))[:16]
+        events.append(
+            build_telemetry_event(
+                phase=TELEMETRY_PHASE_GATE,
+                owner="fallback_behavior",
+                action=_fem_layer_action(
+                    fem,
+                    checked_key="fallback_behavior_checked",
+                    skip_key="fallback_behavior_skip_reason",
+                    repaired_key="fallback_behavior_repaired",
+                ),
+                reasons=fb_reasons,
+                scope=TELEMETRY_SCOPE_TURN,
+                data={
+                    "contract_present": bool(fem.get("fallback_behavior_contract_present")),
+                    "checked": bool(fem.get("fallback_behavior_checked")),
+                    "failed": bool(fem.get("fallback_behavior_failed")),
+                    "repaired": bool(fem.get("fallback_behavior_repaired")),
+                    "uncertainty_active": bool(fem.get("fallback_behavior_uncertainty_active")),
+                    "repair_mode": _fem_clip_str(str(fem.get("fallback_behavior_repair_mode") or ""), limit=48),
+                    "skip_reason": _fem_clip_str(fem.get("fallback_behavior_skip_reason")),
+                    "clarifying_question_used": bool(fem.get("fallback_behavior_clarifying_question_used")),
+                    "partial_used": bool(fem.get("fallback_behavior_partial_used")),
+                },
+            )
+        )
+
+    if any(k in fem for k in FEM_RESPONSE_TYPE_KEYS):
+        rt_reasons = normalize_reason_list(fem.get("response_type_rejection_reasons"))[:16]
+        events.append(
+            build_telemetry_event(
+                phase=TELEMETRY_PHASE_GATE,
+                owner="response_type",
+                action=_fem_response_type_action(fem),
+                reasons=rt_reasons,
+                scope=TELEMETRY_SCOPE_TURN,
+                data={
+                    "required": _fem_clip_str(fem.get("response_type_required"), limit=48),
+                    "contract_source": _fem_clip_str(fem.get("response_type_contract_source"), limit=64),
+                    "candidate_ok": fem.get("response_type_candidate_ok"),
+                    "repair_used": bool(fem.get("response_type_repair_used")),
+                    "repair_kind": _fem_clip_str(fem.get("response_type_repair_kind"), limit=64),
+                    "non_hostile_escalation_blocked": bool(fem.get("non_hostile_escalation_blocked")),
+                },
+            )
+        )
+
+    snap = fem.get(FEM_DEAD_TURN_KEY)
+    if isinstance(snap, Mapping):
+        rc = normalize_reason_list(snap.get("dead_turn_reason_codes"))[:8]
+        events.append(
+            build_telemetry_event(
+                phase=TELEMETRY_PHASE_GATE,
+                owner="dead_turn",
+                action=TELEMETRY_ACTION_OBSERVED,
+                reasons=rc,
+                scope=TELEMETRY_SCOPE_TURN,
+                data={
+                    "is_dead_turn": bool(snap.get("is_dead_turn")),
+                    "dead_turn_class": _fem_clip_str(snap.get("dead_turn_class"), limit=48) or "none",
+                    "validation_playable": bool(snap.get("validation_playable", True)),
+                    "manual_test_valid": bool(snap.get("manual_test_valid", True)),
+                },
+            )
+        )
+
+    # Hard cap: six curated domains; keep deterministic ordering already implied by append order.
+    return events[:6]
+
+
+def _curated_stage_diff_surface_for_bundle(stage_diff: Mapping[str, Any] | None) -> dict[str, Any]:
+    """Shallow-stable copies of bounded stage-diff lists only (no arbitrary metadata pass-through).
+
+    Keys are iterated in sorted order so the returned dict is stable across process runs
+    (``frozenset`` iteration order is not guaranteed). ``stage_diff`` itself is owned by
+    :mod:`game.stage_diff_telemetry`; this helper only copies the bundle allow-list.
+    """
+    if not isinstance(stage_diff, Mapping):
+        return {}
+    sdt = importlib.import_module("game.stage_diff_telemetry")
+    bundle_keys = getattr(sdt, "STAGE_DIFF_BUNDLE_SURFACE_KEYS", frozenset())
+
+    out: dict[str, Any] = {}
+    for key in sorted(bundle_keys):
+        if key not in stage_diff:
+            continue
+        raw = stage_diff.get(key)
+        if not isinstance(raw, list):
+            continue
+        if key == "snapshots":
+            out[key] = [dict(s) if isinstance(s, Mapping) else s for s in raw]
+        else:
+            out[key] = [dict(t) if isinstance(t, Mapping) else t for t in raw]
+    return out
+
+
+def assemble_unified_observational_telemetry_bundle(
+    *,
+    fem: Mapping[str, Any] | None = None,
+    stage_diff: Mapping[str, Any] | None = None,
+    evaluator_result: Mapping[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Assemble normalized FEM plus canonical observational events from FEM, stage-diff, and evaluator inputs.
+
+    ``final_emission_meta`` / ``fem_observability_events`` are built here. Stage-diff lists and
+    events come from :mod:`game.stage_diff_telemetry`; evaluator events from
+    :mod:`game.narrative_authenticity_eval` (separate from the evaluator scoring dict).
+
+    Stage-diff and evaluator builders are loaded with :func:`importlib.import_module` to avoid
+    static import cycles at module import time (same behavior as eager imports).
+
+    Read-side only; telemetry must not drive gate decisions.
+    """
+    fem_norm = normalize_final_emission_meta_for_observability(fem if isinstance(fem, Mapping) else None)
+    fem_events = build_fem_observability_events(fem_norm)
+
+    sdt = importlib.import_module("game.stage_diff_telemetry")
+    build_stage_diff_observability_events = getattr(sdt, "build_stage_diff_observability_events", lambda _: [])
+
+    sd_in = stage_diff if isinstance(stage_diff, Mapping) else None
+    sd_events = build_stage_diff_observability_events(sd_in)
+    sd_surface = _curated_stage_diff_surface_for_bundle(sd_in)
+
+    nae = importlib.import_module("game.narrative_authenticity_eval")
+    build_evaluator_observability_events = getattr(nae, "build_evaluator_observability_events", lambda _: [])
+
+    ev_in = evaluator_result if isinstance(evaluator_result, Mapping) else None
+    ev_events = build_evaluator_observability_events(ev_in)
+
+    return {
+        "final_emission_meta": fem_norm,
+        "fem_observability_events": fem_events,
+        "stage_diff_observability_events": sd_events,
+        "evaluator_observability_events": ev_events,
+        "stage_diff_surface": sd_surface,
+    }
+
+
 def normalized_observational_telemetry_bundle(payload: Mapping[str, Any] | None) -> dict[str, Any]:
-    """Produce a normalized, observational-only telemetry bundle for evaluator/debug consumers.
+    """Produce a normalized, observational-only **payload slice** for evaluator/debug consumers.
+
+    This is **not** :func:`assemble_unified_observational_telemetry_bundle` — it does not attach
+    stage-diff or evaluator canonical event lists; it normalizes FEM reads from a turn/API
+    envelope plus a few lane-level keys useful for proof tooling.
 
     Ownership boundaries:
     - **Write-time packaging** (what gets written into gm_output/internal_state) is owned by the gate.

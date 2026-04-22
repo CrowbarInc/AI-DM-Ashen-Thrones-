@@ -100,7 +100,7 @@ def _scan_evaluator_imports(rel: str, bucket: str | None, subs: set[str]) -> lis
     findings: list[Finding] = []
     if bucket != "evaluator":
         return findings
-    allowed = {"final_emission_meta", "validation_layer_contracts"}
+    allowed = {"final_emission_meta", "validation_layer_contracts", "telemetry_vocab"}
     bad = sorted(subs - allowed)
     for mod in bad:
         sev = "likely_drift"

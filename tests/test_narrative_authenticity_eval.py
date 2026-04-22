@@ -4,7 +4,10 @@ from __future__ import annotations
 
 import pytest
 
-from game.narrative_authenticity_eval import evaluate_narrative_authenticity
+from game.narrative_authenticity_eval import (
+    build_evaluator_observability_events,
+    evaluate_narrative_authenticity,
+)
 
 
 def _resp(*, text: str, fem: dict) -> dict:
@@ -18,6 +21,41 @@ def _resp_sidecar(*, text: str, fem: dict) -> dict:
         "gm_output": {"player_facing_text": text},
         "gm_output_debug": {"emission_debug_lane": {"_final_emission_meta": fem}},
     }
+
+
+def test_build_evaluator_observability_events_canonical_shape() -> None:
+    r = evaluate_narrative_authenticity({}, {"ok": True, "gm_output": {"player_facing_text": "x"}}, {})
+    ev = build_evaluator_observability_events(r)
+    assert len(ev) == 1
+    e = ev[0]
+    assert set(e.keys()) == {"phase", "owner", "action", "reasons", "scope", "data"}
+    assert e["phase"] == "evaluator"
+    assert e["owner"] == "narrative_authenticity_eval"
+    assert e["scope"] == "turn"
+    assert e["action"] == "missing"
+    assert "missing_narrative_authenticity_telemetry" in e["reasons"]
+    assert set(e["data"].keys()) <= {"verdict", "passed", "excluded_from_scoring", "invalidation_reason"}
+    assert "scores" not in e["data"]
+    assert "supporting_metrics" not in e["data"]
+
+
+def test_build_evaluator_observability_events_gameplay_excluded_is_skipped() -> None:
+    ev = build_evaluator_observability_events(
+        {
+            "passed": False,
+            "narrative_authenticity_verdict": "excluded_from_scoring",
+            "gameplay_validation": {"excluded_from_scoring": True, "invalidation_reason": "excluded_from_score:dead_turn:x"},
+            "reasons": ["gameplay_excluded_non_playable_turn"],
+        }
+    )
+    assert ev[0]["action"] == "skipped"
+    assert ev[0]["data"]["excluded_from_scoring"] is True
+
+
+def test_build_evaluator_observability_events_malformed_safe() -> None:
+    assert build_evaluator_observability_events(None) == []
+    assert build_evaluator_observability_events([]) == []
+    assert build_evaluator_observability_events({}) == []
 
 
 def test_missing_telemetry_fails_closed() -> None:

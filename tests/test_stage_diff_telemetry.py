@@ -273,6 +273,69 @@ def test_snapshot_turn_stage_includes_narrative_authenticity_telemetry() -> None
     assert "rumor_uses_identical" in snap["narrative_authenticity_reason_codes"][0]
 
 
+def test_build_stage_diff_observability_events_canonical_shape_and_clusters() -> None:
+    stage_diff = {
+        "transitions": [
+            {
+                "from": "a",
+                "to": "b",
+                "diff": {
+                    "route_changed": True,
+                    "fallback_changed": True,
+                    "repair_flags_changed": True,
+                    "retry_flags_changed": False,
+                    "terminal_retry_activated": True,
+                },
+            }
+        ],
+        "snapshots": [
+            {
+                "stage": "exit",
+                "repair_flags": ["answer_completeness_repaired"],
+                "retry_flags": {"retry_exhausted": True, "targeted_retry_terminal": True},
+                "fallback_kind": "fk",
+                "fallback_source": "resolution",
+                "narrative_authenticity_status": "pass",
+                "narrative_authenticity_reason_codes": ["code_a", "code_a"],
+            }
+        ],
+    }
+    ev = sdt.build_stage_diff_observability_events(stage_diff)
+    assert len(ev) >= 4
+    for e in ev:
+        assert set(e.keys()) == {"phase", "owner", "action", "reasons", "scope", "data"}
+        assert e["phase"] == "gate"
+        assert e["owner"] == "stage_diff_telemetry"
+        assert e["scope"] == "turn"
+    route_ev = next(x for x in ev if x["reasons"] == ["stage_diff_route_changed"])
+    assert route_ev["action"] == "observed"
+    assert route_ev["data"] == {"route_changed": True}
+    fb_ev = next(x for x in ev if "stage_diff_fallback_changed" in x["reasons"])
+    assert fb_ev["data"]["transition_fallback_changed"] is True
+    rep_ev = next(x for x in ev if "stage_diff_repair_flags_changed" in x["reasons"])
+    assert rep_ev["action"] == "repaired"
+    na_ev = next(x for x in ev if "code_a" in x["reasons"])
+    assert na_ev["reasons"] == ["code_a"]
+    assert "player_facing_preview" not in str(na_ev["data"])
+
+
+def test_build_stage_diff_observability_events_malformed_and_empty_safe() -> None:
+    assert sdt.build_stage_diff_observability_events(None) == []
+    assert sdt.build_stage_diff_observability_events("bad") == []
+    assert sdt.build_stage_diff_observability_events({}) == []
+
+
+def test_build_stage_diff_observability_events_does_not_mutate_input() -> None:
+    inner = {
+        "diff": {"route_changed": True},
+    }
+    stage_diff = {"transitions": [inner], "snapshots": []}
+    before = repr(stage_diff)
+    _ = sdt.build_stage_diff_observability_events(stage_diff)
+    assert repr(stage_diff) == before
+    assert inner["diff"]["route_changed"] is True
+
+
 def test_snapshot_turn_stage_does_not_widen_na_surface_with_nested_dicts_or_unknown_keys() -> None:
     """Stage-diff must only consume the curated NA projection surface."""
     gm: Dict[str, Any] = {

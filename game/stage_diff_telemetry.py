@@ -1,19 +1,20 @@
-"""Canonical telemetry-only owner for bounded stage-diff observability.
+"""Bounded **stage-diff telemetry** owner (raw snapshots/transitions + read-side event projection).
 
-Stage-diff telemetry records **mutation observability** (snapshots and transitions) under
-``metadata["stage_diff_telemetry"]``. It does not own engine truth, narration policy, or the
-turn-packet contract boundary.
+Writes **compare-ready** dicts under ``metadata["stage_diff_telemetry"]`` during gate/retry work.
+That log is observability only — not a second engine truth or legality store.
 
-Snapshots consume the canonical packet accessors in :mod:`game.turn_packet` so the same
-packet boundary is reused everywhere. This module remains the **telemetry owner** while
-acting as a packet consumer, not a second packet home.
+:func:`build_stage_diff_observability_events` maps the raw structure into **canonical
+observational events** from :mod:`game.telemetry_vocab` (aggregates over route/fallback/repair/
+retry/NA tail signals). Those events are inspect-only and must not steer orchestration.
 
-``resolve_gate_turn_packet`` remains here only as a compatibility residue wrapper for older
-call sites/tests. The canonical gate-side packet resolver now lives in
-:func:`game.turn_packet.resolve_turn_packet_for_gate`.
+Snapshots may include a **curated** NA slice from FEM via
+:func:`game.final_emission_meta.stage_diff_narrative_authenticity_projection`; NA semantics
+remain FEM/NA-owned — this module only consumes the bounded projection.
 
-Appends to telemetry merge with any pre-existing ``stage_diff_telemetry`` dict keys
-(beyond ``snapshots`` / ``transitions``) so nested subtrees are not clobbered.
+Packet fields come from :mod:`game.turn_packet`. ``resolve_gate_turn_packet`` is a thin
+compatibility wrapper around :func:`game.turn_packet.resolve_turn_packet_for_gate`.
+
+Merges preserve existing ``stage_diff_telemetry`` keys outside ``snapshots`` / ``transitions``.
 """
 
 from __future__ import annotations
@@ -24,9 +25,19 @@ import logging
 from typing import Any, Dict, List, Mapping, MutableMapping, Optional
 
 from game.final_emission_meta import read_final_emission_meta_dict, stage_diff_narrative_authenticity_projection
+from game.telemetry_vocab import (
+    TELEMETRY_ACTION_OBSERVED,
+    TELEMETRY_ACTION_REPAIRED,
+    TELEMETRY_PHASE_GATE,
+    TELEMETRY_SCOPE_TURN,
+    build_telemetry_event,
+    normalize_reason_list,
+)
 from game.turn_packet import resolve_turn_packet_for_gate
 
 STAGE_DIFF_METADATA_KEY = "stage_diff_telemetry"
+# Keys allowed on the read-side bundle ``stage_diff_surface`` (bounded inspectable payload only).
+STAGE_DIFF_BUNDLE_SURFACE_KEYS: frozenset[str] = frozenset({"snapshots", "transitions"})
 _MAX_SNAPSHOTS = 12
 _MAX_TRANSITIONS = 12
 
@@ -120,7 +131,7 @@ def snapshot_turn_stage(
     if na_proj:
         na_codes = na_proj.get("narrative_authenticity_reason_codes")
         if isinstance(na_codes, list) and na_codes:
-            snap["narrative_authenticity_reason_codes"] = [str(x) for x in na_codes[:8] if str(x).strip()]
+            snap["narrative_authenticity_reason_codes"] = normalize_reason_list(na_codes)[:8]
         na_skip = na_proj.get("narrative_authenticity_skip_reason")
         if isinstance(na_skip, str) and na_skip.strip():
             snap["narrative_authenticity_skip_reason"] = na_skip.strip()[:120]
@@ -273,3 +284,181 @@ def record_stage_transition(
         _LOG.info("STAGE_DIFF %s", line)
     elif _meaningful_transition(diff):
         _LOG.debug("STAGE_DIFF %s", line)
+
+
+def _stage_diff_clip(value: Any, *, limit: int = 64) -> str | None:
+    if not isinstance(value, str):
+        return None
+    s = value.strip()
+    if not s:
+        return None
+    if len(s) <= limit:
+        return s
+    return s[: max(0, limit - 1)] + "…"
+
+
+def _last_snapshot_dict(snapshots: Any) -> dict[str, Any]:
+    if not isinstance(snapshots, list) or not snapshots:
+        return {}
+    tail = snapshots[-1]
+    return dict(tail) if isinstance(tail, Mapping) else {}
+
+
+def build_stage_diff_observability_events(stage_diff: Mapping[str, Any] | None) -> list[dict[str, Any]]:
+    """Project **raw** ``stage_diff_telemetry`` into canonical observational events (read-only).
+
+    Input dicts match :func:`record_stage_snapshot` / :func:`record_stage_transition`; outputs use
+    :func:`game.telemetry_vocab.build_telemetry_event`. Transition ``repair_flags_changed`` and
+    snapshot ``repair_flags`` are different raw signals; the repair cluster event may use both
+    without reading FEM repair booleans.
+
+    Aggregates over transitions plus the latest snapshot. Does not mutate *stage_diff*.
+    """
+    if not isinstance(stage_diff, Mapping):
+        return []
+
+    transitions = stage_diff.get("transitions")
+    snapshots = stage_diff.get("snapshots")
+    t_list = transitions if isinstance(transitions, list) else []
+    s_list = snapshots if isinstance(snapshots, list) else []
+
+    any_route = False
+    any_fallback = False
+    any_repair_delta = False
+    any_retry = False
+    terminal_retry = False
+    for rec in t_list:
+        if not isinstance(rec, Mapping):
+            continue
+        diff = rec.get("diff")
+        if not isinstance(diff, Mapping):
+            continue
+        any_route = any_route or bool(diff.get("route_changed"))
+        any_fallback = any_fallback or bool(diff.get("fallback_changed"))
+        any_repair_delta = any_repair_delta or bool(diff.get("repair_flags_changed"))
+        any_retry = any_retry or bool(diff.get("retry_flags_changed"))
+        terminal_retry = terminal_retry or bool(diff.get("terminal_retry_activated"))
+
+    last = _last_snapshot_dict(s_list)
+    repair_on_tail = normalize_reason_list(last.get("repair_flags"))[:12]
+    rf_tail = last.get("retry_flags") if isinstance(last.get("retry_flags"), Mapping) else {}
+    retry_exhausted = bool(rf_tail.get("retry_exhausted"))
+    targeted_terminal = bool(rf_tail.get("targeted_retry_terminal"))
+
+    fb_kind = _stage_diff_clip(str(last.get("fallback_kind") or ""), limit=48)
+    fb_src = _stage_diff_clip(str(last.get("fallback_source") or ""), limit=48)
+    fb_stage = _stage_diff_clip(str(last.get("fallback_stage") or ""), limit=48)
+    fallback_signal = bool(fb_kind or fb_src or fb_stage)
+
+    na_status = _stage_diff_clip(str(last.get("narrative_authenticity_status") or ""), limit=24)
+    na_skip = _stage_diff_clip(str(last.get("narrative_authenticity_skip_reason") or ""), limit=120)
+    na_codes = normalize_reason_list(last.get("narrative_authenticity_reason_codes"))[:8]
+    na_rumor_relaxed = last.get("narrative_authenticity_rumor_relaxed_low_signal")
+    rumor_turn = last.get("rumor_turn_active")
+    na_cluster = bool(na_status or na_skip or na_codes or na_rumor_relaxed is True or rumor_turn is not None)
+
+    owner = "stage_diff_telemetry"
+    events: list[dict[str, Any]] = []
+
+    if any_route:
+        events.append(
+            build_telemetry_event(
+                phase=TELEMETRY_PHASE_GATE,
+                owner=owner,
+                action=TELEMETRY_ACTION_OBSERVED,
+                reasons=["stage_diff_route_changed"],
+                scope=TELEMETRY_SCOPE_TURN,
+                data={"route_changed": True},
+            )
+        )
+
+    if any_fallback or fallback_signal:
+        reasons: list[str] = []
+        if any_fallback:
+            reasons.append("stage_diff_fallback_changed")
+        if fallback_signal and not any_fallback:
+            reasons.append("stage_diff_fallback_path_present")
+        reasons = list(dict.fromkeys(reasons))[:8]
+        events.append(
+            build_telemetry_event(
+                phase=TELEMETRY_PHASE_GATE,
+                owner=owner,
+                action=TELEMETRY_ACTION_OBSERVED,
+                reasons=reasons,
+                scope=TELEMETRY_SCOPE_TURN,
+                data={
+                    "transition_fallback_changed": bool(any_fallback),
+                    "fallback_kind": fb_kind,
+                    "fallback_source": fb_src,
+                    "fallback_stage": fb_stage,
+                },
+            )
+        )
+
+    repair_reasons: list[str] = []
+    if any_repair_delta:
+        repair_reasons.append("stage_diff_repair_flags_changed")
+    if repair_on_tail:
+        repair_reasons.append("stage_diff_repair_flags_present")
+    repair_reasons = list(dict.fromkeys(repair_reasons))[:8]
+    if any_repair_delta or repair_on_tail:
+        repair_action = TELEMETRY_ACTION_REPAIRED if any_repair_delta else TELEMETRY_ACTION_OBSERVED
+        events.append(
+            build_telemetry_event(
+                phase=TELEMETRY_PHASE_GATE,
+                owner=owner,
+                action=repair_action,
+                reasons=repair_reasons,
+                scope=TELEMETRY_SCOPE_TURN,
+                data={
+                    "transition_repair_delta": bool(any_repair_delta),
+                    "repair_flags": list(repair_on_tail),
+                },
+            )
+        )
+
+    if any_retry or terminal_retry or retry_exhausted or targeted_terminal:
+        r_reasons: list[str] = []
+        if terminal_retry:
+            r_reasons.append("stage_diff_terminal_retry_activated")
+        if any_retry:
+            r_reasons.append("stage_diff_retry_flags_changed")
+        if retry_exhausted:
+            r_reasons.append("stage_diff_retry_exhausted_observed")
+        if targeted_terminal:
+            r_reasons.append("stage_diff_targeted_retry_terminal_observed")
+        r_reasons = list(dict.fromkeys(r_reasons))[:8]
+        events.append(
+            build_telemetry_event(
+                phase=TELEMETRY_PHASE_GATE,
+                owner=owner,
+                action=TELEMETRY_ACTION_OBSERVED,
+                reasons=r_reasons,
+                scope=TELEMETRY_SCOPE_TURN,
+                data={
+                    "transition_retry_delta": bool(any_retry),
+                    "terminal_retry_activated": bool(terminal_retry),
+                    "retry_exhausted": retry_exhausted,
+                    "targeted_retry_terminal": targeted_terminal,
+                },
+            )
+        )
+
+    if na_cluster:
+        events.append(
+            build_telemetry_event(
+                phase=TELEMETRY_PHASE_GATE,
+                owner=owner,
+                action=TELEMETRY_ACTION_OBSERVED,
+                reasons=na_codes,
+                scope=TELEMETRY_SCOPE_TURN,
+                data={
+                    "narrative_authenticity_status": na_status,
+                    "narrative_authenticity_skip_reason": na_skip,
+                    "narrative_authenticity_rumor_relaxed_low_signal": bool(na_rumor_relaxed),
+                    "rumor_turn_active": (bool(rumor_turn) if rumor_turn is not None else None),
+                },
+            )
+        )
+
+    return events[:6]

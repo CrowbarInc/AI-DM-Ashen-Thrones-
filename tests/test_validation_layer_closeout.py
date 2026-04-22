@@ -65,7 +65,7 @@ def test_offline_evaluator_import_allowlist_matches_audit_policy() -> None:
     """Evaluator may read meta + registry only (see tools/validation_layer_audit.py)."""
     src = Path(nae_mod.__file__).read_text(encoding="utf-8")
     roots = _game_submodule_roots_from_source(src)
-    allowed = {"final_emission_meta", "validation_layer_contracts"}
+    allowed = {"final_emission_meta", "validation_layer_contracts", "telemetry_vocab"}
     assert roots <= allowed, f"evaluator game imports {roots!r} exceed allowlist {allowed!r}"
 
 

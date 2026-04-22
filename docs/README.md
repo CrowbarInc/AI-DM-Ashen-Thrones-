@@ -108,6 +108,17 @@ End-to-end order of responsibility:
 5. **Meta / trace emission** — `game.final_emission_repairs` merges NA fields into `gm_output["_final_emission_meta"]` via `_merge_narrative_authenticity_meta`; compact trace slices come from `game.narrative_authenticity.build_narrative_authenticity_emission_trace()`.
 6. **Stage diff visibility** — `game/stage_diff_telemetry.py` records gate-stage snapshots; NA skip/reason codes from `_final_emission_meta` are copied into snapshots for diffing (observability only, not policy).
 7. **Evaluator (offline)** — `game.narrative_authenticity_eval.evaluate_narrative_authenticity()`: deterministic 0–5 scores on five axes from telemetry (+ light text heuristics); **does not** re-run the validator and **does not** affect the live pipeline.
+
+### Observational telemetry (debugging mental model)
+
+**Raw** payloads are whatever the gate and helpers wrote (FEM dict, ``stage_diff_telemetry`` lists).
+**Normalized** helpers fill stable empty nested dicts for known FEM subtrees so tools do not fork
+on ``None`` vs missing. **`game/telemetry_vocab.py`** owns the shared vocabulary and the single
+**canonical observational event** envelope; FEM, stage-diff telemetry, and the evaluator each keep
+their own raw semantics and project into that shape. The **unified bundle**
+`assemble_unified_observational_telemetry_bundle` is **read-side only** — it joins those surfaces for
+audits without replacing module ownership. Telemetry must never drive orchestration — see
+`docs/narrative_integrity_architecture.md` → *Observational telemetry pipeline (Block C)*.
 8. **Validation runner** — `tools/run_playability_validation.py` drives real `POST /api/chat` (FastAPI `TestClient` or `--base-url`), writes artifacts under `artifacts/playability_validation/`, and attaches both `playability_eval` and `narrative_authenticity_eval` per turn. See `docs/playability_validation.md`.
 
 ### Enforced behaviors (when the layer runs)

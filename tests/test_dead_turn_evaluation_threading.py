@@ -2,7 +2,11 @@
 
 from __future__ import annotations
 
-from game.final_emission_meta import read_final_emission_meta_dict
+from game.final_emission_meta import (
+    assemble_unified_observational_telemetry_bundle,
+    read_final_emission_meta_dict,
+    read_final_emission_meta_from_turn_payload,
+)
 
 import pytest
 
@@ -44,6 +48,23 @@ def test_transcript_snapshot_carries_final_emission_meta_for_manual_gauntlet_row
     assert isinstance(fem, dict)
     dt = (fem.get("dead_turn") or {})
     assert dt.get("is_dead_turn") is True
+
+    fem_for_bundle = read_final_emission_meta_from_turn_payload(payload)
+    na_eval = evaluate_narrative_authenticity({}, payload, fem_for_bundle)
+    bundle = assemble_unified_observational_telemetry_bundle(
+        fem=fem_for_bundle,
+        stage_diff=(payload.get("gm_output") or {}).get("metadata", {}).get("stage_diff_telemetry"),
+        evaluator_result=na_eval,
+    )
+    assert set(bundle.keys()) == {
+        "final_emission_meta",
+        "fem_observability_events",
+        "stage_diff_observability_events",
+        "evaluator_observability_events",
+        "stage_diff_surface",
+    }
+    assert bundle["evaluator_observability_events"]
+    assert any(e.get("owner") == "dead_turn" for e in bundle["fem_observability_events"])
 
 
 def test_behavioral_gauntlet_marks_run_invalid_when_one_turn_is_dead() -> None:

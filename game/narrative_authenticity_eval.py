@@ -1,11 +1,16 @@
-"""Deterministic proof-layer scoring from shipped narrative authenticity telemetry.
+"""Deterministic offline scoring from shipped narrative authenticity (NA) telemetry.
 
-Reads ``_final_emission_meta`` / NA merge fields produced by the emission pipeline.
-Does **not** re-run :func:`game.narrative_authenticity.validate_narrative_authenticity` and does not call an LLM.
+Reads FEM / merged NA fields from the emission path. Does **not** re-run
+:func:`game.narrative_authenticity.validate_narrative_authenticity` or call an LLM.
 
-**Live runtime boundary:** this module is for **offline / harness** scoring artifacts only. The live
-narration API and :mod:`game.final_emission_gate` must not consult these scores for legality,
-routing, retries, repairs, or emitted text. No evaluator output may feed back into gate decisions.
+**Harness-only:** live narration and :mod:`game.final_emission_gate` must not use these scores for
+legality, routing, retries, repairs, or emitted text.
+
+**Two surfaces on the result dict:** ``passed``, ``scores``, ``narrative_authenticity_verdict``,
+``rumor_realism_axes``, and ``reasons`` are evaluator-owned scoring. Separately,
+:func:`build_evaluator_observability_events` projects that dict into **canonical observational
+events** (:mod:`game.telemetry_vocab`) for read-side bundles; it does not run inside
+:func:`evaluate_narrative_authenticity` and must not affect scores.
 """
 
 from __future__ import annotations
@@ -19,6 +24,16 @@ from game.final_emission_meta import (
     normalized_observational_telemetry_bundle,
     read_final_emission_meta_from_turn_payload,
     summarize_gameplay_validation_for_turn,
+)
+from game.telemetry_vocab import (
+    TELEMETRY_ACTION_MISSING,
+    TELEMETRY_ACTION_OBSERVED,
+    TELEMETRY_ACTION_REJECTED,
+    TELEMETRY_ACTION_SKIPPED,
+    TELEMETRY_PHASE_EVALUATOR,
+    TELEMETRY_SCOPE_TURN,
+    build_telemetry_event,
+    normalize_reason_list,
 )
 from game.validation_layer_contracts import NA_SHADOW_RESPONSE_DELTA_FAILURE_REASON
 
@@ -95,11 +110,11 @@ def _finalize_na_eval_with_dead_turn_policy(
             for k, v in list(out["rumor_realism_axis_reasons"].items()):
                 base = list(v) if isinstance(v, list) else []
                 base.append("gameplay_excluded_non_playable_turn")
-                out["rumor_realism_axis_reasons"][k] = list(dict.fromkeys(str(x) for x in base if str(x).strip()))
+                out["rumor_realism_axis_reasons"][k] = normalize_reason_list(base)
         out["passed"] = False
         merged_reasons = list(out.get("reasons") or [])
         merged_reasons.append("gameplay_excluded_non_playable_turn")
-        out["reasons"] = list(dict.fromkeys(str(x) for x in merged_reasons if str(x).strip()))
+        out["reasons"] = normalize_reason_list(merged_reasons)
         out["narrative_authenticity_verdict"] = "excluded_from_scoring"
     out["gameplay_validation"] = gv
     return out
@@ -755,7 +770,81 @@ def evaluate_narrative_authenticity(
         "scores": scores,
         "rumor_realism_axes": rumor_axes,
         "rumor_realism_axis_reasons": rumor_axis_reasons,
-        "reasons": list(dict.fromkeys(str(x) for x in reasons if str(x).strip())),
+        "reasons": normalize_reason_list(reasons),
         "supporting_metrics": _supporting_metrics(merged),
     }
     return _finalize_na_eval_with_dead_turn_policy(out, response)
+
+
+def _eval_clip_str(value: Any, *, limit: int = 120) -> str | None:
+    if not isinstance(value, str):
+        return None
+    s = value.strip()
+    if not s:
+        return None
+    if len(s) <= limit:
+        return s
+    return s[: max(0, limit - 1)] + "…"
+
+
+def build_evaluator_observability_events(result: Mapping[str, Any] | None) -> list[dict[str, Any]]:
+    """Map evaluator output to at most one canonical observational event (:mod:`game.telemetry_vocab`).
+
+    ``action`` / ``reasons`` / bounded ``data`` derive from ``passed``, verdict, reasons, and
+    gameplay exclusion. ``data["verdict"]`` is the **evaluator** verdict, not FEM
+    ``narrative_authenticity_status``. Does not invoke :func:`evaluate_narrative_authenticity`.
+    """
+    if result is None or not isinstance(result, Mapping):
+        return []
+
+    signal_keys = (
+        "passed",
+        "narrative_authenticity_verdict",
+        "scores",
+        "gameplay_validation",
+        "reasons",
+    )
+    if not any(k in result for k in signal_keys):
+        return []
+
+    gv = result.get("gameplay_validation")
+    gv_d = gv if isinstance(gv, Mapping) else {}
+    excluded = bool(gv_d.get("excluded_from_scoring"))
+
+    verdict_raw = result.get("narrative_authenticity_verdict")
+    verdict_s = str(verdict_raw).strip() if verdict_raw is not None else ""
+
+    passed = result.get("passed")
+    if excluded:
+        action = TELEMETRY_ACTION_SKIPPED
+    elif verdict_s == "missing_telemetry":
+        action = TELEMETRY_ACTION_MISSING
+    elif passed is True:
+        action = TELEMETRY_ACTION_OBSERVED
+    elif passed is False:
+        action = TELEMETRY_ACTION_REJECTED
+    elif not verdict_s:
+        action = TELEMETRY_ACTION_MISSING
+    else:
+        action = TELEMETRY_ACTION_OBSERVED
+
+    reasons = normalize_reason_list(result.get("reasons"))[:16]
+    inv = _eval_clip_str(str(gv_d.get("invalidation_reason") or ""), limit=160)
+
+    data: dict[str, Any] = {
+        "verdict": _eval_clip_str(verdict_s, limit=48) if verdict_s else None,
+        "passed": (bool(passed) if isinstance(passed, bool) else None),
+        "excluded_from_scoring": excluded,
+        "invalidation_reason": inv,
+    }
+
+    return [
+        build_telemetry_event(
+            phase=TELEMETRY_PHASE_EVALUATOR,
+            owner="narrative_authenticity_eval",
+            action=action,
+            reasons=reasons,
+            scope=TELEMETRY_SCOPE_TURN,
+            data=data,
+        )
+    ]

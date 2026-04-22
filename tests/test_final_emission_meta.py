@@ -8,6 +8,8 @@ from game.final_emission_meta import (
     INTERNAL_STATE_KEY,
     NARRATIVE_AUTHENTICITY_FEM_KEYS,
     NARRATIVE_MODE_OUTPUT_FEM_KEYS,
+    assemble_unified_observational_telemetry_bundle,
+    build_fem_observability_events,
     build_narrative_authenticity_emission_trace,
     build_narrative_authenticity_trace_slice,
     default_narrative_authenticity_layer_meta,
@@ -226,6 +228,17 @@ def test_normalize_final_emission_meta_for_observability_fills_nested_defaults_d
     assert "narrative_authenticity_reason_codes" in n
 
 
+def test_stage_diff_na_projection_merges_failure_reasons_into_reason_codes() -> None:
+    fem = {
+        "narrative_authenticity_failure_reasons": ["gate_reason"],
+        "narrative_authenticity_reason_codes": ["packaged", "gate_reason"],
+        "narrative_authenticity_status": "pass",
+    }
+    proj = stage_diff_narrative_authenticity_projection(fem)
+    assert proj["narrative_authenticity_reason_codes"] == ["packaged", "gate_reason"]
+    assert "narrative_authenticity_failure_reasons" not in proj
+
+
 def test_stage_diff_na_projection_is_curated_and_does_not_pass_through_nested_payloads() -> None:
     fem = {
         "narrative_authenticity_status": "pass",
@@ -273,6 +286,134 @@ def test_normalized_observational_bundle_has_stable_top_level_shapes() -> None:
     assert isinstance(b["stage_diff_na_projection"], dict)
     assert sorted(b["emission_debug_lane_keys"]) == b["emission_debug_lane_keys"]
     assert FINAL_EMISSION_META_KEY in b["emission_debug_lane_keys"]
+
+
+def test_build_fem_observability_events_bounded_curated_and_stable() -> None:
+    fem = {
+        "narrative_authenticity_checked": True,
+        "narrative_authenticity_failed": False,
+        "narrative_authenticity_reason_codes": ["a", "a"],
+        "answer_completeness_checked": True,
+        "answer_completeness_failed": False,
+        "response_delta_checked": True,
+        "response_delta_echo_overlap_ratio": 0.25,
+        "fallback_behavior_checked": True,
+        "fallback_behavior_contract_present": True,
+        "response_type_required": "dialogue",
+        "response_type_candidate_ok": True,
+        "response_type_rejection_reasons": ["x"],
+        "dead_turn": {"is_dead_turn": False, "dead_turn_class": "none"},
+        "secret_blob": {"nested": "should-not-appear"},
+        "narrative_authenticity_metrics": {"heavy": "payload"},
+    }
+    ev1 = build_fem_observability_events(fem)
+    ev2 = build_fem_observability_events(fem)
+    assert ev1 == ev2
+    assert len(ev1) == 6
+    owners = [e["owner"] for e in ev1]
+    assert owners == [
+        "narrative_authenticity",
+        "answer_completeness",
+        "response_delta",
+        "fallback_behavior",
+        "response_type",
+        "dead_turn",
+    ]
+    for e in ev1:
+        assert set(e.keys()) == {"phase", "owner", "action", "reasons", "scope", "data"}
+        assert e["phase"] == "gate"
+        assert e["scope"] == "turn"
+        assert "secret_blob" not in e["data"]
+    na = ev1[0]
+    assert na["owner"] == "narrative_authenticity"
+    assert na["data"].keys() <= {
+        "checked",
+        "failed",
+        "repaired",
+        "status",
+        "skip_reason",
+        "rumor_relaxed_low_signal",
+    }
+    assert "metrics" not in na["data"]
+    assert na["reasons"] == ["a"]
+
+
+def test_build_fem_observability_events_malformed_fem_does_not_crash() -> None:
+    assert build_fem_observability_events(None) == []
+    assert build_fem_observability_events([]) == []
+    assert build_fem_observability_events({}) == []
+
+
+def test_assemble_unified_bundle_stage_diff_surface_keys_sorted() -> None:
+    fem = {"dead_turn": {"is_dead_turn": False, "dead_turn_class": "none"}}
+    stage_diff = {
+        "transitions": [{"from": "a", "to": "b", "diff": {"route_changed": True}}],
+        "snapshots": [{"stage": "s"}],
+    }
+    b = assemble_unified_observational_telemetry_bundle(fem=fem, stage_diff=stage_diff, evaluator_result=None)
+    assert list(b["stage_diff_surface"].keys()) == ["snapshots", "transitions"]
+
+
+def test_assemble_unified_observational_telemetry_bundle_merges_three_sources_without_leakage() -> None:
+    fem = {
+        "narrative_authenticity_checked": True,
+        "narrative_authenticity_failed": False,
+        "dead_turn": {"is_dead_turn": False, "dead_turn_class": "none"},
+    }
+    stage_diff = {
+        "snapshots": [{"stage": "s", "final_route": "accept"}],
+        "transitions": [{"from": "a", "to": "b", "diff": {"route_changed": True}}],
+        "prior_custom": {"secret": "must_not_surface"},
+    }
+    evaluator_result = {
+        "passed": True,
+        "narrative_authenticity_verdict": "clean_pass",
+        "scores": {"signal_gain": 5},
+        "reasons": [],
+        "gameplay_validation": {"excluded_from_scoring": False},
+    }
+    b = assemble_unified_observational_telemetry_bundle(
+        fem=fem,
+        stage_diff=stage_diff,
+        evaluator_result=evaluator_result,
+    )
+    assert set(b.keys()) == {
+        "final_emission_meta",
+        "fem_observability_events",
+        "stage_diff_observability_events",
+        "evaluator_observability_events",
+        "stage_diff_surface",
+    }
+    assert isinstance(b["final_emission_meta"], dict)
+    assert b["fem_observability_events"]
+    assert b["stage_diff_observability_events"]
+    assert b["evaluator_observability_events"]
+    assert "prior_custom" not in b["stage_diff_surface"]
+    assert set(b["stage_diff_surface"].keys()) <= {"snapshots", "transitions"}
+    ev0 = b["evaluator_observability_events"][0]
+    assert ev0["phase"] == "evaluator"
+    assert "scores" not in ev0["data"]
+
+
+def test_assemble_unified_observational_telemetry_bundle_optional_inputs_safe() -> None:
+    b = assemble_unified_observational_telemetry_bundle(fem=None, stage_diff=None, evaluator_result=None)
+    assert b["stage_diff_observability_events"] == []
+    assert b["evaluator_observability_events"] == []
+    assert b["stage_diff_surface"] == {}
+    assert isinstance(b["fem_observability_events"], list)
+    assert isinstance(b["final_emission_meta"], dict)
+    # Normalized FEM always materializes ``dead_turn`` defaults, which yields a single dead_turn FEM event.
+    assert all(e.get("owner") != "stage_diff_telemetry" for e in b["fem_observability_events"])
+
+
+def test_build_fem_observability_events_no_arbitrary_pass_through_in_data() -> None:
+    fem = {
+        "narrative_authenticity_checked": True,
+        "narrative_authenticity_evidence": {"should": "not leak"},
+    }
+    ev = build_fem_observability_events(fem)
+    assert len(ev) == 1
+    assert "evidence" not in ev[0]["data"]
 
 
 def test_write_time_mutation_seam_helpers_ensure_and_patch_fem_in_place() -> None:
