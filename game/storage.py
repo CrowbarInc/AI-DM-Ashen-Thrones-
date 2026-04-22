@@ -22,7 +22,10 @@ from pathlib import Path
 import copy
 import hashlib
 import json
+import os
 import secrets
+import threading
+from contextlib import contextmanager
 from typing import Any, Dict, List, Optional
 
 from game.defaults import (
@@ -36,6 +39,12 @@ from game.defaults import (
 )
 from game.utils import utc_iso_now
 from game.validation import validate_all_scenes
+from game.persistence_contract import (
+    PersistenceContractError,
+    PersistenceFailureCategory,
+    unwrap_and_validate,
+    wrap_runtime_payload,
+)
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 DATA_DIR = BASE_DIR / 'data'
@@ -52,6 +61,42 @@ SNAPSHOTS_DIR = DATA_DIR / 'snapshots'
 SNAPSHOT_VERSION = 1
 
 
+class RuntimePersistenceConcurrencyError(RuntimeError):
+    """Raised when overlapping runtime persistence operations are attempted."""
+
+
+class RuntimePersistenceCoherencyError(RuntimeError):
+    """Raised when a post-restore runtime coherency check fails."""
+
+
+_RUNTIME_PERSISTENCE_LOCK = threading.RLock()
+
+# Tests may set this to observe/pause phases deterministically.
+# Signature: hook(op_name: str, phase: str) -> None
+_RUNTIME_PERSISTENCE_TEST_HOOK = None
+
+
+@contextmanager
+def _runtime_persistence_guard(op_name: str):
+    """Serialize runtime persistence operations within this process.
+
+    Scope: local process / local file-backed runtime only.
+    """
+    _RUNTIME_PERSISTENCE_LOCK.acquire()
+    try:
+        hook = _RUNTIME_PERSISTENCE_TEST_HOOK
+        if hook:
+            hook(op_name, "acquired")
+        yield
+    finally:
+        try:
+            hook = _RUNTIME_PERSISTENCE_TEST_HOOK
+            if hook:
+                hook(op_name, "releasing")
+        finally:
+            _RUNTIME_PERSISTENCE_LOCK.release()
+
+
 def _load_json(path: Path, default: Dict[str, Any]) -> Dict[str, Any]:
     if not path.exists():
         path.parent.mkdir(parents=True, exist_ok=True)
@@ -66,6 +111,57 @@ def _load_json(path: Path, default: Dict[str, Any]) -> Dict[str, Any]:
 def _save_json(path: Path, data: Dict[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(data, indent=2), encoding='utf-8')
+
+
+def _atomic_write_bytes(path: Path, content: bytes) -> None:
+    """Atomically replace a file's contents with bytes.
+
+    Writes to a temp file in the same directory, fsyncs, then swaps with os.replace.
+    Cleans up temp files on failure.
+    """
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = path.with_name(f"{path.name}.tmp.{secrets.token_hex(8)}")
+    try:
+        with open(tmp, "wb") as f:
+            f.write(content)
+            f.flush()
+            os.fsync(f.fileno())
+        os.replace(tmp, path)
+        # Best-effort directory fsync for durability; may not be supported on all platforms.
+        try:
+            dfd = os.open(path.parent, os.O_RDONLY)
+        except OSError:
+            dfd = None
+        if dfd is not None:
+            try:
+                os.fsync(dfd)
+            except OSError:
+                pass
+            finally:
+                os.close(dfd)
+    except Exception:
+        try:
+            if tmp.exists():
+                tmp.unlink()
+        finally:
+            raise
+
+
+def _atomic_write_text(path: Path, text: str, *, encoding: str = "utf-8") -> None:
+    _atomic_write_bytes(path, text.encode(encoding))
+
+
+def _atomic_save_json(path: Path, data: Dict[str, Any]) -> None:
+    _atomic_write_text(path, json.dumps(data, indent=2), encoding="utf-8")
+
+
+def _read_bytes_if_exists(path: Path) -> Optional[bytes]:
+    try:
+        if path.exists():
+            return path.read_bytes()
+        return None
+    except OSError:
+        return None
 
 
 def scene_path(scene_id: str) -> Path:
@@ -91,7 +187,7 @@ def ensure_data_files_exist() -> None:
     # ensure active scene exists
     load_active_scene()
     if not SESSION_LOG_PATH.exists():
-        SESSION_LOG_PATH.write_text('', encoding='utf-8')
+        _atomic_write_text(SESSION_LOG_PATH, "", encoding="utf-8")
 
 
 def load_campaign() -> Dict[str, Any]:
@@ -113,14 +209,43 @@ def save_character(data: Dict[str, Any]) -> None:
 
 
 def load_session() -> Dict[str, Any]:
-    return _load_json(SESSION_PATH, default_session())
+    default_payload = default_session()
+    if not SESSION_PATH.exists():
+        # Fresh runtime document: write canonical envelope.
+        now = utc_iso_now()
+        default_payload = dict(default_payload)
+        default_payload["last_saved_at"] = now
+        env = wrap_runtime_payload(kind="session", payload=default_payload, saved_at=now, include_integrity=True)
+        _atomic_save_json(SESSION_PATH, env)
+        return copy.deepcopy(default_payload)
+
+    raw = _load_json(SESSION_PATH, default_payload)
+    try:
+        payload, decision = unwrap_and_validate(raw, expected_kind="session", allow_legacy_missing_envelope=True)
+    except PersistenceContractError as e:
+        # Safe failure: fall back to deterministic default for malformed/unsafe persisted data.
+        # This preserves fresh-session bootstrap behavior and prevents undefined state.
+        if e.category in (
+            PersistenceFailureCategory.MALFORMED_PAYLOAD,
+            PersistenceFailureCategory.UNSUPPORTED_VERSION,
+            PersistenceFailureCategory.WRONG_DOCUMENT_KIND,
+            PersistenceFailureCategory.INTEGRITY_MISMATCH,
+            PersistenceFailureCategory.MISSING_ENVELOPE,
+        ):
+            return copy.deepcopy(default_payload)
+        raise
+
+    return payload
 
 
 def save_session(data: Dict[str, Any]) -> None:
     """Persist session to disk. Sets last_saved_at timestamp for save summary."""
-    data = dict(data)
-    data['last_saved_at'] = utc_iso_now()
-    _save_json(SESSION_PATH, data)
+    with _runtime_persistence_guard("save_session"):
+        payload = dict(data)
+        now = utc_iso_now()
+        payload["last_saved_at"] = now
+        env = wrap_runtime_payload(kind="session", payload=payload, saved_at=now, include_integrity=True)
+        _atomic_save_json(SESSION_PATH, env)
 
 
 def load_world() -> Dict[str, Any]:
@@ -139,11 +264,35 @@ def save_world(data: Dict[str, Any]) -> None:
 
 
 def load_combat() -> Dict[str, Any]:
-    return _load_json(COMBAT_PATH, default_combat())
+    default_payload = default_combat()
+    if not COMBAT_PATH.exists():
+        now = utc_iso_now()
+        env = wrap_runtime_payload(kind="combat", payload=dict(default_payload), saved_at=now, include_integrity=True)
+        _atomic_save_json(COMBAT_PATH, env)
+        return copy.deepcopy(default_payload)
+
+    raw = _load_json(COMBAT_PATH, default_payload)
+    try:
+        payload, _ = unwrap_and_validate(raw, expected_kind="combat", allow_legacy_missing_envelope=True)
+    except PersistenceContractError as e:
+        if e.category in (
+            PersistenceFailureCategory.MALFORMED_PAYLOAD,
+            PersistenceFailureCategory.UNSUPPORTED_VERSION,
+            PersistenceFailureCategory.WRONG_DOCUMENT_KIND,
+            PersistenceFailureCategory.INTEGRITY_MISMATCH,
+            PersistenceFailureCategory.MISSING_ENVELOPE,
+        ):
+            return copy.deepcopy(default_payload)
+        raise
+    return payload
 
 
 def save_combat(data: Dict[str, Any]) -> None:
-    _save_json(COMBAT_PATH, data)
+    with _runtime_persistence_guard("save_combat"):
+        payload = dict(data)
+        now = utc_iso_now()
+        env = wrap_runtime_payload(kind="combat", payload=payload, saved_at=now, include_integrity=True)
+        _atomic_save_json(COMBAT_PATH, env)
 
 
 def load_conditions() -> Dict[str, Any]:
@@ -197,8 +346,17 @@ def is_known_scene_id(scene_id: str) -> bool:
 
 
 def append_log(entry: Dict[str, Any]) -> None:
-    with SESSION_LOG_PATH.open('a', encoding='utf-8') as f:
-        f.write(json.dumps(entry, ensure_ascii=False) + '\n')
+    # Serialize with other runtime persistence ops (restore/reset/clear/save) to avoid
+    # mixed visible state windows where the transcript diverges from session/combat.
+    with _runtime_persistence_guard("append_log"):
+        with SESSION_LOG_PATH.open('a', encoding='utf-8') as f:
+            f.write(json.dumps(entry, ensure_ascii=False) + '\n')
+            f.flush()
+            try:
+                os.fsync(f.fileno())
+            except OSError:
+                # Best-effort durability; some platforms/filesystems may not support fsync.
+                pass
 
 
 def load_log() -> List[Dict[str, Any]]:
@@ -212,7 +370,60 @@ def load_log() -> List[Dict[str, Any]]:
 
 
 def clear_log() -> None:
-    SESSION_LOG_PATH.write_text('', encoding='utf-8')
+    with _runtime_persistence_guard("clear_log"):
+        _atomic_write_text(SESSION_LOG_PATH, "", encoding="utf-8")
+
+
+def _validate_runtime_coherency_structural() -> None:
+    """Structural, deterministic coherency check for runtime state.
+
+    Must not attempt semantic repair or authored-data linting.
+    """
+    session = load_session()
+    combat = load_combat()
+    world = load_world()
+    character = load_character()
+    log_entries = load_log()
+
+    if not isinstance(session, dict):
+        raise RuntimePersistenceCoherencyError("session is not a dict")
+    if not isinstance(combat, dict):
+        raise RuntimePersistenceCoherencyError("combat is not a dict")
+    if not isinstance(world, dict):
+        raise RuntimePersistenceCoherencyError("world is not a dict")
+    if not isinstance(character, dict):
+        raise RuntimePersistenceCoherencyError("character is not a dict")
+    if not isinstance(log_entries, list):
+        raise RuntimePersistenceCoherencyError("session_log is not a list")
+
+    active_scene_id = session.get("active_scene_id")
+    if not isinstance(active_scene_id, str) or not active_scene_id.strip():
+        raise RuntimePersistenceCoherencyError("session.active_scene_id must be a non-empty string")
+    if not is_known_scene_id(active_scene_id):
+        raise RuntimePersistenceCoherencyError(f"session.active_scene_id is not a known scene id: {active_scene_id}")
+
+    visited = session.get("visited_scene_ids")
+    if not isinstance(visited, list) or not all(isinstance(x, str) for x in visited):
+        raise RuntimePersistenceCoherencyError("session.visited_scene_ids must be a list[str]")
+
+    scene_state = session.get("scene_state")
+    if scene_state is not None and not isinstance(scene_state, dict):
+        raise RuntimePersistenceCoherencyError("session.scene_state must be an object when present")
+    if isinstance(scene_state, dict):
+        ssid = scene_state.get("active_scene_id")
+        if ssid is not None and isinstance(ssid, str) and ssid.strip() and not is_known_scene_id(ssid):
+            raise RuntimePersistenceCoherencyError(
+                f"session.scene_state.active_scene_id is not a known scene id: {ssid}"
+            )
+
+    # Minimal combat structure: ensure in_combat is a bool when present.
+    if "in_combat" in combat and not isinstance(combat.get("in_combat"), bool):
+        raise RuntimePersistenceCoherencyError("combat.in_combat must be a bool when present")
+
+    # Ensure that active scene template is loadable via normal storage path.
+    scene = load_scene(active_scene_id)
+    if not isinstance(scene, dict):
+        raise RuntimePersistenceCoherencyError("active scene template did not load as an object")
 
 
 def _ensure_scene_runtime_root(session: Dict[str, Any]) -> Dict[str, Any]:
@@ -743,29 +954,32 @@ def _snapshot_path(snapshot_id: str) -> Path:
 
 def create_snapshot(label: Optional[str] = None) -> Dict[str, Any]:
     """Create a snapshot of current runtime state. Returns snapshot meta (id, created_at, label)."""
-    SNAPSHOTS_DIR.mkdir(parents=True, exist_ok=True)
-    snapshot_id = f"{utc_iso_now().replace(':', '-').replace('.', '-')[:19]}_{secrets.token_hex(4)}"
-    created_at = utc_iso_now()
-    label_clean = (label or "").strip() or None
+    # Guard snapshot creation so the bundle is taken from a stable runtime view and
+    # cannot race with restore/reset/saves in this process.
+    with _runtime_persistence_guard("snapshot_create"):
+        SNAPSHOTS_DIR.mkdir(parents=True, exist_ok=True)
+        snapshot_id = f"{utc_iso_now().replace(':', '-').replace('.', '-')[:19]}_{secrets.token_hex(4)}"
+        created_at = utc_iso_now()
+        label_clean = (label or "").strip() or None
 
-    session = load_session()
-    world = load_world()
-    combat = load_combat()
-    character = load_character()
-    log_entries = load_log()
+        session = load_session()
+        world = load_world()
+        combat = load_combat()
+        character = load_character()
+        log_entries = load_log()
 
-    bundle: Dict[str, Any] = {
-        "version": SNAPSHOT_VERSION,
-        "created_at": created_at,
-        "label": label_clean,
-        "session": copy.deepcopy(session),
-        "world": copy.deepcopy(world),
-        "combat": copy.deepcopy(combat),
-        "character": copy.deepcopy(character),
-        "log_entries": copy.deepcopy(log_entries),
-    }
-    _save_json(_snapshot_path(snapshot_id), bundle)
-    return {"id": snapshot_id, "created_at": created_at, "label": label_clean}
+        bundle: Dict[str, Any] = {
+            "version": SNAPSHOT_VERSION,
+            "created_at": created_at,
+            "label": label_clean,
+            "session": copy.deepcopy(session),
+            "world": copy.deepcopy(world),
+            "combat": copy.deepcopy(combat),
+            "character": copy.deepcopy(character),
+            "log_entries": copy.deepcopy(log_entries),
+        }
+        _atomic_save_json(_snapshot_path(snapshot_id), bundle)
+        return {"id": snapshot_id, "created_at": created_at, "label": label_clean}
 
 
 def list_snapshots() -> List[Dict[str, Any]]:
@@ -788,43 +1002,97 @@ def list_snapshots() -> List[Dict[str, Any]]:
 
 
 def load_snapshot(snapshot_id: str) -> Optional[Dict[str, Any]]:
-    """Restore state from snapshot. Overwrites session, world, combat, character, log.
-    Returns snapshot meta on success, None if not found."""
-    path = _snapshot_path(snapshot_id)
-    if not path.exists():
-        return None
-    try:
-        data = json.loads(path.read_text(encoding="utf-8"))
-    except (json.JSONDecodeError, OSError):
-        return None
-    if not isinstance(data, dict):
-        return None
+    """Restore state from snapshot (validate-first, commit-second).
 
-    session = data.get("session")
-    world = data.get("world")
-    combat = data.get("combat")
-    character = data.get("character")
-    log_entries = data.get("log_entries")
+    All required pieces must validate before any live runtime mutation occurs.
+    If commit fails mid-flight, attempts rollback to preserve the prior live state
+    and then raises.
+    """
+    with _runtime_persistence_guard("snapshot_restore"):
+        path = _snapshot_path(snapshot_id)
+        if not path.exists():
+            return None
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+        except (json.JSONDecodeError, OSError):
+            return None
+        if not isinstance(data, dict):
+            return None
 
-    if not isinstance(session, dict):
-        return None
-    if not isinstance(world, dict):
-        return None
-    if not isinstance(combat, dict):
-        return None
-    if not isinstance(character, dict):
-        return None
-    if not isinstance(log_entries, list):
-        log_entries = []
+        if int(data.get("version") or 0) != SNAPSHOT_VERSION:
+            return None
 
-    session["last_saved_at"] = utc_iso_now()
-    _save_json(SESSION_PATH, session)
-    _save_json(WORLD_PATH, world)
-    _save_json(COMBAT_PATH, combat)
-    _save_json(CHARACTER_PATH, character)
-    clear_log()
-    for entry in log_entries:
-        if isinstance(entry, dict):
-            append_log(entry)
+        session = data.get("session")
+        world = data.get("world")
+        combat = data.get("combat")
+        character = data.get("character")
+        log_entries = data.get("log_entries")
 
-    return {"id": data.get("id", snapshot_id), "created_at": data.get("created_at"), "label": data.get("label")}
+        if not isinstance(session, dict):
+            return None
+        if not isinstance(world, dict):
+            return None
+        if not isinstance(combat, dict):
+            return None
+        if not isinstance(character, dict):
+            return None
+        if not isinstance(log_entries, list):
+            log_entries = []
+
+        # Prepare replacement artifacts in memory first (no mutation yet).
+        now = utc_iso_now()
+        session_payload = dict(session)
+        session_payload["last_saved_at"] = now
+        session_env = wrap_runtime_payload(kind="session", payload=session_payload, saved_at=now, include_integrity=True)
+        combat_env = wrap_runtime_payload(kind="combat", payload=dict(combat), saved_at=now, include_integrity=True)
+        log_text = "".join(
+            json.dumps(e, ensure_ascii=False) + "\n" for e in log_entries if isinstance(e, dict)
+        )
+
+        # Commit-second with rollback-on-failure to avoid mixed runtime state.
+        targets: list[Path] = [SESSION_PATH, WORLD_PATH, COMBAT_PATH, CHARACTER_PATH, SESSION_LOG_PATH]
+        originals: dict[Path, Optional[bytes]] = {p: _read_bytes_if_exists(p) for p in targets}
+        applied: list[Path] = []
+        try:
+            _atomic_save_json(SESSION_PATH, session_env)
+            applied.append(SESSION_PATH)
+            _atomic_save_json(WORLD_PATH, world)
+            applied.append(WORLD_PATH)
+            _atomic_save_json(COMBAT_PATH, combat_env)
+            applied.append(COMBAT_PATH)
+            _atomic_save_json(CHARACTER_PATH, character)
+            applied.append(CHARACTER_PATH)
+            _atomic_write_text(SESSION_LOG_PATH, log_text, encoding="utf-8")
+            applied.append(SESSION_LOG_PATH)
+        except Exception as e:
+            # Best-effort rollback to the original live runtime state.
+            for p in reversed(applied):
+                orig = originals.get(p)
+                try:
+                    if orig is None:
+                        if p.exists():
+                            p.unlink()
+                    else:
+                        _atomic_write_bytes(p, orig)
+                except Exception:
+                    pass
+            raise RuntimeError("Snapshot restore failed during commit; live state may be inconsistent.") from e
+
+        # Restore success requires both commit success and post-restore coherency.
+        try:
+            _validate_runtime_coherency_structural()
+        except Exception as e:
+            # Roll back to preserve safe runtime state; do not advertise success.
+            for p in reversed(applied):
+                orig = originals.get(p)
+                try:
+                    if orig is None:
+                        if p.exists():
+                            p.unlink()
+                    else:
+                        _atomic_write_bytes(p, orig)
+                except Exception:
+                    pass
+            raise RuntimeError("Snapshot restore rejected: restored runtime failed coherency validation.") from e
+
+        return {"id": data.get("id", snapshot_id), "created_at": data.get("created_at"), "label": data.get("label")}

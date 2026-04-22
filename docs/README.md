@@ -88,6 +88,7 @@ See `docs/model_routing_architecture.md` for the current routing note.
 - `data/scenes/` scene registry
 - `static/` browser UI
 - `docs/README.md` this file
+- `docs/runtime_persistence_envelope.md` — **runtime persistence guarantees** (Objective #14): versioned on-disk envelopes, atomic saves, validate-first restores, rollback safety, coherency enforcement, and concurrency guard
 - `tools/validation_layer_audit.py` — optional heuristic drift check for Objective #11 validation-layer ownership (`docs/validation_layer_audit.md`)
 
 ## Narrative Authenticity & Signal Quality

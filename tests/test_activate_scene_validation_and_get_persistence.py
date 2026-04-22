@@ -5,6 +5,7 @@ from game import storage
 from game.api import compose_state, app
 from game.clocks import get_or_init_clocks, DEFAULT_CLOCKS
 from game.defaults import default_scene, default_session, default_world, default_character, default_campaign, default_combat, default_conditions
+from game.persistence_contract import wrap_runtime_payload
 from fastapi.testclient import TestClient
 
 import pytest
@@ -55,11 +56,13 @@ def test_invalid_activate_scene_id_ignored_safely(tmp_path, monkeypatch):
     session = default_session()
     session["active_scene_id"] = "scene_a"
     session["visited_scene_ids"] = ["scene_a"]
-    storage._save_json(storage.SESSION_PATH, session)
+    env = wrap_runtime_payload(kind="session", payload=session, saved_at="t", include_integrity=False)
+    storage._save_json(storage.SESSION_PATH, env)
     storage._save_json(storage.WORLD_PATH, default_world())
     storage._save_json(storage.CAMPAIGN_PATH, default_campaign())
     storage._save_json(storage.CHARACTER_PATH, default_character())
-    storage._save_json(storage.COMBAT_PATH, default_combat())
+    combat_env = wrap_runtime_payload(kind="combat", payload=default_combat(), saved_at="t", include_integrity=False)
+    storage._save_json(storage.COMBAT_PATH, combat_env)
     storage._save_json(storage.CONDITIONS_PATH, default_conditions())
     if not storage.SESSION_LOG_PATH.exists():
         storage.SESSION_LOG_PATH.write_text("", encoding="utf-8")
@@ -94,11 +97,13 @@ def test_valid_activate_scene_id_is_advisory_only_in_chat(tmp_path, monkeypatch)
     session = default_session()
     session["active_scene_id"] = "scene_a"
     session["visited_scene_ids"] = ["scene_a"]
-    storage._save_json(storage.SESSION_PATH, session)
+    env = wrap_runtime_payload(kind="session", payload=session, saved_at="t", include_integrity=False)
+    storage._save_json(storage.SESSION_PATH, env)
     storage._save_json(storage.WORLD_PATH, default_world())
     storage._save_json(storage.CAMPAIGN_PATH, default_campaign())
     storage._save_json(storage.CHARACTER_PATH, default_character())
-    storage._save_json(storage.COMBAT_PATH, default_combat())
+    combat_env = wrap_runtime_payload(kind="combat", payload=default_combat(), saved_at="t", include_integrity=False)
+    storage._save_json(storage.COMBAT_PATH, combat_env)
     storage._save_json(storage.CONDITIONS_PATH, default_conditions())
     if not storage.SESSION_LOG_PATH.exists():
         storage.SESSION_LOG_PATH.write_text("", encoding="utf-8")
@@ -128,11 +133,13 @@ def test_post_scene_activate_rejects_unknown_id(tmp_path, monkeypatch):
     session = default_session()
     session["active_scene_id"] = "only_scene"
     session["visited_scene_ids"] = ["only_scene"]
-    storage._save_json(storage.SESSION_PATH, session)
+    env = wrap_runtime_payload(kind="session", payload=session, saved_at="t", include_integrity=False)
+    storage._save_json(storage.SESSION_PATH, env)
     storage._save_json(storage.WORLD_PATH, default_world())
     storage._save_json(storage.CAMPAIGN_PATH, default_campaign())
     storage._save_json(storage.CHARACTER_PATH, default_character())
-    storage._save_json(storage.COMBAT_PATH, default_combat())
+    combat_env = wrap_runtime_payload(kind="combat", payload=default_combat(), saved_at="t", include_integrity=False)
+    storage._save_json(storage.COMBAT_PATH, combat_env)
     storage._save_json(storage.CONDITIONS_PATH, default_conditions())
 
     client = TestClient(app)
@@ -169,11 +176,13 @@ def test_post_scene_activate_clears_interaction_context(tmp_path, monkeypatch):
         "conversation_privacy": "lowered_voice",
         "player_position_context": "seated_with_target",
     }
-    storage._save_json(storage.SESSION_PATH, session)
+    env = wrap_runtime_payload(kind="session", payload=session, saved_at="t", include_integrity=False)
+    storage._save_json(storage.SESSION_PATH, env)
     storage._save_json(storage.WORLD_PATH, default_world())
     storage._save_json(storage.CAMPAIGN_PATH, default_campaign())
     storage._save_json(storage.CHARACTER_PATH, default_character())
-    storage._save_json(storage.COMBAT_PATH, default_combat())
+    combat_env = wrap_runtime_payload(kind="combat", payload=default_combat(), saved_at="t", include_integrity=False)
+    storage._save_json(storage.COMBAT_PATH, combat_env)
     storage._save_json(storage.CONDITIONS_PATH, default_conditions())
 
     client = TestClient(app)
@@ -205,16 +214,20 @@ def test_get_time_session_initialization_persists_when_mutation_occurs(tmp_path,
     session["active_scene_id"] = "frontier_gate"
     if "clocks" in session:
         del session["clocks"]
-    storage._save_json(storage.SESSION_PATH, session)
+    env = wrap_runtime_payload(kind="session", payload=session, saved_at="t", include_integrity=False)
+    storage._save_json(storage.SESSION_PATH, env)
     storage._save_json(storage.WORLD_PATH, default_world())
     storage._save_json(storage.CAMPAIGN_PATH, default_campaign())
     storage._save_json(storage.CHARACTER_PATH, default_character())
-    storage._save_json(storage.COMBAT_PATH, default_combat())
+    combat_env = wrap_runtime_payload(kind="combat", payload=default_combat(), saved_at="t", include_integrity=False)
+    storage._save_json(storage.COMBAT_PATH, combat_env)
     storage._save_json(storage.CONDITIONS_PATH, default_conditions())
 
     compose_state()
 
-    session_reloaded = json.loads(storage.SESSION_PATH.read_text(encoding="utf-8"))
+    on_disk = json.loads(storage.SESSION_PATH.read_text(encoding="utf-8"))
+    # Runtime docs are stored as versioned envelopes; tests assert persisted payload.
+    session_reloaded = on_disk.get("payload") if isinstance(on_disk, dict) and "payload" in on_disk else on_disk
     assert "clocks" in session_reloaded
     for key in DEFAULT_CLOCKS:
         assert key in session_reloaded["clocks"]
@@ -229,11 +242,13 @@ def test_no_unnecessary_persistence_when_session_already_has_clocks(tmp_path, mo
     session["active_scene_id"] = "frontier_gate"
     session["character_name"] = "Galinor"  # match default character so sync doesn't trigger save
     get_or_init_clocks(session)
-    storage._save_json(storage.SESSION_PATH, session)
+    env = wrap_runtime_payload(kind="session", payload=session, saved_at="t", include_integrity=False)
+    storage._save_json(storage.SESSION_PATH, env)
     storage._save_json(storage.WORLD_PATH, default_world())
     storage._save_json(storage.CAMPAIGN_PATH, default_campaign())
     storage._save_json(storage.CHARACTER_PATH, default_character())
-    storage._save_json(storage.COMBAT_PATH, default_combat())
+    combat_env = wrap_runtime_payload(kind="combat", payload=default_combat(), saved_at="t", include_integrity=False)
+    storage._save_json(storage.COMBAT_PATH, combat_env)
     storage._save_json(storage.CONDITIONS_PATH, default_conditions())
 
     save_calls = []

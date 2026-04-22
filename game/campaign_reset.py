@@ -35,21 +35,25 @@ def apply_new_campaign_hard_reset() -> Dict[str, Any]:
     ``compose_state`` / ``get_or_init_clocks``); world playthrough state must be cleared
     or ``world.json`` would re-contaminate prompts (event log, faction ticks, flags).
     """
-    session = load_session()
-    # Root replacement: stale keys from older engines cannot survive.
-    reset_session_state(session)
-    save_session(session)
+    # Serialize against snapshot restore/save collisions: this flow rewrites runtime state.
+    from game.storage import _runtime_persistence_guard
 
-    world = load_world()
-    reset_world_playthrough_state(world)
-    save_world(world)
+    with _runtime_persistence_guard("new_campaign_hard_reset"):
+        session = load_session()
+        # Root replacement: stale keys from older engines cannot survive.
+        reset_session_state(session)
+        save_session(session)
 
-    combat = load_combat()
-    combat.clear()
-    combat.update(create_fresh_combat_state())
-    save_combat(combat)
+        world = load_world()
+        reset_world_playthrough_state(world)
+        save_world(world)
 
-    clear_log()
+        combat = load_combat()
+        combat.clear()
+        combat.update(create_fresh_combat_state())
+        save_combat(combat)
+
+        clear_log()
     # Invariant (NC2): New Campaign is a silent reset — no persisted transcript rows until a turn runs.
     tail = load_log()
     if tail:
