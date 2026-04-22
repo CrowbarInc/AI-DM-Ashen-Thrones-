@@ -22,6 +22,7 @@ pytestmark = pytest.mark.unit
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 RUNNER = REPO_ROOT / "tools" / "run_content_lint.py"
+CI_RUNNER = REPO_ROOT / "tools" / "ci_content_lint.py"
 
 
 def _run_cli(
@@ -29,6 +30,17 @@ def _run_cli(
     cwd: Path | None = None,
 ) -> subprocess.CompletedProcess[str]:
     cmd = [sys.executable, str(RUNNER), *argv]
+    return subprocess.run(
+        cmd,
+        cwd=cwd or REPO_ROOT,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+    )
+
+
+def _run_ci(*argv: str, cwd: Path | None = None) -> subprocess.CompletedProcess[str]:
+    cmd = [sys.executable, str(CI_RUNNER), *argv]
     return subprocess.run(
         cmd,
         cwd=cwd or REPO_ROOT,
@@ -85,9 +97,9 @@ def _mk_scenes_dir(tmp_path: Path) -> Path:
     return root
 
 
-def _try_load_world_dict(root: Path) -> Optional[Dict[str, Any]]:
-    """Same policy as ``tools/run_content_lint.py`` (optional ``data/world.json``)."""
-    path = root / "data" / "world.json"
+def _try_load_world_adjacent_to_scenes_dir(scenes_dir: Path) -> Optional[Dict[str, Any]]:
+    """Same policy as ``tools/run_content_lint.py`` (optional ``<scenes_dir.parent>/world.json``)."""
+    path = scenes_dir.parent / "world.json"
     if not path.is_file():
         return None
     text = path.read_text(encoding="utf-8").strip()
@@ -123,7 +135,7 @@ def _engine_report_for_runner_disk_state(
         scenes[sid] = json.loads(text)
     report = lint_all_content(
         scenes,
-        world=_try_load_world_dict(REPO_ROOT),
+        world=_try_load_world_adjacent_to_scenes_dir(scenes_dir),
         graph_seed_scene_ids=None,
         reference_known_scene_ids=reference_known if subset else None,
         graph_known_scene_ids=set(scenes.keys()) if subset else None,
@@ -302,6 +314,66 @@ def test_cli_json_preserves_engine_message_codes_unchanged(tmp_path: Path) -> No
     assert clue_msgs[0]["severity"] == eng_msg.severity
 
 
+def _world_with_invalid_npc_scene_link() -> Dict[str, Any]:
+    return {
+        "settlements": [{"id": "set1", "name": "S"}],
+        "factions": [{"id": "fac1", "name": "F"}],
+        "projects": [],
+        "assets": [],
+        "world_flags": [],
+        "event_log": [],
+        "inference_rules": [],
+        "clues": {},
+        "npcs": [{"id": "n1", "location": "not_on_disk", "affiliation": "fac1"}],
+        "world_state": {"flags": {}, "counters": {}, "clocks": {}},
+    }
+
+
+def test_cli_no_world_skips_adjacent_world_json(tmp_path: Path) -> None:
+    root = tmp_path / "pack"
+    sd = root / "scenes"
+    sd.mkdir(parents=True)
+    _write_scene(sd, "hub", _minimal_scene("hub"))
+    (root / "world.json").write_text(json.dumps(_world_with_invalid_npc_scene_link()), encoding="utf-8")
+    r_with = _run_cli("--scenes-dir", str(sd))
+    assert r_with.returncode == 1
+    assert "scene.reference.npc_scene_link_unknown" in r_with.stdout
+    r_no = _run_cli("--scenes-dir", str(sd), "--no-world")
+    assert r_no.returncode == 0, (r_no.stdout, r_no.stderr)
+    assert "scene.reference.npc_scene_link_unknown" not in r_no.stdout
+
+
+def test_cli_world_json_explicit_path_without_adjacent_world(tmp_path: Path) -> None:
+    root = tmp_path / "pack"
+    sd = root / "scenes"
+    sd.mkdir(parents=True)
+    _write_scene(sd, "hub", _minimal_scene("hub"))
+    wpath = tmp_path / "external" / "w.json"
+    wpath.parent.mkdir(parents=True)
+    wpath.write_text(json.dumps(_world_with_invalid_npc_scene_link()), encoding="utf-8")
+    r = _run_cli("--scenes-dir", str(sd), "--world-json", str(wpath))
+    assert r.returncode == 1
+    assert "scene.reference.npc_scene_link_unknown" in r.stdout
+
+
+def test_cli_world_json_missing_file_exit_one(tmp_path: Path) -> None:
+    sd = _mk_scenes_dir(tmp_path)
+    _write_scene(sd, "hub", _minimal_scene("hub"))
+    r = _run_cli("--scenes-dir", str(sd), "--world-json", str(tmp_path / "missing_world.json"))
+    assert r.returncode == 1
+    assert r.stdout == ""
+    assert "not a file" in r.stderr
+
+
+def test_cli_no_world_and_world_json_mutually_exclusive(tmp_path: Path) -> None:
+    sd = _mk_scenes_dir(tmp_path)
+    _write_scene(sd, "hub", _minimal_scene("hub"))
+    r = _run_cli("--scenes-dir", str(sd), "--no-world", "--world-json", str(tmp_path / "x.json"))
+    assert r.returncode == 1
+    assert r.stdout == ""
+    assert "Cannot combine" in r.stderr
+
+
 def test_operator_failure_exit_one_distinct_from_fail_on_warnings_doc(tmp_path: Path) -> None:
     """Invalid JSON is exit 1 (operator); do not confuse with --fail-on-warnings (exit 2)."""
     sd = _mk_scenes_dir(tmp_path)
@@ -312,3 +384,38 @@ def test_operator_failure_exit_one_distinct_from_fail_on_warnings_doc(tmp_path: 
     _write_scene(sd, "lonely", _warning_only_scene("lonely"))
     r_warn = _run_cli("--scenes-dir", str(sd), "--fail-on-warnings")
     assert r_warn.returncode == 2
+
+
+def test_cli_help_documents_modes_world_flags_and_exit_codes() -> None:
+    proc = _run_cli("--help")
+    assert proc.returncode == 0, proc.stderr
+    for needle in (
+        "Exit codes",
+        "Subset",
+        "--world-json",
+        "--no-world",
+        "reference registry",
+        "graph",
+    ):
+        assert needle in proc.stdout, needle
+
+
+def test_ci_content_lint_entry_shows_same_operational_help_as_runner() -> None:
+    """Thin CI forwarder must expose the same argparse surface (wording may differ only in usage line)."""
+    a = _run_cli("--help")
+    b = _run_ci("--help")
+    assert a.returncode == 0 and b.returncode == 0
+    assert a.stderr == "" and b.stderr == ""
+    # Usage banner differs by script name; epilog and flags should match.
+    assert "Exit codes" in a.stdout and "Exit codes" in b.stdout
+    assert "reference registry" in a.stdout and "reference registry" in b.stdout
+    assert "--scene-id" in b.stdout and "--json-out" in b.stdout
+
+
+def test_ci_content_lint_matches_runner_exit_on_minimal_pack(tmp_path: Path) -> None:
+    sd = _mk_scenes_dir(tmp_path)
+    _write_scene(sd, "hub", _minimal_scene("hub"))
+    ra = _run_cli("--scenes-dir", str(sd), "--no-world", "--quiet")
+    rb = _run_ci("--scenes-dir", str(sd), "--no-world", "--quiet")
+    assert ra.returncode == rb.returncode
+    assert ra.stdout == rb.stdout

@@ -2,16 +2,26 @@
 
 Composes strict scene validation, heuristic scene lint, clue/schema checks, and graph
 analysis into a single structured report. Not used on the gameplay hot path.
+
+Bundle-level governance (Objective N2) adds a read-only cross-file index and optional
+passes after scene-level work. :class:`ContentBundleSnapshot` records **loaded** scene
+envelopes, optional ``world`` / ``campaign``, and a **materialized** world↔scene link
+registry (``resolved_world_scene_link_registry_ids``) so subset runs stay auditable.
+Message families include ``bundle.duplicate_id.*``, ``bundle.reference.*``,
+``bundle.contradiction.*``, ``campaign.reference.*``, ``scene.reference.*``,
+``clue.reference.*``, ``faction.reference.*``, and ``world_state.reference.*`` (see
+:func:`lint_bundle_governance`).
 """
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from typing import Any, Callable, Dict, List, Literal, Optional, Set
+import json
+from dataclasses import dataclass, field, replace
+from typing import Any, Callable, Dict, List, Literal, Mapping, Optional, Sequence, Set, Tuple
 
 from game import scene_graph
 from game import scene_lint
 from game import validation
-from game.schema_contracts import adapt_legacy_clue, validate_clue
+from game.schema_contracts import adapt_legacy_clue, normalize_id, validate_clue
 from game.utils import slugify
 
 Severity = Literal["error", "warning"]
@@ -59,6 +69,839 @@ class ContentLintReport:
             "messages": [m.as_dict() for m in self.messages],
             "scene_ids_checked": list(self.scene_ids_checked),
         }
+
+
+# ---------------------------------------------------------------------------
+# Bundle / cross-system governance (Objective N2) — read-only index + passes
+# ---------------------------------------------------------------------------
+
+
+@dataclass(frozen=True)
+class BundleIdOccurrence:
+    """One authored id occurrence for duplicate/collision reporting (immutable)."""
+
+    authored_id: str
+    compare_key: str
+    source_kind: str
+    source_detail: str
+    scene_id: Optional[str] = None
+
+
+@dataclass(frozen=True)
+class BundleContentIndex:
+    """Derived registries from loaded scenes + optional world/campaign (read-only inputs)."""
+
+    scene_envelope_ids: Tuple[str, ...]
+    scene_inner_authored_id_by_envelope: Tuple[Tuple[str, str], ...]
+    scene_inner_compare_key_by_envelope: Tuple[Tuple[str, str], ...]
+    npc_occurrences: Tuple[BundleIdOccurrence, ...]
+    faction_occurrences: Tuple[BundleIdOccurrence, ...]
+    project_occurrences: Tuple[BundleIdOccurrence, ...]
+    world_clue_registry_keys: Tuple[str, ...]
+    world_clue_row_authored_id_by_key: Tuple[Tuple[str, str], ...]
+    world_state_flag_keys: Tuple[str, ...]
+    world_state_counter_keys: Tuple[str, ...]
+    world_state_clock_outer_keys: Tuple[str, ...]
+    world_state_clock_row_id_by_outer_key: Tuple[Tuple[str, str], ...]
+    campaign_top_level_keys: Tuple[str, ...]
+
+
+@dataclass(frozen=True)
+class ContentBundleSnapshot:
+    """Intermediate bundle model for cross-file lint (does not copy scene/world bodies).
+
+    **Scope model (Objective N2)** — three layers the engine keeps explicit:
+
+    1. **Loaded bundle scope** — ``scenes`` keys (``loaded_envelope_ids``), plus optional
+       ``world`` / ``campaign`` bodies attached to this snapshot.
+    2. **Reference registry scope** — scene ids that count as *known targets* for
+       world↔scene bundle checks: loaded scene stems + inner ``scene.id`` values, unioned
+       with ``world_scene_registry_ids`` when that argument was supplied to
+       :func:`build_content_bundle` (full-disk stems in subset CLI runs, or any explicit
+       superset from in-process callers). Materialized as the sorted set
+       ``resolved_world_scene_link_registry_ids``.
+    3. **Validation scope** — strict scene validation / graph use ``reference_known_scene_ids``
+       and ``graph_known_scene_ids`` from :func:`lint_all_content`; bundle scene-link rules
+       use ``resolved_world_scene_link_registry_ids`` only. There is no silent downgrade:
+       unknown targets emit errors iff absent from (2).
+    """
+
+    scenes: Mapping[str, Mapping[str, Any]]
+    world: Optional[Mapping[str, Any]]
+    campaign: Optional[Mapping[str, Any]]
+    index: BundleContentIndex
+    #: Scene ids supplied as an explicit reference overlay (``None`` omitted at build → empty).
+    #: For :func:`lint_all_content`, this is always the same universe as ``reference_known_scene_ids``
+    #: (sorted), so bundle checks stay aligned with exit/action strict validation.
+    world_scene_registry_ids: Tuple[str, ...] = ()
+    #: Sorted envelope stems actually present in ``scenes`` (the loaded bundle).
+    loaded_envelope_ids: Tuple[str, ...] = ()
+    #: Sorted scene ids in the world↔scene link registry that are **not** derivable from
+    #: loaded scene envelopes alone (disk-only stems in subset mode, etc.). Empty when the
+    #: registry adds nothing beyond loaded-scene-derived ids.
+    reference_registry_extension_ids: Tuple[str, ...] = ()
+    #: Sorted union used for ``campaign.*`` / NPC scene-field bundle checks (reproducible).
+    resolved_world_scene_link_registry_ids: Tuple[str, ...] = ()
+
+
+def bundle_compare_id(value: Any) -> str:
+    """Stable id key for duplicate detection (normalize_id only; preserves case rules of normalize_id)."""
+    return normalize_id(value) or ""
+
+
+def _read_scene_inner(envelope: Mapping[str, Any]) -> Mapping[str, Any]:
+    inner = envelope.get("scene")
+    return inner if isinstance(inner, dict) else {}
+
+
+def build_bundle_content_index(
+    scenes: Mapping[str, Mapping[str, Any]],
+    *,
+    world: Optional[Mapping[str, Any]] = None,
+    campaign: Optional[Mapping[str, Any]] = None,
+) -> BundleContentIndex:
+    """Build derived indexes from *scenes* / *world* / *campaign* without mutating inputs."""
+    scene_ids = tuple(sorted(scenes.keys()))
+    inner_pairs: List[Tuple[str, str]] = []
+    inner_cmp_pairs: List[Tuple[str, str]] = []
+    for sid in scene_ids:
+        env = scenes.get(sid) or {}
+        inner = _read_scene_inner(env) if isinstance(env, dict) else {}
+        raw_id = str(inner.get("id") or "").strip() if isinstance(inner, dict) else ""
+        inner_pairs.append((sid, raw_id))
+        inner_cmp_pairs.append((sid, bundle_compare_id(inner.get("id") if isinstance(inner, dict) else None)))
+
+    npc_occ: List[BundleIdOccurrence] = []
+    fac_occ: List[BundleIdOccurrence] = []
+    proj_occ: List[BundleIdOccurrence] = []
+    clue_keys: List[str] = []
+    clue_id_pairs: List[Tuple[str, str]] = []
+    flag_keys: List[str] = []
+    counter_keys: List[str] = []
+    clock_outer: List[str] = []
+    clock_row_ids: List[Tuple[str, str]] = []
+
+    if isinstance(world, dict):
+        npcs = world.get("npcs") or []
+        if isinstance(npcs, list):
+            for i, row in enumerate(npcs):
+                if not isinstance(row, dict):
+                    continue
+                aid = str(row.get("id") or "").strip()
+                if not aid:
+                    continue
+                ck = bundle_compare_id(row.get("id"))
+                if not ck:
+                    continue
+                npc_occ.append(
+                    BundleIdOccurrence(
+                        authored_id=aid,
+                        compare_key=ck,
+                        source_kind="world.npcs",
+                        source_detail=f"[{i}]",
+                        scene_id=None,
+                    )
+                )
+
+        factions = world.get("factions") or []
+        if isinstance(factions, list):
+            for i, row in enumerate(factions):
+                if not isinstance(row, dict):
+                    continue
+                aid = str(row.get("id") or "").strip() or str(row.get("name") or "").strip()
+                if not aid:
+                    continue
+                ck = bundle_compare_id(row.get("id")) or bundle_compare_id(row.get("name"))
+                if not ck:
+                    continue
+                fac_occ.append(
+                    BundleIdOccurrence(
+                        authored_id=aid,
+                        compare_key=ck,
+                        source_kind="world.factions",
+                        source_detail=f"[{i}]",
+                        scene_id=None,
+                    )
+                )
+
+        projects = world.get("projects") or []
+        if isinstance(projects, list):
+            for i, row in enumerate(projects):
+                if not isinstance(row, dict):
+                    continue
+                aid = str(row.get("id") or "").strip()
+                if not aid:
+                    continue
+                ck = bundle_compare_id(row.get("id"))
+                if not ck:
+                    continue
+                proj_occ.append(
+                    BundleIdOccurrence(
+                        authored_id=aid,
+                        compare_key=ck,
+                        source_kind="world.projects",
+                        source_detail=f"[{i}]",
+                        scene_id=None,
+                    )
+                )
+
+        clues = world.get("clues")
+        if isinstance(clues, dict):
+            for k in sorted(clues.keys()):
+                if not isinstance(k, str) or not k.strip():
+                    continue
+                ks = k.strip()
+                clue_keys.append(ks)
+                row = clues.get(k)
+                row_id = ""
+                if isinstance(row, dict):
+                    row_id = str(row.get("id") or "").strip()
+                clue_id_pairs.append((ks, row_id))
+
+        ws = world.get("world_state")
+        if isinstance(ws, dict):
+            flags = ws.get("flags")
+            if isinstance(flags, dict):
+                flag_keys = sorted(str(x).strip() for x in flags.keys() if isinstance(x, str) and str(x).strip())
+            counters = ws.get("counters")
+            if isinstance(counters, dict):
+                counter_keys = sorted(str(x).strip() for x in counters.keys() if isinstance(x, str) and str(x).strip())
+            clocks = ws.get("clocks")
+            if isinstance(clocks, dict):
+                for name in sorted(clocks.keys()):
+                    if not isinstance(name, str) or not name.strip():
+                        continue
+                    nm = name.strip()
+                    clock_outer.append(nm)
+                    entry = clocks.get(name)
+                    rid = ""
+                    if isinstance(entry, dict):
+                        rid = str(entry.get("id") or "").strip()
+                    clock_row_ids.append((nm, rid))
+
+    camp_keys: Tuple[str, ...] = ()
+    if isinstance(campaign, dict):
+        camp_keys = tuple(sorted(k for k in campaign.keys() if isinstance(k, str)))
+
+    return BundleContentIndex(
+        scene_envelope_ids=scene_ids,
+        scene_inner_authored_id_by_envelope=tuple(inner_pairs),
+        scene_inner_compare_key_by_envelope=tuple(inner_cmp_pairs),
+        npc_occurrences=tuple(sorted(npc_occ, key=lambda o: (o.compare_key, o.source_detail, o.authored_id))),
+        faction_occurrences=tuple(sorted(fac_occ, key=lambda o: (o.compare_key, o.source_detail, o.authored_id))),
+        project_occurrences=tuple(sorted(proj_occ, key=lambda o: (o.compare_key, o.source_detail, o.authored_id))),
+        world_clue_registry_keys=tuple(clue_keys),
+        world_clue_row_authored_id_by_key=tuple(clue_id_pairs),
+        world_state_flag_keys=tuple(flag_keys),
+        world_state_counter_keys=tuple(counter_keys),
+        world_state_clock_outer_keys=tuple(clock_outer),
+        world_state_clock_row_id_by_outer_key=tuple(clock_row_ids),
+        campaign_top_level_keys=camp_keys,
+    )
+
+
+def build_content_bundle(
+    scenes: Mapping[str, Mapping[str, Any]],
+    *,
+    world: Optional[Mapping[str, Any]] = None,
+    campaign: Optional[Mapping[str, Any]] = None,
+    world_scene_registry_ids: Optional[Sequence[str]] = None,
+) -> ContentBundleSnapshot:
+    """Assemble bundle snapshot + index (holds references to *scenes* / *world*; do not mutate during lint).
+
+    Populates ``loaded_envelope_ids``, ``reference_registry_extension_ids``, and
+    ``resolved_world_scene_link_registry_ids`` so subset vs full runs are reproducible from
+    ``evidence`` alone. When ``world_scene_registry_ids`` is ``None``, the overlay is empty
+    (loaded-scenes-only link registry).
+    """
+    idx = build_bundle_content_index(scenes, world=world, campaign=campaign)
+    extra: Tuple[str, ...] = ()
+    if world_scene_registry_ids is not None:
+        extra = tuple(sorted({str(x).strip() for x in world_scene_registry_ids if str(x).strip()}))
+    loaded = tuple(sorted(scenes.keys()))
+    base = ContentBundleSnapshot(
+        scenes=scenes,
+        world=world,
+        campaign=campaign,
+        index=idx,
+        world_scene_registry_ids=extra,
+        loaded_envelope_ids=loaded,
+        reference_registry_extension_ids=(),
+        resolved_world_scene_link_registry_ids=(),
+    )
+    loaded_only = _bundle_scene_id_registry(base)
+    resolved: Set[str] = set(loaded_only)
+    resolved |= {str(x).strip() for x in base.world_scene_registry_ids if str(x).strip()}
+    ext_ids = tuple(sorted(x for x in resolved if x not in loaded_only))
+    return replace(
+        base,
+        reference_registry_extension_ids=ext_ids,
+        resolved_world_scene_link_registry_ids=tuple(sorted(resolved)),
+    )
+
+
+def bundle_index_fingerprint(index: BundleContentIndex) -> Tuple[Any, ...]:
+    """Deterministic tuple fingerprint for tests (stable ordering)."""
+    return (
+        index.scene_envelope_ids,
+        index.scene_inner_authored_id_by_envelope,
+        index.scene_inner_compare_key_by_envelope,
+        tuple((o.authored_id, o.compare_key, o.source_kind, o.source_detail) for o in index.npc_occurrences),
+        tuple((o.authored_id, o.compare_key, o.source_kind, o.source_detail) for o in index.faction_occurrences),
+        tuple((o.authored_id, o.compare_key, o.source_kind, o.source_detail) for o in index.project_occurrences),
+        index.world_clue_registry_keys,
+        index.world_clue_row_authored_id_by_key,
+        index.world_state_flag_keys,
+        index.world_state_counter_keys,
+        index.world_state_clock_outer_keys,
+        index.world_state_clock_row_id_by_outer_key,
+        index.campaign_top_level_keys,
+    )
+
+
+def _group_occurrences_by_compare_key(
+    occ: Sequence[BundleIdOccurrence],
+) -> Dict[str, List[BundleIdOccurrence]]:
+    buckets: Dict[str, List[BundleIdOccurrence]] = {}
+    for o in occ:
+        if not o.compare_key:
+            continue
+        buckets.setdefault(o.compare_key, []).append(o)
+    for k in buckets:
+        buckets[k].sort(key=lambda x: (x.source_kind, x.source_detail, x.authored_id))
+    return buckets
+
+
+def lint_bundle_duplicate_ids(bundle: ContentBundleSnapshot) -> List[ContentLintMessage]:
+    """Emit ``bundle.duplicate_id.*`` for duplicate ids within world lists (compare_key collision)."""
+    out: List[ContentLintMessage] = []
+    world = bundle.world
+
+    def _emit(kind_code: str, label: str, bucket: List[BundleIdOccurrence]) -> None:
+        if len(bucket) < 2:
+            return
+        evidence = {
+            "compare_key": bucket[0].compare_key,
+            "scope": f"bundle.world.{kind_code}",
+            "occurrences": [
+                {"authored_id": o.authored_id, "source": f"{o.source_kind}{o.source_detail}"} for o in bucket
+            ],
+        }
+        out.append(
+            ContentLintMessage(
+                severity="error",
+                code=f"bundle.duplicate_id.{kind_code}",
+                message=f"Duplicate {label} id '{bucket[0].compare_key}' appears {len(bucket)} times in world bundle",
+                scene_id=None,
+                path=f"world.{kind_code}",
+                evidence=evidence,
+            )
+        )
+
+    if isinstance(world, dict):
+        npc_b = _group_occurrences_by_compare_key(bundle.index.npc_occurrences)
+        for _ck, rows in sorted(npc_b.items()):
+            _emit("npc", "NPC", rows)
+
+        fac_b = _group_occurrences_by_compare_key(bundle.index.faction_occurrences)
+        for _ck, rows in sorted(fac_b.items()):
+            _emit("faction", "faction", rows)
+
+        proj_b = _group_occurrences_by_compare_key(bundle.index.project_occurrences)
+        for _ck, rows in sorted(proj_b.items()):
+            _emit("project", "project", rows)
+
+    # Duplicate inner scene.id compare keys across different envelope stems (cross-file governance).
+    inner_by_key: Dict[str, List[str]] = {}
+    for env_id, cmp_id in bundle.index.scene_inner_compare_key_by_envelope:
+        if not cmp_id:
+            continue
+        inner_by_key.setdefault(cmp_id, []).append(env_id)
+    for ck in sorted(inner_by_key.keys()):
+        stems = sorted(set(inner_by_key[ck]))
+        if len(stems) < 2:
+            continue
+        authored = []
+        for eid, raw in bundle.index.scene_inner_authored_id_by_envelope:
+            if eid in stems and raw:
+                authored.append(raw)
+        out.append(
+            ContentLintMessage(
+                severity="warning",
+                code="bundle.duplicate_id.scene",
+                message=(
+                    f"Multiple scene envelopes share inner scene.id compare key '{ck}': "
+                    f"{', '.join(stems)}"
+                ),
+                scene_id=None,
+                path="bundle.scenes",
+                evidence={
+                    "compare_key": ck,
+                    "scope": "bundle.scenes.inner_id_collision",
+                    "envelope_ids": stems,
+                    "authored_inner_scene_ids": sorted(set(authored)) or stems,
+                },
+            )
+        )
+
+    return out
+
+
+def lint_clue_world_registry_references(bundle: ContentBundleSnapshot) -> List[ContentLintMessage]:
+    """``clue.reference.*`` — world.clues dict key vs row id consistency (read-only)."""
+    out: List[ContentLintMessage] = []
+    world = bundle.world
+    if not isinstance(world, dict):
+        return out
+    clues = world.get("clues")
+    if not isinstance(clues, dict):
+        return out
+    for reg_key, row_id in bundle.index.world_clue_row_authored_id_by_key:
+        if not row_id:
+            continue
+        if row_id == reg_key:
+            continue
+        out.append(
+            ContentLintMessage(
+                severity="error",
+                code="clue.reference.world_registry_key_mismatch",
+                message=(
+                    f"world.clues registry key '{reg_key}' does not match row id '{row_id}' "
+                    "(ambiguous canonical clue id)"
+                ),
+                scene_id=None,
+                path=f"world.clues[{reg_key}].id",
+                evidence={"registry_key": reg_key, "row_id": row_id, "scope": "bundle.world.clues"},
+            )
+        )
+    return out
+
+
+def lint_faction_progression_uid_collisions(bundle: ContentBundleSnapshot) -> List[ContentLintMessage]:
+    """``faction.reference.*`` — same progression compare key as runtime faction backbone (read-only heuristic)."""
+    out: List[ContentLintMessage] = []
+    buckets = _group_occurrences_by_compare_key(bundle.index.faction_occurrences)
+    for ck, rows in sorted(buckets.items()):
+        if len(rows) < 2:
+            continue
+        if len({r.authored_id for r in rows}) <= 1:
+            # Identical authored ids: already ``bundle.duplicate_id.faction``.
+            continue
+        out.append(
+            ContentLintMessage(
+                severity="error",
+                code="faction.reference.progression_uid_collision",
+                message=(
+                    f"Multiple faction rows resolve to the same bundle compare key '{ck}' "
+                    f"({len(rows)} rows); runtime progression disambiguation may apply"
+                ),
+                scene_id=None,
+                path="world.factions",
+                evidence={
+                    "compare_key": ck,
+                    "scope": "bundle.world.factions",
+                    "rows": [{"authored_id": r.authored_id, "source": f"{r.source_kind}{r.source_detail}"} for r in rows],
+                },
+            )
+        )
+    return out
+
+
+def lint_world_state_registry_consistency(bundle: ContentBundleSnapshot) -> List[ContentLintMessage]:
+    """``world_state.reference.*`` — clock outer key vs row ``id`` when both are present."""
+    out: List[ContentLintMessage] = []
+    for outer_key, row_id in bundle.index.world_state_clock_row_id_by_outer_key:
+        if not row_id:
+            continue
+        if row_id == outer_key:
+            continue
+        out.append(
+            ContentLintMessage(
+                severity="error",
+                code="world_state.reference.clock_key_row_id_mismatch",
+                message=(
+                    f"world_state.clocks['{outer_key}'].id is '{row_id}' "
+                    f"(differs from outer key; ensure tooling agrees on canonical clock id)"
+                ),
+                scene_id=None,
+                path=f"world.world_state.clocks[{outer_key}].id",
+                evidence={"outer_key": outer_key, "row_id": row_id, "scope": "bundle.world.world_state.clocks"},
+            )
+        )
+    return out
+
+
+def _bundle_scene_id_registry(bundle: ContentBundleSnapshot) -> Set[str]:
+    """Scene ids usable for world↔scene bundle checks: envelope stems + non-empty inner ``scene.id`` values."""
+    reg: Set[str] = set()
+    for stem in bundle.index.scene_envelope_ids:
+        reg.add(str(stem).strip())
+    for _env_id, inner_raw in bundle.index.scene_inner_authored_id_by_envelope:
+        s = str(inner_raw or "").strip()
+        if s:
+            reg.add(s)
+    return reg
+
+
+def _world_link_scene_registry(bundle: ContentBundleSnapshot) -> Set[str]:
+    """Union of loaded-scene ids and explicit ``world_scene_registry_ids`` (materialized on the snapshot)."""
+    if bundle.resolved_world_scene_link_registry_ids:
+        return set(bundle.resolved_world_scene_link_registry_ids)
+    reg = _bundle_scene_id_registry(bundle)
+    reg |= {str(x).strip() for x in bundle.world_scene_registry_ids if str(x).strip()}
+    return reg
+
+
+def _scene_link_bundle_scope_evidence(bundle: ContentBundleSnapshot) -> Dict[str, Any]:
+    """Reproducible scope payload for world↔scene bundle checks (subset vs full)."""
+    known = sorted(_world_link_scene_registry(bundle))
+    return {
+        "loaded_envelope_ids": list(bundle.loaded_envelope_ids),
+        "reference_registry_extension_ids": list(bundle.reference_registry_extension_ids),
+        "resolved_world_scene_link_registry_ids": known,
+        "known_scene_ids": known,
+        "validation_scope": "world_scene_link_registry",
+    }
+
+
+def _world_settlement_ids(world: Mapping[str, Any]) -> Set[str]:
+    out: Set[str] = set()
+    rows = world.get("settlements") or []
+    if not isinstance(rows, list):
+        return out
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        sid = str(row.get("id") or "").strip()
+        if sid:
+            out.add(sid)
+    return out
+
+
+def _world_faction_compare_keys(bundle: ContentBundleSnapshot) -> Set[str]:
+    return {o.compare_key for o in bundle.index.faction_occurrences if o.compare_key}
+
+
+def lint_campaign_scene_references(bundle: ContentBundleSnapshot) -> List[ContentLintMessage]:
+    """``campaign.reference.*`` — ``starting_scene_id`` must appear in :func:`_world_link_scene_registry`."""
+    out: List[ContentLintMessage] = []
+    campaign = bundle.campaign
+    if not isinstance(campaign, dict):
+        return out
+    raw = campaign.get("starting_scene_id")
+    if raw is None or (isinstance(raw, str) and not raw.strip()):
+        return out
+    sid = str(raw).strip()
+    known = _world_link_scene_registry(bundle)
+    if sid in known:
+        return out
+    ev = _scene_link_bundle_scope_evidence(bundle)
+    ev["starting_scene_id"] = sid
+    ev["scope"] = "bundle.campaign<->scenes"
+    out.append(
+        ContentLintMessage(
+            severity="error",
+            code="campaign.reference.starting_scene_unknown",
+            message=(
+                f"campaign.starting_scene_id '{sid}' is absent from the resolved world<->scene "
+                f"link registry for this lint run (loaded scenes plus explicit reference ids)"
+            ),
+            scene_id=None,
+            path="campaign.starting_scene_id",
+            evidence=ev,
+        )
+    )
+    return out
+
+
+def lint_scene_world_npc_scene_links(bundle: ContentBundleSnapshot) -> List[ContentLintMessage]:
+    """``scene.reference.*`` — NPC scene fields vs :func:`_world_link_scene_registry` (subset-safe when extended)."""
+    out: List[ContentLintMessage] = []
+    world = bundle.world
+    if not isinstance(world, dict):
+        return out
+    reg = _world_link_scene_registry(bundle)
+    npcs = world.get("npcs") or []
+    if not isinstance(npcs, list):
+        return out
+    fields = ("location", "origin_scene_id", "scene_id")
+    for i, row in enumerate(npcs):
+        if not isinstance(row, dict):
+            continue
+        npc_id = str(row.get("id") or "").strip() or f"npcs[{i}]"
+        for fld in fields:
+            raw = row.get(fld)
+            if raw is None or (isinstance(raw, str) and not raw.strip()):
+                continue
+            val = str(raw).strip()
+            if val in reg:
+                continue
+            ev = _scene_link_bundle_scope_evidence(bundle)
+            ev.update(
+                {
+                    "npc_id": npc_id,
+                    "field": fld,
+                    "value": val,
+                    "scope": "bundle.world.npcs<->scenes",
+                }
+            )
+            out.append(
+                ContentLintMessage(
+                    severity="error",
+                    code="scene.reference.npc_scene_link_unknown",
+                    message=(
+                        f"world.npcs[{i}] ({npc_id!r}) field '{fld}' is '{val}', "
+                        f"which is absent from the resolved world<->scene link registry for this lint run"
+                    ),
+                    scene_id=None,
+                    path=f"world.npcs[{i}].{fld}",
+                    evidence=ev,
+                )
+            )
+    return out
+
+
+def lint_scene_world_npc_affiliations(bundle: ContentBundleSnapshot) -> List[ContentLintMessage]:
+    """``scene.reference.*`` — NPC ``affiliation`` must match a settlement id or faction compare id when non-empty."""
+    out: List[ContentLintMessage] = []
+    world = bundle.world
+    if not isinstance(world, dict):
+        return out
+    settlements = _world_settlement_ids(world)
+    fac_keys = _world_faction_compare_keys(bundle)
+    allow = settlements | fac_keys
+    npcs = world.get("npcs") or []
+    if not isinstance(npcs, list):
+        return out
+    for i, row in enumerate(npcs):
+        if not isinstance(row, dict):
+            continue
+        aff = row.get("affiliation")
+        if aff is None or (isinstance(aff, str) and not aff.strip()):
+            continue
+        val = str(aff).strip()
+        ck = bundle_compare_id(val)
+        if val in allow or (ck and ck in fac_keys):
+            continue
+        npc_id = str(row.get("id") or "").strip() or f"npcs[{i}]"
+        out.append(
+            ContentLintMessage(
+                severity="error",
+                code="scene.reference.npc_affiliation_unknown",
+                message=(
+                    f"world.npcs[{i}] ({npc_id!r}) affiliation '{val}' does not match any "
+                    f"world.settlements[].id or world.factions id/name key in this bundle"
+                ),
+                scene_id=None,
+                path=f"world.npcs[{i}].affiliation",
+                evidence={
+                    "npc_id": npc_id,
+                    "affiliation": val,
+                    "scope": "bundle.world.npcs↔settlements|factions",
+                    "settlement_ids": sorted(settlements),
+                    "faction_compare_keys_sample": sorted(fac_keys)[:32],
+                },
+            )
+        )
+    return out
+
+
+def lint_bundle_event_log_faction_sources(bundle: ContentBundleSnapshot) -> List[ContentLintMessage]:
+    """``bundle.reference.*`` — ``world.event_log`` entries with ``faction_`` type must cite a known faction id."""
+    out: List[ContentLintMessage] = []
+    world = bundle.world
+    if not isinstance(world, dict):
+        return out
+    log = world.get("event_log")
+    if not isinstance(log, list):
+        return out
+    fac_ids: Set[str] = set()
+    for o in bundle.index.faction_occurrences:
+        if o.authored_id:
+            fac_ids.add(str(o.authored_id).strip())
+    for i, entry in enumerate(log):
+        if not isinstance(entry, dict):
+            continue
+        et = str(entry.get("type") or "").strip().lower()
+        if not et.startswith("faction_"):
+            continue
+        src = entry.get("source")
+        if src is None or (isinstance(src, str) and not src.strip()):
+            continue
+        src_s = str(src).strip()
+        if src_s in fac_ids:
+            continue
+        out.append(
+            ContentLintMessage(
+                severity="error",
+                code="bundle.reference.event_log_source_unknown_faction",
+                message=(
+                    f"world.event_log[{i}] type '{et}' source '{src_s}' does not match any world.factions row id"
+                ),
+                scene_id=None,
+                path=f"world.event_log[{i}].source",
+                evidence={
+                    "index": i,
+                    "event_type": et,
+                    "source": src_s,
+                    "scope": "bundle.world.event_log↔factions",
+                    "known_faction_authored_ids": sorted(fac_ids),
+                },
+            )
+        )
+    return out
+
+
+def _stable_json_blob(obj: Any) -> str:
+    return json.dumps(obj, sort_keys=True, separators=(",", ":"), default=str)
+
+
+def lint_bundle_clue_registry_row_conflicts(bundle: ContentBundleSnapshot) -> List[ContentLintMessage]:
+    """``bundle.contradiction.*`` — multiple ``world.clues`` keys share the same canonical row id with differing rows."""
+    out: List[ContentLintMessage] = []
+    world = bundle.world
+    if not isinstance(world, dict):
+        return out
+    clues = world.get("clues")
+    if not isinstance(clues, dict):
+        return out
+    by_compare_key: Dict[str, List[Tuple[str, str, Any]]] = {}
+    for k in sorted(clues.keys()):
+        if not isinstance(k, str) or not k.strip():
+            continue
+        row = clues.get(k)
+        if not isinstance(row, dict):
+            continue
+        rid = str(row.get("id") or "").strip()
+        if not rid:
+            continue
+        ck = bundle_compare_id(rid)
+        if not ck:
+            continue
+        by_compare_key.setdefault(ck, []).append((k.strip(), rid, row))
+    for ck in sorted(by_compare_key.keys()):
+        triples = by_compare_key[ck]
+        if len(triples) < 2:
+            continue
+        blobs = {_stable_json_blob(t[2]) for t in triples}
+        if len(blobs) <= 1:
+            continue
+        keys = sorted(t[0] for t in triples)
+        authored_ids = sorted({t[1] for t in triples})
+        out.append(
+            ContentLintMessage(
+                severity="error",
+                code="bundle.contradiction.clue_registry_row_conflict",
+                message=(
+                    f"world.clues defines incompatible rows for the same canonical clue id '{ck}' "
+                    f"(registry keys {keys})"
+                ),
+                scene_id=None,
+                path="world.clues",
+                evidence={
+                    "compare_key": ck,
+                    "authored_row_ids": authored_ids,
+                    "registry_keys": keys,
+                    "scope": "bundle.world.clues",
+                },
+            )
+        )
+    return out
+
+
+def lint_bundle_clue_scene_vs_world_definitions(bundle: ContentBundleSnapshot) -> List[ContentLintMessage]:
+    """``bundle.contradiction.*`` — scene ``discoverable_clues`` id matches ``world.clues`` but ``text`` differs.
+
+    Conflicting *world-only* definitions for the same canonical clue id across multiple registry
+    keys are reported separately by :func:`lint_bundle_clue_registry_row_conflicts` to avoid
+    duplicate messages for the same structural issue.
+    """
+    out: List[ContentLintMessage] = []
+    world = bundle.world
+    if not isinstance(world, dict):
+        return out
+    clues = world.get("clues")
+    if not isinstance(clues, dict) or not clues:
+        return out
+    texts_by_ck: Dict[str, Set[str]] = {}
+    for k in sorted(clues.keys()):
+        if not isinstance(k, str) or not k.strip():
+            continue
+        row = clues.get(k)
+        if not isinstance(row, dict):
+            continue
+        row_id = str(row.get("id") or "").strip() or k.strip()
+        ck = bundle_compare_id(row_id)
+        if not ck:
+            continue
+        txt = str(row.get("text") or "").strip()
+        if not txt:
+            continue
+        texts_by_ck.setdefault(ck, set()).add(txt)
+
+    world_text_by_ck: Dict[str, str] = {}
+    for ck, texts in texts_by_ck.items():
+        if len(texts) == 1:
+            world_text_by_ck[ck] = next(iter(texts))
+
+    for _env_id in sorted(bundle.scenes):
+        env = bundle.scenes[_env_id]
+        inner = _scene_inner(env if isinstance(env, dict) else {})
+        if not inner:
+            continue
+        disc = inner.get("discoverable_clues") or []
+        if not isinstance(disc, list):
+            continue
+        for idx, raw in enumerate(disc):
+            if not isinstance(raw, dict):
+                continue
+            cid = str(raw.get("id") or "").strip()
+            if not cid:
+                continue
+            ck = bundle_compare_id(cid)
+            wtxt = world_text_by_ck.get(ck)
+            if wtxt is None:
+                continue
+            stxt = str(raw.get("text") or "").strip()
+            if not stxt or stxt == wtxt:
+                continue
+            inner_sid = str(inner.get("id") or _env_id).strip()
+            out.append(
+                ContentLintMessage(
+                    severity="error",
+                    code="bundle.contradiction.clue_scene_vs_world_definition",
+                    message=(
+                        f"Scene '{inner_sid}' discoverable_clues[{idx}] id '{cid}' matches a world.clues entry "
+                        f"but clue text differs from the world row"
+                    ),
+                    scene_id=inner_sid,
+                    path=f"scene.discoverable_clues[{idx}]",
+                    evidence={
+                        "clue_compare_key": ck,
+                        "scene_text_excerpt": stxt[:200],
+                        "world_text_excerpt": wtxt[:200],
+                        "scope": "bundle.scene.discoverable_clues↔world.clues",
+                    },
+                )
+            )
+    return out
+
+
+def lint_bundle_governance(bundle: ContentBundleSnapshot) -> List[ContentLintMessage]:
+    """Run bundle-level passes after scene passes; merge is caller's responsibility."""
+    parts: List[List[ContentLintMessage]] = [
+        lint_bundle_duplicate_ids(bundle),
+        lint_clue_world_registry_references(bundle),
+        lint_faction_progression_uid_collisions(bundle),
+        lint_world_state_registry_consistency(bundle),
+        lint_campaign_scene_references(bundle),
+        lint_scene_world_npc_scene_links(bundle),
+        lint_scene_world_npc_affiliations(bundle),
+        lint_bundle_event_log_faction_sources(bundle),
+        lint_bundle_clue_registry_row_conflicts(bundle),
+        lint_bundle_clue_scene_vs_world_definitions(bundle),
+    ]
+    return _merge_messages(parts)
 
 
 def _norm(s: str) -> str:
@@ -448,22 +1291,31 @@ def lint_all_content(
     scenes: Dict[str, Dict[str, Any]],
     *,
     world: Optional[Dict[str, Any]] = None,
+    campaign: Optional[Dict[str, Any]] = None,
     graph_seed_scene_ids: Optional[List[str]] = None,
     reference_known_scene_ids: Optional[Set[str]] = None,
     graph_known_scene_ids: Optional[Set[str]] = None,
 ) -> ContentLintReport:
     """Run all passes over an in-memory scene map (scene_id -> envelope).
 
-    ``reference_known_scene_ids`` — when set, used as the known scene registry for strict
-    validation and heuristics (exit/action targets, duplicate stems on disk, etc.) while
-    still only running per-scene passes for keys present in ``scenes``. When omitted,
-    defaults to ``set(scenes.keys())`` (single full-map run).
+    **Scopes (formal):**
 
-    ``graph_known_scene_ids`` — universe of scene ids for the graph/reachability pass only.
-    When omitted, defaults to ``reference_known`` (same registry as validation). For
-    subset linting, pass ``set(scenes.keys())`` so reachability is evaluated **only among
-    loaded scenes**; otherwise unreachable warnings would spuriously flag scenes that were
-    never loaded into ``scenes``.
+    1. **Loaded bundle** — the ``scenes`` mapping plus optional ``world`` / ``campaign``.
+       Per-scene passes only iterate ``scenes`` keys.
+
+    2. **Reference registry** — ``reference_known_scene_ids`` when passed, else
+       ``set(scenes.keys())``. Used for strict exit/action targets, heuristics, and (via
+       :func:`build_content_bundle`) the bundle world↔scene link registry so subset runs
+       do not false-positive on on-disk neighbors.
+
+    3. **Validation** — scene strict rules use (2). Graph reachability uses
+       ``graph_known_scene_ids`` (default (2)); pass ``set(scenes.keys())`` in subset mode
+       so ``graph.unreachable_scene`` is evaluated only among loaded scenes. Bundle
+       campaign/NPC scene fields use the same registry as (2); nothing is silently
+       suppressed: an id errors only if missing from that resolved registry.
+
+    ``campaign`` — optional campaign metadata dict for bundle checks (e.g.
+    ``campaign.starting_scene_id`` when present); does not affect scene-only runs when omitted.
     """
     reference_known = set(reference_known_scene_ids) if reference_known_scene_ids is not None else set(scenes.keys())
     graph_known = set(graph_known_scene_ids) if graph_known_scene_ids is not None else set(reference_known)
@@ -489,6 +1341,14 @@ def lint_all_content(
             graph_seed_scene_ids=graph_seed_scene_ids,
         )
     )
+
+    bundle = build_content_bundle(
+        scenes,
+        world=world,
+        campaign=campaign,
+        world_scene_registry_ids=sorted(reference_known),
+    )
+    all_parts.append(lint_bundle_governance(bundle))
 
     messages = _merge_messages(all_parts)
     err = sum(1 for m in messages if m.severity == "error")

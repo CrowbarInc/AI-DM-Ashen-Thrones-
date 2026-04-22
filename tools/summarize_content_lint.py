@@ -69,6 +69,43 @@ def _top_codes(messages: Sequence[Mapping[str, Any]], severity: str, top_n: int)
     return ranked[: max(0, top_n)]
 
 
+def _family_counts(messages: Sequence[Mapping[str, Any]], severity: str, top_n: int) -> List[Tuple[str, int]]:
+    """First path segment of ``code`` (e.g. ``bundle.duplicate_id.npc`` → ``bundle``)."""
+    c: Counter[str] = Counter()
+    for m in messages:
+        if str(m.get("severity", "")) != severity:
+            continue
+        code = str(m.get("code", ""))
+        fam = code.split(".", 1)[0] if code else "other"
+        c[fam] += 1
+    ranked = sorted(c.items(), key=lambda kv: (-kv[1], kv[0]))
+    return ranked[: max(0, top_n)]
+
+
+def _family_error_warning_totals(messages: Sequence[Mapping[str, Any]]) -> List[Tuple[str, int, int, int]]:
+    """(family, errors, warnings, total) for every family with at least one message; sort is stable for reporting."""
+    err_c: Counter[str] = Counter()
+    warn_c: Counter[str] = Counter()
+    for m in messages:
+        code = str(m.get("code", ""))
+        fam = code.split(".", 1)[0] if code else "other"
+        sev = str(m.get("severity", ""))
+        if sev == "error":
+            err_c[fam] += 1
+        elif sev == "warning":
+            warn_c[fam] += 1
+    keys = sorted(set(err_c) | set(warn_c))
+    rows: List[Tuple[str, int, int, int]] = []
+    for fam in keys:
+        e = int(err_c[fam])
+        w = int(warn_c[fam])
+        t = e + w
+        if t:
+            rows.append((fam, e, w, t))
+    rows.sort(key=lambda r: (-r[3], -r[1], -r[2], r[0]))
+    return rows
+
+
 def _by_scene_counts(messages: Sequence[Mapping[str, Any]]) -> Dict[str, Tuple[int, int]]:
     """scene key -> (errors, warnings). Use ``__global__`` for missing scene_id (printed as [global])."""
     out: Dict[str, List[int]] = defaultdict(lambda: [0, 0])
@@ -90,6 +127,32 @@ def _format_top_codes(label: str, ranked: List[Tuple[str, int]]) -> List[str]:
     else:
         for code, n in ranked:
             lines.append(f"  {code}  x{n}")
+    return lines
+
+
+def _format_family_counts(label: str, ranked: List[Tuple[str, int]]) -> List[str]:
+    lines = [label]
+    if not ranked:
+        lines.append("  (none)")
+    else:
+        for fam, n in ranked:
+            lines.append(f"  {fam}: {n}")
+    return lines
+
+
+def _format_family_rollup(label: str, rows: List[Tuple[str, int, int, int]], top_n: int) -> List[str]:
+    """Human-oriented rollup: errors / warnings per code family (first path segment)."""
+    lines = [label]
+    if not rows:
+        lines.append("  (none)")
+        return lines
+    shown = rows[: max(0, top_n)]
+    for fam, e, w, t in shown:
+        lines.append(f"  {fam}: {e} errors / {w} warnings (total {t})")
+    omitted = len(rows) - len(shown)
+    if omitted > 0:
+        noun = "family" if omitted == 1 else "families"
+        lines.append(f"  ... ({omitted} more {noun})")
     return lines
 
 
@@ -120,9 +183,30 @@ def summarize_report(data: Dict[str, Any], *, input_label: str, top_n: int) -> s
         f"errors: {err_n}   warnings: {warn_n}",
     ]
     lines.append("")
+    rollup = _family_error_warning_totals(messages)
+    lines.extend(
+        _format_family_rollup(
+            f"where to look first (code family rollup, max {top_n}):",
+            rollup,
+            top_n,
+        )
+    )
+    lines.append("")
+    lines.append("--- detail (stable ordering) ---")
+    lines.append("")
     lines.extend(_format_top_codes(f"top error codes (max {top_n}):", _top_codes(messages, "error", top_n)))
     lines.append("")
     lines.extend(_format_top_codes(f"top warning codes (max {top_n}):", _top_codes(messages, "warning", top_n)))
+    lines.append("")
+    lines.extend(
+        _format_family_counts(f"errors by code family prefix (max {top_n}):", _family_counts(messages, "error", top_n))
+    )
+    lines.append("")
+    lines.extend(
+        _format_family_counts(
+            f"warnings by code family prefix (max {top_n}):", _family_counts(messages, "warning", top_n)
+        )
+    )
 
     by_scene = _by_scene_counts(messages)
     if by_scene:
@@ -142,6 +226,13 @@ def summarize_report(data: Dict[str, Any], *, input_label: str, top_n: int) -> s
         if omitted > 0:
             noun = "scene" if omitted == 1 else "scenes"
             lines.append(f"  ... ({omitted} more {noun})")
+
+    lines.append("")
+    lines.append(
+        "hint: bundle-level governance uses prefixes such as bundle.*, campaign.*, "
+        "scene.reference.*, clue.reference.*, faction.reference.*, world_state.reference.* "
+        "(see docs/content_lint_pipeline.md)."
+    )
 
     return "\n".join(lines) + "\n"
 
@@ -190,21 +281,27 @@ def compare_reports(
 
 def main(argv: Optional[Sequence[str]] = None) -> int:
     parser = argparse.ArgumentParser(
-        description="Summarize canonical content-lint JSON (from run_content_lint.py --json-out).",
+        description=(
+            "Read-only summary of canonical content-lint JSON (from run_content_lint.py or "
+            "ci_content_lint.py --json-out). Does not execute the lint engine."
+        ),
     )
-    parser.add_argument("--input", type=Path, required=True, help="Path to canonical report JSON.")
+    parser.add_argument("--input", type=Path, required=True, help="Canonical report JSON (ContentLintReport.as_dict()).")
     parser.add_argument(
         "--compare",
         type=Path,
         default=None,
-        help="Optional second report; prints deltas vs --input (baseline -> compare).",
+        help="Optional second report JSON; appends a delta section (baseline = --input, compare = this file).",
     )
     parser.add_argument(
         "--top",
         type=int,
         default=12,
         metavar="N",
-        help="Max codes per severity, max by-scene rows, and max multiset rows in compare mode (default: 12).",
+        help=(
+            "Caps list lengths: family rollup, top codes per severity, by-scene table rows, "
+            "and compare-mode multiset rows (default: 12)."
+        ),
     )
     args = parser.parse_args(list(argv) if argv is not None else None)
 

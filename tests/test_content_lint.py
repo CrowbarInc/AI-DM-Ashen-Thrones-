@@ -144,6 +144,30 @@ def test_report_as_dict_roundtrip_shape():
     assert all("severity" in m and "code" in m for m in d["messages"])
 
 
+def test_subset_lint_resolves_world_npc_location_against_reference_registry():
+    """Bundle NPC↔scene checks use ``reference_known_scene_ids`` like exit targets."""
+    hub = _minimal_scene("hub")
+    world = {
+        "settlements": [{"id": "set1", "name": "S"}],
+        "factions": [{"id": "fac1", "name": "F"}],
+        "projects": [],
+        "assets": [],
+        "world_flags": [],
+        "event_log": [],
+        "inference_rules": [],
+        "clues": {},
+        "npcs": [{"id": "n1", "location": "leaf", "affiliation": "fac1"}],
+        "world_state": {"flags": {}, "counters": {}, "clocks": {}},
+    }
+    report = lint_all_content(
+        {"hub": hub},
+        world=world,
+        reference_known_scene_ids={"hub", "leaf"},
+        graph_known_scene_ids={"hub"},
+    )
+    assert not any(m.code == "scene.reference.npc_scene_link_unknown" for m in report.messages)
+
+
 def test_subset_scopes_graph_but_keeps_exit_reference_registry():
     """Loaded subset + full reference_known: exits to unloaded scenes stay valid; graph ignores unloaded ids."""
     hub = _minimal_scene("hub")
@@ -158,3 +182,38 @@ def test_subset_scopes_graph_but_keeps_exit_reference_registry():
     )
     assert not any(m.code == "exit.unknown_target" for m in report.messages)
     assert not any(m.code == "graph.unreachable_scene" and m.scene_id == "island" for m in report.messages)
+
+
+def test_subset_and_full_emit_same_bundle_scene_link_errors_for_identical_reference_registry():
+    """Upgraded error-severity bundle rules must not false-clear in subset when the reference registry matches."""
+    hub = _minimal_scene("hub")
+    leaf = _minimal_scene("leaf")
+    world = {
+        "settlements": [{"id": "set1", "name": "S"}],
+        "factions": [{"id": "fac1", "name": "F"}],
+        "projects": [],
+        "assets": [],
+        "world_flags": [],
+        "event_log": [],
+        "inference_rules": [],
+        "clues": {},
+        "npcs": [{"id": "n1", "location": "ghost", "affiliation": "fac1"}],
+        "world_state": {"flags": {}, "counters": {}, "clocks": {}},
+    }
+    ref = {"hub", "leaf"}
+    full = lint_all_content({"hub": hub, "leaf": leaf}, world=world, graph_seed_scene_ids=["hub"])
+    sub = lint_all_content(
+        {"hub": hub},
+        world=world,
+        reference_known_scene_ids=ref,
+        graph_known_scene_ids={"hub"},
+        graph_seed_scene_ids=["hub"],
+    )
+    bundle_codes = {
+        "campaign.reference.starting_scene_unknown",
+        "scene.reference.npc_scene_link_unknown",
+        "scene.reference.npc_affiliation_unknown",
+    }
+    full_hits = sorted(m.code for m in full.messages if m.code in bundle_codes)
+    sub_hits = sorted(m.code for m in sub.messages if m.code in bundle_codes)
+    assert full_hits == sub_hits == ["scene.reference.npc_scene_link_unknown"]

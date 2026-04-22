@@ -33,9 +33,10 @@ jobs:
 
       - name: Run content lint (Phase 1 — informational, non-blocking)
         # Observer: always produce logs + JSON; do not fail the workflow on errors or warnings.
+        # Entry script is a thin forwarder to tools/run_content_lint.py (same argv / exit codes).
         continue-on-error: true
         run: >-
-          python tools/run_content_lint.py
+          python tools/ci_content_lint.py
           --json-out artifacts/content_lint/ci_report.json
 
       - name: Summarize content lint report
@@ -55,4 +56,4 @@ jobs:
       #   - Flip the condition below to `true` for a hard-coded enable.
       - name: Run content lint (Phase 2 — optional fail on warnings)
         if: false
-        run: python tools/run_content_lint.py --fail-on-warnings
+        run: python tools/ci_content_lint.py --fail-on-warnings
