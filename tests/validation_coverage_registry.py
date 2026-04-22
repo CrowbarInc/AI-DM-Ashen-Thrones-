@@ -245,6 +245,33 @@ REGISTRY: Final[tuple[CoverageEntry, ...]] = (
         ),
         optional_smoke_overlap=(),
     ),
+    # N1: synthetic harness longitudinal continuity (session-health + analyzer JSON); tooling-only lane.
+    CoverageEntry(
+        feature_id="n1_longitudinal_scenario_spine_validation",
+        title="N1 longitudinal continuity / scenario-spine validation (deterministic synthetic harness)",
+        owner_domain="validation_layer",
+        status=CoverageStatus.ACTIVE,
+        required_surfaces=frozenset({RequiredSurface.INTEGRATION_SMOKE}),
+        transcript_modules=(),
+        behavioral_gauntlet_axes=(),
+        manual_gauntlets=(),
+        playability_scenarios=(),
+        unit_contract_modules=(),
+        integration_smoke_modules=(
+            "tools/run_n1_scenario_spine_validation.py",
+            "tests/test_n1_scenario_spine_cli.py",
+        ),
+        notes=(
+            "Canonical scenario definitions live in tests/helpers/n1_scenarios.py (code-defined fixtures). "
+            "CLI emits session_health.json (harness artifact) and continuity_report.json (longitudinal analyzer) "
+            "as separate files; optional branch_comparison.json for shared-prefix multi-branch runs. "
+            "This lane is not a playability replacement, not a runtime evaluator, and does not change game/ ownership."
+        ),
+        optional_smoke_overlap=(
+            "tests/test_n1_analyzer_regression.py — analyzer regression depth; "
+            "tests/test_n1_scenario_spine_validation.py — harness contract/unit coverage.",
+        ),
+    ),
 )
 
 

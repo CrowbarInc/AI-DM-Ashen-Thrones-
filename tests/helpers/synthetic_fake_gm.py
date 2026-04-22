@@ -95,10 +95,15 @@ def build_fake_gm_snapshot(
     latest_player_text = history[-1] if history else ""
     active_responder = responder or make_deterministic_fake_responder()
     response = active_responder(latest_player_text)
-    return {
+    snapshot: dict[str, Any] = {
         "latest_player_text": latest_player_text,
         "response": response,
     }
+    if isinstance(response, dict):
+        sid = response.get("scene_id")
+        if isinstance(sid, str) and sid.strip():
+            snapshot["scene_id"] = sid.strip()
+    return snapshot
 
 
 def install_fake_responder_monkeypatches(

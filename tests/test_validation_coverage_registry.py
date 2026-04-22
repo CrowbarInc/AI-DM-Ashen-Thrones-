@@ -46,6 +46,7 @@ def test_seed_registry_covers_objective12_demo_surfaces() -> None:
         "playability_validation",
         "manual_gauntlet_lead_narration_smoke",
         "anti_railroading_transcript_regressions",
+        "n1_longitudinal_scenario_spine_validation",
     ):
         assert fid in by_id, f"missing seeded feature_id {fid!r}"
 
@@ -60,6 +61,12 @@ def test_seed_registry_covers_objective12_demo_surfaces() -> None:
     assert by_id["anti_railroading_transcript_regressions"].transcript_modules == (
         "tests/test_anti_railroading_transcript_regressions.py",
     )
+    assert RequiredSurface.INTEGRATION_SMOKE in by_id[
+        "n1_longitudinal_scenario_spine_validation"
+    ].required_surfaces
+    assert "tools/run_n1_scenario_spine_validation.py" in by_id[
+        "n1_longitudinal_scenario_spine_validation"
+    ].integration_smoke_modules
 
 
 def test_unit_contract_requires_typed_modules_not_notes() -> None:
