@@ -11,7 +11,7 @@ from game import ctir
 from game.api import _build_gpt_narration_from_authoritative_state
 from game.ctir_runtime import SESSION_CTIR_STAMP_KEY, attach_ctir, detach_ctir
 from game.defaults import default_campaign, default_character, default_session, default_world
-from game.narration_plan_bundle import attach_narration_plan_bundle
+from game.narration_plan_bundle import SESSION_NARRATION_PLAN_BUNDLE_STAMP_KEY, attach_narration_plan_bundle
 from game.narration_seam_guards import (
     NARRATION_PATH_MATRIX,
     REGISTERED_NARRATION_PATH_KINDS,
@@ -253,9 +253,12 @@ def test_prompt_context_mandatory_narrative_plan_audit_visible() -> None:
 
 
 def test_build_gpt_annotates_seam_failure_not_plan_driven(monkeypatch: pytest.MonkeyPatch) -> None:
-    """If bundle seam verification fails, GM metadata must not claim a normal plan-driven success path."""
+    """If bundle seam verification fails, skip GPT and surface planner convergence seam metadata."""
+
+    gpt_calls: list[int] = []
 
     def fake_call_gpt(_messages: list[dict[str, str]], **_kwargs: Any) -> dict[str, Any]:
+        gpt_calls.append(1)
         return {
             "player_facing_text": "Fallback narration.",
             "tags": [],
@@ -278,7 +281,9 @@ def test_build_gpt_annotates_seam_failure_not_plan_driven(monkeypatch: pytest.Mo
 
     kw = _narration_kw()
     out = _build_gpt_narration_from_authoritative_state(**kw)
+    assert gpt_calls == []
     seam = (out.get("metadata") or {}).get("narration_seam") or {}
+    assert seam.get("path_kind") == "resolved_turn_ctir_planner_convergence_seam"
     assert seam.get("plan_driven") is False
     assert seam.get("emergency_nonplan_output") is True
     extra = seam.get("extra") or {}
@@ -308,10 +313,29 @@ def test_same_turn_retry_ctir_stamp_drift_surfaces() -> None:
     assert tr.get("current") == "drifted"
 
 
+def test_same_turn_retry_bundle_stamp_drift_surfaces() -> None:
+    session: dict[str, Any] = {"debug_traces": []}
+    session[SESSION_CTIR_STAMP_KEY] = "stamp-a"
+    session[SESSION_NARRATION_PLAN_BUNDLE_STAMP_KEY] = "stamp-b"
+    ok = verify_same_turn_narration_stamp_for_retry(
+        session,
+        expected_ctir_stamp="stamp-a",
+        expected_narration_plan_bundle_stamp="stamp-a",
+        owner_module=__name__,
+    )
+    assert ok is False
+    tr = _last_trace_operation(session, "semantic_bypass_blocked")
+    assert tr is not None
+    assert tr.get("reason") == "same_turn_retry_narration_plan_bundle_stamp_drift"
+    assert tr.get("expected") == "stamp-a"
+    assert tr.get("current") == "stamp-b"
+
+
 def test_path_matrix_contract_rows_present() -> None:
     """Lightweight lock: matrix must retain C1 contract rows (prevents silent rot)."""
     joined = " ".join(str(r.get("path")) for r in NARRATION_PATH_MATRIX).lower()
     assert "resolved_turn_ctir_bundle" in joined
+    assert "planner_convergence" in joined
     assert "resolved_turn_ctir_upstream_fast_fallback" in joined or "force_terminal" in joined
     assert "chat procedural" in joined
     assert "manual_play" in joined or "budget exceeded" in joined

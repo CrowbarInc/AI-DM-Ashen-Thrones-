@@ -9,6 +9,8 @@ Domain semantics and publication views live in ``game.world``, ``game.interactio
 
 from __future__ import annotations
 
+from typing import Any
+
 from contextlib import asynccontextmanager
 from pathlib import Path
 import inspect
@@ -142,6 +144,7 @@ from game.social import (
     SOCIAL_KINDS,
     find_npc_by_target,
 )
+from game.planner_convergence import build_planner_convergence_report, planner_convergence_ok
 from game.interaction_context import (
     apply_conservative_emergent_enrollment_from_gm_output,
     apply_explicit_non_social_commitment_break,
@@ -912,6 +915,131 @@ def _preserve_model_route_metadata(
         dst["metadata"] = merged
 
 
+def _classify_planner_convergence_path_label_for_manual_play(
+    *,
+    resolution: dict,
+    response_type_contract: dict,
+    route_choice: str | None,
+) -> str:
+    rk = str(resolution.get("kind") or "").strip().lower()
+    sc = resolution.get("state_changes") if isinstance(resolution.get("state_changes"), dict) else {}
+    transitionish = bool(
+        resolution.get("resolved_transition") is True
+        or rk in ("travel", "scene_transition")
+        or sc.get("scene_transition_occurred")
+        or sc.get("arrived_at_scene")
+        or sc.get("new_scene_context_available")
+    )
+    if rk == "scene_opening":
+        return "scene_opening"
+    if transitionish:
+        return "transition"
+    rr = str(response_type_contract.get("required_response_type") or "").strip().lower()
+    if rk == "adjudication_query" or rr == "answer":
+        return "exposition_answer"
+    if rr == "dialogue":
+        return "dialogue_social"
+    if rr == "action_outcome":
+        return "action_outcome"
+    if rk in SOCIAL_KINDS:
+        return "dialogue_social"
+    return "continuation"
+
+
+def _append_planner_convergence_debug_trace(
+    session: dict | None,
+    *,
+    report: dict[str, Any],
+    stage: str,
+) -> None:
+    if not isinstance(session, dict):
+        return
+    append_debug_trace(
+        session,
+        build_state_mutation_trace(
+            domain=PLAYER_VISIBLE_STATE,
+            owner_module=__name__,
+            operation="planner_convergence_snapshot",
+            extra={"stage": stage, "report": dict(report)},
+        ),
+    )
+
+
+def _attach_planner_convergence_gm_metadata(gm: dict | None, report: dict[str, Any] | None) -> None:
+    if not isinstance(gm, dict) or not isinstance(report, dict):
+        return
+    md = gm.get("metadata") if isinstance(gm.get("metadata"), dict) else {}
+    gm["metadata"] = {**md, "planner_convergence_report": dict(report)}
+
+
+def _gm_planner_convergence_seam_terminal(
+    *,
+    session: dict,
+    report: dict[str, Any],
+    path_label: str,
+    player_text: str,
+    scene: dict,
+    world: dict,
+    resolution: dict,
+    segmented_turn: dict | None,
+) -> dict:
+    codes = report.get("failure_codes") if isinstance(report.get("failure_codes"), list) else []
+    failure = {
+        "failure_class": "planner_convergence_seam",
+        "priority": -1,
+        "reasons": [",".join(str(c) for c in codes if isinstance(c, str))],
+    }
+    out = force_terminal_retry_fallback(
+        session=session,
+        original_text="",
+        failure=failure,
+        retry_failures=[failure],
+        player_text=player_text,
+        scene_envelope=scene,
+        world=world,
+        resolution=resolution,
+        base_gm=None,
+        segmented_turn=segmented_turn,
+    )
+    record_emergency_nonplan_output(
+        session,
+        reason="planner_convergence_seam_failure",
+        owner_module=__name__,
+        extra={
+            "failure_codes": list(codes),
+            "path_label": path_label,
+            "emergency_fallback_label": "deterministic_terminal_repair",
+        },
+    )
+    dbg = str(out.get("debug_notes") or "")
+    tail = f"planner_convergence_seam_failure:path={path_label}:codes={codes}"
+    out["debug_notes"] = (dbg + " | " if dbg else "") + tail
+    _attach_resolution_contract_metadata_to_gm_output(out, resolution)
+    return out
+
+
+def _annotate_planner_convergence_seam_gm(
+    gm: dict,
+    *,
+    report: dict[str, Any],
+    bundle_seam_requirement: dict[str, Any],
+) -> None:
+    annotate_narration_path_kind(
+        gm,
+        path_kind="resolved_turn_ctir_planner_convergence_seam",
+        ctir_backed=True,
+        bundle_required=True,
+        plan_driven=False,
+        emergency_nonplan_output=True,
+        extra={
+            "planner_failure_codes": list(report.get("failure_codes") or []),
+            "bundle_seam_requirement_failed": bundle_seam_requirement.get("ok") is not True,
+            "bundle_seam_error": bundle_seam_requirement.get("error"),
+            "bundle_seam_skipped": bundle_seam_requirement.get("skipped"),
+        },
+    )
+
+
 def _build_gpt_narration_from_authoritative_state(
     *,
     campaign: dict,
@@ -964,6 +1092,11 @@ def _build_gpt_narration_from_authoritative_state(
     _nc_kw: dict | None = None
     _seam_stamp_for_retry = ""
     bundle_seam_requirement: dict[str, Any] = {"ok": True, "skipped": "not_applicable"}
+    contract_payload: dict | None = None
+    planner_convergence_emergency_exit = False
+    planner_path_label = "continuation"
+    planner_convergence_report_final: dict[str, Any] | None = None
+    gm: dict | None = None
     if isinstance(resolution, dict):
         _ctir_stamp = narration_ctir_turn_stamp(session=session, resolution=resolution, user_text=user_text)
         _scene_id_for_ctir = str((scene.get("scene") or {}).get("id") or "").strip() or None
@@ -1030,63 +1163,149 @@ def _build_gpt_narration_from_authoritative_state(
             owner_module=__name__,
         )
         _seam_stamp_for_retry = _ctir_stamp
-    prompt_started = _now_perf()
-    messages = build_messages(
-        campaign,
-        world,
-        session,
-        character,
-        scene,
-        combat,
-        recent_log,
-        user_text,
-        resolution,
-        scene_runtime=scene_runtime,
-        prompt_profile="manual_play_auto",
-        narration_context_call_kwargs=_nc_kw,
-    )
-    prompt_payload: dict = {}
-    if isinstance(messages, list) and len(messages) > 1:
-        try:
-            m1 = messages[1]
-            if isinstance(m1, dict) and isinstance(m1.get("content"), str):
-                prompt_payload = json.loads(m1["content"])
-        except Exception:
-            prompt_payload = {}
-    response_policy = (
-        prompt_payload.get("response_policy")
-        if isinstance(prompt_payload, dict) and isinstance(prompt_payload.get("response_policy"), dict)
-        else build_response_policy()
-    )
-    contract_payload = (
-        dict(response_type_contract)
-        if isinstance(response_type_contract, dict)
-        else _derive_response_type_contract_for_turn(
-            session=session,
-            segmented_turn=segmented_turn,
-            normalized_action=normalized_action if isinstance(normalized_action, dict) else None,
-            resolution=resolution if isinstance(resolution, dict) else None,
-            raw_player_text=user_text,
-            route_choice=route_choice,
-            directed_social_entry=directed_social_entry,
+        contract_payload = (
+            dict(response_type_contract)
+            if isinstance(response_type_contract, dict)
+            else _derive_response_type_contract_for_turn(
+                session=session,
+                segmented_turn=segmented_turn,
+                normalized_action=normalized_action if isinstance(normalized_action, dict) else None,
+                resolution=resolution,
+                raw_player_text=user_text,
+                route_choice=route_choice,
+                directed_social_entry=directed_social_entry,
+            )
         )
-    )
-    if isinstance(prompt_payload, dict) and contract_payload:
-        prompt_payload["response_type_contract"] = dict(contract_payload)
-        response_policy = dict(response_policy) if isinstance(response_policy, dict) else build_response_policy()
-        compact_contract = compact_response_type_contract(contract_payload)
-        if compact_contract:
-            response_policy["response_type_contract"] = compact_contract
-        prompt_payload["response_policy"] = response_policy
-        if (
-            isinstance(messages, list)
-            and len(messages) > 1
-            and isinstance(messages[1], dict)
-        ):
-            messages = list(messages)
-            messages[1] = dict(messages[1])
-            messages[1]["content"] = json.dumps(prompt_payload, ensure_ascii=True)
-    _accumulate_latency(latency_sink, "prompt_construction", _elapsed_ms(prompt_started))
+        planner_path_label = _classify_planner_convergence_path_label_for_manual_play(
+            resolution=resolution,
+            response_type_contract=contract_payload,
+            route_choice=route_choice,
+        )
+        pre_planner_report = build_planner_convergence_report(
+            path_label=planner_path_label,
+            owner_module=__name__,
+            session=session,
+            prompt_payload=None,
+        )
+        _append_planner_convergence_debug_trace(session, report=pre_planner_report, stage="pre_prompt")
+        planner_convergence_report_final = dict(pre_planner_report)
+        bundle_seam_ok = bundle_seam_requirement.get("ok") is True
+        if not planner_convergence_ok(pre_planner_report) or not bundle_seam_ok:
+            planner_convergence_emergency_exit = True
+    if contract_payload is None:
+        contract_payload = (
+            dict(response_type_contract)
+            if isinstance(response_type_contract, dict)
+            else _derive_response_type_contract_for_turn(
+                session=session,
+                segmented_turn=segmented_turn,
+                normalized_action=normalized_action if isinstance(normalized_action, dict) else None,
+                resolution=resolution if isinstance(resolution, dict) else None,
+                raw_player_text=user_text,
+                route_choice=route_choice,
+                directed_social_entry=directed_social_entry,
+            )
+        )
+    if planner_convergence_emergency_exit and isinstance(resolution, dict):
+        assert planner_convergence_report_final is not None
+        gm = _gm_planner_convergence_seam_terminal(
+            session=session,
+            report=planner_convergence_report_final,
+            path_label=planner_path_label,
+            player_text=user_text,
+            scene=scene,
+            world=world,
+            resolution=resolution,
+            segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+        )
+        _attach_planner_convergence_gm_metadata(gm, planner_convergence_report_final)
+        _annotate_planner_convergence_seam_gm(
+            gm,
+            report=planner_convergence_report_final,
+            bundle_seam_requirement=bundle_seam_requirement,
+        )
+        prompt_started = _now_perf()
+        messages = [{"role": "system", "content": "."}, {"role": "user", "content": "{}"}]
+        prompt_payload: dict = {}
+        response_policy = dict(build_response_policy())
+        cc0 = compact_response_type_contract(contract_payload)
+        if cc0:
+            response_policy["response_type_contract"] = cc0
+        _accumulate_latency(latency_sink, "prompt_construction", _elapsed_ms(prompt_started))
+    else:
+        prompt_started = _now_perf()
+        messages = build_messages(
+            campaign,
+            world,
+            session,
+            character,
+            scene,
+            combat,
+            recent_log,
+            user_text,
+            resolution,
+            scene_runtime=scene_runtime,
+            prompt_profile="manual_play_auto",
+            narration_context_call_kwargs=_nc_kw,
+        )
+        prompt_payload = {}
+        if isinstance(messages, list) and len(messages) > 1:
+            try:
+                m1 = messages[1]
+                if isinstance(m1, dict) and isinstance(m1.get("content"), str):
+                    prompt_payload = json.loads(m1["content"])
+            except Exception:
+                prompt_payload = {}
+        if not isinstance(prompt_payload, dict):
+            prompt_payload = {}
+        response_policy = (
+            prompt_payload.get("response_policy")
+            if isinstance(prompt_payload.get("response_policy"), dict)
+            else build_response_policy()
+        )
+        if isinstance(prompt_payload, dict) and contract_payload:
+            prompt_payload["response_type_contract"] = dict(contract_payload)
+            response_policy = dict(response_policy) if isinstance(response_policy, dict) else build_response_policy()
+            compact_contract = compact_response_type_contract(contract_payload)
+            if compact_contract:
+                response_policy["response_type_contract"] = compact_contract
+            prompt_payload["response_policy"] = response_policy
+            if (
+                isinstance(messages, list)
+                and len(messages) > 1
+                and isinstance(messages[1], dict)
+            ):
+                messages = list(messages)
+                messages[1] = dict(messages[1])
+                messages[1]["content"] = json.dumps(prompt_payload, ensure_ascii=True)
+        if isinstance(resolution, dict):
+            post_planner_report = build_planner_convergence_report(
+                path_label=planner_path_label,
+                owner_module=__name__,
+                session=session,
+                prompt_payload=prompt_payload if isinstance(prompt_payload, dict) else None,
+            )
+            _append_planner_convergence_debug_trace(session, report=post_planner_report, stage="post_prompt")
+            planner_convergence_report_final = dict(post_planner_report)
+            if not planner_convergence_ok(post_planner_report):
+                gm = _gm_planner_convergence_seam_terminal(
+                    session=session,
+                    report=post_planner_report,
+                    path_label=planner_path_label,
+                    player_text=user_text,
+                    scene=scene,
+                    world=world,
+                    resolution=resolution,
+                    segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+                )
+                _attach_planner_convergence_gm_metadata(gm, post_planner_report)
+                _annotate_planner_convergence_seam_gm(
+                    gm,
+                    report=post_planner_report,
+                    bundle_seam_requirement=bundle_seam_requirement,
+                )
+                planner_convergence_emergency_exit = True
+        _accumulate_latency(latency_sink, "prompt_construction", _elapsed_ms(prompt_started))
 
     def _failures_after_social_answer_priority(raw: list) -> list:
         prioritized, _dbg = prioritize_retry_failures_for_social_answer_candidate(
@@ -1233,6 +1452,9 @@ def _build_gpt_narration_from_authoritative_state(
         return out
 
     known_clues = list(get_all_known_clue_texts(session))
+    fast_fallback_mode = False
+    used_force_terminal_fallback = False
+    retry_loop_started: float | None = None
     gpt_calls_used = 0
 
     def _call_gpt_route_kwargs(
@@ -1271,6 +1493,7 @@ def _build_gpt_narration_from_authoritative_state(
             verify_same_turn_narration_stamp_for_retry(
                 session,
                 expected_ctir_stamp=_seam_stamp_for_retry,
+                expected_narration_plan_bundle_stamp=_seam_stamp_for_retry,
                 owner_module=__name__,
             )
         gpt_calls_used += 1
@@ -1290,39 +1513,139 @@ def _build_gpt_narration_from_authoritative_state(
             return call_gpt(msgs, **call_kwargs)
         return call_gpt(msgs)
 
-    initial_gpt_started = _now_perf()
-    gm = guard_gm_output(
-        _bounded_call_gpt(messages),
-        scene,
-        user_text,
-        known_clues,
-        session=session,
-        world=world,
-        resolution=resolution,
-    )
-    _accumulate_latency(latency_sink, "gpt_call", _elapsed_ms(initial_gpt_started))
-    retry_attempt = 0
-    retry_loop_started: float | None = None
-    social_dialogue_turn = _social_dialogue_turn()
-    # Cap social-dialogue retries at one when the global budget allows it, but honor a test or
-    # manual monkeypatch that sets MAX_TARGETED_RETRY_ATTEMPTS to 0 (escape hatch on first failure).
-    max_targeted_retry_attempts = (
-        min(1, int(MAX_TARGETED_RETRY_ATTEMPTS)) if social_dialogue_turn else int(MAX_TARGETED_RETRY_ATTEMPTS)
-    )
-    fast_fallback_mode = False
-    used_force_terminal_fallback = False
-    upstream_api_error = _extract_upstream_api_error(gm)
-    if upstream_api_error:
-        retry_loop_started = _now_perf()
-        allow_direct_api_retry = bool(upstream_api_error.get("retryable")) and not social_dialogue_turn
-        if allow_direct_api_retry:
+    if gm is None:
+        initial_gpt_started = _now_perf()
+        gm = guard_gm_output(
+            _bounded_call_gpt(messages),
+            scene,
+            user_text,
+            known_clues,
+            session=session,
+            world=world,
+            resolution=resolution,
+        )
+        _accumulate_latency(latency_sink, "gpt_call", _elapsed_ms(initial_gpt_started))
+        retry_attempt = 0
+        social_dialogue_turn = _social_dialogue_turn()
+        # Cap social-dialogue retries at one when the global budget allows it, but honor a test or
+        # manual monkeypatch that sets MAX_TARGETED_RETRY_ATTEMPTS to 0 (escape hatch on first failure).
+        max_targeted_retry_attempts = (
+            min(1, int(MAX_TARGETED_RETRY_ATTEMPTS)) if social_dialogue_turn else int(MAX_TARGETED_RETRY_ATTEMPTS)
+        )
+        upstream_api_error = _extract_upstream_api_error(gm)
+        if upstream_api_error:
+            retry_loop_started = _now_perf()
+            allow_direct_api_retry = bool(upstream_api_error.get("retryable")) and not social_dialogue_turn
+            if allow_direct_api_retry:
+                retry_gpt_started = _now_perf()
+                gm_retry = guard_gm_output(
+                    _bounded_call_gpt(
+                        messages,
+                        retry_attempt=1,
+                        retry_reason=str(upstream_api_error.get("failure_class") or "").strip()
+                        or "retryable_upstream_error",
+                    ),
+                    scene,
+                    user_text,
+                    known_clues,
+                    session=session,
+                    world=world,
+                    resolution=resolution,
+                )
+                _ = _elapsed_ms(retry_gpt_started)
+                retried_api_error = _extract_upstream_api_error(gm_retry)
+                if retried_api_error:
+                    gm = _fast_fallback_for_upstream_error(
+                        gm_retry,
+                        retried_api_error,
+                        reason="retryable_upstream_error_exhausted",
+                    )
+                    fast_fallback_mode = True
+                else:
+                    gm = gm_retry
+            else:
+                if not upstream_api_error.get("retryable"):
+                    print("[RETRY SKIPPED: NONRETRYABLE UPSTREAM ERROR]")
+                else:
+                    print("[RETRY SKIPPED: UPSTREAM RETRY SUPPRESSED] social_dialogue_turn=True")
+                gm = _fast_fallback_for_upstream_error(
+                    gm,
+                    upstream_api_error,
+                    reason="nonretryable_upstream_error" if not upstream_api_error.get("retryable") else "social_retry_suppressed",
+                )
+                fast_fallback_mode = True
+        while not fast_fallback_mode:
+            failures = _failures_after_social_answer_priority(
+                detect_retry_failures(
+                    player_text=user_text,
+                    gm_reply=gm,
+                    scene_envelope=scene,
+                    session=session,
+                    world=world,
+                    resolution=resolution,
+                    segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+                )
+            )
+            selected_failure = choose_retry_strategy(failures)
+            if not selected_failure:
+                break
+            if retry_loop_started is None:
+                retry_loop_started = _now_perf()
+            if retry_attempt >= max_targeted_retry_attempts:
+                fc = str(selected_failure.get("failure_class") or "").strip()
+                print(f"[RETRY ESCAPE HATCH] class={fc} attempts={retry_attempt}")
+                force_started = _now_perf()
+                gm = force_terminal_retry_fallback(
+                    session=session,
+                    original_text=str(gm.get("player_facing_text") or ""),
+                    failure=selected_failure,
+                    retry_failures=failures,
+                    player_text=user_text,
+                    scene_envelope=scene,
+                    world=world,
+                    resolution=resolution,
+                    base_gm=gm,
+                    segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+                )
+                _accumulate_latency(latency_sink, "fallback_repair", _elapsed_ms(force_started))
+                gm = _repair_terminal_player_facing_if_needed(
+                    gm, reason="api_post_force_terminal_retry_fallback"
+                )
+                used_force_terminal_fallback = True
+                record_emergency_nonplan_output(
+                    session,
+                    reason="force_terminal_retry_fallback",
+                    owner_module=__name__,
+                    extra={"failure_class": fc, "retry_attempt": retry_attempt},
+                )
+                break
+            retry_attempt += 1
+            retry_cs_dbg: dict = {}
+            selected_class = str(selected_failure.get("failure_class") or "").strip()
+            retry_instruction = build_retry_prompt_for_failure(
+                selected_failure,
+                response_policy=response_policy,
+                gm_output=gm,
+                retry_debug_sink=retry_cs_dbg,
+                player_text=user_text,
+            )
+            print(
+                "[RETRY] selected_strategy=",
+                selected_failure.get("failure_class"),
+                "attempt=",
+                retry_attempt,
+                "reasons=",
+                selected_failure.get("reasons"),
+            )
+            retry_messages = (
+                list(messages) if isinstance(messages, list) else []
+            ) + [{'role': 'user', 'content': retry_instruction}]
             retry_gpt_started = _now_perf()
             gm_retry = guard_gm_output(
                 _bounded_call_gpt(
-                    messages,
-                    retry_attempt=1,
-                    retry_reason=str(upstream_api_error.get("failure_class") or "").strip()
-                    or "retryable_upstream_error",
+                    retry_messages,
+                    retry_attempt=retry_attempt,
+                    retry_reason=selected_class or None,
                 ),
                 scene,
                 user_text,
@@ -1332,222 +1655,38 @@ def _build_gpt_narration_from_authoritative_state(
                 resolution=resolution,
             )
             _ = _elapsed_ms(retry_gpt_started)
-            retried_api_error = _extract_upstream_api_error(gm_retry)
-            if retried_api_error:
+            loop_api_err = _extract_upstream_api_error(gm_retry)
+            if loop_api_err:
+                fc = str(loop_api_err.get("failure_class") or "")
+                if not loop_api_err.get("retryable"):
+                    print(f"[RETRY SKIPPED: NONRETRYABLE UPSTREAM ERROR] class={fc}")
+                else:
+                    print(f"[RETRY SKIPPED: UPSTREAM ERROR IN RETRY LOOP] class={fc}")
                 gm = _fast_fallback_for_upstream_error(
                     gm_retry,
-                    retried_api_error,
-                    reason="retryable_upstream_error_exhausted",
+                    loop_api_err,
+                    reason="retry_loop_upstream_api_error",
                 )
                 fast_fallback_mode = True
-            else:
-                gm = gm_retry
-        else:
-            if not upstream_api_error.get("retryable"):
-                print("[RETRY SKIPPED: NONRETRYABLE UPSTREAM ERROR]")
-            else:
-                print("[RETRY SKIPPED: UPSTREAM RETRY SUPPRESSED] social_dialogue_turn=True")
-            gm = _fast_fallback_for_upstream_error(
-                gm,
-                upstream_api_error,
-                reason="nonretryable_upstream_error" if not upstream_api_error.get("retryable") else "social_retry_suppressed",
+                break
+            retry_dbg = gm_retry.get('debug_notes') if isinstance(gm_retry.get('debug_notes'), str) else ''
+            reason_suffix = ','.join(str(r) for r in (selected_failure.get("reasons") or []) if isinstance(r, str)) or 'unknown'
+            cs_trace = ""
+            if retry_cs_dbg:
+                cs_trace = (
+                    f"retry_context_separation_trace:"
+                    f"contract_resolved={retry_cs_dbg.get('retry_context_separation_contract_resolved')}:"
+                    f"source={retry_cs_dbg.get('retry_context_separation_contract_source')}:"
+                    f"prior_trouble={retry_cs_dbg.get('retry_context_separation_prior_trouble')}:"
+                    f"local_first={retry_cs_dbg.get('retry_context_separation_local_first_recovery')}:"
+                    f"pf_allowed={retry_cs_dbg.get('retry_context_separation_pressure_focus_allowed')}"
+                )
+            gm_retry['debug_notes'] = (
+                (retry_dbg + ' | ' if retry_dbg else '')
+                + f"retry_strategy:selected={selected_failure.get('failure_class')}:attempt={retry_attempt}:reasons={reason_suffix}"
+                + (f" | {cs_trace}" if cs_trace else "")
             )
-            fast_fallback_mode = True
-    while not fast_fallback_mode:
-        failures = _failures_after_social_answer_priority(
-            detect_retry_failures(
-                player_text=user_text,
-                gm_reply=gm,
-                scene_envelope=scene,
-                session=session,
-                world=world,
-                resolution=resolution,
-                segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
-            )
-        )
-        selected_failure = choose_retry_strategy(failures)
-        if not selected_failure:
-            break
-        if retry_loop_started is None:
-            retry_loop_started = _now_perf()
-        if retry_attempt >= max_targeted_retry_attempts:
-            fc = str(selected_failure.get("failure_class") or "").strip()
-            print(f"[RETRY ESCAPE HATCH] class={fc} attempts={retry_attempt}")
-            force_started = _now_perf()
-            gm = force_terminal_retry_fallback(
-                session=session,
-                original_text=str(gm.get("player_facing_text") or ""),
-                failure=selected_failure,
-                retry_failures=failures,
-                player_text=user_text,
-                scene_envelope=scene,
-                world=world,
-                resolution=resolution,
-                base_gm=gm,
-                segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
-            )
-            _accumulate_latency(latency_sink, "fallback_repair", _elapsed_ms(force_started))
-            gm = _repair_terminal_player_facing_if_needed(
-                gm, reason="api_post_force_terminal_retry_fallback"
-            )
-            used_force_terminal_fallback = True
-            record_emergency_nonplan_output(
-                session,
-                reason="force_terminal_retry_fallback",
-                owner_module=__name__,
-                extra={"failure_class": fc, "retry_attempt": retry_attempt},
-            )
-            break
-        retry_attempt += 1
-        retry_cs_dbg: dict = {}
-        selected_class = str(selected_failure.get("failure_class") or "").strip()
-        retry_instruction = build_retry_prompt_for_failure(
-            selected_failure,
-            response_policy=response_policy,
-            gm_output=gm,
-            retry_debug_sink=retry_cs_dbg,
-            player_text=user_text,
-        )
-        print(
-            "[RETRY] selected_strategy=",
-            selected_failure.get("failure_class"),
-            "attempt=",
-            retry_attempt,
-            "reasons=",
-            selected_failure.get("reasons"),
-        )
-        retry_messages = (
-            list(messages) if isinstance(messages, list) else []
-        ) + [{'role': 'user', 'content': retry_instruction}]
-        retry_gpt_started = _now_perf()
-        gm_retry = guard_gm_output(
-            _bounded_call_gpt(
-                retry_messages,
-                retry_attempt=retry_attempt,
-                retry_reason=selected_class or None,
-            ),
-            scene,
-            user_text,
-            known_clues,
-            session=session,
-            world=world,
-            resolution=resolution,
-        )
-        _ = _elapsed_ms(retry_gpt_started)
-        loop_api_err = _extract_upstream_api_error(gm_retry)
-        if loop_api_err:
-            fc = str(loop_api_err.get("failure_class") or "")
-            if not loop_api_err.get("retryable"):
-                print(f"[RETRY SKIPPED: NONRETRYABLE UPSTREAM ERROR] class={fc}")
-            else:
-                print(f"[RETRY SKIPPED: UPSTREAM ERROR IN RETRY LOOP] class={fc}")
-            gm = _fast_fallback_for_upstream_error(
-                gm_retry,
-                loop_api_err,
-                reason="retry_loop_upstream_api_error",
-            )
-            fast_fallback_mode = True
-            break
-        retry_dbg = gm_retry.get('debug_notes') if isinstance(gm_retry.get('debug_notes'), str) else ''
-        reason_suffix = ','.join(str(r) for r in (selected_failure.get("reasons") or []) if isinstance(r, str)) or 'unknown'
-        cs_trace = ""
-        if retry_cs_dbg:
-            cs_trace = (
-                f"retry_context_separation_trace:"
-                f"contract_resolved={retry_cs_dbg.get('retry_context_separation_contract_resolved')}:"
-                f"source={retry_cs_dbg.get('retry_context_separation_contract_source')}:"
-                f"prior_trouble={retry_cs_dbg.get('retry_context_separation_prior_trouble')}:"
-                f"local_first={retry_cs_dbg.get('retry_context_separation_local_first_recovery')}:"
-                f"pf_allowed={retry_cs_dbg.get('retry_context_separation_pressure_focus_allowed')}"
-            )
-        gm_retry['debug_notes'] = (
-            (retry_dbg + ' | ' if retry_dbg else '')
-            + f"retry_strategy:selected={selected_failure.get('failure_class')}:attempt={retry_attempt}:reasons={reason_suffix}"
-            + (f" | {cs_trace}" if cs_trace else "")
-        )
-        retry_failures = _failures_after_social_answer_priority(
-            detect_retry_failures(
-                player_text=user_text,
-                gm_reply=gm_retry,
-                scene_envelope=scene,
-                session=session,
-                world=world,
-                resolution=resolution,
-                segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
-            )
-        )
-        still_failing = next(
-            (
-                failure for failure in retry_failures
-                if isinstance(failure, dict) and str(failure.get("failure_class") or "").strip() == selected_class
-            ),
-            None,
-        )
-        still_unresolved_after_answer_retry = next(
-            (
-                failure
-                for failure in retry_failures
-                if isinstance(failure, dict)
-                and str(failure.get("failure_class") or "").strip() == "unresolved_question"
-            ),
-            None,
-        )
-        use_open_crowd_scene_stall_fallback = (
-            selected_class == "scene_stall"
-            and isinstance(still_failing, dict)
-            and resolution_is_open_crowd_social(resolution)
-        )
-        use_question_retry_fallback = (selected_class == "unresolved_question" and still_failing) or (
-            selected_class == "answer" and still_unresolved_after_answer_retry
-        ) or use_open_crowd_scene_stall_fallback or (
-            selected_class == "followup_soft_repetition" and isinstance(still_failing, dict)
-        )
-        if use_question_retry_fallback:
-            _vf = still_failing if isinstance(still_failing, dict) else still_unresolved_after_answer_retry
-            print(
-                "[RETRY] validation_failed selected_strategy=",
-                selected_class,
-                "attempt=",
-                retry_attempt,
-                "reasons=",
-                (_vf.get("reasons") if isinstance(_vf, dict) else None),
-                "action=deterministic_fallback",
-            )
-            if use_open_crowd_scene_stall_fallback:
-                fallback_failure = {
-                    "failure_class": "unresolved_question",
-                    "priority": int(RETRY_FAILURE_PRIORITY.get("unresolved_question", 10)),
-                    "reasons": ["retry_bridge:open_crowd_scene_stall"],
-                }
-            else:
-                if selected_class == "followup_soft_repetition" and isinstance(still_failing, dict):
-                    fallback_failure = {
-                        "failure_class": "unresolved_question",
-                        "priority": int(RETRY_FAILURE_PRIORITY.get("unresolved_question", 10)),
-                        "reasons": list(still_failing.get("reasons") or []),
-                        "followup_context": (
-                            still_failing.get("followup_context")
-                            if isinstance(still_failing.get("followup_context"), dict)
-                            else {}
-                        ),
-                    }
-                else:
-                    fallback_failure = (
-                        still_failing if selected_class == "unresolved_question" else selected_failure
-                    )
-            deterministic_started = _now_perf()
-            gm_retry = apply_deterministic_retry_fallback(
-                gm_retry,
-                failure=fallback_failure,
-                player_text=user_text,
-                scene_envelope=scene,
-                session=session,
-                world=world,
-                resolution=resolution,
-                segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
-            )
-            _accumulate_latency(latency_sink, "fallback_repair", _elapsed_ms(deterministic_started))
-            fallback_failures = _failures_after_social_answer_priority(
+            retry_failures = _failures_after_social_answer_priority(
                 detect_retry_failures(
                     player_text=user_text,
                     gm_reply=gm_retry,
@@ -1558,63 +1697,145 @@ def _build_gpt_narration_from_authoritative_state(
                     segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
                 )
             )
-            compare_class = (
-                "unresolved_question"
-                if use_open_crowd_scene_stall_fallback or selected_class == "followup_soft_repetition"
-                else selected_class
+            still_failing = next(
+                (
+                    failure for failure in retry_failures
+                    if isinstance(failure, dict) and str(failure.get("failure_class") or "").strip() == selected_class
+                ),
+                None,
             )
-            fallback_still_failing = any(
-                isinstance(failure, dict) and str(failure.get("failure_class") or "").strip() == compare_class
-                for failure in fallback_failures
+            still_unresolved_after_answer_retry = next(
+                (
+                    failure
+                    for failure in retry_failures
+                    if isinstance(failure, dict)
+                    and str(failure.get("failure_class") or "").strip() == "unresolved_question"
+                ),
+                None,
             )
-            print(
-                "[RETRY] fallback_result selected_strategy=",
-                selected_class,
-                "attempt=",
-                retry_attempt,
-                "status=",
-                "failed" if fallback_still_failing else "passed",
+            use_open_crowd_scene_stall_fallback = (
+                selected_class == "scene_stall"
+                and isinstance(still_failing, dict)
+                and resolution_is_open_crowd_social(resolution)
             )
-            if fallback_still_failing:
-                print(f"[RETRY ESCAPE HATCH] class={selected_class} attempts={retry_attempt}")
-                fail_meta = next(
-                    (
-                        f
-                        for f in fallback_failures
-                        if isinstance(f, dict) and str(f.get("failure_class") or "").strip() == selected_class
-                    ),
-                    selected_failure,
+            use_question_retry_fallback = (selected_class == "unresolved_question" and still_failing) or (
+                selected_class == "answer" and still_unresolved_after_answer_retry
+            ) or use_open_crowd_scene_stall_fallback or (
+                selected_class == "followup_soft_repetition" and isinstance(still_failing, dict)
+            )
+            if use_question_retry_fallback:
+                _vf = still_failing if isinstance(still_failing, dict) else still_unresolved_after_answer_retry
+                print(
+                    "[RETRY] validation_failed selected_strategy=",
+                    selected_class,
+                    "attempt=",
+                    retry_attempt,
+                    "reasons=",
+                    (_vf.get("reasons") if isinstance(_vf, dict) else None),
+                    "action=deterministic_fallback",
                 )
-                force_started = _now_perf()
-                gm = force_terminal_retry_fallback(
-                    session=session,
-                    original_text=str(gm_retry.get("player_facing_text") or ""),
-                    failure=fail_meta if isinstance(fail_meta, dict) else selected_failure,
-                    retry_failures=fallback_failures,
+                if use_open_crowd_scene_stall_fallback:
+                    fallback_failure = {
+                        "failure_class": "unresolved_question",
+                        "priority": int(RETRY_FAILURE_PRIORITY.get("unresolved_question", 10)),
+                        "reasons": ["retry_bridge:open_crowd_scene_stall"],
+                    }
+                else:
+                    if selected_class == "followup_soft_repetition" and isinstance(still_failing, dict):
+                        fallback_failure = {
+                            "failure_class": "unresolved_question",
+                            "priority": int(RETRY_FAILURE_PRIORITY.get("unresolved_question", 10)),
+                            "reasons": list(still_failing.get("reasons") or []),
+                            "followup_context": (
+                                still_failing.get("followup_context")
+                                if isinstance(still_failing.get("followup_context"), dict)
+                                else {}
+                            ),
+                        }
+                    else:
+                        fallback_failure = (
+                            still_failing if selected_class == "unresolved_question" else selected_failure
+                        )
+                deterministic_started = _now_perf()
+                gm_retry = apply_deterministic_retry_fallback(
+                    gm_retry,
+                    failure=fallback_failure,
                     player_text=user_text,
                     scene_envelope=scene,
+                    session=session,
                     world=world,
                     resolution=resolution,
-                    base_gm=gm_retry,
                     segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
                 )
-                _accumulate_latency(latency_sink, "fallback_repair", _elapsed_ms(force_started))
-                gm = _repair_terminal_player_facing_if_needed(
-                    gm, reason="api_post_force_terminal_retry_fallback"
+                _accumulate_latency(latency_sink, "fallback_repair", _elapsed_ms(deterministic_started))
+                fallback_failures = _failures_after_social_answer_priority(
+                    detect_retry_failures(
+                        player_text=user_text,
+                        gm_reply=gm_retry,
+                        scene_envelope=scene,
+                        session=session,
+                        world=world,
+                        resolution=resolution,
+                        segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+                    )
                 )
-                used_force_terminal_fallback = True
-                record_emergency_nonplan_output(
-                    session,
-                    reason="force_terminal_retry_fallback_after_deterministic",
-                    owner_module=__name__,
-                    extra={"failure_class": str(selected_class or ""), "retry_attempt": retry_attempt},
+                compare_class = (
+                    "unresolved_question"
+                    if use_open_crowd_scene_stall_fallback or selected_class == "followup_soft_repetition"
+                    else selected_class
                 )
-            else:
-                gm = gm_retry
-            break
-        gm = gm_retry
-    if retry_loop_started is not None:
-        _accumulate_latency(latency_sink, "retry_loop_total", _elapsed_ms(retry_loop_started))
+                fallback_still_failing = any(
+                    isinstance(failure, dict) and str(failure.get("failure_class") or "").strip() == compare_class
+                    for failure in fallback_failures
+                )
+                print(
+                    "[RETRY] fallback_result selected_strategy=",
+                    selected_class,
+                    "attempt=",
+                    retry_attempt,
+                    "status=",
+                    "failed" if fallback_still_failing else "passed",
+                )
+                if fallback_still_failing:
+                    print(f"[RETRY ESCAPE HATCH] class={selected_class} attempts={retry_attempt}")
+                    fail_meta = next(
+                        (
+                            f
+                            for f in fallback_failures
+                            if isinstance(f, dict) and str(f.get("failure_class") or "").strip() == selected_class
+                        ),
+                        selected_failure,
+                    )
+                    force_started = _now_perf()
+                    gm = force_terminal_retry_fallback(
+                        session=session,
+                        original_text=str(gm_retry.get("player_facing_text") or ""),
+                        failure=fail_meta if isinstance(fail_meta, dict) else selected_failure,
+                        retry_failures=fallback_failures,
+                        player_text=user_text,
+                        scene_envelope=scene,
+                        world=world,
+                        resolution=resolution,
+                        base_gm=gm_retry,
+                        segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+                    )
+                    _accumulate_latency(latency_sink, "fallback_repair", _elapsed_ms(force_started))
+                    gm = _repair_terminal_player_facing_if_needed(
+                        gm, reason="api_post_force_terminal_retry_fallback"
+                    )
+                    used_force_terminal_fallback = True
+                    record_emergency_nonplan_output(
+                        session,
+                        reason="force_terminal_retry_fallback_after_deterministic",
+                        owner_module=__name__,
+                        extra={"failure_class": str(selected_class or ""), "retry_attempt": retry_attempt},
+                    )
+                else:
+                    gm = gm_retry
+                break
+            gm = gm_retry
+        if retry_loop_started is not None:
+            _accumulate_latency(latency_sink, "retry_loop_total", _elapsed_ms(retry_loop_started))
     gm = _repair_terminal_player_facing_if_needed(
         gm, reason="api_targeted_retry_post_terminal"
     )
@@ -1674,34 +1895,40 @@ def _build_gpt_narration_from_authoritative_state(
             owner_module=__name__,
         )
     elif isinstance(resolution, dict):
-        _emergency_exit = bool(fast_fallback_mode or used_force_terminal_fallback)
-        _bundle_seam_ok = bundle_seam_requirement.get("ok") is True
-        annotate_narration_path_kind(
-            gm,
-            path_kind=(
-                "resolved_turn_ctir_upstream_fast_fallback"
-                if fast_fallback_mode
-                else (
-                    "resolved_turn_ctir_force_terminal_fallback"
-                    if used_force_terminal_fallback
-                    else "resolved_turn_ctir_bundle"
-                )
-            ),
-            ctir_backed=True,
-            bundle_required=True,
-            plan_driven=(not _emergency_exit) and _bundle_seam_ok,
-            emergency_nonplan_output=_emergency_exit or (not _bundle_seam_ok),
-            same_turn_retry_messages_reused=gpt_calls_used > 1,
-            extra=(
-                None
-                if _bundle_seam_ok
-                else {
-                    "bundle_seam_requirement_failed": True,
-                    "bundle_seam_error": bundle_seam_requirement.get("error"),
-                    "bundle_seam_skipped": bundle_seam_requirement.get("skipped"),
-                }
-            ),
-        )
+        if planner_convergence_emergency_exit:
+            if isinstance(planner_convergence_report_final, dict):
+                _attach_planner_convergence_gm_metadata(gm, planner_convergence_report_final)
+        else:
+            _emergency_exit = bool(fast_fallback_mode or used_force_terminal_fallback)
+            _bundle_seam_ok = bundle_seam_requirement.get("ok") is True
+            annotate_narration_path_kind(
+                gm,
+                path_kind=(
+                    "resolved_turn_ctir_upstream_fast_fallback"
+                    if fast_fallback_mode
+                    else (
+                        "resolved_turn_ctir_force_terminal_fallback"
+                        if used_force_terminal_fallback
+                        else "resolved_turn_ctir_bundle"
+                    )
+                ),
+                ctir_backed=True,
+                bundle_required=True,
+                plan_driven=(not _emergency_exit) and _bundle_seam_ok,
+                emergency_nonplan_output=_emergency_exit or (not _bundle_seam_ok),
+                same_turn_retry_messages_reused=gpt_calls_used > 1,
+                extra=(
+                    None
+                    if _bundle_seam_ok
+                    else {
+                        "bundle_seam_requirement_failed": True,
+                        "bundle_seam_error": bundle_seam_requirement.get("error"),
+                        "bundle_seam_skipped": bundle_seam_requirement.get("skipped"),
+                    }
+                ),
+            )
+            if isinstance(planner_convergence_report_final, dict):
+                _attach_planner_convergence_gm_metadata(gm, planner_convergence_report_final)
     else:
         annotate_narration_path_kind(
             gm,

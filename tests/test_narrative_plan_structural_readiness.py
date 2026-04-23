@@ -21,6 +21,7 @@ from contextlib import contextmanager
 import pytest
 
 from game.ctir_runtime import detach_ctir
+from game.narration_plan_bundle import get_attached_narration_plan_bundle
 from game.narration_visibility import build_narration_visibility_contract
 from game.prompt_context import build_narration_context
 from tests.helpers.ctir_narration_bundle import ensure_narration_plan_bundle_for_manual_ctir_tests
@@ -55,6 +56,8 @@ _ALLOWED_PROMPT_DEBUG_NARRATIVE_PLAN_KEYS = frozenset(
         "derivation_codes",
         "derivation_code_count",
         "counts",
+        "narrative_roles_skim",
+        "narrative_plan_validation_error",
     }
 )
 
@@ -96,7 +99,7 @@ def assert_prompt_debug_narrative_plan_is_compact(ctx: dict) -> None:
         assert "allowable_entity_references" not in pd_np
         assert "debug" not in pd_np
         # Guardrail: compact mirror stays small (counts, not duplicated rows).
-        assert len(json.dumps(pd_np, sort_keys=True)) < 2000
+        assert len(json.dumps(pd_np, sort_keys=True)) < 4000
 
 
 @contextmanager
@@ -320,8 +323,13 @@ def test_negative_no_duplicate_plan_blob_in_prompt_debug() -> None:
         assert_prompt_debug_narrative_plan_is_compact(ctx)
         pd_np = (ctx.get("prompt_debug") or {}).get("narrative_plan") or {}
         assert pd_np.get("present") is True
-        full_len = len(json.dumps(ctx["narrative_plan"], sort_keys=True))
+        bundle = get_attached_narration_plan_bundle(session)
+        full_plan = bundle.get("narrative_plan") if isinstance(bundle, dict) else None
+        assert isinstance(full_plan, dict)
+        full_len = len(json.dumps(full_plan, sort_keys=True))
+        public_len = len(json.dumps(ctx["narrative_plan"], sort_keys=True))
         dbg_len = len(json.dumps(pd_np, sort_keys=True))
+        assert full_len > public_len + 200
         assert full_len > dbg_len + 200
 
 

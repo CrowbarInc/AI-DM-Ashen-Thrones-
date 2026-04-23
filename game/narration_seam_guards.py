@@ -26,6 +26,7 @@ REGISTERED_NARRATION_PATH_KINDS: frozenset[str] = frozenset(
         "resolved_turn_ctir_upstream_fast_fallback",
         "resolved_turn_ctir_force_terminal_fallback",
         "resolved_turn_ctir_bundle",
+        "resolved_turn_ctir_planner_convergence_seam",
         "non_resolution_model_narration",
         "engine_combat_initiative_message",
         "engine_combat_end_turn_message",
@@ -44,6 +45,14 @@ NARRATION_PATH_MATRIX: tuple[dict[str, Any], ...] = (
         "plan_driven": True,
         "emergency_only": False,
         "notes": "_run_resolved_turn_pipeline → _build_gpt_narration_from_authoritative_state",
+    },
+    {
+        "path": "resolved_turn_ctir_planner_convergence_seam",
+        "ctir_backed": True,
+        "bundle_required": True,
+        "plan_driven": False,
+        "emergency_only": True,
+        "notes": "CTIR/plan/prompt convergence failed; deterministic_terminal_repair-style terminal output",
     },
     {
         "path": "resolved_turn_ctir_upstream_fast_fallback / resolved_turn_ctir_force_terminal_fallback",
@@ -278,20 +287,33 @@ def verify_same_turn_narration_stamp_for_retry(
     *,
     expected_ctir_stamp: str,
     owner_module: str,
+    expected_narration_plan_bundle_stamp: str | None = None,
 ) -> bool:
-    """Call before a same-turn GPT retry; logs if CTIR stamp drifted (should never happen)."""
+    """Call before a same-turn GPT retry; logs if CTIR or narration plan bundle stamp drifted."""
     if not isinstance(session, MutableMapping):
         return True
     exp = str(expected_ctir_stamp or "").strip()
     if not exp:
         return True
     cur = str(session.get(SESSION_CTIR_STAMP_KEY) or "").strip()
-    if cur == exp:
+    if cur != exp:
+        record_planner_bypass_attempt(
+            session,
+            reason="same_turn_retry_ctir_stamp_drift",
+            owner_module=owner_module,
+            extra={"expected": exp, "current": cur},
+        )
+        return False
+    exp_bundle = str(expected_narration_plan_bundle_stamp or "").strip()
+    if not exp_bundle:
+        return True
+    bstamp = get_narration_plan_bundle_stamp(session)
+    if bstamp == exp_bundle:
         return True
     record_planner_bypass_attempt(
         session,
-        reason="same_turn_retry_ctir_stamp_drift",
+        reason="same_turn_retry_narration_plan_bundle_stamp_drift",
         owner_module=owner_module,
-        extra={"expected": exp, "current": cur},
+        extra={"expected": exp_bundle, "current": bstamp},
     )
     return False

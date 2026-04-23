@@ -65,7 +65,8 @@ Contract layers (orthogonal concerns):
   :mod:`game.conversational_memory_window`); ``recent_log`` in the payload is derived from the selector output.
 - **narrative_plan** — deterministic structural bridge from CTIR to narration (see
   :func:`game.narrative_planning.build_narrative_plan`). Built only upstream at the :mod:`game.narration_plan_bundle`
-  seam for CTIR-backed turns; this module **consumes** the bundled plan for the active stamp (no local replan).
+  seam for CTIR-backed turns; this module **consumes** the bundled full plan internally but ships only
+  :func:`game.narration_plan_bundle.public_narrative_plan_projection_for_prompt` on the public payload (no local replan).
   Objective N3 ``narrative_roles`` (five bounded composition families under ``narrative_plan.narrative_roles``) is a
   first-class **composition aid** in prompt assembly: emphasis bands, closed-set signals, and counts only—never a
   script, ordering mandate, or alternate authority. It is **not** consulted for adjudication, routing, policy, or
@@ -144,7 +145,12 @@ from game.narrative_plan_upstream import (
     pending_lead_ids_from_active_pending,
     session_interaction_slice_for_narrative_plan,
 )
-from game.narration_plan_bundle import get_attached_narration_plan_bundle, get_narration_plan_bundle_stamp
+from game.narration_plan_bundle import (
+    get_attached_narration_plan_bundle,
+    get_narration_plan_bundle_stamp,
+    public_narrative_plan_projection_for_prompt,
+)
+from game.planner_convergence import MISSING_NARRATIVE_PLAN_FOR_CTIR_TURN, NARRATIVE_PLAN_STAMP_MISMATCH
 from game.world_progression import (
     build_prompt_world_progression_hints,
     compose_ctir_world_progression_slice,
@@ -420,6 +426,35 @@ def _narrative_plan_roles_trustworthy(plan: Mapping[str, Any] | None) -> bool:
     if not isinstance(plan, Mapping) or not plan:
         return False
     return validate_narrative_plan(plan, strict=False) is None
+
+
+def _planner_convergence_consumer_debug_slice(
+    *,
+    ctir_present: bool,
+    bundle_present: bool,
+    stamp_matches: bool,
+    narrative_plan_full: Mapping[str, Any] | None,
+) -> dict[str, Any]:
+    """Observability only (``prompt_debug`` lane): CTIR/bundle/stamp/plan validation for operators."""
+    pve: str | None = None
+    if isinstance(narrative_plan_full, Mapping) and narrative_plan_full:
+        raw = validate_narrative_plan(narrative_plan_full, strict=False)
+        pve = str(raw) if isinstance(raw, str) else None
+    seam_codes: list[str] = []
+    if ctir_present:
+        if not bundle_present:
+            seam_codes.append(MISSING_NARRATIVE_PLAN_FOR_CTIR_TURN)
+        elif not stamp_matches:
+            seam_codes.append(NARRATIVE_PLAN_STAMP_MISMATCH)
+        elif not (isinstance(narrative_plan_full, Mapping) and narrative_plan_full):
+            seam_codes.append(MISSING_NARRATIVE_PLAN_FOR_CTIR_TURN)
+    return {
+        "ctir_present": ctir_present,
+        "bundle_present": bundle_present,
+        "stamp_matches": stamp_matches,
+        "plan_validation_error": pve,
+        "seam_failure_codes": sorted(set(seam_codes)),
+    }
 
 
 def _narrative_roles_collapse_observability(
@@ -3640,6 +3675,7 @@ def _build_narration_context_head_state(
     }
     has_active_interlocutor = bool(str(interaction_continuity.get('active_interaction_target_id') or '').strip())
     scene_pub_id = str((public_scene or {}).get("id") or "").strip()
+    # Presentation-only interlocutor export for prompt prose (CTIR-backed meaning stays on attached CTIR).
     interlocutor_export = build_active_interlocutor_export(session, world, public_scene)
     answer_style_hints_list = deterministic_interlocutor_answer_style_hints(
         interlocutor_export, scene_id=scene_pub_id
@@ -4015,6 +4051,12 @@ def build_narration_context(
             "world_clocks_n": len((wp_projection or {}).get("world_clocks") or []),
             "set_flags_n": len((wp_projection or {}).get("set_flags") or []),
         },
+        "planner_convergence_consumer": _planner_convergence_consumer_debug_slice(
+            ctir_present=ctir_obj is not None,
+            bundle_present=isinstance(_bundle, dict),
+            stamp_matches=bundle_stamp_ok,
+            narrative_plan_full=narrative_plan if isinstance(narrative_plan, dict) else None,
+        ),
     }
     first_mention_contract: Dict[str, Any] = {
         "enabled": True,
@@ -4292,6 +4334,7 @@ def build_narration_context(
 
     soc_profile = build_social_interlocutor_profile(interlocutor_export)
 
+    # Presentation-only scene id for speaker contract packaging (not narrative_mode / plan / CTIR).
     scene_id_for_speaker = scene_pub_id or (
         str((session.get("scene_state") or {}).get("active_scene_id") or "").strip()
         if isinstance(session, dict)
@@ -4862,7 +4905,11 @@ def build_narration_context(
 
     payload: Dict[str, Any] = {
         'instructions': instructions,
-        'narrative_plan': narrative_plan,
+        'narrative_plan': (
+            public_narrative_plan_projection_for_prompt(narrative_plan)
+            if isinstance(narrative_plan, dict) and narrative_plan
+            else None
+        ),
         'speaker_selection': speaker_selection,
         'active_topic_anchor': active_topic_anchor,
         'interaction_continuity': interaction_continuity,

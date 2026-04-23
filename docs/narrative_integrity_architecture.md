@@ -1,6 +1,6 @@
 # Narrative integrity — runtime module layout
 
-Concise map for “where does this belong?” after the Block 3 split and Block 4 documentation pass. **Behavior is unchanged by this document**; it reflects `game/` as of the consolidation boundary. For **anti-echo + rumor realism** operator detail (status model, repairs, telemetry, evaluator verdicts), see `docs/narrative_authenticity_anti_echo_rumor_realism.md`.
+Concise map for “where does this belong?” after the Block 3 split and Block 4 documentation pass. **Behavior is unchanged by this document**; it reflects `game/` as of the consolidation boundary. For **planner convergence** (CTIR → narrative plan → GPT → gate, seam labels, static anti-regression audit), see `docs/planner_convergence.md` — including **developer workflow** commands for the static audit, a focused pytest slice, and CI (`.github/workflows/content-lint.yml`). For **anti-echo + rumor realism** operator detail (status model, repairs, telemetry, evaluator verdicts), see `docs/narrative_authenticity_anti_echo_rumor_realism.md`.
 
 For **validation-layer phase ownership** (engine truth vs planner structure vs GPT expression vs gate legality vs offline evaluator scoring), see `docs/validation_layer_separation.md` and the executable leaf registry `game/validation_layer_contracts.py`.
 

@@ -11,6 +11,26 @@ Objective #12 is **governance and tooling only**: it does **not** add a runtime 
 
 **Repeatable loop:** validation-sensitive change → declare/update `tests/validation_coverage_registry.py` → `py -3 -m pytest tests/test_validation_coverage_registry.py -q` → `python tools/validation_coverage_audit.py --feature <feature_id>` → run the emitted tests/tools/scenarios → manual gauntlets when feel, prose, or player-facing behavior changed materially. Contract detail: [`docs/objective12_validation_contract.md`](../docs/objective12_validation_contract.md).
 
+## Planner convergence — static audit (Block D)
+
+Author-time only; **no runtime behavior**. Full maintainer notes: [`docs/planner_convergence.md`](../docs/planner_convergence.md).
+
+**Audit:**
+
+```bash
+python tools/planner_convergence_audit.py
+```
+
+**Focused pytest** (contracts + manual-play convergence structure + plan-only prompt + static audit tests):
+
+```bash
+py -3 -m pytest tests/test_planner_convergence_contract.py tests/test_planner_convergence_live_pipeline.py tests/test_prompt_context_plan_only_convergence.py tests/test_planner_convergence_static_audit.py
+```
+
+**Optional Make** (same audit + same four tests): `make planner-convergence-check` from repo root.
+
+CI runs the audit in `.github/workflows/content-lint.yml` (step **Planner convergence static audit**).
+
 **Copy/paste — registry pytest and audit CLI** (repo root; if `pytest` is not on `PATH`, use `py -3 -m pytest`):
 
 ```bash

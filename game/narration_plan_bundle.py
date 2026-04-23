@@ -32,7 +32,7 @@ signal (the literal ``planner_`` prefix is reserved as an *author* channel key s
 from __future__ import annotations
 
 import copy
-from collections.abc import Callable, MutableMapping
+from collections.abc import Callable, Mapping, MutableMapping
 from typing import Any
 
 from game.ctir_runtime import SESSION_CTIR_STAMP_KEY, get_attached_ctir
@@ -54,6 +54,37 @@ from game.turn_packet import build_turn_packet
 SESSION_NARRATION_PLAN_BUNDLE_KEY = "_runtime_narration_plan_bundle_v1"
 SESSION_NARRATION_PLAN_BUNDLE_STAMP_KEY = "_runtime_narration_plan_bundle_stamp_v1"
 NARRATIVE_PLAN_BUNDLE_VERSION = 1
+
+
+def public_narrative_plan_projection_for_prompt(full_plan: Mapping[str, Any] | None) -> dict[str, Any] | None:
+    """Compact ``narrative_plan`` for the model prompt: copy only bundle-owned structural fields.
+
+    Strips plan ``debug``, ``resolution_meta``, ``recent_compressed_events``, and other
+    non-prompt slices so :mod:`game.prompt_context` does not ship a second full planner blob.
+    """
+    if not isinstance(full_plan, Mapping) or not full_plan:
+        return None
+    out: dict[str, Any] = {}
+    if "version" in full_plan:
+        out["version"] = full_plan["version"]
+    nm = full_plan.get("narrative_mode")
+    if isinstance(nm, str) and nm.strip():
+        out["narrative_mode"] = str(nm).strip()
+    for key in ("role_allocation", "scene_anchors", "active_pressures"):
+        val = full_plan.get(key)
+        if isinstance(val, Mapping):
+            out[key] = copy.deepcopy(val)
+    for key in ("required_new_information", "allowable_entity_references"):
+        val = full_plan.get(key)
+        if isinstance(val, list):
+            out[key] = copy.deepcopy(val)
+    nr = full_plan.get("narrative_roles")
+    if isinstance(nr, Mapping) and nr:
+        out["narrative_roles"] = copy.deepcopy(nr)
+    nmc = full_plan.get("narrative_mode_contract")
+    if isinstance(nmc, Mapping) and nmc:
+        out["narrative_mode_contract"] = copy.deepcopy(nmc)
+    return out if out else None
 
 
 def get_attached_narration_plan_bundle(container: MutableMapping[str, Any] | None) -> dict[str, Any] | None:
