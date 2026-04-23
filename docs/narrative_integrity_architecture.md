@@ -14,6 +14,34 @@ calls `validate_and_repair_acceptance_quality` once per exit path and merges the
 into `_final_emission_meta`. **Activation:** default-off without `prompt_context.narrative_plan`;
 default-on with a plan unless `acceptance_quality_contract` disables the layer.
 
+**Objective N3 (Role-based narrative composition):** `game/narrative_planning.build_narrative_plan` emits
+`narrative_roles`—five abstract roles (`location_anchor`, `actor_anchor`, `pressure`, `hook`, `consequence`)
+with closed-set `signals`, `emphasis_band` (``minimal`` / ``low`` / ``moderate`` / ``elevated`` / ``high``),
+and bounded counters or kind-tags (e.g. hook `information_kind_tags`) derived only from sibling plan
+slices already built from CTIR-shaped inputs (scene anchors, pressures, `required_new_information`,
+`narrative_mode_contract`, visibility-shaped `allowable_entity_references`, `role_allocation`). This is
+**shaping guidance only**; CTIR and shipped contracts remain authoritative. Coarse integer weights stay in
+`role_allocation`. **Upstream one-step repair:** `game/narration_plan_bundle.build_narration_plan_bundle` runs
+`game.narrative_plan_upstream.apply_upstream_narrative_role_reemphasis` after a successful plan build—only
+when `validate_narrative_plan(..., strict=False)` passes; it may bump each *weak* family’s `emphasis_band` by
+at most one step, capped at ``elevated``, using omission-risk heuristics already encoded in the role rows.
+It does not mutate CTIR, contracts, counters, or `role_allocation`. A second invocation on the same dict is
+idempotent once `debug.n3_upstream_role_reemphasis.applied` is true. **Prompt shipping:** `game.prompt_context`
+appends structural N3 guidance plus a trusted supplemental lane only when the bundled plan validates the same
+relaxed gate; compact `prompt_debug.narrative_plan.narrative_roles_skim` includes per-family bands/signal
+counts, optional upstream repair summary, and **observability-only** `collapse_observability` (`sig_families_n`,
+`low_band_n`, `reinforced_n`, `max_band`, `anchor_hint`)—never legality or scoring. **Single-anchor collapse**
+is mitigated by bounded multi-facet composition hints plus optional upstream band nudges; heavy scoring or
+template beats stay out of scope (see N4 acceptance-quality for post-generation floor checks).
+
+#### N3 examples (operator / maintainer glance)
+
+**Plan body — `narrative_roles`:** five fixed keys (`location_anchor`, `actor_anchor`, `pressure`, `hook`, `consequence`). Each row is bounded metadata: an `emphasis_band`, a sorted closed-set `signals` list, and small counters or tags (for example hook `information_kind_tags`). There is no prose and no second copy of CTIR.
+
+**Skim — `prompt_debug.narrative_plan.narrative_roles_skim`:** per-family `emphasis_band`, `signal_n`, and `signals_head` (first few signal strings). Optional `upstream_role_reemphasis` mirrors a trimmed bundle trace (`applied`, `skip_reason`, `reinforced_families`). `collapse_observability` adds counts plus `anchor_hint` (`none` | `high_band_vs_sparse_peers` | `low_signal_coverage`); treat it as **read-only contrast**, not a gate or score—CTIR and shipped contracts still decide conflicts.
+
+**Upstream trace — `narrative_plan.debug.n3_upstream_role_reemphasis`:** JSON-safe dict with `applied`, `weak_roles`, `reinforced_families`, `actions` (for example `bump_emphasis:hook:minimal->low`), `skip_reason` when nothing ran, and short `safety_notes`. Same trust gate as the plan’s relaxed validator; idempotent per plan object once `applied` is true.
+
 **Block C1 (post-AER):** This file is a maintainer-facing consolidation map alongside `docs/current_focus.md` and the governance docs in `tests/TEST_AUDIT.md` / `tests/TEST_CONSOLIDATION_PLAN.md`.
 
 ---

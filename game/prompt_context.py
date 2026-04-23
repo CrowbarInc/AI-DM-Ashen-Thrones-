@@ -66,10 +66,16 @@ Contract layers (orthogonal concerns):
 - **narrative_plan** — deterministic structural bridge from CTIR to narration (see
   :func:`game.narrative_planning.build_narrative_plan`). Built only upstream at the :mod:`game.narration_plan_bundle`
   seam for CTIR-backed turns; this module **consumes** the bundled plan for the active stamp (no local replan).
-  It is **not** consulted for adjudication, routing, policy, or ``turn_summary`` / resolution semantics—those remain
-  CTIR-first (when attached), ``response_policy``, and ``narration_visibility``. If CTIR and the plan ever disagree,
-  **CTIR wins**; the plan is derivative and owned upstream from CTIR plus the same bounded slices passed into the
-  builder (including shipped ``narration_obligations`` and ``response_policy`` for the mode contract).
+  Objective N3 ``narrative_roles`` (five bounded composition families under ``narrative_plan.narrative_roles``) is a
+  first-class **composition aid** in prompt assembly: emphasis bands, closed-set signals, and counts only—never a
+  script, ordering mandate, or alternate authority. It is **not** consulted for adjudication, routing, policy, or
+  ``turn_summary`` / resolution semantics—those remain CTIR-first (when attached), ``response_policy``, and
+  ``narration_visibility``. If CTIR and the plan ever disagree, **CTIR wins**; the plan is derivative and owned
+  upstream from CTIR plus the same bounded slices passed into the builder (including shipped ``narration_obligations``
+  and ``response_policy`` for the mode contract). Optional one-step ``emphasis_band`` nudges for weak N3 families
+  are applied only upstream in :mod:`game.narration_plan_bundle` via
+  :func:`game.narrative_plan_upstream.apply_upstream_narrative_role_reemphasis` (trusted plans only); this module may
+  surface a compact reminder line when that trace is present—never as semantic or CTIR override.
 - **referent_tracking** — JSON-safe referent/clause artifact from :func:`game.referent_tracking.build_referent_tracking_artifact`
   only. Owned by :mod:`game.referent_tracking`; this module calls that constructor once per build with the same bounded
   inputs already present at the prompt seam (visibility contract, speaker selection, interaction continuity contract,
@@ -142,6 +148,7 @@ from game.world_progression import (
     merge_progression_changed_node_signals,
 )
 from game.narrative_mode_contract import NARRATIVE_MODES, validate_narrative_mode_contract
+from game.narrative_planning import NARRATIVE_ROLE_FAMILY_KEYS, validate_narrative_plan
 from game.referent_tracking import build_referent_tracking_artifact
 from game.state_channels import (
     assert_no_debug_keys_in_prompt_payload,
@@ -374,6 +381,11 @@ def _narrative_plan_prompt_debug_anchor(
                 {str(x).strip() for x in _fm_l if isinstance(x, str) and str(x).strip()}
             )[:6],
         }
+    plan_validate_err = validate_narrative_plan(plan, strict=False) if isinstance(plan, Mapping) else "not_mapping"
+    narrative_roles_skim = _narrative_roles_prompt_debug_skim(
+        plan,
+        plan_validation_error=plan_validate_err if isinstance(plan_validate_err, str) else None,
+    )
     return {
         "present": True,
         "version": plan.get("version"),
@@ -393,6 +405,137 @@ def _narrative_plan_prompt_debug_anchor(
             "relevant_actors": len(ra),
             "pending_lead_ids": len(pl),
         },
+        "narrative_roles_skim": narrative_roles_skim,
+        "narrative_plan_validation_error": (
+            str(plan_validate_err)[:400] if isinstance(plan_validate_err, str) else plan_validate_err
+        ),
+    }
+
+
+def _narrative_plan_roles_trustworthy(plan: Mapping[str, Any] | None) -> bool:
+    """True when the full plan passes relaxed validation (harness-safe; no invented role repair)."""
+    if not isinstance(plan, Mapping) or not plan:
+        return False
+    return validate_narrative_plan(plan, strict=False) is None
+
+
+def _narrative_roles_collapse_observability(
+    nr: Mapping[str, Any],
+    *,
+    upstream_trace: Mapping[str, Any] | None,
+) -> Dict[str, Any]:
+    """Inspect-only contrast snapshot for operators (not legality, scoring, or repair input).
+
+    Fields are counts and a symbolic ``anchor_hint`` only:
+    ``sig_families_n`` — role families with at least one non-empty signal string;
+    ``low_band_n`` — families at ``minimal`` or ``low`` emphasis;
+    ``reinforced_n`` — families listed in an applied upstream bump trace;
+    ``max_band`` — coarsest emphasis tier seen across families;
+    ``anchor_hint`` — ``high_band_vs_sparse_peers``, ``low_signal_coverage``, or ``none``.
+    """
+    low_min_bands = frozenset({"minimal", "low"})
+    families_with_signals = 0
+    low_or_minimal_n = 0
+    band_max = "minimal"
+    order = ("minimal", "low", "moderate", "elevated", "high")
+    for rk in NARRATIVE_ROLE_FAMILY_KEYS:
+        sub = nr.get(rk)
+        if not isinstance(sub, Mapping):
+            continue
+        band = str(sub.get("emphasis_band") or "").strip() or "minimal"
+        if band in low_min_bands:
+            low_or_minimal_n += 1
+        if band in order and order.index(band) > order.index(band_max):
+            band_max = band
+        sigs = sub.get("signals") if isinstance(sub.get("signals"), list) else []
+        if any(isinstance(x, str) and str(x).strip() for x in sigs):
+            families_with_signals += 1
+    reinforced_n = 0
+    if isinstance(upstream_trace, dict) and bool(upstream_trace.get("applied")):
+        rf = upstream_trace.get("reinforced_families")
+        if isinstance(rf, list):
+            reinforced_n = len({str(x).strip() for x in rf if isinstance(x, str) and str(x).strip()})
+    anchor_hint = "none"
+    if band_max == "high" and low_or_minimal_n >= 3:
+        anchor_hint = "high_band_vs_sparse_peers"
+    elif families_with_signals <= 2 and low_or_minimal_n >= 3:
+        anchor_hint = "low_signal_coverage"
+    return {
+        "sig_families_n": families_with_signals,
+        "low_band_n": low_or_minimal_n,
+        "reinforced_n": reinforced_n,
+        "max_band": band_max if band_max in order else None,
+        "anchor_hint": anchor_hint,
+    }
+
+
+def _narrative_roles_prompt_debug_skim(
+    plan: Mapping[str, Any],
+    *,
+    plan_validation_error: str | None,
+) -> Dict[str, Any]:
+    """One-screen N3 glance: per-family band, signal count, short heads; upstream trace + collapse hint.
+
+    Does not duplicate the full ``narrative_roles`` object; safe for ``prompt_debug`` only.
+    """
+    nr = plan.get("narrative_roles")
+    if not isinstance(nr, Mapping):
+        return {
+            "present": False,
+            "roles_struct_ok": False,
+            "plan_validation_error_head": (plan_validation_error or "")[:180] or None,
+        }
+    roles_out: Dict[str, Any] = {}
+    for rk in NARRATIVE_ROLE_FAMILY_KEYS:
+        sub = nr.get(rk)
+        if not isinstance(sub, Mapping):
+            continue
+        band = sub.get("emphasis_band")
+        sigs = sub.get("signals") if isinstance(sub.get("signals"), list) else []
+        sig_list = [str(x) for x in sigs if isinstance(x, str)]
+        row: Dict[str, Any] = {
+            "emphasis_band": band if isinstance(band, str) else None,
+            "signal_n": len(sig_list),
+            "signals_head": sig_list[:4],
+        }
+        if rk == "hook":
+            tags = sub.get("information_kind_tags")
+            if isinstance(tags, list):
+                row["information_kind_tags_head"] = [str(x) for x in tags[:4] if isinstance(x, str)]
+        if rk == "pressure":
+            ip = sub.get("interaction_pressure")
+            if isinstance(ip, str) and ip.strip():
+                row["interaction_pressure"] = ip.strip()
+        if rk == "consequence":
+            oft = sub.get("outcome_forward_tier")
+            if isinstance(oft, str) and oft.strip():
+                row["outcome_forward_tier"] = oft.strip()
+        roles_out[rk] = row
+    struct_ok = plan_validation_error is None
+    pl_debug = plan.get("debug") if isinstance(plan.get("debug"), dict) else {}
+    raw_ur = pl_debug.get("n3_upstream_role_reemphasis")
+    upstream_ur: dict[str, Any] | None = None
+    if isinstance(raw_ur, dict):
+        applied = bool(raw_ur.get("applied"))
+        upstream_ur = {
+            "applied": applied,
+            "skip_reason": (str(raw_ur.get("skip_reason") or "").strip()[:48] or None) if not applied else None,
+            "reinforced_families": sorted({str(x) for x in (raw_ur.get("reinforced_families") or []) if str(x).strip()})[
+                :4
+            ]
+            if applied and isinstance(raw_ur.get("reinforced_families"), list)
+            else None,
+        }
+    collapse_obs = _narrative_roles_collapse_observability(nr, upstream_trace=upstream_ur)
+    return {
+        "present": True,
+        "roles_struct_ok": struct_ok,
+        "families_shipped": sorted(roles_out.keys()),
+        "roles": roles_out,
+        "plan_validation_error_head": (plan_validation_error or "")[:180] or None,
+        # Subset of plan.debug.n3_upstream_role_reemphasis for one-screen inspection.
+        "upstream_role_reemphasis": upstream_ur,
+        "collapse_observability": collapse_obs,
     }
 
 
@@ -621,10 +764,48 @@ _NARRATIVE_PLAN_STRUCT_GUIDANCE: tuple[str, ...] = (
     "for published entity_id handles when non-empty—not whom to focus on. Use `scene_anchors.active_interlocutor`, "
     "`scene_anchors` generally, `narrative_plan.narrative_mode`, `narrative_plan.narrative_mode_contract`, `active_pressures`, "
     "`required_new_information`, and `role_allocation` for narrower focality. narration_visibility remains the hard visibility scope—never reference entities outside both contracts.",
+    "Narrative roles composition (N3): read `narrative_plan.narrative_roles` as five parallel composition hints—each carries "
+    "`emphasis_band` plus closed-set `signals` (and small bounded counters/tags)—not prose beats. "
+    "`location_anchor` biases physical/scene grounding; `actor_anchor` biases materially relevant actor presence; "
+    "`pressure` biases current tension or unresolved obligation salience; `hook` biases clue/lead/opening or actionable salience "
+    "aligned with `required_new_information` kind tags; `consequence` biases closing salience toward outcomes, state-forward edges, "
+    "or transition-relevant information. These facets are optional salience dials: weave them where natural; no prescribed ordering, "
+    "no beat checklist, no requirement to dedicate a paragraph or sentence slot to each family.",
+    "N3 precedence: `narrative_roles` stays strictly subordinate to narration_visibility, narrative_authority (response_policy), "
+    "the `NARRATIVE MODE (STRUCTURAL DELTA)` lines from `narrative_mode_contract`, answer_completeness, response_delta, "
+    "social_response_structure / response_type_contract, interaction continuity, and every other shipped policy object—never override them.",
     "Mode deltas: follow the `NARRATIVE MODE (STRUCTURAL DELTA)` instruction lines derived from "
     "`narrative_plan.narrative_mode_contract` (machine prompt_obligations + forbidden_moves). "
     "Use `narrative_plan.role_allocation` integer weights only as bounded emphasis alongside that block—never as a substitute for shipped policy.",
 )
+
+
+def _narrative_plan_roles_trusted_lane() -> tuple[str, ...]:
+    """Extra instruction only when the bundled plan validates (strict=False)—no synthetic repair of partial dicts."""
+    return (
+        "NARRATIVE ROLES (N3 supplemental): `narrative_plan.narrative_roles` on this payload passed structural validation as "
+        "planning-only bounded data. Treat each family's `emphasis_band` and `signals` as optional shaping pressure together "
+        "with `role_allocation`—not as mandatory beats, ordering rules, or replacements for CTIR or machine contracts.",
+    )
+
+
+def _narrative_plan_upstream_role_repair_instruction(plan: Mapping[str, Any] | None) -> tuple[str, ...]:
+    """Single instruction line when the bundle applied capped upstream ``emphasis_band`` bumps (N3)."""
+    if not isinstance(plan, Mapping):
+        return ()
+    dbg = plan.get("debug") if isinstance(plan.get("debug"), dict) else {}
+    ur = dbg.get("n3_upstream_role_reemphasis")
+    if not isinstance(ur, dict) or not ur.get("applied"):
+        return ()
+    fams = ur.get("reinforced_families")
+    if not isinstance(fams, list) or not fams:
+        return ()
+    joined = ", ".join(sorted({str(x) for x in fams if str(x).strip()})[:5])
+    return (
+        "N3 bundle upstream: optional `emphasis_band` one-step bump for "
+        f"{joined} (validated plan metadata only). CTIR, narration visibility, and shipped contracts still win on conflict; "
+        "no new facts or policy.",
+    )
 
 
 _QUESTION_LINE_PATTERN = re.compile(
@@ -3338,9 +3519,9 @@ def _compact_manual_play_instructions(
     if narrative_plan_present:
         out.append(
             "NARRATIVE PLAN: When `narrative_plan` is on the payload, use its scene_anchors, active_pressures, "
-            "required_new_information, and allowable_entity_references (visible handle boundary only—not focality) "
-            "together with the `NARRATIVE MODE (STRUCTURAL DELTA)` lines and role_allocation weights—same precedence as full prompts "
-            "(visibility and response_policy still win conflicts)."
+            "required_new_information, allowable_entity_references (visible handle boundary only—not focality), "
+            "role_allocation weights, and `narrative_roles` emphasis_band/signals as optional composition hints—together with "
+            "the `NARRATIVE MODE (STRUCTURAL DELTA)` lines—same precedence as full prompts (visibility and response_policy still win conflicts)."
         )
     if narrative_mode_instruction_lines:
         out.extend(list(narrative_mode_instruction_lines))
@@ -3838,6 +4019,12 @@ def build_narration_context(
             else []
         ),
         *(_NARRATIVE_PLAN_STRUCT_GUIDANCE if narrative_plan is not None else ()),
+        *(_narrative_plan_roles_trusted_lane() if _narrative_plan_roles_trustworthy(narrative_plan) else ()),
+        *(
+            _narrative_plan_upstream_role_repair_instruction(narrative_plan)
+            if _narrative_plan_roles_trustworthy(narrative_plan)
+            else ()
+        ),
         (
             "SCENE MOMENTUM RULE (HARD RULE): Every 2–3 exchanges, you MUST introduce exactly one of: "
             "new_information, new_actor_entering, environmental_change, time_pressure, consequence_or_opportunity. "

@@ -2,14 +2,23 @@
 
 This module is **not** a narration renderer. :mod:`game.prompt_context` consumes plans
 and plan-adjacent inputs produced here (via :mod:`game.narration_plan_bundle`); it must
-not silently re-invoke this planner for production CTIR-backed turns.
+not silently re-invoke this planner for production CTIR-backed turns. Full plans from
+:func:`game.narrative_planning.build_narrative_plan` include Objective N3 ``narrative_roles``
+(composition shaping only; CTIR remains authoritative).
+
+**Objective N3 upstream role re-emphasis (this module only):** bounded, deterministic
+composition-band bumps when validated plan metadata shows a *low* role emphasis alongside
+clear omission-risk signals already encoded in sibling plan slices. Never invents facts,
+mutates CTIR, alters contracts, or replaces downstream trimming—see
+:func:`apply_upstream_narrative_role_reemphasis`.
 """
 
 from __future__ import annotations
 
+import copy
 from typing import Any, Dict, List, Mapping, Sequence, Set
 
-from game.narrative_planning import build_narrative_plan
+from game.narrative_planning import build_narrative_plan, validate_narrative_plan
 from game.response_policy_contracts import peek_response_type_contract_from_resolution
 from game.response_type_gating import derive_response_type_contract
 
@@ -83,6 +92,196 @@ def public_scene_slice_for_narrative_plan(
                 str(x).strip() for x in lt if isinstance(x, str) and str(x).strip()
             ][:16]
     return out
+
+
+_N3_EMPHASIS_ORDER: tuple[str, ...] = ("minimal", "low", "moderate", "elevated", "high")
+_N3_MAX_REPAIR_BAND = "elevated"
+_N3_ROLE_FAMILY_ORDER: tuple[str, ...] = ("location_anchor", "actor_anchor", "pressure", "hook", "consequence")
+_N3_UPSTREAM_ROLE_REPAIR_DEBUG_KEY = "n3_upstream_role_reemphasis"
+
+
+def _n3_low_emphasis_band(band: Any) -> bool:
+    return isinstance(band, str) and band in ("minimal", "low")
+
+
+def _n3_bump_emphasis_band(band: str) -> str | None:
+    if band not in _N3_EMPHASIS_ORDER:
+        return None
+    idx = _N3_EMPHASIS_ORDER.index(band)
+    cap = _N3_EMPHASIS_ORDER.index(_N3_MAX_REPAIR_BAND)
+    if idx >= cap:
+        return None
+    return _N3_EMPHASIS_ORDER[min(idx + 1, cap)]
+
+
+def _n3_weak_role_families(plan: Mapping[str, Any]) -> List[str]:
+    """Return role families judged weak (low emphasis + plan-derived omission risk)."""
+    nr = plan.get("narrative_roles")
+    if not isinstance(nr, Mapping):
+        return []
+    weak: List[str] = []
+    for rk in _N3_ROLE_FAMILY_ORDER:
+        sub = nr.get(rk)
+        if not isinstance(sub, Mapping):
+            continue
+        band = sub.get("emphasis_band")
+        if not _n3_low_emphasis_band(band):
+            continue
+        if rk == "location_anchor":
+            if bool(sub.get("scene_id_present")) or bool(sub.get("scene_label_present")) or int(sub.get("location_token_n") or 0) > 0:
+                weak.append(rk)
+        elif rk == "actor_anchor":
+            if (
+                bool(sub.get("interlocutor_present"))
+                or int(sub.get("relevant_actor_n") or 0) > 0
+                or int(sub.get("visible_entity_handle_n") or 0) > 1
+            ):
+                weak.append(rk)
+        elif rk == "pressure":
+            ip = str(sub.get("interaction_pressure") or "").strip()
+            if ip and ip != "none":
+                weak.append(rk)
+                continue
+            if int(sub.get("pending_lead_n") or 0) > 0:
+                weak.append(rk)
+                continue
+            if int(sub.get("context_code_n") or 0) > 0 or int(sub.get("tension_code_n") or 0) > 0:
+                weak.append(rk)
+                continue
+            if bool(sub.get("world_pressure_present")) or int(sub.get("clock_summary_n") or 0) > 0:
+                weak.append(rk)
+        elif rk == "hook":
+            if int(sub.get("required_new_information_n") or 0) > 0:
+                weak.append(rk)
+                continue
+            if int(sub.get("distinct_information_kind_n") or 0) >= 2:
+                weak.append(rk)
+                continue
+            tags = sub.get("information_kind_tags")
+            if isinstance(tags, list) and any(isinstance(x, str) and str(x).strip() for x in tags):
+                weak.append(rk)
+        elif rk == "consequence":
+            if bool(sub.get("has_consequence_information")) or bool(sub.get("has_state_or_mutation_information")):
+                weak.append(rk)
+                continue
+            if bool(sub.get("has_transition_information")):
+                weak.append(rk)
+                continue
+            oft = str(sub.get("outcome_forward_tier") or "").strip()
+            if oft in ("elevated", "max"):
+                weak.append(rk)
+    return weak
+
+
+def _n3_attach_role_repair_trace(plan: dict[str, Any], trace: Mapping[str, Any]) -> None:
+    dbg = plan.get("debug")
+    dbg_m = dict(dbg) if isinstance(dbg, dict) else {}
+    dbg_m[_N3_UPSTREAM_ROLE_REPAIR_DEBUG_KEY] = dict(trace)
+    plan["debug"] = dbg_m
+
+
+def apply_upstream_narrative_role_reemphasis(plan: dict[str, Any] | None) -> tuple[dict[str, Any] | None, dict[str, Any]]:
+    """Bounded upstream re-emphasis for N3 ``narrative_roles`` (shaping only).
+
+    Runs only when :func:`game.narrative_planning.validate_narrative_plan` passes with
+    ``strict=False`` (same trust gate as :func:`game.prompt_context._narrative_plan_roles_trustworthy`).
+    At most one emphasis step per weak family, capped at ``elevated``. A second call on the
+    same plan object after a successful ``applied`` repair is a no-op (bands must not stack).
+    No CTIR, state, contracts, or ``role_allocation`` changes. On any post-edit validation failure, the
+    plan is left unchanged and ``applied`` is false.
+    """
+    # Trace is debug-only; consumers must not treat it as authority or scoring input.
+    empty_trace: dict[str, Any] = {
+        "version": 1,
+        "applied": False,
+        "weak_roles": [],
+        "reinforced_families": [],
+        "actions": [],
+        "safety_notes": [],
+        "skip_reason": None,
+    }
+    if not isinstance(plan, dict) or not plan:
+        out_t = {**empty_trace, "skip_reason": "no_plan"}
+        return None, out_t
+
+    if validate_narrative_plan(plan, strict=False) is not None:
+        # Do not mutate invalid / harness-tampered plans (Block B trustworthy gating).
+        return plan, {**empty_trace, "skip_reason": "plan_not_trustworthy"}
+
+    # One repair pass per plan object: a second call must not stack further band bumps
+    # (weak families can remain low/minimal after a single step; re-entry would otherwise escalate).
+    dbg_prior = plan.get("debug") if isinstance(plan.get("debug"), dict) else {}
+    prior_trace = dbg_prior.get(_N3_UPSTREAM_ROLE_REPAIR_DEBUG_KEY)
+    if isinstance(prior_trace, dict) and prior_trace.get("applied") is True:
+        return plan, {
+            **empty_trace,
+            "skip_reason": "upstream_repair_idempotent_already_applied",
+        }
+
+    weak = _n3_weak_role_families(plan)
+    if not weak:
+        out_t = {**empty_trace, "skip_reason": "no_weak_roles"}
+        _n3_attach_role_repair_trace(plan, out_t)
+        return plan, out_t
+
+    snap = copy.deepcopy(plan)
+    nr = plan.get("narrative_roles")
+    if not isinstance(nr, dict):
+        out_t = {**empty_trace, "skip_reason": "narrative_roles_missing"}
+        _n3_attach_role_repair_trace(plan, out_t)
+        return plan, out_t
+
+    actions: List[str] = []
+    safety_notes: List[str] = []
+    reinforced: List[str] = []
+    for rk in weak:
+        sub = nr.get(rk)
+        if not isinstance(sub, dict):
+            continue
+        old_band = sub.get("emphasis_band")
+        if not isinstance(old_band, str):
+            continue
+        new_band = _n3_bump_emphasis_band(old_band)
+        if not new_band or new_band == old_band:
+            continue
+        sub["emphasis_band"] = new_band
+        reinforced.append(rk)
+        actions.append(f"bump_emphasis:{rk}:{old_band}->{new_band}")
+        safety_notes.append(
+            f"safe:{rk}:metadata_only_band_bump_no_counters_no_allocation_contract_slice_unchanged"
+        )
+
+    if not reinforced:
+        out_t = {
+            **empty_trace,
+            "weak_roles": weak,
+            "skip_reason": "no_bumpable_band",
+        }
+        _n3_attach_role_repair_trace(plan, out_t)
+        return plan, out_t
+
+    if validate_narrative_plan(plan, strict=False) is not None:
+        plan.clear()
+        plan.update(snap)
+        out_t = {
+            **empty_trace,
+            "weak_roles": weak,
+            "skip_reason": "validation_failed_after_repair_reverted",
+        }
+        _n3_attach_role_repair_trace(plan, out_t)
+        return plan, out_t
+
+    out_t = {
+        "version": 1,
+        "applied": True,
+        "weak_roles": weak,
+        "reinforced_families": sorted(set(reinforced)),
+        "actions": actions,
+        "safety_notes": safety_notes[:8],
+        "skip_reason": None,
+    }
+    _n3_attach_role_repair_trace(plan, out_t)
+    return plan, out_t
 
 
 def pending_lead_ids_from_active_pending(rows: Sequence[Any] | None) -> List[str]:

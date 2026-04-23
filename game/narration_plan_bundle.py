@@ -8,7 +8,11 @@
   structural bridge produced only by :func:`game.narrative_planning.build_narrative_plan`
   from CTIR plus explicitly passed bounded non-CTIR slices (visibility allowlist, public
   scene labels, compressed log summaries, shipped ``narration_obligations`` /
-  ``response_policy`` for mode contract, etc.).
+  ``response_policy`` for mode contract, etc.). The plan’s ``narrative_roles`` block (N3) is
+  abstract composition shaping only—never a second authority alongside CTIR. After a
+  successful build, :func:`game.narrative_plan_upstream.apply_upstream_narrative_role_reemphasis`
+  may bump bounded ``emphasis_band`` values only (trusted plans); it never edits CTIR,
+  contracts, or :mod:`game.final_emission_repairs` surfaces.
 - :mod:`game.prompt_context` is a **renderer and packager** only: it may map,
   compress, and attach already-owned artifacts into the model payload. It must **not**
   perform fresh semantic derivation from raw engine state, raw ``resolution`` dict
@@ -32,6 +36,7 @@ from game.ctir_runtime import SESSION_CTIR_STAMP_KEY, get_attached_ctir
 from game.interaction_context import build_speaker_selection_contract, response_type_context_snapshot
 from game.interaction_continuity import build_interaction_continuity_contract
 from game.narrative_plan_upstream import (
+    apply_upstream_narrative_role_reemphasis,
     compute_narrative_plan_for_bundle_from_head,
     interaction_context_snapshot_from_ctir_semantics,
     pending_lead_ids_from_active_pending,
@@ -239,6 +244,8 @@ def build_narration_plan_bundle(
         head,
         user_text=str(narration_context_kwargs.get("user_text") or ""),
     )
+    if isinstance(narrative_plan, dict) and not narrative_plan_build_error:
+        narrative_plan, _ = apply_upstream_narrative_role_reemphasis(narrative_plan)
     ctir_stamp = str(session.get(SESSION_CTIR_STAMP_KEY) or "").strip()
     bypass = bool(narrative_plan_build_error) or (narrative_plan is None)
     plan_meta: dict[str, Any] = {

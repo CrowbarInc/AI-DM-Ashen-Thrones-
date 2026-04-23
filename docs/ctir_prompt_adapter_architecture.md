@@ -20,8 +20,9 @@ This document locks the **landed** architecture for Objective #1: where meaning 
 
 ### C. Prompt-context adapter layer (`game.prompt_context`)
 
-- **What it is:** **Consumes** session-backed CTIR via `get_attached_ctir(session)` and maps it through a **small** adapter (`_ctir_to_prompt_semantics`, overlays such as `_session_view_overlay_from_ctir_interaction`). Prompt-local shapes exist for compatibility with existing contract builders.
+- **What it is:** **Consumes** session-backed CTIR via `get_attached_ctir(session)` and maps it through a **small** adapter (`_ctir_to_prompt_semantics`, overlays such as `_session_view_overlay_from_ctir_interaction`). Prompt-local shapes exist for compatibility with existing contract builders. For CTIR-backed turns it also **consumes** the stamp-matched narration plan bundle; `narrative_plan.narrative_roles` (Objective N3) is surfaced as bounded composition guidance—bands, signals, and counts—subordinate to CTIR, visibility, and shipped `response_policy` contracts.
 - **Who owns it:** This module owns prompt **bundling** and contracts, but **not** re-resolution of the turn. When CTIR is present, meaning is **read**, not re-decided.
+- **N3 (role composition):** When a stamp-matched narration plan bundle is present, `narrative_plan.narrative_roles` is optional bounded composition metadata (bands + closed-set signals + small counters). Upstream bundle preflight may apply one capped `emphasis_band` bump per weak family (`game.narrative_plan_upstream.apply_upstream_narrative_role_reemphasis`); `prompt_context` surfaces abstract guidance, a validation-gated trusted lane, compact `narrative_roles_skim` (trimmed upstream trace + **inspect-only** `collapse_observability`—not policy), and obeys the same CTIR / `response_policy` / visibility precedence as other plan fields. See `docs/narrative_integrity_architecture.md` → *N3 examples* for a short read-side cheat sheet.
 - **Explicit non-goals:** The adapter must not become a second semantic authority and must not reconstruct turn meaning when CTIR exists. `prompt_context` does **not** call `build_ctir`.
 
 ### D. Turn packet (`game.turn_packet`)

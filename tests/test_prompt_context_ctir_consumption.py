@@ -128,6 +128,9 @@ def test_ctir_session_attaches_narrative_plan_and_stable_on_repeat() -> None:
     }
     assert plan.get("narrative_mode") == "dialogue"
     assert plan.get("narrative_mode") == plan.get("narrative_mode_contract", {}).get("mode")
+    nr = plan.get("narrative_roles")
+    assert isinstance(nr, dict)
+    assert set(nr.keys()) == {"location_anchor", "actor_anchor", "pressure", "hook", "consequence"}
     assert ctx_a.get("narrative_plan") == ctx_b.get("narrative_plan")
     pd = ctx_a.get("prompt_debug") or {}
     npd = pd.get("narrative_plan") or {}

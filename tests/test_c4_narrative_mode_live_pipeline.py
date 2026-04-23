@@ -59,6 +59,9 @@ def _gm_with_shipped_plan(
         plan["narrative_mode"] = narrative_mode_field
     if extra_plan_keys:
         plan.update(extra_plan_keys)
+    # Synthetic plans here are for C4 / NMO seam tests only; keep N4 off unless callers ship a contract.
+    if not isinstance(plan.get("acceptance_quality_contract"), dict):
+        plan["acceptance_quality_contract"] = {"enabled": False}
     return {"player_facing_text": text, "tags": [], "prompt_context": {"narrative_plan": plan}}
 
 
