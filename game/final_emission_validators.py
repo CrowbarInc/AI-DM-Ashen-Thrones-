@@ -1460,6 +1460,8 @@ _REFERENT_PRONOUN_RE = re.compile(
     re.IGNORECASE,
 )
 _REFERENT_LEAD_WINDOW = 220
+_CLAUSE_AMBIGUITY_RISKY = frozenset({"ambiguous_plural", "ambiguous_singular", "no_anchor"})
+_GENDERED_PRONOUN_BUCKETS = frozenset({"he_him", "she_her"})
 
 
 def _is_full_referent_artifact(obj: Any) -> bool:
@@ -1510,6 +1512,38 @@ def _referent_forbidden_display_names(artifact: Mapping[str, Any]) -> set[str]:
     return names
 
 
+def _artifact_authorizes_explicit_label(artifact: Mapping[str, Any], label: str) -> bool:
+    """True when *label* matches an allow-listed explicit anchor on the full referent artifact."""
+    lab = str(label or "").strip().lower()
+    if not lab:
+        return False
+    if lab in _referent_forbidden_display_names(artifact):
+        return False
+    for row in artifact.get("allowed_named_references") or []:
+        if isinstance(row, Mapping) and str(row.get("display_name") or "").strip().lower() == lab:
+            return True
+    for row in artifact.get("safe_explicit_fallback_labels") or []:
+        if isinstance(row, Mapping) and str(row.get("safe_explicit_label") or "").strip().lower() == lab:
+            return True
+    sue = artifact.get("single_unambiguous_entity")
+    if isinstance(sue, Mapping) and str(sue.get("label") or "").strip().lower() == lab:
+        return True
+    cs = artifact.get("continuity_subject")
+    itc = artifact.get("interaction_target_continuity")
+    active_tgt = str(artifact.get("active_interaction_target") or "").strip()
+    if (
+        isinstance(cs, Mapping)
+        and isinstance(itc, Mapping)
+        and active_tgt
+        and str(cs.get("entity_id") or "").strip() == active_tgt
+        and bool(itc.get("target_visible"))
+        and not bool(itc.get("drift_detected"))
+    ):
+        if str(cs.get("display_name") or "").strip().lower() == lab:
+            return True
+    return False
+
+
 def _referent_allowed_display_tokens(artifact: Mapping[str, Any]) -> set[str]:
     toks: set[str] = set()
     for row in artifact.get("allowed_named_references") or []:
@@ -1555,6 +1589,56 @@ def _text_mentions_forbidden_name(text: str, forbidden_lc: set[str]) -> bool:
     return False
 
 
+def _clause_referent_plan_rows(artifact: Mapping[str, Any]) -> List[Mapping[str, Any]]:
+    crp = artifact.get("clause_referent_plan")
+    if not isinstance(crp, list):
+        return []
+    return [r for r in crp if isinstance(r, Mapping)]
+
+
+def _clause_row_has_explicit_anchor_support(row: Mapping[str, Any]) -> bool:
+    labs = row.get("allowed_explicit_labels")
+    if not isinstance(labs, list):
+        return False
+    return any(isinstance(x, str) and str(x).strip() for x in labs)
+
+
+def _clause_row_ambiguity_or_bucket_supports_tightening(row: Mapping[str, Any]) -> bool:
+    amb = str(row.get("ambiguity_class") or "").strip().lower()
+    if amb in _CLAUSE_AMBIGUITY_RISKY:
+        return True
+    buckets = row.get("risky_pronoun_buckets") if isinstance(row.get("risky_pronoun_buckets"), list) else []
+    for b in buckets:
+        if not isinstance(b, str):
+            continue
+        bk = str(b).strip().lower().replace(" ", "_")
+        if bk in _GENDERED_PRONOUN_BUCKETS or bk == "it_its":
+            return True
+    return False
+
+
+def _try_clause_referent_plan_repair_label(full: Mapping[str, Any], text: str) -> tuple[str | None, str | None]:
+    """Read-side: one repair label from ``clause_referent_plan`` when structural gates fire (gate does not build rows)."""
+    if not _opening_has_pronoun_risk(text):
+        return None, None
+    for row in _clause_referent_plan_rows(full):
+        labs_raw = row.get("allowed_explicit_labels") if isinstance(row.get("allowed_explicit_labels"), list) else []
+        labs = [str(x).strip() for x in labs_raw if isinstance(x, str) and str(x).strip()]
+        if len(labs) != 1:
+            continue
+        label = labs[0]
+        if not _artifact_authorizes_explicit_label(full, label):
+            continue
+        tss = bool(row.get("target_switch_sensitive"))
+        struct_ok = _clause_row_ambiguity_or_bucket_supports_tightening(row) or (
+            tss and _unsupported_target_switch_signal(full)
+        )
+        if not struct_ok:
+            continue
+        return label, "clause_referent_plan"
+    return None, None
+
+
 def _unsupported_target_switch_signal(artifact: Mapping[str, Any]) -> bool:
     itc = artifact.get("interaction_target_continuity")
     if not isinstance(itc, Mapping):
@@ -1576,6 +1660,7 @@ def validate_referent_clarity(
 ) -> Dict[str, Any]:
     """Deterministic referent checks using the full prompt artifact when present.
 
+    Read-only over ``referent_tracking`` / ``referent_tracking_compact`` (no in-place mutation).
     When only ``referent_tracking_compact`` exists, records observability and abstains
     from repair-driving violations (no reconstruction of the full artifact).
     """
@@ -1640,6 +1725,12 @@ def validate_referent_clarity(
                 base["referent_repair_allowed_label"] = lab
                 base["referent_repair_label_source"] = "active_interaction_target_pinned"
 
+    if not base.get("referent_repair_allowed_label"):
+        cl_lab, cl_src = _try_clause_referent_plan_repair_label(full, text)
+        if cl_lab and cl_src:
+            base["referent_repair_allowed_label"] = cl_lab
+            base["referent_repair_label_source"] = cl_src
+
     rac = str(full.get("referential_ambiguity_class") or "").strip().lower()
     risk = int(full.get("ambiguity_risk") or 0) if isinstance(full.get("ambiguity_risk"), int) else 0
     pr = full.get("pronoun_resolution") if isinstance(full.get("pronoun_resolution"), Mapping) else {}
@@ -1673,6 +1764,19 @@ def validate_referent_clarity(
     forb_names = _referent_forbidden_display_names(full)
     if forb_names and _text_mentions_forbidden_name(text, forb_names):
         categories.append("disallowed_named_reference_in_text")
+
+    cr_rows = _clause_referent_plan_rows(full)
+    if cr_rows and _opening_has_pronoun_risk(text):
+        for row in cr_rows:
+            if _clause_row_has_explicit_anchor_support(row):
+                continue
+            tss = bool(row.get("target_switch_sensitive"))
+            amb = str(row.get("ambiguity_class") or "").strip().lower()
+            bucket_tight = _clause_row_ambiguity_or_bucket_supports_tightening(row)
+            if tss and _unsupported_target_switch_signal(full):
+                categories.append("clause_target_switch_sensitive_without_authorized_explicit")
+            if amb in _CLAUSE_AMBIGUITY_RISKY and bucket_tight:
+                categories.append("clause_ambiguous_lane_without_authorized_explicit")
 
     base["referent_violation_categories"] = list(dict.fromkeys(categories))
     base["unresolved_referent_ambiguity"] = bool(

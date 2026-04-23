@@ -1596,7 +1596,10 @@ def _apply_fallback_behavior_layer(
     return text, meta, extra
 
 
-# --- Referent clarity (prompt artifact primary; compact packet observability only) ----------
+# --- Referent clarity (full prompt artifact; compact packet observability only) ----------
+# N5: ``clause_referent_plan`` is read in ``validate_referent_clarity`` only; this module does not
+# construct it. Repairs: existing single pronoun → explicit label path only. Spec:
+# ``docs/clause_level_referent_tracking.md``.
 
 _REFERENT_REPLACE_PRONOUN_RE = re.compile(
     r"\b(he|she|they|him|her|them)\b",

@@ -1,20 +1,20 @@
-"""Deterministic referent / clause tracking artifact (Objective #7 foundation).
+"""Deterministic referent / clause tracking artifact (Objective #7 foundation; N5 extension).
 
-**Owner:** JSON-safe *Referent Tracking* construction and validation — a bounded
-structural projection for narration support (pronoun risk, explicit referents,
-interaction-target continuity). It is **derivative-only**: it never mutates
-adjudication, routing, CTIR meaning, world truth, or state-authority domains.
+**Owner:** JSON-safe referent-tracking construction and validation — a **derivative-only**
+bounded structural projection (pronoun risk, explicit referents, interaction-target
+continuity). Does **not** mutate adjudication, routing, CTIR meaning, world truth, or
+state-authority domains; not a second semantic authority.
 
-**Upstream wins:** On conflict between this artifact and authoritative systems
-(CTIR, interaction_context, visibility contracts, engine session), authoritative
-inputs win; this module only records bounded traces and conservative ambiguity
-signals — it is not a second semantic authority.
+**N5:** Optional ``clause_referent_plan`` is the only canonical artifact field for
+per-slot referent metadata (**bounded structural aid**: ids, labels, flags). Built
+here only — **not** a prose parser, narrative planner, or truth/meaning owner.
+``game.prompt_context`` / gate code are **read-side** consumers only; contract:
+``docs/clause_level_referent_tracking.md``. On conflict, CTIR, interaction, visibility,
+and engine truth win; this module records bounded traces only.
 
-**Not owner:** free-form NLP parsing, prose resolution, prompt assembly, gate
-enforcement, or orchestration. Do not feed raw narration text here for deep
-interpretation; optional ``recent_structured_memory_entities`` must already be
-bounded structured rows (e.g. prior-turn summaries with explicit ids), not a
-semantic source of truth.
+**Not owner:** NLP parsing, prose resolution, prompt assembly, gate enforcement, or
+orchestration. ``recent_structured_memory_entities`` must be pre-bounded structured
+rows (explicit ids), not a semantic source of truth.
 """
 
 from __future__ import annotations
@@ -35,6 +35,38 @@ _PERSON_LIKE_KINDS = frozenset(
 )
 
 _VALID_PRONOUN_BUCKETS = frozenset({"he_him", "she_her", "they_them", "it_its", "unknown"})
+
+# N5 optional ``clause_referent_plan`` lane (``docs/clause_level_referent_tracking.md``).
+_MAX_CLAUSE_PLAN_ROWS = 8
+_MAX_CLAUSE_CANDIDATES = 16
+_MAX_CLAUSE_LABELS = 8
+_MAX_CLAUSE_ID_LEN = 128
+
+_CLAUSE_ROW_KEYS = frozenset(
+    {
+        "clause_id",
+        "clause_kind",
+        "subject_candidate_ids",
+        "object_candidate_ids",
+        "preferred_subject_id",
+        "preferred_object_id",
+        "allowed_explicit_labels",
+        "risky_pronoun_buckets",
+        "target_switch_sensitive",
+        "ambiguity_class",
+    }
+)
+
+_CLAUSE_KINDS = frozenset(
+    {
+        "speaker_subject",
+        "interaction_target",
+        "continuity_object",
+        "addressed_entities",
+    }
+)
+
+_CLAUSE_AMBIGUITY_CLASSES = frozenset({"none", "ambiguous_plural", "ambiguous_singular", "no_anchor"})
 
 _PROSE_INSTRUCTION_KEYS = frozenset(
     {
@@ -423,6 +455,383 @@ def build_active_entity_order(
     return seq[:_MAX_ENTITY_LIST]
 
 
+def _safe_label_map_from_rows(safe_explicit_fallback_labels: Sequence[Mapping[str, Any]]) -> Dict[str, str]:
+    out: Dict[str, str] = {}
+    for row in safe_explicit_fallback_labels:
+        if not isinstance(row, Mapping):
+            continue
+        eid = normalize_entity_id(row.get("entity_id"))
+        if not eid:
+            continue
+        lab = _clip(_as_str(row.get("safe_explicit_label")), max_len=_MAX_STR_CLIP)
+        if lab:
+            out[eid] = lab
+    return out
+
+
+def _union_pronoun_buckets_for_entities(
+    entity_ids: Sequence[str],
+    buckets_by_entity: Mapping[str, Any],
+    *,
+    limit: int = _MAX_CLAUSE_LABELS,
+) -> List[str]:
+    acc: List[str] = []
+    seen: set[str] = set()
+    for eid in sorted(set(normalize_entity_id(x) for x in entity_ids if _as_str(x))):
+        if not eid:
+            continue
+        raw = buckets_by_entity.get(eid) if isinstance(buckets_by_entity, Mapping) else None
+        if not isinstance(raw, (list, tuple)):
+            continue
+        for b in raw:
+            bk = _as_str(b).lower().replace(" ", "_")
+            if bk not in _VALID_PRONOUN_BUCKETS or bk in seen:
+                continue
+            seen.add(bk)
+            acc.append(bk)
+            if len(acc) >= limit:
+                return acc
+    return acc
+
+
+def _allowed_explicit_labels_for_entities(
+    entity_ids: Sequence[str],
+    authorized_by_id: Mapping[str, str],
+    *,
+    limit: int = _MAX_CLAUSE_LABELS,
+) -> List[str]:
+    """Return sorted unique display strings authorized for *entity_ids* only (clipped, capped)."""
+    out: List[str] = []
+    seen: set[str] = set()
+    for eid in sorted(set(normalize_entity_id(x) for x in entity_ids if _as_str(x))):
+        if not eid:
+            continue
+        lab = authorized_by_id.get(eid)
+        if not lab:
+            continue
+        cl = _clip(_as_str(lab), max_len=_MAX_STR_CLIP)
+        if not cl or cl in seen:
+            continue
+        seen.add(cl)
+        out.append(cl)
+        if len(out) >= limit:
+            break
+    return out
+
+
+def _clause_ambiguity_speaker_slot(
+    *,
+    person_like_count: int,
+    speaker_candidates: Sequence[str],
+    rac: str,
+) -> str:
+    if len(speaker_candidates) > 1:
+        return "ambiguous_plural"
+    if person_like_count >= 2:
+        return "ambiguous_plural"
+    if person_like_count == 0:
+        return "no_anchor"
+    if rac in _CLAUSE_AMBIGUITY_CLASSES and rac != "none":
+        return rac
+    return "none"
+
+
+def _clause_ambiguity_target_slot(*, conflicting_targets: bool, rac: str) -> str:
+    if conflicting_targets:
+        return "ambiguous_singular"
+    return rac if rac in _CLAUSE_AMBIGUITY_CLASSES else "no_anchor"
+
+
+def _clause_ambiguity_continuity_object_slot(*, person_like_count: int, rac: str) -> str:
+    if person_like_count >= 2:
+        return "ambiguous_plural"
+    return rac if rac in _CLAUSE_AMBIGUITY_CLASSES else "no_anchor"
+
+
+def _clause_ambiguity_addressed_slot(*, addressed_visible_n: int, person_like_count: int, rac: str) -> str:
+    if addressed_visible_n >= 2:
+        return "ambiguous_plural"
+    if addressed_visible_n == 1 and person_like_count >= 2:
+        return "ambiguous_singular"
+    if addressed_visible_n == 0:
+        return "no_anchor"
+    return rac if rac in _CLAUSE_AMBIGUITY_CLASSES else "none"
+
+
+def _clause_row_target_switch_sensitive(*, conflicting_targets: bool, drift: bool) -> bool:
+    return bool(conflicting_targets or drift)
+
+
+def build_clause_referent_plan(
+    *,
+    visible_sorted: Sequence[str],
+    active_speaker_candidates: Sequence[str],
+    primary_speaker: Optional[str],
+    active_interaction_target: Optional[str],
+    continuity_object_entity_id: Optional[str],
+    ctir_visible_addressed_ids: Sequence[str],
+    conflicting_targets: bool,
+    target_drift: bool,
+    person_like_count: int,
+    referential_ambiguity_class: str,
+    buckets_by_entity: Mapping[str, Any],
+    safe_label_by_entity_id: Mapping[str, str],
+) -> List[Dict[str, Any]]:
+    """N5: deterministic clause-slot rows from structured inputs only (not prose).
+
+    Empty list → omit ``clause_referent_plan`` on the artifact. Stable row order:
+    speaker_subject, interaction_target, continuity_object, addressed_entities.
+    """
+    vis_set = set(visible_sorted)
+    rac = referential_ambiguity_class if referential_ambiguity_class in _CLAUSE_AMBIGUITY_CLASSES else "no_anchor"
+    rows: List[Dict[str, Any]] = []
+
+    speaker_cands = _sorted_unique_strs(
+        [eid for eid in active_speaker_candidates if eid in vis_set],
+        limit=_MAX_CLAUSE_CANDIDATES,
+    )
+    if not speaker_cands and primary_speaker and primary_speaker in vis_set:
+        speaker_cands = [primary_speaker]
+
+    if speaker_cands:
+        subj = list(speaker_cands)
+        pref_sub = primary_speaker if primary_speaker and primary_speaker in subj else None
+        obj_cands: List[str] = []
+        pref_obj: Optional[str] = None
+        if active_interaction_target and active_interaction_target in vis_set:
+            obj_cands = _sorted_unique_strs([active_interaction_target], limit=_MAX_CLAUSE_CANDIDATES)
+            pref_obj = active_interaction_target
+        slot_entities = subj + obj_cands
+        rows.append(
+            {
+                "clause_id": "n5:speaker_subject:0",
+                "clause_kind": "speaker_subject",
+                "subject_candidate_ids": subj,
+                "object_candidate_ids": obj_cands,
+                "preferred_subject_id": pref_sub,
+                "preferred_object_id": pref_obj,
+                "allowed_explicit_labels": _allowed_explicit_labels_for_entities(
+                    slot_entities, safe_label_by_entity_id, limit=_MAX_CLAUSE_LABELS
+                ),
+                "risky_pronoun_buckets": _union_pronoun_buckets_for_entities(
+                    slot_entities, buckets_by_entity, limit=_MAX_CLAUSE_LABELS
+                ),
+                "target_switch_sensitive": _clause_row_target_switch_sensitive(
+                    conflicting_targets=conflicting_targets, drift=target_drift
+                ),
+                "ambiguity_class": _clause_ambiguity_speaker_slot(
+                    person_like_count=person_like_count,
+                    speaker_candidates=subj,
+                    rac=rac,
+                ),
+            }
+        )
+
+    if active_interaction_target and active_interaction_target in vis_set:
+        subj = _sorted_unique_strs(
+            [eid for eid in active_speaker_candidates if eid in vis_set],
+            limit=_MAX_CLAUSE_CANDIDATES,
+        )
+        if not subj and primary_speaker and primary_speaker in vis_set:
+            subj = [primary_speaker]
+        obj_cands = _sorted_unique_strs([active_interaction_target], limit=_MAX_CLAUSE_CANDIDATES)
+        slot_entities = subj + obj_cands
+        rows.append(
+            {
+                "clause_id": "n5:interaction_target:0",
+                "clause_kind": "interaction_target",
+                "subject_candidate_ids": subj,
+                "object_candidate_ids": obj_cands,
+                "preferred_subject_id": primary_speaker if primary_speaker in subj else (subj[0] if len(subj) == 1 else None),
+                "preferred_object_id": active_interaction_target,
+                "allowed_explicit_labels": _allowed_explicit_labels_for_entities(
+                    slot_entities, safe_label_by_entity_id, limit=_MAX_CLAUSE_LABELS
+                ),
+                "risky_pronoun_buckets": _union_pronoun_buckets_for_entities(
+                    slot_entities, buckets_by_entity, limit=_MAX_CLAUSE_LABELS
+                ),
+                "target_switch_sensitive": _clause_row_target_switch_sensitive(
+                    conflicting_targets=conflicting_targets, drift=target_drift
+                ),
+                "ambiguity_class": _clause_ambiguity_target_slot(conflicting_targets=conflicting_targets, rac=rac),
+            }
+        )
+
+    co = normalize_entity_id(continuity_object_entity_id) or None
+    if co and co in vis_set:
+        subj = _sorted_unique_strs(
+            [eid for eid in active_speaker_candidates if eid in vis_set],
+            limit=_MAX_CLAUSE_CANDIDATES,
+        )
+        if not subj and primary_speaker and primary_speaker in vis_set:
+            subj = [primary_speaker]
+        obj_cands = _sorted_unique_strs([co], limit=_MAX_CLAUSE_CANDIDATES)
+        slot_entities = subj + obj_cands
+        rows.append(
+            {
+                "clause_id": "n5:continuity_object:0",
+                "clause_kind": "continuity_object",
+                "subject_candidate_ids": subj,
+                "object_candidate_ids": obj_cands,
+                "preferred_subject_id": primary_speaker if primary_speaker in subj else (subj[0] if len(subj) == 1 else None),
+                "preferred_object_id": co,
+                "allowed_explicit_labels": _allowed_explicit_labels_for_entities(
+                    slot_entities, safe_label_by_entity_id, limit=_MAX_CLAUSE_LABELS
+                ),
+                "risky_pronoun_buckets": _union_pronoun_buckets_for_entities(
+                    slot_entities, buckets_by_entity, limit=_MAX_CLAUSE_LABELS
+                ),
+                "target_switch_sensitive": _clause_row_target_switch_sensitive(
+                    conflicting_targets=conflicting_targets, drift=target_drift
+                ),
+                "ambiguity_class": _clause_ambiguity_continuity_object_slot(person_like_count=person_like_count, rac=rac),
+            }
+        )
+
+    addr = _sorted_unique_strs([x for x in ctir_visible_addressed_ids if normalize_entity_id(x) in vis_set], limit=_MAX_CLAUSE_CANDIDATES)
+    if addr:
+        slot_entities = list(addr)
+        rows.append(
+            {
+                "clause_id": "n5:addressed_entities:0",
+                "clause_kind": "addressed_entities",
+                "subject_candidate_ids": list(addr),
+                "object_candidate_ids": [],
+                "preferred_subject_id": addr[0] if len(addr) == 1 else None,
+                "preferred_object_id": None,
+                "allowed_explicit_labels": _allowed_explicit_labels_for_entities(
+                    slot_entities, safe_label_by_entity_id, limit=_MAX_CLAUSE_LABELS
+                ),
+                "risky_pronoun_buckets": _union_pronoun_buckets_for_entities(
+                    slot_entities, buckets_by_entity, limit=_MAX_CLAUSE_LABELS
+                ),
+                "target_switch_sensitive": _clause_row_target_switch_sensitive(
+                    conflicting_targets=conflicting_targets, drift=target_drift
+                ),
+                "ambiguity_class": _clause_ambiguity_addressed_slot(
+                    addressed_visible_n=len(addr),
+                    person_like_count=person_like_count,
+                    rac=rac,
+                ),
+            }
+        )
+
+    return rows[:_MAX_CLAUSE_PLAN_ROWS]
+
+
+def validate_clause_referent_plan_row(
+    row: Any,
+    *,
+    visible_ids: Set[str],
+    authorized_labels: Set[str],
+) -> Optional[str]:
+    """Strict validation for one ``clause_referent_plan`` row.
+
+    ``visible_ids`` / ``authorized_labels`` must match the parent artifact's
+    ``active_entities`` and ``safe_explicit_fallback_labels`` (normalized ids / labels).
+    """
+    if not isinstance(row, Mapping):
+        return "clause_row_not_mapping"
+    keys = set(row.keys())
+    if keys - _CLAUSE_ROW_KEYS:
+        return f"clause_row_unknown_keys:{sorted(keys - _CLAUSE_ROW_KEYS)}"
+
+    cid = _clip(_as_str(row.get("clause_id")), max_len=_MAX_CLAUSE_ID_LEN)
+    if not cid:
+        return "clause_row_bad_clause_id"
+    ck = _as_str(row.get("clause_kind"))
+    if ck not in _CLAUSE_KINDS:
+        return "clause_row_bad_clause_kind"
+
+    for fld, lim in (
+        ("subject_candidate_ids", _MAX_CLAUSE_CANDIDATES),
+        ("object_candidate_ids", _MAX_CLAUSE_CANDIDATES),
+        ("allowed_explicit_labels", _MAX_CLAUSE_LABELS),
+        ("risky_pronoun_buckets", _MAX_CLAUSE_LABELS),
+    ):
+        raw = row.get(fld)
+        if raw is None:
+            continue
+        if not isinstance(raw, list):
+            return f"clause_row_bad_list:{fld}"
+        if len(raw) > lim:
+            return f"clause_row_list_too_long:{fld}"
+
+    subj_ids: List[str] = []
+    if row.get("subject_candidate_ids") is not None:
+        for item in row["subject_candidate_ids"]:
+            if not isinstance(item, str):
+                return "clause_row_bad_subject_id_type"
+            eid = normalize_entity_id(item)
+            if not eid:
+                return "clause_row_bad_subject_id_empty"
+            subj_ids.append(eid)
+
+    obj_ids: List[str] = []
+    if row.get("object_candidate_ids") is not None:
+        for item in row["object_candidate_ids"]:
+            if not isinstance(item, str):
+                return "clause_row_bad_object_id_type"
+            eid = normalize_entity_id(item)
+            if not eid:
+                return "clause_row_bad_object_id_empty"
+            obj_ids.append(eid)
+
+    for eid in subj_ids + obj_ids:
+        if eid not in visible_ids:
+            return f"clause_row_id_not_visible:{eid}"
+
+    ps = row.get("preferred_subject_id")
+    if ps is not None and not isinstance(ps, str):
+        return "clause_row_bad_preferred_subject_type"
+    pe = normalize_entity_id(ps) if isinstance(ps, str) else ""
+    if pe and pe not in subj_ids:
+        return "clause_row_preferred_subject_not_in_candidates"
+    if not subj_ids and pe:
+        return "clause_row_preferred_subject_without_candidates"
+
+    po = row.get("preferred_object_id")
+    if po is not None and not isinstance(po, str):
+        return "clause_row_bad_preferred_object_type"
+    oe = normalize_entity_id(po) if isinstance(po, str) else ""
+    if oe and oe not in obj_ids:
+        return "clause_row_preferred_object_not_in_candidates"
+    if not obj_ids and oe:
+        return "clause_row_preferred_object_without_candidates"
+
+    tss = row.get("target_switch_sensitive")
+    if tss is not None and not isinstance(tss, bool):
+        return "clause_row_bad_target_switch_sensitive"
+
+    amb = row.get("ambiguity_class")
+    if amb is not None:
+        if _as_str(amb) not in _CLAUSE_AMBIGUITY_CLASSES:
+            return "clause_row_bad_ambiguity_class"
+
+    if row.get("allowed_explicit_labels") is not None:
+        for lab in row["allowed_explicit_labels"]:
+            if not isinstance(lab, str):
+                return "clause_row_bad_label_type"
+            cl = _clip(_as_str(lab), max_len=_MAX_STR_CLIP)
+            if not cl:
+                return "clause_row_empty_label"
+            if cl not in authorized_labels:
+                return "clause_row_label_not_authorized"
+
+    if row.get("risky_pronoun_buckets") is not None:
+        for x in row["risky_pronoun_buckets"]:
+            if not isinstance(x, str):
+                return "clause_row_bad_bucket_type"
+        norm_buckets = [_as_str(x).lower().replace(" ", "_") for x in row["risky_pronoun_buckets"]]
+        if row["risky_pronoun_buckets"] != norm_buckets:
+            return "clause_row_buckets_not_normalized"
+        for b in norm_buckets:
+            if b not in _VALID_PRONOUN_BUCKETS:
+                return "clause_row_bad_bucket"
+
+    return None
+
+
 def validate_referent_tracking_artifact(artifact: Any, *, strict: bool = True) -> Optional[str]:
     """Return error code string if invalid; else None."""
     if not isinstance(artifact, Mapping):
@@ -446,6 +855,7 @@ def validate_referent_tracking_artifact(artifact: Any, *, strict: bool = True) -
         "referential_ambiguity_class",
         "interaction_target_continuity",
         "debug",
+        "clause_referent_plan",
     }
     if strict:
         extra = set(artifact.keys()) - allowed_roots
@@ -487,6 +897,33 @@ def validate_referent_tracking_artifact(artifact: Any, *, strict: bool = True) -
     rac = artifact.get("referential_ambiguity_class")
     if rac not in ("none", "ambiguous_plural", "ambiguous_singular", "no_anchor"):
         return "bad_referential_ambiguity_class"
+
+    crp = artifact.get("clause_referent_plan")
+    if crp is not None:
+        if not isinstance(crp, list):
+            return "bad_clause_referent_plan:not_list"
+        if len(crp) > _MAX_CLAUSE_PLAN_ROWS:
+            return "bad_clause_referent_plan:too_many_rows"
+        visible_entity_ids: Set[str] = set()
+        for ae in artifact.get("active_entities") or []:
+            if isinstance(ae, Mapping):
+                eid = normalize_entity_id(ae.get("entity_id"))
+                if eid:
+                    visible_entity_ids.add(eid)
+        auth_labels: Set[str] = set()
+        for sl in artifact.get("safe_explicit_fallback_labels") or []:
+            if isinstance(sl, Mapping):
+                v = _clip(_as_str(sl.get("safe_explicit_label")), max_len=_MAX_STR_CLIP)
+                if v:
+                    auth_labels.add(v)
+        for i, crow in enumerate(crp):
+            cerr = validate_clause_referent_plan_row(
+                crow,
+                visible_ids=visible_entity_ids,
+                authorized_labels=auth_labels,
+            )
+            if cerr:
+                return f"bad_clause_referent_plan_row:{i}:{cerr}"
 
     try:
         json.dumps(artifact, sort_keys=True)
@@ -748,6 +1185,7 @@ def build_referent_tracking_artifact(
     if rac in ("ambiguous_plural", "ambiguous_singular", "no_anchor") and not has_explicit_pronoun:
         forbidden.append({"kind": "pronoun_anchor_conservative", "referential_ambiguity_class": rac})
 
+    ctir_norm: List[str] = []
     if ctir_addressed_entity_ids is not None:
         sources_used.append("ctir_addressed_entity_ids")
         ctir_norm = [normalize_entity_id(x) for x in ctir_addressed_entity_ids if _as_str(x)][: _MAX_ENTITY_LIST]
@@ -791,6 +1229,33 @@ def build_referent_tracking_artifact(
         pronoun_resolution["strategy"] = "unresolved"
         pronoun_resolution["notes"] = "elevated_to_unresolved_multi_person_like_without_explicit_buckets"
 
+    ctir_visible_for_clause = sorted({eid for eid in ctir_norm if eid and eid in visible_set})[:_MAX_CLAUSE_CANDIDATES]
+    co_eid_clause: Optional[str] = None
+    if isinstance(continuity_object, Mapping) and bool(continuity_object.get("visible")):
+        cx = normalize_entity_id(continuity_object.get("entity_id"))
+        if cx and cx in visible_set:
+            co_eid_clause = cx
+
+    bbe_final = pronoun_resolution.get("buckets_by_entity")
+    if not isinstance(bbe_final, Mapping):
+        bbe_final = {}
+
+    safe_label_by_entity_id = _safe_label_map_from_rows(safe_labels)
+    clause_plan = build_clause_referent_plan(
+        visible_sorted=vis_sorted,
+        active_speaker_candidates=active_speaker_candidates,
+        primary_speaker=primary_speaker,
+        active_interaction_target=active_interaction_target,
+        continuity_object_entity_id=co_eid_clause,
+        ctir_visible_addressed_ids=ctir_visible_for_clause,
+        conflicting_targets=conflicting_targets,
+        target_drift=drift,
+        person_like_count=person_like_count,
+        referential_ambiguity_class=rac,
+        buckets_by_entity=bbe_final,
+        safe_label_by_entity_id=safe_label_by_entity_id,
+    )
+
     debug = {
         "derivation_codes": _sorted_unique_strs(derivation_codes, limit=_MAX_CODES),
         "sources_used": _sorted_unique_strs(sources_used, limit=_MAX_CODES),
@@ -822,6 +1287,8 @@ def build_referent_tracking_artifact(
         "interaction_target_continuity": interaction_target_continuity,
         "debug": debug,
     }
+    if clause_plan:
+        artifact["clause_referent_plan"] = clause_plan
 
     err = validate_referent_tracking_artifact(artifact, strict=True)
     if err:

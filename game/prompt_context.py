@@ -81,6 +81,9 @@ Contract layers (orthogonal concerns):
   inputs already present at the prompt seam (visibility contract, speaker selection, interaction continuity contract,
   session interaction slice, narrative plan, turn packet snapshot). It does **not** re-derive targets or pronouns locally.
   Kept separate from CTIR, ``response_policy``, slim ``narration_visibility`` export, social routing, and planning truth.
+  **N5:** Optional ``clause_referent_plan`` on the shipped artifact is consumed only as **read-side**
+  ``referent_clause_prompt_hints`` (trimmed projection). Does not construct rows or override CTIR;
+  see ``docs/clause_level_referent_tracking.md``.
 """
 from __future__ import annotations
 
@@ -3748,6 +3751,70 @@ def _build_narration_context_head_state(
     }
 
 
+def _project_clause_referent_prompt_hints(
+    referent_tracking: Mapping[str, Any] | None,
+    *,
+    max_rows: int = 4,
+) -> list[dict[str, Any]] | None:
+    """Build ``referent_clause_prompt_hints`` from ``clause_referent_plan`` (read-side only).
+
+    New dict rows; does not mutate *referent_tracking*. Subset of flags/labels already on
+    the artifact — not a parser, planner, or CTIR mirror.
+    """
+    if not isinstance(referent_tracking, Mapping):
+        return None
+    raw = referent_tracking.get("clause_referent_plan")
+    if not isinstance(raw, list) or not raw:
+        return None
+    scored: list[tuple[tuple[int, int, int, str], dict[str, Any]]] = []
+    for row in raw:
+        if not isinstance(row, Mapping):
+            continue
+        cid = str(row.get("clause_id") or "").strip()
+        if not cid:
+            continue
+        amb = str(row.get("ambiguity_class") or "").strip().lower()
+        amb_rank = {"ambiguous_plural": 3, "ambiguous_singular": 2, "no_anchor": 2, "none": 0}.get(amb, 1)
+        tss = 1 if bool(row.get("target_switch_sensitive")) else 0
+        buckets_raw = row.get("risky_pronoun_buckets") if isinstance(row.get("risky_pronoun_buckets"), list) else []
+        norm_buckets: list[str] = []
+        gendered_hits = 0
+        for b in buckets_raw:
+            if not isinstance(b, str):
+                continue
+            bk = str(b).strip().lower().replace(" ", "_")
+            if bk in ("he_him", "she_her", "it_its"):
+                gendered_hits = 1
+            norm_buckets.append(bk)
+        norm_buckets = sorted(dict.fromkeys(norm_buckets))[:6]
+        labels = sorted(
+            {
+                str(x).strip()
+                for x in (row.get("allowed_explicit_labels") or [])
+                if isinstance(x, str) and str(x).strip()
+            }
+        )[:4]
+        ck = str(row.get("clause_kind") or "").strip() or None
+        explicit_anchor_preferred = bool(tss or amb_rank >= 2 or gendered_hits)
+        scored.append(
+            (
+                (-tss, -amb_rank, -gendered_hits, cid),
+                {
+                    "clause_id": cid,
+                    "clause_kind": ck,
+                    "ambiguity_class": amb if amb else None,
+                    "target_switch_sensitive": bool(tss),
+                    "explicit_anchor_preferred": explicit_anchor_preferred,
+                    "risky_pronoun_buckets": norm_buckets,
+                    "allowed_explicit_labels": labels,
+                },
+            )
+        )
+    scored.sort(key=lambda x: x[0])
+    out = [row for _, row in scored[: max(1, max_rows)]]
+    return out or None
+
+
 def build_narration_context(
     campaign: Dict[str, Any],
     world: Dict[str, Any],
@@ -4815,6 +4882,11 @@ def build_narration_context(
         'interlocutor_lead_behavior_hints': interlocutor_lead_behavior_hints,
         'response_policy': response_policy,
         'referent_tracking': referent_tracking,
+        **(
+            {'referent_clause_prompt_hints': h}
+            if (h := _project_clause_referent_prompt_hints(referent_tracking if isinstance(referent_tracking, dict) else None))
+            else {}
+        ),
         'turn_packet': _turn_packet,
         'fallback_behavior': fallback_behavior_contract,
         'uncertainty_hint': eff_uncertainty_hint,

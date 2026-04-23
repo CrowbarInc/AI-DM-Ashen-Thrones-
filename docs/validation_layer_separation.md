@@ -31,6 +31,7 @@ Maintainer-facing contract for **Objective #11**: strict separation of validatio
 - **Prompt bundle** and guard-facing **structure** (`game.prompt_context` and adjacent assembly as documented).
 - **Shipped policy shapes** the writer must satisfy (for example `game.response_policy_contracts` as the canonical **read-side / ship-side** contract owner — **structure**, not post-hoc legality verdict ownership).
 - Coarse **routing** and planner-visible **intent packets** feeding narration.
+- **Objective N5 (`clause_referent_plan` / `referent_clause_prompt_hints`):** Per-slot rows in **`clause_referent_plan`** are **derivative-only** metadata constructed solely in `game.referent_tracking`; `game.prompt_context` may ship **trimmed read-side** **`referent_clause_prompt_hints`** only. Not a second semantic authority, not prose parsing, not CTIR—see `docs/clause_level_referent_tracking.md` and `tests/test_n5_boundary_regressions.py`.
 
 ### GPT (`gpt`)
 
@@ -41,6 +42,7 @@ Maintainer-facing contract for **Objective #11**: strict separation of validatio
 
 - **Deterministic validators** and **inspectors** (`game.final_emission_validators` and peers).
 - **Bounded deterministic repairs** (`game.final_emission_repairs` and peers).
+- **N5 consumption:** Gate referent-clarity logic may **read** optional **`clause_referent_plan`** rows on the full referent artifact; it **does not** construct that field, does not own upstream truth, and stays on the existing **minimal** substitution repair path (`docs/clause_level_referent_tracking.md`, `tests/test_n5_boundary_regressions.py`).
 - **Orchestration** that orders layers, integrates the sanitizer, and seals strict-social / emission paths (`game.final_emission_gate.apply_final_emission_gate` as orchestration owner per ledger).
 - **Objective N4 (Acceptance Quality floor)** — `game.acceptance_quality` supplies a **data-shaped**
   contract and the canonical `validate_and_repair_acceptance_quality` loop; `apply_final_emission_gate`

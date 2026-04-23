@@ -19,6 +19,9 @@
   meaning, or ad-hoc scene/public-state interpretation to invent alternate narration
   structure when CTIR is attached—except for bounded formatting and packaging of slices
   owned upstream (including the narrative plan bundle).
+- **N5:** ``renderer_inputs["referent_tracking"]`` is a deep copy of the full artifact
+  (optional root ``clause_referent_plan`` included). Transport only; construction stays
+  in :mod:`game.referent_tracking` (``docs/clause_level_referent_tracking.md``).
 
 Operator-facing audit names (see ``plan_metadata``): ``narration_plan_bundle_error``;
 ``semantic_bypass_blocked`` corresponds to the requested ``planner_bypass_blocked``
@@ -270,6 +273,7 @@ def build_narration_plan_bundle(
             "scene_state_anchor_contract": copy.deepcopy(head.get("scene_state_anchor_contract")),
             "narration_obligations": copy.deepcopy(head.get("narration_obligations")),
             "turn_packet": copy.deepcopy(turn_packet) if isinstance(turn_packet, dict) else None,
+            # Full artifact including optional N5 ``clause_referent_plan``; transport-only deepcopy.
             "referent_tracking": copy.deepcopy(referent_tracking) if isinstance(referent_tracking, dict) else None,
         },
     }
