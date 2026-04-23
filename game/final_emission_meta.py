@@ -1,5 +1,7 @@
 """FEM packaging, read-side normalization, and FEM-centric observational projections.
 
+Canonical metadata-only owner.
+
 :func:`game.final_emission_gate.apply_final_emission_gate` owns **orchestration** (layer order,
 integration). This module owns **FEM dict shapes**, merges, slim NA traces, dead-turn
 snapshots under ``_final_emission_meta["dead_turn"]``, and **read helpers** / sidecar accessors
@@ -279,6 +281,7 @@ def default_narrative_authenticity_layer_meta() -> Dict[str, Any]:
         "narrative_authenticity_trace": None,
         "narrative_authenticity_relaxation_flags": None,
         "narrative_authenticity_rumor_relaxed_low_signal": False,
+        "narrative_authenticity_boundary_semantic_repair_disabled": False,
     }
 
 
@@ -423,6 +426,9 @@ def merge_narrative_authenticity_into_final_emission_meta(meta: Dict[str, Any], 
             "narrative_authenticity_relaxation_flags": na_dbg.get("narrative_authenticity_relaxation_flags"),
             "narrative_authenticity_rumor_relaxed_low_signal": bool(
                 na_dbg.get("narrative_authenticity_rumor_relaxed_low_signal")
+            ),
+            "narrative_authenticity_boundary_semantic_repair_disabled": bool(
+                na_dbg.get("narrative_authenticity_boundary_semantic_repair_disabled")
             ),
         }
     )

@@ -1,5 +1,7 @@
 """Bounded **stage-diff telemetry** owner (raw snapshots/transitions + read-side event projection).
 
+Canonical telemetry-only owner.
+
 Writes **compare-ready** dicts under ``metadata["stage_diff_telemetry"]`` during gate/retry work.
 That log is observability only — not a second engine truth or legality store.
 

@@ -142,6 +142,7 @@ from game.final_emission_meta import (
     response_type_decision_payload as _response_type_decision_payload,
 )
 from game.state_channels import project_author_payload, project_debug_payload, project_public_payload
+from game.final_emission_boundary_contract import assert_final_emission_mutation_allowed
 from game.final_emission_text import (
     _ACTION_RESULT_PATTERNS,
     _AGENCY_SUBSTITUTE_PATTERNS,
@@ -4033,6 +4034,10 @@ def _apply_upstream_fallback_pregate_containment(out: Dict[str, Any]) -> bool:
     snap = str(prov.get("selector_player_facing_text") or "")
     if not snap or fingerprint_player_facing(snap) != original_fp:
         return False
+    assert_final_emission_mutation_allowed(
+        "preserve_candidate_text",
+        source="gate._apply_upstream_fallback_pregate_containment",
+    )
     out["player_facing_text"] = snap
     md = out.get("metadata") if isinstance(out.get("metadata"), dict) else {}
     prov2 = dict(md.get(METADATA_KEY) or prov)
@@ -4062,6 +4067,10 @@ def _finalize_upstream_fallback_overwrite_containment(
     original_fp = str(prov.get("content_fingerprint") or "")
     if not snap or not original_fp or fingerprint_player_facing(snap) != original_fp:
         return False
+    assert_final_emission_mutation_allowed(
+        "sanitize_html_to_text",
+        source="gate._finalize_upstream_fallback_overwrite_containment",
+    )
     snap_san = _sanitize_output_text(snap)
     if fingerprint_player_facing(snap_san) == original_fp:
         chosen = snap_san
@@ -4069,6 +4078,10 @@ def _finalize_upstream_fallback_overwrite_containment(
         chosen = snap
     else:
         chosen = snap_san
+    assert_final_emission_mutation_allowed(
+        "preserve_candidate_text",
+        source="gate._finalize_upstream_fallback_overwrite_containment",
+    )
     out["player_facing_text"] = chosen
     gate_norm = _normalize_text(chosen)
     contained_kind = (
@@ -4160,6 +4173,10 @@ def _finalize_emission_output(
         record_stage_snapshot(out, "final_emission_gate_exit")
     out.pop("_gate_turn_packet_cache", None)
     final_text = str(out.get("player_facing_text") or "")
+    assert_final_emission_mutation_allowed(
+        "sanitize_html_to_text",
+        source="gate._finalize_emission_output",
+    )
     sanitized_text = _sanitize_output_text(final_text)
     if fast_path:
         smoothed_text = sanitized_text
@@ -4172,8 +4189,16 @@ def _finalize_emission_output(
         fragment_repair_applied = False
         sentence_decompression_applied = False
         sentence_micro_smoothing_applied = False
+    assert_final_emission_mutation_allowed(
+        "strip_route_illegal_contamination",
+        source="gate._finalize_emission_output",
+    )
     smoothed_text = _strip_appended_route_illegal_contamination_sentences(smoothed_text)
     sanitization_applied = sanitized_text != final_text
+    assert_final_emission_mutation_allowed(
+        "normalize_whitespace",
+        source="gate._finalize_emission_output.assign",
+    )
     out["player_facing_text"] = smoothed_text
 
     gate_out_text = _normalize_text(smoothed_text)
@@ -4197,8 +4222,16 @@ def _finalize_emission_output(
     # Legitimate finalize-time edits (including appended stock removal) must not be undone, so
     # re-apply the same narrow strip as the absolute last write on ``player_facing_text``.
     pre_seal = str(out.get("player_facing_text") or "")
+    assert_final_emission_mutation_allowed(
+        "strip_route_illegal_contamination",
+        source="gate._finalize_emission_output.reseal",
+    )
     sealed = _strip_appended_route_illegal_contamination_sentences(pre_seal)
     if sealed != pre_seal:
+        assert_final_emission_mutation_allowed(
+            "normalize_whitespace",
+            source="gate._finalize_emission_output.reseal_assign",
+        )
         out["player_facing_text"] = sealed
         gate_norm_final = _normalize_text(sealed)
         patch_final_emission_meta(
@@ -6476,6 +6509,10 @@ def _apply_first_mention_enforcement(
             emit_integrity_response_type_required or meta.get("response_type_required") or ""
         ),
     )
+    assert_final_emission_mutation_allowed(
+        "hard_replace_illegal_output_with_sealed_fallback",
+        source="gate._apply_first_mention_enforcement",
+    )
     out["player_facing_text"] = fallback_text
     tags = out.get("tags") if isinstance(out.get("tags"), list) else []
     out["tags"] = _dedupe_preserve_order(
@@ -6691,6 +6728,10 @@ def _apply_referential_clarity_enforcement(
             emit_integrity_response_type_required or meta.get("response_type_required") or ""
         ),
     )
+    assert_final_emission_mutation_allowed(
+        "hard_replace_illegal_output_with_sealed_fallback",
+        source="gate._apply_referential_clarity_enforcement",
+    )
     out["player_facing_text"] = fallback_text
     tags = out.get("tags") if isinstance(out.get("tags"), list) else []
     out["tags"] = _dedupe_preserve_order(
@@ -6863,6 +6904,10 @@ def _apply_visibility_enforcement(
         emit_integrity_response_type_required=str(
             emit_integrity_response_type_required or meta.get("response_type_required") or ""
         ),
+    )
+    assert_final_emission_mutation_allowed(
+        "hard_replace_illegal_output_with_sealed_fallback",
+        source="gate._apply_visibility_enforcement",
     )
     out["player_facing_text"] = fallback_text
     tags = out.get("tags") if isinstance(out.get("tags"), list) else []
@@ -8140,7 +8185,15 @@ def _apply_referent_clarity_pre_finalize(out: Dict[str, Any], *, pre_gate_text: 
     if not isinstance(out, dict):
         return
     text_in = str(out.get("player_facing_text") or "")
-    text_out, dbg, _ = _apply_referent_clarity_emission_layer(text_in, gm_output=out)
+    text_out, dbg, _ = _apply_referent_clarity_emission_layer(
+        text_in,
+        gm_output=out,
+        allow_semantic_text_repair=False,
+    )
+    assert_final_emission_mutation_allowed(
+        "preserve_candidate_text",
+        source="gate._apply_referent_clarity_pre_finalize",
+    )
     out["player_facing_text"] = text_out
     fem = ensure_final_emission_meta_dict(out)
     _merge_referent_clarity_meta(fem, dbg)
@@ -8304,6 +8357,10 @@ def _apply_acceptance_quality_n4_floor_seam(
     passed = bool(val1.get("passed"))
     _merge_acceptance_quality_n4_results_into_gate_fem(out, aq1)
     if passed:
+        assert_final_emission_mutation_allowed(
+            "normalize_whitespace",
+            source="gate._apply_acceptance_quality_n4_floor_seam.pass",
+        )
         out["player_facing_text"] = _normalize_text(text1)
         _patch_gate_fem_text_fingerprint(out, pre_gate_text=pre_gate_text)
         return
@@ -8324,9 +8381,17 @@ def _apply_acceptance_quality_n4_floor_seam(
     fem = ensure_final_emission_meta_dict(out)
     fem["acceptance_quality_gate_replaced_candidate"] = True
     fem["acceptance_quality_rejected_reason_codes"] = list(val1.get("reason_codes") or [])
+    assert_final_emission_mutation_allowed(
+        "hard_replace_illegal_output_with_sealed_fallback",
+        source="gate._apply_acceptance_quality_n4_floor_seam",
+    )
     aq2 = validate_and_repair_acceptance_quality(str(fb_line or ""), contract)
     text2 = str(aq2.get("text") or fb_line)
     _merge_acceptance_quality_n4_results_into_gate_fem(out, aq2)
+    assert_final_emission_mutation_allowed(
+        "normalize_whitespace",
+        source="gate._apply_acceptance_quality_n4_floor_seam.replace_normalized",
+    )
     out["player_facing_text"] = _normalize_text(text2)
     out["tags"] = list(out.get("tags") or []) + [
         "final_emission_gate_replaced",
@@ -8977,6 +9042,10 @@ def apply_final_emission_gate(
                 strict_social_path=True,
                 strict_fallback_resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
             )
+            assert_final_emission_mutation_allowed(
+                "normalize_whitespace",
+                source="gate.apply_final_emission_gate.strict_social.ic_text",
+            )
             out["player_facing_text"] = ic_strict_text
             if ic_strict_fb:
                 out["tags"] = list(out.get("tags") or []) + [
@@ -8996,6 +9065,10 @@ def apply_final_emission_gate(
                 strict_social_path=True,
                 session=session if isinstance(session, dict) else None,
                 scene_id=sid,
+            )
+            assert_final_emission_mutation_allowed(
+                "normalize_whitespace",
+                source="gate.apply_final_emission_gate.strict_social.fallback_behavior_text",
             )
             out["player_facing_text"] = fb_text
             _merge_fallback_behavior_into_emission_debug(
@@ -9025,6 +9098,10 @@ def apply_final_emission_gate(
             if _nmo_strict["nmo_enforcement_fail"]:
                 em_fb = minimal_social_emergency_fallback_line(
                     eff_resolution if isinstance(eff_resolution, dict) else None
+                )
+                assert_final_emission_mutation_allowed(
+                    "hard_replace_illegal_output_with_sealed_fallback",
+                    source="gate.apply_final_emission_gate.strict_social.nmo_emergency",
                 )
                 out["player_facing_text"] = em_fb
                 out["tags"] = list(out.get("tags") or []) + [
@@ -9207,6 +9284,10 @@ def apply_final_emission_gate(
             strict_social_path=True,
             session=session if isinstance(session, dict) else None,
             scene_id=sid,
+        )
+        assert_final_emission_mutation_allowed(
+            "normalize_whitespace",
+            source="gate.apply_final_emission_gate.strict_social_replace_path.fallback_behavior_text",
         )
         out["player_facing_text"] = fb_text
         _merge_fallback_behavior_into_emission_debug(
@@ -9800,6 +9881,10 @@ def apply_final_emission_gate(
     deterministic_attempted = False
     deterministic_passed = False
 
+    assert_final_emission_mutation_allowed(
+        "hard_replace_illegal_output_with_sealed_fallback",
+        source="gate.apply_final_emission_gate.replace_path",
+    )
     out["player_facing_text"] = fallback_text
     out["tags"] = tag_list + ["final_emission_gate_replaced", f"final_emission_gate:{fallback_kind}"]
 

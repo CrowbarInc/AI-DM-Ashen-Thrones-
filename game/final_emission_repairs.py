@@ -7,8 +7,9 @@ semantic repair owner, or contract-shaped prose author: answer/action fallbacks 
 refinement cash-out moved to :mod:`game.upstream_response_repairs`; strict-social terminal shaping
 stays in :mod:`game.social_exchange_emission`.
 
-This module keeps strip/remove/substitute surfaces, referent-clarity allow-list substitution,
-narrative-authenticity delegation, and observability merges only—no reorder-for-meaning or template
+This module keeps strip/remove/substitute surfaces, referent-clarity **optional** substitution
+(when ``allow_semantic_text_repair=True`` for non–final-gate callers), narrative-authenticity
+validation-only at the gate boundary, and observability merges—no reorder-for-meaning or template
 synthesis at the boundary.
 """
 from __future__ import annotations
@@ -62,6 +63,7 @@ from game.response_policy_contracts import (
     resolve_fallback_behavior_contract,
     resolve_response_delta_contract,
 )
+from game.final_emission_boundary_contract import assert_final_emission_mutation_allowed
 from game.turn_packet import TURN_PACKET_METADATA_KEY, resolve_turn_packet_for_gate
 
 
@@ -497,6 +499,7 @@ def _default_social_response_structure_meta() -> Dict[str, Any]:
         "social_response_structure_repair_mode": None,
         "social_response_structure_skip_reason": None,
         "social_response_structure_inspect": None,
+        "social_response_structure_boundary_semantic_repair_disabled": False,
     }
 
 
@@ -566,31 +569,17 @@ def _apply_social_response_structure_layer(
     if v0.get("passed"):
         return text, meta, []
 
-    repaired, mode = apply_social_response_structure_repair(
-        text,
-        failure_reasons=list(v0.get("failure_reasons") or []),
-        gm_output=gm_output,
-    )
-    changed = repaired != text and bool(_normalize_text(repaired) != _normalize_text(text))
-    if repaired and mode:
-        meta["social_response_structure_repair_applied"] = True
-        meta["social_response_structure_repair_changed_text"] = changed
-        meta["social_response_structure_repair_mode"] = mode
-
-    v1 = validate_social_response_structure(repaired, None, gm_output=gm_output)
-    meta["social_response_structure_repair_passed"] = bool(v1.get("passed"))
-    if v1.get("passed"):
-        meta["social_response_structure_passed"] = True
-        meta["social_response_structure_failure_reasons"] = []
-        return repaired, meta, []
-
+    # Block C: list→prose / cadence / structural dialogue repairs are SEMANTIC_DISALLOWED at final emission;
+    # record validation only — upstream (``upstream_response_repairs``, social emission) owns repairs.
+    meta["social_response_structure_boundary_semantic_repair_disabled"] = True
     meta["social_response_structure_passed"] = False
-    meta["social_response_structure_failure_reasons"] = list(v1.get("failure_reasons") or v0.get("failure_reasons") or [])
-    meta["social_response_structure_inspect"] = inspect_social_response_structure(v1)
-    extra: List[str] = []
-    if not strict_social_path:
-        extra.append("social_response_structure_unsatisfied_after_repair")
-    return text, meta, extra
+    meta["social_response_structure_failure_reasons"] = list(v0.get("failure_reasons") or [])
+    meta["social_response_structure_repair_applied"] = False
+    meta["social_response_structure_repair_changed_text"] = False
+    meta["social_response_structure_repair_passed"] = False
+    meta["social_response_structure_repair_mode"] = None
+    meta["social_response_structure_inspect"] = inspect_social_response_structure(v0)
+    return text, meta, []
 
 
 def _merge_social_response_structure_meta(meta: Dict[str, Any], srs_dbg: Dict[str, Any]) -> None:
@@ -606,6 +595,9 @@ def _merge_social_response_structure_meta(meta: Dict[str, Any], srs_dbg: Dict[st
             "social_response_structure_repair_mode": srs_dbg.get("social_response_structure_repair_mode"),
             "social_response_structure_skip_reason": srs_dbg.get("social_response_structure_skip_reason"),
             "social_response_structure_inspect": srs_dbg.get("social_response_structure_inspect"),
+            "social_response_structure_boundary_semantic_repair_disabled": bool(
+                srs_dbg.get("social_response_structure_boundary_semantic_repair_disabled")
+            ),
         }
     )
 
@@ -657,7 +649,6 @@ def _apply_narrative_authenticity_layer(
 ) -> tuple[str, Dict[str, Any], List[str]]:
     """NA layer runs **after** ``_apply_response_delta_layer``; NA repairs must not subsume delta repair."""
     from game.narrative_authenticity import (
-        repair_narrative_authenticity_minimal,
         resolve_narrative_authenticity_contract,
         validate_narrative_authenticity,
     )
@@ -707,33 +698,18 @@ def _apply_narrative_authenticity_layer(
 
     meta["narrative_authenticity_failed"] = True
     meta["narrative_authenticity_failure_reasons"] = list(v0.get("failure_reasons") or [])
+    meta["narrative_authenticity_boundary_semantic_repair_disabled"] = True
+    meta["narrative_authenticity_repaired"] = False
+    meta["narrative_authenticity_repair_applied"] = False
+    meta["narrative_authenticity_repair_mode"] = None
+    meta["narrative_authenticity_repair_failure_reason"] = "semantic_repair_must_occur_upstream"
     meta.update(
-        build_narrative_authenticity_emission_trace(v0, contract=contract, repaired=False, repair_failed=False)
+        build_narrative_authenticity_emission_trace(v0, contract=contract, repaired=False, repair_failed=True)
     )
-
-    repaired, mode = repair_narrative_authenticity_minimal(text, v0, contract, gm_output=gm_output)
-    if repaired:
-        v1 = validate_narrative_authenticity(repaired, contract, gm_output=gm_output)
-        if v1.get("passed"):
-            meta["narrative_authenticity_repaired"] = True
-            meta["narrative_authenticity_repair_applied"] = True
-            meta["narrative_authenticity_repair_mode"] = mode
-            meta["narrative_authenticity_failed"] = False
-            meta["narrative_authenticity_failure_reasons"] = []
-            meta.update(
-                build_narrative_authenticity_emission_trace(
-                    v1, contract=contract, repaired=True, repair_mode=mode, repair_failed=False
-                )
-            )
-            return repaired, meta, []
 
     extra: List[str] = []
     if not strict_social_path:
         extra.append("narrative_authenticity_unsatisfied_after_repair")
-    meta["narrative_authenticity_failed"] = True
-    meta.update(
-        build_narrative_authenticity_emission_trace(v0, contract=contract, repaired=False, repair_failed=True)
-    )
     return text, meta, extra
 
 
@@ -1506,6 +1482,10 @@ def repair_fallback_behavior(
     if val.get("meta_fallback_voice_detected"):
         stripped = _strip_meta_fallback_voice(working, contract=ctr)
         if _normalize_text(stripped) != _normalize_text(working):
+            assert_final_emission_mutation_allowed(
+                "strip_meta_fallback_voice_surfaces",
+                source="final_emission_repairs.repair_fallback_behavior.strip_meta_voice",
+            )
             working = stripped
             meta["fallback_behavior_meta_voice_stripped"] = True
             modes.append("strip_meta_voice")
@@ -1513,12 +1493,20 @@ def repair_fallback_behavior(
     if val.get("fabricated_authority_detected"):
         stripped = _remove_fabricated_authority(working, contract=ctr)
         if _normalize_text(stripped) != _normalize_text(working):
+            assert_final_emission_mutation_allowed(
+                "strip_fabricated_authority_surfaces",
+                source="final_emission_repairs.repair_fallback_behavior.remove_fabricated_authority",
+            )
             working = stripped
             modes.append("remove_fabricated_authority")
 
     if val.get("invented_certainty_detected"):
         stripped = _downgrade_overcertain_claims(working, contract=ctr)
         if _normalize_text(stripped) != _normalize_text(working):
+            assert_final_emission_mutation_allowed(
+                "trim_overcertain_claim_spans",
+                source="final_emission_repairs.repair_fallback_behavior.downgrade_invented_certainty",
+            )
             working = stripped
             modes.append("downgrade_invented_certainty")
 
@@ -1618,6 +1606,7 @@ def _default_referent_clarity_layer_meta() -> Dict[str, Any]:
         "referent_repair_strategy": None,
         "referent_repair_skipped_reason": None,
         "unresolved_referent_ambiguity": False,
+        "referent_boundary_semantic_repair_disabled": False,
     }
 
 
@@ -1633,6 +1622,7 @@ def _merge_referent_clarity_meta(meta: Dict[str, Any], dbg: Dict[str, Any]) -> N
             "referent_repair_strategy": dbg.get("referent_repair_strategy"),
             "referent_repair_skipped_reason": dbg.get("referent_repair_skipped_reason"),
             "unresolved_referent_ambiguity": bool(dbg.get("unresolved_referent_ambiguity")),
+            "referent_boundary_semantic_repair_disabled": bool(dbg.get("referent_boundary_semantic_repair_disabled")),
         }
     )
 
@@ -1742,6 +1732,7 @@ def _apply_referent_clarity_emission_layer(
     text: str,
     *,
     gm_output: Dict[str, Any],
+    allow_semantic_text_repair: bool = True,
 ) -> tuple[str, Dict[str, Any], List[str]]:
     meta = _default_referent_clarity_layer_meta()
     full, compact = _resolve_referent_tracking_inputs(gm_output)
@@ -1770,6 +1761,11 @@ def _apply_referent_clarity_emission_layer(
         return text, meta, []
 
     if not v0.get("referent_violation_categories"):
+        return text, meta, []
+
+    if not allow_semantic_text_repair:
+        meta["referent_boundary_semantic_repair_disabled"] = True
+        meta["referent_repair_skipped_reason"] = "semantic_repair_must_occur_upstream"
         return text, meta, []
 
     repaired, mode = _repair_referent_clarity_minimal(text, v0, full)

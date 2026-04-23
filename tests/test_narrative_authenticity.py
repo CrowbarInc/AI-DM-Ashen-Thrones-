@@ -345,7 +345,7 @@ def test_rumor_realism_relaxed_pass_surfaces_in_emission_trace():
 
 
 def test_apply_na_layer_repaired_sets_status_and_repair_modes():
-    # Match ``test_repair_rumor_drops_echo_clause_preserves_source_uncertainty`` (known fail → repair).
+    # Final emission records failure + upstream repair requirement (Block C); no boundary NA repair.
     c = build_narrative_authenticity_contract(
         player_text="What have you heard about the east gate?",
         recent_log_compact=[
@@ -367,6 +367,8 @@ def test_apply_na_layer_repaired_sets_status_and_repair_modes():
         response_type_debug={"response_type_candidate_ok": True},
         strict_social_path=False,
     )
-    assert meta.get("narrative_authenticity_status") == "repaired"
-    assert meta.get("narrative_authenticity_repair_mode") == "drop_echoed_rumor_clause"
-    assert meta.get("narrative_authenticity_repair_modes") == ["drop_echoed_rumor_clause"]
+    assert out == text
+    assert meta.get("narrative_authenticity_status") == "fail"
+    assert meta.get("narrative_authenticity_boundary_semantic_repair_disabled") is True
+    assert meta.get("narrative_authenticity_repair_mode") is None
+    assert meta.get("narrative_authenticity_repair_failure_reason") == "semantic_repair_must_occur_upstream"

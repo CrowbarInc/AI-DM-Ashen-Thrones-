@@ -625,13 +625,14 @@ def test_referent_clarity_pre_finalize_merges_fem_and_tracks_input_source():
     fem = read_final_emission_meta_dict(out)
     assert fem["referent_validation_input_source"] == "full_artifact"
     assert fem["referent_validation_ran"] is True
-    assert fem["referent_repair_applied"] is True
-    assert "Gate sergeant" in out["player_facing_text"]
+    assert fem["referent_repair_applied"] is False
+    assert fem.get("referent_boundary_semantic_repair_disabled") is True
+    assert out["player_facing_text"] == "They halt."
     assert fem.get("tone_escalation") == {"lane": "stub"}
     gtxt = _normalize_text(out["player_facing_text"])
     preview = (gtxt[:120] + "…") if len(gtxt) > 120 else gtxt
     assert fem.get("final_text_preview") == preview
-    assert fem.get("post_gate_mutation_detected") is True
+    assert fem.get("post_gate_mutation_detected") is False
 
 
 def test_referent_clarity_pre_finalize_four_gate_exit_paths_all_use_same_hook():
@@ -3249,10 +3250,10 @@ def test_non_strict_social_failed_repair_adds_unsatisfied_after_repair_reason(mo
         world={},
     )
     meta = read_final_emission_meta_dict(out) or {}
-    dbg = str(read_emission_debug_lane(out).get("debug_notes") or "")
-    assert "social_response_structure_unsatisfied_after_repair" in dbg
-    assert meta.get("final_route") == "replaced"
-    assert "social_response_structure_unsatisfied_after_repair" in (meta.get("rejection_reasons_sample") or [])
+    assert meta.get("social_response_structure_passed") is False
+    assert meta.get("social_response_structure_boundary_semantic_repair_disabled") is True
+    assert meta.get("social_response_structure_repair_applied") is False
+    assert _normalize_text(bad) == _normalize_text(str(out.get("player_facing_text") or ""))
 
 
 def test_strict_social_failed_repair_does_not_add_unsatisfied_after_repair_reason(monkeypatch):
@@ -3293,7 +3294,7 @@ def test_strict_social_failed_repair_does_not_add_unsatisfied_after_repair_reaso
     assert "social_response_structure_unsatisfied_after_repair" not in (meta.get("rejection_reasons_sample") or [])
 
 
-def test_successful_social_response_structure_repair_updates_final_emitted_source(monkeypatch):
+def test_social_response_structure_boundary_skips_list_to_prose_repair(monkeypatch):
     monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
     pol = _dialogue_response_policy_with_social_structure()
     bullet = '- "East gate is two hundred feet south," he says.\n- "Patrols chart that lane nightly."'
@@ -3305,12 +3306,12 @@ def test_successful_social_response_structure_repair_updates_final_emitted_sourc
         world={},
     )
     meta = read_final_emission_meta_dict(out) or {}
-    assert meta.get("social_response_structure_repair_applied") is True
-    assert meta.get("social_response_structure_passed") is True
-    assert meta.get("final_emitted_source") == "flatten_list_like_dialogue"
+    assert meta.get("social_response_structure_repair_applied") is False
+    assert meta.get("social_response_structure_boundary_semantic_repair_disabled") is True
+    assert meta.get("social_response_structure_passed") is False
     out_txt = out.get("player_facing_text") or ""
     assert "east gate" in out_txt.lower() and "patrols" in out_txt.lower()
-    assert not any(ln.lstrip().startswith("-") for ln in out_txt.splitlines() if ln.strip())
+    assert any(ln.lstrip().startswith("-") for ln in out_txt.splitlines() if ln.strip())
 
 
 def test_social_response_structure_metadata_merged_on_layer_execution(monkeypatch):
@@ -3344,6 +3345,7 @@ def test_social_response_structure_metadata_merged_on_layer_execution(monkeypatc
     assert meta.get("social_response_structure_checked") is True
     assert meta.get("social_response_structure_applicable") is True
     assert meta.get("social_response_structure_passed") is True
+    assert meta.get("social_response_structure_repair_applied") is False
 
 
 def test_social_response_structure_skip_path_records_skip_reason_on_answer_completeness_failed():

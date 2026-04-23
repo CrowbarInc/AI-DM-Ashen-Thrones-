@@ -379,8 +379,9 @@ def test_apply_layer_repaired_vs_fail_terminal_meta():
         response_type_debug={"response_type_candidate_ok": True},
         strict_social_path=False,
     )
-    assert meta_rep.get("narrative_authenticity_status") == "repaired"
-    assert meta_rep.get("narrative_authenticity_repair_mode") == "drop_echoed_rumor_clause"
+    assert meta_rep.get("narrative_authenticity_status") == "fail"
+    assert meta_rep.get("narrative_authenticity_boundary_semantic_repair_disabled") is True
+    assert meta_rep.get("narrative_authenticity_repair_mode") is None
 
     gm2 = _gm_with_na(c)
     _o3, meta_fail, _ = _apply_narrative_authenticity_layer(
