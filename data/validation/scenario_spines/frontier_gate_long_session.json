@@ -63,6 +63,11 @@
       "anchor_id": "prog_watch_tightens",
       "description": "Watch posture should harden if the player presses publically or spikes panic.",
       "expected_change_summary": "world: gate_security_or_curfew_enforcement_escalates"
+    },
+    {
+      "anchor_id": "prog_intrusion_consequences",
+      "description": "Unauthorized push should yield cordon, roster lock, or forced withdrawal—not polite answers.",
+      "expected_change_summary": "world: access_conflict_or_intrusion_backlash_escalates"
     }
   ],
   "checkpoints": [
@@ -116,7 +121,7 @@
     {
       "branch_id": "branch_direct_intrusion",
       "label": "Direct action / risky intrusion",
-      "notes": "Force doors, confront watchers, spike gate tension.",
+      "notes": "Bypass courtesy: forced access, roster pressure, cordon, repositioning—not the tavern rumor arc.",
       "turns": [
         {"turn_id": "act_01", "player_prompt": "I slip toward the narrow alley without announcing myself."},
         {"turn_id": "act_02", "player_prompt": "I try the warehouse side door when guards look away."},
@@ -125,7 +130,24 @@
         {"turn_id": "act_05", "player_prompt": "I press through mud toward the gate serjeant."},
         {"turn_id": "act_06", "player_prompt": "I shout a blunt question about the missing patrol."},
         {"turn_id": "act_07", "player_prompt": "I offer a low bribe for duty-roster facts."},
-        {"turn_id": "act_08", "player_prompt": "I sprint for the crates when a hooded figure moves."}
+        {"turn_id": "act_08", "player_prompt": "I sprint for the crates when a hooded figure moves."},
+        {"turn_id": "act_09", "player_prompt": "I shoulder past a census clerk blocking the choke cart lane."},
+        {"turn_id": "act_10", "player_prompt": "I rip a half-torn curfew addendum off the board and read it in the open."},
+        {"turn_id": "act_11", "player_prompt": "I demand the serjeant open the side wicket for inspection now."},
+        {"turn_id": "act_12", "player_prompt": "I claim authority I do not have and stride toward the inner watch post."},
+        {"turn_id": "act_13", "player_prompt": "I jam a crate under the warehouse latch to keep the door from closing."},
+        {"turn_id": "act_14", "player_prompt": "I vault a cordon rope the watch just strung across the mud line."},
+        {"turn_id": "act_15", "player_prompt": "I stare down the hooded lurker until they break and run—I pursue."},
+        {"turn_id": "act_16", "player_prompt": "I slam my palm on the roster board and refuse to step back."},
+        {"turn_id": "act_17", "player_prompt": "I accuse the gate of hiding patrol losses and let the crowd hear it."},
+        {"turn_id": "act_18", "player_prompt": "I press charcoal rag to the duty chalk slate to lift its markings."},
+        {"turn_id": "act_19", "player_prompt": "I wedge myself in the wicket when they move to shut it on me."},
+        {"turn_id": "act_20", "player_prompt": "I shove a lantern hook toward the tavern runner to stop them leaving."},
+        {"turn_id": "act_21", "player_prompt": "I double back through the alley to flank the serjeant’s blind side."},
+        {"turn_id": "act_22", "player_prompt": "I kick a loose cobble toward the watch boots to force a reaction."},
+        {"turn_id": "act_23", "player_prompt": "I refuse dispersal orders and plant my feet at the notice board."},
+        {"turn_id": "act_24", "player_prompt": "I grab the crate stack to climb for a roofline view of the gate yard."},
+        {"turn_id": "act_25", "player_prompt": "I break off under whistles, melting into the eastern mud with heat on my heels."}
       ]
     },
     {

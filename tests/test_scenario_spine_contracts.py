@@ -71,6 +71,17 @@ def test_frontier_gate_fixture_loads_and_validates() -> None:
     assert len(spine.branches) == 3
     by_id = {b.branch_id: b for b in spine.branches}
     assert len(by_id["branch_social_inquiry"].turns) >= 25
+    long_branches = [b for b in spine.branches if len(b.turns) >= 20]
+    assert len(long_branches) >= 2
+    long_scripted_total = sum(len(b.turns) for b in long_branches)
+    assert 40 <= long_scripted_total <= 60
+    seen_turn_ids: set[str] = set()
+    for b in spine.branches:
+        branch_ids = {t.turn_id for t in b.turns}
+        assert len(branch_ids) == len(b.turns), f"duplicate turn_id within {b.branch_id}"
+        dup = seen_turn_ids & branch_ids
+        assert not dup, f"turn_id collision across branches: {dup}"
+        seen_turn_ids |= branch_ids
     assert scenario_spine_from_dict(scenario_spine_to_dict(spine)).spine_id == spine.spine_id
 
 

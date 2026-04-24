@@ -29,7 +29,10 @@ from game.scenario_spine import (  # noqa: E402
     scenario_spine_from_dict,
     validate_scenario_spine_definition,
 )
-from game.scenario_spine_eval import evaluate_scenario_spine_session  # noqa: E402
+from game.scenario_spine_eval import (  # noqa: E402
+    evaluate_scenario_spine_branch_divergence,
+    evaluate_scenario_spine_session,
+)
 
 DEFAULT_SPINE_PATH = ROOT / "data" / "validation" / "scenario_spines" / "frontier_gate_long_session.json"
 DEFAULT_ARTIFACT_ROOT = ROOT / "artifacts" / "scenario_spine_validation"
@@ -275,6 +278,268 @@ def build_operator_summary_md(
     return "\n".join(lines)
 
 
+@dataclass(frozen=True)
+class BranchRunResult:
+    branch_id_requested: str
+    branch_id_resolved: str
+    run_dir: Path
+    eval_result: dict[str, Any]
+    executed_turns: int
+    spine_branch_turns: int
+    scope_label: str
+
+
+def _session_health_from_eval(eval_result: Mapping[str, Any]) -> dict[str, Any]:
+    sh = eval_result.get("session_health")
+    return sh if isinstance(sh, dict) else {}
+
+
+def _long_spine_branch(session_health: Mapping[str, Any]) -> bool:
+    return int(session_health.get("scripted_turn_count") or 0) >= 20
+
+
+def _long_branch_row(session_health: Mapping[str, Any]) -> bool:
+    return bool(session_health.get("full_length_branch")) or _long_spine_branch(session_health)
+
+
+def build_aggregate_session_health_summary(
+    spine: ScenarioSpine,
+    branch_results: Sequence[BranchRunResult],
+    *,
+    smoke: bool,
+    max_turns: int | None,
+    run_timestamp: str,
+) -> dict[str, Any]:
+    """Spine-level aggregate for ``--all-branches`` runs; JSON-serializable."""
+    results = list(branch_results)
+    branches_run = [r.branch_id_resolved for r in results]
+    branch_turn_counts: dict[str, int] = {}
+    branch_classifications: dict[str, str] = {}
+    branch_failures: dict[str, list[Any]] = {}
+    branch_warnings: dict[str, list[Any]] = {}
+    degradation_over_time_by_branch: dict[str, Any] = {}
+
+    total_executed_turns = 0
+    long_branch_count = 0
+
+    for r in results:
+        ev = r.eval_result
+        sh = _session_health_from_eval(ev)
+        bid = r.branch_id_resolved
+        tc = int(sh.get("turn_count", r.executed_turns))
+        branch_turn_counts[bid] = tc
+        total_executed_turns += tc
+        branch_classifications[bid] = str(sh.get("classification") or "")
+        fails = ev.get("detected_failures") or []
+        warns = ev.get("warnings") or []
+        branch_failures[bid] = list(fails) if isinstance(fails, list) else []
+        branch_warnings[bid] = list(warns) if isinstance(warns, list) else []
+        deg = ev.get("degradation_over_time")
+        degradation_over_time_by_branch[bid] = deg if isinstance(deg, dict) else {}
+        if _long_branch_row(sh):
+            long_branch_count += 1
+
+    long_scripted_results = [r for r in results if _long_spine_branch(_session_health_from_eval(r.eval_result))]
+    coverage_turn_total = sum(
+        int(_session_health_from_eval(r.eval_result).get("turn_count", r.executed_turns)) for r in long_scripted_results
+    )
+    long_targets_complete = all(
+        bool(_session_health_from_eval(r.eval_result).get("full_length_branch")) for r in long_scripted_results
+    )
+    long_targets_all_passed = bool(long_scripted_results) and all(
+        bool(_session_health_from_eval(r.eval_result).get("overall_passed")) for r in long_scripted_results
+    )
+    coverage_band_met = (
+        not smoke
+        and bool(long_scripted_results)
+        and long_targets_complete
+        and 40 <= coverage_turn_total <= 60
+    )
+
+    all_full_length_branches_passed = bool(long_scripted_results) and all(
+        bool(_session_health_from_eval(r.eval_result).get("full_length_branch"))
+        and bool(_session_health_from_eval(r.eval_result).get("overall_passed"))
+        for r in long_scripted_results
+    )
+
+    transcripts_for_div: dict[str, list[dict[str, Any]]] = {}
+    for r in results:
+        path = r.run_dir / "transcript.json"
+        raw = json.loads(path.read_text(encoding="utf-8"))
+        turns = raw.get("turns")
+        transcripts_for_div[r.branch_id_resolved] = list(turns) if isinstance(turns, list) else []
+
+    branch_divergence = evaluate_scenario_spine_branch_divergence(spine, transcripts_for_div)
+
+    return {
+        "schema_version": 1,
+        "spine_id": spine.spine_id,
+        "run_timestamp": run_timestamp,
+        "branches_run": branches_run,
+        "branch_turn_counts": dict(sorted(branch_turn_counts.items(), key=lambda kv: kv[0])),
+        "total_executed_turns": total_executed_turns,
+        "long_branch_count": long_branch_count,
+        "coverage_band_met": coverage_band_met,
+        "all_full_length_branches_passed": all_full_length_branches_passed,
+        "branch_classifications": dict(sorted(branch_classifications.items(), key=lambda kv: kv[0])),
+        "branch_failures": {k: branch_failures[k] for k in sorted(branch_failures)},
+        "branch_warnings": {k: branch_warnings[k] for k in sorted(branch_warnings)},
+        "degradation_over_time_by_branch": dict(
+            sorted(degradation_over_time_by_branch.items(), key=lambda kv: kv[0]),
+        ),
+        "branch_divergence": branch_divergence,
+        "aggregate_meta": {
+            "smoke": smoke,
+            "max_turns": max_turns,
+            "coverage_turn_total_long_scripted_branches": coverage_turn_total,
+            "long_scripted_branch_ids": [r.branch_id_resolved for r in long_scripted_results],
+            "long_targets_complete": long_targets_complete,
+            "long_targets_all_passed": long_targets_all_passed,
+        },
+    }
+
+
+def build_aggregate_operator_summary_md(
+    spine: ScenarioSpine,
+    aggregate: Mapping[str, Any],
+    branch_results: Sequence[BranchRunResult],
+) -> str:
+    """Markdown companion for ``aggregate_session_health_summary.json``."""
+    meta = aggregate.get("aggregate_meta") if isinstance(aggregate.get("aggregate_meta"), dict) else {}
+    smoke = bool(meta.get("smoke"))
+    max_turns = meta.get("max_turns")
+    div = aggregate.get("branch_divergence") if isinstance(aggregate.get("branch_divergence"), dict) else {}
+    div_score = div.get("divergence_score", "")
+    div_distinct = div.get("distinct_outcomes_detected", "")
+    div_bleed = div.get("shared_prompt_bleed_detected", "")
+    cov_met = aggregate.get("coverage_band_met")
+    cov_note = (
+        "40–60 turn band (full-length / scripted≥20 branches only) met"
+        if cov_met
+        else "40–60 band not claimed (smoke/partial/short aggregate or total outside band)"
+    )
+
+    lines = [
+        f"# Scenario spine validation — aggregate / {aggregate.get('spine_id', spine.spine_id)}",
+        "",
+        f"- **Run timestamp:** `{aggregate.get('run_timestamp', '')}`",
+        f"- **Branches run:** {', '.join(str(x) for x in (aggregate.get('branches_run') or []))}",
+        f"- **Smoke:** {smoke} · **max_turns:** {max_turns}",
+        f"- **Total executed turns (all branches):** {aggregate.get('total_executed_turns', '')}",
+        f"- **Long-branch row count:** {aggregate.get('long_branch_count', '')}",
+        f"- **Coverage:** {cov_note} (`coverage_band_met={cov_met}`)",
+        f"- **All long-scripted branches passed:** `{aggregate.get('all_full_length_branches_passed')}`",
+        "",
+        "## Branch table",
+        "",
+        "| Branch | Scripted turns | Executed turns | Classification | Score | Degradation (progressive) |",
+        "|--------|----------------|----------------|----------------|-------|---------------------------|",
+    ]
+
+    branches_run = list(aggregate.get("branches_run") or [])
+    deg_by = (
+        aggregate.get("degradation_over_time_by_branch")
+        if isinstance(aggregate.get("degradation_over_time_by_branch"), dict)
+        else {}
+    )
+    by_resolved: dict[str, BranchRunResult] = {r.branch_id_resolved: r for r in branch_results}
+
+    def _md_cell(s: Any) -> str:
+        t = str(s).replace("|", "\\|").replace("\n", " ")
+        return t or "—"
+
+    for bid in branches_run:
+        r = by_resolved.get(bid)
+        sh = _session_health_from_eval(r.eval_result) if r else {}
+        scripted = int(sh.get("scripted_turn_count") or (r.spine_branch_turns if r else 0))
+        executed = int(sh.get("turn_count") or (r.executed_turns if r else 0))
+        cls = str(aggregate.get("branch_classifications", {}).get(bid, sh.get("classification", "")))
+        score = sh.get("score", "")
+        deg = deg_by.get(bid) if isinstance(deg_by.get(bid), dict) else {}
+        prog = deg.get("progressive_degradation_detected", "") if isinstance(deg, dict) else ""
+        lines.append(
+            "| "
+            + " | ".join(
+                (
+                    f"`{bid}`",
+                    str(scripted),
+                    str(executed),
+                    _md_cell(cls),
+                    _md_cell(score),
+                    _md_cell(prog),
+                ),
+            )
+            + " |",
+        )
+
+    lines += [
+        "",
+        "## Divergence (cross-branch)",
+        "",
+        f"- **Divergence score:** {div_score}",
+        f"- **Distinct outcomes detected:** {div_distinct}",
+        f"- **Shared prompt bleed:** {div_bleed}",
+        f"- **Reason codes:** {', '.join(str(x) for x in (div.get('reason_codes') or []) if x is not None) or '_(none)_'}",
+        "",
+        "## Degradation (per branch)",
+        "",
+    ]
+    for bid in branches_run:
+        deg = deg_by.get(bid) if isinstance(deg_by.get(bid), dict) else {}
+        reasons = ", ".join(str(x) for x in (deg.get("reason_codes") or []) if x is not None) if isinstance(deg, dict) else ""
+        prog = deg.get("progressive_degradation_detected") if isinstance(deg, dict) else None
+        lines.append(f"- **`{bid}`:** progressive={prog}; reason_codes={reasons or '_(none)_'}")
+
+    top_branch = ""
+    top_axis = ""
+    best_n = -1
+    for r in branch_results:
+        ev = r.eval_result
+        fails = ev.get("detected_failures") or []
+        n = len(fails) if isinstance(fails, list) else 0
+        if n > best_n:
+            best_n = n
+            top_branch = r.branch_id_resolved
+            top_axis = _suggested_debug_focus(ev) if n else ""
+    lines += [
+        "",
+        "## Top blocking branch / axis",
+        "",
+    ]
+    if best_n > 0:
+        lines.append(f"- **Branch:** `{top_branch}` ({best_n} failure row(s))")
+        lines.append(f"- **Suggested axis focus:** {top_axis}")
+    else:
+        lines.append("- _(no detected_failures rows across branches)_")
+
+    lines.append("")
+    return "\n".join(lines)
+
+
+def write_aggregate_spine_artifacts(
+    spine: ScenarioSpine,
+    aggregate_dir: Path,
+    branch_results: Sequence[BranchRunResult],
+    *,
+    smoke: bool,
+    max_turns: int | None,
+    run_timestamp: str,
+) -> None:
+    """Write spine-level aggregate JSON/Markdown under ``aggregate_dir`` (``…/<stamp>/<spine_id>/``)."""
+    agg = build_aggregate_session_health_summary(
+        spine,
+        branch_results,
+        smoke=smoke,
+        max_turns=max_turns,
+        run_timestamp=run_timestamp,
+    )
+    _write_json(aggregate_dir / "aggregate_session_health_summary.json", agg)
+    _write_text(
+        aggregate_dir / "aggregate_operator_summary.md",
+        build_aggregate_operator_summary_md(spine, agg, branch_results),
+    )
+
+
 def _make_http_caller(base_url: str, *, timeout_s: float) -> ChatCaller:
     root = base_url.rstrip("/")
 
@@ -304,17 +569,6 @@ def _make_http_caller(base_url: str, *, timeout_s: float) -> ChatCaller:
             return {"ok": False, "error": str(exc)}
 
     return call
-
-
-@dataclass(frozen=True)
-class BranchRunResult:
-    branch_id_requested: str
-    branch_id_resolved: str
-    run_dir: Path
-    eval_result: dict[str, Any]
-    executed_turns: int
-    spine_branch_turns: int
-    scope_label: str
 
 
 def run_scenario_spine_branch(
@@ -547,6 +801,20 @@ def main(argv: list[str] | None = None) -> int:
             print(f"Wrote {run_dir / 'transcript.json'}")
             print(f"Wrote {run_dir / 'session_health_summary.json'}")
             print(f"Wrote {run_dir / 'compact_operator_summary.md'}")
+
+        if args.all_branches:
+            agg_dir = base_out / stamp / spine.spine_id
+            ts = datetime.now(timezone.utc).isoformat()
+            write_aggregate_spine_artifacts(
+                spine,
+                agg_dir,
+                results,
+                smoke=bool(args.smoke),
+                max_turns=args.max_turns,
+                run_timestamp=ts,
+            )
+            print(f"Wrote {agg_dir / 'aggregate_session_health_summary.json'}")
+            print(f"Wrote {agg_dir / 'aggregate_operator_summary.md'}")
 
         if args.all_branches and len(results) > 1:
             full_ids = [r.branch_id_resolved for r in results if r.scope_label == "full"]

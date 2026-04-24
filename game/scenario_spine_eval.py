@@ -130,6 +130,203 @@ def _jsonable(value: Any) -> Any:
     return str(value)
 
 
+def _normalize_branch_transcripts_input(
+    branch_transcripts_or_summaries: Mapping[str, Sequence[Mapping[str, Any]]]
+    | Sequence[Mapping[str, Any]],
+) -> dict[str, list[Mapping[str, Any]]]:
+    if isinstance(branch_transcripts_or_summaries, Mapping):
+        return {str(k): list(v) for k, v in sorted(branch_transcripts_or_summaries.items(), key=lambda kv: str(kv[0]))}
+    if isinstance(branch_transcripts_or_summaries, (str, bytes)):
+        msg = "branch_transcripts_or_summaries must be a mapping or sequence of mappings"
+        raise TypeError(msg)
+    if not isinstance(branch_transcripts_or_summaries, Sequence):
+        msg = "branch_transcripts_or_summaries must be a mapping or sequence"
+        raise TypeError(msg)
+    out: dict[str, list[Mapping[str, Any]]] = {}
+    for i, item in enumerate(branch_transcripts_or_summaries):
+        if not isinstance(item, Mapping):
+            msg = f"branch entry {i} must be a mapping"
+            raise TypeError(msg)
+        bid = item.get("branch_id")
+        if not isinstance(bid, str) or not bid.strip():
+            msg = f"branch entry {i} needs non-empty branch_id"
+            raise ValueError(msg)
+        turns = item.get("turns")
+        if not isinstance(turns, Sequence) or isinstance(turns, (str, bytes)):
+            msg = f"branch entry {i} needs turns sequence"
+            raise TypeError(msg)
+        out[str(bid).strip()] = list(turns)
+    return dict(sorted(out.items()))
+
+
+def _final_window_gm(turns: Sequence[Mapping[str, Any]]) -> str:
+    n = len(turns)
+    if n == 0:
+        return ""
+    span = max(3, max(1, n // 5))
+    start = max(0, n - span)
+    parts = [str(turns[i]["gm_text"]) for i in range(start, n)]
+    return _norm_text("\n".join(parts))
+
+
+def _token_jaccard(a: str, b: str) -> float:
+    ta = set(_norm_text(a).split())
+    tb = set(_norm_text(b).split())
+    if not ta and not tb:
+        return 1.0
+    inter = len(ta & tb)
+    union = len(ta | tb) or 1
+    return inter / union
+
+
+def _branch_player_concat(turns: Sequence[Mapping[str, Any]]) -> str:
+    return _norm_text(" ".join(str(t["player_text"]) for t in turns))
+
+
+_CONSEQUENCE_LEXICON: tuple[tuple[str, str], ...] = (
+    ("outcome_patrol", "missing patrol"),
+    ("outcome_patrol", "patrol route"),
+    ("outcome_intrusion", "forced entry"),
+    ("outcome_intrusion", "blade drawn"),
+    ("outcome_negotiation", "negotiation"),
+    ("outcome_negotiation", "parley"),
+    ("outcome_census", "census lockdown"),
+    ("outcome_census", "census lines"),
+    ("outcome_arrest", "arrest"),
+    ("outcome_arrest", "detained"),
+    ("outcome_flee", "withdraw"),
+    ("outcome_flee", "retreat"),
+)
+
+
+def _consequence_term_hits(norm_text: str) -> frozenset[str]:
+    hits: set[str] = set()
+    for tag, needle in _CONSEQUENCE_LEXICON:
+        if needle in norm_text:
+            hits.add(tag)
+    return frozenset(hits)
+
+
+def _detect_shared_prompt_bleed(turns_by: dict[str, tuple[dict[str, Any], ...]]) -> bool:
+    ids = sorted(turns_by)
+    for i, a in enumerate(ids):
+        for b in ids[i + 1 :]:
+            gm_b = _norm_text("\n".join(str(t["gm_text"]) for t in turns_by[b]))
+            gm_a = _norm_text("\n".join(str(t["gm_text"]) for t in turns_by[a]))
+            for t in turns_by[a]:
+                p = _norm_text(str(t["player_text"]))
+                if len(p) >= 24 and p in gm_b:
+                    return True
+            for t in turns_by[b]:
+                p = _norm_text(str(t["player_text"]))
+                if len(p) >= 24 and p in gm_a:
+                    return True
+    return False
+
+
+def evaluate_scenario_spine_branch_divergence(
+    spine: Mapping[str, Any] | ScenarioSpine,
+    branch_transcripts_or_summaries: Mapping[str, Sequence[Mapping[str, Any]]]
+    | Sequence[Mapping[str, Any]],
+) -> dict[str, Any]:
+    """Compare multiple branch transcripts for deterministic divergence (no model calls).
+
+    ``branch_transcripts_or_summaries`` may be:
+    - a mapping ``branch_id -> sequence of turn rows`` (same shape as session rows), or
+    - a sequence of ``{"branch_id": str, "turns": [...]}`` objects.
+    """
+    model = _coerce_spine(spine)
+    by_branch = _normalize_branch_transcripts_input(branch_transcripts_or_summaries)
+    branch_ids = sorted(by_branch)
+    reason_codes: list[str] = []
+    if len(branch_ids) < 2:
+        out = {
+            "schema_version": 1,
+            "scenario_id": model.spine_id,
+            "same_start_state": True,
+            "branches_compared": branch_ids,
+            "distinct_outcomes_detected": False,
+            "divergence_score": 0.0,
+            "shared_prompt_bleed_detected": False,
+            "reason_codes": ["insufficient_branches"],
+        }
+        return _jsonable(out)
+
+    spine_branch_ids = {b.branch_id for b in model.branches}
+    unknown = sorted(bid for bid in branch_ids if bid not in spine_branch_ids)
+    if unknown:
+        reason_codes.append(f"unknown_branch_ids:{','.join(unknown)}")
+
+    turns_by: dict[str, tuple[dict[str, Any], ...]] = {
+        bid: tuple(_normalize_turn_row(j, row) for j, row in enumerate(by_branch[bid])) for bid in branch_ids
+    }
+
+    full_texts = {
+        bid: _norm_text("\n".join(str(t["gm_text"]) for t in turns_by[bid])) for bid in branch_ids
+    }
+    final_windows = {bid: _final_window_gm(turns_by[bid]) for bid in branch_ids}
+
+    pairwise_full: list[float] = []
+    pairwise_final: list[float] = []
+    cons_sets = {bid: _consequence_term_hits(full_texts[bid]) for bid in branch_ids}
+    for i, a in enumerate(branch_ids):
+        for b in branch_ids[i + 1 :]:
+            pairwise_full.append(_token_jaccard(full_texts[a], full_texts[b]))
+            pairwise_final.append(_token_jaccard(final_windows[a], final_windows[b]))
+
+    avg_full_sim = sum(pairwise_full) / len(pairwise_full) if pairwise_full else 1.0
+    avg_final_sim = sum(pairwise_final) / len(pairwise_final) if pairwise_final else 1.0
+
+    near_identical = avg_full_sim >= 0.93 and min(pairwise_full, default=1.0) >= 0.88
+    if near_identical:
+        reason_codes.append("near_identical_branch_transcripts")
+
+    distinct = False
+    if not near_identical:
+        for i, a in enumerate(branch_ids):
+            for b in branch_ids[i + 1 :]:
+                if _token_jaccard(final_windows[a], final_windows[b]) <= 0.78:
+                    distinct = True
+                    break
+                if len(cons_sets[a] ^ cons_sets[b]) >= 2:
+                    distinct = True
+                    break
+            if distinct:
+                break
+        if not distinct:
+            for i, a in enumerate(branch_ids):
+                for b in branch_ids[i + 1 :]:
+                    pa = _branch_player_concat(turns_by[a])
+                    pb = _branch_player_concat(turns_by[b])
+                    if _token_jaccard(pa, pb) <= 0.55:
+                        distinct = True
+                        break
+                if distinct:
+                    break
+
+    bleed = _detect_shared_prompt_bleed(turns_by)
+    if bleed:
+        reason_codes.append("shared_prompt_bleed")
+
+    raw_div = (1.0 - avg_full_sim) * 0.55 + (1.0 - avg_final_sim) * 0.45
+    if near_identical:
+        divergence_score = round(min(0.08, raw_div * 0.25), 4)
+    else:
+        divergence_score = round(max(0.0, min(1.0, raw_div)), 4)
+
+    out = {
+        "schema_version": 1,
+        "scenario_id": model.spine_id,
+        "same_start_state": True,
+        "branches_compared": branch_ids,
+        "distinct_outcomes_detected": bool(distinct and not near_identical),
+        "divergence_score": divergence_score,
+        "shared_prompt_bleed_detected": bleed,
+        "reason_codes": sorted(set(reason_codes)),
+    }
+    return _jsonable(out)
+
+
 def _error_result(
     scenario_id: str,
     branch_id: str,
@@ -141,17 +338,35 @@ def _error_result(
         "failure_codes": ["eval_aborted"],
         "warning_codes": [],
     }
+    n_err = len(turns)
+    empty_deg = {
+        "early_window": {"turn_range": {"start": 0, "end": -1}, "warning_count": 0, "signals": []},
+        "middle_window": {"turn_range": {"start": 0, "end": -1}, "warning_count": 0, "signals": []},
+        "late_window": {"turn_range": {"start": 0, "end": -1}, "warning_count": 0, "signals": []},
+        "clarity_warning_count": 0,
+        "grounding_warning_count": 0,
+        "continuity_warning_count": 0,
+        "progressive_degradation_detected": False,
+        "reason_codes": [],
+    }
     return _jsonable(
         {
             "schema_version": 1,
             "scenario_id": scenario_id,
             "branch_id": branch_id,
-            "turn_count": len(turns),
+            "turn_count": n_err,
             "session_health": {
                 "overall_passed": False,
                 "score": 0,
                 "classification": "failed",
+                "branch_id": branch_id,
+                "turn_count": n_err,
+                "scripted_turn_count": 0,
+                "full_length_branch": False,
+                "long_session_band": _long_session_band(n_err),
+                "degradation_detected": False,
             },
+            "degradation_over_time": empty_deg,
             "axes": {
                 "state_continuity": axis_shell,
                 "referent_persistence": axis_shell,
@@ -213,6 +428,14 @@ _RESET_PHRASES: tuple[str, ...] = (
     "you arrive for the first time",
     "none of this has happened",
     "forget the previous scene",
+)
+
+_AMNESIA_PHRASES: tuple[str, ...] = (
+    "you have no memory",
+    "as if you had never",
+    "never saw the notice",
+    "who is everyone here again",
+    "stranger to this district",
 )
 
 _DEBUG_LEAK_MARKERS: tuple[str, ...] = (
@@ -322,6 +545,249 @@ def _progression_keywords(anchor_id: str, description: str, summary: str) -> fro
     return frozenset(toks)
 
 
+_STRONG_SESSION_DEGRADATION_CODES: frozenset[str] = frozenset(
+    {
+        "late_session_reset_or_amnesia",
+        "debug_leak_late_window",
+        "rising_generic_filler_strong",
+    },
+)
+
+
+def _long_session_band(n: int) -> str:
+    if n < 12:
+        return "short"
+    if n < 24:
+        return "standard"
+    return "long"
+
+
+def _scripted_turn_count_for(spine: ScenarioSpine, branch_id: str) -> int:
+    br = next((b for b in spine.branches if b.branch_id == branch_id), None)
+    return len(br.turns) if br else 0
+
+
+def _split_three_window_ranges(n: int) -> tuple[tuple[int, int], tuple[int, int], tuple[int, int]]:
+    if n <= 0:
+        return ((0, -1), (0, -1), (0, -1))
+    third = n // 3
+    rem = n % 3
+    sizes = [
+        third + (1 if rem > 0 else 0),
+        third + (1 if rem > 1 else 0),
+        third,
+    ]
+    ranges: list[tuple[int, int]] = []
+    lo = 0
+    for sz in sizes:
+        if sz <= 0:
+            ranges.append((lo, lo - 1))
+            continue
+        hi = lo + sz - 1
+        ranges.append((lo, hi))
+        lo = hi + 1
+    return (ranges[0], ranges[1], ranges[2])
+
+
+def _turns_in_index_range(turns: Sequence[Mapping[str, Any]], lo: int, hi: int) -> list[Mapping[str, Any]]:
+    if hi < lo:
+        return []
+    return [t for t in turns if lo <= t["turn_index"] <= hi]
+
+
+def _gm_join_turn_slice(turns: Sequence[Mapping[str, Any]]) -> str:
+    return "\n".join(str(t["gm_text"]) for t in turns)
+
+
+def _filler_hits_turn_slice(turns: Sequence[Mapping[str, Any]]) -> int:
+    total = 0
+    for t in turns:
+        raw = str(t["gm_text"])
+        lines = raw.splitlines() if "\n" in raw else [raw]
+        for line in lines:
+            if _norm_text(line) in _GENERIC_FILLER_PHRASES:
+                total += 1
+    return total
+
+
+def _norm_block_reset_or_amnesia(norm: str) -> bool:
+    for phrase in _RESET_PHRASES:
+        if phrase in norm:
+            return True
+    for phrase in _AMNESIA_PHRASES:
+        if phrase in norm:
+            return True
+    return False
+
+
+def _norm_block_debug(norm: str) -> bool:
+    for marker in _DEBUG_LEAK_MARKERS:
+        if marker in norm:
+            return True
+    return False
+
+
+def _adjust_classification_for_degradation(
+    base: str,
+    *,
+    n: int,
+    degradation: Mapping[str, Any],
+    failed_axes: int,
+    failure_count: int,
+) -> str:
+    if n < 12:
+        return base
+    reasons = frozenset(degradation.get("reason_codes", ()))
+    prog = bool(degradation.get("progressive_degradation_detected"))
+    strong = bool(reasons & _STRONG_SESSION_DEGRADATION_CODES)
+    if prog and strong:
+        if base == "clean":
+            return "failed"
+        if base == "warning":
+            return "degraded"
+        if base == "degraded":
+            return "failed"
+    if prog and not strong:
+        if base == "clean":
+            return "warning"
+    if (
+        not prog
+        and int(degradation.get("clarity_warning_count", 0)) >= 8
+        and failed_axes == 0
+        and failure_count == 0
+    ):
+        if base == "clean":
+            return "warning"
+    return base
+
+
+def _compute_degradation_over_time(
+    spine: ScenarioSpine,
+    turns: tuple[dict[str, Any], ...],
+) -> dict[str, Any]:
+    n = len(turns)
+    early_r, mid_r, late_r = _split_three_window_ranges(n)
+    labels_ranges = (
+        ("early_window", early_r),
+        ("middle_window", mid_r),
+        ("late_window", late_r),
+    )
+
+    window_payload: dict[str, dict[str, Any]] = {}
+    for label, (lo, hi) in labels_ranges:
+        slice_turns = _turns_in_index_range(turns, lo, hi)
+        raw_join = _gm_join_turn_slice(slice_turns)
+        norm = _norm_text(raw_join)
+        signals: list[str] = []
+        if norm and _norm_block_reset_or_amnesia(norm):
+            signals.append("reset_or_amnesia_language")
+        if norm and _norm_block_debug(norm):
+            signals.append("debug_or_system_leak")
+        fh = _filler_hits_turn_slice(slice_turns)
+        if fh >= 2 or (fh >= 1 and label == "late_window" and n >= 12):
+            signals.append(f"generic_filler_density:{fh}")
+        window_payload[label] = {
+            "turn_range": {"start": lo, "end": hi},
+            "signals": signals,
+            "filler_hits": fh,
+        }
+
+    clarity_warning_count = sum(int(w["filler_hits"]) for w in window_payload.values())
+    grounding_warning_count = sum(
+        1 for w in window_payload.values() if "debug_or_system_leak" in w["signals"]
+    )
+    continuity_warning_count = sum(
+        1 for w in window_payload.values() if "reset_or_amnesia_language" in w["signals"]
+    )
+
+    meaningful = n >= 12
+    late_slice = _turns_in_index_range(turns, late_r[0], late_r[1])
+    late_norm = _norm_text(_gm_join_turn_slice(late_slice))
+    est_hi = mid_r[1] if mid_r[1] >= mid_r[0] else early_r[1]
+    establish_slice = _turns_in_index_range(turns, early_r[0], max(early_r[1], est_hi))
+    establish_norm = _norm_text(_gm_join_turn_slice(establish_slice))
+
+    if meaningful and late_r[1] >= late_r[0] and establish_norm and late_norm:
+        for ca in spine.continuity_anchors:
+            if _continuity_match(establish_norm, ca.description) and not _continuity_match(late_norm, ca.description):
+                tag = f"continuity_anchor_lost_late:{ca.anchor_id}"
+                window_payload["late_window"]["signals"].append(tag)
+                continuity_warning_count += 1
+        ref_map = {
+            r.anchor_id: _referent_keywords_for_anchor(r.anchor_id, r.label, r.description)
+            for r in spine.referent_anchors
+        }
+        for rid, kws in ref_map.items():
+            if _text_has_any_keyword(establish_norm, kws) and not _text_has_any_keyword(late_norm, kws):
+                tag = f"referent_keywords_lost_late:{rid}"
+                window_payload["late_window"]["signals"].append(tag)
+                continuity_warning_count += 1
+
+    pre_late_slice = _turns_in_index_range(turns, 0, late_r[0] - 1) if late_r[0] > 0 else []
+    pre_late_norm = _norm_text(_gm_join_turn_slice(pre_late_slice))
+    late_reset = (
+        meaningful
+        and late_norm
+        and _norm_block_reset_or_amnesia(late_norm)
+        and not _norm_block_reset_or_amnesia(pre_late_norm)
+    )
+    debug_late = meaningful and late_norm and _norm_block_debug(late_norm)
+    fe = int(window_payload["early_window"]["filler_hits"])
+    fl = int(window_payload["late_window"]["filler_hits"])
+    filler_strong = meaningful and fl >= 5 and fl >= 2 * max(1, fe) + 1
+    filler_progressive = meaningful and not filler_strong and fl >= 4 and fl >= fe + 3 and fe <= 2
+
+    continuity_late_loss = any(
+        str(s).startswith("continuity_anchor_lost_late:") for s in window_payload["late_window"]["signals"]
+    )
+    referent_late_loss = any(
+        str(s).startswith("referent_keywords_lost_late:") for s in window_payload["late_window"]["signals"]
+    )
+
+    reason_codes: list[str] = []
+    progressive = False
+    if meaningful:
+        if late_reset:
+            progressive = True
+            reason_codes.append("late_session_reset_or_amnesia")
+        if debug_late:
+            progressive = True
+            reason_codes.append("debug_leak_late_window")
+        if filler_strong:
+            progressive = True
+            reason_codes.append("rising_generic_filler_strong")
+        elif filler_progressive:
+            progressive = True
+            reason_codes.append("rising_generic_filler_progressive")
+        if continuity_late_loss:
+            progressive = True
+            reason_codes.append("continuity_anchor_late_loss")
+        if referent_late_loss:
+            progressive = True
+            reason_codes.append("referent_loss_late")
+
+    out_windows: dict[str, Any] = {}
+    for label, _ in labels_ranges:
+        sigs = list(window_payload[label]["signals"])
+        tr = window_payload[label]["turn_range"]
+        out_windows[label] = {
+            "turn_range": dict(tr),
+            "warning_count": len(sigs),
+            "signals": list(sorted(set(sigs))),
+        }
+
+    return {
+        "early_window": out_windows["early_window"],
+        "middle_window": out_windows["middle_window"],
+        "late_window": out_windows["late_window"],
+        "clarity_warning_count": clarity_warning_count,
+        "grounding_warning_count": grounding_warning_count,
+        "continuity_warning_count": continuity_warning_count,
+        "progressive_degradation_detected": progressive,
+        "reason_codes": sorted(set(reason_codes)),
+    }
+
+
 # ---------------------------------------------------------------------------
 # Evaluation context
 # ---------------------------------------------------------------------------
@@ -374,8 +840,46 @@ class _EvalContext:
             item["anchor_id"] = anchor_id
         self.warnings.append(item)
 
+    def _emit_session_degradation_events(self, deg: Mapping[str, Any]) -> None:
+        n = len(self.turns)
+        if n < 12 or not deg.get("progressive_degradation_detected"):
+            return
+        reasons = set(deg.get("reason_codes", ()))
+        if not reasons:
+            return
+        strong_hits = reasons & _STRONG_SESSION_DEGRADATION_CODES
+        if not strong_hits:
+            if not any(w.get("code") == "progressive_degradation_mild" for w in self.warnings):
+                self.add_warning(
+                    "session",
+                    "progressive_degradation_mild",
+                    ",".join(sorted(reasons)),
+                )
+            return
+        covered = True
+        if "late_session_reset_or_amnesia" in strong_hits:
+            if not any(f.get("code") == "continuity_reset_language" for f in self.failures):
+                covered = False
+        if "debug_leak_late_window" in strong_hits:
+            if not any(
+                f.get("code") in ("debug_or_system_leak", "json_diagnostic_dump") for f in self.failures
+            ):
+                covered = False
+        if "rising_generic_filler_strong" in strong_hits:
+            covered = False
+        if covered:
+            return
+        if any(f.get("code") == "strong_progressive_degradation" for f in self.failures):
+            return
+        self.add_failure(
+            "session",
+            "strong_progressive_degradation",
+            ",".join(sorted(reasons)),
+        )
+
     def run(self) -> dict[str, Any]:
         n = len(self.turns)
+        scripted_n = _scripted_turn_count_for(self.spine, self.branch_id)
         axes: dict[str, Any] = {
             "state_continuity": self._axis_state_continuity(),
             "referent_persistence": self._axis_referent_persistence(),
@@ -384,6 +888,9 @@ class _EvalContext:
             "branch_coherence": self._axis_branch_coherence(),
         }
         self._build_checkpoint_results()
+
+        degradation_over_time = _compute_degradation_over_time(self.spine, self.turns)
+        self._emit_session_degradation_events(degradation_over_time)
 
         api_failures = sum(1 for t in self.turns if not t["api_ok"])
         api_majority = n > 0 and api_failures > n // 2
@@ -403,12 +910,30 @@ class _EvalContext:
             score=score,
             api_majority=api_majority,
         )
+        classification = _adjust_classification_for_degradation(
+            classification,
+            n=n,
+            degradation=degradation_over_time,
+            failed_axes=failed_axes,
+            failure_count=len(self.failures),
+        )
         overall_passed = classification in ("clean", "warning")
 
-        session_health = {
+        deg_any = bool(degradation_over_time.get("progressive_degradation_detected")) or bool(
+            int(degradation_over_time.get("clarity_warning_count", 0))
+            + int(degradation_over_time.get("grounding_warning_count", 0))
+            + int(degradation_over_time.get("continuity_warning_count", 0)),
+        )
+        session_health: dict[str, Any] = {
             "overall_passed": overall_passed,
             "score": score,
             "classification": classification,
+            "branch_id": self.branch_id,
+            "turn_count": n,
+            "scripted_turn_count": scripted_n,
+            "full_length_branch": bool(scripted_n and n >= scripted_n),
+            "long_session_band": _long_session_band(n),
+            "degradation_detected": deg_any,
         }
 
         out: dict[str, Any] = {
@@ -417,6 +942,7 @@ class _EvalContext:
             "branch_id": self.branch_id,
             "turn_count": n,
             "session_health": session_health,
+            "degradation_over_time": degradation_over_time,
             "axes": axes,
             "detected_failures": list(self.failures),
             "warnings": list(self.warnings),

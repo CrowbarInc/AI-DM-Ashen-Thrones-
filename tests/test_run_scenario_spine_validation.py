@@ -236,3 +236,134 @@ def test_transcript_excludes_raw_chat_payload(tmp_path, monkeypatch) -> None:
     assert "secret" not in raw
     dbg = json.loads((run_dir / "run_debug.json").read_text(encoding="utf-8"))
     assert any("chat_response" in row for row in dbg.get("turns_debug", []))
+
+
+def test_run_scenario_spine_branch_does_not_write_aggregate_artifacts(tmp_path, monkeypatch) -> None:
+    monkeypatch.setattr(_mod, "apply_new_campaign_hard_reset", lambda: None)
+    spine = _load_spine()
+    br = next(b for b in spine.branches if b.branch_id == "branch_direct_intrusion")
+
+    def chat(_text: str) -> dict:
+        return {"ok": True, "gm_output": {"player_facing_text": "Gate holds."}}
+
+    stamp = "single_stamp"
+    run_dir = tmp_path / stamp / spine.spine_id / br.branch_id
+    _mod.run_scenario_spine_branch(
+        spine,
+        br,
+        branch_id_requested=br.branch_id,
+        chat_call=chat,
+        apply_reset=False,
+        smoke=True,
+        max_turns=None,
+        run_dir=run_dir,
+    )
+    agg_dir = tmp_path / stamp / spine.spine_id
+    assert not (agg_dir / "aggregate_session_health_summary.json").exists()
+    assert not (agg_dir / "aggregate_operator_summary.md").exists()
+
+
+def test_all_branches_aggregate_artifacts_and_payload(tmp_path, monkeypatch) -> None:
+    monkeypatch.setattr(_mod, "apply_new_campaign_hard_reset", lambda: None)
+    spine = _load_spine()
+    branches = sorted(spine.branches, key=lambda b: b.branch_id)
+
+    def chat(_text: str) -> dict:
+        return {"ok": True, "gm_output": {"player_facing_text": "Scene holds; notice and patrol thread remain."}}
+
+    stamp = "agg_stamp"
+    results = []
+    for br in branches:
+        run_dir = tmp_path / stamp / spine.spine_id / br.branch_id
+        results.append(
+            _mod.run_scenario_spine_branch(
+                spine,
+                br,
+                branch_id_requested=br.branch_id,
+                chat_call=chat,
+                apply_reset=False,
+                smoke=False,
+                max_turns=None,
+                run_dir=run_dir,
+            ),
+        )
+
+    agg_dir = tmp_path / stamp / spine.spine_id
+    ts = "2026-01-01T00:00:00+00:00"
+    _mod.write_aggregate_spine_artifacts(
+        spine,
+        agg_dir,
+        results,
+        smoke=False,
+        max_turns=None,
+        run_timestamp=ts,
+    )
+    assert (agg_dir / "aggregate_session_health_summary.json").is_file()
+    assert (agg_dir / "aggregate_operator_summary.md").is_file()
+
+    agg = json.loads((agg_dir / "aggregate_session_health_summary.json").read_text(encoding="utf-8"))
+    assert agg.get("spine_id") == spine.spine_id
+    assert agg.get("run_timestamp") == ts
+    assert set(agg.get("branches_run") or []) == {b.branch_id for b in branches}
+    expected_total = sum(len(b.turns) for b in branches)
+    assert agg.get("total_executed_turns") == expected_total
+    assert "degradation_over_time_by_branch" in agg
+    deg = agg["degradation_over_time_by_branch"]
+    assert isinstance(deg, dict)
+    for bid in agg["branches_run"]:
+        assert bid in deg
+        assert "progressive_degradation_detected" in deg[bid]
+
+    assert "branch_divergence" in agg
+    div = agg["branch_divergence"]
+    assert isinstance(div, dict)
+    assert div.get("schema_version") == 1
+    assert set(div.get("branches_compared") or []) == {b.branch_id for b in branches}
+
+    md = (agg_dir / "aggregate_operator_summary.md").read_text(encoding="utf-8")
+    assert "aggregate" in md.lower()
+    assert "branch_direct_intrusion" in md
+    assert "Divergence" in md
+
+    assert agg.get("coverage_band_met") is True
+    meta = agg.get("aggregate_meta") or {}
+    assert meta.get("coverage_turn_total_long_scripted_branches") == 50
+    assert set(meta.get("long_scripted_branch_ids") or []) == {
+        "branch_direct_intrusion",
+        "branch_social_inquiry",
+    }
+
+
+def test_all_branches_aggregate_smoke_does_not_claim_coverage_band(tmp_path, monkeypatch) -> None:
+    monkeypatch.setattr(_mod, "apply_new_campaign_hard_reset", lambda: None)
+    spine = _load_spine()
+    branches = sorted(spine.branches, key=lambda b: b.branch_id)
+
+    def chat(_text: str) -> dict:
+        return {"ok": True, "gm_output": {"player_facing_text": "Stub."}}
+
+    stamp = "smoke_agg"
+    results = []
+    for br in branches:
+        run_dir = tmp_path / stamp / spine.spine_id / br.branch_id
+        results.append(
+            _mod.run_scenario_spine_branch(
+                spine,
+                br,
+                branch_id_requested=br.branch_id,
+                chat_call=chat,
+                apply_reset=False,
+                smoke=True,
+                max_turns=None,
+                run_dir=run_dir,
+            ),
+        )
+    agg = _mod.build_aggregate_session_health_summary(
+        spine,
+        results,
+        smoke=True,
+        max_turns=None,
+        run_timestamp="2026-01-02T00:00:00+00:00",
+    )
+    assert agg.get("coverage_band_met") is False
+    assert agg.get("total_executed_turns") == 15

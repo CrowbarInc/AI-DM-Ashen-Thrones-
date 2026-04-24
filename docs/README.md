@@ -88,7 +88,7 @@ See `docs/model_routing_architecture.md` for the current routing note.
 - `data/scenes/` scene registry
 - `static/` browser UI
 - `docs/README.md` this file
-- `docs/scenario_spine_validation.md` — scenario-spine JSON, `evaluate_scenario_spine_session`, CLI `tools/run_scenario_spine_validation.py`, artifacts under `artifacts/scenario_spine_validation/<UTC>/<spine_id>/<branch_id>/`
+- `docs/scenario_spine_validation.md` — scenario-spine JSON, `evaluate_scenario_spine_session`, CLI `tools/run_scenario_spine_validation.py`, artifacts under `artifacts/scenario_spine_validation/<UTC>/<spine_id>/<branch_id>/` (plus `aggregate_session_health_summary.json` and `aggregate_operator_summary.md` at `…/<spine_id>/` when using `--all-branches`)
 - `docs/runtime_persistence_envelope.md` — **runtime persistence guarantees** (Objective #14): versioned on-disk envelopes, atomic saves, validate-first restores, rollback safety, coherency enforcement, and concurrency guard
 - `tools/validation_layer_audit.py` — optional heuristic drift check for Objective #11 validation-layer ownership (`docs/validation_layer_audit.md`)
 
@@ -123,7 +123,7 @@ their own raw semantics and project into that shape. The **unified bundle**
 audits without replacing module ownership. Telemetry must never drive orchestration — see
 `docs/narrative_integrity_architecture.md` → *Observational telemetry pipeline (Block C)*.
 8. **Validation runner** — `tools/run_playability_validation.py` drives real `POST /api/chat` (FastAPI `TestClient` or `--base-url`), writes artifacts under `artifacts/playability_validation/`, and attaches both `playability_eval` and `narrative_authenticity_eval` per turn. See `docs/playability_validation.md`.
-9. **Scenario-spine / long-session runner** — `tools/run_scenario_spine_validation.py` drives scripted multi-turn branches, then runs `evaluate_scenario_spine_session` as the **session health authority**. Artifacts: `artifacts/scenario_spine_validation/<UTC>/<spine_id>/<branch_id>/` (`transcript.json`, `session_health_summary.json`, `run_debug.json`, `compact_operator_summary.md`). Operator guide: `docs/scenario_spine_validation.md`.
+9. **Scenario-spine / long-session runner** — `tools/run_scenario_spine_validation.py` drives scripted multi-turn branches, then runs `evaluate_scenario_spine_session` as the **session health authority**. Artifacts: `artifacts/scenario_spine_validation/<UTC>/<spine_id>/<branch_id>/` (`transcript.json`, `session_health_summary.json`, `run_debug.json`, `compact_operator_summary.md`); `--all-branches` also writes `aggregate_session_health_summary.json` and `aggregate_operator_summary.md` under `…/<spine_id>/`. Operator guide: `docs/scenario_spine_validation.md`.
 
 ### Enforced behaviors (when the layer runs)
 

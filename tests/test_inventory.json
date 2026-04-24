@@ -1,23 +1,23 @@
 {
   "summary": {
-    "generated_utc": "2026-04-24T16:41:29.766628+00:00",
+    "generated_utc": "2026-04-24T20:48:30.594932+00:00",
     "test_file_count": 259,
-    "pytest_collected_items": 3407,
-    "ast_test_function_def_lines_total": 3194,
-    "ast_unique_test_names_module_level": 3194,
+    "pytest_collected_items": 3416,
+    "ast_test_function_def_lines_total": 3203,
+    "ast_unique_test_names_module_level": 3203,
     "parametrized_extra_items": 213,
     "files_with_shadowed_duplicate_test_defs": [],
     "counts_by_primary_bucket": {
-      "unit": 1828,
-      "integration": 1417,
+      "unit": 1830,
+      "integration": 1424,
       "regression": 154,
       "transcript_gauntlet": 8
     },
     "cross_file_duplicate_test_name_count": 3
   },
   "counts_by_majority_file_bucket": {
-    "integration": 113,
     "unit": 132,
+    "integration": 113,
     "regression": 12,
     "transcript_gauntlet": 2
   },
@@ -714,12 +714,12 @@
     }
   ],
   "feature_area_primary_counts": {
-    "general": 1264,
+    "general": 1270,
     "resolution/emission": 480,
     "fallback": 354,
     "lead extraction": 266,
-    "social continuity": 203,
-    "transcript regression": 183,
+    "social continuity": 204,
+    "transcript regression": 185,
     "routing": 181,
     "retry": 158,
     "legality/sanitizer": 106,
@@ -1393,7 +1393,7 @@
     },
     {
       "area": "transcript regression",
-      "distinct_files": 26,
+      "distinct_files": 27,
       "files": [
         "tests/test_answer_completeness_rules.py",
         "tests/test_anti_railroading_transcript_regressions.py",
@@ -1410,6 +1410,7 @@
         "tests/test_output_sanitizer.py",
         "tests/test_retry_tone_alignment.py",
         "tests/test_run_scenario_spine_validation.py",
+        "tests/test_scenario_spine_eval.py",
         "tests/test_social_speaker_grounding.py",
         "tests/test_strict_social_answer_pressure_cashout.py",
         "tests/test_synthetic_sessions.py",
@@ -14842,40 +14843,46 @@
     {
       "path": "tests/test_run_scenario_spine_validation.py",
       "filename_bucket": "mixed/unclear",
-      "pytest_collected": 9,
+      "pytest_collected": 12,
       "collected_nodeids": [
         "tests/test_run_scenario_spine_validation.py::test_alias_resolves_fixture_id_in_artifacts",
+        "tests/test_run_scenario_spine_validation.py::test_all_branches_aggregate_artifacts_and_payload",
+        "tests/test_run_scenario_spine_validation.py::test_all_branches_aggregate_smoke_does_not_claim_coverage_band",
         "tests/test_run_scenario_spine_validation.py::test_api_failure_rows_degrade_without_crash",
         "tests/test_run_scenario_spine_validation.py::test_artifacts_written_and_session_health_is_evaluator",
         "tests/test_run_scenario_spine_validation.py::test_effective_turn_limit_smoke_and_max_turns",
         "tests/test_run_scenario_spine_validation.py::test_full_social_branch_mocked",
         "tests/test_run_scenario_spine_validation.py::test_list_main_stdout_lists_canonical_branches",
+        "tests/test_run_scenario_spine_validation.py::test_run_scenario_spine_branch_does_not_write_aggregate_artifacts",
         "tests/test_run_scenario_spine_validation.py::test_short_branches_accepted_explicit_and_all_branches",
         "tests/test_run_scenario_spine_validation.py::test_subprocess_list_matches_fixture",
         "tests/test_run_scenario_spine_validation.py::test_transcript_excludes_raw_chat_payload"
       ],
       "collected_test_names": [
         "test_alias_resolves_fixture_id_in_artifacts",
+        "test_all_branches_aggregate_artifacts_and_payload",
+        "test_all_branches_aggregate_smoke_does_not_claim_coverage_band",
         "test_api_failure_rows_degrade_without_crash",
         "test_artifacts_written_and_session_health_is_evaluator",
         "test_effective_turn_limit_smoke_and_max_turns",
         "test_full_social_branch_mocked",
         "test_list_main_stdout_lists_canonical_branches",
+        "test_run_scenario_spine_branch_does_not_write_aggregate_artifacts",
         "test_short_branches_accepted_explicit_and_all_branches",
         "test_subprocess_list_matches_fixture",
         "test_transcript_excludes_raw_chat_payload"
       ],
-      "ast_test_def_lines": 9,
-      "ast_unique_test_names": 9,
+      "ast_test_def_lines": 12,
+      "ast_unique_test_names": 12,
       "shadowed_duplicate_test_names": [],
       "has_shadowed_duplicate_names": false,
       "primary_bucket": "integration",
       "bucket_distribution": {
         "unit": 3,
-        "integration": 6
+        "integration": 9
       },
       "primary_feature_area_breakdown": {
-        "general": 8,
+        "general": 11,
         "transcript regression": 1
       },
       "high_brittleness_test_count": 0,
@@ -15129,8 +15136,8 @@
       "has_shadowed_duplicate_names": false,
       "primary_bucket": "unit",
       "bucket_distribution": {
-        "unit": 7,
-        "integration": 1
+        "integration": 2,
+        "unit": 6
       },
       "primary_feature_area_breakdown": {
         "general": 8
@@ -15160,42 +15167,56 @@
     {
       "path": "tests/test_scenario_spine_eval.py",
       "filename_bucket": "mixed/unclear",
-      "pytest_collected": 10,
+      "pytest_collected": 16,
       "collected_nodeids": [
         "tests/test_scenario_spine_eval.py::test_accepts_dict_and_dataclass_spine[dataclass]",
         "tests/test_scenario_spine_eval.py::test_accepts_dict_and_dataclass_spine[dict]",
         "tests/test_scenario_spine_eval.py::test_clean_social_investigation_session_passes",
+        "tests/test_scenario_spine_eval.py::test_clean_twenty_five_turn_branch_has_no_progressive_degradation",
         "tests/test_scenario_spine_eval.py::test_debug_leak_fails_narrative_grounding",
+        "tests/test_scenario_spine_eval.py::test_divergent_branch_transcripts_show_distinct_outcomes",
         "tests/test_scenario_spine_eval.py::test_forgotten_captain_and_notice_fail_referent_persistence",
+        "tests/test_scenario_spine_eval.py::test_late_amnesia_language_triggers_progressive_degradation",
         "tests/test_scenario_spine_eval.py::test_minimal_player_text_gm_text_rows",
         "tests/test_scenario_spine_eval.py::test_missing_patrol_progression_fails",
+        "tests/test_scenario_spine_eval.py::test_near_identical_branch_transcripts_flagged",
         "tests/test_scenario_spine_eval.py::test_output_is_json_serializable",
+        "tests/test_scenario_spine_eval.py::test_referent_loss_late_after_establishment_triggers_continuity_signal",
         "tests/test_scenario_spine_eval.py::test_reset_language_fails_state_continuity",
+        "tests/test_scenario_spine_eval.py::test_rising_generic_filler_late_triggers_strong_degradation",
         "tests/test_scenario_spine_eval.py::test_wrong_branch_prompt_echo_fails_branch_coherence"
       ],
       "collected_test_names": [
         "test_accepts_dict_and_dataclass_spine[dataclass]",
         "test_accepts_dict_and_dataclass_spine[dict]",
         "test_clean_social_investigation_session_passes",
+        "test_clean_twenty_five_turn_branch_has_no_progressive_degradation",
         "test_debug_leak_fails_narrative_grounding",
+        "test_divergent_branch_transcripts_show_distinct_outcomes",
         "test_forgotten_captain_and_notice_fail_referent_persistence",
+        "test_late_amnesia_language_triggers_progressive_degradation",
         "test_minimal_player_text_gm_text_rows",
         "test_missing_patrol_progression_fails",
+        "test_near_identical_branch_transcripts_flagged",
         "test_output_is_json_serializable",
+        "test_referent_loss_late_after_establishment_triggers_continuity_signal",
         "test_reset_language_fails_state_continuity",
+        "test_rising_generic_filler_late_triggers_strong_degradation",
         "test_wrong_branch_prompt_echo_fails_branch_coherence"
       ],
-      "ast_test_def_lines": 9,
-      "ast_unique_test_names": 9,
+      "ast_test_def_lines": 15,
+      "ast_unique_test_names": 15,
       "shadowed_duplicate_test_names": [],
       "has_shadowed_duplicate_names": false,
       "primary_bucket": "unit",
       "bucket_distribution": {
-        "unit": 10
+        "integration": 3,
+        "unit": 13
       },
       "primary_feature_area_breakdown": {
-        "general": 8,
-        "social continuity": 1,
+        "general": 11,
+        "social continuity": 2,
+        "transcript regression": 2,
         "fallback": 1
       },
       "high_brittleness_test_count": 0,
@@ -71896,6 +71917,63 @@
       "file_overlap_hints": []
     },
     {
+      "nodeid": "tests/test_run_scenario_spine_validation.py::test_run_scenario_spine_branch_does_not_write_aggregate_artifacts",
+      "file": "tests/test_run_scenario_spine_validation.py",
+      "name": "test_run_scenario_spine_branch_does_not_write_aggregate_artifacts",
+      "base_name": "test_run_scenario_spine_branch_does_not_write_aggregate_artifacts",
+      "parametrized": false,
+      "primary_bucket": "integration",
+      "feature_areas": [
+        "general"
+      ],
+      "historically_motivated": false,
+      "assertion_style": "behavioral",
+      "brittleness": "low",
+      "redundancy_flag": "likely_unique",
+      "keyword_overlap_hints": [],
+      "likely_architecture_layer": "gpt",
+      "likely_ownership_theme": "general",
+      "file_overlap_hints": []
+    },
+    {
+      "nodeid": "tests/test_run_scenario_spine_validation.py::test_all_branches_aggregate_artifacts_and_payload",
+      "file": "tests/test_run_scenario_spine_validation.py",
+      "name": "test_all_branches_aggregate_artifacts_and_payload",
+      "base_name": "test_all_branches_aggregate_artifacts_and_payload",
+      "parametrized": false,
+      "primary_bucket": "integration",
+      "feature_areas": [
+        "general"
+      ],
+      "historically_motivated": false,
+      "assertion_style": "structural",
+      "brittleness": "low",
+      "redundancy_flag": "likely_unique",
+      "keyword_overlap_hints": [],
+      "likely_architecture_layer": "gpt",
+      "likely_ownership_theme": "general",
+      "file_overlap_hints": []
+    },
+    {
+      "nodeid": "tests/test_run_scenario_spine_validation.py::test_all_branches_aggregate_smoke_does_not_claim_coverage_band",
+      "file": "tests/test_run_scenario_spine_validation.py",
+      "name": "test_all_branches_aggregate_smoke_does_not_claim_coverage_band",
+      "base_name": "test_all_branches_aggregate_smoke_does_not_claim_coverage_band",
+      "parametrized": false,
+      "primary_bucket": "integration",
+      "feature_areas": [
+        "general"
+      ],
+      "historically_motivated": false,
+      "assertion_style": "behavioral",
+      "brittleness": "low",
+      "redundancy_flag": "likely_unique",
+      "keyword_overlap_hints": [],
+      "likely_architecture_layer": "gpt",
+      "likely_ownership_theme": "general",
+      "file_overlap_hints": []
+    },
+    {
       "nodeid": "tests/test_runtime_persistence_regression_suite_obj14.py::test_obj14_envelope_round_trip_with_integrity",
       "file": "tests/test_runtime_persistence_regression_suite_obj14.py",
       "name": "test_obj14_envelope_round_trip_with_integrity",
@@ -72465,7 +72543,7 @@
       "name": "test_frontier_gate_fixture_loads_and_validates",
       "base_name": "test_frontier_gate_fixture_loads_and_validates",
       "parametrized": false,
-      "primary_bucket": "unit",
+      "primary_bucket": "integration",
       "feature_areas": [
         "general"
       ],
@@ -72617,7 +72695,7 @@
       "name": "test_clean_social_investigation_session_passes",
       "base_name": "test_clean_social_investigation_session_passes",
       "parametrized": false,
-      "primary_bucket": "unit",
+      "primary_bucket": "integration",
       "feature_areas": [
         "general"
       ],
@@ -72791,6 +72869,120 @@
       "primary_bucket": "unit",
       "feature_areas": [
         "general"
+      ],
+      "historically_motivated": false,
+      "assertion_style": "behavioral",
+      "brittleness": "low",
+      "redundancy_flag": "likely_unique",
+      "keyword_overlap_hints": [],
+      "likely_architecture_layer": "evaluator",
+      "likely_ownership_theme": "general (scenario_spine, scenario_spine_eval)",
+      "file_overlap_hints": []
+    },
+    {
+      "nodeid": "tests/test_scenario_spine_eval.py::test_clean_twenty_five_turn_branch_has_no_progressive_degradation",
+      "file": "tests/test_scenario_spine_eval.py",
+      "name": "test_clean_twenty_five_turn_branch_has_no_progressive_degradation",
+      "base_name": "test_clean_twenty_five_turn_branch_has_no_progressive_degradation",
+      "parametrized": false,
+      "primary_bucket": "unit",
+      "feature_areas": [
+        "general"
+      ],
+      "historically_motivated": false,
+      "assertion_style": "behavioral",
+      "brittleness": "low",
+      "redundancy_flag": "likely_unique",
+      "keyword_overlap_hints": [],
+      "likely_architecture_layer": "evaluator",
+      "likely_ownership_theme": "general (scenario_spine, scenario_spine_eval)",
+      "file_overlap_hints": []
+    },
+    {
+      "nodeid": "tests/test_scenario_spine_eval.py::test_late_amnesia_language_triggers_progressive_degradation",
+      "file": "tests/test_scenario_spine_eval.py",
+      "name": "test_late_amnesia_language_triggers_progressive_degradation",
+      "base_name": "test_late_amnesia_language_triggers_progressive_degradation",
+      "parametrized": false,
+      "primary_bucket": "unit",
+      "feature_areas": [
+        "general"
+      ],
+      "historically_motivated": false,
+      "assertion_style": "behavioral",
+      "brittleness": "low",
+      "redundancy_flag": "likely_unique",
+      "keyword_overlap_hints": [],
+      "likely_architecture_layer": "evaluator",
+      "likely_ownership_theme": "general (scenario_spine, scenario_spine_eval)",
+      "file_overlap_hints": []
+    },
+    {
+      "nodeid": "tests/test_scenario_spine_eval.py::test_rising_generic_filler_late_triggers_strong_degradation",
+      "file": "tests/test_scenario_spine_eval.py",
+      "name": "test_rising_generic_filler_late_triggers_strong_degradation",
+      "base_name": "test_rising_generic_filler_late_triggers_strong_degradation",
+      "parametrized": false,
+      "primary_bucket": "unit",
+      "feature_areas": [
+        "general"
+      ],
+      "historically_motivated": false,
+      "assertion_style": "behavioral",
+      "brittleness": "low",
+      "redundancy_flag": "likely_unique",
+      "keyword_overlap_hints": [],
+      "likely_architecture_layer": "evaluator",
+      "likely_ownership_theme": "general (scenario_spine, scenario_spine_eval)",
+      "file_overlap_hints": []
+    },
+    {
+      "nodeid": "tests/test_scenario_spine_eval.py::test_referent_loss_late_after_establishment_triggers_continuity_signal",
+      "file": "tests/test_scenario_spine_eval.py",
+      "name": "test_referent_loss_late_after_establishment_triggers_continuity_signal",
+      "base_name": "test_referent_loss_late_after_establishment_triggers_continuity_signal",
+      "parametrized": false,
+      "primary_bucket": "unit",
+      "feature_areas": [
+        "social continuity"
+      ],
+      "historically_motivated": false,
+      "assertion_style": "behavioral",
+      "brittleness": "low",
+      "redundancy_flag": "likely_unique",
+      "keyword_overlap_hints": [],
+      "likely_architecture_layer": "evaluator",
+      "likely_ownership_theme": "general (scenario_spine, scenario_spine_eval)",
+      "file_overlap_hints": []
+    },
+    {
+      "nodeid": "tests/test_scenario_spine_eval.py::test_divergent_branch_transcripts_show_distinct_outcomes",
+      "file": "tests/test_scenario_spine_eval.py",
+      "name": "test_divergent_branch_transcripts_show_distinct_outcomes",
+      "base_name": "test_divergent_branch_transcripts_show_distinct_outcomes",
+      "parametrized": false,
+      "primary_bucket": "integration",
+      "feature_areas": [
+        "transcript regression"
+      ],
+      "historically_motivated": false,
+      "assertion_style": "behavioral",
+      "brittleness": "low",
+      "redundancy_flag": "likely_unique",
+      "keyword_overlap_hints": [],
+      "likely_architecture_layer": "evaluator",
+      "likely_ownership_theme": "general (scenario_spine, scenario_spine_eval)",
+      "file_overlap_hints": []
+    },
+    {
+      "nodeid": "tests/test_scenario_spine_eval.py::test_near_identical_branch_transcripts_flagged",
+      "file": "tests/test_scenario_spine_eval.py",
+      "name": "test_near_identical_branch_transcripts_flagged",
+      "base_name": "test_near_identical_branch_transcripts_flagged",
+      "parametrized": false,
+      "primary_bucket": "integration",
+      "feature_areas": [
+        "transcript regression"
       ],
       "historically_motivated": false,
       "assertion_style": "behavioral",
