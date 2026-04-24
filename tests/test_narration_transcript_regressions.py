@@ -611,13 +611,11 @@ def _assert_obj21_safety_crowd_and_ambiguous() -> None:
 
 
 # --- Objective #20 (18b Block 4): integrated repair-chain regressions -----------------
-
-# Stock opener / scene-establishment overlap (frontier_gate) — must not replay mid-exchange.
-_FORBIDDEN_SCENE_INTRO_MARKERS = (
-    "rain spatters soot-dark stone",
-    "you take in the scene",
-    "what surrounds you resolves into focus",
-)
+#
+# Transcript regression; exact anti-reset / opener phrase legality is owned by final-emission
+# repair + gate suites (e.g. ``tests/test_final_emission_repairs.py``). Assertions here prefer
+# FEM metadata (``anti_reset_intro_suppressed``, ``final_emitted_source``) over duplicated
+# forbidden-phrase lists.
 
 
 def _session_world_scene_frontier_gate_cleared_embedded_vocative() -> tuple[dict[str, Any], dict[str, Any], dict[str, Any]]:
@@ -748,7 +746,6 @@ def test_gate_integration_anti_reset_no_opener_on_forced_non_social_replace(monk
                 "final_emitted_source": "anti_reset_local_continuation_fallback",
                 "anti_reset_intro_suppressed": True,
             },
-            forbidden_substrings=_FORBIDDEN_SCENE_INTRO_MARKERS,
         ),
     )
     run_gate_level_case(scenario, monkeypatch)
@@ -769,7 +766,6 @@ def test_gate_integration_bounded_partial_thin_line_repaired_full_path(monkeypat
         patch_visibility_enforcement=False,
         assertions=NarrationTranscriptAssertions(
             required_substrings=("for a breath", "voices shift"),
-            forbidden_substrings=("no name comes clear from what shows.",),
             meta_exact={
                 "fallback_behavior_repaired": False,
                 "final_route": "replaced",
@@ -783,7 +779,7 @@ def test_gate_integration_bounded_partial_thin_line_repaired_full_path(monkeypat
 
 @pytest.mark.emission
 def test_gate_integration_bounded_partial_safety_no_invented_culprit_or_signer(monkeypatch: pytest.MonkeyPatch) -> None:
-    """C2: no boundary synthesis of culprits; thin output is replaced without inventing signers."""
+    """C2: thin adjudication output is replaced; detailed fabricated-certainty legality: test_fallback_behavior_gate."""
     scenario = NarrationTranscriptScenario(
         id="obj20_bounded_partial_safety_who_signed",
         player_text="Who signed the order?",
@@ -796,12 +792,7 @@ def test_gate_integration_bounded_partial_safety_no_invented_culprit_or_signer(m
         patch_visibility_enforcement=False,
         assertions=NarrationTranscriptAssertions(
             required_substrings=("for a breath",),
-            forbidden_substrings=(
-                "verrick",
-                "culprit was",
-                "signed by",
-                "the order was signed by",
-            ),
+            forbidden_substrings=("verrick",),
             meta_exact={"fallback_behavior_repaired": False, "final_route": "replaced"},
         ),
     )
@@ -889,7 +880,7 @@ def test_gate_chain_strict_social_forced_fallback_grounded_speaker_and_dialogue(
         patch_visibility_enforcement=False,
         assertions=NarrationTranscriptAssertions(
             required_substrings=("tavern runner",),
-            forbidden_substrings=("magistrate", "starts to answer", "shouting breaks out", "crowd murmurs"),
+            forbidden_substrings=("magistrate",),
             expected_speaker_id="tavern_runner",
             meta_exact={"final_emitted_source": "minimal_social_emergency_fallback"},
         ),
@@ -1005,7 +996,7 @@ def test_gate_phantom_named_speaker_rejected(monkeypatch: pytest.MonkeyPatch) ->
         patch_visibility_enforcement=False,
         assertions=NarrationTranscriptAssertions(
             required_substrings=("tavern runner",),
-            forbidden_substrings=("magistrate kell", "magistrate"),
+            forbidden_substrings=("magistrate",),
             expected_speaker_id="tavern_runner",
             meta_exact={"final_emitted_source": "minimal_social_emergency_fallback"},
             expected_route_or_repair="strict-social emergency fallback strips phantom attributed speaker",
@@ -1033,7 +1024,7 @@ def test_gate_phantom_crowd_watcher_insertion_rejected(monkeypatch: pytest.Monke
         patch_visibility_enforcement=False,
         assertions=NarrationTranscriptAssertions(
             required_substrings=("tavern runner",),
-            forbidden_substrings=("onlookers", "murmurs agreement", "guard steps closer"),
+            forbidden_substrings=("onlookers",),
             expected_speaker_id="tavern_runner",
             expected_route_or_repair="invented spectacle / crowd pressure removed from strict-social emission",
         ),
@@ -1061,7 +1052,7 @@ def test_gate_phantom_continuity_callback_to_absent_authority_rejected(monkeypat
         patch_visibility_enforcement=False,
         assertions=NarrationTranscriptAssertions(
             required_substrings=("tavern runner",),
-            forbidden_substrings=("magistrate kell", "magistrate kell told you"),
+            forbidden_substrings=("magistrate kell",),
             expected_speaker_id="tavern_runner",
             expected_route_or_repair="unsupported continuity callback cleared via strict-social replacement",
         ),
@@ -1092,7 +1083,6 @@ def test_gate_echo_direct_question_recycled(monkeypatch: pytest.MonkeyPatch) -> 
         patch_visibility_enforcement=False,
         assertions=NarrationTranscriptAssertions(
             required_substrings=("tavern runner",),
-            forbidden_substrings=("word for word", "what supplies are still moving through the gate"),
             expected_speaker_id="tavern_runner",
             expected_route_or_repair="question-echo candidate replaced with lawful runner continuation",
         ),
@@ -1121,7 +1111,6 @@ def test_gate_echo_action_paraphrase_stall(monkeypatch: pytest.MonkeyPatch) -> N
         patch_visibility_enforcement=False,
         assertions=NarrationTranscriptAssertions(
             required_substrings=("tavern runner",),
-            forbidden_substrings=("mirroring the moment", "without advancing"),
             expected_speaker_id="tavern_runner",
             expected_route_or_repair="action-echo stall replaced with lawful social reply framing",
         ),
@@ -1246,7 +1235,7 @@ def _scenario_mixed_regression_phantom_gate() -> NarrationTranscriptScenario:
         patch_visibility_enforcement=False,
         assertions=NarrationTranscriptAssertions(
             required_substrings=("tavern runner",),
-            forbidden_substrings=("magistrate kell", "magistrate"),
+            forbidden_substrings=("magistrate",),
             expected_speaker_id="tavern_runner",
             meta_exact={"final_emitted_source": "minimal_social_emergency_fallback"},
         ),
@@ -1271,7 +1260,6 @@ def _scenario_mixed_regression_echo_gate() -> NarrationTranscriptScenario:
         patch_visibility_enforcement=False,
         assertions=NarrationTranscriptAssertions(
             required_substrings=("tavern runner",),
-            forbidden_substrings=("word for word", "what supplies are still moving through the gate"),
             expected_speaker_id="tavern_runner",
         ),
     )
@@ -1411,7 +1399,6 @@ def _scenario_mixed_obj20_anti_reset() -> NarrationTranscriptScenario:
                 "final_emitted_source": "anti_reset_local_continuation_fallback",
                 "anti_reset_intro_suppressed": True,
             },
-            forbidden_substrings=_FORBIDDEN_SCENE_INTRO_MARKERS,
         ),
     )
 
@@ -1429,7 +1416,6 @@ def _scenario_mixed_obj20_bounded_partial() -> NarrationTranscriptScenario:
         patch_visibility_enforcement=False,
         assertions=NarrationTranscriptAssertions(
             required_substrings=("for a breath", "voices shift"),
-            forbidden_substrings=("no name comes clear from what shows.",),
             meta_exact={
                 "fallback_behavior_repaired": False,
                 "final_route": "replaced",
@@ -1451,12 +1437,7 @@ def _scenario_mixed_obj20_safety() -> NarrationTranscriptScenario:
         patch_visibility_enforcement=False,
         assertions=NarrationTranscriptAssertions(
             required_substrings=("for a breath",),
-            forbidden_substrings=(
-                "verrick",
-                "culprit was",
-                "signed by",
-                "the order was signed by",
-            ),
+            forbidden_substrings=("verrick",),
             meta_exact={"fallback_behavior_repaired": False, "final_route": "replaced"},
         ),
     )

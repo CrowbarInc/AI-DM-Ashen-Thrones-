@@ -34,6 +34,9 @@ jobs:
       - name: Planner convergence static audit
         run: python tools/planner_convergence_audit.py
 
+      - name: Test ownership registry (governance)
+        run: python -m pytest tests/test_ownership_registry.py -q
+
       - name: Run content lint (Phase 1 — informational, non-blocking)
         # Observer: always produce logs + JSON; do not fail the workflow on errors or warnings.
         # Entry script is a thin forwarder to tools/run_content_lint.py (same argv / exit codes).

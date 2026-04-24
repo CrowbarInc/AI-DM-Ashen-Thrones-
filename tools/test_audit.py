@@ -1,8 +1,14 @@
 #!/usr/bin/env python3
 """Static + pytest inventory for tests/. Writes tests/test_inventory.json.
 
-Run from repo root: python tools/test_audit.py
-Requires: same interpreter used for pytest (py -3 tools/test_audit.py).
+Run from repo root: ``py -3 tools/test_audit.py`` (Windows) or ``python tools/test_audit.py``.
+Requires: the same interpreter used for pytest.
+
+Emits per-file ``collected_nodeids`` / ``collected_test_names``, AST duplicate-name
+guardrails, parsed ``game.*`` imports, heuristic ``likely_ownership_theme`` and
+``likely_architecture_layer`` (engine / planner / gpt / gate / evaluator / smoke /
+transcript / gauntlet), overlap hints, and top-level ``block_b_overlap_clusters`` /
+``import_hub_modules`` for consolidation triage.
 
 Also prints whether any module defines the same top-level ``test_*`` name twice
 (Python keeps only the last — pytest would under-collect). Details:
@@ -43,6 +49,18 @@ FILE_BUCKET_RULES: list[tuple[str, tuple[str, ...]]] = [
     ("transcript_gauntlet", ("test_transcript_gauntlet_",)),
     ("regression", ("_regressions.py", "test_transcript_regression.py", "test_gauntlet_regressions.py")),
 ]
+
+# Single primary label per test file for architecture discussions (engine / planner / gpt / gate / …).
+ARCH_LAYERS: tuple[str, ...] = (
+    "transcript",
+    "gauntlet",
+    "evaluator",
+    "gate",
+    "gpt",
+    "planner",
+    "smoke",
+    "engine",
+)
 
 
 def _file_primary_bucket(rel: str) -> str:
@@ -248,6 +266,187 @@ def _find_function_body(src: str, func_name: str) -> str:
     return ""
 
 
+def _parse_game_import_modules(src: str) -> list[str]:
+    """Top-level ``import game`` / ``from game...`` module paths (deduped, stable order)."""
+    try:
+        tree = ast.parse(src)
+    except SyntaxError:
+        return []
+    found: set[str] = set()
+    for node in tree.body:
+        if isinstance(node, ast.Import):
+            for alias in node.names:
+                name = alias.name
+                if name == "game" or name.startswith("game."):
+                    found.add(name if name.startswith("game.") else "game")
+        elif isinstance(node, ast.ImportFrom) and node.module:
+            mod = node.module
+            if mod == "game" or mod.startswith("game."):
+                if node.names and any(a.name == "*" for a in node.names):
+                    found.add(f"{mod}.*")
+                elif mod == "game":
+                    for alias in node.names:
+                        found.add(f"game.{alias.name}")
+                else:
+                    found.add(mod)
+    return sorted(found)
+
+
+def _game_import_roots(modules: list[str]) -> list[str]:
+    """First segment under ``game`` (e.g. ``game.final_emission_gate`` -> ``final_emission_gate``)."""
+    roots: list[str] = []
+    for m in modules:
+        if m == "game" or m == "game.*":
+            roots.append("game")
+            continue
+        if m.startswith("game."):
+            rest = m[len("game.") :]
+            roots.append(rest.split(".", 1)[0])
+    return sorted(set(roots))
+
+
+def _architecture_layer_scores(fp: str, src: str, file_bucket: str) -> dict[str, int]:
+    """Heuristic scores for ``ARCH_LAYERS``; higher wins (ties broken by ``ARCH_LAYERS`` order)."""
+    bn = Path(fp).name.lower()
+    sl = src.lower()
+    scores = {layer: 0 for layer in ARCH_LAYERS}
+
+    if file_bucket == "transcript_gauntlet" or "transcript_gauntlet" in bn:
+        scores["gauntlet"] += 12
+    if "gauntlet_regressions" in bn or "manual_gauntlet" in bn:
+        scores["gauntlet"] += 8
+    if "transcript" in bn and "gauntlet" not in bn and "transcript_gauntlet" not in bn:
+        scores["transcript"] += 6
+    if "run_transcript" in sl or "transcript_runner" in sl or ("session_log" in sl and "replay" in sl):
+        scores["transcript"] += 10
+    if "mixed_state_recovery" in bn and ("run_transcript" in sl or "transcript" in sl):
+        scores["transcript"] += 5
+
+    if any(
+        tok in sl
+        for tok in (
+            "narrative_authenticity_eval",
+            "behavioral_gauntlet_eval",
+            "evaluate_narrative_authenticity",
+            "evaluate_behavioral_gauntlet",
+            "evaluate_scenario_spine",
+            "playability_eval",
+            "intent_fulfillment_eval",
+            "session_cohesion_eval",
+        )
+    ):
+        scores["evaluator"] += 10
+    if "authenticity" in bn and ("eval" in bn or "aer" in bn):
+        scores["evaluator"] += 6
+    if "behavioral_gauntlet_eval" in bn or "playability_eval" in bn or "scenario_spine_eval" in bn:
+        scores["evaluator"] += 5
+
+    if "final_emission_gate" in sl or "apply_final_emission_gate" in sl:
+        scores["gate"] += 10
+    if "final_emission_validators" in sl or "final_emission_repairs" in sl:
+        scores["gate"] += 4
+    if "social_exchange_emission" in sl:
+        scores["gate"] += 3
+    if "output_sanitizer" in sl or "prompt_and_guard" in sl:
+        scores["gate"] += 2
+
+    if "call_gpt" in sl or "mock_gpt" in sl or "patch(" in sl and "gpt" in sl:
+        scores["gpt"] += 10
+    if re.search(r"\bgame\.gpt\b", sl) or "openai" in sl:
+        scores["gpt"] += 6
+
+    if "planner_convergence" in sl or "narration_plan" in sl or re.search(r"\bgame\.narrative_plan", sl):
+        scores["planner"] += 9
+    if "plan_structural" in sl or "plan_prompt" in bn:
+        scores["planner"] += 4
+
+    if "_smoke" in bn or bn.endswith("smoke.py") or "runner_smoke" in bn:
+        scores["smoke"] += 10
+    if "synthetic_smoke" in bn:
+        scores["smoke"] += 6
+
+    if any(
+        root in sl
+        for root in (
+            "exploration_resolution",
+            "world_state",
+            "skill_check",
+            "combat_resolution",
+            "lead_engine",
+            "scene_graph",
+            "world_engine",
+            "storage",
+        )
+    ):
+        scores["engine"] += 3
+    if "TestClient" not in src and "tmp_path" not in sl and max(scores.values()) <= 4:
+        scores["engine"] += 2
+
+    return scores
+
+
+def _primary_architecture_layer(scores: dict[str, int]) -> str:
+    best = max(scores.values())
+    if best <= 0:
+        return "engine"
+    for layer in ARCH_LAYERS:
+        if scores.get(layer, 0) == best:
+            return layer
+    return "engine"
+
+
+def _likely_ownership_theme(fp: str, primary_feature_breakdown: dict[str, int], game_roots: list[str]) -> str:
+    """Readable theme: prefer explicit/heuristic feature majority, else filename + imports."""
+    if primary_feature_breakdown:
+        top_label, top_n = max(primary_feature_breakdown.items(), key=lambda kv: kv[1])
+        second = sorted(((k, v) for k, v in primary_feature_breakdown.items() if k != top_label), key=lambda kv: -kv[1])
+        if top_label != "general":
+            if second and second[0][1] >= max(3, top_n // 4):
+                return f"{top_label} (+mixed: {second[0][0]})"
+            return top_label
+    low = Path(fp).name.lower()
+    for label, kws in FEATURE_RULES:
+        if any(k in low for k in kws):
+            return f"{label} (filename)"
+    if game_roots:
+        return "general (" + ", ".join(game_roots[:6]) + ")"
+    return "general"
+
+
+def _overlap_hints_for_file(
+    fp: str,
+    src: str,
+    game_modules: list[str],
+    game_roots: list[str],
+    has_shadowed_dups: bool,
+    colliding_base_names: list[str],
+    primary_theme: str,
+    layer: str,
+) -> list[str]:
+    hints: list[str] = []
+    low = src.lower()
+    if has_shadowed_dups:
+        hints.append("module_shadowed_duplicate_test_names")
+    if colliding_base_names:
+        hints.append("cross_file_same_test_base_name:" + ",".join(sorted(colliding_base_names)[:6]))
+    fe_sub = [m for m in game_modules if "final_emission" in m]
+    if len(fe_sub) >= 2:
+        hints.append("imports_multiple_final_emission_subsystems")
+    if "final_emission_gate" in low and "prompt_context" in low:
+        hints.append("gate_stack_adjacent_to_prompt_context")
+    if "final_emission_gate" in low and ("testclient" in low or "client.post" in low or "client.get" in low):
+        hints.append("http_client_plus_final_emission_gate")
+    if "social_exchange_emission" in low and "final_emission_gate" in low:
+        hints.append("strict_social_emission_plus_gate")
+    if primary_theme.startswith("lead extraction") and layer in ("gate", "engine", "gpt"):
+        hints.append("lead_theme_non_engine_layer")
+    if primary_theme.startswith("clue system") and "turn_pipeline" in fp:
+        hints.append("clue_theme_in_pipeline_module")
+    if len(game_roots) >= 12:
+        hints.append(f"broad_game_import_fanout:{len(game_roots)}_roots")
+    return hints[:14]
+
+
 def _collect_pytest_nodeids() -> list[str]:
     proc = subprocess.run(
         [sys.executable, "-m", "pytest", str(TESTS), "--collect-only"],
@@ -275,6 +474,17 @@ def _parse_nodeid(line: str) -> tuple[str, str, str, bool]:
     return file_part, rest, base, is_param
 
 
+def _test_keyword_overlap_hints(nodeid: str, body: str) -> list[str]:
+    """When several feature keywords co-occur, flag as a merge-risk hint (not duplicate proof)."""
+    blob = f"{nodeid}\n{body}".lower()
+    hints: list[str] = []
+    for label, kws in FEATURE_RULES:
+        hit_kws = [k for k in kws if k in blob]
+        if len(hit_kws) >= 2:
+            hints.append(f"multi_keyword:{label}:{','.join(hit_kws[:4])}")
+    return hints[:6]
+
+
 def main() -> None:
     nodeids = _collect_pytest_nodeids()
     by_file: dict[str, list[str]] = defaultdict(list)
@@ -282,13 +492,21 @@ def main() -> None:
         fp, _, _, _ = _parse_nodeid(nid)
         by_file[fp].append(nid)
 
+    src_by_fp: dict[str, str] = {}
+    for p in sorted(TESTS.glob("test_*.py")):
+        fp = "tests/" + p.name
+        src_by_fp[fp] = p.read_text(encoding="utf-8")
+
     ast_total = 0
     dup_report: list[dict] = []
+    ast_by_fp: dict[str, tuple[list[str], list[str]]] = {}
     for p in sorted(TESTS.glob("test_*.py")):
         rel = p.as_posix()
         if not rel.startswith("tests/"):
             rel = "tests/" + p.name
         names, dups = _ast_test_defs(p)
+        fp = "tests/" + p.name
+        ast_by_fp[fp] = (names, dups)
         ast_total += len(names)
         if dups:
             dup_report.append(
@@ -309,8 +527,7 @@ def main() -> None:
     tests_out: list[dict] = []
     for nid in nodeids:
         fp, full_name, base, is_param = _parse_nodeid(nid)
-        path = TESTS / Path(fp).name
-        src = path.read_text(encoding="utf-8")
+        src = src_by_fp.get(fp) or ""
         body = _find_function_body(src, base)
         file_bucket = _file_primary_bucket(fp)
         bucket = _refine_bucket_for_test(file_bucket, nid, body)
@@ -336,6 +553,7 @@ def main() -> None:
                 "assertion_style": assertion,
                 "brittleness": brittle,
                 "redundancy_flag": redundancy,
+                "keyword_overlap_hints": _test_keyword_overlap_hints(nid, body),
             }
         )
 
@@ -344,14 +562,17 @@ def main() -> None:
         fp = "tests/" + p.name
         bucket = _file_primary_bucket(fp)
         collected = len(by_file.get(fp, []))
-        names, dups = _ast_test_defs(p)
+        names, dups = ast_by_fp.get(fp, ([], []))
         file_rows.append(
             {
                 "path": fp,
                 "filename_bucket": bucket,
                 "pytest_collected": collected,
+                "collected_nodeids": sorted(by_file.get(fp, [])),
+                "collected_test_names": [nid.split("::", 1)[1] for nid in sorted(by_file.get(fp, []))],
                 "ast_test_def_lines": len(names),
                 "ast_unique_test_names": len(set(names)),
+                "shadowed_duplicate_test_names": sorted(dups) if dups else [],
                 "has_shadowed_duplicate_names": bool(dups),
             }
         )
@@ -364,7 +585,8 @@ def main() -> None:
 
     uniq_sum = 0
     for p in TESTS.glob("test_*.py"):
-        names, _ = _ast_test_defs(p)
+        fp = "tests/" + p.name
+        names, _ = ast_by_fp.get(fp, ([], []))
         uniq_sum += len(set(names))
 
     summary = {
@@ -379,6 +601,14 @@ def main() -> None:
     }
 
     overlap_clusters = [k for k, v in base_locations.items() if len(set(v)) > 1]
+
+    cross_file_dup_index: dict[str, list[str]] = defaultdict(list)
+    for base, fps in base_locations.items():
+        ufs = sorted(set(fps))
+        if len(ufs) <= 1:
+            continue
+        for fp in ufs:
+            cross_file_dup_index[fp].append(base)
 
     file_bucket_majority: dict[str, str] = {}
     file_bucket_distribution: dict[str, dict[str, int]] = {}
@@ -397,6 +627,27 @@ def main() -> None:
         )
         fr["high_brittleness_test_count"] = sum(1 for t in tas if t["brittleness"] == "high")
         fr["prose_sensitive_test_count"] = sum(1 for t in tas if t["assertion_style"] == "prose-sensitive")
+        src = src_by_fp.get(fp, "")
+        gmods = _parse_game_import_modules(src)
+        groots = _game_import_roots(gmods)
+        fr["game_import_modules"] = gmods
+        fr["game_import_roots"] = groots
+        fb = fr["filename_bucket"]
+        layer_scores = _architecture_layer_scores(fp, src, fb)
+        fr["architecture_layer_scores"] = layer_scores
+        fr["likely_architecture_layer"] = _primary_architecture_layer(layer_scores)
+        fr["likely_ownership_theme"] = _likely_ownership_theme(fp, fr["primary_feature_area_breakdown"], groots)
+        colliding = sorted(set(cross_file_dup_index.get(fp, [])))
+        fr["overlap_hints"] = _overlap_hints_for_file(
+            fp,
+            src,
+            gmods,
+            groots,
+            bool(fr["has_shadowed_duplicate_names"]),
+            colliding,
+            fr["likely_ownership_theme"],
+            fr["likely_architecture_layer"],
+        )
 
     primary_feature = [t["feature_areas"][0] for t in tests_out]
     feature_primary_counts = Counter(primary_feature)
@@ -409,12 +660,79 @@ def main() -> None:
         key=lambda x: (-x["distinct_files"], -sum(1 for t in tests_out if x["area"] in t["feature_areas"])),
     )
 
+    file_row_map = {fr["path"]: fr for fr in file_rows}
+    module_to_files: dict[str, set[str]] = defaultdict(set)
+    for fr in file_rows:
+        for m in fr.get("game_import_modules", ()):
+            module_to_files[m].add(fr["path"])
+    import_hub_modules = sorted(
+        [{"game_module": m, "file_count": len(fs), "sample_files": sorted(fs)[:18]} for m, fs in module_to_files.items() if len(fs) >= 10],
+        key=lambda r: (-r["file_count"], r["game_module"]),
+    )[:30]
+
+    cross_file_duplicate_test_names = [
+        {"base_name": base, "files": sorted(set(fps))}
+        for base, fps in sorted(base_locations.items(), key=lambda kv: kv[0])
+        if len(set(fps)) > 1
+    ]
+
+    theme_layer_counter = Counter((fr["likely_ownership_theme"], fr["likely_architecture_layer"]) for fr in file_rows)
+    dense_theme_layer_cells = [
+        {"likely_ownership_theme": a, "likely_architecture_layer": b, "file_count": n}
+        for (a, b), n in theme_layer_counter.most_common(25)
+        if n >= 6
+    ]
+
+    def _mods_hit(fr: dict, needle: str) -> bool:
+        return any(needle in m for m in fr.get("game_import_modules", ()))
+
+    prompt_gate_files = sorted(
+        fr["path"] for fr in file_rows if _mods_hit(fr, "final_emission_gate") and _mods_hit(fr, "prompt_context")
+    )
+
+    block_b_overlap_clusters: list[dict] = []
+    if cross_file_duplicate_test_names:
+        block_b_overlap_clusters.append(
+            {
+                "kind": "cross_file_duplicate_test_base_names",
+                "collision_count": len(cross_file_duplicate_test_names),
+                "items": cross_file_duplicate_test_names,
+            }
+        )
+    if dense_theme_layer_cells:
+        block_b_overlap_clusters.append(
+            {
+                "kind": "dense_ownership_theme_by_architecture_layer",
+                "note": "Heuristic theme label × architecture layer; high file_count suggests many modules in the same rough neighborhood.",
+                "cells": dense_theme_layer_cells,
+            }
+        )
+    if prompt_gate_files:
+        block_b_overlap_clusters.append(
+            {
+                "kind": "imports_final_emission_gate_and_prompt_context",
+                "file_count": len(prompt_gate_files),
+                "sample_files": prompt_gate_files[:30],
+            }
+        )
+
+    for t in tests_out:
+        row = file_row_map.get(t["file"], {})
+        t["likely_architecture_layer"] = row.get("likely_architecture_layer", "engine")
+        t["likely_ownership_theme"] = row.get("likely_ownership_theme", "general")
+        t["file_overlap_hints"] = list(row.get("overlap_hints", []))
+
+    summary["cross_file_duplicate_test_name_count"] = len(cross_file_duplicate_test_names)
+
     payload = {
         "summary": summary,
-        "counts_by_majority_file_bucket": Counter(file_bucket_majority.values()),
+        "counts_by_majority_file_bucket": dict(Counter(file_bucket_majority.values())),
         "top_high_brittleness_files": brittle_by_file.most_common(15),
         "cross_file_same_base_name_count": len(overlap_clusters),
         "cross_file_same_base_names_sample": sorted(overlap_clusters)[:40],
+        "cross_file_duplicate_test_names": cross_file_duplicate_test_names,
+        "import_hub_modules": import_hub_modules,
+        "block_b_overlap_clusters": block_b_overlap_clusters,
         "feature_area_primary_counts": dict(feature_primary_counts.most_common()),
         "feature_areas_by_distinct_files": spread_ranked[:25],
         "files": file_rows,

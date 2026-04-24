@@ -2,6 +2,30 @@
 
 **Status:** Plan + recorded ownership; routing consolidation **pass closed**; **repair/retry cluster closed enough** (Block 3 doc — see *Repair / retry cluster — Block 3*). **Behavioral Gauntlet**, **Playability Validation**, and **AER** are **complete** as validation tracks—this document now governs **post-feature consolidation** only (no gameplay expansion in consolidation-only PRs).
 
+### Test Ownership & Coverage Consolidation (Blocks A–C — complete)
+
+Documentation and tooling only; **no runtime game behavior** changes in this track.
+
+**Block A — inventory audit**
+
+- **`tools/test_audit.py` enhanced** — richer inventory, overlap hints, and JSON fields aligned with triage (see `tests/TEST_AUDIT.md` → *Methodology & limitations*).
+- **`tests/test_inventory.json`** — regenerated from collection + heuristics; **live** ground truth for counts and per-file metadata (`py -3 tools/test_audit.py` from repo root).
+- **`tests/TEST_AUDIT.md`** — static rotting tables removed in favor of JSON-backed methodology and prose governance tables; counts and brittleness leaders are **regenerate**, not hand-maintained.
+
+**Block B — ownership registry governance**
+
+- **`tests/test_ownership_registry.py` added** — declares required **responsibility** groups with a single **direct_owner** path each (plus optional smoke/transcript/gauntlet/evaluator neighbors), checks inventory presence and layer alignment, and rejects **live legality** groups whose direct owner is classified as transcript/gauntlet/playability/evaluator-only.
+- **Direct-owner governance checks** — registry + pytest prevent silent drift of “who owns this seam” and accidental double-claim of the same `direct_owner` path across groups.
+- **Duplicate base names** — cross-file identical `test_*` base names remain **heuristic triage** (`tests/test_inventory.json`, `block_b_overlap_clusters`); a small **allowlist** documents intentional collisions with **non-empty reasons**.
+
+**Block C — smoke / transcript consolidation (examples)**
+
+- **`tests/test_c4_narrative_mode_live_pipeline.py`** — thinned toward **C4 narrative-mode wiring / orchestration smoke**; not a second full NMO legality matrix.
+- **`tests/test_narration_transcript_regressions.py`** — thinned away from **duplicate direct-legality** coverage already owned in focused suites; preserves transcript value for **multi-turn narration** behavior.
+- **Canonical owners preserved** (extend these first for new rules): **prompt context** (`test_prompt_context.py`); **NMO legality** and narrative-mode contracts per existing governance docs; **`test_final_emission_gate.py`**; **`test_final_emission_validators.py`**; **`test_final_emission_repairs.py`**; **fallback** and downstream repair consumers as documented (not parallel derivation owners); **social emission** (`test_social_exchange_emission.py` and related strict-social paths per `TEST_AUDIT.md`).
+
+**Maintainer loop:** `tests/README_TESTS.md` → *Test ownership rules* and *Command cheat sheet*.
+
 **Runtime map:** `docs/narrative_integrity_architecture.md` documents `game/` ownership (routing, continuity breaks, targeting, emission validators/repairs, **`final_emission_gate` orchestration**) and **explicit deferrals**. **Post-AER Consolidation Rules** and the **Consolidation Targets** table live there and in `docs/current_focus.md`.
 
 **Validation layer seam (Objective #11):** Phase ownership (engine / planner / GPT / gate / evaluator) is governed by `docs/validation_layer_separation.md` and `game/validation_layer_contracts.py`. Block B residue and import/wording drift are optionally checked with `tools/validation_layer_audit.py` (see `docs/validation_layer_audit.md`); multiple files may implement one canonical layer without implying duplicate ownership.

@@ -21,7 +21,15 @@ Diagnostic inventory of `tests/` only. **How to run tests (fast/full lanes, coll
 | **Downstream consumer coverage** | Other suites that ship, observe, or regress behavior **through** the owner boundary; they are not alternate semantic homes. |
 | **Compatibility residue** | Supported legacy paths, aliases, or read-side helpers that may remain importable without splitting authority. |
 
-**Regenerate artifacts:** from repo root run `py -3 tools/test_audit.py` (or `python tools/test_audit.py`). That refreshes `tests/test_inventory.json` using `pytest --collect-only` plus static heuristics. The script prints a one-line summary of **module-level duplicate `test_*` names** (shadowed defs); details are in JSON under `summary.files_with_shadowed_duplicate_test_defs`. It also prints a short **overlap spread** line (themes by distinct file count; heuristic, not semantic duplicate detection).
+**Regenerate artifacts:** from repo root run `py -3 tools/test_audit.py` (or `python tools/test_audit.py`). That refreshes `tests/test_inventory.json` using `pytest --collect-only` (non-quiet, so full nodeids are captured) plus static heuristics. The script prints a one-line summary of **module-level duplicate `test_*` names** (shadowed defs); details are in JSON under `summary.files_with_shadowed_duplicate_test_defs`. It also prints a short **overlap spread** line (themes by distinct file count; heuristic, not semantic duplicate detection).
+
+**Governance pytest:** after regenerating or editing inventory-sensitive paths, run `py -3 -m pytest tests/test_ownership_registry.py -q`. That module encodes required **direct-owner** groups and allowlisted duplicate-name reasons; it complements the audit script and does **not** replace semantic code review.
+
+**`block_b_overlap_clusters`:** JSON clusters (for example `dense_ownership_theme_by_architecture_layer`, `imports_final_emission_gate_and_prompt_context`) are **triage signals**—many files touching a theme or importing the same gate helpers does **not** prove redundant tests. Use them to spot candidates; decide merges or thinnings with the governance tables in this file and `tests/TEST_CONSOLIDATION_PLAN.md`.
+
+**Smoke vs transcript consolidation examples:** `tests/test_c4_narrative_mode_live_pipeline.py` is scoped as **wiring / orchestration smoke** for the C4 narrative-mode path; `tests/test_narration_transcript_regressions.py` stays a **transcript** home for multi-turn narration behavior while avoiding duplicate **direct-legality** matrices owned elsewhere.
+
+**Machine-readable ownership map (first pass):** each `files[]` row now includes `collected_nodeids`, `collected_test_names`, `shadowed_duplicate_test_names`, `game_import_modules` / `game_import_roots`, `likely_ownership_theme`, `likely_architecture_layer` (one of `engine` / `planner` / `gpt` / `gate` / `evaluator` / `smoke` / `transcript` / `gauntlet`), `architecture_layer_scores`, and `overlap_hints`. Each `tests[]` row adds `keyword_overlap_hints`, `file_overlap_hints`, and the same `likely_*` fields for quick filtering. Top-level `cross_file_duplicate_test_names`, `import_hub_modules`, and `block_b_overlap_clusters` summarize Block B–style overlap without maintaining giant markdown tables.
 
 **Validation layer drift (Objective #11):** For the five-layer phase contract (truth / structure / expression / legality / offline scoring), run `py -3 tools/validation_layer_audit.py` and read `docs/validation_layer_audit.md`. The audit uses `game/validation_layer_contracts.py` plus `docs/validation_layer_separation.md` and surfaces Block B residue as tolerated context; it does not replace semantic review. Smoke tests: `tests/test_validation_layer_audit_smoke.py`.
 
@@ -231,13 +239,13 @@ secondary downstream retry-terminal / first-mention / compatibility coverage, wi
 and gate/retry-oriented suites may continue to exercise the seam, but they should read as
 consumer/application, harness, or regression evidence rather than alternate semantic owners for the same seam.
 
-Heuristic tags (`test_inventory.json` → `feature_areas_by_distinct_files`) show **many files** touching the same themes (breadth diagnostic, not proof of duplicate ownership). The hotspots below are the highest-risk *semantic* overlap areas for double-locking:
+Heuristic tags (`test_inventory.json` → `feature_areas_by_distinct_files`) show **many files** touching the same themes (breadth diagnostic, not proof of duplicate ownership). For **live** distinct-file counts and import hubs, regenerate the inventory and read `feature_areas_by_distinct_files`, `import_hub_modules`, and `block_b_overlap_clusters` (especially `dense_ownership_theme_by_architecture_layer` and `imports_final_emission_gate_and_prompt_context`). The qualitative hotspots below remain the highest-risk *semantic* overlap areas for double-locking (counts intentionally not duplicated here):
 
-1. **Lead extraction + clue system** — **26** / **24** files respectively; many `test_lead_*.py` modules plus `test_social_lead_landing.py`, `test_clue_lead_registry_integration.py`, pipeline, and prompt/guard.
-2. **Resolution / emission** — **21** files; `test_social_exchange_emission.py`, `test_turn_pipeline_shared.py`, `test_social_emission_quality.py`, `test_social.py`, and several lead payoff modules.
-3. **Routing** — **15** files; pipeline vs `test_directed_social_routing.py` vs exploration/social misc.
-4. **Legality / sanitizer + fallback** — **16** files each; repair regressions overlap with sanitizer, prompt/guard, and pipeline.
-5. **Social continuity** — **15** files; `test_social.py`, `test_directed_social_routing.py`, `test_mixed_state_recovery_regressions.py`, `test_turn_pipeline_shared.py`, emission quality.
+1. **Lead extraction + clue system** — many `test_lead_*.py` modules plus `test_social_lead_landing.py`, `test_clue_lead_registry_integration.py`, pipeline, and prompt/guard.
+2. **Resolution / emission** — `test_social_exchange_emission.py`, `test_turn_pipeline_shared.py`, `test_social_emission_quality.py`, `test_social.py`, and several lead payoff modules.
+3. **Routing** — pipeline vs `test_directed_social_routing.py` vs exploration/social misc.
+4. **Legality / sanitizer + fallback** — repair regressions overlap with sanitizer, prompt/guard, and pipeline.
+5. **Social continuity** — `test_social.py`, `test_directed_social_routing.py`, `test_mixed_state_recovery_regressions.py`, `test_turn_pipeline_shared.py`, emission quality.
 
 ### Block 2 — concrete files to touch next
 
@@ -261,7 +269,7 @@ Prioritize **marker normalization + overlap trimming** (not mass deletion). **Ro
 
 **Block 20 — feature ownership:** Inventory `feature_areas` now honor optional per-test `# feature: tag1, tag2` lines (immediately above the test, optionally above `@pytest.mark.*`), module-level `# feature:` before the first top-level `def test_`, and `@pytest.mark.routing|retry|fallback|social|continuity|clues|leads|emission|legality` when present. Tags map into the existing inventory labels (e.g. `clues` → `clue system`, `leads` → `lead extraction`). See `pytest.ini` for registered markers.
 
-**Per-test rows:** `tests/test_inventory.json` — each collected pytest item includes `nodeid`, heuristic `primary_bucket`, `feature_areas`, `historically_motivated`, `assertion_style`, `brittleness`, and `redundancy_flag` (cross-file name collisions are rare; see limitations below).
+**Per-test rows:** `tests/test_inventory.json` — each collected pytest item includes `nodeid`, heuristic `primary_bucket`, `feature_areas`, `historically_motivated`, `assertion_style`, `brittleness`, `redundancy_flag`, `keyword_overlap_hints`, `likely_architecture_layer`, `likely_ownership_theme`, and `file_overlap_hints` (mirrors the owning file row). **Tool tests:** `tests/test_test_audit_tool.py` locks helper behavior without re-running full collection.
 
 ---
 
@@ -357,8 +365,9 @@ Re-run after large suite edits; treat `tests/test_inventory.json` as the invento
 
 | Metric | Latest `test_inventory.json` summary (regenerate locally) | Notes |
 | --- | ---: | --- |
-| Test files (`tests/` modules matching `test_*.py`) | 173 | from `summary.test_file_count` as of `2026-04-15` refresh in-repo |
-| Pytest collected items | 2377 | from `summary.pytest_collected_items` |
+| Test files (`tests/` modules matching `test_*.py`) | *see JSON* | `summary.test_file_count` |
+| Pytest collected items | *see JSON* | `summary.pytest_collected_items` |
+| Cross-file duplicate `test_*` base names | *see JSON* | `summary.cross_file_duplicate_test_name_count` + `cross_file_duplicate_test_names` |
 | Fast lane (`not transcript and not slow`) | *(re-run)* | `pytest --collect-only -m "not transcript and not slow"` — counts drift with markers |
 
 **Heuristic breakdowns** (bucket mixes, brittleness histograms, AST duplicate-name summaries): regenerate `tests/test_inventory.json` via `py -3 tools/test_audit.py` and read `summary` / `files` — the suite has outgrown static markdown tables here.
@@ -388,24 +397,11 @@ Snapshot from `test_inventory.json` → `top_high_brittleness_files` (2026-04-03
 
 ---
 
-## Top 10 “likely overlap” **areas** (by spread across files)
+## Top “likely overlap” **areas** (by spread across files)
 
-These are **feature tags** (keyword heuristics), not proof of duplicate tests. High file counts mean trims/consolidation require reading tests, not deleting by tag.
+These are **feature tags** (keyword heuristics), not proof of duplicate tests. High file counts mean trims/consolidation require reading tests, not deleting by tag. **Do not maintain a ranked markdown table here** — it rots immediately. After `py -3 tools/test_audit.py`, read `feature_areas_by_distinct_files` (and `feature_area_primary_counts` for item-weighted totals).
 
-| Rank | Feature tag (heuristic) | Distinct files touching tag (any position) |
-| --- | --- | ---: |
-| 1 | lead extraction | 26 |
-| 2 | clue system | 24 |
-| 3 | resolution/emission | 21 |
-| 4 | general | 20 |
-| 5 | legality/sanitizer | 16 |
-| 6 | fallback | 16 |
-| 7 | routing | 15 |
-| 8 | social continuity | 15 |
-| 9 | world/state | 11 |
-| 10 | retry | 11 |
-
-The **general** bucket still indicates tagging debt where modules do not match keyword rules; refine rules or add explicit `# feature:` / markers over time. Re-run the audit to refresh this table.
+The **general** bucket still indicates tagging debt where modules do not match keyword rules; refine rules or add explicit `# feature:` / markers over time.
 
 ---
 
@@ -494,70 +490,9 @@ Concrete “source of truth” examples for recurring themes (prefer extending t
 
 ## Full file index
 
-`primary_bucket` = majority of tests in that file. `High-brittleness` = count of tests with heuristic `brittleness: high` in that file. Feature tags = top primary feature labels (first keyword hit per test, aggregated).
+`primary_bucket` = majority of tests in that file. **High-brittleness** = count of tests with heuristic `brittleness: high` in that file. Feature tags = top primary feature labels (first keyword hit per test, aggregated).
 
-**Authoritative list:** All collected `test_*.py` module rows under `tests/` live in `tests/test_inventory.json` → `files`. The table below is a **partial historical snapshot**; prefer JSON + `pytest --collect-only` for current modules.
-
-| File | Collected | Primary bucket (majority of tests) | High-brittleness tests | Top primary feature tags |
-| --- | ---: | --- | ---: | --- |
-| test_activate_scene_validation_and_get_persistence.py | 6 | integration | 0 | general |
-| test_affordance_generation.py | 12 | integration | 0 | general |
-| test_agenda_simulation.py | 9 | unit | 1 | general |
-| test_campaign_reset.py | 5 | integration | 0 | world/state |
-| test_campaign_state_factory.py | 3 | unit | 0 | world/state |
-| test_clocks_projects_logging_lint.py | 5 | integration | 0 | general, clue system |
-| test_clue_discovery.py | 4 | integration | 1 | clue system |
-| test_clue_knowledge.py | 10 | integration | 0 | clue system |
-| test_combat_resolution.py | 6 | integration | 0 | resolution/emission |
-| test_conditional_affordances.py | 14 | unit | 0 | general, clue system |
-| test_contextual_minimal_repair_regressions.py | 6 | regression | 0 | fallback |
-| test_debug_payload_spoiler_safety.py | 3 | integration | 0 | legality/sanitizer |
-| test_dialogue_interaction_establishment.py | 10 | integration | 0 | social continuity |
-| test_dialogue_routing_lock.py | 5 | unit | 0 | routing |
-| test_directed_social_routing.py | 21 | integration | 0 | routing, social continuity |
-| test_discovery_memory.py | 8 | integration | 0 | clue system |
-| test_emergent_scene_actors.py | 6 | unit | 1 | general |
-| test_empty_social_retry_regressions.py | 8 | regression | 4 | retry |
-| test_exploration_resolution.py | 42 | unit | 0 | resolution/emission, routing, clue system |
-| test_exploration_skill_checks.py | 5 | integration | 0 | combat/skill |
-| test_gauntlet_regressions.py | 5 | regression | 1 | transcript regression |
-| test_intent_and_runtime.py | 2 | unit | 0 | routing |
-| test_intent_parser.py | 18 | unit | 0 | routing, fallback |
-| test_interaction_context_owner.py | 8 | unit | 0 | general, social continuity |
-| test_mixed_state_recovery_regressions.py | 6 | regression | 6 | mixed-state recovery |
-| test_narration_state_consistency.py | 9 | unit | 0 | general, fallback, clue system |
-| test_output_sanitizer.py | 41 | unit | 0 | legality/sanitizer, fallback, routing, transcript regression |
-| test_project_schema.py | 4 | integration | 0 | general |
-| test_prompt_and_guard.py | 67 | integration | 3 | legality/sanitizer, fallback, lead extraction, clue system |
-| test_prompt_compression.py | 17 | integration | 0 | general, world/state, fallback |
-| test_save_load.py | 5 | integration | 0 | world/state, clue system |
-| test_scene_advancement_signals.py | 3 | integration | 0 | general, world/state |
-| test_scene_entity_lock.py | 4 | integration | 0 | social continuity, general |
-| test_scene_graph.py | 6 | integration | 0 | world/state, routing |
-| test_scene_layers.py | 2 | integration | 0 | clue system, general |
-| test_scene_transition_authority.py | 3 | integration | 0 | general |
-| test_scene_validation.py | 17 | unit | 0 | general, clue system |
-| test_skill_checks.py | 9 | unit | 0 | combat/skill, fallback |
-| test_snapshots.py | 5 | integration | 0 | general, world/state |
-| test_social.py | 23 | integration | 0 | general, clue system, social continuity, legality/sanitizer |
-| test_social_answer_candidate.py | 7 | unit | 0 | general, fallback |
-| test_social_answer_retry_prioritization.py | 4 | integration | 0 | retry |
-| test_social_escalation.py | 16 | unit | 0 | general |
-| test_social_exchange_emission.py | 43 | unit | 0 | resolution/emission, fallback, retry, clue system |
-| test_social_interaction_authority.py | 7 | integration | 0 | general, fallback, resolution/emission |
-| test_social_lead_landing.py | 17 | integration | 0 | lead extraction, clue system |
-| test_social_probe_determinism.py | 6 | integration | 0 | general, legality/sanitizer, lead extraction |
-| test_social_target_authority_regressions.py | 10 | regression | 0 | social continuity |
-| test_startup_and_timestamps.py | 4 | unit | 0 | general |
-| test_transcript_gauntlet_actor_addressing.py | 4 | transcript_gauntlet | 4 | transcript regression |
-| test_transcript_gauntlet_campaign_cleanliness.py | 3 | transcript_gauntlet | 3 | transcript regression |
-| test_transcript_regression.py | 5 | regression | 5 | transcript regression |
-| test_transcript_runner_smoke.py | 1 | integration | 0 | transcript regression |
-| test_turn_pipeline_shared.py | 46 | integration | 0 | general, routing, retry, combat/skill |
-| test_validation_journal_affordances.py | 10 | unit | 0 | general, clue system |
-| test_world_engine_updates.py | 9 | unit | 0 | resolution/emission |
-| test_world_state.py | 8 | unit | 0 | world/state |
-| test_world_updates_and_clue_normalization.py | 7 | integration | 0 | clue system |
+**Authoritative list:** Every `test_*.py` under `tests/` is one row in `tests/test_inventory.json` → `files`, including `pytest_collected`, `collected_nodeids`, `likely_architecture_layer`, `likely_ownership_theme`, `overlap_hints`, and `primary_feature_area_breakdown`. The old static markdown table was removed to avoid rot; use your editor’s JSON viewer, `jq`, or ad-hoc Python to slice `files[]`.
 
 ---
 
@@ -566,8 +501,9 @@ Concrete “source of truth” examples for recurring themes (prefer extending t
 - **Ground truth for “what runs”:** pytest collection (see *Executive counts* / Block C1 snapshot; re-run `pytest --collect-only` after large edits). AST `def test_*` counts are per-file module-level defs; **duplicate names in the same file** are listed in `summary.files_with_shadowed_duplicate_test_defs` and echoed when running `tools/test_audit.py`.  
 - **Buckets:** Test-level buckets use filename patterns (`transcript_gauntlet`, `regression`) then body signals (`TestClient`, `tmp_path`, length).  
 - **Feature areas:** Substring rules on `nodeid`, merged with explicit `# feature:` / ownership `pytest.mark.*` when present; unannotated tests may still land on **general**.  
+- **Architecture layer + ownership theme:** Filename, AST-parsed `game.*` imports, and source keywords feed `likely_architecture_layer` / `likely_ownership_theme` on each file (and duplicated on each test row for filtering). These are **heuristics** for triage, not runtime ownership law (the prose tables above remain governance).  
 - **Assertion style / brittleness:** Regex on function source (long string `==`, `in "..."`, structural calls). Transcript/regression modules biased to **high** brittleness.  
-- **Redundancy:** `possible_overlap` only triggers on identical **base** test names in different files (none found). Semantic duplicates are **not** auto-detected.  
+- **Redundancy:** `possible_overlap` on a test row flags identical **base** names collected from multiple files (`cross_file_duplicate_test_names` aggregates them). Semantic duplicates are **not** auto-detected.  
 - **Pytest markers:** `pytest.ini` defines `unit`, `integration`, `regression`, `transcript`, `slow`, `brittle`, plus optional ownership markers (`routing`, `retry`, `fallback`, `social`, `continuity`, `clues`, `leads`, `emission`, `legality`). `tools/test_audit.py` reads those ownership markers and `# feature:` comments when building `feature_areas`.
 
 ---
