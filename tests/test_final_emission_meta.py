@@ -147,6 +147,12 @@ def test_response_type_debug_defaults_and_fem_merge_are_stable() -> None:
         "response_type_rejection_reasons": [],
         "non_hostile_escalation_blocked": False,
         "response_type_upstream_prepared_absent": False,
+        "upstream_prepared_emission_used": False,
+        "upstream_prepared_emission_valid": False,
+        "upstream_prepared_emission_source": None,
+        "upstream_prepared_emission_reject_reason": None,
+        "final_emission_boundary_repair_used": False,
+        "final_emission_boundary_semantic_repair_disabled": True,
     }
 
     fem: dict = {"final_route": "accept_candidate"}
@@ -160,6 +166,12 @@ def test_response_type_debug_defaults_and_fem_merge_are_stable() -> None:
     assert fem["response_type_rejection_reasons"] == []
     assert fem["non_hostile_escalation_blocked"] is False
     assert fem["response_type_upstream_prepared_absent"] is False
+    assert fem["upstream_prepared_emission_used"] is False
+    assert fem["upstream_prepared_emission_valid"] is False
+    assert fem["upstream_prepared_emission_source"] is None
+    assert fem["upstream_prepared_emission_reject_reason"] is None
+    assert fem["final_emission_boundary_repair_used"] is False
+    assert fem["final_emission_boundary_semantic_repair_disabled"] is True
 
     # Payload used by trace/log sinks is canonical and shallow.
     assert response_type_decision_payload(dbg) == {
@@ -171,6 +183,12 @@ def test_response_type_debug_defaults_and_fem_merge_are_stable() -> None:
         "response_type_rejection_reasons": [],
         "non_hostile_escalation_blocked": False,
         "response_type_upstream_prepared_absent": False,
+        "upstream_prepared_emission_used": False,
+        "upstream_prepared_emission_valid": False,
+        "upstream_prepared_emission_source": None,
+        "upstream_prepared_emission_reject_reason": None,
+        "final_emission_boundary_repair_used": False,
+        "final_emission_boundary_semantic_repair_disabled": True,
     }
 
 

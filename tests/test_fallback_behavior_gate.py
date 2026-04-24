@@ -11,7 +11,6 @@ from game.final_emission_meta import read_final_emission_meta_dict
 import pytest
 
 import game.final_emission_gate as feg
-import game.final_emission_repairs as fer
 from game.defaults import default_session, default_world
 from game.final_emission_gate import apply_final_emission_gate
 from game.interaction_context import rebuild_active_scene_entities, set_social_target
@@ -428,48 +427,15 @@ def test_gate_rewrites_open_call_move_plays_out_meta_leak_into_diegetic_partial(
     _assert_no_meta_bits(text)
 
 
-def test_gate_smooths_repaired_repeated_subject_social_line(monkeypatch: pytest.MonkeyPatch) -> None:
-    def fake_ensure_known_unknown_shape(*args, **kwargs):
-        _ = args, kwargs
-        return (
-            "Tavern Runner nods once. Tavern Runner does not answer at once.",
-            {"fallback_behavior_unknown_edge_added": True},
-        )
+def test_finalize_emission_output_preserves_duplicate_subject_without_micro_smooth() -> None:
+    """Packaging finalize must not merge consecutive short sentences for cadence (removed helper)."""
+    from game.final_emission_gate import _finalize_emission_output
 
-    monkeypatch.setattr(fer, "_ensure_known_unknown_shape", fake_ensure_known_unknown_shape)
-
-    out = apply_final_emission_gate(
-        {
-            "player_facing_text": "The reason is still unclear.",
-            "tags": [],
-            "response_policy": {
-                "fallback_behavior": _fallback_contract(
-                    uncertainty_sources=["unknown_feasibility"],
-                    require_partial_to_state_known_edge=False,
-                    require_partial_to_offer_next_lead=False,
-                )
-            },
-        },
-        resolution={
-            "kind": "question",
-            "prompt": "I press the tavern runner for a straight answer.",
-            "social": {
-                "npc_id": "runner",
-                "npc_name": "Tavern Runner",
-                "social_intent_class": "social_exchange",
-            },
-        },
-        session={},
-        scene_id="frontier_gate",
-        scene={},
-        world={},
-    )
-
+    pre = "Tavern Runner nods once. Tavern Runner does not answer at once."
+    out: dict = {"player_facing_text": pre, "tags": []}
+    _finalize_emission_output(out, pre_gate_text=pre)
     text = str(out.get("player_facing_text") or "")
-    low = text.lower()
     meta = read_final_emission_meta_dict(out) or {}
-
-    assert "system" not in low
-    assert "unclear" not in low
-    assert "tavern runner nods once. tavern runner" not in low
-    assert "tavern runner" in low
+    assert text.count("Tavern Runner") == 2
+    assert meta.get("sentence_micro_smoothing_applied") is False
+    assert meta.get("final_emission_boundary_semantic_repair_disabled") is True

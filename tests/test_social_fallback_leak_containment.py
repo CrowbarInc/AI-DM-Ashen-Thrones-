@@ -1,16 +1,16 @@
-"""Regression: social/bounded-partial fallback must not leak engine-shaped imperatives or recycle identical leads."""
+"""Regression: social/bounded-partial fallback must not leak engine-shaped imperatives.
+
+Template synthesis and bare-imperative wrapping previously lived in ``game.final_emission_repairs``;
+those helpers were retired from final emission (see ``docs/final_emission_debt_retirement.md``).
+Diegetic lead rotation and synthesis are owned upstream; this module keeps orchestration tests only.
+"""
 from __future__ import annotations
 
 import pytest
 
 from game.campaign_state import create_fresh_session_document
-from game.final_emission_repairs import (
-    _append_next_lead_if_allowed,
-    _fallback_lead_tail_should_block,
-    _record_fallback_lead_tail,
-    _synthesize_next_lead_phrase,
-    _apply_social_fallback_leak_guard,
-)
+from game.final_emission_repairs import repair_fallback_behavior
+from game.final_emission_validators import validate_fallback_behavior
 from game.interaction_context import rebuild_active_scene_entities
 from game.social_exchange_emission import apply_social_exchange_retry_fallback_gm
 from game.storage import load_scene
@@ -18,8 +18,19 @@ from game.storage import load_scene
 pytestmark = pytest.mark.unit
 
 
-def _minimal_contract_require_lead() -> dict:
-    return {
+def test_final_emission_repairs_no_longer_exports_synthesis_helpers() -> None:
+    import game.final_emission_repairs as fer
+
+    for name in (
+        "_synthesize_next_lead_phrase",
+        "_append_next_lead_if_allowed",
+        "_apply_social_fallback_leak_guard",
+    ):
+        assert not hasattr(fer, name), f"expected {name} removed from boundary module"
+
+
+def test_repair_fallback_behavior_strip_only_does_not_append_synthesized_next_lead() -> None:
+    ctr = {
         "enabled": True,
         "uncertainty_active": True,
         "uncertainty_sources": ["unknown_feasibility"],
@@ -41,76 +52,12 @@ def _minimal_contract_require_lead() -> dict:
         "allowed_authority_bases": ["rumor_marked_as_rumor"],
         "forbidden_authority_bases": [],
     }
-
-
-def test_synthesize_next_lead_is_diegetic_not_bare_imperative() -> None:
-    ctr = _minimal_contract_require_lead()
-    resolution = {
-        "kind": "question",
-        "prompt": "Can I bribe the watch here?",
-        "social": {"npc_id": "tavern_runner", "npc_name": "Tavern Runner"},
-    }
-    out = _synthesize_next_lead_phrase(ctr, resolution, "Can I bribe the watch here?", variant=0)
-    low = out.lower()
-    assert not low.startswith("press ")
-    assert not low.startswith("ask ")
-    assert not low.startswith("check ")
-    assert '"' in out
-    assert "tavern runner" in low or "says" in low or "mutter" in low
-
-
-def test_fallback_lead_tail_blocks_after_two_identical_emissions() -> None:
-    session: dict = {}
-    resolution = {
-        "kind": "question",
-        "prompt": "Who was the buyer?",
-        "social": {"npc_id": "tavern_runner", "npc_name": "Tavern Runner"},
-    }
-    ctr = _minimal_contract_require_lead()
-    lead = _synthesize_next_lead_phrase(ctr, resolution, "Who was the buyer?", variant=0)
-    assert lead
-    _record_fallback_lead_tail(session, "frontier_gate", resolution, lead)
-    assert not _fallback_lead_tail_should_block(session, "frontier_gate", resolution, lead)
-    _record_fallback_lead_tail(session, "frontier_gate", resolution, lead)
-    assert _fallback_lead_tail_should_block(session, "frontier_gate", resolution, lead)
-
-
-def test_append_next_lead_rotates_variant_when_same_lead_repeated_in_session() -> None:
-    """After two identical synthesized leads for the same anchor, the next append must not recycle variant 0."""
-    session: dict = {}
-    resolution = {
-        "kind": "question",
-        "prompt": "same topic",
-        "social": {"npc_id": "tavern_runner", "npc_name": "Tavern Runner"},
-    }
-    ctr = _minimal_contract_require_lead()
     base = "No one commits themselves at once."
-    lead_v0 = _synthesize_next_lead_phrase(ctr, resolution, "same topic", variant=0)
-    _record_fallback_lead_tail(session, "frontier_gate", resolution, lead_v0)
-    _record_fallback_lead_tail(session, "frontier_gate", resolution, lead_v0)
-    text, patch = _append_next_lead_if_allowed(
-        base,
-        contract=ctr,
-        source_text="",
-        resolution=resolution,
-        session=session,
-        scene_id="frontier_gate",
-    )
-    assert lead_v0 not in text
-    assert "patrol sergeant" in text.lower()
-    assert patch.get("fallback_behavior_next_lead_added") is True
-
-
-def test_social_fallback_leak_guard_wraps_bare_press_line() -> None:
-    resolution = {
-        "kind": "question",
-        "prompt": "x",
-        "social": {"npc_id": "tavern_runner", "npc_name": "Tavern Runner"},
-    }
-    raw = 'Tavern Runner shrugs. Press the patrol sergeant for what the watch will actually allow on the street.'
-    out = _apply_social_fallback_leak_guard(raw, resolution)
-    assert 'Press the patrol sergeant' in out
-    assert 'someone nearby says' in out.lower() or 'tavern runner says' in out.lower()
+    v0 = validate_fallback_behavior(base, ctr, resolution=None)
+    out, meta, _ = repair_fallback_behavior(base, ctr, v0, resolution=None, session={}, scene_id="s")
+    assert out == base
+    assert meta.get("fallback_behavior_next_lead_added") is False
+    assert meta.get("final_emission_boundary_semantic_repair_disabled") is True
 
 
 def test_apply_social_exchange_retry_fallback_gm_standard_mode_adds_payload() -> None:

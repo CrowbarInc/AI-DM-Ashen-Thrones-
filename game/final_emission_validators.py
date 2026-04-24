@@ -129,6 +129,12 @@ def _default_response_type_debug(contract: Dict[str, Any] | None, source: str | 
         "response_type_rejection_reasons": [],
         "non_hostile_escalation_blocked": False,
         "response_type_upstream_prepared_absent": False,
+        "upstream_prepared_emission_used": False,
+        "upstream_prepared_emission_valid": False,
+        "upstream_prepared_emission_source": None,
+        "upstream_prepared_emission_reject_reason": None,
+        "final_emission_boundary_repair_used": False,
+        "final_emission_boundary_semantic_repair_disabled": True,
     }
 
 
@@ -143,6 +149,16 @@ def _merge_response_type_meta(meta: Dict[str, Any], debug: Dict[str, Any]) -> No
             "response_type_rejection_reasons": list(debug.get("response_type_rejection_reasons") or []),
             "non_hostile_escalation_blocked": bool(debug.get("non_hostile_escalation_blocked")),
             "response_type_upstream_prepared_absent": bool(debug.get("response_type_upstream_prepared_absent")),
+            "upstream_prepared_emission_used": bool(debug.get("upstream_prepared_emission_used")),
+            "upstream_prepared_emission_valid": bool(debug.get("upstream_prepared_emission_valid")),
+            "upstream_prepared_emission_source": debug.get("upstream_prepared_emission_source"),
+            "upstream_prepared_emission_reject_reason": debug.get("upstream_prepared_emission_reject_reason"),
+            "final_emission_boundary_repair_used": bool(debug.get("final_emission_boundary_repair_used")),
+            "final_emission_boundary_semantic_repair_disabled": (
+                True
+                if debug.get("final_emission_boundary_semantic_repair_disabled") is None
+                else bool(debug.get("final_emission_boundary_semantic_repair_disabled"))
+            ),
         }
     )
 
@@ -157,6 +173,16 @@ def _response_type_decision_payload(debug: Dict[str, Any]) -> Dict[str, Any]:
         "response_type_rejection_reasons": list(debug.get("response_type_rejection_reasons") or []),
         "non_hostile_escalation_blocked": bool(debug.get("non_hostile_escalation_blocked")),
         "response_type_upstream_prepared_absent": bool(debug.get("response_type_upstream_prepared_absent")),
+        "upstream_prepared_emission_used": bool(debug.get("upstream_prepared_emission_used")),
+        "upstream_prepared_emission_valid": bool(debug.get("upstream_prepared_emission_valid")),
+        "upstream_prepared_emission_source": debug.get("upstream_prepared_emission_source"),
+        "upstream_prepared_emission_reject_reason": debug.get("upstream_prepared_emission_reject_reason"),
+        "final_emission_boundary_repair_used": bool(debug.get("final_emission_boundary_repair_used")),
+        "final_emission_boundary_semantic_repair_disabled": (
+            True
+            if debug.get("final_emission_boundary_semantic_repair_disabled") is None
+            else bool(debug.get("final_emission_boundary_semantic_repair_disabled"))
+        ),
     }
 
 

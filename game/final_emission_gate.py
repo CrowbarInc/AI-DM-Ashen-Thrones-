@@ -2841,49 +2841,6 @@ def _validate_answer_shape_primacy(
     return out
 
 
-def _repair_answer_shape_primacy_leading_pressure(
-    text: str,
-    *,
-    player_input: str,
-    resolution: Dict[str, Any] | None,
-    response_type_debug: Dict[str, Any] | None,
-) -> tuple[str | None, str | None]:
-    res = resolution if isinstance(resolution, dict) else None
-    res_kind = str((res or {}).get("kind") or "").strip().lower()
-    required_rt = str((response_type_debug or {}).get("response_type_required") or "").strip().lower()
-    player_tokens = _content_tokens(player_input)
-    sentences = _split_sentences_answer_complete(str(text or ""))
-    if len(sentences) < 2:
-        return None, None
-    i = 0
-    while i < len(sentences):
-        s = sentences[i]
-        has_pl = _asp_sentence_has_payload(
-            s,
-            player_tokens=player_tokens,
-            res_kind=res_kind,
-            required_rt=required_rt,
-            resolution=res,
-        )
-        if has_pl:
-            break
-        if not _asp_sentence_is_pressure_only(
-            s,
-            player_tokens=player_tokens,
-            res_kind=res_kind,
-            required_rt=required_rt,
-            resolution=res,
-        ):
-            break
-        i += 1
-    if i <= 0:
-        return None, None
-    rest = " ".join(sentences[i:]).strip()
-    if not rest:
-        return None, None
-    return rest, f"strip_leading_pressure_sentences:{i}"
-
-
 def _apply_answer_shape_primacy_layer(
     text: str,
     *,
@@ -3284,6 +3241,14 @@ def _apply_scene_state_anchor_layer(
     return text, meta
 
 
+def _upstream_prepared_emission_field_source(upstream: Dict[str, Any], field_name: str) -> str:
+    """Stable attribution for telemetry: explicit ``upstream_prepared_emission_attribution`` or field path."""
+    raw = upstream.get("upstream_prepared_emission_attribution")
+    if isinstance(raw, str) and raw.strip():
+        return raw.strip()[:160]
+    return f"upstream_prepared_emission.{field_name}"
+
+
 def _enforce_response_type_contract(
     candidate_text: str,
     *,
@@ -3345,10 +3310,13 @@ def _enforce_response_type_contract(
 
     if validator_ok and not reasons:
         debug["response_type_candidate_ok"] = True
+        debug["final_emission_boundary_repair_used"] = False
+        debug["final_emission_boundary_semantic_repair_disabled"] = True
         return current, debug
 
     repaired: str | None = None
     repair_kind: str | None = None
+    upstream_src_label: str | None = None
     upstream = (
         gm_output.get(UPSTREAM_PREPARED_EMISSION_KEY)
         if isinstance(gm_output, dict)
@@ -3374,15 +3342,21 @@ def _enforce_response_type_contract(
         if isinstance(cand, str) and cand.strip():
             repaired = cand.strip()
             repair_kind = "answer_upstream_prepared_repair"
+            upstream_src_label = _upstream_prepared_emission_field_source(upstream, "prepared_answer_fallback_text")
         else:
             debug["response_type_upstream_prepared_absent"] = True
+            upstream_src_label = "absent"
+            debug["upstream_prepared_emission_source"] = "absent"
     elif required == "action_outcome":
         cand = upstream.get("prepared_action_fallback_text")
         if isinstance(cand, str) and cand.strip():
             repaired = cand.strip()
             repair_kind = "action_outcome_upstream_prepared_repair"
+            upstream_src_label = _upstream_prepared_emission_field_source(upstream, "prepared_action_fallback_text")
         else:
             debug["response_type_upstream_prepared_absent"] = True
+            upstream_src_label = "absent"
+            debug["upstream_prepared_emission_source"] = "absent"
 
     if repaired:
         repaired = _norm(repaired)
@@ -3410,7 +3384,28 @@ def _enforce_response_type_contract(
             debug["response_type_repair_used"] = True
             debug["response_type_repair_kind"] = repair_kind
             debug["response_type_rejection_reasons"] = list(dict.fromkeys(str(r) for r in reasons if r))
+            if repair_kind in {"answer_upstream_prepared_repair", "action_outcome_upstream_prepared_repair"}:
+                debug["upstream_prepared_emission_used"] = True
+                debug["upstream_prepared_emission_valid"] = True
+                debug["upstream_prepared_emission_source"] = upstream_src_label
+                debug["upstream_prepared_emission_reject_reason"] = None
+            else:
+                debug["upstream_prepared_emission_used"] = False
+                debug["upstream_prepared_emission_valid"] = False
+                debug["upstream_prepared_emission_source"] = None
+                debug["upstream_prepared_emission_reject_reason"] = None
+            debug["final_emission_boundary_repair_used"] = False
+            debug["final_emission_boundary_semantic_repair_disabled"] = True
             return repaired, debug
+
+        if repair_kind in {"answer_upstream_prepared_repair", "action_outcome_upstream_prepared_repair"}:
+            debug["upstream_prepared_emission_used"] = False
+            debug["upstream_prepared_emission_valid"] = False
+            debug["upstream_prepared_emission_source"] = upstream_src_label or "upstream_prepared_emission"
+            rr0 = repaired_reasons[0] if repaired_reasons else "upstream_prepared_failed_contract"
+            debug["upstream_prepared_emission_reject_reason"] = str(rr0)
+            debug["final_emission_boundary_repair_used"] = False
+            debug["final_emission_boundary_semantic_repair_disabled"] = True
 
     debug["response_type_candidate_ok"] = False
     debug["response_type_repair_kind"] = repair_kind
@@ -3447,40 +3442,6 @@ _PARTICIPIAL_THIRD_PERSON: Dict[str, str] = {
     "cutting": "cuts",
 }
 _IMPLICATION_PARTICIPLES = {"hinting", "indicating", "revealing"}
-_MICRO_SMOOTH_MAX_COMBINED_LEN = 140
-_MICRO_SMOOTH_SHORT_SENTENCE_LEN = 85
-_MICRO_SMOOTH_CLAUSE_HEAVY_MARKERS = (
-    ";",
-    ":",
-    " while ",
-    " because ",
-    " although ",
-    " though ",
-    " which ",
-    " that ",
-    " who ",
-)
-_MICRO_SMOOTH_BANNED_TAIL_PHRASES = (
-    "hinting at",
-    "suggesting",
-    "implying",
-    "revealing",
-    "indicating",
-)
-_MICRO_SMOOTH_COMBAT_MECHANICAL_MARKERS = (
-    "initiative",
-    "attack roll",
-    "damage",
-    "hit points",
-    "armor class",
-    "saving throw",
-    "spell slot",
-    "dc ",
-    "roll ",
-    "check ",
-    "hp",
-    "ac",
-)
 _CONCRETE_INTERACTION_PATTERNS: tuple[re.Pattern[str], ...] = (
     re.compile(r"[\"“”'‘’]"),
     re.compile(
@@ -3503,38 +3464,6 @@ _DIALOGUE_ATTRIBUTION_THEY_SPEECH_TAG = re.compile(
     r")\b",
     re.IGNORECASE | re.DOTALL,
 )
-_THIRD_PERSON_TO_PARTICIPLE: Dict[str, str] = {
-    "cuts": "cutting",
-    "draws": "drawing",
-    "hints": "hinting",
-    "suggests": "suggesting",
-    "makes": "making",
-    "indicates": "indicating",
-    "offers": "offering",
-    "creates": "creating",
-    "reveals": "revealing",
-    "urges": "urging",
-    "watches": "watching",
-    "calls": "calling",
-    "shouts": "shouting",
-    "scans": "scanning",
-    "studies": "studying",
-    "gestures": "gesturing",
-    "lingers": "lingering",
-    "waits": "waiting",
-    "stands": "standing",
-    "speaks": "speaking",
-    "says": "saying",
-    "holds": "holding",
-    "keeps": "keeping",
-    "looks": "looking",
-    "glances": "glancing",
-    "murmurs": "murmuring",
-    "whispers": "whispering",
-    "observes": "observing",
-    "surveys": "surveying",
-    "exchanges": "exchanging",
-}
 
 
 def _looks_like_participial_fragment(text: str) -> bool:
@@ -3699,136 +3628,6 @@ def _repair_fragmentary_participial_splits(text: str) -> tuple[str, bool]:
                 continue
         rewritten_parts.append(current)
     return _normalize_text(" ".join(rewritten_parts)), repaired_any
-
-
-def _sentence_has_dialogue_or_mechanics(sentence: str) -> bool:
-    clean = _normalize_text(sentence)
-    if not clean:
-        return True
-    lowered = clean.lower()
-    if any(ch in clean for ch in ('"', "“", "”")):
-        return True
-    if re.search(r"(^|[\s(])'[^']{1,120}'", clean):
-        return True
-    if clean.startswith("- ") or clean.startswith("—"):
-        return True
-    return any(marker in lowered for marker in _MICRO_SMOOTH_COMBAT_MECHANICAL_MARKERS)
-
-
-def _can_micro_merge_sentence_pair(first: str, second: str) -> bool:
-    first_clean = _normalize_text(first)
-    second_clean = _normalize_text(second)
-    if not first_clean or not second_clean:
-        return False
-    if _sentence_has_dialogue_or_mechanics(first_clean) or _sentence_has_dialogue_or_mechanics(second_clean):
-        return False
-
-    first_core = first_clean.rstrip(".!?").strip()
-    second_core = second_clean.rstrip(".!?").strip()
-    if not first_core or not second_core:
-        return False
-    if len(first_core) > _MICRO_SMOOTH_SHORT_SENTENCE_LEN or len(second_core) > _MICRO_SMOOTH_SHORT_SENTENCE_LEN:
-        return False
-
-    first_low = f" {first_core.lower()} "
-    second_low = f" {second_core.lower()} "
-    if any(marker in first_low for marker in _MICRO_SMOOTH_CLAUSE_HEAVY_MARKERS):
-        return False
-    if any(marker in second_low for marker in _MICRO_SMOOTH_CLAUSE_HEAVY_MARKERS):
-        return False
-    if any(phrase in second_low for phrase in _MICRO_SMOOTH_BANNED_TAIL_PHRASES):
-        return False
-    if re.search(r"\b(he|she|it|you|we|i|him|her|them|our|your|my)\b", second_core, flags=re.IGNORECASE):
-        return False
-    if not (
-        re.match(r"^they\b", first_core, flags=re.IGNORECASE)
-        and (
-            re.match(r"^they\b", second_core, flags=re.IGNORECASE)
-            or re.match(r"^their\s+[A-Za-z][A-Za-z' -]{0,40}\s+[A-Za-z][A-Za-z'-]+\b", second_core, flags=re.IGNORECASE)
-        )
-    ):
-        return False
-    return True
-
-
-def _merge_short_same_anchor_sentences(first: str, second: str) -> str | None:
-    if not _can_micro_merge_sentence_pair(first, second):
-        return None
-    first_core = _normalize_text(first).rstrip(".!?").strip()
-    second_core = _normalize_text(second).rstrip(".!?").strip()
-
-    first_they = re.match(r"^(They)\s+(.+)$", first_core, flags=re.IGNORECASE)
-    if not first_they:
-        return None
-    first_subject = first_they.group(1)
-    first_predicate = first_they.group(2).strip()
-    if not first_predicate:
-        return None
-
-    second_they = re.match(r"^(They)\s+(.+)$", second_core, flags=re.IGNORECASE)
-    if second_they:
-        second_predicate = second_they.group(2).strip()
-        if not second_predicate:
-            return None
-        merged = f"{first_subject} {first_predicate}, then {second_predicate}"
-        normalized = _normalize_terminal_punctuation(merged)
-        if len(normalized.rstrip(".!?")) > _MICRO_SMOOTH_MAX_COMBINED_LEN:
-            return None
-        if any(phrase in normalized.lower() for phrase in _MICRO_SMOOTH_BANNED_TAIL_PHRASES):
-            return None
-        return normalized
-
-    second_possessive = re.match(
-        r"^Their\s+([A-Za-z][A-Za-z' -]{0,40})\s+([A-Za-z][A-Za-z'-]*)\b(.*)$",
-        second_core,
-        flags=re.IGNORECASE,
-    )
-    if not second_possessive:
-        return None
-    noun_phrase = _normalize_text(second_possessive.group(1))
-    finite_verb = second_possessive.group(2).lower()
-    remainder = _normalize_text(second_possessive.group(3))
-    participle = _THIRD_PERSON_TO_PARTICIPLE.get(finite_verb)
-    if not noun_phrase or not participle:
-        return None
-
-    tail = f"their {noun_phrase} {participle}{(' ' + remainder) if remainder else ''}"
-    if any(phrase in tail.lower() for phrase in _MICRO_SMOOTH_BANNED_TAIL_PHRASES):
-        return None
-    merged = _normalize_terminal_punctuation(f"{first_subject} {first_predicate}, {tail}")
-    if len(merged.rstrip(".!?")) > _MICRO_SMOOTH_MAX_COMBINED_LEN:
-        return None
-    return merged
-
-
-def _micro_smooth_post_repair_sentences(text: str) -> tuple[str, bool]:
-    clean_text = str(text or "").strip()
-    if not clean_text:
-        return clean_text, False
-    sentence_parts = [part.strip() for part in re.split(r"(?<=[.!?])\s+", clean_text) if part.strip()]
-    if len(sentence_parts) < 2:
-        return clean_text, False
-
-    merged_any = False
-    rewritten_parts: List[str] = []
-    idx = 0
-    while idx < len(sentence_parts):
-        current = sentence_parts[idx]
-        if merged_any or idx >= len(sentence_parts) - 1:
-            rewritten_parts.append(current)
-            idx += 1
-            continue
-        nxt = sentence_parts[idx + 1]
-        merged = _merge_short_same_anchor_sentences(current, nxt)
-        if not merged:
-            rewritten_parts.append(current)
-            idx += 1
-            continue
-        rewritten_parts.append(merged)
-        merged_any = True
-        idx += 2
-
-    return _normalize_text(" ".join(rewritten_parts)), merged_any
 
 
 def _decompress_overpacked_sentences(text: str) -> str:
@@ -4212,6 +4011,9 @@ def _finalize_emission_output(
             "sentence_decompression_applied": sentence_decompression_applied,
             "sentence_fragment_repair_applied": fragment_repair_applied,
             "sentence_micro_smoothing_applied": sentence_micro_smoothing_applied,
+            "final_emission_boundary_semantic_repair_disabled": True,
+            "final_emission_finalize_semantic_repair_used": False,
+            "final_emission_semantic_repair_skip_reason": "finalize_packaging_only_no_sentence_recompose",
             "post_gate_mutation_detected": pre_gate_text != gate_out_text,
             "final_text_preview": (gate_out_text[:120] + "…") if len(gate_out_text) > 120 else gate_out_text,
         }

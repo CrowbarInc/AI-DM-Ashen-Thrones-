@@ -22,10 +22,6 @@ import game.final_emission_repairs as fer
 from game.final_emission_repairs import (
     _collapse_multi_speaker_formatting,
     _flatten_list_like_dialogue,
-    _merge_substantive_paragraphs,
-    _normalize_dialogue_cadence,
-    _reduce_expository_density,
-    _restore_spoken_opening,
 )
 from game.final_emission_validators import validate_fallback_behavior
 
@@ -131,79 +127,15 @@ def test_repair_collapses_multi_speaker_formatting():
     assert "sergeant" in out.lower()
 
 
-def test_repair_merges_overlong_paragraph_dialogue():
-    raw = (
-        'The guard leans in. "East gate is two hundred feet south."\n\n'
-        '"Patrols chart that lane until dusk," he adds.'
-    )
-    out = _merge_substantive_paragraphs(raw, target_max=1)
-    assert "\n\n" not in out
-    assert "east gate" in out.lower()
-
-
-def test_repair_reduces_expository_density():
-    raw = (
-        "Furthermore, the watch rotates at dawn. Moreover, the east lane stays busiest after noon. "
-        "Additionally, the sergeant files tallies by dusk."
-    )
-    out = _reduce_expository_density(raw, ["expository_monologue_density"])
-    assert out != raw or "Furthermore" not in out
-
-
-def test_repair_restores_spoken_opening():
-    raw = "The checkpoint rumor speaks of supply movements and watch rotations without naming officers."
-    out = _restore_spoken_opening(raw)
-    assert out != raw
-    assert out.lower().startswith(("i'll say it plain:", "here's what i can tell you:"))
-
-
-def test_repair_normalizes_monoblob_cadence():
-    parts = ["word"] * 60
-    body = " ".join(parts)
-    raw = f"Guard says {body}; the lane stays watched after curfew."
-    out = _normalize_dialogue_cadence(raw)
-    assert ". " in out
-    assert "word" in out.lower()
-
-
-def test_fallback_line_smoothing_merges_repeated_subject_nonanswer_clause() -> None:
-    smoothed = fer._smooth_repaired_fallback_line(
-        "Tavern Runner nods once. Tavern Runner does not answer at once."
-    )
-
-    low = smoothed.lower()
-    assert "tavern runner nods once. tavern runner" not in low
-    assert smoothed.count("Tavern Runner") == 1
-    assert "does not answer at once" in low
-    _assert_no_meta_bits(smoothed)
-
-
-def test_fallback_line_smoothing_merges_repeated_subject_guarded_clause() -> None:
-    smoothed = fer._smooth_repaired_fallback_line(
-        "Guard Captain watches you. Guard Captain gives nothing away."
-    )
-
-    low = smoothed.lower()
-    assert "guard captain watches you. guard captain" not in low
-    assert smoothed.count("Guard Captain") == 1
-    assert ("watches you and gives nothing away" in low or "watches you, but gives nothing away" in low)
-
-
-def test_fallback_line_smoothing_preserves_grounded_detail_and_uncertainty_signal() -> None:
-    smoothed = fer._smooth_repaired_fallback_line(
-        "The captain keeps his eyes on the crowd. The captain gives you nothing yet. Check the customs arch."
-    )
-
-    low = smoothed.lower()
-    assert "the captain keeps his eyes on the crowd. the captain" not in low
-    assert "crowd" in low
-    assert "gives you nothing yet" in low
-    assert "customs arch" in low
-
-
-def test_fallback_line_smoothing_avoids_ambiguous_pronouns_in_two_entity_case() -> None:
-    raw = "Guard Captain looks to the Tavern Runner. Tavern Runner does not answer at once."
-    assert fer._smooth_repaired_fallback_line(raw) == raw
+def test_removed_semantic_dialogue_helpers_not_exported_from_repairs_module() -> None:
+    for name in (
+        "_merge_substantive_paragraphs",
+        "_normalize_dialogue_cadence",
+        "_restore_spoken_opening",
+        "_smooth_repaired_fallback_line",
+        "_synthesize_next_lead_phrase",
+    ):
+        assert not hasattr(fer, name), f"expected {name} removed from final_emission_repairs"
 
 
 def test_repair_strips_meta_fallback_voice_while_preserving_grounded_content() -> None:
@@ -218,6 +150,11 @@ def test_repair_strips_meta_fallback_voice_while_preserving_grounded_content() -
     assert "ward clerk" in low
     assert meta["fallback_behavior_meta_voice_stripped"] is True
     assert meta["fallback_behavior_partial_used"] is False
+    assert meta["final_emission_boundary_semantic_repair_disabled"] is True
+    assert meta["final_emission_semantic_repair_skipped"] is True
+    assert meta["final_emission_semantic_repair_skip_reason"] == (
+        "repair_fallback_behavior_strip_only_no_template_synthesis"
+    )
     assert "strip_meta_voice" in meta["fallback_behavior_repair_mode"]
     assert "bounded_partial" not in meta["fallback_behavior_repair_mode"]
 

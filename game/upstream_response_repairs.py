@@ -173,6 +173,7 @@ def build_upstream_prepared_emission_payload(
         "prepared_answer_fallback_text": answer,
         "prepared_action_fallback_text": action,
         "prepared_sanitizer_empty_fallback_text": "For a breath, the scene stays still.",
+        "upstream_prepared_bundle_origin": "upstream_response_repairs.build_upstream_prepared_emission_payload",
     }
 
 

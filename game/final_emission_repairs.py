@@ -32,23 +32,10 @@ from game.final_emission_validators import (
     _FALLBACK_META_VOICE_PATTERNS,
     _FALLBACK_OVERCERTAIN_BY_SOURCE,
     _FALLBACK_OVERCERTAIN_GENERAL_PATTERNS,
-    _EXPOSITORY_CONNECTOR_RES,
-    _bounded_partial_thin_substance_violation,
-    _allowed_hedge_in_text,
-    _contains_diegetic_uncertainty_partial,
     _concrete_payload_for_kinds,
-    _content_tokens,
-    _NEXT_LEAD_SNIPPET,
     _contract_bool,
     _looks_like_single_clarifying_question,
-    _opening_carries_allowed_delta,
-    _opening_segment,
-    _partial_reason_in_text,
     _response_delta_snippet_substantive,
-    _response_delta_token_overlap_ratio,
-    _response_delta_tokens,
-    _sentence_carries_response_delta,
-    _sentence_substantive_for_frontload,
     _split_sentences_answer_complete,
     inspect_social_response_structure,
     validate_answer_completeness,
@@ -322,10 +309,6 @@ def _merge_response_delta_meta(meta: Dict[str, Any], rd_dbg: Dict[str, Any]) -> 
     )
 
 
-def _srs_word_count(text: str) -> int:
-    return len(re.findall(r"[A-Za-z']+", str(text or "")))
-
-
 def _flatten_list_like_dialogue(text: str) -> str:
     """Strip list/bullet/numbered prefixes and join lines into prose (no new list items)."""
     lines = [ln.strip() for ln in str(text or "").splitlines() if ln.strip()]
@@ -356,102 +339,11 @@ def _collapse_multi_speaker_formatting(text: str) -> str:
     return _normalize_text(best) if best else _normalize_text(text or "")
 
 
-def _merge_substantive_paragraphs(text: str, *, target_max: int = 1) -> str:
-    raw = str(text or "").strip()
-    if not raw:
-        return _normalize_text(text or "")
-    parts = [p.strip() for p in re.split(r"\n\s*\n+", raw) if p.strip()]
-    if len(parts) <= target_max:
-        return text
-    merged = " ".join(parts)
-    return _normalize_text(merged)
-
-
-def _trim_leading_expository_connectors(text: str, *, max_passes: int = 2) -> str:
-    t = str(text or "").strip()
-    if not t:
-        return t
-    for _ in range(max(1, max_passes)):
-        stripped = False
-        for pat in _EXPOSITORY_CONNECTOR_RES:
-            m = pat.search(t)
-            if m and m.start() < 40:
-                t = (t[: m.start()] + t[m.end() :]).lstrip()
-                t = re.sub(r"^[,:;\-\s]+", "", t)
-                stripped = True
-                break
-        if not stripped:
-            break
-    return _normalize_text(t)
-
-
 def _collapse_soft_line_breaks(text: str) -> str:
     """Turn single newlines into spaces; keeps blank-line paragraph boundaries."""
     t = str(text or "")
     t = re.sub(r"(?<!\n)\n(?!\n)", " ", t)
     return _normalize_text(t)
-
-
-def _reduce_expository_density(text: str, failure_reasons: List[str]) -> str:
-    reasons = set(str(r) for r in failure_reasons if r)
-    t = str(text or "")
-    if "too_many_contiguous_expository_lines" in reasons:
-        t = _collapse_soft_line_breaks(t)
-    if "expository_monologue_density" in reasons:
-        t = _trim_leading_expository_connectors(t, max_passes=3)
-    return _normalize_text(t)
-
-
-def _normalize_dialogue_cadence(text: str) -> str:
-    t = _normalize_text(str(text or ""))
-    if not t:
-        return t
-    sents = _split_sentences_answer_complete(t)
-    if len(sents) == 1:
-        body = sents[0]
-        wc = _srs_word_count(body)
-        if wc >= 50 and "; " in body:
-            a, b = body.split("; ", 1)
-            return _normalize_terminal_punctuation(
-                _normalize_text(f"{a.strip()}. {b.strip()}")
-            )
-        if wc >= 55 and re.search(r",\s+and\s+", body):
-            m = re.search(r",\s+and\s+", body)
-            if m:
-                a, b = body[: m.start()], body[m.end() :]
-                return _normalize_terminal_punctuation(_normalize_text(f"{a.strip()}. {b.strip()}"))
-        return t
-    if len(sents) >= 4:
-        merged_pairs: List[str] = []
-        i = 0
-        while i < len(sents):
-            if i + 1 < len(sents) and _srs_word_count(sents[i]) < 14 and _srs_word_count(sents[i + 1]) < 14:
-                merged_pairs.append(f"{sents[i].rstrip('.!?')} {sents[i + 1]}")
-                i += 2
-            else:
-                merged_pairs.append(sents[i])
-                i += 1
-        if len(merged_pairs) < len(sents):
-            return _normalize_text(" ".join(_normalize_terminal_punctuation(s) for s in merged_pairs if s))
-    return t
-
-
-def _restore_spoken_opening(text: str) -> str:
-    """Prefer first-person spoken lead without changing factual content."""
-    t = str(text or "").strip()
-    if not t:
-        return _normalize_text(t)
-    head = t[:160].lower()
-    if re.search(r"\b(i|i'?m|i'?ve|i'?ll|we|we'?re|we'?ve)\b", head):
-        return _normalize_text(t)
-    if re.search(r'[\"“]', t[:220]):
-        return _normalize_text(t)
-    if re.search(r"\byou\b", head):
-        lead = "I'll say it plain: "
-    else:
-        lead = "Here's what I can tell you: "
-    rest = t[0].lower() + t[1:] if len(t) > 1 else t
-    return _normalize_terminal_punctuation(_normalize_text(lead + rest))
 
 
 def apply_social_response_structure_repair(
@@ -729,6 +621,10 @@ def _default_fallback_behavior_meta() -> Dict[str, Any]:
         "fallback_behavior_unknown_edge_added": False,
         "fallback_behavior_next_lead_added": False,
         "fallback_behavior_meta_voice_stripped": False,
+        "fallback_behavior_boundary_semantic_synthesis_skipped": False,
+        "final_emission_boundary_semantic_repair_disabled": False,
+        "final_emission_semantic_repair_skipped": False,
+        "final_emission_semantic_repair_skip_reason": None,
     }
 
 
@@ -757,6 +653,14 @@ def _merge_fallback_behavior_meta(meta: Dict[str, Any], fb_dbg: Dict[str, Any]) 
             "fallback_behavior_meta_voice_stripped": bool(
                 fb_dbg.get("fallback_behavior_meta_voice_stripped")
             ),
+            "fallback_behavior_boundary_semantic_synthesis_skipped": bool(
+                fb_dbg.get("fallback_behavior_boundary_semantic_synthesis_skipped")
+            ),
+            "final_emission_boundary_semantic_repair_disabled": bool(
+                fb_dbg.get("final_emission_boundary_semantic_repair_disabled")
+            ),
+            "final_emission_semantic_repair_skipped": bool(fb_dbg.get("final_emission_semantic_repair_skipped")),
+            "final_emission_semantic_repair_skip_reason": fb_dbg.get("final_emission_semantic_repair_skip_reason"),
         }
     )
 
@@ -765,428 +669,8 @@ def _fallback_word_count(text: str) -> int:
     return len(re.findall(r"[A-Za-z']+", str(text or "")))
 
 
-def _fallback_allowed_behaviors(contract: Dict[str, Any] | None) -> Dict[str, Any]:
-    if not isinstance(contract, dict):
-        return {}
-    allowed = contract.get("allowed_behaviors")
-    return allowed if isinstance(allowed, dict) else {}
-
-
 def _fallback_sentences(text: str) -> List[str]:
     return [s for s in _split_sentences_answer_complete(text) if str(s).strip()]
-
-
-_FALLBACK_REPEATED_SUBJECT_RE = re.compile(
-    r"^(?P<subject>(?:"
-    r"[A-Z][\w'.-]+(?:\s+[A-Z][\w'.-]+){0,2}"
-    r"|The\s+[A-Za-z][\w'.-]+(?:\s+[A-Za-z][\w'.-]+){0,2}"
-    r"|A few\s+[A-Za-z][\w'.-]+(?:\s+[A-Za-z][\w'.-]+){0,2}"
-    r"))\s+(?P<predicate>.+)$"
-)
-
-
-def _fallback_subject_predicate(sentence: str) -> Tuple[str, str] | None:
-    trimmed = str(sentence or "").strip().rstrip(".!?")
-    if not trimmed:
-        return None
-    match = _FALLBACK_REPEATED_SUBJECT_RE.match(trimmed)
-    if not match:
-        return None
-    subject = _normalize_text(match.group("subject")).strip()
-    predicate = _normalize_text(match.group("predicate")).strip(" ,;:-")
-    if not subject or not predicate:
-        return None
-    return subject, predicate
-
-
-def _fallback_merge_connector(predicate: str) -> str:
-    low = str(predicate or "").strip().lower()
-    if re.match(
-        r"^(?:does not answer|do not answer|no one answers|none answer|holds (?:his|her|their) tongue|lets the question hang)\b",
-        low,
-    ):
-        return "but"
-    return "and"
-
-
-def _merge_repeated_fallback_subject_pair(first: str, second: str) -> str | None:
-    left = _fallback_subject_predicate(first)
-    right = _fallback_subject_predicate(second)
-    if not left or not right:
-        return None
-    subject1, predicate1 = left
-    subject2, predicate2 = right
-    if subject1.lower() != subject2.lower():
-        return None
-    if _fallback_word_count(first) > 12 or _fallback_word_count(second) > 12:
-        return None
-    if predicate1.lower() == predicate2.lower():
-        return None
-    connector = _fallback_merge_connector(predicate2)
-    merged = f"{subject1} {predicate1}, {connector} {predicate2}" if connector == "but" else f"{subject1} {predicate1} and {predicate2}"
-    return _normalize_terminal_punctuation(_normalize_text(merged))
-
-
-def _smooth_repaired_fallback_line(text: str) -> str:
-    t = _normalize_text(text)
-    if not t:
-        return t
-    t = re.sub(
-        r"\b(hesitates|pauses)\s+and\s+does not answer at once\b",
-        r"\1, but does not answer at once",
-        t,
-        flags=re.IGNORECASE,
-    )
-    sentences = _fallback_sentences(t)
-    if len(sentences) < 2:
-        return _normalize_text(t)
-    smoothed: List[str] = []
-    idx = 0
-    while idx < len(sentences):
-        if idx + 1 < len(sentences):
-            merged = _merge_repeated_fallback_subject_pair(sentences[idx], sentences[idx + 1])
-            if merged:
-                smoothed.append(merged)
-                idx += 2
-                continue
-        smoothed.append(_normalize_terminal_punctuation(sentences[idx]))
-        idx += 1
-    return _normalize_text(" ".join(smoothed))
-
-
-def _fallback_unique_join(parts: List[str]) -> str:
-    deduped: List[str] = []
-    seen: set[str] = set()
-    for part in parts:
-        norm = _normalize_text(part)
-        if not norm:
-            continue
-        key = norm.lower()
-        if key in seen:
-            continue
-        seen.add(key)
-        deduped.append(_normalize_terminal_punctuation(norm))
-    return _normalize_text(" ".join(deduped))
-
-
-def _fallback_known_edge_sentence(text: str) -> str:
-    for sentence in _fallback_sentences(text):
-        if _concrete_payload_for_kinds(sentence, ["name", "place", "direction", "fact", "condition"]):
-            return _normalize_terminal_punctuation(sentence)
-    return ""
-
-
-def _fallback_unknown_edge_sentence(text: str, contract: Dict[str, Any]) -> str:
-    for sentence in _fallback_sentences(text):
-        if _partial_reason_in_text(sentence, ["uncertainty", "lack_of_knowledge", "gated_information"]):
-            return _normalize_terminal_punctuation(sentence)
-        if _allowed_hedge_in_text(sentence, contract=contract):
-            return _normalize_terminal_punctuation(sentence)
-        if _contains_diegetic_uncertainty_partial(sentence):
-            return _normalize_terminal_punctuation(sentence)
-    return ""
-
-
-def _fallback_next_lead_sentence(text: str) -> str:
-    for sentence in _fallback_sentences(text):
-        if _concrete_payload_for_kinds(sentence, ["next_lead"]) or _NEXT_LEAD_SNIPPET.search(sentence):
-            return _normalize_terminal_punctuation(sentence)
-    return ""
-
-
-def _fallback_primary_source(contract: Dict[str, Any] | None) -> str:
-    if not isinstance(contract, dict):
-        return ""
-    raw = contract.get("uncertainty_sources")
-    if not isinstance(raw, list):
-        return ""
-    for item in raw:
-        if isinstance(item, str) and item.strip():
-            return item.strip().lower()
-    return ""
-
-
-def _social_npc_name(resolution: Dict[str, Any] | None) -> str:
-    if not isinstance(resolution, dict):
-        return ""
-    social = resolution.get("social") if isinstance(resolution.get("social"), dict) else {}
-    return str(social.get("npc_name") or "").strip()
-
-
-def _pick_place_hint(low: str) -> str:
-    for w in ("checkpoint", "watchhouse", "dock", "market", "square", "gate", "barracks", "lane", "road", "pier"):
-        if w in low:
-            return w
-    return "road"
-
-
-def _synthesize_known_edge_phrase(
-    contract: Dict[str, Any] | None,
-    resolution: Dict[str, Any] | None,
-    source_text: str,
-) -> str:
-    ctr = contract if isinstance(contract, dict) else {}
-    source = _fallback_primary_source(ctr)
-    prompt = _fallback_resolution_prompt(resolution)
-    low = f"{source_text} {prompt}".lower()
-    npc = _social_npc_name(resolution)
-    place = _pick_place_hint(low)
-
-    if npc:
-        if source == "unknown_identity":
-            return f"{npc} holds near the {place}, but offers no name you can pin down."
-        if source == "unknown_location":
-            return f"{npc} taps the map case, but nothing here marks the exact spot."
-        if source == "unknown_motive":
-            return f"{npc} keeps a flat look; motive does not show at the {place}."
-        if source == "unknown_method":
-            return f"{npc} shrugs; nothing in plain view here shows how it was done."
-        if source == "unknown_quantity":
-            return f"{npc} won't pin a count while the {place} churns."
-        if source == "unknown_feasibility":
-            return f"{npc} hesitates at the {place}, offering no clean yes or no."
-
-    if source == "unknown_identity":
-        return f"Noise along the {place} stays loud, but no face here offers a name you can use."
-    if source == "unknown_location":
-        return f"The {place} stays busy; nothing in sight pins the exact spot."
-    if source == "unknown_motive":
-        return f"The {place} crowd keeps its counsel; the why of it stays off the tongue."
-    if source == "unknown_method":
-        return "Tracks and tools look ordinary; nothing in plain view shows how it was done."
-    if source == "unknown_quantity":
-        return "Headcounts shift with the crowd; no clean tally presents itself here."
-    return f"The {place} noise holds; nothing in view settles the question."
-
-
-def _npc_attribution_for_diegetic_lead(resolution: Dict[str, Any] | None) -> str:
-    """Short attribution for synthesized fallback leads (diegetic, not omniscient narrator imperatives)."""
-    npc = _social_npc_name(resolution)
-    if npc:
-        return npc
-    subj = _fallback_scene_subject(resolution, "")
-    if subj:
-        return subj
-    return "They"
-
-
-def _diegetic_next_lead_from_template(inner_quote: str, resolution: Dict[str, Any] | None, verb: str = "says") -> str:
-    inner = str(inner_quote or "").strip().rstrip(".!?")
-    if not inner:
-        return ""
-    npc = _npc_attribution_for_diegetic_lead(resolution)
-    v = str(verb or "says").strip().lower()
-    low_att = npc.strip().lower()
-    if low_att in ("they", "them"):
-        # Avoid bare "they" attribution (referential-clarity gate flags ambiguous entity references).
-        if v == "mutters":
-            return f'"{inner}," someone nearby mutters.'
-        if v == "adds":
-            return f'"{inner}," a lean voice adds.'
-        if v == "shrugs":
-            return f'"{inner}," someone nearby says with a shrug.'
-        return f'"{inner}," someone nearby says.'
-    if v in ("mutters", "adds", "shrugs"):
-        return f'"{inner}," {npc} {v}.'
-    return f'"{inner}," {npc} says.'
-
-
-def _synthesize_next_lead_phrase(
-    contract: Dict[str, Any] | None,
-    resolution: Dict[str, Any] | None,
-    source_text: str,
-    *,
-    variant: int = 0,
-) -> str:
-    """Diegetic next-step hints voiced as NPC speech (never bare second-person planner imperatives)."""
-    ctr = contract if isinstance(contract, dict) else {}
-    source = _fallback_primary_source(ctr)
-    prompt = _fallback_resolution_prompt(resolution)
-    low = f"{source_text} {prompt}".lower()
-    v = max(0, int(variant)) % 3
-
-    if "dock" in low or "harbor" in low:
-        opts = (
-            "If you need which berth was logged last watch, the harbor clerk keeps that—not me.",
-            "Word on the water is the harbor clerk's ledger names berths; I don't keep it in my head.",
-            "They say the harbor clerk can tell you what was logged last watch—I wouldn't swear to it.",
-        )
-        return _diegetic_next_lead_from_template(opts[v], resolution, "mutters")
-
-    if source == "unknown_motive":
-        opts = (
-            "If it's a grudge worth hiding on paper, the duty sergeant hears more of that than I do.",
-            "Rumors point at bad blood, but the duty sergeant's the one who sees it written down.",
-            "I can't pin a motive from here—the duty sergeant might, if anyone does.",
-        )
-        return _diegetic_next_lead_from_template(opts[v], resolution)
-
-    if source == "unknown_method":
-        opts = (
-            "Who was on scene is on the watch roster by the gate—if it's written anywhere, it's there.",
-            "I've heard they post who's on roster by the gate; that's the closest thing to a witness list.",
-            "If you need names tied to the shift, the gate roster is what people actually read.",
-        )
-        return _diegetic_next_lead_from_template(opts[v], resolution, "adds")
-
-    if source == "unknown_quantity":
-        opts = (
-            "A hard count lives in the quartermaster's tally—if you need numbers, that's the paper people mean.",
-            "I've heard the quartermaster's clerk keeps the tally sheet; I won't pretend I memorized it.",
-            "If you want a clean tally, folks say the quartermaster's clerk is the one who holds it.",
-        )
-        return _diegetic_next_lead_from_template(opts[v], resolution)
-
-    if source == "unknown_feasibility":
-        opts = (
-            "What the watch will actually allow on the street—that's the patrol sergeant's say, not mine.",
-            "If you want the rule on what's allowed out here, the patrol sergeant posts it in practice.",
-            "I won't promise what's permitted—the patrol sergeant is the one who enforces it.",
-        )
-        return _diegetic_next_lead_from_template(opts[v], resolution, "mutters")
-
-    opts = (
-        "If you need a name off the watch side, the duty sergeant or the gate roster is where people look.",
-        "Rumor runs through the sergeants and the posted rosters—I'm not your clerk.",
-        "I've heard answers get pinned down at the duty desk or on the roster sheet by the gate.",
-    )
-    return _diegetic_next_lead_from_template(opts[v], resolution)
-
-
-def _fallback_resolution_prompt(resolution: Dict[str, Any] | None) -> str:
-    if not isinstance(resolution, dict):
-        return ""
-    return _normalize_text(str(resolution.get("prompt") or ""))
-
-
-def _fallback_scene_subject(resolution: Dict[str, Any] | None, source_text: str) -> str:
-    social = resolution.get("social") if isinstance(resolution, dict) and isinstance(resolution.get("social"), dict) else {}
-    npc_name = str(social.get("npc_name") or "").strip()
-    if npc_name:
-        return npc_name
-    low = f"{source_text} {_fallback_resolution_prompt(resolution)}".lower()
-    if not re.search(r"\b(?:ask|offer|talk|speak|answer|runner|guard|captain|crowd|bystander)\b", low):
-        return ""
-    if "runner" in low:
-        return "The runner"
-    if "captain" in low:
-        return "The captain"
-    if "guard" in low:
-        return "The guard"
-    return ""
-
-
-def _looks_like_open_call_turn(resolution: Dict[str, Any] | None, source_text: str) -> bool:
-    social = resolution.get("social") if isinstance(resolution, dict) and isinstance(resolution.get("social"), dict) else {}
-    social_intent = str(social.get("social_intent_class") or "").strip().lower()
-    low = f"{source_text} {_fallback_resolution_prompt(resolution)}".lower()
-    if social_intent == "open_call":
-        return True
-    return bool(
-        re.search(
-            r"\b(?:anyone willing to talk|anybody willing to talk|bystanders?|crowd|call out|calls out|who'll talk|who will talk)\b",
-            low,
-        )
-    )
-
-
-def _rewrite_meta_fallback_as_diegetic_partial(
-    source_text: str,
-    *,
-    contract: Dict[str, Any] | None,
-    resolution: Dict[str, Any] | None,
-) -> str:
-    source = _fallback_primary_source(contract)
-    prompt = _fallback_resolution_prompt(resolution)
-    low = f"{source_text} {prompt}".lower()
-    subject = _fallback_scene_subject(resolution, source_text)
-    open_call = _looks_like_open_call_turn(resolution, source_text)
-    coin_word = "copper" if "copper" in low else "silver" if "silver" in low else "coin" if "coin" in low else ""
-
-    if open_call:
-        if coin_word:
-            return f"A few heads turn toward the {coin_word}, but no one answers at once."
-        return "A few bystanders glance over, but no one answers at once."
-
-    if subject:
-        if coin_word:
-            return f"{subject} eyes the {coin_word} but does not answer at once."
-        if source == "unknown_feasibility" or re.search(r"\b(?:safe|safely|bribe|rush|force|work|can i|could i|would it)\b", low):
-            if re.search(r"\b(?:gate|checkpoint|choke point|crowd|patrol|watch)\b", low):
-                return f"{subject} keeps attention on the choke point and gives you nothing yet."
-            return f"{subject} does not answer at once."
-        if re.search(r"\b(?:gate|checkpoint|crowd|patrol|watch)\b", low):
-            return f"{subject} starts to answer, then glances past you toward the gate."
-        if source == "unknown_motive":
-            return f"{subject} gives you nothing but a guarded look."
-        return f"{subject} hesitates, but does not answer at once."
-
-    if source == "unknown_location":
-        return "Nothing in sight pins the place down."
-    if source == "unknown_motive":
-        return "They give nothing away about why."
-    if source == "unknown_method":
-        return "Nothing in plain view shows how it was done."
-    if source == "unknown_quantity":
-        return "No clean count shows."
-    if source == "unknown_feasibility":
-        return "No one commits themselves at once."
-    if source == "unknown_identity":
-        return _fallback_unique_join(
-            [
-                _synthesize_known_edge_phrase(contract, resolution, source_text=source_text),
-                "That name stays unclear; hearsay will not pin anyone yet.",
-            ]
-        )
-    return "The moment yields no answer at once."
-
-
-def _fallback_unknown_edge_phrase(
-    contract: Dict[str, Any] | None,
-    *,
-    resolution: Dict[str, Any] | None = None,
-    source_text: str = "",
-) -> str:
-    mode = str((contract or {}).get("uncertainty_mode") or "").strip().lower()
-    source = _fallback_primary_source(contract)
-    if source == "unknown_identity":
-        return "I don't know the name." if mode == "npc_ignorance" else (
-            "That name stays unclear; hearsay will not pin anyone yet."
-        )
-    if source == "unknown_location":
-        return "I don't know where they went." if mode == "npc_ignorance" else "Nothing in sight pins the place down."
-    if source == "unknown_motive":
-        return "I don't know why." if mode == "npc_ignorance" else _rewrite_meta_fallback_as_diegetic_partial(
-            source_text,
-            contract=contract,
-            resolution=resolution,
-        )
-    if source == "unknown_method":
-        return "I don't know how it was done." if mode == "npc_ignorance" else "Nothing in plain view shows how it was done."
-    if source == "unknown_quantity":
-        return "I don't know the count." if mode == "npc_ignorance" else "No clean count presents itself."
-    if source == "unknown_feasibility" or mode == "procedural_insufficiency":
-        return _rewrite_meta_fallback_as_diegetic_partial(source_text, contract=contract, resolution=resolution)
-    if mode == "npc_ignorance":
-        return "I don't know that part."
-    return _rewrite_meta_fallback_as_diegetic_partial(source_text, contract=contract, resolution=resolution)
-
-
-def _fallback_clarifying_question(contract: Dict[str, Any] | None) -> str:
-    source = _fallback_primary_source(contract)
-    if source == "unknown_identity":
-        return "Which one do you mean?"
-    if source == "unknown_location":
-        return "Which place are you asking about?"
-    if source == "unknown_motive":
-        return "Whose motive are you asking after?"
-    if source == "unknown_method":
-        return "Which part are you pressing on?"
-    if source == "unknown_quantity":
-        return "Which count are you asking for?"
-    if source == "unknown_feasibility":
-        return "Which move are you weighing?"
-    return "Which part do you want pinned down?"
 
 
 def _strip_patterns_from_text(
@@ -1261,205 +745,6 @@ def _downgrade_overcertain_claims(text: str, *, contract: Dict[str, Any] | None 
     return _normalize_text(" ".join(kept))
 
 
-def _ensure_known_unknown_shape(
-    text: str,
-    *,
-    contract: Dict[str, Any] | None,
-    validation: Dict[str, Any] | None,
-    resolution: Dict[str, Any] | None = None,
-) -> Tuple[str, Dict[str, Any]]:
-    _ = validation
-    ctr = contract if isinstance(contract, dict) else {}
-    patch: Dict[str, Any] = {}
-    sentences = _fallback_sentences(text)
-    known = _fallback_known_edge_sentence(text)
-    unknown = _fallback_unknown_edge_sentence(text, ctr)
-    if unknown and _bounded_partial_thin_substance_violation(unknown):
-        unknown = ""
-
-    pieces: List[str] = []
-
-    if known:
-        pieces.append(known)
-        patch["fallback_behavior_known_edge_preserved"] = True
-    elif _contract_bool(ctr, "require_partial_to_state_known_edge"):
-        synth_ke = _synthesize_known_edge_phrase(ctr, resolution, source_text=text)
-        if synth_ke:
-            pieces.append(synth_ke)
-            patch["fallback_behavior_known_edge_synthesized"] = True
-    elif sentences:
-        pieces.append(_normalize_terminal_punctuation(sentences[0]))
-
-    if _contract_bool(ctr, "require_partial_to_state_unknown_edge"):
-        if unknown:
-            pieces.append(unknown)
-        else:
-            pieces.append(_fallback_unknown_edge_phrase(ctr, resolution=resolution, source_text=text))
-            patch["fallback_behavior_unknown_edge_added"] = True
-    elif unknown:
-        pieces.append(unknown)
-
-    if not pieces:
-        pieces.append(_fallback_unknown_edge_phrase(ctr, resolution=resolution, source_text=text))
-        patch["fallback_behavior_unknown_edge_added"] = True
-
-    return _fallback_unique_join(pieces), patch
-
-
-def _topic_fingerprint_for_fallback(resolution: Dict[str, Any] | None) -> str:
-    if not isinstance(resolution, dict):
-        return "none"
-    p = _normalize_text(str(resolution.get("prompt") or ""))[:140]
-    meta = resolution.get("metadata") if isinstance(resolution.get("metadata"), dict) else {}
-    na = meta.get("normalized_action") if isinstance(meta.get("normalized_action"), dict) else {}
-    extra = _normalize_text(str(na.get("kind") or na.get("action_kind") or ""))[:40]
-    return f"{p}|{extra}"
-
-
-def _fallback_lead_state_key(scene_id: str, resolution: Dict[str, Any] | None) -> str:
-    soc = resolution.get("social") if isinstance(resolution, dict) and isinstance(resolution.get("social"), dict) else {}
-    npc_id = str(soc.get("npc_id") or "").strip() or "none"
-    sid = str(scene_id or "").strip() or "none"
-    return f"{sid}|{npc_id}|{_topic_fingerprint_for_fallback(resolution if isinstance(resolution, dict) else None)}"
-
-
-def _get_lead_tail_record(session: Dict[str, Any] | None, key: str) -> Dict[str, Any]:
-    if not isinstance(session, dict):
-        return {}
-    root = session.setdefault("_social_fallback_lead_tail_state", {})
-    if not isinstance(root, dict):
-        root = {}
-        session["_social_fallback_lead_tail_state"] = root
-    ent = root.get(key)
-    if not isinstance(ent, dict):
-        ent = {"last_tail": "", "streak": 0}
-        root[key] = ent
-    return ent
-
-
-def _fallback_lead_tail_should_block(
-    session: Dict[str, Any] | None,
-    scene_id: str,
-    resolution: Dict[str, Any] | None,
-    proposed: str,
-) -> bool:
-    if not isinstance(session, dict) or not str(proposed or "").strip():
-        return False
-    key = _fallback_lead_state_key(scene_id, resolution)
-    ent = _get_lead_tail_record(session, key)
-    norm = _normalize_text(proposed).lower()
-    last = str(ent.get("last_tail") or "").lower()
-    streak = int(ent.get("streak") or 0)
-    return norm == last and streak >= 2
-
-
-def _record_fallback_lead_tail(
-    session: Dict[str, Any] | None,
-    scene_id: str,
-    resolution: Dict[str, Any] | None,
-    emitted: str,
-) -> None:
-    if not isinstance(session, dict) or not str(emitted or "").strip():
-        return
-    key = _fallback_lead_state_key(scene_id, resolution)
-    ent = _get_lead_tail_record(session, key)
-    norm = _normalize_text(emitted).lower()
-    last = str(ent.get("last_tail") or "").lower()
-    if norm == last:
-        ent["streak"] = int(ent.get("streak") or 0) + 1
-    else:
-        ent["streak"] = 1
-    ent["last_tail"] = norm
-
-
-_BARE_IMP_LEAD_RE = re.compile(r"^(?:Press|Ask|Check|Consider)\b", re.IGNORECASE)
-
-
-def _is_bare_imperative_lead_sentence(sentence: str) -> bool:
-    t = str(sentence or "").strip()
-    if not t or t.startswith('"'):
-        return False
-    return bool(_BARE_IMP_LEAD_RE.match(t)) and (
-        _concrete_payload_for_kinds(t, ["next_lead"]) or _NEXT_LEAD_SNIPPET.search(t) is not None
-    )
-
-
-def _wrap_bare_imperative_lead_for_npc_voice(sentence: str, resolution: Dict[str, Any] | None) -> str:
-    inner = str(sentence or "").strip().rstrip(".!?")
-    npc = _npc_attribution_for_diegetic_lead(resolution)
-    if npc.strip().lower() in ("they", "them"):
-        return f'"{inner}," someone nearby says.'
-    return f'"{inner}," {npc} says.'
-
-
-def _voice_extracted_next_lead_sentence(sentence: str, resolution: Dict[str, Any] | None) -> str:
-    s = str(sentence or "").strip()
-    if not s:
-        return ""
-    if _is_bare_imperative_lead_sentence(s):
-        return _wrap_bare_imperative_lead_for_npc_voice(s, resolution)
-    return s
-
-
-def _apply_social_fallback_leak_guard(text: str, resolution: Dict[str, Any] | None) -> str:
-    """Convert bare imperative planner tails in NPC-facing fallback to diegetic quoted speech."""
-    if not isinstance(resolution, dict):
-        return text
-    social = resolution.get("social")
-    if not isinstance(social, dict) or not str(social.get("npc_id") or "").strip():
-        return text
-    parts: List[str] = []
-    for sent in _fallback_sentences(text):
-        if _is_bare_imperative_lead_sentence(sent):
-            parts.append(_wrap_bare_imperative_lead_for_npc_voice(sent, resolution))
-        else:
-            parts.append(sent)
-    return _normalize_text(" ".join(parts))
-
-
-def _append_next_lead_if_allowed(
-    text: str,
-    *,
-    contract: Dict[str, Any] | None,
-    source_text: str,
-    resolution: Dict[str, Any] | None = None,
-    session: Dict[str, Any] | None = None,
-    scene_id: str = "",
-) -> Tuple[str, Dict[str, Any]]:
-    ctr = contract if isinstance(contract, dict) else {}
-    patch: Dict[str, Any] = {}
-    if not _contract_bool(ctr, "require_partial_to_offer_next_lead"):
-        return text, patch
-    existing = _fallback_next_lead_sentence(text)
-    if existing:
-        return text, patch
-    lead = _fallback_next_lead_sentence(source_text)
-    if lead:
-        lead = _voice_extracted_next_lead_sentence(lead, resolution)
-    if not lead:
-        for variant in range(3):
-            cand = _synthesize_next_lead_phrase(ctr, resolution, source_text, variant=variant)
-            if not cand:
-                continue
-            if _fallback_lead_tail_should_block(session, scene_id, resolution, cand):
-                continue
-            lead = cand
-            break
-    if not lead:
-        return text, patch
-    if _fallback_lead_tail_should_block(session, scene_id, resolution, lead):
-        patch["fallback_behavior_next_lead_suppressed_repeat"] = True
-        return text, patch
-    patch["fallback_behavior_next_lead_added"] = True
-    joined = _fallback_unique_join([text, lead])
-    _record_fallback_lead_tail(session, scene_id, resolution, lead)
-    return joined, patch
-
-
-def _convert_to_single_diegetic_clarifying_question(contract: Dict[str, Any] | None) -> str:
-    return _normalize_terminal_punctuation(_fallback_clarifying_question(contract))
-
-
 # C2_OWNER_AUDIT: move-upstream — template synthesis / shape construction should converge out of final emission; see docs/final_emission_ownership_convergence.md.
 def repair_fallback_behavior(
     emitted_text: str,
@@ -1471,7 +756,7 @@ def repair_fallback_behavior(
     session: Dict[str, Any] | None = None,
     scene_id: str = "",
 ) -> Tuple[str, Dict[str, Any], List[str]]:
-    _ = strict_social_path
+    _ = strict_social_path, resolution, session, scene_id
     meta = _default_fallback_behavior_meta()
     ctr = contract if isinstance(contract, dict) else {}
     val = validation if isinstance(validation, dict) else {}
@@ -1511,6 +796,9 @@ def repair_fallback_behavior(
             modes.append("downgrade_invented_certainty")
 
     meta["fallback_behavior_boundary_semantic_synthesis_skipped"] = True
+    meta["final_emission_boundary_semantic_repair_disabled"] = True
+    meta["final_emission_semantic_repair_skipped"] = True
+    meta["final_emission_semantic_repair_skip_reason"] = "repair_fallback_behavior_strip_only_no_template_synthesis"
 
     final_text = _normalize_text(working or original)
     if _looks_like_single_clarifying_question(final_text):

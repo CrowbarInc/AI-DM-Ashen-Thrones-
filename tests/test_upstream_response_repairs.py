@@ -26,6 +26,7 @@ def test_build_upstream_payload_includes_answer_action_and_sanitizer_stock() -> 
     assert "prepared_answer_fallback_text" in p
     assert "prepared_action_fallback_text" in p
     assert p["prepared_sanitizer_empty_fallback_text"]
+    assert p.get("upstream_prepared_bundle_origin") == "upstream_response_repairs.build_upstream_prepared_emission_payload"
     assert "concrete" in (p["prepared_answer_fallback_text"] or "").lower()
     line = build_minimal_action_outcome_contract_repair_text(player_input="I open the door", resolution=resolution)
     assert line.lower().startswith("you")

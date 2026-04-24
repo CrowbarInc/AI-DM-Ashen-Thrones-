@@ -36,10 +36,12 @@ Contract layers (orthogonal concerns):
 - **narrative_authority** — what outcome, hidden-truth, and NPC-intent claims may be stated as
   certain (see ``build_narrative_authority_contract``); does not replace visibility rules.
 - **scene_state_anchor** — mandatory grounding in present scene/speaker/action anchors.
-- **answer_completeness** — direct-answer obligations, voice, and bounded-partial shape.
+- **answer_completeness** — direct-answer obligations, voice, and bounded-partial shape. Final emission
+  **validates** and records failure/skip metadata only; it does not compose missing answers at the boundary
+  (bounded deterministic lines live upstream, e.g. :mod:`game.upstream_response_repairs`).
 - **response_delta** — shipped **structure** for follow-up net-new value pressure (see
-  ``build_response_delta_contract``). Deterministic enforcement, bounded repair, and canonical
-  ``response_delta_*`` legality metadata are gate-owned (:mod:`game.final_emission_repairs`); prompt
+  ``build_response_delta_contract``). The gate records canonical ``response_delta_*`` legality metadata
+  via :mod:`game.final_emission_repairs` **without** reorder or echo-rewrite repair at the boundary; prompt
   assembly **consumes** engine/session inputs to build the contract shape—it does not issue parallel
   legality verdicts for delta.
 - **fallback_behavior** — narrow graceful-degradation policy under meaningful uncertainty pressure;
@@ -54,10 +56,11 @@ Contract layers (orthogonal concerns):
   ``build_player_facing_narration_purity_contract`` in ``game.player_facing_narration_purity``).
 - **social_response_structure** — dialogue-turn spoken shape and anti-monologue caps. The
   canonical prompt-facing public home for this shipped bundle surface remains this module;
-  downstream policy helpers live in ``game.response_policy_contracts``; gate/repairs TBD.
+  downstream policy helpers live in ``game.response_policy_contracts``; strict-social terminal shaping
+  lives in :mod:`game.social_exchange_emission`. Final emission validates and records metadata only.
 - **narrative_authenticity** — anti-echo between narration and spoken lines, minimum new-signal pressure on
   follow-ups, anti-filler heuristics, and diegetic integrity hints (see ``build_narrative_authenticity_contract``
-  in ``game.narrative_authenticity``); gate enforcement in ``game.final_emission_repairs``.
+  in ``game.narrative_authenticity``); gate validation in ``game.final_emission_repairs`` (no boundary NA rewrite).
 - **interaction_continuity** — preserve conversational thread / interlocutor continuity across turns;
   do not silently drop or switch speakers without a break signal or explicit cue (see
   ``build_interaction_continuity_contract`` in ``game.interaction_continuity``); gate/repairs TBD.

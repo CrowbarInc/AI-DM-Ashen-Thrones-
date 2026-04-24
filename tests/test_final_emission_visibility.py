@@ -10,7 +10,6 @@ import game.api_turn_support as api_turn_support
 from game.defaults import default_scene, default_session, default_world
 from game.final_emission_gate import (
     _decompress_overpacked_sentences,
-    _micro_smooth_post_repair_sentences,
     _repair_fragmentary_participial_splits,
 )
 from game.interaction_context import rebuild_active_scene_entities, set_social_target
@@ -915,145 +914,10 @@ def test_fragmentary_participial_split_repair_preserves_uncertain_suggesting_cla
     assert repaired == text
 
 
-def test_micro_smoothing_merges_short_they_to_they_pair():
-    text = "They offer both warm stew and rumors. They gesture toward the tavern."
+def test_final_emission_gate_does_not_export_sentence_micro_smooth_helper() -> None:
+    import game.final_emission_gate as feg
 
-    smoothed, applied = _micro_smooth_post_repair_sentences(text)
-
-    assert applied is True
-    assert smoothed != text
-    assert smoothed.count(".") == 1
-    assert len(smoothed) <= 140
-    assert "They offer both warm stew and rumors" in smoothed
-    assert "gesture toward the tavern" in smoothed
-    assert "suggesting" not in smoothed.lower()
-    assert "implying" not in smoothed.lower()
-    assert "revealing" not in smoothed.lower()
-    assert "indicating" not in smoothed.lower()
-
-
-def test_micro_smoothing_merges_short_they_to_their_continuation():
-    text = "They offer both warm stew and rumors. Their voice cuts."
-
-    smoothed, applied = _micro_smooth_post_repair_sentences(text)
-
-    assert applied is True
-    assert smoothed != text
-    assert smoothed.count(".") == 1
-    assert "They offer both warm stew and rumors" in smoothed
-    assert "their voice cutting" in smoothed.lower()
-    assert "suggesting" not in smoothed.lower()
-    assert "implying" not in smoothed.lower()
-    assert "revealing" not in smoothed.lower()
-    assert "indicating" not in smoothed.lower()
-
-
-def test_micro_smoothing_preserves_when_anchor_changes():
-    text = "The tavern runner calls out from the awning. A guard scans the square."
-
-    smoothed, applied = _micro_smooth_post_repair_sentences(text)
-
-    assert applied is False
-    assert smoothed == text
-    assert smoothed.count(".") == 2
-
-
-@pytest.mark.parametrize(
-    "tail_sentence",
-    [
-        "Their expression hints at more than they say.",
-        "Their expression suggests they know more than they say.",
-        "Their expression reveals more than they say.",
-        "Their expression indicates more than they say.",
-        "Their expression implying more than they say.",
-    ],
-)
-def test_micro_smoothing_preserves_when_second_sentence_is_implication_language(tail_sentence: str):
-    text = f"They pause at the gate. {tail_sentence}"
-
-    smoothed, applied = _micro_smooth_post_repair_sentences(text)
-
-    assert applied is False
-    assert smoothed == text
-    assert smoothed.count(".") == 2
-    assert ", their expression" not in smoothed.lower()
-
-
-def test_micro_smoothing_preserves_dialogue_like_text():
-    text = 'They offer both warm stew and rumors. "Keep your hood low," they whisper.'
-
-    smoothed, applied = _micro_smooth_post_repair_sentences(text)
-
-    assert applied is False
-    assert smoothed == text
-
-
-def test_micro_smoothing_does_not_treat_contractions_as_dialogue():
-    text = "They don't linger. They scan the road."
-
-    smoothed, applied = _micro_smooth_post_repair_sentences(text)
-
-    assert applied is True
-    assert smoothed != text
-    assert "don't linger" in smoothed.lower()
-    assert smoothed.count(".") == 1
-
-
-def test_micro_smoothing_allows_simple_list_heavy_sentence_when_otherwise_safe():
-    text = "They carry bandages and lamp oil. They wave toward shelter."
-
-    smoothed, applied = _micro_smooth_post_repair_sentences(text)
-
-    assert applied is True
-    assert smoothed != text
-    assert smoothed.count(".") == 1
-    assert "bandages and lamp oil" in smoothed.lower()
-
-
-def test_micro_smoothing_never_merges_more_than_one_pair_per_passage():
-    text = (
-        "They offer both warm stew and rumors. "
-        "They gesture toward the tavern. "
-        "They scan the muddy lane. "
-        "They watch the gate."
-    )
-
-    smoothed, applied = _micro_smooth_post_repair_sentences(text)
-
-    assert applied is True
-    assert smoothed.count(".") == 3
-    assert "They scan the muddy lane. They watch the gate." in smoothed
-
-
-def test_micro_smoothing_respects_combined_length_guardrail():
-    text = (
-        "They map every alley from the awning to the south culvert and the watch post near the flooded square. "
-        "They recount each route marker, shuttered stall, and wagon scar to keep your notes exact."
-    )
-
-    smoothed, applied = _micro_smooth_post_repair_sentences(text)
-
-    assert applied is False
-    assert smoothed == text
-    assert smoothed.count(".") == 2
-
-
-def test_micro_smoothing_preserves_mechanical_or_combat_text():
-    text = "They roll initiative as steel clears leather. They draw and close the distance."
-
-    smoothed, applied = _micro_smooth_post_repair_sentences(text)
-
-    assert applied is False
-    assert smoothed == text
-
-
-def test_micro_smoothing_preserves_already_clean_output_when_no_clear_gain():
-    text = "They watch the awning. A guard checks the queue."
-
-    smoothed, applied = _micro_smooth_post_repair_sentences(text)
-
-    assert applied is False
-    assert smoothed == text
+    assert not hasattr(feg, "_micro_smooth_post_repair_sentences")
 
 
 def test_finalization_pipeline_metadata_for_micro_smoothing():
@@ -1068,14 +932,10 @@ def test_finalization_pipeline_metadata_for_micro_smoothing():
         scene=scene,
     )
     fem = read_final_emission_meta_dict(repaired_out)
-    if fem.get("final_emission_fast_path_used") is True:
-        assert fem["sentence_decompression_applied"] is False
-        assert fem["sentence_fragment_repair_applied"] is False
-        assert fem["sentence_micro_smoothing_applied"] is False
-    else:
-        assert fem["sentence_decompression_applied"] is True
-        assert fem["sentence_fragment_repair_applied"] is True
-        assert fem["sentence_micro_smoothing_applied"] is True
+    assert fem["sentence_decompression_applied"] is False
+    assert fem["sentence_fragment_repair_applied"] is False
+    assert fem["sentence_micro_smoothing_applied"] is False
+    assert fem.get("final_emission_boundary_semantic_repair_disabled") is True
 
     plain_out = _finalize_via_turn_support(
         "Guard Captain stands near the gate.",

@@ -11,7 +11,8 @@ import pytest
 
 import game.final_emission_gate as feg
 from game.final_emission_gate import apply_final_emission_gate
-from game.final_emission_meta import read_final_emission_meta_dict
+from game.final_emission_meta import default_response_type_debug, read_final_emission_meta_dict
+from game.final_emission_validators import _default_response_type_debug as _validators_default_response_type_debug
 from game.final_emission_repairs import (
     _apply_answer_completeness_layer,
     _apply_response_delta_layer,
@@ -22,7 +23,7 @@ from game.output_sanitizer import (
     SANITIZER_BOUNDARY_LEGACY_SENTENCE_REWRITE,
     sanitize_player_facing_output,
 )
-from game.social_exchange_emission import strict_social_ownership_terminal_fallback
+from game.social_exchange_emission import minimal_social_emergency_fallback_line, strict_social_ownership_terminal_fallback
 from game.upstream_response_repairs import UPSTREAM_PREPARED_EMISSION_KEY
 from tests.test_final_emission_gate import _runner_strict_bundle
 
@@ -166,6 +167,11 @@ def test_gate_thin_answer_uses_upstream_prepared_marker_not_boundary_synthesis(_
     assert _normalize_text(out.get("player_facing_text") or "") == _normalize_text(marker)
     assert meta.get("response_type_repair_kind") == "answer_upstream_prepared_repair"
     assert meta.get("response_type_upstream_prepared_absent") is not True
+    assert meta.get("upstream_prepared_emission_used") is True
+    assert meta.get("upstream_prepared_emission_valid") is True
+    assert meta.get("upstream_prepared_emission_source") == "upstream_prepared_emission.prepared_answer_fallback_text"
+    assert meta.get("final_emission_boundary_repair_used") is False
+    assert meta.get("final_emission_boundary_semantic_repair_disabled") is True
 
 
 def test_gate_thin_action_outcome_uses_upstream_prepared_marker_not_boundary_synthesis(_noop_visibility):
@@ -190,6 +196,11 @@ def test_gate_thin_action_outcome_uses_upstream_prepared_marker_not_boundary_syn
     meta = read_final_emission_meta_dict(out) or {}
     assert _normalize_text(out.get("player_facing_text") or "") == _normalize_text(marker)
     assert meta.get("response_type_repair_kind") == "action_outcome_upstream_prepared_repair"
+    assert meta.get("upstream_prepared_emission_used") is True
+    assert meta.get("upstream_prepared_emission_valid") is True
+    assert meta.get("upstream_prepared_emission_source") == "upstream_prepared_emission.prepared_action_fallback_text"
+    assert meta.get("final_emission_boundary_repair_used") is False
+    assert meta.get("final_emission_boundary_semantic_repair_disabled") is True
 
 
 def test_enforce_response_type_marks_upstream_absent_without_inventing_answer_line():
@@ -212,6 +223,126 @@ def test_enforce_response_type_marks_upstream_absent_without_inventing_answer_li
     assert dbg.get("response_type_candidate_ok") is False
     assert text == "Only mist between the torches."
     assert "No direct answer is established" not in text
+    assert dbg.get("upstream_prepared_emission_used") is False
+    assert dbg.get("upstream_prepared_emission_valid") is False
+    assert dbg.get("upstream_prepared_emission_source") == "absent"
+    assert dbg.get("final_emission_boundary_repair_used") is False
+    assert dbg.get("final_emission_boundary_semantic_repair_disabled") is True
+
+
+def test_gate_preserves_duplicate_speaker_subject_lines_no_quote_merge_for_cadence(_noop_visibility):
+    """Same speaker twice must not be collapsed into one quoted span for cadence (no multi-speaker merge)."""
+    twin = (
+        'Rook: "First watch ends soon."\n'
+        'Rook: "Second watch picks up the lane."'
+    )
+    gm = {
+        "player_facing_text": twin,
+        "tags": [],
+        "response_policy": {"response_type_contract": _rtc("dialogue")},
+    }
+    out = apply_final_emission_gate(
+        gm,
+        resolution={"kind": "question", "prompt": "What does Rook say?"},
+        session=None,
+        scene_id="wall",
+        world={},
+    )
+    txt = str(out.get("player_facing_text") or "")
+    assert txt.count("Rook:") == 2
+    assert "First watch" in txt and "Second watch" in txt
+    fem = read_final_emission_meta_dict(out) or {}
+    assert fem.get("social_response_structure_repair_applied") is not True
+
+
+def test_enforce_response_type_upstream_attribution_override():
+    text, dbg = feg._enforce_response_type_contract(
+        "Fog.",
+        gm_output={
+            "response_policy": {"response_type_contract": _rtc("answer")},
+            "upstream_prepared_emission": {
+                "prepared_answer_fallback_text": "ZETA none east pier yet.",
+                "upstream_prepared_emission_attribution": "test_harness",
+            },
+        },
+        resolution={"kind": "observe", "prompt": "What do I see?"},
+        session={},
+        scene_id="yard",
+        world={},
+        strict_social_turn=False,
+        strict_social_suppressed_non_social_turn=False,
+        active_interlocutor="",
+    )
+    assert dbg.get("upstream_prepared_emission_used") is True
+    assert dbg.get("upstream_prepared_emission_source") == "test_harness"
+
+
+def test_response_type_debug_default_keys_match_meta_validators_modules():
+    """RTD1 / FEM upstream-prepared fields stay aligned across meta, validators, and gate merge."""
+    c = {"required_response_type": "answer", "action_must_preserve_agency": False}
+    keys_meta = frozenset(default_response_type_debug(c, "unit").keys())
+    keys_val = frozenset(_validators_default_response_type_debug(c, "unit").keys())
+    assert keys_meta == keys_val
+    required = frozenset(
+        {
+            "upstream_prepared_emission_used",
+            "upstream_prepared_emission_valid",
+            "upstream_prepared_emission_source",
+            "upstream_prepared_emission_reject_reason",
+            "final_emission_boundary_repair_used",
+            "final_emission_boundary_semantic_repair_disabled",
+            "response_type_upstream_prepared_absent",
+        }
+    )
+    assert required <= keys_meta
+
+
+def test_enforce_response_type_rejects_malformed_upstream_answer_without_boundary_synthesis():
+    """Non-empty prepared text that fails the answer contract is not adopted; gate does not mint a substitute."""
+    text, dbg = feg._enforce_response_type_contract(
+        "Only mist between the torches.",
+        gm_output={
+            "response_policy": {"response_type_contract": _rtc("answer")},
+            "upstream_prepared_emission": {"prepared_answer_fallback_text": "Why ask that?"},
+        },
+        resolution={"kind": "observe", "prompt": "What do I see?"},
+        session={},
+        scene_id="yard",
+        world={},
+        strict_social_turn=False,
+        strict_social_suppressed_non_social_turn=False,
+        active_interlocutor="",
+    )
+    assert dbg.get("response_type_candidate_ok") is False
+    assert text == "Only mist between the torches."
+    assert dbg.get("upstream_prepared_emission_used") is False
+    assert dbg.get("upstream_prepared_emission_valid") is False
+    assert dbg.get("upstream_prepared_emission_reject_reason") == "answer_is_another_question"
+    assert dbg.get("response_type_upstream_prepared_absent") is not True
+
+
+def test_enforce_response_type_rejects_malformed_upstream_action_without_boundary_synthesis():
+    """Quoted NPC-only prepared action text fails action_outcome contract; gate keeps candidate text."""
+    text, dbg = feg._enforce_response_type_contract(
+        "You pry the chest lid, but nothing gives yet.",
+        gm_output={
+            "response_policy": {"response_type_contract": _rtc("action_outcome")},
+            "upstream_prepared_emission": {"prepared_action_fallback_text": 'She says, "All quiet."'},
+        },
+        resolution={"kind": "investigate", "prompt": "Pry the chest lid"},
+        session={"last_player_action_text": "Pry the chest lid"},
+        scene_id="cellar",
+        world={},
+        strict_social_turn=False,
+        strict_social_suppressed_non_social_turn=False,
+        active_interlocutor="",
+    )
+    assert dbg.get("response_type_candidate_ok") is False
+    assert text == "You pry the chest lid, but nothing gives yet."
+    assert dbg.get("upstream_prepared_emission_used") is False
+    assert dbg.get("upstream_prepared_emission_valid") is False
+    assert dbg.get("upstream_prepared_emission_reject_reason") == "action_outcome_replaced_by_dialogue"
+    assert dbg.get("response_type_upstream_prepared_absent") is not True
 
 
 def test_gate_strict_social_dialogue_repair_is_terminal_social_owned_fallback(monkeypatch, _noop_visibility):
@@ -278,6 +409,88 @@ def test_strip_only_sanitizer_strips_internal_prefix_without_template_substituti
     low = out.lower()
     assert "validator:" not in low
     assert "wooden door" in low
+
+
+def test_gate_valid_answer_passes_unchanged_modulo_packaging_normalization(_noop_visibility):
+    """Contract-satisfying answer text is not rewritten for completeness; only normalization may apply."""
+    raw = "  The   east   gate   is   barred.  "
+    gm = {
+        "player_facing_text": raw,
+        "tags": [],
+        "response_policy": {"response_type_contract": _rtc("answer")},
+    }
+    out = apply_final_emission_gate(
+        gm,
+        resolution={"kind": "observe", "prompt": "What blocks the road?"},
+        session={},
+        scene_id="road",
+        world={},
+    )
+    assert _normalize_text(out.get("player_facing_text") or "") == _normalize_text(
+        "The east gate is barred."
+    )
+    meta = read_final_emission_meta_dict(out) or {}
+    assert meta.get("response_type_candidate_ok") is True
+    assert meta.get("upstream_prepared_emission_used") is not True
+    assert meta.get("final_emission_boundary_semantic_repair_disabled") is True
+
+
+def test_enforce_dialogue_contract_minimal_repair_delegates_to_social_module_not_gate_composition():
+    """Thin non-dialogue text is repaired via ``minimal_social_emergency_fallback_line`` (social module), not gate prose."""
+    resolution = {
+        "kind": "question",
+        "prompt": "What does Rook say?",
+        "social": {"npc_id": "rook", "npc_name": "Rook", "social_intent_class": "social_exchange"},
+    }
+    expected = minimal_social_emergency_fallback_line(resolution)
+    text, dbg = feg._enforce_response_type_contract(
+        "The sky is grey and still.",
+        gm_output={
+            "response_policy": {"response_type_contract": _rtc("dialogue")},
+        },
+        resolution=resolution,
+        session=None,
+        scene_id="wall",
+        world={},
+        strict_social_turn=False,
+        strict_social_suppressed_non_social_turn=False,
+        active_interlocutor="",
+    )
+    assert _normalize_text(text) == _normalize_text(expected)
+    assert dbg.get("response_type_repair_kind") == "dialogue_minimal_repair"
+    assert dbg.get("response_type_repair_used") is True
+    assert dbg.get("final_emission_boundary_semantic_repair_disabled") is True
+
+
+def test_gate_upstream_bundle_origin_preserved_separate_from_fem_source_attribution(_noop_visibility):
+    """``upstream_prepared_bundle_origin`` stays on the payload; FEM ``upstream_prepared_emission_source`` uses attribution."""
+    bundle_tag = "fixture.test_bundle_origin_lock"
+    marker_answer = "The east gate is barred and manned."
+    marker_action = "You pry the chest lid, and the attempt produces an immediate result."
+    gm = {
+        "player_facing_text": "Fog.",
+        "tags": [],
+        "response_policy": {"response_type_contract": _rtc("answer")},
+        UPSTREAM_PREPARED_EMISSION_KEY: {
+            "prepared_answer_fallback_text": marker_answer,
+            "prepared_action_fallback_text": marker_action,
+            "upstream_prepared_emission_attribution": "harness.attrib_only",
+            "upstream_prepared_bundle_origin": bundle_tag,
+        },
+    }
+    out = apply_final_emission_gate(
+        gm,
+        resolution={"kind": "observe", "prompt": "What do I see?"},
+        session={},
+        scene_id="yard",
+        world={},
+    )
+    meta = read_final_emission_meta_dict(out) or {}
+    assert meta.get("upstream_prepared_emission_source") == "harness.attrib_only"
+    up = out.get(UPSTREAM_PREPARED_EMISSION_KEY)
+    assert isinstance(up, dict)
+    assert up.get("upstream_prepared_bundle_origin") == bundle_tag
+    assert "upstream_prepared_bundle_origin" not in meta
 
 
 def test_gate_clean_neutral_narration_near_no_op_pass_through(_noop_visibility):
