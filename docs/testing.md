@@ -127,6 +127,20 @@ Shared JSON-safe stubs (optional): `tests/helpers/objective7_referent_fixtures.p
 - Each turn is evaluated independently
 - Session summaries use the final turn as the representative output
 
+### Scenario-spine long-session validation
+
+**Purpose:** scripted **multi-turn** branches against `/api/chat`, then deterministic **`evaluate_scenario_spine_session`** (session-level axes, anchors, checkpoints). Complements playability; does not replace it.
+
+**Docs:** [`docs/scenario_spine_validation.md`](scenario_spine_validation.md)
+
+**Deterministic pytest (no full live API run required for these modules):**
+
+```bash
+python -m pytest tests/test_scenario_spine_contracts.py tests/test_scenario_spine_eval.py tests/test_run_scenario_spine_validation.py
+```
+
+**Manual / CI-with-model:** `python tools/run_scenario_spine_validation.py` — artifacts under `artifacts/scenario_spine_validation/<UTC>/<spine_id>/<branch_id>/`.
+
 ### Known Testing Constraints
 
 **Escalation vs emission gate**
@@ -145,6 +159,7 @@ Shared JSON-safe stubs (optional): `tests/helpers/objective7_referent_fixtures.p
 | Contracts | Structural correctness | Ongoing (baseline regression) |
 | Behavioral Gauntlet | **Deterministic** pipeline / narration-behavior smoke | **Complete** |
 | Playability | Human-DM behavioral validation via live `/api/chat` | **Complete** |
+| Scenario-spine | Long-session continuity / branching via scripted branches + `evaluate_scenario_spine_session` | **Tooling** — see `docs/scenario_spine_validation.md` |
 | AER (Anti-Echo & Rumor Realism) | Narrative authenticity operator + repairs + telemetry | **Complete** (functionally) |
 
 ## Behavioral gauntlet (complete)

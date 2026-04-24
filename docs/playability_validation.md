@@ -111,3 +111,7 @@ After each chat response, the runner builds the evaluator input as:
 Then it sets `playability_eval` to `evaluate_playability(that_dict)`.
 
 It also sets `narrative_authenticity_eval` to `evaluate_narrative_authenticity(turn_packet, payload, _final_emission_meta_from_chat_payload(payload))`. That evaluator is fail-closed if `_final_emission_meta` / NA telemetry is missing (`missing_narrative_authenticity_telemetry`) and includes `narrative_authenticity_verdict` plus `rumor_realism_axes` for shipped-state reporting. Authority rule is unchanged: **do not** reinterpret or recompute either evaluator’s scores—read the written dicts only. For NA field meanings and debugging, see **Narrative Authenticity & Signal Quality** in `docs/README.md` and `docs/narrative_authenticity_anti_echo_rumor_realism.md`.
+
+## Related: scenario-spine long-session validation
+
+Playability scores **per turn**; the scenario-spine lane scores **whole-branch session health** (continuity, referents, progression, grounding, branch coherence) via `evaluate_scenario_spine_session`. Separate runner, separate artifacts: **`artifacts/scenario_spine_validation/<UTC>/<spine_id>/<branch_id>/`**. Full operator guide, CLI, Definition-of-Done, and regression commands: **`docs/scenario_spine_validation.md`**.

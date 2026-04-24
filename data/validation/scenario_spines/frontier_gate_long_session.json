@@ -1,0 +1,164 @@
+{
+  "spine_id": "frontier_gate_long_session",
+  "title": "Cinderwatch Gate — missing patrol / notice-board pressure",
+  "smoke_only": false,
+  "notes": "Canonical long-session spine for offline validation; frontier_gate diegesis.",
+  "fixed_start_state": {
+    "campaign_tone": "ashen_thrones",
+    "initial_scene_id": "frontier_gate",
+    "player_arrival": "eastern_square_mud",
+    "opening_pressure": "crowd_curfew_taxes_missing_patrol"
+  },
+  "continuity_anchors": [
+    {
+      "anchor_id": "ca_active_npcs",
+      "anchor_kind": "active_npcs",
+      "description": "Gate serjeant, tavern runner, threadbare watcher, hooded lurker, noble townhouse colors."
+    },
+    {
+      "anchor_id": "ca_active_problem",
+      "anchor_kind": "active_problem",
+      "description": "Posted warning and whispers about a missing patrol; rising crowd tension."
+    },
+    {
+      "anchor_id": "ca_location",
+      "anchor_kind": "location",
+      "description": "Cinderwatch Gate District — rain, choke traffic, notice board, tavern heat at the edge."
+    },
+    {
+      "anchor_id": "ca_scene_objective",
+      "anchor_kind": "scene_objective",
+      "description": "Learn what the watch will admit, what the notice omits, and where the patrol rumor points."
+    }
+  ],
+  "referent_anchors": [
+    {
+      "anchor_id": "ref_ash_compact_census",
+      "label": "Ash Compact census pressure",
+      "description": "Faction/project subtext: supply census lines and gate delays tied to compact policy."
+    },
+    {
+      "anchor_id": "ref_captain_thoran",
+      "label": "Captain Thoran",
+      "description": "Named watch officer referenced for patrol assignments and roster truth."
+    },
+    {
+      "anchor_id": "ref_muddy_prints",
+      "label": "Muddy footprints clue",
+      "description": "Discovered lead: faint prints northwest among crates; hurried movement."
+    },
+    {
+      "anchor_id": "ref_notice_board",
+      "label": "The notice",
+      "description": "Posted taxes, curfews, and the missing-patrol warning at the board."
+    }
+  ],
+  "progression_anchors": [
+    {
+      "anchor_id": "prog_patrol_investigation_advances",
+      "description": "Patrol disappearance should deepen: named routes, last sightings, or clock pressure.",
+      "expected_change_summary": "world: patrol_missing_clock_or_investigation_stage_advances"
+    },
+    {
+      "anchor_id": "prog_watch_tightens",
+      "description": "Watch posture should harden if the player presses publically or spikes panic.",
+      "expected_change_summary": "world: gate_security_or_curfew_enforcement_escalates"
+    }
+  ],
+  "checkpoints": [
+    {
+      "checkpoint_id": "cp_after_notice_read",
+      "label": "Notice facts anchored before social escalation",
+      "referenced_anchor_ids": [
+        "ref_notice_board",
+        "ca_scene_objective",
+        "ca_location"
+      ]
+    },
+    {
+      "checkpoint_id": "cp_patrol_thread_deepens",
+      "label": "Patrol thread tied to clue + progression expectation",
+      "referenced_anchor_ids": [
+        "ca_active_problem",
+        "ref_muddy_prints",
+        "prog_patrol_investigation_advances"
+      ]
+    },
+    {
+      "checkpoint_id": "cp_social_pressure_registered",
+      "label": "NPC cast + compact referent in play",
+      "referenced_anchor_ids": [
+        "ca_active_npcs",
+        "ref_captain_thoran",
+        "ref_ash_compact_census",
+        "prog_watch_tightens"
+      ]
+    }
+  ],
+  "branches": [
+    {
+      "branch_id": "branch_cautious_observe",
+      "label": "Cautious observation / delayed commitment",
+      "notes": "Hold position, map rotations, defer confrontation.",
+      "turns": [
+        {"turn_id": "obs_01", "player_prompt": "I loiter in rain shadow and count guard rotations."},
+        {"turn_id": "obs_02", "player_prompt": "I map who watches the notice board."},
+        {"turn_id": "obs_03", "player_prompt": "I wait a full bell before acting."},
+        {"turn_id": "obs_04", "player_prompt": "I feign fatigue near the tavern door, listening only."},
+        {"turn_id": "obs_05", "player_prompt": "I ignore provocations and track hand signals in the crowd."},
+        {"turn_id": "obs_06", "player_prompt": "I note where the well-dressed observer drifts."},
+        {"turn_id": "obs_07", "player_prompt": "I watch the gate without approaching yet."},
+        {"turn_id": "obs_08", "player_prompt": "I commit to returning after dark; I withdraw cleanly."},
+        {"turn_id": "obs_09", "player_prompt": "I pocket a rumor silently and leave the square."},
+        {"turn_id": "obs_10", "player_prompt": "I file a mental timeline: arrivals versus shouts."}
+      ]
+    },
+    {
+      "branch_id": "branch_direct_intrusion",
+      "label": "Direct action / risky intrusion",
+      "notes": "Force doors, confront watchers, spike gate tension.",
+      "turns": [
+        {"turn_id": "act_01", "player_prompt": "I slip toward the narrow alley without announcing myself."},
+        {"turn_id": "act_02", "player_prompt": "I try the warehouse side door when guards look away."},
+        {"turn_id": "act_03", "player_prompt": "I palm the notice edge to read what is pasted behind it."},
+        {"turn_id": "act_04", "player_prompt": "I confront the threadbare watcher aloud."},
+        {"turn_id": "act_05", "player_prompt": "I press through mud toward the gate serjeant."},
+        {"turn_id": "act_06", "player_prompt": "I shout a blunt question about the missing patrol."},
+        {"turn_id": "act_07", "player_prompt": "I offer a low bribe for duty-roster facts."},
+        {"turn_id": "act_08", "player_prompt": "I sprint for the crates when a hooded figure moves."}
+      ]
+    },
+    {
+      "branch_id": "branch_social_inquiry",
+      "label": "Investigation / social inquiry",
+      "notes": "Long path: notice, runners, watch names, compact subtext.",
+      "turns": [
+        {"turn_id": "inv_01", "player_prompt": "I scan the notice for taxes, curfew, and patrol lines."},
+        {"turn_id": "inv_02", "player_prompt": "I ask a guard who commands the watch tonight."},
+        {"turn_id": "inv_03", "player_prompt": "I greet the tavern runner and ask the loudest rumor."},
+        {"turn_id": "inv_04", "player_prompt": "I mention the missing patrol and watch their face."},
+        {"turn_id": "inv_05", "player_prompt": "I ask who posted the warning beside the tax lines."},
+        {"turn_id": "inv_06", "player_prompt": "I press: what route did the patrol take last?"},
+        {"turn_id": "inv_07", "player_prompt": "I ask after Lirael the crier and where she posts."},
+        {"turn_id": "inv_08", "player_prompt": "I inquire politely after Captain Thoran."},
+        {"turn_id": "inv_09", "player_prompt": "I listen to refugees whispering at the mud line."},
+        {"turn_id": "inv_10", "player_prompt": "I ask if Ash Compact census lines caused the choke."},
+        {"turn_id": "inv_11", "player_prompt": "I note the threadbare pickpocket and avoid eye contact."},
+        {"turn_id": "inv_12", "player_prompt": "I ask the serjeant what changed at the gate this week."},
+        {"turn_id": "inv_13", "player_prompt": "I request the exact safe-passage wording on the board."},
+        {"turn_id": "inv_14", "player_prompt": "I ask whether hooded figures are common here."},
+        {"turn_id": "inv_15", "player_prompt": "I buy a cup and trade a coin for a straight rumor."},
+        {"turn_id": "inv_16", "player_prompt": "I ask about the noble colors on the townhouse."},
+        {"turn_id": "inv_17", "player_prompt": "I mention muddy alleys; did patrols search northwest?"},
+        {"turn_id": "inv_18", "player_prompt": "I ask who benefits if the gate stays jammed."},
+        {"turn_id": "inv_19", "player_prompt": "I confirm curfew bells with the watch."},
+        {"turn_id": "inv_20", "player_prompt": "I stake out the board a few minutes, reading edits."},
+        {"turn_id": "inv_21", "player_prompt": "I ask about the eastern caravan choke point."},
+        {"turn_id": "inv_22", "player_prompt": "I probe whether taxes rose after the census."},
+        {"turn_id": "inv_23", "player_prompt": "I thank the runner and ask one last sharp question."},
+        {"turn_id": "inv_24", "player_prompt": "I summarize what I heard and ask what I missed."},
+        {"turn_id": "inv_25", "player_prompt": "I state my next focus: follow the footprint rumor."}
+      ]
+    }
+  ]
+}

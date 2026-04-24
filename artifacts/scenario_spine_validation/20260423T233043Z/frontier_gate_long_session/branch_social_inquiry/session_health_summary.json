@@ -1,0 +1,94 @@
+{
+  "axes": {
+    "branch_coherence": {
+      "failure_codes": [],
+      "passed": true,
+      "warning_codes": []
+    },
+    "narrative_grounding": {
+      "failure_codes": [],
+      "passed": true,
+      "warning_codes": []
+    },
+    "referent_persistence": {
+      "failure_codes": [],
+      "passed": true,
+      "warning_codes": []
+    },
+    "state_continuity": {
+      "failure_codes": [],
+      "passed": true,
+      "warning_codes": [
+        "continuity_anchor_absent_late_window"
+      ]
+    },
+    "world_project_progression": {
+      "failure_codes": [],
+      "passed": true,
+      "warning_codes": []
+    }
+  },
+  "branch_id": "branch_social_inquiry",
+  "checkpoint_results": [
+    {
+      "checkpoint_id": "cp_after_notice_read",
+      "issues": [],
+      "label": "Notice facts anchored before social escalation",
+      "passed": true,
+      "referenced_anchor_ids": [
+        "ref_notice_board",
+        "ca_scene_objective",
+        "ca_location"
+      ],
+      "window_end_turn_index": 0
+    },
+    {
+      "checkpoint_id": "cp_patrol_thread_deepens",
+      "issues": [
+        {
+          "anchor_id": "ref_muddy_prints",
+          "code": "referent_weak",
+          "detail": "referent keywords not found in window"
+        }
+      ],
+      "label": "Patrol thread tied to clue + progression expectation",
+      "passed": false,
+      "referenced_anchor_ids": [
+        "ca_active_problem",
+        "ref_muddy_prints",
+        "prog_patrol_investigation_advances"
+      ],
+      "window_end_turn_index": 2
+    },
+    {
+      "checkpoint_id": "cp_social_pressure_registered",
+      "issues": [],
+      "label": "NPC cast + compact referent in play",
+      "passed": true,
+      "referenced_anchor_ids": [
+        "ca_active_npcs",
+        "ref_captain_thoran",
+        "ref_ash_compact_census",
+        "prog_watch_tightens"
+      ],
+      "window_end_turn_index": 4
+    }
+  ],
+  "detected_failures": [],
+  "scenario_id": "frontier_gate_long_session",
+  "schema_version": 1,
+  "session_health": {
+    "classification": "warning",
+    "overall_passed": true,
+    "score": 93
+  },
+  "turn_count": 5,
+  "warnings": [
+    {
+      "anchor_id": "ca_active_problem",
+      "axis": "state_continuity",
+      "code": "continuity_anchor_absent_late_window",
+      "detail": "continuity ca_active_problem present early but not in final third window"
+    }
+  ]
+}
