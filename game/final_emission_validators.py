@@ -38,6 +38,194 @@ def _content_tokens(text: str) -> set[str]:
     }
 
 
+def _has_hedge_language(text: str) -> bool:
+    """Heuristic hedge detection used for bounded/unknown plan facts (no semantic inference)."""
+    t = str(text or "")
+    if not t:
+        return False
+    return bool(
+        re.search(
+            r"\b(?:might|may|maybe|perhaps|seems|appears|rumor|rumour|hearsay|unclear|not sure|can't say for certain)\b",
+            t,
+            re.IGNORECASE,
+        )
+    )
+
+
+def _mentions_fact_text(emitted_text: str, fact_text: str) -> bool:
+    """True when emitted text overlaps meaningfully with a fact string (token overlap, bounded)."""
+    et = _normalize_text(emitted_text)
+    ft = _normalize_text(fact_text)
+    if not et or not ft:
+        return False
+    # Fast path: direct substring match (case-insensitive) for short facts.
+    if len(ft) <= 180 and ft.lower() in et.lower():
+        return True
+    # Token overlap for longer/looser facts.
+    ftoks = _content_tokens(ft)
+    if not ftoks:
+        return False
+    etoks = _content_tokens(et)
+    inter = ftoks & etoks
+    # Require at least 2 meaningful tokens, or a single long token (names, rare nouns).
+    if len(inter) >= 2:
+        return True
+    return any(len(tok) >= 8 for tok in inter)
+
+
+def _opening_segment_for_plan(text: str) -> str:
+    """Plan-convergence uses the same sentence splitter as answer-completeness."""
+    return _opening_segment(_normalize_text(text))
+
+
+def validate_answer_exposition_plan_convergence(
+    emitted_text: str,
+    *,
+    answer_required: bool,
+    answer_exposition_plan: Mapping[str, Any] | None,
+) -> Dict[str, Any]:
+    """Deterministic final-emission enforcement for Answer/Exposition Convergence.
+
+    Final emission validates; it does not author missing facts or fallback exposition.
+    This validator is intentionally heuristic and fail-closed when required seams are absent.
+    """
+    base: Dict[str, Any] = {
+        "checked": False,
+        "plan_present": False,
+        "plan_valid": False,
+        "passed": True,
+        "required_fact_ids": [],
+        "failure_reasons": [],
+    }
+    if not answer_required:
+        return base
+    base["checked"] = True
+
+    plan = answer_exposition_plan if isinstance(answer_exposition_plan, Mapping) else None
+    base["plan_present"] = plan is not None
+    if plan is None:
+        base["passed"] = False
+        base["failure_reasons"] = ["missing_answer_exposition_plan"]
+        return base
+
+    # Structural validation: mirror the prompt_context projected validator requirements (strict enough for gate).
+    for k in ("enabled", "answer_required"):
+        if not isinstance(plan.get(k), bool):
+            base["passed"] = False
+            base["failure_reasons"] = [f"malformed_plan:missing_or_bad_bool:{k}"]
+            return base
+    if not isinstance(plan.get("facts"), list):
+        base["passed"] = False
+        base["failure_reasons"] = ["malformed_plan:facts_not_list"]
+        return base
+    for req in ("constraints", "voice", "delivery"):
+        if not isinstance(plan.get(req), Mapping):
+            base["passed"] = False
+            base["failure_reasons"] = [f"malformed_plan:missing_{req}"]
+            return base
+    delivery = plan.get("delivery") if isinstance(plan.get("delivery"), Mapping) else {}
+    must_ids = delivery.get("must_include_fact_ids") if isinstance(delivery.get("must_include_fact_ids"), list) else []
+    base["required_fact_ids"] = [str(x) for x in must_ids if isinstance(x, str) and str(x).strip()][:16]
+    base["plan_valid"] = True
+
+    text = _normalize_text(emitted_text)
+    if not text:
+        base["passed"] = False
+        base["failure_reasons"] = ["empty_emitted_text"]
+        return base
+
+    # Enforce answer-first when required by plan delivery.
+    answer_first = bool(delivery.get("answer_must_come_first"))
+    opening = _opening_segment_for_plan(text)
+
+    # Generic filler/deflection cannot stand in for an answer when answer is required.
+    if any(p.search(opening) for p in _ANSWER_FILLER_PATTERNS):
+        base["failure_reasons"].append("opening_is_filler_not_answer")
+    if any(p.search(opening) for p in _DEFLECTIVE_OPENING_PATTERNS):
+        base["failure_reasons"].append("opening_is_deflective")
+    if _GENERIC_NONANSWER_SNIPPET.search(opening):
+        base["failure_reasons"].append("opening_is_generic_nonanswer")
+
+    facts_raw = plan.get("facts") if isinstance(plan.get("facts"), list) else []
+    facts: List[Mapping[str, Any]] = [f for f in facts_raw if isinstance(f, Mapping)][:64]
+    id_to_fact: Dict[str, Mapping[str, Any]] = {}
+    for f in facts:
+        fid = str(f.get("id") or "").strip()
+        if fid:
+            id_to_fact[fid] = f
+
+    # Required fact ids must be representable where feasible (token overlap heuristic).
+    missing_required: List[str] = []
+    for fid in base["required_fact_ids"]:
+        f = id_to_fact.get(fid)
+        if not isinstance(f, Mapping):
+            missing_required.append(fid)
+            continue
+        ftxt = str(f.get("fact") or "").strip()
+        if not _mentions_fact_text(text, ftxt):
+            missing_required.append(fid)
+    if missing_required:
+        base["failure_reasons"].append(f"missing_required_fact_ids:{sorted(missing_required)}")
+
+    # Answer-must-come-first: opening should carry at least one required fact (when such facts exist).
+    if answer_first and base["required_fact_ids"]:
+        open_ok = False
+        for fid in base["required_fact_ids"]:
+            f = id_to_fact.get(fid)
+            if not isinstance(f, Mapping):
+                continue
+            if _mentions_fact_text(opening, str(f.get("fact") or "")):
+                open_ok = True
+                break
+        if not open_ok:
+            base["failure_reasons"].append("answer_must_come_first_violation")
+
+    # Bounded/unknown must not be upgraded to certainty; gated/unknown visibility must not be stated as public truth.
+    emitted_tokens = _content_tokens(text)
+    for f in facts:
+        ftxt = str(f.get("fact") or "").strip()
+        if not ftxt:
+            continue
+        # Mention detection: use the fact string when it matches; otherwise fall back to token overlap.
+        mentioned = _mentions_fact_text(text, ftxt)
+        if not mentioned:
+            ftoks = _content_tokens(ftxt)
+            if len(ftoks & emitted_tokens) >= 2:
+                mentioned = True
+        if not mentioned:
+            continue
+        certainty = str(f.get("certainty") or "").strip().lower()
+        visibility = str(f.get("visibility") or "").strip().lower()
+
+        if certainty in {"bounded", "unknown"} and not _has_hedge_language(text):
+            base["failure_reasons"].append(f"bounded_unknown_upgraded_to_certainty:{str(f.get('id') or '')}")
+        if visibility in {"gated", "unknown"}:
+            # If a gated/unknown fact is mentioned, require explicit gating/uncertainty framing.
+            if visibility == "gated" and not re.search(r"\b(?:can't say|cannot say|won't say|not here|not now|under orders|sworn)\b", text, re.IGNORECASE):
+                base["failure_reasons"].append(f"gated_fact_stated_as_public_truth:{str(f.get('id') or '')}")
+            if visibility == "unknown" and not _has_hedge_language(text):
+                base["failure_reasons"].append(f"unknown_fact_stated_as_known:{str(f.get('id') or '')}")
+
+    # Unsupported lore/exposition claims: fail when there is substantial novel token mass not covered by plan facts.
+    # This is bounded and intentionally coarse: it permits small connective language, but fails closed on
+    # large novelty when the plan provides only small grounded surface area.
+    plan_tokens: set[str] = set()
+    for f in facts:
+        plan_tokens |= _content_tokens(str(f.get("fact") or ""))
+    novel = emitted_tokens - plan_tokens
+    # Allow a small novelty budget for connective narrative words.
+    # If the plan is small, keep the novelty budget small as well (anti-invention).
+    if plan_tokens:
+        long_novel = [t for t in novel if len(t) >= 7]
+        # Conservative: allow light scene color and connective language, but fail on "high-signal" novelty.
+        if (len(long_novel) >= 2 and len(novel) >= 3) or len(novel) >= 10:
+            base["failure_reasons"].append("unsupported_lore_or_exposition_claims")
+
+    base["failure_reasons"] = list(dict.fromkeys(str(r) for r in base["failure_reasons"] if r))
+    base["passed"] = not bool(base["failure_reasons"])
+    return base
+
+
 def candidate_satisfies_dialogue_contract(
     text: str,
     *,

@@ -39,6 +39,7 @@ from game.final_emission_validators import (
     _split_sentences_answer_complete,
     inspect_social_response_structure,
     validate_answer_completeness,
+    validate_answer_exposition_plan_convergence,
     validate_fallback_behavior,
     validate_response_delta,
     validate_referent_clarity,
@@ -145,6 +146,117 @@ def _merge_answer_completeness_meta(meta: Dict[str, Any], ac_dbg: Dict[str, Any]
             "answer_completeness_repair_mode": ac_dbg.get("answer_completeness_repair_mode"),
             "answer_completeness_expected_voice": ac_dbg.get("answer_completeness_expected_voice"),
             "answer_completeness_skip_reason": ac_dbg.get("answer_completeness_skip_reason"),
+        }
+    )
+
+
+def _default_answer_exposition_plan_meta() -> Dict[str, Any]:
+    return {
+        "answer_exposition_plan_checked": False,
+        "answer_exposition_plan_present": False,
+        "answer_exposition_plan_valid": False,
+        "answer_exposition_plan_passed": True,
+        "answer_exposition_plan_failure_reasons": [],
+        "answer_exposition_plan_required_fact_ids": [],
+        "answer_exposition_plan_repair_modes": [],
+    }
+
+
+def _apply_answer_exposition_plan_layer(
+    text: str,
+    *,
+    gm_output: Dict[str, Any],
+    response_type_debug: Dict[str, Any],
+    answer_completeness_meta: Dict[str, Any],
+) -> tuple[str, Dict[str, Any], List[str]]:
+    """Final-emission enforcement for answer_exposition_plan convergence (deterministic, bounded).
+
+    Runs only when answer_completeness indicates answer_required.
+    """
+    meta = _default_answer_exposition_plan_meta()
+    if response_type_debug.get("response_type_candidate_ok") is False:
+        return text, meta, []
+
+    ac = resolve_answer_completeness_contract(gm_output)
+    answer_required = bool((ac or {}).get("answer_required")) if isinstance(ac, dict) else False
+    plan = (ac or {}).get("answer_exposition_plan") if isinstance(ac, dict) else None
+
+    v0 = validate_answer_exposition_plan_convergence(
+        text,
+        answer_required=bool(answer_required),
+        answer_exposition_plan=plan if isinstance(plan, dict) else None,
+    )
+    meta["answer_exposition_plan_checked"] = bool(v0.get("checked"))
+    meta["answer_exposition_plan_present"] = bool(v0.get("plan_present"))
+    meta["answer_exposition_plan_valid"] = bool(v0.get("plan_valid"))
+    meta["answer_exposition_plan_passed"] = bool(v0.get("passed"))
+    meta["answer_exposition_plan_failure_reasons"] = list(v0.get("failure_reasons") or [])
+    meta["answer_exposition_plan_required_fact_ids"] = list(v0.get("required_fact_ids") or [])
+
+    if not v0.get("checked") or v0.get("passed"):
+        return text, meta, []
+
+    # No inventive repairs: do not generate missing facts or fallback exposition.
+    # Reorder is only allowed if boundary contract allows it; use sentence-only permutation.
+    reasons = set(str(r) for r in (meta.get("answer_exposition_plan_failure_reasons") or []) if str(r).strip())
+    if "answer_must_come_first_violation" in reasons:
+        from game.final_emission_validators import _mentions_fact_text  # local import to avoid cycles
+
+        delivery = plan.get("delivery") if isinstance(plan, dict) and isinstance(plan.get("delivery"), dict) else {}
+        must_ids = delivery.get("must_include_fact_ids") if isinstance(delivery.get("must_include_fact_ids"), list) else []
+        req_ids = [str(x) for x in must_ids if isinstance(x, str) and str(x).strip()][:16]
+        facts = plan.get("facts") if isinstance(plan, dict) and isinstance(plan.get("facts"), list) else []
+        id_to_fact = {str(f.get("id") or "").strip(): f for f in facts if isinstance(f, dict)}
+        sentences = _split_sentences_answer_complete(text)
+        if len(sentences) >= 2 and req_ids:
+            # Find first sentence that contains any required fact; move it to front.
+            idx = None
+            for i, s in enumerate(sentences):
+                for fid in req_ids:
+                    f = id_to_fact.get(fid)
+                    if isinstance(f, dict) and _mentions_fact_text(s, str(f.get("fact") or "")):
+                        idx = i
+                        break
+                if idx is not None:
+                    break
+            if idx is not None and idx > 0:
+                candidate = " ".join([sentences[idx]] + [s for i, s in enumerate(sentences) if i != idx])
+                candidate = _normalize_text(candidate)
+                if candidate and candidate != _normalize_text(text):
+                    assert_final_emission_mutation_allowed(
+                        "reorder_answer_to_front",
+                        source="final_emission_repairs._apply_answer_exposition_plan_layer.safe_sentence_reorder",
+                    )
+                    # Revalidate; only accept if it now passes without introducing new failures.
+                    v1 = validate_answer_exposition_plan_convergence(
+                        candidate,
+                        answer_required=True,
+                        answer_exposition_plan=plan if isinstance(plan, dict) else None,
+                    )
+                    if bool(v1.get("passed")):
+                        meta["answer_exposition_plan_repair_modes"] = ["safe_sentence_reorder_answer_first"]
+                        meta["answer_exposition_plan_passed"] = True
+                        meta["answer_exposition_plan_failure_reasons"] = []
+                        return candidate, meta, []
+
+    # Failure remains: record boundary-only failure without semantic synthesis.
+    extra = ["answer_exposition_plan_failed_at_boundary"]
+    meta["answer_exposition_plan_passed"] = False
+    return text, meta, extra
+
+
+def _merge_answer_exposition_plan_meta(meta: Dict[str, Any], dbg: Dict[str, Any]) -> None:
+    meta.update(
+        {
+            "answer_exposition_plan_checked": bool(dbg.get("answer_exposition_plan_checked")),
+            "answer_exposition_plan_present": bool(dbg.get("answer_exposition_plan_present")),
+            "answer_exposition_plan_valid": bool(dbg.get("answer_exposition_plan_valid")),
+            "answer_exposition_plan_passed": bool(dbg.get("answer_exposition_plan_passed")),
+            "answer_exposition_plan_failure_reasons": list(dbg.get("answer_exposition_plan_failure_reasons") or []),
+            "answer_exposition_plan_required_fact_ids": list(
+                dbg.get("answer_exposition_plan_required_fact_ids") or []
+            ),
+            "answer_exposition_plan_repair_modes": list(dbg.get("answer_exposition_plan_repair_modes") or []),
         }
     )
 

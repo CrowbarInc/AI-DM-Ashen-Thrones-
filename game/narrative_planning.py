@@ -187,6 +187,19 @@ _SCENE_OPENING_FALLBACK_MARKERS = (
     "template opener",
 )
 
+_ANSWER_EXPOSITION_INTENTS = frozenset(
+    {"direct_answer", "lore_exposition", "clarification", "bounded_unknown", "none"}
+)
+_ANSWER_EXPOSITION_FACT_SOURCES = frozenset(
+    {"ctir", "visible_state", "published_lore", "mechanical_result"}
+)
+_ANSWER_EXPOSITION_VISIBILITY_VALUES = frozenset({"public", "gated", "unknown"})
+_ANSWER_EXPOSITION_CERTAINTY_VALUES = frozenset({"known", "bounded", "unknown"})
+_ANSWER_EXPOSITION_VOICE_VALUES = frozenset({"npc", "narrator", "either"})
+_ANSWER_EXPOSITION_DELIVERY_MODES = frozenset(
+    {"plain_answer", "diegetic_exposition", "brief_clarification"}
+)
+
 
 def narrative_plan_version() -> int:
     return NARRATIVE_PLAN_VERSION
@@ -475,6 +488,16 @@ def _derive_transition_node(
         transition_required = True
         source_fields.append("resolution.metadata.(transition_type|transition_semantics.kind)")
         derivation_codes.append(f"signal:resolution.metadata.transition_kind:{explicit_kind.lower()}")
+
+    # If a transition is required but CTIR did not carry an explicit after-scene id,
+    # fall back to the already-public scene id passed at this seam (bundle often
+    # supplies the arrival scene id as ``public_scene_slice.scene_id``).
+    if transition_required and not after_scene_id:
+        ps_after = _as_str(ps.get("scene_id")) or None
+        if ps_after:
+            after_scene_id = ps_after
+            source_fields.append("public_scene_slice.scene_id")
+            derivation_codes.append("signal:public_scene_slice.scene_id")
 
     time_before = _as_str(md.get("time_anchor_before") or md.get("time_before") or md.get("time_anchor")) or None
     time_after = _as_str(md.get("time_anchor_after") or md.get("time_after")) or None
@@ -2162,11 +2185,20 @@ def build_narrative_plan(
         opening_visible_fact_strings=opening_visible_fact_strings,
     )
     transition_node, tn_codes = _derive_transition_node(ctir, public_scene_slice=public_scene_slice)
+    answer_exposition_plan, aep_codes = _derive_answer_exposition_plan(
+        ctir,
+        narrative_mode=narrative_mode,
+        narrative_mode_contract=narrative_mode_contract,
+        narration_obligations=narration_obligations,
+        response_policy=response_policy,
+    )
 
     meta = _bounded_shallow_map(resolution_meta, max_keys=12) if resolution_meta else {}
     recent = _compress_recent_events(recent_compressed_events)
 
-    derivation_codes = _merge_derivation_codes([c1, c2, c3, c4, c5, nr_codes, ao_codes, so_codes, tn_codes])
+    derivation_codes = _merge_derivation_codes(
+        [c1, c2, c3, c4, c5, nr_codes, ao_codes, so_codes, tn_codes, aep_codes]
+    )
     _po = (
         narrative_mode_contract.get("prompt_obligations")
         if isinstance(narrative_mode_contract.get("prompt_obligations"), Mapping)
@@ -2216,6 +2248,7 @@ def build_narrative_plan(
         "required_new_information": required_new_information,
         "allowable_entity_references": allowable_entity_references,
         "transition_node": transition_node,
+        "answer_exposition_plan": answer_exposition_plan,
         "narrative_mode": narrative_mode,
         "narrative_mode_contract": narrative_mode_contract,
         "role_allocation": role_allocation,
@@ -2302,6 +2335,195 @@ def _scan_for_banned_keys(obj: Any, *, prefix: str, depth: int) -> Optional[str]
     return None
 
 
+def _derive_answer_exposition_plan(
+    ctir: Mapping[str, Any],
+    *,
+    narrative_mode: str,
+    narrative_mode_contract: Mapping[str, Any],
+    narration_obligations: Mapping[str, Any] | None,
+    response_policy: Mapping[str, Any] | None,
+) -> Tuple[Dict[str, Any], List[str]]:
+    """Derive an answer/exposition plan structure from CTIR + shipped contracts only."""
+    _ = narration_obligations
+    codes: List[str] = ["answer_exposition_plan:derive"]
+    rp = response_policy if isinstance(response_policy, Mapping) else {}
+    ac = rp.get("answer_completeness") if isinstance(rp.get("answer_completeness"), Mapping) else {}
+
+    answer_required = bool(ac.get("answer_required"))
+    enabled = bool(ac.get("enabled")) or answer_required
+
+    trigger = str((ac.get("trace") or {}).get("trigger_source") or "").strip().lower()
+    answer_intent: str = "none"
+    if answer_required:
+        if "clarification" in trigger:
+            answer_intent = "clarification"
+        elif "lore" in trigger or "exposition" in trigger:
+            answer_intent = "lore_exposition"
+        elif "pressure" in trigger or "question" in trigger:
+            answer_intent = "direct_answer"
+        else:
+            answer_intent = "direct_answer"
+    elif str(narrative_mode).strip() == "exposition_answer":
+        answer_intent = "lore_exposition"
+    if answer_intent != "none":
+        codes.append(f"answer_intent:{answer_intent}")
+
+    nc = _mapping(ctir.get("noncombat"))
+    surfaced = nc.get("surfaced_facts")
+    facts: List[Dict[str, Any]] = []
+    if isinstance(surfaced, list):
+        for i, raw in enumerate(surfaced[:32]):
+            s = _clip(_as_str(raw), max_len=240)
+            if not s:
+                continue
+            fid = f"ctir_noncombat_fact_{i+1}"
+            facts.append(
+                {
+                    "id": fid,
+                    "fact": s,
+                    "source": "ctir",
+                    "visibility": "public",
+                    "certainty": "known",
+                }
+            )
+        if facts:
+            codes.append("facts:ctir.noncombat.surfaced_facts")
+
+    expected_voice = str(ac.get("expected_voice") or "").strip().lower() or "either"
+    if expected_voice not in _ANSWER_EXPOSITION_VOICE_VALUES:
+        expected_voice = "either"
+    delivery_mode = "plain_answer"
+    if answer_intent == "clarification":
+        delivery_mode = "brief_clarification"
+    elif answer_intent == "lore_exposition":
+        delivery_mode = "diegetic_exposition"
+
+    answer_must_come_first = bool(ac.get("answer_must_come_first")) if "answer_must_come_first" in ac else False
+    if str(narrative_mode).strip() == "exposition_answer":
+        po = (
+            narrative_mode_contract.get("prompt_obligations")
+            if isinstance(narrative_mode_contract.get("prompt_obligations"), Mapping)
+            else {}
+        )
+        if "answer_first" in po:
+            answer_must_come_first = bool(po.get("answer_first"))
+
+    must_include_fact_ids: List[str] = []
+    if answer_required and facts:
+        must_include_fact_ids = [str(f["id"]) for f in facts if isinstance(f, Mapping) and _as_str(f.get("id"))][:8]
+
+    forbidden_moves: List[str] = []
+    fm = narrative_mode_contract.get("forbidden_moves")
+    if isinstance(fm, list):
+        forbidden_moves.extend([_as_str(x) for x in fm if _as_str(x)])
+    if bool(ac.get("forbid_deflection")):
+        forbidden_moves.append("no_deflection")
+    if bool(ac.get("forbid_generic_nonanswer")):
+        forbidden_moves.append("no_generic_nonanswer")
+
+    allowed_partial_reasons: List[str] = []
+    apr = ac.get("allowed_partial_reasons")
+    if isinstance(apr, list):
+        allowed_partial_reasons = [_as_str(x) for x in apr if _as_str(x)][:24]
+
+    out: Dict[str, Any] = {
+        "enabled": bool(enabled),
+        "answer_required": bool(answer_required),
+        "answer_intent": answer_intent,
+        "source": {
+            "derived_from_ctir": True,
+            "ctir_sections": ["noncombat.surfaced_facts"] if facts else [],
+            "derivation_codes": codes[:16],
+        },
+        "facts": facts,
+        "constraints": {
+            "forbid_invention": True,
+            "forbid_hidden_truth_leak": True,
+            "forbid_prompt_layer_reasoning": True,
+            "allowed_partial_reasons": allowed_partial_reasons,
+        },
+        "voice": {"expected_voice": expected_voice, "delivery_mode": delivery_mode},
+        "delivery": {
+            "answer_must_come_first": bool(answer_must_come_first),
+            "max_sentences_hint": None,
+            "must_include_fact_ids": must_include_fact_ids,
+            "optional_fact_ids": [],
+            "forbidden_moves": sorted({x for x in forbidden_moves if x})[:24],
+        },
+        "debug": {"derivation_codes": codes[:24]},
+    }
+    return out, codes
+
+
+def _validate_answer_exposition_plan(obj: Any) -> Optional[str]:
+    if obj is None:
+        return "missing"
+    if not isinstance(obj, Mapping):
+        return "not_mapping"
+    for k in ("enabled", "answer_required"):
+        if not isinstance(obj.get(k), bool):
+            return f"missing_or_bad_bool:{k}"
+    intent = _as_str(obj.get("answer_intent"))
+    if intent not in _ANSWER_EXPOSITION_INTENTS:
+        return "bad_answer_intent"
+    src = obj.get("source")
+    if not isinstance(src, Mapping):
+        return "missing_source"
+    if not isinstance(src.get("derived_from_ctir"), bool):
+        return "bad_source.derived_from_ctir"
+    if "ctir_sections" in src and not isinstance(src.get("ctir_sections"), list):
+        return "bad_source.ctir_sections"
+    facts = obj.get("facts")
+    if not isinstance(facts, list):
+        return "facts_not_list"
+    seen: set[str] = set()
+    for i, f in enumerate(facts[:48]):
+        if not isinstance(f, Mapping):
+            return f"fact_not_mapping:{i}"
+        fid = _as_str(f.get("id"))
+        if not fid:
+            return f"fact_missing_id:{i}"
+        if fid in seen:
+            return f"fact_duplicate_id:{fid}"
+        seen.add(fid)
+        if not _as_str(f.get("fact")):
+            return f"fact_missing_fact:{fid}"
+        if _as_str(f.get("source")) not in _ANSWER_EXPOSITION_FACT_SOURCES:
+            return f"fact_bad_source:{fid}"
+        if _as_str(f.get("visibility")) not in _ANSWER_EXPOSITION_VISIBILITY_VALUES:
+            return f"fact_bad_visibility:{fid}"
+        if _as_str(f.get("certainty")) not in _ANSWER_EXPOSITION_CERTAINTY_VALUES:
+            return f"fact_bad_certainty:{fid}"
+    constraints = obj.get("constraints")
+    if not isinstance(constraints, Mapping):
+        return "missing_constraints"
+    for k in ("forbid_invention", "forbid_hidden_truth_leak", "forbid_prompt_layer_reasoning"):
+        if constraints.get(k) is not True:
+            return f"constraint_not_true:{k}"
+    voice = obj.get("voice")
+    if not isinstance(voice, Mapping):
+        return "missing_voice"
+    if _as_str(voice.get("expected_voice")) not in _ANSWER_EXPOSITION_VOICE_VALUES:
+        return "bad_voice.expected_voice"
+    if _as_str(voice.get("delivery_mode")) not in _ANSWER_EXPOSITION_DELIVERY_MODES:
+        return "bad_voice.delivery_mode"
+    delivery = obj.get("delivery")
+    if not isinstance(delivery, Mapping):
+        return "missing_delivery"
+    if not isinstance(delivery.get("answer_must_come_first"), bool):
+        return "bad_delivery.answer_must_come_first"
+    msh = delivery.get("max_sentences_hint")
+    if msh is not None and not isinstance(msh, int):
+        return "bad_delivery.max_sentences_hint"
+    for list_key in ("must_include_fact_ids", "optional_fact_ids", "forbidden_moves"):
+        v = delivery.get(list_key)
+        if not isinstance(v, list):
+            return f"bad_delivery.{list_key}"
+    if bool(obj.get("answer_required")) and not bool(obj.get("enabled")):
+        return "answer_required_but_disabled"
+    return None
+
+
 def validate_narrative_plan(plan: Any, *, strict: bool = True) -> Optional[str]:
     """Return an error string if *plan* is invalid; else ``None``.
 
@@ -2320,6 +2542,7 @@ def validate_narrative_plan(plan: Any, *, strict: bool = True) -> Optional[str]:
         "required_new_information",
         "allowable_entity_references",
         "transition_node",
+        "answer_exposition_plan",
         "narrative_mode",
         "narrative_mode_contract",
         "role_allocation",
@@ -2343,6 +2566,20 @@ def validate_narrative_plan(plan: Any, *, strict: bool = True) -> Optional[str]:
     mode = plan.get("narrative_mode")
     if not isinstance(mode, str) or mode.strip() not in NARRATIVE_MODES:
         return "bad_narrative_mode"
+
+    if mode.strip() == "exposition_answer":
+        aep_err = _validate_answer_exposition_plan(plan.get("answer_exposition_plan"))
+        if aep_err:
+            return f"answer_exposition_plan_invalid:{aep_err}"
+        if not bool(_mapping(_mapping(plan.get("answer_exposition_plan")).get("delivery")).get("answer_must_come_first")):
+            # No extra enforcement besides structural validation; keep mode-specific requirement explicit.
+            pass
+        if not bool(_mapping(plan.get("answer_exposition_plan")).get("enabled")):
+            return "answer_exposition_plan_required_for_exposition_answer_mode"
+    elif "answer_exposition_plan" in plan and plan.get("answer_exposition_plan") is not None:
+        aep_err = _validate_answer_exposition_plan(plan.get("answer_exposition_plan"))
+        if aep_err:
+            return f"answer_exposition_plan_invalid:{aep_err}"
 
     nmc = plan.get("narrative_mode_contract")
     if not isinstance(nmc, Mapping):

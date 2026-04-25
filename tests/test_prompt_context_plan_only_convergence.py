@@ -81,6 +81,29 @@ def _attach_observe_ctir(session: dict) -> None:
         session[SESSION_CTIR_STAMP_KEY] = "plan_only_conv_stamp_v1"
 
 
+def _attach_question_ctir(session: dict) -> None:
+    c = ctir.build_ctir(
+        turn_id=3,
+        scene_id="s1",
+        player_input="Where did they go?",
+        builder_source="tests.test_prompt_context_plan_only_convergence",
+        intent={"raw_text": "Where did they go?", "labels": ["general"], "mode": "question"},
+        resolution={"kind": "adjudication_query", "prompt": "Where did they go?"},
+        interaction={"interaction_mode": "social_exchange"},
+        world={},
+        narrative_anchors={
+            "scene_framing": [],
+            "actors_speakers": [],
+            "outcomes": [],
+            "uncertainty": [],
+            "next_leads_affordances": [],
+        },
+    )
+    attach_ctir(session, c)
+    if not str(session.get(SESSION_CTIR_STAMP_KEY) or "").strip():
+        session[SESSION_CTIR_STAMP_KEY] = "plan_only_conv_stamp_v1"
+
+
 def test_ctir_prompt_context_succeeds_when_build_narrative_plan_raises(monkeypatch: pytest.MonkeyPatch) -> None:
     """Bundle supplies the plan; prompt_context must not call build_narrative_plan."""
 
@@ -151,6 +174,56 @@ def test_prompt_narrative_plan_equals_bundle_projection() -> None:
         assert ctx["narrative_plan"] == public_narrative_plan_projection_for_prompt(full)
     finally:
         detach_ctir(session)
+
+
+def test_prompt_context_ships_answer_exposition_plan_and_mirrors_into_answer_completeness() -> None:
+    session = dict(_minimal_kwargs()["session"])
+    _attach_observe_ctir(session)
+    kw = _minimal_kwargs(session=session, include_non_public_prompt_keys=True)
+    try:
+        ensure_narration_plan_bundle_for_manual_ctir_tests(session, kw)
+        ctx = build_narration_context(**kw)
+        np = ctx.get("narrative_plan")
+        assert isinstance(np, dict)
+        aep = np.get("answer_exposition_plan")
+        assert isinstance(aep, dict)
+        # prompt_context must not add facts beyond the plan; it only mirrors/ships.
+        ac = (ctx.get("response_policy") or {}).get("answer_completeness") or {}
+        assert isinstance(ac, dict)
+        assert ac.get("answer_exposition_plan") == aep
+        assert (ac.get("answer_exposition_plan") or {}).get("facts") == aep.get("facts")
+    finally:
+        detach_ctir(session)
+
+
+def test_answer_required_missing_projected_answer_exposition_plan_is_traceable() -> None:
+    session = dict(_minimal_kwargs()["session"])
+    _attach_question_ctir(session)
+    kw = _minimal_kwargs(
+        session=session,
+        user_text="Where did they go?",
+        resolution={"kind": "adjudication_query", "prompt": "Where did they go?"},
+        include_non_public_prompt_keys=True,
+    )
+    try:
+        ensure_narration_plan_bundle_for_manual_ctir_tests(session, kw)
+        bundle = session.get(SESSION_NARRATION_PLAN_BUNDLE_KEY) or {}
+        assert isinstance(bundle, dict)
+        full = bundle.get("narrative_plan")
+        assert isinstance(full, dict)
+        # Break the projected surface: remove the plan-owned answer_exposition_plan.
+        full.pop("answer_exposition_plan", None)
+        ctx = build_narration_context(**kw)
+    finally:
+        detach_ctir(session)
+
+    ac = (ctx.get("response_policy") or {}).get("answer_completeness") or {}
+    assert isinstance(ac, dict)
+    assert ac.get("answer_required") is True
+    assert ac.get("answer_exposition_plan") is None
+    dbg = (ctx.get("prompt_debug") or {}).get("answer_exposition_plan_seam") or {}
+    assert isinstance(dbg, dict)
+    assert dbg.get("seam_open") is True
 
 
 def test_raw_state_mutations_after_bundle_do_not_change_projected_plan() -> None:

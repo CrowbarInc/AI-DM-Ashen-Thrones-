@@ -171,6 +171,7 @@ from game.dialogue_social_plan import validate_dialogue_social_plan
 
 from game.final_emission_repairs import (
     _apply_answer_completeness_layer,
+    _apply_answer_exposition_plan_layer,
     _apply_fallback_behavior_layer,
     _apply_narrative_authenticity_layer,
     _apply_referent_clarity_emission_layer,
@@ -180,6 +181,7 @@ from game.final_emission_repairs import (
     _default_response_delta_meta,
     _default_social_response_structure_meta,
     _merge_answer_completeness_meta,
+    _merge_answer_exposition_plan_meta,
     _merge_fallback_behavior_meta,
     _merge_referent_clarity_meta,
     _merge_response_delta_meta,
@@ -8690,6 +8692,12 @@ def apply_final_emission_gate(
             response_type_debug=response_type_debug,
             strict_social_path=True,
         )
+        text, aep_layer_meta, _ = _apply_answer_exposition_plan_layer(
+            text,
+            gm_output=out,
+            response_type_debug=response_type_debug,
+            answer_completeness_meta=ac_layer_meta,
+        )
         text, rd_layer_meta, _ = _apply_response_delta_layer(
             text,
             gm_output=out,
@@ -8978,8 +8986,18 @@ def apply_final_emission_gate(
                 session=session if isinstance(session, dict) else None,
                 response_type_debug=response_type_debug,
             )
+            # Re-check against the final text: downstream layers may have replaced/mutated the candidate.
+            _final_text = _normalize_text(out.get("player_facing_text") or "")
+            _final_text, aep_layer_meta, _ = _apply_answer_exposition_plan_layer(
+                _final_text,
+                gm_output=out,
+                response_type_debug=response_type_debug,
+                answer_completeness_meta=ac_layer_meta,
+            )
+            out["player_facing_text"] = _final_text
             _merge_response_type_meta(out[FINAL_EMISSION_META_KEY], response_type_debug)
             _merge_answer_completeness_meta(out[FINAL_EMISSION_META_KEY], ac_layer_meta)
+            _merge_answer_exposition_plan_meta(out[FINAL_EMISSION_META_KEY], aep_layer_meta)
             _merge_response_delta_meta(out[FINAL_EMISSION_META_KEY], rd_layer_meta)
             _merge_social_response_structure_meta(out[FINAL_EMISSION_META_KEY], srs_layer_meta)
             merge_narrative_authenticity_into_final_emission_meta(out[FINAL_EMISSION_META_KEY], nat_layer_meta)
@@ -9224,8 +9242,17 @@ def apply_final_emission_gate(
             session=session if isinstance(session, dict) else None,
             response_type_debug=response_type_debug,
         )
+        _final_text = _normalize_text(out.get("player_facing_text") or "")
+        _final_text, aep_layer_meta, _ = _apply_answer_exposition_plan_layer(
+            _final_text,
+            gm_output=out,
+            response_type_debug=response_type_debug,
+            answer_completeness_meta=ac_layer_meta,
+        )
+        out["player_facing_text"] = _final_text
         _merge_response_type_meta(out[FINAL_EMISSION_META_KEY], response_type_debug)
         _merge_answer_completeness_meta(out[FINAL_EMISSION_META_KEY], ac_layer_meta)
+        _merge_answer_exposition_plan_meta(out[FINAL_EMISSION_META_KEY], aep_layer_meta)
         _merge_response_delta_meta(out[FINAL_EMISSION_META_KEY], rd_layer_meta)
         _merge_social_response_structure_meta(out[FINAL_EMISSION_META_KEY], srs_layer_meta)
         merge_narrative_authenticity_into_final_emission_meta(out[FINAL_EMISSION_META_KEY], nat_layer_meta)
@@ -9386,6 +9413,14 @@ def apply_final_emission_gate(
         strict_social_path=False,
     )
     reasons.extend(ac_reasons)
+
+    text, aep_layer_meta, aep_reasons = _apply_answer_exposition_plan_layer(
+        text,
+        gm_output=out,
+        response_type_debug=response_type_debug,
+        answer_completeness_meta=ac_layer_meta,
+    )
+    reasons.extend(aep_reasons)
 
     text, rd_layer_meta, rd_reasons = _apply_response_delta_layer(
         text,
@@ -9703,8 +9738,17 @@ def apply_final_emission_gate(
             session=session if isinstance(session, dict) else None,
             response_type_debug=response_type_debug,
         )
+        _final_text = _normalize_text(out.get("player_facing_text") or "")
+        _final_text, aep_layer_meta, _ = _apply_answer_exposition_plan_layer(
+            _final_text,
+            gm_output=out,
+            response_type_debug=response_type_debug,
+            answer_completeness_meta=ac_layer_meta,
+        )
+        out["player_facing_text"] = _final_text
         _merge_response_type_meta(out[FINAL_EMISSION_META_KEY], response_type_debug)
         _merge_answer_completeness_meta(out[FINAL_EMISSION_META_KEY], ac_layer_meta)
+        _merge_answer_exposition_plan_meta(out[FINAL_EMISSION_META_KEY], aep_layer_meta)
         _merge_response_delta_meta(out[FINAL_EMISSION_META_KEY], rd_layer_meta)
         _merge_social_response_structure_meta(out[FINAL_EMISSION_META_KEY], srs_layer_meta)
         merge_narrative_authenticity_into_final_emission_meta(out[FINAL_EMISSION_META_KEY], nat_layer_meta)
@@ -9925,8 +9969,17 @@ def apply_final_emission_gate(
         session=session if isinstance(session, dict) else None,
         response_type_debug=response_type_debug,
     )
+    _final_text = _normalize_text(out.get("player_facing_text") or "")
+    _final_text, aep_layer_meta, _ = _apply_answer_exposition_plan_layer(
+        _final_text,
+        gm_output=out,
+        response_type_debug=response_type_debug,
+        answer_completeness_meta=ac_layer_meta,
+    )
+    out["player_facing_text"] = _final_text
     _merge_response_type_meta(out[FINAL_EMISSION_META_KEY], response_type_debug)
     _merge_answer_completeness_meta(out[FINAL_EMISSION_META_KEY], ac_layer_meta)
+    _merge_answer_exposition_plan_meta(out[FINAL_EMISSION_META_KEY], aep_layer_meta)
     _merge_response_delta_meta(out[FINAL_EMISSION_META_KEY], rd_layer_meta)
     _merge_social_response_structure_meta(out[FINAL_EMISSION_META_KEY], srs_layer_meta)
     merge_narrative_authenticity_into_final_emission_meta(out[FINAL_EMISSION_META_KEY], nat_layer_meta)

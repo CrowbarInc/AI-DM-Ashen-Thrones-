@@ -171,6 +171,229 @@ _RE_NA_SHADOW = re.compile(r"NA_SHADOW_RESPONSE_DELTA_FAILURE_REASON|follow_up_m
 _RE_NA_RD_LEGAL = re.compile(r"['\"]response_delta_[a-z0-9_]+['\"]\s*(?:\]|=)")
 
 
+# --- Answer/Exposition Convergence (AEP) seam guards (Objective: anti-fragility hardening) ---
+#
+# These checks are intentionally structural and narrow:
+# - they should catch prompt-layer answer authorship drift and removal of required enforcement wiring
+# - they should not become a parallel evaluator or keyword-quality police
+#
+_AEP_SDK_MARKERS: Final[tuple[str, ...]] = (
+    "openai.",
+    "anthropic.",
+    "litellm.",
+    "groq.",
+    "cohere.",
+)
+
+
+def _scan_answer_exposition_ownership(rel: str, source: str) -> list[Finding]:
+    """Heuristics for the Answer/Exposition Convergence chain ownership contract.
+
+    Flags:
+    - prompt_context constructing plan facts or fallback exposition
+    - missing plan projection
+    - missing final-emission enforcement or final-text recheck
+    - missing FEM prefix-based metadata recognition
+    - SDK/LLM hooks in gate/repair modules near the AEP seam
+    """
+
+    findings: list[Finding] = []
+    name = Path(rel).name
+
+    # 1) Prompt context must not construct answer facts or add fallback exposition.
+    if name == "prompt_context.py":
+        # Allow: mirroring a projected plan blob via copy.deepcopy(aep), validation, and debug stamping.
+        # Disallow: authoring a dict/list of facts as a new plan surface in prompt_context.
+        try:
+            tree = ast.parse(source)
+        except SyntaxError:
+            tree = None
+        if tree is not None:
+            for node in ast.walk(tree):
+                if not isinstance(node, ast.Assign):
+                    continue
+                for target in node.targets:
+                    # Look for something like: ac_policy["answer_exposition_plan"] = <value>
+                    if not isinstance(target, ast.Subscript):
+                        continue
+                    key = target.slice
+                    if isinstance(key, ast.Constant) and key.value == "answer_exposition_plan":
+                        val = node.value
+                        # Allowed values: copy.deepcopy(aep) / aep / None / conditional expression returning those.
+                        allowed = False
+                        if isinstance(val, ast.Constant) and val.value is None:
+                            allowed = True
+                        elif isinstance(val, ast.Name) and val.id == "aep":
+                            allowed = True
+                        elif isinstance(val, ast.Call) and isinstance(val.func, ast.Attribute):
+                            if (
+                                isinstance(val.func.value, ast.Name)
+                                and val.func.value.id == "copy"
+                                and val.func.attr == "deepcopy"
+                                and len(val.args) == 1
+                                and isinstance(val.args[0], ast.Name)
+                                and val.args[0].id == "aep"
+                            ):
+                                allowed = True
+                        elif isinstance(val, ast.IfExp):
+                            # Conservative: allow only when both arms are allowed primitives above.
+                            arms = [val.body, val.orelse]
+                            allowed = all(
+                                isinstance(a, ast.Constant)
+                                and a.value is None
+                                or isinstance(a, ast.Name)
+                                and a.id == "aep"
+                                or (
+                                    isinstance(a, ast.Call)
+                                    and isinstance(a.func, ast.Attribute)
+                                    and isinstance(a.func.value, ast.Name)
+                                    and a.func.value.id == "copy"
+                                    and a.func.attr == "deepcopy"
+                                )
+                                for a in arms
+                            )
+                        if not allowed:
+                            findings.append(
+                                Finding(
+                                    "answer_exposition_ownership_drift",
+                                    "likely_drift",
+                                    rel,
+                                    "prompt_context assigns a locally-constructed `answer_exposition_plan` instead of mirroring the projected plan blob (transport-only).",
+                                )
+                            )
+                            break
+
+        # Disallow explicit prompt-side fact synthesis markers (narrow, avoid generic 'fact' matches).
+        if re.search(r"(?is)\banswer_exposition_plan\b.*\b(?:build|derive|synthesize|invent)\b", source):
+            findings.append(
+                Finding(
+                    "answer_exposition_ownership_drift",
+                    "likely_drift",
+                    rel,
+                    "prompt_context contains build/derive/synthesize/invent language near `answer_exposition_plan` (prompt must be transport/render-only).",
+                )
+            )
+        if "answer_exposition_plan_seam" not in source:
+            findings.append(
+                Finding(
+                    "answer_exposition_enforcement_missing",
+                    "review",
+                    rel,
+                    "prompt_context no longer records `answer_exposition_plan_seam` debug when `answer_required` but plan projection is missing/invalid (traceability regression).",
+                )
+            )
+
+    # 2) Projection must include answer_exposition_plan when present.
+    if name == "narration_plan_bundle.py":
+        # Structural anchor: projection must deep-copy the plan-owned AEP blob into the prompt projection.
+        if 'out["answer_exposition_plan"]' not in source and "out['answer_exposition_plan']" not in source:
+            findings.append(
+                Finding(
+                    "answer_exposition_projection_missing",
+                    "likely_drift",
+                    rel,
+                    "`public_narrative_plan_projection_for_prompt()` no longer projects `answer_exposition_plan` (prompt_context must not reconstruct it).",
+                )
+            )
+
+    # 3) FEM read-side prefix recognition must keep the AEP family.
+    if name == "final_emission_meta.py":
+        if '"answer_exposition_plan_"' not in source and "'answer_exposition_plan_'" not in source:
+            findings.append(
+                Finding(
+                    "answer_exposition_fem_meta_missing",
+                    "likely_drift",
+                    rel,
+                    "FEM evaluator-prefix registry no longer recognizes `answer_exposition_plan_*` keys (observability contract regression).",
+                )
+            )
+
+    # 4) Final emission must validate against plan facts; repairs must be bounded and non-inventive.
+    if name == "final_emission_repairs.py":
+        # Ensure the seam exists at all.
+        if "def _apply_answer_exposition_plan_layer" not in source:
+            findings.append(
+                Finding(
+                    "answer_exposition_enforcement_missing",
+                    "likely_drift",
+                    rel,
+                    "Missing `_apply_answer_exposition_plan_layer` (boundary convergence enforcement removed).",
+                )
+            )
+        # Disallow SDK/LLM integration hooks in this boundary module.
+        for marker in _AEP_SDK_MARKERS:
+            if marker in source:
+                findings.append(
+                    Finding(
+                        "answer_exposition_gpt_repair_drift",
+                        "likely_drift",
+                        rel,
+                        f"SDK/LLM marker {marker!r} appears in final-emission repairs (no GPT-driven repair allowed for answer/exposition).",
+                    )
+                )
+        # Bounded allowlist: within the AEP layer, only sentence reorder is allowed as an actual mutation mode.
+        a = source.find("def _apply_answer_exposition_plan_layer")
+        b = source.find("def _merge_answer_exposition_plan_meta", a)
+        if a != -1 and b != -1:
+            body = source[a:b]
+            # If new mutation permissions appear, it should be treated as likely drift.
+            if "assert_final_emission_mutation_allowed" in body:
+                allowed_token = '"reorder_answer_to_front"' in body or "'reorder_answer_to_front'" in body
+                other = re.findall(r"assert_final_emission_mutation_allowed\(\s*['\"]([^'\"]+)['\"]", body)
+                other_bad = sorted({tok for tok in other if tok != "reorder_answer_to_front"})
+                if not allowed_token or other_bad:
+                    findings.append(
+                        Finding(
+                            "answer_exposition_repair_drift",
+                            "likely_drift",
+                            rel,
+                            f"AEP repair layer contains unexpected mutation allowlist tokens: {other_bad or ['(missing reorder_answer_to_front)']}.",
+                        )
+                    )
+            if re.search(r"(?is)\b(?:synthesize|invent|compose)\b.+\bfact\b", body):
+                findings.append(
+                    Finding(
+                        "answer_exposition_repair_drift",
+                        "likely_drift",
+                        rel,
+                        "AEP repair layer contains synthesize/invent/compose language suggesting boundary fact generation (disallowed).",
+                    )
+                )
+
+    # 5) Gate must run the AEP layer and must retain final-text recheck (candidate_satisfies_*).
+    if name == "final_emission_gate.py":
+        if "_apply_answer_exposition_plan_layer" not in source or "_merge_answer_exposition_plan_meta" not in source:
+            findings.append(
+                Finding(
+                    "answer_exposition_enforcement_missing",
+                    "likely_drift",
+                    rel,
+                    "Gate no longer wires `_apply_answer_exposition_plan_layer` and/or FEM merge `_merge_answer_exposition_plan_meta` (chain broken).",
+                )
+            )
+        if "candidate_satisfies_answer_contract(" not in source:
+            findings.append(
+                Finding(
+                    "final_text_recheck_removed",
+                    "likely_drift",
+                    rel,
+                    "Gate no longer performs final candidate recheck via `candidate_satisfies_answer_contract(...)` (final-text recheck regression).",
+                )
+            )
+        for marker in _AEP_SDK_MARKERS:
+            if marker in source:
+                findings.append(
+                    Finding(
+                        "answer_exposition_gpt_repair_drift",
+                        "likely_drift",
+                        rel,
+                        f"SDK/LLM marker {marker!r} appears in final-emission gate (no GPT-driven repair allowed for answer/exposition).",
+                    )
+                )
+
+    return findings
+
+
 def _text_heuristics(rel: str, bucket: str | None, source: str) -> list[Finding]:
     findings: list[Finding] = []
     if bucket == "evaluator" and _RE_EVAL_WRITE.search(source):
@@ -287,6 +510,7 @@ def run_audit(
         findings.extend(_scan_planner_imports(rel, bucket, subs))
         findings.extend(_text_heuristics(rel, bucket, source))
         findings.extend(_duplicate_ownership_phrase(source, rel))
+        findings.extend(_scan_answer_exposition_ownership(rel, source))
 
     benign: list[str] = []
     if len(split_note) == 3:

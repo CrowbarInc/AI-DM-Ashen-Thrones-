@@ -121,6 +121,7 @@ STAGE_DIFF_ALLOWED_NA_PROJECTION_KEYS: frozenset[str] = frozenset(
 # ``acceptance_quality_*`` keys are legality-shaped N4 traces (reason codes + slim evidence), not numeric scores.
 EVALUATOR_FEM_KEY_PREFIX_FAMILIES: tuple[str, ...] = (
     "answer_completeness_",
+    "answer_exposition_plan_",
     "response_delta_",
     "social_response_structure_",
     "fallback_behavior_",

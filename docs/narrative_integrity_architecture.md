@@ -168,6 +168,38 @@ Do **not** describe this seam as: a general referent resolver; a clause parser; 
 
 Post-gate sanitization and other emit-path modules (`game.output_sanitizer`, etc.) stay as documented in existing suites.
 
+---
+
+## Answer / Exposition Convergence (Answer/Exposition Plan ownership chain)
+
+This seam prevents “prompt-layer answer authorship” and “final-emission answer invention”. It is **structural**: CTIR + shipped contracts decide meaning; the planner derives a plan-owned answer/exposition structure; `prompt_context` transports it; final emission validates grounding and applies only bounded non-inventive repair.
+
+**Implemented chain (authoritative ownership):**
+
+- **CTIR / shipped response policy** → authoritative meaning + obligations
+- `game/narrative_planning.py` derives `narrative_plan.answer_exposition_plan`
+- `game/narration_plan_bundle.py` projects `answer_exposition_plan` via `public_narrative_plan_projection_for_prompt()` (deep-copy/filter only)
+- `game/prompt_context.py` consumes/mirrors the projected `answer_exposition_plan` only (transport/render + debug-stamp; no new facts, no fallback exposition synthesis)
+- `game/final_emission_validators.py` validates convergence (deterministic)
+- `game/final_emission_repairs.py` allows only bounded non-inventive repair (`reorder_answer_to_front` sentence permutation + revalidate)
+- `game/final_emission_gate.py` wires the layer, merges metadata, and retains final-text recheck via `candidate_satisfies_*`
+- `game/final_emission_meta.py` recognizes `answer_exposition_plan_*` FEM metadata (prefix-family registry for read-side/evaluator consumers)
+
+**Allowed (tight allowlist):**
+
+- `narrative_planning`: derive `answer_exposition_plan` from CTIR / shipped contracts
+- `narration_plan_bundle`: deep-copy/filter `answer_exposition_plan` into the public prompt projection
+- `prompt_context`: validate + serialize + mirror + debug-stamp the projected `answer_exposition_plan` (transport only)
+- `final_emission_validators`: inspect emitted text against plan facts (deterministic; no synthesis)
+- `final_emission_repairs`: `reorder_answer_to_front` only when non-inventive (sentence permutation + revalidate)
+- `final_emission_gate`: merge metadata and recheck final text before sealing
+
+**Not allowed (hard boundaries):**
+
+- `prompt_context` creating answer facts, synthesizing lore/exposition, or adding fallback explanatory prose beyond the projected plan
+- `final_emission_*` generating missing answer facts or “completing” exposition when the plan/projection is missing or invalid
+- any GPT/LLM-driven repair path for answer/exposition convergence failures (failures must trace to CTIR, plan, projection, or deterministic gate validation metadata)
+
 **Objective C2 (Block D2 lock-in):** Final-emission **ownership** (upstream meaning vs boundary legality/packaging vs strict-social seam) is summarized in `docs/final_emission_ownership_convergence.md`. Regression locks: `tests/test_final_emission_boundary_convergence.py` and `tools/final_emission_ownership_audit.py` (advisory drift scan; `--strict` optional).
 
 ## Test ownership (canonical)

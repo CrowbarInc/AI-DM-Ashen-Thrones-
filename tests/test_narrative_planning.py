@@ -421,6 +421,122 @@ def test_validate_rejects_unknown_required_new_information_kind() -> None:
     assert err and "unknown_kind" in err
 
 
+def test_answer_required_ctir_turn_produces_answer_exposition_plan_enabled() -> None:
+    nc = {
+        "framework_version": "2026.04.noncombat.v1",
+        "kind": "question",
+        "subkind": "query",
+        "authority_domain": "world",
+        "deterministic_resolved": True,
+        "requires_check": False,
+        "outcome_type": "open",
+        "success_state": "success",
+        "surfaced_facts": ["The frontier gate is watched by two patrols."],
+        "blocked_reason_codes": [],
+        "ambiguous_reason_codes": [],
+        "unsupported_reason_codes": [],
+    }
+    c = _minimal_ctir(
+        player_input="Who is watching the gate?",
+        resolution={"kind": "question", "noncombat_resolution": nc},
+    )
+    response_policy = {
+        "answer_completeness": {
+            "enabled": True,
+            "answer_required": True,
+            "answer_must_come_first": True,
+            "expected_voice": "narrator",
+            "allowed_partial_reasons": [],
+            "forbid_deflection": True,
+            "forbid_generic_nonanswer": True,
+            "trace": {"trigger_source": "player_direct_question"},
+        }
+    }
+    plan = build_narrative_plan(ctir=c, response_policy=response_policy)
+    aep = plan.get("answer_exposition_plan") or {}
+    assert aep.get("enabled") is True
+    assert aep.get("answer_required") is True
+    assert aep.get("answer_intent") == "direct_answer"
+    assert isinstance(aep.get("facts"), list)
+    assert len(aep.get("facts") or []) >= 1
+    assert validate_narrative_plan(plan, strict=True) is None
+
+
+def test_lore_exposition_query_produces_facts_and_delivery_structure() -> None:
+    nc = {
+        "framework_version": "2026.04.noncombat.v1",
+        "kind": "lore",
+        "subkind": "exposition",
+        "authority_domain": "world",
+        "deterministic_resolved": True,
+        "requires_check": False,
+        "outcome_type": "open",
+        "success_state": "success",
+        "surfaced_facts": ["The Ashen Thrones are sworn to silence in public courts."],
+        "blocked_reason_codes": [],
+        "ambiguous_reason_codes": [],
+        "unsupported_reason_codes": [],
+    }
+    c = _minimal_ctir(
+        player_input="Tell me about the Ashen Thrones.",
+        resolution={"kind": "question", "noncombat_resolution": nc},
+    )
+    response_policy = {
+        "answer_completeness": {
+            "enabled": True,
+            "answer_required": True,
+            "answer_must_come_first": False,
+            "expected_voice": "narrator",
+            "allowed_partial_reasons": ["npc_ignorance"],
+            "trace": {"trigger_source": "lore_exposition_query"},
+        }
+    }
+    plan = build_narrative_plan(ctir=c, response_policy=response_policy)
+    aep = plan["answer_exposition_plan"]
+    assert aep["enabled"] is True
+    assert aep["answer_intent"] == "lore_exposition"
+    assert aep["voice"]["delivery_mode"] in {"diegetic_exposition", "plain_answer"}
+    assert isinstance(aep["delivery"]["forbidden_moves"], list)
+    assert any("ctir_noncombat_fact_" in f.get("id", "") for f in (aep.get("facts") or []))
+    assert validate_narrative_plan(plan, strict=True) is None
+
+
+def test_non_answer_narration_does_not_require_answer_exposition_plan() -> None:
+    c = _minimal_ctir(
+        player_input="I head toward the gate.",
+        resolution={"kind": "move"},
+    )
+    plan = build_narrative_plan(ctir=c)
+    aep = plan.get("answer_exposition_plan") or {}
+    assert aep.get("enabled") is False
+    assert aep.get("answer_required") is False
+    assert aep.get("answer_intent") == "none"
+    assert validate_narrative_plan(plan, strict=True) is None
+
+
+def test_malformed_answer_exposition_plan_fails_validation_when_mode_exposition_answer() -> None:
+    c = _minimal_ctir(
+        player_input="Where is the barracks?",
+        resolution={"kind": "question"},
+    )
+    response_policy = {
+        "answer_completeness": {
+            "enabled": True,
+            "answer_required": True,
+            "answer_must_come_first": True,
+            "expected_voice": "narrator",
+            "allowed_partial_reasons": [],
+            "trace": {"trigger_source": "player_direct_question"},
+        }
+    }
+    plan = build_narrative_plan(ctir=c, response_policy=response_policy)
+    assert plan["narrative_mode"] == "exposition_answer"
+    bad = dict(plan)
+    bad["answer_exposition_plan"] = {"enabled": True}  # missing required keys/shape
+    err = validate_narrative_plan(bad, strict=True)
+    assert err and err.startswith("answer_exposition_plan_invalid:")
+
+
 def test_narrative_plan_matches_ctir_derivation_detects_tampering() -> None:
     c = _minimal_ctir(
         resolution={"kind": "question", "social": {"npc_reply_expected": True}},

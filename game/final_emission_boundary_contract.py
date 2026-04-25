@@ -24,6 +24,8 @@ PACKAGING_ALLOWED: frozenset[str] = frozenset(
         "strip_meta_fallback_voice_surfaces",
         "strip_fabricated_authority_surfaces",
         "trim_overcertain_claim_spans",
+        # Bounded, non-inventive permutation only (moves existing answer sentence to front).
+        "reorder_answer_to_front",
     }
 )
 
@@ -47,7 +49,6 @@ SEMANTIC_DISALLOWED: frozenset[str] = frozenset(
         "reconstruct_narration",
         "compose_fallback_answer",
         "synthesize_known_edge_phrase",
-        "reorder_answer_to_front",
         "smooth_sentence_microstructure",
         "narrative_repair",
         "semantic_fallback_composition",

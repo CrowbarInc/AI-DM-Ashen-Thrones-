@@ -5237,6 +5237,78 @@ def build_narration_context(
                 },
             }
 
+    projected_narrative_plan = (
+        None
+        if action_outcome_narration_blocked
+        else (
+            public_narrative_plan_projection_for_prompt(narrative_plan)
+            if isinstance(narrative_plan, dict) and narrative_plan
+            else None
+        )
+    )
+
+    def _validate_projected_answer_exposition_plan(obj: Any) -> str | None:
+        if obj is None:
+            return "missing"
+        if not isinstance(obj, Mapping):
+            return "not_mapping"
+        for k in ("enabled", "answer_required"):
+            if not isinstance(obj.get(k), bool):
+                return f"missing_or_bad_bool:{k}"
+        if not isinstance(obj.get("facts"), list):
+            return "facts_not_list"
+        for i, f in enumerate((obj.get("facts") or [])[:48]):
+            if not isinstance(f, Mapping):
+                return f"fact_not_mapping:{i}"
+            if not str(f.get("id") or "").strip():
+                return f"fact_missing_id:{i}"
+            if not str(f.get("fact") or "").strip():
+                return f"fact_missing_fact:{f.get('id')}"
+            # Preserve plan-owned metadata; prompt_context must not "fix" these fields.
+            for mk in ("source", "visibility", "certainty"):
+                if not str(f.get(mk) or "").strip():
+                    return f"fact_missing_meta:{mk}:{f.get('id')}"
+        for req in ("constraints", "voice", "delivery"):
+            if not isinstance(obj.get(req), Mapping):
+                return f"missing_{req}"
+        return None
+
+    aep = (
+        projected_narrative_plan.get("answer_exposition_plan")
+        if isinstance(projected_narrative_plan, Mapping)
+        else None
+    )
+    aep_err = _validate_projected_answer_exposition_plan(aep)
+    aep_valid = aep_err is None
+    ac_policy = (
+        response_policy.get("answer_completeness")
+        if isinstance(response_policy, dict) and isinstance(response_policy.get("answer_completeness"), Mapping)
+        else {}
+    )
+    answer_required = bool((ac_policy or {}).get("answer_required"))
+    prompt_debug_anchor["answer_exposition_plan_projection"] = {
+        "present": aep is not None,
+        "valid": bool(aep_valid),
+        "validation_error": aep_err,
+        "answer_required": bool(answer_required),
+        "sourced_from": "public_narrative_plan_projection_for_prompt",
+    }
+
+    if isinstance(response_policy, dict) and isinstance(ac_policy, dict):
+        # Mirror plan-owned answer facts into the shipped response-policy surface for downstream inspection.
+        ac_policy["answer_exposition_plan"] = copy.deepcopy(aep) if aep_valid else None
+        if not aep_valid:
+            ac_policy["answer_exposition_plan_validation_error"] = aep_err
+        response_policy["answer_completeness"] = ac_policy
+
+    if answer_required and not aep_valid:
+        # Visible seam: answer was required but the plan-owned answer facts did not reach the prompt.
+        prompt_debug_anchor["answer_exposition_plan_seam"] = {
+            "seam_open": True,
+            "reason": "answer_required_but_missing_or_invalid_projected_answer_exposition_plan",
+            "validation_error": aep_err,
+        }
+
     payload: Dict[str, Any] = {
         'instructions': instructions,
         'dialogue_social_plan': (
@@ -5246,15 +5318,7 @@ def build_narration_context(
         ),
         # Block B: structured transition payload sourced ONLY from narrative_plan.transition_node.
         'transition': copy.deepcopy(transition_payload) if isinstance(transition_payload, dict) else None,
-        'narrative_plan': (
-            None
-            if action_outcome_narration_blocked
-            else (
-                public_narrative_plan_projection_for_prompt(narrative_plan)
-                if isinstance(narrative_plan, dict) and narrative_plan
-                else None
-            )
-        ),
+        'narrative_plan': projected_narrative_plan,
         'speaker_selection': speaker_selection,
         'active_topic_anchor': active_topic_anchor,
         'interaction_continuity': interaction_continuity,

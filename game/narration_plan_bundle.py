@@ -95,6 +95,10 @@ def public_narrative_plan_projection_for_prompt(full_plan: Mapping[str, Any] | N
     tn = full_plan.get("transition_node")
     if isinstance(tn, Mapping) and tn:
         out["transition_node"] = copy.deepcopy(tn)
+    aep = full_plan.get("answer_exposition_plan")
+    if isinstance(aep, Mapping) and aep:
+        # Transport-only: already validated upstream; prompt_context must not reconstruct facts.
+        out["answer_exposition_plan"] = copy.deepcopy(aep)
     return out if out else None
 
 
