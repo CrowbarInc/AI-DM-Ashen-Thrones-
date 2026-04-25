@@ -112,6 +112,49 @@ def test_opening_selection_keeps_social_and_actionable_when_present():
     assert "notice" in low or "posted" in low
 
 
+def test_opening_selection_scores_activity_before_static_same_category():
+    public = {
+        "id": "gate",
+        "location": "Gate",
+        "summary": "Gate.",
+        "visible_facts": [
+            "Stone walls enclose the muddy gate.",
+            "Banners hang over the gate arch.",
+            "Guards scan faces at the checkpoint line.",
+            "A posted notice warns of curfew.",
+        ],
+        "exits": [],
+        "enemies": [],
+    }
+
+    out = select_opening_narration_visible_facts(public)
+
+    assert out.index("Guards scan faces at the checkpoint line.") < out.index("A posted notice warns of curfew.")
+
+
+def test_opening_selection_composes_environment_social_and_affordance():
+    public = {
+        "id": "gate",
+        "location": "Gate",
+        "summary": "Gate.",
+        "visible_facts": [
+            "Rain slicks soot-dark stone beneath the eastern gate.",
+            "A guard calls for the next wagon in line.",
+            "A notice board lists curfew warnings beside the arch.",
+            "Smoke trails above the wall.",
+        ],
+        "exits": [],
+        "enemies": [],
+    }
+
+    out = select_opening_narration_visible_facts(public)
+    low = " ".join(s.lower() for s in out)
+
+    assert "rain" in low or "gate" in low
+    assert "guard" in low
+    assert "notice" in low or "curfew" in low
+
+
 def test_opening_selection_stable_ordering():
     public = {
         "id": "s",

@@ -3497,6 +3497,306 @@ def _upstream_prepared_emission_field_source(upstream: Dict[str, Any], field_nam
     return f"upstream_prepared_emission.{field_name}"
 
 
+def _opening_mode_active_for_turn(gm_output: Mapping[str, Any] | None, resolution: Mapping[str, Any] | None) -> bool:
+    if isinstance(resolution, Mapping):
+        if str(resolution.get("kind") or "").strip().lower() == "scene_opening":
+            return True
+    nmc = _shipped_narrative_mode_contract_from_gm_output(gm_output)
+    if isinstance(nmc, dict) and str(nmc.get("mode") or "").strip().lower() == "opening":
+        return True
+    if isinstance(gm_output, Mapping):
+        pc = gm_output.get("prompt_context")
+        if isinstance(pc, Mapping):
+            ob = pc.get("narration_obligations")
+            if isinstance(ob, Mapping) and bool(ob.get("is_opening_scene")):
+                return True
+            ri = pc.get("renderer_inputs")
+            if isinstance(ri, Mapping):
+                ob2 = ri.get("narration_obligations")
+                if isinstance(ob2, Mapping) and bool(ob2.get("is_opening_scene")):
+                    return True
+    return False
+
+
+def _opening_visible_anchor_fallback_text(gm_output: Mapping[str, Any] | None) -> str:
+    """Opening-safe fallback built strictly from shipped visible anchors (no invented facts)."""
+    if not isinstance(gm_output, Mapping):
+        return ""
+    pc = gm_output.get("prompt_context")
+    if not isinstance(pc, Mapping):
+        return ""
+    plan = pc.get("narrative_plan")
+    if not isinstance(plan, Mapping):
+        return ""
+
+    scene_opening = plan.get("scene_opening") if isinstance(plan.get("scene_opening"), Mapping) else {}
+    scene_anchors = plan.get("scene_anchors") if isinstance(plan.get("scene_anchors"), Mapping) else {}
+    active_pressures = plan.get("active_pressures") if isinstance(plan.get("active_pressures"), Mapping) else {}
+
+    # Location anchor: prefer the opening projection (already public-token curated), then scene_anchors.
+    loc_list: list[str] = []
+    for raw in (scene_opening.get("location_anchors"), scene_anchors.get("location_anchors")):
+        if isinstance(raw, (list, tuple)):
+            loc_list = [str(x).strip() for x in raw if isinstance(x, str) and str(x).strip()]
+            if loc_list:
+                break
+        elif isinstance(raw, str) and raw.strip():
+            loc_list = [raw.strip()]
+            break
+    loc = loc_list[0] if loc_list else ""
+
+    # Actor/opportunity anchor: prefer a published descriptor, not an internal entity id.
+    actor_desc = ""
+    aer = plan.get("allowable_entity_references")
+    if isinstance(aer, list):
+        for row in aer:
+            if not isinstance(row, Mapping):
+                continue
+            d = row.get("descriptor") or row.get("name") or row.get("display_name")
+            if isinstance(d, str) and d.strip():
+                actor_desc = d.strip()
+                break
+
+    # Immediate playable situation (non-directive): use contract-shaped pressure codes only.
+    situation = ""
+    ip = str(active_pressures.get("interaction_pressure") or "").strip().lower()
+    if ip == "reply_expected":
+        situation = "A reply is expected."
+    elif ip == "check_pending":
+        situation = "A check is pending."
+
+    parts: list[str] = []
+    if loc:
+        parts.append(f"{loc}.")
+    if actor_desc:
+        parts.append(f"{actor_desc} is here.")
+    if situation:
+        parts.append(situation)
+    return _normalize_text(" ".join(parts)).strip()
+
+
+_OPENING_FORBIDDEN_PATTERNS: tuple[str, ...] = (
+    "appear disturbed",
+    "appears disturbed",
+    "upon closer inspection",
+    "you notice something has been",
+    "recently",
+    "again",
+    "still",
+    "as before",
+)
+
+
+# Opening validation is FINAL BOUNDARY ONLY.
+# Do not add narrative-quality shaping here.
+# Upstream systems (planning / realization) must provide richness.
+_OPENING_ACTION_VERBS: tuple[str, ...] = (
+    "approach",
+    "ask",
+    "check",
+    "choose",
+    "cross",
+    "enter",
+    "examine",
+    "follow",
+    "inspect",
+    "move",
+    "press",
+    "question",
+    "read",
+    "speak",
+    "start",
+    "watch",
+)
+
+
+def _opening_context_from_gm_output(gm_output: Mapping[str, Any] | None) -> Dict[str, Any]:
+    ctx: Dict[str, Any] = {"location_anchors": [], "visible_facts": [], "actionable_labels": []}
+    if not isinstance(gm_output, Mapping):
+        return ctx
+    pc = gm_output.get("prompt_context")
+    if not isinstance(pc, Mapping):
+        return ctx
+    assert pc["opening_inputs_are_curated"] is True
+
+    plan = pc.get("narrative_plan") if isinstance(pc.get("narrative_plan"), Mapping) else {}
+    scene_opening = plan.get("scene_opening") if isinstance(plan.get("scene_opening"), Mapping) else {}
+    scene_anchors = plan.get("scene_anchors") if isinstance(plan.get("scene_anchors"), Mapping) else {}
+    for raw in (scene_opening.get("location_anchors"), scene_anchors.get("location_anchors")):
+        if isinstance(raw, (list, tuple)):
+            ctx["location_anchors"].extend(str(x).strip() for x in raw if isinstance(x, str) and str(x).strip())
+        elif isinstance(raw, str) and raw.strip():
+            ctx["location_anchors"].append(raw.strip())
+
+    opening_realization = pc.get("opening_scene_realization")
+    contract = opening_realization.get("contract") if isinstance(opening_realization, Mapping) else None
+    if isinstance(contract, Mapping):
+        basis = contract.get("narration_basis_visible_facts")
+        if isinstance(basis, list):
+            ctx["visible_facts"].extend(str(x).strip() for x in basis if isinstance(x, str) and str(x).strip())
+
+    nv = pc.get("narration_visibility")
+    if isinstance(nv, Mapping) and isinstance(nv.get("visible_facts"), list):
+        ctx["visible_facts"].extend(str(x).strip() for x in nv.get("visible_facts") if isinstance(x, str) and str(x).strip())
+
+    scene_block = pc.get("scene")
+    public_scene = scene_block.get("public") if isinstance(scene_block, Mapping) else None
+    if isinstance(public_scene, Mapping):
+        loc = public_scene.get("location") or public_scene.get("id")
+        if isinstance(loc, str) and loc.strip():
+            ctx["location_anchors"].append(loc.strip())
+        for key in ("actions", "suggested_actions", "exits", "interactables", "objects"):
+            rows = public_scene.get(key)
+            if not isinstance(rows, list):
+                continue
+            for row in rows[:6]:
+                if not isinstance(row, Mapping):
+                    continue
+                label = row.get("label") or row.get("name") or row.get("id")
+                if isinstance(label, str) and label.strip():
+                    ctx["actionable_labels"].append(label.strip())
+
+    # Preserve order while removing duplicates.
+    for key in ("location_anchors", "visible_facts", "actionable_labels"):
+        seen: set[str] = set()
+        out: list[str] = []
+        for raw in ctx.get(key) or []:
+            clean = str(raw or "").strip()
+            low = clean.lower()
+            if not clean or low in seen:
+                continue
+            seen.add(low)
+            out.append(clean)
+        ctx[key] = out
+    return ctx
+
+
+def _opening_text_has_location_anchor(text: str, context: Mapping[str, Any]) -> bool:
+    low = text.lower()
+    for raw in context.get("location_anchors") or []:
+        anchor = str(raw or "").strip().lower()
+        if anchor and (anchor in low or any(tok in low for tok in re.findall(r"[a-z]{4,}", anchor))):
+            return True
+    return bool(
+        re.search(
+            r"\b(?:gate|district|market|lane|road|square|checkpoint|yard|bridge|dock|pier|tavern|hall|ward|quay|tower|street|milestone)\b",
+            low,
+        )
+    )
+
+
+def _opening_text_has_activity(text: str, context: Mapping[str, Any]) -> bool:
+    low = text.lower()
+    if re.search(r"\b(?:crowd|guards?|refugees?|wagons?|traffic|rain|voices?|shouts?|presses?|watches?|waits?|moves?|clogs?|gathers?|lingers?|banners?|notice board)\b", low):
+        return True
+    return any(
+        str(fact or "").strip().lower() in low
+        for fact in (context.get("visible_facts") or [])[:4]
+        if len(str(fact or "").strip()) >= 24
+    )
+
+
+def _opening_text_has_actionable_hook(text: str, context: Mapping[str, Any]) -> bool:
+    low = text.lower()
+    if re.search(r"\b(?:you can|you may|you could|choose|pick one|where do you|what do you|your next move|start by)\b", low):
+        return True
+    for label in context.get("actionable_labels") or []:
+        if str(label or "").strip().lower() in low:
+            return True
+    imperative = r"(?:^|[.!?]\s+)(?:" + "|".join(re.escape(v).capitalize() for v in _OPENING_ACTION_VERBS) + r")\b"
+    if re.search(imperative, text):
+        return True
+    return False
+
+
+def _opening_text_is_fragment(text: str) -> bool:
+    clean = _normalize_text(text).strip()
+    if not clean:
+        return True
+    if clean[-1] not in ".!?\"'":
+        return True
+    words = re.findall(r"[A-Za-z']+", clean)
+    if len(words) < 14:
+        return True
+    first = words[0].lower() if words else ""
+    if first in {"nearby", "beneath", "under", "beside", "around", "within"} and len(words) < 22:
+        return True
+    finite = re.search(
+        r"\b(?:is|are|was|were|has|have|had|does|do|did|can|could|may|might|must|will|would|press|clog|watch|wait|stand|shout|hang|lists|offers|holds|moves|gathers|lingers|spatters)\b",
+        clean,
+        re.IGNORECASE,
+    )
+    return finite is None
+
+
+def validate_opening_output(text: str, context: Mapping[str, Any] | None) -> List[str]:
+    failures: List[str] = []
+    ctx = context if isinstance(context, Mapping) else {}
+    clean = _normalize_text(text).strip()
+    low = clean.lower()
+    if not _opening_text_has_location_anchor(clean, ctx):
+        failures.append("missing_location_anchor")
+    if not _opening_text_has_activity(clean, ctx):
+        failures.append("missing_activity")
+    if not _opening_text_has_actionable_hook(clean, ctx):
+        failures.append("missing_hook")
+    if any(needle in low for needle in _OPENING_FORBIDDEN_PATTERNS):
+        failures.append("continuation_or_investigation_language")
+    if _opening_text_is_fragment(clean):
+        failures.append("invalid_sentence_structure")
+    return list(dict.fromkeys(failures))
+
+
+def _actionable_hook_from_opening_context(context: Mapping[str, Any]) -> str:
+    labels = [str(x).strip() for x in (context.get("actionable_labels") or []) if str(x).strip()]
+    if labels:
+        head = labels[:3]
+        if len(head) == 1:
+            return f"You can start with {head[0]}."
+        if len(head) == 2:
+            return f"You can start with {head[0]} or {head[1]}."
+        return f"You can start with {head[0]}, {head[1]}, or {head[2]}."
+    facts = [str(x).strip() for x in (context.get("visible_facts") or []) if str(x).strip()]
+    hook_targets: list[str] = []
+    joined = " ".join(facts).lower()
+    if "notice board" in joined or "notice" in joined:
+        hook_targets.append("read the notice board")
+    if "guard" in joined:
+        hook_targets.append("press the guards")
+    if "runner" in joined or "tavern" in joined:
+        hook_targets.append("approach the tavern runner")
+    if "wagon" in joined or "traffic" in joined or "crowd" in joined:
+        hook_targets.append("work through the crowd")
+    if hook_targets:
+        head = hook_targets[:3]
+        if len(head) == 1:
+            return f"You can {head[0]}."
+        if len(head) == 2:
+            return f"You can {head[0]} or {head[1]}."
+        return f"You can {head[0]}, {head[1]}, or {head[2]}."
+    return "You can choose who to approach, what to inspect, or where to move first."
+
+
+def _deterministic_opening_fallback_text(gm_output: Mapping[str, Any] | None) -> str:
+    context = _opening_context_from_gm_output(gm_output)
+    locations = [str(x).strip() for x in (context.get("location_anchors") or []) if str(x).strip()]
+    facts = [str(x).strip().rstrip(".") for x in (context.get("visible_facts") or []) if str(x).strip()]
+    location = locations[0] if locations else "The scene"
+    environment = facts[0] if facts else f"{location} is immediately before you"
+    tension = ""
+    for fact in facts[1:]:
+        low = fact.lower()
+        if any(token in low for token in ("guard", "notice", "missing", "tax", "curfew", "press", "wary", "trouble", "refugee")):
+            tension = fact
+            break
+    if not tension and len(facts) > 1:
+        tension = facts[1]
+    hook = _actionable_hook_from_opening_context(context)
+    if tension:
+        return _normalize_text(f"{location}. {environment}. {tension}. {hook}")
+    return _normalize_text(f"{location}. {environment}. {hook}")
+
+
 def _enforce_response_type_contract(
     candidate_text: str,
     *,
@@ -3532,6 +3832,11 @@ def _enforce_response_type_contract(
     )
     current = _norm(candidate_text)
     reasons: List[str] = []
+    opening_mode = _opening_mode_active_for_turn(gm_output, resolution)
+    debug["opening_generic_action_repair_blocked"] = False
+    debug["opening_specific_repair_used"] = False
+    debug["blocked_repair_kind"] = None
+    debug["opening_repair_source"] = "not_opening" if not opening_mode else None
 
     validator_ok = True
     validator_reasons: List[str] = []
@@ -3556,10 +3861,61 @@ def _enforce_response_type_contract(
         )
     reasons.extend(validator_reasons)
 
+    opening_context: Dict[str, Any] = {}
+    opening_failures: List[str] = []
+    if opening_mode:
+        opening_context = _opening_context_from_gm_output(gm_output)
+        opening_failures = validate_opening_output(current, opening_context)
+        debug["opening_validation_failed"] = bool(opening_failures)
+        debug["opening_failure_reasons"] = list(opening_failures)
+        if not opening_failures:
+            debug["response_type_candidate_ok"] = True
+            debug["response_type_repair_used"] = False
+            debug["response_type_repair_kind"] = None
+            debug["opening_repair_source"] = "preserved_candidate"
+            debug["final_emission_boundary_repair_used"] = False
+            debug["final_emission_boundary_semantic_repair_disabled"] = True
+            return current, debug
+        reasons.extend(opening_failures)
+
     if validator_ok and not reasons:
         debug["response_type_candidate_ok"] = True
+        debug["opening_repair_source"] = "not_opening"
         debug["final_emission_boundary_repair_used"] = False
         debug["final_emission_boundary_semantic_repair_disabled"] = True
+        return current, debug
+
+    if opening_mode:
+        # Opening guard: never replace an opening with generic action-outcome prepared prose.
+        upstream = (
+            gm_output.get(UPSTREAM_PREPARED_EMISSION_KEY)
+            if isinstance(gm_output, dict)
+            else None
+        )
+        if not isinstance(upstream, dict):
+            upstream = {}
+        cand = upstream.get("prepared_action_fallback_text")
+        if isinstance(cand, str) and cand.strip():
+            debug["opening_generic_action_repair_blocked"] = True
+            debug["blocked_repair_kind"] = "action_outcome_upstream_prepared_repair"
+
+        # Otherwise, use an opening-specific seed fallback (no invented facts; includes action vectors).
+        fallback = _deterministic_opening_fallback_text(gm_output)
+        fallback_failures = validate_opening_output(fallback, opening_context)
+        if fallback and not fallback_failures:
+            debug["response_type_candidate_ok"] = True
+            debug["response_type_repair_used"] = True
+            debug["response_type_repair_kind"] = "opening_deterministic_fallback"
+            debug["opening_specific_repair_used"] = True
+            debug["opening_recovered_via_fallback"] = True
+            debug["opening_repair_source"] = "deterministic_fallback"
+            debug["response_type_rejection_reasons"] = list(dict.fromkeys(str(r) for r in reasons if r))
+            return fallback, debug
+
+        debug["response_type_candidate_ok"] = False
+        debug["opening_repair_source"] = "fallback_failed_validation"
+        reasons.extend(f"fallback_{r}" for r in fallback_failures)
+        debug["response_type_rejection_reasons"] = list(dict.fromkeys(str(r) for r in reasons if r))
         return current, debug
 
     repaired: str | None = None
@@ -4603,6 +4959,8 @@ def _augment_scene_with_runtime_visible_leads(
         return scene
     if not isinstance(session, dict):
         return scene
+    if _opening_scene_preference_active(session):
+        return scene
     sid = str(scene_id or "").strip()
     if not sid:
         return scene
@@ -4630,6 +4988,7 @@ def _augment_scene_with_runtime_visible_leads(
 
     if isinstance(scene.get("scene"), dict):
         outer = dict(scene)
+        outer.pop("_is_canon", None)
         inner = dict(scene.get("scene") or {})
         existing = _scene_visible_facts(scene)
         inner["visible_facts"] = _dedupe_preserve_order(existing + extra_facts)
@@ -4637,6 +4996,7 @@ def _augment_scene_with_runtime_visible_leads(
         return outer
 
     inner = dict(scene)
+    inner.pop("_is_canon", None)
     existing = _scene_visible_facts(scene)
     inner["visible_facts"] = _dedupe_preserve_order(existing + extra_facts)
     return inner

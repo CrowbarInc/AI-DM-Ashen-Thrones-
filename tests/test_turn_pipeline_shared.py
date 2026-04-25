@@ -20,6 +20,7 @@ from game.final_emission_meta import read_debug_notes_from_turn_payload, read_fi
 from game.narrative_authenticity_eval import _extract_final_emission_meta
 
 import json
+import copy
 
 import pytest
 from fastapi.testclient import TestClient
@@ -662,7 +663,8 @@ def test_chat_targeted_retry_scene_stall_only(tmp_path, monkeypatch):
 # feature: social, continuity
 def test_chat_single_wait_in_tense_scene_forces_interaction_pressure(tmp_path, monkeypatch):
     _seed_shared_world(tmp_path, monkeypatch)
-    scene = storage.load_scene("scene_investigate")
+    scene = copy.deepcopy(storage.load_scene("scene_investigate"))
+    scene.pop("_is_canon", None)
     scene["scene"]["visible_facts"] = [
         "Guards keep glancing at a missing patrol notice beside the checkpoint.",
         "A tavern runner lingers under an awning, selling rumors for coin.",
@@ -687,7 +689,8 @@ def test_chat_single_wait_in_tense_scene_forces_interaction_pressure(tmp_path, m
 # feature: social
 def test_chat_repeated_passive_actions_do_not_stall_into_atmosphere(tmp_path, monkeypatch):
     _seed_shared_world(tmp_path, monkeypatch)
-    scene = storage.load_scene("scene_investigate")
+    scene = copy.deepcopy(storage.load_scene("scene_investigate"))
+    scene.pop("_is_canon", None)
     scene["scene"]["visible_facts"] = [
         "A guard leans near the checkpoint, watching the road.",
         "A missing patrol notice curls in the damp beside him.",

@@ -11,6 +11,11 @@ from typing import Any, Dict, List, Mapping, Set, Tuple
 
 from game.narration_visibility import _normalize_visibility_text
 
+# Responsible for: scoring + selecting canonical facts
+# Must NOT:
+#   - access runtime overlays
+#   - perform narrative shaping
+
 OPENING_NARRATION_VISIBLE_FACT_MAX = 7
 
 _STOPWORDS = frozenset({
@@ -59,6 +64,43 @@ _A_KEYWORDS = (
     "ceiling", "roof", "building", "architecture", "road", "street", "bridge",
 )
 
+_ACTOR_KEYWORDS = (
+    "actor", "npc", "guard", "guards", "captain", "sergeant", "officer", "runner",
+    "barkeep", "innkeeper", "merchant", "vendor", "steward", "clerk", "patron",
+    "refugee", "refugees", "crowd", "crowds", "onlooker", "onlookers",
+)
+_ACTION_VERB_KEYWORDS = (
+    "waves", "wave", "calls", "call", "scans", "scan", "argues", "argue",
+    "shouts", "shout", "gestures", "gesture", "beckons", "beckon", "watches",
+    "watch", "presses", "press", "jostles", "jostle", "haggles", "haggle",
+    "holds", "hold", "moves", "move", "waits", "wait", "lingers", "linger",
+)
+_TENSION_KEYWORDS = (
+    "crowd", "pressure", "guards", "guard", "curfew", "missing", "warning",
+    "warns", "posted", "tax", "taxes", "press", "urgent", "panic", "unrest",
+    "uneasy", "suspicious", "wary", "choke",
+)
+_AFFORDANCE_KEYWORDS = (
+    "notice", "vendor", "gate", "guard", "guards", "interaction", "runner",
+    "merchant", "barkeep", "board", "sign", "posted", "door", "path", "road",
+    "trail", "stall", "checkpoint",
+)
+_BACKSTAGE_SELECTION_MARKERS = (
+    "backstage",
+    "gm hint",
+    "gm note",
+    "hidden fact",
+    "who controls",
+    "vital information",
+    "manages patrol",
+    "patrol assignments",
+    "controls patrol",
+    "guard captain indicates",
+    "tavern runner shouts",
+)
+
+_CATEGORY_RANK = {"A": 0, "E": 0, "B": 1, "C": 2, "D": 3}
+
 
 def _norm_hits(norm: str, needles: Tuple[str, ...]) -> bool:
     return any(n in norm for n in needles)
@@ -81,6 +123,35 @@ def opening_fact_primary_category(norm: str) -> str:
     if _norm_hits(norm, _A_KEYWORDS):
         return "A"
     return "A"
+
+
+def opening_fact_has_actor(norm: str) -> bool:
+    return _norm_hits(norm, _ACTOR_KEYWORDS)
+
+
+def opening_fact_has_activity(norm: str) -> bool:
+    return _norm_hits(norm, _ACTION_VERB_KEYWORDS)
+
+
+def opening_fact_has_tension(norm: str) -> bool:
+    return _norm_hits(norm, _TENSION_KEYWORDS)
+
+
+def opening_fact_has_affordance(norm: str) -> bool:
+    return _norm_hits(norm, _AFFORDANCE_KEYWORDS)
+
+
+def opening_fact_score(norm: str) -> int:
+    score = 0
+    if opening_fact_has_actor(norm):
+        score += 2
+    if opening_fact_has_activity(norm):
+        score += 2
+    if opening_fact_has_tension(norm):
+        score += 1
+    if opening_fact_has_affordance(norm):
+        score += 1
+    return score
 
 
 def _dominant_cluster(norm: str) -> str:
@@ -122,6 +193,8 @@ def _pairs_from_public_scene(public_scene: Mapping[str, Any]) -> List[Tuple[str,
             continue
         n = _normalize_visibility_text(original)
         if not n or n in seen_norm:
+            continue
+        if _norm_hits(n, _BACKSTAGE_SELECTION_MARKERS):
             continue
         seen_norm.add(n)
         pairs.append((original, n))
@@ -208,6 +281,11 @@ def select_opening_narration_visible_facts(
                 "norm": norm,
                 "tokens": _content_tokens(norm),
                 "category": opening_fact_primary_category(norm),
+                "score": opening_fact_score(norm),
+                "has_actor": opening_fact_has_actor(norm),
+                "has_activity": opening_fact_has_activity(norm),
+                "has_tension": opening_fact_has_tension(norm),
+                "has_affordance": opening_fact_has_affordance(norm),
                 "cluster": _dominant_cluster(norm),
                 "index": idx,
             }
@@ -217,7 +295,7 @@ def select_opening_narration_visible_facts(
     for rec in records:
         by_cat[rec["category"]].append(rec)
     for cat in by_cat:
-        by_cat[cat].sort(key=lambda r: int(r["index"]))
+        by_cat[cat].sort(key=lambda r: (-int(r["score"]), int(r["index"])))
 
     selected: List[Dict[str, Any]] = []
     used_clusters: Set[str] = set()
@@ -256,7 +334,7 @@ def select_opening_narration_visible_facts(
 
     # Back-fill in priority order A→E, original index order within category.
     if len(selected) < cap:
-        for cat in ("A", "B", "C", "D", "E"):
+        for cat in ("A", "E", "B", "C", "D"):
             if len(selected) >= cap:
                 break
             for rec in by_cat[cat]:
@@ -266,6 +344,41 @@ def select_opening_narration_visible_facts(
                     continue
                 _try_take(rec, selected, used_clusters)
 
-    selected.sort(key=lambda r: ("ABCDE".index(r["category"]), int(r["index"])))
+    def _has_sensory_spatial(rows: List[Dict[str, Any]]) -> bool:
+        return any(r["category"] in {"A", "E"} for r in rows)
+
+    def _has_social_actor(rows: List[Dict[str, Any]]) -> bool:
+        return any(r["category"] in {"B", "C"} or bool(r.get("has_actor")) for r in rows)
+
+    def _has_tension_or_affordance(rows: List[Dict[str, Any]]) -> bool:
+        return any(bool(r.get("has_tension")) or bool(r.get("has_affordance")) for r in rows)
+
+    def _add_required(predicate) -> None:
+        nonlocal selected, used_clusters
+        if predicate(selected):
+            return
+        candidates = [r for r in records if r not in selected and predicate([r])]
+        candidates.sort(key=lambda r: (_CATEGORY_RANK.get(r["category"], 9), -int(r["score"]), int(r["index"])))
+        for rec in candidates:
+            if len(selected) < cap:
+                if _try_take(rec, selected, used_clusters):
+                    return
+                continue
+            replaceable = sorted(
+                selected,
+                key=lambda r: (-_CATEGORY_RANK.get(r["category"], 9), int(r["score"]), -int(r["index"])),
+            )
+            for old in replaceable:
+                trial = [r for r in selected if r is not old] + [rec]
+                if _has_sensory_spatial(trial) and _has_social_actor(trial) and _has_tension_or_affordance(trial):
+                    selected = trial
+                    used_clusters = {str(r["cluster"]) for r in selected if r.get("cluster")}
+                    return
+
+    _add_required(_has_sensory_spatial)
+    _add_required(_has_social_actor)
+    _add_required(_has_tension_or_affordance)
+
+    selected.sort(key=lambda r: (_CATEGORY_RANK.get(r["category"], 9), -int(r["score"]), int(r["index"])))
     out = [str(r["original"]) for r in selected[:cap]]
     return out

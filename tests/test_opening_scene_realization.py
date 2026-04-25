@@ -168,6 +168,70 @@ def test_existing_opening_visible_fact_selection_preserved_under_realization():
     assert "notice" in low or "posted" in low
 
 
+def test_opening_realization_rebalances_basis_from_canonical_pool():
+    public = {
+        "id": "gate",
+        "location": "Gate",
+        "summary": "Gate.",
+        "visible_facts": [
+            "Rain slicks soot-dark stone beneath the eastern gate.",
+            "A guard calls for the next wagon in line.",
+            "A notice board lists curfew warnings beside the arch.",
+        ],
+        "exits": [],
+        "enemies": [],
+    }
+
+    out = build_opening_scene_realization(
+        public_scene=public,
+        curated_visible_fact_strings=[
+            "Rain slicks soot-dark stone beneath the eastern gate.",
+            "A guard calls for the next wagon in line.",
+            "A notice board lists curfew warnings beside the arch.",
+        ],
+        visibility_contract=_vc(),
+    )
+    contract = out["contract"]
+    basis = " ".join(contract["narration_basis_visible_facts"]).lower()
+
+    assert "guard" in basis
+    assert "calls" in basis
+    assert "next wagon" in basis or "notice" in basis or "curfew" in basis
+    assert contract["opening_basis_has_actor"] is True
+    assert contract["opening_basis_has_activity"] is True
+    assert contract["opening_basis_has_affordance"] is True
+    assert contract["opening_basis_scores"]
+    assert contract["validator"]["ok"] is True
+
+
+def test_opening_realization_never_reaches_past_curated_visible_facts():
+    public = {
+        "id": "gate",
+        "location": "Gate",
+        "summary": "Gate.",
+        "visible_facts": [
+            "Rain slicks soot-dark stone beneath the eastern gate.",
+            "GM hint: the captain plans to arrest the player after sundown.",
+            "Backstage: the hidden cult controls the west-road patrol.",
+        ],
+        "exits": [],
+        "enemies": [],
+    }
+
+    out = build_opening_scene_realization(
+        public_scene=public,
+        curated_visible_fact_strings=["Rain slicks soot-dark stone beneath the eastern gate."],
+        visibility_contract=_vc(),
+    )
+    basis = " ".join(out["contract"]["narration_basis_visible_facts"]).lower()
+
+    assert "rain slicks" in basis
+    assert "gm hint" not in basis
+    assert "captain plans" not in basis
+    assert "backstage" not in basis
+    assert "hidden cult" not in basis
+
+
 def test_opening_narration_obligations_payload_shape():
     off = build_opening_narration_obligations_payload(opening_mode=False)
     assert off["opening_mode"] is False
@@ -272,3 +336,34 @@ def test_prompt_context_wires_opening_payload():
     assert ctx["opening_narration_obligations"]["opening_mode"] is True
     assert ctx["opening_scene_realization"]["opening_mode"] is True
     assert isinstance(ctx["opening_scene_realization"].get("contract"), dict)
+    assert ctx["opening_inputs_are_curated"] is True
+
+
+def test_prompt_context_opening_output_excludes_contaminated_scene_lines():
+    public = {
+        "id": "contaminated_gate",
+        "location": "Gate",
+        "summary": "Gate.",
+        "visible_facts": [
+            "Rain slicks soot-dark stone beneath the eastern gate.",
+            "A guard calls for the next wagon in line.",
+            "A notice board lists curfew warnings beside the arch.",
+            "GM hint: the captain plans to arrest the player after sundown.",
+            "Backstage: the hidden cult controls the west-road patrol.",
+        ],
+        "exits": [],
+        "enemies": [],
+    }
+    ctx = build_narration_context(**_minimal_ctx_kwargs(public))
+    exported = " ".join(
+        list(ctx["narration_visibility"]["visible_facts"])
+        + list(ctx["opening_scene_realization"]["contract"]["narration_basis_visible_facts"])
+        + list(ctx["scene"]["public"].get("visible_facts") or [])
+    ).lower()
+
+    assert ctx["opening_inputs_are_curated"] is True
+    assert "rain slicks" in exported
+    assert "gm hint" not in exported
+    assert "captain plans" not in exported
+    assert "backstage" not in exported
+    assert "hidden cult" not in exported

@@ -3,6 +3,7 @@ from game.world import apply_world_updates, ensure_defaults
 from game.gm import detect_surfaced_clues, _normalize_clue_match_text
 from game.api import _apply_authoritative_resolution_state_mutation, _apply_post_gm_updates
 from game.campaign_state import create_fresh_combat_state, create_fresh_session_document
+from game.storage import build_effective_scene
 
 
 import pytest
@@ -137,7 +138,7 @@ def test_gpt_narration_surfacing_does_not_mutate_clue_state():
             "enemies": [],
         }
     }
-    session = {"scene_runtime": {}, "clue_knowledge": {}}
+    session = {"scene_runtime": {}, "runtime_scene_overlays": {}, "clue_knowledge": {}}
     world = {"event_log": []}
     combat = {"in_combat": False}
     gm = {
@@ -191,6 +192,71 @@ def test_apply_post_gm_updates_scene_update_runs_under_api_scene_state_guard():
     facts = scene_out["scene"]["visible_facts"]
     assert "Existing." in facts
     assert "New fact from GM layer." in facts
+    assert scene["scene"]["visible_facts"] == ["Existing."]
+    assert session["runtime_scene_overlays"]["gate"]["visible_facts_add"] == ["New fact from GM layer."]
+
+
+def test_build_effective_scene_merges_overlay_without_mutating_canon():
+    canon = {
+        "scene": {
+            "id": "gate",
+            "visible_facts": ["Existing."],
+            "discoverable_clues": ["Old clue."],
+            "hidden_facts": [],
+            "mode": "exploration",
+        }
+    }
+    overlay = {
+        "scene_id": "gate",
+        "visible_facts_add": ["New fact."],
+        "discovered_clues": ["Found clue."],
+        "state_flags": {"alarm": True},
+        "runtime_entities": [{"id": "ash_hound"}],
+        "mutations": {"mode": "social", "discoverable_clues_add": ["New clue."]},
+    }
+
+    effective = build_effective_scene(canon, overlay)
+
+    assert effective["scene"]["visible_facts"] == ["Existing.", "New fact."]
+    assert effective["scene"]["discoverable_clues"] == ["Old clue.", "New clue."]
+    assert effective["scene"]["discovered_clues"] == ["Found clue."]
+    assert effective["scene"]["runtime_entities"] == [{"id": "ash_hound"}]
+    assert effective["scene"]["state_flags"] == {"alarm": True}
+    assert effective["scene"]["mode"] == "social"
+    assert not effective.get("_is_canon")
+    assert canon["scene"]["visible_facts"] == ["Existing."]
+    effective["scene"]["visible_facts"].append("Effective-only mutation.")
+    assert canon["scene"]["visible_facts"] == ["Existing."]
+
+
+def test_apply_post_gm_updates_rejects_canon_scene_mutation_attempt():
+    scene = {
+        "_is_canon": True,
+        "scene": {
+            "id": "gate",
+            "visible_facts": ["Existing."],
+            "discoverable_clues": [],
+            "hidden_facts": [],
+            "mode": "exploration",
+        },
+    }
+    session = {"scene_runtime": {}, "runtime_scene_overlays": {}, "clue_knowledge": {}}
+    world = {"event_log": []}
+    combat = {"in_combat": False}
+    gm = {
+        "player_facing_text": "",
+        "tags": [],
+        "scene_update": {"visible_facts_add": ["New fact from GM layer."]},
+        "activate_scene_id": None,
+        "new_scene_draft": None,
+        "world_updates": None,
+        "suggested_action": None,
+        "debug_notes": "",
+    }
+
+    with pytest.raises(RuntimeError, match="Canonical scene mutation attempted"):
+        _apply_post_gm_updates(gm, scene, session, world, combat)
+    assert session["runtime_scene_overlays"] == {}
 
 
 def test_apply_authoritative_resolution_state_mutation_world_and_scene_guards_observe():

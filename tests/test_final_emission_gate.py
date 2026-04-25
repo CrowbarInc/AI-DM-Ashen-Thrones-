@@ -2927,6 +2927,117 @@ def test_enforce_response_type_contract_marks_upstream_absent_for_answer_without
     assert text == "Only mist between the torches."
 
 
+def _opening_validation_context() -> dict:
+    facts = [
+        "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate.",
+        "Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in.",
+        "A notice board lists new taxes, curfews, and a posted warning about a missing patrol.",
+    ]
+    return {
+        "location_anchors": ["Cinderwatch Gate District"],
+        "visible_facts": facts,
+        "actionable_labels": ["Read the notice board", "Approach the guards"],
+    }
+
+
+def _opening_gm_output() -> dict:
+    facts = _opening_validation_context()["visible_facts"]
+    return {
+        "response_policy": {"response_type_contract": _response_type_contract("action_outcome")},
+        "prompt_context": {
+            "opening_inputs_are_curated": True,
+            "narration_obligations": {"is_opening_scene": True},
+            "narrative_plan": {
+                "scene_opening": {"location_anchors": ["Cinderwatch Gate District"]},
+                "scene_anchors": {"location_anchors": ["Cinderwatch Gate District"]},
+                "active_pressures": {},
+            },
+            "opening_scene_realization": {"contract": {"narration_basis_visible_facts": facts}},
+            "narration_visibility": {"visible_facts": facts},
+            "scene": {
+                "public": {
+                    "id": "frontier_gate",
+                    "location": "Cinderwatch Gate District",
+                    "visible_facts": facts,
+                    "actions": [{"label": "Read the notice board"}, {"label": "Approach the guards"}],
+                }
+            },
+        },
+    }
+
+
+def test_opening_validator_rejects_investigation_continuation_language():
+    failures = feg.validate_opening_output("Nearby crates appear disturbed.", _opening_validation_context())
+
+    assert "continuation_or_investigation_language" in failures
+    assert "invalid_sentence_structure" in failures
+
+
+def test_opening_validator_rejects_fragment_sentence():
+    failures = feg.validate_opening_output("At the Cinderwatch Gate District, rain and refugees.", _opening_validation_context())
+
+    assert "invalid_sentence_structure" in failures
+
+
+def test_opening_validator_rejects_opening_without_actionable_hook():
+    failures = feg.validate_opening_output(
+        "Cinderwatch Gate District. Rain spatters soot-dark stone while refugees and wagons clog the muddy approach.",
+        _opening_validation_context(),
+    )
+
+    assert "missing_hook" in failures
+
+
+def test_opening_failure_recovers_via_deterministic_fallback_not_action_outcome():
+    text, dbg = feg._enforce_response_type_contract(
+        "Nearby crates appear disturbed.",
+        gm_output=_opening_gm_output(),
+        resolution={"kind": "scene_opening", "prompt": "Start the campaign."},
+        session={},
+        scene_id="frontier_gate",
+        world={},
+        strict_social_turn=False,
+        strict_social_suppressed_non_social_turn=False,
+        active_interlocutor="",
+    )
+
+    assert "Cinderwatch Gate District" in text
+    assert "You can" in text
+    assert "appears disturbed" not in text
+    assert dbg.get("opening_validation_failed") is True
+    assert "continuation_or_investigation_language" in dbg.get("opening_failure_reasons")
+    assert dbg.get("opening_recovered_via_fallback") is True
+    assert dbg.get("response_type_repair_kind") == "opening_deterministic_fallback"
+
+
+def test_opening_fallback_ignores_contaminated_public_scene_visible_facts():
+    gm_output = _opening_gm_output()
+    gm_output["prompt_context"]["scene"]["public"]["visible_facts"] = [
+        "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate.",
+        "GM hint: the captain plans to arrest the player after sundown.",
+        "Backstage: the hidden cult controls the west-road patrol.",
+    ]
+
+    text, dbg = feg._enforce_response_type_contract(
+        "Nearby crates appear disturbed.",
+        gm_output=gm_output,
+        resolution={"kind": "scene_opening", "prompt": "Start the campaign."},
+        session={},
+        scene_id="frontier_gate",
+        world={},
+        strict_social_turn=False,
+        strict_social_suppressed_non_social_turn=False,
+        active_interlocutor="",
+    )
+
+    low = text.lower()
+    assert dbg.get("opening_recovered_via_fallback") is True
+    assert "gm hint" not in low
+    assert "captain plans" not in low
+    assert "backstage" not in low
+    assert "hidden cult" not in low
+
+
 def test_resolve_player_facing_narration_purity_contract_from_response_policy():
     c = _purity_contract()
     gm = {"response_policy": {"player_facing_narration_purity": c}}

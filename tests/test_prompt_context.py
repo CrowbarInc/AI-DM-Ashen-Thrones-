@@ -1740,6 +1740,16 @@ def _narration_minimal_kwargs(**overrides):
 
 
 @pytest.mark.unit
+def test_build_narration_context_rejects_canonical_scene():
+    kwargs = _narration_minimal_kwargs(
+        scene={"_is_canon": True, "scene": {"id": "frontier_gate", "visible_facts": [], "exits": [], "enemies": []}}
+    )
+
+    with pytest.raises(AssertionError, match="Prompt built from canonical scene instead of effective scene"):
+        build_narration_context(**kwargs)
+
+
+@pytest.mark.unit
 def test_build_narration_context_narration_visibility_minimal_export():
     hidden_text = "the baron is the cult leader"
     discover_text = "loose brick in the fireplace"

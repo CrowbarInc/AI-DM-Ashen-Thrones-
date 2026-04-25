@@ -15,6 +15,18 @@ from typing import Any, Dict, List, Mapping, MutableMapping, MutableSequence, Op
 
 from game.narration_visibility import _normalize_visibility_text
 from game.opening_visible_fact_selection import opening_fact_primary_category
+from game.opening_visible_fact_selection import (
+    opening_fact_has_activity,
+    opening_fact_has_actor,
+    opening_fact_has_affordance,
+    opening_fact_score,
+)
+
+# Responsible for: validating/rebalancing basis lines only
+# Must NOT:
+#   - invent facts
+#   - modify phrasing
+#   - access non-curated scene data
 
 # Title-cased role labels often mistaken for proper names — replace longer phrases first.
 _ROLE_LABEL_REPLACEMENTS: Tuple[Tuple[str, str], ...] = (
@@ -48,6 +60,9 @@ _BACKSTAGE_DUMP_MARKERS: Tuple[str, ...] = (
     "who controls",
     "who knows what",
     "what faction",
+    "gm hint",
+    "gm note",
+    "hidden fact",
     "vital information",
     "manages patrol",
     "patrol assignments",
@@ -302,6 +317,101 @@ def _diegetic_uncertainty_hooks(lines: Sequence[str], *, cap: int = 2) -> List[s
     return out
 
 
+def _basis_score_rows(lines: Sequence[str]) -> List[Dict[str, Any]]:
+    rows: List[Dict[str, Any]] = []
+    for idx, raw in enumerate(lines):
+        if not isinstance(raw, str) or not raw.strip():
+            continue
+        norm = _normalize_visibility_text(raw)
+        rows.append(
+            {
+                "line": raw.strip(),
+                "norm": norm,
+                "index": idx,
+                "score": opening_fact_score(norm),
+                "has_actor": opening_fact_has_actor(norm),
+                "has_activity": opening_fact_has_activity(norm),
+                "has_affordance": opening_fact_has_affordance(norm),
+            }
+        )
+    return rows
+
+
+def _opening_basis_scores(lines: Sequence[str]) -> List[Dict[str, Any]]:
+    return [
+        {"line": row["line"], "score": row["score"], "category": opening_fact_primary_category(row["norm"])}
+        for row in _basis_score_rows(lines)
+    ]
+
+
+def _basis_has_actor(lines: Sequence[str]) -> bool:
+    return any(row["has_actor"] for row in _basis_score_rows(lines))
+
+
+def _basis_has_activity(lines: Sequence[str]) -> bool:
+    return any(row["has_activity"] for row in _basis_score_rows(lines))
+
+
+def _basis_has_affordance(lines: Sequence[str]) -> bool:
+    return any(row["has_affordance"] for row in _basis_score_rows(lines))
+
+
+def _rebalance_opening_basis(
+    basis: Sequence[str],
+    canonical_pool: Sequence[str],
+) -> List[str]:
+    out = [str(x).strip() for x in basis if isinstance(x, str) and str(x).strip()]
+    pool = [str(x).strip() for x in canonical_pool if isinstance(x, str) and str(x).strip()]
+
+    def _dedupe(lines: Sequence[str]) -> List[str]:
+        seen: Set[str] = set()
+        deduped: List[str] = []
+        for line in lines:
+            norm = _normalize_visibility_text(line)
+            if not norm or norm in seen:
+                continue
+            seen.add(norm)
+            deduped.append(line)
+        return deduped
+
+    out = _dedupe(out)
+    pool = _dedupe(pool)
+    cap = max(len(out), 3)
+
+    def _ensure(predicate) -> None:
+        nonlocal out
+        if predicate(out):
+            return
+        current_norms = {_normalize_visibility_text(x) for x in out}
+        candidates = [line for line in pool if _normalize_visibility_text(line) not in current_norms and predicate([line])]
+        candidates.sort(
+            key=lambda line: (
+                -opening_fact_score(_normalize_visibility_text(line)),
+                pool.index(line),
+            )
+        )
+        if not candidates:
+            return
+        incoming = candidates[0]
+        if len(out) < cap:
+            out.append(incoming)
+            return
+        rows = _basis_score_rows(out)
+        rows.sort(key=lambda row: (int(row["score"]), -int(row["index"])))
+        for row in rows:
+            trial = [x for x in out if x != row["line"]] + [incoming]
+            if _basis_has_actor(trial) and _basis_has_activity(trial) and _basis_has_affordance(trial):
+                out = trial
+                return
+
+    _ensure(_basis_has_actor)
+    _ensure(_basis_has_activity)
+    _ensure(_basis_has_affordance)
+    pool_index = {_normalize_visibility_text(line): idx for idx, line in enumerate(pool)}
+    out.sort(key=lambda line: pool_index.get(_normalize_visibility_text(line), 10_000))
+    return out
+
+
 def validate_opening_scene_contract(contract: Mapping[str, Any]) -> Dict[str, Any]:
     """Narrow deterministic pre-check for opening contract shape (not a full NIL layer)."""
     issues: List[str] = []
@@ -319,6 +429,13 @@ def validate_opening_scene_contract(contract: Mapping[str, Any]) -> Dict[str, An
     anchors = contract.get("sensory_anchors")
     if isinstance(anchors, list) and len(anchors) < 1 and isinstance(basis, list) and len(basis) > 0:
         issues.append("sparse_sensory_anchors")
+    if isinstance(basis, list):
+        if not _basis_has_actor(basis):
+            issues.append("basis_missing_actor")
+        if not _basis_has_activity(basis):
+            issues.append("basis_missing_activity")
+        if not _basis_has_affordance(basis):
+            issues.append("basis_missing_affordance")
     return {"ok": not issues, "issues": issues}
 
 
@@ -328,11 +445,12 @@ def build_opening_scene_realization(
     curated_visible_fact_strings: Sequence[str],
     visibility_contract: Mapping[str, Any] | None,
 ) -> Dict[str, Any]:
-    """Assemble opening contract + narration basis from published scene data only."""
+    """Assemble opening contract + narration basis from curated visible fact strings only."""
     ps = public_scene if isinstance(public_scene, Mapping) else {}
     allowed = allowed_grounded_proper_name_norms(visibility_contract)
 
     ordered_input = [str(s).strip() for s in curated_visible_fact_strings if isinstance(s, str) and str(s).strip()]
+    assert all(isinstance(s, str) and str(s).strip() for s in ordered_input)
     relaxed_no_backstage: List[str] = []
     strict_basis: List[str] = []
     for line in ordered_input:
@@ -359,6 +477,17 @@ def build_opening_scene_realization(
             for x in ordered_input
             if _normalize_visibility_text(suppress_role_label_proper_name_leakage(x))
         ]
+
+    canonical_pool: List[str] = []
+    for raw in ordered_input:
+        cleaned = suppress_role_label_proper_name_leakage(raw)
+        norm = _normalize_visibility_text(cleaned)
+        if not norm or _backstage_dump(norm):
+            continue
+        if _has_ungrounded_honorific_name(cleaned, allowed):
+            continue
+        canonical_pool.append(cleaned)
+    narration_basis = _rebalance_opening_basis(narration_basis, canonical_pool)
 
     sensory, ambient, social, other = partition_opening_fact_categories(narration_basis)
     # Prefer sensory establishment over notice-board affordances in the exported anchors list.
@@ -391,8 +520,12 @@ def build_opening_scene_realization(
         "diegetic_uncertainty_hooks": uncertainty_hooks,
         "prohibited_opener_content": default_prohibited_opener_content(),
         "narration_basis_visible_facts": narration_basis,
+        "opening_basis_scores": _opening_basis_scores(narration_basis),
+        "opening_basis_has_actor": _basis_has_actor(narration_basis),
+        "opening_basis_has_activity": _basis_has_activity(narration_basis),
+        "opening_basis_has_affordance": _basis_has_affordance(narration_basis),
         "source": {
-            "visible_facts": "public_scene.visible_facts via select_opening_narration_visible_facts",
+            "visible_facts": "curated_visible_fact_strings",
             "name_grounding": "narration_visibility.visible_entity_names + visible_entity_aliases",
         },
     }

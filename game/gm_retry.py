@@ -15,7 +15,7 @@ from game.social import (
     select_best_social_answer_candidate,
     sync_strategy_forced_to_answer_for_valid_followup_alignment,
 )
-from game.storage import load_scene, get_scene_runtime
+from game.storage import get_effective_scene, get_scene_runtime
 from game.interaction_context import (
     evaluate_world_action_social_continuity_break,
     inspect as inspect_interaction_context,
@@ -1676,6 +1676,16 @@ def _nonsocial_forced_retry_progress_line(
     sess = session if isinstance(session, dict) else {}
     w = world if isinstance(world, dict) else {}
     res = resolution if isinstance(resolution, dict) else None
+    if str((res or {}).get("kind") or "").strip().lower() == "scene_opening":
+        try:
+            from game.opening_visible_fact_selection import select_opening_narration_visible_facts
+
+            inner = env.get("scene") if isinstance(env.get("scene"), dict) else env
+            curated = select_opening_narration_visible_facts(inner if isinstance(inner, dict) else {})
+            if curated and isinstance(inner, dict):
+                env = {**env, "scene": {**inner, "visible_facts": curated}}
+        except Exception:
+            pass
     sid = _resolve_scene_id(env)
     seed = f"{sid}|{pt[:200]}"
 
@@ -1821,11 +1831,21 @@ def _minimal_repair_context(
     env: Dict[str, Any] = {}
     if sid:
         try:
-            env = load_scene(sid)
+            env = get_effective_scene(sess, sid)
         except (OSError, ValueError, TypeError, json.JSONDecodeError):
             env = {}
     if not isinstance(env, dict):
         env = {}
+    if sess.get("campaign_started") is not True:
+        try:
+            from game.opening_visible_fact_selection import select_opening_narration_visible_facts
+
+            inner = env.get("scene") if isinstance(env.get("scene"), dict) else env
+            curated = select_opening_narration_visible_facts(inner if isinstance(inner, dict) else {})
+            if curated and isinstance(inner, dict):
+                env = {**env, "scene": {**inner, "visible_facts": curated}}
+        except Exception:
+            pass
     visible = _scene_visible_facts(env)
     raw_first = visible[0] if visible else ""
     first_visible = _clean_scene_detail(raw_first) if raw_first else ""
@@ -2265,11 +2285,21 @@ def _nonsocial_minimal_resolution_line(*, session: Dict[str, Any] | None) -> str
     if not sid:
         return _ensure_terminal_punctuation(str(_NONSOCIAL_EMPTY_REPAIR_HARD_LINE).strip())
     try:
-        env = load_scene(sid)
+        env = get_effective_scene(sess, sid)
     except (OSError, ValueError, TypeError, json.JSONDecodeError):
         env = {}
     if not isinstance(env, dict):
         env = {}
+    if sess.get("campaign_started") is not True:
+        try:
+            from game.opening_visible_fact_selection import select_opening_narration_visible_facts
+
+            inner = env.get("scene") if isinstance(env.get("scene"), dict) else env
+            curated = select_opening_narration_visible_facts(inner if isinstance(inner, dict) else {})
+            if curated and isinstance(inner, dict):
+                env = {**env, "scene": {**inner, "visible_facts": curated}}
+        except Exception:
+            pass
     visible = _scene_visible_facts(env)
     if visible:
         detail = _clean_scene_detail(visible[0])

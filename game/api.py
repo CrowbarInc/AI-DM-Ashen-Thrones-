@@ -60,7 +60,7 @@ from game.storage import (
     save_combat,
     load_conditions,
     load_active_scene,
-    load_scene,
+    get_effective_scene,
     save_scene,
     activate_scene,
     list_scene_ids,
@@ -68,6 +68,9 @@ from game.storage import (
     load_log,
     append_log,
     clear_log,
+    assert_canon_immutable,
+    build_effective_scene,
+    get_runtime_scene_overlay,
     get_scene_runtime,
     mark_interactable_resolved,
     mark_target_searched,
@@ -350,8 +353,8 @@ def _apply_authoritative_scene_transition(
     if not sid:
         return scene, session, combat
     activate_scene(sid)
-    scene = load_scene(sid)
     session = load_session()
+    scene = load_active_scene()
     combat = load_combat()
     _reset_combat(combat)
     clear_for_scene_change(session)
@@ -549,15 +552,26 @@ def _apply_post_gm_updates(
     Returns (scene, session, combat, surfaced_in_text, narration_social_lead_clue_texts)."""
     if gm.get('scene_update'):
         assert_owner_can_mutate_domain(__name__, SCENE_STATE, operation="apply_gm_scene_update_layers")
+        assert_canon_immutable(scene)
         su = gm['scene_update']
-        scene['scene'].setdefault('visible_facts', [])
-        scene['scene'].setdefault('discoverable_clues', [])
-        scene['scene'].setdefault('hidden_facts', [])
-        scene['scene']['visible_facts'].extend([x for x in su.get('visible_facts_add', []) if x not in scene['scene']['visible_facts']])
-        scene['scene']['discoverable_clues'].extend([x for x in su.get('discoverable_clues_add', []) if x not in scene['scene']['discoverable_clues']])
-        scene['scene']['hidden_facts'].extend([x for x in su.get('hidden_facts_add', []) if x not in scene['scene']['hidden_facts']])
+        scene_id = str(scene.get('scene', {}).get('id') or session.get('active_scene_id') or '').strip()
+        overlay = get_runtime_scene_overlay(session, scene_id)
+        visible_add = overlay.setdefault('visible_facts_add', [])
+        for fact in su.get('visible_facts_add', []) or []:
+            if fact not in visible_add:
+                visible_add.append(fact)
+        mutations = overlay.setdefault('mutations', {})
+        discoverable_add = mutations.setdefault('discoverable_clues_add', [])
+        for clue in su.get('discoverable_clues_add', []) or []:
+            if clue not in discoverable_add:
+                discoverable_add.append(clue)
+        hidden_add = mutations.setdefault('hidden_facts_add', [])
+        for fact in su.get('hidden_facts_add', []) or []:
+            if fact not in hidden_add:
+                hidden_add.append(fact)
         if su.get('mode'):
-            scene['scene']['mode'] = su['mode']
+            mutations['mode'] = su['mode']
+        scene = build_effective_scene(scene, overlay)
 
     # Scene-transition ownership invariant:
     # GPT transition proposals remain advisory only; authoritative transitions are
@@ -574,6 +588,7 @@ def _apply_post_gm_updates(
 
     if gm.get('world_updates'):
         assert_owner_can_mutate_domain(__name__, WORLD_STATE, operation="apply_gm_world_updates")
+        assert_canon_immutable(scene)
         normalized_wu = normalize_runtime_world_updates(gm['world_updates'])
         new_events: list = []
         for ev in normalized_wu.get('append_events') or []:
@@ -659,6 +674,7 @@ def _apply_authoritative_resolution_state_mutation(
     """Stage 5: apply deterministic state mutation from resolved engine output."""
     assert_owner_can_mutate_domain(__name__, WORLD_STATE, operation="authoritative_resolution_mutation")
     assert_owner_can_mutate_domain(__name__, SCENE_STATE, operation="authoritative_resolution_mutation")
+    assert_canon_immutable(scene)
     authoritative_clue_updates: list[str] = []
 
     merged_res = normalize_runtime_engine_result(resolution)
@@ -2338,7 +2354,7 @@ def compose_state():
                 for e in scene['scene'].get('enemies', []) if e['hp']['current'] > 0
             ],
             'scene_ids': list_scene_ids(),
-            'affordances': get_available_affordances(scene, session, world, mode=scene['scene'].get('mode', 'exploration'), list_scene_ids_fn=list_scene_ids, scene_graph=build_scene_graph(list_scene_ids, load_scene)),
+            'affordances': get_available_affordances(scene, session, world, mode=scene['scene'].get('mode', 'exploration'), list_scene_ids_fn=list_scene_ids, scene_graph=build_scene_graph(list_scene_ids, lambda sid: get_effective_scene(session, sid))),
             'clues': {
                 'known': get_known_clues_with_presentation(session),
             },
@@ -2804,7 +2820,7 @@ def action(req: ActionRequest, ui_mode: str = "player"):
             normalized_type = raw_type
         if normalized_type in SOCIAL_KINDS:
             normalized_action['type'] = normalized_type
-        _ex_kw = {"list_scene_ids": list_scene_ids, "load_scene_fn": load_scene}
+        _ex_kw = {"list_scene_ids": list_scene_ids, "load_scene_fn": lambda sid: get_effective_scene(session, sid)}
         resolution = _resolve_engine_noncombat_seam(
             scene,
             session,
@@ -2833,7 +2849,7 @@ def action(req: ActionRequest, ui_mode: str = "player"):
         )
         if raw and (raw.get('type') or '').strip().lower() in SOCIAL_KINDS:
             normalized_action['type'] = (raw.get('type') or 'social_probe').strip().lower()
-        _ex_kw_social = {"list_scene_ids": list_scene_ids, "load_scene_fn": load_scene}
+        _ex_kw_social = {"list_scene_ids": list_scene_ids, "load_scene_fn": lambda sid: get_effective_scene(session, sid)}
         resolution = _resolve_engine_noncombat_seam(
             scene,
             session,
@@ -3069,7 +3085,6 @@ def action(req: ActionRequest, ui_mode: str = "player"):
     save_world(world)
     save_combat(combat)
     save_session(session)
-    save_scene(scene)
 
     from game.gm import classify_player_intent
 
@@ -3313,7 +3328,6 @@ def _complete_opening_turn_persistence_like_chat(
     if mark_campaign_started:
         session["campaign_started"] = True
     save_session(session)
-    save_scene(scene)
     save_combat(combat)
 
     intent = classify_player_intent(player_text_for_eval)
@@ -3932,7 +3946,7 @@ def chat(req: ChatRequest, ui_mode: str = "player"):
             if isinstance(compact_segmented, dict) and compact_segmented:
                 _sm.setdefault("segmented_turn", compact_segmented)
             trace["canonical_entry_path"] = "social"
-            _ex_kw_chat = {"list_scene_ids": list_scene_ids, "load_scene_fn": load_scene}
+            _ex_kw_chat = {"list_scene_ids": list_scene_ids, "load_scene_fn": lambda sid: get_effective_scene(session, sid)}
             resolution = _resolve_engine_noncombat_seam(
                 scene,
                 session,
@@ -3953,7 +3967,7 @@ def chat(req: ChatRequest, ui_mode: str = "player"):
                     session, world, scene_before_id, req.text, normalized, scene_envelope=scene
                 )
             )
-            _ex_kw_chat2 = {"list_scene_ids": list_scene_ids, "load_scene_fn": load_scene}
+            _ex_kw_chat2 = {"list_scene_ids": list_scene_ids, "load_scene_fn": lambda sid: get_effective_scene(session, sid)}
             resolution = _resolve_engine_noncombat_seam(
                 scene,
                 session,

@@ -30,6 +30,7 @@ from game.social import SOCIAL_KINDS
 from game.clues import get_known_clues_with_presentation
 from game.affordances import get_available_affordances
 from game.scene_graph import build_scene_graph
+from game.opening_visible_fact_selection import select_opening_narration_visible_facts
 from game import leads as leads_module
 
 
@@ -58,6 +59,21 @@ def _accumulate_latency(latency_sink: dict | None, key: str, elapsed_ms: int) ->
     if not isinstance(latency_sink, dict):
         return
     latency_sink[key] = max(0, int(latency_sink.get(key, 0) or 0)) + max(0, int(elapsed_ms or 0))
+
+
+def _scene_for_final_emission_input(scene: dict | None, resolution: dict | None) -> dict | None:
+    """Opening turns pass the same curated visible-fact slice used by prompt inputs."""
+    if not isinstance(scene, dict):
+        return scene
+    if not isinstance(resolution, dict) or str(resolution.get("kind") or "").strip().lower() != "scene_opening":
+        return scene
+    inner = scene.get("scene") if isinstance(scene.get("scene"), dict) else scene
+    curated = select_opening_narration_visible_facts(inner if isinstance(inner, dict) else {})
+    if not curated or not isinstance(inner, dict):
+        return scene
+    if isinstance(scene.get("scene"), dict):
+        return {**scene, "scene": {**inner, "visible_facts": curated}}
+    return {**inner, "visible_facts": curated}
 
 
 def _merge_emergent_actor_debug_into_action_debug(session: dict) -> None:
@@ -233,6 +249,10 @@ def _finalize_player_facing_for_turn(
         "sanitizer_boundary_mode": SANITIZER_BOUNDARY_STRIP_ONLY,
         "upstream_prepared_emission": gm_out.get("upstream_prepared_emission"),
     }
+    gate_scene = _scene_for_final_emission_input(
+        scene,
+        resolution if isinstance(resolution, dict) else None,
+    )
     if strict_social_turn:
         gm_out["player_facing_text"] = raw_text
         gate_started = _now_perf()
@@ -241,7 +261,7 @@ def _finalize_player_facing_for_turn(
             resolution=resolution if isinstance(resolution, dict) else None,
             session=session,
             scene_id=scene_id,
-            scene=scene,
+            scene=gate_scene,
             world=world,
         )
         _accumulate_latency(latency_sink, "final_emission_gate", _elapsed_ms(gate_started))
@@ -253,7 +273,7 @@ def _finalize_player_facing_for_turn(
             resolution=resolution if isinstance(resolution, dict) else None,
             session=session,
             scene_id=scene_id,
-            scene=scene,
+            scene=gate_scene,
             world=world,
         )
         _accumulate_latency(latency_sink, "final_emission_gate", _elapsed_ms(gate_started))
@@ -724,23 +744,31 @@ def _build_turn_response_payload(
 
             if strict_social_turn:
                 gm["player_facing_text"] = raw_text
+                gate_scene = _scene_for_final_emission_input(
+                    state_scene,
+                    resolution if isinstance(resolution, dict) else None,
+                )
                 gm = apply_final_emission_gate(
                     gm,
                     resolution=resolution if isinstance(resolution, dict) else None,
                     session=state_session,
                     scene_id=scene_id,
-                    scene=state_scene,
+                    scene=gate_scene,
                     world=state_world,
                 )
                 # build_final_strict_social_response (via the gate) is the sole writer; no post-gate sanitizer.
             else:
                 gm["player_facing_text"] = sanitize_player_facing_output(raw_text, san_ctx_base)
+                gate_scene = _scene_for_final_emission_input(
+                    state_scene,
+                    resolution if isinstance(resolution, dict) else None,
+                )
                 gm = apply_final_emission_gate(
                     gm,
                     resolution=resolution if isinstance(resolution, dict) else None,
                     session=state_session,
                     scene_id=scene_id,
-                    scene=state_scene,
+                    scene=gate_scene,
                     world=state_world,
                 )
             ist = gm.get("internal_state")

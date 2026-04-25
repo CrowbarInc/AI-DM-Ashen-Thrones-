@@ -646,9 +646,9 @@ def _scene_envelope_for_addressability(
         if not sid:
             sid = _clean_string(session.get("active_scene_id"))
     if sid:
-        from game.storage import load_scene
+        from game.storage import get_effective_scene
 
-        return load_scene(sid)
+        return get_effective_scene(session or {}, sid)
     return scene_envelope if isinstance(scene_envelope, dict) else {}
 
 

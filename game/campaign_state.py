@@ -86,6 +86,7 @@ def create_fresh_session_document() -> Dict[str, Any]:
         "clocks": dict(DEFAULT_CLOCKS),
         "interaction_context": _fresh_interaction_context(),
         "scene_state": _fresh_scene_state(sid),
+        "runtime_scene_overlays": {},
         "scene_runtime": {},
         "clue_knowledge": {},
         SESSION_LEAD_REGISTRY_KEY: {},

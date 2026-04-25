@@ -3811,12 +3811,11 @@ def _build_narration_context_head_state(
         world=world if isinstance(world, dict) else None,
     )
     visible_facts_for_prompt = list(visibility_contract.get("visible_fact_strings") or [])
+    opening_inputs_are_curated = False
     if narration_obligations.get("is_opening_scene") and isinstance(public_scene, Mapping):
         curated_opening = select_opening_narration_visible_facts(public_scene)
-        if curated_opening:
-            visible_facts_for_prompt = curated_opening
-        else:
-            visible_facts_for_prompt = visible_facts_for_prompt[:OPENING_NARRATION_VISIBLE_FACT_MAX]
+        visible_facts_for_prompt = curated_opening[:OPENING_NARRATION_VISIBLE_FACT_MAX]
+        opening_inputs_are_curated = True
     res_for_vis = resolution_sem if isinstance(resolution_sem, dict) else {}
     res_md_vis = res_for_vis.get("metadata") if isinstance(res_for_vis.get("metadata"), dict) else {}
     if res_md_vis.get("human_adjacent_intent_family") in {"listen", "approach_listen", "observe_group"}:
@@ -3830,6 +3829,7 @@ def _build_narration_context_head_state(
         )
     opening_scene_export: Dict[str, Any] = opening_realization_none()
     if narration_obligations.get("is_opening_scene") and isinstance(public_scene, Mapping):
+        assert opening_inputs_are_curated is True
         opening_scene_export = build_opening_scene_realization(
             public_scene=public_scene,
             curated_visible_fact_strings=visible_facts_for_prompt,
@@ -3894,6 +3894,7 @@ def _build_narration_context_head_state(
         "clue_visibility": clue_visibility,
         "visibility_contract": visibility_contract,
         "visible_facts_for_prompt": visible_facts_for_prompt,
+        "opening_inputs_are_curated": opening_inputs_are_curated,
         "res_for_vis": res_for_vis,
         "res_md_vis": res_md_vis,
         "opening_scene_export": opening_scene_export,
@@ -4020,6 +4021,9 @@ def build_narration_context(
     Set ``include_non_public_prompt_keys=True`` only for tests or tooling that must
     inspect builder-local mirrors such as ``prompt_debug`` (never for live model input).
     """
+    assert not (isinstance(scene, dict) and scene.get("_is_canon")), (
+        "Prompt built from canonical scene instead of effective scene"
+    )
     # Head state through scene anchor: shared with :mod:`game.narration_plan_bundle` (renderer-only downstream).
     _head = _build_narration_context_head_state(
         campaign,
@@ -4076,6 +4080,7 @@ def build_narration_context(
     clue_visibility = _head["clue_visibility"]
     visibility_contract = _head["visibility_contract"]
     visible_facts_for_prompt = _head["visible_facts_for_prompt"]
+    opening_inputs_are_curated = _head["opening_inputs_are_curated"]
     res_for_vis = _head["res_for_vis"]
     res_md_vis = _head["res_md_vis"]
     opening_scene_export = _head["opening_scene_export"]
@@ -5144,6 +5149,8 @@ def build_narration_context(
         active_topic_anchor=active_topic_anchor if isinstance(active_topic_anchor, Mapping) else None,
     )
     public_scene_for_prompt = dict(public_scene) if isinstance(public_scene, dict) else {}
+    if narration_obligations.get("is_opening_scene") and isinstance(public_scene_for_prompt, dict):
+        public_scene_for_prompt["visible_facts"] = list(visible_facts_export)
     if use_manual_play_compact:
         selected_conversational_memory = list(selected_conversational_memory[:MANUAL_PLAY_COMPACT_MEMORY_LIMIT])
         recent_log_for_payload = _recent_log_payload_from_selected_memory(
@@ -5361,6 +5368,7 @@ def build_narration_context(
             else None
         ),
         'opening_scene_realization': opening_scene_export if isinstance(opening_scene_export, dict) else opening_realization_none(),
+        'opening_inputs_are_curated': bool(opening_inputs_are_curated),
         'narration_visibility': narration_visibility,
         'scene_state_anchor_contract': scene_state_anchor_contract,
         'anti_railroading_contract': anti_railroading_contract,
@@ -5427,6 +5435,8 @@ def build_narration_context(
             'example': 'Galinor asks, "What changed at the north gate?" while examining the notice board.',
         },
     }
+    if narration_obligations.get("is_opening_scene"):
+        assert payload["opening_inputs_are_curated"] is True
     if narration_seam_audit is not None:
         payload["narration_seam_audit"] = narration_seam_audit
     if use_manual_play_compact:

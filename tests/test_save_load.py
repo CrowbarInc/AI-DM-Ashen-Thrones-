@@ -5,9 +5,12 @@ import game.storage as st
 from game.storage import (
     activate_scene,
     get_save_summary,
+    get_runtime_scene_overlay,
+    assert_canon_immutable,
     load_character,
     load_combat,
     load_log,
+    load_active_scene,
     load_session,
     load_world,
     mark_clue_discovered,
@@ -67,6 +70,35 @@ def test_clues_persist_across_save_load(tmp_path, monkeypatch):
     clues = rt.get("discovered_clues", [])
     assert "The tavern runner knows more." in clues
     assert "Bootprints lead toward the river." in clues
+    overlay_clues = session2.get("runtime_scene_overlays", {}).get("frontier_gate", {}).get("discovered_clues", [])
+    assert "The tavern runner knows more." in overlay_clues
+
+
+def test_runtime_scene_overlay_persists_and_active_scene_merges_without_scene_file_write(tmp_path, monkeypatch):
+    """Runtime scene facts live in session overlays; active scene reads return the merged view."""
+    _setup_data_dir(tmp_path, monkeypatch)
+    session = load_session()
+    overlay = get_runtime_scene_overlay(session, "frontier_gate")
+    overlay["visible_facts_add"].append("A new runtime-only omen hangs over the gate.")
+    save_session(session)
+
+    canon = st.load_scene("frontier_gate")
+    assert "A new runtime-only omen hangs over the gate." not in canon["scene"]["visible_facts"]
+
+    effective = load_active_scene()
+    assert "A new runtime-only omen hangs over the gate." in effective["scene"]["visible_facts"]
+    assert not effective.get("_is_canon")
+
+
+def test_loaded_canon_scene_is_marked_and_rejected_by_mutation_guard(tmp_path, monkeypatch):
+    _setup_data_dir(tmp_path, monkeypatch)
+    canon = st.load_scene("frontier_gate")
+
+    assert canon.get("_is_canon") is True
+    with pytest.raises(RuntimeError, match="Canonical scene mutation attempted"):
+        assert_canon_immutable(canon)
+    with pytest.raises(RuntimeError, match="Canonical scene mutation attempted"):
+        st.save_scene(canon)
 
 
 def test_world_flags_persist_across_save_load(tmp_path, monkeypatch):

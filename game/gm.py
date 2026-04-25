@@ -22,7 +22,7 @@ from game.prompt_context import (
     canonical_interaction_target_npc_id,
 )
 from game.storage import (
-    load_scene,
+    get_effective_scene,
     load_log,
     get_scene_runtime,
     SCENE_MOMENTUM_KINDS,
@@ -4329,7 +4329,7 @@ def collect_narration_context_call_kwargs(
     """Collect keyword arguments for :func:`game.prompt_context.build_narration_context` (shared with API bundle seam)."""
     active_id = (session.get("active_scene_id") or "").strip()
     if active_id:
-        scene = load_scene(active_id)
+        scene = get_effective_scene(session, active_id)
 
     if session.get("chat_history") == []:
         recent_log_for_prompt: List[Dict[str, Any]] = []

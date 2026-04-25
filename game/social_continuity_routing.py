@@ -324,9 +324,9 @@ def apply_explicit_non_social_commitment_break(
     sid = str(scene_id or "").strip()
     env = scene_envelope
     if env is None and sid:
-        from game.storage import load_scene
+        from game.storage import get_effective_scene
 
-        env = load_scene(sid)
+        env = get_effective_scene(session or {}, sid)
 
     should, reason = should_break_social_commitment_for_input(
         session,

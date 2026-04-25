@@ -124,13 +124,13 @@ def _auth_after_social_promotion_binding(
 
 
 def _scene_envelope_for_strict_social(session: Dict[str, Any] | None, scene_id: str) -> Dict[str, Any] | None:
-    """Load persisted scene JSON and overlay live ``session.scene_state`` (active_entities scope)."""
+    """Load effective scene state and overlay live ``session.scene_state`` (active_entities scope)."""
     sid = str(scene_id or "").strip()
     if not sid:
         return None
-    from game.storage import load_scene
+    from game.storage import get_effective_scene
 
-    env = load_scene(sid)
+    env = get_effective_scene(session or {}, sid)
     if not isinstance(env, dict):
         return None
     out = dict(env)

@@ -15,7 +15,8 @@ playthrough fields via ``game.world.reset_world_playthrough_state`` (see
 ``game.campaign_reset.apply_new_campaign_hard_reset``).
 
 ``load_scene`` reads scene templates only from disk; session stores playthrough
-progress (``scene_runtime``, clocks, etc.), never a copy of the scene JSON.
+progress (``runtime_scene_overlays``, ``scene_runtime``, clocks, etc.), never a
+copy of the scene JSON.
 """
 from __future__ import annotations
 from pathlib import Path
@@ -300,6 +301,7 @@ def load_conditions() -> Dict[str, Any]:
 
 
 def load_scene(scene_id: str) -> Dict[str, Any]:
+    """Load authored campaign canon only; gameplay logic should use ``get_effective_scene``."""
     scene = _load_json(scene_path(scene_id), default_scene(scene_id))
     # Backward-compatible normalization: older scenes may not have discoverable_clues.
     scene.setdefault('scene', {})
@@ -312,16 +314,32 @@ def load_scene(scene_id: str) -> Dict[str, Any]:
     scene['scene'].setdefault('interactables', [])
     # Optional objects (id, label?, type?) for auto-generated affordances
     scene['scene'].setdefault('objects', [])
+    scene["_is_canon"] = True
     return scene
 
 
+load_canon_scene = load_scene
+
+
+def assert_canon_immutable(scene: Dict[str, Any]) -> None:
+    if isinstance(scene, dict) and scene.get("_is_canon"):
+        raise RuntimeError("Canonical scene mutation attempted")
+
+
 def save_scene(scene: Dict[str, Any]) -> None:
+    assert_canon_immutable(scene)
     _save_json(scene_path(scene['scene']['id']), scene)
 
 
 def load_active_scene() -> Dict[str, Any]:
     session = load_session()
-    return load_scene(session['active_scene_id'])
+    scene_id = session['active_scene_id']
+    return get_effective_scene(session, scene_id)
+
+
+def get_effective_scene(session: Dict[str, Any], scene_id: str) -> Dict[str, Any]:
+    """Load canon and merge the session runtime overlay; required for gameplay logic."""
+    return build_effective_scene(load_scene(scene_id), get_runtime_scene_overlay(session, scene_id))
 
 
 def activate_scene(scene_id: str) -> Dict[str, Any]:
@@ -416,6 +434,10 @@ def _validate_runtime_coherency_structural() -> None:
                 f"session.scene_state.active_scene_id is not a known scene id: {ssid}"
             )
 
+    overlays = session.get("runtime_scene_overlays")
+    if overlays is not None and not isinstance(overlays, dict):
+        raise RuntimePersistenceCoherencyError("session.runtime_scene_overlays must be an object when present")
+
     # Minimal combat structure: ensure in_combat is a bool when present.
     if "in_combat" in combat and not isinstance(combat.get("in_combat"), bool):
         raise RuntimePersistenceCoherencyError("combat.in_combat must be a bool when present")
@@ -430,6 +452,99 @@ def _ensure_scene_runtime_root(session: Dict[str, Any]) -> Dict[str, Any]:
     if 'scene_runtime' not in session or not isinstance(session['scene_runtime'], dict):
         session['scene_runtime'] = {}
     return session['scene_runtime']
+
+
+def _ensure_runtime_scene_overlay_root(session: Dict[str, Any]) -> Dict[str, Any]:
+    if 'runtime_scene_overlays' not in session or not isinstance(session['runtime_scene_overlays'], dict):
+        session['runtime_scene_overlays'] = {}
+    return session['runtime_scene_overlays']
+
+
+def _default_runtime_scene_overlay(scene_id: str) -> Dict[str, Any]:
+    return {
+        "scene_id": scene_id,
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {},
+    }
+
+
+def _ensure_runtime_scene_overlay_shape(overlay: Dict[str, Any], scene_id: str) -> Dict[str, Any]:
+    overlay["scene_id"] = str(overlay.get("scene_id") or scene_id).strip() or scene_id
+    if not isinstance(overlay.get("visible_facts_add"), list):
+        overlay["visible_facts_add"] = []
+    if not isinstance(overlay.get("discovered_clues"), list):
+        overlay["discovered_clues"] = []
+    if not isinstance(overlay.get("state_flags"), dict):
+        overlay["state_flags"] = {}
+    if not isinstance(overlay.get("runtime_entities"), list):
+        overlay["runtime_entities"] = []
+    if not isinstance(overlay.get("mutations"), dict):
+        overlay["mutations"] = {}
+    return overlay
+
+
+def get_runtime_scene_overlay(session: Dict[str, Any], scene_id: str) -> Dict[str, Any]:
+    """Return mutable runtime overlay for *scene_id*, creating the canonical shape if missing."""
+    sid = str(scene_id or "").strip()
+    if not sid:
+        raise ValueError("scene_id must be a non-empty string")
+    root = _ensure_runtime_scene_overlay_root(session)
+    overlay = root.get(sid)
+    if not isinstance(overlay, dict):
+        overlay = _default_runtime_scene_overlay(sid)
+        root[sid] = overlay
+    return _ensure_runtime_scene_overlay_shape(overlay, sid)
+
+
+def _dedupe_preserve_order(items: List[Any]) -> List[Any]:
+    out: List[Any] = []
+    seen: set[str] = set()
+    for item in items:
+        key = json.dumps(item, sort_keys=True, default=str) if isinstance(item, (dict, list)) else str(item)
+        if key in seen:
+            continue
+        seen.add(key)
+        out.append(copy.deepcopy(item))
+    return out
+
+
+def _merged_list(base: Any, additions: Any) -> List[Any]:
+    base_list = base if isinstance(base, list) else []
+    add_list = additions if isinstance(additions, list) else []
+    return _dedupe_preserve_order(list(base_list) + list(add_list))
+
+
+def build_effective_scene(canon_scene: Dict[str, Any], overlay: Dict[str, Any]) -> Dict[str, Any]:
+    """Return a merged scene view without mutating the canon scene or overlay."""
+    effective = copy.deepcopy(canon_scene if isinstance(canon_scene, dict) else {})
+    effective.pop("_is_canon", None)
+    scene = effective.setdefault("scene", {})
+    if not isinstance(scene, dict):
+        effective["scene"] = {}
+        scene = effective["scene"]
+
+    ov = _ensure_runtime_scene_overlay_shape(copy.deepcopy(overlay or {}), str(scene.get("id") or ""))
+    mutations = ov.get("mutations") if isinstance(ov.get("mutations"), dict) else {}
+
+    scene["visible_facts"] = _merged_list(scene.get("visible_facts"), ov.get("visible_facts_add"))
+    scene["discovered_clues"] = _merged_list(scene.get("discovered_clues"), ov.get("discovered_clues"))
+    scene["runtime_entities"] = _merged_list(scene.get("runtime_entities"), ov.get("runtime_entities"))
+
+    discoverable_add = mutations.get("discoverable_clues_add") if isinstance(mutations, dict) else None
+    if discoverable_add is not None:
+        scene["discoverable_clues"] = _merged_list(scene.get("discoverable_clues"), discoverable_add)
+    hidden_add = mutations.get("hidden_facts_add") if isinstance(mutations, dict) else None
+    if hidden_add is not None:
+        scene["hidden_facts"] = _merged_list(scene.get("hidden_facts"), hidden_add)
+    if isinstance(mutations, dict) and isinstance(mutations.get("mode"), str) and mutations["mode"].strip():
+        scene["mode"] = mutations["mode"].strip()
+
+    if ov.get("state_flags"):
+        scene["state_flags"] = {**(scene.get("state_flags") if isinstance(scene.get("state_flags"), dict) else {}), **ov["state_flags"]}
+    return effective
 
 
 def get_interaction_context(session: Dict[str, Any]) -> Dict[str, Any]:
@@ -499,7 +614,12 @@ def get_scene_runtime(session: Dict[str, Any], scene_id: str) -> Dict[str, Any]:
     if not isinstance(scene_rt, dict):
         scene_rt = {}
         root[scene_id] = scene_rt
-    scene_rt.setdefault('discovered_clues', [])
+    overlay = get_runtime_scene_overlay(session, scene_id)
+    existing_clues = scene_rt.get('discovered_clues')
+    if isinstance(existing_clues, list):
+        for clue in existing_clues:
+            _add_unique_to_list(overlay['discovered_clues'], clue)
+    scene_rt['discovered_clues'] = overlay['discovered_clues']
     scene_rt.setdefault('discovered_clue_ids', [])  # Structured clue ids for world progression
     scene_rt.setdefault('pending_leads', [])
     scene_rt.setdefault('revealed_hidden_facts', [])
@@ -866,13 +986,21 @@ def get_save_summary() -> Dict[str, Any]:
     character = load_character()
     log_entries = load_log()
 
-    # Aggregate discovered clues across all scene runtimes (discovered_clues only; ids overlap)
+    # Aggregate discovered clues across scene overlays first; legacy scene_runtime is a fallback.
     discovered_total = 0
-    rt = session.get('scene_runtime') or {}
-    if isinstance(rt, dict):
-        for scene_rt in rt.values():
-            if isinstance(scene_rt, dict):
-                discovered_total += len(scene_rt.get('discovered_clues') or [])
+    overlay_rt = session.get('runtime_scene_overlays') or {}
+    if isinstance(overlay_rt, dict):
+        for overlay in overlay_rt.values():
+            if isinstance(overlay, dict):
+                discovered_total += len(overlay.get('discovered_clues') or [])
+    if discovered_total == 0:
+        rt = session.get('scene_runtime') or {}
+        if isinstance(rt, dict):
+            for scene_rt in rt.values():
+                if isinstance(scene_rt, dict):
+                    discovered_total += len(scene_rt.get('discovered_clues') or [])
+    else:
+        rt = session.get('scene_runtime') or {}
 
     ws = _ensure_world_state(world)
     flags_count = len(ws.get('flags') or {})

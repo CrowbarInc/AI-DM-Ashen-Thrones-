@@ -384,7 +384,7 @@ def promote_scene_actor_to_npc(
     On failure returns ``{\"ok\": False, \"error\", \"message\", \"scene_id\", \"actor_id\"}``.
     """
     from game.interaction_context import canonical_scene_addressable_roster
-    from game.storage import load_scene, get_scene_state
+    from game.storage import get_effective_scene, get_scene_state
     from game.world import get_world_npc_by_id, upsert_world_npc
 
     def _fail(code: str, message: str) -> Dict[str, Any]:
@@ -414,7 +414,7 @@ def promote_scene_actor_to_npc(
 
     get_scene_state(session)
 
-    env = load_scene(sid)
+    env = get_effective_scene(session, sid)
     roster = canonical_scene_addressable_roster(world, sid, scene_envelope=env, session=session)
     row = _find_roster_row(roster, aid)
 
@@ -524,7 +524,7 @@ def should_promote_scene_actor(
 ) -> bool:
     """Return True if *actor_id* is a promotable roster actor not yet bound to a world NPC row."""
     from game.interaction_context import canonical_scene_addressable_roster
-    from game.storage import load_scene, get_scene_state
+    from game.storage import get_effective_scene, get_scene_state
 
     if not isinstance(session, dict) or not isinstance(world, dict):
         return False
@@ -535,7 +535,7 @@ def should_promote_scene_actor(
     get_scene_state(session)
     if promoted_npc_id_for_actor(session, world, sid, aid):
         return False
-    env = load_scene(sid)
+    env = get_effective_scene(session, sid)
     roster = canonical_scene_addressable_roster(world, sid, scene_envelope=env, session=session)
     row = _find_roster_row(roster, aid)
     if row is None:
