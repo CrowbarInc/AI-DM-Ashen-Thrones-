@@ -7,10 +7,16 @@ from pathlib import Path
 
 import pytest
 
+import game.scenario_spine_eval as scenario_spine_eval_module
 from game.scenario_spine import scenario_spine_from_dict
 from game.scenario_spine_eval import (
+    SCENARIO_SPINE_IDENTITY_KEYS,
+    TRANSCRIPT_TURN_META_ENVELOPE_KEYS,
+    ensure_transcript_turn_meta_dict,
     evaluate_scenario_spine_branch_divergence,
     evaluate_scenario_spine_session,
+    evaluate_transcript_metadata_completeness,
+    minimal_complete_transcript_turn_meta,
 )
 
 pytestmark = pytest.mark.unit
@@ -43,23 +49,91 @@ def _clean_social_gm(turn_index: int) -> str:
 def _build_clean_social_turns(n: int = 25) -> list[dict]:
     raw = _load_fixture_spine_dict()
     branch = next(b for b in raw["branches"] if b["branch_id"] == "branch_social_inquiry")
+    spine_id = str(raw["spine_id"])
     turns_out: list[dict] = []
     for i in range(n):
+        tid = branch["turns"][i]["turn_id"]
         row = {
             "turn_index": i,
-            "turn_id": branch["turns"][i]["turn_id"],
+            "turn_id": tid,
             "player_prompt": branch["turns"][i]["player_prompt"],
             "gm_text": _clean_social_gm(i),
             "api_ok": True,
+            "meta": minimal_complete_transcript_turn_meta(
+                spine_id=spine_id,
+                branch_id="branch_social_inquiry",
+                turn_id=str(tid),
+                turn_index=i,
+            ),
         }
         turns_out.append(row)
     return turns_out
+
+
+def test_ensure_transcript_turn_meta_dict_fills_envelope_without_dropping_extras() -> None:
+    raw = {
+        "resolution_tag": "x",
+        "narration_seam": {"path_kind": "test"},
+        "scenario_spine": {"spine_id": "s1", "custom": 42},
+    }
+    out = ensure_transcript_turn_meta_dict(raw)
+    assert out is not None
+    for k in TRANSCRIPT_TURN_META_ENVELOPE_KEYS:
+        assert k in out
+    assert out["resolution_tag"] == "x"
+    assert out["opening_convergence"] is None
+    ss = out["scenario_spine"]
+    assert ss.get("spine_id") == "s1"
+    assert ss.get("custom") == 42
+    assert "branch_id" in ss
+
+
+def test_normalize_turn_row_preserves_meta_envelope() -> None:
+    raw = _load_fixture_spine_dict()
+    branch = next(b for b in raw["branches"] if b["branch_id"] == "branch_social_inquiry")
+    meta = {
+        "narration_seam": None,
+        "opening_convergence": {},
+        "response_type_contract": None,
+        "final_emission_meta": None,
+        "planner_convergence": None,
+        "scenario_spine": {
+            "spine_id": "frontier_gate_long_session",
+            "branch_id": "branch_social_inquiry",
+            "turn_id": branch["turns"][0]["turn_id"],
+            "turn_index": 0,
+            "smoke": False,
+            "max_turns": None,
+            "resume_entry_first_turn": False,
+            "artifact_schema_version": 1,
+            "note": "preserved",
+        },
+    }
+    row = {
+        "turn_index": 0,
+        "turn_id": branch["turns"][0]["turn_id"],
+        "player_prompt": branch["turns"][0]["player_prompt"],
+        "gm_text": _clean_social_gm(0),
+        "api_ok": True,
+        "meta": meta,
+    }
+    norm = scenario_spine_eval_module._normalize_turn_row(0, row)
+    nm = norm.get("meta")
+    assert nm is not None
+    for k in TRANSCRIPT_TURN_META_ENVELOPE_KEYS:
+        assert k in nm
+    assert nm["scenario_spine"].get("note") == "preserved"
 
 
 def test_clean_social_investigation_session_passes() -> None:
     spine = scenario_spine_from_dict(_load_fixture_spine_dict())
     turns = _build_clean_social_turns(25)
     result = evaluate_scenario_spine_session(spine, "social_investigation", turns)
+    assert result["session_health"]["metadata_completeness_passed"] is True
+    assert result["session_health"]["turns_missing_meta"] == 0
+    assert not any(
+        isinstance(f, dict) and f.get("axis") == "scenario_spine_metadata" for f in result["detected_failures"]
+    )
     assert result["degradation_over_time"]["progressive_degradation_detected"] is False
     assert result["session_health"]["overall_passed"] is True
     assert result["session_health"]["classification"] == "clean"
@@ -136,13 +210,116 @@ def test_accepts_dict_and_dataclass_spine(spine_kind: str) -> None:
 
 def test_minimal_player_text_gm_text_rows() -> None:
     spine = scenario_spine_from_dict(_load_fixture_spine_dict())
+    sid = spine.spine_id
     turns = [
-        {"player_text": "I read the notice.", "gm_text": _clean_social_gm(0)},
-        {"player_text": "I ask after the patrol.", "gm_text": _clean_social_gm(1)},
+        {
+            "player_text": "I read the notice.",
+            "gm_text": _clean_social_gm(0),
+            "meta": minimal_complete_transcript_turn_meta(
+                spine_id=sid,
+                branch_id="branch_social_inquiry",
+                turn_id="idx_0",
+                turn_index=0,
+            ),
+        },
+        {
+            "player_text": "I ask after the patrol.",
+            "gm_text": _clean_social_gm(1),
+            "meta": minimal_complete_transcript_turn_meta(
+                spine_id=sid,
+                branch_id="branch_social_inquiry",
+                turn_id="idx_1",
+                turn_index=1,
+            ),
+        },
     ]
     result = evaluate_scenario_spine_session(spine, "branch_social_inquiry", turns)
     assert result["turn_count"] == 2
     assert "axes" in result
+    assert result["session_health"]["metadata_completeness_passed"] is True
+
+
+def test_metadata_completeness_missing_meta_key_fails() -> None:
+    spine = scenario_spine_from_dict(_load_fixture_spine_dict())
+    turns = _build_clean_social_turns(1)
+    del turns[0]["meta"]
+    out = evaluate_transcript_metadata_completeness(turns)
+    assert out["metadata_completeness_passed"] is False
+    assert out["turns_checked"] == 1
+    assert out["turns_missing_meta"] == 1
+    assert out["missing_by_key"]["narration_seam"] == 1
+    assert out["first_missing_turn_by_key"]["narration_seam"] == 0
+
+    ev = evaluate_scenario_spine_session(spine, "branch_social_inquiry", turns)
+    assert ev["session_health"]["metadata_completeness_passed"] is False
+    assert any(
+        isinstance(f, dict)
+        and f.get("axis") == "scenario_spine_metadata"
+        and f.get("code") == "scenario_spine_metadata_missing"
+        for f in ev["detected_failures"]
+    )
+    assert ev["session_health"]["score"] == 100
+
+
+def test_metadata_completeness_missing_envelope_key_counts() -> None:
+    spine = scenario_spine_from_dict(_load_fixture_spine_dict())
+    base = minimal_complete_transcript_turn_meta(
+        spine_id=spine.spine_id,
+        branch_id="branch_social_inquiry",
+        turn_id="t0",
+        turn_index=0,
+    )
+    del base["planner_convergence"]
+    turns = [{**_build_clean_social_turns(1)[0], "meta": base}]
+    out = evaluate_transcript_metadata_completeness(turns)
+    assert out["metadata_completeness_passed"] is False
+    assert out["missing_by_key"]["planner_convergence"] == 1
+    assert out["first_missing_turn_by_key"]["planner_convergence"] == 0
+
+
+def test_metadata_completeness_missing_scenario_spine_identity_key() -> None:
+    spine = scenario_spine_from_dict(_load_fixture_spine_dict())
+    base = minimal_complete_transcript_turn_meta(
+        spine_id=spine.spine_id,
+        branch_id="branch_social_inquiry",
+        turn_id="t0",
+        turn_index=0,
+    )
+    ss = dict(base["scenario_spine"])
+    del ss["artifact_schema_version"]
+    base["scenario_spine"] = ss
+    turns = [{**_build_clean_social_turns(1)[0], "meta": base}]
+    out = evaluate_transcript_metadata_completeness(turns)
+    assert out["metadata_completeness_passed"] is False
+    assert out["missing_scenario_spine_identity_by_key"]["artifact_schema_version"] == 1
+    assert out["first_missing_turn_by_scenario_spine_identity_key"]["artifact_schema_version"] == 0
+
+
+def test_metadata_completeness_envelope_key_present_null_passes() -> None:
+    spine = scenario_spine_from_dict(_load_fixture_spine_dict())
+    base = minimal_complete_transcript_turn_meta(
+        spine_id=spine.spine_id,
+        branch_id="branch_social_inquiry",
+        turn_id="t0",
+        turn_index=0,
+    )
+    base["final_emission_meta"] = None
+    base["scenario_spine"] = {k: None for k in SCENARIO_SPINE_IDENTITY_KEYS}
+    turns = [{**_build_clean_social_turns(1)[0], "meta": base}]
+    out = evaluate_transcript_metadata_completeness(turns)
+    assert out["metadata_completeness_passed"] is True
+    assert sum(out["missing_by_key"].values()) == 0
+    assert sum(out["missing_scenario_spine_identity_by_key"].values()) == 0
+
+
+def test_metadata_normalized_row_does_not_hide_source_absence() -> None:
+    """``ensure_transcript_turn_meta_dict`` returns None when source has no meta mapping; completeness still sees the omission on the raw row."""
+    raw_row = {**_build_clean_social_turns(1)[0]}
+    del raw_row["meta"]
+    norm = scenario_spine_eval_module._normalize_turn_row(0, raw_row)
+    assert norm["meta"] is None
+    mc = evaluate_transcript_metadata_completeness([raw_row])
+    assert mc["metadata_completeness_passed"] is False
 
 
 def test_output_is_json_serializable() -> None:

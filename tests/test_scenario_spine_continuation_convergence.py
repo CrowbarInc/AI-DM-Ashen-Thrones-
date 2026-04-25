@@ -9,7 +9,11 @@ from typing import Any, Mapping
 import pytest
 
 from game.scenario_spine import scenario_spine_from_dict
-from game.scenario_spine_eval import evaluate_continuation_convergence_for_turn_rows, evaluate_scenario_spine_session
+from game.scenario_spine_eval import (
+    evaluate_continuation_convergence_for_turn_rows,
+    evaluate_scenario_spine_session,
+    minimal_complete_transcript_turn_meta,
+)
 
 pytestmark = pytest.mark.unit
 
@@ -56,13 +60,20 @@ def _row(
     }
     if continuation is not None:
         seam["continuation"] = dict(continuation)
+    meta = minimal_complete_transcript_turn_meta(
+        spine_id="frontier_gate_long_session",
+        branch_id="branch_social_inquiry",
+        turn_id=str(turn_id),
+        turn_index=int(turn_index),
+    )
+    meta["narration_seam"] = seam
     return {
         "turn_index": turn_index,
         "turn_id": turn_id,
         "player_text": "p",
         "gm_text": gm_text,
         "api_ok": True,
-        "meta": {"narration_seam": seam},
+        "meta": meta,
     }
 
 

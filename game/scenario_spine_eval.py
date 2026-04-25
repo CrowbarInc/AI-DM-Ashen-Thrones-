@@ -8,9 +8,207 @@ from typing import Any, Mapping, Sequence
 from game.scenario_spine import ScenarioSpine, scenario_spine_from_dict
 from game.scenario_spine_opening_convergence import evaluate_opening_convergence_for_turn_rows
 
+# Stable per-turn transcript metadata envelope (scenario-spine validation + offline eval).
+TRANSCRIPT_TURN_META_ENVELOPE_KEYS: tuple[str, ...] = (
+    "narration_seam",
+    "opening_convergence",
+    "response_type_contract",
+    "final_emission_meta",
+    "planner_convergence",
+    "scenario_spine",
+)
+SCENARIO_SPINE_IDENTITY_KEYS: tuple[str, ...] = (
+    "spine_id",
+    "branch_id",
+    "turn_id",
+    "turn_index",
+    "smoke",
+    "max_turns",
+    "resume_entry_first_turn",
+    "artifact_schema_version",
+)
+
 # ---------------------------------------------------------------------------
 # Public API
 # ---------------------------------------------------------------------------
+
+
+def ensure_transcript_turn_meta_dict(meta: Any) -> dict[str, Any] | None:
+    """Return JSON-friendly meta with required envelope keys preserved (never drop runner fields).
+
+    If *meta* is not a mapping, returns None (legacy rows without metadata).
+    """
+    if not isinstance(meta, Mapping):
+        return None
+    base: dict[str, Any] = {str(k): meta[k] for k in sorted(meta, key=str)}
+    for k in TRANSCRIPT_TURN_META_ENVELOPE_KEYS:
+        base.setdefault(k, None)
+    ss_raw = base.get("scenario_spine")
+    if isinstance(ss_raw, Mapping):
+        ss2: dict[str, Any] = {str(k): ss_raw[k] for k in sorted(ss_raw, key=str)}
+        for sk in SCENARIO_SPINE_IDENTITY_KEYS:
+            ss2.setdefault(sk, None)
+        base["scenario_spine"] = {str(k): ss2[k] for k in sorted(ss2, key=str)}
+    else:
+        base["scenario_spine"] = {sk: None for sk in SCENARIO_SPINE_IDENTITY_KEYS}
+    return base
+
+
+def minimal_complete_transcript_turn_meta(
+    *,
+    spine_id: str,
+    branch_id: str,
+    turn_id: str,
+    turn_index: int,
+    smoke: bool = False,
+    max_turns: int | None = None,
+    resume_entry_first_turn: bool = False,
+    artifact_schema_version: int = 1,
+) -> dict[str, Any]:
+    """Build a **source**-complete per-turn ``meta`` mapping (all envelope + identity keys present).
+
+    Values may be ``None``; completeness checks key **presence** in the serialized row, not nullability.
+    """
+    ss = {
+        "spine_id": spine_id,
+        "branch_id": branch_id,
+        "turn_id": str(turn_id),
+        "turn_index": int(turn_index),
+        "smoke": bool(smoke),
+        "max_turns": max_turns,
+        "resume_entry_first_turn": bool(resume_entry_first_turn),
+        "artifact_schema_version": int(artifact_schema_version),
+    }
+    return {
+        "narration_seam": None,
+        "opening_convergence": None,
+        "response_type_contract": None,
+        "final_emission_meta": None,
+        "planner_convergence": None,
+        "scenario_spine": ss,
+    }
+
+
+def _turn_index_for_metadata_row(fallback_index: int, raw: Mapping[str, Any]) -> int:
+    tid = raw.get("turn_index")
+    if tid is None:
+        return int(fallback_index)
+    try:
+        return int(tid)
+    except (TypeError, ValueError):
+        return int(fallback_index)
+
+
+def evaluate_transcript_metadata_completeness(
+    raw_turns: Sequence[Mapping[str, Any]],
+) -> dict[str, Any]:
+    """Artifact-level check: required keys must exist on **source** rows (before normalization).
+
+    ``ensure_transcript_turn_meta_dict`` / ``_normalize_turn_row`` fill missing keys with placeholders;
+    this function inspects the original ``meta`` object only so omissions stay visible.
+    """
+    turns_checked = len(raw_turns)
+    missing_by_key: dict[str, int] = {k: 0 for k in TRANSCRIPT_TURN_META_ENVELOPE_KEYS}
+    first_missing_turn_by_key: dict[str, int] = {}
+    missing_ss_by_key: dict[str, int] = {k: 0 for k in SCENARIO_SPINE_IDENTITY_KEYS}
+    first_missing_turn_ss: dict[str, int] = {}
+    turns_with_any_issue: set[int] = set()
+
+    def _bump_envelope_key(key: str, turn_idx: int) -> None:
+        missing_by_key[key] = int(missing_by_key[key]) + 1
+        first_missing_turn_by_key.setdefault(key, int(turn_idx))
+        turns_with_any_issue.add(int(turn_idx))
+
+    def _bump_ss_key(sk: str, turn_idx: int) -> None:
+        missing_ss_by_key[sk] = int(missing_ss_by_key[sk]) + 1
+        first_missing_turn_ss.setdefault(sk, int(turn_idx))
+        turns_with_any_issue.add(int(turn_idx))
+
+    def _all_envelope_missing(turn_idx: int) -> None:
+        for k in TRANSCRIPT_TURN_META_ENVELOPE_KEYS:
+            _bump_envelope_key(k, turn_idx)
+
+    def _all_ss_identity_missing(turn_idx: int) -> None:
+        for sk in SCENARIO_SPINE_IDENTITY_KEYS:
+            _bump_ss_key(sk, turn_idx)
+
+    for i, raw in enumerate(raw_turns):
+        turn_idx = _turn_index_for_metadata_row(i, raw)
+
+        if "meta" not in raw:
+            _all_envelope_missing(turn_idx)
+            _all_ss_identity_missing(turn_idx)
+            continue
+
+        meta_src = raw["meta"]
+        if meta_src is None or not isinstance(meta_src, Mapping):
+            _all_envelope_missing(turn_idx)
+            _all_ss_identity_missing(turn_idx)
+            continue
+
+        meta_m = meta_src
+        for k in TRANSCRIPT_TURN_META_ENVELOPE_KEYS:
+            if k not in meta_m:
+                _bump_envelope_key(k, turn_idx)
+
+        if "scenario_spine" not in meta_m:
+            _all_ss_identity_missing(turn_idx)
+            continue
+
+        ss_raw = meta_m["scenario_spine"]
+        if ss_raw is None or not isinstance(ss_raw, Mapping):
+            _all_ss_identity_missing(turn_idx)
+            continue
+
+        ss_m = ss_raw
+        for sk in SCENARIO_SPINE_IDENTITY_KEYS:
+            if sk not in ss_m:
+                _bump_ss_key(sk, turn_idx)
+
+    turns_missing_meta = len(turns_with_any_issue)
+    passed = turns_missing_meta == 0
+
+    return {
+        "turns_checked": turns_checked,
+        "turns_missing_meta": turns_missing_meta,
+        "missing_by_key": {k: int(missing_by_key[k]) for k in TRANSCRIPT_TURN_META_ENVELOPE_KEYS},
+        "first_missing_turn_by_key": dict(sorted(first_missing_turn_by_key.items(), key=lambda kv: str(kv[0]))),
+        "missing_scenario_spine_identity_by_key": {
+            k: int(missing_ss_by_key[k]) for k in SCENARIO_SPINE_IDENTITY_KEYS
+        },
+        "first_missing_turn_by_scenario_spine_identity_key": dict(
+            sorted(first_missing_turn_ss.items(), key=lambda kv: str(kv[0])),
+        ),
+        "metadata_completeness_passed": passed,
+    }
+
+
+def _default_metadata_completeness_session_health() -> dict[str, Any]:
+    empty_miss = {k: 0 for k in TRANSCRIPT_TURN_META_ENVELOPE_KEYS}
+    empty_ss = {k: 0 for k in SCENARIO_SPINE_IDENTITY_KEYS}
+    return {
+        "turns_checked": 0,
+        "turns_missing_meta": 0,
+        "missing_by_key": empty_miss,
+        "first_missing_turn_by_key": {},
+        "missing_scenario_spine_identity_by_key": empty_ss,
+        "first_missing_turn_by_scenario_spine_identity_key": {},
+        "metadata_completeness_passed": True,
+    }
+
+
+def _metadata_completeness_failure_detail(block: Mapping[str, Any]) -> str:
+    n_miss = int(block.get("turns_missing_meta") or 0)
+    fb = block.get("first_missing_turn_by_key") or {}
+    first_env = min(fb.values()) if fb else None
+    fss = block.get("first_missing_turn_by_scenario_spine_identity_key") or {}
+    first_ss = min(fss.values()) if fss else None
+    parts = [f"{n_miss} turn(s) with metadata gaps"]
+    if first_env is not None:
+        parts.append(f"first envelope gap turn_index={first_env}")
+    if first_ss is not None:
+        parts.append(f"first scenario_spine identity gap turn_index={first_ss}")
+    return "; ".join(parts)
 
 
 def evaluate_scenario_spine_session(
@@ -33,6 +231,7 @@ def evaluate_scenario_spine_session(
         spine=model,
         branch_id=resolved_branch,
         turns=tuple(norm_turns),
+        raw_turns=tuple(turns),
     )
     return ctx.run()
 
@@ -92,12 +291,7 @@ def _normalize_turn_row(turn_index: int, row: Mapping[str, Any]) -> dict[str, An
     elif not isinstance(api_ok, bool):
         api_ok = bool(api_ok)
 
-    meta = row.get("meta")
-    meta_out: dict[str, Any] | None
-    if isinstance(meta, Mapping):
-        meta_out = {str(k): meta[k] for k in sorted(meta, key=str)}
-    else:
-        meta_out = None
+    meta_out = ensure_transcript_turn_meta_dict(row.get("meta"))
 
     return {
         "turn_index": int(turn_index),
@@ -479,6 +673,7 @@ def _error_result(
     turns: Sequence[Mapping[str, Any]],
     detail: str,
 ) -> dict[str, Any]:
+    md_block = evaluate_transcript_metadata_completeness(turns)
     axis_shell = {
         "passed": False,
         "failure_codes": ["eval_aborted"],
@@ -513,6 +708,7 @@ def _error_result(
                 "degradation_detected": False,
                 **_default_opening_convergence_session_health(),
                 **_default_continuation_convergence_session_health(),
+                **md_block,
             },
             "degradation_over_time": empty_deg,
             "axes": {
@@ -522,9 +718,20 @@ def _error_result(
                 "narrative_grounding": axis_shell,
                 "branch_coherence": axis_shell,
             },
-            "detected_failures": [
-                {"axis": "session", "code": "unknown_branch_id", "detail": detail},
-            ],
+            "detected_failures": (
+                [{"axis": "session", "code": "unknown_branch_id", "detail": detail}]
+                + (
+                    [
+                        {
+                            "axis": "scenario_spine_metadata",
+                            "code": "scenario_spine_metadata_missing",
+                            "detail": _metadata_completeness_failure_detail(md_block),
+                        },
+                    ]
+                    if not md_block.get("metadata_completeness_passed", True)
+                    else []
+                )
+            ),
             "warnings": [],
             "checkpoint_results": [],
         },
@@ -948,10 +1155,12 @@ class _EvalContext:
         spine: ScenarioSpine,
         branch_id: str,
         turns: tuple[dict[str, Any], ...],
+        raw_turns: tuple[Mapping[str, Any], ...],
     ) -> None:
         self.spine = spine
         self.branch_id = branch_id
         self.turns = turns
+        self.raw_turns = raw_turns
         self.failures: list[dict[str, Any]] = []
         self.warnings: list[dict[str, Any]] = []
         self.checkpoint_results: list[dict[str, Any]] = []
@@ -1092,6 +1301,8 @@ class _EvalContext:
         )
         overall_passed = classification in ("clean", "warning")
 
+        metadata_block = evaluate_transcript_metadata_completeness(self.raw_turns)
+
         deg_any = bool(degradation_over_time.get("progressive_degradation_detected")) or bool(
             int(degradation_over_time.get("clarity_warning_count", 0))
             + int(degradation_over_time.get("grounding_warning_count", 0))
@@ -1109,7 +1320,18 @@ class _EvalContext:
             "degradation_detected": deg_any,
             **opening_block,
             **continuation_block,
+            **metadata_block,
         }
+
+        detected_failures: list[dict[str, Any]] = list(self.failures)
+        if not metadata_block.get("metadata_completeness_passed", True):
+            detected_failures.append(
+                {
+                    "axis": "scenario_spine_metadata",
+                    "code": "scenario_spine_metadata_missing",
+                    "detail": _metadata_completeness_failure_detail(metadata_block),
+                },
+            )
 
         out: dict[str, Any] = {
             "schema_version": 1,
@@ -1119,7 +1341,7 @@ class _EvalContext:
             "session_health": session_health,
             "degradation_over_time": degradation_over_time,
             "axes": axes,
-            "detected_failures": list(self.failures),
+            "detected_failures": detected_failures,
             "warnings": list(self.warnings),
             "checkpoint_results": list(self.checkpoint_results),
         }

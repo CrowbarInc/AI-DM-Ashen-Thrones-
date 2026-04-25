@@ -8,7 +8,7 @@ from pathlib import Path
 import pytest
 
 from game.scenario_spine import scenario_spine_from_dict
-from game.scenario_spine_eval import evaluate_scenario_spine_session
+from game.scenario_spine_eval import evaluate_scenario_spine_session, minimal_complete_transcript_turn_meta
 from game.scenario_spine_opening_convergence import (
     capture_opening_convergence_meta_from_chat_payload,
     evaluate_opening_convergence_for_turn_rows,
@@ -37,8 +37,22 @@ def _so_campaign() -> dict:
     }
 
 
-def _meta(oc: dict) -> dict:
-    return {"opening_convergence": oc}
+def _meta(
+    oc: dict,
+    *,
+    spine_id: str = "c1a_opening_convergence_paths",
+    branch_id: str = "branch_campaign_start_probe",
+    turn_id: str = "cs_01",
+    turn_index: int = 0,
+) -> dict:
+    m = minimal_complete_transcript_turn_meta(
+        spine_id=spine_id,
+        branch_id=branch_id,
+        turn_id=str(turn_id),
+        turn_index=int(turn_index),
+    )
+    m["opening_convergence"] = oc
+    return m
 
 
 def test_clean_campaign_opening_passes() -> None:
@@ -94,6 +108,8 @@ def test_clean_post_transition_opening_passes() -> None:
                     "planning_session_interaction": {},
                     "scene_opening": so,
                 },
+                branch_id="branch_post_transition_probe",
+                turn_id="pt_01",
             ),
         },
     ]
@@ -122,6 +138,8 @@ def test_clean_resume_entry_opening_passes() -> None:
                     "planning_session_interaction": {"resume_entry": True},
                     "scene_opening": so,
                 },
+                branch_id="branch_resume_entry_probe",
+                turn_id="re_01",
             ),
         },
     ]
@@ -324,6 +342,12 @@ def test_frontier_fixture_clean_session_has_no_opening_observations_by_default()
             "player_text": "p",
             "gm_text": "Cinderwatch Gate district patrol rumor notice board Captain Thoran.",
             "api_ok": True,
+            "meta": minimal_complete_transcript_turn_meta(
+                spine_id=spine.spine_id,
+                branch_id="branch_social_inquiry",
+                turn_id=f"t{i}",
+                turn_index=i,
+            ),
         }
         for i in range(3)
     ]
@@ -362,7 +386,11 @@ def test_repeated_generic_first_line_warning_without_fail_verdict() -> None:
             "player_text": "x",
             "gm_text": f"{shared_first}\nDetail line {i}.",
             "api_ok": True,
-            "meta": _meta({**base_meta, "is_opening_turn": True}),
+            "meta": _meta(
+                {**base_meta, "is_opening_turn": True},
+                turn_index=i,
+                turn_id=f"rep_{i}",
+            ),
         }
         for i in range(3)
     ]

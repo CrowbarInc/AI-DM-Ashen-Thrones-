@@ -93,6 +93,41 @@ Ownership / consumers:
   - Runtime enforcement: `game/narration_seam_guards.py` (`enforce_plan_driven_continuation_invariant`)
   - Offline enforcement for scenario-spine: `game/scenario_spine_eval.py` (`evaluate_continuation_convergence_for_turn_rows`)
 
+### Per-turn transcript metadata envelope (artifact completeness)
+
+The runner records a stable **`meta`** object on each transcript / run-debug turn row. **`evaluate_scenario_spine_session`** reports **`session_health.metadata_completeness`**: deterministic counts of **source** omissions **before** `_normalize_turn_row` / `ensure_transcript_turn_meta_dict` add placeholder keys. That way normalized rows cannot hide missing fields.
+
+**Required top-level keys on each turn’s `meta` mapping** (see `TRANSCRIPT_TURN_META_ENVELOPE_KEYS` in `game/scenario_spine_eval.py`):
+
+- `narration_seam`
+- `opening_convergence`
+- `response_type_contract`
+- `final_emission_meta`
+- `planner_convergence`
+- `scenario_spine`
+
+**Required keys on `meta.scenario_spine`** (`SCENARIO_SPINE_IDENTITY_KEYS`):
+
+- `spine_id`, `branch_id`, `turn_id`, `turn_index`, `smoke`, `max_turns`, `resume_entry_first_turn`, `artifact_schema_version`
+
+**Rules:**
+
+- Missing the **`meta`** key on a turn row, **`meta: null`**, or a non-mapping **`meta`** value → metadata failure for that turn.
+- Missing any of the envelope keys **as keys on the source `meta` object** → failure. A key **present** with value **`null`** does **not** fail (optional nested content may be absent).
+- Missing any **`scenario_spine`** identity key **as a key on the source `scenario_spine` object** → failure. A present key with **`null`** value does **not** fail by itself.
+- **`metadata_completeness_passed`**: `true` only when every checked turn satisfies the above.
+
+**`session_health` fields** (subset): `turns_checked`, `turns_missing_meta` (count of turns with at least one gap), `missing_by_key` (per-envelope-key miss-event counts), `first_missing_turn_by_key`, `missing_scenario_spine_identity_by_key`, `first_missing_turn_by_scenario_spine_identity_key`, `metadata_completeness_passed`.
+
+**Narrative health vs metadata:** Axis scores, **`score`**, **`classification`**, and **`overall_passed`** are driven only by narrative-style failures (continuity, referents, progression, grounding, branch coherence, opening/continuation convergence, API majority, etc.). Metadata gaps are **reported separately**: they append a **`detected_failures`** row with **`axis: "scenario_spine_metadata"`** and **`code: "scenario_spine_metadata_missing"`** for grepability, without changing the numeric narrative score.
+
+**Where to inspect issues:**
+
+- **`transcript.json`** — each `turns[]` row’s **`meta`**: what was persisted as the public artifact (no full `chat_response`).
+- **`run_debug.json`** — same **`meta`** plus **`chat_response`** / `debug_traces` when you need to trace why the API did not emit a field.
+
+**Operator summaries:** `compact_operator_summary.md` (per branch) and **`aggregate_operator_summary.md`** include a compact **Metadata completeness** line / table column derived from the same `session_health` fields.
+
 ## Canonical fixture and branch roles
 
 **File:** `data/validation/scenario_spines/frontier_gate_long_session.json`  
@@ -145,7 +180,7 @@ When you pass **`--all-branches`**, the runner also writes spine-level summaries
 | File | Role |
 |------|------|
 | `aggregate_session_health_summary.json` | Cross-branch JSON: `schema_version`, `spine_id`, `run_timestamp`, `branches_run`, `branch_turn_counts`, `total_executed_turns`, `long_branch_count`, **`coverage_band_met`**, **`all_full_length_branches_passed`**, per-branch `branch_classifications` / `branch_failures` / `branch_warnings`, **`degradation_over_time_by_branch`**, **`branch_divergence`**, and **`aggregate_meta`** (`smoke`, `max_turns`, `coverage_turn_total_long_scripted_branches`, `long_scripted_branch_ids`, `long_targets_complete`, `long_targets_all_passed`). |
-| `aggregate_operator_summary.md` | Operator markdown: branch table (scripted vs executed turns, classification, score, progressive degradation flag), coverage line reflecting `coverage_band_met`, divergence block, per-branch degradation summary, top blocking branch/axis hint. |
+| `aggregate_operator_summary.md` | Operator markdown: branch table (scripted vs executed turns, classification, score, **metadata completeness** pass/fail, opening verdict, progressive degradation flag), coverage line reflecting `coverage_band_met`, divergence block, per-branch degradation summary, top blocking branch/axis hint. |
 
 Per-branch **`session_health_summary.json`** includes evaluator fields such as **`schema_version`**, **`degradation_over_time`** (windowed signals, **`progressive_degradation_detected`**, **`reason_codes`**), and **`session_health`** flags including **`full_length_branch`**, **`scripted_turn_count`**, **`long_session_band`**, and **`degradation_detected`**.
 
@@ -211,7 +246,7 @@ Other useful flags: `--no-reset`, `--artifact-dir PATH`, `--http-timeout SEC` (w
 
 ### `session_health_summary.json`
 
-- **`session_health`:** `overall_passed`, `score`, `classification` (`clean`, `warning`, `degraded`, `failed` — see evaluator `_classify` in `game/scenario_spine_eval.py`). `overall_passed` is true for **`clean`** and **`warning`**. Also **`full_length_branch`**, **`scripted_turn_count`**, **`long_session_band`**, **`degradation_detected`** (any degradation signal presence).
+- **`session_health`:** `overall_passed`, `score`, `classification` (`clean`, `warning`, `degraded`, `failed` — see evaluator `_classify` in `game/scenario_spine_eval.py`). `overall_passed` is true for **`clean`** and **`warning`**. Also **`full_length_branch`**, **`scripted_turn_count`**, **`long_session_band`**, **`degradation_detected`** (any degradation signal presence), and **`metadata_completeness_*`** fields (artifact metadata envelope completeness — separate from narrative **`score`**; see [Per-turn transcript metadata envelope](#per-turn-transcript-metadata-envelope-artifact-completeness)).
 - **`degradation_over_time`:** Early / middle / late window **`signals`**, **`progressive_degradation_detected`**, and **`reason_codes`** — use for “session got worse over time” triage without subjective scoring.
 - **`axes`:** Per-axis `passed`, `failure_codes`, `warning_codes` for: `state_continuity`, `referent_persistence`, `world_project_progression`, `narrative_grounding`, `branch_coherence`.
 - **`detected_failures` / `warnings`:** List of `{axis, code, detail, ...}` entries — primary list for triage.
@@ -228,7 +263,7 @@ Other useful flags: `--no-reset`, `--artifact-dir PATH`, `--http-timeout SEC` (w
 
 ### `compact_operator_summary.md` / `aggregate_operator_summary.md`
 
-- Quick operator pass: classification, axis table (per branch), **C1-A opening convergence** (verdict, counts, capped failure table), truncated failures/warnings, first failing checkpoint id, suggested next debugging area (single-branch file); aggregate adds coverage and cross-branch divergence/degradation sections.
+- Quick operator pass: classification, axis table (per branch), **metadata completeness** line, **C1-A opening convergence** (verdict, counts, capped failure table), truncated failures/warnings, first failing checkpoint id, suggested next debugging area (single-branch file); aggregate adds coverage and cross-branch divergence/degradation sections.
 
 ## Debugging by evaluator axis
 

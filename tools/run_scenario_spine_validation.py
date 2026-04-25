@@ -30,9 +30,12 @@ from game.scenario_spine import (  # noqa: E402
     validate_scenario_spine_definition,
 )
 from game.scenario_spine_eval import (  # noqa: E402
+    TRANSCRIPT_TURN_META_ENVELOPE_KEYS,
+    ensure_transcript_turn_meta_dict,
     evaluate_scenario_spine_branch_divergence,
     evaluate_scenario_spine_session,
 )
+from game.final_emission_meta import read_final_emission_meta_dict  # noqa: E402
 from game.scenario_spine_opening_convergence import (  # noqa: E402
     capture_opening_convergence_meta_from_chat_payload,
 )
@@ -41,6 +44,7 @@ DEFAULT_SPINE_PATH = ROOT / "data" / "validation" / "scenario_spines" / "frontie
 DEFAULT_ARTIFACT_ROOT = ROOT / "artifacts" / "scenario_spine_validation"
 DEFAULT_BRANCH_ID = "branch_social_inquiry"
 SMOKE_TURN_CAP = 5
+SCENARIO_SPINE_ARTIFACT_SCHEMA_VERSION = 1
 # Cap rows rendered in compact_operator_summary.md for C1-A opening convergence failures.
 _OPENING_CONVERGENCE_FAILURE_TABLE_MAX_ROWS = 12
 
@@ -151,6 +155,113 @@ def _narration_seam_from_chat_payload(payload: Mapping[str, Any]) -> dict[str, A
     return {str(k): seam[k] for k in sorted(seam, key=str)}
 
 
+def _json_safe_shallow_copy(value: Any) -> Any:
+    """Best-effort JSON-safe value for transcript ``meta`` (no exceptions on odd types)."""
+    if value is None or isinstance(value, (bool, int, float, str)):
+        return value
+    if isinstance(value, dict):
+        return {str(k): _json_safe_shallow_copy(v) for k, v in sorted(value.items(), key=lambda kv: str(kv[0]))}
+    if isinstance(value, (list, tuple)):
+        return [_json_safe_shallow_copy(v) for v in value]
+    return str(value)
+
+
+def _gm_metadata_from_payload(payload: Mapping[str, Any]) -> tuple[dict[str, Any] | None, Any]:
+    """Return (metadata dict, raw) for ``gm_output.metadata``; dict is None when absent or non-dict."""
+    gm = payload.get("gm_output")
+    if not isinstance(gm, Mapping):
+        return None, None
+    raw = gm.get("metadata")
+    if raw is None:
+        return None, None
+    if isinstance(raw, dict):
+        return raw, raw
+    return None, raw
+
+
+def _resolution_metadata_dict(payload: Mapping[str, Any]) -> dict[str, Any]:
+    res = payload.get("resolution")
+    if not isinstance(res, Mapping):
+        return {}
+    md = res.get("metadata")
+    return dict(md) if isinstance(md, dict) else {}
+
+
+def build_transcript_turn_meta(
+    payload: Mapping[str, Any],
+    *,
+    spine: ScenarioSpine,
+    branch_id_resolved: str,
+    turn_index: int,
+    turn_id: str,
+    smoke: bool,
+    max_turns: int | None,
+    resume_entry_first_turn: bool,
+) -> dict[str, Any]:
+    """Merge API metadata with a stable per-turn envelope for transcript/run_debug rows."""
+    out: dict[str, Any] = {k: None for k in TRANSCRIPT_TURN_META_ENVELOPE_KEYS}
+    api_md, raw_md = _gm_metadata_from_payload(payload)
+    if isinstance(api_md, dict):
+        for k, v in sorted(api_md.items(), key=lambda kv: str(kv[0])):
+            out[k] = _json_safe_shallow_copy(v)
+
+    res_md = _resolution_metadata_dict(payload)
+    if out.get("response_type_contract") is None:
+        rtc = res_md.get("response_type_contract")
+        if isinstance(rtc, dict):
+            out["response_type_contract"] = _json_safe_shallow_copy(rtc)
+
+    if out.get("narration_seam") is None:
+        seam = _narration_seam_from_chat_payload(payload)
+        if seam is not None:
+            out["narration_seam"] = seam
+
+    if out.get("opening_convergence") is None:
+        out["opening_convergence"] = _json_safe_shallow_copy(
+            capture_opening_convergence_meta_from_chat_payload(payload),
+        )
+
+    if out.get("final_emission_meta") is None:
+        gm = payload.get("gm_output")
+        fem = read_final_emission_meta_dict(gm if isinstance(gm, Mapping) else None)
+        out["final_emission_meta"] = _json_safe_shallow_copy(fem) if fem else None
+
+    if out.get("planner_convergence") is None:
+        pc = None
+        if isinstance(api_md, dict):
+            if isinstance(api_md.get("planner_convergence"), dict):
+                pc = api_md.get("planner_convergence")
+            elif isinstance(api_md.get("planner_convergence_report"), dict):
+                pc = api_md.get("planner_convergence_report")
+        out["planner_convergence"] = _json_safe_shallow_copy(pc) if isinstance(pc, dict) else None
+
+    api_ss = out.get("scenario_spine") if isinstance(out.get("scenario_spine"), dict) else {}
+    runner_ss = {
+        "spine_id": spine.spine_id,
+        "branch_id": branch_id_resolved,
+        "turn_id": str(turn_id),
+        "turn_index": int(turn_index),
+        "smoke": bool(smoke),
+        "max_turns": max_turns,
+        "resume_entry_first_turn": bool(resume_entry_first_turn),
+        "artifact_schema_version": SCENARIO_SPINE_ARTIFACT_SCHEMA_VERSION,
+    }
+    out["scenario_spine"] = _json_safe_shallow_copy({**api_ss, **runner_ss})
+
+    ensured = ensure_transcript_turn_meta_dict(out)
+    return ensured if ensured is not None else out
+
+
+def _gm_metadata_malformed_diagnostic(payload: Mapping[str, Any]) -> str | None:
+    _, raw = _gm_metadata_from_payload(payload)
+    if raw is None or isinstance(raw, dict):
+        return None
+    s = str(raw)
+    if len(s) > 4000:
+        return s[:4000] + "…(truncated)"
+    return s
+
+
 def _resolution_kind(payload: Mapping[str, Any]) -> Any:
     res = payload.get("resolution")
     if isinstance(res, Mapping):
@@ -200,8 +311,41 @@ def _suggested_debug_focus(ev: Mapping[str, Any]) -> str:
         "narrative_grounding": "grounding",
         "branch_coherence": "branch routing",
         "session": "API availability or session wiring",
+        "scenario_spine_metadata": (
+            "per-turn transcript metadata envelope (`transcript.json` / `run_debug.json` → `meta`)"
+        ),
+        "opening_convergence": "C1-A opening convergence (recorded meta.opening_convergence)",
+        "continuation_convergence": "C1-B continuation convergence (recorded meta.narration_seam.continuation)",
     }
     return guide.get(dom, dom)
+
+
+def _metadata_completeness_compact_line(sh: Mapping[str, Any]) -> str:
+    """Single-line operator summary for ``session_health.metadata_completeness_*`` fields."""
+    passed = sh.get("metadata_completeness_passed")
+    checked = int(sh.get("turns_checked") or 0)
+    n_gap = int(sh.get("turns_missing_meta") or 0)
+    fb = sh.get("first_missing_turn_by_key") if isinstance(sh.get("first_missing_turn_by_key"), dict) else {}
+    fss = (
+        sh.get("first_missing_turn_by_scenario_spine_identity_key")
+        if isinstance(sh.get("first_missing_turn_by_scenario_spine_identity_key"), dict)
+        else {}
+    )
+    first_env = min(fb.values()) if fb else None
+    first_ss = min(fss.values()) if fss else None
+    miss = sh.get("missing_by_key") if isinstance(sh.get("missing_by_key"), dict) else {}
+    miss_n = sum(int(v) for v in miss.values()) if miss else 0
+    parts = [
+        "**pass**" if passed else "**fail**",
+        f"checked={checked}",
+        f"turns_with_gaps={n_gap}",
+        f"envelope_key_miss_events={miss_n}",
+    ]
+    if first_env is not None:
+        parts.append(f"first_envelope_gap_turn_index={first_env}")
+    if first_ss is not None:
+        parts.append(f"first_identity_gap_turn_index={first_ss}")
+    return " · ".join(parts)
 
 
 def _opening_convergence_verdict_human(verdict: str) -> str:
@@ -319,6 +463,7 @@ def build_operator_summary_md(
         f"- **Classification:** {classification}",
         f"- **Score:** {score}",
         f"- **Overall passed (evaluator):** {sh.get('overall_passed')}",
+        f"- **Metadata completeness:** {_metadata_completeness_compact_line(sh)}",
         "",
         "## Axes",
         "",
@@ -533,8 +678,8 @@ def build_aggregate_operator_summary_md(
         "",
         "## Branch table",
         "",
-        "| Branch | Scripted turns | Executed turns | Classification | Score | Opening verdict | Degradation (progressive) |",
-        "|--------|----------------|----------------|----------------|-------|-----------------|---------------------------|",
+        "| Branch | Scripted turns | Executed turns | Classification | Score | Metadata | Opening verdict | Degradation (progressive) |",
+        "|--------|----------------|----------------|----------------|-------|----------|-----------------|---------------------------|",
     ]
 
     branches_run = list(aggregate.get("branches_run") or [])
@@ -559,6 +704,15 @@ def build_aggregate_operator_summary_md(
         open_v = sh.get("opening_convergence_verdict", "")
         deg = deg_by.get(bid) if isinstance(deg_by.get(bid), dict) else {}
         prog = deg.get("progressive_degradation_detected", "") if isinstance(deg, dict) else ""
+        meta_cell = (
+            "pass"
+            if sh.get("metadata_completeness_passed") is True
+            else (
+                f"fail (gaps={int(sh.get('turns_missing_meta') or 0)})"
+                if sh.get("metadata_completeness_passed") is False
+                else "—"
+            )
+        )
         lines.append(
             "| "
             + " | ".join(
@@ -568,6 +722,7 @@ def build_aggregate_operator_summary_md(
                     str(executed),
                     _md_cell(cls),
                     _md_cell(score),
+                    _md_cell(meta_cell),
                     _md_cell(open_v),
                     _md_cell(prog),
                 ),
@@ -715,15 +870,35 @@ def run_scenario_spine_branch(
         api_err = payload.get("error")
         res_kind = _resolution_kind(payload)
 
-        meta_safe: dict[str, Any] = {}
+        meta_row = build_transcript_turn_meta(
+            payload,
+            spine=spine,
+            branch_id_resolved=resolved,
+            turn_index=idx,
+            turn_id=st.turn_id,
+            smoke=smoke,
+            max_turns=max_turns,
+            resume_entry_first_turn=resume_entry_first_turn,
+        )
         sc = payload.get("status_code")
         if isinstance(sc, int):
-            meta_safe["status_code"] = sc
-        if isinstance(payload, dict):
-            meta_safe["opening_convergence"] = capture_opening_convergence_meta_from_chat_payload(payload)
-            seam = _narration_seam_from_chat_payload(payload)
-            if seam:
-                meta_safe["narration_seam"] = seam
+            meta_row = ensure_transcript_turn_meta_dict({**meta_row, "status_code": sc}) or meta_row
+
+        malformed_md = _gm_metadata_malformed_diagnostic(payload)
+        debug_row: dict[str, Any] = {
+            "turn_index": idx,
+            "turn_id": st.turn_id,
+            "player_prompt": st.player_prompt,
+            "gm_text": gm_text,
+            "api_ok": api_ok,
+            "api_error": api_err,
+            "resolution_kind": res_kind,
+            "meta": meta_row,
+            "debug_traces": _session_debug_traces(payload),
+            "chat_response": dict(payload) if isinstance(payload, dict) else payload,
+        }
+        if malformed_md is not None:
+            debug_row["gm_metadata_malformed_diagnostic"] = malformed_md
 
         eval_rows.append(
             {
@@ -734,23 +909,10 @@ def run_scenario_spine_branch(
                 "api_ok": api_ok,
                 "api_error": api_err,
                 "resolution_kind": res_kind,
-                "meta": meta_safe,
+                "meta": meta_row,
             },
         )
-        debug_rows.append(
-            {
-                "turn_index": idx,
-                "turn_id": st.turn_id,
-                "player_prompt": st.player_prompt,
-                "gm_text": gm_text,
-                "api_ok": api_ok,
-                "api_error": api_err,
-                "resolution_kind": res_kind,
-                "meta": meta_safe if meta_safe else None,
-                "debug_traces": _session_debug_traces(payload),
-                "chat_response": dict(payload) if isinstance(payload, dict) else payload,
-            },
-        )
+        debug_rows.append(debug_row)
 
     eval_result = evaluate_scenario_spine_session(spine, resolved, eval_rows)
 

@@ -13,6 +13,25 @@ import pytest
 pytestmark = pytest.mark.unit
 
 _ROOT = Path(__file__).resolve().parents[1]
+
+
+def _stub_metadata_session_health_fields(*, passed: bool = True, checked: int = 2, gaps: int = 0) -> dict:
+    from game.scenario_spine_eval import SCENARIO_SPINE_IDENTITY_KEYS, TRANSCRIPT_TURN_META_ENVELOPE_KEYS
+
+    miss = {k: (1 if k == "narration_seam" and not passed else 0) for k in TRANSCRIPT_TURN_META_ENVELOPE_KEYS}
+    if passed:
+        miss = {k: 0 for k in TRANSCRIPT_TURN_META_ENVELOPE_KEYS}
+    fb = {} if passed else {"narration_seam": 0}
+    fss = {} if passed else {}
+    return {
+        "metadata_completeness_passed": passed,
+        "turns_checked": checked,
+        "turns_missing_meta": gaps,
+        "missing_by_key": miss,
+        "first_missing_turn_by_key": fb,
+        "missing_scenario_spine_identity_by_key": {k: 0 for k in SCENARIO_SPINE_IDENTITY_KEYS},
+        "first_missing_turn_by_scenario_spine_identity_key": fss,
+    }
 _TOOL = _ROOT / "tools" / "run_scenario_spine_validation.py"
 _spec = importlib.util.spec_from_file_location("run_scenario_spine_validation_tool", _TOOL)
 assert _spec and _spec.loader
@@ -64,6 +83,7 @@ def test_build_operator_summary_includes_c1a_opening_convergence_section() -> No
             "classification": "clean",
             "score": 100,
             "overall_passed": True,
+            **_stub_metadata_session_health_fields(passed=True, checked=2, gaps=0),
             "opening_turns_checked": 2,
             "opening_plan_backed_count": 2,
             "opening_plan_missing_count": 0,
@@ -94,6 +114,55 @@ def test_build_operator_summary_includes_c1a_opening_convergence_section() -> No
     assert "**Pass**" in md
     assert "Opening turns checked" in md
     assert "Seam hard failures" in md
+    assert "**Metadata completeness:**" in md
+    assert "metadata" in md.lower()
+
+
+def test_build_operator_summary_metadata_completeness_fail_line() -> None:
+    from game.scenario_spine_eval import SCENARIO_SPINE_IDENTITY_KEYS, TRANSCRIPT_TURN_META_ENVELOPE_KEYS
+
+    miss = {k: 0 for k in TRANSCRIPT_TURN_META_ENVELOPE_KEYS}
+    miss["planner_convergence"] = 2
+    eval_result = {
+        "session_health": {
+            "classification": "clean",
+            "score": 100,
+            "overall_passed": True,
+            "metadata_completeness_passed": False,
+            "turns_checked": 5,
+            "turns_missing_meta": 2,
+            "missing_by_key": miss,
+            "first_missing_turn_by_key": {"planner_convergence": 1},
+            "missing_scenario_spine_identity_by_key": {k: 0 for k in SCENARIO_SPINE_IDENTITY_KEYS},
+            "first_missing_turn_by_scenario_spine_identity_key": {},
+            "opening_turns_checked": 0,
+            "opening_plan_backed_count": 0,
+            "opening_plan_missing_count": 0,
+            "opening_invalid_plan_count": 0,
+            "opening_anchor_grounding_failures": 0,
+            "opening_stock_fallback_hits": 0,
+            "opening_resume_entry_checked": 0,
+            "opening_seam_failure_count": 0,
+            "opening_convergence_verdict": "no_observations",
+            "opening_repeated_generic_first_line": False,
+            "opening_convergence_failure_details": [],
+        },
+        "axes": {},
+        "detected_failures": [],
+        "warnings": [],
+    }
+    md = _mod.build_operator_summary_md(
+        spine_id="test_spine",
+        branch_id="branch_x",
+        spine_branch_turns=10,
+        executed_turns=5,
+        scope_label="full",
+        eval_result=eval_result,
+    )
+    assert "**Metadata completeness:**" in md
+    assert "**fail**" in md
+    assert "turns_with_gaps=2" in md
+    assert "first_envelope_gap_turn_index=1" in md
 
 
 def test_build_operator_summary_c1a_failure_table_rows() -> None:
@@ -114,6 +183,7 @@ def test_build_operator_summary_c1a_failure_table_rows() -> None:
             "classification": "failed",
             "score": 10,
             "overall_passed": False,
+            **_stub_metadata_session_health_fields(passed=True, checked=20, gaps=0),
             "opening_turns_checked": 20,
             "opening_plan_backed_count": 0,
             "opening_plan_missing_count": 20,
@@ -173,6 +243,144 @@ def test_artifacts_written_and_session_health_is_evaluator(tmp_path, monkeypatch
     assert ev.get("branch_id") == "branch_direct_intrusion"
     assert "session_health" in ev
     assert "axes" in ev
+    assert ev["session_health"].get("metadata_completeness_passed") is True
+
+    op_md = (run_dir / "compact_operator_summary.md").read_text(encoding="utf-8")
+    assert "**Metadata completeness:**" in op_md
+
+
+def _assert_transcript_meta_envelope(row: dict, *, spine_id: str, branch_id: str, smoke: bool, max_turns, resume: bool) -> None:
+    assert "meta" in row
+    m = row["meta"]
+    assert isinstance(m, dict)
+    for k in _mod.TRANSCRIPT_TURN_META_ENVELOPE_KEYS:
+        assert k in m
+    ss = m["scenario_spine"]
+    assert isinstance(ss, dict)
+    assert ss.get("spine_id") == spine_id
+    assert ss.get("branch_id") == branch_id
+    assert ss.get("turn_id") == row.get("turn_id")
+    assert ss.get("turn_index") == row.get("turn_index")
+    assert ss.get("smoke") is smoke
+    assert ss.get("max_turns") == max_turns
+    assert ss.get("resume_entry_first_turn") is resume
+    assert ss.get("artifact_schema_version") == _mod.SCENARIO_SPINE_ARTIFACT_SCHEMA_VERSION
+
+
+def test_transcript_turn_meta_stable_envelope(tmp_path, monkeypatch) -> None:
+    monkeypatch.setattr(_mod, "apply_new_campaign_hard_reset", lambda: None)
+    spine = _load_spine()
+    br = next(b for b in spine.branches if b.branch_id == "branch_direct_intrusion")
+
+    def chat(_text: str) -> dict:
+        return {"ok": True, "gm_output": {"player_facing_text": "Gate serjeant nods."}}
+
+    run_dir = tmp_path / "env"
+    _mod.run_scenario_spine_branch(
+        spine,
+        br,
+        branch_id_requested=br.branch_id,
+        chat_call=chat,
+        apply_reset=False,
+        smoke=True,
+        max_turns=2,
+        run_dir=run_dir,
+        resume_entry_first_turn=True,
+    )
+    t = json.loads((run_dir / "transcript.json").read_text(encoding="utf-8"))
+    dbg = json.loads((run_dir / "run_debug.json").read_text(encoding="utf-8"))
+    for row in t["turns"]:
+        _assert_transcript_meta_envelope(
+            row,
+            spine_id=spine.spine_id,
+            branch_id=br.branch_id,
+            smoke=True,
+            max_turns=2,
+            resume=True,
+        )
+    for row in dbg["turns_debug"]:
+        _assert_transcript_meta_envelope(
+            row,
+            spine_id=spine.spine_id,
+            branch_id=br.branch_id,
+            smoke=True,
+            max_turns=2,
+            resume=True,
+        )
+        assert "gm_metadata_malformed_diagnostic" not in row
+
+
+def test_transcript_meta_preserves_api_gm_metadata_keys(tmp_path, monkeypatch) -> None:
+    monkeypatch.setattr(_mod, "apply_new_campaign_hard_reset", lambda: None)
+    spine = _load_spine()
+    br = next(b for b in spine.branches if b.branch_id == "branch_cautious_observe")
+
+    def chat(_text: str) -> dict:
+        return {
+            "ok": True,
+            "gm_output": {
+                "player_facing_text": "ok",
+                "metadata": {
+                    "custom_probe": {"x": 1},
+                    "response_type_contract": {"required_response_type": "dialogue"},
+                    "planner_convergence_report": {"ok": True, "probe": "from_api"},
+                    "scenario_spine": {"extra_from_api": "keep_me"},
+                },
+            },
+        }
+
+    run_dir = tmp_path / "preserve"
+    _mod.run_scenario_spine_branch(
+        spine,
+        br,
+        branch_id_requested=br.branch_id,
+        chat_call=chat,
+        apply_reset=False,
+        smoke=True,
+        max_turns=1,
+        run_dir=run_dir,
+    )
+    row = json.loads((run_dir / "transcript.json").read_text(encoding="utf-8"))["turns"][0]
+    m = row["meta"]
+    assert m.get("custom_probe") == {"x": 1}
+    assert m.get("response_type_contract") == {"required_response_type": "dialogue"}
+    assert m.get("planner_convergence") == {"ok": True, "probe": "from_api"}
+    ss = m["scenario_spine"]
+    assert ss.get("extra_from_api") == "keep_me"
+    assert ss.get("spine_id") == spine.spine_id
+    assert ss.get("branch_id") == br.branch_id
+
+
+def test_malformed_gm_metadata_does_not_crash_transcript_json(tmp_path, monkeypatch) -> None:
+    monkeypatch.setattr(_mod, "apply_new_campaign_hard_reset", lambda: None)
+    spine = _load_spine()
+    br = next(b for b in spine.branches if b.branch_id == "branch_cautious_observe")
+
+    def chat(_text: str) -> dict:
+        return {
+            "ok": True,
+            "gm_output": {
+                "player_facing_text": "ok",
+                "metadata": "not-a-dict",
+            },
+        }
+
+    run_dir = tmp_path / "badmd"
+    _mod.run_scenario_spine_branch(
+        spine,
+        br,
+        branch_id_requested=br.branch_id,
+        chat_call=chat,
+        apply_reset=False,
+        smoke=True,
+        max_turns=1,
+        run_dir=run_dir,
+    )
+    row = json.loads((run_dir / "transcript.json").read_text(encoding="utf-8"))["turns"][0]
+    assert isinstance(row["meta"], dict)
+    assert row["meta"]["narration_seam"] is None
+    dbg_row = json.loads((run_dir / "run_debug.json").read_text(encoding="utf-8"))["turns_debug"][0]
+    assert dbg_row.get("gm_metadata_malformed_diagnostic") == "not-a-dict"
 
 
 def test_api_failure_rows_degrade_without_crash(tmp_path, monkeypatch) -> None:
@@ -410,6 +618,7 @@ def test_all_branches_aggregate_artifacts_and_payload(tmp_path, monkeypatch) -> 
     assert "aggregate" in md.lower()
     assert "branch_direct_intrusion" in md
     assert "Divergence" in md
+    assert "| Metadata |" in md
 
     assert agg.get("coverage_band_met") is True
     meta = agg.get("aggregate_meta") or {}
