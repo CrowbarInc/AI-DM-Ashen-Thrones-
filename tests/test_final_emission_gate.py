@@ -37,6 +37,7 @@ import pytest
 
 import game.final_emission_gate as feg
 import game.scene_state_anchoring as ssa
+from game.contract_registry import emergency_fallback_source_ids
 from game.defaults import default_scene, default_session, default_world
 from game.final_emission_gate import apply_final_emission_gate, get_speaker_selection_contract
 from game.narrative_mode_contract import build_narrative_mode_contract
@@ -3703,3 +3704,4 @@ def test_strict_social_narrative_mode_output_enforcement_terminal_fallback(monke
     fem = read_final_emission_meta_dict(out) or {}
     assert fem.get("final_route") == "replaced"
     assert fem.get("final_emitted_source") == "minimal_social_emergency_fallback"
+    assert fem.get("final_emitted_source") in emergency_fallback_source_ids()

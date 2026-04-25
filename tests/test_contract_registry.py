@@ -38,6 +38,7 @@ def test_contract_registry_does_not_import_runtime_heavy_owners() -> None:
     forbidden = (
         "game.prompt_context",
         "game.final_emission_gate",
+        "game.social_exchange_emission",
         "game.narration_plan_bundle",
         "tools.planner_convergence_audit",
         "tests.test_planner_convergence_static_audit",
@@ -51,4 +52,36 @@ def test_contract_registry_does_not_import_runtime_heavy_owners() -> None:
     # Import-light guarantee: importing the registry must not pull these in.
     for name in forbidden:
         assert name not in sys.modules
+
+
+def test_emergency_fallback_registry_constants_and_helpers() -> None:
+    reg = importlib.import_module("game.contract_registry")
+
+    src = reg.EMERGENCY_FALLBACK_SOURCE_IDS
+    kinds = reg.EMERGENCY_FALLBACK_KIND_IDS
+    assert isinstance(src, frozenset)
+    assert isinstance(kinds, frozenset)
+    assert reg.emergency_fallback_source_ids() is src
+    assert reg.emergency_fallback_kind_ids() is kinds
+    assert "" not in src
+    assert "" not in kinds
+    assert all(isinstance(x, str) and x.strip() == x and x for x in src)
+    assert all(isinstance(x, str) and x.strip() == x and x for x in kinds)
+
+    assert {
+        "minimal_social_emergency_fallback",
+        "deterministic_social_fallback",
+        "social_interlocutor_minimal_fallback",
+    }.issubset(src)
+    assert {
+        "emergency_social_minimal",
+        "response_type_contract_social_emergency",
+        "visibility_minimal_social_fallback",
+        "social_interlocutor_fallback",
+        "direct_answer_hint",
+        "interruption",
+        "pressure_refusal",
+        "refusal_evasion",
+        "explicit_ignorance",
+    }.issubset(kinds)
 

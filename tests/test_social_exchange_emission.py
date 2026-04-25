@@ -23,6 +23,7 @@ from game.final_emission_meta import read_final_emission_meta_dict
 
 import game.final_emission_gate as feg
 
+from game.contract_registry import emergency_fallback_source_ids
 from game.defaults import default_session, default_world
 from game.gm import apply_deterministic_retry_fallback, sanitize_player_facing_text
 from game.final_emission_gate import (
@@ -2221,6 +2222,7 @@ def test_build_final_strict_social_rejected_candidate_uses_fallback_without_stoc
     _assert_no_stock_passive_pressure_substrings(low)
     assert meta.get("used_internal_fallback") is True
     assert meta.get("final_emitted_source") in ("deterministic_social_fallback", "minimal_social_emergency_fallback")
+    assert meta.get("final_emitted_source") in emergency_fallback_source_ids()
     assert "runner" in low
     assert '"' in out
 
