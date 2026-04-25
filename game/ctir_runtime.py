@@ -115,6 +115,51 @@ def _slice_resolution(resolution: dict | None) -> dict[str, Any]:
     ncr = resolution.get("noncombat_resolution")
     if isinstance(ncr, dict):
         out["noncombat_resolution"] = ncr
+    # Combat is a first-class engine resolution domain. CTIR carries only a bounded,
+    # prose-free combat summary for downstream deterministic consumers (e.g. narrative plan).
+    c_raw = resolution.get("combat")
+    if isinstance(c_raw, dict) and c_raw:
+        combat_out: dict[str, Any] = {}
+        # Actor/target ids only (names are presentation-level and can drift).
+        actor = c_raw.get("actor")
+        if isinstance(actor, dict):
+            aid = str(actor.get("id") or "").strip()
+            if aid:
+                combat_out["actor_id"] = aid
+        target = c_raw.get("target")
+        if isinstance(target, dict):
+            tid = str(target.get("id") or "").strip()
+            if tid:
+                combat_out["target_id"] = tid
+        # Stable mechanics/effects atoms only.
+        for k in ("combat_phase", "hit", "damage_dealt", "healing_applied", "combat_ended", "winner"):
+            if k in c_raw:
+                combat_out[k] = c_raw.get(k)
+        for k in ("conditions_applied", "conditions_removed"):
+            v = c_raw.get(k)
+            if isinstance(v, (list, tuple)):
+                combat_out[k] = [str(x).strip() for x in list(v)[:32] if isinstance(x, str) and str(x).strip()]
+            elif v is None:
+                combat_out[k] = []
+        # Roll summary: numeric/bool atoms only, bounded key set.
+        rolls = c_raw.get("rolls")
+        if isinstance(rolls, dict) and rolls:
+            roll_out: dict[str, Any] = {}
+            for rk in sorted(str(k) for k in rolls.keys())[:24]:
+                vv = rolls.get(rk)
+                if vv is None or isinstance(vv, (bool, int, float)):
+                    roll_out[rk] = vv
+                elif isinstance(vv, (list, tuple)):
+                    slim = [x for x in list(vv)[:24] if x is None or isinstance(x, (bool, int, float))]
+                    roll_out[rk] = slim
+            if roll_out:
+                combat_out["rolls"] = roll_out
+        # Optional bounded combat turn markers.
+        for k in ("round", "active_actor_id"):
+            if k in c_raw and c_raw.get(k) is not None:
+                combat_out[k] = c_raw.get(k)
+        if combat_out:
+            out["combat"] = combat_out
     if "outcome_type" in resolution:
         out["outcome_type"] = resolution.get("outcome_type")
     if "success" in resolution:
@@ -126,7 +171,14 @@ def _slice_resolution(resolution: dict | None) -> dict[str, Any]:
     elif isinstance(sc, (list, tuple)):
         out["consequences"] = list(sc)[:32]
     auth: dict[str, Any] = {}
-    for k in ("action_id", "target_scene_id", "resolved_transition", "originating_scene_id", "clue_id"):
+    for k in (
+        "action_id",
+        "target_scene_id",
+        "resolved_transition",
+        "originating_scene_id",
+        "clue_id",
+        "interactable_id",
+    ):
         if k in resolution and resolution.get(k) is not None:
             auth[k] = resolution.get(k)
     if auth:
@@ -149,18 +201,29 @@ def _slice_resolution(resolution: dict | None) -> dict[str, Any]:
         out["requires_check"] = bool(resolution.get("requires_check"))
     cr = resolution.get("check_request")
     if isinstance(cr, dict):
-        out["check_request"] = cr
+        slim_cr = ctir.normalize_check_request_slice(cr)
+        if slim_cr:
+            out["check_request"] = slim_cr
     sk = resolution.get("skill_check")
     if isinstance(sk, dict):
-        out["skill_check"] = sk
+        slim_sk = ctir.normalize_skill_check_slice(sk)
+        if slim_sk:
+            out["skill_check"] = slim_sk
     md = resolution.get("metadata")
     if isinstance(md, dict):
         keep = {k: md[k] for k in ("human_adjacent_intent_family", "implicit_focus_resolution") if k in md}
         if keep:
             out["metadata"] = keep
-    for k in ("label", "action_id", "prompt"):
+    # Structural ids on the resolution root (normalize_resolution reads these; omit label/prompt).
+    for k in ("action_id", "target_scene_id", "interactable_id"):
         if k in resolution and resolution.get(k) is not None:
             out[k] = resolution.get(k)
+    rt = resolution.get("resolved_transition")
+    if rt is not None:
+        if isinstance(rt, dict):
+            out["resolved_transition"] = rt
+        else:
+            out["resolved_transition"] = rt
     return out
 
 

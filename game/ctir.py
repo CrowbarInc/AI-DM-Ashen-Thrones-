@@ -62,6 +62,24 @@ _MAX_NONCOMBAT_REASON_CODES = 16
 # ``world.progression`` bounded lists (must stay aligned with :mod:`game.world_progression` caps)
 _MAX_PROGRESSION_LIST = 64
 
+# Dropped from normalized intent (never copied into CTIR ``intent``).
+_INTENT_DROP_TOP_LEVEL_KEYS = frozenset(
+    {
+        "player_prompt",
+        "prompt",
+        "hint",
+        "description",
+        "text",
+        "narration",
+        "narrative",
+        "prose",
+        "story",
+        "reason",
+        "reason_text",
+        "rationale",
+    }
+)
+
 
 def ctir_version() -> int:
     """Return the active CTIR schema version (integer)."""
@@ -143,6 +161,52 @@ def _bounded_mapping(
     return out
 
 
+def normalize_skill_check_slice(raw: Any) -> Dict[str, Any]:
+    """Bounded, prose-free projection of engine ``skill_check`` for CTIR ``resolution.skill_check``."""
+    if not isinstance(raw, Mapping):
+        return {}
+    sk = raw
+    out: Dict[str, Any] = {}
+    for rk in ("skill", "difficulty", "dc", "modifier", "roll", "total", "success"):
+        if rk not in sk:
+            continue
+        vv = sk.get(rk)
+        if vv is None or isinstance(vv, (bool, int, float)):
+            out[rk] = vv
+        elif isinstance(vv, str) and rk == "skill":
+            s = _clip_str(_as_str(vv), max_len=64)
+            if s:
+                out[rk] = s
+    return out
+
+
+def normalize_check_request_slice(raw: Any) -> Dict[str, Any]:
+    """Subset of ``check_request`` safe for CTIR (no ``player_prompt`` or other prose blobs)."""
+    if not isinstance(raw, Mapping):
+        return {}
+    cr = raw
+    out: Dict[str, Any] = {}
+    if "requires_check" in cr:
+        out["requires_check"] = bool(cr.get("requires_check"))
+    for rk in ("check_type", "skill", "reason"):
+        if rk not in cr:
+            continue
+        vv = cr.get(rk)
+        if vv is None or isinstance(vv, (bool, int, float)):
+            out[rk] = vv
+        elif isinstance(vv, str):
+            s = _clip_str(vv.strip(), max_len=96)
+            if s:
+                out[rk] = s
+    if "difficulty" in cr:
+        dv = cr.get("difficulty")
+        if isinstance(dv, (int, float)):
+            out["difficulty"] = int(dv)
+        elif dv is None:
+            out["difficulty"] = None
+    return out
+
+
 def legacy_transitional_noncombat_from_resolution(raw: Mapping[str, Any] | None) -> Dict[str, Any]:
     """Transitional CTIR ``noncombat`` fill when ``resolution["noncombat_resolution"]`` is absent.
 
@@ -181,7 +245,9 @@ def normalize_noncombat_slice(noncombat_resolution: Any) -> Dict[str, Any]:
         out["requires_check"] = bool(nc.get("requires_check"))
     cr = nc.get("check_request")
     if isinstance(cr, Mapping):
-        out["check_request"] = _bounded_mapping(cr, max_depth=3)
+        slim = normalize_check_request_slice(cr)
+        if slim:
+            out["check_request"] = slim
     ot = _as_str(nc.get("outcome_type")) or None
     if ot:
         out["outcome_type"] = ot
@@ -243,7 +309,8 @@ def normalize_noncombat_slice(noncombat_resolution: Any) -> Dict[str, Any]:
 
 def normalize_intent(raw: Mapping[str, Any] | None) -> Dict[str, Any]:
     """Normalize ``intent`` (classifier / routing snapshot; no prose)."""
-    r = raw if isinstance(raw, dict) else {}
+    base = raw if isinstance(raw, dict) else {}
+    r = {k: v for k, v in base.items() if k not in _INTENT_DROP_TOP_LEVEL_KEYS}
     raw_text = _as_str(r.get("raw_text"))
     normalized_kind = _as_str(r.get("normalized_kind")) or None
     mode = _as_str(r.get("mode")) or None
@@ -253,7 +320,7 @@ def normalize_intent(raw: Mapping[str, Any] | None) -> Dict[str, Any]:
     if check_request is not None and not isinstance(check_request, Mapping):
         check_request = _json_safe_atom(check_request)
     elif isinstance(check_request, Mapping):
-        check_request = _bounded_mapping(check_request, max_depth=2)
+        check_request = normalize_check_request_slice(check_request) or None
     else:
         check_request = None
     targets = r.get("targets")
@@ -327,22 +394,29 @@ def normalize_resolution(raw: Mapping[str, Any] | None) -> Dict[str, Any]:
         out["requires_check"] = bool(r.get("requires_check"))
     cr = r.get("check_request")
     if isinstance(cr, Mapping):
-        out["check_request"] = _bounded_mapping(cr, max_depth=3)
+        slim_cr = normalize_check_request_slice(cr)
+        if slim_cr:
+            out["check_request"] = slim_cr
     sk = r.get("skill_check")
     if isinstance(sk, Mapping):
-        out["skill_check"] = _bounded_mapping(sk, max_depth=2)
+        slim_sk = normalize_skill_check_slice(sk)
+        if slim_sk:
+            out["skill_check"] = slim_sk
     md = r.get("metadata")
     if isinstance(md, Mapping):
         out["metadata"] = _bounded_mapping(md, max_depth=2)
-    for atom_key in ("label", "action_id", "resolved_transition", "target_scene_id"):
+    for atom_key in ("action_id", "resolved_transition", "target_scene_id", "interactable_id"):
         if atom_key in r and r.get(atom_key) is not None:
             if atom_key == "resolved_transition" and isinstance(r.get(atom_key), Mapping):
                 out[atom_key] = _bounded_mapping(r[atom_key], max_depth=2)
             else:
                 out[atom_key] = _json_safe_atom(r.get(atom_key))
-    pr = r.get("prompt")
-    if isinstance(pr, str) and pr.strip():
-        out["prompt"] = _clip_str(_as_str(pr))
+
+    # Optional bounded combat summary (prose-free). The runtime seam may embed this
+    # under resolution; CTIR carries it verbatim (bounded) without re-adjudication.
+    combat = r.get("combat")
+    if isinstance(combat, Mapping) and combat:
+        out["combat"] = _bounded_mapping(combat, max_depth=3)
 
     # Canonical non-combat contract overlays resolution semantics when embedded by the runtime seam.
     if nc is not None:
@@ -356,7 +430,9 @@ def normalize_resolution(raw: Mapping[str, Any] | None) -> Dict[str, Any]:
             out["requires_check"] = bool(nc.get("requires_check"))
         cr_nc = nc.get("check_request")
         if isinstance(cr_nc, Mapping):
-            out["check_request"] = _bounded_mapping(cr_nc, max_depth=3)
+            slim_nc = normalize_check_request_slice(cr_nc)
+            if slim_nc:
+                out["check_request"] = slim_nc
         elif not bool(nc.get("requires_check")):
             out.pop("check_request", None)
     return out

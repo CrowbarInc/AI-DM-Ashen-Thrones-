@@ -162,7 +162,11 @@ from game.world_progression import (
     merge_progression_changed_node_signals,
 )
 from game.narrative_mode_contract import NARRATIVE_MODES, validate_narrative_mode_contract
-from game.narrative_planning import NARRATIVE_ROLE_FAMILY_KEYS, validate_narrative_plan
+from game.narrative_planning import (
+    NARRATIVE_ROLE_FAMILY_KEYS,
+    validate_action_outcome_plan_contract,
+    validate_narrative_plan,
+)
 from game.referent_tracking import build_referent_tracking_artifact
 from game.state_channels import (
     assert_no_debug_keys_in_prompt_payload,
@@ -3437,16 +3441,64 @@ def _build_turn_summary(
     user_text: str,
     resolution: Dict[str, Any] | None,
     intent: Dict[str, Any] | None,
+    *,
+    narrative_plan_mode: str | None = None,
+    action_outcome_contract_blocked: bool = False,
 ) -> Dict[str, Any]:
     """Build a compact, structured summary of this turn for narration anchoring."""
+    if action_outcome_contract_blocked:
+        return {
+            "action_outcome_contract_blocked": True,
+            "action_descriptor": None,
+            "resolution_kind": None,
+            "action_id": None,
+            "resolved_prompt": None,
+            "intent_labels": [],
+            "raw_player_input": str(user_text or ""),
+            "raw_player_input_usage": (
+                "action_outcome_contract_failed: do not narrate mechanics from resolution, hints, or rolls; "
+                "use narration_seam_audit / prompt_debug only."
+            ),
+        }
+
     res = resolution if isinstance(resolution, dict) else {}
     res_kind = str(res.get('kind') or '').strip()
     res_label = str(res.get('label') or '').strip()
     res_action_id = str(res.get('action_id') or '').strip()
-    res_prompt = str(res.get('prompt') or '').strip()
+    # ``prompt`` can contain engine hint-like prose for some resolvers; treat it as
+    # non-authoritative and avoid using it as the turn summary anchor when possible.
+    res_prompt = ""
+    if isinstance(res.get("label"), str) and str(res.get("label") or "").strip():
+        res_prompt = ""
+    else:
+        res_prompt = str(res.get('prompt') or '').strip()
 
     labels = intent.get('labels') if isinstance(intent, dict) and isinstance(intent.get('labels'), list) else []
     labels = [str(label).strip() for label in labels if isinstance(label, str) and str(label).strip()]
+
+    _nm = str(narrative_plan_mode or "").strip()
+    if _nm == "action_outcome":
+        # Plan-owned mechanics only; never echo engine hint/prompt/label prose as anchors.
+        if res_kind:
+            descriptor = res_kind.replace('_', ' ')
+            if res_action_id:
+                descriptor = f"{descriptor} ({res_action_id})".strip()
+        elif labels:
+            descriptor = labels[0].replace('_', ' ')
+        else:
+            descriptor = "resolved_action"
+        return {
+            'action_descriptor': descriptor,
+            'resolution_kind': res_kind or None,
+            'action_id': res_action_id or None,
+            'resolved_prompt': None,
+            'intent_labels': labels,
+            'raw_player_input': str(user_text or ''),
+            'raw_player_input_usage': (
+                'Retain for exact wording and disambiguation only. '
+                'Prefer action_descriptor + resolution_kind + mechanical_resolution for narration framing.'
+            ),
+        }
 
     if res_kind:
         descriptor = res_label or res_kind.replace('_', ' ')
@@ -4549,7 +4601,80 @@ def build_narration_context(
         ),
     }
 
-    turn_summary_struct = _build_turn_summary(user_text, resolution_sem, intent_sem)
+    interaction_for_rtc = (
+        interaction_context_snapshot_from_ctir_semantics(interaction_sem)
+        if ctir_obj is not None
+        else response_type_context_snapshot(session if isinstance(session, dict) else None)
+    )
+    _rtc_policy_early = response_policy.get("response_type_contract")
+    if isinstance(_rtc_policy_early, dict):
+        rtc_for_social_structure = _rtc_policy_early
+        rtc_source = "response_policy"
+    else:
+        rtc_peeked = peek_response_type_contract_from_resolution(resolution_sem)
+        rtc_source = "resolution.metadata" if rtc_peeked is not None else "derived"
+        rtc_for_social_structure = rtc_peeked or derive_response_type_contract(
+            segmented_turn=None,
+            normalized_action=None,
+            resolution=resolution_sem if isinstance(resolution_sem, dict) else None,
+            interaction_context=interaction_for_rtc,
+            directed_social_entry=None,
+            route_choice=None,
+            raw_player_text=str(user_text or ""),
+        ).to_dict()
+    _rtc_required = str((rtc_for_social_structure or {}).get("required_response_type") or "").strip().lower()
+
+    _plan_nm = (
+        str((narrative_plan or {}).get("narrative_mode") or "").strip()
+        if isinstance(narrative_plan, dict)
+        else None
+    )
+    _ao_ok, _ao_reasons = validate_action_outcome_plan_contract(
+        narrative_plan if isinstance(narrative_plan, dict) else None,
+        response_type_required=_rtc_required or None,
+    )
+    # Structural action_outcome narration lane follows ``narrative_mode`` only (plan slice may
+    # exist with ``present: false`` under continuation; response_type may still tag emission).
+    _needs_ao_contract = _plan_nm == "action_outcome"
+    # Fail-closed only on the CTIR-backed narration seam; legacy no-CTIR prompts keep prior resolution fallbacks.
+    action_outcome_narration_blocked = bool(ctir_obj is not None and _needs_ao_contract and not _ao_ok)
+    _ao_src_kind = None
+    _ao_deriv_codes: List[str] = []
+    if isinstance(narrative_plan, dict):
+        _ao_blk = narrative_plan.get("action_outcome")
+        if isinstance(_ao_blk, Mapping):
+            _ao_src_kind = _ao_blk.get("source_kind")
+            _dc = _ao_blk.get("derivation_codes")
+            if isinstance(_dc, list):
+                _ao_deriv_codes = [str(x) for x in _dc[:48] if isinstance(x, str) and str(x).strip()]
+    prompt_debug_anchor["action_outcome_contract"] = {
+        "action_outcome_plan_present": bool(
+            isinstance(narrative_plan, dict) and isinstance(narrative_plan.get("action_outcome"), Mapping)
+        ),
+        "action_outcome_plan_valid": bool(_ao_ok),
+        "action_outcome_plan_failure_reasons": list(_ao_reasons),
+        "action_outcome_source_kind": _ao_src_kind,
+        "action_outcome_derivation_codes": _ao_deriv_codes,
+        "required_response_type": _rtc_required or None,
+    }
+    if action_outcome_narration_blocked:
+        _ao_audit = {
+            "action_outcome_contract_blocked": True,
+            "semantic_bypass_blocked": True,
+            "action_outcome_plan_failure_reasons": list(_ao_reasons),
+        }
+        if isinstance(narration_seam_audit, dict):
+            narration_seam_audit = {**narration_seam_audit, **_ao_audit}
+        else:
+            narration_seam_audit = _ao_audit
+
+    turn_summary_struct = _build_turn_summary(
+        user_text,
+        resolution_sem,
+        intent_sem,
+        narrative_plan_mode=_plan_nm,
+        action_outcome_contract_blocked=action_outcome_narration_blocked,
+    )
     _ts_parts = [
         str(turn_summary_struct.get("action_descriptor") or "").strip(),
         str(turn_summary_struct.get("resolution_kind") or "").strip(),
@@ -4630,27 +4755,8 @@ def build_narration_context(
     # Canonical prompt-contract owner path: ``game.prompt_context`` ships this
     # policy in the prompt bundle. The implementation remains delegated to the
     # downstream policy consumer module as compatibility residue only.
-    interaction_for_rtc = (
-        interaction_context_snapshot_from_ctir_semantics(interaction_sem)
-        if ctir_obj is not None
-        else response_type_context_snapshot(session if isinstance(session, dict) else None)
-    )
-    _rtc_policy = response_policy.get("response_type_contract")
-    if isinstance(_rtc_policy, dict):
-        rtc_for_social_structure = _rtc_policy
-        rtc_source = "response_policy"
-    else:
-        rtc_peeked = peek_response_type_contract_from_resolution(resolution_sem)
-        rtc_source = "resolution.metadata" if rtc_peeked is not None else "derived"
-        rtc_for_social_structure = rtc_peeked or derive_response_type_contract(
-            segmented_turn=None,
-            normalized_action=None,
-            resolution=resolution_sem if isinstance(resolution_sem, dict) else None,
-            interaction_context=interaction_for_rtc,
-            directed_social_entry=None,
-            route_choice=None,
-            raw_player_text=str(user_text or ""),
-        ).to_dict()
+    # ``rtc_for_social_structure`` / ``rtc_source`` are resolved earlier (before
+    # ``turn_summary``) for action_outcome contract enforcement.
     social_response_structure_contract = build_social_response_structure_contract(
         rtc_for_social_structure,
         debug_inputs={"scene_id": scene_pub_id or None, "response_type_contract_source": rtc_source},
@@ -4672,13 +4778,21 @@ def build_narration_context(
         interaction_continuity_contract
     )
 
+    _mechanical_for_policy: Dict[str, Any] | None
+    if action_outcome_narration_blocked:
+        _mechanical_for_policy = {}
+    elif _needs_ao_contract and isinstance(narrative_plan, dict) and _ao_ok:
+        _mechanical_for_policy = {"action_outcome": narrative_plan.get("action_outcome")}
+    else:
+        _mechanical_for_policy = resolution if isinstance(resolution, dict) else None
+
     fallback_behavior_contract = build_fallback_behavior_contract(
         session=session if isinstance(session, dict) else None,
         scene=scene if isinstance(scene, dict) else None,
         recent_log=recent_log_compact,
         turn_summary=turn_summary_struct,
-        # CTIR intentionally does not own this; reading canonical state
-        mechanical_resolution=resolution if isinstance(resolution, dict) else None,
+        # Action-outcome readiness: plan-owned structure only; never raw resolution rescue when blocked.
+        mechanical_resolution=_mechanical_for_policy,
         response_type_contract=rtc_for_social_structure if isinstance(rtc_for_social_structure, dict) else None,
         answer_completeness_contract=response_policy.get("answer_completeness"),
         narrative_authority_contract=narrative_authority_contract,
@@ -4870,6 +4984,14 @@ def build_narration_context(
         plan_narrative_mode=_pnm or None,
     )
     instructions = list(instructions) + list(narrative_mode_instruction_lines) + _policy_tail
+    if action_outcome_narration_blocked:
+        _ao_codes = "|".join(str(x) for x in (_ao_reasons or [])[:16])
+        instructions = list(instructions) + [
+            "OPERATOR / AUDIT — ACTION_OUTCOME CONTRACT: narrative_plan.action_outcome is missing or failed validation. "
+            f"Machine-readable codes: {_ao_codes or 'unknown'}. "
+            "narration_seam_audit.semantic_bypass_blocked is true for this turn. "
+            "Do not narrate resolved mechanics, DCs, rolls, damage, or success from player_input, hints, prompts, or raw resolution text.",
+        ]
 
     use_manual_play_compact = _should_use_manual_play_compact_prompt(
         prompt_profile=prompt_profile,
@@ -4975,9 +5097,13 @@ def build_narration_context(
     payload: Dict[str, Any] = {
         'instructions': instructions,
         'narrative_plan': (
-            public_narrative_plan_projection_for_prompt(narrative_plan)
-            if isinstance(narrative_plan, dict) and narrative_plan
-            else None
+            None
+            if action_outcome_narration_blocked
+            else (
+                public_narrative_plan_projection_for_prompt(narrative_plan)
+                if isinstance(narrative_plan, dict) and narrative_plan
+                else None
+            )
         ),
         'speaker_selection': speaker_selection,
         'active_topic_anchor': active_topic_anchor,
@@ -5023,8 +5149,16 @@ def build_narration_context(
         'prompt_debug': prompt_debug_anchor,
         'first_mention_contract': first_mention_contract,
         'discoverable_hinting': True,
-        # CTIR intentionally does not own this; reading canonical state
-        'mechanical_resolution': resolution,
+        # Action-outcome readiness: ship plan ``action_outcome`` only when contract-valid; else seam-closed (no raw rescue).
+        'mechanical_resolution': (
+            None
+            if action_outcome_narration_blocked
+            else (
+                {"action_outcome": narrative_plan.get("action_outcome")}
+                if _needs_ao_contract and isinstance(narrative_plan, dict) and _ao_ok
+                else resolution
+            )
+        ),
         'scene_advancement': scene_advancement,
         'session': session_view,
         'character': {

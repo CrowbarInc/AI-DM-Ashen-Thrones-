@@ -4572,8 +4572,20 @@ def build_messages(
         "actionable": [c for c in known_clues if c.get("presentation") == "actionable"],
     }
 
+    # Action-outcome mode: prompt_context ships plan-owned ``mechanical_resolution.action_outcome`` and
+    # intentionally blocks raw prose-like resolution scaffolding (hint/prompt/label) from becoming a narration bypass.
+    # Keep GM-side convenience hints for continuation mode, but do not forward them into the model payload here.
+    action_outcome_mode = False
+    mech = payload.get("mechanical_resolution")
+    if isinstance(mech, dict) and "action_outcome" in mech:
+        action_outcome_mode = True
+    else:
+        np = payload.get("narrative_plan")
+        if isinstance(np, dict) and str(np.get("narrative_mode") or "").strip().lower() == "action_outcome":
+            action_outcome_mode = True
+
     # Add resolved exploration context when the app has already determined the action.
-    if resolution and isinstance(resolution, dict):
+    if not action_outcome_mode and resolution and isinstance(resolution, dict):
         res_kind = resolution.get('kind')
         if res_kind and res_kind in EXPLORATION_KINDS:
             resolved_action = {
@@ -4640,7 +4652,7 @@ def build_messages(
                         'NEVER decide success or failure yourself. ONLY narrate the authoritative result given.',
                     ]
 
-    if resolution and isinstance(resolution, dict) and resolution.get('hint'):
+    if not action_outcome_mode and resolution and isinstance(resolution, dict) and resolution.get('hint'):
         payload['instructions'] = list(payload['instructions']) + [resolution['hint']]
     return [
         {'role': 'system', 'content': SYSTEM_PROMPT},

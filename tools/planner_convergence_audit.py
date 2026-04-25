@@ -56,6 +56,7 @@ APPROVED_PROMPT_NARRATIVE_PLAN_TOP_KEYS: frozenset[str] = frozenset(
         "allowable_entity_references",
         "narrative_roles",
         "narrative_mode_contract",
+        "action_outcome",
         "scene_opening",
     }
 )

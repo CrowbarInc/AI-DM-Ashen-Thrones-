@@ -137,6 +137,32 @@ def test_optional_absent_vs_malformed_required() -> None:
         )
 
 
+def test_normalize_intent_drops_prose_bearing_top_level_keys_and_slenders_check_request() -> None:
+    ni = ctir.normalize_intent(
+        {
+            "raw_text": "Search the desk",
+            "labels": ["investigate"],
+            "player_prompt": "Describe what they find.",
+            "prompt": "GM hint",
+            "hint": "More hint",
+            "check_request": {
+                "requires_check": True,
+                "check_type": "skill",
+                "skill": "perception",
+                "player_prompt": "Roll perception",
+                "difficulty": 12,
+            },
+        }
+    )
+    assert "player_prompt" not in ni
+    assert "prompt" not in ni
+    assert "hint" not in ni
+    cr = ni.get("check_request")
+    assert isinstance(cr, dict)
+    assert "player_prompt" not in cr
+    assert cr.get("skill") == "perception"
+
+
 def test_accessors_are_deterministic() -> None:
     c = _minimal_ctir()
     assert ctir.get_ctir_section(c, "intent", default=None)["mode"] is None

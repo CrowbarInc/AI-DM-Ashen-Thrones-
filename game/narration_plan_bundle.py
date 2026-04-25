@@ -88,6 +88,9 @@ def public_narrative_plan_projection_for_prompt(full_plan: Mapping[str, Any] | N
     so = full_plan.get("scene_opening")
     if isinstance(so, Mapping) and so:
         out["scene_opening"] = copy.deepcopy(so)
+    ao = full_plan.get("action_outcome")
+    if isinstance(ao, Mapping) and ao:
+        out["action_outcome"] = copy.deepcopy(ao)
     return out if out else None
 
 

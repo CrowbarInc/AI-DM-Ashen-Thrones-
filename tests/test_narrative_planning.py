@@ -14,6 +14,7 @@ from game.narrative_planning import (
     narrative_plan_matches_ctir_derivation,
     narrative_plan_version,
     normalize_narrative_plan,
+    validate_action_outcome_plan_contract,
     validate_narrative_plan,
 )
 
@@ -249,6 +250,165 @@ def test_validate_rejects_banned_nested_key() -> None:
     plan["resolution_meta"] = {"ok": 1, "prompt": "leak"}
     err = validate_narrative_plan(plan, strict=True)
     assert err and "banned" in err
+
+
+def test_action_outcome_structure_present_and_deterministic_for_combat() -> None:
+    """Identical CTIR inputs must yield identical prose-free action_outcome plan output."""
+    c = _minimal_ctir(
+        resolution={
+            "kind": "attack",
+            "action_id": "atk_sword",
+            "success_state": "success",
+            "combat": {
+                "combat_phase": "attack",
+                "actor_id": "pc_hero",
+                "target_id": "enemy_orc",
+                "hit": True,
+                "damage_dealt": 5,
+                "healing_applied": 0,
+                "conditions_applied": [],
+                "conditions_removed": [],
+                "combat_ended": False,
+                "winner": None,
+                "rolls": {"attack_roll": 14, "attack_total": 19, "target_ac": 15},
+            },
+        },
+    )
+    p1 = build_narrative_plan(ctir=c)
+    p2 = build_narrative_plan(ctir=c)
+    assert p1["narrative_mode"] == "action_outcome"
+    assert json.dumps(p1["action_outcome"], sort_keys=True) == json.dumps(p2["action_outcome"], sort_keys=True)
+    ao = p1["action_outcome"]
+    assert ao["present"] is True
+    assert ao["source_kind"] == "combat"
+    assert ao["result"]["action_id"] == "atk_sword"
+    assert ao["effects"]["damage_dealt"] == 5
+    assert validate_narrative_plan(p1, strict=True) is None
+
+
+def test_validation_rejects_action_outcome_with_proseish_fields() -> None:
+    c = _minimal_ctir(resolution={"kind": "attack", "combat": {"damage_dealt": 1, "rolls": {"attack_roll": 10}}})
+    plan = build_narrative_plan(ctir=c)
+    bad = dict(plan)
+    ao = dict(bad["action_outcome"])
+    ao["result"] = dict(ao["result"])
+    ao["result"]["hint"] = "Narrate the outcome."  # banned key under plan tree
+    bad["action_outcome"] = ao
+    err = validate_narrative_plan(bad, strict=True)
+    assert err and ("banned_key_path" in err or "action_outcome_" in err)
+
+
+def test_validate_action_outcome_plan_contract_passes_for_valid_combat_plan() -> None:
+    c = _minimal_ctir(resolution={"kind": "attack", "combat": {"damage_dealt": 1, "rolls": {"attack_roll": 10}}})
+    plan = build_narrative_plan(ctir=c)
+    ok, reasons = validate_action_outcome_plan_contract(plan, response_type_required="action_outcome")
+    assert ok is True
+    assert reasons == []
+
+
+def test_validate_action_outcome_plan_contract_skips_when_narrative_mode_not_action_outcome() -> None:
+    c = _minimal_ctir(resolution={"kind": "question", "social": {"npc_reply_expected": True}})
+    plan = build_narrative_plan(ctir=c, **_DIALOGUE_CONTRACT_INPUTS)
+    bad = dict(plan)
+    bad.pop("action_outcome", None)
+    ok, reasons = validate_action_outcome_plan_contract(bad, response_type_required="action_outcome")
+    assert ok is True
+    assert reasons == []
+
+
+def test_validate_action_outcome_plan_contract_fails_when_action_outcome_missing() -> None:
+    c = _minimal_ctir(resolution={"kind": "attack", "combat": {"damage_dealt": 1, "rolls": {"attack_roll": 10}}})
+    plan = build_narrative_plan(ctir=c)
+    bad = dict(plan)
+    bad.pop("action_outcome", None)
+    ok, reasons = validate_action_outcome_plan_contract(bad, response_type_required="action_outcome")
+    assert ok is False
+    assert any("missing_action_outcome" in r for r in reasons)
+
+
+def test_validate_action_outcome_plan_contract_fails_on_extra_prose_key_in_action_outcome() -> None:
+    c = _minimal_ctir(resolution={"kind": "attack", "combat": {"damage_dealt": 1, "rolls": {"attack_roll": 10}}})
+    plan = build_narrative_plan(ctir=c)
+    bad = dict(plan)
+    ao = dict(bad["action_outcome"])
+    ao["hint"] = "forbidden"
+    bad["action_outcome"] = ao
+    ok, reasons = validate_action_outcome_plan_contract(bad, response_type_required="action_outcome")
+    assert ok is False
+    assert any("action_outcome_bad_keys" in r or "narrative_plan_invalid" in r for r in reasons)
+
+
+def test_action_outcome_mode_fails_without_present_structure() -> None:
+    c = _minimal_ctir(resolution={"kind": "attack", "combat": {"damage_dealt": 1, "rolls": {"attack_roll": 10}}})
+    plan = build_narrative_plan(ctir=c)
+    bad = dict(plan)
+    bad["action_outcome"] = {"present": False}
+    err = validate_narrative_plan(bad, strict=True)
+    assert err is not None
+
+
+def test_action_outcome_skill_check_source_and_determinism() -> None:
+    c = _minimal_ctir(
+        resolution={
+            "kind": "investigate",
+            "action_id": "search_crate",
+            "success_state": "success",
+            "interactable_id": "crate_a",
+            "skill_check": {
+                "skill": "perception",
+                "dc": 12,
+                "difficulty": 12,
+                "modifier": 1,
+                "roll": 18,
+                "total": 19,
+                "success": True,
+            },
+        },
+    )
+    p1 = build_narrative_plan(ctir=c)
+    p2 = build_narrative_plan(ctir=c)
+    assert p1["narrative_mode"] == "action_outcome"
+    assert json.dumps(p1["action_outcome"], sort_keys=True) == json.dumps(p2["action_outcome"], sort_keys=True)
+    ao = p1["action_outcome"]
+    assert ao["source_kind"] == "skill_check"
+    assert ao["result"]["roll_summary"].get("total") == 19
+    assert ao["result"]["target_id"] == "crate_a"
+    assert validate_narrative_plan(p1, strict=True) is None
+
+
+def test_action_outcome_environment_source_from_noncombat_slice() -> None:
+    nc = {
+        "framework_version": "2026.04.noncombat.v1",
+        "kind": "investigation",
+        "subkind": "interact",
+        "authority_domain": "scene_state",
+        "deterministic_resolved": True,
+        "requires_check": False,
+        "outcome_type": "closed",
+        "success_state": "success",
+        "discovered_entities": [{"entity_kind": "interactable", "entity_id": "lever_2"}],
+        "blocked_reason_codes": [],
+        "ambiguous_reason_codes": [],
+        "unsupported_reason_codes": [],
+    }
+    c = _minimal_ctir(
+        resolution={
+            "kind": "interact",
+            "action_id": "pull_lever",
+            "success_state": "success",
+            "outcome_type": "closed",
+            "noncombat_resolution": nc,
+        },
+    )
+    p1 = build_narrative_plan(ctir=c)
+    p2 = build_narrative_plan(ctir=c)
+    assert p1["narrative_mode"] == "action_outcome"
+    assert json.dumps(p1["action_outcome"], sort_keys=True) == json.dumps(p2["action_outcome"], sort_keys=True)
+    ao = p1["action_outcome"]
+    assert ao["source_kind"] == "environment"
+    assert ao["result"]["target_id"] == "lever_2"
+    assert ao["result"]["roll_summary"].get("outcome_type") == "closed"
+    assert validate_narrative_plan(p1, strict=True) is None
 
 
 def test_validate_rejects_unknown_required_new_information_kind() -> None:

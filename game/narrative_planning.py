@@ -113,6 +113,7 @@ _PROSE_INSTRUCTION_KEYS = frozenset(
         "prose",
         "story",
         "description",
+        "hint",
         "text",
         "player_facing_text",
         "prompt",
@@ -1900,6 +1901,10 @@ def build_narrative_plan(
         allowable_entity_references=allowable_entity_references,
         role_allocation=role_allocation,
     )
+    action_outcome, ao_codes = _derive_action_outcome(
+        ctir,
+        narrative_mode=narrative_mode,
+    )
     scene_opening, so_codes = _derive_scene_opening(
         ctir,
         narration_obligations=narration_obligations,
@@ -1913,7 +1918,7 @@ def build_narrative_plan(
     meta = _bounded_shallow_map(resolution_meta, max_keys=12) if resolution_meta else {}
     recent = _compress_recent_events(recent_compressed_events)
 
-    derivation_codes = _merge_derivation_codes([c1, c2, c3, c4, c5, nr_codes, so_codes])
+    derivation_codes = _merge_derivation_codes([c1, c2, c3, c4, c5, nr_codes, ao_codes, so_codes])
     _po = (
         narrative_mode_contract.get("prompt_obligations")
         if isinstance(narrative_mode_contract.get("prompt_obligations"), Mapping)
@@ -1966,6 +1971,7 @@ def build_narrative_plan(
         "narrative_mode_contract": narrative_mode_contract,
         "role_allocation": role_allocation,
         "narrative_roles": narrative_roles,
+        "action_outcome": action_outcome,
         "scene_opening": scene_opening,
         "recent_compressed_events": recent,
         "resolution_meta": meta,
@@ -2068,6 +2074,7 @@ def validate_narrative_plan(plan: Any, *, strict: bool = True) -> Optional[str]:
         "narrative_mode_contract",
         "role_allocation",
         "narrative_roles",
+        "action_outcome",
         "scene_opening",
         "recent_compressed_events",
         "resolution_meta",
@@ -2141,6 +2148,10 @@ def validate_narrative_plan(plan: Any, *, strict: bool = True) -> Optional[str]:
     so_err = _validate_scene_opening_plan(plan)
     if so_err:
         return so_err
+
+    ao_err = _validate_action_outcome_plan(plan)
+    if ao_err:
+        return ao_err
 
     try:
         json.dumps(plan, sort_keys=True)
@@ -2277,4 +2288,399 @@ def normalize_narrative_plan(plan: Mapping[str, Any] | None) -> Dict[str, Any]:
             so_d["actor_anchors"] = sorted(rows, key=lambda r: (str(r.get("anchor_role")), str(r.get("entity_id"))))
         p["scene_opening"] = so_d
 
+    ao = p.get("action_outcome")
+    if isinstance(ao, Mapping):
+        p["action_outcome"] = _normalize_action_outcome(ao)
+
     return p
+
+
+def _derive_action_outcome(
+    ctir: Mapping[str, Any],
+    *,
+    narrative_mode: str,
+) -> tuple[dict[str, Any], list[str]]:
+    """Derive a deterministic, bounded, prose-free action_outcome block from CTIR only.
+
+    This is a structural bridge: it carries mechanics/effects atoms for narration, but
+    never asks the planner to re-adjudicate.
+    """
+    codes: list[str] = ["action_outcome:derive"]
+    res = _mapping(ctir.get("resolution"))
+    nc = _mapping(ctir.get("noncombat"))
+    sm = _mapping(ctir.get("state_mutations"))
+
+    mode = _as_str(narrative_mode) or "continuation"
+    present = mode == "action_outcome"
+
+    # Default empty-but-structured object (still JSON-safe).
+    out: dict[str, Any] = {
+        "present": bool(present),
+        "source_kind": "unknown",
+        "result": {
+            "result_kind": _clip(_as_str(res.get("kind")), max_len=64) or None,
+            "success_state": _clip(_as_str(res.get("success_state")), max_len=24) or None,
+            "actor_id": None,
+            "target_id": None,
+            "action_id": _clip(_as_str(res.get("action_id")), max_len=128) or None,
+            "roll_summary": {},
+        },
+        "effects": {
+            "damage_dealt": 0,
+            "healing_applied": 0,
+            "conditions_applied": [],
+            "conditions_removed": [],
+            "combat_ended": False,
+            "winner": None,
+            "state_delta_keys": [],
+        },
+        "framing": {
+            "emphasis": "standard",
+            "reveal_policy": "respect_visibility",
+            "allowed_certainty": "engine_only",
+            "prohibited_codes": [
+                "no_raw_roll_text",
+                "no_hint_prompt_prose",
+                "no_mechanics_interpretation",
+            ],
+        },
+        "derivation_codes": [],
+    }
+
+    # State delta keys: stable, bounded projection.
+    delta: list[str] = []
+    for domain in ("scene", "session", "combat", "clues_leads"):
+        block = sm.get(domain)
+        if not isinstance(block, Mapping):
+            continue
+        ck = block.get("changed_keys")
+        if isinstance(ck, (list, tuple)):
+            for k in ck:
+                sk = _clip(_as_str(k), max_len=96)
+                if sk:
+                    delta.append(f"{domain}.{sk}")
+    out["effects"]["state_delta_keys"] = _sorted_unique_strs(delta, limit=48)
+
+    # Source selection: combat > skill_check > environment/noncombat (from CTIR noncombat slice) > unknown.
+    _nc_env_kinds = frozenset({"perception", "investigation", "exploration"})
+
+    def _discovered_target_id(n: Mapping[str, Any]) -> Optional[str]:
+        de = n.get("discovered_entities")
+        if not isinstance(de, (list, tuple)):
+            return None
+        for pref in ("interactable", "object", "npc", "scene"):
+            for item in de:
+                if not isinstance(item, Mapping):
+                    continue
+                if _as_str(item.get("entity_kind")).lower() == pref:
+                    eid = _as_str(item.get("entity_id"))
+                    if eid:
+                        return _clip(eid, max_len=96)
+        return None
+
+    def _roll_summary_from_nc_block(n: Mapping[str, Any]) -> dict[str, Any]:
+        roll_out: dict[str, Any] = {}
+        if isinstance(n.get("check_request"), Mapping):
+            cr = n["check_request"]
+            for rk in ("check_type", "skill", "difficulty", "reason"):
+                vv = cr.get(rk)
+                if vv is None or isinstance(vv, (bool, int, float)):
+                    roll_out[rk] = vv
+                elif isinstance(vv, str) and rk in ("check_type", "skill", "reason"):
+                    roll_out[rk] = _clip(vv.strip(), max_len=96)
+        ot = _as_str(n.get("outcome_type"))
+        if ot:
+            roll_out["outcome_type"] = _clip(ot, max_len=64)
+        sub = _as_str(n.get("subkind"))
+        if sub:
+            roll_out["subkind"] = _clip(sub, max_len=64)
+        return roll_out
+
+    def _apply_structural_target_ids() -> None:
+        iid = _as_str(res.get("interactable_id"))
+        auth = res.get("authoritative_outputs")
+        if not iid and isinstance(auth, Mapping):
+            iid = _as_str(auth.get("interactable_id"))
+        if iid:
+            out["result"]["target_id"] = _clip(iid, max_len=96)
+            return
+        if nc:
+            tid = _discovered_target_id(nc)
+            if tid:
+                out["result"]["target_id"] = tid
+
+    combat = res.get("combat")
+    if isinstance(combat, Mapping) and combat:
+        out["source_kind"] = "combat"
+        codes.append("action_outcome:source:combat")
+        actor_id = _as_str(combat.get("actor_id"))
+        target_id = _as_str(combat.get("target_id"))
+        if actor_id:
+            out["result"]["actor_id"] = _clip(actor_id, max_len=96)
+        if target_id:
+            out["result"]["target_id"] = _clip(target_id, max_len=96)
+        # Rolls: numeric/bool atoms only.
+        rolls = combat.get("rolls")
+        if isinstance(rolls, Mapping):
+            roll_out: dict[str, Any] = {}
+            for rk in sorted(str(k) for k in rolls.keys())[:24]:
+                vv = rolls.get(rk)
+                if vv is None or isinstance(vv, (bool, int, float)):
+                    roll_out[rk] = vv
+                elif isinstance(vv, list):
+                    roll_out[rk] = [x for x in vv[:24] if x is None or isinstance(x, (bool, int, float))]
+            out["result"]["roll_summary"] = roll_out
+        out["effects"]["damage_dealt"] = int(combat.get("damage_dealt") or 0) if isinstance(combat.get("damage_dealt"), (int, float)) else 0
+        out["effects"]["healing_applied"] = int(combat.get("healing_applied") or 0) if isinstance(combat.get("healing_applied"), (int, float)) else 0
+        for k in ("conditions_applied", "conditions_removed"):
+            vv = combat.get(k)
+            if isinstance(vv, list):
+                out["effects"][k] = _sorted_unique_strs(vv, limit=24)
+        out["effects"]["combat_ended"] = bool(combat.get("combat_ended")) if "combat_ended" in combat else False
+        win = _as_str(combat.get("winner"))
+        out["effects"]["winner"] = _clip(win, max_len=32) if win else None
+    elif isinstance(res.get("skill_check"), Mapping) and res.get("skill_check"):
+        out["source_kind"] = "skill_check"
+        codes.append("action_outcome:source:skill_check")
+        sk = res["skill_check"]
+        roll_out_sc: dict[str, Any] = {}
+        for rk in ("skill", "difficulty", "dc", "modifier", "roll", "total", "success"):
+            if rk in sk:
+                vv = sk.get(rk)
+                if vv is None or isinstance(vv, (bool, int, float)):
+                    roll_out_sc[rk] = vv
+                elif isinstance(vv, str) and rk in ("skill",):
+                    roll_out_sc[rk] = _clip(vv.strip(), max_len=64)
+        out["result"]["roll_summary"] = roll_out_sc
+        _apply_structural_target_ids()
+    elif nc:
+        nk = _as_str(nc.get("kind"))
+        if nk in _nc_env_kinds:
+            out["source_kind"] = "environment"
+            codes.append("action_outcome:source:environment")
+        else:
+            out["source_kind"] = "noncombat"
+            codes.append("action_outcome:source:noncombat")
+        out["result"]["roll_summary"] = _roll_summary_from_nc_block(nc)
+        _apply_structural_target_ids()
+
+    out["derivation_codes"] = _merge_derivation_codes([codes])
+    return out, codes
+
+
+def _validate_action_outcome_object(ao: Any) -> Optional[str]:
+    if ao is None:
+        return None
+    if not isinstance(ao, Mapping):
+        return "action_outcome_not_mapping"
+    keys = set(ao.keys())
+    allowed = {"present", "source_kind", "result", "effects", "framing", "derivation_codes"}
+    if keys != allowed:
+        return f"action_outcome_bad_keys:{sorted(keys ^ allowed)}"
+    if not isinstance(ao.get("present"), bool):
+        return "action_outcome_present_not_bool"
+    sk = _as_str(ao.get("source_kind"))
+    if sk not in ("combat", "skill_check", "noncombat", "environment", "unknown"):
+        return "action_outcome_bad_source_kind"
+    res = ao.get("result")
+    if not isinstance(res, Mapping):
+        return "action_outcome_result_not_mapping"
+    res_keys = set(res.keys())
+    res_allowed = {"result_kind", "success_state", "actor_id", "target_id", "action_id", "roll_summary"}
+    if res_keys != res_allowed:
+        return f"action_outcome_result_bad_keys:{sorted(res_keys ^ res_allowed)}"
+    for k in ("result_kind", "success_state", "actor_id", "target_id", "action_id"):
+        v = res.get(k)
+        if v is not None and not (isinstance(v, str) and v.strip() and len(v) <= 160):
+            return f"action_outcome_result_bad_str:{k}"
+        if isinstance(v, str) and v.strip().lower() in _PROSE_INSTRUCTION_KEYS:
+            return f"action_outcome_result_prose_key_leak:{k}"
+    rs = res.get("roll_summary")
+    if not isinstance(rs, Mapping):
+        return "action_outcome_roll_summary_not_mapping"
+    if len(rs.keys()) > 32:
+        return "action_outcome_roll_summary_too_many_keys"
+    for k, v in rs.items():
+        if not isinstance(k, str) or not k.strip() or len(k) > 64:
+            return "action_outcome_roll_summary_bad_key"
+        if isinstance(v, str):
+            # Allow small enumerations like skill id; disallow prose.
+            if len(v) > 96 or any(ch in v for ch in ("\n", "\r")):
+                return "action_outcome_roll_summary_string_too_long"
+        elif v is None or isinstance(v, (bool, int, float)):
+            pass
+        elif isinstance(v, list):
+            if len(v) > 24:
+                return "action_outcome_roll_summary_list_too_long"
+            for item in v:
+                if not (item is None or isinstance(item, (bool, int, float))):
+                    return "action_outcome_roll_summary_list_bad_item"
+        else:
+            return "action_outcome_roll_summary_bad_value_type"
+    eff = ao.get("effects")
+    if not isinstance(eff, Mapping):
+        return "action_outcome_effects_not_mapping"
+    eff_allowed = {
+        "damage_dealt",
+        "healing_applied",
+        "conditions_applied",
+        "conditions_removed",
+        "combat_ended",
+        "winner",
+        "state_delta_keys",
+    }
+    if set(eff.keys()) != eff_allowed:
+        return f"action_outcome_effects_bad_keys:{sorted(set(eff.keys()) ^ eff_allowed)}"
+    for k in ("damage_dealt", "healing_applied"):
+        v = eff.get(k)
+        if not isinstance(v, int) or v < 0 or v > 10_000:
+            return f"action_outcome_effects_bad_int:{k}"
+    for k in ("conditions_applied", "conditions_removed", "state_delta_keys"):
+        v = eff.get(k)
+        if not isinstance(v, list):
+            return f"action_outcome_effects_{k}_not_list"
+        if len(v) > 48:
+            return f"action_outcome_effects_{k}_too_long"
+        for item in v:
+            if not isinstance(item, str) or not item.strip() or len(item) > 120:
+                return f"action_outcome_effects_{k}_bad_item"
+    if not isinstance(eff.get("combat_ended"), bool):
+        return "action_outcome_effects_combat_ended_not_bool"
+    win = eff.get("winner")
+    if win is not None and not (isinstance(win, str) and win.strip() and len(win) <= 32):
+        return "action_outcome_effects_bad_winner"
+    framing = ao.get("framing")
+    if not isinstance(framing, Mapping):
+        return "action_outcome_framing_not_mapping"
+    fr_allowed = {"emphasis", "reveal_policy", "allowed_certainty", "prohibited_codes"}
+    if set(framing.keys()) != fr_allowed:
+        return f"action_outcome_framing_bad_keys:{sorted(set(framing.keys()) ^ fr_allowed)}"
+    for k in ("emphasis", "reveal_policy", "allowed_certainty"):
+        v = framing.get(k)
+        if not isinstance(v, str) or not v.strip() or len(v) > 64:
+            return f"action_outcome_framing_bad_str:{k}"
+    pc = framing.get("prohibited_codes")
+    if not isinstance(pc, list) or len(pc) > 24:
+        return "action_outcome_framing_prohibited_codes_bad"
+    for item in pc:
+        if not isinstance(item, str) or not item.strip() or len(item) > 96:
+            return "action_outcome_framing_bad_prohibited_code"
+    dc = ao.get("derivation_codes")
+    if not isinstance(dc, list) or len(dc) > _MAX_CODES:
+        return "action_outcome_derivation_codes_bad"
+    for item in dc:
+        if not isinstance(item, str) or not item.strip() or len(item) > 120:
+            return "action_outcome_bad_derivation_code"
+    return None
+
+
+def _validate_action_outcome_plan(plan: Mapping[str, Any]) -> Optional[str]:
+    mode = _as_str(plan.get("narrative_mode"))
+    ao = plan.get("action_outcome")
+    err = _validate_action_outcome_object(ao)
+    if err:
+        return err
+    if mode == "action_outcome":
+        if not isinstance(ao, Mapping):
+            return "action_outcome_missing_for_action_outcome_mode"
+        if ao.get("present") is not True:
+            return "action_outcome_present_not_true_for_action_outcome_mode"
+        # Require a bounded result structure: roll_summary must exist (may be empty mapping).
+        res = ao.get("result") if isinstance(ao.get("result"), Mapping) else None
+        if not isinstance(res, Mapping) or "roll_summary" not in res:
+            return "action_outcome_missing_result_structure"
+    return None
+
+
+def validate_action_outcome_plan_contract(
+    plan: Mapping[str, Any] | None,
+    *,
+    response_type_required: str | None = None,
+) -> tuple[bool, list[str]]:
+    """Enforce action_outcome readiness for narration prompt assembly (fail-closed seam input).
+
+    When ``narrative_mode`` is ``action_outcome``, the plan must carry a validating
+    ``action_outcome`` object (``present`` true, bounded ``result`` / ``effects`` / ``framing``),
+    and the full plan must pass :func:`validate_narrative_plan` (relaxed strictness).
+
+    ``response_type_required`` is accepted for API symmetry / tracing; structural
+    enforcement is keyed off ``narrative_mode`` so continuation plans with a dormant
+    ``action_outcome`` slice (``present: false``) stay valid alongside a response-type hint.
+
+    Returns ``(ok, failure_reasons)`` where *failure_reasons* are machine-readable tokens
+    suitable for ``narration_seam_audit`` / ``prompt_debug`` (never player-facing prose).
+    """
+    _ = str(response_type_required or "").strip().lower()
+    if not isinstance(plan, Mapping):
+        return True, []
+    nm = _as_str(plan.get("narrative_mode"))
+    if nm != "action_outcome":
+        return True, []
+    if not plan:
+        return False, ["action_outcome_contract:plan_empty"]
+
+    reasons: list[str] = []
+    ao = plan.get("action_outcome")
+    if ao is None:
+        reasons.append("action_outcome_contract:missing_action_outcome")
+    oerr = _validate_action_outcome_object(ao)
+    if oerr:
+        reasons.append(f"action_outcome_contract:{oerr}")
+    if isinstance(ao, Mapping):
+        if ao.get("present") is not True:
+            reasons.append("action_outcome_contract:present_not_true")
+        res = ao.get("result") if isinstance(ao.get("result"), Mapping) else None
+        if not isinstance(res, Mapping) or "roll_summary" not in res:
+            reasons.append("action_outcome_contract:missing_result_roll_summary")
+        if not isinstance(ao.get("effects"), Mapping):
+            reasons.append("action_outcome_contract:missing_effects")
+        if not isinstance(ao.get("framing"), Mapping):
+            reasons.append("action_outcome_contract:missing_framing")
+
+    vp = validate_narrative_plan(plan, strict=False)
+    if isinstance(vp, str) and vp.strip():
+        reasons.append(f"action_outcome_contract:narrative_plan_invalid:{vp}")
+
+    seen: set[str] = set()
+    ordered: list[str] = []
+    for tok in reasons:
+        if tok not in seen:
+            seen.add(tok)
+            ordered.append(tok)
+    return (len(ordered) == 0), ordered
+
+
+def _normalize_action_outcome(ao: Mapping[str, Any]) -> dict[str, Any]:
+    """Light normalization pass: sorts lists and clips strings (no semantic edits)."""
+    out = dict(ao)
+    # Derivation codes stable sorted unique.
+    dc = out.get("derivation_codes")
+    if isinstance(dc, list):
+        out["derivation_codes"] = _sorted_unique_strs(dc, limit=_MAX_CODES)
+    # Effects lists stable ordering.
+    eff = out.get("effects")
+    if isinstance(eff, Mapping):
+        eff_d = dict(eff)
+        for k in ("conditions_applied", "conditions_removed", "state_delta_keys"):
+            v = eff_d.get(k)
+            if isinstance(v, list):
+                eff_d[k] = _sorted_unique_strs(v, limit=48)
+        win = _as_str(eff_d.get("winner"))
+        eff_d["winner"] = _clip(win, max_len=32) if win else None
+        out["effects"] = eff_d
+    # Result roll_summary: stable key ordering already via json dumps; keep as-is.
+    res = out.get("result")
+    if isinstance(res, Mapping):
+        res_d = dict(res)
+        for k in ("result_kind", "success_state", "actor_id", "target_id", "action_id"):
+            v = _as_str(res_d.get(k))
+            res_d[k] = _clip(v, max_len=160) if v else None
+        out["result"] = res_d
+    fr = out.get("framing")
+    if isinstance(fr, Mapping):
+        fr_d = dict(fr)
+        pc = fr_d.get("prohibited_codes")
+        if isinstance(pc, list):
+            fr_d["prohibited_codes"] = _sorted_unique_strs(pc, limit=24)
+        out["framing"] = fr_d
+    return out

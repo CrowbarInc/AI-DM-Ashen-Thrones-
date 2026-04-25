@@ -124,6 +124,7 @@ def test_approved_public_projection_keys_match_bundle_implementation() -> None:
             "allowable_entity_references",
             "narrative_roles",
             "narrative_mode_contract",
+            "action_outcome",
             "scene_opening",
         }
     )
