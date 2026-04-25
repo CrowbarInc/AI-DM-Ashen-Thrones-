@@ -3350,11 +3350,11 @@ def derive_narration_obligations(
 
     res = resolution if isinstance(resolution, dict) else {}
     res_kind = str(res.get('kind') or '').strip().lower()
-    state_changes = res.get("state_changes") if isinstance(res.get("state_changes"), dict) else {}
-    scene_transition_occurred = bool(res.get("resolved_transition")) or bool(state_changes.get("scene_transition_occurred"))
-    arrived_at_scene = bool(state_changes.get("arrived_at_scene"))
-    new_scene_context_available = bool(state_changes.get("new_scene_context_available"))
-    must_advance_scene = bool(scene_transition_occurred or arrived_at_scene or new_scene_context_available)
+    # Block B: prompt_context must not infer transitions (time/location/scene movement)
+    # from resolution semantics, state_changes, or CTIR-derived target_scene_id deltas.
+    # Transition requirements are consumed only from narrative_plan.transition_node (root-level),
+    # applied downstream in build_narration_context as a pass-through / traceable seam.
+    must_advance_scene = False
 
     active_target_id = str(session_view.get('active_interaction_target_id') or '').strip()
     active_kind = str(session_view.get('active_interaction_kind') or '').strip().lower()
@@ -3526,6 +3526,67 @@ MANUAL_PLAY_COMPACT_MEMORY_LIMIT = 6
 MANUAL_PLAY_COMPACT_RECENT_LOG_LIMIT = 4
 
 
+_EXPECTED_TRANSITION_NODE_KEYS: tuple[str, ...] = (
+    "transition_required",
+    "transition_type",
+    "before_anchor",
+    "after_anchor",
+    "continuity_anchor_ids",
+    "derivation_codes",
+    "source_fields",
+)
+
+
+def _resolution_has_transition_signal(resolution_sem: Mapping[str, Any] | None) -> bool:
+    """Seam-signal only (never used to synthesize transition payload)."""
+    if not isinstance(resolution_sem, Mapping) or not resolution_sem:
+        return False
+    if bool(resolution_sem.get("resolved_transition")):
+        return True
+    kind = str(resolution_sem.get("kind") or "").strip().lower()
+    if kind in {"scene_transition", "travel"}:
+        return True
+    if str(resolution_sem.get("target_scene_id") or "").strip():
+        return True
+    auth = resolution_sem.get("authoritative_outputs")
+    if isinstance(auth, Mapping):
+        if bool(auth.get("resolved_transition")) or str(auth.get("target_scene_id") or "").strip():
+            return True
+    return False
+
+
+def _project_transition_node_for_prompt(
+    narrative_plan: Mapping[str, Any] | None,
+) -> tuple[dict[str, Any] | None, list[str]]:
+    """Consume narrative_plan.transition_node as structured data only (no inference, no repair)."""
+    if not isinstance(narrative_plan, Mapping) or not narrative_plan:
+        return None, ["missing_narrative_plan"]
+    raw = narrative_plan.get("transition_node")
+    if raw is None:
+        return None, ["missing_transition_node"]
+    if not isinstance(raw, Mapping):
+        return None, ["transition_node_not_mapping"]
+    missing = [k for k in _EXPECTED_TRANSITION_NODE_KEYS if k not in raw]
+    if missing:
+        return None, ["transition_node_missing_keys:" + ",".join(missing[:16])]
+    # Shallow structural typing only; do not "fix" or add anchors/ids.
+    if not isinstance(raw.get("transition_required"), bool):
+        return None, ["transition_node_bad_type:transition_required"]
+    if not isinstance(raw.get("transition_type"), str):
+        return None, ["transition_node_bad_type:transition_type"]
+    if not isinstance(raw.get("before_anchor"), Mapping):
+        return None, ["transition_node_bad_type:before_anchor"]
+    if not isinstance(raw.get("after_anchor"), Mapping):
+        return None, ["transition_node_bad_type:after_anchor"]
+    if not isinstance(raw.get("continuity_anchor_ids"), list):
+        return None, ["transition_node_bad_type:continuity_anchor_ids"]
+    if not isinstance(raw.get("derivation_codes"), list):
+        return None, ["transition_node_bad_type:derivation_codes"]
+    if not isinstance(raw.get("source_fields"), list):
+        return None, ["transition_node_bad_type:source_fields"]
+    return dict(raw), []
+
+
 def _should_use_manual_play_compact_prompt(
     *,
     prompt_profile: str,
@@ -3543,13 +3604,7 @@ def _should_use_manual_play_compact_prompt(
     res = resolution if isinstance(resolution, Mapping) else {}
     if obligations.get("is_opening_scene") or obligations.get("must_advance_scene"):
         return False
-    if res.get("requires_check") or res.get("resolved_transition"):
-        return False
-    state_changes = res.get("state_changes") if isinstance(res.get("state_changes"), Mapping) else {}
-    if any(
-        bool(state_changes.get(key))
-        for key in ("scene_transition_occurred", "arrived_at_scene", "new_scene_context_available")
-    ):
+    if res.get("requires_check"):
         return False
     if isinstance(uncertainty_hint, Mapping) and uncertainty_hint:
         return False
@@ -3593,8 +3648,6 @@ def _compact_manual_play_instructions(
         out.append("Prioritize the active interlocutor's answer over broad scene description.")
     if obligations.get("avoid_input_echo") or obligations.get("avoid_player_action_restatement"):
         out.append("Do not restate or lightly paraphrase player_input. Continue forward with new information.")
-    if has_scene_change_context:
-        out.append("When transitioning scenes, include a brief bridge from the prior location before describing the new one.")
     ac = policy.get("answer_completeness") if isinstance(policy.get("answer_completeness"), Mapping) else {}
     if ac.get("answer_required"):
         out.append("ANSWER COMPLETENESS: When response_policy.answer_completeness.answer_required is true, lead with the substantive answer in the first sentence.")
@@ -4174,6 +4227,49 @@ def build_narration_context(
             "semantic_bypass_blocked": True,
         }
 
+    # Block B: prompt_context consumes transition_node as structured data only (no inference, no repair).
+    transition_payload: dict[str, Any] | None = None
+    transition_failure_codes: list[str] = []
+    if isinstance(narrative_plan, Mapping):
+        transition_payload, transition_failure_codes = _project_transition_node_for_prompt(narrative_plan)
+    else:
+        transition_payload, transition_failure_codes = (None, ["missing_narrative_plan"])
+
+    transition_required = bool(transition_payload.get("transition_required")) if isinstance(transition_payload, dict) else False
+    if isinstance(narration_obligations, dict):
+        narration_obligations = {**narration_obligations, "must_advance_scene": bool(transition_required)}
+
+    # Seam-failure metadata for missing/malformed transition_node and for blocked legacy inference paths.
+    _transition_signal = _resolution_has_transition_signal(resolution_sem if isinstance(resolution_sem, Mapping) else None)
+    _transition_missing = bool(_transition_signal and not isinstance(transition_payload, dict))
+    _anchor_incomplete = False
+    if isinstance(transition_payload, dict) and transition_required:
+        ba = transition_payload.get("before_anchor") if isinstance(transition_payload.get("before_anchor"), Mapping) else {}
+        aa = transition_payload.get("after_anchor") if isinstance(transition_payload.get("after_anchor"), Mapping) else {}
+        _anchor_incomplete = not bool(ba) or not bool(aa)
+    if _transition_missing or _anchor_incomplete or transition_failure_codes:
+        tn_audit = {
+            "transition_signal_present": bool(_transition_signal),
+            "transition_node_present": isinstance(transition_payload, dict),
+            "transition_node_failure_codes": list(transition_failure_codes[:16]) if transition_failure_codes else [],
+            "transition_required": bool(transition_required),
+            "blocked_inference_path": bool(_transition_missing),
+            "incomplete_required_anchors": bool(_anchor_incomplete),
+        }
+        if isinstance(narration_seam_audit, dict):
+            narration_seam_audit = {**narration_seam_audit, "transition_node_consumer": tn_audit}
+        else:
+            narration_seam_audit = {"transition_node_consumer": tn_audit}
+
+    # prompt_debug lane: compact transition consumer mirror (inspect-only).
+    prompt_debug_anchor["transition_node_consumer"] = {
+        "present": isinstance(transition_payload, dict),
+        "transition_signal_present": bool(_transition_signal),
+        "failure_codes": list(transition_failure_codes[:16]) if transition_failure_codes else [],
+        "blocked_inference_path": bool(_transition_missing),
+        "required": bool(transition_required) if isinstance(transition_payload, dict) else None,
+    }
+
     # C1-D: dialogue/social planning is shipped as a deterministic structural plan from the bundle.
     # For CTIR-backed social turns, do not locally infer speaker/intent/pressure/tone from logs or raw text.
     _dsp_required = bool(
@@ -4315,7 +4411,6 @@ def build_narration_context(
         'Quoted in-character dialogue is valid inside an action declaration (for example: Galinor says, "Keep your voice down."); do not treat the quote alone as the entire action when surrounding action context exists.',
         'Follow narration_obligations as output requirements only: they shape wording and focus, but never grant authority to mutate state or decide mechanics.',
         'If narration_obligations.is_opening_scene is true, establish immediate environment plus actionable social/world hooks the player can engage now (see opening_narration_obligations, narrative_plan.scene_opening when present, and opening_scene_realization.contract narration_basis_visible_facts for diegetic first-shot shape).',
-        'If narration_obligations.must_advance_scene is true, do not stop at movement text alone; narrate arrival, changed state, and at least one concrete opportunity or pressure in the destination context.',
         'If narration_obligations.active_npc_reply_expected is true, complete the active NPC\'s substantive in-turn reply now unless a pending engine check prompt already takes precedence, or authoritative state indicates refusal/evasion/interruption/inability.',
         'If narration_obligations.should_answer_active_npc is true, prioritize the active interlocutor\'s reply and the immediate exchange over general scene recap.',
         'Use narration_obligations.active_npc_reply_kind as a compact reply-shape hint (answer, explanation, reaction, refusal).',
@@ -4331,10 +4426,6 @@ def build_narration_context(
         'Keep the narration to 1-4 concise paragraphs.',
         mode_instruction,
     ]
-    if has_scene_change_context:
-        instructions.append(
-            'When transitioning scenes, include a brief bridge from the prior location before describing the new one.'
-        )
 
     _opening_contract = opening_scene_export.get("contract") if isinstance(opening_scene_export, dict) else None
     if (
@@ -5153,6 +5244,8 @@ def build_narration_context(
             if (ctir_obj is not None and bundle_stamp_ok and isinstance(_bdsp, dict))
             else None
         ),
+        # Block B: structured transition payload sourced ONLY from narrative_plan.transition_node.
+        'transition': copy.deepcopy(transition_payload) if isinstance(transition_payload, dict) else None,
         'narrative_plan': (
             None
             if action_outcome_narration_blocked

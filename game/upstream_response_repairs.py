@@ -87,7 +87,9 @@ def _action_result_summary(resolution: Dict[str, Any] | None) -> str:
     check_request = resolution.get("check_request") if isinstance(resolution.get("check_request"), dict) else {}
     kind = str(resolution.get("kind") or "").strip().lower()
     if bool(resolution.get("resolved_transition")) or state_changes.get("scene_transition_occurred") or state_changes.get("arrived_at_scene"):
-        return "the scene shifts with that movement"
+        # Transition narration is owned by planning + prompt projection; deterministic fallbacks must not
+        # inject generic scene-shift prose (Transition Convergence, Block D).
+        return "your position changes with that movement"
     if state_changes.get("already_searched"):
         if kind in {"investigate", "observe", "search"}:
             return "the search turns up nothing new"

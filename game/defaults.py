@@ -160,7 +160,7 @@ def default_scene(scene_id: str = 'frontier_gate'):
                     "One figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue.",
                 ],
                 "journal_seed_facts": [
-                    "You arrive at Cinderwatch's eastern gate in cold rain, under frayed banners.",
+                    "Cold rain needles Cinderwatch's eastern gate under frayed banners.",
                     "The approach is jammed with refugees, wagons, and travelers; guards watch with hard, tired discipline.",
                     "A notice board announces new taxes and curfews, and names a missing patrol.",
                     "A tavern runner is hawking hot stew and rumor for coin.",

@@ -68,7 +68,7 @@ def test_valid_transition_to_connected_scene_succeeds(tmp_path, monkeypatch):
     _seed_three_scenes(tmp_path, monkeypatch)
 
     def fake_gpt(m):
-        return {"player_facing_text": "You arrive.", "tags": [], "scene_update": None, "activate_scene_id": None, "new_scene_draft": None, "world_updates": None, "suggested_action": None, "debug_notes": ""}
+        return {"player_facing_text": "The path opens onto a different stretch of road.", "tags": [], "scene_update": None, "activate_scene_id": None, "new_scene_draft": None, "world_updates": None, "suggested_action": None, "debug_notes": ""}
 
     with monkeypatch.context() as m:
         m.setattr("game.api.call_gpt", fake_gpt)
@@ -133,7 +133,7 @@ def test_freeform_travel_intent_respects_graph(tmp_path, monkeypatch):
     """Free text 'go to B' from scene A matches exit 'To B' and transitions (graph allows A->B)."""
     _seed_three_scenes(tmp_path, monkeypatch)
     with monkeypatch.context() as m:
-        m.setattr("game.api.call_gpt", lambda _: {"player_facing_text": "You arrive at B.", "tags": [], "scene_update": None, "activate_scene_id": None, "new_scene_draft": None, "world_updates": None, "suggested_action": None, "debug_notes": ""})
+        m.setattr("game.api.call_gpt", lambda _: {"player_facing_text": "At B, the air feels colder and the ground firmer.", "tags": [], "scene_update": None, "activate_scene_id": None, "new_scene_draft": None, "world_updates": None, "suggested_action": None, "debug_notes": ""})
         client = TestClient(app)
         r = client.post("/api/chat", json={"text": "go to B"})
     assert r.status_code == 200

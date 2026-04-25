@@ -96,7 +96,7 @@ def test_scene_transition_with_known_target_activates_before_narration(tmp_path,
                         call_gpt_invoked_with_scene_id.append(sid)
                 except Exception:
                     pass
-        return {"player_facing_text": "You arrive.", "tags": [], "scene_update": None, "activate_scene_id": None, "new_scene_draft": None, "world_updates": None, "suggested_action": None, "debug_notes": ""}
+        return {"player_facing_text": "The street narrows and the new scene takes shape.", "tags": [], "scene_update": None, "activate_scene_id": None, "new_scene_draft": None, "world_updates": None, "suggested_action": None, "debug_notes": ""}
 
     with monkeypatch.context() as m:
         m.setattr("game.api.call_gpt", capture_messages)

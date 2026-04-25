@@ -122,7 +122,7 @@ def test_known_destination_transition_sets_arrival_signals(tmp_path, monkeypatch
         m.setattr(
             "game.api.call_gpt",
             lambda _messages: {
-                "player_facing_text": "You arrive at the crossroads.",
+                "player_facing_text": "At the crossroads, the roads split under a low sky.",
                 "tags": [],
                 "scene_update": None,
                 "activate_scene_id": None,

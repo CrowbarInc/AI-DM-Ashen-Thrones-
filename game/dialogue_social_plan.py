@@ -239,7 +239,9 @@ def build_dialogue_social_plan(
 
     plan: Dict[str, Any] = {
         "version": DIALOGUE_SOCIAL_PLAN_VERSION,
-        "applies": bool(is_social and (speaker_id or dialogue_intent)),
+        # Applies only when a concrete speaker is resolved. We intentionally do not
+        # infer/guess a speaker from dialogue_intent alone.
+        "applies": bool(is_social and speaker_id and dialogue_intent),
         "speaker_id": speaker_id,
         "speaker_name": speaker_name,
         "speaker_source": speaker_source,

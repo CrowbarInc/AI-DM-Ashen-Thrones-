@@ -153,7 +153,7 @@ def test_gate_thin_answer_uses_upstream_prepared_marker_not_boundary_synthesis(_
         "response_policy": {"response_type_contract": _rtc("answer")},
         UPSTREAM_PREPARED_EMISSION_KEY: {
             "prepared_answer_fallback_text": marker,
-            "prepared_action_fallback_text": "You act, and the scene shifts.",
+            "prepared_action_fallback_text": "You act, and your position changes with that movement.",
         },
     }
     out = apply_final_emission_gate(

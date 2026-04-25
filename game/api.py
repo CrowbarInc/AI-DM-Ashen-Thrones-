@@ -5,6 +5,15 @@ Asserts ``game.state_authority`` guards at selected **authoritative** ``scene_st
 Domain semantics and publication views live in ``game.world``, ``game.interaction_context``,
 ``game.journal``, and related owners; composed client payloads and prompt-facing text are
 **not** canonical truth stores.
+
+Transition Convergence ownership:
+
+- **Runtime (this module / turn pipeline):** emits only concrete transition signals via resolution/state mutation.
+- **Planning:** `game.narrative_planning` derives/validates `narrative_plan.transition_node`.
+- **Projection:** `game.narration_plan_bundle` ships the node as public structured data.
+- **Consumer:** `game.prompt_context` consumes (no inference/repair).
+- **Final emission:** `game.final_emission_gate` is expression-only; no semantic transition invention/repair.
+- **Enforcement:** `game.scenario_spine_transition_convergence` reports hidden/disjoint transitions (no repair).
 """
 
 from __future__ import annotations

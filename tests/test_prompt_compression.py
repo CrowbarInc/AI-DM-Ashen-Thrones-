@@ -407,12 +407,12 @@ def test_compressed_prompt_context_carries_arrival_bridge_guidance():
         mode_instruction="Standard.",
         recent_log_for_prompt=[],
     )
+    # Block B: prompt_context does not infer transition/arrival guidance from raw resolution.
     obligations = ctx["narration_obligations"]
-    assert obligations["must_advance_scene"] is True
+    assert obligations["must_advance_scene"] is False
     instructions = " ".join(ctx.get("instructions", [])).lower()
-    assert "must_advance_scene" in instructions
-    assert "arrival" in instructions
-    assert "brief bridge from the prior location" in instructions
+    assert "brief bridge from the prior location" not in instructions
+    assert "arrive" not in instructions
 
 
 def test_compressed_prompt_context_only_adds_transition_bridge_when_scene_changes():
@@ -474,7 +474,7 @@ def test_compressed_prompt_context_only_adds_transition_bridge_when_scene_change
         recent_log_for_prompt=[],
     )
     transition_instructions = " ".join(transition_ctx.get("instructions", [])).lower()
-    assert "brief bridge from the prior location" in transition_instructions
+    assert "brief bridge from the prior location" not in transition_instructions
 
 
 def test_compressed_prompt_context_carries_active_npc_reply_flags():

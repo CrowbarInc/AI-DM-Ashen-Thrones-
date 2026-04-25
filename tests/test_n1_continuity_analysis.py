@@ -110,7 +110,7 @@ def test_revisit_inconsistency_and_scene_unstable() -> None:
         {
             "turn_index": 0,
             "player_text": "return to the gate",
-            "gm_text": "you arrive seal intact",
+            "gm_text": "seal intact on return",
             "raw_snapshot": {"scene_id": "court_a"},
         },
         {

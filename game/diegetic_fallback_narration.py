@@ -492,7 +492,12 @@ def render_travel_arrival_fallback_line(
     *,
     seed_key: str,
 ) -> str | None:
-    """Short arrival line from destination scene summary / facts (current envelope only)."""
+    """Short destination-grounding line (current envelope only).
+
+    Transition Convergence (Block D): this helper must not emit generic "you arrive"/scene-shift
+    phrasing that could be interpreted as an inferred transition. Callers should only use it when
+    a transition is already authoritative and plan-backed elsewhere.
+    """
     scene = _inner_scene(scene_or_envelope)
     summary = _first_summary_sentence(scene)
     facts = _visible_fact_strings(scene)
@@ -502,21 +507,23 @@ def render_travel_arrival_fallback_line(
     if summary:
         summ_low = summary[0].lower() + summary[1:] if len(summary) > 1 else summary.lower()
         if idx == 0:
-            prefix = f"You arrive{f' in {loc}' if loc else ''} as "
+            prefix = f"In {loc}, " if loc else ""
             return f"{prefix}{summ_low}".strip()
         if idx == 1:
-            return f"You step through{f' into {loc}' if loc else ''}, and {summ_low}".strip()
+            prefix = f"In {loc}, " if loc else ""
+            return f"{prefix}{summ_low}".strip()
         return f"The new ground shows itself: {summ_low}".strip()
 
     if facts:
         f0 = facts[_stable_u32(f"arr|f|{seed_key}") % len(facts)]
         lead = f0[0].upper() + f0[1:] if f0 else f0
         if idx == 0:
-            return f"You arrive{f' in {loc}' if loc else ''} where {f0.lower()}.".strip()
+            prefix = f"In {loc}, " if loc else ""
+            return f"{prefix}{f0[0].lower() + f0[1:] if len(f0) > 1 else f0.lower()}.".strip()
         return f"{lead} is the first thing that defines the space{f' here in {loc}' if loc else ''}.".strip()
 
     if loc:
-        return f"You arrive in {loc}, the air and noise different enough to mark the change."
+        return f"In {loc}, the air and noise feel different enough to matter."
 
     return None
 

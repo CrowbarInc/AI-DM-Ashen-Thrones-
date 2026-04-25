@@ -69,7 +69,7 @@ authoring.
 from __future__ import annotations
 
 import json
-from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
+from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple, Literal
 
 from game.ctir import looks_like_ctir
 from game.narrative_mode_contract import (
@@ -103,6 +103,17 @@ _MAX_ID_LIST = 48
 _MAX_CODES = 64
 _MAX_PRESSURE_BLOCK_KEYS = 16
 _MAX_DEPTH_SCAN = 3
+
+# --- Block A — Transition Plan Node contract ---
+TransitionType = Literal[
+    "none",
+    "location_change",
+    "time_skip",
+    "scene_cut",
+    "travel",
+    "scene_entry",
+    "scene_exit",
+]
 
 # Keys rejected anywhere in the plan tree (prose / prompt leakage guard).
 _PROSE_INSTRUCTION_KEYS = frozenset(
@@ -400,6 +411,242 @@ def _derive_active_pressures(
         },
         codes,
     )
+
+
+def _derive_transition_node(
+    ctir: Mapping[str, Any],
+    *,
+    public_scene_slice: Mapping[str, Any] | None,
+) -> Tuple[Dict[str, Any], List[str]]:
+    """Derive an explicit transition node from CTIR resolution/state only (no inference)."""
+    codes: List[str] = ["transition_node:derive"]
+    res = _mapping(ctir.get("resolution"))
+    sm = _mapping(ctir.get("state_mutations"))
+    sm_scene = sm.get("scene") if isinstance(sm.get("scene"), Mapping) else {}
+    sc = res.get("state_changes") if isinstance(res.get("state_changes"), Mapping) else {}
+    md = res.get("metadata") if isinstance(res.get("metadata"), Mapping) else {}
+
+    before_scene_id = _as_str(ctir.get("scene_id")) or None
+    after_scene_id = _as_str(res.get("target_scene_id")) or None
+    if not after_scene_id:
+        after_scene_id = _as_str(sm_scene.get("scene_id") or sm_scene.get("activate_scene_id")) or None
+
+    # Deterministic location label only when already public (public_scene_slice).
+    before_location_label: Optional[str] = None
+    ps = public_scene_slice if isinstance(public_scene_slice, Mapping) else {}
+    loc_raw = ps.get("location_tokens") or ps.get("location_anchors")
+    if isinstance(loc_raw, (list, tuple)):
+        toks = [str(x).strip() for x in list(loc_raw) if isinstance(x, str) and str(x).strip()]
+        if toks:
+            before_location_label = _clip(toks[0], max_len=160)
+            codes.append("transition_node:before_location:public_slice")
+    elif isinstance(loc_raw, str) and loc_raw.strip():
+        before_location_label = _clip(loc_raw.strip(), max_len=160)
+        codes.append("transition_node:before_location:public_slice")
+
+    transition_required = False
+    source_fields: List[str] = []
+    derivation_codes: List[str] = []
+
+    resolved_transition = res.get("resolved_transition")
+    if resolved_transition is True or isinstance(resolved_transition, Mapping):
+        transition_required = True
+        source_fields.append("resolution.resolved_transition")
+        derivation_codes.append("signal:resolution.resolved_transition")
+    if _as_str(res.get("target_scene_id")):
+        transition_required = True
+        source_fields.append("resolution.target_scene_id")
+        derivation_codes.append("signal:resolution.target_scene_id")
+    if _as_str(sm_scene.get("scene_id") or sm_scene.get("activate_scene_id")):
+        transition_required = True
+        source_fields.append("state_mutations.scene.(scene_id|activate_scene_id)")
+        derivation_codes.append("signal:state_mutations.scene")
+    for k in ("scene_transition_occurred", "arrived_at_scene", "new_scene_context_available"):
+        if bool(sc.get(k)):
+            transition_required = True
+            source_fields.append(f"resolution.state_changes.{k}")
+            derivation_codes.append(f"signal:resolution.state_changes.{k}")
+
+    md_tt = _as_str(md.get("transition_type"))
+    md_sem = md.get("transition_semantics") if isinstance(md.get("transition_semantics"), Mapping) else {}
+    md_sem_kind = _as_str(md_sem.get("kind")) if isinstance(md_sem, Mapping) else ""
+    explicit_kind = md_tt or md_sem_kind
+    if explicit_kind:
+        transition_required = True
+        source_fields.append("resolution.metadata.(transition_type|transition_semantics.kind)")
+        derivation_codes.append(f"signal:resolution.metadata.transition_kind:{explicit_kind.lower()}")
+
+    time_before = _as_str(md.get("time_anchor_before") or md.get("time_before") or md.get("time_anchor")) or None
+    time_after = _as_str(md.get("time_anchor_after") or md.get("time_after")) or None
+
+    ttype: TransitionType = "none"
+    kind = _as_str(res.get("kind")).lower()
+    explicit_low = explicit_kind.lower() if explicit_kind else ""
+    if transition_required:
+        if explicit_low in ("time_skip", "timeskip"):
+            ttype = "time_skip"
+        elif explicit_low in ("scene_cut", "cut"):
+            ttype = "scene_cut"
+        elif explicit_low in ("scene_entry", "entry", "arrive", "arrival"):
+            ttype = "scene_entry"
+        elif explicit_low in ("scene_exit", "exit", "depart", "departure"):
+            ttype = "scene_exit"
+        elif explicit_low == "travel" or kind == "travel":
+            ttype = "travel"
+        elif bool(sc.get("arrived_at_scene")) and after_scene_id:
+            ttype = "scene_entry"
+        elif after_scene_id and before_scene_id and after_scene_id != before_scene_id:
+            ttype = "location_change"
+        elif after_scene_id:
+            ttype = "location_change"
+        else:
+            ttype = "scene_cut"
+            derivation_codes.append("validation_error:missing_after_scene_id")
+
+    before_anchor: Optional[Dict[str, Any]] = None
+    after_anchor: Optional[Dict[str, Any]] = None
+    if transition_required:
+        before_anchor = {
+            "scene_id": before_scene_id,
+            "location_id": None,
+            "location_label": before_location_label,
+            "time_anchor": time_before,
+        }
+        after_anchor = {
+            "scene_id": after_scene_id,
+            "location_id": None,
+            "location_label": None,
+            "time_anchor": time_after,
+        }
+        if not (before_scene_id or before_location_label or time_before):
+            derivation_codes.append("validation_error:missing_before_anchor_identifier")
+        if not (after_scene_id or time_after):
+            derivation_codes.append("validation_error:missing_after_anchor_identifier")
+        if ttype == "time_skip" and not (time_before and time_after):
+            derivation_codes.append("validation_error:time_skip_missing_time_anchors")
+
+    cont_ids: List[str] = []
+    na = _mapping(ctir.get("narrative_anchors"))
+    for bucket in ("outcomes", "uncertainty", "actors_speakers", "scene_framing"):
+        rows = na.get(bucket)
+        if not isinstance(rows, list):
+            continue
+        for item in rows[:48]:
+            if not isinstance(item, Mapping):
+                continue
+            cid = _as_str(item.get("id") or item.get("anchor_id"))
+            if cid:
+                cont_ids.append(_clip(cid, max_len=96))
+    continuity_anchor_ids = _sorted_unique_strs(cont_ids, limit=48)
+
+    node: Dict[str, Any] = {
+        "transition_required": bool(transition_required),
+        "transition_type": ttype,
+        "before_anchor": before_anchor,
+        "after_anchor": after_anchor,
+        "continuity_anchor_ids": continuity_anchor_ids,
+        "derivation_codes": _sorted_unique_strs(_merge_derivation_codes([codes, derivation_codes]), limit=_MAX_CODES),
+        "source_fields": _sorted_unique_strs(source_fields, limit=48),
+    }
+    return node, list(node.get("derivation_codes") or codes)
+
+
+def _validate_transition_node(node: Any) -> Optional[str]:
+    if node is None:
+        return None
+    if not isinstance(node, Mapping):
+        return "transition_node_not_mapping"
+    allowed = {
+        "transition_required",
+        "transition_type",
+        "before_anchor",
+        "after_anchor",
+        "continuity_anchor_ids",
+        "derivation_codes",
+        "source_fields",
+    }
+    if set(node.keys()) != allowed:
+        return f"transition_node_bad_keys:{sorted(set(node.keys()) ^ allowed)}"
+    if not isinstance(node.get("transition_required"), bool):
+        return "transition_node_transition_required_not_bool"
+    tt = _as_str(node.get("transition_type"))
+    if tt not in (
+        "none",
+        "location_change",
+        "time_skip",
+        "scene_cut",
+        "travel",
+        "scene_entry",
+        "scene_exit",
+    ):
+        return "transition_node_bad_transition_type"
+
+    def _validate_anchor(a: Any, *, which: str) -> Optional[str]:
+        if a is None:
+            return None
+        if not isinstance(a, Mapping):
+            return f"transition_node_{which}_anchor_not_mapping"
+        allowed_a = {"scene_id", "location_id", "location_label", "time_anchor"}
+        if set(a.keys()) != allowed_a:
+            return f"transition_node_{which}_anchor_bad_keys:{sorted(set(a.keys()) ^ allowed_a)}"
+        for k in ("scene_id", "location_id", "location_label", "time_anchor"):
+            v = a.get(k)
+            if v is not None and not (isinstance(v, str) and v.strip() and len(v) <= 160):
+                return f"transition_node_{which}_anchor_bad_str:{k}"
+        return None
+
+    tr = bool(node.get("transition_required"))
+    ba = node.get("before_anchor")
+    aa = node.get("after_anchor")
+    if tr:
+        if ba is None or aa is None:
+            return "transition_node_missing_anchors_for_required_transition"
+        eb = _validate_anchor(ba, which="before")
+        if eb:
+            return eb
+        ea = _validate_anchor(aa, which="after")
+        if ea:
+            return ea
+        bmap = ba if isinstance(ba, Mapping) else {}
+        amap = aa if isinstance(aa, Mapping) else {}
+        if not (
+            _as_str(bmap.get("scene_id"))
+            or _as_str(bmap.get("location_id"))
+            or _as_str(bmap.get("location_label"))
+            or _as_str(bmap.get("time_anchor"))
+        ):
+            return "transition_node_before_anchor_missing_identifier"
+        if not (
+            _as_str(amap.get("scene_id"))
+            or _as_str(amap.get("location_id"))
+            or _as_str(amap.get("location_label"))
+            or _as_str(amap.get("time_anchor"))
+        ):
+            return "transition_node_after_anchor_missing_identifier"
+    else:
+        if tt == "none" and (ba is not None or aa is not None):
+            return "transition_node_unexpected_anchors_when_not_required"
+
+    cids = node.get("continuity_anchor_ids")
+    if not isinstance(cids, list):
+        return "transition_node_continuity_anchor_ids_not_list"
+    if len(cids) > 48:
+        return "transition_node_continuity_anchor_ids_too_long"
+    for x in cids:
+        if not isinstance(x, str) or not x.strip() or len(x) > 120:
+            return "transition_node_continuity_anchor_id_bad_item"
+
+    for lk in ("derivation_codes", "source_fields"):
+        v = node.get(lk)
+        if not isinstance(v, list):
+            return f"transition_node_{lk}_not_list"
+        if len(v) > 64:
+            return f"transition_node_{lk}_too_long"
+        for item in v:
+            if not isinstance(item, str) or not item.strip() or len(item) > 180:
+                return f"transition_node_{lk}_bad_item"
+
+    return None
 
 
 def _derive_required_new_information(ctir: Mapping[str, Any]) -> Tuple[List[Dict[str, Any]], List[str]]:
@@ -1914,11 +2161,12 @@ def build_narrative_plan(
         active_pressures=active_pressures,
         opening_visible_fact_strings=opening_visible_fact_strings,
     )
+    transition_node, tn_codes = _derive_transition_node(ctir, public_scene_slice=public_scene_slice)
 
     meta = _bounded_shallow_map(resolution_meta, max_keys=12) if resolution_meta else {}
     recent = _compress_recent_events(recent_compressed_events)
 
-    derivation_codes = _merge_derivation_codes([c1, c2, c3, c4, c5, nr_codes, ao_codes, so_codes])
+    derivation_codes = _merge_derivation_codes([c1, c2, c3, c4, c5, nr_codes, ao_codes, so_codes, tn_codes])
     _po = (
         narrative_mode_contract.get("prompt_obligations")
         if isinstance(narrative_mode_contract.get("prompt_obligations"), Mapping)
@@ -1967,6 +2215,7 @@ def build_narrative_plan(
         "active_pressures": active_pressures,
         "required_new_information": required_new_information,
         "allowable_entity_references": allowable_entity_references,
+        "transition_node": transition_node,
         "narrative_mode": narrative_mode,
         "narrative_mode_contract": narrative_mode_contract,
         "role_allocation": role_allocation,
@@ -2070,6 +2319,7 @@ def validate_narrative_plan(plan: Any, *, strict: bool = True) -> Optional[str]:
         "active_pressures",
         "required_new_information",
         "allowable_entity_references",
+        "transition_node",
         "narrative_mode",
         "narrative_mode_contract",
         "role_allocation",
@@ -2153,6 +2403,10 @@ def validate_narrative_plan(plan: Any, *, strict: bool = True) -> Optional[str]:
     if ao_err:
         return ao_err
 
+    tn_err = _validate_transition_node(plan.get("transition_node"))
+    if tn_err:
+        return tn_err
+
     try:
         json.dumps(plan, sort_keys=True)
     except (TypeError, ValueError):
@@ -2221,6 +2475,23 @@ def normalize_narrative_plan(plan: Mapping[str, Any] | None) -> Dict[str, Any]:
                 }
             )
         p["allowable_entity_references"] = sorted(cleaned, key=lambda r: r["entity_id"])[:_MAX_ID_LIST]
+
+    tn = p.get("transition_node")
+    if isinstance(tn, Mapping):
+        tn_d: Dict[str, Any] = dict(tn)
+        for fld, lim in (("continuity_anchor_ids", 48), ("derivation_codes", _MAX_CODES), ("source_fields", 48)):
+            v = tn_d.get(fld)
+            if isinstance(v, list):
+                tn_d[fld] = _sorted_unique_strs(v, limit=lim)
+        for af in ("before_anchor", "after_anchor"):
+            a = tn_d.get(af)
+            if isinstance(a, Mapping):
+                a_d = dict(a)
+                for k in ("scene_id", "location_id", "location_label", "time_anchor"):
+                    sval = _as_str(a_d.get(k))
+                    a_d[k] = _clip(sval, max_len=160) if sval else None
+                tn_d[af] = a_d
+        p["transition_node"] = tn_d
 
     dbg = _mapping(p.get("debug"))
     if dbg.get("derivation_codes") is not None:
