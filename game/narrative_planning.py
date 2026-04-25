@@ -77,6 +77,7 @@ from game.narrative_mode_contract import (
     build_narrative_mode_contract,
     validate_narrative_mode_contract,
 )
+from game.opening_visible_fact_selection import opening_fact_primary_category
 
 NARRATIVE_PLAN_VERSION = 1
 
@@ -122,6 +123,56 @@ _PROSE_INSTRUCTION_KEYS = frozenset(
         "message",
         "messages",
     }
+)
+
+# Extra key names rejected under ``scene_opening`` (C1-A structural projection).
+_SCENE_OPENING_PROSEISH_KEYS = frozenset(
+    _PROSE_INSTRUCTION_KEYS
+    | {
+        "cinematic",
+        "opener_line",
+        "atmospheric",
+        "neutral_opener",
+        "fallback_opener",
+        "fallback",
+        "template",
+    }
+)
+
+_SCENE_OPENING_REASONS = frozenset({"campaign_start", "scene_entry", "post_transition", "resume_entry", "none"})
+
+_SCENE_OPENING_ALLOWED_TOP_KEYS = frozenset(
+    {
+        "opening_required",
+        "opening_reason",
+        "scene_id",
+        "location_anchors",
+        "actor_anchors",
+        "active_pressures",
+        "visible_fact_categories",
+        "visible_fact_anchor_ids",
+        "prohibited_content_codes",
+        "derivation_codes",
+        "validator",
+    }
+)
+
+# Canonical machine codes only (expanded to instruction lines downstream in prompt assembly).
+DEFAULT_SCENE_OPENING_PROHIBITED_CONTENT_CODES: Tuple[str, ...] = (
+    "no_engine_role_label_as_proper_name",
+    "no_unintroduced_offscene_npc_names",
+    "no_backstage_plot_briefings",
+    "no_hidden_gm_facts_as_immediate_perception",
+    "no_unfounded_faction_control_claims",
+)
+
+_SCENE_OPENING_FALLBACK_MARKERS = (
+    "neutral opener",
+    "neutral_opener",
+    "fallback opener",
+    "fallback_opener",
+    "fast_fallback",
+    "template opener",
 )
 
 
@@ -1317,6 +1368,460 @@ def _merge_derivation_codes(parts: Sequence[Sequence[str]]) -> List[str]:
     return merged
 
 
+def infer_scene_opening_reason(
+    ctir: Mapping[str, Any],
+    *,
+    narration_obligations: Mapping[str, Any] | None = None,
+    session_interaction: Mapping[str, Any] | None = None,
+) -> str:
+    """Closed-set ``opening_reason`` string (same rules as plan ``scene_opening``).
+
+    Used at runtime seams (bundle audit) to know whether a turn requires a plan-backed
+    ``scene_opening`` without duplicating ad-hoc opening detection outside this module.
+    """
+    r, _ = _derive_opening_reason(
+        ctir, narration_obligations=narration_obligations, session_interaction=session_interaction
+    )
+    return r
+
+
+def _derive_opening_reason(
+    ctir: Mapping[str, Any],
+    *,
+    narration_obligations: Mapping[str, Any] | None,
+    session_interaction: Mapping[str, Any] | None,
+) -> Tuple[str, List[str]]:
+    """Closed-set opening_reason from CTIR + narration_obligations + session_interaction only."""
+    codes: List[str] = []
+    no = narration_obligations if isinstance(narration_obligations, Mapping) else {}
+    si = session_interaction if isinstance(session_interaction, Mapping) else {}
+    res = _mapping(ctir.get("resolution"))
+    sc = _mapping(res.get("state_changes"))
+
+    if bool(si.get("resume_entry")):
+        codes.append("opening_reason:resume_entry")
+        return "resume_entry", codes
+
+    action_id = _as_str(res.get("action_id"))
+    campaign_start = bool(sc.get("opening_scene_turn")) or action_id == "campaign_start_opening_scene"
+    if campaign_start:
+        codes.append("opening_reason:campaign_start")
+        return "campaign_start", codes
+
+    has_tr = bool(res.get("resolved_transition")) or bool(_as_str(res.get("target_scene_id"))) or bool(
+        sc.get("scene_transition_occurred") or sc.get("arrived_at_scene") or sc.get("new_scene_context_available")
+    )
+    if has_tr:
+        codes.append("opening_reason:post_transition")
+        return "post_transition", codes
+
+    if bool(no.get("is_opening_scene")):
+        codes.append("opening_reason:scene_entry")
+        return "scene_entry", codes
+
+    codes.append("opening_reason:none")
+    return "none", codes
+
+
+def _scene_opening_anchor_requirements(
+    ctir: Mapping[str, Any],
+    *,
+    public_scene_slice: Mapping[str, Any] | None,
+    scene_anchors: Mapping[str, Any],
+) -> Tuple[bool, bool]:
+    """(require_scene_id, require_location_anchors) when merged anchors / slices carry those signals."""
+    ps = public_scene_slice if isinstance(public_scene_slice, Mapping) else {}
+    sa = scene_anchors if isinstance(scene_anchors, Mapping) else {}
+    need_sid = bool(
+        _as_str(sa.get("scene_id")) or _as_str(ctir.get("scene_id")) or _as_str(ps.get("scene_id"))
+    )
+    loc_sa = sa.get("location_anchors") if isinstance(sa.get("location_anchors"), list) else []
+    need_loc = any(bool(_as_str(x)) for x in loc_sa)
+    if not need_loc:
+        loc_raw = ps.get("location_tokens") or ps.get("location_anchors")
+        if isinstance(loc_raw, (list, tuple)):
+            need_loc = any(bool(_as_str(x)) for x in loc_raw)
+        elif isinstance(loc_raw, str) and loc_raw.strip():
+            need_loc = True
+    return need_sid, need_loc
+
+
+def _derive_scene_opening_actor_anchors(scene_anchors: Mapping[str, Any]) -> Tuple[List[Dict[str, Any]], List[str]]:
+    codes: List[str] = []
+    sa = scene_anchors if isinstance(scene_anchors, Mapping) else {}
+    out: List[Dict[str, Any]] = []
+    seen: set[str] = set()
+    inter = _as_str(sa.get("active_interlocutor"))
+    if inter:
+        eid = _clip(inter, max_len=96)
+        out.append({"entity_id": eid, "anchor_role": "interlocutor"})
+        seen.add(eid)
+        codes.append("actor_anchor:interlocutor")
+    rel = sa.get("relevant_actors") if isinstance(sa.get("relevant_actors"), list) else []
+    for item in rel[:24]:
+        if not isinstance(item, Mapping):
+            continue
+        eid = _clip(_as_str(item.get("id") or item.get("entity_id")), max_len=96)
+        if not eid or eid in seen:
+            continue
+        seen.add(eid)
+        out.append({"entity_id": eid, "anchor_role": "relevant_actor"})
+        codes.append("actor_anchor:relevant_actor")
+    out.sort(key=lambda r: (str(r.get("anchor_role")), str(r.get("entity_id"))))
+    return out[:24], codes
+
+
+def _visible_fact_opening_projection(
+    opening_visible_fact_strings: Sequence[str] | None,
+) -> Tuple[List[str], List[str], List[str]]:
+    """Derive category tags + stable slot anchor ids from curated visible-fact strings (upstream-selected only)."""
+    codes: List[str] = []
+    if not opening_visible_fact_strings:
+        return [], [], codes
+    cats_acc: set[str] = set()
+    anchors: List[str] = []
+    for i, raw in enumerate(list(opening_visible_fact_strings)[:12]):
+        if not isinstance(raw, str) or not raw.strip():
+            continue
+        norm = " ".join(raw.split())
+        cat = opening_fact_primary_category(norm)
+        cats_acc.add(cat)
+        anchors.append(f"vf_slot:{i}")
+        codes.append(f"visible_fact:cat:{cat}")
+    return sorted(cats_acc), sorted(anchors), codes
+
+
+def _deep_copy_jsonish(v: Any) -> Any:
+    try:
+        return json.loads(json.dumps(v, sort_keys=True))
+    except (TypeError, ValueError):
+        return v
+
+
+def _derive_scene_opening(
+    ctir: Mapping[str, Any],
+    *,
+    narration_obligations: Mapping[str, Any] | None,
+    session_interaction: Mapping[str, Any] | None,
+    public_scene_slice: Mapping[str, Any] | None,
+    scene_anchors: Mapping[str, Any],
+    active_pressures: Mapping[str, Any],
+    opening_visible_fact_strings: Sequence[str] | None,
+) -> Tuple[Dict[str, Any] | None, List[str]]:
+    """Plan-owned structural scene opening (C1-A). No prose, prompts, or world paraphrase."""
+    reason, r_codes = _derive_opening_reason(
+        ctir, narration_obligations=narration_obligations, session_interaction=session_interaction
+    )
+    opening_required = reason != "none"
+    if not opening_required:
+        return None, r_codes
+
+    ap_copy = _deep_copy_jsonish(active_pressures) if isinstance(active_pressures, Mapping) else {}
+    if not isinstance(ap_copy, dict):
+        ap_copy = {}
+
+    loc_anchors = scene_anchors.get("location_anchors") if isinstance(scene_anchors.get("location_anchors"), list) else []
+    loc_anchors = _sorted_unique_strs(loc_anchors, limit=16)
+
+    sid = _as_str(scene_anchors.get("scene_id")) or None
+
+    actor_anchors, a_codes = _derive_scene_opening_actor_anchors(scene_anchors)
+    vf_cats, vf_ids, vf_codes = _visible_fact_opening_projection(opening_visible_fact_strings)
+
+    prohibited = sorted(DEFAULT_SCENE_OPENING_PROHIBITED_CONTENT_CODES)
+
+    so_codes = _merge_derivation_codes([r_codes, a_codes, vf_codes])
+    so_obj: Dict[str, Any] = {
+        "opening_required": True,
+        "opening_reason": reason,
+        "scene_id": sid,
+        "location_anchors": loc_anchors,
+        "actor_anchors": actor_anchors,
+        "active_pressures": ap_copy,
+        "visible_fact_categories": vf_cats,
+        "visible_fact_anchor_ids": vf_ids,
+        "prohibited_content_codes": prohibited,
+        "derivation_codes": so_codes,
+        "validator": {"ok": True, "issues": []},
+    }
+    v_issues = _validate_scene_opening_object(
+        so_obj,
+        ctir=ctir,
+        public_scene_slice=public_scene_slice,
+        plan_active_pressures=active_pressures if isinstance(active_pressures, Mapping) else {},
+        scene_anchors=scene_anchors if isinstance(scene_anchors, Mapping) else {},
+    )
+    so_obj["validator"] = {"ok": not v_issues, "issues": v_issues}
+    return so_obj, so_codes
+
+
+def _scan_scene_opening_for_proseish_keys(obj: Any, *, prefix: str, depth: int) -> Optional[str]:
+    if depth > _MAX_DEPTH_SCAN:
+        return None
+    if isinstance(obj, Mapping):
+        for k, v in obj.items():
+            sk = _as_str(k).lower()
+            if sk in _SCENE_OPENING_PROSEISH_KEYS:
+                return f"{prefix}.{k}"
+            hit = _scan_scene_opening_for_proseish_keys(v, prefix=f"{prefix}.{k}", depth=depth + 1)
+            if hit:
+                return hit
+    elif isinstance(obj, (list, tuple)):
+        for i, v in enumerate(obj):
+            hit = _scan_scene_opening_for_proseish_keys(v, prefix=f"{prefix}[{i}]", depth=depth + 1)
+            if hit:
+                return hit
+    elif isinstance(obj, str):
+        low = obj.lower()
+        for m in _SCENE_OPENING_FALLBACK_MARKERS:
+            if m in low:
+                return f"{prefix}:fallback_marker:{m}"
+    return None
+
+
+def _validate_scene_opening_object(
+    so: Mapping[str, Any],
+    *,
+    ctir: Mapping[str, Any],
+    public_scene_slice: Mapping[str, Any] | None,
+    plan_active_pressures: Mapping[str, Any],
+    scene_anchors: Mapping[str, Any],
+) -> List[str]:
+    """Return issue codes; empty means structurally valid under C1-A."""
+    issues: List[str] = []
+    if not isinstance(so, Mapping):
+        return ["scene_opening_not_mapping"]
+    keys = set(so.keys())
+    if keys != _SCENE_OPENING_ALLOWED_TOP_KEYS:
+        issues.append(f"scene_opening_bad_keys:{sorted(keys ^ _SCENE_OPENING_ALLOWED_TOP_KEYS)}")
+
+    req = so.get("opening_required")
+    if req is not True:
+        issues.append("scene_opening_opening_required_not_true")
+
+    reason = _as_str(so.get("opening_reason"))
+    if reason not in _SCENE_OPENING_REASONS:
+        issues.append(f"scene_opening_bad_reason:{reason!r}")
+
+    prose = _scan_scene_opening_for_proseish_keys(so, prefix="scene_opening", depth=0)
+    if prose:
+        issues.append(f"scene_opening_proseish_key_path:{prose}")
+
+    need_sid, need_loc = _scene_opening_anchor_requirements(
+        ctir, public_scene_slice=public_scene_slice, scene_anchors=scene_anchors if isinstance(scene_anchors, Mapping) else {}
+    )
+    sid = _as_str(so.get("scene_id"))
+    if need_sid and not sid:
+        issues.append("scene_opening_missing_scene_id")
+    anchor_sid = _as_str(scene_anchors.get("scene_id"))
+    if anchor_sid and sid != anchor_sid:
+        issues.append("scene_opening_scene_id_mismatch_scene_anchors")
+
+    la = so.get("location_anchors")
+    la_sa = scene_anchors.get("location_anchors") if isinstance(scene_anchors.get("location_anchors"), list) else []
+    la_sa_norm = _sorted_unique_strs(la_sa, limit=16)
+    if not isinstance(la, list):
+        issues.append("scene_opening_location_anchors_not_list")
+    else:
+        la_so_norm = _sorted_unique_strs([_as_str(x) for x in la], limit=16)
+        if need_loc and not la_so_norm:
+            issues.append("scene_opening_missing_location_anchors")
+        if need_loc and la_so_norm != la_sa_norm:
+            issues.append("scene_opening_location_anchors_mismatch_scene_anchors")
+
+    aa = so.get("actor_anchors")
+    if not isinstance(aa, list):
+        issues.append("scene_opening_actor_anchors_not_list")
+    else:
+        allowed_ids: set[str] = set()
+        ic = _mapping(ctir.get("interaction"))
+        for tid in (
+            _as_str(ic.get("active_target_id")),
+            _as_str((ic.get("responder_target") or {}).get("id") if isinstance(ic.get("responder_target"), Mapping) else ""),
+            _as_str((ic.get("speaker_target") or {}).get("id") if isinstance(ic.get("speaker_target"), Mapping) else ""),
+        ):
+            if tid:
+                allowed_ids.add(_clip(tid, max_len=96))
+        na = _mapping(ctir.get("narrative_anchors")).get("actors_speakers")
+        if isinstance(na, list):
+            for item in na:
+                if isinstance(item, Mapping):
+                    eid = _as_str(item.get("id") or item.get("entity_id"))
+                    if eid:
+                        allowed_ids.add(_clip(eid, max_len=96))
+        inter_sa = _as_str(scene_anchors.get("active_interlocutor"))
+        tgt_sa = _as_str(scene_anchors.get("active_target"))
+        if inter_sa:
+            allowed_ids.add(_clip(inter_sa, max_len=96))
+        if tgt_sa:
+            allowed_ids.add(_clip(tgt_sa, max_len=96))
+        for i, row in enumerate(aa):
+            if not isinstance(row, Mapping):
+                issues.append(f"scene_opening_actor_anchor_not_mapping:{i}")
+                continue
+            eid = _as_str(row.get("entity_id"))
+            role = _as_str(row.get("anchor_role"))
+            if role not in ("interlocutor", "relevant_actor"):
+                issues.append(f"scene_opening_bad_anchor_role:{i}")
+            if eid and allowed_ids and eid not in allowed_ids:
+                issues.append(f"scene_opening_actor_not_in_ctir:{eid}")
+
+    ap_so = so.get("active_pressures")
+    if not isinstance(ap_so, Mapping):
+        issues.append("scene_opening_active_pressures_not_mapping")
+    else:
+        try:
+            if json.dumps(ap_so, sort_keys=True) != json.dumps(plan_active_pressures, sort_keys=True):
+                issues.append("scene_opening_active_pressures_mismatch")
+        except (TypeError, ValueError):
+            issues.append("scene_opening_active_pressures_not_comparable")
+
+    pcc = so.get("prohibited_content_codes")
+    if not isinstance(pcc, list):
+        issues.append("scene_opening_prohibited_codes_not_list")
+    else:
+        for i, c in enumerate(pcc):
+            if not isinstance(c, str) or not c.strip():
+                issues.append(f"scene_opening_bad_prohibited_code:{i}")
+            low = str(c).lower()
+            if any(m in low for m in _SCENE_OPENING_FALLBACK_MARKERS):
+                issues.append(f"scene_opening_fallback_indicator_in_code:{i}")
+
+    vfc = so.get("visible_fact_categories")
+    if not isinstance(vfc, list) or len(vfc) > 12:
+        issues.append("scene_opening_bad_visible_fact_categories")
+    else:
+        allowed_cats = frozenset({"A", "B", "C", "D", "E"})
+        for i, c in enumerate(vfc):
+            if not isinstance(c, str) or c not in allowed_cats:
+                issues.append(f"scene_opening_bad_visible_fact_category:{i}")
+
+    vf_ids = so.get("visible_fact_anchor_ids")
+    if not isinstance(vf_ids, list) or len(vf_ids) > 12:
+        issues.append("scene_opening_bad_visible_fact_anchor_ids")
+
+    dc = so.get("derivation_codes")
+    if not isinstance(dc, list):
+        issues.append("scene_opening_derivation_codes_not_list")
+
+    val = so.get("validator")
+    if not isinstance(val, Mapping):
+        issues.append("scene_opening_validator_not_mapping")
+
+    return issues
+
+
+def validate_scene_opening(
+    scene_opening: Any,
+    *,
+    ctir: Mapping[str, Any],
+    public_scene_slice: Mapping[str, Any] | None,
+    plan_active_pressures: Mapping[str, Any],
+    scene_anchors: Mapping[str, Any],
+    opening_required: bool,
+) -> Optional[str]:
+    """Return first error code string, or None if valid for the given *opening_required* flag."""
+    if not opening_required:
+        if scene_opening is not None:
+            return "scene_opening_must_be_null_when_not_required"
+        return None
+    if scene_opening is None:
+        return "scene_opening_missing_when_required"
+    if not isinstance(scene_opening, Mapping):
+        return "scene_opening_not_mapping"
+    issues = _validate_scene_opening_object(
+        scene_opening,
+        ctir=ctir,
+        public_scene_slice=public_scene_slice,
+        plan_active_pressures=plan_active_pressures,
+        scene_anchors=scene_anchors,
+    )
+    if issues:
+        return issues[0]
+    val = scene_opening.get("validator") if isinstance(scene_opening.get("validator"), Mapping) else {}
+    if not val.get("ok"):
+        return "scene_opening_validator_failed"
+    return None
+
+
+def _validate_scene_opening_plan(plan: Mapping[str, Any]) -> Optional[str]:
+    """Post-build plan coherence for ``scene_opening`` (no external CTIR argument)."""
+    so = plan.get("scene_opening")
+    nm = _as_str(plan.get("narrative_mode"))
+    if so is None:
+        if nm == "opening":
+            return "scene_opening_missing_for_opening_mode"
+        return None
+    if not isinstance(so, Mapping):
+        return "scene_opening_not_mapping"
+
+    prose = _scan_scene_opening_for_proseish_keys(so, prefix="scene_opening", depth=0)
+    if prose:
+        return f"scene_opening_proseish:{prose}"
+
+    keys = set(so.keys())
+    if keys != _SCENE_OPENING_ALLOWED_TOP_KEYS:
+        return f"scene_opening_bad_keys:{sorted(keys ^ _SCENE_OPENING_ALLOWED_TOP_KEYS)}"
+
+    sa = plan.get("scene_anchors") if isinstance(plan.get("scene_anchors"), Mapping) else {}
+    ap = plan.get("active_pressures") if isinstance(plan.get("active_pressures"), Mapping) else {}
+
+    sid_sa = _as_str(sa.get("scene_id"))
+    sid_so = _as_str(so.get("scene_id"))
+    if sid_sa and sid_so != sid_sa:
+        return "scene_opening_scene_id_mismatch_scene_anchors"
+
+    la_sa = sa.get("location_anchors") if isinstance(sa.get("location_anchors"), list) else []
+    la_so = so.get("location_anchors") if isinstance(so.get("location_anchors"), list) else []
+    if _sorted_unique_strs(la_sa, limit=16) != _sorted_unique_strs(la_so, limit=16):
+        return "scene_opening_location_anchors_mismatch_plan"
+
+    try:
+        if json.dumps(so.get("active_pressures"), sort_keys=True) != json.dumps(ap, sort_keys=True):
+            return "scene_opening_active_pressures_mismatch_plan"
+    except (TypeError, ValueError):
+        return "scene_opening_active_pressures_not_json_comparable"
+
+    reason = _as_str(so.get("opening_reason"))
+    if reason not in _SCENE_OPENING_REASONS:
+        return f"scene_opening_bad_reason:{reason!r}"
+
+    val = so.get("validator")
+    if isinstance(val, Mapping) and val.get("ok") is False:
+        return "scene_opening_validator_failed"
+
+    aer = plan.get("allowable_entity_references") if isinstance(plan.get("allowable_entity_references"), list) else []
+    allowed: set[str] = set()
+    for row in aer:
+        if isinstance(row, Mapping):
+            eid = _as_str(row.get("entity_id"))
+            if eid:
+                allowed.add(_clip(eid, max_len=96))
+    for fld in ("active_interlocutor", "active_target"):
+        x = _as_str(sa.get(fld))
+        if x:
+            allowed.add(_clip(x, max_len=96))
+    aa = so.get("actor_anchors") if isinstance(so.get("actor_anchors"), list) else []
+    if allowed:
+        for row in aa:
+            if not isinstance(row, Mapping):
+                continue
+            eid = _as_str(row.get("entity_id"))
+            if eid and eid not in allowed:
+                return f"scene_opening_actor_not_allowlisted:{eid}"
+
+    pcc = so.get("prohibited_content_codes")
+    if isinstance(pcc, list):
+        for c in pcc:
+            if not isinstance(c, str):
+                continue
+            low = str(c).lower()
+            if any(m in low for m in _SCENE_OPENING_FALLBACK_MARKERS):
+                return "scene_opening_fallback_indicator_in_code"
+
+    return None
+
+
 def build_narrative_plan(
     *,
     ctir: Mapping[str, Any],
@@ -1328,6 +1833,7 @@ def build_narrative_plan(
     turn_packet: Mapping[str, Any] | None = None,
     narration_obligations: Mapping[str, Any] | None = None,
     response_policy: Mapping[str, Any] | None = None,
+    opening_visible_fact_strings: Sequence[str] | None = None,
 ) -> Dict[str, Any]:
     """Assemble a deterministic narrative-plan dict from CTIR-centered inputs.
 
@@ -1351,6 +1857,9 @@ def build_narrative_plan(
       :func:`game.narrative_mode_contract.build_narrative_mode_contract` only (no
       local mode re-derivation). Omitted branches default to empty mappings at the
       contract builder.
+    - ``opening_visible_fact_strings``: optional curated public visible-fact lines
+      (same order as the prompt seam) used only to emit ``scene_opening.visible_fact_*``
+      category/slot anchors—never embedded as prose on the plan.
 
     This function does not load engine/session/world objects or hidden stores.
     """
@@ -1391,11 +1900,20 @@ def build_narrative_plan(
         allowable_entity_references=allowable_entity_references,
         role_allocation=role_allocation,
     )
+    scene_opening, so_codes = _derive_scene_opening(
+        ctir,
+        narration_obligations=narration_obligations,
+        session_interaction=session_interaction,
+        public_scene_slice=public_scene_slice,
+        scene_anchors=scene_anchors,
+        active_pressures=active_pressures,
+        opening_visible_fact_strings=opening_visible_fact_strings,
+    )
 
     meta = _bounded_shallow_map(resolution_meta, max_keys=12) if resolution_meta else {}
     recent = _compress_recent_events(recent_compressed_events)
 
-    derivation_codes = _merge_derivation_codes([c1, c2, c3, c4, c5, nr_codes])
+    derivation_codes = _merge_derivation_codes([c1, c2, c3, c4, c5, nr_codes, so_codes])
     _po = (
         narrative_mode_contract.get("prompt_obligations")
         if isinstance(narrative_mode_contract.get("prompt_obligations"), Mapping)
@@ -1432,6 +1950,8 @@ def build_narrative_plan(
     # - narrative_roles: Objective N3 abstract composition-role shaping (counts, closed-set signals,
     #   emphasis bands, structural kind-tags); downstream of scene_anchors, active_pressures,
     #   required_new_information, narrative_mode_contract, allowable_entity_references, role_allocation.
+    # - scene_opening: C1-A plan-owned structural opening projection (prose-free); None when
+    #   ``opening_reason`` is ``none``; otherwise CTIR + public/visibility-shaped inputs only.
     # - recent_compressed_events: bounded planning convenience (caller-supplied bounded summaries;
     #   not canonical turn history).
     # - resolution_meta: bounded planning convenience (optional caller metadata blob; never CTIR).
@@ -1446,6 +1966,7 @@ def build_narrative_plan(
         "narrative_mode_contract": narrative_mode_contract,
         "role_allocation": role_allocation,
         "narrative_roles": narrative_roles,
+        "scene_opening": scene_opening,
         "recent_compressed_events": recent,
         "resolution_meta": meta,
         "debug": {
@@ -1471,6 +1992,7 @@ def narrative_plan_matches_ctir_derivation(
     turn_packet: Mapping[str, Any] | None = None,
     narration_obligations: Mapping[str, Any] | None = None,
     response_policy: Mapping[str, Any] | None = None,
+    opening_visible_fact_strings: Sequence[str] | None = None,
 ) -> bool:
     """Return True iff *plan* is byte-identical to a fresh :func:`build_narrative_plan` for the same inputs.
 
@@ -1496,6 +2018,7 @@ def narrative_plan_matches_ctir_derivation(
             turn_packet=turn_packet,
             narration_obligations=narration_obligations,
             response_policy=response_policy,
+            opening_visible_fact_strings=opening_visible_fact_strings,
         )
     except ValueError:
         return False
@@ -1545,6 +2068,7 @@ def validate_narrative_plan(plan: Any, *, strict: bool = True) -> Optional[str]:
         "narrative_mode_contract",
         "role_allocation",
         "narrative_roles",
+        "scene_opening",
         "recent_compressed_events",
         "resolution_meta",
         "debug",
@@ -1613,6 +2137,10 @@ def validate_narrative_plan(plan: Any, *, strict: bool = True) -> Optional[str]:
         pinst = _validate_narrative_roles_plan_slices(plan)
         if pinst:
             return pinst
+
+    so_err = _validate_scene_opening_plan(plan)
+    if so_err:
+        return so_err
 
     try:
         json.dumps(plan, sort_keys=True)
@@ -1720,5 +2248,33 @@ def normalize_narrative_plan(plan: Mapping[str, Any] | None) -> Dict[str, Any]:
             fixed_nr[rk] = sub_d
         if len(fixed_nr) == len(_NARRATIVE_ROLE_TOP_KEYS):
             p["narrative_roles"] = fixed_nr
+
+    so = p.get("scene_opening")
+    if isinstance(so, Mapping):
+        so_d = dict(so)
+        lac = so_d.get("location_anchors")
+        if isinstance(lac, list):
+            so_d["location_anchors"] = _sorted_unique_strs(lac, limit=16)
+        for fld in ("visible_fact_categories", "visible_fact_anchor_ids", "prohibited_content_codes", "derivation_codes"):
+            v = so_d.get(fld)
+            if isinstance(v, list):
+                if fld == "prohibited_content_codes":
+                    so_d[fld] = sorted({str(x).strip() for x in v if isinstance(x, str) and str(x).strip()})
+                else:
+                    so_d[fld] = sorted({str(x).strip() for x in v if isinstance(x, str) and str(x).strip()})
+        aa = so_d.get("actor_anchors")
+        if isinstance(aa, list):
+            rows = []
+            for x in aa:
+                if not isinstance(x, Mapping):
+                    continue
+                rows.append(
+                    {
+                        "entity_id": _clip(_as_str(x.get("entity_id")), max_len=96),
+                        "anchor_role": _clip(_as_str(x.get("anchor_role")), max_len=32),
+                    }
+                )
+            so_d["actor_anchors"] = sorted(rows, key=lambda r: (str(r.get("anchor_role")), str(r.get("entity_id"))))
+        p["scene_opening"] = so_d
 
     return p

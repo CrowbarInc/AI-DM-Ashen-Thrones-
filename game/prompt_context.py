@@ -122,6 +122,7 @@ from game.opening_scene_realization import (
     build_opening_scene_realization,
     merge_opening_instructions,
     opening_realization_none,
+    patch_opening_export_with_plan_scene_opening,
 )
 from game.anti_railroading import build_anti_railroading_contract
 from game.context_separation import build_context_separation_contract
@@ -144,6 +145,7 @@ from game.response_policy_contracts import (
 from game.turn_packet import build_turn_packet
 from game.ctir_runtime import SESSION_CTIR_STAMP_KEY, get_attached_ctir
 from game.narrative_plan_upstream import (
+    SESSION_NARRATION_RESUME_ENTRY_PENDING_KEY,
     interaction_context_snapshot_from_ctir_semantics,
     pending_lead_ids_from_active_pending,
     session_interaction_slice_for_narrative_plan,
@@ -805,6 +807,9 @@ _NARRATIVE_PLAN_STRUCT_GUIDANCE: tuple[str, ...] = (
     "for published entity_id handles when non-empty—not whom to focus on. Use `scene_anchors.active_interlocutor`, "
     "`scene_anchors` generally, `narrative_plan.narrative_mode`, `narrative_plan.narrative_mode_contract`, `active_pressures`, "
     "`required_new_information`, and `role_allocation` for narrower focality. narration_visibility remains the hard visibility scope—never reference entities outside both contracts.",
+    "Scene opening (C1-A): when `narrative_plan.scene_opening` is present, treat it as the sole structural opener contract "
+    "(anchors, closed-set opening_reason, visible_fact anchor ids/categories, prohibited_content_codes)—prose-free; pair with "
+    "narration_visibility.visible_facts for observable lines. It does not replace CTIR or visibility.",
     "Narrative roles composition (N3): read `narrative_plan.narrative_roles` as five parallel composition hints—each carries "
     "`emphasis_band` plus closed-set `signals` (and small bounded counters/tags)—not prose beats. "
     "`location_anchor` biases physical/scene grounding; `actor_anchor` biases materially relevant actor presence; "
@@ -3001,7 +3006,7 @@ def _compress_session(
     convo_privacy = interaction_ctx.get('conversation_privacy')
     position_ctx = interaction_ctx.get('player_position_context')
 
-    return {
+    out_sv = {
         'active_scene_id': str(session.get('active_scene_id', '') or ''),
         'response_mode': str(session.get('response_mode', 'standard') or 'standard'),
         'turn_counter': int(session.get('turn_counter', 0) or 0),
@@ -3014,6 +3019,9 @@ def _compress_session(
         'conversation_privacy': str(convo_privacy).strip() if isinstance(convo_privacy, str) and convo_privacy.strip() else None,
         'player_position_context': str(position_ctx).strip() if isinstance(position_ctx, str) and position_ctx.strip() else None,
     }
+    if bool(session.get(SESSION_NARRATION_RESUME_ENTRY_PENDING_KEY)):
+        out_sv['resume_entry'] = True
+    return out_sv
 
 
 def _compress_recent_log(recent_log: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
@@ -3561,7 +3569,8 @@ def _compact_manual_play_instructions(
         out.append(
             "NARRATIVE PLAN: When `narrative_plan` is on the payload, use its scene_anchors, active_pressures, "
             "required_new_information, allowable_entity_references (visible handle boundary only—not focality), "
-            "role_allocation weights, and `narrative_roles` emphasis_band/signals as optional composition hints—together with "
+            "role_allocation weights, `scene_opening` when present (structural opener anchors only—no prose there), "
+            "and `narrative_roles` emphasis_band/signals as optional composition hints—together with "
             "the `NARRATIVE MODE (STRUCTURAL DELTA)` lines—same precedence as full prompts (visibility and response_policy still win conflicts)."
         )
     if narrative_mode_instruction_lines:
@@ -4017,6 +4026,12 @@ def build_narration_context(
         if isinstance(rtc_override, dict):
             response_policy["response_type_contract"] = copy.deepcopy(rtc_override)
 
+    if isinstance(narrative_plan, dict) and isinstance(opening_scene_export, dict):
+        patch_opening_export_with_plan_scene_opening(
+            opening_scene_export,
+            scene_opening=narrative_plan.get("scene_opening"),
+        )
+
     prompt_debug_anchor = {
         "scene_state_anchor": {
             "enabled": bool(scene_state_anchor_contract.get("enabled")),
@@ -4167,7 +4182,7 @@ def build_narration_context(
         'Treat player input as an action declaration: default to third-person phrasing and preserve the user\'s expression format instead of rewriting it.',
         'Quoted in-character dialogue is valid inside an action declaration (for example: Galinor says, "Keep your voice down."); do not treat the quote alone as the entire action when surrounding action context exists.',
         'Follow narration_obligations as output requirements only: they shape wording and focus, but never grant authority to mutate state or decide mechanics.',
-        'If narration_obligations.is_opening_scene is true, establish immediate environment plus actionable social/world hooks the player can engage now (see opening_narration_obligations and opening_scene_realization.contract for diegetic first-shot shape).',
+        'If narration_obligations.is_opening_scene is true, establish immediate environment plus actionable social/world hooks the player can engage now (see opening_narration_obligations, narrative_plan.scene_opening when present, and opening_scene_realization.contract narration_basis_visible_facts for diegetic first-shot shape).',
         'If narration_obligations.must_advance_scene is true, do not stop at movement text alone; narrate arrival, changed state, and at least one concrete opportunity or pressure in the destination context.',
         'If narration_obligations.active_npc_reply_expected is true, complete the active NPC\'s substantive in-turn reply now unless a pending engine check prompt already takes precedence, or authoritative state indicates refusal/evasion/interruption/inability.',
         'If narration_obligations.should_answer_active_npc is true, prioritize the active interlocutor\'s reply and the immediate exchange over general scene recap.',

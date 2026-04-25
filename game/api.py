@@ -207,6 +207,7 @@ from game.narration_plan_bundle import (
     build_narration_plan_bundle,
     ensure_narration_plan_bundle_for_turn,
 )
+from game.narrative_plan_upstream import mark_session_narration_resume_entry_pending
 from game.narration_seam_guards import (
     annotate_narration_path_kind,
     record_emergency_nonplan_output,
@@ -2594,6 +2595,9 @@ def api_load_snapshot(request: Request, payload: dict):
     meta = load_snapshot(snapshot_id)
     if meta is None:
         return {'ok': False, 'error': 'Snapshot not found'}
+    _sess_resume = load_session()
+    mark_session_narration_resume_entry_pending(_sess_resume)
+    save_session(_sess_resume)
     st = compose_state()
     return {'ok': True, 'ui_mode': ui_mode, 'snapshot': meta, **_project_state_for_ui_mode(st, ui_mode)}
 

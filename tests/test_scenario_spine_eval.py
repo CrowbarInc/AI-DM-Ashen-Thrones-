@@ -67,6 +67,8 @@ def test_clean_social_investigation_session_passes() -> None:
     assert result["session_health"]["scripted_turn_count"] == 25
     assert result["session_health"]["full_length_branch"] is True
     assert result["session_health"]["long_session_band"] == "long"
+    assert result["session_health"]["opening_turns_checked"] == 0
+    assert result["session_health"]["opening_convergence_verdict"] == "no_observations"
     assert result["axes"]["state_continuity"]["passed"] is True
     assert result["axes"]["referent_persistence"]["passed"] is True
     assert result["axes"]["world_project_progression"]["passed"] is True

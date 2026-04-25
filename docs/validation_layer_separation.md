@@ -165,6 +165,8 @@ Inventory and “would become a violation if…” notes: `docs/validation_layer
 
 ## Objective #11 — documented closeout (historical “Block D” label in Objective #11 work)
 
+**Block D closeout:** Objective #11 is **satisfied with narrow fenced residue** (same status as the paragraph below; kept as an explicit anchor string for doc/audit tests).
+
 **Status:** Objective #11 is **satisfied with narrow fenced residue** (compatibility-shaped seams above). That residue is **not** a second source of truth: it is explicitly **non-authoritative** and must not override `game/validation_layer_contracts.py` or this document.
 
 **Distinction:**

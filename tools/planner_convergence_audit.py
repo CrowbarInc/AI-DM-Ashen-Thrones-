@@ -4,7 +4,10 @@ Scans selected runtime modules for patterns that would reintroduce:
   second planners (:func:`build_narrative_plan` outside approved owners),
   unsafe ``prompt_context`` narrative-plan shipment / raw shortcuts,
   manual-play paths that skip convergence instrumentation,
-  and emergency player-facing output without seam registration.
+  emergency player-facing output without seam registration,
+  and **C1-A scene-opening convergence** drift (plan-bypass opener authority, duplicate
+  opening-reason logic, ``visible_facts`` → player-facing narration shortcuts, and
+  unapproved ``opening_scene_realization`` imports outside ``prompt_context``).
 
 Run from repo root::
 
@@ -53,6 +56,7 @@ APPROVED_PROMPT_NARRATIVE_PLAN_TOP_KEYS: frozenset[str] = frozenset(
         "allowable_entity_references",
         "narrative_roles",
         "narrative_mode_contract",
+        "scene_opening",
     }
 )
 
@@ -61,11 +65,65 @@ PRIMARY_AUDIT_REL_PATHS: tuple[str, ...] = (
     "game/api.py",
     "game/gm.py",
     "game/prompt_context.py",
+    "game/storage.py",
     "game/narration_plan_bundle.py",
     "game/narrative_plan_upstream.py",
     "game/narrative_planning.py",
     "game/final_emission_gate.py",
+    "game/final_emission_repairs.py",
+    "game/final_emission_validators.py",
     "game/narration_seam_guards.py",
+)
+
+# --- C1-A Scene Opening (CTIR → plan ``scene_opening`` → prompt_context → GPT → gate) ---
+
+# Runtime surfaces where player-facing opener *construction* or plan-bypass is disallowed
+# (heuristic scan; structural owners above are exempt from those rules).
+C1A_SCENE_OPENING_PLAYER_FACING_RISK_PATHS: frozenset[str] = frozenset(
+    {
+        "game/api.py",
+        "game/gm.py",
+        "game/prompt_context.py",
+        "game/storage.py",
+        "game/final_emission_gate.py",
+        "game/final_emission_repairs.py",
+        "game/final_emission_validators.py",
+    }
+)
+
+# Only ``prompt_context`` may import/call the opening realization builder on live paths.
+C1A_APPROVED_OPENING_SCENE_REALIZATION_IMPORTERS: frozenset[str] = frozenset({"game/prompt_context.py"})
+
+# Only the seam guard may import plan opening *surface* APIs (reason inference + validate) from planning.
+C1A_APPROVED_PLANNING_OPENING_API_IMPORTERS: frozenset[str] = frozenset({"game/narration_seam_guards.py"})
+
+C1A_PLANNING_OPENING_API_NAMES: frozenset[str] = frozenset(
+    {"infer_scene_opening_reason", "validate_scene_opening"}
+)
+
+# Dict keys suggesting locally authored opener prose in ``build_narration_context`` (not plan projection).
+C1A_BANNED_OPENING_PROSE_PAYLOAD_KEYS: frozenset[str] = frozenset(
+    {
+        "opening_paragraph",
+        "opening_narration",
+        "opening_narration_text",
+        "opening_prose",
+        "opening_hook",
+        "opening_lines",
+        "cinematic_opening",
+        "neutral_opening",
+        "fallback_opening",
+    }
+)
+
+# Avoid matching grammatical "opening … cinematic …" (e.g. social-answer validators); require scene-seam tokens.
+_C1A_FALLBACK_OPENER_CLUSTER_RE = re.compile(
+    r"(?is).{0,200}(?:\b(?:fallback|neutral|cinematic)\b.{0,120}\b(?:opening_scene|scene_opening|opener|is_opening_scene)\b"
+    r"|\b(?:opening_scene|scene_opening|opener|is_opening_scene)\b.{0,120}\b(?:fallback|neutral|cinematic)\b)"
+)
+
+_C1A_VISIBLE_FACTS_PLAYER_FACING_RE = re.compile(
+    r"(?is)\bvisible_facts\b.{0,240}\bplayer_facing_text\b|\bplayer_facing_text\b.{0,240}\bvisible_facts\b"
 )
 
 
@@ -388,6 +446,177 @@ def _assigns_player_facing_text(node: ast.AST) -> bool:
     return False
 
 
+def _opens_with_opening_scene_realization_module(module: str | None) -> bool:
+    if not module:
+        return False
+    return module == "game.opening_scene_realization" or module.startswith("game.opening_scene_realization.")
+
+
+def _audit_c1a_opening_scene_realization_imports(rel_path: str, tree: ast.Module) -> list[str]:
+    """``opening_scene_realization`` is renderer-side only; live stack imports it from ``prompt_context`` alone."""
+    issues: list[str] = []
+    if not rel_path.startswith("game/") or rel_path == "game/opening_scene_realization.py":
+        return issues
+    if rel_path in C1A_APPROVED_OPENING_SCENE_REALIZATION_IMPORTERS:
+        return issues
+    for node in ast.walk(tree):
+        if isinstance(node, ast.ImportFrom) and node.module and _opens_with_opening_scene_realization_module(node.module):
+            issues.append(
+                f"{rel_path}:{node.lineno}: import from ``game.opening_scene_realization`` outside "
+                f"{sorted(C1A_APPROVED_OPENING_SCENE_REALIZATION_IMPORTERS)} — C1-A plan-owned ``scene_opening`` + "
+                "renderer seam only (``prompt_context``)."
+            )
+            return issues
+        if isinstance(node, ast.Import):
+            for alias in node.names:
+                if isinstance(alias.name, str) and _opens_with_opening_scene_realization_module(alias.name):
+                    issues.append(
+                        f"{rel_path}:{node.lineno}: import of ``{alias.name}`` — only ``prompt_context`` may "
+                        "import ``opening_scene_realization`` on the live narration stack (C1-A)."
+                    )
+                    return issues
+    return issues
+
+
+def _is_build_opening_scene_realization_call(node: ast.Call) -> bool:
+    f = node.func
+    if isinstance(f, ast.Name) and f.id == "build_opening_scene_realization":
+        return True
+    if isinstance(f, ast.Attribute) and f.attr == "build_opening_scene_realization":
+        return True
+    return False
+
+
+def _audit_c1a_build_opening_scene_realization_calls(rel_path: str, tree: ast.Module) -> list[str]:
+    allowed = C1A_APPROVED_OPENING_SCENE_REALIZATION_IMPORTERS | {"game/opening_scene_realization.py"}
+    if rel_path in allowed:
+        return []
+    issues: list[str] = []
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Call) and _is_build_opening_scene_realization_call(node):
+            issues.append(
+                f"{rel_path}:{node.lineno}: build_opening_scene_realization(...) outside "
+                f"{sorted(C1A_APPROVED_OPENING_SCENE_REALIZATION_IMPORTERS)} / tests — not an independent opener "
+                "authority (C1-A)."
+            )
+    return issues
+
+
+def _audit_c1a_planning_opening_surface_imports(rel_path: str, tree: ast.Module) -> list[str]:
+    """Opening-reason inference + ``validate_scene_opening`` are planning/guard surfaces only."""
+    if rel_path == "game/narrative_planning.py":
+        return []
+    issues: list[str] = []
+    for node in ast.walk(tree):
+        if not isinstance(node, ast.ImportFrom) or node.module != "game.narrative_planning":
+            continue
+        for alias in node.names:
+            if alias.name not in C1A_PLANNING_OPENING_API_NAMES:
+                continue
+            if rel_path not in C1A_APPROVED_PLANNING_OPENING_API_IMPORTERS:
+                issues.append(
+                    f"{rel_path}:{node.lineno}: import {alias.name} from narrative_planning outside "
+                    f"{sorted(C1A_APPROVED_PLANNING_OPENING_API_IMPORTERS)} — duplicate scene-opening "
+                    "planning surface (C1-A)."
+                )
+    return issues
+
+
+def _audit_c1a_derive_opening_reason_leak(rel_path: str, tree: ast.Module) -> list[str]:
+    """Private planner helper must not be referenced outside ``narrative_planning``."""
+    if rel_path == "game/narrative_planning.py":
+        return []
+    issues: list[str] = []
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Name) and node.id == "_derive_opening_reason":
+            issues.append(
+                f"{rel_path}:{node.lineno}: reference to _derive_opening_reason outside "
+                "game/narrative_planning.py — duplicate opening-reason logic (C1-A)."
+            )
+            return issues
+        if isinstance(node, ast.Call):
+            f = node.func
+            if isinstance(f, ast.Name) and f.id == "_derive_opening_reason":
+                issues.append(
+                    f"{rel_path}:{node.lineno}: call to _derive_opening_reason outside narrative_planning (C1-A)."
+                )
+                return issues
+            if isinstance(f, ast.Attribute) and f.attr == "_derive_opening_reason":
+                issues.append(
+                    f"{rel_path}:{node.lineno}: call to _derive_opening_reason outside narrative_planning (C1-A)."
+                )
+                return issues
+    return issues
+
+
+def _find_function_def(tree: ast.Module, name: str) -> ast.FunctionDef | None:
+    for node in ast.walk(tree):
+        if isinstance(node, ast.FunctionDef) and node.name == name:
+            return node
+    return None
+
+
+def _audit_c1a_prompt_context_build_narration_context_opening_prose(tree: ast.Module) -> list[str]:
+    """Flag dict keys / obvious opener prose assembly inside ``build_narration_context`` only."""
+    issues: list[str] = []
+    fn = _find_function_def(tree, "build_narration_context")
+    if fn is None:
+        return issues
+    for sub in ast.walk(fn):
+        if not isinstance(sub, ast.Dict):
+            continue
+        for i, key in enumerate(sub.keys):
+            if key is None or sub.values[i] is None:
+                continue
+            ks = _dict_key_str(key)
+            if not ks:
+                continue
+            kl = ks.lower()
+            if ks in C1A_BANNED_OPENING_PROSE_PAYLOAD_KEYS or kl in C1A_BANNED_OPENING_PROSE_PAYLOAD_KEYS:
+                val = sub.values[i]
+                if isinstance(val, ast.Constant) and isinstance(val.value, str) and len(val.value.strip()) > 24:
+                    issues.append(
+                        f"game/prompt_context.py:{val.lineno}: banned opening-prose payload key {ks!r} with long "
+                        "string literal in build_narration_context — scene opening is plan-owned (C1-A)."
+                    )
+    return issues
+
+
+def audit_c1a_scene_opening_convergence(rel_path: str, source: str) -> list[str]:
+    """Heuristic C1-A guardrails for scene-opening seam (low-noise clustered evidence)."""
+    issues: list[str] = []
+    try:
+        tree = ast.parse(source)
+    except SyntaxError:
+        return issues
+    if not isinstance(tree, ast.Module):
+        return issues
+    issues.extend(_audit_c1a_opening_scene_realization_imports(rel_path, tree))
+    issues.extend(_audit_c1a_build_opening_scene_realization_calls(rel_path, tree))
+    issues.extend(_audit_c1a_planning_opening_surface_imports(rel_path, tree))
+    issues.extend(_audit_c1a_derive_opening_reason_leak(rel_path, tree))
+    if rel_path == "game/prompt_context.py":
+        issues.extend(_audit_c1a_prompt_context_build_narration_context_opening_prose(tree))
+
+    if rel_path in C1A_SCENE_OPENING_PLAYER_FACING_RISK_PATHS:
+        lines = source.splitlines()
+        for i, raw in enumerate(lines, start=1):
+            line = raw.strip()
+            if line.startswith("#"):
+                continue
+            if _C1A_VISIBLE_FACTS_PLAYER_FACING_RE.search(raw):
+                issues.append(
+                    f"{rel_path}:{i}: visible_facts clustered with player_facing_text on one line — "
+                    "avoid piping published facts directly into player-facing narration strings (C1-A)."
+                )
+            if _C1A_FALLBACK_OPENER_CLUSTER_RE.search(raw):
+                issues.append(
+                    f"{rel_path}:{i}: fallback/neutral/cinematic opener clustering — use Narrative Plan "
+                    "``scene_opening`` + approved renderer seam, not ad-hoc opener scaffolding (C1-A)."
+                )
+    return issues
+
+
 def audit_emergency_player_facing_functions(source: str, *, rel_path: str = "synthetic_emergency_fixture.py") -> list[str]:
     """For small synthetic modules: any function that assigns player_facing_text must register emergency output.
 
@@ -430,6 +659,7 @@ def audit_file(rel_path: str, *, source: str | None = None, repo_root: Path | No
     issues.extend(audit_prompt_context_raw_semantic_shortcuts(rel_path, text))
     issues.extend(audit_narration_plan_bundle_projection_keys(rel_path, text))
     issues.extend(audit_api_manual_play_convergence_structure(rel_path, text))
+    issues.extend(audit_c1a_scene_opening_convergence(rel_path, text))
     return issues
 
 

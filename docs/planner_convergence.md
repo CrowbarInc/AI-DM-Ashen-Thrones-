@@ -52,8 +52,13 @@ Only these keys may appear at the top level of the shipped plan (mirror of `publ
 - `allowable_entity_references`
 - `narrative_roles`
 - `narrative_mode_contract`
+- `scene_opening` (C1-A structural opener projection; prose-free; see `docs/narrative_integrity_architecture.md`)
 
 `prompt_debug` may carry a compact **`_narrative_plan_prompt_debug_anchor`** mirror; that is not the authoritative top-level plan field.
+
+## C1-A — Scene opening convergence (static audit)
+
+The same audit flags **plan-bypass opener** patterns: imports/calls of `opening_scene_realization` outside `prompt_context`, duplicate `infer_scene_opening_reason` / `validate_scene_opening` imports, references to `_derive_opening_reason` outside `narrative_planning`, **visible_facts** clustered with **player_facing_text** on one line in API/GM/storage/gate modules, **fallback/neutral/cinematic** clustering with **scene_opening / opening_scene / opener / is_opening_scene** tokens, and banned long opener-prose dict keys inside `build_narration_context`. Legitimate Block A/B wiring (`resume_entry`, `patch_opening_export_with_plan_scene_opening`, seam guard, plan-owned `scene_opening`) is structured vocabulary and should not trip the heuristic when unchanged.
 
 ### Presentation-only raw reads
 

@@ -13,6 +13,7 @@ from game.narration_plan_bundle import (
     get_attached_narration_plan_bundle,
     get_narration_plan_bundle_stamp,
 )
+from game.narrative_planning import infer_scene_opening_reason, validate_scene_opening
 from game.state_authority import PLAYER_VISIBLE_STATE, build_state_mutation_trace
 from game.storage import append_debug_trace
 
@@ -279,6 +280,35 @@ def require_narration_plan_bundle_for_ctir_turn(
             },
         )
         return {"ok": False, "error": "narrative_plan_missing"}
+    plan = bundle["narrative_plan"]
+    pm = bundle.get("plan_metadata") if isinstance(bundle.get("plan_metadata"), dict) else {}
+    ri = bundle.get("renderer_inputs") if isinstance(bundle.get("renderer_inputs"), dict) else {}
+    no = ri.get("narration_obligations") if isinstance(ri.get("narration_obligations"), dict) else {}
+    si = pm.get("planning_session_interaction") if isinstance(pm.get("planning_session_interaction"), dict) else {}
+    opening_reason = infer_scene_opening_reason(ctir, narration_obligations=no, session_interaction=si or None)
+    opening_required = opening_reason != "none"
+    so_err = validate_scene_opening(
+        plan.get("scene_opening"),
+        ctir=ctir,
+        public_scene_slice=None,
+        plan_active_pressures=plan.get("active_pressures")
+        if isinstance(plan.get("active_pressures"), dict)
+        else {},
+        scene_anchors=plan.get("scene_anchors") if isinstance(plan.get("scene_anchors"), dict) else {},
+        opening_required=opening_required,
+    )
+    if so_err:
+        record_planner_bypass_attempt(
+            session,
+            reason="scene_opening_seam_invalid",
+            owner_module=owner_module,
+            extra={
+                "validate_scene_opening": so_err,
+                "opening_reason_inferred": opening_reason,
+                "opening_required": opening_required,
+            },
+        )
+        return {"ok": False, "error": "scene_opening_seam_invalid", "scene_opening_error": so_err}
     return {"ok": True}
 
 

@@ -22,6 +22,19 @@ from game.narrative_planning import build_narrative_plan, validate_narrative_pla
 from game.response_policy_contracts import peek_response_type_contract_from_resolution
 from game.response_type_gating import derive_response_type_contract
 
+# Transient session flag: first CTIR narration after snapshot restore (or tests) requests plan ``resume_entry``.
+SESSION_NARRATION_RESUME_ENTRY_PENDING_KEY = "_narration_resume_entry_pending"
+
+
+def mark_session_narration_resume_entry_pending(session: Mapping[str, Any] | None) -> None:
+    if isinstance(session, dict):
+        session[SESSION_NARRATION_RESUME_ENTRY_PENDING_KEY] = True
+
+
+def clear_session_narration_resume_entry_pending(session: Mapping[str, Any] | None) -> None:
+    if isinstance(session, dict):
+        session.pop(SESSION_NARRATION_RESUME_ENTRY_PENDING_KEY, None)
+
 
 def interaction_context_snapshot_from_ctir_semantics(interaction_sem: Mapping[str, Any] | None) -> dict[str, Any]:
     """Shape CTIR interaction into the compact dict used by response-type derivation."""
@@ -316,18 +329,23 @@ def session_interaction_slice_for_narrative_plan(
     pids = [str(x).strip() for x in pending_lead_ids if str(x).strip()]
     if pids:
         out["pending_lead_ids"] = pids[:48]
+    if bool(sv.get("resume_entry")):
+        out["resume_entry"] = True
     return out
 
 
 def compute_narrative_plan_for_bundle_from_head(
     head: Mapping[str, Any], *, user_text: str
-) -> tuple[Dict[str, Any] | None, str | None]:
-    """Build narrative plan from pre-assembled head state (bundle / offline tooling only)."""
+) -> tuple[Dict[str, Any] | None, str | None, Dict[str, Any]]:
+    """Build narrative plan from pre-assembled head state (bundle / offline tooling only).
+
+    Returns ``(plan, build_error, planning_session_interaction)`` for bundle metadata and seam audits.
+    """
     ctir_obj = head.get("ctir_obj")
     narrative_plan: Dict[str, Any] | None = None
     narrative_plan_build_error: str | None = None
     if ctir_obj is None:
-        return None, None
+        return None, None, {}
     resolution_sem = head.get("resolution_sem")
     interaction_sem = head.get("interaction_sem")
     response_policy = head.get("response_policy")
@@ -339,8 +357,15 @@ def compute_narrative_plan_for_bundle_from_head(
     recent_log_compact = head.get("recent_log_compact")
     narration_obligations = head.get("narration_obligations")
     if not isinstance(response_policy, dict):
-        return None, "response_policy_missing_for_narrative_plan"
+        return None, "response_policy_missing_for_narrative_plan", {}
     rp_mut = response_policy
+    _plids = pending_lead_ids_from_active_pending(
+        active_pending_leads if isinstance(active_pending_leads, list) else None
+    )
+    planning_session_interaction = session_interaction_slice_for_narrative_plan(
+        session_view if isinstance(session_view, dict) else None,
+        _plids,
+    )
     if isinstance(resolution_sem, dict):
         _rtc_peek_plan = peek_response_type_contract_from_resolution(resolution_sem)
         _ic_rtc_plan = interaction_context_snapshot_from_ctir_semantics(
@@ -365,24 +390,26 @@ def compute_narrative_plan_for_bundle_from_head(
             public_scene if isinstance(public_scene, Mapping) else None,
             scene_state_anchor_contract if isinstance(scene_state_anchor_contract, dict) else None,
         )
-        _plids = pending_lead_ids_from_active_pending(
-            active_pending_leads if isinstance(active_pending_leads, list) else None
-        )
-        _sess_int = session_interaction_slice_for_narrative_plan(
-            session_view if isinstance(session_view, dict) else None,
-            _plids,
-        )
+        _no = narration_obligations if isinstance(narration_obligations, dict) else {}
+        _vfs = head.get("visible_facts_for_prompt")
+        _opening_strings = None
+        if isinstance(_vfs, list) and _vfs:
+            if _no.get("is_opening_scene"):
+                _opening_strings = list(_vfs)
+            elif bool(planning_session_interaction.get("resume_entry")):
+                _opening_strings = list(_vfs)[:12]
         narrative_plan = build_narrative_plan(
             ctir=ctir_obj,
-            session_interaction=_sess_int or None,
+            session_interaction=planning_session_interaction or None,
             public_scene_slice=_pub_scene_slice or None,
             published_entities=_pub_ent,
             recent_compressed_events=list(recent_log_compact or []),
             narration_obligations=narration_obligations if isinstance(narration_obligations, dict) else {},
             response_policy=rp_mut,
+            opening_visible_fact_strings=_opening_strings,
         )
         assert narrative_plan is None or isinstance(narrative_plan, dict)
     except Exception as exc:
         narrative_plan_build_error = f"{type(exc).__name__}: {exc}"
         narrative_plan = None
-    return narrative_plan, narrative_plan_build_error
+    return narrative_plan, narrative_plan_build_error, dict(planning_session_interaction)

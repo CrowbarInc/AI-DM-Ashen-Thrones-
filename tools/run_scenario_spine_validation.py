@@ -33,11 +33,16 @@ from game.scenario_spine_eval import (  # noqa: E402
     evaluate_scenario_spine_branch_divergence,
     evaluate_scenario_spine_session,
 )
+from game.scenario_spine_opening_convergence import (  # noqa: E402
+    capture_opening_convergence_meta_from_chat_payload,
+)
 
 DEFAULT_SPINE_PATH = ROOT / "data" / "validation" / "scenario_spines" / "frontier_gate_long_session.json"
 DEFAULT_ARTIFACT_ROOT = ROOT / "artifacts" / "scenario_spine_validation"
 DEFAULT_BRANCH_ID = "branch_social_inquiry"
 SMOKE_TURN_CAP = 5
+# Cap rows rendered in compact_operator_summary.md for C1-A opening convergence failures.
+_OPENING_CONVERGENCE_FAILURE_TABLE_MAX_ROWS = 12
 
 # Mirrors ``game.scenario_spine_eval`` private alias table for CLI resolution only.
 _BRANCH_ALIASES: dict[str, str] = {
@@ -185,6 +190,87 @@ def _suggested_debug_focus(ev: Mapping[str, Any]) -> str:
     return guide.get(dom, dom)
 
 
+def _opening_convergence_verdict_human(verdict: str) -> str:
+    v = str(verdict or "").strip().lower()
+    if v == "pass":
+        return "**Pass** — no hard opening-convergence failures on evaluated opening turn(s)."
+    if v == "fail":
+        return "**Fail** — at least one hard opening-convergence signal (see table below)."
+    if v in ("no_observations", ""):
+        return "**No observations** — no opening-turn rows were evaluated (opening meta absent or skipped)."
+    return f"**{verdict}**"
+
+
+def _opening_convergence_md_lines(eval_result: Mapping[str, Any]) -> list[str]:
+    sh = eval_result.get("session_health") if isinstance(eval_result.get("session_health"), dict) else {}
+    verdict_raw = str(sh.get("opening_convergence_verdict") or "")
+    n_checked = int(sh.get("opening_turns_checked") or 0)
+    n_missing = int(sh.get("opening_plan_missing_count") or 0)
+    n_invalid = int(sh.get("opening_invalid_plan_count") or 0)
+    n_seam = int(sh.get("opening_seam_failure_count") or 0)
+    n_anchor = int(sh.get("opening_anchor_grounding_failures") or 0)
+    n_stock = int(sh.get("opening_stock_fallback_hits") or 0)
+    n_resume = int(sh.get("opening_resume_entry_checked") or 0)
+    n_backed = int(sh.get("opening_plan_backed_count") or 0)
+    rep_first = sh.get("opening_repeated_generic_first_line")
+
+    lines = [
+        "",
+        "## C1-A opening convergence (observational)",
+        "",
+        _opening_convergence_verdict_human(verdict_raw),
+        "",
+        "### Counts (opening turns)",
+        "",
+        f"- **Opening turns checked:** {n_checked}",
+        f"- **Plan-backed openings:** {n_backed}",
+        f"- **Missing plan / scene_opening:** {n_missing}",
+        f"- **Invalid recorded scene_opening:** {n_invalid}",
+        f"- **Seam hard failures** (`scene_opening_seam_invalid`): {n_seam}",
+        f"- **Anchor grounding failures:** {n_anchor}",
+        f"- **Stock opener phrase hits** (warning-style unless verdict fail): {n_stock}",
+        f"- **Resume-entry openings checked:** {n_resume}",
+        f"- **Repeated generic first-line** (warning-style unless verdict fail): {rep_first}",
+        "",
+        "### Opening convergence failures (compact table)",
+        "",
+    ]
+    details = sh.get("opening_convergence_failure_details") or []
+    if isinstance(details, list) and details:
+        cap = _OPENING_CONVERGENCE_FAILURE_TABLE_MAX_ROWS
+        lines.extend(
+            [
+                "| Turn | Opening reason | Scene id | Marker | Seam / anchors | Source |",
+                "|-----:|----------------|----------|--------|----------------|--------|",
+            ],
+        )
+        shown = 0
+        for d in details:
+            if shown >= cap:
+                break
+            if not isinstance(d, dict):
+                lines.append(f"| — | _(non-dict row)_ | | `{d!r}` | | |")
+                shown += 1
+                continue
+            tid = d.get("turn_index")
+            oreason = str(d.get("opening_reason") or "").replace("|", "\\|")
+            sid = str(d.get("scene_id") or "").replace("|", "\\|") or "—"
+            marker = str(d.get("marker") or "").replace("|", "\\|")
+            seam = str(d.get("seam_failure_reason") or "").replace("|", "\\|")
+            anch = str(d.get("anchor_grounding_category") or "").replace("|", "\\|")
+            seam_anch = " / ".join(x for x in (seam, anch) if x) or "—"
+            src = str(d.get("suspected_source") or "").replace("|", "\\|")
+            lines.append(f"| `{tid}` | {oreason} | {sid} | `{marker}` | {seam_anch} | `{src}` |")
+            shown += 1
+        rest = len(details) - shown
+        if rest > 0:
+            lines.append("")
+            lines.append(f"_… {rest} more failure row(s) not shown (cap {cap})._")
+    else:
+        lines.append("_No failure rows — either **pass** or **no observations**._")
+    return lines
+
+
 def build_operator_summary_md(
     *,
     spine_id: str,
@@ -234,6 +320,7 @@ def build_operator_summary_md(
         wc = ", ".join(str(x) for x in (ax.get("warning_codes") or []) if x is not None)
         lines.append(f"| `{axis_key}` | {passed} | {fc} | {wc} |")
 
+    lines += _opening_convergence_md_lines(eval_result)
     lines += [
         "",
         "## Top failures",
@@ -432,8 +519,8 @@ def build_aggregate_operator_summary_md(
         "",
         "## Branch table",
         "",
-        "| Branch | Scripted turns | Executed turns | Classification | Score | Degradation (progressive) |",
-        "|--------|----------------|----------------|----------------|-------|---------------------------|",
+        "| Branch | Scripted turns | Executed turns | Classification | Score | Opening verdict | Degradation (progressive) |",
+        "|--------|----------------|----------------|----------------|-------|-----------------|---------------------------|",
     ]
 
     branches_run = list(aggregate.get("branches_run") or [])
@@ -455,6 +542,7 @@ def build_aggregate_operator_summary_md(
         executed = int(sh.get("turn_count") or (r.executed_turns if r else 0))
         cls = str(aggregate.get("branch_classifications", {}).get(bid, sh.get("classification", "")))
         score = sh.get("score", "")
+        open_v = sh.get("opening_convergence_verdict", "")
         deg = deg_by.get(bid) if isinstance(deg_by.get(bid), dict) else {}
         prog = deg.get("progressive_degradation_detected", "") if isinstance(deg, dict) else ""
         lines.append(
@@ -466,6 +554,7 @@ def build_aggregate_operator_summary_md(
                     str(executed),
                     _md_cell(cls),
                     _md_cell(score),
+                    _md_cell(open_v),
                     _md_cell(prog),
                 ),
             )
@@ -581,6 +670,7 @@ def run_scenario_spine_branch(
     smoke: bool,
     max_turns: int | None,
     run_dir: Path,
+    resume_entry_first_turn: bool = False,
 ) -> BranchRunResult:
     resolved = branch.branch_id
     limit = effective_turn_limit(len(branch.turns), smoke=smoke, max_turns=max_turns)
@@ -589,6 +679,14 @@ def run_scenario_spine_branch(
 
     if apply_reset:
         apply_new_campaign_hard_reset()
+
+    if resume_entry_first_turn:
+        from game.narrative_plan_upstream import mark_session_narration_resume_entry_pending
+        from game.storage import load_session, save_session
+
+        _sess = load_session()
+        mark_session_narration_resume_entry_pending(_sess)
+        save_session(_sess)
 
     debug_rows: list[dict[str, Any]] = []
     eval_rows: list[dict[str, Any]] = []
@@ -607,6 +705,8 @@ def run_scenario_spine_branch(
         sc = payload.get("status_code")
         if isinstance(sc, int):
             meta_safe["status_code"] = sc
+        if isinstance(payload, dict):
+            meta_safe["opening_convergence"] = capture_opening_convergence_meta_from_chat_payload(payload)
 
         eval_rows.append(
             {
@@ -617,7 +717,7 @@ def run_scenario_spine_branch(
                 "api_ok": api_ok,
                 "api_error": api_err,
                 "resolution_kind": res_kind,
-                "meta": meta_safe if meta_safe else None,
+                "meta": meta_safe,
             },
         )
         debug_rows.append(
@@ -657,6 +757,7 @@ def run_scenario_spine_branch(
             "smoke": smoke,
             "max_turns": max_turns,
             "apply_reset": apply_reset,
+            "resume_entry_first_turn": resume_entry_first_turn,
             "turns_debug": debug_rows,
         },
     )
@@ -739,6 +840,11 @@ def _build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help=f"Limit turns to {SMOKE_TURN_CAP} (or lower if --max-turns is lower).",
     )
+    p.add_argument(
+        "--resume-entry-first-turn",
+        action="store_true",
+        help="After reset (if any), mark snapshot-resume pending on session before the first scripted turn.",
+    )
     return p
 
 
@@ -796,6 +902,7 @@ def main(argv: list[str] | None = None) -> int:
                 smoke=bool(args.smoke),
                 max_turns=args.max_turns,
                 run_dir=run_dir,
+                resume_entry_first_turn=bool(args.resume_entry_first_turn),
             )
             results.append(res)
             print(f"Wrote {run_dir / 'transcript.json'}")

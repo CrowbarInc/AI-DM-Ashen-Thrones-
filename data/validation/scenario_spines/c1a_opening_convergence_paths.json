@@ -1,0 +1,59 @@
+{
+  "spine_id": "c1a_opening_convergence_paths",
+  "title": "C1-A opening convergence scripted paths (smoke fixture)",
+  "smoke_only": true,
+  "fixed_start_state": {
+    "tone": "fixture",
+    "notes": "Operator harness for opening-convergence capture alongside frontier_gate_long_session.json."
+  },
+  "branches": [
+    {
+      "branch_id": "branch_campaign_start_probe",
+      "label": "Fresh campaign start (first scripted beat)",
+      "turns": [
+        {"turn_id": "cs_01", "player_prompt": "Begin the campaign at the gate."}
+      ]
+    },
+    {
+      "branch_id": "branch_location_entry_probe",
+      "label": "New location entry beat",
+      "turns": [
+        {"turn_id": "le_01", "player_prompt": "Step into the yard and take in the scene."}
+      ]
+    },
+    {
+      "branch_id": "branch_post_transition_probe",
+      "label": "Post-transition scene setup",
+      "turns": [
+        {"turn_id": "pt_01", "player_prompt": "After the transition, orient to the new space."}
+      ]
+    },
+    {
+      "branch_id": "branch_resume_entry_probe",
+      "label": "Snapshot restore / resume_entry (use --resume-entry-first-turn on runner)",
+      "turns": [
+        {"turn_id": "re_01", "player_prompt": "Resume where we left off."}
+      ]
+    },
+    {
+      "branch_id": "branch_multi_transition_smoke",
+      "label": "Multi-beat lane: campaign start, two scene moves, post-transition beat, resume cue, continuation (~14 turns)",
+      "turns": [
+        {"turn_id": "mt_01", "player_prompt": "Begin the campaign at Cinderwatch Gate; establish arrival and pressure."},
+        {"turn_id": "mt_02", "player_prompt": "Move through the outer yard toward the notice board and census lines."},
+        {"turn_id": "mt_03", "player_prompt": "Take a beat to absorb crowd noise, ash on the cobbles, and posted orders."},
+        {"turn_id": "mt_04", "player_prompt": "Transition through the side passage into the inner ward."},
+        {"turn_id": "mt_05", "player_prompt": "Step into the inner ward; note torchlight, serjeants, and cordon tension."},
+        {"turn_id": "mt_06", "player_prompt": "After the transition, orient to the watch post and who holds the line."},
+        {"turn_id": "mt_07", "player_prompt": "Continue in the inner ward: ask the serjeant a direct question about patrols."},
+        {"turn_id": "mt_08", "player_prompt": "Listen for rumors about the missing patrol route beyond the gate."},
+        {"turn_id": "mt_09", "player_prompt": "Shift focus back toward the gate district and census choke points."},
+        {"turn_id": "mt_10", "player_prompt": "Return attention to the notice board and northwest crate lines."},
+        {"turn_id": "mt_11", "player_prompt": "Step out toward the main gate arch as crowds surge again."},
+        {"turn_id": "mt_12", "player_prompt": "Resume the investigation at the gate as if picking up a saved session."},
+        {"turn_id": "mt_13", "player_prompt": "Follow muddy prints carefully among the crates."},
+        {"turn_id": "mt_14", "player_prompt": "Close the beat: note how the watch tightens and what that implies next."}
+      ]
+    }
+  ]
+}

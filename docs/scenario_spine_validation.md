@@ -66,6 +66,15 @@ Schema validation (`validate_scenario_spine_definition`) requires at least one b
 
 Single-branch runs (default branch, explicit `--branch`, or `--list`) do **not** write the aggregate files.
 
+### C1-A opening convergence (observational)
+
+Per-branch **`session_health`** includes opening-convergence counters populated by **`game/scenario_spine_opening_convergence.py`** from recorded turn **`meta.opening_convergence`** (the harness does **not** re-run `infer_scene_opening_reason` or `validate_scene_opening`; it mirrors bundle / seam fields only).
+
+- **Observational:** counts and verdict describe what was **recorded** on opening-class turns, not a second runtime opener authority.
+- **Stock opener phrases** in GM text increment **`opening_stock_fallback_hits`** and may surface as evaluator **`opening_style_signal`** warnings; they do **not** flip the opening verdict to fail **unless** a hard signal already failed the run (missing/invalid plan, seam, anchor grounding).
+- **`scene_opening_seam_invalid`** on the captured seam trace is a **hard** opening-convergence failure (same convergence family as planner bypass / seam guard).
+- **`resume_entry`:** the runner’s **`--resume-entry-first-turn`** path sets the same session **`resume_entry` / pending** flag used after a snapshot restore so the first scripted turn exercises the **runtime** resume-entry seam like a restored session.
+
 ## Canonical fixture and branch roles
 
 **File:** `data/validation/scenario_spines/frontier_gate_long_session.json`  
@@ -201,7 +210,7 @@ Other useful flags: `--no-reset`, `--artifact-dir PATH`, `--http-timeout SEC` (w
 
 ### `compact_operator_summary.md` / `aggregate_operator_summary.md`
 
-- Quick operator pass: classification, axis table (per branch), truncated failures/warnings, first failing checkpoint id, suggested next debugging area (single-branch file); aggregate adds coverage and cross-branch divergence/degradation sections.
+- Quick operator pass: classification, axis table (per branch), **C1-A opening convergence** (verdict, counts, capped failure table), truncated failures/warnings, first failing checkpoint id, suggested next debugging area (single-branch file); aggregate adds coverage and cross-branch divergence/degradation sections.
 
 ## Debugging by evaluator axis
 

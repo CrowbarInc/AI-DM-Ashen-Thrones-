@@ -40,6 +40,7 @@ from game.interaction_context import build_speaker_selection_contract, response_
 from game.interaction_continuity import build_interaction_continuity_contract
 from game.narrative_plan_upstream import (
     apply_upstream_narrative_role_reemphasis,
+    clear_session_narration_resume_entry_pending,
     compute_narrative_plan_for_bundle_from_head,
     interaction_context_snapshot_from_ctir_semantics,
     pending_lead_ids_from_active_pending,
@@ -84,6 +85,9 @@ def public_narrative_plan_projection_for_prompt(full_plan: Mapping[str, Any] | N
     nmc = full_plan.get("narrative_mode_contract")
     if isinstance(nmc, Mapping) and nmc:
         out["narrative_mode_contract"] = copy.deepcopy(nmc)
+    so = full_plan.get("scene_opening")
+    if isinstance(so, Mapping) and so:
+        out["scene_opening"] = copy.deepcopy(so)
     return out if out else None
 
 
@@ -274,12 +278,13 @@ def build_narration_plan_bundle(
         }
 
     head = _build_narration_context_head_state(**narration_context_kwargs)
-    narrative_plan, narrative_plan_build_error = compute_narrative_plan_for_bundle_from_head(
+    narrative_plan, narrative_plan_build_error, planning_session_interaction = compute_narrative_plan_for_bundle_from_head(
         head,
         user_text=str(narration_context_kwargs.get("user_text") or ""),
     )
     if isinstance(narrative_plan, dict) and not narrative_plan_build_error:
         narrative_plan, _ = apply_upstream_narrative_role_reemphasis(narrative_plan)
+        clear_session_narration_resume_entry_pending(session)
     ctir_stamp = str(session.get(SESSION_CTIR_STAMP_KEY) or "").strip()
     bypass = bool(narrative_plan_build_error) or (narrative_plan is None)
     plan_meta: dict[str, Any] = {
@@ -288,6 +293,9 @@ def build_narration_plan_bundle(
         "narrative_plan_version": NARRATIVE_PLAN_VERSION,
         "narration_plan_bundle_error": narrative_plan_build_error,
         "semantic_bypass_blocked": bypass,
+        "planning_session_interaction": dict(planning_session_interaction)
+        if isinstance(planning_session_interaction, dict)
+        else {},
     }
     rp = head.get("response_policy")
     turn_packet, referent_tracking = _assemble_plan_adjacent_renderer_inputs(

@@ -156,6 +156,61 @@ def test_bundle_requirement_negative_stamp_mismatch() -> None:
     detach_ctir(session)
 
 
+def test_bundle_requirement_scene_opening_seam_invalid_on_tampered_plan() -> None:
+    """Opening-required turn must carry a structurally valid plan ``scene_opening`` (no silent acceptance)."""
+    session: dict[str, Any] = {"debug_traces": []}
+    stamp = "1:abc:def"
+    session[SESSION_CTIR_STAMP_KEY] = stamp
+    c = ctir.build_ctir(
+        turn_id=3,
+        scene_id="s_gate",
+        player_input="I move on.",
+        builder_source="tests.c1.scene_opening_seam",
+        resolution={
+            "kind": "observe",
+            "state_changes": {"scene_transition_occurred": True},
+        },
+        narrative_anchors={
+            "scene_framing": [],
+            "actors_speakers": [],
+            "outcomes": [],
+            "uncertainty": [],
+            "next_leads_affordances": [],
+        },
+    )
+    attach_ctir(session, c)
+    from game.narrative_planning import build_narrative_plan
+
+    good = build_narrative_plan(
+        ctir=c,
+        public_scene_slice={"scene_id": "s_gate", "location_tokens": ["Road"]},
+        narration_obligations={"active_npc_reply_expected": True, "active_npc_reply_kind": "answer"},
+    )
+    bad = dict(good)
+    bad["scene_opening"] = None
+    attach_narration_plan_bundle(
+        session,
+        {
+            "plan_metadata": {
+                "ctir_stamp": stamp,
+                "planning_session_interaction": {},
+            },
+            "narrative_plan": bad,
+            "renderer_inputs": {
+                "narration_obligations": {"active_npc_reply_expected": True, "active_npc_reply_kind": "answer"},
+            },
+        },
+    )
+    session["_runtime_narration_plan_bundle_stamp_v1"] = stamp
+    out = require_narration_plan_bundle_for_ctir_turn(session, turn_stamp=stamp, owner_module=__name__)
+    assert out["ok"] is False
+    assert out.get("error") == "scene_opening_seam_invalid"
+    tr = _last_trace_operation(session, "semantic_bypass_blocked")
+    assert tr is not None
+    assert tr.get("reason") == "scene_opening_seam_invalid"
+    detach_ctir(session)
+
+
 def test_bundle_requirement_negative_missing_narrative_plan() -> None:
     session: dict[str, Any] = {"debug_traces": []}
     stamp = "1:abc:def"

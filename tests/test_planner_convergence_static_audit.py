@@ -7,6 +7,7 @@ from pathlib import Path
 from tools.planner_convergence_audit import (
     APPROVED_PROMPT_NARRATIVE_PLAN_TOP_KEYS,
     audit_build_narrative_plan_call_sites,
+    audit_c1a_scene_opening_convergence,
     audit_emergency_player_facing_functions,
     audit_file,
     audit_narration_plan_bundle_projection_keys,
@@ -123,6 +124,7 @@ def test_approved_public_projection_keys_match_bundle_implementation() -> None:
             "allowable_entity_references",
             "narrative_roles",
             "narrative_mode_contract",
+            "scene_opening",
         }
     )
 
@@ -132,3 +134,57 @@ def test_prompt_context_payload_uses_projection_only_on_real_file() -> None:
     issues = audit_file("game/prompt_context.py", source=text)
     payload_issues = [m for m in issues if "payload['narrative_plan']" in m]
     assert not payload_issues, payload_issues
+
+
+def test_c1a_injected_banned_opening_prose_key_in_prompt_context_flagged() -> None:
+    bad = '''
+def build_narration_context():
+    payload = {"opening_paragraph": "This is a long handcrafted opening paragraph that must not be authored in prompt_context."}
+    return payload
+'''
+    issues = audit_c1a_scene_opening_convergence("game/prompt_context.py", bad)
+    assert issues and any("opening-prose" in m or "opening_paragraph" in m for m in issues), issues
+
+
+def test_c1a_injected_fallback_opener_cluster_in_api_flagged() -> None:
+    bad = 'hint = "neutral fallback when scene_opening is absent — cinematic opener"\n'
+    issues = audit_c1a_scene_opening_convergence("game/api.py", bad)
+    assert issues and any("fallback" in m.lower() or "C1-A" in m for m in issues), issues
+
+
+def test_c1a_injected_visible_facts_to_player_facing_in_storage_flagged() -> None:
+    bad = """gm['player_facing_text'] = "Facts: " + ", ".join(scene['scene']['visible_facts'])\n"""
+    issues = audit_c1a_scene_opening_convergence("game/storage.py", bad)
+    assert issues and any("visible_facts" in m for m in issues), issues
+
+
+def test_c1a_injected_infer_scene_opening_reason_import_in_gm_flagged() -> None:
+    bad = "from game.narrative_planning import infer_scene_opening_reason\n"
+    issues = audit_c1a_scene_opening_convergence("game/gm.py", bad)
+    assert issues and any("infer_scene_opening_reason" in m for m in issues), issues
+
+
+def test_c1a_injected_derive_opening_reason_reference_in_api_flagged() -> None:
+    bad = "def rogue():\n    return _derive_opening_reason\n"
+    issues = audit_c1a_scene_opening_convergence("game/api.py", bad)
+    assert issues and any("_derive_opening_reason" in m for m in issues), issues
+
+
+def test_c1a_real_prompt_context_passes() -> None:
+    text = (REPO_ROOT / "game" / "prompt_context.py").read_text(encoding="utf-8")
+    assert not audit_c1a_scene_opening_convergence("game/prompt_context.py", text)
+
+
+def test_c1a_real_narrative_planning_passes() -> None:
+    text = (REPO_ROOT / "game" / "narrative_planning.py").read_text(encoding="utf-8")
+    assert not audit_c1a_scene_opening_convergence("game/narrative_planning.py", text)
+
+
+def test_c1a_real_narration_seam_guards_passes() -> None:
+    text = (REPO_ROOT / "game" / "narration_seam_guards.py").read_text(encoding="utf-8")
+    assert not audit_c1a_scene_opening_convergence("game/narration_seam_guards.py", text)
+
+
+def test_c1a_real_opening_scene_realization_passes() -> None:
+    text = (REPO_ROOT / "game" / "opening_scene_realization.py").read_text(encoding="utf-8")
+    assert not audit_c1a_scene_opening_convergence("game/opening_scene_realization.py", text)

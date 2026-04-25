@@ -6,6 +6,7 @@ import re
 from typing import Any, Mapping, Sequence
 
 from game.scenario_spine import ScenarioSpine, scenario_spine_from_dict
+from game.scenario_spine_opening_convergence import evaluate_opening_convergence_for_turn_rows
 
 # ---------------------------------------------------------------------------
 # Public API
@@ -327,6 +328,22 @@ def evaluate_scenario_spine_branch_divergence(
     return _jsonable(out)
 
 
+def _default_opening_convergence_session_health() -> dict[str, Any]:
+    return {
+        "opening_turns_checked": 0,
+        "opening_plan_backed_count": 0,
+        "opening_plan_missing_count": 0,
+        "opening_invalid_plan_count": 0,
+        "opening_anchor_grounding_failures": 0,
+        "opening_stock_fallback_hits": 0,
+        "opening_resume_entry_checked": 0,
+        "opening_seam_failure_count": 0,
+        "opening_convergence_verdict": "no_observations",
+        "opening_repeated_generic_first_line": False,
+        "opening_convergence_failure_details": [],
+    }
+
+
 def _error_result(
     scenario_id: str,
     branch_id: str,
@@ -365,6 +382,7 @@ def _error_result(
                 "full_length_branch": False,
                 "long_session_band": _long_session_band(n_err),
                 "degradation_detected": False,
+                **_default_opening_convergence_session_health(),
             },
             "degradation_over_time": empty_deg,
             "axes": {
@@ -901,6 +919,23 @@ class _EvalContext:
                 f"{api_failures}/{n} turns report api_ok=false",
             )
 
+        opening_block = evaluate_opening_convergence_for_turn_rows(self.turns)
+        if opening_block.get("opening_convergence_verdict") == "fail":
+            self.add_failure(
+                "opening_convergence",
+                "opening_convergence_verdict_fail",
+                "C1-A scene opening convergence failed (see session_health.opening_convergence_failure_details)",
+            )
+        elif int(opening_block.get("opening_turns_checked") or 0) > 0 and (
+            opening_block.get("opening_repeated_generic_first_line")
+            or int(opening_block.get("opening_stock_fallback_hits") or 0) > 0
+        ):
+            self.add_warning(
+                "opening_convergence",
+                "opening_style_signal",
+                "repeated generic first-line and/or stock opener phrasing on opening turn(s) — scoring only",
+            )
+
         score = _compute_score(self.failures, self.warnings, api_majority=api_majority)
         failed_axes = sum(1 for a in axes.values() if not a["passed"])
         classification = _classify(
@@ -934,6 +969,7 @@ class _EvalContext:
             "full_length_branch": bool(scripted_n and n >= scripted_n),
             "long_session_band": _long_session_band(n),
             "degradation_detected": deg_any,
+            **opening_block,
         }
 
         out: dict[str, Any] = {

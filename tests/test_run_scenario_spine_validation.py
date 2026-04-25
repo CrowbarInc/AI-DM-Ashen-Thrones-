@@ -58,6 +58,92 @@ def test_effective_turn_limit_smoke_and_max_turns() -> None:
     assert _mod.effective_turn_limit(8, smoke=True, max_turns=None) == 5
 
 
+def test_build_operator_summary_includes_c1a_opening_convergence_section() -> None:
+    eval_result = {
+        "session_health": {
+            "classification": "clean",
+            "score": 100,
+            "overall_passed": True,
+            "opening_turns_checked": 2,
+            "opening_plan_backed_count": 2,
+            "opening_plan_missing_count": 0,
+            "opening_invalid_plan_count": 0,
+            "opening_anchor_grounding_failures": 0,
+            "opening_stock_fallback_hits": 0,
+            "opening_resume_entry_checked": 0,
+            "opening_seam_failure_count": 0,
+            "opening_convergence_verdict": "pass",
+            "opening_repeated_generic_first_line": False,
+            "opening_convergence_failure_details": [],
+        },
+        "axes": {
+            "state_continuity": {"passed": True, "failure_codes": [], "warning_codes": []},
+        },
+        "detected_failures": [],
+        "warnings": [],
+    }
+    md = _mod.build_operator_summary_md(
+        spine_id="test_spine",
+        branch_id="branch_x",
+        spine_branch_turns=10,
+        executed_turns=2,
+        scope_label="smoke",
+        eval_result=eval_result,
+    )
+    assert "## C1-A opening convergence (observational)" in md
+    assert "**Pass**" in md
+    assert "Opening turns checked" in md
+    assert "Seam hard failures" in md
+
+
+def test_build_operator_summary_c1a_failure_table_rows() -> None:
+    details = [
+        {
+            "turn_index": i,
+            "opening_reason": "campaign_start",
+            "scene_id": "s_gate",
+            "marker": "plan_or_scene_opening_missing",
+            "seam_failure_reason": None,
+            "anchor_grounding_category": None,
+            "suspected_source": "CTIR",
+        }
+        for i in range(20)
+    ]
+    eval_result = {
+        "session_health": {
+            "classification": "failed",
+            "score": 10,
+            "overall_passed": False,
+            "opening_turns_checked": 20,
+            "opening_plan_backed_count": 0,
+            "opening_plan_missing_count": 20,
+            "opening_invalid_plan_count": 0,
+            "opening_anchor_grounding_failures": 0,
+            "opening_stock_fallback_hits": 0,
+            "opening_resume_entry_checked": 0,
+            "opening_seam_failure_count": 0,
+            "opening_convergence_verdict": "fail",
+            "opening_repeated_generic_first_line": False,
+            "opening_convergence_failure_details": details,
+        },
+        "axes": {},
+        "detected_failures": [{"axis": "opening_convergence", "code": "x", "detail": "y"}],
+        "warnings": [],
+    }
+    md = _mod.build_operator_summary_md(
+        spine_id="test_spine",
+        branch_id="branch_x",
+        spine_branch_turns=20,
+        executed_turns=20,
+        scope_label="full",
+        eval_result=eval_result,
+    )
+    assert "| Turn |" in md
+    assert "more failure row" in md.lower()
+    assert "| `11` |" in md
+    assert "| `12` |" not in md
+
+
 def test_artifacts_written_and_session_health_is_evaluator(tmp_path, monkeypatch) -> None:
     monkeypatch.setattr(_mod, "apply_new_campaign_hard_reset", lambda: None)
     spine = _load_spine()

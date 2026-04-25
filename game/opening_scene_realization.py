@@ -1,13 +1,17 @@
-"""Deterministic opening-scene contract from published (player-visible) scene slices.
+"""Deterministic opening-scene **renderer helpers** from published (player-visible) scene slices.
 
-Builds a small, inspectable opening contract for first-turn / opening narration prompts.
+Structural opening obligations (C1-A) are owned by :attr:`game.narrative_planning.build_narrative_plan`
+as ``scene_opening`` on the Narrative Plan. This module curates **diegetic basis lines** and
+instruction expansion for prompt assembly only — not a parallel opener authority alongside the plan.
+
+Builds a small, inspectable opening payload for first-turn / opening narration prompts.
 Does not read hidden facts, GM notes, or undiscoverable layers — callers must pass only
 public scene fields and an existing narration_visibility snapshot for name grounding.
 """
 from __future__ import annotations
 
 import re
-from typing import Any, Dict, List, Mapping, MutableSequence, Optional, Sequence, Set, Tuple
+from typing import Any, Dict, List, Mapping, MutableMapping, MutableSequence, Optional, Sequence, Set, Tuple
 
 from game.narration_visibility import _normalize_visibility_text
 from game.opening_visible_fact_selection import opening_fact_primary_category
@@ -210,15 +214,75 @@ def build_opening_narration_obligations_payload(*, opening_mode: bool) -> Dict[s
     }
 
 
+# Machine codes aligned with ``game.narrative_planning.DEFAULT_SCENE_OPENING_PROHIBITED_CONTENT_CODES``.
+_PROHIBITED_OPENER_CODE_ORDER: Tuple[str, ...] = (
+    "no_engine_role_label_as_proper_name",
+    "no_unintroduced_offscene_npc_names",
+    "no_backstage_plot_briefings",
+    "no_hidden_gm_facts_as_immediate_perception",
+    "no_unfounded_faction_control_claims",
+)
+
+_PROHIBITED_OPENER_LINE_BY_CODE: Dict[str, str] = {
+    "no_engine_role_label_as_proper_name": (
+        "Do not treat engine role labels as proper names (for example title-cased 'Tavern Runner', 'Guard Captain')."
+    ),
+    "no_unintroduced_offscene_npc_names": (
+        "Do not name unseen or off-scene NPCs the player has not been introduced to through direct presence or clear address."
+    ),
+    "no_backstage_plot_briefings": (
+        "Do not open with backstage plot summaries, faction strategy briefings, or omniscient knowledge claims."
+    ),
+    "no_hidden_gm_facts_as_immediate_perception": (
+        "Do not narrate hidden GM notes, scene seeds, or privileged facts as immediate player perception."
+    ),
+    "no_unfounded_faction_control_claims": (
+        "Do not assert who controls patrols, who secretly knows what, or what factions are doing unless that is directly visible or audible here and now."
+    ),
+}
+
+
 def default_prohibited_opener_content() -> List[str]:
     """Static prohibitions shipped with every opening contract."""
-    return [
-        "Do not treat engine role labels as proper names (for example title-cased 'Tavern Runner', 'Guard Captain').",
-        "Do not name unseen or off-scene NPCs the player has not been introduced to through direct presence or clear address.",
-        "Do not open with backstage plot summaries, faction strategy briefings, or omniscient knowledge claims.",
-        "Do not narrate hidden GM notes, scene seeds, or privileged facts as immediate player perception.",
-        "Do not assert who controls patrols, who secretly knows what, or what factions are doing unless that is directly visible or audible here and now.",
-    ]
+    return prohibited_opener_lines_from_codes(list(_PROHIBITED_OPENER_CODE_ORDER))
+
+
+def prohibited_opener_lines_from_codes(codes: Sequence[str]) -> List[str]:
+    """Expand plan ``prohibited_content_codes`` into the legacy instruction strings (renderer-only)."""
+    out: List[str] = []
+    seen: Set[str] = set()
+    for raw in codes:
+        if not isinstance(raw, str):
+            continue
+        c = raw.strip()
+        if not c or c in seen:
+            continue
+        seen.add(c)
+        line = _PROHIBITED_OPENER_LINE_BY_CODE.get(c)
+        if line:
+            out.append(line)
+    return out
+
+
+def patch_opening_export_with_plan_scene_opening(
+    opening_scene_export: MutableMapping[str, Any],
+    *,
+    scene_opening: Mapping[str, Any] | None,
+) -> None:
+    """When a bundled plan carries ``scene_opening``, align export prohibitions with plan codes (in-place)."""
+    if not isinstance(opening_scene_export, MutableMapping):
+        return
+    if not opening_scene_export.get("opening_mode"):
+        return
+    if not isinstance(scene_opening, Mapping):
+        return
+    codes = scene_opening.get("prohibited_content_codes")
+    if not isinstance(codes, list) or not codes:
+        return
+    contract = opening_scene_export.get("contract")
+    if not isinstance(contract, MutableMapping):
+        return
+    contract["prohibited_opener_content"] = prohibited_opener_lines_from_codes(codes)
 
 
 def _diegetic_uncertainty_hooks(lines: Sequence[str], *, cap: int = 2) -> List[str]:
@@ -346,7 +410,7 @@ def merge_opening_instructions(existing: MutableSequence[str], *, contract: Mapp
     prohib = c.get("prohibited_opener_content")
     lines = [str(x).strip() for x in prohib if isinstance(x, str) and str(x).strip()] if isinstance(prohib, list) else []
     existing.append(
-        "OPENING SCENE (HARD SHAPE): First paragraph is an establishing shot — externally observable sensory "
+        "OPENING SCENE (HARD SHAPE): First paragraph grounds the moment in externally observable sensory "
         "and spatial detail only; no omniscient briefing, no title-cased role labels as names, no hidden-fact assertions."
     )
     if lines:
