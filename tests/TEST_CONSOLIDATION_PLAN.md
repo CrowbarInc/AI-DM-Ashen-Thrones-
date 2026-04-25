@@ -2,7 +2,7 @@
 
 **Status:** Plan + recorded ownership; routing consolidation **pass closed**; **repair/retry cluster closed enough** (Block 3 doc — see *Repair / retry cluster — Block 3*). **Behavioral Gauntlet**, **Playability Validation**, and **AER** are **complete** as validation tracks—this document now governs **post-feature consolidation** only (no gameplay expansion in consolidation-only PRs).
 
-### Test Ownership & Coverage Consolidation (Blocks A–C — complete)
+### Test Ownership & Coverage Consolidation (Blocks A–D — complete)
 
 Documentation and tooling only; **no runtime game behavior** changes in this track.
 
@@ -14,8 +14,9 @@ Documentation and tooling only; **no runtime game behavior** changes in this tra
 
 **Block B — ownership registry governance**
 
-- **`tests/test_ownership_registry.py` added** — declares required **responsibility** groups with a single **direct_owner** path each (plus optional smoke/transcript/gauntlet/evaluator neighbors), checks inventory presence and layer alignment, and rejects **live legality** groups whose direct owner is classified as transcript/gauntlet/playability/evaluator-only.
-- **Direct-owner governance checks** — registry + pytest prevent silent drift of “who owns this seam” and accidental double-claim of the same `direct_owner` path across groups.
+- **`tests/test_ownership_registry.py` added** — declares required **responsibility** groups with a single **direct_owner** path each (plus optional **neighbor** suites), checks inventory presence and layer alignment, and rejects **live legality** groups whose direct owner is classified as transcript/gauntlet/playability/evaluator-only.
+- **Neighbor categories (exactly one slot per listed path within a group):** `smoke_suites`, `transcript_suites`, `gauntlet_suites`, `evaluator_suites`, `downstream_consumer_suites`, `compatibility_residue_suites`. Use **downstream_consumer** for integration suites that consume the owner boundary without being thin smoke; use **compatibility_residue** for documented legacy or read-side harnesses. The audit mirrors these lists under `ownership_registry_index.groups` and `files_roles` in `tests/test_inventory.json`.
+- **Direct-owner governance checks** — registry + pytest prevent silent drift of “who owns this seam” and accidental double-claim of the same `direct_owner` path across groups. Inventory `likely_architecture_layer` heuristics treat **`general` as permissive for neighbors only**; a **direct owner** with a non-null `declared_architecture_layer` must not resolve to `general`, and must align with declared layer (with the same soft adjacency rules as before).
 - **Duplicate base names** — cross-file identical `test_*` base names remain **heuristic triage** (`tests/test_inventory.json`, `block_b_overlap_clusters`); a small **allowlist** documents intentional collisions with **non-empty reasons**.
 
 **Block C — smoke / transcript consolidation (examples)**
@@ -23,6 +24,13 @@ Documentation and tooling only; **no runtime game behavior** changes in this tra
 - **`tests/test_c4_narrative_mode_live_pipeline.py`** — thinned toward **C4 narrative-mode wiring / orchestration smoke**; not a second full NMO legality matrix.
 - **`tests/test_narration_transcript_regressions.py`** — thinned away from **duplicate direct-legality** coverage already owned in focused suites; preserves transcript value for **multi-turn narration** behavior.
 - **Canonical owners preserved** (extend these first for new rules): **prompt context** (`test_prompt_context.py`); **NMO legality** and narrative-mode contracts per existing governance docs; **`test_final_emission_gate.py`**; **`test_final_emission_validators.py`**; **`test_final_emission_repairs.py`**; **fallback** and downstream repair consumers as documented (not parallel derivation owners); **social emission** (`test_social_exchange_emission.py` and related strict-social paths per `TEST_AUDIT.md`).
+- **Strict-social vs prompt stack (closeout):** exact duplicate **direct** validation for strict-social `question_resolution_rule_check` / first-sentence legality was moved to **`tests/test_social_exchange_emission.py`**. **`tests/test_prompt_and_guard.py`** keeps **smoke** near the prompt stack for that boundary, **`build_retry_prompt_for_failure`** text for unresolved-question / social-contract failures, and **`enforce_question_resolution_rule` prepend** behavior. **`downstream_consumer_suites`** and **`compatibility_residue_suites`** stayed **empty** (no Block D case justified populating them).
+
+**Block D — inventory schema v2 + drift resistance**
+
+- **`summary.inventory_schema_version` = 2** with **`summary.declared_pytest_markers`**, per-file **`likely_architecture_layer`**, **`marker_set`**, **`ownership_registry_positions`**, top-level **`ownership_registry_index`**, **`block_b_overlap_clusters`**, and **`import_hub_modules`** — all emitted by `tools/test_audit.py` and asserted by governance tests.
+- **Neighbor-only overlap typing** — any path listed under a responsibility group must appear in exactly one neighbor field (or as `direct_owner`); heuristic inventory clusters remain **triage hints** and do not fail CI.
+- **Intentional cross-file duplicate base names** (allowlisted): `test_deterministic_json_stable`, `test_version_constant`, `test_maybe_attach_respects_env` — see `tests/test_ownership_registry.py` → `_CROSS_FILE_DUPLICATE_ALLOWLIST`.
 
 **Maintainer loop:** `tests/README_TESTS.md` → *Test ownership rules* and *Command cheat sheet*.
 
@@ -44,7 +52,7 @@ Documentation and tooling only; **no runtime game behavior** changes in this tra
 
 | File | Owns |
 | --- | --- |
-| `tests/test_prompt_and_guard.py` | **Pre-generation / pipeline guards:** `build_messages` payload and instructions, `SYSTEM_PROMPT` shape hooks, discoverable-clue justification (`allow_discoverable_clues` / intent), **retry** classification and **`build_retry_prompt_for_failure`**, **`guard_gm_output`** (spoiler / unjustified discoverables), **`enforce_npc_response_contract`**, **`enforce_question_resolution_rule`**, **`question_resolution_rule_check`** / **`detect_retry_failures`**, uncertainty **classification + render** (`classify_uncertainty`, `render_uncertainty_response`, `choose_contextual_lead`, `resolve_known_fact_before_uncertainty`), **`apply_response_policy_enforcement`** ordering (incl. strict-social bypass), **`detect_validator_voice` / `enforce_no_validator_voice`** as **GM-side** enforcement + tags, scene momentum / generic phrase **detection** wired to policy. |
+| `tests/test_prompt_and_guard.py` | **Pre-generation / pipeline guards:** `build_messages` payload and instructions, `SYSTEM_PROMPT` shape hooks, discoverable-clue justification (`allow_discoverable_clues` / intent), **retry** classification and **`build_retry_prompt_for_failure`** (including **retry prompt text** for unresolved-question / social-contract failures), **`guard_gm_output`** (spoiler / unjustified discoverables), **`enforce_npc_response_contract`**, **`enforce_question_resolution_rule` prepend** behavior, **`detect_retry_failures`**, uncertainty **classification + render** (`classify_uncertainty`, `render_uncertainty_response`, `choose_contextual_lead`, `resolve_known_fact_before_uncertainty`), **`apply_response_policy_enforcement`** ordering (incl. strict-social bypass), **`detect_validator_voice` / `enforce_no_validator_voice`** as **GM-side** enforcement + tags, scene momentum / generic phrase **detection** wired to policy. **Strict-social** `question_resolution_rule_check` / first-sentence **legality matrices** → `tests/test_social_exchange_emission.py` (this file keeps **smoke** only for that boundary). |
 | `tests/test_output_sanitizer.py` | **Post-GM emit path:** `sanitize_player_facing_output`, `final_validation_pass`, `final_coherence_pass`, `rewrite_analytical_sentence`, extraction of leaked JSON payloads, **final** removal/rewrite of instructional strings, router/planner/validator **scaffold** leaks, duplicate collapse, **post-final strict-social clamp** / `gate_sealed_text` (boundary-only; thin vs repair cluster). |
 
 **Overlap hotspots for Block 2 (1–2 only)**

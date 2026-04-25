@@ -12,7 +12,11 @@ Direct prompt-contract semantics for shipped ``social_response_structure`` remai
 owned by ``tests/test_response_policy_contracts.py``. ``tests/test_strict_social_emergency_fallback_dialogue.py``
 remains secondary downstream retry / compatibility coverage, including the historical repair-shaped
 alias. Keep adjacent contract/read-side or repair-owner semantics out of this file unless they are
-needed to prove downstream emission-consumer behavior."""
+needed to prove downstream emission-consumer behavior.
+
+Block C: ``question_resolution_rule_check`` / first-sentence social legality (including
+``detect_retry_failures`` wiring for unresolved strict-social questions) is consolidated here
+rather than duplicated in ``tests/test_prompt_and_guard.py``."""
 from __future__ import annotations
 
 from game.final_emission_meta import read_final_emission_meta_dict
@@ -1817,3 +1821,283 @@ def test_enforce_speaker_contract_reads_stored_contract_without_calling_build_sp
         scene_id=sid,
     )
     assert len(calls) == 0
+
+
+# ---------------------------------------------------------------------------
+# Block C: ``question_resolution_rule_check`` / first-sentence social legality
+# (moved from ``test_prompt_and_guard``). Retry *prompt text* stays in the prompt suite.
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.parametrize(
+    "reply_text",
+    [
+        'Tavern Runner says, "Two cloaked riders hit them near the east road."',
+        'The runner shakes his head. "I don\'t know who hit them."',
+        "No names have surfaced yet, the runner says.",
+        'The runner\'s face tightens. "Ask me that again and I\'m done talking."',
+    ],
+)
+def test_social_exchange_question_first_sentence_contract_accepts_explicit_shapes(reply_text):
+    from game.gm import question_resolution_rule_check
+
+    check = question_resolution_rule_check(
+        player_text="Who hit them?",
+        gm_reply_text=reply_text,
+        resolution={
+            "kind": "question",
+            "social": {
+                "social_intent_class": "social_exchange",
+                "npc_id": "runner",
+                "npc_name": "Tavern Runner",
+            },
+        },
+    )
+    assert check["applies"] is True
+    assert check["ok"] is True
+    assert check["reasons"] == []
+
+
+def test_social_exchange_contract_accepts_beat_then_substantive_indirect_answer():
+    """Short NPC beat + follow-on counts as explicit; grounding tokens match npc_id slug."""
+    from game.gm import question_resolution_rule_check
+
+    check = question_resolution_rule_check(
+        player_text="What happened to the missing patrol?",
+        gm_reply_text=(
+            "The runner frowns. They never came back from the east bend—just rumors after that."
+        ),
+        resolution={
+            "kind": "question",
+            "social": {
+                "social_intent_class": "social_exchange",
+                "npc_id": "tavern_runner",
+                "npc_name": "The runner",
+            },
+        },
+    )
+    assert check["applies"] is True
+    assert check["ok"] is True
+    assert check["reasons"] == []
+
+
+def test_social_exchange_contract_accepts_leading_dialogue_without_name_prefix():
+    from game.gm import question_resolution_rule_check
+
+    check = question_resolution_rule_check(
+        player_text="Any idea who attacked them?",
+        gm_reply_text='"Couldn\'t tell you—only rumors from the road."',
+        resolution={
+            "kind": "question",
+            "social": {
+                "social_intent_class": "social_exchange",
+                "npc_id": "runner",
+                "npc_name": "Tavern Runner",
+            },
+        },
+    )
+    assert check["applies"] is True
+    assert check["ok"] is True
+
+
+def test_opening_echo_skips_when_reply_leads_with_dialogue():
+    from game.gm import opening_sentence_echoes_player_input
+
+    player = "What happened to the missing patrol?"
+    reply = '"Patrol never made the rendezvous," the runner mutters. "I heard riders, not names."'
+    assert opening_sentence_echoes_player_input(reply, player) is False
+
+
+def test_social_exchange_question_first_sentence_contract_rejects_atmospheric_opener():
+    from game.gm import question_resolution_rule_check
+
+    check = question_resolution_rule_check(
+        player_text="Who hit them?",
+        gm_reply_text=(
+            "The truth is still buried beneath rumor and rain. "
+            "The runner glances away and avoids your eyes."
+        ),
+        resolution={
+            "kind": "question",
+            "social": {
+                "social_intent_class": "social_exchange",
+                "npc_id": "runner",
+                "npc_name": "Tavern Runner",
+            },
+        },
+    )
+    assert check["applies"] is True
+    assert check["ok"] is False
+    assert "question_rule:social_exchange_first_sentence_not_speaker_grounded" in check["reasons"]
+    assert "question_rule:social_exchange_first_sentence_not_substantive_answer" in check["reasons"]
+
+
+def test_detect_retry_failures_flags_social_exchange_first_sentence_contract():
+    from game.gm import detect_retry_failures
+
+    # Local fixture (same shape as tests/test_prompt_and_guard.py); avoids cross-test-module imports.
+    frontier_gate_scene = {
+        "scene": {
+            "id": "frontier_gate",
+            "location": "Cinderwatch Gate District",
+            "summary": "Rain spatters soot-dark stone as caravans and refugees choke the eastern gate.",
+            "mode": "exploration",
+            "visible_facts": [
+                "Refugees crowd the muddy approach road.",
+                "A notice board lists new taxes, curfews, and a missing patrol.",
+                "A tavern runner loudly offers rumor and hot stew for coin.",
+            ],
+            "discoverable_clues": [
+                "A well-dressed onlooker near the gate seems more interested in newcomers than in the refugees.",
+            ],
+            "hidden_facts": [
+                "An agent of a noble house is watching new arrivals.",
+            ],
+            "exits": [],
+            "enemies": [],
+        }
+    }
+    campaign = {"title": "T", "character_role": "R"}
+    world = {
+        "event_log": [],
+        "npcs": [
+            {"id": "guard_captain", "name": "Captain Veyra", "scene_id": "frontier_gate"},
+        ],
+    }
+    session = {
+        "active_scene_id": "frontier_gate",
+        "interaction_context": {
+            "active_interaction_target_id": "guard_captain",
+            "active_interaction_kind": "social",
+            "interaction_mode": "social",
+            "engagement_level": "engaged",
+            "conversation_privacy": "lowered_voice",
+            "player_position_context": "seated_with_target",
+        },
+    }
+    _ = campaign
+    failures = detect_retry_failures(
+        player_text="Who hit them?",
+        gm_reply={
+            "player_facing_text": "Around you, small details sharpen into clues as the gate crowd churns.",
+            "tags": [],
+            "scene_update": None,
+            "activate_scene_id": None,
+            "new_scene_draft": None,
+            "world_updates": None,
+            "suggested_action": None,
+            "debug_notes": "",
+        },
+        scene_envelope=frontier_gate_scene,
+        session=session,
+        world=world,
+        resolution={
+            "kind": "question",
+            "social": {
+                "social_intent_class": "social_exchange",
+                "npc_id": "guard_captain",
+                "npc_name": "Captain Veyra",
+            },
+        },
+    )
+    unresolved = next((f for f in failures if f.get("failure_class") == "unresolved_question"), None)
+    assert unresolved is not None
+    reasons = unresolved.get("reasons") or []
+    assert "question_rule:social_exchange_first_sentence_not_speaker_grounded" in reasons
+    assert "question_rule:social_exchange_first_sentence_not_substantive_answer" in reasons
+
+
+def test_social_exchange_natural_warning_passes_question_rule():
+    from game.gm import question_resolution_rule_check
+
+    check = question_resolution_rule_check(
+        player_text="Anyone I should steer clear of for sure?",
+        gm_reply_text=(
+            "Tavern Runner doesn't look at you. "
+            "Keep clear of House Verevin's bailiffs by the east crossroads—people vanish near that stretch."
+        ),
+        resolution={
+            "kind": "question",
+            "social": {
+                "social_intent_class": "social_exchange",
+                "npc_id": "tavern_runner",
+                "npc_name": "Tavern Runner",
+            },
+        },
+    )
+    assert check["applies"] is True
+    assert check["ok"] is True
+    assert check.get("social_answer_validation_mode") == "substantive_content"
+    assert check.get("first_sentence_substantive") is True
+    assert check.get("rejected_as_cinematic_nonanswer") is False
+
+
+def test_social_exchange_natural_directional_passes_question_rule():
+    from game.gm import question_resolution_rule_check
+
+    check = question_resolution_rule_check(
+        player_text="Where shouldn't I go tonight?",
+        gm_reply_text='Tavern Runner says, "Watch out for the mill yard after dark—best not cross Verevin\'s riders there."',
+        resolution={
+            "kind": "question",
+            "social": {
+                "social_intent_class": "social_exchange",
+                "npc_id": "tavern_runner",
+                "npc_name": "Tavern Runner",
+            },
+        },
+    )
+    assert check["applies"] is True
+    assert check["ok"] is True
+
+
+def test_social_exchange_cinematic_interruption_fails_question_rule():
+    from game.gm import question_resolution_rule_check
+
+    check = question_resolution_rule_check(
+        player_text="Who should I avoid?",
+        gm_reply_text=(
+            "Tavern Runner starts to answer, then pauses as shouting breaks out by the gate."
+        ),
+        resolution={
+            "kind": "question",
+            "social": {
+                "social_intent_class": "social_exchange",
+                "npc_id": "tavern_runner",
+                "npc_name": "Tavern Runner",
+            },
+        },
+    )
+    assert check["applies"] is True
+    assert check["ok"] is False
+    assert "question_rule:social_exchange_first_sentence_not_substantive_answer" in check["reasons"]
+    assert check.get("rejected_as_cinematic_nonanswer") is True
+
+
+def test_is_valid_social_answer_first_sentence_helper():
+    from game.gm import is_valid_social_answer_first_sentence
+
+    assert is_valid_social_answer_first_sentence("Keep clear of House Verevin's men by the crossroads.") is True
+    assert is_valid_social_answer_first_sentence("Watch out for riders on the east road.") is True
+    assert is_valid_social_answer_first_sentence("Tavern Runner starts to answer, then pauses.") is False
+    assert is_valid_social_answer_first_sentence("For a moment the scene holds, unreadable.") is False
+    assert is_valid_social_answer_first_sentence("") is False
+
+
+def test_social_exchange_short_substantive_answer_passes_question_rule():
+    from game.gm import question_resolution_rule_check
+
+    check = question_resolution_rule_check(
+        player_text="Any names I should know?",
+        gm_reply_text='Tavern Runner mutters, "Don\'t trust the night clerk at the Crown."',
+        resolution={
+            "kind": "question",
+            "social": {
+                "social_intent_class": "social_exchange",
+                "npc_id": "tavern_runner",
+                "npc_name": "Tavern Runner",
+            },
+        },
+    )
+    assert check["applies"] is True
+    assert check["ok"] is True

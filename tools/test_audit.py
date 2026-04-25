@@ -7,8 +7,13 @@ Requires: the same interpreter used for pytest.
 Emits per-file ``collected_nodeids`` / ``collected_test_names``, AST duplicate-name
 guardrails, parsed ``game.*`` imports, heuristic ``likely_ownership_theme`` and
 ``likely_architecture_layer`` (engine / planner / gpt / gate / evaluator / smoke /
-transcript / gauntlet), overlap hints, and top-level ``block_b_overlap_clusters`` /
-``import_hub_modules`` for consolidation triage.
+transcript / gauntlet / general), per-file ``marker_set`` / ``declared_pytest_markers``,
+``collected_duplicate_base_names`` (parametrize / name reuse triage), parsed ``game.*`` imports,
+overlap hints, optional ``ownership_registry_index`` (direct owner + neighbor suites), and
+top-level ``block_b_overlap_clusters`` / ``import_hub_modules`` for consolidation triage.
+
+JSON is written with sorted object keys for stable diffs aside from
+``summary.generated_utc`` (see ``summary.inventory_schema_version``).
 
 Also prints whether any module defines the same top-level ``test_*`` name twice
 (Python keeps only the last — pytest would under-collect). Details:
@@ -28,6 +33,32 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 TESTS = ROOT / "tests"
 OUT_JSON = TESTS / "test_inventory.json"
+
+# Running as ``python tools/test_audit.py`` puts ``tools/`` on ``sys.path[0]``; repo root must precede it
+# so ``tests.*`` imports (ownership registry snapshot) resolve.
+_ROOT_STR = str(ROOT)
+if _ROOT_STR not in sys.path:
+    sys.path.insert(0, _ROOT_STR)
+
+# Bump when adding/removing inventory fields or changing semantics (governance / CI may assert).
+INVENTORY_SCHEMA_VERSION = 2
+
+# Heuristic: architecture scores at or below this ceiling resolve to ``general`` (weak signal).
+_ARCH_LAYER_GENERAL_THRESHOLD = 2
+
+INTERNAL_PYTEST_MARKS = frozenset(
+    {
+        "parametrize",
+        "usefixtures",
+        "filterwarnings",
+        "timeout",
+        "skip",
+        "skipif",
+        "xfail",
+        "asyncio",
+        "anyio",
+    }
+)
 
 # Feature-area keywords (first match wins for primary label; all matches kept in feature_areas)
 FEATURE_RULES: list[tuple[str, tuple[str, ...]]] = [
@@ -51,6 +82,7 @@ FILE_BUCKET_RULES: list[tuple[str, tuple[str, ...]]] = [
 ]
 
 # Single primary label per test file for architecture discussions (engine / planner / gpt / gate / …).
+# ``general`` is not scored here; it is chosen when all scores fall at/below ``_ARCH_LAYER_GENERAL_THRESHOLD``.
 ARCH_LAYERS: tuple[str, ...] = (
     "transcript",
     "gauntlet",
@@ -305,6 +337,143 @@ def _game_import_roots(modules: list[str]) -> list[str]:
     return sorted(set(roots))
 
 
+def _declared_markers_from_pytest_ini() -> frozenset[str]:
+    """Marker names declared under ``[pytest]`` → ``markers`` in ``pytest.ini`` (best-effort)."""
+    ini_path = ROOT / "pytest.ini"
+    if not ini_path.is_file():
+        return frozenset()
+    names: list[str] = []
+    in_markers = False
+    for raw in ini_path.read_text(encoding="utf-8").splitlines():
+        line = raw.rstrip()
+        if not in_markers:
+            if re.match(r"^markers\s*=", line, re.IGNORECASE):
+                in_markers = True
+                rhs = line.split("=", 1)[1].strip()
+                if rhs and ":" in rhs and not rhs.startswith("#"):
+                    names.append(rhs.split(":", 1)[0].strip())
+            continue
+        stripped = line.strip()
+        if not stripped:
+            continue
+        if stripped.startswith("[") or (re.match(r"^[A-Za-z_][A-Za-z0-9_]*\s*=", stripped) and not stripped.lower().startswith("markers")):
+            break
+        if ":" in stripped:
+            name = stripped.split(":", 1)[0].strip()
+            if name and not name.startswith("#"):
+                names.append(name)
+    return frozenset(n for n in names if n)
+
+
+def _pytest_mark_name_from_decorator(dec: ast.AST) -> str | None:
+    """``pytest.mark.foo`` / ``pytest.mark.foo(...)`` → ``foo``."""
+    if isinstance(dec, ast.Call):
+        dec = dec.func
+    parts: list[str] = []
+    cur: ast.AST | None = dec
+    while isinstance(cur, ast.Attribute):
+        parts.append(cur.attr)
+        cur = cur.value
+    if not isinstance(cur, ast.Name) or cur.id != "pytest":
+        return None
+    if len(parts) >= 2 and parts[-1] == "mark":
+        return parts[-2]
+    return None
+
+
+def _marks_from_pytestmark_value(val: ast.AST) -> list[str]:
+    out: list[str] = []
+    if isinstance(val, (ast.List, ast.Tuple)):
+        for elt in val.elts:
+            n = _pytest_mark_name_from_decorator(elt)
+            if n and n not in INTERNAL_PYTEST_MARKS:
+                out.append(n)
+    else:
+        n = _pytest_mark_name_from_decorator(val)
+        if n and n not in INTERNAL_PYTEST_MARKS:
+            out.append(n)
+    return out
+
+
+def _parse_module_pytestmarks_and_per_test_marks(
+    path: Path,
+) -> tuple[list[str], dict[str, list[str]]]:
+    """Module-level ``pytestmark`` union (sorted), plus per-``test_*`` decorator marks."""
+    try:
+        src = path.read_text(encoding="utf-8")
+        tree = ast.parse(src)
+    except (OSError, SyntaxError, UnicodeError):
+        return [], {}
+    module_level: set[str] = set()
+    per_test: dict[str, set[str]] = {}
+    for node in tree.body:
+        if isinstance(node, ast.Assign):
+            for t in node.targets:
+                if isinstance(t, ast.Name) and t.id == "pytestmark":
+                    for m in _marks_from_pytestmark_value(node.value):
+                        module_level.add(m)
+        elif isinstance(node, ast.AnnAssign) and isinstance(node.target, ast.Name) and node.target.id == "pytestmark":
+            for m in _marks_from_pytestmark_value(node.value):
+                module_level.add(m)
+        elif isinstance(node, ast.FunctionDef) and node.name.startswith("test_"):
+            marks: set[str] = set()
+            for dec in node.decorator_list:
+                n = _pytest_mark_name_from_decorator(dec)
+                if n and n not in INTERNAL_PYTEST_MARKS:
+                    marks.add(n)
+            if marks:
+                per_test[node.name] = marks
+    per_test_lists = {k: sorted(v) for k, v in sorted(per_test.items())}
+    return sorted(module_level), per_test_lists
+
+
+def _build_ownership_registry_index() -> dict[str, object] | None:
+    """Snapshot of ``tests/test_ownership_registry.py`` for machine-readable neighbor maps."""
+    try:
+        from tests.test_ownership_registry import RESPONSIBILITY_REGISTRY
+    except Exception:
+        return None
+    groups: dict[str, dict[str, object]] = {}
+    for gid, rec in sorted(RESPONSIBILITY_REGISTRY.items()):
+        groups[gid] = {
+            "human_title": rec.human_title,
+            "declared_architecture_layer": rec.declared_architecture_layer,
+            "direct_owner": rec.direct_owner.replace("\\", "/"),
+            "smoke_suites": [p.replace("\\", "/") for p in rec.smoke_suites],
+            "transcript_suites": [p.replace("\\", "/") for p in rec.transcript_suites],
+            "gauntlet_suites": [p.replace("\\", "/") for p in rec.gauntlet_suites],
+            "evaluator_suites": [p.replace("\\", "/") for p in rec.evaluator_suites],
+            "downstream_consumer_suites": [p.replace("\\", "/") for p in rec.downstream_consumer_suites],
+            "compatibility_residue_suites": [p.replace("\\", "/") for p in rec.compatibility_residue_suites],
+        }
+    roles_by_path: dict[str, list[dict[str, str]]] = defaultdict(list)
+    for gid in sorted(groups):
+        row = groups[gid]
+        d = str(row["direct_owner"])
+        roles_by_path[d].append({"group_id": gid, "role": "direct_owner"})
+        for p in row["smoke_suites"]:
+            roles_by_path[str(p)].append({"group_id": gid, "role": "smoke_suite"})
+        for p in row["transcript_suites"]:
+            roles_by_path[str(p)].append({"group_id": gid, "role": "transcript_suite"})
+        for p in row["gauntlet_suites"]:
+            roles_by_path[str(p)].append({"group_id": gid, "role": "gauntlet_suite"})
+        for p in row["evaluator_suites"]:
+            roles_by_path[str(p)].append({"group_id": gid, "role": "evaluator_suite"})
+        for p in row["downstream_consumer_suites"]:
+            roles_by_path[str(p)].append({"group_id": gid, "role": "downstream_consumer_suite"})
+        for p in row["compatibility_residue_suites"]:
+            roles_by_path[str(p)].append({"group_id": gid, "role": "compatibility_residue_suite"})
+    files_roles = {
+        path: sorted(entries, key=lambda e: (e["role"], e["group_id"]))
+        for path, entries in sorted(roles_by_path.items())
+    }
+    return {
+        "available": True,
+        "groups": groups,
+        "files_roles": files_roles,
+    }
+
+
 def _architecture_layer_scores(fp: str, src: str, file_bucket: str) -> dict[str, int]:
     """Heuristic scores for ``ARCH_LAYERS``; higher wins (ties broken by ``ARCH_LAYERS`` order)."""
     bn = Path(fp).name.lower()
@@ -379,6 +548,15 @@ def _architecture_layer_scores(fp: str, src: str, file_bucket: str) -> dict[str,
         )
     ):
         scores["engine"] += 3
+    # Direct-owner governance expects a non-``general`` inventory layer for these suites.
+    if re.search(r"\bgame\.response_policy_contracts\b", sl):
+        scores["engine"] += 10
+    if re.search(r"\bgame\.clues\b", sl) or re.search(r"\bgame\.leads\b", sl):
+        scores["engine"] += 10
+    if "clue_lead_registry" in bn or ("clue" in bn and "lead" in bn and "registry" in bn):
+        scores["engine"] += 6
+    if re.search(r"\bgame\.final_emission_validators\b", sl):
+        scores["gate"] += 12
     if "TestClient" not in src and "tmp_path" not in sl and max(scores.values()) <= 4:
         scores["engine"] += 2
 
@@ -387,12 +565,12 @@ def _architecture_layer_scores(fp: str, src: str, file_bucket: str) -> dict[str,
 
 def _primary_architecture_layer(scores: dict[str, int]) -> str:
     best = max(scores.values())
-    if best <= 0:
-        return "engine"
+    if best <= _ARCH_LAYER_GENERAL_THRESHOLD:
+        return "general"
     for layer in ARCH_LAYERS:
         if scores.get(layer, 0) == best:
             return layer
-    return "engine"
+    return "general"
 
 
 def _likely_ownership_theme(fp: str, primary_feature_breakdown: dict[str, int], game_roots: list[str]) -> str:
@@ -492,10 +670,24 @@ def main() -> None:
         fp, _, _, _ = _parse_nodeid(nid)
         by_file[fp].append(nid)
 
+    all_fps = sorted(set(by_file.keys()) | {"tests/" + p.name for p in TESTS.glob("test_*.py")})
+    declared_pytest_markers = sorted(_declared_markers_from_pytest_ini())
+    ownership_registry_index = _build_ownership_registry_index()
+    registry_positions: dict[str, list[dict[str, str]]] = {}
+    if isinstance(ownership_registry_index, dict) and ownership_registry_index.get("available"):
+        frmap = ownership_registry_index.get("files_roles")
+        if isinstance(frmap, dict):
+            registry_positions = {str(k): list(v) for k, v in frmap.items()}
+
     src_by_fp: dict[str, str] = {}
     for p in sorted(TESTS.glob("test_*.py")):
         fp = "tests/" + p.name
         src_by_fp[fp] = p.read_text(encoding="utf-8")
+
+    markers_by_fp: dict[str, tuple[list[str], dict[str, list[str]]]] = {}
+    for p in sorted(TESTS.glob("test_*.py")):
+        fp = "tests/" + p.name
+        markers_by_fp[fp] = _parse_module_pytestmarks_and_per_test_marks(p)
 
     ast_total = 0
     dup_report: list[dict] = []
@@ -540,6 +732,8 @@ def main() -> None:
             redundancy = "possible_overlap"
         # Same name collected from one file multiple times shouldn't happen; parametrized differs in [..]
         hist = _historical(nid, file_bucket)
+        mod_marks, per_test_marks = markers_by_fp.get(fp, ([], {}))
+        marker_set = sorted(set(mod_marks) | set(per_test_marks.get(base, [])))
         tests_out.append(
             {
                 "nodeid": nid,
@@ -554,15 +748,22 @@ def main() -> None:
                 "brittleness": brittle,
                 "redundancy_flag": redundancy,
                 "keyword_overlap_hints": _test_keyword_overlap_hints(nid, body),
+                "marker_set": marker_set,
             }
         )
 
     file_rows: list[dict] = []
-    for p in sorted(TESTS.glob("test_*.py")):
-        fp = "tests/" + p.name
+    for fp in all_fps:
+        path = TESTS / Path(fp).name
         bucket = _file_primary_bucket(fp)
         collected = len(by_file.get(fp, []))
         names, dups = ast_by_fp.get(fp, ([], []))
+        if path.is_file() and not names and collected:
+            names, dups = _ast_test_defs(path)
+        base_counts = Counter(_parse_nodeid(n)[2] for n in by_file.get(fp, []))
+        collected_dup_bases = sorted(b for b, c in base_counts.items() if c > 1)
+        mod_marks, per_test_marks = markers_by_fp.get(fp, ([], {}))
+        file_marker_union = sorted(set(mod_marks) | {m for ms in per_test_marks.values() for m in ms})
         file_rows.append(
             {
                 "path": fp,
@@ -570,10 +771,13 @@ def main() -> None:
                 "pytest_collected": collected,
                 "collected_nodeids": sorted(by_file.get(fp, [])),
                 "collected_test_names": [nid.split("::", 1)[1] for nid in sorted(by_file.get(fp, []))],
+                "collected_duplicate_base_names": collected_dup_bases,
                 "ast_test_def_lines": len(names),
                 "ast_unique_test_names": len(set(names)),
                 "shadowed_duplicate_test_names": sorted(dups) if dups else [],
                 "has_shadowed_duplicate_names": bool(dups),
+                "marker_set": file_marker_union,
+                "ownership_registry_positions": registry_positions.get(fp.replace("\\", "/"), []),
             }
         )
 
@@ -591,6 +795,8 @@ def main() -> None:
 
     summary = {
         "generated_utc": datetime.now(timezone.utc).isoformat(),
+        "inventory_schema_version": INVENTORY_SCHEMA_VERSION,
+        "declared_pytest_markers": declared_pytest_markers,
         "test_file_count": len(file_rows),
         "pytest_collected_items": len(nodeids),
         "ast_test_function_def_lines_total": ast_total,
@@ -612,7 +818,7 @@ def main() -> None:
 
     file_bucket_majority: dict[str, str] = {}
     file_bucket_distribution: dict[str, dict[str, int]] = {}
-    for fp in {t["file"] for t in tests_out}:
+    for fp in sorted(set(all_fps) | {t["file"] for t in tests_out}):
         bc = Counter(t["primary_bucket"] for t in tests_out if t["file"] == fp)
         file_bucket_distribution[fp] = dict(bc)
         file_bucket_majority[fp] = bc.most_common(1)[0][0] if bc else "mixed/unclear"
@@ -724,7 +930,7 @@ def main() -> None:
 
     summary["cross_file_duplicate_test_name_count"] = len(cross_file_duplicate_test_names)
 
-    payload = {
+    payload: dict[str, object] = {
         "summary": summary,
         "counts_by_majority_file_bucket": dict(Counter(file_bucket_majority.values())),
         "top_high_brittleness_files": brittle_by_file.most_common(15),
@@ -738,8 +944,10 @@ def main() -> None:
         "files": file_rows,
         "tests": tests_out,
     }
+    if ownership_registry_index is not None:
+        payload["ownership_registry_index"] = ownership_registry_index
 
-    OUT_JSON.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+    OUT_JSON.write_text(json.dumps(payload, indent=2, sort_keys=True), encoding="utf-8")
     print(f"Wrote {OUT_JSON} ({len(nodeids)} tests, {len(file_rows)} files)")
     # One-line overlap hint: themes touching the most distinct files (see JSON feature_areas_by_distinct_files).
     top_spread = spread_ranked[:8]

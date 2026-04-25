@@ -6,9 +6,10 @@ edge case?* It does **not** claim to catalog all meaningful coverage.
 Design notes (read before extending):
 - **Direct owner** = exactly one canonical test module that is allowed to introduce detailed
   normative assertions for the responsibility. Other suites may overlap behaviorally.
-- **Smoke / transcript / gauntlet / evaluator** paths listed here are *supporting* surfaces.
-  They must not be named as the direct owner for **live legality** responsibilities (gate-era
-  rules, sanitizer post-processing, shipped policy materialization, etc.).
+- **Neighbor** paths (smoke, transcript, gauntlet, evaluator, downstream consumer, compatibility
+  residue) are *supporting* surfaces. They must not be named as the direct owner for **live
+  legality** responsibilities (gate-era rules, sanitizer post-processing, shipped policy
+  materialization, etc.).
 - New validation rules should land with a clear direct owner first; only then add broad
   regression, transcript, or gauntlet coverage so failures stay attributable.
 
@@ -20,7 +21,7 @@ these checks.
 from __future__ import annotations
 
 import json
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from pathlib import Path
 from typing import AbstractSet, Final, Mapping, Tuple
 
@@ -46,7 +47,7 @@ _CANONICAL: Final[AbstractSet[str]] = (
 
 # Heuristic inventory buckets that are too noisy to treat as contradicting a canonical owner.
 _PERMISSIVE_INVENTORY_LAYERS: Final[AbstractSet[str]] = frozenset(
-    {"smoke", "transcript", "gauntlet"},
+    {"smoke", "transcript", "gauntlet", "general"},
 )
 
 # Adjacent layers often co-score in static import heuristics; treat as compatible, not drift.
@@ -96,6 +97,41 @@ def _layers_compatible(declared: str | None, likely: str | None) -> bool:
     return False
 
 
+def _direct_owner_inventory_layer_ok(declared: str | None, likely: str | None) -> bool:
+    """Inventory ``general`` is permissive for neighbors, but not for a declared direct owner with a layer."""
+    if likely is None or not isinstance(likely, str):
+        return True
+    if _normalize_layer(likely) == "general" and declared is not None:
+        return False
+    return _layers_compatible(declared, likely)
+
+
+_NEIGHBOR_SUITE_FIELDS: Final[tuple[str, ...]] = (
+    "smoke_suites",
+    "transcript_suites",
+    "gauntlet_suites",
+    "evaluator_suites",
+    "downstream_consumer_suites",
+    "compatibility_residue_suites",
+)
+
+
+def _neighbor_paths_for_group(rec: ResponsibilityRecord) -> list[tuple[str, str]]:
+    """(normalized_path, field_name) for neighbor slots only."""
+    out: list[tuple[str, str]] = []
+    for field in _NEIGHBOR_SUITE_FIELDS:
+        for p in getattr(rec, field):
+            out.append((str(p).replace("\\", "/"), field))
+    return out
+
+
+def _paths_for_group(rec: ResponsibilityRecord) -> list[tuple[str, str]]:
+    """All governed paths: direct_owner plus each neighbor field."""
+    seq: list[tuple[str, str]] = [(rec.direct_owner.replace("\\", "/"), "direct_owner")]
+    seq.extend(_neighbor_paths_for_group(rec))
+    return seq
+
+
 def _path_is_disallowed_live_legality_owner(path: str) -> bool:
     """True when ``path`` looks like transcript / gauntlet / playability / evaluator *suite* ownership."""
     norm = path.replace("\\", "/").lower()
@@ -124,6 +160,8 @@ class ResponsibilityRecord:
     transcript_suites: Tuple[str, ...] = ()
     gauntlet_suites: Tuple[str, ...] = ()
     evaluator_suites: Tuple[str, ...] = ()
+    downstream_consumer_suites: Tuple[str, ...] = ()
+    compatibility_residue_suites: Tuple[str, ...] = ()
 
 
 # Keys are stable ids consumed by governance tests.
@@ -288,24 +326,175 @@ def test_registry_defines_all_required_groups() -> None:
     assert set(RESPONSIBILITY_REGISTRY) == _REQUIRED_GROUP_IDS
 
 
+def test_inventory_schema_version_matches_audit_tool() -> None:
+    """Block A: inventory generator and governance tests agree on schema generation."""
+    import importlib.util
+
+    spec = importlib.util.spec_from_file_location("_inv_audit", _REPO_ROOT / "tools" / "test_audit.py")
+    assert spec and spec.loader
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    data = _load_inventory()
+    assert data.get("summary", {}).get("inventory_schema_version") == mod.INVENTORY_SCHEMA_VERSION
+
+
+def test_inventory_embeds_neighbor_registry_index(inventory: dict) -> None:
+    idx = inventory.get("ownership_registry_index")
+    assert isinstance(idx, dict) and idx.get("available") is True
+    groups = idx.get("groups")
+    roles = idx.get("files_roles")
+    assert isinstance(groups, dict) and isinstance(roles, dict)
+    assert set(groups) == _REQUIRED_GROUP_IDS
+    assert "final_emission_gate_orchestration" in groups
+    gate = groups["final_emission_gate_orchestration"]
+    assert isinstance(gate, dict)
+    assert gate.get("direct_owner") == "tests/test_final_emission_gate.py"
+    assert isinstance(gate.get("transcript_suites"), list)
+    for key in (
+        "smoke_suites",
+        "transcript_suites",
+        "gauntlet_suites",
+        "evaluator_suites",
+        "downstream_consumer_suites",
+        "compatibility_residue_suites",
+    ):
+        assert key in gate, f"missing ownership_registry_index.groups field {key!r}"
+
+
+def test_inventory_block_b_schema_v2_coherence(inventory: dict) -> None:
+    clusters = inventory.get("block_b_overlap_clusters")
+    assert isinstance(clusters, list) and clusters, "block_b_overlap_clusters must be a non-empty list"
+    kinds = {c.get("kind") for c in clusters if isinstance(c, dict)}
+    assert "dense_ownership_theme_by_architecture_layer" in kinds
+    hubs = inventory.get("import_hub_modules")
+    assert isinstance(hubs, list)
+    idx = inventory.get("ownership_registry_index", {})
+    fr = idx.get("files_roles", {})
+    for fp, row in _inventory_paths(inventory).items():
+        pos = row.get("ownership_registry_positions")
+        assert isinstance(pos, list)
+        if fp in fr:
+            assert pos == fr[fp], f"files_roles mismatch for {fp}"
+
+
+def test_evaluator_neighbor_may_have_general_inventory_layer(inventory_by_path: dict[str, dict]) -> None:
+    """Heuristic ``general`` is allowed for non-owner paths; governance only sharpens direct owners."""
+    p = "tests/test_player_agency_evaluator.py"
+    row = inventory_by_path.get(p)
+    assert row is not None and row.get("likely_architecture_layer") == "general"
+    errs = collect_ownership_governance_errors(
+        RESPONSIBILITY_REGISTRY,
+        _load_inventory(),
+        inventory_by_path,
+        cross_file_allowlist=_CROSS_FILE_DUPLICATE_ALLOWLIST,
+        live_legality_group_ids=_LIVE_LEGALITY_GROUP_IDS,
+    )
+    assert not any(p in e for e in errs)
+
+
+def test_governance_rejects_duplicate_direct_owner(inventory: dict, inventory_by_path: dict[str, dict]) -> None:
+    owner = "tests/test_save_load.py"
+    reg = {
+        "a": replace(RESPONSIBILITY_REGISTRY["engine_truth_persistence_mechanics"], direct_owner=owner),
+        "b": replace(RESPONSIBILITY_REGISTRY["planner_prompt_bundle_shipped_contract"], direct_owner=owner),
+    }
+    errs = collect_ownership_governance_errors(
+        reg,
+        inventory,
+        inventory_by_path,
+        cross_file_allowlist=_CROSS_FILE_DUPLICATE_ALLOWLIST,
+        live_legality_group_ids=frozenset(),
+    )
+    assert any("duplicate direct_owner" in e for e in errs)
+
+
+def test_governance_rejects_missing_inventory_path(inventory: dict, inventory_by_path: dict[str, dict]) -> None:
+    reg = {
+        "__missing__": ResponsibilityRecord(
+            human_title="Synthetic",
+            declared_architecture_layer="engine",
+            direct_owner="tests/__this_file_should_not_exist__.py",
+        ),
+    }
+    errs = collect_ownership_governance_errors(
+        reg,
+        inventory,
+        inventory_by_path,
+        cross_file_allowlist=_CROSS_FILE_DUPLICATE_ALLOWLIST,
+        live_legality_group_ids=frozenset(),
+    )
+    assert any("not in inventory" in e for e in errs)
+
+
+def test_direct_owner_general_disallowed_when_declared_layer_set() -> None:
+    assert not _direct_owner_inventory_layer_ok("engine", "general")
+    assert not _direct_owner_inventory_layer_ok("gate", "General")
+    assert _direct_owner_inventory_layer_ok(None, "general")
+    assert _direct_owner_inventory_layer_ok("engine", "smoke")
+    assert _direct_owner_inventory_layer_ok("engine", "engine")
+
+
+def test_governance_rejects_sharp_direct_owner_layer_mismatch(inventory: dict, inventory_by_path: dict[str, dict]) -> None:
+    reg = {
+        "__layer__": ResponsibilityRecord(
+            human_title="Synthetic layer mismatch",
+            declared_architecture_layer="gate",
+            direct_owner="tests/test_save_load.py",
+        ),
+    }
+    errs = collect_ownership_governance_errors(
+        reg,
+        inventory,
+        inventory_by_path,
+        cross_file_allowlist=_CROSS_FILE_DUPLICATE_ALLOWLIST,
+        live_legality_group_ids=frozenset(),
+    )
+    assert any("inventory layer incompatible" in e for e in errs)
+
+
+def test_inventory_per_test_rows_include_marker_set(inventory: dict) -> None:
+    tests = inventory.get("tests")
+    assert isinstance(tests, list) and tests
+    missing = [t.get("nodeid") for t in tests if not isinstance(t, dict) or "marker_set" not in t]
+    assert not missing, f"missing marker_set on {len(missing)} items (first: {missing[:3]!r})"
+
+
 def test_canonical_validation_layers_importable() -> None:
     assert vlc is not None, "game.validation_layer_contracts must import for layer alignment"
     assert set(vlc.CANONICAL_VALIDATION_LAYERS) == _CANONICAL
 
 
-def test_ownership_registry_governance(inventory: dict, inventory_by_path: dict[str, dict]) -> None:
+def collect_ownership_governance_errors(
+    registry: Mapping[str, ResponsibilityRecord],
+    inventory: dict,
+    inventory_by_path: dict[str, dict],
+    *,
+    cross_file_allowlist: Mapping[str, str],
+    live_legality_group_ids: AbstractSet[str],
+) -> list[str]:
+    """Pure governance checks for tests and unit tests with synthetic registries."""
     errors: list[str] = []
     seen_owners: dict[str, str] = {}
 
-    for gid, rec in RESPONSIBILITY_REGISTRY.items():
-        paths_to_check = (
-            (rec.direct_owner, "direct_owner"),
-            *[(p, "smoke_suites") for p in rec.smoke_suites],
-            *[(p, "transcript_suites") for p in rec.transcript_suites],
-            *[(p, "gauntlet_suites") for p in rec.gauntlet_suites],
-            *[(p, "evaluator_suites") for p in rec.evaluator_suites],
-        )
-        for rel, field in paths_to_check:
+    for _fp, row in inventory_by_path.items():
+        if not isinstance(row, dict):
+            errors.append(f"inventory row for {_fp!r} is not an object")
+            continue
+        for key in ("marker_set", "ownership_registry_positions", "collected_duplicate_base_names"):
+            if key not in row:
+                errors.append(f"{_fp}: missing inventory field {key!r}")
+
+    for gid, rec in registry.items():
+        neighbors = _neighbor_paths_for_group(rec)
+        seen_neighbor: dict[str, str] = {}
+        for npath, field in neighbors:
+            if npath in seen_neighbor and seen_neighbor[npath] != field:
+                errors.append(
+                    f"{gid}: neighbor path {npath!r} listed under both {seen_neighbor[npath]!r} and {field!r}",
+                )
+            seen_neighbor[npath] = field
+
+        for rel, field in _paths_for_group(rec):
             key = rel.replace("\\", "/")
             if key not in inventory_by_path:
                 errors.append(f"{gid}: {field} not in inventory: {key}")
@@ -318,7 +507,7 @@ def test_ownership_registry_governance(inventory: dict, inventory_by_path: dict[
                 )
             seen_owners[dkey] = gid
 
-        if gid in _LIVE_LEGALITY_GROUP_IDS and _path_is_disallowed_live_legality_owner(rec.direct_owner):
+        if gid in live_legality_group_ids and _path_is_disallowed_live_legality_owner(rec.direct_owner):
             errors.append(
                 f"{gid}: direct_owner {rec.direct_owner!r} looks like transcript/gauntlet/"
                 f"playability/evaluator suite; pick a unit/integration gate owner instead.",
@@ -327,10 +516,15 @@ def test_ownership_registry_governance(inventory: dict, inventory_by_path: dict[
         row = inventory_by_path.get(rec.direct_owner.replace("\\", "/"))
         if row is not None:
             likely = row.get("likely_architecture_layer")
-            if isinstance(likely, str) and not _layers_compatible(rec.declared_architecture_layer, likely):
+            if isinstance(likely, str) and not _direct_owner_inventory_layer_ok(rec.declared_architecture_layer, likely):
+                if _normalize_layer(likely) == "general" and rec.declared_architecture_layer is not None:
+                    detail = "direct owners may not rest on heuristic `general` when a declared validation layer is set"
+                else:
+                    detail = "tighten tools/test_audit.py heuristics or adjust declared_architecture_layer in the registry"
                 errors.append(
-                    f"{gid}: declared layer {rec.declared_architecture_layer!r} "
-                    f"vs inventory likely_architecture_layer {likely!r} for {rec.direct_owner}",
+                    f"{gid}: direct owner inventory layer incompatible with declared "
+                    f"{rec.declared_architecture_layer!r}: likely_architecture_layer {likely!r} "
+                    f"for {rec.direct_owner} ({detail}).",
                 )
 
     dups = inventory.get("cross_file_duplicate_test_names")
@@ -341,15 +535,26 @@ def test_ownership_registry_governance(inventory: dict, inventory_by_path: dict[
             base = block.get("base_name")
             if not isinstance(base, str):
                 continue
-            if base in _CROSS_FILE_DUPLICATE_ALLOWLIST:
+            if base in cross_file_allowlist:
                 continue
             files = block.get("files")
             fl = ", ".join(files) if isinstance(files, list) else "?"
             errors.append(
                 f"cross-file duplicate test name {base!r} not allowlisted "
-                f"(files: {fl}); rename tests or extend _CROSS_FILE_DUPLICATE_ALLOWLIST with a reason.",
+                f"(files: {fl}); rename tests or extend allowlist with a reason.",
             )
 
+    return errors
+
+
+def test_ownership_registry_governance(inventory: dict, inventory_by_path: dict[str, dict]) -> None:
+    errors = collect_ownership_governance_errors(
+        RESPONSIBILITY_REGISTRY,
+        inventory,
+        inventory_by_path,
+        cross_file_allowlist=_CROSS_FILE_DUPLICATE_ALLOWLIST,
+        live_legality_group_ids=_LIVE_LEGALITY_GROUP_IDS,
+    )
     assert not errors, "ownership governance failures:\n" + "\n".join(errors)
 
 

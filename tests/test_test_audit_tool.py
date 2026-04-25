@@ -89,3 +89,45 @@ def test_keyword_overlap_hints_multi_hit(audit_mod) -> None:
     body = "route routing dialogue_lock"
     hints = audit_mod._test_keyword_overlap_hints("tests/test_foo.py::test_bar", body)
     assert any(h.startswith("multi_keyword:") for h in hints)
+
+
+def test_declared_markers_from_ini_includes_core_lanes(audit_mod) -> None:
+    m = audit_mod._declared_markers_from_pytest_ini()
+    assert "unit" in m
+    assert "transcript" in m
+    assert "emission" in m
+
+
+def test_parse_module_marks_detects_pytestmark_and_per_test(audit_mod, tmp_path) -> None:
+    p = tmp_path / "sample_tests.py"
+    p.write_text(
+        "import pytest\n\n"
+        "pytestmark = [pytest.mark.integration, pytest.mark.slow]\n\n"
+        "@pytest.mark.unit\n"
+        "def test_foo():\n"
+        "    assert True\n",
+        encoding="utf-8",
+    )
+    mod_marks, per_test = audit_mod._parse_module_pytestmarks_and_per_test_marks(p)
+    assert "integration" in mod_marks and "slow" in mod_marks
+    assert per_test.get("test_foo") == ["unit"]
+
+
+def test_architecture_layer_weak_signal_is_general(audit_mod) -> None:
+    fp = "tests/test_misc_helpers.py"
+    src = "# no game imports, no client, no tmp_path\n"
+    scores = audit_mod._architecture_layer_scores(fp, src, "mixed/unclear")
+    assert audit_mod._primary_architecture_layer(scores) == "general"
+
+
+def test_build_ownership_registry_index_exports_groups_and_roles(audit_mod) -> None:
+    idx = audit_mod._build_ownership_registry_index()
+    assert idx is not None
+    assert idx.get("available") is True
+    assert isinstance(idx.get("groups"), dict)
+    assert "final_emission_gate_orchestration" in idx["groups"]
+    gate = idx["groups"]["final_emission_gate_orchestration"]
+    assert "downstream_consumer_suites" in gate and "compatibility_residue_suites" in gate
+    roles = idx.get("files_roles")
+    assert isinstance(roles, dict)
+    assert any("tests/test_final_emission_gate.py" == p for p in roles)

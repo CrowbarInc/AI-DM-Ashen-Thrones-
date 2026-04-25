@@ -137,6 +137,23 @@ Objective #11 allows **narrow, explicitly documented** shapes that look like “
 
 Inventory and “would become a violation if…” notes: `docs/validation_layer_separation_block_b_residue.md` (non-authoritative except as a compatibility checklist; the executable registry + this doc define ownership).
 
+**Test ownership (Blocks B–D, pytest-only):** `tests/test_ownership_registry.py` maps each **live invariant responsibility** to exactly one **direct_owner** module under `tests/` plus optional **neighbor** modules. Neighbors are explicitly typed as **`smoke_suites`**, **`transcript_suites`**, **`gauntlet_suites`**, **`evaluator_suites`**, **`downstream_consumer_suites`**, or **`compatibility_residue_suites`** (see `tests/TEST_CONSOLIDATION_PLAN.md`). `tools/test_audit.py` embeds that map in `tests/test_inventory.json` (**schema v2**) for drift checks; it does not change runtime validation-layer behavior.
+
+**How pytest roles line up with the five layers (maintenance vocabulary):**
+
+- **Engine** — Tests aligned with engine concerns defend **state correctness** (truth, persistence, mechanics) after deterministic rules; they are not the home for post-generation **legality orchestration** or offline **scoring**.
+- **Planner** — Tests defend **structure**: prompt-bundle / shipped-contract assembly and intent consumption for prompting; not authoritative **legality** verdicts or engine truth mutation.
+- **Gate** — Tests defend **legality** and **final emission** (validators, bounded repairs, orchestration that seals output), not numeric quality scoring as enforcement.
+- **Evaluator** — Tests defend **scoring / playability** and offline axes; they must **not** substitute for live gate enforcement.
+- **Transcript** — Tests own **cross-turn sequencing** and multi-turn **regression stories**; they complement single-turn owners and must not be named **`direct_owner`** for **live legality** groups in the registry.
+- **Gauntlet** — Tests own **harness / slice** behavior (including API-style gauntlet regressions where named); same **live legality** direct-owner restriction as transcript-style suites.
+- **Smoke** — **Wiring only**: orchestration presence, routes, thin integration checks—not parallel full legality matrices for seams already directly owned.
+- **Downstream consumer** (registry neighbor slot) — Verifies **consumer behavior** through an owner boundary; **not** a canonical invariant owner for the responsibility.
+- **Compatibility residue** (registry neighbor slot) — **Intentionally preserved historical** coverage; **not** canonical ownership of new rules.
+- **`general`** — Inventory field `likely_architecture_layer: general` means the static heuristic had **weak signal**; it is **not** a sixth validation layer. Declared **direct_owner** paths with a non-null `declared_architecture_layer` must not resolve to `general` in inventory (governance test).
+
+**Block C closeout (strict-social vs prompt vs gate tests):** Strict-social **first-sentence** / **question-resolution** legality matrices → **`tests/test_social_exchange_emission.py`**. Retry **prompt text** for unresolved-question / social-contract failures, **`enforce_question_resolution_rule` prepend**, and **validator-voice** GM-layer enforcement → **`tests/test_prompt_and_guard.py`** (plus thin smoke at the prompt boundary). **`apply_final_emission_gate` orchestration** → **`tests/test_final_emission_gate.py`**.
+
 ---
 
 ## Change discipline
@@ -146,7 +163,7 @@ Inventory and “would become a violation if…” notes: `docs/validation_layer
 
 ---
 
-## Block D closeout (Objective #11)
+## Objective #11 — documented closeout (historical “Block D” label in Objective #11 work)
 
 **Status:** Objective #11 is **satisfied with narrow fenced residue** (compatibility-shaped seams above). That residue is **not** a second source of truth: it is explicitly **non-authoritative** and must not override `game/validation_layer_contracts.py` or this document.
 

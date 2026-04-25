@@ -1,6 +1,6 @@
 # Running tests
 
-## Test ownership rules (Blocks A–C)
+## Test ownership rules (Blocks A–D)
 
 These rules keep the suite maintainable without turning CI into a heavy transcript or harness gate.
 
@@ -9,9 +9,14 @@ These rules keep the suite maintainable without turning CI into a heavy transcri
 - **Transcript tests** — Transcript- and harness-backed modules preserve **multi-turn story, ordering, and playability** behavior. Prefer structural or milestone checks over re-locking strings that a direct owner already pins.
 - **Gauntlets and playability validation** — Behavioral gauntlets, manual gauntlets, and playability suites remain **end-to-end or slice harnesses** for behavior in motion; they complement—not replace—focused pytest owners.
 - **Evaluators** — Offline evaluators (for example behavioral gauntlet and playability helpers) **score** deterministic slices; they must **not** become live **legality enforcement** or gate substitutes.
+- **Downstream consumer suites** — Verify that a consumer **observes or ships** behavior through an owner boundary; they are **not** alternate homes for canonical invariants.
+- **Compatibility residue suites** — Intentionally preserved historical coverage; **not** canonical ownership.
+- **`general` in inventory** — `likely_architecture_layer: general` is a **weak heuristic bucket**, not a validation layer. Direct owners with a declared validation layer must not rest on `general` in the inventory (enforced by `tests/test_ownership_registry.py`).
 - **New validation rules** — Before adding **broad** coverage across many files, add or extend **one canonical owner** for the new rule, then optional smoke elsewhere. `tests/test_ownership_registry.py` locks the responsibility registry (exactly one **direct_owner** path per governed slice, inventory presence, layer alignment, and **no transcript/gauntlet/playability/evaluator** module as direct owner for **live legality** groups). Cross-file duplicate `test_*` **base names** stay **heuristic** triage in `tests/test_inventory.json` (allowlisted pairs require reasons); see `tests/TEST_AUDIT.md`.
 
 **Quick maintenance loop (local, low noise):** `py -3 tools/test_audit.py` → `py -3 -m pytest tests/test_ownership_registry.py -q` → `py -3 -m pytest --collect-only -q` → day-to-day `py -3 -m pytest -m "not transcript and not slow" -q`. Details: *Command cheat sheet* below and `tests/TEST_AUDIT.md`.
+
+**Block C prompt / strict-social split (final):** strict-social **first-sentence** and **question-resolution** legality matrices live in `tests/test_social_exchange_emission.py`. `tests/test_prompt_and_guard.py` keeps **retry prompt text** for unresolved-question / social-contract failures, **`enforce_question_resolution_rule` prepend** behavior, **validator-voice detect/rewrite** at the GM layer, and thin smoke near the prompt stack for that boundary. **`apply_final_emission_gate` orchestration** remains owned by `tests/test_final_emission_gate.py`.
 
 ## Objective #12 — validation coverage (contributor workflow)
 
@@ -310,7 +315,7 @@ Optional stricter selection: add `and not synthetic` to a local fast-lane comman
 
 When recording **which scenarios defend which feature** (Objective #12), update `tests/validation_coverage_registry.py` per [`docs/objective12_validation_contract.md`](../docs/objective12_validation_contract.md).
 
-See `tests/TEST_AUDIT.md` → *Consolidation Block 1 — Canonical ownership map & overlap hotspots* for **canonical owner** themes and **smoke overlap** guidance. **Test ownership & audit (Blocks A–C)** are **complete** — inventory + governance pytest + doc pointers; see *Test ownership rules* above and `tests/TEST_CONSOLIDATION_PLAN.md` → *Test Ownership & Coverage Consolidation (Blocks A–C — complete)*. **Next consolidation order (Block C1):** emit-path **orchestration** / metadata + **telemetry** alignment (doc-driven) → prompt/sanitizer → social/emission → transcript duplicate assertion thinning → **lead/clue `deferred`** last (repair/retry cluster documented and closed enough — see `tests/TEST_CONSOLIDATION_PLAN.md` → *Next consolidation order* and *Repair / retry cluster — Block 3*).
+See `tests/TEST_AUDIT.md` → *Consolidation Block 1 — Canonical ownership map & overlap hotspots* for **canonical owner** themes and **smoke overlap** guidance. **Test ownership & audit (Blocks A–D)** are **complete** for the consolidation pass: **inventory schema v2** (`summary.inventory_schema_version`, `declared_pytest_markers`, per-file `likely_architecture_layer`, `marker_set`, `ownership_registry_positions`, top-level `ownership_registry_index`, `block_b_overlap_clusters`, `import_hub_modules`) plus governance pytest and doc pointers; see *Test ownership rules* above and `tests/TEST_CONSOLIDATION_PLAN.md` → *Test Ownership & Coverage Consolidation*. **Next consolidation order (Block C1):** emit-path **orchestration** / metadata + **telemetry** alignment (doc-driven) → prompt/sanitizer → social/emission → transcript duplicate assertion thinning → **lead/clue `deferred`** last (repair/retry cluster documented and closed enough — see `tests/TEST_CONSOLIDATION_PLAN.md` → *Next consolidation order* and *Repair / retry cluster — Block 3*).
 
 ## Command cheat sheet
 
