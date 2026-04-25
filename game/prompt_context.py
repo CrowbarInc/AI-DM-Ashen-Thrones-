@@ -5318,7 +5318,15 @@ def build_narration_context(
         ),
         # Block B: structured transition payload sourced ONLY from narrative_plan.transition_node.
         'transition': copy.deepcopy(transition_payload) if isinstance(transition_payload, dict) else None,
-        'narrative_plan': projected_narrative_plan,
+        'narrative_plan': (
+            None
+            if action_outcome_narration_blocked
+            else (
+                public_narrative_plan_projection_for_prompt(narrative_plan)
+                if isinstance(narrative_plan, dict) and narrative_plan
+                else None
+            )
+        ),
         'speaker_selection': speaker_selection,
         'active_topic_anchor': active_topic_anchor,
         'interaction_continuity': interaction_continuity,

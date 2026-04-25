@@ -177,6 +177,39 @@ def test_build_final_strict_social_prefers_structured_fact_over_rejection():
     assert details.get("used_internal_fallback") is False
 
 
+def test_build_final_route_illegal_without_topic_fact_does_not_emit_structured_fact():
+    """Route-illegal sanitizer text must not pick structured facts when none exist in session."""
+    session = default_session()
+    world = default_world()
+    sid = "frontier_gate"
+    rebuild_active_scene_entities(session, world, sid)
+    set_social_target(session, "tavern_runner")
+    resolution = {
+        "kind": "question",
+        "prompt": "Who is he?",
+        "social": {
+            "social_intent_class": "social_exchange",
+            "npc_id": "tavern_runner",
+            "npc_name": "Tavern Runner",
+            "reply_kind": "refusal",
+            "npc_reply_expected": True,
+        },
+    }
+    bad = "For a breath, the scene holds while voices shift around you."
+    text, details = build_final_strict_social_response(
+        bad,
+        resolution=resolution,
+        tags=[],
+        session=session,
+        scene_id=sid,
+        world=world,
+    )
+    assert details.get("final_emitted_source") != "structured_fact_candidate_emission"
+    low = text.lower()
+    assert "for a breath" not in low and "scene holds" not in low and "voices shift around you" not in low
+    assert "tavern runner" in low
+
+
 def test_format_structured_fact_social_line_single_sentence():
     res = {
         "social": {"npc_name": "Tavern Runner", "npc_id": "tavern_runner"},

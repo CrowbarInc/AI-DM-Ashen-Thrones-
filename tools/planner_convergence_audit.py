@@ -58,6 +58,8 @@ APPROVED_PROMPT_NARRATIVE_PLAN_TOP_KEYS: frozenset[str] = frozenset(
         "narrative_mode_contract",
         "action_outcome",
         "scene_opening",
+        "transition_node",
+        "answer_exposition_plan",
     }
 )
 

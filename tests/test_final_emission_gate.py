@@ -3294,6 +3294,68 @@ def test_strict_social_failed_repair_does_not_add_unsatisfied_after_repair_reaso
     assert "social_response_structure_unsatisfied_after_repair" not in (meta.get("rejection_reasons_sample") or [])
 
 
+def test_bare_speech_attribution_shell_line_heuristic() -> None:
+    assert feg._is_bare_speech_attribution_shell_line("Tavern Runner says") is True
+    assert feg._is_bare_speech_attribution_shell_line("  Runner replies  ") is True
+    assert feg._is_bare_speech_attribution_shell_line("") is True
+    assert feg._is_bare_speech_attribution_shell_line('Runner mutters, "East."') is False
+    assert feg._is_bare_speech_attribution_shell_line("Rain falls hard on the square.") is False
+
+
+def test_subtractive_dialogue_strip_on_long_monoblob_yields_shell_not_playable_narration() -> None:
+    stripped = feg._strip_dialogue_from_text(_monoblob_dialogue_quote())
+    assert '"' not in stripped
+    assert feg._is_bare_speech_attribution_shell_line(stripped)
+
+
+def test_strict_social_long_quoted_line_retains_speaker_and_dialogue_payload(monkeypatch) -> None:
+    """Invalid dialogue plan must not truncate strict-social output to a bare '… says' tail."""
+    session, world, sid, resolution = _runner_strict_bundle()
+    stub_details = {
+        "used_internal_fallback": False,
+        "final_emitted_source": "test_stub",
+        "rejection_reasons": [],
+        "deterministic_attempted": False,
+        "deterministic_passed": False,
+        "fallback_pool": "none",
+        "fallback_kind": "none",
+        "route_illegal_intercepted": False,
+    }
+    bad = _monoblob_dialogue_quote()
+
+    def fake_build(candidate_text, *, resolution, tags, session, scene_id, world):
+        return bad, dict(stub_details)
+
+    monkeypatch.setattr(feg, "build_final_strict_social_response", fake_build)
+    monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
+    pol = _dialogue_response_policy_with_social_structure()
+    out = apply_final_emission_gate(
+        {"player_facing_text": bad, "tags": [], "response_policy": pol},
+        resolution=resolution,
+        session=session,
+        scene_id=sid,
+        world=world,
+    )
+    txt = str(out.get("player_facing_text") or "")
+    low = txt.lower()
+    assert "tavern runner" in low
+    assert '"' in txt
+    assert "w0" in low and "w109" in low
+    banned = (
+        "that is all i can give you",
+        "from here, no",
+        "no certain answer",
+        "truth is still buried",
+        "nothing in the scene",
+        "scene holds",
+        "hard to say",
+        "i can only point you",
+        "best lead",
+    )
+    for phrase in banned:
+        assert phrase not in low, phrase
+
+
 def test_social_response_structure_boundary_skips_list_to_prose_repair(monkeypatch):
     monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
     pol = _dialogue_response_policy_with_social_structure()

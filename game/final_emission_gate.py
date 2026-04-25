@@ -81,6 +81,7 @@ from game.social import (
 from game.social_exchange_emission import (
     _active_interlocutor_matches_resolution_social_npc,
     _has_explicit_interruption_shape,
+    _text_is_strict_social_minimal_emergency_fallback,
     build_final_strict_social_response,
     effective_strict_social_resolution_for_emission,
     interruption_cue_present_in_text,
@@ -272,6 +273,7 @@ def _dialogue_plan_trace_defaults() -> Dict[str, Any]:
         "dialogue_plan_valid": False,
         "dialogue_plan_failure_reasons": [],
         "dialogue_plan_repair_mode": None,
+        "dialogue_plan_subtractive_strip_deferred": False,
     }
 
 
@@ -333,6 +335,48 @@ def _strip_dialogue_from_text(text: str) -> str:
     )
     stripped = re.sub(r"\s+", " ", stripped).strip()
     return _normalize_text(stripped)
+
+
+_BARE_SPEECH_ATTRIBUTION_SHELL_RE = re.compile(
+    r"^\s*(?:[A-Z][a-z]+(?:\s+[A-Z][a-z]+){0,4}\s+)?"
+    r"(?:says|replies|answers|mutters|asks|whispers|adds|continues)\s*\.?\s*$",
+    re.IGNORECASE,
+)
+
+
+def _is_the_lowercase_role_mutters_comma_shell(text: str) -> bool:
+    """Strip tail like ``The tavern runner mutters,`` after quote removal (comma breaks bare-shell RE)."""
+    t = _normalize_text(str(text or "")).strip()
+    if '"' in t or "'" in t or "\u201c" in t or "\u201d" in t:
+        return False
+    return bool(
+        re.match(
+            r"(?i)^the\s+[a-z][\w'-]*(?:\s+[a-z][\w'-]*){0,4}\s+mutters\s*,\s*$",
+            t,
+        )
+    )
+
+
+def _strict_social_line_matches_terminal_emission_pool(text: str, resolution: Mapping[str, Any] | None) -> bool:
+    """True when emitted text equals a deterministic strict-social terminal/minimal emergency line."""
+    if not isinstance(resolution, dict):
+        return False
+    t = _normalize_text(str(text or "")).strip()
+    if not t:
+        return False
+    if _text_is_strict_social_minimal_emergency_fallback(text, resolution):
+        return True
+    return _normalize_text(strict_social_ownership_terminal_fallback(resolution)).strip() == t
+
+
+def _is_bare_speech_attribution_shell_line(text: str) -> bool:
+    """True when subtractive dialogue strip left only a speech-verb tail with no quoted/spoken payload."""
+    t = _normalize_text(str(text or "")).strip()
+    if not t:
+        return True
+    if '"' in t or "'" in t or "\u201c" in t or "\u201d" in t:
+        return False
+    return bool(_BARE_SPEECH_ATTRIBUTION_SHELL_RE.match(t))
 
 
 def _enforce_dialogue_plan_invariant_on_strict_social(
@@ -400,10 +444,52 @@ def _enforce_dialogue_plan_invariant_on_strict_social(
 
     repaired = _strip_dialogue_from_text(text)
     trace["dialogue_plan_repair_mode"] = "subtractive_strip_dialogue"
-    if repaired:
-        return repaired, trace
-    trace["dialogue_plan_repair_mode"] = "fail_closed_no_dialogue"
-    return "The moment passes without an answer.", trace
+    if not repaired.strip():
+        sig0 = _dialogue_bearing_signals(text)
+        if bool(sig0.get("has_quotes")):
+            # Quote-only or quote-stripping erased the only diegetic payload; keep the candidate for strict-social
+            # writers / referential substitution rather than collapsing to ambient stall text.
+            trace["dialogue_plan_repair_mode"] = "defer_empty_strip_preserving_quote_only_candidate"
+            trace["dialogue_plan_subtractive_strip_deferred"] = True
+            return text, trace
+        trace["dialogue_plan_repair_mode"] = "fail_closed_no_dialogue"
+        return "The moment passes without an answer.", trace
+    if _is_bare_speech_attribution_shell_line(repaired):
+        # Stripping quoted speech would erase the only playable NPC line; defer to strict-social writer/fallbacks.
+        trace["dialogue_plan_repair_mode"] = "defer_strip_preserving_dialogue_candidate"
+        trace["dialogue_plan_subtractive_strip_deferred"] = True
+        return text, trace
+    if (
+        isinstance(eff_resolution, Mapping)
+        and str((eff_resolution.get("social") or {}).get("social_intent_class") or "").strip().lower()
+        == "social_exchange"
+        and '"' in str(text or "")
+        and '"' not in str(repaired or "")
+        and _is_the_lowercase_role_mutters_comma_shell(str(repaired or ""))
+    ):
+        # ``The tavern runner mutters,`` tails lose the comma-attribution case for bare-shell detection;
+        # preserve the clipped quoted line for strict-social restoration.
+        trace["dialogue_plan_repair_mode"] = "defer_strip_preserving_dialogue_candidate"
+        trace["dialogue_plan_subtractive_strip_deferred"] = True
+        return text, trace
+    # Subtractive strip removed quoted speech but left a pronoun-led beat tail (e.g. ``she insists``);
+    # that tail is not an attributable ``<Name> says`` shell. Preserve the original for strict-social
+    # writers / referential local repair. Do not defer for ``<NPC> says,`` shells: those are the
+    # dialogue-plan fail-closed shape handled by returning ``repaired``.
+    rep_tail = str(repaired or "").lstrip()
+    if (
+        isinstance(eff_resolution, Mapping)
+        and str((eff_resolution.get("social") or {}).get("social_intent_class") or "").strip().lower()
+        == "social_exchange"
+        and bool((eff_resolution.get("social") or {}).get("npc_reply_expected"))
+        and '"' in str(text or "")
+        and '"' not in str(repaired or "")
+        and bool(re.match(r"(?i)(?:they|he|she)\b", rep_tail))
+    ):
+        trace["dialogue_plan_repair_mode"] = "defer_strip_preserving_dialogue_candidate"
+        trace["dialogue_plan_subtractive_strip_deferred"] = True
+        return text, trace
+    return repaired, trace
 
 
 def _narration_constraint_small_str(value: Any) -> str | None:
@@ -8643,6 +8729,15 @@ def apply_final_emission_gate(
             scene_id=str(scene_id or "").strip(),
             world=world if isinstance(world, dict) else None,
         )
+        if (
+            dialogue_plan_blocked
+            and isinstance(eff_resolution, dict)
+            and isinstance(details, dict)
+            and str(details.get("final_emitted_source") or "") == "normalized_social_candidate"
+            and _strict_social_line_matches_terminal_emission_pool(text, eff_resolution)
+        ):
+            # Telemetry: missing dialogue plan still produced a sealed terminal-class line; attribute as emergency-class.
+            details = {**details, "final_emitted_source": "minimal_social_emergency_fallback"}
         text, response_type_debug = _enforce_response_type_contract(
             text,
             gm_output=out,
@@ -8811,9 +8906,35 @@ def apply_final_emission_gate(
             strict_social_active=strict_social_active,
         )
         # If dialogue-plan enforcement blocked earlier, ensure no later repair re-introduced dialogue.
-        if dialogue_plan_blocked:
+        if dialogue_plan_blocked and not dialogue_plan_trace.get("dialogue_plan_subtractive_strip_deferred"):
             stripped = _strip_dialogue_from_text(text)
-            text = stripped or "The moment passes without an answer."
+            if not str(stripped or "").strip():
+                # Subtractive strip removed all diegetic text (e.g. quote-only fragment from a prior hint
+                # split). Strict-social turns must not collapse to ambient stall prose.
+                if isinstance(eff_resolution, dict):
+                    text = minimal_social_emergency_fallback_line(eff_resolution)
+                    if isinstance(details, dict):
+                        details = {
+                            **details,
+                            "final_emitted_source": "minimal_social_emergency_fallback",
+                            "fallback_kind": "emergency_social_minimal",
+                        }
+                else:
+                    text = "The moment passes without an answer."
+            elif _is_bare_speech_attribution_shell_line(stripped):
+                # Do not replace a route-legal quoted NPC reply with an empty attribution shell.
+                pass
+            elif (
+                isinstance(eff_resolution, dict)
+                and '"' in str(text or "")
+                and '"' not in str(stripped or "")
+                and _strict_social_line_matches_terminal_emission_pool(str(text or ""), eff_resolution)
+            ):
+                # Late subtractive strip would erase the only quoted payload from a deterministic
+                # strict-social terminal/minimal line matched to this resolution.
+                pass
+            else:
+                text = stripped
         out["player_facing_text"] = text
 
         record_stage_snapshot(out, "final_emission_gate_after_strict_social_composition")

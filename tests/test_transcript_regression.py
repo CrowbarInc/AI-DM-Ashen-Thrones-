@@ -829,6 +829,7 @@ def test_transcript_runner_repeated_interruption_beat_forces_progression(tmp_pat
             or "starts to answer" in low1
             or "glances past" in low1
             or ("tavern runner" in low1 and ("frown" in low1 or "that's all i've got" in low1))
+            or ("word is" in low1 and "milestone" in low1)
         )
         res1 = d1.get("resolution") or {}
         assert res1.get("kind") in ("question", "social_probe")

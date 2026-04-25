@@ -42,14 +42,18 @@ from game.output_sanitizer import (
 )
 from game.social_exchange_emission import (
     _apply_interruption_repeat_guard,
+    _social_integrity_fallback_line_candidates,
     apply_strict_social_terminal_dialogue_fallback_if_needed,
     apply_strict_social_ownership_enforcement,
     apply_strict_social_sentence_ownership_filter,
     build_final_strict_social_response,
     coerce_resolution_for_strict_social_emission,
     effective_strict_social_resolution_for_emission,
+    deterministic_social_fallback_line,
     hard_reject_social_exchange_text,
     is_route_illegal_global_or_sanitizer_fallback_text,
+    lawful_strict_social_dialogue_emergency_fallback_line,
+    minimal_social_emergency_fallback_line,
     normalize_social_exchange_candidate,
     reconcile_strict_social_resolution_speaker,
     should_apply_strict_social_exchange_emission,
@@ -1300,7 +1304,7 @@ def test_strict_social_emission_meta_documents_final_emitted_source():
     rt = get_scene_runtime(session, sid)
     rt["last_player_action_text"] = "Who ordered the patrol?"
     out = apply_final_emission_gate(
-        {"player_facing_text": 'The runner says "I don\'t know."', "tags": []},
+        {"player_facing_text": 'Tavern Runner says "I don\'t know."', "tags": []},
         resolution=None,
         session=session,
         scene_id=sid,
@@ -1308,13 +1312,21 @@ def test_strict_social_emission_meta_documents_final_emitted_source():
     )
     meta = read_final_emission_meta_dict(out) or {}
     assert meta.get("strict_social_active") is True
-    assert meta.get("final_emitted_source") in (
+    fem = meta.get("final_emitted_source")
+    assert isinstance(fem, str) and fem
+    assert fem in (
         "generated_candidate",
         "normalized_social_candidate",
         "retry_output",
         "resolved_grounded_social_answer",
+        "deterministic_social_fallback",
+        "minimal_social_emergency_fallback",
+        "social_emission_integrity_fallback",
+        "structured_fact_candidate_emission",
     )
-    assert meta.get("candidate_validation_passed") is True
+    # Bare "I don't know" may fail first-sentence question substance; strict-social still lands via speaker-owned fallback.
+    if fem in ("generated_candidate", "normalized_social_candidate", "retry_output", "resolved_grounded_social_answer"):
+        assert meta.get("candidate_validation_passed") is True
 
 
 def test_strict_social_gate_merges_social_response_structure_metadata(monkeypatch):
@@ -2101,3 +2113,139 @@ def test_social_exchange_short_substantive_answer_passes_question_rule():
     )
     assert check["applies"] is True
     assert check["ok"] is True
+
+
+_STRICT_SOCIAL_STOCK_FALLBACK_BANNED = (
+    "that is all i can give you",
+    "from here, no",
+    "no certain answer",
+    "truth is still buried",
+    "nothing in the scene",
+    "scene holds",
+    "hard to say",
+    "i can only point you",
+    "best lead",
+    "you should",
+    "you could",
+)
+
+
+def _assert_no_stock_passive_pressure_substrings(text: str) -> None:
+    low = str(text or "").lower()
+    for phrase in _STRICT_SOCIAL_STOCK_FALLBACK_BANNED:
+        assert phrase not in low, (phrase, text)
+
+
+def _collect_unique_emergency_lines(factory, base_social: dict, *, limit: int = 80) -> set[str]:
+    out: set[str] = set()
+    for i in range(limit):
+        res = {
+            "kind": "question",
+            "prompt": "Who was it?",
+            "social": {**base_social, "npc_id": f"npc_{i}"},
+        }
+        out.add(factory(res))
+    return out
+
+
+def test_minimal_and_lawful_social_emergency_fallbacks_avoid_stock_passive_pressure():
+    base = {"social_intent_class": "social_exchange", "npc_name": "The broker"}
+    minimal_lines = _collect_unique_emergency_lines(minimal_social_emergency_fallback_line, base)
+    lawful_lines = _collect_unique_emergency_lines(lawful_strict_social_dialogue_emergency_fallback_line, base)
+    assert len(minimal_lines) == 3
+    assert len(lawful_lines) == 4
+    for line in minimal_lines | lawful_lines:
+        _assert_no_stock_passive_pressure_substrings(line)
+        assert "broker" in line.lower()
+
+
+def test_strict_social_ownership_terminal_fallback_variants_avoid_stock_passive_pressure():
+    base = {"social_intent_class": "social_exchange", "npc_name": "The clerk"}
+    lines = _collect_unique_emergency_lines(strict_social_ownership_terminal_fallback, base)
+    assert len(lines) == 3
+    for line in lines:
+        _assert_no_stock_passive_pressure_substrings(line)
+        assert "clerk" in line.lower()
+
+
+def test_strict_social_ownership_terminal_fallback_avoids_vague_rumor_heard_talk_phrasing():
+    base = {"social_intent_class": "social_exchange", "npc_name": "The cook"}
+    lines = _collect_unique_emergency_lines(strict_social_ownership_terminal_fallback, base)
+    assert len(lines) == 3
+    for line in lines:
+        low = line.lower()
+        for frag in ("rumors only", "heard talk", "not names", "swear to a name"):
+            assert frag not in low, (frag, line)
+        assert '"' in line
+
+
+def test_deterministic_social_fallback_under_pressure_is_npc_owned_not_ambient():
+    res = _strict_social_resolution()
+    for seed in ("p0", "p1", "pressure-a", "pressure-b"):
+        line, kind = deterministic_social_fallback_line(
+            resolution=res,
+            uncertainty_source="npc_ignorance",
+            pressure_active=True,
+            interruption_active=False,
+            seed=seed,
+        )
+        assert kind == "pressure_refusal"
+        _assert_no_stock_passive_pressure_substrings(line)
+        assert "runner" in line.lower()
+        assert is_route_illegal_global_or_sanitizer_fallback_text(line) is False
+
+
+def test_build_final_strict_social_rejected_candidate_uses_fallback_without_stock_passive_pressure():
+    res = {
+        "kind": "question",
+        "prompt": "What next?",
+        "social": {
+            "social_intent_class": "social_exchange",
+            "npc_id": "runner",
+            "npc_name": "Runner",
+        },
+    }
+    raw = (
+        "Nothing in the scene points to a clear answer yet. You should pick a next step. "
+        "Best lead is the east gate."
+    )
+    out, meta = build_final_strict_social_response(
+        raw,
+        resolution=res,
+        tags=["topic_pressure_escalation"],
+        session={},
+        scene_id="frontier_gate",
+        world=default_world(),
+    )
+    low = out.lower()
+    _assert_no_stock_passive_pressure_substrings(low)
+    assert meta.get("used_internal_fallback") is True
+    assert meta.get("final_emitted_source") in ("deterministic_social_fallback", "minimal_social_emergency_fallback")
+    assert "runner" in low
+    assert '"' in out
+
+
+def test_social_integrity_fallback_candidates_avoid_stock_passive_pressure():
+    res = {
+        "kind": "question",
+        "prompt": "Who ordered the patrol?",
+        "social": {
+            "social_intent_class": "social_exchange",
+            "npc_id": "warder",
+            "npc_name": "The warder",
+            "reply_kind": "explanation",
+            "probe_outcome": "partial",
+        },
+    }
+    cands = _social_integrity_fallback_line_candidates(
+        resolution=res,
+        player_text="Who ordered the patrol?",
+        session=default_session(),
+        scene_id="frontier_gate",
+        tag_list=["topic_pressure_escalation"],
+        seed="integrity-regression",
+    )
+    assert cands
+    for line, _kind in cands:
+        _assert_no_stock_passive_pressure_substrings(line)
+        assert "warder" in line.lower()

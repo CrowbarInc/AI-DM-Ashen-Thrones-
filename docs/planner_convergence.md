@@ -52,6 +52,8 @@ Only these keys may appear at the top level of the shipped plan (mirror of `publ
 - `allowable_entity_references`
 - `narrative_roles`
 - `narrative_mode_contract`
+- `transition_node` (plan-owned structural transition projection; not prompt_context-authored semantics)
+- `answer_exposition_plan` (plan-owned structural exposition scaffold; not prompt_context-authored semantics)
 - `scene_opening` (C1-A structural opener projection; prose-free; see `docs/narrative_integrity_architecture.md`)
 
 `prompt_debug` may carry a compact **`_narrative_plan_prompt_debug_anchor`** mirror; that is not the authoritative top-level plan field.

@@ -1006,7 +1006,7 @@ def minimal_social_emergency_fallback_line(resolution: Dict[str, Any] | None) ->
     idx = _deterministic_index(seed, 3)
     lines = (
         f'{speaker} shakes their head. "I don\'t know."',
-        f'{speaker} frowns. "That\'s all I\'ve got."',
+        f'{speaker} says, "I do not know enough to answer that."',
         f'{speaker} grimaces. "Not something I can say here."',
     )
     return lines[idx]
@@ -1042,9 +1042,9 @@ def lawful_strict_social_dialogue_emergency_fallback_line(resolution: Dict[str, 
     idx = _deterministic_index(seed, 4)
     lines = (
         f'{speaker} shakes their head. "I don\'t know."',
-        f'{speaker} frowns. "That\'s all I\'ve got."',
+        f'{speaker} says, "I do not know enough to answer that."',
         f'{speaker} grimaces. "Not something I can say here."',
-        f'{speaker} shakes their head slowly. "That is all I can give you."',
+        f'{speaker} says, "I cannot answer that from what I know."',
     )
     return lines[idx]
 
@@ -1164,8 +1164,8 @@ def strict_social_ownership_terminal_fallback(resolution: Dict[str, Any] | None)
     idx = _deterministic_index(seed, 3)
     lines = (
         f'{speaker} shakes their head. "I don\'t know."',
-        f'{speaker} lowers their voice. "I heard talk, not names."',
-        f'{speaker} grimaces. "Hard to say—people whisper, nobody swears."',
+        f'{speaker} says, "I do not know enough to name anyone."',
+        f'{speaker} says, "No. I do not know a name."',
     )
     return lines[idx]
 
@@ -2159,7 +2159,7 @@ def deterministic_social_fallback_line(
     )
     pressure_refusal = (
         f'{speaker} tightens their jaw. "I\'ve told you what I know."',
-        f'{speaker} steps back. "That\'s all you\'re getting from me."',
+        f'{speaker} shakes their head. "No. I will not say more."',
     )
     ignorance = (
         f'{speaker} shakes their head. "I don\'t know."',
@@ -2822,7 +2822,10 @@ def _looks_like_strict_social_terminal_placeholder(text: str) -> bool:
         return True
     if "hard to say" in low and ("whisper" in low or "nobody" in low or "swear" in low):
         return True
-    if re.search(r"\b(don'?t know|do not know|no names here|won'?t name)\b", low) and (
+    if re.search(
+        r"\b(don'?t know|do not know|no names here|won'?t name|cannot name anyone|do not know a name|do not know enough)\b",
+        low,
+    ) and (
         "shake" in low or "grimace" in low or "mutter" in low or "spread" in low
     ):
         return True
@@ -3449,7 +3452,7 @@ def _social_integrity_fallback_line_candidates(
             "integrity_explanation_rumor_pier",
         )
         _add_unique(
-            f'{speaker} exhales. "Honest word—I can only point you at the ward clerk for {topic}; I do not keep that answer."',
+            f'{speaker} exhales. "I do not keep that answer on {topic}—not from what I know."',
             "integrity_explanation_defer_clerk",
         )
 
@@ -3584,6 +3587,30 @@ def build_final_strict_social_response(
             "resolved_answer_source": None,
             "resolved_answer_preference_reason": None,
         }
+
+    cand0 = _normalize_gate_text(candidate_text)
+    if is_route_illegal_global_or_sanitizer_fallback_text(cand0):
+        st_illegal = _try_emit_structured_fact_strict_line(
+            resolution=res,
+            session=sess,
+            scene_id=sid,
+            world=world if isinstance(world, dict) else None,
+            tag_list=tag_list,
+        )
+        if st_illegal:
+            st_illegal, interrupt_meta_illegal = _apply_interruption_repeat_guard(
+                st_illegal,
+                resolution=res,
+                session=sess,
+                scene_id=sid,
+                world=world if isinstance(world, dict) else None,
+                tags=tag_list,
+                source_text=candidate_text,
+            )
+            return st_illegal, {
+                **_structured_fact_emission_details(),
+                **interrupt_meta_illegal,
+            }
 
     filtered = apply_strict_social_sentence_ownership_filter(
         candidate_text,

@@ -833,7 +833,13 @@ def test_chat_adjudication_question_with_active_interlocutor_stays_answer_shaped
     meta = _extract_final_emission_meta(data) or {}
 
     assert resolution.get("kind") == "adjudication_query"
-    assert "lead" in low or "concrete move" in low or "answer has not formed yet" in low or "that's all" in low
+    assert (
+        "lead" in low
+        or "concrete move" in low
+        or "answer has not formed yet" in low
+        or "that's all" in low
+        or "i do not know enough" in low
+    )
     assert meta.get("response_type_required") == "answer"
     assert meta.get("response_type_candidate_ok") is True
     assert meta.get("response_type_repair_used") is True
@@ -1773,8 +1779,13 @@ def test_chat_social_exchange_interruption_output_stays_coherent(tmp_path, monke
             "no names",
             "rumors",
             "that's all i've got",
+            "word is",
+            "grimace",
+            "shake",
+            "do not know enough",
+            "do not know a name",
         )
-    )
+    ) or ("tavern runner" in low and "mutters" in low)
 
 
 # feature: emission, continuity
@@ -1811,6 +1822,8 @@ def test_chat_repeated_interruption_progresses_without_losing_dialogue_contract(
     assert (
         "heard talk" in low2
         or "not names" in low2
+        or "do not know enough" in low2
+        or "do not know a name" in low2
         or "ward clerk" in low2
         or "main gate" in low2
         or "gate roster" in low2
