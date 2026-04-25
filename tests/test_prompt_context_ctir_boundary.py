@@ -137,6 +137,17 @@ def test_no_build_ctir_symbol_in_prompt_context_source() -> None:
                 assert alias.name != "build_ctir"
 
 
+def test_no_build_dialogue_social_plan_symbol_in_prompt_context_source() -> None:
+    path = Path(__file__).resolve().parents[1] / "game" / "prompt_context.py"
+    src = path.read_text(encoding="utf-8")
+    assert "build_dialogue_social_plan" not in src
+    tree = ast.parse(src)
+    for node in ast.walk(tree):
+        if isinstance(node, ast.ImportFrom) and node.module in ("game.dialogue_social_plan", "dialogue_social_plan"):
+            for alias in node.names:
+                assert alias.name != "build_dialogue_social_plan"
+
+
 def test_raw_resolution_fallback_when_no_ctir() -> None:
     session = dict(_base_kwargs()["session"])
     detach_ctir(session)

@@ -166,6 +166,8 @@ from game.response_policy_contracts import (
     resolve_interaction_continuity_contract,
 )
 
+from game.dialogue_social_plan import validate_dialogue_social_plan
+
 
 from game.final_emission_repairs import (
     _apply_answer_completeness_layer,
@@ -242,6 +244,164 @@ def _default_narration_constraint_debug() -> Dict[str, Any]:
             "binding_confident": None,
         },
     }
+
+
+_DIALOGUE_QUOTE_RE = re.compile(r'["“”][^"”]{2,}["“”]')
+_DIALOGUE_SPEECH_VERB_RE = re.compile(
+    r"\b(?:says|said|replies|replied|answers|answered|asks|asked|mutters|muttered|whispers|whispered|snaps|snapped|spits|spat|grunts|grunted)\b",
+    re.IGNORECASE,
+)
+_DIALOGUE_NAME_COLON_RE = re.compile(r"(?:^|\n)\s*([A-Z][a-zA-Z]{1,24}(?:\s+[A-Z][a-zA-Z]{1,24}){0,2})\s*:\s*['\"“”]")
+_DIALOGUE_SPEAKER_ATTR_RE = re.compile(
+    r"\b([A-Z][a-zA-Z]{1,24}(?:\s+[A-Z][a-zA-Z]{1,24}){0,2})\s+(?:says|replies|answers|asks|mutters|whispers|snaps|spits|grunts)\b",
+    re.IGNORECASE,
+)
+_DIALOGUE_SOCIAL_GLUE_RE = re.compile(
+    r"\b(?:nods?|shrugs?|sighs?|hesitates?|pauses?|leans in|leans closer|glances|looks at you|meets your eyes)\b",
+    re.IGNORECASE,
+)
+
+
+def _dialogue_plan_trace_defaults() -> Dict[str, Any]:
+    return {
+        "dialogue_plan_checked": False,
+        "dialogue_plan_required": False,
+        "dialogue_plan_present": False,
+        "dialogue_plan_valid": False,
+        "dialogue_plan_failure_reasons": [],
+        "dialogue_plan_repair_mode": None,
+    }
+
+
+def _extract_attributed_speaker_labels(text: str) -> List[str]:
+    raw = str(text or "")
+    labels: List[str] = []
+    for m in _DIALOGUE_NAME_COLON_RE.finditer(raw):
+        lab = str(m.group(1) or "").strip()
+        if lab and lab not in labels:
+            labels.append(lab)
+    for m in _DIALOGUE_SPEAKER_ATTR_RE.finditer(raw):
+        lab = str(m.group(1) or "").strip()
+        if lab and lab not in labels:
+            labels.append(lab)
+    return labels[:8]
+
+
+def _dialogue_bearing_signals(text: str) -> Dict[str, Any]:
+    t = str(text or "")
+    low = t.lower()
+    has_quotes = bool(_DIALOGUE_QUOTE_RE.search(t))
+    has_speech_verb = bool(_DIALOGUE_SPEECH_VERB_RE.search(t))
+    has_name_colon = bool(_DIALOGUE_NAME_COLON_RE.search(t))
+    has_speaker_attr = bool(_DIALOGUE_SPEAKER_ATTR_RE.search(t))
+    has_social_glue = bool(_DIALOGUE_SOCIAL_GLUE_RE.search(low))
+    dialogue_present = bool(has_quotes or has_speech_verb or has_name_colon or has_speaker_attr)
+    glue_present = bool(has_social_glue and (has_speaker_attr or has_name_colon or has_speech_verb))
+    return {
+        "dialogue_present": dialogue_present,
+        "glue_present": glue_present,
+        "has_quotes": has_quotes,
+        "has_speech_verb": has_speech_verb,
+        "has_name_colon": has_name_colon,
+        "has_speaker_attr": has_speaker_attr,
+        "attributed_speakers": _extract_attributed_speaker_labels(t),
+    }
+
+
+def _get_dialogue_social_plan_from_emission_debug(
+    resolution: Mapping[str, Any] | None,
+    eff_resolution: Mapping[str, Any] | None,
+) -> Mapping[str, Any] | None:
+    for res in (eff_resolution, resolution):
+        md = res.get("metadata") if isinstance(res, Mapping) and isinstance(res.get("metadata"), Mapping) else None
+        em = md.get("emission_debug") if isinstance(md, Mapping) and isinstance(md.get("emission_debug"), Mapping) else None
+        dsp = em.get("dialogue_social_plan") if isinstance(em, Mapping) else None
+        if isinstance(dsp, Mapping):
+            return dsp
+    return None
+
+
+def _strip_dialogue_from_text(text: str) -> str:
+    raw = str(text or "")
+    stripped = _DIALOGUE_QUOTE_RE.sub("", raw)
+    stripped = re.sub(
+        r"(?:^|\n)\s*[A-Z][a-zA-Z]{1,24}(?:\s+[A-Z][a-zA-Z]{1,24}){0,2}\s*:\s*",
+        "\n",
+        stripped,
+    )
+    stripped = re.sub(r"\s+", " ", stripped).strip()
+    return _normalize_text(stripped)
+
+
+def _enforce_dialogue_plan_invariant_on_strict_social(
+    text: str,
+    *,
+    resolution: Mapping[str, Any] | None,
+    eff_resolution: Mapping[str, Any] | None,
+    strict_social_active: bool,
+    response_type_required: str | None,
+) -> tuple[str, Dict[str, Any]]:
+    trace = _dialogue_plan_trace_defaults()
+    if not strict_social_active:
+        return text, trace
+
+    sig = _dialogue_bearing_signals(text)
+    dialogue_present = bool(sig.get("dialogue_present")) or bool(sig.get("glue_present"))
+    npc_reply_expected = False
+    if isinstance(eff_resolution, Mapping):
+        soc = eff_resolution.get("social") if isinstance(eff_resolution.get("social"), Mapping) else {}
+        npc_reply_expected = bool(soc.get("npc_reply_expected"))
+
+    required = bool(dialogue_present or npc_reply_expected or (str(response_type_required or "").strip().lower() == "dialogue"))
+    trace["dialogue_plan_checked"] = True
+    trace["dialogue_plan_required"] = required
+    if not required:
+        return text, trace
+
+    dsp = _get_dialogue_social_plan_from_emission_debug(resolution, eff_resolution)
+    trace["dialogue_plan_present"] = bool(isinstance(dsp, Mapping))
+    failure_reasons: List[str] = []
+    if not isinstance(dsp, Mapping):
+        failure_reasons.append("missing_dialogue_social_plan")
+    else:
+        if dsp.get("applies") is not True:
+            failure_reasons.append("dialogue_social_plan_applies_false")
+        if not str(dsp.get("speaker_id") or "").strip():
+            failure_reasons.append("missing_required:speaker_id")
+        if not str(dsp.get("dialogue_intent") or "").strip():
+            failure_reasons.append("missing_required:dialogue_intent")
+        ok, errs = validate_dialogue_social_plan(dsp, strict=False)
+        if not ok:
+            failure_reasons.extend([f"plan_invalid:{e}" for e in (errs or [])[:12]])
+
+        attributed = [str(x).strip() for x in (sig.get("attributed_speakers") or []) if str(x).strip()]
+        if attributed:
+            sid = str(dsp.get("speaker_id") or "").strip().lower()
+            sname = str(dsp.get("speaker_name") or "").strip().lower()
+            for lab in attributed:
+                ll = lab.strip().lower()
+                ll_slug = ll.replace(" ", "_")
+                if sid and ll_slug == sid:
+                    continue
+                if sname and ll == sname:
+                    continue
+                if sname or sid:
+                    failure_reasons.append(f"attributed_speaker_mismatch:{lab}")
+                    break
+
+    failure_reasons = list(dict.fromkeys([str(r) for r in failure_reasons if str(r).strip()]))
+    trace["dialogue_plan_failure_reasons"] = failure_reasons
+    trace["dialogue_plan_valid"] = not bool(failure_reasons)
+
+    if trace["dialogue_plan_valid"]:
+        return text, trace
+
+    repaired = _strip_dialogue_from_text(text)
+    trace["dialogue_plan_repair_mode"] = "subtractive_strip_dialogue"
+    if repaired:
+        return repaired, trace
+    trace["dialogue_plan_repair_mode"] = "fail_closed_no_dialogue"
+    return "The moment passes without an answer.", trace
 
 
 def _narration_constraint_small_str(value: Any) -> str | None:
@@ -8442,7 +8602,9 @@ def apply_final_emission_gate(
     asp_layer_meta: Dict[str, Any] = _default_answer_shape_primacy_meta()
     ssa_layer_meta: Dict[str, Any] = {}
     ffnc_layer_meta: Dict[str, Any] = _default_fast_fallback_neutral_composition_meta()
+    dialogue_plan_trace: Dict[str, Any] = {}
     nmo_fem_trace_override: Dict[str, Any] | None = None
+    dialogue_plan_blocked = False
 
     strict_social_active = bool(strict_social_turn)
     coercion_used = (
@@ -8457,6 +8619,20 @@ def apply_final_emission_gate(
 
     if strict_social_turn:
         normalization_ran = True
+        # Objective C1-D: check the writer-produced candidate before strict-social normalization rewrites.
+        # This must fail closed (no speaker inference / no speaker rewriting).
+        pre_gate_text, dsp_trace0 = _enforce_dialogue_plan_invariant_on_strict_social(
+            pre_gate_text,
+            resolution=resolution if isinstance(resolution, dict) else None,
+            eff_resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
+            strict_social_active=True,
+            response_type_required=None,
+        )
+        dialogue_plan_trace = dict(dsp_trace0 or {})
+        dialogue_plan_blocked = bool(
+            dialogue_plan_trace.get("dialogue_plan_required")
+            and (dialogue_plan_trace.get("dialogue_plan_valid") is False)
+        )
         text, details = build_final_strict_social_response(
             pre_gate_text,
             resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
@@ -8560,6 +8736,7 @@ def apply_final_emission_gate(
             scene_id=sid,
         )
         out["player_facing_text"] = text
+
         text, _speaker_contract_payload = enforce_emitted_speaker_with_contract(
             _normalize_text_preserve_paragraphs(text),
             gm_output=out,
@@ -8625,7 +8802,12 @@ def apply_final_emission_gate(
             scene_id=sid,
             strict_social_active=strict_social_active,
         )
+        # If dialogue-plan enforcement blocked earlier, ensure no later repair re-introduced dialogue.
+        if dialogue_plan_blocked:
+            stripped = _strip_dialogue_from_text(text)
+            text = stripped or "The moment passes without an answer."
         out["player_facing_text"] = text
+
         record_stage_snapshot(out, "final_emission_gate_after_strict_social_composition")
         if ffnc_layer_meta.get("fast_fallback_neutral_composition_repaired"):
             realign_fallback_provenance_selector_to_current_text(
@@ -8771,6 +8953,7 @@ def apply_final_emission_gate(
                 "npc_id": npc_id_for_meta or None,
                 "normalization_ran": normalization_ran,
                 "candidate_validation_passed": True,
+                **(dialogue_plan_trace or {}),
                 "deterministic_social_fallback_attempted": bool(details.get("deterministic_attempted")),
                 "deterministic_social_fallback_passed": bool(details.get("deterministic_passed")),
                 "final_emitted_source": final_emitted_source,
@@ -9018,6 +9201,7 @@ def apply_final_emission_gate(
             "npc_id": npc_id_for_meta or None,
             "normalization_ran": normalization_ran,
             "candidate_validation_passed": False,
+            **(dialogue_plan_trace or {}),
             "deterministic_social_fallback_attempted": deterministic_attempted,
             "deterministic_social_fallback_passed": deterministic_passed,
             "final_emitted_source": final_emitted_source,

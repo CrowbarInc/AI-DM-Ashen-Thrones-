@@ -4174,6 +4174,40 @@ def build_narration_context(
             "semantic_bypass_blocked": True,
         }
 
+    # C1-D: dialogue/social planning is shipped as a deterministic structural plan from the bundle.
+    # For CTIR-backed social turns, do not locally infer speaker/intent/pressure/tone from logs or raw text.
+    _dsp_required = bool(
+        ctir_obj is not None
+        and social_authority
+        and bool(narration_obligations.get("active_npc_reply_expected"))
+    )
+    _dsp_raw = _bundle_renderer_inputs.get("dialogue_social_plan") if isinstance(_bundle_renderer_inputs, dict) else None
+    _dsp_present = bool(ctir_obj is not None and bundle_stamp_ok and isinstance(_dsp_raw, dict))
+    _dsp_missing_or_invalid = bool(_dsp_required and not _dsp_present)
+    if _dsp_missing_or_invalid:
+        _dsp_codes: List[str] = []
+        if ctir_obj is None:
+            _dsp_codes.append("ctir_absent")
+        elif not bundle_stamp_ok:
+            _dsp_codes.append("bundle_stamp_invalid_or_mismatch")
+        elif not isinstance(_dsp_raw, dict):
+            _dsp_codes.append("missing_dialogue_social_plan")
+        else:
+            _dsp_codes.append("unknown_dialogue_social_plan_failure")
+        if isinstance(narration_seam_audit, dict):
+            narration_seam_audit = {
+                **narration_seam_audit,
+                "dialogue_social_plan_contract_blocked": True,
+                "dialogue_social_plan_present": False,
+                "dialogue_social_plan_failure_codes": _dsp_codes[:16],
+            }
+        else:
+            narration_seam_audit = {
+                "dialogue_social_plan_contract_blocked": True,
+                "dialogue_social_plan_present": False,
+                "dialogue_social_plan_failure_codes": _dsp_codes[:16],
+            }
+
     instructions: List[str] = (
         (
             [
@@ -4224,6 +4258,23 @@ def build_narration_context(
                 "obey CTIR + shipped response_policy for facts; do not invent an alternate structural plan from raw scene text.",
             ]
             if ctir_obj is not None and narrative_plan is None
+            else []
+        ),
+        *(
+            [
+                "OPERATOR / AUDIT — DIALOGUE SOCIAL PLAN CONTRACT: dialogue_social_plan was required for this CTIR-backed social turn but is missing/invalid. "
+                "Use narration_seam_audit.dialogue_social_plan_failure_codes for machine-readable trace; do not invent speaker/intent/tone/pressure or generic conversational glue to compensate.",
+            ]
+            if _dsp_missing_or_invalid
+            else []
+        ),
+        *(
+            [
+                "DIALOGUE SOCIAL PLAN (HARD RULE): When top-level dialogue_social_plan is present, it is the ONLY dialogue/social planning source for this turn. "
+                "You MUST NOT choose the speaker, decide NPC intent, infer pressure/tone, or add generic conversational glue. "
+                "Express only the planned reply_kind and dialogue_intent for the shipped speaker, staying within pressure_state and tone_bounds; obey prohibited_content_codes and derivation_codes.",
+            ]
+            if (_dsp_required and _dsp_present)
             else []
         ),
         *(_NARRATIVE_PLAN_STRUCT_GUIDANCE if narrative_plan is not None else ()),
@@ -5045,6 +5096,7 @@ def build_narration_context(
     # Canonical snapshot for retry / gate contract lookup (not authoritative engine state).
     _btp = _bundle_renderer_inputs.get("turn_packet") if isinstance(_bundle_renderer_inputs, dict) else None
     _brt = _bundle_renderer_inputs.get("referent_tracking") if isinstance(_bundle_renderer_inputs, dict) else None
+    _bdsp = _bundle_renderer_inputs.get("dialogue_social_plan") if isinstance(_bundle_renderer_inputs, dict) else None
     if ctir_obj is not None and bundle_stamp_ok and isinstance(_btp, dict) and isinstance(_brt, dict):
         _turn_packet = copy.deepcopy(_btp)
         referent_tracking = copy.deepcopy(_brt)
@@ -5096,6 +5148,11 @@ def build_narration_context(
 
     payload: Dict[str, Any] = {
         'instructions': instructions,
+        'dialogue_social_plan': (
+            copy.deepcopy(_bdsp)
+            if (ctir_obj is not None and bundle_stamp_ok and isinstance(_bdsp, dict))
+            else None
+        ),
         'narrative_plan': (
             None
             if action_outcome_narration_blocked

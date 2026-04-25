@@ -26,7 +26,12 @@ from game.social_exchange_emission import (
     repair_strict_social_terminal_dialogue_fallback_if_needed,
     strict_social_terminal_dialogue_fallback_valid,
 )
+from game.dialogue_social_plan import validate_dialogue_social_plan
 from game.storage import get_scene_runtime
+from tests.helpers.dialogue_social_plan import (
+    attach_dialogue_social_plan_to_resolution,
+    make_valid_dialogue_social_plan,
+)
 
 pytestmark = pytest.mark.unit
 
@@ -123,6 +128,14 @@ def test_strict_social_terminal_fallback_grimace_line_survives_first_mention_gat
     rt = get_scene_runtime(session, sid)
     rt["last_player_action_text"] = "What did you hear?"
     res = _dialogue_contract_resolution()
+    attach_dialogue_social_plan_to_resolution(
+        res,
+        make_valid_dialogue_social_plan(
+            speaker_id="tavern_runner",
+            speaker_name="Tavern Runner",
+            dialogue_intent="question",
+        ),
+    )
     text = 'Tavern Runner grimaces. "Not something I can say here."'
     out = apply_final_emission_gate(
         {"player_facing_text": text, "tags": []},
@@ -217,6 +230,14 @@ def test_retry_terminal_repaired_dialogue_survives_first_mention_gate(monkeypatc
     session["interaction_context"] = ic
     rt = get_scene_runtime(session, sid)
     rt["last_player_action_text"] = "Who saw it?"
+    attach_dialogue_social_plan_to_resolution(
+        res,
+        make_valid_dialogue_social_plan(
+            speaker_id="tavern_runner",
+            speaker_name="Tavern Runner",
+            dialogue_intent="question",
+        ),
+    )
     out = apply_final_emission_gate(
         {"player_facing_text": repaired, "tags": ["targeted_retry_terminal"]},
         resolution=res,

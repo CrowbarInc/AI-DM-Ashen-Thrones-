@@ -51,6 +51,7 @@ from game.referent_tracking import build_referent_tracking_artifact
 from game.response_type_gating import derive_response_type_contract
 from game.response_policy_contracts import peek_response_type_contract_from_resolution
 from game.turn_packet import build_turn_packet
+from game.dialogue_social_plan import build_dialogue_social_plan
 
 SESSION_NARRATION_PLAN_BUNDLE_KEY = "_runtime_narration_plan_bundle_v1"
 SESSION_NARRATION_PLAN_BUNDLE_STAMP_KEY = "_runtime_narration_plan_bundle_stamp_v1"
@@ -306,6 +307,15 @@ def build_narration_plan_bundle(
         head=head,
         narrative_plan=narrative_plan if isinstance(narrative_plan, dict) else None,
     )
+    dialogue_social_plan = build_dialogue_social_plan(
+        ctir_obj=ctir_obj if isinstance(ctir_obj, dict) else None,
+        referent_tracking=referent_tracking if isinstance(referent_tracking, dict) else None,
+        bounded_session_hints=(
+            head.get("interaction_continuity")
+            if isinstance(head.get("interaction_continuity"), dict)
+            else None
+        ),
+    )
     bundle: dict[str, Any] = {
         "plan_metadata": plan_meta,
         "narrative_plan": narrative_plan,
@@ -317,6 +327,9 @@ def build_narration_plan_bundle(
             "turn_packet": copy.deepcopy(turn_packet) if isinstance(turn_packet, dict) else None,
             # Full artifact including optional N5 ``clause_referent_plan``; transport-only deepcopy.
             "referent_tracking": copy.deepcopy(referent_tracking) if isinstance(referent_tracking, dict) else None,
+            "dialogue_social_plan": copy.deepcopy(dialogue_social_plan)
+            if isinstance(dialogue_social_plan, dict)
+            else None,
         },
     }
     return bundle

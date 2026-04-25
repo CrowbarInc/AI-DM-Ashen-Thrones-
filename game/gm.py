@@ -4483,6 +4483,31 @@ def build_messages(
     runtime_for_scene = nc_kwargs.get("scene_runtime") or {}
     social_authority = _session_social_authority(session)
     payload = build_narration_context(**nc_kwargs)
+
+    # C1-D prompt projection: for CTIR-backed social turns, forward only structural
+    # dialogue/social plan fields to the model (no validator/version/applies scaffolding).
+    dsp = payload.get("dialogue_social_plan")
+    # Preserve the full shipped plan for downstream deterministic validation (final-emission gate).
+    # This is trace-only; do not mutate or infer missing fields here.
+    if isinstance(resolution, dict) and isinstance(dsp, dict):
+        md = resolution.setdefault("metadata", {})
+        em = md.setdefault("emission_debug", {})
+        if "dialogue_social_plan" not in em:
+            em["dialogue_social_plan"] = dict(dsp)
+    if social_authority and isinstance(dsp, dict):
+        allowed_keys = (
+            "speaker_id",
+            "speaker_name",
+            "speaker_source",
+            "dialogue_intent",
+            "reply_kind",
+            "pressure_state",
+            "relationship_codes",
+            "tone_bounds",
+            "prohibited_content_codes",
+            "derivation_codes",
+        )
+        payload["dialogue_social_plan"] = {k: dsp.get(k) for k in allowed_keys if k in dsp}
     if isinstance(resolution, dict):
         sac = payload.get("scene_state_anchor_contract")
         if isinstance(sac, dict):
