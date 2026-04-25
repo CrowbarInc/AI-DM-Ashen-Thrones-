@@ -43,6 +43,9 @@ For CTIR-backed turns, `build_narration_context` must **not** call `build_narrat
 
 Only these keys may appear at the top level of the shipped plan (mirror of `public_narrative_plan_projection_for_prompt` in `game/narration_plan_bundle.py`):
 
+- **Authoritative registry (audits/tests):** `game/contract_registry.py::PUBLIC_NARRATIVE_PLAN_PROMPT_TOP_KEYS`
+- This doc’s list is **descriptive for humans**; the registry constant is the **single code-owned approval source** used by audits/tests.
+
 - `version`
 - `narrative_mode`
 - `role_allocation`
@@ -154,7 +157,7 @@ make planner-convergence-check
 | `payload['narrative_plan'] must ship only public_narrative_plan_projection_for_prompt` | Model payload is assembling the full plan or a hand-built dict. Use the bundle projection (or `None`) only. |
 | `local dict resembles narrative_plan assembly` | Inline plan-shaped dict inside `build_narration_context`; consolidate on bundle + projection. |
 | `possible raw-state -> narrative_plan semantic shortcut` | Same line mixes `world`/`session`/`scene`/`combat` access with `narrative_plan` without a presentation marker. |
-| `public_narrative_plan_projection_for_prompt emits unknown keys` / `missing keys` | Projection drift vs audit contract; align **`APPROVED_PROMPT_NARRATIVE_PLAN_TOP_KEYS`** in `tools/planner_convergence_audit.py` with the implementation and this doc’s key list. |
+| `public_narrative_plan_projection_for_prompt emits unknown keys` / `missing keys` | Projection drift vs audit contract; update **`game/contract_registry.py::PUBLIC_NARRATIVE_PLAN_PROMPT_TOP_KEYS`** and keep this doc’s key list aligned. Audits/tests treat the registry as authoritative. |
 | `game/api.py`: missing … `build_planner_convergence_report` / `planner_convergence_ok` / seam markers | Manual-play GPT path structure diverged from the convergence seam (do not “fix” by skipping the seam). |
 | `assigns player_facing_text without record_emergency_nonplan_output` | Synthetic-module rule: emergency text must register in-function. |
 
@@ -162,7 +165,7 @@ make planner-convergence-check
 
 1. **`# planner_convergence_presentation_only`** — For a **single line** in `build_narration_context` that legitimately reads `world` / `session` / `scene` / `combat` alongside `narrative_plan` for formatting or packaging only. Keep the tag on that line; do not use it to hide real planner semantics.
 2. **`APPROVED_BUILD_NARRATIVE_PLAN_OWNER_PATHS`** — Only if a **new canonical owner module** must call `build_narrative_plan` (rare). Add the repo-relative POSIX path in `tools/planner_convergence_audit.py`, update **Approved `build_narrative_plan` owners** in this doc, and justify in the PR.
-3. **`APPROVED_PROMPT_NARRATIVE_PLAN_TOP_KEYS`** — When **`public_narrative_plan_projection_for_prompt`** gains or drops a **top-level** model-facing key. Update the frozenset, the bullet list under **Public `narrative_plan` projection keys**, and any contract tests that lock the set.
+3. **`PUBLIC_NARRATIVE_PLAN_PROMPT_TOP_KEYS`** — When **`public_narrative_plan_projection_for_prompt`** gains or drops a **top-level** model-facing key. Update `game/contract_registry.py::PUBLIC_NARRATIVE_PLAN_PROMPT_TOP_KEYS`, keep the bullet list under **Public `narrative_plan` projection keys** aligned, and ensure the projection implementation + focused tests still match.
 
 Never “fix” the audit by weakening rules for one-off hacks; extend contracts and owners explicitly so runtime and docs stay aligned.
 

@@ -4,6 +4,8 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from game.contract_registry import PUBLIC_NARRATIVE_PLAN_PROMPT_TOP_KEYS
+from game.narration_plan_bundle import public_narrative_plan_projection_for_prompt
 from tools.planner_convergence_audit import (
     APPROVED_PROMPT_NARRATIVE_PLAN_TOP_KEYS,
     audit_build_narrative_plan_call_sites,
@@ -112,24 +114,29 @@ def test_approved_public_projection_keys_match_bundle_implementation() -> None:
     rel = "game/narration_plan_bundle.py"
     text = (REPO_ROOT / rel).read_text(encoding="utf-8")
     assert not audit_narration_plan_bundle_projection_keys(rel, text)
-    # Contract doc + audit constant stay aligned (update both if projection grows).
-    assert APPROVED_PROMPT_NARRATIVE_PLAN_TOP_KEYS == frozenset(
-        {
-            "version",
-            "narrative_mode",
-            "role_allocation",
-            "scene_anchors",
-            "active_pressures",
-            "required_new_information",
-            "allowable_entity_references",
-            "narrative_roles",
-            "narrative_mode_contract",
-            "action_outcome",
-            "transition_node",
-            "answer_exposition_plan",
-            "scene_opening",
-        }
-    )
+    # Authoritative allowlist lives in contract_registry; audit must mirror it exactly.
+    assert APPROVED_PROMPT_NARRATIVE_PLAN_TOP_KEYS is PUBLIC_NARRATIVE_PLAN_PROMPT_TOP_KEYS
+
+    # Projection must emit exactly the approved keys when given a complete sample plan.
+    # This must fail if the registry approves a key the projection does not emit.
+    complete_sample_plan = {
+        "version": 1,
+        "narrative_mode": "standard",
+        "role_allocation": {"allocation_version": 1},
+        "scene_anchors": {"anchors_version": 1},
+        "active_pressures": {"pressures_version": 1},
+        "required_new_information": [{"id": "info_1"}],
+        "allowable_entity_references": [{"id": "ent_1"}],
+        "narrative_roles": {"roles_version": 1},
+        "narrative_mode_contract": {"contract_version": 1},
+        "scene_opening": {"opening_version": 1},
+        "action_outcome": {"outcome_version": 1},
+        "transition_node": {"transition_version": 1},
+        "answer_exposition_plan": {"plan_version": 1},
+    }
+    projected = public_narrative_plan_projection_for_prompt(complete_sample_plan)
+    assert isinstance(projected, dict)
+    assert frozenset(projected.keys()) == PUBLIC_NARRATIVE_PLAN_PROMPT_TOP_KEYS
 
 
 def test_prompt_context_payload_uses_projection_only_on_real_file() -> None:

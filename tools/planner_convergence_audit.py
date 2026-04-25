@@ -32,6 +32,15 @@ from typing import Any
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
+# NOTE: This tool is executed as a script (`py -3 tools/planner_convergence_audit.py`), so we
+# cannot assume the repo root is already on `sys.path` at import time. We therefore attempt to
+# import the registry constant opportunistically, and when running as `__main__` we rebind it
+# after inserting `REPO_ROOT` into `sys.path`.
+try:
+    from game.contract_registry import PUBLIC_NARRATIVE_PLAN_PROMPT_TOP_KEYS
+except ModuleNotFoundError:  # pragma: no cover - only when executed without repo root on sys.path
+    PUBLIC_NARRATIVE_PLAN_PROMPT_TOP_KEYS = frozenset()
+
 # --- Allowlists (contract mirrors ``game.planner_convergence`` + Block C projection) ---
 
 # Callers permitted to invoke ``build_narrative_plan`` (single planner seam).
@@ -45,23 +54,7 @@ APPROVED_BUILD_NARRATIVE_PLAN_OWNER_PATHS: frozenset[str] = frozenset(
 
 # Top-level ``narrative_plan`` keys allowed in the model prompt (must stay aligned
 # with ``public_narrative_plan_projection_for_prompt`` in ``game/narration_plan_bundle``).
-APPROVED_PROMPT_NARRATIVE_PLAN_TOP_KEYS: frozenset[str] = frozenset(
-    {
-        "version",
-        "narrative_mode",
-        "role_allocation",
-        "scene_anchors",
-        "active_pressures",
-        "required_new_information",
-        "allowable_entity_references",
-        "narrative_roles",
-        "narrative_mode_contract",
-        "action_outcome",
-        "scene_opening",
-        "transition_node",
-        "answer_exposition_plan",
-    }
-)
+APPROVED_PROMPT_NARRATIVE_PLAN_TOP_KEYS: frozenset[str] = PUBLIC_NARRATIVE_PLAN_PROMPT_TOP_KEYS
 
 # Primary modules scanned every run (plus ``_discover_opening_scene_modules``).
 PRIMARY_AUDIT_REL_PATHS: tuple[str, ...] = (
@@ -693,4 +686,9 @@ def main() -> int:
 
 if __name__ == "__main__":
     sys.path.insert(0, str(REPO_ROOT))
+    if not PUBLIC_NARRATIVE_PLAN_PROMPT_TOP_KEYS:
+        from game.contract_registry import PUBLIC_NARRATIVE_PLAN_PROMPT_TOP_KEYS as _PUBLIC_KEYS
+
+        PUBLIC_NARRATIVE_PLAN_PROMPT_TOP_KEYS = _PUBLIC_KEYS
+        APPROVED_PROMPT_NARRATIVE_PLAN_TOP_KEYS = _PUBLIC_KEYS
     raise SystemExit(main())
