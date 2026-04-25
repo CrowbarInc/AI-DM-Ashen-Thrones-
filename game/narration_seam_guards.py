@@ -155,6 +155,270 @@ def annotate_narration_path_kind(
     gm["metadata"] = {**md, "narration_seam": {**base_seam, **block}}
 
 
+def classify_narration_continuation_path(
+    *,
+    session: MutableMapping[str, Any] | None,
+    narration_seam: Mapping[str, Any] | None,
+) -> dict[str, Any]:
+    """Classify the *continuation* status/kind for the current narration output.
+
+    Debug-only: this must never drive orchestration (C1-B inventory only).
+    Returns a JSON-safe dict with stable keys + reason codes.
+    """
+    seam = dict(narration_seam) if isinstance(narration_seam, Mapping) else {}
+    path_kind = str(seam.get("path_kind") or "").strip() or "unknown"
+    ctir_backed = seam.get("ctir_backed")
+    plan_driven = bool(seam.get("plan_driven"))
+    emergency = bool(seam.get("emergency_nonplan_output"))
+    explicit_nonplan = bool(seam.get("explicit_nonplan_model_narration"))
+
+    reason_codes: list[str] = []
+
+    # --- Opening vs continuation ---
+    is_continuation_turn: bool
+    opening_reason = "unknown"
+    if isinstance(ctir_backed, bool) and ctir_backed and isinstance(session, MutableMapping):
+        ctir = get_attached_ctir(session)
+        bundle = get_attached_narration_plan_bundle(session)
+        if isinstance(ctir, Mapping) and isinstance(bundle, Mapping):
+            ri = bundle.get("renderer_inputs") if isinstance(bundle.get("renderer_inputs"), Mapping) else {}
+            pm = bundle.get("plan_metadata") if isinstance(bundle.get("plan_metadata"), Mapping) else {}
+            narration_obligations = ri.get("narration_obligations") if isinstance(ri.get("narration_obligations"), Mapping) else {}
+            session_interaction = (
+                pm.get("planning_session_interaction")
+                if isinstance(pm.get("planning_session_interaction"), Mapping)
+                else {}
+            )
+            opening_reason = infer_scene_opening_reason(
+                ctir,
+                narration_obligations=narration_obligations,
+                session_interaction=session_interaction,
+            )
+            is_continuation_turn = opening_reason == "none"
+            reason_codes.append(f"opening_reason:{opening_reason}")
+        else:
+            # CTIR-backed path, but we cannot inspect the bundle/ctir for opening inference.
+            is_continuation_turn = True
+            reason_codes.append("opening_reason:unknown_missing_ctir_or_bundle")
+    else:
+        # Non-CTIR paths are never treated as scene openings (openings are CTIR semantics).
+        is_continuation_turn = True
+        reason_codes.append("opening_reason:non_ctir_path_assumed_continuation")
+
+    # --- Continuation path kind ---
+    continuation_path_kind: str | None = None
+    requires_plan_driven_continuation = False
+    allows_nonplan_output = False
+
+    if not is_continuation_turn:
+        continuation_path_kind = None
+        requires_plan_driven_continuation = False
+        allows_nonplan_output = True
+        reason_codes.append("turn_is_scene_opening")
+    elif emergency:
+        continuation_path_kind = "emergency_nonplan_output"
+        allows_nonplan_output = True
+        requires_plan_driven_continuation = False
+        reason_codes.append("seam_emergency_nonplan_output")
+    elif explicit_nonplan or path_kind == "non_resolution_model_narration":
+        continuation_path_kind = "explicit_nonplan_model_narration"
+        allows_nonplan_output = True
+        requires_plan_driven_continuation = False
+        reason_codes.append("seam_explicit_nonplan_model_narration")
+    elif isinstance(ctir_backed, bool) and ctir_backed:
+        # CTIR-backed continuation.
+        if plan_driven:
+            # Heuristic: pressures present → pressure-driven continuation; otherwise plan-driven.
+            pressures_present = False
+            if isinstance(session, MutableMapping):
+                bundle = get_attached_narration_plan_bundle(session)
+                plan = bundle.get("narrative_plan") if isinstance(bundle, Mapping) else None
+                ap = plan.get("active_pressures") if isinstance(plan, Mapping) else None
+                pressures_present = isinstance(ap, Mapping) and bool(ap)
+            continuation_path_kind = "pressure_driven_continuation" if pressures_present else "plan_driven_continuation"
+            requires_plan_driven_continuation = True
+            allows_nonplan_output = False
+            reason_codes.append("ctir_backed_plan_driven")
+            if pressures_present:
+                reason_codes.append("plan_active_pressures_present")
+        else:
+            continuation_path_kind = "passive_turn_continuation"
+            requires_plan_driven_continuation = False
+            allows_nonplan_output = True
+            reason_codes.append("ctir_backed_not_plan_driven")
+    else:
+        # Non-CTIR engine or unknown path.
+        if path_kind.startswith("engine_"):
+            continuation_path_kind = "non_ctir_engine_output"
+            requires_plan_driven_continuation = False
+            allows_nonplan_output = True
+            reason_codes.append("non_ctir_engine_output")
+        else:
+            continuation_path_kind = "non_ctir_engine_output"
+            requires_plan_driven_continuation = False
+            allows_nonplan_output = True
+            reason_codes.append("non_ctir_unknown_path_assumed_engine_or_external")
+
+    # --- JSON-safety / stability ---
+    out: dict[str, Any] = {
+        "is_continuation_turn": bool(is_continuation_turn),
+        "continuation_path_kind": continuation_path_kind,
+        "requires_plan_driven_continuation": bool(requires_plan_driven_continuation),
+        "allows_nonplan_output": bool(allows_nonplan_output),
+        "reason_codes": [str(x) for x in reason_codes if isinstance(x, str) and x],
+    }
+    return out
+
+
+def annotate_narration_continuation_classification(
+    gm: MutableMapping[str, Any] | None,
+    *,
+    session: MutableMapping[str, Any] | None,
+) -> None:
+    """Attach continuation classification into ``gm["metadata"]["narration_seam"]``.
+
+    Must be called only as a debug/read-side annotation (no orchestration).
+    """
+    if not isinstance(gm, MutableMapping):
+        return
+    md = gm.get("metadata") if isinstance(gm.get("metadata"), dict) else {}
+    prev_seam = md.get("narration_seam")
+    base_seam = dict(prev_seam) if isinstance(prev_seam, dict) else {}
+    seam = dict(base_seam)
+    classified = classify_narration_continuation_path(session=session, narration_seam=seam)
+    prev_cont = seam.get("continuation")
+    carry = dict(prev_cont) if isinstance(prev_cont, Mapping) else {}
+    seam["continuation"] = {**carry, **dict(classified)}
+    gm["metadata"] = {**md, "narration_seam": seam}
+
+
+def enforce_plan_driven_continuation_invariant(
+    gm: MutableMapping[str, Any] | None,
+    *,
+    session: MutableMapping[str, Any] | None,
+    bundle_seam_requirement: Mapping[str, Any] | None = None,
+    turn_stamp: str | None = None,
+) -> dict[str, Any]:
+    """Enforce C1-B: CTIR-backed continuation requiring plan-driven continuation must be plan-verified.
+
+    - Must not reclassify independently: consumes existing ``gm.metadata.narration_seam.continuation``
+      (created by :func:`annotate_narration_continuation_classification`).
+    - Produces enforcement metadata under ``gm["metadata"]["narration_seam"]["continuation"]``.
+    - Returns a compact status dict for callers (no player-facing narration mutation).
+    """
+    if not isinstance(gm, MutableMapping):
+        return {"ok": True, "skipped": "no_gm"}
+    md = gm.get("metadata") if isinstance(gm.get("metadata"), dict) else {}
+    seam0 = md.get("narration_seam")
+    seam: dict[str, Any] = dict(seam0) if isinstance(seam0, dict) else {}
+    cont0 = seam.get("continuation")
+    cont: dict[str, Any] = dict(cont0) if isinstance(cont0, Mapping) else {}
+
+    # If callers forgot to annotate, do it here (idempotent merge).
+    if not cont:
+        annotate_narration_continuation_classification(gm, session=session)
+        md = gm.get("metadata") if isinstance(gm.get("metadata"), dict) else {}
+        seam = dict(md.get("narration_seam") or {}) if isinstance(md.get("narration_seam"), dict) else {}
+        cont = dict(seam.get("continuation") or {}) if isinstance(seam.get("continuation"), Mapping) else {}
+
+    ctir_backed = seam.get("ctir_backed") is True
+    emergency = bool(seam.get("emergency_nonplan_output"))
+    explicit_nonplan = bool(seam.get("explicit_nonplan_model_narration"))
+    path_kind = str(seam.get("path_kind") or "").strip()
+    is_engine_only = path_kind.startswith("engine_")
+
+    is_continuation_turn = bool(cont.get("is_continuation_turn"))
+    requires_plan_driven = bool(cont.get("requires_plan_driven_continuation"))
+    enforcement_applied = bool(ctir_backed and is_continuation_turn and requires_plan_driven and (not is_engine_only))
+
+    # --- Verification ---
+    ts = str(turn_stamp or "").strip()
+    bs = dict(bundle_seam_requirement) if isinstance(bundle_seam_requirement, Mapping) else {}
+    verified = False
+    failure_reason: str | None = None
+
+    if emergency or explicit_nonplan or (not ctir_backed) or is_engine_only:
+        verified = False
+        # Even when the output is an explicit emergency/nonplan path, preserve the triggering
+        # seam-verification failure when available (operators need it traceable).
+        if bs and bs.get("ok") is False:
+            failure_reason = str(bs.get("error") or bs.get("skipped") or "bundle_seam_requirement_failed")
+        else:
+            failure_reason = None
+    else:
+        # If we already have a seam verification result, prefer it (no double-check divergence).
+        if bs and bs.get("ok") is True:
+            verified = True
+        elif bs and bs.get("ok") is False:
+            verified = False
+            failure_reason = str(bs.get("error") or bs.get("skipped") or "bundle_seam_requirement_failed")
+        else:
+            # Fallback verification for callers that did not pass ``bundle_seam_requirement``.
+            if not isinstance(session, MutableMapping):
+                verified = False
+                failure_reason = "no_session"
+            else:
+                ctir = get_attached_ctir(session)
+                if not isinstance(ctir, Mapping):
+                    verified = False
+                    failure_reason = "ctir_absent"
+                elif not ts:
+                    verified = False
+                    failure_reason = "empty_turn_stamp"
+                else:
+                    cstamp = str(session.get(SESSION_CTIR_STAMP_KEY) or "").strip()
+                    if cstamp != ts:
+                        verified = False
+                        failure_reason = "ctir_stamp_mismatch"
+                    else:
+                        bundle = get_attached_narration_plan_bundle(session)
+                        bstamp = get_narration_plan_bundle_stamp(session)
+                        if bstamp != ts:
+                            verified = False
+                            failure_reason = "narration_plan_bundle_stamp_mismatch"
+                        elif not isinstance(bundle, Mapping):
+                            verified = False
+                            failure_reason = "bundle_absent"
+                        else:
+                            np = bundle.get("narrative_plan")
+                            if not isinstance(np, Mapping) or not np:
+                                verified = False
+                                failure_reason = "narrative_plan_missing"
+                            else:
+                                verified = True
+
+    # --- Source labeling ---
+    if emergency:
+        source = "emergency_nonplan"
+    elif explicit_nonplan or cont.get("continuation_path_kind") == "explicit_nonplan_model_narration":
+        source = "explicit_nonplan_model_narration"
+    elif is_engine_only or cont.get("continuation_path_kind") == "non_ctir_engine_output":
+        source = "engine_only"
+    elif ctir_backed and verified:
+        source = "narrative_plan_bundle"
+    elif ctir_backed and requires_plan_driven:
+        source = "unverified"
+    else:
+        source = "engine_only"
+
+    cont_out = dict(cont)
+    cont_out["continuation_plan_verified"] = bool(verified)
+    cont_out["continuation_plan_failure_reason"] = str(failure_reason) if failure_reason else None
+    cont_out["continuation_source"] = source
+    cont_out["continuation_enforcement_applied"] = bool(enforcement_applied)
+
+    seam["continuation"] = cont_out
+    gm["metadata"] = {**md, "narration_seam": seam}
+
+    return {
+        "ok": True,
+        "continuation_plan_verified": bool(verified),
+        "continuation_plan_failure_reason": str(failure_reason) if failure_reason else None,
+        "continuation_source": source,
+        "continuation_enforcement_applied": bool(enforcement_applied),
+    }
+
+
 def record_explicit_nonplan_model_narration(
     session: MutableMapping[str, Any] | None,
     *,

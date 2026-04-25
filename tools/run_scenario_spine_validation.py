@@ -137,6 +137,20 @@ def _gm_text_from_chat_payload(payload: Mapping[str, Any]) -> str:
     return ""
 
 
+def _narration_seam_from_chat_payload(payload: Mapping[str, Any]) -> dict[str, Any] | None:
+    gm = payload.get("gm_output")
+    if not isinstance(gm, Mapping):
+        return None
+    md = gm.get("metadata")
+    if not isinstance(md, Mapping):
+        return None
+    seam = md.get("narration_seam")
+    if not isinstance(seam, Mapping):
+        return None
+    # Keep as plain dict for JSON serialization; evaluator expects Mapping.
+    return {str(k): seam[k] for k in sorted(seam, key=str)}
+
+
 def _resolution_kind(payload: Mapping[str, Any]) -> Any:
     res = payload.get("resolution")
     if isinstance(res, Mapping):
@@ -707,6 +721,9 @@ def run_scenario_spine_branch(
             meta_safe["status_code"] = sc
         if isinstance(payload, dict):
             meta_safe["opening_convergence"] = capture_opening_convergence_meta_from_chat_payload(payload)
+            seam = _narration_seam_from_chat_payload(payload)
+            if seam:
+                meta_safe["narration_seam"] = seam
 
         eval_rows.append(
             {

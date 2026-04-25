@@ -13,6 +13,7 @@ Multi-turn, spine-shaped evidence that the stack can sustain:
 - **World / project progression** — Progression anchors tied to checkpoints show keyword-level evidence in checkpoint windows; gross contradictions after positive signals surface as warnings.
 - **Narrative grounding** — Player-facing GM text should not leak debug/system markers or raw JSON diagnostic lines; long runs flag excessive generic filler as warnings.
 - **Branch coherence** — GM narration should not echo long distinctive substrings from **other** branches’ scripted player prompts (cross-branch bleed).
+- **C1-B continuation convergence** — For **CTIR-backed continuation** turns that require plan-driven continuation, recorded seam metadata must show a **plan-verified** narration path (bundle + stamp alignment). Emergency/nonplan and engine-only outputs are counted separately; a narrow filler anti-pattern list is enforced only on normal plan-driven bundle continuation.
 
 ## What it does not prove
 
@@ -74,6 +75,23 @@ Per-branch **`session_health`** includes opening-convergence counters populated 
 - **Stock opener phrases** in GM text increment **`opening_stock_fallback_hits`** and may surface as evaluator **`opening_style_signal`** warnings; they do **not** flip the opening verdict to fail **unless** a hard signal already failed the run (missing/invalid plan, seam, anchor grounding).
 - **`scene_opening_seam_invalid`** on the captured seam trace is a **hard** opening-convergence failure (same convergence family as planner bypass / seam guard).
 - **`resume_entry`:** the runner’s **`--resume-entry-first-turn`** path sets the same session **`resume_entry` / pending** flag used after a snapshot restore so the first scripted turn exercises the **runtime** resume-entry seam like a restored session.
+
+### C1-B continuation convergence (observational + enforcement-backed)
+
+Scenario-spine validation also evaluates **continuation convergence** using recorded per-turn seam metadata under **`meta.narration_seam.continuation`** (mirrored from `gm_output.metadata.narration_seam` by the runner).
+
+- **Invariant (C1-B)**: If a turn is a **continuation** turn and is **CTIR-backed** and the continuation classification reports **`requires_plan_driven_continuation: true`**, the runtime must have produced a **plan-verified** continuation output (bundle present, stamps aligned, and `continuation_plan_verified: true`), with `continuation_source == "narrative_plan_bundle"`.
+- **Counters / visibility**: Emergency nonplan (`emergency_nonplan_output`), explicit nonplan model narration (`explicit_nonplan_model_narration`), and engine-only / non-CTIR outputs are counted separately and do not satisfy plan-driven continuation success.
+- **Filler anti-pattern enforcement**: A narrow filler phrase list is checked only for **normal plan-driven bundle continuation** (not for emergency/nonplan or engine-only outputs).
+
+Ownership / consumers:
+
+- **Runtime owner**: `game/api.py` (turn pipeline emits `gm_output.metadata.narration_seam` and applies runtime enforcement via seam guards).
+- **Planning owner**: `game/narration_plan_bundle.py` + `game/narrative_planning.py` (bundle construction + narrative plan).
+- **Consumer**: `game/prompt_context.py` (prompt packaging consumes the bundled plan; no second planner).
+- **Enforcement / evaluation**:
+  - Runtime enforcement: `game/narration_seam_guards.py` (`enforce_plan_driven_continuation_invariant`)
+  - Offline enforcement for scenario-spine: `game/scenario_spine_eval.py` (`evaluate_continuation_convergence_for_turn_rows`)
 
 ## Canonical fixture and branch roles
 

@@ -344,6 +344,135 @@ def _default_opening_convergence_session_health() -> dict[str, Any]:
     }
 
 
+_CONTINUATION_FILLER_ANTI_PATTERNS: tuple[str, ...] = (
+    "the scene holds",
+    "nothing changes",
+    "things remain as they are",
+    "the moment continues",
+)
+
+
+def _default_continuation_convergence_session_health() -> dict[str, Any]:
+    return {
+        "continuation_convergence_passed": True,
+        "continuation_turns_checked": 0,
+        "continuation_plan_verified_count": 0,
+        "continuation_emergency_nonplan_count": 0,
+        "continuation_explicit_nonplan_count": 0,
+        "continuation_engine_only_count": 0,
+        "continuation_failure_reasons": [],
+        "first_continuation_failure_turn_id": None,
+    }
+
+
+def evaluate_continuation_convergence_for_turn_rows(
+    turns: Sequence[Mapping[str, Any]],
+) -> dict[str, Any]:
+    """C1-B: validate that continuation paths converge on plan-verified narration.
+
+    Observational + deterministic: inspects recorded per-turn metadata only.
+    Does not attempt to score prose quality; only checks explicit seam metadata and a narrow
+    anti-pattern list on *normal* plan-driven continuation outputs.
+    """
+    turns_checked = 0
+    plan_verified = 0
+    emergency_nonplan = 0
+    explicit_nonplan = 0
+    engine_only = 0
+
+    failure_reasons: list[str] = []
+    first_failure_turn_id: str | None = None
+
+    def _record_failure(turn_id: str, reason: str) -> None:
+        nonlocal first_failure_turn_id
+        failure_reasons.append(str(reason))
+        if first_failure_turn_id is None:
+            first_failure_turn_id = str(turn_id)
+
+    for row in turns:
+        turn_id = str(row.get("turn_id") or row.get("turn_index") or "")
+        meta = row.get("meta") if isinstance(row.get("meta"), Mapping) else {}
+        seam = meta.get("narration_seam") if isinstance(meta.get("narration_seam"), Mapping) else {}
+        cont = seam.get("continuation") if isinstance(seam.get("continuation"), Mapping) else {}
+
+        # If metadata is missing entirely, we cannot evaluate continuation convergence for that turn.
+        if not seam or not cont:
+            continue
+
+        # Opening turns must not count as continuation.
+        is_cont = cont.get("is_continuation_turn")
+        if is_cont is False:
+            continue
+
+        # Count emergency / explicit non-plan separately (visible, not treated as success).
+        if bool(seam.get("emergency_nonplan_output")) or cont.get("continuation_source") == "emergency_nonplan":
+            emergency_nonplan += 1
+            continue
+        if bool(seam.get("explicit_nonplan_model_narration")) or (
+            cont.get("continuation_source") == "explicit_nonplan_model_narration"
+        ):
+            explicit_nonplan += 1
+            continue
+
+        # Engine-only / non-CTIR outputs are excluded or separately counted.
+        path_kind = str(seam.get("path_kind") or "")
+        if path_kind.startswith("engine_") or cont.get("continuation_source") == "engine_only":
+            engine_only += 1
+            continue
+        if seam.get("ctir_backed") is not True:
+            engine_only += 1
+            continue
+
+        # From here: CTIR-backed continuation turn (candidate for validation).
+        turns_checked += 1
+
+        requires_plan = bool(cont.get("requires_plan_driven_continuation"))
+        verified = cont.get("continuation_plan_verified")
+        source = str(cont.get("continuation_source") or "")
+        failure_reason = cont.get("continuation_plan_failure_reason")
+
+        if requires_plan:
+            if verified is not True:
+                _record_failure(turn_id, f"continuation_plan_unverified:{failure_reason or 'unknown'}")
+                continue
+            plan_verified += 1
+            if source != "narrative_plan_bundle":
+                _record_failure(turn_id, f"continuation_source_not_bundle:{source or 'missing'}")
+                continue
+        else:
+            # Passive CTIR-backed continuation that did not require plan-driven continuation must not
+            # be allowed to claim bundle-backed success without verification.
+            if source == "narrative_plan_bundle" and verified is not True:
+                _record_failure(turn_id, "bundle_source_without_verification")
+                continue
+
+        # Missing bundle / stamp mismatch / explicit unverified source must fail.
+        if source == "unverified" or (failure_reason and verified is not True and requires_plan):
+            _record_failure(turn_id, f"unverified_continuation:{failure_reason or 'unknown'}")
+            continue
+
+        # Narrow anti-pattern checks for normal plan-driven continuation only.
+        if source == "narrative_plan_bundle" and requires_plan:
+            gm_text = str(row.get("gm_text") or "")
+            gm_norm = _norm_text(gm_text)
+            for phrase in _CONTINUATION_FILLER_ANTI_PATTERNS:
+                if _norm_text(phrase) in gm_norm:
+                    _record_failure(turn_id, f"continuation_generic_filler:{phrase}")
+                    break
+
+    passed = len(failure_reasons) == 0
+    return {
+        "continuation_convergence_passed": passed,
+        "continuation_turns_checked": turns_checked,
+        "continuation_plan_verified_count": plan_verified,
+        "continuation_emergency_nonplan_count": emergency_nonplan,
+        "continuation_explicit_nonplan_count": explicit_nonplan,
+        "continuation_engine_only_count": engine_only,
+        "continuation_failure_reasons": list(failure_reasons),
+        "first_continuation_failure_turn_id": first_failure_turn_id,
+    }
+
+
 def _error_result(
     scenario_id: str,
     branch_id: str,
@@ -383,6 +512,7 @@ def _error_result(
                 "long_session_band": _long_session_band(n_err),
                 "degradation_detected": False,
                 **_default_opening_convergence_session_health(),
+                **_default_continuation_convergence_session_health(),
             },
             "degradation_over_time": empty_deg,
             "axes": {
@@ -936,6 +1066,14 @@ class _EvalContext:
                 "repeated generic first-line and/or stock opener phrasing on opening turn(s) — scoring only",
             )
 
+        continuation_block = evaluate_continuation_convergence_for_turn_rows(self.turns)
+        if continuation_block.get("continuation_convergence_passed") is False:
+            self.add_failure(
+                "continuation_convergence",
+                "continuation_convergence_failed",
+                "C1-B continuation convergence invariant failed (see session_health.continuation_failure_reasons)",
+            )
+
         score = _compute_score(self.failures, self.warnings, api_majority=api_majority)
         failed_axes = sum(1 for a in axes.values() if not a["passed"])
         classification = _classify(
@@ -970,6 +1108,7 @@ class _EvalContext:
             "long_session_band": _long_session_band(n),
             "degradation_detected": deg_any,
             **opening_block,
+            **continuation_block,
         }
 
         out: dict[str, Any] = {

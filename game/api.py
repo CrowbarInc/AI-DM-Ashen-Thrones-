@@ -209,7 +209,9 @@ from game.narration_plan_bundle import (
 )
 from game.narrative_plan_upstream import mark_session_narration_resume_entry_pending
 from game.narration_seam_guards import (
+    annotate_narration_continuation_classification,
     annotate_narration_path_kind,
+    enforce_plan_driven_continuation_invariant,
     record_emergency_nonplan_output,
     record_explicit_nonplan_model_narration,
     require_narration_plan_bundle_for_ctir_turn,
@@ -1024,6 +1026,8 @@ def _annotate_planner_convergence_seam_gm(
     *,
     report: dict[str, Any],
     bundle_seam_requirement: dict[str, Any],
+    session: dict[str, Any] | None = None,
+    turn_stamp: str | None = None,
 ) -> None:
     annotate_narration_path_kind(
         gm,
@@ -1038,6 +1042,13 @@ def _annotate_planner_convergence_seam_gm(
             "bundle_seam_error": bundle_seam_requirement.get("error"),
             "bundle_seam_skipped": bundle_seam_requirement.get("skipped"),
         },
+    )
+    annotate_narration_continuation_classification(gm, session=session)
+    enforce_plan_driven_continuation_invariant(
+        gm,
+        session=session,
+        bundle_seam_requirement=bundle_seam_requirement,
+        turn_stamp=turn_stamp,
     )
 
 
@@ -1224,6 +1235,8 @@ def _build_gpt_narration_from_authoritative_state(
             gm,
             report=planner_convergence_report_final,
             bundle_seam_requirement=bundle_seam_requirement,
+            session=session,
+            turn_stamp=_ctir_stamp,
         )
         prompt_started = _now_perf()
         messages = [{"role": "system", "content": "."}, {"role": "user", "content": "{}"}]
@@ -1304,6 +1317,8 @@ def _build_gpt_narration_from_authoritative_state(
                     gm,
                     report=post_planner_report,
                     bundle_seam_requirement=bundle_seam_requirement,
+                    session=session,
+                    turn_stamp=_ctir_stamp,
                 )
                 planner_convergence_emergency_exit = True
         _accumulate_latency(latency_sink, "prompt_construction", _elapsed_ms(prompt_started))
@@ -1890,6 +1905,13 @@ def _build_gpt_narration_from_authoritative_state(
             emergency_nonplan_output=True,
             same_turn_retry_messages_reused=gpt_calls_used > 1,
         )
+        annotate_narration_continuation_classification(gm, session=session if isinstance(session, dict) else None)
+        enforce_plan_driven_continuation_invariant(
+            gm,
+            session=session if isinstance(session, dict) else None,
+            bundle_seam_requirement=bundle_seam_requirement,
+            turn_stamp=_seam_stamp_for_retry or None,
+        )
         record_emergency_nonplan_output(
             session,
             reason="manual_play_gpt_budget_exceeded",
@@ -1928,6 +1950,13 @@ def _build_gpt_narration_from_authoritative_state(
                     }
                 ),
             )
+            annotate_narration_continuation_classification(gm, session=session if isinstance(session, dict) else None)
+            enforce_plan_driven_continuation_invariant(
+                gm,
+                session=session if isinstance(session, dict) else None,
+                bundle_seam_requirement=bundle_seam_requirement,
+                turn_stamp=_seam_stamp_for_retry or None,
+            )
             if isinstance(planner_convergence_report_final, dict):
                 _attach_planner_convergence_gm_metadata(gm, planner_convergence_report_final)
     else:
@@ -1939,6 +1968,13 @@ def _build_gpt_narration_from_authoritative_state(
             plan_driven=False,
             explicit_nonplan_model_narration=True,
             same_turn_retry_messages_reused=gpt_calls_used > 1,
+        )
+        annotate_narration_continuation_classification(gm, session=session if isinstance(session, dict) else None)
+        enforce_plan_driven_continuation_invariant(
+            gm,
+            session=session if isinstance(session, dict) else None,
+            bundle_seam_requirement=None,
+            turn_stamp=None,
         )
     return gm
 
@@ -2668,6 +2704,7 @@ def action(req: ActionRequest, ui_mode: str = "player"):
             bundle_required=False,
             plan_driven=False,
         )
+        annotate_narration_continuation_classification(gm, session=session if isinstance(session, dict) else None)
     elif req.action_type == 'attack':
         # Stages 1-4: input -> classification -> deterministic engine resolution.
         if not player_can_act(character, combat, conditions):
@@ -2737,6 +2774,7 @@ def action(req: ActionRequest, ui_mode: str = "player"):
                 bundle_required=False,
                 plan_driven=False,
             )
+            annotate_narration_continuation_classification(gm, session=session if isinstance(session, dict) else None)
     elif req.action_type == 'exploration':
         raw = req.exploration_action if isinstance(req.exploration_action, dict) else None
         if not raw and req.intent:
@@ -2832,6 +2870,7 @@ def action(req: ActionRequest, ui_mode: str = "player"):
             bundle_required=False,
             plan_driven=False,
         )
+        annotate_narration_continuation_classification(gm, session=session if isinstance(session, dict) else None)
         run_resolved_pipeline = False
         trace['gpt_called'] = False
 
@@ -2851,6 +2890,7 @@ def action(req: ActionRequest, ui_mode: str = "player"):
             bundle_required=False,
             plan_driven=False,
         )
+        annotate_narration_continuation_classification(gm, session=session if isinstance(session, dict) else None)
         run_resolved_pipeline = False
         trace['gpt_called'] = False
 
@@ -2880,6 +2920,7 @@ def action(req: ActionRequest, ui_mode: str = "player"):
             plan_driven=False,
             extra={"note": "gm was None after action pipeline"},
         )
+        annotate_narration_continuation_classification(gm, session=session if isinstance(session, dict) else None)
     if response_type_contract is None:
         response_type_contract = _derive_response_type_contract_for_turn(
             session=session,
@@ -3968,6 +4009,7 @@ def chat(req: ChatRequest, ui_mode: str = "player"):
                 bundle_required=False,
                 plan_driven=False,
             )
+            annotate_narration_continuation_classification(gm, session=session if isinstance(session, dict) else None)
         elif _is_pending_check_resolution(resolution):
             trace['gpt_called'] = False
             response_type_contract = _derive_response_type_contract_for_turn(
@@ -3987,6 +4029,7 @@ def chat(req: ChatRequest, ui_mode: str = "player"):
                 bundle_required=False,
                 plan_driven=False,
             )
+            annotate_narration_continuation_classification(gm, session=session if isinstance(session, dict) else None)
         else:
             scene, session, combat, gm, turn_clue_updates, response_type_contract = _run_resolved_turn_pipeline(
                 campaign=campaign,
@@ -4087,6 +4130,7 @@ def chat(req: ChatRequest, ui_mode: str = "player"):
                 bundle_required=False,
                 plan_driven=False,
             )
+            annotate_narration_continuation_classification(gm, session=session if isinstance(session, dict) else None)
         else:
             trace['canonical_entry_path'] = 'procedural'
             response_type_contract = _derive_response_type_contract_for_turn(

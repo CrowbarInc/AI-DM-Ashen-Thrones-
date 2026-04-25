@@ -4032,6 +4032,17 @@ def build_narration_context(
             scene_opening=narrative_plan.get("scene_opening"),
         )
 
+    # C1-B: prompt_context must not reconstruct continuation progression from raw state/logs.
+    # A "verified CTIR-backed continuation" here means: CTIR attached, stamp-matched bundle,
+    # and the attached plan projects a continuation-mode turn. (Block B enforcement happens upstream;
+    # prompt_context is a renderer/packager only.)
+    is_verified_ctir_continuation = bool(
+        ctir_obj is not None
+        and bundle_stamp_ok
+        and isinstance(narrative_plan, dict)
+        and str(narrative_plan.get("narrative_mode") or "").strip().lower() == "continuation"
+    )
+
     prompt_debug_anchor = {
         "scene_state_anchor": {
             "enabled": bool(scene_state_anchor_contract.get("enabled")),
@@ -4075,6 +4086,24 @@ def build_narration_context(
             stamp_matches=bundle_stamp_ok,
             narrative_plan_full=narrative_plan if isinstance(narrative_plan, dict) else None,
         ),
+    }
+    _cont_mode = (
+        str((narrative_plan or {}).get("narrative_mode") or "").strip().lower()
+        if isinstance(narrative_plan, dict)
+        else ""
+    )
+    if is_verified_ctir_continuation:
+        _progression_src = "narrative_plan_bundle"
+    elif _cont_mode != "continuation":
+        _progression_src = "not_continuation"
+    elif ctir_obj is None:
+        _progression_src = "legacy_non_ctir"
+    else:
+        _progression_src = "unavailable"
+    prompt_debug_anchor["continuation_packaging"] = {
+        "continuation_progression_source": _progression_src,
+        "prompt_context_reconstructed_continuation": False,
+        "continuation_plan_projection_used": bool(is_verified_ctir_continuation),
     }
     first_mention_contract: Dict[str, Any] = {
         "enabled": True,
@@ -4228,20 +4257,28 @@ def build_narration_context(
             "beats as the main voice. The active interlocutor must carry this turn (substantive reply, reaction, or refusal)."
         )
 
-    follow_up_log_pressure = _compute_follow_up_pressure(recent_log_compact, user_text)
-    ap_for_prompt = _answer_pressure_followup_details(
-        player_input=str(user_text or ""),
-        recent_log_compact=list(recent_log_compact or []),
-        narration_obligations=narration_obligations,
-        session_view=session_view,
-        answer_completeness=None,
-    )
-    if follow_up_log_pressure is None and ap_for_prompt.get("answer_pressure_followup_detected"):
-        follow_up_log_pressure = _synthetic_follow_up_pressure_from_log(
-            recent_log_compact, str(user_text or "")
-        )
-    if social_authority and not ap_for_prompt.get("answer_pressure_followup_detected"):
+    # Legacy follow-up pressure is derived from recent_log (a continuity proxy). For CTIR-attached turns,
+    # prompt_context must not invent continuity/progression signals from logs when the plan is missing or when
+    # the plan is verified continuation (C1-B ownership).
+    _ctir_plan_missing = bool(ctir_obj is not None and narrative_plan is None)
+    if is_verified_ctir_continuation or _ctir_plan_missing:
         follow_up_log_pressure = None
+        ap_for_prompt: dict[str, Any] = {}
+    else:
+        follow_up_log_pressure = _compute_follow_up_pressure(recent_log_compact, user_text)
+        ap_for_prompt = _answer_pressure_followup_details(
+            player_input=str(user_text or ""),
+            recent_log_compact=list(recent_log_compact or []),
+            narration_obligations=narration_obligations,
+            session_view=session_view,
+            answer_completeness=None,
+        )
+        if follow_up_log_pressure is None and ap_for_prompt.get("answer_pressure_followup_detected"):
+            follow_up_log_pressure = _synthetic_follow_up_pressure_from_log(
+                recent_log_compact, str(user_text or "")
+            )
+        if social_authority and not ap_for_prompt.get("answer_pressure_followup_detected"):
+            follow_up_log_pressure = None
 
     active_topic_anchor = explicit_player_topic_anchor_state(str(user_text or ""))
 
@@ -4302,19 +4339,33 @@ def build_narration_context(
     lead_instr: List[str] = [
         "LEAD REGISTRY (authoritative slice): Use top-level lead_context only as supplied—do not invent leads, facts, or journal summaries. "
         "Turn compact rows into light, actionable nudges (what could matter next), not recap.",
-        "When the player is clearly continuing an existing investigation thread, prefer lead_context.currently_pursued_lead as the primary thread anchor when it is non-null.",
-        "When interaction_continuity names an active NPC, use lead_context.npc_relevant_leads to tie the exchange to registry-linked threads that list that NPC—without fabricating details beyond those rows.",
-        "Use lead_context.urgent_or_stale_leads to surface unattended time pressure or stale threads as diegetic tension or reminders—only as implied by those rows; do not invent urgency.",
-        "Use lead_context.recent_lead_changes for continuity with the latest registry state shifts (status, next_step, touches)—do not restate full buckets or dump all leads.",
-        "follow_up_pressure.from_leads is boolean-only: has_pursued, has_stale, npc_has_relevant, has_escalated_threat, has_newly_unlocked, has_supersession_cleanup. Do not treat it as prose; use the matching lead_context lists/objects for specifics.",
-        "If follow_up_pressure.from_leads.has_pursued is true, bias narration toward continuing that pursued thread when it fits the player's action.",
-        "If follow_up_pressure.from_leads.has_stale is true, you may surface reminder, pressure, or unattended-thread beats that fit the scene—without inventing facts beyond lead_context.",
-        "If follow_up_pressure.from_leads.npc_has_relevant is true, you may let the active NPC exchange reflect relevance to those threads—within knowledge_scope and without inventing registry facts.",
-        "If follow_up_pressure.from_leads.has_escalated_threat is true, bias tension beats toward unattended threat rows in lead_context (escalation fields)—without inventing facts beyond those rows.",
-        "If follow_up_pressure.from_leads.has_newly_unlocked is true, you may acknowledge a thread becoming available or unblocked when it fits the scene—grounded in unlocked_by_lead_id / recent_lead_changes only.",
-        "If follow_up_pressure.from_leads.has_supersession_cleanup is true, avoid treating superseded obsoleted threads as primary pressure unless the player returns to them; prefer current non-terminal rows.",
     ]
-    instructions = list(instructions) + lead_instr
+    # Quarantine progression guidance: for verified CTIR continuation, plan-owned anchors/pressures are the
+    # only continuation progression source. Lead registry remains transportable support context, but must not
+    # become a substitute continuation planner.
+    if is_verified_ctir_continuation or (ctir_obj is not None and narrative_plan is None):
+        instructions = list(instructions) + [
+            "CTIR CONTINUATION PROGRESSION (HARD RULE): When CTIR is attached, treat `narrative_plan` "
+            "(scene_anchors, active_pressures, required_new_information, narrative_mode_contract) as the sole "
+            "continuation-progression guide when it is present. If the plan is missing, do not substitute "
+            "recent_log, public_scene recap, or lead_context as a replacement continuity plan.",
+            *lead_instr,
+        ]
+    else:
+        lead_instr = lead_instr + [
+            "When the player is clearly continuing an existing investigation thread, prefer lead_context.currently_pursued_lead as the primary thread anchor when it is non-null.",
+            "When interaction_continuity names an active NPC, use lead_context.npc_relevant_leads to tie the exchange to registry-linked threads that list that NPC—without fabricating details beyond those rows.",
+            "Use lead_context.urgent_or_stale_leads to surface unattended time pressure or stale threads as diegetic tension or reminders—only as implied by those rows; do not invent urgency.",
+            "Use lead_context.recent_lead_changes for continuity with the latest registry state shifts (status, next_step, touches)—do not restate full buckets or dump all leads.",
+            "follow_up_pressure.from_leads is boolean-only: has_pursued, has_stale, npc_has_relevant, has_escalated_threat, has_newly_unlocked, has_supersession_cleanup. Do not treat it as prose; use the matching lead_context lists/objects for specifics.",
+            "If follow_up_pressure.from_leads.has_pursued is true, bias narration toward continuing that pursued thread when it fits the player's action.",
+            "If follow_up_pressure.from_leads.has_stale is true, you may surface reminder, pressure, or unattended-thread beats that fit the scene—without inventing facts beyond lead_context.",
+            "If follow_up_pressure.from_leads.npc_has_relevant is true, you may let the active NPC exchange reflect relevance to those threads—within knowledge_scope and without inventing registry facts.",
+            "If follow_up_pressure.from_leads.has_escalated_threat is true, bias tension beats toward unattended threat rows in lead_context (escalation fields)—without inventing facts beyond those rows.",
+            "If follow_up_pressure.from_leads.has_newly_unlocked is true, you may acknowledge a thread becoming available or unblocked when it fits the scene—grounded in unlocked_by_lead_id / recent_lead_changes only.",
+            "If follow_up_pressure.from_leads.has_supersession_cleanup is true, avoid treating superseded obsoleted threads as primary pressure unless the player returns to them; prefer current non-terminal rows.",
+        ]
+        instructions = list(instructions) + lead_instr
 
     if social_authority and active_topic_anchor.get("active"):
         instructions = list(instructions) + [

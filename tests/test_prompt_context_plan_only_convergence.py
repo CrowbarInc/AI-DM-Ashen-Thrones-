@@ -181,3 +181,76 @@ def test_legacy_no_ctir_path_unaffected() -> None:
     pcc = (ctx.get("prompt_debug") or {}).get("planner_convergence_consumer") or {}
     assert pcc.get("ctir_present") is False
     assert pcc.get("seam_failure_codes") == []
+
+
+def _pressing_recent_log() -> list[dict]:
+    return [
+        {
+            "log_meta": {"player_input": "Look around."},
+            "gm_output": {
+                "player_facing_text": "You get a quick survey of the area, but nothing definitive stands out at a glance."
+            },
+        }
+    ]
+
+
+def test_verified_ctir_continuation_does_not_use_recent_log_pressure() -> None:
+    """Verified continuation must not derive progression/pressure from recent_log."""
+    session = dict(_minimal_kwargs()["session"])
+    _attach_observe_ctir(session)
+    kw = _minimal_kwargs(
+        session=session,
+        user_text="Look around again.",
+        recent_log_for_prompt=_pressing_recent_log(),
+        include_non_public_prompt_keys=True,
+    )
+    try:
+        ensure_narration_plan_bundle_for_manual_ctir_tests(session, kw)
+        ctx = build_narration_context(**kw)
+    finally:
+        detach_ctir(session)
+
+    assert ctx.get("narrative_plan") is not None
+    assert ctx.get("follow_up_pressure") is None
+    ins = "\n".join(ctx.get("instructions") or [])
+    assert "FOLLOW-UP ESCALATION RULE" not in ins
+    cdbg = (ctx.get("prompt_debug") or {}).get("continuation_packaging") or {}
+    assert cdbg.get("continuation_progression_source") == "narrative_plan_bundle"
+    assert cdbg.get("prompt_context_reconstructed_continuation") is False
+    assert cdbg.get("continuation_plan_projection_used") is True
+
+
+def test_ctir_missing_plan_does_not_trigger_recent_log_continuity_reconstruction() -> None:
+    """When CTIR is present but plan is missing, prompt_context must not 'patch' continuity from logs."""
+    session = dict(_minimal_kwargs()["session"])
+    _attach_observe_ctir(session)
+    kw = _minimal_kwargs(
+        session=session,
+        user_text="Look around again.",
+        recent_log_for_prompt=_pressing_recent_log(),
+        include_non_public_prompt_keys=True,
+    )
+    try:
+        ctx = build_narration_context(**kw)
+    finally:
+        detach_ctir(session)
+
+    assert ctx.get("narrative_plan") is None
+    assert ctx.get("follow_up_pressure") is None
+    ins = "\n".join(ctx.get("instructions") or [])
+    assert "FOLLOW-UP ESCALATION RULE" not in ins
+
+
+def test_legacy_no_ctir_path_still_uses_recent_log_follow_up_pressure() -> None:
+    """Non-CTIR paths may still use legacy recent_log-derived follow-up pressure."""
+    session = dict(_minimal_kwargs()["session"])
+    detach_ctir(session)
+    kw = _minimal_kwargs(
+        session=session,
+        user_text="Look around again.",
+        recent_log_for_prompt=_pressing_recent_log(),
+        include_non_public_prompt_keys=True,
+    )
+    ctx = build_narration_context(**kw)
+    fup = ctx.get("follow_up_pressure") or {}
+    assert fup.get("pressed") is True

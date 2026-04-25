@@ -115,6 +115,52 @@ def test_resolved_turn_success_seam_metadata(monkeypatch: pytest.MonkeyPatch) ->
     assert isinstance(session.get("_runtime_narration_plan_bundle_v1"), dict)
     bundle = session["_runtime_narration_plan_bundle_v1"]
     assert isinstance(bundle.get("narrative_plan"), dict)
+    cont = seam.get("continuation") or {}
+    assert isinstance(cont, dict)
+    assert cont.get("continuation_plan_verified") is True
+    assert cont.get("continuation_source") == "narrative_plan_bundle"
+    assert cont.get("continuation_enforcement_applied") is True
+
+
+def test_missing_plan_bundle_blocks_normal_continuation_narration(monkeypatch: pytest.MonkeyPatch) -> None:
+    gpt_calls: list[int] = []
+
+    def fake_call_gpt(_messages: list[dict[str, str]], **_kwargs: Any) -> dict[str, Any]:
+        gpt_calls.append(1)
+        return {"player_facing_text": "SHOULD_NOT_RUN", "tags": [], "debug_notes": "", "metadata": {}}
+
+    monkeypatch.setattr(api_mod, "call_gpt", fake_call_gpt)
+    monkeypatch.setattr(api_mod, "apply_response_policy_enforcement", lambda gm, **_k: gm)
+
+    def bad_bundle(*_a: Any, **_k: Any) -> dict[str, Any]:
+        return {
+            "plan_metadata": {
+                "ctir_stamp": "",
+                "narrative_plan_bundle_version": 1,
+                "narrative_plan_version": 0,
+                "narration_plan_bundle_error": "synthetic_missing_plan",
+                "semantic_bypass_blocked": True,
+                "planning_session_interaction": {},
+            },
+            "narrative_plan": None,
+            "renderer_inputs": {},
+        }
+
+    monkeypatch.setattr(api_mod, "build_narration_plan_bundle", bad_bundle)
+
+    kw = _narration_kw()
+    out = _build_gpt_narration_from_authoritative_state(**kw)
+    assert gpt_calls == []
+    seam = (out.get("metadata") or {}).get("narration_seam") or {}
+    assert seam.get("path_kind") == "resolved_turn_ctir_planner_convergence_seam"
+    cont = seam.get("continuation") or {}
+    assert isinstance(cont, dict)
+    assert cont.get("continuation_plan_verified") is False
+    assert cont.get("continuation_source") in ("emergency_nonplan", "unverified")
+    assert cont.get("continuation_plan_failure_reason")
+    pf = str(out.get("player_facing_text") or "").lower()
+    assert "nothing changes" not in pf
+    assert "scene holds" not in pf
 
 
 def test_bundle_requirement_negative_emits_semantic_bypass_blocked() -> None:
