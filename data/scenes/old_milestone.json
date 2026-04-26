@@ -5,15 +5,11 @@
     "summary": "The old road bends through blasted scrub and broken stones, where a weathered milestone leans above a ditch filled with black rainwater. Carrion birds stir when the wind shifts.",
     "mode": "exploration",
     "visible_facts": [
+      "The old road bends through blasted scrub and broken stones.",
+      "A weathered milestone leans above a ditch filled with black rainwater.",
       "A dead courier lies half-hidden in the ditch.",
-      "Fresh bootprints and claw marks cross the road.",
-      "The dead courier has belongings that include a satchel, a partially burnt letter, and a small dagger.",
-      "The dead courier's satchel is slightly ajar, hinting at the contents within.",
-      "The scavenger bandit positions himself strategically near the roadside, watching.",
-      "The scavenger bandit is positioned near the weathered milestone, observing Galinor with keen interest.",
-      "The scavenger bandit appears more relaxed, revealing a deep-seated confidence.",
-      "A partially burnt letter flutters in the breeze, its edges charred but some text is still legible.",
-      "Fresh bootprints and claw marks indicate a struggle took place recently."
+      "Carrion birds stir whenever the wind shifts.",
+      "A satchel, a partially burnt letter, and a small dagger lie near the courier."
     ],
     "discoverable_clues": [
       "The letter hints at treachery and warnings, but the details are hard to read.",
@@ -75,7 +71,13 @@
     ],
     "actions": [],
     "interactables": [],
-    "objects": []
+    "objects": [],
+    "opening_seed_facts": [
+      "The old road bends through blasted scrub and broken stones.",
+      "A weathered milestone leans above a ditch filled with black rainwater.",
+      "A dead courier lies half-hidden in the ditch.",
+      "Carrion birds stir whenever the wind shifts."
+    ]
   },
   "scene_state": {
     "active_scene_id": "old_milestone",
@@ -86,25 +88,7 @@
       "emergent_town_crier": "offscene"
     },
     "current_interlocutor": null,
-    "emergent_addressables": [
-      {
-        "id": "emergent_lord_aldric",
-        "name": "Lord Aldric",
-        "scene_id": "frontier_gate",
-        "address_roles": [
-          "lord"
-        ],
-        "aliases": [
-          "Lord Aldric",
-          "aldric",
-          "lord aldric"
-        ],
-        "kind": "scene_actor",
-        "addressable": true,
-        "address_priority": 40,
-        "emergent_source": "promoted_visible_figure"
-      }
-    ],
+    "emergent_addressables": [],
     "promoted_actor_npc_map": {}
   }
 }

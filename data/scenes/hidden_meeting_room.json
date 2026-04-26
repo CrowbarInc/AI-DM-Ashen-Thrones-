@@ -5,12 +5,15 @@
     "summary": "A dimly lit room behind the tavern, filled with the rich aroma of hidden secrets and whispered plans. The walls are draped in dark fabric, muffling sounds from the outside world. A small table is set with maps and old parchments, revealing a network of connections and potential dangers.",
     "mode": "exploration",
     "visible_facts": [
-      "Dimly lit with shadows lurking in the corners.",
-      "A small table holds maps detailing recent patrol activities.",
-      "The air is thick with tension and anticipation."
+      "Shadows gather in the corners of the dim back room.",
+      "A small table holds maps, old parchments, and guttering candle stubs.",
+      "Dark fabric draped along the walls muffles the tavern noise outside."
     ],
     "discoverable_clues": [
-      {"id": "patrol_route_learned", "text": "A map indicates the locations of recent disturbances linked to the missing patrol."},
+      {
+        "id": "patrol_route_learned",
+        "text": "A map indicates the locations of recent disturbances linked to the missing patrol."
+      },
       "Whispers hint at ancient dangers beneath the city."
     ],
     "hidden_facts": [
@@ -29,7 +32,9 @@
         "type": "investigate",
         "reveals_clue": "patrol_route_learned",
         "world_updates_on_discover": {
-          "set_flags": {"patrol_route_known": true}
+          "set_flags": {
+            "patrol_route_known": true
+          }
         }
       }
     ],
@@ -43,7 +48,9 @@
         "targetSceneId": "old_milestone",
         "prompt": "I follow the patrol route to the old trading crossroads.",
         "conditions": {
-          "requires_flags": ["patrol_route_known"]
+          "requires_flags": [
+            "patrol_route_known"
+          ]
         }
       },
       {
@@ -52,7 +59,9 @@
         "type": "interact",
         "prompt": "I ask the well-dressed woman about the maps on the table.",
         "conditions": {
-          "requires_flags": ["met_well_dressed_woman"]
+          "requires_flags": [
+            "met_well_dressed_woman"
+          ]
         }
       },
       {
@@ -62,9 +71,15 @@
         "type": "interact",
         "prompt": "I confront the well-dressed woman about what she knows.",
         "conditions": {
-          "requires_flags": ["met_well_dressed_woman"],
-          "requires_clues": ["watcher_identified"],
-          "excludes_flags": ["watcher_fled"]
+          "requires_flags": [
+            "met_well_dressed_woman"
+          ],
+          "requires_clues": [
+            "watcher_identified"
+          ],
+          "excludes_flags": [
+            "watcher_fled"
+          ]
         }
       },
       {
@@ -73,9 +88,16 @@
         "type": "observe",
         "prompt": "I carefully scan the surroundings for anything unusual.",
         "conditions": {
-          "excludes_clues": ["patrol_route_learned"]
+          "excludes_clues": [
+            "patrol_route_learned"
+          ]
         }
       }
+    ],
+    "opening_seed_facts": [
+      "Shadows gather in the corners of the dim back room.",
+      "A small table holds maps, old parchments, and guttering candle stubs.",
+      "Dark fabric draped along the walls muffles the tavern noise outside."
     ]
   }
 }

@@ -99,7 +99,6 @@ _BACKSTAGE_SELECTION_MARKERS = (
 
 _CATEGORY_RANK = {"A": 0, "E": 0, "B": 1, "C": 2, "D": 3}
 
-_OPENING_SEED_LIFECYCLES = frozenset({"opening_seed", "scene_seed"})
 _NON_OPENING_LIFECYCLES = frozenset({
     "runtime_observation",
     "discovered_clue",
@@ -177,6 +176,28 @@ def _fact_rows(raw: Any, *, source: str) -> List[Tuple[str, Dict[str, Any]]]:
         md = dict(metadata)
         md.setdefault("source", source)
         rows.append((text, md))
+    return rows
+
+
+def _campaign_spine_opening_rows(public_scene: Mapping[str, Any]) -> List[Tuple[str, Dict[str, Any]]]:
+    """Return explicit opening facts supplied by a campaign/scenario spine."""
+    sources: List[Any] = [
+        public_scene.get("campaign_spine_opening_facts"),
+        public_scene.get("spine_opening_facts"),
+    ]
+    for container_key in ("campaign_spine", "scenario_spine", "spine"):
+        container = public_scene.get(container_key)
+        if isinstance(container, Mapping):
+            sources.extend(
+                [
+                    container.get("opening_seed_facts"),
+                    container.get("opening_facts"),
+                    container.get("scene_opening_facts"),
+                ]
+            )
+    rows: List[Tuple[str, Dict[str, Any]]] = []
+    for raw in sources:
+        rows.extend(_fact_rows(raw, source="campaign_spine_opening_facts"))
     return rows
 
 
@@ -351,45 +372,24 @@ def _candidate_rows_from_public_scene(
 ) -> Tuple[List[Tuple[str, str]], Dict[str, Any]]:
     ps = public_scene if isinstance(public_scene, Mapping) else {}
     opening_rows = _fact_rows(ps.get("opening_seed_facts"), source="opening_seed_facts")
-    journal_rows = _fact_rows(ps.get("journal_seed_facts"), source="journal_seed_facts")
-    visible_rows = _fact_rows(ps.get("visible_facts"), source="visible_facts")
-    lifecycle_seed_rows = [
-        row
-        for row in visible_rows
-        if _metadata_lifecycle_values(row[1]) & _OPENING_SEED_LIFECYCLES
-    ]
+    spine_rows = _campaign_spine_opening_rows(ps)
 
     source_used = "none"
     eligibility_mode = "none"
     rows: List[Tuple[str, Dict[str, Any]]] = []
-    pre_rejected_by_lifecycle = 0
     if opening_rows:
         rows = opening_rows
         source_used = "opening_seed_facts"
         eligibility_mode = "explicit_source"
-    elif journal_rows:
-        rows = journal_rows
-        source_used = "journal_seed_facts"
+    elif spine_rows:
+        rows = spine_rows
+        source_used = "campaign_spine_opening_facts"
         eligibility_mode = "explicit_source"
-    elif lifecycle_seed_rows:
-        rows = lifecycle_seed_rows
-        source_used = "visible_facts_lifecycle_seed"
-        eligibility_mode = "explicit_lifecycle"
-        pre_rejected_by_lifecycle = sum(
-            1
-            for _text, metadata in visible_rows
-            if not (_metadata_lifecycle_values(metadata) & _OPENING_SEED_LIFECYCLES)
-            and bool(_metadata_lifecycle_values(metadata) & _NON_OPENING_LIFECYCLES)
-        )
-    elif visible_rows:
-        rows = visible_rows
-        source_used = "visible_facts"
-        eligibility_mode = "legacy_structural"
 
     base_md = dict(eligibility_metadata or {})
     seen_norm: Set[str] = set()
     pairs: List[Tuple[str, str]] = []
-    rejected_by_lifecycle = pre_rejected_by_lifecycle
+    rejected_by_lifecycle = 0
     rejected_by_form = 0
     for original, metadata in rows:
         md = {**base_md, **metadata}

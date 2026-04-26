@@ -26,7 +26,7 @@ def test_contract_prefers_sensory_scene_establishing_over_notice_dump_ordering()
         "id": "gate",
         "location": "Gate",
         "summary": "A gate.",
-        "visible_facts": [
+        "opening_seed_facts": [
             "A posted parchment lists tolls and curfews.",
             "Rain slicks soot-dark stone; banners hang limp above the arch.",
             "Crowds press toward the checkpoint.",
@@ -71,7 +71,7 @@ def test_premature_named_npc_blocked_when_not_grounded():
         "id": "p",
         "location": "Square",
         "summary": "Busy.",
-        "visible_facts": [
+        "opening_seed_facts": [
             "Lord Aldric indicates that the missing patrol could hold vital information.",
             "Rain slicks the cobbles.",
         ],
@@ -112,7 +112,7 @@ def test_opening_export_stable_ordering():
         "id": "s",
         "location": "L",
         "summary": "S.",
-        "visible_facts": [
+        "opening_seed_facts": [
             "Stone gate arches overhead.",
             "Crowds press toward the checkpoint.",
             "A merchant haggles with a guard.",
@@ -137,7 +137,7 @@ def test_existing_opening_visible_fact_selection_preserved_under_realization():
         "id": "tavern_yard",
         "location": "Yard",
         "summary": "Busy yard.",
-        "visible_facts": [
+        "opening_seed_facts": [
             "Stone walls enclose the muddy yard.",
             "A tavern runner waves you toward the side door.",
             "A posted notice warns of curfew at the inner gate.",
@@ -173,7 +173,7 @@ def test_opening_realization_rebalances_basis_from_canonical_pool():
         "id": "gate",
         "location": "Gate",
         "summary": "Gate.",
-        "visible_facts": [
+        "opening_seed_facts": [
             "Rain slicks soot-dark stone beneath the eastern gate.",
             "A guard calls for the next wagon in line.",
             "A notice board lists curfew warnings beside the arch.",
@@ -247,7 +247,7 @@ def test_briefing_role_phrases_drop_from_opening_basis():
         "id": "gate_x",
         "location": "Gate",
         "summary": "Approach.",
-        "visible_facts": [
+        "opening_seed_facts": [
             "Rain beads on soot-dark stone; refugees queue beside muddy wagon ruts.",
             "Guard Captain indicates the western tally changed at noon without banner notice.",
             "Tavern Runner shouts wagon-clearance prices over splintering crates.",
@@ -328,7 +328,7 @@ def test_prompt_context_wires_opening_payload():
         "id": "z",
         "location": "Z",
         "summary": "Z.",
-        "visible_facts": ["Stone walls enclose the muddy yard.", "Wind tugs at loose banners."],
+        "opening_seed_facts": ["Stone walls enclose the muddy yard.", "Wind tugs at loose banners."],
         "exits": [],
         "enemies": [],
     }
@@ -344,10 +344,12 @@ def test_prompt_context_opening_output_excludes_contaminated_scene_lines():
         "id": "contaminated_gate",
         "location": "Gate",
         "summary": "Gate.",
-        "visible_facts": [
+        "opening_seed_facts": [
             "Rain slicks soot-dark stone beneath the eastern gate.",
             "A guard calls for the next wagon in line.",
             "A notice board lists curfew warnings beside the arch.",
+        ],
+        "visible_facts": [
             "GM hint: the captain plans to arrest the player after sundown.",
             "Backstage: the hidden cult controls the west-road patrol.",
         ],

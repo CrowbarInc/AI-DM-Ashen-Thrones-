@@ -159,6 +159,14 @@ def default_scene(scene_id: str = 'frontier_gate'):
                     "A well-appointed townhouse overlooking the square flies noble colors—a quiet contrast to the mud and clamor.",
                     "One figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue.",
                 ],
+                "opening_seed_facts": [
+                    "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate.",
+                    "Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in.",
+                    "A notice board lists new taxes, curfews, and a posted warning about a missing patrol.",
+                    "A tavern runner shouts offers of hot stew and paid rumor.",
+                    "A well-appointed townhouse overlooking the square flies noble colors—a quiet contrast to the mud and clamor.",
+                    "One figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue.",
+                ],
                 "journal_seed_facts": [
                     "Cold rain needles Cinderwatch's eastern gate under frayed banners.",
                     "The approach is jammed with refugees, wagons, and travelers; guards watch with hard, tired discipline.",
@@ -240,6 +248,7 @@ def default_scene(scene_id: str = 'frontier_gate'):
                 "summary": "Canvases snap in the wind over a market built from salvage timber and old stone. Mercenaries, pilgrims, smugglers, and hungry townsfolk bargain under armed watch.",
                 "mode": "exploration",
                 "visible_facts": ["A moneylender's house flies noble colors.", "Rumors of an abandoned fortress circulate among caravan guards."],
+                "opening_seed_facts": ["A moneylender's house flies noble colors.", "Canvases snap in the wind over the market stalls."],
                 "discoverable_clues": [],
                 "hidden_facts": ["The Ash Cowl taxes black-market arcane goods here."],
                 "exits": [

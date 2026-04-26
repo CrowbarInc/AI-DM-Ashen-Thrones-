@@ -1,7 +1,7 @@
 {
   "persistence_version": 1,
   "kind": "session",
-  "saved_at": "2026-04-26T01:38:03.498532Z",
+  "saved_at": "2026-04-26T01:39:45.958230Z",
   "payload": {
     "active_scene_id": "frontier_gate",
     "visited_scene_ids": [
@@ -500,23 +500,11 @@
       },
       "frontier_gate": {
         "scene_id": "frontier_gate",
-        "visible_facts_add": [
-          "rain spatters soot-dark stone; frayed banners hang above cinderwatch's eastern gate",
-          "a hooded figure is lingering near the gate, drawing the attention of guards who exchange wary glances",
-          "a well-dressed figure near the gate scans the crowd, particularly focused on newcomers",
-          "the muddy surroundings near the dead drop are marked by remnants of recent activity; footprints suggest hurried movements",
-          "a tavern runner's expression reflects an anxious urgency",
-          "several patrons express anxiety, casting glances at a well-dressed observer near the gate",
-          "a faint trail leads from the crowd toward a dark thicket of crates, marked by disturbed earth"
-        ],
+        "visible_facts_add": [],
         "discovered_clues": [],
         "state_flags": {},
         "runtime_entities": [],
-        "mutations": {
-          "discoverable_clues_add": [],
-          "hidden_facts_add": [],
-          "mode": "exploration"
-        }
+        "mutations": {}
       },
       "lane_scene": {
         "scene_id": "lane_scene",
@@ -539,7 +527,7 @@
         "last_exploration_action_key": "campaign_start_opening_scene",
         "repeated_action_count": 1,
         "last_resolution_kind": "scene_opening",
-        "last_description_hash": "8493d7e9fd29800ff516aa34085e7881",
+        "last_description_hash": "6028abbb24532a7a531531ef52a492cd",
         "consumed_action_ids": [],
         "momentum_exchanges_since": 0,
         "momentum_next_due_in": 3,
@@ -558,19 +546,39 @@
         "last_player_action_passive": false,
         "recent_contextual_leads": [
           {
-            "key": "active_event_hooded_figure_near_the_entrance_drawing_wary_glances_from_the_guards_maintaining_a_brittle_watch_over_the_muddy_masses_of_refugees_wagons",
+            "key": "active_event_muddy_square_throngs_with_refugees_and_wagon_traffic_jostling_against_the_watchful_guards_who_hold_the_choke_point_with_brittle_discipline",
             "kind": "active_event",
+            "subject": "muddy square throngs with refugees and wagon traffic, jostling against the watchful guards who hold the choke point with brittle discipline",
+            "position": "",
+            "named": false,
+            "positioned": false,
+            "mentions": 1,
+            "last_turn": 1
+          },
+          {
+            "key": "visible_suspicious_figure_hooded_figure_near_the_gate_drawing_wary_glances_from_the_soldiers",
+            "kind": "visible_suspicious_figure",
             "subject": "hooded figure",
-            "position": "near the entrance, drawing wary glances from the guards maintaining a brittle watch over the muddy masses of refugees, wagons",
+            "position": "near the gate, drawing wary glances from the soldiers",
             "named": false,
             "positioned": true,
             "mentions": 1,
             "last_turn": 1
           },
           {
-            "key": "active_event_tavern_runner_calls_out_with_anxious_urgency_offering_warm_stew_and_murmuring_rumors_about_a_missing_patrol",
+            "key": "active_event_among_the_bustle_a_tavern_runner_shouts_offers_of_hot_stew_her_face_marked_by_anxious_urgency",
             "kind": "active_event",
-            "subject": "tavern runner calls out with anxious urgency, offering warm stew and murmuring rumors about a missing patrol",
+            "subject": "among the bustle, a tavern runner shouts offers of hot stew, her face marked",
+            "position": "by anxious urgency",
+            "named": false,
+            "positioned": true,
+            "mentions": 1,
+            "last_turn": 1
+          },
+          {
+            "key": "notice_board_notice_board",
+            "kind": "notice_board",
+            "subject": "notice board",
             "position": "",
             "named": false,
             "positioned": false,
@@ -583,16 +591,6 @@
             "subject": "Tavern Runner",
             "position": "",
             "named": true,
-            "positioned": false,
-            "mentions": 1,
-            "last_turn": 1
-          },
-          {
-            "key": "active_event_missing_patrol_rumor",
-            "kind": "active_event",
-            "subject": "missing patrol rumor",
-            "position": "",
-            "named": false,
             "positioned": false,
             "mentions": 1,
             "last_turn": 1
@@ -693,9 +691,9 @@
           "owner_module": "game.api",
           "path_label": "scene_opening",
           "ctir_present": true,
-          "ctir_stamp": "1:1b42afb9580:0",
+          "ctir_stamp": "1:1b42b0f3740:0",
           "narrative_plan_present": true,
-          "narrative_plan_stamp": "1:1b42afb9580:0",
+          "narrative_plan_stamp": "1:1b42b0f3740:0",
           "stamp_matches": true,
           "prompt_consumes_plan": false,
           "raw_state_prompt_bypass_detected": false,
@@ -714,9 +712,9 @@
           "owner_module": "game.api",
           "path_label": "scene_opening",
           "ctir_present": true,
-          "ctir_stamp": "1:1b42afb9580:0",
+          "ctir_stamp": "1:1b42b0f3740:0",
           "narrative_plan_present": true,
-          "narrative_plan_stamp": "1:1b42afb9580:0",
+          "narrative_plan_stamp": "1:1b42b0f3740:0",
           "stamp_matches": true,
           "prompt_consumes_plan": true,
           "raw_state_prompt_bypass_detected": false,
@@ -732,7 +730,7 @@
         "changed_area": "scene_state.active_entities"
       },
       {
-        "timestamp": "2026-04-26T01:37:55.314973Z",
+        "timestamp": "2026-04-26T01:39:38.778744Z",
         "source": "start_campaign",
         "action_type": "start_campaign",
         "raw_input": "",
@@ -1329,12 +1327,12 @@
           "latency_ms": {
             "intent_classification": 0,
             "engine_resolution": 0,
-            "prompt_construction": 71,
-            "gpt_call": 7981,
+            "prompt_construction": 60,
+            "gpt_call": 6999,
             "retry_loop_total": 0,
-            "final_emission_gate": 19,
-            "fallback_repair": 1,
-            "total_turn": 8162
+            "final_emission_gate": 12,
+            "fallback_repair": 0,
+            "total_turn": 7158
           }
         },
         "gpt_called": true,
@@ -1368,21 +1366,21 @@
         "latency_ms": {
           "intent_classification": 0,
           "engine_resolution": 0,
-          "prompt_construction": 71,
-          "gpt_call": 7981,
+          "prompt_construction": 60,
+          "gpt_call": 6999,
           "retry_loop_total": 0,
-          "final_emission_gate": 19,
-          "fallback_repair": 1,
-          "total_turn": 8162
+          "final_emission_gate": 12,
+          "fallback_repair": 0,
+          "total_turn": 7158
         }
       }
     ],
     "flags": {},
     "character_name": "Galinor",
-    "campaign_run_id": "70b9d80b2efbd104c128ebad",
-    "session_id": "70b9d80b2efbd104c128ebad",
+    "campaign_run_id": "f45613b36f264bea54e440aa",
+    "session_id": "f45613b36f264bea54e440aa",
     "campaign_started": true,
-    "last_saved_at": "2026-04-26T01:38:03.498532Z",
+    "last_saved_at": "2026-04-26T01:39:45.958230Z",
     "_runtime_canonical_ctir_v1": {
       "version": 1,
       "turn_id": 1,
@@ -1511,10 +1509,10 @@
         "normalization_notes": []
       }
     },
-    "_runtime_canonical_ctir_stamp_v1": "1:1b42afb9580:0",
+    "_runtime_canonical_ctir_stamp_v1": "1:1b42b0f3740:0",
     "_runtime_narration_plan_bundle_v1": {
       "plan_metadata": {
-        "ctir_stamp": "1:1b42afb9580:0",
+        "ctir_stamp": "1:1b42b0f3740:0",
         "narrative_plan_bundle_version": 1,
         "narrative_plan_version": 1,
         "narration_plan_bundle_error": null,
@@ -2855,7 +2853,7 @@
         }
       }
     },
-    "_runtime_narration_plan_bundle_stamp_v1": "1:1b42afb9580:0",
+    "_runtime_narration_plan_bundle_stamp_v1": "1:1b42b0f3740:0",
     "last_turn_response_policy": {
       "rule_priority_order": [
         "ANSWER THE PLAYER",
@@ -4104,7 +4102,7 @@
     }
   },
   "integrity": {
-    "payload_sha256": "44bb928448c1f796e0265325fa13737ffdc0cdf8b6a761cb209bfe55b2994334",
+    "payload_sha256": "5b40afc461ef288a1ff872188d8e94ea9191137db4c950739e1d5b6a5cde71c2",
     "canonicalization": "json/sort_keys,separators",
     "hash": "sha256"
   }

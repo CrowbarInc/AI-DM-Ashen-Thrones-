@@ -60,7 +60,7 @@ def test_opening_selection_respects_budget():
         "id": "frontier_gate",
         "location": "Gate",
         "summary": "Gate scene.",
-        "visible_facts": facts,
+        "opening_seed_facts": facts,
         "exits": [],
         "enemies": [],
     }
@@ -76,7 +76,7 @@ def test_opening_selection_collapses_patrol_duplicates():
         "id": "test",
         "location": "Road",
         "summary": "Road.",
-        "visible_facts": [
+        "opening_seed_facts": [
             "The last patrol has not returned from the north road.",
             "Rumors say the night patrol is missing.",
             "Mud slicks the checkpoint stones.",
@@ -95,7 +95,7 @@ def test_opening_selection_keeps_social_and_actionable_when_present():
         "id": "tavern_yard",
         "location": "Yard",
         "summary": "Busy yard.",
-        "visible_facts": [
+        "opening_seed_facts": [
             "Stone walls enclose the muddy yard.",
             "A tavern runner waves you toward the side door.",
             "A posted notice warns of curfew at the inner gate.",
@@ -119,7 +119,7 @@ def test_opening_selection_scores_activity_before_static_same_category():
         "id": "gate",
         "location": "Gate",
         "summary": "Gate.",
-        "visible_facts": [
+        "opening_seed_facts": [
             "Stone walls enclose the muddy gate.",
             "Banners hang over the gate arch.",
             "Guards scan faces at the checkpoint line.",
@@ -139,7 +139,7 @@ def test_opening_selection_composes_environment_social_and_affordance():
         "id": "gate",
         "location": "Gate",
         "summary": "Gate.",
-        "visible_facts": [
+        "opening_seed_facts": [
             "Rain slicks soot-dark stone beneath the eastern gate.",
             "A guard calls for the next wagon in line.",
             "A notice board lists curfew warnings beside the arch.",
@@ -162,7 +162,7 @@ def test_opening_selection_stable_ordering():
         "id": "s",
         "location": "L",
         "summary": "S.",
-        "visible_facts": [
+        "opening_seed_facts": [
             "Stone gate arches overhead.",
             "Crowds press toward the checkpoint.",
             "A merchant haggles with a guard.",
@@ -197,7 +197,7 @@ def test_short_list_unchanged():
         "exits": [],
         "enemies": [],
     }
-    assert select_opening_narration_visible_facts(public) == ["Only one fact at the gate."]
+    assert select_opening_narration_visible_facts(public) == []
 
 
 def test_opening_seed_facts_beat_visible_facts():
@@ -224,7 +224,7 @@ def test_opening_seed_facts_beat_visible_facts():
     assert telemetry["opening_fact_eligibility_mode"] == "explicit_source"
 
 
-def test_journal_seed_facts_beat_visible_facts_when_no_opening_seed():
+def test_journal_seed_facts_are_not_opening_fallback():
     public = {
         "id": "journal",
         "location": "Square",
@@ -237,11 +237,11 @@ def test_journal_seed_facts_beat_visible_facts_when_no_opening_seed():
 
     out, telemetry = select_opening_narration_visible_facts_with_telemetry(public)
 
-    assert out == ["Wind tugs at loose banners above the square."]
-    assert telemetry["opening_fact_source_used"] == "journal_seed_facts"
+    assert out == []
+    assert telemetry["opening_fact_source_used"] == "none"
 
 
-def test_lifecycle_metadata_rejects_non_opening_facts():
+def test_visible_facts_lifecycle_metadata_is_not_opening_fallback():
     public = {
         "id": "lifecycle",
         "location": "Gate",
@@ -257,9 +257,9 @@ def test_lifecycle_metadata_rejects_non_opening_facts():
 
     out, telemetry = select_opening_narration_visible_facts_with_telemetry(public)
 
-    assert out == ["Rain slicks the gate stones."]
-    assert telemetry["opening_fact_source_used"] == "visible_facts_lifecycle_seed"
-    assert telemetry["opening_fact_rejected_by_lifecycle_count"] == 2
+    assert out == []
+    assert telemetry["opening_fact_source_used"] == "none"
+    assert telemetry["opening_fact_rejected_by_lifecycle_count"] == 0
     assert not is_opening_eligible_fact("The clue names a culprit.", {"lifecycle": "discovered_clue"})
     assert not is_opening_eligible_fact("The player remembers a private warning.", {"lifecycle": "pc_specific"})
 
@@ -280,12 +280,12 @@ def test_investigation_result_phrasing_rejected_by_form():
 
     out, telemetry = select_opening_narration_visible_facts_with_telemetry(public)
 
-    assert out == ["Rain slicks the cobbles."]
-    assert telemetry["opening_fact_eligibility_mode"] == "legacy_structural"
-    assert telemetry["opening_fact_rejected_by_form_count"] == 2
+    assert out == []
+    assert telemetry["opening_fact_eligibility_mode"] == "none"
+    assert telemetry["opening_fact_rejected_by_form_count"] == 0
 
 
-def test_legacy_visible_facts_still_work_for_clean_seed_style_observations():
+def test_legacy_visible_facts_do_not_feed_openings():
     public = {
         "id": "legacy",
         "location": "Gate",
@@ -301,10 +301,35 @@ def test_legacy_visible_facts_still_work_for_clean_seed_style_observations():
 
     out, telemetry = select_opening_narration_visible_facts_with_telemetry(public)
 
-    assert len(out) == 3
-    assert telemetry["opening_fact_source_used"] == "visible_facts"
-    assert telemetry["opening_fact_eligibility_mode"] == "legacy_structural"
+    assert out == []
+    assert telemetry["opening_fact_source_used"] == "none"
+    assert telemetry["opening_fact_eligibility_mode"] == "none"
     assert telemetry["opening_fact_rejected_by_form_count"] == 0
+
+
+def test_campaign_spine_opening_facts_are_allowed_without_opening_seed():
+    public = {
+        "id": "spine",
+        "location": "Gate",
+        "summary": "Gate.",
+        "campaign_spine": {
+            "opening_facts": [
+                "Rain slicks soot-dark stone beneath the eastern gate.",
+                "A guard calls for the next wagon in line.",
+            ]
+        },
+        "visible_facts": ["Upon closer inspection, hidden tracks reveal a smuggler route."],
+        "exits": [],
+        "enemies": [],
+    }
+
+    out, telemetry = select_opening_narration_visible_facts_with_telemetry(public)
+
+    assert set(out) == {
+        "Rain slicks soot-dark stone beneath the eastern gate.",
+        "A guard calls for the next wagon in line.",
+    }
+    assert telemetry["opening_fact_source_used"] == "campaign_spine_opening_facts"
 
 
 def test_player_specific_name_rejection_uses_context_not_entity_blacklist():
