@@ -185,6 +185,10 @@ def test_start_campaign_emits_opening_and_sets_started(tmp_path: Path, monkeypat
     assert emission_debug.get("pre_gate_text_len", 0) > 800
     assert emission_debug.get("post_final_emission_gate_text_len", 0) > 800
     assert emission_debug.get("post_narration_state_consistency_text_len", 0) > 800
+    assert emission_debug.get("scene_opening_candidate_len", 0) > 800
+    assert emission_debug.get("scene_opening_emitted_len", 0) > 800
+    assert emission_debug.get("scene_opening_candidate_emitted_match") is True
+    assert emission_debug.get("scene_opening_accepted_candidate_promoted") is True
     assert emission_debug.get("narration_state_consistency_changed_text") is False
     assert emission_debug.get("narration_state_consistency_before_preview")
     assert emission_debug.get("narration_state_consistency_after_preview")
@@ -286,10 +290,15 @@ def test_start_campaign_promotes_valid_upstream_prepared_scene_opening(
     assert response_text != SHORT_OPENING_WITH_RICH_UPSTREAM_PREPARED_RESPONSE["player_facing_text"]
     assert "Somewhere ahead, a guard captain's voice cuts through the mutter of the crowd" in response_text
     assert len(response_text) > 800
+    assert len(log_text) > 800
     assert emission_debug.get("opening_upstream_prepared_present") is True
     assert emission_debug.get("opening_upstream_prepared_len", 0) > 800
     assert emission_debug.get("opening_upstream_prepared_promoted") is True
     assert emission_debug.get("opening_raw_text_source") == "upstream_prepared_emission"
+    assert emission_debug.get("scene_opening_candidate_len", 0) > 800
+    assert emission_debug.get("scene_opening_emitted_len", 0) > 800
+    assert emission_debug.get("scene_opening_candidate_emitted_match") is True
+    assert emission_debug.get("scene_opening_accepted_candidate_promoted") is True
 
 
 def test_start_campaign_frontier_gate_uses_journal_seed_facts_when_opening_seed_absent(

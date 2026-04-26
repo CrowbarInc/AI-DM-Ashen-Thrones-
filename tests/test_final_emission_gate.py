@@ -3050,6 +3050,61 @@ def test_valid_scene_opening_skips_deterministic_fallback():
     }
 
 
+def _rich_scene_opening_candidate() -> str:
+    return (
+        "Rain spatters soot-dark stone across Cinderwatch's eastern gate while frayed banners snap "
+        "above the muddy approach. You stand in the churned mud before the gate as refugees press "
+        "shoulder to shoulder around the wagon line and guards hold the choke under shouted orders. "
+        "A tavern runner weaves through the crush, calling offers of hot stew and paid rumor as the "
+        "notice board waits beside the arch. The queue inches forward in fits, wagon wheels grinding "
+        "through black ruts while wet canvas slaps against overloaded carts and the smell of damp wool, "
+        "smoke, and sour road dust clings to everyone close enough to breathe on you. Somewhere ahead, "
+        "a guard captain's voice cuts through the mutter of the crowd, sharp enough to make shoulders "
+        "hunch and conversations die for a heartbeat before the pressure of bodies closes in again. "
+        "You can read the notice board, press the guards, approach the tavern runner, or watch the "
+        "silent figure in the crush."
+    )
+
+
+def test_scene_opening_accepted_candidate_promotes_over_short_stale_player_text(monkeypatch):
+    short = "You stand at Cinderwatch's eastern gate in the rain. Guards hold the choke."
+    rich = _rich_scene_opening_candidate()
+    orig_enforce = feg._enforce_response_type_contract
+
+    def _select_rich_candidate(candidate_text, **kwargs):
+        assert candidate_text == short
+        return orig_enforce(rich, **kwargs)
+
+    def _late_stale_rewrite(out, *, text, **kwargs):
+        return short, [], False
+
+    monkeypatch.setattr(feg, "_enforce_response_type_contract", _select_rich_candidate)
+    monkeypatch.setattr(feg, "_apply_interaction_continuity_emission_step", _late_stale_rewrite)
+
+    gm_output = _opening_gm_output()
+    gm_output["player_facing_text"] = short
+    gm_output["tags"] = []
+    out = apply_final_emission_gate(
+        gm_output,
+        resolution={"kind": "scene_opening", "prompt": "Start the campaign."},
+        session={},
+        scene_id="frontier_gate",
+        world={},
+    )
+    emitted = str(out.get("player_facing_text") or "")
+    emission_debug = ((out.get("metadata") or {}).get("emission_debug") or {})
+    fem = read_final_emission_meta_dict(out) or {}
+
+    assert emitted == rich
+    assert emitted != short
+    assert emission_debug.get("scene_opening_candidate_len") == len(rich)
+    assert emission_debug.get("scene_opening_emitted_len") == len(rich)
+    assert emission_debug.get("scene_opening_candidate_emitted_match") is True
+    assert emission_debug.get("scene_opening_accepted_candidate_promoted") is True
+    assert emission_debug.get("response_type_candidate_preview") == emission_debug.get("response_type_emitted_preview")
+    assert fem.get("response_type_candidate_preview") == fem.get("response_type_emitted_preview")
+
+
 def test_empty_scene_opening_uses_deterministic_fallback():
     text, dbg = feg._enforce_response_type_contract(
         "",

@@ -4022,6 +4022,8 @@ def _enforce_response_type_contract(
         )
     elif required == "scene_opening":
         validator_ok, validator_reasons = candidate_satisfies_scene_opening_contract(current)
+        debug["scene_opening_candidate_contract_passed"] = bool(validator_ok)
+        debug["scene_opening_candidate_len"] = len(current)
     reasons.extend(validator_reasons)
 
     opening_context: Dict[str, Any] = {}
@@ -4039,6 +4041,8 @@ def _enforce_response_type_contract(
             debug["opening_fallback_skipped"] = True
             debug["final_emission_boundary_repair_used"] = False
             debug["final_emission_boundary_semantic_repair_disabled"] = True
+            if required == "scene_opening" and validator_ok:
+                debug["scene_opening_accepted_candidate_promoted"] = True
             return current, debug
         reasons.extend(opening_failures)
 
@@ -4075,6 +4079,8 @@ def _enforce_response_type_contract(
             debug["response_type_rejection_reasons"] = list(dict.fromkeys(str(r) for r in reasons if r))
             debug["final_emission_boundary_repair_used"] = False
             debug["final_emission_boundary_semantic_repair_disabled"] = True
+            if required == "scene_opening" and validator_ok:
+                debug["scene_opening_accepted_candidate_promoted"] = True
             return current, debug
 
         # Otherwise, use an opening-specific seed fallback (no invented facts; includes action vectors).
@@ -4763,6 +4769,7 @@ def _finalize_emission_output(
     pre_gate_text: str,
     fast_path: bool = False,
     scene_emit_integrity_bundle: Dict[str, Any] | None = None,
+    accepted_scene_opening_text: str | None = None,
 ) -> Dict[str, Any]:
     if isinstance(out, dict):
         record_stage_snapshot(out, "final_emission_gate_exit")
@@ -4839,6 +4846,11 @@ def _finalize_emission_output(
                 "final_text_preview": (gate_norm_final[:120] + "…") if len(gate_norm_final) > 120 else gate_norm_final,
             },
         )
+    _reassert_scene_opening_accepted_candidate(
+        out,
+        accepted_scene_opening_text=accepted_scene_opening_text,
+        source="gate._finalize_emission_output.scene_opening_candidate_reseal",
+    )
     package_dead_turn_snapshot_into_final_emission_meta(out)
     debug_lane = project_debug_payload(out)
     author_lane = project_author_payload(out)
@@ -9107,6 +9119,63 @@ def _narrative_mode_output_legality_assessment(
     return _pack(validation=v, contract_for_trace=shipped, skip_reason=None)
 
 
+def _scene_opening_debug_preview(text: str, *, limit: int = 120) -> str:
+    clean = _normalize_text(text)
+    return (clean[:limit] + "…") if len(clean) > limit else clean
+
+
+def _patch_scene_opening_candidate_emission_debug(
+    out: Dict[str, Any],
+    *,
+    accepted_scene_opening_text: str | None,
+) -> None:
+    if not isinstance(out, dict):
+        return
+    md = out.setdefault("metadata", {})
+    if not isinstance(md, dict):
+        md = {}
+        out["metadata"] = md
+    em = md.setdefault("emission_debug", {})
+    if not isinstance(em, dict):
+        em = {}
+        md["emission_debug"] = em
+    accepted = _normalize_text(accepted_scene_opening_text or "")
+    emitted = _normalize_text(out.get("player_facing_text") or "")
+    em["scene_opening_candidate_len"] = len(accepted)
+    em["scene_opening_emitted_len"] = len(emitted)
+    em["scene_opening_candidate_emitted_match"] = bool(accepted) and emitted == accepted
+    em["scene_opening_accepted_candidate_promoted"] = bool(accepted) and emitted == accepted
+    em["response_type_candidate_preview"] = _scene_opening_debug_preview(accepted)
+    em["response_type_emitted_preview"] = _scene_opening_debug_preview(emitted)
+
+    fem = out.get(FINAL_EMISSION_META_KEY)
+    if isinstance(fem, dict):
+        fem["response_type_candidate_preview"] = em["response_type_candidate_preview"]
+        fem["response_type_emitted_preview"] = em["response_type_emitted_preview"]
+
+
+def _reassert_scene_opening_accepted_candidate(
+    out: Dict[str, Any],
+    *,
+    accepted_scene_opening_text: str | None,
+    source: str,
+) -> None:
+    accepted = _normalize_text(accepted_scene_opening_text or "")
+    if not accepted:
+        return
+    if _normalize_text(out.get("player_facing_text") or "") != accepted:
+        assert_final_emission_mutation_allowed(
+            "normalize_whitespace",
+            source=source,
+        )
+        out["player_facing_text"] = accepted
+    _patch_scene_opening_candidate_emission_debug(
+        out,
+        accepted_scene_opening_text=accepted,
+    )
+    assert _normalize_text(out.get("player_facing_text") or "") == accepted
+
+
 # --- Main entry: wires extracted validators/repairs + remaining in-module policy layers ---
 # Deterministic post-generation ordering (non–strict-social trunk): response_type → answer_completeness →
 # response_delta → social_response_structure → narrative_authenticity → tone → narrative_authority →
@@ -9255,6 +9324,7 @@ def apply_final_emission_gate(
     dialogue_plan_trace: Dict[str, Any] = {}
     nmo_fem_trace_override: Dict[str, Any] | None = None
     dialogue_plan_blocked = False
+    accepted_scene_opening_text: str | None = None
 
     strict_social_active = bool(strict_social_turn)
     coercion_used = (
@@ -10074,6 +10144,19 @@ def apply_final_emission_gate(
         strict_social_suppressed_non_social_turn=strict_social_suppressed_non_social_turn,
         active_interlocutor=active_interlocutor,
     )
+    if (
+        str(response_type_debug.get("response_type_required") or "").strip().lower() == "scene_opening"
+        and response_type_debug.get("response_type_candidate_ok") is True
+        and response_type_debug.get("response_type_repair_used") is False
+        and response_type_debug.get("scene_opening_candidate_contract_passed") is True
+    ):
+        accepted_scene_opening_text = _normalize_text(text)
+        out["player_facing_text"] = accepted_scene_opening_text
+        response_type_debug["scene_opening_accepted_candidate_promoted"] = True
+        _patch_scene_opening_candidate_emission_debug(
+            out,
+            accepted_scene_opening_text=accepted_scene_opening_text,
+        )
     scene_emit_integrity_bundle = _compute_scene_emit_integrity_assessment(
         authoritative_resolution=resolution if isinstance(resolution, dict) else None,
         session=session if isinstance(session, dict) else None,
@@ -10517,12 +10600,18 @@ def apply_final_emission_gate(
             world=world if isinstance(world, dict) else None,
             response_type_debug=response_type_debug,
         )
+        _reassert_scene_opening_accepted_candidate(
+            out,
+            accepted_scene_opening_text=accepted_scene_opening_text,
+            source="gate.apply_final_emission_gate.scene_opening_accept_return",
+        )
         log_final_emission_trace({**out[FINAL_EMISSION_META_KEY], "stage": "final_emission_gate_accept"})
         return _finalize_emission_output(
             out,
             pre_gate_text=pre_gate_text,
             fast_path=_final_emission_fast_path_eligible(out),
             scene_emit_integrity_bundle=scene_emit_integrity_bundle,
+            accepted_scene_opening_text=accepted_scene_opening_text,
         )
 
     # Non-social replace path only (strict-social replacement is handled in build_final_strict_social_response).
