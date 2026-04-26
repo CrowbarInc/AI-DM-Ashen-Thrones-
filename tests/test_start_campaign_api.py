@@ -40,6 +40,17 @@ RICH_OPENING_GPT_RESPONSE = {
     ),
 }
 
+SHORT_OPENING_WITH_RICH_UPSTREAM_PREPARED_RESPONSE = {
+    **FAKE_GPT_RESPONSE,
+    "player_facing_text": (
+        "You stand at Cinderwatch's eastern gate in the rain. Refugees crowd the wagon line "
+        "while guards hold the choke."
+    ),
+    "upstream_prepared_emission": {
+        "prepared_scene_opening_text": RICH_OPENING_GPT_RESPONSE["player_facing_text"],
+    },
+}
+
 
 def _patch_data_dir(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     base = tmp_path
@@ -245,6 +256,40 @@ def test_start_campaign_scene_opening_reconcile_cannot_shorten_rich_post_gate_te
     assert emission_debug.get("post_final_emission_gate_text_len", 0) > 800
     assert emission_debug.get("post_narration_state_consistency_text_len", 0) > 800
     assert emission_debug.get("narration_state_consistency_changed_text") is False
+
+
+def test_start_campaign_promotes_valid_upstream_prepared_scene_opening(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    _patch_data_dir(tmp_path, monkeypatch)
+    monkeypatch.setattr(api_mod, "log_upstream_api_preflight_at_startup", lambda: None)
+    monkeypatch.setattr(
+        "game.api.call_gpt",
+        lambda *_a, **_k: dict(SHORT_OPENING_WITH_RICH_UPSTREAM_PREPARED_RESPONSE),
+    )
+
+    with TestClient(app) as client:
+        assert client.post("/api/new_campaign").status_code == 200
+        sc = client.post("/api/start_campaign")
+        assert sc.status_code == 200
+        data = sc.json()
+        log_reload_entries = client.get("/api/log").json().get("entries") or []
+
+    response_text = str(data.get("gm_output", {}).get("player_facing_text") or "")
+    gm_output = load_log()[0].get("gm_output") or {}
+    log_text = str(gm_output.get("player_facing_text") or "")
+    reload_text = str((log_reload_entries[0].get("gm_output") or {}).get("player_facing_text") or "")
+    emission_debug = (gm_output.get("metadata") or {}).get("emission_debug") or {}
+
+    assert response_text == log_text == reload_text
+    assert response_text in RICH_OPENING_GPT_RESPONSE["player_facing_text"]
+    assert response_text != SHORT_OPENING_WITH_RICH_UPSTREAM_PREPARED_RESPONSE["player_facing_text"]
+    assert "Somewhere ahead, a guard captain's voice cuts through the mutter of the crowd" in response_text
+    assert len(response_text) > 800
+    assert emission_debug.get("opening_upstream_prepared_present") is True
+    assert emission_debug.get("opening_upstream_prepared_len", 0) > 800
+    assert emission_debug.get("opening_upstream_prepared_promoted") is True
+    assert emission_debug.get("opening_raw_text_source") == "upstream_prepared_emission"
 
 
 def test_start_campaign_frontier_gate_uses_journal_seed_facts_when_opening_seed_absent(

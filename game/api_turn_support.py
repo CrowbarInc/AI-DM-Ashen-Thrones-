@@ -213,6 +213,30 @@ def _finalize_player_facing_for_turn(
             metadata["emission_debug"] = debug
         return debug
 
+    def _upstream_prepared_text_candidate(prepared: object) -> str:
+        if isinstance(prepared, str):
+            return prepared.strip()
+        if not isinstance(prepared, dict):
+            return ""
+        for key in (
+            "player_facing_text",
+            "prepared_player_facing_text",
+            "prepared_scene_opening_text",
+            "scene_opening_text",
+            "final_text",
+            "text",
+        ):
+            value = prepared.get(key)
+            if isinstance(value, str) and value.strip():
+                return value.strip()
+        for key in ("gm_output", "emission", "candidate"):
+            nested = prepared.get(key)
+            if isinstance(nested, dict):
+                value = nested.get("player_facing_text")
+                if isinstance(value, str) and value.strip():
+                    return value.strip()
+        return ""
+
     if not isinstance(gm, dict):
         return gm, {
             "narration_state_mismatch_detected": False,
@@ -260,6 +284,28 @@ def _finalize_player_facing_for_turn(
         world=world,
         scene_id=scene_id,
     )
+    raw_text_source = "gm_player_facing_text"
+    is_scene_opening = (
+        isinstance(resolution, dict)
+        and str(resolution.get("kind") or "").strip().lower() == "scene_opening"
+    )
+    upstream_prepared = gm_out.get("upstream_prepared_emission")
+    upstream_candidate = _upstream_prepared_text_candidate(upstream_prepared)
+    upstream_candidate_ok = False
+    if is_scene_opening and upstream_candidate:
+        upstream_candidate_ok, _upstream_candidate_reasons = candidate_satisfies_scene_opening_contract(
+            upstream_candidate
+        )
+        if upstream_candidate_ok:
+            raw_text = upstream_candidate
+            raw_text_source = "upstream_prepared_emission"
+    debug = _emission_debug(gm_out)
+    debug["opening_upstream_prepared_present"] = bool(upstream_candidate)
+    debug["opening_upstream_prepared_len"] = len(upstream_candidate)
+    debug["opening_upstream_prepared_promoted"] = bool(
+        is_scene_opening and upstream_candidate and upstream_candidate_ok
+    )
+    debug["opening_raw_text_source"] = raw_text_source
     san_ctx_base = {
         "resolution": resolution if isinstance(resolution, dict) else None,
         "include_resolution": bool(include_resolution_in_sanitizer),
