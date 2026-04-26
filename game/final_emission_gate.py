@@ -3806,6 +3806,26 @@ def validate_opening_output(text: str, context: Mapping[str, Any] | None) -> Lis
     return list(dict.fromkeys(failures))
 
 
+def is_valid_opening(text: str, curated_facts: Sequence[Any]) -> bool:
+    """Lightweight preservation gate for GPT-authored scene openings."""
+    clean = _normalize_text(text).strip()
+    if not clean:
+        return False
+    if len(clean) < 40:
+        return False
+
+    low = clean.lower()
+    matches = 0
+    for fact in curated_facts or []:
+        fact_text = str(fact or "").strip()
+        if not fact_text:
+            continue
+        tokens = [tok.strip(".,;:!?()[]{}\"'").lower() for tok in fact_text.split()]
+        if any(token and token in low for token in tokens):
+            matches += 1
+    return matches >= 2
+
+
 def _actionable_hook_from_opening_context(context: Mapping[str, Any]) -> str:
     labels = [str(x).strip() for x in (context.get("actionable_labels") or []) if str(x).strip()]
     if labels:
@@ -3975,6 +3995,7 @@ def _enforce_response_type_contract(
     opening_mode = required == "scene_opening" or _opening_mode_active_for_turn(gm_output, resolution)
     debug["opening_generic_action_repair_blocked"] = False
     debug["opening_specific_repair_used"] = False
+    debug["opening_fallback_skipped"] = False
     debug["blocked_repair_kind"] = None
     debug["opening_repair_source"] = "not_opening" if not opening_mode else None
 
@@ -4015,6 +4036,7 @@ def _enforce_response_type_contract(
             debug["response_type_repair_used"] = False
             debug["response_type_repair_kind"] = None
             debug["opening_repair_source"] = "preserved_candidate"
+            debug["opening_fallback_skipped"] = True
             debug["final_emission_boundary_repair_used"] = False
             debug["final_emission_boundary_semantic_repair_disabled"] = True
             return current, debug
@@ -4040,6 +4062,20 @@ def _enforce_response_type_contract(
         if isinstance(cand, str) and cand.strip():
             debug["opening_generic_action_repair_blocked"] = True
             debug["blocked_repair_kind"] = "action_outcome_upstream_prepared_repair"
+
+        curated_facts = opening_context.get("visible_facts") if isinstance(opening_context, Mapping) else []
+        if is_valid_opening(current, curated_facts if isinstance(curated_facts, Sequence) else []):
+            debug["response_type_candidate_ok"] = True
+            debug["response_type_repair_used"] = False
+            debug["response_type_repair_kind"] = None
+            debug["opening_specific_repair_used"] = False
+            debug["opening_recovered_via_fallback"] = False
+            debug["opening_fallback_skipped"] = True
+            debug["opening_repair_source"] = "preserved_candidate_validity_check"
+            debug["response_type_rejection_reasons"] = list(dict.fromkeys(str(r) for r in reasons if r))
+            debug["final_emission_boundary_repair_used"] = False
+            debug["final_emission_boundary_semantic_repair_disabled"] = True
+            return current, debug
 
         # Otherwise, use an opening-specific seed fallback (no invented facts; includes action vectors).
         fallback, fallback_meta = _deterministic_opening_fallback_text_and_meta(gm_output)

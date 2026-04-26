@@ -3022,6 +3022,54 @@ def test_opening_failure_recovers_via_deterministic_fallback_not_action_outcome(
     assert dbg.get("fallback_temporal_frame") == "first_impression"
 
 
+def test_valid_scene_opening_skips_deterministic_fallback():
+    candidate = (
+        "You stand in the churned mud before Cinderwatch's eastern gate as rain spatters soot-dark stone "
+        "and frayed banners snap above you. Refugees press shoulder to shoulder around the wagon line "
+        "while guards hold the choke under shouted orders."
+    )
+    text, dbg = feg._enforce_response_type_contract(
+        candidate,
+        gm_output=_opening_gm_output(),
+        resolution={"kind": "scene_opening", "prompt": "Start the campaign."},
+        session={},
+        scene_id="frontier_gate",
+        world={},
+        strict_social_turn=False,
+        strict_social_suppressed_non_social_turn=False,
+        active_interlocutor="",
+    )
+
+    assert text == candidate
+    assert dbg.get("opening_fallback_skipped") is True
+    assert dbg.get("response_type_repair_used") is False
+    assert dbg.get("response_type_repair_kind") is None
+    assert dbg.get("opening_repair_source") in {
+        "preserved_candidate",
+        "preserved_candidate_validity_check",
+    }
+
+
+def test_empty_scene_opening_uses_deterministic_fallback():
+    text, dbg = feg._enforce_response_type_contract(
+        "",
+        gm_output=_opening_gm_output(),
+        resolution={"kind": "scene_opening", "prompt": "Start the campaign."},
+        session={},
+        scene_id="frontier_gate",
+        world={},
+        strict_social_turn=False,
+        strict_social_suppressed_non_social_turn=False,
+        active_interlocutor="",
+    )
+
+    assert text
+    assert "Cinderwatch's eastern gate" in text
+    assert dbg.get("opening_fallback_skipped") is False
+    assert dbg.get("response_type_repair_used") is True
+    assert dbg.get("response_type_repair_kind") == "opening_deterministic_fallback"
+
+
 def test_scene_opening_candidate_not_rejected_for_lacking_action_result_language():
     text, dbg = feg._enforce_response_type_contract(
         (
