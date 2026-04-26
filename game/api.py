@@ -943,10 +943,28 @@ def _preserve_model_route_metadata(
         dst["metadata"] = merged
 
 
-def _scene_opening_curated_facts_from_prompt_payload(prompt_payload: dict | None) -> tuple[list[str], str]:
+def _dedupe_clean_string_list(raw: Any) -> list[str]:
+    facts: list[str] = []
+    if not isinstance(raw, list):
+        return facts
+    seen: set[str] = set()
+    for item in raw:
+        if not isinstance(item, str):
+            continue
+        clean = item.strip()
+        key = clean.lower()
+        if not clean or key in seen:
+            continue
+        seen.add(key)
+        facts.append(clean)
+    return facts
+
+
+def _scene_opening_curated_facts_from_prompt_payload(prompt_payload: dict | None) -> tuple[list[str], str, list[str]]:
     if not isinstance(prompt_payload, dict):
-        return [], "selector"
-    raw = prompt_payload.get("opening_curated_facts")
+        return [], "none", []
+    selector_facts = _dedupe_clean_string_list(prompt_payload.get("opening_selector_selected_facts"))
+    raw = selector_facts if selector_facts else prompt_payload.get("opening_curated_facts")
     if not isinstance(raw, list):
         opening_realization = prompt_payload.get("opening_scene_realization")
         contract = (
@@ -955,23 +973,16 @@ def _scene_opening_curated_facts_from_prompt_payload(prompt_payload: dict | None
             else {}
         )
         raw = contract.get("narration_basis_visible_facts")
-    facts: list[str] = []
-    if isinstance(raw, list):
-        seen: set[str] = set()
-        for item in raw:
-            if not isinstance(item, str):
-                continue
-            clean = item.strip()
-            key = clean.lower()
-            if not clean or key in seen:
-                continue
-            seen.add(key)
-            facts.append(clean)
-    source = "selector"
-    opening_realization = prompt_payload.get("opening_scene_realization")
-    if isinstance(opening_realization, dict) and opening_realization.get("opening_mode"):
-        source = "realization"
-    return facts, source
+    facts = _dedupe_clean_string_list(raw)
+    telemetry = prompt_payload.get("opening_fact_telemetry")
+    source = ""
+    if isinstance(telemetry, dict):
+        source = str(telemetry.get("opening_fact_source_used") or "").strip()
+    if not source:
+        source = str(prompt_payload.get("opening_selector_source_used") or "").strip()
+    if not source:
+        source = "selector" if selector_facts else "realization"
+    return facts, source, selector_facts or facts
 
 
 def _attach_scene_opening_curated_facts_to_gm(
@@ -984,8 +995,9 @@ def _attach_scene_opening_curated_facts_to_gm(
         return
     if str(resolution.get("kind") or "").strip() != "scene_opening":
         return
-    opening_basis_facts, source = _scene_opening_curated_facts_from_prompt_payload(prompt_payload)
+    opening_basis_facts, source, selector_facts = _scene_opening_curated_facts_from_prompt_payload(prompt_payload)
     gm["opening_curated_facts"] = opening_basis_facts
+    gm["opening_selector_selected_facts"] = list(selector_facts)
     md = gm.get("metadata") if isinstance(gm.get("metadata"), dict) else {}
     gm["metadata"] = md
     if isinstance(md, dict):
@@ -993,7 +1005,10 @@ def _attach_scene_opening_curated_facts_to_gm(
         if isinstance(em, dict):
             em["opening_curated_facts_present"] = bool(opening_basis_facts)
             em["opening_curated_facts_count"] = len(opening_basis_facts)
-            em["opening_curated_facts_source"] = source
+            em["opening_curated_facts_source"] = "selector"
+            em["opening_selector_source_used"] = source
+            em["opening_selector_selected_facts"] = list(selector_facts)
+            em["opening_curated_facts"] = list(opening_basis_facts)
     assert "opening_curated_facts" in gm
 
 

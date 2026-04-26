@@ -3817,7 +3817,9 @@ def _build_narration_context_head_state(
         "opening_fact_eligibility_mode": "none",
         "opening_fact_rejected_by_lifecycle_count": 0,
         "opening_fact_rejected_by_form_count": 0,
+        "opening_journal_filtered_count": 0,
     }
+    opening_selector_selected_facts: List[str] = []
     if narration_obligations.get("is_opening_scene") and isinstance(public_scene, Mapping):
         curated_opening, opening_fact_telemetry = select_opening_narration_visible_facts_with_telemetry(
             public_scene,
@@ -3826,7 +3828,8 @@ def _build_narration_context_head_state(
                 "session_player_context": session.get("player_context") if isinstance(session, dict) else {},
             },
         )
-        visible_facts_for_prompt = curated_opening[:OPENING_NARRATION_VISIBLE_FACT_MAX]
+        opening_selector_selected_facts = curated_opening[:OPENING_NARRATION_VISIBLE_FACT_MAX]
+        visible_facts_for_prompt = list(opening_selector_selected_facts)
         opening_inputs_are_curated = True
     res_for_vis = resolution_sem if isinstance(resolution_sem, dict) else {}
     res_md_vis = res_for_vis.get("metadata") if isinstance(res_for_vis.get("metadata"), dict) else {}
@@ -3911,6 +3914,7 @@ def _build_narration_context_head_state(
         "visible_facts_for_prompt": visible_facts_for_prompt,
         "opening_inputs_are_curated": opening_inputs_are_curated,
         "opening_fact_telemetry": opening_fact_telemetry,
+        "opening_selector_selected_facts": opening_selector_selected_facts,
         "res_for_vis": res_for_vis,
         "res_md_vis": res_md_vis,
         "opening_scene_export": opening_scene_export,
@@ -4098,6 +4102,7 @@ def build_narration_context(
     visible_facts_for_prompt = _head["visible_facts_for_prompt"]
     opening_inputs_are_curated = _head["opening_inputs_are_curated"]
     opening_fact_telemetry = _head["opening_fact_telemetry"]
+    opening_selector_selected_facts = _head["opening_selector_selected_facts"]
     res_for_vis = _head["res_for_vis"]
     res_md_vis = _head["res_md_vis"]
     opening_scene_export = _head["opening_scene_export"]
@@ -5386,7 +5391,13 @@ def build_narration_context(
         ),
         'opening_scene_realization': opening_scene_export if isinstance(opening_scene_export, dict) else opening_realization_none(),
         'opening_inputs_are_curated': bool(opening_inputs_are_curated),
-        'opening_curated_facts': list(visible_facts_for_prompt) if opening_inputs_are_curated else [],
+        'opening_selector_source_used': (
+            opening_fact_telemetry.get("opening_fact_source_used")
+            if isinstance(opening_fact_telemetry, dict)
+            else "none"
+        ),
+        'opening_selector_selected_facts': list(opening_selector_selected_facts),
+        'opening_curated_facts': list(opening_selector_selected_facts) if opening_inputs_are_curated else [],
         'opening_fact_telemetry': opening_fact_telemetry,
         'narration_visibility': narration_visibility,
         'scene_state_anchor_contract': scene_state_anchor_contract,

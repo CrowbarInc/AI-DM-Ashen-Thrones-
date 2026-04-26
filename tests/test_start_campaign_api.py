@@ -123,6 +123,45 @@ def test_start_campaign_frontier_gate_uses_journal_seed_facts_when_opening_seed_
     assert emission_debug.get("opening_curated_facts_count", 0) > 0
 
 
+def test_start_campaign_opening_fallback_basis_uses_journal_seed_not_visible_facts(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    _patch_data_dir(tmp_path, monkeypatch)
+    monkeypatch.setattr(api_mod, "log_upstream_api_preflight_at_startup", lambda: None)
+    monkeypatch.setattr("game.api.call_gpt", lambda *_a, **_k: dict(FAKE_GPT_RESPONSE))
+
+    with TestClient(app) as client:
+        assert client.post("/api/new_campaign").status_code == 200
+        gate_path = st.scene_path("frontier_gate")
+        gate = json.loads(gate_path.read_text(encoding="utf-8"))
+        scene = gate.get("scene") if isinstance(gate.get("scene"), dict) else gate
+        scene.pop("opening_seed_facts", None)
+        scene.pop("campaign_spine_opening_facts", None)
+        scene.pop("spine_opening_facts", None)
+        scene["visible_facts"] = ["VISIBLE FACT SHOULD NOT APPEAR"]
+        scene["journal_seed_facts"] = ["JOURNAL FACT SHOULD APPEAR"]
+        gate_path.write_text(json.dumps(gate, indent=2), encoding="utf-8")
+
+        sc = client.post("/api/start_campaign")
+        assert sc.status_code == 200
+        data = sc.json()
+
+    text = str(data.get("gm_output", {}).get("player_facing_text") or "")
+    assert "JOURNAL FACT SHOULD APPEAR" in text
+    assert "VISIBLE FACT SHOULD NOT APPEAR" not in text
+
+    gm_output = (load_log()[0].get("gm_output") or {})
+    emission_debug = (gm_output.get("metadata") or {}).get("emission_debug") or {}
+    final_meta = gm_output.get("_final_emission_meta") or {}
+    assert emission_debug.get("opening_selector_source_used") == "journal_seed_facts"
+    assert emission_debug.get("opening_selector_selected_facts") == ["JOURNAL FACT SHOULD APPEAR"]
+    assert emission_debug.get("opening_curated_facts") == ["JOURNAL FACT SHOULD APPEAR"]
+    assert final_meta.get("opening_final_fallback_basis") == ["JOURNAL FACT SHOULD APPEAR"]
+    assert final_meta.get("opening_final_basis_matches_selector") is True
+    if data.get("resolution", {}).get("kind") == "scene_opening":
+        assert final_meta.get("opening_final_basis_matches_selector") is True
+
+
 def test_start_campaign_log_has_no_begin_player_line(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     _patch_data_dir(tmp_path, monkeypatch)
     monkeypatch.setattr(api_mod, "log_upstream_api_preflight_at_startup", lambda: None)

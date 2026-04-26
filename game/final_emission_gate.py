@@ -3618,6 +3618,23 @@ _OPENING_ACTION_VERBS: tuple[str, ...] = (
 _OPENING_FALLBACK_EMPTY_CURATED_FACTS_MARKER = "[opening_fallback_failed_closed: empty_curated_facts]"
 
 
+def _opening_clean_fact_list(raw: Any) -> list[str]:
+    if not isinstance(raw, list):
+        return []
+    out: list[str] = []
+    seen: set[str] = set()
+    for item in raw:
+        if not isinstance(item, str):
+            continue
+        clean = item.strip()
+        key = clean.lower()
+        if not clean or key in seen:
+            continue
+        seen.add(key)
+        out.append(clean)
+    return out
+
+
 def _opening_context_from_gm_output(gm_output: Mapping[str, Any] | None) -> Dict[str, Any]:
     ctx: Dict[str, Any] = {
         "location_anchors": [],
@@ -3627,6 +3644,11 @@ def _opening_context_from_gm_output(gm_output: Mapping[str, Any] | None) -> Dict
         "opening_fallback_basis_count": 0,
         "opening_fallback_context_missing": True,
         "opening_curated_facts_source": "selector",
+        "opening_selector_source_used": "none",
+        "opening_selector_selected_facts": [],
+        "opening_curated_facts": [],
+        "opening_final_fallback_basis": [],
+        "opening_final_basis_matches_selector": False,
     }
     if not isinstance(gm_output, Mapping):
         raise AssertionError("scene_opening missing curated facts")
@@ -3635,13 +3657,23 @@ def _opening_context_from_gm_output(gm_output: Mapping[str, Any] | None) -> Dict
     gm_curated = gm_output.get("opening_curated_facts")
     if not isinstance(gm_curated, list):
         raise AssertionError("scene_opening missing curated facts")
-    ctx["visible_facts"].extend(str(x).strip() for x in gm_curated if isinstance(x, str) and str(x).strip())
+    curated_facts = _opening_clean_fact_list(gm_curated)
+    ctx["visible_facts"].extend(curated_facts)
+    ctx["opening_curated_facts"] = list(curated_facts)
     if ctx["visible_facts"]:
         ctx["opening_fallback_context_source"] = "opening_curated_facts"
         md = gm_output.get("metadata") if isinstance(gm_output.get("metadata"), Mapping) else {}
         em = md.get("emission_debug") if isinstance(md.get("emission_debug"), Mapping) else {}
         src = str(em.get("opening_curated_facts_source") or "").strip()
-        ctx["opening_curated_facts_source"] = src if src in {"selector", "realization"} else "realization"
+        selector_src = str(em.get("opening_selector_source_used") or src or "").strip()
+        ctx["opening_curated_facts_source"] = src or "selector"
+        ctx["opening_selector_source_used"] = selector_src or "selector"
+        selector_facts = _opening_clean_fact_list(
+            gm_output.get("opening_selector_selected_facts")
+            if isinstance(gm_output.get("opening_selector_selected_facts"), list)
+            else em.get("opening_selector_selected_facts")
+        )
+        ctx["opening_selector_selected_facts"] = selector_facts or list(curated_facts)
     pc = gm_output.get("prompt_context")
     if isinstance(pc, Mapping):
         plan = pc.get("narrative_plan") if isinstance(pc.get("narrative_plan"), Mapping) else {}
@@ -3690,6 +3722,11 @@ def _opening_context_from_gm_output(gm_output: Mapping[str, Any] | None) -> Dict
         ctx[key] = out
     ctx["opening_fallback_basis_count"] = len(ctx.get("visible_facts") or [])
     ctx["opening_fallback_context_missing"] = ctx["opening_fallback_basis_count"] <= 0
+    ctx["opening_final_fallback_basis"] = list(ctx.get("visible_facts") or [])
+    ctx["opening_final_basis_matches_selector"] = (
+        list(ctx.get("opening_final_fallback_basis") or [])
+        == list(ctx.get("opening_selector_selected_facts") or [])
+    )
     return ctx
 
 
@@ -3834,7 +3871,14 @@ def _deterministic_opening_fallback_text_and_meta(gm_output: Mapping[str, Any] |
         "opening_curated_facts_present": bool(facts),
         "opening_curated_facts_count": len(facts),
         "opening_curated_facts_source": context.get("opening_curated_facts_source") or "selector",
+        "opening_selector_source_used": context.get("opening_selector_source_used") or "none",
+        "opening_selector_selected_facts": list(context.get("opening_selector_selected_facts") or []),
+        "opening_curated_facts": list(context.get("opening_curated_facts") or []),
+        "opening_final_fallback_basis": list(context.get("opening_final_fallback_basis") or []),
+        "opening_final_basis_matches_selector": bool(context.get("opening_final_basis_matches_selector")),
     }
+    if not meta["opening_final_basis_matches_selector"]:
+        raise AssertionError("scene_opening fallback basis does not match selector output")
     if not facts:
         meta["opening_fallback_failed_closed"] = True
         meta["opening_fallback_context_source"] = "opening_curated_facts"
@@ -10464,6 +10508,11 @@ def apply_final_emission_gate(
                 "opening_curated_facts_present": fallback_composition_meta.get("opening_curated_facts_present"),
                 "opening_curated_facts_count": fallback_composition_meta.get("opening_curated_facts_count"),
                 "opening_curated_facts_source": fallback_composition_meta.get("opening_curated_facts_source"),
+                "opening_selector_source_used": fallback_composition_meta.get("opening_selector_source_used"),
+                "opening_selector_selected_facts": fallback_composition_meta.get("opening_selector_selected_facts"),
+                "opening_curated_facts": fallback_composition_meta.get("opening_curated_facts"),
+                "opening_final_fallback_basis": fallback_composition_meta.get("opening_final_fallback_basis"),
+                "opening_final_basis_matches_selector": fallback_composition_meta.get("opening_final_basis_matches_selector"),
             }
         )
     elif (
@@ -10591,6 +10640,11 @@ def apply_final_emission_gate(
         "opening_curated_facts_present": bool(fallback_composition_meta.get("opening_curated_facts_present")),
         "opening_curated_facts_count": int(fallback_composition_meta.get("opening_curated_facts_count") or 0),
         "opening_curated_facts_source": fallback_composition_meta.get("opening_curated_facts_source"),
+        "opening_selector_source_used": fallback_composition_meta.get("opening_selector_source_used"),
+        "opening_selector_selected_facts": fallback_composition_meta.get("opening_selector_selected_facts"),
+        "opening_curated_facts": fallback_composition_meta.get("opening_curated_facts"),
+        "opening_final_fallback_basis": fallback_composition_meta.get("opening_final_fallback_basis"),
+        "opening_final_basis_matches_selector": fallback_composition_meta.get("opening_final_basis_matches_selector"),
         "post_gate_mutation_detected": post_gate_mutation_detected,
         "final_text_preview": (gate_out_text[:120] + "…") if len(gate_out_text) > 120 else gate_out_text,
         "coercion_reason": coercion_reason,
@@ -10599,6 +10653,18 @@ def apply_final_emission_gate(
         "strict_social_suppression_reason": strict_social_suppression_reason,
         "anti_reset_intro_suppressed": bool(suppress_intro_replace),
     }
+    md_dbg = out.get("metadata") if isinstance(out.get("metadata"), dict) else {}
+    out["metadata"] = md_dbg
+    em_dbg = md_dbg.setdefault("emission_debug", {})
+    if isinstance(em_dbg, dict):
+        for key in (
+            "opening_selector_source_used",
+            "opening_selector_selected_facts",
+            "opening_curated_facts",
+            "opening_final_fallback_basis",
+            "opening_final_basis_matches_selector",
+        ):
+            em_dbg[key] = out[FINAL_EMISSION_META_KEY].get(key)
     _flag_non_hostile_escalation_from_writer_pregate(
         pre_gate_text,
         gm_output=out,
