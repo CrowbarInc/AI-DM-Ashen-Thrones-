@@ -3295,6 +3295,7 @@ def _complete_opening_turn_persistence_like_chat(
                 "final_emission_text_preview": _text_preview(final_text),
                 "response_payload_text_preview": _text_preview(response_text),
                 "log_payload_text_preview": _text_preview(log_text),
+                "canonical_gm_object_id": id(gm_obj),
             }
         )
 
@@ -3326,6 +3327,22 @@ def _complete_opening_turn_persistence_like_chat(
         include_resolution_in_sanitizer=_include_res_chat,
         latency_sink=latency_ms,
     )
+    canonical_gm = gm
+    if isinstance(resolution, dict) and str(resolution.get("kind") or "").strip().lower() == "scene_opening":
+        metadata = canonical_gm.get("metadata") if isinstance(canonical_gm.get("metadata"), dict) else {}
+        emission_debug = metadata.get("emission_debug") if isinstance(metadata.get("emission_debug"), dict) else {}
+        if isinstance(emission_debug, dict):
+            final_meta = canonical_gm.setdefault("_final_emission_meta", {})
+            if isinstance(final_meta, dict):
+                for key in (
+                    "opening_selector_source_used",
+                    "opening_selector_selected_facts",
+                    "opening_curated_facts",
+                    "opening_final_fallback_basis",
+                    "opening_final_basis_matches_selector",
+                ):
+                    if key in emission_debug and key not in final_meta:
+                        final_meta[key] = emission_debug.get(key)
     for _rt in _narr_consistency_chat.get("repaired_discovered_clue_texts") or []:
         if isinstance(_rt, str) and _rt.strip() and _rt.strip() not in authoritative_clue_updates:
             authoritative_clue_updates.append(_rt.strip())
@@ -3486,31 +3503,44 @@ def _complete_opening_turn_persistence_like_chat(
         resolution=resolution if (routed_via_exploration or routed_via_adjudication) and isinstance(resolution, dict) else None,
         include_resolution=bool((routed_via_exploration or routed_via_adjudication) and isinstance(resolution, dict)),
     )
-    final_text = str(gm.get("player_facing_text") or "")
+    final_text = str(canonical_gm.get("player_facing_text") or "")
     payload_gm = response_payload.get("gm_output") if isinstance(response_payload, dict) else None
-    if isinstance(payload_gm, dict) and str(payload_gm.get("player_facing_text") or "") != final_text:
-        payload_gm["player_facing_text"] = final_text
+    if mark_campaign_started and isinstance(response_payload, dict):
+        response_payload["gm_output"] = canonical_gm
+        payload_gm = canonical_gm
     _attach_final_text_invariant_debug(
-        gm,
+        canonical_gm,
         response_payload=response_payload if isinstance(response_payload, dict) else None,
         log_payload_text=final_text,
     )
-    if isinstance(payload_gm, dict):
+    if isinstance(payload_gm, dict) and payload_gm is not canonical_gm:
         payload_metadata = payload_gm.setdefault("metadata", {})
         if isinstance(payload_metadata, dict):
             payload_debug = payload_metadata.setdefault("emission_debug", {})
-            source_debug = (gm.get("metadata") or {}).get("emission_debug") if isinstance(gm.get("metadata"), dict) else {}
+            source_debug = (
+                (canonical_gm.get("metadata") or {}).get("emission_debug")
+                if isinstance(canonical_gm.get("metadata"), dict)
+                else {}
+            )
             if isinstance(payload_debug, dict) and isinstance(source_debug, dict):
                 payload_debug.update(source_debug)
+    assert (
+        response_payload["gm_output"] is canonical_gm
+        or response_payload["gm_output"]["player_facing_text"] == canonical_gm["player_facing_text"]
+    )
 
     append_log(
         {
             "timestamp": utc_iso_now(),
             "request": dict(request_log_payload.get("request") or {}),
             "resolution": resolution,
-            "gm_output": gm,
+            "gm_output": canonical_gm,
             "log_meta": log_meta,
         }
+    )
+    assert (
+        response_payload["gm_output"] is canonical_gm
+        or response_payload["gm_output"]["player_facing_text"] == canonical_gm["player_facing_text"]
     )
     return response_payload
 

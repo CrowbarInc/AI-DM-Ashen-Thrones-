@@ -148,6 +148,7 @@ def test_start_campaign_emits_opening_and_sets_started(tmp_path: Path, monkeypat
         assert data.get("session", {}).get("campaign_started") is True
         assert data.get("ui", {}).get("campaign_can_start") is False
         response_text = str(data.get("gm_output", {}).get("player_facing_text") or "")
+        response_debug = ((data.get("gm_output") or {}).get("metadata") or {}).get("emission_debug") or {}
         log_reload_entries = client.get("/api/log").json().get("entries") or []
 
     entries = load_log()
@@ -158,17 +159,30 @@ def test_start_campaign_emits_opening_and_sets_started(tmp_path: Path, monkeypat
     gm_output = entries[0].get("gm_output") or {}
     log_text = str(gm_output.get("player_facing_text") or "")
     reload_text = str((log_reload_entries[0].get("gm_output") or {}).get("player_facing_text") or "")
+    reload_debug = ((log_reload_entries[0].get("gm_output") or {}).get("metadata") or {}).get("emission_debug") or {}
     assert response_text == log_text == reload_text
     assert response_text in RICH_OPENING_GPT_RESPONSE["player_facing_text"]
     assert "You stand" in response_text
-    assert len(response_text) > 500
+    assert len(response_text) > 800
+    assert len(log_text) > 800
     assert isinstance(gm_output.get("opening_curated_facts"), list)
     assert gm_output["opening_curated_facts"]
     _assert_scene_opening_reads_like_scene(str(gm_output.get("player_facing_text") or ""))
     emission_debug = (gm_output.get("metadata") or {}).get("emission_debug") or {}
     assert emission_debug.get("gm_output_player_facing_len") == len(log_text)
+    assert emission_debug.get("final_emission_text_preview")
     assert emission_debug.get("response_payload_text_preview")
     assert emission_debug.get("log_payload_text_preview")
+    assert isinstance(emission_debug.get("canonical_gm_object_id"), int)
+    for field in (
+        "gm_output_player_facing_len",
+        "final_emission_text_preview",
+        "response_payload_text_preview",
+        "log_payload_text_preview",
+        "canonical_gm_object_id",
+    ):
+        assert field in reload_debug
+        assert field in response_debug
     assert emission_debug.get("opening_curated_facts_present") is True
     assert emission_debug.get("opening_curated_facts_count", 0) > 0
     assert emission_debug.get("opening_curated_facts_source") in {"selector", "realization"}
