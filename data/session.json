@@ -1,7 +1,7 @@
 {
   "persistence_version": 1,
   "kind": "session",
-  "saved_at": "2026-04-26T01:39:45.958230Z",
+  "saved_at": "2026-04-26T02:47:37.533841Z",
   "payload": {
     "active_scene_id": "frontier_gate",
     "visited_scene_ids": [
@@ -31,7 +31,6 @@
         "guard_captain",
         "tavern_runner",
         "emergent_town_crier",
-        "emergent_lord_aldric",
         "refugee",
         "threadbare_watcher"
       ],
@@ -39,33 +38,62 @@
         "guard_captain": "active",
         "tavern_runner": "active",
         "emergent_town_crier": "active",
-        "threadbare_watcher": "active",
         "refugee": "active",
-        "emergent_lord_aldric": "active"
+        "threadbare_watcher": "active"
       },
       "current_interlocutor": null,
-      "emergent_addressables": [
-        {
-          "id": "emergent_lord_aldric",
-          "name": "Lord Aldric",
-          "scene_id": "frontier_gate",
-          "address_roles": [
-            "lord"
-          ],
-          "aliases": [
-            "Lord Aldric",
-            "aldric",
-            "lord aldric"
-          ],
-          "kind": "scene_actor",
-          "addressable": true,
-          "address_priority": 40,
-          "emergent_source": "promoted_visible_figure"
-        }
-      ],
+      "emergent_addressables": [],
       "promoted_actor_npc_map": {}
     },
     "runtime_scene_overlays": {
+      "scene_investigate": {
+        "scene_id": "scene_investigate",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "npc_repeat_scene_d": {
+        "scene_id": "npc_repeat_scene_d",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "hidden_meeting_room": {
+        "scene_id": "hidden_meeting_room",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "scene": {
+        "scene_id": "scene",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "storeroom": {
+        "scene_id": "storeroom",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "beacon_yard": {
+        "scene_id": "beacon_yard",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
       "pier": {
         "scene_id": "pier",
         "visible_facts_add": [],
@@ -74,16 +102,16 @@
         "runtime_entities": [],
         "mutations": {}
       },
-      "t_scene": {
-        "scene_id": "t_scene",
+      "granary_scene": {
+        "scene_id": "granary_scene",
         "visible_facts_add": [],
         "discovered_clues": [],
         "state_flags": {},
         "runtime_entities": [],
         "mutations": {}
       },
-      "tavern": {
-        "scene_id": "tavern",
+      "eastern_square": {
+        "scene_id": "eastern_square",
         "visible_facts_add": [],
         "discovered_clues": [],
         "state_flags": {},
@@ -98,16 +126,40 @@
         "runtime_entities": [],
         "mutations": {}
       },
-      "wild_moors": {
-        "scene_id": "wild_moors",
+      "street": {
+        "scene_id": "street",
         "visible_facts_add": [],
         "discovered_clues": [],
         "state_flags": {},
         "runtime_entities": [],
         "mutations": {}
       },
-      "test": {
-        "scene_id": "test",
+      "npc_repeat_scene_c": {
+        "scene_id": "npc_repeat_scene_c",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "npc_repeat_scene_a": {
+        "scene_id": "npc_repeat_scene_a",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "npc_repeat_scene_b": {
+        "scene_id": "npc_repeat_scene_b",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "river_arch": {
+        "scene_id": "river_arch",
         "visible_facts_add": [],
         "discovered_clues": [],
         "state_flags": {},
@@ -122,8 +174,177 @@
         "runtime_entities": [],
         "mutations": {}
       },
-      "checkpoint": {
-        "scene_id": "checkpoint",
+      "ward": {
+        "scene_id": "ward",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "test_scene": {
+        "scene_id": "test_scene",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "s_inn": {
+        "scene_id": "s_inn",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "dock": {
+        "scene_id": "dock",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "gate": {
+        "scene_id": "gate",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "bridge": {
+        "scene_id": "bridge",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "market": {
+        "scene_id": "market",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "old_milestone": {
+        "scene_id": "old_milestone",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "rope_bridge": {
+        "scene_id": "rope_bridge",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "market_square": {
+        "scene_id": "market_square",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "s1": {
+        "scene_id": "s1",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "arch_lane": {
+        "scene_id": "arch_lane",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "lane": {
+        "scene_id": "lane",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "frontier_gate": {
+        "scene_id": "frontier_gate",
+        "visible_facts_add": [
+          "rain spatters soot-dark stone; frayed banners hang above cinderwatch's eastern gate",
+          "a well-appointed townhouse overlooking the square flies noble colors above the mud and clamor",
+          "one figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue",
+          "refugees, wagons, and foot traffic clog the muddy approach while guards hold the choke",
+          "a notice board lists new taxes, curfews, and a posted warning about a missing patrol"
+        ],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {
+          "discoverable_clues_add": [
+            "Closer reading or asking around may reveal who posted the missing-patrol notice\u2014some name the town crier Lirael.",
+            "Paying the runner (or sharing a drink) might buy a clearer line on where the patrol was last seen; talk drifts toward the old trading crossroads.",
+            "A well-dressed watcher near the gate studies newcomers more than stamped papers; tailing or testing him could show whether he's House, guild, or hired eyes.",
+            "A rough customer in the press keeps sizing up travelers with unusual packs or sigils\u2014enough attention might expose black-market or arcane interest.",
+            "The threadbare watcher starts at certain whistles and hand-signs; shadowing him could reveal who he's meeting.",
+            "When guards look away, voices near the tavern door drop to hurried talk about the patrol and whether the inn is safe after dark."
+          ],
+          "hidden_facts_add": [],
+          "mode": "exploration"
+        }
+      },
+      "market_quarter": {
+        "scene_id": "market_quarter",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "partial_scene": {
+        "scene_id": "partial_scene",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "tavern": {
+        "scene_id": "tavern",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "test": {
+        "scene_id": "test",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "road": {
+        "scene_id": "road",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "hall": {
+        "scene_id": "hall",
         "visible_facts_add": [],
         "discovered_clues": [],
         "state_flags": {},
@@ -132,6 +353,142 @@
       },
       "wall": {
         "scene_id": "wall",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "wild_moors": {
+        "scene_id": "wild_moors",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "crossroads": {
+        "scene_id": "crossroads",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "checkpoint": {
+        "scene_id": "checkpoint",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "lane_scene": {
+        "scene_id": "lane_scene",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "market_lane": {
+        "scene_id": "market_lane",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "scene_docks": {
+        "scene_id": "scene_docks",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "office": {
+        "scene_id": "office",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "x": {
+        "scene_id": "x",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "t_scene": {
+        "scene_id": "t_scene",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "yard": {
+        "scene_id": "yard",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "watchtower": {
+        "scene_id": "watchtower",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "alley_door": {
+        "scene_id": "alley_door",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "alley": {
+        "scene_id": "alley",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "lower_ward": {
+        "scene_id": "lower_ward",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "hut": {
+        "scene_id": "hut",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "s": {
+        "scene_id": "s",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "m": {
+        "scene_id": "m",
         "visible_facts_add": [],
         "discovered_clues": [],
         "state_flags": {},
@@ -153,366 +510,6 @@
         "state_flags": {},
         "runtime_entities": [],
         "mutations": {}
-      },
-      "market_square": {
-        "scene_id": "market_square",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "npc_repeat_scene_b": {
-        "scene_id": "npc_repeat_scene_b",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "arch_lane": {
-        "scene_id": "arch_lane",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "crossroads": {
-        "scene_id": "crossroads",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "s1": {
-        "scene_id": "s1",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "npc_repeat_scene_d": {
-        "scene_id": "npc_repeat_scene_d",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "alley": {
-        "scene_id": "alley",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "watchtower": {
-        "scene_id": "watchtower",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "x": {
-        "scene_id": "x",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "hidden_meeting_room": {
-        "scene_id": "hidden_meeting_room",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "old_milestone": {
-        "scene_id": "old_milestone",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "npc_repeat_scene_a": {
-        "scene_id": "npc_repeat_scene_a",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "road": {
-        "scene_id": "road",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "rope_bridge": {
-        "scene_id": "rope_bridge",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "scene_investigate": {
-        "scene_id": "scene_investigate",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "m": {
-        "scene_id": "m",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "granary_scene": {
-        "scene_id": "granary_scene",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "lane": {
-        "scene_id": "lane",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "scene": {
-        "scene_id": "scene",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "market": {
-        "scene_id": "market",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "yard": {
-        "scene_id": "yard",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "scene_docks": {
-        "scene_id": "scene_docks",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "bridge": {
-        "scene_id": "bridge",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "hut": {
-        "scene_id": "hut",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "test_scene": {
-        "scene_id": "test_scene",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "market_lane": {
-        "scene_id": "market_lane",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "eastern_square": {
-        "scene_id": "eastern_square",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "market_quarter": {
-        "scene_id": "market_quarter",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "hall": {
-        "scene_id": "hall",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "lower_ward": {
-        "scene_id": "lower_ward",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "gate": {
-        "scene_id": "gate",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "beacon_yard": {
-        "scene_id": "beacon_yard",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "s": {
-        "scene_id": "s",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "street": {
-        "scene_id": "street",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "alley_door": {
-        "scene_id": "alley_door",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "npc_repeat_scene_c": {
-        "scene_id": "npc_repeat_scene_c",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "storeroom": {
-        "scene_id": "storeroom",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "s_inn": {
-        "scene_id": "s_inn",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "office": {
-        "scene_id": "office",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "river_arch": {
-        "scene_id": "river_arch",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "dock": {
-        "scene_id": "dock",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "partial_scene": {
-        "scene_id": "partial_scene",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "ward": {
-        "scene_id": "ward",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "frontier_gate": {
-        "scene_id": "frontier_gate",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "lane_scene": {
-        "scene_id": "lane_scene",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
       }
     },
     "scene_runtime": {
@@ -527,7 +524,7 @@
         "last_exploration_action_key": "campaign_start_opening_scene",
         "repeated_action_count": 1,
         "last_resolution_kind": "scene_opening",
-        "last_description_hash": "6028abbb24532a7a531531ef52a492cd",
+        "last_description_hash": "5bc7dee6cf85b5de63970ece73975496",
         "consumed_action_ids": [],
         "momentum_exchanges_since": 0,
         "momentum_next_due_in": 3,
@@ -546,9 +543,19 @@
         "last_player_action_passive": false,
         "recent_contextual_leads": [
           {
-            "key": "active_event_muddy_square_throngs_with_refugees_and_wagon_traffic_jostling_against_the_watchful_guards_who_hold_the_choke_point_with_brittle_discipline",
+            "key": "active_event_refugees_wagons_and_foot_traffic_crowd_the_muddy_approach_held_in_check_by_guards_whose_tired_discipline_hints_at_growing_unease",
             "kind": "active_event",
-            "subject": "muddy square throngs with refugees and wagon traffic, jostling against the watchful guards who hold the choke point with brittle discipline",
+            "subject": "refugees, wagons, and foot traffic crowd the muddy approach, held in check",
+            "position": "by guards whose tired discipline hints at growing unease",
+            "named": false,
+            "positioned": true,
+            "mentions": 1,
+            "last_turn": 1
+          },
+          {
+            "key": "active_event_tavern_runner_calls_out_offers_of_hot_stew_and_paid_rumor_weaving_through_the_press_with_practiced_ease",
+            "kind": "active_event",
+            "subject": "tavern runner calls out offers of hot stew and paid rumor, weaving through the press with practiced ease",
             "position": "",
             "named": false,
             "positioned": false,
@@ -556,22 +563,22 @@
             "last_turn": 1
           },
           {
-            "key": "visible_suspicious_figure_hooded_figure_near_the_gate_drawing_wary_glances_from_the_soldiers",
-            "kind": "visible_suspicious_figure",
-            "subject": "hooded figure",
-            "position": "near the gate, drawing wary glances from the soldiers",
+            "key": "active_event_overlooking_the_scene_a_well_appointed_townhouse_flies_noble_colors_its_presence_a_sharp_contrast_to_the_grimy_square_below",
+            "kind": "active_event",
+            "subject": "overlooking the scene, a well-appointed townhouse flies noble colors, its presence a sharp contrast to the grimy square below",
+            "position": "",
             "named": false,
-            "positioned": true,
+            "positioned": false,
             "mentions": 1,
             "last_turn": 1
           },
           {
-            "key": "active_event_among_the_bustle_a_tavern_runner_shouts_offers_of_hot_stew_her_face_marked_by_anxious_urgency",
+            "key": "active_event_one_figure",
             "kind": "active_event",
-            "subject": "among the bustle, a tavern runner shouts offers of hot stew, her face marked",
-            "position": "by anxious urgency",
+            "subject": "one figure",
+            "position": "",
             "named": false,
-            "positioned": true,
+            "positioned": false,
             "mentions": 1,
             "last_turn": 1
           },
@@ -653,9 +660,9 @@
           "non_hostile_world_action_guard"
         ]
       },
-      "emergent_actor_enrolled": true,
-      "emergent_actor_id": "emergent_lord_aldric",
-      "emergent_actor_source_text": "Lord Aldric"
+      "emergent_actor_enrolled": false,
+      "emergent_actor_id": null,
+      "emergent_actor_source_text": null
     },
     "debug_traces": [
       {
@@ -691,9 +698,9 @@
           "owner_module": "game.api",
           "path_label": "scene_opening",
           "ctir_present": true,
-          "ctir_stamp": "1:1b42b0f3740:0",
+          "ctir_stamp": "1:1ce0317b900:0",
           "narrative_plan_present": true,
-          "narrative_plan_stamp": "1:1b42b0f3740:0",
+          "narrative_plan_stamp": "1:1ce0317b900:0",
           "stamp_matches": true,
           "prompt_consumes_plan": false,
           "raw_state_prompt_bypass_detected": false,
@@ -712,9 +719,9 @@
           "owner_module": "game.api",
           "path_label": "scene_opening",
           "ctir_present": true,
-          "ctir_stamp": "1:1b42b0f3740:0",
+          "ctir_stamp": "1:1ce0317b900:0",
           "narrative_plan_present": true,
-          "narrative_plan_stamp": "1:1b42b0f3740:0",
+          "narrative_plan_stamp": "1:1ce0317b900:0",
           "stamp_matches": true,
           "prompt_consumes_plan": true,
           "raw_state_prompt_bypass_detected": false,
@@ -730,7 +737,7 @@
         "changed_area": "scene_state.active_entities"
       },
       {
-        "timestamp": "2026-04-26T01:39:38.778744Z",
+        "timestamp": "2026-04-26T02:47:26.254052Z",
         "source": "start_campaign",
         "action_type": "start_campaign",
         "raw_input": "",
@@ -896,7 +903,7 @@
                 "scene_id": "frontier_gate",
                 "counts": {
                   "location": 17,
-                  "actor": 6,
+                  "actor": 5,
                   "player_action": 3
                 }
               },
@@ -914,7 +921,7 @@
                   "pressure_overweighting": false
                 },
                 "repair_hints": [],
-                "debug_reason_marker": "cs_violations=none;repair_applied=False;pass_after=None;before_len=391;after_len=391;before_head='A hooded figure is lingering near the gate, drawing the attention of guards who exchange wary gl\u2026';after_head='A hooded figure is lingering near the gate, drawing the attention of guards who exchange wary gl\u2026'"
+                "debug_reason_marker": "cs_violations=none;repair_applied=False;pass_after=None;before_len=334;after_len=334;before_head=\"Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate. Refugees, w\u2026\";after_head=\"Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate. Refugees, w\u2026\""
               },
               "conversational_memory_window": {
                 "enabled": true,
@@ -927,7 +934,6 @@
                 "soft_memory_limit": 12,
                 "stale_after_turns": 18,
                 "active_scene_entity_ids": [
-                  "emergent_lord_aldric",
                   "emergent_town_crier",
                   "guard_captain",
                   "refugee",
@@ -958,8 +964,7 @@
               "scene_state_anchor_failed": false,
               "scene_state_anchor_skip_reason": null,
               "scene_state_anchor_matched_kinds": [
-                "location",
-                "actor"
+                "location"
               ],
               "scene_state_anchor_failure_reasons": [],
               "scene_state_anchor_repaired": false,
@@ -969,25 +974,25 @@
               "tone_escalation_failed": false,
               "tone_escalation_failure_reasons": [],
               "tone_escalation_detected_flags": {
-                "guarded": true,
+                "guarded": false,
                 "verbal_pressure": false,
                 "explicit_threat": false,
                 "physical_hostility": false,
                 "combat_initiation": false
               },
-              "tone_escalation_matched_tone_level": "guarded",
+              "tone_escalation_matched_tone_level": null,
               "tone_escalation_repaired": false,
               "tone_escalation_repair_mode": null,
               "tone_escalation_contract_summary": {
                 "enabled": true,
-                "base_tone": "tense",
+                "base_tone": "guarded",
                 "max_allowed_tone": "tense",
                 "allow_verbal_pressure": true,
                 "allow_explicit_threat": false,
                 "allow_physical_hostility": false,
                 "allow_combat_initiation": false,
                 "justification_reasons": [
-                  "visible_facts_or_runtime_topic_pressure_indicate_elevated_tension",
+                  "visible_facts_engagement_or_moderate_topic_pressure",
                   "visible_entity_roles_include_authority_guardship",
                   "affiliated_faction_attitude_and_pressure_in_world_state"
                 ]
@@ -1054,7 +1059,7 @@
               "context_separation_repair_hints": [],
               "context_separation_repaired": false,
               "context_separation_repair_mode": null,
-              "context_separation_debug_reason_marker": "cs_violations=none;repair_applied=False;pass_after=None;before_len=391;after_len=391;before_head='A hooded figure is lingering near the gate, drawing the attention of guards who exchange wary gl\u2026';after_head='A hooded figure is lingering near the gate, drawing the attention of guards who exchange wary gl\u2026'",
+              "context_separation_debug_reason_marker": "cs_violations=none;repair_applied=False;pass_after=None;before_len=334;after_len=334;before_head=\"Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate. Refugees, w\u2026\";after_head=\"Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate. Refugees, w\u2026\"",
               "context_separation_passed_after_repair": null,
               "player_facing_narration_purity": {
                 "validation": {
@@ -1064,8 +1069,8 @@
                 "violation_keys": [],
                 "repair_hints": [],
                 "repair_modes": [],
-                "preview_before": "A hooded figure is lingering near the gate, drawing the attention of guards who exchange wary gl\u2026",
-                "preview_after": "A hooded figure is lingering near the gate, drawing the attention of guards who exchange wary gl\u2026"
+                "preview_before": "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate. Refugees, w\u2026",
+                "preview_after": "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate. Refugees, w\u2026"
               },
               "player_facing_narration_purity_contract_resolution_source": "response_policy",
               "player_facing_narration_purity_skip_reason": null,
@@ -1076,8 +1081,8 @@
               "player_facing_narration_purity_violation_keys": [],
               "player_facing_narration_purity_repair_hints_used": [],
               "player_facing_narration_purity_collapsed_to_diegetic_core": false,
-              "player_facing_narration_purity_preview_before": "A hooded figure is lingering near the gate, drawing the attention of guards who exchange wary gl\u2026",
-              "player_facing_narration_purity_preview_after": "A hooded figure is lingering near the gate, drawing the attention of guards who exchange wary gl\u2026",
+              "player_facing_narration_purity_preview_before": "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate. Refugees, w\u2026",
+              "player_facing_narration_purity_preview_after": "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate. Refugees, w\u2026",
               "answer_shape_primacy": {
                 "checked": true,
                 "passed": true,
@@ -1089,8 +1094,8 @@
               "answer_shape_primacy_repaired": false,
               "answer_shape_primacy_repair_mode": null,
               "answer_shape_primacy_failure_reasons": [],
-              "answer_shape_primacy_preview_before": "A hooded figure is lingering near the gate, drawing the attention of guards who exchange wary gl\u2026",
-              "answer_shape_primacy_preview_after": "A hooded figure is lingering near the gate, drawing the attention of guards who exchange wary gl\u2026",
+              "answer_shape_primacy_preview_before": "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate. Refugees, w\u2026",
+              "answer_shape_primacy_preview_after": "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate. Refugees, w\u2026",
               "interaction_continuity_validation": {
                 "ok": true,
                 "enabled": false,
@@ -1153,7 +1158,7 @@
                 "visibility": {
                   "contract_present": true,
                   "decision_mode": "validated",
-                  "visible_entity_count": 6,
+                  "visible_entity_count": 5,
                   "withheld_fact_count": 17,
                   "reason_codes": []
                 },
@@ -1315,9 +1320,9 @@
             }
           ],
           "emergent_actor": {
-            "emergent_actor_enrolled": true,
-            "emergent_actor_id": "emergent_lord_aldric",
-            "emergent_actor_source_text": "Lord Aldric"
+            "emergent_actor_enrolled": false,
+            "emergent_actor_id": null,
+            "emergent_actor_source_text": null
           },
           "leads": {
             "registry_debug": [],
@@ -1327,12 +1332,12 @@
           "latency_ms": {
             "intent_classification": 0,
             "engine_resolution": 0,
-            "prompt_construction": 60,
-            "gpt_call": 6999,
+            "prompt_construction": 28,
+            "gpt_call": 11165,
             "retry_loop_total": 0,
-            "final_emission_gate": 12,
-            "fallback_repair": 0,
-            "total_turn": 7158
+            "final_emission_gate": 20,
+            "fallback_repair": 2,
+            "total_turn": 11257
           }
         },
         "gpt_called": true,
@@ -1366,21 +1371,21 @@
         "latency_ms": {
           "intent_classification": 0,
           "engine_resolution": 0,
-          "prompt_construction": 60,
-          "gpt_call": 6999,
+          "prompt_construction": 28,
+          "gpt_call": 11165,
           "retry_loop_total": 0,
-          "final_emission_gate": 12,
-          "fallback_repair": 0,
-          "total_turn": 7158
+          "final_emission_gate": 20,
+          "fallback_repair": 2,
+          "total_turn": 11257
         }
       }
     ],
     "flags": {},
     "character_name": "Galinor",
-    "campaign_run_id": "f45613b36f264bea54e440aa",
-    "session_id": "f45613b36f264bea54e440aa",
+    "campaign_run_id": "c0206a2d9ad71fe87c7084fd",
+    "session_id": "c0206a2d9ad71fe87c7084fd",
     "campaign_started": true,
-    "last_saved_at": "2026-04-26T01:39:45.958230Z",
+    "last_saved_at": "2026-04-26T02:47:37.533841Z",
     "_runtime_canonical_ctir_v1": {
       "version": 1,
       "turn_id": 1,
@@ -1509,10 +1514,10 @@
         "normalization_notes": []
       }
     },
-    "_runtime_canonical_ctir_stamp_v1": "1:1b42b0f3740:0",
+    "_runtime_canonical_ctir_stamp_v1": "1:1ce0317b900:0",
     "_runtime_narration_plan_bundle_v1": {
       "plan_metadata": {
-        "ctir_stamp": "1:1b42b0f3740:0",
+        "ctir_stamp": "1:1ce0317b900:0",
         "narrative_plan_bundle_version": 1,
         "narrative_plan_version": 1,
         "narration_plan_bundle_error": null,
@@ -1593,10 +1598,6 @@
           }
         ],
         "allowable_entity_references": [
-          {
-            "entity_id": "emergent_lord_aldric",
-            "descriptor": "emergent lord aldric"
-          },
           {
             "entity_id": "emergent_town_crier",
             "descriptor": "town crier"
@@ -1738,7 +1739,7 @@
             ],
             "relevant_actor_n": 0,
             "interlocutor_present": false,
-            "visible_entity_handle_n": 6
+            "visible_entity_handle_n": 5
           },
           "pressure": {
             "emphasis_band": "minimal",
@@ -1852,17 +1853,14 @@
             "A",
             "B",
             "C",
-            "D",
-            "E"
+            "D"
           ],
           "visible_fact_anchor_ids": [
             "vf_slot:0",
             "vf_slot:1",
             "vf_slot:2",
             "vf_slot:3",
-            "vf_slot:4",
-            "vf_slot:5",
-            "vf_slot:6"
+            "vf_slot:4"
           ],
           "prohibited_content_codes": [
             "no_backstage_plot_briefings",
@@ -1874,7 +1872,6 @@
           "derivation_codes": [
             "opening_reason:campaign_start",
             "visible_fact:cat:A",
-            "visible_fact:cat:E",
             "visible_fact:cat:B",
             "visible_fact:cat:C",
             "visible_fact:cat:D"
@@ -1903,7 +1900,6 @@
             "action_outcome:derive",
             "opening_reason:campaign_start",
             "visible_fact:cat:A",
-            "visible_fact:cat:E",
             "visible_fact:cat:B",
             "visible_fact:cat:C",
             "visible_fact:cat:D",
@@ -2131,7 +2127,6 @@
         },
         "narration_visibility": {
           "visible_entities": [
-            "emergent lord aldric",
             "town crier",
             "guard captain",
             "ragged stranger",
@@ -2140,13 +2135,11 @@
           ],
           "active_interlocutor_id": null,
           "visible_facts": [
-            "a hooded figure is lingering near the gate, drawing the attention of guards who exchange wary glances",
             "rain spatters soot-dark stone; frayed banners hang above cinderwatch's eastern gate",
-            "the muddy surroundings near the dead drop are marked by remnants of recent activity; footprints suggest hurried movements",
-            "a well-dressed figure near the gate scans the crowd, particularly focused on newcomers",
-            "a tavern runner's expression reflects an anxious urgency",
-            "several patrons express anxiety, casting glances at a well-dressed observer near the gate",
-            "a faint trail leads from the crowd toward a dark thicket of crates, marked by disturbed earth"
+            "a well-appointed townhouse overlooking the square flies noble colors above the mud and clamor",
+            "one figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue",
+            "refugees, wagons, and foot traffic clog the muddy approach while guards hold the choke",
+            "a notice board lists new taxes, curfews, and a posted warning about a missing patrol"
           ],
           "rules": {
             "no_unseen_entities": true,
@@ -2184,7 +2177,6 @@
             "gate"
           ],
           "actor_tokens": [
-            "emergent lord aldric",
             "town crier",
             "guard captain",
             "ragged stranger",
@@ -2201,7 +2193,7 @@
             "player_action",
             "location"
           ],
-          "debug_reason": "scene_state_anchor: loc=17 actor=6 player_action=3 enabled=True",
+          "debug_reason": "scene_state_anchor: loc=17 actor=5 player_action=3 enabled=True",
           "debug_sources": {
             "location": [
               "scene.id",
@@ -2576,12 +2568,6 @@
           "version": 1,
           "active_entities": [
             {
-              "entity_id": "emergent_lord_aldric",
-              "display_name": "emergent lord aldric",
-              "entity_kind": null,
-              "roles": []
-            },
-            {
               "entity_id": "emergent_town_crier",
               "display_name": "town crier",
               "entity_kind": "npc",
@@ -2627,7 +2613,6 @@
             }
           ],
           "active_entity_order": [
-            "emergent_lord_aldric",
             "emergent_town_crier",
             "guard_captain",
             "refugee",
@@ -2641,9 +2626,6 @@
           "pronoun_resolution": {
             "strategy": "unresolved",
             "buckets_by_entity": {
-              "emergent_lord_aldric": [
-                "they_them"
-              ],
               "emergent_town_crier": [
                 "they_them"
               ],
@@ -2665,10 +2647,6 @@
           },
           "ambiguity_risk": 58,
           "allowed_named_references": [
-            {
-              "entity_id": "emergent_lord_aldric",
-              "display_name": "emergent lord aldric"
-            },
             {
               "entity_id": "emergent_town_crier",
               "display_name": "town crier"
@@ -2701,10 +2679,6 @@
             }
           ],
           "safe_explicit_fallback_labels": [
-            {
-              "entity_id": "emergent_lord_aldric",
-              "safe_explicit_label": "emergent lord aldric"
-            },
             {
               "entity_id": "emergent_town_crier",
               "safe_explicit_label": "town crier"
@@ -2751,8 +2725,8 @@
               "turn_packet"
             ],
             "target_resolution_trace": [],
-            "visible_entity_count": 6,
-            "person_like_visible_count": 6,
+            "visible_entity_count": 5,
+            "person_like_visible_count": 5,
             "memory_window_entity_ids": [],
             "conflicting_target_signals": false
           }
@@ -2853,7 +2827,7 @@
         }
       }
     },
-    "_runtime_narration_plan_bundle_stamp_v1": "1:1b42b0f3740:0",
+    "_runtime_narration_plan_bundle_stamp_v1": "1:1ce0317b900:0",
     "last_turn_response_policy": {
       "rule_priority_order": [
         "ANSWER THE PLAYER",
@@ -3070,7 +3044,7 @@
         "enabled": true,
         "scene_id": "frontier_gate",
         "active_speaker_id": null,
-        "base_tone": "tense",
+        "base_tone": "guarded",
         "max_allowed_tone": "tense",
         "allow_guarded_refusal": true,
         "allow_verbal_pressure": true,
@@ -3089,7 +3063,7 @@
           "npc_already_hostile_in_state": false
         },
         "justification_reasons": [
-          "visible_facts_or_runtime_topic_pressure_indicate_elevated_tension",
+          "visible_facts_engagement_or_moderate_topic_pressure",
           "visible_entity_roles_include_authority_guardship",
           "affiliated_faction_attitude_and_pressure_in_world_state"
         ],
@@ -3097,7 +3071,7 @@
           "Tighten diction and body language without 'or else' phrasing.",
           "Use deadlines, policy, or reputation risk as leverage."
         ],
-        "debug_reason": "tone_escalation: base_rank=2 max_rank=2 combat_active=False hostile_npc=False",
+        "debug_reason": "tone_escalation: base_rank=1 max_rank=2 combat_active=False hostile_npc=False",
         "debug_inputs": {
           "scene_id": "frontier_gate",
           "has_session": true,
@@ -3109,7 +3083,7 @@
           "recent_log_len": 0
         },
         "debug_flags": {
-          "base_rank": 2,
+          "base_rank": 1,
           "max_rank": 2,
           "recent_player_text_latest_len": 0,
           "resolution_kind": "scene_opening",
@@ -3129,511 +3103,13 @@
         "active_target_id": null,
         "visible_fact_strings": [
           "rain spatters soot-dark stone; frayed banners hang above cinderwatch's eastern gate",
-          "refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in",
+          "refugees, wagons, and foot traffic clog the muddy approach while guards hold the choke",
           "a notice board lists new taxes, curfews, and a posted warning about a missing patrol",
           "a tavern runner shouts offers of hot stew and paid rumor",
-          "a well-appointed townhouse overlooking the square flies noble colors\u2014a quiet contrast to the mud and clamor",
+          "a well-appointed townhouse overlooking the square flies noble colors above the mud and clamor",
           "one figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue",
-          "a notice board lists new taxes, curfews, and a warning about a missing patrol",
-          "a tavern runner is shouting offers of hot stew",
-          "a figure in threadbare clothes stands still, observing the crowd",
-          "the notice board prominently displays new taxes, curfews, and a warning about a missing patrol",
-          "the tavern runner prepares a steaming bowl of thick stew",
-          "the tavern's warmth contrasts with the brisk rain outside, drawing in weary souls looking for food and news",
-          "the tavern runner is pulling together supplies as patrons enter, offering them warm stew",
-          "the atmosphere buzzes with urgent whispers from a few nearby patrons",
-          "the rain intensifies, making the muddy ground slick and treacherous",
-          "the well-dressed figure near the gate seems particularly interested in newcomers",
-          "lord aldric indicates that the missing patrol could hold vital information",
-          "nearby guards exchange wary glances, indicating a rising tension in the crowd",
-          "the tavern runner offers steaming stew and urgent rumors, creating a tempting opportunity",
-          "the tavern runner's demeanor shifts to serious as they share the rumor",
-          "a hooded figure is approaching the guard, shadowy and indistinct",
-          "the tavern runner appears anxious but intent on providing information",
-          "steam rises from a cauldron bubbling with thick stew, a beacon for weary souls",
-          "the atmosphere is thick with tension as the guards exchange wary glances",
-          "several figures in the crowd seem to be watching newcomers intently",
-          "the figure in threadbare clothes is watching the crowd intently",
-          "a well-dressed observer nearby is subtly studying newcomers",
-          "guards exchange wary glances, indicating rising tension",
-          "the tavern runner shouts offers of warm stew, but seems anxious",
-          "a cheer rises from nearby patrons, drawing attention",
-          "the rain intensifies, making the ground slick and treacherous",
-          "patrons near the tavern are whispering urgently about the missing patrol",
-          "a well-dressed bystander near the figure in tatters appears to exchange a subtle hand gesture, signaling something",
-          "several guards are now scanning the crowd with heightened attention",
-          "the tavern runner's expression reflects an anxious urgency",
-          "the tavern runner mentions lirael, the town crier, as a possible source of information about the missing patrol",
-          "a hooded figure has bumped into a guard, causing a shout among the crowd",
-          "onlookers are whispering nervously about the confrontation",
-          "the tavern runner's anxious shout about missing patrols and hot stew draws the attention of several locals",
-          "the atmosphere is filled with a mix of hunger and concern as more people gather around the runner",
-          "the figure in threadbare clothes continues to survey the crowd with an unsettling focus",
-          "nearby patrons are murmuring about the missing patrol, their whispers laced with apprehension",
-          "the rain continues to pour, soaking everyone in the square",
-          "the atmosphere is charged with urgent whispers about a missing patrol",
-          "nearby guards exchange wary glances, suggesting rising tension from the crowd",
-          "the tavern runner is gesturing galinor over, her expression a mix of urgency and hope",
-          "guards at a nearby table share uneasy glances, their hushed voices hinting at trouble",
-          "a figure in threadbare clothes is watching the crowd intently",
-          "the atmosphere is thick with whispers regarding the missing patrol, suggesting urgency and tension",
-          "several individuals in the crowd keep a watchful eye on newcomers, indicating a mix of curiosity and suspicion",
-          "to his left, there are two alleyways\u2014a narrow one that seems less traveled and a broader one leading toward a nearby tavern",
-          "a muddy patch directly ahead is strewn with crates, providing some cover, though it emits a sharp smell",
-          "several figures in the crowd appear to be acting strangely amidst the hustle about the missing patrol",
-          "two alleyways are nearby\u2014one narrow and less traveled, the other wider leading to a tavern",
-          "the tavern runner shouts not only about warm stew but also about urgent rumors concerning the missing patrol",
-          "the figure in threadbare clothes stands still, observing the crowd and the guards, indicating a potential waiting game",
-          "nearby guards exchange wary glances, indicating rising tension in the crowd",
-          "a hooded figure is lingering near the gate, drawing the attention of guards who exchange wary glances",
-          "a figure in threadbare clothes observes the crowd intently, waiting for something to happen",
-          "the crowd is thick with refugees, but a few individuals linger near the edges with suspicious intent",
-          "the tavern runner shouts offers of warm stew, alongside urgent rumors about a missing patrol",
-          "figures in the crowd shift uneasily, their eyes flicking toward the guards",
-          "the gate sergeant indicates captain thoran manages patrol assignments",
-          "murmurs of tension rise from the crowd, hinting at deeper troubles",
-          "the narrow alleyway appears shadowy and deserted, while the tavern helps an influx of patrons manage the rain outside",
-          "the tavern runner's anxious demeanor suggests she may have more than just stew to offer in terms of news",
-          "the muddy surroundings near the dead drop are marked by remnants of recent activity; footprints suggest hurried movements",
-          "a faint trail leads away from the drop, disappearing into a thicket of scattered crates",
-          "in the distance, a group of refugees appears to be whispering urgently among themselves, casting glances towards galinor",
-          "examining the dead drop closely reveals faint, hurried footprints leading northwest into the thicket of crates",
-          "a huddled group of refugees nearby murmurs about the missing patrol, their expressions grave",
-          "the intense gaze of a well-dressed figure flits between newcomers and the guards, suggesting an interest that could be more than casual",
-          "two alleyways present themselves; one narrow and deserted, the other wider, leading toward the tavern",
-          "a muddy patch is strewn with crates, providing some cover but emitting a sharp smell",
-          "several figures in the crowd appear to be watching newcomers intently",
-          "the area around the dead drop shows signs of recent activity; footprints are faint but visible, leading northwest into a thicket of crates",
-          "a nearby crate appears to have been disturbed, its contents spilling out onto the ground",
-          "the muddy ground near the dead drop bears faint footprints, suggesting recent movement",
-          "a few crates nearby appear to have been disturbed, some contents spilling onto the ground",
-          "a well-dressed figure near the gate studies newcomers intently, as if searching for something specific",
-          "a tavern runner excitedly shouts offers of warm stew while mentioning that rumors about a missing patrol are spreading quickly",
-          "patrons nearby murmur anxiously about the crowd's growing agitation over the missing patrol",
-          "to his left, a narrow alleyway seems less traveled, while a broader path leads to a nearby tavern",
-          "several figures in the crowd watch newcomers intently, conveying curious and suspicious glances",
-          "the tavern runner yells about warm stew and whispers rumors, catching the attention of nearby patrons",
-          "the tavern runner mentions that lirael, the town crier, has recently posted news about the patrol",
-          "the rain intensifies, further saturating the area as puddles begin to form",
-          "a hooded figure stands close to the entrance, drawing the watchful gaze of the guards",
-          "the tavern runner's shouts mix with growing murmurs of anxiety from the crowd",
-          "the atmosphere is charged with whispers regarding the missing patrol, suggesting urgency and tension",
-          "the rain intensifies, making the muddy ground slick and treacherous as galinor moves toward the thicket of crates",
-          "the atmosphere buzzes with whispers from the crowd regarding the missing patrol, suggesting rising concern among the townsfolk",
-          "the faint footprints lead northwest into the thicket of crates, suggesting hurried movements",
-          "disturbed crates nearby scatter remnants of a recent activity",
-          "the atmosphere is thick with the urgent whispers of nearby refugees about the missing patrol",
-          "a well-dressed individual is carefully observing the crowd, seemingly searching for something",
-          "the figure in threadbare clothing remains motionless, watching intently",
-          "the rain continues to pour, making it difficult to see much of the surrounding area beyond the immediate crowd",
-          "a hooded figure stands near the edge of the yard, casting furtive glances",
-          "the tavern runner looks particularly anxious, glancing at the guards and then back at the mob",
-          "there are two alleyways nearby; one narrow and less traveled, the other wider leading toward the tavern",
-          "several figures in the crowd seem to be watching newcomers intently, indicating a mix of curiosity and suspicion",
-          "a few crates nearby are disturbed, suggesting possible recent activity",
-          "nearby patrons murmur anxiously about the crowd's growing agitation over the missing patrol",
-          "faint footprints lead northwest into the thicket of crates",
-          "a crate appears slightly ajar, with its contents spilling out onto the ground",
-          "guards near the gate exchange whispers, visibly tense",
-          "the hooded figure shifts restlessly, their concealed intent keeping their eyes darting between the crowd and the guards",
-          "the rain continues to create puddles in the yard, making movement tricky",
-          "the tavern runner is shouting about both warm stew and urgent rumors regarding the missing patrol",
-          "two alleyways nearby: one narrow and deserted, the other wider, leading toward a tavern",
-          "the tavern runner's shouts about warm stew also include urgent rumors regarding the missing patrol",
-          "figures in the crowd appear curious, exchanging glances with each other and eyeing newcomers",
-          "faint footprints lead northwest into a thicket of scattered crates, suggesting hurried movements",
-          "the atmosphere is thick with tension, and several figures in the crowd are casting watchful glances in your direction",
-          "upon closer inspection, faint footprints lead northwest from the dead drop into a thicket of scattered crates, suggesting hurried movements",
-          "the rain further saturates the yard while tense conversations ripple through the crowd",
-          "a well-dressed figure, observing newcomers, catches galinor's eye\u2014a contrast amidst the disheveled refugees",
-          "the tavern runner, now near the tavern entrance, shouts eagerly about warm stew and urgent rumors of a missing patrol",
-          "the town square is crowded with a mix of refugees and curious onlookers, shadows shifting ominously with the rain",
-          "a well-dressed figure seems notably interested in newcomers, quietly scanning the crowd",
-          "the hooded figure continues to linger, casting furtive glances at the guards and nearby patrons",
-          "the thicket of crates feels ominous, the rain soaking through thin clothing as shadows dance with each flicker of lightning",
-          "footprints become clearer in the muddy ground, leading deeper into the scattered crates",
-          "the atmosphere thickens with tension, and you hear distant murmurs among the crowd, suggesting some urgency related to your pursuit",
-          "the crowd's tension amplifies, as several figures watch galinor intently, suggesting deeper interests at play",
-          "a figure in threadbare clothes stands still, observing the crowd intently",
-          "the tavern runner, now near the tavern entrance, shouts about warm stew and urgent rumors of a missing patrol",
-          "a well-dressed figure scans the crowd for newcomers, his interest unmistakable",
-          "the tavern runner hints at something strange about the missing patrol, specifically involving the old milestone",
-          "faint footprints lead northwest into a thicket of crates, suggesting hurried movements",
-          "faint footprints lead northwest into a thicket of crates, suggesting recent hurried movements",
-          "the tavern runner calls out to nearby patrons, urging them to grab warm stew while the opportunity lasts",
-          "guards at the gate exchange whispers, suggesting rising tensions in the crowd",
-          "a well-dressed figure near the entrance seems particularly interested in the newcomers",
-          "lirael, the town crier, stands nearby, her expression serious as she exchanges whispers with anxious patrons",
-          "the crowd's murmurs grow louder, particularly surrounding the rumors about the missing patrol",
-          "a loud shout from the tavern runner echoes as she calls for assistance",
-          "some patrons turn to look, their faces marked with concern and curiosity",
-          "a faint trail leads from the crowd toward a dark thicket of crates, marked by disturbed earth",
-          "the tavern runner's expression shifts to concern as she glances at the trail",
-          "faint footprints are visible in the muddy ground around the dead drop, suggesting recent activity",
-          "nearby crates appear disturbed, some contents spilling out into the mud, indicating a possible hurried escape",
-          "the faint footprints lead deeper into the thicket of crates, suggesting someone may have recently escaped or hidden something",
-          "nearby patrons are whispering urgently, their concern hinting at the significance of the missing patrol",
-          "the tavern runner, a woman with a worried expression, emphasizes that the missing patrol could be crucial to the town's safety",
-          "two alleyways are nearby\u2014one narrow and deserted, the other wider leading to a tavern",
-          "a hooded figure stands nearby, casting furtive glances",
-          "the muddy earth squishes underfoot, making each step careful",
-          "the well-dressed figure\u2019s gaze flits between passerby, appearing particularly interested in newcomers",
-          "the tavern runner gestures emphatically, urging locals to pay attention to the rumors",
-          "the rain-soaked yard is filled with a mix of refugees and townsfolk. the atmosphere is thick with tension as whispers about a missing patrol weave through the crowd",
-          "to his left, there are two alleyways\u2014one narrow and deserted, the other wider leading toward a nearby tavern",
-          "nearby patrons whisper anxiously among themselves, their eyes darting toward galinor",
-          "the thicket of crates appears tangled and messy, suggesting that something has been moved",
-          "faint footprints continue deeper into the thicket, but also seem to veer towards a few disturbed crates",
-          "the tension in the crowd grows as whispers amplify regarding the missing patrol",
-          "a well-dressed man has fixed his gaze on newcomers like galinor, keeping a sharp ear on the guards",
-          "a well-dressed figure discreetly watches the crowd, glancing at the guards",
-          "the tavern runner is shouting about warm stew and the latest rumors concerning the missing patrol",
-          "the rain intensifies, further soaking the yard and creating puddles",
-          "shops offer basic supplies, though prices seem higher than usual due to recent tensions",
-          "the local inns are crowded, with some patrons expressing concern about the missing patrol",
-          "tempers flare occasionally among the townsfolk, suggesting unrest in response to recent events",
-          "the old milestone looms in the distance, partially obscured by thick underbrush and shadows",
-          "the rain forms puddles around the worn path leading to the stone structure",
-          "a chilling breeze rustles through the underbrush, enhancing the uneasy atmosphere",
-          "to the left, a narrow alleyway appears less traveled, while a broader path leads to the tavern, bubbling with activity",
-          "figures in the crowd cast furtive glances, conveying unease about outsiders",
-          "the faint footprints lead deeper into the thicket, indicating hurried movement",
-          "among the scattered crates, a torn piece of parchment is partially visible, protruding from between two crates",
-          "the ground around the dead drop reveals faint footprints leading northwest into a thicket of scattered crates, suggesting hurried movements",
-          "nearby crates appear disturbed, their contents strewn about, indicating a possible recent escape or hurried concealment of something",
-          "faint footprints lead northwest into a thicket of crates near the dead drop, suggesting hurried movements",
-          "the rain continues to fall heavily, turning the ground to slick mud",
-          "the tavern runner's voice cuts through the din, offering both comfort and intrigue with news of the missing patrol",
-          "a well-dressed observer is scanning the crowd, a keen interest etched on his face",
-          "the tavern runner's voice cuts through the rain-drenched murmurings, blending warmth with urgency",
-          "the crowd's tension amplifies, with patrons glancing apprehensively at the guards",
-          "a well-dressed observer scans the crowd, their attention shifting toward galinor",
-          "several refugees exchange hushed words, their expressions grave regarding the missing patrol",
-          "nearby patrons keep glancing at a hooded figure, hinting at deeper secrets they might know",
-          "a few guards are now scanning the crowd more closely, increasing the overall tension",
-          "the footprints become more visible as the thicket thickens, leading deeper into the maze of crates, obscured from the main thoroughfare",
-          "the atmosphere in the thicket feels charged, as if something unseen is watching, adding a layer of tension to galinor's pursuit",
-          "the persistent rain creates puddles and makes the ground slippery",
-          "townsfolk murmur anxiously about the missing patrol, expressing concern and fear",
-          "a well-dressed man is watching the crowd intently, specifically focused on newcomers",
-          "the rain-soaked yard is filled with a mix of refugees and townsfolk",
-          "guards scan the area with wary eyes, indicating rising tension in the crowd",
-          "a well-dressed figure is watching the newcomers with particular interest",
-          "the tavern runner continues to shout about warm stew and the latest rumors regarding the missing patrol",
-          "the tavern runner's shouts mix with the growing murmurs of apprehension in the crowd about the missing patrol",
-          "the notice board highlights a significant warning about the missing patrol's last known location",
-          "the old millstone's stones are worn and moss-covered",
-          "faint footprints lead toward the millstone",
-          "the area around the millstone feels charged with unease",
-          "a group of nearby refugees is whispering anxiously, their voices barely audible over the din of the crowd",
-          "the rain intensifies, soaking the ground and creating a slick surface",
-          "a well-dressed figure surveys the crowd near the entrance, their interest piqued by galinor",
-          "the notice board highlights important warnings, particularly about the missing patrol",
-          "the rain continues to pour heavily, making the ground slick and dangerous",
-          "several figures in the crowd watch newcomers intently, suggesting deeper interests",
-          "a well-dressed figure is observing the crowd, his gaze particularly fixed on the newcomers",
-          "to his left, a narrow alleyway seems less traveled, while a broader path leads to a nearby tavern bubbling with activity",
-          "nearby crates appear disturbed, suggesting possible recent activity",
-          "the tavern runner is eager but cautious, aware of the delicate situation with the guards and the missing patrol",
-          "the gate sergeant is currently absent from their post",
-          "nearby guards are on high alert, casting wary looks toward the crowd",
-          "the tavern runner is calling out offers of warm stew and whispers of urgent rumors",
-          "refugees and townsfolk share anxious whispers about the missing patrol",
-          "a well-dressed figure observes newcomers intently, their interests piqued",
-          "two nearby alleyways offer contrasting atmospheres\u2014one quiet and deserted, the other lively",
-          "the rain intensifies, making the street muddy and slick underfoot",
-          "a cloaked figure seems to be observing the crowd closely",
-          "the eastern square is bustling with activity, drawing both patrons and onlookers",
-          "a hooded figure appears to be observing newcomers, an unusual air of scrutiny marking their presence",
-          "a torn piece of parchment is visible wedged between a couple of crates nearby, possibly containing important information",
-          "a well-dressed figure stands a little way back from the crowd, their attention fixed on galinor, hinting at possible intentions",
-          "two alleyways are nearby: one narrow and deserted, the other wider leading to the tavern",
-          "a figure in threadbare clothes observes the crowd with a focused intensity, hinting at possible ulterior motives",
-          "some crates nearby appear distressed, indicating recent activity or concealment",
-          "faint footprints lead northwest into the thicket of crates near the dead drop, suggesting hurried movements",
-          "the area smells of rain-soaked earth and something sharp, indicating recent activity",
-          "a marked symbol resembling a sigil associated with the ash cowl is visible among the disturbed crates",
-          "two alleyways are nearby: one narrow and shadowy, the other wider, leading toward a bustling tavern",
-          "the air is thick with the scent of rain-soaked earth and anxiety",
-          "the atmosphere is charged with whispers regarding the missing patrol, adding to the crowd's tension",
-          "the muddy ground is slick underfoot as the rain continues to pour",
-          "heavy rain soaks the ground, making movement tricky and muffling distant sounds",
-          "a few figures at the edge of the crowd are whispering urgently, glancing toward galinor as if discussing his presence",
-          "clarity is limited, and the many faces in the crowd obscure those who might be watching him",
-          "disturbed crates nearby indicate recent activity or concealment",
-          "the rain intensifies, making the ground slick and treacherous as galinor moves forward",
-          "a well-dressed man among the crowd appears to be watching newcomers intently",
-          "the tavern runner shouts offers of warm stew and urgent rumors about a missing patrol",
-          "galinor's insistence raises the eyebrows of some nearby patrons, who exchange glances as if they recognize the importance of the detail",
-          "two alleyways are nearby: one narrow and deserted, the other wider leading toward the bustling tavern",
-          "the atmosphere is thick with tension, and several figures in the crowd are watchful",
-          "a figure in threadbare clothes is watching the crowd and guards intently",
-          "the gate remains bustling with soldiers and town officials, but the sergeant is notably missing",
-          "guards are exchanging wary glances, indicating rising tension",
-          "the rain continues to pour, heightening the uneasy atmosphere",
-          "the tavern runner is gesturing toward galinor with a look of urgency, clearly wanting to share rumors",
-          "several figures in the crowd, particularly near the crates, whisper among themselves, sharing furtive glances",
-          "two alleyways are nearby: one narrow and deserted, the other wider leading toward a bustling tavern",
-          "a well-dressed figure is observing the newcomers with particular interest",
-          "nearby crates are disturbed, suggesting possible recent activity",
-          "anxious murmurs about the missing patrol ripple through the crowd",
-          "faint footprints lead northwest into the thicket of crates, suggesting hurried movement from the dead drop. nearby whispers regarding the missing patrol increase the atmosphere's tension",
-          "the narrow alleyway to the left appears shadowy and deserted, while the broader path leads to a lively tavern",
-          "nearby crates are disturbed, showing signs of recent activity",
-          "galinoir notices a marked symbol resembling a sigil associated with the ash cowl among the crates",
-          "the crowded atmosphere is thick with anxious whispers regarding the missing patrol",
-          "the tavern runner appears to want galinor's attention, gesturing him over with an expression of urgency",
-          "several figures in the crowd are watching galinor intently, hinting at a mix of curiosity and caution",
-          "two alleyways are nearby: one narrow and shadowy, the other wider leading toward a bustling tavern",
-          "a well-dressed observer near the entrance scans the crowd, clearly interested in newcomers",
-          "a well-dressed figure stands near the gate, observing newcomers with keen interest",
-          "a well-dressed figure near the gate is observing newcomers intently",
-          "the tavern runner seems particularly eager to share news, signaling towards galinor with urgency",
-          "the tavern runner's shouts mix with the growing murmurs of apprehension about the missing patrol",
-          "guards are exchanging wary glances, indicating rising tensions in the crowd",
-          "the bustling square is filled with a mixture of refugees and townsfolk",
-          "alerts about a missing patrol hang on the notice board, fluttering among drizzles of wet mud",
-          "figures in the crowd shift uneasily, casting watchful glances at strangers",
-          "nearby guards exchange wary glances, indicating rising tension",
-          "galinor notices the crowd's tension escalating as whispers about the missing patrol become more frantic",
-          "the tavern runner seems particularly anxious, hinting that she may hold information about recent events",
-          "the notice board prominently displays new taxes, curfews, and a warning about the missing patrol",
-          "several patrons exchange furtive glances as if aware of something deeper at play",
-          "the atmosphere thickens with whispers regarding what else might be hidden about the missing patrol",
-          "nearby crates appear disturbed, suggesting recent activity",
-          "the notice board prominently displays pressing warnings about the missing patrol",
-          "the tavern runner appears increasingly anxious as the shouting continues, casting worried glances at the crowd",
-          "two alleyways nearby: one narrow and deserted, the other wider leading toward a lively tavern",
-          "upon closer inspection, galinor discovers a torn piece of parchment wedged between the crates, possibly containing a note",
-          "two possible exits: a narrow alleyway leading away from the square and a broader path to the tavern",
-          "the tavern runner continues to shout about warm stew and urgent rumors regarding the missing patrol",
-          "several figures in the crowd are watching newcomers intently",
-          "a narrow alleyway to the left appears shadowy and deserted",
-          "a broader path leads toward a bustling tavern",
-          "nearby crates look disturbed and partially open, hinting at recent activity",
-          "the well-dressed figure near the gate observes newcomers intently",
-          "the muddy ground reveals faint footprints leading northwest into a thicket of scattered crates, suggesting hurried movements",
-          "the tavern runner appears eager to share news, signaling toward galinor with urgency",
-          "a well-dressed figure is observing newcomers with keen interest, his eyes scanning the crowd",
-          "the rain-soaked ground squelches underfoot",
-          "nearby, a well-dressed figure studies newcomers with keen interest",
-          "faint footprints are visible in the muddy ground around the dead drop, suggesting a hurried departure",
-          "new disturbances in the crates might have been caused by someone hastily searching through them",
-          "the muddy ground is busy with refugees and wagons",
-          "several onlookers exchange apprehensive glances",
-          "the tavern runner continues to shout about warm stew and rumors of a missing patrol",
-          "the atmosphere buzzes with tension",
-          "nearby patrons whisper among themselves, their expressions indicating they recognize the importance of the detail galinor insists upon",
-          "two nearby alleyways present themselves; one narrow and deserted, the other wider, leading toward a lively tavern",
-          "a few figures in the crowd are watching newcomers intently, hinting at a mix of curiosity and suspicion",
-          "nearby crates appear disturbed, indicating possible recent activity",
-          "the rain-soaked crowd is restless, with expressions of worry and anticipation as they discuss the missing patrol",
-          "the well-dressed observer is noted for watching the newcomers with keen interest, hinting at possible ulterior motives",
-          "the tavern runner's persistent shouts for warm stew and rumors create a significant buzz among the crowd",
-          "faint footprints lead northwest into the thicket of scattered crates, suggesting hurried movements from the dead drop",
-          "nearby crates appear disturbed, some contents strewn about, indicating a possible recent escape or hurried concealment of something",
-          "a well-dressed observer near the gate is watching newcomers intently, indicating potential deeper interests",
-          "the atmosphere buzzes with conversations regarding the missing patrol as figures in the crowd exchange furtive glances",
-          "the square bustles with tension as guards observe the crowd closely",
-          "a tavern runner continues shouting offers of warm stew while alluding to rumors of a missing patrol",
-          "nearby, the notice board details new taxes, curfews, and warnings regarding the missing patrol",
-          "crowd tensions seem to rise as whispers ripple about the missing patrol's fate",
-          "two alleyways are nearby: one narrow and deserted, leading away from the square, the other broader, leading to a lively tavern",
-          "the crowd's tension amplifies, with patrons exchanging furtive glances regarding the missing patrol",
-          "to the left, a narrow alleyway appears less traveled",
-          "a broader path leads toward the nearby tavern, bustling with activity",
-          "some crates half-hidden in the mud emit a sharp smell, suggesting possible activity",
-          "a faint trail of disturbed earth leads northwest from the drop, disappearing into a thicket of scattered crates, suggesting hurried movements",
-          "nearby patrons seem to notice galinor's interest in the area, exchanging faint whispers among themselves, their expressions grave",
-          "the muddy ground near the dead drop reveals faint footprints leading northwest into a thicket of scattered crates, suggesting hurried movement",
-          "among the disturbed crates, a marked symbol resembling a sigil associated with the ash cowl is visible",
-          "the yard is filled with a mix of bustling refugees and townsfolk eager for news amidst the chaos",
-          "the tavern runner's shouts mix urgently with murmurs from nearby patrons discussing the missing patrol",
-          "several well-dressed figures are observing the crowd, their expressions unreadable as they note newcomers",
-          "two alleyways are nearby; one narrow and shadowy, and the other broader, leading to a lively tavern filled with patrons",
-          "a group of nearby patrons appears to glance nervously at a set of disturbed crates",
-          "galinor notices faint footprints in the muddy ground leading northwest from the dead drop, suggesting recent hurried movement",
-          "nearby crates are positioned irregularly, indicating recent activity or concealment",
-          "nearby patrons exchange furtive glances, their expressions indicating they recognize the importance of recent events",
-          "to galinor's left, the narrow alleyway appears shadowy and deserted",
-          "a nearby patch of crates appears disturbed, suggesting recent activity",
-          "the tavern runner, her expression a mix of urgency and anxiety, gestures toward galinor",
-          "the thicket of crates appears tangled and messy, suggesting that something has been moved recently",
-          "faint footprints lead deeper into the scattered crates from the dead drop, indicating hurried movements",
-          "faint footprints are visible in the muddy ground leading northwest into a thicket of scattered crates, suggesting hurried movements from the dead drop",
-          "the rain pelts harder, creating puddles in the already muddy yard",
-          "the tavern runner continues calling out, urging locals to grab warm stew while spreading urgent rumors",
-          "several patrons express anxiety, casting glances at a well-dressed observer near the gate",
-          "tension in the crowd amplifies, and murmurs grow louder around the missing patrol",
-          "nearby crates are disturbed, indicating possible recent activity",
-          "faint footprints are visible in the muddy ground near the dead drop, suggesting hurried movement leading deeper into the thicket of crates",
-          "the notice board prominently features urgent notices about the missing patrol, drawing eyes and whispers",
-          "the tavern runner gestures toward galinor, her expression a mix of urgency and hope, indicating she may have valuable information",
-          "the crowd is filled with refugees and townspeople, their urgent whispers about the missing patrol blending into a chaotic harmony. nearby, a well-dressed individual studies newcomers with keen interest",
-          "patrons are increasingly uneasy about the missing patrol, their eyes darting around as they whisper urgent concerns",
-          "the tavern runner is calling out with a nervous energy, trying to capture attention among the growing crowd",
-          "faint footprints lead northwest into a thicket of crates, suggesting hurried movements from the dead drop, merging with the concerns of nearby patrons discussing the missing patrol",
-          "closer inspection reveals more footprints merging with disturbances around the crates, indicating recent activity or concealment",
-          "galinor notices a well-dressed figure observing newcomers with keen interest",
-          "the tavern runner, now calling out, tries to capture the attention of those nearby, hinting at valuable rumors",
-          "the well-dressed figure near the gate shifts slightly, indicating awareness of galinor's scanning gaze",
-          "the crates have distinct markings and signs of disturbance, suggesting recent activity or concealment",
-          "faint footprints lead northwest into the thicket of crates, suggesting hurried movements from the dead drop",
-          "the muddy ground shows signs of recent activity, indicating a potential escape or concealment",
-          "faint footprints lead northwest into a thicket of crates, suggesting hurried movements from the dead drop",
-          "to his left, a narrow alleyway appears shadowy and deserted",
-          "on his right is a broader path leading toward the lively tavern, echoing with shouts of the tavern runner offering warm stew",
-          "a well-dressed observer near the gate is meticulously watching newcomers",
-          "the gate sergeant is currently absent from their post, leading to a noticeable gap in security",
-          "nearby, a well-dressed observer scans the crowd with interest, indicating potential connections to the local power structure",
-          "the tavern runner insists that a figure named lirael, the town crier, handles curfew passes and is typically stationed at the tavern in the eastern square",
-          "the footprints become clearer as they lead deeper into the thicket, revealing signs of recent activity",
-          "galinor notices nearby patrons glancing nervously at the crates, suggesting they might know more about the dead drop",
-          "the tavern runner shouts about a missing patrol, her tone urgent and anxious, drawing the attention of several nearby patrons who exchange nervous glances",
-          "rain intensifies, further soaking the square and creating a slick surface that makes movement treacherous",
-          "the tavern runner is calling out offers of warm stew and rumors about the missing patrol",
-          "the well-dressed figure near the gate studies newcomers intently",
-          "the faint footprints lead deeper into the thicket, disappearing amidst the tangled crates and shadowy underbrush",
-          "the air grows thick with tension, as several patrons cast anxious glances in galinor's direction, recognizing the significance of his pursuit",
-          "the muddy ground shows clearer signs of recent activity as footprints lead deeper into the thicket of scattered crates",
-          "nearby patrons glance nervously at the crates, suggesting they might know more about the dead drop",
-          "the tavern runner's expression is a mix of urgency and anxiety, hinting she may hold valuable information",
-          "the crowd's atmosphere buzzes with urgent whispers about a missing patrol",
-          "a well-dressed figure near the gate observes newcomers intently, shifting their gaze between the crowd and the guards",
-          "the tavern runner continues to shout offers of warm stew, her expression a mix of urgency and anxiety",
-          "the atmosphere buzzes with urgent whispers regarding the missing patrol",
-          "a hooded figure lingers at the edge of the crowd, casually observing the exchanges with interest",
-          "nearby patrons whisper suspiciously among themselves, eyes darting towards newcomers and the guards",
-          "the gate sergeant is currently absent from his post, leading to a noticeable gap in security",
-          "murmurs about the missing patrol echo through the crowd, intensifying the atmosphere",
-          "nearby patrons whisper anxiously about what they might know regarding the missing patrol's fate",
-          "lord aldric's expression suggests he might know more about the missing patrol than he's letting on",
-          "nearby patrons exchange furtive glances, indicating they recognize the importance of the patrol's fate",
-          "a tavern runner nearby shouts about warm stew and the rumors surrounding the missing patrol",
-          "the notice board displays whispers of deep concern regarding the missing patrol, particularly concerning incidents near the old milestone",
-          "the tavern runner, now near the tavern entrance, shouts eagerly about warm stew and urgent rumors of a missing patrol, clearly wanting to share information",
-          "several figures in the crowd are watching galinor intently, hinting at a mix of curiosity and suspicion",
-          "a well-dressed figure near the gate observes newcomers intently, their interest piqued",
-          "the footprints become clearer as they lead into the thicket, indicating hurried movement. the thicket appears tangled, and the rain-soaked ground is slick underfoot, making the journey more treacherous",
-          "the atmosphere buzzes with urgent whispers regarding the missing patrol, suggesting rising concern among the townsfolk",
-          "a well-dressed figure watches the newcomers intently, indicating deeper interests may be at play",
-          "the muddy ground shows clearer signs of recent activity; several faint footprints lead further into a thicket of crates, suggesting hurried movements from the drop",
-          "among the disturbed crates, a marked symbol resembling a sigil associated with the ash cowl is now visible, hinting at possible connections to the missing patrol",
-          "the tavern runner continues to shout about warm stew while mixing in urgent rumors regarding the missing patrol",
-          "to the left, two alleyways present themselves: one narrow and shadowy, the other wider, leading toward a bustling tavern",
-          "nearby crates are piled haphazardly, their contents spilling out, suggesting recent activity that doesn\u2019t align with the bustling atmosphere of the square",
-          "nearby patrons whisper among themselves, their expressions indicating they recognize the importance of mentioning the missing patrol",
-          "the gate sergeant is notably absent, causing concern among the guards and the crowd",
-          "the faint footprints appear increasingly clear as galinor examines them closely",
-          "among the scattered crates, a torn piece of parchment is wedged, possibly containing critical information",
-          "the area around the dead drop shows signs of recent activity; footprints are faint but visible in the muddy ground",
-          "a torn piece of parchment is partially wedged between two crates nearby",
-          "nearby patrons whisper among themselves anxiously, glancing at galinor and the disturbed crates",
-          "some patrons appear to know more about the dead drop, their expressions indicating unease",
-          "nearby patrons glance nervously at the crates, their expressions indicating concern about recent events",
-          "the tavern runner continues to shout about warm stew, her voice carrying urgency over the murmurs of the crowd, while nearby patrons whisper anxiously about the missing patrol",
-          "several figures in the crowd watch newcomers intently, suggesting a wave of curiosity laced with suspicion",
-          "a few nearby patrons whisper anxiously, glancing towards galinor and indicating they recognize something important",
-          "the atmosphere thickens with murmurs about the missing patrol, making the tavern runner's offers of stew seem almost desperate",
-          "the muddy ground shows signs of recent activity, indicating potential concealment",
-          "the rain punctuates the chaotic atmosphere, creating a slick surface underfoot as patrons murmur urgently about a missing patrol",
-          "the well-dressed figure observes newcomers with keen interest, casting occasional glances toward the guards",
-          "two possible exits are visible: a narrow alleyway leading away from the square and a broader path toward a tavern",
-          "the ground is muddy, cluttered with crates that emit a sharp smell",
-          "several figures around the crates exchange anxious glances, likely aware of the tension surrounding the missing patrol",
-          "the muddy ground reveals more pronounced footprints leading northwest into the thicket, suggesting hurried movements from the dead drop",
-          "several nearby patrons look on, occasionally whispering amongst themselves, their expressions a mix of curiosity and concern",
-          "patrons nearby hold whispered conversations about the missing patrol, adding to the overall unease",
-          "the tavern runner insists the missing patrol may possess important information that could impact the town",
-          "the presence of guards lies heavier on the crowd, their wary glances sweeping across the throng as apprehension grows",
-          "the tavern runner gestures to a small group of patrons, clearly eager to share more about the rumors of the missing patrol",
-          "several nearby patrons glance nervously at the crates, indicating they might know more about the dead drop",
-          "faint footprints lead northwest into a thicket of crates from the dead drop, suggesting hurried movements",
-          "the tavern runner's expression is a mix of urgency and anxiety, hinting she may hold valuable information about the missing patrol",
-          "a nearby figure in threadbare clothes watches the crowd intently, indicating potential ulterior motives",
-          "galinor notices that some nearby patrons are whispering urgently about a missing patrol, their expressions showing concern",
-          "the atmosphere is thick with tension, with fleeting glances exchanged between guards and the crowd",
-          "galinor notices a narrow alley to the left, shadowy and deserted, while a broader path to the right leads toward a bustling tavern",
-          "the tavern runner's tone suggests urgency, hinting at more than just food in her offers",
-          "the faint footprints continue deeper into the thicket, suggesting a recent hurried movement away from the drop",
-          "among the disturbed crates, a marked symbol resembling a sigil associated with the ash cowl is now visible, hinting at possible connections to your pursuit",
-          "whispers ripple through the crowd, hinting that the missing patrol may have encountered something significant nearby",
-          "as the crowd buzzes with urgent whispers about the missing patrol, a few nearby patrons exchange glances, seemingly aware of galinor's insistence",
-          "rain-soaked refugees and townsfolk move about the square, their expressions taut with nervousness about the missing patrol",
-          "the tavern runner's shouts blend into murmurs from nearby patrons discussing the patrol, drawing more eager listeners",
-          "the square is a chaotic mix of refugees and townspeople, nearby patrons whispering anxiously about the missing patrol",
-          "the well-dressed observer near the gate seems particularly focused on newcomers like galinor, raising questions about their interest",
-          "two alleyways are visible; one narrow and shadowy, the other wider leading toward a lively tavern",
-          "the nearby crates are disturbed, indicating possible recent activity",
-          "whispers about the missing patrol ripple through the crowd, filled with anxiety",
-          "the muddy ground reveals clearer signs of recent activity as galinor investigates the area around the dead drop",
-          "the rain continues to pour, saturating the crowd",
-          "the tavern runner shouts about warm stew and rumors about the missing patrol, creating a buzz among the townsfolk",
-          "a well-dressed figure near the gate scans the crowd, particularly focused on newcomers",
-          "nearby patrons seem anxious, whispering about the missing patrol",
-          "the gate sergeant is notably missing from their post, causing concerns among the guards and crowd",
-          "the faint footprints appear more pronounced, leading deeper into the thicket, hinting at a hurried escape or concealment",
-          "amidst the scattered crates, a torn piece of parchment is partially visible, suggesting it might contain vital information regarding the dead drop's contents",
-          "a torn piece of parchment wedged between the crates nearby may hold crucial information about the missing patrol",
-          "rain continues to intensify, creating a damp atmosphere thick with tension",
-          "nearby guards scan the crowd with wary eyes, their postures rigid as they anticipate trouble",
-          "a notice board at the edge of the square prominently displays warnings about new taxes and the missing patrol",
-          "the tavern runner is actively calling out offers of warm stew mixed with whispers of rumors surrounding the patrol's fate",
-          "the atmosphere buzzes with urgent whispers about a missing patrol",
-          "the tavern runner is calling out offers of warm stew, her expression a mix of urgency and anxiety",
-          "nearby patrons are exchanging nervous glances regarding the patrol's fate",
-          "nearby, patrons murmur about the missing patrol, their tones laced with urgency",
-          "signs of hasty movement disturb the mud near the dead drop; faint footprints lead into the thicket of crates",
-          "whispers about the missing patrol circulate as patrons exchange nervous glances. the urgency in their voices hints at something significant",
-          "two nearby alleyways present themselves: one narrow and shadowy, the other broader, leading toward a bustling tavern",
-          "the atmosphere is thick with murmurs regarding the missing patrol, with patrons casting watchful glances at newcomers",
-          "a disturbed crate near the dead drop seems out of place amidst the organized activity of the crowd",
-          "faint footprints lead northwest into a thicket of scattered crates, suggesting hurried movements from the dead drop",
-          "several figures in the crowd seem to be watching the area intently",
-          "the tavern runner appears anxious, hinting that she might have more to offer than just stew",
-          "nearby patrons appear anxious, whispering among themselves about the missing patrol",
-          "the muddy ground near the dead drop reveals clearer signs of recent activity; several faint footprints lead northwest into the thicket of scattered crates",
-          "the crowd's atmosphere buzzes with urgent whispers about the missing patrol",
-          "a few refugees are discussing sightings of the patrol near the old milestone",
-          "guards exchange nervous glances, suggesting they sense something amiss",
-          "the tavern runner has urgent information about the missing patrol",
-          "nearby patrons seem to be aware of the significance of galinor's interest",
-          "multiple possible exits are visible: a narrow, deserted alleyway leading left and a broader path to a bustling tavern on the right",
-          "faint footprints lead northwest into a cluttered thicket of scattered crates, suggesting hurried movements from the dead drop",
-          "the atmosphere buzzes with urgent whispers from nearby patrons about the missing patrol",
-          "the tavern runner seems eager to share information, casting anxious glances at galinor",
-          "the gate sergeant is absent from his post",
-          "a guard indicates that captain thoran controls patrol assignments tonight",
-          "galinor focuses on tracing the smuggler\u2019s dead drop, following faint footprints northwest into the scattered crates",
-          "the tavern runner persists in calling out about warm stew and rumors of a missing patrol",
-          "a well-dressed figure observes newcomers near the gate with sharp interest",
-          "two alleyways are visible: a narrow shadowed path and a wider passage leading to a bustling tavern",
-          "the rain intensifies, making the muddy ground slick and challenging",
-          "the muddy ground near the dead drop shows faint footprints leading northwest into a thicket of disturbed crates",
-          "a torn piece of parchment is wedged between two crates nearby at the dead drop",
-          "several nearby patrons glance nervously at the crates",
-          "two alleyways near the gate: a narrow, shadowy, deserted one and a broader path leading to a busy tavern",
-          "a muddy patch near scattered crates emits a sharp smell; faint hurried footprints lead northwest into the thicket of crates",
-          "a torn piece of parchment is wedged between two crates near the muddy patch",
-          "a marked sigil resembling that of the ash cowl is visible among the disturbed crates",
-          "several patrons cast anxious glances at the disturbed crates and whisper among themselves",
-          "a tavern runner shouts offers of hot stew and urgent rumors about a missing patrol, her anxious glances shifting between the crowd and the guards",
-          "a well-dressed figure near the gate studies newcomers with intense, focused interest",
-          "galinor offers a trade: safe passage in exchange for information known to the guards and locals",
-          "the tavern runner signals willingness to speak but hints at risk",
-          "the guard captain and a well-dressed observer both react to the offer with heightened attention",
-          "the figure in threadbare clothes remains a silent observer near the crowd",
-          "a torn piece of parchment is wedged between two crates near the dead drop",
-          "faint footprints lead northwest into a thicket of scattered crates near the smuggler's dead drop, suggesting recent hurried movement",
-          "nearby crates appear disturbed, with some contents spilled onto the muddy ground",
-          "the yard is slick with rain and mud, making footing treacherous",
-          "the tavern runner\u2019s calls mix food with urgent rumors about local dangers",
-          "the notice board\u2019s messages highlight growing concern about a missing patrol",
-          "the threadbare figure watches the crowd rather than the gate itself",
-          "rain intensifies, muffling distant sounds and shadowing the square in gray",
-          "galinor offers a trade to the guards: safe passage in exchange for information about the missing patrol",
-          "the guard captain and a well-dressed observer watch galinor closely, their expressions wary but curious",
-          "the tavern runner signals willingness to speak but hints at risk in sharing information now"
+          "two alleyways branch from the approach: one narrow and shadowed, the other broader and leading toward the tavern",
+          "muddy crates clutter one edge of the approach, sharp with wet straw and refuse"
         ],
         "hidden_fact_strings_present": true,
         "discoverable_hinting_allowed": true,
@@ -3742,7 +3218,6 @@
           "cinderwatch",
           "eastern",
           "gate",
-          "emergent lord aldric",
           "town crier",
           "guard captain",
           "ragged stranger",
@@ -3768,7 +3243,7 @@
           "enabled": true,
           "scene_id": "frontier_gate",
           "active_speaker_id": null,
-          "base_tone": "tense",
+          "base_tone": "guarded",
           "max_allowed_tone": "tense",
           "allow_guarded_refusal": true,
           "allow_verbal_pressure": true,
@@ -3787,7 +3262,7 @@
             "npc_already_hostile_in_state": false
           },
           "justification_reasons": [
-            "visible_facts_or_runtime_topic_pressure_indicate_elevated_tension",
+            "visible_facts_engagement_or_moderate_topic_pressure",
             "visible_entity_roles_include_authority_guardship",
             "affiliated_faction_attitude_and_pressure_in_world_state"
           ],
@@ -3795,7 +3270,7 @@
             "Tighten diction and body language without 'or else' phrasing.",
             "Use deadlines, policy, or reputation risk as leverage."
           ],
-          "debug_reason": "tone_escalation: base_rank=2 max_rank=2 combat_active=False hostile_npc=False",
+          "debug_reason": "tone_escalation: base_rank=1 max_rank=2 combat_active=False hostile_npc=False",
           "debug_inputs": {
             "scene_id": "frontier_gate",
             "has_session": true,
@@ -3807,7 +3282,7 @@
             "recent_log_len": 0
           },
           "debug_flags": {
-            "base_rank": 2,
+            "base_rank": 1,
             "max_rank": 2,
             "recent_player_text_latest_len": 0,
             "resolution_kind": "scene_opening",
@@ -3832,7 +3307,7 @@
           "has_active_pending_leads": true,
           "has_follow_surface": false,
           "player_text_nonempty": false,
-          "primary_topic_count": 26,
+          "primary_topic_count": 25,
           "ambient_pressure_topic_count": 3
         },
         "debug_flags": {
@@ -3844,7 +3319,7 @@
           "tone_allow_verbal_pressure": true,
           "tone_allow_explicit_threat": false
         },
-        "debug_reason": "context_separation: pressure_focus_allowed=False primary_topics=26 ambient=3"
+        "debug_reason": "context_separation: pressure_focus_allowed=False primary_topics=25 ambient=3"
       },
       "player_facing_narration_purity": {
         "enabled": true,
@@ -4064,7 +3539,6 @@
         "soft_memory_limit": 12,
         "stale_after_turns": 18,
         "active_scene_entity_ids": [
-          "emergent_lord_aldric",
           "emergent_town_crier",
           "guard_captain",
           "refugee",
@@ -4096,13 +3570,13 @@
       "faction_pressure:ordo_pyric": "active|2|10"
     },
     "emergent_actor_debug": {
-      "emergent_actor_enrolled": true,
-      "emergent_actor_id": "emergent_lord_aldric",
-      "emergent_actor_source_text": "Lord Aldric"
+      "emergent_actor_enrolled": false,
+      "emergent_actor_id": null,
+      "emergent_actor_source_text": null
     }
   },
   "integrity": {
-    "payload_sha256": "5b40afc461ef288a1ff872188d8e94ea9191137db4c950739e1d5b6a5cde71c2",
+    "payload_sha256": "6c6bc48ba2c23ac9a729be646e1ee3e336348117ff2238b0c0129271da0bc56d",
     "canonicalization": "json/sort_keys,separators",
     "hash": "sha256"
   }

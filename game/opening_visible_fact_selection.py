@@ -132,6 +132,35 @@ def _norm_hits(norm: str, needles: Tuple[str, ...]) -> bool:
     return any(n in norm for n in needles)
 
 
+def _is_perceptual_opening_fact(norm: str) -> bool:
+    """Return True only for immediate, surface-level perceptual facts."""
+    if not norm:
+        return False
+
+    # Reject inference / causality / investigation phrasing.
+    INFERENCE_MARKERS = (
+        "suggest",
+        "indicat",
+        "reveal",
+        "appear to have",
+        "likely",
+        "recently",
+        "has been",
+        "have been",
+        "disturb",
+        "footprint",
+        "trail",
+        "dead drop",
+        "leads to",
+    )
+
+    for marker in INFERENCE_MARKERS:
+        if marker in norm:
+            return False
+
+    return True
+
+
 def _string_list(value: Any) -> List[str]:
     if isinstance(value, str):
         return [value]
@@ -372,6 +401,19 @@ def _candidate_rows_from_public_scene(
 ) -> Tuple[List[Tuple[str, str]], Dict[str, Any]]:
     ps = public_scene if isinstance(public_scene, Mapping) else {}
     opening_rows = _fact_rows(ps.get("opening_seed_facts"), source="opening_seed_facts")
+    journal_rows = _fact_rows(ps.get("journal_seed_facts"), source="journal_seed_facts")
+    journal_filtered_count = 0
+    if journal_rows:
+        journal_rows_with_norm = [
+            (original, metadata, _normalize_visibility_text(original))
+            for original, metadata in journal_rows
+        ]
+        journal_rows = [
+            (original, metadata)
+            for original, metadata, norm in journal_rows_with_norm
+            if _is_perceptual_opening_fact(norm)
+        ]
+        journal_filtered_count = len(journal_rows_with_norm) - len(journal_rows)
     spine_rows = _campaign_spine_opening_rows(ps)
 
     source_used = "none"
@@ -380,6 +422,10 @@ def _candidate_rows_from_public_scene(
     if opening_rows:
         rows = opening_rows
         source_used = "opening_seed_facts"
+        eligibility_mode = "explicit_source"
+    elif journal_rows:
+        rows = journal_rows
+        source_used = "journal_seed_facts"
         eligibility_mode = "explicit_source"
     elif spine_rows:
         rows = spine_rows
@@ -410,6 +456,7 @@ def _candidate_rows_from_public_scene(
         "opening_fact_eligibility_mode": eligibility_mode,
         "opening_fact_rejected_by_lifecycle_count": rejected_by_lifecycle,
         "opening_fact_rejected_by_form_count": rejected_by_form,
+        "opening_journal_filtered_count": journal_filtered_count,
     }
     return pairs, telemetry
 
@@ -498,6 +545,7 @@ def select_opening_narration_visible_facts_with_telemetry(
         "opening_fact_eligibility_mode": "none",
         "opening_fact_rejected_by_lifecycle_count": 0,
         "opening_fact_rejected_by_form_count": 0,
+        "opening_journal_filtered_count": 0,
     }
     if cap < 1:
         return [], empty_meta

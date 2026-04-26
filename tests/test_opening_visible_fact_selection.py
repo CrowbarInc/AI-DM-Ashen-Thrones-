@@ -224,13 +224,95 @@ def test_opening_seed_facts_beat_visible_facts():
     assert telemetry["opening_fact_eligibility_mode"] == "explicit_source"
 
 
-def test_journal_seed_facts_are_not_opening_fallback():
+def test_journal_seed_facts_are_explicit_opening_source_not_visible_facts_fallback():
     public = {
         "id": "journal",
         "location": "Square",
         "summary": "Square.",
-        "journal_seed_facts": ["Wind tugs at loose banners above the square."],
-        "visible_facts": ["Examining the crate reveals a private cipher."],
+        "journal_seed_facts": [
+            "Wind tugs at loose banners above the square.",
+            "A guard calls the next wagon toward the gate.",
+        ],
+        "visible_facts": [
+            "Examining the crate reveals a private cipher.",
+            "Upon closer inspection, hidden tracks reveal a smuggler route.",
+        ],
+        "exits": [],
+        "enemies": [],
+    }
+
+    out, telemetry = select_opening_narration_visible_facts_with_telemetry(public)
+
+    joined = " ".join(out).lower()
+    assert "wind tugs" in joined
+    assert "guard calls" in joined
+    assert "private cipher" not in joined
+    assert "smuggler route" not in joined
+    assert telemetry["opening_fact_source_used"] == "journal_seed_facts"
+    assert telemetry["opening_fact_eligibility_mode"] == "explicit_source"
+
+
+def test_journal_seed_facts_reject_inference_phrasing():
+    public = {
+        "journal_seed_facts": [
+            "Footprints suggest hurried movement.",
+            "A crate appears to have been disturbed.",
+            "Rain beads on the gate stones.",
+        ]
+    }
+
+    out, telemetry = select_opening_narration_visible_facts_with_telemetry(public)
+
+    assert out == ["Rain beads on the gate stones."]
+    assert telemetry["opening_journal_filtered_count"] == 2
+
+
+def test_journal_seed_facts_allow_neutral_perceptual_facts():
+    public = {
+        "journal_seed_facts": [
+            "Rain falls across the gate.",
+            "Guards watch the crowd.",
+        ]
+    }
+
+    out, telemetry = select_opening_narration_visible_facts_with_telemetry(public)
+
+    assert set(out) == {
+        "Rain falls across the gate.",
+        "Guards watch the crowd.",
+    }
+    assert telemetry["opening_journal_filtered_count"] == 0
+
+
+def test_journal_seed_facts_filter_investigation_terms_and_ignore_visible_facts():
+    public = {
+        "journal_seed_facts": [
+            "Footprints lead northwest from a dead drop.",
+            "Rain slicks the stone.",
+        ],
+        "visible_facts": [
+            "Dead drop contains hidden parchment.",
+        ],
+    }
+
+    out, telemetry = select_opening_narration_visible_facts_with_telemetry(public)
+    joined = " ".join(out).lower()
+
+    assert out == ["Rain slicks the stone."]
+    assert "footprints" not in joined
+    assert "dead drop" not in joined
+    assert telemetry["opening_journal_filtered_count"] == 1
+
+
+def test_opening_selection_fails_closed_without_explicit_opening_sources():
+    public = {
+        "id": "closed",
+        "location": "Gate",
+        "summary": "Gate.",
+        "visible_facts": [
+            "Rain slicks soot-dark stone beneath the eastern gate.",
+            "A guard calls for the next wagon in line.",
+        ],
         "exits": [],
         "enemies": [],
     }
@@ -239,6 +321,7 @@ def test_journal_seed_facts_are_not_opening_fallback():
 
     assert out == []
     assert telemetry["opening_fact_source_used"] == "none"
+    assert telemetry["opening_fact_eligibility_mode"] == "none"
 
 
 def test_visible_facts_lifecycle_metadata_is_not_opening_fallback():

@@ -424,6 +424,13 @@ def _scene_layers(scene_envelope: Dict[str, Any]) -> Tuple[Dict[str, Any], List[
         'summary': scene.get('summary'),
         'mode': scene.get('mode'),
         'visible_facts': visible,
+        'opening_seed_facts': scene.get('opening_seed_facts', []),
+        'journal_seed_facts': scene.get('journal_seed_facts', []),
+        'campaign_spine_opening_facts': scene.get('campaign_spine_opening_facts', []),
+        'spine_opening_facts': scene.get('spine_opening_facts', []),
+        'campaign_spine': scene.get('campaign_spine', {}),
+        'scenario_spine': scene.get('scenario_spine', {}),
+        'spine': scene.get('spine', {}),
         'exits': scene.get('exits', []),
         'enemies': scene.get('enemies', []),
     }

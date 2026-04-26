@@ -97,6 +97,32 @@ def test_start_campaign_emits_opening_and_sets_started(tmp_path: Path, monkeypat
     assert emission_debug.get("opening_curated_facts_source") in {"selector", "realization"}
 
 
+def test_start_campaign_frontier_gate_uses_journal_seed_facts_when_opening_seed_absent(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    _patch_data_dir(tmp_path, monkeypatch)
+    monkeypatch.setattr(api_mod, "log_upstream_api_preflight_at_startup", lambda: None)
+    monkeypatch.setattr("game.api.call_gpt", lambda *_a, **_k: dict(FAKE_GPT_RESPONSE))
+
+    with TestClient(app) as client:
+        assert client.post("/api/new_campaign").status_code == 200
+        gate_path = st.scene_path("frontier_gate")
+        gate = json.loads(gate_path.read_text(encoding="utf-8"))
+        scene = gate.get("scene") if isinstance(gate.get("scene"), dict) else gate
+        scene.pop("opening_seed_facts", None)
+        scene.pop("campaign_spine_opening_facts", None)
+        scene.pop("spine_opening_facts", None)
+        gate_path.write_text(json.dumps(gate, indent=2), encoding="utf-8")
+
+        sc = client.post("/api/start_campaign")
+        assert sc.status_code == 200
+
+    entries = load_log()
+    gm_output = entries[0].get("gm_output") or {}
+    emission_debug = (gm_output.get("metadata") or {}).get("emission_debug") or {}
+    assert emission_debug.get("opening_curated_facts_count", 0) > 0
+
+
 def test_start_campaign_log_has_no_begin_player_line(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     _patch_data_dir(tmp_path, monkeypatch)
     monkeypatch.setattr(api_mod, "log_upstream_api_preflight_at_startup", lambda: None)
