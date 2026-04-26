@@ -1,0 +1,71 @@
+{
+  "scene": {
+    "id": "scene_investigate",
+    "location": "Unnamed Scene",
+    "summary": "A blank scene awaiting definition.",
+    "mode": "exploration",
+    "visible_facts": [
+      "A notice board carries a posting about the missing patrol.",
+      "A broken lantern lies near the threshold.",
+      "A strange brass device ticks on the table."
+    ],
+    "discoverable_clues": [
+      {
+        "id": "notice_patrol_details",
+        "text": "The missing patrol was last seen below the east ridge."
+      },
+      {
+        "id": "lantern_tampering",
+        "text": "The lantern's hinge was forced open with a narrow tool."
+      },
+      {
+        "id": "brass_device_anomaly",
+        "text": "The brass device is warmer on the side facing the old road."
+      }
+    ],
+    "hidden_facts": [],
+    "exits": [],
+    "enemies": [],
+    "actions": [],
+    "interactables": [
+      {
+        "id": "notice_board",
+        "label": "Notice board",
+        "aliases": [
+          "notice",
+          "posting about the missing patrol"
+        ],
+        "type": "investigate",
+        "reveals_clue": "notice_patrol_details"
+      },
+      {
+        "id": "broken_lantern",
+        "label": "Broken lantern",
+        "type": "investigate",
+        "reveals_clue": "lantern_tampering"
+      },
+      {
+        "id": "brass_device",
+        "label": "Strange brass device",
+        "type": "investigate",
+        "reveals_clue": "brass_device_anomaly"
+      }
+    ],
+    "objects": [],
+    "suggested_actions": [
+      {
+        "id": "study-notice",
+        "label": "Study the notice board"
+      },
+      {
+        "id": "inspect-lantern",
+        "label": "Inspect the broken lantern"
+      },
+      {
+        "id": "study-device",
+        "label": "Study the strange brass device"
+      }
+    ]
+  },
+  "_is_canon": true
+}

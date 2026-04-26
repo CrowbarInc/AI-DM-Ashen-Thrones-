@@ -1,0 +1,4401 @@
+{
+  "persistence_version": 1,
+  "kind": "session",
+  "saved_at": "2026-04-26T16:18:33.329588Z",
+  "payload": {
+    "active_scene_id": "eastern_square",
+    "visited_scene_ids": [
+      "frontier_gate",
+      "eastern_square"
+    ],
+    "current_date": "Day 1",
+    "turn_counter": 1,
+    "response_mode": "standard",
+    "clocks": {
+      "suspicion": 0,
+      "unrest": 0,
+      "danger": 0,
+      "occult_instability": 0,
+      "time_pressure": 1
+    },
+    "interaction_context": {
+      "active_interaction_target_id": null,
+      "active_interaction_kind": null,
+      "interaction_mode": "none",
+      "engagement_level": "none",
+      "conversation_privacy": null,
+      "player_position_context": null
+    },
+    "scene_state": {
+      "active_scene_id": "eastern_square",
+      "active_entities": [],
+      "entity_presence": {
+        "tavern_runner": "offscene"
+      },
+      "current_interlocutor": null,
+      "emergent_addressables": [],
+      "promoted_actor_npc_map": {}
+    },
+    "runtime_scene_overlays": {
+      "frontier_gate": {
+        "scene_id": "frontier_gate",
+        "visible_facts_add": [],
+        "discovered_clues": [
+          "Lirael posts near the eastern square when she is not on the crier route."
+        ],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "eastern_square": {
+        "scene_id": "eastern_square",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "old_milestone": {
+        "scene_id": "old_milestone",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      }
+    },
+    "scene_runtime": {
+      "frontier_gate": {
+        "discovered_clues": [
+          "Lirael posts near the eastern square when she is not on the crier route."
+        ],
+        "discovered_clue_ids": [
+          "c_lirael"
+        ],
+        "pending_leads": [
+          {
+            "clue_id": "c_patrol",
+            "authoritative_lead_id": "ms_lead",
+            "text": "The patrol was last seen at the old milestone",
+            "leads_to_scene": "old_milestone"
+          }
+        ],
+        "revealed_hidden_facts": [],
+        "suspicion_flags": [],
+        "searched_targets": [],
+        "resolved_interactables": [],
+        "last_exploration_action_key": "question_tavern_runner",
+        "repeated_action_count": 1,
+        "last_resolution_kind": "question",
+        "last_description_hash": null,
+        "consumed_action_ids": [],
+        "momentum_exchanges_since": 0,
+        "momentum_next_due_in": 2,
+        "momentum_last_kind": null,
+        "passive_action_streak": 0,
+        "recent_player_actions": [
+          {
+            "text": "Tavern Runner, where can I find Lirael?",
+            "passive": false,
+            "markers": [],
+            "resolution_kind": null,
+            "turn": 1
+          }
+        ],
+        "last_player_action_text": "Tavern Runner, where can I find Lirael?",
+        "last_player_action_passive": false,
+        "npc_lead_discussions": {
+          "tavern_runner": {
+            "c_lirael": {
+              "npc_id": "tavern_runner",
+              "lead_id": "c_lirael",
+              "first_discussed_turn": 1,
+              "last_discussed_turn": 1,
+              "disclosure_level": "explicit",
+              "player_acknowledged": false,
+              "player_acknowledged_turn": null,
+              "mention_count": 1,
+              "last_scene_id": "frontier_gate"
+            }
+          }
+        },
+        "topic_pressure": {
+          "topic:find_lirael_runner": {
+            "repeat_count": 1,
+            "low_progress_streak": 0,
+            "progress_score_total": 1.5,
+            "last_answer": "Tavern Runner lowers their voice. \"I have heard the talk, but I cannot swear to that.\" Tavern Runner glances toward the street. \"You're asking for a line I don't own.\".",
+            "last_turn": 1,
+            "speaker_targets": {
+              "tavern_runner": {
+                "repeat_count": 1,
+                "low_progress_streak": 0,
+                "patience": 3,
+                "last_turn": 1
+              }
+            },
+            "previous_probe_dimension": "",
+            "last_probe_dimension": "location",
+            "last_player_input": "Tavern Runner, where can I find Lirael?"
+          }
+        },
+        "topic_pressure_last_topic_key": "topic:find_lirael_runner",
+        "topic_pressure_current": {
+          "topic_key": "topic:find_lirael_runner",
+          "speaker_key": "tavern_runner",
+          "turn": 1,
+          "player_text": "Tavern Runner, where can I find Lirael?",
+          "interaction_kind": "social",
+          "interaction_mode": "social",
+          "social_intent_class": "social_exchange",
+          "npc_name": "Tavern Runner"
+        },
+        "recent_contextual_leads": [
+          {
+            "key": "active_event_tavern_runner_lowers_their_voice",
+            "kind": "active_event",
+            "subject": "tavern runner lowers their voice",
+            "position": "",
+            "named": false,
+            "positioned": false,
+            "mentions": 1,
+            "last_turn": 1
+          },
+          {
+            "key": "active_event_i_have_heard_the_talk_but_i_cannot_swear_to_that_tavern_runner_glances_toward_the_street",
+            "kind": "active_event",
+            "subject": "\"i have heard the talk, but i cannot swear to that.\" tavern runner glances toward the street",
+            "position": "",
+            "named": false,
+            "positioned": false,
+            "mentions": 1,
+            "last_turn": 1
+          },
+          {
+            "key": "scene_npc_tavern_runner",
+            "kind": "scene_npc",
+            "subject": "Tavern Runner",
+            "position": "",
+            "named": true,
+            "positioned": false,
+            "mentions": 1,
+            "last_turn": 1
+          }
+        ]
+      },
+      "eastern_square": {
+        "discovered_clues": [],
+        "discovered_clue_ids": [],
+        "pending_leads": [],
+        "revealed_hidden_facts": [],
+        "suspicion_flags": [],
+        "searched_targets": [],
+        "resolved_interactables": [],
+        "last_exploration_action_key": "i_asked_about_lirael_earlier_galinor_lea",
+        "repeated_action_count": 1,
+        "last_resolution_kind": "scene_transition",
+        "last_description_hash": "956c319495af3c273a3a0145f8869e62",
+        "consumed_action_ids": [],
+        "momentum_exchanges_since": 1,
+        "momentum_next_due_in": 2,
+        "momentum_last_kind": null,
+        "recent_contextual_leads": []
+      }
+    },
+    "clue_knowledge": {
+      "c_lirael": {
+        "state": "discovered",
+        "source_scene": "frontier_gate",
+        "presentation": "explicit",
+        "text": "Lirael posts near the eastern square when she is not on the crier route."
+      }
+    },
+    "lead_registry": {
+      "ms_lead": {
+        "id": "ms_lead",
+        "title": "Patrol rumor",
+        "summary": "",
+        "type": "rumor",
+        "lifecycle": "discovered",
+        "status": "active",
+        "confidence": "rumor",
+        "discovery_source": "",
+        "first_discovered_turn": null,
+        "last_updated_turn": null,
+        "committed_at_turn": null,
+        "commitment_source": null,
+        "commitment_strength": null,
+        "resolved_at_turn": null,
+        "resolution_type": null,
+        "resolution_summary": null,
+        "obsolete_reason": null,
+        "escalation_level": 0,
+        "escalation_reason": null,
+        "escalated_at_turn": null,
+        "unlocked_by_lead_id": null,
+        "obsolete_by_lead_id": null,
+        "next_step": "",
+        "related_clue_ids": [],
+        "related_npc_ids": [],
+        "related_location_ids": [],
+        "owner_faction_id": null,
+        "priority": 0,
+        "last_touched_turn": null,
+        "stale_after_turns": null,
+        "parent_lead_id": null,
+        "supersedes": [],
+        "superseded_by": null,
+        "unlocks": [],
+        "blocked_by": [],
+        "related_faction_ids": [],
+        "related_scene_ids": [
+          "old_milestone"
+        ],
+        "tags": [],
+        "evidence_clue_ids": [],
+        "consequence_ids": [],
+        "metadata": {}
+      },
+      "c_lirael": {
+        "id": "c_lirael",
+        "title": "Lirael posts near the eastern square when she is not on the crier route.",
+        "summary": "Lirael posts near the eastern square when she is not on the crier route.",
+        "type": "rumor",
+        "lifecycle": "discovered",
+        "status": "active",
+        "confidence": "plausible",
+        "discovery_source": "clue_explicit",
+        "first_discovered_turn": 1,
+        "last_updated_turn": 1,
+        "committed_at_turn": null,
+        "commitment_source": null,
+        "commitment_strength": null,
+        "resolved_at_turn": null,
+        "resolution_type": null,
+        "resolution_summary": null,
+        "obsolete_reason": null,
+        "escalation_level": 0,
+        "escalation_reason": null,
+        "escalated_at_turn": null,
+        "unlocked_by_lead_id": null,
+        "obsolete_by_lead_id": null,
+        "next_step": "",
+        "related_clue_ids": [],
+        "related_npc_ids": [],
+        "related_location_ids": [],
+        "owner_faction_id": null,
+        "priority": 0,
+        "last_touched_turn": 1,
+        "stale_after_turns": null,
+        "parent_lead_id": null,
+        "supersedes": [],
+        "superseded_by": null,
+        "unlocks": [],
+        "blocked_by": [],
+        "related_faction_ids": [],
+        "related_scene_ids": [
+          "frontier_gate"
+        ],
+        "tags": [],
+        "evidence_clue_ids": [
+          "c_lirael"
+        ],
+        "consequence_ids": [],
+        "metadata": {}
+      }
+    },
+    "npc_runtime": {
+      "tavern_runner": {
+        "attitude": 0,
+        "trust": 1,
+        "fear": 0,
+        "suspicion": 0,
+        "known_topics": [],
+        "revealed_topics": [
+          "lirael_tip"
+        ],
+        "last_interaction_turn": 1
+      }
+    },
+    "last_action_debug": {
+      "last_action_type": "chat",
+      "player_input": "\"Thanks for the tip.\" I asked about Lirael earlier. Galinor leaves for the eastern square.",
+      "normalized_action": {
+        "id": "i_asked_about_lirael_earlier_galinor_lea",
+        "label": "I asked about Lirael earlier. Galinor leaves for the eastern square.",
+        "type": "scene_transition",
+        "targetSceneId": "eastern_square",
+        "target_scene_id": "eastern_square",
+        "prompt": "I asked about Lirael earlier. Galinor leaves for the eastern square."
+      },
+      "resolution_kind": "scene_transition",
+      "target_scene": "eastern_square",
+      "resolver_result": {
+        "kind": "scene_transition",
+        "action_id": "i_asked_about_lirael_earlier_galinor_lea",
+        "label": "I asked about Lirael earlier. Galinor leaves for the eastern square.",
+        "prompt": "I asked about Lirael earlier. Galinor leaves for the eastern square.",
+        "success": true,
+        "resolved_transition": true,
+        "target_scene_id": "eastern_square",
+        "clue_id": null,
+        "discovered_clues": [],
+        "state_changes": {
+          "scene_changed": true,
+          "scene_transition_occurred": true,
+          "arrived_at_scene": true,
+          "new_scene_context_available": true
+        },
+        "hint": "Player has moved to scene eastern_square. Narrate arrival and what they see there.",
+        "originating_scene_id": "frontier_gate",
+        "world_tick_events": [
+          {
+            "type": "faction_pressure",
+            "text": "Ordo Pyric's pressure mounts.",
+            "source": "ordo_pyric"
+          }
+        ]
+      },
+      "scene_transition": {
+        "from": "frontier_gate",
+        "to": "eastern_square"
+      },
+      "response_type_contract": {
+        "required_response_type": "action_outcome",
+        "source_route": "exploration",
+        "allow_escalation": false,
+        "debug_reasons": [
+          "resolved_world_action_requires_action_outcome",
+          "non_hostile_world_action_guard"
+        ]
+      },
+      "emergent_actor_enrolled": false,
+      "emergent_actor_id": null,
+      "emergent_actor_source_text": null
+    },
+    "debug_traces": [
+      {
+        "kind": "state_mutation",
+        "domain": "scene_state",
+        "owner_module": "game.interaction_context",
+        "operation": "rebuild_active_scene_entities",
+        "changed_area": "scene_state.active_entities"
+      },
+      {
+        "kind": "state_mutation",
+        "domain": "interaction_state",
+        "owner_module": "game.interaction_context",
+        "operation": "set_social_target",
+        "changed_area": "interaction_context+scene_state.current_interlocutor"
+      },
+      {
+        "kind": "state_mutation",
+        "domain": "scene_state",
+        "owner_module": "game.interaction_context",
+        "operation": "rebuild_active_scene_entities",
+        "changed_area": "scene_state.active_entities"
+      },
+      {
+        "kind": "state_mutation",
+        "domain": "interaction_state",
+        "owner_module": "game.interaction_context",
+        "operation": "set_social_target",
+        "changed_area": "interaction_context+scene_state.current_interlocutor"
+      },
+      {
+        "kind": "state_mutation",
+        "domain": "scene_state",
+        "owner_module": "game.api",
+        "operation": "authoritative_resolution_mutation",
+        "changed_area": "session+world+scene_runtime",
+        "resolution_kind": "question"
+      },
+      {
+        "kind": "state_mutation",
+        "domain": "player_visible_state",
+        "owner_module": "game.api",
+        "operation": "planner_convergence_snapshot",
+        "stage": "pre_prompt",
+        "report": {
+          "enabled": true,
+          "owner_module": "game.api",
+          "path_label": "dialogue_social",
+          "ctir_present": true,
+          "ctir_stamp": "1:25726c24540:2ac8a2f9",
+          "narrative_plan_present": true,
+          "narrative_plan_stamp": "1:25726c24540:2ac8a2f9",
+          "stamp_matches": true,
+          "prompt_consumes_plan": false,
+          "raw_state_prompt_bypass_detected": false,
+          "emergency_nonplan_allowed": false,
+          "failure_codes": []
+        }
+      },
+      {
+        "kind": "state_mutation",
+        "domain": "player_visible_state",
+        "owner_module": "game.api",
+        "operation": "planner_convergence_snapshot",
+        "stage": "post_prompt",
+        "report": {
+          "enabled": true,
+          "owner_module": "game.api",
+          "path_label": "dialogue_social",
+          "ctir_present": true,
+          "ctir_stamp": "1:25726c24540:2ac8a2f9",
+          "narrative_plan_present": true,
+          "narrative_plan_stamp": "1:25726c24540:2ac8a2f9",
+          "stamp_matches": true,
+          "prompt_consumes_plan": true,
+          "raw_state_prompt_bypass_detected": false,
+          "emergency_nonplan_allowed": false,
+          "failure_codes": []
+        }
+      },
+      {
+        "kind": "state_mutation",
+        "domain": "player_visible_state",
+        "owner_module": "game.api",
+        "operation": "emergency_nonplan_output",
+        "reason": "force_terminal_retry_fallback",
+        "emergency_nonplan_output": true,
+        "failure_class": "unresolved_question",
+        "retry_attempt": 1
+      },
+      {
+        "kind": "state_mutation",
+        "domain": "scene_state",
+        "owner_module": "game.interaction_context",
+        "operation": "rebuild_active_scene_entities",
+        "changed_area": "scene_state.active_entities"
+      },
+      {
+        "timestamp": "2026-04-26T16:18:33.130929Z",
+        "source": "chat",
+        "action_type": "chat",
+        "raw_input": "Tavern Runner, where can I find Lirael?",
+        "turn_stage_order": [
+          "player_input",
+          "intent_normalization_expansion",
+          "action_classification",
+          "engine_resolution",
+          "authoritative_state_mutation",
+          "prompt_context_construction",
+          "gpt_narration",
+          "affordance_derivation",
+          "response_debug_packaging"
+        ],
+        "incoming_payload": {
+          "text": "Tavern Runner, where can I find Lirael?"
+        },
+        "parsed_intent": {
+          "id": "question_tavern_runner",
+          "label": "Tavern Runner, where can I find Lirael?",
+          "type": "question",
+          "social_intent_class": "social_exchange",
+          "prompt": "Tavern Runner, where can I find Lirael?",
+          "metadata": {
+            "routed_via_dialogue_lock": true,
+            "route": "dialogue",
+            "canonical_entry_path": "social",
+            "canonical_entry_reason": "spoken_vocative_address",
+            "canonical_entry_target_actor_id": "tavern_runner",
+            "intent_route_debug": {
+              "routed_to": "social_exchange",
+              "route_reason": "spoken_vocative_address",
+              "addressed_actor_id": "tavern_runner",
+              "addressed_actor_source": "spoken_vocative"
+            },
+            "social_turn_contract": {
+              "social_followup_recovery": "not_applicable",
+              "interlocutor_status": "adopted",
+              "continuity_status": "redirected",
+              "fallback_anchor_source": "none",
+              "reply_owner_actor_id": "tavern_runner",
+              "routing_reason_code": "spoken_vocative_address",
+              "continuity_basis": "none",
+              "nearby_group_focus_source": "none"
+            },
+            "active_interaction_target_id": "tavern_runner",
+            "segmented_turn": {
+              "adjudication_question_text": "Tavern Runner, where can I find Lirael?"
+            },
+            "turn_segmentation": {
+              "adjudication_question_text": "Tavern Runner, where can I find Lirael?"
+            }
+          },
+          "target_id": "tavern_runner",
+          "targetEntityId": "tavern_runner"
+        },
+        "segmented_turn": {
+          "adjudication_question_text": "Tavern Runner, where can I find Lirael?"
+        },
+        "normalized_action": {
+          "id": "question_tavern_runner",
+          "label": "Tavern Runner, where can I find Lirael?",
+          "type": "question",
+          "prompt": "Tavern Runner, where can I find Lirael?"
+        },
+        "resolution": {
+          "kind": "question",
+          "action_id": "question_tavern_runner",
+          "label": "Tavern Runner, where can I find Lirael?",
+          "prompt": "Tavern Runner, where can I find Lirael?",
+          "success": true,
+          "resolved_transition": false,
+          "target_scene_id": null,
+          "clue_id": "c_lirael",
+          "discovered_clues": [
+            "Lirael posts near the eastern square when she is not on the crier route."
+          ],
+          "state_changes": {
+            "topic_revealed": true,
+            "npc_id": "tavern_runner"
+          },
+          "hint": "Player questioned Tavern Runner and learned: Lirael posts near the eastern square when she is not on the crier route.. Narrate the revelation.",
+          "metadata": {
+            "routed_via_dialogue_lock": true,
+            "route": "dialogue",
+            "canonical_entry_path": "social",
+            "canonical_entry_reason": "spoken_vocative_address",
+            "canonical_entry_target_actor_id": "tavern_runner",
+            "intent_route_debug": {
+              "routed_to": "social_exchange",
+              "route_reason": "spoken_vocative_address",
+              "addressed_actor_id": "tavern_runner",
+              "addressed_actor_source": "spoken_vocative"
+            },
+            "social_turn_contract": {
+              "social_followup_recovery": "not_applicable",
+              "interlocutor_status": "adopted",
+              "continuity_status": "redirected",
+              "fallback_anchor_source": "none",
+              "reply_owner_actor_id": "tavern_runner",
+              "routing_reason_code": "spoken_vocative_address",
+              "continuity_basis": "none",
+              "nearby_group_focus_source": "none"
+            },
+            "active_interaction_target_id": "tavern_runner",
+            "segmented_turn": {
+              "adjudication_question_text": "Tavern Runner, where can I find Lirael?"
+            },
+            "turn_segmentation": {
+              "adjudication_question_text": "Tavern Runner, where can I find Lirael?"
+            },
+            "unknown_legacy_keys": {
+              "noncombat_resolution": {
+                "framework_version": "2026.04.noncombat.v1",
+                "kind": "social_probe",
+                "subkind": "question",
+                "authority_domain": "interaction_state",
+                "deterministic_resolved": true,
+                "requires_check": false,
+                "check_request": null,
+                "outcome_type": "closed",
+                "success_state": "success",
+                "discovered_entities": [
+                  {
+                    "entity_kind": "npc",
+                    "entity_id": "tavern_runner"
+                  }
+                ],
+                "surfaced_facts": [
+                  "clue:c_lirael",
+                  "clue_text_digest:ebaba5f8"
+                ],
+                "state_changes": {
+                  "npc_id": "tavern_runner",
+                  "topic_revealed": true
+                },
+                "blocked_reason_codes": [],
+                "ambiguous_reason_codes": [],
+                "unsupported_reason_codes": [],
+                "authoritative_outputs": [
+                  {
+                    "output_kind": "resolution_trace",
+                    "source_engine": "game.social",
+                    "route": "social",
+                    "engine_action_id": "question_tavern_runner"
+                  }
+                ],
+                "narration_constraints": {
+                  "npc_reply_expected": true,
+                  "reply_kind": "answer"
+                }
+              }
+            },
+            "lead_landing": {
+              "revealed_lead_ids": [
+                "c_lirael"
+              ],
+              "already_known_lead_ids": [],
+              "actionable_lead_ids": [],
+              "lead_write_targets": [
+                "clue_knowledge",
+                "scene_runtime.discovered_clue_ids",
+                "event_log"
+              ],
+              "extracted_lead_ids": [],
+              "extracted_lead_sources": [],
+              "extracted_from_text": false,
+              "extracted_from_reconciled_text": false,
+              "authoritative_created_ids": [],
+              "authoritative_updated_ids": [],
+              "authoritative_unchanged_ids": [],
+              "authoritative_promoted_ids": []
+            },
+            "response_type_contract": {
+              "required_response_type": "dialogue",
+              "source_route": "mixed",
+              "allow_escalation": false,
+              "escalation_block_reason": "social_question_guard",
+              "strict_target_id": "tavern_runner",
+              "strict_answer_expected": true,
+              "strict_dialogue_expected": true,
+              "action_must_preserve_agency": false,
+              "debug_reasons": [
+                "authoritative_social_target_requires_dialogue",
+                "dialogue_turn_contains_question_expectation",
+                "social_question_guard"
+              ]
+            },
+            "emission_debug": {
+              "dialogue_social_plan": {
+                "version": 1,
+                "applies": true,
+                "speaker_id": "tavern_runner",
+                "speaker_name": "tavern runner",
+                "speaker_source": "referent_tracking.continuity_subject",
+                "dialogue_intent": "question",
+                "reply_kind": "unknown",
+                "pressure_state": "none",
+                "relationship_codes": [
+                  "unknown"
+                ],
+                "tone_bounds": [
+                  "neutral",
+                  "direct"
+                ],
+                "prohibited_content_codes": [
+                  "no_narrator_override",
+                  "no_ooc_instructions",
+                  "no_player_agency_override",
+                  "no_prompt_text"
+                ],
+                "derivation_codes": [
+                  "dialogue_social_plan:v1",
+                  "intent:ctir_only",
+                  "referent_tracking:consumed",
+                  "session_hints:bounded",
+                  "speaker:referent_tracking.continuity_subject"
+                ],
+                "validator": {
+                  "validated": true,
+                  "errors": [],
+                  "reject_field_names": [
+                    "dialogue",
+                    "dialogue_line",
+                    "gm_guidance",
+                    "instructions",
+                    "message",
+                    "narration",
+                    "player_facing_text",
+                    "prompt",
+                    "system_prompt",
+                    "text"
+                  ],
+                  "allowed_reply_kinds": [
+                    "answer",
+                    "explanation",
+                    "reaction",
+                    "refusal",
+                    "unknown"
+                  ],
+                  "allowed_pressure_states": [
+                    "high",
+                    "low",
+                    "moderate",
+                    "none"
+                  ],
+                  "allowed_tone_codes": [
+                    "cold",
+                    "deferential",
+                    "direct",
+                    "evasive",
+                    "guarded",
+                    "hostile",
+                    "neutral",
+                    "threatening",
+                    "warm"
+                  ],
+                  "allowed_relationship_codes": [
+                    "engagement_engaged",
+                    "engagement_focused",
+                    "engagement_none",
+                    "fear_high",
+                    "fear_low",
+                    "friendly",
+                    "hostile",
+                    "neutral",
+                    "suspicion_high",
+                    "suspicion_low",
+                    "trust_high",
+                    "trust_low",
+                    "unfriendly",
+                    "unknown"
+                  ]
+                },
+                "bounded_session_hints": {
+                  "active_interaction_target_id": "tavern_runner",
+                  "active_interaction_target_name": "Tavern Runner",
+                  "active_interaction_kind": "social",
+                  "interaction_mode": "social",
+                  "engagement_level": "engaged",
+                  "conversation_privacy": null,
+                  "player_position_context": null
+                }
+              },
+              "scene_state_anchor": {
+                "enabled": true,
+                "scene_id": "frontier_gate",
+                "counts": {
+                  "location": 17,
+                  "actor": 4,
+                  "player_action": 8
+                }
+              },
+              "context_separation": {
+                "validation": {
+                  "checked": true,
+                  "passed": true
+                },
+                "failure_reasons": [],
+                "assertion_flags": {
+                  "topic_hijack_background_pressure": false,
+                  "pressure_answer_substitution": false,
+                  "ambient_pressure_forced_tone_shift": false,
+                  "scene_focus_displaced_by_world_pressure": false,
+                  "pressure_overweighting": false
+                },
+                "repair_hints": [],
+                "debug_reason_marker": "cs_violations=none;repair_applied=False;pass_after=None;before_len=126;after_len=126;before_head='Tavern Runner lowers their voice. \"I have heard the talk, but I cannot swear to that.\" \"You\\'re a\u2026';after_head='Tavern Runner lowers their voice. \"I have heard the talk, but I cannot swear to that.\" \"You\\'re a\u2026'"
+              },
+              "conversational_memory_window": {
+                "enabled": true,
+                "window_version": "v1",
+                "prioritize_recent_turns": true,
+                "prioritize_active_scene_entities": true,
+                "deprioritize_stale_inactive_elements": true,
+                "allow_explicit_reintroduction": true,
+                "recent_turn_window": 6,
+                "soft_memory_limit": 12,
+                "stale_after_turns": 18,
+                "active_scene_entity_ids": [
+                  "guard_captain",
+                  "refugee",
+                  "tavern_runner",
+                  "threadbare_watcher"
+                ],
+                "anchored_interlocutor_id": "tavern_runner",
+                "active_interaction_target_id": "tavern_runner",
+                "explicit_reintroduced_entity_ids": [
+                  "tavern_runner"
+                ],
+                "explicit_reintroduced_topics": [],
+                "selection_debug": {
+                  "matched_entity_ids": [
+                    "tavern_runner"
+                  ],
+                  "matched_topics": [],
+                  "matched_grounded_ids": [
+                    {
+                      "id": "tavern_runner",
+                      "via": "anchored_interlocutor_id"
+                    },
+                    {
+                      "id": "tavern_runner",
+                      "via": "active_interaction_target_id"
+                    }
+                  ],
+                  "callback_marker_hit": null,
+                  "source_of_activity_anchor": "active_interaction_target_id",
+                  "source_of_recentness": "session.turn_counter",
+                  "source_of_reintroductions": "player_text+visibility_aliases"
+                }
+              },
+              "selected_conversational_memory": [
+                {
+                  "kind": "npc_lead_discussion",
+                  "entity_ids": [
+                    "tavern_runner"
+                  ],
+                  "topic_tokens": [
+                    "crier",
+                    "eastern",
+                    "lirael",
+                    "near",
+                    "posts",
+                    "route",
+                    "square",
+                    "when"
+                  ],
+                  "source_turn": 1,
+                  "text": "Lead c_lirael: Lirael posts near the eastern square when she is not on the crier route. (explicit)",
+                  "score": 256.0,
+                  "why_selected": [
+                    "recency",
+                    "active_scene_entity",
+                    "active_interaction_target",
+                    "anchored_interlocutor",
+                    "explicit_reintroduction"
+                  ]
+                }
+              ],
+              "conversational_memory": {
+                "selected_count": 1
+              },
+              "speaker_selection_contract": {
+                "primary_speaker_id": "tavern_runner",
+                "primary_speaker_name": "Tavern Runner",
+                "primary_speaker_source": "spoken_vocative",
+                "allowed_speaker_ids": [
+                  "tavern_runner"
+                ],
+                "continuity_locked": true,
+                "continuity_lock_reason": "single_grounded_in_scene_speaker",
+                "speaker_switch_allowed": true,
+                "speaker_switch_reason": "spoken_vocative_or_explicit_address",
+                "generic_fallback_forbidden": false,
+                "forbidden_fallback_labels": [
+                  "ragged stranger",
+                  "stranger",
+                  "someone nearby",
+                  "someone in the crowd",
+                  "a voice nearby",
+                  "a passerby",
+                  "a bystander",
+                  "an onlooker",
+                  "a figure nearby",
+                  "someone anonymous"
+                ],
+                "interruption_allowed": true,
+                "interruption_requires_scene_event": true,
+                "offscene_speakers_forbidden": true,
+                "debug": {
+                  "merged_player_prompt_preview": "Tavern Runner, where can I find Lirael? Tavern Runner, where can I find Lirael?",
+                  "strict_social_active": true,
+                  "authoritative_source": "spoken_vocative",
+                  "authoritative_reason": "spoken_vocative_resolved_to_addressable_actor",
+                  "grounding_reason_code": "authoritative_speaker_topic_pressure_reinforced",
+                  "grounding_fallback_applied": false,
+                  "neutral_reply_bridge": false,
+                  "why_speaker_chosen": "grounded_in_scene_npc:tavern_runner;authority_source=spoken_vocative;grounding=authoritative_speaker_topic_pressure_reinforced",
+                  "why_continuity_locked_or_not": "single_grounded_in_scene_speaker",
+                  "why_switch_permitted_or_not": "spoken_vocative_or_explicit_address",
+                  "interruption_tracker_active": false,
+                  "social_turn_contract": {
+                    "social_followup_recovery": "not_applicable",
+                    "interlocutor_status": "adopted",
+                    "continuity_status": "redirected",
+                    "fallback_anchor_source": "none",
+                    "reply_owner_actor_id": "tavern_runner",
+                    "routing_reason_code": "spoken_vocative_address",
+                    "continuity_basis": "none",
+                    "nearby_group_focus_source": "none"
+                  },
+                  "resolution_path": "engine_reuse_strict_reconcile"
+                }
+              },
+              "speaker_contract_enforcement": {
+                "contract_present": true,
+                "validation": {
+                  "ok": true,
+                  "reason_code": "speaker_contract_match",
+                  "canonical_speaker_id": "tavern_runner",
+                  "canonical_speaker_name": "Tavern Runner",
+                  "repair_mode": "none",
+                  "details": {
+                    "signature": {
+                      "speaker_name": "Tavern Runner",
+                      "speaker_label": "Tavern Runner",
+                      "is_explicitly_attributed": true,
+                      "is_generic_fallback_label": false,
+                      "has_interruption_framing": false,
+                      "confidence": "high"
+                    }
+                  }
+                },
+                "final_reason_code": "speaker_contract_match"
+              },
+              "scene_state_anchor_checked": true,
+              "scene_state_anchor_passed": true,
+              "scene_state_anchor_failed": false,
+              "scene_state_anchor_skip_reason": null,
+              "scene_state_anchor_matched_kinds": [
+                "actor",
+                "player_action"
+              ],
+              "scene_state_anchor_failure_reasons": [],
+              "scene_state_anchor_repaired": false,
+              "scene_state_anchor_repair_mode": null,
+              "tone_escalation_checked": true,
+              "tone_escalation_ok": true,
+              "tone_escalation_failed": false,
+              "tone_escalation_failure_reasons": [],
+              "tone_escalation_detected_flags": {
+                "guarded": false,
+                "verbal_pressure": false,
+                "explicit_threat": false,
+                "physical_hostility": false,
+                "combat_initiation": false
+              },
+              "tone_escalation_matched_tone_level": null,
+              "tone_escalation_repaired": false,
+              "tone_escalation_repair_mode": null,
+              "tone_escalation_contract_summary": {
+                "enabled": true,
+                "base_tone": "guarded",
+                "max_allowed_tone": "tense",
+                "allow_verbal_pressure": true,
+                "allow_explicit_threat": false,
+                "allow_physical_hostility": false,
+                "allow_combat_initiation": false,
+                "justification_reasons": [
+                  "visible_facts_engagement_or_moderate_topic_pressure",
+                  "visible_entity_roles_include_authority_guardship"
+                ]
+              },
+              "tone_escalation_contract_resolution_source": "shipped_response_policy",
+              "tone_escalation_violation_before_repair": false,
+              "narrative_authority_checked": true,
+              "narrative_authority_failed": false,
+              "narrative_authority_failure_reasons": [],
+              "narrative_authority_repaired": false,
+              "narrative_authority_repair_mode": null,
+              "narrative_authority_skip_reason": null,
+              "narrative_authority_deferral_mode": null,
+              "narrative_authority_assertion_flags": {
+                "invented_outcome": false,
+                "invented_hidden_fact": false,
+                "invented_intent": false,
+                "overcertain_unresolved_action": false
+              },
+              "anti_railroading": {
+                "validation": {
+                  "checked": true,
+                  "passed": true
+                },
+                "failure_reasons": [],
+                "assertion_flags": {
+                  "player_decision_override": false,
+                  "forced_direction": false,
+                  "exclusive_path_claim": false,
+                  "lead_plot_gravity": false,
+                  "forced_conclusion": false
+                },
+                "repair_hints": []
+              },
+              "anti_railroading_checked": true,
+              "anti_railroading_ok": true,
+              "anti_railroading_failed": false,
+              "anti_railroading_failure_reasons": [],
+              "anti_railroading_assertion_flags": {
+                "player_decision_override": false,
+                "forced_direction": false,
+                "exclusive_path_claim": false,
+                "lead_plot_gravity": false,
+                "forced_conclusion": false
+              },
+              "anti_railroading_repair_hints": [],
+              "anti_railroading_repaired": false,
+              "anti_railroading_repair_mode": null,
+              "anti_railroading_skip_reason": null,
+              "anti_railroading_contract_resolution_source": "shipped",
+              "context_separation_contract_resolution_source": "response_policy",
+              "context_separation_skip_reason": null,
+              "context_separation_checked": true,
+              "context_separation_ok": true,
+              "context_separation_failed": false,
+              "context_separation_failure_reasons": [],
+              "context_separation_assertion_flags": {
+                "topic_hijack_background_pressure": false,
+                "pressure_answer_substitution": false,
+                "ambient_pressure_forced_tone_shift": false,
+                "scene_focus_displaced_by_world_pressure": false,
+                "pressure_overweighting": false
+              },
+              "context_separation_repair_hints": [],
+              "context_separation_repaired": false,
+              "context_separation_repair_mode": null,
+              "context_separation_debug_reason_marker": "cs_violations=none;repair_applied=False;pass_after=None;before_len=126;after_len=126;before_head='Tavern Runner lowers their voice. \"I have heard the talk, but I cannot swear to that.\" \"You\\'re a\u2026';after_head='Tavern Runner lowers their voice. \"I have heard the talk, but I cannot swear to that.\" \"You\\'re a\u2026'",
+              "context_separation_passed_after_repair": null,
+              "player_facing_narration_purity": {
+                "validation": {
+                  "checked": true,
+                  "passed": true
+                },
+                "violation_keys": [],
+                "repair_hints": [],
+                "repair_modes": [],
+                "preview_before": "Tavern Runner lowers their voice. \"I have heard the talk, but I cannot swear to that.\" \"You're a\u2026",
+                "preview_after": "Tavern Runner lowers their voice. \"I have heard the talk, but I cannot swear to that.\" \"You're a\u2026"
+              },
+              "player_facing_narration_purity_contract_resolution_source": "response_policy",
+              "player_facing_narration_purity_skip_reason": null,
+              "player_facing_narration_purity_checked": true,
+              "player_facing_narration_purity_failed": false,
+              "player_facing_narration_purity_repaired": false,
+              "player_facing_narration_purity_repair_modes": [],
+              "player_facing_narration_purity_violation_keys": [],
+              "player_facing_narration_purity_repair_hints_used": [],
+              "player_facing_narration_purity_collapsed_to_diegetic_core": false,
+              "player_facing_narration_purity_preview_before": "Tavern Runner lowers their voice. \"I have heard the talk, but I cannot swear to that.\" \"You're a\u2026",
+              "player_facing_narration_purity_preview_after": "Tavern Runner lowers their voice. \"I have heard the talk, but I cannot swear to that.\" \"You're a\u2026",
+              "answer_shape_primacy": {
+                "checked": false,
+                "passed": true,
+                "failure_reasons": [],
+                "skip_reason": "turn_not_in_scope"
+              },
+              "answer_shape_primacy_skip_reason": "turn_not_in_scope",
+              "answer_shape_primacy_checked": false,
+              "answer_shape_primacy_failed": false,
+              "answer_shape_primacy_repaired": false,
+              "answer_shape_primacy_repair_mode": null,
+              "answer_shape_primacy_failure_reasons": [],
+              "answer_shape_primacy_preview_before": null,
+              "answer_shape_primacy_preview_after": null,
+              "interaction_continuity_validation": {
+                "ok": false,
+                "enabled": true,
+                "continuity_strength": "strong",
+                "violations": [
+                  "multi_speaker_interruption_under_continuity",
+                  "speaker_switch_without_explicit_cue"
+                ],
+                "warnings": [],
+                "facts": {
+                  "anchored_interlocutor_id": "tavern_runner",
+                  "anchor_required": true,
+                  "speaker_switch_detected": true,
+                  "explicit_switch_cue_present": false,
+                  "thread_drop_detected": false,
+                  "narrator_bridge_present": false,
+                  "multi_speaker_pattern_present": true,
+                  "dialogue_presence": true
+                },
+                "debug": {
+                  "speaker_labels_detected": [],
+                  "cue_labels": [],
+                  "reason_path": [
+                    "contract_active",
+                    "dialogue_shape_expected",
+                    "speaker_contract_primary_id_vs_multi_speaker_pattern"
+                  ]
+                }
+              },
+              "fallback_behavior": {
+                "validation": {
+                  "contract_present": false,
+                  "checked": true,
+                  "passed": false,
+                  "uncertainty_active": true
+                },
+                "failure_reasons": [
+                  "missing_allowed_fallback_shape"
+                ],
+                "repair_mode": "none"
+              },
+              "fallback_behavior_contract_present": false,
+              "fallback_behavior_checked": true,
+              "fallback_behavior_skip_reason": null,
+              "fallback_behavior_uncertainty_active": true,
+              "fallback_behavior_failed": true,
+              "fallback_behavior_failure_reasons": [
+                "missing_allowed_fallback_shape"
+              ],
+              "fallback_behavior_repaired": false,
+              "fallback_behavior_repair_mode": "none",
+              "fallback_behavior_clarifying_question_used": false,
+              "fallback_behavior_partial_used": false,
+              "fallback_behavior_known_edge_preserved": false,
+              "fallback_behavior_unknown_edge_added": false,
+              "fallback_behavior_next_lead_added": false,
+              "fallback_behavior_meta_voice_stripped": false,
+              "fallback_behavior_boundary_semantic_synthesis_skipped": true,
+              "narration_constraint_debug": {
+                "response_type": {
+                  "required": "dialogue",
+                  "contract_source": "resolution.authoritative_social",
+                  "candidate_ok": true,
+                  "repair_used": false,
+                  "repair_kind": null,
+                  "upstream_prepared_absent": false
+                },
+                "visibility": {
+                  "contract_present": true,
+                  "decision_mode": "validated",
+                  "visible_entity_count": 4,
+                  "withheld_fact_count": 4,
+                  "reason_codes": []
+                },
+                "speaker_selection": {
+                  "speaker_id": "tavern_runner",
+                  "speaker_name": "Tavern Runner",
+                  "selection_source": "spoken_vocative",
+                  "reason_code": "speaker_contract_match",
+                  "binding_confident": true
+                }
+              }
+            },
+            "minimum_actionable_lead": {
+              "minimum_actionable_lead_enforced": false,
+              "enforced_lead_id": null,
+              "enforced_lead_source": null
+            },
+            "minimum_actionable_lead_enforced": false,
+            "enforced_lead_id": null,
+            "enforced_lead_source": null
+          },
+          "social": {
+            "social_intent_class": "social_exchange",
+            "npc_id": "tavern_runner",
+            "npc_name": "Tavern Runner",
+            "target_resolved": true,
+            "topic_revealed": {
+              "id": "lirael_tip",
+              "text": "Lirael posts near the eastern square when she is not on the crier route.",
+              "clue_id": "c_lirael",
+              "clue_text": null
+            },
+            "skill_check": null,
+            "npc_reply_expected": true,
+            "reply_kind": "answer",
+            "target_source": "explicit_target",
+            "target_reason": "normalized target_id matches scene-addressable roster",
+            "target_candidate_id": "tavern_runner",
+            "target_candidate_valid": true,
+            "stale_interlocutor_cleared": false,
+            "addressability_checked_against": [
+              "active_entities",
+              "entity_presence_active_or_nearby",
+              "scene_addressables",
+              "world_roster_in_scene",
+              "interaction_continuity"
+            ],
+            "declared_switch_detected": false,
+            "declared_switch_target_actor_id": null,
+            "continuity_overridden_by_declared_switch": false,
+            "spoken_vocative_detected": true,
+            "spoken_vocative_target_actor_id": "tavern_runner",
+            "continuity_overridden_by_spoken_vocative": false,
+            "actor_addressable": true,
+            "target_binding": {
+              "final_target_kind": "npc",
+              "npc_id": "tavern_runner",
+              "target_source": "native_npc",
+              "origin_actor_id": null,
+              "promoted_this_turn": false
+            },
+            "target_profile_hints": {
+              "guardedness": "medium",
+              "answer_reliability_tier": "medium",
+              "speaks_authoritatively_for_scene": false
+            },
+            "authority_source_used": "explicit_target",
+            "proposed_reply_speaker_id": "tavern_runner",
+            "grounding_fallback_applied": false,
+            "grounding_reason_code": "authoritative_speaker_eligible",
+            "grounded_speaker_id": "tavern_runner",
+            "lead_discussion_updates": [
+              {
+                "npc_id": "tavern_runner",
+                "lead_id": "c_lirael",
+                "disclosure_level": "explicit",
+                "player_acknowledged": false,
+                "mention_count": 1,
+                "acknowledged_updated": false
+              }
+            ],
+            "anchor_tokens_extracted": [],
+            "anchor_token_matched": null,
+            "anchor_followup_detected": false,
+            "explanation_of_recent_anchor_followup": false,
+            "correction_reask_followup_detected": false,
+            "recent_reference_clarification_detected": false,
+            "recent_reference_kind": null,
+            "recent_reference_phrase_matched": null,
+            "clarification_prompt_shape": null,
+            "social_escalation": {
+              "escalation_level": 1,
+              "escalation_reason": "first_attempt_same_topic",
+              "escalation_effect": "vague_or_guarded_answer_allowed",
+              "force_partial_answer": false,
+              "force_actionable_lead": false,
+              "add_suspicion": false,
+              "trigger_scene_momentum": false,
+              "convert_refusal_to_conditioned_offer": false,
+              "topic_exhausted": false,
+              "effective_reply_kind": null,
+              "social_question_dimension": "location",
+              "topic_exhausted_for_dimension": false,
+              "valid_followup_detected": false,
+              "prior_same_dimension_answer_exists": false
+            },
+            "social_question_dimension": "location",
+            "topic_exhausted_for_dimension": false,
+            "valid_followup_detected": false,
+            "prior_same_dimension_answer_exists": false,
+            "strategy_forced_to_answer": false,
+            "suppressed_fallback_strategies": [],
+            "social_answer_retry_candidate_kind": "structured_fact",
+            "social_answer_retry_anchor_text": "Lirael posts near the eastern square when she is not on the crier route.",
+            "social_answer_retry_candidate_source": "resolution:topic_revealed"
+          },
+          "requires_check": false,
+          "world_tick_events": [
+            {
+              "type": "faction_pressure",
+              "text": "House Verevin's pressure mounts.",
+              "source": "house_verevin"
+            },
+            {
+              "type": "faction_pressure",
+              "text": "The Ash Cowl's pressure mounts.",
+              "source": "ash_cowl"
+            }
+          ]
+        },
+        "scene_before": "frontier_gate",
+        "scene_after": "frontier_gate",
+        "clue_updates": [
+          "Lirael posts near the eastern square when she is not on the crier route."
+        ],
+        "world_flag_updates": [
+          "clock:time_pressure=1"
+        ],
+        "turn_trace": {
+          "source": "chat",
+          "player_input": "Tavern Runner, where can I find Lirael?",
+          "intent": {
+            "parsed": {
+              "id": "question_tavern_runner",
+              "label": "Tavern Runner, where can I find Lirael?",
+              "type": "question",
+              "social_intent_class": "social_exchange",
+              "prompt": "Tavern Runner, where can I find Lirael?",
+              "metadata": {
+                "routed_via_dialogue_lock": true,
+                "route": "dialogue",
+                "canonical_entry_path": "social",
+                "canonical_entry_reason": "spoken_vocative_address",
+                "canonical_entry_target_actor_id": "tavern_runner",
+                "intent_route_debug": {
+                  "routed_to": "social_exchange",
+                  "route_reason": "spoken_vocative_address",
+                  "addressed_actor_id": "tavern_runner",
+                  "addressed_actor_source": "spoken_vocative"
+                },
+                "social_turn_contract": {
+                  "social_followup_recovery": "not_applicable",
+                  "interlocutor_status": "adopted",
+                  "continuity_status": "redirected",
+                  "fallback_anchor_source": "none",
+                  "reply_owner_actor_id": "tavern_runner",
+                  "routing_reason_code": "spoken_vocative_address",
+                  "continuity_basis": "none",
+                  "nearby_group_focus_source": "none"
+                },
+                "active_interaction_target_id": "tavern_runner",
+                "segmented_turn": {
+                  "adjudication_question_text": "Tavern Runner, where can I find Lirael?"
+                },
+                "turn_segmentation": {
+                  "adjudication_question_text": "Tavern Runner, where can I find Lirael?"
+                }
+              },
+              "target_id": "tavern_runner",
+              "targetEntityId": "tavern_runner"
+            },
+            "segmented_turn": {
+              "adjudication_question_text": "Tavern Runner, where can I find Lirael?"
+            },
+            "normalized": {
+              "id": "question_tavern_runner",
+              "label": "Tavern Runner, where can I find Lirael?",
+              "type": "question",
+              "prompt": "Tavern Runner, where can I find Lirael?",
+              "targetSceneId": null,
+              "target_scene_id": null,
+              "targetEntityId": "tavern_runner",
+              "target_id": "tavern_runner"
+            },
+            "implied_context": {
+              "applied": false,
+              "cases": [],
+              "target_id": "tavern_runner",
+              "commitment_broken": false,
+              "break_reason": null
+            }
+          },
+          "classification": {
+            "action_type": "chat",
+            "resolved_kind": "question",
+            "requires_check": false
+          },
+          "response_type_contract": {
+            "required_response_type": "dialogue",
+            "source_route": "mixed",
+            "allow_escalation": false,
+            "debug_reasons": [
+              "authoritative_social_target_requires_dialogue",
+              "dialogue_turn_contains_question_expectation",
+              "social_question_guard"
+            ]
+          },
+          "social_contract_trace": {
+            "route_selected": "dialogue",
+            "routing_reason_code": "spoken_vocative_address",
+            "social_followup_recovery": "not_applicable",
+            "reply_owner_actor_id": "tavern_runner",
+            "interlocutor_status": "retained",
+            "continuity_status": "redirected",
+            "fallback_anchor_source": "active_interlocutor",
+            "visible_grounded_speaker": "tavern_runner",
+            "final_reply_owner": "tavern_runner"
+          },
+          "resolution_path": "social_engine",
+          "authoritative_state_changes": {
+            "scene_transition": null,
+            "resolution_state_changes": {
+              "topic_revealed": true,
+              "npc_id": "tavern_runner"
+            },
+            "resolution_world_updates": [],
+            "check_request": null
+          },
+          "interaction_after": {
+            "active_interaction_target_id": "tavern_runner",
+            "active_interaction_kind": "social",
+            "interaction_mode": "social",
+            "engagement_level": "engaged",
+            "conversation_privacy": null,
+            "player_position_context": null
+          },
+          "narration_obligations": {
+            "is_opening_scene": true,
+            "must_advance_scene": false,
+            "should_answer_active_npc": true,
+            "avoid_input_echo": true,
+            "avoid_player_action_restatement": true,
+            "prefer_structured_turn_summary": true,
+            "active_npc_reply_expected": true,
+            "active_npc_reply_kind": "answer",
+            "scene_momentum_due": false,
+            "scene_momentum_exchanges_since": 0,
+            "scene_momentum_next_due_in": 2,
+            "suppress_non_social_emitters": true
+          },
+          "clues": {
+            "discovered_texts": [
+              "Lirael posts near the eastern square when she is not on the crier route."
+            ],
+            "presentation_changes": [
+              {
+                "id": "c_lirael",
+                "from": null,
+                "to": "explicit"
+              }
+            ],
+            "known_counts": {
+              "implicit": 0,
+              "explicit": 1,
+              "actionable": 0
+            }
+          },
+          "affordances_after": [
+            {
+              "id": "question_tavern_runner",
+              "type": "question",
+              "label": "Talk to Tavern Runner",
+              "targetEntityId": "tavern_runner"
+            },
+            {
+              "id": "examine_the_rain_spatters_soot_dark_stone_frayed",
+              "type": "investigate",
+              "label": "Examine the Rain spatters soot-dark stone; frayed"
+            },
+            {
+              "id": "examine_refugees",
+              "type": "investigate",
+              "label": "Examine Refugees"
+            },
+            {
+              "id": "examine_a_notice_board_lists_new_taxes",
+              "type": "investigate",
+              "label": "Examine A notice board lists new taxes"
+            },
+            {
+              "id": "talk_to_a_tavern_runner_shouts_offers_of_hot",
+              "type": "investigate",
+              "label": "Talk to A tavern runner shouts offers of hot"
+            }
+          ],
+          "emergent_actor": {
+            "emergent_actor_enrolled": false,
+            "emergent_actor_id": null,
+            "emergent_actor_source_text": null
+          },
+          "leads": {
+            "registry_debug": [
+              {
+                "id": "c_lirael",
+                "title": "Lirael posts near the eastern square when she is not on the crier route.",
+                "lifecycle": "discovered",
+                "status": "active",
+                "priority": "0",
+                "last_updated_turn": "1",
+                "last_touched_turn": "1",
+                "superseded_by": "",
+                "obsolete_reason": "",
+                "resolution_type": "",
+                "last_transition_reason": "",
+                "last_transition_category": "",
+                "last_transition_turn": "",
+                "last_transition_from_lifecycle": "",
+                "last_transition_to_lifecycle": "",
+                "last_transition_from_status": "",
+                "last_transition_to_status": "",
+                "last_progression_effects": [],
+                "type": "rumor",
+                "confidence": "plausible",
+                "resolved_at_turn": "",
+                "consequence_ids": ""
+              },
+              {
+                "id": "ms_lead",
+                "title": "Patrol rumor",
+                "lifecycle": "discovered",
+                "status": "active",
+                "priority": "0",
+                "last_updated_turn": "",
+                "last_touched_turn": "",
+                "superseded_by": "",
+                "obsolete_reason": "",
+                "resolution_type": "",
+                "last_transition_reason": "",
+                "last_transition_category": "",
+                "last_transition_turn": "",
+                "last_transition_from_lifecycle": "",
+                "last_transition_to_lifecycle": "",
+                "last_transition_from_status": "",
+                "last_transition_to_status": "",
+                "last_progression_effects": [],
+                "type": "rumor",
+                "confidence": "rumor",
+                "resolved_at_turn": "",
+                "consequence_ids": ""
+              }
+            ],
+            "delta_after_reconcile": [],
+            "changed_count": 0
+          },
+          "latency_ms": {
+            "intent_classification": 13,
+            "engine_resolution": 1,
+            "prompt_construction": 33,
+            "gpt_call": 0,
+            "retry_loop_total": 19,
+            "final_emission_gate": 12,
+            "fallback_repair": 9,
+            "total_turn": 104
+          }
+        },
+        "gpt_called": true,
+        "response_ok": true,
+        "error": null,
+        "canonical_entry": {
+          "should_route_social": true,
+          "target_actor_id": "tavern_runner",
+          "target_source": "spoken_vocative",
+          "reason": "spoken_vocative_address",
+          "spoken_text": null,
+          "declared_switch_detected": false,
+          "declared_switch_target_actor_id": null,
+          "continuity_overridden_by_declared_switch": false,
+          "spoken_vocative_detected": true,
+          "spoken_vocative_target_actor_id": "tavern_runner",
+          "continuity_overridden_by_spoken_vocative": false
+        },
+        "canonical_entry_path": "social",
+        "canonical_entry_reason": "spoken_vocative_address",
+        "canonical_entry_target_actor_id": "tavern_runner",
+        "declared_travel_override": {
+          "applied": false
+        },
+        "response_type_contract": {
+          "required_response_type": "dialogue",
+          "source_route": "mixed",
+          "allow_escalation": false,
+          "debug_reasons": [
+            "authoritative_social_target_requires_dialogue",
+            "dialogue_turn_contains_question_expectation",
+            "social_question_guard"
+          ]
+        },
+        "latency_ms": {
+          "intent_classification": 13,
+          "engine_resolution": 1,
+          "prompt_construction": 33,
+          "gpt_call": 0,
+          "retry_loop_total": 19,
+          "final_emission_gate": 12,
+          "fallback_repair": 9,
+          "total_turn": 104
+        }
+      },
+      {
+        "kind": "state_mutation",
+        "domain": "scene_state",
+        "owner_module": "game.interaction_context",
+        "operation": "rebuild_active_scene_entities",
+        "changed_area": "scene_state.active_entities"
+      },
+      {
+        "kind": "state_mutation",
+        "domain": "scene_state",
+        "owner_module": "game.interaction_context",
+        "operation": "rebuild_active_scene_entities",
+        "changed_area": "scene_state.active_entities"
+      },
+      {
+        "kind": "state_mutation",
+        "domain": "scene_state",
+        "owner_module": "game.api",
+        "operation": "authoritative_resolution_mutation",
+        "changed_area": "session+world+scene_runtime",
+        "resolution_kind": "scene_transition"
+      },
+      {
+        "kind": "state_mutation",
+        "domain": "player_visible_state",
+        "owner_module": "game.api",
+        "operation": "planner_convergence_snapshot",
+        "stage": "pre_prompt",
+        "report": {
+          "enabled": true,
+          "owner_module": "game.api",
+          "path_label": "transition",
+          "ctir_present": true,
+          "ctir_stamp": "1:25726cb9640:290fab76",
+          "narrative_plan_present": true,
+          "narrative_plan_stamp": "1:25726cb9640:290fab76",
+          "stamp_matches": true,
+          "prompt_consumes_plan": false,
+          "raw_state_prompt_bypass_detected": false,
+          "emergency_nonplan_allowed": false,
+          "failure_codes": []
+        }
+      },
+      {
+        "kind": "state_mutation",
+        "domain": "player_visible_state",
+        "owner_module": "game.api",
+        "operation": "planner_convergence_snapshot",
+        "stage": "post_prompt",
+        "report": {
+          "enabled": true,
+          "owner_module": "game.api",
+          "path_label": "transition",
+          "ctir_present": true,
+          "ctir_stamp": "1:25726cb9640:290fab76",
+          "narrative_plan_present": true,
+          "narrative_plan_stamp": "1:25726cb9640:290fab76",
+          "stamp_matches": true,
+          "prompt_consumes_plan": true,
+          "raw_state_prompt_bypass_detected": false,
+          "emergency_nonplan_allowed": false,
+          "failure_codes": []
+        }
+      },
+      {
+        "kind": "state_mutation",
+        "domain": "scene_state",
+        "owner_module": "game.interaction_context",
+        "operation": "rebuild_active_scene_entities",
+        "changed_area": "scene_state.active_entities"
+      },
+      {
+        "timestamp": "2026-04-26T16:18:33.283888Z",
+        "source": "chat",
+        "action_type": "chat",
+        "raw_input": "\"Thanks for the tip.\" I asked about Lirael earlier. Galinor leaves for the eastern square.",
+        "turn_stage_order": [
+          "player_input",
+          "intent_normalization_expansion",
+          "action_classification",
+          "engine_resolution",
+          "authoritative_state_mutation",
+          "prompt_context_construction",
+          "gpt_narration",
+          "affordance_derivation",
+          "response_debug_packaging"
+        ],
+        "incoming_payload": {
+          "text": "\"Thanks for the tip.\" I asked about Lirael earlier. Galinor leaves for the eastern square."
+        },
+        "parsed_intent": {
+          "id": "i_asked_about_lirael_earlier_galinor_lea",
+          "label": "I asked about Lirael earlier. Galinor leaves for the eastern square.",
+          "type": "scene_transition",
+          "prompt": "I asked about Lirael earlier. Galinor leaves for the eastern square.",
+          "targetSceneId": "eastern_square",
+          "target_scene_id": "eastern_square",
+          "metadata": {
+            "declared_travel_override": true,
+            "declared_travel_pattern": "leave_for_Y",
+            "declared_travel_dest_hint": "eastern square"
+          }
+        },
+        "segmented_turn": {
+          "spoken_text": "Thanks for the tip.",
+          "declared_action_text": "I asked about Lirael earlier. Galinor leaves for the eastern square."
+        },
+        "normalized_action": {
+          "id": "i_asked_about_lirael_earlier_galinor_lea",
+          "label": "I asked about Lirael earlier. Galinor leaves for the eastern square.",
+          "type": "scene_transition",
+          "prompt": "I asked about Lirael earlier. Galinor leaves for the eastern square.",
+          "targetSceneId": "eastern_square",
+          "target_scene_id": "eastern_square"
+        },
+        "resolution": {
+          "kind": "scene_transition",
+          "action_id": "i_asked_about_lirael_earlier_galinor_lea",
+          "label": "I asked about Lirael earlier. Galinor leaves for the eastern square.",
+          "prompt": "I asked about Lirael earlier. Galinor leaves for the eastern square.",
+          "success": true,
+          "resolved_transition": true,
+          "target_scene_id": "eastern_square",
+          "clue_id": null,
+          "discovered_clues": [],
+          "state_changes": {
+            "scene_changed": true,
+            "scene_transition_occurred": true,
+            "arrived_at_scene": true,
+            "new_scene_context_available": true
+          },
+          "hint": "Player has moved to scene eastern_square. Narrate arrival and what they see there.",
+          "metadata": {
+            "declared_travel_override": true,
+            "declared_travel_pattern": "leave_for_Y",
+            "declared_travel_dest_hint": "eastern square",
+            "prompt": "I asked about Lirael earlier. Galinor leaves for the eastern square.",
+            "destination_binding_source": "normalized_action_target",
+            "destination_binding_conflict": false,
+            "destination_binding_conflict_candidates": [],
+            "destination_binding_resolution_reason": "use_parser_or_affordance_target_scene_id",
+            "destination_semantic_kind": "explicit_scene_id",
+            "destination_compatibility_checked": true,
+            "destination_compatibility_passed": true,
+            "destination_compatibility_failure_reason": null,
+            "blocked_incompatible_scene_transition": false,
+            "destination_compatibility_expected_kind": "generic_travel",
+            "destination_compatibility_actual_kind": "",
+            "turn_segmentation": {
+              "spoken_text": "Thanks for the tip.",
+              "declared_action_text": "I asked about Lirael earlier. Galinor leaves for the eastern square."
+            },
+            "unknown_legacy_keys": {
+              "noncombat_resolution": {
+                "framework_version": "2026.04.noncombat.v1",
+                "kind": "exploration",
+                "subkind": "scene_transition",
+                "authority_domain": "scene_state",
+                "deterministic_resolved": true,
+                "requires_check": false,
+                "check_request": null,
+                "outcome_type": "closed",
+                "success_state": "success",
+                "discovered_entities": [
+                  {
+                    "entity_kind": "scene",
+                    "entity_id": "eastern_square"
+                  }
+                ],
+                "surfaced_facts": [],
+                "state_changes": {
+                  "arrived_at_scene": true,
+                  "new_scene_context_available": true,
+                  "scene_changed": true,
+                  "scene_transition_occurred": true
+                },
+                "blocked_reason_codes": [],
+                "ambiguous_reason_codes": [],
+                "unsupported_reason_codes": [],
+                "authoritative_outputs": [
+                  {
+                    "output_kind": "resolution_trace",
+                    "source_engine": "game.exploration",
+                    "route": "exploration",
+                    "engine_action_id": "i_asked_about_lirael_earlier_galinor_lea"
+                  }
+                ],
+                "narration_constraints": {
+                  "scene_transition_occurred": true
+                }
+              }
+            },
+            "response_type_contract": {
+              "required_response_type": "action_outcome",
+              "source_route": "exploration",
+              "allow_escalation": false,
+              "escalation_block_reason": "non_hostile_world_action_guard",
+              "strict_target_id": null,
+              "strict_answer_expected": false,
+              "strict_dialogue_expected": false,
+              "action_must_preserve_agency": true,
+              "debug_reasons": [
+                "resolved_world_action_requires_action_outcome",
+                "non_hostile_world_action_guard"
+              ]
+            },
+            "emission_debug": {
+              "dialogue_social_plan": {
+                "version": 1,
+                "applies": false,
+                "speaker_id": null,
+                "speaker_name": null,
+                "speaker_source": "unresolved",
+                "dialogue_intent": null,
+                "reply_kind": "unknown",
+                "pressure_state": "none",
+                "relationship_codes": [
+                  "unknown"
+                ],
+                "tone_bounds": [
+                  "neutral"
+                ],
+                "prohibited_content_codes": [
+                  "no_narrator_override",
+                  "no_ooc_instructions",
+                  "no_player_agency_override",
+                  "no_prompt_text"
+                ],
+                "derivation_codes": [
+                  "dialogue_social_plan:v1",
+                  "intent:ctir_only",
+                  "referent_tracking:consumed",
+                  "session_hints:bounded",
+                  "speaker:unresolved"
+                ],
+                "validator": {
+                  "validated": true,
+                  "errors": [],
+                  "reject_field_names": [
+                    "dialogue",
+                    "dialogue_line",
+                    "gm_guidance",
+                    "instructions",
+                    "message",
+                    "narration",
+                    "player_facing_text",
+                    "prompt",
+                    "system_prompt",
+                    "text"
+                  ],
+                  "allowed_reply_kinds": [
+                    "answer",
+                    "explanation",
+                    "reaction",
+                    "refusal",
+                    "unknown"
+                  ],
+                  "allowed_pressure_states": [
+                    "high",
+                    "low",
+                    "moderate",
+                    "none"
+                  ],
+                  "allowed_tone_codes": [
+                    "cold",
+                    "deferential",
+                    "direct",
+                    "evasive",
+                    "guarded",
+                    "hostile",
+                    "neutral",
+                    "threatening",
+                    "warm"
+                  ],
+                  "allowed_relationship_codes": [
+                    "engagement_engaged",
+                    "engagement_focused",
+                    "engagement_none",
+                    "fear_high",
+                    "fear_low",
+                    "friendly",
+                    "hostile",
+                    "neutral",
+                    "suspicion_high",
+                    "suspicion_low",
+                    "trust_high",
+                    "trust_low",
+                    "unfriendly",
+                    "unknown"
+                  ]
+                },
+                "bounded_session_hints": {
+                  "active_interaction_target_id": null,
+                  "active_interaction_target_name": null,
+                  "active_interaction_kind": null,
+                  "interaction_mode": "none",
+                  "engagement_level": "none",
+                  "conversation_privacy": null,
+                  "player_position_context": null
+                }
+              },
+              "scene_state_anchor": {
+                "enabled": true,
+                "scene_id": "eastern_square",
+                "counts": {
+                  "location": 3,
+                  "actor": 1,
+                  "player_action": 3
+                }
+              },
+              "context_separation": {
+                "validation": {
+                  "checked": true,
+                  "passed": true
+                },
+                "failure_reasons": [],
+                "assertion_flags": {
+                  "topic_hijack_background_pressure": false,
+                  "pressure_answer_substitution": false,
+                  "ambient_pressure_forced_tone_shift": false,
+                  "scene_focus_displaced_by_world_pressure": false,
+                  "pressure_overweighting": false
+                },
+                "repair_hints": [],
+                "debug_reason_marker": "cs_violations=none;repair_applied=False;pass_after=None;before_len=116;after_len=116;before_head='You asked about Lirael earlier. Galinor leaves for the eastern square, and your position changes\u2026';after_head='You asked about Lirael earlier. Galinor leaves for the eastern square, and your position changes\u2026'"
+              },
+              "conversational_memory_window": {
+                "enabled": true,
+                "window_version": "v1",
+                "prioritize_recent_turns": true,
+                "prioritize_active_scene_entities": true,
+                "deprioritize_stale_inactive_elements": true,
+                "allow_explicit_reintroduction": true,
+                "recent_turn_window": 6,
+                "soft_memory_limit": 12,
+                "stale_after_turns": 18,
+                "active_scene_entity_ids": [],
+                "anchored_interlocutor_id": "",
+                "active_interaction_target_id": "",
+                "explicit_reintroduced_entity_ids": [],
+                "explicit_reintroduced_topics": [],
+                "selection_debug": {
+                  "matched_entity_ids": [],
+                  "matched_topics": [],
+                  "matched_grounded_ids": [],
+                  "callback_marker_hit": "earlier",
+                  "source_of_activity_anchor": "none",
+                  "source_of_recentness": "session.turn_counter",
+                  "source_of_reintroductions": "player_text+visibility_aliases"
+                }
+              },
+              "selected_conversational_memory": [
+                {
+                  "kind": "recent_turn",
+                  "entity_ids": [],
+                  "topic_tokens": [],
+                  "source_turn": 0,
+                  "text": "P: Tavern Runner, where can I find Lirael? | G: Tavern Runner lowers their voice. \"I have heard the talk, but I cannot swear to that.\" \"You're asking for a line I don't own.\"",
+                  "score": 103.71428571428571,
+                  "why_selected": [
+                    "recency",
+                    "recent_turn_kind"
+                  ]
+                }
+              ],
+              "conversational_memory": {
+                "selected_count": 1
+              },
+              "scene_state_anchor_checked": true,
+              "scene_state_anchor_passed": true,
+              "scene_state_anchor_failed": false,
+              "scene_state_anchor_skip_reason": null,
+              "scene_state_anchor_matched_kinds": [
+                "location"
+              ],
+              "scene_state_anchor_failure_reasons": [],
+              "scene_state_anchor_repaired": false,
+              "scene_state_anchor_repair_mode": null,
+              "tone_escalation_checked": true,
+              "tone_escalation_ok": true,
+              "tone_escalation_failed": false,
+              "tone_escalation_failure_reasons": [],
+              "tone_escalation_detected_flags": {
+                "guarded": false,
+                "verbal_pressure": false,
+                "explicit_threat": false,
+                "physical_hostility": false,
+                "combat_initiation": false
+              },
+              "tone_escalation_matched_tone_level": null,
+              "tone_escalation_repaired": false,
+              "tone_escalation_repair_mode": null,
+              "tone_escalation_contract_summary": {
+                "enabled": true,
+                "base_tone": "neutral",
+                "max_allowed_tone": "neutral",
+                "allow_verbal_pressure": false,
+                "allow_explicit_threat": false,
+                "allow_physical_hostility": false,
+                "allow_combat_initiation": false,
+                "justification_reasons": []
+              },
+              "tone_escalation_contract_resolution_source": "shipped_response_policy",
+              "tone_escalation_violation_before_repair": false,
+              "narrative_authority_checked": true,
+              "narrative_authority_failed": false,
+              "narrative_authority_failure_reasons": [],
+              "narrative_authority_repaired": false,
+              "narrative_authority_repair_mode": null,
+              "narrative_authority_skip_reason": null,
+              "narrative_authority_deferral_mode": null,
+              "narrative_authority_assertion_flags": {
+                "invented_outcome": false,
+                "invented_hidden_fact": false,
+                "invented_intent": false,
+                "overcertain_unresolved_action": false
+              },
+              "anti_railroading": {
+                "validation": {
+                  "checked": true,
+                  "passed": true
+                },
+                "failure_reasons": [],
+                "assertion_flags": {
+                  "player_decision_override": false,
+                  "forced_direction": false,
+                  "exclusive_path_claim": false,
+                  "lead_plot_gravity": false,
+                  "forced_conclusion": false
+                },
+                "repair_hints": []
+              },
+              "anti_railroading_checked": true,
+              "anti_railroading_ok": true,
+              "anti_railroading_failed": false,
+              "anti_railroading_failure_reasons": [],
+              "anti_railroading_assertion_flags": {
+                "player_decision_override": false,
+                "forced_direction": false,
+                "exclusive_path_claim": false,
+                "lead_plot_gravity": false,
+                "forced_conclusion": false
+              },
+              "anti_railroading_repair_hints": [],
+              "anti_railroading_repaired": false,
+              "anti_railroading_repair_mode": null,
+              "anti_railroading_skip_reason": null,
+              "anti_railroading_contract_resolution_source": "shipped",
+              "context_separation_contract_resolution_source": "response_policy",
+              "context_separation_skip_reason": null,
+              "context_separation_checked": true,
+              "context_separation_ok": true,
+              "context_separation_failed": false,
+              "context_separation_failure_reasons": [],
+              "context_separation_assertion_flags": {
+                "topic_hijack_background_pressure": false,
+                "pressure_answer_substitution": false,
+                "ambient_pressure_forced_tone_shift": false,
+                "scene_focus_displaced_by_world_pressure": false,
+                "pressure_overweighting": false
+              },
+              "context_separation_repair_hints": [],
+              "context_separation_repaired": false,
+              "context_separation_repair_mode": null,
+              "context_separation_debug_reason_marker": "cs_violations=none;repair_applied=False;pass_after=None;before_len=116;after_len=116;before_head='You asked about Lirael earlier. Galinor leaves for the eastern square, and your position changes\u2026';after_head='You asked about Lirael earlier. Galinor leaves for the eastern square, and your position changes\u2026'",
+              "context_separation_passed_after_repair": null,
+              "player_facing_narration_purity": {
+                "validation": {
+                  "checked": true,
+                  "passed": true
+                },
+                "violation_keys": [],
+                "repair_hints": [],
+                "repair_modes": [],
+                "preview_before": "You asked about Lirael earlier. Galinor leaves for the eastern square, and your position changes\u2026",
+                "preview_after": "You asked about Lirael earlier. Galinor leaves for the eastern square, and your position changes\u2026"
+              },
+              "player_facing_narration_purity_contract_resolution_source": "response_policy",
+              "player_facing_narration_purity_skip_reason": null,
+              "player_facing_narration_purity_checked": true,
+              "player_facing_narration_purity_failed": false,
+              "player_facing_narration_purity_repaired": false,
+              "player_facing_narration_purity_repair_modes": [],
+              "player_facing_narration_purity_violation_keys": [],
+              "player_facing_narration_purity_repair_hints_used": [],
+              "player_facing_narration_purity_collapsed_to_diegetic_core": false,
+              "player_facing_narration_purity_preview_before": "You asked about Lirael earlier. Galinor leaves for the eastern square, and your position changes\u2026",
+              "player_facing_narration_purity_preview_after": "You asked about Lirael earlier. Galinor leaves for the eastern square, and your position changes\u2026",
+              "answer_shape_primacy": {
+                "checked": true,
+                "passed": true,
+                "failure_reasons": []
+              },
+              "answer_shape_primacy_skip_reason": null,
+              "answer_shape_primacy_checked": true,
+              "answer_shape_primacy_failed": false,
+              "answer_shape_primacy_repaired": false,
+              "answer_shape_primacy_repair_mode": null,
+              "answer_shape_primacy_failure_reasons": [],
+              "answer_shape_primacy_preview_before": "You asked about Lirael earlier. Galinor leaves for the eastern square, and your position changes\u2026",
+              "answer_shape_primacy_preview_after": "You asked about Lirael earlier. Galinor leaves for the eastern square, and your position changes\u2026",
+              "interaction_continuity_validation": {
+                "ok": true,
+                "enabled": false,
+                "continuity_strength": "none",
+                "violations": [],
+                "warnings": [],
+                "facts": {
+                  "anchored_interlocutor_id": "",
+                  "anchor_required": false,
+                  "speaker_switch_detected": false,
+                  "explicit_switch_cue_present": false,
+                  "thread_drop_detected": false,
+                  "narrator_bridge_present": false,
+                  "multi_speaker_pattern_present": false,
+                  "dialogue_presence": false
+                },
+                "debug": {
+                  "speaker_labels_detected": [],
+                  "cue_labels": [],
+                  "reason_path": [
+                    "contract_disabled_or_strength_none"
+                  ]
+                }
+              },
+              "fallback_behavior": {
+                "validation": {
+                  "contract_present": true,
+                  "checked": false,
+                  "passed": true,
+                  "uncertainty_active": false
+                },
+                "failure_reasons": [],
+                "repair_mode": "none",
+                "skip_reason": "uncertainty_inactive"
+              },
+              "fallback_behavior_contract_present": true,
+              "fallback_behavior_checked": false,
+              "fallback_behavior_skip_reason": "uncertainty_inactive",
+              "fallback_behavior_uncertainty_active": false,
+              "fallback_behavior_failed": false,
+              "fallback_behavior_failure_reasons": [],
+              "fallback_behavior_repaired": false,
+              "fallback_behavior_repair_mode": "none",
+              "fallback_behavior_clarifying_question_used": false,
+              "fallback_behavior_partial_used": false,
+              "fallback_behavior_known_edge_preserved": false,
+              "fallback_behavior_unknown_edge_added": false,
+              "fallback_behavior_next_lead_added": false,
+              "fallback_behavior_meta_voice_stripped": false,
+              "fallback_behavior_boundary_semantic_synthesis_skipped": false,
+              "narration_constraint_debug": {
+                "response_type": {
+                  "required": "action_outcome",
+                  "contract_source": "response_policy",
+                  "candidate_ok": true,
+                  "repair_used": true,
+                  "repair_kind": "action_outcome_upstream_prepared_repair",
+                  "upstream_prepared_absent": false
+                },
+                "visibility": {
+                  "contract_present": true,
+                  "decision_mode": "validated",
+                  "visible_entity_count": 0,
+                  "withheld_fact_count": 0,
+                  "reason_codes": []
+                },
+                "speaker_selection": {
+                  "speaker_id": null,
+                  "speaker_name": null,
+                  "selection_source": null,
+                  "reason_code": "speaker_unresolved",
+                  "binding_confident": null
+                }
+              }
+            }
+          },
+          "originating_scene_id": "frontier_gate",
+          "world_tick_events": [
+            {
+              "type": "faction_pressure",
+              "text": "Ordo Pyric's pressure mounts.",
+              "source": "ordo_pyric"
+            }
+          ]
+        },
+        "scene_before": "frontier_gate",
+        "scene_after": "eastern_square",
+        "clue_updates": [],
+        "world_flag_updates": [
+          "clock:time_pressure=2"
+        ],
+        "turn_trace": {
+          "source": "chat",
+          "player_input": "\"Thanks for the tip.\" I asked about Lirael earlier. Galinor leaves for the eastern square.",
+          "intent": {
+            "parsed": {
+              "id": "i_asked_about_lirael_earlier_galinor_lea",
+              "label": "I asked about Lirael earlier. Galinor leaves for the eastern square.",
+              "type": "scene_transition",
+              "prompt": "I asked about Lirael earlier. Galinor leaves for the eastern square.",
+              "targetSceneId": "eastern_square",
+              "target_scene_id": "eastern_square",
+              "metadata": {
+                "declared_travel_override": true,
+                "declared_travel_pattern": "leave_for_Y",
+                "declared_travel_dest_hint": "eastern square"
+              }
+            },
+            "segmented_turn": {
+              "spoken_text": "Thanks for the tip.",
+              "declared_action_text": "I asked about Lirael earlier. Galinor leaves for the eastern square."
+            },
+            "normalized": {
+              "id": "i_asked_about_lirael_earlier_galinor_lea",
+              "label": "I asked about Lirael earlier. Galinor leaves for the eastern square.",
+              "type": "scene_transition",
+              "prompt": "I asked about Lirael earlier. Galinor leaves for the eastern square.",
+              "targetSceneId": "eastern_square",
+              "target_scene_id": "eastern_square",
+              "targetEntityId": null,
+              "target_id": null
+            },
+            "implied_context": {
+              "applied": false,
+              "cases": [],
+              "target_id": null,
+              "commitment_broken": true,
+              "break_reason": "freeform_parse_travel"
+            }
+          },
+          "classification": {
+            "action_type": "chat",
+            "resolved_kind": "scene_transition",
+            "requires_check": false
+          },
+          "response_type_contract": {
+            "required_response_type": "action_outcome",
+            "source_route": "exploration",
+            "allow_escalation": false,
+            "debug_reasons": [
+              "resolved_world_action_requires_action_outcome",
+              "non_hostile_world_action_guard"
+            ]
+          },
+          "social_contract_trace": {
+            "route_selected": "dialogue",
+            "routing_reason_code": "travel_or_scene_transition_intent",
+            "social_followup_recovery": "not_applicable",
+            "reply_owner_actor_id": null,
+            "interlocutor_status": "none",
+            "continuity_status": "broken",
+            "fallback_anchor_source": "none",
+            "visible_grounded_speaker": null,
+            "final_reply_owner": null
+          },
+          "resolution_path": "exploration_engine",
+          "authoritative_state_changes": {
+            "scene_transition": {
+              "from": "frontier_gate",
+              "to": "eastern_square"
+            },
+            "resolution_state_changes": {
+              "scene_changed": true,
+              "scene_transition_occurred": true,
+              "arrived_at_scene": true,
+              "new_scene_context_available": true
+            },
+            "resolution_world_updates": [],
+            "check_request": null
+          },
+          "interaction_after": {
+            "active_interaction_target_id": null,
+            "active_interaction_kind": null,
+            "interaction_mode": "none",
+            "engagement_level": "none",
+            "conversation_privacy": null,
+            "player_position_context": null
+          },
+          "narration_obligations": {
+            "is_opening_scene": true,
+            "must_advance_scene": false,
+            "should_answer_active_npc": false,
+            "avoid_input_echo": true,
+            "avoid_player_action_restatement": true,
+            "prefer_structured_turn_summary": true,
+            "active_npc_reply_expected": false,
+            "active_npc_reply_kind": null,
+            "scene_momentum_due": false,
+            "scene_momentum_exchanges_since": 0,
+            "scene_momentum_next_due_in": 2,
+            "suppress_non_social_emitters": false
+          },
+          "clues": {
+            "discovered_texts": [],
+            "presentation_changes": [],
+            "known_counts": {
+              "implicit": 0,
+              "explicit": 1,
+              "actionable": 0
+            }
+          },
+          "affordances_after": [
+            {
+              "id": "observe_the_area",
+              "type": "observe",
+              "label": "Observe the area"
+            }
+          ],
+          "emergent_actor": {
+            "emergent_actor_enrolled": false,
+            "emergent_actor_id": null,
+            "emergent_actor_source_text": null
+          },
+          "leads": {
+            "registry_debug": [
+              {
+                "id": "c_lirael",
+                "title": "Lirael posts near the eastern square when she is not on the crier route.",
+                "lifecycle": "discovered",
+                "status": "active",
+                "priority": "0",
+                "last_updated_turn": "1",
+                "last_touched_turn": "1",
+                "superseded_by": "",
+                "obsolete_reason": "",
+                "resolution_type": "",
+                "last_transition_reason": "",
+                "last_transition_category": "",
+                "last_transition_turn": "",
+                "last_transition_from_lifecycle": "",
+                "last_transition_to_lifecycle": "",
+                "last_transition_from_status": "",
+                "last_transition_to_status": "",
+                "last_progression_effects": [],
+                "type": "rumor",
+                "confidence": "plausible",
+                "resolved_at_turn": "",
+                "consequence_ids": ""
+              },
+              {
+                "id": "ms_lead",
+                "title": "Patrol rumor",
+                "lifecycle": "discovered",
+                "status": "active",
+                "priority": "0",
+                "last_updated_turn": "",
+                "last_touched_turn": "",
+                "superseded_by": "",
+                "obsolete_reason": "",
+                "resolution_type": "",
+                "last_transition_reason": "",
+                "last_transition_category": "",
+                "last_transition_turn": "",
+                "last_transition_from_lifecycle": "",
+                "last_transition_to_lifecycle": "",
+                "last_transition_from_status": "",
+                "last_transition_to_status": "",
+                "last_progression_effects": [],
+                "type": "rumor",
+                "confidence": "rumor",
+                "resolved_at_turn": "",
+                "consequence_ids": ""
+              }
+            ],
+            "delta_after_reconcile": [],
+            "changed_count": 0
+          },
+          "latency_ms": {
+            "intent_classification": 8,
+            "engine_resolution": 11,
+            "prompt_construction": 5,
+            "gpt_call": 1,
+            "retry_loop_total": 0,
+            "final_emission_gate": 3,
+            "fallback_repair": 0,
+            "total_turn": 43
+          }
+        },
+        "gpt_called": true,
+        "response_ok": true,
+        "error": null,
+        "canonical_entry": {
+          "should_route_social": false,
+          "target_actor_id": null,
+          "target_source": null,
+          "reason": "travel_or_scene_transition_intent",
+          "spoken_text": "Thanks for the tip.",
+          "declared_switch_detected": false,
+          "declared_switch_target_actor_id": null,
+          "continuity_overridden_by_declared_switch": false,
+          "spoken_vocative_detected": false,
+          "spoken_vocative_target_actor_id": null,
+          "continuity_overridden_by_spoken_vocative": false
+        },
+        "canonical_entry_path": "undecided",
+        "canonical_entry_reason": "travel_or_scene_transition_intent",
+        "canonical_entry_target_actor_id": null,
+        "declared_travel_override": {
+          "applied": true,
+          "prior_action_type": "social_probe",
+          "normalized_type": "scene_transition",
+          "target_scene_id": "eastern_square"
+        },
+        "response_type_contract": {
+          "required_response_type": "action_outcome",
+          "source_route": "exploration",
+          "allow_escalation": false,
+          "debug_reasons": [
+            "resolved_world_action_requires_action_outcome",
+            "non_hostile_world_action_guard"
+          ]
+        },
+        "latency_ms": {
+          "intent_classification": 8,
+          "engine_resolution": 11,
+          "prompt_construction": 5,
+          "gpt_call": 1,
+          "retry_loop_total": 0,
+          "final_emission_gate": 3,
+          "fallback_repair": 0,
+          "total_turn": 43
+        }
+      }
+    ],
+    "flags": {},
+    "character_name": "Galinor",
+    "campaign_run_id": "3c7fa0906eec4a5964b86723",
+    "session_id": "3c7fa0906eec4a5964b86723",
+    "campaign_started": false,
+    "social_lead_event_ids": [
+      "c_lirael"
+    ],
+    "_runtime_canonical_ctir_v1": {
+      "version": 1,
+      "turn_id": 1,
+      "scene_id": "eastern_square",
+      "player_input": "I asked about Lirael earlier. Galinor leaves for the eastern square.",
+      "intent": {
+        "raw_text": "I asked about Lirael earlier. Galinor leaves for the eastern square.",
+        "normalized_kind": "scene_transition",
+        "mode": "scene_transition",
+        "classified_action": "scene_transition",
+        "requires_check": false,
+        "check_request": null,
+        "targets": [
+          "eastern_square",
+          "eastern_square"
+        ],
+        "labels": []
+      },
+      "resolution": {
+        "kind": "scene_transition",
+        "outcome_type": null,
+        "success_state": "success",
+        "consequences": [
+          "arrived_at_scene",
+          "new_scene_context_available",
+          "scene_changed",
+          "scene_transition_occurred"
+        ],
+        "authoritative_outputs": {
+          "action_id": "i_asked_about_lirael_earlier_galinor_lea",
+          "originating_scene_id": "frontier_gate",
+          "resolved_transition": true,
+          "target_scene_id": "eastern_square"
+        },
+        "state_changes": {
+          "scene_transition_occurred": true,
+          "arrived_at_scene": true,
+          "new_scene_context_available": true
+        },
+        "action_id": "i_asked_about_lirael_earlier_galinor_lea",
+        "resolved_transition": true,
+        "target_scene_id": "eastern_square"
+      },
+      "noncombat": {},
+      "state_mutations": {
+        "scene": {
+          "scene_id": "eastern_square",
+          "activate_scene_id": "eastern_square"
+        },
+        "session": {
+          "scene_id": "eastern_square"
+        },
+        "combat": {
+          "combat_active": false,
+          "round": 0
+        },
+        "clues_leads": {}
+      },
+      "interaction": {
+        "active_target_id": null,
+        "interaction_mode": "none",
+        "interaction_kind": null,
+        "continuity_snapshot": {},
+        "responder_target": {},
+        "speaker_target": {}
+      },
+      "world": {
+        "progression": {
+          "changed_node_ids": [
+            "faction_agenda:ash_cowl",
+            "faction_agenda:house_verevin",
+            "faction_agenda:ordo_pyric",
+            "faction_pressure:ash_cowl",
+            "faction_pressure:house_verevin",
+            "faction_pressure:ordo_pyric"
+          ],
+          "active_projects": [],
+          "faction_pressure": [
+            {
+              "id": "ash_cowl",
+              "status": "active",
+              "value": 4
+            },
+            {
+              "id": "house_verevin",
+              "status": "active",
+              "value": 4
+            },
+            {
+              "id": "ordo_pyric",
+              "status": "active",
+              "value": 3
+            }
+          ],
+          "faction_agenda": [
+            {
+              "id": "ash_cowl",
+              "status": "active",
+              "value": 2
+            },
+            {
+              "id": "house_verevin",
+              "status": "active",
+              "value": 2
+            },
+            {
+              "id": "ordo_pyric",
+              "status": "active",
+              "value": 2
+            }
+          ],
+          "world_clocks": [],
+          "set_flags": []
+        }
+      },
+      "narrative_anchors": {
+        "scene_framing": [],
+        "actors_speakers": [],
+        "outcomes": [],
+        "uncertainty": [],
+        "next_leads_affordances": []
+      },
+      "provenance": {
+        "builder_source": "game.api._build_gpt_narration_from_authoritative_state",
+        "source_modules": [
+          "game.api",
+          "game.ctir_runtime"
+        ],
+        "signals_used": [],
+        "retry_safe_flags": {},
+        "extras": {}
+      },
+      "debug": {
+        "missing_optional_sections": [
+          "narrative_anchors_input"
+        ],
+        "normalization_notes": []
+      }
+    },
+    "_runtime_canonical_ctir_stamp_v1": "1:25726cb9640:290fab76",
+    "_runtime_narration_plan_bundle_v1": {
+      "plan_metadata": {
+        "ctir_stamp": "1:25726cb9640:290fab76",
+        "narrative_plan_bundle_version": 1,
+        "narrative_plan_version": 1,
+        "narration_plan_bundle_error": null,
+        "semantic_bypass_blocked": false,
+        "planning_session_interaction": {}
+      },
+      "narrative_plan": {
+        "version": 1,
+        "scene_anchors": {
+          "scene_id": "eastern_square",
+          "scene_name": null,
+          "location_anchors": [
+            "eastern square",
+            "eastern_square",
+            "unnamed scene"
+          ],
+          "active_interlocutor": null,
+          "active_target": null,
+          "relevant_actors": []
+        },
+        "active_pressures": {
+          "pending_lead_ids": [],
+          "context_codes": [],
+          "interaction_pressure": "none",
+          "scene_tension_codes": [],
+          "world_pressure": null,
+          "clock_summaries": []
+        },
+        "required_new_information": [
+          {
+            "kind": "authoritative_output_keys",
+            "keys": [
+              "action_id",
+              "originating_scene_id",
+              "resolved_transition",
+              "target_scene_id"
+            ]
+          },
+          {
+            "kind": "consequence_atoms",
+            "values": [
+              "arrived_at_scene",
+              "new_scene_context_available",
+              "scene_changed",
+              "scene_transition_occurred"
+            ]
+          },
+          {
+            "kind": "resolution_kind",
+            "value": "scene_transition"
+          },
+          {
+            "kind": "state_change",
+            "flag": "arrived_at_scene"
+          },
+          {
+            "kind": "state_change",
+            "flag": "new_scene_context_available"
+          },
+          {
+            "kind": "state_change",
+            "flag": "scene_transition_occurred"
+          },
+          {
+            "kind": "success_state",
+            "value": "success"
+          },
+          {
+            "kind": "transition",
+            "target_scene_id": "eastern_square"
+          }
+        ],
+        "allowable_entity_references": [],
+        "transition_node": {
+          "transition_required": true,
+          "transition_type": "scene_entry",
+          "before_anchor": {
+            "scene_id": "eastern_square",
+            "location_id": null,
+            "location_label": "eastern_square",
+            "time_anchor": null
+          },
+          "after_anchor": {
+            "scene_id": "eastern_square",
+            "location_id": null,
+            "location_label": null,
+            "time_anchor": null
+          },
+          "continuity_anchor_ids": [],
+          "derivation_codes": [
+            "signal:resolution.resolved_transition",
+            "signal:resolution.state_changes.arrived_at_scene",
+            "signal:resolution.state_changes.new_scene_context_available",
+            "signal:resolution.state_changes.scene_transition_occurred",
+            "signal:resolution.target_scene_id",
+            "signal:state_mutations.scene",
+            "transition_node:before_location:public_slice",
+            "transition_node:derive"
+          ],
+          "source_fields": [
+            "resolution.resolved_transition",
+            "resolution.state_changes.arrived_at_scene",
+            "resolution.state_changes.new_scene_context_available",
+            "resolution.state_changes.scene_transition_occurred",
+            "resolution.target_scene_id",
+            "state_mutations.scene.(scene_id|activate_scene_id)"
+          ]
+        },
+        "answer_exposition_plan": {
+          "enabled": false,
+          "answer_required": false,
+          "answer_intent": "none",
+          "source": {
+            "derived_from_ctir": true,
+            "ctir_sections": [],
+            "derivation_codes": [
+              "answer_exposition_plan:derive"
+            ]
+          },
+          "facts": [],
+          "constraints": {
+            "forbid_invention": true,
+            "forbid_hidden_truth_leak": true,
+            "forbid_prompt_layer_reasoning": true,
+            "allowed_partial_reasons": []
+          },
+          "voice": {
+            "expected_voice": "either",
+            "delivery_mode": "plain_answer"
+          },
+          "delivery": {
+            "answer_must_come_first": false,
+            "max_sentences_hint": null,
+            "must_include_fact_ids": [],
+            "optional_fact_ids": [],
+            "forbidden_moves": [
+              "no_generic_fallback",
+              "no_opening_tableau_reuse"
+            ]
+          },
+          "debug": {
+            "derivation_codes": [
+              "answer_exposition_plan:derive"
+            ]
+          }
+        },
+        "narrative_mode": "opening",
+        "narrative_mode_contract": {
+          "version": 1,
+          "enabled": true,
+          "mode": "opening",
+          "mode_family": "framing",
+          "source_signals": [
+            "mode:opening:narration_obligations.is_opening_scene"
+          ],
+          "prompt_obligations": {
+            "require_first_impression_framing": true,
+            "require_scene_grounding": true,
+            "suppress_mid_conversation_answer_shape": true
+          },
+          "forbidden_moves": [
+            "no_generic_fallback",
+            "no_opening_tableau_reuse"
+          ],
+          "debug": {
+            "derivation_codes": [
+              "mode:opening:narration_obligations.is_opening_scene"
+            ]
+          }
+        },
+        "role_allocation": {
+          "dialogue": 12,
+          "exposition": 62,
+          "outcome_forward": 14,
+          "transition": 12
+        },
+        "narrative_roles": {
+          "location_anchor": {
+            "emphasis_band": "high",
+            "signals": [
+              "exposition_axis_elevated",
+              "has_location_tokens",
+              "has_scene_id",
+              "mode_biases_scene_setting",
+              "multi_location_token"
+            ],
+            "location_token_n": 3,
+            "scene_id_present": true,
+            "scene_label_present": false
+          },
+          "actor_anchor": {
+            "emphasis_band": "minimal",
+            "signals": [],
+            "relevant_actor_n": 0,
+            "interlocutor_present": false,
+            "visible_entity_handle_n": 0
+          },
+          "pressure": {
+            "emphasis_band": "minimal",
+            "signals": [],
+            "interaction_pressure": "none",
+            "pending_lead_n": 0,
+            "context_code_n": 0,
+            "tension_code_n": 0,
+            "world_pressure_present": false,
+            "clock_summary_n": 0
+          },
+          "hook": {
+            "emphasis_band": "high",
+            "signals": [
+              "multi_information_kinds",
+              "prompt_obligations_nonempty",
+              "required_information_nonempty"
+            ],
+            "required_new_information_n": 8,
+            "distinct_information_kind_n": 6,
+            "information_kind_tags": [
+              "authoritative_output_keys",
+              "consequence_atoms",
+              "resolution_kind",
+              "state_change",
+              "success_state",
+              "transition"
+            ],
+            "narrative_mode_contract_enabled": true,
+            "prompt_obligation_key_n": 3
+          },
+          "consequence": {
+            "emphasis_band": "high",
+            "signals": [
+              "consequence_information_present",
+              "state_or_mutation_information_present",
+              "transition_information_present"
+            ],
+            "outcome_forward_tier": "low",
+            "has_consequence_information": true,
+            "has_state_or_mutation_information": true,
+            "has_transition_information": true
+          }
+        },
+        "action_outcome": {
+          "present": false,
+          "source_kind": "unknown",
+          "result": {
+            "result_kind": "scene_transition",
+            "success_state": "success",
+            "actor_id": null,
+            "target_id": null,
+            "action_id": "i_asked_about_lirael_earlier_galinor_lea",
+            "roll_summary": {}
+          },
+          "effects": {
+            "damage_dealt": 0,
+            "healing_applied": 0,
+            "conditions_applied": [],
+            "conditions_removed": [],
+            "combat_ended": false,
+            "winner": null,
+            "state_delta_keys": []
+          },
+          "framing": {
+            "emphasis": "standard",
+            "reveal_policy": "respect_visibility",
+            "allowed_certainty": "engine_only",
+            "prohibited_codes": [
+              "no_raw_roll_text",
+              "no_hint_prompt_prose",
+              "no_mechanics_interpretation"
+            ]
+          },
+          "derivation_codes": [
+            "action_outcome:derive"
+          ]
+        },
+        "scene_opening": {
+          "opening_required": true,
+          "opening_reason": "post_transition",
+          "scene_id": "eastern_square",
+          "location_anchors": [
+            "eastern square",
+            "eastern_square",
+            "unnamed scene"
+          ],
+          "actor_anchors": [],
+          "active_pressures": {
+            "clock_summaries": [],
+            "context_codes": [],
+            "interaction_pressure": "none",
+            "pending_lead_ids": [],
+            "scene_tension_codes": [],
+            "world_pressure": null
+          },
+          "visible_fact_categories": [],
+          "visible_fact_anchor_ids": [],
+          "prohibited_content_codes": [
+            "no_backstage_plot_briefings",
+            "no_engine_role_label_as_proper_name",
+            "no_hidden_gm_facts_as_immediate_perception",
+            "no_unfounded_faction_control_claims",
+            "no_unintroduced_offscene_npc_names"
+          ],
+          "derivation_codes": [
+            "opening_reason:post_transition"
+          ],
+          "validator": {
+            "ok": true,
+            "issues": []
+          }
+        },
+        "recent_compressed_events": [
+          {
+            "gm_snippet": "Tavern Runner lowers their voice. \"I have heard the talk, but I cannot swear to that.\" \"You're asking for a line I don't own.\"",
+            "player_input": "Tavern Runner, where can I find Lirael?"
+          }
+        ],
+        "resolution_meta": {},
+        "debug": {
+          "derivation_codes": [
+            "req:resolution_kind",
+            "req:state_change",
+            "req:authoritative_outputs",
+            "req:transition_target",
+            "req:consequence_list",
+            "entity_filter:published_intersect",
+            "mode:opening:narration_obligations.is_opening_scene",
+            "nroles:location_anchor",
+            "nroles:actor_anchor",
+            "nroles:pressure",
+            "nroles:hook",
+            "nroles:consequence",
+            "action_outcome:derive",
+            "opening_reason:post_transition",
+            "signal:resolution.resolved_transition",
+            "signal:resolution.state_changes.arrived_at_scene",
+            "signal:resolution.state_changes.new_scene_context_available",
+            "signal:resolution.state_changes.scene_transition_occurred",
+            "signal:resolution.target_scene_id",
+            "signal:state_mutations.scene",
+            "transition_node:before_location:public_slice",
+            "transition_node:derive",
+            "answer_exposition_plan:derive"
+          ],
+          "nmc_ship_trace": {
+            "mode": "opening",
+            "enabled": true,
+            "contract_ok": true,
+            "ob_keys_head": [
+              "require_first_impression_framing",
+              "require_scene_grounding",
+              "suppress_mid_conversation_answer_shape"
+            ],
+            "fm_head": [
+              "no_generic_fallback",
+              "no_opening_tableau_reuse"
+            ]
+          },
+          "n3_upstream_role_reemphasis": {
+            "version": 1,
+            "applied": false,
+            "weak_roles": [],
+            "reinforced_families": [],
+            "actions": [],
+            "safety_notes": [],
+            "skip_reason": "no_weak_roles"
+          }
+        }
+      },
+      "renderer_inputs": {
+        "response_policy": {
+          "rule_priority_order": [
+            "ANSWER THE PLAYER",
+            "DO NOT CONTRADICT AUTHORITATIVE STATE",
+            "DO NOT LEAK HIDDEN FACTS / SECRETS",
+            "DO NOT ASSERT UNRESOLVED OUTCOMES, HIDDEN TRUTHS, OR NPC INTENT AS SETTLED FACT",
+            "PRESERVE PLAYER AGENCY \u2014 DO NOT DECIDE ACTIONS OR UPGRADE SURFACED LEADS INTO MANDATORY PATHS",
+            "IF FULL CERTAINTY IS UNAVAILABLE, GIVE A BOUNDED PARTIAL ANSWER",
+            "WHEN THE PLAYER PRESSES THE SAME TOPIC AGAIN, ADD NET-NEW VALUE RATHER THAN RESTATING",
+            "KEEP NARRATION AND SPOKEN LINES DISTINCT; PREFER NEW SIGNAL OVER GENERIC FILLER; RESPECT FALLBACK BREVITY",
+            "MAINTAIN DIEGETIC VOICE (no validator/system voice)",
+            "KEEP NARRATION FREE OF INTERNAL SCAFFOLDS, MENU LABELS, AND ENGINE COACHING",
+            "PRESERVE SCENE MOMENTUM",
+            "ADD SPECIFICITY / FLAVOR / POLISH"
+          ],
+          "must_answer": true,
+          "forbid_state_invention": true,
+          "forbid_secret_leak": true,
+          "allow_partial_answer": true,
+          "response_delta": {
+            "enabled": false,
+            "delta_required": false,
+            "delta_must_come_early": false,
+            "trigger_source": "none",
+            "topic_tokens": [],
+            "press_depth": 0,
+            "previous_player_input": null,
+            "previous_answer_snippet": null,
+            "overlap_ratio": null,
+            "allowed_delta_kinds": [],
+            "forbid_semantic_restatement": false,
+            "forbid_repackaged_nonanswer": false,
+            "allow_short_bridge_before_delta": false,
+            "require_delta_when_answer_required": false,
+            "expected_delta_shape": "none",
+            "trace": {
+              "question_detected_from_player_text": false,
+              "follow_up_pressure_detected": false,
+              "follow_up_press_depth": 0,
+              "follow_up_overlap_ratio": null,
+              "prior_answer_available": false,
+              "answer_completeness_required": false,
+              "social_lock": false,
+              "active_target_id": null,
+              "answer_pressure_followup_detected": false,
+              "strict_social_answer_seek_override": false,
+              "same_interlocutor_followup": false,
+              "answer_pressure_suppressed_because": [
+                "no_active_interlocutor",
+                "not_question_or_answer_pressure"
+              ],
+              "answer_pressure_family": null,
+              "answer_pressure_anchor_kind": null,
+              "contradiction_followup_detected": false,
+              "explanation_followup_detected": false,
+              "insufficiency_followup_detected": false,
+              "short_followup_anchor_detected": false,
+              "anchor_tokens_extracted": [
+                "you're"
+              ],
+              "anchor_token_matched": null,
+              "anchor_followup_detected": false,
+              "explanation_of_recent_anchor_followup": false,
+              "recent_reference_clarification_detected": false,
+              "recent_reference_kind": null,
+              "recent_reference_phrase_matched": null,
+              "clarification_prompt_shape": null,
+              "correction_reask_followup_detected": false,
+              "answer_pressure_reasons": [],
+              "trigger_source": "none",
+              "resolution_kind": "scene_transition",
+              "uncertainty_suggests_partial": false,
+              "suppressed_because": [
+                "no_follow_up_pressure",
+                "not_answer_seeking_turn",
+                "resolution_kind_suppressed",
+                "opening_scene"
+              ]
+            }
+          },
+          "diegetic_only": true,
+          "prefer_scene_momentum": true,
+          "prefer_specificity": true,
+          "no_validator_voice": {
+            "enabled": true,
+            "applies_to": "standard_narration",
+            "rule": "Never speak as a validator, analyst, referee of canon, or system. Do not mention what is or is not established, available to the model, visible to tools, or answerable by the system. If uncertainty exists, express it as in-world uncertainty from people, circumstances, clues, distance, darkness, rumor, missing access, or incomplete observation.",
+            "prohibited_perspectives": [
+              "canon_validation",
+              "evidence_review",
+              "system_limitation",
+              "tool_access",
+              "model_identity",
+              "rules_explanation_outside_oc_or_adjudication"
+            ],
+            "rules_explanation_only_in": [
+              "oc",
+              "adjudication"
+            ]
+          },
+          "scene_momentum_due": false,
+          "uncertainty": {
+            "enabled": true,
+            "categories": [
+              "unknown_identity",
+              "unknown_location",
+              "unknown_motive",
+              "unknown_method",
+              "unknown_quantity",
+              "unknown_feasibility"
+            ],
+            "sources": [
+              "npc_ignorance",
+              "scene_ambiguity",
+              "procedural_insufficiency"
+            ],
+            "answer_shape": [
+              "known_edge",
+              "unknown_edge",
+              "next_lead"
+            ],
+            "context_inputs": [
+              "turn_context",
+              "speaker",
+              "scene_snapshot"
+            ]
+          },
+          "answer_completeness": {
+            "enabled": false,
+            "trace": {
+              "trigger_source": "none",
+              "active_target_id": null,
+              "active_npc_reply_kind": null,
+              "question_detected_from_player_text": false,
+              "answer_pressure_followup_detected": false,
+              "strict_social_answer_seek_override": false,
+              "same_interlocutor_followup": false,
+              "answer_pressure_suppressed_because": [
+                "no_active_interlocutor",
+                "not_question_or_answer_pressure"
+              ],
+              "answer_pressure_family": null,
+              "answer_pressure_anchor_kind": null,
+              "contradiction_followup_detected": false,
+              "explanation_followup_detected": false,
+              "insufficiency_followup_detected": false,
+              "short_followup_anchor_detected": false,
+              "anchor_tokens_extracted": [
+                "you're"
+              ],
+              "anchor_token_matched": null,
+              "anchor_followup_detected": false,
+              "explanation_of_recent_anchor_followup": false,
+              "recent_reference_clarification_detected": false,
+              "recent_reference_kind": null,
+              "recent_reference_phrase_matched": null,
+              "clarification_prompt_shape": null,
+              "correction_reask_followup_detected": false,
+              "answer_pressure_reasons": [],
+              "partial_answer_permitted": false
+            },
+            "player_direct_question": false,
+            "answer_required": false,
+            "answer_must_come_first": false,
+            "expected_voice": "either",
+            "expected_answer_shape": "direct",
+            "allowed_partial_reasons": [],
+            "forbid_deflection": false,
+            "forbid_generic_nonanswer": false,
+            "require_concrete_payload": false,
+            "concrete_payload_any_of": []
+          },
+          "response_type_contract": {
+            "required_response_type": "action_outcome",
+            "source_route": "exploration",
+            "allow_escalation": false,
+            "escalation_block_reason": "non_hostile_world_action_guard",
+            "strict_target_id": null,
+            "strict_answer_expected": false,
+            "strict_dialogue_expected": false,
+            "action_must_preserve_agency": true,
+            "debug_reasons": [
+              "resolved_world_action_requires_action_outcome",
+              "non_hostile_world_action_guard"
+            ]
+          }
+        },
+        "narration_visibility": {
+          "visible_entities": [],
+          "active_interlocutor_id": null,
+          "visible_facts": [],
+          "rules": {
+            "no_unseen_entities": true,
+            "no_hidden_facts": true,
+            "no_undiscovered_facts": true
+          }
+        },
+        "scene_state_anchor_contract": {
+          "enabled": true,
+          "required_any_of": [
+            "location",
+            "actor",
+            "player_action"
+          ],
+          "minimum_anchor_hits": 1,
+          "scene_id": "eastern_square",
+          "scene_location_label": "Unnamed Scene",
+          "location_tokens": [
+            "eastern_square",
+            "eastern square",
+            "unnamed scene"
+          ],
+          "actor_tokens": [
+            "tavern runner"
+          ],
+          "player_action_tokens": [
+            "scene_transition",
+            "i_asked_about_lirael_earlier_galinor_lea",
+            "i asked about lirael earlier galinor lea"
+          ],
+          "preferred_repair_order": [
+            "actor",
+            "player_action",
+            "location"
+          ],
+          "debug_reason": "scene_state_anchor: loc=3 actor=1 player_action=3 enabled=True",
+          "debug_sources": {
+            "location": [
+              "scene.id",
+              "scene.location"
+            ],
+            "actor": [
+              "visible_entity_aliases"
+            ],
+            "player_action": [
+              "resolution.kind",
+              "resolution.action_id"
+            ]
+          }
+        },
+        "narration_obligations": {
+          "is_opening_scene": true,
+          "must_advance_scene": false,
+          "should_answer_active_npc": false,
+          "avoid_input_echo": true,
+          "avoid_player_action_restatement": true,
+          "prefer_structured_turn_summary": true,
+          "active_npc_reply_expected": false,
+          "active_npc_reply_kind": null,
+          "scene_momentum_due": false,
+          "scene_momentum_exchanges_since": 0,
+          "scene_momentum_next_due_in": 2,
+          "suppress_non_social_emitters": false
+        },
+        "turn_packet": {
+          "version": 1,
+          "turn_id": null,
+          "scene_id": "eastern_square",
+          "player_text": "I asked about Lirael earlier. Galinor leaves for the eastern square.",
+          "resolution_kind": "scene_transition",
+          "route": {
+            "interaction_mode": "none",
+            "active_target_id": null,
+            "active_reply_kind": null,
+            "strict_social_expected": false
+          },
+          "response_policy": {
+            "rule_priority_order": [
+              "ANSWER THE PLAYER",
+              "DO NOT CONTRADICT AUTHORITATIVE STATE",
+              "DO NOT LEAK HIDDEN FACTS / SECRETS",
+              "DO NOT ASSERT UNRESOLVED OUTCOMES, HIDDEN TRUTHS, OR NPC INTENT AS SETTLED FACT",
+              "PRESERVE PLAYER AGENCY \u2014 DO NOT DECIDE ACTIONS OR UPGRADE SURFACED LEADS INTO MANDATORY PATHS",
+              "IF FULL CERTAINTY IS UNAVAILABLE, GIVE A BOUNDED PARTIAL ANSWER",
+              "WHEN THE PLAYER PRESSES THE SAME TOPIC AGAIN, ADD NET-NEW VALUE RATHER THAN RESTATING",
+              "KEEP NARRATION AND SPOKEN LINES DISTINCT; PREFER NEW SIGNAL OVER GENERIC FILLER; RESPECT FALLBACK BREVITY",
+              "MAINTAIN DIEGETIC VOICE (no validator/system voice)",
+              "KEEP NARRATION FREE OF INTERNAL SCAFFOLDS, MENU LABELS, AND ENGINE COACHING",
+              "PRESERVE SCENE MOMENTUM",
+              "ADD SPECIFICITY / FLAVOR / POLISH"
+            ],
+            "must_answer": true,
+            "forbid_state_invention": true,
+            "forbid_secret_leak": true,
+            "allow_partial_answer": true,
+            "response_delta": {
+              "enabled": false,
+              "delta_required": false,
+              "delta_must_come_early": false,
+              "trigger_source": "none",
+              "topic_tokens": [],
+              "press_depth": 0,
+              "previous_player_input": null,
+              "previous_answer_snippet": null,
+              "overlap_ratio": null,
+              "allowed_delta_kinds": [],
+              "forbid_semantic_restatement": false,
+              "forbid_repackaged_nonanswer": false,
+              "allow_short_bridge_before_delta": false,
+              "require_delta_when_answer_required": false,
+              "expected_delta_shape": "none",
+              "trace": {
+                "question_detected_from_player_text": false,
+                "follow_up_pressure_detected": false,
+                "follow_up_press_depth": 0,
+                "follow_up_overlap_ratio": null,
+                "prior_answer_available": false,
+                "answer_completeness_required": false,
+                "social_lock": false,
+                "active_target_id": null,
+                "answer_pressure_followup_detected": false,
+                "strict_social_answer_seek_override": false,
+                "same_interlocutor_followup": false,
+                "answer_pressure_suppressed_because": [
+                  "no_active_interlocutor",
+                  "not_question_or_answer_pressure"
+                ],
+                "answer_pressure_family": null,
+                "answer_pressure_anchor_kind": null,
+                "contradiction_followup_detected": false,
+                "explanation_followup_detected": false,
+                "insufficiency_followup_detected": false,
+                "short_followup_anchor_detected": false,
+                "anchor_tokens_extracted": [
+                  "you're"
+                ],
+                "anchor_token_matched": null,
+                "anchor_followup_detected": false,
+                "explanation_of_recent_anchor_followup": false,
+                "recent_reference_clarification_detected": false,
+                "recent_reference_kind": null,
+                "recent_reference_phrase_matched": null,
+                "clarification_prompt_shape": null,
+                "correction_reask_followup_detected": false,
+                "answer_pressure_reasons": [],
+                "trigger_source": "none",
+                "resolution_kind": "scene_transition",
+                "uncertainty_suggests_partial": false,
+                "suppressed_because": [
+                  "no_follow_up_pressure",
+                  "not_answer_seeking_turn",
+                  "resolution_kind_suppressed",
+                  "opening_scene"
+                ]
+              }
+            },
+            "diegetic_only": true,
+            "prefer_scene_momentum": true,
+            "prefer_specificity": true,
+            "no_validator_voice": {
+              "enabled": true,
+              "applies_to": "standard_narration",
+              "rule": "Never speak as a validator, analyst, referee of canon, or system. Do not mention what is or is not established, available to the model, visible to tools, or answerable by the system. If uncertainty exists, express it as in-world uncertainty from people, circumstances, clues, distance, darkness, rumor, missing access, or incomplete observation.",
+              "prohibited_perspectives": [
+                "canon_validation",
+                "evidence_review",
+                "system_limitation",
+                "tool_access",
+                "model_identity",
+                "rules_explanation_outside_oc_or_adjudication"
+              ],
+              "rules_explanation_only_in": [
+                "oc",
+                "adjudication"
+              ]
+            },
+            "scene_momentum_due": false,
+            "uncertainty": {
+              "enabled": true,
+              "categories": [
+                "unknown_identity",
+                "unknown_location",
+                "unknown_motive",
+                "unknown_method",
+                "unknown_quantity",
+                "unknown_feasibility"
+              ],
+              "sources": [
+                "npc_ignorance",
+                "scene_ambiguity",
+                "procedural_insufficiency"
+              ],
+              "answer_shape": [
+                "known_edge",
+                "unknown_edge",
+                "next_lead"
+              ],
+              "context_inputs": [
+                "turn_context",
+                "speaker",
+                "scene_snapshot"
+              ]
+            },
+            "answer_completeness": {
+              "enabled": false,
+              "trace": {
+                "trigger_source": "none",
+                "active_target_id": null,
+                "active_npc_reply_kind": null,
+                "question_detected_from_player_text": false,
+                "answer_pressure_followup_detected": false,
+                "strict_social_answer_seek_override": false,
+                "same_interlocutor_followup": false,
+                "answer_pressure_suppressed_because": [
+                  "no_active_interlocutor",
+                  "not_question_or_answer_pressure"
+                ],
+                "answer_pressure_family": null,
+                "answer_pressure_anchor_kind": null,
+                "contradiction_followup_detected": false,
+                "explanation_followup_detected": false,
+                "insufficiency_followup_detected": false,
+                "short_followup_anchor_detected": false,
+                "anchor_tokens_extracted": [
+                  "you're"
+                ],
+                "anchor_token_matched": null,
+                "anchor_followup_detected": false,
+                "explanation_of_recent_anchor_followup": false,
+                "recent_reference_clarification_detected": false,
+                "recent_reference_kind": null,
+                "recent_reference_phrase_matched": null,
+                "clarification_prompt_shape": null,
+                "correction_reask_followup_detected": false,
+                "answer_pressure_reasons": [],
+                "partial_answer_permitted": false
+              },
+              "player_direct_question": false,
+              "answer_required": false,
+              "answer_must_come_first": false,
+              "expected_voice": "either",
+              "expected_answer_shape": "direct",
+              "allowed_partial_reasons": [],
+              "forbid_deflection": false,
+              "forbid_generic_nonanswer": false,
+              "require_concrete_payload": false,
+              "concrete_payload_any_of": []
+            },
+            "response_type_contract": {
+              "required_response_type": "action_outcome",
+              "source_route": "exploration",
+              "allow_escalation": false,
+              "escalation_block_reason": "non_hostile_world_action_guard",
+              "strict_target_id": null,
+              "strict_answer_expected": false,
+              "strict_dialogue_expected": false,
+              "action_must_preserve_agency": true,
+              "debug_reasons": [
+                "resolved_world_action_requires_action_outcome",
+                "non_hostile_world_action_guard"
+              ]
+            }
+          },
+          "contracts": {
+            "answer_completeness": {
+              "enabled": false,
+              "trace": {
+                "trigger_source": "none",
+                "active_target_id": null,
+                "active_npc_reply_kind": null,
+                "question_detected_from_player_text": false,
+                "answer_pressure_followup_detected": false,
+                "strict_social_answer_seek_override": false,
+                "same_interlocutor_followup": false,
+                "answer_pressure_suppressed_because": [
+                  "no_active_interlocutor",
+                  "not_question_or_answer_pressure"
+                ],
+                "answer_pressure_family": null,
+                "answer_pressure_anchor_kind": null,
+                "contradiction_followup_detected": false,
+                "explanation_followup_detected": false,
+                "insufficiency_followup_detected": false,
+                "short_followup_anchor_detected": false,
+                "anchor_tokens_extracted": [
+                  "you're"
+                ],
+                "anchor_token_matched": null,
+                "anchor_followup_detected": false,
+                "explanation_of_recent_anchor_followup": false,
+                "recent_reference_clarification_detected": false,
+                "recent_reference_kind": null,
+                "recent_reference_phrase_matched": null,
+                "clarification_prompt_shape": null,
+                "correction_reask_followup_detected": false,
+                "answer_pressure_reasons": [],
+                "partial_answer_permitted": false
+              },
+              "player_direct_question": false,
+              "answer_required": false,
+              "answer_must_come_first": false,
+              "expected_voice": "either",
+              "expected_answer_shape": "direct",
+              "allowed_partial_reasons": [],
+              "forbid_deflection": false,
+              "forbid_generic_nonanswer": false,
+              "require_concrete_payload": false,
+              "concrete_payload_any_of": []
+            },
+            "response_delta": {
+              "enabled": false,
+              "delta_required": false,
+              "delta_must_come_early": false,
+              "trigger_source": "none",
+              "topic_tokens": [],
+              "press_depth": 0,
+              "previous_player_input": null,
+              "previous_answer_snippet": null,
+              "overlap_ratio": null,
+              "allowed_delta_kinds": [],
+              "forbid_semantic_restatement": false,
+              "forbid_repackaged_nonanswer": false,
+              "allow_short_bridge_before_delta": false,
+              "require_delta_when_answer_required": false,
+              "expected_delta_shape": "none",
+              "trace": {
+                "question_detected_from_player_text": false,
+                "follow_up_pressure_detected": false,
+                "follow_up_press_depth": 0,
+                "follow_up_overlap_ratio": null,
+                "prior_answer_available": false,
+                "answer_completeness_required": false,
+                "social_lock": false,
+                "active_target_id": null,
+                "answer_pressure_followup_detected": false,
+                "strict_social_answer_seek_override": false,
+                "same_interlocutor_followup": false,
+                "answer_pressure_suppressed_because": [
+                  "no_active_interlocutor",
+                  "not_question_or_answer_pressure"
+                ],
+                "answer_pressure_family": null,
+                "answer_pressure_anchor_kind": null,
+                "contradiction_followup_detected": false,
+                "explanation_followup_detected": false,
+                "insufficiency_followup_detected": false,
+                "short_followup_anchor_detected": false,
+                "anchor_tokens_extracted": [
+                  "you're"
+                ],
+                "anchor_token_matched": null,
+                "anchor_followup_detected": false,
+                "explanation_of_recent_anchor_followup": false,
+                "recent_reference_clarification_detected": false,
+                "recent_reference_kind": null,
+                "recent_reference_phrase_matched": null,
+                "clarification_prompt_shape": null,
+                "correction_reask_followup_detected": false,
+                "answer_pressure_reasons": [],
+                "trigger_source": "none",
+                "resolution_kind": "scene_transition",
+                "uncertainty_suggests_partial": false,
+                "suppressed_because": [
+                  "no_follow_up_pressure",
+                  "not_answer_seeking_turn",
+                  "resolution_kind_suppressed",
+                  "opening_scene"
+                ]
+              }
+            },
+            "fallback_behavior": null,
+            "tone_escalation": null,
+            "anti_railroading": null,
+            "context_separation": null,
+            "response_type": {
+              "required_response_type": "action_outcome",
+              "source_route": "exploration",
+              "allow_escalation": false,
+              "escalation_block_reason": "non_hostile_world_action_guard",
+              "strict_target_id": null,
+              "strict_answer_expected": false,
+              "strict_dialogue_expected": false,
+              "action_must_preserve_agency": true,
+              "debug_reasons": [
+                "resolved_world_action_requires_action_outcome",
+                "non_hostile_world_action_guard"
+              ]
+            }
+          },
+          "continuity": {
+            "last_human_adjacent_continuity": null
+          },
+          "fallback": {
+            "fallback_provenance": null
+          },
+          "debug": {
+            "sources_used": [
+              "game.narration_plan_bundle._assemble_plan_adjacent_renderer_inputs"
+            ],
+            "missing_contracts": [
+              "fallback_behavior",
+              "tone_escalation",
+              "anti_railroading",
+              "context_separation"
+            ],
+            "world_progression": {
+              "changed_nodes_head": [
+                "faction_agenda:ash_cowl",
+                "faction_agenda:house_verevin",
+                "faction_agenda:ordo_pyric",
+                "faction_pressure:ash_cowl",
+                "faction_pressure:house_verevin",
+                "faction_pressure:ordo_pyric"
+              ],
+              "active_projects_n": 0,
+              "world_clocks_n": 0
+            }
+          },
+          "referent_tracking_compact": {
+            "referent_artifact_version": 1,
+            "active_interaction_target": null,
+            "referential_ambiguity_class": "no_anchor",
+            "ambiguity_risk": 0
+          }
+        },
+        "referent_tracking": {
+          "version": 1,
+          "active_entities": [],
+          "active_entity_order": [],
+          "active_interaction_target": null,
+          "active_speaker_candidates": [],
+          "continuity_subject": null,
+          "continuity_object": null,
+          "pronoun_resolution": {
+            "strategy": "neutral_buckets",
+            "buckets_by_entity": {},
+            "explicit_sources": [],
+            "notes": "conservative_default_they_them_without_explicit_engine_buckets"
+          },
+          "ambiguity_risk": 0,
+          "allowed_named_references": [],
+          "forbidden_or_unresolved_patterns": [
+            {
+              "kind": "pronoun_anchor_conservative",
+              "referential_ambiguity_class": "no_anchor"
+            }
+          ],
+          "safe_explicit_fallback_labels": [],
+          "single_unambiguous_entity": null,
+          "referential_ambiguity_class": "no_anchor",
+          "interaction_target_continuity": {
+            "prior_target_id": null,
+            "current_target_id": null,
+            "signal_target_id": null,
+            "target_visible": false,
+            "drift_detected": false,
+            "signal_sources": []
+          },
+          "debug": {
+            "derivation_codes": [
+              "plan:descriptor_merge",
+              "speaker:contract",
+              "target:signals_collected",
+              "visibility:slice"
+            ],
+            "sources_used": [
+              "interaction_continuity",
+              "narration_visibility",
+              "narrative_plan",
+              "speaker_selection",
+              "turn_packet"
+            ],
+            "target_resolution_trace": [],
+            "visible_entity_count": 0,
+            "person_like_visible_count": 0,
+            "memory_window_entity_ids": [],
+            "conflicting_target_signals": false
+          }
+        },
+        "dialogue_social_plan": {
+          "version": 1,
+          "applies": false,
+          "speaker_id": null,
+          "speaker_name": null,
+          "speaker_source": "unresolved",
+          "dialogue_intent": null,
+          "reply_kind": "unknown",
+          "pressure_state": "none",
+          "relationship_codes": [
+            "unknown"
+          ],
+          "tone_bounds": [
+            "neutral"
+          ],
+          "prohibited_content_codes": [
+            "no_narrator_override",
+            "no_ooc_instructions",
+            "no_player_agency_override",
+            "no_prompt_text"
+          ],
+          "derivation_codes": [
+            "dialogue_social_plan:v1",
+            "intent:ctir_only",
+            "referent_tracking:consumed",
+            "session_hints:bounded",
+            "speaker:unresolved"
+          ],
+          "validator": {
+            "validated": true,
+            "errors": [],
+            "reject_field_names": [
+              "dialogue",
+              "dialogue_line",
+              "gm_guidance",
+              "instructions",
+              "message",
+              "narration",
+              "player_facing_text",
+              "prompt",
+              "system_prompt",
+              "text"
+            ],
+            "allowed_reply_kinds": [
+              "answer",
+              "explanation",
+              "reaction",
+              "refusal",
+              "unknown"
+            ],
+            "allowed_pressure_states": [
+              "high",
+              "low",
+              "moderate",
+              "none"
+            ],
+            "allowed_tone_codes": [
+              "cold",
+              "deferential",
+              "direct",
+              "evasive",
+              "guarded",
+              "hostile",
+              "neutral",
+              "threatening",
+              "warm"
+            ],
+            "allowed_relationship_codes": [
+              "engagement_engaged",
+              "engagement_focused",
+              "engagement_none",
+              "fear_high",
+              "fear_low",
+              "friendly",
+              "hostile",
+              "neutral",
+              "suspicion_high",
+              "suspicion_low",
+              "trust_high",
+              "trust_low",
+              "unfriendly",
+              "unknown"
+            ]
+          },
+          "bounded_session_hints": {
+            "active_interaction_target_id": null,
+            "active_interaction_target_name": null,
+            "active_interaction_kind": null,
+            "interaction_mode": "none",
+            "engagement_level": "none",
+            "conversation_privacy": null,
+            "player_position_context": null
+          }
+        }
+      }
+    },
+    "_runtime_narration_plan_bundle_stamp_v1": "1:25726cb9640:290fab76",
+    "last_turn_response_policy": {
+      "rule_priority_order": [
+        "ANSWER THE PLAYER",
+        "DO NOT CONTRADICT AUTHORITATIVE STATE",
+        "DO NOT LEAK HIDDEN FACTS / SECRETS",
+        "DO NOT ASSERT UNRESOLVED OUTCOMES, HIDDEN TRUTHS, OR NPC INTENT AS SETTLED FACT",
+        "PRESERVE PLAYER AGENCY \u2014 DO NOT DECIDE ACTIONS OR UPGRADE SURFACED LEADS INTO MANDATORY PATHS",
+        "IF FULL CERTAINTY IS UNAVAILABLE, GIVE A BOUNDED PARTIAL ANSWER",
+        "WHEN THE PLAYER PRESSES THE SAME TOPIC AGAIN, ADD NET-NEW VALUE RATHER THAN RESTATING",
+        "KEEP NARRATION AND SPOKEN LINES DISTINCT; PREFER NEW SIGNAL OVER GENERIC FILLER; RESPECT FALLBACK BREVITY",
+        "MAINTAIN DIEGETIC VOICE (no validator/system voice)",
+        "KEEP NARRATION FREE OF INTERNAL SCAFFOLDS, MENU LABELS, AND ENGINE COACHING",
+        "PRESERVE SCENE MOMENTUM",
+        "ADD SPECIFICITY / FLAVOR / POLISH"
+      ],
+      "must_answer": true,
+      "forbid_state_invention": true,
+      "forbid_secret_leak": true,
+      "allow_partial_answer": true,
+      "response_delta": {
+        "enabled": false,
+        "delta_required": false,
+        "delta_must_come_early": false,
+        "trigger_source": "none",
+        "topic_tokens": [],
+        "press_depth": 0,
+        "previous_player_input": null,
+        "previous_answer_snippet": null,
+        "overlap_ratio": null,
+        "allowed_delta_kinds": [],
+        "forbid_semantic_restatement": false,
+        "forbid_repackaged_nonanswer": false,
+        "allow_short_bridge_before_delta": false,
+        "require_delta_when_answer_required": false,
+        "expected_delta_shape": "none",
+        "trace": {
+          "question_detected_from_player_text": false,
+          "follow_up_pressure_detected": false,
+          "follow_up_press_depth": 0,
+          "follow_up_overlap_ratio": null,
+          "prior_answer_available": false,
+          "answer_completeness_required": false,
+          "social_lock": false,
+          "active_target_id": null,
+          "answer_pressure_followup_detected": false,
+          "strict_social_answer_seek_override": false,
+          "same_interlocutor_followup": false,
+          "answer_pressure_suppressed_because": [
+            "no_active_interlocutor",
+            "not_question_or_answer_pressure"
+          ],
+          "answer_pressure_family": null,
+          "answer_pressure_anchor_kind": null,
+          "contradiction_followup_detected": false,
+          "explanation_followup_detected": false,
+          "insufficiency_followup_detected": false,
+          "short_followup_anchor_detected": false,
+          "anchor_tokens_extracted": [
+            "you're"
+          ],
+          "anchor_token_matched": null,
+          "anchor_followup_detected": false,
+          "explanation_of_recent_anchor_followup": false,
+          "recent_reference_clarification_detected": false,
+          "recent_reference_kind": null,
+          "recent_reference_phrase_matched": null,
+          "clarification_prompt_shape": null,
+          "correction_reask_followup_detected": false,
+          "answer_pressure_reasons": [],
+          "trigger_source": "none",
+          "resolution_kind": "scene_transition",
+          "uncertainty_suggests_partial": false,
+          "suppressed_because": [
+            "no_follow_up_pressure",
+            "not_answer_seeking_turn",
+            "resolution_kind_suppressed",
+            "opening_scene"
+          ]
+        }
+      },
+      "diegetic_only": true,
+      "prefer_scene_momentum": true,
+      "prefer_specificity": true,
+      "no_validator_voice": {
+        "enabled": true,
+        "applies_to": "standard_narration",
+        "rule": "Never speak as a validator, analyst, referee of canon, or system. Do not mention what is or is not established, available to the model, visible to tools, or answerable by the system. If uncertainty exists, express it as in-world uncertainty from people, circumstances, clues, distance, darkness, rumor, missing access, or incomplete observation.",
+        "prohibited_perspectives": [
+          "canon_validation",
+          "evidence_review",
+          "system_limitation",
+          "tool_access",
+          "model_identity",
+          "rules_explanation_outside_oc_or_adjudication"
+        ],
+        "rules_explanation_only_in": [
+          "oc",
+          "adjudication"
+        ]
+      },
+      "scene_momentum_due": false,
+      "uncertainty": {
+        "enabled": true,
+        "categories": [
+          "unknown_identity",
+          "unknown_location",
+          "unknown_motive",
+          "unknown_method",
+          "unknown_quantity",
+          "unknown_feasibility"
+        ],
+        "sources": [
+          "npc_ignorance",
+          "scene_ambiguity",
+          "procedural_insufficiency"
+        ],
+        "answer_shape": [
+          "known_edge",
+          "unknown_edge",
+          "next_lead"
+        ],
+        "context_inputs": [
+          "turn_context",
+          "speaker",
+          "scene_snapshot"
+        ]
+      },
+      "answer_completeness": {
+        "enabled": false,
+        "trace": {
+          "trigger_source": "none",
+          "active_target_id": null,
+          "active_npc_reply_kind": null,
+          "question_detected_from_player_text": false,
+          "answer_pressure_followup_detected": false,
+          "strict_social_answer_seek_override": false,
+          "same_interlocutor_followup": false,
+          "answer_pressure_suppressed_because": [
+            "no_active_interlocutor",
+            "not_question_or_answer_pressure"
+          ],
+          "answer_pressure_family": null,
+          "answer_pressure_anchor_kind": null,
+          "contradiction_followup_detected": false,
+          "explanation_followup_detected": false,
+          "insufficiency_followup_detected": false,
+          "short_followup_anchor_detected": false,
+          "anchor_tokens_extracted": [
+            "you're"
+          ],
+          "anchor_token_matched": null,
+          "anchor_followup_detected": false,
+          "explanation_of_recent_anchor_followup": false,
+          "recent_reference_clarification_detected": false,
+          "recent_reference_kind": null,
+          "recent_reference_phrase_matched": null,
+          "clarification_prompt_shape": null,
+          "correction_reask_followup_detected": false,
+          "answer_pressure_reasons": [],
+          "partial_answer_permitted": false
+        },
+        "player_direct_question": false,
+        "answer_required": false,
+        "answer_must_come_first": false,
+        "expected_voice": "either",
+        "expected_answer_shape": "direct",
+        "allowed_partial_reasons": [],
+        "forbid_deflection": false,
+        "forbid_generic_nonanswer": false,
+        "require_concrete_payload": false,
+        "concrete_payload_any_of": [],
+        "answer_exposition_plan": {
+          "enabled": false,
+          "answer_required": false,
+          "answer_intent": "none",
+          "source": {
+            "derived_from_ctir": true,
+            "ctir_sections": [],
+            "derivation_codes": [
+              "answer_exposition_plan:derive"
+            ]
+          },
+          "facts": [],
+          "constraints": {
+            "forbid_invention": true,
+            "forbid_hidden_truth_leak": true,
+            "forbid_prompt_layer_reasoning": true,
+            "allowed_partial_reasons": []
+          },
+          "voice": {
+            "expected_voice": "either",
+            "delivery_mode": "plain_answer"
+          },
+          "delivery": {
+            "answer_must_come_first": false,
+            "max_sentences_hint": null,
+            "must_include_fact_ids": [],
+            "optional_fact_ids": [],
+            "forbidden_moves": [
+              "no_generic_fallback",
+              "no_opening_tableau_reuse"
+            ]
+          },
+          "debug": {
+            "derivation_codes": [
+              "answer_exposition_plan:derive"
+            ]
+          }
+        }
+      },
+      "response_type_contract": {
+        "required_response_type": "action_outcome",
+        "source_route": "exploration",
+        "allow_escalation": false,
+        "debug_reasons": [
+          "resolved_world_action_requires_action_outcome",
+          "non_hostile_world_action_guard"
+        ]
+      },
+      "tone_escalation": {
+        "enabled": true,
+        "scene_id": "eastern_square",
+        "active_speaker_id": null,
+        "base_tone": "neutral",
+        "max_allowed_tone": "neutral",
+        "allow_guarded_refusal": false,
+        "allow_verbal_pressure": false,
+        "allow_explicit_threat": false,
+        "allow_physical_hostility": false,
+        "allow_combat_initiation": false,
+        "justification_flags": {
+          "player_used_aggressive_action": false,
+          "player_used_coercive_social_action": false,
+          "player_persisted_after_refusal": false,
+          "scene_has_active_tension": false,
+          "scene_has_authority_pressure": false,
+          "scene_has_visible_hostile_actor": false,
+          "combat_active": false,
+          "resolution_is_risky": false,
+          "npc_already_hostile_in_state": false
+        },
+        "justification_reasons": [],
+        "preferred_deescalations": [
+          "Default to observational tone; keep interpersonal heat optional.",
+          "Prefer curiosity and clarification over suspicion-as-accusation."
+        ],
+        "debug_reason": "tone_escalation: base_rank=0 max_rank=0 combat_active=False hostile_npc=False",
+        "debug_inputs": {
+          "scene_id": "eastern_square",
+          "has_session": true,
+          "has_world": true,
+          "has_resolution": true,
+          "has_narration_visibility": true,
+          "has_scene_state_anchor_contract": true,
+          "has_speaker_selection_contract": true,
+          "recent_log_len": 1
+        },
+        "debug_flags": {
+          "base_rank": 0,
+          "max_rank": 0,
+          "recent_player_text_latest_len": 39,
+          "resolution_kind": "scene_transition",
+          "normalized_action_type": null,
+          "prior_refusal_seen_in_log": false,
+          "topic_pressure": 0,
+          "combat_active_inferred": false
+        }
+      },
+      "narrative_authority": {
+        "enabled": true,
+        "authoritative_outcome_available": true,
+        "resolution_kind": "scene_transition",
+        "success_state_available": false,
+        "mechanical_result_available": false,
+        "active_speaker_id": null,
+        "active_target_id": null,
+        "visible_fact_strings": [],
+        "hidden_fact_strings_present": false,
+        "discoverable_hinting_allowed": false,
+        "forbid_unresolved_outcome_assertions": false,
+        "forbid_hidden_fact_assertions": true,
+        "forbid_npc_intent_assertions_without_basis": true,
+        "allow_bounded_intent_reading_only_when_player_asked": false,
+        "allowed_deferrals": [
+          "ask_for_roll",
+          "bounded_uncertainty",
+          "branch_outcome"
+        ],
+        "preferred_deferral_order": [
+          "bounded_uncertainty",
+          "branch_outcome",
+          "ask_for_roll"
+        ],
+        "debug_reason": "narrative_authority: authoritative_outcome=True kind='scene_transition' mechanical_risky=False",
+        "debug_inputs": {
+          "has_resolution": true,
+          "has_narration_visibility": true,
+          "has_scene_state_anchor_contract": true,
+          "has_speaker_selection_contract": true,
+          "has_session_view": true
+        },
+        "debug_flags": {
+          "mechanical_risky": false,
+          "pending_player_roll": false,
+          "anchor_contract_enabled": true
+        }
+      },
+      "forbid_unjustified_narrative_authority": true,
+      "anti_railroading": {
+        "enabled": true,
+        "forbid_player_decision_override": true,
+        "forbid_forced_direction": true,
+        "forbid_exclusive_path_claims_without_basis": true,
+        "forbid_lead_to_plot_gravity_upgrade": true,
+        "allow_directional_language_from_resolved_transition": true,
+        "allow_exclusivity_from_authoritative_resolution": true,
+        "allow_commitment_language_when_player_explicitly_committed": false,
+        "surfaced_lead_ids": [
+          "c_lirael",
+          "ms_lead"
+        ],
+        "surfaced_lead_labels": [
+          "Lirael posts near the eastern square when she is not on the crier route.",
+          "Patrol rumor"
+        ],
+        "allowed_lead_roles": [
+          "option",
+          "hook",
+          "rumor",
+          "pressure",
+          "opportunity",
+          "constraint"
+        ],
+        "forbidden_lead_roles": [
+          "destiny",
+          "required_path",
+          "main_plot",
+          "only_real_way_forward"
+        ],
+        "debug_reason": "anti_railroading: transition=True authoritative=True commitment=False surfaced_leads=2",
+        "debug_inputs": {
+          "has_resolution": true,
+          "has_narration_obligations": true,
+          "has_session_view": true,
+          "has_scene_state_anchor_contract": true,
+          "has_speaker_selection_contract": true,
+          "has_narrative_authority_contract": true,
+          "has_prompt_leads": true,
+          "has_active_pending_leads": true,
+          "has_follow_surface": false,
+          "player_text_nonempty": true,
+          "obligation_hints": {
+            "must_advance_scene": true,
+            "scene_momentum_due": false,
+            "is_opening_scene": true
+          }
+        },
+        "debug_flags": {
+          "resolved_transition": true,
+          "authoritative_resolution_outcome": true,
+          "player_commitment_detected": false,
+          "surfaced_lead_count": 2,
+          "scene_state_anchor_contract_present": true,
+          "narrative_authority_contract_present": true,
+          "speaker_contract_present": true
+        }
+      },
+      "context_separation": {
+        "enabled": true,
+        "scene_focus_summary": "A blank scene awaiting definition. scene transition scene_transition A blank scene awaiting definition.",
+        "interaction_kind": "scene_transition",
+        "player_intent_summary": "I asked about Lirael earlier. Galinor leaves for the eastern square.",
+        "primary_topics": [
+          "asked",
+          "lirael",
+          "earlier",
+          "galinor",
+          "leaves",
+          "eastern",
+          "square",
+          "eastern_square",
+          "eastern square",
+          "unnamed scene",
+          "tavern runner",
+          "scene_transition",
+          "i_asked_about_lirael_earlier_galinor_lea",
+          "i asked about lirael earlier galinor lea"
+        ],
+        "allowed_contextual_topics": [
+          "Lirael posts near the eastern square when she is not on the crier route.",
+          "Patrol rumor"
+        ],
+        "ambient_pressure_topics": [
+          "Rival noble houses competing for territory and influence.",
+          "Religious orders attempting to control or suppress dangerous magic.",
+          "Criminal syndicates dominating trade, smuggling, and urban power."
+        ],
+        "forbid_topic_hijack": true,
+        "forbid_pressure_answer_substitution": true,
+        "forbid_unearned_tone_shift_from_background_pressure": true,
+        "allow_brief_pressure_coloring": true,
+        "allow_optional_consequence_signposting": true,
+        "max_pressure_sentences_without_player_prompt": 2,
+        "tone_escalation_contract": {
+          "enabled": true,
+          "scene_id": "eastern_square",
+          "active_speaker_id": null,
+          "base_tone": "neutral",
+          "max_allowed_tone": "neutral",
+          "allow_guarded_refusal": false,
+          "allow_verbal_pressure": false,
+          "allow_explicit_threat": false,
+          "allow_physical_hostility": false,
+          "allow_combat_initiation": false,
+          "justification_flags": {
+            "player_used_aggressive_action": false,
+            "player_used_coercive_social_action": false,
+            "player_persisted_after_refusal": false,
+            "scene_has_active_tension": false,
+            "scene_has_authority_pressure": false,
+            "scene_has_visible_hostile_actor": false,
+            "combat_active": false,
+            "resolution_is_risky": false,
+            "npc_already_hostile_in_state": false
+          },
+          "justification_reasons": [],
+          "preferred_deescalations": [
+            "Default to observational tone; keep interpersonal heat optional.",
+            "Prefer curiosity and clarification over suspicion-as-accusation."
+          ],
+          "debug_reason": "tone_escalation: base_rank=0 max_rank=0 combat_active=False hostile_npc=False",
+          "debug_inputs": {
+            "scene_id": "eastern_square",
+            "has_session": true,
+            "has_world": true,
+            "has_resolution": true,
+            "has_narration_visibility": true,
+            "has_scene_state_anchor_contract": true,
+            "has_speaker_selection_contract": true,
+            "recent_log_len": 1
+          },
+          "debug_flags": {
+            "base_rank": 0,
+            "max_rank": 0,
+            "recent_player_text_latest_len": 39,
+            "resolution_kind": "scene_transition",
+            "normalized_action_type": null,
+            "prior_refusal_seen_in_log": false,
+            "topic_pressure": 0,
+            "combat_active_inferred": false
+          }
+        },
+        "debug_inputs": {
+          "has_resolution": true,
+          "has_session_view": true,
+          "has_scene_envelope": true,
+          "has_scene_summary": true,
+          "has_turn_summary": true,
+          "has_speaker_selection_contract": true,
+          "has_scene_state_anchor_contract": true,
+          "has_narration_visibility": true,
+          "has_tone_escalation_contract": true,
+          "has_compressed_world_pressures": true,
+          "has_prompt_leads": true,
+          "has_active_pending_leads": true,
+          "has_follow_surface": false,
+          "player_text_nonempty": true,
+          "primary_topic_count": 14,
+          "ambient_pressure_topic_count": 3
+        },
+        "debug_flags": {
+          "player_seeks_world_danger_info": false,
+          "scene_summary_crisis": false,
+          "interaction_kind_worldish": false,
+          "authoritative_or_consequence_relevant": true,
+          "pressure_focus_allowed": true,
+          "tone_allow_verbal_pressure": false,
+          "tone_allow_explicit_threat": false
+        },
+        "debug_reason": "context_separation: pressure_focus_allowed=True primary_topics=14 ambient=3"
+      },
+      "player_facing_narration_purity": {
+        "enabled": true,
+        "diegetic_only": true,
+        "allow_structured_choice_labels": false,
+        "allow_explicit_ui_references": false,
+        "allow_meta_transition_bridges": false,
+        "forbid_scaffold_headers": true,
+        "forbid_coaching_language": true,
+        "forbid_engine_choice_framing": true,
+        "forbid_non_diegetic_action_prompting": true,
+        "response_type_required": null,
+        "interaction_kind": null
+      },
+      "social_response_structure": {
+        "enabled": false,
+        "applies_to_response_type": "dialogue",
+        "require_spoken_dialogue_shape": false,
+        "discourage_expository_monologue": false,
+        "require_natural_cadence": false,
+        "allow_brief_action_beats": true,
+        "allow_brief_refusal_or_uncertainty": true,
+        "max_contiguous_expository_lines": null,
+        "max_dialogue_paragraphs_before_break": null,
+        "prefer_single_speaker_turn": false,
+        "forbid_bulleted_or_list_like_dialogue": false,
+        "required_response_type": "action_outcome",
+        "debug_reason": "response_type_not_dialogue:action_outcome",
+        "debug_inputs": {
+          "scene_id": "eastern_square",
+          "response_type_contract_source": "response_policy"
+        }
+      },
+      "interaction_continuity": {
+        "enabled": false,
+        "continuity_strength": "none",
+        "preserve_conversational_thread": false,
+        "preserve_context_continuity": false,
+        "drop_interlocutor_requires_explicit_break": false,
+        "speaker_switch_requires_explicit_cue": false,
+        "allow_narrator_bridge": true,
+        "interaction_mode": "none",
+        "interaction_kind": "",
+        "active_interaction_target_id": "",
+        "current_interlocutor": "",
+        "anchored_interlocutor_id": "",
+        "conversation_privacy": "",
+        "engagement_level": "none",
+        "speaker_selection_contract": {
+          "primary_speaker_id": null,
+          "primary_speaker_name": null,
+          "primary_speaker_source": null,
+          "allowed_speaker_ids": [],
+          "continuity_locked": false,
+          "continuity_lock_reason": null,
+          "speaker_switch_allowed": true,
+          "speaker_switch_reason": "no_authoritative_pin",
+          "generic_fallback_forbidden": true,
+          "forbidden_fallback_labels": [
+            "ragged stranger",
+            "stranger",
+            "someone nearby",
+            "someone in the crowd",
+            "a voice nearby",
+            "a passerby",
+            "a bystander",
+            "an onlooker",
+            "a figure nearby",
+            "someone anonymous"
+          ],
+          "interruption_allowed": false,
+          "interruption_requires_scene_event": false,
+          "offscene_speakers_forbidden": true,
+          "debug": {
+            "merged_player_prompt_preview": "",
+            "strict_social_active": false,
+            "authoritative_source": "none",
+            "authoritative_reason": "no addressable target resolved",
+            "grounding_reason_code": "empty_actor_id",
+            "grounding_fallback_applied": false,
+            "neutral_reply_bridge": true,
+            "why_speaker_chosen": "authoritative_target_unresolved",
+            "why_continuity_locked_or_not": null,
+            "why_switch_permitted_or_not": "no_authoritative_pin",
+            "interruption_tracker_active": false,
+            "resolution_path": "full_authoritative_resolve_plus_grounding"
+          }
+        },
+        "continuity_reasons": [],
+        "break_signals_present": [],
+        "debug": {
+          "source_of_anchor": "none",
+          "scene_scope_validated": true,
+          "response_type_required": "action_outcome"
+        }
+      },
+      "fallback_behavior": {
+        "enabled": true,
+        "uncertainty_active": false,
+        "uncertainty_sources": [],
+        "uncertainty_mode": null,
+        "allowed_behaviors": {
+          "ask_clarifying_question": false,
+          "hedge_appropriately": false,
+          "provide_partial_information": false
+        },
+        "disallowed_behaviors": {
+          "invented_certainty": true,
+          "fabricated_authority": true,
+          "meta_system_explanations": true
+        },
+        "diegetic_only": true,
+        "max_clarifying_questions": 1,
+        "prefer_partial_over_question": false,
+        "require_partial_to_state_known_edge": false,
+        "require_partial_to_state_unknown_edge": false,
+        "require_partial_to_offer_next_lead": false,
+        "allowed_hedge_forms": [
+          "I can't swear to it, but",
+          "From what I saw,",
+          "As far as rumor goes,",
+          "Looks like",
+          "Hard to tell, but"
+        ],
+        "forbidden_hedge_forms": [
+          "I lack enough information to answer confidently.",
+          "The system cannot confirm that.",
+          "Canon proves it.",
+          "As an AI, I don't know.",
+          "There is insufficient context available."
+        ],
+        "allowed_authority_bases": [
+          "direct_observation",
+          "established_report",
+          "rumor_marked_as_rumor",
+          "visible_evidence"
+        ],
+        "forbidden_authority_bases": [
+          "unsupported_named_culprit",
+          "unsupported_exact_location",
+          "unsupported_motive_as_fact",
+          "unsupported_procedural_certainty",
+          "system_or_canon_claims"
+        ],
+        "debug": {
+          "activation_reasons": [],
+          "partial_preferred": false,
+          "clarifying_question_allowed": false
+        }
+      },
+      "narrative_authenticity": {
+        "enabled": true,
+        "version": 1,
+        "mode": "advisory_prompt_with_gate_enforcement",
+        "allow_restate_for_continuity": true,
+        "max_anchor_reuse_clauses": 1,
+        "forbid_scene_narration_echo_as_dialogue": true,
+        "forbid_low_signal_generic_reply": true,
+        "forbid_adjacent_phrase_reuse": true,
+        "require_meaningful_change_on_followup": true,
+        "signal_sources": [
+          "new_information",
+          "new_perspective",
+          "new_reaction",
+          "new_boundary_of_uncertainty",
+          "new_actionable_next_step"
+        ],
+        "anti_goals": {
+          "do_not_force_verbosity": true,
+          "do_not_invent_facts": true,
+          "do_not_override_fallback_correctness": true
+        },
+        "fallback_compatibility": {
+          "may_be_brief_under_uncertainty": true,
+          "may_refuse_or_partially_answer_if_other_contracts_require": true,
+          "brevity_alone_is_not_failure": true
+        },
+        "rumor_realism": {
+          "enabled": true,
+          "apply_on_secondhand_or_rumor_turns": true,
+          "forbid_verbatim_scene_to_rumor_reuse": true,
+          "forbid_recent_narration_to_dialogue_reuse": true,
+          "require_one_of": [
+            "source_limitation",
+            "uncertainty_or_distortion",
+            "perspective_or_bias",
+            "net_new_detail"
+          ],
+          "allow_partial_fact_overlap": true,
+          "forbid_identical_phrasing_even_when_overlap_allowed": true,
+          "fallback_compatibility": {
+            "allow_brief_bounded_partial_under_uncertainty": true,
+            "do_not_fail_for_brevity_alone": true,
+            "allow_source_limited_refusal": true
+          }
+        },
+        "trace": {
+          "response_delta_contract_active": false,
+          "topic_follow_up_active": false,
+          "answer_completeness_required": false,
+          "dialogue_shape_expected": false,
+          "prior_turn_gm_snippet_for_overlap": "Tavern Runner lowers their voice. \"I have heard the talk, but I cannot swear to that.\" \"You're asking for a line I don't own.\"",
+          "player_text_len": 68,
+          "rumor_turn_active": false,
+          "rumor_turn_reason_codes": [],
+          "rumor_trigger_spans": []
+        }
+      },
+      "conversational_memory_window": {
+        "enabled": true,
+        "window_version": "v1",
+        "prioritize_recent_turns": true,
+        "prioritize_active_scene_entities": true,
+        "deprioritize_stale_inactive_elements": true,
+        "allow_explicit_reintroduction": true,
+        "recent_turn_window": 6,
+        "soft_memory_limit": 12,
+        "stale_after_turns": 18,
+        "active_scene_entity_ids": [],
+        "anchored_interlocutor_id": "",
+        "active_interaction_target_id": "",
+        "explicit_reintroduced_entity_ids": [],
+        "explicit_reintroduced_topics": [],
+        "selection_debug": {
+          "matched_entity_ids": [],
+          "matched_topics": [],
+          "matched_grounded_ids": [],
+          "callback_marker_hit": "earlier",
+          "source_of_activity_anchor": "none",
+          "source_of_recentness": "session.turn_counter",
+          "source_of_reintroductions": "player_text+visibility_aliases"
+        }
+      }
+    },
+    "_runtime_progression_nodes_fingerprint_v1": {
+      "faction_agenda:ash_cowl": "active|2|10",
+      "faction_agenda:house_verevin": "active|2|10",
+      "faction_agenda:ordo_pyric": "active|2|10",
+      "faction_pressure:ash_cowl": "active|4|10",
+      "faction_pressure:house_verevin": "active|4|10",
+      "faction_pressure:ordo_pyric": "active|3|10"
+    },
+    "emergent_actor_debug": {
+      "emergent_actor_enrolled": false,
+      "emergent_actor_id": null,
+      "emergent_actor_source_text": null
+    },
+    "last_saved_at": "2026-04-26T16:18:33.329588Z"
+  },
+  "integrity": {
+    "payload_sha256": "789b0d2d2cfa5b72911a2d62f24c6e3bab15b26bbd739bf95e21e1b7686efc17",
+    "canonicalization": "json/sort_keys,separators",
+    "hash": "sha256"
+  }
+}

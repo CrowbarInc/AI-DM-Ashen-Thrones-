@@ -114,6 +114,58 @@ def test_investigate_notice_board_resolves():
     assert "notice" in (parsed.get("prompt") or "").lower() or "board" in (parsed.get("prompt") or "").lower()
 
 
+def test_parse_mixed_investigation_question_uses_scene_grounding_metadata():
+    scene = {
+        "scene": {
+            "id": "workshop",
+            "interactables": [
+                {
+                    "id": "orrery",
+                    "label": "Clockwork orrery",
+                    "aliases": ["tiny jeweled planet-machine"],
+                    "type": "investigate",
+                }
+            ],
+            "visible_facts": ["A tiny jeweled planet-machine hums on the bench."],
+            "discoverable_clues": [{"id": "orrery_heat", "text": "The clockwork orrery is warm to the touch."}],
+            "suggested_actions": [{"id": "study-orrery", "label": "Study the clockwork orrery"}],
+        }
+    }
+
+    parsed = parse_freeform_to_action(
+        "I study the tiny jeweled planet-machine. Anything unusual?",
+        scene,
+    )
+
+    assert parsed is not None
+    assert parsed.get("type") == "investigate"
+    assert parsed.get("target_id") == "orrery"
+    metadata = parsed.get("metadata") or {}
+    assert metadata.get("parser_lane") == "mixed_scene_object_investigation"
+    assert metadata.get("mixed_turn_detail_question") == "Anything unusual?"
+    assert metadata.get("recovered_action_clause") == "I study the tiny jeweled planet-machine"
+
+
+def test_parse_mixed_investigation_question_does_not_invent_ungrounded_target():
+    scene = {
+        "scene": {
+            "id": "workshop",
+            "interactables": [{"id": "sealed_crate", "label": "Sealed crate", "type": "investigate"}],
+            "visible_facts": ["A sealed crate rests under the bench."],
+        }
+    }
+
+    parsed = parse_freeform_to_action(
+        "I study the silver astrolabe. Anything unusual?",
+        scene,
+    )
+
+    assert parsed is not None
+    assert parsed.get("type") == "investigate"
+    assert (parsed.get("metadata") or {}).get("parser_lane") != "mixed_scene_object_investigation"
+    assert "silver astrolabe" in str(parsed.get("target_id") or "")
+
+
 def test_attack_returns_attack_type():
     """'I attack the guard' returns type attack (for API to route when in combat)."""
     scene = {"scene": {"id": "gate", "exits": []}}

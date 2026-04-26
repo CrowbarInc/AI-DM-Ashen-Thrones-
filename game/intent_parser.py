@@ -98,6 +98,14 @@ INVESTIGATE_PATTERNS = [
     (r"\b(dig\s+through|rifle\s+through|search)\s+(?:the\s+)?(.+?)\.?$", "investigate", True),
     (r"\b(look|search|inspect|examine)\b", "investigate", False),  # fallback when no target
 ]
+_MIXED_INVESTIGATION_VERB_RE = re.compile(
+    r"\b(?P<verb>study|studies|inspect|inspects|examine|examines|check|checks|search|searches|look\s+at|looks\s+at|look\s+for|looks\s+for)\b",
+    re.IGNORECASE,
+)
+_MIXED_INVESTIGATION_TARGET_RE = re.compile(
+    r"\b(?:study|studies|inspect|inspects|examine|examines|check|checks|search|searches|look\s+at|looks\s+at|look\s+for|looks\s+for)\s+(?:the\s+|a\s+|an\s+|this\s+|that\s+)?(?P<target>[^.;?!]{1,120})",
+    re.IGNORECASE,
+)
 INTERACT_PATTERNS = [
     (r"\b(talk\s+to|talk\s+with|speak\s+to|speak\s+with|ask|question|chat\s+with|greet)\s+(?:the\s+)?(.+?)(?:\s+about\s+)?\.?$", "interact", True),
     (r"\b(gauge|approach)\s+(?:the\s+)?(.+?)\.?$", "interact", True),
@@ -408,6 +416,149 @@ def _match_target_to_visible_fact(target_slug: str, visible_facts: List[Any]) ->
         if target_slug in f_slug or f_slug in target_slug:
             return text
     return None
+
+
+def _scene_grounding_terms(scene: Dict[str, Any]) -> List[Dict[str, str]]:
+    """Scene-authored target surfaces for shape-based mixed investigation recovery."""
+    terms: List[Dict[str, str]] = []
+    for i in scene.get("interactables") or []:
+        if not isinstance(i, dict):
+            continue
+        target_id = str(i.get("id") or "").strip()
+        if not target_id:
+            continue
+        for field in ("id", "label", "name"):
+            value = str(i.get(field) or "").strip()
+            if value:
+                terms.append({"kind": "interactable", "text": value, "target_id": target_id})
+        for alias in i.get("aliases") or []:
+            value = str(alias or "").strip()
+            if value:
+                terms.append({"kind": "interactable", "text": value, "target_id": target_id})
+    for fact in scene.get("visible_facts") or []:
+        text = str(fact or "").strip()
+        if text:
+            terms.append({"kind": "visible_fact", "text": text, "target_id": slugify(text)[:40] or "visible_fact"})
+    for clue in scene.get("discoverable_clues") or []:
+        rec = clue if isinstance(clue, dict) else {"id": slugify(str(clue)), "text": str(clue)}
+        cid = str(rec.get("id") or slugify(str(rec.get("text") or ""))).strip()
+        for field in ("id", "text", "label", "name"):
+            value = str(rec.get(field) or "").strip()
+            if value:
+                terms.append({"kind": "discoverable_clue", "text": value, "target_id": cid or slugify(value)[:40]})
+    for action in scene.get("actions") or scene.get("suggested_actions") or []:
+        if not isinstance(action, dict):
+            continue
+        aid = str(action.get("id") or action.get("action_id") or "").strip()
+        for field in ("label", "name", "prompt"):
+            value = str(action.get(field) or "").strip()
+            if value:
+                terms.append({"kind": "suggested_action", "text": value, "target_id": aid or slugify(value)[:40]})
+    return terms
+
+
+def _ground_scene_investigation_target(target_text: str, scene: Dict[str, Any]) -> Optional[Dict[str, str]]:
+    """Resolve an extracted target against scene-authored surfaces only."""
+    target_slug = slugify(target_text or "")
+    if not target_slug:
+        return None
+    best: Optional[Dict[str, str]] = None
+    best_score = -1
+    priority = {
+        "interactable": 400,
+        "suggested_action": 300,
+        "discoverable_clue": 200,
+        "visible_fact": 100,
+    }
+    for term in _scene_grounding_terms(scene):
+        surface = term.get("text") or ""
+        surface_slug = slugify(surface)
+        if not surface_slug:
+            continue
+        if target_slug in surface_slug or surface_slug in target_slug:
+            score = priority.get(term.get("kind") or "", 0) + len(surface_slug)
+            if score > best_score:
+                best = term
+                best_score = score
+    return best
+
+
+def _split_mixed_investigation_detail_question(text: str) -> tuple[Optional[str], Optional[str]]:
+    if not isinstance(text, str) or "?" not in text or '"' in text:
+        return None, None
+    q_end = text.rfind("?")
+    if q_end < 0:
+        return None, None
+    prefix = text[:q_end]
+    boundary = max(prefix.rfind("."), prefix.rfind(";"), prefix.rfind("\n"))
+    if boundary < 0:
+        comma_q = re.search(
+            r"[,]\s*(?=(?:does|do|did|is|are|was|were|can|could|would|will|anything|any|what|where|why|how)\b)",
+            prefix,
+            re.IGNORECASE,
+        )
+        boundary = comma_q.start() if comma_q else -1
+    if boundary < 0:
+        return None, None
+    action_part = _clean_clause(text[:boundary])
+    question = _clean_clause(text[boundary + 1 : q_end + 1])
+    if not action_part or not question:
+        return None, None
+    q_low = question.lower()
+    if _looks_like_npc_directed_second_person_question(q_low):
+        return None, None
+    if not _MIXED_INVESTIGATION_VERB_RE.search(action_part):
+        return None, None
+    return action_part, question
+
+
+def _recover_mixed_scene_object_investigation(
+    text: str,
+    scene: Dict[str, Any],
+    *,
+    detail_question_text: Optional[str] = None,
+) -> Optional[Dict[str, Any]]:
+    if isinstance(detail_question_text, str) and detail_question_text.strip() and "?" not in text:
+        action_part = _clean_clause(text)
+        question = _clean_clause(detail_question_text)
+    else:
+        action_part, question = _split_mixed_investigation_detail_question(text)
+    if not action_part or not question:
+        return None
+    candidates = [_clean_clause(c) for c in re.split(r"[.;]\s*", action_part)]
+    action_clause = None
+    for candidate in reversed([c for c in candidates if c]):
+        if _MIXED_INVESTIGATION_VERB_RE.search(candidate):
+            action_clause = candidate
+            break
+    if not action_clause:
+        action_clause = action_part
+    m = _MIXED_INVESTIGATION_TARGET_RE.search(action_clause)
+    if not m:
+        return None
+    target = _clean_clause(m.group("target"))
+    if not target:
+        return None
+    grounding = _ground_scene_investigation_target(target, scene)
+    if grounding is None:
+        return None
+    target_id = str(grounding.get("target_id") or "").strip()
+    aid = target_id or (slugify(action_clause) or "investigate")[:40]
+    return _build_action(
+        "investigate",
+        action_clause,
+        action_clause,
+        target_id=target_id or None,
+        action_id=aid,
+        metadata={
+            "parser_lane": "mixed_scene_object_investigation",
+            "mixed_turn_detail_question": question,
+            "adjudication_or_detail_question_text": question,
+            "recovered_action_clause": action_clause,
+            "scene_grounding_kind": grounding.get("kind"),
+            "scene_grounding_text": grounding.get("text"),
+        },
+    )
 
 
 def _build_action(
@@ -919,6 +1070,19 @@ def parse_freeform_to_action(
             metadata={"parser_lane": "local_observation_question"},
         )
 
+    mixed_detail_question = (
+        segmented_turn.get("adjudication_question_text")
+        if isinstance(segmented_turn, dict)
+        else None
+    )
+    mixed_investigation = _recover_mixed_scene_object_investigation(
+        t,
+        scene,
+        detail_question_text=mixed_detail_question if isinstance(mixed_detail_question, str) else None,
+    )
+    if mixed_investigation is not None:
+        return mixed_investigation
+
     # ---- 0. Qualified explicit pursuit (fail-closed) + bare follow-the-lead (session) ----
     q_frag = _extract_qualified_pursuit_target_text(t)
     if q_frag is not None and not isinstance(session, dict):
@@ -1038,12 +1202,25 @@ def parse_freeform_to_action(
             target_slug = slugify(target) if target else None
             matched_id = _match_target_to_interactable(target_slug, interactables) if target_slug else None
             aid = matched_id or (slugify(t) or "investigate")[:40]
+            metadata = None
+            if isinstance(mixed_detail_question, str) and mixed_detail_question.strip() and target:
+                grounding = _ground_scene_investigation_target(target, scene)
+                if grounding is not None:
+                    metadata = {
+                        "parser_lane": "mixed_scene_object_investigation",
+                        "mixed_turn_detail_question": mixed_detail_question.strip(),
+                        "adjudication_or_detail_question_text": mixed_detail_question.strip(),
+                        "recovered_action_clause": _clean_clause(t) or t,
+                        "scene_grounding_kind": grounding.get("kind"),
+                        "scene_grounding_text": grounding.get("text"),
+                    }
             return _build_action(
                 "investigate",
                 t,
                 t,
                 target_id=matched_id or target,
                 action_id=aid,
+                metadata=metadata,
             )
 
     # ---- 4. Observe (general look-around) ----

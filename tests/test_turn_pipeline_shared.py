@@ -1310,6 +1310,101 @@ def test_chat_mixed_turn_preserves_embedded_adjudication_metadata(tmp_path, monk
     assert "Perception" in (embedded.get("question") or "")
 
 
+# feature: routing, clues, emission
+@pytest.mark.parametrize(
+    ("player_text", "target_id", "question_text"),
+    [
+        (
+            "Approaching the notice board, Galinor studies the posting about the missing patrol. Does it have any other details?",
+            "notice_board",
+            "Does it have any other details?",
+        ),
+        ("I check the notice. Is there more written below?", "notice_board", "Is there more written below?"),
+        (
+            "I examine the broken lantern; does it show signs of tampering?",
+            "broken_lantern",
+            "does it show signs of tampering?",
+        ),
+        ("I study the strange brass device. Anything unusual?", "brass_device", "Anything unusual?"),
+    ],
+)
+def test_chat_mixed_scene_object_investigation_question_recovers_action_outcome(
+    tmp_path,
+    monkeypatch,
+    player_text,
+    target_id,
+    question_text,
+):
+    _seed_shared_world(tmp_path, monkeypatch)
+    scene = copy.deepcopy(storage.load_scene("scene_investigate"))
+    scene["scene"]["interactables"] = [
+        {
+            "id": "notice_board",
+            "label": "Notice board",
+            "aliases": ["notice", "posting about the missing patrol"],
+            "type": "investigate",
+            "reveals_clue": "notice_patrol_details",
+        },
+        {
+            "id": "broken_lantern",
+            "label": "Broken lantern",
+            "type": "investigate",
+            "reveals_clue": "lantern_tampering",
+        },
+        {
+            "id": "brass_device",
+            "label": "Strange brass device",
+            "type": "investigate",
+            "reveals_clue": "brass_device_anomaly",
+        },
+    ]
+    scene["scene"]["visible_facts"] = [
+        "A notice board carries a posting about the missing patrol.",
+        "A broken lantern lies near the threshold.",
+        "A strange brass device ticks on the table.",
+    ]
+    scene["scene"]["discoverable_clues"] = [
+        {"id": "notice_patrol_details", "text": "The missing patrol was last seen below the east ridge."},
+        {"id": "lantern_tampering", "text": "The lantern's hinge was forced open with a narrow tool."},
+        {"id": "brass_device_anomaly", "text": "The brass device is warmer on the side facing the old road."},
+    ]
+    scene["scene"]["suggested_actions"] = [
+        {"id": "study-notice", "label": "Study the notice board"},
+        {"id": "inspect-lantern", "label": "Inspect the broken lantern"},
+        {"id": "study-device", "label": "Study the strange brass device"},
+    ]
+    storage._save_json(storage.scene_path("scene_investigate"), scene)
+
+    with monkeypatch.context() as m:
+        m.setattr("game.api.call_gpt", lambda _messages: _gm_response("The scene pauses without offering anything concrete."))
+        m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
+        client = TestClient(app)
+        resp = client.post("/api/chat", json={"text": player_text})
+
+    assert resp.status_code == 200
+    data = resp.json()
+    resolution = data.get("resolution") or {}
+    metadata = resolution.get("metadata") or {}
+    debug = data.get("debug") or {}
+    normalized_action = debug.get("normalized_action") or {}
+    gm_text = str((data.get("gm_output") or {}).get("player_facing_text") or "")
+    low = gm_text.lower()
+    final_meta = _extract_final_emission_meta(data) or {}
+
+    assert resolution.get("kind") in {"investigate", "discover_clue"}
+    assert resolution.get("kind") != "question"
+    assert normalized_action.get("type") == "investigate"
+    assert normalized_action.get("targetEntityId") == target_id or resolution.get("action_id") == target_id
+    assert metadata.get("parser_lane") == "mixed_scene_object_investigation"
+    assert metadata.get("mixed_turn_detail_question") == question_text
+    assert metadata.get("adjudication_or_detail_question_text") == question_text
+    assert metadata.get("recovered_action_clause")
+    assert final_meta.get("response_type_required") == "action_outcome"
+    assert "state exactly what you do" not in low
+    assert "scene pauses" not in low
+    assert "nothing concrete" not in low
+
+
 # feature: emission, continuity
 def test_chat_action_outcome_contract_survives_inside_active_social_scene(tmp_path, monkeypatch):
     _seed_runner_dialogue_context(tmp_path, monkeypatch)

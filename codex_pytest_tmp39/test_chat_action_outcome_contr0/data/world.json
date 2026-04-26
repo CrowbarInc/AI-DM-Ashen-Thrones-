@@ -1,0 +1,93 @@
+{
+  "settlements": [
+    {
+      "id": "cinderwatch",
+      "name": "Cinderwatch",
+      "type": "frontier_city",
+      "tags": [
+        "frontier",
+        "trade",
+        "unstable"
+      ],
+      "status": "strained",
+      "notes": "A frontier city balanced between noble influence, criminal pressure, and military necessity."
+    }
+  ],
+  "factions": [
+    {
+      "id": "house_verevin",
+      "name": "House Verevin",
+      "type": "noble_house",
+      "attitude": "wary",
+      "influence": 3,
+      "pressure": 2,
+      "goal": "Expand territory",
+      "current_plan": "Gathering influence",
+      "agenda_progress": 0,
+      "assets": []
+    },
+    {
+      "id": "ash_cowl",
+      "name": "The Ash Cowl",
+      "type": "criminal_syndicate",
+      "attitude": "opportunistic",
+      "influence": 3,
+      "pressure": 2,
+      "goal": "Control black market",
+      "current_plan": "Establishing smuggling routes",
+      "agenda_progress": 0,
+      "assets": []
+    },
+    {
+      "id": "ordo_pyric",
+      "name": "Ordo Pyric",
+      "type": "religious_order",
+      "attitude": "suspicious",
+      "influence": 2,
+      "pressure": 1,
+      "goal": "Suppress dangerous magic",
+      "current_plan": "Watching newcomers",
+      "agenda_progress": 0,
+      "assets": []
+    }
+  ],
+  "assets": [],
+  "projects": [],
+  "world_flags": [],
+  "event_log": [],
+  "inference_rules": [],
+  "clues": {},
+  "npcs": [
+    {
+      "id": "runner",
+      "name": "Tavern Runner",
+      "location": "scene_investigate",
+      "topics": [
+        {
+          "id": "lanes",
+          "text": "They were seen near the east lanes.",
+          "clue_id": "east_lanes"
+        }
+      ],
+      "role": "",
+      "affiliation": "",
+      "availability": "available",
+      "current_agenda": "",
+      "disposition": "neutral",
+      "stance_toward_player": "neutral",
+      "knowledge_scope": [],
+      "information_reliability": "partial",
+      "origin_kind": "npc",
+      "origin_scene_id": "scene_investigate",
+      "promoted_from_actor_id": null,
+      "promotion_reason": null,
+      "promotion_turn": null,
+      "tags": []
+    }
+  ],
+  "world_state": {
+    "flags": {},
+    "counters": {},
+    "clocks": {}
+  }
+}

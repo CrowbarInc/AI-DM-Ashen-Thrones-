@@ -341,6 +341,18 @@ def resolve_exploration_action(
                 wu = i.get("world_updates_on_discover")
                 world_updates_val = wu if isinstance(wu, dict) and wu else None
                 metadata: Dict[str, Any] = {}
+                am = normalized_action.get("metadata")
+                if isinstance(am, dict):
+                    for key in (
+                        "parser_lane",
+                        "mixed_turn_detail_question",
+                        "adjudication_or_detail_question_text",
+                        "recovered_action_clause",
+                        "scene_grounding_kind",
+                        "scene_grounding_text",
+                    ):
+                        if key in am:
+                            metadata[key] = am[key]
                 if check_result:
                     metadata["skill_check"] = check_result
                 result = ExplorationEngineResult(
@@ -493,6 +505,11 @@ def resolve_exploration_action(
                 res_metadata["passive_interruption_wait"] = True
             for key in (
                 "parser_lane",
+                "mixed_turn_detail_question",
+                "adjudication_or_detail_question_text",
+                "recovered_action_clause",
+                "scene_grounding_kind",
+                "scene_grounding_text",
                 "human_adjacent_intent_family",
                 "human_adjacent_phrase",
                 "implicit_focus_resolution",

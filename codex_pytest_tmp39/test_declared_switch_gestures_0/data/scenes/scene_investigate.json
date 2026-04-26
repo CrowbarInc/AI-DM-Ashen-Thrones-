@@ -1,0 +1,31 @@
+{
+  "scene": {
+    "id": "scene_investigate",
+    "location": "Unnamed Scene",
+    "summary": "A blank scene awaiting definition.",
+    "mode": "exploration",
+    "visible_facts": [],
+    "discoverable_clues": [],
+    "hidden_facts": [],
+    "exits": [],
+    "enemies": [],
+    "actions": [],
+    "addressables": [
+      {
+        "id": "refugee",
+        "name": "Ragged stranger",
+        "scene_id": "scene_investigate",
+        "kind": "scene_actor",
+        "addressable": true,
+        "address_priority": 2,
+        "address_roles": [
+          "stranger",
+          "refugee"
+        ],
+        "aliases": [
+          "ragged stranger"
+        ]
+      }
+    ]
+  }
+}

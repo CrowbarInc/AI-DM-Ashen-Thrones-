@@ -1,0 +1,59 @@
+{
+  "active_scene_id": "scene_investigate",
+  "visited_scene_ids": [
+    "scene_investigate"
+  ],
+  "current_date": "Day 1",
+  "turn_counter": 0,
+  "response_mode": "standard",
+  "clocks": {
+    "suspicion": 0,
+    "unrest": 0,
+    "danger": 0,
+    "occult_instability": 0,
+    "time_pressure": 0
+  },
+  "interaction_context": {
+    "active_interaction_target_id": "runner",
+    "active_interaction_kind": "social",
+    "interaction_mode": "social",
+    "engagement_level": "engaged",
+    "conversation_privacy": null,
+    "player_position_context": null
+  },
+  "scene_state": {
+    "active_scene_id": "scene_investigate",
+    "active_entities": [
+      "runner",
+      "gate_guard"
+    ],
+    "entity_presence": {
+      "runner": "active",
+      "gate_guard": "active"
+    },
+    "current_interlocutor": "runner",
+    "emergent_addressables": [],
+    "promoted_actor_npc_map": {}
+  },
+  "runtime_scene_overlays": {},
+  "scene_runtime": {},
+  "clue_knowledge": {},
+  "lead_registry": {},
+  "npc_runtime": {},
+  "last_action_debug": null,
+  "debug_traces": [
+    {
+      "kind": "state_mutation",
+      "domain": "scene_state",
+      "owner_module": "game.interaction_context",
+      "operation": "rebuild_active_scene_entities",
+      "changed_area": "scene_state.active_entities"
+    }
+  ],
+  "flags": {},
+  "chat_history": [],
+  "character_name": null,
+  "campaign_run_id": "18b833ebbb992d9beac5e79c",
+  "session_id": "18b833ebbb992d9beac5e79c",
+  "campaign_started": false
+}
