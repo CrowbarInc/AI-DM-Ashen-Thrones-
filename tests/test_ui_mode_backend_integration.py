@@ -148,3 +148,42 @@ def test_endpoint_guards_author_debug_runtime(tmp_path: Path, monkeypatch: pytes
         assert client.post("/api/action", json={"action_type": "exploration", "ui_mode": "author"}).status_code == 403
         assert client.post("/api/action", json={"action_type": "exploration", "ui_mode": "debug"}).status_code == 403
 
+
+def test_public_log_exposes_player_input_as_public_transcript_field(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    _seed_minimal_with_spoilers(tmp_path, monkeypatch)
+    storage.append_log(
+        {
+            "timestamp": "2026-04-26T12:00:00Z",
+            "request": {"chat": "I ask the guard about the missing patrol."},
+            "resolution": {
+                "prompt": "I ask the guard about the missing patrol.",
+                "metadata": {
+                    "player_input": "I ask the guard about the missing patrol.",
+                    "emission_debug": {"should_not": "ship"},
+                },
+            },
+            "gm_output": {
+                "player_facing_text": "The guard glances toward the rain-dark road.",
+                "metadata": {"emission_debug": {"should_not": "ship"}},
+                "_final_emission_meta": {"should_not": "ship"},
+            },
+            "log_meta": {"player_input": "I ask the guard about the missing patrol."},
+        }
+    )
+
+    with TestClient(app) as client:
+        r = client.get("/api/log")
+        assert r.status_code == 200
+        entry = r.json()["entries"][0]
+
+    assert entry["player_input"] == "I ask the guard about the missing patrol."
+    assert entry["gm_output"] == {
+        "player_facing_text": "The guard glances toward the rain-dark road."
+    }
+    assert "log_meta" not in entry
+    assert "resolution" not in entry
+    assert "emission_debug" not in json.dumps(entry)
+    assert "_final_emission_meta" not in json.dumps(entry)
+

@@ -2489,6 +2489,63 @@ def _project_state_for_ui_mode(full_state: dict, ui_mode: str) -> dict:
     return out
 
 
+def _extract_log_player_input(entry: dict | None) -> str:
+    if not isinstance(entry, dict):
+        return ""
+
+    for key in ("player_input", "player_text"):
+        value = entry.get(key)
+        if isinstance(value, str) and value.strip():
+            return value.strip()
+
+    request_payload = entry.get("request")
+    if isinstance(request_payload, dict):
+        for key in ("text", "chat"):
+            value = request_payload.get(key)
+            if isinstance(value, str) and value.strip():
+                return value.strip()
+
+    resolution = entry.get("resolution")
+    if isinstance(resolution, dict):
+        metadata = resolution.get("metadata")
+        if isinstance(metadata, dict):
+            value = metadata.get("player_input")
+            if isinstance(value, str) and value.strip():
+                return value.strip()
+        value = resolution.get("prompt")
+        if isinstance(value, str) and value.strip():
+            return value.strip()
+
+    log_meta = entry.get("log_meta")
+    if isinstance(log_meta, dict):
+        value = log_meta.get("player_input")
+        if isinstance(value, str) and value.strip():
+            return value.strip()
+
+    return ""
+
+
+def _log_entry_with_public_player_input(entry: dict) -> dict:
+    out = dict(entry)
+    out["player_input"] = _extract_log_player_input(entry)
+    return out
+
+
+def _project_log_entry_for_ui_mode(entry: dict, ui_mode: str) -> dict:
+    enriched = _log_entry_with_public_player_input(entry)
+    if ui_mode == "debug":
+        return enriched
+
+    gm_output = enriched.get("gm_output") if isinstance(enriched.get("gm_output"), dict) else {}
+    return {
+        "timestamp": enriched.get("timestamp"),
+        "player_input": enriched.get("player_input") or "",
+        "gm_output": {
+            "player_facing_text": str(gm_output.get("player_facing_text") or "")
+        },
+    }
+
+
 @app.get('/api/state')
 def get_state(request: Request):
     try:
@@ -2505,7 +2562,8 @@ def get_log(request: Request):
         ui_mode = resolve_requested_ui_mode(request)
     except UiModePolicyError as e:
         return _ui_mode_error_response(e)
-    return {'ok': True, 'ui_mode': ui_mode, 'entries': load_log()}
+    entries = [_project_log_entry_for_ui_mode(entry, ui_mode) for entry in load_log()]
+    return {'ok': True, 'ui_mode': ui_mode, 'entries': entries}
 
 
 @app.get('/api/debug_trace')
@@ -3194,6 +3252,7 @@ def action(req: ActionRequest, ui_mode: str = "player"):
     append_log(
         {
             'timestamp': utc_iso_now(),
+            'player_input': player_input,
             'request': req.model_dump(),
             'resolution': resolution,
             'gm_output': gm,
@@ -3532,6 +3591,7 @@ def _complete_opening_turn_persistence_like_chat(
     append_log(
         {
             "timestamp": utc_iso_now(),
+            "player_input": log_meta.get("player_input") or player_text_for_eval or "",
             "request": dict(request_log_payload.get("request") or {}),
             "resolution": resolution,
             "gm_output": canonical_gm,

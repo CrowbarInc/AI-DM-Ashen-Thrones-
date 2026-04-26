@@ -519,6 +519,11 @@ async function loadLog(){
   $('chatLog').innerHTML = '';
   // Empty transcript after New Campaign / clear: no synthetic GM or system narration here (NC2).
   for(const entry of entries){
+    const playerText = String(entry.player_input || entry.player_text || entry.request?.text || entry.request?.chat || entry.resolution?.metadata?.player_input || entry.resolution?.prompt || '').trim();
+    if(playerText){
+      const playerName = state?.player_name || state?.character?.name || 'You';
+      addMessage('player', playerName, playerText);
+    }
     addMessage('gm','GM',entry.gm_output?.player_facing_text || '(no narration)', entry.resolution);
   }
   if(state && currentUIMode === "player") updateCampaignBootstrapUI(state);

@@ -83,3 +83,16 @@ def test_authoritative_render_flow_not_mixed_with_chat_or_action_payloads() -> N
     # Guardrail: no renderStateEnvelope(data) on /chat or /action payloads.
     assert "renderStateEnvelope(data)" not in js
 
+
+def test_log_replay_renders_player_then_gm() -> None:
+    js = _read_static("app.js")
+
+    assert "async function loadLog(){" in js
+    assert "const playerText = String(entry.player_input || entry.player_text || entry.request?.text" in js
+    assert "if(playerText){" in js
+    assert "addMessage('player', playerName, playerText);" in js
+    assert "addMessage('gm','GM',entry.gm_output?.player_facing_text" in js
+    assert js.index("addMessage('player', playerName, playerText);") < js.index(
+        "addMessage('gm','GM',entry.gm_output?.player_facing_text"
+    )
+
