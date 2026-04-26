@@ -150,6 +150,46 @@ def test_world_action_requires_action_outcome_and_preserves_agency() -> None:
     assert contract["allow_escalation"] is False
 
 
+def test_scene_opening_requires_scene_opening_not_action_outcome() -> None:
+    contract = derive_response_type_contract(
+        segmented_turn=None,
+        normalized_action={"type": "scene_opening"},
+        resolution={
+            "kind": "scene_opening",
+            "prompt": "Start the campaign.",
+            "requires_check": False,
+        },
+        interaction_context={"interaction_mode": "activity"},
+        route_choice="action",
+        directed_social_entry=None,
+        raw_player_text="Start the campaign.",
+    ).to_dict()
+
+    assert contract["required_response_type"] == "scene_opening"
+    assert contract["required_response_type"] != "action_outcome"
+    assert contract["source_route"] == "exploration"
+    assert contract["action_must_preserve_agency"] is False
+    assert contract["strict_answer_expected"] is False
+    assert contract["strict_dialogue_expected"] is False
+    assert contract["allow_escalation"] is False
+    assert "scene_opening_requires_opening_response" in contract["debug_reasons"]
+
+
+def test_scene_opening_normalized_action_type_controls_without_resolution() -> None:
+    contract = derive_response_type_contract(
+        segmented_turn=None,
+        normalized_action={"type": "scene_opening"},
+        resolution=None,
+        interaction_context={"interaction_mode": "activity"},
+        route_choice="action",
+        directed_social_entry=None,
+        raw_player_text="Begin.",
+    ).to_dict()
+
+    assert contract["required_response_type"] == "scene_opening"
+    assert contract["action_must_preserve_agency"] is False
+
+
 def test_action_route_without_resolution_still_requires_action_outcome() -> None:
     contract = derive_response_type_contract(
         segmented_turn=None,

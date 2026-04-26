@@ -116,7 +116,7 @@ from game.interaction_context import build_speaker_selection_contract, response_
 from game.narration_visibility import _normalize_visibility_text, build_narration_visibility_contract
 from game.opening_visible_fact_selection import (
     OPENING_NARRATION_VISIBLE_FACT_MAX,
-    select_opening_narration_visible_facts,
+    select_opening_narration_visible_facts_with_telemetry,
 )
 from game.opening_scene_realization import (
     build_opening_scene_realization,
@@ -3812,8 +3812,20 @@ def _build_narration_context_head_state(
     )
     visible_facts_for_prompt = list(visibility_contract.get("visible_fact_strings") or [])
     opening_inputs_are_curated = False
+    opening_fact_telemetry: Dict[str, Any] = {
+        "opening_fact_source_used": "none",
+        "opening_fact_eligibility_mode": "none",
+        "opening_fact_rejected_by_lifecycle_count": 0,
+        "opening_fact_rejected_by_form_count": 0,
+    }
     if narration_obligations.get("is_opening_scene") and isinstance(public_scene, Mapping):
-        curated_opening = select_opening_narration_visible_facts(public_scene)
+        curated_opening, opening_fact_telemetry = select_opening_narration_visible_facts_with_telemetry(
+            public_scene,
+            eligibility_metadata={
+                "character": character if isinstance(character, dict) else {},
+                "session_player_context": session.get("player_context") if isinstance(session, dict) else {},
+            },
+        )
         visible_facts_for_prompt = curated_opening[:OPENING_NARRATION_VISIBLE_FACT_MAX]
         opening_inputs_are_curated = True
     res_for_vis = resolution_sem if isinstance(resolution_sem, dict) else {}
@@ -3835,6 +3847,9 @@ def _build_narration_context_head_state(
             curated_visible_fact_strings=visible_facts_for_prompt,
             visibility_contract=visibility_contract,
         )
+        _opening_contract = opening_scene_export.get("contract") if isinstance(opening_scene_export, dict) else None
+        if isinstance(_opening_contract, dict):
+            _opening_contract.update(opening_fact_telemetry)
         _opening_basis = (opening_scene_export.get("contract") or {}).get("narration_basis_visible_facts")
         if isinstance(_opening_basis, list):
             visible_facts_for_prompt = list(_opening_basis)
@@ -3895,6 +3910,7 @@ def _build_narration_context_head_state(
         "visibility_contract": visibility_contract,
         "visible_facts_for_prompt": visible_facts_for_prompt,
         "opening_inputs_are_curated": opening_inputs_are_curated,
+        "opening_fact_telemetry": opening_fact_telemetry,
         "res_for_vis": res_for_vis,
         "res_md_vis": res_md_vis,
         "opening_scene_export": opening_scene_export,
@@ -4081,6 +4097,7 @@ def build_narration_context(
     visibility_contract = _head["visibility_contract"]
     visible_facts_for_prompt = _head["visible_facts_for_prompt"]
     opening_inputs_are_curated = _head["opening_inputs_are_curated"]
+    opening_fact_telemetry = _head["opening_fact_telemetry"]
     res_for_vis = _head["res_for_vis"]
     res_md_vis = _head["res_md_vis"]
     opening_scene_export = _head["opening_scene_export"]
@@ -5369,6 +5386,8 @@ def build_narration_context(
         ),
         'opening_scene_realization': opening_scene_export if isinstance(opening_scene_export, dict) else opening_realization_none(),
         'opening_inputs_are_curated': bool(opening_inputs_are_curated),
+        'opening_curated_facts': list(visible_facts_for_prompt) if opening_inputs_are_curated else [],
+        'opening_fact_telemetry': opening_fact_telemetry,
         'narration_visibility': narration_visibility,
         'scene_state_anchor_contract': scene_state_anchor_contract,
         'anti_railroading_contract': anti_railroading_contract,

@@ -307,6 +307,28 @@ def candidate_satisfies_action_outcome_contract(
     return True, []
 
 
+def candidate_satisfies_scene_opening_contract(text: str) -> tuple[bool, List[str]]:
+    clean = _normalize_text(text)
+    if not clean:
+        return False, ["scene_opening_empty"]
+    low = clean.lower()
+    if is_route_illegal_global_or_sanitizer_fallback_text(clean):
+        return False, ["scene_opening_generic_fallback_text"]
+    if any(p.search(clean) for p in _ANSWER_FILLER_PATTERNS):
+        return False, ["scene_opening_generic_fallback_text"]
+    if re.search(r"\b(?:the scene holds|voices shift around you|insufficient context|not established)\b", low):
+        return False, ["scene_opening_generic_fallback_text"]
+    if not re.search(
+        r"\b(?:you|gate|district|market|lane|road|square|yard|bridge|dock|pier|tavern|hall|ward|street|"
+        r"rain|mist|crowd|guards?|refugees?|wagons?|torchlight|notice board)\b",
+        low,
+    ):
+        return False, ["scene_opening_not_scene_establishing"]
+    if clean.endswith("?"):
+        return False, ["scene_opening_is_question"]
+    return True, []
+
+
 def _default_response_type_debug(contract: Dict[str, Any] | None, source: str | None) -> Dict[str, Any]:
     return {
         "response_type_required": str((contract or {}).get("required_response_type") or "") or None,
@@ -321,6 +343,10 @@ def _default_response_type_debug(contract: Dict[str, Any] | None, source: str | 
         "opening_validation_failed": False,
         "opening_failure_reasons": [],
         "opening_recovered_via_fallback": False,
+        "opening_fallback_context_source": None,
+        "opening_fallback_basis_count": 0,
+        "opening_fallback_context_missing": False,
+        "opening_fallback_failed_closed": False,
         "blocked_repair_kind": None,
         "opening_repair_source": "not_opening",
         "response_type_upstream_prepared_absent": False,
@@ -348,6 +374,10 @@ def _merge_response_type_meta(meta: Dict[str, Any], debug: Dict[str, Any]) -> No
             "opening_validation_failed": bool(debug.get("opening_validation_failed")),
             "opening_failure_reasons": list(debug.get("opening_failure_reasons") or []),
             "opening_recovered_via_fallback": bool(debug.get("opening_recovered_via_fallback")),
+            "opening_fallback_context_source": debug.get("opening_fallback_context_source"),
+            "opening_fallback_basis_count": int(debug.get("opening_fallback_basis_count") or 0),
+            "opening_fallback_context_missing": bool(debug.get("opening_fallback_context_missing")),
+            "opening_fallback_failed_closed": bool(debug.get("opening_fallback_failed_closed")),
             "blocked_repair_kind": debug.get("blocked_repair_kind"),
             "opening_repair_source": debug.get("opening_repair_source"),
             "response_type_upstream_prepared_absent": bool(debug.get("response_type_upstream_prepared_absent")),
@@ -379,6 +409,10 @@ def _response_type_decision_payload(debug: Dict[str, Any]) -> Dict[str, Any]:
         "opening_validation_failed": bool(debug.get("opening_validation_failed")),
         "opening_failure_reasons": list(debug.get("opening_failure_reasons") or []),
         "opening_recovered_via_fallback": bool(debug.get("opening_recovered_via_fallback")),
+        "opening_fallback_context_source": debug.get("opening_fallback_context_source"),
+        "opening_fallback_basis_count": int(debug.get("opening_fallback_basis_count") or 0),
+        "opening_fallback_context_missing": bool(debug.get("opening_fallback_context_missing")),
+        "opening_fallback_failed_closed": bool(debug.get("opening_fallback_failed_closed")),
         "blocked_repair_kind": debug.get("blocked_repair_kind"),
         "opening_repair_source": debug.get("opening_repair_source"),
         "response_type_upstream_prepared_absent": bool(debug.get("response_type_upstream_prepared_absent")),

@@ -103,7 +103,12 @@ from game.anti_reset_emission_guard import (
     local_exchange_continuation_fallback_line,
     should_replace_candidate_intro_fallback,
 )
+from game.diegetic_fallback_narration import (
+    fallback_template_metadata,
+    opening_scene_fallback_template_allowed,
+)
 from game.leads import get_lead, normalize_lead
+from game.opening_visible_fact_selection import select_opening_narration_visible_facts_with_telemetry
 from game.prompt_context import canonical_interaction_target_npc_id
 from game.stage_diff_telemetry import (
     diff_turn_stage,
@@ -203,6 +208,7 @@ from game.final_emission_validators import (
     candidate_satisfies_action_outcome_contract,
     candidate_satisfies_answer_contract,
     candidate_satisfies_dialogue_contract,
+    candidate_satisfies_scene_opening_contract,
     inspect_answer_completeness_failure,
     inspect_response_delta_failure,
     validate_answer_completeness,
@@ -3610,14 +3616,46 @@ _OPENING_ACTION_VERBS: tuple[str, ...] = (
 )
 
 
+_OPENING_FALLBACK_FAILED_CLOSED_MARKER = "[opening_fallback_failed_closed: missing_curated_opening_context]"
+
+
 def _opening_context_from_gm_output(gm_output: Mapping[str, Any] | None) -> Dict[str, Any]:
-    ctx: Dict[str, Any] = {"location_anchors": [], "visible_facts": [], "actionable_labels": []}
+    ctx: Dict[str, Any] = {
+        "location_anchors": [],
+        "visible_facts": [],
+        "actionable_labels": [],
+        "opening_fallback_context_source": "none",
+        "opening_fallback_basis_count": 0,
+        "opening_fallback_context_missing": True,
+        "opening_curated_facts_source": "selector",
+    }
     if not isinstance(gm_output, Mapping):
         return ctx
+    gm_curated = gm_output.get("opening_curated_facts")
+    if isinstance(gm_curated, list):
+        ctx["visible_facts"].extend(str(x).strip() for x in gm_curated if isinstance(x, str) and str(x).strip())
+        if ctx["visible_facts"]:
+            ctx["opening_fallback_context_source"] = "opening_curated_facts"
+            md = gm_output.get("metadata") if isinstance(gm_output.get("metadata"), Mapping) else {}
+            em = md.get("emission_debug") if isinstance(md.get("emission_debug"), Mapping) else {}
+            src = str(em.get("opening_curated_facts_source") or "").strip()
+            ctx["opening_curated_facts_source"] = src if src in {"selector", "realization"} else "realization"
     pc = gm_output.get("prompt_context")
     if not isinstance(pc, Mapping):
+        for key in ("location_anchors", "visible_facts", "actionable_labels"):
+            seen: set[str] = set()
+            out: list[str] = []
+            for raw in ctx.get(key) or []:
+                clean = str(raw or "").strip()
+                low = clean.lower()
+                if not clean or low in seen:
+                    continue
+                seen.add(low)
+                out.append(clean)
+            ctx[key] = out
+        ctx["opening_fallback_basis_count"] = len(ctx.get("visible_facts") or [])
+        ctx["opening_fallback_context_missing"] = ctx["opening_fallback_basis_count"] <= 0
         return ctx
-    assert pc["opening_inputs_are_curated"] is True
 
     plan = pc.get("narrative_plan") if isinstance(pc.get("narrative_plan"), Mapping) else {}
     scene_opening = plan.get("scene_opening") if isinstance(plan.get("scene_opening"), Mapping) else {}
@@ -3628,20 +3666,45 @@ def _opening_context_from_gm_output(gm_output: Mapping[str, Any] | None) -> Dict
         elif isinstance(raw, str) and raw.strip():
             ctx["location_anchors"].append(raw.strip())
 
+    if not ctx["visible_facts"]:
+        pc_curated = pc.get("opening_curated_facts")
+        if isinstance(pc_curated, list):
+            ctx["visible_facts"].extend(str(x).strip() for x in pc_curated if isinstance(x, str) and str(x).strip())
+            if ctx["visible_facts"]:
+                ctx["opening_fallback_context_source"] = "prompt_context.opening_curated_facts"
+                opening_realization = pc.get("opening_scene_realization")
+                ctx["opening_curated_facts_source"] = (
+                    "realization"
+                    if isinstance(opening_realization, Mapping) and opening_realization.get("opening_mode")
+                    else "selector"
+                )
+
     opening_realization = pc.get("opening_scene_realization")
     contract = opening_realization.get("contract") if isinstance(opening_realization, Mapping) else None
-    if isinstance(contract, Mapping):
+    if not ctx["visible_facts"] and isinstance(contract, Mapping):
         basis = contract.get("narration_basis_visible_facts")
         if isinstance(basis, list):
             ctx["visible_facts"].extend(str(x).strip() for x in basis if isinstance(x, str) and str(x).strip())
+            if ctx["visible_facts"]:
+                ctx["opening_fallback_context_source"] = "opening_scene_realization"
+                ctx["opening_curated_facts_source"] = "realization"
 
-    nv = pc.get("narration_visibility")
-    if isinstance(nv, Mapping) and isinstance(nv.get("visible_facts"), list):
-        ctx["visible_facts"].extend(str(x).strip() for x in nv.get("visible_facts") if isinstance(x, str) and str(x).strip())
+    if not ctx["visible_facts"]:
+        nv = pc.get("narration_visibility")
+        if isinstance(nv, Mapping) and isinstance(nv.get("visible_facts"), list):
+            ctx["visible_facts"].extend(str(x).strip() for x in nv.get("visible_facts") if isinstance(x, str) and str(x).strip())
+            if ctx["visible_facts"]:
+                ctx["opening_fallback_context_source"] = "narration_visibility"
 
     scene_block = pc.get("scene")
     public_scene = scene_block.get("public") if isinstance(scene_block, Mapping) else None
     if isinstance(public_scene, Mapping):
+        if not ctx["visible_facts"]:
+            curated, telemetry = select_opening_narration_visible_facts_with_telemetry(public_scene)
+            ctx["visible_facts"].extend(str(x).strip() for x in curated if isinstance(x, str) and str(x).strip())
+            if ctx["visible_facts"]:
+                ctx["opening_fallback_context_source"] = str(telemetry.get("opening_fact_source_used") or "opening_visible_fact_selection")
+                ctx["opening_curated_facts_source"] = "selector"
         loc = public_scene.get("location") or public_scene.get("id")
         if isinstance(loc, str) and loc.strip():
             ctx["location_anchors"].append(loc.strip())
@@ -3668,6 +3731,8 @@ def _opening_context_from_gm_output(gm_output: Mapping[str, Any] | None) -> Dict
             seen.add(low)
             out.append(clean)
         ctx[key] = out
+    ctx["opening_fallback_basis_count"] = len(ctx.get("visible_facts") or [])
+    ctx["opening_fallback_context_missing"] = ctx["opening_fallback_basis_count"] <= 0
     return ctx
 
 
@@ -3774,27 +3839,100 @@ def _actionable_hook_from_opening_context(context: Mapping[str, Any]) -> str:
         if len(head) == 2:
             return f"You can {head[0]} or {head[1]}."
         return f"You can {head[0]}, {head[1]}, or {head[2]}."
-    return "You can choose who to approach, what to inspect, or where to move first."
+    return ""
+
+
+def _opening_fact_matches_any(fact: str, needles: tuple[str, ...]) -> bool:
+    low = fact.lower()
+    return any(needle in low for needle in needles)
+
+
+def _pick_opening_fallback_fact(
+    facts: list[str],
+    *,
+    used: set[str],
+    needles: tuple[str, ...],
+) -> str:
+    for fact in facts:
+        key = fact.lower()
+        if key not in used and _opening_fact_matches_any(fact, needles):
+            used.add(key)
+            return fact
+    for fact in facts:
+        key = fact.lower()
+        if key not in used:
+            used.add(key)
+            return fact
+    return ""
+
+
+def _deterministic_opening_fallback_text_and_meta(gm_output: Mapping[str, Any] | None) -> tuple[str, Dict[str, Any]]:
+    context = _opening_context_from_gm_output(gm_output)
+    facts = [str(x).strip().rstrip(".") for x in (context.get("visible_facts") or []) if str(x).strip()]
+    meta = {
+        "opening_fallback_context_source": context.get("opening_fallback_context_source"),
+        "opening_fallback_basis_count": len(facts),
+        "opening_fallback_context_missing": not bool(facts),
+        "opening_fallback_failed_closed": False,
+        "opening_curated_facts_present": bool(facts),
+        "opening_curated_facts_count": len(facts),
+        "opening_curated_facts_source": context.get("opening_curated_facts_source") or "selector",
+    }
+    if not facts:
+        meta["opening_fallback_failed_closed"] = True
+        return _OPENING_FALLBACK_FAILED_CLOSED_MARKER, meta
+
+    used: set[str] = set()
+    environment = _pick_opening_fallback_fact(
+        facts,
+        used=used,
+        needles=("gate", "district", "market", "road", "square", "rain", "mist", "banners", "street", "yard"),
+    )
+    activity = _pick_opening_fallback_fact(
+        facts,
+        used=used,
+        needles=("guard", "refugee", "wagon", "crowd", "runner", "stranger", "observer", "watch", "hawking"),
+    )
+    hook_fact = _pick_opening_fallback_fact(
+        facts,
+        used=used,
+        needles=("notice", "curfew", "tax", "missing", "patrol", "offers", "signals", "speak", "coin", "risk"),
+    )
+    hook = _actionable_hook_from_opening_context(context)
+    parts = [str(p).strip().rstrip(".") for p in (environment, activity, hook_fact, hook) if str(p).strip()]
+    return _normalize_text(". ".join(parts) + "."), meta
 
 
 def _deterministic_opening_fallback_text(gm_output: Mapping[str, Any] | None) -> str:
-    context = _opening_context_from_gm_output(gm_output)
-    locations = [str(x).strip() for x in (context.get("location_anchors") or []) if str(x).strip()]
-    facts = [str(x).strip().rstrip(".") for x in (context.get("visible_facts") or []) if str(x).strip()]
-    location = locations[0] if locations else "The scene"
-    environment = facts[0] if facts else f"{location} is immediately before you"
-    tension = ""
-    for fact in facts[1:]:
-        low = fact.lower()
-        if any(token in low for token in ("guard", "notice", "missing", "tax", "curfew", "press", "wary", "trouble", "refugee")):
-            tension = fact
-            break
-    if not tension and len(facts) > 1:
-        tension = facts[1]
-    hook = _actionable_hook_from_opening_context(context)
-    if tension:
-        return _normalize_text(f"{location}. {environment}. {tension}. {hook}")
-    return _normalize_text(f"{location}. {environment}. {hook}")
+    text, _meta = _deterministic_opening_fallback_text_and_meta(gm_output)
+    return text
+
+
+def _opening_fallback_classification() -> Dict[str, str]:
+    template_id = "opening_deterministic_fallback"
+    if not opening_scene_fallback_template_allowed(template_id):
+        raise AssertionError("opening deterministic fallback template is not opening-scene classified")
+    return fallback_template_metadata(template_id)
+
+
+def _opening_scene_safe_fallback_tuple(
+    gm_output: Mapping[str, Any] | None,
+) -> tuple[str, str, str, str, str, str, Dict[str, Any]]:
+    classification = _opening_fallback_classification()
+    fallback_text, fallback_meta = _deterministic_opening_fallback_text_and_meta(gm_output)
+    meta = _first_mention_composition_meta()
+    meta["fallback_family_used"] = classification.get("fallback_family")
+    meta["fallback_temporal_frame"] = classification.get("temporal_frame")
+    meta.update(fallback_meta)
+    return (
+        fallback_text,
+        "scene_opening_deterministic",
+        "opening_deterministic_fallback",
+        "opening_deterministic_fallback",
+        "opening_scene_safe_fallback",
+        "opening_deterministic_fallback",
+        meta,
+    )
 
 
 def _enforce_response_type_contract(
@@ -3832,7 +3970,7 @@ def _enforce_response_type_contract(
     )
     current = _norm(candidate_text)
     reasons: List[str] = []
-    opening_mode = _opening_mode_active_for_turn(gm_output, resolution)
+    opening_mode = required == "scene_opening" or _opening_mode_active_for_turn(gm_output, resolution)
     debug["opening_generic_action_repair_blocked"] = False
     debug["opening_specific_repair_used"] = False
     debug["blocked_repair_kind"] = None
@@ -3859,6 +3997,8 @@ def _enforce_response_type_contract(
             current,
             player_input=player_input,
         )
+    elif required == "scene_opening":
+        validator_ok, validator_reasons = candidate_satisfies_scene_opening_contract(current)
     reasons.extend(validator_reasons)
 
     opening_context: Dict[str, Any] = {}
@@ -3900,23 +4040,37 @@ def _enforce_response_type_contract(
             debug["blocked_repair_kind"] = "action_outcome_upstream_prepared_repair"
 
         # Otherwise, use an opening-specific seed fallback (no invented facts; includes action vectors).
-        fallback = _deterministic_opening_fallback_text(gm_output)
+        fallback, fallback_meta = _deterministic_opening_fallback_text_and_meta(gm_output)
+        debug.update(fallback_meta)
         fallback_failures = validate_opening_output(fallback, opening_context)
-        if fallback and not fallback_failures:
+        if fallback and not fallback_failures and not fallback_meta.get("opening_fallback_failed_closed"):
+            classification = _opening_fallback_classification()
             debug["response_type_candidate_ok"] = True
             debug["response_type_repair_used"] = True
             debug["response_type_repair_kind"] = "opening_deterministic_fallback"
             debug["opening_specific_repair_used"] = True
             debug["opening_recovered_via_fallback"] = True
             debug["opening_repair_source"] = "deterministic_fallback"
+            debug["fallback_family_used"] = classification.get("fallback_family")
+            debug["fallback_temporal_frame"] = classification.get("temporal_frame")
             debug["response_type_rejection_reasons"] = list(dict.fromkeys(str(r) for r in reasons if r))
             return fallback, debug
 
         debug["response_type_candidate_ok"] = False
-        debug["opening_repair_source"] = "fallback_failed_validation"
+        debug["response_type_repair_used"] = bool(fallback_meta.get("opening_fallback_failed_closed"))
+        debug["response_type_repair_kind"] = (
+            "opening_deterministic_fallback_failed_closed"
+            if fallback_meta.get("opening_fallback_failed_closed")
+            else None
+        )
+        debug["opening_repair_source"] = (
+            "fallback_failed_closed"
+            if fallback_meta.get("opening_fallback_failed_closed")
+            else "fallback_failed_validation"
+        )
         reasons.extend(f"fallback_{r}" for r in fallback_failures)
         debug["response_type_rejection_reasons"] = list(dict.fromkeys(str(r) for r in reasons if r))
-        return current, debug
+        return fallback if fallback_meta.get("opening_fallback_failed_closed") else current, debug
 
     repaired: str | None = None
     repair_kind: str | None = None
@@ -6558,6 +6712,7 @@ def _scene_emit_integrity_global_fallback_tuple(
 
 def _standard_visibility_safe_fallback(
     *,
+    gm_output: Dict[str, Any] | None = None,
     session: Dict[str, Any] | None,
     scene: Dict[str, Any] | None,
     world: Dict[str, Any] | None,
@@ -6573,6 +6728,9 @@ def _standard_visibility_safe_fallback(
     emit_integrity_res_kind: str = "",
     emit_integrity_response_type_required: str = "",
 ) -> tuple[str, str, str, str, str, str, Dict[str, Any]]:
+    if _opening_mode_active_for_turn(gm_output, eff_resolution):
+        return _opening_scene_safe_fallback_tuple(gm_output)
+
     inspected = inspect_interaction_context(session) if isinstance(session, dict) else {}
     mode = str((inspected or {}).get("interaction_mode") or "").strip().lower()
     validation_scene = _augment_scene_with_runtime_visible_leads(
@@ -6902,6 +7060,7 @@ def _apply_first_mention_enforcement(
         fallback_candidate_source,
         composition_meta,
     ) = _standard_visibility_safe_fallback(
+        gm_output=out,
         session=session,
         scene=scene,
         world=world,
@@ -6940,6 +7099,8 @@ def _apply_first_mention_enforcement(
     gate_out_text = _normalize_text(out.get("player_facing_text"))
     meta["final_route"] = "replaced"
     meta["final_emitted_source"] = final_emitted_source
+    meta["fallback_family_used"] = composition_meta.get("fallback_family_used")
+    meta["fallback_temporal_frame"] = composition_meta.get("fallback_temporal_frame")
     meta["post_gate_mutation_detected"] = candidate_text != gate_out_text
     meta["final_text_preview"] = (gate_out_text[:120] + "…") if len(gate_out_text) > 120 else gate_out_text
     meta["first_mention_validation_passed"] = False
@@ -7122,6 +7283,7 @@ def _apply_referential_clarity_enforcement(
         _fallback_candidate_source,
         composition_meta,
     ) = _standard_visibility_safe_fallback(
+        gm_output=out,
         session=session,
         scene=scene,
         world=world,
@@ -7159,6 +7321,8 @@ def _apply_referential_clarity_enforcement(
     gate_out_text = _normalize_text(out.get("player_facing_text"))
     meta["final_route"] = "replaced"
     meta["final_emitted_source"] = final_emitted_source
+    meta["fallback_family_used"] = composition_meta.get("fallback_family_used")
+    meta["fallback_temporal_frame"] = composition_meta.get("fallback_temporal_frame")
     meta["post_gate_mutation_detected"] = candidate_text != gate_out_text
     meta["final_text_preview"] = (gate_out_text[:120] + "…") if len(gate_out_text) > 120 else gate_out_text
     meta["referential_clarity_validation_passed"] = False
@@ -10322,7 +10486,29 @@ def apply_final_emission_gate(
         resolution if isinstance(resolution, dict) else None,
     )
     mode = str((inspected or {}).get("interaction_mode") or "").strip().lower()
-    if (
+    fallback_composition_meta: Dict[str, Any] = {}
+    if _opening_mode_active_for_turn(out, resolution if isinstance(resolution, dict) else None):
+        (
+            fallback_text,
+            fallback_pool,
+            fallback_kind,
+            final_emitted_source,
+            _fb_strat_ie,
+            _fb_cand_ie,
+            fallback_composition_meta,
+        ) = _opening_scene_safe_fallback_tuple(out)
+        response_type_debug.update(
+            {
+                "opening_fallback_context_source": fallback_composition_meta.get("opening_fallback_context_source"),
+                "opening_fallback_basis_count": fallback_composition_meta.get("opening_fallback_basis_count"),
+                "opening_fallback_context_missing": fallback_composition_meta.get("opening_fallback_context_missing"),
+                "opening_fallback_failed_closed": fallback_composition_meta.get("opening_fallback_failed_closed"),
+                "opening_curated_facts_present": fallback_composition_meta.get("opening_curated_facts_present"),
+                "opening_curated_facts_count": fallback_composition_meta.get("opening_curated_facts_count"),
+                "opening_curated_facts_source": fallback_composition_meta.get("opening_curated_facts_source"),
+            }
+        )
+    elif (
         active_interlocutor
         and mode == "social"
         and isinstance(world, dict)
@@ -10422,6 +10608,9 @@ def apply_final_emission_gate(
     )
     gate_out_text = _normalize_text(out.get("player_facing_text"))
     post_gate_mutation_detected = pre_gate_text != gate_out_text
+    fallback_classification = fallback_template_metadata(fallback_kind) or fallback_template_metadata(final_emitted_source)
+    fallback_family_used = fallback_composition_meta.get("fallback_family_used") or fallback_classification.get("fallback_family")
+    fallback_temporal_frame = fallback_composition_meta.get("fallback_temporal_frame") or fallback_classification.get("temporal_frame")
 
     out[FINAL_EMISSION_META_KEY] = {
         "final_route": "replaced",
@@ -10435,6 +10624,15 @@ def apply_final_emission_gate(
         "deterministic_social_fallback_attempted": deterministic_attempted,
         "deterministic_social_fallback_passed": deterministic_passed,
         "final_emitted_source": final_emitted_source,
+        "fallback_family_used": fallback_family_used,
+        "fallback_temporal_frame": fallback_temporal_frame,
+        "opening_fallback_context_source": fallback_composition_meta.get("opening_fallback_context_source"),
+        "opening_fallback_basis_count": int(fallback_composition_meta.get("opening_fallback_basis_count") or 0),
+        "opening_fallback_context_missing": bool(fallback_composition_meta.get("opening_fallback_context_missing")),
+        "opening_fallback_failed_closed": bool(fallback_composition_meta.get("opening_fallback_failed_closed")),
+        "opening_curated_facts_present": bool(fallback_composition_meta.get("opening_curated_facts_present")),
+        "opening_curated_facts_count": int(fallback_composition_meta.get("opening_curated_facts_count") or 0),
+        "opening_curated_facts_source": fallback_composition_meta.get("opening_curated_facts_source"),
         "post_gate_mutation_detected": post_gate_mutation_detected,
         "final_text_preview": (gate_out_text[:120] + "…") if len(gate_out_text) > 120 else gate_out_text,
         "coercion_reason": coercion_reason,

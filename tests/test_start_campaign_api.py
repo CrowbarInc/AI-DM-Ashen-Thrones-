@@ -88,6 +88,13 @@ def test_start_campaign_emits_opening_and_sets_started(tmp_path: Path, monkeypat
     assert len(entries) == 1
     assert entries[0].get("resolution", {}).get("kind") == "scene_opening"
     assert entries[0].get("request", {}).get("start_campaign") is True
+    gm_output = entries[0].get("gm_output") or {}
+    assert isinstance(gm_output.get("opening_curated_facts"), list)
+    assert gm_output["opening_curated_facts"]
+    emission_debug = (gm_output.get("metadata") or {}).get("emission_debug") or {}
+    assert emission_debug.get("opening_curated_facts_present") is True
+    assert emission_debug.get("opening_curated_facts_count", 0) > 0
+    assert emission_debug.get("opening_curated_facts_source") in {"selector", "realization"}
 
 
 def test_start_campaign_log_has_no_begin_player_line(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
@@ -142,6 +149,7 @@ def test_start_campaign_prompt_includes_opening_contract_fields(
     payload = json.loads(user_msg["content"])
     assert "opening_scene_realization" in payload
     assert "opening_narration_obligations" in payload
+    assert payload.get("opening_curated_facts")
 
 
 def test_play_ui_bootstrap_copy_and_no_gm_ready_placeholder() -> None:

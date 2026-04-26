@@ -78,7 +78,7 @@ def _capitalize_sentence_fragment(text: str) -> str:
     return "".join(chars)
 
 
-_RESPONSE_TYPE_VALUES = {"dialogue", "answer", "action_outcome", "neutral_narration"}
+_RESPONSE_TYPE_VALUES = {"dialogue", "answer", "action_outcome", "neutral_narration", "scene_opening"}
 _ANSWER_DIRECT_PATTERNS = (
     re.compile(r"\b(?:yes|no|none|nothing|nowhere|someone|somebody|everyone|nobody)\b", re.IGNORECASE),
     re.compile(r"\b(?:don'?t know|do not know|cannot say|can'?t say|that'?s all i(?:'ve| have) got)\b", re.IGNORECASE),

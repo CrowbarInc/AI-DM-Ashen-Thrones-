@@ -8,7 +8,7 @@ from game.exploration import EXPLORATION_KINDS
 from game.social import SOCIAL_KINDS
 
 
-ResponseType = Literal["dialogue", "answer", "action_outcome", "neutral_narration"]
+ResponseType = Literal["dialogue", "answer", "action_outcome", "neutral_narration", "scene_opening"]
 SourceRoute = Literal["social", "adjudication", "exploration", "combat", "mixed"]
 
 _QUESTION_WORD_RE = re.compile(r"\b(?:who|what|where|when|why|how|which|tell me|do you know)\b", re.IGNORECASE)
@@ -22,7 +22,7 @@ _EXPLICIT_HOSTILE_TEXT_RE = re.compile(
 )
 
 _COMBAT_KINDS = frozenset({"attack", "combat", "cast_spell", "skill_check", "roll_initiative", "end_turn"})
-_ACTION_OUTCOME_KINDS = frozenset(set(EXPLORATION_KINDS) | _COMBAT_KINDS | {"scene_opening"})
+_ACTION_OUTCOME_KINDS = frozenset(set(EXPLORATION_KINDS) | _COMBAT_KINDS)
 _HOSTILE_RESOLUTION_KINDS = frozenset({"attack", "combat", "intimidate"})
 _QUESTIONISH_SOCIAL_KINDS = frozenset({"question", "social_probe"})
 
@@ -92,6 +92,8 @@ def _resolve_source_route(
         return "combat"
     if resolution_kind in SOCIAL_KINDS:
         return "social"
+    if resolution_kind == "scene_opening" or normalized_type == "scene_opening":
+        return "exploration"
     if resolution_kind in _ACTION_OUTCOME_KINDS or normalized_type in _ACTION_OUTCOME_KINDS:
         return "exploration"
     if bool((directed_social_entry or {}).get("should_route_social")):
@@ -229,6 +231,8 @@ def derive_response_type_contract(
     raw_player_text: str | None = None,
 ) -> ResponseTypeContract:
     reasons: list[str] = []
+    resolution_kind = _clean_str((resolution or {}).get("kind")).lower()
+    normalized_type = _clean_str((normalized_action or {}).get("type")).lower()
     source_route = _resolve_source_route(
         segmented_turn=segmented_turn,
         normalized_action=normalized_action,
@@ -243,7 +247,11 @@ def derive_response_type_contract(
         directed_social_entry=directed_social_entry,
     )
 
-    if _clean_str((resolution or {}).get("kind")).lower() == "adjudication_query":
+    if resolution_kind == "scene_opening" or normalized_type == "scene_opening":
+        required_response_type: ResponseType = "scene_opening"
+        source_route = "exploration"
+        reasons.append("scene_opening_requires_opening_response")
+    elif resolution_kind == "adjudication_query":
         required_response_type: ResponseType = "answer"
         reasons.append("adjudication_query_requires_answer")
     elif _resolution_requires_dialogue(
@@ -255,8 +263,6 @@ def derive_response_type_contract(
         required_response_type = "dialogue"
         reasons.append("authoritative_social_target_requires_dialogue")
     else:
-        resolution_kind = _clean_str((resolution or {}).get("kind")).lower()
-        normalized_type = _clean_str((normalized_action or {}).get("type")).lower()
         route_choice_clean = _clean_str(route_choice).lower()
         if resolution_kind in _ACTION_OUTCOME_KINDS or normalized_type in _ACTION_OUTCOME_KINDS:
             required_response_type = "action_outcome"
@@ -268,7 +274,7 @@ def derive_response_type_contract(
             required_response_type = "neutral_narration"
             reasons.append("no_stricter_authoritative_contract")
 
-    strict_answer_expected = _resolution_requires_answer(
+    strict_answer_expected = False if required_response_type == "scene_opening" else _resolution_requires_answer(
         segmented_turn=segmented_turn,
         resolution=resolution,
         raw_player_text=raw_player_text,
@@ -283,7 +289,7 @@ def derive_response_type_contract(
         raw_player_text=raw_player_text,
         required_response_type=required_response_type,
     )
-    allow_escalation = not guard_applies
+    allow_escalation = False if required_response_type == "scene_opening" else not guard_applies
     if not allow_escalation and block_reason:
         reasons.append(block_reason)
     if allow_escalation:

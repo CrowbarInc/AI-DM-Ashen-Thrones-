@@ -40,6 +40,7 @@ import game.scene_state_anchoring as ssa
 from game.contract_registry import emergency_fallback_source_ids
 from game.defaults import default_scene, default_session, default_world
 from game.final_emission_gate import apply_final_emission_gate, get_speaker_selection_contract
+from game.diegetic_fallback_narration import fallback_template_metadata
 from game.narrative_mode_contract import build_narrative_mode_contract
 from game.anti_railroading import build_anti_railroading_contract
 from game.context_separation import build_context_separation_contract
@@ -2943,9 +2944,18 @@ def _opening_validation_context() -> dict:
 def _opening_gm_output() -> dict:
     facts = _opening_validation_context()["visible_facts"]
     return {
-        "response_policy": {"response_type_contract": _response_type_contract("action_outcome")},
+        "response_policy": {"response_type_contract": _response_type_contract("scene_opening")},
+        "opening_curated_facts": list(facts),
+        "metadata": {
+            "emission_debug": {
+                "opening_curated_facts_present": True,
+                "opening_curated_facts_count": len(facts),
+                "opening_curated_facts_source": "realization",
+            }
+        },
         "prompt_context": {
             "opening_inputs_are_curated": True,
+            "opening_curated_facts": list(facts),
             "narration_obligations": {"is_opening_scene": True},
             "narrative_plan": {
                 "scene_opening": {"location_anchors": ["Cinderwatch Gate District"]},
@@ -3001,13 +3011,191 @@ def test_opening_failure_recovers_via_deterministic_fallback_not_action_outcome(
         active_interlocutor="",
     )
 
-    assert "Cinderwatch Gate District" in text
+    assert "Cinderwatch's eastern gate" in text
     assert "You can" in text
     assert "appears disturbed" not in text
     assert dbg.get("opening_validation_failed") is True
     assert "continuation_or_investigation_language" in dbg.get("opening_failure_reasons")
     assert dbg.get("opening_recovered_via_fallback") is True
     assert dbg.get("response_type_repair_kind") == "opening_deterministic_fallback"
+    assert dbg.get("fallback_family_used") == "scene_opening"
+    assert dbg.get("fallback_temporal_frame") == "first_impression"
+
+
+def test_scene_opening_candidate_not_rejected_for_lacking_action_result_language():
+    text, dbg = feg._enforce_response_type_contract(
+        (
+            "Cinderwatch Gate District gathers rain, refugees, wagons, guards, and torchlight "
+            "around the eastern gate. You can read the notice board or approach the guards."
+        ),
+        gm_output=_opening_gm_output(),
+        resolution={"kind": "scene_opening", "prompt": "Start the campaign."},
+        session={},
+        scene_id="frontier_gate",
+        world={},
+        strict_social_turn=False,
+        strict_social_suppressed_non_social_turn=False,
+        active_interlocutor="",
+    )
+
+    assert "Cinderwatch Gate District" in text
+    assert dbg.get("response_type_required") == "scene_opening"
+    assert dbg.get("response_type_candidate_ok") is True
+    assert "action_outcome_missing_result" not in dbg.get("response_type_rejection_reasons")
+    assert dbg.get("response_type_repair_used") is False
+
+
+def test_scene_opening_fallback_with_opening_seed_facts_emits_seed_facts():
+    gm_output = {
+        "response_policy": {"response_type_contract": _response_type_contract("scene_opening")},
+        "prompt_context": {
+            "opening_inputs_are_curated": True,
+            "narration_obligations": {"is_opening_scene": True},
+            "narrative_plan": {
+                "scene_opening": {"location_anchors": ["Ash Quay"]},
+                "scene_anchors": {"location_anchors": ["Ash Quay"]},
+            },
+            "scene": {
+                "public": {
+                    "id": "ash_quay",
+                    "location": "Ash Quay",
+                    "opening_seed_facts": [
+                        "Ash Quay crouches under black rain and lantern smoke.",
+                        "Dock guards hold a shouting crowd behind a rope line.",
+                        "A brass notice board points newcomers toward the harbor clerk.",
+                    ],
+                }
+            },
+        },
+    }
+
+    text, dbg = feg._enforce_response_type_contract(
+        "Nearby crates appear disturbed.",
+        gm_output=gm_output,
+        resolution={"kind": "scene_opening", "prompt": "Start the campaign."},
+        session={},
+        scene_id="ash_quay",
+        world={},
+        strict_social_turn=False,
+        strict_social_suppressed_non_social_turn=False,
+        active_interlocutor="",
+    )
+
+    assert "Ash Quay crouches under black rain" in text
+    assert "Dock guards hold a shouting crowd" in text
+    assert "brass notice board" in text
+    assert dbg.get("opening_fallback_context_source") == "opening_seed_facts"
+    assert dbg.get("opening_fallback_basis_count") == 3
+    assert dbg.get("opening_fallback_failed_closed") is False
+
+
+def test_scene_opening_fallback_prefers_opening_curated_facts():
+    curated = [
+        "Glass rain hangs over the Argent Court hall's silent balconies.",
+        "Court guards keep a velvet rope across the marble stair.",
+        "A silver notice board names the first petitioners for the morning.",
+    ]
+    gm_output = _opening_gm_output()
+    gm_output["opening_curated_facts"] = curated
+    gm_output["metadata"]["emission_debug"]["opening_curated_facts_count"] = len(curated)
+    gm_output["metadata"]["emission_debug"]["opening_curated_facts_source"] = "realization"
+    gm_output["prompt_context"]["narration_visibility"]["visible_facts"] = [
+        "This narration_visibility fact should not be used while curated facts exist."
+    ]
+
+    text, dbg = feg._enforce_response_type_contract(
+        "Nearby crates appear disturbed.",
+        gm_output=gm_output,
+        resolution={"kind": "scene_opening", "prompt": "Start the campaign."},
+        session={},
+        scene_id="argent_court",
+        world={},
+        strict_social_turn=False,
+        strict_social_suppressed_non_social_turn=False,
+        active_interlocutor="",
+    )
+
+    assert "Argent Court hall's silent balconies" in text
+    assert "velvet rope" in text
+    assert "should not be used" not in text
+    assert dbg.get("opening_fallback_context_source") == "opening_curated_facts"
+    assert dbg.get("opening_curated_facts_present") is True
+    assert dbg.get("opening_curated_facts_count") == 3
+    assert dbg.get("opening_curated_facts_source") == "realization"
+    assert dbg.get("opening_fallback_failed_closed") is False
+
+
+def test_removing_opening_curated_facts_fail_closes_when_no_fallback_context():
+    gm_output = _opening_gm_output()
+    gm_output.pop("opening_curated_facts", None)
+    pc = gm_output["prompt_context"]
+    pc.pop("opening_curated_facts", None)
+    pc.pop("opening_scene_realization", None)
+    pc.pop("narration_visibility", None)
+    pc.pop("scene", None)
+
+    text, dbg = feg._enforce_response_type_contract(
+        "Nearby crates appear disturbed.",
+        gm_output=gm_output,
+        resolution={"kind": "scene_opening", "prompt": "Start the campaign."},
+        session={},
+        scene_id="empty_opening",
+        world={},
+        strict_social_turn=False,
+        strict_social_suppressed_non_social_turn=False,
+        active_interlocutor="",
+    )
+
+    assert text == "[opening_fallback_failed_closed: missing_curated_opening_context]"
+    assert dbg.get("opening_curated_facts_present") is False
+    assert dbg.get("opening_curated_facts_count") == 0
+    assert dbg.get("opening_fallback_failed_closed") is True
+
+
+def test_opening_failure_fallback_classification_excludes_observe_family():
+    text, dbg = feg._enforce_response_type_contract(
+        "A bad response type.",
+        gm_output=_opening_gm_output(),
+        resolution={"kind": "scene_opening", "prompt": "Start the campaign."},
+        session={},
+        scene_id="frontier_gate",
+        world={},
+        strict_social_turn=False,
+        strict_social_suppressed_non_social_turn=False,
+        active_interlocutor="",
+    )
+
+    repair_kind = str(dbg.get("response_type_repair_kind") or "")
+    meta = fallback_template_metadata(repair_kind)
+    observe_meta = fallback_template_metadata("observe_perception_fallback")
+    assert text
+    assert meta == {"fallback_family": "scene_opening", "temporal_frame": "first_impression"}
+    assert meta.get("fallback_family") != observe_meta.get("fallback_family")
+    assert meta.get("temporal_frame") not in {"reinspection", "continuation"}
+    assert dbg.get("fallback_family_used") == "scene_opening"
+    assert dbg.get("fallback_temporal_frame") == "first_impression"
+
+
+def test_opening_visibility_safe_fallback_routes_to_opening_family_not_observe():
+    fallback = feg._standard_visibility_safe_fallback(
+        gm_output=_opening_gm_output(),
+        session={},
+        scene={"scene": _opening_gm_output()["prompt_context"]["scene"]["public"]},
+        world={},
+        scene_id="frontier_gate",
+        eff_resolution={"kind": "scene_opening", "prompt": "Start the campaign."},
+        active_interlocutor="",
+        strict_social_active=False,
+        strict_social_suppressed_non_social_turn=False,
+    )
+
+    text, _pool, fallback_kind, _source, _strategy, _candidate_source, composition_meta = fallback
+    low = text.lower()
+    assert fallback_kind == "opening_deterministic_fallback"
+    assert composition_meta.get("fallback_family_used") == "scene_opening"
+    assert composition_meta.get("fallback_temporal_frame") == "first_impression"
+    assert "look again" not in low
+    assert "still" not in low
 
 
 def test_opening_fallback_ignores_contaminated_public_scene_visible_facts():
@@ -3036,6 +3224,93 @@ def test_opening_fallback_ignores_contaminated_public_scene_visible_facts():
     assert "captain plans" not in low
     assert "backstage" not in low
     assert "hidden cult" not in low
+
+
+def test_failed_scene_opening_never_emits_generic_the_scene_fallback():
+    gm_output = _opening_gm_output()
+    plan = gm_output["prompt_context"]["narrative_plan"]
+    plan["scene_opening"]["location_anchors"] = []
+    plan["scene_anchors"]["location_anchors"] = []
+    gm_output["prompt_context"]["scene"]["public"].pop("location", None)
+
+    text, dbg = feg._enforce_response_type_contract(
+        "Nearby crates appear disturbed.",
+        gm_output=gm_output,
+        resolution={"kind": "scene_opening", "prompt": "Start the campaign."},
+        session={},
+        scene_id="frontier_gate",
+        world={},
+        strict_social_turn=False,
+        strict_social_suppressed_non_social_turn=False,
+        active_interlocutor="",
+    )
+
+    assert dbg.get("response_type_repair_kind") == "opening_deterministic_fallback"
+    assert "the scene" not in text.lower()
+    assert "before you is immediately before you" not in text.lower()
+    assert "the scene is immediately before you" not in text.lower()
+    assert text
+
+
+def test_scene_opening_fallback_fail_closes_without_curated_context():
+    text, dbg = feg._enforce_response_type_contract(
+        "Nearby crates appear disturbed.",
+        gm_output={"response_policy": {"response_type_contract": _response_type_contract("scene_opening")}},
+        resolution={"kind": "scene_opening", "prompt": "Start the campaign."},
+        session={},
+        scene_id="empty_opening",
+        world={},
+        strict_social_turn=False,
+        strict_social_suppressed_non_social_turn=False,
+        active_interlocutor="",
+    )
+
+    assert text == "[opening_fallback_failed_closed: missing_curated_opening_context]"
+    assert dbg.get("opening_fallback_context_missing") is True
+    assert dbg.get("opening_fallback_failed_closed") is True
+    assert dbg.get("response_type_repair_kind") == "opening_deterministic_fallback_failed_closed"
+
+
+def test_frontier_gate_opening_fallback_uses_journal_seed_facts():
+    public_scene = default_scene("frontier_gate")["scene"]
+    gm_output = {
+        "response_policy": {"response_type_contract": _response_type_contract("scene_opening")},
+        "prompt_context": {
+            "opening_inputs_are_curated": True,
+            "narration_obligations": {"is_opening_scene": True},
+            "narrative_plan": {
+                "scene_opening": {"location_anchors": ["Cinderwatch Gate"]},
+                "scene_anchors": {"location_anchors": ["Cinderwatch Gate"]},
+            },
+            "scene": {"public": public_scene},
+        },
+    }
+
+    text, dbg = feg._enforce_response_type_contract(
+        "Nearby crates appear disturbed.",
+        gm_output=gm_output,
+        resolution={"kind": "scene_opening", "prompt": "Start the campaign."},
+        session={},
+        scene_id="frontier_gate",
+        world={},
+        strict_social_turn=False,
+        strict_social_suppressed_non_social_turn=False,
+        active_interlocutor="",
+    )
+
+    assert "Cold rain needles Cinderwatch's eastern gate" in text
+    assert any(
+        phrase in text
+        for phrase in (
+            "refugees, wagons, and travelers",
+            "notice board announces new taxes and curfews",
+            "tavern runner is hawking hot stew",
+            "ragged stranger hangs back",
+        )
+    )
+    assert dbg.get("opening_fallback_context_source") == "journal_seed_facts"
+    assert dbg.get("opening_fallback_failed_closed") is False
+    assert "immediately before you" not in text.lower()
 
 
 def test_resolve_player_facing_narration_purity_contract_from_response_policy():
@@ -3710,6 +3985,31 @@ def test_narrative_mode_output_layer_runs_when_plan_contract_shipped() -> None:
     assert fem.get("narrative_mode_output_mode") == nmc["mode"] == "continuation"
     assert fem.get("narrative_mode_contract_mode") == "continuation"
     assert fem.get("narrative_mode_output_skip_reason") is None
+
+
+def test_narrative_mode_output_opening_validation_runs_for_scene_opening_response_type() -> None:
+    nmc = build_narrative_mode_contract(narration_obligations={"is_opening_scene": True})
+    gm_output = _opening_gm_output()
+    gm_output["prompt_context"]["narrative_plan"]["narrative_mode_contract"] = nmc
+    gm_output["player_facing_text"] = (
+        "Cinderwatch Gate District gathers rain, refugees, wagons, guards, and torchlight "
+        "around the eastern gate. You can read the notice board or approach the guards."
+    )
+    gm_output["tags"] = []
+
+    out = apply_final_emission_gate(
+        gm_output,
+        resolution={"kind": "scene_opening", "prompt": "Start the campaign."},
+        session={},
+        scene_id="frontier_gate",
+        world={},
+    )
+    fem = read_final_emission_meta_dict(out) or {}
+
+    assert fem.get("response_type_required") == "scene_opening"
+    assert fem.get("narrative_mode_output_checked") is True
+    assert fem.get("narrative_mode_output_mode") == "opening"
+    assert fem.get("narrative_mode_contract_mode") == "opening"
 
 
 def test_narrative_mode_output_failure_reasons_in_fem_and_replace_route() -> None:

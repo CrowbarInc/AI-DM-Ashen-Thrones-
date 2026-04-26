@@ -943,6 +943,60 @@ def _preserve_model_route_metadata(
         dst["metadata"] = merged
 
 
+def _scene_opening_curated_facts_from_prompt_payload(prompt_payload: dict | None) -> tuple[list[str], str]:
+    if not isinstance(prompt_payload, dict):
+        return [], "selector"
+    raw = prompt_payload.get("opening_curated_facts")
+    if not isinstance(raw, list):
+        opening_realization = prompt_payload.get("opening_scene_realization")
+        contract = (
+            opening_realization.get("contract")
+            if isinstance(opening_realization, dict) and isinstance(opening_realization.get("contract"), dict)
+            else {}
+        )
+        raw = contract.get("narration_basis_visible_facts")
+    facts: list[str] = []
+    if isinstance(raw, list):
+        seen: set[str] = set()
+        for item in raw:
+            if not isinstance(item, str):
+                continue
+            clean = item.strip()
+            key = clean.lower()
+            if not clean or key in seen:
+                continue
+            seen.add(key)
+            facts.append(clean)
+    source = "selector"
+    opening_realization = prompt_payload.get("opening_scene_realization")
+    if isinstance(opening_realization, dict) and opening_realization.get("opening_mode"):
+        source = "realization"
+    return facts, source
+
+
+def _attach_scene_opening_curated_facts_to_gm(
+    gm: dict | None,
+    *,
+    prompt_payload: dict | None,
+    resolution: dict | None,
+) -> None:
+    if not isinstance(gm, dict) or not isinstance(resolution, dict):
+        return
+    if str(resolution.get("kind") or "").strip() != "scene_opening":
+        return
+    opening_basis_facts, source = _scene_opening_curated_facts_from_prompt_payload(prompt_payload)
+    gm["opening_curated_facts"] = opening_basis_facts
+    md = gm.get("metadata") if isinstance(gm.get("metadata"), dict) else {}
+    gm["metadata"] = md
+    if isinstance(md, dict):
+        em = md.setdefault("emission_debug", {})
+        if isinstance(em, dict):
+            em["opening_curated_facts_present"] = bool(opening_basis_facts)
+            em["opening_curated_facts_count"] = len(opening_basis_facts)
+            em["opening_curated_facts_source"] = source
+    assert "opening_curated_facts" in gm
+
+
 def _classify_planner_convergence_path_label_for_manual_play(
     *,
     resolution: dict,
@@ -1898,6 +1952,11 @@ def _build_gpt_narration_from_authoritative_state(
                 merged_pd = dict(gm["prompt_debug"]) if isinstance(gm.get("prompt_debug"), dict) else {}
                 merged_pd["conversational_memory"] = dict(cm)
                 gm["prompt_debug"] = merged_pd
+        _attach_scene_opening_curated_facts_to_gm(
+            gm,
+            prompt_payload=prompt_payload,
+            resolution=resolution if isinstance(resolution, dict) else None,
+        )
     if not fast_fallback_mode:
         gm = apply_response_policy_enforcement(
             gm,
@@ -1912,6 +1971,13 @@ def _build_gpt_narration_from_authoritative_state(
         gm = _repair_terminal_player_facing_if_needed(
             gm, reason="api_post_response_policy_enforcement"
         )
+    _attach_scene_opening_curated_facts_to_gm(
+        gm,
+        prompt_payload=prompt_payload if isinstance(prompt_payload, dict) else None,
+        resolution=resolution if isinstance(resolution, dict) else None,
+    )
+    if isinstance(resolution, dict) and str(resolution.get("kind") or "").strip() == "scene_opening":
+        assert "opening_curated_facts" in gm
     if isinstance(session, dict) and isinstance(response_policy, dict):
         session["last_turn_response_policy"] = dict(response_policy)
     store_progression_fingerprint_on_session(

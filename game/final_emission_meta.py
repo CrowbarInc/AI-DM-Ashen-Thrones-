@@ -103,6 +103,8 @@ FEM_RESPONSE_TYPE_KEYS: frozenset[str] = frozenset(
         "opening_validation_failed",
         "opening_failure_reasons",
         "opening_recovered_via_fallback",
+        "fallback_family_used",
+        "fallback_temporal_frame",
     }
 )
 
@@ -133,6 +135,7 @@ EVALUATOR_FEM_KEY_PREFIX_FAMILIES: tuple[str, ...] = (
     "narrative_mode_output_",
     "acceptance_quality_",
     "response_type_",
+    "fallback_",
 )
 
 # Explicit non-prefix evaluator keys (nested dicts / stable aliases).
@@ -170,6 +173,8 @@ def default_response_type_debug(contract: Dict[str, Any] | None, source: str | N
         "upstream_prepared_emission_reject_reason": None,
         "final_emission_boundary_repair_used": False,
         "final_emission_boundary_semantic_repair_disabled": True,
+        "fallback_family_used": None,
+        "fallback_temporal_frame": None,
     }
 
 
@@ -188,6 +193,8 @@ def merge_response_type_meta(meta: Dict[str, Any], debug: Dict[str, Any]) -> Non
             "opening_specific_repair_used": bool(debug.get("opening_specific_repair_used")),
             "blocked_repair_kind": debug.get("blocked_repair_kind"),
             "opening_repair_source": debug.get("opening_repair_source"),
+            "fallback_family_used": debug.get("fallback_family_used"),
+            "fallback_temporal_frame": debug.get("fallback_temporal_frame"),
             "response_type_upstream_prepared_absent": bool(debug.get("response_type_upstream_prepared_absent")),
             "upstream_prepared_emission_used": bool(debug.get("upstream_prepared_emission_used")),
             "upstream_prepared_emission_valid": bool(debug.get("upstream_prepared_emission_valid")),
@@ -217,6 +224,8 @@ def response_type_decision_payload(debug: Dict[str, Any]) -> Dict[str, Any]:
         "opening_specific_repair_used": bool(debug.get("opening_specific_repair_used")),
         "blocked_repair_kind": debug.get("blocked_repair_kind"),
         "opening_repair_source": debug.get("opening_repair_source"),
+        "fallback_family_used": debug.get("fallback_family_used"),
+        "fallback_temporal_frame": debug.get("fallback_temporal_frame"),
         "response_type_upstream_prepared_absent": bool(debug.get("response_type_upstream_prepared_absent")),
         "upstream_prepared_emission_used": bool(debug.get("upstream_prepared_emission_used")),
         "upstream_prepared_emission_valid": bool(debug.get("upstream_prepared_emission_valid")),

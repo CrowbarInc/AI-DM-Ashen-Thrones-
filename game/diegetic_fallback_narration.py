@@ -10,6 +10,55 @@ import re
 from typing import Any, Dict, List, Mapping, Set, Tuple
 
 
+_FALLBACK_TEMPLATE_METADATA: Dict[str, Dict[str, str]] = {
+    "opening_deterministic_fallback": {
+        "fallback_family": "scene_opening",
+        "temporal_frame": "first_impression",
+    },
+    "observe_perception_fallback": {
+        "fallback_family": "observe",
+        "temporal_frame": "reinspection",
+    },
+    "global_scene_fallback": {
+        "fallback_family": "observe",
+        "temporal_frame": "reinspection",
+    },
+    "anti_reset_local_continuation_fallback": {
+        "fallback_family": "action",
+        "temporal_frame": "continuation",
+    },
+    "npc_pursuit_neutral_fallback": {
+        "fallback_family": "action",
+        "temporal_frame": "continuation",
+    },
+    "scene_emit_integrity_safe_fallback": {
+        "fallback_family": "action",
+        "temporal_frame": "continuation",
+    },
+    "social_interlocutor_minimal_fallback": {
+        "fallback_family": "social",
+        "temporal_frame": "continuation",
+    },
+    "minimal_social_emergency_fallback": {
+        "fallback_family": "social",
+        "temporal_frame": "continuation",
+    },
+}
+
+
+def fallback_template_metadata(template_id: str) -> Dict[str, str]:
+    """Classification metadata used by fallback dispatchers."""
+    return dict(_FALLBACK_TEMPLATE_METADATA.get(str(template_id or "").strip(), {}))
+
+
+def opening_scene_fallback_template_allowed(template_id: str) -> bool:
+    meta = fallback_template_metadata(template_id)
+    return (
+        meta.get("fallback_family") == "scene_opening"
+        and meta.get("temporal_frame") == "first_impression"
+    )
+
+
 def _stable_u32(seed: str) -> int:
     acc = 2166136261
     for ch in str(seed or ""):

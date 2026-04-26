@@ -9,8 +9,10 @@ import importlib
 
 from game.opening_visible_fact_selection import (
     OPENING_NARRATION_VISIBLE_FACT_MAX,
+    is_opening_eligible_fact,
     opening_fact_primary_category,
     select_opening_narration_visible_facts,
+    select_opening_narration_visible_facts_with_telemetry,
 )
 
 build_narration_context = importlib.import_module("game.prompt_context").build_narration_context
@@ -196,3 +198,121 @@ def test_short_list_unchanged():
         "enemies": [],
     }
     assert select_opening_narration_visible_facts(public) == ["Only one fact at the gate."]
+
+
+def test_opening_seed_facts_beat_visible_facts():
+    public = {
+        "id": "seeded",
+        "location": "Gate",
+        "summary": "Gate.",
+        "opening_seed_facts": [
+            "Rain beads on soot-dark stones beneath the gate arch.",
+            "A guard calls the next wagon forward.",
+        ],
+        "visible_facts": ["Upon closer inspection, hidden tracks reveal a smuggler route."],
+        "exits": [],
+        "enemies": [],
+    }
+
+    out, telemetry = select_opening_narration_visible_facts_with_telemetry(public)
+
+    joined = " ".join(out).lower()
+    assert "rain beads" in joined
+    assert "guard calls" in joined
+    assert "smuggler route" not in joined
+    assert telemetry["opening_fact_source_used"] == "opening_seed_facts"
+    assert telemetry["opening_fact_eligibility_mode"] == "explicit_source"
+
+
+def test_journal_seed_facts_beat_visible_facts_when_no_opening_seed():
+    public = {
+        "id": "journal",
+        "location": "Square",
+        "summary": "Square.",
+        "journal_seed_facts": ["Wind tugs at loose banners above the square."],
+        "visible_facts": ["Examining the crate reveals a private cipher."],
+        "exits": [],
+        "enemies": [],
+    }
+
+    out, telemetry = select_opening_narration_visible_facts_with_telemetry(public)
+
+    assert out == ["Wind tugs at loose banners above the square."]
+    assert telemetry["opening_fact_source_used"] == "journal_seed_facts"
+
+
+def test_lifecycle_metadata_rejects_non_opening_facts():
+    public = {
+        "id": "lifecycle",
+        "location": "Gate",
+        "summary": "Gate.",
+        "visible_facts": [
+            {"text": "Rain slicks the gate stones.", "metadata": {"lifecycle": "opening_seed"}},
+            {"text": "The clue recovered from the crate names a culprit.", "metadata": {"lifecycle": "discovered_clue"}},
+            {"text": "The player remembers a private warning.", "metadata": {"lifecycle": "pc_specific"}},
+        ],
+        "exits": [],
+        "enemies": [],
+    }
+
+    out, telemetry = select_opening_narration_visible_facts_with_telemetry(public)
+
+    assert out == ["Rain slicks the gate stones."]
+    assert telemetry["opening_fact_source_used"] == "visible_facts_lifecycle_seed"
+    assert telemetry["opening_fact_rejected_by_lifecycle_count"] == 2
+    assert not is_opening_eligible_fact("The clue names a culprit.", {"lifecycle": "discovered_clue"})
+    assert not is_opening_eligible_fact("The player remembers a private warning.", {"lifecycle": "pc_specific"})
+
+
+def test_investigation_result_phrasing_rejected_by_form():
+    public = {
+        "id": "form",
+        "location": "Gate",
+        "summary": "Gate.",
+        "visible_facts": [
+            "Rain slicks the cobbles.",
+            "Upon closer inspection, faint footprints lead northwest, suggesting hurried movement.",
+            "Examining the notice reveals that someone has recently altered it.",
+        ],
+        "exits": [],
+        "enemies": [],
+    }
+
+    out, telemetry = select_opening_narration_visible_facts_with_telemetry(public)
+
+    assert out == ["Rain slicks the cobbles."]
+    assert telemetry["opening_fact_eligibility_mode"] == "legacy_structural"
+    assert telemetry["opening_fact_rejected_by_form_count"] == 2
+
+
+def test_legacy_visible_facts_still_work_for_clean_seed_style_observations():
+    public = {
+        "id": "legacy",
+        "location": "Gate",
+        "summary": "Gate.",
+        "visible_facts": [
+            "Rain slicks soot-dark stone beneath the eastern gate.",
+            "A guard calls for the next wagon in line.",
+            "A notice board lists curfew warnings beside the arch.",
+        ],
+        "exits": [],
+        "enemies": [],
+    }
+
+    out, telemetry = select_opening_narration_visible_facts_with_telemetry(public)
+
+    assert len(out) == 3
+    assert telemetry["opening_fact_source_used"] == "visible_facts"
+    assert telemetry["opening_fact_eligibility_mode"] == "legacy_structural"
+    assert telemetry["opening_fact_rejected_by_form_count"] == 0
+
+
+def test_player_specific_name_rejection_uses_context_not_entity_blacklist():
+    assert not is_opening_eligible_fact(
+        "Galinor notices the torn parchment near the crates.",
+        {"character": {"name": "Galinor"}},
+    )
+    assert is_opening_eligible_fact(
+        "A traveler notices the torn parchment near the crates.",
+        {"character": {"name": "Galinor"}},
+    )

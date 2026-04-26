@@ -7,7 +7,7 @@ authoritative scene data (full fact list).
 """
 from __future__ import annotations
 
-from typing import Any, Dict, List, Mapping, Set, Tuple
+from typing import Any, Dict, List, Mapping, Sequence, Set, Tuple
 
 from game.narration_visibility import _normalize_visibility_text
 
@@ -95,15 +95,180 @@ _BACKSTAGE_SELECTION_MARKERS = (
     "manages patrol",
     "patrol assignments",
     "controls patrol",
-    "guard captain indicates",
-    "tavern runner shouts",
 )
 
 _CATEGORY_RANK = {"A": 0, "E": 0, "B": 1, "C": 2, "D": 3}
 
+_OPENING_SEED_LIFECYCLES = frozenset({"opening_seed", "scene_seed"})
+_NON_OPENING_LIFECYCLES = frozenset({
+    "runtime_observation",
+    "discovered_clue",
+    "investigation_result",
+    "pc_specific",
+    "gm_generated",
+    "post_start_state",
+})
+_FORM_REJECTION_MARKERS = (
+    "upon closer inspection",
+    "examining ",
+    "examining the ",
+    "reveals ",
+    " reveal ",
+    "revealed ",
+    "suggesting ",
+    " suggests ",
+    "appears to have",
+    "appear to have",
+    "has recently",
+    "have recently",
+    "recently posted",
+    "after you ",
+    "after the player ",
+    "as you ",
+)
+_HIDDEN_VISIBILITY_VALUES = frozenset({"hidden", "gm_only", "backstage", "secret", "undiscovered"})
+
 
 def _norm_hits(norm: str, needles: Tuple[str, ...]) -> bool:
     return any(n in norm for n in needles)
+
+
+def _string_list(value: Any) -> List[str]:
+    if isinstance(value, str):
+        return [value]
+    if isinstance(value, Sequence) and not isinstance(value, (str, bytes, bytearray)):
+        return [str(x).strip() for x in value if isinstance(x, str) and str(x).strip()]
+    return []
+
+
+def _fact_text_and_metadata(raw: Any) -> Tuple[str, Dict[str, Any]] | None:
+    if isinstance(raw, str):
+        text = " ".join(raw.split()).strip()
+        return (text, {}) if text else None
+    if not isinstance(raw, Mapping):
+        return None
+    text = ""
+    for key in ("text", "fact", "line", "value", "description"):
+        val = raw.get(key)
+        if isinstance(val, str) and val.strip():
+            text = " ".join(val.split()).strip()
+            break
+    if not text:
+        return None
+    metadata: Dict[str, Any] = {}
+    nested = raw.get("metadata")
+    if isinstance(nested, Mapping):
+        metadata.update(dict(nested))
+    for key in ("source", "lifecycle", "tags", "tag", "visibility", "immediately_observable", "pc_specific"):
+        if key in raw and key not in metadata:
+            metadata[key] = raw.get(key)
+    return text, metadata
+
+
+def _fact_rows(raw: Any, *, source: str) -> List[Tuple[str, Dict[str, Any]]]:
+    if not isinstance(raw, list):
+        return []
+    rows: List[Tuple[str, Dict[str, Any]]] = []
+    for item in raw:
+        parsed = _fact_text_and_metadata(item)
+        if not parsed:
+            continue
+        text, metadata = parsed
+        md = dict(metadata)
+        md.setdefault("source", source)
+        rows.append((text, md))
+    return rows
+
+
+def _metadata_lifecycle_values(metadata: Mapping[str, Any] | None) -> Set[str]:
+    md = metadata if isinstance(metadata, Mapping) else {}
+    values: Set[str] = set()
+    for key in ("lifecycle", "source"):
+        raw = md.get(key)
+        if isinstance(raw, str) and raw.strip():
+            values.add(raw.strip().lower())
+    for key in ("tag", "tags", "lifecycle_tags"):
+        for item in _string_list(md.get(key)):
+            values.add(item.strip().lower())
+    return values
+
+
+def _metadata_hidden_or_pc_specific(metadata: Mapping[str, Any] | None) -> bool:
+    md = metadata if isinstance(metadata, Mapping) else {}
+    if md.get("pc_specific") is True:
+        return True
+    if md.get("immediately_observable") is False:
+        return True
+    visibility = str(md.get("visibility") or "").strip().lower()
+    return bool(visibility and visibility in _HIDDEN_VISIBILITY_VALUES)
+
+
+def _player_specific_markers(metadata: Mapping[str, Any] | None) -> Set[str]:
+    md = metadata if isinstance(metadata, Mapping) else {}
+    out: Set[str] = set()
+
+    def _add_name(raw: Any) -> None:
+        if isinstance(raw, str):
+            n = _normalize_visibility_text(raw)
+            if n:
+                out.add(n)
+        elif isinstance(raw, Mapping):
+            for key in ("name", "display_name", "pc_name", "character_name", "player_name"):
+                val = raw.get(key)
+                if isinstance(val, str):
+                    n = _normalize_visibility_text(val)
+                    if n:
+                        out.add(n)
+        elif isinstance(raw, Sequence) and not isinstance(raw, (str, bytes, bytearray)):
+            for item in raw:
+                _add_name(item)
+
+    for key in (
+        "player_name",
+        "pc_name",
+        "character_name",
+        "player_names",
+        "pc_names",
+        "character_names",
+        "player_context",
+        "character",
+        "session_player_context",
+    ):
+        _add_name(md.get(key))
+    return {m for m in out if len(m) >= 3}
+
+
+def _opening_fact_rejection_reason(fact: str, metadata: Mapping[str, Any] | None = None) -> str | None:
+    text = " ".join(str(fact or "").split()).strip()
+    if not text:
+        return "form"
+    norm = _normalize_visibility_text(text)
+    if not norm:
+        return "form"
+
+    lifecycle_values = _metadata_lifecycle_values(metadata)
+    if lifecycle_values & _NON_OPENING_LIFECYCLES:
+        return "lifecycle"
+    if _metadata_hidden_or_pc_specific(metadata):
+        return "lifecycle"
+
+    if _norm_hits(norm, _BACKSTAGE_SELECTION_MARKERS):
+        return "form"
+    if _norm_hits(norm, _FORM_REJECTION_MARKERS):
+        return "form"
+    for marker in _player_specific_markers(metadata):
+        if marker and marker in norm:
+            return "form"
+    return None
+
+
+def is_opening_eligible_fact(fact: str, metadata: Mapping[str, Any] | None = None) -> bool:
+    """Return whether a fact is safe to use as opening narration basis.
+
+    Eligibility is based on provenance/lifecycle metadata and sentence form, not
+    on hardcoded entity or role-name blacklists.
+    """
+    return _opening_fact_rejection_reason(fact, metadata) is None
 
 
 def opening_fact_primary_category(norm: str) -> str:
@@ -179,26 +344,74 @@ def _jaccard(a: Set[str], b: Set[str]) -> float:
     return float(inter) / float(union or 1)
 
 
-def _pairs_from_public_scene(public_scene: Mapping[str, Any]) -> List[Tuple[str, str]]:
-    raw = public_scene.get("visible_facts") if isinstance(public_scene, Mapping) else None
-    if not isinstance(raw, list):
-        return []
+def _candidate_rows_from_public_scene(
+    public_scene: Mapping[str, Any],
+    *,
+    eligibility_metadata: Mapping[str, Any] | None = None,
+) -> Tuple[List[Tuple[str, str]], Dict[str, Any]]:
+    ps = public_scene if isinstance(public_scene, Mapping) else {}
+    opening_rows = _fact_rows(ps.get("opening_seed_facts"), source="opening_seed_facts")
+    journal_rows = _fact_rows(ps.get("journal_seed_facts"), source="journal_seed_facts")
+    visible_rows = _fact_rows(ps.get("visible_facts"), source="visible_facts")
+    lifecycle_seed_rows = [
+        row
+        for row in visible_rows
+        if _metadata_lifecycle_values(row[1]) & _OPENING_SEED_LIFECYCLES
+    ]
+
+    source_used = "none"
+    eligibility_mode = "none"
+    rows: List[Tuple[str, Dict[str, Any]]] = []
+    pre_rejected_by_lifecycle = 0
+    if opening_rows:
+        rows = opening_rows
+        source_used = "opening_seed_facts"
+        eligibility_mode = "explicit_source"
+    elif journal_rows:
+        rows = journal_rows
+        source_used = "journal_seed_facts"
+        eligibility_mode = "explicit_source"
+    elif lifecycle_seed_rows:
+        rows = lifecycle_seed_rows
+        source_used = "visible_facts_lifecycle_seed"
+        eligibility_mode = "explicit_lifecycle"
+        pre_rejected_by_lifecycle = sum(
+            1
+            for _text, metadata in visible_rows
+            if not (_metadata_lifecycle_values(metadata) & _OPENING_SEED_LIFECYCLES)
+            and bool(_metadata_lifecycle_values(metadata) & _NON_OPENING_LIFECYCLES)
+        )
+    elif visible_rows:
+        rows = visible_rows
+        source_used = "visible_facts"
+        eligibility_mode = "legacy_structural"
+
+    base_md = dict(eligibility_metadata or {})
     seen_norm: Set[str] = set()
     pairs: List[Tuple[str, str]] = []
-    for item in raw:
-        if not isinstance(item, str):
+    rejected_by_lifecycle = pre_rejected_by_lifecycle
+    rejected_by_form = 0
+    for original, metadata in rows:
+        md = {**base_md, **metadata}
+        reason = _opening_fact_rejection_reason(original, md)
+        if reason == "lifecycle":
+            rejected_by_lifecycle += 1
             continue
-        original = " ".join(item.split()).strip()
-        if not original:
+        if reason == "form":
+            rejected_by_form += 1
             continue
         n = _normalize_visibility_text(original)
         if not n or n in seen_norm:
             continue
-        if _norm_hits(n, _BACKSTAGE_SELECTION_MARKERS):
-            continue
         seen_norm.add(n)
         pairs.append((original, n))
-    return pairs
+    telemetry = {
+        "opening_fact_source_used": source_used,
+        "opening_fact_eligibility_mode": eligibility_mode,
+        "opening_fact_rejected_by_lifecycle_count": rejected_by_lifecycle,
+        "opening_fact_rejected_by_form_count": rejected_by_form,
+    }
+    return pairs, telemetry
 
 
 _DEDUPE_ANCHOR_SUBSTRINGS: Tuple[str, ...] = (
@@ -261,17 +474,39 @@ def select_opening_narration_visible_facts(
     public_scene: Mapping[str, Any] | None,
     *,
     max_facts: int = OPENING_NARRATION_VISIBLE_FACT_MAX,
+    eligibility_metadata: Mapping[str, Any] | None = None,
 ) -> List[str]:
     """Return up to *max_facts* curated visible fact strings for opening prompts."""
+    selected, _telemetry = select_opening_narration_visible_facts_with_telemetry(
+        public_scene,
+        max_facts=max_facts,
+        eligibility_metadata=eligibility_metadata,
+    )
+    return selected
+
+
+def select_opening_narration_visible_facts_with_telemetry(
+    public_scene: Mapping[str, Any] | None,
+    *,
+    max_facts: int = OPENING_NARRATION_VISIBLE_FACT_MAX,
+    eligibility_metadata: Mapping[str, Any] | None = None,
+) -> Tuple[List[str], Dict[str, Any]]:
+    """Return curated opening facts plus provenance/eligibility telemetry."""
     cap = int(max_facts)
+    empty_meta = {
+        "opening_fact_source_used": "none",
+        "opening_fact_eligibility_mode": "none",
+        "opening_fact_rejected_by_lifecycle_count": 0,
+        "opening_fact_rejected_by_form_count": 0,
+    }
     if cap < 1:
-        return []
+        return [], empty_meta
     ps = public_scene if isinstance(public_scene, Mapping) else {}
-    pairs = _pairs_from_public_scene(ps)
+    pairs, telemetry = _candidate_rows_from_public_scene(ps, eligibility_metadata=eligibility_metadata)
     if not pairs:
-        return []
+        return [], telemetry
     if len(pairs) == 1:
-        return [pairs[0][0]]
+        return [pairs[0][0]], telemetry
 
     records: List[Dict[str, Any]] = []
     for idx, (original, norm) in enumerate(pairs):
@@ -381,4 +616,4 @@ def select_opening_narration_visible_facts(
 
     selected.sort(key=lambda r: (_CATEGORY_RANK.get(r["category"], 9), -int(r["score"]), int(r["index"])))
     out = [str(r["original"]) for r in selected[:cap]]
-    return out
+    return out, telemetry
