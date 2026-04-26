@@ -543,8 +543,24 @@ def merge_opening_instructions(existing: MutableSequence[str], *, contract: Mapp
     prohib = c.get("prohibited_opener_content")
     lines = [str(x).strip() for x in prohib if isinstance(x, str) and str(x).strip()] if isinstance(prohib, list) else []
     existing.append(
-        "OPENING SCENE (HARD SHAPE): First paragraph grounds the moment in externally observable sensory "
-        "and spatial detail only; no omniscient briefing, no title-cased role labels as names, no hidden-fact assertions."
+        "OPENING SCENE (STRUCTURED COMPOSITION): Start from the player's anchored perspective: where the "
+        "player is positioned and what immediately surrounds them. Then expand the selected visible facts into "
+        "sensory detail (sound, motion, texture, smell), introduce light tension (crowd pressure, authority "
+        "friction, urgency), and only then present affordances the player can act on now."
+    )
+    existing.append(
+        "OPENING SCENE COMPOSITION CONTRACT: Do not list facts. Do not compress facts into clauses. Expand "
+        "each fact into a natural sentence or phrase, blending every selected fact through one focal player "
+        "perspective. Include at least one positional anchor, at least two sensory cues (sound, motion, texture, "
+        "or smell), and at least one pressure/tension element. Preserve source integrity: use only externally "
+        "observable facts from opening_scene_realization.contract narration_basis_visible_facts and existing "
+        "visible context; no omniscient briefing, no title-cased role labels as names, no hidden-fact assertions."
+    )
+    existing.append(
+        "OPENING SCENE EXAMPLE: BAD: \"Rain spatters... Refugees... Guards...\" GOOD: \"You stand in the "
+        "churned mud before Cinderwatch's eastern gate as rain spatters against soot-dark stone. Refugees press "
+        "shoulder to shoulder around you, wagons grinding forward under shouted orders while guards hold the "
+        "choke. A tavern runner weaves through the crush, calling out offers of hot stew and paid rumor.\""
     )
     if lines:
         existing.append("OPENING SCENE PROHIBITED CONTENT: " + " | ".join(lines[:5]))

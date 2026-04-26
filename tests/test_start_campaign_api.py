@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import re
 from pathlib import Path
 from typing import Any
 
@@ -17,6 +18,18 @@ from game.storage import load_log, load_session
 from tests.test_turn_pipeline_shared import FAKE_GPT_RESPONSE
 
 pytestmark = pytest.mark.integration
+
+RICH_OPENING_GPT_RESPONSE = {
+    **FAKE_GPT_RESPONSE,
+    "player_facing_text": (
+        "Rain spatters soot-dark stone across Cinderwatch's eastern gate while frayed banners snap "
+        "above the muddy approach. You stand in the churned mud before the gate as refugees press "
+        "shoulder to shoulder around the wagon line and guards hold the choke under shouted orders. "
+        "A tavern runner weaves through the crush, calling offers of hot stew and paid rumor as the "
+        "notice board waits beside the arch. You can read the notice board, press the guards, or "
+        "approach the tavern runner."
+    ),
+}
 
 
 def _patch_data_dir(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
@@ -37,6 +50,39 @@ def _patch_data_dir(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
         (st.SCENES_DIR / f"{sid}.json").write_text(
             json.dumps(default_scene(sid), indent=2), encoding="utf-8"
         )
+
+
+def _assert_scene_opening_reads_like_scene(text: str) -> None:
+    sentences = [s for s in re.split(r"[.!?]+", text) if s.strip()]
+    assert len(sentences) >= 2
+
+    lowered = text.lower()
+    assert any(
+        phrase in lowered
+        for phrase in (
+            "you stand",
+            "you arrive",
+            "you are",
+            "you find yourself",
+            "you step",
+            "you wait",
+        )
+    )
+    assert any(
+        re.search(rf"\b{verb}\w*\b", lowered)
+        for verb in (
+            "press",
+            "shout",
+            "grind",
+            "spatter",
+            "slick",
+            "drift",
+            "snap",
+            "call",
+            "weave",
+            "mutter",
+        )
+    )
 
 
 def test_compose_state_ui_campaign_flags_fresh_vs_started(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
@@ -72,10 +118,20 @@ def test_new_campaign_leaves_log_empty_and_no_gm_payload(tmp_path: Path, monkeyp
 def test_start_campaign_emits_opening_and_sets_started(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     _patch_data_dir(tmp_path, monkeypatch)
     monkeypatch.setattr(api_mod, "log_upstream_api_preflight_at_startup", lambda: None)
-    monkeypatch.setattr("game.api.call_gpt", lambda *_a, **_k: dict(FAKE_GPT_RESPONSE))
+    monkeypatch.setattr("game.api.call_gpt", lambda *_a, **_k: dict(RICH_OPENING_GPT_RESPONSE))
 
     with TestClient(app) as client:
         assert client.post("/api/new_campaign").status_code == 200
+        gate_path = st.scene_path("frontier_gate")
+        gate = json.loads(gate_path.read_text(encoding="utf-8"))
+        scene = gate.get("scene") if isinstance(gate.get("scene"), dict) else gate
+        scene["opening_seed_facts"] = [
+            "You stand in the churned mud before Cinderwatch's eastern gate as rain spatters soot-dark stone.",
+            "Refugees press shoulder to shoulder around the wagon line while guards hold the choke.",
+            "A tavern runner shouts offers of hot stew and paid rumor.",
+            "A notice board lists new taxes, curfews, and a posted warning about a missing patrol.",
+        ]
+        gate_path.write_text(json.dumps(gate, indent=2), encoding="utf-8")
         sc = client.post("/api/start_campaign")
         assert sc.status_code == 200
         data = sc.json()
@@ -91,6 +147,7 @@ def test_start_campaign_emits_opening_and_sets_started(tmp_path: Path, monkeypat
     gm_output = entries[0].get("gm_output") or {}
     assert isinstance(gm_output.get("opening_curated_facts"), list)
     assert gm_output["opening_curated_facts"]
+    _assert_scene_opening_reads_like_scene(str(gm_output.get("player_facing_text") or ""))
     emission_debug = (gm_output.get("metadata") or {}).get("emission_debug") or {}
     assert emission_debug.get("opening_curated_facts_present") is True
     assert emission_debug.get("opening_curated_facts_count", 0) > 0
@@ -209,6 +266,12 @@ def test_start_campaign_prompt_includes_opening_contract_fields(
         assert client.post("/api/start_campaign").status_code == 200
 
     assert captured
+    prompt_text = "\n".join(
+        str(msg.get("content") or "") for msg in captured[0] if isinstance(msg, dict)
+    )
+    assert "OPENING SCENE (STRUCTURED COMPOSITION)" in prompt_text
+    assert "OPENING SCENE COMPOSITION CONTRACT" in prompt_text
+    assert "BAD:" in prompt_text and "GOOD:" in prompt_text
     user_msg = captured[0][1]
     assert isinstance(user_msg, dict) and isinstance(user_msg.get("content"), str)
     payload = json.loads(user_msg["content"])
