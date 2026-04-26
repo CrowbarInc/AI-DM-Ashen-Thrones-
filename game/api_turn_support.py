@@ -21,6 +21,7 @@ from game.upstream_response_repairs import (
     merge_upstream_prepared_emission_into_gm_output,
 )
 from game.final_emission_gate import apply_final_emission_gate
+from game.final_emission_validators import candidate_satisfies_scene_opening_contract
 from game.narration_state_consistency import reconcile_final_text_with_structured_state
 from game.social_exchange_emission import strict_social_emission_will_apply
 from game.interaction_context import inspect as inspect_interaction_context
@@ -197,6 +198,21 @@ def _finalize_player_facing_for_turn(
     Returns:
         ``(gm_out, narration_consistency_meta)`` — meta is always a dict (possibly empty flags).
     """
+    def _preview(value: object, *, limit: int = 180) -> str:
+        text = str(value or "")
+        return text[:limit] + ("..." if len(text) > limit else "")
+
+    def _emission_debug(gm_obj: dict) -> dict:
+        metadata = gm_obj.setdefault("metadata", {})
+        if not isinstance(metadata, dict):
+            metadata = {}
+            gm_obj["metadata"] = metadata
+        debug = metadata.setdefault("emission_debug", {})
+        if not isinstance(debug, dict):
+            debug = {}
+            metadata["emission_debug"] = debug
+        return debug
+
     if not isinstance(gm, dict):
         return gm, {
             "narration_state_mismatch_detected": False,
@@ -236,6 +252,7 @@ def _finalize_player_facing_for_turn(
             if isinstance(extracted, str) and extracted.strip()
             else strip_serialized_payload_fragments(raw_text)
         )
+    pre_gate_text = str(raw_text or "")
     merge_upstream_prepared_emission_into_gm_output(
         gm_out,
         resolution=resolution if isinstance(resolution, dict) else None,
@@ -259,6 +276,7 @@ def _finalize_player_facing_for_turn(
     )
     if strict_social_turn:
         gm_out["player_facing_text"] = raw_text
+        pre_gate_text = str(gm_out.get("player_facing_text") or "")
         gate_started = _now_perf()
         gm_out = apply_final_emission_gate(
             gm_out,
@@ -271,6 +289,7 @@ def _finalize_player_facing_for_turn(
         _accumulate_latency(latency_sink, "final_emission_gate", _elapsed_ms(gate_started))
     else:
         gm_out["player_facing_text"] = sanitize_player_facing_output(raw_text, san_ctx_base)
+        pre_gate_text = str(gm_out.get("player_facing_text") or "")
         gate_started = _now_perf()
         gm_out = apply_final_emission_gate(
             gm_out,
@@ -282,6 +301,12 @@ def _finalize_player_facing_for_turn(
         )
         _accumulate_latency(latency_sink, "final_emission_gate", _elapsed_ms(gate_started))
 
+    post_gate_text = str(gm_out.get("player_facing_text") or "")
+    debug = _emission_debug(gm_out)
+    debug["pre_gate_text_len"] = len(pre_gate_text)
+    debug["post_final_emission_gate_text_len"] = len(post_gate_text)
+    debug["narration_state_consistency_before_preview"] = _preview(post_gate_text)
+
     narr_meta = reconcile_final_text_with_structured_state(
         session=session,
         scene=scene,
@@ -289,6 +314,30 @@ def _finalize_player_facing_for_turn(
         resolution=resolution if isinstance(resolution, dict) else None,
         gm_output=gm_out,
     )
+    post_reconcile_text = str(gm_out.get("player_facing_text") or "")
+    is_scene_opening = (
+        isinstance(resolution, dict)
+        and str(resolution.get("kind") or "").strip().lower() == "scene_opening"
+    )
+    if is_scene_opening and post_reconcile_text != post_gate_text:
+        gate_ok, _gate_reasons = candidate_satisfies_scene_opening_contract(post_gate_text)
+        if post_gate_text.strip() and gate_ok:
+            gm_out["player_facing_text"] = post_gate_text
+            post_reconcile_text = post_gate_text
+            narr_meta["scene_opening_reconcile_text_restore_applied"] = True
+            narr_meta["scene_opening_reconcile_text_restore_reason"] = (
+                "valid_scene_opening_reconciliation_is_telemetry_only"
+            )
+        else:
+            narr_meta["scene_opening_reconcile_text_restore_applied"] = False
+            narr_meta["scene_opening_reconcile_text_restore_reason"] = (
+                "post_gate_text_empty_or_invalid"
+            )
+    debug = _emission_debug(gm_out)
+    debug["post_narration_state_consistency_text_len"] = len(post_reconcile_text)
+    debug["narration_state_consistency_changed_text"] = post_reconcile_text != post_gate_text
+    debug["narration_state_consistency_before_preview"] = _preview(post_gate_text)
+    debug["narration_state_consistency_after_preview"] = _preview(post_reconcile_text)
     gm_out["_player_facing_emission_finalized"] = True
     return gm_out, narr_meta
 

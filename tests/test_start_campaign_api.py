@@ -11,6 +11,7 @@ import pytest
 from fastapi.testclient import TestClient
 
 import game.api as api_mod
+import game.api_turn_support as turn_support
 import game.storage as st
 from game.api import app, compose_state
 from game.defaults import default_scene
@@ -170,12 +171,24 @@ def test_start_campaign_emits_opening_and_sets_started(tmp_path: Path, monkeypat
     _assert_scene_opening_reads_like_scene(str(gm_output.get("player_facing_text") or ""))
     emission_debug = (gm_output.get("metadata") or {}).get("emission_debug") or {}
     assert emission_debug.get("gm_output_player_facing_len") == len(log_text)
+    assert emission_debug.get("pre_gate_text_len", 0) > 800
+    assert emission_debug.get("post_final_emission_gate_text_len", 0) > 800
+    assert emission_debug.get("post_narration_state_consistency_text_len", 0) > 800
+    assert emission_debug.get("narration_state_consistency_changed_text") is False
+    assert emission_debug.get("narration_state_consistency_before_preview")
+    assert emission_debug.get("narration_state_consistency_after_preview")
     assert emission_debug.get("final_emission_text_preview")
     assert emission_debug.get("response_payload_text_preview")
     assert emission_debug.get("log_payload_text_preview")
     assert isinstance(emission_debug.get("canonical_gm_object_id"), int)
     for field in (
         "gm_output_player_facing_len",
+        "pre_gate_text_len",
+        "post_final_emission_gate_text_len",
+        "post_narration_state_consistency_text_len",
+        "narration_state_consistency_changed_text",
+        "narration_state_consistency_before_preview",
+        "narration_state_consistency_after_preview",
         "final_emission_text_preview",
         "response_payload_text_preview",
         "log_payload_text_preview",
@@ -186,6 +199,52 @@ def test_start_campaign_emits_opening_and_sets_started(tmp_path: Path, monkeypat
     assert emission_debug.get("opening_curated_facts_present") is True
     assert emission_debug.get("opening_curated_facts_count", 0) > 0
     assert emission_debug.get("opening_curated_facts_source") in {"selector", "realization"}
+
+
+def test_start_campaign_scene_opening_reconcile_cannot_shorten_rich_post_gate_text(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    _patch_data_dir(tmp_path, monkeypatch)
+    monkeypatch.setattr(api_mod, "log_upstream_api_preflight_at_startup", lambda: None)
+    monkeypatch.setattr("game.api.call_gpt", lambda *_a, **_k: dict(RICH_OPENING_GPT_RESPONSE))
+
+    compressed_summary = (
+        "You stand at Cinderwatch's eastern gate in the rain. Refugees crowd the wagon line, "
+        "guards hold the choke, a tavern runner calls for attention, and a notice board offers "
+        "possible leads."
+    )
+
+    def _shortening_reconcile(**kwargs: Any) -> dict:
+        gm_output = kwargs.get("gm_output")
+        if isinstance(gm_output, dict):
+            gm_output["player_facing_text"] = compressed_summary
+        return {
+            "narration_state_mismatch_detected": True,
+            "mismatch_kind": "test_forced_scene_opening_summary",
+            "mismatch_repair_applied": "test_summary_overwrite",
+            "mismatch_repairs_applied": ["test_summary_overwrite"],
+            "repaired_discovered_clue_texts": [],
+        }
+
+    monkeypatch.setattr(turn_support, "reconcile_final_text_with_structured_state", _shortening_reconcile)
+
+    with TestClient(app) as client:
+        assert client.post("/api/new_campaign").status_code == 200
+        sc = client.post("/api/start_campaign")
+        assert sc.status_code == 200
+        data = sc.json()
+
+    response_text = str(data.get("gm_output", {}).get("player_facing_text") or "")
+    gm_output = load_log()[0].get("gm_output") or {}
+    log_text = str(gm_output.get("player_facing_text") or "")
+    emission_debug = (gm_output.get("metadata") or {}).get("emission_debug") or {}
+
+    assert response_text == log_text
+    assert response_text != compressed_summary
+    assert len(response_text) > 800
+    assert emission_debug.get("post_final_emission_gate_text_len", 0) > 800
+    assert emission_debug.get("post_narration_state_consistency_text_len", 0) > 800
+    assert emission_debug.get("narration_state_consistency_changed_text") is False
 
 
 def test_start_campaign_frontier_gate_uses_journal_seed_facts_when_opening_seed_absent(

@@ -236,9 +236,20 @@ def reconcile_final_text_with_structured_state(
         "mismatch_repairs_applied": [],
         "repaired_discovered_clue_texts": [],
         "emergent_actor_hint_detected": False,
+        "scene_opening_reconcile_telemetry_only": False,
     }
 
     if not isinstance(resolution, dict) or not isinstance(session, dict) or not isinstance(scene, dict):
+        return base
+
+    if str(resolution.get("kind") or "").strip().lower() == "scene_opening":
+        text = _final_text(gm_output if isinstance(gm_output, dict) else None)
+        base["scene_opening_reconcile_telemetry_only"] = True
+        base["scene_opening_text_len"] = len(text)
+        base["scene_opening_text_empty"] = not bool(text.strip())
+        nmeta = resolution.setdefault("metadata", {})
+        if isinstance(nmeta, dict):
+            nmeta["narration_state_consistency"] = dict(base)
         return base
 
     if not _resolution_claims_no_information(resolution):
