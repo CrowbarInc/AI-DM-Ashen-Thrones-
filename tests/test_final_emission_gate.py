@@ -3046,8 +3046,14 @@ def test_scene_opening_candidate_not_rejected_for_lacking_action_result_language
 
 
 def test_scene_opening_fallback_with_opening_seed_facts_emits_seed_facts():
+    curated = [
+        "Ash Quay crouches under black rain and lantern smoke.",
+        "Dock guards hold a shouting crowd behind a rope line.",
+        "A brass notice board points newcomers toward the harbor clerk.",
+    ]
     gm_output = {
         "response_policy": {"response_type_contract": _response_type_contract("scene_opening")},
+        "opening_curated_facts": list(curated),
         "prompt_context": {
             "opening_inputs_are_curated": True,
             "narration_obligations": {"is_opening_scene": True},
@@ -3060,9 +3066,7 @@ def test_scene_opening_fallback_with_opening_seed_facts_emits_seed_facts():
                     "id": "ash_quay",
                     "location": "Ash Quay",
                     "opening_seed_facts": [
-                        "Ash Quay crouches under black rain and lantern smoke.",
-                        "Dock guards hold a shouting crowd behind a rope line.",
-                        "A brass notice board points newcomers toward the harbor clerk.",
+                        "This opening_seed_facts line must not be the fallback source.",
                     ],
                 }
             },
@@ -3084,7 +3088,8 @@ def test_scene_opening_fallback_with_opening_seed_facts_emits_seed_facts():
     assert "Ash Quay crouches under black rain" in text
     assert "Dock guards hold a shouting crowd" in text
     assert "brass notice board" in text
-    assert dbg.get("opening_fallback_context_source") == "opening_seed_facts"
+    assert "opening_seed_facts line" not in text
+    assert dbg.get("opening_fallback_context_source") == "opening_curated_facts"
     assert dbg.get("opening_fallback_basis_count") == 3
     assert dbg.get("opening_fallback_failed_closed") is False
 
@@ -3125,31 +3130,22 @@ def test_scene_opening_fallback_prefers_opening_curated_facts():
     assert dbg.get("opening_fallback_failed_closed") is False
 
 
-def test_removing_opening_curated_facts_fail_closes_when_no_fallback_context():
+def test_removing_opening_curated_facts_raises_instead_of_falling_back():
     gm_output = _opening_gm_output()
     gm_output.pop("opening_curated_facts", None)
-    pc = gm_output["prompt_context"]
-    pc.pop("opening_curated_facts", None)
-    pc.pop("opening_scene_realization", None)
-    pc.pop("narration_visibility", None)
-    pc.pop("scene", None)
 
-    text, dbg = feg._enforce_response_type_contract(
-        "Nearby crates appear disturbed.",
-        gm_output=gm_output,
-        resolution={"kind": "scene_opening", "prompt": "Start the campaign."},
-        session={},
-        scene_id="empty_opening",
-        world={},
-        strict_social_turn=False,
-        strict_social_suppressed_non_social_turn=False,
-        active_interlocutor="",
-    )
-
-    assert text == "[opening_fallback_failed_closed: missing_curated_opening_context]"
-    assert dbg.get("opening_curated_facts_present") is False
-    assert dbg.get("opening_curated_facts_count") == 0
-    assert dbg.get("opening_fallback_failed_closed") is True
+    with pytest.raises(AssertionError, match="scene_opening missing curated facts"):
+        feg._enforce_response_type_contract(
+            "Nearby crates appear disturbed.",
+            gm_output=gm_output,
+            resolution={"kind": "scene_opening", "prompt": "Start the campaign."},
+            session={},
+            scene_id="empty_opening",
+            world={},
+            strict_social_turn=False,
+            strict_social_suppressed_non_social_turn=False,
+            active_interlocutor="",
+        )
 
 
 def test_opening_failure_fallback_classification_excludes_observe_family():
@@ -3226,6 +3222,37 @@ def test_opening_fallback_ignores_contaminated_public_scene_visible_facts():
     assert "hidden cult" not in low
 
 
+def test_opening_fallback_never_uses_polluted_narration_visibility_facts():
+    gm_output = _opening_gm_output()
+    gm_output["opening_curated_facts"] = [
+        "Blue rain beads on the Gate Ward's iron lamps.",
+        "Ward guards keep travelers moving past the toll arch.",
+        "A brass notice board names the morning crossings.",
+    ]
+    gm_output["prompt_context"]["narration_visibility"]["visible_facts"] = [
+        "A dead drop waits beneath the third bench.",
+        "Muddy footprints lead toward the shuttered apothecary.",
+    ]
+
+    text, dbg = feg._enforce_response_type_contract(
+        "Nearby crates appear disturbed.",
+        gm_output=gm_output,
+        resolution={"kind": "scene_opening", "prompt": "Start the campaign."},
+        session={},
+        scene_id="frontier_gate",
+        world={},
+        strict_social_turn=False,
+        strict_social_suppressed_non_social_turn=False,
+        active_interlocutor="",
+    )
+
+    low = text.lower()
+    assert "dead drop" not in low
+    assert "footprints" not in low
+    assert "gate ward's iron lamps" in text.lower()
+    assert dbg.get("opening_fallback_context_source") == "opening_curated_facts"
+
+
 def test_failed_scene_opening_never_emits_generic_the_scene_fallback():
     gm_output = _opening_gm_output()
     plan = gm_output["prompt_context"]["narrative_plan"]
@@ -3253,9 +3280,27 @@ def test_failed_scene_opening_never_emits_generic_the_scene_fallback():
 
 
 def test_scene_opening_fallback_fail_closes_without_curated_context():
+    with pytest.raises(AssertionError, match="scene_opening missing curated facts"):
+        feg._enforce_response_type_contract(
+            "Nearby crates appear disturbed.",
+            gm_output={"response_policy": {"response_type_contract": _response_type_contract("scene_opening")}},
+            resolution={"kind": "scene_opening", "prompt": "Start the campaign."},
+            session={},
+            scene_id="empty_opening",
+            world={},
+            strict_social_turn=False,
+            strict_social_suppressed_non_social_turn=False,
+            active_interlocutor="",
+        )
+
+
+def test_scene_opening_fallback_fail_closes_with_empty_curated_facts():
     text, dbg = feg._enforce_response_type_contract(
         "Nearby crates appear disturbed.",
-        gm_output={"response_policy": {"response_type_contract": _response_type_contract("scene_opening")}},
+        gm_output={
+            "response_policy": {"response_type_contract": _response_type_contract("scene_opening")},
+            "opening_curated_facts": [],
+        },
         resolution={"kind": "scene_opening", "prompt": "Start the campaign."},
         session={},
         scene_id="empty_opening",
@@ -3265,16 +3310,22 @@ def test_scene_opening_fallback_fail_closes_without_curated_context():
         active_interlocutor="",
     )
 
-    assert text == "[opening_fallback_failed_closed: missing_curated_opening_context]"
+    assert text == "[opening_fallback_failed_closed: empty_curated_facts]"
     assert dbg.get("opening_fallback_context_missing") is True
     assert dbg.get("opening_fallback_failed_closed") is True
     assert dbg.get("response_type_repair_kind") == "opening_deterministic_fallback_failed_closed"
 
 
-def test_frontier_gate_opening_fallback_uses_journal_seed_facts():
+def test_frontier_gate_opening_fallback_uses_top_level_curated_facts():
     public_scene = default_scene("frontier_gate")["scene"]
+    curated = [
+        "Cold rain needles Cinderwatch's eastern gate while torchlight smears across the stone.",
+        "Refugees, wagons, and travelers crowd the muddy checkpoint.",
+        "A notice board announces new taxes and curfews beside the guard post.",
+    ]
     gm_output = {
         "response_policy": {"response_type_contract": _response_type_contract("scene_opening")},
+        "opening_curated_facts": curated,
         "prompt_context": {
             "opening_inputs_are_curated": True,
             "narration_obligations": {"is_opening_scene": True},
@@ -3308,7 +3359,7 @@ def test_frontier_gate_opening_fallback_uses_journal_seed_facts():
             "ragged stranger hangs back",
         )
     )
-    assert dbg.get("opening_fallback_context_source") == "journal_seed_facts"
+    assert dbg.get("opening_fallback_context_source") == "opening_curated_facts"
     assert dbg.get("opening_fallback_failed_closed") is False
     assert "immediately before you" not in text.lower()
 

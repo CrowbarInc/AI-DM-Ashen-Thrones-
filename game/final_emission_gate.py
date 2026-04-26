@@ -108,7 +108,6 @@ from game.diegetic_fallback_narration import (
     opening_scene_fallback_template_allowed,
 )
 from game.leads import get_lead, normalize_lead
-from game.opening_visible_fact_selection import select_opening_narration_visible_facts_with_telemetry
 from game.prompt_context import canonical_interaction_target_npc_id
 from game.stage_diff_telemetry import (
     diff_turn_stage,
@@ -3616,7 +3615,7 @@ _OPENING_ACTION_VERBS: tuple[str, ...] = (
 )
 
 
-_OPENING_FALLBACK_FAILED_CLOSED_MARKER = "[opening_fallback_failed_closed: missing_curated_opening_context]"
+_OPENING_FALLBACK_EMPTY_CURATED_FACTS_MARKER = "[opening_fallback_failed_closed: empty_curated_facts]"
 
 
 def _opening_context_from_gm_output(gm_output: Mapping[str, Any] | None) -> Dict[str, Any]:
@@ -3630,84 +3629,42 @@ def _opening_context_from_gm_output(gm_output: Mapping[str, Any] | None) -> Dict
         "opening_curated_facts_source": "selector",
     }
     if not isinstance(gm_output, Mapping):
-        return ctx
+        raise AssertionError("scene_opening missing curated facts")
+    if "opening_curated_facts" not in gm_output:
+        raise AssertionError("scene_opening missing curated facts")
     gm_curated = gm_output.get("opening_curated_facts")
-    if isinstance(gm_curated, list):
-        ctx["visible_facts"].extend(str(x).strip() for x in gm_curated if isinstance(x, str) and str(x).strip())
-        if ctx["visible_facts"]:
-            ctx["opening_fallback_context_source"] = "opening_curated_facts"
-            md = gm_output.get("metadata") if isinstance(gm_output.get("metadata"), Mapping) else {}
-            em = md.get("emission_debug") if isinstance(md.get("emission_debug"), Mapping) else {}
-            src = str(em.get("opening_curated_facts_source") or "").strip()
-            ctx["opening_curated_facts_source"] = src if src in {"selector", "realization"} else "realization"
+    if not isinstance(gm_curated, list):
+        raise AssertionError("scene_opening missing curated facts")
+    ctx["visible_facts"].extend(str(x).strip() for x in gm_curated if isinstance(x, str) and str(x).strip())
+    if ctx["visible_facts"]:
+        ctx["opening_fallback_context_source"] = "opening_curated_facts"
+        md = gm_output.get("metadata") if isinstance(gm_output.get("metadata"), Mapping) else {}
+        em = md.get("emission_debug") if isinstance(md.get("emission_debug"), Mapping) else {}
+        src = str(em.get("opening_curated_facts_source") or "").strip()
+        ctx["opening_curated_facts_source"] = src if src in {"selector", "realization"} else "realization"
     pc = gm_output.get("prompt_context")
-    if not isinstance(pc, Mapping):
-        for key in ("location_anchors", "visible_facts", "actionable_labels"):
-            seen: set[str] = set()
-            out: list[str] = []
-            for raw in ctx.get(key) or []:
-                clean = str(raw or "").strip()
-                low = clean.lower()
-                if not clean or low in seen:
-                    continue
-                seen.add(low)
-                out.append(clean)
-            ctx[key] = out
-        ctx["opening_fallback_basis_count"] = len(ctx.get("visible_facts") or [])
-        ctx["opening_fallback_context_missing"] = ctx["opening_fallback_basis_count"] <= 0
-        return ctx
+    if isinstance(pc, Mapping):
+        plan = pc.get("narrative_plan") if isinstance(pc.get("narrative_plan"), Mapping) else {}
+        scene_opening = plan.get("scene_opening") if isinstance(plan.get("scene_opening"), Mapping) else {}
+        scene_anchors = plan.get("scene_anchors") if isinstance(plan.get("scene_anchors"), Mapping) else {}
+        for raw in (scene_opening.get("location_anchors"), scene_anchors.get("location_anchors")):
+            if isinstance(raw, (list, tuple)):
+                ctx["location_anchors"].extend(str(x).strip() for x in raw if isinstance(x, str) and str(x).strip())
+            elif isinstance(raw, str) and raw.strip():
+                ctx["location_anchors"].append(raw.strip())
 
-    plan = pc.get("narrative_plan") if isinstance(pc.get("narrative_plan"), Mapping) else {}
-    scene_opening = plan.get("scene_opening") if isinstance(plan.get("scene_opening"), Mapping) else {}
-    scene_anchors = plan.get("scene_anchors") if isinstance(plan.get("scene_anchors"), Mapping) else {}
-    for raw in (scene_opening.get("location_anchors"), scene_anchors.get("location_anchors")):
-        if isinstance(raw, (list, tuple)):
-            ctx["location_anchors"].extend(str(x).strip() for x in raw if isinstance(x, str) and str(x).strip())
-        elif isinstance(raw, str) and raw.strip():
-            ctx["location_anchors"].append(raw.strip())
+        scene_block = pc.get("scene")
+        public_scene = scene_block.get("public") if isinstance(scene_block, Mapping) else None
+        if isinstance(public_scene, Mapping):
+            loc = public_scene.get("location") or public_scene.get("id")
+            if isinstance(loc, str) and loc.strip():
+                ctx["location_anchors"].append(loc.strip())
+        else:
+            public_scene = None
+    else:
+        public_scene = None
 
-    if not ctx["visible_facts"]:
-        pc_curated = pc.get("opening_curated_facts")
-        if isinstance(pc_curated, list):
-            ctx["visible_facts"].extend(str(x).strip() for x in pc_curated if isinstance(x, str) and str(x).strip())
-            if ctx["visible_facts"]:
-                ctx["opening_fallback_context_source"] = "prompt_context.opening_curated_facts"
-                opening_realization = pc.get("opening_scene_realization")
-                ctx["opening_curated_facts_source"] = (
-                    "realization"
-                    if isinstance(opening_realization, Mapping) and opening_realization.get("opening_mode")
-                    else "selector"
-                )
-
-    opening_realization = pc.get("opening_scene_realization")
-    contract = opening_realization.get("contract") if isinstance(opening_realization, Mapping) else None
-    if not ctx["visible_facts"] and isinstance(contract, Mapping):
-        basis = contract.get("narration_basis_visible_facts")
-        if isinstance(basis, list):
-            ctx["visible_facts"].extend(str(x).strip() for x in basis if isinstance(x, str) and str(x).strip())
-            if ctx["visible_facts"]:
-                ctx["opening_fallback_context_source"] = "opening_scene_realization"
-                ctx["opening_curated_facts_source"] = "realization"
-
-    if not ctx["visible_facts"]:
-        nv = pc.get("narration_visibility")
-        if isinstance(nv, Mapping) and isinstance(nv.get("visible_facts"), list):
-            ctx["visible_facts"].extend(str(x).strip() for x in nv.get("visible_facts") if isinstance(x, str) and str(x).strip())
-            if ctx["visible_facts"]:
-                ctx["opening_fallback_context_source"] = "narration_visibility"
-
-    scene_block = pc.get("scene")
-    public_scene = scene_block.get("public") if isinstance(scene_block, Mapping) else None
     if isinstance(public_scene, Mapping):
-        if not ctx["visible_facts"]:
-            curated, telemetry = select_opening_narration_visible_facts_with_telemetry(public_scene)
-            ctx["visible_facts"].extend(str(x).strip() for x in curated if isinstance(x, str) and str(x).strip())
-            if ctx["visible_facts"]:
-                ctx["opening_fallback_context_source"] = str(telemetry.get("opening_fact_source_used") or "opening_visible_fact_selection")
-                ctx["opening_curated_facts_source"] = "selector"
-        loc = public_scene.get("location") or public_scene.get("id")
-        if isinstance(loc, str) and loc.strip():
-            ctx["location_anchors"].append(loc.strip())
         for key in ("actions", "suggested_actions", "exits", "interactables", "objects"):
             rows = public_scene.get(key)
             if not isinstance(rows, list):
@@ -3880,7 +3837,8 @@ def _deterministic_opening_fallback_text_and_meta(gm_output: Mapping[str, Any] |
     }
     if not facts:
         meta["opening_fallback_failed_closed"] = True
-        return _OPENING_FALLBACK_FAILED_CLOSED_MARKER, meta
+        meta["opening_fallback_context_source"] = "opening_curated_facts"
+        return _OPENING_FALLBACK_EMPTY_CURATED_FACTS_MARKER, meta
 
     used: set[str] = set()
     environment = _pick_opening_fallback_fact(
