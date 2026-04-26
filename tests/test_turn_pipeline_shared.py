@@ -424,6 +424,84 @@ def test_chat_dialogue_lock_final_output_beats_generic_fillers_and_keeps_contrac
     assert resolution_contract.get("required_response_type") == "dialogue"
 
 
+# feature: routing, emission, social
+def test_direct_npc_question_keeps_dialogue_contract_and_question_relevant_unknown_fallback(
+    tmp_path, monkeypatch
+):
+    _seed_runner_dialogue_context(tmp_path, monkeypatch)
+    captured_inputs = []
+
+    def _fake_call_gpt(messages):
+        captured_inputs.append(messages)
+        gm = _gm_response("For a breath, the scene holds while voices shift around you.")
+        gm["response_policy"] = {
+            "response_type_contract": {"required_response_type": "neutral_narration"},
+            "social_response_structure": {
+                "enabled": False,
+                "required_response_type": "neutral_narration",
+                "debug_reason": "response_type_not_dialogue:neutral_narration",
+            },
+        }
+        return gm
+
+    with monkeypatch.context() as m:
+        m.setattr("game.api.call_gpt", _fake_call_gpt)
+        m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
+        m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
+        m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+        client = TestClient(app)
+        resp = client.post("/api/chat", json={"text": "Runner, who attacked the patrol?"})
+
+    assert resp.status_code == 200
+    data = resp.json()
+    assert captured_inputs
+
+    payload = json.loads(captured_inputs[0][1]["content"])
+    prompt_contract = payload.get("response_type_contract") or {}
+    prompt_policy = payload.get("response_policy") or {}
+    prompt_policy_contract = prompt_policy.get("response_type_contract") or {}
+    prompt_srs = prompt_policy.get("social_response_structure") or {}
+    prompt_ac = prompt_policy.get("answer_completeness") or {}
+
+    resolution = data.get("resolution") or {}
+    social = resolution.get("social") or {}
+    gm_output = data.get("gm_output") or {}
+    text = str(gm_output.get("player_facing_text") or "")
+    low = text.lower()
+    meta = _extract_final_emission_meta(data) or {}
+    response_policy_meta = (gm_output.get("response_policy") or {}).get("response_type_contract") or {}
+
+    assert resolution.get("kind") == "question"
+    assert social.get("npc_id") == "runner"
+    assert social.get("npc_reply_expected") is True
+    assert social.get("reply_kind") in {"answer", "refusal", "explanation"}
+
+    assert prompt_contract.get("required_response_type") == "dialogue"
+    assert prompt_policy_contract.get("required_response_type") == "dialogue"
+    assert response_policy_meta.get("required_response_type") == "dialogue"
+    assert meta.get("response_type_required") == "dialogue"
+
+    assert prompt_srs.get("enabled") is True
+    assert prompt_srs.get("required_response_type") == "dialogue"
+    assert meta.get("social_response_structure_checked") is True
+    assert meta.get("social_response_structure_applicable") is True
+    assert meta.get("social_response_structure_skip_reason") is None
+
+    assert prompt_ac.get("enabled") is True
+    assert prompt_ac.get("answer_required") is True
+    assert meta.get("answer_completeness_skip_reason") is None
+    assert meta.get("answer_completeness_checked") is True
+
+    assert "for a breath" not in low
+    assert "scene holds" not in low
+    assert "do not know a name" not in low
+    assert "name anyone" not in low
+    assert any(
+        phrase in low
+        for phrase in ("answer that", "that part", "don't know", "do not know", "cannot answer", "hard to swear")
+    ), text
+
+
 # feature: leads
 def test_chat_persists_recent_contextual_leads_from_gm_reply(tmp_path, monkeypatch):
     _seed_shared_world(tmp_path, monkeypatch)

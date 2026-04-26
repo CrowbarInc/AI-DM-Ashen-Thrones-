@@ -1164,8 +1164,8 @@ def strict_social_ownership_terminal_fallback(resolution: Dict[str, Any] | None)
     idx = _deterministic_index(seed, 3)
     lines = (
         f'{speaker} shakes their head. "I don\'t know."',
-        f'{speaker} says, "I do not know enough to name anyone."',
-        f'{speaker} says, "No. I do not know a name."',
+        f'{speaker} says, "I do not know enough to answer that."',
+        f'{speaker} says, "No. I cannot answer that from what I know."',
     )
     return lines[idx]
 
@@ -2163,8 +2163,8 @@ def deterministic_social_fallback_line(
     )
     ignorance = (
         f'{speaker} shakes their head. "I don\'t know."',
-        f'{speaker} spreads their hands. "I\'ve heard talk, not names."',
-        f'{speaker} lowers their voice. "I have heard the talk, but not the names."',
+        f'{speaker} spreads their hands. "I\'ve heard talk, but not enough to answer that."',
+        f'{speaker} lowers their voice. "I have heard the talk, but I cannot swear to that."',
         f'{speaker} glances away. "I do not know that part for certain."',
         f'{speaker} mutters. "Word is, it was messy—but I won\'t swear to who."',
         f'{speaker} shrugs. "Couldn\'t tell you—only rumors from the road."',
@@ -2182,6 +2182,11 @@ def deterministic_social_fallback_line(
     elif uncertainty_source == "npc_ignorance":
         options, kind = ignorance, "explicit_ignorance"
     else:
+        social = resolution.get("social") if isinstance(resolution, dict) and isinstance(resolution.get("social"), dict) else {}
+        if bool(social.get("npc_reply_expected")):
+            options, kind = ignorance, "explicit_ignorance"
+            idx = _deterministic_index(seed, len(options))
+            return options[idx], kind
         idx = _deterministic_index(seed + "|direct", len(direct_answer))
         return direct_answer[idx], "direct_answer_hint"
     idx = _deterministic_index(seed, len(options))
@@ -2538,7 +2543,7 @@ def _standard_mode_social_retry_payload_floor(
     extras = (
         f'{speaker} keeps their voice low. "Hard to swear to anything in this crowd."',
         f'{speaker} glances toward the street. "You\'re asking for a line I don\'t own."',
-        f'{speaker} hesitates. "I\'ve heard talk, but I won\'t pin it to a name."',
+        f'{speaker} hesitates. "I\'ve heard talk, but I won\'t pin that down as truth."',
     )
     idx = _deterministic_index(seed + f"|{uncertainty_source}|stdfloor", len(extras))
     return _ensure_sentence_end(_normalize_gate_text(f"{t} {extras[idx]}"))

@@ -17,6 +17,7 @@ from __future__ import annotations
 from typing import Any, Dict, List, Mapping, Optional, Tuple
 
 from game.final_emission_text import _RESPONSE_TYPE_VALUES
+from game.social import SOCIAL_KINDS
 from game.storage import get_scene_runtime
 
 
@@ -52,6 +53,49 @@ def _valid_response_type_contract(candidate: Any) -> Dict[str, Any] | None:
     return out
 
 
+def _resolution_requires_authoritative_dialogue_contract(
+    resolution: Dict[str, Any] | None,
+) -> bool:
+    if not isinstance(resolution, dict):
+        return False
+    kind = str(resolution.get("kind") or "").strip().lower()
+    social = resolution.get("social") if isinstance(resolution.get("social"), dict) else {}
+    return bool(kind in SOCIAL_KINDS and social.get("npc_reply_expected") is True)
+
+
+def _authoritative_dialogue_contract_from_resolution(
+    resolution: Dict[str, Any] | None,
+    fallback: Dict[str, Any] | None = None,
+) -> Dict[str, Any] | None:
+    if not _resolution_requires_authoritative_dialogue_contract(resolution):
+        return None
+
+    metadata = (
+        resolution.get("metadata")
+        if isinstance(resolution, dict) and isinstance(resolution.get("metadata"), dict)
+        else {}
+    )
+    base = _valid_response_type_contract(metadata.get("response_type_contract"))
+    if base is None:
+        base = _valid_response_type_contract(fallback) or {}
+
+    out = dict(base)
+    out["required_response_type"] = "dialogue"
+    out.setdefault("source_route", "social")
+    out["strict_dialogue_expected"] = True
+
+    social = resolution.get("social") if isinstance(resolution, dict) and isinstance(resolution.get("social"), dict) else {}
+    reply_kind = str(social.get("reply_kind") or "").strip().lower()
+    if reply_kind in {"answer", "refusal", "explanation"}:
+        out["strict_answer_expected"] = True
+
+    reasons = [str(r) for r in (out.get("debug_reasons") or []) if isinstance(r, str)]
+    if "authoritative_social_npc_reply_forces_dialogue" not in reasons:
+        reasons.append("authoritative_social_npc_reply_forces_dialogue")
+    out["debug_reasons"] = reasons
+    return out
+
+
 def _resolve_response_type_contract(
     gm_output: Dict[str, Any] | None,
     *,
@@ -64,6 +108,11 @@ def _resolve_response_type_contract(
         else None
     )
     contract = _valid_response_type_contract((response_policy or {}).get("response_type_contract"))
+
+    authoritative = _authoritative_dialogue_contract_from_resolution(resolution, contract)
+    if authoritative:
+        return authoritative, "resolution.authoritative_social"
+
     if contract:
         return contract, "response_policy"
 

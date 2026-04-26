@@ -457,7 +457,7 @@ _GENERIC_NONANSWER_SNIPPET = re.compile(
 _BOUNDED_PARTIAL_REASON_MARKERS: Dict[str, tuple[re.Pattern[str], ...]] = {
     "uncertainty": (
         re.compile(r"\b(?:unclear|not sure|rumor|hearsay|might be|could be)\b", re.IGNORECASE),
-        re.compile(r"\b(?:can'?t pin|can'?t say for certain)\b", re.IGNORECASE),
+        re.compile(r"\b(?:can'?t pin|can'?t say for certain|hard to swear|cannot swear|can'?t swear|won'?t swear)\b", re.IGNORECASE),
     ),
     "lack_of_knowledge": (
         re.compile(r"\b(?:don'?t know|do not know|never heard|wasn'?t there|not on duty)\b", re.IGNORECASE),

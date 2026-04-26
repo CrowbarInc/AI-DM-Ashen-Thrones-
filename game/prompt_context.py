@@ -141,6 +141,7 @@ from game.conversational_memory_window import (
 from game.response_policy_contracts import (
     build_social_response_structure_contract as _build_social_response_structure_contract_impl,
     peek_response_type_contract_from_resolution as _peek_response_type_contract_from_resolution_impl,
+    _resolve_response_type_contract as _resolve_authoritative_response_type_contract_impl,
 )
 from game.turn_packet import build_turn_packet
 from game.ctir_runtime import SESSION_CTIR_STAMP_KEY, get_attached_ctir
@@ -4776,7 +4777,16 @@ def build_narration_context(
         else response_type_context_snapshot(session if isinstance(session, dict) else None)
     )
     _rtc_policy_early = response_policy.get("response_type_contract")
-    if isinstance(_rtc_policy_early, dict):
+    _rtc_authoritative, _rtc_authoritative_source = _resolve_authoritative_response_type_contract_impl(
+        {"response_policy": {"response_type_contract": _rtc_policy_early}} if isinstance(_rtc_policy_early, dict) else None,
+        resolution=resolution_sem if isinstance(resolution_sem, dict) else None,
+        session=session if isinstance(session, dict) else None,
+    )
+    if isinstance(_rtc_authoritative, dict):
+        rtc_for_social_structure = _rtc_authoritative
+        rtc_source = _rtc_authoritative_source or "response_policy"
+        response_policy["response_type_contract"] = copy.deepcopy(_rtc_authoritative)
+    elif isinstance(_rtc_policy_early, dict):
         rtc_for_social_structure = _rtc_policy_early
         rtc_source = "response_policy"
     else:
