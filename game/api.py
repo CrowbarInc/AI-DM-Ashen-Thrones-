@@ -3262,6 +3262,42 @@ def _complete_opening_turn_persistence_like_chat(
     """
     from game.gm import classify_player_intent
 
+    def _text_preview(value: object, *, limit: int = 180) -> str:
+        text = str(value or "")
+        return text[:limit] + ("..." if len(text) > limit else "")
+
+    def _attach_final_text_invariant_debug(
+        gm_obj: dict,
+        *,
+        response_payload: dict | None = None,
+        log_payload_text: str | None = None,
+    ) -> None:
+        if not isinstance(gm_obj, dict):
+            return
+        final_text = str(gm_obj.get("player_facing_text") or "")
+        response_text = final_text
+        if isinstance(response_payload, dict):
+            payload_gm = response_payload.get("gm_output")
+            if isinstance(payload_gm, dict):
+                response_text = str(payload_gm.get("player_facing_text") or "")
+        log_text = str(log_payload_text if log_payload_text is not None else final_text)
+        metadata = gm_obj.setdefault("metadata", {})
+        if not isinstance(metadata, dict):
+            metadata = {}
+            gm_obj["metadata"] = metadata
+        emission_debug = metadata.setdefault("emission_debug", {})
+        if not isinstance(emission_debug, dict):
+            emission_debug = {}
+            metadata["emission_debug"] = emission_debug
+        emission_debug.update(
+            {
+                "gm_output_player_facing_len": len(final_text),
+                "final_emission_text_preview": _text_preview(final_text),
+                "response_payload_text_preview": _text_preview(response_text),
+                "log_payload_text_preview": _text_preview(log_text),
+            }
+        )
+
     _include_res_chat = bool(
         (routed_via_exploration or routed_via_adjudication) and isinstance(resolution, dict)
     )
@@ -3445,6 +3481,28 @@ def _complete_opening_turn_persistence_like_chat(
     log_meta.setdefault("clocks_changed", clocks_changed)
     log_meta.setdefault("response_type_contract", compact_response_type_contract(response_type_contract))
 
+    response_payload = _build_turn_response_payload(
+        gm=gm,
+        resolution=resolution if (routed_via_exploration or routed_via_adjudication) and isinstance(resolution, dict) else None,
+        include_resolution=bool((routed_via_exploration or routed_via_adjudication) and isinstance(resolution, dict)),
+    )
+    final_text = str(gm.get("player_facing_text") or "")
+    payload_gm = response_payload.get("gm_output") if isinstance(response_payload, dict) else None
+    if isinstance(payload_gm, dict) and str(payload_gm.get("player_facing_text") or "") != final_text:
+        payload_gm["player_facing_text"] = final_text
+    _attach_final_text_invariant_debug(
+        gm,
+        response_payload=response_payload if isinstance(response_payload, dict) else None,
+        log_payload_text=final_text,
+    )
+    if isinstance(payload_gm, dict):
+        payload_metadata = payload_gm.setdefault("metadata", {})
+        if isinstance(payload_metadata, dict):
+            payload_debug = payload_metadata.setdefault("emission_debug", {})
+            source_debug = (gm.get("metadata") or {}).get("emission_debug") if isinstance(gm.get("metadata"), dict) else {}
+            if isinstance(payload_debug, dict) and isinstance(source_debug, dict):
+                payload_debug.update(source_debug)
+
     append_log(
         {
             "timestamp": utc_iso_now(),
@@ -3454,11 +3512,7 @@ def _complete_opening_turn_persistence_like_chat(
             "log_meta": log_meta,
         }
     )
-    return _build_turn_response_payload(
-        gm=gm,
-        resolution=resolution if (routed_via_exploration or routed_via_adjudication) and isinstance(resolution, dict) else None,
-        include_resolution=bool((routed_via_exploration or routed_via_adjudication) and isinstance(resolution, dict)),
-    )
+    return response_payload
 
 
 @app.post('/api/start_campaign')

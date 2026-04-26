@@ -220,7 +220,11 @@ def _finalize_player_facing_for_turn(
         # under a locked interlocutor, swapping duplicate model output for a generic summary
         # strips interruption cues before build_final / repeat tracking (stall + tracker loss).
         # Non-strict social still runs the guard so repeated stale blobs can converge cleanly.
-        if not (_session_ongoing_social_exchange(session) and strict_social_turn):
+        is_scene_opening = (
+            isinstance(resolution, dict)
+            and str(resolution.get("kind") or "").strip().lower() == "scene_opening"
+        )
+        if not is_scene_opening and not (_session_ongoing_social_exchange(session) and strict_social_turn):
             apply_repeated_description_guard(gm_out, session, scene_id)
         if not _session_ongoing_social_exchange(session):
             update_scene_momentum_runtime(session, scene_id, gm_out)

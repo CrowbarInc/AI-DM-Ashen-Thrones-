@@ -26,8 +26,16 @@ RICH_OPENING_GPT_RESPONSE = {
         "above the muddy approach. You stand in the churned mud before the gate as refugees press "
         "shoulder to shoulder around the wagon line and guards hold the choke under shouted orders. "
         "A tavern runner weaves through the crush, calling offers of hot stew and paid rumor as the "
-        "notice board waits beside the arch. You can read the notice board, press the guards, or "
-        "approach the tavern runner."
+        "notice board waits beside the arch. The queue inches forward in fits, wagon wheels grinding "
+        "through black ruts while wet canvas slaps against overloaded carts and the smell of damp wool, "
+        "smoke, and sour road dust clings to everyone close enough to breathe on you. Somewhere ahead, "
+        "a guard captain's voice cuts through the mutter of the crowd, sharp enough to make shoulders "
+        "hunch and conversations die for a heartbeat before the pressure of bodies closes in again. "
+        "To your left, a well-appointed townhouse flies noble colors above the square, clean banners "
+        "staring down at the mud as if the gate's misery belongs to another city. Near the line, one "
+        "threadbare watcher stands too still, eyes flicking to packs and faces instead of the arch. "
+        "You can read the notice board, press the guards, approach the tavern runner, or watch the "
+        "silent figure in the crush."
     ),
 }
 
@@ -139,16 +147,28 @@ def test_start_campaign_emits_opening_and_sets_started(tmp_path: Path, monkeypat
         assert data.get("resolution", {}).get("kind") == "scene_opening"
         assert data.get("session", {}).get("campaign_started") is True
         assert data.get("ui", {}).get("campaign_can_start") is False
+        response_text = str(data.get("gm_output", {}).get("player_facing_text") or "")
+        log_reload_entries = client.get("/api/log").json().get("entries") or []
 
     entries = load_log()
     assert len(entries) == 1
+    assert len(log_reload_entries) == 1
     assert entries[0].get("resolution", {}).get("kind") == "scene_opening"
     assert entries[0].get("request", {}).get("start_campaign") is True
     gm_output = entries[0].get("gm_output") or {}
+    log_text = str(gm_output.get("player_facing_text") or "")
+    reload_text = str((log_reload_entries[0].get("gm_output") or {}).get("player_facing_text") or "")
+    assert response_text == log_text == reload_text
+    assert response_text in RICH_OPENING_GPT_RESPONSE["player_facing_text"]
+    assert "You stand" in response_text
+    assert len(response_text) > 500
     assert isinstance(gm_output.get("opening_curated_facts"), list)
     assert gm_output["opening_curated_facts"]
     _assert_scene_opening_reads_like_scene(str(gm_output.get("player_facing_text") or ""))
     emission_debug = (gm_output.get("metadata") or {}).get("emission_debug") or {}
+    assert emission_debug.get("gm_output_player_facing_len") == len(log_text)
+    assert emission_debug.get("response_payload_text_preview")
+    assert emission_debug.get("log_payload_text_preview")
     assert emission_debug.get("opening_curated_facts_present") is True
     assert emission_debug.get("opening_curated_facts_count", 0) > 0
     assert emission_debug.get("opening_curated_facts_source") in {"selector", "realization"}

@@ -10144,6 +10144,16 @@ def apply_final_emission_gate(
     )
     if te_layer_meta.get("tone_escalation_violation_before_repair"):
         response_type_debug["non_hostile_escalation_blocked"] = True
+    if (
+        response_type_debug.get("response_type_required") == "scene_opening"
+        and response_type_debug.get("opening_fallback_skipped") is True
+        and response_type_debug.get("response_type_repair_used") is False
+    ):
+        te_reasons = [
+            str(r)
+            for r in te_reasons
+            if str(r) != "tone_escalation_unsatisfied_at_boundary_no_rewrite"
+        ]
     reasons.extend(te_reasons)
 
     text, na_layer_meta, na_reasons = _apply_narrative_authority_layer(
