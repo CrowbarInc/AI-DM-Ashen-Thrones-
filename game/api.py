@@ -131,6 +131,8 @@ from game.ui_mode_policy import (
     assert_mode_allows_runtime_action,
 )
 from game.state_authority import (
+    HIDDEN_STATE,
+    INTERACTION_STATE,
     PLAYER_VISIBLE_STATE,
     SCENE_STATE,
     WORLD_STATE,
@@ -538,6 +540,483 @@ def _apply_authoritative_clues_from_resolution(
     )
 
 
+_POST_GM_ADOPTION_CLASSIFICATIONS: dict[str, dict[str, Any]] = {
+    "apply_gm_scene_update_layers": {
+        "provenance_class": "model_structured_proposal",
+        "adoption_status": "authoritative_adopted",
+        "risk_class": "high",
+        "needs_gateway": True,
+        "proposed_future_owner": "post_gm_adoption_gateway",
+    },
+    "ignore_gm_transition_proposal": {
+        "provenance_class": "advisory_only",
+        "adoption_status": "advisory_ignored",
+        "risk_class": "low",
+        "needs_gateway": False,
+        "proposed_future_owner": "no_change",
+    },
+    "apply_gm_world_updates": {
+        "provenance_class": "model_structured_proposal",
+        "adoption_status": "authoritative_adopted",
+        "risk_class": "high",
+        "needs_gateway": True,
+        "proposed_future_owner": "post_gm_adoption_gateway",
+    },
+    "apply_repeated_description_guard": {
+        "provenance_class": "publication_hygiene",
+        "adoption_status": "publication_only",
+        "risk_class": "low",
+        "needs_gateway": False,
+        "proposed_future_owner": "final_emission_gate",
+    },
+    "update_scene_momentum_runtime": {
+        "provenance_class": "post_emission_text",
+        "adoption_status": "authoritative_adopted",
+        "risk_class": "medium",
+        "needs_gateway": True,
+        "proposed_future_owner": "post_gm_adoption_gateway",
+    },
+    "detect_surfaced_clues": {
+        "provenance_class": "telemetry_only",
+        "adoption_status": "telemetry_only",
+        "risk_class": "low",
+        "needs_gateway": False,
+        "proposed_future_owner": "telemetry_only",
+    },
+    "apply_social_narration_lead_supplements": {
+        "provenance_class": "post_emission_text",
+        "adoption_status": "authoritative_adopted",
+        "risk_class": "high",
+        "needs_gateway": True,
+        "proposed_future_owner": "post_gm_adoption_gateway",
+    },
+    "ensure_scene_has_minimum_actionable_lead": {
+        "provenance_class": "deterministic_resolution",
+        "adoption_status": "authoritative_adopted",
+        "risk_class": "medium",
+        "needs_gateway": False,
+        "proposed_future_owner": "engine_resolution_gateway",
+    },
+    "apply_spoken_state_refinement_cash_out": {
+        "provenance_class": "post_emission_text",
+        "adoption_status": "authoritative_adopted",
+        "risk_class": "medium",
+        "needs_gateway": True,
+        "proposed_future_owner": "post_gm_adoption_gateway",
+    },
+    "apply_conservative_emergent_enrollment_from_gm_output": {
+        "provenance_class": "post_emission_text",
+        "adoption_status": "authoritative_adopted",
+        "risk_class": "high",
+        "needs_gateway": True,
+        "proposed_future_owner": "post_gm_adoption_gateway",
+    },
+}
+
+
+_GM_WORLD_UPDATES_LEGACY_ALLOWED_KEYS = frozenset(
+    {
+        "append_events",
+        "world_state",
+        "projects",
+        "set_flags",
+        "increment_counters",
+        "advance_clocks",
+        "flags_patch",
+        "counters_patch",
+        "clocks_patch",
+        "projects_patch",
+        "clues_patch",
+        "npcs_patch",
+        "leads_patch",
+        "metadata",
+    }
+)
+_GM_WORLD_UPDATES_PROSE_KEY_HINTS = frozenset(
+    {
+        "player_facing_text",
+        "hidden_facts",
+        "hidden_fact",
+        "hidden",
+        "narration",
+        "narrative",
+        "prose",
+        "description",
+        "text",
+    }
+)
+_GM_SCENE_UPDATE_ALLOWED_KEYS = frozenset(
+    {"visible_facts_add", "discoverable_clues_add", "hidden_facts_add", "mode"}
+)
+_GM_SCENE_UPDATE_LIST_KEYS = frozenset(
+    {"visible_facts_add", "discoverable_clues_add", "hidden_facts_add"}
+)
+
+
+def _post_gm_adoption_classification(operation: str) -> dict[str, Any]:
+    """Closed-set adoption classification for post-GM mutation trace operations."""
+    classification = _POST_GM_ADOPTION_CLASSIFICATIONS.get(str(operation or ""))
+    if classification is None:
+        return {
+            "provenance_class": "telemetry_only",
+            "adoption_status": "telemetry_only",
+            "risk_class": "low",
+            "needs_gateway": False,
+            "proposed_future_owner": "no_change",
+        }
+    return dict(classification)
+
+
+def _gm_world_updates_value_is_json_like(value: Any, *, depth: int = 0) -> bool:
+    if depth > 8:
+        return False
+    if value is None or isinstance(value, (str, bool, int, float)):
+        return True
+    if callable(value):
+        return False
+    if isinstance(value, list):
+        return all(_gm_world_updates_value_is_json_like(item, depth=depth + 1) for item in value)
+    if isinstance(value, dict):
+        return all(
+            isinstance(k, str) and _gm_world_updates_value_is_json_like(v, depth=depth + 1)
+            for k, v in value.items()
+        )
+    return False
+
+
+def _gm_world_updates_contains_oversized_string(value: Any, *, limit: int = 2000) -> bool:
+    if isinstance(value, str):
+        return len(value) > limit
+    if isinstance(value, list):
+        return any(_gm_world_updates_contains_oversized_string(item, limit=limit) for item in value)
+    if isinstance(value, dict):
+        return any(_gm_world_updates_contains_oversized_string(item, limit=limit) for item in value.values())
+    return False
+
+
+def _gm_scene_update_strings_are_small(values: list[Any], *, limit: int = 500) -> bool:
+    return all(isinstance(value, str) and len(value) <= limit for value in values)
+
+
+def _validate_gm_scene_update_for_legacy_adoption(raw_scene_update: Any) -> dict[str, Any]:
+    """Validate GM scene_update before preserving the legacy overlay mutation path."""
+    if not isinstance(raw_scene_update, dict):
+        return {
+            "allowed": False,
+            "reason_codes": ["gm_scene_update:not_a_dict"],
+            "sanitized_scene_update": None,
+            "top_level_key_count": 0,
+            "recognized_key_count": 0,
+            "unknown_key_count": 0,
+            "visible_facts_add_count": 0,
+            "discoverable_clues_add_count": 0,
+            "hidden_facts_add_count": 0,
+            "mode_present": False,
+        }
+
+    reason_codes: list[str] = []
+    top_level_keys = [k for k in raw_scene_update.keys() if isinstance(k, str)]
+    unknown_keys = [k for k in top_level_keys if k not in _GM_SCENE_UPDATE_ALLOWED_KEYS]
+    if unknown_keys:
+        reason_codes.append("gm_scene_update:unknown_keys_ignored")
+
+    sanitized: dict[str, Any] = {}
+    for key in _GM_SCENE_UPDATE_LIST_KEYS:
+        if key not in raw_scene_update:
+            sanitized[key] = []
+            continue
+        value = raw_scene_update.get(key)
+        if not isinstance(value, list):
+            reason_codes.append(f"gm_scene_update:{key}:not_list")
+            sanitized[key] = []
+            continue
+        if not all(isinstance(item, str) for item in value):
+            reason_codes.append(f"gm_scene_update:{key}:non_string_entry")
+            sanitized[key] = []
+            continue
+        if not _gm_scene_update_strings_are_small(value):
+            reason_codes.append(f"gm_scene_update:{key}:oversized_string")
+            sanitized[key] = []
+            continue
+        sanitized[key] = list(value)
+
+    mode = raw_scene_update.get("mode")
+    if mode is not None:
+        if not isinstance(mode, str):
+            reason_codes.append("gm_scene_update:mode:not_string")
+        elif len(mode) > 100:
+            reason_codes.append("gm_scene_update:mode:oversized_string")
+        elif mode:
+            sanitized["mode"] = mode
+
+    allowed = not any(
+        code.endswith(":not_list")
+        or code.endswith(":non_string_entry")
+        or code.endswith(":oversized_string")
+        or code == "gm_scene_update:mode:not_string"
+        for code in reason_codes
+    )
+    if allowed:
+        reason_codes.append("gm_scene_update:legacy_shape_allowed")
+
+    return {
+        "allowed": allowed,
+        "reason_codes": reason_codes,
+        "sanitized_scene_update": sanitized if allowed else None,
+        "top_level_key_count": len(top_level_keys),
+        "recognized_key_count": len([k for k in top_level_keys if k in _GM_SCENE_UPDATE_ALLOWED_KEYS]),
+        "unknown_key_count": len(unknown_keys),
+        "visible_facts_add_count": len(sanitized.get("visible_facts_add") or []) if allowed else 0,
+        "discoverable_clues_add_count": len(sanitized.get("discoverable_clues_add") or []) if allowed else 0,
+        "hidden_facts_add_count": len(sanitized.get("hidden_facts_add") or []) if allowed else 0,
+        "mode_present": bool(sanitized.get("mode")) if allowed else False,
+    }
+
+
+def _validate_post_emission_emergent_actor_adoption(
+    *,
+    session: Any,
+    scene: Any,
+    narration_text: Any,
+) -> dict[str, Any]:
+    """Validate narration-derived emergent actor adoption before legacy enrollment."""
+    reason_codes: list[str] = []
+    scene_id = ""
+    if not isinstance(session, dict):
+        reason_codes.append("emergent_actor_adoption:session_not_dict")
+    if not isinstance(scene, dict):
+        reason_codes.append("emergent_actor_adoption:scene_not_dict")
+    else:
+        scene_body = scene.get("scene")
+        if not isinstance(scene_body, dict):
+            reason_codes.append("emergent_actor_adoption:scene_body_not_dict")
+        else:
+            scene_id = str(scene_body.get("id") or "").strip()
+            if not scene_id:
+                reason_codes.append("emergent_actor_adoption:missing_scene_id")
+    if not isinstance(narration_text, str):
+        reason_codes.append("emergent_actor_adoption:narration_not_string")
+    else:
+        stripped = narration_text.strip()
+        if not stripped:
+            reason_codes.append("emergent_actor_adoption:narration_empty")
+        elif len(stripped) > 4000:
+            reason_codes.append("emergent_actor_adoption:narration_oversized")
+
+    allowed = not reason_codes
+    if allowed:
+        reason_codes.append("emergent_actor_adoption:legacy_shape_allowed")
+    return {
+        "allowed": allowed,
+        "reason_codes": reason_codes,
+        "sanitized_narration_available": allowed,
+        "scene_id_present": bool(scene_id),
+        "narration_present": isinstance(narration_text, str) and bool(narration_text.strip()),
+        "narration_oversized": isinstance(narration_text, str) and len(narration_text.strip()) > 4000,
+    }
+
+
+def _validate_post_emission_social_lead_supplement_adoption(
+    *,
+    session: Any,
+    world: Any,
+    scene: Any,
+    resolution: Any,
+    narration_text: Any,
+) -> dict[str, Any]:
+    """Validate narration-derived social lead supplement adoption before legacy helper call."""
+    reason_codes: list[str] = []
+    scene_id = ""
+    if not isinstance(session, dict):
+        reason_codes.append("social_lead_supplement:session_not_dict")
+    if not isinstance(world, dict):
+        reason_codes.append("social_lead_supplement:world_not_dict")
+    if not isinstance(scene, dict):
+        reason_codes.append("social_lead_supplement:scene_not_dict")
+    else:
+        scene_body = scene.get("scene")
+        if not isinstance(scene_body, dict):
+            reason_codes.append("social_lead_supplement:scene_body_not_dict")
+        else:
+            scene_id = str(scene_body.get("id") or "").strip()
+            if not scene_id:
+                reason_codes.append("social_lead_supplement:missing_scene_id")
+    if not isinstance(resolution, dict):
+        reason_codes.append("social_lead_supplement:resolution_not_dict")
+    if not isinstance(narration_text, str):
+        reason_codes.append("social_lead_supplement:narration_not_string")
+    else:
+        stripped = narration_text.strip()
+        if not stripped:
+            reason_codes.append("social_lead_supplement:narration_empty")
+        elif len(stripped) > 4000:
+            reason_codes.append("social_lead_supplement:narration_oversized")
+
+    allowed = not reason_codes
+    if allowed:
+        reason_codes.append("social_lead_supplement:legacy_shape_allowed")
+    return {
+        "allowed": allowed,
+        "reason_codes": reason_codes,
+        "sanitized_narration_available": allowed,
+        "scene_id_present": bool(scene_id),
+        "resolution_present": isinstance(resolution, dict),
+        "narration_present": isinstance(narration_text, str) and bool(narration_text.strip()),
+        "narration_oversized": isinstance(narration_text, str) and len(narration_text.strip()) > 4000,
+    }
+
+
+def _validate_gm_world_updates_for_legacy_adoption(raw_world_updates: Any) -> dict[str, Any]:
+    """Validate GM world_updates before preserving the legacy normalize/apply path."""
+    reason_codes: list[str] = []
+    if not isinstance(raw_world_updates, dict):
+        return {
+            "allowed": False,
+            "reason_codes": ["gm_world_updates:not_a_dict"],
+            "sanitized_world_updates": None,
+            "top_level_key_count": 0,
+            "recognized_key_count": 0,
+            "unknown_key_count": 0,
+            "append_events_count": 0,
+        }
+
+    top_level_keys = [k for k in raw_world_updates.keys() if isinstance(k, str)]
+    unknown_keys = [k for k in top_level_keys if k not in _GM_WORLD_UPDATES_LEGACY_ALLOWED_KEYS]
+    if unknown_keys:
+        reason_codes.append("gm_world_updates:unknown_keys_parked")
+    if any(k in _GM_WORLD_UPDATES_PROSE_KEY_HINTS for k in unknown_keys):
+        reason_codes.append("gm_world_updates:unsafe_unknown_prose_key")
+    if not _gm_world_updates_value_is_json_like(raw_world_updates):
+        reason_codes.append("gm_world_updates:non_json_like_value")
+    if _gm_world_updates_contains_oversized_string(raw_world_updates):
+        reason_codes.append("gm_world_updates:oversized_string_value")
+
+    allowed = not any(
+        code in reason_codes
+        for code in (
+            "gm_world_updates:unsafe_unknown_prose_key",
+            "gm_world_updates:non_json_like_value",
+            "gm_world_updates:oversized_string_value",
+        )
+    )
+    if allowed:
+        reason_codes.append("gm_world_updates:legacy_shape_allowed")
+
+    append_events = raw_world_updates.get("append_events")
+    return {
+        "allowed": allowed,
+        "reason_codes": reason_codes,
+        "sanitized_world_updates": dict(raw_world_updates) if allowed else None,
+        "top_level_key_count": len(top_level_keys),
+        "recognized_key_count": len([k for k in top_level_keys if k in _GM_WORLD_UPDATES_LEGACY_ALLOWED_KEYS]),
+        "unknown_key_count": len(unknown_keys),
+        "append_events_count": len(append_events) if isinstance(append_events, list) else 0,
+    }
+
+
+def _post_gm_adoption_gateway(
+    *,
+    operation: str,
+    source: str,
+    session: dict,
+    scene_id: str | None,
+    affected_domains: list[str],
+    proposed_payload_summary: dict[str, Any] | None = None,
+    branch_label: str | None = None,
+    classification: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Observe-only shell for high-risk post-GM adoption paths."""
+    resolved_classification = (
+        dict(classification)
+        if isinstance(classification, dict)
+        else _post_gm_adoption_classification(operation)
+    )
+    return {
+        "allow": True,
+        "trace_metadata": {
+            "gateway_present": True,
+            "gateway_decision": "allow_legacy_behavior",
+            "gateway_mode": "observe_only",
+            "future_blocking_candidate": bool(
+                resolved_classification.get("needs_gateway")
+                and resolved_classification.get("risk_class") in {"medium", "high"}
+            ),
+        },
+    }
+
+
+def _record_post_gm_mutation_trace(
+    session: dict,
+    *,
+    operation: str,
+    source: str,
+    affected_domains: list[str],
+    derived_from_model_or_post_emission: bool,
+    authority: str,
+    scene_id: str | None = None,
+    resolution: dict | None = None,
+    **metadata: Any,
+) -> None:
+    """Best-effort trace for post-GM mutation seams; never affects turn execution."""
+    try:
+        if not isinstance(session, dict):
+            return
+        domains = [str(domain) for domain in affected_domains if isinstance(domain, str) and domain.strip()]
+        if not domains:
+            domains = [SCENE_STATE]
+        extra: dict[str, Any] = {
+            "seam": "post_gm_updates",
+            "source": source,
+            "affected_domains": domains,
+            "derived_from_model_or_post_emission": bool(derived_from_model_or_post_emission),
+            "authority": authority,
+        }
+        extra.update(_post_gm_adoption_classification(operation))
+        if scene_id:
+            extra["scene_id"] = str(scene_id)
+        if isinstance(resolution, dict):
+            kind = resolution.get("kind")
+            if kind is not None:
+                extra["resolution"] = {"kind": str(kind)}
+        for key, value in metadata.items():
+            if isinstance(value, (bool, int)) or value is None:
+                extra[str(key)] = value
+            elif key == "adoption_status" and value in {"authoritative_adopted", "rejected"}:
+                extra[str(key)] = value
+            elif key == "gateway_decision" and value in {
+                "allow_legacy_behavior",
+                "allow_validated_legacy_scene_update",
+                "reject_unsafe_scene_update",
+                "allow_validated_legacy_world_updates",
+                "reject_unsafe_world_updates",
+                "allow_validated_legacy_emergent_actor_adoption",
+                "reject_unsafe_emergent_actor_adoption",
+                "allow_validated_legacy_social_lead_supplement",
+                "reject_unsafe_social_lead_supplement",
+            }:
+                extra[str(key)] = value
+            elif key == "gateway_mode" and value == "observe_only":
+                extra[str(key)] = value
+            elif key in {"reason_codes", "validation_reason_codes"} and isinstance(value, list):
+                safe_codes = [str(code) for code in value if isinstance(code, str)]
+                extra[str(key)] = safe_codes[:16]
+            elif isinstance(value, (list, tuple, set)):
+                extra[str(key)] = len(value)
+            elif isinstance(value, dict):
+                extra[str(key)] = len(value)
+        append_debug_trace(
+            session,
+            build_state_mutation_trace(
+                domain=domains[0],
+                owner_module=__name__,
+                operation=operation,
+                extra=extra,
+            ),
+        )
+    except Exception:
+        return
+
+
 def _apply_post_gm_updates(
     gm: dict,
     scene: dict,
@@ -553,25 +1032,77 @@ def _apply_post_gm_updates(
     if gm.get('scene_update'):
         assert_owner_can_mutate_domain(__name__, SCENE_STATE, operation="apply_gm_scene_update_layers")
         assert_canon_immutable(scene)
-        su = gm['scene_update']
+        scene_update_validation = _validate_gm_scene_update_for_legacy_adoption(gm['scene_update'])
+        su = scene_update_validation.get("sanitized_scene_update") if scene_update_validation.get("allowed") else {}
         scene_id = str(scene.get('scene', {}).get('id') or session.get('active_scene_id') or '').strip()
-        overlay = get_runtime_scene_overlay(session, scene_id)
-        visible_add = overlay.setdefault('visible_facts_add', [])
-        for fact in su.get('visible_facts_add', []) or []:
-            if fact not in visible_add:
-                visible_add.append(fact)
-        mutations = overlay.setdefault('mutations', {})
-        discoverable_add = mutations.setdefault('discoverable_clues_add', [])
-        for clue in su.get('discoverable_clues_add', []) or []:
-            if clue not in discoverable_add:
-                discoverable_add.append(clue)
-        hidden_add = mutations.setdefault('hidden_facts_add', [])
-        for fact in su.get('hidden_facts_add', []) or []:
-            if fact not in hidden_add:
-                hidden_add.append(fact)
-        if su.get('mode'):
-            mutations['mode'] = su['mode']
-        scene = build_effective_scene(scene, overlay)
+        scene_update_gateway = _post_gm_adoption_gateway(
+            operation="apply_gm_scene_update_layers",
+            source="gm_structured_scene_update",
+            session=session,
+            scene_id=scene_id or None,
+            affected_domains=[SCENE_STATE, PLAYER_VISIBLE_STATE, HIDDEN_STATE],
+            proposed_payload_summary={
+                "visible_facts_add_count": scene_update_validation.get("visible_facts_add_count"),
+                "discoverable_clues_add_count": scene_update_validation.get("discoverable_clues_add_count"),
+                "hidden_facts_add_count": scene_update_validation.get("hidden_facts_add_count"),
+                "mode_present": scene_update_validation.get("mode_present"),
+                "raw_top_level_key_count": scene_update_validation.get("top_level_key_count"),
+                "raw_unknown_key_count": scene_update_validation.get("unknown_key_count"),
+            },
+            branch_label="gm.scene_update",
+            classification=_post_gm_adoption_classification("apply_gm_scene_update_layers"),
+        )
+        scene_update_gateway_trace = scene_update_gateway.get("trace_metadata") if isinstance(scene_update_gateway, dict) else {}
+        if scene_update_validation.get("allowed"):
+            scene_update_gateway_trace = {
+                **scene_update_gateway_trace,
+                "gateway_decision": "allow_validated_legacy_scene_update",
+            }
+            adoption_status = "authoritative_adopted"
+        else:
+            scene_update_gateway_trace = {
+                **scene_update_gateway_trace,
+                "gateway_decision": "reject_unsafe_scene_update",
+            }
+            adoption_status = "rejected"
+        _record_post_gm_mutation_trace(
+            session,
+            operation="apply_gm_scene_update_layers",
+            source="gm_structured_scene_update",
+            affected_domains=[SCENE_STATE, PLAYER_VISIBLE_STATE, HIDDEN_STATE],
+            derived_from_model_or_post_emission=True,
+            authority="authoritative",
+            scene_id=scene_id or None,
+            resolution=resolution,
+            adoption_status=adoption_status,
+            visible_facts_add_count=scene_update_validation.get("visible_facts_add_count"),
+            discoverable_clues_add_count=scene_update_validation.get("discoverable_clues_add_count"),
+            hidden_facts_add_count=scene_update_validation.get("hidden_facts_add_count"),
+            mode_present=scene_update_validation.get("mode_present"),
+            validation_reason_codes=scene_update_validation.get("reason_codes"),
+            raw_top_level_key_count=scene_update_validation.get("top_level_key_count"),
+            raw_recognized_key_count=scene_update_validation.get("recognized_key_count"),
+            raw_unknown_key_count=scene_update_validation.get("unknown_key_count"),
+            **scene_update_gateway_trace,
+        )
+        if scene_update_validation.get("allowed"):
+            overlay = get_runtime_scene_overlay(session, scene_id)
+            visible_add = overlay.setdefault('visible_facts_add', [])
+            for fact in su.get('visible_facts_add', []) or []:
+                if fact not in visible_add:
+                    visible_add.append(fact)
+            mutations = overlay.setdefault('mutations', {})
+            discoverable_add = mutations.setdefault('discoverable_clues_add', [])
+            for clue in su.get('discoverable_clues_add', []) or []:
+                if clue not in discoverable_add:
+                    discoverable_add.append(clue)
+            hidden_add = mutations.setdefault('hidden_facts_add', [])
+            for fact in su.get('hidden_facts_add', []) or []:
+                if fact not in hidden_add:
+                    hidden_add.append(fact)
+            if su.get('mode'):
+                mutations['mode'] = su['mode']
+            scene = build_effective_scene(scene, overlay)
 
     # Scene-transition ownership invariant:
     # GPT transition proposals remain advisory only; authoritative transitions are
@@ -582,6 +1113,19 @@ def _apply_post_gm_updates(
     if gm.get('activate_scene_id'):
         ignored_transition_proposals.append('activate_scene_id')
     if ignored_transition_proposals:
+        _record_post_gm_mutation_trace(
+            session,
+            operation="ignore_gm_transition_proposal",
+            source="gm_transition_proposal_ignored",
+            affected_domains=[SCENE_STATE],
+            derived_from_model_or_post_emission=True,
+            authority="advisory-only",
+            scene_id=str(scene.get('scene', {}).get('id') or session.get('active_scene_id') or '').strip() or None,
+            resolution=resolution,
+            proposal_count=len(ignored_transition_proposals),
+            has_new_scene_draft='new_scene_draft' in ignored_transition_proposals,
+            has_activate_scene_id='activate_scene_id' in ignored_transition_proposals,
+        )
         dbg = gm.get('debug_notes') if isinstance(gm.get('debug_notes'), str) else ''
         reason = 'advisory_only:' + ','.join(ignored_transition_proposals)
         gm['debug_notes'] = (dbg + ' | ' if dbg else '') + reason
@@ -589,22 +1133,95 @@ def _apply_post_gm_updates(
     if gm.get('world_updates'):
         assert_owner_can_mutate_domain(__name__, WORLD_STATE, operation="apply_gm_world_updates")
         assert_canon_immutable(scene)
-        normalized_wu = normalize_runtime_world_updates(gm['world_updates'])
-        new_events: list = []
-        for ev in normalized_wu.get('append_events') or []:
-            if isinstance(ev, dict) and ev.get('type') == 'note' and isinstance(ev.get('text'), str):
-                new_events.append({'type': 'gm_event', 'text': ev['text']})
-            elif isinstance(ev, str) and ev.strip():
-                new_events.append({'type': 'gm_event', 'text': ev.strip()})
-            else:
-                new_events.append(ev)
-        normalized_wu['append_events'] = new_events
         scene_id = str(scene.get('scene', {}).get('id') or '').strip() or None
-        apply_normalized_world_updates(world, normalized_wu, session=session, scene_id=scene_id)
+        world_update_validation = _validate_gm_world_updates_for_legacy_adoption(gm['world_updates'])
+        if world_update_validation.get("allowed"):
+            normalized_wu = normalize_runtime_world_updates(world_update_validation.get("sanitized_world_updates"))
+            new_events: list = []
+            for ev in normalized_wu.get('append_events') or []:
+                if isinstance(ev, dict) and ev.get('type') == 'note' and isinstance(ev.get('text'), str):
+                    new_events.append({'type': 'gm_event', 'text': ev['text']})
+                elif isinstance(ev, str) and ev.strip():
+                    new_events.append({'type': 'gm_event', 'text': ev.strip()})
+                else:
+                    new_events.append(ev)
+            normalized_wu['append_events'] = new_events
+        else:
+            normalized_wu = {}
+        world_updates_gateway = _post_gm_adoption_gateway(
+            operation="apply_gm_world_updates",
+            source="gm_structured_world_updates",
+            session=session,
+            scene_id=scene_id,
+            affected_domains=[WORLD_STATE],
+            proposed_payload_summary={
+                "update_field_count": len(normalized_wu) if isinstance(normalized_wu, dict) else 0,
+                "append_events_count": len(normalized_wu.get('append_events') or []) if isinstance(normalized_wu, dict) else 0,
+                "raw_top_level_key_count": world_update_validation.get("top_level_key_count"),
+                "raw_unknown_key_count": world_update_validation.get("unknown_key_count"),
+            },
+            branch_label="gm.world_updates",
+            classification=_post_gm_adoption_classification("apply_gm_world_updates"),
+        )
+        world_updates_gateway_trace = world_updates_gateway.get("trace_metadata") if isinstance(world_updates_gateway, dict) else {}
+        if world_update_validation.get("allowed"):
+            world_updates_gateway_trace = {
+                **world_updates_gateway_trace,
+                "gateway_decision": "allow_validated_legacy_world_updates",
+            }
+            adoption_status = "authoritative_adopted"
+        else:
+            world_updates_gateway_trace = {
+                **world_updates_gateway_trace,
+                "gateway_decision": "reject_unsafe_world_updates",
+            }
+            adoption_status = "rejected"
+        _record_post_gm_mutation_trace(
+            session,
+            operation="apply_gm_world_updates",
+            source="gm_structured_world_updates",
+            affected_domains=[WORLD_STATE],
+            derived_from_model_or_post_emission=True,
+            authority="authoritative",
+            scene_id=scene_id,
+            resolution=resolution,
+            adoption_status=adoption_status,
+            update_field_count=len(normalized_wu) if isinstance(normalized_wu, dict) else 0,
+            append_events_count=len(normalized_wu.get('append_events') or []) if isinstance(normalized_wu, dict) else 0,
+            validation_reason_codes=world_update_validation.get("reason_codes"),
+            raw_top_level_key_count=world_update_validation.get("top_level_key_count"),
+            raw_recognized_key_count=world_update_validation.get("recognized_key_count"),
+            raw_unknown_key_count=world_update_validation.get("unknown_key_count"),
+            **world_updates_gateway_trace,
+        )
+        if world_update_validation.get("allowed"):
+            apply_normalized_world_updates(world, normalized_wu, session=session, scene_id=scene_id)
 
     if not gm.get("_player_facing_emission_finalized"):
+        _record_post_gm_mutation_trace(
+            session,
+            operation="apply_repeated_description_guard",
+            source="post_emission_repetition_guard",
+            affected_domains=[PLAYER_VISIBLE_STATE, SCENE_STATE],
+            derived_from_model_or_post_emission=True,
+            authority="publication-only",
+            scene_id=str(scene['scene']['id'] or '').strip() or None,
+            resolution=resolution,
+            player_text_present=isinstance(gm.get('player_facing_text'), str) and bool(gm.get('player_facing_text')),
+        )
         apply_repeated_description_guard(gm, session, scene['scene']['id'])
         if not _session_ongoing_social_exchange(session):
+            _record_post_gm_mutation_trace(
+                session,
+                operation="update_scene_momentum_runtime",
+                source="post_emission_scene_momentum",
+                affected_domains=[SCENE_STATE],
+                derived_from_model_or_post_emission=True,
+                authority="telemetry-only",
+                scene_id=str(scene['scene']['id'] or '').strip() or None,
+                resolution=resolution,
+                social_exchange_active=False,
+            )
             update_scene_momentum_runtime(session, scene['scene']['id'], gm)
 
     surfaced_in_text: list = []
@@ -612,19 +1229,85 @@ def _apply_post_gm_updates(
         from game.gm import detect_surfaced_clues  # local import to avoid cycles
         for clue_text in detect_surfaced_clues(gm['player_facing_text'], scene):
             surfaced_in_text.append(clue_text)
+        _record_post_gm_mutation_trace(
+            session,
+            operation="detect_surfaced_clues",
+            source="post_emission_surfaced_clue_telemetry",
+            affected_domains=[PLAYER_VISIBLE_STATE],
+            derived_from_model_or_post_emission=True,
+            authority="telemetry-only",
+            scene_id=str(scene['scene']['id'] or '').strip() or None,
+            resolution=resolution,
+            surfaced_clue_count=len(surfaced_in_text),
+            player_text_present=True,
+        )
 
     narration_social_leads: list[str] = []
-    ptext = gm.get('player_facing_text') if isinstance(gm.get('player_facing_text'), str) else ''
-    if resolution and isinstance(resolution, dict) and isinstance(ptext, str) and ptext.strip():
-        narration_social_leads.extend(
-            apply_social_narration_lead_supplements(
-                session,
-                scene['scene']['id'],
-                world,
-                resolution,
-                ptext.strip(),
-                scene,
+    ptext = gm.get('player_facing_text') if isinstance(gm, dict) else None
+    if resolution is not None or ptext is not None:
+        social_lead_validation = _validate_post_emission_social_lead_supplement_adoption(
+            session=session,
+            world=world,
+            scene=scene,
+            resolution=resolution,
+            narration_text=ptext,
+        )
+        social_lead_gateway = _post_gm_adoption_gateway(
+            operation="apply_social_narration_lead_supplements",
+            source="post_emission_social_lead_supplement",
+            session=session,
+            scene_id=str(scene.get("scene", {}).get("id") or "").strip() if isinstance(scene, dict) and isinstance(scene.get("scene"), dict) else None,
+            affected_domains=[WORLD_STATE, SCENE_STATE, PLAYER_VISIBLE_STATE],
+            proposed_payload_summary={
+                "narration_present": social_lead_validation.get("narration_present"),
+                "scene_id_present": social_lead_validation.get("scene_id_present"),
+                "resolution_present": social_lead_validation.get("resolution_present"),
+            },
+            branch_label="apply_social_narration_lead_supplements",
+            classification=_post_gm_adoption_classification("apply_social_narration_lead_supplements"),
+        )
+        social_lead_gateway_trace = social_lead_gateway.get("trace_metadata") if isinstance(social_lead_gateway, dict) else {}
+        if social_lead_validation.get("allowed"):
+            social_lead_gateway_trace = {
+                **social_lead_gateway_trace,
+                "gateway_decision": "allow_validated_legacy_social_lead_supplement",
+            }
+            adoption_status = "authoritative_adopted"
+            narration_social_leads.extend(
+                apply_social_narration_lead_supplements(
+                    session,
+                    scene['scene']['id'],
+                    world,
+                    resolution,
+                    ptext.strip(),
+                    scene,
+                )
             )
+        else:
+            social_lead_gateway_trace = {
+                **social_lead_gateway_trace,
+                "gateway_decision": "reject_unsafe_social_lead_supplement",
+            }
+            adoption_status = "rejected"
+        _record_post_gm_mutation_trace(
+            session,
+            operation="apply_social_narration_lead_supplements",
+            source="post_emission_social_lead_supplement",
+            affected_domains=[WORLD_STATE, SCENE_STATE, PLAYER_VISIBLE_STATE],
+            derived_from_model_or_post_emission=True,
+            authority="authoritative",
+            scene_id=str(scene.get("scene", {}).get("id") or "").strip() if isinstance(scene, dict) and isinstance(scene.get("scene"), dict) else None,
+            resolution=resolution if isinstance(resolution, dict) else None,
+            adoption_status=adoption_status,
+            validation_reason_codes=social_lead_validation.get("reason_codes"),
+            sanitized_narration_available=social_lead_validation.get("sanitized_narration_available"),
+            scene_id_present=social_lead_validation.get("scene_id_present"),
+            resolution_present=social_lead_validation.get("resolution_present"),
+            narration_present=social_lead_validation.get("narration_present"),
+            narration_oversized=social_lead_validation.get("narration_oversized"),
+            narration_social_leads_count=len(narration_social_leads),
+            player_text_present=social_lead_validation.get("narration_present"),
+            **social_lead_gateway_trace,
         )
 
     if resolution and isinstance(resolution, dict):
@@ -636,6 +1319,17 @@ def _apply_post_gm_updates(
             gm_output=gm if isinstance(gm, dict) else None,
             world=world,
         )
+        _record_post_gm_mutation_trace(
+            session,
+            operation="ensure_scene_has_minimum_actionable_lead",
+            source="post_emission_minimum_actionable_lead",
+            affected_domains=[WORLD_STATE, SCENE_STATE, PLAYER_VISIBLE_STATE],
+            derived_from_model_or_post_emission=True,
+            authority="authoritative",
+            scene_id=str(scene['scene']['id'] or '').strip() or None,
+            resolution=resolution,
+            gm_output_present=isinstance(gm, dict),
+        )
         if isinstance(gm, dict):
             gm = apply_spoken_state_refinement_cash_out(
                 gm,
@@ -644,18 +1338,79 @@ def _apply_post_gm_updates(
                 world=world,
                 scene_id=str(scene["scene"]["id"] or "").strip(),
             )
+            _record_post_gm_mutation_trace(
+                session,
+                operation="apply_spoken_state_refinement_cash_out",
+                source="post_emission_spoken_state_refinement",
+                affected_domains=[INTERACTION_STATE, SCENE_STATE],
+                derived_from_model_or_post_emission=True,
+                authority="authoritative",
+                scene_id=str(scene["scene"]["id"] or "").strip() or None,
+                resolution=resolution,
+                gm_output_present=True,
+            )
 
     emergent_debug = {
         "emergent_actor_enrolled": False,
         "emergent_actor_id": None,
         "emergent_actor_source_text": None,
     }
-    if isinstance(session, dict) and isinstance(scene, dict) and isinstance(scene.get("scene"), dict):
-        narr = gm.get("player_facing_text") if isinstance(gm.get("player_facing_text"), str) else ""
-        emergent_debug = apply_conservative_emergent_enrollment_from_gm_output(
+    if isinstance(session, dict):
+        narr = gm.get("player_facing_text") if isinstance(gm.get("player_facing_text"), str) else gm.get("player_facing_text")
+        emergent_validation = _validate_post_emission_emergent_actor_adoption(
             session=session,
             scene=scene,
-            narration_text=narr.strip() or None,
+            narration_text=narr,
+        )
+        emergent_gateway = _post_gm_adoption_gateway(
+            operation="apply_conservative_emergent_enrollment_from_gm_output",
+            source="post_emission_emergent_actor_enrollment",
+            session=session,
+            scene_id=str(scene.get("scene", {}).get("id") or "").strip() if isinstance(scene, dict) and isinstance(scene.get("scene"), dict) else None,
+            affected_domains=[SCENE_STATE, INTERACTION_STATE],
+            proposed_payload_summary={
+                "narration_present": emergent_validation.get("narration_present"),
+                "scene_id_present": emergent_validation.get("scene_id_present"),
+            },
+            branch_label="apply_conservative_emergent_enrollment_from_gm_output",
+            classification=_post_gm_adoption_classification("apply_conservative_emergent_enrollment_from_gm_output"),
+        )
+        emergent_gateway_trace = emergent_gateway.get("trace_metadata") if isinstance(emergent_gateway, dict) else {}
+        if emergent_validation.get("allowed"):
+            emergent_gateway_trace = {
+                **emergent_gateway_trace,
+                "gateway_decision": "allow_validated_legacy_emergent_actor_adoption",
+            }
+            adoption_status = "authoritative_adopted"
+            emergent_debug = apply_conservative_emergent_enrollment_from_gm_output(
+                session=session,
+                scene=scene,
+                narration_text=narr.strip() or None,
+            )
+        else:
+            emergent_gateway_trace = {
+                **emergent_gateway_trace,
+                "gateway_decision": "reject_unsafe_emergent_actor_adoption",
+            }
+            adoption_status = "rejected"
+        _record_post_gm_mutation_trace(
+            session,
+            operation="apply_conservative_emergent_enrollment_from_gm_output",
+            source="post_emission_emergent_actor_enrollment",
+            affected_domains=[SCENE_STATE, INTERACTION_STATE],
+            derived_from_model_or_post_emission=True,
+            authority="authoritative",
+            scene_id=str(scene.get("scene", {}).get("id") or "").strip() if isinstance(scene, dict) and isinstance(scene.get("scene"), dict) else None,
+            resolution=resolution,
+            adoption_status=adoption_status,
+            validation_reason_codes=emergent_validation.get("reason_codes"),
+            sanitized_narration_available=emergent_validation.get("sanitized_narration_available"),
+            scene_id_present=emergent_validation.get("scene_id_present"),
+            narration_present=emergent_validation.get("narration_present"),
+            narration_oversized=emergent_validation.get("narration_oversized"),
+            emergent_actor_enrolled=bool(emergent_debug.get("emergent_actor_enrolled")),
+            emergent_actor_id_present=bool(emergent_debug.get("emergent_actor_id")),
+            **emergent_gateway_trace,
         )
     session["emergent_actor_debug"] = emergent_debug
 

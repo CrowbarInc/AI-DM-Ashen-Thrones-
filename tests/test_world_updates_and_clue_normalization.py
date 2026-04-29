@@ -156,6 +156,17 @@ def test_gpt_narration_surfacing_does_not_mutate_clue_state():
     assert surfaced == ["A coded mark is carved beneath the bridge rail."]
     assert session_after.get("clue_knowledge") == {}
     assert (session_after.get("scene_runtime", {}).get("gate", {}).get("discovered_clue_ids") or []) == []
+    telemetry_trace = next(
+        t for t in session_after["debug_traces"] if t.get("source") == "post_emission_surfaced_clue_telemetry"
+    )
+    assert telemetry_trace["provenance_class"] == "telemetry_only"
+    assert telemetry_trace["adoption_status"] == "telemetry_only"
+    assert telemetry_trace["risk_class"] == "low"
+    assert telemetry_trace["needs_gateway"] is False
+    assert telemetry_trace["proposed_future_owner"] == "telemetry_only"
+    assert "gateway_present" not in telemetry_trace
+    assert telemetry_trace["surfaced_clue_count"] == 1
+    assert "coded mark is carved" not in str(telemetry_trace)
 
 
 def test_apply_post_gm_updates_scene_update_runs_under_api_scene_state_guard():
@@ -194,6 +205,359 @@ def test_apply_post_gm_updates_scene_update_runs_under_api_scene_state_guard():
     assert "New fact from GM layer." in facts
     assert scene["scene"]["visible_facts"] == ["Existing."]
     assert session["runtime_scene_overlays"]["gate"]["visible_facts_add"] == ["New fact from GM layer."]
+
+
+def test_apply_post_gm_updates_records_compact_scene_update_trace():
+    scene = {
+        "scene": {
+            "id": "gate",
+            "visible_facts": [],
+            "discoverable_clues": [],
+            "hidden_facts": [],
+            "mode": "exploration",
+            "exits": [],
+            "enemies": [],
+        }
+    }
+    session = {"scene_runtime": {}, "runtime_scene_overlays": {}, "clue_knowledge": {}}
+    world = {"event_log": []}
+    combat = {"in_combat": False}
+    gm = {
+        "player_facing_text": "The private passphrase is amber glass.",
+        "tags": [],
+        "scene_update": {
+            "visible_facts_add": ["A new public fact."],
+            "discoverable_clues_add": ["A compact clue."],
+            "hidden_facts_add": ["A hidden private fact."],
+        },
+        "activate_scene_id": None,
+        "new_scene_draft": None,
+        "world_updates": None,
+        "suggested_action": None,
+        "debug_notes": "",
+    }
+
+    _apply_post_gm_updates(gm, scene, session, world, combat, resolution={"kind": "observe"})
+
+    scene_update_trace = next(
+        t for t in session["debug_traces"] if t.get("source") == "gm_structured_scene_update"
+    )
+    assert scene_update_trace["seam"] == "post_gm_updates"
+    assert scene_update_trace["operation"] == "apply_gm_scene_update_layers"
+    assert scene_update_trace["authority"] == "authoritative"
+    assert scene_update_trace["affected_domains"] == ["scene_state", "player_visible_state", "hidden_state"]
+    assert scene_update_trace["provenance_class"] == "model_structured_proposal"
+    assert scene_update_trace["adoption_status"] == "authoritative_adopted"
+    assert scene_update_trace["risk_class"] == "high"
+    assert scene_update_trace["needs_gateway"] is True
+    assert scene_update_trace["proposed_future_owner"] == "post_gm_adoption_gateway"
+    assert scene_update_trace["gateway_present"] is True
+    assert scene_update_trace["gateway_decision"] == "allow_validated_legacy_scene_update"
+    assert scene_update_trace["gateway_mode"] == "observe_only"
+    assert scene_update_trace["future_blocking_candidate"] is True
+    assert scene_update_trace["validation_reason_codes"] == ["gm_scene_update:legacy_shape_allowed"]
+    assert scene_update_trace["scene_id"] == "gate"
+    assert scene_update_trace["resolution"] == {"kind": "observe"}
+    assert scene_update_trace["visible_facts_add_count"] == 1
+    assert scene_update_trace["discoverable_clues_add_count"] == 1
+    assert scene_update_trace["hidden_facts_add_count"] == 1
+    assert "amber glass" not in str(scene_update_trace)
+    assert "A hidden private fact." not in str(scene_update_trace)
+
+
+def test_apply_post_gm_updates_scene_update_preserves_discoverable_and_hidden_adds():
+    scene = {
+        "scene": {
+            "id": "gate",
+            "visible_facts": [],
+            "discoverable_clues": [],
+            "hidden_facts": [],
+            "mode": "exploration",
+            "exits": [],
+            "enemies": [],
+        }
+    }
+    session = {"scene_runtime": {}, "runtime_scene_overlays": {}, "clue_knowledge": {}}
+    world = {"event_log": []}
+    combat = {"in_combat": False}
+    gm = {
+        "player_facing_text": "",
+        "tags": [],
+        "scene_update": {
+            "discoverable_clues_add": ["A chalk mark points toward the sluice."],
+            "hidden_facts_add": ["The lock answers to the old bell sequence."],
+        },
+        "activate_scene_id": None,
+        "new_scene_draft": None,
+        "world_updates": None,
+        "suggested_action": None,
+        "debug_notes": "",
+    }
+
+    scene_out, _, _, _, _ = _apply_post_gm_updates(gm, scene, session, world, combat)
+
+    overlay_mutations = session["runtime_scene_overlays"]["gate"]["mutations"]
+    assert overlay_mutations["discoverable_clues_add"] == ["A chalk mark points toward the sluice."]
+    assert overlay_mutations["hidden_facts_add"] == ["The lock answers to the old bell sequence."]
+    assert "A chalk mark points toward the sluice." in scene_out["scene"]["discoverable_clues"]
+    trace = next(t for t in session["debug_traces"] if t.get("source") == "gm_structured_scene_update")
+    assert trace["gateway_decision"] == "allow_validated_legacy_scene_update"
+    assert trace["discoverable_clues_add_count"] == 1
+    assert trace["hidden_facts_add_count"] == 1
+    assert "old bell sequence" not in str(trace)
+
+
+def test_apply_post_gm_updates_rejects_non_dict_scene_update_without_overlay_mutation():
+    scene = {
+        "scene": {
+            "id": "gate",
+            "visible_facts": [],
+            "discoverable_clues": [],
+            "hidden_facts": [],
+            "mode": "exploration",
+            "exits": [],
+            "enemies": [],
+        }
+    }
+    session = {"scene_runtime": {}, "runtime_scene_overlays": {}, "clue_knowledge": {}}
+    world = {"event_log": []}
+    combat = {"in_combat": False}
+    gm = {
+        "player_facing_text": "Do not copy this narration.",
+        "tags": [],
+        "scene_update": "A hidden private fact should not become overlay state.",
+        "activate_scene_id": None,
+        "new_scene_draft": None,
+        "world_updates": None,
+        "suggested_action": None,
+        "debug_notes": "",
+    }
+
+    scene_out, _, _, _, _ = _apply_post_gm_updates(gm, scene, session, world, combat)
+
+    assert scene_out["scene"]["visible_facts"] == []
+    overlay = (session.get("runtime_scene_overlays") or {}).get("gate") or {}
+    assert overlay.get("visible_facts_add") == []
+    assert overlay.get("mutations") == {}
+    trace = next(t for t in session["debug_traces"] if t.get("source") == "gm_structured_scene_update")
+    assert trace["adoption_status"] == "rejected"
+    assert trace["gateway_decision"] == "reject_unsafe_scene_update"
+    assert trace["validation_reason_codes"] == ["gm_scene_update:not_a_dict"]
+    assert "hidden private fact" not in str(trace)
+    assert "Do not copy this narration." not in str(trace)
+
+
+def test_apply_post_gm_updates_rejects_nested_scene_update_fact_payload():
+    scene = {
+        "scene": {
+            "id": "gate",
+            "visible_facts": [],
+            "discoverable_clues": [],
+            "hidden_facts": [],
+            "mode": "exploration",
+            "exits": [],
+            "enemies": [],
+        }
+    }
+    session = {"scene_runtime": {}, "runtime_scene_overlays": {}, "clue_knowledge": {}}
+    world = {"event_log": []}
+    combat = {"in_combat": False}
+    gm = {
+        "player_facing_text": "",
+        "tags": [],
+        "scene_update": {"visible_facts_add": [{"text": "Nested fact should be rejected."}]},
+        "activate_scene_id": None,
+        "new_scene_draft": None,
+        "world_updates": None,
+        "suggested_action": None,
+        "debug_notes": "",
+    }
+
+    scene_out, _, _, _, _ = _apply_post_gm_updates(gm, scene, session, world, combat)
+
+    assert scene_out["scene"]["visible_facts"] == []
+    overlay = (session.get("runtime_scene_overlays") or {}).get("gate") or {}
+    assert overlay.get("visible_facts_add") == []
+    assert overlay.get("mutations") == {}
+    trace = next(t for t in session["debug_traces"] if t.get("source") == "gm_structured_scene_update")
+    assert trace["adoption_status"] == "rejected"
+    assert trace["gateway_decision"] == "reject_unsafe_scene_update"
+    assert "gm_scene_update:visible_facts_add:non_string_entry" in trace["validation_reason_codes"]
+    assert "Nested fact" not in str(trace)
+
+
+def test_apply_post_gm_updates_records_world_update_trace_without_changing_updates():
+    scene = {
+        "scene": {
+            "id": "gate",
+            "visible_facts": [],
+            "discoverable_clues": [],
+            "hidden_facts": [],
+            "mode": "exploration",
+            "exits": [],
+            "enemies": [],
+        }
+    }
+    session = {"scene_runtime": {}, "runtime_scene_overlays": {}, "clue_knowledge": {}}
+    world = {"event_log": []}
+    combat = {"in_combat": False}
+    gm = {
+        "player_facing_text": "No payload text should be copied.",
+        "tags": [],
+        "scene_update": None,
+        "activate_scene_id": None,
+        "new_scene_draft": None,
+        "world_updates": {"append_events": [{"type": "note", "text": "World event text."}]},
+        "suggested_action": None,
+        "debug_notes": "",
+    }
+
+    _apply_post_gm_updates(gm, scene, session, world, combat)
+
+    assert world["event_log"] == [{"type": "gm_event", "text": "World event text."}]
+    world_update_trace = next(
+        t for t in session["debug_traces"] if t.get("source") == "gm_structured_world_updates"
+    )
+    assert world_update_trace["seam"] == "post_gm_updates"
+    assert world_update_trace["operation"] == "apply_gm_world_updates"
+    assert world_update_trace["authority"] == "authoritative"
+    assert world_update_trace["affected_domains"] == ["world_state"]
+    assert world_update_trace["provenance_class"] == "model_structured_proposal"
+    assert world_update_trace["adoption_status"] == "authoritative_adopted"
+    assert world_update_trace["risk_class"] == "high"
+    assert world_update_trace["needs_gateway"] is True
+    assert world_update_trace["proposed_future_owner"] == "post_gm_adoption_gateway"
+    assert world_update_trace["gateway_present"] is True
+    assert world_update_trace["gateway_decision"] == "allow_validated_legacy_world_updates"
+    assert world_update_trace["gateway_mode"] == "observe_only"
+    assert world_update_trace["future_blocking_candidate"] is True
+    assert world_update_trace["validation_reason_codes"] == ["gm_world_updates:legacy_shape_allowed"]
+    assert world_update_trace["append_events_count"] == 1
+    assert "No payload text should be copied." not in str(world_update_trace)
+    assert "World event text." not in str(world_update_trace)
+
+
+def test_apply_post_gm_updates_rejects_non_dict_world_updates_without_mutation():
+    scene = {
+        "scene": {
+            "id": "gate",
+            "visible_facts": [],
+            "discoverable_clues": [],
+            "hidden_facts": [],
+            "mode": "exploration",
+            "exits": [],
+            "enemies": [],
+        }
+    }
+    session = {"scene_runtime": {}, "runtime_scene_overlays": {}, "clue_knowledge": {}}
+    world = {"event_log": []}
+    combat = {"in_combat": False}
+    gm = {
+        "player_facing_text": "",
+        "tags": [],
+        "scene_update": None,
+        "activate_scene_id": None,
+        "new_scene_draft": None,
+        "world_updates": "The hidden cult controls the docks.",
+        "suggested_action": None,
+        "debug_notes": "",
+    }
+
+    _apply_post_gm_updates(gm, scene, session, world, combat)
+
+    assert world["event_log"] == []
+    world_update_trace = next(
+        t for t in session["debug_traces"] if t.get("source") == "gm_structured_world_updates"
+    )
+    assert world_update_trace["adoption_status"] == "rejected"
+    assert world_update_trace["gateway_decision"] == "reject_unsafe_world_updates"
+    assert world_update_trace["validation_reason_codes"] == ["gm_world_updates:not_a_dict"]
+    assert world_update_trace["append_events_count"] == 0
+    assert "hidden cult" not in str(world_update_trace)
+
+
+def test_apply_post_gm_updates_rejects_unknown_prose_world_update_payload():
+    scene = {
+        "scene": {
+            "id": "gate",
+            "visible_facts": [],
+            "discoverable_clues": [],
+            "hidden_facts": [],
+            "mode": "exploration",
+            "exits": [],
+            "enemies": [],
+        }
+    }
+    session = {"scene_runtime": {}, "runtime_scene_overlays": {}, "clue_knowledge": {}}
+    world = {"event_log": []}
+    combat = {"in_combat": False}
+    gm = {
+        "player_facing_text": "",
+        "tags": [],
+        "scene_update": None,
+        "activate_scene_id": None,
+        "new_scene_draft": None,
+        "world_updates": {"hidden_facts": "The sealed vault is below the shrine."},
+        "suggested_action": None,
+        "debug_notes": "",
+    }
+
+    _apply_post_gm_updates(gm, scene, session, world, combat)
+
+    assert world["event_log"] == []
+    world_update_trace = next(
+        t for t in session["debug_traces"] if t.get("source") == "gm_structured_world_updates"
+    )
+    assert world_update_trace["adoption_status"] == "rejected"
+    assert world_update_trace["gateway_decision"] == "reject_unsafe_world_updates"
+    assert "gm_world_updates:unknown_keys_parked" in world_update_trace["validation_reason_codes"]
+    assert "gm_world_updates:unsafe_unknown_prose_key" in world_update_trace["validation_reason_codes"]
+    assert world_update_trace["raw_unknown_key_count"] == 1
+    assert "sealed vault" not in str(world_update_trace)
+
+
+def test_apply_post_gm_updates_records_transition_proposals_as_advisory_only():
+    scene = {
+        "scene": {
+            "id": "gate",
+            "visible_facts": [],
+            "discoverable_clues": [],
+            "hidden_facts": [],
+            "mode": "exploration",
+            "exits": [],
+            "enemies": [],
+        }
+    }
+    session = {"active_scene_id": "gate", "scene_runtime": {}, "runtime_scene_overlays": {}, "clue_knowledge": {}}
+    world = {"event_log": []}
+    combat = {"in_combat": False}
+    gm = {
+        "player_facing_text": "",
+        "tags": [],
+        "scene_update": None,
+        "activate_scene_id": "market",
+        "new_scene_draft": {"title": "Market"},
+        "world_updates": None,
+        "suggested_action": None,
+        "debug_notes": "",
+    }
+
+    _apply_post_gm_updates(gm, scene, session, world, combat)
+
+    assert session["active_scene_id"] == "gate"
+    proposal_trace = next(
+        t for t in session["debug_traces"] if t.get("source") == "gm_transition_proposal_ignored"
+    )
+    assert proposal_trace["authority"] == "advisory-only"
+    assert proposal_trace["provenance_class"] == "advisory_only"
+    assert proposal_trace["adoption_status"] == "advisory_ignored"
+    assert proposal_trace["risk_class"] == "low"
+    assert proposal_trace["needs_gateway"] is False
+    assert proposal_trace["proposed_future_owner"] == "no_change"
+    assert "gateway_present" not in proposal_trace
+    assert proposal_trace["proposal_count"] == 2
+    assert proposal_trace["has_new_scene_draft"] is True
+    assert proposal_trace["has_activate_scene_id"] is True
 
 
 def test_build_effective_scene_merges_overlay_without_mutating_canon():

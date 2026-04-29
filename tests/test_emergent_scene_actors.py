@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from game.campaign_state import create_fresh_session_document
+from game.api import _apply_post_gm_updates
 from game.interaction_context import (
     apply_conservative_emergent_enrollment_from_gm_output,
     assert_valid_speaker,
@@ -22,6 +23,20 @@ pytestmark = pytest.mark.unit
 
 def _scene(sid: str = "test_gate") -> dict:
     return {"scene": {"id": sid}}
+
+
+def _full_scene(sid: str = "test_gate", *, visible_facts: list[str] | None = None) -> dict:
+    return {
+        "scene": {
+            "id": sid,
+            "visible_facts": list(visible_facts or []),
+            "discoverable_clues": [],
+            "hidden_facts": [],
+            "mode": "exploration",
+            "exits": [],
+            "enemies": [],
+        }
+    }
 
 
 def test_enrolled_watcher_is_addressable_next_turn(monkeypatch):
@@ -111,6 +126,93 @@ def test_visible_fact_promotes_watcher_without_watcher_in_narration(monkeypatch)
     )
     assert debug["emergent_actor_enrolled"] is True
     assert debug["emergent_actor_id"] == "emergent_well_dressed_watcher"
+
+
+def test_post_gm_valid_emergent_actor_adoption_still_enrolls(monkeypatch):
+    world = {"npcs": []}
+    monkeypatch.setattr("game.storage.load_world", lambda: world)
+    session = create_fresh_session_document()
+    session["active_scene_id"] = "g"
+    session["scene_state"]["active_scene_id"] = "g"
+    scene = _full_scene(
+        "g",
+        visible_facts=["You notice a well-dressed watcher by the gate."],
+    )
+    gm = {
+        "player_facing_text": "The plaza is busy with merchants.",
+        "_player_facing_emission_finalized": True,
+    }
+
+    _apply_post_gm_updates(gm, scene, session, world, {"in_combat": False})
+
+    assert session["emergent_actor_debug"]["emergent_actor_enrolled"] is True
+    assert session["emergent_actor_debug"]["emergent_actor_id"] == "emergent_well_dressed_watcher"
+    trace = next(
+        t for t in session["debug_traces"] if t.get("source") == "post_emission_emergent_actor_enrollment"
+    )
+    assert trace["adoption_status"] == "authoritative_adopted"
+    assert trace["gateway_present"] is True
+    assert trace["gateway_decision"] == "allow_validated_legacy_emergent_actor_adoption"
+    assert trace["validation_reason_codes"] == ["emergent_actor_adoption:legacy_shape_allowed"]
+    assert trace["risk_class"] == "high"
+    assert trace["needs_gateway"] is True
+    assert "The plaza is busy with merchants." not in str(trace)
+
+
+def test_post_gm_non_string_emergent_narration_rejects_without_throwing(monkeypatch):
+    world = {"npcs": []}
+    monkeypatch.setattr("game.storage.load_world", lambda: world)
+    session = create_fresh_session_document()
+    session["active_scene_id"] = "g"
+    session["scene_state"]["active_scene_id"] = "g"
+    scene = _full_scene(
+        "g",
+        visible_facts=["You notice a well-dressed watcher by the gate."],
+    )
+    gm = {
+        "player_facing_text": {"text": "The watcher should not be adopted from this object."},
+        "_player_facing_emission_finalized": True,
+    }
+
+    _apply_post_gm_updates(gm, scene, session, world, {"in_combat": False})
+
+    assert session["emergent_actor_debug"]["emergent_actor_enrolled"] is False
+    trace = next(
+        t for t in session["debug_traces"] if t.get("source") == "post_emission_emergent_actor_enrollment"
+    )
+    assert trace["adoption_status"] == "rejected"
+    assert trace["gateway_decision"] == "reject_unsafe_emergent_actor_adoption"
+    assert trace["validation_reason_codes"] == ["emergent_actor_adoption:narration_not_string"]
+    assert "watcher should not be adopted" not in str(trace)
+
+
+def test_post_gm_oversized_emergent_narration_rejects_without_throwing(monkeypatch):
+    world = {"npcs": []}
+    monkeypatch.setattr("game.storage.load_world", lambda: world)
+    session = create_fresh_session_document()
+    session["active_scene_id"] = "g"
+    session["scene_state"]["active_scene_id"] = "g"
+    scene = _full_scene(
+        "g",
+        visible_facts=["You notice a well-dressed watcher by the gate."],
+    )
+    oversized = "Lord Calder watches from the balcony. " * 130
+    gm = {
+        "player_facing_text": oversized,
+        "_player_facing_emission_finalized": True,
+    }
+
+    _apply_post_gm_updates(gm, scene, session, world, {"in_combat": False})
+
+    assert session["emergent_actor_debug"]["emergent_actor_enrolled"] is False
+    trace = next(
+        t for t in session["debug_traces"] if t.get("source") == "post_emission_emergent_actor_enrollment"
+    )
+    assert trace["adoption_status"] == "rejected"
+    assert trace["gateway_decision"] == "reject_unsafe_emergent_actor_adoption"
+    assert trace["validation_reason_codes"] == ["emergent_actor_adoption:narration_oversized"]
+    assert trace["narration_oversized"] is True
+    assert "Lord Calder watches from the balcony." not in str(trace)
 
 
 def test_clear_emergent_on_scene_change(monkeypatch):
