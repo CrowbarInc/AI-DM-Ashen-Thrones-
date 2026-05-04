@@ -21,6 +21,7 @@ from __future__ import annotations
 from typing import Any
 
 from contextlib import asynccontextmanager
+from dataclasses import dataclass
 from pathlib import Path
 import inspect
 import json
@@ -101,6 +102,7 @@ from game.gm import (
     call_gpt,
     guard_gm_output,
     apply_response_policy_enforcement,
+    GM_METADATA_RESPONSE_POLICY_ENFORCEMENT_APPLIED,
     MAX_TARGETED_RETRY_ATTEMPTS,
     RETRY_FAILURE_PRIORITY,
     detect_retry_failures,
@@ -540,6 +542,9 @@ def _apply_authoritative_clues_from_resolution(
     )
 
 
+# Trace-only classification for post-GM mutation branches. These labels describe
+# provenance/risk and future ownership intent; allow/reject behavior still comes
+# from the branch validators below.
 _POST_GM_ADOPTION_CLASSIFICATIONS: dict[str, dict[str, Any]] = {
     "apply_gm_scene_update_layers": {
         "provenance_class": "model_structured_proposal",
@@ -654,7 +659,7 @@ _GM_SCENE_UPDATE_LIST_KEYS = frozenset(
 
 
 def _post_gm_adoption_classification(operation: str) -> dict[str, Any]:
-    """Closed-set adoption classification for post-GM mutation trace operations."""
+    """Closed-set trace classification for post-GM mutation operations."""
     classification = _POST_GM_ADOPTION_CLASSIFICATIONS.get(str(operation or ""))
     if classification is None:
         return {
@@ -698,12 +703,40 @@ def _gm_scene_update_strings_are_small(values: list[Any], *, limit: int = 500) -
     return all(isinstance(value, str) and len(value) <= limit for value in values)
 
 
+# Typed legacy adoption contracts for GM-structured scene/world updates only.
+# Intentionally local to this module—not a generalized effect system; narration-
+# derived branches (emergent actors, social leads) stay untyped here pending a
+# separate policy design.
+@dataclass(frozen=True)
+class PostGmWorldUpdatesEffect:
+    sanitized_world_updates: dict
+    append_events_count: int
+    update_field_count: int
+    validation_reason_codes: list[str]
+
+
+@dataclass(frozen=True)
+class PostGmSceneUpdateEffect:
+    sanitized_scene_update: dict
+    visible_facts_add_count: int
+    discoverable_clues_add_count: int
+    hidden_facts_add_count: int
+    mode_present: bool
+    validation_reason_codes: list[str]
+
+
 def _validate_gm_scene_update_for_legacy_adoption(raw_scene_update: Any) -> dict[str, Any]:
-    """Validate GM scene_update before preserving the legacy overlay mutation path."""
+    """Validate GM scene_update payload shape before preserving legacy overlay adoption.
+
+    This rejects malformed or unsafe shapes only. It intentionally does not make
+    broad gameplay-policy decisions about valid legacy scene update proposals.
+    """
     if not isinstance(raw_scene_update, dict):
+        rc = ["gm_scene_update:not_a_dict"]
         return {
             "allowed": False,
-            "reason_codes": ["gm_scene_update:not_a_dict"],
+            "reason_codes": rc,
+            "validation_reason_codes": rc,
             "sanitized_scene_update": None,
             "top_level_key_count": 0,
             "recognized_key_count": 0,
@@ -712,6 +745,7 @@ def _validate_gm_scene_update_for_legacy_adoption(raw_scene_update: Any) -> dict
             "discoverable_clues_add_count": 0,
             "hidden_facts_add_count": 0,
             "mode_present": False,
+            "effect": None,
         }
 
     reason_codes: list[str] = []
@@ -759,9 +793,22 @@ def _validate_gm_scene_update_for_legacy_adoption(raw_scene_update: Any) -> dict
     if allowed:
         reason_codes.append("gm_scene_update:legacy_shape_allowed")
 
+    effect: PostGmSceneUpdateEffect | None = None
+    if allowed:
+        sanitized_copy = dict(sanitized)
+        effect = PostGmSceneUpdateEffect(
+            sanitized_scene_update=sanitized_copy,
+            visible_facts_add_count=len(sanitized.get("visible_facts_add") or []),
+            discoverable_clues_add_count=len(sanitized.get("discoverable_clues_add") or []),
+            hidden_facts_add_count=len(sanitized.get("hidden_facts_add") or []),
+            mode_present=bool(sanitized.get("mode")),
+            validation_reason_codes=list(reason_codes),
+        )
+
     return {
         "allowed": allowed,
         "reason_codes": reason_codes,
+        "validation_reason_codes": reason_codes,
         "sanitized_scene_update": sanitized if allowed else None,
         "top_level_key_count": len(top_level_keys),
         "recognized_key_count": len([k for k in top_level_keys if k in _GM_SCENE_UPDATE_ALLOWED_KEYS]),
@@ -770,6 +817,7 @@ def _validate_gm_scene_update_for_legacy_adoption(raw_scene_update: Any) -> dict
         "discoverable_clues_add_count": len(sanitized.get("discoverable_clues_add") or []) if allowed else 0,
         "hidden_facts_add_count": len(sanitized.get("hidden_facts_add") or []) if allowed else 0,
         "mode_present": bool(sanitized.get("mode")) if allowed else False,
+        "effect": effect,
     }
 
 
@@ -779,7 +827,11 @@ def _validate_post_emission_emergent_actor_adoption(
     scene: Any,
     narration_text: Any,
 ) -> dict[str, Any]:
-    """Validate narration-derived emergent actor adoption before legacy enrollment."""
+    """Validate payload shape before legacy emergent actor enrollment.
+
+    Rejection here means the inputs are malformed or unsafe for the legacy helper,
+    not that narration-derived adoption is globally forbidden.
+    """
     reason_codes: list[str] = []
     scene_id = ""
     if not isinstance(session, dict):
@@ -824,7 +876,10 @@ def _validate_post_emission_social_lead_supplement_adoption(
     resolution: Any,
     narration_text: Any,
 ) -> dict[str, Any]:
-    """Validate narration-derived social lead supplement adoption before legacy helper call."""
+    """Validate payload shape before the legacy social lead supplement helper.
+
+    Valid legacy payloads remain allowed while semantic policy is still observed.
+    """
     reason_codes: list[str] = []
     scene_id = ""
     if not isinstance(session, dict):
@@ -866,18 +921,47 @@ def _validate_post_emission_social_lead_supplement_adoption(
     }
 
 
+def _post_gm_world_updates_effect_from_sanitized(
+    sanitized_world_updates: dict,
+    validation_reason_codes: list[str],
+) -> PostGmWorldUpdatesEffect:
+    normalized_wu = normalize_runtime_world_updates(sanitized_world_updates)
+    new_events: list = []
+    for ev in normalized_wu.get('append_events') or []:
+        if isinstance(ev, dict) and ev.get('type') == 'note' and isinstance(ev.get('text'), str):
+            new_events.append({'type': 'gm_event', 'text': ev['text']})
+        elif isinstance(ev, str) and ev.strip():
+            new_events.append({'type': 'gm_event', 'text': ev.strip()})
+        else:
+            new_events.append(ev)
+    normalized_wu['append_events'] = new_events
+    return PostGmWorldUpdatesEffect(
+        sanitized_world_updates=normalized_wu,
+        append_events_count=len(normalized_wu.get('append_events') or []),
+        update_field_count=len(normalized_wu),
+        validation_reason_codes=list(validation_reason_codes),
+    )
+
+
 def _validate_gm_world_updates_for_legacy_adoption(raw_world_updates: Any) -> dict[str, Any]:
-    """Validate GM world_updates before preserving the legacy normalize/apply path."""
+    """Validate GM world_updates payload shape before preserving legacy adoption.
+
+    This guards malformed or unsafe payload shapes; valid legacy world updates are
+    still allowed by design until a future gameplay policy layer exists.
+    """
     reason_codes: list[str] = []
     if not isinstance(raw_world_updates, dict):
+        rc = ["gm_world_updates:not_a_dict"]
         return {
             "allowed": False,
-            "reason_codes": ["gm_world_updates:not_a_dict"],
+            "reason_codes": rc,
+            "validation_reason_codes": rc,
             "sanitized_world_updates": None,
             "top_level_key_count": 0,
             "recognized_key_count": 0,
             "unknown_key_count": 0,
             "append_events_count": 0,
+            "effect": None,
         }
 
     top_level_keys = [k for k in raw_world_updates.keys() if isinstance(k, str)]
@@ -903,14 +987,27 @@ def _validate_gm_world_updates_for_legacy_adoption(raw_world_updates: Any) -> di
         reason_codes.append("gm_world_updates:legacy_shape_allowed")
 
     append_events = raw_world_updates.get("append_events")
+    sanitized_world_updates = dict(raw_world_updates) if allowed else None
+    effect = (
+        _post_gm_world_updates_effect_from_sanitized(sanitized_world_updates, reason_codes)
+        if sanitized_world_updates is not None
+        else None
+    )
+    append_events_count = (
+        effect.append_events_count
+        if effect is not None
+        else len(append_events) if isinstance(append_events, list) else 0
+    )
     return {
         "allowed": allowed,
         "reason_codes": reason_codes,
-        "sanitized_world_updates": dict(raw_world_updates) if allowed else None,
+        "validation_reason_codes": reason_codes,
+        "sanitized_world_updates": sanitized_world_updates,
         "top_level_key_count": len(top_level_keys),
         "recognized_key_count": len([k for k in top_level_keys if k in _GM_WORLD_UPDATES_LEGACY_ALLOWED_KEYS]),
         "unknown_key_count": len(unknown_keys),
-        "append_events_count": len(append_events) if isinstance(append_events, list) else 0,
+        "append_events_count": append_events_count,
+        "effect": effect,
     }
 
 
@@ -925,7 +1022,12 @@ def _post_gm_adoption_gateway(
     branch_label: str | None = None,
     classification: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
-    """Observe-only shell for high-risk post-GM adoption paths."""
+    """Trace the transitional post-GM adoption gateway.
+
+    Branch validators currently enforce payload-shape safety. The gateway records
+    routing/adoption decisions and future policy intent, but it does not yet make
+    broad semantic gameplay-policy decisions.
+    """
     resolved_classification = (
         dict(classification)
         if isinstance(classification, dict)
@@ -936,6 +1038,8 @@ def _post_gm_adoption_gateway(
         "trace_metadata": {
             "gateway_present": True,
             "gateway_decision": "allow_legacy_behavior",
+            "gateway_shape_validation_enforced": True,
+            "gateway_policy_enforcement": "observe_only",
             "gateway_mode": "observe_only",
             "future_blocking_candidate": bool(
                 resolved_classification.get("needs_gateway")
@@ -957,7 +1061,11 @@ def _record_post_gm_mutation_trace(
     resolution: dict | None = None,
     **metadata: Any,
 ) -> None:
-    """Best-effort trace for post-GM mutation seams; never affects turn execution."""
+    """Best-effort trace for post-GM mutation seams; never affects turn execution.
+
+    Metadata is deliberately allowlisted so traces contain counts/status/reasons,
+    not raw narration, scene_update payloads, world_updates payloads, or hidden facts.
+    """
     try:
         if not isinstance(session, dict):
             return
@@ -997,6 +1105,8 @@ def _record_post_gm_mutation_trace(
                 extra[str(key)] = value
             elif key == "gateway_mode" and value == "observe_only":
                 extra[str(key)] = value
+            elif key == "gateway_policy_enforcement" and value == "observe_only":
+                extra[str(key)] = value
             elif key in {"reason_codes", "validation_reason_codes"} and isinstance(value, list):
                 safe_codes = [str(code) for code in value if isinstance(code, str)]
                 extra[str(key)] = safe_codes[:16]
@@ -1017,6 +1127,14 @@ def _record_post_gm_mutation_trace(
         return
 
 
+def _gm_response_policy_enforcement_marker_present(gm: Any) -> bool:
+    return (
+        isinstance(gm, dict)
+        and isinstance(gm.get("metadata"), dict)
+        and gm["metadata"].get(GM_METADATA_RESPONSE_POLICY_ENFORCEMENT_APPLIED) is True
+    )
+
+
 def _apply_post_gm_updates(
     gm: dict,
     scene: dict,
@@ -1029,11 +1147,33 @@ def _apply_post_gm_updates(
     repeated description guard, detect surfaced clues (telemetry only), and narration-based social leads.
 
     Returns (scene, session, combat, surfaced_in_text, narration_social_lead_clue_texts)."""
+    if isinstance(session, dict) and isinstance(gm, dict):
+        if not _gm_response_policy_enforcement_marker_present(gm):
+            audit_scene_id = None
+            if isinstance(scene, dict):
+                audit_scene_id = str(scene.get("scene", {}).get("id") or "").strip() or None
+            _record_post_gm_mutation_trace(
+                session,
+                operation="observe_missing_response_policy_enforcement_marker",
+                source="post_gm_adoption_semantic_policy_audit",
+                affected_domains=[SCENE_STATE, WORLD_STATE],
+                derived_from_model_or_post_emission=True,
+                authority="telemetry-only",
+                scene_id=audit_scene_id,
+                resolution=resolution,
+                response_policy_enforcement_marker_present=False,
+                validation_reason_codes=["post_gm_audit:response_policy_enforcement_marker_missing"],
+            )
     if gm.get('scene_update'):
         assert_owner_can_mutate_domain(__name__, SCENE_STATE, operation="apply_gm_scene_update_layers")
         assert_canon_immutable(scene)
         scene_update_validation = _validate_gm_scene_update_for_legacy_adoption(gm['scene_update'])
-        su = scene_update_validation.get("sanitized_scene_update") if scene_update_validation.get("allowed") else {}
+        scene_update_effect = scene_update_validation.get("effect")
+        su = (
+            scene_update_effect.sanitized_scene_update
+            if isinstance(scene_update_effect, PostGmSceneUpdateEffect)
+            else {}
+        )
         scene_id = str(scene.get('scene', {}).get('id') or session.get('active_scene_id') or '').strip()
         scene_update_gateway = _post_gm_adoption_gateway(
             operation="apply_gm_scene_update_layers",
@@ -1079,13 +1219,13 @@ def _apply_post_gm_updates(
             discoverable_clues_add_count=scene_update_validation.get("discoverable_clues_add_count"),
             hidden_facts_add_count=scene_update_validation.get("hidden_facts_add_count"),
             mode_present=scene_update_validation.get("mode_present"),
-            validation_reason_codes=scene_update_validation.get("reason_codes"),
+            validation_reason_codes=scene_update_validation.get("validation_reason_codes"),
             raw_top_level_key_count=scene_update_validation.get("top_level_key_count"),
             raw_recognized_key_count=scene_update_validation.get("recognized_key_count"),
             raw_unknown_key_count=scene_update_validation.get("unknown_key_count"),
             **scene_update_gateway_trace,
         )
-        if scene_update_validation.get("allowed"):
+        if isinstance(scene_update_effect, PostGmSceneUpdateEffect):
             overlay = get_runtime_scene_overlay(session, scene_id)
             visible_add = overlay.setdefault('visible_facts_add', [])
             for fact in su.get('visible_facts_add', []) or []:
@@ -1135,19 +1275,22 @@ def _apply_post_gm_updates(
         assert_canon_immutable(scene)
         scene_id = str(scene.get('scene', {}).get('id') or '').strip() or None
         world_update_validation = _validate_gm_world_updates_for_legacy_adoption(gm['world_updates'])
-        if world_update_validation.get("allowed"):
-            normalized_wu = normalize_runtime_world_updates(world_update_validation.get("sanitized_world_updates"))
-            new_events: list = []
-            for ev in normalized_wu.get('append_events') or []:
-                if isinstance(ev, dict) and ev.get('type') == 'note' and isinstance(ev.get('text'), str):
-                    new_events.append({'type': 'gm_event', 'text': ev['text']})
-                elif isinstance(ev, str) and ev.strip():
-                    new_events.append({'type': 'gm_event', 'text': ev.strip()})
-                else:
-                    new_events.append(ev)
-            normalized_wu['append_events'] = new_events
-        else:
-            normalized_wu = {}
+        world_updates_effect = world_update_validation.get("effect")
+        effect_updates = (
+            world_updates_effect.sanitized_world_updates
+            if isinstance(world_updates_effect, PostGmWorldUpdatesEffect)
+            else {}
+        )
+        effect_update_field_count = (
+            world_updates_effect.update_field_count
+            if isinstance(world_updates_effect, PostGmWorldUpdatesEffect)
+            else 0
+        )
+        effect_append_events_count = (
+            world_updates_effect.append_events_count
+            if isinstance(world_updates_effect, PostGmWorldUpdatesEffect)
+            else 0
+        )
         world_updates_gateway = _post_gm_adoption_gateway(
             operation="apply_gm_world_updates",
             source="gm_structured_world_updates",
@@ -1155,8 +1298,8 @@ def _apply_post_gm_updates(
             scene_id=scene_id,
             affected_domains=[WORLD_STATE],
             proposed_payload_summary={
-                "update_field_count": len(normalized_wu) if isinstance(normalized_wu, dict) else 0,
-                "append_events_count": len(normalized_wu.get('append_events') or []) if isinstance(normalized_wu, dict) else 0,
+                "update_field_count": effect_update_field_count,
+                "append_events_count": effect_append_events_count,
                 "raw_top_level_key_count": world_update_validation.get("top_level_key_count"),
                 "raw_unknown_key_count": world_update_validation.get("unknown_key_count"),
             },
@@ -1186,16 +1329,16 @@ def _apply_post_gm_updates(
             scene_id=scene_id,
             resolution=resolution,
             adoption_status=adoption_status,
-            update_field_count=len(normalized_wu) if isinstance(normalized_wu, dict) else 0,
-            append_events_count=len(normalized_wu.get('append_events') or []) if isinstance(normalized_wu, dict) else 0,
-            validation_reason_codes=world_update_validation.get("reason_codes"),
+            update_field_count=effect_update_field_count,
+            append_events_count=effect_append_events_count,
+            validation_reason_codes=world_update_validation.get("validation_reason_codes"),
             raw_top_level_key_count=world_update_validation.get("top_level_key_count"),
             raw_recognized_key_count=world_update_validation.get("recognized_key_count"),
             raw_unknown_key_count=world_update_validation.get("unknown_key_count"),
             **world_updates_gateway_trace,
         )
-        if world_update_validation.get("allowed"):
-            apply_normalized_world_updates(world, normalized_wu, session=session, scene_id=scene_id)
+        if isinstance(world_updates_effect, PostGmWorldUpdatesEffect):
+            apply_normalized_world_updates(world, effect_updates, session=session, scene_id=scene_id)
 
     if not gm.get("_player_facing_emission_finalized"):
         _record_post_gm_mutation_trace(

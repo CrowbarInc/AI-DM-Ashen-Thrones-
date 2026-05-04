@@ -172,7 +172,7 @@ def set_social_target(session: Dict[str, Any], target_id: Optional[str]) -> Dict
 
 ### Risky / needs tightening
 
-- **`_apply_post_gm_updates` does not re-validate** the GM dict: it applies `gm['scene_update']` / `gm['world_updates']` **as given** at this seam. If any code path produced a GM dict **without** `apply_response_policy_enforcement`, this would be a **defense-in-depth gap**. **Minimal fix (not implemented):** call `validate_gm_state_update(gm, session, scene)` at the top of `_apply_post_gm_updates` (or assert a marker that policy enforcement ran).
+- **Structured adoption is not raw-object mutation:** `scene_update` and `world_updates` branches run legacy **shape** validators, record gateway traces (`gateway_shape_validation_enforced`, transitional policy observe-only), and apply overlays / world writes only from **`PostGmSceneUpdateEffect` / `PostGmWorldUpdatesEffect` sanitized payloads**—not from mutating the raw `gm['scene_update']` / `gm['world_updates']` dicts in place. **Semantic** policy (`validate_gm_state_update`, e.g. `forbid_state_invention`) still runs upstream in `apply_response_policy_enforcement` when enabled; **`_apply_post_gm_updates` does not call `validate_gm_state_update` again** at this seam. If any code path produced a GM dict **without** `apply_response_policy_enforcement`, that remains a **defense-in-depth gap** for *semantic* policy, not for payload-shape rejection. **Minimal fix (not implemented):** call `validate_gm_state_update(gm, session, scene)` at the top of `_apply_post_gm_updates` (or assert a marker that policy enforcement ran).
 
 - **Ordering vs narration:** `_finalize_player_facing_for_turn` runs **before** `_apply_post_gm_updates` (`game/api.py` action/chat completion paths). `scene_update` can therefore change `visible_facts` / `discoverable_clues` / `hidden_facts` **after** narration was aligned to the pre-update scene envelope—potential **same-turn template drift** between emitted text and persisted scene. **Classification:** **needs tightening** for strict same-turn coherence; **future objective** if rare.
 
@@ -190,7 +190,7 @@ def set_social_target(session: Dict[str, Any], target_id: Optional[str]) -> Dict
 | Narration consistency repair + narration lead supplements | **needs tightening** vs strict “no text-derived state” CITR; **safe** under shipped anti-drift policy |
 | Interaction allow-listed scene writes | **safe** |
 | Emergent enrollment from narration | **needs tightening** / product discretion |
-| `_apply_post_gm_updates` | **needs tightening** (re-validate; optional ordering review) |
+| `_apply_post_gm_updates` | **needs tightening** (optional seam `validate_gm_state_update`; optional ordering review); structured branches already use shape validation + typed legacy effects |
 | Registry ops `reveal_*_runtime` without matching guards at clue/hidden writers | **future objective** (documentation / guard alignment) |
 
 ### Explicit statement
@@ -205,7 +205,7 @@ Each targets one seam; avoids global guard expansion.
 
 1. **Hidden reveal → runtime:** From the deterministic resolution path that truly publishes a hidden template line, call `mark_hidden_fact_revealed` only after verifying the string is in `scene['hidden_facts']` (normalized), then optionally `assert_cross_domain_write_allowed(HIDDEN_STATE, SCENE_STATE, operation="reveal_hidden_fact_runtime")` at that single new caller.
 
-2. **GM post-update hardening:** At the start of `_apply_post_gm_updates`, run `validate_gm_state_update` on a shallow copy of `gm` and merge cleaned `scene_update` / `world_updates` back (or no-op if invalid).
+2. **GM post-update hardening (semantic layer):** At the start of `_apply_post_gm_updates`, run `validate_gm_state_update` on a shallow copy of `gm` and merge cleaned `scene_update` / `world_updates` back (or no-op if invalid). This would sit **beside** existing branch shape validators and typed effects; it does not replace them.
 
 3. **Same-turn scene drift:** Move `scene_update` application **before** final narration build, **or** re-run a narrow visibility/narration check after `scene_update` (larger change—flag as **future objective** if chosen).
 

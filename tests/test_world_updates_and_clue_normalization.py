@@ -253,6 +253,8 @@ def test_apply_post_gm_updates_records_compact_scene_update_trace():
     assert scene_update_trace["proposed_future_owner"] == "post_gm_adoption_gateway"
     assert scene_update_trace["gateway_present"] is True
     assert scene_update_trace["gateway_decision"] == "allow_validated_legacy_scene_update"
+    assert scene_update_trace["gateway_shape_validation_enforced"] is True
+    assert scene_update_trace["gateway_policy_enforcement"] == "observe_only"
     assert scene_update_trace["gateway_mode"] == "observe_only"
     assert scene_update_trace["future_blocking_candidate"] is True
     assert scene_update_trace["validation_reason_codes"] == ["gm_scene_update:legacy_shape_allowed"]
@@ -429,6 +431,8 @@ def test_apply_post_gm_updates_records_world_update_trace_without_changing_updat
     assert world_update_trace["proposed_future_owner"] == "post_gm_adoption_gateway"
     assert world_update_trace["gateway_present"] is True
     assert world_update_trace["gateway_decision"] == "allow_validated_legacy_world_updates"
+    assert world_update_trace["gateway_shape_validation_enforced"] is True
+    assert world_update_trace["gateway_policy_enforcement"] == "observe_only"
     assert world_update_trace["gateway_mode"] == "observe_only"
     assert world_update_trace["future_blocking_candidate"] is True
     assert world_update_trace["validation_reason_codes"] == ["gm_world_updates:legacy_shape_allowed"]

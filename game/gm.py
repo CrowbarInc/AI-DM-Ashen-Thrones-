@@ -56,6 +56,12 @@ COMBAT_KINDS = frozenset({
 
 SOCIAL_CHECK_KINDS = frozenset({'persuade', 'intimidate', 'deceive', 'barter', 'recruit'})
 
+# ``gm["metadata"][GM_METADATA_RESPONSE_POLICY_ENFORCEMENT_APPLIED]`` is set by
+# :func:`apply_response_policy_enforcement`. Post-GM adoption checks this for a
+# defense-in-depth signal that semantic policy already ran (not a replacement for
+# branch shape validators / typed effects).
+GM_METADATA_RESPONSE_POLICY_ENFORCEMENT_APPLIED = "response_policy_enforcement_applied"
+
 
 def _session_social_authority(session: Dict[str, Any] | None) -> bool:
     """True when a social interlocutor is authoritative for this turn (prompt + sanitization)."""
@@ -5802,6 +5808,9 @@ def apply_response_policy_enforcement(
                         "allowed_behaviors": dict(fb.get("allowed_behaviors") or {}),
                         "prefer_partial_over_question": bool(fb.get("prefer_partial_over_question")),
                     }
+    md = out.setdefault("metadata", {})
+    if isinstance(md, dict):
+        md[GM_METADATA_RESPONSE_POLICY_ENFORCEMENT_APPLIED] = True
     return out
 
 
