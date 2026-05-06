@@ -169,6 +169,8 @@ def test_sanitizer_prefers_npc_uncertainty_for_dialogue_like_instructional_text(
         ('"i do not know that part for certain."' in low)
         or ('"i have heard the talk, but not the names."' in low)
         or ("heard talk, not names" in low)
+        or ("heard talk, but not enough to answer" in low)
+        or ("not enough to answer that" in low)
         or ("do not know enough to name anyone" in low)
         or ("do not know a name" in low)
         or ("word is, it was messy" in low)

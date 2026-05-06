@@ -146,6 +146,17 @@ def test_response_type_debug_defaults_and_fem_merge_are_stable() -> None:
         "response_type_repair_kind": None,
         "response_type_rejection_reasons": [],
         "non_hostile_escalation_blocked": False,
+        "opening_generic_action_repair_blocked": False,
+        "opening_specific_repair_used": False,
+        "opening_validation_failed": False,
+        "opening_failure_reasons": [],
+        "opening_recovered_via_fallback": False,
+        "opening_fallback_context_source": None,
+        "opening_fallback_basis_count": 0,
+        "opening_fallback_context_missing": False,
+        "opening_fallback_failed_closed": False,
+        "blocked_repair_kind": None,
+        "opening_repair_source": "not_opening",
         "response_type_upstream_prepared_absent": False,
         "upstream_prepared_emission_used": False,
         "upstream_prepared_emission_valid": False,
@@ -153,6 +164,8 @@ def test_response_type_debug_defaults_and_fem_merge_are_stable() -> None:
         "upstream_prepared_emission_reject_reason": None,
         "final_emission_boundary_repair_used": False,
         "final_emission_boundary_semantic_repair_disabled": True,
+        "fallback_family_used": None,
+        "fallback_temporal_frame": None,
     }
 
     fem: dict = {"final_route": "accept_candidate"}
@@ -165,6 +178,10 @@ def test_response_type_debug_defaults_and_fem_merge_are_stable() -> None:
     assert fem["response_type_repair_kind"] is None
     assert fem["response_type_rejection_reasons"] == []
     assert fem["non_hostile_escalation_blocked"] is False
+    assert fem["opening_validation_failed"] is False
+    assert fem["opening_fallback_basis_count"] == 0
+    assert fem["fallback_family_used"] is None
+    assert fem["fallback_temporal_frame"] is None
     assert fem["response_type_upstream_prepared_absent"] is False
     assert fem["upstream_prepared_emission_used"] is False
     assert fem["upstream_prepared_emission_valid"] is False
@@ -182,6 +199,17 @@ def test_response_type_debug_defaults_and_fem_merge_are_stable() -> None:
         "response_type_repair_kind": None,
         "response_type_rejection_reasons": [],
         "non_hostile_escalation_blocked": False,
+        "opening_generic_action_repair_blocked": False,
+        "opening_specific_repair_used": False,
+        "opening_validation_failed": False,
+        "opening_failure_reasons": [],
+        "opening_recovered_via_fallback": False,
+        "opening_fallback_context_source": None,
+        "opening_fallback_basis_count": 0,
+        "opening_fallback_context_missing": False,
+        "opening_fallback_failed_closed": False,
+        "blocked_repair_kind": None,
+        "opening_repair_source": "not_opening",
         "response_type_upstream_prepared_absent": False,
         "upstream_prepared_emission_used": False,
         "upstream_prepared_emission_valid": False,
@@ -189,6 +217,8 @@ def test_response_type_debug_defaults_and_fem_merge_are_stable() -> None:
         "upstream_prepared_emission_reject_reason": None,
         "final_emission_boundary_repair_used": False,
         "final_emission_boundary_semantic_repair_disabled": True,
+        "fallback_family_used": None,
+        "fallback_temporal_frame": None,
     }
 
 

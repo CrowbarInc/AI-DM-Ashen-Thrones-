@@ -29,6 +29,11 @@ from __future__ import annotations
 import importlib
 from typing import Any, Dict, Mapping, MutableMapping
 
+from game.final_emission_validators import (
+    _default_response_type_debug as _validators_default_response_type_debug,
+    _merge_response_type_meta as _validators_merge_response_type_meta,
+    _response_type_decision_payload as _validators_response_type_decision_payload,
+)
 from game.state_channels import project_debug_payload
 from game.telemetry_vocab import (
     TELEMETRY_ACTION_OBSERVED,
@@ -154,88 +159,17 @@ def default_response_type_debug(contract: Dict[str, Any] | None, source: str | N
     This shapes *descriptive* fields used by the gate for observability and FEM merge, but does not
     decide whether the response-type contract should run or what repair is applied.
     """
-    return {
-        "response_type_required": str((contract or {}).get("required_response_type") or "") or None,
-        "response_type_contract_source": source,
-        "response_type_candidate_ok": None if not contract else True,
-        "response_type_repair_used": False,
-        "response_type_repair_kind": None,
-        "response_type_rejection_reasons": [],
-        "non_hostile_escalation_blocked": False,
-        "opening_generic_action_repair_blocked": False,
-        "opening_specific_repair_used": False,
-        "blocked_repair_kind": None,
-        "opening_repair_source": "not_opening",
-        "response_type_upstream_prepared_absent": False,
-        "upstream_prepared_emission_used": False,
-        "upstream_prepared_emission_valid": False,
-        "upstream_prepared_emission_source": None,
-        "upstream_prepared_emission_reject_reason": None,
-        "final_emission_boundary_repair_used": False,
-        "final_emission_boundary_semantic_repair_disabled": True,
-        "fallback_family_used": None,
-        "fallback_temporal_frame": None,
-    }
+    return _validators_default_response_type_debug(contract, source)
 
 
 def merge_response_type_meta(meta: Dict[str, Any], debug: Dict[str, Any]) -> None:
     """Metadata-only merge of response-type debug fields into ``_final_emission_meta``."""
-    meta.update(
-        {
-            "response_type_required": debug.get("response_type_required"),
-            "response_type_contract_source": debug.get("response_type_contract_source"),
-            "response_type_candidate_ok": debug.get("response_type_candidate_ok"),
-            "response_type_repair_used": debug.get("response_type_repair_used"),
-            "response_type_repair_kind": debug.get("response_type_repair_kind"),
-            "response_type_rejection_reasons": list(debug.get("response_type_rejection_reasons") or []),
-            "non_hostile_escalation_blocked": bool(debug.get("non_hostile_escalation_blocked")),
-            "opening_generic_action_repair_blocked": bool(debug.get("opening_generic_action_repair_blocked")),
-            "opening_specific_repair_used": bool(debug.get("opening_specific_repair_used")),
-            "blocked_repair_kind": debug.get("blocked_repair_kind"),
-            "opening_repair_source": debug.get("opening_repair_source"),
-            "fallback_family_used": debug.get("fallback_family_used"),
-            "fallback_temporal_frame": debug.get("fallback_temporal_frame"),
-            "response_type_upstream_prepared_absent": bool(debug.get("response_type_upstream_prepared_absent")),
-            "upstream_prepared_emission_used": bool(debug.get("upstream_prepared_emission_used")),
-            "upstream_prepared_emission_valid": bool(debug.get("upstream_prepared_emission_valid")),
-            "upstream_prepared_emission_source": debug.get("upstream_prepared_emission_source"),
-            "upstream_prepared_emission_reject_reason": debug.get("upstream_prepared_emission_reject_reason"),
-            "final_emission_boundary_repair_used": bool(debug.get("final_emission_boundary_repair_used")),
-            "final_emission_boundary_semantic_repair_disabled": (
-                True
-                if debug.get("final_emission_boundary_semantic_repair_disabled") is None
-                else bool(debug.get("final_emission_boundary_semantic_repair_disabled"))
-            ),
-        }
-    )
+    _validators_merge_response_type_meta(meta, debug)
 
 
 def response_type_decision_payload(debug: Dict[str, Any]) -> Dict[str, Any]:
     """Metadata-only compact view suitable for logs/telemetry sinks (stable keys)."""
-    return {
-        "response_type_required": debug.get("response_type_required"),
-        "response_type_contract_source": debug.get("response_type_contract_source"),
-        "response_type_candidate_ok": debug.get("response_type_candidate_ok"),
-        "response_type_repair_used": debug.get("response_type_repair_used"),
-        "response_type_repair_kind": debug.get("response_type_repair_kind"),
-        "response_type_rejection_reasons": list(debug.get("response_type_rejection_reasons") or []),
-        "non_hostile_escalation_blocked": bool(debug.get("non_hostile_escalation_blocked")),
-        "opening_generic_action_repair_blocked": bool(debug.get("opening_generic_action_repair_blocked")),
-        "opening_specific_repair_used": bool(debug.get("opening_specific_repair_used")),
-        "blocked_repair_kind": debug.get("blocked_repair_kind"),
-        "opening_repair_source": debug.get("opening_repair_source"),
-        "fallback_family_used": debug.get("fallback_family_used"),
-        "fallback_temporal_frame": debug.get("fallback_temporal_frame"),
-        "response_type_upstream_prepared_absent": bool(debug.get("response_type_upstream_prepared_absent")),
-        "upstream_prepared_emission_used": bool(debug.get("upstream_prepared_emission_used")),
-        "upstream_prepared_emission_valid": bool(debug.get("upstream_prepared_emission_valid")),
-        "upstream_prepared_emission_source": debug.get("upstream_prepared_emission_source"),
-        "upstream_prepared_emission_reject_reason": debug.get("upstream_prepared_emission_reject_reason"),
-        "final_emission_boundary_repair_used": bool(debug.get("final_emission_boundary_repair_used")),
-        "final_emission_boundary_semantic_repair_disabled": bool(
-            debug.get("final_emission_boundary_semantic_repair_disabled")
-        ),
-    }
+    return _validators_response_type_decision_payload(debug)
 
 # ``accepted_via`` values that can carry ``retry_exhausted`` / terminal flags from legitimate
 # deterministic repairs without implying an upstream API / infra failure by themselves.

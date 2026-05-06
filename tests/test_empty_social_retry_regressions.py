@@ -176,7 +176,11 @@ def test_ensure_minimal_social_resolution_survives_total_minimal_helper_failure(
         scene_envelope=_scene_envelope(),
     )
     assert _gm_has_usable_player_facing_text(out)
-    assert "They answer cautiously" in str(out.get("player_facing_text") or "")
+    text = str(out.get("player_facing_text") or "")
+    low = text.lower()
+    assert "tavern runner" in low
+    assert '"' in text
+    assert "do not know" in low or "don't know" in low or "cannot answer" in low
     assert out.get("fallback_kind") == "social_empty_resolution_repair"
     assert out.get("accepted_via") == "social_resolution_repair"
     assert out.get("targeted_retry_terminal") is True

@@ -1982,14 +1982,6 @@ def _forced_interruption_progression_line(
     seed = f"{sid}|interrupt_progression|{signature}|{merged_pt}|rc={int(repeat_count)}"
     topic = _integrity_topic_hook(merged_pt) or "that"
     speaker = _speaker_label(resolution)
-    candidates = _social_integrity_fallback_line_candidates(
-        resolution=resolution,
-        player_text=merged_pt,
-        session=session,
-        scene_id=sid,
-        tag_list=tag_list,
-        seed=seed,
-    )
     direct_hint, direct_kind = deterministic_social_fallback_line(
         resolution=resolution,
         uncertainty_source="scene_ambiguity",
@@ -1997,19 +1989,27 @@ def _forced_interruption_progression_line(
         interruption_active=False,
         seed=seed + "|direct_hint",
     )
-    candidates.extend(
-        [
-            (
-                f'{speaker} lowers their voice. "That shouting is coming from the main gate. If {topic} still matters, catch the ward clerk before the square locks down."',
-                "forced_progression_gate_redirect",
-            ),
-            (
-                f'{speaker} jerks their chin toward the square. "Two watchmen are hauling someone out by the main gate. Stay with me and I will give you the short version on {topic} once they pass."',
-                "forced_progression_watch_pressure",
-            ),
-            (direct_hint, f"forced_progression_{direct_kind}"),
-        ]
+    # Prefer scene-grounded progression lines before generic integrity/deterministic uncertainty pools.
+    progression_first: List[tuple[str, str]] = [
+        (
+            f'{speaker} lowers their voice. "That shouting is coming from the main gate. If {topic} still matters, catch the ward clerk before the square locks down."',
+            "forced_progression_gate_redirect",
+        ),
+        (
+            f'{speaker} jerks their chin toward the square. "Two watchmen are hauling someone out by the main gate. Stay with me and I will give you the short version on {topic} once they pass."',
+            "forced_progression_watch_pressure",
+        ),
+        (direct_hint, f"forced_progression_{direct_kind}"),
+    ]
+    integrity_candidates = _social_integrity_fallback_line_candidates(
+        resolution=resolution,
+        player_text=merged_pt,
+        session=session,
+        scene_id=sid,
+        tag_list=tag_list,
+        seed=seed,
     )
+    candidates = progression_first + list(integrity_candidates)
 
     for raw_line, kind in candidates:
         filtered = apply_strict_social_sentence_ownership_filter(

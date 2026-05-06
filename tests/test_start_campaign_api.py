@@ -161,7 +161,7 @@ def test_start_campaign_emits_opening_and_sets_started(tmp_path: Path, monkeypat
         assert data.get("ui", {}).get("campaign_can_start") is False
         response_text = str(data.get("gm_output", {}).get("player_facing_text") or "")
         response_debug = ((data.get("gm_output") or {}).get("metadata") or {}).get("emission_debug") or {}
-        log_reload_entries = client.get("/api/log").json().get("entries") or []
+        log_reload_entries = client.get("/api/log?ui_mode=debug").json().get("entries") or []
 
     entries = load_log()
     assert len(entries) == 1

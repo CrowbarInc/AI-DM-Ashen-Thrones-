@@ -1,10 +1,14 @@
 {
   "scene": {
     "id": "scene_investigate",
-    "location": "Unnamed Scene",
-    "summary": "A blank scene awaiting definition.",
+    "location": "Investigator's Office",
+    "summary": "Lamplight pools over clutter: ink-stained maps, a ledger half-shut, and the damp smell of rain through the shutters.",
     "mode": "exploration",
-    "visible_facts": [],
+    "visible_facts": [
+      "Filing shelves crowd one wall; loose papers curl at the edges.",
+      "A brass compass sits beside a blot of spilled ink on the desk.",
+      "Rain taps at shutter slats while distant bells mark the ward."
+    ],
     "discoverable_clues": [
       {
         "id": "desk_clue",
@@ -21,18 +25,6 @@
         "type": "investigate",
         "reveals_clue": "desk_clue"
       }
-    ],
-    "objects": []
-  },
-  "scene_state": {
-    "active_scene_id": "scene_investigate",
-    "active_entities": [],
-    "entity_presence": {
-      "guard_captain": "offscene",
-      "tavern_runner": "offscene"
-    },
-    "current_interlocutor": null,
-    "emergent_addressables": [],
-    "promoted_actor_npc_map": {}
+    ]
   }
 }

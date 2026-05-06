@@ -27,6 +27,8 @@ Operator-facing audit names (see ``plan_metadata``): ``narration_plan_bundle_err
 ``semantic_bypass_blocked`` corresponds to the requested ``planner_bypass_blocked``
 signal (the literal ``planner_`` prefix is reserved as an *author* channel key shape in
 :mod:`game.state_channels` and would be stripped from nested model payloads).
+
+See :mod:`game.planner_input_manifest` for a classified inventory of planner inputs at this seam.
 """
 
 from __future__ import annotations
@@ -36,6 +38,15 @@ from collections.abc import Callable, Mapping, MutableMapping
 from typing import Any
 
 from game.ctir_runtime import SESSION_CTIR_STAMP_KEY, get_attached_ctir
+from game.planner_seam_fencing import (
+    GUARD_CTIR_BACKED_BUNDLE_REQUIRED,
+    GUARD_FALLBACK_VISIBLE_FAILURE,
+    GUARD_LEGACY_NO_CTIR_ONLY,
+    GUARD_NON_CTIR_SEMANTIC_PATH,
+    attach_response_type_trace_to_policy,
+    resolve_response_type_contract_for_planner_seam,
+    response_type_seam_already_traced,
+)
 from game.interaction_context import build_speaker_selection_contract, response_type_context_snapshot
 from game.interaction_continuity import build_interaction_continuity_contract
 from game.narrative_plan_upstream import (
@@ -48,10 +59,9 @@ from game.narrative_plan_upstream import (
 )
 from game.narrative_planning import NARRATIVE_PLAN_VERSION
 from game.referent_tracking import build_referent_tracking_artifact
-from game.response_type_gating import derive_response_type_contract
-from game.response_policy_contracts import peek_response_type_contract_from_resolution
 from game.turn_packet import build_turn_packet
 from game.dialogue_social_plan import build_dialogue_social_plan
+from game.planner_head_state import build_planner_head_state
 
 SESSION_NARRATION_PLAN_BUNDLE_KEY = "_runtime_narration_plan_bundle_v1"
 SESSION_NARRATION_PLAN_BUNDLE_STAMP_KEY = "_runtime_narration_plan_bundle_stamp_v1"
@@ -191,20 +201,31 @@ def _assemble_plan_adjacent_renderer_inputs(
         if ctir_obj is not None
         else response_type_context_snapshot(session)
     )
-    _rtc_policy = response_policy.get("response_type_contract")
-    if isinstance(_rtc_policy, dict):
-        rtc_for_social_structure = _rtc_policy
+    if isinstance(response_policy, dict) and response_type_seam_already_traced(response_policy):
+        rtc_for_social_structure = response_policy.get("response_type_contract")
+        if not isinstance(rtc_for_social_structure, dict):
+            _rtc_resolved, _rtc_trace = resolve_response_type_contract_for_planner_seam(
+                ctir_attached=ctir_obj is not None,
+                resolution_sem=resolution_sem if isinstance(resolution_sem, dict) else None,
+                response_policy=response_policy,
+                interaction_context=interaction_for_rtc if isinstance(interaction_for_rtc, dict) else None,
+                user_text=user_text,
+            )
+            rtc_for_social_structure = _rtc_resolved
+            response_policy["response_type_contract"] = _rtc_resolved
+            attach_response_type_trace_to_policy(response_policy, _rtc_trace)
     else:
-        rtc_peeked = peek_response_type_contract_from_resolution(resolution_sem)
-        rtc_for_social_structure = rtc_peeked or derive_response_type_contract(
-            segmented_turn=None,
-            normalized_action=None,
-            resolution=resolution_sem if isinstance(resolution_sem, dict) else None,
-            interaction_context=interaction_for_rtc,
-            directed_social_entry=None,
-            route_choice=None,
-            raw_player_text=user_text,
-        ).to_dict()
+        _rtc_resolved, _rtc_trace = resolve_response_type_contract_for_planner_seam(
+            ctir_attached=ctir_obj is not None,
+            resolution_sem=resolution_sem if isinstance(resolution_sem, dict) else None,
+            response_policy=response_policy if isinstance(response_policy, dict) else None,
+            interaction_context=interaction_for_rtc if isinstance(interaction_for_rtc, dict) else None,
+            user_text=user_text,
+        )
+        rtc_for_social_structure = _rtc_resolved
+        if isinstance(response_policy, dict):
+            response_policy["response_type_contract"] = _rtc_resolved
+            attach_response_type_trace_to_policy(response_policy, _rtc_trace)
     interaction_continuity_contract = build_interaction_continuity_contract(
         session,
         scene_id=scene_pub_id or None,
@@ -271,9 +292,8 @@ def build_narration_plan_bundle(
     Reads attached CTIR only for *semantic* planning (via :func:`game.narrative_planning.build_narrative_plan`);
     ``narration_context_kwargs`` must be the same keyword bundle passed to
     :func:`game.prompt_context.build_narration_context` so bounded slices match the renderer path.
+    Head assembly is :func:`game.planner_head_state.build_planner_head_state`.
     """
-    from game.prompt_context import _build_narration_context_head_state
-
     ctir_obj = get_attached_ctir(session if isinstance(session, dict) else None)
     if not isinstance(ctir_obj, dict):
         return {
@@ -283,12 +303,16 @@ def build_narration_plan_bundle(
                 "narrative_plan_version": NARRATIVE_PLAN_VERSION,
                 "narration_plan_bundle_error": None,
                 "semantic_bypass_blocked": False,
+                GUARD_LEGACY_NO_CTIR_ONLY: True,
+                GUARD_NON_CTIR_SEMANTIC_PATH: True,
+                GUARD_CTIR_BACKED_BUNDLE_REQUIRED: False,
+                GUARD_FALLBACK_VISIBLE_FAILURE: False,
             },
             "narrative_plan": None,
             "renderer_inputs": {},
         }
 
-    head = _build_narration_context_head_state(**narration_context_kwargs)
+    head = build_planner_head_state(**narration_context_kwargs)
     narrative_plan, narrative_plan_build_error, planning_session_interaction = compute_narrative_plan_for_bundle_from_head(
         head,
         user_text=str(narration_context_kwargs.get("user_text") or ""),
@@ -304,6 +328,10 @@ def build_narration_plan_bundle(
         "narrative_plan_version": NARRATIVE_PLAN_VERSION,
         "narration_plan_bundle_error": narrative_plan_build_error,
         "semantic_bypass_blocked": bypass,
+        GUARD_CTIR_BACKED_BUNDLE_REQUIRED: True,
+        GUARD_FALLBACK_VISIBLE_FAILURE: bool(bypass),
+        GUARD_LEGACY_NO_CTIR_ONLY: False,
+        GUARD_NON_CTIR_SEMANTIC_PATH: False,
         "planning_session_interaction": dict(planning_session_interaction)
         if isinstance(planning_session_interaction, dict)
         else {},

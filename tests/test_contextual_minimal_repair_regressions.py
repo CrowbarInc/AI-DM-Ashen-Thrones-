@@ -123,7 +123,16 @@ def test_nonsocial_minimal_repair_by_context() -> None:
     assert _norm_pft(pft_t) != hard
     low_t = pft_t.lower()
     assert "something shifts" not in low_t
-    assert "tavern" in low_t or "locals" in low_t or "notice board" in low_t or "lantern" in low_t
+    # Nonsocial anchoring uses on-disk visible_facts[0] when present (wording varies by template),
+    # not fixed scene-id tokens; otherwise a stable alternate. Unrelated to planner extraction.
+    assert (
+        "still frames what you can see" in low_t
+        or "the air settles into a clear beat" in low_t
+        or "tavern" in low_t
+        or "locals" in low_t
+        or "notice board" in low_t
+        or "lantern" in low_t
+    )
 
     out_empty = ensure_minimal_nonsocial_resolution(
         gm={"player_facing_text": ""},

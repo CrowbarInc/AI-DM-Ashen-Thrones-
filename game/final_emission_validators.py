@@ -356,6 +356,8 @@ def _default_response_type_debug(contract: Dict[str, Any] | None, source: str | 
         "upstream_prepared_emission_reject_reason": None,
         "final_emission_boundary_repair_used": False,
         "final_emission_boundary_semantic_repair_disabled": True,
+        "fallback_family_used": None,
+        "fallback_temporal_frame": None,
     }
 
 
@@ -391,6 +393,8 @@ def _merge_response_type_meta(meta: Dict[str, Any], debug: Dict[str, Any]) -> No
                 if debug.get("final_emission_boundary_semantic_repair_disabled") is None
                 else bool(debug.get("final_emission_boundary_semantic_repair_disabled"))
             ),
+            "fallback_family_used": debug.get("fallback_family_used"),
+            "fallback_temporal_frame": debug.get("fallback_temporal_frame"),
         }
     )
 
@@ -426,6 +430,8 @@ def _response_type_decision_payload(debug: Dict[str, Any]) -> Dict[str, Any]:
             if debug.get("final_emission_boundary_semantic_repair_disabled") is None
             else bool(debug.get("final_emission_boundary_semantic_repair_disabled"))
         ),
+        "fallback_family_used": debug.get("fallback_family_used"),
+        "fallback_temporal_frame": debug.get("fallback_temporal_frame"),
     }
 
 

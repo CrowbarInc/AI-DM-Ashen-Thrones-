@@ -229,8 +229,21 @@ def derive_response_type_contract(
     directed_social_entry: dict | None = None,
     route_choice: str | None = None,
     raw_player_text: str | None = None,
+    suppress_phrase_heuristics: bool = False,
 ) -> ResponseTypeContract:
+    """Derive the shipped ``response_type_contract`` shape.
+
+    When ``suppress_phrase_heuristics`` is True (CTIR planner seam), regex/question
+    guards driven by *raw_player_text* are disabled — resolution/interaction fields only.
+    """
     reasons: list[str] = []
+    phrase_effective_text = (
+        ""
+        if suppress_phrase_heuristics
+        else _clean_str(raw_player_text)
+    )
+    if suppress_phrase_heuristics:
+        reasons.append("phrase_heuristics_suppressed_for_ctir_planner_seam")
     resolution_kind = _clean_str((resolution or {}).get("kind")).lower()
     normalized_type = _clean_str((normalized_action or {}).get("type")).lower()
     source_route = _resolve_source_route(
@@ -277,7 +290,7 @@ def derive_response_type_contract(
     strict_answer_expected = False if required_response_type == "scene_opening" else _resolution_requires_answer(
         segmented_turn=segmented_turn,
         resolution=resolution,
-        raw_player_text=raw_player_text,
+        raw_player_text=phrase_effective_text,
     )
     if required_response_type == "dialogue" and strict_answer_expected:
         reasons.append("dialogue_turn_contains_question_expectation")
@@ -286,7 +299,7 @@ def derive_response_type_contract(
         segmented_turn=segmented_turn,
         normalized_action=normalized_action,
         resolution=resolution,
-        raw_player_text=raw_player_text,
+        raw_player_text=phrase_effective_text,
         required_response_type=required_response_type,
     )
     allow_escalation = False if required_response_type == "scene_opening" else not guard_applies

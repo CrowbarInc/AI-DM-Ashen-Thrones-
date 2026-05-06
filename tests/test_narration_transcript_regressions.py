@@ -916,7 +916,7 @@ def test_gate_chain_phantom_speaker_not_accepted_via_grounding_exemption(monkeyp
             required_substrings=("tavern runner",),
             forbidden_substrings=("magistrate",),
             expected_speaker_id="tavern_runner",
-            meta_exact={"final_emitted_source": "minimal_social_emergency_fallback"},
+            meta_exact={"final_emitted_source": "deterministic_social_fallback"},
         ),
     )
     out = run_gate_level_case(scenario, monkeypatch)

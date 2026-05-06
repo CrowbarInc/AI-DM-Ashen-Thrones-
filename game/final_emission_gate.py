@@ -104,8 +104,8 @@ from game.anti_reset_emission_guard import (
     should_replace_candidate_intro_fallback,
 )
 from game.diegetic_fallback_narration import (
-    fallback_template_metadata,
-    opening_scene_fallback_template_allowed,
+    fallback_template_metadata as diegetic_classified_fallback_meta,
+    opening_scene_fallback_template_allowed as diegetic_opening_scene_template_allowed,
 )
 from game.leads import get_lead, normalize_lead
 from game.prompt_context import canonical_interaction_target_npc_id
@@ -3898,7 +3898,7 @@ def _deterministic_opening_fallback_text_and_meta(gm_output: Mapping[str, Any] |
         "opening_final_basis_matches_selector": bool(context.get("opening_final_basis_matches_selector")),
     }
     if not meta["opening_final_basis_matches_selector"]:
-        raise AssertionError("scene_opening fallback basis does not match selector output")
+        raise AssertionError("curated opening facts diverged from selector output")
     if not facts:
         meta["opening_fallback_failed_closed"] = True
         meta["opening_fallback_context_source"] = "opening_curated_facts"
@@ -3932,9 +3932,9 @@ def _deterministic_opening_fallback_text(gm_output: Mapping[str, Any] | None) ->
 
 def _opening_fallback_classification() -> Dict[str, str]:
     template_id = "opening_deterministic_fallback"
-    if not opening_scene_fallback_template_allowed(template_id):
+    if not diegetic_opening_scene_template_allowed(template_id):
         raise AssertionError("opening deterministic fallback template is not opening-scene classified")
-    return fallback_template_metadata(template_id)
+    return diegetic_classified_fallback_meta(template_id)
 
 
 def _opening_scene_safe_fallback_tuple(
@@ -10750,7 +10750,9 @@ def apply_final_emission_gate(
     )
     gate_out_text = _normalize_text(out.get("player_facing_text"))
     post_gate_mutation_detected = pre_gate_text != gate_out_text
-    fallback_classification = fallback_template_metadata(fallback_kind) or fallback_template_metadata(final_emitted_source)
+    fallback_classification = diegetic_classified_fallback_meta(fallback_kind) or diegetic_classified_fallback_meta(
+        final_emitted_source
+    )
     fallback_family_used = fallback_composition_meta.get("fallback_family_used") or fallback_classification.get("fallback_family")
     fallback_temporal_frame = fallback_composition_meta.get("fallback_temporal_frame") or fallback_classification.get("temporal_frame")
 

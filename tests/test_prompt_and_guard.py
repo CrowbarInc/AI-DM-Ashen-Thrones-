@@ -79,6 +79,12 @@ def _dummy_state():
     return campaign, world, session, character, combat, recent_log
 
 
+def _norm_visible_fact_line(s: str) -> str:
+    """Match narration visibility normalization (case/punctuation-insensitive)."""
+    line = " ".join(str(s or "").strip().split()).rstrip(".").lower()
+    return line
+
+
 def _assert_text_contains_all(text: str, *substrings: str) -> None:
     """Structural prose check: avoid pinning full canonical sentences from scene fixtures."""
     low = (text or "").lower()
@@ -192,7 +198,11 @@ def test_prompt_structure_separates_hidden_facts():
     scene_payload = payload["scene"]
     assert "public" in scene_payload
     assert "gm_only" in scene_payload
-    assert scene_payload["public"]["visible_facts"] == FRONTIER_GATE_SCENE["scene"]["visible_facts"]
+    pub_vf = scene_payload["public"]["visible_facts"]
+    exp_vf = FRONTIER_GATE_SCENE["scene"]["visible_facts"]
+    assert isinstance(pub_vf, list) and isinstance(exp_vf, list)
+    assert len(pub_vf) == len(exp_vf)
+    assert {_norm_visible_fact_line(x) for x in pub_vf} == {_norm_visible_fact_line(x) for x in exp_vf}
     # Not justified by "Look around." => discoverable clues must not be in the main discoverable list.
     assert scene_payload["discoverable_clues"] == []
     assert scene_payload["gm_only"]["hidden_facts"] == FRONTIER_GATE_SCENE["scene"]["hidden_facts"]

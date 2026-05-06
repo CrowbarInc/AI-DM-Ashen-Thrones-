@@ -41,6 +41,7 @@ from game.output_sanitizer import (
     final_validation_pass,
     sanitize_player_facing_output,
 )
+from game.response_policy_contracts import response_type_contract_requires_dialogue
 from game.social_exchange_emission import (
     _apply_interruption_repeat_guard,
     _social_integrity_fallback_line_candidates,
@@ -740,6 +741,9 @@ def test_terminal_dialogue_application_skips_when_contract_is_not_dialogue():
     sid = "frontier_gate"
     set_social_target(session, "tavern_runner")
     rebuild_active_scene_entities(session, world, sid)
+    # Authoritative social + npc_reply_expected True forces dialogue regardless of
+    # metadata "answer" (game.response_policy_contracts); use no reply expectation
+    # so the resolved contract stays non-dialogue for this assertion.
     resolution = {
         "kind": "question",
         "prompt": "Who saw it?",
@@ -750,7 +754,7 @@ def test_terminal_dialogue_application_skips_when_contract_is_not_dialogue():
             "social_intent_class": "social_exchange",
             "npc_id": "tavern_runner",
             "npc_name": "Tavern Runner",
-            "npc_reply_expected": True,
+            "npc_reply_expected": False,
         },
     }
     original = "Tavern Runner answers with visible caution."
@@ -765,6 +769,43 @@ def test_terminal_dialogue_application_skips_when_contract_is_not_dialogue():
     )
     assert did is False
     assert text == original
+
+
+def test_authoritative_social_npc_reply_overrides_stale_metadata_answer_contract_requires_dialogue():
+    """Social kind + npc_reply_expected forces dialogue; stale metadata ``answer`` does not win."""
+    session = default_session()
+    world = default_world()
+    sid = "frontier_gate"
+    set_social_target(session, "tavern_runner")
+    rebuild_active_scene_entities(session, world, sid)
+    resolution = {
+        "kind": "question",
+        "prompt": "Who saw it?",
+        "metadata": {
+            "response_type_contract": {"required_response_type": "answer"},
+        },
+        "social": {
+            "social_intent_class": "social_exchange",
+            "npc_id": "tavern_runner",
+            "npc_name": "Tavern Runner",
+            "npc_reply_expected": True,
+        },
+    }
+    base_gm = {"response_policy": {"response_type_contract": {"required_response_type": "answer"}}}
+    assert response_type_contract_requires_dialogue(base_gm, resolution=resolution, session=session) is True
+    original = "Tavern Runner answers with visible caution."
+    text, did = apply_strict_social_terminal_dialogue_fallback_if_needed(
+        original,
+        resolution=resolution,
+        base_gm=base_gm,
+        session=session,
+        world=world,
+        scene_id=sid,
+        retry_terminal=True,
+    )
+    assert did is True
+    assert strict_social_terminal_dialogue_fallback_valid(text, resolution) is True
+    assert '"' in text
 
 
 def test_gate_replaces_when_all_sentences_non_social_strict_social():

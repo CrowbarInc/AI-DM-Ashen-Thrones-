@@ -42,6 +42,7 @@ from game.stage_diff_telemetry import (
 from game.turn_packet import get_turn_packet, resolve_turn_packet_contract, resolve_turn_packet_for_gate
 
 from game.gm import (
+    _looks_like_follow_up_find_request,
     _apply_uncertainty_to_gm,
     _clean_scene_detail,
     _ensure_terminal_punctuation,
@@ -1193,11 +1194,16 @@ def _retry_known_fact_is_suppressed_social_shape(
     known_fact: Dict[str, Any],
     *,
     world_action_signal: bool,
+    player_text: str = "",
 ) -> bool:
     """When Block #1 signals world-action, drop social/dialogue-shaped known facts from retry carry."""
     if not world_action_signal or not isinstance(known_fact, dict):
         return False
     src = str(known_fact.get("source") or "").strip()
+    if src == "recent_dialogue_continuity" and _looks_like_follow_up_find_request(str(player_text or "")):
+        # Follow-up "where do I find …" must keep engine-established lead facts even when the turn
+        # scans as world-action/motion for continuity-break purposes.
+        return False
     if src in {"social_answer_candidate", "recent_dialogue_continuity"}:
         return True
     sp = dict(known_fact.get("speaker") or {}) if isinstance(known_fact.get("speaker"), dict) else {}
@@ -1295,6 +1301,7 @@ def detect_retry_failures(
             if isinstance(known_fact, dict) and _retry_known_fact_is_suppressed_social_shape(
                 known_fact,
                 world_action_signal=block1_signal,
+                player_text=str(player_text or ""),
             ):
                 known_fact = None
                 suppressed_kf_carry = block1_signal
@@ -1521,6 +1528,7 @@ def apply_deterministic_retry_fallback(
     if isinstance(known_fact, dict) and _retry_known_fact_is_suppressed_social_shape(
         known_fact,
         world_action_signal=block1_signal,
+        player_text=str(player_text or ""),
     ):
         known_fact = None
     out = dict(gm)
@@ -1548,6 +1556,7 @@ def apply_deterministic_retry_fallback(
                 allow_kf = not _retry_known_fact_is_suppressed_social_shape(
                     known_fact,
                     world_action_signal=True,
+                    player_text=str(player_text or ""),
                 )
             else:
                 allow_kf = (
@@ -1555,6 +1564,11 @@ def apply_deterministic_retry_fallback(
                     or open_social_solicit
                     or (strict_route and narrator_kf and engine_owned)
                 )
+            if (
+                str(known_fact.get("source") or "").strip() == "recent_dialogue_continuity"
+                and _looks_like_follow_up_find_request(str(player_text or ""))
+            ):
+                allow_kf = True
             if allow_kf:
                 out["player_facing_text"] = _ensure_terminal_punctuation(ktxt)
                 tags = out.get("tags") if isinstance(out.get("tags"), list) else []

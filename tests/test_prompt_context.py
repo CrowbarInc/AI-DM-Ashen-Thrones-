@@ -1762,6 +1762,7 @@ def test_build_narration_context_narration_visibility_minimal_export():
         "enemies": [],
     }
     session = _session_with_registry()
+    session["turn_counter"] = 3  # avoid opening-scene fact curation path (selector may yield [])
     session["interaction_context"] = {
         "active_interaction_target_id": "npc_gate_guard",
         "active_interaction_kind": "social",
@@ -3171,7 +3172,7 @@ def test_conversational_memory_window_mirrored_on_response_policy_object_identit
 
 
 @pytest.mark.unit
-@patch("game.prompt_context._compress_recent_log")
+@patch("game.planner_head_state._compress_recent_log")
 def test_response_policy_path_uses_compress_recent_log(mock_compress):
     """Policy / lead slices use compressed log; selector still receives the full recent_log_for_prompt."""
     mock_compress.return_value = [{"player_input": "c1", "gm_snippet": "g1"}]

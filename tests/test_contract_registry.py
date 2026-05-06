@@ -43,15 +43,25 @@ def test_contract_registry_does_not_import_runtime_heavy_owners() -> None:
         "tools.planner_convergence_audit",
         "tests.test_planner_convergence_static_audit",
     )
-    for name in forbidden:
-        sys.modules.pop(name, None)
+    saved = {name: sys.modules.get(name) for name in forbidden}
+    try:
+        for name in forbidden:
+            sys.modules.pop(name, None)
 
-    importlib.invalidate_caches()
-    importlib.import_module("game.contract_registry")
+        importlib.invalidate_caches()
+        importlib.import_module("game.contract_registry")
 
-    # Import-light guarantee: importing the registry must not pull these in.
-    for name in forbidden:
-        assert name not in sys.modules
+        # Import-light guarantee: importing the registry must not pull these in.
+        for name in forbidden:
+            assert name not in sys.modules
+    finally:
+        # Restoring the pre-test module graph avoids split-brain imports later in the suite
+        # (consumers still holding references to evicted module objects vs fresh re-imports).
+        for name, previous in saved.items():
+            if previous is not None:
+                sys.modules[name] = previous
+            elif name in sys.modules:
+                del sys.modules[name]
 
 
 def test_emergency_fallback_registry_constants_and_helpers() -> None:

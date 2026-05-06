@@ -20,10 +20,10 @@
       "type": "noble_house",
       "attitude": "wary",
       "influence": 3,
-      "pressure": 4,
+      "pressure": 7,
       "goal": "Expand territory",
       "current_plan": "Gathering influence",
-      "agenda_progress": 2,
+      "agenda_progress": 5,
       "assets": []
     },
     {
@@ -32,10 +32,10 @@
       "type": "criminal_syndicate",
       "attitude": "opportunistic",
       "influence": 3,
-      "pressure": 4,
+      "pressure": 7,
       "goal": "Control black market",
       "current_plan": "Establishing smuggling routes",
-      "agenda_progress": 2,
+      "agenda_progress": 5,
       "assets": []
     },
     {
@@ -44,10 +44,10 @@
       "type": "religious_order",
       "attitude": "suspicious",
       "influence": 2,
-      "pressure": 3,
+      "pressure": 6,
       "goal": "Suppress dangerous magic",
       "current_plan": "Watching newcomers",
-      "agenda_progress": 2,
+      "agenda_progress": 5,
       "assets": []
     }
   ],
@@ -68,6 +68,21 @@
     {
       "type": "faction_pressure",
       "text": "Ordo Pyric's pressure mounts.",
+      "source": "ordo_pyric"
+    },
+    {
+      "type": "faction_operation_complete",
+      "text": "House Verevin completes an off-screen operation.",
+      "source": "house_verevin"
+    },
+    {
+      "type": "faction_operation_complete",
+      "text": "The Ash Cowl completes an off-screen operation.",
+      "source": "ash_cowl"
+    },
+    {
+      "type": "faction_operation_complete",
+      "text": "Ordo Pyric completes an off-screen operation.",
       "source": "ordo_pyric"
     }
   ],
@@ -123,35 +138,14 @@
       "promotion_reason": null,
       "promotion_turn": null,
       "tags": []
-    },
-    {
-      "id": "emergent_town_crier",
-      "name": "Town Crier",
-      "location": "frontier_gate",
-      "scene_id": "frontier_gate",
-      "role": "",
-      "affiliation": "",
-      "availability": "available",
-      "current_agenda": "",
-      "disposition": "neutral",
-      "origin_kind": "scene_actor",
-      "origin_scene_id": "frontier_gate",
-      "promoted_from_actor_id": "emergent_town_crier",
-      "promotion_reason": "social_auto:stable_explicit_address",
-      "promotion_turn": 3,
-      "knowledge_scope": [
-        "crier",
-        "town crier",
-        "scene:frontier_gate"
-      ],
-      "information_reliability": "partial",
-      "tags": [],
-      "topics": [],
-      "stance_toward_player": "neutral"
     }
   ],
   "world_state": {
-    "flags": {},
+    "flags": {
+      "faction_house_verevin_agenda_advanced": true,
+      "faction_ash_cowl_agenda_advanced": true,
+      "faction_ordo_pyric_agenda_advanced": true
+    },
     "counters": {},
     "clocks": {}
   }

@@ -3434,6 +3434,17 @@ def _resolve_known_fact_from_context(player_text: str, context: Dict[str, Any]) 
         return None
     scene_snapshot = context.get("scene_snapshot") if isinstance(context.get("scene_snapshot"), dict) else {}
     recent_leads = scene_snapshot.get("recent_contextual_leads") if isinstance(scene_snapshot.get("recent_contextual_leads"), list) else []
+    if _looks_like_follow_up_find_request(str(player_text or "")):
+        lead_first = _known_fact_from_recent_leads(player_text, recent_leads)
+        if isinstance(lead_first, dict):
+            t0 = str(lead_first.get("text") or "").strip()
+            if t0 and _is_valid_player_facing_fallback_answer(
+                t0,
+                player_text=player_text,
+                known_fact=lead_first,
+                failure_class="unresolved_question",
+            ):
+                return lead_first
     candidates: List[Dict[str, Any] | None] = [
         _known_fact_from_recent_leads(player_text, recent_leads),
         _known_fact_from_scene_location(player_text, scene_snapshot),

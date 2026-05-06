@@ -178,6 +178,9 @@ DEFAULT_SCENE_OPENING_PROHIBITED_CONTENT_CODES: Tuple[str, ...] = (
     "no_unfounded_faction_control_claims",
 )
 
+# Prose/quality heuristics only: substring scan on *derivation codes* and structural strings to flag
+# likely template leak — not a second opener authority. CTIR + narration_obligations still own
+# opening/resume obligations; a match here only fails structural validation (C1-A guard).
 _SCENE_OPENING_FALLBACK_MARKERS = (
     "neutral opener",
     "neutral_opener",

@@ -202,7 +202,11 @@ def test_apply_authoritative_scene_transition_runs_as_api_scene_state_orchestrat
     scene_envelope = {"scene": {"id": "other", "visible_facts": [], "exits": [], "mode": "exploration"}}
 
     monkeypatch.setattr("game.api.activate_scene", lambda sid: None)
-    monkeypatch.setattr("game.api.load_scene", lambda sid: dict(scene_envelope) | {"scene": {**scene_envelope["scene"], "id": sid}})
+    # Authoritative transition reloads via ``load_active_scene()`` (not ``load_scene`` templates).
+    monkeypatch.setattr(
+        "game.api.load_active_scene",
+        lambda: dict(scene_envelope) | {"scene": {**scene_envelope["scene"], "id": "other_scene"}},
+    )
     monkeypatch.setattr("game.api.load_session", lambda: session)
     monkeypatch.setattr("game.api.load_combat", lambda: combat)
 

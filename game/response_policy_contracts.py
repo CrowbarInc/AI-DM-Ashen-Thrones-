@@ -77,7 +77,11 @@ def _authoritative_dialogue_contract_from_resolution(
     )
     base = _valid_response_type_contract(metadata.get("response_type_contract"))
     if base is None:
-        base = _valid_response_type_contract(fallback) or {}
+        base = _valid_response_type_contract(fallback)
+    # Authoritative social with npc_reply_expected forces dialogue; stale neutral hints in
+    # metadata or policy fallbacks must not suppress the dialogue contract for prompt/emission.
+    if base is None:
+        base = {}
 
     out = dict(base)
     out["required_response_type"] = "dialogue"
@@ -179,6 +183,11 @@ def _last_player_input(
         return ""
     rt = get_scene_runtime(session, scene_id)
     return str((rt or {}).get("last_player_action_text") or "").strip()
+
+
+def coerce_valid_response_type_contract(candidate: Any) -> Dict[str, Any] | None:
+    """Return a copy-normalized contract dict if *candidate* is structurally valid, else None."""
+    return _valid_response_type_contract(candidate)
 
 
 def peek_response_type_contract_from_resolution(resolution: Any) -> Dict[str, Any] | None:

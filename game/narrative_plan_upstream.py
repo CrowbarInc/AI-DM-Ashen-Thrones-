@@ -1,5 +1,7 @@
 """Upstream-only helpers for CTIR → narrative plan construction (bundle / tooling seam).
 
+Input classification for this seam lives in :mod:`game.planner_input_manifest`.
+
 This module is **not** a narration renderer. :mod:`game.prompt_context` consumes plans
 and plan-adjacent inputs produced here (via :mod:`game.narration_plan_bundle`); it must
 not silently re-invoke this planner for production CTIR-backed turns. Full plans from
@@ -19,8 +21,10 @@ import copy
 from typing import Any, Dict, List, Mapping, Sequence, Set
 
 from game.narrative_planning import build_narrative_plan, validate_narrative_plan
-from game.response_policy_contracts import peek_response_type_contract_from_resolution
-from game.response_type_gating import derive_response_type_contract
+from game.planner_seam_fencing import (
+    attach_response_type_trace_to_policy,
+    resolve_response_type_contract_for_planner_seam,
+)
 
 # Transient session flag: first CTIR narration after snapshot restore (or tests) requests plan ``resume_entry``.
 SESSION_NARRATION_RESUME_ENTRY_PENDING_KEY = "_narration_resume_entry_pending"
@@ -367,21 +371,19 @@ def compute_narrative_plan_for_bundle_from_head(
         _plids,
     )
     if isinstance(resolution_sem, dict):
-        _rtc_peek_plan = peek_response_type_contract_from_resolution(resolution_sem)
         _ic_rtc_plan = interaction_context_snapshot_from_ctir_semantics(
             interaction_sem if isinstance(interaction_sem, dict) else None
         )
-        _rtc_plan_dict = _rtc_peek_plan or derive_response_type_contract(
-            segmented_turn=None,
-            normalized_action=None,
-            resolution=resolution_sem,
+        _rtc_plan_dict, _rtc_trace = resolve_response_type_contract_for_planner_seam(
+            ctir_attached=True,
+            resolution_sem=resolution_sem,
+            response_policy=rp_mut,
             interaction_context=_ic_rtc_plan,
-            directed_social_entry=None,
-            route_choice=None,
-            raw_player_text=str(user_text or ""),
-        ).to_dict()
+            user_text=str(user_text or ""),
+        )
         if isinstance(_rtc_plan_dict, dict):
             rp_mut["response_type_contract"] = _rtc_plan_dict
+            attach_response_type_trace_to_policy(rp_mut, _rtc_trace)
     try:
         _pub_ent = published_entities_slice_for_narrative_planning(
             visibility_contract if isinstance(visibility_contract, Mapping) else None
