@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from typing import Any, Mapping
 
-from game.dialogue_social_plan import validate_dialogue_social_plan
+from game.dialogue_social_plan import SPEAKER_ALIAS_RESOLUTION_SOURCES, validate_dialogue_social_plan
 
 
 def make_valid_dialogue_social_plan(
@@ -56,7 +56,11 @@ def make_valid_dialogue_social_plan(
         ],
         "derivation_codes": list(derivation_codes) if derivation_codes is not None else ["dialogue_social_plan:v1", "intent:ctir_only"],
         # Keep validator minimal; validate_dialogue_social_plan will populate it.
-        "validator": {"validated": False, "errors": []},
+        "validator": {
+            "validated": False,
+            "errors": [],
+            "allowed_speaker_alias_resolution_sources": sorted(SPEAKER_ALIAS_RESOLUTION_SOURCES),
+        },
     }
 
     if overrides:

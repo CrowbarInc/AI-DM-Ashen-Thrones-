@@ -1,9 +1,10 @@
-"""Formal contract for final-stage emission mutations (Block B: classification only).
+"""Formal contract for final-stage emission mutations (Gate taxonomy).
 
-Block B defines allowed vs disallowed *mutation kinds* at the final emission boundary.
-Runtime wiring into ``final_emission_gate`` / ``final_emission_repairs`` is deferred to Block C.
+Blocks B–D define allowed vs disallowed *mutation kinds* at the final emission boundary.
+Semantic-disallowed kinds are classified honestly but must not be passed to
+``assert_final_emission_mutation_allowed`` at runtime (integration tests enforce that).
 
-See ``docs/final_emission_boundary_audit.md``.
+See ``docs/final_emission_boundary_audit.md`` and ``docs/gate_cleanup_inventory.md``.
 """
 from __future__ import annotations
 
@@ -28,6 +29,8 @@ PACKAGING_ALLOWED: frozenset[str] = frozenset(
         "restore_accepted_scene_opening_candidate",
         # Bounded, non-inventive permutation only (moves existing answer sentence to front).
         "reorder_answer_to_front",
+        # Gate attaches interaction-continuity validation / legality-shaped diagnostics only (no prose repair).
+        "interaction_continuity_validation_attach",
     }
 )
 
@@ -38,6 +41,8 @@ LEGALITY_ALLOWED: frozenset[str] = frozenset(
         "strict_social_terminal_fallback",
         # Selector-only use of a prepared upstream opening snapshot; Gate does not compose prose.
         "select_upstream_prepared_opening_fallback",
+        # Sealed deterministic minimal social line when strong continuity fails under strict-social orchestration.
+        "interaction_continuity_strict_social_fallback",
     }
 )
 
@@ -62,6 +67,9 @@ SEMANTIC_DISALLOWED: frozenset[str] = frozenset(
         "strict_social_referential_substitution",
         "effective_social_resolution_sync",
         "compose_opening_fallback_compatibility_local",
+        # Interaction continuity: Gate-local semantic repair / speaker-bridge residue (not packaging).
+        "interaction_continuity_repair",
+        "interaction_continuity_malformed_speaker_bridge",
     }
 )
 

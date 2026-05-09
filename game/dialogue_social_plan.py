@@ -74,6 +74,19 @@ PROHIBITED_CONTENT_CODES: frozenset[str] = frozenset(
     }
 )
 
+# Phase 1 (Block Y): declared pregate alias provenance — never ``inferred_from_prose``.
+SPEAKER_ALIAS_RESOLUTION_SOURCES: frozenset[str] = frozenset(
+    {
+        "continuity_snapshot",
+        "referent_tracking",
+        "interaction_continuity_contract",
+        "manual_bundle_override",
+    }
+)
+
+_ALIAS_LABEL_MAX_LEN = 128
+_MAX_DECLARED_PREGATE_LABELS = 8
+
 
 def _as_str(v: Any) -> str:
     return str(v or "").strip()
@@ -94,6 +107,85 @@ def _safe_list_str(items: Sequence[Any] | None, *, limit: int = 16) -> List[str]
         if s and s not in out:
             out.append(s)
     return out
+
+
+def _normalized_attribution_label(raw: Any) -> Optional[str]:
+    """Bounded structural label from upstream maps — reject newline/control-heavy blobs."""
+    t = _as_str(raw)
+    if not t or len(t) > _ALIAS_LABEL_MAX_LEN:
+        return None
+    if any(c in t for c in "\n\r\t"):
+        return None
+    return t
+
+
+def _labels_and_writer_from_alias_mapping(m: Mapping[str, Any]) -> Tuple[List[str], Optional[str]]:
+    """Read optional Phase-1 keys only (declared upstream data)."""
+    raw_list = m.get("allowed_pregate_speaker_labels")
+    labels = (
+        _safe_list_str(raw_list, limit=_MAX_DECLARED_PREGATE_LABELS)
+        if isinstance(raw_list, (list, tuple))
+        else []
+    )
+    wl = _normalized_attribution_label(m.get("writer_attribution_label"))
+    return labels, wl
+
+
+def _dedupe_labels_ci(labels: Sequence[str]) -> List[str]:
+    seen: set[str] = set()
+    out: List[str] = []
+    for raw in labels:
+        s = _as_str(raw)
+        if not s:
+            continue
+        k = s.lower()
+        if k in seen:
+            continue
+        seen.add(k)
+        out.append(s)
+        if len(out) >= _MAX_DECLARED_PREGATE_LABELS:
+            break
+    return out
+
+
+def _collect_declared_pregate_alias_fields(
+    ctir_obj: Mapping[str, Any] | None,
+    referent_tracking: Mapping[str, Any] | None,
+) -> Tuple[List[str], Optional[str], Optional[str]]:
+    """Return (allowed_pregate_speaker_labels, writer_attribution_label, speaker_alias_resolution_source).
+
+    Populated only from **declared** CTIR / referent_tracking structure — no prose inference,
+    no synthesizing aliases from entity ids or names.
+    """
+    ctir = ctir_obj if isinstance(ctir_obj, Mapping) else {}
+    inter = ctir.get("interaction") if isinstance(ctir.get("interaction"), Mapping) else {}
+    cont = inter.get("continuity_snapshot") if isinstance(inter.get("continuity_snapshot"), Mapping) else {}
+
+    allowed: List[str] = []
+    writer: Optional[str] = None
+    primary_source: Optional[str] = None
+
+    if isinstance(cont, Mapping):
+        cl, cw = _labels_and_writer_from_alias_mapping(cont)
+        if cl or cw:
+            primary_source = "continuity_snapshot"
+            allowed.extend(cl)
+            writer = cw
+
+    rt = referent_tracking if isinstance(referent_tracking, Mapping) else {}
+    rtl, rtw = _labels_and_writer_from_alias_mapping(rt)
+    if rtl or rtw:
+        if primary_source is None:
+            primary_source = "referent_tracking"
+        for x in rtl:
+            allowed.append(x)
+        if writer is None:
+            writer = rtw
+
+    allowed = _dedupe_labels_ci(allowed)
+    if not allowed and not writer:
+        return [], None, None
+    return allowed, writer, primary_source
 
 
 def _pressure_state_from_engagement(engagement_level: str) -> str:
@@ -225,6 +317,10 @@ def build_dialogue_social_plan(
     if not tone_bounds:
         tone_bounds = ["neutral"]
 
+    pregate_labels, pregate_writer, pregate_source = _collect_declared_pregate_alias_fields(
+        ctir, referent_tracking
+    )
+
     derivation_codes: List[str] = [
         "dialogue_social_plan:v1",
         *(speaker_deriv or []),
@@ -234,6 +330,8 @@ def build_dialogue_social_plan(
         derivation_codes.append("session_hints:bounded")
     if referent_tracking:
         derivation_codes.append("referent_tracking:consumed")
+    if pregate_labels or pregate_writer:
+        derivation_codes.append(f"speaker_alias_declared:{pregate_source or 'unknown'}")
 
     prohibited = sorted(PROHIBITED_CONTENT_CODES)
 
@@ -260,8 +358,16 @@ def build_dialogue_social_plan(
             "allowed_pressure_states": sorted(PRESSURE_STATES),
             "allowed_tone_codes": sorted(TONE_CODES),
             "allowed_relationship_codes": sorted(RELATIONSHIP_CODES),
+            "allowed_speaker_alias_resolution_sources": sorted(SPEAKER_ALIAS_RESOLUTION_SOURCES),
         },
     }
+    # Phase 1 (Block Y): optional declared pregate aliases — omit keys when absent (backward compatible).
+    if pregate_labels:
+        plan["allowed_pregate_speaker_labels"] = list(pregate_labels)
+    if pregate_writer:
+        plan["writer_attribution_label"] = pregate_writer
+    if pregate_labels or pregate_writer:
+        plan["speaker_alias_resolution_source"] = pregate_source or "referent_tracking"
     # Optional bounded hints pass-through (must remain structural).
     if isinstance(bounded_session_hints, Mapping) and bounded_session_hints:
         # Keep only atoms and tiny bounded lists; never store full maps.
@@ -344,6 +450,35 @@ def validate_dialogue_social_plan(plan: Mapping[str, Any] | None, *, strict: boo
                     errors.append("bad_relationship_code")
                     break
 
+    apl = plan.get("allowed_pregate_speaker_labels")
+    has_list_labels = False
+    if apl is not None:
+        if not isinstance(apl, list):
+            errors.append("allowed_pregate_speaker_labels_not_list")
+        elif len(apl) > _MAX_DECLARED_PREGATE_LABELS:
+            errors.append("allowed_pregate_speaker_labels_over_limit")
+        else:
+            for item in apl:
+                if not _normalized_attribution_label(item):
+                    errors.append("bad_allowed_pregate_speaker_label_item")
+                    break
+            else:
+                has_list_labels = bool(apl)
+
+    wal_raw = plan.get("writer_attribution_label")
+    has_writer = bool(wal_raw is not None and _normalized_attribution_label(wal_raw))
+    if wal_raw is not None and not has_writer:
+        errors.append("bad_writer_attribution_label")
+
+    alias_src = _as_str(plan.get("speaker_alias_resolution_source"))
+    has_alias_data = bool(has_list_labels or has_writer)
+    if has_alias_data and not alias_src:
+        errors.append("missing_required:speaker_alias_resolution_source_when_alias_fields_present")
+    if alias_src and alias_src not in SPEAKER_ALIAS_RESOLUTION_SOURCES:
+        errors.append("bad_speaker_alias_resolution_source")
+    if alias_src and not has_alias_data:
+        errors.append("speaker_alias_resolution_source_without_alias_fields")
+
     # Ensure JSON-safety.
     try:
         json.dumps(dict(plan), sort_keys=True)
@@ -364,4 +499,41 @@ def validate_dialogue_social_plan(plan: Mapping[str, Any] | None, *, strict: boo
     if strict and not ok:
         raise ValueError(";".join(errors))
     return ok, errors
+
+
+def pregate_attributed_label_matches_dialogue_social_plan(
+    attributed_label: str,
+    plan: Mapping[str, Any],
+) -> bool:
+    """Return True when *attributed_label* is explicitly allowed by the structural plan.
+
+    **Exact token equality only** (case-fold on ASCII-ish speaker tokens): canonical
+    ``speaker_id`` slug vs whitespace→underscore slug of the attributed fragment,
+    canonical ``speaker_name``, declared ``writer_attribution_label``, or membership in
+    ``allowed_pregate_speaker_labels``. No fuzzy matching and no inference from unrelated prose.
+    """
+    lab = _as_str(attributed_label)
+    if not lab:
+        return False
+    ll = lab.strip().lower()
+    ll_slug = ll.replace(" ", "_")
+
+    sid = _as_str(plan.get("speaker_id")).strip().lower()
+    sname = _as_str(plan.get("speaker_name")).strip().lower()
+
+    if sid and ll_slug == sid:
+        return True
+    if sname and ll == sname:
+        return True
+
+    wal = _as_str(plan.get("writer_attribution_label")).strip().lower()
+    if wal and ll == wal:
+        return True
+
+    raw = plan.get("allowed_pregate_speaker_labels")
+    if isinstance(raw, list):
+        for item in raw:
+            if _as_str(item).strip().lower() == ll:
+                return True
+    return False
 

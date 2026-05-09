@@ -4534,6 +4534,9 @@ def build_messages(
             "tone_bounds",
             "prohibited_content_codes",
             "derivation_codes",
+            "allowed_pregate_speaker_labels",
+            "writer_attribution_label",
+            "speaker_alias_resolution_source",
         )
         payload["dialogue_social_plan"] = {k: dsp.get(k) for k in allowed_keys if k in dsp}
     if isinstance(resolution, dict):

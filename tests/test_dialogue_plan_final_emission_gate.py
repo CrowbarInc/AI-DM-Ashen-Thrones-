@@ -207,3 +207,162 @@ def test_non_dialogue_narration_unaffected_when_not_strict_social() -> None:
     assert meta.get("dialogue_plan_checked") in (None, False)
     assert out["player_facing_text"] == "Rain beads on the checkpoint stones."
 
+
+def test_block_z_declared_writer_attribution_label_passes() -> None:
+    session = default_session()
+    world = default_world()
+    sid = "frontier_gate"
+    set_social_target(session, "tavern_runner")
+    rebuild_active_scene_entities(session, world, sid)
+    resolution = _strict_social_resolution()
+    rt = get_scene_runtime(session, sid)
+    rt["last_player_action_text"] = resolution["prompt"]
+    attach_dialogue_social_plan_to_resolution(
+        resolution,
+        make_valid_dialogue_social_plan(
+            speaker_id="tavern_runner",
+            speaker_name="Tavern Runner",
+            dialogue_intent="question",
+            writer_attribution_label="Ragged stranger",
+            speaker_alias_resolution_source="manual_bundle_override",
+        ),
+    )
+
+    out = apply_final_emission_gate(
+        {"player_facing_text": 'Ragged stranger says, "East road."', "tags": []},
+        resolution=resolution,
+        session=session,
+        scene_id=sid,
+        world=world,
+    )
+    meta = read_final_emission_meta_dict(out) or {}
+    assert meta.get("dialogue_plan_valid") is True
+    assert '"' in out["player_facing_text"]
+
+
+def test_block_z_declared_allowed_pregate_labels_passes() -> None:
+    session = default_session()
+    world = default_world()
+    sid = "frontier_gate"
+    set_social_target(session, "tavern_runner")
+    rebuild_active_scene_entities(session, world, sid)
+    resolution = _strict_social_resolution()
+    rt = get_scene_runtime(session, sid)
+    rt["last_player_action_text"] = resolution["prompt"]
+    attach_dialogue_social_plan_to_resolution(
+        resolution,
+        make_valid_dialogue_social_plan(
+            speaker_id="tavern_runner",
+            speaker_name="Tavern Runner",
+            dialogue_intent="question",
+            allowed_pregate_speaker_labels=["Ragged stranger", "Hooded figure"],
+            speaker_alias_resolution_source="manual_bundle_override",
+        ),
+    )
+
+    out = apply_final_emission_gate(
+        {"player_facing_text": 'Hooded figure says, "East road."', "tags": []},
+        resolution=resolution,
+        session=session,
+        scene_id=sid,
+        world=world,
+    )
+    meta = read_final_emission_meta_dict(out) or {}
+    assert meta.get("dialogue_plan_valid") is True
+
+
+def test_block_z_alias_labels_without_provenance_plan_invalid() -> None:
+    session = default_session()
+    world = default_world()
+    sid = "frontier_gate"
+    set_social_target(session, "tavern_runner")
+    rebuild_active_scene_entities(session, world, sid)
+    resolution = _strict_social_resolution()
+    rt = get_scene_runtime(session, sid)
+    rt["last_player_action_text"] = resolution["prompt"]
+    plan = make_valid_dialogue_social_plan(
+        speaker_id="tavern_runner",
+        speaker_name="Tavern Runner",
+        dialogue_intent="question",
+    )
+    plan["allowed_pregate_speaker_labels"] = ["Ragged stranger"]
+    plan.pop("speaker_alias_resolution_source", None)
+    attach_dialogue_social_plan_to_resolution(resolution, plan)
+
+    out = apply_final_emission_gate(
+        {"player_facing_text": 'Ragged stranger says, "East road."', "tags": []},
+        resolution=resolution,
+        session=session,
+        scene_id=sid,
+        world=world,
+    )
+    meta = read_final_emission_meta_dict(out) or {}
+    assert meta.get("dialogue_plan_valid") is False
+    reasons = meta.get("dialogue_plan_failure_reasons") or []
+    assert any(str(r).startswith("plan_invalid:") for r in reasons)
+
+
+def test_block_z_invalid_provenance_inferred_from_prose_plan_invalid() -> None:
+    session = default_session()
+    world = default_world()
+    sid = "frontier_gate"
+    set_social_target(session, "tavern_runner")
+    rebuild_active_scene_entities(session, world, sid)
+    resolution = _strict_social_resolution()
+    rt = get_scene_runtime(session, sid)
+    rt["last_player_action_text"] = resolution["prompt"]
+    plan = make_valid_dialogue_social_plan(
+        speaker_id="tavern_runner",
+        speaker_name="Tavern Runner",
+        dialogue_intent="question",
+        allowed_pregate_speaker_labels=["Ragged stranger"],
+        speaker_alias_resolution_source="manual_bundle_override",
+    )
+    plan["speaker_alias_resolution_source"] = "inferred_from_prose"
+    attach_dialogue_social_plan_to_resolution(resolution, plan)
+
+    out = apply_final_emission_gate(
+        {"player_facing_text": 'Ragged stranger says, "East road."', "tags": []},
+        resolution=resolution,
+        session=session,
+        scene_id=sid,
+        world=world,
+    )
+    meta = read_final_emission_meta_dict(out) or {}
+    assert meta.get("dialogue_plan_valid") is False
+    reasons = meta.get("dialogue_plan_failure_reasons") or []
+    assert any("bad_speaker_alias_resolution_source" in str(r) for r in reasons)
+
+
+def test_block_z_unrelated_alias_still_mismatch() -> None:
+    session = default_session()
+    world = default_world()
+    sid = "frontier_gate"
+    set_social_target(session, "tavern_runner")
+    rebuild_active_scene_entities(session, world, sid)
+    resolution = _strict_social_resolution()
+    rt = get_scene_runtime(session, sid)
+    rt["last_player_action_text"] = resolution["prompt"]
+    attach_dialogue_social_plan_to_resolution(
+        resolution,
+        make_valid_dialogue_social_plan(
+            speaker_id="tavern_runner",
+            speaker_name="Tavern Runner",
+            dialogue_intent="question",
+            allowed_pregate_speaker_labels=["Ragged stranger"],
+            speaker_alias_resolution_source="manual_bundle_override",
+        ),
+    )
+
+    out = apply_final_emission_gate(
+        {"player_facing_text": 'Town crier says, "East road."', "tags": []},
+        resolution=resolution,
+        session=session,
+        scene_id=sid,
+        world=world,
+    )
+    meta = read_final_emission_meta_dict(out) or {}
+    assert meta.get("dialogue_plan_valid") is False
+    reasons = meta.get("dialogue_plan_failure_reasons") or []
+    assert any(str(r).startswith("attributed_speaker_mismatch:") for r in reasons)
+

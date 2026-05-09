@@ -20,6 +20,7 @@ from game.upstream_response_repairs import (
     build_minimal_action_outcome_contract_repair_text,
     build_upstream_prepared_emission_payload,
     build_upstream_prepared_opening_fallback_payload,
+    is_structurally_usable_upstream_prepared_opening_fallback_payload,
     maybe_attach_upstream_prepared_opening_fallback_payload,
     merge_upstream_prepared_emission_into_gm_output,
 )
@@ -250,3 +251,49 @@ def test_maybe_attach_upstream_opening_preserves_existing_nonempty_payload() -> 
     gm[UPSTREAM_PREPARED_OPENING_FALLBACK_KEY] = custom
     maybe_attach_upstream_prepared_opening_fallback_payload(gm, resolution={"kind": "scene_opening", "prompt": "Start."})
     assert gm[UPSTREAM_PREPARED_OPENING_FALLBACK_KEY]["prepared_opening_fallback_text"] == "CUSTOM_OPENING_FALLBACK."
+
+
+def test_maybe_attach_upstream_opening_replaces_text_only_stub_with_full_snapshot() -> None:
+    """Block I: text-only stub is not kept when curated facts can supply a full upstream snapshot."""
+    gm = _opening_gm_output()
+    gm[UPSTREAM_PREPARED_OPENING_FALLBACK_KEY] = {"prepared_opening_fallback_text": EXPECTED_FRONTIER_GATE_OPENING_FALLBACK}
+    assert not is_structurally_usable_upstream_prepared_opening_fallback_payload(
+        gm[UPSTREAM_PREPARED_OPENING_FALLBACK_KEY]
+    )
+    maybe_attach_upstream_prepared_opening_fallback_payload(gm, resolution={"kind": "scene_opening", "prompt": "Start."})
+    pay = gm[UPSTREAM_PREPARED_OPENING_FALLBACK_KEY]
+    assert is_structurally_usable_upstream_prepared_opening_fallback_payload(pay)
+    assert pay["prepared_opening_fallback_text"] == EXPECTED_FRONTIER_GATE_OPENING_FALLBACK
+
+
+def test_block_m_maybe_attach_records_build_failure_on_emission_debug(monkeypatch: pytest.MonkeyPatch) -> None:
+    import game.upstream_response_repairs as urr
+
+    gm = _opening_gm_output()
+    gm.pop(UPSTREAM_PREPARED_OPENING_FALLBACK_KEY, None)
+
+    def boom(_mapping: object) -> dict[str, object]:
+        raise RuntimeError("attach build boom")
+
+    monkeypatch.setattr(urr, "build_upstream_prepared_opening_fallback_payload", boom)
+    maybe_attach_upstream_prepared_opening_fallback_payload(gm, resolution={"kind": "scene_opening", "prompt": "Start."})
+    em = gm["metadata"]["emission_debug"]
+    assert em["opening_upstream_prepare_attach_build_failed"] is True
+    assert em["opening_upstream_prepare_attach_failure_exc_type"] == "RuntimeError"
+    assert em["opening_upstream_prepare_attach_no_usable_payload_after_attempt"] is True
+    assert UPSTREAM_PREPARED_OPENING_FALLBACK_KEY not in gm
+
+
+def test_block_m_maybe_attach_success_clears_stale_attach_failure_keys() -> None:
+    gm = _opening_gm_output()
+    gm.pop(UPSTREAM_PREPARED_OPENING_FALLBACK_KEY, None)
+    md = gm.setdefault("metadata", {})
+    em = md.setdefault("emission_debug", {})
+    em["opening_upstream_prepare_attach_build_failed"] = True
+    em["opening_upstream_prepare_attach_failure_exc_type"] = "StaleError"
+    em["opening_upstream_prepare_attach_no_usable_payload_after_attempt"] = True
+    maybe_attach_upstream_prepared_opening_fallback_payload(gm, resolution={"kind": "scene_opening", "prompt": "Start."})
+    em2 = gm["metadata"]["emission_debug"]
+    assert "opening_upstream_prepare_attach_build_failed" not in em2
+    assert "opening_upstream_prepare_attach_failure_exc_type" not in em2
+    assert "opening_upstream_prepare_attach_no_usable_payload_after_attempt" not in em2

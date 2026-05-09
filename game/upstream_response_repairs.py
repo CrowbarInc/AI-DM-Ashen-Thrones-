@@ -170,6 +170,22 @@ def build_minimal_action_outcome_contract_repair_text(
     return _normalize_terminal_punctuation(f"{action_clause}, and {result_clause}")
 
 
+def is_structurally_usable_upstream_prepared_opening_fallback_payload(raw: Any) -> bool:
+    """True when *raw* has text, composition meta, and opening meta required by the gate selector."""
+    if not isinstance(raw, dict):
+        return False
+    text = raw.get("prepared_opening_fallback_text")
+    if not isinstance(text, str) or not text.strip():
+        return False
+    comp = raw.get("opening_fallback_composition_meta")
+    if not isinstance(comp, dict):
+        return False
+    ob_meta = raw.get("opening_fallback_meta")
+    if not isinstance(ob_meta, dict):
+        return False
+    return True
+
+
 def build_upstream_prepared_opening_fallback_payload(
     gm_output: Mapping[str, Any] | None,
 ) -> Dict[str, Any]:
@@ -203,6 +219,27 @@ def build_upstream_prepared_opening_fallback_payload(
     return payload
 
 
+def _patch_scene_opening_upstream_prepare_attach_emission_debug(
+    gm_output: Dict[str, Any],
+    *,
+    build_failed: bool,
+    exc_type: str | None,
+    no_usable_payload_after_attempt: bool,
+) -> None:
+    """Record Block M observability on ``metadata.emission_debug`` (attach attempt did not yield usable payload)."""
+    md = gm_output.setdefault("metadata", {})
+    if not isinstance(md, dict):
+        gm_output["metadata"] = {}
+        md = gm_output["metadata"]
+    em = md.setdefault("emission_debug", {})
+    if not isinstance(em, dict):
+        md["emission_debug"] = {}
+        em = md["emission_debug"]
+    em["opening_upstream_prepare_attach_build_failed"] = bool(build_failed)
+    em["opening_upstream_prepare_attach_failure_exc_type"] = exc_type
+    em["opening_upstream_prepare_attach_no_usable_payload_after_attempt"] = bool(no_usable_payload_after_attempt)
+
+
 def maybe_attach_upstream_prepared_opening_fallback_payload(
     gm_output: Dict[str, Any] | None,
     *,
@@ -210,9 +247,14 @@ def maybe_attach_upstream_prepared_opening_fallback_payload(
 ) -> None:
     """Attach ``upstream_prepared_opening_fallback`` when scene-opening curated facts are usable.
 
-    Idempotent: existing non-empty ``prepared_opening_fallback_text`` on the stored payload wins.
-    On build failure, leaves *gm_output* unchanged (gate compatibility path may still call the shared
-    composer locally).
+    Idempotent: an existing payload is kept only when it is **structurally usable** (text +
+    ``opening_fallback_composition_meta`` + ``opening_fallback_meta``). A text-only stub is
+    replaced by a full upstream-prepared snapshot (Block I).
+    On build failure, leaves *gm_output* unchanged (gate stub-recovery path may fail closed).
+
+    **Block M:** when a rebuild was required but :func:`build_upstream_prepared_opening_fallback_payload`
+    raises, records ``opening_upstream_prepare_attach_*`` keys on ``metadata.emission_debug``.
+    Successful silent attach does not add these keys.
     """
     if not isinstance(gm_output, dict) or not isinstance(resolution, dict):
         return
@@ -224,14 +266,24 @@ def maybe_attach_upstream_prepared_opening_fallback_payload(
     if not any(isinstance(x, str) and x.strip() for x in facts):
         return
     existing = gm_output.get(UPSTREAM_PREPARED_OPENING_FALLBACK_KEY)
-    if isinstance(existing, dict):
-        prior = existing.get("prepared_opening_fallback_text")
-        if isinstance(prior, str) and prior.strip():
-            return
+    if isinstance(existing, dict) and is_structurally_usable_upstream_prepared_opening_fallback_payload(existing):
+        return
     try:
         gm_output[UPSTREAM_PREPARED_OPENING_FALLBACK_KEY] = build_upstream_prepared_opening_fallback_payload(gm_output)
-    except Exception:
+    except Exception as exc:
+        _patch_scene_opening_upstream_prepare_attach_emission_debug(
+            gm_output,
+            build_failed=True,
+            exc_type=type(exc).__name__,
+            no_usable_payload_after_attempt=True,
+        )
         return
+    md0 = gm_output.get("metadata")
+    em0 = md0.get("emission_debug") if isinstance(md0, dict) else None
+    if isinstance(em0, dict):
+        em0.pop("opening_upstream_prepare_attach_build_failed", None)
+        em0.pop("opening_upstream_prepare_attach_failure_exc_type", None)
+        em0.pop("opening_upstream_prepare_attach_no_usable_payload_after_attempt", None)
 
 
 def build_upstream_prepared_emission_payload(

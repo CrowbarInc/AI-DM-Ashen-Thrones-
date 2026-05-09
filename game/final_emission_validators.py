@@ -347,6 +347,14 @@ def _default_response_type_debug(contract: Dict[str, Any] | None, source: str | 
         "opening_fallback_basis_count": 0,
         "opening_fallback_context_missing": False,
         "opening_fallback_failed_closed": False,
+        "opening_fallback_compatibility_local_disabled": False,
+        "opening_fallback_missing_upstream_prepared_payload": False,
+        "opening_fallback_missing_curated_facts": False,
+        "opening_fallback_upstream_payload_unusable": False,
+        "opening_fallback_upstream_payload_recovered": False,
+        "opening_upstream_prepare_attach_build_failed": False,
+        "opening_upstream_prepare_attach_failure_exc_type": None,
+        "opening_upstream_prepare_attach_no_usable_payload_after_attempt": False,
         "blocked_repair_kind": None,
         "opening_repair_source": "not_opening",
         "opening_fallback_authorship_source": None,
@@ -381,6 +389,18 @@ def _merge_response_type_meta(meta: Dict[str, Any], debug: Dict[str, Any]) -> No
             "opening_fallback_basis_count": int(debug.get("opening_fallback_basis_count") or 0),
             "opening_fallback_context_missing": bool(debug.get("opening_fallback_context_missing")),
             "opening_fallback_failed_closed": bool(debug.get("opening_fallback_failed_closed")),
+            "opening_fallback_compatibility_local_disabled": bool(debug.get("opening_fallback_compatibility_local_disabled")),
+            "opening_fallback_missing_upstream_prepared_payload": bool(
+                debug.get("opening_fallback_missing_upstream_prepared_payload")
+            ),
+            "opening_fallback_missing_curated_facts": bool(debug.get("opening_fallback_missing_curated_facts")),
+            "opening_fallback_upstream_payload_unusable": bool(debug.get("opening_fallback_upstream_payload_unusable")),
+            "opening_fallback_upstream_payload_recovered": bool(debug.get("opening_fallback_upstream_payload_recovered")),
+            "opening_upstream_prepare_attach_build_failed": bool(debug.get("opening_upstream_prepare_attach_build_failed")),
+            "opening_upstream_prepare_attach_failure_exc_type": debug.get("opening_upstream_prepare_attach_failure_exc_type"),
+            "opening_upstream_prepare_attach_no_usable_payload_after_attempt": bool(
+                debug.get("opening_upstream_prepare_attach_no_usable_payload_after_attempt")
+            ),
             "blocked_repair_kind": debug.get("blocked_repair_kind"),
             "opening_repair_source": debug.get("opening_repair_source"),
             "opening_fallback_authorship_source": debug.get("opening_fallback_authorship_source"),
@@ -420,6 +440,18 @@ def _response_type_decision_payload(debug: Dict[str, Any]) -> Dict[str, Any]:
         "opening_fallback_basis_count": int(debug.get("opening_fallback_basis_count") or 0),
         "opening_fallback_context_missing": bool(debug.get("opening_fallback_context_missing")),
         "opening_fallback_failed_closed": bool(debug.get("opening_fallback_failed_closed")),
+        "opening_fallback_compatibility_local_disabled": bool(debug.get("opening_fallback_compatibility_local_disabled")),
+        "opening_fallback_missing_upstream_prepared_payload": bool(
+            debug.get("opening_fallback_missing_upstream_prepared_payload")
+        ),
+        "opening_fallback_missing_curated_facts": bool(debug.get("opening_fallback_missing_curated_facts")),
+        "opening_fallback_upstream_payload_unusable": bool(debug.get("opening_fallback_upstream_payload_unusable")),
+        "opening_fallback_upstream_payload_recovered": bool(debug.get("opening_fallback_upstream_payload_recovered")),
+        "opening_upstream_prepare_attach_build_failed": bool(debug.get("opening_upstream_prepare_attach_build_failed")),
+        "opening_upstream_prepare_attach_failure_exc_type": debug.get("opening_upstream_prepare_attach_failure_exc_type"),
+        "opening_upstream_prepare_attach_no_usable_payload_after_attempt": bool(
+            debug.get("opening_upstream_prepare_attach_no_usable_payload_after_attempt")
+        ),
         "blocked_repair_kind": debug.get("blocked_repair_kind"),
         "opening_repair_source": debug.get("opening_repair_source"),
         "opening_fallback_authorship_source": debug.get("opening_fallback_authorship_source"),

@@ -78,11 +78,7 @@ from game.narration_visibility import (
     _split_visibility_sentences,
 )
 from game.output_sanitizer import sanitize_player_facing_output
-from game.social import (
-    SOCIAL_KINDS,
-    SPEAKER_CONTRACT_FORBIDDEN_FALLBACK_LABELS,
-    neutral_reply_speaker_grounding_bridge_line,
-)
+from game.social import SOCIAL_KINDS
 from game.social_exchange_emission import (
     _active_interlocutor_matches_resolution_social_npc,
     _has_explicit_interruption_shape,
@@ -153,6 +149,16 @@ from game.final_emission_meta import (
 )
 from game.state_channels import project_author_payload, project_debug_payload, project_public_payload
 from game.final_emission_boundary_contract import assert_final_emission_mutation_allowed
+from game.speaker_contract_enforcement import (
+    SPEAKER_CONTRACT_ENFORCEMENT_REASON_CODES,
+    SPEAKER_REASON_SPEAKER_BINDING_MISMATCH,
+    _apply_speaker_contract_repairs,
+    _merge_speaker_enforcement_into_outputs,
+    _sync_eff_social_to_resolution,
+    detect_emitted_speaker_signature,
+    get_speaker_selection_contract,
+    validate_emitted_speaker_against_contract,
+)
 from game.final_emission_text import (
     _ACTION_RESULT_PATTERNS,
     _AGENCY_SUBSTITUTE_PATTERNS,
@@ -168,6 +174,7 @@ from game.final_emission_text import (
     _sanitize_output_text,
 )
 from game.opening_deterministic_fallback import (
+    OPENING_FALLBACK_EMPTY_CURATED_FACTS_MARKER,
     deterministic_opening_fallback_text_and_meta as _deterministic_opening_fallback_text_and_meta,
     opening_context_from_gm_output as _opening_context_from_gm_output,
 )
@@ -188,7 +195,10 @@ from game.realization_provenance import (
     normalize_realization_fallback_family,
 )
 
-from game.dialogue_social_plan import validate_dialogue_social_plan
+from game.dialogue_social_plan import (
+    pregate_attributed_label_matches_dialogue_social_plan,
+    validate_dialogue_social_plan,
+)
 
 
 from game.final_emission_repairs import (
@@ -219,6 +229,8 @@ from game.upstream_response_repairs import (
     UPSTREAM_PREPARED_EMISSION_KEY,
     UPSTREAM_PREPARED_OPENING_FALLBACK_KEY,
     build_social_fallback_resolution,
+    build_upstream_prepared_opening_fallback_payload,
+    is_structurally_usable_upstream_prepared_opening_fallback_payload,
     maybe_attach_upstream_prepared_opening_fallback_payload,
     merge_upstream_prepared_emission_into_gm_output,
 )
@@ -679,16 +691,10 @@ def _enforce_dialogue_plan_invariant_on_strict_social(
 
         attributed = [str(x).strip() for x in (sig.get("attributed_speakers") or []) if str(x).strip()]
         if attributed:
-            sid = str(dsp.get("speaker_id") or "").strip().lower()
-            sname = str(dsp.get("speaker_name") or "").strip().lower()
             for lab in attributed:
-                ll = lab.strip().lower()
-                ll_slug = ll.replace(" ", "_")
-                if sid and ll_slug == sid:
+                if pregate_attributed_label_matches_dialogue_social_plan(lab, dsp):
                     continue
-                if sname and ll == sname:
-                    continue
-                if sname or sid:
+                if str(dsp.get("speaker_id") or "").strip() or str(dsp.get("speaker_name") or "").strip():
                     failure_reasons.append(f"attributed_speaker_mismatch:{lab}")
                     break
 
@@ -3964,18 +3970,94 @@ def is_valid_opening(text: str, curated_facts: Sequence[Any]) -> bool:
     return matches >= 2
 
 
-
-def _compat_opening_fallback_text_from_gm(gm_output: Mapping[str, Any] | None) -> str:
-    """Compatibility-only: opening deterministic text when ``upstream_prepared_opening_fallback`` is unusable."""
-    text, _meta = _deterministic_opening_fallback_text_and_meta(gm_output)
-    return text
-
-
 def _opening_fallback_classification() -> Dict[str, str]:
     template_id = "opening_deterministic_fallback"
     if not diegetic_opening_scene_template_allowed(template_id):
         raise AssertionError("opening deterministic fallback template is not opening-scene classified")
     return diegetic_classified_fallback_meta(template_id)
+
+
+def _opening_curated_facts_have_attachable_non_empty_strings(gm_output: Mapping[str, Any] | None) -> bool:
+    """Aligned with :func:`game.upstream_response_repairs.maybe_attach_upstream_prepared_opening_fallback_payload`."""
+    if not isinstance(gm_output, dict):
+        return False
+    facts = gm_output.get("opening_curated_facts")
+    if not isinstance(facts, list):
+        return False
+    return any(isinstance(x, str) and x.strip() for x in facts)
+
+
+def _opening_curated_facts_schema_ok(gm_output: Mapping[str, Any] | None) -> bool:
+    """True when ``opening_curated_facts`` is present and a list (empty list is valid schema)."""
+    return (
+        isinstance(gm_output, dict)
+        and "opening_curated_facts" in gm_output
+        and isinstance(gm_output.get("opening_curated_facts"), list)
+    )
+
+
+def _gm_output_normalized_for_opening_context(gm_output: Mapping[str, Any] | None) -> Mapping[str, Any]:
+    """Normalize missing/non-list ``opening_curated_facts`` to ``[]`` so context extraction does not assert (Block J)."""
+    if not isinstance(gm_output, dict):
+        return {"opening_curated_facts": []}
+    if _opening_curated_facts_schema_ok(gm_output):
+        return gm_output
+    merged = dict(gm_output)
+    merged["opening_curated_facts"] = []
+    return merged
+
+
+def _opening_fail_closed_meta_upstream_missing_insufficient_curated_facts(
+    gm_output: Mapping[str, Any] | None,
+) -> Dict[str, Any]:
+    """Meta for sealed opening marker without gate-local deterministic composition (Block H).
+
+    Invoked only when prepared upstream opening fallback is unusable and curated facts cannot supply
+    attachable strings — same precondition family as skipping upstream ``maybe_attach``.
+    """
+    block_h = {
+        "opening_fallback_compatibility_local_disabled": True,
+        "opening_fallback_missing_upstream_prepared_payload": True,
+    }
+    if isinstance(gm_output, dict) and isinstance(gm_output.get("opening_curated_facts"), list):
+        ctx = _opening_context_from_gm_output(gm_output)
+        facts = [str(x).strip().rstrip(".") for x in (ctx.get("visible_facts") or []) if str(x).strip()]
+        meta = {
+            "opening_fallback_context_source": ctx.get("opening_fallback_context_source"),
+            "opening_fallback_basis_count": len(facts),
+            "opening_fallback_context_missing": not bool(facts),
+            "opening_fallback_failed_closed": False,
+            "opening_curated_facts_present": bool(facts),
+            "opening_curated_facts_count": len(facts),
+            "opening_curated_facts_source": ctx.get("opening_curated_facts_source") or "selector",
+            "opening_selector_source_used": ctx.get("opening_selector_source_used") or "none",
+            "opening_selector_selected_facts": list(ctx.get("opening_selector_selected_facts") or []),
+            "opening_curated_facts": list(ctx.get("opening_curated_facts") or []),
+            "opening_final_fallback_basis": list(ctx.get("opening_final_fallback_basis") or []),
+            "opening_final_basis_matches_selector": bool(ctx.get("opening_final_basis_matches_selector")),
+        }
+        meta["opening_fallback_failed_closed"] = True
+        meta["opening_fallback_context_source"] = "opening_curated_facts"
+        meta["opening_fallback_missing_curated_facts"] = False
+        meta.update(block_h)
+        return meta
+    meta = {
+        "opening_fallback_context_source": "opening_curated_facts",
+        "opening_fallback_basis_count": 0,
+        "opening_fallback_context_missing": True,
+        "opening_fallback_failed_closed": True,
+        "opening_fallback_missing_curated_facts": True,
+        "opening_curated_facts_present": False,
+        "opening_curated_facts_count": 0,
+        "opening_curated_facts_source": "selector",
+        "opening_selector_source_used": "none",
+        "opening_selector_selected_facts": [],
+        "opening_curated_facts": [],
+        "opening_final_fallback_basis": [],
+        "opening_final_basis_matches_selector": True,
+    }
+    meta.update(block_h)
+    return meta
 
 
 def _upstream_prepared_opening_fallback_payload_if_usable(
@@ -3985,26 +4067,139 @@ def _upstream_prepared_opening_fallback_payload_if_usable(
     if not isinstance(gm_output, dict):
         return None
     raw = gm_output.get(UPSTREAM_PREPARED_OPENING_FALLBACK_KEY)
+    return raw if is_structurally_usable_upstream_prepared_opening_fallback_payload(raw) else None
+
+
+def _recover_upstream_opening_fallback_stub_payload(
+    gm_output: Dict[str, Any] | None,
+) -> tuple[Dict[str, Any] | None, Dict[str, Any]]:
+    """Replace structurally unusable opening stub with :func:`build_upstream_prepared_opening_fallback_payload` (Block I).
+
+    Mutates *gm_output* in place when recovery succeeds. Returns ``(usable_payload, debug_patch)``.
+    """
+    patch: Dict[str, Any] = {}
+    if not isinstance(gm_output, dict):
+        return None, patch
+    usable = _upstream_prepared_opening_fallback_payload_if_usable(gm_output)
+    if usable:
+        return usable, patch
+    if not _opening_curated_facts_have_attachable_non_empty_strings(gm_output):
+        return None, patch
+    if UPSTREAM_PREPARED_OPENING_FALLBACK_KEY not in gm_output:
+        return None, patch
+    raw = gm_output.get(UPSTREAM_PREPARED_OPENING_FALLBACK_KEY)
     if not isinstance(raw, dict):
-        return None
-    text = raw.get("prepared_opening_fallback_text")
-    if not isinstance(text, str) or not text.strip():
-        return None
-    comp = raw.get("opening_fallback_composition_meta")
-    if not isinstance(comp, dict):
-        return None
-    ob_meta = raw.get("opening_fallback_meta")
-    if not isinstance(ob_meta, dict):
-        return None
-    return raw
+        return None, patch
+    patch["opening_fallback_upstream_payload_unusable"] = True
+    try:
+        gm_output[UPSTREAM_PREPARED_OPENING_FALLBACK_KEY] = build_upstream_prepared_opening_fallback_payload(gm_output)
+    except Exception:
+        patch["opening_fallback_upstream_payload_recovered"] = False
+        patch["opening_fallback_compatibility_local_disabled"] = True
+        return None, patch
+    usable2 = _upstream_prepared_opening_fallback_payload_if_usable(gm_output)
+    if usable2:
+        patch["opening_fallback_upstream_payload_recovered"] = True
+        patch["opening_fallback_compatibility_local_disabled"] = True
+        return usable2, patch
+    patch["opening_fallback_upstream_payload_recovered"] = False
+    patch["opening_fallback_compatibility_local_disabled"] = True
+    return None, patch
+
+
+def _opening_maybe_attach_upstream_prepare_build_failed_on_emission_debug(
+    gm_output: Mapping[str, Any] | None,
+) -> bool:
+    """True when ``maybe_attach_upstream_prepared_opening_fallback_payload`` recorded a build failure (Block M).
+
+    Only full ``apply_final_emission_gate`` entry populates ``metadata.emission_debug`` this way; helper-only
+    callers without attach telemetry keep compatibility-local deterministic fallback behavior.
+    """
+    if not isinstance(gm_output, dict):
+        return False
+    md = gm_output.get("metadata")
+    em = md.get("emission_debug") if isinstance(md, dict) else None
+    if not isinstance(em, dict):
+        return False
+    return bool(em.get("opening_upstream_prepare_attach_build_failed"))
+
+
+def _opening_fail_closed_meta_upstream_maybe_attach_prepare_failed(
+    gm_output: Mapping[str, Any] | None,
+) -> Dict[str, Any]:
+    """Sealed marker meta when upstream attach was attempted at gate entry but build failed (Block N)."""
+    out: Dict[str, Any] = {
+        "opening_fallback_failed_closed": True,
+        "opening_fallback_compatibility_local_disabled": True,
+        "opening_fallback_missing_upstream_prepared_payload": True,
+        "blocked_repair_kind": "opening_upstream_prepare_attach_failed",
+    }
+    if isinstance(gm_output, dict) and isinstance(gm_output.get("opening_curated_facts"), list):
+        ctx = _opening_context_from_gm_output(gm_output)
+        facts = [str(x).strip().rstrip(".") for x in (ctx.get("visible_facts") or []) if str(x).strip()]
+        out.update(
+            {
+                "opening_fallback_context_source": "opening_curated_facts",
+                "opening_fallback_basis_count": len(facts),
+                "opening_fallback_context_missing": not bool(facts),
+                "opening_curated_facts_present": bool(facts),
+                "opening_curated_facts_count": len(facts),
+                "opening_curated_facts_source": ctx.get("opening_curated_facts_source") or "selector",
+                "opening_selector_source_used": ctx.get("opening_selector_source_used") or "none",
+                "opening_selector_selected_facts": list(ctx.get("opening_selector_selected_facts") or []),
+                "opening_curated_facts": list(ctx.get("opening_curated_facts") or []),
+                "opening_final_fallback_basis": list(ctx.get("opening_final_fallback_basis") or []),
+                "opening_final_basis_matches_selector": bool(ctx.get("opening_final_basis_matches_selector")),
+            }
+        )
+    return out
+
+
+def _opening_fail_closed_meta_upstream_stub_rebuild_failed(
+    gm_output: Mapping[str, Any] | None,
+) -> Dict[str, Any]:
+    """Sealed marker meta when upstream stub recovery fails but curated facts were attachable (Block I)."""
+    out: Dict[str, Any] = {
+        "opening_fallback_failed_closed": True,
+        "opening_fallback_compatibility_local_disabled": True,
+        "opening_fallback_upstream_payload_unusable": True,
+        "opening_fallback_upstream_payload_recovered": False,
+        "opening_fallback_missing_upstream_prepared_payload": False,
+    }
+    if isinstance(gm_output, dict) and isinstance(gm_output.get("opening_curated_facts"), list):
+        ctx = _opening_context_from_gm_output(gm_output)
+        facts = [str(x).strip().rstrip(".") for x in (ctx.get("visible_facts") or []) if str(x).strip()]
+        out.update(
+            {
+                "opening_fallback_context_source": "opening_curated_facts",
+                "opening_fallback_basis_count": len(facts),
+                "opening_fallback_context_missing": not bool(facts),
+                "opening_curated_facts_present": bool(facts),
+                "opening_curated_facts_count": len(facts),
+                "opening_curated_facts_source": ctx.get("opening_curated_facts_source") or "selector",
+                "opening_selector_source_used": ctx.get("opening_selector_source_used") or "none",
+                "opening_selector_selected_facts": list(ctx.get("opening_selector_selected_facts") or []),
+                "opening_curated_facts": list(ctx.get("opening_curated_facts") or []),
+                "opening_final_fallback_basis": list(ctx.get("opening_final_fallback_basis") or []),
+                "opening_final_basis_matches_selector": bool(ctx.get("opening_final_basis_matches_selector")),
+            }
+        )
+    return out
 
 
 def _opening_scene_safe_fallback_tuple(
     gm_output: Mapping[str, Any] | None,
 ) -> tuple[str, str, str, str, str, str, Dict[str, Any]]:
     """Hard-replace tuple for opening-mode illegality: prefers upstream prepared snapshot, else compatibility composer."""
-    upstream = _upstream_prepared_opening_fallback_payload_if_usable(gm_output)
+    gm_dict = gm_output if isinstance(gm_output, dict) else None
+    upstream, stub_patch = (
+        _recover_upstream_opening_fallback_stub_payload(gm_dict)
+        if gm_dict is not None
+        else (None, {})
+    )
     if upstream:
+        composition_meta = dict(upstream["opening_fallback_composition_meta"])
+        composition_meta.update(stub_patch)
         return (
             str(upstream["prepared_opening_fallback_text"]).strip(),
             "scene_opening_deterministic",
@@ -4012,15 +4207,31 @@ def _opening_scene_safe_fallback_tuple(
             "opening_deterministic_fallback",
             "opening_scene_safe_fallback",
             "opening_deterministic_fallback",
-            dict(upstream["opening_fallback_composition_meta"]),
+            composition_meta,
         )
     classification = _opening_fallback_classification()
-    fallback_text, fallback_meta = _deterministic_opening_fallback_text_and_meta(gm_output)
+    if stub_patch.get("opening_fallback_upstream_payload_unusable") and stub_patch.get(
+        "opening_fallback_upstream_payload_recovered"
+    ) is False:
+        fallback_text = OPENING_FALLBACK_EMPTY_CURATED_FACTS_MARKER
+        fallback_meta = _opening_fail_closed_meta_upstream_stub_rebuild_failed(gm_output)
+    elif _opening_maybe_attach_upstream_prepare_build_failed_on_emission_debug(gm_dict):
+        fallback_text = OPENING_FALLBACK_EMPTY_CURATED_FACTS_MARKER
+        fallback_meta = _opening_fail_closed_meta_upstream_maybe_attach_prepare_failed(gm_output)
+    elif not _opening_curated_facts_have_attachable_non_empty_strings(gm_output):
+        fallback_text = OPENING_FALLBACK_EMPTY_CURATED_FACTS_MARKER
+        fallback_meta = _opening_fail_closed_meta_upstream_missing_insufficient_curated_facts(gm_output)
+    else:
+        fallback_text, fallback_meta = _deterministic_opening_fallback_text_and_meta(gm_output)
     meta = _first_mention_composition_meta()
     meta["fallback_family_used"] = classification.get("fallback_family")
     meta["fallback_temporal_frame"] = classification.get("temporal_frame")
     meta.update(fallback_meta)
-    meta["opening_fallback_authorship_source"] = OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL
+    meta.update(stub_patch)
+    if fallback_meta.get("blocked_repair_kind") == "opening_upstream_prepare_attach_failed":
+        meta["opening_fallback_authorship_source"] = None
+    else:
+        meta["opening_fallback_authorship_source"] = OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL
     return (
         fallback_text,
         "scene_opening_deterministic",
@@ -4106,9 +4317,16 @@ def _enforce_response_type_contract(
 
     opening_context: Dict[str, Any] = {}
     opening_failures: List[str] = []
+    opening_facts_schema_ok = True
     if opening_mode:
-        opening_context = _opening_context_from_gm_output(gm_output)
+        opening_facts_schema_ok = _opening_curated_facts_schema_ok(gm_output if isinstance(gm_output, dict) else None)
+        if not opening_facts_schema_ok:
+            debug["opening_fallback_missing_curated_facts"] = True
+        gm_for_opening_ctx = _gm_output_normalized_for_opening_context(gm_output)
+        opening_context = _opening_context_from_gm_output(gm_for_opening_ctx)
         opening_failures = validate_opening_output(current, opening_context)
+        if not opening_facts_schema_ok and not opening_failures:
+            opening_failures = ["opening_curated_facts_missing"]
         debug["opening_validation_failed"] = bool(opening_failures)
         debug["opening_failure_reasons"] = list(opening_failures)
         if not opening_failures:
@@ -4161,17 +4379,40 @@ def _enforce_response_type_contract(
                 debug["scene_opening_accepted_candidate_promoted"] = True
             return current, debug
 
-        # Otherwise, select opening fallback text: prepared upstream snapshot, else compatibility re-call.
-        upstream_opening = _upstream_prepared_opening_fallback_payload_if_usable(gm_output)
+        # Otherwise, select opening fallback text: prepared upstream snapshot, stub recovery, else compatibility re-call.
+        upstream_opening, stub_patch = _recover_upstream_opening_fallback_stub_payload(
+            gm_output if isinstance(gm_output, dict) else None
+        )
+        debug.update(stub_patch)
         if upstream_opening:
             fallback = str(upstream_opening["prepared_opening_fallback_text"]).strip()
             fallback_meta = dict(upstream_opening["opening_fallback_meta"])
+        elif stub_patch.get("opening_fallback_upstream_payload_unusable") and stub_patch.get(
+            "opening_fallback_upstream_payload_recovered"
+        ) is False:
+            fallback = OPENING_FALLBACK_EMPTY_CURATED_FACTS_MARKER
+            fallback_meta = _opening_fail_closed_meta_upstream_stub_rebuild_failed(gm_output)
+        elif _opening_maybe_attach_upstream_prepare_build_failed_on_emission_debug(gm_output):
+            fallback = OPENING_FALLBACK_EMPTY_CURATED_FACTS_MARKER
+            fallback_meta = _opening_fail_closed_meta_upstream_maybe_attach_prepare_failed(gm_output)
+        elif not _opening_curated_facts_have_attachable_non_empty_strings(gm_output):
+            fallback = OPENING_FALLBACK_EMPTY_CURATED_FACTS_MARKER
+            fallback_meta = _opening_fail_closed_meta_upstream_missing_insufficient_curated_facts(gm_output)
         else:
             fallback, fallback_meta = _deterministic_opening_fallback_text_and_meta(gm_output)
         debug.update(fallback_meta)
-        debug["opening_fallback_authorship_source"] = (
-            OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED if upstream_opening else OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL
-        )
+        if (
+            not opening_facts_schema_ok
+            and not upstream_opening
+            and fallback_meta.get("blocked_repair_kind") != "opening_upstream_prepare_attach_failed"
+        ):
+            debug["blocked_repair_kind"] = "opening_missing_curated_facts"
+        if upstream_opening:
+            debug["opening_fallback_authorship_source"] = OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED
+        elif fallback_meta.get("blocked_repair_kind") == "opening_upstream_prepare_attach_failed":
+            debug["opening_fallback_authorship_source"] = None
+        else:
+            debug["opening_fallback_authorship_source"] = OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL
         fallback_failures = validate_opening_output(fallback, opening_context)
         if fallback and not fallback_failures and not fallback_meta.get("opening_fallback_failed_closed"):
             classification = _opening_fallback_classification()
@@ -7707,571 +7948,6 @@ def _should_use_neutral_nonprogress_fallback_instead_of_global_stock(
     return True
 
 
-# --- Speaker selection contract (Block 1 authority) — validation + repair at final emission ---
-
-_SPEAKER_REASON_SPEAKER_CONTRACT_MATCH = "speaker_contract_match"
-_SPEAKER_REASON_SPEAKER_BINDING_MISMATCH = "speaker_binding_mismatch"
-_SPEAKER_REASON_FORBIDDEN_GENERIC_FALLBACK_SPEAKER = "forbidden_generic_fallback_speaker"
-_SPEAKER_REASON_UNJUSTIFIED_SPEAKER_SWITCH = "unjustified_speaker_switch"
-_SPEAKER_REASON_INTERRUPTION_WITHOUT_CONTRACT_SUPPORT = "interruption_without_contract_support"
-_SPEAKER_REASON_INTERRUPTION_JUSTIFIED_SWITCH = "interruption_justified_switch"
-_SPEAKER_REASON_CONTINUITY_LOCKED_SPEAKER_REPAIR = "continuity_locked_speaker_repair"
-_SPEAKER_REASON_CANONICAL_SPEAKER_REWRITE = "canonical_speaker_rewrite"
-_SPEAKER_REASON_NARRATOR_NEUTRAL_NO_ALLOWED_SPEAKER = "narrator_neutral_no_allowed_speaker"
-
-SPEAKER_CONTRACT_ENFORCEMENT_REASON_CODES: tuple[str, ...] = (
-    _SPEAKER_REASON_SPEAKER_CONTRACT_MATCH,
-    _SPEAKER_REASON_SPEAKER_BINDING_MISMATCH,
-    _SPEAKER_REASON_FORBIDDEN_GENERIC_FALLBACK_SPEAKER,
-    _SPEAKER_REASON_UNJUSTIFIED_SPEAKER_SWITCH,
-    _SPEAKER_REASON_INTERRUPTION_WITHOUT_CONTRACT_SUPPORT,
-    _SPEAKER_REASON_INTERRUPTION_JUSTIFIED_SWITCH,
-    _SPEAKER_REASON_CONTINUITY_LOCKED_SPEAKER_REPAIR,
-    _SPEAKER_REASON_CANONICAL_SPEAKER_REWRITE,
-    _SPEAKER_REASON_NARRATOR_NEUTRAL_NO_ALLOWED_SPEAKER,
-)
-
-_SPEECH_VERB_ATTRIBUTION_RE = re.compile(
-    r"^\s*([^\n]+?)\s+"
-    r"(?:says|said|replies|replied|answers|answered|mutters|muttered|whispers|whispered|asks|asked|adds|added)\b",
-    re.IGNORECASE,
-)
-_BEAT_ATTRIBUTION_RE = re.compile(
-    r"^\s*([^\n]+?)\s+"
-    r"(?:shakes|frowns|nods|grimaces|shrugs|lowers|raises|opens|starts|spreads|tightens|leans|glances)\b",
-    re.IGNORECASE,
-)
-# Leading "…" dialogue + pronoun + attribution verb: label is the pronoun only (not the quoted span).
-_QUOTED_THEN_PRONOUN_SPEECH_RE = re.compile(
-    r'^\s*"[^"]*"\s+'
-    r"\b(he|she|they|him|her|them)\b\s+"
-    r"(?:says|said|replies|replied|answers|answered|mutters|muttered|whispers|whispered|"
-    r"asks|asked|adds|added|insists|insisted)\b",
-    re.IGNORECASE,
-)
-_QUOTED_THEN_PRONOUN_BEAT_RE = re.compile(
-    r'^\s*"[^"]*"\s+'
-    r"\b(he|she|they|him|her|them)\b\s+"
-    r"(?:shakes|frowns|nods|grimaces|shrugs|lowers|raises|opens|starts|spreads|tightens|leans|glances)\b",
-    re.IGNORECASE,
-)
-_NON_NAME_ATTRIBUTION_PREFIXES = frozenset(
-    {
-        "he",
-        "she",
-        "they",
-        "it",
-        "someone",
-        "a voice",
-        "the voice",
-        "another voice",
-    }
-)
-
-
-def _empty_speaker_selection_contract() -> Dict[str, Any]:
-    return {
-        "primary_speaker_id": None,
-        "primary_speaker_name": None,
-        "allowed_speaker_ids": [],
-        "continuity_locked": False,
-        "continuity_lock_reason": None,
-        "speaker_switch_allowed": True,
-        "speaker_switch_reason": None,
-        "interruption_allowed": True,
-        "interruption_requires_scene_event": False,
-        "generic_fallback_forbidden": False,
-        "forbidden_fallback_labels": list(SPEAKER_CONTRACT_FORBIDDEN_FALLBACK_LABELS),
-        "offscene_speakers_forbidden": True,
-        "debug": {"contract_missing": True},
-    }
-
-
-def get_speaker_selection_contract(
-    resolution: Dict[str, Any] | None,
-    metadata: Dict[str, Any] | None = None,
-    trace: Dict[str, Any] | None = None,
-) -> Dict[str, Any]:
-    """Load Block 1 speaker contract: metadata emission_debug first, then resolution/trace copies."""
-    empty = _empty_speaker_selection_contract()
-
-    def _from_emission_debug(em: Any) -> Dict[str, Any] | None:
-        if not isinstance(em, dict):
-            return None
-        c = em.get("speaker_selection_contract")
-        return c if isinstance(c, dict) and c else None
-
-    if isinstance(metadata, dict):
-        hit = _from_emission_debug(metadata.get("emission_debug"))
-        if hit is not None:
-            return hit
-
-    if isinstance(resolution, dict):
-        md = resolution.get("metadata")
-        if isinstance(md, dict):
-            hit = _from_emission_debug(md.get("emission_debug"))
-            if hit is not None:
-                return hit
-
-    if isinstance(trace, dict):
-        tc = trace.get("speaker_selection_contract")
-        if isinstance(tc, dict) and tc:
-            return tc
-        hit = _from_emission_debug(trace.get("emission_debug"))
-        if hit is not None:
-            return hit
-
-    return empty
-
-
-def detect_emitted_speaker_signature(
-    text: str,
-    resolution: Optional[Dict[str, Any]] = None,
-) -> Dict[str, Any]:
-    """Infer opening attribution / dialogue-ownership cues from emitted text."""
-    t = _normalize_text(text)
-    speaker_label: str | None = None
-    speaker_name: str | None = None
-    is_explicit = False
-    confidence: str = "low"
-
-    mq = _QUOTED_THEN_PRONOUN_SPEECH_RE.match(t)
-    if not mq:
-        mq = _QUOTED_THEN_PRONOUN_BEAT_RE.match(t)
-    if mq:
-        raw = str(mq.group(1) or "").strip()
-        low = raw.lower()
-        speaker_label = raw
-        if low and low not in _NON_NAME_ATTRIBUTION_PREFIXES:
-            speaker_name = raw
-            is_explicit = True
-            confidence = "high"
-        elif raw:
-            confidence = "medium"
-        forbidden = list(SPEAKER_CONTRACT_FORBIDDEN_FALLBACK_LABELS)
-        is_generic_fb = False
-        if speaker_label:
-            sl = speaker_label.strip().lower()
-            for fb in forbidden:
-                fbl = str(fb or "").strip().lower()
-                if fbl and (fbl == sl or fbl in sl or sl in fbl):
-                    is_generic_fb = True
-                    break
-        intr = bool(interruption_cue_present_in_text(t) or _has_explicit_interruption_shape(t))
-        return {
-            "speaker_name": speaker_name,
-            "speaker_label": speaker_label,
-            "is_explicitly_attributed": is_explicit,
-            "is_generic_fallback_label": is_generic_fb,
-            "has_interruption_framing": intr,
-            "confidence": confidence,
-        }
-
-    m = _SPEECH_VERB_ATTRIBUTION_RE.match(t)
-    if not m:
-        m = _BEAT_ATTRIBUTION_RE.match(t)
-    if m:
-        raw = str(m.group(1) or "").strip()
-        low = raw.lower()
-        if raw and low not in _NON_NAME_ATTRIBUTION_PREFIXES and not low.startswith(
-            tuple(p + " " for p in _NON_NAME_ATTRIBUTION_PREFIXES)
-        ):
-            speaker_label = raw
-            speaker_name = raw
-            is_explicit = True
-            confidence = "high"
-        elif raw:
-            speaker_label = raw
-            confidence = "medium"
-
-    forbidden = list(SPEAKER_CONTRACT_FORBIDDEN_FALLBACK_LABELS)
-    is_generic_fb = False
-    if speaker_label:
-        sl = speaker_label.strip().lower()
-        for fb in forbidden:
-            fbl = fb.strip().lower()
-            if fbl == sl or fbl in sl or sl in fbl:
-                is_generic_fb = True
-                break
-
-    intr = bool(interruption_cue_present_in_text(t) or _has_explicit_interruption_shape(t))
-
-    return {
-        "speaker_name": speaker_name,
-        "speaker_label": speaker_label,
-        "is_explicitly_attributed": is_explicit,
-        "is_generic_fallback_label": is_generic_fb,
-        "has_interruption_framing": intr,
-        "confidence": confidence,
-    }
-
-
-def _display_from_npc_id(npc_id: str | None) -> str:
-    s = str(npc_id or "").strip()
-    if not s:
-        return ""
-    return s.replace("_", " ").replace("-", " ").title()
-
-
-def _label_matches_primary_speaker(label: str, contract: Dict[str, Any], resolution: Dict[str, Any] | None) -> bool:
-    if not str(label or "").strip():
-        return False
-    low = label.strip().lower()
-    pn = str(contract.get("primary_speaker_name") or "").strip().lower()
-    pid = str(contract.get("primary_speaker_id") or "").strip()
-    pid_disp = _display_from_npc_id(pid).lower()
-    if pn and low == pn:
-        return True
-    if pid_disp and low == pid_disp:
-        return True
-    if isinstance(resolution, dict):
-        soc = resolution.get("social") if isinstance(resolution.get("social"), dict) else {}
-        rn = str(soc.get("npc_name") or "").strip().lower()
-        rid = _display_from_npc_id(str(soc.get("npc_id") or "")).lower()
-        if rn and low == rn:
-            return True
-        if rid and low == rid:
-            return True
-    return False
-
-
-def _label_in_allowed_speaker_ids(label: str, contract: Dict[str, Any], resolution: Dict[str, Any] | None) -> bool:
-    allowed = contract.get("allowed_speaker_ids")
-    if not isinstance(allowed, list) or not allowed:
-        return False
-    low = label.strip().lower()
-    for aid in allowed:
-        disp = _display_from_npc_id(str(aid or "").strip()).lower()
-        if disp and low == disp:
-            return True
-    pid = str(contract.get("primary_speaker_id") or "").strip()
-    if pid in allowed and _label_matches_primary_speaker(label, contract, resolution):
-        return True
-    return False
-
-
-def _emitted_invents_dialogue_ownership(text: str) -> bool:
-    t = _normalize_text(text)
-    if not t:
-        return False
-    if '"' in t:
-        return True
-    return bool(
-        re.search(
-            r"\b(?:says|replies|answers|mutters|whispers|asks|shakes|shrugs|frowns|grimaces)\b",
-            t,
-            re.IGNORECASE,
-        )
-    )
-
-
-def _explicit_interruption_scene_event_framing(text: str) -> bool:
-    return bool(_has_explicit_interruption_shape(_normalize_text(text)))
-
-
-def validate_emitted_speaker_against_contract(
-    text: str,
-    speaker_selection: Dict[str, Any],
-    resolution: Optional[Dict[str, Any]] = None,
-) -> Dict[str, Any]:
-    """Contract-first validation of final text vs Block 1 speaker_selection_contract."""
-    c = speaker_selection if isinstance(speaker_selection, dict) else {}
-    res = resolution if isinstance(resolution, dict) else None
-    details: Dict[str, Any] = {"signature": detect_emitted_speaker_signature(text, res)}
-
-    if isinstance(c.get("debug"), dict) and c["debug"].get("contract_missing"):
-        return {
-            "ok": True,
-            "reason_code": _SPEAKER_REASON_SPEAKER_CONTRACT_MATCH,
-            "canonical_speaker_id": c.get("primary_speaker_id"),
-            "canonical_speaker_name": c.get("primary_speaker_name"),
-            "repair_mode": "none",
-            "details": {**details, "skipped": "no_contract"},
-        }
-
-    allowed = [str(x).strip() for x in (c.get("allowed_speaker_ids") or []) if str(x).strip()]
-    primary_id = str(c.get("primary_speaker_id") or "").strip() or None
-    primary_name = str(c.get("primary_speaker_name") or "").strip() or None
-    continuity_locked = bool(c.get("continuity_locked"))
-    gen_ff = bool(c.get("generic_fallback_forbidden"))
-    sw_ok = bool(c.get("speaker_switch_allowed"))
-    intr_ok = bool(c.get("interruption_allowed"))
-    intr_scene = bool(c.get("interruption_requires_scene_event"))
-    offscene_forbid = bool(c.get("offscene_speakers_forbidden"))
-
-    sig = details["signature"]
-    label = str(sig.get("speaker_label") or "").strip()
-    explicit = bool(sig.get("is_explicitly_attributed"))
-    intr = bool(sig.get("has_interruption_framing"))
-    explicit_scene = _explicit_interruption_scene_event_framing(text)
-
-    canonical_id = primary_id
-    canonical_name = primary_name
-    if not canonical_name and res is not None:
-        soc0 = res.get("social") if isinstance(res.get("social"), dict) else {}
-        canonical_name = str(soc0.get("npc_name") or "").strip() or None
-    if not canonical_name and primary_id:
-        canonical_name = _display_from_npc_id(primary_id)
-
-    # (b) Generic fallback speaker
-    if gen_ff:
-        flist = (
-            c.get("forbidden_fallback_labels")
-            if isinstance(c.get("forbidden_fallback_labels"), list)
-            else list(SPEAKER_CONTRACT_FORBIDDEN_FALLBACK_LABELS)
-        )
-        low_lab = label.lower() if label else ""
-        hit = bool(sig.get("is_generic_fallback_label"))
-        if explicit and low_lab and not hit:
-            for fb in flist:
-                fbs = str(fb or "").strip().lower()
-                if fbs and (fbs == low_lab or fbs in low_lab or low_lab in fbs):
-                    hit = True
-                    break
-        if hit:
-            rm = "canonical_rewrite" if (primary_id or allowed) else "narrator_neutral"
-            return {
-                "ok": False,
-                "reason_code": _SPEAKER_REASON_FORBIDDEN_GENERIC_FALLBACK_SPEAKER,
-                "canonical_speaker_id": canonical_id,
-                "canonical_speaker_name": canonical_name,
-                "repair_mode": rm,
-                "details": {**details, "rule": "generic_fallback_forbidden"},
-            }
-
-    # Interruption policy (third-party / scene break)
-    if intr:
-        if not (sw_ok and intr_ok):
-            return {
-                "ok": False,
-                "reason_code": _SPEAKER_REASON_INTERRUPTION_WITHOUT_CONTRACT_SUPPORT,
-                "canonical_speaker_id": canonical_id,
-                "canonical_speaker_name": canonical_name,
-                "repair_mode": "canonical_rewrite" if (primary_id or allowed) else "narrator_neutral",
-                "details": {**details, "rule": "interruption_not_permitted"},
-            }
-        # Continuity-locked strict-social: require explicit join only when dialogue ownership
-        # is present (quoted speech or clear attribution), matching mixed-blob rejection policy.
-        tnorm = _normalize_text(text)
-        if intr_scene and not explicit_scene and ('"' in tnorm or explicit):
-            return {
-                "ok": False,
-                "reason_code": _SPEAKER_REASON_INTERRUPTION_WITHOUT_CONTRACT_SUPPORT,
-                "canonical_speaker_id": canonical_id,
-                "canonical_speaker_name": canonical_name,
-                "repair_mode": "canonical_rewrite" if (primary_id or allowed) else "narrator_neutral",
-                "details": {**details, "rule": "interruption_requires_scene_event"},
-            }
-
-    # (e) No speaker allowed but dialogue ownership invented
-    if not allowed:
-        if _emitted_invents_dialogue_ownership(text):
-            return {
-                "ok": False,
-                "reason_code": _SPEAKER_REASON_NARRATOR_NEUTRAL_NO_ALLOWED_SPEAKER,
-                "canonical_speaker_id": None,
-                "canonical_speaker_name": None,
-                "repair_mode": "narrator_neutral",
-                "details": {**details, "rule": "no_allowed_speaker_dialogue"},
-            }
-        return {
-            "ok": True,
-            "reason_code": _SPEAKER_REASON_SPEAKER_CONTRACT_MATCH,
-            "canonical_speaker_id": canonical_id,
-            "canonical_speaker_name": canonical_name,
-            "repair_mode": "none",
-            "details": details,
-        }
-
-    # (a) Continuity locked + wrong explicit speaker
-    if continuity_locked and explicit and label:
-        if not _label_in_allowed_speaker_ids(label, c, res):
-            if intr and sw_ok and intr_ok and (not intr_scene or explicit_scene):
-                return {
-                    "ok": True,
-                    "reason_code": _SPEAKER_REASON_INTERRUPTION_JUSTIFIED_SWITCH,
-                    "canonical_speaker_id": canonical_id,
-                    "canonical_speaker_name": canonical_name,
-                    "repair_mode": "none",
-                    "details": {**details, "rule": "interruption_overrides_explicit_mismatch"},
-                }
-            salvage = bool(re.search(r"\"[^\"]{2,}\"", _normalize_text(text)))
-            rm = "local_rebind" if (canonical_name and salvage) else ("canonical_rewrite" if canonical_id else "narrator_neutral")
-            return {
-                "ok": False,
-                "reason_code": _SPEAKER_REASON_SPEAKER_BINDING_MISMATCH,
-                "canonical_speaker_id": canonical_id,
-                "canonical_speaker_name": canonical_name,
-                "repair_mode": rm,
-                "details": {**details, "rule": "continuity_locked_explicit_mismatch"},
-            }
-
-    # (c) New speaker not permitted
-    if explicit and label and not _label_in_allowed_speaker_ids(label, c, res):
-        if intr and sw_ok and intr_ok and (not intr_scene or explicit_scene):
-            return {
-                "ok": True,
-                "reason_code": _SPEAKER_REASON_INTERRUPTION_JUSTIFIED_SWITCH,
-                "canonical_speaker_id": canonical_id,
-                "canonical_speaker_name": canonical_name,
-                "repair_mode": "none",
-                "details": {**details, "rule": "switch_permitted_interruption"},
-            }
-        if not sw_ok:
-            return {
-                "ok": False,
-                "reason_code": _SPEAKER_REASON_UNJUSTIFIED_SPEAKER_SWITCH,
-                "canonical_speaker_id": canonical_id,
-                "canonical_speaker_name": canonical_name,
-                "repair_mode": "canonical_rewrite" if canonical_id else "narrator_neutral",
-                "details": {**details, "rule": "speaker_switch_disallowed"},
-            }
-        return {
-            "ok": False,
-            "reason_code": _SPEAKER_REASON_UNJUSTIFIED_SPEAKER_SWITCH,
-            "canonical_speaker_id": canonical_id,
-            "canonical_speaker_name": canonical_name,
-            "repair_mode": "canonical_rewrite" if canonical_id else "narrator_neutral",
-            "details": {**details, "rule": "unlisted_explicit_speaker"},
-        }
-
-    if offscene_forbid and explicit and label and not _label_in_allowed_speaker_ids(label, c, res) and not intr:
-        return {
-            "ok": False,
-            "reason_code": _SPEAKER_REASON_UNJUSTIFIED_SPEAKER_SWITCH,
-            "canonical_speaker_id": canonical_id,
-            "canonical_speaker_name": canonical_name,
-            "repair_mode": "canonical_rewrite" if canonical_id else "narrator_neutral",
-            "details": {**details, "rule": "offscene_speakers_forbidden"},
-        }
-
-    if intr:
-        return {
-            "ok": True,
-            "reason_code": _SPEAKER_REASON_INTERRUPTION_JUSTIFIED_SWITCH,
-            "canonical_speaker_id": canonical_id,
-            "canonical_speaker_name": canonical_name,
-            "repair_mode": "none",
-            "details": details,
-        }
-
-    return {
-        "ok": True,
-        "reason_code": _SPEAKER_REASON_SPEAKER_CONTRACT_MATCH,
-        "canonical_speaker_id": canonical_id,
-        "canonical_speaker_name": canonical_name,
-        "repair_mode": "none",
-        "details": details,
-    }
-
-
-def _try_local_rebind_opening_speaker(text: str, *, wrong_label: str, canonical_name: str) -> str | None:
-    t = _normalize_text(text)
-    w = str(wrong_label or "").strip()
-    if not w or not canonical_name:
-        return None
-    if '"' in w or "“" in w or "”" in w:
-        return None
-    low_t = t.lower()
-    low_w = w.lower()
-    if low_t.startswith(low_w + " ") or low_t.startswith(low_w + ","):
-        rest = t[len(w) :].lstrip()
-        return _normalize_text(f"{canonical_name} {rest}")
-    return None
-
-
-def _apply_speaker_contract_repairs(
-    text: str,
-    validation: Dict[str, Any],
-    *,
-    contract: Dict[str, Any],
-    eff_resolution: Dict[str, Any] | None,
-    scene_id: str,
-    world: Dict[str, Any] | None,
-) -> tuple[str, str, Dict[str, Any]]:
-    """Returns (new_text, final_reason_code, repair_debug)."""
-    dbg: Dict[str, Any] = {"initial_repair_mode": validation.get("repair_mode")}
-    mode = str(validation.get("repair_mode") or "none")
-    reason = str(validation.get("reason_code") or "")
-    cid = validation.get("canonical_speaker_id")
-    cname = str(validation.get("canonical_speaker_name") or "").strip()
-
-    if mode == "local_rebind" and eff_resolution is not None:
-        sig = (validation.get("details") or {}).get("signature") or {}
-        wl = str(sig.get("speaker_label") or "").strip()
-        if wl and cname:
-            attempt = _try_local_rebind_opening_speaker(text, wrong_label=wl, canonical_name=cname)
-            if attempt:
-                dbg["local_rebind_applied"] = True
-                if isinstance(eff_resolution.get("social"), dict):
-                    soc = eff_resolution["social"]
-                    if cid:
-                        soc["npc_id"] = str(cid).strip()
-                    soc["npc_name"] = cname
-                return attempt, _SPEAKER_REASON_CONTINUITY_LOCKED_SPEAKER_REPAIR, dbg
-
-    if mode == "canonical_rewrite":
-        if eff_resolution is not None and isinstance(eff_resolution.get("social"), dict):
-            soc = dict(eff_resolution["social"])
-            if cid:
-                soc["npc_id"] = str(cid).strip()
-            if cname:
-                soc["npc_name"] = cname
-            elif cid:
-                soc["npc_name"] = _npc_display_name_for_emission(
-                    world if isinstance(world, dict) else {},
-                    str(scene_id or "").strip(),
-                    str(cid).strip(),
-                )
-            soc.pop("reply_speaker_grounding_neutral_bridge", None)
-            eff_resolution["social"] = soc
-            line = strict_social_ownership_terminal_fallback(eff_resolution)
-            dbg["canonical_rewrite_applied"] = True
-            return line, _SPEAKER_REASON_CANONICAL_SPEAKER_REWRITE, dbg
-        line = _normalize_text(text)
-        dbg["canonical_rewrite_failed_resolution"] = True
-        return line, reason, dbg
-
-    if mode == "narrator_neutral":
-        seed = f"{scene_id}|{cid or ''}|{hash(_normalize_text(text)) % 10000}"
-        line = neutral_reply_speaker_grounding_bridge_line(seed=seed)
-        dbg["narrator_neutral_applied"] = True
-        if eff_resolution is not None and isinstance(eff_resolution.get("social"), dict):
-            soc = eff_resolution["social"]
-            soc["reply_speaker_grounding_neutral_bridge"] = True
-            soc.pop("npc_id", None)
-            soc.pop("npc_name", None)
-        return line, _SPEAKER_REASON_NARRATOR_NEUTRAL_NO_ALLOWED_SPEAKER, dbg
-
-    return text, reason, dbg
-
-
-def _sync_eff_social_to_resolution(
-    eff_resolution: Dict[str, Any] | None,
-    resolution: Dict[str, Any] | None,
-) -> None:
-    """Copy speaker fields from effective resolution back to the caller's resolution dict when distinct."""
-    if not isinstance(eff_resolution, dict) or not isinstance(resolution, dict):
-        return
-    if resolution is eff_resolution:
-        return
-    src = eff_resolution.get("social")
-    if not isinstance(src, dict):
-        return
-    dst = resolution.get("social")
-    if not isinstance(dst, dict):
-        resolution["social"] = {}
-        dst = resolution["social"]
-    if src.get("reply_speaker_grounding_neutral_bridge"):
-        dst["reply_speaker_grounding_neutral_bridge"] = True
-        dst.pop("npc_id", None)
-        dst.pop("npc_name", None)
-        return
-    if "npc_id" in src:
-        dst["npc_id"] = src.get("npc_id")
-    if "npc_name" in src:
-        dst["npc_name"] = src.get("npc_name")
-
 
 def _merge_interaction_continuity_validation_into_outputs(
     out: Dict[str, Any],
@@ -8580,7 +8256,7 @@ def _interaction_continuity_should_fail_from_speaker_binding(
         debug["skipped"] = "speaker_contract_ok"
         base["debug"] = debug
         return base
-    if reason_code != _SPEAKER_REASON_SPEAKER_BINDING_MISMATCH:
+    if reason_code != SPEAKER_REASON_SPEAKER_BINDING_MISMATCH:
         debug["skipped"] = "speaker_reason_not_binding_mismatch"
         debug["speaker_reason_code"] = reason_code
         base["debug"] = debug
@@ -8785,6 +8461,10 @@ def _apply_interaction_continuity_emission_step(
     )
     if strict_social_path and isinstance(strict_fallback_resolution, dict):
         fb = minimal_social_emergency_fallback_line(strict_fallback_resolution)
+        assert_final_emission_mutation_allowed(
+            "interaction_continuity_strict_social_fallback",
+            source="gate._apply_interaction_continuity_emission_step.strict_social_hard_fallback",
+        )
         return _normalize_text(fb), [], True
     return norm, ["interaction_continuity_enforced"], False
 
@@ -8804,6 +8484,10 @@ def _attach_interaction_continuity_validation(
         if isinstance(icv, dict):
             fem = ensure_final_emission_meta_dict(out)
             fem["interaction_continuity_validation"] = icv
+        assert_final_emission_mutation_allowed(
+            "interaction_continuity_validation_attach",
+            source="gate._attach_interaction_continuity_validation.preserve_existing",
+        )
         return
     final_text = _normalize_text(out.get("player_facing_text"))
     _apply_interaction_continuity_emission_step(
@@ -8815,32 +8499,10 @@ def _attach_interaction_continuity_validation(
         validate_only=True,
         strict_social_path=False,
     )
-
-
-def _merge_speaker_enforcement_into_outputs(
-    out: Dict[str, Any],
-    resolution: Dict[str, Any] | None,
-    eff_resolution: Dict[str, Any] | None,
-    *,
-    enforcement_payload: Dict[str, Any],
-) -> None:
-    md_out = out.setdefault("metadata", {})
-    if isinstance(md_out, dict):
-        em = md_out.setdefault("emission_debug", {})
-        if isinstance(em, dict):
-            em["speaker_contract_enforcement"] = enforcement_payload
-
-    if isinstance(resolution, dict):
-        md_r = resolution.setdefault("metadata", {})
-        if isinstance(md_r, dict):
-            emr = md_r.setdefault("emission_debug", {})
-            if isinstance(emr, dict):
-                emr["speaker_contract_enforcement"] = enforcement_payload
-
-    if eff_resolution is not None and isinstance(eff_resolution.get("metadata"), dict):
-        eme = eff_resolution["metadata"].setdefault("emission_debug", {})
-        if isinstance(eme, dict):
-            eme["speaker_contract_enforcement"] = enforcement_payload
+    assert_final_emission_mutation_allowed(
+        "interaction_continuity_validation_attach",
+        source="gate._attach_interaction_continuity_validation.validate_only",
+    )
 
 
 def enforce_emitted_speaker_with_contract(
@@ -8852,7 +8514,11 @@ def enforce_emitted_speaker_with_contract(
     world: Dict[str, Any] | None,
     scene_id: str,
 ) -> tuple[str, Dict[str, Any]]:
-    """Validate *text* against stored contract; repair if needed. Mutates *eff_resolution* social on repair paths."""
+    """Validate *text* against stored contract; repair if needed. Mutates *eff_resolution* social on repair paths.
+
+    Kept in this module (not only in :mod:`game.speaker_contract_enforcement`) so callers/tests can
+    monkeypatch :func:`get_speaker_selection_contract` on the gate package and have enforcement observe it.
+    """
     trace = gm_output.get("trace") if isinstance(gm_output.get("trace"), dict) else None
     md = gm_output.get("metadata") if isinstance(gm_output.get("metadata"), dict) else None
     contract = get_speaker_selection_contract(
@@ -9267,6 +8933,29 @@ def _reassert_scene_opening_accepted_candidate(
     assert _normalize_text(out.get("player_facing_text") or "") == accepted
 
 
+_OPENING_UPSTREAM_PREPARE_ATTACH_OBSERVABILITY_KEYS: tuple[str, ...] = (
+    "opening_upstream_prepare_attach_build_failed",
+    "opening_upstream_prepare_attach_failure_exc_type",
+    "opening_upstream_prepare_attach_no_usable_payload_after_attempt",
+)
+
+
+def _merge_opening_upstream_prepare_attach_observability_into_response_type_debug(
+    gm_output: Mapping[str, Any] | None,
+    response_type_debug: Dict[str, Any],
+) -> None:
+    """Copy Block M upstream opening attach telemetry from ``metadata.emission_debug`` into RT debug / FEM."""
+    if not isinstance(gm_output, dict):
+        return
+    md = gm_output.get("metadata")
+    em = md.get("emission_debug") if isinstance(md, dict) else None
+    if not isinstance(em, dict):
+        return
+    for k in _OPENING_UPSTREAM_PREPARE_ATTACH_OBSERVABILITY_KEYS:
+        if k in em:
+            response_type_debug[k] = em[k]
+
+
 # --- Main entry: wires extracted validators/repairs + remaining in-module policy layers ---
 # Deterministic post-generation ordering (non–strict-social trunk): response_type → answer_completeness →
 # response_delta → social_response_structure → narrative_authenticity → tone → narrative_authority →
@@ -9403,6 +9092,7 @@ def apply_final_emission_gate(
             )
     text = _normalize_text(out.get("player_facing_text"))
     response_type_debug = _default_response_type_debug(None, None)
+    _merge_opening_upstream_prepare_attach_observability_into_response_type_debug(out, response_type_debug)
     ac_layer_meta: Dict[str, Any] = {}
     rd_layer_meta: Dict[str, Any] = _default_response_delta_meta()
     srs_layer_meta: Dict[str, Any] = _default_social_response_structure_meta()
@@ -9476,6 +9166,7 @@ def apply_final_emission_gate(
             strict_social_suppressed_non_social_turn=strict_social_suppressed_non_social_turn,
             active_interlocutor=active_interlocutor,
         )
+        _merge_opening_upstream_prepare_attach_observability_into_response_type_debug(out, response_type_debug)
         if response_type_debug.get("response_type_candidate_ok") is False and isinstance(eff_resolution, dict):
             text = minimal_social_emergency_fallback_line(eff_resolution)
             text, response_type_debug = _enforce_response_type_contract(
@@ -9489,6 +9180,7 @@ def apply_final_emission_gate(
                 strict_social_suppressed_non_social_turn=strict_social_suppressed_non_social_turn,
                 active_interlocutor=active_interlocutor,
             )
+            _merge_opening_upstream_prepare_attach_observability_into_response_type_debug(out, response_type_debug)
             details = {
                 **details,
                 "used_internal_fallback": True,
@@ -9895,8 +9587,8 @@ def apply_final_emission_gate(
                 strict_fallback_resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
             )
             assert_final_emission_mutation_allowed(
-                "normalize_whitespace",
-                source="gate.apply_final_emission_gate.strict_social.ic_text",
+                "interaction_continuity_validation_attach",
+                source="gate.apply_final_emission_gate.strict_social.ic_validate_only",
             )
             out["player_facing_text"] = ic_strict_text
             if ic_strict_fb:
@@ -10245,6 +9937,7 @@ def apply_final_emission_gate(
         strict_social_suppressed_non_social_turn=strict_social_suppressed_non_social_turn,
         active_interlocutor=active_interlocutor,
     )
+    _merge_opening_upstream_prepare_attach_observability_into_response_type_debug(out, response_type_debug)
     if _scene_opening_rt_contract_accept_path_promotes_candidate(response_type_debug):
         accepted_scene_opening_text = _normalize_text(text)
         out["player_facing_text"] = accepted_scene_opening_text
@@ -10469,6 +10162,10 @@ def apply_final_emission_gate(
         session=session if isinstance(session, dict) else None,
         validate_only=True,
         strict_social_path=False,
+    )
+    assert_final_emission_mutation_allowed(
+        "interaction_continuity_validation_attach",
+        source="gate.apply_final_emission_gate.pre_candidate.ic_validate_only",
     )
     reasons.extend(ic_extra_reasons)
     text = ic_text
