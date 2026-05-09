@@ -6,34 +6,47 @@ Snapshot source:
 - `artifacts/realization_provenance_audit/realization_provenance_audit.json`
 
 Both audits are advisory, lexical, and intentionally noisy. This ledger records
-post-Block-S triage value from the current snapshot; it is not a zero-findings
+triage value from the **Block AO** refresh snapshot; it is not a zero-findings
 plan and it does not claim the architecture is fully converged.
 
 # Executive Summary
 
-## Audit Totals
+## Audit Totals (Block AO refresh)
 
 | Audit | HIGH | REVIEW | INFO | Total |
 | --- | ---: | ---: | ---: | ---: |
-| Realization layer audit | 1218 | 706 | 8732 | 10656 |
-| Realization provenance audit | 893 | 1261 | 673 | 2827 |
+| Realization layer audit | 1261 | 710 | 8945 | 10916 |
+| Realization provenance audit | 958 | 1280 | 738 | 2976 |
 
-## Post-Block-S Interpretation
+## Post failure-locality pass interpretation
 
-The realization layer is now much better protected than the raw audit counts
-suggest. Blocks G-S added tests and docs for upstream prepared emission
-provenance, diegetic fallback caller labeling, retry fallback branch behavior,
-retry selector contracts, `build_messages` projection-only behavior, response
-policy enforcement mutation snapshots, opening fallback exact text/provenance,
-and final emission source/family snapshots.
+The realization layer is far better protected than raw audit counts imply.
+Earlier milestones (through **Block S** in prior ledger language) added tests
+and docs for upstream prepared emission provenance, diegetic fallback callers,
+retry selectors and branches, `build_messages` projection-only behavior,
+response policy enforcement mutation snapshots and manifest, opening fallback,
+and final emission source/family snapshots. **Blocks AJ–AN** added API narration
+hub route metadata extraction, contract guards, orchestration handoff ordering,
+the `_apply_narration_hub_policy_handoff` adapter, and **Block AN** as an
+explicit extraction stop point.
 
-The remaining risk is concentrated in behavioral refactors, not missing
-awareness. The repo now has enough safety net for Cursor to do careful
-extractions, while Codex passes should mostly pause on runtime changes and
-continue only with advisory audits, docs, or narrow tests that freeze existing
-behavior.
+**Block AO** re-ran advisory audits, refreshed this ledger and
+`docs/realization_cursor_handoff.md`, and added `docs/realization_failure_locality_closeout.md`
+— **no production or prose changes.**
+
+Remaining risk sits in **large behavioral surfaces** (`apply_response_policy_enforcement`,
+`apply_final_emission_gate`, opening fallback ownership), not in missing tests for
+the seams already pinned. Further runtime refactors should be **evidence-driven**
+(bug, targeted audit finding, or approved design change), not churn for lexical counts.
 
 # Completed Coverage / Extraction Work
+
+## Block AO — failure-locality closeout
+
+- Advisory audits re-run; totals updated in **Executive Summary** (this file) and
+  `docs/realization_cursor_handoff.md`.
+- **`docs/realization_failure_locality_closeout.md`** records program summary, risks,
+  boundaries, and recommended stop point. No runtime or prose changes.
 
 ## Upstream Prepared Emission
 
@@ -167,16 +180,22 @@ behavior.
 ## API narration hub simplification
 
 - File/function: `game/api.py::_build_gpt_narration_from_authoritative_state`
-- Current status: `tests/test_api_narration_path_selection.py` snapshots normal
-  GPT, planner convergence emergency, GPT budget/provider failure, targeted
-  retry, and terminal retry paths.
-- Remaining risk: this function coordinates CTIR/bundle construction, prompt
-  building, GPT calls, policy enforcement, retry routing, emergency fallback,
-  and final emission. It can still hide semantic mutation by orchestration.
-- Required future action: Cursor should extract path classification and
-  provenance trace assembly before moving any text-producing behavior. Keep CTIR
-  and bundle reuse stable.
-- Risk: EXTREME.
+- Current status (**Blocks AJ–AM + Block AN stop point**): Path-selection and Block AL
+  orchestration handoff order are snapshotted; route metadata helpers are contract-tested;
+  `_apply_narration_hub_policy_handoff` isolates the response-policy seam after GPT/retry.
+  **Block AN** (`test_block_an_*`) guards the extraction boundary and registers Block AL /
+  Block AM test names — treat further hub extraction as **paused** unless a concrete bug or
+  audit finding warrants it. Safe follow-up work is **docs and advisory audit refresh** only.
+- What stays in the hub on purpose: CTIR/planner/bundle setup, prompt construction,
+  GPT/retry/upstream-fallback orchestration, GM merges from prompt payload, policy handoff
+  adapter call, finalize annotations (`annotate_narration_path_kind`, continuation
+  classification). Final emission remains **`api_turn_support`** / `apply_final_emission_gate`.
+- Remaining risk if someone reopens the hub: orchestration edits can still change semantics
+  without touching obvious text owners; rely on Block AL ordering tests and narrow regressions.
+- Required future action: **no broad hub extraction** for failure-locality unless justified;
+  otherwise refresh documentation and re-run advisory audits as needed.
+- Risk: **Mitigated for extraction churn** by AJ–AN tests; behavioral edits to the hub body
+  remain **HIGH** and should stay rare and evidence-driven.
 
 ## Retry fallback: current status / likely leave alone for now
 
@@ -201,6 +220,7 @@ behavior.
 1. Re-run advisory audits and refresh docs when runtime changes land.
 2. Add narrow tests only when they freeze current behavior or metadata shape.
 3. Keep `docs/realization_cursor_handoff.md`,
+   `docs/realization_failure_locality_closeout.md`,
    `docs/retry_fallback_selector_contract.md`, and
    `docs/response_policy_enforcement_split_plan.md` in sync.
 4. Do not wire the advisory audits into CI yet.
@@ -214,8 +234,9 @@ behavior.
    text and provenance snapshots.
 3. Reduce `final_emission_gate` fallback authorship branch-by-branch, starting
    only with prepared or sealed sources.
-4. Simplify the API narration hub by extracting path/provenance orchestration,
-   not text production.
+4. **API narration hub:** Blocks AJ–AM delivered; **Block AN** documents a **stop point**
+   — do not resume hub extraction unless bug- or audit-driven; safe work is docs/audit
+   refresh (`docs/realization_cursor_handoff.md`, this ledger).
 5. Revisit retry fallback last, and likely leave it unchanged unless the above
    work exposes a concrete local cleanup.
 

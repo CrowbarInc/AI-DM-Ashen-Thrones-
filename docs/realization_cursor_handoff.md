@@ -2,11 +2,12 @@
 
 Branch context: `feature/failure-locality`
 
-This handoff reflects the post-Block-S state after refreshing the advisory
-audits:
+This handoff reflects the **Block AO** advisory audit refresh (failure-locality
+closeout). Full milestone narrative and stopping-point guidance:
+`docs/realization_failure_locality_closeout.md`.
 
-- `tools/realization_layer_audit.py`: `HIGH=1218`, `REVIEW=706`, `INFO=8732`
-- `tools/realization_provenance_audit.py`: `HIGH=893`, `REVIEW=1261`, `INFO=673`
+- `tools/realization_layer_audit.py`: `HIGH=1261`, `REVIEW=710`, `INFO=8945`
+- `tools/realization_provenance_audit.py`: `HIGH=958`, `REVIEW=1280`, `INFO=738`
 
 The audits remain advisory and lexical. They are useful for locating remaining
 behavioral ownership risks, not for proving failures or setting a zero-findings
@@ -40,6 +41,9 @@ target.
 - API narration path selection for normal GPT, planner convergence emergency,
   GPT budget/provider failure, targeted retry, and terminal retry:
   `tests/test_api_narration_path_selection.py`
+- API narration hub extraction boundary / contract guard (Blocks AJ–AM snapshots +
+  Block AN stop point): `tests/test_api_narration_path_selection.py`
+  (`test_block_an_*`, registry tuples `_BLOCK_AL_*` / `_BLOCK_AM_*`)
 
 # Low-Risk Seams / Leave Alone
 
@@ -138,27 +142,50 @@ Do not broadly rewrite `final_emission_gate`. It is the most dangerous place to
 make sweeping edits because the current tests now pin several branch-local
 source/provenance behaviors. Treat it as a branch-by-branch reduction project.
 
-## API narration hub simplification
+## API narration hub — extraction phase complete (Block AN stop point)
 
-Current status:
+**Status:** The planned **metadata / orchestration / policy-handoff** extraction for the
+manual-play API narration hub is **complete** for the current failure-locality effort
+(Blocks AJ–AM). **Block AN** adds contract guards and treats this boundary as a **stop
+point** for further hub extraction unless new evidence appears (see below).
 
-- Path-selection snapshots exist for normal GPT, planner convergence emergency,
-  GPT budget/provider failure, targeted retry, and terminal retry.
+Completed slices:
 
-Why Cursor is required:
+- **Block AJ:** `_narration_hub_finalize_annotation_parts`, `_classify_narration_hub_route`,
+  `_build_narration_hub_route_meta` — route metadata and `annotate_narration_path_kind`
+  kwargs only.
+- **Block AK:** Contract tests (`test_block_ak_*`) — route helpers stay metadata-only.
+- **Block AL:** Orchestration handoff order snapshots (GPT → retry → policy → turn-support
+  final gate via `_finalize_player_facing_for_turn`).
+- **Block AM:** `_apply_narration_hub_policy_handoff` — response-policy enforcement seam
+  after GPT/retry (no GPT, retry execution, or final emission gate inside the adapter).
 
-`_build_gpt_narration_from_authoritative_state` coordinates CTIR/bundle setup,
-prompt building, GPT calls, policy enforcement, retry routing, emergency
-fallback, and final emission. Even if downstream helpers are bounded, this hub
-can still hide semantic changes through orchestration.
+**Route helper contract (AJ/AK — `game/api.py`):** unchanged — **allowed:** route labels and
+annotation kwargs from read-only `resolution` / `bundle_seam_requirement`; **forbidden:**
+GPT, retry execution, final emission, mutating `player_facing_text`, fallback prose
+selection.
 
-Recommended Cursor action:
+**What remains intentionally inside `_build_gpt_narration_from_authoritative_state`:**
 
-1. Extract path classification and provenance trace assembly first.
-2. Preserve CTIR/bundle reuse and call ordering.
-3. Keep text production in the current downstream owners during the first pass.
-4. Only split emergency route behavior after snapshots cover the extracted
-   classification layer.
+- Resolution hygiene, CTIR attach, narration plan bundle ensure, planner convergence
+  emergency exits, `build_messages` / prompt payload construction.
+- GPT calls (`call_gpt` / bounded wrapper), `guard_gm_output`, upstream API error handling,
+  targeted retry loop, deterministic and terminal retry fallbacks, latency accounting.
+- Prompt-derived GM field merges, `_attach_scene_opening_curated_facts_to_gm`, policy
+  handoff via `_apply_narration_hub_policy_handoff`, session policy fingerprint and
+  progression storage, narration seam finalize annotations (`annotate_narration_path_kind`,
+  continuation classification, planner metadata attachment).
+
+Final player-facing emission still runs in **`game/api_turn_support`** (`apply_final_emission_gate`), not in the hub builder.
+
+**Pause guidance (failure-locality / realization):** Do **not** continue broad hub
+refactoring for orchestration alone. Resume extraction or deep edits only when driven by a
+**concrete bug**, a **targeted audit finding**, or an approved design change — not by
+lexical audit volume or cosmetic thinning.
+
+**Safe work without runtime risk:** advisory audit re-runs, doc updates (this file,
+`triage_ledger`, selector/manifest docs), and narrow regression tests that freeze observed
+behavior.
 
 ## Retry fallback: current status / likely leave alone for now
 
@@ -192,8 +219,8 @@ changing emitted prose.
    introduce prepared opening fallback payload and make the gate select it.
 3. `final_emission_gate` branch-local fallback reduction:
    prepared/sealed branches first, no broad rewrite.
-4. API narration hub simplification:
-   extract path/provenance orchestration before behavior.
+4. **API narration hub:** Blocks AJ–AM done; **Block AN stop point** — no further hub
+   extraction unless bug/audit-driven (see **API narration hub** section above).
 5. Retry fallback cleanup only if necessary:
    keep selector contract and emitted prose stable.
 
@@ -207,7 +234,8 @@ need interactive, branch-by-branch refactors with close review.
 Codex can safely continue with:
 
 - Re-running advisory audits.
-- Refreshing docs after Cursor changes.
+- Refreshing docs after Cursor changes (`realization_triage_ledger.md`,
+  `realization_failure_locality_closeout.md` when milestones shift).
 - Adding narrow regression tests that freeze current behavior.
 - Fixing doc references if paths or helper names move.
 
