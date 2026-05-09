@@ -16,6 +16,10 @@ from game.realization_provenance import (
     REALIZATION_FALLBACK_FAMILY_FIELD,
     RETRY_TERMINAL_FALLBACK,
 )
+from game.upstream_response_repairs import (
+    OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL,
+    OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED,
+)
 from tests.test_final_emission_gate import EXPECTED_FRONTIER_GATE_OPENING_FALLBACK, _opening_gm_output
 
 pytestmark = pytest.mark.unit
@@ -102,6 +106,7 @@ def test_final_emission_opening_repair_debug_labels_legacy_diegetic_fallback_bou
     family = debug[REALIZATION_FALLBACK_FAMILY_FIELD]
     _assert_known_family(family)
     assert family == LEGACY_DIEGETIC_FALLBACK
+    assert debug.get("opening_fallback_authorship_source") == OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL
 
 
 def test_final_emission_opening_repair_carries_legacy_diegetic_family_to_fem() -> None:
@@ -126,6 +131,7 @@ def test_final_emission_opening_repair_carries_legacy_diegetic_family_to_fem() -
     _assert_known_family(family)
     assert family == LEGACY_DIEGETIC_FALLBACK
     assert family != GATE_TERMINAL_REPAIR
+    assert fem.get("opening_fallback_authorship_source") == OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED
 
 
 def test_valid_final_emission_candidate_does_not_gain_diegetic_fallback_family() -> None:

@@ -166,3 +166,41 @@ RESPONSE_POLICY_ENFORCEMENT_SUBPATHS: tuple[ResponsePolicyEnforcementSubpath, ..
 
 def response_policy_enforcement_subpath_keys() -> tuple[str, ...]:
     return tuple(item.key for item in RESPONSE_POLICY_ENFORCEMENT_SUBPATHS)
+
+
+# Contract guard (Blocks U–X): these ``game.gm`` symbols must remain importable;
+# tests assert presence + orchestration order. Do not rename without updating tests/docs.
+RESPONSE_POLICY_ENFORCEMENT_CONTRACT_HELPER_NAMES: tuple[str, ...] = (
+    "_normalize_response_policy_input",
+    "_scene_id_from_scene_envelope",
+    "_init_response_policy_enforcement_state",
+    "_apply_forbid_state_invention_validation",
+    "_project_fallback_behavior_contract_metadata",
+    "_snapshot_response_policy_and_project_fallback_contract",
+    "_mark_response_policy_enforcement_applied",
+    "_apply_must_answer_question_resolution_enforcement",
+    "_apply_diegetic_validator_voice_enforcement",
+    "_apply_prefer_specificity_text_enforcement",
+    "_apply_forbid_secret_leak_guard",
+    "_apply_topic_pressure_escalation_enforcement",
+    "_apply_escalate_passive_scene_enforcement",
+    "_apply_scene_momentum_enforcement",
+    "_commit_topic_progress_after_enforcement",
+)
+
+# Expected invocation order when every orchestrated branch is enabled (strict-social off).
+# Mirrors ``apply_response_policy_enforcement`` + ``RESPONSE_RULE_PRIORITY`` handling.
+RESPONSE_POLICY_ENFORCEMENT_ORCHESTRATION_SEQUENCE_FULL_POLICY: tuple[str, ...] = (
+    "_init_response_policy_enforcement_state",
+    "_apply_must_answer_question_resolution_enforcement",
+    "_apply_forbid_state_invention_validation",
+    "_apply_forbid_secret_leak_guard",
+    "_apply_diegetic_validator_voice_enforcement",
+    "_apply_topic_pressure_escalation_enforcement",
+    "_apply_escalate_passive_scene_enforcement",
+    "_apply_scene_momentum_enforcement",
+    "_apply_prefer_specificity_text_enforcement",
+    "_commit_topic_progress_after_enforcement",
+    "_snapshot_response_policy_and_project_fallback_contract",
+    "_mark_response_policy_enforcement_applied",
+)

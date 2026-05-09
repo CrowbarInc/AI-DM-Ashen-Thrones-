@@ -5690,6 +5690,235 @@ def enforce_no_validator_voice(
     return gm
 
 
+def _normalize_response_policy_input(response_policy: Any) -> Dict[str, Any]:
+    """Return a dict view of ``response_policy`` for enforcement (metadata/validation only)."""
+    return response_policy if isinstance(response_policy, dict) else {}
+
+
+def _scene_id_from_scene_envelope(scene_envelope: Dict[str, Any]) -> str:
+    """Extract ``scene.id`` for strict-social detection (metadata-only)."""
+    scene_id = ""
+    if isinstance(scene_envelope, dict):
+        sc = scene_envelope.get("scene")
+        if isinstance(sc, dict):
+            scene_id = str(sc.get("id") or "").strip()
+    return scene_id
+
+
+def _init_response_policy_enforcement_state(
+    gm: Dict[str, Any],
+    response_policy: Any,
+    scene_envelope: Dict[str, Any],
+    session: Dict[str, Any],
+    world: Dict[str, Any],
+    resolution: Dict[str, Any] | None,
+) -> tuple[Dict[str, Any], Dict[str, Any], bool]:
+    """Copy the GM dict, normalize policy, and compute strict-social bypass (no text mutation)."""
+    out = dict(gm)
+    policy = _normalize_response_policy_input(response_policy)
+    scene_id = _scene_id_from_scene_envelope(scene_envelope)
+    strict_social_turn = strict_social_emission_will_apply(resolution, session, world, scene_id)
+    return out, policy, strict_social_turn
+
+
+def _apply_forbid_state_invention_validation(
+    gm_dict: Dict[str, Any],
+    session: Dict[str, Any],
+    scene_envelope: Dict[str, Any],
+) -> Dict[str, Any]:
+    """Validation-only branch for ``forbid_state_invention`` (no player-facing prose)."""
+    return validate_gm_state_update(gm_dict, session, scene_envelope)
+
+
+def _project_fallback_behavior_contract_metadata(
+    out: Dict[str, Any],
+    fallback_behavior: Dict[str, Any],
+) -> None:
+    """Project ``fallback_behavior`` into ``metadata.emission_debug`` (metadata-only)."""
+    md = out.setdefault("metadata", {})
+    if not isinstance(md, dict):
+        return
+    em = md.setdefault("emission_debug", {})
+    if not isinstance(em, dict):
+        return
+    fb = fallback_behavior
+    em["fallback_behavior_contract"] = {
+        "enabled": bool(fb.get("enabled")),
+        "uncertainty_active": bool(fb.get("uncertainty_active")),
+        "uncertainty_mode": fb.get("uncertainty_mode"),
+        "uncertainty_sources": list(fb.get("uncertainty_sources") or []),
+        "allowed_behaviors": dict(fb.get("allowed_behaviors") or {}),
+        "prefer_partial_over_question": bool(fb.get("prefer_partial_over_question")),
+    }
+
+
+def _snapshot_response_policy_and_project_fallback_contract(
+    out: Dict[str, Any],
+    policy: Dict[str, Any],
+) -> None:
+    """Store ``response_policy`` on ``out`` and project fallback contract metadata (no prose changes)."""
+    out["response_policy"] = dict(policy)
+    fb = policy.get("fallback_behavior")
+    if isinstance(fb, dict):
+        _project_fallback_behavior_contract_metadata(out, fb)
+
+
+def _mark_response_policy_enforcement_applied(out: Dict[str, Any]) -> None:
+    """Set the defense-in-depth marker on metadata (metadata-only)."""
+    md = out.setdefault("metadata", {})
+    if isinstance(md, dict):
+        md[GM_METADATA_RESPONSE_POLICY_ENFORCEMENT_APPLIED] = True
+
+
+def _apply_must_answer_question_resolution_enforcement(
+    out: Dict[str, Any],
+    *,
+    player_text: str,
+    scene_envelope: Dict[str, Any],
+    session: Dict[str, Any],
+    world: Dict[str, Any],
+    resolution: Dict[str, Any] | None,
+) -> Dict[str, Any]:
+    """``must_answer`` / question-resolution completeness pass (deterministic; snapshot-covered)."""
+    return enforce_question_resolution_rule(
+        out,
+        player_text=player_text,
+        scene_envelope=scene_envelope,
+        session=session,
+        world=world,
+        resolution=resolution,
+    )
+
+
+def _apply_diegetic_validator_voice_enforcement(
+    out: Dict[str, Any],
+    *,
+    scene_envelope: Dict[str, Any],
+    player_text: str,
+    session: Dict[str, Any],
+    world: Dict[str, Any],
+    resolution: Dict[str, Any] | None,
+) -> Dict[str, Any]:
+    """``diegetic_only`` validator-voice removal (snapshot-covered; internal fallback unchanged)."""
+    return enforce_no_validator_voice(
+        out,
+        scene_envelope=scene_envelope,
+        player_text=player_text,
+        session=session,
+        world=world,
+        resolution=resolution,
+    )
+
+
+def _apply_prefer_specificity_text_enforcement(
+    out: Dict[str, Any],
+    *,
+    player_text: str,
+    scene_envelope: Dict[str, Any],
+    session: Dict[str, Any],
+    world: Dict[str, Any],
+    resolution: Dict[str, Any] | None,
+) -> Dict[str, Any]:
+    """NPC contract enforcement then forbidden-generic rewrite (fixed pair order; snapshot-covered)."""
+    out = enforce_npc_response_contract(
+        out,
+        player_text=player_text,
+        scene_envelope=scene_envelope,
+        session=session,
+        world=world,
+        resolution=resolution,
+    )
+    out = enforce_forbidden_generic_phrases(
+        out,
+        scene_envelope=scene_envelope,
+        session=session,
+        world=world,
+    )
+    return out
+
+
+def _apply_forbid_secret_leak_guard(
+    out: Dict[str, Any],
+    scene_envelope: Dict[str, Any],
+    player_text: str,
+    discovered_clues: List[str] | None,
+    *,
+    session: Dict[str, Any],
+    world: Dict[str, Any],
+    resolution: Dict[str, Any] | None,
+) -> Dict[str, Any]:
+    """``forbid_secret_leak`` branch — delegates to ``guard_gm_output`` (snapshot-covered)."""
+    return guard_gm_output(
+        out,
+        scene_envelope,
+        player_text,
+        discovered_clues,
+        session=session,
+        world=world,
+        resolution=resolution,
+    )
+
+
+def _apply_topic_pressure_escalation_enforcement(
+    out: Dict[str, Any],
+    *,
+    player_text: str,
+    session: Dict[str, Any],
+    scene_envelope: Dict[str, Any],
+) -> Dict[str, Any]:
+    """First step of ``prefer_scene_momentum`` — topic-pressure escalation."""
+    return enforce_topic_pressure_escalation(
+        out,
+        player_text=player_text,
+        session=session,
+        scene_envelope=scene_envelope,
+    )
+
+
+def _apply_escalate_passive_scene_enforcement(
+    out: Dict[str, Any],
+    *,
+    player_text: str,
+    session: Dict[str, Any],
+    world: Dict[str, Any],
+    scene_envelope: Dict[str, Any],
+    resolution: Dict[str, Any] | None,
+) -> Dict[str, Any]:
+    """Second step of ``prefer_scene_momentum`` — passive stall pressure."""
+    return escalate_passive_scene(
+        out,
+        player_text=player_text,
+        session=session,
+        world=world,
+        scene_envelope=scene_envelope,
+        resolution=resolution,
+    )
+
+
+def _apply_scene_momentum_enforcement(
+    out: Dict[str, Any],
+    *,
+    session: Dict[str, Any],
+    scene_envelope: Dict[str, Any],
+) -> Dict[str, Any]:
+    """Third step of ``prefer_scene_momentum`` — momentum beat enforcement."""
+    return enforce_scene_momentum(out, session=session, scene_envelope=scene_envelope)
+
+
+def _commit_topic_progress_after_enforcement(
+    *,
+    session: Dict[str, Any],
+    scene_envelope: Dict[str, Any],
+    reply_text: str,
+) -> None:
+    """Post-loop topic bookkeeping from enforced reply text (ordering-sensitive)."""
+    _commit_topic_progress(
+        session=session,
+        scene_envelope=scene_envelope,
+        reply_text=reply_text,
+    )
+
+
 def apply_response_policy_enforcement(
     gm: Dict[str, Any],
     *,
@@ -5710,19 +5939,19 @@ def apply_response_policy_enforcement(
     if not isinstance(gm, dict):
         return gm
 
-    out = dict(gm)
-    policy = response_policy if isinstance(response_policy, dict) else {}
-    scene_id = ""
-    if isinstance(scene_envelope, dict):
-        sc = scene_envelope.get("scene")
-        if isinstance(sc, dict):
-            scene_id = str(sc.get("id") or "").strip()
-    strict_social_turn = strict_social_emission_will_apply(resolution, session, world, scene_id)
+    out, policy, strict_social_turn = _init_response_policy_enforcement_state(
+        gm,
+        response_policy,
+        scene_envelope,
+        session,
+        world,
+        resolution,
+    )
 
     for policy_key, _rule_name in RESPONSE_RULE_PRIORITY:
         if policy_key == "must_answer" and policy.get(policy_key, True):
             if not strict_social_turn:
-                out = enforce_question_resolution_rule(
+                out = _apply_must_answer_question_resolution_enforcement(
                     out,
                     player_text=player_text,
                     scene_envelope=scene_envelope,
@@ -5733,12 +5962,12 @@ def apply_response_policy_enforcement(
             continue
 
         if policy_key == "forbid_state_invention" and policy.get(policy_key, True):
-            out = validate_gm_state_update(out, session, scene_envelope)
+            out = _apply_forbid_state_invention_validation(out, session, scene_envelope)
             continue
 
         if policy_key == "forbid_secret_leak" and policy.get(policy_key, True):
             if not strict_social_turn:
-                out = guard_gm_output(
+                out = _apply_forbid_secret_leak_guard(
                     out,
                     scene_envelope,
                     player_text,
@@ -5758,7 +5987,7 @@ def apply_response_policy_enforcement(
             and bool((policy.get("no_validator_voice") or {}).get("enabled", True))
         ):
             if not strict_social_turn:
-                out = enforce_no_validator_voice(
+                out = _apply_diegetic_validator_voice_enforcement(
                     out,
                     scene_envelope=scene_envelope,
                     player_text=player_text,
@@ -5770,13 +5999,13 @@ def apply_response_policy_enforcement(
 
         if policy_key == "prefer_scene_momentum" and policy.get(policy_key, True):
             if not strict_social_turn:
-                out = enforce_topic_pressure_escalation(
+                out = _apply_topic_pressure_escalation_enforcement(
                     out,
                     player_text=player_text,
                     session=session,
                     scene_envelope=scene_envelope,
                 )
-                out = escalate_passive_scene(
+                out = _apply_escalate_passive_scene_enforcement(
                     out,
                     player_text=player_text,
                     session=session,
@@ -5784,12 +6013,16 @@ def apply_response_policy_enforcement(
                     scene_envelope=scene_envelope,
                     resolution=resolution,
                 )
-                out = enforce_scene_momentum(out, session=session, scene_envelope=scene_envelope)
+                out = _apply_scene_momentum_enforcement(
+                    out,
+                    session=session,
+                    scene_envelope=scene_envelope,
+                )
             continue
 
         if policy_key == "prefer_specificity" and policy.get(policy_key, True):
             if not strict_social_turn:
-                out = enforce_npc_response_contract(
+                out = _apply_prefer_specificity_text_enforcement(
                     out,
                     player_text=player_text,
                     scene_envelope=scene_envelope,
@@ -5797,37 +6030,15 @@ def apply_response_policy_enforcement(
                     world=world,
                     resolution=resolution,
                 )
-                out = enforce_forbidden_generic_phrases(
-                    out,
-                    scene_envelope=scene_envelope,
-                    session=session,
-                    world=world,
-                )
 
-    _commit_topic_progress(
+    _commit_topic_progress_after_enforcement(
         session=session,
         scene_envelope=scene_envelope,
         reply_text=str(out.get("player_facing_text") or ""),
     )
     if isinstance(policy, dict):
-        out["response_policy"] = dict(policy)
-        fb = policy.get("fallback_behavior")
-        if isinstance(fb, dict):
-            md = out.setdefault("metadata", {})
-            if isinstance(md, dict):
-                em = md.setdefault("emission_debug", {})
-                if isinstance(em, dict):
-                    em["fallback_behavior_contract"] = {
-                        "enabled": bool(fb.get("enabled")),
-                        "uncertainty_active": bool(fb.get("uncertainty_active")),
-                        "uncertainty_mode": fb.get("uncertainty_mode"),
-                        "uncertainty_sources": list(fb.get("uncertainty_sources") or []),
-                        "allowed_behaviors": dict(fb.get("allowed_behaviors") or {}),
-                        "prefer_partial_over_question": bool(fb.get("prefer_partial_over_question")),
-                    }
-    md = out.setdefault("metadata", {})
-    if isinstance(md, dict):
-        md[GM_METADATA_RESPONSE_POLICY_ENFORCEMENT_APPLIED] = True
+        _snapshot_response_policy_and_project_fallback_contract(out, policy)
+    _mark_response_policy_enforcement_applied(out)
     return out
 
 

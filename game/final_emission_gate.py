@@ -37,6 +37,11 @@ from :func:`game.turn_packet.get_turn_packet` and popped in
 derived from the packet boundary and does not own it. Neither layer owns engine truth or
 narration policy.
 
+**Scene-opening deterministic fallback:** canonical prose is packaged upstream as
+``upstream_prepared_opening_fallback`` (:mod:`game.upstream_response_repairs`). This module selects that
+snapshot when usable and uses :mod:`game.opening_deterministic_fallback` only as a **compatibility**
+re-invocation when the snapshot is absent or unusable—never as a parallel author.
+
 **Last-mile player text:** :func:`_finalize_emission_output` applies packaging-only normalization
 (whitespace / route-illegal stock stripping via :func:`_strip_appended_route_illegal_contamination_sentences`).
 It does **not** decompress, repair participial fragments, or micro-smooth for meaning at the boundary
@@ -46,7 +51,7 @@ pre-gate scaffold/serialization firewall; final emission is not a planner or sem
 from __future__ import annotations
 
 import re
-from typing import Any, Dict, List, Mapping, Optional, Sequence
+from typing import Any, Dict, List, Literal, Mapping, MutableMapping, Optional, Sequence
 
 from game.exploration import NPC_PURSUIT_CONTACT_SESSION_KEY
 from game.interaction_context import inspect as inspect_interaction_context
@@ -162,6 +167,10 @@ from game.final_emission_text import (
     _normalize_text_preserve_paragraphs,
     _sanitize_output_text,
 )
+from game.opening_deterministic_fallback import (
+    deterministic_opening_fallback_text_and_meta as _deterministic_opening_fallback_text_and_meta,
+    opening_context_from_gm_output as _opening_context_from_gm_output,
+)
 from game.interaction_continuity import repair_interaction_continuity, validate_interaction_continuity
 from game.response_policy_contracts import (
     _last_player_input,
@@ -205,8 +214,12 @@ from game.final_emission_repairs import (
     _strict_social_answer_pressure_rd_contract_active,
 )
 from game.upstream_response_repairs import (
+    OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL,
+    OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED,
     UPSTREAM_PREPARED_EMISSION_KEY,
+    UPSTREAM_PREPARED_OPENING_FALLBACK_KEY,
     build_social_fallback_resolution,
+    maybe_attach_upstream_prepared_opening_fallback_payload,
     merge_upstream_prepared_emission_into_gm_output,
 )
 from game.final_emission_validators import (
@@ -231,7 +244,238 @@ from game.acceptance_quality import (
     validate_and_repair_acceptance_quality,
 )
 
+
 # --- Policy layers & helpers (large clusters live here; validators/repairs are extracted) ---
+
+
+def _stamp_sealed_fallback_realization_family(
+    meta: MutableMapping[str, Any],
+    *,
+    final_emitted_source: str,
+    strict_social_route: bool,
+) -> None:
+    """Telemetry-only: classify sealed hard-replace prose for ``realization_fallback_family``.
+
+    Matches terminal replace-path policy: gate-terminal repair for generic sealed tuples; strict-social
+    deterministic only when the emitted source id is the strict-social minimal emergency pool.
+    """
+    src = str(final_emitted_source or "").strip()
+    if strict_social_route and src == "minimal_social_emergency_fallback":
+        attach_realization_fallback_family(meta, STRICT_SOCIAL_DETERMINISTIC_FALLBACK)
+    else:
+        attach_realization_fallback_family(meta, GATE_TERMINAL_REPAIR)
+
+
+def _prepare_sealed_replacement_route_meta(
+    meta: MutableMapping[str, Any],
+    *,
+    gm_output: Mapping[str, Any],
+    pre_gate_candidate_text: str,
+    final_emitted_source: str,
+    strict_social_route: bool,
+    composition_meta: Mapping[str, Any] | None,
+) -> None:
+    """Shared FEM assembly after ``player_facing_text`` is swapped to sealed fallback (visibility-safe paths).
+
+    When *composition_meta* is ``None``, diegetic ``fallback_family_used`` / ``fallback_temporal_frame``
+    are left untouched (visibility enforcement historically omits them here).
+    """
+    gate_out_text = _normalize_text(gm_output.get("player_facing_text"))
+    meta["final_route"] = "replaced"
+    meta["final_emitted_source"] = final_emitted_source
+    _stamp_sealed_fallback_realization_family(
+        meta,
+        final_emitted_source=final_emitted_source,
+        strict_social_route=strict_social_route,
+    )
+    if composition_meta is not None:
+        meta["fallback_family_used"] = composition_meta.get("fallback_family_used")
+        meta["fallback_temporal_frame"] = composition_meta.get("fallback_temporal_frame")
+    meta["post_gate_mutation_detected"] = pre_gate_candidate_text != gate_out_text
+    meta["final_text_preview"] = (gate_out_text[:120] + "…") if len(gate_out_text) > 120 else gate_out_text
+
+
+def _finalize_n4_sealed_replace_fem_route_meta(
+    fem: MutableMapping[str, Any],
+    *,
+    strict_social_path: bool,
+) -> None:
+    """Route-level FEM keys for acceptance-quality N4 hard replace (selection happens upstream)."""
+    fe_src = (
+        "minimal_social_emergency_fallback"
+        if strict_social_path
+        else "acceptance_quality_global_scene_fallback"
+    )
+    fem["final_route"] = "replaced"
+    fem["candidate_validation_passed"] = False
+    fem["final_emitted_source"] = fe_src
+    _stamp_sealed_fallback_realization_family(
+        fem,
+        final_emitted_source=fe_src,
+        strict_social_route=strict_social_path,
+    )
+
+
+def _route_visibility_enforcement_after_failed_validation(
+    *,
+    tag_list_gate: Sequence[str],
+    dbg_gate: str,
+    violation_kinds: Sequence[str],
+    checked_entities: Sequence[Any],
+    checked_facts: Sequence[Any],
+    candidate_text: str,
+) -> Literal[
+    "continuity_lead_exemption",
+    "concrete_interaction_no_hard_replace",
+    "sealed_hard_replace",
+]:
+    """Branch selector after visibility validation fails (order-sensitive; snapshots depend on it)."""
+    if (
+        "known_fact_guard" in tag_list_gate
+        and "recent_dialogue_continuity" in dbg_gate
+        and violation_kinds == ["unseen_entity_reference"]
+    ):
+        return "continuity_lead_exemption"
+    if not checked_entities and not checked_facts and _reply_already_has_concrete_interaction(candidate_text):
+        return "concrete_interaction_no_hard_replace"
+    return "sealed_hard_replace"
+
+
+def _select_acceptance_quality_n4_sealed_fallback_line(
+    *,
+    strict_social_path: bool,
+    eff_resolution: Mapping[str, Any] | None,
+    scene: Dict[str, Any] | None,
+    scene_id: str,
+    resolution: Mapping[str, Any] | None,
+    session: Dict[str, Any] | None,
+    world: Dict[str, Any] | None,
+    res_kind: str,
+    response_type_required: str,
+) -> str:
+    """Sealed replacement line when N4 fails after subtractive repair (strict-social vs global tuple)."""
+    if strict_social_path:
+        return minimal_social_emergency_fallback_line(eff_resolution if isinstance(eff_resolution, dict) else None)
+    return _scene_emit_integrity_global_fallback_tuple(
+        scene if isinstance(scene, dict) else None,
+        str(scene_id or "").strip(),
+        authoritative_resolution=resolution if isinstance(resolution, dict) else None,
+        session=session if isinstance(session, dict) else None,
+        world=world if isinstance(world, dict) else None,
+        res_kind=res_kind,
+        response_type_required=response_type_required,
+    )[0]
+
+
+def _scene_opening_rt_contract_accept_path_promotes_candidate(response_type_debug: Mapping[str, Any]) -> bool:
+    """True when scene-opening response-type path accepts the writer candidate without RT repair (selector only)."""
+    return (
+        str(response_type_debug.get("response_type_required") or "").strip().lower() == "scene_opening"
+        and response_type_debug.get("response_type_candidate_ok") is True
+        and response_type_debug.get("response_type_repair_used") is False
+        and response_type_debug.get("scene_opening_candidate_contract_passed") is True
+    )
+
+
+def _select_non_strict_replace_path_terminal_sealed_fallback(
+    out: Dict[str, Any],
+    *,
+    session: Dict[str, Any] | None,
+    scene: Dict[str, Any] | None,
+    world: Dict[str, Any] | None,
+    sid: str,
+    resolution: Dict[str, Any] | None,
+    eff_resolution: Dict[str, Any] | None,
+    active_interlocutor: str,
+    strict_social_suppressed_non_social_turn: bool,
+    res_kind: str,
+    response_type_required: str,
+    suppress_intro_replace: bool,
+    interaction_mode: str,
+) -> tuple[str, str, str, str, Dict[str, Any] | None]:
+    """Selector + tuple unpack for non–strict-social candidate-rejection terminal replace (ordering preserved)."""
+    mode = str(interaction_mode or "").strip().lower()
+    if _opening_mode_active_for_turn(out, resolution if isinstance(resolution, dict) else None):
+        (
+            fallback_text,
+            fallback_pool,
+            fallback_kind,
+            final_emitted_source,
+            _fb_strat_ie,
+            _fb_cand_ie,
+            fallback_composition_meta,
+        ) = _opening_scene_safe_fallback_tuple(out)
+        return fallback_text, fallback_pool, fallback_kind, final_emitted_source, fallback_composition_meta
+    if (
+        active_interlocutor
+        and mode == "social"
+        and isinstance(world, dict)
+        and not strict_social_suppressed_non_social_turn
+    ):
+        mini_res: Dict[str, Any] = {
+            "kind": "question",
+            "social": {
+                "npc_id": active_interlocutor,
+                "npc_name": _npc_display_name_for_emission(world, sid, active_interlocutor),
+                "social_intent_class": "social_exchange",
+            },
+        }
+        fallback_pool = "social_active_interlocutor_minimal"
+        fallback_text = minimal_social_emergency_fallback_line(mini_res)
+        fallback_kind = "social_interlocutor_fallback"
+        final_emitted_source = "social_interlocutor_minimal_fallback"
+        return fallback_text, fallback_pool, fallback_kind, final_emitted_source, None
+    passive_candidates = _passive_scene_pressure_fallback_candidates(
+        session=session if isinstance(session, dict) else None,
+        scene=scene,
+        scene_id=sid,
+    )
+    if passive_candidates:
+        (
+            fallback_text,
+            fallback_pool,
+            fallback_kind,
+            final_emitted_source,
+            _fallback_strategy,
+            _fallback_candidate_source,
+            _composition_meta,
+        ) = passive_candidates[0]
+        return fallback_text, fallback_pool, fallback_kind, final_emitted_source, None
+    if _should_use_neutral_nonprogress_fallback_instead_of_global_stock(session, eff_resolution):
+        fallback_pool = "npc_pursuit_fail_closed_neutral"
+        fallback_text = "Nothing confirms progress toward that lead yet—the moment stays unresolved."
+        fallback_kind = "npc_pursuit_neutral_nonprogress"
+        final_emitted_source = "npc_pursuit_neutral_fallback"
+        return fallback_text, fallback_pool, fallback_kind, final_emitted_source, None
+    if suppress_intro_replace:
+        fallback_pool = "anti_reset_local_continuation"
+        fallback_text = local_exchange_continuation_fallback_line(
+            session=session if isinstance(session, dict) else None,
+            world=world if isinstance(world, dict) else None,
+            scene_id=sid,
+            resolution=resolution if isinstance(resolution, dict) else None,
+        )
+        fallback_kind = "anti_reset_continuation_fallback"
+        final_emitted_source = "anti_reset_local_continuation_fallback"
+        return fallback_text, fallback_pool, fallback_kind, final_emitted_source, None
+    (
+        fallback_text,
+        fallback_pool,
+        fallback_kind,
+        final_emitted_source,
+        _fb_strat_ie,
+        _fb_cand_ie,
+        _comp_ie,
+    ) = _scene_emit_integrity_global_fallback_tuple(
+        scene if isinstance(scene, dict) else None,
+        sid,
+        authoritative_resolution=resolution if isinstance(resolution, dict) else None,
+        session=session if isinstance(session, dict) else None,
+        world=world if isinstance(world, dict) else None,
+        res_kind=res_kind,
+        response_type_required=response_type_required,
+    )
+    return fallback_text, fallback_pool, fallback_kind, final_emitted_source, None
 
 
 def _default_narration_constraint_debug() -> Dict[str, Any]:
@@ -3623,120 +3867,6 @@ _OPENING_ACTION_VERBS: tuple[str, ...] = (
 )
 
 
-_OPENING_FALLBACK_EMPTY_CURATED_FACTS_MARKER = "[opening_fallback_failed_closed: empty_curated_facts]"
-
-
-def _opening_clean_fact_list(raw: Any) -> list[str]:
-    if not isinstance(raw, list):
-        return []
-    out: list[str] = []
-    seen: set[str] = set()
-    for item in raw:
-        if not isinstance(item, str):
-            continue
-        clean = item.strip()
-        key = clean.lower()
-        if not clean or key in seen:
-            continue
-        seen.add(key)
-        out.append(clean)
-    return out
-
-
-def _opening_context_from_gm_output(gm_output: Mapping[str, Any] | None) -> Dict[str, Any]:
-    ctx: Dict[str, Any] = {
-        "location_anchors": [],
-        "visible_facts": [],
-        "actionable_labels": [],
-        "opening_fallback_context_source": "none",
-        "opening_fallback_basis_count": 0,
-        "opening_fallback_context_missing": True,
-        "opening_curated_facts_source": "selector",
-        "opening_selector_source_used": "none",
-        "opening_selector_selected_facts": [],
-        "opening_curated_facts": [],
-        "opening_final_fallback_basis": [],
-        "opening_final_basis_matches_selector": False,
-    }
-    if not isinstance(gm_output, Mapping):
-        raise AssertionError("scene_opening missing curated facts")
-    if "opening_curated_facts" not in gm_output:
-        raise AssertionError("scene_opening missing curated facts")
-    gm_curated = gm_output.get("opening_curated_facts")
-    if not isinstance(gm_curated, list):
-        raise AssertionError("scene_opening missing curated facts")
-    curated_facts = _opening_clean_fact_list(gm_curated)
-    ctx["visible_facts"].extend(curated_facts)
-    ctx["opening_curated_facts"] = list(curated_facts)
-    if ctx["visible_facts"]:
-        ctx["opening_fallback_context_source"] = "opening_curated_facts"
-        md = gm_output.get("metadata") if isinstance(gm_output.get("metadata"), Mapping) else {}
-        em = md.get("emission_debug") if isinstance(md.get("emission_debug"), Mapping) else {}
-        src = str(em.get("opening_curated_facts_source") or "").strip()
-        selector_src = str(em.get("opening_selector_source_used") or src or "").strip()
-        ctx["opening_curated_facts_source"] = src or "selector"
-        ctx["opening_selector_source_used"] = selector_src or "selector"
-        selector_facts = _opening_clean_fact_list(
-            gm_output.get("opening_selector_selected_facts")
-            if isinstance(gm_output.get("opening_selector_selected_facts"), list)
-            else em.get("opening_selector_selected_facts")
-        )
-        ctx["opening_selector_selected_facts"] = selector_facts or list(curated_facts)
-    pc = gm_output.get("prompt_context")
-    if isinstance(pc, Mapping):
-        plan = pc.get("narrative_plan") if isinstance(pc.get("narrative_plan"), Mapping) else {}
-        scene_opening = plan.get("scene_opening") if isinstance(plan.get("scene_opening"), Mapping) else {}
-        scene_anchors = plan.get("scene_anchors") if isinstance(plan.get("scene_anchors"), Mapping) else {}
-        for raw in (scene_opening.get("location_anchors"), scene_anchors.get("location_anchors")):
-            if isinstance(raw, (list, tuple)):
-                ctx["location_anchors"].extend(str(x).strip() for x in raw if isinstance(x, str) and str(x).strip())
-            elif isinstance(raw, str) and raw.strip():
-                ctx["location_anchors"].append(raw.strip())
-
-        scene_block = pc.get("scene")
-        public_scene = scene_block.get("public") if isinstance(scene_block, Mapping) else None
-        if isinstance(public_scene, Mapping):
-            loc = public_scene.get("location") or public_scene.get("id")
-            if isinstance(loc, str) and loc.strip():
-                ctx["location_anchors"].append(loc.strip())
-        else:
-            public_scene = None
-    else:
-        public_scene = None
-
-    if isinstance(public_scene, Mapping):
-        for key in ("actions", "suggested_actions", "exits", "interactables", "objects"):
-            rows = public_scene.get(key)
-            if not isinstance(rows, list):
-                continue
-            for row in rows[:6]:
-                if not isinstance(row, Mapping):
-                    continue
-                label = row.get("label") or row.get("name") or row.get("id")
-                if isinstance(label, str) and label.strip():
-                    ctx["actionable_labels"].append(label.strip())
-
-    # Preserve order while removing duplicates.
-    for key in ("location_anchors", "visible_facts", "actionable_labels"):
-        seen: set[str] = set()
-        out: list[str] = []
-        for raw in ctx.get(key) or []:
-            clean = str(raw or "").strip()
-            low = clean.lower()
-            if not clean or low in seen:
-                continue
-            seen.add(low)
-            out.append(clean)
-        ctx[key] = out
-    ctx["opening_fallback_basis_count"] = len(ctx.get("visible_facts") or [])
-    ctx["opening_fallback_context_missing"] = ctx["opening_fallback_basis_count"] <= 0
-    ctx["opening_final_fallback_basis"] = list(ctx.get("visible_facts") or [])
-    ctx["opening_final_basis_matches_selector"] = (
-        list(ctx.get("opening_final_fallback_basis") or [])
-        == list(ctx.get("opening_selector_selected_facts") or [])
-    )
-    return ctx
-
 
 def _opening_text_has_location_anchor(text: str, context: Mapping[str, Any]) -> bool:
     low = text.lower()
@@ -3834,106 +3964,9 @@ def is_valid_opening(text: str, curated_facts: Sequence[Any]) -> bool:
     return matches >= 2
 
 
-def _actionable_hook_from_opening_context(context: Mapping[str, Any]) -> str:
-    labels = [str(x).strip() for x in (context.get("actionable_labels") or []) if str(x).strip()]
-    if labels:
-        head = labels[:3]
-        if len(head) == 1:
-            return f"You can start with {head[0]}."
-        if len(head) == 2:
-            return f"You can start with {head[0]} or {head[1]}."
-        return f"You can start with {head[0]}, {head[1]}, or {head[2]}."
-    facts = [str(x).strip() for x in (context.get("visible_facts") or []) if str(x).strip()]
-    hook_targets: list[str] = []
-    joined = " ".join(facts).lower()
-    if "notice board" in joined or "notice" in joined:
-        hook_targets.append("read the notice board")
-    if "guard" in joined:
-        hook_targets.append("press the guards")
-    if "runner" in joined or "tavern" in joined:
-        hook_targets.append("approach the tavern runner")
-    if "wagon" in joined or "traffic" in joined or "crowd" in joined:
-        hook_targets.append("work through the crowd")
-    if hook_targets:
-        head = hook_targets[:3]
-        if len(head) == 1:
-            return f"You can {head[0]}."
-        if len(head) == 2:
-            return f"You can {head[0]} or {head[1]}."
-        return f"You can {head[0]}, {head[1]}, or {head[2]}."
-    return ""
 
-
-def _opening_fact_matches_any(fact: str, needles: tuple[str, ...]) -> bool:
-    low = fact.lower()
-    return any(needle in low for needle in needles)
-
-
-def _pick_opening_fallback_fact(
-    facts: list[str],
-    *,
-    used: set[str],
-    needles: tuple[str, ...],
-) -> str:
-    for fact in facts:
-        key = fact.lower()
-        if key not in used and _opening_fact_matches_any(fact, needles):
-            used.add(key)
-            return fact
-    for fact in facts:
-        key = fact.lower()
-        if key not in used:
-            used.add(key)
-            return fact
-    return ""
-
-
-def _deterministic_opening_fallback_text_and_meta(gm_output: Mapping[str, Any] | None) -> tuple[str, Dict[str, Any]]:
-    context = _opening_context_from_gm_output(gm_output)
-    facts = [str(x).strip().rstrip(".") for x in (context.get("visible_facts") or []) if str(x).strip()]
-    meta = {
-        "opening_fallback_context_source": context.get("opening_fallback_context_source"),
-        "opening_fallback_basis_count": len(facts),
-        "opening_fallback_context_missing": not bool(facts),
-        "opening_fallback_failed_closed": False,
-        "opening_curated_facts_present": bool(facts),
-        "opening_curated_facts_count": len(facts),
-        "opening_curated_facts_source": context.get("opening_curated_facts_source") or "selector",
-        "opening_selector_source_used": context.get("opening_selector_source_used") or "none",
-        "opening_selector_selected_facts": list(context.get("opening_selector_selected_facts") or []),
-        "opening_curated_facts": list(context.get("opening_curated_facts") or []),
-        "opening_final_fallback_basis": list(context.get("opening_final_fallback_basis") or []),
-        "opening_final_basis_matches_selector": bool(context.get("opening_final_basis_matches_selector")),
-    }
-    if not meta["opening_final_basis_matches_selector"]:
-        raise AssertionError("curated opening facts diverged from selector output")
-    if not facts:
-        meta["opening_fallback_failed_closed"] = True
-        meta["opening_fallback_context_source"] = "opening_curated_facts"
-        return _OPENING_FALLBACK_EMPTY_CURATED_FACTS_MARKER, meta
-
-    used: set[str] = set()
-    environment = _pick_opening_fallback_fact(
-        facts,
-        used=used,
-        needles=("gate", "district", "market", "road", "square", "rain", "mist", "banners", "street", "yard"),
-    )
-    activity = _pick_opening_fallback_fact(
-        facts,
-        used=used,
-        needles=("guard", "refugee", "wagon", "crowd", "runner", "stranger", "observer", "watch", "hawking"),
-    )
-    hook_fact = _pick_opening_fallback_fact(
-        facts,
-        used=used,
-        needles=("notice", "curfew", "tax", "missing", "patrol", "offers", "signals", "speak", "coin", "risk"),
-    )
-    hook = _actionable_hook_from_opening_context(context)
-    parts = [str(p).strip().rstrip(".") for p in (environment, activity, hook_fact, hook) if str(p).strip()]
-    return _normalize_text(". ".join(parts) + "."), meta
-
-
-def _deterministic_opening_fallback_text(gm_output: Mapping[str, Any] | None) -> str:
+def _compat_opening_fallback_text_from_gm(gm_output: Mapping[str, Any] | None) -> str:
+    """Compatibility-only: opening deterministic text when ``upstream_prepared_opening_fallback`` is unusable."""
     text, _meta = _deterministic_opening_fallback_text_and_meta(gm_output)
     return text
 
@@ -3945,15 +3978,49 @@ def _opening_fallback_classification() -> Dict[str, str]:
     return diegetic_classified_fallback_meta(template_id)
 
 
+def _upstream_prepared_opening_fallback_payload_if_usable(
+    gm_output: Mapping[str, Any] | None,
+) -> Dict[str, Any] | None:
+    """Return the prepared opening snapshot if present and structurally consumable by the gate."""
+    if not isinstance(gm_output, dict):
+        return None
+    raw = gm_output.get(UPSTREAM_PREPARED_OPENING_FALLBACK_KEY)
+    if not isinstance(raw, dict):
+        return None
+    text = raw.get("prepared_opening_fallback_text")
+    if not isinstance(text, str) or not text.strip():
+        return None
+    comp = raw.get("opening_fallback_composition_meta")
+    if not isinstance(comp, dict):
+        return None
+    ob_meta = raw.get("opening_fallback_meta")
+    if not isinstance(ob_meta, dict):
+        return None
+    return raw
+
+
 def _opening_scene_safe_fallback_tuple(
     gm_output: Mapping[str, Any] | None,
 ) -> tuple[str, str, str, str, str, str, Dict[str, Any]]:
+    """Hard-replace tuple for opening-mode illegality: prefers upstream prepared snapshot, else compatibility composer."""
+    upstream = _upstream_prepared_opening_fallback_payload_if_usable(gm_output)
+    if upstream:
+        return (
+            str(upstream["prepared_opening_fallback_text"]).strip(),
+            "scene_opening_deterministic",
+            "opening_deterministic_fallback",
+            "opening_deterministic_fallback",
+            "opening_scene_safe_fallback",
+            "opening_deterministic_fallback",
+            dict(upstream["opening_fallback_composition_meta"]),
+        )
     classification = _opening_fallback_classification()
     fallback_text, fallback_meta = _deterministic_opening_fallback_text_and_meta(gm_output)
     meta = _first_mention_composition_meta()
     meta["fallback_family_used"] = classification.get("fallback_family")
     meta["fallback_temporal_frame"] = classification.get("temporal_frame")
     meta.update(fallback_meta)
+    meta["opening_fallback_authorship_source"] = OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL
     return (
         fallback_text,
         "scene_opening_deterministic",
@@ -3977,7 +4044,10 @@ def _enforce_response_type_contract(
     strict_social_suppressed_non_social_turn: bool,
     active_interlocutor: str,
 ) -> tuple[str, Dict[str, Any]]:
-    # C2 Block B: answer/action contract-shaped fallback text is read from ``upstream_prepared_emission`` (see :mod:`game.upstream_response_repairs`); gate does not synthesize those lines here.
+    # C2 Block B: answer/action contract-shaped fallback text is read from ``upstream_prepared_emission``
+    # (see :mod:`game.upstream_response_repairs`). Scene-opening deterministic fallback is selected from
+    # ``upstream_prepared_opening_fallback`` when present; compatibility path re-invokes the shared composer only
+    # when that snapshot is absent or unusable.
     contract, source = _resolve_response_type_contract(
         gm_output if isinstance(gm_output, dict) else None,
         resolution=resolution,
@@ -4091,9 +4161,17 @@ def _enforce_response_type_contract(
                 debug["scene_opening_accepted_candidate_promoted"] = True
             return current, debug
 
-        # Otherwise, use an opening-specific seed fallback (no invented facts; includes action vectors).
-        fallback, fallback_meta = _deterministic_opening_fallback_text_and_meta(gm_output)
+        # Otherwise, select opening fallback text: prepared upstream snapshot, else compatibility re-call.
+        upstream_opening = _upstream_prepared_opening_fallback_payload_if_usable(gm_output)
+        if upstream_opening:
+            fallback = str(upstream_opening["prepared_opening_fallback_text"]).strip()
+            fallback_meta = dict(upstream_opening["opening_fallback_meta"])
+        else:
+            fallback, fallback_meta = _deterministic_opening_fallback_text_and_meta(gm_output)
         debug.update(fallback_meta)
+        debug["opening_fallback_authorship_source"] = (
+            OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED if upstream_opening else OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL
+        )
         fallback_failures = validate_opening_output(fallback, opening_context)
         if fallback and not fallback_failures and not fallback_meta.get("opening_fallback_failed_closed"):
             classification = _opening_fallback_classification()
@@ -7158,13 +7236,14 @@ def _apply_first_mention_enforcement(
         + ",".join(violation_kinds[:8])
     )
 
-    gate_out_text = _normalize_text(out.get("player_facing_text"))
-    meta["final_route"] = "replaced"
-    meta["final_emitted_source"] = final_emitted_source
-    meta["fallback_family_used"] = composition_meta.get("fallback_family_used")
-    meta["fallback_temporal_frame"] = composition_meta.get("fallback_temporal_frame")
-    meta["post_gate_mutation_detected"] = candidate_text != gate_out_text
-    meta["final_text_preview"] = (gate_out_text[:120] + "…") if len(gate_out_text) > 120 else gate_out_text
+    _prepare_sealed_replacement_route_meta(
+        meta,
+        gm_output=out,
+        pre_gate_candidate_text=candidate_text,
+        final_emitted_source=final_emitted_source,
+        strict_social_route=strict_social_active,
+        composition_meta=composition_meta,
+    )
     meta["first_mention_validation_passed"] = False
     meta["first_mention_replacement_applied"] = True
     meta["first_mention_fallback_strategy"] = fallback_strategy
@@ -7380,13 +7459,14 @@ def _apply_referential_clarity_enforcement(
         + ",".join(violation_kinds[:8])
     )
 
-    gate_out_text = _normalize_text(out.get("player_facing_text"))
-    meta["final_route"] = "replaced"
-    meta["final_emitted_source"] = final_emitted_source
-    meta["fallback_family_used"] = composition_meta.get("fallback_family_used")
-    meta["fallback_temporal_frame"] = composition_meta.get("fallback_temporal_frame")
-    meta["post_gate_mutation_detected"] = candidate_text != gate_out_text
-    meta["final_text_preview"] = (gate_out_text[:120] + "…") if len(gate_out_text) > 120 else gate_out_text
+    _prepare_sealed_replacement_route_meta(
+        meta,
+        gm_output=out,
+        pre_gate_candidate_text=candidate_text,
+        final_emitted_source=final_emitted_source,
+        strict_social_route=strict_social_active,
+        composition_meta=composition_meta,
+    )
     meta["referential_clarity_validation_passed"] = False
     meta["referential_clarity_replacement_applied"] = True
     meta["first_mention_composition_used"] = bool(composition_meta.get("first_mention_composition_used"))
@@ -7490,11 +7570,15 @@ def _apply_visibility_enforcement(
 
     tag_list_gate = [str(t) for t in (out.get("tags") or []) if isinstance(t, str)]
     dbg_gate = str(out.get("debug_notes") or "")
-    if (
-        "known_fact_guard" in tag_list_gate
-        and "recent_dialogue_continuity" in dbg_gate
-        and violation_kinds == ["unseen_entity_reference"]
-    ):
+    route = _route_visibility_enforcement_after_failed_validation(
+        tag_list_gate=tag_list_gate,
+        dbg_gate=dbg_gate,
+        violation_kinds=violation_kinds,
+        checked_entities=checked_entities,
+        checked_facts=checked_facts,
+        candidate_text=candidate_text,
+    )
+    if route == "continuity_lead_exemption":
         meta["visibility_validation_passed"] = True
         meta["visibility_replacement_applied"] = False
         meta["visibility_continuity_lead_exemption"] = True
@@ -7514,7 +7598,7 @@ def _apply_visibility_enforcement(
             emit_integrity_response_type_required=emit_integrity_response_type_required,
         )
 
-    if not checked_entities and not checked_facts and _reply_already_has_concrete_interaction(candidate_text):
+    if route == "concrete_interaction_no_hard_replace":
         meta["visibility_validation_passed"] = None
         return out
 
@@ -7559,11 +7643,14 @@ def _apply_visibility_enforcement(
         + ",".join(violation_kinds[:8])
     )
 
-    gate_out_text = _normalize_text(out.get("player_facing_text"))
-    meta["final_route"] = "replaced"
-    meta["final_emitted_source"] = final_emitted_source
-    meta["post_gate_mutation_detected"] = candidate_text != gate_out_text
-    meta["final_text_preview"] = (gate_out_text[:120] + "…") if len(gate_out_text) > 120 else gate_out_text
+    _prepare_sealed_replacement_route_meta(
+        meta,
+        gm_output=out,
+        pre_gate_candidate_text=candidate_text,
+        final_emitted_source=final_emitted_source,
+        strict_social_route=strict_social_active,
+        composition_meta=None,
+    )
     meta["visibility_validation_passed"] = False
     meta["visibility_replacement_applied"] = True
     meta["visibility_fallback_pool"] = fallback_pool
@@ -9001,18 +9088,16 @@ def _apply_acceptance_quality_n4_floor_seam(
         _patch_gate_fem_text_fingerprint(out, pre_gate_text=pre_gate_text)
         return
 
-    fb_line = (
-        minimal_social_emergency_fallback_line(eff_resolution if isinstance(eff_resolution, dict) else None)
-        if strict_social_path
-        else _scene_emit_integrity_global_fallback_tuple(
-            scene if isinstance(scene, dict) else None,
-            str(scene_id or "").strip(),
-            authoritative_resolution=resolution if isinstance(resolution, dict) else None,
-            session=session if isinstance(session, dict) else None,
-            world=world if isinstance(world, dict) else None,
-            res_kind=res_kind,
-            response_type_required=response_type_required,
-        )[0]
+    fb_line = _select_acceptance_quality_n4_sealed_fallback_line(
+        strict_social_path=strict_social_path,
+        eff_resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
+        scene=scene if isinstance(scene, dict) else None,
+        scene_id=str(scene_id or "").strip(),
+        resolution=resolution if isinstance(resolution, dict) else None,
+        session=session if isinstance(session, dict) else None,
+        world=world if isinstance(world, dict) else None,
+        res_kind=res_kind,
+        response_type_required=response_type_required,
     )
     fem = ensure_final_emission_meta_dict(out)
     fem["acceptance_quality_gate_replaced_candidate"] = True
@@ -9033,13 +9118,7 @@ def _apply_acceptance_quality_n4_floor_seam(
         "final_emission_gate_replaced",
         "final_emission_gate:acceptance_quality",
     ]
-    fem["final_route"] = "replaced"
-    fem["candidate_validation_passed"] = False
-    fem["final_emitted_source"] = (
-        "minimal_social_emergency_fallback"
-        if strict_social_path
-        else "acceptance_quality_global_scene_fallback"
-    )
+    _finalize_n4_sealed_replace_fem_route_meta(fem, strict_social_path=strict_social_path)
     _patch_gate_fem_text_fingerprint(out, pre_gate_text=pre_gate_text)
     dbg = out.get("debug_notes") if isinstance(out.get("debug_notes"), str) else ""
     codes = ",".join(str(c) for c in (val1.get("reason_codes") or [])[:8])
@@ -9177,7 +9256,7 @@ def _reassert_scene_opening_accepted_candidate(
         return
     if _normalize_text(out.get("player_facing_text") or "") != accepted:
         assert_final_emission_mutation_allowed(
-            "normalize_whitespace",
+            "restore_accepted_scene_opening_candidate",
             source=source,
         )
         out["player_facing_text"] = accepted
@@ -9226,6 +9305,10 @@ def apply_final_emission_gate(
         session=session if isinstance(session, dict) else None,
         world=world if isinstance(world, dict) else None,
         scene_id=str(scene_id or "").strip(),
+    )
+    maybe_attach_upstream_prepared_opening_fallback_payload(
+        out,
+        resolution=resolution if isinstance(resolution, dict) else None,
     )
     pre_gate_text = _normalize_text(out.get("player_facing_text"))
     tags = out.get("tags") if isinstance(out.get("tags"), list) else []
@@ -10162,12 +10245,7 @@ def apply_final_emission_gate(
         strict_social_suppressed_non_social_turn=strict_social_suppressed_non_social_turn,
         active_interlocutor=active_interlocutor,
     )
-    if (
-        str(response_type_debug.get("response_type_required") or "").strip().lower() == "scene_opening"
-        and response_type_debug.get("response_type_candidate_ok") is True
-        and response_type_debug.get("response_type_repair_used") is False
-        and response_type_debug.get("scene_opening_candidate_contract_passed") is True
-    ):
+    if _scene_opening_rt_contract_accept_path_promotes_candidate(response_type_debug):
         accepted_scene_opening_text = _normalize_text(text)
         out["player_facing_text"] = accepted_scene_opening_text
         response_type_debug["scene_opening_accepted_candidate_promoted"] = True
@@ -10641,100 +10719,46 @@ def apply_final_emission_gate(
         resolution if isinstance(resolution, dict) else None,
     )
     mode = str((inspected or {}).get("interaction_mode") or "").strip().lower()
-    fallback_composition_meta: Dict[str, Any] = {}
-    if _opening_mode_active_for_turn(out, resolution if isinstance(resolution, dict) else None):
-        (
-            fallback_text,
-            fallback_pool,
-            fallback_kind,
-            final_emitted_source,
-            _fb_strat_ie,
-            _fb_cand_ie,
-            fallback_composition_meta,
-        ) = _opening_scene_safe_fallback_tuple(out)
+    (
+        fallback_text,
+        fallback_pool,
+        fallback_kind,
+        final_emitted_source,
+        opening_fallback_composition_meta,
+    ) = _select_non_strict_replace_path_terminal_sealed_fallback(
+        out,
+        session=session if isinstance(session, dict) else None,
+        scene=scene if isinstance(scene, dict) else None,
+        world=world if isinstance(world, dict) else None,
+        sid=sid,
+        resolution=resolution if isinstance(resolution, dict) else None,
+        eff_resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
+        active_interlocutor=active_interlocutor,
+        strict_social_suppressed_non_social_turn=strict_social_suppressed_non_social_turn,
+        res_kind=res_kind,
+        response_type_required=str(response_type_debug.get("response_type_required") or ""),
+        suppress_intro_replace=suppress_intro_replace,
+        interaction_mode=mode,
+    )
+    fallback_composition_meta: Dict[str, Any] = opening_fallback_composition_meta or {}
+    if opening_fallback_composition_meta is not None:
         response_type_debug.update(
             {
-                "opening_fallback_context_source": fallback_composition_meta.get("opening_fallback_context_source"),
-                "opening_fallback_basis_count": fallback_composition_meta.get("opening_fallback_basis_count"),
-                "opening_fallback_context_missing": fallback_composition_meta.get("opening_fallback_context_missing"),
-                "opening_fallback_failed_closed": fallback_composition_meta.get("opening_fallback_failed_closed"),
-                "opening_curated_facts_present": fallback_composition_meta.get("opening_curated_facts_present"),
-                "opening_curated_facts_count": fallback_composition_meta.get("opening_curated_facts_count"),
-                "opening_curated_facts_source": fallback_composition_meta.get("opening_curated_facts_source"),
-                "opening_selector_source_used": fallback_composition_meta.get("opening_selector_source_used"),
-                "opening_selector_selected_facts": fallback_composition_meta.get("opening_selector_selected_facts"),
-                "opening_curated_facts": fallback_composition_meta.get("opening_curated_facts"),
-                "opening_final_fallback_basis": fallback_composition_meta.get("opening_final_fallback_basis"),
-                "opening_final_basis_matches_selector": fallback_composition_meta.get("opening_final_basis_matches_selector"),
+                "opening_fallback_context_source": opening_fallback_composition_meta.get("opening_fallback_context_source"),
+                "opening_fallback_basis_count": opening_fallback_composition_meta.get("opening_fallback_basis_count"),
+                "opening_fallback_context_missing": opening_fallback_composition_meta.get("opening_fallback_context_missing"),
+                "opening_fallback_failed_closed": opening_fallback_composition_meta.get("opening_fallback_failed_closed"),
+                "opening_curated_facts_present": opening_fallback_composition_meta.get("opening_curated_facts_present"),
+                "opening_curated_facts_count": opening_fallback_composition_meta.get("opening_curated_facts_count"),
+                "opening_curated_facts_source": opening_fallback_composition_meta.get("opening_curated_facts_source"),
+                "opening_selector_source_used": opening_fallback_composition_meta.get("opening_selector_source_used"),
+                "opening_selector_selected_facts": opening_fallback_composition_meta.get("opening_selector_selected_facts"),
+                "opening_curated_facts": opening_fallback_composition_meta.get("opening_curated_facts"),
+                "opening_final_fallback_basis": opening_fallback_composition_meta.get("opening_final_fallback_basis"),
+                "opening_final_basis_matches_selector": opening_fallback_composition_meta.get("opening_final_basis_matches_selector"),
+                "opening_fallback_authorship_source": opening_fallback_composition_meta.get("opening_fallback_authorship_source"),
             }
         )
-    elif (
-        active_interlocutor
-        and mode == "social"
-        and isinstance(world, dict)
-        and not strict_social_suppressed_non_social_turn
-    ):
-        mini_res: Dict[str, Any] = {
-            "kind": "question",
-            "social": {
-                "npc_id": active_interlocutor,
-                "npc_name": _npc_display_name_for_emission(world, sid, active_interlocutor),
-                "social_intent_class": "social_exchange",
-            },
-        }
-        fallback_pool = "social_active_interlocutor_minimal"
-        fallback_text = minimal_social_emergency_fallback_line(mini_res)
-        fallback_kind = "social_interlocutor_fallback"
-        final_emitted_source = "social_interlocutor_minimal_fallback"
-    else:
-        passive_candidates = _passive_scene_pressure_fallback_candidates(
-            session=session if isinstance(session, dict) else None,
-            scene=scene,
-            scene_id=sid,
-        )
-        if passive_candidates:
-            (
-                fallback_text,
-                fallback_pool,
-                fallback_kind,
-                final_emitted_source,
-                _fallback_strategy,
-                _fallback_candidate_source,
-                _composition_meta,
-            ) = passive_candidates[0]
-        elif _should_use_neutral_nonprogress_fallback_instead_of_global_stock(session, eff_resolution):
-            fallback_pool = "npc_pursuit_fail_closed_neutral"
-            fallback_text = "Nothing confirms progress toward that lead yet—the moment stays unresolved."
-            fallback_kind = "npc_pursuit_neutral_nonprogress"
-            final_emitted_source = "npc_pursuit_neutral_fallback"
-        elif suppress_intro_replace:
-            fallback_pool = "anti_reset_local_continuation"
-            fallback_text = local_exchange_continuation_fallback_line(
-                session=session if isinstance(session, dict) else None,
-                world=world if isinstance(world, dict) else None,
-                scene_id=sid,
-                resolution=resolution if isinstance(resolution, dict) else None,
-            )
-            fallback_kind = "anti_reset_continuation_fallback"
-            final_emitted_source = "anti_reset_local_continuation_fallback"
-        else:
-            (
-                fallback_text,
-                fallback_pool,
-                fallback_kind,
-                final_emitted_source,
-                _fb_strat_ie,
-                _fb_cand_ie,
-                _comp_ie,
-            ) = _scene_emit_integrity_global_fallback_tuple(
-                scene if isinstance(scene, dict) else None,
-                sid,
-                authoritative_resolution=resolution if isinstance(resolution, dict) else None,
-                session=session if isinstance(session, dict) else None,
-                world=world if isinstance(world, dict) else None,
-                res_kind=res_kind,
-                response_type_required=str(response_type_debug.get("response_type_required") or ""),
-            )
     deterministic_attempted = False
     deterministic_passed = False
 
@@ -10916,7 +10940,11 @@ def apply_final_emission_gate(
         world=world if isinstance(world, dict) else None,
         response_type_debug=response_type_debug,
     )
-    out[FINAL_EMISSION_META_KEY]["realization_fallback_family"] = GATE_TERMINAL_REPAIR
+    _stamp_sealed_fallback_realization_family(
+        ensure_final_emission_meta_dict(out),
+        final_emitted_source=str(out[FINAL_EMISSION_META_KEY].get("final_emitted_source") or ""),
+        strict_social_route=strict_social_active,
+    )
     log_final_emission_trace({**out[FINAL_EMISSION_META_KEY], "stage": "final_emission_gate_replace"})
     return _finalize_emission_output(
         out,

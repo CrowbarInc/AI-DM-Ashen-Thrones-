@@ -24,6 +24,8 @@ PACKAGING_ALLOWED: frozenset[str] = frozenset(
         "strip_meta_fallback_voice_surfaces",
         "strip_fabricated_authority_surfaces",
         "trim_overcertain_claim_spans",
+        # Restores a previously accepted scene-opening candidate after later boundary drift.
+        "restore_accepted_scene_opening_candidate",
         # Bounded, non-inventive permutation only (moves existing answer sentence to front).
         "reorder_answer_to_front",
     }
@@ -34,6 +36,8 @@ LEGALITY_ALLOWED: frozenset[str] = frozenset(
         "hard_replace_illegal_output_with_sealed_fallback",
         "reject_contract_failed_output",
         "strict_social_terminal_fallback",
+        # Selector-only use of a prepared upstream opening snapshot; Gate does not compose prose.
+        "select_upstream_prepared_opening_fallback",
     }
 )
 
@@ -52,6 +56,12 @@ SEMANTIC_DISALLOWED: frozenset[str] = frozenset(
         "smooth_sentence_microstructure",
         "narrative_repair",
         "semantic_fallback_composition",
+        "speaker_contract_local_rebind",
+        "speaker_contract_canonical_rewrite",
+        "speaker_contract_neutral_bridge",
+        "strict_social_referential_substitution",
+        "effective_social_resolution_sync",
+        "compose_opening_fallback_compatibility_local",
     }
 )
 

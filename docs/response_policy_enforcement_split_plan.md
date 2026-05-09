@@ -1,9 +1,138 @@
 # Response Policy Enforcement Split Plan
 
-This plan records the current subpaths inside
-`game.gm.apply_response_policy_enforcement` without changing runtime behavior.
-It is split-readiness documentation only: the function should stay intact until
-the text-mutating paths have broader regression coverage.
+This document describes the **completed** split of
+`game.gm.apply_response_policy_enforcement` into orchestration plus helpers (Blocks U–X),
+with **contract guards** (Block Y) to prevent re-coupling policy, validation, metadata, and text
+mutation.
+
+## Block Y — Finalization / contract guard (completed)
+
+The refactor is **frozen at the orchestration boundary**: `apply_response_policy_enforcement`
+must remain a thin loop over `RESPONSE_RULE_PRIORITY`, delegating work to named helpers.
+
+**Contract surfaces**
+
+| Surface | Location |
+| --- | --- |
+| Required helper symbol names | `RESPONSE_POLICY_ENFORCEMENT_CONTRACT_HELPER_NAMES` in `game/response_policy_enforcement_manifest.py` |
+| Full-stack orchestration call order | `RESPONSE_POLICY_ENFORCEMENT_ORCHESTRATION_SEQUENCE_FULL_POLICY` in the same module |
+| Behavioral snapshots | `tests/test_response_policy_enforcement_mutation.py` |
+
+**Final helper groups (by responsibility)**
+
+1. **Setup / normalization** — `_normalize_response_policy_input`, `_scene_id_from_scene_envelope`,
+   `_init_response_policy_enforcement_state`
+2. **Validation-only** — `_apply_forbid_state_invention_validation` → `validate_gm_state_update`
+3. **Metadata projection** — `_project_fallback_behavior_contract_metadata`,
+   `_snapshot_response_policy_and_project_fallback_contract`, `_mark_response_policy_enforcement_applied`
+4. **Deterministic text enforcement** — `_apply_must_answer_question_resolution_enforcement`,
+   `_apply_diegetic_validator_voice_enforcement`, `_apply_prefer_specificity_text_enforcement`
+5. **Residual / provenance-sensitive text enforcement** — `_apply_forbid_secret_leak_guard`,
+   `_apply_topic_pressure_escalation_enforcement`, `_apply_escalate_passive_scene_enforcement`,
+   `_apply_scene_momentum_enforcement`
+6. **Post-enforcement topic commit** — `_commit_topic_progress_after_enforcement` → `_commit_topic_progress`
+
+**Rules for future edits**
+
+- Do **not** embed text mutation, sanitization, or metadata projection directly inside
+  `apply_response_policy_enforcement`; extend or compose helpers instead.
+- Do **not** reorder relative to `RESPONSE_RULE_PRIORITY`: policy precedence matches
+  `game.planner_ctir_projection.RESPONSE_RULE_PRIORITY`.
+- Keep `_commit_topic_progress_after_enforcement` **after** all enforcement branches and **before**
+  response-policy snapshot / applied marker (current order).
+- Before renaming or removing any helper in `RESPONSE_POLICY_ENFORCEMENT_CONTRACT_HELPER_NAMES`,
+  update the manifest, this doc, and contract tests.
+- Do **not** use this pass to add new provenance emission behavior — provenance belongs in dedicated
+  pipelines and tests.
+
+## Block U — Metadata / validation extraction (completed)
+
+Low-risk helpers now live next to `apply_response_policy_enforcement` in
+`game/gm.py`. They preserve mutation order and emitted prose; only boundaries
+were extracted.
+
+**Helpers added**
+
+| Helper | Role |
+| --- | --- |
+| `_normalize_response_policy_input` | Coerce `response_policy` to a dict for reads (same as prior inline `isinstance` guard). |
+| `_scene_id_from_scene_envelope` | Read `scene.id` for strict-social bypass (no mutation). |
+| `_init_response_policy_enforcement_state` | Shallow-copy GM dict, normalized policy, `strict_social_emission_will_apply(...)`. |
+| `_apply_forbid_state_invention_validation` | Thin wrapper around `validate_gm_state_update` (validation-only branch). |
+| `_project_fallback_behavior_contract_metadata` | Writes `metadata.emission_debug.fallback_behavior_contract` from a `fallback_behavior` dict. |
+| `_snapshot_response_policy_and_project_fallback_contract` | Sets `out["response_policy"]` and optionally projects fallback contract (metadata-only). |
+| `_mark_response_policy_enforcement_applied` | Sets `metadata[GM_METADATA_RESPONSE_POLICY_ENFORCEMENT_APPLIED]`. |
+
+**Delegated from `apply_response_policy_enforcement` (see Block V)** — deterministic mutation helpers:
+
+- `_apply_must_answer_question_resolution_enforcement` → `enforce_question_resolution_rule`
+- `_apply_diegetic_validator_voice_enforcement` → `enforce_no_validator_voice`
+- `_apply_prefer_specificity_text_enforcement` → `enforce_npc_response_contract` then
+  `enforce_forbidden_generic_phrases`
+
+**Still inline** — loop orchestration only (see **Block X**).
+
+## Block X — Residual helper extraction (completed)
+
+Snapshot-covered branches from Block W are thin wrappers next to
+`apply_response_policy_enforcement` in `game/gm.py`.
+
+**Helpers added**
+
+| Helper | Wraps |
+| --- | --- |
+| `_apply_forbid_secret_leak_guard` | `guard_gm_output` |
+| `_apply_topic_pressure_escalation_enforcement` | `enforce_topic_pressure_escalation` |
+| `_apply_escalate_passive_scene_enforcement` | `escalate_passive_scene` |
+| `_apply_scene_momentum_enforcement` | `enforce_scene_momentum` |
+| `_commit_topic_progress_after_enforcement` | `_commit_topic_progress` (post-loop; session side-effect) |
+
+**Intentionally remaining inline inside `apply_response_policy_enforcement`**
+
+- Early return for non-dict `gm`.
+- `_init_response_policy_enforcement_state` and the `RESPONSE_RULE_PRIORITY` loop with per-key
+  `policy.get(...)` gates and `strict_social_turn` bypass checks (branch conditions unchanged).
+- Calls into Block U/V/X helpers and post-loop `_snapshot_response_policy_and_project_fallback_contract` /
+  `_mark_response_policy_enforcement_applied`.
+
+## Block V — Deterministic mutation extraction (completed)
+
+Thin wrappers isolate snapshot-covered deterministic text branches; loop priority and
+strict-social bypass checks are unchanged.
+
+**Helpers added**
+
+| Helper | Wraps |
+| --- | --- |
+| `_apply_must_answer_question_resolution_enforcement` | `enforce_question_resolution_rule` |
+| `_apply_diegetic_validator_voice_enforcement` | `enforce_no_validator_voice` |
+| `_apply_prefer_specificity_text_enforcement` | `enforce_npc_response_contract`, then `enforce_forbidden_generic_phrases` |
+
+**Remaining inline** — orchestration only after Block X; implementation lives in Block U/V/X helpers.
+
+There is no separate player-facing “fallback behavior repair” mutation in this function;
+`fallback_behavior` is projected as metadata only (Block U).
+
+## Residual Inline Risk Map (Block W — completed)
+
+Historical map of residual branches **before** Block X wrappers. Runtime behavior is unchanged;
+call sites now route through the Block X helpers above.
+
+| Branch / helper | Mutates `player_facing_text` | Mutates metadata only | Provenance-sensitive | Current test coverage (`test_response_policy_enforcement_mutation.py`) | Recommended next action |
+| --- | --- | --- | --- | --- | --- |
+| `guard_gm_output` (`forbid_secret_leak`) | Yes (via `sanitize_player_facing_text` + tags/debug) | Yes (tags, `debug_notes`) | Yes — replaces leaked prose with bounded safe text | **Yes** — keyword-leak snapshot (`spoiler_guard`) | Wrapped by `_apply_forbid_secret_leak_guard` (Block X). |
+| `enforce_topic_pressure_escalation` (`prefer_scene_momentum`) | Yes — append or replace with pressure beat | Yes (tags, `debug_notes`) | Yes — diegetic beats + momentum kind tags | **Yes** — engineered `topic_pressure` runtime + `adjudication_query` resolution (avoids strict-social bypass) | Wrapped by `_apply_topic_pressure_escalation_enforcement` (Block X). |
+| `escalate_passive_scene` (`prefer_scene_momentum`) | Yes — append passive beat | Yes | Yes | **Yes** — passive streak + neutral session | Wrapped by `_apply_escalate_passive_scene_enforcement` (Block X). |
+| `enforce_scene_momentum` (`prefer_scene_momentum`) | Yes — append momentum fallback line | Yes | Yes — calls `render_scene_momentum_diegetic_append` | **Yes** — `momentum_exchanges_since` forces due beat | Wrapped by `_apply_scene_momentum_enforcement` (Block X). |
+| `_commit_topic_progress` (post-loop) | No | No (updates `session.scene_runtime` topic-pressure bookkeeping, not `gm["metadata"]`) | Low — ordering-sensitive vs final reply | **Yes** — with/without `topic_pressure` runtime context | Wrapped by `_commit_topic_progress_after_enforcement` (Block X). |
+
+**Strict-social bypass note:** `strict_social_emission_will_apply(...)` can skip the entire
+`prefer_scene_momentum` stack and `forbid_secret_leak`; mutation tests pin resolutions/session
+shapes that keep enforcement reachable.
+
+**Manifest alignment:** `secret_leak_guard`, `scene_momentum_passive_escalation`, and
+`topic_progress_commit` in `game/response_policy_enforcement_manifest.py` correspond to the rows
+above.
 
 ## Current Shape
 
@@ -32,24 +161,17 @@ even when the rewrite is deterministic and bounded.
 
 ## Proposed Future Split Order
 
-1. Extract metadata-only projection last-step helpers:
-   `fallback_behavior_contract`, response-policy snapshot, applied marker, and
-   topic progress commit. These should remain text-preserving.
-2. Separate validation-only state/update normalization from player-facing text
-   enforcement.
-3. Group deterministic text-mutating enforcement that does not select fallback
-   families: question resolution, NPC contract, and forbidden generic phrase
-   rewrite.
-4. Leave fallback/provenance-relevant mutation in place until each branch has
-   explicit provenance assertions: validator voice fallback, secret leak guard,
-   topic pressure/passive pressure, and scene momentum fallback.
-5. Keep strict social response structure outside this function unless ownership
-   changes. This function currently records only the bypass decision, not the
-   social structure repair itself.
+The structural split is **complete**. Remaining work is optional maintenance:
+
+1. ~~Extract metadata-only projection last-step helpers~~ (done — Block U).
+2. ~~Separate validation-only state/update normalization~~ (done — Block U).
+3. ~~Deterministic and residual text helpers~~ (done — Blocks V–X).
+4. ~~Contract tests + manifest registry~~ (done — Block Y).
+5. Optional later: deeper splits **inside** leaf implementations (`enforce_no_validator_voice`,
+   `guard_gm_output`, scene momentum renderers) only with dedicated provenance/snapshot coverage.
 
 ## Non-Goals For This Block
 
-- Do not refactor `apply_response_policy_enforcement`.
-- Do not change emitted prose.
-- Do not change fallback selection behavior.
-- Do not touch `final_emission_gate`.
+- Do not regress the orchestration boundary (see Block Y rules).
+- Do not change emitted prose or mutation order without updating snapshots and manifest contracts.
+- Do not touch `final_emission_gate`, prompt construction, or retry fallback from this seam.

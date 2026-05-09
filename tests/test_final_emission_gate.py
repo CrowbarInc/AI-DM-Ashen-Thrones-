@@ -21,6 +21,8 @@ coverage once the orchestration contract is already owned here.
 
 from __future__ import annotations
 
+import copy
+import sys
 from typing import Any
 from unittest.mock import MagicMock
 
@@ -30,6 +32,13 @@ from game.acceptance_quality import (
     validate_and_repair_acceptance_quality,
 )
 from game.final_emission_meta import read_emission_debug_lane, read_final_emission_meta_dict
+from game.final_emission_boundary_contract import (
+    LEGALITY_ALLOWED_KIND,
+    PACKAGING_ALLOWED_KIND,
+    SEMANTIC_DISALLOWED_KIND,
+    classify_final_emission_mutation,
+    is_packaging_allowed,
+)
 
 import json
 
@@ -58,7 +67,14 @@ from game.realization_provenance import (
     STRICT_SOCIAL_DETERMINISTIC_FALLBACK,
     UPSTREAM_PREPARED_EMISSION,
 )
-from game.upstream_response_repairs import UPSTREAM_PREPARED_EMISSION_KEY
+from game.opening_deterministic_fallback import deterministic_opening_fallback_text_and_meta as _deterministic_opening_under_test
+from game.upstream_response_repairs import (
+    OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL,
+    OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED,
+    UPSTREAM_PREPARED_EMISSION_KEY,
+    UPSTREAM_PREPARED_OPENING_FALLBACK_KEY,
+    build_upstream_prepared_opening_fallback_payload,
+)
 from tests.helpers.objective7_referent_fixtures import (
     minimal_full_referent_artifact,
     referent_compact_mirror,
@@ -317,6 +333,7 @@ def test_acceptance_quality_n4_replace_path_reruns_seam_on_fallback_and_fem_term
     assert isinstance(fem.get("acceptance_quality_rejected_reason_codes"), list)
     assert fem.get("candidate_validation_passed") is False
     assert fem.get("final_emitted_source") == "acceptance_quality_global_scene_fallback"
+    assert fem.get(REALIZATION_FALLBACK_FAMILY_FIELD) == GATE_TERMINAL_REPAIR
     aq_contract = build_acceptance_quality_contract(overrides=plan["acceptance_quality_contract"])
     ref = validate_and_repair_acceptance_quality(str(out.get("player_facing_text") or ""), aq_contract)
     assert fem.get("acceptance_quality_passed") == bool(ref["validation"]["passed"])
@@ -849,6 +866,140 @@ def test_apply_final_emission_gate_strict_social_contract_missing_skips_tighteni
     assert (read_final_emission_meta_dict(out) or {}).get("speaker_contract_enforcement_reason") == "speaker_contract_match"
     payload = ((out.get("metadata") or {}).get("emission_debug") or {}).get("speaker_contract_enforcement") or {}
     assert payload.get("validation", {}).get("details", {}).get("skipped") == "no_contract"
+    assert "repair" not in payload
+
+
+def test_block_b_speaker_contract_mutation_kinds_are_semantic_not_packaging():
+    for kind in (
+        "speaker_contract_local_rebind",
+        "speaker_contract_canonical_rewrite",
+        "speaker_contract_neutral_bridge",
+        "strict_social_referential_substitution",
+        "effective_social_resolution_sync",
+    ):
+        assert classify_final_emission_mutation(kind) == SEMANTIC_DISALLOWED_KIND
+        assert is_packaging_allowed(kind) is False
+
+
+def test_block_c_opening_fallback_mutation_kinds_are_fenced_by_ownership():
+    assert (
+        classify_final_emission_mutation("select_upstream_prepared_opening_fallback")
+        == LEGALITY_ALLOWED_KIND
+    )
+    assert (
+        classify_final_emission_mutation("restore_accepted_scene_opening_candidate")
+        == PACKAGING_ALLOWED_KIND
+    )
+    assert (
+        classify_final_emission_mutation("compose_opening_fallback_compatibility_local")
+        == SEMANTIC_DISALLOWED_KIND
+    )
+    assert is_packaging_allowed("compose_opening_fallback_compatibility_local") is False
+
+
+def test_block_b_speaker_local_rebind_is_metadata_visible_and_sync_traceable():
+    session, world, sid, resolution = _runner_strict_bundle()
+    eff_resolution = copy.deepcopy(resolution)
+    eff_resolution["social"]["npc_id"] = "runner"
+    eff_resolution["social"]["npc_name"] = "Tavern Runner"
+    gm = {"metadata": {}}
+
+    contract = {
+        "primary_speaker_id": "runner",
+        "primary_speaker_name": "Tavern Runner",
+        "allowed_speaker_ids": ["runner"],
+        "continuity_locked": True,
+        "speaker_switch_allowed": False,
+        "generic_fallback_forbidden": False,
+        "offscene_speakers_forbidden": True,
+        "debug": {"contract_missing": False},
+    }
+
+    def fake_contract(*args, **kwargs):
+        return dict(contract)
+
+    with pytest.MonkeyPatch.context() as mp:
+        mp.setattr(feg, "get_speaker_selection_contract", fake_contract)
+        repaired, payload = feg.enforce_emitted_speaker_with_contract(
+            'Ragged stranger says, "East lanes."',
+            gm_output=gm,
+            resolution=resolution,
+            eff_resolution=eff_resolution,
+            world=world,
+            scene_id=sid,
+        )
+
+    assert repaired == 'Tavern Runner says, "East lanes."'
+    assert payload["final_reason_code"] == "continuity_locked_speaker_repair"
+    assert payload["repair"]["local_rebind_applied"] is True
+    assert classify_final_emission_mutation("speaker_contract_local_rebind") == SEMANTIC_DISALLOWED_KIND
+
+    feg._sync_eff_social_to_resolution(eff_resolution, resolution)
+    assert resolution["social"]["npc_id"] == "runner"
+    assert resolution["social"]["npc_name"] == "Tavern Runner"
+    assert classify_final_emission_mutation("effective_social_resolution_sync") == SEMANTIC_DISALLOWED_KIND
+
+    em = (gm.get("metadata") or {}).get("emission_debug") or {}
+    assert em["speaker_contract_enforcement"] is payload
+    assert em["speaker_contract_enforcement"]["repair"]["local_rebind_applied"] is True
+
+
+def test_block_b_strict_social_pronoun_substitution_records_explicit_metadata(monkeypatch):
+    out = {
+        "player_facing_text": 'She says, "East gate is watched."',
+        "tags": [],
+        "_final_emission_meta": {"response_type_required": "dialogue"},
+    }
+    eff_resolution = {
+        "kind": "question",
+        "social": {"npc_id": "runner", "npc_name": "Tavern Runner"},
+    }
+
+    calls = {"ref": 0}
+
+    def fake_ref(text, **kwargs):
+        calls["ref"] += 1
+        if calls["ref"] == 1:
+            return {
+                "ok": False,
+                "violations": [
+                    {
+                        "kind": "ambiguous_entity_reference",
+                        "token": "She",
+                        "candidate_entity_ids": ["runner"],
+                        "sentence_text": text,
+                    }
+                ],
+                "checked_entities": ["runner"],
+            }
+        return {"ok": True, "violations": [], "checked_entities": ["runner"]}
+
+    monkeypatch.setattr(feg, "validate_player_facing_referential_clarity", fake_ref)
+    monkeypatch.setattr(feg, "validate_player_facing_first_mentions", lambda *a, **k: {"ok": True})
+    monkeypatch.setattr(feg, "validate_player_facing_visibility", lambda *a, **k: {"ok": True})
+    monkeypatch.setattr(feg, "_active_interlocutor_visible_person_like", lambda *a, **k: True)
+
+    result = feg._apply_referential_clarity_enforcement(
+        out,
+        session={},
+        scene={},
+        world={},
+        scene_id="scene_investigate",
+        eff_resolution=eff_resolution,
+        active_interlocutor="runner",
+        strict_social_active=True,
+        strict_social_suppressed_non_social_turn=False,
+    )
+
+    meta = result["_final_emission_meta"]
+    assert result["player_facing_text"].startswith("The Tavern Runner says")
+    assert meta["referential_clarity_local_substitution_attempted"] is True
+    assert meta["referential_clarity_local_substitution_applied"] is True
+    assert meta["referential_clarity_local_substitution_token"] == "She"
+    assert meta["referential_clarity_local_substitution_replacement"] == "The Tavern Runner"
+    assert "referential_clarity_local_substitution" in result["tags"]
+    assert classify_final_emission_mutation("strict_social_referential_substitution") == SEMANTIC_DISALLOWED_KIND
+    assert is_packaging_allowed("strict_social_referential_substitution") is False
 
 
 def test_apply_final_emission_gate_non_strict_path_does_not_attach_speaker_enforcement():
@@ -3030,7 +3181,37 @@ def test_opening_scene_safe_fallback_tuple_exact_text_and_classification_snapsho
     assert composition_meta["fallback_family_used"] == "scene_opening"
     assert composition_meta["fallback_temporal_frame"] == "first_impression"
     assert composition_meta["opening_fallback_context_source"] == "opening_curated_facts"
+    assert composition_meta["opening_fallback_authorship_source"] == OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL
     assert REALIZATION_FALLBACK_FAMILY_FIELD not in composition_meta
+
+
+def test_opening_scene_safe_fallback_tuple_prefers_upstream_prepared_payload(monkeypatch) -> None:
+    gm = _opening_gm_output()
+    gm[UPSTREAM_PREPARED_OPENING_FALLBACK_KEY] = build_upstream_prepared_opening_fallback_payload(gm)
+
+    def _should_not_run_local_deterministic_opening(*_a: Any, **_k: Any) -> tuple[str, dict]:
+        raise AssertionError("gate-local deterministic opening must not run when upstream payload is present")
+
+    monkeypatch.setattr(feg, "_deterministic_opening_fallback_text_and_meta", _should_not_run_local_deterministic_opening)
+    (
+        text,
+        fallback_pool,
+        fallback_kind,
+        final_emitted_source,
+        fallback_strategy,
+        fallback_candidate_source,
+        composition_meta,
+    ) = feg._opening_scene_safe_fallback_tuple(gm)
+
+    assert text == EXPECTED_FRONTIER_GATE_OPENING_FALLBACK
+    assert fallback_pool == "scene_opening_deterministic"
+    assert fallback_kind == "opening_deterministic_fallback"
+    assert final_emitted_source == "opening_deterministic_fallback"
+    assert fallback_strategy == "opening_scene_safe_fallback"
+    assert fallback_candidate_source == "opening_deterministic_fallback"
+    assert composition_meta["fallback_family_used"] == "scene_opening"
+    assert composition_meta["fallback_temporal_frame"] == "first_impression"
+    assert composition_meta["opening_fallback_authorship_source"] == OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED
 
 
 def test_opening_validator_rejects_investigation_continuation_language():
@@ -3053,6 +3234,63 @@ def test_opening_validator_rejects_opening_without_actionable_hook():
     )
 
     assert "missing_hook" in failures
+
+
+def test_opening_failure_recovers_via_upstream_prepared_payload_when_present(monkeypatch) -> None:
+    gm = _opening_gm_output()
+    gm[UPSTREAM_PREPARED_OPENING_FALLBACK_KEY] = build_upstream_prepared_opening_fallback_payload(gm)
+
+    def _should_not_run_local_deterministic_opening(*_a: Any, **_k: Any) -> tuple[str, dict]:
+        raise AssertionError("gate-local deterministic opening must not run when upstream payload is present")
+
+    monkeypatch.setattr(feg, "_deterministic_opening_fallback_text_and_meta", _should_not_run_local_deterministic_opening)
+    text, dbg = feg._enforce_response_type_contract(
+        "Nearby crates appear disturbed.",
+        gm_output=gm,
+        resolution={"kind": "scene_opening", "prompt": "Start the campaign."},
+        session={},
+        scene_id="frontier_gate",
+        world={},
+        strict_social_turn=False,
+        strict_social_suppressed_non_social_turn=False,
+        active_interlocutor="",
+    )
+
+    assert text == EXPECTED_FRONTIER_GATE_OPENING_FALLBACK
+    assert dbg.get("response_type_repair_kind") == "opening_deterministic_fallback"
+    assert dbg.get("fallback_family_used") == "scene_opening"
+    family = dbg[REALIZATION_FALLBACK_FAMILY_FIELD]
+    assert family == LEGACY_DIEGETIC_FALLBACK
+    assert dbg.get("opening_fallback_authorship_source") == OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED
+
+
+def test_opening_failure_falls_back_to_gate_local_when_upstream_payload_incomplete(monkeypatch) -> None:
+    gm = _opening_gm_output()
+    gm[UPSTREAM_PREPARED_OPENING_FALLBACK_KEY] = {"prepared_opening_fallback_text": EXPECTED_FRONTIER_GATE_OPENING_FALLBACK}
+
+    calls: list[int] = []
+
+    def _counting_local_deterministic_opening(*a: Any, **k: Any) -> tuple[str, dict]:
+        calls.append(1)
+        return _deterministic_opening_under_test(*a, **k)
+
+    monkeypatch.setattr(feg, "_deterministic_opening_fallback_text_and_meta", _counting_local_deterministic_opening)
+    text, dbg = feg._enforce_response_type_contract(
+        "Nearby crates appear disturbed.",
+        gm_output=gm,
+        resolution={"kind": "scene_opening", "prompt": "Start the campaign."},
+        session={},
+        scene_id="frontier_gate",
+        world={},
+        strict_social_turn=False,
+        strict_social_suppressed_non_social_turn=False,
+        active_interlocutor="",
+    )
+
+    assert calls == [1]
+    assert text == EXPECTED_FRONTIER_GATE_OPENING_FALLBACK
+    assert dbg.get("response_type_repair_kind") == "opening_deterministic_fallback"
+    assert dbg.get("opening_fallback_authorship_source") == OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL
 
 
 def test_opening_failure_recovers_via_deterministic_fallback_not_action_outcome():
@@ -3081,6 +3319,7 @@ def test_opening_failure_recovers_via_deterministic_fallback_not_action_outcome(
     family = dbg[REALIZATION_FALLBACK_FAMILY_FIELD]
     assert family in FALLBACK_FAMILIES
     assert family == LEGACY_DIEGETIC_FALLBACK
+    assert dbg.get("opening_fallback_authorship_source") == OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL
 
 
 def test_valid_scene_opening_skips_deterministic_fallback():
@@ -3111,6 +3350,7 @@ def test_valid_scene_opening_skips_deterministic_fallback():
     }
     assert dbg.get("fallback_family_used") is None
     assert dbg.get(REALIZATION_FALLBACK_FAMILY_FIELD) is None
+    assert dbg.get("opening_fallback_authorship_source") is None
 
 
 def _rich_scene_opening_candidate() -> str:
@@ -3188,6 +3428,7 @@ def test_empty_scene_opening_uses_deterministic_fallback():
     family = dbg[REALIZATION_FALLBACK_FAMILY_FIELD]
     assert family in FALLBACK_FAMILIES
     assert family == LEGACY_DIEGETIC_FALLBACK
+    assert dbg.get("opening_fallback_authorship_source") == OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL
 
 
 def test_final_gate_opening_fallback_exact_text_and_fem_provenance_snapshot() -> None:
@@ -3212,6 +3453,95 @@ def test_final_gate_opening_fallback_exact_text_and_fem_provenance_snapshot() ->
     assert family == LEGACY_DIEGETIC_FALLBACK
     assert fem["response_type_repair_kind"] == "opening_deterministic_fallback"
     assert fem["opening_fallback_context_source"] == "opening_curated_facts"
+    assert fem.get("opening_fallback_authorship_source") == OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED
+
+
+def test_final_gate_auto_attaches_upstream_opening_fallback_before_emission(monkeypatch) -> None:
+    gm_output = _opening_gm_output()
+    assert UPSTREAM_PREPARED_OPENING_FALLBACK_KEY not in gm_output
+    gm_output["player_facing_text"] = "Nearby crates appear disturbed."
+    gm_output["tags"] = []
+
+    def _should_not_run_gate_local_deterministic_opening(*_a: Any, **_k: Any) -> tuple[str, dict]:
+        raise AssertionError("gate-local deterministic opening must not run when upstream payload is present")
+
+    monkeypatch.setattr(feg, "_deterministic_opening_fallback_text_and_meta", _should_not_run_gate_local_deterministic_opening)
+    out = apply_final_emission_gate(
+        gm_output,
+        resolution={"kind": "scene_opening", "prompt": "Start the campaign."},
+        session={},
+        scene_id="frontier_gate",
+        world={},
+    )
+
+    pay = out.get(UPSTREAM_PREPARED_OPENING_FALLBACK_KEY)
+    assert isinstance(pay, dict)
+    assert pay["prepared_opening_fallback_text"] == EXPECTED_FRONTIER_GATE_OPENING_FALLBACK
+    assert out["player_facing_text"] == EXPECTED_FRONTIER_GATE_OPENING_FALLBACK
+    fem = read_final_emission_meta_dict(out) or {}
+    assert fem["final_emitted_source"] == "opening_deterministic_fallback"
+    assert fem["fallback_family_used"] == "scene_opening"
+    assert fem[REALIZATION_FALLBACK_FAMILY_FIELD] == LEGACY_DIEGETIC_FALLBACK
+    assert fem.get("opening_fallback_authorship_source") == OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED
+
+
+def test_final_gate_scene_opening_empty_curated_facts_skips_upstream_opening_payload() -> None:
+    gm_output = _opening_gm_output()
+    gm_output["opening_curated_facts"] = []
+    gm_output["opening_selector_selected_facts"] = []
+    md = gm_output.setdefault("metadata", {})
+    em = md.setdefault("emission_debug", {})
+    em["opening_curated_facts_present"] = False
+    em["opening_curated_facts_count"] = 0
+    em["opening_selector_selected_facts"] = []
+    em["opening_curated_facts"] = []
+    gm_output["player_facing_text"] = "Nearby crates appear disturbed."
+    gm_output["tags"] = []
+
+    out = apply_final_emission_gate(
+        gm_output,
+        resolution={"kind": "scene_opening", "prompt": "Start the campaign."},
+        session={},
+        scene_id="frontier_gate",
+        world={},
+    )
+
+    assert UPSTREAM_PREPARED_OPENING_FALLBACK_KEY not in out
+    assert out["player_facing_text"] == "For a breath, the scene holds while voices shift around you."
+    fem = read_final_emission_meta_dict(out) or {}
+    assert fem["final_route"] == "replaced"
+    assert fem["final_emitted_source"] == "acceptance_quality_global_scene_fallback"
+    assert fem[REALIZATION_FALLBACK_FAMILY_FIELD] == GATE_TERMINAL_REPAIR
+    assert fem["response_type_repair_kind"] == "opening_deterministic_fallback_failed_closed"
+    assert fem.get("opening_fallback_authorship_source") == OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL
+
+
+def test_final_gate_opening_prefers_upstream_prepared_payload_when_present(monkeypatch) -> None:
+    gm_output = _opening_gm_output()
+    gm_output["player_facing_text"] = "Nearby crates appear disturbed."
+    gm_output["tags"] = []
+    gm_output[UPSTREAM_PREPARED_OPENING_FALLBACK_KEY] = build_upstream_prepared_opening_fallback_payload(gm_output)
+
+    def _should_not_run_local_deterministic_opening(*_a: Any, **_k: Any) -> tuple[str, dict]:
+        raise AssertionError("gate-local deterministic opening must not run when upstream payload is present")
+
+    monkeypatch.setattr(feg, "_deterministic_opening_fallback_text_and_meta", _should_not_run_local_deterministic_opening)
+    out = apply_final_emission_gate(
+        gm_output,
+        resolution={"kind": "scene_opening", "prompt": "Start the campaign."},
+        session={},
+        scene_id="frontier_gate",
+        world={},
+    )
+
+    fem = read_final_emission_meta_dict(out) or {}
+    assert out["player_facing_text"] == EXPECTED_FRONTIER_GATE_OPENING_FALLBACK
+    assert fem["final_emitted_source"] == "opening_deterministic_fallback"
+    assert fem["fallback_family_used"] == "scene_opening"
+    assert fem[REALIZATION_FALLBACK_FAMILY_FIELD] == LEGACY_DIEGETIC_FALLBACK
+    assert fem["response_type_repair_kind"] == "opening_deterministic_fallback"
+    assert fem["opening_fallback_context_source"] == "opening_curated_facts"
+    assert fem.get("opening_fallback_authorship_source") == OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED
 
 
 def test_final_gate_valid_opening_candidate_has_no_fallback_provenance() -> None:
@@ -3237,6 +3567,8 @@ def test_final_gate_valid_opening_candidate_has_no_fallback_provenance() -> None
     assert fem["final_emitted_source"] == "generated_candidate"
     assert fem.get("fallback_family_used") is None
     assert fem.get(REALIZATION_FALLBACK_FAMILY_FIELD) is None
+    assert isinstance(out.get(UPSTREAM_PREPARED_OPENING_FALLBACK_KEY), dict)
+    assert fem.get("opening_fallback_authorship_source") is None
 
 
 def test_final_gate_upstream_prepared_emission_branch_records_upstream_family() -> None:
@@ -3289,6 +3621,451 @@ def test_final_gate_terminal_repair_branch_records_gate_terminal_family() -> Non
     _assert_known_realization_family(family)
     assert family == GATE_TERMINAL_REPAIR
     assert family != UPSTREAM_PREPARED_EMISSION
+
+
+def _visibility_offscene_npc_gate_bundle() -> tuple[dict, dict, dict, str]:
+    """Session/scene/world/sid where referencing Lord Aldric is visibility-illegal (offscene NPC)."""
+    session = default_session()
+    world = default_world()
+    world["npcs"].append({"id": "lord_aldric", "name": "Lord Aldric", "location": "castle_keep"})
+    scene = default_scene("frontier_gate")
+    scene["scene"]["visible_facts"] = ["A brazier throws orange sparks over the checkpoint."]
+    scene["scene"]["discoverable_clues"] = ["The missing patrol was last seen near the old stone bridge."]
+    scene["scene"]["hidden_facts"] = ["The checkpoint taxes are funding an Ash Cowl payoff."]
+    sid = "frontier_gate"
+    session["active_scene_id"] = sid
+    session["scene_state"]["active_scene_id"] = sid
+    rebuild_active_scene_entities(session, world, sid, scene_envelope=scene)
+    scene["scene_state"] = dict(session["scene_state"])
+    return session, world, scene, sid
+
+
+def test_visibility_safe_fallback_final_emitted_source_snapshot() -> None:
+    """Visibility replace uses sealed tuples for text; FEM source pins global_scene_fallback today."""
+    session, world, scene, sid = _visibility_offscene_npc_gate_bundle()
+    out = apply_final_emission_gate(
+        {"player_facing_text": "Lord Aldric watches the checkpoint from the square.", "tags": []},
+        resolution={"kind": "observe", "prompt": "I look."},
+        session=session,
+        scene_id=sid,
+        world=world,
+        scene=scene,
+    )
+    tl = [str(t) for t in (out.get("tags") or []) if isinstance(t, str)]
+    assert "visibility_enforcement_replaced" in tl
+    fem = read_final_emission_meta_dict(out) or {}
+    assert fem["final_route"] == "replaced"
+    assert fem["final_emitted_source"] == "global_scene_fallback"
+    assert fem.get(REALIZATION_FALLBACK_FAMILY_FIELD) == GATE_TERMINAL_REPAIR
+
+
+# --- Block AG: sealed branch selector / order snapshots ---
+
+
+def test_selector_snapshot_visibility_vs_generic_terminal_distinct_markers() -> None:
+    """Visibility illegality uses visibility-specific tags and debug; generic terminal replace does not."""
+    session, world, scene, sid = _visibility_offscene_npc_gate_bundle()
+    vis = apply_final_emission_gate(
+        {"player_facing_text": "Lord Aldric watches the checkpoint from the square.", "tags": []},
+        resolution={"kind": "observe", "prompt": "I look."},
+        session=session,
+        scene_id=sid,
+        world=world,
+        scene=scene,
+    )
+    gen = apply_final_emission_gate(
+        {"player_facing_text": "", "tags": []},
+        resolution={"kind": "observe", "prompt": "I wait."},
+        session={},
+        scene_id="yard",
+        world={},
+    )
+    vis_tl = [str(t) for t in (vis.get("tags") or []) if isinstance(t, str)]
+    gen_tl = [str(t) for t in (gen.get("tags") or []) if isinstance(t, str)]
+    assert "visibility_enforcement_replaced" in vis_tl
+    assert "visibility_enforcement_replaced" not in gen_tl
+    assert "final_emission_gate:narrative_safe_fallback" in gen_tl
+
+    vis_fem = read_final_emission_meta_dict(vis) or {}
+    gen_fem = read_final_emission_meta_dict(gen) or {}
+    assert vis_fem["final_emitted_source"] == "global_scene_fallback"
+    assert gen_fem["final_emitted_source"] == "global_scene_fallback"
+    assert vis_fem["visibility_replacement_applied"] is True
+    assert gen_fem.get("visibility_replacement_applied") is not True
+
+
+def test_selector_snapshot_n4_replace_vs_generic_terminal_distinct_markers() -> None:
+    """N4 floor failure tags acceptance_quality; generic terminal uses narrative_safe_fallback pool tag."""
+    plan = _minimal_n4_narrative_plan(acceptance_quality={"enabled": True})
+    n4_out = apply_final_emission_gate(
+        {
+            "player_facing_text": _N4_TRAILER_LINE,
+            "tags": [],
+            "prompt_context": {"narrative_plan": plan},
+        },
+        resolution={"kind": "narrate", "prompt": "I wait."},
+        session=None,
+        scene_id="lane_scene",
+        world={},
+    )
+    gen_out = apply_final_emission_gate(
+        {"player_facing_text": "", "tags": []},
+        resolution={"kind": "observe", "prompt": "I wait."},
+        session={},
+        scene_id="yard",
+        world={},
+    )
+    n4_tl = [str(t) for t in (n4_out.get("tags") or []) if isinstance(t, str)]
+    gen_tl = [str(t) for t in (gen_out.get("tags") or []) if isinstance(t, str)]
+    assert "final_emission_gate:acceptance_quality" in n4_tl
+    assert "final_emission_gate:acceptance_quality" not in gen_tl
+    assert "final_emission_gate:narrative_safe_fallback" in gen_tl
+
+    n4_fem = read_final_emission_meta_dict(n4_out) or {}
+    gen_fem = read_final_emission_meta_dict(gen_out) or {}
+    assert n4_fem["final_emitted_source"] == "acceptance_quality_global_scene_fallback"
+    assert gen_fem["final_emitted_source"] == "global_scene_fallback"
+    assert n4_fem[REALIZATION_FALLBACK_FAMILY_FIELD] == GATE_TERMINAL_REPAIR
+    assert gen_fem[REALIZATION_FALLBACK_FAMILY_FIELD] == GATE_TERMINAL_REPAIR
+    assert n4_fem.get("acceptance_quality_gate_replaced_candidate") is True
+    assert gen_fem.get("acceptance_quality_gate_replaced_candidate") is not True
+
+
+def test_selector_snapshot_opening_rt_repair_vs_generic_terminal_families() -> None:
+    """Opening contract repair stamps legacy diegetic family; generic terminal stamps gate_terminal_repair."""
+    gm_open = _opening_gm_output()
+    gm_open["player_facing_text"] = "Nearby crates appear disturbed."
+    gm_open["tags"] = []
+    open_out = apply_final_emission_gate(
+        gm_open,
+        resolution={"kind": "scene_opening", "prompt": "Start the campaign."},
+        session={},
+        scene_id="frontier_gate",
+        world={},
+    )
+    gen_out = apply_final_emission_gate(
+        {"player_facing_text": "", "tags": []},
+        resolution={"kind": "observe", "prompt": "I wait."},
+        session={},
+        scene_id="yard",
+        world={},
+    )
+    o_fem = read_final_emission_meta_dict(open_out) or {}
+    g_fem = read_final_emission_meta_dict(gen_out) or {}
+    assert o_fem["final_emitted_source"] == "opening_deterministic_fallback"
+    assert o_fem["final_route"] == "accept_candidate"
+    assert o_fem[REALIZATION_FALLBACK_FAMILY_FIELD] == LEGACY_DIEGETIC_FALLBACK
+
+    assert g_fem["final_emitted_source"] == "global_scene_fallback"
+    assert g_fem["final_route"] == "replaced"
+    assert g_fem[REALIZATION_FALLBACK_FAMILY_FIELD] == GATE_TERMINAL_REPAIR
+
+
+def test_selector_snapshot_strict_social_emergency_vs_gate_terminal_family(monkeypatch) -> None:
+    """Strict-social sealed minimal emergency uses strict-social deterministic family; generic terminal uses gate_terminal."""
+    gen_out = apply_final_emission_gate(
+        {"player_facing_text": "", "tags": []},
+        resolution={"kind": "observe", "prompt": "I wait."},
+        session={},
+        scene_id="yard",
+        world={},
+    )
+    gen_fem = read_final_emission_meta_dict(gen_out) or {}
+    assert gen_fem[REALIZATION_FALLBACK_FAMILY_FIELD] == GATE_TERMINAL_REPAIR
+
+    session, world, sid, resolution = _runner_strict_bundle()
+    nmc = build_narrative_mode_contract(ctir=_minimal_ctir_continuation())
+    stub_details = {
+        "used_internal_fallback": False,
+        "final_emitted_source": "test_stub",
+        "rejection_reasons": [],
+        "deterministic_attempted": False,
+        "deterministic_passed": False,
+        "fallback_pool": "none",
+        "fallback_kind": "none",
+        "route_illegal_intercepted": False,
+    }
+
+    def fake_build(candidate_text, *, resolution, tags, session, scene_id, world):
+        bad = "You wake to a new day. The market unfolds around you as if nothing before it mattered."
+        return bad, dict(stub_details)
+
+    monkeypatch.setattr(feg, "build_final_strict_social_response", fake_build)
+    ss_out = apply_final_emission_gate(
+        {
+            "player_facing_text": "stub",
+            "tags": [],
+            **_narrative_mode_plan_payload(nmc),
+        },
+        resolution=resolution,
+        session=session,
+        scene_id=sid,
+        world=world,
+    )
+    ss_fem = read_final_emission_meta_dict(ss_out) or {}
+    assert ss_fem["final_emitted_source"] == "minimal_social_emergency_fallback"
+    assert ss_fem[REALIZATION_FALLBACK_FAMILY_FIELD] == STRICT_SOCIAL_DETERMINISTIC_FALLBACK
+    tl = [str(t) for t in (ss_out.get("tags") or []) if isinstance(t, str)]
+    assert any("final_emission_gate:narrative_mode_output" in t for t in tl)
+
+
+def test_selector_snapshot_valid_candidate_bypasses_sealed_branches() -> None:
+    """Clean observe narration accepts without sealed-replace tags."""
+    out = apply_final_emission_gate(
+        {"player_facing_text": "Rain ticks against the gatehouse stones.", "tags": []},
+        resolution={"kind": "observe", "prompt": "I listen."},
+        session={},
+        scene_id="yard",
+        world={},
+    )
+    fem = read_final_emission_meta_dict(out) or {}
+    tl = [str(t) for t in (out.get("tags") or []) if isinstance(t, str)]
+    assert fem["final_route"] == "accept_candidate"
+    assert fem["final_emitted_source"] == "generated_candidate"
+    assert fem.get(REALIZATION_FALLBACK_FAMILY_FIELD) is None
+    assert "visibility_enforcement_replaced" not in tl
+    assert "final_emission_gate:acceptance_quality" not in tl
+    assert "final_emission_gate_replaced" not in tl
+
+
+def test_sealed_branch_order_accept_path_visibility_before_n4(monkeypatch) -> None:
+    order: list[str] = []
+    orig_vis = feg._apply_visibility_enforcement
+    orig_n4 = feg._apply_acceptance_quality_n4_floor_seam
+
+    def wrap_vis(*args: Any, **kwargs: Any):
+        order.append("visibility")
+        return orig_vis(*args, **kwargs)
+
+    def wrap_n4(*args: Any, **kwargs: Any):
+        order.append("n4")
+        return orig_n4(*args, **kwargs)
+
+    monkeypatch.setattr(feg, "_apply_visibility_enforcement", wrap_vis)
+    monkeypatch.setattr(feg, "_apply_acceptance_quality_n4_floor_seam", wrap_n4)
+
+    plan = _minimal_n4_narrative_plan(acceptance_quality={"enabled": True})
+    apply_final_emission_gate(
+        {
+            "player_facing_text": "Torchlight holds on wet cobbles near the east lane.",
+            "tags": [],
+            "prompt_context": {"narrative_plan": plan},
+        },
+        resolution={"kind": "narrate", "prompt": "I wait."},
+        session=None,
+        scene_id="lane_scene",
+        world={},
+    )
+    assert order == ["visibility", "n4"]
+
+
+def test_sealed_branch_order_replace_path_visibility_before_n4(monkeypatch) -> None:
+    order: list[str] = []
+    orig_vis = feg._apply_visibility_enforcement
+    orig_n4 = feg._apply_acceptance_quality_n4_floor_seam
+
+    def wrap_vis(*args: Any, **kwargs: Any):
+        order.append("visibility")
+        return orig_vis(*args, **kwargs)
+
+    def wrap_n4(*args: Any, **kwargs: Any):
+        order.append("n4")
+        return orig_n4(*args, **kwargs)
+
+    monkeypatch.setattr(feg, "_apply_visibility_enforcement", wrap_vis)
+    monkeypatch.setattr(feg, "_apply_acceptance_quality_n4_floor_seam", wrap_n4)
+
+    apply_final_emission_gate(
+        {"player_facing_text": "", "tags": []},
+        resolution={"kind": "observe", "prompt": "I wait."},
+        session={},
+        scene_id="yard",
+        world={},
+    )
+    assert order == ["visibility", "n4"]
+
+
+# --- Block AI: final gate reduction contract guards (selection vs assembly vs authorship) ---
+
+
+def test_block_ai_sealed_selector_helpers_importable_and_callable() -> None:
+    for name in (
+        "_route_visibility_enforcement_after_failed_validation",
+        "_select_acceptance_quality_n4_sealed_fallback_line",
+        "_scene_opening_rt_contract_accept_path_promotes_candidate",
+        "_select_non_strict_replace_path_terminal_sealed_fallback",
+    ):
+        fn = getattr(feg, name, None)
+        assert callable(fn), name
+    r = feg._route_visibility_enforcement_after_failed_validation(
+        tag_list_gate=[],
+        dbg_gate="",
+        violation_kinds=["offscene_entity"],
+        checked_entities=["_force_visibility_entity_check"],
+        checked_facts=[],
+        candidate_text="The guard nods once.",
+    )
+    assert r == "sealed_hard_replace"
+    line = feg._select_acceptance_quality_n4_sealed_fallback_line(
+        strict_social_path=True,
+        eff_resolution={"kind": "question", "social": {"npc_id": "n1", "grounded_speaker_id": "n1"}},
+        scene=None,
+        scene_id="s1",
+        resolution=None,
+        session={},
+        world={},
+        res_kind="question",
+        response_type_required="dialogue",
+    )
+    assert isinstance(line, str) and line.strip() != ""
+    assert feg._scene_opening_rt_contract_accept_path_promotes_candidate(
+        {
+            "response_type_required": "scene_opening",
+            "response_type_candidate_ok": True,
+            "response_type_repair_used": False,
+            "scene_opening_candidate_contract_passed": True,
+        }
+    ) is True
+
+
+def test_block_ai_route_visibility_and_opening_rt_selectors_do_not_mutate_inputs() -> None:
+    tags = ["a", "b"]
+    vks = ["unseen_entity_reference"]
+    ce: list[Any] = []
+    cf: list[Any] = []
+    tags_s, vks_s = list(tags), list(vks)
+    feg._route_visibility_enforcement_after_failed_validation(
+        tag_list_gate=tags,
+        dbg_gate="x",
+        violation_kinds=vks,
+        checked_entities=ce,
+        checked_facts=cf,
+        candidate_text="x",
+    )
+    assert tags == tags_s and vks == vks_s
+    rd: dict[str, Any] = {
+        "response_type_required": "scene_opening",
+        "response_type_candidate_ok": True,
+        "response_type_repair_used": False,
+        "scene_opening_candidate_contract_passed": True,
+    }
+    snap = json.dumps(rd, sort_keys=True)
+    feg._scene_opening_rt_contract_accept_path_promotes_candidate(rd)
+    assert json.dumps(rd, sort_keys=True) == snap
+
+
+def test_block_ai_n4_sealed_line_selector_preserves_copied_input_dicts() -> None:
+    eff: dict[str, Any] = {
+        "kind": "question",
+        "social": {"npc_id": "n1", "grounded_speaker_id": "n1", "social_intent_class": "social_exchange"},
+    }
+    session: dict[str, Any] = {"active_scene_id": "yard"}
+    eff0 = copy.deepcopy(eff)
+    session0 = copy.deepcopy(session)
+    feg._select_acceptance_quality_n4_sealed_fallback_line(
+        strict_social_path=True,
+        eff_resolution=eff,
+        scene=None,
+        scene_id="yard",
+        resolution=None,
+        session=session,
+        world=None,
+        res_kind="question",
+        response_type_required="dialogue",
+    )
+    assert eff == eff0
+    assert session == session0
+
+
+def test_block_ai_non_strict_terminal_selector_does_not_mutate_gm_output_when_opening_branch(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(feg, "_passive_scene_pressure_fallback_candidates", lambda **_: [])
+    monkeypatch.setattr(feg, "_should_use_neutral_nonprogress_fallback_instead_of_global_stock", lambda *_: False)
+    gm = copy.deepcopy(_opening_gm_output())
+    snap = copy.deepcopy(gm)
+    resolution = {"kind": "scene_opening", "prompt": "Start the campaign."}
+    feg._select_non_strict_replace_path_terminal_sealed_fallback(
+        gm,
+        session={},
+        scene=None,
+        world={},
+        sid="frontier_gate",
+        resolution=resolution,
+        eff_resolution=None,
+        active_interlocutor="",
+        strict_social_suppressed_non_social_turn=False,
+        res_kind="scene_opening",
+        response_type_required="scene_opening",
+        suppress_intro_replace=False,
+        interaction_mode="",
+    )
+    assert gm == snap
+
+
+def test_block_ai_assembly_helpers_stamp_meta_without_selecting_fallback_lines(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Assembly paths set FEM route/source/stamp from caller-provided ids; they must not pick sealed line text."""
+
+    def _forbidden_minimal(*_a: Any, **_k: Any) -> str:
+        raise AssertionError("assembly helper must not invoke minimal_social_emergency_fallback_line")
+
+    def _forbidden_global(*_a: Any, **_k: Any) -> Any:
+        raise AssertionError("assembly helper must not invoke _scene_emit_integrity_global_fallback_tuple")
+
+    monkeypatch.setattr(feg, "minimal_social_emergency_fallback_line", _forbidden_minimal)
+    monkeypatch.setattr(feg, "_scene_emit_integrity_global_fallback_tuple", _forbidden_global)
+
+    meta: dict[str, Any] = {}
+    feg._prepare_sealed_replacement_route_meta(
+        meta,
+        gm_output={"player_facing_text": "Stock sealed visibility-safe line.", "tags": []},
+        pre_gate_candidate_text="illegal candidate",
+        final_emitted_source="global_scene_fallback",
+        strict_social_route=False,
+        composition_meta=None,
+    )
+    assert meta.get("final_route") == "replaced"
+    assert meta.get("final_emitted_source") == "global_scene_fallback"
+
+    fem: dict[str, Any] = {}
+    feg._finalize_n4_sealed_replace_fem_route_meta(fem, strict_social_path=False)
+    assert fem.get("final_emitted_source") == "acceptance_quality_global_scene_fallback"
+
+    stamp_meta: dict[str, Any] = {}
+    feg._stamp_sealed_fallback_realization_family(
+        stamp_meta,
+        final_emitted_source="acceptance_quality_global_scene_fallback",
+        strict_social_route=False,
+    )
+    assert REALIZATION_FALLBACK_FAMILY_FIELD in stamp_meta
+
+
+def test_block_ai_opening_upstream_prepared_snapshot_remains_preferred_over_compatibility_local(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    gm = _opening_gm_output()
+    gm[UPSTREAM_PREPARED_OPENING_FALLBACK_KEY] = build_upstream_prepared_opening_fallback_payload(gm)
+
+    def _compat_must_not_run(*_a: Any, **_k: Any) -> tuple[str, dict]:
+        raise AssertionError("compatibility-local opening composer must not run when upstream snapshot is attached")
+
+    monkeypatch.setattr(feg, "_deterministic_opening_fallback_text_and_meta", _compat_must_not_run)
+    _text, _pool, _kind, _fe_src, _fs, _fc, composition_meta = feg._opening_scene_safe_fallback_tuple(gm)
+    assert composition_meta["opening_fallback_authorship_source"] == OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED
+
+
+def test_block_ai_block_ag_selector_order_snapshots_remain_entrypoints() -> None:
+    """Regression anchor: Block AG tests must stay importable so selector/order contracts do not drift unnoticed."""
+    mod = sys.modules[__name__]
+    for name in (
+        "test_sealed_branch_order_accept_path_visibility_before_n4",
+        "test_sealed_branch_order_replace_path_visibility_before_n4",
+        "test_selector_snapshot_visibility_vs_generic_terminal_distinct_markers",
+        "test_selector_snapshot_n4_replace_vs_generic_terminal_distinct_markers",
+        "test_selector_snapshot_opening_rt_repair_vs_generic_terminal_families",
+        "test_selector_snapshot_valid_candidate_bypasses_sealed_branches",
+    ):
+        assert callable(getattr(mod, name, None)), name
 
 
 def test_final_gate_plain_valid_candidate_has_source_without_fallback_family() -> None:

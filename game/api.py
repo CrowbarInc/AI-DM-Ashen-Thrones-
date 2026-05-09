@@ -18,7 +18,7 @@ Transition Convergence ownership:
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, Callable, Mapping
 
 from contextlib import asynccontextmanager
 from dataclasses import dataclass
@@ -2022,6 +2022,180 @@ def _gm_planner_convergence_seam_terminal(
     return out
 
 
+def _narration_hub_finalize_annotation_parts(
+    *,
+    resolution: Mapping[str, Any] | None,
+    planner_convergence_emergency_exit: bool,
+    gpt_budget_exceeded: bool,
+    fast_fallback_mode: bool,
+    used_force_terminal_fallback: bool,
+    bundle_seam_requirement: Mapping[str, Any],
+    gpt_calls_used: int,
+) -> tuple[str, str | None, dict[str, Any] | None, bool]:
+    """Plan finalize-step narration seam annotation (metadata only; no text production).
+
+    Returns ``(route_label, path_kind, annotate_kwargs, attach_planner_metadata_only)``.
+    When ``path_kind`` / ``annotate_kwargs`` are ``None``, skip :func:`annotate_narration_path_kind`
+    (planner convergence emergency: GM already carries convergence seam metadata).
+
+    **Forbidden here** (callers own these): :func:`call_gpt`, retry execution,
+    final emission gate handoff, ``player_facing_text`` mutation,
+    deterministic fallback line selection.
+    """
+    same_turn_retry = gpt_calls_used > 1
+    _bundle_seam_ok = bundle_seam_requirement.get("ok") is True
+
+    if gpt_budget_exceeded:
+        return (
+            "gpt_budget_exceeded",
+            "manual_play_gpt_budget_exceeded",
+            {
+                "ctir_backed": False,
+                "bundle_required": False,
+                "plan_driven": False,
+                "emergency_nonplan_output": True,
+                "same_turn_retry_messages_reused": same_turn_retry,
+            },
+            False,
+        )
+
+    if not isinstance(resolution, dict):
+        return (
+            "non_resolution_model_narration",
+            "non_resolution_model_narration",
+            {
+                "ctir_backed": False,
+                "bundle_required": False,
+                "plan_driven": False,
+                "explicit_nonplan_model_narration": True,
+                "same_turn_retry_messages_reused": same_turn_retry,
+            },
+            False,
+        )
+
+    if planner_convergence_emergency_exit:
+        return ("planner_convergence_emergency", None, None, True)
+
+    _emergency_exit = bool(fast_fallback_mode or used_force_terminal_fallback)
+    path_kind = (
+        "resolved_turn_ctir_upstream_fast_fallback"
+        if fast_fallback_mode
+        else (
+            "resolved_turn_ctir_force_terminal_fallback"
+            if used_force_terminal_fallback
+            else "resolved_turn_ctir_bundle"
+        )
+    )
+    extra = (
+        None
+        if _bundle_seam_ok
+        else {
+            "bundle_seam_requirement_failed": True,
+            "bundle_seam_error": bundle_seam_requirement.get("error"),
+            "bundle_seam_skipped": bundle_seam_requirement.get("skipped"),
+        }
+    )
+    kwargs: dict[str, Any] = {
+        "ctir_backed": True,
+        "bundle_required": True,
+        "plan_driven": (not _emergency_exit) and _bundle_seam_ok,
+        "emergency_nonplan_output": _emergency_exit or (not _bundle_seam_ok),
+        "same_turn_retry_messages_reused": same_turn_retry,
+        "extra": extra,
+    }
+    return (path_kind, path_kind, kwargs, False)
+
+
+def _classify_narration_hub_route(
+    *,
+    resolution: Mapping[str, Any] | None,
+    planner_convergence_emergency_exit: bool,
+    gpt_budget_exceeded: bool,
+    fast_fallback_mode: bool,
+    used_force_terminal_fallback: bool,
+) -> str:
+    """Stable narration-hub finalize route label (telemetry / contract tests). Bundle seam defaults OK.
+
+    Same forbidden surface as :func:`_narration_hub_finalize_annotation_parts` (no GPT/retry/emission/text).
+    """
+    route_label, _, _, _ = _narration_hub_finalize_annotation_parts(
+        resolution=resolution,
+        planner_convergence_emergency_exit=planner_convergence_emergency_exit,
+        gpt_budget_exceeded=gpt_budget_exceeded,
+        fast_fallback_mode=fast_fallback_mode,
+        used_force_terminal_fallback=used_force_terminal_fallback,
+        bundle_seam_requirement={"ok": True},
+        gpt_calls_used=0,
+    )
+    return route_label
+
+
+def _build_narration_hub_route_meta(
+    *,
+    resolution: Mapping[str, Any] | None,
+    planner_convergence_emergency_exit: bool,
+    gpt_budget_exceeded: bool,
+    fast_fallback_mode: bool,
+    used_force_terminal_fallback: bool,
+    bundle_seam_requirement: Mapping[str, Any],
+    gpt_calls_used: int,
+) -> dict[str, Any]:
+    """Flatten ``path_kind`` + kwargs for :func:`annotate_narration_path_kind`; empty when annotate skipped.
+
+    Same forbidden surface as :func:`_narration_hub_finalize_annotation_parts` (no GPT/retry/emission/text).
+    """
+    _, path_kind, annotate_kw, _ = _narration_hub_finalize_annotation_parts(
+        resolution=resolution,
+        planner_convergence_emergency_exit=planner_convergence_emergency_exit,
+        gpt_budget_exceeded=gpt_budget_exceeded,
+        fast_fallback_mode=fast_fallback_mode,
+        used_force_terminal_fallback=used_force_terminal_fallback,
+        bundle_seam_requirement=bundle_seam_requirement,
+        gpt_calls_used=gpt_calls_used,
+    )
+    if not path_kind or not annotate_kw:
+        return {}
+    return {"path_kind": path_kind, **annotate_kw}
+
+
+def _apply_narration_hub_policy_handoff(
+    gm: dict | None,
+    *,
+    fast_fallback_mode: bool,
+    response_policy: Any,
+    player_text: str,
+    scene_envelope: dict,
+    session: dict,
+    world: dict,
+    resolution: Any,
+    discovered_clues: list[str],
+    repair_terminal_player_facing_if_needed: Callable[..., dict],
+) -> dict | None:
+    """Post-GPT/retry response policy seam for manual-play narration hub.
+
+    Runs :func:`~game.gm.apply_response_policy_enforcement` when ``fast_fallback_mode`` is false,
+    then the hub's terminal repair hook (same reasons as inline hub code before extraction).
+
+    **Does not** call GPT, retry execution, select fallback prose, or final emission gate.
+    """
+    if fast_fallback_mode:
+        return gm
+    gm = apply_response_policy_enforcement(
+        gm,
+        response_policy=response_policy,
+        player_text=player_text,
+        scene_envelope=scene_envelope,
+        session=session,
+        world=world,
+        resolution=resolution,
+        discovered_clues=discovered_clues,
+    )
+    return repair_terminal_player_facing_if_needed(
+        gm,
+        reason="api_post_response_policy_enforcement",
+    )
+
+
 def _annotate_planner_convergence_seam_gm(
     gm: dict,
     *,
@@ -2880,20 +3054,18 @@ def _build_gpt_narration_from_authoritative_state(
             prompt_payload=prompt_payload,
             resolution=resolution if isinstance(resolution, dict) else None,
         )
-    if not fast_fallback_mode:
-        gm = apply_response_policy_enforcement(
-            gm,
-            response_policy=response_policy,
-            player_text=user_text,
-            scene_envelope=scene,
-            session=session,
-            world=world,
-            resolution=resolution,
-            discovered_clues=known_clues,
-        )
-        gm = _repair_terminal_player_facing_if_needed(
-            gm, reason="api_post_response_policy_enforcement"
-        )
+    gm = _apply_narration_hub_policy_handoff(
+        gm,
+        fast_fallback_mode=fast_fallback_mode,
+        response_policy=response_policy,
+        player_text=user_text,
+        scene_envelope=scene,
+        session=session,
+        world=world,
+        resolution=resolution,
+        discovered_clues=known_clues,
+        repair_terminal_player_facing_if_needed=_repair_terminal_player_facing_if_needed,
+    )
     _attach_scene_opening_curated_facts_to_gm(
         gm,
         prompt_payload=prompt_payload if isinstance(prompt_payload, dict) else None,
@@ -2909,16 +3081,22 @@ def _build_gpt_narration_from_authoritative_state(
     )
     _tag_list = [str(t) for t in (gm.get("tags") or []) if isinstance(t, str)]
     _gpt_budget_exceeded = any("manual_play_gpt_budget_exceeded" in t for t in _tag_list)
+    (
+        _,
+        _finalize_path_kind,
+        _finalize_annotate_kwargs,
+        _,
+    ) = _narration_hub_finalize_annotation_parts(
+        resolution=resolution if isinstance(resolution, dict) else None,
+        planner_convergence_emergency_exit=planner_convergence_emergency_exit,
+        gpt_budget_exceeded=_gpt_budget_exceeded,
+        fast_fallback_mode=fast_fallback_mode,
+        used_force_terminal_fallback=used_force_terminal_fallback,
+        bundle_seam_requirement=bundle_seam_requirement,
+        gpt_calls_used=gpt_calls_used,
+    )
     if _gpt_budget_exceeded:
-        annotate_narration_path_kind(
-            gm,
-            path_kind="manual_play_gpt_budget_exceeded",
-            ctir_backed=False,
-            bundle_required=False,
-            plan_driven=False,
-            emergency_nonplan_output=True,
-            same_turn_retry_messages_reused=gpt_calls_used > 1,
-        )
+        annotate_narration_path_kind(gm, path_kind=_finalize_path_kind, **_finalize_annotate_kwargs)
         annotate_narration_continuation_classification(gm, session=session if isinstance(session, dict) else None)
         enforce_plan_driven_continuation_invariant(
             gm,
@@ -2936,34 +3114,7 @@ def _build_gpt_narration_from_authoritative_state(
             if isinstance(planner_convergence_report_final, dict):
                 _attach_planner_convergence_gm_metadata(gm, planner_convergence_report_final)
         else:
-            _emergency_exit = bool(fast_fallback_mode or used_force_terminal_fallback)
-            _bundle_seam_ok = bundle_seam_requirement.get("ok") is True
-            annotate_narration_path_kind(
-                gm,
-                path_kind=(
-                    "resolved_turn_ctir_upstream_fast_fallback"
-                    if fast_fallback_mode
-                    else (
-                        "resolved_turn_ctir_force_terminal_fallback"
-                        if used_force_terminal_fallback
-                        else "resolved_turn_ctir_bundle"
-                    )
-                ),
-                ctir_backed=True,
-                bundle_required=True,
-                plan_driven=(not _emergency_exit) and _bundle_seam_ok,
-                emergency_nonplan_output=_emergency_exit or (not _bundle_seam_ok),
-                same_turn_retry_messages_reused=gpt_calls_used > 1,
-                extra=(
-                    None
-                    if _bundle_seam_ok
-                    else {
-                        "bundle_seam_requirement_failed": True,
-                        "bundle_seam_error": bundle_seam_requirement.get("error"),
-                        "bundle_seam_skipped": bundle_seam_requirement.get("skipped"),
-                    }
-                ),
-            )
+            annotate_narration_path_kind(gm, path_kind=_finalize_path_kind, **_finalize_annotate_kwargs)
             annotate_narration_continuation_classification(gm, session=session if isinstance(session, dict) else None)
             enforce_plan_driven_continuation_invariant(
                 gm,
@@ -2974,15 +3125,7 @@ def _build_gpt_narration_from_authoritative_state(
             if isinstance(planner_convergence_report_final, dict):
                 _attach_planner_convergence_gm_metadata(gm, planner_convergence_report_final)
     else:
-        annotate_narration_path_kind(
-            gm,
-            path_kind="non_resolution_model_narration",
-            ctir_backed=False,
-            bundle_required=False,
-            plan_driven=False,
-            explicit_nonplan_model_narration=True,
-            same_turn_retry_messages_reused=gpt_calls_used > 1,
-        )
+        annotate_narration_path_kind(gm, path_kind=_finalize_path_kind, **_finalize_annotate_kwargs)
         annotate_narration_continuation_classification(gm, session=session if isinstance(session, dict) else None)
         enforce_plan_driven_continuation_invariant(
             gm,

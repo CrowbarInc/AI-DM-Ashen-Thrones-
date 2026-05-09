@@ -7,15 +7,25 @@ import pytest
 from game.realization_authority import FALLBACK_FAMILIES
 from game.realization_provenance import (
     GATE_TERMINAL_REPAIR,
+    LEGACY_DIEGETIC_FALLBACK,
     REALIZATION_FALLBACK_FAMILY_FIELD,
     RETRY_TERMINAL_FALLBACK,
     UPSTREAM_PREPARED_EMISSION,
 )
 from game.upstream_response_repairs import (
+    OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED,
     UPSTREAM_PREPARED_EMISSION_KEY,
+    UPSTREAM_PREPARED_OPENING_FALLBACK_KEY,
+    UPSTREAM_PREPARED_OPENING_FALLBACK_ORIGIN,
     build_minimal_action_outcome_contract_repair_text,
     build_upstream_prepared_emission_payload,
+    build_upstream_prepared_opening_fallback_payload,
+    maybe_attach_upstream_prepared_opening_fallback_payload,
     merge_upstream_prepared_emission_into_gm_output,
+)
+from tests.test_final_emission_gate import (
+    EXPECTED_FRONTIER_GATE_OPENING_FALLBACK,
+    _opening_gm_output,
 )
 
 pytestmark = pytest.mark.unit
@@ -186,3 +196,57 @@ def test_action_outcome_style_repair_payload_is_labeled_upstream_prepared_emissi
 
     assert "concrete clue" in payload["prepared_action_fallback_text"]
     _assert_upstream_prepared_family(payload)
+
+
+def test_upstream_prepared_opening_fallback_matches_gate_snapshot_and_family() -> None:
+    assert UPSTREAM_PREPARED_OPENING_FALLBACK_KEY == "upstream_prepared_opening_fallback"
+    gm = _opening_gm_output()
+    payload = build_upstream_prepared_opening_fallback_payload(gm)
+
+    assert payload["prepared_opening_fallback_text"] == EXPECTED_FRONTIER_GATE_OPENING_FALLBACK
+    assert payload["upstream_prepared_opening_fallback_origin"] == UPSTREAM_PREPARED_OPENING_FALLBACK_ORIGIN
+
+    meta = payload["opening_fallback_meta"]
+    assert meta["opening_fallback_context_source"] == "opening_curated_facts"
+    assert meta["opening_fallback_basis_count"] == 3
+    assert meta["opening_fallback_context_missing"] is False
+    assert meta["opening_fallback_failed_closed"] is False
+    assert meta["opening_curated_facts_present"] is True
+    assert meta["opening_curated_facts_source"] == "realization"
+
+    comp = payload["opening_fallback_composition_meta"]
+    assert comp["fallback_family_used"] == "scene_opening"
+    assert comp["fallback_temporal_frame"] == "first_impression"
+    assert comp["opening_fallback_context_source"] == "opening_curated_facts"
+    assert comp["opening_fallback_authorship_source"] == OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED
+
+    fam = payload.get(REALIZATION_FALLBACK_FAMILY_FIELD)
+    assert fam == LEGACY_DIEGETIC_FALLBACK
+    assert fam in FALLBACK_FAMILIES
+
+
+def test_maybe_attach_upstream_opening_payload_scene_opening_with_curated_facts() -> None:
+    gm = _opening_gm_output()
+    maybe_attach_upstream_prepared_opening_fallback_payload(gm, resolution={"kind": "scene_opening", "prompt": "Start."})
+    assert gm[UPSTREAM_PREPARED_OPENING_FALLBACK_KEY]["prepared_opening_fallback_text"] == EXPECTED_FRONTIER_GATE_OPENING_FALLBACK
+
+
+def test_maybe_attach_upstream_opening_skips_non_scene_opening_or_empty_facts() -> None:
+    gm = _opening_gm_output()
+    maybe_attach_upstream_prepared_opening_fallback_payload(gm, resolution={"kind": "observe", "prompt": "Look."})
+    assert UPSTREAM_PREPARED_OPENING_FALLBACK_KEY not in gm
+
+    gm2 = _opening_gm_output()
+    gm2["opening_curated_facts"] = []
+    gm2["opening_selector_selected_facts"] = []
+    maybe_attach_upstream_prepared_opening_fallback_payload(gm2, resolution={"kind": "scene_opening", "prompt": "Start."})
+    assert UPSTREAM_PREPARED_OPENING_FALLBACK_KEY not in gm2
+
+
+def test_maybe_attach_upstream_opening_preserves_existing_nonempty_payload() -> None:
+    gm = _opening_gm_output()
+    custom = build_upstream_prepared_opening_fallback_payload(gm)
+    custom["prepared_opening_fallback_text"] = "CUSTOM_OPENING_FALLBACK."
+    gm[UPSTREAM_PREPARED_OPENING_FALLBACK_KEY] = custom
+    maybe_attach_upstream_prepared_opening_fallback_payload(gm, resolution={"kind": "scene_opening", "prompt": "Start."})
+    assert gm[UPSTREAM_PREPARED_OPENING_FALLBACK_KEY]["prepared_opening_fallback_text"] == "CUSTOM_OPENING_FALLBACK."

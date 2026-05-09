@@ -6,22 +6,33 @@ Block C), and the social-resolution helper used for dialogue repair routing live
 :mod:`game.final_emission_gate` consumes structured fields instead of minting substitute prose
 at the boundary.
 
+**Scene-opening deterministic fallback:** canonical authored prose + FEM-shaped composition lives in
+:func:`build_upstream_prepared_opening_fallback_payload` (shared text from
+:mod:`game.opening_deterministic_fallback`). The gate selects that prepared snapshot and only falls
+back to a compatibility re-call of the shared composer when the snapshot is absent or unusable.
+
 See ``docs/final_emission_ownership_convergence.md`` (Objective C2, Block B / Block C).
 """
 from __future__ import annotations
 
 import re
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Mapping
 
+from game.diegetic_fallback_narration import (
+    fallback_template_metadata as diegetic_classified_fallback_meta,
+    opening_scene_fallback_template_allowed as diegetic_opening_scene_template_allowed,
+)
 from game.final_emission_text import (
     _capitalize_sentence_fragment,
     _normalize_terminal_punctuation,
     _normalize_text,
 )
+from game.opening_deterministic_fallback import deterministic_opening_fallback_text_and_meta
 from game.interaction_context import inspect as inspect_interaction_context
 from game.leads import get_lead, normalize_lead
 from game.final_emission_validators import _contract_bool
 from game.realization_provenance import (
+    LEGACY_DIEGETIC_FALLBACK,
     UPSTREAM_PREPARED_EMISSION,
     attach_realization_fallback_family,
 )
@@ -38,7 +49,13 @@ from game.social_exchange_emission import (
 )
 
 UPSTREAM_PREPARED_EMISSION_KEY = "upstream_prepared_emission"
+UPSTREAM_PREPARED_OPENING_FALLBACK_KEY = "upstream_prepared_opening_fallback"
 SANITIZER_BOUNDARY_STRIP_ONLY = "strip_only"
+OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED = "upstream_prepared_opening_fallback"
+OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL = "compatibility_local_opening_deterministic"
+UPSTREAM_PREPARED_OPENING_FALLBACK_ORIGIN = (
+    "upstream_response_repairs.build_upstream_prepared_opening_fallback_payload"
+)
 
 
 def build_social_fallback_resolution(
@@ -151,6 +168,70 @@ def build_minimal_action_outcome_contract_repair_text(
     action_clause = _to_second_person_action_clause(player_input, resolution)
     result_clause = _action_result_summary(resolution)
     return _normalize_terminal_punctuation(f"{action_clause}, and {result_clause}")
+
+
+def build_upstream_prepared_opening_fallback_payload(
+    gm_output: Mapping[str, Any] | None,
+) -> Dict[str, Any]:
+    """Canonical prepared snapshot for scene-opening deterministic fallback (prose + FEM-shaped meta).
+
+    **Ownership:** prose is composed only via :func:`game.opening_deterministic_fallback.deterministic_opening_fallback_text_and_meta`;
+    this function packages classification, composition layers, and provenance for :mod:`game.final_emission_gate`
+    to select (not re-author). Attached automatically before final emission via
+    :func:`maybe_attach_upstream_prepared_opening_fallback_payload` when curated facts exist.
+    """
+    fallback_text, fallback_meta = deterministic_opening_fallback_text_and_meta(gm_output)
+    template_id = "opening_deterministic_fallback"
+    if not diegetic_opening_scene_template_allowed(template_id):
+        raise AssertionError("opening deterministic fallback template is not opening-scene classified")
+    classification = diegetic_classified_fallback_meta(template_id)
+    composition_meta = {
+        "first_mention_composition_used": False,
+        "first_mention_composition_layers": {"environment": None, "motion": None, "entities": []},
+        "fallback_family_used": classification.get("fallback_family"),
+        "fallback_temporal_frame": classification.get("temporal_frame"),
+        "opening_fallback_authorship_source": OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED,
+    }
+    composition_meta.update(fallback_meta)
+    payload: Dict[str, Any] = {
+        "prepared_opening_fallback_text": fallback_text,
+        "opening_fallback_meta": dict(fallback_meta),
+        "opening_fallback_composition_meta": composition_meta,
+        "upstream_prepared_opening_fallback_origin": UPSTREAM_PREPARED_OPENING_FALLBACK_ORIGIN,
+    }
+    attach_realization_fallback_family(payload, LEGACY_DIEGETIC_FALLBACK)
+    return payload
+
+
+def maybe_attach_upstream_prepared_opening_fallback_payload(
+    gm_output: Dict[str, Any] | None,
+    *,
+    resolution: Dict[str, Any] | None,
+) -> None:
+    """Attach ``upstream_prepared_opening_fallback`` when scene-opening curated facts are usable.
+
+    Idempotent: existing non-empty ``prepared_opening_fallback_text`` on the stored payload wins.
+    On build failure, leaves *gm_output* unchanged (gate compatibility path may still call the shared
+    composer locally).
+    """
+    if not isinstance(gm_output, dict) or not isinstance(resolution, dict):
+        return
+    if str(resolution.get("kind") or "").strip().lower() != "scene_opening":
+        return
+    facts = gm_output.get("opening_curated_facts")
+    if not isinstance(facts, list) or not facts:
+        return
+    if not any(isinstance(x, str) and x.strip() for x in facts):
+        return
+    existing = gm_output.get(UPSTREAM_PREPARED_OPENING_FALLBACK_KEY)
+    if isinstance(existing, dict):
+        prior = existing.get("prepared_opening_fallback_text")
+        if isinstance(prior, str) and prior.strip():
+            return
+    try:
+        gm_output[UPSTREAM_PREPARED_OPENING_FALLBACK_KEY] = build_upstream_prepared_opening_fallback_payload(gm_output)
+    except Exception:
+        return
 
 
 def build_upstream_prepared_emission_payload(
