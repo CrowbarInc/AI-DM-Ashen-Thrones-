@@ -28,6 +28,11 @@ import logging
 import re
 from typing import Any, Dict, List, Optional, Tuple
 
+from game.realization_provenance import (
+    STRICT_SOCIAL_DETERMINISTIC_FALLBACK,
+    attach_realization_fallback_family,
+)
+
 from game.prompt_context import canonical_interaction_target_npc_id
 
 from game.dialogue_targeting import (
@@ -2838,7 +2843,7 @@ def _looks_like_strict_social_terminal_placeholder(text: str) -> bool:
 
 
 def _structured_fact_emission_details() -> dict[str, Any]:
-    return {
+    details = {
         "used_internal_fallback": False,
         "fallback_kind": "none",
         "rejection_reasons": [],
@@ -2853,6 +2858,8 @@ def _structured_fact_emission_details() -> dict[str, Any]:
         "resolved_answer_source": None,
         "resolved_answer_preference_reason": None,
     }
+    attach_realization_fallback_family(details, STRICT_SOCIAL_DETERMINISTIC_FALLBACK)
+    return details
 
 
 def select_best_grounded_social_answer_text(
@@ -3577,7 +3584,7 @@ def build_final_strict_social_response(
         nb = neutral_reply_speaker_grounding_bridge_line(
             seed=f"{sid}|neutral_grounding|{_question_prompt_for_resolution_early(res)}"
         )
-        return nb, {
+        details = {
             "used_internal_fallback": True,
             "fallback_kind": "neutral_speaker_grounding_bridge",
             "rejection_reasons": [],
@@ -3592,6 +3599,8 @@ def build_final_strict_social_response(
             "resolved_answer_source": None,
             "resolved_answer_preference_reason": None,
         }
+        attach_realization_fallback_family(details, STRICT_SOCIAL_DETERMINISTIC_FALLBACK)
+        return nb, details
 
     cand0 = _normalize_gate_text(candidate_text)
     if is_route_illegal_global_or_sanitizer_fallback_text(cand0):
@@ -3811,7 +3820,7 @@ def build_final_strict_social_response(
     )
     _assert_all_sentences_strict_social_or_interruption(out_text, res)
 
-    return out_text, {
+    details = {
         "used_internal_fallback": True,
         "fallback_kind": fallback_kind,
         "rejection_reasons": reasons,
@@ -3827,3 +3836,5 @@ def build_final_strict_social_response(
         "resolved_answer_preference_reason": None,
         **interrupt_meta,
     }
+    attach_realization_fallback_family(details, STRICT_SOCIAL_DETERMINISTIC_FALLBACK)
+    return out_text, details

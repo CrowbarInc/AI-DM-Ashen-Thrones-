@@ -50,6 +50,15 @@ from game.player_facing_narration_purity import build_player_facing_narration_pu
 from game.social_exchange_emission import effective_strict_social_resolution_for_emission
 from game.storage import get_scene_runtime
 from game.final_emission_text import _normalize_text
+from game.realization_authority import FALLBACK_FAMILIES
+from game.realization_provenance import (
+    GATE_TERMINAL_REPAIR,
+    LEGACY_DIEGETIC_FALLBACK,
+    REALIZATION_FALLBACK_FAMILY_FIELD,
+    STRICT_SOCIAL_DETERMINISTIC_FALLBACK,
+    UPSTREAM_PREPARED_EMISSION,
+)
+from game.upstream_response_repairs import UPSTREAM_PREPARED_EMISSION_KEY
 from tests.helpers.objective7_referent_fixtures import (
     minimal_full_referent_artifact,
     referent_compact_mirror,
@@ -2976,6 +2985,54 @@ def _opening_gm_output() -> dict:
     }
 
 
+EXPECTED_FRONTIER_GATE_OPENING_FALLBACK = (
+    "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate. "
+    "Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in. "
+    "A notice board lists new taxes, curfews, and a posted warning about a missing patrol. "
+    "You can start with Read the notice board or Approach the guards."
+)
+
+
+def _assert_known_realization_family(value: str) -> None:
+    assert value in FALLBACK_FAMILIES
+
+
+def test_deterministic_opening_fallback_helper_exact_text_and_meta_snapshot() -> None:
+    text, meta = feg._deterministic_opening_fallback_text_and_meta(_opening_gm_output())
+
+    assert text == EXPECTED_FRONTIER_GATE_OPENING_FALLBACK
+    assert meta["opening_fallback_context_source"] == "opening_curated_facts"
+    assert meta["opening_fallback_basis_count"] == 3
+    assert meta["opening_fallback_context_missing"] is False
+    assert meta["opening_fallback_failed_closed"] is False
+    assert meta["opening_curated_facts_present"] is True
+    assert meta["opening_curated_facts_source"] == "realization"
+    assert REALIZATION_FALLBACK_FAMILY_FIELD not in meta
+
+
+def test_opening_scene_safe_fallback_tuple_exact_text_and_classification_snapshot() -> None:
+    (
+        text,
+        fallback_pool,
+        fallback_kind,
+        final_emitted_source,
+        fallback_strategy,
+        fallback_candidate_source,
+        composition_meta,
+    ) = feg._opening_scene_safe_fallback_tuple(_opening_gm_output())
+
+    assert text == EXPECTED_FRONTIER_GATE_OPENING_FALLBACK
+    assert fallback_pool == "scene_opening_deterministic"
+    assert fallback_kind == "opening_deterministic_fallback"
+    assert final_emitted_source == "opening_deterministic_fallback"
+    assert fallback_strategy == "opening_scene_safe_fallback"
+    assert fallback_candidate_source == "opening_deterministic_fallback"
+    assert composition_meta["fallback_family_used"] == "scene_opening"
+    assert composition_meta["fallback_temporal_frame"] == "first_impression"
+    assert composition_meta["opening_fallback_context_source"] == "opening_curated_facts"
+    assert REALIZATION_FALLBACK_FAMILY_FIELD not in composition_meta
+
+
 def test_opening_validator_rejects_investigation_continuation_language():
     failures = feg.validate_opening_output("Nearby crates appear disturbed.", _opening_validation_context())
 
@@ -3011,6 +3068,7 @@ def test_opening_failure_recovers_via_deterministic_fallback_not_action_outcome(
         active_interlocutor="",
     )
 
+    assert text == EXPECTED_FRONTIER_GATE_OPENING_FALLBACK
     assert "Cinderwatch's eastern gate" in text
     assert "You can" in text
     assert "appears disturbed" not in text
@@ -3020,6 +3078,9 @@ def test_opening_failure_recovers_via_deterministic_fallback_not_action_outcome(
     assert dbg.get("response_type_repair_kind") == "opening_deterministic_fallback"
     assert dbg.get("fallback_family_used") == "scene_opening"
     assert dbg.get("fallback_temporal_frame") == "first_impression"
+    family = dbg[REALIZATION_FALLBACK_FAMILY_FIELD]
+    assert family in FALLBACK_FAMILIES
+    assert family == LEGACY_DIEGETIC_FALLBACK
 
 
 def test_valid_scene_opening_skips_deterministic_fallback():
@@ -3048,6 +3109,8 @@ def test_valid_scene_opening_skips_deterministic_fallback():
         "preserved_candidate",
         "preserved_candidate_validity_check",
     }
+    assert dbg.get("fallback_family_used") is None
+    assert dbg.get(REALIZATION_FALLBACK_FAMILY_FIELD) is None
 
 
 def _rich_scene_opening_candidate() -> str:
@@ -3118,11 +3181,133 @@ def test_empty_scene_opening_uses_deterministic_fallback():
         active_interlocutor="",
     )
 
-    assert text
-    assert "Cinderwatch's eastern gate" in text
+    assert text == EXPECTED_FRONTIER_GATE_OPENING_FALLBACK
     assert dbg.get("opening_fallback_skipped") is False
     assert dbg.get("response_type_repair_used") is True
     assert dbg.get("response_type_repair_kind") == "opening_deterministic_fallback"
+    family = dbg[REALIZATION_FALLBACK_FAMILY_FIELD]
+    assert family in FALLBACK_FAMILIES
+    assert family == LEGACY_DIEGETIC_FALLBACK
+
+
+def test_final_gate_opening_fallback_exact_text_and_fem_provenance_snapshot() -> None:
+    gm_output = _opening_gm_output()
+    gm_output["player_facing_text"] = "Nearby crates appear disturbed."
+    gm_output["tags"] = []
+
+    out = apply_final_emission_gate(
+        gm_output,
+        resolution={"kind": "scene_opening", "prompt": "Start the campaign."},
+        session={},
+        scene_id="frontier_gate",
+        world={},
+    )
+
+    fem = read_final_emission_meta_dict(out) or {}
+    assert out["player_facing_text"] == EXPECTED_FRONTIER_GATE_OPENING_FALLBACK
+    assert fem["final_emitted_source"] == "opening_deterministic_fallback"
+    assert fem["fallback_family_used"] == "scene_opening"
+    family = fem[REALIZATION_FALLBACK_FAMILY_FIELD]
+    assert family in FALLBACK_FAMILIES
+    assert family == LEGACY_DIEGETIC_FALLBACK
+    assert fem["response_type_repair_kind"] == "opening_deterministic_fallback"
+    assert fem["opening_fallback_context_source"] == "opening_curated_facts"
+
+
+def test_final_gate_valid_opening_candidate_has_no_fallback_provenance() -> None:
+    candidate = (
+        "You stand in the churned mud before Cinderwatch's eastern gate as rain spatters soot-dark stone. "
+        "Refugees press shoulder to shoulder around the wagon line while guards hold the choke. "
+        "You can read the notice board or approach the guards."
+    )
+    gm_output = _opening_gm_output()
+    gm_output["player_facing_text"] = candidate
+    gm_output["tags"] = []
+
+    out = apply_final_emission_gate(
+        gm_output,
+        resolution={"kind": "scene_opening", "prompt": "Start the campaign."},
+        session={},
+        scene_id="frontier_gate",
+        world={},
+    )
+
+    fem = read_final_emission_meta_dict(out) or {}
+    assert out["player_facing_text"] == candidate
+    assert fem["final_emitted_source"] == "generated_candidate"
+    assert fem.get("fallback_family_used") is None
+    assert fem.get(REALIZATION_FALLBACK_FAMILY_FIELD) is None
+
+
+def test_final_gate_upstream_prepared_emission_branch_records_upstream_family() -> None:
+    out = apply_final_emission_gate(
+        {
+            "player_facing_text": "Mist gathers without answering.",
+            "tags": [],
+            "response_policy": {"response_type_contract": _response_type_contract("answer")},
+            UPSTREAM_PREPARED_EMISSION_KEY: {
+                "prepared_answer_fallback_text": "Yes. The east gate is open until dusk.",
+                "upstream_prepared_emission_attribution": "unit_upstream_answer",
+            },
+        },
+        resolution={"kind": "question", "prompt": "Is the east gate open?"},
+        session={},
+        scene_id="yard",
+        world={},
+    )
+
+    fem = read_final_emission_meta_dict(out) or {}
+    assert out["player_facing_text"] == "Yes. The east gate is open until dusk."
+    assert fem["final_route"] == "accept_candidate"
+    assert fem["final_emitted_source"] == "answer_upstream_prepared_repair"
+    assert fem["response_type_repair_kind"] == "answer_upstream_prepared_repair"
+    assert fem["upstream_prepared_emission_used"] is True
+    assert fem["upstream_prepared_emission_valid"] is True
+    assert fem["upstream_prepared_emission_source"] == "unit_upstream_answer"
+    family = fem[REALIZATION_FALLBACK_FAMILY_FIELD]
+    _assert_known_realization_family(family)
+    assert family == UPSTREAM_PREPARED_EMISSION
+    assert family != GATE_TERMINAL_REPAIR
+
+
+def test_final_gate_terminal_repair_branch_records_gate_terminal_family() -> None:
+    out = apply_final_emission_gate(
+        {"player_facing_text": "", "tags": []},
+        resolution={"kind": "observe", "prompt": "I wait."},
+        session={},
+        scene_id="yard",
+        world={},
+    )
+
+    fem = read_final_emission_meta_dict(out) or {}
+    assert out["player_facing_text"] == "For a breath, the scene holds while voices shift around you."
+    assert "final_emission_gate_replaced" in out["tags"]
+    assert fem["final_route"] == "replaced"
+    assert fem["candidate_validation_passed"] is False
+    assert fem["final_emitted_source"] == "global_scene_fallback"
+    family = fem[REALIZATION_FALLBACK_FAMILY_FIELD]
+    _assert_known_realization_family(family)
+    assert family == GATE_TERMINAL_REPAIR
+    assert family != UPSTREAM_PREPARED_EMISSION
+
+
+def test_final_gate_plain_valid_candidate_has_source_without_fallback_family() -> None:
+    candidate = "Rain ticks against the gatehouse stones."
+    out = apply_final_emission_gate(
+        {"player_facing_text": candidate, "tags": []},
+        resolution={"kind": "observe", "prompt": "I listen."},
+        session={},
+        scene_id="yard",
+        world={},
+    )
+
+    fem = read_final_emission_meta_dict(out) or {}
+    assert out["player_facing_text"] == candidate
+    assert fem["final_route"] == "accept_candidate"
+    assert fem["candidate_validation_passed"] is True
+    assert fem["final_emitted_source"] == "generated_candidate"
+    assert fem.get(REALIZATION_FALLBACK_FAMILY_FIELD) is None
+    assert fem.get("fallback_family_used") is None
 
 
 def test_scene_opening_candidate_not_rejected_for_lacking_action_result_language():
@@ -4270,3 +4455,7 @@ def test_strict_social_narrative_mode_output_enforcement_terminal_fallback(monke
     assert fem.get("final_route") == "replaced"
     assert fem.get("final_emitted_source") == "minimal_social_emergency_fallback"
     assert fem.get("final_emitted_source") in emergency_fallback_source_ids()
+    family = fem[REALIZATION_FALLBACK_FAMILY_FIELD]
+    _assert_known_realization_family(family)
+    assert family == STRICT_SOCIAL_DETERMINISTIC_FALLBACK
+    assert family != GATE_TERMINAL_REPAIR

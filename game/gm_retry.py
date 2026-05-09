@@ -34,6 +34,10 @@ from game.diegetic_fallback_narration import (
 )
 from game.fallback_provenance_debug import preserve_fallback_provenance_metadata
 from game.final_emission_meta import read_final_emission_meta_dict
+from game.realization_provenance import (
+    RETRY_TERMINAL_FALLBACK,
+    attach_realization_fallback_family,
+)
 from game.stage_diff_telemetry import (
     record_stage_snapshot,
     record_stage_transition,
@@ -88,6 +92,18 @@ def _gm_binding():
     import game.gm as gm
 
     return gm
+
+
+def _attach_retry_terminal_family(gm_output: Dict[str, Any]) -> Dict[str, Any]:
+    attach_realization_fallback_family(gm_output, RETRY_TERMINAL_FALLBACK)
+    meta = dict(gm_output.get("metadata")) if isinstance(gm_output.get("metadata"), dict) else {}
+    gm_output["metadata"] = meta
+    attach_realization_fallback_family(meta, RETRY_TERMINAL_FALLBACK)
+    fem = dict(gm_output.get("_final_emission_meta")) if isinstance(gm_output.get("_final_emission_meta"), dict) else None
+    if isinstance(fem, dict):
+        gm_output["_final_emission_meta"] = fem
+        attach_realization_fallback_family(fem, RETRY_TERMINAL_FALLBACK)
+    return gm_output
 
 
 RETRY_FAILURE_PRIORITY: dict[str, int] = {
@@ -1438,7 +1454,7 @@ def detect_retry_failures(
     return failures
 
 
-def apply_deterministic_retry_fallback(
+def select_deterministic_retry_fallback_line(
     gm: Dict[str, Any],
     *,
     failure: Dict[str, Any],
@@ -1449,26 +1465,24 @@ def apply_deterministic_retry_fallback(
     resolution: Dict[str, Any] | None,
     segmented_turn: Dict[str, Any] | None = None,
 ) -> Dict[str, Any]:
-    """Apply deterministic fallback when targeted retry still fails."""
+    """Pure deterministic retry branch selector; caller owns telemetry and provenance assembly."""
     if not isinstance(gm, dict):
-        return gm
+        return {
+            "selected": False,
+            "text": "",
+            "source": "non_dict_gm",
+            "realization_fallback_family": RETRY_TERMINAL_FALLBACK,
+            "debug": {"reason": "non_dict_gm"},
+        }
     failure_class = str((failure or {}).get("failure_class") or "").strip()
     if failure_class not in ("unresolved_question", "answer"):
-        return gm
-
-    snap_pre_det = snapshot_turn_stage(gm, "retry_pre_deterministic_fallback")
-    record_stage_snapshot(gm, "retry_pre_deterministic_fallback", snapshot=snap_pre_det)
-
-    def _emit_deterministic_retry_result(out_obj: Dict[str, Any]) -> None:
-        snap_post = snapshot_turn_stage(out_obj, "retry_deterministic_fallback_applied", failure_class=failure_class)
-        record_stage_snapshot(out_obj, "retry_deterministic_fallback_applied", snapshot=snap_post)
-        record_stage_transition(
-            out_obj,
-            "retry_pre_deterministic_fallback",
-            "retry_deterministic_fallback_applied",
-            snap_pre_det,
-            snap_post,
-        )
+        return {
+            "selected": False,
+            "text": str(gm.get("player_facing_text") or ""),
+            "source": "no_op_preserve_original",
+            "realization_fallback_family": RETRY_TERMINAL_FALLBACK,
+            "debug": {"failure_class": failure_class, "reason": "unsupported_failure_class"},
+        }
 
     scene_id = str((scene_envelope.get("scene") or {}).get("id") or "").strip()
     eff_res, strict_route, _ = _gm_binding().effective_strict_social_resolution_for_emission(
@@ -1487,10 +1501,6 @@ def apply_deterministic_retry_fallback(
     soc_in_scope = bool(scope.get("social_shaped_fallback_in_scope"))
     block1_signal = bool(scope.get("block1_world_action_signal"))
 
-    def _tag_retry_scope(out_d: Dict[str, Any]) -> Dict[str, Any]:
-        _append_retry_social_scope_debug(out_d, scope)
-        return out_d
-
     known_fact_ctx = (failure or {}).get("known_fact_context") if isinstance((failure or {}).get("known_fact_context"), dict) else {}
     ans_ctx = str(known_fact_ctx.get("answer") or "").strip()
     if failure_class == "answer" and ans_ctx and soc_in_scope:
@@ -1505,7 +1515,7 @@ def apply_deterministic_retry_fallback(
             known_fact=kf_for_val,
             failure_class="answer",
         ):
-            out = dict(gm)
+            out = copy.deepcopy(gm)
             out["player_facing_text"] = _ensure_terminal_punctuation(ans_ctx)
             tags = out.get("tags") if isinstance(out.get("tags"), list) else []
             out["tags"] = list(tags) + ["question_retry_fallback", "known_fact_guard", "social_answer_retry"]
@@ -1515,8 +1525,15 @@ def apply_deterministic_retry_fallback(
                 (dbg + " | " if dbg else "")
                 + f"retry_fallback:answer:known_fact_guard:{source}"
             )
-            _emit_deterministic_retry_result(out)
-            return _tag_retry_scope(out)
+            return {
+                "selected": True,
+                "text": out["player_facing_text"],
+                "source": "answer_context_known_fact",
+                "realization_fallback_family": RETRY_TERMINAL_FALLBACK,
+                "debug": {"failure_class": failure_class, "source": source, "scope": dict(scope)},
+                "gm_output": out,
+                "scope": scope,
+            }
 
     known_fact = resolve_known_fact_before_uncertainty(
         player_text,
@@ -1531,7 +1548,7 @@ def apply_deterministic_retry_fallback(
         player_text=str(player_text or ""),
     ):
         known_fact = None
-    out = dict(gm)
+    out = copy.deepcopy(gm)
     ktxt = str((known_fact or {}).get("text") or "").strip() if isinstance(known_fact, dict) else ""
     if isinstance(known_fact, dict) and ktxt:
         src_nf = str(known_fact.get("source") or "").strip()
@@ -1580,8 +1597,15 @@ def apply_deterministic_retry_fallback(
                     (dbg + " | " if dbg else "")
                     + f"retry_fallback:unresolved_question:known_fact_guard:{source}|retry_fallback:{won}"
                 )
-                _emit_deterministic_retry_result(out)
-                return _tag_retry_scope(out)
+                return {
+                    "selected": True,
+                    "text": out["player_facing_text"],
+                    "source": "known_fact_guard",
+                    "realization_fallback_family": RETRY_TERMINAL_FALLBACK,
+                    "debug": {"failure_class": failure_class, "source": source, "scope": dict(scope)},
+                    "gm_output": out,
+                    "scope": scope,
+                }
 
     res_open = resolution if isinstance(resolution, dict) else None
     soc_open = (
@@ -1604,7 +1628,7 @@ def apply_deterministic_retry_fallback(
             player_text=player_text,
         )
         if rec_fb.get("used") and isinstance(rec_fb.get("text"), str) and str(rec_fb.get("text") or "").strip():
-            out = dict(gm)
+            out = copy.deepcopy(gm)
             out["player_facing_text"] = _ensure_terminal_punctuation(str(rec_fb.get("text") or "").strip())
             tags = out.get("tags") if isinstance(out.get("tags"), list) else []
             tag_list = [str(t) for t in tags if isinstance(t, str)]
@@ -1619,8 +1643,16 @@ def apply_deterministic_retry_fallback(
                 + f"retry_fallback:open_social_recovery:{rec_fb.get('mode')}|retry_fallback:suppressed:uncertainty_pool"
             )
             _merge_open_social_recovery_emission_debug(out, rec_fb)
-            _emit_deterministic_retry_result(out)
-            return _tag_retry_scope(out)
+            return {
+                "selected": True,
+                "text": out["player_facing_text"],
+                "source": "open_social_recovery",
+                "realization_fallback_family": RETRY_TERMINAL_FALLBACK,
+                "debug": {"failure_class": failure_class, "recovery": dict(rec_fb), "scope": dict(scope)},
+                "gm_output": out,
+                "scope": scope,
+            }
+
     fu_ctx_for_variation = (
         (failure or {}).get("followup_context")
         if isinstance((failure or {}).get("followup_context"), dict)
@@ -1639,8 +1671,15 @@ def apply_deterministic_retry_fallback(
             scene_id=scene_id,
             variation_salt=variation_salt,
         )
-        _emit_deterministic_retry_result(inner)
-        return _tag_retry_scope(inner)
+        return {
+            "selected": True,
+            "text": str(inner.get("player_facing_text") or ""),
+            "source": "strict_social_retry_fallback",
+            "realization_fallback_family": RETRY_TERMINAL_FALLBACK,
+            "debug": {"failure_class": failure_class, "scope": dict(scope), "strict_route": True},
+            "gm_output": inner,
+            "scope": scope,
+        }
 
     uncertainty = classify_uncertainty(
         player_text,
@@ -1664,6 +1703,68 @@ def apply_deterministic_retry_fallback(
             (dbg_u + " | " if dbg_u else "")
             + "retry_fallback_chosen:nonsocial_uncertainty_pool_after_block1_social_out_of_scope"
         )
+    return {
+        "selected": True,
+        "text": str(out.get("player_facing_text") or ""),
+        "source": "uncertainty_fallback",
+        "realization_fallback_family": RETRY_TERMINAL_FALLBACK,
+        "debug": {"failure_class": failure_class, "uncertainty": dict(uncertainty), "scope": dict(scope)},
+        "gm_output": out,
+        "scope": scope,
+    }
+
+
+def apply_deterministic_retry_fallback(
+    gm: Dict[str, Any],
+    *,
+    failure: Dict[str, Any],
+    player_text: str,
+    scene_envelope: Dict[str, Any],
+    session: Dict[str, Any],
+    world: Dict[str, Any],
+    resolution: Dict[str, Any] | None,
+    segmented_turn: Dict[str, Any] | None = None,
+) -> Dict[str, Any]:
+    """Apply deterministic fallback when targeted retry still fails."""
+    if not isinstance(gm, dict):
+        return gm
+    failure_class = str((failure or {}).get("failure_class") or "").strip()
+    if failure_class not in ("unresolved_question", "answer"):
+        return gm
+
+    snap_pre_det = snapshot_turn_stage(gm, "retry_pre_deterministic_fallback")
+    record_stage_snapshot(gm, "retry_pre_deterministic_fallback", snapshot=snap_pre_det)
+
+    def _emit_deterministic_retry_result(out_obj: Dict[str, Any]) -> None:
+        snap_post = snapshot_turn_stage(out_obj, "retry_deterministic_fallback_applied", failure_class=failure_class)
+        record_stage_snapshot(out_obj, "retry_deterministic_fallback_applied", snapshot=snap_post)
+        record_stage_transition(
+            out_obj,
+            "retry_pre_deterministic_fallback",
+            "retry_deterministic_fallback_applied",
+            snap_pre_det,
+            snap_post,
+        )
+
+    def _tag_retry_scope(out_d: Dict[str, Any]) -> Dict[str, Any]:
+        scope = selected.get("scope") if isinstance(selected.get("scope"), dict) else {}
+        _append_retry_social_scope_debug(out_d, scope)
+        _attach_retry_terminal_family(out_d)
+        return out_d
+
+    selected = select_deterministic_retry_fallback_line(
+        gm,
+        failure=failure,
+        player_text=player_text,
+        scene_envelope=scene_envelope,
+        session=session,
+        world=world,
+        resolution=resolution,
+        segmented_turn=segmented_turn,
+    )
+    if not selected.get("selected"):
+        return gm
+    out = selected.get("gm_output") if isinstance(selected.get("gm_output"), dict) else dict(gm)
     _emit_deterministic_retry_result(out)
     return _tag_retry_scope(out)
 
@@ -2390,6 +2491,132 @@ def ensure_minimal_nonsocial_resolution(
     return out
 
 
+def select_terminal_retry_fallback_line(
+    *,
+    session: Dict[str, Any] | None,
+    player_text: str = "",
+    scene_envelope: Dict[str, Any] | None = None,
+    world: Dict[str, Any] | None = None,
+    resolution: Dict[str, Any] | None = None,
+    base_gm: Dict[str, Any] | None = None,
+    segmented_turn: Dict[str, Any] | None = None,
+) -> Dict[str, Any]:
+    """Pure terminal retry line selector; payload assembly remains in ``force_terminal_retry_fallback``."""
+    sess = session if isinstance(session, dict) else None
+    env = scene_envelope if isinstance(scene_envelope, dict) else {}
+    w = world if isinstance(world, dict) else None
+    res = resolution if isinstance(resolution, dict) else None
+    scene_id = _resolve_scene_id(env)
+
+    soc_terminal_in_scope = bool(
+        w is not None
+        and _social_answer_fallback_in_scope(
+            player_text=str(player_text or ""),
+            scene_envelope=env,
+            session=sess if isinstance(sess, dict) else {},
+            world=w,
+            segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+        )
+    )
+    use_social_terminal = bool(_session_social_authority(sess) and soc_terminal_in_scope)
+
+    line = ""
+    source = ""
+    gm_work: Dict[str, Any] | None = None
+    res_for_social: Dict[str, Any] | None = None
+    if use_social_terminal:
+        eff_res, _, _ = _gm_binding().effective_strict_social_resolution_for_emission(
+            res,
+            sess,
+            w,
+            scene_id,
+        )
+        res_for_social = eff_res if isinstance(eff_res, dict) else res
+        gm_work = copy.deepcopy(base_gm) if isinstance(base_gm, dict) else {}
+        if isinstance(res_for_social, dict):
+            gm_work = _gm_binding().apply_social_exchange_retry_fallback_gm(
+                gm_work,
+                player_text=str(player_text or ""),
+                session=sess if isinstance(sess, dict) else {},
+                world=w if isinstance(w, dict) else {},
+                resolution=res_for_social,
+                scene_id=scene_id,
+            )
+            source = "social_exchange_retry_fallback"
+        candidate = str(gm_work.get("player_facing_text") or "").strip()
+        if not isinstance(res_for_social, dict):
+            candidate = ""
+        if (
+            not candidate
+            or _gm_binding().is_route_illegal_global_or_sanitizer_fallback_text(candidate)
+        ):
+            candidate = _gm_binding().minimal_social_emergency_fallback_line(
+                res_for_social if isinstance(res_for_social, dict) else None
+            )
+            source = "minimal_social_emergency_fallback"
+        line_raw = str(candidate).strip()
+        line = _ensure_terminal_punctuation(line_raw) if line_raw else ""
+        gm_work["player_facing_text"] = line
+    else:
+        line = _nonsocial_forced_retry_progress_line(
+            str(player_text or ""),
+            scene_envelope=env,
+            session=sess,
+            world=w,
+            resolution=res,
+        )
+        source = "nonsocial_forced_retry_progress_line"
+
+    if not str(line or "").strip():
+        anchor_dead = render_nonsocial_terminal_anchor_line(
+            env,
+            seed_key=f"term|{scene_id}|{player_text[:120]}",
+            player_text=str(player_text or ""),
+        )
+        if isinstance(anchor_dead, str) and anchor_dead.strip():
+            line = _ensure_terminal_punctuation(anchor_dead.strip())
+            source = "nonsocial_terminal_anchor"
+            sup_ar = anti_reset_suppresses_intro_style_fallbacks(
+                sess,
+                env,
+                w,
+                scene_id,
+                res,
+            )
+            if sup_ar and (
+                text_matches_observe_opener_templates(line)
+                or text_overlaps_known_scene_intro_sources(line, env)
+            ):
+                line = _ensure_terminal_punctuation(
+                    local_exchange_continuation_fallback_line(
+                        session=sess,
+                        world=w,
+                        scene_id=scene_id,
+                        resolution=res,
+                    ).strip()
+                )
+                source = "anti_reset_local_exchange_continuation"
+        else:
+            line = _ensure_terminal_punctuation(str(_NONSOCIAL_EMPTY_REPAIR_HARD_LINE).strip())
+            source = "nonsocial_empty_repair_hard_line"
+
+    return {
+        "text": _ensure_terminal_punctuation(str(line).strip()) if str(line or "").strip() else "",
+        "source": source,
+        "realization_fallback_family": RETRY_TERMINAL_FALLBACK,
+        "debug": {
+            "use_social_terminal": use_social_terminal,
+            "soc_terminal_in_scope": soc_terminal_in_scope,
+            "scene_id": scene_id,
+            "needs_social_repair": bool(use_social_terminal and not _gm_has_usable_player_facing_text(gm_work)),
+        },
+        "gm_work": gm_work,
+        "res_for_social": res_for_social,
+        "use_social_terminal": use_social_terminal,
+        "soc_terminal_in_scope": soc_terminal_in_scope,
+    }
+
+
 def force_terminal_retry_fallback(
     *,
     session: Dict[str, Any] | None,
@@ -2431,51 +2658,21 @@ def force_terminal_retry_fallback(
     res = resolution if isinstance(resolution, dict) else None
     scene_id = _resolve_scene_id(env)
 
-    soc_terminal_in_scope = bool(
-        w is not None
-        and _social_answer_fallback_in_scope(
-            player_text=str(player_text or ""),
-            scene_envelope=env,
-            session=sess if isinstance(sess, dict) else {},
-            world=w,
-            segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
-        )
+    selected_line = select_terminal_retry_fallback_line(
+        session=session,
+        player_text=player_text,
+        scene_envelope=scene_envelope,
+        world=world,
+        resolution=resolution,
+        base_gm=base_gm,
+        segmented_turn=segmented_turn,
     )
-    use_social_terminal = bool(_session_social_authority(sess) and soc_terminal_in_scope)
-
-    line = ""
-    gm_work: Dict[str, Any] | None = None
+    line = str(selected_line.get("text") or "")
+    gm_work = selected_line.get("gm_work") if isinstance(selected_line.get("gm_work"), dict) else None
+    use_social_terminal = bool(selected_line.get("use_social_terminal"))
+    soc_terminal_in_scope = bool(selected_line.get("soc_terminal_in_scope"))
+    res_for_social = selected_line.get("res_for_social") if isinstance(selected_line.get("res_for_social"), dict) else res
     if use_social_terminal:
-        eff_res, _, _ = _gm_binding().effective_strict_social_resolution_for_emission(
-            res,
-            sess,
-            w,
-            scene_id,
-        )
-        res_for_social = eff_res if isinstance(eff_res, dict) else res
-        gm_work = dict(out)
-        if isinstance(res_for_social, dict):
-            gm_work = _gm_binding().apply_social_exchange_retry_fallback_gm(
-                gm_work,
-                player_text=str(player_text or ""),
-                session=sess if isinstance(sess, dict) else {},
-                world=w if isinstance(w, dict) else {},
-                resolution=res_for_social,
-                scene_id=scene_id,
-            )
-        candidate = str(gm_work.get("player_facing_text") or "").strip()
-        if not isinstance(res_for_social, dict):
-            candidate = ""
-        if (
-            not candidate
-            or _gm_binding().is_route_illegal_global_or_sanitizer_fallback_text(candidate)
-        ):
-            candidate = _gm_binding().minimal_social_emergency_fallback_line(
-                res_for_social if isinstance(res_for_social, dict) else None
-            )
-        line_raw = str(candidate).strip()
-        line = _ensure_terminal_punctuation(line_raw) if line_raw else ""
-        gm_work["player_facing_text"] = line
         if not _gm_has_usable_player_facing_text(gm_work):
             out = ensure_minimal_social_resolution(
                 gm=gm_work,
@@ -2533,47 +2730,9 @@ def force_terminal_retry_fallback(
                     scene_id=scene_id,
                 )
             preserve_fallback_provenance_metadata(out, base_gm, gm_work)
+            _attach_retry_terminal_family(out)
             _emit_terminal_retry_result(out)
             return out
-        line = str(gm_work.get("player_facing_text") or "").strip()
-    else:
-        line = _nonsocial_forced_retry_progress_line(
-            str(player_text or ""),
-            scene_envelope=env,
-            session=sess,
-            world=w,
-            resolution=res,
-        )
-
-    if not str(line or "").strip():
-        anchor_dead = render_nonsocial_terminal_anchor_line(
-            env,
-            seed_key=f"term|{scene_id}|{player_text[:120]}",
-            player_text=str(player_text or ""),
-        )
-        if isinstance(anchor_dead, str) and anchor_dead.strip():
-            line = _ensure_terminal_punctuation(anchor_dead.strip())
-            sup_ar = anti_reset_suppresses_intro_style_fallbacks(
-                sess,
-                env,
-                w,
-                scene_id,
-                res,
-            )
-            if sup_ar and (
-                text_matches_observe_opener_templates(line)
-                or text_overlaps_known_scene_intro_sources(line, env)
-            ):
-                line = _ensure_terminal_punctuation(
-                    local_exchange_continuation_fallback_line(
-                        session=sess,
-                        world=w,
-                        scene_id=scene_id,
-                        resolution=res,
-                    ).strip()
-                )
-        else:
-            line = _ensure_terminal_punctuation(str(_NONSOCIAL_EMPTY_REPAIR_HARD_LINE).strip())
 
     out["player_facing_text"] = _ensure_terminal_punctuation(str(line).strip())
     out["final_route"] = "forced_retry_fallback"
@@ -2667,6 +2826,7 @@ def force_terminal_retry_fallback(
         )
 
     preserve_fallback_provenance_metadata(out, base_gm, gm_work)
+    _attach_retry_terminal_family(out)
 
     if use_social_terminal:
         eff_res_final, _, _ = _gm_binding().effective_strict_social_resolution_for_emission(

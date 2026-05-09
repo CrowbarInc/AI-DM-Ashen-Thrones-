@@ -170,6 +170,14 @@ from game.response_policy_contracts import (
     materialize_response_policy_bundle,
     resolve_interaction_continuity_contract,
 )
+from game.realization_provenance import (
+    GATE_TERMINAL_REPAIR,
+    LEGACY_DIEGETIC_FALLBACK,
+    STRICT_SOCIAL_DETERMINISTIC_FALLBACK,
+    UPSTREAM_PREPARED_EMISSION,
+    attach_realization_fallback_family,
+    normalize_realization_fallback_family,
+)
 
 from game.dialogue_social_plan import validate_dialogue_social_plan
 
@@ -4097,6 +4105,7 @@ def _enforce_response_type_contract(
             debug["opening_repair_source"] = "deterministic_fallback"
             debug["fallback_family_used"] = classification.get("fallback_family")
             debug["fallback_temporal_frame"] = classification.get("temporal_frame")
+            attach_realization_fallback_family(debug, LEGACY_DIEGETIC_FALLBACK)
             debug["response_type_rejection_reasons"] = list(dict.fromkeys(str(r) for r in reasons if r))
             return fallback, debug
 
@@ -4191,11 +4200,14 @@ def _enforce_response_type_contract(
                 debug["upstream_prepared_emission_valid"] = True
                 debug["upstream_prepared_emission_source"] = upstream_src_label
                 debug["upstream_prepared_emission_reject_reason"] = None
+                attach_realization_fallback_family(debug, UPSTREAM_PREPARED_EMISSION)
             else:
                 debug["upstream_prepared_emission_used"] = False
                 debug["upstream_prepared_emission_valid"] = False
                 debug["upstream_prepared_emission_source"] = None
                 debug["upstream_prepared_emission_reject_reason"] = None
+                if repair_kind in {"strict_social_dialogue_repair", "dialogue_minimal_repair"}:
+                    attach_realization_fallback_family(debug, STRICT_SOCIAL_DETERMINISTIC_FALLBACK)
             debug["final_emission_boundary_repair_used"] = False
             debug["final_emission_boundary_semantic_repair_disabled"] = True
             return repaired, debug
@@ -9400,6 +9412,7 @@ def apply_final_emission_gate(
                 "fallback_kind": "response_type_contract_social_emergency",
                 "fallback_pool": "response_type_contract",
                 "final_emitted_source": "minimal_social_emergency_fallback",
+                "realization_fallback_family": STRICT_SOCIAL_DETERMINISTIC_FALLBACK,
                 "rejection_reasons": list(details.get("rejection_reasons") or [])
                 + list(response_type_debug.get("response_type_rejection_reasons") or []),
             }
@@ -9811,6 +9824,7 @@ def apply_final_emission_gate(
                 fem_patch = out.get("_final_emission_meta")
                 if isinstance(fem_patch, dict):
                     fem_patch["final_emitted_source"] = "minimal_social_emergency_fallback"
+                    attach_realization_fallback_family(fem_patch, STRICT_SOCIAL_DETERMINISTIC_FALLBACK)
                     gtxt = _normalize_text(ic_strict_text)
                     fem_patch["final_text_preview"] = (gtxt[:120] + "…") if len(gtxt) > 120 else gtxt
                     fem_patch["post_gate_mutation_detected"] = pre_gate_text != gtxt
@@ -9869,6 +9883,7 @@ def apply_final_emission_gate(
                     fem_nmo["final_route"] = "replaced"
                     fem_nmo["candidate_validation_passed"] = False
                     fem_nmo["final_emitted_source"] = "minimal_social_emergency_fallback"
+                    attach_realization_fallback_family(fem_nmo, STRICT_SOCIAL_DETERMINISTIC_FALLBACK)
                     gtn = _normalize_text(em_fb)
                     fem_nmo["final_text_preview"] = (gtn[:120] + "…") if len(gtn) > 120 else gtn
                     fem_nmo["post_gate_mutation_detected"] = pre_gate_text != gtn
@@ -9976,6 +9991,9 @@ def apply_final_emission_gate(
             "deterministic_social_fallback_attempted": deterministic_attempted,
             "deterministic_social_fallback_passed": deterministic_passed,
             "final_emitted_source": final_emitted_source,
+            "realization_fallback_family": normalize_realization_fallback_family(
+                str(details.get("realization_fallback_family") or STRICT_SOCIAL_DETERMINISTIC_FALLBACK)
+            ),
             "post_gate_mutation_detected": post_gate_mutation_detected,
             "final_text_preview": (gate_out_text[:120] + "…") if len(gate_out_text) > 120 else gate_out_text,
             "coercion_reason": coercion_reason,
@@ -10768,6 +10786,7 @@ def apply_final_emission_gate(
         "deterministic_social_fallback_attempted": deterministic_attempted,
         "deterministic_social_fallback_passed": deterministic_passed,
         "final_emitted_source": final_emitted_source,
+        "realization_fallback_family": GATE_TERMINAL_REPAIR,
         "fallback_family_used": fallback_family_used,
         "fallback_temporal_frame": fallback_temporal_frame,
         "opening_fallback_context_source": fallback_composition_meta.get("opening_fallback_context_source"),
@@ -10897,6 +10916,7 @@ def apply_final_emission_gate(
         world=world if isinstance(world, dict) else None,
         response_type_debug=response_type_debug,
     )
+    out[FINAL_EMISSION_META_KEY]["realization_fallback_family"] = GATE_TERMINAL_REPAIR
     log_final_emission_trace({**out[FINAL_EMISSION_META_KEY], "stage": "final_emission_gate_replace"})
     return _finalize_emission_output(
         out,

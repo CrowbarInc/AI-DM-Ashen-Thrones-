@@ -29,6 +29,10 @@ from game.storage import (
     SCENE_MOMENTUM_TAG_PREFIX,
 )
 from game.diegetic_fallback_narration import render_scene_momentum_diegetic_append
+from game.realization_provenance import (
+    GPT_BUDGET_OR_PROVIDER_FAILURE,
+    attach_realization_fallback_family,
+)
 from game.clues import get_clue_presentation, get_known_clues_with_presentation
 from game.leads import filter_pending_leads_for_active_follow_surface
 from game.interaction_context import (
@@ -4987,6 +4991,10 @@ def call_gpt(
         err = _classify_upstream_gpt_error(e)
         # Return a safe fallback response that preserves the expected schema so
         # callers can continue without special-casing exceptions.
+        fallback_metadata = {
+            'upstream_api_error': err,
+        }
+        attach_realization_fallback_family(fallback_metadata, GPT_BUDGET_OR_PROVIDER_FAILURE)
         return _attach_model_route_metadata({
             'player_facing_text': 'The game master is temporarily unavailable. Please try again.',
             'tags': [
@@ -5003,9 +5011,7 @@ def call_gpt(
                 f"call_gpt error: {repr(e)} | "
                 f"api_error_class={err['failure_class']}:retryable={err['retryable']}"
             ),
-            'metadata': {
-                'upstream_api_error': err,
-            },
+            'metadata': fallback_metadata,
         },
             selected_model=route.selected_model,
             route_reason=route.route_reason,

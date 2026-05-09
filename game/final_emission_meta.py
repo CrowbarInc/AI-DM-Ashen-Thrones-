@@ -110,6 +110,7 @@ FEM_RESPONSE_TYPE_KEYS: frozenset[str] = frozenset(
         "opening_recovered_via_fallback",
         "fallback_family_used",
         "fallback_temporal_frame",
+        "realization_fallback_family",
     }
 )
 

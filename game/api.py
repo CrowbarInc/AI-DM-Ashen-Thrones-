@@ -96,6 +96,10 @@ from game.fallback_provenance_debug import (
     attach_upstream_fast_fallback_provenance,
     preserve_fallback_provenance_metadata,
 )
+from game.realization_provenance import (
+    GPT_BUDGET_OR_PROVIDER_FAILURE,
+    attach_realization_fallback_family,
+)
 from game.gm import (
     build_messages,
     collect_narration_context_call_kwargs,
@@ -1796,7 +1800,12 @@ def _synthetic_manual_play_gpt_budget_gm() -> dict:
         "world_updates": None,
         "suggested_action": None,
         "debug_notes": "manual_play_gpt_budget_exceeded:safety_cap",
-        "metadata": {"upstream_api_error": err},
+        "metadata": dict(
+            attach_realization_fallback_family(
+                {"upstream_api_error": err},
+                GPT_BUDGET_OR_PROVIDER_FAILURE,
+            )
+        ),
     }
 
 
@@ -2436,6 +2445,7 @@ def _build_gpt_narration_from_authoritative_state(
             "upstream_api_error": dict(api_error),
             "latency_mode": "fast_fallback",
         }
+        attach_realization_fallback_family(out["metadata"], GPT_BUDGET_OR_PROVIDER_FAILURE)
         dbg = out.get("debug_notes") if isinstance(out.get("debug_notes"), str) else ""
         out["debug_notes"] = (
             (dbg + " | " if dbg else "")

@@ -21,6 +21,10 @@ from game.final_emission_text import (
 from game.interaction_context import inspect as inspect_interaction_context
 from game.leads import get_lead, normalize_lead
 from game.final_emission_validators import _contract_bool
+from game.realization_provenance import (
+    UPSTREAM_PREPARED_EMISSION,
+    attach_realization_fallback_family,
+)
 from game.response_policy_contracts import (
     _last_player_input,
     materialize_response_policy_bundle,
@@ -171,12 +175,14 @@ def build_upstream_prepared_emission_payload(
         player_input=player_input,
         resolution=resolution if isinstance(resolution, dict) else None,
     )
-    return {
+    payload = {
         "prepared_answer_fallback_text": answer,
         "prepared_action_fallback_text": action,
         "prepared_sanitizer_empty_fallback_text": "For a breath, the scene stays still.",
         "upstream_prepared_bundle_origin": "upstream_response_repairs.build_upstream_prepared_emission_payload",
     }
+    attach_realization_fallback_family(payload, UPSTREAM_PREPARED_EMISSION)
+    return payload
 
 
 def merge_upstream_prepared_emission_into_gm_output(
@@ -202,6 +208,7 @@ def merge_upstream_prepared_emission_into_gm_output(
     )
     existing = gm_output.get(UPSTREAM_PREPARED_EMISSION_KEY)
     if not isinstance(existing, dict):
+        attach_realization_fallback_family(fresh, UPSTREAM_PREPARED_EMISSION)
         gm_output[UPSTREAM_PREPARED_EMISSION_KEY] = fresh
         return
     merged = dict(fresh)
@@ -211,6 +218,7 @@ def merge_upstream_prepared_emission_into_gm_output(
         if isinstance(v, str) and not v.strip():
             continue
         merged[k] = v
+    attach_realization_fallback_family(merged, UPSTREAM_PREPARED_EMISSION)
     gm_output[UPSTREAM_PREPARED_EMISSION_KEY] = merged
 
 
