@@ -312,6 +312,28 @@ def test_metadata_completeness_envelope_key_present_null_passes() -> None:
     assert sum(out["missing_scenario_spine_identity_by_key"].values()) == 0
 
 
+def test_metadata_completeness_does_not_validate_fem_correctness() -> None:
+    spine = scenario_spine_from_dict(_load_fixture_spine_dict())
+    base = minimal_complete_transcript_turn_meta(
+        spine_id=spine.spine_id,
+        branch_id="branch_social_inquiry",
+        turn_id="t0",
+        turn_index=0,
+    )
+    base["final_emission_meta"] = {"dead_turn": "not-a-valid-fem-dead-turn-object"}
+    turns = [{**_build_clean_social_turns(1)[0], "meta": base}]
+
+    out = evaluate_transcript_metadata_completeness(turns)
+    assert out["metadata_completeness_passed"] is True
+    assert sum(out["missing_by_key"].values()) == 0
+
+    ev = evaluate_scenario_spine_session(spine, "branch_social_inquiry", turns)
+    assert ev["session_health"]["metadata_completeness_passed"] is True
+    assert not any(
+        isinstance(f, dict) and f.get("axis") == "scenario_spine_metadata" for f in ev["detected_failures"]
+    )
+
+
 def test_metadata_normalized_row_does_not_hide_source_absence() -> None:
     """``ensure_transcript_turn_meta_dict`` returns None when source has no meta mapping; completeness still sees the omission on the raw row."""
     raw_row = {**_build_clean_social_turns(1)[0]}

@@ -127,6 +127,10 @@ The matrix helpers `layer_may_read_layer`, `allowed_reader_layers_for_writer`, a
 - **`docs/architecture_ownership_ledger.md`** — seam-level runtime module owners. This file names **phase responsibilities** that those modules must roll up into without blurring layers.
 - **`docs/narrative_integrity_architecture.md`** — emit-path module map; use it for file-level placement, and use **this** document when deciding **which phase** may own a new concern.
 
+### Relationship to architecture audit
+
+`tools/validation_layer_audit.py` is the narrow executable checker for this document's Objective #11 layer-separation contract. `tools/architecture_audit.py` is broader repo governance for subsystem ownership, test/doc/runtime alignment, and patch-accumulation risk. Neither audit proves semantic correctness; both are heuristic maintainer aids.
+
 ---
 
 ## Fenced tolerated residue (compatibility)

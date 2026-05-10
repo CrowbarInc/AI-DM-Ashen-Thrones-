@@ -404,6 +404,22 @@ def test_architecture_audit_report_shape_is_stable(audit_mod, tmp_path):
     assert "file_category_counts" in report["tests_analyzed"]
 
 
+def test_architecture_audit_scope_stays_broad_repo_governance(audit_mod):
+    text = TOOL_PATH.read_text(encoding="utf-8")
+    assert "broad repo governance" in text
+    assert "Objective #11 validation-layer separation checker" in text
+    assert "tools/validation_layer_audit.py" in text
+
+    seed_names = {seed["subsystem_name"] for seed in audit_mod.SUBSYSTEM_SEEDS}
+    assert {
+        "prompt contracts",
+        "response policy contracts",
+        "final emission gate orchestration",
+        "stage diff telemetry",
+        "test ownership / inventory docs",
+    } <= seed_names
+
+
 def test_architecture_audit_infers_runtime_ownership_and_overlap(audit_mod, tmp_path):
     repo = _mini_repo(tmp_path)
     report = audit_mod.analyze_repo(repo)

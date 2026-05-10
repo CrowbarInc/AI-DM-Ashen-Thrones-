@@ -62,6 +62,20 @@ def test_direct_answer_high_for_clear_question_and_answer():
     assert ax["passed"] is True
 
 
+def test_playability_schema_is_turn_evaluator_not_behavioral_gauntlet():
+    out = evaluate_playability(
+        {
+            "player_prompt": "Who commands the watch here?",
+            "gm_text": "Captain Halvar commands the watch; sergeants rotate shifts.",
+        }
+    )
+    _assert_stable_schema(out)
+    assert {"version", "overall", "axes", "summary", "gameplay_validation"} <= set(out)
+    assert "overall_passed" not in out
+    assert "dead_turn_run_report" not in out
+    assert all("reason_codes" not in axis for axis in out["axes"].values())
+
+
 def test_bounded_partial_with_next_lead_passes():
     out = evaluate_playability(
         {

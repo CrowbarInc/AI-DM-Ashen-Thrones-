@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
-"""Heuristic audit for Objective #11 validation-layer ownership drift.
+"""Heuristic audit for Objective #11 validation-layer separation drift.
+
+Scope: the narrow engine/planner/GPT/gate/evaluator layer-separation contract.
+This tool is not the broad repo subsystem governance, test/doc/runtime
+alignment, or patch-accumulation audit; keep that in
+``tools/architecture_audit.py``.
 
 Uses ``game/validation_layer_contracts.py`` as the executable registry and
 ``docs/validation_layer_separation.md`` as the prose contract pointer.

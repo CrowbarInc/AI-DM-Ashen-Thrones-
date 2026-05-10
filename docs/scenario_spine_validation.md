@@ -93,6 +93,15 @@ Ownership / consumers:
   - Runtime enforcement: `game/narration_seam_guards.py` (`enforce_plan_driven_continuation_invariant`)
   - Offline enforcement for scenario-spine: `game/scenario_spine_eval.py` (`evaluate_continuation_convergence_for_turn_rows`)
 
+### Metadata terminology
+
+The transcript `meta` object is an artifact envelope, not a single runtime metadata source.
+
+- **`meta.final_emission_meta`** is a copied FEM/runtime metadata snapshot from the final-emission lane. FEM semantics and correctness remain owned by `game/final_emission_meta.py` and the final-emission tests.
+- **`meta.scenario_spine`** is runner identity metadata: spine id, branch id, turn id/index, smoke/max-turn flags, resume-entry flag, and artifact schema version.
+- **`session_health.metadata_completeness_*`** fields evaluate whether the source transcript row envelope included required keys before normalization filled placeholders. They do not prove FEM correctness, do not validate every nested runtime metadata payload, and are evaluator findings for artifact quality.
+- Metadata completeness adds a `detected_failures` row for visibility when the source envelope has gaps. It does not change the numeric narrative score unless that is explicitly documented separately.
+
 ### Per-turn transcript metadata envelope (artifact completeness)
 
 The runner records a stable **`meta`** object on each transcript / run-debug turn row. **`evaluate_scenario_spine_session`** reports **`session_health.metadata_completeness`**: deterministic counts of **source** omissions **before** `_normalize_turn_row` / `ensure_transcript_turn_meta_dict` add placeholder keys. That way normalized rows cannot hide missing fields.

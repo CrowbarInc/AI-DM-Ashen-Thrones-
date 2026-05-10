@@ -1,8 +1,9 @@
-"""Deterministic, shallow behavioral checks for narration-style transcripts (tests/tooling only).
+"""Deterministic, shallow behavioral regression checks for transcript slices (tests/tooling only).
 
 Inspects only caller-supplied turn dicts; no GPT calls. Dead-turn policy reads
 ``gm_output['_final_emission_meta']['dead_turn']`` (or top-level ``_final_emission_meta``) via
 :func:`game.final_emission_meta.read_dead_turn_from_gm_output` — no local classification.
+This helper is not the canonical playability scorer; it guards short behavioral regressions.
 """
 
 from __future__ import annotations

@@ -115,3 +115,11 @@ It also sets `narrative_authenticity_eval` to `evaluate_narrative_authenticity(t
 ## Related: scenario-spine long-session validation
 
 Playability scores **per turn**; the scenario-spine lane scores **whole-branch session health** (continuity, referents, progression, grounding, branch coherence) via `evaluate_scenario_spine_session`. Separate runner, separate artifacts: **`artifacts/scenario_spine_validation/<UTC>/<spine_id>/<branch_id>/`**. Full operator guide, CLI, Definition-of-Done, and regression commands: **`docs/scenario_spine_validation.md`**.
+
+## Relationship to behavioral gauntlet tests
+
+`game.playability_eval.evaluate_playability` is the canonical per-turn playability evaluator. It returns the playability schema (`overall`, `axes`, `summary`, `gameplay_validation`) and owns product-facing usability axes such as direct answer, player intent, logical escalation, and immersion.
+
+`tests/helpers/behavioral_gauntlet_eval.py` is a test-helper regression harness over short transcript slices. It returns a different helper schema (`overall_passed`, axis rows with `reason_codes`, `dead_turn_run_report`) and owns shallow behavioral regression checks such as neutrality, escalation proportionality, reengagement loops, and local dialogue coherence.
+
+The two may cover similar concepts, but they should not collapse into one owner. Gauntlet tests should not become canonical playability scoring, and playability should not absorb every behavioral regression axis just because both use deterministic text heuristics.

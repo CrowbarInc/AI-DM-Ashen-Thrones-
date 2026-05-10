@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
-"""Static architecture durability audit for the repo.
+"""Static architecture durability audit for broad repo governance.
+
+Scope: broad subsystem ownership, docs/tests/runtime alignment, coupling,
+archaeology/residue, and patch-accumulation risk across the repo. This is not
+the Objective #11 validation-layer separation checker; keep that narrow scope
+in ``tools/validation_layer_audit.py``.
 
 Pure analysis only:
 - no runtime imports from ``game/``

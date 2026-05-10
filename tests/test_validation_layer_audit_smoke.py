@@ -36,8 +36,16 @@ def test_validation_layer_audit_json_mode_structure() -> None:
     assert proc.returncode == 0, proc.stderr
     data = json.loads(proc.stdout)
     assert data.get("executable_registry") == "game.validation_layer_contracts"
+    assert data.get("canonical_contract_doc") == "docs/validation_layer_separation.md"
     assert isinstance(data.get("findings"), list)
     assert "summary" in data
+
+
+def test_validation_layer_audit_scope_stays_objective_11_specific() -> None:
+    text = AUDIT.read_text(encoding="utf-8")
+    assert "Objective #11 validation-layer separation" in text
+    assert "narrow engine/planner/GPT/gate/evaluator layer-separation contract" in text
+    assert "not the broad repo subsystem governance" in text
 
 
 def test_validation_layer_audit_flags_synthetic_evaluator_gate_import(tmp_path: Path) -> None:

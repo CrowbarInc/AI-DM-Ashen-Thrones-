@@ -8,7 +8,9 @@ from typing import Any, Mapping, Sequence
 from game.scenario_spine import ScenarioSpine, scenario_spine_from_dict
 from game.scenario_spine_opening_convergence import evaluate_opening_convergence_for_turn_rows
 
-# Stable per-turn transcript metadata envelope (scenario-spine validation + offline eval).
+# Stable per-turn transcript artifact envelope (scenario-spine validation + offline eval).
+# ``final_emission_meta`` is a copied runtime/FEM payload inside the envelope; this module
+# checks envelope presence, not FEM semantic correctness.
 TRANSCRIPT_TURN_META_ENVELOPE_KEYS: tuple[str, ...] = (
     "narration_seam",
     "opening_convergence",
@@ -106,6 +108,7 @@ def evaluate_transcript_metadata_completeness(
 
     ``ensure_transcript_turn_meta_dict`` / ``_normalize_turn_row`` fill missing keys with placeholders;
     this function inspects the original ``meta`` object only so omissions stay visible.
+    Present-but-null envelope fields are complete; nested FEM correctness belongs to FEM tests.
     """
     turns_checked = len(raw_turns)
     missing_by_key: dict[str, int] = {k: 0 for k in TRANSCRIPT_TURN_META_ENVELOPE_KEYS}
@@ -179,6 +182,7 @@ def evaluate_transcript_metadata_completeness(
         "first_missing_turn_by_scenario_spine_identity_key": dict(
             sorted(first_missing_turn_ss.items(), key=lambda kv: str(kv[0])),
         ),
+        # Evaluator finding about transcript envelope completeness only; not runtime legality.
         "metadata_completeness_passed": passed,
     }
 

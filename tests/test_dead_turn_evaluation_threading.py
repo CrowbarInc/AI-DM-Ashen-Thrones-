@@ -125,6 +125,95 @@ def test_narrative_authenticity_eval_respects_dtd1_dead_turn_not_upstream_inspec
     assert sum(int(v) for v in diag.values() if isinstance(v, (int, float))) > 0
 
 
+def test_narrative_authenticity_eval_does_not_infer_dead_turn_from_api_error_shape() -> None:
+    fem = {
+        "narrative_authenticity_checked": True,
+        "narrative_authenticity_failed": False,
+        "narrative_authenticity_repaired": False,
+        "narrative_authenticity_status": "pass",
+        "narrative_authenticity_reason_codes": [],
+        "narrative_authenticity_metrics": {"generic_filler_score": 0.12, "signal_markers_detected": 2},
+    }
+    payload = {
+        "ok": False,
+        "error": "upstream_api_error: retry_terminal_fallback",
+        "gm_output": {
+            "player_facing_text": "Captain Halvar points to the east gate roster.",
+            "_final_emission_meta": fem,
+            "metadata": {"upstream_api_error": {"failure_class": "transport"}},
+            "retry_exhausted": True,
+            "targeted_retry_terminal": True,
+        },
+    }
+    r = evaluate_narrative_authenticity({}, payload, fem)
+    assert r["gameplay_validation"]["excluded_from_scoring"] is False
+    assert r["gameplay_validation"]["run_valid"] is True
+    assert r["narrative_authenticity_verdict"] != "excluded_from_scoring"
+
+
+def test_playability_eval_excludes_only_from_fem_dead_turn_source() -> None:
+    live_out = evaluate_playability(
+        {
+            "player_prompt": "Who commands the watch here?",
+            "gm_text": "Captain Halvar commands the watch; sergeants rotate shifts.",
+            "ok": False,
+            "api_error": "upstream_api_error retry_terminal_fallback",
+            "gm_output": {
+                "metadata": {"upstream_api_error": {"failure_class": "transport"}},
+                "retry_exhausted": True,
+                "targeted_retry_terminal": True,
+            },
+        }
+    )
+    assert live_out["gameplay_validation"]["excluded_from_scoring"] is False
+    assert live_out["gameplay_validation"]["run_valid"] is True
+    assert live_out["overall"]["score"] > 0
+
+    dead_out = evaluate_playability(
+        {
+            "player_prompt": "Who commands the watch here?",
+            "gm_text": "Captain Halvar commands the watch; sergeants rotate shifts.",
+            "gm_output": {
+                "_final_emission_meta": {
+                    "dead_turn": {
+                        "is_dead_turn": True,
+                        "dead_turn_class": "upstream_api_failure",
+                        "dead_turn_reason_codes": ["upstream_api_error"],
+                        "validation_playable": False,
+                        "manual_test_valid": False,
+                    }
+                }
+            },
+        }
+    )
+    assert dead_out["gameplay_validation"]["excluded_from_scoring"] is True
+    assert dead_out["gameplay_validation"]["run_valid"] is False
+    assert dead_out["overall"] == {"score": 0, "rating": "weak", "passed": False}
+
+
+def test_behavioral_gauntlet_does_not_infer_dead_turn_from_api_error_shape_without_fem() -> None:
+    turns = [
+        {
+            "player_text": "What do I see?",
+            "gm_text": "Mist and a posted notice; guards watch quietly.",
+            "ok": False,
+            "api_error": "upstream_api_error retry_terminal_fallback",
+            "gm_output": {
+                "metadata": {"upstream_api_error": {"failure_class": "transport"}},
+                "retry_exhausted": True,
+                "targeted_retry_terminal": True,
+            },
+        }
+    ]
+    out = evaluate_behavioral_gauntlet(turns, expected_axis={"neutrality"})
+    gv = out["gameplay_validation"]
+    assert gv["excluded_from_scoring"] is False
+    assert gv["run_valid"] is True
+    assert gv["dead_turn_count"] == 0
+    assert out["dead_turn_run_report"]["chat_error_count"] == 1
+    assert out["dead_turn_run_report"]["invalid_for_gameplay_conclusions"] is False
+
+
 def test_playability_all_live_turn_still_scores_normally() -> None:
     out = evaluate_playability(
         {

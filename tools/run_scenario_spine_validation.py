@@ -199,6 +199,8 @@ def build_transcript_turn_meta(
     resume_entry_first_turn: bool,
 ) -> dict[str, Any]:
     """Merge API metadata with a stable per-turn envelope for transcript/run_debug rows."""
+    # Transcript artifact envelope only: mirror FEM, seam, planner, and spine identity data
+    # for offline evaluation. FEM semantics remain owned by game.final_emission_meta.
     out: dict[str, Any] = {k: None for k in TRANSCRIPT_TURN_META_ENVELOPE_KEYS}
     api_md, raw_md = _gm_metadata_from_payload(payload)
     if isinstance(api_md, dict):

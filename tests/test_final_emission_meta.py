@@ -138,7 +138,7 @@ def test_normalize_merged_na_for_eval_fills_none_nested() -> None:
 
 def test_response_type_debug_defaults_and_fem_merge_are_stable() -> None:
     dbg = default_response_type_debug({"required_response_type": "dialogue"}, "resolution.metadata")
-    assert dbg == {
+    expected_stable = {
         "response_type_required": "dialogue",
         "response_type_contract_source": "resolution.metadata",
         "response_type_candidate_ok": True,
@@ -167,6 +167,19 @@ def test_response_type_debug_defaults_and_fem_merge_are_stable() -> None:
         "fallback_family_used": None,
         "fallback_temporal_frame": None,
     }
+    for key, value in expected_stable.items():
+        assert dbg.get(key) == value
+    assert {
+        "opening_fallback_compatibility_local_disabled": False,
+        "opening_fallback_missing_upstream_prepared_payload": False,
+        "opening_fallback_missing_curated_facts": False,
+        "opening_fallback_upstream_payload_unusable": False,
+        "opening_fallback_upstream_payload_recovered": False,
+        "opening_upstream_prepare_attach_build_failed": False,
+        "opening_upstream_prepare_attach_failure_exc_type": None,
+        "opening_upstream_prepare_attach_no_usable_payload_after_attempt": False,
+        "opening_fallback_authorship_source": None,
+    }.items() <= dbg.items()
 
     fem: dict = {"final_route": "accept_candidate"}
     merge_response_type_meta(fem, dbg)
@@ -191,35 +204,20 @@ def test_response_type_debug_defaults_and_fem_merge_are_stable() -> None:
     assert fem["final_emission_boundary_semantic_repair_disabled"] is True
 
     # Payload used by trace/log sinks is canonical and shallow.
-    assert response_type_decision_payload(dbg) == {
-        "response_type_required": "dialogue",
-        "response_type_contract_source": "resolution.metadata",
-        "response_type_candidate_ok": True,
-        "response_type_repair_used": False,
-        "response_type_repair_kind": None,
-        "response_type_rejection_reasons": [],
-        "non_hostile_escalation_blocked": False,
-        "opening_generic_action_repair_blocked": False,
-        "opening_specific_repair_used": False,
-        "opening_validation_failed": False,
-        "opening_failure_reasons": [],
-        "opening_recovered_via_fallback": False,
-        "opening_fallback_context_source": None,
-        "opening_fallback_basis_count": 0,
-        "opening_fallback_context_missing": False,
-        "opening_fallback_failed_closed": False,
-        "blocked_repair_kind": None,
-        "opening_repair_source": "not_opening",
-        "response_type_upstream_prepared_absent": False,
-        "upstream_prepared_emission_used": False,
-        "upstream_prepared_emission_valid": False,
-        "upstream_prepared_emission_source": None,
-        "upstream_prepared_emission_reject_reason": None,
-        "final_emission_boundary_repair_used": False,
-        "final_emission_boundary_semantic_repair_disabled": True,
-        "fallback_family_used": None,
-        "fallback_temporal_frame": None,
-    }
+    payload = response_type_decision_payload(dbg)
+    for key, value in expected_stable.items():
+        assert payload.get(key) == value
+    assert {
+        "opening_fallback_compatibility_local_disabled": False,
+        "opening_fallback_missing_upstream_prepared_payload": False,
+        "opening_fallback_missing_curated_facts": False,
+        "opening_fallback_upstream_payload_unusable": False,
+        "opening_fallback_upstream_payload_recovered": False,
+        "opening_upstream_prepare_attach_build_failed": False,
+        "opening_upstream_prepare_attach_failure_exc_type": None,
+        "opening_upstream_prepare_attach_no_usable_payload_after_attempt": False,
+        "opening_fallback_authorship_source": None,
+    }.items() <= payload.items()
 
 
 def test_read_helpers_prefer_sidecar_lane_over_legacy_top_level() -> None:

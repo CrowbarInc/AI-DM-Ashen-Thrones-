@@ -249,6 +249,8 @@ def run_scenario(
             fem,
         )
         api_ok = bool(payload.get("ok"))
+        # Presentation only: dead-turn validity comes from FEM ``dead_turn`` via
+        # per_turn_dead_turn_visibility, not from ``ok`` / ``error`` strings.
         dead_vis = per_turn_dead_turn_visibility({"_final_emission_meta": fem, "ok": api_ok}, turn_index=idx)
 
         turns_out.append(

@@ -1,8 +1,9 @@
-"""Deterministic playability scoring for validation and gauntlets (advisory only).
+"""Deterministic turn-level player-facing playability scoring (advisory only).
 
 No LLM calls. Reads dead-turn policy from ``_final_emission_meta['dead_turn']`` via
 :mod:`game.final_emission_meta` (DTD1 single source of truth). Tolerates missing/malformed
-payload fields and always returns a stable top-level schema.
+payload fields and always returns a stable top-level schema. This is the product-facing
+turn evaluator; transcript-slice regression checks live in ``tests.helpers.behavioral_gauntlet_eval``.
 """
 
 from __future__ import annotations

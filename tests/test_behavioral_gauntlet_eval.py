@@ -37,6 +37,26 @@ def test_evaluate_behavioral_gauntlet_shape_and_expected_axis_filter():
         assert isinstance(axis["reason_codes"], list)
 
 
+def test_behavioral_gauntlet_schema_is_helper_owned_not_playability_schema():
+    out = evaluate_behavioral_gauntlet(
+        [{"player_text": "What do I see at the gate?", "gm_text": "Mist and a posted notice."}],
+        expected_axis={"neutrality"},
+    )
+    assert {"schema_version", "overall_passed", "axes", "gameplay_validation", "dead_turn_run_report"} <= set(out)
+    assert "version" not in out
+    assert "overall" not in out
+    assert "summary" not in out
+    assert set(out["axes"]["neutrality"]) == {
+        "axis",
+        "passed",
+        "score",
+        "reason_codes",
+        "summary",
+        "evidence_turn_indexes",
+    }
+    assert "signals" not in out["axes"]["neutrality"]
+
+
 def test_evaluate_behavioral_gauntlet_rejects_unknown_axis():
     with pytest.raises(ValueError):
         evaluate_behavioral_gauntlet([{"player_text": "Hi", "gm_text": "Hello."}], expected_axis={"not_a_real_axis"})
