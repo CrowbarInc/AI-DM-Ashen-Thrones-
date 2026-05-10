@@ -2,6 +2,8 @@
 
 Status: **converged / maintenance-grade**.
 
+CI parity: see `.github/workflows/convergence-checks.yml` and `docs/convergence_ci_inventory.md`.
+
 This closeout freezes the evaluator cleanup/convergence pass completed across Blocks A-F. The evaluator layer remains an offline, read-only consumer of finalized outputs, telemetry, and artifacts. It performs no runtime repairs, has no gate legality authority, and has no engine truth authority.
 
 ## Completed Scope

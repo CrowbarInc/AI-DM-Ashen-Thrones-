@@ -1,0 +1,122 @@
+# Convergence CI inventory
+
+**Status:** Planning / **CI parity only**. This document maps closed convergence seams to executable checks. It does **not** change runtime behavior, evaluator scoring, gate legality, or test semantics.
+
+**Non-goals:** No reopening of Evaluator, Gate, or FE-C2 cleanup blocks. Test code and production code are not rewritten here; only CI wiring and pointers are in scope.
+
+**Automation:** Continuous integration parity is enforced by `.github/workflows/convergence-checks.yml`. Planner convergence remains owned by `.github/workflows/content-lint.yml` (see [Planner convergence](#planner-convergence--ctir--narrative-plan--prompt) below)—do not duplicate that step in `convergence-checks.yml`.
+
+---
+
+## Local and CI usage
+
+Run from the **repository root**. GitHub Actions uses the same commands with `python` from `actions/setup-python`. On Windows, if `python` is not on `PATH`, use `py -3` in place of `python` (see `tests/README_TESTS.md`).
+
+**Hard-fail — pytest (matches workflow order):**
+
+```bash
+python -m pytest tests/test_evaluator_convergence_closeout.py -q
+python -m pytest tests/test_dead_turn_evaluation_threading.py tests/test_playability_eval.py tests/test_behavioral_gauntlet_eval.py tests/test_scenario_spine_eval.py tests/test_final_emission_meta.py tests/test_architecture_audit_tool.py tests/test_validation_layer_audit_smoke.py -q
+python -m pytest tests/test_final_emission_boundary_contract.py tests/test_final_emission_boundary_convergence.py -q
+python -m pytest tests/test_gate_convergence_closeout.py -q
+python -m pytest tests/test_validation_coverage_audit.py -q
+python -m pytest tests/test_ownership_registry.py -q
+```
+
+**Hard-fail — strict audits:**
+
+```bash
+python tools/validation_layer_audit.py --strict
+python tools/final_emission_ownership_audit.py --strict
+python tools/validation_coverage_audit.py --strict
+```
+
+**Informational audits (same sequence as CI; non-blocking in Actions via `continue-on-error: true`):**
+
+```bash
+python tools/run_governance_audits.py
+```
+
+Or run each tool individually: `python tools/architecture_audit.py --print-summary`, then `python tools/realization_layer_audit.py`, `python tools/realization_provenance_audit.py`, `python tools/c1_narration_seam_audit.py`, `python tools/ui_mode_separation_audit.py`.
+
+**Planner convergence (not in `convergence-checks.yml`):** `python tools/planner_convergence_audit.py` runs in `.github/workflows/content-lint.yml` only.
+
+---
+
+## Classification legend
+
+| Recommended CI status | Meaning |
+| --- | --- |
+| **Hard-fail** | Step fails the workflow (`continue-on-error: false`). Fix regressions or tooling breaks before merge. |
+| **Informational** | Step runs with `continue-on-error: true` (or advisory-only exit 0 tools); failures surface in logs but do not fail the job until promoted in a later block. |
+| **Deferred** | Not wired yet; documented for future promotion or optional local runs. |
+
+---
+
+## Seam → enforcement matrix
+
+| Closed seam | Closeout / source doc | Pytest slice | Static audit / tool | In CI before Block B | Recommended CI status | Rationale |
+| --- | --- | --- | --- | --- | --- | --- |
+| **Evaluator convergence** | `docs/evaluator_convergence_closeout.md`, `docs/evaluator_convergence_inventory.md` | `tests/test_evaluator_convergence_closeout.py` | — | No | **Hard-fail** | Fast lock on evaluator maintenance-grade invariants. |
+| **Evaluator boundary / governance guards** | Same | `tests/test_dead_turn_evaluation_threading.py`, `tests/test_playability_eval.py`, `tests/test_behavioral_gauntlet_eval.py`, `tests/test_scenario_spine_eval.py`, `tests/test_final_emission_meta.py`, `tests/test_architecture_audit_tool.py`, `tests/test_validation_layer_audit_smoke.py` | — | No | **Hard-fail** | Same slice as closeout doc; protects evaluator-adjacent and audit-smoke coverage without extending evaluator scope. |
+| **FE-C2 / final emission boundary** | `docs/final_emission_ownership_convergence.md` (Block D2), `docs/narrative_integrity_architecture.md` | `tests/test_final_emission_boundary_convergence.py`, `tests/test_final_emission_boundary_contract.py` | `tools/final_emission_ownership_audit.py` | No | **Pytests + ownership audit: Hard-fail** | Convergence scenarios + boundary contract tests; strict ownership audit catches advisory drift signals. |
+| **Gate convergence** | `docs/gate_convergence_closeout.md`, `docs/gate_cleanup_inventory.md` | `tests/test_gate_convergence_closeout.py` | — (gate boundary also covered indirectly by FE-C2 tests and audits) | No | **Hard-fail** | Formal closeout regression slice for gate maintenance grade. |
+| **Validation layer (Objective #11)** | `docs/validation_layer_separation.md`, `docs/validation_layer_audit.md` | `tests/test_validation_layer_audit_smoke.py` (also in evaluator boundary bundle) | `tools/validation_layer_audit.py` | No | **Hard-fail (`--strict`)** | Strict mode fails on `likely_drift`; aligns with doc “CI opt-in” language. |
+| **Validation coverage registry (Objective #12)** | `docs/validation_layer_separation.md`, `tests/TEST_AUDIT.md` | `tests/test_validation_coverage_audit.py` | `tools/validation_coverage_audit.py` | No | **Hard-fail (`--strict`)** | Guard tests lock tool behavior; `--strict` fails on registry validation errors (non-strict CLI exits 0 even when errors print). |
+| **Test ownership / inventory** | `docs/architecture_ownership_ledger.md`, `tests/TEST_CONSOLIDATION_PLAN.md` | `tests/test_ownership_registry.py` | `tools/test_audit.py` | Partial (`content-lint` only) | **Hard-fail** | Registry map stays aligned with governance docs. Same pytest also runs in `content-lint.yml`; overlap is intentional for discoverability. |
+| **Architecture governance (broad)** | `docs/architecture_ownership_ledger.md`, `docs/narrative_integrity_architecture.md` | `tests/test_architecture_audit_tool.py` (included in evaluator boundary bundle) | `tools/architecture_audit.py --print-summary` | No | **Informational** | Heuristic breadth; summary keeps artifacts warm without noisy hard-fail until signals stabilize. |
+| **Narrative realization / failure locality** | `docs/realization_failure_locality_closeout.md` | Guard tests exist (`tests/test_realization_*`) but not part of this minimal CI slice | **`tools/realization_layer_audit.py`** (maps *realization surface* intent), **`tools/realization_provenance_audit.py`** (maps *failure locality / provenance* intent). Repo does **not** ship `realization_surface_audit.py` or `realization_failure_locality_audit.py` under those names. | No | **Informational** | Advisory-only exit 0; large lexical counts—observe drift, do not gate merges yet. |
+| **C1 narration seam** | `docs/narrative_integrity_architecture.md` (cross-links), C1 seam docs | — | `tools/c1_narration_seam_audit.py` | No | **Informational** | AST seam tripwire; may exit 1 on issues—kept informational until noise profile is reviewed. |
+| **UI mode separation (Objective #15)** | `docs/narrative_integrity_architecture.md` | — | `tools/ui_mode_separation_audit.py` | No | **Informational** | Findings print by default without fatal exit unless `--fail-on`; informational tier. |
+
+---
+
+## Planner convergence (CTIR → narrative plan → prompt)
+
+| Item | Detail |
+| --- | --- |
+| **Closeout / doc** | `docs/planner_convergence.md` (and related planner convergence tests referenced in `tests/TEST_AUDIT.md`) |
+| **Pytest** | `tests/test_planner_convergence_static_audit.py`, contract/live pipeline tests—already exercised indirectly when developers run full suites |
+| **Static tool** | `tools/planner_convergence_audit.py` |
+| **Current CI** | **Yes** — `.github/workflows/content-lint.yml` runs `python tools/planner_convergence_audit.py` |
+| **Recommended CI status** | **Stay in `content-lint.yml`** (hard-fail there). **Do not duplicate** in `convergence-checks.yml` to avoid double runtime and conflicting ownership. |
+| **Rationale / future** | Single workflow owns planner convergence. If CI consolidation is desired later, **move** the step from `content-lint.yml` into `convergence-checks.yml` in one PR and remove it from the old workflow—do not run twice. |
+
+---
+
+## Workflow step classification (authoritative)
+
+Aligned with `.github/workflows/convergence-checks.yml`:
+
+### Hard-fail
+
+- `pytest tests/test_evaluator_convergence_closeout.py`
+- Evaluator boundary pytest bundle (dead-turn, playability, behavioral gauntlet, scenario spine, FEM meta, architecture audit tool, validation-layer smoke)
+- `pytest tests/test_final_emission_boundary_contract.py tests/test_final_emission_boundary_convergence.py`
+- `pytest tests/test_gate_convergence_closeout.py`
+- `python tools/validation_layer_audit.py --strict`
+- `python tools/final_emission_ownership_audit.py --strict`
+- `python tools/validation_coverage_audit.py --strict`
+- `pytest tests/test_validation_coverage_audit.py`
+- `pytest tests/test_ownership_registry.py`
+
+### Informational (`continue-on-error: true`)
+
+- `python tools/architecture_audit.py --print-summary`
+- `python tools/realization_layer_audit.py`
+- `python tools/realization_provenance_audit.py`
+- `python tools/c1_narration_seam_audit.py`
+- `python tools/ui_mode_separation_audit.py`
+
+### Deferred / future work
+
+- **`tools/test_audit.py`** — Registry regen and `tests/test_inventory.json` drift checks (`tests/TEST_AUDIT.md`). Not yet in `convergence-checks.yml`; candidate for a future CI slice if runtime is acceptable.
+- **`tools/run_governance_audits.py`** — Thin local runner for informational audits only (`python tools/run_governance_audits.py`). Strict audits and pytest remain separate commands.
+
+---
+
+## Related governance artifacts
+
+- `docs/post_evaluator_next_target_scan.md` — rationale for CI parity as next target.
+- `docs/evaluator_convergence_closeout.md`, `docs/gate_convergence_closeout.md`, `docs/final_emission_ownership_convergence.md`, `docs/validation_layer_separation.md` — one-line CI pointers in each.
+- `tests/TEST_AUDIT.md`, `tests/TEST_CONSOLIDATION_PLAN.md` — broader test inventory (not all wired to CI).

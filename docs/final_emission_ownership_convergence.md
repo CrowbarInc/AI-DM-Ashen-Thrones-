@@ -196,6 +196,8 @@ Tests under `tests/` should prefer **`final_route`**, **`fallback_kind`**, tags,
 
 ### Anti-regression lock-in (Block D2, 2026-04-22)
 
+CI parity: see `.github/workflows/convergence-checks.yml` and `docs/convergence_ci_inventory.md`.
+
 **Goal:** make the shipped C2 boundary **hard to regress silently**.
 
 - **Behavioral invariants** live in `tests/test_final_emission_boundary_convergence.py` (scenario-style gate + strip-only sanitizer cases: thin answer/action with upstream markers, strict-social terminal repair kind, upstream-absent explicit debug, route-illegal stock packaging, meta prefix strip, serialized payload extraction, clean pass-through).

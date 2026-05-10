@@ -5,6 +5,8 @@ This document is the formal stop-point for Blocks A–AA; further changes should
 
 **Companion docs:**
 
+CI parity: see `.github/workflows/convergence-checks.yml` and `docs/convergence_ci_inventory.md`.
+
 - `docs/gate_cleanup_inventory.md` — full per-seam inventory and Block-by-block convergence record (Blocks A–AA).
 - `docs/final_emission_boundary_audit.md` — boundary mutation taxonomy.
 - `docs/final_emission_ownership_convergence.md` — final-emission ownership map.

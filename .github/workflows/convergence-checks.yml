@@ -1,0 +1,107 @@
+# Convergence checks: pytest slices + governance audits for closed seams (Evaluator, Gate,
+# FE-C2, Validation Layer, ownership registry). Does not replace content-lint (planner
+# convergence + Phase 1 lint remain in content-lint.yml).
+#
+# Planner convergence: tools/planner_convergence_audit.py stays ONLY in content-lint.yml.
+# Do not duplicate here.
+#
+# Ubuntu / Actions notes:
+# - Default working directory is the repo root after actions/checkout (POSIX paths in YAML).
+# - Use `python -m pip` / `python -m pytest` so the job uses the interpreter from setup-python.
+# - Audits write under `artifacts/` (created by tools as needed); no upload-artifact unless debugging.
+# - Informational steps each set continue-on-error: true so advisory failures do not mask hard-fail red.
+
+name: Convergence checks
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  convergence-checks:
+    name: convergence-checks
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    env:
+      PYTHONUNBUFFERED: "1"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements.txt
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+
+      # --- Hard-fail (blocking) ---
+
+      - name: Pytest — evaluator convergence closeout
+        run: python -m pytest tests/test_evaluator_convergence_closeout.py -q
+
+      - name: Pytest — evaluator boundary slice
+        run: >-
+          python -m pytest
+          tests/test_dead_turn_evaluation_threading.py
+          tests/test_playability_eval.py
+          tests/test_behavioral_gauntlet_eval.py
+          tests/test_scenario_spine_eval.py
+          tests/test_final_emission_meta.py
+          tests/test_architecture_audit_tool.py
+          tests/test_validation_layer_audit_smoke.py
+          -q
+
+      - name: Pytest — FE-C2 boundary (contract + convergence)
+        run: >-
+          python -m pytest
+          tests/test_final_emission_boundary_contract.py
+          tests/test_final_emission_boundary_convergence.py
+          -q
+
+      - name: Pytest — gate convergence closeout
+        run: python -m pytest tests/test_gate_convergence_closeout.py -q
+
+      - name: Pytest — validation coverage audit guards
+        run: python -m pytest tests/test_validation_coverage_audit.py -q
+
+      - name: Pytest — test ownership registry
+        run: python -m pytest tests/test_ownership_registry.py -q
+
+      - name: Validation layer audit (strict)
+        run: python tools/validation_layer_audit.py --strict
+
+      - name: Final emission ownership audit (strict)
+        run: python tools/final_emission_ownership_audit.py --strict
+
+      - name: Validation coverage audit (strict)
+        run: python tools/validation_coverage_audit.py --strict
+
+      # --- Informational (non-blocking) ---
+
+      - name: Architecture audit — print summary (informational)
+        continue-on-error: true
+        run: python tools/architecture_audit.py --print-summary
+
+      - name: Realization layer audit (informational)
+        continue-on-error: true
+        run: python tools/realization_layer_audit.py
+
+      - name: Realization provenance audit (informational)
+        continue-on-error: true
+        run: python tools/realization_provenance_audit.py
+
+      - name: C1 narration seam audit (informational)
+        continue-on-error: true
+        run: python tools/c1_narration_seam_audit.py
+
+      - name: UI mode separation audit (informational)
+        continue-on-error: true
+        run: python tools/ui_mode_separation_audit.py

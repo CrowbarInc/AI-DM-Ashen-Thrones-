@@ -4,15 +4,15 @@ Advisory only: this report is not CI-enforced and findings are not failures yet.
 Interpret classifications alongside `game.realization_authority`.
 
 ## Summary by Severity
-- INFO: 8945
-- REVIEW: 710
-- HIGH: 1261
+- INFO: 8947
+- REVIEW: 696
+- HIGH: 1300
 
 ## Summary by Category
-- fallback_authorship: 1814
-- prompt_gpt_realization_risk: 1482
-- raw_state_semantic_risk: 6384
-- semantic_reconstruction: 1236
+- fallback_authorship: 1858
+- prompt_gpt_realization_risk: 1533
+- raw_state_semantic_risk: 6335
+- semantic_reconstruction: 1217
 
 ## Top HIGH Findings
 - `game/prompt_context.py:132` fallback_authorship / fallback: from game.fallback_behavior import build_fallback_behavior_contract

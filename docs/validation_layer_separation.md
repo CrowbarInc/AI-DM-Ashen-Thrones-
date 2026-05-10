@@ -180,4 +180,4 @@ Inventory and “would become a violation if…” notes: `docs/validation_layer
 - **Acceptable compatibility residue** — Documented within-layer splits, NA shadow reads, planner structure surfaces, and offline evaluator artifacts that **do not** claim rival ownership of gate legality, engine truth, or `response_delta` repair/metadata.
 - **Actual ownership violations** — Live paths where an offline evaluator or planner module imports gate repair/orchestration to enforce legality; NA importing gate orchestration or owning canonical `response_delta_*` meta; evaluator scores feeding gate pass/fail; or narrative text treated as engine truth without validation.
 
-**Verification:** `tools/validation_layer_audit.py` (non-strict clean on `./game`; `--strict` for CI opt-in), plus regression tests under `tests/test_validation_layer_*`.
+**Verification:** `tools/validation_layer_audit.py` (non-strict clean on `./game`; `--strict` for CI opt-in), plus regression tests under `tests/test_validation_layer_*`. CI parity: `.github/workflows/convergence-checks.yml` and `docs/convergence_ci_inventory.md`.

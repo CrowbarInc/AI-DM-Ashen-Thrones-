@@ -3,20 +3,20 @@
 Advisory only: this report is not CI-enforced and findings are not failures.
 
 ## Summary by Severity
-- INFO: 738
-- REVIEW: 1280
-- HIGH: 958
+- INFO: 731
+- REVIEW: 1317
+- HIGH: 1022
 
 ## Summary by Matched Term
 - `emergency`: 86
-- `fallback`: 1184
+- `fallback`: 1243
 - `final_emitted_source`: 92
-- `gm_output`: 427
+- `gm_output`: 478
 - `player_facing_text`: 219
 - `prepared_action_fallback_text`: 4
 - `prepared_answer_fallback_text`: 3
-- `repair`: 657
-- `terminal`: 260
+- `repair`: 642
+- `terminal`: 259
 - `upstream_prepared_emission`: 44
 
 ## HIGH Findings
