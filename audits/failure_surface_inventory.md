@@ -1,0 +1,94 @@
+# Failure Surface Inventory
+
+Discovery pass for Cycle Track B. Scope is inventory only; no dashboard implementation or runtime changes.
+
+## Replay Layer
+
+| Item | File | Function/Class | Responsibility | Inputs | Outputs | Mutates | Repairs | Observes |
+|---|---|---|---|---|---|---:|---:|---:|
+| Golden turn observation | `tests/helpers/golden_replay.py` | `run_golden_replay`, `_observed_turn` | Runs compact replay turns and projects payload/session/debug/FEM into stable rows. | Scenario id, turn text, tmp path, monkeypatch, optional setup/chat fn. | `scenario_id`, `turn_count`, per-turn observation dicts. | No runtime; test storage setup only. | No | Yes |
+| Dotted-path assertions | `tests/helpers/golden_replay.py` | `assert_golden_turn_observation`, `_lookup_path` | Checks nested fields such as `trace.canonical_entry.target_actor_id`. | Turn mapping, expectation mapping. | Assertion pass/fail with debug context. | No | No | Yes |
+| Drift classification | `tests/helpers/golden_replay.py` | `classify_golden_drift` | Buckets exact, structural, semantic drift. | Observed turn, expectation, optional exact text. | `exact_drift`, `structural_drift`, `semantic_drift`, hashes, status, summary. | No | No | Yes |
+| Exact drift | `tests/helpers/golden_replay.py` | `normalize_golden_text`, `golden_text_hash`, `classify_golden_drift` | Opt-in normalized final-text comparison. | Expected exact text, observed `final_text`. | Hash mismatch row under `exact_drift`. | No | No | Yes |
+| Structural drift | `tests/helpers/golden_replay.py` | `_STRUCTURAL_DRIFT_FIELDS`, `classify_golden_drift` | Route/speaker/FEM/source/fallback/trace field mismatch classification. | Expected structural fields. | Structural drift rows. | No | No | Yes |
+| Semantic drift | `tests/helpers/golden_replay.py` | `_SEMANTIC_DRIFT_FIELDS`, `final_text_has_scaffold_leakage` | Predicate failures: scaffold leakage, forbidden/required text fragments. | Final text, semantic expectation predicates. | Semantic drift rows. | No | No | Yes |
+| Invariant checks | `tests/test_golden_replay.py` | Golden replay scenario tests | Directed question, vocative override, wrong speaker, alias plan, thin action outcome, sanitizer leakage, opening fallback, dialogue lock, three-branch spine. | Monkeypatched GPT responses and seeded state. | Pytest assertions. | Test storage only | No | Yes |
+| Replay exception paths | `tests/helpers/golden_replay.py` | `run_golden_replay`, `assert_golden_turn_observation` | Raises `TypeError` on non-dict chat payload and `AssertionError` on expectation failures. | Chat payload, assertion expectations. | Exception with field path/expected/actual/debug context. | No | No | Yes |
+| Observation projection failures | `tests/helpers/golden_replay.py` | `_observed_turn` | Marks missing replay-visible fields in `unavailable`. | Chat payload, transcript snapshot. | `unavailable` field list. | No | No | Yes |
+| Scenario spine metadata | `game/scenario_spine.py`, `game/scenario_spine_eval.py` | `ScenarioSpine`, `ScenarioBranch`, `ScenarioTurn`, `minimal_complete_transcript_turn_meta` | Represents branch scripts and transcript metadata; structural, not exact-output golden truth. | Spine definitions and transcript turn rows. | Spine dicts and metadata blocks. | No | No | Yes |
+
+## Planner / Routing Layer
+
+| Item | File | Function/Class | Responsibility | Inputs | Outputs | Mutates | Repairs | Observes |
+|---|---|---|---|---|---|---:|---:|---:|
+| Route resolution | `game/api.py` | `chat`, `_run_resolved_turn_pipeline`, `_build_compact_turn_trace` | Orchestrates turn route, canonical entry, compact trace and debug payload. | `ChatRequest`, session, scene, world, parsed/resolved action. | Payload with `resolution`, `debug_traces`, `turn_trace`, route/FEM data. | Yes, session/log/world through pipeline. | Some upstream repair attachment. | Yes |
+| Directed social entry | `game/interaction_context.py` | `resolve_directed_social_entry` | Decides whether input should route to social/dialogue and which actor owns reply. | Player text, session, scene, world, segmented turn. | `should_route_social`, `target_actor_id`, `target_source`, `reason`, `social_turn_contract`. | No direct storage except optional continuity break caller paths. | No | Yes |
+| Route metadata finalization | `game/interaction_context.py` | `finalize_routing_social_turn_contract` | Normalizes route handoff and reply-owner continuity status. | Directed entry output and prior target snapshot. | `social_turn_contract`. | Mutates output dict. | Normalizes | Yes |
+| Dialogue lock routing | `game/api.py`, `game/interaction_context.py` | `should_route_addressed_question_to_social`, `choose_interaction_route` | Keeps addressed questions in social/dialogue lane when valid. | Text, session, scene, world. | Route decision and route reason metadata. | No | No | Yes |
+| Speaker attribution | `game/speaker_contract_enforcement.py` | `get_speaker_selection_contract`, `detect_emitted_speaker_signature`, `validate_emitted_speaker_against_contract` | Reads contract and validates emitted speaker label/ownership. | Candidate text, resolution, speaker contract. | Validation dict with canonical speaker and repair mode. | No | No | Yes |
+| Speaker repair | `game/speaker_contract_enforcement.py` | `enforce_emitted_speaker_with_contract` | Applies terminal legality repair for wrong speaker/forbidden fallback speaker. | Text, resolution, session/world/contract metadata. | Repaired text plus enforcement payload. | No storage; returns text. | Yes | Yes |
+| Dialogue ownership plan | `game/dialogue_social_plan.py` | `build_dialogue_social_plan`, `validate_dialogue_social_plan`, `pregate_attributed_label_matches_dialogue_social_plan` | Structural plan for speaker id, intent, alias labels, writer attribution. | CTIR, social artifacts, referent tracking. | JSON-safe plan and validation errors. | No | No | Yes |
+| Planner continuity | `game/interaction_continuity.py` | `build_interaction_continuity_contract`, `validate_interaction_continuity`, `repair_interaction_continuity` | Detects/repairs uncued speaker switches and continuity breaks in candidate text. | Text, continuity contract, speaker contract. | Validation/repair payload and possible repaired text. | No | Yes | Yes |
+| Invalid transitions | `game/scene_destination_binding.py` | `reconcile_scene_transition_destination`, `evaluate_destination_semantic_compatibility` | Binds normalized action transition targets to declared/known scene destinations. | Normalized action, current scene exits, player text. | Reconciled target metadata and compatibility status. | Mutates action metadata in merge helpers. | Yes, target reconciliation | Yes |
+| Missing route metadata | `tests/helpers/golden_replay.py`, `game/api.py` | `_observed_turn`, trace assembly near `canonical_entry` | Missing route fields become replay `unavailable`; current dashboard can see absence but not always owner. | Payload/debug trace. | `unavailable: ["route_kind", "trace.social_contract_trace"]`. | No | No | Yes |
+
+## Fallback Layer
+
+| Item | File | Function/Class | Responsibility | Inputs | Outputs | Mutates | Repairs | Observes |
+|---|---|---|---|---|---|---:|---:|---:|
+| Fallback behavior contract | `game/fallback_behavior.py` | `build_fallback_behavior_contract` | Defines graceful uncertainty behavior and allowed partial/clarifying fallback shape. | Turn summary, recent log, contracts. | Contract dict. | No | No | Yes |
+| Fallback behavior validator | `game/final_emission_validators.py` | `validate_fallback_behavior` | Rejects meta fallback voice, fabricated authority, thin bounded partials, missing fallback shape. | Text, fallback behavior contract. | Validation dict with failure reasons. | No | No | Yes |
+| Fallback behavior repair | `game/final_emission_repairs.py` | `_apply_fallback_behavior_layer` | Applies bounded repair/replacement when fallback behavior fails. | Text, gm_output, context contracts. | Text plus fallback behavior metadata. | No storage; mutates gm output in gate caller. | Yes | Yes |
+| Diegetic fallback templates | `game/diegetic_fallback_narration.py` | `fallback_template_metadata`, render functions | Owns classified fallback families and deterministic fallback lines. | Scene, resolution, player text, source mode. | Fallback prose and family/temporal metadata. | No | Yes, by emitting substitute text | Yes |
+| Opening fallback composer | `game/opening_deterministic_fallback.py` | `deterministic_opening_fallback_text_and_meta`, `opening_context_from_gm_output` | Shared upstream/gate-compatible scene-opening fallback. | Curated facts/opening context. | Deterministic opening text and meta. | No | Yes | Yes |
+| Upstream prepared emission | `game/upstream_response_repairs.py` | `merge_upstream_prepared_emission_into_gm_output`, `maybe_attach_upstream_prepared_opening_fallback_payload` | Attaches upstream-owned response-type/opening fallback payloads before gate selection. | GM output, resolution, session/scene/world context. | Metadata and prepared emission payload. | Mutates gm output metadata. | Yes | Yes |
+| Strict social fallback | `game/social_exchange_emission.py` | `build_final_strict_social_response`, `social_fallback_line_for_sanitizer`, strict fallback helpers | Produces strict-social terminal dialogue/fallback text and details. | Candidate text, resolution, tags, session, scene, world. | Text and details with source/fallback fields. | No storage | Yes | Yes |
+| Emergency scaffolds | `game/narration_seam_guards.py` | `record_emergency_nonplan_output`, `record_planner_bypass_attempt` | Emits audit metadata for CTIR/plan/prompt failures and terminal repair paths. | GM output, session/path context. | `metadata.narration_seam` rows. | Mutates metadata. | No | Yes |
+| Safe response emitters | `game/final_emission_gate.py`, `game/diegetic_fallback_narration.py`, `game/anti_reset_emission_guard.py` | Terminal fallback selection, `local_exchange_continuation_fallback_line`, global/observe fallbacks | Replace illegal/empty output with visibility-safe deterministic lines. | Candidate output and route/context. | Replacement player-facing text and FEM source/fallback. | Mutates gm_output text/tags/meta. | Yes | Yes |
+| Stock-line emitters | `game/diegetic_fallback_narration.py`, `game/anti_reset_emission_guard.py`, `game/output_sanitizer.py` | Template renderers and `_simple_diegetic_fallback` | Short fallback lines for observe/social/continuation/sanitizer paths. | Sentence/context/scene. | Stock prose. | No | Yes | Yes |
+| Sanitizer recovery paths | `game/output_sanitizer.py` | `_diegetic_uncertainty_fallback`, `_rewrite_line`, `sanitize_output_text` | Converts scaffold/internal/procedural leakage into diegetic fallback or strips it. | Text and sanitizer context. | Sanitized text plus optional debug events. | No storage; caller mutates output. | Yes | Yes |
+
+## Emission Layer
+
+| Item | File | Function/Class | Responsibility | Inputs | Outputs | Mutates | Repairs | Observes |
+|---|---|---|---|---|---|---:|---:|---:|
+| Final emission orchestration | `game/final_emission_gate.py` | `apply_final_emission_gate` | Main legality/fallback/source/meta orchestrator for final GM output. | GM output, resolution, session, scene id/envelope, world. | Finalized gm output with text/tags/internal FEM. | Yes, gm_output dict. | Yes | Yes |
+| Finalization boundary | `game/final_emission_gate.py` | `_finalize_emission_output` | Packages sidecar/internal state and runs final output path. | GM output plus fast-path flag. | Public gm output with internal lanes. | Yes | Yes, late sanitizer/final packaging | Yes |
+| FEM metadata | `game/final_emission_meta.py` | `ensure_final_emission_meta_dict`, `patch_final_emission_meta`, `read_final_emission_meta_*` | Canonical final-emission metadata write/read surfaces. | GM output or turn payload. | FEM dict or normalized observability view. | Write helpers mutate gm_output. | No | Yes |
+| Stage diffs | `game/stage_diff_telemetry.py` | `record_stage_snapshot`, `record_stage_transition`, `build_stage_diff_observability_events` | Compare-ready snapshots/transitions of text/source/fallback/repair flags. | GM output before/after stages. | `metadata.stage_diff_telemetry`, observability events. | Yes, metadata. | No | Yes |
+| Formatting transforms | `game/final_emission_text.py`, `game/output_sanitizer.py` | `_normalize_text`, whitespace/sentence split helpers | Normalize whitespace and sentence packaging. | Text. | Normalized text. | No | Sometimes strips | Yes |
+| Output rewriting | `game/output_sanitizer.py` | `_rewrite_line`, `_rewrite_instructional_sentence`, `rewrite_analytical_sentence`, `_rewrite_directive_sentence` | Rewrites internal/instructional/analytical sentences into diegetic surface. | Sentence/context. | Rewritten sentence. | No | Yes | Yes |
+| Late-stage repair systems | `game/final_emission_gate.py`, `game/final_emission_repairs.py`, `game/acceptance_quality.py`, `game/player_facing_narration_purity.py`, `game/interaction_continuity.py` | Gate stack layer calls and minimal repair helpers | Apply legal visibility/quality/continuity repairs after planning/GPT. | Candidate text and contracts. | Mutated final text + layer meta. | Yes via gate | Yes | Yes |
+
+## Validation Layer
+
+| Item | File | Function/Class | Responsibility | Inputs | Outputs | Mutates | Repairs | Observes |
+|---|---|---|---|---|---|---:|---:|---:|
+| Scene validation | `game/validation.py` | `collect_scene_validation_issues`, `validate_scene`, `validate_all_scenes` | Strict scene schema/link/clue/action validation. | Scene envelope and known ids. | Issues or `SceneValidationError`. | No | No | Yes |
+| Schema contracts | `game/schema_contracts.py` | `normalize_*`, `validate_*`, `adapt_legacy_*` | Canonical normalization/validation for engine result, world update, affordance, target, clue, project, clock. | Raw mappings. | Normalized dicts, validation reason lists. | No | Yes in returned object | Yes |
+| Response type gating | `game/response_type_gating.py` | `derive_response_type_contract`, `compact_response_type_contract` | Derives required output type and guard policy. | Resolution, normalized action, player text, segmented turn. | `ResponseTypeContract`/compact dict. | No | No | Yes |
+| Response policy contracts | `game/response_policy_contracts.py` | `materialize_response_policy_bundle`, resolve/coerce helpers | Materializes shipped policy contracts. | Resolution/gm output metadata. | Contract bundle. | No | No | Yes |
+| Final emission validators | `game/final_emission_validators.py` | `validate_answer_completeness`, `validate_fallback_behavior`, `validate_response_delta`, `validate_social_response_structure`, `validate_referent_clarity` | Deterministic legality predicates for final text. | Text, contracts/artifacts/gm_output. | Validation dicts, failure/warning reasons. | No | No | Yes |
+| Narrative/output guards | `game/anti_railroading.py`, `game/context_separation.py`, `game/tone_escalation.py`, `game/player_facing_narration_purity.py` | `build_*_contract`, `validate_*`, repair hints/minimal repairs | Guard agency, topic hijack, tone escalation, player-facing purity. | Text plus contract context. | Validation and hint payloads; some minimal repaired text. | No | Some modules return repaired text | Yes |
+| State authority guards | `game/state_authority.py` | `assert_owner_can_mutate_domain`, `assert_cross_domain_write_allowed`, `build_state_mutation_trace` | Domain ownership and mutation guard registry. | Owner module/domain/cross-domain write. | Exception or mutation trace dict. | No | No | Yes |
+| Narration seam guards | `game/narration_seam_guards.py` | `enforce_plan_driven_continuation_invariant`, `require_narration_plan_bundle_for_ctir_turn`, stamp verification | Guards CTIR-to-plan-to-prompt path. | CTIR, bundle, prompt/debug context. | Metadata/exception-like status rows. | Mutates metadata. | No | Yes |
+
+## Evaluator Layer
+
+| Item | File | Function/Class | Responsibility | Inputs | Outputs | Mutates | Repairs | Observes |
+|---|---|---|---|---|---|---:|---:|---:|
+| Scenario spine evaluator | `game/scenario_spine_eval.py` | `_EvalContext`, `evaluate_scenario_spine_session`, branch/metadata evaluators | Scores branch/session health, metadata completeness, degradation, continuity/referent/progression. | Transcript turn rows and spine. | Score, classification, failures, warnings. | No | No | Yes |
+| Playability evaluator | `game/playability_eval.py` | `evaluate_playability`, `rollup_playability_gameplay_validation` | Scores direct answer, intent, escalation, immersion and summarizes failures/warnings. | Turn payload. | Scores, pass/fail, summary, gameplay validation. | No | No | Yes |
+| Narrative authenticity evaluator | `game/narrative_authenticity_eval.py` | `evaluate_narrative_authenticity`, `build_evaluator_observability_events` | Harness-only scoring and observability for authenticity/rumor/echo behavior. | Payload/response plus FEM. | Scores/verdict/events. | No | No | Yes |
+| Behavioral gauntlet evaluator | `tests/helpers/behavioral_gauntlet_eval.py` | `evaluate_behavioral_gauntlet` and axis evaluators | Regression evaluator for neutrality, escalation, reengagement, dialogue coherence. | Transcript rows. | Axis scores, failures, warnings. | No | No | Yes |
+| Behavioral runtime evaluators | `game/behavioral_evaluators/*.py` | `evaluate_intent_fulfillment`, `evaluate_player_agency`, `evaluate_session_cohesion`, `maybe_attach_*` | Heuristic session/turn quality evaluators; optional attachment into debug lanes. | Turn packet, final output, turn history/session. | Score dicts and notes. | `maybe_attach_*` mutates session/debug. | No | Yes |
+| Synthetic scoring | `tests/helpers/synthetic_scoring.py` | `score_synthetic_run`, `detect_soft_lock` | Synthetic-player run summarization and soft-lock/progress signals. | Synthetic run result. | Score dict and summary. | No | No | Yes |
+
+## Replay Failure Signals Currently Visible
+
+- Assertion types: `require_present`, `allow_unavailable`, `equals`, `one_of`, `not_equals`, `text_must_include`, `text_must_not_include`, `scaffold_leakage`, optional `exact_text`.
+- Drift categories: `exact_drift`, `structural_drift`, `semantic_drift`.
+- Invariant checks: route kind, selected speaker, canonical target, social contract route, final emitted source, fallback family, response-type repair, opening fallback, scaffold leakage.
+- Exception paths: non-dict chat payload, unexpected unavailable fields, absent required fields, exact/allowed/forbidden mismatches, text fragment mismatches.
+- Projection failures: missing route/FEM/trace fields become `unavailable`; useful but sometimes owner-ambiguous.
+- Dotted-path failures: nested trace/FEM paths are checked with `_lookup_path` and produce field-level assertion messages.

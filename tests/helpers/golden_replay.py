@@ -12,12 +12,21 @@ from pathlib import Path
 from typing import Any, Callable, Mapping
 
 from game.api import chat
-from game.final_emission_meta import read_final_emission_meta_from_turn_payload
+from game.final_emission_meta import (
+    normalize_final_emission_meta_for_observability,
+    read_emission_debug_lane_from_turn_payload,
+    read_final_emission_meta_from_turn_payload,
+)
 from game.models import ChatRequest
 from game.output_sanitizer import resembles_serialized_response_payload
 from game import storage
 
 from tests.debug_trace_utils import latest_compact_debug_trace_entry
+from tests.helpers.failure_classifier import classify_replay_failure
+from tests.helpers.failure_dashboard_report import (
+    failure_dashboard_requested,
+    record_failure_dashboard_rows,
+)
 from tests.helpers.transcript_runner import (
     compact_snapshot_summary,
     latest_target_id,
@@ -370,6 +379,22 @@ def classify_golden_drift(
         "structural_drift": len(out["structural_drift"]),
         "semantic_drift": len(out["semantic_drift"]),
     }
+    drift_rows: list[dict[str, Any]] = []
+    for bucket in ("exact_drift", "structural_drift", "semantic_drift"):
+        for row in out[bucket]:
+            enriched = dict(row)
+            enriched["drift_bucket"] = bucket
+            enriched["replay_tags"] = [bucket]
+            enriched["observed_text_hash"] = out.get("observed_text_hash")
+            drift_rows.append(enriched)
+    out["failure_classifications"] = classify_replay_failure(
+        scenario_id=str(observed.get("scenario_id") or ""),
+        turn_index=int(observed.get("turn_index") or 0),
+        observed_turn=observed,
+        drift_rows=drift_rows,
+    )
+    if failure_dashboard_requested() and observed.get("scenario_id") and observed.get("turn_index") is not None:
+        record_failure_dashboard_rows(out["failure_classifications"])
     return out
 
 
@@ -380,8 +405,8 @@ def render_golden_replay_markdown_report(rows: list[Mapping[str, Any]], *, title
         "",
         "Exact prose comparison is opt-in. This report records structural and predicate-level observations for drift review.",
         "",
-        "| Scenario | Mode | Turns | Status | Drift | Sources | Fallback | Unavailable | Invariants |",
-        "|---|---:|---:|---:|---|---|---|---|---|",
+        "| Scenario | Mode | Turns | Status | Drift | Classifications | Sources | Fallback | Unavailable | Invariants |",
+        "|---|---:|---:|---:|---|---|---|---|---|---|",
     ]
     for row in sorted(rows, key=lambda r: str(r.get("scenario_id") or "")):
         drift = row.get("drift")
@@ -393,9 +418,19 @@ def render_golden_replay_markdown_report(rows: list[Mapping[str, Any]], *, title
                 f"semantic={int(summary.get('semantic_drift') or 0)}"
             )
             status = str(drift.get("status") or row.get("status") or "")
+            classifications = drift.get("failure_classifications")
+            if isinstance(classifications, list):
+                classifications_s = ", ".join(
+                    f"{item.get('category')}:{item.get('primary_owner')}:{item.get('severity')}"
+                    for item in classifications
+                    if isinstance(item, Mapping)
+                )
+            else:
+                classifications_s = ""
         else:
             drift_s = str(row.get("drift_summary") or "")
             status = str(row.get("status") or "")
+            classifications_s = ""
         sources = row.get("final_emitted_source")
         if isinstance(sources, (list, tuple)):
             sources_s = ", ".join(str(x) for x in sources if str(x).strip()) or "none"
@@ -419,6 +454,7 @@ def render_golden_replay_markdown_report(rows: list[Mapping[str, Any]], *, title
                     str(row.get("turn_count") or ""),
                     status or "unknown",
                     drift_s or "not-classified",
+                    classifications_s or "none",
                     sources_s,
                     fallback_s,
                     unavailable_s or "none",
@@ -452,6 +488,53 @@ def _first_present(mapping: Mapping[str, Any], keys: tuple[str, ...]) -> Any:
     return None
 
 
+def _has_path(obj: Mapping[str, Any], path: str) -> bool:
+    cur: Any = obj
+    for part in str(path or "").split("."):
+        if not isinstance(cur, Mapping) or part not in cur:
+            return False
+        cur = cur.get(part)
+    return True
+
+
+def _find_nested_mapping(root: Mapping[str, Any], key: str) -> dict[str, Any]:
+    stack: list[Any] = [root]
+    seen = 0
+    while stack and seen < 200:
+        seen += 1
+        cur = stack.pop()
+        if not isinstance(cur, Mapping):
+            continue
+        value = cur.get(key)
+        if isinstance(value, Mapping):
+            return dict(value)
+        for child in cur.values():
+            if isinstance(child, Mapping):
+                stack.append(child)
+            elif isinstance(child, list):
+                stack.extend(item for item in child if isinstance(item, Mapping))
+    return {}
+
+
+def _find_nested_list(root: Mapping[str, Any], key: str) -> list[Any]:
+    stack: list[Any] = [root]
+    seen = 0
+    while stack and seen < 200:
+        seen += 1
+        cur = stack.pop()
+        if not isinstance(cur, Mapping):
+            continue
+        value = cur.get(key)
+        if isinstance(value, list):
+            return list(value)
+        for child in cur.values():
+            if isinstance(child, Mapping):
+                stack.append(child)
+            elif isinstance(child, list):
+                stack.extend(item for item in child if isinstance(item, Mapping))
+    return []
+
+
 def _observed_turn(
     *,
     scenario_id: str,
@@ -461,6 +544,8 @@ def _observed_turn(
     resolution = payload.get("resolution") if isinstance(payload.get("resolution"), Mapping) else {}
     social = resolution.get("social") if isinstance(resolution.get("social"), Mapping) else {}
     fem = read_final_emission_meta_from_turn_payload(payload)
+    fem_normalized = normalize_final_emission_meta_for_observability(fem)
+    emission_debug_lane = read_emission_debug_lane_from_turn_payload(payload)
     trace = _trace_from_payload_or_snapshot(payload, snap)
     turn_trace = trace.get("turn_trace") if isinstance(trace.get("turn_trace"), Mapping) else {}
     social_contract_trace = (
@@ -504,6 +589,7 @@ def _observed_turn(
     response_type_candidate_ok = _first_present(fem, ("response_type_candidate_ok",))
     response_type_repair_used = _first_present(fem, ("response_type_repair_used",))
     response_type_repair_kind = _first_present(fem, ("response_type_repair_kind",))
+    post_gate_mutation_detected = _first_present(fem, ("post_gate_mutation_detected",))
     opening_recovered_via_fallback = _first_present(fem, ("opening_recovered_via_fallback",))
     opening_fallback_authorship_source = _first_present(fem, ("opening_fallback_authorship_source",))
     fallback_family = _first_present(
@@ -511,8 +597,50 @@ def _observed_turn(
         ("fallback_family_used", "realization_fallback_family"),
     )
     fallback_temporal_frame = _first_present(fem, ("fallback_temporal_frame",))
+    stage_diff = _find_nested_mapping(payload, "stage_diff_telemetry")
+    sanitizer_debug = _find_nested_list(payload, "sanitizer_debug")
+    sanitizer_trace = _find_nested_mapping(payload, "sanitizer_trace")
+    sanitizer_mode = _first_present(
+        sanitizer_trace,
+        ("sanitizer_boundary_mode", "mode"),
+    ) or _lookup_path(payload, "gm_output.metadata.sanitizer_boundary_mode")
+    sanitizer_event_count = len(sanitizer_debug) if sanitizer_debug else None
+    sanitizer_changed_count = sum(
+        1
+        for event in sanitizer_debug
+        if isinstance(event, Mapping)
+        and any(token in str(event.get("event") or "") for token in ("dropped", "rewritten", "rewrite", "strip"))
+    ) if sanitizer_debug else None
+    sanitizer_rewrite_used = bool(sanitizer_changed_count) if sanitizer_changed_count is not None else None
 
     final_text = str(snap.get("gm_text") or "")
+    raw_signal_presence = {
+        "route_kind": route_kind is not None or _has_path(payload, "resolution.kind") or _has_path(trace, "turn_trace.social_contract_trace.route_selected"),
+        "selected_speaker_id": selected_speaker_id is not None,
+        "final_emitted_source": "final_emitted_source" in fem,
+        "response_type_required": "response_type_required" in fem,
+        "response_type_candidate_ok": "response_type_candidate_ok" in fem,
+        "response_type_repair_used": "response_type_repair_used" in fem,
+        "fallback_family": "fallback_family_used" in fem or "realization_fallback_family" in fem,
+        "trace.canonical_entry": bool(canonical_entry),
+        "trace.turn_trace": bool(turn_trace),
+        "trace.social_contract_trace": bool(social_contract_trace),
+    }
+    normalized_signal_presence = {
+        "final_emitted_source": "final_emitted_source" in fem_normalized,
+        "response_type_required": "response_type_required" in fem_normalized,
+        "response_type_candidate_ok": "response_type_candidate_ok" in fem_normalized,
+        "response_type_repair_used": "response_type_repair_used" in fem_normalized,
+        "fallback_family": "fallback_family_used" in fem_normalized or "realization_fallback_family" in fem_normalized,
+    }
+    missing_source_by_field = {}
+    for field, raw_present in raw_signal_presence.items():
+        if raw_present is True and field in normalized_signal_presence and normalized_signal_presence[field] is False:
+            missing_source_by_field[field] = "normalized_view_missing_raw_present"
+        elif raw_present is True:
+            missing_source_by_field[field] = "projection_missing_raw_present"
+        elif raw_present is False:
+            missing_source_by_field[field] = "runtime_missing_raw_absent"
     observed = {
         "scenario_id": scenario_id,
         "turn_index": snap.get("turn_index"),
@@ -527,11 +655,24 @@ def _observed_turn(
         "response_type_candidate_ok": response_type_candidate_ok,
         "response_type_repair_used": response_type_repair_used,
         "response_type_repair_kind": response_type_repair_kind,
+        "post_gate_mutation_detected": post_gate_mutation_detected,
+        "strict_social_active": _first_present(fem, ("strict_social_active",)),
+        "speaker_contract_enforcement_reason": _first_present(fem, ("speaker_contract_enforcement_reason",)),
+        "fallback_behavior_repaired": _first_present(fem, ("fallback_behavior_repaired",)),
+        "fallback_behavior_repair_kind": _first_present(fem, ("fallback_behavior_repair_kind",)),
+        "narrative_authenticity_repair_mode": _first_present(fem, ("narrative_authenticity_repair_mode",)),
+        "stage_diff": stage_diff,
+        "sanitizer_mode": sanitizer_mode,
+        "sanitizer_event_count": sanitizer_event_count,
+        "sanitizer_changed_count": sanitizer_changed_count,
+        "sanitizer_rewrite_used": sanitizer_rewrite_used,
+        "sanitizer_leak_terms": ["scaffold_leakage"] if final_text_has_scaffold_leakage(final_text) else [],
         "opening_recovered_via_fallback": opening_recovered_via_fallback,
         "opening_fallback_authorship_source": opening_fallback_authorship_source,
         "fallback_family": fallback_family,
         "fallback_temporal_frame": fallback_temporal_frame,
         "scaffold_leakage": final_text_has_scaffold_leakage(final_text),
+        "final_text_hash": golden_text_hash(final_text),
         "trace": {
             "canonical_entry_path": trace.get("canonical_entry_path"),
             "canonical_entry_reason": trace.get("canonical_entry_reason"),
@@ -541,6 +682,12 @@ def _observed_turn(
             "social_contract_trace": dict(social_contract_trace),
         },
         "snapshot_summary": compact_snapshot_summary(snap),
+        "raw_signal_presence": raw_signal_presence,
+        "normalized_signal_presence": normalized_signal_presence,
+        "missing_source_by_field": missing_source_by_field,
+        "fem_raw_keys": sorted(str(k) for k in fem.keys()),
+        "fem_normalized_keys": sorted(str(k) for k in fem_normalized.keys()),
+        "emission_debug_lane_keys": sorted(str(k) for k in emission_debug_lane.keys()),
     }
     observed["unavailable"] = sorted(
         key
@@ -636,4 +783,23 @@ def format_golden_replay_debug(result: Mapping[str, Any]) -> str:
                 f"turn[{turn.get('turn_index')}].snapshot_summary: {turn.get('snapshot_summary')}",
             ]
         )
+    drift = result.get("drift") if isinstance(result.get("drift"), Mapping) else {}
+    classifications = drift.get("failure_classifications") if isinstance(drift, Mapping) else None
+    if isinstance(classifications, list) and classifications:
+        lines.append("failure_classifications:")
+        for row in classifications:
+            if not isinstance(row, Mapping):
+                continue
+            lines.append(
+                "  "
+                + ", ".join(
+                    [
+                        f"turn={row.get('turn_index')!r}",
+                        f"category={row.get('category')!r}",
+                        f"owner={row.get('primary_owner')!r}",
+                        f"severity={row.get('severity')!r}",
+                        f"investigate_first={row.get('investigate_first')!r}",
+                    ]
+                )
+            )
     return "\n".join(lines)

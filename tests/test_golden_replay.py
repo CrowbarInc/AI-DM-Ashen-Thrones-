@@ -335,7 +335,7 @@ def test_golden_markdown_report_renderer_is_compact_and_deterministic():
 
     assert report.index("| alpha |") < report.index("| zeta |")
     assert "Exact prose comparison is opt-in" in report
-    assert "| Scenario | Mode | Turns | Status | Drift |" in report
+    assert "| Scenario | Mode | Turns | Status | Drift | Classifications |" in report
 
 
 def test_golden_replay_directed_npc_question_structural_invariants(tmp_path, monkeypatch):

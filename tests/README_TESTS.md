@@ -206,6 +206,75 @@ python -m pytest -m golden_replay -q
 
 The current baseline artifact lives at [`audits/golden_replay_baseline_2026-05-11.md`](../audits/golden_replay_baseline_2026-05-11.md).
 
+## Failure Classification Dashboard
+
+The failure classification dashboard is a replay-side diagnostic layer for golden replay drift.  It turns existing golden replay drift rows plus replay-visible observation fields into deterministic rows with category, severity, owner, and first investigation target.
+
+It is additive to golden replay: replay assertions still decide pass/fail, while the classifier explains classified failures when drift rows exist.  The dashboard consumes existing signals such as route/speaker fields, FEM metadata, fallback metadata, unavailable fields, and replay tags.  It does not call runtime systems or mutate game behavior.
+
+Run the classifier-focused tests from repo root:
+
+```bash
+python -m pytest tests/test_failure_classifier.py -q
+```
+
+Generate the latest dashboard artifact intentionally:
+
+```bash
+python -m pytest -m golden_replay -q --write-failure-dashboard
+```
+
+or with the environment variable:
+
+```bash
+ASHEN_WRITE_FAILURE_DASHBOARD=1 python -m pytest -m golden_replay -q
+```
+
+Both opt-in paths write [`audits/failure_dashboard_latest.md`](../audits/failure_dashboard_latest.md). Normal test runs do not write this artifact. If no replay failures are classified, the artifact says `No replay failures classified.`
+
+Owner meanings are deterministic diagnostic ownership labels. The primary owner is the earliest legitimate fault location visible from replay signals; the secondary owner is optional boundary context. Examples include `route`, `speaker`, `fallback`, `emission`, `sanitizer`, `validator`, `projection`, `continuity`, and `replay`.
+
+What the dashboard does **not** do:
+
+- It is not a live runtime telemetry system.
+- It is not an evaluator, scoring layer, or AI judge.
+- It does not repair output, change routing, change speaker behavior, or alter final emission.
+- It does not infer hidden runtime state beyond existing replay predicates and projected metadata.
+
+### Controlled Failure Dashboard Probes
+
+Controlled failure probes are known-bad replay-shaped rows used to validate the dashboard itself. They do **not** modify production fixtures, golden replay baseline scenarios, runtime generation, routing, speaker behavior, sanitizer behavior, or final emission.
+
+They are opt-in because they intentionally model failures. A normal full test run collects them as skipped unless you explicitly ask for the probe suite.
+
+Run the probe file directly:
+
+```bash
+python -m pytest tests/test_failure_dashboard_controlled_failures.py -q
+```
+
+or by marker:
+
+```bash
+python -m pytest -m failure_dashboard_probe -q
+```
+
+Generate a latest dashboard from the probe rows:
+
+```bash
+python -m pytest -m failure_dashboard_probe -q --write-failure-dashboard
+```
+
+The committed sample artifact is [`audits/failure_dashboard_probe_sample.md`](../audits/failure_dashboard_probe_sample.md). It demonstrates category, severity, owners, investigation targets, replay tags, evidence, and unavailable-field handling for deterministic known-bad cases.
+
+### Failure Classification Contract
+
+The dashboard taxonomy is contract-locked in [`tests/failure_classification_contract.py`](failure_classification_contract.py). That file defines the allowed categories, owners, severities, replay tags, source-family tags, required row fields, and optional evidence fields.
+
+New classifier rules that introduce a category, owner, severity, replay tag, source family, or evidence field must update the contract and the contract tests in [`tests/test_failure_classification_contract.py`](test_failure_classification_contract.py). The validation helper `validate_failure_classification_row(...)` checks emitted rows before dashboard rendering, so invalid taxonomy or missing required fields fail near the report boundary.
+
+The controlled failure probes verify behavior on known-bad rows; the contract tests prevent silent drift in row shape, taxonomy, owners, severities, replay tags, and key dashboard columns.
+
 ## Full lane
 
 **When:** Pre-merge, milestones, or whenever you need the full regression surface (transcript harnesses, gauntlets, expensive flows).
