@@ -188,6 +188,24 @@ These tests:
 pytest tests/test_playability_smoke.py -q
 ```
 
+## Golden replay
+
+Golden replay protects canonical turn-routing and final-emission invariants across repair cycles: speaker/target selection, route kind, FEM/fallback metadata, scaffold leakage, action/answer survival, and compact scenario-spine branch structure. It does **not** lock exact final prose by default; exact text comparison is opt-in, while structural drift is the primary signal.
+
+From repo root:
+
+```bash
+python -m pytest tests/test_golden_replay.py -q
+```
+
+The suite is marked `golden_replay`, so this equivalent marker filter also works:
+
+```bash
+python -m pytest -m golden_replay -q
+```
+
+The current baseline artifact lives at [`audits/golden_replay_baseline_2026-05-11.md`](../audits/golden_replay_baseline_2026-05-11.md).
+
 ## Full lane
 
 **When:** Pre-merge, milestones, or whenever you need the full regression surface (transcript harnesses, gauntlets, expensive flows).
