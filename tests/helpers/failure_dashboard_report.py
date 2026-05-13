@@ -117,19 +117,47 @@ def _cell(value: Any) -> str:
 
 def _evidence_cell(row: Mapping[str, Any]) -> str:
     parts: list[str] = []
+    if row.get("prepared_emission_owner") == "upstream_prepared_emission":
+        if row.get("upstream_prepared_emission_valid") is False:
+            reason = row.get("upstream_prepared_emission_reject_reason") or "unknown"
+            parts.append(f"prepared_emission=rejected reason={reason}")
+        else:
+            valid = row.get("upstream_prepared_emission_valid")
+            source = row.get("upstream_prepared_emission_source") or "unknown"
+            parts.append(f"prepared_emission=used valid={valid} source={source}")
     evidence_keys = (
         ("sublayer", "emission_sublayer"),
         ("repair", "repair_kind"),
+        ("lineage", "final_emission_mutation_lineage"),
+        ("opening_owner", "opening_fallback_owner_bucket"),
         ("mutation", "mutation_source"),
         ("missing", "missing_source_kind"),
         ("sanitizer_mode", "sanitizer_mode"),
         ("sanitizer_events", "sanitizer_event_count"),
         ("sanitizer_changed", "sanitizer_changed_count"),
+        ("sanitizer_empty", "sanitizer_empty_fallback_used"),
+        ("sanitizer_empty_source", "sanitizer_empty_fallback_source"),
+        ("sanitizer_empty_owner", "sanitizer_empty_fallback_owner"),
+        ("sanitizer_lineage_mode", "sanitizer_lineage_mode"),
+        ("sanitizer_lineage_changed", "sanitizer_lineage_changed_count"),
+        ("sanitizer_lineage_dropped", "sanitizer_lineage_dropped_count"),
+        ("sanitizer_lineage_empty", "sanitizer_lineage_empty_fallback_used"),
+        ("sanitizer_lineage_legacy", "sanitizer_lineage_legacy_rewrite_active"),
+        ("strict_social_fallback", "sanitizer_strict_social_fallback_used"),
+        ("strict_social_selection_owner", "sanitizer_strict_social_selection_owner"),
+        ("strict_social_prose_owner", "sanitizer_strict_social_prose_owner"),
+        ("strict_social_source", "sanitizer_strict_social_source"),
     )
     for label, key in evidence_keys:
         value = row.get(key)
         if value is None or value == "":
             continue
+        if key == "final_emission_mutation_lineage" and isinstance(value, list):
+            value = ">".join(str(item) for item in value if str(item).strip())
+            if not value:
+                continue
+        if key == "sanitizer_lineage_legacy_rewrite_active" and value is True:
+            value = "legacy_diagnostic"
         parts.append(f"{label}={value}")
     return "; ".join(parts) or "none"
 

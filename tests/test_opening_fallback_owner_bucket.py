@@ -1,0 +1,134 @@
+"""Direct tests for opening fallback owner-bucket read mapping."""
+
+from __future__ import annotations
+
+import pytest
+
+from game.final_emission_meta import (
+    OPENING_FALLBACK_OWNER_RETRY,
+    OPENING_FALLBACK_OWNER_SEALED_GATE,
+    OPENING_FALLBACK_OWNER_STRICT_SOCIAL,
+    OPENING_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS,
+    OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
+    OPENING_FALLBACK_OWNER_BUCKETS,
+    opening_fallback_owner_bucket_from_fields,
+    opening_fallback_owner_bucket_from_meta,
+)
+from game.upstream_response_repairs import (
+    OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL,
+    OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED,
+)
+
+pytestmark = pytest.mark.unit
+
+
+def test_owner_bucket_constants_are_the_allowed_values() -> None:
+    assert OPENING_FALLBACK_OWNER_BUCKETS == frozenset(
+        {
+            "upstream-prepared",
+            "sealed-gate",
+            "retry",
+            "strict-social",
+            "unknown-ambiguous",
+        }
+    )
+
+
+def test_canonical_upstream_prepared_authorship_source_maps_to_upstream_prepared() -> None:
+    got = opening_fallback_owner_bucket_from_meta(
+        {
+            "opening_recovered_via_fallback": True,
+            "opening_fallback_authorship_source": OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED,
+            "final_emitted_source": "opening_deterministic_fallback",
+            "response_type_repair_kind": "opening_deterministic_fallback",
+        }
+    )
+    assert got == OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED
+
+
+def test_fail_closed_repair_kind_maps_to_sealed_gate() -> None:
+    got = opening_fallback_owner_bucket_from_meta(
+        {
+            "response_type_repair_kind": "opening_deterministic_fallback_failed_closed",
+            "opening_fallback_authorship_source": OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED,
+        }
+    )
+    assert got == OPENING_FALLBACK_OWNER_SEALED_GATE
+
+
+def test_legacy_compatibility_local_authorship_source_maps_to_unknown_ambiguous() -> None:
+    """Legacy compatibility-local opening authorship is observed, not canonicalized."""
+    got = opening_fallback_owner_bucket_from_meta(
+        {
+            "opening_recovered_via_fallback": True,
+            "opening_fallback_authorship_source": OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL,
+            "final_emitted_source": "opening_deterministic_fallback",
+        }
+    )
+    assert got == OPENING_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS
+    assert OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL != OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED
+
+
+def test_missing_metadata_maps_to_unknown_ambiguous() -> None:
+    assert opening_fallback_owner_bucket_from_meta(None) == OPENING_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS
+
+
+def test_empty_metadata_maps_to_unknown_ambiguous() -> None:
+    assert opening_fallback_owner_bucket_from_meta({}) == OPENING_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS
+
+
+def test_non_opening_fallback_family_maps_to_unknown_ambiguous() -> None:
+    got = opening_fallback_owner_bucket_from_meta(
+        {
+            "fallback_family_used": "observation",
+            "fallback_temporal_frame": "continuation",
+            "final_emitted_source": "global_scene_fallback",
+        }
+    )
+    assert got == OPENING_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS
+
+
+def test_strict_social_signal_maps_to_strict_social_only_when_explicit() -> None:
+    assert (
+        opening_fallback_owner_bucket_from_fields(
+            opening_recovered_via_fallback=True,
+            fallback_family="scene_opening",
+        )
+        == OPENING_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS
+    )
+    assert (
+        opening_fallback_owner_bucket_from_fields(
+            opening_recovered_via_fallback=True,
+            response_type_repair_kind="strict_social_dialogue_repair",
+        )
+        == OPENING_FALLBACK_OWNER_STRICT_SOCIAL
+    )
+
+
+def test_retry_signal_maps_to_retry_only_when_explicit() -> None:
+    assert (
+        opening_fallback_owner_bucket_from_fields(
+            opening_recovered_via_fallback=True,
+            response_type_repair_kind="opening_deterministic_fallback",
+        )
+        == OPENING_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS
+    )
+    assert (
+        opening_fallback_owner_bucket_from_fields(
+            opening_recovered_via_fallback=True,
+            final_emitted_source="forced_retry_fallback",
+        )
+        == OPENING_FALLBACK_OWNER_RETRY
+    )
+
+
+def test_conflicting_upstream_prepared_and_fail_closed_signals_choose_sealed_gate() -> None:
+    got = opening_fallback_owner_bucket_from_meta(
+        {
+            "opening_recovered_via_fallback": True,
+            "opening_fallback_authorship_source": OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED,
+            "response_type_repair_kind": "opening_deterministic_fallback_failed_closed",
+            "final_emitted_source": "opening_deterministic_fallback",
+        }
+    )
+    assert got == OPENING_FALLBACK_OWNER_SEALED_GATE

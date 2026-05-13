@@ -6,6 +6,8 @@ row fields should be added here deliberately with tests.
 """
 from __future__ import annotations
 
+from game.final_emission_meta import OPENING_FALLBACK_OWNER_BUCKETS
+
 ALLOWED_FAILURE_CATEGORIES: frozenset[str] = frozenset(
     {
         "route",
@@ -37,6 +39,7 @@ ALLOWED_PRIMARY_OWNERS: frozenset[str] = frozenset(
         "continuity",
         "normalization",
         "sanitizer",
+        "upstream_prepared_emission",
     }
 )
 
@@ -82,6 +85,7 @@ ALLOWED_SOURCE_FAMILY_TAGS: frozenset[str] = frozenset(
         "fallback_behavior",
         "strict_social_emission",
         "opening_fallback",
+        "upstream_prepared_emission",
         "output_sanitizer",
         "stage_diff",
         "schema_contracts",
@@ -93,6 +97,19 @@ ALLOWED_SOURCE_FAMILY_TAGS: frozenset[str] = frozenset(
         "golden_replay_projection",
     }
 )
+
+ALLOWED_OPENING_FALLBACK_OWNER_BUCKETS: frozenset[str] = OPENING_FALLBACK_OWNER_BUCKETS
+
+ALLOWED_RUNTIME_RESPONSE_TYPE_REPAIR_KINDS: frozenset[str] = frozenset(
+    {
+        "answer_upstream_prepared_repair",
+        "action_outcome_upstream_prepared_repair",
+        "strict_social_dialogue_repair",
+        "dialogue_minimal_repair",
+    }
+)
+
+LEGACY_RESPONSE_TYPE_REPAIR_KINDS: frozenset[str] = frozenset({"thin_answer"})
 
 REQUIRED_CLASSIFICATION_FIELDS: frozenset[str] = frozenset(
     {
@@ -122,8 +139,15 @@ OPTIONAL_CLASSIFICATION_EVIDENCE_FIELDS: frozenset[str] = frozenset(
         "selected_speaker_id",
         "canonical_target_actor_id",
         "final_emitted_source",
+        "final_emission_mutation_lineage",
         "fallback_family",
         "fallback_temporal_frame",
+        "opening_fallback_owner_bucket",
+        "upstream_prepared_emission_used",
+        "upstream_prepared_emission_valid",
+        "upstream_prepared_emission_source",
+        "upstream_prepared_emission_reject_reason",
+        "prepared_emission_owner",
         "response_type_required",
         "response_type_repair_used",
         "response_type_repair_kind",
@@ -136,6 +160,18 @@ OPTIONAL_CLASSIFICATION_EVIDENCE_FIELDS: frozenset[str] = frozenset(
         "sanitizer_event_count",
         "sanitizer_changed_count",
         "sanitizer_rewrite_used",
+        "sanitizer_empty_fallback_used",
+        "sanitizer_empty_fallback_source",
+        "sanitizer_empty_fallback_owner",
+        "sanitizer_lineage_mode",
+        "sanitizer_lineage_changed_count",
+        "sanitizer_lineage_dropped_count",
+        "sanitizer_lineage_empty_fallback_used",
+        "sanitizer_lineage_legacy_rewrite_active",
+        "sanitizer_strict_social_fallback_used",
+        "sanitizer_strict_social_selection_owner",
+        "sanitizer_strict_social_prose_owner",
+        "sanitizer_strict_social_source",
     }
 )
 
@@ -156,7 +192,12 @@ ALLOWED_EMISSION_SUBLAYERS: frozenset[str] = frozenset(
         "speaker_contract_enforcement",
         "interaction_continuity",
         "sanitizer",
+        "sanitizer.empty_fallback",
         "opening_fallback",
+        "upstream_prepared_emission",
+        "sealed_gate",
+        "final_emission.finalize_packaging",
+        "final_emission.finalize_route_illegal_strip",
         "terminal_fallback",
         "emission.post_gate_mutation_unknown",
     }
@@ -175,4 +216,5 @@ MAJOR_OWNER_INVESTIGATION_TARGETS: dict[str, str] = {
     "continuity": "game/interaction_context.py",
     "normalization": "game/final_emission_meta.py",
     "sanitizer": "game/output_sanitizer.py",
+    "upstream_prepared_emission": "game/final_emission_gate.py",
 }

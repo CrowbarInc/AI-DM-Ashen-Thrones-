@@ -543,6 +543,37 @@ def _log_sanitizer_event(context: Dict[str, Any], event: str, sentence: str) -> 
     debug_log = context.setdefault("sanitizer_debug", [])
     if isinstance(debug_log, list):
         debug_log.append({"event": event, "sentence": sentence[:240]})
+    _record_sanitizer_lineage_event(context, event)
+
+
+def _ensure_sanitizer_lineage_trace(context: Dict[str, Any], *, mode: str | None) -> Dict[str, Any] | None:
+    if not isinstance(context, dict):
+        return None
+    trace = context.setdefault("sanitizer_trace", {})
+    if not isinstance(trace, dict):
+        return None
+    normalized_mode = str(mode or "").strip().lower() or "strip_only"
+    trace["sanitizer_boundary_mode"] = normalized_mode
+    trace["sanitizer_lineage_mode"] = normalized_mode
+    trace["sanitizer_lineage_legacy_rewrite_active"] = normalized_mode == SANITIZER_BOUNDARY_LEGACY_SENTENCE_REWRITE
+    trace.setdefault("sanitizer_lineage_changed_count", 0)
+    trace.setdefault("sanitizer_lineage_dropped_count", 0)
+    trace.setdefault("sanitizer_lineage_empty_fallback_used", False)
+    return trace
+
+
+def _record_sanitizer_lineage_event(context: Dict[str, Any], event: str) -> None:
+    trace = _ensure_sanitizer_lineage_trace(
+        context,
+        mode=str(context.get("sanitizer_boundary_mode") or "").strip().lower() or "strip_only",
+    )
+    if not isinstance(trace, dict):
+        return
+    event_s = str(event or "").strip().lower()
+    if any(token in event_s for token in ("dropped", "drop", "rewritten", "rewrite", "strip")):
+        trace["sanitizer_lineage_changed_count"] = int(trace.get("sanitizer_lineage_changed_count") or 0) + 1
+    if "dropped" in event_s or "drop" in event_s:
+        trace["sanitizer_lineage_dropped_count"] = int(trace.get("sanitizer_lineage_dropped_count") or 0) + 1
 
 
 def _contains_template_fragment(sentence: str) -> bool:
@@ -1278,6 +1309,37 @@ def _prepared_upstream_empty_fallback_text(context: Dict[str, Any] | None) -> st
     return ""
 
 
+def _mark_sanitizer_empty_fallback(
+    context: Dict[str, Any],
+    *,
+    used: bool,
+    source: str | None = None,
+    owner: str = "output_sanitizer",
+) -> None:
+    trace = context.setdefault("sanitizer_trace", {})
+    if not isinstance(trace, dict):
+        return
+    trace["sanitizer_empty_fallback_used"] = bool(used)
+    trace["sanitizer_empty_fallback_source"] = source
+    trace["sanitizer_empty_fallback_owner"] = owner
+    trace["sanitizer_lineage_empty_fallback_used"] = bool(used)
+
+
+def _mark_sanitizer_strict_social_fallback(
+    context: Dict[str, Any],
+    *,
+    used: bool,
+    source: str | None = None,
+) -> None:
+    trace = context.setdefault("sanitizer_trace", {})
+    if not isinstance(trace, dict):
+        return
+    trace["sanitizer_strict_social_fallback_used"] = bool(used)
+    trace["sanitizer_strict_social_selection_owner"] = "output_sanitizer"
+    trace["sanitizer_strict_social_prose_owner"] = "strict_social_emission"
+    trace["sanitizer_strict_social_source"] = source
+
+
 def _sanitizer_must_rewrite_sentence(sentence: str, *, has_previous_kept_sentence: bool) -> bool:
     """Mirror ``_classify_sentence_action`` rewrite triggers without performing rewrites."""
     s = _strip_internal_prefixes(sentence).strip()
@@ -1310,6 +1372,11 @@ def _final_validation_pass_strip_only(text: str, context: Dict[str, Any] | None 
     if not isinstance(text, str):
         return ""
     ctx = context if isinstance(context, dict) else {}
+    mode = str(ctx.get("sanitizer_boundary_mode") or "").strip().lower()
+    _ensure_sanitizer_lineage_trace(
+        ctx,
+        mode=mode or "strip_only",
+    )
     validated: list[str] = []
     for sentence in _split_sentences(text):
         s = (sentence or "").strip()
@@ -1385,13 +1452,24 @@ def _sanitize_player_facing_output_strip_only(text: str, context: Dict[str, Any]
         if strict_social and isinstance(eff_res, dict):
             fb_ctx = dict(context)
             fb_ctx["resolution"] = eff_res
+            _mark_sanitizer_strict_social_fallback(
+                context,
+                used=True,
+                source="social_fallback_line_for_sanitizer.empty_output",
+            )
             return social_fallback_line_for_sanitizer(fb_ctx, source_text=out)
         prepared = _prepared_upstream_empty_fallback_text(context)
         if prepared:
+            _mark_sanitizer_empty_fallback(
+                context,
+                used=True,
+                source="upstream_prepared_emission.prepared_sanitizer_empty_fallback_text",
+            )
             return prepared
         trace = context.setdefault("sanitizer_trace", {})
         if isinstance(trace, dict):
             trace["strip_only_empty_after_upstream_strip"] = True
+        _mark_sanitizer_empty_fallback(context, used=False)
         return ""
 
     return rebuilt
@@ -1407,6 +1485,8 @@ def sanitize_player_facing_output(text: str, context: Dict[str, Any] | None = No
         return ""
 
     ctx = context if isinstance(context, dict) else {}
+    mode = str(ctx.get("sanitizer_boundary_mode") or "").strip().lower()
+    _ensure_sanitizer_lineage_trace(ctx, mode=mode or "strip_only")
     # Strict-social turns after apply_final_emission_gate: no further sentence rewrites or coherence passes.
     # C2_OWNER_AUDIT: packaging-only — sealed text path; keep aligned with docs/final_emission_ownership_convergence.md.
     if bool(ctx.get("post_final_emission_gate")) and bool(ctx.get("strict_social_terminal_clamp")):
@@ -1418,7 +1498,6 @@ def sanitize_player_facing_output(text: str, context: Dict[str, Any] | None = No
         return ""
 
     out = str(text)
-    mode = str(ctx.get("sanitizer_boundary_mode") or "").strip().lower()
     if mode != SANITIZER_BOUNDARY_LEGACY_SENTENCE_REWRITE:
         return _sanitize_player_facing_output_strip_only(out, ctx)
 
@@ -1473,6 +1552,11 @@ def sanitize_player_facing_output(text: str, context: Dict[str, Any] | None = No
         if strict_social and isinstance(eff_res, dict):
             fb_ctx = dict(ctx)
             fb_ctx["resolution"] = eff_res
+            _mark_sanitizer_strict_social_fallback(
+                ctx,
+                used=True,
+                source="social_fallback_line_for_sanitizer.empty_output",
+            )
             return social_fallback_line_for_sanitizer(fb_ctx, source_text=out)
         return "For a breath, the scene stays still."
     return rebuilt

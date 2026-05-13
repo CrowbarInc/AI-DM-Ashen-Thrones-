@@ -6,7 +6,13 @@ from game import storage
 from game.defaults import default_scene, default_world
 import game.final_emission_gate as feg
 from game.final_emission_gate import apply_final_emission_gate
-from game.final_emission_meta import read_final_emission_meta_dict
+from game.final_emission_meta import (
+    OPENING_FALLBACK_OWNER_SEALED_GATE,
+    OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
+    opening_fallback_owner_bucket_from_meta,
+    read_final_emission_meta_dict,
+)
+from game.upstream_response_repairs import OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL
 from game.scenario_spine import (
     ScenarioBranch,
     ScenarioSpine,
@@ -16,6 +22,7 @@ from game.scenario_spine import (
 )
 from game.scenario_spine_eval import minimal_complete_transcript_turn_meta
 from tests.helpers.golden_replay import (
+    _observed_turn,
     assert_golden_turn_observation,
     classify_golden_drift,
     final_text_has_scaffold_leakage,
@@ -338,6 +345,370 @@ def test_golden_markdown_report_renderer_is_compact_and_deterministic():
     assert "| Scenario | Mode | Turns | Status | Drift | Classifications |" in report
 
 
+def test_golden_observed_turn_projects_canonical_upstream_prepared_opening_owner_bucket():
+    observed = _observed_turn(
+        scenario_id="synthetic_opening_owner",
+        snap={"turn_index": 0, "gm_text": "The road opens."},
+        payload={
+            "gm_output": {
+                "_final_emission_meta": {
+                    "final_emitted_source": "opening_deterministic_fallback",
+                    "response_type_repair_kind": "opening_deterministic_fallback",
+                    "opening_recovered_via_fallback": True,
+                    "opening_fallback_authorship_source": "upstream_prepared_opening_fallback",
+                    "fallback_family_used": "scene_opening",
+                    "fallback_temporal_frame": "first_impression",
+                }
+            }
+        },
+    )
+
+    assert observed["opening_fallback_owner_bucket"] == OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED
+
+
+def test_golden_observed_turn_projects_fail_closed_sealed_gate_opening_owner_bucket():
+    observed = _observed_turn(
+        scenario_id="synthetic_opening_owner_fail_closed",
+        snap={"turn_index": 0, "gm_text": "[opening_fallback_failed_closed:no_curated_facts]"},
+        payload={
+            "gm_output": {
+                "_final_emission_meta": {
+                    "final_emitted_source": "opening_fallback_failed_closed",
+                    "response_type_repair_kind": "opening_deterministic_fallback_failed_closed",
+                    "opening_recovered_via_fallback": True,
+                    "fallback_family_used": "scene_opening",
+                }
+            }
+        },
+    )
+
+    assert observed["opening_fallback_owner_bucket"] == OPENING_FALLBACK_OWNER_SEALED_GATE
+
+
+@pytest.mark.parametrize(
+    ("required", "repair_kind", "source"),
+    [
+        (
+            "answer",
+            "answer_upstream_prepared_repair",
+            "upstream_prepared_emission.prepared_answer_fallback_text",
+        ),
+        (
+            "action_outcome",
+            "action_outcome_upstream_prepared_repair",
+            "upstream_prepared_emission.prepared_action_fallback_text",
+        ),
+    ],
+)
+def test_golden_observed_turn_projects_valid_upstream_prepared_emission_telemetry(required, repair_kind, source):
+    observed = _observed_turn(
+        scenario_id=f"{required}_prepared_projection",
+        snap={"turn_index": 0, "player_text": "Do the thing.", "gm_text": "Projected prepared text."},
+        payload={
+            "resolution": {"kind": "investigate"},
+            "gm_output": {
+                "_final_emission_meta": {
+                    "final_emitted_source": repair_kind,
+                    "response_type_required": required,
+                    "response_type_candidate_ok": True,
+                    "response_type_repair_used": True,
+                    "response_type_repair_kind": repair_kind,
+                    "upstream_prepared_emission_used": True,
+                    "upstream_prepared_emission_valid": True,
+                    "upstream_prepared_emission_source": source,
+                    "upstream_prepared_emission_reject_reason": None,
+                    "realization_fallback_family": "upstream_prepared_emission",
+                }
+            },
+        },
+    )
+
+    assert observed["upstream_prepared_emission_used"] is True
+    assert observed["upstream_prepared_emission_valid"] is True
+    assert observed["upstream_prepared_emission_source"] == source
+    assert observed["upstream_prepared_emission_reject_reason"] is None
+    debug = format_golden_replay_debug({"scenario_id": observed["scenario_id"], "turn_count": 1, "turns": [observed]})
+    assert f"upstream_prepared_emission_source: {source!r}" in debug
+
+
+def test_golden_observed_turn_projects_rejected_upstream_prepared_emission_telemetry():
+    observed = _observed_turn(
+        scenario_id="rejected_prepared_projection",
+        snap={"turn_index": 0, "player_text": "Pry the chest.", "gm_text": "You pry the chest, but nothing gives yet."},
+        payload={
+            "resolution": {"kind": "investigate"},
+            "gm_output": {
+                "_final_emission_meta": {
+                    "final_emitted_source": "generated_candidate",
+                    "response_type_required": "action_outcome",
+                    "response_type_candidate_ok": False,
+                    "response_type_repair_used": False,
+                    "response_type_repair_kind": "action_outcome_upstream_prepared_repair",
+                    "upstream_prepared_emission_used": False,
+                    "upstream_prepared_emission_valid": False,
+                    "upstream_prepared_emission_source": "upstream_prepared_emission.prepared_action_fallback_text",
+                    "upstream_prepared_emission_reject_reason": "action_outcome_replaced_by_dialogue",
+                    "realization_fallback_family": "upstream_prepared_emission",
+                }
+            },
+        },
+    )
+
+    assert observed["upstream_prepared_emission_used"] is False
+    assert observed["upstream_prepared_emission_valid"] is False
+    assert observed["upstream_prepared_emission_source"] == "upstream_prepared_emission.prepared_action_fallback_text"
+    assert observed["upstream_prepared_emission_reject_reason"] == "action_outcome_replaced_by_dialogue"
+    debug = format_golden_replay_debug({"scenario_id": observed["scenario_id"], "turn_count": 1, "turns": [observed]})
+    assert "upstream_prepared_emission_reject_reason: 'action_outcome_replaced_by_dialogue'" in debug
+
+
+@pytest.mark.parametrize(
+    ("required", "repair_kind", "source"),
+    [
+        ("answer", None, "absent"),
+        ("action_outcome", None, "absent"),
+    ],
+)
+def test_golden_observed_turn_projects_absent_upstream_prepared_emission_telemetry(required, repair_kind, source):
+    observed = _observed_turn(
+        scenario_id=f"{required}_prepared_absent_projection",
+        snap={"turn_index": 0, "player_text": "Can I do it?", "gm_text": "Only mist between the torches."},
+        payload={
+            "resolution": {"kind": "investigate"},
+            "gm_output": {
+                "_final_emission_meta": {
+                    "final_emitted_source": "generated_candidate",
+                    "response_type_required": required,
+                    "response_type_candidate_ok": False,
+                    "response_type_repair_used": False,
+                    "response_type_repair_kind": repair_kind,
+                    "response_type_upstream_prepared_absent": True,
+                    "upstream_prepared_emission_used": False,
+                    "upstream_prepared_emission_valid": False,
+                    "upstream_prepared_emission_source": source,
+                    "upstream_prepared_emission_reject_reason": None,
+                }
+            },
+        },
+    )
+
+    assert observed["upstream_prepared_emission_used"] is False
+    assert observed["upstream_prepared_emission_valid"] is False
+    assert observed["upstream_prepared_emission_source"] == "absent"
+    assert observed["upstream_prepared_emission_reject_reason"] is None
+    assert observed["raw_signal_presence"]["upstream_prepared_emission_used"] is True
+    assert observed["raw_signal_presence"]["upstream_prepared_emission_valid"] is True
+    debug = format_golden_replay_debug({"scenario_id": observed["scenario_id"], "turn_count": 1, "turns": [observed]})
+    assert "upstream_prepared_emission_used: False" in debug
+    assert "upstream_prepared_emission_source: 'absent'" in debug
+
+
+def test_golden_drift_classification_preserves_malformed_prepared_emission_reject_reason():
+    observed = _observed_turn(
+        scenario_id="malformed_prepared_projection",
+        snap={"turn_index": 0, "player_text": "Pry the lock.", "gm_text": "The lock remains stubborn."},
+        payload={
+            "resolution": {"kind": "investigate"},
+            "gm_output": {
+                "_final_emission_meta": {
+                    "final_emitted_source": "generated_candidate",
+                    "response_type_required": "action_outcome",
+                    "response_type_candidate_ok": False,
+                    "response_type_repair_used": False,
+                    "response_type_repair_kind": "action_outcome_upstream_prepared_repair",
+                    "upstream_prepared_emission_used": True,
+                    "upstream_prepared_emission_valid": False,
+                    "upstream_prepared_emission_source": "upstream_prepared_emission.prepared_action_fallback_text",
+                    "upstream_prepared_emission_reject_reason": "action_outcome_missing_result",
+                    "realization_fallback_family": "upstream_prepared_emission",
+                }
+            },
+        },
+    )
+
+    drift = classify_golden_drift(
+        observed,
+        {
+            "equals": {
+                "upstream_prepared_emission_valid": True,
+            }
+        },
+    )
+
+    assert observed["upstream_prepared_emission_used"] is True
+    assert observed["upstream_prepared_emission_valid"] is False
+    assert observed["upstream_prepared_emission_reject_reason"] == "action_outcome_missing_result"
+    row = drift["failure_classifications"][0]
+    assert row["primary_owner"] == "upstream_prepared_emission"
+    assert row["upstream_prepared_emission_reject_reason"] == "action_outcome_missing_result"
+    debug = format_golden_replay_debug(
+        {"scenario_id": observed["scenario_id"], "turn_count": 1, "turns": [observed], "drift": drift}
+    )
+    assert "upstream_prepared_emission_reject_reason: 'action_outcome_missing_result'" in debug
+    assert "owner='upstream_prepared_emission'" in debug
+
+
+def test_golden_observed_turn_projects_sanitizer_empty_fallback_as_sanitizer_owned():
+    observed = _observed_turn(
+        scenario_id="sanitizer_empty_projection",
+        snap={"turn_index": 0, "player_text": "Wait.", "gm_text": "For a breath, the scene stays still."},
+        payload={
+            "resolution": {"kind": "observe"},
+            "gm_output": {
+                "metadata": {
+                    "sanitizer_trace": {
+                        "sanitizer_boundary_mode": "strip_only",
+                        "sanitizer_empty_fallback_used": True,
+                        "sanitizer_empty_fallback_source": "upstream_prepared_emission.prepared_sanitizer_empty_fallback_text",
+                        "sanitizer_empty_fallback_owner": "output_sanitizer",
+                    }
+                },
+                "_final_emission_meta": {
+                    "final_emitted_source": "generated_candidate",
+                    "final_emission_mutation_lineage": [
+                        "pre_gate_sanitizer",
+                        "sanitizer_empty_fallback",
+                        "finalize_packaging",
+                    ],
+                    "response_type_repair_used": False,
+                    "upstream_prepared_emission_used": False,
+                    "upstream_prepared_emission_valid": False,
+                    "upstream_prepared_emission_source": None,
+                    "upstream_prepared_emission_reject_reason": None,
+                },
+            },
+        },
+    )
+
+    assert observed["sanitizer_empty_fallback_used"] is True
+    assert observed["sanitizer_empty_fallback_source"] == "upstream_prepared_emission.prepared_sanitizer_empty_fallback_text"
+    assert observed["sanitizer_empty_fallback_owner"] == "output_sanitizer"
+    assert observed["upstream_prepared_emission_used"] is False
+    assert observed["sanitizer_lineage_mode"] == "strip_only"
+    assert observed["sanitizer_lineage_empty_fallback_used"] is True
+    assert "sanitizer_empty_fallback" in observed["final_emission_mutation_lineage"]
+    debug = format_golden_replay_debug({"scenario_id": observed["scenario_id"], "turn_count": 1, "turns": [observed]})
+    assert "sanitizer_empty_fallback_owner: 'output_sanitizer'" in debug
+    assert "sanitizer_lineage_empty_fallback_used: True" in debug
+    assert "final_emission_mutation_lineage" in debug
+
+
+def test_golden_observed_turn_projects_strict_social_sanitizer_fallback_owner_split():
+    observed = _observed_turn(
+        scenario_id="strict_social_sanitizer_split",
+        snap={"turn_index": 0, "player_text": "Ask the runner.", "gm_text": 'The runner says, "No names."'},
+        payload={
+            "resolution": {"kind": "question"},
+            "gm_output": {
+                "metadata": {
+                    "sanitizer_trace": {
+                        "sanitizer_lineage_mode": "strip_only",
+                        "sanitizer_strict_social_fallback_used": True,
+                        "sanitizer_strict_social_selection_owner": "output_sanitizer",
+                        "sanitizer_strict_social_prose_owner": "strict_social_emission",
+                        "sanitizer_strict_social_source": "social_fallback_line_for_sanitizer.empty_output",
+                    }
+                },
+                "_final_emission_meta": {
+                    "final_emitted_source": "generated_candidate",
+                    "strict_social_active": True,
+                    "upstream_prepared_emission_used": False,
+                    "upstream_prepared_emission_valid": False,
+                    "upstream_prepared_emission_source": None,
+                    "upstream_prepared_emission_reject_reason": None,
+                },
+            },
+        },
+    )
+
+    assert observed["sanitizer_strict_social_fallback_used"] is True
+    assert observed["sanitizer_strict_social_selection_owner"] == "output_sanitizer"
+    assert observed["sanitizer_strict_social_prose_owner"] == "strict_social_emission"
+    assert observed["sanitizer_strict_social_source"] == "social_fallback_line_for_sanitizer.empty_output"
+    assert observed["sanitizer_empty_fallback_used"] is None
+    assert observed["upstream_prepared_emission_used"] is False
+    debug = format_golden_replay_debug({"scenario_id": observed["scenario_id"], "turn_count": 1, "turns": [observed]})
+    assert "sanitizer_strict_social_selection_owner: 'output_sanitizer'" in debug
+    assert "sanitizer_strict_social_prose_owner: 'strict_social_emission'" in debug
+
+
+def test_golden_observed_turn_projects_clean_sanitizer_lineage():
+    observed = _observed_turn(
+        scenario_id="sanitizer_clean_lineage",
+        snap={"turn_index": 0, "player_text": "Wait.", "gm_text": "Rain needles across the checkpoint."},
+        payload={
+            "resolution": {"kind": "observe"},
+            "gm_output": {
+                "metadata": {
+                    "sanitizer_trace": {
+                        "sanitizer_lineage_mode": "strip_only",
+                        "sanitizer_lineage_changed_count": 0,
+                        "sanitizer_lineage_dropped_count": 0,
+                        "sanitizer_lineage_empty_fallback_used": False,
+                        "sanitizer_lineage_legacy_rewrite_active": False,
+                    }
+                },
+                "_final_emission_meta": {"final_emitted_source": "generated_candidate"},
+            },
+        },
+    )
+
+    assert observed["sanitizer_lineage_mode"] == "strip_only"
+    assert observed["sanitizer_lineage_changed_count"] == 0
+    assert observed["sanitizer_lineage_dropped_count"] == 0
+    assert observed["sanitizer_lineage_empty_fallback_used"] is False
+    assert observed["sanitizer_lineage_legacy_rewrite_active"] is False
+
+
+def test_golden_observed_turn_projects_sanitizer_lineage_from_debug_events():
+    observed = _observed_turn(
+        scenario_id="sanitizer_debug_lineage",
+        snap={"turn_index": 0, "player_text": "Wait.", "gm_text": ""},
+        payload={
+            "resolution": {"kind": "observe"},
+            "gm_output": {
+                "metadata": {
+                    "sanitizer_trace": {"sanitizer_boundary_mode": "strip_only"},
+                    "sanitizer_debug": [
+                        {"event": "strip_only_dropped_rewrite_candidate", "sentence": "Validator scaffold."},
+                        {"event": "strip_only_dropped_non_diegetic", "sentence": "Planner scaffold."},
+                    ],
+                },
+                "_final_emission_meta": {"final_emitted_source": "generated_candidate"},
+            },
+        },
+    )
+
+    assert observed["sanitizer_lineage_mode"] == "strip_only"
+    assert observed["sanitizer_lineage_changed_count"] == 2
+    assert observed["sanitizer_lineage_dropped_count"] == 2
+
+
+def test_golden_observed_turn_projects_legacy_sanitizer_lineage():
+    observed = _observed_turn(
+        scenario_id="sanitizer_legacy_lineage",
+        snap={"turn_index": 0, "player_text": "Wait.", "gm_text": "The answer has not formed yet."},
+        payload={
+            "resolution": {"kind": "observe"},
+            "gm_output": {
+                "metadata": {
+                    "sanitizer_trace": {
+                        "sanitizer_lineage_mode": "legacy_sentence_rewrite",
+                        "sanitizer_lineage_changed_count": 1,
+                        "sanitizer_lineage_dropped_count": 0,
+                        "sanitizer_lineage_empty_fallback_used": False,
+                        "sanitizer_lineage_legacy_rewrite_active": True,
+                    }
+                },
+                "_final_emission_meta": {"final_emitted_source": "generated_candidate"},
+            },
+        },
+    )
+
+    assert observed["sanitizer_lineage_mode"] == "legacy_sentence_rewrite"
+    assert observed["sanitizer_lineage_legacy_rewrite_active"] is True
+
+
 def test_golden_replay_directed_npc_question_structural_invariants(tmp_path, monkeypatch):
     captured_prompts: list[list[dict]] = []
 
@@ -635,6 +1006,7 @@ def test_golden_replay_thin_answer_action_outcome_final_emission_structural_inva
         debug_context=debug_context,
     )
     assert "patrol" in low or "east ridge" in low or "notice" in low, debug_context
+    assert turn.get("sanitizer_lineage_legacy_rewrite_active") is not True
 
 
 def test_golden_replay_sanitizer_scaffold_leakage_structural_invariants(tmp_path, monkeypatch):
@@ -657,6 +1029,7 @@ def test_golden_replay_sanitizer_scaffold_leakage_structural_invariants(tmp_path
 
     assert result["turn_count"] == 1
     turn = result["turns"][0]
+    assert turn.get("sanitizer_lineage_legacy_rewrite_active") is not True
     assert_golden_turn_observation(
         turn,
         {
@@ -689,7 +1062,7 @@ def test_golden_replay_sanitizer_scaffold_leakage_structural_invariants(tmp_path
         )
 
 
-def test_golden_direct_seam_opening_fallback_path_structural_invariants():
+def test_golden_direct_seam_canonical_opening_fallback_path_has_no_compatibility_local_ownership():
     gm_output = _opening_gm_output()
     gm_output["player_facing_text"] = "Nearby crates appear disturbed."
     gm_output["tags"] = []
@@ -712,6 +1085,7 @@ def test_golden_direct_seam_opening_fallback_path_structural_invariants():
         "response_type_repair_kind": meta.get("response_type_repair_kind"),
         "opening_recovered_via_fallback": meta.get("opening_recovered_via_fallback"),
         "opening_fallback_authorship_source": meta.get("opening_fallback_authorship_source"),
+        "opening_fallback_owner_bucket": opening_fallback_owner_bucket_from_meta(meta),
         "fallback_family": meta.get("fallback_family_used") or meta.get("realization_fallback_family"),
         "fallback_temporal_frame": meta.get("fallback_temporal_frame"),
         "scaffold_leakage": final_text_has_scaffold_leakage(final_text),
@@ -721,27 +1095,46 @@ def test_golden_direct_seam_opening_fallback_path_structural_invariants():
     assert_golden_turn_observation(
         turn,
         {
-            "require_present": ["final_text", "final_emitted_source", "fallback_family"],
+            "require_present": ["final_text", "final_emitted_source", "fallback_family", "opening_fallback_owner_bucket"],
             "equals": {
                 "final_emitted_source": "opening_deterministic_fallback",
                 "response_type_required": "scene_opening",
                 "response_type_repair_used": True,
                 "response_type_repair_kind": "opening_deterministic_fallback",
                 "opening_recovered_via_fallback": True,
+                "opening_fallback_authorship_source": "upstream_prepared_opening_fallback",
+                "opening_fallback_owner_bucket": OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
                 "fallback_family": "scene_opening",
                 "fallback_temporal_frame": "first_impression",
             },
-            "one_of": {
-                "opening_fallback_authorship_source": [
-                    "upstream_prepared_opening_fallback",
-                    "compatibility_local",
-                ]
+            "not_equals": {
+                "opening_fallback_authorship_source": OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL,
             },
             "text_must_not_include": ["planner", "router", "validator", "adjudication", "scaffold"],
             "scaffold_leakage": False,
         },
         debug_context=f"meta={meta!r}; final_text={final_text!r}",
     )
+    assert turn["opening_fallback_owner_bucket"] == OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED
+    assert turn["opening_fallback_authorship_source"] != OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL
+
+
+def test_golden_canonical_opening_fallback_never_reports_compatibility_local_ownership():
+    gm_output = _opening_gm_output()
+    gm_output["player_facing_text"] = "Nearby crates appear disturbed."
+    gm_output["tags"] = []
+
+    out = apply_final_emission_gate(
+        gm_output,
+        resolution={"kind": "scene_opening", "prompt": "Start the campaign."},
+        session={},
+        scene_id="frontier_gate",
+        world={},
+    )
+
+    meta = read_final_emission_meta_dict(out) or {}
+    assert meta.get("opening_fallback_authorship_source") != OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL
+    assert opening_fallback_owner_bucket_from_meta(meta) == OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED
 
 
 def test_golden_replay_lead_followup_with_dialogue_lock_structural_invariants(tmp_path, monkeypatch):

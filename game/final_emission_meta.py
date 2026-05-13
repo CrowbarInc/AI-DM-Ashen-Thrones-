@@ -59,6 +59,7 @@ EMISSION_AUTHOR_LANE_KEY: str = "emission_author_lane"
 # at read time for mixed dicts/fixtures but is not the intended post-gate storage location.
 FINAL_EMISSION_META_KEY: str = "_final_emission_meta"
 DEBUG_NOTES_KEY: str = "debug_notes"
+FINAL_EMISSION_MUTATION_LINEAGE_KEY: str = "final_emission_mutation_lineage"
 
 # FEM subtrees / well-known nested keys.
 FEM_DEAD_TURN_KEY: str = "dead_turn"
@@ -79,6 +80,93 @@ def ensure_final_emission_meta_dict(gm_output: MutableMapping[str, Any]) -> Dict
     return meta
 
 
+def _append_lineage_token(tokens: list[str], token: str) -> None:
+    if token and token not in tokens:
+        tokens.append(token)
+
+
+def build_final_emission_mutation_lineage(
+    meta: Mapping[str, Any] | None,
+    *,
+    sanitizer_trace: Mapping[str, Any] | None = None,
+) -> list[str]:
+    """Build a compact ordered visible-writer lineage from existing FEM/sanitizer telemetry.
+
+    Metadata-only: this observes already-stamped repair/fallback/finalize fields and does not
+    authorize or perform any text mutation.
+    """
+    if not isinstance(meta, Mapping):
+        meta = {}
+    trace = sanitizer_trace if isinstance(sanitizer_trace, Mapping) else {}
+    existing_lineage = [str(x) for x in meta.get(FINAL_EMISSION_MUTATION_LINEAGE_KEY, []) if isinstance(x, str)]
+    tokens: list[str] = []
+
+    if (
+        trace.get("sanitizer_lineage_mode") is not None
+        or trace.get("sanitizer_boundary_mode") is not None
+        or trace.get("sanitizer_lineage_changed_count") is not None
+        or trace.get("sanitizer_empty_fallback_used") is not None
+        or "pre_gate_sanitizer" in existing_lineage
+    ):
+        _append_lineage_token(tokens, "pre_gate_sanitizer")
+
+    repair_kind = str(meta.get("response_type_repair_kind") or "").strip()
+    final_source = str(meta.get("final_emitted_source") or "").strip()
+    if meta.get("response_type_repair_used") is True or repair_kind:
+        _append_lineage_token(tokens, "response_type_repair")
+    if (
+        meta.get("upstream_prepared_emission_used") is True
+        or repair_kind in {"answer_upstream_prepared_repair", "action_outcome_upstream_prepared_repair"}
+        or final_source in {"answer_upstream_prepared_repair", "action_outcome_upstream_prepared_repair"}
+    ):
+        _append_lineage_token(tokens, "prepared_emission_selection")
+    if (
+        meta.get("opening_recovered_via_fallback") is True
+        or "opening" in repair_kind
+        or "opening" in final_source
+    ):
+        _append_lineage_token(tokens, "opening_fallback_selection")
+    if meta.get("fallback_behavior_repaired") is True or str(meta.get("fallback_behavior_repair_kind") or "").strip():
+        _append_lineage_token(tokens, "fallback_behavior_repair")
+    if meta.get("final_route") == "replaced":
+        _append_lineage_token(tokens, "sealed_fallback_replacement")
+
+    if (
+        trace.get("sanitizer_empty_fallback_used") is True
+        or trace.get("sanitizer_lineage_empty_fallback_used") is True
+        or "sanitizer_empty_fallback" in existing_lineage
+    ):
+        _append_lineage_token(tokens, "sanitizer_empty_fallback")
+
+    if meta.get("output_sanitization_applied") is True:
+        _append_lineage_token(tokens, "finalize_html_strip")
+    if meta.get("finalize_route_illegal_strip_applied") is True:
+        _append_lineage_token(tokens, "finalize_route_illegal_strip")
+    if (
+        "final_emission_fast_path_used" in meta
+        or meta.get("final_emission_boundary_semantic_repair_disabled") is True
+        or meta.get("final_emission_finalize_semantic_repair_used") is not None
+    ):
+        _append_lineage_token(tokens, "finalize_packaging")
+    if meta.get("post_gate_mutation_detected") is True:
+        _append_lineage_token(tokens, "post_gate_mutation_detected")
+    return tokens
+
+
+def refresh_final_emission_mutation_lineage(
+    meta: MutableMapping[str, Any],
+    *,
+    sanitizer_trace: Mapping[str, Any] | None = None,
+) -> None:
+    """Refresh ``final_emission_mutation_lineage`` in-place from already-stamped metadata."""
+    if not isinstance(meta, MutableMapping):
+        return
+    meta[FINAL_EMISSION_MUTATION_LINEAGE_KEY] = build_final_emission_mutation_lineage(
+        meta,
+        sanitizer_trace=sanitizer_trace,
+    )
+
+
 def patch_final_emission_meta(gm_output: MutableMapping[str, Any], patch: Mapping[str, Any] | None) -> None:
     """Write-time helper: shallow-merge *patch* into ``_final_emission_meta`` (in place)."""
     if not isinstance(gm_output, MutableMapping):
@@ -87,6 +175,7 @@ def patch_final_emission_meta(gm_output: MutableMapping[str, Any], patch: Mappin
         return
     meta = ensure_final_emission_meta_dict(gm_output)
     meta.update(dict(patch))
+    refresh_final_emission_mutation_lineage(meta)
 
 # Response-type debug fields (RTD1) that may be merged into FEM for observability.
 FEM_RESPONSE_TYPE_KEYS: frozenset[str] = frozenset(
@@ -114,6 +203,145 @@ FEM_RESPONSE_TYPE_KEYS: frozenset[str] = frozenset(
         "realization_fallback_family",
     }
 )
+
+OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED = "upstream-prepared"
+OPENING_FALLBACK_OWNER_SEALED_GATE = "sealed-gate"
+OPENING_FALLBACK_OWNER_RETRY = "retry"
+OPENING_FALLBACK_OWNER_STRICT_SOCIAL = "strict-social"
+OPENING_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS = "unknown-ambiguous"
+
+OPENING_FALLBACK_OWNER_BUCKETS: frozenset[str] = frozenset(
+    {
+        OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
+        OPENING_FALLBACK_OWNER_SEALED_GATE,
+        OPENING_FALLBACK_OWNER_RETRY,
+        OPENING_FALLBACK_OWNER_STRICT_SOCIAL,
+        OPENING_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS,
+    }
+)
+
+_OPENING_FALLBACK_AUTH_UPSTREAM_PREPARED: frozenset[str] = frozenset(
+    {
+        "upstream_prepared",
+        "upstream_prepared_opening_fallback",
+    }
+)
+_OPENING_FALLBACK_AUTH_COMPATIBILITY_LOCAL: frozenset[str] = frozenset(
+    {
+        "compatibility_local",
+        "compatibility_local_opening_deterministic",
+    }
+)
+_OPENING_FALLBACK_STRICT_SOCIAL_SIGNALS: frozenset[str] = frozenset(
+    {
+        "minimal_social_emergency_fallback",
+        "strict_social_dialogue_repair",
+        "strict_social_deterministic_fallback",
+        "strict_social_replacement",
+        "strict_social_terminal_fallback",
+    }
+)
+_OPENING_FALLBACK_RETRY_SIGNALS: frozenset[str] = frozenset(
+    {
+        "retry_deterministic_fallback",
+        "retry_terminal_fallback",
+        "forced_retry_fallback",
+        "retry_escape_hatch",
+        "question_retry_fallback",
+        "social_exchange_retry_fallback",
+    }
+)
+
+
+def _opening_owner_norm(value: Any) -> str:
+    if not isinstance(value, str):
+        return ""
+    return value.strip().lower().replace("-", "_")
+
+
+def _opening_owner_bool(value: Any) -> bool:
+    return value is True
+
+
+def opening_fallback_owner_bucket_from_fields(
+    *,
+    final_emitted_source: str | None = None,
+    opening_recovered_via_fallback: bool | None = None,
+    opening_fallback_authorship_source: str | None = None,
+    response_type_repair_kind: str | None = None,
+    fallback_family: str | None = None,
+    fallback_temporal_frame: str | None = None,
+) -> str:
+    """Map existing opening fallback telemetry to one conservative owner bucket.
+
+    Read-side only: this does not select, repair, or authorize fallback text.
+    Compatibility-local opening composition intentionally remains ambiguous.
+    """
+    del fallback_temporal_frame  # Family/timeframe are insufficient ownership signals by themselves.
+
+    final_source = _opening_owner_norm(final_emitted_source)
+    authorship = _opening_owner_norm(opening_fallback_authorship_source)
+    repair_kind = _opening_owner_norm(response_type_repair_kind)
+    family = _opening_owner_norm(fallback_family)
+
+    fail_closed = (
+        repair_kind == "opening_deterministic_fallback_failed_closed"
+        or "opening_fallback_failed_closed" in final_source
+    )
+    if fail_closed:
+        return OPENING_FALLBACK_OWNER_SEALED_GATE
+
+    if authorship in _OPENING_FALLBACK_AUTH_COMPATIBILITY_LOCAL:
+        return OPENING_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS
+
+    explicit_strict_social = (
+        final_source in _OPENING_FALLBACK_STRICT_SOCIAL_SIGNALS
+        or repair_kind in _OPENING_FALLBACK_STRICT_SOCIAL_SIGNALS
+        or authorship in _OPENING_FALLBACK_STRICT_SOCIAL_SIGNALS
+    )
+    if explicit_strict_social:
+        return OPENING_FALLBACK_OWNER_STRICT_SOCIAL
+
+    explicit_retry = (
+        final_source in _OPENING_FALLBACK_RETRY_SIGNALS
+        or repair_kind in _OPENING_FALLBACK_RETRY_SIGNALS
+        or authorship in _OPENING_FALLBACK_RETRY_SIGNALS
+    )
+    if explicit_retry:
+        return OPENING_FALLBACK_OWNER_RETRY
+
+    opening_signal = (
+        _opening_owner_bool(opening_recovered_via_fallback)
+        or "opening" in final_source
+        or "opening" in repair_kind
+        or family == "scene_opening"
+    )
+    if authorship in _OPENING_FALLBACK_AUTH_UPSTREAM_PREPARED and opening_signal:
+        return OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED
+
+    return OPENING_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS
+
+
+def opening_fallback_owner_bucket_from_meta(meta: Mapping[str, Any] | None) -> str:
+    """Return a normalized opening fallback owner bucket from FEM-shaped metadata."""
+    if not isinstance(meta, Mapping) or not meta:
+        return OPENING_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS
+    final_source = meta.get("final_emitted_source")
+    recovered = meta.get("opening_recovered_via_fallback")
+    authorship = meta.get("opening_fallback_authorship_source")
+    repair_kind = meta.get("response_type_repair_kind")
+    family = meta.get("fallback_family_used")
+    if not isinstance(family, str):
+        family = meta.get("fallback_family")
+    temporal = meta.get("fallback_temporal_frame")
+    return opening_fallback_owner_bucket_from_fields(
+        final_emitted_source=final_source if isinstance(final_source, str) else None,
+        opening_recovered_via_fallback=recovered if isinstance(recovered, bool) else None,
+        opening_fallback_authorship_source=authorship if isinstance(authorship, str) else None,
+        response_type_repair_kind=repair_kind if isinstance(repair_kind, str) else None,
+        fallback_family=family if isinstance(family, str) else None,
+        fallback_temporal_frame=temporal if isinstance(temporal, str) else None,
+    )
 
 # Stage-diff is intentionally bounded; it may project a compact NA subset for observability only.
 # This is not a second owner of NA semantics; it is an explicitly-allowed projection surface.

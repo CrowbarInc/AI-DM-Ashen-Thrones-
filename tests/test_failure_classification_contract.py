@@ -9,6 +9,10 @@ from tests.failure_classification_contract import (
     ALLOWED_FAILURE_CATEGORIES,
     ALLOWED_FAILURE_OWNERS,
     ALLOWED_FAILURE_SEVERITIES,
+    ALLOWED_OPENING_FALLBACK_OWNER_BUCKETS,
+    ALLOWED_RUNTIME_RESPONSE_TYPE_REPAIR_KINDS,
+    ALLOWED_SOURCE_FAMILY_TAGS,
+    LEGACY_RESPONSE_TYPE_REPAIR_KINDS,
     MAJOR_OWNER_INVESTIGATION_TARGETS,
 )
 from tests.helpers.failure_classifier import validate_failure_classification_row
@@ -80,6 +84,86 @@ def test_unknown_replay_tag_fails_unless_experimental():
     assert validate_failure_classification_row(row) == []
 
 
+def test_opening_fallback_owner_bucket_values_are_contract_locked():
+    row = _valid_sample_row()
+    row["opening_fallback_owner_bucket"] = "upstream-prepared"
+    assert row["opening_fallback_owner_bucket"] in ALLOWED_OPENING_FALLBACK_OWNER_BUCKETS
+    assert validate_failure_classification_row(row) == []
+
+    row["opening_fallback_owner_bucket"] = "mystery-owner"
+    assert "invalid opening_fallback_owner_bucket: 'mystery-owner'" in validate_failure_classification_row(row)
+
+
+def test_runtime_response_type_repair_kind_taxonomy_is_contract_locked():
+    assert {
+        "answer_upstream_prepared_repair",
+        "action_outcome_upstream_prepared_repair",
+        "strict_social_dialogue_repair",
+        "dialogue_minimal_repair",
+    } <= ALLOWED_RUNTIME_RESPONSE_TYPE_REPAIR_KINDS
+    assert "thin_answer" not in ALLOWED_RUNTIME_RESPONSE_TYPE_REPAIR_KINDS
+    assert "thin_answer" in LEGACY_RESPONSE_TYPE_REPAIR_KINDS
+
+
+def test_upstream_prepared_emission_owner_and_source_family_are_contract_locked():
+    assert "upstream_prepared_emission" in ALLOWED_FAILURE_OWNERS
+    assert "upstream_prepared_emission" in ALLOWED_SOURCE_FAMILY_TAGS
+
+    row = _valid_sample_row()
+    row["primary_owner"] = "upstream_prepared_emission"
+    row["secondary_owner"] = "emission"
+    row["source_family"] = "upstream_prepared_emission"
+    row["prepared_emission_owner"] = "upstream_prepared_emission"
+    row["upstream_prepared_emission_used"] = True
+    row["upstream_prepared_emission_valid"] = True
+    row["upstream_prepared_emission_source"] = "prepared_answer_fallback_text"
+    row["upstream_prepared_emission_reject_reason"] = None
+
+    assert validate_failure_classification_row(row) == []
+
+
+def test_strict_social_from_sanitizer_owner_split_fields_are_contract_locked():
+    row = _valid_sample_row()
+    row["category"] = "sanitizer"
+    row["primary_owner"] = "sanitizer"
+    row["secondary_owner"] = "emission"
+    row["source_family"] = "output_sanitizer"
+    row["emission_sublayer"] = "strict_social_replacement"
+    row["sanitizer_strict_social_fallback_used"] = True
+    row["sanitizer_strict_social_selection_owner"] = "output_sanitizer"
+    row["sanitizer_strict_social_prose_owner"] = "strict_social_emission"
+    row["sanitizer_strict_social_source"] = "social_fallback_line_for_sanitizer.empty_output"
+    row["prepared_emission_owner"] = None
+
+    assert validate_failure_classification_row(row) == []
+
+    row["sanitizer_strict_social_prose_owner"] = "output_sanitizer"
+    assert "invalid sanitizer_strict_social_prose_owner: 'output_sanitizer'" in validate_failure_classification_row(row)
+
+
+@pytest.mark.parametrize(
+    "sublayer",
+    [
+        "sanitizer.empty_fallback",
+        "sealed_gate",
+        "final_emission.finalize_packaging",
+        "final_emission.finalize_route_illegal_strip",
+        "emission.post_gate_mutation_unknown",
+    ],
+)
+def test_post_gate_mutation_reduction_sublayers_are_contract_locked(sublayer):
+    row = _valid_sample_row()
+    row["category"] = "emission"
+    row["primary_owner"] = "emission"
+    row["secondary_owner"] = "validator"
+    row["source_family"] = "stage_diff"
+    row["post_gate_mutation_detected"] = True
+    row["emission_sublayer"] = sublayer
+    row["mutation_source"] = sublayer
+
+    assert validate_failure_classification_row(row) == []
+
+
 def test_missing_primary_owner_fails_validation():
     row = _valid_sample_row()
     del row["primary_owner"]
@@ -123,7 +207,8 @@ def test_owner_matrix_and_schema_docs_cover_contract_taxonomy():
     root = Path(__file__).resolve().parents[1]
     owner_doc = (root / "audits" / "failure_owner_matrix.md").read_text(encoding="utf-8")
     schema_doc = (root / "audits" / "proposed_failure_classification_schema.md").read_text(encoding="utf-8")
-    combined = f"{owner_doc}\n{schema_doc}"
+    thin_answer_doc = (root / "audits" / "thin_answer_fallback_surface_inventory_2026-05-12.md").read_text(encoding="utf-8")
+    combined = f"{owner_doc}\n{schema_doc}\n{thin_answer_doc}"
 
     for owner in ALLOWED_FAILURE_OWNERS:
         if owner == "none":

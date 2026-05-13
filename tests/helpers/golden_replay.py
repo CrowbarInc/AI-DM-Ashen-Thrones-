@@ -14,6 +14,7 @@ from typing import Any, Callable, Mapping
 from game.api import chat
 from game.final_emission_meta import (
     normalize_final_emission_meta_for_observability,
+    opening_fallback_owner_bucket_from_meta,
     read_emission_debug_lane_from_turn_payload,
     read_final_emission_meta_from_turn_payload,
 )
@@ -47,12 +48,30 @@ _STRUCTURAL_DRIFT_FIELDS = frozenset(
         "route_kind",
         "selected_speaker_id",
         "final_emitted_source",
+        "final_emission_mutation_lineage",
         "response_type_required",
         "response_type_candidate_ok",
         "response_type_repair_used",
         "response_type_repair_kind",
+        "upstream_prepared_emission_used",
+        "upstream_prepared_emission_valid",
+        "upstream_prepared_emission_source",
+        "upstream_prepared_emission_reject_reason",
+        "sanitizer_empty_fallback_used",
+        "sanitizer_empty_fallback_source",
+        "sanitizer_empty_fallback_owner",
+        "sanitizer_lineage_mode",
+        "sanitizer_lineage_changed_count",
+        "sanitizer_lineage_dropped_count",
+        "sanitizer_lineage_empty_fallback_used",
+        "sanitizer_lineage_legacy_rewrite_active",
+        "sanitizer_strict_social_fallback_used",
+        "sanitizer_strict_social_selection_owner",
+        "sanitizer_strict_social_prose_owner",
+        "sanitizer_strict_social_source",
         "opening_recovered_via_fallback",
         "opening_fallback_authorship_source",
+        "opening_fallback_owner_bucket",
         "fallback_family",
         "fallback_temporal_frame",
         "trace.canonical_entry.target_actor_id",
@@ -75,6 +94,32 @@ def final_text_has_scaffold_leakage(text: str) -> bool:
     if not isinstance(text, str) or not text.strip():
         return False
     return bool(_SCAFFOLD_LEAK_RE.search(text) or resembles_serialized_response_payload(text))
+
+
+def _sanitizer_debug_change_counts(sanitizer_debug: list[Any] | None) -> tuple[int | None, int | None]:
+    if not sanitizer_debug:
+        return None, None
+    changed = 0
+    dropped = 0
+    for event in sanitizer_debug:
+        if not isinstance(event, Mapping):
+            continue
+        event_name = str(event.get("event") or "").lower()
+        if any(token in event_name for token in ("dropped", "rewritten", "rewrite", "strip")):
+            changed += 1
+        if "dropped" in event_name or "drop" in event_name:
+            dropped += 1
+    return changed, dropped
+
+
+def _sanitizer_lineage_field(
+    sanitizer_trace: Mapping[str, Any] | None,
+    key: str,
+    fallback: Any = None,
+) -> Any:
+    if isinstance(sanitizer_trace, Mapping) and key in sanitizer_trace:
+        return sanitizer_trace.get(key)
+    return fallback
 
 
 def normalize_golden_text(text: Any) -> str:
@@ -586,12 +631,18 @@ def _observed_turn(
         ("final_emitted_source", "final_route", "upstream_prepared_emission_source"),
     )
     response_type_required = _first_present(fem, ("response_type_required",))
+    final_emission_mutation_lineage = _first_present(fem, ("final_emission_mutation_lineage",))
     response_type_candidate_ok = _first_present(fem, ("response_type_candidate_ok",))
     response_type_repair_used = _first_present(fem, ("response_type_repair_used",))
     response_type_repair_kind = _first_present(fem, ("response_type_repair_kind",))
+    upstream_prepared_emission_used = _first_present(fem, ("upstream_prepared_emission_used",))
+    upstream_prepared_emission_valid = _first_present(fem, ("upstream_prepared_emission_valid",))
+    upstream_prepared_emission_source = _first_present(fem, ("upstream_prepared_emission_source",))
+    upstream_prepared_emission_reject_reason = _first_present(fem, ("upstream_prepared_emission_reject_reason",))
     post_gate_mutation_detected = _first_present(fem, ("post_gate_mutation_detected",))
     opening_recovered_via_fallback = _first_present(fem, ("opening_recovered_via_fallback",))
     opening_fallback_authorship_source = _first_present(fem, ("opening_fallback_authorship_source",))
+    opening_fallback_owner_bucket = opening_fallback_owner_bucket_from_meta(fem)
     fallback_family = _first_present(
         fem,
         ("fallback_family_used", "realization_fallback_family"),
@@ -605,22 +656,58 @@ def _observed_turn(
         ("sanitizer_boundary_mode", "mode"),
     ) or _lookup_path(payload, "gm_output.metadata.sanitizer_boundary_mode")
     sanitizer_event_count = len(sanitizer_debug) if sanitizer_debug else None
-    sanitizer_changed_count = sum(
-        1
-        for event in sanitizer_debug
-        if isinstance(event, Mapping)
-        and any(token in str(event.get("event") or "") for token in ("dropped", "rewritten", "rewrite", "strip"))
-    ) if sanitizer_debug else None
+    sanitizer_changed_count, sanitizer_dropped_count = _sanitizer_debug_change_counts(sanitizer_debug)
     sanitizer_rewrite_used = bool(sanitizer_changed_count) if sanitizer_changed_count is not None else None
+    sanitizer_empty_fallback_used = _first_present(sanitizer_trace, ("sanitizer_empty_fallback_used",))
+    sanitizer_empty_fallback_source = _first_present(sanitizer_trace, ("sanitizer_empty_fallback_source",))
+    sanitizer_empty_fallback_owner = _first_present(sanitizer_trace, ("sanitizer_empty_fallback_owner",))
+    sanitizer_lineage_mode = _sanitizer_lineage_field(sanitizer_trace, "sanitizer_lineage_mode", sanitizer_mode)
+    sanitizer_lineage_changed_count = _sanitizer_lineage_field(
+        sanitizer_trace,
+        "sanitizer_lineage_changed_count",
+        sanitizer_changed_count,
+    )
+    sanitizer_lineage_dropped_count = _sanitizer_lineage_field(
+        sanitizer_trace,
+        "sanitizer_lineage_dropped_count",
+        sanitizer_dropped_count,
+    )
+    sanitizer_lineage_empty_fallback_used = _sanitizer_lineage_field(
+        sanitizer_trace,
+        "sanitizer_lineage_empty_fallback_used",
+        sanitizer_empty_fallback_used,
+    )
+    sanitizer_lineage_legacy_rewrite_active = _sanitizer_lineage_field(
+        sanitizer_trace,
+        "sanitizer_lineage_legacy_rewrite_active",
+        str(sanitizer_lineage_mode or "").strip().lower() == "legacy_sentence_rewrite"
+        if sanitizer_lineage_mode is not None
+        else None,
+    )
+    sanitizer_strict_social_fallback_used = _first_present(sanitizer_trace, ("sanitizer_strict_social_fallback_used",))
+    sanitizer_strict_social_selection_owner = _first_present(
+        sanitizer_trace,
+        ("sanitizer_strict_social_selection_owner",),
+    )
+    sanitizer_strict_social_prose_owner = _first_present(
+        sanitizer_trace,
+        ("sanitizer_strict_social_prose_owner",),
+    )
+    sanitizer_strict_social_source = _first_present(sanitizer_trace, ("sanitizer_strict_social_source",))
 
     final_text = str(snap.get("gm_text") or "")
     raw_signal_presence = {
         "route_kind": route_kind is not None or _has_path(payload, "resolution.kind") or _has_path(trace, "turn_trace.social_contract_trace.route_selected"),
         "selected_speaker_id": selected_speaker_id is not None,
         "final_emitted_source": "final_emitted_source" in fem,
+        "final_emission_mutation_lineage": "final_emission_mutation_lineage" in fem,
         "response_type_required": "response_type_required" in fem,
         "response_type_candidate_ok": "response_type_candidate_ok" in fem,
         "response_type_repair_used": "response_type_repair_used" in fem,
+        "upstream_prepared_emission_used": "upstream_prepared_emission_used" in fem,
+        "upstream_prepared_emission_valid": "upstream_prepared_emission_valid" in fem,
+        "upstream_prepared_emission_source": "upstream_prepared_emission_source" in fem,
+        "upstream_prepared_emission_reject_reason": "upstream_prepared_emission_reject_reason" in fem,
         "fallback_family": "fallback_family_used" in fem or "realization_fallback_family" in fem,
         "trace.canonical_entry": bool(canonical_entry),
         "trace.turn_trace": bool(turn_trace),
@@ -628,9 +715,14 @@ def _observed_turn(
     }
     normalized_signal_presence = {
         "final_emitted_source": "final_emitted_source" in fem_normalized,
+        "final_emission_mutation_lineage": "final_emission_mutation_lineage" in fem_normalized,
         "response_type_required": "response_type_required" in fem_normalized,
         "response_type_candidate_ok": "response_type_candidate_ok" in fem_normalized,
         "response_type_repair_used": "response_type_repair_used" in fem_normalized,
+        "upstream_prepared_emission_used": "upstream_prepared_emission_used" in fem_normalized,
+        "upstream_prepared_emission_valid": "upstream_prepared_emission_valid" in fem_normalized,
+        "upstream_prepared_emission_source": "upstream_prepared_emission_source" in fem_normalized,
+        "upstream_prepared_emission_reject_reason": "upstream_prepared_emission_reject_reason" in fem_normalized,
         "fallback_family": "fallback_family_used" in fem_normalized or "realization_fallback_family" in fem_normalized,
     }
     missing_source_by_field = {}
@@ -651,10 +743,17 @@ def _observed_turn(
         "selected_speaker_id": selected_speaker_id,
         "selected_speaker_source": selected_speaker_source,
         "final_emitted_source": final_emitted_source,
+        "final_emission_mutation_lineage": list(final_emission_mutation_lineage)
+        if isinstance(final_emission_mutation_lineage, list)
+        else final_emission_mutation_lineage,
         "response_type_required": response_type_required,
         "response_type_candidate_ok": response_type_candidate_ok,
         "response_type_repair_used": response_type_repair_used,
         "response_type_repair_kind": response_type_repair_kind,
+        "upstream_prepared_emission_used": upstream_prepared_emission_used,
+        "upstream_prepared_emission_valid": upstream_prepared_emission_valid,
+        "upstream_prepared_emission_source": upstream_prepared_emission_source,
+        "upstream_prepared_emission_reject_reason": upstream_prepared_emission_reject_reason,
         "post_gate_mutation_detected": post_gate_mutation_detected,
         "strict_social_active": _first_present(fem, ("strict_social_active",)),
         "speaker_contract_enforcement_reason": _first_present(fem, ("speaker_contract_enforcement_reason",)),
@@ -666,9 +765,22 @@ def _observed_turn(
         "sanitizer_event_count": sanitizer_event_count,
         "sanitizer_changed_count": sanitizer_changed_count,
         "sanitizer_rewrite_used": sanitizer_rewrite_used,
+        "sanitizer_empty_fallback_used": sanitizer_empty_fallback_used,
+        "sanitizer_empty_fallback_source": sanitizer_empty_fallback_source,
+        "sanitizer_empty_fallback_owner": sanitizer_empty_fallback_owner,
+        "sanitizer_lineage_mode": sanitizer_lineage_mode,
+        "sanitizer_lineage_changed_count": sanitizer_lineage_changed_count,
+        "sanitizer_lineage_dropped_count": sanitizer_lineage_dropped_count,
+        "sanitizer_lineage_empty_fallback_used": sanitizer_lineage_empty_fallback_used,
+        "sanitizer_lineage_legacy_rewrite_active": sanitizer_lineage_legacy_rewrite_active,
+        "sanitizer_strict_social_fallback_used": sanitizer_strict_social_fallback_used,
+        "sanitizer_strict_social_selection_owner": sanitizer_strict_social_selection_owner,
+        "sanitizer_strict_social_prose_owner": sanitizer_strict_social_prose_owner,
+        "sanitizer_strict_social_source": sanitizer_strict_social_source,
         "sanitizer_leak_terms": ["scaffold_leakage"] if final_text_has_scaffold_leakage(final_text) else [],
         "opening_recovered_via_fallback": opening_recovered_via_fallback,
         "opening_fallback_authorship_source": opening_fallback_authorship_source,
+        "opening_fallback_owner_bucket": opening_fallback_owner_bucket,
         "fallback_family": fallback_family,
         "fallback_temporal_frame": fallback_temporal_frame,
         "scaffold_leakage": final_text_has_scaffold_leakage(final_text),
@@ -770,12 +882,30 @@ def format_golden_replay_debug(result: Mapping[str, Any]) -> str:
                 f"turn[{turn.get('turn_index')}].route_kind: {turn.get('route_kind')!r}",
                 f"turn[{turn.get('turn_index')}].selected_speaker_id: {turn.get('selected_speaker_id')!r}",
                 f"turn[{turn.get('turn_index')}].final_emitted_source: {turn.get('final_emitted_source')!r}",
+                f"turn[{turn.get('turn_index')}].final_emission_mutation_lineage: {turn.get('final_emission_mutation_lineage')!r}",
                 f"turn[{turn.get('turn_index')}].response_type_required: {turn.get('response_type_required')!r}",
                 f"turn[{turn.get('turn_index')}].response_type_candidate_ok: {turn.get('response_type_candidate_ok')!r}",
                 f"turn[{turn.get('turn_index')}].response_type_repair_used: {turn.get('response_type_repair_used')!r}",
                 f"turn[{turn.get('turn_index')}].response_type_repair_kind: {turn.get('response_type_repair_kind')!r}",
+                f"turn[{turn.get('turn_index')}].upstream_prepared_emission_used: {turn.get('upstream_prepared_emission_used')!r}",
+                f"turn[{turn.get('turn_index')}].upstream_prepared_emission_valid: {turn.get('upstream_prepared_emission_valid')!r}",
+                f"turn[{turn.get('turn_index')}].upstream_prepared_emission_source: {turn.get('upstream_prepared_emission_source')!r}",
+                f"turn[{turn.get('turn_index')}].upstream_prepared_emission_reject_reason: {turn.get('upstream_prepared_emission_reject_reason')!r}",
+                f"turn[{turn.get('turn_index')}].sanitizer_empty_fallback_used: {turn.get('sanitizer_empty_fallback_used')!r}",
+                f"turn[{turn.get('turn_index')}].sanitizer_empty_fallback_source: {turn.get('sanitizer_empty_fallback_source')!r}",
+                f"turn[{turn.get('turn_index')}].sanitizer_empty_fallback_owner: {turn.get('sanitizer_empty_fallback_owner')!r}",
+                f"turn[{turn.get('turn_index')}].sanitizer_lineage_mode: {turn.get('sanitizer_lineage_mode')!r}",
+                f"turn[{turn.get('turn_index')}].sanitizer_lineage_changed_count: {turn.get('sanitizer_lineage_changed_count')!r}",
+                f"turn[{turn.get('turn_index')}].sanitizer_lineage_dropped_count: {turn.get('sanitizer_lineage_dropped_count')!r}",
+                f"turn[{turn.get('turn_index')}].sanitizer_lineage_empty_fallback_used: {turn.get('sanitizer_lineage_empty_fallback_used')!r}",
+                f"turn[{turn.get('turn_index')}].sanitizer_lineage_legacy_rewrite_active: {turn.get('sanitizer_lineage_legacy_rewrite_active')!r}",
+                f"turn[{turn.get('turn_index')}].sanitizer_strict_social_fallback_used: {turn.get('sanitizer_strict_social_fallback_used')!r}",
+                f"turn[{turn.get('turn_index')}].sanitizer_strict_social_selection_owner: {turn.get('sanitizer_strict_social_selection_owner')!r}",
+                f"turn[{turn.get('turn_index')}].sanitizer_strict_social_prose_owner: {turn.get('sanitizer_strict_social_prose_owner')!r}",
+                f"turn[{turn.get('turn_index')}].sanitizer_strict_social_source: {turn.get('sanitizer_strict_social_source')!r}",
                 f"turn[{turn.get('turn_index')}].opening_recovered_via_fallback: {turn.get('opening_recovered_via_fallback')!r}",
                 f"turn[{turn.get('turn_index')}].opening_fallback_authorship_source: {turn.get('opening_fallback_authorship_source')!r}",
+                f"turn[{turn.get('turn_index')}].opening_fallback_owner_bucket: {turn.get('opening_fallback_owner_bucket')!r}",
                 f"turn[{turn.get('turn_index')}].fallback_family: {turn.get('fallback_family')!r}",
                 f"turn[{turn.get('turn_index')}].fallback_temporal_frame: {turn.get('fallback_temporal_frame')!r}",
                 f"turn[{turn.get('turn_index')}].scaffold_leakage: {turn.get('scaffold_leakage')!r}",

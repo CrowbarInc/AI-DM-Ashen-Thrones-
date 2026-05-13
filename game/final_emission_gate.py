@@ -145,6 +145,7 @@ from game.final_emission_meta import (
     patch_final_emission_meta,
     package_dead_turn_snapshot_into_final_emission_meta,
     package_emission_channel_sidecar,
+    refresh_final_emission_mutation_lineage,
     response_type_decision_payload as _response_type_decision_payload,
 )
 from game.state_channels import project_author_payload, project_debug_payload, project_public_payload
@@ -224,12 +225,10 @@ from game.final_emission_repairs import (
     _strict_social_answer_pressure_rd_contract_active,
 )
 from game.upstream_response_repairs import (
-    OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL,
     OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED,
     UPSTREAM_PREPARED_EMISSION_KEY,
     UPSTREAM_PREPARED_OPENING_FALLBACK_KEY,
     build_social_fallback_resolution,
-    build_upstream_prepared_opening_fallback_payload,
     is_structurally_usable_upstream_prepared_opening_fallback_payload,
     maybe_attach_upstream_prepared_opening_fallback_payload,
     merge_upstream_prepared_emission_into_gm_output,
@@ -278,6 +277,15 @@ def _stamp_sealed_fallback_realization_family(
         attach_realization_fallback_family(meta, GATE_TERMINAL_REPAIR)
 
 
+def _refresh_output_mutation_lineage(out: Mapping[str, Any] | None) -> None:
+    if not isinstance(out, MutableMapping):
+        return
+    meta = ensure_final_emission_meta_dict(out)
+    md = out.get("metadata") if isinstance(out.get("metadata"), Mapping) else {}
+    sanitizer_trace = md.get("sanitizer_trace") if isinstance(md.get("sanitizer_trace"), Mapping) else None
+    refresh_final_emission_mutation_lineage(meta, sanitizer_trace=sanitizer_trace)
+
+
 def _prepare_sealed_replacement_route_meta(
     meta: MutableMapping[str, Any],
     *,
@@ -305,6 +313,7 @@ def _prepare_sealed_replacement_route_meta(
         meta["fallback_temporal_frame"] = composition_meta.get("fallback_temporal_frame")
     meta["post_gate_mutation_detected"] = pre_gate_candidate_text != gate_out_text
     meta["final_text_preview"] = (gate_out_text[:120] + "…") if len(gate_out_text) > 120 else gate_out_text
+    refresh_final_emission_mutation_lineage(meta)
 
 
 def _finalize_n4_sealed_replace_fem_route_meta(
@@ -4073,9 +4082,10 @@ def _upstream_prepared_opening_fallback_payload_if_usable(
 def _recover_upstream_opening_fallback_stub_payload(
     gm_output: Dict[str, Any] | None,
 ) -> tuple[Dict[str, Any] | None, Dict[str, Any]]:
-    """Replace structurally unusable opening stub with :func:`build_upstream_prepared_opening_fallback_payload` (Block I).
+    """Return usable upstream opening payload, or mark unusable gate-arriving stubs fail-closed.
 
-    Mutates *gm_output* in place when recovery succeeds. Returns ``(usable_payload, debug_patch)``.
+    Upstream attach may still replace text-only stubs before final emission. Once an unusable
+    payload reaches the gate, the gate must not rebuild or re-author opening fallback prose.
     """
     patch: Dict[str, Any] = {}
     if not isinstance(gm_output, dict):
@@ -4083,25 +4093,9 @@ def _recover_upstream_opening_fallback_stub_payload(
     usable = _upstream_prepared_opening_fallback_payload_if_usable(gm_output)
     if usable:
         return usable, patch
-    if not _opening_curated_facts_have_attachable_non_empty_strings(gm_output):
-        return None, patch
     if UPSTREAM_PREPARED_OPENING_FALLBACK_KEY not in gm_output:
         return None, patch
-    raw = gm_output.get(UPSTREAM_PREPARED_OPENING_FALLBACK_KEY)
-    if not isinstance(raw, dict):
-        return None, patch
     patch["opening_fallback_upstream_payload_unusable"] = True
-    try:
-        gm_output[UPSTREAM_PREPARED_OPENING_FALLBACK_KEY] = build_upstream_prepared_opening_fallback_payload(gm_output)
-    except Exception:
-        patch["opening_fallback_upstream_payload_recovered"] = False
-        patch["opening_fallback_compatibility_local_disabled"] = True
-        return None, patch
-    usable2 = _upstream_prepared_opening_fallback_payload_if_usable(gm_output)
-    if usable2:
-        patch["opening_fallback_upstream_payload_recovered"] = True
-        patch["opening_fallback_compatibility_local_disabled"] = True
-        return usable2, patch
     patch["opening_fallback_upstream_payload_recovered"] = False
     patch["opening_fallback_compatibility_local_disabled"] = True
     return None, patch
@@ -4112,8 +4106,8 @@ def _opening_maybe_attach_upstream_prepare_build_failed_on_emission_debug(
 ) -> bool:
     """True when ``maybe_attach_upstream_prepared_opening_fallback_payload`` recorded a build failure (Block M).
 
-    Only full ``apply_final_emission_gate`` entry populates ``metadata.emission_debug`` this way; helper-only
-    callers without attach telemetry keep compatibility-local deterministic fallback behavior.
+    Only full ``apply_final_emission_gate`` entry populates ``metadata.emission_debug`` this way; callers
+    without attach telemetry now fail closed instead of composing gate-local opening prose.
     """
     if not isinstance(gm_output, dict):
         return False
@@ -4190,7 +4184,7 @@ def _opening_fail_closed_meta_upstream_stub_rebuild_failed(
 def _opening_scene_safe_fallback_tuple(
     gm_output: Mapping[str, Any] | None,
 ) -> tuple[str, str, str, str, str, str, Dict[str, Any]]:
-    """Hard-replace tuple for opening-mode illegality: prefers upstream prepared snapshot, else compatibility composer."""
+    """Hard-replace tuple for opening-mode illegality: upstream prepared snapshot, else sealed marker."""
     gm_dict = gm_output if isinstance(gm_output, dict) else None
     upstream, stub_patch = (
         _recover_upstream_opening_fallback_stub_payload(gm_dict)
@@ -4222,16 +4216,14 @@ def _opening_scene_safe_fallback_tuple(
         fallback_text = OPENING_FALLBACK_EMPTY_CURATED_FACTS_MARKER
         fallback_meta = _opening_fail_closed_meta_upstream_missing_insufficient_curated_facts(gm_output)
     else:
-        fallback_text, fallback_meta = _deterministic_opening_fallback_text_and_meta(gm_output)
+        fallback_text = OPENING_FALLBACK_EMPTY_CURATED_FACTS_MARKER
+        fallback_meta = _opening_fail_closed_meta_upstream_missing_insufficient_curated_facts(gm_output)
     meta = _first_mention_composition_meta()
     meta["fallback_family_used"] = classification.get("fallback_family")
     meta["fallback_temporal_frame"] = classification.get("temporal_frame")
     meta.update(fallback_meta)
     meta.update(stub_patch)
-    if fallback_meta.get("blocked_repair_kind") == "opening_upstream_prepare_attach_failed":
-        meta["opening_fallback_authorship_source"] = None
-    else:
-        meta["opening_fallback_authorship_source"] = OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL
+    meta["opening_fallback_authorship_source"] = None
     return (
         fallback_text,
         "scene_opening_deterministic",
@@ -4379,7 +4371,7 @@ def _enforce_response_type_contract(
                 debug["scene_opening_accepted_candidate_promoted"] = True
             return current, debug
 
-        # Otherwise, select opening fallback text: prepared upstream snapshot, stub recovery, else compatibility re-call.
+        # Otherwise, select opening fallback text: prepared upstream snapshot, stub recovery, else sealed marker.
         upstream_opening, stub_patch = _recover_upstream_opening_fallback_stub_payload(
             gm_output if isinstance(gm_output, dict) else None
         )
@@ -4399,7 +4391,8 @@ def _enforce_response_type_contract(
             fallback = OPENING_FALLBACK_EMPTY_CURATED_FACTS_MARKER
             fallback_meta = _opening_fail_closed_meta_upstream_missing_insufficient_curated_facts(gm_output)
         else:
-            fallback, fallback_meta = _deterministic_opening_fallback_text_and_meta(gm_output)
+            fallback = OPENING_FALLBACK_EMPTY_CURATED_FACTS_MARKER
+            fallback_meta = _opening_fail_closed_meta_upstream_missing_insufficient_curated_facts(gm_output)
         debug.update(fallback_meta)
         if (
             not opening_facts_schema_ok
@@ -4409,10 +4402,8 @@ def _enforce_response_type_contract(
             debug["blocked_repair_kind"] = "opening_missing_curated_facts"
         if upstream_opening:
             debug["opening_fallback_authorship_source"] = OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED
-        elif fallback_meta.get("blocked_repair_kind") == "opening_upstream_prepare_attach_failed":
-            debug["opening_fallback_authorship_source"] = None
         else:
-            debug["opening_fallback_authorship_source"] = OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL
+            debug["opening_fallback_authorship_source"] = None
         fallback_failures = validate_opening_output(fallback, opening_context)
         if fallback and not fallback_failures and not fallback_meta.get("opening_fallback_failed_closed"):
             classification = _opening_fallback_classification()
@@ -5126,7 +5117,9 @@ def _finalize_emission_output(
         "strip_route_illegal_contamination",
         source="gate._finalize_emission_output",
     )
+    pre_route_strip_text = smoothed_text
     smoothed_text = _strip_appended_route_illegal_contamination_sentences(smoothed_text)
+    route_illegal_strip_applied = smoothed_text != pre_route_strip_text
     sanitization_applied = sanitized_text != final_text
     assert_final_emission_mutation_allowed(
         "normalize_whitespace",
@@ -5142,6 +5135,7 @@ def _finalize_emission_output(
         {
             "final_emission_fast_path_used": bool(fast_path),
             "output_sanitization_applied": sanitization_applied,
+            "finalize_route_illegal_strip_applied": route_illegal_strip_applied,
             "sentence_decompression_applied": sentence_decompression_applied,
             "sentence_fragment_repair_applied": fragment_repair_applied,
             "sentence_micro_smoothing_applied": sentence_micro_smoothing_applied,
@@ -5152,6 +5146,7 @@ def _finalize_emission_output(
             "final_text_preview": (gate_out_text[:120] + "…") if len(gate_out_text) > 120 else gate_out_text,
         }
     )
+    _refresh_output_mutation_lineage(out)
     record_final_emission_gate_exit(out, final_normalized_text=gate_out_text)
     _finalize_upstream_fallback_overwrite_containment(out, pre_gate_normalized=pre_gate_text)
     # Block I containment restores the upstream selector snapshot when exit fingerprints diverge.
@@ -5174,6 +5169,7 @@ def _finalize_emission_output(
             out,
             {
                 "post_gate_mutation_detected": pre_gate_text != gate_norm_final,
+                "finalize_route_illegal_strip_applied": True,
                 "final_text_preview": (gate_norm_final[:120] + "…") if len(gate_norm_final) > 120 else gate_norm_final,
             },
         )

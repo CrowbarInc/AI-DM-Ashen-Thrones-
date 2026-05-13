@@ -43,17 +43,45 @@ def test_strip_only_mode_drops_scaffold_without_diegetic_template_substitution()
     assert out == "UPSTREAM_EMPTY_STOCK."
     events = [e.get("event") for e in (ctx.get("sanitizer_debug") or []) if isinstance(e, dict)]
     assert "strip_only_dropped_rewrite_candidate" in events
+    trace = ctx.get("sanitizer_trace") or {}
+    assert trace.get("sanitizer_empty_fallback_used") is True
+    assert trace.get("sanitizer_empty_fallback_source") == "upstream_prepared_emission.prepared_sanitizer_empty_fallback_text"
+    assert trace.get("sanitizer_empty_fallback_owner") == "output_sanitizer"
+    assert trace.get("sanitizer_lineage_mode") == "strip_only"
+    assert trace.get("sanitizer_lineage_changed_count") == 1
+    assert trace.get("sanitizer_lineage_dropped_count") == 1
+    assert trace.get("sanitizer_lineage_empty_fallback_used") is True
+    assert trace.get("sanitizer_lineage_legacy_rewrite_active") is False
 
 
 def test_strip_only_preserves_clean_atmospheric_narration():
     text = "Rain needles across the checkpoint as lanternlight wavers on wet stone."
     ctx = {"sanitizer_boundary_mode": "strip_only", "upstream_prepared_emission": {}}
     assert sanitize_player_facing_output(text, ctx) == text
+    trace = ctx.get("sanitizer_trace") or {}
+    assert trace.get("sanitizer_lineage_mode") == "strip_only"
+    assert trace.get("sanitizer_lineage_changed_count") == 0
+    assert trace.get("sanitizer_lineage_dropped_count") == 0
+    assert trace.get("sanitizer_lineage_empty_fallback_used") is False
+    assert trace.get("sanitizer_lineage_legacy_rewrite_active") is False
+
+
+def test_default_sanitizer_mode_is_strip_only_lineage():
+    text = "Rain needles across the checkpoint as lanternlight wavers on wet stone."
+    ctx: dict = {}
+    assert sanitize_player_facing_output(text, ctx) == text
+    trace = ctx.get("sanitizer_trace") or {}
+    assert trace.get("sanitizer_lineage_mode") == "strip_only"
+    assert trace.get("sanitizer_lineage_changed_count") == 0
+    assert trace.get("sanitizer_lineage_dropped_count") == 0
+    assert trace.get("sanitizer_lineage_empty_fallback_used") is False
+    assert trace.get("sanitizer_lineage_legacy_rewrite_active") is False
 
 
 def test_sanitizer_rewrites_procedural_engine_text():
     text = "I need a more concrete action or target to resolve that procedurally."
-    out = sanitize_player_facing_output(text, _legacy_rewrite_ctx())
+    ctx = _legacy_rewrite_ctx()
+    out = sanitize_player_facing_output(text, ctx)
     low = out.lower()
     assert "resolve that procedurally" not in low
     assert "more concrete action" not in low
@@ -64,6 +92,11 @@ def test_sanitizer_rewrites_procedural_engine_text():
         or "truth stays locked until someone pushes a concrete move" in low
         or "answer has not formed yet" in low
     )
+    trace = ctx.get("sanitizer_trace") or {}
+    assert trace.get("sanitizer_lineage_mode") == SANITIZER_BOUNDARY_LEGACY_SENTENCE_REWRITE
+    assert trace.get("sanitizer_lineage_legacy_rewrite_active") is True
+    assert trace.get("sanitizer_lineage_changed_count") >= 1
+    assert trace.get("sanitizer_lineage_dropped_count") == 0
 
 
 def test_sanitizer_strips_internal_role_prefixes():
@@ -584,3 +617,34 @@ def test_post_gate_strict_clamp_empty_rebuilt_returns_gate_sealed_text():
         },
     )
     assert out == sealed
+
+
+def test_strict_social_empty_output_fallback_records_sanitizer_selection_and_social_prose_owner():
+    res = _strict_social_resolution_for_sanitizer()
+    session = default_session()
+    world = default_world()
+    sid = "frontier_gate"
+    rebuild_active_scene_entities(session, world, sid)
+    set_social_target(session, "runner")
+    ctx = {
+        "resolution": res,
+        "session": session,
+        "world": world,
+        "scene_id": sid,
+        "tags": [],
+        "sanitizer_boundary_mode": "strip_only",
+        "upstream_prepared_emission": {
+            "prepared_sanitizer_empty_fallback_text": "UPSTREAM_EMPTY_STOCK.",
+        },
+    }
+
+    out = sanitize_player_facing_output("", ctx)
+
+    assert out
+    assert out != "UPSTREAM_EMPTY_STOCK."
+    trace = ctx.get("sanitizer_trace") or {}
+    assert trace.get("sanitizer_strict_social_fallback_used") is True
+    assert trace.get("sanitizer_strict_social_selection_owner") == "output_sanitizer"
+    assert trace.get("sanitizer_strict_social_prose_owner") == "strict_social_emission"
+    assert trace.get("sanitizer_strict_social_source") == "social_fallback_line_for_sanitizer.empty_output"
+    assert trace.get("sanitizer_empty_fallback_used") is None

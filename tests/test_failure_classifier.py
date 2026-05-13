@@ -4,7 +4,12 @@ from typing import Any
 
 import pytest
 
-from tests.helpers.failure_classifier import classify_replay_failure
+from game.final_emission_meta import (
+    OPENING_FALLBACK_OWNER_SEALED_GATE,
+    OPENING_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS,
+    OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
+)
+from tests.helpers.failure_classifier import classify_replay_failure, validate_failure_classification_row
 from tests.helpers.failure_dashboard_report import (
     build_failure_dashboard_rows,
     render_failure_dashboard_markdown,
@@ -23,6 +28,7 @@ def _observed(**overrides: Any) -> dict[str, Any]:
         "final_emitted_source": "generated_candidate",
         "fallback_family": None,
         "fallback_temporal_frame": None,
+        "opening_fallback_owner_bucket": None,
         "response_type_required": "dialogue_response",
         "response_type_repair_used": False,
         "response_type_repair_kind": None,
@@ -215,6 +221,109 @@ def test_failure_dashboard_report_includes_required_replay_columns():
     assert "gate_terminal_repair" in report
 
 
+@pytest.mark.parametrize(
+    ("case", "observed", "expected_bucket"),
+    [
+        (
+            "canonical_upstream_prepared",
+            _observed(
+                final_emitted_source="opening_deterministic_fallback",
+                response_type_repair_kind="opening_deterministic_fallback",
+                opening_recovered_via_fallback=True,
+                opening_fallback_authorship_source="upstream_prepared_opening_fallback",
+                fallback_family="scene_opening",
+                fallback_temporal_frame="first_impression",
+            ),
+            OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
+        ),
+        (
+            "fail_closed_sealed_gate",
+            _observed(
+                final_emitted_source="opening_fallback_failed_closed",
+                response_type_repair_kind="opening_deterministic_fallback_failed_closed",
+                opening_recovered_via_fallback=True,
+                fallback_family="scene_opening",
+            ),
+            OPENING_FALLBACK_OWNER_SEALED_GATE,
+        ),
+        (
+            "legacy_compatibility_local_unknown_ambiguous",
+            _observed(
+                final_emitted_source="opening_deterministic_fallback",
+                response_type_repair_kind="opening_deterministic_fallback",
+                opening_recovered_via_fallback=True,
+                opening_fallback_authorship_source="compatibility_local_opening_deterministic",
+                fallback_family="scene_opening",
+            ),
+            OPENING_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS,
+        ),
+    ],
+)
+def test_failure_classifier_rows_split_canonical_legacy_and_sealed_opening_owner_buckets(case, observed, expected_bucket):
+    row = classify_replay_failure(
+        scenario_id=f"{case}_scenario",
+        turn_index=0,
+        observed_turn=observed,
+        drift_rows=[
+            {
+                "field_path": "opening_recovered_via_fallback",
+                "expected": False,
+                "actual": True,
+                "reason": "exact value mismatch",
+                "drift_bucket": "structural_drift",
+            }
+        ],
+    )[0]
+
+    assert row["category"] == "fallback"
+    assert row["source_family"] == "opening_fallback"
+    assert row["emission_sublayer"] == "opening_fallback"
+    assert row["opening_fallback_owner_bucket"] == expected_bucket
+
+
+def test_failure_classifier_preserves_projected_opening_owner_bucket_evidence():
+    row = classify_replay_failure(
+        scenario_id="projected_owner_scenario",
+        turn_index=0,
+        observed_turn=_observed(
+            opening_recovered_via_fallback=True,
+            opening_fallback_owner_bucket=OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
+            fallback_family="scene_opening",
+        ),
+        drift_rows=[
+            {
+                "field_path": "opening_fallback_owner_bucket",
+                "expected": OPENING_FALLBACK_OWNER_SEALED_GATE,
+                "actual": OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
+                "reason": "exact value mismatch",
+                "drift_bucket": "structural_drift",
+            }
+        ],
+    )[0]
+
+    assert row["opening_fallback_owner_bucket"] == OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED
+    assert row["source_family"] == "opening_fallback"
+
+
+def test_failure_classification_contract_rejects_invalid_opening_owner_bucket():
+    row = classify_replay_failure(
+        scenario_id="invalid_owner_scenario",
+        turn_index=0,
+        observed_turn=_observed(opening_recovered_via_fallback=True, opening_fallback_owner_bucket="not-a-bucket"),
+        drift_rows=[
+            {
+                "field_path": "opening_fallback_owner_bucket",
+                "expected": OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
+                "actual": "not-a-bucket",
+                "reason": "exact value mismatch",
+                "drift_bucket": "structural_drift",
+            }
+        ],
+    )[0]
+
+    assert "invalid opening_fallback_owner_bucket: 'not-a-bucket'" in validate_failure_classification_row(row)
+
+
 def test_failure_dashboard_markdown_renders_empty_state():
     report = render_failure_dashboard_markdown(
         [],
@@ -313,9 +422,33 @@ def test_failure_dashboard_artifact_generation_is_opt_in(tmp_path):
     ("case", "observed", "drift_row", "expected"),
     [
         (
-            "response-type repair sublayer",
-            _observed(response_type_repair_used=True, response_type_repair_kind="thin_answer"),
+            "answer upstream prepared repair sublayer",
+            _observed(response_type_repair_used=True, response_type_repair_kind="answer_upstream_prepared_repair"),
             {"field_path": "response_type_repair_used", "expected": False, "actual": True, "reason": "exact value mismatch", "drift_bucket": "structural_drift"},
+            ("emission", "emission", "validator", "medium", "game/final_emission_gate.py", "response_type", "answer_upstream_prepared_repair", None),
+        ),
+        (
+            "action outcome upstream prepared repair sublayer",
+            _observed(response_type_repair_used=True, response_type_repair_kind="action_outcome_upstream_prepared_repair"),
+            {"field_path": "response_type_repair_used", "expected": False, "actual": True, "reason": "exact value mismatch", "drift_bucket": "structural_drift"},
+            ("emission", "emission", "validator", "medium", "game/final_emission_gate.py", "response_type", "action_outcome_upstream_prepared_repair", None),
+        ),
+        (
+            "strict social dialogue repair sublayer",
+            _observed(response_type_repair_used=True, response_type_repair_kind="strict_social_dialogue_repair"),
+            {"field_path": "response_type_repair_used", "expected": False, "actual": True, "reason": "exact value mismatch", "drift_bucket": "structural_drift"},
+            ("emission", "emission", "validator", "medium", "game/final_emission_gate.py", "response_type", "strict_social_dialogue_repair", None),
+        ),
+        (
+            "dialogue minimal repair sublayer",
+            _observed(response_type_repair_used=True, response_type_repair_kind="dialogue_minimal_repair"),
+            {"field_path": "response_type_repair_used", "expected": False, "actual": True, "reason": "exact value mismatch", "drift_bucket": "structural_drift"},
+            ("emission", "emission", "validator", "medium", "game/final_emission_gate.py", "response_type", "dialogue_minimal_repair", None),
+        ),
+        (
+            "legacy thin answer backward-compatible sublayer",
+            _observed(response_type_repair_used=True, response_type_repair_kind="thin_answer"),
+            {"field_path": "response_type_repair_used", "expected": False, "actual": True, "reason": "legacy backward-compatible fixture", "drift_bucket": "structural_drift"},
             ("emission", "emission", "validator", "medium", "game/final_emission_gate.py", "response_type", "thin_answer", None),
         ),
         (
@@ -388,13 +521,333 @@ def test_failure_classifier_uses_precision_evidence_for_ambiguous_locality(case,
     assert row["missing_source_kind"] == missing_kind
 
 
+@pytest.mark.parametrize(
+    ("lineage", "expected_source"),
+    [
+        (["finalize_route_illegal_strip", "post_gate_mutation_detected"], "final_emission.finalize_route_illegal_strip"),
+        (["pre_gate_sanitizer", "sanitizer_empty_fallback", "finalize_packaging"], "sanitizer.empty_fallback"),
+        (["response_type_repair", "finalize_packaging"], "response_type"),
+    ],
+)
+def test_failure_classifier_reduces_post_gate_unknown_from_final_emission_lineage(lineage, expected_source):
+    row = classify_replay_failure(
+        scenario_id="post_gate_lineage_reduction",
+        turn_index=0,
+        observed_turn=_observed(
+            post_gate_mutation_detected=True,
+            final_emission_mutation_lineage=lineage,
+        ),
+        drift_rows=[
+            {
+                "field_path": "post_gate_mutation_detected",
+                "expected": False,
+                "actual": True,
+                "reason": "exact value mismatch",
+                "drift_bucket": "structural_drift",
+            }
+        ],
+    )[0]
+
+    assert row["category"] == "emission"
+    assert row["emission_sublayer"] == expected_source
+    assert row["mutation_source"] == expected_source
+    assert row["final_emission_mutation_lineage"] == lineage
+
+
+def test_failure_classifier_keeps_post_gate_unknown_without_lineage_or_specific_evidence():
+    row = classify_replay_failure(
+        scenario_id="post_gate_no_lineage_unknown",
+        turn_index=0,
+        observed_turn=_observed(post_gate_mutation_detected=True, final_emission_mutation_lineage=None),
+        drift_rows=[
+            {
+                "field_path": "post_gate_mutation_detected",
+                "expected": False,
+                "actual": True,
+                "reason": "exact value mismatch",
+                "drift_bucket": "structural_drift",
+            }
+        ],
+    )[0]
+
+    assert row["emission_sublayer"] == "emission.post_gate_mutation_unknown"
+    assert row["mutation_source"] == "emission.post_gate_mutation_unknown"
+
+
+@pytest.mark.parametrize(
+    ("case", "repair_kind", "source_field"),
+    [
+        ("answer_prepared_owner", "answer_upstream_prepared_repair", "prepared_answer_fallback_text"),
+        ("action_prepared_owner", "action_outcome_upstream_prepared_repair", "prepared_action_fallback_text"),
+    ],
+)
+def test_failure_classifier_maps_valid_prepared_answer_action_repairs_to_upstream_owner(case, repair_kind, source_field):
+    row = classify_replay_failure(
+        scenario_id=case,
+        turn_index=0,
+        observed_turn=_observed(
+            response_type_repair_used=True,
+            response_type_repair_kind=repair_kind,
+            upstream_prepared_emission_used=True,
+            upstream_prepared_emission_valid=True,
+            upstream_prepared_emission_source=source_field,
+            upstream_prepared_emission_reject_reason=None,
+        ),
+        drift_rows=[
+            {
+                "field_path": "response_type_repair_used",
+                "expected": False,
+                "actual": True,
+                "reason": "exact value mismatch",
+                "drift_bucket": "structural_drift",
+            }
+        ],
+    )[0]
+
+    assert row["category"] == "emission"
+    assert row["primary_owner"] == "upstream_prepared_emission"
+    assert row["secondary_owner"] == "emission"
+    assert row["source_family"] == "upstream_prepared_emission"
+    assert row["investigate_first"] == "game/final_emission_gate.py"
+    assert row["emission_sublayer"] == "upstream_prepared_emission"
+    assert row["prepared_emission_owner"] == "upstream_prepared_emission"
+    assert row["upstream_prepared_emission_used"] is True
+    assert row["upstream_prepared_emission_valid"] is True
+    assert row["upstream_prepared_emission_source"] == source_field
+
+
+def test_failure_classifier_preserves_rejected_prepared_emission_reason():
+    row = classify_replay_failure(
+        scenario_id="malformed_prepared_owner",
+        turn_index=0,
+        observed_turn=_observed(
+            response_type_repair_used=True,
+            response_type_repair_kind="action_outcome_upstream_prepared_repair",
+            upstream_prepared_emission_used=True,
+            upstream_prepared_emission_valid=False,
+            upstream_prepared_emission_source="prepared_action_fallback_text",
+            upstream_prepared_emission_reject_reason="missing_concrete_action_outcome",
+        ),
+        drift_rows=[
+            {
+                "field_path": "upstream_prepared_emission_valid",
+                "expected": True,
+                "actual": False,
+                "reason": "malformed prepared emission rejected",
+                "drift_bucket": "structural_drift",
+            }
+        ],
+    )[0]
+
+    assert row["primary_owner"] == "upstream_prepared_emission"
+    assert row["prepared_emission_owner"] == "upstream_prepared_emission"
+    assert row["upstream_prepared_emission_valid"] is False
+    assert row["upstream_prepared_emission_reject_reason"] == "missing_concrete_action_outcome"
+
+
+def test_failure_dashboard_evidence_shows_rejected_prepared_emission_reason():
+    rows = build_failure_dashboard_rows(
+        observed_turn=_observed(
+            response_type_repair_used=False,
+            response_type_repair_kind="action_outcome_upstream_prepared_repair",
+            upstream_prepared_emission_used=True,
+            upstream_prepared_emission_valid=False,
+            upstream_prepared_emission_source="upstream_prepared_emission.prepared_action_fallback_text",
+            upstream_prepared_emission_reject_reason="action_outcome_missing_result",
+        ),
+        drift_rows=[
+            {
+                "field_path": "upstream_prepared_emission_valid",
+                "expected": True,
+                "actual": False,
+                "reason": "malformed prepared emission rejected",
+                "drift_bucket": "structural_drift",
+            }
+        ],
+        scenario_id="rejected_prepared_dashboard",
+        turn_index=0,
+    )
+
+    report = render_failure_dashboard_markdown(
+        rows,
+        generated_at="2026-05-13T00:00:00Z",
+        command_used="pytest rejected prepared evidence",
+    )
+
+    assert rows[0]["primary_owner"] == "upstream_prepared_emission"
+    assert rows[0]["upstream_prepared_emission_reject_reason"] == "action_outcome_missing_result"
+    assert "prepared_emission=rejected reason=action_outcome_missing_result" in report
+
+
+def test_failure_classifier_absent_prepared_emission_telemetry_does_not_assign_upstream_owner():
+    row = classify_replay_failure(
+        scenario_id="absent_prepared_telemetry",
+        turn_index=0,
+        observed_turn=_observed(
+            response_type_repair_used=False,
+            response_type_repair_kind=None,
+            upstream_prepared_emission_used=False,
+            upstream_prepared_emission_valid=False,
+            upstream_prepared_emission_source="absent",
+            upstream_prepared_emission_reject_reason=None,
+        ),
+        drift_rows=[
+            {
+                "field_path": "upstream_prepared_emission_used",
+                "expected": True,
+                "actual": False,
+                "reason": "absent prepared emission telemetry",
+                "drift_bucket": "structural_drift",
+            }
+        ],
+    )[0]
+
+    assert row["category"] == "emission"
+    assert row["primary_owner"] == "emission"
+    assert row["secondary_owner"] == "validator"
+    assert row["source_family"] == "upstream_prepared_emission"
+    assert row["prepared_emission_owner"] is None
+
+
+def test_failure_classifier_sanitizer_empty_fallback_is_sanitizer_owned_not_prepared_answer_action():
+    row = classify_replay_failure(
+        scenario_id="sanitizer_empty_split",
+        turn_index=0,
+        observed_turn=_observed(
+            sanitizer_mode="strip_only",
+            sanitizer_empty_fallback_used=True,
+            sanitizer_empty_fallback_source="upstream_prepared_emission.prepared_sanitizer_empty_fallback_text",
+            sanitizer_empty_fallback_owner="output_sanitizer",
+            upstream_prepared_emission_used=False,
+            upstream_prepared_emission_valid=False,
+            upstream_prepared_emission_source=None,
+            upstream_prepared_emission_reject_reason=None,
+        ),
+        drift_rows=[
+            {
+                "field_path": "sanitizer_empty_fallback_used",
+                "expected": False,
+                "actual": True,
+                "reason": "sanitizer empty fallback selected",
+                "drift_bucket": "structural_drift",
+            }
+        ],
+    )[0]
+
+    assert row["category"] == "sanitizer"
+    assert row["primary_owner"] == "sanitizer"
+    assert row["secondary_owner"] == "emission"
+    assert row["source_family"] == "output_sanitizer"
+    assert row["emission_sublayer"] == "sanitizer"
+    assert row["prepared_emission_owner"] is None
+    assert row["sanitizer_empty_fallback_owner"] == "output_sanitizer"
+    assert row["sanitizer_empty_fallback_source"] == "upstream_prepared_emission.prepared_sanitizer_empty_fallback_text"
+
+
+@pytest.mark.parametrize("repair_kind", ["strict_social_dialogue_repair", "dialogue_minimal_repair"])
+def test_failure_classifier_keeps_dialogue_repairs_separate_from_prepared_emission(repair_kind):
+    row = classify_replay_failure(
+        scenario_id=f"{repair_kind}_separate",
+        turn_index=0,
+        observed_turn=_observed(response_type_repair_used=True, response_type_repair_kind=repair_kind),
+        drift_rows=[
+            {
+                "field_path": "response_type_repair_used",
+                "expected": False,
+                "actual": True,
+                "reason": "exact value mismatch",
+                "drift_bucket": "structural_drift",
+            }
+        ],
+    )[0]
+
+    assert row["primary_owner"] == "emission"
+    assert row["source_family"] == "final_emission_gate"
+    assert row["emission_sublayer"] == "response_type"
+    assert row["prepared_emission_owner"] is None
+
+
+def test_failure_dashboard_evidence_renders_sanitizer_empty_fallback_distinctly():
+    rows = build_failure_dashboard_rows(
+        observed_turn=_observed(
+            sanitizer_mode="strip_only",
+            sanitizer_empty_fallback_used=True,
+            sanitizer_empty_fallback_source="upstream_prepared_emission.prepared_sanitizer_empty_fallback_text",
+            sanitizer_empty_fallback_owner="output_sanitizer",
+            upstream_prepared_emission_used=False,
+            upstream_prepared_emission_valid=False,
+        ),
+        drift_rows=[
+            {
+                "field_path": "sanitizer_empty_fallback_used",
+                "expected": False,
+                "actual": True,
+                "reason": "sanitizer empty fallback selected",
+                "drift_bucket": "structural_drift",
+            }
+        ],
+        scenario_id="sanitizer_empty_dashboard",
+        turn_index=0,
+    )
+
+    report = render_failure_dashboard_markdown(
+        rows,
+        generated_at="2026-05-13T00:00:00Z",
+        command_used="pytest sanitizer empty evidence",
+    )
+
+    assert rows[0]["primary_owner"] == "sanitizer"
+    assert rows[0]["prepared_emission_owner"] is None
+    assert "sanitizer_empty=True" in report
+    assert "sanitizer_empty_source=upstream_prepared_emission.prepared_sanitizer_empty_fallback_text" in report
+    assert "sanitizer_empty_owner=output_sanitizer" in report
+    assert "prepared_emission=used" not in report
+
+
+def test_failure_classifier_missing_prepared_emission_telemetry_preserves_legacy_owner():
+    row = classify_replay_failure(
+        scenario_id="legacy_no_prepared_telemetry",
+        turn_index=0,
+        observed_turn=_observed(response_type_repair_used=True, response_type_repair_kind="answer_upstream_prepared_repair"),
+        drift_rows=[
+            {
+                "field_path": "response_type_repair_used",
+                "expected": False,
+                "actual": True,
+                "reason": "exact value mismatch",
+                "drift_bucket": "structural_drift",
+            }
+        ],
+    )[0]
+
+    assert row["primary_owner"] == "emission"
+    assert row["secondary_owner"] == "validator"
+    assert row["source_family"] == "final_emission_gate"
+    assert row["emission_sublayer"] == "response_type"
+    assert row["prepared_emission_owner"] is None
+
+
 def test_failure_dashboard_evidence_column_compacts_precision_fields():
     rows = build_failure_dashboard_rows(
         observed_turn=_observed(
             response_type_repair_used=True,
-            response_type_repair_kind="thin_answer",
+            response_type_repair_kind="action_outcome_upstream_prepared_repair",
+            upstream_prepared_emission_used=True,
+            upstream_prepared_emission_valid=True,
+            upstream_prepared_emission_source="prepared_action_fallback_text",
+            final_emission_mutation_lineage=[
+                "pre_gate_sanitizer",
+                "response_type_repair",
+                "prepared_emission_selection",
+                "finalize_packaging",
+            ],
             sanitizer_mode="strip_only",
             sanitizer_event_count=2,
+            sanitizer_lineage_mode="strip_only",
+            sanitizer_lineage_changed_count=2,
+            sanitizer_lineage_dropped_count=1,
+            sanitizer_lineage_empty_fallback_used=False,
+            sanitizer_lineage_legacy_rewrite_active=False,
         ),
         drift_rows=[
             {
@@ -416,7 +869,123 @@ def test_failure_dashboard_evidence_column_compacts_precision_fields():
     )
 
     assert "Evidence" in report
-    assert "sublayer=response_type" in report
-    assert "repair=thin_answer" in report
+    assert "prepared_emission=used valid=True source=prepared_action_fallback_text" in report
+    assert "sublayer=upstream_prepared_emission" in report
+    assert "repair=action_outcome_upstream_prepared_repair" in report
+    assert "lineage=pre_gate_sanitizer>response_type_repair>prepared_emission_selection>finalize_packaging" in report
     assert "sanitizer_mode=strip_only" in report
     assert "sanitizer_events=2" in report
+    assert "sanitizer_lineage_mode=strip_only" in report
+    assert "sanitizer_lineage_changed=2" in report
+    assert "sanitizer_lineage_dropped=1" in report
+    assert "sanitizer_lineage_empty=False" in report
+    assert "sanitizer_lineage_legacy=False" in report
+
+
+def test_failure_dashboard_evidence_preserves_legacy_thin_answer_as_backward_compatible_label():
+    rows = build_failure_dashboard_rows(
+        observed_turn=_observed(response_type_repair_used=True, response_type_repair_kind="thin_answer"),
+        drift_rows=[
+            {
+                "field_path": "response_type_repair_used",
+                "expected": False,
+                "actual": True,
+                "reason": "legacy backward-compatible fixture",
+                "drift_bucket": "structural_drift",
+            }
+        ],
+        scenario_id="legacy_thin_answer_probe",
+        turn_index=1,
+    )
+
+    report = render_failure_dashboard_markdown(
+        rows,
+        generated_at="2026-05-11T00:00:00Z",
+        command_used="pytest legacy evidence",
+    )
+
+    assert rows[0]["repair_kind"] == "thin_answer"
+    assert "legacy_thin_answer_probe" in report
+    assert "repair=thin_answer" in report
+
+
+def test_failure_classifier_legacy_sanitizer_rewrite_is_diagnostic_output_sanitizer_evidence():
+    rows = build_failure_dashboard_rows(
+        observed_turn=_observed(
+            sanitizer_lineage_mode="legacy_sentence_rewrite",
+            sanitizer_lineage_changed_count=1,
+            sanitizer_lineage_dropped_count=0,
+            sanitizer_lineage_empty_fallback_used=False,
+            sanitizer_lineage_legacy_rewrite_active=True,
+        ),
+        drift_rows=[
+            {
+                "field_path": "scaffold_leakage",
+                "expected": False,
+                "actual": True,
+                "reason": "legacy sentence rewrite diagnostic evidence",
+                "drift_bucket": "semantic_drift",
+            }
+        ],
+        scenario_id="legacy_sanitizer_rewrite_probe",
+        turn_index=2,
+    )
+
+    report = render_failure_dashboard_markdown(
+        rows,
+        generated_at="2026-05-13T00:00:00Z",
+        command_used="pytest legacy sanitizer evidence",
+    )
+
+    assert rows[0]["category"] == "sanitizer"
+    assert rows[0]["primary_owner"] == "sanitizer"
+    assert rows[0]["secondary_owner"] == "emission"
+    assert rows[0]["source_family"] == "output_sanitizer"
+    assert rows[0]["emission_sublayer"] == "sanitizer"
+    assert rows[0]["sanitizer_lineage_legacy_rewrite_active"] is True
+    assert "sanitizer_lineage_mode=legacy_sentence_rewrite" in report
+    assert "sanitizer_lineage_legacy=legacy_diagnostic" in report
+
+
+def test_failure_classifier_strict_social_sanitizer_fallback_keeps_selection_and_prose_owners_split():
+    rows = build_failure_dashboard_rows(
+        observed_turn=_observed(
+            strict_social_active=True,
+            sanitizer_strict_social_fallback_used=True,
+            sanitizer_strict_social_selection_owner="output_sanitizer",
+            sanitizer_strict_social_prose_owner="strict_social_emission",
+            sanitizer_strict_social_source="social_fallback_line_for_sanitizer.empty_output",
+            sanitizer_empty_fallback_used=None,
+            upstream_prepared_emission_used=False,
+            upstream_prepared_emission_valid=False,
+        ),
+        drift_rows=[
+            {
+                "field_path": "sanitizer_strict_social_fallback_used",
+                "expected": False,
+                "actual": True,
+                "reason": "sanitizer selected strict-social fallback",
+                "drift_bucket": "structural_drift",
+            }
+        ],
+        scenario_id="strict_social_sanitizer_split_probe",
+        turn_index=2,
+    )
+
+    report = render_failure_dashboard_markdown(
+        rows,
+        generated_at="2026-05-13T00:00:00Z",
+        command_used="pytest strict social sanitizer split",
+    )
+
+    assert rows[0]["category"] == "sanitizer"
+    assert rows[0]["primary_owner"] == "sanitizer"
+    assert rows[0]["source_family"] == "output_sanitizer"
+    assert rows[0]["emission_sublayer"] == "strict_social_replacement"
+    assert rows[0]["prepared_emission_owner"] is None
+    assert rows[0]["sanitizer_empty_fallback_used"] is None
+    assert rows[0]["sanitizer_strict_social_selection_owner"] == "output_sanitizer"
+    assert rows[0]["sanitizer_strict_social_prose_owner"] == "strict_social_emission"
+    assert "strict_social_selection_owner=output_sanitizer" in report
+    assert "strict_social_prose_owner=strict_social_emission" in report
+    assert "strict_social_source=social_fallback_line_for_sanitizer.empty_output" in report

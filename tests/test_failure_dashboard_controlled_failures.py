@@ -4,6 +4,7 @@ from typing import Any
 
 import pytest
 
+from game.final_emission_meta import OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED
 from tests.helpers.failure_dashboard_report import (
     build_failure_dashboard_rows,
     failure_dashboard_requested,
@@ -25,6 +26,7 @@ def _observed(**overrides: Any) -> dict[str, Any]:
         "final_emitted_source": "generated_candidate",
         "fallback_family": None,
         "fallback_temporal_frame": None,
+        "opening_fallback_owner_bucket": None,
         "response_type_required": "dialogue_response",
         "response_type_repair_used": False,
         "response_type_repair_kind": None,
@@ -87,8 +89,45 @@ CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any], dict[
         },
     ),
     (
+        "opening_fallback_owner_bucket",
+        _observed(
+            final_emitted_source="opening_deterministic_fallback",
+            response_type_repair_kind="opening_deterministic_fallback",
+            opening_recovered_via_fallback=True,
+            opening_fallback_authorship_source="upstream_prepared_opening_fallback",
+            opening_fallback_owner_bucket=OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
+            fallback_family="scene_opening",
+            fallback_temporal_frame="first_impression",
+        ),
+        {
+            "field_path": "opening_fallback_owner_bucket",
+            "expected": "sealed-gate",
+            "actual": OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
+            "reason": "exact value mismatch",
+            "drift_bucket": "structural_drift",
+        },
+        {
+            "category": "fallback",
+            "primary_owner": "fallback",
+            "secondary_owner": "emission",
+            "severity": "high",
+            "investigate_first": "game/final_emission_gate.py",
+            "emission_sublayer": "opening_fallback",
+            "opening_fallback_owner_bucket": OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
+        },
+    ),
+    (
         "sanitizer_leakage",
-        _observed(sanitizer_mode="strip_only", sanitizer_event_count=1, sanitizer_changed_count=0),
+        _observed(
+            sanitizer_mode="strip_only",
+            sanitizer_event_count=1,
+            sanitizer_changed_count=0,
+            sanitizer_lineage_mode="strip_only",
+            sanitizer_lineage_changed_count=1,
+            sanitizer_lineage_dropped_count=1,
+            sanitizer_lineage_empty_fallback_used=False,
+            sanitizer_lineage_legacy_rewrite_active=False,
+        ),
         {
             "field_path": "scaffold_leakage",
             "expected": False,
@@ -103,11 +142,127 @@ CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any], dict[
             "severity": "critical",
             "investigate_first": "game/output_sanitizer.py",
             "emission_sublayer": "sanitizer",
+            "sanitizer_lineage_mode": "strip_only",
+            "sanitizer_lineage_changed_count": 1,
+            "sanitizer_lineage_dropped_count": 1,
+        },
+    ),
+    (
+        "sanitizer_empty_fallback",
+        _observed(
+            sanitizer_mode="strip_only",
+            sanitizer_empty_fallback_used=True,
+            sanitizer_empty_fallback_source="upstream_prepared_emission.prepared_sanitizer_empty_fallback_text",
+            sanitizer_empty_fallback_owner="output_sanitizer",
+            sanitizer_lineage_mode="strip_only",
+            sanitizer_lineage_changed_count=1,
+            sanitizer_lineage_dropped_count=1,
+            sanitizer_lineage_empty_fallback_used=True,
+            sanitizer_lineage_legacy_rewrite_active=False,
+            final_emission_mutation_lineage=[
+                "pre_gate_sanitizer",
+                "sanitizer_empty_fallback",
+                "finalize_packaging",
+            ],
+            upstream_prepared_emission_used=False,
+            upstream_prepared_emission_valid=False,
+        ),
+        {
+            "field_path": "sanitizer_empty_fallback_used",
+            "expected": False,
+            "actual": True,
+            "reason": "sanitizer empty fallback selected",
+            "drift_bucket": "structural_drift",
+        },
+        {
+            "category": "sanitizer",
+            "primary_owner": "sanitizer",
+            "secondary_owner": "emission",
+            "severity": "critical",
+            "investigate_first": "game/output_sanitizer.py",
+            "emission_sublayer": "sanitizer",
+            "sanitizer_empty_fallback_owner": "output_sanitizer",
+            "sanitizer_lineage_empty_fallback_used": True,
+            "final_emission_mutation_lineage": [
+                "pre_gate_sanitizer",
+                "sanitizer_empty_fallback",
+                "finalize_packaging",
+            ],
+        },
+    ),
+    (
+        "strict_social_sanitizer_fallback",
+        _observed(
+            strict_social_active=True,
+            sanitizer_strict_social_fallback_used=True,
+            sanitizer_strict_social_selection_owner="output_sanitizer",
+            sanitizer_strict_social_prose_owner="strict_social_emission",
+            sanitizer_strict_social_source="social_fallback_line_for_sanitizer.empty_output",
+            sanitizer_empty_fallback_used=None,
+            upstream_prepared_emission_used=False,
+            upstream_prepared_emission_valid=False,
+        ),
+        {
+            "field_path": "sanitizer_strict_social_fallback_used",
+            "expected": False,
+            "actual": True,
+            "reason": "sanitizer selected strict-social fallback",
+            "drift_bucket": "structural_drift",
+        },
+        {
+            "category": "sanitizer",
+            "primary_owner": "sanitizer",
+            "secondary_owner": "emission",
+            "severity": "critical",
+            "investigate_first": "game/output_sanitizer.py",
+            "emission_sublayer": "strict_social_replacement",
+            "sanitizer_strict_social_selection_owner": "output_sanitizer",
+            "sanitizer_strict_social_prose_owner": "strict_social_emission",
+            "sanitizer_strict_social_source": "social_fallback_line_for_sanitizer.empty_output",
+            "prepared_emission_owner": None,
+            "sanitizer_empty_fallback_used": None,
+        },
+    ),
+    (
+        "legacy_sanitizer_rewrite_diagnostic",
+        _observed(
+            sanitizer_lineage_mode="legacy_sentence_rewrite",
+            sanitizer_lineage_changed_count=1,
+            sanitizer_lineage_dropped_count=0,
+            sanitizer_lineage_empty_fallback_used=False,
+            sanitizer_lineage_legacy_rewrite_active=True,
+        ),
+        {
+            "field_path": "scaffold_leakage",
+            "expected": False,
+            "actual": True,
+            "reason": "legacy sentence rewrite diagnostic evidence",
+            "drift_bucket": "semantic_drift",
+        },
+        {
+            "category": "sanitizer",
+            "primary_owner": "sanitizer",
+            "secondary_owner": "emission",
+            "severity": "critical",
+            "investigate_first": "game/output_sanitizer.py",
+            "emission_sublayer": "sanitizer",
+            "sanitizer_lineage_legacy_rewrite_active": True,
         },
     ),
     (
         "response_type_repair_unexpected",
-        _observed(response_type_repair_used=True, response_type_repair_kind="thin_answer"),
+        _observed(
+            response_type_repair_used=True,
+            response_type_repair_kind="action_outcome_upstream_prepared_repair",
+            upstream_prepared_emission_used=True,
+            upstream_prepared_emission_valid=True,
+            upstream_prepared_emission_source="prepared_action_fallback_text",
+            final_emission_mutation_lineage=[
+                "response_type_repair",
+                "prepared_emission_selection",
+                "finalize_packaging",
+            ],
+        ),
         {
             "field_path": "response_type_repair_used",
             "expected": False,
@@ -117,12 +272,46 @@ CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any], dict[
         },
         {
             "category": "emission",
-            "primary_owner": "emission",
-            "secondary_owner": "validator",
+            "primary_owner": "upstream_prepared_emission",
+            "secondary_owner": "emission",
             "severity": "medium",
             "investigate_first": "game/final_emission_gate.py",
-            "emission_sublayer": "response_type",
-            "repair_kind": "thin_answer",
+            "emission_sublayer": "upstream_prepared_emission",
+            "repair_kind": "action_outcome_upstream_prepared_repair",
+            "prepared_emission_owner": "upstream_prepared_emission",
+            "final_emission_mutation_lineage": [
+                "response_type_repair",
+                "prepared_emission_selection",
+                "finalize_packaging",
+            ],
+        },
+    ),
+    (
+        "prepared_emission_rejected",
+        _observed(
+            response_type_repair_used=True,
+            response_type_repair_kind="answer_upstream_prepared_repair",
+            upstream_prepared_emission_used=True,
+            upstream_prepared_emission_valid=False,
+            upstream_prepared_emission_source="prepared_answer_fallback_text",
+            upstream_prepared_emission_reject_reason="missing_answer_specificity",
+        ),
+        {
+            "field_path": "upstream_prepared_emission_valid",
+            "expected": True,
+            "actual": False,
+            "reason": "malformed prepared emission rejected",
+            "drift_bucket": "structural_drift",
+        },
+        {
+            "category": "emission",
+            "primary_owner": "upstream_prepared_emission",
+            "secondary_owner": "emission",
+            "severity": "high",
+            "investigate_first": "game/final_emission_gate.py",
+            "emission_sublayer": "upstream_prepared_emission",
+            "prepared_emission_owner": "upstream_prepared_emission",
+            "upstream_prepared_emission_reject_reason": "missing_answer_specificity",
         },
     ),
     (
@@ -183,7 +372,9 @@ CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any], dict[
     ),
     (
         "post_gate_unknown_mutation",
-        _observed(post_gate_mutation_detected=True),
+        _observed(
+            post_gate_mutation_detected=True,
+        ),
         {
             "field_path": "post_gate_mutation_detected",
             "expected": False,
@@ -199,6 +390,79 @@ CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any], dict[
             "investigate_first": "game/final_emission_gate.py",
             "emission_sublayer": "emission.post_gate_mutation_unknown",
             "mutation_source": "emission.post_gate_mutation_unknown",
+            "final_emission_mutation_lineage": None,
+        },
+    ),
+    (
+        "post_gate_route_illegal_strip_reduced",
+        _observed(
+            post_gate_mutation_detected=True,
+            final_emission_mutation_lineage=["finalize_route_illegal_strip", "finalize_packaging"],
+        ),
+        {
+            "field_path": "post_gate_mutation_detected",
+            "expected": False,
+            "actual": True,
+            "reason": "exact value mismatch",
+            "drift_bucket": "structural_drift",
+        },
+        {
+            "category": "emission",
+            "primary_owner": "emission",
+            "secondary_owner": "validator",
+            "severity": "high",
+            "investigate_first": "game/final_emission_gate.py",
+            "emission_sublayer": "final_emission.finalize_route_illegal_strip",
+            "mutation_source": "final_emission.finalize_route_illegal_strip",
+            "final_emission_mutation_lineage": ["finalize_route_illegal_strip", "finalize_packaging"],
+        },
+    ),
+    (
+        "post_gate_sanitizer_empty_reduced",
+        _observed(
+            post_gate_mutation_detected=True,
+            final_emission_mutation_lineage=["pre_gate_sanitizer", "sanitizer_empty_fallback", "finalize_packaging"],
+        ),
+        {
+            "field_path": "post_gate_mutation_detected",
+            "expected": False,
+            "actual": True,
+            "reason": "exact value mismatch",
+            "drift_bucket": "structural_drift",
+        },
+        {
+            "category": "emission",
+            "primary_owner": "emission",
+            "secondary_owner": "validator",
+            "severity": "high",
+            "investigate_first": "game/final_emission_gate.py",
+            "emission_sublayer": "sanitizer.empty_fallback",
+            "mutation_source": "sanitizer.empty_fallback",
+            "final_emission_mutation_lineage": ["pre_gate_sanitizer", "sanitizer_empty_fallback", "finalize_packaging"],
+        },
+    ),
+    (
+        "post_gate_response_type_reduced",
+        _observed(
+            post_gate_mutation_detected=True,
+            final_emission_mutation_lineage=["response_type_repair", "finalize_packaging"],
+        ),
+        {
+            "field_path": "post_gate_mutation_detected",
+            "expected": False,
+            "actual": True,
+            "reason": "exact value mismatch",
+            "drift_bucket": "structural_drift",
+        },
+        {
+            "category": "emission",
+            "primary_owner": "emission",
+            "secondary_owner": "validator",
+            "severity": "high",
+            "investigate_first": "game/final_emission_gate.py",
+            "emission_sublayer": "response_type",
+            "mutation_source": "response_type",
+            "final_emission_mutation_lineage": ["response_type_repair", "finalize_packaging"],
         },
     ),
 )
@@ -249,7 +513,26 @@ def test_controlled_failure_probe_dashboard_contains_triage_columns():
     assert "speaker_mismatch" in report
     assert "forced_fallback_source" in report
     assert "fallback_source_mismatch" in report
+    assert "opening_fallback_owner_bucket" in report
+    assert "opening_owner=upstream-prepared" in report
+    assert "prepared_emission=used valid=True source=prepared_action_fallback_text" in report
+    assert "lineage=response_type_repair>prepared_emission_selection>finalize_packaging" in report
+    assert "prepared_emission=rejected reason=missing_answer_specificity" in report
+    assert "sanitizer_empty_owner=output_sanitizer" in report
+    assert "sanitizer_lineage_changed=1" in report
+    assert "sanitizer_lineage_dropped=1" in report
+    assert "sanitizer_lineage_empty=True" in report
+    assert "sanitizer_lineage_legacy=legacy_diagnostic" in report
+    assert "strict_social_selection_owner=output_sanitizer" in report
+    assert "strict_social_prose_owner=strict_social_emission" in report
+    assert "strict_social_source=social_fallback_line_for_sanitizer.empty_output" in report
     assert "missing=runtime_missing_raw_absent" in report
     assert "missing=projection_missing_raw_present" in report
     assert "sublayer=emission.post_gate_mutation_unknown" in report
+    assert "lineage=finalize_route_illegal_strip>finalize_packaging" in report
+    assert "mutation=final_emission.finalize_route_illegal_strip" in report
+    assert "lineage=pre_gate_sanitizer>sanitizer_empty_fallback>finalize_packaging" in report
+    assert "mutation=sanitizer.empty_fallback" in report
+    assert "lineage=response_type_repair>finalize_packaging" in report
+    assert "mutation=response_type" in report
     assert "route_kind" in report

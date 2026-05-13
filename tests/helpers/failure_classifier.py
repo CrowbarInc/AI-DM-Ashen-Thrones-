@@ -8,11 +8,13 @@ from __future__ import annotations
 
 from typing import Any, Mapping, NotRequired, Sequence, TypedDict
 
+from game.final_emission_meta import opening_fallback_owner_bucket_from_meta
 from tests.failure_classification_contract import (
     ALLOWED_EMISSION_SUBLAYERS,
     ALLOWED_FAILURE_CATEGORIES,
     ALLOWED_FAILURE_SEVERITIES,
     ALLOWED_MISSING_SOURCE_KINDS,
+    ALLOWED_OPENING_FALLBACK_OWNER_BUCKETS,
     ALLOWED_PRIMARY_OWNERS,
     ALLOWED_REPLAY_TAGS,
     ALLOWED_SECONDARY_OWNERS,
@@ -47,8 +49,15 @@ class FailureClassification(TypedDict):
     selected_speaker_id: NotRequired[Any]
     canonical_target_actor_id: NotRequired[Any]
     final_emitted_source: NotRequired[Any]
+    final_emission_mutation_lineage: NotRequired[Any]
     fallback_family: NotRequired[Any]
     fallback_temporal_frame: NotRequired[Any]
+    opening_fallback_owner_bucket: NotRequired[Any]
+    upstream_prepared_emission_used: NotRequired[Any]
+    upstream_prepared_emission_valid: NotRequired[Any]
+    upstream_prepared_emission_source: NotRequired[Any]
+    upstream_prepared_emission_reject_reason: NotRequired[Any]
+    prepared_emission_owner: NotRequired[str | None]
     response_type_required: NotRequired[Any]
     response_type_repair_used: NotRequired[Any]
     response_type_repair_kind: NotRequired[Any]
@@ -61,6 +70,18 @@ class FailureClassification(TypedDict):
     sanitizer_event_count: NotRequired[Any]
     sanitizer_changed_count: NotRequired[Any]
     sanitizer_rewrite_used: NotRequired[Any]
+    sanitizer_empty_fallback_used: NotRequired[Any]
+    sanitizer_empty_fallback_source: NotRequired[Any]
+    sanitizer_empty_fallback_owner: NotRequired[str | None]
+    sanitizer_lineage_mode: NotRequired[Any]
+    sanitizer_lineage_changed_count: NotRequired[Any]
+    sanitizer_lineage_dropped_count: NotRequired[Any]
+    sanitizer_lineage_empty_fallback_used: NotRequired[Any]
+    sanitizer_lineage_legacy_rewrite_active: NotRequired[Any]
+    sanitizer_strict_social_fallback_used: NotRequired[Any]
+    sanitizer_strict_social_selection_owner: NotRequired[str | None]
+    sanitizer_strict_social_prose_owner: NotRequired[str | None]
+    sanitizer_strict_social_source: NotRequired[Any]
     unavailable_fields: list[str]
     raw_signal_refs: list[str]
     classification_confidence: str
@@ -73,11 +94,15 @@ CATEGORY_RULES: tuple[tuple[str, tuple[str, ...], FailureCategory, str], ...] = 
     ("route", ("route_kind", "resolution_kind", "trace.social_contract_trace.route_selected"), "route", "interaction_context"),
     ("continuity", ("continuity", "active_interaction", "current_interlocutor", "dialogue_lock"), "continuity", "interaction_continuity"),
     ("speaker", ("selected_speaker_id", "reply_owner", "visible_grounded_speaker", "speaker"), "speaker", "speaker_contract"),
-    ("fallback", ("fallback_family", "fallback_temporal_frame", "opening_recovered_via_fallback", "opening_fallback_authorship_source"), "fallback", "fallback_behavior"),
+    ("opening_fallback", ("opening_recovered_via_fallback", "opening_fallback_authorship_source", "opening_fallback_owner_bucket"), "fallback", "opening_fallback"),
+    ("fallback", ("fallback_family", "fallback_temporal_frame"), "fallback", "fallback_behavior"),
     ("fallback_source", ("final_emitted_source",), "fallback", "final_emission_gate"),
+    ("upstream_prepared_emission", ("upstream_prepared_emission", "prepared_emission_owner"), "emission", "upstream_prepared_emission"),
     ("response_type_repair", ("response_type_repair_used", "response_type_repair_kind"), "emission", "final_emission_gate"),
     ("response_type", ("response_type_required", "response_type_candidate_ok", "validator"), "validator", "response_type"),
     ("stage_diff", ("stage_diff", "post_gate_mutation_detected"), "emission", "stage_diff"),
+    ("sanitizer_strict_social_fallback", ("sanitizer_strict_social_fallback",), "sanitizer", "output_sanitizer"),
+    ("sanitizer_empty_fallback", ("sanitizer_empty_fallback",), "sanitizer", "output_sanitizer"),
     ("normalization", ("normalization", "normalized", "schema_contract"), "normalization", "schema_contracts"),
     ("projection", ("unavailable", "missing_observation"), "projection", "golden_replay_projection"),
     ("evaluator", ("evaluator", "score", "warning"), "evaluator", "behavioral_eval"),
@@ -97,6 +122,7 @@ PRIMARY_OWNER_RULES: dict[FailureCategory, FailureOwner] = {
     "continuity": "continuity",
     "normalization": "normalization",
     "sanitizer": "sanitizer",
+    "upstream_prepared_emission": "upstream_prepared_emission",
 }
 
 SECONDARY_OWNER_RULES: dict[FailureCategory, FailureOwner | None] = {
@@ -112,6 +138,7 @@ SECONDARY_OWNER_RULES: dict[FailureCategory, FailureOwner | None] = {
     "continuity": "route",
     "normalization": "projection",
     "sanitizer": "emission",
+    "upstream_prepared_emission": "emission",
 }
 
 INVESTIGATION_TARGETS: dict[FailureCategory, str] = {
@@ -127,6 +154,7 @@ INVESTIGATION_TARGETS: dict[FailureCategory, str] = {
     "continuity": "game/interaction_context.py",
     "normalization": "game/final_emission_meta.py",
     "sanitizer": "game/output_sanitizer.py",
+    "upstream_prepared_emission": "game/final_emission_gate.py",
 }
 
 assert INVESTIGATION_TARGETS == (
@@ -157,6 +185,32 @@ FALLBACK_SOURCE_MARKERS = (
     "opening",
 )
 
+POST_GATE_LINEAGE_SOURCE_MAP: dict[str, str] = {
+    "sanitizer_empty_fallback": "sanitizer.empty_fallback",
+    "pre_gate_sanitizer": "sanitizer",
+    "response_type_repair": "response_type",
+    "prepared_emission_selection": "upstream_prepared_emission",
+    "opening_fallback_selection": "opening_fallback",
+    "fallback_behavior_repair": "fallback_behavior",
+    "sealed_fallback_replacement": "sealed_gate",
+    "finalize_html_strip": "final_emission.finalize_packaging",
+    "finalize_route_illegal_strip": "final_emission.finalize_route_illegal_strip",
+    "finalize_packaging": "final_emission.finalize_packaging",
+}
+
+POST_GATE_LINEAGE_SOURCE_PRIORITY: tuple[str, ...] = (
+    "sanitizer_empty_fallback",
+    "finalize_route_illegal_strip",
+    "response_type_repair",
+    "prepared_emission_selection",
+    "opening_fallback_selection",
+    "fallback_behavior_repair",
+    "sealed_fallback_replacement",
+    "pre_gate_sanitizer",
+    "finalize_html_strip",
+    "finalize_packaging",
+)
+
 
 def _lookup_path(obj: Mapping[str, Any], path: str) -> Any:
     cur: Any = obj
@@ -177,6 +231,22 @@ def _as_list(value: Any) -> list[str]:
     if isinstance(value, (list, tuple, set, frozenset)):
         return [str(item) for item in value if str(item).strip()]
     return [str(value)]
+
+
+def _lineage_tokens(value: Any) -> list[str]:
+    return [str(item).strip().lower() for item in _as_list(value) if str(item).strip()]
+
+
+def _post_gate_lineage_mutation_source(observed_turn: Mapping[str, Any]) -> str | None:
+    if observed_turn.get("post_gate_mutation_detected") is not True:
+        return None
+    tokens = set(_lineage_tokens(observed_turn.get("final_emission_mutation_lineage")))
+    if not tokens:
+        return None
+    for token in POST_GATE_LINEAGE_SOURCE_PRIORITY:
+        if token in tokens:
+            return POST_GATE_LINEAGE_SOURCE_MAP[token]
+    return None
 
 
 def validate_failure_classification_row(row: Mapping[str, Any]) -> list[str]:
@@ -234,6 +304,26 @@ def validate_failure_classification_row(row: Mapping[str, Any]) -> list[str]:
     emission_sublayer = row.get("emission_sublayer")
     if emission_sublayer not in (None, "") and emission_sublayer not in ALLOWED_EMISSION_SUBLAYERS:
         errors.append(f"invalid emission_sublayer: {emission_sublayer!r}")
+
+    opening_bucket = row.get("opening_fallback_owner_bucket")
+    if opening_bucket not in (None, "") and opening_bucket not in ALLOWED_OPENING_FALLBACK_OWNER_BUCKETS:
+        errors.append(f"invalid opening_fallback_owner_bucket: {opening_bucket!r}")
+
+    prepared_owner = row.get("prepared_emission_owner")
+    if prepared_owner not in (None, "") and prepared_owner != "upstream_prepared_emission":
+        errors.append(f"invalid prepared_emission_owner: {prepared_owner!r}")
+
+    sanitizer_empty_owner = row.get("sanitizer_empty_fallback_owner")
+    if sanitizer_empty_owner not in (None, "") and sanitizer_empty_owner != "output_sanitizer":
+        errors.append(f"invalid sanitizer_empty_fallback_owner: {sanitizer_empty_owner!r}")
+
+    strict_social_selection_owner = row.get("sanitizer_strict_social_selection_owner")
+    if strict_social_selection_owner not in (None, "") and strict_social_selection_owner != "output_sanitizer":
+        errors.append(f"invalid sanitizer_strict_social_selection_owner: {strict_social_selection_owner!r}")
+
+    strict_social_prose_owner = row.get("sanitizer_strict_social_prose_owner")
+    if strict_social_prose_owner not in (None, "") and strict_social_prose_owner != "strict_social_emission":
+        errors.append(f"invalid sanitizer_strict_social_prose_owner: {strict_social_prose_owner!r}")
 
     allowed_fields = REQUIRED_CLASSIFICATION_FIELDS | OPTIONAL_CLASSIFICATION_EVIDENCE_FIELDS
     for key in sorted(row.keys()):
@@ -306,6 +396,10 @@ def _emission_sublayer(observed_turn: Mapping[str, Any], drift_row: Mapping[str,
         if isinstance(snap, Mapping):
             repair_flags.update(_as_list(snap.get("repair_flags")))
 
+    if _prepared_emission_owner(observed_turn) == "upstream_prepared_emission":
+        return "upstream_prepared_emission"
+    if observed_turn.get("sanitizer_strict_social_fallback_used") is True:
+        return "strict_social_replacement"
     if field_path.startswith("response_type") or observed_turn.get("response_type_repair_used") is True:
         return "response_type"
     if observed_turn.get("opening_recovered_via_fallback") or "opening" in final_source or "opening" in repair_kind:
@@ -318,15 +412,73 @@ def _emission_sublayer(observed_turn: Mapping[str, Any], drift_row: Mapping[str,
         return "speaker_contract_enforcement"
     if "interaction_continuity" in final_source or "interaction_continuity" in repair_kind:
         return "interaction_continuity"
-    if observed_turn.get("sanitizer_rewrite_used") or observed_turn.get("sanitizer_event_count"):
+    if (
+        observed_turn.get("sanitizer_rewrite_used")
+        or observed_turn.get("sanitizer_event_count")
+        or bool(observed_turn.get("sanitizer_lineage_changed_count"))
+        or observed_turn.get("sanitizer_lineage_empty_fallback_used") is True
+        or observed_turn.get("sanitizer_empty_fallback_used") is True
+    ):
         return "sanitizer"
     if "terminal" in final_source or "emergency_fallback" in final_source or "global_scene_fallback" in final_source:
         return "terminal_fallback"
     if observed_turn.get("post_gate_mutation_detected") is True:
-        return "emission.post_gate_mutation_unknown"
+        return _post_gate_lineage_mutation_source(observed_turn) or "emission.post_gate_mutation_unknown"
     if fallback_family:
         return "fallback_behavior"
     return None
+
+
+def _has_prepared_emission_telemetry(observed_turn: Mapping[str, Any]) -> bool:
+    return any(
+        key in observed_turn
+        for key in (
+            "upstream_prepared_emission_used",
+            "upstream_prepared_emission_valid",
+            "upstream_prepared_emission_source",
+            "upstream_prepared_emission_reject_reason",
+        )
+    )
+
+
+def _prepared_emission_owner(observed_turn: Mapping[str, Any]) -> str | None:
+    if not _has_prepared_emission_telemetry(observed_turn):
+        return None
+    if observed_turn.get("upstream_prepared_emission_used") is True:
+        return "upstream_prepared_emission"
+    return None
+
+
+def _prepared_emission_source_family(observed_turn: Mapping[str, Any], source_family: str) -> str:
+    if _prepared_emission_owner(observed_turn) == "upstream_prepared_emission":
+        return "upstream_prepared_emission"
+    return source_family
+
+
+def _opening_fallback_evidence_present(observed_turn: Mapping[str, Any], drift_row: Mapping[str, Any]) -> bool:
+    field_path = str(drift_row.get("field_path") or "").lower()
+    final_source = str(observed_turn.get("final_emitted_source") or drift_row.get("actual") or "").lower()
+    repair_kind = str(observed_turn.get("response_type_repair_kind") or drift_row.get("repair_kind") or "").lower()
+    fallback_family = str(observed_turn.get("fallback_family") or "").lower()
+    return (
+        observed_turn.get("opening_recovered_via_fallback") is True
+        or bool(str(observed_turn.get("opening_fallback_authorship_source") or "").strip())
+        or bool(str(observed_turn.get("opening_fallback_owner_bucket") or "").strip())
+        or fallback_family == "scene_opening"
+        or "opening" in field_path
+        or "opening" in final_source
+        or "opening" in repair_kind
+    )
+
+
+def _opening_fallback_owner_bucket(observed_turn: Mapping[str, Any], drift_row: Mapping[str, Any]) -> str | None:
+    observed = observed_turn.get("opening_fallback_owner_bucket")
+    if isinstance(observed, str) and observed.strip():
+        return observed.strip()
+    if not _opening_fallback_evidence_present(observed_turn, drift_row):
+        return None
+    mapped = opening_fallback_owner_bucket_from_meta(observed_turn)
+    return mapped if isinstance(mapped, str) and mapped.strip() else None
 
 
 def _repair_kind(observed_turn: Mapping[str, Any], drift_row: Mapping[str, Any]) -> str | None:
@@ -345,7 +497,7 @@ def _mutation_source(observed_turn: Mapping[str, Any], emission_sublayer: str | 
     if emission_sublayer:
         return emission_sublayer
     if observed_turn.get("post_gate_mutation_detected") is True:
-        return "emission.post_gate_mutation_unknown"
+        return _post_gate_lineage_mutation_source(observed_turn) or "emission.post_gate_mutation_unknown"
     return None
 
 
@@ -354,6 +506,7 @@ def _fallback_observed(observed_turn: Mapping[str, Any], drift_row: Mapping[str,
         observed_turn.get("fallback_family"),
         observed_turn.get("final_emitted_source"),
         observed_turn.get("opening_fallback_authorship_source"),
+        observed_turn.get("opening_fallback_owner_bucket"),
         drift_row.get("actual"),
     ]
     return any(any(marker in str(value).lower() for marker in FALLBACK_SOURCE_MARKERS) for value in values if value is not None)
@@ -429,6 +582,9 @@ def determine_primary_owner(
     drift_row: Mapping[str, Any] | None = None,
 ) -> FailureOwner:
     missing_kind = _missing_source_kind(str((drift_row or {}).get("field_path") or ""), observed_turn or {}, drift_row or {})
+    prepared_owner = _prepared_emission_owner(observed_turn or {})
+    if prepared_owner:
+        return prepared_owner
     if missing_kind == "projection_missing_raw_present":
         return "projection"
     if missing_kind == "normalized_view_missing_raw_present":
@@ -446,6 +602,8 @@ def determine_secondary_owner(
 ) -> FailureOwner | None:
     field_path = str((drift_row or {}).get("field_path") or "")
     missing_kind = _missing_source_kind(field_path, observed_turn or {}, drift_row or {})
+    if _prepared_emission_owner(observed_turn or {}):
+        return "emission"
     if missing_kind == "projection_missing_raw_present":
         return None
     if missing_kind == "normalized_view_missing_raw_present":
@@ -521,8 +679,13 @@ def _raw_signal_refs(field_path: str, observed_turn: Mapping[str, Any]) -> list[
     refs: set[str] = set()
     if field_path.startswith("trace."):
         refs.add("trace")
-    if any(part in field_path for part in ("final_emitted_source", "fallback", "response_type", "opening_", "post_gate")):
+    if any(
+        part in field_path
+        for part in ("final_emitted_source", "fallback", "response_type", "opening_", "post_gate", "upstream_prepared_emission")
+    ):
         refs.add("_final_emission_meta")
+    if field_path.startswith("sanitizer_"):
+        refs.add("sanitizer_trace")
     if field_path in set(_as_list(observed_turn.get("unavailable"))):
         refs.add("unavailable")
     if field_path.startswith("selected_speaker") or "speaker" in field_path:
@@ -541,7 +704,7 @@ def classify_replay_failure(
     for drift_row in drift_rows:
         field_path = str(drift_row.get("field_path") or "")
         category = classify_failure_category(observed_turn=observed_turn, drift_row=drift_row)
-        source_family = _source_family_for(category, field_path)
+        source_family = _prepared_emission_source_family(observed_turn, _source_family_for(category, field_path))
         replay_tags = _replay_tags(
             category=category,
             field_path=field_path,
@@ -575,8 +738,15 @@ def classify_replay_failure(
             "selected_speaker_id": observed_turn.get("selected_speaker_id"),
             "canonical_target_actor_id": _canonical_target_actor_id(observed_turn),
             "final_emitted_source": observed_turn.get("final_emitted_source"),
+            "final_emission_mutation_lineage": observed_turn.get("final_emission_mutation_lineage"),
             "fallback_family": observed_turn.get("fallback_family"),
             "fallback_temporal_frame": observed_turn.get("fallback_temporal_frame"),
+            "opening_fallback_owner_bucket": _opening_fallback_owner_bucket(observed_turn, drift_row),
+            "upstream_prepared_emission_used": observed_turn.get("upstream_prepared_emission_used"),
+            "upstream_prepared_emission_valid": observed_turn.get("upstream_prepared_emission_valid"),
+            "upstream_prepared_emission_source": observed_turn.get("upstream_prepared_emission_source"),
+            "upstream_prepared_emission_reject_reason": observed_turn.get("upstream_prepared_emission_reject_reason"),
+            "prepared_emission_owner": _prepared_emission_owner(observed_turn),
             "response_type_required": observed_turn.get("response_type_required"),
             "response_type_repair_used": observed_turn.get("response_type_repair_used"),
             "response_type_repair_kind": observed_turn.get("response_type_repair_kind"),
@@ -589,6 +759,18 @@ def classify_replay_failure(
             "sanitizer_event_count": observed_turn.get("sanitizer_event_count"),
             "sanitizer_changed_count": observed_turn.get("sanitizer_changed_count"),
             "sanitizer_rewrite_used": observed_turn.get("sanitizer_rewrite_used"),
+            "sanitizer_empty_fallback_used": observed_turn.get("sanitizer_empty_fallback_used"),
+            "sanitizer_empty_fallback_source": observed_turn.get("sanitizer_empty_fallback_source"),
+            "sanitizer_empty_fallback_owner": observed_turn.get("sanitizer_empty_fallback_owner"),
+            "sanitizer_lineage_mode": observed_turn.get("sanitizer_lineage_mode"),
+            "sanitizer_lineage_changed_count": observed_turn.get("sanitizer_lineage_changed_count"),
+            "sanitizer_lineage_dropped_count": observed_turn.get("sanitizer_lineage_dropped_count"),
+            "sanitizer_lineage_empty_fallback_used": observed_turn.get("sanitizer_lineage_empty_fallback_used"),
+            "sanitizer_lineage_legacy_rewrite_active": observed_turn.get("sanitizer_lineage_legacy_rewrite_active"),
+            "sanitizer_strict_social_fallback_used": observed_turn.get("sanitizer_strict_social_fallback_used"),
+            "sanitizer_strict_social_selection_owner": observed_turn.get("sanitizer_strict_social_selection_owner"),
+            "sanitizer_strict_social_prose_owner": observed_turn.get("sanitizer_strict_social_prose_owner"),
+            "sanitizer_strict_social_source": observed_turn.get("sanitizer_strict_social_source"),
             "unavailable_fields": sorted(set(_as_list(observed_turn.get("unavailable"))) | set(_as_list(drift_row.get("unavailable_fields")))),
             "raw_signal_refs": _raw_signal_refs(field_path, observed_turn),
             "classification_confidence": "high" if category not in {"projection", "replay_drift"} else "medium",
