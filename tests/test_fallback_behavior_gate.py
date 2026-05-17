@@ -3,6 +3,19 @@
 Direct ``game.final_emission_repairs`` helper semantics live in
 ``tests/test_final_emission_repairs.py``. This file keeps gate ordering, application,
 and emitted-metadata behavior focused on downstream orchestration.
+
+This file owns downstream orchestration coverage for ``fallback_behavior`` through
+``apply_final_emission_gate()``:
+
+- gate ordering
+- layer invocation
+- final-emission metadata/debug propagation
+- historically important end-to-end fallback_behavior paths
+
+It does not own validator predicate semantics, detailed repair semantics, or the
+full adversarial fallback_behavior predicate matrix. Those are owned by
+``tests/test_fallback_behavior_validator.py`` and
+``tests/test_final_emission_repairs.py``.
 """
 from __future__ import annotations
 
@@ -169,11 +182,11 @@ def test_gate_repairs_meta_fallback_voice_into_bounded_partial() -> None:
     meta = read_final_emission_meta_dict(out) or {}
     emission_debug = ((out.get("metadata") or {}).get("emission_debug") or {}).get("fallback_behavior") or {}
 
+    # Gate ownership: the layer ran, produced player-facing text, and propagated FEM/debug.
+    # Detailed repair-mode semantics live in tests/test_final_emission_repairs.py.
     assert "don't have enough information" not in low
     assert "ward clerk" in low
     assert meta.get("fallback_behavior_repaired") is True
-    assert meta.get("fallback_behavior_meta_voice_stripped") is True
-    assert "strip_meta_voice" in str(meta.get("fallback_behavior_repair_mode") or "")
     assert emission_debug.get("validation", {}).get("checked") is True
     assert emission_debug.get("repair_mode") == meta.get("fallback_behavior_repair_mode")
 
@@ -195,14 +208,14 @@ def test_gate_skips_fallback_behavior_when_uncertainty_inactive() -> None:
 
     meta = read_final_emission_meta_dict(out) or {}
     emission_debug = ((out.get("metadata") or {}).get("emission_debug") or {}).get("fallback_behavior") or {}
+
+    # Gate ownership: inactive contracts bypass the layer without changing output and
+    # still expose skip state. Exact predicate semantics live in the validator suite.
     assert out.get("player_facing_text") == raw
     assert meta.get("fallback_behavior_checked") is False
-    assert meta.get("fallback_behavior_skip_reason") == "uncertainty_inactive"
     assert meta.get("fallback_behavior_repaired") is False
     assert meta.get("fallback_behavior_uncertainty_active") is False
     assert emission_debug.get("validation", {}).get("checked") is False
-    assert emission_debug.get("validation", {}).get("passed") is True
-    assert emission_debug.get("skip_reason") == "uncertainty_inactive"
 
 
 def test_gate_runs_fallback_behavior_after_interaction_continuity_non_strict(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -295,42 +308,11 @@ def test_gate_runs_fallback_behavior_after_strict_social_continuity(monkeypatch:
     assert meta.get("fallback_behavior_checked") is True
 
 
-@pytest.mark.parametrize(
-    ("source", "prompt", "raw", "forbidden"),
-    [
-        pytest.param(
-            "unknown_identity",
-            "No. Exactly who?",
-            "The culprit was Captain Verrick at the gate. Check the ward clerk at the east gate office.",
-            "culprit was",
-            marks=pytest.mark.xfail(reason="current identity repair still preserves unsupported named culprit text"),
-        ),
-        (
-            "unknown_location",
-            "Which dock exactly?",
-            "They are under Dock Seven by the customs gate. Check the harbor watch by the customs arch.",
-            "dock seven",
-        ),
-        (
-            "unknown_quantity",
-            "How many were there?",
-            "There were exactly 5 guards at the gate. Ask the watch captain for the tally sheet.",
-            "exactly 5",
-        ),
-        (
-            "unknown_feasibility",
-            "Can I safely bribe the guard?",
-            "It is safe to bribe the guard at the gate. Check the patrol map at the watchhouse.",
-            "it is safe",
-        ),
-    ],
-)
-def test_gate_repairs_adversarial_uncertainty_followups_without_fabricating_certainty(
-    source: str,
-    prompt: str,
-    raw: str,
-    forbidden: str,
-) -> None:
+def test_gate_repairs_adversarial_uncertainty_followups_without_fabricating_certainty() -> None:
+    source = "unknown_quantity"
+    prompt = "How many were there?"
+    raw = "There were exactly 5 guards at the gate. Ask the watch captain for the tally sheet."
+    forbidden = "exactly 5"
     out = apply_final_emission_gate(
         {
             "player_facing_text": raw,
@@ -351,8 +333,9 @@ def test_gate_repairs_adversarial_uncertainty_followups_without_fabricating_cert
     low = text.lower()
     meta = read_final_emission_meta_dict(out) or {}
 
+    # Gate ownership keeps one representative end-to-end sanity check. The full
+    # adversarial predicate matrix belongs to validator/repair owner tests.
     assert forbidden not in low
-    _assert_no_meta_bits(text)
     assert text.strip()
     assert meta.get("fallback_behavior_repaired") is True
 

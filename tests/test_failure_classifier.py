@@ -227,6 +227,8 @@ def test_failure_dashboard_report_includes_required_replay_columns():
     assert "gate_terminal_repair" in report
 
 
+# Opening fallback owner-bucket assertions here are classifier projection locks,
+# not duplicate ownership of gate selection or deterministic opening prose.
 @pytest.mark.parametrize(
     ("case", "observed", "expected_bucket"),
     [
@@ -330,6 +332,8 @@ def test_failure_classification_contract_rejects_invalid_opening_owner_bucket():
     assert "invalid opening_fallback_owner_bucket: 'not-a-bucket'" in validate_failure_classification_row(row)
 
 
+# Sealed owner-bucket evidence is intentionally preserved as classifier
+# projection; it does not re-own sealed helper prose/output behavior.
 def test_failure_classifier_preserves_projected_sealed_owner_bucket_evidence():
     row = classify_replay_failure(
         scenario_id="projected_sealed_owner_scenario",

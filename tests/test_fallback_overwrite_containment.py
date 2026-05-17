@@ -1,4 +1,15 @@
-"""Block I regressions: upstream fast-fallback overwrite containment from canonical provenance only."""
+"""Block I regressions for upstream fast-fallback overwrite containment.
+
+Ownership:
+- ``game.fallback_provenance_debug`` owns provenance/fingerprint metadata shaping only.
+- ``game.final_emission_gate`` owns containment at gate/finalize boundaries.
+- This file owns overwrite containment and gate-exit-vs-selector protection.
+
+Failures here should point first to final-emission containment unless the
+provenance/fingerprint payload itself is malformed, in which case
+``game.fallback_provenance_debug`` is the likely owner. Repeated provenance
+assertions are intentional incident-boundary locks, not accidental duplication.
+"""
 
 from __future__ import annotations
 

@@ -347,6 +347,8 @@ def test_golden_markdown_report_renderer_is_compact_and_deterministic():
     assert "| Scenario | Mode | Turns | Status | Drift | Classifications |" in report
 
 
+# Opening fallback projection fields are repeated here as replay contract locks;
+# the owner-bucket mapper itself is owned by tests/test_opening_fallback_owner_bucket.py.
 def test_golden_observed_turn_projects_canonical_upstream_prepared_opening_owner_bucket():
     observed = _observed_turn(
         scenario_id="synthetic_opening_owner",
@@ -387,6 +389,9 @@ def test_golden_observed_turn_projects_fail_closed_sealed_gate_opening_owner_buc
     assert observed["opening_fallback_owner_bucket"] == OPENING_FALLBACK_OWNER_SEALED_GATE
 
 
+# Sealed fallback projection fields are replay contract locks. Helper shaping is
+# owned by final_emission_sealed_fallback; gate branch selection/output remains
+# owned by final_emission_gate.
 def test_golden_observed_turn_projects_sealed_fallback_owner_bucket():
     observed = _observed_turn(
         scenario_id="synthetic_sealed_owner",

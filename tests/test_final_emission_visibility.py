@@ -143,6 +143,8 @@ def test_pipeline_replaces_offscene_known_npc_reference():
         "visibility_enforcement_replaced",
         "visibility_violation:unseen_entity_reference",
     ]
+    # The sealed owner bucket here is a visibility-pipeline projection lock; the
+    # sealed helper module owns only metadata/route shaping, not output selection.
     assert read_final_emission_meta_dict(out)["visibility_validation_passed"] is False
     assert read_final_emission_meta_dict(out)["visibility_replacement_applied"] is True
     assert read_final_emission_meta_dict(out)["final_route"] == "replaced"

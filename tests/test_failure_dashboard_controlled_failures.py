@@ -93,6 +93,8 @@ CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any], dict[
             "emission_sublayer": "terminal_fallback",
         },
     ),
+    # Opening fallback owner-bucket rows intentionally duplicate projection
+    # fields for dashboard/triage contracts, not deterministic prose ownership.
     (
         "opening_fallback_owner_bucket",
         _observed(
@@ -121,6 +123,8 @@ CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any], dict[
             "opening_fallback_owner_bucket": OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
         },
     ),
+    # Sealed fallback rows intentionally repeat final source and owner bucket as
+    # dashboard/triage projection locks, not sealed helper prose ownership.
     (
         "sealed_fallback_owner_bucket",
         _observed(

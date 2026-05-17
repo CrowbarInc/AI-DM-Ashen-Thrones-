@@ -86,6 +86,8 @@ def test_unknown_replay_tag_fails_unless_experimental():
     assert validate_failure_classification_row(row) == []
 
 
+# Opening fallback owner buckets are cross-layer contract values; runtime
+# selection and prose behavior remain owned by the gate and opening fallback tests.
 def test_opening_fallback_owner_bucket_values_are_contract_locked():
     row = _valid_sample_row()
     row["opening_fallback_owner_bucket"] = "upstream-prepared"
@@ -96,6 +98,8 @@ def test_opening_fallback_owner_bucket_values_are_contract_locked():
     assert "invalid opening_fallback_owner_bucket: 'mystery-owner'" in validate_failure_classification_row(row)
 
 
+# Sealed fallback owner buckets are cross-layer contract values; helper shaping
+# is owned by final_emission_sealed_fallback and gate orchestration by final_emission_gate.
 def test_sealed_fallback_owner_bucket_values_are_contract_locked():
     row = _valid_sample_row()
     row["sealed_fallback_owner_bucket"] = "sealed-gate"

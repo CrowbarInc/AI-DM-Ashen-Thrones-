@@ -10,6 +10,15 @@ and materialization behavior are owned by:
 tests/test_final_emission_repairs.py
 ```
 
+This file owns downstream consumer behavior for shipped ``fallback_behavior``
+metadata. Failures here should point first to
+``game.gm.apply_response_policy_enforcement``,
+``game.gm_retry.build_retry_prompt_for_failure``, or the ``game.gm_retry``
+fallback/debug metadata consumption path.
+
+It should not duplicate detailed validator/repair predicate ownership except
+where needed for end-to-end metadata observation.
+
 """
 from __future__ import annotations
 
@@ -207,9 +216,12 @@ def test_downstream_gate_observes_answer_contract_meta_when_output_exhibits_smoo
     )
 
     meta = read_final_emission_meta_dict(out) or {}
+    emission_debug = ((out.get("metadata") or {}).get("emission_debug") or {}).get("fallback_behavior") or {}
+    text = str(out.get("player_facing_text") or "")
+
+    # Consumer ownership: downstream can observe shipped answer/fallback metadata
+    # and a player-facing result. Predicate and repair details live in owner suites.
     assert meta.get("response_type_required") == "answer"
-    assert meta.get("response_type_candidate_ok") is True
-    assert meta.get("answer_completeness_checked") is True
-    assert meta.get("answer_completeness_failed") is False
     assert meta.get("fallback_behavior_repaired") is True
-    assert "enough information" not in str(out.get("player_facing_text") or "").lower()
+    assert emission_debug.get("validation", {}).get("checked") is True
+    assert text.strip()

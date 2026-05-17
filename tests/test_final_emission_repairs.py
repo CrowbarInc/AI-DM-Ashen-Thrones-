@@ -4,6 +4,14 @@ This file owns direct helper/accessor semantics, repair materialization behavior
 owner-level fallback/social-response-structure repair assertions. Downstream
 fallback/gate/compatibility suites should consume repaired outputs and metadata
 without re-owning helper semantics here.
+
+The ``fallback_behavior`` tests in this module own repair/layer semantics. Failures
+there should point first to
+``game.final_emission_repairs.repair_fallback_behavior`` or
+``game.final_emission_repairs._apply_fallback_behavior_layer``.
+
+Gate/downstream tests may verify that this layer is invoked and metadata
+propagates, but should not own detailed repair predicate behavior.
 """
 
 # === PRACTICAL OWNER SUITE ===

@@ -911,6 +911,10 @@ def test_block_b_speaker_contract_mutation_kinds_are_semantic_not_packaging():
         assert is_packaging_allowed(kind) is False
 
 
+# Opening fallback ownership is split across composition, upstream packaging,
+# gate orchestration, and projection metadata. The Block C/G/H tests below lock
+# final_emission_gate boundaries: compatibility-local composition is fenced, the
+# upstream-prepared path is preferred, and fail-closed paths stay sealed.
 def test_block_c_opening_fallback_mutation_kinds_are_fenced_by_ownership():
     assert (
         classify_final_emission_mutation("select_upstream_prepared_opening_fallback")
@@ -3873,6 +3877,10 @@ def _assert_known_realization_family(value: str) -> None:
     assert value in FALLBACK_FAMILIES
 
 
+# Canonical opening fallback seams intentionally repeat authorship/source/family
+# fields as gate-level contract locks. Composition details remain owned by
+# opening_deterministic_fallback; owner-bucket mapping remains owned by
+# final_emission_meta and tests/test_opening_fallback_owner_bucket.py.
 def test_deterministic_opening_fallback_helper_exact_text_and_meta_snapshot() -> None:
     text, meta = feg._deterministic_opening_fallback_text_and_meta(_opening_gm_output())
 
@@ -4664,6 +4672,10 @@ def _visibility_offscene_npc_gate_bundle() -> tuple[dict, dict, dict, str]:
     return session, world, scene, sid
 
 
+# Sealed fallback gate assertions below own orchestration and historical branch
+# protection: final_emission_gate selects the sealed replacement branch, calls
+# injected prose owners, writes final output, and stamps metadata/debug. Pure
+# metadata/route helper shaping is owned by game.final_emission_sealed_fallback.
 def test_visibility_safe_fallback_final_emitted_source_snapshot() -> None:
     """Visibility replace uses sealed tuples for text; FEM source pins global_scene_fallback today."""
     session, world, scene, sid = _visibility_offscene_npc_gate_bundle()
@@ -4687,6 +4699,9 @@ def test_visibility_safe_fallback_final_emitted_source_snapshot() -> None:
 # --- Block AG: sealed branch selector / order snapshots ---
 
 
+# Block AG snapshots intentionally repeat final_emitted_source and
+# sealed_fallback_owner_bucket to distinguish sealed replacement branches. These
+# are branch/projection locks, not duplicate ownership of sealed helper internals.
 def test_selector_snapshot_visibility_vs_generic_terminal_distinct_markers() -> None:
     """Visibility illegality uses visibility-specific tags and debug; generic terminal replace does not."""
     session, world, scene, sid = _visibility_offscene_npc_gate_bundle()
@@ -6378,6 +6393,9 @@ def test_block_ai_non_strict_terminal_selector_does_not_mutate_gm_output_when_op
     assert gm == snap
 
 
+# Block AI helper tests own the extracted sealed-helper boundary: the helper
+# module shapes metadata/routes and selects among injected providers, but must
+# not author prose, select prose by itself, write final output, or mutate gate state.
 def test_block_ai_sealed_fallback_metadata_module_exports_helpers_only() -> None:
     for name in (
         "SealedFallbackSelection",
@@ -6723,6 +6741,9 @@ def test_scene_opening_candidate_not_rejected_for_lacking_action_result_language
     assert dbg.get("response_type_repair_used") is False
 
 
+# Opening context-source and fail-closed regressions are historical gate coverage.
+# They protect selection/pollution guards and sealed fallback behavior without
+# transferring detailed prose composition ownership away from the opening helper.
 def test_scene_opening_fallback_with_opening_seed_facts_emits_seed_facts():
     curated = [
         "Ash Quay crouches under black rain and lantern smoke.",

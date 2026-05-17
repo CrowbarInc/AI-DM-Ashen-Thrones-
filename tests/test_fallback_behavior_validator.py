@@ -1,3 +1,12 @@
+"""Owner tests for ``fallback_behavior`` validator predicate semantics.
+
+Failures here should point first to
+``game.final_emission_validators.validate_fallback_behavior``.
+
+Downstream gate/retry tests should not duplicate detailed predicate ownership;
+they should only observe invocation, propagation, or end-to-end behavior.
+"""
+
 from __future__ import annotations
 
 import pytest

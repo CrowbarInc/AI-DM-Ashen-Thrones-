@@ -1,4 +1,15 @@
-"""Block L regressions: non-retryable upstream classification, fast fallback, metadata preservation."""
+"""Block L regressions for upstream fast fallback and provenance realignment.
+
+Ownership:
+- ``game.api`` and ``game.gm`` own upstream error classification and fast-fallback selection.
+- ``game.fallback_provenance_debug`` owns provenance/fingerprint metadata shaping and selector realignment.
+- This file owns upstream classification, tagging, provenance preservation, and retry/budget incident paths.
+
+Gate/finalize overwrite containment is owned by
+``tests/test_fallback_overwrite_containment.py``. Repeated provenance assertions
+here are intentional historical locks around upstream error and budget handling,
+not duplicate ownership of final-emission containment behavior.
+"""
 
 from __future__ import annotations
 
