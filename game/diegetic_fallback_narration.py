@@ -51,6 +51,14 @@ def fallback_template_metadata(template_id: str) -> Dict[str, str]:
     return dict(_FALLBACK_TEMPLATE_METADATA.get(str(template_id or "").strip(), {}))
 
 
+NPC_PURSUIT_NEUTRAL_NONPROGRESS_FALLBACK_LINE = "Nothing confirms progress toward that lead yet—the moment stays unresolved."
+
+
+def npc_pursuit_neutral_nonprogress_fallback_line() -> str:
+    """Owned literal fallback line for neutral NPC-pursuit nonprogress sealed replacement."""
+    return NPC_PURSUIT_NEUTRAL_NONPROGRESS_FALLBACK_LINE
+
+
 def opening_scene_fallback_template_allowed(template_id: str) -> bool:
     meta = fallback_template_metadata(template_id)
     return (

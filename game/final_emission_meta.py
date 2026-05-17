@@ -198,6 +198,7 @@ FEM_RESPONSE_TYPE_KEYS: frozenset[str] = frozenset(
         "opening_failure_reasons",
         "opening_recovered_via_fallback",
         "opening_fallback_authorship_source",
+        "sealed_fallback_owner_bucket",
         "fallback_family_used",
         "fallback_temporal_frame",
         "realization_fallback_family",
@@ -217,6 +218,36 @@ OPENING_FALLBACK_OWNER_BUCKETS: frozenset[str] = frozenset(
         OPENING_FALLBACK_OWNER_RETRY,
         OPENING_FALLBACK_OWNER_STRICT_SOCIAL,
         OPENING_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS,
+    }
+)
+
+SEALED_FALLBACK_OWNER_SEALED_GATE = "sealed-gate"
+SEALED_FALLBACK_OWNER_STRICT_SOCIAL_SEALED = "strict-social-sealed"
+SEALED_FALLBACK_OWNER_UNKNOWN_NONE = "unknown-none"
+SEALED_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS = "unknown-ambiguous"
+
+SEALED_FALLBACK_OWNER_BUCKETS: frozenset[str] = frozenset(
+    {
+        SEALED_FALLBACK_OWNER_SEALED_GATE,
+        SEALED_FALLBACK_OWNER_STRICT_SOCIAL_SEALED,
+        SEALED_FALLBACK_OWNER_UNKNOWN_NONE,
+        SEALED_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS,
+    }
+)
+
+VISIBILITY_FALLBACK_OWNER_SEALED_GATE = "sealed-gate"
+VISIBILITY_FALLBACK_OWNER_STRICT_SOCIAL_VISIBILITY = "strict-social-visibility"
+VISIBILITY_FALLBACK_OWNER_OPENING_VISIBILITY = "opening-visibility"
+VISIBILITY_FALLBACK_OWNER_UNKNOWN_NONE = "unknown-none"
+VISIBILITY_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS = "unknown-ambiguous"
+
+VISIBILITY_FALLBACK_OWNER_BUCKETS: frozenset[str] = frozenset(
+    {
+        VISIBILITY_FALLBACK_OWNER_SEALED_GATE,
+        VISIBILITY_FALLBACK_OWNER_STRICT_SOCIAL_VISIBILITY,
+        VISIBILITY_FALLBACK_OWNER_OPENING_VISIBILITY,
+        VISIBILITY_FALLBACK_OWNER_UNKNOWN_NONE,
+        VISIBILITY_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS,
     }
 )
 

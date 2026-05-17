@@ -6,7 +6,11 @@ row fields should be added here deliberately with tests.
 """
 from __future__ import annotations
 
-from game.final_emission_meta import OPENING_FALLBACK_OWNER_BUCKETS
+from game.final_emission_meta import (
+    OPENING_FALLBACK_OWNER_BUCKETS,
+    SEALED_FALLBACK_OWNER_BUCKETS,
+    VISIBILITY_FALLBACK_OWNER_BUCKETS,
+)
 
 ALLOWED_FAILURE_CATEGORIES: frozenset[str] = frozenset(
     {
@@ -99,6 +103,8 @@ ALLOWED_SOURCE_FAMILY_TAGS: frozenset[str] = frozenset(
 )
 
 ALLOWED_OPENING_FALLBACK_OWNER_BUCKETS: frozenset[str] = OPENING_FALLBACK_OWNER_BUCKETS
+ALLOWED_SEALED_FALLBACK_OWNER_BUCKETS: frozenset[str] = SEALED_FALLBACK_OWNER_BUCKETS
+ALLOWED_VISIBILITY_FALLBACK_OWNER_BUCKETS: frozenset[str] = VISIBILITY_FALLBACK_OWNER_BUCKETS
 
 ALLOWED_RUNTIME_RESPONSE_TYPE_REPAIR_KINDS: frozenset[str] = frozenset(
     {
@@ -143,6 +149,11 @@ OPTIONAL_CLASSIFICATION_EVIDENCE_FIELDS: frozenset[str] = frozenset(
         "fallback_family",
         "fallback_temporal_frame",
         "opening_fallback_owner_bucket",
+        "sealed_fallback_owner_bucket",
+        "visibility_fallback_owner_bucket",
+        "visibility_replacement_applied",
+        "visibility_fallback_pool",
+        "visibility_fallback_kind",
         "upstream_prepared_emission_used",
         "upstream_prepared_emission_valid",
         "upstream_prepared_emission_source",

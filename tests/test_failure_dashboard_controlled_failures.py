@@ -4,7 +4,7 @@ from typing import Any
 
 import pytest
 
-from game.final_emission_meta import OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED
+from game.final_emission_meta import OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED, SEALED_FALLBACK_OWNER_SEALED_GATE
 from tests.helpers.failure_dashboard_report import (
     build_failure_dashboard_rows,
     failure_dashboard_requested,
@@ -27,6 +27,11 @@ def _observed(**overrides: Any) -> dict[str, Any]:
         "fallback_family": None,
         "fallback_temporal_frame": None,
         "opening_fallback_owner_bucket": None,
+        "sealed_fallback_owner_bucket": None,
+        "visibility_fallback_owner_bucket": None,
+        "visibility_replacement_applied": None,
+        "visibility_fallback_pool": None,
+        "visibility_fallback_kind": None,
         "response_type_required": "dialogue_response",
         "response_type_repair_used": False,
         "response_type_repair_kind": None,
@@ -114,6 +119,58 @@ CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any], dict[
             "investigate_first": "game/final_emission_gate.py",
             "emission_sublayer": "opening_fallback",
             "opening_fallback_owner_bucket": OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
+        },
+    ),
+    (
+        "sealed_fallback_owner_bucket",
+        _observed(
+            final_emitted_source="global_scene_fallback",
+            fallback_family="gate_terminal_repair",
+            sealed_fallback_owner_bucket=SEALED_FALLBACK_OWNER_SEALED_GATE,
+        ),
+        {
+            "field_path": "sealed_fallback_owner_bucket",
+            "expected": "strict-social-sealed",
+            "actual": SEALED_FALLBACK_OWNER_SEALED_GATE,
+            "reason": "exact value mismatch",
+            "drift_bucket": "structural_drift",
+        },
+        {
+            "category": "fallback",
+            "primary_owner": "fallback",
+            "secondary_owner": "emission",
+            "severity": "high",
+            "investigate_first": "game/final_emission_gate.py",
+            "emission_sublayer": "terminal_fallback",
+            "sealed_fallback_owner_bucket": SEALED_FALLBACK_OWNER_SEALED_GATE,
+        },
+    ),
+    (
+        "visibility_fallback_owner_bucket",
+        _observed(
+            final_emitted_source="global_scene_fallback",
+            visibility_fallback_owner_bucket="sealed-gate",
+            visibility_replacement_applied=True,
+            visibility_fallback_pool="global_scene_narrative",
+            visibility_fallback_kind="narrative_safe_fallback",
+        ),
+        {
+            "field_path": "visibility_fallback_owner_bucket",
+            "expected": "strict-social-visibility",
+            "actual": "sealed-gate",
+            "reason": "exact value mismatch",
+            "drift_bucket": "structural_drift",
+        },
+        {
+            "category": "fallback",
+            "primary_owner": "fallback",
+            "secondary_owner": "emission",
+            "severity": "high",
+            "investigate_first": "game/final_emission_gate.py",
+            "visibility_fallback_owner_bucket": "sealed-gate",
+            "visibility_replacement_applied": True,
+            "visibility_fallback_pool": "global_scene_narrative",
+            "visibility_fallback_kind": "narrative_safe_fallback",
         },
     ),
     (
@@ -515,6 +572,13 @@ def test_controlled_failure_probe_dashboard_contains_triage_columns():
     assert "fallback_source_mismatch" in report
     assert "opening_fallback_owner_bucket" in report
     assert "opening_owner=upstream-prepared" in report
+    assert "sealed_fallback_owner_bucket" in report
+    assert "sealed_owner=sealed-gate" in report
+    assert "visibility_fallback_owner_bucket" in report
+    assert "visibility_owner=sealed-gate" in report
+    assert "visibility_replaced=True" in report
+    assert "visibility_pool=global_scene_narrative" in report
+    assert "visibility_kind=narrative_safe_fallback" in report
     assert "prepared_emission=used valid=True source=prepared_action_fallback_text" in report
     assert "lineage=response_type_repair>prepared_emission_selection>finalize_packaging" in report
     assert "prepared_emission=rejected reason=missing_answer_specificity" in report

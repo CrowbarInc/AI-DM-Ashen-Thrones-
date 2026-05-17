@@ -8,6 +8,7 @@ from game.final_emission_meta import (
     OPENING_FALLBACK_OWNER_SEALED_GATE,
     OPENING_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS,
     OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
+    SEALED_FALLBACK_OWNER_SEALED_GATE,
 )
 from tests.helpers.failure_classifier import classify_replay_failure, validate_failure_classification_row
 from tests.helpers.failure_dashboard_report import (
@@ -29,6 +30,11 @@ def _observed(**overrides: Any) -> dict[str, Any]:
         "fallback_family": None,
         "fallback_temporal_frame": None,
         "opening_fallback_owner_bucket": None,
+        "sealed_fallback_owner_bucket": None,
+        "visibility_fallback_owner_bucket": None,
+        "visibility_replacement_applied": None,
+        "visibility_fallback_pool": None,
+        "visibility_fallback_kind": None,
         "response_type_required": "dialogue_response",
         "response_type_repair_used": False,
         "response_type_repair_kind": None,
@@ -322,6 +328,81 @@ def test_failure_classification_contract_rejects_invalid_opening_owner_bucket():
     )[0]
 
     assert "invalid opening_fallback_owner_bucket: 'not-a-bucket'" in validate_failure_classification_row(row)
+
+
+def test_failure_classifier_preserves_projected_sealed_owner_bucket_evidence():
+    row = classify_replay_failure(
+        scenario_id="projected_sealed_owner_scenario",
+        turn_index=0,
+        observed_turn=_observed(
+            final_emitted_source="global_scene_fallback",
+            fallback_family="gate_terminal_repair",
+            sealed_fallback_owner_bucket=SEALED_FALLBACK_OWNER_SEALED_GATE,
+        ),
+        drift_rows=[
+            {
+                "field_path": "sealed_fallback_owner_bucket",
+                "expected": "not-sealed",
+                "actual": SEALED_FALLBACK_OWNER_SEALED_GATE,
+                "reason": "exact value mismatch",
+                "drift_bucket": "structural_drift",
+            }
+        ],
+    )[0]
+
+    assert row["category"] == "fallback"
+    assert row["sealed_fallback_owner_bucket"] == SEALED_FALLBACK_OWNER_SEALED_GATE
+
+
+def test_failure_classifier_preserves_projected_visibility_fallback_evidence():
+    row = classify_replay_failure(
+        scenario_id="projected_visibility_owner_scenario",
+        turn_index=0,
+        observed_turn=_observed(
+            final_emitted_source="global_scene_fallback",
+            visibility_fallback_owner_bucket="sealed-gate",
+            visibility_replacement_applied=True,
+            visibility_fallback_pool="global_scene_narrative",
+            visibility_fallback_kind="narrative_safe_fallback",
+        ),
+        drift_rows=[
+            {
+                "field_path": "visibility_fallback_owner_bucket",
+                "expected": "strict-social-visibility",
+                "actual": "sealed-gate",
+                "reason": "exact value mismatch",
+                "drift_bucket": "structural_drift",
+            }
+        ],
+    )[0]
+
+    assert row["category"] == "fallback"
+    assert row["visibility_fallback_owner_bucket"] == "sealed-gate"
+    assert row["visibility_replacement_applied"] is True
+    assert row["visibility_fallback_pool"] == "global_scene_narrative"
+    assert row["visibility_fallback_kind"] == "narrative_safe_fallback"
+
+
+def test_failure_classification_contract_rejects_invalid_visibility_owner_bucket():
+    row = classify_replay_failure(
+        scenario_id="invalid_visibility_owner_scenario",
+        turn_index=0,
+        observed_turn=_observed(
+            visibility_fallback_owner_bucket="not-a-bucket",
+            visibility_replacement_applied=True,
+        ),
+        drift_rows=[
+            {
+                "field_path": "visibility_fallback_owner_bucket",
+                "expected": "sealed-gate",
+                "actual": "not-a-bucket",
+                "reason": "exact value mismatch",
+                "drift_bucket": "structural_drift",
+            }
+        ],
+    )[0]
+
+    assert "invalid visibility_fallback_owner_bucket: 'not-a-bucket'" in validate_failure_classification_row(row)
 
 
 def test_failure_dashboard_markdown_renders_empty_state():

@@ -72,6 +72,11 @@ _STRUCTURAL_DRIFT_FIELDS = frozenset(
         "opening_recovered_via_fallback",
         "opening_fallback_authorship_source",
         "opening_fallback_owner_bucket",
+        "sealed_fallback_owner_bucket",
+        "visibility_fallback_owner_bucket",
+        "visibility_replacement_applied",
+        "visibility_fallback_pool",
+        "visibility_fallback_kind",
         "fallback_family",
         "fallback_temporal_frame",
         "trace.canonical_entry.target_actor_id",
@@ -643,6 +648,11 @@ def _observed_turn(
     opening_recovered_via_fallback = _first_present(fem, ("opening_recovered_via_fallback",))
     opening_fallback_authorship_source = _first_present(fem, ("opening_fallback_authorship_source",))
     opening_fallback_owner_bucket = opening_fallback_owner_bucket_from_meta(fem)
+    sealed_fallback_owner_bucket = _first_present(fem, ("sealed_fallback_owner_bucket",))
+    visibility_fallback_owner_bucket = _first_present(fem, ("visibility_fallback_owner_bucket",))
+    visibility_replacement_applied = _first_present(fem, ("visibility_replacement_applied",))
+    visibility_fallback_pool = _first_present(fem, ("visibility_fallback_pool",))
+    visibility_fallback_kind = _first_present(fem, ("visibility_fallback_kind",))
     fallback_family = _first_present(
         fem,
         ("fallback_family_used", "realization_fallback_family"),
@@ -708,6 +718,11 @@ def _observed_turn(
         "upstream_prepared_emission_valid": "upstream_prepared_emission_valid" in fem,
         "upstream_prepared_emission_source": "upstream_prepared_emission_source" in fem,
         "upstream_prepared_emission_reject_reason": "upstream_prepared_emission_reject_reason" in fem,
+        "sealed_fallback_owner_bucket": "sealed_fallback_owner_bucket" in fem,
+        "visibility_fallback_owner_bucket": "visibility_fallback_owner_bucket" in fem,
+        "visibility_replacement_applied": "visibility_replacement_applied" in fem,
+        "visibility_fallback_pool": "visibility_fallback_pool" in fem,
+        "visibility_fallback_kind": "visibility_fallback_kind" in fem,
         "fallback_family": "fallback_family_used" in fem or "realization_fallback_family" in fem,
         "trace.canonical_entry": bool(canonical_entry),
         "trace.turn_trace": bool(turn_trace),
@@ -723,6 +738,11 @@ def _observed_turn(
         "upstream_prepared_emission_valid": "upstream_prepared_emission_valid" in fem_normalized,
         "upstream_prepared_emission_source": "upstream_prepared_emission_source" in fem_normalized,
         "upstream_prepared_emission_reject_reason": "upstream_prepared_emission_reject_reason" in fem_normalized,
+        "sealed_fallback_owner_bucket": "sealed_fallback_owner_bucket" in fem_normalized,
+        "visibility_fallback_owner_bucket": "visibility_fallback_owner_bucket" in fem_normalized,
+        "visibility_replacement_applied": "visibility_replacement_applied" in fem_normalized,
+        "visibility_fallback_pool": "visibility_fallback_pool" in fem_normalized,
+        "visibility_fallback_kind": "visibility_fallback_kind" in fem_normalized,
         "fallback_family": "fallback_family_used" in fem_normalized or "realization_fallback_family" in fem_normalized,
     }
     missing_source_by_field = {}
@@ -781,6 +801,11 @@ def _observed_turn(
         "opening_recovered_via_fallback": opening_recovered_via_fallback,
         "opening_fallback_authorship_source": opening_fallback_authorship_source,
         "opening_fallback_owner_bucket": opening_fallback_owner_bucket,
+        "sealed_fallback_owner_bucket": sealed_fallback_owner_bucket,
+        "visibility_fallback_owner_bucket": visibility_fallback_owner_bucket,
+        "visibility_replacement_applied": visibility_replacement_applied,
+        "visibility_fallback_pool": visibility_fallback_pool,
+        "visibility_fallback_kind": visibility_fallback_kind,
         "fallback_family": fallback_family,
         "fallback_temporal_frame": fallback_temporal_frame,
         "scaffold_leakage": final_text_has_scaffold_leakage(final_text),
@@ -906,6 +931,7 @@ def format_golden_replay_debug(result: Mapping[str, Any]) -> str:
                 f"turn[{turn.get('turn_index')}].opening_recovered_via_fallback: {turn.get('opening_recovered_via_fallback')!r}",
                 f"turn[{turn.get('turn_index')}].opening_fallback_authorship_source: {turn.get('opening_fallback_authorship_source')!r}",
                 f"turn[{turn.get('turn_index')}].opening_fallback_owner_bucket: {turn.get('opening_fallback_owner_bucket')!r}",
+                f"turn[{turn.get('turn_index')}].sealed_fallback_owner_bucket: {turn.get('sealed_fallback_owner_bucket')!r}",
                 f"turn[{turn.get('turn_index')}].fallback_family: {turn.get('fallback_family')!r}",
                 f"turn[{turn.get('turn_index')}].fallback_temporal_frame: {turn.get('fallback_temporal_frame')!r}",
                 f"turn[{turn.get('turn_index')}].scaffold_leakage: {turn.get('scaffold_leakage')!r}",

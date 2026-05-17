@@ -11,7 +11,9 @@ from tests.failure_classification_contract import (
     ALLOWED_FAILURE_SEVERITIES,
     ALLOWED_OPENING_FALLBACK_OWNER_BUCKETS,
     ALLOWED_RUNTIME_RESPONSE_TYPE_REPAIR_KINDS,
+    ALLOWED_SEALED_FALLBACK_OWNER_BUCKETS,
     ALLOWED_SOURCE_FAMILY_TAGS,
+    ALLOWED_VISIBILITY_FALLBACK_OWNER_BUCKETS,
     LEGACY_RESPONSE_TYPE_REPAIR_KINDS,
     MAJOR_OWNER_INVESTIGATION_TARGETS,
 )
@@ -92,6 +94,29 @@ def test_opening_fallback_owner_bucket_values_are_contract_locked():
 
     row["opening_fallback_owner_bucket"] = "mystery-owner"
     assert "invalid opening_fallback_owner_bucket: 'mystery-owner'" in validate_failure_classification_row(row)
+
+
+def test_sealed_fallback_owner_bucket_values_are_contract_locked():
+    row = _valid_sample_row()
+    row["sealed_fallback_owner_bucket"] = "sealed-gate"
+    assert row["sealed_fallback_owner_bucket"] in ALLOWED_SEALED_FALLBACK_OWNER_BUCKETS
+    assert validate_failure_classification_row(row) == []
+
+    row["sealed_fallback_owner_bucket"] = "mystery-owner"
+    assert "invalid sealed_fallback_owner_bucket: 'mystery-owner'" in validate_failure_classification_row(row)
+
+
+def test_visibility_fallback_owner_bucket_values_are_contract_locked():
+    row = _valid_sample_row()
+    row["visibility_fallback_owner_bucket"] = "strict-social-visibility"
+    row["visibility_replacement_applied"] = True
+    row["visibility_fallback_pool"] = "strict_social_visibility_minimal"
+    row["visibility_fallback_kind"] = "visibility_minimal_social_fallback"
+    assert row["visibility_fallback_owner_bucket"] in ALLOWED_VISIBILITY_FALLBACK_OWNER_BUCKETS
+    assert validate_failure_classification_row(row) == []
+
+    row["visibility_fallback_owner_bucket"] = "mystery-owner"
+    assert "invalid visibility_fallback_owner_bucket: 'mystery-owner'" in validate_failure_classification_row(row)
 
 
 def test_runtime_response_type_repair_kind_taxonomy_is_contract_locked():

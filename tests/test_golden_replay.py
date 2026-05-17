@@ -9,6 +9,8 @@ from game.final_emission_gate import apply_final_emission_gate
 from game.final_emission_meta import (
     OPENING_FALLBACK_OWNER_SEALED_GATE,
     OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
+    SEALED_FALLBACK_OWNER_SEALED_GATE,
+    SEALED_FALLBACK_OWNER_STRICT_SOCIAL_SEALED,
     opening_fallback_owner_bucket_from_meta,
     read_final_emission_meta_dict,
 )
@@ -383,6 +385,69 @@ def test_golden_observed_turn_projects_fail_closed_sealed_gate_opening_owner_buc
     )
 
     assert observed["opening_fallback_owner_bucket"] == OPENING_FALLBACK_OWNER_SEALED_GATE
+
+
+def test_golden_observed_turn_projects_sealed_fallback_owner_bucket():
+    observed = _observed_turn(
+        scenario_id="synthetic_sealed_owner",
+        snap={"turn_index": 0, "gm_text": "A sealed fallback line."},
+        payload={
+            "gm_output": {
+                "_final_emission_meta": {
+                    "final_route": "replaced",
+                    "final_emitted_source": "global_scene_fallback",
+                    "sealed_fallback_owner_bucket": SEALED_FALLBACK_OWNER_SEALED_GATE,
+                    "realization_fallback_family": "gate_terminal_repair",
+                }
+            }
+        },
+    )
+
+    assert observed["sealed_fallback_owner_bucket"] == SEALED_FALLBACK_OWNER_SEALED_GATE
+
+
+def test_golden_observed_turn_projects_strict_social_sealed_fallback_owner_bucket():
+    observed = _observed_turn(
+        scenario_id="synthetic_strict_social_sealed_owner",
+        snap={"turn_index": 0, "gm_text": "A strict-social sealed fallback line."},
+        payload={
+            "gm_output": {
+                "_final_emission_meta": {
+                    "final_route": "replaced",
+                    "final_emitted_source": "minimal_social_emergency_fallback",
+                    "sealed_fallback_owner_bucket": SEALED_FALLBACK_OWNER_STRICT_SOCIAL_SEALED,
+                    "realization_fallback_family": "strict_social_deterministic_fallback",
+                }
+            }
+        },
+    )
+
+    assert observed["sealed_fallback_owner_bucket"] == SEALED_FALLBACK_OWNER_STRICT_SOCIAL_SEALED
+
+
+def test_golden_observed_turn_projects_visibility_fallback_evidence():
+    observed = _observed_turn(
+        scenario_id="synthetic_visibility_owner",
+        snap={"turn_index": 0, "gm_text": "A visibility fallback line."},
+        payload={
+            "gm_output": {
+                "_final_emission_meta": {
+                    "final_route": "replaced",
+                    "final_emitted_source": "global_scene_fallback",
+                    "visibility_fallback_owner_bucket": "sealed-gate",
+                    "visibility_replacement_applied": True,
+                    "visibility_fallback_pool": "global_scene_narrative",
+                    "visibility_fallback_kind": "narrative_safe_fallback",
+                    "sealed_fallback_owner_bucket": SEALED_FALLBACK_OWNER_SEALED_GATE,
+                }
+            }
+        },
+    )
+
+    assert observed["visibility_fallback_owner_bucket"] == "sealed-gate"
+    assert observed["visibility_replacement_applied"] is True
+    assert observed["visibility_fallback_pool"] == "global_scene_narrative"
+    assert observed["visibility_fallback_kind"] == "narrative_safe_fallback"
 
 
 @pytest.mark.parametrize(

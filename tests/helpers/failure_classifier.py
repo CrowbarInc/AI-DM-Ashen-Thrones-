@@ -17,8 +17,10 @@ from tests.failure_classification_contract import (
     ALLOWED_OPENING_FALLBACK_OWNER_BUCKETS,
     ALLOWED_PRIMARY_OWNERS,
     ALLOWED_REPLAY_TAGS,
+    ALLOWED_SEALED_FALLBACK_OWNER_BUCKETS,
     ALLOWED_SECONDARY_OWNERS,
     ALLOWED_SOURCE_FAMILY_TAGS,
+    ALLOWED_VISIBILITY_FALLBACK_OWNER_BUCKETS,
     EXPERIMENTAL_REPLAY_TAG_PREFIX,
     MAJOR_OWNER_INVESTIGATION_TARGETS,
     OPTIONAL_CLASSIFICATION_EVIDENCE_FIELDS,
@@ -53,6 +55,11 @@ class FailureClassification(TypedDict):
     fallback_family: NotRequired[Any]
     fallback_temporal_frame: NotRequired[Any]
     opening_fallback_owner_bucket: NotRequired[Any]
+    sealed_fallback_owner_bucket: NotRequired[Any]
+    visibility_fallback_owner_bucket: NotRequired[Any]
+    visibility_replacement_applied: NotRequired[Any]
+    visibility_fallback_pool: NotRequired[Any]
+    visibility_fallback_kind: NotRequired[Any]
     upstream_prepared_emission_used: NotRequired[Any]
     upstream_prepared_emission_valid: NotRequired[Any]
     upstream_prepared_emission_source: NotRequired[Any]
@@ -95,7 +102,7 @@ CATEGORY_RULES: tuple[tuple[str, tuple[str, ...], FailureCategory, str], ...] = 
     ("continuity", ("continuity", "active_interaction", "current_interlocutor", "dialogue_lock"), "continuity", "interaction_continuity"),
     ("speaker", ("selected_speaker_id", "reply_owner", "visible_grounded_speaker", "speaker"), "speaker", "speaker_contract"),
     ("opening_fallback", ("opening_recovered_via_fallback", "opening_fallback_authorship_source", "opening_fallback_owner_bucket"), "fallback", "opening_fallback"),
-    ("fallback", ("fallback_family", "fallback_temporal_frame"), "fallback", "fallback_behavior"),
+    ("fallback", ("fallback_family", "fallback_temporal_frame", "sealed_fallback_owner_bucket", "visibility_fallback_owner_bucket", "visibility_fallback_pool", "visibility_fallback_kind"), "fallback", "fallback_behavior"),
     ("fallback_source", ("final_emitted_source",), "fallback", "final_emission_gate"),
     ("upstream_prepared_emission", ("upstream_prepared_emission", "prepared_emission_owner"), "emission", "upstream_prepared_emission"),
     ("response_type_repair", ("response_type_repair_used", "response_type_repair_kind"), "emission", "final_emission_gate"),
@@ -309,6 +316,14 @@ def validate_failure_classification_row(row: Mapping[str, Any]) -> list[str]:
     if opening_bucket not in (None, "") and opening_bucket not in ALLOWED_OPENING_FALLBACK_OWNER_BUCKETS:
         errors.append(f"invalid opening_fallback_owner_bucket: {opening_bucket!r}")
 
+    sealed_bucket = row.get("sealed_fallback_owner_bucket")
+    if sealed_bucket not in (None, "") and sealed_bucket not in ALLOWED_SEALED_FALLBACK_OWNER_BUCKETS:
+        errors.append(f"invalid sealed_fallback_owner_bucket: {sealed_bucket!r}")
+
+    visibility_bucket = row.get("visibility_fallback_owner_bucket")
+    if visibility_bucket not in (None, "") and visibility_bucket not in ALLOWED_VISIBILITY_FALLBACK_OWNER_BUCKETS:
+        errors.append(f"invalid visibility_fallback_owner_bucket: {visibility_bucket!r}")
+
     prepared_owner = row.get("prepared_emission_owner")
     if prepared_owner not in (None, "") and prepared_owner != "upstream_prepared_emission":
         errors.append(f"invalid prepared_emission_owner: {prepared_owner!r}")
@@ -507,6 +522,11 @@ def _fallback_observed(observed_turn: Mapping[str, Any], drift_row: Mapping[str,
         observed_turn.get("final_emitted_source"),
         observed_turn.get("opening_fallback_authorship_source"),
         observed_turn.get("opening_fallback_owner_bucket"),
+        observed_turn.get("sealed_fallback_owner_bucket"),
+        observed_turn.get("visibility_fallback_owner_bucket"),
+        observed_turn.get("visibility_replacement_applied"),
+        observed_turn.get("visibility_fallback_pool"),
+        observed_turn.get("visibility_fallback_kind"),
         drift_row.get("actual"),
     ]
     return any(any(marker in str(value).lower() for marker in FALLBACK_SOURCE_MARKERS) for value in values if value is not None)
@@ -742,6 +762,11 @@ def classify_replay_failure(
             "fallback_family": observed_turn.get("fallback_family"),
             "fallback_temporal_frame": observed_turn.get("fallback_temporal_frame"),
             "opening_fallback_owner_bucket": _opening_fallback_owner_bucket(observed_turn, drift_row),
+            "sealed_fallback_owner_bucket": observed_turn.get("sealed_fallback_owner_bucket"),
+            "visibility_fallback_owner_bucket": observed_turn.get("visibility_fallback_owner_bucket"),
+            "visibility_replacement_applied": observed_turn.get("visibility_replacement_applied"),
+            "visibility_fallback_pool": observed_turn.get("visibility_fallback_pool"),
+            "visibility_fallback_kind": observed_turn.get("visibility_fallback_kind"),
             "upstream_prepared_emission_used": observed_turn.get("upstream_prepared_emission_used"),
             "upstream_prepared_emission_valid": observed_turn.get("upstream_prepared_emission_valid"),
             "upstream_prepared_emission_source": observed_turn.get("upstream_prepared_emission_source"),

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from game.final_emission_meta import read_final_emission_meta_dict
+from game.realization_provenance import GATE_TERMINAL_REPAIR, REALIZATION_FALLBACK_FAMILY_FIELD
 
 from copy import deepcopy
 
@@ -144,6 +145,13 @@ def test_pipeline_replaces_offscene_known_npc_reference():
     ]
     assert read_final_emission_meta_dict(out)["visibility_validation_passed"] is False
     assert read_final_emission_meta_dict(out)["visibility_replacement_applied"] is True
+    assert read_final_emission_meta_dict(out)["final_route"] == "replaced"
+    assert read_final_emission_meta_dict(out)["final_emitted_source"] == "global_scene_fallback"
+    assert read_final_emission_meta_dict(out)[REALIZATION_FALLBACK_FAMILY_FIELD] == GATE_TERMINAL_REPAIR
+    assert read_final_emission_meta_dict(out)["sealed_fallback_owner_bucket"] == "sealed-gate"
+    assert read_final_emission_meta_dict(out)["visibility_fallback_owner_bucket"] == "sealed-gate"
+    assert read_final_emission_meta_dict(out)["visibility_fallback_pool"] == "global_scene_narrative"
+    assert read_final_emission_meta_dict(out)["visibility_fallback_kind"] == "narrative_safe_fallback"
     assert read_final_emission_meta_dict(out)["visibility_violation_kinds"] == [
         "unseen_entity_reference",
     ]
