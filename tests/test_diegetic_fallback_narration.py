@@ -17,10 +17,13 @@ from game.realization_provenance import (
     RETRY_TERMINAL_FALLBACK,
 )
 from game.upstream_response_repairs import (
-    OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL,
     OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED,
 )
-from tests.test_final_emission_gate import EXPECTED_FRONTIER_GATE_OPENING_FALLBACK, _opening_gm_output
+from tests.test_final_emission_gate import (
+    EXPECTED_FRONTIER_GATE_OPENING_FALLBACK,
+    _opening_gm_output,
+    opening_gate_attach_then_enforce_response_type_contract,
+)
 
 pytestmark = pytest.mark.unit
 
@@ -88,9 +91,9 @@ def test_retry_terminal_caller_labels_selected_diegetic_fallback_with_retry_fami
 
 
 def test_final_emission_opening_repair_debug_labels_legacy_diegetic_fallback_boundary() -> None:
-    text, debug = feg._enforce_response_type_contract(
+    text, debug = opening_gate_attach_then_enforce_response_type_contract(
         "Nearby crates appear disturbed.",
-        gm_output=_opening_gm_output(),
+        _opening_gm_output(),
         resolution={"kind": "scene_opening", "prompt": "Start the campaign."},
         session={},
         scene_id="frontier_gate",
@@ -106,7 +109,7 @@ def test_final_emission_opening_repair_debug_labels_legacy_diegetic_fallback_bou
     family = debug[REALIZATION_FALLBACK_FAMILY_FIELD]
     _assert_known_family(family)
     assert family == LEGACY_DIEGETIC_FALLBACK
-    assert debug.get("opening_fallback_authorship_source") == OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL
+    assert debug.get("opening_fallback_authorship_source") == OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED
 
 
 def test_final_emission_opening_repair_carries_legacy_diegetic_family_to_fem() -> None:

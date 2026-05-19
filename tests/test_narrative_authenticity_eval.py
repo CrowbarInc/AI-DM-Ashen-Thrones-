@@ -2,8 +2,13 @@
 
 from __future__ import annotations
 
+import shutil
+from pathlib import Path
+from typing import Any
+
 import pytest
 
+from game import storage
 from game.narrative_authenticity_eval import (
     build_evaluator_observability_events,
     evaluate_narrative_authenticity,
@@ -21,6 +26,22 @@ def _resp_sidecar(*, text: str, fem: dict) -> dict:
         "gm_output": {"player_facing_text": text},
         "gm_output_debug": {"emission_debug_lane": {"_final_emission_meta": fem}},
     }
+
+
+def _patch_api_storage(monkeypatch: Any, tmp_path: Path) -> None:
+    """Point API persistence at a per-test temp root before TestClient startup."""
+    data_dir = tmp_path / "data"
+    shutil.copytree(storage.DATA_DIR, data_dir, dirs_exist_ok=True)
+    monkeypatch.setattr(storage, "DATA_DIR", data_dir)
+    monkeypatch.setattr(storage, "WORLD_PATH", storage.DATA_DIR / "world.json")
+    monkeypatch.setattr(storage, "SCENES_DIR", storage.DATA_DIR / "scenes")
+    monkeypatch.setattr(storage, "CHARACTER_PATH", storage.DATA_DIR / "character.json")
+    monkeypatch.setattr(storage, "CAMPAIGN_PATH", storage.DATA_DIR / "campaign.json")
+    monkeypatch.setattr(storage, "SESSION_PATH", storage.DATA_DIR / "session.json")
+    monkeypatch.setattr(storage, "COMBAT_PATH", storage.DATA_DIR / "combat.json")
+    monkeypatch.setattr(storage, "CONDITIONS_PATH", storage.DATA_DIR / "conditions.json")
+    monkeypatch.setattr(storage, "SESSION_LOG_PATH", storage.DATA_DIR / "session_log.jsonl")
+    monkeypatch.setattr(storage, "SNAPSHOTS_DIR", storage.DATA_DIR / "snapshots")
 
 
 def test_build_evaluator_observability_events_canonical_shape() -> None:
@@ -280,8 +301,10 @@ def test_eval_reads_fem_from_sidecar_lane_not_only_legacy_top_level() -> None:
 
 
 @pytest.mark.integration
-def test_api_chat_includes_fem_for_eval() -> None:
+def test_api_chat_includes_fem_for_eval(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     from fastapi.testclient import TestClient
+
+    _patch_api_storage(monkeypatch, tmp_path)
 
     from game.api import app
 

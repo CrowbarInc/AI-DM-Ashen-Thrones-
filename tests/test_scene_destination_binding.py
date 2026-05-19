@@ -500,7 +500,8 @@ def test_sti_e2e_enter_stone_boar_does_not_land_old_milestone():
     assert (act.get("metadata") or {}).get("parser_lane") != "legacy_follow_exit_match"
 
 
-def test_sti_e2e_head_to_old_milestone_still_resolves_through_chain():
+def test_sti_e2e_head_to_old_milestone_still_resolves_through_chain(tmp_path, monkeypatch):
+    _seed_sti_http_pack(tmp_path, monkeypatch)
     scene = _gate_with_stone_boar_and_milestone_exits()
     scene["scene"]["exits"] = list(scene["scene"]["exits"]) + [
         {"label": "The old milestone", "target_scene_id": "old_milestone"},

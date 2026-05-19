@@ -48,6 +48,13 @@ def _load_spine():
     return spine
 
 
+def _patch_session_storage(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
+    from game import storage
+
+    monkeypatch.setattr(storage, "DATA_DIR", tmp_path / "data")
+    monkeypatch.setattr(storage, "SESSION_PATH", storage.DATA_DIR / "session.json")
+
+
 def test_list_main_stdout_lists_canonical_branches(capsys) -> None:
     code = _mod.main(["--list"])
     assert code == 0
@@ -269,6 +276,7 @@ def _assert_transcript_meta_envelope(row: dict, *, spine_id: str, branch_id: str
 
 def test_transcript_turn_meta_stable_envelope(tmp_path, monkeypatch) -> None:
     monkeypatch.setattr(_mod, "apply_new_campaign_hard_reset", lambda: None)
+    _patch_session_storage(monkeypatch, tmp_path)
     spine = _load_spine()
     br = next(b for b in spine.branches if b.branch_id == "branch_direct_intrusion")
 

@@ -71,7 +71,7 @@ python tools/validation_coverage_audit.py --surface playability
 
 **Post-AER Block C1:** Behavioral Gauntlet, Playability Validation, and AER are **complete** as validation tracks. Consolidation PRs target **orchestration** clarity, **telemetry/meta** normalization, and **test ownership** (**canonical owner** per module, **smoke overlap** only where layers differ)—see `docs/current_focus.md` and `docs/narrative_integrity_architecture.md` (**Post-AER Consolidation Rules**).
 
-**Windows:** If `pytest` is not on your `PATH`, use `py -3 -m pytest` instead of `pytest` for every command below (for example `py -3 -m pytest -m "not transcript and not slow"`).
+**Windows / Codex temp-root note:** `pytest.ini` supplies `--basetemp=codex_pytest_tmp`, so normal pytest runs use a repo-local temporary directory instead of the shared user temp root. This avoids Windows/Codex permission failures like `PermissionError` under `AppData\Local\Temp\pytest-of-...` without changing test behavior. If `pytest` is not on your `PATH`, use `py -3 -m pytest` instead of `pytest` for every command below (for example `py -3 -m pytest -m "not transcript and not slow"`). If neither launcher is on `PATH` in Codex, invoke the available Codex Python with `-m pytest` from the repo root and keep `PYTHONPATH` pointed at `.\.venv\Lib\site-packages`; the repo-local basetemp still comes from `pytest.ini`.
 
 ## Manual gauntlets (outside pytest)
 
@@ -291,6 +291,8 @@ Same thing with an explicit path:
 pytest tests/
 ```
 
+Both commands inherit `--basetemp=codex_pytest_tmp` from `pytest.ini`; do not add a shared user-temp override for local/Codex runs.
+
 **Collect only:**
 
 ```bash
@@ -410,7 +412,7 @@ See `tests/TEST_AUDIT.md` → *Consolidation Block 1 — Canonical ownership map
 |------|---------|
 | **Test audit (regenerate inventory)** | `py -3 tools/test_audit.py` |
 | **Ownership registry governance** | `py -3 -m pytest tests/test_ownership_registry.py -q` |
-| **Full lane** | `pytest` or `pytest tests/` |
+| **Full lane** | `pytest` or `pytest tests/` (uses repo-local `codex_pytest_tmp` from `pytest.ini`) |
 | **Full lane, collect only** | `pytest --collect-only -q` |
 | **Fast lane** | `pytest -m "not transcript and not slow"` |
 | **Fast lane, collect only** | `pytest --collect-only -m "not transcript and not slow" -q` |

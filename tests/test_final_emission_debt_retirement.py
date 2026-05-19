@@ -57,6 +57,8 @@ _EXPECTED_FORBIDDEN_SUBSTRING_SYMBOLS_BY_MODULE: dict[str, frozenset[str]] = {
     "final_emission_meta.py": frozenset(),
     "final_emission_text.py": frozenset(),
     "final_emission_validators.py": frozenset(),
+    "final_emission_sealed_fallback.py": frozenset(),
+    "final_emission_visibility_fallback.py": frozenset(),
 }
 
 
