@@ -14,6 +14,13 @@ from tests.helpers.failure_dashboard_report import (
 
 pytestmark = pytest.mark.failure_dashboard_probe
 
+# Ownership note:
+# Controlled probes own dashboard/classifier behavior on known-bad replay-shaped
+# rows. They intentionally duplicate projection fields to preserve triage
+# locality; runtime prose and routing behavior stay with their direct owners.
+# Cycle F.I: controlled opening-fallback rows preserve taxonomy while allowing
+# symptom-specific ``investigate_first`` routing for classifier-owned triage.
+
 
 def _observed(**overrides: Any) -> dict[str, Any]:
     base: dict[str, Any] = {
@@ -95,6 +102,8 @@ CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any], dict[
     ),
     # Opening fallback owner-bucket rows intentionally duplicate projection
     # fields for dashboard/triage contracts, not deterministic prose ownership.
+    # Owner-bucket mapping now routes to FEM metadata; gate selection/final
+    # source symptoms remain final-gate-owned.
     (
         "opening_fallback_owner_bucket",
         _observed(
@@ -118,9 +127,76 @@ CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any], dict[
             "primary_owner": "fallback",
             "secondary_owner": "emission",
             "severity": "high",
-            "investigate_first": "game/final_emission_gate.py",
+            "investigate_first": "game/final_emission_meta.py",
             "emission_sublayer": "opening_fallback",
             "opening_fallback_owner_bucket": OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
+        },
+    ),
+    (
+        "opening_fallback_authorship_source",
+        _observed(
+            opening_recovered_via_fallback=True,
+            opening_fallback_authorship_source="compatibility_local_opening_deterministic",
+            fallback_family="scene_opening",
+        ),
+        {
+            "field_path": "opening_fallback_authorship_source",
+            "expected": "upstream_prepared_opening_fallback",
+            "actual": "compatibility_local_opening_deterministic",
+            "reason": "exact value mismatch",
+            "drift_bucket": "structural_drift",
+        },
+        {
+            "category": "fallback",
+            "primary_owner": "fallback",
+            "secondary_owner": "emission",
+            "severity": "high",
+            "investigate_first": "game/upstream_response_repairs.py",
+            "emission_sublayer": "opening_fallback",
+        },
+    ),
+    (
+        "opening_fallback_basis",
+        _observed(
+            opening_recovered_via_fallback=True,
+            fallback_family="scene_opening",
+        ),
+        {
+            "field_path": "opening_final_fallback_basis",
+            "expected": ["journal seed"],
+            "actual": ["visible fact"],
+            "reason": "exact value mismatch",
+            "drift_bucket": "structural_drift",
+        },
+        {
+            "category": "replay_drift",
+            "primary_owner": "replay",
+            "secondary_owner": "emission",
+            "severity": "medium",
+            "investigate_first": "game/opening_deterministic_fallback.py",
+            "emission_sublayer": "opening_fallback",
+        },
+    ),
+    (
+        "opening_fallback_projection_missing",
+        _observed(
+            unavailable=["opening_fallback_owner_bucket"],
+            raw_signal_presence={"opening_fallback_owner_bucket": True},
+        ),
+        {
+            "field_path": "opening_fallback_owner_bucket",
+            "expected": OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
+            "actual": None,
+            "reason": "unexpected unavailable field",
+            "drift_bucket": "structural_drift",
+        },
+        {
+            "category": "projection",
+            "primary_owner": "projection",
+            "secondary_owner": None,
+            "severity": "medium",
+            "investigate_first": "tests/helpers/golden_replay.py",
+            "missing_source_kind": "projection_missing_raw_present",
         },
     ),
     # Sealed fallback rows intentionally repeat final source and owner bucket as
@@ -576,6 +652,13 @@ def test_controlled_failure_probe_dashboard_contains_triage_columns():
     assert "fallback_source_mismatch" in report
     assert "opening_fallback_owner_bucket" in report
     assert "opening_owner=upstream-prepared" in report
+    assert "game/final_emission_meta.py" in report
+    assert "opening_fallback_authorship_source" in report
+    assert "game/upstream_response_repairs.py" in report
+    assert "opening_final_fallback_basis" in report
+    assert "game/opening_deterministic_fallback.py" in report
+    assert "opening_fallback_projection_missing" in report
+    assert "tests/helpers/golden_replay.py" in report
     assert "sealed_fallback_owner_bucket" in report
     assert "sealed_owner=sealed-gate" in report
     assert "visibility_fallback_owner_bucket" in report

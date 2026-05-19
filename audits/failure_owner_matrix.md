@@ -2,6 +2,8 @@
 
 Rule used here: one primary owner, optional secondary only when diagnosability genuinely crosses a boundary. Primary owner is the earliest legitimate fault location, not the layer where the bad prose finally became visible.
 
+Opening-fallback routing policy note (Cycle F.H): current dashboard/classifier behavior is still coarse and gate-biased. Opening-fallback fields classify under `fallback`, and `fallback` currently routes to `game/final_emission_gate.py`. Desired future routing is symptom-specific first-fault routing after a reviewed classifier policy change: gate selection/final source/fail-closed/FEM merge stay with `game/final_emission_gate.py`; composition/basis goes to `game/opening_deterministic_fallback.py`; upstream payload shape/authorship goes to `game/upstream_response_repairs.py`; owner-bucket mapping goes to `game/final_emission_meta.py`; replay projection goes to `tests/helpers/golden_replay.py`; classifier policy goes to `tests/helpers/failure_classifier.py`; dashboard rendering goes to `tests/helpers/failure_dashboard_report.py`.
+
 | Failure Type | Primary Owner | Secondary Owner | Why |
 |---|---|---|---|
 | Exact final-text hash mismatch | replay | emission | Exact drift is an opt-in replay assertion; emission is secondary only when no upstream structural predicate changed. |
@@ -56,4 +58,3 @@ Rule used here: one primary owner, optional secondary only when diagnosability g
 | Branch coherence failure | evaluator | planner | Evaluator detects non-divergence/coherence failure; planner/route often owns root branch behavior. |
 | Replay exact text misleading while structure passes | replay | evaluator | Replay exact drift alone may not indicate owner; evaluator/semantic checks decide severity. |
 | Projection strips debug needed for classification | projection | emission | Projection/read-side owns missing dashboard field; emission owns whether raw debug existed. |
-

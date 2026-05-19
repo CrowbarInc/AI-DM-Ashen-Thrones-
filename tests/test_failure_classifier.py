@@ -17,6 +17,14 @@ from tests.helpers.failure_dashboard_report import (
     write_failure_dashboard_artifact_if_requested,
 )
 
+# Ownership note:
+# This suite owns classifier locality: category, owners, severity,
+# investigate_first, and evidence projection. Projection-field duplication is
+# intentional so replay failures remain diagnosable without re-owning runtime.
+# Cycle F.H: opening-fallback routing is intentionally still gate-biased in the
+# current classifier contract; symptom-specific first-fault routing is future
+# reviewed policy work, not behavior asserted in this file today.
+
 
 def _observed(**overrides: Any) -> dict[str, Any]:
     base = {
@@ -229,6 +237,11 @@ def test_failure_dashboard_report_includes_required_replay_columns():
 
 # Opening fallback owner-bucket assertions here are classifier projection locks,
 # not duplicate ownership of gate selection or deterministic opening prose.
+# Current rows keep category/source-family taxonomy stable while routing selected
+# opening symptoms to first-fault targets: gate selection remains gate-owned,
+# owner-bucket mapping routes to FEM metadata, payload symptoms to upstream
+# repairs, composition/basis to the deterministic composer, and raw-present
+# projection omissions to golden replay.
 @pytest.mark.parametrize(
     ("case", "observed", "expected_bucket"),
     [
@@ -311,6 +324,98 @@ def test_failure_classifier_preserves_projected_opening_owner_bucket_evidence():
 
     assert row["opening_fallback_owner_bucket"] == OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED
     assert row["source_family"] == "opening_fallback"
+    assert row["investigate_first"] == "game/final_emission_meta.py"
+
+
+def test_failure_classifier_routes_opening_authorship_payload_symptom_to_upstream_repairs():
+    row = classify_replay_failure(
+        scenario_id="opening_authorship_payload",
+        turn_index=0,
+        observed_turn=_observed(
+            opening_recovered_via_fallback=True,
+            opening_fallback_authorship_source="compatibility_local_opening_deterministic",
+            fallback_family="scene_opening",
+        ),
+        drift_rows=[
+            {
+                "field_path": "opening_fallback_authorship_source",
+                "expected": "upstream_prepared_opening_fallback",
+                "actual": "compatibility_local_opening_deterministic",
+                "reason": "exact value mismatch",
+                "drift_bucket": "structural_drift",
+            }
+        ],
+    )[0]
+
+    assert row["category"] == "fallback"
+    assert row["source_family"] == "opening_fallback"
+    assert row["investigate_first"] == "game/upstream_response_repairs.py"
+
+
+def test_failure_classifier_routes_opening_basis_symptom_to_deterministic_composer():
+    row = classify_replay_failure(
+        scenario_id="opening_basis_divergence",
+        turn_index=0,
+        observed_turn=_observed(opening_recovered_via_fallback=True, fallback_family="scene_opening"),
+        drift_rows=[
+            {
+                "field_path": "opening_final_fallback_basis",
+                "expected": ["journal seed"],
+                "actual": ["visible fact"],
+                "reason": "exact value mismatch",
+                "drift_bucket": "structural_drift",
+            }
+        ],
+    )[0]
+
+    assert row["investigate_first"] == "game/opening_deterministic_fallback.py"
+
+
+def test_failure_classifier_routes_opening_projection_omission_to_golden_replay():
+    row = classify_replay_failure(
+        scenario_id="opening_projection_missing",
+        turn_index=0,
+        observed_turn=_observed(
+            unavailable=["opening_fallback_owner_bucket"],
+            raw_signal_presence={"opening_fallback_owner_bucket": True},
+        ),
+        drift_rows=[
+            {
+                "field_path": "opening_fallback_owner_bucket",
+                "expected": OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
+                "actual": None,
+                "reason": "unexpected unavailable field",
+                "drift_bucket": "structural_drift",
+            }
+        ],
+    )[0]
+
+    assert row["category"] == "projection"
+    assert row["investigate_first"] == "tests/helpers/golden_replay.py"
+
+
+def test_failure_classifier_keeps_opening_gate_selection_symptom_gate_routed():
+    row = classify_replay_failure(
+        scenario_id="opening_gate_selection",
+        turn_index=0,
+        observed_turn=_observed(
+            final_emitted_source="opening_deterministic_fallback",
+            opening_recovered_via_fallback=True,
+            fallback_family="scene_opening",
+        ),
+        drift_rows=[
+            {
+                "field_path": "final_emitted_source",
+                "expected": "generated_candidate",
+                "actual": "opening_deterministic_fallback",
+                "reason": "exact value mismatch",
+                "drift_bucket": "structural_drift",
+            }
+        ],
+    )[0]
+
+    assert row["category"] == "fallback"
+    assert row["investigate_first"] == "game/final_emission_gate.py"
 
 
 def test_failure_classification_contract_rejects_invalid_opening_owner_bucket():
@@ -330,6 +435,7 @@ def test_failure_classification_contract_rejects_invalid_opening_owner_bucket():
     )[0]
 
     assert "invalid opening_fallback_owner_bucket: 'not-a-bucket'" in validate_failure_classification_row(row)
+    assert row["investigate_first"] == "game/final_emission_meta.py"
 
 
 # Sealed owner-bucket evidence is intentionally preserved as classifier

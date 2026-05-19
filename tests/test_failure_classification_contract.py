@@ -21,6 +21,11 @@ from tests.helpers.failure_classifier import validate_failure_classification_row
 from tests.helpers.failure_dashboard_report import build_failure_dashboard_rows, render_failure_dashboard_markdown
 from tests.test_failure_dashboard_controlled_failures import _classified_rows
 
+# Ownership note:
+# This file owns the failure-classification schema and taxonomy contract.
+# Dashboard rendering assertions here validate contract enforcement, not runtime
+# fallback, route, speaker, or visibility behavior.
+
 
 def _valid_sample_row() -> dict[str, Any]:
     return build_failure_dashboard_rows(

@@ -116,6 +116,13 @@ CATEGORY_RULES: tuple[tuple[str, tuple[str, ...], FailureCategory, str], ...] = 
     ("semantic_text", ("semantic.", "semantic_drift", "final_text"), "semantic_mutation", "stage_diff"),
 )
 
+# Cycle F.I policy note: opening-fallback fields keep the coarse ``fallback``
+# taxonomy where possible, while ``investigate_first`` can route by symptom.
+# Gate selection/final source/fail-closed/FEM merge stay gate-owned; composition/basis routes to
+# ``game/opening_deterministic_fallback.py``; upstream payload issues to
+# ``game/upstream_response_repairs.py``; owner-bucket mapping to ``game/final_emission_meta.py``;
+# replay projection to ``tests/helpers/golden_replay.py``; classifier policy here; dashboard
+# rendering to ``tests/helpers/failure_dashboard_report.py``.
 PRIMARY_OWNER_RULES: dict[FailureCategory, FailureOwner] = {
     "route": "route",
     "speaker": "speaker",
@@ -671,6 +678,54 @@ def classify_failure_severity(
     return "low" if _drift_bucket(drift_row) == "exact_drift" else "medium"
 
 
+_OPENING_COMPOSITION_FIELD_MARKERS: tuple[str, ...] = (
+    "opening_final_fallback_basis",
+    "opening_final_basis_matches_selector",
+    "opening_fallback_basis_count",
+    "opening_fallback_context",
+    "opening_curated_facts",
+    "opening_selector",
+    "prepared_opening_fallback_text",
+)
+
+_OPENING_UPSTREAM_PAYLOAD_FIELD_MARKERS: tuple[str, ...] = (
+    "upstream_prepared_opening_fallback",
+    "opening_fallback_authorship_source",
+    "opening_upstream_prepare",
+)
+
+_OPENING_GATE_FIELD_MARKERS: tuple[str, ...] = (
+    "final_emitted_source",
+    "opening_recovered_via_fallback",
+    "scene_opening_accepted_candidate",
+    "response_type",
+)
+
+
+def _opening_fallback_investigation_target(
+    *,
+    observed_turn: Mapping[str, Any],
+    drift_row: Mapping[str, Any],
+) -> str | None:
+    field_path = str(drift_row.get("field_path") or "")
+    field_l = field_path.lower()
+    if not _opening_fallback_evidence_present(observed_turn, drift_row):
+        return None
+
+    missing_kind = _missing_source_kind(field_path, observed_turn, drift_row)
+    if missing_kind == "projection_missing_raw_present":
+        return "tests/helpers/golden_replay.py"
+    if field_l == "opening_fallback_owner_bucket":
+        return "game/final_emission_meta.py"
+    if any(marker in field_l for marker in _OPENING_GATE_FIELD_MARKERS):
+        return "game/final_emission_gate.py"
+    if any(marker in field_l for marker in _OPENING_UPSTREAM_PAYLOAD_FIELD_MARKERS):
+        return "game/upstream_response_repairs.py"
+    if any(marker in field_l for marker in _OPENING_COMPOSITION_FIELD_MARKERS):
+        return "game/opening_deterministic_fallback.py"
+    return None
+
+
 def build_investigation_target(
     *,
     category: FailureCategory,
@@ -679,6 +734,12 @@ def build_investigation_target(
     drift_row: Mapping[str, Any] | None = None,
 ) -> str:
     field_path = str((drift_row or {}).get("field_path") or "")
+    opening_target = _opening_fallback_investigation_target(
+        observed_turn=observed_turn or {},
+        drift_row=drift_row or {},
+    )
+    if opening_target:
+        return opening_target
     if category not in {"sanitizer", "projection", "replay_drift", "semantic_mutation", "normalization"}:
         for needle, target in FIELD_TARGET_OVERRIDES:
             if needle in field_path:

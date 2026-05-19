@@ -45,6 +45,11 @@ from tests.test_final_emission_gate import _opening_gm_output
 
 pytestmark = [pytest.mark.integration, pytest.mark.golden_replay]
 
+# Ownership note:
+# Golden replay owns replay observation and projection contracts. Repeated
+# route/speaker/fallback/final-emission fields are intentional diagnostic locks,
+# not runtime ownership of those subsystems.
+
 
 def _gm_response(text: str, *, tags: list[str] | None = None, debug_notes: str = "") -> dict:
     return {

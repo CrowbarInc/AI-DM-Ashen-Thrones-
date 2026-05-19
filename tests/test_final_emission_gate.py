@@ -19,6 +19,11 @@ coverage once the orchestration contract is already owned here.
 #
 # All other suites must consume outputs only.
 
+# Ownership note:
+# This opening cluster owns final-gate orchestration/projection for Acceptance
+# Quality N4. Investigate semantic AQ scoring in the acceptance-quality layer
+# first; add cases here only for gate ordering, FEM attachment, or replace routing.
+
 from __future__ import annotations
 
 import ast
@@ -538,6 +543,12 @@ def _runner_strict_bundle():
 
 
 _IC_BRIDGE_LIVE_MALFORMED = 'South road." Tavern Runner nods once. "Old Millstone.'
+
+
+# Ownership note:
+# This cluster owns route/speaker/social-continuity attachment at final-gate time.
+# Investigate speaker/continuity semantics in their direct modules first; add
+# cases here only for gate order, bridge routing, or metadata projection.
 
 
 def _strong_interaction_continuity_contract(*, anchor: str = "npc_melka") -> dict:
@@ -1280,6 +1291,12 @@ def test_block_b_strict_social_pronoun_substitution_records_explicit_metadata(mo
 #
 # Behavior is unchanged: these tests fence the existing path; they do not move
 # substitution upstream, change replacement wording, or alter sealed fallback shape.
+#
+# Ownership note:
+# This cluster owns strict-social referential integration at the gate boundary.
+# Semantic legality belongs to game/narration_visibility.py and
+# tests/test_final_emission_visibility.py; add cases here only for routing,
+# substitution fencing, metadata attachment, or final fallback behavior.
 
 
 _BLOCK_E_REFCLARITY_FAIL_VIOLATION = {
@@ -1502,6 +1519,12 @@ def test_block_e_strict_social_referential_substitution_kind_never_passed_to_ass
         "strict_social_referential_substitution must not be passed to "
         "assert_final_emission_mutation_allowed in game/final_emission_repairs.py"
     )
+
+
+# Ownership note:
+# This cluster owns speaker-repair invocation boundaries and historical ordering
+# locks. Investigate prose/speaker semantics outside the gate first; add cases
+# here only for dispatch, mutation taxonomy, or layer order.
 
 
 def test_block_f_apply_final_emission_gate_non_strict_never_invokes_enforce_emitted_speaker_with_contract(monkeypatch):
@@ -1738,6 +1761,12 @@ def test_apply_final_emission_gate_runs_scene_state_anchor_after_speaker_enforce
         world=world,
     )
     assert order.index("speaker_contract") < order.index("scene_state_anchor")
+
+
+# Ownership note:
+# This cluster owns scene-state-anchor integration and metadata projection at
+# final emission. Semantic anchor validation should live with scene-state-anchor
+# owners; do not grow this into a broader legality matrix.
 
 
 def test_apply_final_emission_gate_scene_state_anchor_location_repair_non_strict():
@@ -2491,6 +2520,12 @@ def test_strict_and_non_strict_repair_sync_metadata():
     assert text == "Fog."
 
 
+# Ownership note:
+# This cluster owns compact narration-constraint debug projection through the
+# gate. Investigate projection schema/meta helpers first; add cases here only for
+# gate surfacing, merge timing, or sensitive-value containment.
+
+
 def _iter_narration_constraint_strings(value):
     if isinstance(value, str):
         yield value
@@ -3008,6 +3043,11 @@ def test_apply_final_emission_gate_narration_constraint_debug_stays_compact_afte
 
 # --- Narrative authority (Objective #9 Block 3 contract resolution + strict-social slice) ---------
 
+# Ownership note:
+# This cluster owns final-gate orchestration for narrative-authority enforcement.
+# Semantic authority rules should live with their validator/repair owners; add
+# cases here only for contract resolution, layer order, strict-social routing, or FEM.
+
 
 def _na_contract_for_resolution(resolution: dict) -> dict:
     return build_narrative_authority_contract(
@@ -3262,6 +3302,11 @@ def test_final_emission_gate_marks_non_hostile_escalation_blocked_on_tone_writer
 
 
 # --- Anti-railroading (Objective Block 3) -------------------------------------------------------
+
+# Ownership note:
+# This cluster owns anti-railroading and context-separation gate integration.
+# Investigate policy semantics in their direct modules first; add cases here only
+# for final-gate repair timing, replacement routing, or metadata attachment.
 
 
 def _ar_contract(**kwargs):
@@ -3738,6 +3783,11 @@ def test_gate_context_separation_pressure_overweight_replaces(monkeypatch):
 
 # --- Player-facing narration purity + answer-shape primacy (Block 3) ------------------------------
 
+# Ownership note:
+# This cluster owns final-gate packaging for purity, answer-shape primacy, and
+# response-type enforcement. Semantic repair breadth belongs in validators/repairs;
+# add cases here only for gate sequencing, final text packaging, or FEM projection.
+
 
 def _purity_contract(**kwargs):
     return build_player_facing_narration_purity_contract(**kwargs)
@@ -3748,6 +3798,12 @@ def _response_type_contract(required: str) -> dict:
         "required_response_type": required,
         "action_must_preserve_agency": required == "action_outcome",
     }
+
+
+# Ownership note:
+# Opening fallback remains a high-drag mixed ownership area. These tests protect
+# gate accept/replace decisions, upstream prepared payload recovery, and fail-closed
+# metadata; do not thin or grow semantic composition coverage here without review.
 
 
 def test_enforce_response_type_contract_marks_upstream_absent_for_answer_without_prepared_text():
@@ -4672,6 +4728,11 @@ def _visibility_offscene_npc_gate_bundle() -> tuple[dict, dict, dict, str]:
     return session, world, scene, sid
 
 
+# Ownership note:
+# Visibility legality semantics belong to game/narration_visibility.py and
+# tests/test_final_emission_visibility.py. The gate checks below own routing,
+# replacement-branch projection, metadata propagation, and integration order.
+
 # Sealed fallback gate assertions below own orchestration and historical branch
 # protection: final_emission_gate selects the sealed replacement branch, calls
 # injected prose owners, writes final output, and stamps metadata/debug. Pure
@@ -4699,6 +4760,11 @@ def test_visibility_safe_fallback_final_emitted_source_snapshot() -> None:
 # --- Block AG: sealed branch selector / order snapshots ---
 
 
+# Ownership note:
+# This cluster owns sealed/strict-social branch selection snapshots and ordering.
+# Prose authorship belongs outside the gate; add cases here only for branch routing,
+# final emitted source/family projection, or final-gate order guarantees.
+#
 # Block AG snapshots intentionally repeat final_emitted_source and
 # sealed_fallback_owner_bucket to distinguish sealed replacement branches. These
 # are branch/projection locks, not duplicate ownership of sealed helper internals.
@@ -4930,6 +4996,11 @@ def test_sealed_branch_order_replace_path_visibility_before_n4(monkeypatch) -> N
 
 
 # --- Block AI: final gate reduction contract guards (selection vs assembly vs authorship) ---
+
+# Ownership note:
+# These helper checks keep extracted visibility fallback routing local and
+# prose-free. Helper shape belongs to game/final_emission_visibility_fallback.py;
+# these remain here as integration/pressure-reduction locks, not semantic matrices.
 
 
 def test_block_ai_sealed_selector_helpers_importable_and_callable() -> None:
@@ -6698,6 +6769,12 @@ def test_block_ai_block_ag_selector_order_snapshots_remain_entrypoints() -> None
         assert callable(getattr(mod, name, None)), name
 
 
+# Ownership note:
+# This cluster extends opening fallback historical regression locks. Investigate
+# upstream/opening fallback ownership first; add cases here only for final-gate
+# accept/replace routing, curated-fact source precedence, or fail-closed FEM.
+
+
 def test_final_gate_plain_valid_candidate_has_source_without_fallback_family() -> None:
     candidate = "Rain ticks against the gatehouse stones."
     out = apply_final_emission_gate(
@@ -7153,6 +7230,12 @@ def test_frontier_gate_opening_fallback_uses_top_level_curated_facts():
     assert "immediately before you" not in text.lower()
 
 
+# Ownership note:
+# This cluster owns downstream gate integration for purity and answer-shape
+# repairs. Semantic text-repair behavior belongs in validator/repair owners; add
+# cases here only for final-gate pass/repair/replace routing or final packaging.
+
+
 def test_resolve_player_facing_narration_purity_contract_from_response_policy():
     c = _purity_contract()
     gm = {"response_policy": {"player_facing_narration_purity": c}}
@@ -7382,6 +7465,11 @@ def test_gate_asp_triggers_replace_when_no_observation_payload(monkeypatch):
 # --- Social response structure downstream integration (orchestration + metadata) -----------------
 # Direct prompt-contract semantics live in tests/test_prompt_context.py; these checks verify
 # gate ordering, metadata merge paths, and repair behavior after the prompt bundle is shipped.
+#
+# Ownership note:
+# This cluster owns route/speaker/social downstream orchestration and metadata.
+# Social-response semantics belong to social emission/structure owners; add cases
+# here only for gate ordering, skip reasons, strict-social routing, or FEM fields.
 
 
 def _monoblob_dialogue_quote() -> str:
@@ -7726,6 +7814,11 @@ def test_social_response_structure_coexists_with_tone_escalation_layer(monkeypat
 
 # --- Appended global-visibility stock: last-mile owner is _finalize_emission_output (not sanitizer-only). ---
 
+# Ownership note:
+# This cluster owns packaging/final-output historical regression locks. If replay,
+# classifier, or dashboard projections fail, investigate downstream projection
+# first; add cases here only for final text containment or last-mile packaging.
+
 
 def test_strip_appended_global_visibility_stock_multi_sentence_trailing():
     raw = (
@@ -7806,6 +7899,12 @@ def test_finalize_emission_output_post_containment_reseals_appended_stock(monkey
     assert "finalize_route_illegal_strip" in lineage
     assert "finalize_packaging" in lineage
     assert "post_gate_mutation_detected" in lineage
+
+
+# Ownership note:
+# This cluster owns narrative-mode output orchestration and final replacement
+# projection. Narrative-mode semantics belong to their direct contract validators;
+# add cases here only for gate skip reasons, branch routing, or final FEM shape.
 
 
 def _narrative_mode_plan_payload(contract: dict) -> dict:

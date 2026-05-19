@@ -23,6 +23,11 @@ from game.storage import get_scene_runtime
 
 pytestmark = pytest.mark.unit
 
+# Ownership note:
+# This file owns semantic visibility, first-mention, and referential-clarity
+# legality expectations with game/narration_visibility.py. Final-gate tests
+# should cover ordering, routing, projection, and integration seams only.
+
 GLOBAL_VISIBILITY_FALLBACK = "For a breath, the scene holds while voices shift around you."
 VISIBLE_FACT = "A brazier throws orange sparks over the checkpoint."
 
@@ -102,6 +107,8 @@ def _finalize_via_turn_support(
 
 
 def _assert_first_mention_default_meta_shape(meta: dict) -> None:
+    # Projection smoke: keep metadata presence diagnosable, but investigate
+    # first-mention legality failures in game/narration_visibility.py first.
     assert "first_mention_validation_passed" in meta
     assert "first_mention_replacement_applied" in meta
     assert "first_mention_violation_kinds" in meta
@@ -114,6 +121,8 @@ def _assert_first_mention_default_meta_shape(meta: dict) -> None:
 
 
 def _assert_referential_clarity_default_meta_shape(meta: dict) -> None:
+    # Projection smoke: this pins emitted metadata shape, not a second home for
+    # the referential-clarity legality matrix.
     assert "referential_clarity_validation_passed" in meta
     assert "referential_clarity_replacement_applied" in meta
     assert "referential_clarity_violation_kinds" in meta
