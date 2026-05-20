@@ -2,6 +2,9 @@
 
 from __future__ import annotations
 
+import importlib
+import sys
+
 from game.final_emission_meta import (
     assemble_unified_observational_telemetry_bundle,
     read_final_emission_meta_dict,
@@ -13,13 +16,37 @@ import pytest
 from game.narrative_authenticity_eval import evaluate_narrative_authenticity
 from game.playability_eval import evaluate_playability
 from tests.helpers.behavioral_gauntlet_eval import evaluate_behavioral_gauntlet
-from tests.helpers.transcript_runner import snapshot_from_chat_payload
+from tests.helpers.transcript_snapshots import snapshot_from_chat_payload
 
 pytestmark = pytest.mark.unit
 
 
 def _resp_na(*, text: str, fem: dict) -> dict:
     return {"ok": True, "gm_output": {"player_facing_text": text, "_final_emission_meta": fem}}
+
+
+def test_transcript_snapshot_helper_import_does_not_load_live_api_stack() -> None:
+    module_names = (
+        "game.api",
+        "game.gm",
+        "game.config",
+        "tests.helpers.transcript_snapshots",
+    )
+    saved = {name: sys.modules[name] for name in module_names if name in sys.modules}
+    try:
+        for name in module_names:
+            sys.modules.pop(name, None)
+
+        imported = importlib.import_module("tests.helpers.transcript_snapshots")
+
+        assert hasattr(imported, "snapshot_from_chat_payload")
+        assert "game.api" not in sys.modules
+        assert "game.gm" not in sys.modules
+        assert "game.config" not in sys.modules
+    finally:
+        sys.modules.pop("tests.helpers.transcript_snapshots", None)
+        for name, module in saved.items():
+            sys.modules[name] = module
 
 
 def test_transcript_snapshot_carries_final_emission_meta_for_manual_gauntlet_rows() -> None:
