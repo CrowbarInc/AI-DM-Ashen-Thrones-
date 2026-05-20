@@ -54,6 +54,34 @@ def test_preflight_healthy_mocked_upstream(monkeypatch: pytest.MonkeyPatch) -> N
     assert cached["health_class"] == "healthy"
 
 
+def test_preflight_without_explicit_key_requires_runtime_key(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.delenv("ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT", raising=False)
+
+    def missing_key() -> str:
+        raise RuntimeError("Missing required environment variable: OPENAI_API_KEY")
+
+    monkeypatch.setattr(pre, "get_openai_api_key", missing_key)
+    with pytest.raises(RuntimeError, match="Missing required environment variable: OPENAI_API_KEY"):
+        run_upstream_api_preflight(client_factory=lambda _k: object())
+
+
+def test_startup_preflight_skip_does_not_require_runtime_key(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
+    monkeypatch.setenv("ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT", "1")
+    monkeypatch.setattr(
+        pre,
+        "get_openai_api_key",
+        lambda: (_ for _ in ()).throw(AssertionError("skip path must not load key")),
+    )
+    monkeypatch.setattr(
+        pre,
+        "run_upstream_api_preflight",
+        lambda **_kwargs: (_ for _ in ()).throw(AssertionError("skip path must not run preflight")),
+    )
+
+    log_upstream_api_preflight_at_startup()
+    assert "skipped" in capsys.readouterr().out
+
+
 def test_preflight_defaults_to_configured_default_model(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.delenv("ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT", raising=False)
     captured: list[dict[str, Any]] = []

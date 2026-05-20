@@ -22,6 +22,7 @@ def _install_openai_recorder(
     response_text: str,
 ) -> list[dict[str, Any]]:
     calls: list[dict[str, Any]] = []
+    monkeypatch.setenv("OPENAI_API_KEY", "sk-test")
 
     class _Client:
         def __init__(self, *_a: Any, **_k: Any) -> None:

@@ -3,7 +3,7 @@ from typing import Any, Dict, List, Optional, Tuple
 import copy
 import json
 import re
-from game.config import OPENAI_API_KEY
+from game.config import get_openai_api_key
 from game.model_routing import resolve_model_route
 from game.utils import slugify
 from game.exploration import EXPLORATION_KINDS
@@ -4964,7 +4964,7 @@ def call_gpt(
     )
     try:
         from openai import OpenAI
-        client = OpenAI(api_key=OPENAI_API_KEY)
+        client = OpenAI(api_key=get_openai_api_key())
         _log_model_route(
             selected_model=route.selected_model,
             route_family=route.route_family,

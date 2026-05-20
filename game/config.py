@@ -49,8 +49,9 @@ def env_flag(name: str, default: bool = False) -> bool:
     return default
 
 
-# Secrets (required)
-OPENAI_API_KEY = _getenv_required("OPENAI_API_KEY")
+def get_openai_api_key() -> str:
+    """Return the OpenAI API key, requiring it only at upstream-call time."""
+    return _getenv_required("OPENAI_API_KEY")
 
 # Model configuration (defaults allowed)
 # `MODEL_NAME` remains for legacy compatibility. New configuration should

@@ -45,7 +45,6 @@ def _config_snapshot_for_env(**env: str | None) -> dict[str, object]:
 
 def test_high_precision_falls_back_to_default_and_routing_flag_parses_false() -> None:
     snapshot = _config_snapshot_for_env(
-        OPENAI_API_KEY="sk-test",
         DEFAULT_MODEL_NAME="default-sentinel",
         HIGH_PRECISION_MODEL_NAME=None,
         RETRY_ESCALATION_MODEL_NAME="retry-sentinel",
@@ -61,7 +60,6 @@ def test_high_precision_falls_back_to_default_and_routing_flag_parses_false() ->
 
 def test_retry_escalation_falls_back_to_high_precision_model() -> None:
     snapshot = _config_snapshot_for_env(
-        OPENAI_API_KEY="sk-test",
         DEFAULT_MODEL_NAME="default-sentinel",
         HIGH_PRECISION_MODEL_NAME="high-precision-sentinel",
         RETRY_ESCALATION_MODEL_NAME=None,
@@ -74,7 +72,6 @@ def test_retry_escalation_falls_back_to_high_precision_model() -> None:
 
 def test_legacy_model_name_only_env_remains_backward_compatible() -> None:
     snapshot = _config_snapshot_for_env(
-        OPENAI_API_KEY="sk-test",
         MODEL_NAME="legacy-model-sentinel",
         DEFAULT_MODEL_NAME=None,
         HIGH_PRECISION_MODEL_NAME=None,
@@ -86,3 +83,18 @@ def test_legacy_model_name_only_env_remains_backward_compatible() -> None:
     assert snapshot["HIGH_PRECISION_MODEL_NAME"] == "legacy-model-sentinel"
     assert snapshot["RETRY_ESCALATION_MODEL_NAME"] == "legacy-model-sentinel"
     assert snapshot["PREFLIGHT_DEFAULT_MODEL_NAME"] == "legacy-model-sentinel"
+
+
+def test_config_and_gm_import_without_openai_api_key(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr(dotenv, "load_dotenv", lambda *args, **kwargs: None)
+    monkeypatch.delenv("OPENAI_API_KEY", raising=False)
+
+    cfg = importlib.reload(config_mod)
+    import game.gm as gm_mod
+
+    importlib.reload(gm_mod)
+    with pytest.raises(RuntimeError, match="Missing required environment variable: OPENAI_API_KEY"):
+        cfg.get_openai_api_key()
+
+    importlib.reload(config_mod)
+    importlib.reload(gm_mod)

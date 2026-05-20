@@ -72,6 +72,7 @@ def test_merge_upstream_prepared_overrides_legacy_unclassified_for_known_path() 
 def test_call_gpt_provider_failure_metadata_has_provider_family(monkeypatch) -> None:
     import game.gm as gm
 
+    monkeypatch.setenv("OPENAI_API_KEY", "sk-test")
     monkeypatch.setattr(
         gm,
         "resolve_model_route",
