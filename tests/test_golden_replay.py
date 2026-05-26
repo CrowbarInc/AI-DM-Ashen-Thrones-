@@ -14,6 +14,7 @@ from game.final_emission_meta import (
     opening_fallback_owner_bucket_from_meta,
     read_final_emission_meta_dict,
 )
+from game.runtime_lineage_telemetry import make_runtime_lineage_event
 from game.upstream_response_repairs import OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL
 from game.scenario_spine import (
     ScenarioBranch,
@@ -31,6 +32,10 @@ from tests.helpers.golden_replay import (
     format_golden_replay_debug,
     render_golden_replay_markdown_report,
     run_golden_replay,
+)
+from tests.helpers.failure_dashboard_report import (
+    clear_recorded_failure_dashboard_rows,
+    recorded_runtime_lineage_events,
 )
 from tests.helpers.dialogue_social_plan import (
     attach_dialogue_social_plan_to_resolution,
@@ -319,6 +324,61 @@ def test_golden_drift_classifier_buckets_exact_structural_and_semantic_drift():
     assert drift["summary"]["semantic_drift"] == 2
 
 
+def test_golden_drift_classification_ignores_runtime_lineage_diagnostics():
+    observed = {
+        "scenario_id": "lineage_diagnostic_only",
+        "turn_index": 0,
+        "final_text": "The runner answers.",
+        "route_kind": "dialogue",
+        "unavailable": [],
+    }
+    expectation = {"equals": {"route_kind": "dialogue"}}
+    baseline = classify_golden_drift(observed, expectation)
+    with_lineage = classify_golden_drift(
+        {
+            **observed,
+            "runtime_lineage_events": [
+                make_runtime_lineage_event(
+                    event_kind="fallback_selected",
+                    stage="gate",
+                    owner="game.final_emission_gate",
+                    fallback_kind="scene_opening",
+                )
+            ],
+        },
+        expectation,
+    )
+    assert with_lineage == baseline
+
+
+def test_golden_drift_opt_in_dashboard_records_lineage_outside_classification_rows(monkeypatch):
+    event = make_runtime_lineage_event(
+        event_kind="gate_outcome",
+        stage="gate",
+        owner="game.final_emission_gate",
+        gate_path="accept_unchanged",
+    )
+    clear_recorded_failure_dashboard_rows()
+    monkeypatch.setenv("ASHEN_WRITE_FAILURE_DASHBOARD", "1")
+    try:
+        drift = classify_golden_drift(
+            {
+                "scenario_id": "recorded_lineage",
+                "turn_index": 0,
+                "final_text": "The runner answers.",
+                "route_kind": "dialogue",
+                "unavailable": [],
+                "runtime_lineage_events": [event],
+            },
+            {"equals": {"route_kind": "dialogue"}},
+        )
+        assert drift["status"] == "pass"
+        assert drift["failure_classifications"] == []
+        assert recorded_runtime_lineage_events() == [event]
+    finally:
+        clear_recorded_failure_dashboard_rows()
+
+
 def test_golden_markdown_report_renderer_is_compact_and_deterministic():
     rows = [
         {
@@ -373,6 +433,56 @@ def test_golden_observed_turn_projects_canonical_upstream_prepared_opening_owner
     )
 
     assert observed["opening_fallback_owner_bucket"] == OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED
+
+
+def test_golden_observed_turn_projects_runtime_lineage_and_prefers_existing_events():
+    existing = make_runtime_lineage_event(
+        event_kind="speaker_repair",
+        stage="gate",
+        owner="game.speaker_contract_enforcement",
+        source="provided_projection",
+        repair_kind="local_rebind",
+    )
+    observed = _observed_turn(
+        scenario_id="existing_lineage_projection",
+        snap={"turn_index": 0, "gm_text": "The road opens."},
+        payload={
+            "gm_output": {
+                "metadata": {"observability_bundle": {"fem_runtime_lineage_events": [existing]}},
+                "_final_emission_meta": {
+                    "final_emitted_source": "opening_deterministic_fallback",
+                    "opening_recovered_via_fallback": True,
+                    "fallback_family_used": "scene_opening",
+                },
+            }
+        },
+    )
+    assert observed["runtime_lineage_events"] == [existing]
+
+    from_fem = _observed_turn(
+        scenario_id="fem_lineage_projection",
+        snap={"turn_index": 0, "gm_text": "The road opens."},
+        payload={
+            "gm_output": {
+                "_final_emission_meta": {
+                    "final_emitted_source": "opening_deterministic_fallback",
+                    "opening_recovered_via_fallback": True,
+                    "fallback_family_used": "scene_opening",
+                }
+            }
+        },
+    )
+    assert any(
+        event["event_kind"] == "fallback_selected" and event["fallback_kind"] == "scene_opening"
+        for event in from_fem["runtime_lineage_events"]
+    )
+
+    missing = _observed_turn(
+        scenario_id="missing_lineage_projection",
+        snap={"turn_index": 0, "gm_text": "The road remains quiet."},
+        payload={"gm_output": {"player_facing_text": "The road remains quiet."}},
+    )
+    assert missing["runtime_lineage_events"] == []
 
 
 def test_golden_observed_turn_projects_fail_closed_sealed_gate_opening_owner_bucket():

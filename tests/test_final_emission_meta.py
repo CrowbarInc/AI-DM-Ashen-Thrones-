@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import json
+
 from game.final_emission_meta import (
     EVALUATOR_FEM_KEY_PREFIX_FAMILIES,
     EMISSION_DEBUG_LANE_KEY,
@@ -11,6 +13,7 @@ from game.final_emission_meta import (
     NARRATIVE_MODE_OUTPUT_FEM_KEYS,
     assemble_unified_observational_telemetry_bundle,
     build_fem_observability_events,
+    build_fem_runtime_lineage_events,
     build_narrative_authenticity_emission_trace,
     build_narrative_authenticity_trace_slice,
     default_narrative_authenticity_layer_meta,
@@ -431,12 +434,14 @@ def test_assemble_unified_observational_telemetry_bundle_merges_three_sources_wi
     assert set(b.keys()) == {
         "final_emission_meta",
         "fem_observability_events",
+        "fem_runtime_lineage_events",
         "stage_diff_observability_events",
         "evaluator_observability_events",
         "stage_diff_surface",
     }
     assert isinstance(b["final_emission_meta"], dict)
     assert b["fem_observability_events"]
+    assert b["fem_runtime_lineage_events"] == []
     assert b["stage_diff_observability_events"]
     assert b["evaluator_observability_events"]
     assert "prior_custom" not in b["stage_diff_surface"]
@@ -450,6 +455,7 @@ def test_assemble_unified_observational_telemetry_bundle_optional_inputs_safe() 
     b = assemble_unified_observational_telemetry_bundle(fem=None, stage_diff=None, evaluator_result=None)
     assert b["stage_diff_observability_events"] == []
     assert b["evaluator_observability_events"] == []
+    assert b["fem_runtime_lineage_events"] == []
     assert b["stage_diff_surface"] == {}
     assert isinstance(b["fem_observability_events"], list)
     assert isinstance(b["final_emission_meta"], dict)
@@ -465,6 +471,213 @@ def test_build_fem_observability_events_no_arbitrary_pass_through_in_data() -> N
     ev = build_fem_observability_events(fem)
     assert len(ev) == 1
     assert "evidence" not in ev[0]["data"]
+
+
+def _lineage_event(events: list[dict], event_kind: str) -> dict:
+    return next(event for event in events if event["event_kind"] == event_kind)
+
+
+def test_build_fem_runtime_lineage_events_acceptance_outcomes_do_not_invent_fallbacks() -> None:
+    unchanged = build_fem_runtime_lineage_events(
+        {
+            "final_route": "accept_candidate",
+            "final_emitted_source": "generated_candidate",
+            "post_gate_mutation_detected": False,
+        }
+    )
+    assert [event["event_kind"] for event in unchanged] == ["gate_outcome"]
+    assert unchanged[0]["gate_path"] == "accept_unchanged"
+
+    repaired = build_fem_runtime_lineage_events(
+        {
+            "final_route": "accept_candidate",
+            "final_emitted_source": "response_delta_repair",
+            "post_gate_mutation_detected": True,
+        }
+    )
+    assert _lineage_event(repaired, "gate_outcome")["gate_path"] == "accept_repaired"
+    assert not any(event["event_kind"] == "fallback_selected" for event in repaired)
+
+
+def test_build_fem_runtime_lineage_events_projects_opening_and_fail_closed_fallbacks() -> None:
+    opening = build_fem_runtime_lineage_events(
+        {
+            "final_route": "accept_candidate",
+            "final_emitted_source": "opening_deterministic_fallback",
+            "opening_recovered_via_fallback": True,
+            "fallback_family_used": "scene_opening",
+        }
+    )
+    assert _lineage_event(opening, "fallback_selected")["fallback_kind"] == "scene_opening"
+    assert _lineage_event(opening, "gate_outcome")["gate_path"] == "opening_fallback"
+
+    failed_closed = build_fem_runtime_lineage_events(
+        {
+            "final_route": "replaced",
+            "final_emitted_source": "opening_fallback_failed_closed",
+            "opening_fallback_failed_closed": True,
+            "response_type_repair_kind": "opening_deterministic_fallback_failed_closed",
+        }
+    )
+    assert _lineage_event(failed_closed, "fallback_selected")["fallback_kind"] == "opening_failed_closed"
+    assert _lineage_event(failed_closed, "gate_outcome")["gate_path"] == "opening_failed_closed"
+
+
+def test_build_fem_runtime_lineage_events_projects_strict_social_and_sanitizer_fallbacks() -> None:
+    strict_social = build_fem_runtime_lineage_events(
+        {
+            "final_route": "replaced",
+            "strict_social_active": True,
+            "final_emitted_source": "deterministic_social_fallback",
+        }
+    )
+    assert _lineage_event(strict_social, "fallback_selected")["fallback_kind"] == "strict_social_fallback"
+    assert _lineage_event(strict_social, "gate_outcome")["gate_path"] == "strict_social_fallback"
+
+    emergency = build_fem_runtime_lineage_events(
+        {
+            "final_route": "replaced",
+            "strict_social_active": True,
+            "final_emitted_source": "minimal_social_emergency_fallback",
+        }
+    )
+    assert _lineage_event(emergency, "fallback_selected")["fallback_kind"] == "minimal_social_emergency_fallback"
+    assert _lineage_event(emergency, "gate_outcome")["gate_path"] == "strict_social_emergency"
+
+    sanitizer = build_fem_runtime_lineage_events(
+        {
+            "sanitizer_empty_fallback_used": True,
+            "sanitizer_empty_fallback_source": "upstream_prepared_emission.prepared_sanitizer_empty_fallback_text",
+        }
+    )
+    fallback = _lineage_event(sanitizer, "fallback_selected")
+    assert fallback["stage"] == "sanitizer"
+    assert fallback["fallback_kind"] == "sanitizer_empty_output"
+    assert _lineage_event(sanitizer, "gate_outcome")["gate_path"] == "sanitizer_fallback"
+
+    sanitizer_social = build_fem_runtime_lineage_events(
+        {
+            "sanitizer_strict_social_fallback_used": True,
+            "sanitizer_strict_social_source": "social_fallback_line_for_sanitizer.empty_output",
+        }
+    )
+    assert _lineage_event(sanitizer_social, "fallback_selected")["fallback_kind"] == "sanitizer_strict_social"
+    assert _lineage_event(sanitizer_social, "gate_outcome")["gate_path"] == "sanitizer_fallback"
+
+
+def test_build_fem_runtime_lineage_events_is_conservative_serializable_and_recurrence_ready() -> None:
+    assert build_fem_runtime_lineage_events(None) == []
+    assert build_fem_runtime_lineage_events({}) == []
+    assert build_fem_runtime_lineage_events({"upstream_prepared_emission_valid": True}) == []
+
+    events = build_fem_runtime_lineage_events(
+        {
+            "upstream_prepared_emission_used": True,
+            "response_type_repair_used": True,
+            "response_type_repair_kind": "answer_upstream_prepared_repair",
+            "final_emitted_source": "answer_upstream_prepared_repair",
+        }
+    )
+    assert _lineage_event(events, "fallback_selected")["fallback_kind"] == "response_type_prepared_emission"
+    assert _lineage_event(events, "gate_outcome")["gate_path"] == "prepared_repair"
+    assert all(event["recurrence_key"] for event in events)
+    assert json.loads(json.dumps(events)) == events
+
+
+def test_assemble_unified_observational_bundle_exposes_fem_runtime_lineage_sibling_surface() -> None:
+    bundle = assemble_unified_observational_telemetry_bundle(
+        fem={
+            "final_route": "replaced",
+            "final_emitted_source": "global_scene_fallback",
+            "visibility_replacement_applied": True,
+        }
+    )
+    events = bundle["fem_runtime_lineage_events"]
+    assert _lineage_event(events, "fallback_selected")["fallback_kind"] == "visibility_or_scene_replacement"
+    assert _lineage_event(events, "gate_outcome")["gate_path"] == "visibility_or_scene_replaced"
+
+
+def test_build_fem_runtime_lineage_events_projects_explicit_speaker_contract_repairs() -> None:
+    for reason, expected_kind in (
+        ("continuity_locked_speaker_repair", "local_rebind"),
+        ("canonical_speaker_rewrite", "canonical_rewrite"),
+        ("narrator_neutral_no_allowed_speaker", "narrator_neutral"),
+    ):
+        events = build_fem_runtime_lineage_events({"speaker_contract_enforcement_reason": reason})
+        speaker = _lineage_event(events, "speaker_repair")
+        mutation = _lineage_event(events, "mutation")
+        assert speaker["repair_kind"] == expected_kind
+        assert speaker["owner"] == "game.speaker_contract_enforcement"
+        assert mutation["mutation_kind"] == "speaker_repair_mutation"
+        assert all(event["recurrence_key"] for event in events)
+
+
+def test_build_fem_runtime_lineage_events_projects_interaction_continuity_repairs() -> None:
+    expected = {
+        "repair_malformed_speaker_attribution": "continuity_malformed_attribution",
+        "strip_uncued_interruption": "continuity_strip_uncued_interruption",
+        "insert_explicit_bridge": "continuity_insert_bridge",
+        "narration_to_dialogue": "continuity_wrap_dialogue",
+    }
+    for raw_type, repair_kind in expected.items():
+        events = build_fem_runtime_lineage_events(
+            {
+                "interaction_continuity_repair": {
+                    "applied": True,
+                    "repair_type": raw_type,
+                    "violations": ["continuity_violation"],
+                }
+            }
+        )
+        assert _lineage_event(events, "speaker_repair")["repair_kind"] == repair_kind
+        assert _lineage_event(events, "mutation")["mutation_kind"] == "continuity_repair_mutation"
+
+
+def test_build_fem_runtime_lineage_events_projects_explicit_mutation_evidence_without_explosion() -> None:
+    events = build_fem_runtime_lineage_events(
+        {
+            "final_route": "accept_candidate",
+            "final_emitted_source": "answer_upstream_prepared_repair",
+            "response_type_repair_used": True,
+            "response_type_repair_kind": "answer_upstream_prepared_repair",
+            "upstream_prepared_emission_used": True,
+            "post_gate_mutation_detected": True,
+            "final_emission_mutation_lineage": [
+                "response_type_repair",
+                "response_type_repair",
+                "prepared_emission_selection",
+                "finalize_route_illegal_strip",
+                "finalize_packaging",
+                "post_gate_mutation_detected",
+            ],
+        }
+    )
+    mutations = [event for event in events if event["event_kind"] == "mutation"]
+    kinds = [event["mutation_kind"] for event in mutations]
+    assert kinds.count("response_type_repair_mutation") == 1
+    assert kinds.count("fallback_mutation") == 1
+    assert kinds.count("final_emission_mutation") == 1
+    assert all(event["recurrence_key"] for event in mutations)
+    assert json.loads(json.dumps(events)) == events
+
+
+def test_build_fem_runtime_lineage_events_projects_sanitizer_and_unknown_post_gate_mutation() -> None:
+    sanitizer = build_fem_runtime_lineage_events(
+        {
+            "sanitizer_lineage_changed_count": 2,
+            "sanitizer_empty_fallback_used": True,
+            "sanitizer_empty_fallback_source": "prepared_empty",
+            "final_emission_mutation_lineage": ["sanitizer_empty_fallback"],
+        }
+    )
+    sanitizer_kinds = {
+        event["mutation_kind"] for event in sanitizer if event["event_kind"] == "mutation"
+    }
+    assert sanitizer_kinds == {"fallback_mutation", "sanitizer_mutation"}
+    assert len([event for event in sanitizer if event.get("mutation_kind") == "fallback_mutation"]) == 1
+
+    generic = build_fem_runtime_lineage_events({"post_gate_mutation_detected": True})
+    assert _lineage_event(generic, "mutation")["mutation_kind"] == "final_emission_mutation"
 
 
 def test_write_time_mutation_seam_helpers_ensure_and_patch_fem_in_place() -> None:

@@ -359,6 +359,120 @@ def test_transcript_meta_preserves_api_gm_metadata_keys(tmp_path, monkeypatch) -
     assert ss.get("branch_id") == br.branch_id
 
 
+def test_transcript_meta_runtime_lineage_prefers_projected_bundle_and_projects_fem_fallback() -> None:
+    spine = _load_spine()
+    projected = {
+        "event_type": "runtime_lineage",
+        "event_kind": "speaker_repair",
+        "stage": "gate",
+        "owner": "game.speaker_contract_enforcement",
+        "source": "contract",
+        "gate_path": None,
+        "mutation_kind": None,
+        "fallback_kind": None,
+        "repair_kind": "local_rebind",
+        "recurrence_key": "speaker_repair:gate:game.speaker_contract_enforcement:local_rebind",
+        "notes": [],
+    }
+    from_bundle = _mod.build_transcript_turn_meta(
+        {
+            "ok": True,
+            "gm_output": {
+                "player_facing_text": "ok",
+                "metadata": {"observational_telemetry_bundle": {"fem_runtime_lineage_events": [projected]}},
+                "_final_emission_meta": {
+                    "opening_recovered_via_fallback": True,
+                    "fallback_family_used": "scene_opening",
+                    "final_emitted_source": "opening_deterministic_fallback",
+                },
+            },
+        },
+        spine=spine,
+        branch_id_resolved="branch_direct_intrusion",
+        turn_index=0,
+        turn_id="turn_0",
+        smoke=True,
+        max_turns=1,
+        resume_entry_first_turn=False,
+    )
+    assert from_bundle["runtime_lineage_events"] == [projected]
+
+    projected_from_fem = _mod.build_transcript_turn_meta(
+        {
+            "ok": True,
+            "gm_output": {
+                "player_facing_text": "ok",
+                "_final_emission_meta": {
+                    "opening_recovered_via_fallback": True,
+                    "fallback_family_used": "scene_opening",
+                    "final_emitted_source": "opening_deterministic_fallback",
+                },
+            },
+        },
+        spine=spine,
+        branch_id_resolved="branch_direct_intrusion",
+        turn_index=0,
+        turn_id="turn_0",
+        smoke=True,
+        max_turns=1,
+        resume_entry_first_turn=False,
+    )
+    events = projected_from_fem["runtime_lineage_events"]
+    assert any(event["event_kind"] == "fallback_selected" and event["fallback_kind"] == "scene_opening" for event in events)
+    assert any(event["event_kind"] == "gate_outcome" and event["gate_path"] == "opening_fallback" for event in events)
+    assert json.loads(json.dumps(events)) == events
+
+    empty = _mod.build_transcript_turn_meta(
+        {"ok": True, "gm_output": {"player_facing_text": "ok"}},
+        spine=spine,
+        branch_id_resolved="branch_direct_intrusion",
+        turn_index=0,
+        turn_id="turn_0",
+        smoke=True,
+        max_turns=1,
+        resume_entry_first_turn=False,
+    )
+    assert empty["runtime_lineage_events"] == []
+
+
+def test_build_runtime_lineage_summary_counts_frequency_and_recurrence_without_scoring_fields() -> None:
+    def event(kind: str, key: str, **fields) -> dict:
+        return {"event_type": "runtime_lineage", "event_kind": kind, "stage": "gate", "recurrence_key": key, **fields}
+
+    fallback = event("fallback_selected", "fallback_selected:gate:owner:scene_opening", fallback_kind="scene_opening")
+    transcripts = {
+        "branch_a": [
+            {"meta": {"runtime_lineage_events": [fallback, event("gate_outcome", "gate_outcome:gate:owner:opening_fallback", gate_path="opening_fallback")]}},
+        ],
+        "branch_b": [
+            {"meta": {"runtime_lineage_events": [
+                fallback,
+                event("speaker_repair", "speaker_repair:gate:owner:local_rebind", repair_kind="local_rebind"),
+                event("mutation", "mutation:gate:owner:speaker_repair_mutation", mutation_kind="speaker_repair_mutation"),
+            ]}},
+        ],
+    }
+    summary = _mod.build_runtime_lineage_summary(transcripts)
+    assert summary["total_events"] == 5
+    assert summary["by_event_kind"] == {
+        "fallback_selected": 2,
+        "gate_outcome": 1,
+        "mutation": 1,
+        "speaker_repair": 1,
+    }
+    assert summary["by_stage"] == {"gate": 5}
+    assert summary["by_recurrence_key"]["fallback_selected:gate:owner:scene_opening"] == 2
+    assert summary["fallback_frequency"] == {"scene_opening": 2}
+    assert summary["speaker_repair_frequency"] == {"local_rebind": 1}
+    assert summary["mutation_kind_frequency"] == {"speaker_repair_mutation": 1}
+    assert summary["gate_path_frequency"] == {"opening_fallback": 1}
+    assert summary["recurring_events"] == [
+        {"recurrence_key": "fallback_selected:gate:owner:scene_opening", "count": 2},
+    ]
+    assert "score" not in summary
+    assert "overall_passed" not in summary
+
+
 def test_malformed_gm_metadata_does_not_crash_transcript_json(tmp_path, monkeypatch) -> None:
     monkeypatch.setattr(_mod, "apply_new_campaign_hard_reset", lambda: None)
     spine = _load_spine()
@@ -563,6 +677,7 @@ def test_run_scenario_spine_branch_does_not_write_aggregate_artifacts(tmp_path, 
     agg_dir = tmp_path / stamp / spine.spine_id
     assert not (agg_dir / "aggregate_session_health_summary.json").exists()
     assert not (agg_dir / "aggregate_operator_summary.md").exists()
+    assert not (agg_dir / "runtime_lineage_summary.json").exists()
 
 
 def test_all_branches_aggregate_artifacts_and_payload(tmp_path, monkeypatch) -> None:
@@ -570,8 +685,30 @@ def test_all_branches_aggregate_artifacts_and_payload(tmp_path, monkeypatch) -> 
     spine = _load_spine()
     branches = sorted(spine.branches, key=lambda b: b.branch_id)
 
+    lineage_event = {
+        "event_type": "runtime_lineage",
+        "event_kind": "fallback_selected",
+        "stage": "gate",
+        "owner": "game.final_emission_gate",
+        "source": "selected_fallback",
+        "fallback_kind": "scene_opening",
+        "repair_kind": None,
+        "mutation_kind": None,
+        "gate_path": None,
+        "recurrence_key": "fallback_selected:gate:game.final_emission_gate:scene_opening",
+        "notes": [],
+    }
+
     def chat(_text: str) -> dict:
-        return {"ok": True, "gm_output": {"player_facing_text": "Scene holds; notice and patrol thread remain."}}
+        return {
+            "ok": True,
+            "gm_output": {
+                "player_facing_text": "Scene holds; notice and patrol thread remain.",
+                "metadata": {
+                    "observational_telemetry_bundle": {"fem_runtime_lineage_events": [lineage_event]},
+                },
+            },
+        }
 
     stamp = "agg_stamp"
     results = []
@@ -602,6 +739,7 @@ def test_all_branches_aggregate_artifacts_and_payload(tmp_path, monkeypatch) -> 
     )
     assert (agg_dir / "aggregate_session_health_summary.json").is_file()
     assert (agg_dir / "aggregate_operator_summary.md").is_file()
+    assert (agg_dir / "runtime_lineage_summary.json").is_file()
 
     agg = json.loads((agg_dir / "aggregate_session_health_summary.json").read_text(encoding="utf-8"))
     assert agg.get("spine_id") == spine.spine_id
@@ -621,11 +759,27 @@ def test_all_branches_aggregate_artifacts_and_payload(tmp_path, monkeypatch) -> 
     assert isinstance(div, dict)
     assert div.get("schema_version") == 1
     assert set(div.get("branches_compared") or []) == {b.branch_id for b in branches}
+    lineage = agg["runtime_lineage_summary"]
+    assert lineage["total_events"] == expected_total
+    assert lineage["by_event_kind"] == {"fallback_selected": expected_total}
+    assert lineage["fallback_frequency"] == {"scene_opening": expected_total}
+    assert lineage["recurring_events"] == [
+        {
+            "recurrence_key": "fallback_selected:gate:game.final_emission_gate:scene_opening",
+            "count": expected_total,
+        },
+    ]
+    standalone_lineage = json.loads((agg_dir / "runtime_lineage_summary.json").read_text(encoding="utf-8"))
+    assert standalone_lineage["spine_id"] == spine.spine_id
+    assert standalone_lineage["total_events"] == expected_total
+    assert standalone_lineage["fallback_frequency"] == {"scene_opening": expected_total}
 
     md = (agg_dir / "aggregate_operator_summary.md").read_text(encoding="utf-8")
     assert "aggregate" in md.lower()
     assert "branch_direct_intrusion" in md
     assert "Divergence" in md
+    assert "Runtime Lineage Summary" in md
+    assert f"**Total lineage events:** {expected_total}" in md
     assert "| Metadata |" in md
 
     assert agg.get("coverage_band_met") is True

@@ -10,9 +10,11 @@ from game.final_emission_meta import (
     OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
     SEALED_FALLBACK_OWNER_SEALED_GATE,
 )
+from game.runtime_lineage_telemetry import make_runtime_lineage_event
 from tests.helpers.failure_classifier import classify_replay_failure, validate_failure_classification_row
 from tests.helpers.failure_dashboard_report import (
     build_failure_dashboard_rows,
+    build_runtime_lineage_summary,
     render_failure_dashboard_markdown,
     write_failure_dashboard_artifact_if_requested,
 )
@@ -233,6 +235,76 @@ def test_failure_dashboard_report_includes_required_replay_columns():
     assert "game/final_emission_gate.py" in report
     assert "global_scene_fallback" in report
     assert "gate_terminal_repair" in report
+
+
+def test_failure_dashboard_renders_optional_runtime_lineage_summary_without_changing_rows():
+    observed = _observed(final_emitted_source="global_scene_fallback", fallback_family="gate_terminal_repair")
+    rows = build_failure_dashboard_rows(
+        observed_turn=observed,
+        drift_rows=[
+            {
+                "field_path": "final_emitted_source",
+                "expected": "generated_candidate",
+                "actual": "global_scene_fallback",
+                "reason": "exact value mismatch",
+                "drift_bucket": "structural_drift",
+            }
+        ],
+        scenario_id="lineage_report_probe",
+        turn_index=2,
+    )
+    fallback = make_runtime_lineage_event(
+        event_kind="fallback_selected",
+        stage="gate",
+        owner="game.final_emission_gate",
+        fallback_kind="scene_opening",
+    )
+    events = [
+        fallback,
+        fallback,
+        make_runtime_lineage_event(
+            event_kind="speaker_repair",
+            stage="gate",
+            owner="game.speaker_contract_enforcement",
+            repair_kind="local_rebind",
+        ),
+        make_runtime_lineage_event(
+            event_kind="mutation",
+            stage="gate",
+            owner="game.final_emission_gate",
+            mutation_kind="fallback_mutation",
+        ),
+        make_runtime_lineage_event(
+            event_kind="gate_outcome",
+            stage="gate",
+            owner="game.final_emission_gate",
+            gate_path="opening_fallback",
+        ),
+    ]
+    summary = build_runtime_lineage_summary(events)
+    assert summary["total_events"] == 5
+    assert summary["fallback_frequency"] == {"scene_opening": 2}
+    assert summary["speaker_repair_frequency"] == {"local_rebind": 1}
+    assert summary["mutation_kind_frequency"] == {"fallback_mutation": 1}
+    assert summary["gate_path_frequency"] == {"opening_fallback": 1}
+    assert summary["recurring_events"][0]["count"] == 2
+
+    ordinary = render_failure_dashboard_markdown(rows, generated_at="2026-05-11T00:00:00Z", command_used="pytest")
+    report = render_failure_dashboard_markdown(
+        rows,
+        generated_at="2026-05-11T00:00:00Z",
+        command_used="pytest",
+        runtime_lineage_events=events,
+    )
+    assert "Runtime Lineage Summary" not in ordinary
+    assert "## Runtime Lineage Summary" in report
+    assert "**Total lineage events:** 5" in report
+    assert "**Fallback selected:** 2" in report
+    assert "`scene_opening` (2)" in report
+    assert "`local_rebind` (1)" in report
+    assert "`fallback_mutation` (1)" in report
+    assert "`opening_fallback` (1)" in report
+    assert rows[0]["category"] == "fallback"
 
 
 # Opening fallback owner-bucket assertions here are classifier projection locks,

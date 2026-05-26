@@ -13,11 +13,13 @@ from typing import Any, Callable, Mapping
 
 from game.api import chat
 from game.final_emission_meta import (
+    build_fem_runtime_lineage_events,
     normalize_final_emission_meta_for_observability,
     opening_fallback_owner_bucket_from_meta,
     read_emission_debug_lane_from_turn_payload,
     read_final_emission_meta_from_turn_payload,
 )
+from game.runtime_lineage_telemetry import normalize_runtime_lineage_events
 from game.models import ChatRequest
 from game.output_sanitizer import resembles_serialized_response_payload
 from game import storage
@@ -27,6 +29,7 @@ from tests.helpers.failure_classifier import classify_replay_failure
 from tests.helpers.failure_dashboard_report import (
     failure_dashboard_requested,
     record_failure_dashboard_rows,
+    record_runtime_lineage_events,
 )
 from tests.helpers.transcript_runner import (
     compact_snapshot_summary,
@@ -445,6 +448,7 @@ def classify_golden_drift(
     )
     if failure_dashboard_requested() and observed.get("scenario_id") and observed.get("turn_index") is not None:
         record_failure_dashboard_rows(out["failure_classifications"])
+        record_runtime_lineage_events(observed.get("runtime_lineage_events"))
     return out
 
 
@@ -585,6 +589,33 @@ def _find_nested_list(root: Mapping[str, Any], key: str) -> list[Any]:
     return []
 
 
+def _find_nested_list_field(root: Mapping[str, Any], key: str) -> tuple[bool, list[Any]]:
+    """Return whether a nested projected-list field exists, preserving an explicit empty list."""
+    stack: list[Any] = [root]
+    seen = 0
+    while stack and seen < 200:
+        seen += 1
+        cur = stack.pop()
+        if not isinstance(cur, Mapping):
+            continue
+        if key in cur:
+            value = cur.get(key)
+            return True, list(value) if isinstance(value, list) else []
+        for child in cur.values():
+            if isinstance(child, Mapping):
+                stack.append(child)
+            elif isinstance(child, list):
+                stack.extend(item for item in child if isinstance(item, Mapping))
+    return False, []
+
+
+def _runtime_lineage_events_from_payload(payload: Mapping[str, Any], fem: Mapping[str, Any]) -> list[dict[str, Any]]:
+    found, events = _find_nested_list_field(payload, "fem_runtime_lineage_events")
+    if found:
+        return normalize_runtime_lineage_events(events)[:16]
+    return build_fem_runtime_lineage_events(fem)[:16] if fem else []
+
+
 def _observed_turn(
     *,
     scenario_id: str,
@@ -595,6 +626,7 @@ def _observed_turn(
     social = resolution.get("social") if isinstance(resolution.get("social"), Mapping) else {}
     fem = read_final_emission_meta_from_turn_payload(payload)
     fem_normalized = normalize_final_emission_meta_for_observability(fem)
+    runtime_lineage_events = _runtime_lineage_events_from_payload(payload, fem)
     emission_debug_lane = read_emission_debug_lane_from_turn_payload(payload)
     trace = _trace_from_payload_or_snapshot(payload, snap)
     turn_trace = trace.get("turn_trace") if isinstance(trace.get("turn_trace"), Mapping) else {}
@@ -825,6 +857,7 @@ def _observed_turn(
         "fem_raw_keys": sorted(str(k) for k in fem.keys()),
         "fem_normalized_keys": sorted(str(k) for k in fem_normalized.keys()),
         "emission_debug_lane_keys": sorted(str(k) for k in emission_debug_lane.keys()),
+        "runtime_lineage_events": runtime_lineage_events,
     }
     observed["unavailable"] = sorted(
         key

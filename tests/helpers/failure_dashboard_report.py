@@ -7,6 +7,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, Mapping, Sequence
 
+from game.runtime_lineage_telemetry import normalize_runtime_lineage_events
 from tests.helpers.failure_classifier import (
     FailureClassification,
     classify_replay_failure,
@@ -16,6 +17,7 @@ from tests.helpers.failure_classifier import (
 FAILURE_DASHBOARD_ENV_VAR = "ASHEN_WRITE_FAILURE_DASHBOARD"
 FAILURE_DASHBOARD_LATEST_PATH = Path("audits/failure_dashboard_latest.md")
 _RECORDED_FAILURE_DASHBOARD_ROWS: list[Mapping[str, Any]] = []
+_RECORDED_RUNTIME_LINEAGE_EVENTS: list[dict[str, Any]] = []
 
 
 def _as_list(value: Any) -> list[Any]:
@@ -178,12 +180,103 @@ def record_failure_dashboard_rows(rows: Sequence[Mapping[str, Any]]) -> None:
     _RECORDED_FAILURE_DASHBOARD_ROWS.extend(dict(row) for row in rows if isinstance(row, Mapping))
 
 
+def record_runtime_lineage_events(events: Any) -> None:
+    """Record separate replay lineage diagnostics without changing classification rows."""
+    _RECORDED_RUNTIME_LINEAGE_EVENTS.extend(normalize_runtime_lineage_events(events)[:16])
+
+
 def clear_recorded_failure_dashboard_rows() -> None:
     _RECORDED_FAILURE_DASHBOARD_ROWS.clear()
+    _RECORDED_RUNTIME_LINEAGE_EVENTS.clear()
 
 
 def recorded_failure_dashboard_rows() -> list[Mapping[str, Any]]:
     return list(_RECORDED_FAILURE_DASHBOARD_ROWS)
+
+
+def recorded_runtime_lineage_events() -> list[dict[str, Any]]:
+    return list(_RECORDED_RUNTIME_LINEAGE_EVENTS)
+
+
+def build_runtime_lineage_summary(events: Any) -> dict[str, Any]:
+    """Build a diagnostic-only replay lineage frequency and recurrence summary."""
+    normalized = normalize_runtime_lineage_events(events)
+    buckets: dict[str, dict[str, int]] = {
+        "by_event_kind": {},
+        "by_stage": {},
+        "by_recurrence_key": {},
+        "fallback_frequency": {},
+        "speaker_repair_frequency": {},
+        "mutation_kind_frequency": {},
+        "gate_path_frequency": {},
+    }
+
+    def _count(bucket: str, value: Any) -> None:
+        if isinstance(value, str) and value.strip():
+            key = value.strip()
+            values = buckets[bucket]
+            values[key] = values.get(key, 0) + 1
+
+    for event in normalized:
+        kind = event.get("event_kind")
+        _count("by_event_kind", kind)
+        _count("by_stage", event.get("stage"))
+        _count("by_recurrence_key", event.get("recurrence_key"))
+        if kind == "fallback_selected":
+            _count("fallback_frequency", event.get("fallback_kind"))
+        elif kind == "speaker_repair":
+            _count("speaker_repair_frequency", event.get("repair_kind"))
+        elif kind == "mutation":
+            _count("mutation_kind_frequency", event.get("mutation_kind"))
+        elif kind == "gate_outcome":
+            _count("gate_path_frequency", event.get("gate_path"))
+
+    recurrence = buckets["by_recurrence_key"]
+    return {
+        "total_events": len(normalized),
+        **{key: dict(sorted(values.items())) for key, values in buckets.items()},
+        "recurring_events": [
+            {"recurrence_key": key, "count": count}
+            for key, count in sorted(recurrence.items(), key=lambda item: (-item[1], item[0]))
+            if count > 1
+        ],
+    }
+
+
+def _runtime_lineage_markdown_lines(events: Any) -> list[str]:
+    summary = build_runtime_lineage_summary(events)
+    if summary["total_events"] == 0:
+        return []
+
+    def _top(bucket: str) -> str:
+        values = summary[bucket]
+        if not isinstance(values, Mapping) or not values:
+            return "_(none)_"
+        return "; ".join(f"`{key}` ({count})" for key, count in sorted(values.items(), key=lambda item: (-item[1], item[0]))[:5])
+
+    kinds = summary["by_event_kind"]
+    recurring = summary["recurring_events"]
+    recurring_s = (
+        "; ".join(f"`{item['recurrence_key']}` ({item['count']})" for item in recurring[:5])
+        if recurring
+        else "_(none)_"
+    )
+    return [
+        "",
+        "## Runtime Lineage Summary",
+        "",
+        f"- **Total lineage events:** {summary['total_events']}",
+        f"- **Fallback selected:** {kinds.get('fallback_selected', 0)}",
+        f"- **Speaker repair:** {kinds.get('speaker_repair', 0)}",
+        f"- **Mutation:** {kinds.get('mutation', 0)}",
+        f"- **Gate outcome:** {kinds.get('gate_outcome', 0)}",
+        f"- **Top recurring recurrence keys:** {recurring_s}",
+        f"- **Top fallback kinds:** {_top('fallback_frequency')}",
+        f"- **Top repair kinds:** {_top('speaker_repair_frequency')}",
+        f"- **Top mutation kinds:** {_top('mutation_kind_frequency')}",
+        f"- **Top gate paths:** {_top('gate_path_frequency')}",
+        "",
+    ]
 
 
 def render_failure_dashboard_markdown(
@@ -192,6 +285,7 @@ def render_failure_dashboard_markdown(
     title: str = "Replay Failure Classification Dashboard",
     generated_at: str | None = None,
     command_used: str | None = None,
+    runtime_lineage_events: Any = None,
 ) -> str:
     """Render deterministic markdown table rows for replay failure diagnostics."""
     generated_at_s = generated_at or datetime.now(UTC).replace(microsecond=0).isoformat().replace("+00:00", "Z")
@@ -205,6 +299,7 @@ def render_failure_dashboard_markdown(
     ]
     if not rows:
         lines.extend(["No replay failures classified.", ""])
+        lines.extend(_runtime_lineage_markdown_lines(runtime_lineage_events))
         return "\n".join(lines)
     lines.extend(
         [
@@ -255,6 +350,7 @@ def render_failure_dashboard_markdown(
             + " |"
         )
     lines.append("")
+    lines.extend(_runtime_lineage_markdown_lines(runtime_lineage_events))
     return "\n".join(lines)
 
 
@@ -264,6 +360,7 @@ def write_failure_dashboard_artifact(
     path: Path | str = FAILURE_DASHBOARD_LATEST_PATH,
     command_used: str | None = None,
     generated_at: str | None = None,
+    runtime_lineage_events: Any = None,
 ) -> Path:
     """Write the latest failure dashboard artifact and return its path."""
     out_path = Path(path)
@@ -274,6 +371,11 @@ def write_failure_dashboard_artifact(
             title="Latest Replay Failure Classification Dashboard",
             generated_at=generated_at,
             command_used=command_used,
+            runtime_lineage_events=(
+                runtime_lineage_events
+                if runtime_lineage_events is not None
+                else recorded_runtime_lineage_events()
+            ),
         ),
         encoding="utf-8",
     )
@@ -287,6 +389,7 @@ def write_failure_dashboard_artifact_if_requested(
     command_used: str | None = None,
     env: Mapping[str, str] | None = None,
     generated_at: str | None = None,
+    runtime_lineage_events: Any = None,
 ) -> Path | None:
     """Write the dashboard only when the opt-in environment flag is enabled."""
     if not failure_dashboard_requested(env):
@@ -296,4 +399,5 @@ def write_failure_dashboard_artifact_if_requested(
         path=path,
         command_used=command_used,
         generated_at=generated_at,
+        runtime_lineage_events=runtime_lineage_events,
     )

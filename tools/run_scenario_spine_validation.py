@@ -35,7 +35,7 @@ from game.scenario_spine_eval import (  # noqa: E402
     evaluate_scenario_spine_branch_divergence,
     evaluate_scenario_spine_session,
 )
-from game.final_emission_meta import read_final_emission_meta_dict  # noqa: E402
+from game.final_emission_meta import build_fem_runtime_lineage_events, read_final_emission_meta_dict  # noqa: E402
 from game.scenario_spine_opening_convergence import (  # noqa: E402
     capture_opening_convergence_meta_from_chat_payload,
 )
@@ -47,6 +47,7 @@ SMOKE_TURN_CAP = 5
 SCENARIO_SPINE_ARTIFACT_SCHEMA_VERSION = 1
 # Cap rows rendered in compact_operator_summary.md for C1-A opening convergence failures.
 _OPENING_CONVERGENCE_FAILURE_TABLE_MAX_ROWS = 12
+_RUNTIME_LINEAGE_EVENTS_PER_TURN_MAX = 16
 
 # Mirrors ``game.scenario_spine_eval`` private alias table for CLI resolution only.
 _BRANCH_ALIASES: dict[str, str] = {
@@ -166,6 +167,45 @@ def _json_safe_shallow_copy(value: Any) -> Any:
     return str(value)
 
 
+def _bounded_runtime_lineage_events(value: Any) -> list[dict[str, Any]]:
+    """Return bounded JSON-safe runtime lineage event dictionaries."""
+    if not isinstance(value, list):
+        return []
+    out: list[dict[str, Any]] = []
+    for raw in value[:_RUNTIME_LINEAGE_EVENTS_PER_TURN_MAX]:
+        if isinstance(raw, Mapping):
+            event = _json_safe_shallow_copy(dict(raw))
+            if isinstance(event, dict):
+                out.append(event)
+    return out
+
+
+def _runtime_lineage_events_for_turn(payload: Mapping[str, Any], turn_meta: Mapping[str, Any]) -> list[dict[str, Any]]:
+    """Read already-projected lineage first, otherwise project conservatively from copied FEM."""
+    candidates: list[Any] = []
+    for key in ("observational_telemetry_bundle", "telemetry_bundle"):
+        bundle = turn_meta.get(key)
+        if isinstance(bundle, Mapping):
+            candidates.append(bundle.get("fem_runtime_lineage_events"))
+        raw_bundle = payload.get(key)
+        if isinstance(raw_bundle, Mapping):
+            candidates.append(raw_bundle.get("fem_runtime_lineage_events"))
+    candidates.append(turn_meta.get("fem_runtime_lineage_events"))
+    candidates.append(payload.get("fem_runtime_lineage_events"))
+    for candidate in candidates:
+        events = _bounded_runtime_lineage_events(candidate)
+        if events:
+            return events
+
+    fem = turn_meta.get("final_emission_meta")
+    if isinstance(fem, Mapping):
+        try:
+            return _bounded_runtime_lineage_events(build_fem_runtime_lineage_events(fem))
+        except Exception:
+            return []
+    return []
+
+
 def _gm_metadata_from_payload(payload: Mapping[str, Any]) -> tuple[dict[str, Any] | None, Any]:
     """Return (metadata dict, raw) for ``gm_output.metadata``; dict is None when absent or non-dict."""
     gm = payload.get("gm_output")
@@ -227,6 +267,8 @@ def build_transcript_turn_meta(
         gm = payload.get("gm_output")
         fem = read_final_emission_meta_dict(gm if isinstance(gm, Mapping) else None)
         out["final_emission_meta"] = _json_safe_shallow_copy(fem) if fem else None
+
+    out["runtime_lineage_events"] = _runtime_lineage_events_for_turn(payload, out)
 
     if out.get("planner_convergence") is None:
         pc = None
@@ -550,6 +592,66 @@ def _long_branch_row(session_health: Mapping[str, Any]) -> bool:
     return bool(session_health.get("full_length_branch")) or _long_spine_branch(session_health)
 
 
+def build_runtime_lineage_summary(branch_transcripts: Mapping[str, Sequence[Mapping[str, Any]]]) -> dict[str, Any]:
+    """Aggregate persisted runtime lineage events without feeding evaluation results."""
+    by_event_kind: dict[str, int] = {}
+    by_stage: dict[str, int] = {}
+    by_recurrence_key: dict[str, int] = {}
+    fallback_frequency: dict[str, int] = {}
+    speaker_repair_frequency: dict[str, int] = {}
+    mutation_kind_frequency: dict[str, int] = {}
+    gate_path_frequency: dict[str, int] = {}
+    total_events = 0
+
+    def _count(target: dict[str, int], raw: Any) -> None:
+        if isinstance(raw, str) and raw.strip():
+            key = raw.strip()
+            target[key] = target.get(key, 0) + 1
+
+    for branch_id in sorted(branch_transcripts, key=str):
+        for row in branch_transcripts[branch_id]:
+            meta = row.get("meta") if isinstance(row, Mapping) else None
+            raw_events = meta.get("runtime_lineage_events") if isinstance(meta, Mapping) else None
+            if not isinstance(raw_events, list):
+                continue
+            for event in raw_events:
+                if not isinstance(event, Mapping) or event.get("event_type") != "runtime_lineage":
+                    continue
+                event_kind = event.get("event_kind")
+                if not isinstance(event_kind, str) or not event_kind.strip():
+                    continue
+                event_kind = event_kind.strip()
+                total_events += 1
+                _count(by_event_kind, event_kind)
+                _count(by_stage, event.get("stage"))
+                _count(by_recurrence_key, event.get("recurrence_key"))
+                if event_kind == "fallback_selected":
+                    _count(fallback_frequency, event.get("fallback_kind"))
+                elif event_kind == "speaker_repair":
+                    _count(speaker_repair_frequency, event.get("repair_kind"))
+                elif event_kind == "mutation":
+                    _count(mutation_kind_frequency, event.get("mutation_kind"))
+                elif event_kind == "gate_outcome":
+                    _count(gate_path_frequency, event.get("gate_path"))
+
+    recurring_events = [
+        {"recurrence_key": key, "count": count}
+        for key, count in sorted(by_recurrence_key.items(), key=lambda item: (-item[1], item[0]))
+        if count > 1
+    ]
+    return {
+        "total_events": total_events,
+        "by_event_kind": dict(sorted(by_event_kind.items())),
+        "by_stage": dict(sorted(by_stage.items())),
+        "by_recurrence_key": dict(sorted(by_recurrence_key.items())),
+        "fallback_frequency": dict(sorted(fallback_frequency.items())),
+        "speaker_repair_frequency": dict(sorted(speaker_repair_frequency.items())),
+        "mutation_kind_frequency": dict(sorted(mutation_kind_frequency.items())),
+        "gate_path_frequency": dict(sorted(gate_path_frequency.items())),
+        "recurring_events": recurring_events,
+    }
+
+
 def build_aggregate_session_health_summary(
     spine: ScenarioSpine,
     branch_results: Sequence[BranchRunResult],
@@ -618,6 +720,7 @@ def build_aggregate_session_health_summary(
         transcripts_for_div[r.branch_id_resolved] = list(turns) if isinstance(turns, list) else []
 
     branch_divergence = evaluate_scenario_spine_branch_divergence(spine, transcripts_for_div)
+    runtime_lineage_summary = build_runtime_lineage_summary(transcripts_for_div)
 
     return {
         "schema_version": 1,
@@ -636,6 +739,7 @@ def build_aggregate_session_health_summary(
             sorted(degradation_over_time_by_branch.items(), key=lambda kv: kv[0]),
         ),
         "branch_divergence": branch_divergence,
+        "runtime_lineage_summary": runtime_lineage_summary,
         "aggregate_meta": {
             "smoke": smoke,
             "max_turns": max_turns,
@@ -660,6 +764,13 @@ def build_aggregate_operator_summary_md(
     div_score = div.get("divergence_score", "")
     div_distinct = div.get("distinct_outcomes_detected", "")
     div_bleed = div.get("shared_prompt_bleed_detected", "")
+    lineage = (
+        aggregate.get("runtime_lineage_summary")
+        if isinstance(aggregate.get("runtime_lineage_summary"), dict)
+        else {}
+    )
+    lineage_kinds = lineage.get("by_event_kind") if isinstance(lineage.get("by_event_kind"), dict) else {}
+    recurring = lineage.get("recurring_events") if isinstance(lineage.get("recurring_events"), list) else []
     cov_met = aggregate.get("coverage_band_met")
     cov_note = (
         "40–60 turn band (full-length / scripted≥20 branches only) met"
@@ -741,6 +852,23 @@ def build_aggregate_operator_summary_md(
         f"- **Shared prompt bleed:** {div_bleed}",
         f"- **Reason codes:** {', '.join(str(x) for x in (div.get('reason_codes') or []) if x is not None) or '_(none)_'}",
         "",
+        "## Runtime Lineage Summary",
+        "",
+        f"- **Total lineage events:** {lineage.get('total_events', 0)}",
+        f"- **Fallback selected:** {lineage_kinds.get('fallback_selected', 0)}",
+        f"- **Speaker repair:** {lineage_kinds.get('speaker_repair', 0)}",
+        f"- **Mutation:** {lineage_kinds.get('mutation', 0)}",
+        f"- **Gate outcome:** {lineage_kinds.get('gate_outcome', 0)}",
+        "- **Top recurring recurrence keys:** "
+        + (
+            "; ".join(
+                f"`{item.get('recurrence_key')}` ({item.get('count')})"
+                for item in recurring[:5]
+                if isinstance(item, Mapping)
+            )
+            or "_(none)_"
+        ),
+        "",
         "## Degradation (per branch)",
         "",
     ]
@@ -794,6 +922,17 @@ def write_aggregate_spine_artifacts(
         run_timestamp=run_timestamp,
     )
     _write_json(aggregate_dir / "aggregate_session_health_summary.json", agg)
+    lineage = agg.get("runtime_lineage_summary") if isinstance(agg.get("runtime_lineage_summary"), dict) else {}
+    _write_json(
+        aggregate_dir / "runtime_lineage_summary.json",
+        {
+            "schema_version": 1,
+            "spine_id": spine.spine_id,
+            "run_timestamp": run_timestamp,
+            "branches_run": list(agg.get("branches_run") or []),
+            **lineage,
+        },
+    )
     _write_text(
         aggregate_dir / "aggregate_operator_summary.md",
         build_aggregate_operator_summary_md(spine, agg, branch_results),
