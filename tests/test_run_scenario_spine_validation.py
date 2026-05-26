@@ -404,6 +404,7 @@ def test_transcript_meta_runtime_lineage_prefers_projected_bundle_and_projects_f
                 "player_facing_text": "ok",
                 "_final_emission_meta": {
                     "opening_recovered_via_fallback": True,
+                    "opening_fallback_authorship_source": "upstream_prepared_opening_fallback",
                     "fallback_family_used": "scene_opening",
                     "final_emitted_source": "opening_deterministic_fallback",
                 },
@@ -418,7 +419,11 @@ def test_transcript_meta_runtime_lineage_prefers_projected_bundle_and_projects_f
         resume_entry_first_turn=False,
     )
     events = projected_from_fem["runtime_lineage_events"]
-    assert any(event["event_kind"] == "fallback_selected" and event["fallback_kind"] == "scene_opening" for event in events)
+    fallback_selected = next(event for event in events if event["event_kind"] == "fallback_selected")
+    assert fallback_selected["fallback_kind"] == "scene_opening"
+    assert fallback_selected["owner"] == "game.final_emission_gate"
+    assert fallback_selected["fallback_authorship_source"] == "upstream_prepared_opening_fallback"
+    assert fallback_selected["fallback_owner_bucket"] == "upstream-prepared"
     assert any(event["event_kind"] == "gate_outcome" and event["gate_path"] == "opening_fallback" for event in events)
     assert json.loads(json.dumps(events)) == events
 
@@ -439,7 +444,13 @@ def test_build_runtime_lineage_summary_counts_frequency_and_recurrence_without_s
     def event(kind: str, key: str, **fields) -> dict:
         return {"event_type": "runtime_lineage", "event_kind": kind, "stage": "gate", "recurrence_key": key, **fields}
 
-    fallback = event("fallback_selected", "fallback_selected:gate:owner:scene_opening", fallback_kind="scene_opening")
+    fallback = event(
+        "fallback_selected",
+        "fallback_selected:gate:owner:scene_opening",
+        fallback_kind="scene_opening",
+        fallback_authorship_source="upstream_prepared_opening_fallback",
+        fallback_owner_bucket="upstream-prepared",
+    )
     transcripts = {
         "branch_a": [
             {"meta": {"runtime_lineage_events": [fallback, event("gate_outcome", "gate_outcome:gate:owner:opening_fallback", gate_path="opening_fallback")]}},
@@ -463,6 +474,8 @@ def test_build_runtime_lineage_summary_counts_frequency_and_recurrence_without_s
     assert summary["by_stage"] == {"gate": 5}
     assert summary["by_recurrence_key"]["fallback_selected:gate:owner:scene_opening"] == 2
     assert summary["fallback_frequency"] == {"scene_opening": 2}
+    assert summary["fallback_authorship_frequency"] == {"upstream_prepared_opening_fallback": 2}
+    assert summary["fallback_owner_bucket_frequency"] == {"upstream-prepared": 2}
     assert summary["speaker_repair_frequency"] == {"local_rebind": 1}
     assert summary["mutation_kind_frequency"] == {"speaker_repair_mutation": 1}
     assert summary["gate_path_frequency"] == {"opening_fallback": 1}
@@ -471,6 +484,83 @@ def test_build_runtime_lineage_summary_counts_frequency_and_recurrence_without_s
     ]
     assert "score" not in summary
     assert "overall_passed" not in summary
+
+
+def test_cycle_i_opening_attribution_survives_prepared_payload_gate_lineage_and_diagnostics() -> None:
+    from game.final_emission_gate import apply_final_emission_gate
+    from game.final_emission_meta import build_fem_runtime_lineage_events, read_final_emission_meta_dict
+    from game.upstream_response_repairs import (
+        UPSTREAM_PREPARED_OPENING_FALLBACK_KEY,
+        build_upstream_prepared_opening_fallback_payload,
+    )
+    from tests.test_final_emission_gate import EXPECTED_FRONTIER_GATE_OPENING_FALLBACK, _opening_gm_output
+
+    successful_gm = _opening_gm_output()
+    prepared = build_upstream_prepared_opening_fallback_payload(successful_gm)
+    successful_gm[UPSTREAM_PREPARED_OPENING_FALLBACK_KEY] = prepared
+    successful_gm["player_facing_text"] = "Nearby crates appear disturbed."
+    successful_gm["tags"] = []
+    successful = apply_final_emission_gate(
+        successful_gm,
+        resolution={"kind": "scene_opening", "prompt": "Start the campaign."},
+        session={},
+        scene_id="frontier_gate",
+        world={},
+    )
+    assert prepared["prepared_opening_fallback_text"] == EXPECTED_FRONTIER_GATE_OPENING_FALLBACK
+    assert successful["player_facing_text"] == prepared["prepared_opening_fallback_text"]
+
+    successful_events = build_fem_runtime_lineage_events(read_final_emission_meta_dict(successful) or {})
+    successful_selected = next(event for event in successful_events if event["event_kind"] == "fallback_selected")
+    assert successful_selected["fallback_kind"] == "scene_opening"
+    assert successful_selected["owner"] == "game.final_emission_gate"
+    assert successful_selected["fallback_authorship_source"] == "upstream_prepared_opening_fallback"
+    assert successful_selected["fallback_owner_bucket"] == "upstream-prepared"
+    assert any(
+        event["event_kind"] == "gate_outcome" and event["gate_path"] == "opening_fallback"
+        for event in successful_events
+    )
+
+    fail_closed_gm = _opening_gm_output()
+    fail_closed_gm["opening_curated_facts"] = []
+    fail_closed_gm["opening_selector_selected_facts"] = []
+    fail_closed_gm["player_facing_text"] = "Nearby crates appear disturbed."
+    fail_closed_gm["tags"] = []
+    fail_closed = apply_final_emission_gate(
+        fail_closed_gm,
+        resolution={"kind": "scene_opening", "prompt": "Start the campaign."},
+        session={},
+        scene_id="frontier_gate",
+        world={},
+    )
+    fail_closed_events = build_fem_runtime_lineage_events(read_final_emission_meta_dict(fail_closed) or {})
+    fail_closed_selected = next(event for event in fail_closed_events if event["event_kind"] == "fallback_selected")
+    assert fail_closed_selected["fallback_kind"] == "opening_failed_closed"
+    assert fail_closed_selected["owner"] == "game.final_emission_gate"
+    assert fail_closed_selected["fallback_owner_bucket"] == "sealed-gate"
+    assert fail_closed_selected["fallback_authorship_source"] is None
+    assert fail_closed_selected["fallback_kind"] != successful_selected["fallback_kind"]
+
+    summary = _mod.build_runtime_lineage_summary(
+        {
+            "successful": [{"meta": {"runtime_lineage_events": successful_events}}],
+            "fail_closed": [{"meta": {"runtime_lineage_events": fail_closed_events}}],
+        }
+    )
+    assert summary["fallback_frequency"] == {"opening_failed_closed": 1, "scene_opening": 1}
+    assert summary["fallback_authorship_frequency"] == {"upstream_prepared_opening_fallback": 1}
+    assert summary["fallback_owner_bucket_frequency"] == {"sealed-gate": 1, "upstream-prepared": 1}
+    assert summary["gate_path_frequency"] == {"opening_failed_closed": 1, "opening_fallback": 1}
+
+    md = _mod.build_aggregate_operator_summary_md(
+        _load_spine(),
+        {"spine_id": "cycle_i_contract", "runtime_lineage_summary": summary},
+        [],
+    )
+    assert "`upstream_prepared_opening_fallback` (1)" in md
+    assert "`upstream-prepared` (1)" in md
+    assert "`sealed-gate` (1)" in md
+    assert "`opening_fallback` (1)" in md
 
 
 def test_malformed_gm_metadata_does_not_crash_transcript_json(tmp_path, monkeypatch) -> None:
@@ -692,6 +782,8 @@ def test_all_branches_aggregate_artifacts_and_payload(tmp_path, monkeypatch) -> 
         "owner": "game.final_emission_gate",
         "source": "selected_fallback",
         "fallback_kind": "scene_opening",
+        "fallback_authorship_source": "upstream_prepared_opening_fallback",
+        "fallback_owner_bucket": "upstream-prepared",
         "repair_kind": None,
         "mutation_kind": None,
         "gate_path": None,
@@ -763,6 +855,8 @@ def test_all_branches_aggregate_artifacts_and_payload(tmp_path, monkeypatch) -> 
     assert lineage["total_events"] == expected_total
     assert lineage["by_event_kind"] == {"fallback_selected": expected_total}
     assert lineage["fallback_frequency"] == {"scene_opening": expected_total}
+    assert lineage["fallback_authorship_frequency"] == {"upstream_prepared_opening_fallback": expected_total}
+    assert lineage["fallback_owner_bucket_frequency"] == {"upstream-prepared": expected_total}
     assert lineage["recurring_events"] == [
         {
             "recurrence_key": "fallback_selected:gate:game.final_emission_gate:scene_opening",
@@ -773,6 +867,8 @@ def test_all_branches_aggregate_artifacts_and_payload(tmp_path, monkeypatch) -> 
     assert standalone_lineage["spine_id"] == spine.spine_id
     assert standalone_lineage["total_events"] == expected_total
     assert standalone_lineage["fallback_frequency"] == {"scene_opening": expected_total}
+    assert standalone_lineage["fallback_authorship_frequency"] == {"upstream_prepared_opening_fallback": expected_total}
+    assert standalone_lineage["fallback_owner_bucket_frequency"] == {"upstream-prepared": expected_total}
 
     md = (agg_dir / "aggregate_operator_summary.md").read_text(encoding="utf-8")
     assert "aggregate" in md.lower()
@@ -780,6 +876,8 @@ def test_all_branches_aggregate_artifacts_and_payload(tmp_path, monkeypatch) -> 
     assert "Divergence" in md
     assert "Runtime Lineage Summary" in md
     assert f"**Total lineage events:** {expected_total}" in md
+    assert f"`upstream_prepared_opening_fallback` ({expected_total})" in md
+    assert f"`upstream-prepared` ({expected_total})" in md
     assert "| Metadata |" in md
 
     assert agg.get("coverage_band_met") is True

@@ -467,15 +467,24 @@ def test_golden_observed_turn_projects_runtime_lineage_and_prefers_existing_even
                 "_final_emission_meta": {
                     "final_emitted_source": "opening_deterministic_fallback",
                     "opening_recovered_via_fallback": True,
+                    "opening_fallback_authorship_source": "upstream_prepared_opening_fallback",
                     "fallback_family_used": "scene_opening",
                 }
             }
         },
     )
-    assert any(
-        event["event_kind"] == "fallback_selected" and event["fallback_kind"] == "scene_opening"
-        for event in from_fem["runtime_lineage_events"]
+    opening_selected = next(
+        event for event in from_fem["runtime_lineage_events"] if event["event_kind"] == "fallback_selected"
     )
+    assert opening_selected["fallback_kind"] == "scene_opening"
+    assert opening_selected["owner"] == "game.final_emission_gate"
+    assert opening_selected["fallback_authorship_source"] == "upstream_prepared_opening_fallback"
+    assert opening_selected["fallback_owner_bucket"] == OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED
+    debug = format_golden_replay_debug(
+        {"scenario_id": from_fem["scenario_id"], "turn_count": 1, "turns": [from_fem]}
+    )
+    assert "'fallback_authorship_source': 'upstream_prepared_opening_fallback'" in debug
+    assert "'fallback_owner_bucket': 'upstream-prepared'" in debug
 
     missing = _observed_turn(
         scenario_id="missing_lineage_projection",
@@ -502,6 +511,17 @@ def test_golden_observed_turn_projects_fail_closed_sealed_gate_opening_owner_buc
     )
 
     assert observed["opening_fallback_owner_bucket"] == OPENING_FALLBACK_OWNER_SEALED_GATE
+    failed_closed_selected = next(
+        event for event in observed["runtime_lineage_events"] if event["event_kind"] == "fallback_selected"
+    )
+    assert failed_closed_selected["fallback_kind"] == "opening_failed_closed"
+    assert failed_closed_selected["fallback_authorship_source"] is None
+    assert failed_closed_selected["fallback_owner_bucket"] == OPENING_FALLBACK_OWNER_SEALED_GATE
+    debug = format_golden_replay_debug(
+        {"scenario_id": observed["scenario_id"], "turn_count": 1, "turns": [observed]}
+    )
+    assert "'fallback_kind': 'opening_failed_closed'" in debug
+    assert "'fallback_owner_bucket': 'sealed-gate'" in debug
 
 
 # Sealed fallback projection fields are replay contract locks. Helper shaping is

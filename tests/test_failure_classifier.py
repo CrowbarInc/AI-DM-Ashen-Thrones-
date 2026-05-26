@@ -258,6 +258,8 @@ def test_failure_dashboard_renders_optional_runtime_lineage_summary_without_chan
         stage="gate",
         owner="game.final_emission_gate",
         fallback_kind="scene_opening",
+        fallback_authorship_source="upstream_prepared_opening_fallback",
+        fallback_owner_bucket="upstream-prepared",
     )
     events = [
         fallback,
@@ -284,6 +286,8 @@ def test_failure_dashboard_renders_optional_runtime_lineage_summary_without_chan
     summary = build_runtime_lineage_summary(events)
     assert summary["total_events"] == 5
     assert summary["fallback_frequency"] == {"scene_opening": 2}
+    assert summary["fallback_authorship_frequency"] == {"upstream_prepared_opening_fallback": 2}
+    assert summary["fallback_owner_bucket_frequency"] == {"upstream-prepared": 2}
     assert summary["speaker_repair_frequency"] == {"local_rebind": 1}
     assert summary["mutation_kind_frequency"] == {"fallback_mutation": 1}
     assert summary["gate_path_frequency"] == {"opening_fallback": 1}
@@ -301,6 +305,8 @@ def test_failure_dashboard_renders_optional_runtime_lineage_summary_without_chan
     assert "**Total lineage events:** 5" in report
     assert "**Fallback selected:** 2" in report
     assert "`scene_opening` (2)" in report
+    assert "`upstream_prepared_opening_fallback` (2)" in report
+    assert "`upstream-prepared` (2)" in report
     assert "`local_rebind` (1)" in report
     assert "`fallback_mutation` (1)" in report
     assert "`opening_fallback` (1)" in report
@@ -372,6 +378,7 @@ def test_failure_classifier_rows_split_canonical_legacy_and_sealed_opening_owner
     assert row["source_family"] == "opening_fallback"
     assert row["emission_sublayer"] == "opening_fallback"
     assert row["opening_fallback_owner_bucket"] == expected_bucket
+    assert row["opening_fallback_authorship_source"] == observed.get("opening_fallback_authorship_source")
 
 
 def test_failure_classifier_preserves_projected_opening_owner_bucket_evidence():

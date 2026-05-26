@@ -598,6 +598,8 @@ def build_runtime_lineage_summary(branch_transcripts: Mapping[str, Sequence[Mapp
     by_stage: dict[str, int] = {}
     by_recurrence_key: dict[str, int] = {}
     fallback_frequency: dict[str, int] = {}
+    fallback_authorship_frequency: dict[str, int] = {}
+    fallback_owner_bucket_frequency: dict[str, int] = {}
     speaker_repair_frequency: dict[str, int] = {}
     mutation_kind_frequency: dict[str, int] = {}
     gate_path_frequency: dict[str, int] = {}
@@ -627,6 +629,8 @@ def build_runtime_lineage_summary(branch_transcripts: Mapping[str, Sequence[Mapp
                 _count(by_recurrence_key, event.get("recurrence_key"))
                 if event_kind == "fallback_selected":
                     _count(fallback_frequency, event.get("fallback_kind"))
+                    _count(fallback_authorship_frequency, event.get("fallback_authorship_source"))
+                    _count(fallback_owner_bucket_frequency, event.get("fallback_owner_bucket"))
                 elif event_kind == "speaker_repair":
                     _count(speaker_repair_frequency, event.get("repair_kind"))
                 elif event_kind == "mutation":
@@ -645,6 +649,8 @@ def build_runtime_lineage_summary(branch_transcripts: Mapping[str, Sequence[Mapp
         "by_stage": dict(sorted(by_stage.items())),
         "by_recurrence_key": dict(sorted(by_recurrence_key.items())),
         "fallback_frequency": dict(sorted(fallback_frequency.items())),
+        "fallback_authorship_frequency": dict(sorted(fallback_authorship_frequency.items())),
+        "fallback_owner_bucket_frequency": dict(sorted(fallback_owner_bucket_frequency.items())),
         "speaker_repair_frequency": dict(sorted(speaker_repair_frequency.items())),
         "mutation_kind_frequency": dict(sorted(mutation_kind_frequency.items())),
         "gate_path_frequency": dict(sorted(gate_path_frequency.items())),
@@ -807,6 +813,13 @@ def build_aggregate_operator_summary_md(
         t = str(s).replace("|", "\\|").replace("\n", " ")
         return t or "—"
 
+    def _top_lineage_frequency(key: str) -> str:
+        values = lineage.get(key) if isinstance(lineage.get(key), dict) else {}
+        return "; ".join(
+            f"`{name}` ({count})"
+            for name, count in sorted(values.items(), key=lambda item: (-item[1], item[0]))[:5]
+        ) or "_(none)_"
+
     for bid in branches_run:
         r = by_resolved.get(bid)
         sh = _session_health_from_eval(r.eval_result) if r else {}
@@ -859,6 +872,10 @@ def build_aggregate_operator_summary_md(
         f"- **Speaker repair:** {lineage_kinds.get('speaker_repair', 0)}",
         f"- **Mutation:** {lineage_kinds.get('mutation', 0)}",
         f"- **Gate outcome:** {lineage_kinds.get('gate_outcome', 0)}",
+        f"- **Top fallback kinds:** {_top_lineage_frequency('fallback_frequency')}",
+        f"- **Top fallback authorship sources:** {_top_lineage_frequency('fallback_authorship_frequency')}",
+        f"- **Top fallback owner buckets:** {_top_lineage_frequency('fallback_owner_bucket_frequency')}",
+        f"- **Top gate paths:** {_top_lineage_frequency('gate_path_frequency')}",
         "- **Top recurring recurrence keys:** "
         + (
             "; ".join(

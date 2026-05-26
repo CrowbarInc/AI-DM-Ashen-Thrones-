@@ -54,6 +54,7 @@ class FailureClassification(TypedDict):
     final_emission_mutation_lineage: NotRequired[Any]
     fallback_family: NotRequired[Any]
     fallback_temporal_frame: NotRequired[Any]
+    opening_fallback_authorship_source: NotRequired[Any]
     opening_fallback_owner_bucket: NotRequired[Any]
     sealed_fallback_owner_bucket: NotRequired[Any]
     visibility_fallback_owner_bucket: NotRequired[Any]
@@ -822,6 +823,7 @@ def classify_replay_failure(
             "final_emission_mutation_lineage": observed_turn.get("final_emission_mutation_lineage"),
             "fallback_family": observed_turn.get("fallback_family"),
             "fallback_temporal_frame": observed_turn.get("fallback_temporal_frame"),
+            "opening_fallback_authorship_source": observed_turn.get("opening_fallback_authorship_source"),
             "opening_fallback_owner_bucket": _opening_fallback_owner_bucket(observed_turn, drift_row),
             "sealed_fallback_owner_bucket": observed_turn.get("sealed_fallback_owner_bucket"),
             "visibility_fallback_owner_bucket": observed_turn.get("visibility_fallback_owner_bucket"),

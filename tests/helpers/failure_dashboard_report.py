@@ -131,6 +131,7 @@ def _evidence_cell(row: Mapping[str, Any]) -> str:
         ("sublayer", "emission_sublayer"),
         ("repair", "repair_kind"),
         ("lineage", "final_emission_mutation_lineage"),
+        ("opening_authorship", "opening_fallback_authorship_source"),
         ("opening_owner", "opening_fallback_owner_bucket"),
         ("sealed_owner", "sealed_fallback_owner_bucket"),
         ("visibility_owner", "visibility_fallback_owner_bucket"),
@@ -206,6 +207,8 @@ def build_runtime_lineage_summary(events: Any) -> dict[str, Any]:
         "by_stage": {},
         "by_recurrence_key": {},
         "fallback_frequency": {},
+        "fallback_authorship_frequency": {},
+        "fallback_owner_bucket_frequency": {},
         "speaker_repair_frequency": {},
         "mutation_kind_frequency": {},
         "gate_path_frequency": {},
@@ -224,6 +227,8 @@ def build_runtime_lineage_summary(events: Any) -> dict[str, Any]:
         _count("by_recurrence_key", event.get("recurrence_key"))
         if kind == "fallback_selected":
             _count("fallback_frequency", event.get("fallback_kind"))
+            _count("fallback_authorship_frequency", event.get("fallback_authorship_source"))
+            _count("fallback_owner_bucket_frequency", event.get("fallback_owner_bucket"))
         elif kind == "speaker_repair":
             _count("speaker_repair_frequency", event.get("repair_kind"))
         elif kind == "mutation":
@@ -272,6 +277,8 @@ def _runtime_lineage_markdown_lines(events: Any) -> list[str]:
         f"- **Gate outcome:** {kinds.get('gate_outcome', 0)}",
         f"- **Top recurring recurrence keys:** {recurring_s}",
         f"- **Top fallback kinds:** {_top('fallback_frequency')}",
+        f"- **Top fallback authorship sources:** {_top('fallback_authorship_frequency')}",
+        f"- **Top fallback owner buckets:** {_top('fallback_owner_bucket_frequency')}",
         f"- **Top repair kinds:** {_top('speaker_repair_frequency')}",
         f"- **Top mutation kinds:** {_top('mutation_kind_frequency')}",
         f"- **Top gate paths:** {_top('gate_path_frequency')}",

@@ -19,6 +19,8 @@ def test_make_runtime_lineage_event_is_json_serializable_and_normalized() -> Non
         owner="game.final_emission_gate",
         source=" game.final_emission_gate.apply_final_emission_gate ",
         fallback_kind="Opening Failed-Closed",
+        fallback_authorship_source="upstream_prepared_opening_fallback",
+        fallback_owner_bucket="upstream-prepared",
         notes=["selected", "selected", " sealed "],
     )
 
@@ -31,6 +33,8 @@ def test_make_runtime_lineage_event_is_json_serializable_and_normalized() -> Non
         "gate_path": None,
         "mutation_kind": None,
         "fallback_kind": "opening_failed_closed",
+        "fallback_authorship_source": "upstream_prepared_opening_fallback",
+        "fallback_owner_bucket": "upstream-prepared",
         "repair_kind": None,
         "recurrence_key": "fallback_selected:gate:game.final_emission_gate:opening_failed_closed",
         "notes": ["selected", "sealed"],
@@ -93,6 +97,8 @@ def test_normalize_runtime_lineage_events_is_safe_bounded_projection() -> None:
             "stage": "post-emission",
             "owner": "game.post_emission_speaker_adoption",
             "repair_kind": "stale interlocutor invalidation",
+            "fallback_authorship_source": "upstream_prepared_opening_fallback",
+            "fallback_owner_bucket": "upstream-prepared",
             "notes": " corrected ",
         },
         {"event_kind": "not-supported", "stage": "nowhere", "mutation_kind": "state mutation"},
@@ -105,6 +111,8 @@ def test_normalize_runtime_lineage_events_is_safe_bounded_projection() -> None:
     assert normalized[0]["event_kind"] == "speaker_repair"
     assert normalized[0]["stage"] == "post_emission"
     assert normalized[0]["repair_kind"] == "stale_interlocutor_invalidation"
+    assert normalized[0]["fallback_authorship_source"] == "upstream_prepared_opening_fallback"
+    assert normalized[0]["fallback_owner_bucket"] == "upstream-prepared"
     assert normalized[0]["notes"] == ["corrected"]
     assert normalized[1]["event_kind"] == "unknown"
     assert normalized[1]["stage"] == "unknown"

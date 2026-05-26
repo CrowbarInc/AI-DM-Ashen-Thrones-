@@ -1553,6 +1553,13 @@ def build_fem_runtime_lineage_events(fem: Mapping[str, Any] | None) -> list[dict
     fallback = _fem_selected_fallback_projection(fem)
     if fallback is not None:
         fallback_kind, gate_path, stage, owner, source = fallback
+        fallback_authorship_source: str | None = None
+        fallback_owner_bucket: str | None = None
+        if fallback_kind == "scene_opening":
+            fallback_authorship_source = _fem_lineage_source(fem, "opening_fallback_authorship_source")
+            fallback_owner_bucket = opening_fallback_owner_bucket_from_meta(fem)
+        elif fallback_kind == "opening_failed_closed":
+            fallback_owner_bucket = opening_fallback_owner_bucket_from_meta(fem)
         _append_fem_lineage_event(
             events,
             make_runtime_lineage_event(
@@ -1561,6 +1568,8 @@ def build_fem_runtime_lineage_events(fem: Mapping[str, Any] | None) -> list[dict
                 owner=owner,
                 source=source,
                 fallback_kind=fallback_kind,
+                fallback_authorship_source=fallback_authorship_source,
+                fallback_owner_bucket=fallback_owner_bucket,
             )
         )
         if gate_path != "unknown":

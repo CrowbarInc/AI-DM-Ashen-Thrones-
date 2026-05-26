@@ -11,6 +11,8 @@ from game.final_emission_meta import (
     INTERNAL_STATE_KEY,
     NARRATIVE_AUTHENTICITY_FEM_KEYS,
     NARRATIVE_MODE_OUTPUT_FEM_KEYS,
+    OPENING_FALLBACK_OWNER_SEALED_GATE,
+    OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
     assemble_unified_observational_telemetry_bundle,
     build_fem_observability_events,
     build_fem_runtime_lineage_events,
@@ -25,6 +27,7 @@ from game.final_emission_meta import (
     merge_response_type_meta,
     normalize_final_emission_meta_for_observability,
     normalize_merged_na_telemetry_for_eval,
+    opening_fallback_owner_bucket_from_meta,
     normalized_observational_telemetry_bundle,
     patch_final_emission_meta,
     read_emission_debug_lane,
@@ -36,6 +39,7 @@ from game.final_emission_meta import (
     slim_na_metrics,
     stage_diff_narrative_authenticity_projection,
 )
+from game.upstream_response_repairs import OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED
 
 from game.narrative_mode_contract import (
     build_narrative_mode_contract,
@@ -500,27 +504,37 @@ def test_build_fem_runtime_lineage_events_acceptance_outcomes_do_not_invent_fall
 
 
 def test_build_fem_runtime_lineage_events_projects_opening_and_fail_closed_fallbacks() -> None:
-    opening = build_fem_runtime_lineage_events(
-        {
-            "final_route": "accept_candidate",
-            "final_emitted_source": "opening_deterministic_fallback",
-            "opening_recovered_via_fallback": True,
-            "fallback_family_used": "scene_opening",
-        }
-    )
-    assert _lineage_event(opening, "fallback_selected")["fallback_kind"] == "scene_opening"
+    opening_meta = {
+        "final_route": "accept_candidate",
+        "final_emitted_source": "opening_deterministic_fallback",
+        "opening_recovered_via_fallback": True,
+        "opening_fallback_authorship_source": OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED,
+        "fallback_family_used": "scene_opening",
+    }
+    opening = build_fem_runtime_lineage_events(opening_meta)
+    assert opening_fallback_owner_bucket_from_meta(opening_meta) == OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED
+    opening_selected = _lineage_event(opening, "fallback_selected")
+    assert opening_selected["fallback_kind"] == "scene_opening"
+    assert opening_selected["owner"] == "game.final_emission_gate"
+    assert opening_selected["fallback_authorship_source"] == OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED
+    assert opening_selected["fallback_owner_bucket"] == OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED
     assert _lineage_event(opening, "gate_outcome")["gate_path"] == "opening_fallback"
 
-    failed_closed = build_fem_runtime_lineage_events(
-        {
-            "final_route": "replaced",
-            "final_emitted_source": "opening_fallback_failed_closed",
-            "opening_fallback_failed_closed": True,
-            "response_type_repair_kind": "opening_deterministic_fallback_failed_closed",
-        }
-    )
-    assert _lineage_event(failed_closed, "fallback_selected")["fallback_kind"] == "opening_failed_closed"
+    failed_closed_meta = {
+        "final_route": "replaced",
+        "final_emitted_source": "opening_fallback_failed_closed",
+        "opening_fallback_failed_closed": True,
+        "response_type_repair_kind": "opening_deterministic_fallback_failed_closed",
+    }
+    failed_closed = build_fem_runtime_lineage_events(failed_closed_meta)
+    assert opening_fallback_owner_bucket_from_meta(failed_closed_meta) == OPENING_FALLBACK_OWNER_SEALED_GATE
+    failed_closed_selected = _lineage_event(failed_closed, "fallback_selected")
+    assert failed_closed_selected["fallback_kind"] == "opening_failed_closed"
+    assert failed_closed_selected["owner"] == "game.final_emission_gate"
+    assert failed_closed_selected["fallback_authorship_source"] is None
+    assert failed_closed_selected["fallback_owner_bucket"] == OPENING_FALLBACK_OWNER_SEALED_GATE
     assert _lineage_event(failed_closed, "gate_outcome")["gate_path"] == "opening_failed_closed"
+    assert opening_selected["fallback_kind"] != failed_closed_selected["fallback_kind"]
 
 
 def test_build_fem_runtime_lineage_events_projects_strict_social_and_sanitizer_fallbacks() -> None:

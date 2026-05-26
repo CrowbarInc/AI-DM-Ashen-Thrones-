@@ -130,16 +130,24 @@ def make_runtime_lineage_event(
     gate_path: Any = None,
     mutation_kind: Any = None,
     fallback_kind: Any = None,
+    fallback_authorship_source: Any = None,
+    fallback_owner_bucket: Any = None,
     repair_kind: Any = None,
     notes: Any = None,
 ) -> dict[str, Any]:
-    """Return one compact normalized runtime lineage event."""
+    """Return one compact normalized runtime lineage event.
+
+    ``owner`` remains event/selection ownership. Optional fallback attribution
+    fields preserve prose authorship separately when FEM has that evidence.
+    """
     event_kind_out = normalize_runtime_lineage_event_kind(event_kind)
     stage_out = normalize_runtime_lineage_stage(stage)
     owner_out = normalize_owner(owner)
     gate_path_out = _normalize_token(gate_path)
     mutation_kind_out = _normalize_token(mutation_kind)
     fallback_kind_out = _normalize_token(fallback_kind)
+    fallback_authorship_source_out = _normalize_text(fallback_authorship_source)
+    fallback_owner_bucket_out = _normalize_text(fallback_owner_bucket)
     repair_kind_out = _normalize_token(repair_kind)
     generated_key = build_recurrence_key(
         event_kind=event_kind_out,
@@ -159,6 +167,8 @@ def make_runtime_lineage_event(
         "gate_path": gate_path_out,
         "mutation_kind": mutation_kind_out,
         "fallback_kind": fallback_kind_out,
+        "fallback_authorship_source": fallback_authorship_source_out,
+        "fallback_owner_bucket": fallback_owner_bucket_out,
         "repair_kind": repair_kind_out,
         "recurrence_key": generated_key,
         "notes": normalize_reason_list(notes),
@@ -182,6 +192,8 @@ def normalize_runtime_lineage_events(events: Any) -> list[dict[str, Any]]:
                 gate_path=raw.get("gate_path"),
                 mutation_kind=raw.get("mutation_kind"),
                 fallback_kind=raw.get("fallback_kind"),
+                fallback_authorship_source=raw.get("fallback_authorship_source"),
+                fallback_owner_bucket=raw.get("fallback_owner_bucket"),
                 repair_kind=raw.get("repair_kind"),
                 notes=raw.get("notes"),
             )

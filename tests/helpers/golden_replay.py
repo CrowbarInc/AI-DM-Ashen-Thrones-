@@ -967,6 +967,7 @@ def format_golden_replay_debug(result: Mapping[str, Any]) -> str:
                 f"turn[{turn.get('turn_index')}].sealed_fallback_owner_bucket: {turn.get('sealed_fallback_owner_bucket')!r}",
                 f"turn[{turn.get('turn_index')}].fallback_family: {turn.get('fallback_family')!r}",
                 f"turn[{turn.get('turn_index')}].fallback_temporal_frame: {turn.get('fallback_temporal_frame')!r}",
+                f"turn[{turn.get('turn_index')}].runtime_lineage_events: {turn.get('runtime_lineage_events')!r}",
                 f"turn[{turn.get('turn_index')}].scaffold_leakage: {turn.get('scaffold_leakage')!r}",
                 f"turn[{turn.get('turn_index')}].unavailable: {turn.get('unavailable')!r}",
                 f"turn[{turn.get('turn_index')}].snapshot_summary: {turn.get('snapshot_summary')}",

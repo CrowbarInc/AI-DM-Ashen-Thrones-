@@ -148,6 +148,7 @@ OPTIONAL_CLASSIFICATION_EVIDENCE_FIELDS: frozenset[str] = frozenset(
         "final_emission_mutation_lineage",
         "fallback_family",
         "fallback_temporal_frame",
+        "opening_fallback_authorship_source",
         "opening_fallback_owner_bucket",
         "sealed_fallback_owner_bucket",
         "visibility_fallback_owner_bucket",

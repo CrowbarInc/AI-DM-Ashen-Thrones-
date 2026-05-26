@@ -652,6 +652,7 @@ def test_controlled_failure_probe_dashboard_contains_triage_columns():
     assert "fallback_source_mismatch" in report
     assert "opening_fallback_owner_bucket" in report
     assert "opening_owner=upstream-prepared" in report
+    assert "opening_authorship=upstream_prepared_opening_fallback" in report
     assert "game/final_emission_meta.py" in report
     assert "opening_fallback_authorship_source" in report
     assert "game/upstream_response_repairs.py" in report
