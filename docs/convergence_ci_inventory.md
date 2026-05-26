@@ -4,7 +4,7 @@
 
 **Non-goals:** No reopening of Evaluator, Gate, or FE-C2 cleanup blocks. Test code and production code are not rewritten here; only CI wiring and pointers are in scope.
 
-**Automation:** Continuous integration parity is enforced by `.github/workflows/convergence-checks.yml`. Planner convergence remains owned by `.github/workflows/content-lint.yml` (see [Planner convergence](#planner-convergence--ctir--narrative-plan--prompt) below)—do not duplicate that step in `convergence-checks.yml`.
+**Automation:** Continuous integration parity is enforced by `.github/workflows/convergence-checks.yml`, including the required protected golden replay gate declared in `docs/testing/protected_replay_manifest.md`. Planner convergence remains owned by `.github/workflows/content-lint.yml` (see [Planner convergence](#planner-convergence--ctir--narrative-plan--prompt) below)—do not duplicate that step in `convergence-checks.yml`.
 
 ---
 
@@ -15,6 +15,7 @@ Run from the **repository root**. GitHub Actions uses the same commands with `py
 **Hard-fail — pytest (matches workflow order):**
 
 ```bash
+python -m pytest -m golden_replay -q
 python -m pytest tests/test_evaluator_convergence_closeout.py -q
 python -m pytest tests/test_dead_turn_evaluation_threading.py tests/test_playability_eval.py tests/test_behavioral_gauntlet_eval.py tests/test_scenario_spine_eval.py tests/test_final_emission_meta.py tests/test_architecture_audit_tool.py tests/test_validation_layer_audit_smoke.py -q
 python -m pytest tests/test_final_emission_boundary_contract.py tests/test_final_emission_boundary_convergence.py -q
@@ -41,6 +42,8 @@ Or run each tool individually: `python tools/architecture_audit.py --print-summa
 
 **Planner convergence (not in `convergence-checks.yml`):** `python tools/planner_convergence_audit.py` runs in `.github/workflows/content-lint.yml` only.
 
+**Protected replay failure artifact:** When the protected replay step fails, Actions attempts to upload the stable artifact `protected-replay-failure-report` from `artifacts/golden_replay/replay_failure_report.md`. It is not uploaded on a successful replay run; missing output is reported as a warning rather than masking the blocking replay failure. Reproduce locally with `python -m pytest -m golden_replay -q`.
+
 ---
 
 ## Classification legend
@@ -57,6 +60,7 @@ Or run each tool individually: `python tools/architecture_audit.py --print-summa
 
 | Closed seam | Closeout / source doc | Pytest slice | Static audit / tool | In CI before Block B | Recommended CI status | Rationale |
 | --- | --- | --- | --- | --- | --- | --- |
+| **Protected golden replay acceptance** | `docs/testing/protected_replay_manifest.md`, `docs/audits/cycle_k_block_k1_protected_replay_declaration_2026-05-26.md` | `-m golden_replay` | — | No | **Hard-fail** | Protected end-to-end and direct-seam replay failures block acceptance; marker selection permits future protected replay expansion without workflow rewiring. |
 | **Evaluator convergence** | `docs/evaluator_convergence_closeout.md`, `docs/evaluator_convergence_inventory.md` | `tests/test_evaluator_convergence_closeout.py` | — | No | **Hard-fail** | Fast lock on evaluator maintenance-grade invariants. |
 | **Evaluator boundary / governance guards** | Same | `tests/test_dead_turn_evaluation_threading.py`, `tests/test_playability_eval.py`, `tests/test_behavioral_gauntlet_eval.py`, `tests/test_scenario_spine_eval.py`, `tests/test_final_emission_meta.py`, `tests/test_architecture_audit_tool.py`, `tests/test_validation_layer_audit_smoke.py` | — | No | **Hard-fail** | Same slice as closeout doc; protects evaluator-adjacent and audit-smoke coverage without extending evaluator scope. |
 | **FE-C2 / final emission boundary** | `docs/final_emission_ownership_convergence.md` (Block D2), `docs/narrative_integrity_architecture.md` | `tests/test_final_emission_boundary_convergence.py`, `tests/test_final_emission_boundary_contract.py` | `tools/final_emission_ownership_audit.py` | No | **Pytests + ownership audit: Hard-fail** | Convergence scenarios + boundary contract tests; strict ownership audit catches advisory drift signals. |
@@ -90,6 +94,7 @@ Aligned with `.github/workflows/convergence-checks.yml`:
 
 ### Hard-fail
 
+- `pytest -m golden_replay` — required protected replay acceptance; a failure fails the workflow.
 - `pytest tests/test_evaluator_convergence_closeout.py`
 - Evaluator boundary pytest bundle (dead-turn, playability, behavioral gauntlet, scenario spine, FEM meta, architecture audit tool, validation-layer smoke)
 - `pytest tests/test_final_emission_boundary_contract.py tests/test_final_emission_boundary_convergence.py`
@@ -117,6 +122,9 @@ Aligned with `.github/workflows/convergence-checks.yml`:
 
 ## Related governance artifacts
 
+- `docs/testing/protected_replay_manifest.md` — canonical protected replay declaration and developer reproduction commands.
+- `docs/audits/cycle_k_block_k2_replay_ci_promotion_2026-05-26.md` — replay CI promotion record.
+- `docs/audits/cycle_k_block_k3b_failure_artifact_retention_2026-05-26.md` — protected replay failure artifact retention record.
 - `docs/post_evaluator_next_target_scan.md` — rationale for CI parity as next target.
 - `docs/evaluator_convergence_closeout.md`, `docs/gate_convergence_closeout.md`, `docs/final_emission_ownership_convergence.md`, `docs/validation_layer_separation.md` — one-line CI pointers in each.
 - `tests/TEST_AUDIT.md`, `tests/TEST_CONSOLIDATION_PLAN.md` — broader test inventory (not all wired to CI).

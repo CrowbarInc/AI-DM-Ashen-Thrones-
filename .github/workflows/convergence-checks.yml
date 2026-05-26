@@ -8,7 +8,7 @@
 # Ubuntu / Actions notes:
 # - Default working directory is the repo root after actions/checkout (POSIX paths in YAML).
 # - Use `python -m pip` / `python -m pytest` so the job uses the interpreter from setup-python.
-# - Audits write under `artifacts/` (created by tools as needed); no upload-artifact unless debugging.
+# - Audits write under `artifacts/` (created by tools as needed); protected replay uploads its diagnostic report only on failure.
 # - Informational steps each set continue-on-error: true so advisory failures do not mask hard-fail red.
 
 name: Convergence checks
@@ -43,6 +43,18 @@ jobs:
           python -m pip install -r requirements.txt
 
       # --- Hard-fail (blocking) ---
+
+      - name: Pytest - protected golden replay acceptance
+        id: protected_replay
+        run: python -m pytest -m golden_replay -q
+
+      - name: Upload protected replay failure report
+        if: failure() && steps.protected_replay.outcome == 'failure'
+        uses: actions/upload-artifact@v4
+        with:
+          name: protected-replay-failure-report
+          path: artifacts/golden_replay/replay_failure_report.md
+          if-no-files-found: warn
 
       - name: Pytest — evaluator convergence closeout
         run: python -m pytest tests/test_evaluator_convergence_closeout.py -q

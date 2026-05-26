@@ -192,6 +192,8 @@ pytest tests/test_playability_smoke.py -q
 
 Golden replay protects canonical turn-routing and final-emission invariants across repair cycles: speaker/target selection, route kind, FEM/fallback metadata, scaffold leakage, action/answer survival, and compact scenario-spine branch structure. It does **not** lock exact final prose by default; exact text comparison is opt-in, while structural drift is the primary signal.
 
+Protected scenario ownership is declared in [`docs/testing/protected_replay_manifest.md`](../docs/testing/protected_replay_manifest.md). Protected replay is a required hard-fail CI check in `.github/workflows/convergence-checks.yml`: failure means acceptance-protected replay or its currently co-located golden replay contract coverage failed, so the change must not be accepted until resolved.
+
 From repo root:
 
 ```bash
@@ -203,6 +205,10 @@ The suite is marked `golden_replay`, so this equivalent marker filter also works
 ```bash
 python -m pytest -m golden_replay -q
 ```
+
+CI uses the marker-selected command above so future protected replay modules can join the required lane without changing the workflow command. Use the same command locally to reproduce a protected replay CI failure.
+
+When the protected replay CI step fails, the `convergence-checks` workflow preserves K3A diagnostics as the `protected-replay-failure-report` Actions artifact, sourced from `artifacts/golden_replay/replay_failure_report.md`. The artifact appears only for a failed protected replay step; it is not published on success, and an absent report cannot replace the underlying hard-fail result.
 
 The current baseline artifact lives at [`audits/golden_replay_baseline_2026-05-11.md`](../audits/golden_replay_baseline_2026-05-11.md).
 

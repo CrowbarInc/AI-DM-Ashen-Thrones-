@@ -7,6 +7,7 @@ changing runtime behavior or creating a second storage/test harness.
 from __future__ import annotations
 
 import hashlib
+import os
 import re
 from pathlib import Path
 from typing import Any, Callable, Mapping
@@ -29,6 +30,7 @@ from tests.helpers.failure_classifier import classify_replay_failure
 from tests.helpers.failure_dashboard_report import (
     failure_dashboard_requested,
     record_failure_dashboard_rows,
+    record_protected_replay_assertion_failure,
     record_runtime_lineage_events,
 )
 from tests.helpers.transcript_runner import (
@@ -171,11 +173,49 @@ def _format_expected_failure(
     return "\n".join(lines)
 
 
+def _raise_expected_failure(
+    *,
+    turn: Mapping[str, Any],
+    field_path: str,
+    expected: Any,
+    actual: Any,
+    reason: str,
+    debug_context: str,
+    report_scenario_id: str | None,
+) -> None:
+    if report_scenario_id:
+        try:
+            test_node_id = str(os.environ.get("PYTEST_CURRENT_TEST") or "").split(" (", 1)[0]
+            record_protected_replay_assertion_failure(
+                scenario_id=report_scenario_id,
+                test_node_id=test_node_id,
+                observed_turn=turn,
+                field_path=field_path,
+                expected=expected,
+                actual=None if actual is _MISSING else actual,
+                reason=reason,
+                drift_bucket=_drift_bucket_for_field(field_path),
+            )
+        except Exception:
+            # Diagnostic reporting must never replace or mask an acceptance failure.
+            pass
+    raise AssertionError(
+        _format_expected_failure(
+            field_path=field_path,
+            expected=expected,
+            actual=actual,
+            reason=reason,
+            debug_context=debug_context,
+        )
+    )
+
+
 def assert_golden_turn_observation(
     turn: Mapping[str, Any],
     expectation: Mapping[str, Any],
     *,
     debug_context: str = "",
+    _report_scenario_id: str | None = None,
 ) -> None:
     """Assert a golden turn observation against a compact expectation.
 
@@ -196,41 +236,41 @@ def assert_golden_turn_observation(
     }
     for field_path in sorted(unavailable - allow_unavailable):
         actual = _lookup_path(turn, field_path)
-        raise AssertionError(
-            _format_expected_failure(
-                field_path=field_path,
-                expected=f"available or explicitly allowed unavailable; allowed={sorted(allow_unavailable)!r}",
-                actual=actual,
-                reason="unexpected unavailable field",
-                debug_context=debug_context,
-            )
+        _raise_expected_failure(
+            turn=turn,
+            field_path=field_path,
+            expected=f"available or explicitly allowed unavailable; allowed={sorted(allow_unavailable)!r}",
+            actual=actual,
+            reason="unexpected unavailable field",
+            debug_context=debug_context,
+            report_scenario_id=_report_scenario_id,
         )
 
     for field_path in expectation.get("require_present", []):
         actual = _lookup_path(turn, str(field_path))
         if actual is _MISSING or actual is None or actual == "":
-            raise AssertionError(
-                _format_expected_failure(
-                    field_path=str(field_path),
-                    expected="present non-empty value",
-                    actual=actual,
-                    reason="required field absent",
-                    debug_context=debug_context,
-                )
+            _raise_expected_failure(
+                turn=turn,
+                field_path=str(field_path),
+                expected="present non-empty value",
+                actual=actual,
+                reason="required field absent",
+                debug_context=debug_context,
+                report_scenario_id=_report_scenario_id,
             )
 
     equals = expectation.get("equals") if isinstance(expectation.get("equals"), Mapping) else {}
     for field_path, expected in equals.items():
         actual = _lookup_path(turn, str(field_path))
         if actual != expected:
-            raise AssertionError(
-                _format_expected_failure(
-                    field_path=str(field_path),
-                    expected=expected,
-                    actual=actual,
-                    reason="exact value mismatch",
-                    debug_context=debug_context,
-                )
+            _raise_expected_failure(
+                turn=turn,
+                field_path=str(field_path),
+                expected=expected,
+                actual=actual,
+                reason="exact value mismatch",
+                debug_context=debug_context,
+                report_scenario_id=_report_scenario_id,
             )
 
     one_of = expectation.get("one_of") if isinstance(expectation.get("one_of"), Mapping) else {}
@@ -238,67 +278,83 @@ def assert_golden_turn_observation(
         allowed_values = list(allowed) if isinstance(allowed, (list, tuple, set, frozenset)) else [allowed]
         actual = _lookup_path(turn, str(field_path))
         if actual not in allowed_values:
-            raise AssertionError(
-                _format_expected_failure(
-                    field_path=str(field_path),
-                    expected=allowed_values,
-                    actual=actual,
-                    reason="value not in allowed set",
-                    debug_context=debug_context,
-                )
+            _raise_expected_failure(
+                turn=turn,
+                field_path=str(field_path),
+                expected=allowed_values,
+                actual=actual,
+                reason="value not in allowed set",
+                debug_context=debug_context,
+                report_scenario_id=_report_scenario_id,
             )
 
     not_equals = expectation.get("not_equals") if isinstance(expectation.get("not_equals"), Mapping) else {}
     for field_path, forbidden in not_equals.items():
         actual = _lookup_path(turn, str(field_path))
         if actual == forbidden:
-            raise AssertionError(
-                _format_expected_failure(
-                    field_path=str(field_path),
-                    expected=f"anything except {forbidden!r}",
-                    actual=actual,
-                    reason="forbidden exact value observed",
-                    debug_context=debug_context,
-                )
+            _raise_expected_failure(
+                turn=turn,
+                field_path=str(field_path),
+                expected=f"anything except {forbidden!r}",
+                actual=actual,
+                reason="forbidden exact value observed",
+                debug_context=debug_context,
+                report_scenario_id=_report_scenario_id,
             )
 
     final_text = str(turn.get("final_text") or "")
     for needle in expectation.get("text_must_include", []):
         if str(needle) not in final_text:
-            raise AssertionError(
-                _format_expected_failure(
-                    field_path="final_text",
-                    expected=f"include {str(needle)!r}",
-                    actual=final_text,
-                    reason="required text fragment missing",
-                    debug_context=debug_context,
-                )
+            _raise_expected_failure(
+                turn=turn,
+                field_path="final_text",
+                expected=f"include {str(needle)!r}",
+                actual=final_text,
+                reason="required text fragment missing",
+                debug_context=debug_context,
+                report_scenario_id=_report_scenario_id,
             )
     for needle in expectation.get("text_must_not_include", []):
         if str(needle) in final_text:
-            raise AssertionError(
-                _format_expected_failure(
-                    field_path="final_text",
-                    expected=f"not include {str(needle)!r}",
-                    actual=final_text,
-                    reason="forbidden text fragment observed",
-                    debug_context=debug_context,
-                )
+            _raise_expected_failure(
+                turn=turn,
+                field_path="final_text",
+                expected=f"not include {str(needle)!r}",
+                actual=final_text,
+                reason="forbidden text fragment observed",
+                debug_context=debug_context,
+                report_scenario_id=_report_scenario_id,
             )
 
     expected_scaffold = expectation.get("scaffold_leakage")
     if expected_scaffold is not None:
         actual = _lookup_path(turn, "scaffold_leakage")
         if actual is not bool(expected_scaffold):
-            raise AssertionError(
-                _format_expected_failure(
-                    field_path="scaffold_leakage",
-                    expected=bool(expected_scaffold),
-                    actual=actual,
-                    reason="scaffold leakage mismatch",
-                    debug_context=debug_context,
-                )
+            _raise_expected_failure(
+                turn=turn,
+                field_path="scaffold_leakage",
+                expected=bool(expected_scaffold),
+                actual=actual,
+                reason="scaffold leakage mismatch",
+                debug_context=debug_context,
+                report_scenario_id=_report_scenario_id,
             )
+
+
+def assert_protected_golden_turn_observation(
+    turn: Mapping[str, Any],
+    expectation: Mapping[str, Any],
+    *,
+    scenario_id: str,
+    debug_context: str = "",
+) -> None:
+    """Assert a protected invariant while recording diagnostic failures only."""
+    assert_golden_turn_observation(
+        turn,
+        expectation,
+        debug_context=debug_context,
+        _report_scenario_id=scenario_id,
+    )
 
 
 def _drift_bucket_for_field(field_path: str) -> str:

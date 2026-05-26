@@ -16,8 +16,11 @@ from tests.helpers.failure_classifier import (
 
 FAILURE_DASHBOARD_ENV_VAR = "ASHEN_WRITE_FAILURE_DASHBOARD"
 FAILURE_DASHBOARD_LATEST_PATH = Path("audits/failure_dashboard_latest.md")
+PROTECTED_REPLAY_FAILURE_REPORT_PATH = Path("artifacts/golden_replay/replay_failure_report.md")
 _RECORDED_FAILURE_DASHBOARD_ROWS: list[Mapping[str, Any]] = []
 _RECORDED_RUNTIME_LINEAGE_EVENTS: list[dict[str, Any]] = []
+_RECORDED_PROTECTED_REPLAY_FAILURE_ROWS: list[Mapping[str, Any]] = []
+_RECORDED_PROTECTED_REPLAY_RUNTIME_LINEAGE_EVENTS: list[dict[str, Any]] = []
 
 
 def _as_list(value: Any) -> list[Any]:
@@ -117,6 +120,20 @@ def _cell(value: Any) -> str:
     return text.replace("|", "\\|").replace("\n", " ")
 
 
+def _first_non_none(*values: Any) -> Any:
+    for value in values:
+        if value is not None:
+            return value
+    return None
+
+
+def _drift_type(row: Mapping[str, Any]) -> str:
+    for tag in _as_list(row.get("replay_tags")):
+        if tag in {"exact_drift", "structural_drift", "semantic_drift"}:
+            return str(tag)
+    return "unclassified"
+
+
 def _evidence_cell(row: Mapping[str, Any]) -> str:
     parts: list[str] = []
     if row.get("prepared_emission_owner") == "upstream_prepared_emission":
@@ -186,6 +203,44 @@ def record_runtime_lineage_events(events: Any) -> None:
     _RECORDED_RUNTIME_LINEAGE_EVENTS.extend(normalize_runtime_lineage_events(events)[:16])
 
 
+def record_protected_replay_assertion_failure(
+    *,
+    scenario_id: str,
+    test_node_id: str,
+    observed_turn: Mapping[str, Any],
+    field_path: str,
+    expected: Any,
+    actual: Any,
+    reason: str,
+    drift_bucket: str,
+) -> list[FailureClassification]:
+    """Translate one protected assertion failure into existing classification rows."""
+    rows = build_failure_dashboard_rows(
+        observed_turn=observed_turn,
+        drift_rows=[
+            {
+                "field_path": field_path,
+                "expected": expected,
+                "actual": actual,
+                "reason": reason,
+                "drift_bucket": drift_bucket,
+                "replay_tags": [drift_bucket],
+            }
+        ],
+        scenario_id=scenario_id,
+        turn_index=int(observed_turn.get("turn_index") or 0),
+    )
+    for row in rows:
+        enriched = dict(row)
+        enriched["test_node_id"] = test_node_id
+        enriched["failed_invariant"] = f"{field_path}: {reason}"
+        _RECORDED_PROTECTED_REPLAY_FAILURE_ROWS.append(enriched)
+    _RECORDED_PROTECTED_REPLAY_RUNTIME_LINEAGE_EVENTS.extend(
+        normalize_runtime_lineage_events(observed_turn.get("runtime_lineage_events"))[:16]
+    )
+    return rows
+
+
 def clear_recorded_failure_dashboard_rows() -> None:
     _RECORDED_FAILURE_DASHBOARD_ROWS.clear()
     _RECORDED_RUNTIME_LINEAGE_EVENTS.clear()
@@ -197,6 +252,19 @@ def recorded_failure_dashboard_rows() -> list[Mapping[str, Any]]:
 
 def recorded_runtime_lineage_events() -> list[dict[str, Any]]:
     return list(_RECORDED_RUNTIME_LINEAGE_EVENTS)
+
+
+def clear_recorded_protected_replay_failures() -> None:
+    _RECORDED_PROTECTED_REPLAY_FAILURE_ROWS.clear()
+    _RECORDED_PROTECTED_REPLAY_RUNTIME_LINEAGE_EVENTS.clear()
+
+
+def recorded_protected_replay_failure_rows() -> list[Mapping[str, Any]]:
+    return list(_RECORDED_PROTECTED_REPLAY_FAILURE_ROWS)
+
+
+def recorded_protected_replay_runtime_lineage_events() -> list[dict[str, Any]]:
+    return list(_RECORDED_PROTECTED_REPLAY_RUNTIME_LINEAGE_EVENTS)
 
 
 def build_runtime_lineage_summary(events: Any) -> dict[str, Any]:
@@ -408,3 +476,173 @@ def write_failure_dashboard_artifact_if_requested(
         generated_at=generated_at,
         runtime_lineage_events=runtime_lineage_events,
     )
+
+
+def render_protected_replay_failure_report(
+    rows: Sequence[Mapping[str, Any]],
+    *,
+    path: Path | str = PROTECTED_REPLAY_FAILURE_REPORT_PATH,
+    command_used: str | None = None,
+    generated_at: str | None = None,
+    runtime_lineage_events: Any = None,
+) -> str:
+    """Render the canonical report for classified protected replay failures."""
+    generated_at_s = generated_at or datetime.now(UTC).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+    command_s = command_used if command_used is not None else " ".join(sys.argv)
+    artifact_path = str(path).replace("\\", "/")
+    ordered_rows = sorted(
+        rows,
+        key=lambda item: (
+            str(item.get("scenario_id") or ""),
+            str(item.get("test_node_id") or ""),
+            int(item.get("turn_index") or 0),
+            str(item.get("field_path") or ""),
+        ),
+    )
+    lines = [
+        "# Protected Replay Failure Report",
+        "",
+        "## Run Summary",
+        "",
+        f"- Status: `failed`",
+        f"- Command: `{command_s or 'unavailable'}`",
+        f"- Generated at: `{generated_at_s}`",
+        f"- Artifact location: `{artifact_path}`",
+        f"- Classified failures: `{len(ordered_rows)}`",
+        "",
+        "## Failure Table",
+        "",
+        "| Scenario | Test Node | Turn | Failed Invariant | Drift Type | Expected | Actual | Category | Severity | Primary Owner | Secondary Owner | Investigate First |",
+        "|---|---|---:|---|---|---|---|---|---|---|---|---|",
+    ]
+    for row in ordered_rows:
+        classification_row = {
+            key: value
+            for key, value in row.items()
+            if key not in {"test_node_id", "failed_invariant"}
+        }
+        validation_errors = validate_failure_classification_row(classification_row)
+        if validation_errors:
+            raise ValueError(f"invalid protected replay failure row: {validation_errors}")
+        lines.append(
+            "| "
+            + " | ".join(
+                [
+                    _cell(row.get("scenario_id")),
+                    _cell(row.get("test_node_id")),
+                    _cell(row.get("turn_index")),
+                    _cell(row.get("failed_invariant")),
+                    _cell(_drift_type(row)),
+                    _cell(row.get("expected")),
+                    _cell(row.get("actual")),
+                    _cell(row.get("category")),
+                    _cell(row.get("severity")),
+                    _cell(row.get("primary_owner")),
+                    _cell(row.get("secondary_owner")),
+                    _cell(row.get("investigate_first")),
+                ]
+            )
+            + " |"
+        )
+    category_counts: dict[str, int] = {}
+    owner_counts: dict[str, int] = {}
+    for row in ordered_rows:
+        category = str(row.get("category") or "unknown")
+        owner = str(row.get("primary_owner") or "unknown")
+        category_counts[category] = category_counts.get(category, 0) + 1
+        owner_counts[owner] = owner_counts.get(owner, 0) + 1
+    lines.extend(
+        [
+            "",
+            "## Classification Summary",
+            "",
+            "- Categories: " + "; ".join(f"`{key}` ({value})" for key, value in sorted(category_counts.items())),
+            "- Primary owners: " + "; ".join(f"`{key}` ({value})" for key, value in sorted(owner_counts.items())),
+            "",
+            "## Fallback Summary",
+            "",
+            "| Scenario | Final Source | Fallback Family | Temporal Frame | Opening Authorship | Opening Owner | Sealed Owner | Sanitizer Empty Owner |",
+            "|---|---|---|---|---|---|---|---|",
+        ]
+    )
+    for row in ordered_rows:
+        lines.append(
+            "| "
+            + " | ".join(
+                [
+                    _cell(row.get("scenario_id")),
+                    _cell(row.get("final_emitted_source")),
+                    _cell(row.get("fallback_family")),
+                    _cell(row.get("fallback_temporal_frame")),
+                    _cell(row.get("opening_fallback_authorship_source")),
+                    _cell(row.get("opening_fallback_owner_bucket")),
+                    _cell(row.get("sealed_fallback_owner_bucket")),
+                    _cell(row.get("sanitizer_empty_fallback_owner")),
+                ]
+            )
+            + " |"
+        )
+    lines.extend(
+        [
+            "",
+            "## Sanitizer Summary",
+            "",
+            "| Scenario | Mode | Changed | Dropped | Empty Fallback | Empty Owner | Legacy Rewrite | Strict Social Owner |",
+            "|---|---|---:|---:|---|---|---|---|",
+        ]
+    )
+    for row in ordered_rows:
+        lines.append(
+            "| "
+            + " | ".join(
+                [
+                    _cell(row.get("scenario_id")),
+                    _cell(_first_non_none(row.get("sanitizer_lineage_mode"), row.get("sanitizer_mode"))),
+                    _cell(_first_non_none(row.get("sanitizer_lineage_changed_count"), row.get("sanitizer_changed_count"))),
+                    _cell(row.get("sanitizer_lineage_dropped_count")),
+                    _cell(_first_non_none(row.get("sanitizer_lineage_empty_fallback_used"), row.get("sanitizer_empty_fallback_used"))),
+                    _cell(row.get("sanitizer_empty_fallback_owner")),
+                    _cell(row.get("sanitizer_lineage_legacy_rewrite_active")),
+                    _cell(row.get("sanitizer_strict_social_prose_owner")),
+                ]
+            )
+            + " |"
+        )
+    lines.extend(_runtime_lineage_markdown_lines(runtime_lineage_events))
+    lines.extend(["## Reproduce Locally", ""])
+    node_ids = sorted({str(row.get("test_node_id") or "").strip() for row in ordered_rows if str(row.get("test_node_id") or "").strip()})
+    for node_id in node_ids:
+        lines.extend(["```bash", f"python -m pytest {node_id} -q", "```", ""])
+    lines.extend(["```bash", "python -m pytest -m golden_replay -q", "```", ""])
+    return "\n".join(lines)
+
+
+def write_protected_replay_failure_report_if_present(
+    rows: Sequence[Mapping[str, Any]] | None = None,
+    *,
+    path: Path | str = PROTECTED_REPLAY_FAILURE_REPORT_PATH,
+    command_used: str | None = None,
+    generated_at: str | None = None,
+    runtime_lineage_events: Any = None,
+) -> Path | None:
+    """Write the canonical protected replay report only when failures were recorded."""
+    report_rows = list(rows) if rows is not None else recorded_protected_replay_failure_rows()
+    if not report_rows:
+        return None
+    out_path = Path(path)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    out_path.write_text(
+        render_protected_replay_failure_report(
+            report_rows,
+            path=out_path,
+            command_used=command_used,
+            generated_at=generated_at,
+            runtime_lineage_events=(
+                runtime_lineage_events
+                if runtime_lineage_events is not None
+                else recorded_protected_replay_runtime_lineage_events()
+            ),
+        ),
+        encoding="utf-8",
+    )
+    return out_path

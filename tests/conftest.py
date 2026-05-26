@@ -53,6 +53,10 @@ def pytest_collection_modifyitems(config, items):
 
 
 def pytest_sessionfinish(session, exitstatus):
+    from tests.helpers.failure_dashboard_report import write_protected_replay_failure_report_if_present
+
+    if exitstatus != 0:
+        write_protected_replay_failure_report_if_present(command_used=" ".join(sys.argv))
     if str(os.environ.get("ASHEN_WRITE_FAILURE_DASHBOARD") or "").strip().lower() not in {"1", "true", "yes", "on"}:
         return
     from tests.helpers.failure_dashboard_report import (
