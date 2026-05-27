@@ -1,3 +1,11 @@
+"""Owner tests for opening adapter result semantics.
+
+This module owns prepared-payload selection, sealed fail-closed metadata, and
+adapter-level opening ownership fields for ``game.final_emission_opening_fallback``.
+The gate delegation test at the end is the only intended gate-integration pin
+here; final output, FEM propagation, and gate ordering remain gate-suite work.
+"""
+
 from __future__ import annotations
 
 from typing import Any, Dict

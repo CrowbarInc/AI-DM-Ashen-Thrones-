@@ -26,7 +26,6 @@ coverage once the orchestration contract is already owned here.
 
 from __future__ import annotations
 
-import ast
 import copy
 import inspect
 import sys
@@ -44,13 +43,6 @@ from game.final_emission_meta import (
     OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
     SEALED_FALLBACK_OWNER_SEALED_GATE,
     SEALED_FALLBACK_OWNER_STRICT_SOCIAL_SEALED,
-    VISIBILITY_FALLBACK_OWNER_BUCKETS,
-    VISIBILITY_FALLBACK_OWNER_OPENING_VISIBILITY,
-    VISIBILITY_FALLBACK_OWNER_SEALED_GATE,
-    VISIBILITY_FALLBACK_OWNER_STRICT_SOCIAL_VISIBILITY,
-    VISIBILITY_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS,
-    VISIBILITY_FALLBACK_OWNER_UNKNOWN_NONE,
-    opening_fallback_owner_bucket_from_fields,
     opening_fallback_owner_bucket_from_meta,
     read_emission_debug_lane,
     read_final_emission_meta_dict,
@@ -70,7 +62,6 @@ import pytest
 
 import game.final_emission_gate as feg
 import game.final_emission_sealed_fallback as fesf
-import game.final_emission_visibility_fallback as visibility_fallback
 import game.scene_state_anchoring as ssa
 from game.contract_registry import emergency_fallback_source_ids
 from game.defaults import default_scene, default_session, default_world
@@ -923,9 +914,10 @@ def test_block_b_speaker_contract_mutation_kinds_are_semantic_not_packaging():
 
 
 # Opening fallback ownership is split across composition, upstream packaging,
-# gate orchestration, and projection metadata. The Block C/G/H tests below lock
-# final_emission_gate boundaries: compatibility-local composition is fenced, the
-# upstream-prepared path is preferred, and fail-closed paths stay sealed.
+# adapter selection, gate orchestration, and projection metadata. These
+# historical Block C/G/H tests remain gate-consumer locks for mutation fencing,
+# attach invocation, and wrapper reachability. Adapter result matrices belong
+# in tests/test_final_emission_opening_fallback.py.
 def test_block_c_opening_fallback_mutation_kinds_are_fenced_by_ownership():
     assert (
         classify_final_emission_mutation("select_upstream_prepared_opening_fallback")
@@ -1017,10 +1009,7 @@ def test_block_g_fail_closed_empty_curated_facts_emits_marker_not_composed_scene
         active_interlocutor="",
     )
     assert text.startswith("[opening_fallback_failed_closed:")
-    assert dbg.get("opening_fallback_failed_closed") is True
-    assert dbg.get("opening_fallback_context_missing") is True
     assert dbg.get("opening_fallback_compatibility_local_disabled") is True
-    assert dbg.get("opening_fallback_missing_upstream_prepared_payload") is True
     low = text.lower()
     assert "cinderwatch" not in low and "refugees" not in low
 
@@ -3800,10 +3789,14 @@ def _response_type_contract(required: str) -> dict:
     }
 
 
-# Ownership note:
-# Opening fallback remains a high-drag mixed ownership area. These tests protect
-# gate accept/replace decisions, upstream prepared payload recovery, and fail-closed
-# metadata; do not thin or grow semantic composition coverage here without review.
+# Opening fallback consumer roles:
+# - The direct-wrapper tests below are historical adapter-shaped tests retained
+#   as gate handoff pins; they assert selected output and compatibility fencing,
+#   not the adapter metadata matrix.
+# - Response-type and full-gate/FEM tests own gate application and emitted
+#   metadata propagation.
+# - Detailed selection/fail-closed fields remain owned by
+#   tests/test_final_emission_opening_fallback.py.
 
 
 def test_enforce_response_type_contract_marks_upstream_absent_for_answer_without_prepared_text():
@@ -3933,10 +3926,10 @@ def _assert_known_realization_family(value: str) -> None:
     assert value in FALLBACK_FAMILIES
 
 
-# Canonical opening fallback seams intentionally repeat authorship/source/family
-# fields as gate-level contract locks. Composition details remain owned by
-# opening_deterministic_fallback; owner-bucket mapping remains owned by
-# final_emission_meta and tests/test_opening_fallback_owner_bucket.py.
+# The composer snapshot below remains a handoff fixture lock. The following
+# direct-wrapper tests predate adapter extraction and now act only as historical
+# gate-consumer pins; adapter metadata matrices are tested in
+# tests/test_final_emission_opening_fallback.py.
 def test_deterministic_opening_fallback_helper_exact_text_and_meta_snapshot() -> None:
     text, meta = feg._deterministic_opening_fallback_text_and_meta(_opening_gm_output())
 
@@ -3951,7 +3944,7 @@ def test_deterministic_opening_fallback_helper_exact_text_and_meta_snapshot() ->
 
 
 def test_canonical_upstream_prepared_direct_tuple_has_no_compatibility_local_ownership() -> None:
-    """Canonical direct seam: gate-equivalent attach selects upstream-prepared ownership only."""
+    """Historical wrapper pin: attached output survives the gate handoff without compat authorship."""
     (
         text,
         fallback_pool,
@@ -3968,22 +3961,8 @@ def test_canonical_upstream_prepared_direct_tuple_has_no_compatibility_local_own
     assert final_emitted_source == "opening_deterministic_fallback"
     assert fallback_strategy == "opening_scene_safe_fallback"
     assert fallback_candidate_source == "opening_deterministic_fallback"
-    assert composition_meta["fallback_family_used"] == "scene_opening"
-    assert composition_meta["fallback_temporal_frame"] == "first_impression"
-    assert composition_meta["opening_fallback_context_source"] == "opening_curated_facts"
     assert composition_meta["opening_fallback_authorship_source"] == OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED
     assert composition_meta["opening_fallback_authorship_source"] != OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL
-    assert (
-        opening_fallback_owner_bucket_from_fields(
-            final_emitted_source=final_emitted_source,
-            opening_recovered_via_fallback=True,
-            opening_fallback_authorship_source=composition_meta.get("opening_fallback_authorship_source"),
-            response_type_repair_kind=fallback_kind,
-            fallback_family=composition_meta.get("fallback_family_used"),
-            fallback_temporal_frame=composition_meta.get("fallback_temporal_frame"),
-        )
-        == OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED
-    )
     assert REALIZATION_FALLBACK_FAMILY_FIELD not in composition_meta
 
 
@@ -4006,30 +3985,19 @@ def test_canonical_direct_tuple_prefers_upstream_prepared_payload_over_compatibi
     ) = opening_gate_attach_then_opening_scene_safe_fallback_tuple(gm)
 
     assert text == EXPECTED_FRONTIER_GATE_OPENING_FALLBACK
-    assert fallback_pool == "scene_opening_deterministic"
-    assert fallback_kind == "opening_deterministic_fallback"
-    assert final_emitted_source == "opening_deterministic_fallback"
-    assert fallback_strategy == "opening_scene_safe_fallback"
-    assert fallback_candidate_source == "opening_deterministic_fallback"
-    assert composition_meta["fallback_family_used"] == "scene_opening"
-    assert composition_meta["fallback_temporal_frame"] == "first_impression"
+    assert (fallback_pool, fallback_kind, final_emitted_source, fallback_strategy, fallback_candidate_source) == (
+        "scene_opening_deterministic",
+        "opening_deterministic_fallback",
+        "opening_deterministic_fallback",
+        "opening_scene_safe_fallback",
+        "opening_deterministic_fallback",
+    )
     assert composition_meta["opening_fallback_authorship_source"] == OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED
     assert composition_meta["opening_fallback_authorship_source"] != OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL
-    assert (
-        opening_fallback_owner_bucket_from_fields(
-            final_emitted_source=final_emitted_source,
-            opening_recovered_via_fallback=True,
-            opening_fallback_authorship_source=composition_meta.get("opening_fallback_authorship_source"),
-            response_type_repair_kind=fallback_kind,
-            fallback_family=composition_meta.get("fallback_family_used"),
-            fallback_temporal_frame=composition_meta.get("fallback_temporal_frame"),
-        )
-        == OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED
-    )
 
 
 def test_gate_direct_tuple_text_only_stub_fails_closed_without_rebuild(monkeypatch) -> None:
-    """Block C8: malformed upstream stubs reaching the gate fail closed instead of rebuilding."""
+    """Historical wrapper pin: malformed stubs cannot reintroduce compatibility-local text."""
     gm = _opening_gm_output()
     gm[UPSTREAM_PREPARED_OPENING_FALLBACK_KEY] = {"prepared_opening_fallback_text": EXPECTED_FRONTIER_GATE_OPENING_FALLBACK}
 
@@ -4038,25 +4006,15 @@ def test_gate_direct_tuple_text_only_stub_fails_closed_without_rebuild(monkeypat
 
     monkeypatch.setattr(feg, "_deterministic_opening_fallback_text_and_meta", _boom)
     # Direct tuple only: upstream ``maybe_attach`` would repair this before final emission.
-    text, _p, _k, _fe, _fs, _fc, composition_meta = feg._opening_scene_safe_fallback_tuple(gm)
+    text, _p, kind, _fe, _fs, _fc, composition_meta = feg._opening_scene_safe_fallback_tuple(gm)
     assert text == "[opening_fallback_failed_closed: empty_curated_facts]"
+    assert kind == "opening_deterministic_fallback"
     assert composition_meta["opening_fallback_authorship_source"] is None
     assert composition_meta["opening_fallback_authorship_source"] != OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL
-    assert (
-        opening_fallback_owner_bucket_from_fields(
-            final_emitted_source="opening_deterministic_fallback",
-            opening_recovered_via_fallback=True,
-            opening_fallback_authorship_source=composition_meta.get("opening_fallback_authorship_source"),
-            response_type_repair_kind="opening_deterministic_fallback_failed_closed",
-            fallback_family=composition_meta.get("fallback_family_used"),
-            fallback_temporal_frame=composition_meta.get("fallback_temporal_frame"),
-        )
-        == OPENING_FALLBACK_OWNER_SEALED_GATE
-    )
-    assert composition_meta.get("opening_fallback_failed_closed") is True
-    assert composition_meta.get("opening_fallback_upstream_payload_unusable") is True
-    assert composition_meta.get("opening_fallback_upstream_payload_recovered") is False
-    assert composition_meta.get("opening_fallback_compatibility_local_disabled") is True
+
+
+# Gate consumer integration: response-type application must emit the adapter
+# choice and carry boundary authorship/owner evidence into gate metadata.
 
 
 def test_opening_validator_rejects_investigation_continuation_language():
@@ -4141,10 +4099,6 @@ def test_gate_opening_failure_text_only_stub_fails_closed_without_rebuild(monkey
     assert dbg.get("opening_fallback_authorship_source") is None
     assert dbg.get("opening_fallback_authorship_source") != OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL
     assert opening_fallback_owner_bucket_from_meta(dbg) == OPENING_FALLBACK_OWNER_SEALED_GATE
-    assert dbg.get("opening_fallback_failed_closed") is True
-    assert dbg.get("opening_fallback_upstream_payload_unusable") is True
-    assert dbg.get("opening_fallback_upstream_payload_recovered") is False
-    assert dbg.get("opening_fallback_compatibility_local_disabled") is True
 
 
 def test_full_gate_malformed_opening_payload_without_upstream_repair_is_sealed_gate(
@@ -4171,9 +4125,6 @@ def test_full_gate_malformed_opening_payload_without_upstream_repair_is_sealed_g
     )
 
     fem = read_final_emission_meta_dict(out) or {}
-    assert fem.get("opening_fallback_upstream_payload_unusable") is True
-    assert fem.get("opening_fallback_upstream_payload_recovered") is False
-    assert fem.get("opening_fallback_compatibility_local_disabled") is True
     assert fem.get("response_type_repair_kind") == "opening_deterministic_fallback_failed_closed"
     assert fem.get("opening_fallback_authorship_source") is None
     assert fem.get("opening_fallback_authorship_source") != OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL
@@ -4197,8 +4148,6 @@ def test_helper_bypass_without_upstream_payload_fails_closed_sealed_gate():
     assert text == "[opening_fallback_failed_closed: empty_curated_facts]"
     assert dbg.get("opening_validation_failed") is True
     assert "continuation_or_investigation_language" in dbg.get("opening_failure_reasons")
-    assert dbg.get("opening_fallback_failed_closed") is True
-    assert dbg.get("opening_fallback_compatibility_local_disabled") is True
     assert dbg.get("response_type_repair_kind") == "opening_deterministic_fallback_failed_closed"
     assert dbg.get("opening_fallback_authorship_source") is None
     assert dbg.get("opening_fallback_authorship_source") != OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED
@@ -4310,13 +4259,15 @@ def test_helper_bypass_empty_scene_opening_fails_closed_sealed_gate():
     assert dbg.get("opening_fallback_skipped") is False
     assert dbg.get("response_type_repair_used") is True
     assert dbg.get("response_type_repair_kind") == "opening_deterministic_fallback_failed_closed"
-    assert dbg.get("opening_fallback_failed_closed") is True
     assert dbg.get("opening_fallback_authorship_source") is None
     assert dbg.get("opening_fallback_authorship_source") != OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED
     assert dbg.get("opening_fallback_authorship_source") != OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL
     assert opening_fallback_owner_bucket_from_meta(dbg) == OPENING_FALLBACK_OWNER_SEALED_GATE
 
 
+# Full-gate/FEM integration pins: these keep final output and emitted metadata
+# propagation observable after adapter selection; they do not define adapter
+# selection policy.
 def test_canonical_final_gate_opening_fallback_fem_is_upstream_prepared_not_compatibility_local() -> None:
     gm_output = _opening_gm_output()
     gm_output["player_facing_text"] = "Nearby crates appear disturbed."
@@ -4998,9 +4949,9 @@ def test_sealed_branch_order_replace_path_visibility_before_n4(monkeypatch) -> N
 # --- Block AI: final gate reduction contract guards (selection vs assembly vs authorship) ---
 
 # Ownership note:
-# These helper checks keep extracted visibility fallback routing local and
-# prose-free. Helper shape belongs to game/final_emission_visibility_fallback.py;
-# these remain here as integration/pressure-reduction locks, not semantic matrices.
+# These gate-private helper checks remain integration/pressure-reduction locks.
+# Pure visibility fallback helper shape belongs to
+# tests/test_final_emission_visibility_fallback.py.
 
 
 def test_block_ai_sealed_selector_helpers_importable_and_callable() -> None:
@@ -5043,1351 +4994,9 @@ def test_block_ai_sealed_selector_helpers_importable_and_callable() -> None:
     ) is True
 
 
-def test_visibility_fallback_route_helper_importable_and_callable_from_new_module() -> None:
-    fn = visibility_fallback.route_visibility_enforcement_after_failed_validation
-
-    assert callable(fn)
-    assert fn(
-        tag_list_gate=[],
-        dbg_gate="",
-        violation_kinds=["offscene_entity"],
-        checked_entities=["_force_visibility_entity_check"],
-        checked_facts=[],
-        candidate_text="The guard nods once.",
-    ) == "sealed_hard_replace"
-
-
-@pytest.mark.parametrize(
-    ("case", "kwargs", "expected"),
-    [
-        (
-            "hard_replace",
-            {
-                "tag_list_gate": [],
-                "dbg_gate": "",
-                "violation_kinds": ["unseen_entity_reference"],
-                "checked_entities": [{"entity_id": "lord_aldric"}],
-                "checked_facts": [],
-                "candidate_text": "Lord Aldric watches from the square.",
-            },
-            "sealed_hard_replace",
-        ),
-        (
-            "continuity_lead_exemption",
-            {
-                "tag_list_gate": ["known_fact_guard"],
-                "dbg_gate": "recent_dialogue_continuity",
-                "violation_kinds": ["unseen_entity_reference"],
-                "checked_entities": [{"entity_id": "runner"}],
-                "checked_facts": [],
-                "candidate_text": "The runner answers.",
-            },
-            "continuity_lead_exemption",
-        ),
-        (
-            "concrete_interaction_no_hard_replace",
-            {
-                "tag_list_gate": [],
-                "dbg_gate": "",
-                "violation_kinds": ["visibility_probe"],
-                "checked_entities": [],
-                "checked_facts": [],
-                "candidate_text": '"Stay close," the guard says.',
-            },
-            "concrete_interaction_no_hard_replace",
-        ),
-    ],
-)
-def test_visibility_fallback_route_helper_decisions(case: str, kwargs: dict[str, Any], expected: str) -> None:
-    del case
-    assert visibility_fallback.route_visibility_enforcement_after_failed_validation(**kwargs) == expected
-
-
-def test_visibility_fallback_route_module_contains_no_fallback_prose_literals() -> None:
-    source = inspect.getsource(visibility_fallback)
-    forbidden = (
-        "voices shift",
-        "Nothing confirms progress",
-        "Enough watching",
-        "Ask me now",
-        "lose the trail",
-    )
-
-    for snippet in forbidden:
-        assert snippet not in source
-
-
-@pytest.mark.parametrize(
-    ("case", "kwargs", "expected"),
-    [
-        (
-            "sealed_gate_global",
-            {
-                "fallback_pool": "global_scene_narrative",
-                "fallback_kind": "narrative_safe_fallback",
-                "final_emitted_source": "global_scene_fallback",
-            },
-            VISIBILITY_FALLBACK_OWNER_SEALED_GATE,
-        ),
-        (
-            "strict_social_pool",
-            {
-                "fallback_pool": "strict_social_visibility_minimal",
-                "fallback_kind": "visibility_minimal_social_fallback",
-                "final_emitted_source": "minimal_social_emergency_fallback",
-            },
-            VISIBILITY_FALLBACK_OWNER_STRICT_SOCIAL_VISIBILITY,
-        ),
-        (
-            "strict_social_kind",
-            {
-                "fallback_pool": "",
-                "fallback_kind": "visibility_minimal_social_fallback",
-                "final_emitted_source": "",
-            },
-            VISIBILITY_FALLBACK_OWNER_STRICT_SOCIAL_VISIBILITY,
-        ),
-        (
-            "opening_pool",
-            {
-                "fallback_pool": "scene_opening_deterministic",
-                "fallback_kind": "opening_deterministic_fallback",
-                "final_emitted_source": "opening_deterministic_fallback",
-            },
-            VISIBILITY_FALLBACK_OWNER_OPENING_VISIBILITY,
-        ),
-        (
-            "opening_kind",
-            {
-                "fallback_pool": "",
-                "fallback_kind": "opening_deterministic_fallback",
-                "final_emitted_source": "",
-            },
-            VISIBILITY_FALLBACK_OWNER_OPENING_VISIBILITY,
-        ),
-        (
-            "unknown_none",
-            {
-                "fallback_pool": "",
-                "fallback_kind": "",
-                "final_emitted_source": "",
-            },
-            VISIBILITY_FALLBACK_OWNER_UNKNOWN_NONE,
-        ),
-    ],
-)
-def test_visibility_fallback_owner_bucket_classifier(case: str, kwargs: dict[str, str], expected: str) -> None:
-    del case
-    assert visibility_fallback.classify_visibility_fallback_owner_bucket(**kwargs) == expected
-
-
-def test_visibility_fallback_owner_bucket_taxonomy_includes_ambiguous_bucket() -> None:
-    assert VISIBILITY_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS in VISIBILITY_FALLBACK_OWNER_BUCKETS
-
-
-def test_build_visibility_validation_observation_shapes_pass_result() -> None:
-    observation = visibility_fallback.build_visibility_validation_observation(
-        {
-            "ok": True,
-            "violations": "not-a-list",
-            "visibility_checked_entities": [{"entity_id": "guard"}],
-            "visibility_checked_facts": [{"fact": "visible brazier"}],
-        }
-    )
-
-    assert observation.validation_passed is True
-    assert observation.violation_kinds == []
-    assert observation.violation_sample == []
-    assert observation.checked_entities == [{"entity_id": "guard"}]
-    assert observation.checked_facts == [{"fact": "visible brazier"}]
-
-
-def test_build_visibility_validation_observation_shapes_failed_result() -> None:
-    observation = visibility_fallback.build_visibility_validation_observation(
-        {
-            "ok": False,
-            "violations": [
-                {
-                    "kind": "unseen_entity_reference",
-                    "token": "Lord Aldric",
-                    "matched_entity_id": "lord_aldric",
-                },
-                {
-                    "kind": "undiscovered_fact_assertion",
-                    "token": "payoff",
-                    "matched_fact": "ash cowl payoff",
-                },
-                {"kind": "unseen_entity_reference", "token": "Aldric again"},
-                {"kind": "extra_visibility_probe", "token": "fourth"},
-                {"kind": ""},
-                "malformed",
-            ],
-            "visibility_checked_entities": [{"entity_id": "lord_aldric"}],
-            "visibility_checked_facts": [{"fact": "ash cowl payoff"}],
-        }
-    )
-
-    assert observation.validation_passed is False
-    assert observation.violation_kinds == [
-        "unseen_entity_reference",
-        "undiscovered_fact_assertion",
-        "extra_visibility_probe",
-    ]
-    assert observation.violation_sample == [
-        {
-            "kind": "unseen_entity_reference",
-            "token": "Lord Aldric",
-            "matched_entity_id": "lord_aldric",
-            "matched_fact": None,
-        },
-        {
-            "kind": "undiscovered_fact_assertion",
-            "token": "payoff",
-            "matched_entity_id": None,
-            "matched_fact": "ash cowl payoff",
-        },
-        {
-            "kind": "unseen_entity_reference",
-            "token": "Aldric again",
-            "matched_entity_id": None,
-            "matched_fact": None,
-        },
-    ]
-    assert observation.checked_entities == [{"entity_id": "lord_aldric"}]
-    assert observation.checked_facts == [{"fact": "ash cowl payoff"}]
-
-
-def test_build_visibility_pre_route_validation_context_wraps_validation_result_and_observation() -> None:
-    validation_result = {
-        "ok": False,
-        "violations": [
-            {
-                "kind": "unseen_entity_reference",
-                "token": "Lord Aldric",
-                "matched_entity_id": "lord_aldric",
-            },
-        ],
-        "visibility_checked_entities": [{"entity_id": "lord_aldric"}],
-        "visibility_checked_facts": [],
-    }
-
-    context = visibility_fallback.build_visibility_pre_route_validation_context(
-        candidate_text="Lord Aldric watches the gate.",
-        validation_result=validation_result,
-    )
-
-    assert context.candidate_text == "Lord Aldric watches the gate."
-    assert context.validation_result is validation_result
-    assert context.observation == visibility_fallback.VisibilityValidationObservation(
-        validation_passed=False,
-        violation_kinds=["unseen_entity_reference"],
-        violation_sample=[
-            {
-                "kind": "unseen_entity_reference",
-                "token": "Lord Aldric",
-                "matched_entity_id": "lord_aldric",
-                "matched_fact": None,
-            }
-        ],
-        checked_entities=[{"entity_id": "lord_aldric"}],
-        checked_facts=[],
-    )
-
-
-def test_build_visibility_default_metadata_payload_collects_initial_stamp_kwargs() -> None:
-    observation = visibility_fallback.VisibilityValidationObservation(
-        validation_passed=False,
-        violation_kinds=["unseen_entity_reference"],
-        violation_sample=[{"kind": "unseen_entity_reference", "token": "Lord Aldric"}],
-        checked_entities=[{"entity_id": "lord_aldric"}],
-        checked_facts=[{"fact": "hidden"}],
-    )
-
-    payload = visibility_fallback.build_visibility_default_metadata_payload(observation)
-
-    assert payload == visibility_fallback.VisibilityDefaultMetadataPayload(
-        validation_passed=False,
-        replacement_applied=False,
-        violation_kinds=["unseen_entity_reference"],
-        violation_sample=[{"kind": "unseen_entity_reference", "token": "Lord Aldric"}],
-        checked_entities=[{"entity_id": "lord_aldric"}],
-        checked_facts=[{"fact": "hidden"}],
-    )
-    assert payload.stamp_kwargs() == {
-        "validation_passed": False,
-        "replacement_applied": False,
-        "violation_kinds": ["unseen_entity_reference"],
-        "violation_sample": [{"kind": "unseen_entity_reference", "token": "Lord Aldric"}],
-        "checked_entities": [{"entity_id": "lord_aldric"}],
-        "checked_facts": [{"fact": "hidden"}],
-    }
-    assert "fallback_pool" not in payload.stamp_kwargs()
-    assert "fallback_kind" not in payload.stamp_kwargs()
-    assert "fallback_owner_bucket" not in payload.stamp_kwargs()
-
-
-def test_build_visibility_first_mention_default_metadata_payload_collects_ordered_meta_updates() -> None:
-    payload = visibility_fallback.build_visibility_first_mention_default_metadata_payload(
-        default_first_mention_composition_layers=["default_layer"],
-    )
-
-    assert payload == visibility_fallback.VisibilityFirstMentionDefaultMetadataPayload(
-        first_mention_validation_passed=None,
-        first_mention_replacement_applied=False,
-        first_mention_violation_kinds=[],
-        first_mention_checked_entities=[],
-        first_mention_leading_pronoun_detected=False,
-        first_mention_first_explicit_entity_offset=None,
-        first_mention_fallback_strategy=None,
-        first_mention_fallback_candidate_source=None,
-        opening_scene_first_mention_preference_used=False,
-        first_mention_composition_used=False,
-        first_mention_composition_layers=["default_layer"],
-    )
-    assert list(payload.meta_updates().items()) == [
-        ("first_mention_validation_passed", None),
-        ("first_mention_replacement_applied", False),
-        ("first_mention_violation_kinds", []),
-        ("first_mention_checked_entities", []),
-        ("first_mention_leading_pronoun_detected", False),
-        ("first_mention_first_explicit_entity_offset", None),
-        ("first_mention_fallback_strategy", None),
-        ("first_mention_fallback_candidate_source", None),
-        ("opening_scene_first_mention_preference_used", False),
-        ("first_mention_composition_used", False),
-        ("first_mention_composition_layers", ["default_layer"]),
-    ]
-
-
-def test_build_visibility_pre_route_metadata_context_groups_default_payloads() -> None:
-    observation = visibility_fallback.VisibilityValidationObservation(
-        validation_passed=False,
-        violation_kinds=["unseen_entity_reference"],
-        violation_sample=[{"kind": "unseen_entity_reference", "token": "Lord Aldric"}],
-        checked_entities=[{"entity_id": "lord_aldric"}],
-        checked_facts=[],
-    )
-
-    context = visibility_fallback.build_visibility_pre_route_metadata_context(
-        observation=observation,
-        default_first_mention_composition_layers=["default_layer"],
-    )
-
-    assert context == visibility_fallback.VisibilityPreRouteMetadataContext(
-        first_mention_defaults=visibility_fallback.VisibilityFirstMentionDefaultMetadataPayload(
-            first_mention_validation_passed=None,
-            first_mention_replacement_applied=False,
-            first_mention_violation_kinds=[],
-            first_mention_checked_entities=[],
-            first_mention_leading_pronoun_detected=False,
-            first_mention_first_explicit_entity_offset=None,
-            first_mention_fallback_strategy=None,
-            first_mention_fallback_candidate_source=None,
-            opening_scene_first_mention_preference_used=False,
-            first_mention_composition_used=False,
-            first_mention_composition_layers=["default_layer"],
-        ),
-        visibility_defaults=visibility_fallback.VisibilityDefaultMetadataPayload(
-            validation_passed=False,
-            replacement_applied=False,
-            violation_kinds=["unseen_entity_reference"],
-            violation_sample=[{"kind": "unseen_entity_reference", "token": "Lord Aldric"}],
-            checked_entities=[{"entity_id": "lord_aldric"}],
-            checked_facts=[],
-        ),
-    )
-    assert list(context.first_mention_defaults.meta_updates()) == [
-        "first_mention_validation_passed",
-        "first_mention_replacement_applied",
-        "first_mention_violation_kinds",
-        "first_mention_checked_entities",
-        "first_mention_leading_pronoun_detected",
-        "first_mention_first_explicit_entity_offset",
-        "first_mention_fallback_strategy",
-        "first_mention_fallback_candidate_source",
-        "opening_scene_first_mention_preference_used",
-        "first_mention_composition_used",
-        "first_mention_composition_layers",
-    ]
-    assert context.visibility_defaults.stamp_kwargs()["replacement_applied"] is False
-
-
-def test_build_visibility_enforcement_stage_context_groups_pre_route_objects() -> None:
-    validation_result = {
-        "ok": False,
-        "violations": [
-            {
-                "kind": "unseen_entity_reference",
-                "token": "Lord Aldric",
-                "matched_entity_id": "lord_aldric",
-            },
-        ],
-        "visibility_checked_entities": [{"entity_id": "lord_aldric"}],
-        "visibility_checked_facts": [],
-    }
-
-    context = visibility_fallback.build_visibility_enforcement_stage_context(
-        candidate_text="Lord Aldric watches the gate.",
-        validation_result=validation_result,
-        default_first_mention_composition_layers=["default_layer"],
-        tag_list_gate=["known_fact_guard"],
-        dbg_gate="recent_dialogue_continuity",
-    )
-
-    assert isinstance(context, visibility_fallback.VisibilityEnforcementStageContext)
-    assert context.pre_route_validation.validation_result is validation_result
-    assert context.pre_route_validation.candidate_text == "Lord Aldric watches the gate."
-    assert context.pre_route_validation.observation.violation_kinds == ["unseen_entity_reference"]
-    assert context.pre_route_metadata.first_mention_defaults.first_mention_composition_layers == ["default_layer"]
-    assert context.pre_route_metadata.visibility_defaults.stamp_kwargs() == {
-        "validation_passed": False,
-        "replacement_applied": False,
-        "violation_kinds": ["unseen_entity_reference"],
-        "violation_sample": [
-            {
-                "kind": "unseen_entity_reference",
-                "token": "Lord Aldric",
-                "matched_entity_id": "lord_aldric",
-                "matched_fact": None,
-            }
-        ],
-        "checked_entities": [{"entity_id": "lord_aldric"}],
-        "checked_facts": [],
-    }
-    assert context.route_decision_inputs == visibility_fallback.VisibilityRouteDecisionInputs(
-        tag_list_gate=["known_fact_guard"],
-        dbg_gate="recent_dialogue_continuity",
-        violation_kinds=["unseen_entity_reference"],
-        checked_entities=[{"entity_id": "lord_aldric"}],
-        checked_facts=[],
-        candidate_text="Lord Aldric watches the gate.",
-    )
-
-
-def test_stamp_visibility_fallback_metadata_writes_visibility_fields_only() -> None:
-    meta: dict[str, Any] = {"final_emitted_source": "global_scene_fallback"}
-
-    visibility_fallback.stamp_visibility_fallback_metadata(
-        meta,
-        validation_passed=False,
-        replacement_applied=True,
-        violation_kinds=["unseen_entity_reference"],
-        violation_sample=[{"kind": "unseen_entity_reference", "entity_id": "lord_aldric"}],
-        checked_entities=[{"entity_id": "lord_aldric"}],
-        checked_facts=[],
-        fallback_pool="global_scene_narrative",
-        fallback_kind="narrative_safe_fallback",
-        final_emitted_source="global_scene_fallback",
-    )
-
-    assert meta == {
-        "final_emitted_source": "global_scene_fallback",
-        "visibility_validation_passed": False,
-        "visibility_replacement_applied": True,
-        "visibility_violation_kinds": ["unseen_entity_reference"],
-        "visibility_violation_sample": [{"kind": "unseen_entity_reference", "entity_id": "lord_aldric"}],
-        "visibility_checked_entities": [{"entity_id": "lord_aldric"}],
-        "visibility_checked_facts": [],
-        "visibility_fallback_pool": "global_scene_narrative",
-        "visibility_fallback_kind": "narrative_safe_fallback",
-        "visibility_fallback_owner_bucket": VISIBILITY_FALLBACK_OWNER_SEALED_GATE,
-    }
-
-
-def test_stamp_visibility_fallback_metadata_can_mark_nonreplacement_routes() -> None:
-    meta: dict[str, Any] = {"visibility_replacement_applied": False}
-
-    visibility_fallback.stamp_visibility_fallback_metadata(
-        meta,
-        validation_passed=True,
-        replacement_applied=False,
-        continuity_lead_exemption=True,
-    )
-
-    assert meta["visibility_validation_passed"] is True
-    assert meta["visibility_replacement_applied"] is False
-    assert meta["visibility_continuity_lead_exemption"] is True
-    assert "visibility_fallback_owner_bucket" not in meta
-
-
-def test_build_visibility_route_metadata_outcome_for_hard_replacement() -> None:
-    observation = visibility_fallback.VisibilityValidationObservation(
-        validation_passed=False,
-        violation_kinds=["unseen_entity_reference"],
-        violation_sample=[],
-        checked_entities=[{"entity_id": "lord_aldric"}],
-        checked_facts=[],
-    )
-
-    outcome = visibility_fallback.build_visibility_route_metadata_outcome(
-        observation=observation,
-        route="sealed_hard_replace",
-        fallback_pool="global_scene_narrative",
-        fallback_kind="narrative_safe_fallback",
-        final_emitted_source="global_scene_fallback",
-    )
-
-    assert outcome.validation_passed is False
-    assert outcome.replacement_applied is True
-    assert outcome.fallback_pool == "global_scene_narrative"
-    assert outcome.fallback_kind == "narrative_safe_fallback"
-    assert outcome.fallback_owner_bucket == VISIBILITY_FALLBACK_OWNER_SEALED_GATE
-    assert outcome.stamp_kwargs() == {
-        "validation_passed": False,
-        "replacement_applied": True,
-        "fallback_pool": "global_scene_narrative",
-        "fallback_kind": "narrative_safe_fallback",
-        "fallback_owner_bucket": VISIBILITY_FALLBACK_OWNER_SEALED_GATE,
-    }
-
-
-@pytest.mark.parametrize(
-    ("route", "expected"),
-    [
-        (
-            "continuity_lead_exemption",
-            {
-                "validation_passed": True,
-                "replacement_applied": False,
-                "continuity_lead_exemption": True,
-            },
-        ),
-        (
-            "concrete_interaction_no_hard_replace",
-            {
-                "validation_passed": None,
-            },
-        ),
-    ],
-)
-def test_build_visibility_route_metadata_outcome_for_nonreplacement_routes(route: str, expected: dict[str, Any]) -> None:
-    observation = visibility_fallback.VisibilityValidationObservation(
-        validation_passed=False,
-        violation_kinds=["unseen_entity_reference"],
-        violation_sample=[],
-        checked_entities=[],
-        checked_facts=[],
-    )
-
-    outcome = visibility_fallback.build_visibility_route_metadata_outcome(
-        observation=observation,
-        route=route,
-    )
-
-    assert outcome.stamp_kwargs() == expected
-    assert outcome.fallback_owner_bucket is None
-
-
-def test_build_visibility_non_replacement_route_context_for_continuity_lead_exemption() -> None:
-    observation = visibility_fallback.VisibilityValidationObservation(
-        validation_passed=False,
-        violation_kinds=["unseen_entity_reference"],
-        violation_sample=[{"kind": "unseen_entity_reference", "token": "Guard Captain"}],
-        checked_entities=[{"entity_id": "guard_captain"}],
-        checked_facts=[],
-    )
-
-    context = visibility_fallback.build_visibility_non_replacement_route_context(
-        observation=observation,
-        route="continuity_lead_exemption",
-    )
-
-    assert context == visibility_fallback.VisibilityNonReplacementRouteContext(
-        route="continuity_lead_exemption",
-        observation=observation,
-        route_metadata_outcome=visibility_fallback.VisibilityRouteMetadataOutcome(
-            validation_passed=True,
-            replacement_applied=False,
-            continuity_lead_exemption=True,
-        ),
-        return_token="apply_first_mention_enforcement",
-        debug_notes_to_add=None,
-    )
-    assert context.route_metadata_outcome.stamp_kwargs() == {
-        "validation_passed": True,
-        "replacement_applied": False,
-        "continuity_lead_exemption": True,
-    }
-
-
-def test_build_visibility_non_replacement_route_context_for_concrete_interaction_no_hard_replace() -> None:
-    observation = visibility_fallback.VisibilityValidationObservation(
-        validation_passed=False,
-        violation_kinds=["unseen_entity_reference"],
-        violation_sample=[],
-        checked_entities=[],
-        checked_facts=[],
-    )
-
-    context = visibility_fallback.build_visibility_non_replacement_route_context(
-        observation=observation,
-        route="concrete_interaction_no_hard_replace",
-    )
-
-    assert context.route == "concrete_interaction_no_hard_replace"
-    assert context.observation is observation
-    assert context.return_token == "return_current_output"
-    assert context.debug_notes_to_add is None
-    assert context.route_metadata_outcome.stamp_kwargs() == {
-        "validation_passed": None,
-    }
-    assert context.route_metadata_outcome.fallback_owner_bucket is None
-
-
-def test_build_visibility_replacement_annotations_for_hard_replacement() -> None:
-    observation = visibility_fallback.VisibilityValidationObservation(
-        validation_passed=False,
-        violation_kinds=["unseen_entity_reference", "undiscovered_fact_assertion"],
-        violation_sample=[],
-        checked_entities=[],
-        checked_facts=[],
-    )
-
-    annotations = visibility_fallback.build_visibility_replacement_annotations(observation)
-
-    assert annotations.tags_to_add == [
-        "final_emission_gate_replaced",
-        "visibility_enforcement_replaced",
-        "visibility_violation:unseen_entity_reference",
-        "visibility_violation:undiscovered_fact_assertion",
-    ]
-    assert (
-        annotations.debug_notes_to_add
-        == "final_emission_gate:visibility_replaced:unseen_entity_reference,undiscovered_fact_assertion"
-    )
-
-
-def test_build_visibility_replacement_annotations_caps_debug_violation_list() -> None:
-    kinds = [f"kind_{index}" for index in range(10)]
-    observation = visibility_fallback.VisibilityValidationObservation(
-        validation_passed=False,
-        violation_kinds=kinds,
-        violation_sample=[],
-        checked_entities=[],
-        checked_facts=[],
-    )
-
-    annotations = visibility_fallback.build_visibility_replacement_annotations(observation)
-
-    assert annotations.tags_to_add == [
-        "final_emission_gate_replaced",
-        "visibility_enforcement_replaced",
-    ] + [f"visibility_violation:{kind}" for kind in kinds]
-    assert annotations.debug_notes_to_add == "final_emission_gate:visibility_replaced:" + ",".join(kinds[:8])
-
-
-def test_build_visibility_hard_replacement_plan_collects_side_effect_inputs() -> None:
-    observation = visibility_fallback.VisibilityValidationObservation(
-        validation_passed=False,
-        violation_kinds=["unseen_entity_reference"],
-        violation_sample=[{"kind": "unseen_entity_reference", "token": "Lord Aldric"}],
-        checked_entities=[{"entity_id": "lord_aldric"}],
-        checked_facts=[],
-    )
-    outcome = visibility_fallback.build_visibility_route_metadata_outcome(
-        observation=observation,
-        route="sealed_hard_replace",
-        fallback_pool="global_scene_narrative",
-        fallback_kind="narrative_safe_fallback",
-        final_emitted_source="global_scene_fallback",
-    )
-    annotations = visibility_fallback.build_visibility_replacement_annotations(observation)
-    selected_fallback = visibility_fallback.VisibilitySelectedFallback(
-        text="Selected fallback text.",
-        fallback_pool="global_scene_narrative",
-        fallback_kind="narrative_safe_fallback",
-        final_emitted_source="global_scene_fallback",
-        fallback_strategy="standard_safe_fallback",
-        fallback_candidate_source="global_scene_fallback",
-        composition_meta={},
-    )
-
-    plan = visibility_fallback.build_visibility_hard_replacement_plan(
-        observation=observation,
-        route_metadata_outcome=outcome,
-        annotations=annotations,
-        selected_fallback=selected_fallback,
-    )
-
-    assert plan == visibility_fallback.VisibilityHardReplacementPlan(
-        fallback_text="Selected fallback text.",
-        fallback_pool="global_scene_narrative",
-        fallback_kind="narrative_safe_fallback",
-        final_emitted_source="global_scene_fallback",
-        observation=observation,
-        route_metadata_outcome=outcome,
-        annotations=annotations,
-    )
-    assert plan.route_metadata_outcome.stamp_kwargs() == {
-        "validation_passed": False,
-        "replacement_applied": True,
-        "fallback_pool": "global_scene_narrative",
-        "fallback_kind": "narrative_safe_fallback",
-        "fallback_owner_bucket": VISIBILITY_FALLBACK_OWNER_SEALED_GATE,
-    }
-
-
-def test_visibility_selected_fallback_round_trips_legacy_tuple() -> None:
-    composition_meta = {
-        "first_mention_composition_used": True,
-        "first_mention_composition_layers": ["opening", "entity_intro"],
-    }
-    legacy = (
-        "Selected fallback text.",
-        "global_scene_narrative",
-        "narrative_safe_fallback",
-        "global_scene_fallback",
-        "standard_safe_fallback",
-        "global_scene_fallback",
-        composition_meta,
-    )
-
-    selected = visibility_fallback.visibility_selected_fallback_from_tuple(legacy)
-
-    assert selected == visibility_fallback.VisibilitySelectedFallback(
-        text="Selected fallback text.",
-        fallback_pool="global_scene_narrative",
-        fallback_kind="narrative_safe_fallback",
-        final_emitted_source="global_scene_fallback",
-        fallback_strategy="standard_safe_fallback",
-        fallback_candidate_source="global_scene_fallback",
-        composition_meta=composition_meta,
-    )
-    assert selected.as_legacy_tuple() == legacy
-    assert visibility_fallback.VisibilitySelectedFallback.from_legacy_tuple(legacy) == selected
-
-
-def test_build_visibility_first_mention_metadata_payload_collects_composition_values() -> None:
-    payload = visibility_fallback.build_visibility_first_mention_metadata_payload(
-        composition_meta={
-            "first_mention_composition_used": True,
-            "first_mention_composition_layers": ["opening", "entity_intro"],
-        },
-        default_first_mention_composition_layers=["default"],
-    )
-
-    assert payload == visibility_fallback.VisibilityFirstMentionMetadataPayload(
-        first_mention_composition_used=True,
-        first_mention_composition_layers=["opening", "entity_intro"],
-    )
-    assert payload.meta_updates() == {
-        "first_mention_composition_used": True,
-        "first_mention_composition_layers": ["opening", "entity_intro"],
-    }
-
-
-def test_build_visibility_first_mention_metadata_payload_defaults_when_composition_empty() -> None:
-    payload = visibility_fallback.build_visibility_first_mention_metadata_payload(
-        composition_meta={},
-        default_first_mention_composition_layers=["default"],
-    )
-
-    assert payload.meta_updates() == {
-        "first_mention_composition_used": False,
-        "first_mention_composition_layers": ["default"],
-    }
-
-
-def test_build_first_mention_selected_fallback_metadata_payload_collects_replacement_fields() -> None:
-    layers = {"environment": "market", "motion": "approach", "entities": ["Tavern Runner"]}
-    selected_fallback = visibility_fallback.VisibilitySelectedFallback(
-        text="Selected fallback text.",
-        fallback_pool="scene_opening_deterministic",
-        fallback_kind="opening_deterministic_fallback",
-        final_emitted_source="opening_scene_fallback",
-        fallback_strategy="opening_scene_safe_fallback",
-        fallback_candidate_source="upstream_prepared_opening_fallback",
-        composition_meta={
-            "first_mention_composition_used": True,
-            "first_mention_composition_layers": layers,
-        },
-    )
-
-    payload = visibility_fallback.build_first_mention_selected_fallback_metadata_payload(
-        selected_fallback,
-        opening_scene_first_mention_preference_used=True,
-        default_first_mention_composition_layers={"environment": None, "motion": None, "entities": []},
-    )
-
-    assert payload == visibility_fallback.FirstMentionSelectedFallbackMetadataPayload(
-        first_mention_validation_passed=False,
-        first_mention_replacement_applied=True,
-        first_mention_fallback_strategy="opening_scene_safe_fallback",
-        first_mention_fallback_candidate_source="upstream_prepared_opening_fallback",
-        opening_scene_first_mention_preference_used=True,
-        first_mention_composition_used=True,
-        first_mention_composition_layers=layers,
-    )
-    assert list(payload.meta_updates()) == [
-        "first_mention_validation_passed",
-        "first_mention_replacement_applied",
-        "first_mention_fallback_strategy",
-        "first_mention_fallback_candidate_source",
-        "opening_scene_first_mention_preference_used",
-        "first_mention_composition_used",
-        "first_mention_composition_layers",
-    ]
-    assert payload.meta_updates()["first_mention_composition_layers"] is layers
-
-
-def test_build_first_mention_selected_fallback_metadata_payload_uses_default_layers() -> None:
-    default_layers = {"environment": None, "motion": None, "entities": []}
-    selected_fallback = visibility_fallback.VisibilitySelectedFallback(
-        text="Selected fallback text.",
-        fallback_pool="global_scene_narrative",
-        fallback_kind="narrative_safe_fallback",
-        final_emitted_source="global_scene_fallback",
-        fallback_strategy="standard_safe_fallback",
-        fallback_candidate_source="global_scene_fallback",
-        composition_meta={},
-    )
-
-    payload = visibility_fallback.build_first_mention_selected_fallback_metadata_payload(
-        selected_fallback,
-        opening_scene_first_mention_preference_used=False,
-        default_first_mention_composition_layers=default_layers,
-    )
-
-    assert payload.meta_updates() == {
-        "first_mention_validation_passed": False,
-        "first_mention_replacement_applied": True,
-        "first_mention_fallback_strategy": "standard_safe_fallback",
-        "first_mention_fallback_candidate_source": "global_scene_fallback",
-        "opening_scene_first_mention_preference_used": False,
-        "first_mention_composition_used": False,
-        "first_mention_composition_layers": default_layers,
-    }
-
-
-def test_build_referential_clarity_selected_fallback_metadata_payload_collects_replacement_fields() -> None:
-    layers = {"environment": "street", "motion": None, "entities": ["Guard Captain"]}
-    selected_fallback = visibility_fallback.VisibilitySelectedFallback(
-        text="Selected fallback text.",
-        fallback_pool="strict_social_visibility_minimal",
-        fallback_kind="visibility_minimal_social_fallback",
-        final_emitted_source="minimal_social_emergency_fallback",
-        fallback_strategy="standard_safe_fallback",
-        fallback_candidate_source="minimal_social_emergency_fallback",
-        composition_meta={
-            "first_mention_composition_used": True,
-            "first_mention_composition_layers": layers,
-        },
-    )
-
-    payload = visibility_fallback.build_referential_clarity_selected_fallback_metadata_payload(
-        selected_fallback,
-        default_first_mention_composition_layers={"environment": None, "motion": None, "entities": []},
-    )
-
-    assert payload == visibility_fallback.ReferentialClaritySelectedFallbackMetadataPayload(
-        referential_clarity_validation_passed=False,
-        referential_clarity_replacement_applied=True,
-        first_mention_composition_used=True,
-        first_mention_composition_layers=layers,
-    )
-    assert list(payload.meta_updates()) == [
-        "referential_clarity_validation_passed",
-        "referential_clarity_replacement_applied",
-        "first_mention_composition_used",
-        "first_mention_composition_layers",
-    ]
-    assert payload.meta_updates()["first_mention_composition_layers"] is layers
-
-
-def test_build_referential_clarity_selected_fallback_metadata_payload_uses_default_layers() -> None:
-    default_layers = {"environment": None, "motion": None, "entities": []}
-    selected_fallback = visibility_fallback.VisibilitySelectedFallback(
-        text="Selected fallback text.",
-        fallback_pool="global_scene_narrative",
-        fallback_kind="narrative_safe_fallback",
-        final_emitted_source="global_scene_fallback",
-        fallback_strategy="standard_safe_fallback",
-        fallback_candidate_source="global_scene_fallback",
-        composition_meta={},
-    )
-
-    payload = visibility_fallback.build_referential_clarity_selected_fallback_metadata_payload(
-        selected_fallback,
-        default_first_mention_composition_layers=default_layers,
-    )
-
-    assert payload.meta_updates() == {
-        "referential_clarity_validation_passed": False,
-        "referential_clarity_replacement_applied": True,
-        "first_mention_composition_used": False,
-        "first_mention_composition_layers": default_layers,
-    }
-
-
-def test_build_first_mention_replacement_logging_payload_matches_gate_decision_shape() -> None:
-    selected_fallback = visibility_fallback.VisibilitySelectedFallback(
-        text="Selected fallback text.",
-        fallback_pool="scene_opening_deterministic",
-        fallback_kind="opening_deterministic_fallback",
-        final_emitted_source="opening_scene_fallback",
-        fallback_strategy="opening_scene_safe_fallback",
-        fallback_candidate_source="upstream_prepared_opening_fallback",
-        composition_meta={},
-    )
-    violation_kinds = [f"kind_{index}" for index in range(14)]
-
-    payload = visibility_fallback.build_first_mention_replacement_logging_payload(
-        selected_fallback,
-        strict_social_active=True,
-        violation_kinds=violation_kinds,
-        active_interlocutor="tavern_runner",
-    )
-
-    assert payload == visibility_fallback.FirstMentionReplacementLoggingPayload(
-        social_route=True,
-        candidate_ok=False,
-        rejection_reasons=violation_kinds[:12],
-        fallback_pool="scene_opening_deterministic",
-        fallback_kind="opening_deterministic_fallback",
-        active_interlocutor="tavern_runner",
-    )
-    assert payload.decision_payload() == {
-        "stage": "final_emission_gate_first_mention",
-        "social_route": True,
-        "candidate_ok": False,
-        "rejection_reasons": violation_kinds[:12],
-        "fallback_pool": "scene_opening_deterministic",
-        "fallback_kind": "opening_deterministic_fallback",
-        "active_interlocutor": "tavern_runner",
-    }
-    assert list(payload.decision_payload()) == [
-        "stage",
-        "social_route",
-        "candidate_ok",
-        "rejection_reasons",
-        "fallback_pool",
-        "fallback_kind",
-        "active_interlocutor",
-    ]
-    violation_kinds.append("late_mutation")
-    assert payload.decision_payload()["rejection_reasons"] == [f"kind_{index}" for index in range(12)]
-
-
-def test_build_first_mention_replacement_logging_payload_normalizes_empty_interlocutor() -> None:
-    selected_fallback = visibility_fallback.VisibilitySelectedFallback(
-        text="Selected fallback text.",
-        fallback_pool="global_scene_narrative",
-        fallback_kind="narrative_safe_fallback",
-        final_emitted_source="global_scene_fallback",
-        fallback_strategy="standard_safe_fallback",
-        fallback_candidate_source="global_scene_fallback",
-        composition_meta={},
-    )
-
-    payload = visibility_fallback.build_first_mention_replacement_logging_payload(
-        selected_fallback,
-        strict_social_active=False,
-        violation_kinds=["first_mention_unearned_familiarity"],
-        active_interlocutor="",
-    )
-
-    assert payload.decision_payload()["active_interlocutor"] is None
-    assert payload.decision_payload()["rejection_reasons"] == ["first_mention_unearned_familiarity"]
-
-
-def test_build_referential_clarity_replacement_logging_payload_matches_gate_decision_shape() -> None:
-    selected_fallback = visibility_fallback.VisibilitySelectedFallback(
-        text="Selected fallback text.",
-        fallback_pool="strict_social_visibility_minimal",
-        fallback_kind="visibility_minimal_social_fallback",
-        final_emitted_source="minimal_social_emergency_fallback",
-        fallback_strategy="standard_safe_fallback",
-        fallback_candidate_source="minimal_social_emergency_fallback",
-        composition_meta={},
-    )
-    violation_kinds = [f"kind_{index}" for index in range(13)]
-
-    payload = visibility_fallback.build_referential_clarity_replacement_logging_payload(
-        selected_fallback,
-        strict_social_active=True,
-        violation_kinds=violation_kinds,
-        active_interlocutor="guard_captain",
-        referential_clarity_fallback_after_failed_local_repair=True,
-    )
-
-    assert payload == visibility_fallback.ReferentialClarityReplacementLoggingPayload(
-        social_route=True,
-        candidate_ok=False,
-        rejection_reasons=violation_kinds[:12],
-        fallback_pool="strict_social_visibility_minimal",
-        fallback_kind="visibility_minimal_social_fallback",
-        active_interlocutor="guard_captain",
-        referential_clarity_fallback_after_failed_local_repair=True,
-    )
-    assert payload.decision_payload() == {
-        "stage": "final_emission_gate_referential_clarity",
-        "social_route": True,
-        "candidate_ok": False,
-        "rejection_reasons": violation_kinds[:12],
-        "fallback_pool": "strict_social_visibility_minimal",
-        "fallback_kind": "visibility_minimal_social_fallback",
-        "active_interlocutor": "guard_captain",
-        "referential_clarity_fallback_after_failed_local_repair": True,
-    }
-    assert list(payload.decision_payload()) == [
-        "stage",
-        "social_route",
-        "candidate_ok",
-        "rejection_reasons",
-        "fallback_pool",
-        "fallback_kind",
-        "active_interlocutor",
-        "referential_clarity_fallback_after_failed_local_repair",
-    ]
-
-
-def test_build_referential_clarity_replacement_logging_payload_normalizes_boolean_and_interlocutor() -> None:
-    selected_fallback = visibility_fallback.VisibilitySelectedFallback(
-        text="Selected fallback text.",
-        fallback_pool="global_scene_narrative",
-        fallback_kind="narrative_safe_fallback",
-        final_emitted_source="global_scene_fallback",
-        fallback_strategy="standard_safe_fallback",
-        fallback_candidate_source="global_scene_fallback",
-        composition_meta={},
-    )
-
-    payload = visibility_fallback.build_referential_clarity_replacement_logging_payload(
-        selected_fallback,
-        strict_social_active=False,
-        violation_kinds=["ambiguous_entity_reference"],
-        active_interlocutor="",
-        referential_clarity_fallback_after_failed_local_repair=1,
-    )
-
-    assert payload.decision_payload()["active_interlocutor"] is None
-    assert payload.decision_payload()["referential_clarity_fallback_after_failed_local_repair"] is True
-
-
-def test_build_visibility_hard_replacement_logging_payload_collects_decision_and_trace_inputs() -> None:
-    observation = visibility_fallback.VisibilityValidationObservation(
-        validation_passed=False,
-        violation_kinds=["unseen_entity_reference", "undiscovered_fact_assertion"],
-        violation_sample=[],
-        checked_entities=[],
-        checked_facts=[],
-    )
-
-    payload = visibility_fallback.build_visibility_hard_replacement_logging_payload(
-        strict_social_active=True,
-        observation=observation,
-        fallback_pool="strict_social_visibility_minimal",
-        fallback_kind="visibility_minimal_social_fallback",
-        active_interlocutor="tavern_runner",
-    )
-
-    assert payload == visibility_fallback.VisibilityHardReplacementLoggingPayload(
-        social_route=True,
-        candidate_ok=False,
-        rejection_reasons=["unseen_entity_reference", "undiscovered_fact_assertion"],
-        fallback_pool="strict_social_visibility_minimal",
-        fallback_kind="visibility_minimal_social_fallback",
-        active_interlocutor="tavern_runner",
-        trace_stage="final_emission_gate_visibility_replace",
-    )
-    assert payload.decision_payload() == {
-        "stage": "final_emission_gate_visibility",
-        "social_route": True,
-        "candidate_ok": False,
-        "rejection_reasons": ["unseen_entity_reference", "undiscovered_fact_assertion"],
-        "fallback_pool": "strict_social_visibility_minimal",
-        "fallback_kind": "visibility_minimal_social_fallback",
-        "active_interlocutor": "tavern_runner",
-    }
-    assert payload.trace_payload({"visibility_replacement_applied": True}) == {
-        "visibility_replacement_applied": True,
-        "stage": "final_emission_gate_visibility_replace",
-    }
-
-
-def test_build_visibility_hard_replacement_logging_payload_caps_reasons_and_normalizes_empty_interlocutor() -> None:
-    kinds = [f"kind_{index}" for index in range(14)]
-    observation = visibility_fallback.VisibilityValidationObservation(
-        validation_passed=False,
-        violation_kinds=kinds,
-        violation_sample=[],
-        checked_entities=[],
-        checked_facts=[],
-    )
-
-    payload = visibility_fallback.build_visibility_hard_replacement_logging_payload(
-        strict_social_active=False,
-        observation=observation,
-        fallback_pool="global_scene_narrative",
-        fallback_kind="narrative_safe_fallback",
-        active_interlocutor="",
-    )
-
-    assert payload.decision_payload()["rejection_reasons"] == kinds[:12]
-    assert payload.decision_payload()["active_interlocutor"] is None
-
-
-def test_build_visibility_hard_replacement_context_groups_existing_payloads() -> None:
-    observation = visibility_fallback.VisibilityValidationObservation(
-        validation_passed=False,
-        violation_kinds=["unseen_entity_reference"],
-        violation_sample=[{"kind": "unseen_entity_reference", "token": "Lord Aldric"}],
-        checked_entities=[{"entity_id": "lord_aldric"}],
-        checked_facts=[],
-    )
-    selected_fallback = visibility_fallback.VisibilitySelectedFallback(
-        text="Selected fallback text.",
-        fallback_pool="global_scene_narrative",
-        fallback_kind="narrative_safe_fallback",
-        final_emitted_source="global_scene_fallback",
-        fallback_strategy="standard_safe_fallback",
-        fallback_candidate_source="global_scene_fallback",
-        composition_meta={
-            "first_mention_composition_used": True,
-            "first_mention_composition_layers": ["opening", "entity_intro"],
-        },
-    )
-
-    context = visibility_fallback.build_visibility_hard_replacement_context(
-        observation=observation,
-        route="sealed_hard_replace",
-        selected_fallback=selected_fallback,
-        default_first_mention_composition_layers=["default"],
-        strict_social_active=False,
-        active_interlocutor="",
-    )
-
-    assert isinstance(context, visibility_fallback.VisibilityHardReplacementContext)
-    assert context.replacement_plan.fallback_text == "Selected fallback text."
-    assert context.replacement_plan.final_emitted_source == "global_scene_fallback"
-    assert context.replacement_plan.annotations.tags_to_add == [
-        "final_emission_gate_replaced",
-        "visibility_enforcement_replaced",
-        "visibility_violation:unseen_entity_reference",
-    ]
-    assert context.replacement_plan.route_metadata_outcome.stamp_kwargs() == {
-        "validation_passed": False,
-        "replacement_applied": True,
-        "fallback_pool": "global_scene_narrative",
-        "fallback_kind": "narrative_safe_fallback",
-        "fallback_owner_bucket": VISIBILITY_FALLBACK_OWNER_SEALED_GATE,
-    }
-    assert context.first_mention_payload.meta_updates() == {
-        "first_mention_composition_used": True,
-        "first_mention_composition_layers": ["opening", "entity_intro"],
-    }
-    assert context.logging_payload.decision_payload() == {
-        "stage": "final_emission_gate_visibility",
-        "social_route": False,
-        "candidate_ok": False,
-        "rejection_reasons": ["unseen_entity_reference"],
-        "fallback_pool": "global_scene_narrative",
-        "fallback_kind": "narrative_safe_fallback",
-        "active_interlocutor": None,
-    }
-
-
-def test_visibility_fallback_helper_module_contains_no_fallback_prose_literals() -> None:
-    source = inspect.getsource(visibility_fallback)
-    module = ast.parse(source)
-    string_literals = [
-        node.value
-        for node in ast.walk(module)
-        if isinstance(node, ast.Constant) and isinstance(node.value, str)
-    ]
-
-    forbidden_fragments = [
-        "For a breath",
-        "scene holds",
-        "scene stays still",
-        "voices shift around you",
-    ]
-    for literal in string_literals:
-        for fragment in forbidden_fragments:
-            assert fragment not in literal
-
-
-def test_build_visibility_fallback_selection_inputs_collects_hard_replace_context() -> None:
-    observation = visibility_fallback.VisibilityValidationObservation(
-        validation_passed=False,
-        violation_kinds=["unseen_entity_reference"],
-        violation_sample=[],
-        checked_entities=[{"entity_id": "lord_aldric"}],
-        checked_facts=[],
-    )
-
-    bundle = visibility_fallback.build_visibility_fallback_selection_inputs(
-        observation=observation,
-        route="sealed_hard_replace",
-        active_interlocutor="guard_captain",
-        strict_social_active=True,
-        strict_social_suppressed_non_social_turn=False,
-        emit_integrity_response_type_required="",
-        response_type_required_meta="dialogue",
-    )
-
-    assert bundle == visibility_fallback.VisibilityFallbackSelectionInputs(
-        route="sealed_hard_replace",
-        strict_social_route=True,
-        strict_social_suppressed_non_social_turn=False,
-        has_active_social_interlocutor=True,
-        violation_kinds=["unseen_entity_reference"],
-        checked_entities=[{"entity_id": "lord_aldric"}],
-        checked_facts=[],
-        emit_integrity_response_type_required="dialogue",
-    )
-
-
-def test_build_visibility_fallback_selection_inputs_prefers_explicit_response_type_context() -> None:
-    observation = visibility_fallback.VisibilityValidationObservation(
-        validation_passed=False,
-        violation_kinds=[],
-        violation_sample=[],
-        checked_entities=[],
-        checked_facts=[{"fact": "hidden"}],
-    )
-
-    bundle = visibility_fallback.build_visibility_fallback_selection_inputs(
-        observation=observation,
-        route="sealed_hard_replace",
-        active_interlocutor=" ",
-        strict_social_active=False,
-        strict_social_suppressed_non_social_turn=True,
-        emit_integrity_response_type_required="answer",
-        response_type_required_meta="dialogue",
-    )
-
-    assert bundle.strict_social_route is False
-    assert bundle.strict_social_suppressed_non_social_turn is True
-    assert bundle.has_active_social_interlocutor is False
-    assert bundle.checked_facts == [{"fact": "hidden"}]
-    assert bundle.emit_integrity_response_type_required == "answer"
-
-
-def test_build_visibility_route_dispatch_context_for_sealed_hard_replace() -> None:
-    observation = visibility_fallback.VisibilityValidationObservation(
-        validation_passed=False,
-        violation_kinds=["unseen_entity_reference"],
-        violation_sample=[],
-        checked_entities=[{"entity_id": "lord_aldric"}],
-        checked_facts=[],
-    )
-
-    context = visibility_fallback.build_visibility_route_dispatch_context(
-        observation=observation,
-        route="sealed_hard_replace",
-        active_interlocutor="guard_captain",
-        strict_social_active=True,
-        strict_social_suppressed_non_social_turn=False,
-        emit_integrity_response_type_required="",
-        response_type_required_meta="dialogue",
-    )
-
-    assert context.route == "sealed_hard_replace"
-    assert context.observation is observation
-    assert context.non_replacement_context is None
-    assert context.selection_inputs == visibility_fallback.VisibilityFallbackSelectionInputs(
-        route="sealed_hard_replace",
-        strict_social_route=True,
-        strict_social_suppressed_non_social_turn=False,
-        has_active_social_interlocutor=True,
-        violation_kinds=["unseen_entity_reference"],
-        checked_entities=[{"entity_id": "lord_aldric"}],
-        checked_facts=[],
-        emit_integrity_response_type_required="dialogue",
-    )
-
-
-def test_build_visibility_route_dispatch_context_for_continuity_lead_exemption() -> None:
-    observation = visibility_fallback.VisibilityValidationObservation(
-        validation_passed=False,
-        violation_kinds=["unseen_entity_reference"],
-        violation_sample=[],
-        checked_entities=[],
-        checked_facts=[],
-    )
-
-    context = visibility_fallback.build_visibility_route_dispatch_context(
-        observation=observation,
-        route="continuity_lead_exemption",
-        active_interlocutor="guard_captain",
-        strict_social_active=True,
-        strict_social_suppressed_non_social_turn=True,
-        emit_integrity_response_type_required="answer",
-        response_type_required_meta="dialogue",
-    )
-
-    assert context.route == "continuity_lead_exemption"
-    assert context.observation is observation
-    assert context.selection_inputs is None
-    assert context.non_replacement_context is not None
-    assert context.non_replacement_context.return_token == "apply_first_mention_enforcement"
-    assert context.non_replacement_context.route_metadata_outcome.stamp_kwargs() == {
-        "validation_passed": True,
-        "replacement_applied": False,
-        "continuity_lead_exemption": True,
-    }
-
-
-def test_build_visibility_route_dispatch_context_for_concrete_interaction_no_hard_replace() -> None:
-    observation = visibility_fallback.VisibilityValidationObservation(
-        validation_passed=False,
-        violation_kinds=["unseen_entity_reference"],
-        violation_sample=[],
-        checked_entities=[],
-        checked_facts=[],
-    )
-
-    context = visibility_fallback.build_visibility_route_dispatch_context(
-        observation=observation,
-        route="concrete_interaction_no_hard_replace",
-        active_interlocutor="",
-        strict_social_active=False,
-        strict_social_suppressed_non_social_turn=False,
-        emit_integrity_response_type_required="",
-        response_type_required_meta="",
-    )
-
-    assert context.route == "concrete_interaction_no_hard_replace"
-    assert context.observation is observation
-    assert context.selection_inputs is None
-    assert context.non_replacement_context is not None
-    assert context.non_replacement_context.return_token == "return_current_output"
-    assert context.non_replacement_context.route_metadata_outcome.stamp_kwargs() == {
-        "validation_passed": None,
-    }
-
-
-def test_build_visibility_route_decision_inputs_collects_selector_arguments() -> None:
-    observation = visibility_fallback.VisibilityValidationObservation(
-        validation_passed=False,
-        violation_kinds=["unseen_entity_reference"],
-        violation_sample=[],
-        checked_entities=[{"entity_id": "lord_aldric"}],
-        checked_facts=[{"fact": "hidden"}],
-    )
-    tags = ["known_fact_guard", "other"]
-
-    bundle = visibility_fallback.build_visibility_route_decision_inputs(
-        tag_list_gate=tags,
-        dbg_gate="recent_dialogue_continuity",
-        observation=observation,
-        candidate_text="Lord Aldric watches.",
-    )
-
-    assert bundle == visibility_fallback.VisibilityRouteDecisionInputs(
-        tag_list_gate=["known_fact_guard", "other"],
-        dbg_gate="recent_dialogue_continuity",
-        violation_kinds=["unseen_entity_reference"],
-        checked_entities=[{"entity_id": "lord_aldric"}],
-        checked_facts=[{"fact": "hidden"}],
-        candidate_text="Lord Aldric watches.",
-    )
-    tags.append("late_mutation")
-    observation.violation_kinds.append("late_kind")
-    assert bundle.tag_list_gate == ["known_fact_guard", "other"]
-    assert bundle.violation_kinds == ["unseen_entity_reference"]
-
+# Pure ``game.final_emission_visibility_fallback`` characterization now lives in
+# tests/test_final_emission_visibility_fallback.py. Gate-private consumer and
+# orchestration locks remain in this module.
 
 def test_block_ai_route_visibility_and_opening_rt_selectors_do_not_mutate_inputs() -> None:
     tags = ["a", "b"]
@@ -6818,9 +5427,10 @@ def test_scene_opening_candidate_not_rejected_for_lacking_action_result_language
     assert dbg.get("response_type_repair_used") is False
 
 
-# Opening context-source and fail-closed regressions are historical gate coverage.
-# They protect selection/pollution guards and sealed fallback behavior without
-# transferring detailed prose composition ownership away from the opening helper.
+# Opening context-source and fail-closed regressions are historical gate
+# coverage. Context/pollution cases protect gate input safety; fail-closed
+# cases retain only gate-visible output/authorship/owner-boundary obligations,
+# leaving the adapter metadata matrix with its direct owner suite.
 def test_scene_opening_fallback_with_opening_seed_facts_emits_seed_facts():
     curated = [
         "Ash Quay crouches under black rain and lantern smoke.",
@@ -6922,11 +5532,9 @@ def test_fail_closed_sealed_gate_missing_curated_facts_has_explicit_metadata():
         active_interlocutor="",
     )
     assert text == "[opening_fallback_failed_closed: empty_curated_facts]"
-    assert dbg.get("opening_fallback_missing_curated_facts") is True
-    assert dbg.get("opening_fallback_failed_closed") is True
-    assert dbg.get("opening_fallback_compatibility_local_disabled") is True
-    assert dbg.get("blocked_repair_kind") == "opening_missing_curated_facts"
     assert dbg.get("response_type_repair_kind") == "opening_deterministic_fallback_failed_closed"
+    assert dbg.get("opening_fallback_authorship_source") is None
+    assert dbg.get("opening_fallback_authorship_source") != OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL
     assert opening_fallback_owner_bucket_from_meta(dbg) == OPENING_FALLBACK_OWNER_SEALED_GATE
 
 
@@ -7074,11 +5682,9 @@ def test_fail_closed_sealed_gate_without_curated_context():
         active_interlocutor="",
     )
     assert text == "[opening_fallback_failed_closed: empty_curated_facts]"
-    assert dbg.get("opening_fallback_missing_curated_facts") is True
-    assert dbg.get("opening_fallback_failed_closed") is True
-    assert dbg.get("opening_fallback_compatibility_local_disabled") is True
-    assert dbg.get("blocked_repair_kind") == "opening_missing_curated_facts"
     assert dbg.get("response_type_repair_kind") == "opening_deterministic_fallback_failed_closed"
+    assert dbg.get("opening_fallback_authorship_source") is None
+    assert dbg.get("opening_fallback_authorship_source") != OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL
     assert opening_fallback_owner_bucket_from_meta(dbg) == OPENING_FALLBACK_OWNER_SEALED_GATE
 
 
@@ -7099,12 +5705,9 @@ def test_fail_closed_sealed_gate_with_empty_curated_facts():
     )
 
     assert text == "[opening_fallback_failed_closed: empty_curated_facts]"
-    assert dbg.get("opening_fallback_context_missing") is True
-    assert dbg.get("opening_fallback_failed_closed") is True
-    assert dbg.get("opening_fallback_missing_curated_facts") is False
     assert dbg.get("response_type_repair_kind") == "opening_deterministic_fallback_failed_closed"
-    assert dbg.get("opening_fallback_compatibility_local_disabled") is True
-    assert dbg.get("opening_fallback_missing_upstream_prepared_payload") is True
+    assert dbg.get("opening_fallback_authorship_source") is None
+    assert dbg.get("opening_fallback_authorship_source") != OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL
     assert opening_fallback_owner_bucket_from_meta(dbg) == OPENING_FALLBACK_OWNER_SEALED_GATE
 
 
@@ -7131,7 +5734,6 @@ def test_block_j_missing_curated_facts_skips_gate_local_deterministic_opening_co
     )
     assert text.startswith("[opening_fallback_failed_closed:")
     assert dbg.get("opening_fallback_compatibility_local_disabled") is True
-    assert dbg.get("opening_fallback_missing_curated_facts") is True
 
 
 def test_canonical_missing_curated_facts_upstream_prepared_payload_still_wins(monkeypatch) -> None:
