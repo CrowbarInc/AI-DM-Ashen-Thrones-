@@ -190,7 +190,7 @@ pytest tests/test_playability_smoke.py -q
 
 ## Golden replay
 
-Golden replay protects canonical turn-routing and final-emission invariants across repair cycles: speaker/target selection, route kind, FEM/fallback metadata, scaffold leakage, action/answer survival, and compact scenario-spine branch structure. It does **not** lock exact final prose by default; exact text comparison is opt-in, while structural drift is the primary signal.
+Golden replay protects canonical turn-routing and final-emission invariants across repair cycles: speaker/target selection, route kind, FEM/fallback metadata, scaffold leakage, action/answer survival, compact scenario-spine branch structure, and the protected 20-turn Frontier Gate long-session stability lane. It does **not** lock exact final prose by default; exact text comparison is opt-in, while structural drift is the primary signal.
 
 Protected scenario ownership is declared in [`docs/testing/protected_replay_manifest.md`](../docs/testing/protected_replay_manifest.md). Protected replay is a required hard-fail CI check in `.github/workflows/convergence-checks.yml`: failure means acceptance-protected replay or its currently co-located golden replay contract coverage failed, so the change must not be accepted until resolved.
 

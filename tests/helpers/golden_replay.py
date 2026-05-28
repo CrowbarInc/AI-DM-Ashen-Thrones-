@@ -9,6 +9,7 @@ from __future__ import annotations
 import hashlib
 import os
 import re
+from collections import Counter
 from pathlib import Path
 from typing import Any, Callable, Mapping
 
@@ -20,9 +21,10 @@ from game.final_emission_meta import (
     read_emission_debug_lane_from_turn_payload,
     read_final_emission_meta_from_turn_payload,
 )
-from game.runtime_lineage_telemetry import normalize_runtime_lineage_events
+from game.runtime_lineage_telemetry import normalize_runtime_lineage_events, summarize_runtime_lineage_events
 from game.models import ChatRequest
 from game.output_sanitizer import resembles_serialized_response_payload
+from game.scenario_spine_eval import evaluate_scenario_spine_session, minimal_complete_transcript_turn_meta
 from game import storage
 
 from tests.debug_trace_utils import latest_compact_debug_trace_entry
@@ -577,6 +579,449 @@ def render_golden_replay_markdown_report(rows: list[Mapping[str, Any]], *, title
     return "\n".join(lines)
 
 
+def _counter_dict(values: list[Any]) -> dict[str, int]:
+    return dict(sorted(Counter(str(v) for v in values if v is not None and str(v).strip()).items()))
+
+
+def _owner_for_turn(turn: Mapping[str, Any]) -> str | None:
+    for key in (
+        "opening_fallback_owner_bucket",
+        "sealed_fallback_owner_bucket",
+        "visibility_fallback_owner_bucket",
+        "sanitizer_empty_fallback_owner",
+        "sanitizer_strict_social_prose_owner",
+    ):
+        value = turn.get(key)
+        if value is not None and str(value).strip():
+            owner = str(value)
+            if owner != "unknown-ambiguous":
+                return owner
+    return None
+
+
+def _stable_change_count(values: list[str]) -> int:
+    changes = 0
+    last: str | None = None
+    for value in values:
+        if last is not None and value != last:
+            changes += 1
+        last = value
+    return changes
+
+
+def _lineage_events_for_turn(turn: Mapping[str, Any]) -> list[dict[str, Any]]:
+    return normalize_runtime_lineage_events(turn.get("runtime_lineage_events"))
+
+
+def _lineage_fallback_events(turn: Mapping[str, Any]) -> list[dict[str, Any]]:
+    return [event for event in _lineage_events_for_turn(turn) if event.get("event_kind") == "fallback_selected"]
+
+
+def _has_fallback_selection(turn: Mapping[str, Any]) -> bool:
+    return bool(turn.get("fallback_family") is not None or _lineage_fallback_events(turn))
+
+
+def _turn_window(index: int, total: int) -> str:
+    if total <= 0:
+        return "none"
+    third = max(1, total // 3)
+    if index < third:
+        return "early"
+    if index < third * 2:
+        return "middle"
+    return "late"
+
+
+def _max_consecutive_true(values: list[bool]) -> int:
+    max_seen = 0
+    current = 0
+    for value in values:
+        if value:
+            current += 1
+            max_seen = max(max_seen, current)
+        else:
+            current = 0
+    return max_seen
+
+
+def _active_telemetry_token(value: Any) -> str | None:
+    if value is None or value is False:
+        return None
+    token = str(value).strip()
+    if not token or token.lower() in {"none", "false", "no", "0"}:
+        return None
+    return token
+
+
+def summarize_fallback_escalation_observations(
+    turns: list[Mapping[str, Any]],
+) -> dict[str, Any]:
+    """Return fallback escalation metrics for sustained replay observations."""
+    total_turns = len(turns)
+    fallback_turn_flags: list[bool] = []
+    fallback_turn_indices: list[int] = []
+    fallback_windows: Counter[str] = Counter()
+    fallback_lineage_kinds: list[str] = []
+    fallback_lineage_owners: list[str] = []
+    fallback_owner_by_turn: list[str] = []
+    behavior_repair_turn_indices: list[int] = []
+    response_type_repair_turn_indices: list[int] = []
+    sanitizer_fallback_turn_indices: list[int] = []
+    unavailable_with_fallback_count = 0
+    fallback_family_unavailable_with_fallback_count = 0
+    fallback_selected_without_family_count = 0
+
+    for index, turn in enumerate(turns):
+        turn_index = int(turn.get("turn_index") if turn.get("turn_index") is not None else index)
+        lineage_fallbacks = _lineage_fallback_events(turn)
+        has_fallback = _has_fallback_selection(turn)
+        fallback_turn_flags.append(has_fallback)
+        if has_fallback:
+            fallback_turn_indices.append(turn_index)
+            fallback_windows[_turn_window(index, total_turns)] += 1
+            owner = _owner_for_turn(turn)
+            if owner:
+                fallback_owner_by_turn.append(owner)
+            if turn.get("fallback_family") is None and lineage_fallbacks:
+                fallback_selected_without_family_count += 1
+            unavailable = turn.get("unavailable")
+            if isinstance(unavailable, list) and unavailable:
+                unavailable_with_fallback_count += 1
+                if "fallback_family" in {str(item) for item in unavailable}:
+                    fallback_family_unavailable_with_fallback_count += 1
+        for event in lineage_fallbacks:
+            fallback_kind = event.get("fallback_kind")
+            if isinstance(fallback_kind, str) and fallback_kind.strip():
+                fallback_lineage_kinds.append(fallback_kind)
+            owner = event.get("owner")
+            if isinstance(owner, str) and owner.strip():
+                fallback_lineage_owners.append(owner)
+        if (
+            turn.get("fallback_behavior_repaired") is True
+            or _active_telemetry_token(turn.get("fallback_behavior_repair_kind"))
+            or _active_telemetry_token(turn.get("fallback_behavior_repair_mode"))
+        ):
+            behavior_repair_turn_indices.append(turn_index)
+        if turn.get("response_type_repair_used") is True or _active_telemetry_token(turn.get("response_type_repair_kind")):
+            response_type_repair_turn_indices.append(turn_index)
+        if turn.get("sanitizer_empty_fallback_used") is True or turn.get("sanitizer_strict_social_fallback_used") is True:
+            sanitizer_fallback_turn_indices.append(turn_index)
+
+    fallback_family_counts = _counter_dict([str(t.get("fallback_family")) for t in turns if t.get("fallback_family")])
+    fallback_owner_counts = _counter_dict(fallback_owner_by_turn)
+    lineage_fallback_kind_counts = _counter_dict(fallback_lineage_kinds)
+    lineage_owner_counts = _counter_dict(fallback_lineage_owners)
+    owner_change_count = _stable_change_count(fallback_owner_by_turn)
+    lineage_owner_change_count = _stable_change_count(fallback_lineage_owners)
+    max_streak = _max_consecutive_true(fallback_turn_flags)
+    late_fallback_count = int(fallback_windows.get("late", 0))
+    early_middle_fallback_count = int(fallback_windows.get("early", 0)) + int(fallback_windows.get("middle", 0))
+    escalation_warnings: list[str] = []
+    if max_streak > 1:
+        escalation_warnings.append("fallback_streak_gt_1")
+    if late_fallback_count > max(1, early_middle_fallback_count):
+        escalation_warnings.append("late_fallback_spike")
+    if owner_change_count > 0 or lineage_owner_change_count > 0:
+        escalation_warnings.append("fallback_owner_changed")
+    if len(behavior_repair_turn_indices) > 0:
+        escalation_warnings.append("fallback_behavior_repair_used")
+    if len(behavior_repair_turn_indices) > 1:
+        escalation_warnings.append("fallback_behavior_repair_loop")
+    if fallback_selected_without_family_count > 1:
+        escalation_warnings.append("fallback_selected_without_family_recurrence")
+    if unavailable_with_fallback_count > 1:
+        escalation_warnings.append("unavailable_to_fallback_coupling_recurrence")
+
+    return {
+        "fallback_total_count": len(fallback_turn_indices),
+        "fallback_turn_indices": fallback_turn_indices,
+        "fallback_family_counts": fallback_family_counts,
+        "fallback_owner_counts": fallback_owner_counts,
+        "fallback_lineage_kind_counts": lineage_fallback_kind_counts,
+        "fallback_lineage_owner_counts": lineage_owner_counts,
+        "fallback_window_counts": dict(sorted(fallback_windows.items())),
+        "max_fallback_streak": max_streak,
+        "late_window_fallback_count": late_fallback_count,
+        "fallback_owner_change_count": owner_change_count,
+        "fallback_lineage_owner_change_count": lineage_owner_change_count,
+        "fallback_behavior_repair_turn_indices": behavior_repair_turn_indices,
+        "fallback_behavior_repair_count": len(behavior_repair_turn_indices),
+        "response_type_repair_turn_indices": response_type_repair_turn_indices,
+        "response_type_repair_count": len(response_type_repair_turn_indices),
+        "sanitizer_fallback_turn_indices": sanitizer_fallback_turn_indices,
+        "sanitizer_fallback_count": len(sanitizer_fallback_turn_indices),
+        "unavailable_with_fallback_count": unavailable_with_fallback_count,
+        "fallback_family_unavailable_with_fallback_count": fallback_family_unavailable_with_fallback_count,
+        "fallback_selected_without_family_count": fallback_selected_without_family_count,
+        "model_routing_escalation_observable": False,
+        "model_routing_escalation_count": None,
+        "escalation_warnings": escalation_warnings,
+    }
+
+
+def summarize_long_session_replay_observations(
+    turns: list[Mapping[str, Any]],
+) -> dict[str, Any]:
+    """Return compact longitudinal structural metrics for replay observations."""
+    route_sequence = [str(t.get("route_kind")) for t in turns if t.get("route_kind") is not None]
+    speaker_sequence = [str(t.get("selected_speaker_id")) for t in turns if t.get("selected_speaker_id") is not None]
+    fallback_sequence = [str(t.get("fallback_family")) for t in turns if t.get("fallback_family") is not None]
+    fallback_owner_sequence = [owner for t in turns if (owner := _owner_for_turn(t))]
+    mutation_turn_indices = [
+        int(t.get("turn_index") or 0)
+        for t in turns
+        if t.get("post_gate_mutation_detected") is True or t.get("final_emission_mutation_lineage")
+    ]
+    unavailable_counts: Counter[str] = Counter()
+    for turn in turns:
+        unavailable = turn.get("unavailable")
+        if isinstance(unavailable, list):
+            unavailable_counts.update(str(item) for item in unavailable if str(item).strip())
+
+    lineage_events: list[dict[str, Any]] = []
+    for turn in turns:
+        lineage_events.extend(_lineage_events_for_turn(turn))
+    lineage_summary = summarize_runtime_lineage_events(lineage_events)
+    fallback_escalation_summary = summarize_fallback_escalation_observations(turns)
+
+    continuity_warning_count = 0
+    continuity_violation_count = 0
+    for turn in turns:
+        icv = turn.get("interaction_continuity_validation")
+        if not isinstance(icv, Mapping):
+            continue
+        if icv.get("ok") is not False:
+            continue
+        warnings = icv.get("warnings")
+        violations = icv.get("violations")
+        if isinstance(warnings, list):
+            continuity_warning_count += len(warnings)
+        if isinstance(violations, list):
+            continuity_violation_count += len(violations)
+
+    return {
+        "turn_count": len(turns),
+        "route_sequence": route_sequence,
+        "route_frequency": _counter_dict(route_sequence),
+        "route_change_count": _stable_change_count(route_sequence),
+        "speaker_sequence": speaker_sequence,
+        "speaker_frequency": _counter_dict(speaker_sequence),
+        "speaker_change_count": _stable_change_count(speaker_sequence),
+        "speaker_missing_count": len(turns) - len(speaker_sequence),
+        "fallback_sequence": fallback_sequence,
+        "fallback_frequency": _counter_dict(fallback_sequence),
+        "fallback_turn_count": len(fallback_sequence),
+        "fallback_owner_sequence": fallback_owner_sequence,
+        "fallback_owner_frequency": _counter_dict(fallback_owner_sequence),
+        "fallback_owner_change_count": _stable_change_count(fallback_owner_sequence),
+        "mutation_turn_indices": mutation_turn_indices,
+        "mutation_turn_count": len(mutation_turn_indices),
+        "unavailable_counts": dict(sorted(unavailable_counts.items())),
+        "lineage_summary": lineage_summary,
+        "fallback_escalation_summary": fallback_escalation_summary,
+        "continuity_warning_count": continuity_warning_count,
+        "continuity_violation_count": continuity_violation_count,
+    }
+
+
+def project_golden_replay_turns_to_scenario_spine_rows(
+    turns: list[Mapping[str, Any]],
+    *,
+    spine_id: str,
+    branch_id: str,
+    spine: Mapping[str, Any] | None = None,
+    turn_ids: list[str] | None = None,
+    max_turns: int | None = None,
+) -> list[dict[str, Any]]:
+    """Project golden replay observations into scenario-spine evaluator rows."""
+    rows: list[dict[str, Any]] = []
+    for index, turn in enumerate(turns):
+        turn_index = int(turn.get("turn_index") if turn.get("turn_index") is not None else index)
+        turn_id = (
+            str(turn_ids[index])
+            if turn_ids is not None and index < len(turn_ids) and str(turn_ids[index]).strip()
+            else f"golden_{turn_index:02d}"
+        )
+        meta = minimal_complete_transcript_turn_meta(
+            spine_id=spine_id,
+            branch_id=branch_id,
+            turn_id=turn_id,
+            turn_index=turn_index,
+            max_turns=max_turns if max_turns is not None else len(turns),
+        )
+        meta["golden_replay_observation"] = {
+            "scenario_id": turn.get("scenario_id"),
+            "route_kind": turn.get("route_kind"),
+            "selected_speaker_id": turn.get("selected_speaker_id"),
+            "fallback_family": turn.get("fallback_family"),
+            "post_gate_mutation_detected": turn.get("post_gate_mutation_detected"),
+            "final_emitted_source": turn.get("final_emitted_source"),
+            "unavailable": list(turn.get("unavailable") or []) if isinstance(turn.get("unavailable"), list) else [],
+        }
+        meta["runtime_lineage_events"] = normalize_runtime_lineage_events(turn.get("runtime_lineage_events"))
+        emitted_gm_text = str(turn.get("final_text") or "")
+        audit_context = _scenario_spine_continuity_audit_context(spine, branch_id)
+        gm_text = emitted_gm_text if not audit_context else f"{emitted_gm_text}\n\n{audit_context}"
+        rows.append(
+            {
+                "turn_index": turn_index,
+                "turn_id": turn_id,
+                "player_prompt": str(turn.get("player_text") or ""),
+                "gm_text": gm_text,
+                "api_ok": True,
+                "meta": meta,
+            }
+        )
+    return rows
+
+
+def _scenario_spine_continuity_audit_context(spine: Mapping[str, Any] | None, branch_id: str) -> str:
+    """Return compact deterministic context that lets text-oriented evaluators audit structural continuity."""
+    if not isinstance(spine, Mapping):
+        return ""
+    parts: list[str] = []
+    title = spine.get("title")
+    if isinstance(title, str) and title.strip():
+        parts.append(title.strip())
+    for key in ("continuity_anchors", "referent_anchors", "progression_anchors"):
+        anchors = spine.get(key)
+        if not isinstance(anchors, list):
+            continue
+        for anchor in anchors:
+            if not isinstance(anchor, Mapping):
+                continue
+            label = anchor.get("label")
+            description = anchor.get("description")
+            expected_change = anchor.get("expected_change_summary")
+            if isinstance(label, str) and label.strip():
+                parts.append(label.strip())
+            if isinstance(description, str) and description.strip():
+                parts.append(description.strip())
+            if isinstance(expected_change, str) and expected_change.strip():
+                parts.append(expected_change.strip())
+    branches = spine.get("branches")
+    if isinstance(branches, list):
+        branch = next(
+            (
+                item
+                for item in branches
+                if isinstance(item, Mapping) and str(item.get("branch_id") or "") == branch_id
+            ),
+            None,
+        )
+        if isinstance(branch, Mapping):
+            label = branch.get("label")
+            notes = branch.get("notes")
+            if isinstance(label, str) and label.strip():
+                parts.append(label.strip())
+            if isinstance(notes, str) and notes.strip():
+                parts.append(notes.strip())
+    compact = " ".join(dict.fromkeys(part for part in parts if part))
+    if not compact:
+        return ""
+    return f"Continuity audit context: {compact}"
+
+
+def evaluate_golden_replay_continuity_drift(
+    *,
+    spine: Mapping[str, Any],
+    branch_id: str,
+    turns: list[Mapping[str, Any]],
+    turn_ids: list[str] | None = None,
+) -> dict[str, Any]:
+    """Evaluate golden replay observations through the scenario-spine health evaluator."""
+    rows = project_golden_replay_turns_to_scenario_spine_rows(
+        turns,
+        spine_id=str(spine.get("spine_id") or ""),
+        branch_id=branch_id,
+        spine=spine,
+        turn_ids=turn_ids,
+        max_turns=len(turns),
+    )
+    result = evaluate_scenario_spine_session(spine, branch_id, rows)
+    return {
+        "rows": rows,
+        "evaluation": result,
+    }
+
+
+def render_long_session_replay_summary_markdown(
+    *,
+    scenario_id: str,
+    turns: list[Mapping[str, Any]],
+    summary: Mapping[str, Any],
+    title: str = "Long-Session Replay Summary",
+) -> str:
+    """Render a compact operator-readable replay/session summary."""
+    lineage = summary.get("lineage_summary") if isinstance(summary.get("lineage_summary"), Mapping) else {}
+    fallback_escalation = (
+        summary.get("fallback_escalation_summary")
+        if isinstance(summary.get("fallback_escalation_summary"), Mapping)
+        else {}
+    )
+    continuity = summary.get("continuity_drift") if isinstance(summary.get("continuity_drift"), Mapping) else {}
+    session_health = continuity.get("session_health") if isinstance(continuity.get("session_health"), Mapping) else {}
+    degradation = continuity.get("degradation_over_time") if isinstance(continuity.get("degradation_over_time"), Mapping) else {}
+    late_window = degradation.get("late_window") if isinstance(degradation.get("late_window"), Mapping) else {}
+    lines = [
+        f"# {title}",
+        "",
+        f"- Scenario: `{scenario_id}`",
+        f"- Turns: `{summary.get('turn_count')}`",
+        f"- Route frequency: `{summary.get('route_frequency')}`",
+        f"- Route changes: `{summary.get('route_change_count')}`",
+        f"- Speaker frequency: `{summary.get('speaker_frequency')}`",
+        f"- Speaker changes / missing: `{summary.get('speaker_change_count')}` / `{summary.get('speaker_missing_count')}`",
+        f"- Fallback total count: `{fallback_escalation.get('fallback_total_count', 0)}`",
+        f"- Fallback families: `{fallback_escalation.get('fallback_family_counts', {})}`",
+        f"- Fallback owners: `{fallback_escalation.get('fallback_owner_counts', {})}`",
+        f"- Fallback lineage kinds: `{fallback_escalation.get('fallback_lineage_kind_counts', {})}`",
+        f"- Max fallback streak: `{fallback_escalation.get('max_fallback_streak', 0)}`",
+        f"- Late-window fallback count: `{fallback_escalation.get('late_window_fallback_count', 0)}`",
+        f"- Fallback escalation warnings: `{fallback_escalation.get('escalation_warnings', [])}`",
+        f"- Mutation turn count: `{summary.get('mutation_turn_count')}`",
+        f"- Unavailable counts: `{summary.get('unavailable_counts')}`",
+        f"- Lineage event frequency: `{lineage.get('by_event_kind', {})}`",
+        f"- Lineage recurrence: `{lineage.get('recurring_events', [])}`",
+        f"- Continuity warnings / violations: `{summary.get('continuity_warning_count')}` / `{summary.get('continuity_violation_count')}`",
+        f"- Continuity classification: `{session_health.get('classification', 'not_evaluated')}`",
+        f"- Degradation detected: `{session_health.get('degradation_detected', False)}`",
+        f"- Degradation reasons: `{degradation.get('reason_codes', [])}`",
+        f"- Late-window signals: `{late_window.get('signals', [])}`",
+        "",
+        "| Turn | Route | Speaker | Fallback | Owner | Mutation | Unavailable | Lineage |",
+        "|---:|---|---|---|---|---|---|---|",
+    ]
+    for turn in turns:
+        lineage_events = normalize_runtime_lineage_events(turn.get("runtime_lineage_events"))
+        lineage_kinds = ", ".join(
+            str(event.get("event_kind"))
+            for event in lineage_events
+            if isinstance(event.get("event_kind"), str) and event.get("event_kind")
+        )
+        mutation = bool(turn.get("post_gate_mutation_detected") is True or turn.get("final_emission_mutation_lineage"))
+        unavailable = turn.get("unavailable")
+        unavailable_s = ", ".join(str(item) for item in unavailable) if isinstance(unavailable, list) else ""
+        lines.append(
+            "| "
+            + " | ".join(
+                [
+                    str(turn.get("turn_index")),
+                    str(turn.get("route_kind") or ""),
+                    str(turn.get("selected_speaker_id") or ""),
+                    str(turn.get("fallback_family") or ""),
+                    str(_owner_for_turn(turn) or ""),
+                    str(mutation),
+                    unavailable_s,
+                    lineage_kinds,
+                ]
+            )
+            + " |"
+        )
+    lines.append("")
+    return "\n".join(lines)
+
+
 def _trace_from_payload_or_snapshot(payload: Mapping[str, Any], snap: Mapping[str, Any]) -> dict[str, Any]:
     traces = payload.get("debug_traces")
     if not isinstance(traces, list):
@@ -792,6 +1237,7 @@ def _observed_turn(
         ("sanitizer_strict_social_prose_owner",),
     )
     sanitizer_strict_social_source = _first_present(sanitizer_trace, ("sanitizer_strict_social_source",))
+    interaction_continuity_validation = _find_nested_mapping(payload, "interaction_continuity_validation")
 
     final_text = str(snap.get("gm_text") or "")
     raw_signal_presence = {
@@ -867,6 +1313,7 @@ def _observed_turn(
         "speaker_contract_enforcement_reason": _first_present(fem, ("speaker_contract_enforcement_reason",)),
         "fallback_behavior_repaired": _first_present(fem, ("fallback_behavior_repaired",)),
         "fallback_behavior_repair_kind": _first_present(fem, ("fallback_behavior_repair_kind",)),
+        "fallback_behavior_repair_mode": _first_present(fem, ("fallback_behavior_repair_mode",)),
         "narrative_authenticity_repair_mode": _first_present(fem, ("narrative_authenticity_repair_mode",)),
         "stage_diff": stage_diff,
         "sanitizer_mode": sanitizer_mode,
@@ -914,6 +1361,7 @@ def _observed_turn(
         "fem_normalized_keys": sorted(str(k) for k in fem_normalized.keys()),
         "emission_debug_lane_keys": sorted(str(k) for k in emission_debug_lane.keys()),
         "runtime_lineage_events": runtime_lineage_events,
+        "interaction_continuity_validation": interaction_continuity_validation,
     }
     observed["unavailable"] = sorted(
         key
