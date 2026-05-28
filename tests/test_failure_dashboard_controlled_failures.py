@@ -11,6 +11,7 @@ from tests.helpers.failure_dashboard_report import (
     record_failure_dashboard_rows,
     render_failure_dashboard_markdown,
 )
+from tests.helpers.opening_fallback_evidence import successful_opening_observed_fields
 
 pytestmark = pytest.mark.failure_dashboard_probe
 
@@ -106,15 +107,7 @@ CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any], dict[
     # source symptoms remain final-gate-owned.
     (
         "opening_fallback_owner_bucket",
-        _observed(
-            final_emitted_source="opening_deterministic_fallback",
-            response_type_repair_kind="opening_deterministic_fallback",
-            opening_recovered_via_fallback=True,
-            opening_fallback_authorship_source="upstream_prepared_opening_fallback",
-            opening_fallback_owner_bucket=OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
-            fallback_family="scene_opening",
-            fallback_temporal_frame="first_impression",
-        ),
+        _observed(**successful_opening_observed_fields(include_owner_bucket=True)),
         {
             "field_path": "opening_fallback_owner_bucket",
             "expected": "sealed-gate",

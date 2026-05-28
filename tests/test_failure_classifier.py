@@ -18,6 +18,10 @@ from tests.helpers.failure_dashboard_report import (
     render_failure_dashboard_markdown,
     write_failure_dashboard_artifact_if_requested,
 )
+from tests.helpers.opening_fallback_evidence import (
+    fail_closed_opening_observed_fields,
+    successful_opening_observed_fields,
+)
 
 # Ownership note:
 # This suite owns classifier locality: category, owners, severity,
@@ -325,24 +329,12 @@ def test_failure_dashboard_renders_optional_runtime_lineage_summary_without_chan
     [
         (
             "canonical_upstream_prepared",
-            _observed(
-                final_emitted_source="opening_deterministic_fallback",
-                response_type_repair_kind="opening_deterministic_fallback",
-                opening_recovered_via_fallback=True,
-                opening_fallback_authorship_source="upstream_prepared_opening_fallback",
-                fallback_family="scene_opening",
-                fallback_temporal_frame="first_impression",
-            ),
+            _observed(**successful_opening_observed_fields()),
             OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
         ),
         (
             "fail_closed_sealed_gate",
-            _observed(
-                final_emitted_source="opening_fallback_failed_closed",
-                response_type_repair_kind="opening_deterministic_fallback_failed_closed",
-                opening_recovered_via_fallback=True,
-                fallback_family="scene_opening",
-            ),
+            _observed(**fail_closed_opening_observed_fields()),
             OPENING_FALLBACK_OWNER_SEALED_GATE,
         ),
         (

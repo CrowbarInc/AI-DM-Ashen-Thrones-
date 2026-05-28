@@ -7,7 +7,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, Mapping, Sequence
 
-from game.runtime_lineage_telemetry import normalize_runtime_lineage_events
+from game.runtime_lineage_telemetry import normalize_runtime_lineage_events, summarize_runtime_lineage_events
 from tests.helpers.failure_classifier import (
     FailureClassification,
     classify_replay_failure,
@@ -268,52 +268,8 @@ def recorded_protected_replay_runtime_lineage_events() -> list[dict[str, Any]]:
 
 
 def build_runtime_lineage_summary(events: Any) -> dict[str, Any]:
-    """Build a diagnostic-only replay lineage frequency and recurrence summary."""
-    normalized = normalize_runtime_lineage_events(events)
-    buckets: dict[str, dict[str, int]] = {
-        "by_event_kind": {},
-        "by_stage": {},
-        "by_recurrence_key": {},
-        "fallback_frequency": {},
-        "fallback_authorship_frequency": {},
-        "fallback_owner_bucket_frequency": {},
-        "speaker_repair_frequency": {},
-        "mutation_kind_frequency": {},
-        "gate_path_frequency": {},
-    }
-
-    def _count(bucket: str, value: Any) -> None:
-        if isinstance(value, str) and value.strip():
-            key = value.strip()
-            values = buckets[bucket]
-            values[key] = values.get(key, 0) + 1
-
-    for event in normalized:
-        kind = event.get("event_kind")
-        _count("by_event_kind", kind)
-        _count("by_stage", event.get("stage"))
-        _count("by_recurrence_key", event.get("recurrence_key"))
-        if kind == "fallback_selected":
-            _count("fallback_frequency", event.get("fallback_kind"))
-            _count("fallback_authorship_frequency", event.get("fallback_authorship_source"))
-            _count("fallback_owner_bucket_frequency", event.get("fallback_owner_bucket"))
-        elif kind == "speaker_repair":
-            _count("speaker_repair_frequency", event.get("repair_kind"))
-        elif kind == "mutation":
-            _count("mutation_kind_frequency", event.get("mutation_kind"))
-        elif kind == "gate_outcome":
-            _count("gate_path_frequency", event.get("gate_path"))
-
-    recurrence = buckets["by_recurrence_key"]
-    return {
-        "total_events": len(normalized),
-        **{key: dict(sorted(values.items())) for key, values in buckets.items()},
-        "recurring_events": [
-            {"recurrence_key": key, "count": count}
-            for key, count in sorted(recurrence.items(), key=lambda item: (-item[1], item[0]))
-            if count > 1
-        ],
-    }
+    """Normalize replay input, then delegate diagnostic-only aggregation."""
+    return summarize_runtime_lineage_events(normalize_runtime_lineage_events(events))
 
 
 def _runtime_lineage_markdown_lines(events: Any) -> list[str]:

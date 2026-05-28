@@ -9,6 +9,7 @@ from game.runtime_lineage_telemetry import (
     build_recurrence_key,
     make_runtime_lineage_event,
     normalize_runtime_lineage_events,
+    summarize_runtime_lineage_events,
 )
 
 
@@ -119,3 +120,37 @@ def test_normalize_runtime_lineage_events_is_safe_bounded_projection() -> None:
     assert raw[0]["repair_kind"] == "stale interlocutor invalidation"
     assert normalize_runtime_lineage_events(None) == []
     assert normalize_runtime_lineage_events({"event_kind": "mutation"}) == []
+
+
+def test_summarize_runtime_lineage_events_owns_frequency_and_persisted_recurrence_buckets() -> None:
+    fallback = make_runtime_lineage_event(
+        event_kind="fallback_selected",
+        stage="gate",
+        owner="game.final_emission_gate",
+        fallback_kind="scene_opening",
+        fallback_authorship_source="upstream_prepared_opening_fallback",
+        fallback_owner_bucket="upstream-prepared",
+    )
+    recorded = dict(fallback)
+    recorded["recurrence_key"] = "persisted:opening:key"
+    summary = summarize_runtime_lineage_events(
+        [
+            recorded,
+            recorded,
+            make_runtime_lineage_event(
+                event_kind="gate_outcome",
+                stage="gate",
+                owner="game.final_emission_gate",
+                gate_path="opening_fallback",
+            ),
+            {"event_type": "different_event_type", "event_kind": "fallback_selected"},
+        ]
+    )
+
+    assert summary["total_events"] == 3
+    assert summary["by_event_kind"] == {"fallback_selected": 2, "gate_outcome": 1}
+    assert summary["fallback_frequency"] == {"scene_opening": 2}
+    assert summary["fallback_authorship_frequency"] == {"upstream_prepared_opening_fallback": 2}
+    assert summary["fallback_owner_bucket_frequency"] == {"upstream-prepared": 2}
+    assert summary["gate_path_frequency"] == {"opening_fallback": 1}
+    assert summary["recurring_events"] == [{"recurrence_key": "persisted:opening:key", "count": 2}]

@@ -36,6 +36,7 @@ from game.scenario_spine_eval import (  # noqa: E402
     evaluate_scenario_spine_session,
 )
 from game.final_emission_meta import build_fem_runtime_lineage_events, read_final_emission_meta_dict  # noqa: E402
+from game.runtime_lineage_telemetry import summarize_runtime_lineage_events  # noqa: E402
 from game.scenario_spine_opening_convergence import (  # noqa: E402
     capture_opening_convergence_meta_from_chat_payload,
 )
@@ -593,69 +594,16 @@ def _long_branch_row(session_health: Mapping[str, Any]) -> bool:
 
 
 def build_runtime_lineage_summary(branch_transcripts: Mapping[str, Sequence[Mapping[str, Any]]]) -> dict[str, Any]:
-    """Aggregate persisted runtime lineage events without feeding evaluation results."""
-    by_event_kind: dict[str, int] = {}
-    by_stage: dict[str, int] = {}
-    by_recurrence_key: dict[str, int] = {}
-    fallback_frequency: dict[str, int] = {}
-    fallback_authorship_frequency: dict[str, int] = {}
-    fallback_owner_bucket_frequency: dict[str, int] = {}
-    speaker_repair_frequency: dict[str, int] = {}
-    mutation_kind_frequency: dict[str, int] = {}
-    gate_path_frequency: dict[str, int] = {}
-    total_events = 0
-
-    def _count(target: dict[str, int], raw: Any) -> None:
-        if isinstance(raw, str) and raw.strip():
-            key = raw.strip()
-            target[key] = target.get(key, 0) + 1
-
+    """Gather persisted lineage rows and delegate diagnostic aggregation."""
+    events: list[Any] = []
     for branch_id in sorted(branch_transcripts, key=str):
         for row in branch_transcripts[branch_id]:
             meta = row.get("meta") if isinstance(row, Mapping) else None
             raw_events = meta.get("runtime_lineage_events") if isinstance(meta, Mapping) else None
             if not isinstance(raw_events, list):
                 continue
-            for event in raw_events:
-                if not isinstance(event, Mapping) or event.get("event_type") != "runtime_lineage":
-                    continue
-                event_kind = event.get("event_kind")
-                if not isinstance(event_kind, str) or not event_kind.strip():
-                    continue
-                event_kind = event_kind.strip()
-                total_events += 1
-                _count(by_event_kind, event_kind)
-                _count(by_stage, event.get("stage"))
-                _count(by_recurrence_key, event.get("recurrence_key"))
-                if event_kind == "fallback_selected":
-                    _count(fallback_frequency, event.get("fallback_kind"))
-                    _count(fallback_authorship_frequency, event.get("fallback_authorship_source"))
-                    _count(fallback_owner_bucket_frequency, event.get("fallback_owner_bucket"))
-                elif event_kind == "speaker_repair":
-                    _count(speaker_repair_frequency, event.get("repair_kind"))
-                elif event_kind == "mutation":
-                    _count(mutation_kind_frequency, event.get("mutation_kind"))
-                elif event_kind == "gate_outcome":
-                    _count(gate_path_frequency, event.get("gate_path"))
-
-    recurring_events = [
-        {"recurrence_key": key, "count": count}
-        for key, count in sorted(by_recurrence_key.items(), key=lambda item: (-item[1], item[0]))
-        if count > 1
-    ]
-    return {
-        "total_events": total_events,
-        "by_event_kind": dict(sorted(by_event_kind.items())),
-        "by_stage": dict(sorted(by_stage.items())),
-        "by_recurrence_key": dict(sorted(by_recurrence_key.items())),
-        "fallback_frequency": dict(sorted(fallback_frequency.items())),
-        "fallback_authorship_frequency": dict(sorted(fallback_authorship_frequency.items())),
-        "fallback_owner_bucket_frequency": dict(sorted(fallback_owner_bucket_frequency.items())),
-        "speaker_repair_frequency": dict(sorted(speaker_repair_frequency.items())),
-        "mutation_kind_frequency": dict(sorted(mutation_kind_frequency.items())),
-        "gate_path_frequency": dict(sorted(gate_path_frequency.items())),
-        "recurring_events": recurring_events,
-    }
+            events.extend(raw_events)
+    return summarize_runtime_lineage_events(events)
 
 
 def build_aggregate_session_health_summary(

@@ -40,6 +40,7 @@ from game.final_emission_meta import (
     stage_diff_narrative_authenticity_projection,
 )
 from game.upstream_response_repairs import OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED
+from tests.helpers.opening_fallback_evidence import fail_closed_opening_fem_meta, successful_opening_fem_meta
 
 from game.narrative_mode_contract import (
     build_narrative_mode_contract,
@@ -504,13 +505,7 @@ def test_build_fem_runtime_lineage_events_acceptance_outcomes_do_not_invent_fall
 
 
 def test_build_fem_runtime_lineage_events_projects_opening_and_fail_closed_fallbacks() -> None:
-    opening_meta = {
-        "final_route": "accept_candidate",
-        "final_emitted_source": "opening_deterministic_fallback",
-        "opening_recovered_via_fallback": True,
-        "opening_fallback_authorship_source": OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED,
-        "fallback_family_used": "scene_opening",
-    }
+    opening_meta = successful_opening_fem_meta(final_route="accept_candidate")
     opening = build_fem_runtime_lineage_events(opening_meta)
     assert opening_fallback_owner_bucket_from_meta(opening_meta) == OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED
     opening_selected = _lineage_event(opening, "fallback_selected")
@@ -520,12 +515,7 @@ def test_build_fem_runtime_lineage_events_projects_opening_and_fail_closed_fallb
     assert opening_selected["fallback_owner_bucket"] == OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED
     assert _lineage_event(opening, "gate_outcome")["gate_path"] == "opening_fallback"
 
-    failed_closed_meta = {
-        "final_route": "replaced",
-        "final_emitted_source": "opening_fallback_failed_closed",
-        "opening_fallback_failed_closed": True,
-        "response_type_repair_kind": "opening_deterministic_fallback_failed_closed",
-    }
+    failed_closed_meta = fail_closed_opening_fem_meta(final_route="replaced", opening_fallback_failed_closed=True)
     failed_closed = build_fem_runtime_lineage_events(failed_closed_meta)
     assert opening_fallback_owner_bucket_from_meta(failed_closed_meta) == OPENING_FALLBACK_OWNER_SEALED_GATE
     failed_closed_selected = _lineage_event(failed_closed, "fallback_selected")

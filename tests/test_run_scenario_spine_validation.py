@@ -10,6 +10,8 @@ from pathlib import Path
 
 import pytest
 
+from tests.helpers.opening_fallback_evidence import successful_opening_fem_meta
+
 pytestmark = pytest.mark.unit
 
 _ROOT = Path(__file__).resolve().parents[1]
@@ -402,12 +404,7 @@ def test_transcript_meta_runtime_lineage_prefers_projected_bundle_and_projects_f
             "ok": True,
             "gm_output": {
                 "player_facing_text": "ok",
-                "_final_emission_meta": {
-                    "opening_recovered_via_fallback": True,
-                    "opening_fallback_authorship_source": "upstream_prepared_opening_fallback",
-                    "fallback_family_used": "scene_opening",
-                    "final_emitted_source": "opening_deterministic_fallback",
-                },
+                "_final_emission_meta": successful_opening_fem_meta(),
             },
         },
         spine=spine,

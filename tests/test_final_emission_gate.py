@@ -5349,6 +5349,93 @@ def test_block_ai_assembly_helpers_stamp_meta_without_selecting_fallback_lines(m
         assert forbidden not in helper_source
 
 
+def _assert_source_markers_in_order(source: str, markers: list[str]) -> None:
+    cursor = -1
+    for marker in markers:
+        next_index = source.find(marker, cursor + 1)
+        assert next_index > cursor, marker
+        cursor = next_index
+
+
+def test_block_m4_final_emitted_source_accept_precedence_ladders_are_locked() -> None:
+    """Characterization: accept-path final source attribution is a last-repair-wins ladder."""
+
+    source = inspect.getsource(feg.apply_final_emission_gate)
+
+    strict_accept = source[
+        source.index('final_emitted_source = str(details.get("final_emitted_source")')
+        : source.index('if not details.get("used_internal_fallback"):')
+    ]
+    non_strict_accept = source[
+        source.index('final_emitted_source = "generated_candidate"')
+        : source.index('log_final_emission_decision', source.index('final_emitted_source = "generated_candidate"'))
+    ]
+
+    strict_markers = [
+        'final_emitted_source = str(details.get("final_emitted_source")',
+        'response_type_debug.get("response_type_repair_used")',
+        'final_emitted_source = "retry_output"',
+        'ac_layer_meta.get("answer_completeness_repaired")',
+        'rd_layer_meta.get("response_delta_repaired")',
+        'srs_layer_meta.get("social_response_structure_repair_applied")',
+        'nat_layer_meta.get("narrative_authenticity_repaired")',
+        'na_layer_meta.get("narrative_authority_repaired")',
+        'te_layer_meta.get("tone_escalation_repaired")',
+        'ar_layer_meta.get("anti_railroading_repaired")',
+        'cs_layer_meta.get("context_separation_repaired")',
+        'fb_layer_meta.get("fallback_behavior_repaired")',
+        'purity_layer_meta.get("player_facing_narration_purity_repaired")',
+        'asp_layer_meta.get("answer_shape_primacy_repaired")',
+        'ffnc_layer_meta.get("fast_fallback_neutral_composition_repaired")',
+    ]
+    non_strict_markers = [
+        'final_emitted_source = "generated_candidate"',
+        'response_type_debug.get("response_type_repair_used")',
+        'final_emitted_source = "retry_output"',
+        'ac_layer_meta.get("answer_completeness_repaired")',
+        'rd_layer_meta.get("response_delta_repaired")',
+        'srs_layer_meta.get("social_response_structure_repair_applied")',
+        'nat_layer_meta.get("narrative_authenticity_repaired")',
+        'na_layer_meta.get("narrative_authority_repaired")',
+        'te_layer_meta.get("tone_escalation_repaired")',
+        'ar_layer_meta.get("anti_railroading_repaired")',
+        'cs_layer_meta.get("context_separation_repaired")',
+        'fb_layer_meta.get("fallback_behavior_repaired")',
+        'purity_layer_meta.get("player_facing_narration_purity_repaired")',
+        'asp_layer_meta.get("answer_shape_primacy_repaired")',
+        'ffnc_layer_meta.get("fast_fallback_neutral_composition_repaired")',
+    ]
+
+    _assert_source_markers_in_order(strict_accept, strict_markers)
+    _assert_source_markers_in_order(non_strict_accept, non_strict_markers)
+
+
+def test_block_m4_replacement_final_source_ownership_is_locked() -> None:
+    """Characterization: replacement paths use selected fallback source, with late patch-only exceptions."""
+
+    source = inspect.getsource(feg.apply_final_emission_gate)
+
+    _assert_source_markers_in_order(
+        source,
+        [
+            'details = {**details, "final_emitted_source": "minimal_social_emergency_fallback"}',
+            '"final_emitted_source": "minimal_social_emergency_fallback"',
+            'final_emitted_source = str(details.get("final_emitted_source")',
+            'fem_patch["final_emitted_source"] = "minimal_social_emergency_fallback"',
+            'fem_nmo["final_emitted_source"] = "minimal_social_emergency_fallback"',
+        ],
+    )
+    _assert_source_markers_in_order(
+        source,
+        [
+            'sealed_selection = _select_non_strict_replace_path_terminal_sealed_fallback_selection',
+            'final_emitted_source = sealed_selection.final_emitted_source',
+            '"final_emitted_source": final_emitted_source',
+            '_stamp_sealed_fallback_realization_family(',
+        ],
+    )
+
+
 def test_block_ai_opening_upstream_prepared_snapshot_remains_preferred_over_compatibility_local(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:

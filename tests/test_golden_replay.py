@@ -41,6 +41,7 @@ from tests.helpers.failure_dashboard_report import (
     recorded_runtime_lineage_events,
     write_protected_replay_failure_report_if_present,
 )
+from tests.helpers.opening_fallback_evidence import fail_closed_opening_fem_meta, successful_opening_fem_meta
 from tests.helpers.dialogue_social_plan import (
     attach_dialogue_social_plan_to_resolution,
     make_valid_dialogue_social_plan,
@@ -490,14 +491,10 @@ def test_golden_observed_turn_projects_canonical_upstream_prepared_opening_owner
         snap={"turn_index": 0, "gm_text": "The road opens."},
         payload={
             "gm_output": {
-                "_final_emission_meta": {
-                    "final_emitted_source": "opening_deterministic_fallback",
-                    "response_type_repair_kind": "opening_deterministic_fallback",
-                    "opening_recovered_via_fallback": True,
-                    "opening_fallback_authorship_source": "upstream_prepared_opening_fallback",
-                    "fallback_family_used": "scene_opening",
-                    "fallback_temporal_frame": "first_impression",
-                }
+                "_final_emission_meta": successful_opening_fem_meta(
+                    response_type_repair_kind="opening_deterministic_fallback",
+                    fallback_temporal_frame="first_impression",
+                )
             }
         },
     )
@@ -534,12 +531,7 @@ def test_golden_observed_turn_projects_runtime_lineage_and_prefers_existing_even
         snap={"turn_index": 0, "gm_text": "The road opens."},
         payload={
             "gm_output": {
-                "_final_emission_meta": {
-                    "final_emitted_source": "opening_deterministic_fallback",
-                    "opening_recovered_via_fallback": True,
-                    "opening_fallback_authorship_source": "upstream_prepared_opening_fallback",
-                    "fallback_family_used": "scene_opening",
-                }
+                "_final_emission_meta": successful_opening_fem_meta()
             }
         },
     )
@@ -570,12 +562,10 @@ def test_golden_observed_turn_projects_fail_closed_sealed_gate_opening_owner_buc
         snap={"turn_index": 0, "gm_text": "[opening_fallback_failed_closed:no_curated_facts]"},
         payload={
             "gm_output": {
-                "_final_emission_meta": {
-                    "final_emitted_source": "opening_fallback_failed_closed",
-                    "response_type_repair_kind": "opening_deterministic_fallback_failed_closed",
-                    "opening_recovered_via_fallback": True,
-                    "fallback_family_used": "scene_opening",
-                }
+                "_final_emission_meta": fail_closed_opening_fem_meta(
+                    opening_recovered_via_fallback=True,
+                    fallback_family_used="scene_opening",
+                )
             }
         },
     )

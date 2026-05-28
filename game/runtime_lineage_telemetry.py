@@ -199,3 +199,66 @@ def normalize_runtime_lineage_events(events: Any) -> list[dict[str, Any]]:
             )
         )
     return out
+
+
+def summarize_runtime_lineage_events(events: Any) -> dict[str, Any]:
+    """Aggregate canonical lineage events for read-side diagnostics only.
+
+    This is the canonical owner for the frequency and recurrence buckets shared
+    by scenario-spine artifacts and failure-dashboard reporting. Consumers
+    remain responsible for gathering events and, when needed, normalizing raw
+    input before calling this helper. Recorded recurrence keys are consumed as
+    provided so persisted scenario artifacts retain their existing identity.
+    """
+    buckets: dict[str, dict[str, int]] = {
+        "by_event_kind": {},
+        "by_stage": {},
+        "by_recurrence_key": {},
+        "fallback_frequency": {},
+        "fallback_authorship_frequency": {},
+        "fallback_owner_bucket_frequency": {},
+        "speaker_repair_frequency": {},
+        "mutation_kind_frequency": {},
+        "gate_path_frequency": {},
+    }
+    total_events = 0
+
+    def _count(bucket: str, value: Any) -> None:
+        if isinstance(value, str) and value.strip():
+            key = value.strip()
+            values = buckets[bucket]
+            values[key] = values.get(key, 0) + 1
+
+    if not isinstance(events, (str, bytes, Mapping)) and isinstance(events, Iterable):
+        for event in events:
+            if not isinstance(event, Mapping) or event.get("event_type") != RUNTIME_LINEAGE_EVENT_TYPE:
+                continue
+            kind = event.get("event_kind")
+            if not isinstance(kind, str) or not kind.strip():
+                continue
+            kind = kind.strip()
+            total_events += 1
+            _count("by_event_kind", kind)
+            _count("by_stage", event.get("stage"))
+            _count("by_recurrence_key", event.get("recurrence_key"))
+            if kind == RUNTIME_LINEAGE_EVENT_FALLBACK_SELECTED:
+                _count("fallback_frequency", event.get("fallback_kind"))
+                _count("fallback_authorship_frequency", event.get("fallback_authorship_source"))
+                _count("fallback_owner_bucket_frequency", event.get("fallback_owner_bucket"))
+            elif kind == RUNTIME_LINEAGE_EVENT_SPEAKER_REPAIR:
+                _count("speaker_repair_frequency", event.get("repair_kind"))
+            elif kind == RUNTIME_LINEAGE_EVENT_MUTATION:
+                _count("mutation_kind_frequency", event.get("mutation_kind"))
+            elif kind == RUNTIME_LINEAGE_EVENT_GATE_OUTCOME:
+                _count("gate_path_frequency", event.get("gate_path"))
+
+    recurrence = buckets["by_recurrence_key"]
+    return {
+        "total_events": total_events,
+        **{key: dict(sorted(values.items())) for key, values in buckets.items()},
+        "recurring_events": [
+            {"recurrence_key": key, "count": count}
+            for key, count in sorted(recurrence.items(), key=lambda item: (-item[1], item[0]))
+            if count > 1
+        ],
+    }
