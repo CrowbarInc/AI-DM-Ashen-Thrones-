@@ -837,6 +837,14 @@ def test_golden_observed_turn_projects_visibility_fallback_evidence():
     assert observed["visibility_replacement_applied"] is True
     assert observed["visibility_fallback_pool"] == "global_scene_narrative"
     assert observed["visibility_fallback_kind"] == "narrative_safe_fallback"
+    fallback_selected = next(
+        event for event in observed["runtime_lineage_events"] if event["event_kind"] == "fallback_selected"
+    )
+    gate_outcome = next(
+        event for event in observed["runtime_lineage_events"] if event["event_kind"] == "gate_outcome"
+    )
+    assert fallback_selected["fallback_kind"] == "visibility_or_scene_replacement"
+    assert gate_outcome["gate_path"] == "visibility_or_scene_replaced"
 
 
 @pytest.mark.parametrize(

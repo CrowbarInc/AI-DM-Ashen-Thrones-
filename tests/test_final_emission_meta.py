@@ -13,6 +13,7 @@ from game.final_emission_meta import (
     NARRATIVE_MODE_OUTPUT_FEM_KEYS,
     OPENING_FALLBACK_OWNER_SEALED_GATE,
     OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
+    SEALED_FALLBACK_OWNER_SEALED_GATE,
     assemble_unified_observational_telemetry_bundle,
     build_fem_observability_events,
     build_fem_runtime_lineage_events,
@@ -599,6 +600,33 @@ def test_assemble_unified_observational_bundle_exposes_fem_runtime_lineage_sibli
     events = bundle["fem_runtime_lineage_events"]
     assert _lineage_event(events, "fallback_selected")["fallback_kind"] == "visibility_or_scene_replacement"
     assert _lineage_event(events, "gate_outcome")["gate_path"] == "visibility_or_scene_replaced"
+
+
+def test_build_fem_runtime_lineage_events_preserves_visibility_sealed_projection_split() -> None:
+    events = build_fem_runtime_lineage_events(
+        {
+            "final_route": "replaced",
+            "final_emitted_source": "global_scene_fallback",
+            "visibility_replacement_applied": True,
+            "visibility_fallback_owner_bucket": "sealed-gate",
+            "visibility_fallback_pool": "global_scene_narrative",
+            "visibility_fallback_kind": "narrative_safe_fallback",
+            "sealed_fallback_owner_bucket": SEALED_FALLBACK_OWNER_SEALED_GATE,
+            "realization_fallback_family": "gate_terminal_repair",
+        }
+    )
+
+    fallback = _lineage_event(events, "fallback_selected")
+    assert fallback["fallback_kind"] == "visibility_or_scene_replacement"
+    assert fallback["owner"] == "game.final_emission_gate"
+    assert fallback["fallback_authorship_source"] is None
+    assert fallback["fallback_owner_bucket"] is None
+    assert _lineage_event(events, "gate_outcome")["gate_path"] == "visibility_or_scene_replaced"
+    assert not any(
+        event.get("fallback_kind") in {"scene_opening", "opening_failed_closed", "strict_social_fallback"}
+        for event in events
+    )
+    assert json.loads(json.dumps(events)) == events
 
 
 def test_build_fem_runtime_lineage_events_projects_explicit_speaker_contract_repairs() -> None:

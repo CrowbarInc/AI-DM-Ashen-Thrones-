@@ -121,12 +121,14 @@ def test_unified_bundle_realistic_integration_representative_payload() -> None:
     assert set(bundle.keys()) == {
         "final_emission_meta",
         "fem_observability_events",
+        "fem_runtime_lineage_events",
         "stage_diff_observability_events",
         "evaluator_observability_events",
         "stage_diff_surface",
     }
     assert bundle["final_emission_meta"] == normalize_final_emission_meta_for_observability(fem)
     assert bundle["fem_observability_events"]
+    assert isinstance(bundle["fem_runtime_lineage_events"], list)
     assert bundle["stage_diff_observability_events"]
     assert bundle["evaluator_observability_events"]
 

@@ -424,6 +424,37 @@ def test_transcript_meta_runtime_lineage_prefers_projected_bundle_and_projects_f
     assert any(event["event_kind"] == "gate_outcome" and event["gate_path"] == "opening_fallback" for event in events)
     assert json.loads(json.dumps(events)) == events
 
+    projected_visibility_from_fem = _mod.build_transcript_turn_meta(
+        {
+            "ok": True,
+            "gm_output": {
+                "player_facing_text": "ok",
+                "_final_emission_meta": {
+                    "final_route": "replaced",
+                    "final_emitted_source": "global_scene_fallback",
+                    "visibility_replacement_applied": True,
+                    "visibility_fallback_owner_bucket": "sealed-gate",
+                    "visibility_fallback_pool": "global_scene_narrative",
+                    "visibility_fallback_kind": "narrative_safe_fallback",
+                    "sealed_fallback_owner_bucket": "sealed-gate",
+                },
+            },
+        },
+        spine=spine,
+        branch_id_resolved="branch_direct_intrusion",
+        turn_index=0,
+        turn_id="turn_0",
+        smoke=True,
+        max_turns=1,
+        resume_entry_first_turn=False,
+    )
+    visibility_events = projected_visibility_from_fem["runtime_lineage_events"]
+    visibility_summary = _mod.build_runtime_lineage_summary(
+        {"visibility": [{"meta": {"runtime_lineage_events": visibility_events}}]}
+    )
+    assert visibility_summary["fallback_frequency"] == {"visibility_or_scene_replacement": 1}
+    assert visibility_summary["gate_path_frequency"] == {"visibility_or_scene_replaced": 1}
+
     empty = _mod.build_transcript_turn_meta(
         {"ok": True, "gm_output": {"player_facing_text": "ok"}},
         spine=spine,
