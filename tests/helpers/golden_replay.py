@@ -1111,6 +1111,8 @@ def _find_nested_list_field(root: Mapping[str, Any], key: str) -> tuple[bool, li
 
 
 def _runtime_lineage_events_from_payload(payload: Mapping[str, Any], fem: Mapping[str, Any]) -> list[dict[str, Any]]:
+    # Replay consumes normalized event-owner semantics as written: ``owner`` is selector/application
+    # ownership unless a future split-owner migration adds explicit content/projection owner fields.
     found, events = _find_nested_list_field(payload, "fem_runtime_lineage_events")
     if found:
         return normalize_runtime_lineage_events(events)[:16]

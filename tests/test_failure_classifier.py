@@ -264,6 +264,8 @@ def test_failure_dashboard_renders_optional_runtime_lineage_summary_without_chan
         fallback_kind="scene_opening",
         fallback_authorship_source="upstream_prepared_opening_fallback",
         fallback_owner_bucket="upstream-prepared",
+        fallback_selection_owner="game.final_emission_gate",
+        fallback_content_owner="game.opening_deterministic_fallback",
     )
     events = [
         fallback,
@@ -292,6 +294,8 @@ def test_failure_dashboard_renders_optional_runtime_lineage_summary_without_chan
     assert summary["fallback_frequency"] == {"scene_opening": 2}
     assert summary["fallback_authorship_frequency"] == {"upstream_prepared_opening_fallback": 2}
     assert summary["fallback_owner_bucket_frequency"] == {"upstream-prepared": 2}
+    assert summary["fallback_selection_owner_frequency"] == {"game.final_emission_gate": 2}
+    assert summary["fallback_content_owner_frequency"] == {"game.opening_deterministic_fallback": 2}
     assert summary["speaker_repair_frequency"] == {"local_rebind": 1}
     assert summary["mutation_kind_frequency"] == {"fallback_mutation": 1}
     assert summary["gate_path_frequency"] == {"opening_fallback": 1}
@@ -311,6 +315,8 @@ def test_failure_dashboard_renders_optional_runtime_lineage_summary_without_chan
     assert "`scene_opening` (2)" in report
     assert "`upstream_prepared_opening_fallback` (2)" in report
     assert "`upstream-prepared` (2)" in report
+    assert "`game.final_emission_gate` (2)" in report
+    assert "`game.opening_deterministic_fallback` (2)" in report
     assert "`local_rebind` (1)" in report
     assert "`fallback_mutation` (1)" in report
     assert "`opening_fallback` (1)" in report
@@ -1251,3 +1257,107 @@ def test_failure_classifier_strict_social_sanitizer_fallback_keeps_selection_and
     assert "strict_social_selection_owner=output_sanitizer" in report
     assert "strict_social_prose_owner=strict_social_emission" in report
     assert "strict_social_source=social_fallback_line_for_sanitizer.empty_output" in report
+
+
+def test_failure_classifier_accepts_opening_runtime_lineage_split_owners():
+    rows = build_failure_dashboard_rows(
+        observed_turn=_observed(
+            final_emitted_source="opening_deterministic_fallback",
+            opening_fallback_owner_bucket=OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
+            runtime_lineage_events=[
+                make_runtime_lineage_event(
+                    event_kind="fallback_selected",
+                    stage="gate",
+                    owner="game.final_emission_gate",
+                    fallback_kind="scene_opening",
+                    fallback_selection_owner="game.final_emission_gate",
+                    fallback_content_owner="game.opening_deterministic_fallback",
+                )
+            ],
+        ),
+        drift_rows=[
+            {
+                "field_path": "fallback_content_owner",
+                "expected": "game.final_emission_gate",
+                "actual": "game.opening_deterministic_fallback",
+                "reason": "split owner projection changed",
+                "drift_bucket": "structural_drift",
+            }
+        ],
+        scenario_id="opening_split_owner_probe",
+        turn_index=0,
+    )
+
+    report = render_failure_dashboard_markdown(rows, generated_at="2026-05-29T00:00:00Z", command_used="pytest")
+
+    assert rows[0]["fallback_selection_owner"] == "game.final_emission_gate"
+    assert rows[0]["fallback_content_owner"] == "game.opening_deterministic_fallback"
+    assert validate_failure_classification_row(rows[0]) == []
+    assert "fallback_selection_owner=game.final_emission_gate" in report
+    assert "fallback_content_owner=game.opening_deterministic_fallback" in report
+
+
+def test_failure_classifier_accepts_gate_selected_strict_social_runtime_lineage_split_owners():
+    rows = build_failure_dashboard_rows(
+        observed_turn=_observed(
+            strict_social_active=True,
+            final_emitted_source="minimal_social_emergency_fallback",
+            runtime_lineage_events=[
+                make_runtime_lineage_event(
+                    event_kind="fallback_selected",
+                    stage="gate",
+                    owner="game.final_emission_gate",
+                    fallback_kind="minimal_social_emergency_fallback",
+                    fallback_selection_owner="game.final_emission_gate",
+                    fallback_content_owner="game.social_exchange_emission",
+                )
+            ],
+        ),
+        drift_rows=[
+            {
+                "field_path": "fallback_content_owner",
+                "expected": "game.final_emission_gate",
+                "actual": "game.social_exchange_emission",
+                "reason": "strict-social split owner projection changed",
+                "drift_bucket": "structural_drift",
+            }
+        ],
+        scenario_id="strict_social_split_owner_probe",
+        turn_index=0,
+    )
+
+    assert rows[0]["fallback_selection_owner"] == "game.final_emission_gate"
+    assert rows[0]["fallback_content_owner"] == "game.social_exchange_emission"
+    assert validate_failure_classification_row(rows[0]) == []
+
+
+def test_failure_classification_contract_rejects_unknown_runtime_lineage_split_owner():
+    row = build_failure_dashboard_rows(
+        observed_turn=_observed(
+            runtime_lineage_events=[
+                make_runtime_lineage_event(
+                    event_kind="fallback_selected",
+                    stage="gate",
+                    owner="game.final_emission_gate",
+                    fallback_kind="scene_opening",
+                    fallback_selection_owner="game.unowned_selector",
+                    fallback_content_owner="game.unknown_content_owner",
+                )
+            ],
+        ),
+        drift_rows=[
+            {
+                "field_path": "fallback_content_owner",
+                "expected": "game.opening_deterministic_fallback",
+                "actual": "game.unknown_content_owner",
+                "reason": "unknown split owner",
+                "drift_bucket": "structural_drift",
+            }
+        ],
+        scenario_id="unknown_split_owner_probe",
+        turn_index=0,
+    )
+
+    errors = validate_failure_classification_row(row[0])
+    assert "invalid fallback_selection_owner: 'game.unowned_selector'" in errors
+    assert "invalid fallback_content_owner: 'game.unknown_content_owner'" in errors

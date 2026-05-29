@@ -207,6 +207,88 @@ FEM_RESPONSE_TYPE_KEYS: frozenset[str] = frozenset(
     }
 )
 
+OPENING_FALLBACK_PROJECTION_FIELDS: tuple[str, ...] = (
+    "opening_fallback_context_source",
+    "opening_fallback_basis_count",
+    "opening_fallback_context_missing",
+    "opening_fallback_failed_closed",
+    "opening_curated_facts_present",
+    "opening_curated_facts_count",
+    "opening_curated_facts_source",
+    "opening_selector_source_used",
+    "opening_selector_selected_facts",
+    "opening_curated_facts",
+    "opening_final_fallback_basis",
+    "opening_final_basis_matches_selector",
+    "opening_fallback_authorship_source",
+)
+
+OPENING_FALLBACK_SELECTOR_DEBUG_FIELDS: tuple[str, ...] = (
+    "opening_selector_source_used",
+    "opening_selector_selected_facts",
+    "opening_curated_facts",
+    "opening_final_fallback_basis",
+    "opening_final_basis_matches_selector",
+)
+
+_OPENING_FALLBACK_BOOL_PROJECTION_FIELDS: frozenset[str] = frozenset(
+    {
+        "opening_fallback_context_missing",
+        "opening_fallback_failed_closed",
+        "opening_curated_facts_present",
+        "opening_final_basis_matches_selector",
+    }
+)
+
+_OPENING_FALLBACK_INT_PROJECTION_FIELDS: frozenset[str] = frozenset(
+    {
+        "opening_fallback_basis_count",
+        "opening_curated_facts_count",
+    }
+)
+
+
+def opening_fallback_projection_fields(
+    source: Mapping[str, Any] | None,
+    *,
+    coerce_for_fem: bool = False,
+    include_authorship_source: bool = True,
+) -> Dict[str, Any]:
+    """Copy opening fallback projection fields from *source* without selecting or authoring fallback text."""
+    src = source if isinstance(source, Mapping) else {}
+    out: Dict[str, Any] = {}
+    for key in OPENING_FALLBACK_PROJECTION_FIELDS:
+        if key == "opening_fallback_authorship_source" and not include_authorship_source:
+            continue
+        value = src.get(key)
+        if coerce_for_fem and key in _OPENING_FALLBACK_BOOL_PROJECTION_FIELDS:
+            out[key] = bool(value)
+        elif coerce_for_fem and key in _OPENING_FALLBACK_INT_PROJECTION_FIELDS:
+            out[key] = int(value or 0)
+        else:
+            out[key] = value
+    return out
+
+
+def apply_opening_fallback_projection_fields(
+    target: MutableMapping[str, Any],
+    source: Mapping[str, Any] | None,
+    *,
+    coerce_for_fem: bool = False,
+    include_authorship_source: bool = True,
+) -> None:
+    """Metadata-only shallow copy of opening fallback projection fields into *target*."""
+    if not isinstance(target, MutableMapping):
+        return
+    target.update(
+        opening_fallback_projection_fields(
+            source,
+            coerce_for_fem=coerce_for_fem,
+            include_authorship_source=include_authorship_source,
+        )
+    )
+
+
 OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED = "upstream-prepared"
 OPENING_FALLBACK_OWNER_SEALED_GATE = "sealed-gate"
 OPENING_FALLBACK_OWNER_RETRY = "retry"
@@ -1229,7 +1311,11 @@ def _fem_response_type_action(fem: Mapping[str, Any]) -> str:
     return TELEMETRY_ACTION_UNKNOWN
 
 
-# Compatibility surface: runtime-lineage projection lives in final_emission_replay_projection; keep this import path stable for replay/dashboard consumers.
+# Compatibility surface: runtime-lineage projection lives in final_emission_replay_projection;
+# keep this import path stable for replay/dashboard consumers. Its event ``owner`` field
+# currently means selector/application owner, while fallback authorship evidence remains in
+# fields such as ``opening_fallback_authorship_source`` and ``opening_fallback_owner_bucket``.
+# Successful opening fallback also projects additive split fields for selection/content owner.
 from game.final_emission_replay_projection import build_fem_runtime_lineage_events
 
 

@@ -1,4 +1,19 @@
-"""Read-side FEM replay/runtime-lineage projection helpers. This module must not select fallbacks, mutate output, or stamp write-time FEM."""
+"""Read-side FEM replay/runtime-lineage projection helpers.
+
+This module must not select fallbacks, mutate output, or stamp write-time FEM.
+
+Owner semantics for projected runtime-lineage events:
+- ``projection_owner`` is this module: it derives lineage from already-finalized FEM.
+- Projected event ``owner`` preserves the current event-owner meaning: selector or
+  application owner for fallback paths, not necessarily fallback content owner.
+- Opening fallback can therefore project ``owner="game.final_emission_gate"`` while
+  carrying ``fallback_owner_bucket="upstream-prepared"`` and
+  ``fallback_authorship_source="upstream_prepared_opening_fallback"``.
+- Successful opening fallback and gate-selected strict-social fallback carry
+  explicit ``fallback_selection_owner`` and ``fallback_content_owner`` fields.
+  Fail-closed opening keeps gate/sealed ownership and is not treated as
+  upstream-authored content.
+"""
 from __future__ import annotations
 
 from typing import Any, Mapping
@@ -13,6 +28,11 @@ from game.runtime_lineage_telemetry import (
 from game.telemetry_vocab import normalize_reason_list
 
 FINAL_EMISSION_MUTATION_LINEAGE_KEY: str = "final_emission_mutation_lineage"
+OPENING_FALLBACK_SELECTION_OWNER: str = "game.final_emission_gate"
+OPENING_FALLBACK_CONTENT_OWNER: str = "game.opening_deterministic_fallback"
+OPENING_FAIL_CLOSED_CONTENT_OWNER: str = "game.final_emission_gate"
+STRICT_SOCIAL_FALLBACK_SELECTION_OWNER: str = "game.final_emission_gate"
+STRICT_SOCIAL_FALLBACK_CONTENT_OWNER: str = "game.social_exchange_emission"
 
 
 def _opening_fallback_owner_bucket_from_meta(meta: Mapping[str, Any] | None) -> str:
@@ -30,7 +50,12 @@ def _fem_lineage_source(fem: Mapping[str, Any], *keys: str) -> str | None:
 
 
 def _fem_selected_fallback_projection(fem: Mapping[str, Any]) -> tuple[str, str, str, str, str | None] | None:
-    """Return ``(fallback_kind, gate_path, stage, owner, source)`` only for proven selection."""
+    """Return ``(fallback_kind, gate_path, stage, owner, source)`` only for proven selection.
+
+    The returned ``owner`` is selection/application ownership for the projected
+    event. Content authorship, when known, is attached later via fallback-specific
+    attribution fields without changing replay event identity.
+    """
     final_route = str(fem.get("final_route") or "").strip().lower()
     final_source = _fem_lineage_source(fem, "final_emitted_source")
     source_token = str(final_source or "").strip().lower()
@@ -55,6 +80,7 @@ def _fem_selected_fallback_projection(fem: Mapping[str, Any]) -> tuple[str, str,
         )
 
     # Opening projection separates gate selection ownership from upstream-prepared prose authorship.
+    # Preserve ``owner`` as gate selection for P1; P2 may add or consume split-owner fields.
     if (
         fem.get("opening_fallback_failed_closed") is True
         or repair_kind == "opening_deterministic_fallback_failed_closed"
@@ -343,11 +369,20 @@ def build_fem_runtime_lineage_events(fem: Mapping[str, Any] | None) -> list[dict
         fallback_kind, gate_path, stage, owner, source = fallback
         fallback_authorship_source: str | None = None
         fallback_owner_bucket: str | None = None
+        fallback_selection_owner: str | None = None
+        fallback_content_owner: str | None = None
         if fallback_kind == "scene_opening":
             fallback_authorship_source = _fem_lineage_source(fem, "opening_fallback_authorship_source")
             fallback_owner_bucket = _opening_fallback_owner_bucket_from_meta(fem)
+            fallback_selection_owner = OPENING_FALLBACK_SELECTION_OWNER
+            fallback_content_owner = OPENING_FALLBACK_CONTENT_OWNER
         elif fallback_kind == "opening_failed_closed":
             fallback_owner_bucket = _opening_fallback_owner_bucket_from_meta(fem)
+            fallback_selection_owner = OPENING_FALLBACK_SELECTION_OWNER
+            fallback_content_owner = OPENING_FAIL_CLOSED_CONTENT_OWNER
+        elif fallback_kind in {"strict_social_fallback", "minimal_social_emergency_fallback"}:
+            fallback_selection_owner = STRICT_SOCIAL_FALLBACK_SELECTION_OWNER
+            fallback_content_owner = STRICT_SOCIAL_FALLBACK_CONTENT_OWNER
         _append_fem_lineage_event(
             events,
             make_runtime_lineage_event(
@@ -358,6 +393,8 @@ def build_fem_runtime_lineage_events(fem: Mapping[str, Any] | None) -> list[dict
                 fallback_kind=fallback_kind,
                 fallback_authorship_source=fallback_authorship_source,
                 fallback_owner_bucket=fallback_owner_bucket,
+                fallback_selection_owner=fallback_selection_owner,
+                fallback_content_owner=fallback_content_owner,
             ),
         )
         if gate_path != "unknown":

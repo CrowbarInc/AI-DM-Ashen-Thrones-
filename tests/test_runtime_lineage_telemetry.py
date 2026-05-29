@@ -22,6 +22,8 @@ def test_make_runtime_lineage_event_is_json_serializable_and_normalized() -> Non
         fallback_kind="Opening Failed-Closed",
         fallback_authorship_source="upstream_prepared_opening_fallback",
         fallback_owner_bucket="upstream-prepared",
+        fallback_selection_owner="game.final_emission_gate",
+        fallback_content_owner="game.opening_deterministic_fallback",
         notes=["selected", "selected", " sealed "],
     )
 
@@ -36,6 +38,8 @@ def test_make_runtime_lineage_event_is_json_serializable_and_normalized() -> Non
         "fallback_kind": "opening_failed_closed",
         "fallback_authorship_source": "upstream_prepared_opening_fallback",
         "fallback_owner_bucket": "upstream-prepared",
+        "fallback_selection_owner": "game.final_emission_gate",
+        "fallback_content_owner": "game.opening_deterministic_fallback",
         "repair_kind": None,
         "recurrence_key": "fallback_selected:gate:game.final_emission_gate:opening_failed_closed",
         "notes": ["selected", "sealed"],
@@ -100,6 +104,8 @@ def test_normalize_runtime_lineage_events_is_safe_bounded_projection() -> None:
             "repair_kind": "stale interlocutor invalidation",
             "fallback_authorship_source": "upstream_prepared_opening_fallback",
             "fallback_owner_bucket": "upstream-prepared",
+            "fallback_selection_owner": "game.final_emission_gate",
+            "fallback_content_owner": "game.opening_deterministic_fallback",
             "notes": " corrected ",
         },
         {"event_kind": "not-supported", "stage": "nowhere", "mutation_kind": "state mutation"},
@@ -114,6 +120,8 @@ def test_normalize_runtime_lineage_events_is_safe_bounded_projection() -> None:
     assert normalized[0]["repair_kind"] == "stale_interlocutor_invalidation"
     assert normalized[0]["fallback_authorship_source"] == "upstream_prepared_opening_fallback"
     assert normalized[0]["fallback_owner_bucket"] == "upstream-prepared"
+    assert normalized[0]["fallback_selection_owner"] == "game.final_emission_gate"
+    assert normalized[0]["fallback_content_owner"] == "game.opening_deterministic_fallback"
     assert normalized[0]["notes"] == ["corrected"]
     assert normalized[1]["event_kind"] == "unknown"
     assert normalized[1]["stage"] == "unknown"
@@ -130,6 +138,8 @@ def test_summarize_runtime_lineage_events_owns_frequency_and_persisted_recurrenc
         fallback_kind="scene_opening",
         fallback_authorship_source="upstream_prepared_opening_fallback",
         fallback_owner_bucket="upstream-prepared",
+        fallback_selection_owner="game.final_emission_gate",
+        fallback_content_owner="game.opening_deterministic_fallback",
     )
     recorded = dict(fallback)
     recorded["recurrence_key"] = "persisted:opening:key"
@@ -152,5 +162,7 @@ def test_summarize_runtime_lineage_events_owns_frequency_and_persisted_recurrenc
     assert summary["fallback_frequency"] == {"scene_opening": 2}
     assert summary["fallback_authorship_frequency"] == {"upstream_prepared_opening_fallback": 2}
     assert summary["fallback_owner_bucket_frequency"] == {"upstream-prepared": 2}
+    assert summary["fallback_selection_owner_frequency"] == {"game.final_emission_gate": 2}
+    assert summary["fallback_content_owner_frequency"] == {"game.opening_deterministic_fallback": 2}
     assert summary["gate_path_frequency"] == {"opening_fallback": 1}
     assert summary["recurring_events"] == [{"recurrence_key": "persisted:opening:key", "count": 2}]

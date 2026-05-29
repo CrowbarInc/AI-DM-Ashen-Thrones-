@@ -729,6 +729,8 @@ def test_golden_observed_turn_projects_runtime_lineage_and_prefers_existing_even
     )
     assert opening_selected["fallback_kind"] == "scene_opening"
     assert opening_selected["owner"] == "game.final_emission_gate"
+    assert opening_selected["fallback_selection_owner"] == "game.final_emission_gate"
+    assert opening_selected["fallback_content_owner"] == "game.opening_deterministic_fallback"
     assert opening_selected["fallback_authorship_source"] == "upstream_prepared_opening_fallback"
     assert opening_selected["fallback_owner_bucket"] == OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED
     debug = format_golden_replay_debug(
@@ -764,6 +766,8 @@ def test_golden_observed_turn_projects_fail_closed_sealed_gate_opening_owner_buc
         event for event in observed["runtime_lineage_events"] if event["event_kind"] == "fallback_selected"
     )
     assert failed_closed_selected["fallback_kind"] == "opening_failed_closed"
+    assert failed_closed_selected["fallback_selection_owner"] == "game.final_emission_gate"
+    assert failed_closed_selected["fallback_content_owner"] == "game.final_emission_gate"
     assert failed_closed_selected["fallback_authorship_source"] is None
     assert failed_closed_selected["fallback_owner_bucket"] == OPENING_FALLBACK_OWNER_SEALED_GATE
     debug = format_golden_replay_debug(
@@ -812,6 +816,13 @@ def test_golden_observed_turn_projects_strict_social_sealed_fallback_owner_bucke
     )
 
     assert observed["sealed_fallback_owner_bucket"] == SEALED_FALLBACK_OWNER_STRICT_SOCIAL_SEALED
+    fallback_selected = next(
+        event for event in observed["runtime_lineage_events"] if event["event_kind"] == "fallback_selected"
+    )
+    assert fallback_selected["fallback_kind"] == "minimal_social_emergency_fallback"
+    assert fallback_selected["owner"] == "game.final_emission_gate"
+    assert fallback_selected["fallback_selection_owner"] == "game.final_emission_gate"
+    assert fallback_selected["fallback_content_owner"] == "game.social_exchange_emission"
 
 
 def test_golden_observed_turn_projects_visibility_fallback_evidence():

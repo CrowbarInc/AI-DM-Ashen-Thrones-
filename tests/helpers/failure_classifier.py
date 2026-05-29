@@ -13,6 +13,8 @@ from tests.failure_classification_contract import (
     ALLOWED_EMISSION_SUBLAYERS,
     ALLOWED_FAILURE_CATEGORIES,
     ALLOWED_FAILURE_SEVERITIES,
+    ALLOWED_FALLBACK_CONTENT_OWNERS,
+    ALLOWED_FALLBACK_SELECTION_OWNERS,
     ALLOWED_MISSING_SOURCE_KINDS,
     ALLOWED_OPENING_FALLBACK_OWNER_BUCKETS,
     ALLOWED_PRIMARY_OWNERS,
@@ -56,6 +58,8 @@ class FailureClassification(TypedDict):
     fallback_temporal_frame: NotRequired[Any]
     opening_fallback_authorship_source: NotRequired[Any]
     opening_fallback_owner_bucket: NotRequired[Any]
+    fallback_selection_owner: NotRequired[str | None]
+    fallback_content_owner: NotRequired[str | None]
     sealed_fallback_owner_bucket: NotRequired[Any]
     visibility_fallback_owner_bucket: NotRequired[Any]
     visibility_replacement_applied: NotRequired[Any]
@@ -332,6 +336,14 @@ def validate_failure_classification_row(row: Mapping[str, Any]) -> list[str]:
     if visibility_bucket not in (None, "") and visibility_bucket not in ALLOWED_VISIBILITY_FALLBACK_OWNER_BUCKETS:
         errors.append(f"invalid visibility_fallback_owner_bucket: {visibility_bucket!r}")
 
+    fallback_selection_owner = row.get("fallback_selection_owner")
+    if fallback_selection_owner not in (None, "") and fallback_selection_owner not in ALLOWED_FALLBACK_SELECTION_OWNERS:
+        errors.append(f"invalid fallback_selection_owner: {fallback_selection_owner!r}")
+
+    fallback_content_owner = row.get("fallback_content_owner")
+    if fallback_content_owner not in (None, "") and fallback_content_owner not in ALLOWED_FALLBACK_CONTENT_OWNERS:
+        errors.append(f"invalid fallback_content_owner: {fallback_content_owner!r}")
+
     prepared_owner = row.get("prepared_emission_owner")
     if prepared_owner not in (None, "") and prepared_owner != "upstream_prepared_emission":
         errors.append(f"invalid prepared_emission_owner: {prepared_owner!r}")
@@ -502,6 +514,21 @@ def _opening_fallback_owner_bucket(observed_turn: Mapping[str, Any], drift_row: 
         return None
     mapped = opening_fallback_owner_bucket_from_meta(observed_turn)
     return mapped if isinstance(mapped, str) and mapped.strip() else None
+
+
+def _fallback_split_owner(observed_turn: Mapping[str, Any], owner_field: str) -> str | None:
+    raw_events = observed_turn.get("runtime_lineage_events")
+    events = raw_events if isinstance(raw_events, Sequence) and not isinstance(raw_events, (str, bytes)) else ()
+    for event in events:
+        if not isinstance(event, Mapping):
+            continue
+        if event.get("event_kind") != "fallback_selected":
+            continue
+        value = event.get(owner_field)
+        if isinstance(value, str) and value.strip():
+            return value.strip()
+    value = observed_turn.get(owner_field)
+    return value.strip() if isinstance(value, str) and value.strip() else None
 
 
 def _repair_kind(observed_turn: Mapping[str, Any], drift_row: Mapping[str, Any]) -> str | None:
@@ -825,6 +852,8 @@ def classify_replay_failure(
             "fallback_temporal_frame": observed_turn.get("fallback_temporal_frame"),
             "opening_fallback_authorship_source": observed_turn.get("opening_fallback_authorship_source"),
             "opening_fallback_owner_bucket": _opening_fallback_owner_bucket(observed_turn, drift_row),
+            "fallback_selection_owner": _fallback_split_owner(observed_turn, "fallback_selection_owner"),
+            "fallback_content_owner": _fallback_split_owner(observed_turn, "fallback_content_owner"),
             "sealed_fallback_owner_bucket": observed_turn.get("sealed_fallback_owner_bucket"),
             "visibility_fallback_owner_bucket": observed_turn.get("visibility_fallback_owner_bucket"),
             "visibility_replacement_applied": observed_turn.get("visibility_replacement_applied"),

@@ -4,6 +4,20 @@ This leaf module normalizes already-observed runtime evidence into compact,
 JSON-serializable event dictionaries. It does not inspect live runtime objects,
 select fallbacks, apply repairs, mutate emitted text, or influence scoring.
 
+Owner vocabulary contract:
+- ``owner`` is the event owner: the component that selected, applied, repaired,
+  or projected the observed lineage event.
+- For fallback-selected events, this usually means selection/application owner,
+  not necessarily the prose/content author.
+- Existing fallback attribution fields such as ``fallback_authorship_source``
+  and ``fallback_owner_bucket`` carry content/prose provenance when finalized
+  FEM has that evidence. ``fallback_selection_owner`` and
+  ``fallback_content_owner`` are explicit split-owner fields for families that
+  have moved beyond bucket/authorship-source hints.
+- Future split-owner work should add explicit fields such as content_owner,
+  selection_owner, and projection_owner instead of changing emitted text or
+  silently reinterpreting ``owner``.
+
 H2/H3 wire finalized fallback/gate-outcome/speaker-repair/mutation FEM reads through
 ``game.final_emission_meta.build_fem_runtime_lineage_events``. Future read-side
 consumers may derive additional events from stage-diff, post-emission state, or
@@ -132,13 +146,17 @@ def make_runtime_lineage_event(
     fallback_kind: Any = None,
     fallback_authorship_source: Any = None,
     fallback_owner_bucket: Any = None,
+    fallback_selection_owner: Any = None,
+    fallback_content_owner: Any = None,
     repair_kind: Any = None,
     notes: Any = None,
 ) -> dict[str, Any]:
     """Return one compact normalized runtime lineage event.
 
-    ``owner`` remains event/selection ownership. Optional fallback attribution
-    fields preserve prose authorship separately when FEM has that evidence.
+    ``owner`` remains event/selection/application ownership. Optional fallback
+    attribution fields preserve prose/content authorship separately when FEM has
+    that evidence. Split-owner fields are additive and must not change recurrence
+    identity or emitted text behavior.
     """
     event_kind_out = normalize_runtime_lineage_event_kind(event_kind)
     stage_out = normalize_runtime_lineage_stage(stage)
@@ -148,6 +166,8 @@ def make_runtime_lineage_event(
     fallback_kind_out = _normalize_token(fallback_kind)
     fallback_authorship_source_out = _normalize_text(fallback_authorship_source)
     fallback_owner_bucket_out = _normalize_text(fallback_owner_bucket)
+    fallback_selection_owner_out = normalize_owner(fallback_selection_owner)
+    fallback_content_owner_out = normalize_owner(fallback_content_owner)
     repair_kind_out = _normalize_token(repair_kind)
     generated_key = build_recurrence_key(
         event_kind=event_kind_out,
@@ -169,6 +189,8 @@ def make_runtime_lineage_event(
         "fallback_kind": fallback_kind_out,
         "fallback_authorship_source": fallback_authorship_source_out,
         "fallback_owner_bucket": fallback_owner_bucket_out,
+        "fallback_selection_owner": fallback_selection_owner_out,
+        "fallback_content_owner": fallback_content_owner_out,
         "repair_kind": repair_kind_out,
         "recurrence_key": generated_key,
         "notes": normalize_reason_list(notes),
@@ -194,6 +216,8 @@ def normalize_runtime_lineage_events(events: Any) -> list[dict[str, Any]]:
                 fallback_kind=raw.get("fallback_kind"),
                 fallback_authorship_source=raw.get("fallback_authorship_source"),
                 fallback_owner_bucket=raw.get("fallback_owner_bucket"),
+                fallback_selection_owner=raw.get("fallback_selection_owner"),
+                fallback_content_owner=raw.get("fallback_content_owner"),
                 repair_kind=raw.get("repair_kind"),
                 notes=raw.get("notes"),
             )
@@ -217,6 +241,8 @@ def summarize_runtime_lineage_events(events: Any) -> dict[str, Any]:
         "fallback_frequency": {},
         "fallback_authorship_frequency": {},
         "fallback_owner_bucket_frequency": {},
+        "fallback_selection_owner_frequency": {},
+        "fallback_content_owner_frequency": {},
         "speaker_repair_frequency": {},
         "mutation_kind_frequency": {},
         "gate_path_frequency": {},
@@ -245,6 +271,8 @@ def summarize_runtime_lineage_events(events: Any) -> dict[str, Any]:
                 _count("fallback_frequency", event.get("fallback_kind"))
                 _count("fallback_authorship_frequency", event.get("fallback_authorship_source"))
                 _count("fallback_owner_bucket_frequency", event.get("fallback_owner_bucket"))
+                _count("fallback_selection_owner_frequency", event.get("fallback_selection_owner"))
+                _count("fallback_content_owner_frequency", event.get("fallback_content_owner"))
             elif kind == RUNTIME_LINEAGE_EVENT_SPEAKER_REPAIR:
                 _count("speaker_repair_frequency", event.get("repair_kind"))
             elif kind == RUNTIME_LINEAGE_EVENT_MUTATION:

@@ -105,6 +105,18 @@ ALLOWED_SOURCE_FAMILY_TAGS: frozenset[str] = frozenset(
 ALLOWED_OPENING_FALLBACK_OWNER_BUCKETS: frozenset[str] = OPENING_FALLBACK_OWNER_BUCKETS
 ALLOWED_SEALED_FALLBACK_OWNER_BUCKETS: frozenset[str] = SEALED_FALLBACK_OWNER_BUCKETS
 ALLOWED_VISIBILITY_FALLBACK_OWNER_BUCKETS: frozenset[str] = VISIBILITY_FALLBACK_OWNER_BUCKETS
+ALLOWED_FALLBACK_SELECTION_OWNERS: frozenset[str] = frozenset(
+    {
+        "game.final_emission_gate",
+    }
+)
+ALLOWED_FALLBACK_CONTENT_OWNERS: frozenset[str] = frozenset(
+    {
+        "game.final_emission_gate",
+        "game.opening_deterministic_fallback",
+        "game.social_exchange_emission",
+    }
+)
 
 ALLOWED_RUNTIME_RESPONSE_TYPE_REPAIR_KINDS: frozenset[str] = frozenset(
     {
@@ -150,6 +162,8 @@ OPTIONAL_CLASSIFICATION_EVIDENCE_FIELDS: frozenset[str] = frozenset(
         "fallback_temporal_frame",
         "opening_fallback_authorship_source",
         "opening_fallback_owner_bucket",
+        "fallback_selection_owner",
+        "fallback_content_owner",
         "sealed_fallback_owner_bucket",
         "visibility_fallback_owner_bucket",
         "visibility_replacement_applied",

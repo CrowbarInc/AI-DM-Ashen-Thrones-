@@ -5349,6 +5349,42 @@ def test_block_ai_assembly_helpers_stamp_meta_without_selecting_fallback_lines(m
         assert forbidden not in helper_source
 
 
+def test_strict_social_emergency_fallback_patch_applies_caller_provided_text_without_selecting(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    def _forbidden_minimal(*_a: Any, **_k: Any) -> str:
+        raise AssertionError("patch helper must not invoke minimal_social_emergency_fallback_line")
+
+    monkeypatch.setattr(feg, "minimal_social_emergency_fallback_line", _forbidden_minimal)
+    out = {
+        "player_facing_text": "Bad candidate.",
+        "tags": ["existing"],
+        "_final_emission_meta": {"final_route": "accept_candidate", "candidate_validation_passed": True},
+    }
+
+    feg.apply_strict_social_emergency_fallback_patch(
+        out,
+        fallback_text='"Runner says, "No."',
+        pre_gate_text="Bad candidate.",
+        gate_tag="narrative_mode_output",
+        final_route="replaced",
+        candidate_validation_passed=False,
+    )
+
+    fem = out["_final_emission_meta"]
+    assert out["player_facing_text"] == '"Runner says, "No."'
+    assert out["tags"] == [
+        "existing",
+        "final_emission_gate_replaced",
+        "final_emission_gate:narrative_mode_output",
+    ]
+    assert fem["final_route"] == "replaced"
+    assert fem["candidate_validation_passed"] is False
+    assert fem["final_emitted_source"] == "minimal_social_emergency_fallback"
+    assert fem[REALIZATION_FALLBACK_FAMILY_FIELD] == STRICT_SOCIAL_DETERMINISTIC_FALLBACK
+    assert fem["post_gate_mutation_detected"] is True
+
+
 def _assert_source_markers_in_order(source: str, markers: list[str]) -> None:
     cursor = -1
     for marker in markers:
@@ -5421,8 +5457,8 @@ def test_block_m4_replacement_final_source_ownership_is_locked() -> None:
             'details = {**details, "final_emitted_source": "minimal_social_emergency_fallback"}',
             '"final_emitted_source": "minimal_social_emergency_fallback"',
             'final_emitted_source = str(details.get("final_emitted_source")',
-            'fem_patch["final_emitted_source"] = "minimal_social_emergency_fallback"',
-            'fem_nmo["final_emitted_source"] = "minimal_social_emergency_fallback"',
+            'gate_tag="interaction_continuity"',
+            'gate_tag="narrative_mode_output"',
         ],
     )
     _assert_source_markers_in_order(

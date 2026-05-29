@@ -136,6 +136,8 @@ from game.fallback_provenance_debug import (
 )
 from game.final_emission_meta import (
     FINAL_EMISSION_META_KEY,
+    OPENING_FALLBACK_SELECTOR_DEBUG_FIELDS,
+    apply_opening_fallback_projection_fields,
     default_narrative_authenticity_layer_meta,
     default_response_type_debug as _default_response_type_debug,
     ensure_final_emission_meta_dict,
@@ -8447,6 +8449,33 @@ def _patch_gate_fem_text_fingerprint(out: Dict[str, Any], *, pre_gate_text: str)
     fem["post_gate_mutation_detected"] = pre_gate_text != gtxt
 
 
+def apply_strict_social_emergency_fallback_patch(
+    out: Dict[str, Any],
+    *,
+    fallback_text: str,
+    pre_gate_text: str,
+    gate_tag: str,
+    final_route: str | None = None,
+    candidate_validation_passed: bool | None = None,
+) -> None:
+    """Apply already-authored strict-social emergency fallback text and stamp FEM metadata."""
+    out["player_facing_text"] = fallback_text
+    out["tags"] = list(out.get("tags") or []) + [
+        "final_emission_gate_replaced",
+        f"final_emission_gate:{gate_tag}",
+    ]
+    fem = out.get(FINAL_EMISSION_META_KEY)
+    if not isinstance(fem, dict):
+        return
+    if final_route is not None:
+        fem["final_route"] = final_route
+    if candidate_validation_passed is not None:
+        fem["candidate_validation_passed"] = candidate_validation_passed
+    fem["final_emitted_source"] = "minimal_social_emergency_fallback"
+    attach_realization_fallback_family(fem, STRICT_SOCIAL_DETERMINISTIC_FALLBACK)
+    _patch_gate_fem_text_fingerprint(out, pre_gate_text=pre_gate_text)
+
+
 def _apply_acceptance_quality_n4_floor_seam(
     out: Dict[str, Any],
     *,
@@ -9342,17 +9371,12 @@ def apply_final_emission_gate(
             )
             out["player_facing_text"] = ic_strict_text
             if ic_strict_fb:
-                out["tags"] = list(out.get("tags") or []) + [
-                    "final_emission_gate_replaced",
-                    "final_emission_gate:interaction_continuity",
-                ]
-                fem_patch = out.get("_final_emission_meta")
-                if isinstance(fem_patch, dict):
-                    fem_patch["final_emitted_source"] = "minimal_social_emergency_fallback"
-                    attach_realization_fallback_family(fem_patch, STRICT_SOCIAL_DETERMINISTIC_FALLBACK)
-                    gtxt = _normalize_text(ic_strict_text)
-                    fem_patch["final_text_preview"] = (gtxt[:120] + "…") if len(gtxt) > 120 else gtxt
-                    fem_patch["post_gate_mutation_detected"] = pre_gate_text != gtxt
+                apply_strict_social_emergency_fallback_patch(
+                    out,
+                    fallback_text=ic_strict_text,
+                    pre_gate_text=pre_gate_text,
+                    gate_tag="interaction_continuity",
+                )
             fb_text, fb_layer_meta, _ = _apply_fallback_behavior_layer(
                 _normalize_text(out.get("player_facing_text")),
                 gm_output=out,
@@ -9398,20 +9422,14 @@ def apply_final_emission_gate(
                     "hard_replace_illegal_output_with_sealed_fallback",
                     source="gate.apply_final_emission_gate.strict_social.nmo_emergency",
                 )
-                out["player_facing_text"] = em_fb
-                out["tags"] = list(out.get("tags") or []) + [
-                    "final_emission_gate_replaced",
-                    "final_emission_gate:narrative_mode_output",
-                ]
-                fem_nmo = out.get(FINAL_EMISSION_META_KEY)
-                if isinstance(fem_nmo, dict):
-                    fem_nmo["final_route"] = "replaced"
-                    fem_nmo["candidate_validation_passed"] = False
-                    fem_nmo["final_emitted_source"] = "minimal_social_emergency_fallback"
-                    attach_realization_fallback_family(fem_nmo, STRICT_SOCIAL_DETERMINISTIC_FALLBACK)
-                    gtn = _normalize_text(em_fb)
-                    fem_nmo["final_text_preview"] = (gtn[:120] + "…") if len(gtn) > 120 else gtn
-                    fem_nmo["post_gate_mutation_detected"] = pre_gate_text != gtn
+                apply_strict_social_emergency_fallback_patch(
+                    out,
+                    fallback_text=em_fb,
+                    pre_gate_text=pre_gate_text,
+                    gate_tag="narrative_mode_output",
+                    final_route="replaced",
+                    candidate_validation_passed=False,
+                )
                 _nmo_post_fb = _narrative_mode_output_legality_assessment(
                     str(out.get("player_facing_text") or ""),
                     out,
@@ -10188,23 +10206,7 @@ def apply_final_emission_gate(
     opening_fallback_composition_meta = sealed_selection.composition_meta
     fallback_composition_meta: Dict[str, Any] = opening_fallback_composition_meta or {}
     if opening_fallback_composition_meta is not None:
-        response_type_debug.update(
-            {
-                "opening_fallback_context_source": opening_fallback_composition_meta.get("opening_fallback_context_source"),
-                "opening_fallback_basis_count": opening_fallback_composition_meta.get("opening_fallback_basis_count"),
-                "opening_fallback_context_missing": opening_fallback_composition_meta.get("opening_fallback_context_missing"),
-                "opening_fallback_failed_closed": opening_fallback_composition_meta.get("opening_fallback_failed_closed"),
-                "opening_curated_facts_present": opening_fallback_composition_meta.get("opening_curated_facts_present"),
-                "opening_curated_facts_count": opening_fallback_composition_meta.get("opening_curated_facts_count"),
-                "opening_curated_facts_source": opening_fallback_composition_meta.get("opening_curated_facts_source"),
-                "opening_selector_source_used": opening_fallback_composition_meta.get("opening_selector_source_used"),
-                "opening_selector_selected_facts": opening_fallback_composition_meta.get("opening_selector_selected_facts"),
-                "opening_curated_facts": opening_fallback_composition_meta.get("opening_curated_facts"),
-                "opening_final_fallback_basis": opening_fallback_composition_meta.get("opening_final_fallback_basis"),
-                "opening_final_basis_matches_selector": opening_fallback_composition_meta.get("opening_final_basis_matches_selector"),
-                "opening_fallback_authorship_source": opening_fallback_composition_meta.get("opening_fallback_authorship_source"),
-            }
-        )
+        apply_opening_fallback_projection_fields(response_type_debug, opening_fallback_composition_meta)
     deterministic_attempted = False
     deterministic_passed = False
 
@@ -10244,7 +10246,7 @@ def apply_final_emission_gate(
     fallback_family_used = fallback_composition_meta.get("fallback_family_used") or fallback_classification.get("fallback_family")
     fallback_temporal_frame = fallback_composition_meta.get("fallback_temporal_frame") or fallback_classification.get("temporal_frame")
 
-    out[FINAL_EMISSION_META_KEY] = {
+    fem_replacement_meta = {
         "final_route": "replaced",
         "reply_kind": _reply_kind(eff_resolution if isinstance(eff_resolution, dict) else None),
         "strict_social_active": strict_social_active,
@@ -10259,18 +10261,6 @@ def apply_final_emission_gate(
         "realization_fallback_family": GATE_TERMINAL_REPAIR,
         "fallback_family_used": fallback_family_used,
         "fallback_temporal_frame": fallback_temporal_frame,
-        "opening_fallback_context_source": fallback_composition_meta.get("opening_fallback_context_source"),
-        "opening_fallback_basis_count": int(fallback_composition_meta.get("opening_fallback_basis_count") or 0),
-        "opening_fallback_context_missing": bool(fallback_composition_meta.get("opening_fallback_context_missing")),
-        "opening_fallback_failed_closed": bool(fallback_composition_meta.get("opening_fallback_failed_closed")),
-        "opening_curated_facts_present": bool(fallback_composition_meta.get("opening_curated_facts_present")),
-        "opening_curated_facts_count": int(fallback_composition_meta.get("opening_curated_facts_count") or 0),
-        "opening_curated_facts_source": fallback_composition_meta.get("opening_curated_facts_source"),
-        "opening_selector_source_used": fallback_composition_meta.get("opening_selector_source_used"),
-        "opening_selector_selected_facts": fallback_composition_meta.get("opening_selector_selected_facts"),
-        "opening_curated_facts": fallback_composition_meta.get("opening_curated_facts"),
-        "opening_final_fallback_basis": fallback_composition_meta.get("opening_final_fallback_basis"),
-        "opening_final_basis_matches_selector": fallback_composition_meta.get("opening_final_basis_matches_selector"),
         "post_gate_mutation_detected": post_gate_mutation_detected,
         "final_text_preview": (gate_out_text[:120] + "…") if len(gate_out_text) > 120 else gate_out_text,
         "coercion_reason": coercion_reason,
@@ -10279,17 +10269,18 @@ def apply_final_emission_gate(
         "strict_social_suppression_reason": strict_social_suppression_reason,
         "anti_reset_intro_suppressed": bool(suppress_intro_replace),
     }
+    apply_opening_fallback_projection_fields(
+        fem_replacement_meta,
+        fallback_composition_meta,
+        coerce_for_fem=True,
+        include_authorship_source=False,
+    )
+    out[FINAL_EMISSION_META_KEY] = fem_replacement_meta
     md_dbg = out.get("metadata") if isinstance(out.get("metadata"), dict) else {}
     out["metadata"] = md_dbg
     em_dbg = md_dbg.setdefault("emission_debug", {})
     if isinstance(em_dbg, dict):
-        for key in (
-            "opening_selector_source_used",
-            "opening_selector_selected_facts",
-            "opening_curated_facts",
-            "opening_final_fallback_basis",
-            "opening_final_basis_matches_selector",
-        ):
+        for key in OPENING_FALLBACK_SELECTOR_DEBUG_FIELDS:
             em_dbg[key] = out[FINAL_EMISSION_META_KEY].get(key)
     _flag_non_hostile_escalation_from_writer_pregate(
         pre_gate_text,
