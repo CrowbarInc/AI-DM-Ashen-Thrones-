@@ -755,6 +755,39 @@ def test_build_runtime_lineage_summary_counts_frequency_and_recurrence_without_s
     assert "overall_passed" not in summary
 
 
+def test_scenario_spine_runtime_lineage_summary_uses_shared_reporting_surface() -> None:
+    from tests.helpers.runtime_lineage_reporting import (
+        build_runtime_lineage_summary_from_branch_transcripts,
+        runtime_lineage_markdown_lines,
+    )
+
+    assert _mod.build_runtime_lineage_summary({}) == build_runtime_lineage_summary_from_branch_transcripts({})
+
+    summary = _mod.build_runtime_lineage_summary(
+        {
+            "branch_a": [
+                {
+                    "meta": {
+                        "runtime_lineage_events": [
+                            {
+                                "event_type": "runtime_lineage",
+                                "event_kind": "fallback_selected",
+                                "stage": "gate",
+                                "fallback_kind": "scene_opening",
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    )
+    markdown = "\n".join(runtime_lineage_markdown_lines(summary, profile="spine_aggregate"))
+    assert "## Runtime Lineage Summary" in markdown
+    assert "Top fallback kinds" in markdown
+    assert "Top recurring recurrence keys" in markdown
+    assert "Top fallback selection owners" not in markdown
+
+
 def test_cycle_i_opening_attribution_survives_prepared_payload_gate_lineage_and_diagnostics() -> None:
     from game.final_emission_gate import apply_final_emission_gate
     from game.final_emission_meta import build_fem_runtime_lineage_events, read_final_emission_meta_dict
@@ -762,9 +795,12 @@ def test_cycle_i_opening_attribution_survives_prepared_payload_gate_lineage_and_
         UPSTREAM_PREPARED_OPENING_FALLBACK_KEY,
         build_upstream_prepared_opening_fallback_payload,
     )
-    from tests.test_final_emission_gate import EXPECTED_FRONTIER_GATE_OPENING_FALLBACK, _opening_gm_output
+    from tests.helpers.final_emission_gate_fixtures import (
+        EXPECTED_FRONTIER_GATE_OPENING_FALLBACK,
+        opening_gm_output,
+    )
 
-    successful_gm = _opening_gm_output()
+    successful_gm = opening_gm_output()
     prepared = build_upstream_prepared_opening_fallback_payload(successful_gm)
     successful_gm[UPSTREAM_PREPARED_OPENING_FALLBACK_KEY] = prepared
     successful_gm["player_facing_text"] = "Nearby crates appear disturbed."
@@ -790,7 +826,7 @@ def test_cycle_i_opening_attribution_survives_prepared_payload_gate_lineage_and_
         for event in successful_events
     )
 
-    fail_closed_gm = _opening_gm_output()
+    fail_closed_gm = opening_gm_output()
     fail_closed_gm["opening_curated_facts"] = []
     fail_closed_gm["opening_selector_selected_facts"] = []
     fail_closed_gm["player_facing_text"] = "Nearby crates appear disturbed."

@@ -6,30 +6,32 @@ changing runtime behavior or creating a second storage/test harness.
 """
 from __future__ import annotations
 
-import hashlib
 import json
 import os
-import re
 from collections import Counter
 from pathlib import Path
 from typing import Any, Callable, Mapping
 
 from game.api import chat
-from game.final_emission_meta import (
-    build_fem_runtime_lineage_events,
-    normalize_final_emission_meta_for_observability,
-    opening_fallback_owner_bucket_from_meta,
-    read_emission_debug_lane_from_turn_payload,
-    read_final_emission_meta_from_turn_payload,
-)
-from game.runtime_lineage_telemetry import normalize_runtime_lineage_events, summarize_runtime_lineage_events
+from game.runtime_lineage_telemetry import normalize_runtime_lineage_events
+from tests.helpers.runtime_lineage_reporting import build_runtime_lineage_summary
 from game.models import ChatRequest
-from game.output_sanitizer import resembles_serialized_response_payload
 from game.scenario_spine_eval import evaluate_scenario_spine_session, minimal_complete_transcript_turn_meta
 from game import storage
 
-from tests.debug_trace_utils import latest_compact_debug_trace_entry
 from tests.helpers.failure_classifier import classify_replay_failure
+from tests.helpers.golden_replay_projection import (
+    MISSING as _MISSING,
+    NEUTRAL_REPLY_SPEAKER_GROUNDING_BRIDGE_FAMILY,
+    SEMANTIC_DRIFT_FIELDS as _SEMANTIC_DRIFT_FIELDS,
+    STRUCTURAL_DRIFT_FIELDS as _STRUCTURAL_DRIFT_FIELDS,
+    _echo_overlap_band,
+    final_text_has_scaffold_leakage,
+    golden_text_hash,
+    lookup_observation_path as _lookup_path,
+    normalize_golden_text,
+    project_turn_observation,
+)
 from tests.helpers.failure_dashboard_report import (
     failure_dashboard_requested,
     record_failure_dashboard_rows,
@@ -37,9 +39,6 @@ from tests.helpers.failure_dashboard_report import (
     record_runtime_lineage_events,
 )
 from tests.helpers.transcript_runner import (
-    compact_snapshot_summary,
-    latest_target_id,
-    latest_target_source,
     new_clean_campaign,
     patch_transcript_storage,
     snapshot_from_chat_payload,
@@ -57,65 +56,6 @@ PROTECTED_SOCIAL_RESOLUTION_KINDS = ("question", "social", "social_exchange", "d
 PROTECTED_SOCIAL_ROUTE_KINDS = ("social", "question", "social_engine", "dialogue")
 PROTECTED_DIALOGUE_TRACE_ROUTES = ("social", "dialogue")
 PROTECTED_GLOBAL_SCENE_FALLBACK_SOURCE = "global_scene_fallback"
-NEUTRAL_REPLY_SPEAKER_GROUNDING_BRIDGE_FAMILY = "neutral_reply_speaker_grounding_bridge"
-_MISSING = object()
-_STRUCTURAL_DRIFT_FIELDS = frozenset(
-    {
-        "resolution_kind",
-        "route_kind",
-        "selected_speaker_id",
-        "final_emitted_source",
-        "final_emission_mutation_lineage",
-        "response_type_required",
-        "response_type_candidate_ok",
-        "response_type_repair_used",
-        "response_type_repair_kind",
-        "upstream_prepared_emission_used",
-        "upstream_prepared_emission_valid",
-        "upstream_prepared_emission_source",
-        "upstream_prepared_emission_reject_reason",
-        "sanitizer_empty_fallback_used",
-        "sanitizer_empty_fallback_source",
-        "sanitizer_empty_fallback_owner",
-        "sanitizer_lineage_mode",
-        "sanitizer_lineage_changed_count",
-        "sanitizer_lineage_dropped_count",
-        "sanitizer_lineage_empty_fallback_used",
-        "sanitizer_lineage_legacy_rewrite_active",
-        "sanitizer_strict_social_fallback_used",
-        "sanitizer_strict_social_selection_owner",
-        "sanitizer_strict_social_prose_owner",
-        "sanitizer_strict_social_source",
-        "opening_recovered_via_fallback",
-        "opening_fallback_authorship_source",
-        "opening_fallback_owner_bucket",
-        "sealed_fallback_owner_bucket",
-        "visibility_fallback_owner_bucket",
-        "visibility_replacement_applied",
-        "visibility_fallback_pool",
-        "visibility_fallback_kind",
-        "fallback_family",
-        "fallback_temporal_frame",
-        "trace.canonical_entry.target_actor_id",
-        "trace.canonical_entry.target_source",
-        "trace.canonical_entry.reason",
-        "trace.social_contract_trace.route_selected",
-    }
-)
-_SEMANTIC_DRIFT_FIELDS = frozenset({"final_text", "scaffold_leakage"})
-
-_SCAFFOLD_LEAK_RE = re.compile(
-    r"\b(?:planner|router|validator|adjudication|scaffold|authoritative state|"
-    r"resolve that procedurally|player_facing_text|scene_update|debug_notes)\b",
-    re.IGNORECASE,
-)
-
-
-def final_text_has_scaffold_leakage(text: str) -> bool:
-    """Best-effort final-text leak detector for golden structural assertions."""
-    if not isinstance(text, str) or not text.strip():
-        return False
-    return bool(_SCAFFOLD_LEAK_RE.search(text) or resembles_serialized_response_payload(text))
 
 
 def protected_no_scaffold_expectation(*, extra_terms: tuple[str, ...] = ()) -> dict[str, Any]:
@@ -175,53 +115,6 @@ def frontier_gate_branch_turn_ids(branch_id: str, max_turns: int | None = None) 
     branch = _frontier_gate_branch(branch_id)
     turns = branch["turns"] if max_turns is None else branch["turns"][:max_turns]
     return [str(turn["turn_id"]) for turn in turns]
-
-
-def _sanitizer_debug_change_counts(sanitizer_debug: list[Any] | None) -> tuple[int | None, int | None]:
-    if not sanitizer_debug:
-        return None, None
-    changed = 0
-    dropped = 0
-    for event in sanitizer_debug:
-        if not isinstance(event, Mapping):
-            continue
-        event_name = str(event.get("event") or "").lower()
-        if any(token in event_name for token in ("dropped", "rewritten", "rewrite", "strip")):
-            changed += 1
-        if "dropped" in event_name or "drop" in event_name:
-            dropped += 1
-    return changed, dropped
-
-
-def _sanitizer_lineage_field(
-    sanitizer_trace: Mapping[str, Any] | None,
-    key: str,
-    fallback: Any = None,
-) -> Any:
-    if isinstance(sanitizer_trace, Mapping) and key in sanitizer_trace:
-        return sanitizer_trace.get(key)
-    return fallback
-
-
-def normalize_golden_text(text: Any) -> str:
-    """Stable, opt-in text normalization for exact golden prose checks."""
-    return re.sub(r"\s+", " ", str(text or "").strip())
-
-
-def golden_text_hash(text: Any) -> str:
-    """Short deterministic hash for report rows without storing long prose."""
-    return hashlib.sha256(normalize_golden_text(text).encode("utf-8")).hexdigest()[:16]
-
-
-def _lookup_path(obj: Mapping[str, Any], path: str) -> Any:
-    cur: Any = obj
-    for part in str(path or "").split("."):
-        if not part:
-            return _MISSING
-        if not isinstance(cur, Mapping) or part not in cur:
-            return _MISSING
-        cur = cur.get(part)
-    return cur
 
 
 def _format_expected_failure(
@@ -675,38 +568,6 @@ def _response_delta_kind_for_turn(turn: Mapping[str, Any]) -> str | None:
     return None
 
 
-def _echo_overlap_ratio(value: Any) -> float | None:
-    if isinstance(value, bool) or value is None:
-        return None
-    if isinstance(value, (int, float)):
-        ratio = float(value)
-    else:
-        try:
-            ratio = float(str(value).strip())
-        except (TypeError, ValueError):
-            return None
-    if ratio < 0:
-        return None
-    return min(ratio, 1.0)
-
-
-def _echo_overlap_band(value: Any) -> str | None:
-    if value is not None and not isinstance(value, bool):
-        text = str(value).strip()
-        if text and _echo_overlap_ratio(text) is None:
-            return text
-    ratio = _echo_overlap_ratio(value)
-    if ratio is None:
-        return None
-    if ratio == 0:
-        return "none"
-    if ratio < 0.25:
-        return "low"
-    if ratio < 0.5:
-        return "medium"
-    return "high"
-
-
 def summarize_response_delta_observations(turns: list[Mapping[str, Any]]) -> dict[str, Any]:
     """Summarize existing response-delta/FEM signals without judging prose semantics."""
     checked_count = 0
@@ -967,8 +828,8 @@ def compare_golden_replay_reruns(
             semantic_delta_frequency_delta_count += 1
             row["deltas"]["response_delta"] = response_delta_fields
 
-        prev_lineage = summarize_runtime_lineage_events(_lineage_events_for_turn(prev))
-        cur_lineage = summarize_runtime_lineage_events(_lineage_events_for_turn(cur))
+        prev_lineage = build_runtime_lineage_summary(_lineage_events_for_turn(prev))
+        cur_lineage = build_runtime_lineage_summary(_lineage_events_for_turn(cur))
         lineage_delta = _runtime_lineage_delta(prev_lineage, cur_lineage)
         if lineage_delta["total_event_delta"] != 0 or lineage_delta["changed_key_count"] > 0:
             runtime_lineage_delta_count += 1
@@ -977,8 +838,8 @@ def compare_golden_replay_reruns(
         if row["deltas"]:
             per_turn_deltas.append(row)
 
-    previous_lineage_summary = summarize_runtime_lineage_events(_runtime_lineage_events_for_turns(previous_turns))
-    current_lineage_summary = summarize_runtime_lineage_events(_runtime_lineage_events_for_turns(current_turns))
+    previous_lineage_summary = build_runtime_lineage_summary(_runtime_lineage_events_for_turns(previous_turns))
+    current_lineage_summary = build_runtime_lineage_summary(_runtime_lineage_events_for_turns(current_turns))
     previous_fallback_owners = [_fallback_owner_for_rerun_turn(turn) for turn in previous_turns]
     current_fallback_owners = [_fallback_owner_for_rerun_turn(turn) for turn in current_turns]
     previous_response_delta_summary = summarize_response_delta_observations(previous_turns)
@@ -1253,7 +1114,7 @@ def summarize_long_session_replay_observations(
     lineage_events: list[dict[str, Any]] = []
     for turn in turns:
         lineage_events.extend(_lineage_events_for_turn(turn))
-    lineage_summary = summarize_runtime_lineage_events(lineage_events)
+    lineage_summary = build_runtime_lineage_summary(lineage_events)
     fallback_escalation_summary = summarize_fallback_escalation_observations(turns)
     response_delta_summary = summarize_response_delta_observations(turns)
 
@@ -1514,122 +1375,6 @@ def render_long_session_replay_summary_markdown(
     return "\n".join(lines)
 
 
-def _trace_from_payload_or_snapshot(payload: Mapping[str, Any], snap: Mapping[str, Any]) -> dict[str, Any]:
-    traces = payload.get("debug_traces")
-    if not isinstance(traces, list):
-        session = payload.get("session") if isinstance(payload.get("session"), Mapping) else {}
-        traces = session.get("debug_traces") if isinstance(session.get("debug_traces"), list) else []
-    trace = latest_compact_debug_trace_entry(traces)
-    if trace:
-        return trace
-    debug = snap.get("debug") if isinstance(snap.get("debug"), Mapping) else {}
-    last = debug.get("last_debug_trace")
-    return dict(last) if isinstance(last, Mapping) else {}
-
-
-def _first_present(mapping: Mapping[str, Any], keys: tuple[str, ...]) -> Any:
-    for key in keys:
-        value = mapping.get(key)
-        if value is not None:
-            return value
-    return None
-
-
-def _has_path(obj: Mapping[str, Any], path: str) -> bool:
-    cur: Any = obj
-    for part in str(path or "").split("."):
-        if not isinstance(cur, Mapping) or part not in cur:
-            return False
-        cur = cur.get(part)
-    return True
-
-
-def _find_nested_mapping(root: Mapping[str, Any], key: str) -> dict[str, Any]:
-    stack: list[Any] = [root]
-    seen = 0
-    while stack and seen < 200:
-        seen += 1
-        cur = stack.pop()
-        if not isinstance(cur, Mapping):
-            continue
-        value = cur.get(key)
-        if isinstance(value, Mapping):
-            return dict(value)
-        for child in cur.values():
-            if isinstance(child, Mapping):
-                stack.append(child)
-            elif isinstance(child, list):
-                stack.extend(item for item in child if isinstance(item, Mapping))
-    return {}
-
-
-def _find_nested_list(root: Mapping[str, Any], key: str) -> list[Any]:
-    stack: list[Any] = [root]
-    seen = 0
-    while stack and seen < 200:
-        seen += 1
-        cur = stack.pop()
-        if not isinstance(cur, Mapping):
-            continue
-        value = cur.get(key)
-        if isinstance(value, list):
-            return list(value)
-        for child in cur.values():
-            if isinstance(child, Mapping):
-                stack.append(child)
-            elif isinstance(child, list):
-                stack.extend(item for item in child if isinstance(item, Mapping))
-    return []
-
-
-def _find_nested_list_field(root: Mapping[str, Any], key: str) -> tuple[bool, list[Any]]:
-    """Return whether a nested projected-list field exists, preserving an explicit empty list."""
-    stack: list[Any] = [root]
-    seen = 0
-    while stack and seen < 200:
-        seen += 1
-        cur = stack.pop()
-        if not isinstance(cur, Mapping):
-            continue
-        if key in cur:
-            value = cur.get(key)
-            return True, list(value) if isinstance(value, list) else []
-        for child in cur.values():
-            if isinstance(child, Mapping):
-                stack.append(child)
-            elif isinstance(child, list):
-                stack.extend(item for item in child if isinstance(item, Mapping))
-    return False, []
-
-
-def _runtime_lineage_events_from_payload(payload: Mapping[str, Any], fem: Mapping[str, Any]) -> list[dict[str, Any]]:
-    # Replay consumes normalized event-owner semantics as written: ``owner`` is selector/application
-    # ownership unless a future split-owner migration adds explicit content/projection owner fields.
-    found, events = _find_nested_list_field(payload, "fem_runtime_lineage_events")
-    if found:
-        return normalize_runtime_lineage_events(events)[:16]
-    return build_fem_runtime_lineage_events(fem)[:16] if fem else []
-
-
-def _project_replay_fallback_family(
-    fem: Mapping[str, Any],
-    runtime_lineage_events: list[Mapping[str, Any]],
-) -> str | None:
-    """Return read-side diagnostic family for finalized fallback evidence missing a family field."""
-    final_route = str(fem.get("final_route") or "").strip().lower()
-    final_source = str(fem.get("final_emitted_source") or "").strip()
-    if final_route != "replaced" or final_source != NEUTRAL_REPLY_SPEAKER_GROUNDING_BRIDGE_FAMILY:
-        return None
-    if any(
-        event.get("event_kind") == "fallback_selected"
-        and event.get("fallback_kind") == "sealed_or_global_replacement"
-        for event in runtime_lineage_events
-        if isinstance(event, Mapping)
-    ):
-        return NEUTRAL_REPLY_SPEAKER_GROUNDING_BRIDGE_FAMILY
-    return None
-
-
 def _observed_turn(
     *,
     scenario_id: str,
@@ -1637,301 +1382,15 @@ def _observed_turn(
     payload: dict[str, Any],
     replay_identity: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
-    resolution = payload.get("resolution") if isinstance(payload.get("resolution"), Mapping) else {}
-    social = resolution.get("social") if isinstance(resolution.get("social"), Mapping) else {}
-    fem = read_final_emission_meta_from_turn_payload(payload)
-    fem_normalized = normalize_final_emission_meta_for_observability(fem)
-    runtime_lineage_events = _runtime_lineage_events_from_payload(payload, fem)
-    emission_debug_lane = read_emission_debug_lane_from_turn_payload(payload)
-    trace = _trace_from_payload_or_snapshot(payload, snap)
-    turn_trace = trace.get("turn_trace") if isinstance(trace.get("turn_trace"), Mapping) else {}
-    social_contract_trace = (
-        turn_trace.get("social_contract_trace")
-        if isinstance(turn_trace.get("social_contract_trace"), Mapping)
-        else {}
+    """Backward-compatible wrapper around ``project_turn_observation``."""
+    return project_turn_observation(
+        {
+            "scenario_id": scenario_id,
+            "snap": snap,
+            "payload": payload,
+            "replay_identity": replay_identity,
+        }
     )
-    canonical_entry = trace.get("canonical_entry") if isinstance(trace.get("canonical_entry"), Mapping) else {}
-    resolution_compact = (
-        (snap.get("debug") or {}).get("resolution_compact")
-        if isinstance(snap.get("debug"), Mapping)
-        else None
-    )
-
-    route_kind = _first_present(
-        social_contract_trace,
-        ("route_selected",),
-    )
-    if route_kind is None and isinstance(resolution_compact, Mapping):
-        route_kind = resolution_compact.get("kind")
-    if route_kind is None:
-        route_kind = resolution.get("kind")
-
-    selected_speaker_id = _first_present(
-        social_contract_trace,
-        ("final_reply_owner", "reply_owner_actor_id", "visible_grounded_speaker"),
-    )
-    selected_speaker_source = "turn_trace.social_contract_trace" if selected_speaker_id else None
-    if selected_speaker_id is None:
-        selected_speaker_id = latest_target_id(snap)
-        selected_speaker_source = latest_target_source(snap)
-    if selected_speaker_id is None:
-        selected_speaker_id = social.get("npc_id")
-        selected_speaker_source = "resolution.social.npc_id" if selected_speaker_id else None
-
-    final_emitted_source = _first_present(
-        fem,
-        ("final_emitted_source", "final_route", "upstream_prepared_emission_source"),
-    )
-    response_type_required = _first_present(fem, ("response_type_required",))
-    final_emission_mutation_lineage = _first_present(fem, ("final_emission_mutation_lineage",))
-    response_type_candidate_ok = _first_present(fem, ("response_type_candidate_ok",))
-    response_type_repair_used = _first_present(fem, ("response_type_repair_used",))
-    response_type_repair_kind = _first_present(fem, ("response_type_repair_kind",))
-    response_delta_checked = _first_present(fem, ("response_delta_checked",))
-    response_delta_failed = _first_present(fem, ("response_delta_failed",))
-    response_delta_repaired = _first_present(fem, ("response_delta_repaired",))
-    response_delta_kind = _first_present(fem, ("response_delta_kind", "response_delta_kind_detected"))
-    response_delta_echo_overlap_ratio = _first_present(fem, ("response_delta_echo_overlap_ratio",))
-    response_delta_echo_overlap_band = _echo_overlap_band(response_delta_echo_overlap_ratio)
-    response_delta_skip_reason = _first_present(fem, ("response_delta_skip_reason",))
-    response_delta_trigger_source = _first_present(fem, ("response_delta_trigger_source",))
-    upstream_prepared_emission_used = _first_present(fem, ("upstream_prepared_emission_used",))
-    upstream_prepared_emission_valid = _first_present(fem, ("upstream_prepared_emission_valid",))
-    upstream_prepared_emission_source = _first_present(fem, ("upstream_prepared_emission_source",))
-    upstream_prepared_emission_reject_reason = _first_present(fem, ("upstream_prepared_emission_reject_reason",))
-    post_gate_mutation_detected = _first_present(fem, ("post_gate_mutation_detected",))
-    opening_recovered_via_fallback = _first_present(fem, ("opening_recovered_via_fallback",))
-    opening_fallback_authorship_source = _first_present(fem, ("opening_fallback_authorship_source",))
-    opening_fallback_owner_bucket = opening_fallback_owner_bucket_from_meta(fem)
-    sealed_fallback_owner_bucket = _first_present(fem, ("sealed_fallback_owner_bucket",))
-    visibility_fallback_owner_bucket = _first_present(fem, ("visibility_fallback_owner_bucket",))
-    visibility_replacement_applied = _first_present(fem, ("visibility_replacement_applied",))
-    visibility_fallback_pool = _first_present(fem, ("visibility_fallback_pool",))
-    visibility_fallback_kind = _first_present(fem, ("visibility_fallback_kind",))
-    fallback_family = _first_present(
-        fem,
-        ("fallback_family_used", "realization_fallback_family"),
-    )
-    if fallback_family is None:
-        fallback_family = _project_replay_fallback_family(fem, runtime_lineage_events)
-    fallback_temporal_frame = _first_present(fem, ("fallback_temporal_frame",))
-    stage_diff = _find_nested_mapping(payload, "stage_diff_telemetry")
-    sanitizer_debug = _find_nested_list(payload, "sanitizer_debug")
-    sanitizer_trace = _find_nested_mapping(payload, "sanitizer_trace")
-    sanitizer_mode = _first_present(
-        sanitizer_trace,
-        ("sanitizer_boundary_mode", "mode"),
-    ) or _lookup_path(payload, "gm_output.metadata.sanitizer_boundary_mode")
-    sanitizer_event_count = len(sanitizer_debug) if sanitizer_debug else None
-    sanitizer_changed_count, sanitizer_dropped_count = _sanitizer_debug_change_counts(sanitizer_debug)
-    sanitizer_rewrite_used = bool(sanitizer_changed_count) if sanitizer_changed_count is not None else None
-    sanitizer_empty_fallback_used = _first_present(sanitizer_trace, ("sanitizer_empty_fallback_used",))
-    sanitizer_empty_fallback_source = _first_present(sanitizer_trace, ("sanitizer_empty_fallback_source",))
-    sanitizer_empty_fallback_owner = _first_present(sanitizer_trace, ("sanitizer_empty_fallback_owner",))
-    sanitizer_lineage_mode = _sanitizer_lineage_field(sanitizer_trace, "sanitizer_lineage_mode", sanitizer_mode)
-    sanitizer_lineage_changed_count = _sanitizer_lineage_field(
-        sanitizer_trace,
-        "sanitizer_lineage_changed_count",
-        sanitizer_changed_count,
-    )
-    sanitizer_lineage_dropped_count = _sanitizer_lineage_field(
-        sanitizer_trace,
-        "sanitizer_lineage_dropped_count",
-        sanitizer_dropped_count,
-    )
-    sanitizer_lineage_empty_fallback_used = _sanitizer_lineage_field(
-        sanitizer_trace,
-        "sanitizer_lineage_empty_fallback_used",
-        sanitizer_empty_fallback_used,
-    )
-    sanitizer_lineage_legacy_rewrite_active = _sanitizer_lineage_field(
-        sanitizer_trace,
-        "sanitizer_lineage_legacy_rewrite_active",
-        str(sanitizer_lineage_mode or "").strip().lower() == "legacy_sentence_rewrite"
-        if sanitizer_lineage_mode is not None
-        else None,
-    )
-    sanitizer_strict_social_fallback_used = _first_present(sanitizer_trace, ("sanitizer_strict_social_fallback_used",))
-    sanitizer_strict_social_selection_owner = _first_present(
-        sanitizer_trace,
-        ("sanitizer_strict_social_selection_owner",),
-    )
-    sanitizer_strict_social_prose_owner = _first_present(
-        sanitizer_trace,
-        ("sanitizer_strict_social_prose_owner",),
-    )
-    sanitizer_strict_social_source = _first_present(sanitizer_trace, ("sanitizer_strict_social_source",))
-    interaction_continuity_validation = _find_nested_mapping(payload, "interaction_continuity_validation")
-
-    final_text = str(snap.get("gm_text") or "")
-    raw_signal_presence = {
-        "route_kind": route_kind is not None or _has_path(payload, "resolution.kind") or _has_path(trace, "turn_trace.social_contract_trace.route_selected"),
-        "selected_speaker_id": selected_speaker_id is not None,
-        "final_emitted_source": "final_emitted_source" in fem,
-        "final_emission_mutation_lineage": "final_emission_mutation_lineage" in fem,
-        "response_type_required": "response_type_required" in fem,
-        "response_type_candidate_ok": "response_type_candidate_ok" in fem,
-        "response_type_repair_used": "response_type_repair_used" in fem,
-        "response_delta_checked": "response_delta_checked" in fem,
-        "response_delta_failed": "response_delta_failed" in fem,
-        "response_delta_repaired": "response_delta_repaired" in fem,
-        "response_delta_kind": "response_delta_kind" in fem or "response_delta_kind_detected" in fem,
-        "response_delta_echo_overlap_ratio": "response_delta_echo_overlap_ratio" in fem,
-        "upstream_prepared_emission_used": "upstream_prepared_emission_used" in fem,
-        "upstream_prepared_emission_valid": "upstream_prepared_emission_valid" in fem,
-        "upstream_prepared_emission_source": "upstream_prepared_emission_source" in fem,
-        "upstream_prepared_emission_reject_reason": "upstream_prepared_emission_reject_reason" in fem,
-        "sealed_fallback_owner_bucket": "sealed_fallback_owner_bucket" in fem,
-        "visibility_fallback_owner_bucket": "visibility_fallback_owner_bucket" in fem,
-        "visibility_replacement_applied": "visibility_replacement_applied" in fem,
-        "visibility_fallback_pool": "visibility_fallback_pool" in fem,
-        "visibility_fallback_kind": "visibility_fallback_kind" in fem,
-        "fallback_family": "fallback_family_used" in fem or "realization_fallback_family" in fem,
-        "trace.canonical_entry": bool(canonical_entry),
-        "trace.turn_trace": bool(turn_trace),
-        "trace.social_contract_trace": bool(social_contract_trace),
-    }
-    normalized_signal_presence = {
-        "final_emitted_source": "final_emitted_source" in fem_normalized,
-        "final_emission_mutation_lineage": "final_emission_mutation_lineage" in fem_normalized,
-        "response_type_required": "response_type_required" in fem_normalized,
-        "response_type_candidate_ok": "response_type_candidate_ok" in fem_normalized,
-        "response_type_repair_used": "response_type_repair_used" in fem_normalized,
-        "response_delta_checked": "response_delta_checked" in fem_normalized,
-        "response_delta_failed": "response_delta_failed" in fem_normalized,
-        "response_delta_repaired": "response_delta_repaired" in fem_normalized,
-        "response_delta_kind": "response_delta_kind" in fem_normalized or "response_delta_kind_detected" in fem_normalized,
-        "response_delta_echo_overlap_ratio": "response_delta_echo_overlap_ratio" in fem_normalized,
-        "upstream_prepared_emission_used": "upstream_prepared_emission_used" in fem_normalized,
-        "upstream_prepared_emission_valid": "upstream_prepared_emission_valid" in fem_normalized,
-        "upstream_prepared_emission_source": "upstream_prepared_emission_source" in fem_normalized,
-        "upstream_prepared_emission_reject_reason": "upstream_prepared_emission_reject_reason" in fem_normalized,
-        "sealed_fallback_owner_bucket": "sealed_fallback_owner_bucket" in fem_normalized,
-        "visibility_fallback_owner_bucket": "visibility_fallback_owner_bucket" in fem_normalized,
-        "visibility_replacement_applied": "visibility_replacement_applied" in fem_normalized,
-        "visibility_fallback_pool": "visibility_fallback_pool" in fem_normalized,
-        "visibility_fallback_kind": "visibility_fallback_kind" in fem_normalized,
-        "fallback_family": "fallback_family_used" in fem_normalized or "realization_fallback_family" in fem_normalized,
-    }
-    missing_source_by_field = {}
-    for field, raw_present in raw_signal_presence.items():
-        if raw_present is True and field in normalized_signal_presence and normalized_signal_presence[field] is False:
-            missing_source_by_field[field] = "normalized_view_missing_raw_present"
-        elif raw_present is True:
-            missing_source_by_field[field] = "projection_missing_raw_present"
-        elif raw_present is False:
-            missing_source_by_field[field] = "runtime_missing_raw_absent"
-    observed = {
-        "scenario_id": scenario_id,
-        "turn_index": snap.get("turn_index"),
-        "player_text": snap.get("player_text"),
-        "final_text": final_text,
-        "resolution_kind": resolution.get("kind"),
-        "route_kind": route_kind,
-        "selected_speaker_id": selected_speaker_id,
-        "selected_speaker_source": selected_speaker_source,
-        "final_emitted_source": final_emitted_source,
-        "final_emission_mutation_lineage": list(final_emission_mutation_lineage)
-        if isinstance(final_emission_mutation_lineage, list)
-        else final_emission_mutation_lineage,
-        "response_type_required": response_type_required,
-        "response_type_candidate_ok": response_type_candidate_ok,
-        "response_type_repair_used": response_type_repair_used,
-        "response_type_repair_kind": response_type_repair_kind,
-        "response_delta_checked": response_delta_checked,
-        "response_delta_failed": response_delta_failed,
-        "response_delta_repaired": response_delta_repaired,
-        "response_delta_kind": response_delta_kind,
-        "response_delta_echo_overlap_ratio": response_delta_echo_overlap_ratio,
-        "response_delta_echo_overlap_band": response_delta_echo_overlap_band,
-        "response_delta_skip_reason": response_delta_skip_reason,
-        "response_delta_trigger_source": response_delta_trigger_source,
-        "upstream_prepared_emission_used": upstream_prepared_emission_used,
-        "upstream_prepared_emission_valid": upstream_prepared_emission_valid,
-        "upstream_prepared_emission_source": upstream_prepared_emission_source,
-        "upstream_prepared_emission_reject_reason": upstream_prepared_emission_reject_reason,
-        "post_gate_mutation_detected": post_gate_mutation_detected,
-        "strict_social_active": _first_present(fem, ("strict_social_active",)),
-        "speaker_contract_enforcement_reason": _first_present(fem, ("speaker_contract_enforcement_reason",)),
-        "fallback_behavior_repaired": _first_present(fem, ("fallback_behavior_repaired",)),
-        "fallback_behavior_repair_kind": _first_present(fem, ("fallback_behavior_repair_kind",)),
-        "fallback_behavior_repair_mode": _first_present(fem, ("fallback_behavior_repair_mode",)),
-        "narrative_authenticity_repair_mode": _first_present(fem, ("narrative_authenticity_repair_mode",)),
-        "stage_diff": stage_diff,
-        "sanitizer_mode": sanitizer_mode,
-        "sanitizer_event_count": sanitizer_event_count,
-        "sanitizer_changed_count": sanitizer_changed_count,
-        "sanitizer_rewrite_used": sanitizer_rewrite_used,
-        "sanitizer_empty_fallback_used": sanitizer_empty_fallback_used,
-        "sanitizer_empty_fallback_source": sanitizer_empty_fallback_source,
-        "sanitizer_empty_fallback_owner": sanitizer_empty_fallback_owner,
-        "sanitizer_lineage_mode": sanitizer_lineage_mode,
-        "sanitizer_lineage_changed_count": sanitizer_lineage_changed_count,
-        "sanitizer_lineage_dropped_count": sanitizer_lineage_dropped_count,
-        "sanitizer_lineage_empty_fallback_used": sanitizer_lineage_empty_fallback_used,
-        "sanitizer_lineage_legacy_rewrite_active": sanitizer_lineage_legacy_rewrite_active,
-        "sanitizer_strict_social_fallback_used": sanitizer_strict_social_fallback_used,
-        "sanitizer_strict_social_selection_owner": sanitizer_strict_social_selection_owner,
-        "sanitizer_strict_social_prose_owner": sanitizer_strict_social_prose_owner,
-        "sanitizer_strict_social_source": sanitizer_strict_social_source,
-        "sanitizer_leak_terms": ["scaffold_leakage"] if final_text_has_scaffold_leakage(final_text) else [],
-        "opening_recovered_via_fallback": opening_recovered_via_fallback,
-        "opening_fallback_authorship_source": opening_fallback_authorship_source,
-        "opening_fallback_owner_bucket": opening_fallback_owner_bucket,
-        "sealed_fallback_owner_bucket": sealed_fallback_owner_bucket,
-        "visibility_fallback_owner_bucket": visibility_fallback_owner_bucket,
-        "visibility_replacement_applied": visibility_replacement_applied,
-        "visibility_fallback_pool": visibility_fallback_pool,
-        "visibility_fallback_kind": visibility_fallback_kind,
-        "fallback_family": fallback_family,
-        "fallback_temporal_frame": fallback_temporal_frame,
-        "scaffold_leakage": final_text_has_scaffold_leakage(final_text),
-        "final_text_hash": golden_text_hash(final_text),
-        "trace": {
-            "canonical_entry_path": trace.get("canonical_entry_path"),
-            "canonical_entry_reason": trace.get("canonical_entry_reason"),
-            "canonical_entry_target_actor_id": trace.get("canonical_entry_target_actor_id"),
-            "canonical_entry": dict(canonical_entry),
-            "turn_trace": dict(turn_trace),
-            "social_contract_trace": dict(social_contract_trace),
-        },
-        "snapshot_summary": compact_snapshot_summary(snap),
-        "raw_signal_presence": raw_signal_presence,
-        "normalized_signal_presence": normalized_signal_presence,
-        "missing_source_by_field": missing_source_by_field,
-        "fem_raw_keys": sorted(str(k) for k in fem.keys()),
-        "fem_normalized_keys": sorted(str(k) for k in fem_normalized.keys()),
-        "emission_debug_lane_keys": sorted(str(k) for k in emission_debug_lane.keys()),
-        "runtime_lineage_events": runtime_lineage_events,
-        "interaction_continuity_validation": interaction_continuity_validation,
-    }
-    if replay_identity:
-        for key in ("source_path", "branch_id", "turn_id"):
-            value = replay_identity.get(key)
-            if value is not None and str(value).strip():
-                observed[key] = str(value)
-    observed["unavailable"] = sorted(
-        key
-        for key in (
-            "route_kind",
-            "selected_speaker_id",
-            "final_emitted_source",
-            "response_type_required",
-            "response_type_candidate_ok",
-            "response_type_repair_used",
-            "fallback_family",
-            "trace.canonical_entry",
-            "trace.turn_trace",
-            "trace.social_contract_trace",
-        )
-        if (
-            (key == "trace.canonical_entry" and not observed["trace"]["canonical_entry"])
-            or (key == "trace.turn_trace" and not observed["trace"]["turn_trace"])
-            or (key == "trace.social_contract_trace" and not observed["trace"]["social_contract_trace"])
-            or (not key.startswith("trace.") and observed.get(key) is None)
-        )
-    )
-    return observed
 
 
 def run_golden_replay(

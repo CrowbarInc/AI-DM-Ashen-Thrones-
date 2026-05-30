@@ -5,15 +5,34 @@ from typing import Any
 import pytest
 
 from game.final_emission_meta import OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED, SEALED_FALLBACK_OWNER_SEALED_GATE
+from tests.helpers.failure_classification_sync import (
+    assert_contract_classifier_alignment,
+    classification_contract_summary,
+    known_failure_categories,
+    known_owner_buckets,
+)
 from tests.helpers.failure_dashboard_report import (
+    KNOWN_FAILURE_CATEGORIES,
+    REPLAY_PROTECTED_FIELD_PATHS,
     build_failure_dashboard_rows,
     failure_dashboard_requested,
     record_failure_dashboard_rows,
     render_failure_dashboard_markdown,
 )
+from tests.helpers.golden_replay_projection import project_turn_observation, protected_field_paths
 from tests.helpers.opening_fallback_evidence import successful_opening_observed_fields
 
 pytestmark = pytest.mark.failure_dashboard_probe
+
+_CONTROLLED_PROBE_EXTENSION_FIELD_PATHS = frozenset(
+    {
+        "opening_fallback_authorship_source",
+        "opening_final_fallback_basis",
+        "fallback_content_owner",
+        "post_gate_mutation_detected",
+        "sanitizer_strict_social_fallback_used",
+    }
+)
 
 # Ownership note:
 # Controlled probes own dashboard/classifier behavior on known-bad replay-shaped
@@ -596,6 +615,70 @@ CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any], dict[
         },
     ),
 )
+
+
+def test_dashboard_report_module_exports_projection_and_taxonomy_surfaces():
+    assert REPLAY_PROTECTED_FIELD_PATHS == protected_field_paths()
+    assert KNOWN_FAILURE_CATEGORIES == known_failure_categories()
+    assert_contract_classifier_alignment()
+
+
+def test_controlled_failure_probe_categories_use_sync_taxonomy():
+    categories = set(known_failure_categories())
+    for _case_id, _observed, _drift_row, expected in CONTROLLED_FAILURE_CASES:
+        assert expected["category"] in categories
+
+
+def test_controlled_failure_probe_owner_buckets_use_sync_taxonomy():
+    buckets = known_owner_buckets()
+    for _case_id, observed, _drift_row, expected in CONTROLLED_FAILURE_CASES:
+        opening_bucket = expected.get("opening_fallback_owner_bucket") or observed.get("opening_fallback_owner_bucket")
+        if opening_bucket is not None:
+            assert opening_bucket in buckets["opening"]
+        sealed_bucket = expected.get("sealed_fallback_owner_bucket") or observed.get("sealed_fallback_owner_bucket")
+        if sealed_bucket is not None:
+            assert sealed_bucket in buckets["sealed"]
+        visibility_bucket = expected.get("visibility_fallback_owner_bucket") or observed.get(
+            "visibility_fallback_owner_bucket"
+        )
+        if visibility_bucket is not None:
+            assert visibility_bucket in buckets["visibility"]
+
+
+def test_controlled_failure_probe_field_paths_use_projection_surface():
+    protected = set(protected_field_paths())
+    for _case_id, _observed, drift_row, _expected in CONTROLLED_FAILURE_CASES:
+        field_path = str(drift_row["field_path"])
+        assert field_path in protected or field_path in _CONTROLLED_PROBE_EXTENSION_FIELD_PATHS
+
+
+def test_controlled_wrong_speaker_projection_matches_hand_observed_shape():
+    observed = _observed(selected_speaker_id="guard")
+    projected = project_turn_observation(
+        {
+            "scenario_id": "controlled_probe",
+            "snap": {
+                "turn_index": observed["turn_index"],
+                "gm_text": observed["final_text"],
+            },
+            "payload": {
+                "resolution": {"kind": observed["route_kind"], "social": {"npc_id": "guard"}},
+                "gm_output": {
+                    "_final_emission_meta": {
+                        "final_emitted_source": observed["final_emitted_source"],
+                        "response_type_required": observed["response_type_required"],
+                    }
+                },
+            },
+        }
+    )
+    for key in ("route_kind", "selected_speaker_id", "final_emitted_source", "final_text"):
+        assert projected.get(key) == observed.get(key)
+
+
+def test_controlled_failure_dashboard_summary_matches_sync_helpers():
+    summary = classification_contract_summary()
+    assert summary["failure_category_count"] == len(KNOWN_FAILURE_CATEGORIES)
 
 
 def _classified_rows() -> list[dict[str, Any]]:

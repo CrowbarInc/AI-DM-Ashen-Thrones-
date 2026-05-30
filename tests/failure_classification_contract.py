@@ -3,6 +3,9 @@
 This module is the public taxonomy lock for the replay-side failure dashboard.
 Classifier rules may evolve, but new categories, owners, severities, tags, or
 row fields should be added here deliberately with tests.
+
+Alignment with classifier rule tables is enforced by
+``tests.helpers.failure_classification_sync``.
 """
 from __future__ import annotations
 

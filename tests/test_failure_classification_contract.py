@@ -10,14 +10,18 @@ from tests.failure_classification_contract import (
     ALLOWED_FAILURE_OWNERS,
     ALLOWED_FAILURE_SEVERITIES,
     ALLOWED_OPENING_FALLBACK_OWNER_BUCKETS,
-    ALLOWED_RUNTIME_RESPONSE_TYPE_REPAIR_KINDS,
     ALLOWED_SEALED_FALLBACK_OWNER_BUCKETS,
-    ALLOWED_SOURCE_FAMILY_TAGS,
     ALLOWED_VISIBILITY_FALLBACK_OWNER_BUCKETS,
-    LEGACY_RESPONSE_TYPE_REPAIR_KINDS,
     MAJOR_OWNER_INVESTIGATION_TARGETS,
 )
-from tests.helpers.failure_classifier import validate_failure_classification_row
+from tests.helpers.failure_classifier import CATEGORY_RULES, INVESTIGATION_TARGETS, validate_failure_classification_row
+from tests.helpers.failure_classification_sync import (
+    assert_contract_classifier_alignment,
+    classification_contract_summary,
+    contract_classifier_misalignments,
+    known_failure_categories,
+    known_owner_buckets,
+)
 from tests.helpers.failure_dashboard_report import build_failure_dashboard_rows, render_failure_dashboard_markdown
 from tests.test_failure_dashboard_controlled_failures import _classified_rows
 
@@ -25,6 +29,34 @@ from tests.test_failure_dashboard_controlled_failures import _classified_rows
 # This file owns the failure-classification schema and taxonomy contract.
 # Dashboard rendering assertions here validate contract enforcement, not runtime
 # fallback, route, speaker, or visibility behavior.
+
+
+def test_contract_classifier_alignment_is_locked():
+    assert_contract_classifier_alignment()
+
+
+def test_classification_contract_summary_matches_known_taxonomy():
+    summary = classification_contract_summary()
+    assert summary["failure_category_count"] == len(known_failure_categories())
+    buckets = known_owner_buckets()
+    assert summary["opening_owner_bucket_count"] == len(buckets["opening"])
+    assert summary["sealed_owner_bucket_count"] == len(buckets["sealed"])
+    assert summary["visibility_owner_bucket_count"] == len(buckets["visibility"])
+    assert summary["category_rule_count"] > 0
+
+
+def test_sync_helper_reports_category_rule_category_drift():
+    drift = contract_classifier_misalignments(
+        category_rules=CATEGORY_RULES + (("bad", ("x",), "not-a-category", "interaction_context"),),
+    )
+    assert any("not-a-category" in item for item in drift)
+
+
+def test_sync_helper_reports_investigation_target_drift():
+    drift = contract_classifier_misalignments(
+        investigation_targets={**INVESTIGATION_TARGETS, "route": "game/wrong.py"},
+    )
+    assert any("game/wrong.py" in item for item in drift)
 
 
 def _valid_sample_row() -> dict[str, Any]:
@@ -129,20 +161,10 @@ def test_visibility_fallback_owner_bucket_values_are_contract_locked():
 
 
 def test_runtime_response_type_repair_kind_taxonomy_is_contract_locked():
-    assert {
-        "answer_upstream_prepared_repair",
-        "action_outcome_upstream_prepared_repair",
-        "strict_social_dialogue_repair",
-        "dialogue_minimal_repair",
-    } <= ALLOWED_RUNTIME_RESPONSE_TYPE_REPAIR_KINDS
-    assert "thin_answer" not in ALLOWED_RUNTIME_RESPONSE_TYPE_REPAIR_KINDS
-    assert "thin_answer" in LEGACY_RESPONSE_TYPE_REPAIR_KINDS
+    assert_contract_classifier_alignment()
 
 
 def test_upstream_prepared_emission_owner_and_source_family_are_contract_locked():
-    assert "upstream_prepared_emission" in ALLOWED_FAILURE_OWNERS
-    assert "upstream_prepared_emission" in ALLOWED_SOURCE_FAMILY_TAGS
-
     row = _valid_sample_row()
     row["primary_owner"] = "upstream_prepared_emission"
     row["secondary_owner"] = "emission"

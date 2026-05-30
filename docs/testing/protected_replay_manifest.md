@@ -29,6 +29,75 @@ Golden replay owns `scenario_id` as the replay acceptance identifier. Scenario-s
 
 Text fields are layer-specific projections: `player_facing_text` is the runtime response field, `gm_text` is a snapshot/transcript projection, and `final_text` is the golden replay observed assertion surface. Protected replay failure reports may include `source_path`, `branch_id`, and `turn_id` when a replay row can be traced back to a scenario-spine fixture.
 
+<!-- BEGIN GENERATED: protected_field_paths -->
+
+## Protected Observation Field Paths (Generated)
+
+Bounded registry of golden replay observation paths locked by protected replay.
+Source: `tests/helpers/golden_replay_projection.py::protected_field_paths()`.
+
+Refresh this section:
+
+```bash
+python tools/refresh_protected_replay_manifest.py --write
+```
+
+Verify without writing:
+
+```bash
+python tools/refresh_protected_replay_manifest.py --check
+```
+
+- **Path count:** 41
+- **Structural drift fields:** 39
+- **Semantic drift fields:** 2
+
+| Field path | Drift bucket |
+|---|---|
+| `fallback_family` | `structural_drift` |
+| `fallback_temporal_frame` | `structural_drift` |
+| `final_emission_mutation_lineage` | `structural_drift` |
+| `final_emitted_source` | `structural_drift` |
+| `final_text` | `semantic_drift` |
+| `opening_fallback_authorship_source` | `structural_drift` |
+| `opening_fallback_owner_bucket` | `structural_drift` |
+| `opening_recovered_via_fallback` | `structural_drift` |
+| `resolution_kind` | `structural_drift` |
+| `response_type_candidate_ok` | `structural_drift` |
+| `response_type_repair_kind` | `structural_drift` |
+| `response_type_repair_used` | `structural_drift` |
+| `response_type_required` | `structural_drift` |
+| `route_kind` | `structural_drift` |
+| `sanitizer_empty_fallback_owner` | `structural_drift` |
+| `sanitizer_empty_fallback_source` | `structural_drift` |
+| `sanitizer_empty_fallback_used` | `structural_drift` |
+| `sanitizer_lineage_changed_count` | `structural_drift` |
+| `sanitizer_lineage_dropped_count` | `structural_drift` |
+| `sanitizer_lineage_empty_fallback_used` | `structural_drift` |
+| `sanitizer_lineage_legacy_rewrite_active` | `structural_drift` |
+| `sanitizer_lineage_mode` | `structural_drift` |
+| `sanitizer_strict_social_fallback_used` | `structural_drift` |
+| `sanitizer_strict_social_prose_owner` | `structural_drift` |
+| `sanitizer_strict_social_selection_owner` | `structural_drift` |
+| `sanitizer_strict_social_source` | `structural_drift` |
+| `scaffold_leakage` | `semantic_drift` |
+| `sealed_fallback_owner_bucket` | `structural_drift` |
+| `selected_speaker_id` | `structural_drift` |
+| `trace.canonical_entry.reason` | `structural_drift` |
+| `trace.canonical_entry.target_actor_id` | `structural_drift` |
+| `trace.canonical_entry.target_source` | `structural_drift` |
+| `trace.social_contract_trace.route_selected` | `structural_drift` |
+| `upstream_prepared_emission_reject_reason` | `structural_drift` |
+| `upstream_prepared_emission_source` | `structural_drift` |
+| `upstream_prepared_emission_used` | `structural_drift` |
+| `upstream_prepared_emission_valid` | `structural_drift` |
+| `visibility_fallback_kind` | `structural_drift` |
+| `visibility_fallback_owner_bucket` | `structural_drift` |
+| `visibility_fallback_pool` | `structural_drift` |
+| `visibility_replacement_applied` | `structural_drift` |
+
+<!-- END GENERATED: protected_field_paths -->
+
 ## Cycle S Drift Policy Addendum
 
 Cycle S adds rerun drift measurement and seed-seam audit coverage without promoting new drift thresholds into protected acceptance gates.

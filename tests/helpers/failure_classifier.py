@@ -176,14 +176,7 @@ INVESTIGATION_TARGETS: dict[FailureCategory, str] = {
     "upstream_prepared_emission": "game/final_emission_gate.py",
 }
 
-assert INVESTIGATION_TARGETS == (
-    {
-        category: target
-        for category, target in MAJOR_OWNER_INVESTIGATION_TARGETS.items()
-        if category != "replay"
-    }
-    | {"replay_drift": MAJOR_OWNER_INVESTIGATION_TARGETS["replay"]}
-)
+# Contract ↔ classifier alignment is enforced by tests.helpers.failure_classification_sync.
 
 FIELD_TARGET_OVERRIDES: tuple[tuple[str, str], ...] = (
     ("response_type_repair", "game/final_emission_gate.py"),

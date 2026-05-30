@@ -17,8 +17,8 @@ import game.final_emission_opening_fallback as opening_fallback
 from game.final_emission_meta import (
     OPENING_FALLBACK_OWNER_SEALED_GATE,
     OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
-    opening_fallback_owner_bucket_from_fields,
 )
+from tests.helpers.final_emission_gate_fixtures import assert_fallback_owner_bucket
 from game.opening_deterministic_fallback import OPENING_FALLBACK_EMPTY_CURATED_FACTS_MARKER
 from game.upstream_response_repairs import (
     OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED,
@@ -57,14 +57,17 @@ def _select(gm_output: Dict[str, Any]) -> tuple[str, str, str, str, str, str, Di
     )
 
 
-def _owner_bucket(meta: Dict[str, Any], *, repair_kind: str) -> str:
-    return opening_fallback_owner_bucket_from_fields(
-        final_emitted_source="opening_deterministic_fallback",
-        opening_recovered_via_fallback=True,
-        opening_fallback_authorship_source=meta.get("opening_fallback_authorship_source"),
-        response_type_repair_kind=repair_kind,
-        fallback_family=meta.get("fallback_family_used"),
-        fallback_temporal_frame=meta.get("fallback_temporal_frame"),
+def _assert_owner_bucket(meta: Dict[str, Any], *, repair_kind: str, expected: str) -> None:
+    assert_fallback_owner_bucket(
+        expected,
+        from_fields={
+            "final_emitted_source": "opening_deterministic_fallback",
+            "opening_recovered_via_fallback": True,
+            "opening_fallback_authorship_source": meta.get("opening_fallback_authorship_source"),
+            "response_type_repair_kind": repair_kind,
+            "fallback_family": meta.get("fallback_family_used"),
+            "fallback_temporal_frame": meta.get("fallback_temporal_frame"),
+        },
     )
 
 
@@ -89,7 +92,7 @@ def test_adapter_selects_usable_upstream_prepared_payload_unchanged() -> None:
     assert meta == payload["opening_fallback_composition_meta"]
     assert meta is not payload["opening_fallback_composition_meta"]
     assert meta["opening_fallback_authorship_source"] == OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED
-    assert _owner_bucket(meta, repair_kind=kind) == OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED
+    _assert_owner_bucket(meta, repair_kind=kind, expected=OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED)
 
 
 def test_adapter_missing_upstream_payload_fails_closed_with_existing_metadata_shape() -> None:
@@ -106,9 +109,10 @@ def test_adapter_missing_upstream_payload_fails_closed_with_existing_metadata_sh
     assert meta["opening_fallback_authorship_source"] is None
     assert meta["fallback_family_used"] == "scene_opening"
     assert meta["fallback_temporal_frame"] == "first_impression"
-    assert (
-        _owner_bucket(meta, repair_kind="opening_deterministic_fallback_failed_closed")
-        == OPENING_FALLBACK_OWNER_SEALED_GATE
+    _assert_owner_bucket(
+        meta,
+        repair_kind="opening_deterministic_fallback_failed_closed",
+        expected=OPENING_FALLBACK_OWNER_SEALED_GATE,
     )
 
 
@@ -125,9 +129,10 @@ def test_adapter_insufficient_curated_facts_fails_closed_with_existing_metadata_
     assert meta["opening_curated_facts_present"] is False
     assert meta["opening_curated_facts_count"] == 0
     assert meta["opening_fallback_authorship_source"] is None
-    assert (
-        _owner_bucket(meta, repair_kind="opening_deterministic_fallback_failed_closed")
-        == OPENING_FALLBACK_OWNER_SEALED_GATE
+    _assert_owner_bucket(
+        meta,
+        repair_kind="opening_deterministic_fallback_failed_closed",
+        expected=OPENING_FALLBACK_OWNER_SEALED_GATE,
     )
 
 
@@ -146,9 +151,10 @@ def test_adapter_unusable_upstream_stub_preserves_fail_closed_metadata() -> None
     assert meta["opening_fallback_missing_upstream_prepared_payload"] is False
     assert meta["opening_fallback_compatibility_local_disabled"] is True
     assert meta["opening_fallback_authorship_source"] is None
-    assert (
-        _owner_bucket(meta, repair_kind="opening_deterministic_fallback_failed_closed")
-        == OPENING_FALLBACK_OWNER_SEALED_GATE
+    _assert_owner_bucket(
+        meta,
+        repair_kind="opening_deterministic_fallback_failed_closed",
+        expected=OPENING_FALLBACK_OWNER_SEALED_GATE,
     )
 
 

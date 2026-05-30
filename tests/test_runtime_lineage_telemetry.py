@@ -11,6 +11,11 @@ from game.runtime_lineage_telemetry import (
     normalize_runtime_lineage_events,
     summarize_runtime_lineage_events,
 )
+from tests.helpers.runtime_lineage_reporting import (
+    build_runtime_lineage_summary,
+    build_runtime_lineage_summary_from_branch_transcripts,
+    runtime_lineage_markdown_lines,
+)
 
 
 def test_make_runtime_lineage_event_is_json_serializable_and_normalized() -> None:
@@ -166,3 +171,36 @@ def test_summarize_runtime_lineage_events_owns_frequency_and_persisted_recurrenc
     assert summary["fallback_content_owner_frequency"] == {"game.opening_deterministic_fallback": 2}
     assert summary["gate_path_frequency"] == {"opening_fallback": 1}
     assert summary["recurring_events"] == [{"recurrence_key": "persisted:opening:key", "count": 2}]
+
+
+def test_runtime_lineage_reporting_helper_delegates_to_runtime_summarize() -> None:
+    events = [
+        make_runtime_lineage_event(
+            event_kind="fallback_selected",
+            stage="gate",
+            owner="game.final_emission_gate",
+            fallback_kind="scene_opening",
+        ),
+        make_runtime_lineage_event(
+            event_kind="gate_outcome",
+            stage="gate",
+            owner="game.final_emission_gate",
+            gate_path="opening_fallback",
+        ),
+    ]
+    via_helper = build_runtime_lineage_summary(events)
+    via_runtime = summarize_runtime_lineage_events(normalize_runtime_lineage_events(events))
+    assert via_helper == via_runtime
+
+    branch_summary = build_runtime_lineage_summary_from_branch_transcripts(
+        {
+            "branch_a": [
+                {"meta": {"runtime_lineage_events": events}},
+            ]
+        }
+    )
+    assert branch_summary == via_helper
+
+    markdown = runtime_lineage_markdown_lines(via_helper, profile="dashboard")
+    assert "## Runtime Lineage Summary" in "\n".join(markdown)
+    assert "Top fallback kinds" in "\n".join(markdown)

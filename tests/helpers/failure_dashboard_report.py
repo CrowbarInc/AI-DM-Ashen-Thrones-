@@ -8,12 +8,23 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, Mapping, Sequence
 
-from game.runtime_lineage_telemetry import normalize_runtime_lineage_events, summarize_runtime_lineage_events
+from game.runtime_lineage_telemetry import normalize_runtime_lineage_events
 from tests.helpers.failure_classifier import (
     FailureClassification,
     classify_replay_failure,
     validate_failure_classification_row,
 )
+from tests.helpers.failure_classification_sync import known_failure_categories
+from tests.helpers.golden_replay_projection import protected_field_paths
+from tests.helpers.runtime_lineage_reporting import (
+    build_runtime_lineage_summary,
+    runtime_lineage_markdown_lines as _runtime_lineage_markdown_lines,
+)
+
+# Cycle T3: dashboard reporting consumes projection/sync surfaces instead of
+# re-enumerating protected replay field paths or failure categories inline.
+REPLAY_PROTECTED_FIELD_PATHS = protected_field_paths()
+KNOWN_FAILURE_CATEGORIES = known_failure_categories()
 
 FAILURE_DASHBOARD_ENV_VAR = "ASHEN_WRITE_FAILURE_DASHBOARD"
 RERUN_DRIFT_SCORECARD_ENV_VAR = "ASHEN_WRITE_RERUN_DRIFT_SCORECARD"
@@ -296,51 +307,6 @@ def record_rerun_drift_scorecard(scorecard: Mapping[str, Any] | None) -> None:
 
 def recorded_rerun_drift_scorecards() -> list[Mapping[str, Any]]:
     return list(_RECORDED_RERUN_DRIFT_SCORECARDS)
-
-
-def build_runtime_lineage_summary(events: Any) -> dict[str, Any]:
-    """Normalize replay input, then delegate diagnostic-only aggregation."""
-    return summarize_runtime_lineage_events(normalize_runtime_lineage_events(events))
-
-
-def _runtime_lineage_markdown_lines(events: Any) -> list[str]:
-    summary = build_runtime_lineage_summary(events)
-    if summary["total_events"] == 0:
-        return []
-
-    def _top(bucket: str) -> str:
-        values = summary[bucket]
-        if not isinstance(values, Mapping) or not values:
-            return "_(none)_"
-        return "; ".join(f"`{key}` ({count})" for key, count in sorted(values.items(), key=lambda item: (-item[1], item[0]))[:5])
-
-    kinds = summary["by_event_kind"]
-    recurring = summary["recurring_events"]
-    recurring_s = (
-        "; ".join(f"`{item['recurrence_key']}` ({item['count']})" for item in recurring[:5])
-        if recurring
-        else "_(none)_"
-    )
-    return [
-        "",
-        "## Runtime Lineage Summary",
-        "",
-        f"- **Total lineage events:** {summary['total_events']}",
-        f"- **Fallback selected:** {kinds.get('fallback_selected', 0)}",
-        f"- **Speaker repair:** {kinds.get('speaker_repair', 0)}",
-        f"- **Mutation:** {kinds.get('mutation', 0)}",
-        f"- **Gate outcome:** {kinds.get('gate_outcome', 0)}",
-        f"- **Top recurring recurrence keys:** {recurring_s}",
-        f"- **Top fallback kinds:** {_top('fallback_frequency')}",
-        f"- **Top fallback authorship sources:** {_top('fallback_authorship_frequency')}",
-        f"- **Top fallback owner buckets:** {_top('fallback_owner_bucket_frequency')}",
-        f"- **Top fallback selection owners:** {_top('fallback_selection_owner_frequency')}",
-        f"- **Top fallback content owners:** {_top('fallback_content_owner_frequency')}",
-        f"- **Top repair kinds:** {_top('speaker_repair_frequency')}",
-        f"- **Top mutation kinds:** {_top('mutation_kind_frequency')}",
-        f"- **Top gate paths:** {_top('gate_path_frequency')}",
-        "",
-    ]
 
 
 def render_failure_dashboard_markdown(

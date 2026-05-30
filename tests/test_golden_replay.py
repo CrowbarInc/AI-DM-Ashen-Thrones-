@@ -51,6 +51,10 @@ from tests.helpers.golden_replay import (
     run_golden_replay,
     summarize_long_session_replay_observations,
 )
+from tests.helpers.golden_replay_projection import (
+    project_turn_observation,
+    protected_field_paths,
+)
 from tests.helpers.transcript_runner import (
     new_clean_campaign,
     patch_transcript_storage,
@@ -79,15 +83,73 @@ from tests.test_block_s_speaker_local_rebind_equivalence import (
     _locked_runner_contract,
     _stub_strict_social_details,
 )
-from tests.test_final_emission_gate import _runner_strict_bundle
-from tests.test_final_emission_gate import _opening_gm_output
+from tests.helpers.final_emission_gate_fixtures import (
+    opening_gm_output,
+    runner_strict_bundle,
+)
 
 pytestmark = [pytest.mark.integration, pytest.mark.golden_replay]
 
 # Ownership note:
-# Golden replay owns replay observation and projection contracts. Repeated
-# route/speaker/fallback/final-emission fields are intentional diagnostic locks,
-# not runtime ownership of those subsystems.
+# Golden replay owns replay observation and projection contracts. Turn observation
+# projection is centralized in ``tests.helpers.golden_replay_projection`` (Cycle T1).
+# Repeated route/speaker/fallback/final-emission fields are intentional diagnostic
+# locks, not runtime ownership of those subsystems.
+
+
+def test_golden_replay_projection_adapter_wires_observed_turn():
+    turn_payload = {
+        "scenario_id": "projection_adapter",
+        "snap": {"turn_index": 0, "gm_text": "Rain falls on the gate road."},
+        "payload": {
+            "gm_output": {
+                "_final_emission_meta": {
+                    "response_type_required": "neutral_narration",
+                    "final_emitted_source": "upstream_prepared_emission",
+                }
+            }
+        },
+    }
+    via_adapter = project_turn_observation(turn_payload)
+    via_wrapper = _observed_turn(
+        scenario_id=str(turn_payload["scenario_id"]),
+        snap=dict(turn_payload["snap"]),
+        payload=dict(turn_payload["payload"]),
+    )
+    assert via_adapter == via_wrapper
+    paths = protected_field_paths()
+    assert "final_emitted_source" in paths
+    assert "scaffold_leakage" in paths
+    assert "route_kind" in paths
+    assert paths == tuple(sorted(set(paths)))
+
+
+def test_protected_replay_manifest_generated_section_matches_projection_field_paths():
+    import importlib.util
+    from pathlib import Path
+
+    root = Path(__file__).resolve().parents[1]
+    spec = importlib.util.spec_from_file_location(
+        "refresh_protected_replay_manifest",
+        root / "tools" / "refresh_protected_replay_manifest.py",
+    )
+    assert spec is not None and spec.loader is not None
+    refresh_mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(refresh_mod)
+
+    manifest_text = refresh_mod.MANIFEST_PATH.read_text(encoding="utf-8")
+    expected = refresh_mod.render_generated_section()
+    current = refresh_mod.extract_generated_section(manifest_text)
+
+    assert current is not None, "protected replay manifest is missing generated protected_field_paths section"
+    assert current == expected
+    assert refresh_mod.manifest_section_is_current(manifest_text)
+
+    paths = protected_field_paths()
+    assert str(len(paths)) in current
+    for path in paths:
+        assert f"| `{path}` |" in current
+
 
 def _gm_response(text: str, *, tags: list[str] | None = None, debug_notes: str = "") -> dict:
     return {
@@ -1868,7 +1930,7 @@ def test_golden_replay_wrong_speaker_strict_social_emission_structural_invariant
 
 
 def test_golden_direct_seam_declared_alias_dialogue_plan_structural_invariants(monkeypatch):
-    session, world, scene_id, resolution = _runner_strict_bundle()
+    session, world, scene_id, resolution = runner_strict_bundle()
     attach_dialogue_social_plan_to_resolution(
         resolution,
         make_valid_dialogue_social_plan(
@@ -2040,7 +2102,7 @@ def test_golden_replay_sanitizer_scaffold_leakage_structural_invariants(tmp_path
 
 
 def test_golden_direct_seam_canonical_opening_fallback_path_has_no_compatibility_local_ownership():
-    gm_output = _opening_gm_output()
+    gm_output = opening_gm_output()
     gm_output["player_facing_text"] = "Nearby crates appear disturbed."
     gm_output["tags"] = []
 
@@ -2097,7 +2159,7 @@ def test_golden_direct_seam_canonical_opening_fallback_path_has_no_compatibility
 
 
 def test_golden_canonical_opening_fallback_never_reports_compatibility_local_ownership():
-    gm_output = _opening_gm_output()
+    gm_output = opening_gm_output()
     gm_output["player_facing_text"] = "Nearby crates appear disturbed."
     gm_output["tags"] = []
 

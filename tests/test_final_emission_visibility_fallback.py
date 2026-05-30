@@ -21,6 +21,7 @@ from game.final_emission_meta import (
     VISIBILITY_FALLBACK_OWNER_UNKNOWN_NONE,
 )
 import game.final_emission_visibility_fallback as visibility_fallback
+from tests.helpers.final_emission_gate_fixtures import assert_visibility_pool
 
 pytestmark = pytest.mark.unit
 
@@ -159,7 +160,7 @@ def test_visibility_fallback_route_module_contains_no_fallback_prose_literals() 
 )
 def test_visibility_fallback_owner_bucket_classifier(case: str, kwargs: dict[str, str], expected: str) -> None:
     del case
-    assert visibility_fallback.classify_visibility_fallback_owner_bucket(**kwargs) == expected
+    assert_visibility_pool(owner_bucket=expected, **kwargs)
 
 
 def test_visibility_fallback_owner_bucket_taxonomy_includes_ambiguous_bucket() -> None:

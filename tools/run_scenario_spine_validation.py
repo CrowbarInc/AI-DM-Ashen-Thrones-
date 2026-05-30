@@ -36,7 +36,10 @@ from game.scenario_spine_eval import (  # noqa: E402
     evaluate_scenario_spine_session,
 )
 from game.final_emission_meta import build_fem_runtime_lineage_events, read_final_emission_meta_dict  # noqa: E402
-from game.runtime_lineage_telemetry import summarize_runtime_lineage_events  # noqa: E402
+from tests.helpers.runtime_lineage_reporting import (  # noqa: E402
+    build_runtime_lineage_summary_from_branch_transcripts,
+    runtime_lineage_markdown_lines,
+)
 from game.scenario_spine_opening_convergence import (  # noqa: E402
     capture_opening_convergence_meta_from_chat_payload,
 )
@@ -595,15 +598,7 @@ def _long_branch_row(session_health: Mapping[str, Any]) -> bool:
 
 def build_runtime_lineage_summary(branch_transcripts: Mapping[str, Sequence[Mapping[str, Any]]]) -> dict[str, Any]:
     """Gather persisted lineage rows and delegate diagnostic aggregation."""
-    events: list[Any] = []
-    for branch_id in sorted(branch_transcripts, key=str):
-        for row in branch_transcripts[branch_id]:
-            meta = row.get("meta") if isinstance(row, Mapping) else None
-            raw_events = meta.get("runtime_lineage_events") if isinstance(meta, Mapping) else None
-            if not isinstance(raw_events, list):
-                continue
-            events.extend(raw_events)
-    return summarize_runtime_lineage_events(events)
+    return build_runtime_lineage_summary_from_branch_transcripts(branch_transcripts)
 
 
 def build_aggregate_session_health_summary(
@@ -723,8 +718,6 @@ def build_aggregate_operator_summary_md(
         if isinstance(aggregate.get("runtime_lineage_summary"), dict)
         else {}
     )
-    lineage_kinds = lineage.get("by_event_kind") if isinstance(lineage.get("by_event_kind"), dict) else {}
-    recurring = lineage.get("recurring_events") if isinstance(lineage.get("recurring_events"), list) else []
     cov_met = aggregate.get("coverage_band_met")
     cov_note = (
         "40–60 turn band (full-length / scripted≥20 branches only) met"
@@ -760,13 +753,6 @@ def build_aggregate_operator_summary_md(
     def _md_cell(s: Any) -> str:
         t = str(s).replace("|", "\\|").replace("\n", " ")
         return t or "—"
-
-    def _top_lineage_frequency(key: str) -> str:
-        values = lineage.get(key) if isinstance(lineage.get(key), dict) else {}
-        return "; ".join(
-            f"`{name}` ({count})"
-            for name, count in sorted(values.items(), key=lambda item: (-item[1], item[0]))[:5]
-        ) or "_(none)_"
 
     for bid in branches_run:
         r = by_resolved.get(bid)
@@ -812,28 +798,9 @@ def build_aggregate_operator_summary_md(
         f"- **Distinct outcomes detected:** {div_distinct}",
         f"- **Shared prompt bleed:** {div_bleed}",
         f"- **Reason codes:** {', '.join(str(x) for x in (div.get('reason_codes') or []) if x is not None) or '_(none)_'}",
-        "",
-        "## Runtime Lineage Summary",
-        "",
-        f"- **Total lineage events:** {lineage.get('total_events', 0)}",
-        f"- **Fallback selected:** {lineage_kinds.get('fallback_selected', 0)}",
-        f"- **Speaker repair:** {lineage_kinds.get('speaker_repair', 0)}",
-        f"- **Mutation:** {lineage_kinds.get('mutation', 0)}",
-        f"- **Gate outcome:** {lineage_kinds.get('gate_outcome', 0)}",
-        f"- **Top fallback kinds:** {_top_lineage_frequency('fallback_frequency')}",
-        f"- **Top fallback authorship sources:** {_top_lineage_frequency('fallback_authorship_frequency')}",
-        f"- **Top fallback owner buckets:** {_top_lineage_frequency('fallback_owner_bucket_frequency')}",
-        f"- **Top gate paths:** {_top_lineage_frequency('gate_path_frequency')}",
-        "- **Top recurring recurrence keys:** "
-        + (
-            "; ".join(
-                f"`{item.get('recurrence_key')}` ({item.get('count')})"
-                for item in recurring[:5]
-                if isinstance(item, Mapping)
-            )
-            or "_(none)_"
-        ),
-        "",
+    ]
+    lines.extend(runtime_lineage_markdown_lines(lineage, profile="spine_aggregate"))
+    lines += [
         "## Degradation (per branch)",
         "",
     ]

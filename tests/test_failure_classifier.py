@@ -12,6 +12,12 @@ from game.final_emission_meta import (
 )
 from game.runtime_lineage_telemetry import make_runtime_lineage_event
 from tests.helpers.failure_classifier import classify_replay_failure, validate_failure_classification_row
+from tests.helpers.failure_classification_sync import (
+    assert_contract_classifier_alignment,
+    classification_contract_summary,
+    known_failure_categories,
+    known_owner_buckets,
+)
 from tests.helpers.failure_dashboard_report import (
     build_failure_dashboard_rows,
     build_runtime_lineage_summary,
@@ -30,6 +36,26 @@ from tests.helpers.opening_fallback_evidence import (
 # Cycle F.H: opening-fallback routing is intentionally still gate-biased in the
 # current classifier contract; symptom-specific first-fault routing is future
 # reviewed policy work, not behavior asserted in this file today.
+
+
+def test_classifier_tables_stay_aligned_with_contract():
+    assert_contract_classifier_alignment()
+
+
+def test_classifier_consumer_reads_taxonomy_from_sync_helpers():
+    summary = classification_contract_summary()
+    categories = known_failure_categories()
+    buckets = known_owner_buckets()
+
+    assert summary["failure_category_count"] == len(categories)
+    assert summary["opening_owner_bucket_count"] == len(buckets["opening"])
+    assert summary["sealed_owner_bucket_count"] == len(buckets["sealed"])
+    assert summary["visibility_owner_bucket_count"] == len(buckets["visibility"])
+    assert OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED in buckets["opening"]
+    assert OPENING_FALLBACK_OWNER_SEALED_GATE in buckets["opening"]
+    assert SEALED_FALLBACK_OWNER_SEALED_GATE in buckets["sealed"]
+    assert "speaker" in categories
+    assert "fallback" in categories
 
 
 def _observed(**overrides: Any) -> dict[str, Any]:
