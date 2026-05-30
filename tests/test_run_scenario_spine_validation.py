@@ -917,6 +917,153 @@ def test_all_branches_aggregate_artifacts_and_payload(tmp_path, monkeypatch) -> 
     }
 
 
+def test_frontier_gate_long_branch_50_turn_advisory_aggregate_artifacts(tmp_path) -> None:
+    spine = _load_spine()
+    long_branch_ids = ("branch_direct_intrusion", "branch_social_inquiry")
+    long_branches = [next(b for b in spine.branches if b.branch_id == bid) for bid in long_branch_ids]
+    assert [len(branch.turns) for branch in long_branches] == [25, 25]
+
+    stamp = "u9_advisory_aggregate"
+    aggregate_dir = tmp_path / stamp / spine.spine_id
+    results = []
+    for branch in long_branches:
+        branch_dir = aggregate_dir / branch.branch_id
+        branch_dir.mkdir(parents=True, exist_ok=True)
+        lineage_event = {
+            "event_type": "runtime_lineage",
+            "event_kind": "gate_outcome",
+            "stage": "gate",
+            "owner": "tests.advisory_aggregate",
+            "source": "mocked_transcript",
+            "gate_path": f"{branch.branch_id}_path",
+            "fallback_kind": None,
+            "fallback_authorship_source": None,
+            "fallback_owner_bucket": None,
+            "repair_kind": None,
+            "mutation_kind": None,
+            "recurrence_key": f"gate_outcome:gate:tests.advisory_aggregate:{branch.branch_id}",
+            "notes": [],
+        }
+        turns = [
+            {
+                "turn_index": idx,
+                "turn_id": turn.turn_id,
+                "player_prompt": turn.player_prompt,
+                "gm_text": (
+                    f"{branch.branch_id} advisory aggregate turn {idx}: Cinderwatch Gate, notice board, "
+                    "Captain Thoran, Ash Compact census pressure, missing patrol route, muddy crates, "
+                    "and branch-specific consequence remain visible."
+                ),
+                "api_ok": True,
+                "meta": {
+                    "runtime_lineage_events": [lineage_event],
+                },
+            }
+            for idx, turn in enumerate(branch.turns)
+        ]
+        (branch_dir / "transcript.json").write_text(
+            json.dumps(
+                {
+                    "schema_version": 1,
+                    "spine_id": spine.spine_id,
+                    "branch_id": branch.branch_id,
+                    "turn_count": len(turns),
+                    "turns": turns,
+                },
+                indent=2,
+            ),
+            encoding="utf-8",
+        )
+        eval_result = {
+            "session_health": {
+                "turn_count": 25,
+                "scripted_turn_count": 25,
+                "full_length_branch": True,
+                "classification": "clean",
+                "score": 100,
+                "overall_passed": True,
+                **_stub_metadata_session_health_fields(passed=True, checked=25, gaps=0),
+            },
+            "degradation_over_time": {
+                "progressive_degradation_detected": False,
+                "reason_codes": [],
+                "early_window": {"signals": []},
+                "middle_window": {"signals": []},
+                "late_window": {"signals": []},
+            },
+            "detected_failures": [],
+            "warnings": [],
+            "axes": {
+                "branch_coherence": {"passed": True, "failure_codes": [], "warning_codes": []},
+                "narrative_grounding": {"passed": True, "failure_codes": [], "warning_codes": []},
+            },
+        }
+        results.append(
+            _mod.BranchRunResult(
+                branch_id_requested=branch.branch_id,
+                branch_id_resolved=branch.branch_id,
+                run_dir=branch_dir,
+                eval_result=eval_result,
+                executed_turns=25,
+                spine_branch_turns=25,
+                scope_label="full",
+            ),
+        )
+
+    _mod.write_aggregate_spine_artifacts(
+        spine,
+        aggregate_dir,
+        results,
+        smoke=False,
+        max_turns=None,
+        run_timestamp="2026-05-30T00:00:00+00:00",
+    )
+
+    aggregate_path = aggregate_dir / "aggregate_session_health_summary.json"
+    lineage_path = aggregate_dir / "runtime_lineage_summary.json"
+    operator_path = aggregate_dir / "aggregate_operator_summary.md"
+    assert aggregate_path.is_file()
+    assert lineage_path.is_file()
+    assert operator_path.is_file()
+
+    aggregate = json.loads(aggregate_path.read_text(encoding="utf-8"))
+    assert aggregate["branches_run"] == list(long_branch_ids)
+    assert aggregate["branch_turn_counts"] == {
+        "branch_direct_intrusion": 25,
+        "branch_social_inquiry": 25,
+    }
+    assert aggregate["total_executed_turns"] == 50
+    assert aggregate["long_branch_count"] == 2
+    assert aggregate["coverage_band_met"] is True
+    assert aggregate["all_full_length_branches_passed"] is True
+    assert aggregate["aggregate_meta"]["coverage_turn_total_long_scripted_branches"] == 50
+    assert aggregate["aggregate_meta"]["long_scripted_branch_ids"] == list(long_branch_ids)
+    assert aggregate["aggregate_meta"]["long_targets_complete"] is True
+    assert aggregate["aggregate_meta"]["long_targets_all_passed"] is True
+    assert set(aggregate["degradation_over_time_by_branch"]) == set(long_branch_ids)
+    assert all(
+        aggregate["degradation_over_time_by_branch"][bid]["progressive_degradation_detected"] is False
+        for bid in long_branch_ids
+    )
+    assert set(aggregate["branch_divergence"]["branches_compared"]) == set(long_branch_ids)
+    assert "divergence_score" in aggregate["branch_divergence"]
+    assert aggregate["runtime_lineage_summary"]["total_events"] == 50
+    assert aggregate["runtime_lineage_summary"]["by_event_kind"] == {"gate_outcome": 50}
+
+    standalone_lineage = json.loads(lineage_path.read_text(encoding="utf-8"))
+    assert standalone_lineage["branches_run"] == list(long_branch_ids)
+    assert standalone_lineage["total_events"] == 50
+
+    md = operator_path.read_text(encoding="utf-8")
+    assert "branch_direct_intrusion" in md
+    assert "branch_social_inquiry" in md
+    assert "**Total executed turns (all branches):** 50" in md
+    assert "40–60 turn band" in md
+    assert "## Divergence (cross-branch)" in md
+    assert "## Runtime Lineage Summary" in md
+    assert "## Degradation (per branch)" in md
+
+
 def test_all_branches_aggregate_smoke_does_not_claim_coverage_band(tmp_path, monkeypatch) -> None:
     monkeypatch.setattr(_mod, "apply_new_campaign_hard_reset", lambda: None)
     spine = _load_spine()

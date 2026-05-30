@@ -57,6 +57,7 @@ PROTECTED_SOCIAL_RESOLUTION_KINDS = ("question", "social", "social_exchange", "d
 PROTECTED_SOCIAL_ROUTE_KINDS = ("social", "question", "social_engine", "dialogue")
 PROTECTED_DIALOGUE_TRACE_ROUTES = ("social", "dialogue")
 PROTECTED_GLOBAL_SCENE_FALLBACK_SOURCE = "global_scene_fallback"
+NEUTRAL_REPLY_SPEAKER_GROUNDING_BRIDGE_FAMILY = "neutral_reply_speaker_grounding_bridge"
 _MISSING = object()
 _STRUCTURAL_DRIFT_FIELDS = frozenset(
     {
@@ -721,12 +722,60 @@ def _active_telemetry_token(value: Any) -> str | None:
     return token
 
 
+def _fallback_unavailable_is_scene_action_speaker_optional(
+    turn: Mapping[str, Any],
+    unavailable: list[Any],
+) -> bool:
+    unavailable_fields = {str(item) for item in unavailable if str(item).strip()}
+    if unavailable_fields != {"selected_speaker_id"}:
+        return False
+    route_kind = str(turn.get("route_kind") or "").strip().lower()
+    response_type_required = str(turn.get("response_type_required") or "").strip().lower()
+    final_source = str(turn.get("final_emitted_source") or "").strip()
+    if route_kind in {"dialogue", "social", "question", "social_engine"}:
+        return False
+    return route_kind in {"undecided", "action"} or response_type_required in {
+        "neutral_narration",
+        "action_outcome",
+    } or final_source in {
+        NEUTRAL_REPLY_SPEAKER_GROUNDING_BRIDGE_FAMILY,
+        "passive_scene_pressure_fallback",
+        "global_scene_fallback",
+        "anti_reset_local_continuation_fallback",
+    }
+
+
+def _fallback_selection_is_scene_action_nonblocking(turn: Mapping[str, Any]) -> bool:
+    if turn.get("selected_speaker_id") is not None:
+        return False
+    route_kind = str(turn.get("route_kind") or "").strip().lower()
+    if route_kind in {"dialogue", "social", "question", "social_engine"}:
+        return False
+    response_type_required = str(turn.get("response_type_required") or "").strip().lower()
+    final_source = str(turn.get("final_emitted_source") or "").strip()
+    fallback_family = str(turn.get("fallback_family") or "").strip()
+    return route_kind in {"undecided", "action"} or response_type_required in {
+        "neutral_narration",
+        "action_outcome",
+    } or final_source in {
+        NEUTRAL_REPLY_SPEAKER_GROUNDING_BRIDGE_FAMILY,
+        "passive_scene_pressure_fallback",
+        "global_scene_fallback",
+        "anti_reset_local_continuation_fallback",
+    } or fallback_family in {
+        NEUTRAL_REPLY_SPEAKER_GROUNDING_BRIDGE_FAMILY,
+        "gate_terminal_repair",
+    }
+
+
 def summarize_fallback_escalation_observations(
     turns: list[Mapping[str, Any]],
 ) -> dict[str, Any]:
     """Return fallback escalation metrics for sustained replay observations."""
     total_turns = len(turns)
     fallback_turn_flags: list[bool] = []
+    scene_action_nonblocking_fallback_turn_flags: list[bool] = []
+    blocking_fallback_turn_flags: list[bool] = []
     fallback_turn_indices: list[int] = []
     fallback_windows: Counter[str] = Counter()
     fallback_lineage_kinds: list[str] = []
@@ -736,6 +785,8 @@ def summarize_fallback_escalation_observations(
     response_type_repair_turn_indices: list[int] = []
     sanitizer_fallback_turn_indices: list[int] = []
     unavailable_with_fallback_count = 0
+    blocking_unavailable_with_fallback_count = 0
+    scene_action_speaker_optional_unavailable_count = 0
     fallback_family_unavailable_with_fallback_count = 0
     fallback_selected_without_family_count = 0
 
@@ -743,7 +794,10 @@ def summarize_fallback_escalation_observations(
         turn_index = int(turn.get("turn_index") if turn.get("turn_index") is not None else index)
         lineage_fallbacks = _lineage_fallback_events(turn)
         has_fallback = _has_fallback_selection(turn)
+        scene_action_nonblocking_fallback = has_fallback and _fallback_selection_is_scene_action_nonblocking(turn)
         fallback_turn_flags.append(has_fallback)
+        scene_action_nonblocking_fallback_turn_flags.append(scene_action_nonblocking_fallback)
+        blocking_fallback_turn_flags.append(has_fallback and not scene_action_nonblocking_fallback)
         if has_fallback:
             fallback_turn_indices.append(turn_index)
             fallback_windows[_turn_window(index, total_turns)] += 1
@@ -755,6 +809,10 @@ def summarize_fallback_escalation_observations(
             unavailable = turn.get("unavailable")
             if isinstance(unavailable, list) and unavailable:
                 unavailable_with_fallback_count += 1
+                if _fallback_unavailable_is_scene_action_speaker_optional(turn, unavailable):
+                    scene_action_speaker_optional_unavailable_count += 1
+                else:
+                    blocking_unavailable_with_fallback_count += 1
                 if "fallback_family" in {str(item) for item in unavailable}:
                     fallback_family_unavailable_with_fallback_count += 1
         for event in lineage_fallbacks:
@@ -782,10 +840,12 @@ def summarize_fallback_escalation_observations(
     owner_change_count = _stable_change_count(fallback_owner_by_turn)
     lineage_owner_change_count = _stable_change_count(fallback_lineage_owners)
     max_streak = _max_consecutive_true(fallback_turn_flags)
+    max_scene_action_nonblocking_streak = _max_consecutive_true(scene_action_nonblocking_fallback_turn_flags)
+    max_blocking_streak = _max_consecutive_true(blocking_fallback_turn_flags)
     late_fallback_count = int(fallback_windows.get("late", 0))
     early_middle_fallback_count = int(fallback_windows.get("early", 0)) + int(fallback_windows.get("middle", 0))
     escalation_warnings: list[str] = []
-    if max_streak > 1:
+    if max_blocking_streak > 1:
         escalation_warnings.append("fallback_streak_gt_1")
     if late_fallback_count > max(1, early_middle_fallback_count):
         escalation_warnings.append("late_fallback_spike")
@@ -797,7 +857,7 @@ def summarize_fallback_escalation_observations(
         escalation_warnings.append("fallback_behavior_repair_loop")
     if fallback_selected_without_family_count > 1:
         escalation_warnings.append("fallback_selected_without_family_recurrence")
-    if unavailable_with_fallback_count > 1:
+    if blocking_unavailable_with_fallback_count > 1:
         escalation_warnings.append("unavailable_to_fallback_coupling_recurrence")
 
     return {
@@ -809,6 +869,8 @@ def summarize_fallback_escalation_observations(
         "fallback_lineage_owner_counts": lineage_owner_counts,
         "fallback_window_counts": dict(sorted(fallback_windows.items())),
         "max_fallback_streak": max_streak,
+        "max_scene_action_nonblocking_fallback_streak": max_scene_action_nonblocking_streak,
+        "max_blocking_fallback_streak": max_blocking_streak,
         "late_window_fallback_count": late_fallback_count,
         "fallback_owner_change_count": owner_change_count,
         "fallback_lineage_owner_change_count": lineage_owner_change_count,
@@ -819,6 +881,8 @@ def summarize_fallback_escalation_observations(
         "sanitizer_fallback_turn_indices": sanitizer_fallback_turn_indices,
         "sanitizer_fallback_count": len(sanitizer_fallback_turn_indices),
         "unavailable_with_fallback_count": unavailable_with_fallback_count,
+        "blocking_unavailable_with_fallback_count": blocking_unavailable_with_fallback_count,
+        "scene_action_speaker_optional_unavailable_count": scene_action_speaker_optional_unavailable_count,
         "fallback_family_unavailable_with_fallback_count": fallback_family_unavailable_with_fallback_count,
         "fallback_selected_without_family_count": fallback_selected_without_family_count,
         "model_routing_escalation_observable": False,
@@ -1045,7 +1109,17 @@ def render_long_session_replay_summary_markdown(
         f"- Fallback owners: `{fallback_escalation.get('fallback_owner_counts', {})}`",
         f"- Fallback lineage kinds: `{fallback_escalation.get('fallback_lineage_kind_counts', {})}`",
         f"- Max fallback streak: `{fallback_escalation.get('max_fallback_streak', 0)}`",
+        (
+            "- Max fallback streak blocking / scene-action nonblocking: "
+            f"`{fallback_escalation.get('max_blocking_fallback_streak', 0)}` / "
+            f"`{fallback_escalation.get('max_scene_action_nonblocking_fallback_streak', 0)}`"
+        ),
         f"- Late-window fallback count: `{fallback_escalation.get('late_window_fallback_count', 0)}`",
+        (
+            "- Fallback unavailable blocking / scene-action speaker optional: "
+            f"`{fallback_escalation.get('blocking_unavailable_with_fallback_count', 0)}` / "
+            f"`{fallback_escalation.get('scene_action_speaker_optional_unavailable_count', 0)}`"
+        ),
         f"- Fallback escalation warnings: `{fallback_escalation.get('escalation_warnings', [])}`",
         f"- Mutation turn count: `{summary.get('mutation_turn_count')}`",
         f"- Unavailable counts: `{summary.get('unavailable_counts')}`",
@@ -1187,6 +1261,25 @@ def _runtime_lineage_events_from_payload(payload: Mapping[str, Any], fem: Mappin
     return build_fem_runtime_lineage_events(fem)[:16] if fem else []
 
 
+def _project_replay_fallback_family(
+    fem: Mapping[str, Any],
+    runtime_lineage_events: list[Mapping[str, Any]],
+) -> str | None:
+    """Return read-side diagnostic family for finalized fallback evidence missing a family field."""
+    final_route = str(fem.get("final_route") or "").strip().lower()
+    final_source = str(fem.get("final_emitted_source") or "").strip()
+    if final_route != "replaced" or final_source != NEUTRAL_REPLY_SPEAKER_GROUNDING_BRIDGE_FAMILY:
+        return None
+    if any(
+        event.get("event_kind") == "fallback_selected"
+        and event.get("fallback_kind") == "sealed_or_global_replacement"
+        for event in runtime_lineage_events
+        if isinstance(event, Mapping)
+    ):
+        return NEUTRAL_REPLY_SPEAKER_GROUNDING_BRIDGE_FAMILY
+    return None
+
+
 def _observed_turn(
     *,
     scenario_id: str,
@@ -1261,6 +1354,8 @@ def _observed_turn(
         fem,
         ("fallback_family_used", "realization_fallback_family"),
     )
+    if fallback_family is None:
+        fallback_family = _project_replay_fallback_family(fem, runtime_lineage_events)
     fallback_temporal_frame = _first_present(fem, ("fallback_temporal_frame",))
     stage_diff = _find_nested_mapping(payload, "stage_diff_telemetry")
     sanitizer_debug = _find_nested_list(payload, "sanitizer_debug")

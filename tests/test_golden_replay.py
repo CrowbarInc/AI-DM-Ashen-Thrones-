@@ -3,6 +3,7 @@ from __future__ import annotations
 import pytest
 
 from game import storage
+from game.api import chat
 from game.defaults import default_scene, default_world
 import game.final_emission_gate as feg
 from game.final_emission_gate import apply_final_emission_gate
@@ -24,8 +25,10 @@ from game.scenario_spine import (
     validate_scenario_spine_definition,
 )
 from game.scenario_spine_eval import minimal_complete_transcript_turn_meta
+from game.models import ChatRequest
 from tests.helpers.golden_replay import (
     FRONTIER_GATE_LONG_SESSION_SOURCE_PATH,
+    NEUTRAL_REPLY_SPEAKER_GROUNDING_BRIDGE_FAMILY,
     _observed_turn,
     assert_golden_turn_observation,
     assert_protected_golden_turn_observation,
@@ -44,6 +47,12 @@ from tests.helpers.golden_replay import (
     render_long_session_replay_summary_markdown,
     run_golden_replay,
     summarize_long_session_replay_observations,
+)
+from tests.helpers.transcript_runner import (
+    new_clean_campaign,
+    patch_transcript_storage,
+    snapshot_from_chat_payload,
+    write_default_bootstrap_scenes,
 )
 from tests.helpers.failure_dashboard_report import (
     clear_recorded_failure_dashboard_rows,
@@ -772,6 +781,89 @@ def test_golden_observed_turn_projects_runtime_lineage_and_prefers_existing_even
         payload={"gm_output": {"player_facing_text": "The road remains quiet."}},
     )
     assert missing["runtime_lineage_events"] == []
+
+
+def test_golden_observed_turn_projects_neutral_speaker_grounding_replacement_family():
+    observed = _observed_turn(
+        scenario_id="neutral_grounding_family_projection",
+        snap={
+            "turn_index": 0,
+            "player_text": "I force the side door.",
+            "gm_text": "The moment passes without anyone stepping forward to own that thread.",
+        },
+        payload={
+            "gm_output": {
+                "_final_emission_meta": {
+                    "final_route": "replaced",
+                    "final_emitted_source": NEUTRAL_REPLY_SPEAKER_GROUNDING_BRIDGE_FAMILY,
+                    "response_type_repair_used": False,
+                }
+            }
+        },
+    )
+
+    assert observed["fallback_family"] == NEUTRAL_REPLY_SPEAKER_GROUNDING_BRIDGE_FAMILY
+    assert "fallback_family" not in observed["unavailable"]
+    fallback_selected = [
+        event
+        for event in observed["runtime_lineage_events"]
+        if event.get("event_kind") == "fallback_selected"
+    ]
+    assert fallback_selected[0]["fallback_kind"] == "sealed_or_global_replacement"
+
+    summary = summarize_long_session_replay_observations([observed])
+    fallback_escalation = summary["fallback_escalation_summary"]
+    assert summary["fallback_turn_count"] == 1
+    assert fallback_escalation["fallback_selected_without_family_count"] == 0
+    assert "fallback_selected_without_family_recurrence" not in fallback_escalation["escalation_warnings"]
+
+
+def test_long_session_summary_treats_scene_action_fallback_speaker_absence_as_optional():
+    turns = [
+        {
+            "turn_index": 0,
+            "route_kind": "undecided",
+            "response_type_required": "neutral_narration",
+            "final_emitted_source": NEUTRAL_REPLY_SPEAKER_GROUNDING_BRIDGE_FAMILY,
+            "fallback_family": NEUTRAL_REPLY_SPEAKER_GROUNDING_BRIDGE_FAMILY,
+            "unavailable": ["selected_speaker_id"],
+            "runtime_lineage_events": [
+                make_runtime_lineage_event(
+                    event_kind="fallback_selected",
+                    stage="gate",
+                    owner="game.final_emission_gate",
+                    fallback_kind="sealed_or_global_replacement",
+                )
+            ],
+        },
+        {
+            "turn_index": 1,
+            "route_kind": "action",
+            "response_type_required": "action_outcome",
+            "final_emitted_source": "anti_reset_local_continuation_fallback",
+            "fallback_family": "gate_terminal_repair",
+            "unavailable": ["selected_speaker_id"],
+            "runtime_lineage_events": [
+                make_runtime_lineage_event(
+                    event_kind="fallback_selected",
+                    stage="gate",
+                    owner="game.final_emission_gate",
+                    fallback_kind="response_type_prepared_emission",
+                )
+            ],
+        },
+    ]
+
+    fallback_escalation = summarize_long_session_replay_observations(turns)["fallback_escalation_summary"]
+
+    assert fallback_escalation["unavailable_with_fallback_count"] == 2
+    assert fallback_escalation["scene_action_speaker_optional_unavailable_count"] == 2
+    assert fallback_escalation["blocking_unavailable_with_fallback_count"] == 0
+    assert fallback_escalation["max_fallback_streak"] == 2
+    assert fallback_escalation["max_scene_action_nonblocking_fallback_streak"] == 2
+    assert fallback_escalation["max_blocking_fallback_streak"] == 0
+    assert "fallback_streak_gt_1" not in fallback_escalation["escalation_warnings"]
+    assert "unavailable_to_fallback_coupling_recurrence" not in fallback_escalation["escalation_warnings"]
 
 
 def test_golden_observed_turn_projects_fail_closed_sealed_gate_opening_owner_bucket():
@@ -1698,11 +1790,11 @@ def test_golden_replay_lead_followup_with_dialogue_lock_structural_invariants(tm
         )
 
 
-def test_golden_replay_frontier_gate_social_inquiry_20_turn_structural_stability(tmp_path, monkeypatch):
-    turns = frontier_gate_branch_prompts("branch_social_inquiry", max_turns=20)
-    turn_ids = frontier_gate_branch_turn_ids("branch_social_inquiry", max_turns=20)
+def test_golden_replay_frontier_gate_social_inquiry_25_turn_structural_stability(tmp_path, monkeypatch):
+    turns = frontier_gate_branch_prompts("branch_social_inquiry")
+    turn_ids = frontier_gate_branch_turn_ids("branch_social_inquiry")
     spine = load_frontier_gate_long_session_spine()
-    assert len(turns) == 20
+    assert len(turns) == 25
 
     gpt_call_count = 0
 
@@ -1724,7 +1816,7 @@ def test_golden_replay_frontier_gate_social_inquiry_20_turn_structural_stability
         m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
 
         result = run_golden_replay(
-            scenario_id="frontier_gate_social_inquiry_20_turn",
+            scenario_id="frontier_gate_social_inquiry_25_turn",
             turns=turns,
             tmp_path=tmp_path,
             monkeypatch=monkeypatch,
@@ -1739,7 +1831,7 @@ def test_golden_replay_frontier_gate_social_inquiry_20_turn_structural_stability
     assert observed_turns[0]["source_path"] == FRONTIER_GATE_LONG_SESSION_SOURCE_PATH
     assert observed_turns[0]["branch_id"] == "branch_social_inquiry"
     assert observed_turns[0]["turn_id"] == "inv_01"
-    assert observed_turns[-1]["turn_id"] == "inv_20"
+    assert observed_turns[-1]["turn_id"] == "inv_25"
     summary = summarize_long_session_replay_observations(observed_turns)
     continuity_bridge = evaluate_golden_replay_continuity_drift(
         spine=spine,
@@ -1753,10 +1845,10 @@ def test_golden_replay_frontier_gate_social_inquiry_20_turn_structural_stability
         [
             format_golden_replay_debug(result),
             render_long_session_replay_summary_markdown(
-                scenario_id="frontier_gate_social_inquiry_20_turn",
+                scenario_id="frontier_gate_social_inquiry_25_turn",
                 turns=observed_turns,
                 summary=summary,
-                title="Golden Replay 20-Turn Structural Stability",
+                title="Golden Replay 25-Turn Structural Stability",
             ),
         ]
     )
@@ -1764,14 +1856,14 @@ def test_golden_replay_frontier_gate_social_inquiry_20_turn_structural_stability
     assert "branch_id: 'branch_social_inquiry'" in debug_context
     assert "turn_id: 'inv_01'" in debug_context
 
-    assert result["turn_count"] == 20, debug_context
-    assert summary["turn_count"] == 20, debug_context
+    assert result["turn_count"] == 25, debug_context
+    assert summary["turn_count"] == 25, debug_context
     assert all(not turn.get("scaffold_leakage") for turn in observed_turns), debug_context
-    assert summary["speaker_change_count"] <= 8, debug_context
-    assert summary["speaker_missing_count"] <= 10, debug_context
-    assert summary["fallback_turn_count"] <= 3, debug_context
+    assert summary["speaker_change_count"] <= 2, debug_context
+    assert summary["speaker_missing_count"] <= 2, debug_context
+    assert summary["fallback_turn_count"] <= 1, debug_context
     assert summary["fallback_owner_change_count"] <= 1, debug_context
-    assert summary["route_change_count"] <= 8, debug_context
+    assert summary["route_change_count"] <= 2, debug_context
 
     route_frequency = summary["route_frequency"]
     resolved_routes = sum(route_frequency.values())
@@ -1779,7 +1871,9 @@ def test_golden_replay_frontier_gate_social_inquiry_20_turn_structural_stability
 
     session_health = continuity_eval["session_health"]
     degradation = continuity_eval["degradation_over_time"]
-    assert session_health["long_session_band"] == "standard", debug_context
+    # The full 25-turn branch crosses the evaluator's long-session band; the prior
+    # protected 20-turn slice was still classified as standard.
+    assert session_health["long_session_band"] == "long", debug_context
     assert session_health["classification"] in {"clean", "warning"}, debug_context
     assert session_health["overall_passed"] is True, debug_context
     assert degradation["progressive_degradation_detected"] is False, debug_context
@@ -1795,8 +1889,26 @@ def test_golden_replay_frontier_gate_social_inquiry_20_turn_structural_stability
     lineage_summary = summary["lineage_summary"]
     fallback_selected = lineage_summary.get("fallback_frequency") or {}
     assert sum(int(v) for v in fallback_selected.values()) <= 1, debug_context
+    event_frequency = lineage_summary.get("by_event_kind") or {}
+    assert int(event_frequency.get("fallback_selected") or 0) <= 1, debug_context
+    assert int(event_frequency.get("mutation") or 0) <= 25, debug_context
     mutation_frequency = lineage_summary.get("mutation_kind_frequency") or {}
     assert int(mutation_frequency.get("fallback_mutation") or 0) <= 1, debug_context
+    assert int(mutation_frequency.get("final_emission_mutation") or 0) <= 25, debug_context
+    recurring_keys = {
+        str(event.get("recurrence_key"))
+        for event in lineage_summary.get("recurring_events", [])
+        if isinstance(event, dict)
+    }
+    assert recurring_keys <= {
+        "gate_outcome:gate:game.final_emission_gate:strict_social_accept",
+        "mutation:gate:game.final_emission_gate:final_emission_mutation",
+    }, debug_context
+    assert all(
+        int(event.get("count") or 0) <= 25
+        for event in lineage_summary.get("recurring_events", [])
+        if isinstance(event, dict)
+    ), debug_context
 
     fallback_escalation = summary["fallback_escalation_summary"]
     assert fallback_escalation["fallback_total_count"] <= 1, debug_context
@@ -1809,6 +1921,372 @@ def test_golden_replay_frontier_gate_social_inquiry_20_turn_structural_stability
     assert fallback_escalation["sanitizer_fallback_count"] == 0, debug_context
     assert fallback_escalation["unavailable_with_fallback_count"] <= 1, debug_context
     assert fallback_escalation["fallback_selected_without_family_count"] <= 1, debug_context
+    assert fallback_escalation["escalation_warnings"] == [], debug_context
+    assert fallback_escalation["model_routing_escalation_observable"] is False, debug_context
+
+
+def test_golden_replay_frontier_gate_social_inquiry_25_turn_resume_persistence_supporting(tmp_path, monkeypatch):
+    # Supporting checkpoint probe: this uses a real on-disk snapshot restore at
+    # the 12/13 boundary, but keeps the protected lock on the uninterrupted run.
+    turns = frontier_gate_branch_prompts("branch_social_inquiry")
+    turn_ids = frontier_gate_branch_turn_ids("branch_social_inquiry")
+    spine = load_frontier_gate_long_session_spine()
+    split_at = 12
+    assert len(turns) == 25
+    assert turn_ids[split_at - 1] == "inv_12"
+    assert turn_ids[split_at] == "inv_13"
+
+    gpt_call_count = 0
+
+    def _fake_call_gpt(_messages):
+        nonlocal gpt_call_count
+        gpt_call_count += 1
+        return _gm_response(
+            (
+                "The resumed gate inquiry stays anchored: the notice board, Captain Thoran, "
+                "the Ash Compact census delay, muddy footprints northwest of the crates, "
+                "and the missing patrol route remain in view. "
+                f"The answer advances the same thread at deterministic call {gpt_call_count}."
+            )
+        )
+
+    observed_turns = []
+    checkpoint_meta = None
+    restored_meta = None
+    pre_resume_counter = None
+    post_restore_counter = None
+    post_restore_log_count = None
+
+    with monkeypatch.context() as m:
+        m.setattr("game.api.call_gpt", _fake_call_gpt)
+        m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
+        m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
+        m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+
+        patch_transcript_storage(monkeypatch, tmp_path)
+        write_default_bootstrap_scenes()
+        if not storage.SESSION_LOG_PATH.exists():
+            storage.SESSION_LOG_PATH.write_text("", encoding="utf-8")
+        new_clean_campaign(starting_scene_id="frontier_gate")
+        _seed_frontier_gate_long_session_context()
+
+        for i, text in enumerate(turns[:split_at]):
+            payload = chat(ChatRequest(text=text))
+            snap = snapshot_from_chat_payload(i, text, payload)
+            observed_turns.append(
+                _observed_turn(
+                    scenario_id="frontier_gate_social_inquiry_25_turn_resume_persistence_supporting",
+                    snap=snap,
+                    payload=payload,
+                    replay_identity={
+                        "source_path": FRONTIER_GATE_LONG_SESSION_SOURCE_PATH,
+                        "branch_id": "branch_social_inquiry",
+                        "turn_id": turn_ids[i],
+                    },
+                )
+            )
+
+        pre_resume_counter = int(storage.load_session().get("turn_counter") or 0)
+        checkpoint_meta = storage.create_snapshot(label="golden-social-inquiry-after-turn-12")
+        restored_meta = storage.load_snapshot(str(checkpoint_meta["id"]))
+        post_restore_session = storage.load_session()
+        post_restore_counter = int(post_restore_session.get("turn_counter") or 0)
+        post_restore_log_count = len(storage.load_log())
+
+        for i, text in enumerate(turns[split_at:], start=split_at):
+            payload = chat(ChatRequest(text=text))
+            snap = snapshot_from_chat_payload(i, text, payload)
+            observed_turns.append(
+                _observed_turn(
+                    scenario_id="frontier_gate_social_inquiry_25_turn_resume_persistence_supporting",
+                    snap=snap,
+                    payload=payload,
+                    replay_identity={
+                        "source_path": FRONTIER_GATE_LONG_SESSION_SOURCE_PATH,
+                        "branch_id": "branch_social_inquiry",
+                        "turn_id": turn_ids[i],
+                    },
+                )
+            )
+
+    result = {
+        "scenario_id": "frontier_gate_social_inquiry_25_turn_resume_persistence_supporting",
+        "turn_count": len(observed_turns),
+        "turns": observed_turns,
+    }
+    pre_resume_turns = observed_turns[:split_at]
+    post_resume_turns = observed_turns[split_at:]
+    summary = summarize_long_session_replay_observations(observed_turns)
+    pre_summary = summarize_long_session_replay_observations(pre_resume_turns)
+    post_summary = summarize_long_session_replay_observations(post_resume_turns)
+    continuity_bridge = evaluate_golden_replay_continuity_drift(
+        spine=spine,
+        branch_id="branch_social_inquiry",
+        turns=observed_turns,
+        turn_ids=turn_ids,
+    )
+    continuity_eval = continuity_bridge["evaluation"]
+    summary["continuity_drift"] = continuity_eval
+    debug_context = "\n\n".join(
+        [
+            f"split_at: {split_at}",
+            f"checkpoint_meta: {checkpoint_meta!r}",
+            f"restored_meta: {restored_meta!r}",
+            f"pre_resume_counter: {pre_resume_counter!r}",
+            f"post_restore_counter: {post_restore_counter!r}",
+            f"post_restore_log_count: {post_restore_log_count!r}",
+            f"pre_resume_summary: {pre_summary!r}",
+            f"post_resume_summary: {post_summary!r}",
+            format_golden_replay_debug(result),
+            render_long_session_replay_summary_markdown(
+                scenario_id="frontier_gate_social_inquiry_25_turn_resume_persistence_supporting",
+                turns=observed_turns,
+                summary=summary,
+                title="Golden Replay 25-Turn Resume Persistence Supporting Probe",
+            ),
+        ]
+    )
+
+    assert checkpoint_meta is not None, debug_context
+    assert restored_meta is not None, debug_context
+    assert pre_resume_counter == split_at, debug_context
+    assert post_restore_counter == split_at, debug_context
+    assert post_restore_log_count == split_at, debug_context
+    assert storage.load_session().get("turn_counter") == 25, debug_context
+    assert len(storage.load_log()) == 25, debug_context
+
+    assert result["turn_count"] == 25, debug_context
+    assert summary["turn_count"] == 25, debug_context
+    assert [turn.get("turn_index") for turn in observed_turns] == list(range(25)), debug_context
+    assert [turn.get("turn_id") for turn in observed_turns] == turn_ids, debug_context
+    assert observed_turns[split_at - 1]["turn_id"] == "inv_12", debug_context
+    assert observed_turns[split_at]["turn_id"] == "inv_13", debug_context
+    assert observed_turns[0]["source_path"] == FRONTIER_GATE_LONG_SESSION_SOURCE_PATH
+    assert observed_turns[0]["branch_id"] == "branch_social_inquiry"
+    assert observed_turns[-1]["turn_id"] == "inv_25"
+
+    assert all(not turn.get("scaffold_leakage") for turn in observed_turns), debug_context
+    assert pre_summary["turn_count"] == split_at, debug_context
+    assert post_summary["turn_count"] == 25 - split_at, debug_context
+    assert pre_summary["speaker_missing_count"] <= 2, debug_context
+    assert post_summary["speaker_missing_count"] <= 1, debug_context
+    assert observed_turns[split_at]["selected_speaker_id"] is not None, debug_context
+    assert observed_turns[split_at]["selected_speaker_source"] is not None, debug_context
+    assert summary["speaker_change_count"] <= 2, debug_context
+    assert summary["speaker_missing_count"] <= 2, debug_context
+    assert summary["fallback_turn_count"] <= 1, debug_context
+    assert summary["fallback_owner_change_count"] <= 1, debug_context
+    assert summary["route_change_count"] <= 2, debug_context
+
+    session_health = continuity_eval["session_health"]
+    degradation = continuity_eval["degradation_over_time"]
+    assert session_health["long_session_band"] == "long", debug_context
+    assert session_health["classification"] in {"clean", "warning"}, debug_context
+    assert session_health["overall_passed"] is True, debug_context
+    assert degradation["progressive_degradation_detected"] is False, debug_context
+    assert "late_session_reset_or_amnesia" not in degradation["reason_codes"], debug_context
+    assert "rising_generic_filler_strong" not in degradation["reason_codes"], debug_context
+    assert "rising_generic_filler_progressive" not in degradation["reason_codes"], debug_context
+    assert "debug_leak_late_window" not in degradation["reason_codes"], debug_context
+    assert "referent_loss_late" not in degradation["reason_codes"], debug_context
+    assert "continuity_anchor_late_loss" not in degradation["reason_codes"], debug_context
+    assert continuity_eval["axes"]["narrative_grounding"]["passed"] is True, debug_context
+    assert continuity_eval["axes"]["branch_coherence"]["passed"] is True, debug_context
+
+    lineage_summary = summary["lineage_summary"]
+    event_frequency = lineage_summary.get("by_event_kind") or {}
+    mutation_frequency = lineage_summary.get("mutation_kind_frequency") or {}
+    assert int(event_frequency.get("fallback_selected") or 0) <= 1, debug_context
+    assert int(event_frequency.get("mutation") or 0) <= 25, debug_context
+    assert int(mutation_frequency.get("fallback_mutation") or 0) <= 1, debug_context
+    assert int(mutation_frequency.get("final_emission_mutation") or 0) <= 25, debug_context
+    recurring_keys = {
+        str(event.get("recurrence_key"))
+        for event in lineage_summary.get("recurring_events", [])
+        if isinstance(event, dict)
+    }
+    assert recurring_keys <= {
+        "gate_outcome:gate:game.final_emission_gate:strict_social_accept",
+        "mutation:gate:game.final_emission_gate:final_emission_mutation",
+    }, debug_context
+    assert all(
+        int(event.get("count") or 0) <= 25
+        for event in lineage_summary.get("recurring_events", [])
+        if isinstance(event, dict)
+    ), debug_context
+
+    fallback_escalation = summary["fallback_escalation_summary"]
+    assert fallback_escalation["fallback_total_count"] <= 1, debug_context
+    assert fallback_escalation["max_fallback_streak"] <= 1, debug_context
+    assert fallback_escalation["late_window_fallback_count"] == 0, debug_context
+    assert fallback_escalation["fallback_owner_change_count"] == 0, debug_context
+    assert fallback_escalation["fallback_lineage_owner_change_count"] == 0, debug_context
+    assert fallback_escalation["fallback_behavior_repair_count"] == 0, debug_context
+    assert fallback_escalation["response_type_repair_count"] <= 1, debug_context
+    assert fallback_escalation["sanitizer_fallback_count"] == 0, debug_context
+    assert fallback_escalation["unavailable_with_fallback_count"] <= 1, debug_context
+    assert fallback_escalation["fallback_selected_without_family_count"] <= 1, debug_context
+    assert fallback_escalation["escalation_warnings"] == [], debug_context
+    assert fallback_escalation["model_routing_escalation_observable"] is False, debug_context
+
+
+def test_golden_replay_frontier_gate_direct_intrusion_25_turn_diagnostic_stability(tmp_path, monkeypatch):
+    # Supporting diagnostic only: this branch intentionally stresses risky
+    # action/visibility paths and currently emits more fallback lineage than the
+    # protected social-inquiry baseline. Keep it supporting until it gets another
+    # clean run after future fallback-family or action-routing changes.
+    turns = frontier_gate_branch_prompts("branch_direct_intrusion")
+    turn_ids = frontier_gate_branch_turn_ids("branch_direct_intrusion")
+    spine = load_frontier_gate_long_session_spine()
+    assert len(turns) == 25
+
+    gpt_call_count = 0
+
+    def _fake_call_gpt(_messages):
+        nonlocal gpt_call_count
+        gpt_call_count += 1
+        return _gm_response(
+            (
+                "The direct intrusion stays anchored: the gate serjeant, roster board, cordon pressure, "
+                "warehouse latch, muddy crates, and watch whistles remain in view. "
+                f"The risky push advances the same forced-access thread at deterministic call {gpt_call_count}."
+            )
+        )
+
+    with monkeypatch.context() as m:
+        m.setattr("game.api.call_gpt", _fake_call_gpt)
+        m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
+        m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
+        m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+
+        result = run_golden_replay(
+            scenario_id="frontier_gate_direct_intrusion_25_turn_diagnostic",
+            turns=turns,
+            tmp_path=tmp_path,
+            monkeypatch=monkeypatch,
+            setup_fn=_seed_frontier_gate_long_session_context,
+            starting_scene_id="frontier_gate",
+            source_path=FRONTIER_GATE_LONG_SESSION_SOURCE_PATH,
+            branch_id="branch_direct_intrusion",
+            turn_ids=turn_ids,
+        )
+
+    observed_turns = result["turns"]
+    assert observed_turns[0]["source_path"] == FRONTIER_GATE_LONG_SESSION_SOURCE_PATH
+    assert observed_turns[0]["branch_id"] == "branch_direct_intrusion"
+    assert observed_turns[0]["turn_id"] == "act_01"
+    assert observed_turns[-1]["turn_id"] == "act_25"
+    summary = summarize_long_session_replay_observations(observed_turns)
+    continuity_bridge = evaluate_golden_replay_continuity_drift(
+        spine=spine,
+        branch_id="branch_direct_intrusion",
+        turns=observed_turns,
+        turn_ids=turn_ids,
+    )
+    continuity_eval = continuity_bridge["evaluation"]
+    summary["continuity_drift"] = continuity_eval
+    debug_context = "\n\n".join(
+        [
+            format_golden_replay_debug(result),
+            render_long_session_replay_summary_markdown(
+                scenario_id="frontier_gate_direct_intrusion_25_turn_diagnostic",
+                turns=observed_turns,
+                summary=summary,
+                title="Golden Replay 25-Turn Direct-Intrusion Diagnostic Stability",
+            ),
+        ]
+    )
+    assert f"source_path: {FRONTIER_GATE_LONG_SESSION_SOURCE_PATH!r}" in debug_context
+    assert "branch_id: 'branch_direct_intrusion'" in debug_context
+    assert "turn_id: 'act_01'" in debug_context
+
+    assert result["turn_count"] == 25, debug_context
+    assert summary["turn_count"] == 25, debug_context
+    assert all(not turn.get("scaffold_leakage") for turn in observed_turns), debug_context
+    assert summary["route_change_count"] <= 6, debug_context
+    assert summary["speaker_change_count"] <= 3, debug_context
+    assert summary["speaker_missing_count"] <= 20, debug_context
+    assert summary["fallback_turn_count"] == 7, debug_context
+    assert summary["fallback_owner_change_count"] == 0, debug_context
+    assert summary["mutation_turn_count"] <= 25, debug_context
+
+    session_health = continuity_eval["session_health"]
+    degradation = continuity_eval["degradation_over_time"]
+    assert session_health["long_session_band"] == "long", debug_context
+    assert session_health["classification"] in {"clean", "warning"}, debug_context
+    assert session_health["overall_passed"] is True, debug_context
+    assert degradation["progressive_degradation_detected"] is False, debug_context
+    assert "late_session_reset_or_amnesia" not in degradation["reason_codes"], debug_context
+    assert "rising_generic_filler_strong" not in degradation["reason_codes"], debug_context
+    assert "rising_generic_filler_progressive" not in degradation["reason_codes"], debug_context
+    assert "debug_leak_late_window" not in degradation["reason_codes"], debug_context
+    assert "referent_loss_late" not in degradation["reason_codes"], debug_context
+    assert "continuity_anchor_late_loss" not in degradation["reason_codes"], debug_context
+    assert continuity_eval["axes"]["narrative_grounding"]["passed"] is True, debug_context
+    assert continuity_eval["axes"]["branch_coherence"]["passed"] is True, debug_context
+
+    lineage_summary = summary["lineage_summary"]
+    fallback_frequency = summary["fallback_frequency"]
+    assert set(fallback_frequency) <= {
+        NEUTRAL_REPLY_SPEAKER_GROUNDING_BRIDGE_FAMILY,
+        "gate_terminal_repair",
+    }, debug_context
+    assert int(fallback_frequency.get(NEUTRAL_REPLY_SPEAKER_GROUNDING_BRIDGE_FAMILY) or 0) <= 4, debug_context
+    assert int(fallback_frequency.get("gate_terminal_repair") or 0) <= 3, debug_context
+    event_frequency = lineage_summary.get("by_event_kind") or {}
+    mutation_frequency = lineage_summary.get("mutation_kind_frequency") or {}
+    assert int(event_frequency.get("fallback_selected") or 0) == 7, debug_context
+    assert int(event_frequency.get("mutation") or 0) <= 14, debug_context
+    assert int(event_frequency.get("speaker_repair") or 0) <= 1, debug_context
+    assert int(mutation_frequency.get("fallback_mutation") or 0) <= 7, debug_context
+    assert int(mutation_frequency.get("final_emission_mutation") or 0) <= 4, debug_context
+    assert int(mutation_frequency.get("response_type_repair_mutation") or 0) <= 2, debug_context
+    assert int(mutation_frequency.get("speaker_repair_mutation") or 0) <= 1, debug_context
+    recurring_keys = {
+        str(event.get("recurrence_key"))
+        for event in lineage_summary.get("recurring_events", [])
+        if isinstance(event, dict)
+    }
+    assert recurring_keys <= {
+        "gate_outcome:gate:game.final_emission_gate:accept_unchanged",
+        "mutation:gate:game.final_emission_gate:fallback_mutation",
+        "fallback_selected:gate:game.final_emission_gate:sealed_or_global_replacement",
+        "gate_outcome:gate:game.final_emission_gate:replaced_or_sealed",
+        "gate_outcome:gate:game.final_emission_gate:strict_social_accept",
+        "mutation:gate:game.final_emission_gate:final_emission_mutation",
+        "fallback_selected:gate:game.final_emission_gate:response_type_prepared_emission",
+        "gate_outcome:gate:game.final_emission_gate:prepared_repair",
+        "mutation:gate:game.final_emission_gate:response_type_repair_mutation",
+    }, debug_context
+    assert all(
+        int(event.get("count") or 0) <= 25
+        for event in lineage_summary.get("recurring_events", [])
+        if isinstance(event, dict)
+    ), debug_context
+
+    fallback_escalation = summary["fallback_escalation_summary"]
+    assert fallback_escalation["fallback_total_count"] == 7, debug_context
+    assert set(fallback_escalation["fallback_family_counts"]) <= {
+        NEUTRAL_REPLY_SPEAKER_GROUNDING_BRIDGE_FAMILY,
+        "gate_terminal_repair",
+    }, debug_context
+    assert fallback_escalation["fallback_family_counts"].get(
+        NEUTRAL_REPLY_SPEAKER_GROUNDING_BRIDGE_FAMILY
+    ) == 4, debug_context
+    assert fallback_escalation["fallback_family_counts"].get("gate_terminal_repair") == 3, debug_context
+    assert fallback_escalation["max_fallback_streak"] <= 2, debug_context
+    assert fallback_escalation["max_scene_action_nonblocking_fallback_streak"] <= 2, debug_context
+    assert fallback_escalation["max_blocking_fallback_streak"] == 0, debug_context
+    assert fallback_escalation["late_window_fallback_count"] <= 2, debug_context
+    assert fallback_escalation["fallback_owner_change_count"] == 0, debug_context
+    assert fallback_escalation["fallback_lineage_owner_change_count"] == 0, debug_context
+    assert fallback_escalation["fallback_behavior_repair_count"] == 0, debug_context
+    assert fallback_escalation["response_type_repair_count"] <= 2, debug_context
+    assert fallback_escalation["sanitizer_fallback_count"] == 0, debug_context
+    assert fallback_escalation["unavailable_with_fallback_count"] <= 7, debug_context
+    assert fallback_escalation["scene_action_speaker_optional_unavailable_count"] == 7, debug_context
+    assert fallback_escalation["blocking_unavailable_with_fallback_count"] == 0, debug_context
+    assert fallback_escalation["fallback_selected_without_family_count"] == 0, debug_context
     assert fallback_escalation["escalation_warnings"] == [], debug_context
     assert fallback_escalation["model_routing_escalation_observable"] is False, debug_context
 

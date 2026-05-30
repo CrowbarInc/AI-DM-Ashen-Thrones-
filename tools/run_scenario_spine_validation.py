@@ -1206,6 +1206,7 @@ def main(argv: list[str] | None = None) -> int:
                 run_timestamp=ts,
             )
             print(f"Wrote {agg_dir / 'aggregate_session_health_summary.json'}")
+            print(f"Wrote {agg_dir / 'runtime_lineage_summary.json'}")
             print(f"Wrote {agg_dir / 'aggregate_operator_summary.md'}")
 
         if args.all_branches and len(results) > 1:

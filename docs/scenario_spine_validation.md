@@ -189,6 +189,7 @@ When you pass **`--all-branches`**, the runner also writes spine-level summaries
 | File | Role |
 |------|------|
 | `aggregate_session_health_summary.json` | Cross-branch JSON: `schema_version`, `spine_id`, `run_timestamp`, `branches_run`, `branch_turn_counts`, `total_executed_turns`, `long_branch_count`, **`coverage_band_met`**, **`all_full_length_branches_passed`**, per-branch `branch_classifications` / `branch_failures` / `branch_warnings`, **`degradation_over_time_by_branch`**, **`branch_divergence`**, and **`aggregate_meta`** (`smoke`, `max_turns`, `coverage_turn_total_long_scripted_branches`, `long_scripted_branch_ids`, `long_targets_complete`, `long_targets_all_passed`). |
+| `runtime_lineage_summary.json` | Spine-level lineage rollup copied from aggregate JSON: `branches_run`, total event counts, event-kind frequencies, fallback / repair / mutation / gate-path frequencies, and recurring lineage keys. |
 | `aggregate_operator_summary.md` | Operator markdown: branch table (scripted vs executed turns, classification, score, **metadata completeness** pass/fail, opening verdict, progressive degradation flag), coverage line reflecting `coverage_band_met`, divergence block, per-branch degradation summary, top blocking branch/axis hint. |
 
 Per-branch **`session_health_summary.json`** includes evaluator fields such as **`schema_version`**, **`degradation_over_time`** (windowed signals, **`progressive_degradation_detected`**, **`reason_codes`**), and **`session_health`** flags including **`full_length_branch`**, **`scripted_turn_count`**, **`long_session_band`**, and **`degradation_detected`**.
@@ -234,6 +235,22 @@ python tools/run_scenario_spine_validation.py --base-url http://127.0.0.1:8000 -
 
 Omitting `--branch` runs the default branch (`branch_social_inquiry`) with full turns (unless `--smoke` / `--max-turns`).
 
+### Advisory 50-turn aggregate path
+
+The current non-protected Cycle U aggregate check is the canonical full all-branches command:
+
+```bash
+python tools/run_scenario_spine_validation.py --all-branches
+```
+
+For `frontier_gate_long_session`, the advisory 50-turn lane is the pair of long scripted branches inside that run:
+
+- `branch_social_inquiry` — 25 turns.
+- `branch_direct_intrusion` — 25 turns.
+- Long-branch aggregate total — 50 turns, reported in `aggregate_session_health_summary.json` at `aggregate_meta.coverage_turn_total_long_scripted_branches`.
+
+The short `branch_cautious_observe` branch is still included by `--all-branches` for contrast, branch divergence, and harness health, but it does not contribute to the long-scripted 40-60 turn coverage band.
+
 ### Windows
 
 If `python` is not on `PATH`:
@@ -265,6 +282,8 @@ Other useful flags: `--no-reset`, `--artifact-dir PATH`, `--http-timeout SEC` (w
 
 - **`branch_divergence`:** `distinct_outcomes_detected`, `divergence_score`, `shared_prompt_bleed_detected`, `reason_codes`, `branches_compared` — all from deterministic comparison of the transcripts written in the same run.
 - **`degradation_over_time_by_branch`:** Map of branch id → the same structure as per-branch **`degradation_over_time`**.
+- **`runtime_lineage_summary`:** Same aggregate lineage counts as `runtime_lineage_summary.json`; use it to review fallback, repair, mutation, gate-outcome, and recurrence patterns across branches.
+- **`aggregate_meta.coverage_turn_total_long_scripted_branches`:** The long-branch executed-turn total. It is **50** for a full current-fixture run when `branch_social_inquiry` and `branch_direct_intrusion` each complete all 25 turns.
 
 ### `run_debug.json`
 
