@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import json
+
 import pytest
 
 from game import storage
@@ -33,6 +35,7 @@ from tests.helpers.golden_replay import (
     assert_golden_turn_observation,
     assert_protected_golden_turn_observation,
     classify_golden_drift,
+    compare_golden_replay_reruns,
     evaluate_golden_replay_continuity_drift,
     final_text_has_scaffold_leakage,
     format_golden_replay_debug,
@@ -57,8 +60,14 @@ from tests.helpers.transcript_runner import (
 from tests.helpers.failure_dashboard_report import (
     clear_recorded_failure_dashboard_rows,
     clear_recorded_protected_replay_failures,
+    clear_recorded_rerun_drift_scorecards,
     recorded_protected_replay_failure_rows,
+    record_rerun_drift_scorecard,
+    recorded_rerun_drift_scorecards,
     recorded_runtime_lineage_events,
+    render_rerun_drift_scorecard_markdown,
+    write_rerun_drift_scorecard_artifacts,
+    write_rerun_drift_scorecard_artifacts_if_requested,
     write_protected_replay_failure_report_if_present,
 )
 from tests.helpers.opening_fallback_evidence import fail_closed_opening_fem_meta, successful_opening_fem_meta
@@ -592,6 +601,367 @@ def test_golden_drift_opt_in_dashboard_records_lineage_outside_classification_ro
         clear_recorded_failure_dashboard_rows()
 
 
+def _synthetic_rerun_turn(
+    *,
+    turn_index: int = 0,
+    turn_id: str = "t01",
+    route_kind: str | None = "dialogue",
+    selected_speaker_id: str | None = "runner",
+    fallback_family: str | None = None,
+    fallback_owner: str | None = None,
+    final_text: str = "The runner answers.",
+    scaffold_leakage: bool | None = False,
+    runtime_lineage_events: list[dict] | None = None,
+    response_delta_checked: bool | None = None,
+    response_delta_failed: bool | None = None,
+    response_delta_repaired: bool | None = None,
+    response_delta_kind: str | None = None,
+    response_delta_echo_overlap_band: str | None = None,
+) -> dict:
+    row = {
+        "turn_index": turn_index,
+        "turn_id": turn_id,
+        "route_kind": route_kind,
+        "selected_speaker_id": selected_speaker_id,
+        "fallback_family": fallback_family,
+        "final_text": final_text,
+        "runtime_lineage_events": list(runtime_lineage_events or []),
+    }
+    if fallback_owner is not None:
+        row["sealed_fallback_owner_bucket"] = fallback_owner
+    if scaffold_leakage is not None:
+        row["scaffold_leakage"] = scaffold_leakage
+    if response_delta_checked is not None:
+        row["response_delta_checked"] = response_delta_checked
+    if response_delta_failed is not None:
+        row["response_delta_failed"] = response_delta_failed
+    if response_delta_repaired is not None:
+        row["response_delta_repaired"] = response_delta_repaired
+    if response_delta_kind is not None:
+        row["response_delta_kind"] = response_delta_kind
+    if response_delta_echo_overlap_band is not None:
+        row["response_delta_echo_overlap_band"] = response_delta_echo_overlap_band
+    return row
+
+
+def test_compare_golden_replay_reruns_identical_runs_have_zero_deltas():
+    turns = [
+        _synthetic_rerun_turn(turn_index=0, turn_id="t01"),
+        _synthetic_rerun_turn(turn_index=1, turn_id="t02", route_kind="action", selected_speaker_id=None),
+    ]
+
+    scorecard = compare_golden_replay_reruns(turns, [dict(turn) for turn in turns])
+
+    assert scorecard["report_only"] is True
+    assert scorecard["total_turns_compared"] == 2
+    assert scorecard["summary"] == {
+        "speaker_delta_count": 0,
+        "route_delta_count": 0,
+        "fallback_delta_count": 0,
+        "text_fingerprint_delta_count": 0,
+        "scaffold_delta_count": 0,
+        "runtime_lineage_delta_count": 0,
+        "semantic_delta_frequency_delta_count": 0,
+    }
+    assert scorecard["per_turn_deltas"] == []
+
+
+def test_compare_golden_replay_reruns_counts_speaker_only_drift():
+    previous = [_synthetic_rerun_turn(selected_speaker_id="runner")]
+    current = [_synthetic_rerun_turn(selected_speaker_id="guard")]
+
+    scorecard = compare_golden_replay_reruns(previous, current)
+
+    assert scorecard["summary"]["speaker_delta_count"] == 1
+    assert scorecard["summary"]["route_delta_count"] == 0
+    assert scorecard["per_turn_deltas"][0]["deltas"]["speaker"] == {
+        "previous": "runner",
+        "current": "guard",
+    }
+    assert scorecard["frequencies"]["speakers"]["delta"] == {"guard": 1, "runner": -1}
+
+
+def test_compare_golden_replay_reruns_counts_route_only_drift():
+    previous = [_synthetic_rerun_turn(route_kind="dialogue")]
+    current = [_synthetic_rerun_turn(route_kind="action")]
+
+    scorecard = compare_golden_replay_reruns(previous, current)
+
+    assert scorecard["summary"]["route_delta_count"] == 1
+    assert scorecard["summary"]["speaker_delta_count"] == 0
+    assert scorecard["per_turn_deltas"][0]["deltas"]["route"] == {
+        "previous": "dialogue",
+        "current": "action",
+    }
+    assert scorecard["frequencies"]["routes"]["delta"] == {"action": 1, "dialogue": -1}
+
+
+def test_compare_golden_replay_reruns_counts_fallback_frequency_drift():
+    event = make_runtime_lineage_event(
+        event_kind="fallback_selected",
+        stage="gate",
+        owner="game.final_emission_gate",
+        fallback_kind="sealed_or_global_replacement",
+        fallback_selection_owner="final_emission_gate",
+    )
+    previous = [_synthetic_rerun_turn()]
+    current = [
+        _synthetic_rerun_turn(
+            fallback_family="gate_terminal_repair",
+            fallback_owner="sealed_gate",
+            runtime_lineage_events=[event],
+        )
+    ]
+
+    scorecard = compare_golden_replay_reruns(previous, current)
+
+    assert scorecard["summary"]["fallback_delta_count"] == 1
+    assert scorecard["summary"]["runtime_lineage_delta_count"] == 1
+    assert scorecard["frequencies"]["fallback_families"]["delta"] == {"gate_terminal_repair": 1}
+    assert scorecard["frequencies"]["fallback_owners"]["delta"] == {"sealed_gate": 1}
+    assert (
+        scorecard["frequencies"]["runtime_lineage"]["frequency_deltas"]["fallback_frequency"]["delta"]
+        == {"sealed_or_global_replacement": 1}
+    )
+
+
+def test_compare_golden_replay_reruns_reports_text_fingerprints_without_failing():
+    previous = [_synthetic_rerun_turn(final_text="The runner answers.")]
+    current = [_synthetic_rerun_turn(final_text="The runner answers with a warning.")]
+
+    scorecard = compare_golden_replay_reruns(previous, current)
+
+    assert scorecard["summary"]["text_fingerprint_delta_count"] == 1
+    fingerprint_delta = scorecard["per_turn_deltas"][0]["deltas"]["text_fingerprint"]
+    assert fingerprint_delta["previous"] != fingerprint_delta["current"]
+    assert len(fingerprint_delta["previous"]) == 16
+    assert len(fingerprint_delta["current"]) == 16
+    assert scorecard["report_only"] is True
+
+
+def test_compare_golden_replay_reruns_handles_missing_optional_metadata():
+    previous = [{"turn_index": 0, "final_text": "Rain falls."}]
+    current = [{"turn_index": 0, "final_text": "Rain falls.", "runtime_lineage_events": "not-a-list"}]
+
+    scorecard = compare_golden_replay_reruns(previous, current)
+
+    assert scorecard["total_turns_compared"] == 1
+    assert scorecard["summary"]["speaker_delta_count"] == 0
+    assert scorecard["summary"]["route_delta_count"] == 0
+    assert scorecard["summary"]["fallback_delta_count"] == 0
+    assert scorecard["summary"]["runtime_lineage_delta_count"] == 0
+    assert scorecard["summary"]["semantic_delta_frequency_delta_count"] == 0
+    assert scorecard["frequencies"]["response_delta"]["previous"]["response_delta_unknown_count"] == 1
+    assert scorecard["frequencies"]["response_delta"]["current"]["response_delta_unknown_count"] == 1
+    assert scorecard["per_turn_deltas"] == []
+
+
+def test_golden_observed_turn_projects_response_delta_metadata():
+    observed = _observed_turn(
+        scenario_id="response_delta_projection",
+        snap={"turn_index": 0, "gm_text": "The runner adds a new location lead."},
+        payload={
+            "gm_output": {
+                "_final_emission_meta": {
+                    "response_delta_checked": True,
+                    "response_delta_failed": True,
+                    "response_delta_repaired": False,
+                    "response_delta_kind_detected": "new_actionable_lead",
+                    "response_delta_echo_overlap_ratio": 0.2,
+                    "response_delta_trigger_source": "strict_social_answer_pressure",
+                }
+            }
+        },
+    )
+
+    assert observed["response_delta_checked"] is True
+    assert observed["response_delta_failed"] is True
+    assert observed["response_delta_repaired"] is False
+    assert observed["response_delta_kind"] == "new_actionable_lead"
+    assert observed["response_delta_echo_overlap_ratio"] == 0.2
+    assert observed["response_delta_echo_overlap_band"] == "low"
+    assert observed["response_delta_trigger_source"] == "strict_social_answer_pressure"
+
+
+def test_long_session_summary_counts_response_delta_metadata():
+    turns = [
+        _synthetic_rerun_turn(
+            response_delta_checked=True,
+            response_delta_failed=False,
+            response_delta_repaired=False,
+            response_delta_kind="new_fact",
+            response_delta_echo_overlap_band="low",
+        ),
+        _synthetic_rerun_turn(
+            turn_index=1,
+            response_delta_checked=True,
+            response_delta_failed=True,
+            response_delta_repaired=True,
+            response_delta_kind="new_fact",
+            response_delta_echo_overlap_band="high",
+        ),
+        _synthetic_rerun_turn(turn_index=2),
+    ]
+
+    summary = summarize_long_session_replay_observations(turns)["response_delta_summary"]
+
+    assert summary["response_delta_checked_count"] == 2
+    assert summary["response_delta_failed_count"] == 1
+    assert summary["response_delta_repaired_count"] == 1
+    assert summary["response_delta_kind_counts"] == {"new_fact": 2}
+    assert summary["response_delta_unknown_count"] == 1
+    assert summary["echo_overlap_band_counts"] == {"high": 1, "low": 1}
+
+
+def test_compare_golden_replay_reruns_reports_response_delta_frequency_deltas():
+    previous = [
+        _synthetic_rerun_turn(
+            response_delta_checked=True,
+            response_delta_failed=False,
+            response_delta_repaired=False,
+            response_delta_kind="new_fact",
+            response_delta_echo_overlap_band="low",
+        )
+    ]
+    current = [
+        _synthetic_rerun_turn(
+            response_delta_checked=True,
+            response_delta_failed=True,
+            response_delta_repaired=True,
+            response_delta_kind="new_actionable_lead",
+            response_delta_echo_overlap_band="high",
+        )
+    ]
+
+    scorecard = compare_golden_replay_reruns(previous, current)
+
+    assert scorecard["summary"]["semantic_delta_frequency_delta_count"] == 1
+    response_delta = scorecard["frequencies"]["response_delta"]
+    assert response_delta["failed"]["delta"] == {"failed": 1}
+    assert response_delta["repaired"]["delta"] == {"repaired": 1}
+    assert response_delta["kinds"]["delta"] == {"new_actionable_lead": 1, "new_fact": -1}
+    assert response_delta["echo_overlap_bands"]["delta"] == {"high": 1, "low": -1}
+    assert scorecard["per_turn_deltas"][0]["deltas"]["response_delta"]["response_delta_failed"] == {
+        "previous": False,
+        "current": True,
+    }
+
+
+def _synthetic_rerun_scorecard() -> dict:
+    event = make_runtime_lineage_event(
+        event_kind="fallback_selected",
+        stage="gate",
+        owner="game.final_emission_gate",
+        fallback_kind="sealed_or_global_replacement",
+    )
+    return compare_golden_replay_reruns(
+        [_synthetic_rerun_turn(final_text="The runner answers.")],
+        [
+            _synthetic_rerun_turn(
+                selected_speaker_id="guard",
+                route_kind="action",
+                fallback_family="gate_terminal_repair",
+                fallback_owner="sealed_gate",
+                final_text="The guard answers.",
+                runtime_lineage_events=[event],
+            )
+        ],
+    )
+
+
+def test_rerun_drift_scorecard_markdown_summarizes_fabricated_scorecard():
+    scorecard = _synthetic_rerun_scorecard()
+
+    markdown = render_rerun_drift_scorecard_markdown(
+        scorecard,
+        generated_at="2026-05-30T00:00:00Z",
+        command_used="pytest synthetic",
+    )
+
+    assert "# Golden Rerun Drift Scorecard" in markdown
+    assert "- Total turns compared: `1`" in markdown
+    assert "- Speaker deltas: `1`" in markdown
+    assert "- Route deltas: `1`" in markdown
+    assert "- Fallback deltas: `1`" in markdown
+    assert "- Text fingerprint deltas: `1`" in markdown
+    assert "- Runtime-lineage deltas: `1`" in markdown
+    assert "## Semantic Delta Frequency" in markdown
+    assert "- Semantic delta frequency deltas: `0`" in markdown
+    assert "| Turn | Previous Turn ID | Current Turn ID | Drift Fields | Details |" in markdown
+    assert "text_hash" in markdown
+
+
+def test_rerun_drift_scorecard_writer_creates_json_and_markdown(tmp_path):
+    scorecard = _synthetic_rerun_scorecard()
+    json_path = tmp_path / "rerun_drift_scorecard.json"
+    markdown_path = tmp_path / "rerun_drift_scorecard.md"
+
+    written_json, written_markdown = write_rerun_drift_scorecard_artifacts(
+        scorecard,
+        json_path=json_path,
+        markdown_path=markdown_path,
+        generated_at="2026-05-30T00:00:00Z",
+        command_used="pytest synthetic",
+    )
+
+    assert written_json == json_path
+    assert written_markdown == markdown_path
+    assert json.loads(json_path.read_text(encoding="utf-8")) == scorecard
+    markdown = markdown_path.read_text(encoding="utf-8")
+    assert "Golden Rerun Drift Scorecard" in markdown
+    assert "Speaker deltas: `1`" in markdown
+
+
+def test_rerun_drift_scorecard_writer_is_opt_in_by_default(tmp_path):
+    scorecard = _synthetic_rerun_scorecard()
+    json_path = tmp_path / "default_off.json"
+    markdown_path = tmp_path / "default_off.md"
+
+    written = write_rerun_drift_scorecard_artifacts_if_requested(
+        scorecard,
+        json_path=json_path,
+        markdown_path=markdown_path,
+        env={},
+    )
+
+    assert written is None
+    assert not json_path.exists()
+    assert not markdown_path.exists()
+
+
+def test_rerun_drift_scorecard_writer_handles_missing_comparison(tmp_path):
+    json_path = tmp_path / "no_comparison.json"
+    markdown_path = tmp_path / "no_comparison.md"
+
+    written_json, written_markdown = write_rerun_drift_scorecard_artifacts(
+        None,
+        json_path=json_path,
+        markdown_path=markdown_path,
+        generated_at="2026-05-30T00:00:00Z",
+        command_used="pytest synthetic",
+    )
+
+    assert written_json == json_path
+    assert written_markdown == markdown_path
+    payload = json.loads(json_path.read_text(encoding="utf-8"))
+    assert payload["comparison_available"] is False
+    assert "No rerun comparison available" in markdown_path.read_text(encoding="utf-8")
+
+
+def test_rerun_drift_scorecard_recording_does_not_change_failure_dashboard_behavior(tmp_path):
+    scorecard = _synthetic_rerun_scorecard()
+    clear_recorded_rerun_drift_scorecards()
+    clear_recorded_protected_replay_failures()
+    try:
+        record_rerun_drift_scorecard(scorecard)
+
+        assert recorded_rerun_drift_scorecards() == [scorecard]
+        assert write_protected_replay_failure_report_if_present(path=tmp_path / "failure_report.md") is None
+    finally:
+        clear_recorded_rerun_drift_scorecards()
+        clear_recorded_protected_replay_failures()
+
+
 def test_golden_markdown_report_renderer_is_compact_and_deterministic():
     rows = [
         {
@@ -663,6 +1033,14 @@ def test_long_session_replay_summary_renderer_surfaces_operator_metrics():
         "speaker_missing_count": 0,
         "mutation_turn_count": 1,
         "unavailable_counts": {"fallback_family": 1},
+        "response_delta_summary": {
+            "response_delta_checked_count": 1,
+            "response_delta_failed_count": 0,
+            "response_delta_repaired_count": 0,
+            "response_delta_kind_counts": {"new_fact": 1},
+            "response_delta_unknown_count": 1,
+            "echo_overlap_band_counts": {"low": 1},
+        },
         "lineage_summary": {
             "by_event_kind": {"fallback_selected": 1},
             "recurring_events": [
@@ -702,6 +1080,10 @@ def test_long_session_replay_summary_renderer_surfaces_operator_metrics():
     assert "- Fallback total count: `1`" in report
     assert "- Fallback lineage kinds: `{'sealed_or_global_replacement': 1}`" in report
     assert "- Mutation turn count: `1`" in report
+    assert "- Response-delta checked / failed / repaired: `1` / `0` / `0`" in report
+    assert "- Response-delta kinds: `{'new_fact': 1}`" in report
+    assert "- Response-delta unknown count: `1`" in report
+    assert "- Echo-overlap bands: `{'low': 1}`" in report
     assert "- Unavailable counts: `{'fallback_family': 1}`" in report
     assert "- Lineage recurrence: `[" in report
     assert "- Fallback frequency:" not in report

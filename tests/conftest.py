@@ -18,15 +18,27 @@ def pytest_addoption(parser):
         default=False,
         help="Write audits/failure_dashboard_latest.md from opt-in golden replay failure classifications.",
     )
+    parser.addoption(
+        "--write-rerun-drift-scorecard",
+        action="store_true",
+        default=False,
+        help="Write artifacts/golden_replay/rerun_drift_scorecard.{json,md} from opt-in replay rerun diagnostics.",
+    )
 
 
 def pytest_configure(config):
     if config.getoption("--write-failure-dashboard", default=False):
         os.environ["ASHEN_WRITE_FAILURE_DASHBOARD"] = "1"
+    if config.getoption("--write-rerun-drift-scorecard", default=False):
+        os.environ["ASHEN_WRITE_RERUN_DRIFT_SCORECARD"] = "1"
     if str(os.environ.get("ASHEN_WRITE_FAILURE_DASHBOARD") or "").strip().lower() in {"1", "true", "yes", "on"}:
         from tests.helpers.failure_dashboard_report import clear_recorded_failure_dashboard_rows
 
         clear_recorded_failure_dashboard_rows()
+    if str(os.environ.get("ASHEN_WRITE_RERUN_DRIFT_SCORECARD") or "").strip().lower() in {"1", "true", "yes", "on"}:
+        from tests.helpers.failure_dashboard_report import clear_recorded_rerun_drift_scorecards
+
+        clear_recorded_rerun_drift_scorecards()
 
 
 def _failure_dashboard_probe_requested(config) -> bool:
@@ -53,10 +65,21 @@ def pytest_collection_modifyitems(config, items):
 
 
 def pytest_sessionfinish(session, exitstatus):
-    from tests.helpers.failure_dashboard_report import write_protected_replay_failure_report_if_present
+    from tests.helpers.failure_dashboard_report import (
+        recorded_rerun_drift_scorecards,
+        rerun_drift_scorecard_requested,
+        write_protected_replay_failure_report_if_present,
+        write_rerun_drift_scorecard_artifacts,
+    )
 
     if exitstatus != 0:
         write_protected_replay_failure_report_if_present(command_used=" ".join(sys.argv))
+    if exitstatus == 0 and rerun_drift_scorecard_requested():
+        scorecards = recorded_rerun_drift_scorecards()
+        write_rerun_drift_scorecard_artifacts(
+            scorecards[-1] if scorecards else None,
+            command_used=" ".join(sys.argv),
+        )
     if str(os.environ.get("ASHEN_WRITE_FAILURE_DASHBOARD") or "").strip().lower() not in {"1", "true", "yes", "on"}:
         return
     from tests.helpers.failure_dashboard_report import (

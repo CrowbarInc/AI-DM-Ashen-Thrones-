@@ -652,6 +652,99 @@ def _counter_dict(values: list[Any]) -> dict[str, int]:
     return dict(sorted(Counter(str(v) for v in values if v is not None and str(v).strip()).items()))
 
 
+_RESPONSE_DELTA_SIGNAL_KEYS = frozenset(
+    {
+        "response_delta_checked",
+        "response_delta_failed",
+        "response_delta_repaired",
+        "response_delta_kind",
+        "response_delta_kind_detected",
+        "response_delta_echo_overlap_ratio",
+        "response_delta_echo_overlap_band",
+        "response_delta_skip_reason",
+        "response_delta_trigger_source",
+    }
+)
+
+
+def _response_delta_kind_for_turn(turn: Mapping[str, Any]) -> str | None:
+    for key in ("response_delta_kind", "response_delta_kind_detected"):
+        value = turn.get(key)
+        if value is not None and str(value).strip():
+            return str(value).strip()
+    return None
+
+
+def _echo_overlap_ratio(value: Any) -> float | None:
+    if isinstance(value, bool) or value is None:
+        return None
+    if isinstance(value, (int, float)):
+        ratio = float(value)
+    else:
+        try:
+            ratio = float(str(value).strip())
+        except (TypeError, ValueError):
+            return None
+    if ratio < 0:
+        return None
+    return min(ratio, 1.0)
+
+
+def _echo_overlap_band(value: Any) -> str | None:
+    if value is not None and not isinstance(value, bool):
+        text = str(value).strip()
+        if text and _echo_overlap_ratio(text) is None:
+            return text
+    ratio = _echo_overlap_ratio(value)
+    if ratio is None:
+        return None
+    if ratio == 0:
+        return "none"
+    if ratio < 0.25:
+        return "low"
+    if ratio < 0.5:
+        return "medium"
+    return "high"
+
+
+def summarize_response_delta_observations(turns: list[Mapping[str, Any]]) -> dict[str, Any]:
+    """Summarize existing response-delta/FEM signals without judging prose semantics."""
+    checked_count = 0
+    failed_count = 0
+    repaired_count = 0
+    unknown_count = 0
+    kind_values: list[str] = []
+    echo_bands: list[str] = []
+
+    for turn in turns:
+        if not any(key in turn and turn.get(key) is not None for key in _RESPONSE_DELTA_SIGNAL_KEYS):
+            unknown_count += 1
+            continue
+        if turn.get("response_delta_checked") is True:
+            checked_count += 1
+        if turn.get("response_delta_failed") is True:
+            failed_count += 1
+        if turn.get("response_delta_repaired") is True:
+            repaired_count += 1
+        kind = _response_delta_kind_for_turn(turn)
+        if kind:
+            kind_values.append(kind)
+        band = _echo_overlap_band(turn.get("response_delta_echo_overlap_band"))
+        if band is None:
+            band = _echo_overlap_band(turn.get("response_delta_echo_overlap_ratio"))
+        if band:
+            echo_bands.append(band)
+
+    return {
+        "response_delta_checked_count": checked_count,
+        "response_delta_failed_count": failed_count,
+        "response_delta_repaired_count": repaired_count,
+        "response_delta_kind_counts": _counter_dict(kind_values),
+        "response_delta_unknown_count": unknown_count,
+        "echo_overlap_band_counts": _counter_dict(echo_bands),
+    }
+
+
 def _owner_for_turn(turn: Mapping[str, Any]) -> str | None:
     for key in (
         "opening_fallback_owner_bucket",
@@ -686,6 +779,18 @@ def _lineage_fallback_events(turn: Mapping[str, Any]) -> list[dict[str, Any]]:
     return [event for event in _lineage_events_for_turn(turn) if event.get("event_kind") == "fallback_selected"]
 
 
+def _fallback_owner_for_rerun_turn(turn: Mapping[str, Any]) -> str | None:
+    owner = _owner_for_turn(turn)
+    if owner:
+        return owner
+    for event in _lineage_fallback_events(turn):
+        for key in ("fallback_selection_owner", "fallback_content_owner", "owner"):
+            value = event.get(key)
+            if isinstance(value, str) and value.strip():
+                return value.strip()
+    return None
+
+
 def _has_fallback_selection(turn: Mapping[str, Any]) -> bool:
     return bool(turn.get("fallback_family") is not None or _lineage_fallback_events(turn))
 
@@ -711,6 +816,241 @@ def _max_consecutive_true(values: list[bool]) -> int:
         else:
             current = 0
     return max_seen
+
+
+def _rerun_value(value: Any) -> str | None:
+    if value is None:
+        return None
+    text = str(value).strip()
+    return text or None
+
+
+def _rerun_text_hash(turn: Mapping[str, Any]) -> str | None:
+    if "final_text" not in turn:
+        return None
+    return golden_text_hash(turn.get("final_text"))
+
+
+def _frequency_delta(previous: Mapping[str, int], current: Mapping[str, int]) -> dict[str, Any]:
+    prev = {str(k): int(v) for k, v in previous.items()}
+    cur = {str(k): int(v) for k, v in current.items()}
+    keys = sorted(set(prev) | set(cur))
+    delta = {key: cur.get(key, 0) - prev.get(key, 0) for key in keys if cur.get(key, 0) != prev.get(key, 0)}
+    return {
+        "previous": dict(sorted(prev.items())),
+        "current": dict(sorted(cur.items())),
+        "delta": delta,
+        "changed_key_count": len(delta),
+    }
+
+
+def _runtime_lineage_events_for_turns(turns: list[Mapping[str, Any]]) -> list[dict[str, Any]]:
+    events: list[dict[str, Any]] = []
+    for turn in turns:
+        events.extend(_lineage_events_for_turn(turn))
+    return events
+
+
+def _runtime_lineage_delta(previous: Mapping[str, Any], current: Mapping[str, Any]) -> dict[str, Any]:
+    frequency_keys = (
+        "by_event_kind",
+        "by_stage",
+        "fallback_frequency",
+        "fallback_selection_owner_frequency",
+        "fallback_content_owner_frequency",
+        "speaker_repair_frequency",
+        "mutation_kind_frequency",
+        "gate_path_frequency",
+        "by_recurrence_key",
+    )
+    out: dict[str, Any] = {
+        "previous_total_events": int(previous.get("total_events") or 0),
+        "current_total_events": int(current.get("total_events") or 0),
+        "total_event_delta": int(current.get("total_events") or 0) - int(previous.get("total_events") or 0),
+        "frequency_deltas": {},
+    }
+    changed = 0
+    for key in frequency_keys:
+        delta = _frequency_delta(
+            previous.get(key) if isinstance(previous.get(key), Mapping) else {},
+            current.get(key) if isinstance(current.get(key), Mapping) else {},
+        )
+        out["frequency_deltas"][key] = delta
+        changed += int(delta["changed_key_count"])
+    out["changed_key_count"] = changed
+    return out
+
+
+def compare_golden_replay_reruns(
+    previous_observations: list[Mapping[str, Any]],
+    current_observations: list[Mapping[str, Any]],
+) -> dict[str, Any]:
+    """Return a compact, report-only drift scorecard for two golden replay runs.
+
+    The comparator is intentionally non-authoritative: it never raises, never
+    decides pass/fail, and treats absent optional projection fields as ``None``.
+    """
+
+    previous_turns = [turn for turn in previous_observations if isinstance(turn, Mapping)]
+    current_turns = [turn for turn in current_observations if isinstance(turn, Mapping)]
+    compared = min(len(previous_turns), len(current_turns))
+    per_turn_deltas: list[dict[str, Any]] = []
+
+    speaker_delta_count = 0
+    route_delta_count = 0
+    fallback_delta_count = 0
+    text_fingerprint_delta_count = 0
+    scaffold_delta_count = 0
+    runtime_lineage_delta_count = 0
+    semantic_delta_frequency_delta_count = 0
+
+    for index in range(compared):
+        prev = previous_turns[index]
+        cur = current_turns[index]
+        row: dict[str, Any] = {
+            "turn_index": index,
+            "previous_turn_id": prev.get("turn_id"),
+            "current_turn_id": cur.get("turn_id"),
+            "deltas": {},
+        }
+
+        prev_speaker = _rerun_value(prev.get("selected_speaker_id"))
+        cur_speaker = _rerun_value(cur.get("selected_speaker_id"))
+        if prev_speaker != cur_speaker:
+            speaker_delta_count += 1
+            row["deltas"]["speaker"] = {"previous": prev_speaker, "current": cur_speaker}
+
+        prev_route = _rerun_value(prev.get("route_kind"))
+        cur_route = _rerun_value(cur.get("route_kind"))
+        if prev_route != cur_route:
+            route_delta_count += 1
+            row["deltas"]["route"] = {"previous": prev_route, "current": cur_route}
+
+        prev_fallback_family = _rerun_value(prev.get("fallback_family"))
+        cur_fallback_family = _rerun_value(cur.get("fallback_family"))
+        prev_fallback_owner = _fallback_owner_for_rerun_turn(prev)
+        cur_fallback_owner = _fallback_owner_for_rerun_turn(cur)
+        if prev_fallback_family != cur_fallback_family or prev_fallback_owner != cur_fallback_owner:
+            fallback_delta_count += 1
+            row["deltas"]["fallback"] = {
+                "previous_family": prev_fallback_family,
+                "current_family": cur_fallback_family,
+                "previous_owner": prev_fallback_owner,
+                "current_owner": cur_fallback_owner,
+            }
+
+        prev_hash = _rerun_text_hash(prev)
+        cur_hash = _rerun_text_hash(cur)
+        if prev_hash != cur_hash:
+            text_fingerprint_delta_count += 1
+            row["deltas"]["text_fingerprint"] = {"previous": prev_hash, "current": cur_hash}
+
+        prev_scaffold = prev.get("scaffold_leakage") if "scaffold_leakage" in prev else None
+        cur_scaffold = cur.get("scaffold_leakage") if "scaffold_leakage" in cur else None
+        if prev_scaffold != cur_scaffold:
+            scaffold_delta_count += 1
+            row["deltas"]["scaffold"] = {"previous": prev_scaffold, "current": cur_scaffold}
+
+        response_delta_fields: dict[str, Any] = {}
+        for field in (
+            "response_delta_checked",
+            "response_delta_failed",
+            "response_delta_repaired",
+            "response_delta_kind",
+            "response_delta_echo_overlap_band",
+        ):
+            prev_value = prev.get(field) if field in prev else None
+            cur_value = cur.get(field) if field in cur else None
+            if prev_value != cur_value:
+                response_delta_fields[field] = {"previous": prev_value, "current": cur_value}
+        if response_delta_fields:
+            semantic_delta_frequency_delta_count += 1
+            row["deltas"]["response_delta"] = response_delta_fields
+
+        prev_lineage = summarize_runtime_lineage_events(_lineage_events_for_turn(prev))
+        cur_lineage = summarize_runtime_lineage_events(_lineage_events_for_turn(cur))
+        lineage_delta = _runtime_lineage_delta(prev_lineage, cur_lineage)
+        if lineage_delta["total_event_delta"] != 0 or lineage_delta["changed_key_count"] > 0:
+            runtime_lineage_delta_count += 1
+            row["deltas"]["runtime_lineage"] = lineage_delta
+
+        if row["deltas"]:
+            per_turn_deltas.append(row)
+
+    previous_lineage_summary = summarize_runtime_lineage_events(_runtime_lineage_events_for_turns(previous_turns))
+    current_lineage_summary = summarize_runtime_lineage_events(_runtime_lineage_events_for_turns(current_turns))
+    previous_fallback_owners = [_fallback_owner_for_rerun_turn(turn) for turn in previous_turns]
+    current_fallback_owners = [_fallback_owner_for_rerun_turn(turn) for turn in current_turns]
+    previous_response_delta_summary = summarize_response_delta_observations(previous_turns)
+    current_response_delta_summary = summarize_response_delta_observations(current_turns)
+
+    return {
+        "schema_version": 1,
+        "report_only": True,
+        "previous_turn_count": len(previous_turns),
+        "current_turn_count": len(current_turns),
+        "total_turns_compared": compared,
+        "extra_previous_turn_count": max(0, len(previous_turns) - compared),
+        "extra_current_turn_count": max(0, len(current_turns) - compared),
+        "summary": {
+            "speaker_delta_count": speaker_delta_count,
+            "route_delta_count": route_delta_count,
+            "fallback_delta_count": fallback_delta_count,
+            "text_fingerprint_delta_count": text_fingerprint_delta_count,
+            "scaffold_delta_count": scaffold_delta_count,
+            "runtime_lineage_delta_count": runtime_lineage_delta_count,
+            "semantic_delta_frequency_delta_count": semantic_delta_frequency_delta_count,
+        },
+        "frequencies": {
+            "speakers": _frequency_delta(
+                _counter_dict([turn.get("selected_speaker_id") for turn in previous_turns]),
+                _counter_dict([turn.get("selected_speaker_id") for turn in current_turns]),
+            ),
+            "routes": _frequency_delta(
+                _counter_dict([turn.get("route_kind") for turn in previous_turns]),
+                _counter_dict([turn.get("route_kind") for turn in current_turns]),
+            ),
+            "fallback_families": _frequency_delta(
+                _counter_dict([turn.get("fallback_family") for turn in previous_turns]),
+                _counter_dict([turn.get("fallback_family") for turn in current_turns]),
+            ),
+            "fallback_owners": _frequency_delta(
+                _counter_dict(previous_fallback_owners),
+                _counter_dict(current_fallback_owners),
+            ),
+            "runtime_lineage": _runtime_lineage_delta(previous_lineage_summary, current_lineage_summary),
+            "response_delta": {
+                "previous": previous_response_delta_summary,
+                "current": current_response_delta_summary,
+                "semantic_delta_frequency_delta_count": semantic_delta_frequency_delta_count,
+                "checked": _frequency_delta(
+                    {"checked": previous_response_delta_summary["response_delta_checked_count"]},
+                    {"checked": current_response_delta_summary["response_delta_checked_count"]},
+                ),
+                "failed": _frequency_delta(
+                    {"failed": previous_response_delta_summary["response_delta_failed_count"]},
+                    {"failed": current_response_delta_summary["response_delta_failed_count"]},
+                ),
+                "repaired": _frequency_delta(
+                    {"repaired": previous_response_delta_summary["response_delta_repaired_count"]},
+                    {"repaired": current_response_delta_summary["response_delta_repaired_count"]},
+                ),
+                "kinds": _frequency_delta(
+                    previous_response_delta_summary["response_delta_kind_counts"],
+                    current_response_delta_summary["response_delta_kind_counts"],
+                ),
+                "echo_overlap_bands": _frequency_delta(
+                    previous_response_delta_summary["echo_overlap_band_counts"],
+                    current_response_delta_summary["echo_overlap_band_counts"],
+                ),
+                "unknown": _frequency_delta(
+                    {"unknown": previous_response_delta_summary["response_delta_unknown_count"]},
+                    {"unknown": current_response_delta_summary["response_delta_unknown_count"]},
+                ),
+            },
+        },
+        "per_turn_deltas": per_turn_deltas,
+    }
 
 
 def _active_telemetry_token(value: Any) -> str | None:
@@ -915,6 +1255,7 @@ def summarize_long_session_replay_observations(
         lineage_events.extend(_lineage_events_for_turn(turn))
     lineage_summary = summarize_runtime_lineage_events(lineage_events)
     fallback_escalation_summary = summarize_fallback_escalation_observations(turns)
+    response_delta_summary = summarize_response_delta_observations(turns)
 
     continuity_warning_count = 0
     continuity_violation_count = 0
@@ -949,6 +1290,7 @@ def summarize_long_session_replay_observations(
         "mutation_turn_indices": mutation_turn_indices,
         "mutation_turn_count": len(mutation_turn_indices),
         "unavailable_counts": dict(sorted(unavailable_counts.items())),
+        "response_delta_summary": response_delta_summary,
         "lineage_summary": lineage_summary,
         "fallback_escalation_summary": fallback_escalation_summary,
         "continuity_warning_count": continuity_warning_count,
@@ -1095,6 +1437,7 @@ def render_long_session_replay_summary_markdown(
     session_health = continuity.get("session_health") if isinstance(continuity.get("session_health"), Mapping) else {}
     degradation = continuity.get("degradation_over_time") if isinstance(continuity.get("degradation_over_time"), Mapping) else {}
     late_window = degradation.get("late_window") if isinstance(degradation.get("late_window"), Mapping) else {}
+    response_delta = summary.get("response_delta_summary") if isinstance(summary.get("response_delta_summary"), Mapping) else {}
     lines = [
         f"# {title}",
         "",
@@ -1122,6 +1465,13 @@ def render_long_session_replay_summary_markdown(
         ),
         f"- Fallback escalation warnings: `{fallback_escalation.get('escalation_warnings', [])}`",
         f"- Mutation turn count: `{summary.get('mutation_turn_count')}`",
+        f"- Response-delta checked / failed / repaired: "
+        f"`{response_delta.get('response_delta_checked_count', 0)}` / "
+        f"`{response_delta.get('response_delta_failed_count', 0)}` / "
+        f"`{response_delta.get('response_delta_repaired_count', 0)}`",
+        f"- Response-delta kinds: `{response_delta.get('response_delta_kind_counts', {})}`",
+        f"- Response-delta unknown count: `{response_delta.get('response_delta_unknown_count', 0)}`",
+        f"- Echo-overlap bands: `{response_delta.get('echo_overlap_band_counts', {})}`",
         f"- Unavailable counts: `{summary.get('unavailable_counts')}`",
         f"- Lineage event frequency: `{lineage.get('by_event_kind', {})}`",
         f"- Lineage recurrence: `{lineage.get('recurring_events', [])}`",
@@ -1337,6 +1687,14 @@ def _observed_turn(
     response_type_candidate_ok = _first_present(fem, ("response_type_candidate_ok",))
     response_type_repair_used = _first_present(fem, ("response_type_repair_used",))
     response_type_repair_kind = _first_present(fem, ("response_type_repair_kind",))
+    response_delta_checked = _first_present(fem, ("response_delta_checked",))
+    response_delta_failed = _first_present(fem, ("response_delta_failed",))
+    response_delta_repaired = _first_present(fem, ("response_delta_repaired",))
+    response_delta_kind = _first_present(fem, ("response_delta_kind", "response_delta_kind_detected"))
+    response_delta_echo_overlap_ratio = _first_present(fem, ("response_delta_echo_overlap_ratio",))
+    response_delta_echo_overlap_band = _echo_overlap_band(response_delta_echo_overlap_ratio)
+    response_delta_skip_reason = _first_present(fem, ("response_delta_skip_reason",))
+    response_delta_trigger_source = _first_present(fem, ("response_delta_trigger_source",))
     upstream_prepared_emission_used = _first_present(fem, ("upstream_prepared_emission_used",))
     upstream_prepared_emission_valid = _first_present(fem, ("upstream_prepared_emission_valid",))
     upstream_prepared_emission_source = _first_present(fem, ("upstream_prepared_emission_source",))
@@ -1414,6 +1772,11 @@ def _observed_turn(
         "response_type_required": "response_type_required" in fem,
         "response_type_candidate_ok": "response_type_candidate_ok" in fem,
         "response_type_repair_used": "response_type_repair_used" in fem,
+        "response_delta_checked": "response_delta_checked" in fem,
+        "response_delta_failed": "response_delta_failed" in fem,
+        "response_delta_repaired": "response_delta_repaired" in fem,
+        "response_delta_kind": "response_delta_kind" in fem or "response_delta_kind_detected" in fem,
+        "response_delta_echo_overlap_ratio": "response_delta_echo_overlap_ratio" in fem,
         "upstream_prepared_emission_used": "upstream_prepared_emission_used" in fem,
         "upstream_prepared_emission_valid": "upstream_prepared_emission_valid" in fem,
         "upstream_prepared_emission_source": "upstream_prepared_emission_source" in fem,
@@ -1434,6 +1797,11 @@ def _observed_turn(
         "response_type_required": "response_type_required" in fem_normalized,
         "response_type_candidate_ok": "response_type_candidate_ok" in fem_normalized,
         "response_type_repair_used": "response_type_repair_used" in fem_normalized,
+        "response_delta_checked": "response_delta_checked" in fem_normalized,
+        "response_delta_failed": "response_delta_failed" in fem_normalized,
+        "response_delta_repaired": "response_delta_repaired" in fem_normalized,
+        "response_delta_kind": "response_delta_kind" in fem_normalized or "response_delta_kind_detected" in fem_normalized,
+        "response_delta_echo_overlap_ratio": "response_delta_echo_overlap_ratio" in fem_normalized,
         "upstream_prepared_emission_used": "upstream_prepared_emission_used" in fem_normalized,
         "upstream_prepared_emission_valid": "upstream_prepared_emission_valid" in fem_normalized,
         "upstream_prepared_emission_source": "upstream_prepared_emission_source" in fem_normalized,
@@ -1470,6 +1838,14 @@ def _observed_turn(
         "response_type_candidate_ok": response_type_candidate_ok,
         "response_type_repair_used": response_type_repair_used,
         "response_type_repair_kind": response_type_repair_kind,
+        "response_delta_checked": response_delta_checked,
+        "response_delta_failed": response_delta_failed,
+        "response_delta_repaired": response_delta_repaired,
+        "response_delta_kind": response_delta_kind,
+        "response_delta_echo_overlap_ratio": response_delta_echo_overlap_ratio,
+        "response_delta_echo_overlap_band": response_delta_echo_overlap_band,
+        "response_delta_skip_reason": response_delta_skip_reason,
+        "response_delta_trigger_source": response_delta_trigger_source,
         "upstream_prepared_emission_used": upstream_prepared_emission_used,
         "upstream_prepared_emission_valid": upstream_prepared_emission_valid,
         "upstream_prepared_emission_source": upstream_prepared_emission_source,

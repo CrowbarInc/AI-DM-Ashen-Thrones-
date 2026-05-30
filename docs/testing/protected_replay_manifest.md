@@ -29,6 +29,31 @@ Golden replay owns `scenario_id` as the replay acceptance identifier. Scenario-s
 
 Text fields are layer-specific projections: `player_facing_text` is the runtime response field, `gm_text` is a snapshot/transcript projection, and `final_text` is the golden replay observed assertion surface. Protected replay failure reports may include `source_path`, `branch_id`, and `turn_id` when a replay row can be traced back to a scenario-spine fixture.
 
+## Cycle S Drift Policy Addendum
+
+Cycle S adds rerun drift measurement and seed-seam audit coverage without promoting new drift thresholds into protected acceptance gates.
+
+Policy:
+
+- Golden rerun drift scorecards are `ADVISORY` / report-only. They summarize successful-run differences; they do not change protected replay pass/fail behavior.
+- Exact prose identity is not a default protected gate. Exact text comparison remains opt-in for explicitly curated expectations, while protected replay continues to enforce structural and player-facing semantic invariants.
+- Semantic delta frequency uses existing `response_delta_*` and FEM metadata only. Cycle S does not add a semantic similarity judge, semantic rewrite behavior, or prose-quality scoring gate.
+- Scenario-spine rerun comparison is advisory and separate from CI hard gates. It compares already-written artifact directories and reports identity, transcript, health, lineage, and text-fingerprint deltas for operator review.
+- The stable-seed audit protects replay-sensitive speaker/fallback/final-emission paths from process-randomized seed seams such as Python `hash(...)`, `random`, `uuid`, or wall-clock `time` inputs.
+- Future hard thresholds require repeated evidence across advisory scorecards, explicit review, and an update to this protected manifest before they may become acceptance-blocking.
+
+Write the golden rerun drift scorecard locally with:
+
+```powershell
+.\.venv\Scripts\python.exe -m pytest -m golden_replay -q --write-rerun-drift-scorecard --basetemp=codex_pytest_tmp_cycle_s_scorecard
+```
+
+Compare two scenario-spine rerun artifact directories with:
+
+```powershell
+.\.venv\Scripts\python.exe tools/compare_scenario_spine_reruns.py --previous <dir> --current <dir> --out artifacts/scenario_spine/rerun_delta.md --json-out artifacts/scenario_spine/rerun_delta.json
+```
+
 ## End-To-End Protected Scenarios
 
 Category: `END_TO_END_PROTECTED`. These cases execute turns through `run_golden_replay(...)` and the chat pipeline with deterministic test setup/model responses.

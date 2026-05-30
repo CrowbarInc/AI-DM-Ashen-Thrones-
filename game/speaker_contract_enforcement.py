@@ -6,6 +6,7 @@ This module owns the speaker-contract implementation surface consumed by that or
 """
 from __future__ import annotations
 
+import hashlib
 import re
 from typing import Any, Dict, Optional
 
@@ -79,6 +80,10 @@ _NON_NAME_ATTRIBUTION_PREFIXES = frozenset(
         "another voice",
     }
 )
+
+
+def _stable_seed_fingerprint(text: str) -> str:
+    return hashlib.sha256(str(text or "").encode("utf-8")).hexdigest()[:12]
 
 
 def _empty_speaker_selection_contract() -> Dict[str, Any]:
@@ -545,7 +550,7 @@ def _apply_speaker_contract_repairs(
         return line, reason, dbg
 
     if mode == "narrator_neutral":
-        seed = f"{scene_id}|{cid or ''}|{hash(_normalize_text(text)) % 10000}"
+        seed = f"{scene_id}|{cid or ''}|{_stable_seed_fingerprint(_normalize_text(text))}"
         line = neutral_reply_speaker_grounding_bridge_line(seed=seed)
         dbg["narrator_neutral_applied"] = True
         if eff_resolution is not None and isinstance(eff_resolution.get("social"), dict):

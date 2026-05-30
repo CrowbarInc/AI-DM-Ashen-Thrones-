@@ -40,8 +40,128 @@ assert _spec and _spec.loader
 _mod = importlib.util.module_from_spec(_spec)
 sys.modules["run_scenario_spine_validation_tool"] = _mod
 _spec.loader.exec_module(_mod)
+_COMPARE_TOOL = _ROOT / "tools" / "compare_scenario_spine_reruns.py"
+_compare_spec = importlib.util.spec_from_file_location("compare_scenario_spine_reruns_tool", _COMPARE_TOOL)
+assert _compare_spec and _compare_spec.loader
+_compare_mod = importlib.util.module_from_spec(_compare_spec)
+sys.modules["compare_scenario_spine_reruns_tool"] = _compare_mod
+_compare_spec.loader.exec_module(_compare_mod)
 
 FIXTURE = _ROOT / "data" / "validation" / "scenario_spines" / "frontier_gate_long_session.json"
+
+
+def _write_json(path: Path, payload: dict) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+
+def _fabricated_spine_artifact_dir(
+    root: Path,
+    *,
+    spine_id: str = "spine_alpha",
+    branch_id: str = "branch_one",
+    classification: str = "clean",
+    score: int = 100,
+    speaker: str = "runner",
+    route: str = "dialogue",
+    gm_text: str = "The runner answers with a steady lead.",
+    include_optional: bool = True,
+) -> Path:
+    run_dir = root / spine_id / branch_id
+    turns = [
+        {
+            "turn_index": 0,
+            "turn_id": "turn_001",
+            "player_prompt": "What did you see?",
+            "gm_text": gm_text,
+            "api_ok": True,
+            "resolution_kind": route,
+            "selected_speaker_id": speaker,
+            "fallback_family": None,
+            "meta": {
+                "scenario_spine": {
+                    "spine_id": spine_id,
+                    "branch_id": branch_id,
+                    "turn_id": "turn_001",
+                    "turn_index": 0,
+                    "smoke": False,
+                    "max_turns": None,
+                    "resume_entry_first_turn": False,
+                    "artifact_schema_version": 1,
+                },
+                "runtime_lineage_events": [
+                    {
+                        "event_type": "runtime_lineage",
+                        "event_kind": "gate_outcome",
+                        "stage": "gate",
+                        "owner": "game.final_emission_gate",
+                        "source": "synthetic",
+                        "gate_path": "strict_social_accept",
+                        "recurrence_key": "gate_outcome:gate:game.final_emission_gate:strict_social_accept",
+                    }
+                ],
+            },
+        }
+    ]
+    _write_json(
+        run_dir / "transcript.json",
+        {
+            "schema_version": 1,
+            "spine_id": spine_id,
+            "branch_id": branch_id,
+            "turn_count": len(turns),
+            "turns": turns,
+        },
+    )
+    _write_json(
+        run_dir / "session_health_summary.json",
+        {
+            "schema_version": 1,
+            "session_health": {
+                "classification": classification,
+                "score": score,
+                "overall_passed": classification == "clean",
+                "turn_count": len(turns),
+            },
+            "axes": {
+                "state_continuity": {
+                    "passed": classification == "clean",
+                    "failure_codes": [] if classification == "clean" else ["continuity_lost"],
+                    "warning_codes": [] if classification == "clean" else ["continuity_weak"],
+                },
+                "referent_persistence": {"passed": True, "failure_codes": [], "warning_codes": []},
+                "project_progression": {"passed": True, "failure_codes": [], "warning_codes": []},
+            },
+            "detected_failures": [] if classification == "clean" else [{"axis": "state_continuity", "code": "continuity_lost"}],
+            "warnings": [] if classification == "clean" else [{"axis": "state_continuity", "code": "continuity_weak"}],
+            "checkpoint_results": [] if classification == "clean" else [{"issues": [{"code": "continuity_weak"}]}],
+            "degradation_over_time": {
+                "progressive_degradation_detected": classification != "clean",
+                "reason_codes": [] if classification == "clean" else ["late_continuity_weak"],
+            },
+        },
+    )
+    if include_optional:
+        _write_json(
+            run_dir / "runtime_lineage_summary.json",
+            {
+                "total_events": 1,
+                "by_event_kind": {"gate_outcome": 1},
+                "by_stage": {"gate": 1},
+                "by_recurrence_key": {"gate_outcome:gate:game.final_emission_gate:strict_social_accept": 1},
+                "fallback_frequency": {},
+                "fallback_authorship_frequency": {},
+                "fallback_owner_bucket_frequency": {},
+                "fallback_selection_owner_frequency": {},
+                "fallback_content_owner_frequency": {},
+                "speaker_repair_frequency": {},
+                "mutation_kind_frequency": {},
+                "gate_path_frequency": {"strict_social_accept": 1},
+                "recurring_events": [],
+            },
+        )
+        _write_json(run_dir / "branch_divergence.json", {"distinct_outcomes_detected": True, "reason_codes": []})
+    return run_dir
 
 
 def _load_spine():
@@ -77,6 +197,127 @@ def test_subprocess_list_matches_fixture() -> None:
     )
     assert proc.returncode == 0
     assert "branch_social_inquiry" in proc.stdout
+
+
+def test_compare_scenario_spine_reruns_identical_artifacts_have_zero_deltas(tmp_path: Path) -> None:
+    previous = _fabricated_spine_artifact_dir(tmp_path / "previous")
+    current = _fabricated_spine_artifact_dir(tmp_path / "current")
+
+    scorecard = _compare_mod.compare_scenario_spine_rerun_dirs(previous, current)
+
+    assert scorecard["report_only"] is True
+    assert scorecard["identity"]["mismatch"] is False
+    assert scorecard["summary"]["turn_count_delta"] == 0
+    assert scorecard["summary"]["route_delta_count"] == 0
+    assert scorecard["summary"]["speaker_delta_count"] == 0
+    assert scorecard["summary"]["text_fingerprint_delta_count"] == 0
+    assert scorecard["summary"]["health_changed_field_count"] == 0
+    assert scorecard["summary"]["runtime_lineage_changed_key_count"] == 0
+    assert scorecard["transcript"]["per_turn_deltas"] == []
+
+
+def test_compare_scenario_spine_reruns_reports_health_delta(tmp_path: Path) -> None:
+    previous = _fabricated_spine_artifact_dir(tmp_path / "previous")
+    current = _fabricated_spine_artifact_dir(tmp_path / "current", classification="degraded", score=65)
+
+    scorecard = _compare_mod.compare_scenario_spine_rerun_dirs(previous, current)
+    health = scorecard["health"]["deltas"]
+
+    assert health["classification"] == {"previous": "clean", "current": "degraded", "changed": True}
+    assert health["score"] == {"previous": 100, "current": 65, "changed": True}
+    assert health["tracked_axis_warning_counts"]["delta"] == {"state_continuity": 1}
+    assert health["checkpoint_issue_counts"]["delta"] == {"continuity_weak": 1}
+    assert health["degradation_reason_counts"]["delta"] == {"late_continuity_weak": 1}
+
+
+def test_compare_scenario_spine_reruns_reports_transcript_route_speaker_text_deltas(tmp_path: Path) -> None:
+    previous = _fabricated_spine_artifact_dir(tmp_path / "previous")
+    current = _fabricated_spine_artifact_dir(
+        tmp_path / "current",
+        speaker="guard",
+        route="action",
+        gm_text="The guard redirects the answer toward the west road.",
+    )
+
+    scorecard = _compare_mod.compare_scenario_spine_rerun_dirs(previous, current)
+
+    assert scorecard["summary"]["route_delta_count"] == 1
+    assert scorecard["summary"]["speaker_delta_count"] == 1
+    assert scorecard["summary"]["text_fingerprint_delta_count"] == 1
+    assert scorecard["transcript"]["frequencies"]["routes"]["delta"] == {"action": 1, "dialogue": -1}
+    assert scorecard["transcript"]["frequencies"]["speakers"]["delta"] == {"guard": 1, "runner": -1}
+    row = scorecard["transcript"]["per_turn_deltas"][0]
+    assert sorted(row["deltas"]) == ["route", "speaker", "text_fingerprint"]
+
+
+def test_compare_scenario_spine_reruns_missing_optional_files_do_not_crash(tmp_path: Path) -> None:
+    previous = _fabricated_spine_artifact_dir(tmp_path / "previous", include_optional=False)
+    current = _fabricated_spine_artifact_dir(tmp_path / "current", include_optional=False)
+
+    scorecard = _compare_mod.compare_scenario_spine_rerun_dirs(previous, current)
+
+    assert scorecard["summary"]["runtime_lineage_changed_key_count"] == 0
+    assert scorecard["runtime_lineage"]["previous_source"] == "derived_from_transcript"
+    assert scorecard["runtime_lineage"]["current_source"] == "derived_from_transcript"
+    assert scorecard["missing_or_unavailable"]["previous"]["branch_divergence.json"] == "missing"
+    assert scorecard["branch_divergence"]["previous_available"] is False
+
+
+def test_compare_scenario_spine_reruns_reports_identity_mismatch(tmp_path: Path) -> None:
+    previous = _fabricated_spine_artifact_dir(tmp_path / "previous", spine_id="spine_alpha", branch_id="branch_one")
+    current = _fabricated_spine_artifact_dir(tmp_path / "current", spine_id="spine_beta", branch_id="branch_two")
+
+    scorecard = _compare_mod.compare_scenario_spine_rerun_dirs(previous, current)
+
+    assert scorecard["identity"]["mismatch"] is True
+    assert scorecard["identity"]["mismatch_fields"] == ["spine_id", "branch_id"]
+    assert scorecard["summary"]["identity_mismatch"] is True
+
+
+def test_compare_scenario_spine_reruns_markdown_contains_operator_summary(tmp_path: Path) -> None:
+    previous = _fabricated_spine_artifact_dir(tmp_path / "previous")
+    current = _fabricated_spine_artifact_dir(
+        tmp_path / "current",
+        classification="degraded",
+        score=70,
+        speaker="guard",
+        gm_text="The guard shifts the answer.",
+    )
+
+    scorecard = _compare_mod.compare_scenario_spine_rerun_dirs(previous, current)
+    markdown = _compare_mod.render_scenario_spine_rerun_delta_markdown(scorecard)
+
+    assert "# Scenario-Spine Rerun Delta Advisory" in markdown
+    assert "## Operator Summary" in markdown
+    assert "- Report only: `true`" in markdown
+    assert "- Route / speaker / fallback deltas: `0` / `1` / `0`" in markdown
+    assert "## Health Delta" in markdown
+    assert "classification: `clean` -> `degraded`" in markdown
+
+
+def test_compare_scenario_spine_reruns_cli_writes_markdown_and_json(tmp_path: Path) -> None:
+    previous = _fabricated_spine_artifact_dir(tmp_path / "previous")
+    current = _fabricated_spine_artifact_dir(tmp_path / "current", gm_text="A changed answer.")
+    md_out = tmp_path / "rerun_delta.md"
+    json_out = tmp_path / "rerun_delta.json"
+
+    code = _compare_mod.main(
+        [
+            "--previous",
+            str(previous),
+            "--current",
+            str(current),
+            "--out",
+            str(md_out),
+            "--json-out",
+            str(json_out),
+        ],
+    )
+
+    assert code == 0
+    assert "Scenario-Spine Rerun Delta Advisory" in md_out.read_text(encoding="utf-8")
+    payload = json.loads(json_out.read_text(encoding="utf-8"))
+    assert payload["summary"]["text_fingerprint_delta_count"] == 1
 
 
 def test_effective_turn_limit_smoke_and_max_turns() -> None:

@@ -214,6 +214,26 @@ Files in each `branch_id` directory:
 | `run_debug.json` | Per-turn debug: includes `debug_traces` when present and **full** `chat_response` per turn — large; use for deep API debugging. |
 | `compact_operator_summary.md` | Markdown summary: classification, score, axis table, top failures/warnings, first failing checkpoint, suggested debug focus. |
 
+## Advisory rerun delta comparison
+
+S4 adds a separate report-only comparator for two already-written scenario-spine artifact directories from the same spine/branch:
+
+```powershell
+.\.venv\Scripts\python.exe tools/compare_scenario_spine_reruns.py --previous <dir> --current <dir> --out artifacts/scenario_spine/rerun_delta.md --json-out artifacts/scenario_spine/rerun_delta.json
+```
+
+The comparator reads available artifacts only; it does not call the app, does not call a model, and does not wire into CI hard-fail behavior. Missing optional files are marked unavailable in the scorecard and markdown rather than treated as failures.
+
+Cycle S drift policy keeps this comparator advisory until repeated evidence justifies a threshold. A scenario-spine rerun delta may identify route/speaker/fallback, health, lineage, or text-fingerprint movement, but it is not a protected gate by itself. Promoting any rerun-delta threshold requires explicit review and a protected-manifest update.
+
+Report fields include:
+
+- Identity comparison for `spine_id` / `branch_id`, with mismatches called out prominently.
+- Transcript turn-count delta, route/speaker/fallback frequency deltas when those fields are present, and compact stable GM-text fingerprints.
+- Session-health deltas for classification/status/score/pass state, warning/failure counts, continuity/progression/referent axis warning deltas, checkpoint issue deltas, and degradation reason deltas.
+- Runtime-lineage total-event and frequency deltas from `runtime_lineage_summary.json`, or from transcript `meta.runtime_lineage_events` when the summary file is absent.
+- Branch-divergence availability/change status when `branch_divergence.json` exists.
+
 ## Smoke vs full branch validation
 
 - **`--smoke`** — Caps executed turns to **5**, or fewer if `--max-turns` is set lower. Same evaluator and artifacts; scope is short for wiring checks. Aggregate **`coverage_band_met`** stays **false**.
