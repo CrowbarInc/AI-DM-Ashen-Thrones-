@@ -234,6 +234,10 @@ def record_protected_replay_assertion_failure(
     )
     for row in rows:
         enriched = dict(row)
+        for key in ("source_path", "branch_id", "turn_id"):
+            value = observed_turn.get(key)
+            if value is not None and str(value).strip():
+                enriched[key] = str(value)
         enriched["test_node_id"] = test_node_id
         enriched["failed_invariant"] = f"{field_path}: {reason}"
         _RECORDED_PROTECTED_REPLAY_FAILURE_ROWS.append(enriched)
@@ -459,6 +463,14 @@ def render_protected_replay_failure_report(
             str(item.get("field_path") or ""),
         ),
     )
+    has_replay_identity = any(
+        row.get("scenario_id")
+        or row.get("source_path")
+        or row.get("branch_id")
+        or row.get("turn_id")
+        or row.get("turn_index") is not None
+        for row in ordered_rows
+    )
     lines = [
         "# Protected Replay Failure Report",
         "",
@@ -469,17 +481,47 @@ def render_protected_replay_failure_report(
         f"- Generated at: `{generated_at_s}`",
         f"- Artifact location: `{artifact_path}`",
         f"- Classified failures: `{len(ordered_rows)}`",
-        "",
-        "## Failure Table",
-        "",
-        "| Scenario | Test Node | Turn | Failed Invariant | Drift Type | Expected | Actual | Category | Severity | Primary Owner | Secondary Owner | Investigate First |",
-        "|---|---|---:|---|---|---|---|---|---|---|---|---|",
     ]
+    if has_replay_identity:
+        lines.extend(
+            [
+                "",
+                "## Failure Locator",
+                "",
+                "| Scenario | Source Path | Branch | Turn Index | Turn ID | Failed Invariant | Test Node |",
+                "|---|---|---|---:|---|---|---|",
+            ]
+        )
+        for row in ordered_rows:
+            lines.append(
+                "| "
+                + " | ".join(
+                    [
+                        _cell(row.get("scenario_id")),
+                        _cell(row.get("source_path")),
+                        _cell(row.get("branch_id")),
+                        _cell(row.get("turn_index")),
+                        _cell(row.get("turn_id")),
+                        _cell(row.get("failed_invariant")),
+                        _cell(row.get("test_node_id")),
+                    ]
+                )
+                + " |"
+            )
+    lines.extend(
+        [
+            "",
+            "## Failure Table",
+            "",
+            "| Scenario | Test Node | Turn | Failed Invariant | Drift Type | Expected | Actual | Category | Severity | Primary Owner | Secondary Owner | Investigate First |",
+            "|---|---|---:|---|---|---|---|---|---|---|---|---|",
+        ]
+    )
     for row in ordered_rows:
         classification_row = {
             key: value
             for key, value in row.items()
-            if key not in {"test_node_id", "failed_invariant"}
+            if key not in {"test_node_id", "failed_invariant", "source_path", "branch_id", "turn_id"}
         }
         validation_errors = validate_failure_classification_row(classification_row)
         if validation_errors:
@@ -569,11 +611,14 @@ def render_protected_replay_failure_report(
             + " |"
         )
     lines.extend(_runtime_lineage_markdown_lines(runtime_lineage_events))
-    lines.extend(["## Reproduce Locally", ""])
+    lines.extend(["## Reproduce Locally", "", "### Focused failing tests", ""])
     node_ids = sorted({str(row.get("test_node_id") or "").strip() for row in ordered_rows if str(row.get("test_node_id") or "").strip()})
-    for node_id in node_ids:
-        lines.extend(["```bash", f"python -m pytest {node_id} -q", "```", ""])
-    lines.extend(["```bash", "python -m pytest -m golden_replay -q", "```", ""])
+    if node_ids:
+        for node_id in node_ids:
+            lines.extend(["```bash", f"python -m pytest {node_id} -q --tb=short", "```", ""])
+    else:
+        lines.extend(["No focused pytest node was recorded for these rows.", ""])
+    lines.extend(["### Protected replay lane", "", "```bash", "python -m pytest -m golden_replay -q --tb=short", "```", ""])
     return "\n".join(lines)
 
 

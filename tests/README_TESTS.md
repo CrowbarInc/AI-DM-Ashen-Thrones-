@@ -192,6 +192,10 @@ pytest tests/test_playability_smoke.py -q
 
 Golden replay protects canonical turn-routing and final-emission invariants across repair cycles: speaker/target selection, route kind, FEM/fallback metadata, scaffold leakage, action/answer survival, compact scenario-spine branch structure, and the protected 20-turn Frontier Gate long-session stability lane. It does **not** lock exact final prose by default; exact text comparison is opt-in, while structural drift is the primary signal.
 
+Metadata ownership is intentionally split. Golden replay uses `scenario_id`; scenario-spine fixtures use `spine_id`, `branch_id`, and per-turn `turn_id`; the N1 synthetic lane uses `scenario_spine_id` and remains advisory rather than protected golden replay. Text projections are also layer-specific: `player_facing_text` is runtime response output, `gm_text` is snapshot/transcript output, and `final_text` is the golden replay assertion surface.
+
+The Frontier Gate 20-turn social-inquiry replay is protected golden replay backed by `data/validation/scenario_spines/frontier_gate_long_session.json`. Protected replay failure reports may include `source_path`, `branch_id`, and `turn_id` when fixture identity is available.
+
 Protected scenario ownership is declared in [`docs/testing/protected_replay_manifest.md`](../docs/testing/protected_replay_manifest.md). Protected replay is a required hard-fail CI check in `.github/workflows/convergence-checks.yml`: failure means acceptance-protected replay or its currently co-located golden replay contract coverage failed, so the change must not be accepted until resolved.
 
 From repo root:
@@ -205,6 +209,18 @@ The suite is marked `golden_replay`, so this equivalent marker filter also works
 ```bash
 python -m pytest -m golden_replay -q
 ```
+
+### Replay validation
+
+Use these lanes after protected replay helper, report, or metadata-doc changes:
+
+| Goal | Command |
+|------|---------|
+| Focused golden replay file | `python -m pytest tests/test_golden_replay.py -q --tb=short` |
+| Protected marker lane | `python -m pytest -m golden_replay -q --tb=short` |
+| Replay diagnostics | `python -m pytest tests/test_failure_dashboard_controlled_failures.py tests/test_failure_classifier.py tests/test_failure_classification_contract.py -q --tb=short` |
+| Scenario-spine replay-adjacent slice | `python -m pytest tests/test_scenario_spine_contracts.py tests/test_scenario_spine_eval.py tests/test_run_scenario_spine_validation.py tests/test_scenario_spine_opening_convergence.py tests/test_scenario_spine_continuation_convergence.py -q --tb=short` |
+| Broader replay-adjacent safety slice | `python -m pytest tests/test_transcript_regression.py tests/test_transcript_gauntlet_actor_addressing.py tests/test_transcript_gauntlet_campaign_cleanliness.py tests/test_narration_transcript_regressions.py tests/test_n1_scenario_spine_validation.py tests/test_n1_scenario_spine_cli.py -q --tb=short` |
 
 CI uses the marker-selected command above so future protected replay modules can join the required lane without changing the workflow command. Use the same command locally to reproduce a protected replay CI failure.
 

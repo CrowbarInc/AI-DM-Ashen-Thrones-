@@ -7,6 +7,7 @@ changing runtime behavior or creating a second storage/test harness.
 from __future__ import annotations
 
 import hashlib
+import json
 import os
 import re
 from collections import Counter
@@ -48,6 +49,14 @@ from tests.helpers.transcript_runner import (
 
 GoldenSetupFn = Callable[[], None]
 GoldenChatFn = Callable[[ChatRequest], dict[str, Any]]
+REPO_ROOT = Path(__file__).resolve().parents[2]
+FRONTIER_GATE_LONG_SESSION_SOURCE_PATH = "data/validation/scenario_spines/frontier_gate_long_session.json"
+FRONTIER_GATE_LONG_SESSION_PATH = REPO_ROOT / FRONTIER_GATE_LONG_SESSION_SOURCE_PATH
+PROTECTED_NO_SCAFFOLD_TERMS = ("planner", "router", "validator", "adjudication", "scaffold")
+PROTECTED_SOCIAL_RESOLUTION_KINDS = ("question", "social", "social_exchange", "dialogue")
+PROTECTED_SOCIAL_ROUTE_KINDS = ("social", "question", "social_engine", "dialogue")
+PROTECTED_DIALOGUE_TRACE_ROUTES = ("social", "dialogue")
+PROTECTED_GLOBAL_SCENE_FALLBACK_SOURCE = "global_scene_fallback"
 _MISSING = object()
 _STRUCTURAL_DRIFT_FIELDS = frozenset(
     {
@@ -106,6 +115,65 @@ def final_text_has_scaffold_leakage(text: str) -> bool:
     if not isinstance(text, str) or not text.strip():
         return False
     return bool(_SCAFFOLD_LEAK_RE.search(text) or resembles_serialized_response_payload(text))
+
+
+def protected_no_scaffold_expectation(*, extra_terms: tuple[str, ...] = ()) -> dict[str, Any]:
+    """Protected replay fragment for the shared player-facing scaffold leak lock."""
+    return {
+        "text_must_not_include": [*extra_terms, *PROTECTED_NO_SCAFFOLD_TERMS],
+        "scaffold_leakage": False,
+    }
+
+
+def protected_unavailable_expectation(*field_paths: str) -> dict[str, Any]:
+    """Protected replay fragment for explicitly optional projected observation fields."""
+    return {"allow_unavailable": list(field_paths)}
+
+
+def protected_route_expectation(
+    *,
+    include_resolution_kind: bool = False,
+    include_route_kind: bool = True,
+    include_trace_route: bool = False,
+) -> dict[str, Any]:
+    """Protected replay fragment for social/dialogue route-shape observations."""
+    one_of: dict[str, list[str]] = {}
+    if include_resolution_kind:
+        one_of["resolution_kind"] = list(PROTECTED_SOCIAL_RESOLUTION_KINDS)
+    if include_route_kind:
+        one_of["route_kind"] = list(PROTECTED_SOCIAL_ROUTE_KINDS)
+    if include_trace_route:
+        one_of["trace.social_contract_trace.route_selected"] = list(PROTECTED_DIALOGUE_TRACE_ROUTES)
+    return {"one_of": one_of}
+
+
+def protected_source_expectation(*, disallow_global_scene_fallback: bool = True) -> dict[str, Any]:
+    """Protected replay fragment for final source locks."""
+    if not disallow_global_scene_fallback:
+        return {}
+    return {"not_equals": {"final_emitted_source": PROTECTED_GLOBAL_SCENE_FALLBACK_SOURCE}}
+
+
+def load_frontier_gate_long_session_spine() -> dict[str, Any]:
+    """Load the authoritative Frontier Gate long-session replay fixture."""
+    return json.loads(FRONTIER_GATE_LONG_SESSION_PATH.read_text(encoding="utf-8"))
+
+
+def _frontier_gate_branch(branch_id: str) -> Mapping[str, Any]:
+    raw = load_frontier_gate_long_session_spine()
+    return next(b for b in raw["branches"] if b["branch_id"] == branch_id)
+
+
+def frontier_gate_branch_prompts(branch_id: str, max_turns: int | None = None) -> list[str]:
+    branch = _frontier_gate_branch(branch_id)
+    turns = branch["turns"] if max_turns is None else branch["turns"][:max_turns]
+    return [str(turn["player_prompt"]) for turn in turns]
+
+
+def frontier_gate_branch_turn_ids(branch_id: str, max_turns: int | None = None) -> list[str]:
+    branch = _frontier_gate_branch(branch_id)
+    turns = branch["turns"] if max_turns is None else branch["turns"][:max_turns]
+    return [str(turn["turn_id"]) for turn in turns]
 
 
 def _sanitizer_debug_change_counts(sanitizer_debug: list[Any] | None) -> tuple[int | None, int | None]:
@@ -1124,6 +1192,7 @@ def _observed_turn(
     scenario_id: str,
     snap: dict[str, Any],
     payload: dict[str, Any],
+    replay_identity: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
     resolution = payload.get("resolution") if isinstance(payload.get("resolution"), Mapping) else {}
     social = resolution.get("social") if isinstance(resolution.get("social"), Mapping) else {}
@@ -1365,6 +1434,11 @@ def _observed_turn(
         "runtime_lineage_events": runtime_lineage_events,
         "interaction_continuity_validation": interaction_continuity_validation,
     }
+    if replay_identity:
+        for key in ("source_path", "branch_id", "turn_id"):
+            value = replay_identity.get(key)
+            if value is not None and str(value).strip():
+                observed[key] = str(value)
     observed["unavailable"] = sorted(
         key
         for key in (
@@ -1399,6 +1473,9 @@ def run_golden_replay(
     starting_scene_id: str | None = None,
     extra_scene_ids: tuple[str, ...] = (),
     chat_fn: GoldenChatFn | None = None,
+    source_path: str | Path | None = None,
+    branch_id: str | None = None,
+    turn_ids: list[str] | None = None,
 ) -> dict[str, Any]:
     """Run transcript turns and return a stable golden-observation result."""
     patch_transcript_storage(monkeypatch, tmp_path)
@@ -1423,7 +1500,21 @@ def run_golden_replay(
         if not isinstance(payload, dict):
             raise TypeError("chat_fn must return a dict payload")
         snap = snapshot_from_chat_payload(i, text, payload)
-        observed_turns.append(_observed_turn(scenario_id=scenario_id, snap=snap, payload=payload))
+        replay_identity: dict[str, Any] = {}
+        if source_path is not None:
+            replay_identity["source_path"] = str(source_path)
+        if branch_id is not None:
+            replay_identity["branch_id"] = str(branch_id)
+        if turn_ids is not None and i < len(turn_ids) and str(turn_ids[i]).strip():
+            replay_identity["turn_id"] = str(turn_ids[i])
+        observed_turns.append(
+            _observed_turn(
+                scenario_id=scenario_id,
+                snap=snap,
+                payload=payload,
+                replay_identity=replay_identity,
+            )
+        )
 
     return {
         "scenario_id": scenario_id,
@@ -1442,6 +1533,9 @@ def format_golden_replay_debug(result: Mapping[str, Any]) -> str:
         lines.extend(
             [
                 f"turn[{turn.get('turn_index')}].player_text: {turn.get('player_text')!r}",
+                f"turn[{turn.get('turn_index')}].source_path: {turn.get('source_path')!r}",
+                f"turn[{turn.get('turn_index')}].branch_id: {turn.get('branch_id')!r}",
+                f"turn[{turn.get('turn_index')}].turn_id: {turn.get('turn_id')!r}",
                 f"turn[{turn.get('turn_index')}].resolution_kind: {turn.get('resolution_kind')!r}",
                 f"turn[{turn.get('turn_index')}].route_kind: {turn.get('route_kind')!r}",
                 f"turn[{turn.get('turn_index')}].selected_speaker_id: {turn.get('selected_speaker_id')!r}",

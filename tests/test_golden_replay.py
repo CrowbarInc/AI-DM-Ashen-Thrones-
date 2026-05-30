@@ -1,8 +1,5 @@
 from __future__ import annotations
 
-import json
-from pathlib import Path
-
 import pytest
 
 from game import storage
@@ -28,6 +25,7 @@ from game.scenario_spine import (
 )
 from game.scenario_spine_eval import minimal_complete_transcript_turn_meta
 from tests.helpers.golden_replay import (
+    FRONTIER_GATE_LONG_SESSION_SOURCE_PATH,
     _observed_turn,
     assert_golden_turn_observation,
     assert_protected_golden_turn_observation,
@@ -35,6 +33,13 @@ from tests.helpers.golden_replay import (
     evaluate_golden_replay_continuity_drift,
     final_text_has_scaffold_leakage,
     format_golden_replay_debug,
+    frontier_gate_branch_prompts,
+    frontier_gate_branch_turn_ids,
+    load_frontier_gate_long_session_spine,
+    protected_no_scaffold_expectation,
+    protected_route_expectation,
+    protected_source_expectation,
+    protected_unavailable_expectation,
     render_golden_replay_markdown_report,
     render_long_session_replay_summary_markdown,
     run_golden_replay,
@@ -65,10 +70,6 @@ pytestmark = [pytest.mark.integration, pytest.mark.golden_replay]
 # Golden replay owns replay observation and projection contracts. Repeated
 # route/speaker/fallback/final-emission fields are intentional diagnostic locks,
 # not runtime ownership of those subsystems.
-
-REPO_ROOT = Path(__file__).resolve().parents[1]
-FRONTIER_GATE_LONG_SESSION_PATH = REPO_ROOT / "data" / "validation" / "scenario_spines" / "frontier_gate_long_session.json"
-
 
 def _gm_response(text: str, *, tags: list[str] | None = None, debug_notes: str = "") -> dict:
     return {
@@ -341,22 +342,6 @@ def _seed_frontier_gate_long_session_context() -> None:
     storage.save_session(session)
 
 
-def _frontier_gate_branch_prompts(branch_id: str, limit: int) -> list[str]:
-    raw = json.loads(FRONTIER_GATE_LONG_SESSION_PATH.read_text(encoding="utf-8"))
-    branch = next(b for b in raw["branches"] if b["branch_id"] == branch_id)
-    return [str(turn["player_prompt"]) for turn in branch["turns"][:limit]]
-
-
-def _frontier_gate_branch_turn_ids(branch_id: str, limit: int) -> list[str]:
-    raw = json.loads(FRONTIER_GATE_LONG_SESSION_PATH.read_text(encoding="utf-8"))
-    branch = next(b for b in raw["branches"] if b["branch_id"] == branch_id)
-    return [str(turn["turn_id"]) for turn in branch["turns"][:limit]]
-
-
-def _frontier_gate_long_session_spine() -> dict:
-    return json.loads(FRONTIER_GATE_LONG_SESSION_PATH.read_text(encoding="utf-8"))
-
-
 def test_golden_expectation_helper_supports_dotted_paths_and_debug_messages():
     turn = {
         "final_text": 'Tavern Runner says, "No names."',
@@ -407,6 +392,9 @@ def test_golden_expectation_helper_supports_dotted_paths_and_debug_messages():
 def test_protected_golden_assertion_failure_records_canonical_report(tmp_path):
     turn = {
         "turn_index": 0,
+        "source_path": "data/validation/scenario_spines/synthetic_fixture.json",
+        "branch_id": "synthetic_branch",
+        "turn_id": "synthetic_turn_01",
         "final_text": 'Gate Guard says, "No names."',
         "route_kind": "dialogue",
         "selected_speaker_id": "guard",
@@ -443,6 +431,9 @@ def test_protected_golden_assertion_failure_records_canonical_report(tmp_path):
         rows = recorded_protected_replay_failure_rows()
         assert len(rows) == 1
         assert rows[0]["scenario_id"] == "synthetic_protected_bridge"
+        assert rows[0]["source_path"] == "data/validation/scenario_spines/synthetic_fixture.json"
+        assert rows[0]["branch_id"] == "synthetic_branch"
+        assert rows[0]["turn_id"] == "synthetic_turn_01"
         assert rows[0]["field_path"] == "selected_speaker_id"
         assert rows[0]["expected"] == "runner"
         assert rows[0]["actual"] == "guard"
@@ -461,11 +452,47 @@ def test_protected_golden_assertion_failure_records_canonical_report(tmp_path):
         assert "# Protected Replay Failure Report" in report
         assert "synthetic_protected_bridge" in report
         assert "selected_speaker_id: exact value mismatch" in report
+        assert "## Failure Locator" in report
+        assert "| Scenario | Source Path | Branch | Turn Index | Turn ID | Failed Invariant | Test Node |" in report
+        assert "data/validation/scenario_spines/synthetic_fixture.json" in report
+        assert "synthetic_branch" in report
+        assert "synthetic_turn_01" in report
         assert "structural_drift" in report
         assert "game/speaker_contract_enforcement.py" in report
         assert "## Sanitizer Summary" in report
         assert "## Runtime Lineage Summary" in report
-        assert "python -m pytest -m golden_replay -q" in report
+        assert "### Focused failing tests" in report
+        assert "### Protected replay lane" in report
+        assert "python -m pytest -m golden_replay -q --tb=short" in report
+
+        clear_recorded_protected_replay_failures()
+        no_identity_turn = {
+            key: value
+            for key, value in turn.items()
+            if key not in {"source_path", "branch_id", "turn_id"}
+        }
+        with pytest.raises(AssertionError):
+            assert_protected_golden_turn_observation(
+                no_identity_turn,
+                {"equals": {"selected_speaker_id": "runner"}},
+                scenario_id="synthetic_inline_bridge",
+                debug_context="synthetic inline reporting context",
+            )
+        no_identity_report_path = tmp_path / "replay_failure_report_no_identity.md"
+        written = write_protected_replay_failure_report_if_present(
+            path=no_identity_report_path,
+            command_used="python -m pytest -m golden_replay -q",
+            generated_at="2026-05-26T00:00:00Z",
+        )
+        assert written == no_identity_report_path
+        no_identity_report = no_identity_report_path.read_text(encoding="utf-8")
+        assert "synthetic_inline_bridge" in no_identity_report
+        assert "## Failure Locator" in no_identity_report
+        assert (
+            "| synthetic_inline_bridge | none | none | 0 | none | selected_speaker_id: exact value mismatch |"
+            in no_identity_report
+        )
+        assert "python -m pytest -m golden_replay -q --tb=short" in no_identity_report
     finally:
         clear_recorded_protected_replay_failures()
 
@@ -1216,19 +1243,14 @@ def test_golden_replay_directed_npc_question_structural_invariants(tmp_path, mon
             "trace.canonical_entry.target_actor_id",
             "trace.social_contract_trace.route_selected",
         ],
-        "allow_unavailable": ["fallback_family"],
+        **protected_unavailable_expectation("fallback_family"),
         "equals": {
             "selected_speaker_id": "runner",
             "trace.canonical_entry.target_actor_id": "runner",
         },
-        "one_of": {
-            "resolution_kind": ["question", "social", "social_exchange", "dialogue"],
-            "route_kind": ["social", "question", "social_engine", "dialogue"],
-            "trace.social_contract_trace.route_selected": ["social", "dialogue"],
-        },
-        "not_equals": {"final_emitted_source": "global_scene_fallback"},
-        "text_must_not_include": ["planner", "router", "validator", "adjudication", "scaffold"],
-        "scaffold_leakage": False,
+        **protected_route_expectation(include_resolution_kind=True, include_trace_route=True),
+        **protected_source_expectation(),
+        **protected_no_scaffold_expectation(),
     }
     assert_protected_golden_turn_observation(
         turn,
@@ -1273,17 +1295,16 @@ def test_golden_replay_vocative_override_after_prior_continuity_structural_invar
         turn,
         {
             "require_present": ["final_text", "selected_speaker_id"],
-            "allow_unavailable": [
+            **protected_unavailable_expectation(
                 "fallback_family",
                 "final_emitted_source",
                 "route_kind",
                 "trace.canonical_entry",
                 "trace.turn_trace",
                 "trace.social_contract_trace",
-            ],
+            ),
             "equals": {"selected_speaker_id": "guard"},
-            "text_must_not_include": ["planner", "router", "validator", "adjudication", "scaffold"],
-            "scaffold_leakage": False,
+            **protected_no_scaffold_expectation(),
         },
         scenario_id="vocative_override_after_prior_continuity",
         debug_context=debug_context,
@@ -1291,7 +1312,10 @@ def test_golden_replay_vocative_override_after_prior_continuity_structural_invar
     if "route_kind" not in turn.get("unavailable", []):
         assert_protected_golden_turn_observation(
             turn,
-            {"allow_unavailable": ["fallback_family"], "one_of": {"route_kind": ["social", "question", "social_engine", "dialogue"]}},
+            {
+                **protected_unavailable_expectation("fallback_family"),
+                **protected_route_expectation(),
+            },
             scenario_id="vocative_override_after_prior_continuity",
             debug_context=debug_context,
         )
@@ -1300,7 +1324,7 @@ def test_golden_replay_vocative_override_after_prior_continuity_structural_invar
         assert_protected_golden_turn_observation(
             turn,
             {
-                "allow_unavailable": ["fallback_family"],
+                **protected_unavailable_expectation("fallback_family"),
                 "equals": {"trace.canonical_entry.target_actor_id": "guard"},
                 "one_of": {
                     "trace.canonical_entry.target_source": ["spoken_vocative", "vocative"],
@@ -1320,8 +1344,8 @@ def test_golden_replay_vocative_override_after_prior_continuity_structural_invar
         assert_protected_golden_turn_observation(
             turn,
             {
-                "allow_unavailable": ["fallback_family"],
-                "one_of": {"trace.social_contract_trace.route_selected": ["social", "dialogue"]},
+                **protected_unavailable_expectation("fallback_family"),
+                **protected_route_expectation(include_route_kind=False, include_trace_route=True),
             },
             scenario_id="vocative_override_after_prior_continuity",
             debug_context=debug_context,
@@ -1350,10 +1374,9 @@ def test_golden_replay_wrong_speaker_strict_social_emission_structural_invariant
         turn,
         {
             "require_present": ["final_text", "selected_speaker_id"],
-            "allow_unavailable": ["fallback_family", "final_emitted_source"],
+            **protected_unavailable_expectation("fallback_family", "final_emitted_source"),
             "equals": {"selected_speaker_id": "runner"},
-            "text_must_not_include": ["Merchant", "planner", "router", "validator", "adjudication", "scaffold"],
-            "scaffold_leakage": False,
+            **protected_no_scaffold_expectation(extra_terms=("Merchant",)),
         },
         scenario_id="wrong_speaker_strict_social_emission",
         debug_context=debug_context,
@@ -1361,7 +1384,10 @@ def test_golden_replay_wrong_speaker_strict_social_emission_structural_invariant
     if "final_emitted_source" not in turn.get("unavailable", []):
         assert_protected_golden_turn_observation(
             turn,
-            {"allow_unavailable": ["fallback_family"], "require_present": ["final_emitted_source"]},
+            {
+                **protected_unavailable_expectation("fallback_family"),
+                "require_present": ["final_emitted_source"],
+            },
             scenario_id="wrong_speaker_strict_social_emission",
             debug_context=debug_context,
         )
@@ -1424,7 +1450,7 @@ def test_golden_direct_seam_declared_alias_dialogue_plan_structural_invariants(m
                 "selected_speaker_id",
                 "trace.canonical_entry.declared_alias_target_actor_id",
             ],
-            "allow_unavailable": ["fallback_family"],
+            **protected_unavailable_expectation("fallback_family"),
             "equals": {
                 "selected_speaker_id": "runner",
                 "trace.canonical_entry.target_actor_id": "runner",
@@ -1432,8 +1458,7 @@ def test_golden_direct_seam_declared_alias_dialogue_plan_structural_invariants(m
                 "trace.canonical_entry.speaker_alias_resolution_source": "manual_bundle_override",
                 "dialogue_plan_valid": True,
             },
-            "text_must_not_include": ["planner", "router", "validator", "adjudication", "scaffold"],
-            "scaffold_leakage": False,
+            **protected_no_scaffold_expectation(),
         },
         scenario_id="declared_alias_dialogue_plan",
         debug_context=f"meta={meta!r}; final_text={final_text!r}",
@@ -1461,28 +1486,22 @@ def test_golden_replay_thin_answer_action_outcome_final_emission_structural_inva
         turn,
         {
             "require_present": ["final_text", "final_emitted_source"],
-            "allow_unavailable": [
+            **protected_unavailable_expectation(
                 "fallback_family",
                 "selected_speaker_id",
                 "trace.canonical_entry",
                 "trace.social_contract_trace",
-            ],
+            ),
             "equals": {
                 "response_type_required": "action_outcome",
                 "response_type_repair_used": True,
             },
-            "not_equals": {"final_emitted_source": "global_scene_fallback"},
-            "text_must_not_include": [
+            **protected_source_expectation(),
+            **protected_no_scaffold_expectation(extra_terms=(
                 "scene pauses",
                 "nothing concrete",
                 "no name comes clear",
-                "planner",
-                "router",
-                "validator",
-                "adjudication",
-                "scaffold",
-            ],
-            "scaffold_leakage": False,
+            )),
         },
         scenario_id="thin_answer_action_outcome_final_emission",
         debug_context=debug_context,
@@ -1516,13 +1535,13 @@ def test_golden_replay_sanitizer_scaffold_leakage_structural_invariants(tmp_path
         turn,
         {
             "require_present": ["final_text"],
-            "allow_unavailable": [
+            **protected_unavailable_expectation(
                 "fallback_family",
                 "final_emitted_source",
                 "selected_speaker_id",
                 "trace.canonical_entry",
                 "trace.social_contract_trace",
-            ],
+            ),
             "text_must_not_include": ["Planner", "planner", "router", "Validator", "validator", "scaffold"],
             "scaffold_leakage": False,
         },
@@ -1533,12 +1552,12 @@ def test_golden_replay_sanitizer_scaffold_leakage_structural_invariants(tmp_path
         assert_protected_golden_turn_observation(
             turn,
             {
-                "allow_unavailable": [
+                **protected_unavailable_expectation(
                     "fallback_family",
                     "selected_speaker_id",
                     "trace.canonical_entry",
                     "trace.social_contract_trace",
-                ],
+                ),
                 "require_present": ["final_emitted_source"],
             },
             scenario_id="sanitizer_scaffold_leakage",
@@ -1594,8 +1613,7 @@ def test_golden_direct_seam_canonical_opening_fallback_path_has_no_compatibility
             "not_equals": {
                 "opening_fallback_authorship_source": OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL,
             },
-            "text_must_not_include": ["planner", "router", "validator", "adjudication", "scaffold"],
-            "scaffold_leakage": False,
+            **protected_no_scaffold_expectation(),
         },
         scenario_id="opening_fallback_path",
         debug_context=f"meta={meta!r}; final_text={final_text!r}",
@@ -1659,14 +1677,10 @@ def test_golden_replay_lead_followup_with_dialogue_lock_structural_invariants(tm
         turn,
         {
             "require_present": ["final_text", "selected_speaker_id", "final_emitted_source"],
-            "allow_unavailable": ["fallback_family"],
+            **protected_unavailable_expectation("fallback_family"),
             "equals": {"selected_speaker_id": "tavern_runner"},
-            "one_of": {
-                "route_kind": ["social", "question", "social_engine", "dialogue"],
-                "trace.social_contract_trace.route_selected": ["social", "dialogue"],
-            },
-            "text_must_not_include": ["planner", "router", "validator", "adjudication", "scaffold"],
-            "scaffold_leakage": False,
+            **protected_route_expectation(include_trace_route=True),
+            **protected_no_scaffold_expectation(),
         },
         scenario_id="lead_followup_with_dialogue_lock",
         debug_context=debug_context,
@@ -1676,7 +1690,7 @@ def test_golden_replay_lead_followup_with_dialogue_lock_structural_invariants(tm
         assert_protected_golden_turn_observation(
             turn,
             {
-                "allow_unavailable": ["fallback_family"],
+                **protected_unavailable_expectation("fallback_family"),
                 "equals": {"trace.canonical_entry.target_actor_id": "tavern_runner"},
             },
             scenario_id="lead_followup_with_dialogue_lock",
@@ -1685,9 +1699,9 @@ def test_golden_replay_lead_followup_with_dialogue_lock_structural_invariants(tm
 
 
 def test_golden_replay_frontier_gate_social_inquiry_20_turn_structural_stability(tmp_path, monkeypatch):
-    turns = _frontier_gate_branch_prompts("branch_social_inquiry", 20)
-    turn_ids = _frontier_gate_branch_turn_ids("branch_social_inquiry", 20)
-    spine = _frontier_gate_long_session_spine()
+    turns = frontier_gate_branch_prompts("branch_social_inquiry", max_turns=20)
+    turn_ids = frontier_gate_branch_turn_ids("branch_social_inquiry", max_turns=20)
+    spine = load_frontier_gate_long_session_spine()
     assert len(turns) == 20
 
     gpt_call_count = 0
@@ -1716,9 +1730,16 @@ def test_golden_replay_frontier_gate_social_inquiry_20_turn_structural_stability
             monkeypatch=monkeypatch,
             setup_fn=_seed_frontier_gate_long_session_context,
             starting_scene_id="frontier_gate",
+            source_path=FRONTIER_GATE_LONG_SESSION_SOURCE_PATH,
+            branch_id="branch_social_inquiry",
+            turn_ids=turn_ids,
         )
 
     observed_turns = result["turns"]
+    assert observed_turns[0]["source_path"] == FRONTIER_GATE_LONG_SESSION_SOURCE_PATH
+    assert observed_turns[0]["branch_id"] == "branch_social_inquiry"
+    assert observed_turns[0]["turn_id"] == "inv_01"
+    assert observed_turns[-1]["turn_id"] == "inv_20"
     summary = summarize_long_session_replay_observations(observed_turns)
     continuity_bridge = evaluate_golden_replay_continuity_drift(
         spine=spine,
@@ -1739,6 +1760,9 @@ def test_golden_replay_frontier_gate_social_inquiry_20_turn_structural_stability
             ),
         ]
     )
+    assert f"source_path: {FRONTIER_GATE_LONG_SESSION_SOURCE_PATH!r}" in debug_context
+    assert "branch_id: 'branch_social_inquiry'" in debug_context
+    assert "turn_id: 'inv_01'" in debug_context
 
     assert result["turn_count"] == 20, debug_context
     assert summary["turn_count"] == 20, debug_context
@@ -1852,13 +1876,13 @@ def test_golden_replay_scenario_spine_three_branch_structural_smoke(tmp_path, mo
                     turn,
                     {
                         "require_present": ["final_text"],
-                        "allow_unavailable": [
+                        **protected_unavailable_expectation(
                             "fallback_family",
                             "selected_speaker_id",
                             "final_emitted_source",
                             "trace.canonical_entry",
                             "trace.social_contract_trace",
-                        ],
+                        ),
                         "scaffold_leakage": False,
                     },
                     debug_context=format_golden_replay_debug(result),
