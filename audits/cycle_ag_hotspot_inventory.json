@@ -1,0 +1,339 @@
+{
+  "cycle": "AG",
+  "date": "2026-05-31",
+  "recon_artifact": "audits/cycle_ag_residual_complexity_burndown_recon_2026-05-31.md",
+  "first_block": "AG-1",
+  "hotspots": [
+    {
+      "rank": 1,
+      "path": "tools/refresh_protected_replay_manifest.py",
+      "related_paths": [
+        "tools/test_audit.py",
+        "tests/test_inventory.json",
+        "docs/testing/protected_replay_manifest.md",
+        "tests/helpers/golden_replay_projection.py"
+      ],
+      "category": "maintenance",
+      "symbols": [
+        "render_generated_section",
+        "protected_field_paths",
+        "protected_observation_field_registry",
+        "PROTECTED_OBSERVATION_FIELDS"
+      ],
+      "lines_approx": 105,
+      "reason": "AE5 deferred: manifest refresh still uses legacy frozensets; 128k-line test_inventory.json bundles with closure commits; no CI registry parity check.",
+      "safe_move": "Wire refresh tool to PROTECTED_OBSERVATION_FIELDS registry; add manifest contract pytest; document inventory-only regen workflow.",
+      "risk": "low",
+      "handle_now": true,
+      "protecting_tests": [
+        "tests/test_golden_replay.py",
+        "tests/test_failure_classification_contract.py",
+        "tests/test_ownership_registry.py"
+      ],
+      "recommended_block": "AG-1"
+    },
+    {
+      "rank": 2,
+      "path": "tests/test_turn_pipeline_shared.py",
+      "related_paths": [
+        "tests/test_playability_smoke.py",
+        "tests/test_start_campaign_api.py",
+        "tests/test_narration_transcript_regressions.py",
+        "tests/test_turn_trace_contract.py",
+        "tests/test_new_campaign_silent_reset_nc2.py",
+        "tests/test_empty_social_retry_regressions.py",
+        "tests/test_manual_play_latency.py",
+        "tests/test_opening_start_seam_regressions.py"
+      ],
+      "category": "test",
+      "symbols": [
+        "FAKE_GPT_RESPONSE",
+        "_patch_storage",
+        "_seed_shared_world",
+        "_seed_runner_dialogue_context",
+        "_gm_response"
+      ],
+      "lines_approx": 1860,
+      "reason": "1860 LOC HTTP integration owner; 8 test modules import seeds/stubs from this test file (AD follow-up deferred).",
+      "safe_move": "Extract tests/helpers/turn_pipeline_http_fixtures.py; repoint importers only; no assertion semantic change.",
+      "risk": "low",
+      "handle_now": true,
+      "protecting_tests": [
+        "tests/test_turn_pipeline_shared.py",
+        "tests/test_playability_smoke.py",
+        "tests/test_start_campaign_api.py",
+        "tests/test_narration_transcript_regressions.py"
+      ],
+      "recommended_block": "AG-2"
+    },
+    {
+      "rank": 3,
+      "path": "tests/test_final_emission_gate.py",
+      "related_paths": [
+        "tests/test_final_emission_visibility_fallback.py",
+        "tests/test_final_emission_sealed_fallback.py",
+        "game/final_emission_sealed_fallback.py",
+        "game/final_emission_visibility_fallback.py"
+      ],
+      "category": "mixed",
+      "symbols": [
+        "test_block_ai_sealed_fallback_selection_round_trips_legacy_tuple",
+        "test_block_ai_sealed_fallback_selection_round_trips_visibility_tuple",
+        "test_block_ai_sealed_selector_helpers_importable_and_callable",
+        "test_block_ai_assembly_helpers_stamp_meta_without_selecting_fallback_lines"
+      ],
+      "lines_approx": 5819,
+      "reason": "5819 LOC direct gate owner (~100 tests); ~70 sealed/tuple references; helper-shape tests co-located with orchestration integration.",
+      "safe_move": "Migrate Block AI dataclass/tuple round-trip and helper importability tests to sealed/visibility owner test modules.",
+      "risk": "medium",
+      "handle_now": true,
+      "protecting_tests": [
+        "tests/test_final_emission_gate.py",
+        "tests/test_final_emission_visibility_fallback.py",
+        "tests/test_gate_convergence_closeout.py"
+      ],
+      "recommended_block": "AG-3"
+    },
+    {
+      "rank": 4,
+      "path": "tests/helpers/emission_smoke_assertions.py",
+      "related_paths": [
+        "tests/test_interaction_continuity_repair.py",
+        "tests/test_social_speaker_grounding.py",
+        "tests/test_social_answer_candidate.py",
+        "tests/test_broadcast_open_call_social.py"
+      ],
+      "category": "test",
+      "symbols": [
+        "assert_response_type_meta",
+        "assert_emission_repair_evidence",
+        "assert_no_internal_scaffold_labels",
+        "assert_global_visibility_stock_absent"
+      ],
+      "lines_approx": 138,
+      "reason": "AE3 migrated 3 downstream suites; AE closure lists 4 remaining HTTP smoke suites with scattered FEM/route/phrase asserts.",
+      "safe_move": "Extend AE3 facade adoption to remaining downstream HTTP suites; thin to route-class + consumer-owned field smoke per AD-3.",
+      "risk": "low",
+      "handle_now": true,
+      "protecting_tests": [
+        "tests/test_interaction_continuity_repair.py",
+        "tests/test_social_speaker_grounding.py",
+        "tests/test_social_answer_candidate.py",
+        "tests/test_broadcast_open_call_social.py",
+        "tests/test_turn_pipeline_shared.py"
+      ],
+      "recommended_block": "AG-4"
+    },
+    {
+      "rank": 5,
+      "path": "tests/helpers/golden_replay.py",
+      "related_paths": [
+        "tests/test_golden_replay.py",
+        "tests/helpers/golden_replay_fixtures.py"
+      ],
+      "category": "replay",
+      "symbols": [
+        "protected_structural_expectation",
+        "protected_route_expectation",
+        "protected_no_scaffold_expectation",
+        "assert_golden_turn_observation",
+        "run_golden_replay"
+      ],
+      "lines_approx": 1378,
+      "reason": "1378 LOC post-AC; AC recon optional protected_social_structural_base composer not yet added; 51 function defs.",
+      "safe_move": "Add protected_social_structural_base composer wrapping existing protected_*_expectation fragments; no drift eval semantic change.",
+      "risk": "low",
+      "handle_now": true,
+      "protecting_tests": [
+        "tests/test_golden_replay.py"
+      ],
+      "recommended_block": "AG-5"
+    },
+    {
+      "rank": 6,
+      "path": "tests/helpers/speaker_relocation_shadow_harness.py",
+      "related_paths": [
+        "tests/test_block_s_speaker_local_rebind_equivalence.py",
+        "tests/test_block_t_speaker_relocation_shadow_equivalence.py",
+        "tests/test_block_u_finalize_stack_divergence.py"
+      ],
+      "category": "mixed",
+      "symbols": [
+        "speaker_relocation_shadow_harness"
+      ],
+      "lines_approx": 540,
+      "reason": "Block S/T/U equivalence suites co-edit on gate ordering tweaks; AE recon rank #9 finalize-stack fixture duplication.",
+      "safe_move": "Add build_finalize_stack_fixture() shared builder; block tests import only.",
+      "risk": "medium",
+      "handle_now": true,
+      "protecting_tests": [
+        "tests/test_block_s_speaker_local_rebind_equivalence.py",
+        "tests/test_block_t_speaker_relocation_shadow_equivalence.py",
+        "tests/test_block_u_finalize_stack_divergence.py",
+        "tests/test_gate_convergence_closeout.py"
+      ],
+      "recommended_block": "AG-6"
+    },
+    {
+      "rank": 7,
+      "path": "tests/helpers/failure_classifier.py",
+      "related_paths": [
+        "tests/test_failure_classifier.py",
+        "tests/helpers/failure_classification_sync.py",
+        "tests/helpers/opening_fallback_evidence.py"
+      ],
+      "category": "replay",
+      "symbols": [
+        "classify_replay_drift",
+        "synthetic observed row builders"
+      ],
+      "lines_approx": 2130,
+      "reason": "Classifier helper (788 LOC) + test module (1342 LOC) co-edit with golden replay; inline FEM rows duplicate opening_fallback_evidence builders.",
+      "safe_move": "Extend failure_classification_sync.py with template row builder facades for opening/social/sealed observed shapes.",
+      "risk": "low",
+      "handle_now": true,
+      "protecting_tests": [
+        "tests/test_failure_classifier.py",
+        "tests/test_failure_classification_contract.py",
+        "tests/test_failure_dashboard_controlled_failures.py"
+      ],
+      "recommended_block": "AG-7"
+    },
+    {
+      "rank": 8,
+      "path": "tests/test_golden_replay.py",
+      "related_paths": [
+        "tests/helpers/golden_replay.py",
+        "tests/helpers/golden_replay_fixtures.py"
+      ],
+      "category": "replay",
+      "symbols": [
+        "protected E2E integration tests",
+        "assert_protected_golden_turn_observation"
+      ],
+      "lines_approx": 2336,
+      "reason": "2336 LOC after AC harness extraction; still hosts all 57 protected/supporting scenarios and residual expectation spreads.",
+      "safe_move": "Adopt AG-5 structural composer across 7 protected E2E tests; no scenario ID or seed changes.",
+      "risk": "low",
+      "handle_now": true,
+      "protecting_tests": [
+        "tests/test_golden_replay.py",
+        "pytest -m golden_replay"
+      ],
+      "recommended_block": "AG-8"
+    },
+    {
+      "rank": 9,
+      "path": "tests/helpers/opening_fallback_evidence.py",
+      "related_paths": [
+        "tests/test_opening_fallback_owner_bucket.py",
+        "tests/test_upstream_response_repairs.py",
+        "tests/test_final_emission_meta.py"
+      ],
+      "category": "fallback",
+      "symbols": [
+        "successful_opening_fem_meta",
+        "successful_opening_observed_fields",
+        "OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL"
+      ],
+      "lines_approx": 83,
+      "reason": "AE recon rank #6; ~15 files still reference opening evidence but some hand-build partial FEM literals.",
+      "safe_move": "Incremental migration of non-prose FEM dict literals to evidence builders; do not change canonical opening prose bytes.",
+      "risk": "low",
+      "handle_now": true,
+      "protecting_tests": [
+        "tests/test_opening_fallback_owner_bucket.py",
+        "tests/test_golden_replay.py::test_golden_direct_seam_canonical_opening_fallback_path_has_no_compatibility_local_ownership",
+        "tests/test_upstream_response_repairs.py"
+      ],
+      "recommended_block": "AG-9"
+    },
+    {
+      "rank": 10,
+      "path": "tests/test_ownership_registry.py",
+      "related_paths": [
+        "tests/test_inventory.json",
+        "docs/architecture_ownership_ledger.md"
+      ],
+      "category": "maintenance",
+      "symbols": [
+        "collect_ownership_governance_errors",
+        "test_ad3_gate_orchestration_direct_owner_is_final_emission_gate",
+        "test_final_emission_meta_projection_read_side_ownership_boundaries"
+      ],
+      "lines_approx": 638,
+      "reason": "AE4 added read-side boundary tests but no automated guard against gate test file accumulating read-side replay projection assertions.",
+      "safe_move": "Add governance test blocking gate direct-owner from importing replay read-side projection ownership patterns.",
+      "risk": "low",
+      "handle_now": true,
+      "protecting_tests": [
+        "tests/test_ownership_registry.py"
+      ],
+      "recommended_block": "AG-10"
+    }
+  ],
+  "deferred": [
+    {
+      "path": "game/final_emission_gate.py",
+      "category": "gate",
+      "lines_approx": 9118,
+      "reason": "Largest production module; AA5+ high-risk policy layers explicitly deferred; gate convergence frozen at AB.",
+      "risk": "high",
+      "handle_now": false
+    },
+    {
+      "path": "game/prompt_context.py",
+      "category": "maintenance",
+      "lines_approx": 2874,
+      "reason": "57 touches/60d but planner convergence freeze; prompt bundle semantics — behavioral core.",
+      "risk": "high",
+      "handle_now": false
+    },
+    {
+      "path": "game/final_emission_repairs.py",
+      "category": "gate",
+      "lines_approx": 1047,
+      "reason": "FE-C2 semantic repair upstream moves are behavioral; not burn-down without deliberate boundary migration.",
+      "risk": "high",
+      "handle_now": false
+    },
+    {
+      "path": "game/final_emission_meta.py",
+      "category": "mixed",
+      "lines_approx": 1724,
+      "reason": "Write-time FEM packaging co-edits with gate; read-side already split to final_emission_replay_projection.py.",
+      "risk": "medium",
+      "handle_now": false
+    },
+    {
+      "path": "game/final_emission_visibility_fallback.py",
+      "category": "fallback",
+      "lines_approx": 835,
+      "reason": "VisibilitySelectedFallback.from_legacy_tuple remains at gate boundary per AB5 intentional seam.",
+      "risk": "medium",
+      "handle_now": false
+    },
+    {
+      "path": "tests/helpers/golden_replay_projection.py + emission_smoke_assertions.py scaffold tokens",
+      "category": "mixed",
+      "reason": "AC Group G: unifying scaffold-ban tokens across HTTP smoke and replay projection risks layer divergence.",
+      "risk": "high",
+      "handle_now": false
+    },
+    {
+      "path": "fallback_family_used + realization_fallback_family merge",
+      "category": "fallback",
+      "reason": "AB3/AB4 dual-field contract and protected replay diegetic-first projection explicitly forbid topology merge.",
+      "risk": "high",
+      "handle_now": false
+    },
+    {
+      "path": "game/gm.py",
+      "category": "maintenance",
+      "lines_approx": 5564,
+      "reason": "Turn pipeline behavioral core; size alone insufficient for AG burn-down.",
+      "risk": "high",
+      "handle_now": false
+    }
+  ]
+}

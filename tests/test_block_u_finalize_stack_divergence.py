@@ -19,7 +19,11 @@ from tests.helpers.post_speaker_finalize_probe import (
     install_post_speaker_text_probes,
     post_speaker_events_only,
 )
-from tests.helpers.speaker_relocation_shadow_harness import ShadowEnforceCapture, install_dual_run_enforce
+from tests.helpers.speaker_relocation_shadow_harness import (
+    ShadowEnforceCapture,
+    build_finalize_stack_fixture,
+    install_dual_run_enforce,
+)
 from tests.test_block_s_speaker_local_rebind_equivalence import (
     _locked_runner_contract,
     _stub_strict_social_details,
@@ -31,41 +35,34 @@ pytestmark = pytest.mark.unit
 
 @pytest.fixture
 def local_rebind_strict_bundle(monkeypatch):
-    session, world, sid, resolution = runner_strict_bundle()
-    c = _locked_runner_contract()
-    monkeypatch.setattr(feg, "get_speaker_selection_contract", lambda *a, **kw: dict(c))
-    line = 'Ragged stranger says, "No names, only rumors."'
-
-    def fake_build(candidate_text, *, resolution, tags, session, scene_id, world):
-        return line, _stub_strict_social_details()
-
-    monkeypatch.setattr(feg, "build_final_strict_social_response", fake_build)
-    return session, world, sid, resolution, line
+    return build_finalize_stack_fixture(
+        monkeypatch,
+        contract=_locked_runner_contract(),
+        strict_social_details=_stub_strict_social_details,
+    )
 
 
 @pytest.fixture
 def local_rebind_canonical_plan_with_declared_alias_bundle(monkeypatch):
     """Canonical ``speaker_id`` / ``speaker_name`` (Tavern Runner) + declared pregate alias (Block Z)."""
-    session, world, sid, resolution = runner_strict_bundle()
-    attach_dialogue_social_plan_to_resolution(
-        resolution,
-        make_valid_dialogue_social_plan(
-            speaker_id="tavern_runner",
-            speaker_name="Tavern Runner",
-            dialogue_intent="question",
-            allowed_pregate_speaker_labels=["Ragged stranger"],
-            speaker_alias_resolution_source="manual_bundle_override",
-        ),
+    def configure_resolution(resolution: dict) -> None:
+        attach_dialogue_social_plan_to_resolution(
+            resolution,
+            make_valid_dialogue_social_plan(
+                speaker_id="tavern_runner",
+                speaker_name="Tavern Runner",
+                dialogue_intent="question",
+                allowed_pregate_speaker_labels=["Ragged stranger"],
+                speaker_alias_resolution_source="manual_bundle_override",
+            ),
+        )
+
+    return build_finalize_stack_fixture(
+        monkeypatch,
+        contract=_locked_runner_contract(),
+        strict_social_details=_stub_strict_social_details,
+        configure_resolution=configure_resolution,
     )
-    c = _locked_runner_contract()
-    monkeypatch.setattr(feg, "get_speaker_selection_contract", lambda *a, **kw: dict(c))
-    line = 'Ragged stranger says, "No names, only rumors."'
-
-    def fake_build(candidate_text, *, resolution, tags, session, scene_id, world):
-        return line, _stub_strict_social_details()
-
-    monkeypatch.setattr(feg, "build_final_strict_social_response", fake_build)
-    return session, world, sid, resolution, line
 
 
 @pytest.fixture
@@ -75,24 +72,22 @@ def local_rebind_passing_dialogue_plan_bundle(monkeypatch):
     Plan speakers must match **pregate** attribution (`Ragged stranger`), not post-``local_rebind``
     canonicalization (`Tavern Runner`): dialogue-plan invariant runs before strict-social build/speaker repair.
     """
-    session, world, sid, resolution = runner_strict_bundle()
-    attach_dialogue_social_plan_to_resolution(
-        resolution,
-        make_valid_dialogue_social_plan(
-            speaker_id="ragged_stranger",
-            speaker_name="Ragged stranger",
-            dialogue_intent="question",
-        ),
+    def configure_resolution(resolution: dict) -> None:
+        attach_dialogue_social_plan_to_resolution(
+            resolution,
+            make_valid_dialogue_social_plan(
+                speaker_id="ragged_stranger",
+                speaker_name="Ragged stranger",
+                dialogue_intent="question",
+            ),
+        )
+
+    return build_finalize_stack_fixture(
+        monkeypatch,
+        contract=_locked_runner_contract(),
+        strict_social_details=_stub_strict_social_details,
+        configure_resolution=configure_resolution,
     )
-    c = _locked_runner_contract()
-    monkeypatch.setattr(feg, "get_speaker_selection_contract", lambda *a, **kw: dict(c))
-    line = 'Ragged stranger says, "No names, only rumors."'
-
-    def fake_build(candidate_text, *, resolution, tags, session, scene_id, world):
-        return line, _stub_strict_social_details()
-
-    monkeypatch.setattr(feg, "build_final_strict_social_response", fake_build)
-    return session, world, sid, resolution, line
 
 
 def test_block_u_first_post_speaker_divergence_is_dialogue_plan_strip(local_rebind_strict_bundle, monkeypatch):

@@ -142,6 +142,48 @@ def assert_response_type_meta(
         assert meta.get("response_type_repair_kind") in set(repair_kinds)
 
 
+def assert_social_grounding_smoke(
+    social: Mapping[str, Any],
+    *,
+    expected_npc_id: str,
+    expected_npc_name: str | None = None,
+    expected_authority_source: str | None = None,
+    expected_fallback_applied: bool = False,
+    require_proposed_speaker: bool = False,
+) -> None:
+    """Downstream smoke: social reply remains grounded without neutral bridge fallback."""
+    assert social.get("npc_id") == expected_npc_id
+    if expected_npc_name is not None:
+        assert social.get("npc_name") == expected_npc_name
+    assert social.get("grounded_speaker_id") == expected_npc_id
+    assert social.get("reply_speaker_grounding_neutral_bridge") is not True
+    assert social.get("authority_source_used")
+    if expected_authority_source is not None:
+        assert social.get("authority_source_used") == expected_authority_source
+    assert social.get("grounding_reason_code")
+    if require_proposed_speaker:
+        assert social.get("proposed_reply_speaker_id") == expected_npc_id
+    assert social.get("grounding_fallback_applied") is expected_fallback_applied
+
+
+def assert_continuity_validation_failed_without_repair(emission_debug: Mapping[str, Any]) -> None:
+    """Downstream smoke: continuity violation is recorded without applying structural repair."""
+    validation = emission_debug.get("interaction_continuity_validation") or {}
+    assert validation.get("ok") is False
+    repair = emission_debug.get("interaction_continuity_repair") or {}
+    assert repair.get("applied") is not True
+
+
+def assert_open_social_solicitation_route(entry: Mapping[str, Any], *, phrase: str | None = None) -> None:
+    """Route-class smoke: broadcast/open-call text is classified as open social solicitation."""
+    assert entry.get("should_route_social") is True
+    assert entry.get("reason") == "open_social_solicitation"
+    assert entry.get("open_social_solicitation") is True
+    assert entry.get("broadcast_social_open_call") is True
+    if phrase is not None:
+        assert entry.get("broad_address_phrase_matched") == phrase
+
+
 def assert_final_route_replaced_or_not_accept(meta: Mapping[str, Any]) -> None:
     """Smoke: final route is not an accept path."""
     assert meta.get("final_route") not in (None, "", "accept_candidate")

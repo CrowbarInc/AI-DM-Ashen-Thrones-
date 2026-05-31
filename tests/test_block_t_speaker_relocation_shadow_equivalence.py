@@ -12,6 +12,7 @@ import game.final_emission_gate as feg
 from game.final_emission_gate import apply_final_emission_gate
 from tests.helpers.speaker_relocation_shadow_harness import (
     ShadowEnforceCapture,
+    build_finalize_stack_fixture,
     install_dual_run_enforce,
     run_isolated_enforce_mirror,
     with_finalize_delta,
@@ -40,16 +41,11 @@ def _eff_runner_aligned(resolution: dict) -> dict:
 
 def test_block_t_dual_run_gate_matches_isolated_continuity_locked_opening_mismatch(monkeypatch):
     """Fixture: continuity-locked wrong opening label → ``local_rebind``; Gate vs isolated equivalence."""
-    session, world, sid, resolution = runner_strict_bundle()
-    c = _locked_runner_contract()
-    monkeypatch.setattr(feg, "get_speaker_selection_contract", lambda *a, **kw: dict(c))
-
-    line = 'Ragged stranger says, "No names, only rumors."'
-
-    def fake_build(candidate_text, *, resolution, tags, session, scene_id, world):
-        return line, _stub_strict_social_details()
-
-    monkeypatch.setattr(feg, "build_final_strict_social_response", fake_build)
+    session, world, sid, resolution, line = build_finalize_stack_fixture(
+        monkeypatch,
+        contract=_locked_runner_contract(),
+        strict_social_details=_stub_strict_social_details,
+    )
 
     cap = ShadowEnforceCapture()
     install_dual_run_enforce(monkeypatch, cap)
@@ -80,26 +76,24 @@ def test_block_t_dual_run_gate_matches_isolated_continuity_locked_opening_mismat
 
 def test_block_aa_dual_run_declared_alias_dialogue_plan_shadow_equivalence(monkeypatch):
     """Block AA closeout: Block Z declared aliases + passing dialogue plan + local_rebind → shadow equivalence holds."""
-    session, world, sid, resolution = runner_strict_bundle()
-    attach_dialogue_social_plan_to_resolution(
-        resolution,
-        make_valid_dialogue_social_plan(
-            speaker_id="tavern_runner",
-            speaker_name="Tavern Runner",
-            dialogue_intent="question",
-            allowed_pregate_speaker_labels=["Ragged stranger"],
-            speaker_alias_resolution_source="manual_bundle_override",
-        ),
+    def configure_resolution(resolution: dict) -> None:
+        attach_dialogue_social_plan_to_resolution(
+            resolution,
+            make_valid_dialogue_social_plan(
+                speaker_id="tavern_runner",
+                speaker_name="Tavern Runner",
+                dialogue_intent="question",
+                allowed_pregate_speaker_labels=["Ragged stranger"],
+                speaker_alias_resolution_source="manual_bundle_override",
+            ),
+        )
+
+    session, world, sid, resolution, line = build_finalize_stack_fixture(
+        monkeypatch,
+        contract=_locked_runner_contract(),
+        strict_social_details=_stub_strict_social_details,
+        configure_resolution=configure_resolution,
     )
-    c = _locked_runner_contract()
-    monkeypatch.setattr(feg, "get_speaker_selection_contract", lambda *a, **kw: dict(c))
-
-    line = 'Ragged stranger says, "No names, only rumors."'
-
-    def fake_build(candidate_text, *, resolution, tags, session, scene_id, world):
-        return line, _stub_strict_social_details()
-
-    monkeypatch.setattr(feg, "build_final_strict_social_response", fake_build)
 
     cap = ShadowEnforceCapture()
     install_dual_run_enforce(monkeypatch, cap)
@@ -130,16 +124,12 @@ def test_block_aa_dual_run_declared_alias_dialogue_plan_shadow_equivalence(monke
 
 def test_block_t_quoted_dialogue_layers_shadow_records_downstream_delta(monkeypatch):
     """Fixture: quoted strict-social line through NA/tone/authority (validation-only); finalize may reshape."""
-    session, world, sid, resolution = runner_strict_bundle()
-    c = _locked_runner_contract()
-    monkeypatch.setattr(feg, "get_speaker_selection_contract", lambda *a, **kw: dict(c))
-
-    line = 'Ragged stranger says, "The east lanes hear everything late."'
-
-    def fake_build(candidate_text, *, resolution, tags, session, scene_id, world):
-        return line, _stub_strict_social_details()
-
-    monkeypatch.setattr(feg, "build_final_strict_social_response", fake_build)
+    session, world, sid, resolution, line = build_finalize_stack_fixture(
+        monkeypatch,
+        contract=_locked_runner_contract(),
+        strict_social_details=_stub_strict_social_details,
+        line='Ragged stranger says, "The east lanes hear everything late."',
+    )
 
     cap = ShadowEnforceCapture()
     install_dual_run_enforce(monkeypatch, cap)

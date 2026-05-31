@@ -12,6 +12,7 @@ from tests.helpers.speaker_gate_order import (
     assert_phase_subsequence,
     normalized_player_text_equal,
 )
+from tests.helpers.speaker_relocation_shadow_harness import build_finalize_stack_fixture
 from tests.helpers.final_emission_gate_fixtures import runner_strict_bundle
 
 pytestmark = pytest.mark.unit
@@ -119,16 +120,11 @@ def test_block_s_strict_social_phase_order_wrapped_build(monkeypatch):
 
 def test_block_s_local_rebind_full_gate_metadata_not_canonical_or_neutral(monkeypatch):
     """Wrong opening label + continuity lock → local_rebind; no canonical_rewrite / narrator_neutral flags."""
-    session, world, sid, resolution = runner_strict_bundle()
-    c = _locked_runner_contract()
-    monkeypatch.setattr(feg, "get_speaker_selection_contract", lambda *a, **kw: dict(c))
-
-    line = 'Ragged stranger says, "No names, only rumors."'
-
-    def fake_build(candidate_text, *, resolution, tags, session, scene_id, world):
-        return line, _stub_strict_social_details()
-
-    monkeypatch.setattr(feg, "build_final_strict_social_response", fake_build)
+    session, world, sid, resolution, line = build_finalize_stack_fixture(
+        monkeypatch,
+        contract=_locked_runner_contract(),
+        strict_social_details=_stub_strict_social_details,
+    )
 
     out = apply_final_emission_gate(
         {"player_facing_text": line, "tags": []},

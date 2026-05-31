@@ -7,6 +7,9 @@ from __future__ import annotations
 
 from typing import Any, Mapping, Sequence
 
+from game.final_emission_meta import (
+    SEALED_FALLBACK_OWNER_SEALED_GATE,
+)
 from tests.failure_classification_contract import (
     ALLOWED_FAILURE_CATEGORIES,
     ALLOWED_OPENING_FALLBACK_OWNER_BUCKETS,
@@ -33,6 +36,140 @@ from tests.helpers.golden_replay_projection import (
     protected_observation_field_paths,
     protected_observation_field_registry,
 )
+from tests.helpers.opening_fallback_evidence import (
+    OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL,
+    fail_closed_opening_observed_fields,
+    successful_opening_observed_fields,
+)
+
+
+def observed_failure_row(**overrides: Any) -> dict[str, Any]:
+    """Return a classifier-shaped synthetic observed replay row."""
+    row: dict[str, Any] = {
+        "scenario_id": "probe",
+        "turn_index": 0,
+        "final_text": "The runner answers.",
+        "final_text_hash": "hash123",
+        "route_kind": "dialogue",
+        "selected_speaker_id": "runner",
+        "final_emitted_source": "generated_candidate",
+        "fallback_family": None,
+        "fallback_temporal_frame": None,
+        "opening_fallback_owner_bucket": None,
+        "sealed_fallback_owner_bucket": None,
+        "visibility_fallback_owner_bucket": None,
+        "visibility_replacement_applied": None,
+        "visibility_fallback_pool": None,
+        "visibility_fallback_kind": None,
+        "response_type_required": "dialogue_response",
+        "response_type_repair_used": False,
+        "response_type_repair_kind": None,
+        "post_gate_mutation_detected": False,
+        "strict_social_active": False,
+        "speaker_contract_enforcement_reason": None,
+        "fallback_behavior_repaired": False,
+        "fallback_behavior_repair_kind": None,
+        "sanitizer_mode": None,
+        "sanitizer_event_count": None,
+        "sanitizer_changed_count": None,
+        "sanitizer_rewrite_used": None,
+        "unavailable": [],
+        "trace": {
+            "canonical_entry": {"target_actor_id": "runner"},
+            "social_contract_trace": {"route_selected": "dialogue"},
+        },
+    }
+    row.update(overrides)
+    return row
+
+
+def observed_opening_fallback_row(*, owner_bucket: bool = False, **overrides: Any) -> dict[str, Any]:
+    """Return observed-row evidence for canonical successful opening fallback."""
+    return observed_failure_row(**successful_opening_observed_fields(include_owner_bucket=owner_bucket, **overrides))
+
+
+def observed_fail_closed_opening_fallback_row(*, owner_bucket: bool = False, **overrides: Any) -> dict[str, Any]:
+    """Return observed-row evidence for sealed/fail-closed opening fallback."""
+    return observed_failure_row(**fail_closed_opening_observed_fields(include_owner_bucket=owner_bucket, **overrides))
+
+
+def observed_legacy_opening_fallback_row(**overrides: Any) -> dict[str, Any]:
+    """Return observed-row evidence for legacy compatibility-local opening fallback."""
+    fields = {
+        "final_emitted_source": "opening_deterministic_fallback",
+        "response_type_repair_kind": "opening_deterministic_fallback",
+        "opening_recovered_via_fallback": True,
+        "opening_fallback_authorship_source": OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL,
+        "fallback_family": "scene_opening",
+    }
+    fields.update(overrides)
+    return observed_failure_row(**fields)
+
+
+def observed_global_replacement_row(**overrides: Any) -> dict[str, Any]:
+    """Return observed-row evidence for global/gate terminal replacement."""
+    fields = {
+        "final_emitted_source": "global_scene_fallback",
+        "fallback_family": "gate_terminal_repair",
+    }
+    fields.update(overrides)
+    return observed_failure_row(**fields)
+
+
+def observed_social_fallback_row(**overrides: Any) -> dict[str, Any]:
+    """Return observed-row evidence for strict-social fallback replacement probes."""
+    fields = {
+        "strict_social_active": True,
+        "final_emitted_source": "strict_social_visibility_minimal",
+    }
+    fields.update(overrides)
+    return observed_failure_row(**fields)
+
+
+def observed_sealed_replacement_row(**overrides: Any) -> dict[str, Any]:
+    """Return observed-row evidence for sealed/global replacement owner-bucket checks."""
+    fields = {"sealed_fallback_owner_bucket": SEALED_FALLBACK_OWNER_SEALED_GATE}
+    fields.update(overrides)
+    return observed_global_replacement_row(**fields)
+
+
+def observed_visibility_replacement_row(**overrides: Any) -> dict[str, Any]:
+    """Return observed-row evidence for visibility replacement owner-bucket checks."""
+    fields = {
+        "final_emitted_source": "global_scene_fallback",
+        "visibility_fallback_owner_bucket": "sealed-gate",
+        "visibility_replacement_applied": True,
+        "visibility_fallback_pool": "global_scene_narrative",
+        "visibility_fallback_kind": "narrative_safe_fallback",
+    }
+    fields.update(overrides)
+    return observed_failure_row(**fields)
+
+
+def observed_sanitizer_row(**overrides: Any) -> dict[str, Any]:
+    """Return observed-row evidence for sanitizer-classified failure probes."""
+    fields = {
+        "sanitizer_mode": "strip_only",
+        "sanitizer_event_count": 2,
+        "sanitizer_changed_count": 1,
+        "sanitizer_rewrite_used": True,
+    }
+    fields.update(overrides)
+    return observed_failure_row(**fields)
+
+
+def observed_sanitizer_empty_fallback_row(**overrides: Any) -> dict[str, Any]:
+    """Return observed-row evidence for sanitizer empty-fallback ownership probes."""
+    fields = {
+        "sanitizer_mode": "strip_only",
+        "sanitizer_empty_fallback_used": True,
+        "sanitizer_empty_fallback_source": "upstream_prepared_emission.prepared_sanitizer_empty_fallback_text",
+        "sanitizer_empty_fallback_owner": "output_sanitizer",
+        "upstream_prepared_emission_used": False,
+        "upstream_prepared_emission_valid": False,
+    }
+    fields.update(overrides)
+    return observed_failure_row(**fields)
 
 
 def known_failure_categories() -> tuple[str, ...]:

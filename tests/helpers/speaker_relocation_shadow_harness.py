@@ -17,11 +17,12 @@ from __future__ import annotations
 
 import copy
 from dataclasses import dataclass, replace
-from typing import Any, Callable, Dict, Mapping, Optional
+from typing import Any, Callable, Dict, Iterator, Mapping, Optional
 
 import game.final_emission_gate as feg
 import game.speaker_contract_enforcement as sce
 
+from tests.helpers.final_emission_gate_fixtures import runner_strict_bundle
 from tests.helpers.speaker_gate_order import normalized_player_text_equal
 
 
@@ -163,6 +164,49 @@ def with_finalize_delta(eq: SpeakerShadowEquivalence, final_player_text: str) ->
     """Attach final gate output and recompute downstream reshaping delta."""
     downstream = not normalized_player_text_equal(eq.gate_post_speaker_text, final_player_text)
     return replace(eq, final_player_text=final_player_text, downstream_finalize_delta=downstream)
+
+
+@dataclass(frozen=True)
+class FinalizeStackFixture:
+    """Shared strict-social finalize-stack inputs used by Block S/T/U tests."""
+
+    session: dict[str, Any]
+    world: dict[str, Any]
+    scene_id: str
+    resolution: dict[str, Any]
+    line: str
+
+    def __iter__(self) -> Iterator[Any]:
+        """Preserve tuple-unpacking readability in existing tests."""
+        yield self.session
+        yield self.world
+        yield self.scene_id
+        yield self.resolution
+        yield self.line
+
+
+def build_finalize_stack_fixture(
+    monkeypatch: Any,
+    *,
+    contract: Mapping[str, Any],
+    strict_social_details: Mapping[str, Any] | Callable[[], Mapping[str, Any]],
+    line: str = 'Ragged stranger says, "No names, only rumors."',
+    configure_resolution: Callable[[dict[str, Any]], None] | None = None,
+) -> FinalizeStackFixture:
+    """Build the common strict-social finalize-stack fixture without owning assertions."""
+    session, world, scene_id, resolution = runner_strict_bundle()
+    if configure_resolution is not None:
+        configure_resolution(resolution)
+
+    monkeypatch.setattr(feg, "get_speaker_selection_contract", lambda *a, **kw: dict(contract))
+
+    def fake_build(candidate_text: str, *, resolution: dict[str, Any], tags: list[str], session: dict[str, Any], scene_id: str, world: dict[str, Any]):
+        del candidate_text, resolution, tags, session, scene_id, world
+        details = strict_social_details() if callable(strict_social_details) else strict_social_details
+        return line, dict(details)
+
+    monkeypatch.setattr(feg, "build_final_strict_social_response", fake_build)
+    return FinalizeStackFixture(session=session, world=world, scene_id=scene_id, resolution=resolution, line=line)
 
 
 @dataclass

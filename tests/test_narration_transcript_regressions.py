@@ -62,7 +62,7 @@ from game.storage import load_scene
 import game.social_exchange_emission as _sse
 from game.social_exchange_emission import build_final_strict_social_response
 
-from tests.test_turn_pipeline_shared import _patch_storage
+from tests.helpers.turn_pipeline_http_fixtures import _patch_storage
 from tests.test_fallback_behavior_gate import _fallback_contract, _answer_contract
 from tests.helpers.final_emission_gate_fixtures import response_type_contract
 

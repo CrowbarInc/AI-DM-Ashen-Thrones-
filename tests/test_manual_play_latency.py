@@ -16,7 +16,7 @@ from game.defaults import default_campaign, default_character, default_world
 from game.gm import build_messages
 from game.storage import get_scene_runtime
 from tests.debug_trace_utils import latest_compact_debug_trace_entry
-from tests.test_turn_pipeline_shared import _seed_shared_world
+from tests.helpers.turn_pipeline_http_fixtures import _seed_shared_world
 
 pytestmark = [pytest.mark.integration]
 

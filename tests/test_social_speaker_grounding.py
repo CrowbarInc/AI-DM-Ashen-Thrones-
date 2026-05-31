@@ -27,6 +27,7 @@ from game.social_exchange_emission import (
     reconcile_strict_social_resolution_speaker,
 )
 from game.storage import get_scene_runtime, load_scene
+from tests.helpers.emission_smoke_assertions import assert_social_grounding_smoke
 
 
 
@@ -34,14 +35,12 @@ pytestmark = pytest.mark.integration
 
 def _assert_runner_strict_social_grounding(social: dict) -> None:
     """Player-visible reply speaker must remain Tavern Runner with grounding metadata populated."""
-    assert social.get("npc_id") == "tavern_runner"
-    assert social.get("npc_name") == "Tavern Runner"
-    assert social.get("grounded_speaker_id") == "tavern_runner"
-    assert social.get("reply_speaker_grounding_neutral_bridge") is not True
-    assert social.get("authority_source_used")
-    assert social.get("grounding_reason_code")
-    assert social.get("proposed_reply_speaker_id") == "tavern_runner"
-    assert social.get("grounding_fallback_applied") is False
+    assert_social_grounding_smoke(
+        social,
+        expected_npc_id="tavern_runner",
+        expected_npc_name="Tavern Runner",
+        require_proposed_speaker=True,
+    )
 
 
 # ``apply_structured_social_answer_candidate_to_resolution`` only adjusts hints / answer-candidate flags;
@@ -310,12 +309,7 @@ def test_reconcile_emission_keeps_tavern_runner_when_stale_resolution_named_aldr
     }
     out = reconcile_strict_social_resolution_speaker(res, session, world, "frontier_gate")
     soc = out.get("social") or {}
-    assert soc.get("npc_id") == "tavern_runner"
-    assert soc.get("grounded_speaker_id") == "tavern_runner"
-    assert soc.get("grounding_reason_code")
-    assert soc.get("authority_source_used")
-    assert soc.get("grounding_fallback_applied") is False
-    assert soc.get("reply_speaker_grounding_neutral_bridge") is not True
+    assert_social_grounding_smoke(soc, expected_npc_id="tavern_runner")
 
 
 def test_apply_reply_grounding_sets_metadata_when_eligible(frontier_gate_scene_bundle):
@@ -339,10 +333,11 @@ def test_apply_reply_grounding_sets_metadata_when_eligible(frontier_gate_scene_b
     apply_social_reply_speaker_grounding(
         soc, session, world, "frontier_gate", scene, auth, proposed_reply_speaker_id="tavern_runner"
     )
-    assert soc.get("npc_id") == "tavern_runner"
-    assert soc.get("grounding_fallback_applied") is False
-    assert soc.get("grounded_speaker_id") == "tavern_runner"
-    assert soc.get("authority_source_used") == "continuity"
+    assert_social_grounding_smoke(
+        soc,
+        expected_npc_id="tavern_runner",
+        expected_authority_source="continuity",
+    )
 
 
 def test_retry_fallback_gm_regrounds_resolution_social(frontier_gate_scene_bundle):
@@ -373,11 +368,11 @@ def test_retry_fallback_gm_regrounds_resolution_social(frontier_gate_scene_bundl
         scene_id="frontier_gate",
     )
     assert isinstance(out, dict)
-    assert resolution["social"]["npc_id"] == "tavern_runner"
-    assert resolution["social"].get("grounding_reason_code")
-    assert resolution["social"].get("grounded_speaker_id") == "tavern_runner"
-    assert resolution["social"].get("authority_source_used")
-    assert resolution["social"].get("grounding_fallback_applied") is True
+    assert_social_grounding_smoke(
+        resolution["social"],
+        expected_npc_id="tavern_runner",
+        expected_fallback_applied=True,
+    )
 
 
 def test_build_final_strict_social_emits_neutral_bridge_when_grounding_denied(frontier_gate_scene_bundle):
@@ -499,10 +494,11 @@ def test_transcript_runner_asks_about_aldric_followup_stays_runner(frontier_gate
     }
     out = reconcile_strict_social_resolution_speaker(stale, session, world, sid)
     socf = out.get("social") or {}
-    assert socf.get("npc_id") == "tavern_runner"
-    assert socf.get("grounded_speaker_id") == "tavern_runner"
-    assert socf.get("authority_source_used") == "continuity"
-    assert socf.get("grounding_fallback_applied") is False
+    assert_social_grounding_smoke(
+        socf,
+        expected_npc_id="tavern_runner",
+        expected_authority_source="continuity",
+    )
 
 
 def test_transcript_where_is_aldric_repeated_followups_stay_runner(frontier_gate_scene_bundle):

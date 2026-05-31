@@ -12,7 +12,7 @@ from game import storage
 from game.api import app
 from game.output_sanitizer import resembles_serialized_response_payload
 from tests.debug_trace_utils import latest_compact_debug_trace_entry
-from tests.test_turn_pipeline_shared import FAKE_GPT_RESPONSE, _seed_shared_world
+from tests.helpers.turn_pipeline_http_fixtures import FAKE_GPT_RESPONSE, _seed_shared_world
 
 pytestmark = pytest.mark.integration
 

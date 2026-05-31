@@ -14,7 +14,7 @@ import game.storage as st
 from game.api import app
 from game.defaults import default_scene
 from game.storage import append_log, load_log
-from tests.test_turn_pipeline_shared import FAKE_GPT_RESPONSE
+from tests.helpers.turn_pipeline_http_fixtures import FAKE_GPT_RESPONSE
 
 pytestmark = pytest.mark.integration
 

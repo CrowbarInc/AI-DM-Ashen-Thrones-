@@ -44,7 +44,7 @@ from tests.helpers.golden_replay import (
     load_frontier_gate_long_session_spine,
     protected_no_scaffold_expectation,
     protected_route_expectation,
-    protected_source_expectation,
+    protected_social_structural_base,
     protected_structural_expectation,
     protected_unavailable_expectation,
     render_golden_replay_markdown_report,
@@ -58,6 +58,7 @@ from tests.helpers.golden_replay_projection import (
     protected_field_paths,
     protected_observation_drift_bucket,
     protected_observation_field_paths,
+    protected_observation_field_registry,
 )
 from tests.helpers.transcript_runner import (
     new_clean_campaign,
@@ -78,7 +79,11 @@ from tests.helpers.failure_dashboard_report import (
     write_rerun_drift_scorecard_artifacts_if_requested,
     write_protected_replay_failure_report_if_present,
 )
-from tests.helpers.opening_fallback_evidence import fail_closed_opening_fem_meta, successful_opening_fem_meta
+from tests.helpers.opening_fallback_evidence import (
+    fail_closed_opening_fem_meta,
+    successful_opening_fem_meta,
+    successful_opening_observed_fields,
+)
 from tests.helpers.dialogue_social_plan import (
     attach_dialogue_social_plan_to_resolution,
     make_valid_dialogue_social_plan,
@@ -227,7 +232,7 @@ def test_observed_turn_from_gate_output_projects_direct_seam_fields() -> None:
     assert stored["realization_fallback_family"] == "upstream_prepared_emission"
 
 
-def test_protected_replay_manifest_generated_section_matches_projection_field_paths():
+def test_protected_replay_manifest_matches_observation_registry():
     import importlib.util
     from pathlib import Path
 
@@ -245,13 +250,16 @@ def test_protected_replay_manifest_generated_section_matches_projection_field_pa
     current = refresh_mod.extract_generated_section(manifest_text)
 
     assert current is not None, "protected replay manifest is missing generated protected_field_paths section"
-    assert current == expected
+    assert current == expected, (
+        "protected replay manifest generated section is out of date; "
+        "run: python tools/refresh_protected_replay_manifest.py --write"
+    )
     assert refresh_mod.manifest_section_is_current(manifest_text)
 
-    paths = protected_field_paths()
+    paths = tuple(sorted({field.path for field in protected_observation_field_registry()}))
     assert str(len(paths)) in current
-    for path in paths:
-        assert f"| `{path}` |" in current
+    for field in protected_observation_field_registry():
+        assert f"| `{field.path}` | `{field.drift_bucket}` |" in current
 
 
 def test_golden_expectation_helper_supports_dotted_paths_and_debug_messages():
@@ -1543,21 +1551,13 @@ def test_golden_replay_directed_npc_question_structural_invariants(tmp_path, mon
     assert captured_prompts
     assert result["turn_count"] == 1
     turn = result["turns"][0]
-    directed_npc_question_expectation = protected_structural_expectation(
-        require_present=(
-            "final_text",
-            "resolution_kind",
-            "route_kind",
-            "selected_speaker_id",
-            "final_emitted_source",
-            "trace.canonical_entry.target_actor_id",
-            "trace.social_contract_trace.route_selected",
-        ),
-        allow_unavailable=("fallback_family",),
-        equals={
-            "selected_speaker_id": "runner",
-            "trace.canonical_entry.target_actor_id": "runner",
-        },
+    directed_npc_question_expectation = protected_social_structural_base(
+        selected_speaker_id="runner",
+        canonical_target_id="runner",
+        require_resolution_kind=True,
+        require_final_emitted_source=True,
+        require_trace_target=True,
+        require_trace_route=True,
         include_resolution_kind=True,
         include_trace_route=True,
         disallow_global_scene_fallback=True,
@@ -1599,9 +1599,11 @@ def test_golden_replay_vocative_override_after_prior_continuity_structural_invar
     debug_context = format_golden_replay_debug(result)
     assert_protected_golden_turn_observation(
         turn,
-        {
-            "require_present": ["final_text", "selected_speaker_id"],
-            **protected_unavailable_expectation(
+        protected_social_structural_base(
+            selected_speaker_id="guard",
+            require_route_kind=False,
+            require_final_emitted_source=False,
+            allow_unavailable=(
                 "fallback_family",
                 "final_emitted_source",
                 "route_kind",
@@ -1609,9 +1611,8 @@ def test_golden_replay_vocative_override_after_prior_continuity_structural_invar
                 "trace.turn_trace",
                 "trace.social_contract_trace",
             ),
-            "equals": {"selected_speaker_id": "guard"},
-            **protected_no_scaffold_expectation(),
-        },
+            include_route_kind=False,
+        ),
         scenario_id="vocative_override_after_prior_continuity",
         debug_context=debug_context,
     )
@@ -1677,10 +1678,11 @@ def test_golden_replay_wrong_speaker_strict_social_emission_structural_invariant
     debug_context = format_golden_replay_debug(result)
     assert_protected_golden_turn_observation(
         turn,
-        protected_structural_expectation(
-            require_present=("final_text", "selected_speaker_id"),
+        protected_social_structural_base(
+            selected_speaker_id="runner",
             allow_unavailable=("fallback_family", "final_emitted_source"),
-            equals={"selected_speaker_id": "runner"},
+            require_route_kind=False,
+            require_final_emitted_source=False,
             include_route_kind=False,
             extra_no_scaffold_terms=("Merchant",),
         ),
@@ -1751,22 +1753,18 @@ def test_golden_direct_seam_declared_alias_dialogue_plan_structural_invariants(m
 
     assert_protected_golden_turn_observation(
         turn,
-        {
-            "require_present": [
-                "final_text",
-                "selected_speaker_id",
-                "trace.canonical_entry.declared_alias_target_actor_id",
-            ],
-            **protected_unavailable_expectation("fallback_family"),
-            "equals": {
-                "selected_speaker_id": "runner",
-                "trace.canonical_entry.target_actor_id": "runner",
+        protected_social_structural_base(
+            selected_speaker_id="runner",
+            canonical_target_id="runner",
+            require_present=("trace.canonical_entry.declared_alias_target_actor_id",),
+            require_route_kind=False,
+            equals={
                 "trace.canonical_entry.declared_alias_target_actor_id": "runner",
                 "trace.canonical_entry.speaker_alias_resolution_source": "manual_bundle_override",
                 "dialogue_plan_valid": True,
             },
-            **protected_no_scaffold_expectation(),
-        },
+            include_route_kind=False,
+        ),
         scenario_id="declared_alias_dialogue_plan",
         debug_context=f"meta={meta!r}; final_text={final_text!r}",
     )
@@ -1900,17 +1898,11 @@ def test_golden_direct_seam_canonical_opening_fallback_path_has_no_compatibility
         turn,
         {
             "require_present": ["final_text", "final_emitted_source", "fallback_family", "opening_fallback_owner_bucket"],
-            "equals": {
-                "final_emitted_source": "opening_deterministic_fallback",
-                "response_type_required": "scene_opening",
-                "response_type_repair_used": True,
-                "response_type_repair_kind": "opening_deterministic_fallback",
-                "opening_recovered_via_fallback": True,
-                "opening_fallback_authorship_source": "upstream_prepared_opening_fallback",
-                "opening_fallback_owner_bucket": OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
-                "fallback_family": "scene_opening",
-                "fallback_temporal_frame": "first_impression",
-            },
+            "equals": successful_opening_observed_fields(
+                include_owner_bucket=True,
+                response_type_required="scene_opening",
+                response_type_repair_used=True,
+            ),
             "not_equals": {
                 "opening_fallback_authorship_source": OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL,
             },
@@ -1976,10 +1968,9 @@ def test_golden_replay_lead_followup_with_dialogue_lock_structural_invariants(tm
     debug_context = format_golden_replay_debug(result)
     assert_protected_golden_turn_observation(
         turn,
-        protected_structural_expectation(
-            require_present=("final_text", "selected_speaker_id", "final_emitted_source"),
-            allow_unavailable=("fallback_family",),
-            equals={"selected_speaker_id": "tavern_runner"},
+        protected_social_structural_base(
+            selected_speaker_id="tavern_runner",
+            require_final_emitted_source=True,
             include_trace_route=True,
         ),
         scenario_id="lead_followup_with_dialogue_lock",

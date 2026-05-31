@@ -20,7 +20,7 @@ from game.api import (
 )
 from game.defaults import default_scene, default_world
 from game.storage import load_log, load_session
-from tests.test_turn_pipeline_shared import FAKE_GPT_RESPONSE as TURN_FAKE_GPT
+from tests.helpers.turn_pipeline_http_fixtures import FAKE_GPT_RESPONSE as TURN_FAKE_GPT
 
 pytestmark = pytest.mark.integration
 

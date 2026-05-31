@@ -87,6 +87,9 @@ jobs:
       - name: Pytest — test ownership registry
         run: python -m pytest tests/test_ownership_registry.py -q
 
+      - name: Protected replay manifest registry parity
+        run: python tools/refresh_protected_replay_manifest.py --check
+
       - name: Validation layer audit (strict)
         run: python tools/validation_layer_audit.py --strict
 

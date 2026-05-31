@@ -19,6 +19,7 @@ import pytest
 from game.final_emission_gate import apply_final_emission_gate
 from game.final_emission_meta import read_final_emission_meta_dict
 from game.interaction_continuity import repair_interaction_continuity, validate_interaction_continuity
+from tests.helpers.emission_smoke_assertions import assert_continuity_validation_failed_without_repair
 
 pytestmark = pytest.mark.unit
 
@@ -87,10 +88,7 @@ def test_emitted_output_exhibits_continuity_repaired_structure_strong_short_narr
         world={},
     )
     em = out["metadata"]["emission_debug"]
-    icv = em.get("interaction_continuity_validation") or {}
-    assert icv.get("ok") is False
-    rep = em.get("interaction_continuity_repair") or {}
-    assert rep.get("applied") is not True
+    assert_continuity_validation_failed_without_repair(em)
     assert out.get("player_facing_text") == "You can't go there."
 
 
@@ -116,11 +114,7 @@ def test_emitted_output_preserves_continuity_constraints_under_strong_complex_na
         world={},
     )
     em = out["metadata"]["emission_debug"]
-    assert em.get("interaction_continuity_repair") is None or em.get("interaction_continuity_repair", {}).get(
-        "applied"
-    ) is not True
-    icv = em.get("interaction_continuity_validation") or {}
-    assert icv.get("ok") is False
+    assert_continuity_validation_failed_without_repair(em)
     assert (read_final_emission_meta_dict(out) or {}).get("final_route") != "replaced"
 
 
@@ -172,9 +166,6 @@ def test_emitted_output_surfaces_stripped_interruption_repair_metadata():
         world={},
     )
     em = out["metadata"]["emission_debug"]
-    icv = em.get("interaction_continuity_validation") or {}
-    assert icv.get("ok") is False
-    rep = em.get("interaction_continuity_repair") or {}
-    assert rep.get("applied") is not True
+    assert_continuity_validation_failed_without_repair(em)
     assert "final_route" in (read_final_emission_meta_dict(out) or {})
     assert "final_emission_gate_replaced" in out.get("tags", [])

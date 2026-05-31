@@ -23,6 +23,8 @@ python -m pytest tests/test_golden_replay.py -q
 
 `tests/test_golden_replay.py` currently contains protected and supporting tests in one pytest module. This manifest classifies their acceptance ownership; it does not alter today's test execution behavior.
 
+Inventory-only regeneration is a maintenance workflow, not logic ownership. Run `python tools/test_audit.py` only when refreshing `tests/test_inventory.json` and keep that generated JSON output separate from behavior, replay, or protected-observation changes.
+
 ## Metadata Ownership
 
 Golden replay owns `scenario_id` as the replay acceptance identifier. Scenario-spine fixtures own `spine_id`, `branch_id`, and per-turn `turn_id`; when a golden replay is scenario-spine-backed, those fixture identifiers remain source metadata rather than replacing the golden `scenario_id`. The N1 longitudinal lane uses `scenario_spine_id` and remains a separate synthetic/advisory lane, not a silent extension of protected golden replay.
@@ -60,7 +62,7 @@ They are **not** protected golden replay observation fields and do not rewrite r
 ## Protected Observation Field Paths (Generated)
 
 Bounded registry of golden replay observation paths locked by protected replay.
-Source: `tests/helpers/golden_replay_projection.py::protected_field_paths()`.
+Source: `tests/helpers/golden_replay_projection.py::protected_observation_field_registry()`.
 
 Refresh this section:
 

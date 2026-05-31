@@ -146,6 +146,60 @@ def protected_structural_expectation(
     return out
 
 
+def protected_social_structural_base(
+    *,
+    selected_speaker_id: str,
+    canonical_target_id: str | None = None,
+    require_present: tuple[str, ...] | list[str] = (),
+    allow_unavailable: tuple[str, ...] | list[str] = ("fallback_family",),
+    equals: Mapping[str, Any] | None = None,
+    one_of: Mapping[str, Any] | None = None,
+    not_equals: Mapping[str, Any] | None = None,
+    require_resolution_kind: bool = False,
+    require_route_kind: bool = False,
+    require_final_emitted_source: bool = False,
+    require_trace_target: bool = False,
+    require_trace_route: bool = False,
+    include_resolution_kind: bool = False,
+    include_route_kind: bool = True,
+    include_trace_route: bool = False,
+    disallow_global_scene_fallback: bool = False,
+    extra_no_scaffold_terms: tuple[str, ...] = (),
+) -> dict[str, Any]:
+    """Compose common protected social/dialogue structural expectation fragments."""
+    required = ["final_text"]
+    if require_resolution_kind:
+        required.append("resolution_kind")
+    if require_route_kind:
+        required.append("route_kind")
+    required.extend(["selected_speaker_id", *list(require_present)])
+    if require_final_emitted_source:
+        required.append("final_emitted_source")
+    if require_trace_target:
+        required.append("trace.canonical_entry.target_actor_id")
+    if require_trace_route:
+        required.append("trace.social_contract_trace.route_selected")
+
+    expected_equals: dict[str, Any] = {"selected_speaker_id": selected_speaker_id}
+    if canonical_target_id is not None:
+        expected_equals["trace.canonical_entry.target_actor_id"] = canonical_target_id
+    if equals:
+        expected_equals.update(equals)
+
+    return protected_structural_expectation(
+        require_present=tuple(required),
+        allow_unavailable=allow_unavailable,
+        equals=expected_equals,
+        one_of=one_of,
+        not_equals=not_equals,
+        include_resolution_kind=include_resolution_kind,
+        include_route_kind=include_route_kind,
+        include_trace_route=include_trace_route,
+        disallow_global_scene_fallback=disallow_global_scene_fallback,
+        extra_no_scaffold_terms=extra_no_scaffold_terms,
+    )
+
+
 def load_frontier_gate_long_session_spine() -> dict[str, Any]:
     """Load the authoritative Frontier Gate long-session replay fixture."""
     return json.loads(FRONTIER_GATE_LONG_SESSION_PATH.read_text(encoding="utf-8"))

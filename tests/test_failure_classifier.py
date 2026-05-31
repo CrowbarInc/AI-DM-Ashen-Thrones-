@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from typing import Any
-
 import pytest
 
 from game.final_emission_meta import (
@@ -20,6 +18,16 @@ from tests.helpers.failure_classification_sync import (
     failure_dashboard_row_shape_errors,
     known_failure_categories,
     known_owner_buckets,
+    observed_fail_closed_opening_fallback_row,
+    observed_failure_row as _observed,
+    observed_global_replacement_row,
+    observed_legacy_opening_fallback_row,
+    observed_opening_fallback_row,
+    observed_sanitizer_empty_fallback_row,
+    observed_sanitizer_row,
+    observed_sealed_replacement_row,
+    observed_social_fallback_row,
+    observed_visibility_replacement_row,
     protected_observation_registry_summary,
 )
 from tests.helpers.failure_dashboard_report import (
@@ -29,11 +37,6 @@ from tests.helpers.failure_dashboard_report import (
     render_failure_dashboard_markdown,
     write_failure_dashboard_artifact_if_requested,
 )
-from tests.helpers.opening_fallback_evidence import (
-    fail_closed_opening_observed_fields,
-    successful_opening_observed_fields,
-)
-
 # Ownership note:
 # This suite owns classifier locality: category, owners, severity,
 # investigate_first, and evidence projection. Projection-field duplication is
@@ -74,46 +77,6 @@ def test_classifier_consumer_reads_taxonomy_from_sync_helpers():
     assert "category" in row_fields["required"]
     assert "fallback_family" in row_fields["optional_evidence"]
 
-
-def _observed(**overrides: Any) -> dict[str, Any]:
-    base = {
-        "scenario_id": "probe",
-        "turn_index": 0,
-        "final_text": "The runner answers.",
-        "final_text_hash": "hash123",
-        "route_kind": "dialogue",
-        "selected_speaker_id": "runner",
-        "final_emitted_source": "generated_candidate",
-        "fallback_family": None,
-        "fallback_temporal_frame": None,
-        "opening_fallback_owner_bucket": None,
-        "sealed_fallback_owner_bucket": None,
-        "visibility_fallback_owner_bucket": None,
-        "visibility_replacement_applied": None,
-        "visibility_fallback_pool": None,
-        "visibility_fallback_kind": None,
-        "response_type_required": "dialogue_response",
-        "response_type_repair_used": False,
-        "response_type_repair_kind": None,
-        "post_gate_mutation_detected": False,
-        "strict_social_active": False,
-        "speaker_contract_enforcement_reason": None,
-        "fallback_behavior_repaired": False,
-        "fallback_behavior_repair_kind": None,
-        "sanitizer_mode": None,
-        "sanitizer_event_count": None,
-        "sanitizer_changed_count": None,
-        "sanitizer_rewrite_used": None,
-        "unavailable": [],
-        "trace": {
-            "canonical_entry": {"target_actor_id": "runner"},
-            "social_contract_trace": {"route_selected": "dialogue"},
-        },
-    }
-    base.update(overrides)
-    return base
-
-
 @pytest.mark.parametrize(
     ("case", "observed", "drift_row", "expected"),
     [
@@ -131,7 +94,7 @@ def _observed(**overrides: Any) -> dict[str, Any]:
         ),
         (
             "fallback substitution",
-            _observed(final_emitted_source="global_scene_fallback", fallback_family="gate_terminal_repair"),
+            observed_global_replacement_row(),
             {
                 "field_path": "final_emitted_source",
                 "expected": "anything except 'global_scene_fallback'",
@@ -258,7 +221,7 @@ def test_failure_classifier_routes_canonical_failure_cases(case, observed, drift
 
 
 def test_failure_dashboard_report_includes_required_replay_columns():
-    observed = _observed(final_emitted_source="global_scene_fallback", fallback_family="gate_terminal_repair")
+    observed = observed_global_replacement_row()
     drift_rows = [
         {
             "field_path": "final_emitted_source",
@@ -356,7 +319,7 @@ def test_failure_dashboard_markdown_raises_on_invalid_row_shape():
 
 
 def test_failure_dashboard_renders_optional_runtime_lineage_summary_without_changing_rows():
-    observed = _observed(final_emitted_source="global_scene_fallback", fallback_family="gate_terminal_repair")
+    observed = observed_global_replacement_row()
     rows = build_failure_dashboard_rows(
         observed_turn=observed,
         drift_rows=[
@@ -449,23 +412,17 @@ def test_failure_dashboard_renders_optional_runtime_lineage_summary_without_chan
     [
         (
             "canonical_upstream_prepared",
-            _observed(**successful_opening_observed_fields()),
+            observed_opening_fallback_row(),
             OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
         ),
         (
             "fail_closed_sealed_gate",
-            _observed(**fail_closed_opening_observed_fields()),
+            observed_fail_closed_opening_fallback_row(),
             OPENING_FALLBACK_OWNER_SEALED_GATE,
         ),
         (
             "legacy_compatibility_local_unknown_ambiguous",
-            _observed(
-                final_emitted_source="opening_deterministic_fallback",
-                response_type_repair_kind="opening_deterministic_fallback",
-                opening_recovered_via_fallback=True,
-                opening_fallback_authorship_source="compatibility_local_opening_deterministic",
-                fallback_family="scene_opening",
-            ),
+            observed_legacy_opening_fallback_row(),
             OPENING_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS,
         ),
     ],
@@ -497,11 +454,7 @@ def test_failure_classifier_preserves_projected_opening_owner_bucket_evidence():
     row = classify_replay_failure(
         scenario_id="projected_owner_scenario",
         turn_index=0,
-        observed_turn=_observed(
-            opening_recovered_via_fallback=True,
-            opening_fallback_owner_bucket=OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
-            fallback_family="scene_opening",
-        ),
+        observed_turn=observed_opening_fallback_row(owner_bucket=True),
         drift_rows=[
             {
                 "field_path": "opening_fallback_owner_bucket",
@@ -522,11 +475,7 @@ def test_failure_classifier_routes_opening_authorship_payload_symptom_to_upstrea
     row = classify_replay_failure(
         scenario_id="opening_authorship_payload",
         turn_index=0,
-        observed_turn=_observed(
-            opening_recovered_via_fallback=True,
-            opening_fallback_authorship_source="compatibility_local_opening_deterministic",
-            fallback_family="scene_opening",
-        ),
+        observed_turn=observed_legacy_opening_fallback_row(),
         drift_rows=[
             {
                 "field_path": "opening_fallback_authorship_source",
@@ -547,7 +496,7 @@ def test_failure_classifier_routes_opening_basis_symptom_to_deterministic_compos
     row = classify_replay_failure(
         scenario_id="opening_basis_divergence",
         turn_index=0,
-        observed_turn=_observed(opening_recovered_via_fallback=True, fallback_family="scene_opening"),
+        observed_turn=observed_opening_fallback_row(),
         drift_rows=[
             {
                 "field_path": "opening_final_fallback_basis",
@@ -589,11 +538,7 @@ def test_failure_classifier_keeps_opening_gate_selection_symptom_gate_routed():
     row = classify_replay_failure(
         scenario_id="opening_gate_selection",
         turn_index=0,
-        observed_turn=_observed(
-            final_emitted_source="opening_deterministic_fallback",
-            opening_recovered_via_fallback=True,
-            fallback_family="scene_opening",
-        ),
+        observed_turn=observed_opening_fallback_row(),
         drift_rows=[
             {
                 "field_path": "final_emitted_source",
@@ -613,7 +558,7 @@ def test_failure_classification_contract_rejects_invalid_opening_owner_bucket():
     row = classify_replay_failure(
         scenario_id="invalid_owner_scenario",
         turn_index=0,
-        observed_turn=_observed(opening_recovered_via_fallback=True, opening_fallback_owner_bucket="not-a-bucket"),
+        observed_turn=observed_opening_fallback_row(opening_fallback_owner_bucket="not-a-bucket"),
         drift_rows=[
             {
                 "field_path": "opening_fallback_owner_bucket",
@@ -635,11 +580,7 @@ def test_failure_classifier_preserves_projected_sealed_owner_bucket_evidence():
     row = classify_replay_failure(
         scenario_id="projected_sealed_owner_scenario",
         turn_index=0,
-        observed_turn=_observed(
-            final_emitted_source="global_scene_fallback",
-            fallback_family="gate_terminal_repair",
-            sealed_fallback_owner_bucket=SEALED_FALLBACK_OWNER_SEALED_GATE,
-        ),
+        observed_turn=observed_sealed_replacement_row(),
         drift_rows=[
             {
                 "field_path": "sealed_fallback_owner_bucket",
@@ -659,13 +600,7 @@ def test_failure_classifier_preserves_projected_visibility_fallback_evidence():
     row = classify_replay_failure(
         scenario_id="projected_visibility_owner_scenario",
         turn_index=0,
-        observed_turn=_observed(
-            final_emitted_source="global_scene_fallback",
-            visibility_fallback_owner_bucket="sealed-gate",
-            visibility_replacement_applied=True,
-            visibility_fallback_pool="global_scene_narrative",
-            visibility_fallback_kind="narrative_safe_fallback",
-        ),
+        observed_turn=observed_visibility_replacement_row(),
         drift_rows=[
             {
                 "field_path": "visibility_fallback_owner_bucket",
@@ -688,10 +623,7 @@ def test_failure_classification_contract_rejects_invalid_visibility_owner_bucket
     row = classify_replay_failure(
         scenario_id="invalid_visibility_owner_scenario",
         turn_index=0,
-        observed_turn=_observed(
-            visibility_fallback_owner_bucket="not-a-bucket",
-            visibility_replacement_applied=True,
-        ),
+        observed_turn=observed_visibility_replacement_row(visibility_fallback_owner_bucket="not-a-bucket"),
         drift_rows=[
             {
                 "field_path": "visibility_fallback_owner_bucket",
@@ -835,13 +767,13 @@ def test_failure_dashboard_artifact_generation_is_opt_in(tmp_path):
         ),
         (
             "strict-social replacement sublayer",
-            _observed(strict_social_active=True, final_emitted_source="strict_social_visibility_minimal"),
+            observed_social_fallback_row(),
             {"field_path": "final_emitted_source", "expected": "generated_candidate", "actual": "strict_social_visibility_minimal", "reason": "exact value mismatch", "drift_bucket": "structural_drift"},
             ("fallback", "fallback", "emission", "high", "game/final_emission_gate.py", "strict_social_replacement", None, None),
         ),
         (
             "opening fallback sublayer",
-            _observed(opening_recovered_via_fallback=True, opening_fallback_authorship_source="upstream_prepared_opening_fallback", fallback_family="scene_opening"),
+            observed_opening_fallback_row(response_type_repair_kind=None),
             {"field_path": "opening_recovered_via_fallback", "expected": False, "actual": True, "reason": "exact value mismatch", "drift_bucket": "structural_drift"},
             ("fallback", "fallback", "emission", "high", "game/final_emission_gate.py", "opening_fallback", None, None),
         ),
@@ -853,7 +785,7 @@ def test_failure_dashboard_artifact_generation_is_opt_in(tmp_path):
         ),
         (
             "sanitizer leakage metadata present",
-            _observed(sanitizer_mode="strip_only", sanitizer_event_count=2, sanitizer_changed_count=1, sanitizer_rewrite_used=True),
+            observed_sanitizer_row(),
             {"field_path": "scaffold_leakage", "expected": False, "actual": True, "reason": "scaffold leakage mismatch", "drift_bucket": "semantic_drift"},
             ("sanitizer", "sanitizer", "emission", "critical", "game/output_sanitizer.py", "sanitizer", None, None),
         ),
@@ -1095,13 +1027,7 @@ def test_failure_classifier_sanitizer_empty_fallback_is_sanitizer_owned_not_prep
     row = classify_replay_failure(
         scenario_id="sanitizer_empty_split",
         turn_index=0,
-        observed_turn=_observed(
-            sanitizer_mode="strip_only",
-            sanitizer_empty_fallback_used=True,
-            sanitizer_empty_fallback_source="upstream_prepared_emission.prepared_sanitizer_empty_fallback_text",
-            sanitizer_empty_fallback_owner="output_sanitizer",
-            upstream_prepared_emission_used=False,
-            upstream_prepared_emission_valid=False,
+        observed_turn=observed_sanitizer_empty_fallback_row(
             upstream_prepared_emission_source=None,
             upstream_prepared_emission_reject_reason=None,
         ),
@@ -1151,14 +1077,7 @@ def test_failure_classifier_keeps_dialogue_repairs_separate_from_prepared_emissi
 
 def test_failure_dashboard_evidence_renders_sanitizer_empty_fallback_distinctly():
     rows = build_failure_dashboard_rows(
-        observed_turn=_observed(
-            sanitizer_mode="strip_only",
-            sanitizer_empty_fallback_used=True,
-            sanitizer_empty_fallback_source="upstream_prepared_emission.prepared_sanitizer_empty_fallback_text",
-            sanitizer_empty_fallback_owner="output_sanitizer",
-            upstream_prepared_emission_used=False,
-            upstream_prepared_emission_valid=False,
-        ),
+        observed_turn=observed_sanitizer_empty_fallback_row(),
         drift_rows=[
             {
                 "field_path": "sanitizer_empty_fallback_used",
@@ -1375,9 +1294,8 @@ def test_failure_classifier_strict_social_sanitizer_fallback_keeps_selection_and
 
 def test_failure_classifier_accepts_opening_runtime_lineage_split_owners():
     rows = build_failure_dashboard_rows(
-        observed_turn=_observed(
-            final_emitted_source="opening_deterministic_fallback",
-            opening_fallback_owner_bucket=OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
+        observed_turn=observed_opening_fallback_row(
+            owner_bucket=True,
             runtime_lineage_events=[
                 make_runtime_lineage_event(
                     event_kind="fallback_selected",
@@ -1413,8 +1331,7 @@ def test_failure_classifier_accepts_opening_runtime_lineage_split_owners():
 
 def test_failure_classifier_accepts_gate_selected_strict_social_runtime_lineage_split_owners():
     rows = build_failure_dashboard_rows(
-        observed_turn=_observed(
-            strict_social_active=True,
+        observed_turn=observed_social_fallback_row(
             final_emitted_source="minimal_social_emergency_fallback",
             runtime_lineage_events=[
                 make_runtime_lineage_event(

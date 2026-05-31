@@ -680,6 +680,28 @@ def test_final_emission_meta_projection_read_side_ownership_boundaries() -> None
     assert "gate orchestration" not in title
 
 
+def test_final_emission_gate_does_not_accumulate_read_side_projection_assertions() -> None:
+    """AG-10: gate owner must not re-own FEM replay/read-side projection contracts."""
+    gate_source = (_REPO_ROOT / "tests" / "test_final_emission_gate.py").read_text(encoding="utf-8")
+    forbidden_fragments = (
+        "game.final_emission_replay_projection",
+        "read_side_lineage_projection_surface",
+        "project_sealed_replacement_subkind_from_fem",
+        "SEALED_REPLACEMENT_SUBKIND",
+        "SEALED_REPLACEMENT_SUBKINDS",
+        "build_fem_runtime_lineage_events",
+        "final_emission_meta_read_side_surface",
+        "fem_runtime_lineage_events",
+    )
+
+    found = [fragment for fragment in forbidden_fragments if fragment in gate_source]
+    assert not found, (
+        "tests/test_final_emission_gate.py owns gate orchestration/wrappers, not read-side "
+        "replay projection assertions. Move these contracts to tests/test_final_emission_meta.py: "
+        + ", ".join(found)
+    )
+
+
 def test_ad3_gate_orchestration_direct_owner_is_final_emission_gate() -> None:
     """Cycle AD-3: gate orchestration normative owner stays on the gate module."""
     rec = RESPONSIBILITY_REGISTRY["final_emission_gate_orchestration"]

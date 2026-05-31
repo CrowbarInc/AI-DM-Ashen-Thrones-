@@ -11,6 +11,7 @@ from game.interaction_context import (
     resolve_directed_social_entry,
 )
 from game.storage import load_scene
+from tests.helpers.emission_smoke_assertions import assert_open_social_solicitation_route
 
 import pytest
 
@@ -46,11 +47,7 @@ def test_who_wants_routes_open_social_with_broadcast_flag():
         segmented_turn=None,
         raw_text='Galinor bellows: "WHO WANTS TO SPEAK WITH CINDERWATCH\'S NEWEST HERO?!?"',
     )
-    assert ent.get("should_route_social") is True
-    assert ent.get("reason") == "open_social_solicitation"
-    assert ent.get("open_social_solicitation") is True
-    assert ent.get("broadcast_social_open_call") is True
-    assert ent.get("broad_address_phrase_matched") == "who_wants"
+    assert_open_social_solicitation_route(ent, phrase="who_wants")
 
 
 def test_broadcast_detector_rejects_local_observation():

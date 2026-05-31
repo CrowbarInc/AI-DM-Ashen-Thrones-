@@ -6,7 +6,7 @@ from fastapi.testclient import TestClient
 
 from game.api import app
 from game.playability_eval import evaluate_playability
-from tests.test_turn_pipeline_shared import _gm_response, _seed_runner_dialogue_context
+from tests.helpers.turn_pipeline_http_fixtures import _gm_response, _seed_runner_dialogue_context
 
 pytestmark = pytest.mark.integration
 

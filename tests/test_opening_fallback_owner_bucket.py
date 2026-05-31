@@ -25,7 +25,10 @@ from game.final_emission_meta import (
     opening_fallback_owner_bucket_from_fields,
 )
 from tests.helpers.final_emission_gate_fixtures import assert_fallback_owner_bucket
-from tests.helpers.opening_fallback_evidence import OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL
+from tests.helpers.opening_fallback_evidence import (
+    OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL,
+    successful_opening_observed_fields,
+)
 from game.upstream_response_repairs import OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED
 
 pytestmark = pytest.mark.unit
@@ -46,12 +49,7 @@ def test_owner_bucket_constants_are_the_allowed_values() -> None:
 def test_canonical_upstream_prepared_authorship_source_maps_to_upstream_prepared() -> None:
     assert_fallback_owner_bucket(
         OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
-        meta={
-            "opening_recovered_via_fallback": True,
-            "opening_fallback_authorship_source": OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED,
-            "final_emitted_source": "opening_deterministic_fallback",
-            "response_type_repair_kind": "opening_deterministic_fallback",
-        },
+        meta=successful_opening_observed_fields(),
     )
 
 
@@ -69,11 +67,9 @@ def test_legacy_compatibility_local_authorship_source_maps_to_unknown_ambiguous(
     """Legacy compatibility-local opening authorship is observed, not canonicalized."""
     assert_fallback_owner_bucket(
         OPENING_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS,
-        meta={
-            "opening_recovered_via_fallback": True,
-            "opening_fallback_authorship_source": OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL,
-            "final_emitted_source": "opening_deterministic_fallback",
-        },
+        meta=successful_opening_observed_fields(
+            opening_fallback_authorship_source=OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL,
+        ),
     )
     assert OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL != OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED
 

@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Refresh or verify the generated protected-field-paths section in the replay manifest.
 
-Report-only governance helper: reads ``protected_field_paths()`` from golden replay
-projection and keeps ``docs/testing/protected_replay_manifest.md`` aligned.
+Report-only governance helper: reads the canonical protected observation registry
+from golden replay projection and keeps ``docs/testing/protected_replay_manifest.md``
+aligned.
 """
 
 from __future__ import annotations
@@ -15,11 +16,7 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from tests.helpers.golden_replay_projection import (  # noqa: E402
-    SEMANTIC_DRIFT_FIELDS,
-    STRUCTURAL_DRIFT_FIELDS,
-    protected_field_paths,
-)
+from tests.helpers.golden_replay_projection import protected_observation_field_registry  # noqa: E402
 
 MANIFEST_PATH = ROOT / "docs" / "testing" / "protected_replay_manifest.md"
 BEGIN_MARKER = "<!-- BEGIN GENERATED: protected_field_paths -->"
@@ -27,22 +24,32 @@ END_MARKER = "<!-- END GENERATED: protected_field_paths -->"
 INSERT_BEFORE_HEADING = "## Cycle S Drift Policy Addendum"
 
 
-def _drift_bucket(path: str) -> str:
-    if path in SEMANTIC_DRIFT_FIELDS:
-        return "semantic_drift"
-    return "structural_drift"
+def _registry_fields_by_path() -> dict[str, str]:
+    """Return registry path -> drift bucket, preserving the registry as sole authority."""
+    buckets_by_path: dict[str, str] = {}
+    for field in protected_observation_field_registry():
+        previous = buckets_by_path.setdefault(field.path, field.drift_bucket)
+        if previous != field.drift_bucket:
+            raise ValueError(
+                f"Protected observation field {field.path!r} has conflicting drift buckets: "
+                f"{previous!r} and {field.drift_bucket!r}"
+            )
+    return buckets_by_path
 
 
 def render_generated_section() -> str:
     """Return the bounded manifest section for protected observation field paths."""
-    paths = protected_field_paths()
+    buckets_by_path = _registry_fields_by_path()
+    paths = tuple(sorted(buckets_by_path))
+    structural_count = sum(bucket == "structural_drift" for bucket in buckets_by_path.values())
+    semantic_count = sum(bucket == "semantic_drift" for bucket in buckets_by_path.values())
     lines = [
         BEGIN_MARKER,
         "",
         "## Protected Observation Field Paths (Generated)",
         "",
         "Bounded registry of golden replay observation paths locked by protected replay.",
-        "Source: `tests/helpers/golden_replay_projection.py::protected_field_paths()`.",
+        "Source: `tests/helpers/golden_replay_projection.py::protected_observation_field_registry()`.",
         "",
         "Refresh this section:",
         "",
@@ -57,14 +64,14 @@ def render_generated_section() -> str:
         "```",
         "",
         f"- **Path count:** {len(paths)}",
-        f"- **Structural drift fields:** {len(STRUCTURAL_DRIFT_FIELDS)}",
-        f"- **Semantic drift fields:** {len(SEMANTIC_DRIFT_FIELDS)}",
+        f"- **Structural drift fields:** {structural_count}",
+        f"- **Semantic drift fields:** {semantic_count}",
         "",
         "| Field path | Drift bucket |",
         "|---|---|",
     ]
     for path in paths:
-        lines.append(f"| `{path}` | `{_drift_bucket(path)}` |")
+        lines.append(f"| `{path}` | `{buckets_by_path[path]}` |")
     lines.extend(["", END_MARKER])
     return "\n".join(lines)
 
