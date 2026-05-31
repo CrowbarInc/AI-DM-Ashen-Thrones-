@@ -26,12 +26,32 @@ from __future__ import annotations
 import json
 import logging
 import re
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, MutableMapping, Optional, Tuple
 
 from game.realization_provenance import (
     STRICT_SOCIAL_DETERMINISTIC_FALLBACK,
     attach_realization_fallback_family,
+    normalize_realization_fallback_family,
 )
+
+
+def stamp_strict_social_deterministic_fallback_family(
+    meta: MutableMapping[str, Any],
+) -> MutableMapping[str, Any]:
+    """Stamp strict-social deterministic fallback family on emission/debug metadata."""
+    return attach_realization_fallback_family(meta, STRICT_SOCIAL_DETERMINISTIC_FALLBACK)
+
+
+def strict_social_deterministic_fallback_family_token() -> str:
+    """Canonical token for strict-social details/FEM literals (known family constant)."""
+    return STRICT_SOCIAL_DETERMINISTIC_FALLBACK
+
+
+def project_strict_social_replace_realization_family(existing: str | None = None) -> str:
+    """Normalized family for strict-social terminal replace FEM (details trace optional)."""
+    return normalize_realization_fallback_family(
+        str(existing if (existing not in (None, "")) else STRICT_SOCIAL_DETERMINISTIC_FALLBACK)
+    )
 
 from game.prompt_context import canonical_interaction_target_npc_id
 
