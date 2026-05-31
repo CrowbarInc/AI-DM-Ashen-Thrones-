@@ -10,7 +10,7 @@ The new guard summarizes fallback recurrence, ownership stability, repair usage,
 |---|---|
 | `tests/helpers/golden_replay.py` | Added fallback escalation summarization metrics, active telemetry token normalization, fallback window/streak helpers, and fallback escalation fields in the compact long-session markdown artifact. Also projects `fallback_behavior_repair_mode` for read-side audit visibility. |
 | `tests/test_golden_replay.py` | Added protected 20-turn fallback escalation assertions to the canonical long-session replay. |
-| `docs/reports/cycle_n_block_n4_fallback_escalation_guard_2026-05-27.md` | Documents N4 metrics, assertions, artifacts, validation, and CI status. |
+| `docs/cycles/cycle_n_block_n4_fallback_escalation_guard_2026-05-27.md` | Documents N4 metrics, assertions, artifacts, validation, and CI status. |
 
 ## Metrics Added
 `summarize_fallback_escalation_observations(...)` now reports:

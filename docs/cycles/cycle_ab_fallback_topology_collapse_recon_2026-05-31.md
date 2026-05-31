@@ -123,8 +123,8 @@ Fallback behavior spans **three parallel vocabularies** that must not be collaps
 
 | File | Role |
 |---|---|
-| `docs/reports/cycle_p_fallback_family_collapse_recon_2026-05-28.md` | Prior family-level recon |
-| `docs/reports/cycle_p_fallback_family_collapse_closure_2026-05-29.md` | Split-owner closure |
+| `docs/cycles/cycle_p_fallback_family_collapse_recon_2026-05-28.md` | Prior family-level recon |
+| `docs/cycles/cycle_p_fallback_family_collapse_closure_2026-05-29.md` | Split-owner closure |
 | `audits/cycle_e_adjacent_fallback_family_ownership_recon_2026-05-17.md` | Adjacent ownership map |
 | `audits/opening_fallback_surface_inventory_2026-05-11.md` | Opening surface inventory |
 | `docs/gate_cleanup_inventory.md` | Compatibility-local gate composer (may be stale vs code) |
@@ -392,8 +392,8 @@ From `docs/testing/protected_replay_manifest.md`:
 
 **Prior recon / closure**
 
-- `docs/reports/cycle_p_fallback_family_collapse_recon_2026-05-28.md`
-- `docs/reports/cycle_p_fallback_family_collapse_closure_2026-05-29.md`
+- `docs/cycles/cycle_p_fallback_family_collapse_recon_2026-05-28.md`
+- `docs/cycles/cycle_p_fallback_family_collapse_closure_2026-05-29.md`
 - This file: `cycle_ab_fallback_topology_collapse_recon_2026-05-31.md`
 
 ---

@@ -170,8 +170,8 @@ Strongest first implementation candidate: **M1**, because it is confirmed duplic
 
 ### Primary handoff set
 
-1. `docs/reports/cycle_m_maintenance_drag_reduction_recon_2026-05-27.md` - this Cycle M decision basis.
-2. `docs/reports/cycle_h_runtime_lineage_closure_2026-05-25.md` - explicitly identifies duplicate reporting aggregation as a follow-up.
+1. `docs/cycles/cycle_m_maintenance_drag_reduction_recon_2026-05-27.md` - this Cycle M decision basis.
+2. `docs/cycles/cycle_h_runtime_lineage_closure_2026-05-25.md` - explicitly identifies duplicate reporting aggregation as a follow-up.
 3. `game/runtime_lineage_telemetry.py` - natural read-side owner for M1.
 4. `tools/run_scenario_spine_validation.py` - one duplicated lineage summary implementation.
 5. `tests/helpers/failure_dashboard_report.py` - the second duplicated lineage summary implementation.
@@ -190,8 +190,8 @@ Strongest first implementation candidate: **M1**, because it is confirmed duplic
 12. `audits/cycle_f_maintenance_drag_recon_20260517.md`
 13. `audits/cycle_f_final_gate_hotspot_touch_budget_20260518.md`
 14. `audits/cycle_f_maintenance_drag_closure_20260519.md`
-15. `docs/reports/cycle_j_gate_cluster_extraction_closure_2026-05-26.md`
-16. `docs/reports/cycle_l_test_ownership_compression_closure_2026-05-27.md`
+15. `docs/cycles/cycle_j_gate_cluster_extraction_closure_2026-05-26.md`
+16. `docs/cycles/cycle_l_test_ownership_compression_closure_2026-05-27.md`
 17. `docs/audits/cycle_k_replay_promotion_recon_2026-05-26.md`
 18. `tests/README_TESTS.md` and `docs/testing.md` - testing/ownership expectations and protected replay lane guidance.
 

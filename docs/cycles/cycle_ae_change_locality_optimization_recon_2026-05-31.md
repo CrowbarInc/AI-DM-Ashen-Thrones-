@@ -178,7 +178,7 @@ Columns use **raw file count** for the 8+ threshold (matches the stated 23–24/
 ### Cluster 6 — Inventory / registry / manifest hygiene (closure amplifier)
 
 **Files involved:**  
-`tests/test_inventory.json`, `tests/test_ownership_registry.py`, `tests/TEST_AUDIT.md`, `docs/testing/protected_replay_manifest.md`, `tools/refresh_protected_replay_manifest.py`, cycle closure markdown under `docs/reports/` and `tests/cycle_r_*`
+`tests/test_inventory.json`, `tests/test_ownership_registry.py`, `tests/TEST_AUDIT.md`, `docs/testing/protected_replay_manifest.md`, `tools/refresh_protected_replay_manifest.py`, cycle closure markdown under `docs/reports/` and `docs/cycles/cycle_r_*`
 
 **Why coupled:** Closure commits regenerate inventory, refresh manifest sections, and bundle recon docs — inflating raw fanout without runtime risk.
 
@@ -301,10 +301,10 @@ Provide these for implementation block generation:
 
 ### Recon and prior cycle context
 
-- `cycle_ae_change_locality_optimization_recon_2026-05-31.md` (this report)
-- `docs/reports/cycle_t_maintenance_locality_reduction_recon_2026-05-30.md`
-- `tests/cycle_r_test_fanout_reduction_recon_2026-05-30.md`
-- `docs/reports/cycle_ab_fallback_topology_collapse_closure_2026-05-31.md`
+- `docs/cycles/cycle_ae_change_locality_optimization_recon_2026-05-31.md` (this report)
+- `docs/cycles/cycle_t_maintenance_locality_reduction_recon_2026-05-30.md`
+- `docs/cycles/cycle_r_test_fanout_reduction_recon_2026-05-30.md`
+- `docs/cycles/cycle_ab_fallback_topology_collapse_closure_2026-05-31.md`
 - `audits/cycle_f_final_gate_hotspot_touch_budget_20260518.md`
 
 ### Top hotspot source files (production)

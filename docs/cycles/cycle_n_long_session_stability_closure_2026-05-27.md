@@ -49,10 +49,10 @@ Cycle N does not prove:
 | `tests/test_golden_replay.py` | Protected 20-turn replay, continuity/fallback assertions, and renderer contract test. |
 | `docs/testing/protected_replay_manifest.md` | Declares `frontier_gate_social_inquiry_20_turn` as a protected end-to-end replay scenario. |
 | `tests/README_TESTS.md` | Notes that golden replay now includes the protected 20-turn Frontier Gate stability lane. |
-| `docs/reports/cycle_n_block_n1_canonical_20_turn_replay_2026-05-27.md` | N1 implementation report. |
-| `docs/reports/cycle_n_block_n3_continuity_drift_bridge_2026-05-27.md` | N3 implementation report. |
-| `docs/reports/cycle_n_block_n4_fallback_escalation_guard_2026-05-27.md` | N4 implementation report. |
-| `docs/reports/cycle_n_long_session_stability_closure_2026-05-27.md` | Cycle N closure report. |
+| `docs/cycles/cycle_n_block_n1_canonical_20_turn_replay_2026-05-27.md` | N1 implementation report. |
+| `docs/cycles/cycle_n_block_n3_continuity_drift_bridge_2026-05-27.md` | N3 implementation report. |
+| `docs/cycles/cycle_n_block_n4_fallback_escalation_guard_2026-05-27.md` | N4 implementation report. |
+| `docs/cycles/cycle_n_long_session_stability_closure_2026-05-27.md` | Cycle N closure report. |
 
 ## Artifact Review
 The long-session artifact now reports:

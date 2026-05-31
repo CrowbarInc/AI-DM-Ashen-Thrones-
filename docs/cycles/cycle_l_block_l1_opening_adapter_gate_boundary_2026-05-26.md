@@ -19,7 +19,7 @@ or registry policy were changed.
 | --- | --- |
 | `tests/test_final_emission_opening_fallback.py` | Added module ownership note: adapter result semantics are owner-level here; its existing delegation test is the only gate-integration pin in this module. |
 | `tests/test_final_emission_gate.py` | Added role comments for historical wrapper pins, response-type gate consumers, full-gate/FEM integration pins, and historical source-safety coverage; narrowed adapter-shaped duplicate assertions to gate boundary obligations. |
-| `docs/reports/cycle_l_block_l1_opening_adapter_gate_boundary_2026-05-26.md` | Added this implementation report. |
+| `docs/cycles/cycle_l_block_l1_opening_adapter_gate_boundary_2026-05-26.md` | Added this implementation report. |
 
 `tests/test_ownership_registry.py` was inspected conceptually through the
 reconnaissance evidence but did not need a change: the existing gate owner

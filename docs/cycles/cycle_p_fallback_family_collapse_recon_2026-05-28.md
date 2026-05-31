@@ -204,8 +204,8 @@ Known fragile assertions:
 - `tests/helpers/failure_classifier.py`
 - `tests/helpers/failure_dashboard_report.py`
 - `docs/testing/protected_replay_manifest.md`
-- `docs/reports/cycle_i_fallback_authorship_recon_2026-05-25.md`
-- `docs/reports/cycle_o_final_emission_gate_contraction_recon_2026-05-28.md`
+- `docs/cycles/cycle_i_fallback_authorship_recon_2026-05-25.md`
+- `docs/cycles/cycle_o_final_emission_gate_contraction_recon_2026-05-28.md`
 
 ## Commands Run
 

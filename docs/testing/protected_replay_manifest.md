@@ -13,7 +13,7 @@ Classification meanings:
 | `ADVISORY` | Informational or exploratory evidence only. |
 | `DEPRECATED` | No longer intended for long-term protection. |
 
-Current executable location: `tests/test_golden_replay.py`. Current helper/projection location: `tests/helpers/golden_replay.py`. Current documentary baseline: `audits/golden_replay_baseline_2026-05-11.md`.
+Current executable location: `tests/test_golden_replay.py`. Current helper/projection location: `tests/helpers/golden_replay.py`. Historical replay baseline archived under `docs/archive/dead_governance/2026-05-31/golden_replay_baseline_2026-05-11.md`; this manifest is the sole current protected replay acceptance authority.
 
 Protected replay reproduction command:
 

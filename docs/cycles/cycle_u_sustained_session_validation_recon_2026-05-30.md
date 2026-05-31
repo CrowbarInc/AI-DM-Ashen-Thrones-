@@ -32,7 +32,7 @@ Main gap for Cycle U: the repo proves one protected 20-turn social-inquiry path.
 | `tests/test_transcript_gauntlet_actor_addressing.py` | Transcript actor binding and address continuity. | Multi-turn speaker/target persistence around guard/runner. | Supporting only. |
 | `tests/test_transcript_gauntlet_campaign_cleanliness.py` | Campaign reset/social persistence and lead/travel sequencing. | Multi-turn reset and state cleanliness. | Supporting only. |
 | `docs/scenario_spine_validation.md` | Scenario-spine lane documentation. | Documents `--all-branches`, 50-turn long-branch coverage band, artifacts, commands. | Yes for block plan and commands. |
-| `docs/reports/cycle_n_long_session_stability_closure_2026-05-27.md` | Prior closure for 20-turn long-session stability. | States what Cycle N proves and what remains unproven: 50-turn, live model, semantic quality, hard-fail CLI health. | Yes; key prior-art handoff. |
+| `docs/cycles/cycle_n_long_session_stability_closure_2026-05-27.md` | Prior closure for 20-turn long-session stability. | States what Cycle N proves and what remains unproven: 50-turn, live model, semantic quality, hard-fail CLI health. | Yes; key prior-art handoff. |
 
 ## Existing Coverage
 

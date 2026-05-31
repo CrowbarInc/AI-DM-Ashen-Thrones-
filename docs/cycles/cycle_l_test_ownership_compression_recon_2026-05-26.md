@@ -315,7 +315,7 @@ Files to pass back to GPT for that implementation:
 - `tests/test_start_campaign_api.py`
 - `game/final_emission_opening_fallback.py`
 - `game/final_emission_gate.py`
-- `docs/reports/cycle_j_gate_cluster_extraction_closure_2026-05-26.md`
+- `docs/cycles/cycle_j_gate_cluster_extraction_closure_2026-05-26.md`
 
 ## 7. Commands Run
 

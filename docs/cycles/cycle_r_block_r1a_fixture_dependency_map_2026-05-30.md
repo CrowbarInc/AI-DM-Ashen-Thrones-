@@ -58,7 +58,7 @@ game.storage.get_scene_runtime
 | `tests/test_final_emission_boundary_convergence.py` | `_runner_strict_bundle` | Module-level import | Smoke: strict-social dialogue repair terminal fallback (`test_gate_strict_social_dialogue_repair_*`) | **Smoke** (registry: repairs smoke_suite neighbor) | **Yes** |
 | `tests/test_gauntlet_regressions.py` | `_runner_strict_bundle` (**indirect**) | **Imports gate test function** `test_strict_social_gate_repairs_motive_overclaim_and_keeps_speaker` inside `test_gauntlet_slice_strict_social_narrative_authority_repair` | Thin gauntlet hook re-running canonical strict-social NA case | **Smoke** | **Repoint fixture yes**; **must also replace test-function import** (see §3) |
 
-**Non-Python references (no repoint needed):** `docs/gate_cleanup_inventory.md`, `docs/audits/cycle_k_replay_promotion_recon_2026-05-26.md`, `docs/reports/cycle_j_gate_cluster_extraction_recon_2026-05-26.md`, `tests/cycle_r_test_fanout_reduction_recon_2026-05-30.md`.
+**Non-Python references (no repoint needed):** `docs/gate_cleanup_inventory.md`, `docs/audits/cycle_k_replay_promotion_recon_2026-05-26.md`, `docs/cycles/cycle_j_gate_cluster_extraction_recon_2026-05-26.md`, `docs/cycles/cycle_r_test_fanout_reduction_recon_2026-05-30.md`.
 
 ### Owner-module call volume (internal, for extraction sizing)
 

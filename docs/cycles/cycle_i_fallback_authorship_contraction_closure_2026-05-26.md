@@ -56,7 +56,7 @@ ownership. It is not repurposed as prose authorship.
 | Scenario diagnostics | `tools/run_scenario_spine_validation.py` |
 | Replay/dashboard consumers | `tests/helpers/golden_replay.py`, `tests/helpers/failure_classifier.py`, `tests/helpers/failure_dashboard_report.py`, `tests/failure_classification_contract.py` |
 | Regression and focused tests | `tests/test_final_emission_meta.py`, `tests/test_runtime_lineage_telemetry.py`, `tests/test_golden_replay.py`, `tests/test_run_scenario_spine_validation.py`, `tests/test_failure_classifier.py`, `tests/test_failure_dashboard_controlled_failures.py` |
-| Reports/contracts | `docs/reports/cycle_i_fallback_authorship_recon_2026-05-25.md`, `docs/reports/cycle_i_a_opening_owner_semantics_contract_2026-05-26.md`, this closure report |
+| Reports/contracts | `docs/cycles/cycle_i_fallback_authorship_recon_2026-05-25.md`, `docs/cycles/cycle_i_a_opening_owner_semantics_contract_2026-05-26.md`, this closure report |
 
 ## Behavior Review
 

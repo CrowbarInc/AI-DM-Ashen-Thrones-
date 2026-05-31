@@ -38,7 +38,7 @@ Completed test-only helper consolidation.
 
 Completed report-only contract characterization.
 
-- Created `docs/reports/cycle_m_block_m3_source_attribution_projection_recon_2026-05-27.md`.
+- Created `docs/cycles/cycle_m_block_m3_source_attribution_projection_recon_2026-05-27.md`.
 - Found `game/final_emission_meta.py` already owns owner-bucket vocabulary and opening owner-bucket projection.
 - Recommended deferring broader source-family/owner-bucket table consolidation.
 
@@ -54,7 +54,7 @@ Completed focused characterization tests.
 
 Completed report-only boundary characterization.
 
-- Created `docs/reports/cycle_m_block_m5_strict_social_boundary_recon_2026-05-27.md`.
+- Created `docs/cycles/cycle_m_block_m5_strict_social_boundary_recon_2026-05-27.md`.
 - Mapped strict-social prose, terminal fallback, answer-pressure cash-out, local referential repair, and gate integration ownership.
 - Recommended deferring strict-social extraction.
 
@@ -79,10 +79,10 @@ Tests:
 
 Reports:
 
-- `docs/reports/cycle_m_maintenance_drag_reduction_recon_2026-05-27.md`
-- `docs/reports/cycle_m_block_m3_source_attribution_projection_recon_2026-05-27.md`
-- `docs/reports/cycle_m_block_m5_strict_social_boundary_recon_2026-05-27.md`
-- `docs/reports/cycle_m_maintenance_drag_reduction_closure_2026-05-27.md`
+- `docs/cycles/cycle_m_maintenance_drag_reduction_recon_2026-05-27.md`
+- `docs/cycles/cycle_m_block_m3_source_attribution_projection_recon_2026-05-27.md`
+- `docs/cycles/cycle_m_block_m5_strict_social_boundary_recon_2026-05-27.md`
+- `docs/cycles/cycle_m_maintenance_drag_reduction_closure_2026-05-27.md`
 
 ## 4. Drag Reduced
 

@@ -17,8 +17,8 @@ Goal: preserve replay authority while reducing replay operational drag. This pas
 | `tests/test_failure_classifier.py` | Classifier behavior coverage. | Diagnostic helper tests. | Authoritative for helper behavior |
 | `tests/test_failure_dashboard_controlled_failures.py` | Known-bad replay-shaped probes for dashboard classification/rendering. | Diagnostic probe owner. | Supporting |
 | `tests/test_failure_classification_contract.py` | Contract tests for classifier/dashboard schema. | Diagnostic schema tests. | Authoritative schema tests |
-| `audits/golden_replay_baseline_2026-05-11.md` | Historical human-readable golden baseline. Not loaded by tests. | Replay baseline documentation. | Documentation-only |
-| `audits/golden_replay_readiness_2026-05-11.md` | Historical readiness assessment. | Replay audit history. | Documentation-only |
+| `docs/archive/dead_governance/2026-05-31/golden_replay_baseline_2026-05-11.md` | Historical human-readable golden baseline (archived). Not loaded by tests. | Replay baseline documentation. | Documentation-only |
+| `docs/archive/dead_governance/2026-05-31/golden_replay_readiness_2026-05-11.md` | Historical readiness assessment (archived). | Replay audit history. | Documentation-only |
 | `audits/replay_failure_corpus.md` | Historical replay failure corpus. | Replay audit history. | Documentation-only |
 | `audits/failure_dashboard_latest.md` | Opt-in latest failure dashboard path. | Generated diagnostic artifact. | Artifact-only |
 | `audits/failure_dashboard_*.md` | Historical dashboard probes/audits/samples. | Diagnostic audit history. | Documentation/artifact-only |
@@ -49,7 +49,7 @@ Goal: preserve replay authority while reducing replay operational drag. This pas
 | `tests/test_n1_scenario_spine_validation.py`, `tests/test_n1_scenario_spine_cli.py`, `tests/test_n1_analyzer_regression.py` | N1 contract, CLI, and analyzer tests. | N1 tests. | Supporting/separate lane |
 | `tests/README_TESTS.md` | Replay commands, protected replay CI status, dashboard commands, marker docs, full/fast lane commands. | Test operations docs. | Documentation-only |
 | `docs/testing.md`, `docs/scenario_spine_validation.md`, `docs/n1_scenario_spine_validation.md` | Validation lane documentation and scenario-spine/N1 commands. | Validation docs. | Documentation-only |
-| `docs/audits/cycle_k_*.md`, `docs/reports/cycle_n_*.md` | Replay promotion, protected declaration, failure artifact, 20-turn replay, long-session stability history. | Audit/report history. | Documentation-only |
+| `docs/audits/cycle_k_*.md`, `docs/cycles/cycle_n_*.md` | Replay promotion, protected declaration, failure artifact, 20-turn replay, long-session stability history. | Audit/report history. | Documentation-only |
 | `pytest.ini` | Registers `golden_replay`, `transcript`, `slow`, and `failure_dashboard_probe` markers; sets repo-local basetemp. | Test configuration owner. | Authoritative config |
 
 ## 2. Duplicate Fixture Inventory
@@ -200,7 +200,7 @@ Duplicate output formats:
 
 Stale or confusing paths:
 
-- `audits/golden_replay_baseline_2026-05-11.md` is historical, while current protected status lives in `docs/testing/protected_replay_manifest.md` and Cycle N docs.
+- Historical replay baseline archived at `docs/archive/dead_governance/2026-05-31/golden_replay_baseline_2026-05-11.md`; current protected status lives in `docs/testing/protected_replay_manifest.md` and Cycle N docs.
 - Older Cycle K recon says scenario-spine is advisory and CI not yet wired; newer workflow/docs show protected replay is now CI-wired.
 - `artifacts/golden_replay/replay_failure_report.md` may be absent locally after passing runs, which is correct but can confuse operators looking for it.
 

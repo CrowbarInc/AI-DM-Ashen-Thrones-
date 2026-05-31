@@ -101,9 +101,9 @@ Relevant fixtures/artifacts:
 - `docs/testing/protected_replay_manifest.md`
 - `data/validation/scenario_spines/frontier_gate_long_session.json`
 - `data/validation/scenario_spines/c1a_opening_convergence_paths.json`
-- `audits/golden_replay_baseline_2026-05-11.md`
+- `docs/archive/dead_governance/2026-05-31/golden_replay_baseline_2026-05-11.md` (historical archived baseline; current protected replay authority is `docs/testing/protected_replay_manifest.md`)
 - `docs/audits/cycle_k_replay_promotion_recon_2026-05-26.md`
-- `docs/reports/cycle_h_runtime_lineage_closure_2026-05-25.md`
+- `docs/cycles/cycle_h_runtime_lineage_closure_2026-05-25.md`
 
 Narrow commands:
 

@@ -40,12 +40,12 @@ test-only clarification.
 
 | File | Purpose |
 | --- | --- |
-| `docs/reports/cycle_l_test_ownership_compression_recon_2026-05-26.md` | Initial suite-wide reconnaissance and selection of opening fallback as the first implementation block. |
-| `docs/reports/cycle_l_block_l1_opening_adapter_gate_boundary_2026-05-26.md` | L1 implementation report. |
-| `docs/reports/cycle_l_block_l2_visibility_fallback_recon_2026-05-26.md` | Visibility ownership reconnaissance. |
-| `docs/reports/cycle_l_block_l3_visibility_helper_extraction_assessment_2026-05-26.md` | Assessment and exact move plan for the visibility helper owner suite. |
-| `docs/reports/cycle_l_block_l4_visibility_helper_owner_suite_extraction_2026-05-26.md` | L4 extraction implementation report. |
-| `docs/reports/cycle_l_test_ownership_compression_closure_2026-05-27.md` | This closure report. |
+| `docs/cycles/cycle_l_test_ownership_compression_recon_2026-05-26.md` | Initial suite-wide reconnaissance and selection of opening fallback as the first implementation block. |
+| `docs/cycles/cycle_l_block_l1_opening_adapter_gate_boundary_2026-05-26.md` | L1 implementation report. |
+| `docs/cycles/cycle_l_block_l2_visibility_fallback_recon_2026-05-26.md` | Visibility ownership reconnaissance. |
+| `docs/cycles/cycle_l_block_l3_visibility_helper_extraction_assessment_2026-05-26.md` | Assessment and exact move plan for the visibility helper owner suite. |
+| `docs/cycles/cycle_l_block_l4_visibility_helper_owner_suite_extraction_2026-05-26.md` | L4 extraction implementation report. |
+| `docs/cycles/cycle_l_test_ownership_compression_closure_2026-05-27.md` | This closure report. |
 
 ### Production files
 
@@ -157,12 +157,12 @@ Current branch: `feature/failure-locality` tracking `origin/feature/failure-loca
 | Modified | `tests/test_final_emission_opening_fallback.py` | L1 ownership note. |
 | Modified | `tests/test_final_emission_gate.py` | L1 gate-consumer clarification plus L4 visibility owner-suite relocation. |
 | Untracked | `tests/test_final_emission_visibility_fallback.py` | L4 dedicated helper owner suite. |
-| Untracked | `docs/reports/cycle_l_test_ownership_compression_recon_2026-05-26.md` | Cycle L recon artifact. |
-| Untracked | `docs/reports/cycle_l_block_l1_opening_adapter_gate_boundary_2026-05-26.md` | L1 report. |
-| Untracked | `docs/reports/cycle_l_block_l2_visibility_fallback_recon_2026-05-26.md` | L2 report. |
-| Untracked | `docs/reports/cycle_l_block_l3_visibility_helper_extraction_assessment_2026-05-26.md` | L3 report. |
-| Untracked | `docs/reports/cycle_l_block_l4_visibility_helper_owner_suite_extraction_2026-05-26.md` | L4 report. |
-| Untracked | `docs/reports/cycle_l_test_ownership_compression_closure_2026-05-27.md` | Closure report. |
+| Untracked | `docs/cycles/cycle_l_test_ownership_compression_recon_2026-05-26.md` | Cycle L recon artifact. |
+| Untracked | `docs/cycles/cycle_l_block_l1_opening_adapter_gate_boundary_2026-05-26.md` | L1 report. |
+| Untracked | `docs/cycles/cycle_l_block_l2_visibility_fallback_recon_2026-05-26.md` | L2 report. |
+| Untracked | `docs/cycles/cycle_l_block_l3_visibility_helper_extraction_assessment_2026-05-26.md` | L3 report. |
+| Untracked | `docs/cycles/cycle_l_block_l4_visibility_helper_owner_suite_extraction_2026-05-26.md` | L4 report. |
+| Untracked | `docs/cycles/cycle_l_test_ownership_compression_closure_2026-05-27.md` | Closure report. |
 
 No production-code diff is present. No tests were changed as part of producing
 this closure report.

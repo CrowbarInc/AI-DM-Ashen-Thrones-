@@ -66,7 +66,7 @@ The repo already documents several classes where output can be acceptable but st
 - `audits/replay_failure_corpus.md` notes fallback substitution can look plausible while the source/family is wrong, missing route metadata can leave final text acceptable but diagnostics ambiguous, and emission repairs can make text acceptable while hiding sublayer cause.
 - `tests/test_final_emission_boundary_no_semantic_repair.py` protects awkward-but-legal narration from semantic rewriting. That is a direct signal that legal phrasing differences should not be normalized away by broad repairs.
 - `docs/scenario_spine_validation.md` treats `branch_divergence` as useful cross-branch signal, but branch divergence is not rerun drift. It compares intended branch outcomes from the same fixture, not repeated executions of one branch.
-- `docs/reports/cycle_u_sustained_session_validation_closure_2026-05-30.md` records that Cycle U stayed metrics-first and avoided exact prose validation. This keeps replay robust, but leaves Cycle S room to add report-only variance summaries.
+- `docs/cycles/cycle_u_sustained_session_validation_closure_2026-05-30.md` records that Cycle U stayed metrics-first and avoided exact prose validation. This keeps replay robust, but leaves Cycle S room to add report-only variance summaries.
 
 ## Drift Seam Map
 
@@ -239,8 +239,8 @@ Cycle S completed as advisory/reporting-first work:
 - `data/validation/scenario_spines/frontier_gate_long_session.json`
 - `docs/audits/cycle_k_block_k4_drift_threshold_policy_2026-05-26.md`
 - `docs/n1_scenario_spine_validation.md`
-- `docs/reports/cycle_n_long_session_stability_closure_2026-05-27.md`
-- `docs/reports/cycle_u_sustained_session_validation_closure_2026-05-30.md`
+- `docs/cycles/cycle_n_long_session_stability_closure_2026-05-27.md`
+- `docs/cycles/cycle_u_sustained_session_validation_closure_2026-05-30.md`
 - `docs/scenario_spine_validation.md`
 - `docs/testing/protected_replay_manifest.md`
 - `game/api.py`

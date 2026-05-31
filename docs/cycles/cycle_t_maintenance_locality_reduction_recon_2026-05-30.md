@@ -40,7 +40,7 @@ Analysis command: `git log --name-only --pretty=format:'---COMMIT--- %h %s' -n 3
 #### `1f4e94e` — Cycle S: Runtime Drift Compression — **12 files** ⚠️ 8+
 
 - `docs/cycles/cycle_s_runtime_drift_compression_recon_2026-05-30.md`
-- `docs/reports/cycle_s_runtime_drift_compression_closure_2026-05-30.md`
+- `docs/cycles/cycle_s_runtime_drift_compression_closure_2026-05-30.md`
 - `docs/scenario_spine_validation.md`
 - `docs/testing/protected_replay_manifest.md`
 - `game/speaker_contract_enforcement.py`
@@ -54,13 +54,13 @@ Analysis command: `git log --name-only --pretty=format:'---COMMIT--- %h %s' -n 3
 
 #### `92f7213` — Cycle U: Sustained Session Validation — **13 files** ⚠️ 8+
 
-- `docs/reports/cycle_n_block_n1_canonical_20_turn_replay_2026-05-27.md`
-- `docs/reports/cycle_n_block_n3_continuity_drift_bridge_2026-05-27.md`
-- `docs/reports/cycle_n_block_n4_fallback_escalation_guard_2026-05-27.md`
-- `docs/reports/cycle_n_long_session_stability_recon_2026-05-27.md`
-- `docs/reports/cycle_o_final_emission_gate_contraction_recon_2026-05-28.md`
-- `docs/reports/cycle_u_sustained_session_validation_closure_2026-05-30.md`
-- `docs/reports/cycle_u_sustained_session_validation_recon_2026-05-30.md`
+- `docs/cycles/cycle_n_block_n1_canonical_20_turn_replay_2026-05-27.md`
+- `docs/cycles/cycle_n_block_n3_continuity_drift_bridge_2026-05-27.md`
+- `docs/cycles/cycle_n_block_n4_fallback_escalation_guard_2026-05-27.md`
+- `docs/cycles/cycle_n_long_session_stability_recon_2026-05-27.md`
+- `docs/cycles/cycle_o_final_emission_gate_contraction_recon_2026-05-28.md`
+- `docs/cycles/cycle_u_sustained_session_validation_closure_2026-05-30.md`
+- `docs/cycles/cycle_u_sustained_session_validation_recon_2026-05-30.md`
 - `docs/scenario_spine_validation.md`
 - `docs/testing/protected_replay_manifest.md`
 - `tests/helpers/golden_replay.py`
@@ -80,8 +80,8 @@ Analysis command: `git log --name-only --pretty=format:'---COMMIT--- %h %s' -n 3
 
 #### `1c5b9d8` — P: Collapse fallback family ownership ambiguity — **15 files** ⚠️ 8+
 
-- `docs/reports/cycle_p_fallback_family_collapse_closure_2026-05-29.md`
-- `docs/reports/cycle_p_fallback_family_collapse_recon_2026-05-28.md`
+- `docs/cycles/cycle_p_fallback_family_collapse_closure_2026-05-29.md`
+- `docs/cycles/cycle_p_fallback_family_collapse_recon_2026-05-28.md`
 - `game/final_emission_gate.py`
 - `game/final_emission_meta.py`
 - `game/final_emission_replay_projection.py`
@@ -98,7 +98,7 @@ Analysis command: `git log --name-only --pretty=format:'---COMMIT--- %h %s' -n 3
 
 #### `77faefe` — O: Final Emission Gate Contraction — **9 files** ⚠️ 8+
 
-- `docs/reports/cycle_o_final_emission_gate_contraction_closure_2026-05-28.md`
+- `docs/cycles/cycle_o_final_emission_gate_contraction_closure_2026-05-28.md`
 - `game/final_emission_meta.py`
 - `game/final_emission_replay_projection.py`
 - `tests/test_dead_turn_evaluation_threading.py`
@@ -110,7 +110,7 @@ Analysis command: `git log --name-only --pretty=format:'---COMMIT--- %h %s' -n 3
 
 #### `3582d48` — Complete Cycle N long-session stability — **5 files**
 
-- `docs/reports/cycle_n_long_session_stability_closure_2026-05-27.md`
+- `docs/cycles/cycle_n_long_session_stability_closure_2026-05-27.md`
 - `docs/testing/protected_replay_manifest.md`
 - `tests/README_TESTS.md`
 - `tests/helpers/golden_replay.py`
@@ -118,10 +118,10 @@ Analysis command: `git log --name-only --pretty=format:'---COMMIT--- %h %s' -n 3
 
 #### `76fe80a` — M: Reduce maintenance drag — **15 files** ⚠️ 8+
 
-- `docs/reports/cycle_m_block_m3_source_attribution_projection_recon_2026-05-27.md`
-- `docs/reports/cycle_m_block_m5_strict_social_boundary_recon_2026-05-27.md`
-- `docs/reports/cycle_m_maintenance_drag_reduction_closure_2026-05-27.md`
-- `docs/reports/cycle_m_maintenance_drag_reduction_recon_2026-05-27.md`
+- `docs/cycles/cycle_m_block_m3_source_attribution_projection_recon_2026-05-27.md`
+- `docs/cycles/cycle_m_block_m5_strict_social_boundary_recon_2026-05-27.md`
+- `docs/cycles/cycle_m_maintenance_drag_reduction_closure_2026-05-27.md`
+- `docs/cycles/cycle_m_maintenance_drag_reduction_recon_2026-05-27.md`
 - `game/runtime_lineage_telemetry.py`
 - `tests/helpers/failure_dashboard_report.py`
 - `tests/helpers/opening_fallback_evidence.py`
@@ -136,12 +136,12 @@ Analysis command: `git log --name-only --pretty=format:'---COMMIT--- %h %s' -n 3
 
 #### `f36e834` — Cycle L: Test Ownership Compression — **9 files** ⚠️ 8+
 
-- `docs/reports/cycle_l_block_l1_opening_adapter_gate_boundary_2026-05-26.md`
-- `docs/reports/cycle_l_block_l2_visibility_fallback_recon_2026-05-26.md`
-- `docs/reports/cycle_l_block_l3_visibility_helper_extraction_assessment_2026-05-26.md`
-- `docs/reports/cycle_l_block_l4_visibility_helper_owner_suite_extraction_2026-05-26.md`
-- `docs/reports/cycle_l_test_ownership_compression_closure_2026-05-27.md`
-- `docs/reports/cycle_l_test_ownership_compression_recon_2026-05-26.md`
+- `docs/cycles/cycle_l_block_l1_opening_adapter_gate_boundary_2026-05-26.md`
+- `docs/cycles/cycle_l_block_l2_visibility_fallback_recon_2026-05-26.md`
+- `docs/cycles/cycle_l_block_l3_visibility_helper_extraction_assessment_2026-05-26.md`
+- `docs/cycles/cycle_l_block_l4_visibility_helper_owner_suite_extraction_2026-05-26.md`
+- `docs/cycles/cycle_l_test_ownership_compression_closure_2026-05-27.md`
+- `docs/cycles/cycle_l_test_ownership_compression_recon_2026-05-26.md`
 - `tests/test_final_emission_gate.py`
 - `tests/test_final_emission_opening_fallback.py`
 - `tests/test_final_emission_visibility_fallback.py`
@@ -167,17 +167,17 @@ Analysis command: `git log --name-only --pretty=format:'---COMMIT--- %h %s' -n 3
 
 #### `6074e9e` — J: Gate Cluster Extraction — **5 files**
 
-- `docs/reports/cycle_j_gate_cluster_extraction_closure_2026-05-26.md`
-- `docs/reports/cycle_j_gate_cluster_extraction_recon_2026-05-26.md`
+- `docs/cycles/cycle_j_gate_cluster_extraction_closure_2026-05-26.md`
+- `docs/cycles/cycle_j_gate_cluster_extraction_recon_2026-05-26.md`
 - `game/final_emission_gate.py`
 - `game/final_emission_opening_fallback.py`
 - `tests/test_final_emission_opening_fallback.py`
 
 #### `fd5f1a9` — Cycle I: Contract opening fallback authorship attribution — **16 files** ⚠️ 8+
 
-- `docs/reports/cycle_i_a_opening_owner_semantics_contract_2026-05-26.md`
-- `docs/reports/cycle_i_fallback_authorship_contraction_closure_2026-05-26.md`
-- `docs/reports/cycle_i_fallback_authorship_recon_2026-05-25.md`
+- `docs/cycles/cycle_i_a_opening_owner_semantics_contract_2026-05-26.md`
+- `docs/cycles/cycle_i_fallback_authorship_contraction_closure_2026-05-26.md`
+- `docs/cycles/cycle_i_fallback_authorship_recon_2026-05-25.md`
 - `game/final_emission_meta.py`
 - `game/runtime_lineage_telemetry.py`
 - `tests/failure_classification_contract.py`
@@ -194,8 +194,8 @@ Analysis command: `git log --name-only --pretty=format:'---COMMIT--- %h %s' -n 3
 
 #### `b086b75` — H: Runtime Lineage Instrumentation — **12 files** ⚠️ 8+
 
-- `docs/reports/cycle_h_runtime_lineage_closure_2026-05-25.md`
-- `docs/reports/cycle_h_runtime_lineage_instrumentation_recon_2026-05-23.md`
+- `docs/cycles/cycle_h_runtime_lineage_closure_2026-05-25.md`
+- `docs/cycles/cycle_h_runtime_lineage_instrumentation_recon_2026-05-23.md`
 - `game/final_emission_meta.py`
 - `game/runtime_lineage_telemetry.py`
 - `tests/helpers/failure_dashboard_report.py`
@@ -718,7 +718,7 @@ git log --name-only --pretty=format:--- %h -n 20 |
 - Replay protected: yes (golden replay green before merge)
 ```
 
-Store these one-page closures alongside existing `docs/reports/cycle_*_closure_*.md` files.
+Store these one-page closures alongside existing `docs/cycles/cycle_*_closure_*.md` files.
 
 ---
 
@@ -807,5 +807,5 @@ T1 → T2 → T3 → T6
 ## Appendix — Methodology Notes
 
 - **Data source:** `git log --name-only --pretty=format:'---COMMIT--- %h %s' -n 30` on branch `feature/failure-locality` at recon time (HEAD `1f4e94e`).
-- **Related prior recon:** `audits/cycle_f_source_fanout_refinement_20260518.md`, `docs/reports/cycle_m_maintenance_drag_reduction_recon_2026-05-27.md`.
+- **Related prior recon:** `audits/cycle_f_source_fanout_refinement_20260518.md`, `docs/cycles/cycle_m_maintenance_drag_reduction_recon_2026-05-27.md`.
 - **Existing branch-local helpers worth extending (not replacing):** `tests/helpers/final_emission_gate_fixtures.py`, `tests/helpers/opening_fallback_evidence.py`, `tests/helpers/speaker_relocation_shadow_harness.py`.

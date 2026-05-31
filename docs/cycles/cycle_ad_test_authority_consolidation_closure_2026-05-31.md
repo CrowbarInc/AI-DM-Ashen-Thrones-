@@ -108,7 +108,7 @@ Work was delivered in four blocks:
 | `tests/helpers/opening_fallback_evidence.py` | AD-4 (docstring) |
 | `tests/test_fallback_behavior_gate.py` | AD-4 (adjacent dedupe) |
 | `tests/test_fallback_behavior_repairs.py` | AD-4 (adjacent dedupe) |
-| `cycle_ad_test_authority_consolidation_recon_2026-05-31.md` | Recon (reference) |
+| `docs/cycles/cycle_ad_test_authority_consolidation_recon_2026-05-31.md` | Recon (reference) |
 
 **Not changed:** Production code, `tests/test_final_emission_gate.py`, `tests/test_golden_replay.py`, `tests/test_failure_classifier.py`.
 

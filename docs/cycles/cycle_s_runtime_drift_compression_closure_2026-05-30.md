@@ -154,7 +154,7 @@ Validation run:
 ### Docs
 
 - `docs/cycles/cycle_s_runtime_drift_compression_recon_2026-05-30.md`
-- `docs/reports/cycle_s_runtime_drift_compression_closure_2026-05-30.md`
+- `docs/cycles/cycle_s_runtime_drift_compression_closure_2026-05-30.md`
 - `docs/scenario_spine_validation.md`
 - `docs/testing/protected_replay_manifest.md`
 

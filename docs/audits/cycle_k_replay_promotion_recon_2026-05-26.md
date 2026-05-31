@@ -21,7 +21,7 @@ Recommended posture for Cycle K: promote the existing deterministic golden repla
 |---|---|---|---|
 | Golden replay runner / harness | `tests/helpers/golden_replay.py`; `tests/helpers/transcript_runner.py`; `tests/helpers/transcript_snapshots.py` | Runs clean-campaign chat turns; projects final text, route, speaker, FEM/fallback, sanitizer, trace, and runtime-lineage signals into stable observed rows; asserts/classifies drift. | Test-only harness. `run_golden_replay(...)` reuses transcript infrastructure and does not create runtime behavior. |
 | Golden replay tests | `tests/test_golden_replay.py` | Executable replay suite and inline expectations for canonical turn/final-emission scenarios plus projection/renderer contract tests. | Module marked `integration` and `golden_replay`; failures are pytest failures. |
-| Golden baseline / expected-output records | `audits/golden_replay_baseline_2026-05-11.md`; `audits/golden_replay_readiness_2026-05-11.md`; `audits/replay_failure_corpus.md` | Human-readable canonical scenario baseline, original readiness map, and controlled failure observations. | Baseline Markdown is documentary; it is not loaded as an executable snapshot file by `tests/test_golden_replay.py`. |
+| Golden baseline / expected-output records | `docs/archive/dead_governance/2026-05-31/golden_replay_baseline_2026-05-11.md`; `docs/archive/dead_governance/2026-05-31/golden_replay_readiness_2026-05-11.md`; `audits/replay_failure_corpus.md` | Human-readable canonical scenario baseline, original readiness map, and controlled failure observations. | Baseline Markdown was documentary (archived in Cycle AF); current protected replay authority is `docs/testing/protected_replay_manifest.md`. Not loaded as an executable snapshot file by `tests/test_golden_replay.py`. |
 | Replay drift / failure diagnostics | `tests/helpers/failure_classifier.py`; `tests/helpers/failure_dashboard_report.py`; `tests/failure_classification_contract.py`; `tests/test_failure_classifier.py`; `tests/test_failure_dashboard_controlled_failures.py`; `tests/test_failure_classification_contract.py`; `tests/conftest.py`; `audits/failure_dashboard_latest.md`; `audits/failure_dashboard_probe_sample.md`; `audits/failure_dashboard_*.md` | Classifies replay drift into owner/category/severity rows; renders opt-in Markdown dashboards; validates controlled known-bad rows and taxonomy. | Dashboard generation is opt-in via CLI flag or environment variable; normal golden replay runs do not write it. |
 | Game-level scenario definitions | `data/validation/scenario_spines/frontier_gate_long_session.json`; `data/validation/scenario_spines/c1a_opening_convergence_paths.json`; `game/scenario_spine.py` | JSON-defined long-session/branch fixtures and schema. | Adjacent to golden replay. `frontier_gate_long_session.json` is documented as canonical for the scenario-spine lane, not consumed by the golden three-branch smoke scenario. |
 | Game-level scenario evaluation / runner | `game/scenario_spine_eval.py`; `game/scenario_spine_opening_convergence.py`; `game/scenario_spine_transition_convergence.py`; `tools/run_scenario_spine_validation.py` | Deterministic session-health, opening/continuation/transition checks, branch divergence, runtime-lineage summaries, and artifact-producing API runs. | Richest longitudinal artifact lane; CLI is currently advisory with respect to evaluator result. |
@@ -40,7 +40,7 @@ Recommended posture for Cycle K: promote the existing deterministic golden repla
 
 | Command | Discovered At | Current Role | Hard/Soft | CI/Default/Manual |
 |---|---|---|---|---|
-| `python -m pytest tests/test_golden_replay.py -q` | `tests/README_TESTS.md`; `audits/golden_replay_baseline_2026-05-11.md` | Direct golden replay execution. | Hard: pytest assertions fail the command. | Documented manual/local command; not explicit in CI. |
+| `python -m pytest tests/test_golden_replay.py -q` | `tests/README_TESTS.md`; `docs/testing/protected_replay_manifest.md` | Direct golden replay execution. | Hard: pytest assertions fail the command. | Documented manual/local command; not explicit in CI. |
 | `python -m pytest -m golden_replay -q` | `tests/README_TESTS.md`; `pytest.ini` | Marker-selected equivalent golden replay execution. | Hard. | Documented manual/local command; not explicit in CI. |
 | `pytest` or `pytest tests/` | `pytest.ini`; `tests/README_TESTS.md` | Full/default pytest lane. | Hard. | Includes golden replay because `pytest.ini` applies no exclusion filter. |
 | `pytest -m "not transcript and not slow"` | `tests/README_TESTS.md`; `pytest.ini` | Fast developer lane. | Hard. | Includes `tests/test_golden_replay.py` by inference: that module is marked `integration` + `golden_replay`, not `transcript` or `slow`. |
@@ -67,7 +67,7 @@ Recommended posture for Cycle K: promote the existing deterministic golden repla
 - `tests/test_golden_replay.py` is marked `pytest.mark.integration` and `pytest.mark.golden_replay`; it is not marked `slow`, `optional`, `manual`, or `transcript`.
 - Golden scenario failures are hard pytest failures through `assert_golden_turn_observation(...)`.
 - Golden result artifact writing is optional: only the failure dashboard has a wired output path, and only when requested.
-- The committed `audits/golden_replay_baseline_2026-05-11.md` records nine passing baseline scenarios, but is not regenerated or checked by the ordinary pytest command.
+- Historical replay baseline archived at `docs/archive/dead_governance/2026-05-31/golden_replay_baseline_2026-05-11.md`; current protected replay authority is `docs/testing/protected_replay_manifest.md`. The archived baseline records nine passing baseline scenarios, but is not regenerated or checked by the ordinary pytest command.
 
 ## Current Replay Coverage
 
@@ -121,7 +121,7 @@ Recommended posture for Cycle K: promote the existing deterministic golden repla
 | Field-level golden expectations: `equals`, `one_of`, `not_equals`, presence and unavailable handling | `tests/helpers/golden_replay.py`; `tests/test_golden_replay.py` | Structural route/speaker/FEM/fallback/trace invariants. | Hard when invoked by pytest scenario assertions. | Strong foundation for initial required golden gate. |
 | Semantic golden predicates: required/forbidden fragments and `scaffold_leakage` | `tests/helpers/golden_replay.py`; `tests/test_golden_replay.py` | Semantic safety and final-text contract failures without locking all prose. | Hard when invoked by pytest assertions. | Strong for acceptance failures such as leaked scaffolding or wrong speaker. |
 | Exact text hash drift, opt-in | `tests/helpers/golden_replay.py` (`normalize_golden_text`, `golden_text_hash`, `classify_golden_drift`) | Exact normalized `final_text` hash mismatch only when `exact_text` is supplied. | Hard only if a test asserts classifier failure/status; not enabled as the default baseline contract. | Suitable for rare deliberately fixed prose, not broad primary policy. |
-| Drift categorization: `exact_drift`, `structural_drift`, `semantic_drift` | `tests/helpers/golden_replay.py`; `audits/golden_replay_baseline_2026-05-11.md` | Per-observation bucketed mismatch rows and summary counts. | Diagnostic inside helper; scenario assertions independently hard-fail. | Good vocabulary for promotion reporting; not yet an aggregate threshold policy. |
+| Drift categorization: `exact_drift`, `structural_drift`, `semantic_drift` | `tests/helpers/golden_replay.py`; archived baseline `docs/archive/dead_governance/2026-05-31/golden_replay_baseline_2026-05-11.md` | Per-observation bucketed mismatch rows and summary counts. | Diagnostic inside helper; scenario assertions independently hard-fail. | Good vocabulary for promotion reporting; not yet an aggregate threshold policy. |
 | Failure classification/dashboard | `tests/helpers/failure_classifier.py`; `tests/helpers/failure_dashboard_report.py`; contract/probe tests | Category, severity, primary/secondary owner, investigate-first target, evidence. | Classifier/contract tests hard; generated dashboard opt-in diagnostic. | Strong ergonomics once enabled on required CI failure paths. |
 | Runtime-lineage event projection and frequency summary | `game/runtime_lineage_telemetry.py`; `game/final_emission_meta.py`; `tests/helpers/golden_replay.py`; `tools/run_scenario_spine_validation.py`; `tests/test_run_scenario_spine_validation.py` | Fallback selections, mutations, speaker repair, gate outcome paths, frequency and recurrence keys. | Observational; golden tests confirm projection but do not impose count ceilings. | Nearest existing support for fallback-count, mutation-count, and gate-path-frequency thresholds. |
 | Scenario-spine narrative health scoring | `game/scenario_spine_eval.py`; `tests/test_scenario_spine_eval.py` | Failures deduct 24, warnings deduct 7, API-majority deducts 30; classification and `overall_passed`; degradation signals. | Evaluator tests hard; API runner's evaluated health is not enforced by CLI exit code. | Useful longitudinal candidate only after enforcement semantics are chosen. |
@@ -200,7 +200,7 @@ Replay could be added as a separate required job or a hard-fail step in `converg
 ### Block K1 — Canonical Protected Replay Declaration
 
 - **Goal:** Name the existing golden replay acceptance set explicitly, including whether direct-seam rows are protected companions or members of the primary replay gate.
-- **Files likely touched:** `tests/test_golden_replay.py`; `tests/README_TESTS.md`; `audits/golden_replay_baseline_2026-05-11.md` or a successor report; possibly a new test-only protected-scenario manifest.
+- **Files likely touched:** `tests/test_golden_replay.py`; `tests/README_TESTS.md`; `docs/testing/protected_replay_manifest.md` (successor to archived baseline); possibly a new test-only protected-scenario manifest.
 - **Acceptance criteria:** Every promoted scenario has a stable ID, scope (`end-to-end` or `direct-seam`), protected invariant summary, and one documented reproduction command; non-canonical probes/N1/transcript lanes remain separately labelled.
 - **Risk level:** Low.
 
@@ -239,7 +239,7 @@ Minimum high-signal set for the next planning step:
 1. `docs/audits/cycle_k_replay_promotion_recon_2026-05-26.md`
 2. `tests/test_golden_replay.py`
 3. `tests/helpers/golden_replay.py`
-4. `audits/golden_replay_baseline_2026-05-11.md`
+4. `docs/testing/protected_replay_manifest.md` (current protected replay authority; archived baseline at `docs/archive/dead_governance/2026-05-31/golden_replay_baseline_2026-05-11.md`)
 5. `tests/helpers/failure_classifier.py`
 6. `tests/helpers/failure_dashboard_report.py`
 7. `tests/conftest.py`

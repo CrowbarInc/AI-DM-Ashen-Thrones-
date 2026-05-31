@@ -21,7 +21,7 @@ Opening fallback is close to single-source for prose composition, but not yet si
 - `tests/test_upstream_response_repairs.py`
 - `tests/test_api_narration_path_selection.py`
 - `tests/test_start_campaign_api.py`
-- Existing audits: `audits/failure_hotspots.md`, `audits/failure_surface_inventory.md`, `audits/failure_owner_matrix.md`, `audits/mutation_boundary_inventory.md`, `audits/runtime_signal_inventory.md`, `audits/golden_replay_readiness_2026-05-11.md`, `audits/golden_replay_baseline_2026-05-11.md`, `audits/replay_failure_corpus.md`, `audits/failure_dashboard_precision_pass_2026-05-11.md`, `audits/proposed_failure_classification_schema.md`.
+- Existing audits: `audits/failure_hotspots.md`, `audits/failure_surface_inventory.md`, `audits/failure_owner_matrix.md`, `audits/mutation_boundary_inventory.md`, `audits/runtime_signal_inventory.md`, `docs/archive/dead_governance/2026-05-31/golden_replay_readiness_2026-05-11.md`, `docs/archive/dead_governance/2026-05-31/golden_replay_baseline_2026-05-11.md`, `audits/replay_failure_corpus.md`, `audits/failure_dashboard_precision_pass_2026-05-11.md`, `audits/proposed_failure_classification_schema.md`. Current protected replay authority: `docs/testing/protected_replay_manifest.md`.
 
 ## Runtime Authoring / Selection
 
@@ -92,8 +92,8 @@ Opening fallback is close to single-source for prose composition, but not yet si
 - `audits/failure_owner_matrix.md`: says opening fallback composer/upstream-prepared payload owns prose while gate selects it.
 - `audits/mutation_boundary_inventory.md`: marks opening fallback attach as a critical mutation boundary.
 - `audits/runtime_signal_inventory.md`: lists opening fallback telemetry fields as high-confidence runtime signals.
-- `audits/golden_replay_readiness_2026-05-11.md`: identifies opening fallback as a golden replay candidate needing authorship/source assertion.
-- `audits/golden_replay_baseline_2026-05-11.md`: records `opening_fallback_path` passing with `final_emitted_source=opening_deterministic_fallback`, `fallback_family=scene_opening`, `fallback_temporal_frame=first_impression`.
+- `docs/archive/dead_governance/2026-05-31/golden_replay_readiness_2026-05-11.md`: identifies opening fallback as a golden replay candidate needing authorship/source assertion (historical; current authority is `docs/testing/protected_replay_manifest.md`).
+- `docs/archive/dead_governance/2026-05-31/golden_replay_baseline_2026-05-11.md`: records `opening_fallback_path` passing with `final_emitted_source=opening_deterministic_fallback`, `fallback_family=scene_opening`, `fallback_temporal_frame=first_impression` (historical archived baseline).
 - `audits/replay_failure_corpus.md`: says existing opening fallback direct seam would fail on wrong source, family, authorship, or temporal frame.
 - `audits/failure_dashboard_precision_pass_2026-05-11.md`: calls out opening fallback attribution as a dashboard precision target.
 - `audits/proposed_failure_classification_schema.md`: includes fallback family/source fields but does not yet encode the desired owner buckets.

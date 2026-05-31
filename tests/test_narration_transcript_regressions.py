@@ -63,7 +63,8 @@ import game.social_exchange_emission as _sse
 from game.social_exchange_emission import build_final_strict_social_response
 
 from tests.test_turn_pipeline_shared import _patch_storage
-from tests.test_fallback_behavior_gate import _fallback_contract, _answer_contract, _response_type_contract
+from tests.test_fallback_behavior_gate import _fallback_contract, _answer_contract
+from tests.helpers.final_emission_gate_fixtures import response_type_contract
 
 pytestmark = [pytest.mark.regression, pytest.mark.transcript]
 
@@ -653,7 +654,7 @@ def _run_object20_bounded_gate_case(
         "tags": [],
         "response_policy": (
             {
-                "response_type_contract": _response_type_contract("answer"),
+                "response_type_contract": response_type_contract("answer"),
                 "answer_completeness": _answer_contract(),
                 "fallback_behavior": _fallback_contract(),
             }

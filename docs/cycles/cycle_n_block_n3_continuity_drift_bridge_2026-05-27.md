@@ -10,7 +10,7 @@ The bridge projects golden replay observations into evaluator-compatible transcr
 |---|---|
 | `tests/helpers/golden_replay.py` | Added golden-replay-to-scenario-spine projection, continuity drift evaluation helper, deterministic audit context projection, and continuity summary fields in the long-session markdown renderer. |
 | `tests/test_golden_replay.py` | Extended the protected 20-turn replay to evaluate scenario-spine continuity/degradation and assert metrics-first drift invariants. |
-| `docs/reports/cycle_n_block_n3_continuity_drift_bridge_2026-05-27.md` | Documents the N3 implementation, validation, CI impact, and next recommendation. |
+| `docs/cycles/cycle_n_block_n3_continuity_drift_bridge_2026-05-27.md` | Documents the N3 implementation, validation, CI impact, and next recommendation. |
 
 ## Evaluator Seam Chosen
 The additive seam is:

@@ -226,7 +226,7 @@ CI uses the marker-selected command above so future protected replay modules can
 
 When the protected replay CI step fails, the `convergence-checks` workflow preserves K3A diagnostics as the `protected-replay-failure-report` Actions artifact, sourced from `artifacts/golden_replay/replay_failure_report.md`. The artifact appears only for a failed protected replay step; it is not published on success, and an absent report cannot replace the underlying hard-fail result.
 
-The current baseline artifact lives at [`audits/golden_replay_baseline_2026-05-11.md`](../audits/golden_replay_baseline_2026-05-11.md).
+Historical replay baseline archived; current protected replay authority is [`docs/testing/protected_replay_manifest.md`](../docs/testing/protected_replay_manifest.md). Archived baseline: [`docs/archive/dead_governance/2026-05-31/golden_replay_baseline_2026-05-11.md`](../docs/archive/dead_governance/2026-05-31/golden_replay_baseline_2026-05-11.md).
 
 ## Failure Classification Dashboard
 

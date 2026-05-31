@@ -105,9 +105,9 @@ Other candidate coverage reviewed:
 
 Documentation and audit references reviewed:
 
-- `docs/reports/cycle_i_fallback_authorship_recon_2026-05-25.md`.
-- `docs/reports/cycle_i_a_opening_owner_semantics_contract_2026-05-26.md`.
-- `docs/reports/cycle_i_fallback_authorship_contraction_closure_2026-05-26.md`.
+- `docs/cycles/cycle_i_fallback_authorship_recon_2026-05-25.md`.
+- `docs/cycles/cycle_i_a_opening_owner_semantics_contract_2026-05-26.md`.
+- `docs/cycles/cycle_i_fallback_authorship_contraction_closure_2026-05-26.md`.
 - `audits/cycle_d_visibility_fallback_contraction_closure_2026-05-13.md`.
 - `audits/cycle_f_final_gate_hotspot_touch_budget_20260518.md`.
 - `docs/final_emission_gate_reduction_plan.md`, `docs/final_emission_ownership_convergence.md`, and `docs/gate_cleanup_inventory.md`.
@@ -145,8 +145,8 @@ For implementation-block planning of the recommended opening selection seam:
 - `tests/test_start_campaign_api.py`
 - `data/scenes/frontier_gate.json`
 - `data/validation/scenario_spines/c1a_opening_convergence_paths.json`
-- `docs/reports/cycle_i_a_opening_owner_semantics_contract_2026-05-26.md`
-- `docs/reports/cycle_i_fallback_authorship_contraction_closure_2026-05-26.md`
+- `docs/cycles/cycle_i_a_opening_owner_semantics_contract_2026-05-26.md`
+- `docs/cycles/cycle_i_fallback_authorship_contraction_closure_2026-05-26.md`
 - `audits/cycle_f_final_gate_hotspot_touch_budget_20260518.md`
 
 ## Commands Run

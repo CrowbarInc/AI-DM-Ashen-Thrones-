@@ -33,7 +33,7 @@ The resulting attribution boundary is:
 | --- | --- |
 | `tests/test_final_emission_visibility_fallback.py` | New direct owner suite with the requested ownership note, minimal imports, and the 42 relocated helper test functions. |
 | `tests/test_final_emission_gate.py` | Removed only the relocated helper-owner test definitions; removed imports used solely by those tests; added a short pointer from the gate-private Block AI area to the new owner suite. Existing L1 opening changes remain present and were not reverted. |
-| `docs/reports/cycle_l_block_l4_visibility_helper_owner_suite_extraction_2026-05-26.md` | This implementation report. |
+| `docs/cycles/cycle_l_block_l4_visibility_helper_owner_suite_extraction_2026-05-26.md` | This implementation report. |
 
 No files under `game/` were changed.
 

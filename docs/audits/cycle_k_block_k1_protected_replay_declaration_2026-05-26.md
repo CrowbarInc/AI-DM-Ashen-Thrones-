@@ -10,7 +10,7 @@ Canonical manifest: `docs/testing/protected_replay_manifest.md`.
 
 - `tests/test_golden_replay.py`
 - `tests/helpers/golden_replay.py`
-- `audits/golden_replay_baseline_2026-05-11.md`
+- `docs/archive/dead_governance/2026-05-31/golden_replay_baseline_2026-05-11.md` (historical; current protected replay authority is `docs/testing/protected_replay_manifest.md`)
 - `docs/audits/cycle_k_replay_promotion_recon_2026-05-26.md`
 
 The committed baseline identifies nine canonical scenario rows. Eight are now declared `PROTECTED`; the compact three-branch schema smoke is `SUPPORTING`. Synthetic observation IDs used by projection and diagnostic tests are supporting test inputs, not scenario entries.

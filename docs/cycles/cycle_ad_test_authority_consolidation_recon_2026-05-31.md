@@ -278,13 +278,13 @@ py -3 -m pytest tests/helpers/ -q   # if helper-only changes
 
 Prioritized for follow-up planning and implementation:
 
-1. **This recon:** `cycle_ad_test_authority_consolidation_recon_2026-05-31.md`
+1. **This recon:** `docs/cycles/cycle_ad_test_authority_consolidation_recon_2026-05-31.md`
 2. **Governance anchor:** `tests/test_ownership_registry.py`, `tests/README_TESTS.md`, `tests/TEST_AUDIT.md`
 3. **Top duplicate-assertion owners:** `tests/test_final_emission_gate.py`, `tests/test_turn_pipeline_shared.py`, `tests/test_golden_replay.py`, `tests/test_social_exchange_emission.py`, `tests/test_final_emission_meta.py`, `tests/test_final_emission_visibility.py`, `tests/test_answer_completeness_rules.py`, `tests/test_response_delta_requirement.py`
 4. **Helper/fixture modules:** `tests/helpers/final_emission_gate_fixtures.py`, `tests/helpers/opening_fallback_evidence.py`, `tests/helpers/emission_smoke_assertions.py`, `tests/helpers/golden_replay_projection.py`, `tests/helpers/failure_classifier.py`, `tests/helpers/ctir_narration_bundle.py`
 5. **Intentional-overlap / high-risk (do not thin blindly):** `tests/test_golden_replay.py`, `tests/test_failure_classifier.py`, `tests/test_opening_fallback_owner_bucket.py`, `tests/test_failure_dashboard_controlled_failures.py`
 6. **Test-to-test import hubs:** `tests/test_turn_pipeline_shared.py`, `tests/test_block_s_speaker_local_rebind_equivalence.py`
-7. **Prior Cycle R context:** `tests/cycle_r_test_fanout_reduction_recon_2026-05-30.md`, `tests/cycle_r_block_r1a_fixture_dependency_map_2026-05-30.md`
+7. **Prior Cycle R context:** `docs/cycles/cycle_r_test_fanout_reduction_recon_2026-05-30.md`, `docs/cycles/cycle_r_block_r1a_fixture_dependency_map_2026-05-30.md`
 
 ---
 

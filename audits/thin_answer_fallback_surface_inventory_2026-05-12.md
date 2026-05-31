@@ -96,7 +96,7 @@ Important final-source behavior:
 
 Existing replay/golden coverage:
 
-- `audits/golden_replay_baseline_2026-05-11.md`
+- `docs/archive/dead_governance/2026-05-31/golden_replay_baseline_2026-05-11.md` (historical archived baseline; current protected replay authority is `docs/testing/protected_replay_manifest.md`)
   - `thin_answer_action_outcome_final_emission` passes with `final_emitted_source=action_outcome_upstream_prepared_repair` and `fallback_family=upstream_prepared_emission`.
   - `scenario_spine_three_branch` also observes `action_outcome_upstream_prepared_repair` on the notice branch.
 - `tests/test_golden_replay.py`
