@@ -94,6 +94,58 @@ def protected_source_expectation(*, disallow_global_scene_fallback: bool = True)
     return {"not_equals": {"final_emitted_source": PROTECTED_GLOBAL_SCENE_FALLBACK_SOURCE}}
 
 
+def protected_structural_expectation(
+    *,
+    require_present: tuple[str, ...] | list[str] = (),
+    allow_unavailable: tuple[str, ...] | list[str] = (),
+    equals: Mapping[str, Any] | None = None,
+    one_of: Mapping[str, Any] | None = None,
+    not_equals: Mapping[str, Any] | None = None,
+    include_resolution_kind: bool = False,
+    include_route_kind: bool = True,
+    include_trace_route: bool = False,
+    disallow_global_scene_fallback: bool = False,
+    no_scaffold: bool = True,
+    extra_no_scaffold_terms: tuple[str, ...] = (),
+) -> dict[str, Any]:
+    """Compose common protected replay structural expectation fragments."""
+    out: dict[str, Any] = {}
+
+    if require_present:
+        out["require_present"] = list(require_present)
+
+    if allow_unavailable:
+        out.update(protected_unavailable_expectation(*allow_unavailable))
+
+    if equals:
+        out["equals"] = dict(equals)
+
+    route_fragment = protected_route_expectation(
+        include_resolution_kind=include_resolution_kind,
+        include_route_kind=include_route_kind,
+        include_trace_route=include_trace_route,
+    )
+    route_one_of = route_fragment.get("one_of") if isinstance(route_fragment.get("one_of"), Mapping) else {}
+    custom_one_of = dict(one_of) if one_of else {}
+    merged_one_of = {**route_one_of, **custom_one_of}
+    if merged_one_of:
+        out["one_of"] = merged_one_of
+
+    source_fragment = protected_source_expectation(
+        disallow_global_scene_fallback=disallow_global_scene_fallback,
+    )
+    source_not_equals = source_fragment.get("not_equals") if isinstance(source_fragment.get("not_equals"), Mapping) else {}
+    custom_not_equals = dict(not_equals) if not_equals else {}
+    merged_not_equals = {**source_not_equals, **custom_not_equals}
+    if merged_not_equals:
+        out["not_equals"] = merged_not_equals
+
+    if no_scaffold:
+        out.update(protected_no_scaffold_expectation(extra_terms=extra_no_scaffold_terms))
+
+    return out
+
+
 def load_frontier_gate_long_session_spine() -> dict[str, Any]:
     """Load the authoritative Frontier Gate long-session replay fixture."""
     return json.loads(FRONTIER_GATE_LONG_SESSION_PATH.read_text(encoding="utf-8"))
@@ -134,6 +186,137 @@ def _format_expected_failure(
     if debug_context:
         lines.extend(["", debug_context])
     return "\n".join(lines)
+
+
+def _drift_bucket_for_field(field_path: str) -> str:
+    return protected_observation_drift_bucket(field_path)
+
+
+def _allow_unavailable_paths(expectation: Mapping[str, Any]) -> set[str]:
+    return {
+        str(path)
+        for path in expectation.get("allow_unavailable", [])
+        if isinstance(path, str) and path.strip()
+    }
+
+
+def _unavailable_paths(observed: Mapping[str, Any]) -> set[str]:
+    return {
+        str(path)
+        for path in observed.get("unavailable", [])
+        if isinstance(path, str) and path.strip()
+    }
+
+
+def _evaluate_golden_expectation(
+    observed: Mapping[str, Any],
+    expectation: Mapping[str, Any],
+) -> list[dict[str, Any]]:
+    """Return compact drift rows for shared golden expectation evaluation."""
+    issues: list[dict[str, Any]] = []
+
+    def _issue(
+        field_path: str,
+        expected: Any,
+        actual: Any,
+        reason: str,
+        *,
+        drift_bucket: str | None = None,
+    ) -> None:
+        issues.append(
+            {
+                "field_path": str(field_path),
+                "expected": expected,
+                "actual": actual,
+                "reason": str(reason),
+                "drift_bucket": drift_bucket if drift_bucket is not None else _drift_bucket_for_field(field_path),
+            }
+        )
+
+    allow_unavailable = _allow_unavailable_paths(expectation)
+    for field_path in sorted(_unavailable_paths(observed) - allow_unavailable):
+        _issue(
+            field_path,
+            f"available or allowed unavailable; allowed={sorted(allow_unavailable)!r}",
+            _lookup_path(observed, field_path),
+            "unexpected unavailable field",
+        )
+
+    for field_path in expectation.get("require_present", []):
+        field_s = str(field_path)
+        actual = _lookup_path(observed, field_s)
+        if actual is _MISSING or actual is None or actual == "":
+            _issue(field_s, "present non-empty value", actual, "required field absent")
+
+    equals = expectation.get("equals") if isinstance(expectation.get("equals"), Mapping) else {}
+    for field_path, expected in equals.items():
+        field_s = str(field_path)
+        actual = _lookup_path(observed, field_s)
+        if actual != expected:
+            _issue(field_s, expected, actual, "exact value mismatch")
+
+    one_of = expectation.get("one_of") if isinstance(expectation.get("one_of"), Mapping) else {}
+    for field_path, allowed in one_of.items():
+        field_s = str(field_path)
+        allowed_values = list(allowed) if isinstance(allowed, (list, tuple, set, frozenset)) else [allowed]
+        actual = _lookup_path(observed, field_s)
+        if actual not in allowed_values:
+            _issue(field_s, allowed_values, actual, "value not in allowed set")
+
+    not_equals = expectation.get("not_equals") if isinstance(expectation.get("not_equals"), Mapping) else {}
+    for field_path, forbidden in not_equals.items():
+        field_s = str(field_path)
+        actual = _lookup_path(observed, field_s)
+        if actual == forbidden:
+            _issue(field_s, f"anything except {forbidden!r}", actual, "forbidden value observed")
+
+    final_text = str(observed.get("final_text") or "")
+    for needle in expectation.get("text_must_include", []):
+        if str(needle) not in final_text:
+            _issue(
+                "final_text",
+                f"include {str(needle)!r}",
+                final_text,
+                "required text fragment missing",
+                drift_bucket="semantic_drift",
+            )
+    for needle in expectation.get("text_must_not_include", []):
+        if str(needle) in final_text:
+            _issue(
+                "final_text",
+                f"not include {str(needle)!r}",
+                final_text,
+                "forbidden text fragment observed",
+                drift_bucket="semantic_drift",
+            )
+
+    expected_scaffold = expectation.get("scaffold_leakage")
+    if expected_scaffold is not None:
+        actual_scaffold = _lookup_path(observed, "scaffold_leakage")
+        if actual_scaffold is not bool(expected_scaffold):
+            _issue(
+                "scaffold_leakage",
+                bool(expected_scaffold),
+                actual_scaffold,
+                "scaffold leakage mismatch",
+                drift_bucket="semantic_drift",
+            )
+
+    return issues
+
+
+def _assert_expected_for_issue(issue: Mapping[str, Any], expectation: Mapping[str, Any]) -> Any:
+    if issue.get("reason") == "unexpected unavailable field":
+        allow_unavailable = _allow_unavailable_paths(expectation)
+        return f"available or explicitly allowed unavailable; allowed={sorted(allow_unavailable)!r}"
+    return issue.get("expected")
+
+
+def _assert_reason_for_issue(issue: Mapping[str, Any]) -> str:
+    reason = str(issue.get("reason") or "")
+    if reason == "forbidden value observed":
+        return "forbidden exact value observed"
+    return reason
 
 
 def _raise_expected_failure(
@@ -187,121 +370,16 @@ def assert_golden_turn_observation(
     ``not_equals``, ``text_must_include``, ``text_must_not_include``, and
     ``scaffold_leakage``. Field selectors use dotted paths for nested dicts.
     """
-    allow_unavailable = {
-        str(path)
-        for path in expectation.get("allow_unavailable", [])
-        if isinstance(path, str) and path.strip()
-    }
-    unavailable = {
-        str(path)
-        for path in turn.get("unavailable", [])
-        if isinstance(path, str) and path.strip()
-    }
-    for field_path in sorted(unavailable - allow_unavailable):
-        actual = _lookup_path(turn, field_path)
+    for issue in _evaluate_golden_expectation(turn, expectation):
         _raise_expected_failure(
             turn=turn,
-            field_path=field_path,
-            expected=f"available or explicitly allowed unavailable; allowed={sorted(allow_unavailable)!r}",
-            actual=actual,
-            reason="unexpected unavailable field",
+            field_path=str(issue["field_path"]),
+            expected=_assert_expected_for_issue(issue, expectation),
+            actual=issue["actual"],
+            reason=_assert_reason_for_issue(issue),
             debug_context=debug_context,
             report_scenario_id=_report_scenario_id,
         )
-
-    for field_path in expectation.get("require_present", []):
-        actual = _lookup_path(turn, str(field_path))
-        if actual is _MISSING or actual is None or actual == "":
-            _raise_expected_failure(
-                turn=turn,
-                field_path=str(field_path),
-                expected="present non-empty value",
-                actual=actual,
-                reason="required field absent",
-                debug_context=debug_context,
-                report_scenario_id=_report_scenario_id,
-            )
-
-    equals = expectation.get("equals") if isinstance(expectation.get("equals"), Mapping) else {}
-    for field_path, expected in equals.items():
-        actual = _lookup_path(turn, str(field_path))
-        if actual != expected:
-            _raise_expected_failure(
-                turn=turn,
-                field_path=str(field_path),
-                expected=expected,
-                actual=actual,
-                reason="exact value mismatch",
-                debug_context=debug_context,
-                report_scenario_id=_report_scenario_id,
-            )
-
-    one_of = expectation.get("one_of") if isinstance(expectation.get("one_of"), Mapping) else {}
-    for field_path, allowed in one_of.items():
-        allowed_values = list(allowed) if isinstance(allowed, (list, tuple, set, frozenset)) else [allowed]
-        actual = _lookup_path(turn, str(field_path))
-        if actual not in allowed_values:
-            _raise_expected_failure(
-                turn=turn,
-                field_path=str(field_path),
-                expected=allowed_values,
-                actual=actual,
-                reason="value not in allowed set",
-                debug_context=debug_context,
-                report_scenario_id=_report_scenario_id,
-            )
-
-    not_equals = expectation.get("not_equals") if isinstance(expectation.get("not_equals"), Mapping) else {}
-    for field_path, forbidden in not_equals.items():
-        actual = _lookup_path(turn, str(field_path))
-        if actual == forbidden:
-            _raise_expected_failure(
-                turn=turn,
-                field_path=str(field_path),
-                expected=f"anything except {forbidden!r}",
-                actual=actual,
-                reason="forbidden exact value observed",
-                debug_context=debug_context,
-                report_scenario_id=_report_scenario_id,
-            )
-
-    final_text = str(turn.get("final_text") or "")
-    for needle in expectation.get("text_must_include", []):
-        if str(needle) not in final_text:
-            _raise_expected_failure(
-                turn=turn,
-                field_path="final_text",
-                expected=f"include {str(needle)!r}",
-                actual=final_text,
-                reason="required text fragment missing",
-                debug_context=debug_context,
-                report_scenario_id=_report_scenario_id,
-            )
-    for needle in expectation.get("text_must_not_include", []):
-        if str(needle) in final_text:
-            _raise_expected_failure(
-                turn=turn,
-                field_path="final_text",
-                expected=f"not include {str(needle)!r}",
-                actual=final_text,
-                reason="forbidden text fragment observed",
-                debug_context=debug_context,
-                report_scenario_id=_report_scenario_id,
-            )
-
-    expected_scaffold = expectation.get("scaffold_leakage")
-    if expected_scaffold is not None:
-        actual = _lookup_path(turn, "scaffold_leakage")
-        if actual is not bool(expected_scaffold):
-            _raise_expected_failure(
-                turn=turn,
-                field_path="scaffold_leakage",
-                expected=bool(expected_scaffold),
-                actual=actual,
-                reason="scaffold leakage mismatch",
-                debug_context=debug_context,
-                report_scenario_id=_report_scenario_id,
-            )
 
 
 def assert_protected_golden_turn_observation(
@@ -318,10 +396,6 @@ def assert_protected_golden_turn_observation(
         debug_context=debug_context,
         _report_scenario_id=scenario_id,
     )
-
-
-def _drift_bucket_for_field(field_path: str) -> str:
-    return protected_observation_drift_bucket(field_path)
 
 
 def _add_drift(out: dict[str, Any], bucket: str, field_path: str, expected: Any, actual: Any, reason: str) -> None:
@@ -372,74 +446,15 @@ def classify_golden_drift(
                 "opt-in exact text hash mismatch",
             )
 
-    allow_unavailable = {
-        str(path)
-        for path in expectation.get("allow_unavailable", [])
-        if isinstance(path, str) and path.strip()
-    }
-    unavailable = {
-        str(path)
-        for path in observed.get("unavailable", [])
-        if isinstance(path, str) and path.strip()
-    }
-    for field_path in sorted(unavailable - allow_unavailable):
+    for issue in _evaluate_golden_expectation(observed, expectation):
         _add_drift(
             out,
-            _drift_bucket_for_field(field_path),
-            field_path,
-            f"available or allowed unavailable; allowed={sorted(allow_unavailable)!r}",
-            _lookup_path(observed, field_path),
-            "unexpected unavailable field",
+            str(issue["drift_bucket"]),
+            str(issue["field_path"]),
+            issue["expected"],
+            issue["actual"],
+            str(issue["reason"]),
         )
-
-    for field_path in expectation.get("require_present", []):
-        field_s = str(field_path)
-        actual = _lookup_path(observed, field_s)
-        if actual is _MISSING or actual is None or actual == "":
-            _add_drift(out, _drift_bucket_for_field(field_s), field_s, "present non-empty value", actual, "required field absent")
-
-    equals = expectation.get("equals") if isinstance(expectation.get("equals"), Mapping) else {}
-    for field_path, expected in equals.items():
-        field_s = str(field_path)
-        actual = _lookup_path(observed, field_s)
-        if actual != expected:
-            _add_drift(out, _drift_bucket_for_field(field_s), field_s, expected, actual, "exact value mismatch")
-
-    one_of = expectation.get("one_of") if isinstance(expectation.get("one_of"), Mapping) else {}
-    for field_path, allowed in one_of.items():
-        field_s = str(field_path)
-        allowed_values = list(allowed) if isinstance(allowed, (list, tuple, set, frozenset)) else [allowed]
-        actual = _lookup_path(observed, field_s)
-        if actual not in allowed_values:
-            _add_drift(out, _drift_bucket_for_field(field_s), field_s, allowed_values, actual, "value not in allowed set")
-
-    not_equals = expectation.get("not_equals") if isinstance(expectation.get("not_equals"), Mapping) else {}
-    for field_path, forbidden in not_equals.items():
-        field_s = str(field_path)
-        actual = _lookup_path(observed, field_s)
-        if actual == forbidden:
-            _add_drift(out, _drift_bucket_for_field(field_s), field_s, f"anything except {forbidden!r}", actual, "forbidden value observed")
-
-    final_text = str(observed.get("final_text") or "")
-    for needle in expectation.get("text_must_include", []):
-        if str(needle) not in final_text:
-            _add_drift(out, "semantic_drift", "final_text", f"include {str(needle)!r}", final_text, "required text fragment missing")
-    for needle in expectation.get("text_must_not_include", []):
-        if str(needle) in final_text:
-            _add_drift(out, "semantic_drift", "final_text", f"not include {str(needle)!r}", final_text, "forbidden text fragment observed")
-
-    if expectation.get("scaffold_leakage") is not None:
-        expected_scaffold = bool(expectation.get("scaffold_leakage"))
-        actual_scaffold = _lookup_path(observed, "scaffold_leakage")
-        if actual_scaffold is not expected_scaffold:
-            _add_drift(
-                out,
-                "semantic_drift",
-                "scaffold_leakage",
-                expected_scaffold,
-                actual_scaffold,
-                "scaffold leakage mismatch",
-            )
 
     out["status"] = "fail" if any(out[k] for k in ("exact_drift", "structural_drift", "semantic_drift")) else "pass"
     out["summary"] = {

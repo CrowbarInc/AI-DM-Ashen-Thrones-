@@ -6,7 +6,6 @@ import pytest
 
 from game import storage
 from game.api import chat
-from game.defaults import default_scene, default_world
 import game.final_emission_gate as feg
 from game.final_emission_gate import apply_final_emission_gate
 from game.final_emission_meta import (
@@ -46,6 +45,7 @@ from tests.helpers.golden_replay import (
     protected_no_scaffold_expectation,
     protected_route_expectation,
     protected_source_expectation,
+    protected_structural_expectation,
     protected_unavailable_expectation,
     render_golden_replay_markdown_report,
     render_long_session_replay_summary_markdown,
@@ -91,6 +91,22 @@ from tests.helpers.final_emission_gate_fixtures import (
     opening_gm_output,
     runner_strict_bundle,
 )
+from tests.helpers.golden_replay_fixtures import (
+    fem_payload,
+    gm_response,
+    golden_replay_chat_stubs,
+    minimal_gm_output_payload,
+    minimal_turn_payload,
+    observed_turn_from_gate_output,
+    project_synthetic_turn,
+    seed_frontier_gate_world,
+    seed_investigator_runner_world,
+    seed_runner_continuity_world,
+    seed_runner_guard_world,
+    seed_scene_object_investigation_world,
+    seed_spine_three_branch_world,
+    seed_tavern_patrol_lead_world,
+)
 
 pytestmark = [pytest.mark.integration, pytest.mark.golden_replay]
 
@@ -102,18 +118,14 @@ pytestmark = [pytest.mark.integration, pytest.mark.golden_replay]
 
 
 def test_golden_replay_projection_adapter_wires_observed_turn():
-    turn_payload = {
-        "scenario_id": "projection_adapter",
-        "snap": {"turn_index": 0, "gm_text": "Rain falls on the gate road."},
-        "payload": {
-            "gm_output": {
-                "_final_emission_meta": {
-                    "response_type_required": "neutral_narration",
-                    "final_emitted_source": "upstream_prepared_emission",
-                }
-            }
-        },
-    }
+    turn_payload = minimal_turn_payload(
+        scenario_id="projection_adapter",
+        gm_text="Rain falls on the gate road.",
+        fem_meta=fem_payload(
+            response_type_required="neutral_narration",
+            final_emitted_source="upstream_prepared_emission",
+        ),
+    )
     via_adapter = project_turn_observation(turn_payload)
     via_wrapper = _observed_turn(
         scenario_id=str(turn_payload["scenario_id"]),
@@ -142,11 +154,11 @@ def test_golden_replay_dual_family_projection_prefers_diegetic_fallback_family_u
     assert project_replay_fallback_family_from_fem(fem) == "scene_opening"
 
     turn = project_turn_observation(
-        {
-            "scenario_id": "dual_family_diegetic_first",
-            "snap": {"turn_index": 0, "gm_text": "Rain on the gate road."},
-            "payload": {"gm_output": {"_final_emission_meta": fem}},
-        }
+        minimal_turn_payload(
+            scenario_id="dual_family_diegetic_first",
+            gm_text="Rain on the gate road.",
+            fem_meta=fem,
+        )
     )
     assert turn["fallback_family"] == "scene_opening"
     assert "fallback_family_used" in turn["fem_raw_keys"]
@@ -159,11 +171,11 @@ def test_golden_replay_dual_family_projection_falls_back_to_realization_when_die
     assert project_replay_fallback_family_from_fem(fem) == "upstream_prepared_emission"
 
     turn = project_turn_observation(
-        {
-            "scenario_id": "dual_family_realization_fallback",
-            "snap": {"turn_index": 0, "gm_text": "The notice board creaks."},
-            "payload": {"gm_output": {"_final_emission_meta": fem}},
-        }
+        minimal_turn_payload(
+            scenario_id="dual_family_realization_fallback",
+            gm_text="The notice board creaks.",
+            fem_meta=fem,
+        )
     )
     assert turn["fallback_family"] == "upstream_prepared_emission"
 
@@ -175,15 +187,42 @@ def test_golden_replay_dual_family_projection_does_not_rewrite_raw_fem_fields() 
         "realization_fallback_family": "upstream_prepared_emission",
         "final_emitted_source": "opening_deterministic_fallback",
     }
-    payload = {"gm_output": {"_final_emission_meta": dict(raw_fem)}}
+    payload = minimal_gm_output_payload(fem_meta=raw_fem)
     project_turn_observation(
-        {
-            "scenario_id": "dual_family_no_rewrite",
-            "snap": {"turn_index": 0, "gm_text": "Torchlight on wet stone."},
-            "payload": payload,
-        }
+        minimal_turn_payload(
+            scenario_id="dual_family_no_rewrite",
+            gm_text="Torchlight on wet stone.",
+            payload=payload,
+        )
     )
     stored = payload["gm_output"]["_final_emission_meta"]
+    assert stored["fallback_family_used"] == "scene_opening"
+    assert stored["realization_fallback_family"] == "upstream_prepared_emission"
+
+
+def test_observed_turn_from_gate_output_projects_direct_seam_fields() -> None:
+    """Direct-seam helper uses canonical projection and supports extra assertion fields."""
+    raw_fem = {
+        "fallback_family_used": "scene_opening",
+        "realization_fallback_family": "upstream_prepared_emission",
+        "final_emitted_source": "opening_deterministic_fallback",
+    }
+    gm_output = {
+        "player_facing_text": "Rain on the gate.",
+        "_final_emission_meta": dict(raw_fem),
+    }
+    turn = observed_turn_from_gate_output(
+        scenario_id="direct_seam_helper_probe",
+        gm_output=gm_output,
+        extra_fields={"dialogue_plan_valid": True},
+    )
+    assert turn["final_text"] == "Rain on the gate."
+    assert turn["final_emitted_source"] == "opening_deterministic_fallback"
+    assert turn["fallback_family"] == "scene_opening"
+    assert "fallback_family_used" in turn["fem_raw_keys"]
+    assert "realization_fallback_family" in turn["fem_raw_keys"]
+    assert turn["dialogue_plan_valid"] is True
+    stored = gm_output["_final_emission_meta"]
     assert stored["fallback_family_used"] == "scene_opening"
     assert stored["realization_fallback_family"] == "upstream_prepared_emission"
 
@@ -213,277 +252,6 @@ def test_protected_replay_manifest_generated_section_matches_projection_field_pa
     assert str(len(paths)) in current
     for path in paths:
         assert f"| `{path}` |" in current
-
-
-def _gm_response(text: str, *, tags: list[str] | None = None, debug_notes: str = "") -> dict:
-    return {
-        "player_facing_text": text,
-        "tags": list(tags or []),
-        "scene_update": None,
-        "activate_scene_id": None,
-        "new_scene_draft": None,
-        "world_updates": None,
-        "suggested_action": None,
-        "debug_notes": debug_notes,
-    }
-
-
-def _seed_directed_runner_question_context() -> None:
-    scene = default_scene("scene_investigate")
-    scene["scene"]["id"] = "scene_investigate"
-    scene["scene"]["location"] = "Investigator's Office"
-    scene["scene"]["summary"] = "Rain taps the shutters while patrol notices curl on the desk."
-    storage._save_json(storage.scene_path("scene_investigate"), scene)
-
-    world = default_world()
-    world["npcs"] = [
-        {
-            "id": "runner",
-            "name": "Tavern Runner",
-            "location": "scene_investigate",
-            "topics": [
-                {
-                    "id": "lanes",
-                    "text": "They were seen near the east lanes.",
-                    "clue_id": "east_lanes",
-                }
-            ],
-        }
-    ]
-    storage._save_json(storage.WORLD_PATH, world)
-
-    session = storage.load_session()
-    session["active_scene_id"] = "scene_investigate"
-    session["visited_scene_ids"] = ["scene_investigate"]
-    storage.save_session(session)
-
-
-def _seed_runner_and_guard_context() -> None:
-    scene = default_scene("scene_investigate")
-    scene["scene"]["id"] = "scene_investigate"
-    scene["scene"]["location"] = "Investigator's Office"
-    scene["scene"]["summary"] = "A runner and a guard wait beside rain-spattered patrol maps."
-    storage._save_json(storage.scene_path("scene_investigate"), scene)
-
-    world = default_world()
-    world["npcs"] = [
-        {
-            "id": "runner",
-            "name": "Tavern Runner",
-            "location": "scene_investigate",
-            "topics": [
-                {
-                    "id": "lanes",
-                    "text": "They were seen near the east lanes.",
-                    "clue_id": "east_lanes",
-                }
-            ],
-        },
-        {
-            "id": "guard",
-            "name": "Gate Guard",
-            "location": "scene_investigate",
-            "topics": [
-                {
-                    "id": "patrol",
-                    "text": "The guard saw fresh mud by the north arch.",
-                    "clue_id": "north_arch_mud",
-                }
-            ],
-        },
-    ]
-    storage._save_json(storage.WORLD_PATH, world)
-
-    session = storage.load_session()
-    session["active_scene_id"] = "scene_investigate"
-    session["visited_scene_ids"] = ["scene_investigate"]
-    storage.save_session(session)
-
-
-def _seed_runner_continuity_context() -> None:
-    _seed_runner_and_guard_context()
-    session = storage.load_session()
-    session_ctx = session.setdefault("interaction_context", {})
-    session_ctx["active_interaction_target_id"] = "runner"
-    session_ctx["active_interaction_kind"] = "social"
-    session_ctx["interaction_mode"] = "social"
-    session_ctx["engagement_level"] = "engaged"
-    session.setdefault("scene_state", {})["current_interlocutor"] = "runner"
-    storage.save_session(session)
-
-
-def _seed_tavern_patrol_lead_context() -> None:
-    tavern = default_scene("tavern")
-    tavern["scene"]["id"] = "tavern"
-    tavern["scene"]["location"] = "Rain Barrel Tavern"
-    tavern["scene"]["summary"] = "A crowded tavern hums around a runner with news of the missing patrol."
-    tavern["scene"]["exits"] = [{"label": "Path to the old milestone", "target_scene_id": "old_milestone"}]
-    storage._save_json(storage.scene_path("tavern"), tavern)
-
-    milestone = default_scene("old_milestone")
-    milestone["scene"]["id"] = "old_milestone"
-    milestone["scene"]["location"] = "Old Milestone"
-    storage._save_json(storage.scene_path("old_milestone"), milestone)
-
-    world = default_world()
-    world["npcs"] = [
-        {
-            "id": "tavern_runner",
-            "name": "Tavern Runner",
-            "location": "tavern",
-            "topics": [
-                {
-                    "id": "patrol_milestone",
-                    "text": "The patrol never came back from the old milestone.",
-                    "clue_id": "c_patrol_milestone",
-                    "leads_to_scene": "old_milestone",
-                }
-            ],
-        }
-    ]
-    storage._save_json(storage.WORLD_PATH, world)
-
-    session = storage.load_session()
-    session["active_scene_id"] = "tavern"
-    session["visited_scene_ids"] = ["tavern"]
-    storage.save_session(session)
-
-
-def _seed_scene_object_investigation_context() -> None:
-    scene = default_scene("scene_investigate")
-    scene["scene"]["id"] = "scene_investigate"
-    scene["scene"]["location"] = "Investigator's Office"
-    scene["scene"]["summary"] = "A rain-damp office holds patrol maps, a desk, and a public notice board."
-    scene["scene"]["visible_facts"] = [
-        "A notice board carries a posting about the missing patrol.",
-        "An ink-stained desk is crowded with patrol maps.",
-    ]
-    scene["scene"]["interactables"] = [
-        {
-            "id": "notice_board",
-            "label": "Notice board",
-            "aliases": ["notice", "posting about the missing patrol"],
-            "type": "investigate",
-            "reveals_clue": "notice_patrol_details",
-        }
-    ]
-    scene["scene"]["discoverable_clues"] = [
-        {"id": "notice_patrol_details", "text": "The missing patrol was last seen below the east ridge."}
-    ]
-    storage._save_json(storage.scene_path("scene_investigate"), scene)
-
-    world = default_world()
-    world["npcs"] = []
-    storage._save_json(storage.WORLD_PATH, world)
-
-    session = storage.load_session()
-    session["active_scene_id"] = "scene_investigate"
-    session["visited_scene_ids"] = ["scene_investigate"]
-    storage.save_session(session)
-
-
-def _seed_spine_three_branch_context() -> None:
-    _seed_runner_and_guard_context()
-    scene = storage.load_scene("scene_investigate")
-    scene["scene"]["visible_facts"] = [
-        "A runner waits by the desk with road gossip.",
-        "A gate guard studies muddy patrol marks.",
-        "A notice board carries a posting about the missing patrol.",
-    ]
-    scene["scene"]["interactables"] = [
-        {
-            "id": "notice_board",
-            "label": "Notice board",
-            "aliases": ["notice", "posting about the missing patrol"],
-            "type": "investigate",
-            "reveals_clue": "notice_patrol_details",
-        }
-    ]
-    scene["scene"]["discoverable_clues"] = [
-        {"id": "notice_patrol_details", "text": "The missing patrol was last seen below the east ridge."}
-    ]
-    storage._save_json(storage.scene_path("scene_investigate"), scene)
-
-
-def _seed_frontier_gate_long_session_context() -> None:
-    scene = default_scene("frontier_gate")
-    scene["scene"]["id"] = "frontier_gate"
-    scene["scene"]["location"] = "Cinderwatch Gate District"
-    scene["scene"]["summary"] = (
-        "Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry."
-    )
-    scene["scene"]["visible_facts"] = [
-        "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
-        "A gate serjeant manages the crowd and keeps one eye on the roster board.",
-        "A tavern runner trades hot stew and rumors near the rain barrel.",
-        "Threadbare watchers and refugees cluster along the muddy gate line.",
-        "Ash Compact census delays have tightened the eastern caravan choke point.",
-    ]
-    scene["scene"]["interactables"] = [
-        {
-            "id": "notice_board",
-            "label": "Notice board",
-            "aliases": ["notice", "board", "curfew notice", "missing patrol warning"],
-            "type": "investigate",
-            "reveals_clue": "notice_patrol_route",
-        }
-    ]
-    scene["scene"]["discoverable_clues"] = [
-        {
-            "id": "notice_patrol_route",
-            "text": "The missing patrol was last seen taking the northwest mud track past the crates.",
-        }
-    ]
-    storage._save_json(storage.scene_path("frontier_gate"), scene)
-
-    world = default_world()
-    world["npcs"] = [
-        {
-            "id": "gate_guard",
-            "name": "Gate Guard",
-            "location": "frontier_gate",
-            "aliases": ["guard", "watch", "watch guard"],
-            "topics": [
-                {
-                    "id": "watch_command",
-                    "text": "Captain Thoran commands the gate watch tonight.",
-                    "clue_id": "captain_thoran_watch",
-                }
-            ],
-        },
-        {
-            "id": "gate_serjeant",
-            "name": "Gate Serjeant",
-            "location": "frontier_gate",
-            "aliases": ["serjeant", "watch serjeant", "gate serjeant"],
-            "topics": [
-                {
-                    "id": "route_change",
-                    "text": "The patrol route changed after the Ash Compact census choke worsened.",
-                    "clue_id": "patrol_route_change",
-                }
-            ],
-        },
-        {
-            "id": "tavern_runner",
-            "name": "Tavern Runner",
-            "location": "frontier_gate",
-            "aliases": ["runner", "tavern runner"],
-            "topics": [
-                {
-                    "id": "patrol_rumor",
-                    "text": "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
-                    "clue_id": "muddy_footprints_northwest",
-                }
-            ],
-        },
-    ]
-    storage._save_json(storage.WORLD_PATH, world)
-
-    session = storage.load_session()
-    session["active_scene_id"] = "frontier_gate"
-    session["visited_scene_ids"] = ["frontier_gate"]
-    storage.save_session(session)
 
 
 def test_golden_expectation_helper_supports_dotted_paths_and_debug_messages():
@@ -883,21 +651,17 @@ def test_compare_golden_replay_reruns_handles_missing_optional_metadata():
 
 
 def test_golden_observed_turn_projects_response_delta_metadata():
-    observed = _observed_turn(
+    observed = project_synthetic_turn(
         scenario_id="response_delta_projection",
-        snap={"turn_index": 0, "gm_text": "The runner adds a new location lead."},
-        payload={
-            "gm_output": {
-                "_final_emission_meta": {
-                    "response_delta_checked": True,
-                    "response_delta_failed": True,
-                    "response_delta_repaired": False,
-                    "response_delta_kind_detected": "new_actionable_lead",
-                    "response_delta_echo_overlap_ratio": 0.2,
-                    "response_delta_trigger_source": "strict_social_answer_pressure",
-                }
-            }
-        },
+        gm_text="The runner adds a new location lead.",
+        fem_meta=fem_payload(
+            response_delta_checked=True,
+            response_delta_failed=True,
+            response_delta_repaired=False,
+            response_delta_kind_detected="new_actionable_lead",
+            response_delta_echo_overlap_ratio=0.2,
+            response_delta_trigger_source="strict_social_answer_pressure",
+        ),
     )
 
     assert observed["response_delta_checked"] is True
@@ -1219,17 +983,13 @@ def test_long_session_replay_summary_renderer_surfaces_operator_metrics():
 # Opening fallback projection fields are repeated here as replay contract locks;
 # the owner-bucket mapper itself is owned by tests/test_opening_fallback_owner_bucket.py.
 def test_golden_observed_turn_projects_canonical_upstream_prepared_opening_owner_bucket():
-    observed = _observed_turn(
+    observed = project_synthetic_turn(
         scenario_id="synthetic_opening_owner",
-        snap={"turn_index": 0, "gm_text": "The road opens."},
-        payload={
-            "gm_output": {
-                "_final_emission_meta": successful_opening_fem_meta(
-                    response_type_repair_kind="opening_deterministic_fallback",
-                    fallback_temporal_frame="first_impression",
-                )
-            }
-        },
+        gm_text="The road opens.",
+        fem_meta=successful_opening_fem_meta(
+            response_type_repair_kind="opening_deterministic_fallback",
+            fallback_temporal_frame="first_impression",
+        ),
     )
 
     assert observed["opening_fallback_owner_bucket"] == OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED
@@ -1243,30 +1003,24 @@ def test_golden_observed_turn_projects_runtime_lineage_and_prefers_existing_even
         source="provided_projection",
         repair_kind="local_rebind",
     )
-    observed = _observed_turn(
+    observed = project_synthetic_turn(
         scenario_id="existing_lineage_projection",
-        snap={"turn_index": 0, "gm_text": "The road opens."},
-        payload={
-            "gm_output": {
-                "metadata": {"observability_bundle": {"fem_runtime_lineage_events": [existing]}},
-                "_final_emission_meta": {
-                    "final_emitted_source": "opening_deterministic_fallback",
-                    "opening_recovered_via_fallback": True,
-                    "fallback_family_used": "scene_opening",
-                },
-            }
-        },
+        gm_text="The road opens.",
+        payload=minimal_gm_output_payload(
+            fem_meta=fem_payload(
+                final_emitted_source="opening_deterministic_fallback",
+                opening_recovered_via_fallback=True,
+                fallback_family_used="scene_opening",
+            ),
+            metadata={"observability_bundle": {"fem_runtime_lineage_events": [existing]}},
+        ),
     )
     assert observed["runtime_lineage_events"] == [existing]
 
-    from_fem = _observed_turn(
+    from_fem = project_synthetic_turn(
         scenario_id="fem_lineage_projection",
-        snap={"turn_index": 0, "gm_text": "The road opens."},
-        payload={
-            "gm_output": {
-                "_final_emission_meta": successful_opening_fem_meta()
-            }
-        },
+        gm_text="The road opens.",
+        fem_meta=successful_opening_fem_meta(),
     )
     opening_selected = next(
         event for event in from_fem["runtime_lineage_events"] if event["event_kind"] == "fallback_selected"
@@ -1283,31 +1037,24 @@ def test_golden_observed_turn_projects_runtime_lineage_and_prefers_existing_even
     assert "'fallback_authorship_source': 'upstream_prepared_opening_fallback'" in debug
     assert "'fallback_owner_bucket': 'upstream-prepared'" in debug
 
-    missing = _observed_turn(
+    missing = project_synthetic_turn(
         scenario_id="missing_lineage_projection",
-        snap={"turn_index": 0, "gm_text": "The road remains quiet."},
-        payload={"gm_output": {"player_facing_text": "The road remains quiet."}},
+        gm_text="The road remains quiet.",
+        payload=minimal_gm_output_payload(player_facing_text="The road remains quiet."),
     )
     assert missing["runtime_lineage_events"] == []
 
 
 def test_golden_observed_turn_projects_neutral_speaker_grounding_replacement_family():
-    observed = _observed_turn(
+    observed = project_synthetic_turn(
         scenario_id="neutral_grounding_family_projection",
-        snap={
-            "turn_index": 0,
-            "player_text": "I force the side door.",
-            "gm_text": "The moment passes without anyone stepping forward to own that thread.",
-        },
-        payload={
-            "gm_output": {
-                "_final_emission_meta": {
-                    "final_route": "replaced",
-                    "final_emitted_source": NEUTRAL_REPLY_SPEAKER_GROUNDING_BRIDGE_FAMILY,
-                    "response_type_repair_used": False,
-                }
-            }
-        },
+        gm_text="The moment passes without anyone stepping forward to own that thread.",
+        player_text="I force the side door.",
+        fem_meta=fem_payload(
+            final_route="replaced",
+            final_emitted_source=NEUTRAL_REPLY_SPEAKER_GROUNDING_BRIDGE_FAMILY,
+            response_type_repair_used=False,
+        ),
     )
 
     assert observed["fallback_family"] == NEUTRAL_REPLY_SPEAKER_GROUNDING_BRIDGE_FAMILY
@@ -1375,17 +1122,13 @@ def test_long_session_summary_treats_scene_action_fallback_speaker_absence_as_op
 
 
 def test_golden_observed_turn_projects_fail_closed_sealed_gate_opening_owner_bucket():
-    observed = _observed_turn(
+    observed = project_synthetic_turn(
         scenario_id="synthetic_opening_owner_fail_closed",
-        snap={"turn_index": 0, "gm_text": "[opening_fallback_failed_closed:no_curated_facts]"},
-        payload={
-            "gm_output": {
-                "_final_emission_meta": fail_closed_opening_fem_meta(
-                    opening_recovered_via_fallback=True,
-                    fallback_family_used="scene_opening",
-                )
-            }
-        },
+        gm_text="[opening_fallback_failed_closed:no_curated_facts]",
+        fem_meta=fail_closed_opening_fem_meta(
+            opening_recovered_via_fallback=True,
+            fallback_family_used="scene_opening",
+        ),
     )
 
     assert observed["opening_fallback_owner_bucket"] == OPENING_FALLBACK_OWNER_SEALED_GATE
@@ -1408,38 +1151,30 @@ def test_golden_observed_turn_projects_fail_closed_sealed_gate_opening_owner_buc
 # owned by final_emission_sealed_fallback; gate branch selection/output remains
 # owned by final_emission_gate.
 def test_golden_observed_turn_projects_sealed_fallback_owner_bucket():
-    observed = _observed_turn(
+    observed = project_synthetic_turn(
         scenario_id="synthetic_sealed_owner",
-        snap={"turn_index": 0, "gm_text": "A sealed fallback line."},
-        payload={
-            "gm_output": {
-                "_final_emission_meta": {
-                    "final_route": "replaced",
-                    "final_emitted_source": "global_scene_fallback",
-                    "sealed_fallback_owner_bucket": SEALED_FALLBACK_OWNER_SEALED_GATE,
-                    "realization_fallback_family": "gate_terminal_repair",
-                }
-            }
-        },
+        gm_text="A sealed fallback line.",
+        fem_meta=fem_payload(
+            final_route="replaced",
+            final_emitted_source="global_scene_fallback",
+            sealed_fallback_owner_bucket=SEALED_FALLBACK_OWNER_SEALED_GATE,
+            realization_fallback_family="gate_terminal_repair",
+        ),
     )
 
     assert observed["sealed_fallback_owner_bucket"] == SEALED_FALLBACK_OWNER_SEALED_GATE
 
 
 def test_golden_observed_turn_projects_strict_social_sealed_fallback_owner_bucket():
-    observed = _observed_turn(
+    observed = project_synthetic_turn(
         scenario_id="synthetic_strict_social_sealed_owner",
-        snap={"turn_index": 0, "gm_text": "A strict-social sealed fallback line."},
-        payload={
-            "gm_output": {
-                "_final_emission_meta": {
-                    "final_route": "replaced",
-                    "final_emitted_source": "minimal_social_emergency_fallback",
-                    "sealed_fallback_owner_bucket": SEALED_FALLBACK_OWNER_STRICT_SOCIAL_SEALED,
-                    "realization_fallback_family": "strict_social_deterministic_fallback",
-                }
-            }
-        },
+        gm_text="A strict-social sealed fallback line.",
+        fem_meta=fem_payload(
+            final_route="replaced",
+            final_emitted_source="minimal_social_emergency_fallback",
+            sealed_fallback_owner_bucket=SEALED_FALLBACK_OWNER_STRICT_SOCIAL_SEALED,
+            realization_fallback_family="strict_social_deterministic_fallback",
+        ),
     )
 
     assert observed["sealed_fallback_owner_bucket"] == SEALED_FALLBACK_OWNER_STRICT_SOCIAL_SEALED
@@ -1453,22 +1188,18 @@ def test_golden_observed_turn_projects_strict_social_sealed_fallback_owner_bucke
 
 
 def test_golden_observed_turn_projects_visibility_fallback_evidence():
-    observed = _observed_turn(
+    observed = project_synthetic_turn(
         scenario_id="synthetic_visibility_owner",
-        snap={"turn_index": 0, "gm_text": "A visibility fallback line."},
-        payload={
-            "gm_output": {
-                "_final_emission_meta": {
-                    "final_route": "replaced",
-                    "final_emitted_source": "global_scene_fallback",
-                    "visibility_fallback_owner_bucket": "sealed-gate",
-                    "visibility_replacement_applied": True,
-                    "visibility_fallback_pool": "global_scene_narrative",
-                    "visibility_fallback_kind": "narrative_safe_fallback",
-                    "sealed_fallback_owner_bucket": SEALED_FALLBACK_OWNER_SEALED_GATE,
-                }
-            }
-        },
+        gm_text="A visibility fallback line.",
+        fem_meta=fem_payload(
+            final_route="replaced",
+            final_emitted_source="global_scene_fallback",
+            visibility_fallback_owner_bucket="sealed-gate",
+            visibility_replacement_applied=True,
+            visibility_fallback_pool="global_scene_narrative",
+            visibility_fallback_kind="narrative_safe_fallback",
+            sealed_fallback_owner_bucket=SEALED_FALLBACK_OWNER_SEALED_GATE,
+        ),
     )
 
     assert observed["visibility_fallback_owner_bucket"] == "sealed-gate"
@@ -1501,26 +1232,23 @@ def test_golden_observed_turn_projects_visibility_fallback_evidence():
     ],
 )
 def test_golden_observed_turn_projects_valid_upstream_prepared_emission_telemetry(required, repair_kind, source):
-    observed = _observed_turn(
+    observed = project_synthetic_turn(
         scenario_id=f"{required}_prepared_projection",
-        snap={"turn_index": 0, "player_text": "Do the thing.", "gm_text": "Projected prepared text."},
-        payload={
-            "resolution": {"kind": "investigate"},
-            "gm_output": {
-                "_final_emission_meta": {
-                    "final_emitted_source": repair_kind,
-                    "response_type_required": required,
-                    "response_type_candidate_ok": True,
-                    "response_type_repair_used": True,
-                    "response_type_repair_kind": repair_kind,
-                    "upstream_prepared_emission_used": True,
-                    "upstream_prepared_emission_valid": True,
-                    "upstream_prepared_emission_source": source,
-                    "upstream_prepared_emission_reject_reason": None,
-                    "realization_fallback_family": "upstream_prepared_emission",
-                }
-            },
-        },
+        gm_text="Projected prepared text.",
+        player_text="Do the thing.",
+        resolution={"kind": "investigate"},
+        fem_meta=fem_payload(
+            final_emitted_source=repair_kind,
+            response_type_required=required,
+            response_type_candidate_ok=True,
+            response_type_repair_used=True,
+            response_type_repair_kind=repair_kind,
+            upstream_prepared_emission_used=True,
+            upstream_prepared_emission_valid=True,
+            upstream_prepared_emission_source=source,
+            upstream_prepared_emission_reject_reason=None,
+            realization_fallback_family="upstream_prepared_emission",
+        ),
     )
 
     assert observed["upstream_prepared_emission_used"] is True
@@ -1532,26 +1260,23 @@ def test_golden_observed_turn_projects_valid_upstream_prepared_emission_telemetr
 
 
 def test_golden_observed_turn_projects_rejected_upstream_prepared_emission_telemetry():
-    observed = _observed_turn(
+    observed = project_synthetic_turn(
         scenario_id="rejected_prepared_projection",
-        snap={"turn_index": 0, "player_text": "Pry the chest.", "gm_text": "You pry the chest, but nothing gives yet."},
-        payload={
-            "resolution": {"kind": "investigate"},
-            "gm_output": {
-                "_final_emission_meta": {
-                    "final_emitted_source": "generated_candidate",
-                    "response_type_required": "action_outcome",
-                    "response_type_candidate_ok": False,
-                    "response_type_repair_used": False,
-                    "response_type_repair_kind": "action_outcome_upstream_prepared_repair",
-                    "upstream_prepared_emission_used": False,
-                    "upstream_prepared_emission_valid": False,
-                    "upstream_prepared_emission_source": "upstream_prepared_emission.prepared_action_fallback_text",
-                    "upstream_prepared_emission_reject_reason": "action_outcome_replaced_by_dialogue",
-                    "realization_fallback_family": "upstream_prepared_emission",
-                }
-            },
-        },
+        gm_text="You pry the chest, but nothing gives yet.",
+        player_text="Pry the chest.",
+        resolution={"kind": "investigate"},
+        fem_meta=fem_payload(
+            final_emitted_source="generated_candidate",
+            response_type_required="action_outcome",
+            response_type_candidate_ok=False,
+            response_type_repair_used=False,
+            response_type_repair_kind="action_outcome_upstream_prepared_repair",
+            upstream_prepared_emission_used=False,
+            upstream_prepared_emission_valid=False,
+            upstream_prepared_emission_source="upstream_prepared_emission.prepared_action_fallback_text",
+            upstream_prepared_emission_reject_reason="action_outcome_replaced_by_dialogue",
+            realization_fallback_family="upstream_prepared_emission",
+        ),
     )
 
     assert observed["upstream_prepared_emission_used"] is False
@@ -1570,26 +1295,23 @@ def test_golden_observed_turn_projects_rejected_upstream_prepared_emission_telem
     ],
 )
 def test_golden_observed_turn_projects_absent_upstream_prepared_emission_telemetry(required, repair_kind, source):
-    observed = _observed_turn(
+    observed = project_synthetic_turn(
         scenario_id=f"{required}_prepared_absent_projection",
-        snap={"turn_index": 0, "player_text": "Can I do it?", "gm_text": "Only mist between the torches."},
-        payload={
-            "resolution": {"kind": "investigate"},
-            "gm_output": {
-                "_final_emission_meta": {
-                    "final_emitted_source": "generated_candidate",
-                    "response_type_required": required,
-                    "response_type_candidate_ok": False,
-                    "response_type_repair_used": False,
-                    "response_type_repair_kind": repair_kind,
-                    "response_type_upstream_prepared_absent": True,
-                    "upstream_prepared_emission_used": False,
-                    "upstream_prepared_emission_valid": False,
-                    "upstream_prepared_emission_source": source,
-                    "upstream_prepared_emission_reject_reason": None,
-                }
-            },
-        },
+        gm_text="Only mist between the torches.",
+        player_text="Can I do it?",
+        resolution={"kind": "investigate"},
+        fem_meta=fem_payload(
+            final_emitted_source="generated_candidate",
+            response_type_required=required,
+            response_type_candidate_ok=False,
+            response_type_repair_used=False,
+            response_type_repair_kind=repair_kind,
+            response_type_upstream_prepared_absent=True,
+            upstream_prepared_emission_used=False,
+            upstream_prepared_emission_valid=False,
+            upstream_prepared_emission_source=source,
+            upstream_prepared_emission_reject_reason=None,
+        ),
     )
 
     assert observed["upstream_prepared_emission_used"] is False
@@ -1604,26 +1326,23 @@ def test_golden_observed_turn_projects_absent_upstream_prepared_emission_telemet
 
 
 def test_golden_drift_classification_preserves_malformed_prepared_emission_reject_reason():
-    observed = _observed_turn(
+    observed = project_synthetic_turn(
         scenario_id="malformed_prepared_projection",
-        snap={"turn_index": 0, "player_text": "Pry the lock.", "gm_text": "The lock remains stubborn."},
-        payload={
-            "resolution": {"kind": "investigate"},
-            "gm_output": {
-                "_final_emission_meta": {
-                    "final_emitted_source": "generated_candidate",
-                    "response_type_required": "action_outcome",
-                    "response_type_candidate_ok": False,
-                    "response_type_repair_used": False,
-                    "response_type_repair_kind": "action_outcome_upstream_prepared_repair",
-                    "upstream_prepared_emission_used": True,
-                    "upstream_prepared_emission_valid": False,
-                    "upstream_prepared_emission_source": "upstream_prepared_emission.prepared_action_fallback_text",
-                    "upstream_prepared_emission_reject_reason": "action_outcome_missing_result",
-                    "realization_fallback_family": "upstream_prepared_emission",
-                }
-            },
-        },
+        gm_text="The lock remains stubborn.",
+        player_text="Pry the lock.",
+        resolution={"kind": "investigate"},
+        fem_meta=fem_payload(
+            final_emitted_source="generated_candidate",
+            response_type_required="action_outcome",
+            response_type_candidate_ok=False,
+            response_type_repair_used=False,
+            response_type_repair_kind="action_outcome_upstream_prepared_repair",
+            upstream_prepared_emission_used=True,
+            upstream_prepared_emission_valid=False,
+            upstream_prepared_emission_source="upstream_prepared_emission.prepared_action_fallback_text",
+            upstream_prepared_emission_reject_reason="action_outcome_missing_result",
+            realization_fallback_family="upstream_prepared_emission",
+        ),
     )
 
     drift = classify_golden_drift(
@@ -1649,35 +1368,34 @@ def test_golden_drift_classification_preserves_malformed_prepared_emission_rejec
 
 
 def test_golden_observed_turn_projects_sanitizer_empty_fallback_as_sanitizer_owned():
-    observed = _observed_turn(
+    observed = project_synthetic_turn(
         scenario_id="sanitizer_empty_projection",
-        snap={"turn_index": 0, "player_text": "Wait.", "gm_text": "For a breath, the scene stays still."},
-        payload={
-            "resolution": {"kind": "observe"},
-            "gm_output": {
-                "metadata": {
-                    "sanitizer_trace": {
-                        "sanitizer_boundary_mode": "strip_only",
-                        "sanitizer_empty_fallback_used": True,
-                        "sanitizer_empty_fallback_source": "upstream_prepared_emission.prepared_sanitizer_empty_fallback_text",
-                        "sanitizer_empty_fallback_owner": "output_sanitizer",
-                    }
-                },
-                "_final_emission_meta": {
-                    "final_emitted_source": "generated_candidate",
-                    "final_emission_mutation_lineage": [
-                        "pre_gate_sanitizer",
-                        "sanitizer_empty_fallback",
-                        "finalize_packaging",
-                    ],
-                    "response_type_repair_used": False,
-                    "upstream_prepared_emission_used": False,
-                    "upstream_prepared_emission_valid": False,
-                    "upstream_prepared_emission_source": None,
-                    "upstream_prepared_emission_reject_reason": None,
-                },
+        gm_text="For a breath, the scene stays still.",
+        player_text="Wait.",
+        resolution={"kind": "observe"},
+        payload=minimal_gm_output_payload(
+            fem_meta=fem_payload(
+                final_emitted_source="generated_candidate",
+                final_emission_mutation_lineage=[
+                    "pre_gate_sanitizer",
+                    "sanitizer_empty_fallback",
+                    "finalize_packaging",
+                ],
+                response_type_repair_used=False,
+                upstream_prepared_emission_used=False,
+                upstream_prepared_emission_valid=False,
+                upstream_prepared_emission_source=None,
+                upstream_prepared_emission_reject_reason=None,
+            ),
+            metadata={
+                "sanitizer_trace": {
+                    "sanitizer_boundary_mode": "strip_only",
+                    "sanitizer_empty_fallback_used": True,
+                    "sanitizer_empty_fallback_source": "upstream_prepared_emission.prepared_sanitizer_empty_fallback_text",
+                    "sanitizer_empty_fallback_owner": "output_sanitizer",
+                }
             },
-        },
+        ),
     )
 
     assert observed["sanitizer_empty_fallback_used"] is True
@@ -1694,31 +1412,30 @@ def test_golden_observed_turn_projects_sanitizer_empty_fallback_as_sanitizer_own
 
 
 def test_golden_observed_turn_projects_strict_social_sanitizer_fallback_owner_split():
-    observed = _observed_turn(
+    observed = project_synthetic_turn(
         scenario_id="strict_social_sanitizer_split",
-        snap={"turn_index": 0, "player_text": "Ask the runner.", "gm_text": 'The runner says, "No names."'},
-        payload={
-            "resolution": {"kind": "question"},
-            "gm_output": {
-                "metadata": {
-                    "sanitizer_trace": {
-                        "sanitizer_lineage_mode": "strip_only",
-                        "sanitizer_strict_social_fallback_used": True,
-                        "sanitizer_strict_social_selection_owner": "output_sanitizer",
-                        "sanitizer_strict_social_prose_owner": "strict_social_emission",
-                        "sanitizer_strict_social_source": "social_fallback_line_for_sanitizer.empty_output",
-                    }
-                },
-                "_final_emission_meta": {
-                    "final_emitted_source": "generated_candidate",
-                    "strict_social_active": True,
-                    "upstream_prepared_emission_used": False,
-                    "upstream_prepared_emission_valid": False,
-                    "upstream_prepared_emission_source": None,
-                    "upstream_prepared_emission_reject_reason": None,
-                },
+        gm_text='The runner says, "No names."',
+        player_text="Ask the runner.",
+        resolution={"kind": "question"},
+        payload=minimal_gm_output_payload(
+            fem_meta=fem_payload(
+                final_emitted_source="generated_candidate",
+                strict_social_active=True,
+                upstream_prepared_emission_used=False,
+                upstream_prepared_emission_valid=False,
+                upstream_prepared_emission_source=None,
+                upstream_prepared_emission_reject_reason=None,
+            ),
+            metadata={
+                "sanitizer_trace": {
+                    "sanitizer_lineage_mode": "strip_only",
+                    "sanitizer_strict_social_fallback_used": True,
+                    "sanitizer_strict_social_selection_owner": "output_sanitizer",
+                    "sanitizer_strict_social_prose_owner": "strict_social_emission",
+                    "sanitizer_strict_social_source": "social_fallback_line_for_sanitizer.empty_output",
+                }
             },
-        },
+        ),
     )
 
     assert observed["sanitizer_strict_social_fallback_used"] is True
@@ -1733,24 +1450,23 @@ def test_golden_observed_turn_projects_strict_social_sanitizer_fallback_owner_sp
 
 
 def test_golden_observed_turn_projects_clean_sanitizer_lineage():
-    observed = _observed_turn(
+    observed = project_synthetic_turn(
         scenario_id="sanitizer_clean_lineage",
-        snap={"turn_index": 0, "player_text": "Wait.", "gm_text": "Rain needles across the checkpoint."},
-        payload={
-            "resolution": {"kind": "observe"},
-            "gm_output": {
-                "metadata": {
-                    "sanitizer_trace": {
-                        "sanitizer_lineage_mode": "strip_only",
-                        "sanitizer_lineage_changed_count": 0,
-                        "sanitizer_lineage_dropped_count": 0,
-                        "sanitizer_lineage_empty_fallback_used": False,
-                        "sanitizer_lineage_legacy_rewrite_active": False,
-                    }
-                },
-                "_final_emission_meta": {"final_emitted_source": "generated_candidate"},
+        gm_text="Rain needles across the checkpoint.",
+        player_text="Wait.",
+        resolution={"kind": "observe"},
+        payload=minimal_gm_output_payload(
+            fem_meta=fem_payload(final_emitted_source="generated_candidate"),
+            metadata={
+                "sanitizer_trace": {
+                    "sanitizer_lineage_mode": "strip_only",
+                    "sanitizer_lineage_changed_count": 0,
+                    "sanitizer_lineage_dropped_count": 0,
+                    "sanitizer_lineage_empty_fallback_used": False,
+                    "sanitizer_lineage_legacy_rewrite_active": False,
+                }
             },
-        },
+        ),
     )
 
     assert observed["sanitizer_lineage_mode"] == "strip_only"
@@ -1761,22 +1477,21 @@ def test_golden_observed_turn_projects_clean_sanitizer_lineage():
 
 
 def test_golden_observed_turn_projects_sanitizer_lineage_from_debug_events():
-    observed = _observed_turn(
+    observed = project_synthetic_turn(
         scenario_id="sanitizer_debug_lineage",
-        snap={"turn_index": 0, "player_text": "Wait.", "gm_text": ""},
-        payload={
-            "resolution": {"kind": "observe"},
-            "gm_output": {
-                "metadata": {
-                    "sanitizer_trace": {"sanitizer_boundary_mode": "strip_only"},
-                    "sanitizer_debug": [
-                        {"event": "strip_only_dropped_rewrite_candidate", "sentence": "Validator scaffold."},
-                        {"event": "strip_only_dropped_non_diegetic", "sentence": "Planner scaffold."},
-                    ],
-                },
-                "_final_emission_meta": {"final_emitted_source": "generated_candidate"},
+        gm_text="",
+        player_text="Wait.",
+        resolution={"kind": "observe"},
+        payload=minimal_gm_output_payload(
+            fem_meta=fem_payload(final_emitted_source="generated_candidate"),
+            metadata={
+                "sanitizer_trace": {"sanitizer_boundary_mode": "strip_only"},
+                "sanitizer_debug": [
+                    {"event": "strip_only_dropped_rewrite_candidate", "sentence": "Validator scaffold."},
+                    {"event": "strip_only_dropped_non_diegetic", "sentence": "Planner scaffold."},
+                ],
             },
-        },
+        ),
     )
 
     assert observed["sanitizer_lineage_mode"] == "strip_only"
@@ -1785,24 +1500,23 @@ def test_golden_observed_turn_projects_sanitizer_lineage_from_debug_events():
 
 
 def test_golden_observed_turn_projects_legacy_sanitizer_lineage():
-    observed = _observed_turn(
+    observed = project_synthetic_turn(
         scenario_id="sanitizer_legacy_lineage",
-        snap={"turn_index": 0, "player_text": "Wait.", "gm_text": "The answer has not formed yet."},
-        payload={
-            "resolution": {"kind": "observe"},
-            "gm_output": {
-                "metadata": {
-                    "sanitizer_trace": {
-                        "sanitizer_lineage_mode": "legacy_sentence_rewrite",
-                        "sanitizer_lineage_changed_count": 1,
-                        "sanitizer_lineage_dropped_count": 0,
-                        "sanitizer_lineage_empty_fallback_used": False,
-                        "sanitizer_lineage_legacy_rewrite_active": True,
-                    }
-                },
-                "_final_emission_meta": {"final_emitted_source": "generated_candidate"},
+        gm_text="The answer has not formed yet.",
+        player_text="Wait.",
+        resolution={"kind": "observe"},
+        payload=minimal_gm_output_payload(
+            fem_meta=fem_payload(final_emitted_source="generated_candidate"),
+            metadata={
+                "sanitizer_trace": {
+                    "sanitizer_lineage_mode": "legacy_sentence_rewrite",
+                    "sanitizer_lineage_changed_count": 1,
+                    "sanitizer_lineage_dropped_count": 0,
+                    "sanitizer_lineage_empty_fallback_used": False,
+                    "sanitizer_lineage_legacy_rewrite_active": True,
+                }
             },
-        },
+        ),
     )
 
     assert observed["sanitizer_lineage_mode"] == "legacy_sentence_rewrite"
@@ -1814,27 +1528,23 @@ def test_golden_replay_directed_npc_question_structural_invariants(tmp_path, mon
 
     def _fake_call_gpt(messages):
         captured_prompts.append(messages)
-        return _gm_response('Tavern Runner grimaces. "I heard east-road talk, but no names."')
+        return gm_response('Tavern Runner grimaces. "I heard east-road talk, but no names."')
 
-    with monkeypatch.context() as m:
-        m.setattr("game.api.call_gpt", _fake_call_gpt)
-        m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
-        m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
-        m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+    golden_replay_chat_stubs(monkeypatch, gpt_callback=_fake_call_gpt)
 
-        result = run_golden_replay(
-            scenario_id="directed_npc_question",
-            turns=["Runner, who attacked the patrol?"],
-            tmp_path=tmp_path,
-            monkeypatch=monkeypatch,
-            setup_fn=_seed_directed_runner_question_context,
-        )
+    result = run_golden_replay(
+        scenario_id="directed_npc_question",
+        turns=["Runner, who attacked the patrol?"],
+        tmp_path=tmp_path,
+        monkeypatch=monkeypatch,
+        setup_fn=seed_investigator_runner_world,
+    )
 
     assert captured_prompts
     assert result["turn_count"] == 1
     turn = result["turns"][0]
-    directed_npc_question_expectation = {
-        "require_present": [
+    directed_npc_question_expectation = protected_structural_expectation(
+        require_present=(
             "final_text",
             "resolution_kind",
             "route_kind",
@@ -1842,16 +1552,16 @@ def test_golden_replay_directed_npc_question_structural_invariants(tmp_path, mon
             "final_emitted_source",
             "trace.canonical_entry.target_actor_id",
             "trace.social_contract_trace.route_selected",
-        ],
-        **protected_unavailable_expectation("fallback_family"),
-        "equals": {
+        ),
+        allow_unavailable=("fallback_family",),
+        equals={
             "selected_speaker_id": "runner",
             "trace.canonical_entry.target_actor_id": "runner",
         },
-        **protected_route_expectation(include_resolution_kind=True, include_trace_route=True),
-        **protected_source_expectation(),
-        **protected_no_scaffold_expectation(),
-    }
+        include_resolution_kind=True,
+        include_trace_route=True,
+        disallow_global_scene_fallback=True,
+    )
     assert_protected_golden_turn_observation(
         turn,
         directed_npc_question_expectation,
@@ -1863,30 +1573,26 @@ def test_golden_replay_directed_npc_question_structural_invariants(tmp_path, mon
 def test_golden_replay_vocative_override_after_prior_continuity_structural_invariants(tmp_path, monkeypatch):
     responses = iter(
         [
-            _gm_response('Tavern Runner says, "I saw the patrol turn toward the east lanes."'),
-            _gm_response('Gate Guard says, "I saw fresh mud by the north arch."'),
+            gm_response('Tavern Runner says, "I saw the patrol turn toward the east lanes."'),
+            gm_response('Gate Guard says, "I saw fresh mud by the north arch."'),
         ]
     )
 
     def _fake_call_gpt(_messages):
         return next(responses)
 
-    with monkeypatch.context() as m:
-        m.setattr("game.api.call_gpt", _fake_call_gpt)
-        m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
-        m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
-        m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+    golden_replay_chat_stubs(monkeypatch, gpt_callback=_fake_call_gpt)
 
-        result = run_golden_replay(
-            scenario_id="vocative_override_after_prior_continuity",
-            turns=[
-                "Runner, where did the patrol go?",
-                "Guard, what did you see?",
-            ],
-            tmp_path=tmp_path,
-            monkeypatch=monkeypatch,
-            setup_fn=_seed_runner_and_guard_context,
-        )
+    result = run_golden_replay(
+        scenario_id="vocative_override_after_prior_continuity",
+        turns=[
+            "Runner, where did the patrol go?",
+            "Guard, what did you see?",
+        ],
+        tmp_path=tmp_path,
+        monkeypatch=monkeypatch,
+        setup_fn=seed_runner_guard_world,
+    )
 
     assert result["turn_count"] == 2
     turn = result["turns"][1]
@@ -1953,31 +1659,31 @@ def test_golden_replay_vocative_override_after_prior_continuity_structural_invar
 
 
 def test_golden_replay_wrong_speaker_strict_social_emission_structural_invariants(tmp_path, monkeypatch):
-    with monkeypatch.context() as m:
-        m.setattr("game.api.call_gpt", lambda _messages: _gm_response('Merchant says, "I know nothing about that."'))
-        m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
-        m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
-        m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+    golden_replay_chat_stubs(
+        monkeypatch,
+        gpt_callback=lambda _messages: gm_response('Merchant says, "I know nothing about that."'),
+    )
 
-        result = run_golden_replay(
-            scenario_id="wrong_speaker_strict_social_emission",
-            turns=["Who attacked the patrol?"],
-            tmp_path=tmp_path,
-            monkeypatch=monkeypatch,
-            setup_fn=_seed_runner_continuity_context,
-        )
+    result = run_golden_replay(
+        scenario_id="wrong_speaker_strict_social_emission",
+        turns=["Who attacked the patrol?"],
+        tmp_path=tmp_path,
+        monkeypatch=monkeypatch,
+        setup_fn=seed_runner_continuity_world,
+    )
 
     assert result["turn_count"] == 1
     turn = result["turns"][0]
     debug_context = format_golden_replay_debug(result)
     assert_protected_golden_turn_observation(
         turn,
-        {
-            "require_present": ["final_text", "selected_speaker_id"],
-            **protected_unavailable_expectation("fallback_family", "final_emitted_source"),
-            "equals": {"selected_speaker_id": "runner"},
-            **protected_no_scaffold_expectation(extra_terms=("Merchant",)),
-        },
+        protected_structural_expectation(
+            require_present=("final_text", "selected_speaker_id"),
+            allow_unavailable=("fallback_family", "final_emitted_source"),
+            equals={"selected_speaker_id": "runner"},
+            include_route_kind=False,
+            extra_no_scaffold_terms=("Merchant",),
+        ),
         scenario_id="wrong_speaker_strict_social_emission",
         debug_context=debug_context,
     )
@@ -2024,23 +1730,24 @@ def test_golden_direct_seam_declared_alias_dialogue_plan_structural_invariants(m
 
     final_text = str(out.get("player_facing_text") or "")
     meta = read_final_emission_meta_dict(out) or {}
-    turn = {
-        "final_text": final_text,
-        "selected_speaker_id": (resolution.get("social") or {}).get("npc_id"),
-        "final_emitted_source": meta.get("final_emitted_source"),
-        "fallback_family": meta.get("fallback_family_used") or meta.get("realization_fallback_family"),
-        "scaffold_leakage": final_text_has_scaffold_leakage(final_text),
-        "unavailable": ["fallback_family"],
-        "trace": {
-            "canonical_entry": {
-                "target_actor_id": (resolution.get("social") or {}).get("npc_id"),
-                "declared_alias_target_actor_id": (resolution.get("social") or {}).get("npc_id"),
-                "allowed_pregate_speaker_labels": ["Ragged stranger"],
-                "speaker_alias_resolution_source": "manual_bundle_override",
-            }
+    npc_id = (resolution.get("social") or {}).get("npc_id")
+    turn = observed_turn_from_gate_output(
+        scenario_id="declared_alias_dialogue_plan",
+        gm_output=out,
+        resolution=resolution,
+        extra_fields={
+            "trace": {
+                "canonical_entry": {
+                    "target_actor_id": npc_id,
+                    "declared_alias_target_actor_id": npc_id,
+                    "allowed_pregate_speaker_labels": ["Ragged stranger"],
+                    "speaker_alias_resolution_source": "manual_bundle_override",
+                }
+            },
+            "dialogue_plan_valid": meta.get("dialogue_plan_valid"),
         },
-        "dialogue_plan_valid": meta.get("dialogue_plan_valid"),
-    }
+        unavailable=["fallback_family"],
+    )
 
     assert_protected_golden_turn_observation(
         turn,
@@ -2066,17 +1773,20 @@ def test_golden_direct_seam_declared_alias_dialogue_plan_structural_invariants(m
 
 
 def test_golden_replay_thin_answer_action_outcome_final_emission_structural_invariants(tmp_path, monkeypatch):
-    with monkeypatch.context() as m:
-        m.setattr("game.api.call_gpt", lambda _messages: _gm_response("The scene pauses without offering anything concrete."))
-        m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
+    golden_replay_chat_stubs(
+        monkeypatch,
+        gpt_callback=lambda _messages: gm_response("The scene pauses without offering anything concrete."),
+        suppress_exploration=False,
+        suppress_intent=False,
+    )
 
-        result = run_golden_replay(
-            scenario_id="thin_answer_action_outcome_final_emission",
-            turns=["I examine the notice board; does it show where the missing patrol went?"],
-            tmp_path=tmp_path,
-            monkeypatch=monkeypatch,
-            setup_fn=_seed_scene_object_investigation_context,
-        )
+    result = run_golden_replay(
+        scenario_id="thin_answer_action_outcome_final_emission",
+        turns=["I examine the notice board; does it show where the missing patrol went?"],
+        tmp_path=tmp_path,
+        monkeypatch=monkeypatch,
+        setup_fn=seed_scene_object_investigation_world,
+    )
 
     assert result["turn_count"] == 1
     turn = result["turns"][0]
@@ -2084,25 +1794,26 @@ def test_golden_replay_thin_answer_action_outcome_final_emission_structural_inva
     debug_context = format_golden_replay_debug(result)
     assert_protected_golden_turn_observation(
         turn,
-        {
-            "require_present": ["final_text", "final_emitted_source"],
-            **protected_unavailable_expectation(
+        protected_structural_expectation(
+            require_present=("final_text", "final_emitted_source"),
+            allow_unavailable=(
                 "fallback_family",
                 "selected_speaker_id",
                 "trace.canonical_entry",
                 "trace.social_contract_trace",
             ),
-            "equals": {
+            equals={
                 "response_type_required": "action_outcome",
                 "response_type_repair_used": True,
             },
-            **protected_source_expectation(),
-            **protected_no_scaffold_expectation(extra_terms=(
+            include_route_kind=False,
+            disallow_global_scene_fallback=True,
+            extra_no_scaffold_terms=(
                 "scene pauses",
                 "nothing concrete",
                 "no name comes clear",
-            )),
-        },
+            ),
+        ),
         scenario_id="thin_answer_action_outcome_final_emission",
         debug_context=debug_context,
     )
@@ -2111,40 +1822,38 @@ def test_golden_replay_thin_answer_action_outcome_final_emission_structural_inva
 
 
 def test_golden_replay_sanitizer_scaffold_leakage_structural_invariants(tmp_path, monkeypatch):
-    with monkeypatch.context() as m:
-        m.setattr(
-            "game.api.call_gpt",
-            lambda _messages: _gm_response("Planner: route via router. Validator: unresolved scaffold."),
-        )
-        m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
-        m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
-        m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+    golden_replay_chat_stubs(
+        monkeypatch,
+        gpt_callback=lambda _messages: gm_response(
+            "Planner: route via router. Validator: unresolved scaffold."
+        ),
+    )
 
-        result = run_golden_replay(
-            scenario_id="sanitizer_scaffold_leakage",
-            turns=["Where should I start?"],
-            tmp_path=tmp_path,
-            monkeypatch=monkeypatch,
-            setup_fn=_seed_scene_object_investigation_context,
-        )
+    result = run_golden_replay(
+        scenario_id="sanitizer_scaffold_leakage",
+        turns=["Where should I start?"],
+        tmp_path=tmp_path,
+        monkeypatch=monkeypatch,
+        setup_fn=seed_scene_object_investigation_world,
+    )
 
     assert result["turn_count"] == 1
     turn = result["turns"][0]
     assert turn.get("sanitizer_lineage_legacy_rewrite_active") is not True
     assert_protected_golden_turn_observation(
         turn,
-        {
-            "require_present": ["final_text"],
-            **protected_unavailable_expectation(
+        protected_structural_expectation(
+            require_present=("final_text",),
+            allow_unavailable=(
                 "fallback_family",
                 "final_emitted_source",
                 "selected_speaker_id",
                 "trace.canonical_entry",
                 "trace.social_contract_trace",
             ),
-            "text_must_not_include": ["Planner", "planner", "router", "Validator", "validator", "scaffold"],
-            "scaffold_leakage": False,
-        },
+            include_route_kind=False,
+            extra_no_scaffold_terms=("Planner", "Validator"),
+        ),
         scenario_id="sanitizer_scaffold_leakage",
         debug_context=format_golden_replay_debug(result),
     )
@@ -2180,20 +1889,12 @@ def test_golden_direct_seam_canonical_opening_fallback_path_has_no_compatibility
 
     final_text = str(out.get("player_facing_text") or "")
     meta = read_final_emission_meta_dict(out) or {}
-    turn = {
-        "final_text": final_text,
-        "final_emitted_source": meta.get("final_emitted_source"),
-        "response_type_required": meta.get("response_type_required"),
-        "response_type_repair_used": meta.get("response_type_repair_used"),
-        "response_type_repair_kind": meta.get("response_type_repair_kind"),
-        "opening_recovered_via_fallback": meta.get("opening_recovered_via_fallback"),
-        "opening_fallback_authorship_source": meta.get("opening_fallback_authorship_source"),
-        "opening_fallback_owner_bucket": opening_fallback_owner_bucket_from_meta(meta),
-        "fallback_family": meta.get("fallback_family_used") or meta.get("realization_fallback_family"),
-        "fallback_temporal_frame": meta.get("fallback_temporal_frame"),
-        "scaffold_leakage": final_text_has_scaffold_leakage(final_text),
-        "unavailable": [],
-    }
+    turn = observed_turn_from_gate_output(
+        scenario_id="opening_fallback_path",
+        gm_output=out,
+        resolution={"kind": "scene_opening", "prompt": "Start the campaign."},
+        unavailable=[],
+    )
 
     assert_protected_golden_turn_observation(
         turn,
@@ -2247,45 +1948,40 @@ def test_golden_canonical_opening_fallback_never_reports_compatibility_local_own
 def test_golden_replay_lead_followup_with_dialogue_lock_structural_invariants(tmp_path, monkeypatch):
     responses = iter(
         [
-            _gm_response(
+            gm_response(
                 'Tavern Runner says, "The patrol never came back from the old milestone beyond the east road."'
             ),
-            _gm_response('Tavern Runner says, "Last reliable sign was the old milestone."'),
+            gm_response('Tavern Runner says, "Last reliable sign was the old milestone."'),
         ]
     )
 
     def _fake_call_gpt(_messages):
         return next(responses)
 
-    with monkeypatch.context() as m:
-        m.setattr("game.api.call_gpt", _fake_call_gpt)
-        m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
-        m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
-        m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+    golden_replay_chat_stubs(monkeypatch, gpt_callback=_fake_call_gpt)
 
-        result = run_golden_replay(
-            scenario_id="lead_followup_with_dialogue_lock",
-            turns=[
-                "Tavern Runner, what happened to the patrol?",
-                "Runner, where were they last seen?",
-            ],
-            tmp_path=tmp_path,
-            monkeypatch=monkeypatch,
-            setup_fn=_seed_tavern_patrol_lead_context,
-        )
+    result = run_golden_replay(
+        scenario_id="lead_followup_with_dialogue_lock",
+        turns=[
+            "Tavern Runner, what happened to the patrol?",
+            "Runner, where were they last seen?",
+        ],
+        tmp_path=tmp_path,
+        monkeypatch=monkeypatch,
+        setup_fn=seed_tavern_patrol_lead_world,
+    )
 
     assert result["turn_count"] == 2
     turn = result["turns"][1]
     debug_context = format_golden_replay_debug(result)
     assert_protected_golden_turn_observation(
         turn,
-        {
-            "require_present": ["final_text", "selected_speaker_id", "final_emitted_source"],
-            **protected_unavailable_expectation("fallback_family"),
-            "equals": {"selected_speaker_id": "tavern_runner"},
-            **protected_route_expectation(include_trace_route=True),
-            **protected_no_scaffold_expectation(),
-        },
+        protected_structural_expectation(
+            require_present=("final_text", "selected_speaker_id", "final_emitted_source"),
+            allow_unavailable=("fallback_family",),
+            equals={"selected_speaker_id": "tavern_runner"},
+            include_trace_route=True,
+        ),
         scenario_id="lead_followup_with_dialogue_lock",
         debug_context=debug_context,
     )
@@ -2313,7 +2009,7 @@ def test_golden_replay_frontier_gate_social_inquiry_25_turn_structural_stability
     def _fake_call_gpt(_messages):
         nonlocal gpt_call_count
         gpt_call_count += 1
-        return _gm_response(
+        return gm_response(
             (
                 "The gate inquiry stays anchored: the notice board, Captain Thoran, the Ash Compact census "
                 "delay, muddy footprints northwest of the crates, and the missing patrol route remain in view. "
@@ -2321,23 +2017,19 @@ def test_golden_replay_frontier_gate_social_inquiry_25_turn_structural_stability
             )
         )
 
-    with monkeypatch.context() as m:
-        m.setattr("game.api.call_gpt", _fake_call_gpt)
-        m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
-        m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
-        m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+    golden_replay_chat_stubs(monkeypatch, gpt_callback=_fake_call_gpt)
 
-        result = run_golden_replay(
-            scenario_id="frontier_gate_social_inquiry_25_turn",
-            turns=turns,
-            tmp_path=tmp_path,
-            monkeypatch=monkeypatch,
-            setup_fn=_seed_frontier_gate_long_session_context,
-            starting_scene_id="frontier_gate",
-            source_path=FRONTIER_GATE_LONG_SESSION_SOURCE_PATH,
-            branch_id="branch_social_inquiry",
-            turn_ids=turn_ids,
-        )
+    result = run_golden_replay(
+        scenario_id="frontier_gate_social_inquiry_25_turn",
+        turns=turns,
+        tmp_path=tmp_path,
+        monkeypatch=monkeypatch,
+        setup_fn=seed_frontier_gate_world,
+        starting_scene_id="frontier_gate",
+        source_path=FRONTIER_GATE_LONG_SESSION_SOURCE_PATH,
+        branch_id="branch_social_inquiry",
+        turn_ids=turn_ids,
+    )
 
     observed_turns = result["turns"]
     assert observed_turns[0]["source_path"] == FRONTIER_GATE_LONG_SESSION_SOURCE_PATH
@@ -2453,7 +2145,7 @@ def test_golden_replay_frontier_gate_social_inquiry_25_turn_resume_persistence_s
     def _fake_call_gpt(_messages):
         nonlocal gpt_call_count
         gpt_call_count += 1
-        return _gm_response(
+        return gm_response(
             (
                 "The resumed gate inquiry stays anchored: the notice board, Captain Thoran, "
                 "the Ash Compact census delay, muddy footprints northwest of the crates, "
@@ -2469,57 +2161,53 @@ def test_golden_replay_frontier_gate_social_inquiry_25_turn_resume_persistence_s
     post_restore_counter = None
     post_restore_log_count = None
 
-    with monkeypatch.context() as m:
-        m.setattr("game.api.call_gpt", _fake_call_gpt)
-        m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
-        m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
-        m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+    golden_replay_chat_stubs(monkeypatch, gpt_callback=_fake_call_gpt)
 
-        patch_transcript_storage(monkeypatch, tmp_path)
-        write_default_bootstrap_scenes()
-        if not storage.SESSION_LOG_PATH.exists():
-            storage.SESSION_LOG_PATH.write_text("", encoding="utf-8")
-        new_clean_campaign(starting_scene_id="frontier_gate")
-        _seed_frontier_gate_long_session_context()
+    patch_transcript_storage(monkeypatch, tmp_path)
+    write_default_bootstrap_scenes()
+    if not storage.SESSION_LOG_PATH.exists():
+        storage.SESSION_LOG_PATH.write_text("", encoding="utf-8")
+    new_clean_campaign(starting_scene_id="frontier_gate")
+    seed_frontier_gate_world()
 
-        for i, text in enumerate(turns[:split_at]):
-            payload = chat(ChatRequest(text=text))
-            snap = snapshot_from_chat_payload(i, text, payload)
-            observed_turns.append(
-                _observed_turn(
-                    scenario_id="frontier_gate_social_inquiry_25_turn_resume_persistence_supporting",
-                    snap=snap,
-                    payload=payload,
-                    replay_identity={
-                        "source_path": FRONTIER_GATE_LONG_SESSION_SOURCE_PATH,
-                        "branch_id": "branch_social_inquiry",
-                        "turn_id": turn_ids[i],
-                    },
-                )
+    for i, text in enumerate(turns[:split_at]):
+        payload = chat(ChatRequest(text=text))
+        snap = snapshot_from_chat_payload(i, text, payload)
+        observed_turns.append(
+            _observed_turn(
+                scenario_id="frontier_gate_social_inquiry_25_turn_resume_persistence_supporting",
+                snap=snap,
+                payload=payload,
+                replay_identity={
+                    "source_path": FRONTIER_GATE_LONG_SESSION_SOURCE_PATH,
+                    "branch_id": "branch_social_inquiry",
+                    "turn_id": turn_ids[i],
+                },
             )
+        )
 
-        pre_resume_counter = int(storage.load_session().get("turn_counter") or 0)
-        checkpoint_meta = storage.create_snapshot(label="golden-social-inquiry-after-turn-12")
-        restored_meta = storage.load_snapshot(str(checkpoint_meta["id"]))
-        post_restore_session = storage.load_session()
-        post_restore_counter = int(post_restore_session.get("turn_counter") or 0)
-        post_restore_log_count = len(storage.load_log())
+    pre_resume_counter = int(storage.load_session().get("turn_counter") or 0)
+    checkpoint_meta = storage.create_snapshot(label="golden-social-inquiry-after-turn-12")
+    restored_meta = storage.load_snapshot(str(checkpoint_meta["id"]))
+    post_restore_session = storage.load_session()
+    post_restore_counter = int(post_restore_session.get("turn_counter") or 0)
+    post_restore_log_count = len(storage.load_log())
 
-        for i, text in enumerate(turns[split_at:], start=split_at):
-            payload = chat(ChatRequest(text=text))
-            snap = snapshot_from_chat_payload(i, text, payload)
-            observed_turns.append(
-                _observed_turn(
-                    scenario_id="frontier_gate_social_inquiry_25_turn_resume_persistence_supporting",
-                    snap=snap,
-                    payload=payload,
-                    replay_identity={
-                        "source_path": FRONTIER_GATE_LONG_SESSION_SOURCE_PATH,
-                        "branch_id": "branch_social_inquiry",
-                        "turn_id": turn_ids[i],
-                    },
-                )
+    for i, text in enumerate(turns[split_at:], start=split_at):
+        payload = chat(ChatRequest(text=text))
+        snap = snapshot_from_chat_payload(i, text, payload)
+        observed_turns.append(
+            _observed_turn(
+                scenario_id="frontier_gate_social_inquiry_25_turn_resume_persistence_supporting",
+                snap=snap,
+                payload=payload,
+                replay_identity={
+                    "source_path": FRONTIER_GATE_LONG_SESSION_SOURCE_PATH,
+                    "branch_id": "branch_social_inquiry",
+                    "turn_id": turn_ids[i],
+                },
             )
+        )
 
     result = {
         "scenario_id": "frontier_gate_social_inquiry_25_turn_resume_persistence_supporting",
@@ -2657,7 +2345,7 @@ def test_golden_replay_frontier_gate_direct_intrusion_25_turn_diagnostic_stabili
     def _fake_call_gpt(_messages):
         nonlocal gpt_call_count
         gpt_call_count += 1
-        return _gm_response(
+        return gm_response(
             (
                 "The direct intrusion stays anchored: the gate serjeant, roster board, cordon pressure, "
                 "warehouse latch, muddy crates, and watch whistles remain in view. "
@@ -2665,23 +2353,19 @@ def test_golden_replay_frontier_gate_direct_intrusion_25_turn_diagnostic_stabili
             )
         )
 
-    with monkeypatch.context() as m:
-        m.setattr("game.api.call_gpt", _fake_call_gpt)
-        m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
-        m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
-        m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+    golden_replay_chat_stubs(monkeypatch, gpt_callback=_fake_call_gpt)
 
-        result = run_golden_replay(
-            scenario_id="frontier_gate_direct_intrusion_25_turn_diagnostic",
-            turns=turns,
-            tmp_path=tmp_path,
-            monkeypatch=monkeypatch,
-            setup_fn=_seed_frontier_gate_long_session_context,
-            starting_scene_id="frontier_gate",
-            source_path=FRONTIER_GATE_LONG_SESSION_SOURCE_PATH,
-            branch_id="branch_direct_intrusion",
-            turn_ids=turn_ids,
-        )
+    result = run_golden_replay(
+        scenario_id="frontier_gate_direct_intrusion_25_turn_diagnostic",
+        turns=turns,
+        tmp_path=tmp_path,
+        monkeypatch=monkeypatch,
+        setup_fn=seed_frontier_gate_world,
+        starting_scene_id="frontier_gate",
+        source_path=FRONTIER_GATE_LONG_SESSION_SOURCE_PATH,
+        branch_id="branch_direct_intrusion",
+        turn_ids=turn_ids,
+    )
 
     observed_turns = result["turns"]
     assert observed_turns[0]["source_path"] == FRONTIER_GATE_LONG_SESSION_SOURCE_PATH
@@ -2840,58 +2524,65 @@ def test_golden_replay_scenario_spine_three_branch_structural_smoke(tmp_path, mo
     spine_dict = scenario_spine_to_dict(spine)
 
     def _fake_call_gpt(_messages):
-        return _gm_response('Tavern Runner says, "The east road keeps the best clue."')
+        return gm_response('Tavern Runner says, "The east road keeps the best clue."')
+
+    golden_replay_chat_stubs(
+        monkeypatch,
+        gpt_callback=_fake_call_gpt,
+        suppress_exploration=False,
+        suppress_intent=False,
+    )
 
     branch_rows: list[dict] = []
-    with monkeypatch.context() as m:
-        m.setattr("game.api.call_gpt", _fake_call_gpt)
-        m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
-
-        for branch in spine.branches:
-            result = run_golden_replay(
-                scenario_id=f"scenario_spine_three_branch::{branch.branch_id}",
-                turns=[turn.player_prompt for turn in branch.turns],
-                tmp_path=tmp_path / branch.branch_id,
-                monkeypatch=monkeypatch,
-                setup_fn=_seed_spine_three_branch_context,
+    for branch in spine.branches:
+        result = run_golden_replay(
+            scenario_id=f"scenario_spine_three_branch::{branch.branch_id}",
+            turns=[turn.player_prompt for turn in branch.turns],
+            tmp_path=tmp_path / branch.branch_id,
+            monkeypatch=monkeypatch,
+            setup_fn=seed_spine_three_branch_world,
+        )
+        assert result["turn_count"] == len(branch.turns)
+        for i, turn in enumerate(result["turns"]):
+            meta = minimal_complete_transcript_turn_meta(
+                spine_id=spine.spine_id,
+                branch_id=branch.branch_id,
+                turn_id=branch.turns[i].turn_id,
+                turn_index=i,
+                smoke=True,
+                max_turns=len(branch.turns),
             )
-            assert result["turn_count"] == len(branch.turns)
-            for i, turn in enumerate(result["turns"]):
-                meta = minimal_complete_transcript_turn_meta(
-                    spine_id=spine.spine_id,
-                    branch_id=branch.branch_id,
-                    turn_id=branch.turns[i].turn_id,
-                    turn_index=i,
-                    smoke=True,
-                    max_turns=len(branch.turns),
-                )
-                assert meta["scenario_spine"]["branch_id"] == branch.branch_id
-                assert_golden_turn_observation(
-                    turn,
-                    {
-                        "require_present": ["final_text"],
-                        **protected_unavailable_expectation(
+            assert meta["scenario_spine"]["branch_id"] == branch.branch_id
+            assert_golden_turn_observation(
+                turn,
+                {
+                    **protected_structural_expectation(
+                        require_present=("final_text",),
+                        allow_unavailable=(
                             "fallback_family",
                             "selected_speaker_id",
                             "final_emitted_source",
                             "trace.canonical_entry",
                             "trace.social_contract_trace",
                         ),
-                        "scaffold_leakage": False,
-                    },
-                    debug_context=format_golden_replay_debug(result),
-                )
-            last = result["turns"][-1]
-            branch_rows.append(
-                {
-                    "branch_id": branch.branch_id,
-                    "turn_count": result["turn_count"],
-                    "route_kind": last.get("route_kind"),
-                    "selected_speaker_id": last.get("selected_speaker_id"),
-                    "final_emitted_source": last.get("final_emitted_source"),
-                    "fallback_family": last.get("fallback_family"),
-                }
+                        no_scaffold=False,
+                        include_route_kind=False,
+                    ),
+                    "scaffold_leakage": False,
+                },
+                debug_context=format_golden_replay_debug(result),
             )
+        last = result["turns"][-1]
+        branch_rows.append(
+            {
+                "branch_id": branch.branch_id,
+                "turn_count": result["turn_count"],
+                "route_kind": last.get("route_kind"),
+                "selected_speaker_id": last.get("selected_speaker_id"),
+                "final_emitted_source": last.get("final_emitted_source"),
+                "fallback_family": last.get("fallback_family"),
+            }
+        )
 
     assert [row["branch_id"] for row in branch_rows] == [branch.branch_id for branch in spine.branches]
     assert {row["turn_count"] for row in branch_rows} == {1}
