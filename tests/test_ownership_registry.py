@@ -190,6 +190,28 @@ RESPONSIBILITY_REGISTRY: Final[Mapping[str, ResponsibilityRecord]] = {
         declared_architecture_layer="gate",
         direct_owner="tests/test_final_emission_gate.py",
         transcript_suites=("tests/test_narration_transcript_regressions.py",),
+        downstream_consumer_suites=(
+            "tests/test_turn_pipeline_shared.py",
+            "tests/test_answer_completeness_rules.py",
+            "tests/test_response_delta_requirement.py",
+            "tests/test_interaction_continuity_repair.py",
+            "tests/test_diegetic_fallback_narration.py",
+        ),
+    ),
+    "final_emission_meta_projection": ResponsibilityRecord(
+        human_title="Final emission meta (FEM) projection and read path",
+        declared_architecture_layer="gate",
+        direct_owner="tests/test_final_emission_meta.py",
+        downstream_consumer_suites=(
+            "tests/test_turn_packet_stage_diff_integration.py",
+            "tests/test_diegetic_fallback_narration.py",
+        ),
+    ),
+    "final_emission_visibility_semantics": ResponsibilityRecord(
+        human_title="Final emission visibility fallback semantics",
+        declared_architecture_layer="gate",
+        direct_owner="tests/test_final_emission_visibility.py",
+        downstream_consumer_suites=("tests/test_turn_pipeline_shared.py",),
     ),
     "final_emission_validators": ResponsibilityRecord(
         human_title="Final emission validators",
@@ -213,11 +235,16 @@ RESPONSIBILITY_REGISTRY: Final[Mapping[str, ResponsibilityRecord]] = {
         declared_architecture_layer="engine",
         direct_owner="tests/test_prompt_context.py",
         smoke_suites=("tests/test_prompt_context_plan_only_convergence.py",),
+        downstream_consumer_suites=("tests/test_prompt_and_guard.py",),
     ),
     "output_sanitizer_final_string_cleanup": ResponsibilityRecord(
         human_title="Output sanitizer final string cleanup",
         declared_architecture_layer="gate",
         direct_owner="tests/test_output_sanitizer.py",
+        downstream_consumer_suites=(
+            "tests/test_turn_pipeline_shared.py",
+            "tests/test_prompt_and_guard.py",
+        ),
     ),
     "social_engine_state_rules": ResponsibilityRecord(
         human_title="Social engine state / rules",
@@ -230,6 +257,10 @@ RESPONSIBILITY_REGISTRY: Final[Mapping[str, ResponsibilityRecord]] = {
         declared_architecture_layer="gate",
         direct_owner="tests/test_social_exchange_emission.py",
         transcript_suites=("tests/test_speaker_contract_enforcement.py",),
+        downstream_consumer_suites=(
+            "tests/test_answer_completeness_rules.py",
+            "tests/test_response_delta_requirement.py",
+        ),
     ),
     "lead_clue_lifecycle": ResponsibilityRecord(
         human_title="Lead / clue lifecycle",
@@ -248,7 +279,10 @@ RESPONSIBILITY_REGISTRY: Final[Mapping[str, ResponsibilityRecord]] = {
         human_title="Gauntlet / playability validation",
         declared_architecture_layer="gate",
         direct_owner="tests/test_gauntlet_regressions.py",
-        gauntlet_suites=("tests/test_behavioral_gauntlet_smoke.py",),
+        gauntlet_suites=(
+            "tests/test_behavioral_gauntlet_smoke.py",
+            "tests/test_golden_replay.py",
+        ),
         smoke_suites=("tests/test_playability_smoke.py",),
     ),
     "offline_evaluator_scoring": ResponsibilityRecord(
@@ -265,6 +299,8 @@ _REQUIRED_GROUP_IDS: Final[AbstractSet[str]] = frozenset(
         "planner_prompt_bundle_shipped_contract",
         "gpt_expression_surface_smoke",
         "final_emission_gate_orchestration",
+        "final_emission_meta_projection",
+        "final_emission_visibility_semantics",
         "final_emission_validators",
         "final_emission_repairs",
         "response_policy_contract_materialization",
@@ -292,6 +328,18 @@ _CROSS_FILE_DUPLICATE_ALLOWLIST: Final[Mapping[str, str]] = {
     "test_maybe_attach_respects_env": (
         "Separate offline evaluator harnesses (intent fulfillment vs player agency) each "
         "need the same env-guard smoke; names intentionally parallel across evaluator suites."
+    ),
+    "test_real_repo_scan_does_not_require_zero_findings": (
+        "Parallel realization audit tool smoke in layer vs provenance audit modules; distinct audit surfaces."
+    ),
+    "test_report_generation_writes_json_and_markdown": (
+        "Parallel realization audit report writers in layer vs provenance audit modules."
+    ),
+    "test_severity_values_are_only_expected_values": (
+        "Parallel realization audit severity contract smoke in layer vs provenance audit modules."
+    ),
+    "test_tool_imports_successfully": (
+        "Parallel realization audit import smoke in layer vs provenance audit modules."
     ),
 }
 

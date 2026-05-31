@@ -29,6 +29,32 @@ Golden replay owns `scenario_id` as the replay acceptance identifier. Scenario-s
 
 Text fields are layer-specific projections: `player_facing_text` is the runtime response field, `gm_text` is a snapshot/transcript projection, and `final_text` is the golden replay observed assertion surface. Protected replay failure reports may include `source_path`, `branch_id`, and `turn_id` when a replay row can be traced back to a scenario-spine fixture.
 
+## Cycle AB Dual Fallback-Family Contract
+
+Runtime FEM may carry **two independent fallback-family fields**:
+
+| FEM field | Taxonomy | Owner module | Examples |
+|---|---|---|---|
+| `fallback_family_used` | Diegetic / template | `game/diegetic_fallback_narration.py` | `scene_opening`, `observe`, `social` |
+| `realization_fallback_family` | Governed provenance | `game/realization_provenance.py` | `legacy_diegetic_fallback`, `upstream_prepared_emission`, `gate_terminal_repair` |
+
+Protected golden replay observes a **single** projected field, `fallback_family`, for structural drift checks. Projection is implemented in `tests/helpers/golden_replay_projection.py::project_replay_fallback_family_from_fem` and prefers `fallback_family_used` first, falling back to `realization_fallback_family` only when diegetic classification is absent. That preference is a **read-side compatibility projection only**; runtime code must not rewrite either FEM field to force one taxonomy into the other.
+
+Canonical opening fallback may therefore carry both `fallback_family_used=scene_opening` and `realization_fallback_family=upstream_prepared_emission` on the same turn (AB4). Protected replay locks the **projected** `fallback_family` to the diegetic value (`scene_opening`) while both raw FEM fields remain distinct.
+
+Topology collapse (merging diegetic and provenance stamps into one runtime field) is **deferred** until AB4+ replay proof; this manifest documents the contract but does not change protected assertion behavior.
+
+## Cycle AB6 Sealed Replacement Sub-Kind Projection
+
+Runtime terminal replace turns keep ``final_route=replaced``, ``final_emitted_source``,
+``fallback_pool``, and ``fallback_kind`` unchanged. Read-side lineage projection in
+``game/final_emission_replay_projection.py::project_sealed_replacement_subkind_from_fem``
+refines the former catch-all lineage bucket ``sealed_or_global_replacement`` into stable
+sub-kinds (for example ``sealed_global_scene_fallback``, ``sealed_passive_scene_pressure_fallback``).
+
+These sub-kinds appear on projected ``fem_runtime_lineage_events[*].fallback_kind`` only.
+They are **not** protected golden replay observation fields and do not rewrite runtime FEM.
+
 <!-- BEGIN GENERATED: protected_field_paths -->
 
 ## Protected Observation Field Paths (Generated)

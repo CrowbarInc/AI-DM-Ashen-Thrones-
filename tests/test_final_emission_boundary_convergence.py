@@ -25,7 +25,7 @@ from game.output_sanitizer import (
 )
 from game.social_exchange_emission import minimal_social_emergency_fallback_line, strict_social_ownership_terminal_fallback
 from game.upstream_response_repairs import UPSTREAM_PREPARED_EMISSION_KEY
-from tests.test_final_emission_gate import _runner_strict_bundle
+from tests.helpers.final_emission_gate_fixtures import runner_strict_bundle
 
 pytestmark = pytest.mark.unit
 
@@ -347,7 +347,7 @@ def test_enforce_response_type_rejects_malformed_upstream_action_without_boundar
 
 def test_gate_strict_social_dialogue_repair_is_terminal_social_owned_fallback(monkeypatch, _noop_visibility):
     """Thin non-dialogue strict-social candidate is repaired via ``strict_social_ownership_terminal_fallback``, not gate prose."""
-    session, world, sid, resolution = _runner_strict_bundle()
+    session, world, sid, resolution = runner_strict_bundle()
     expected = strict_social_ownership_terminal_fallback(resolution)
 
     def fake_build(candidate_text, *, resolution, tags=None, session=None, scene_id="", world=None):

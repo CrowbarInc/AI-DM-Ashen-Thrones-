@@ -3,7 +3,7 @@
 Opening fallback ownership is intentionally split:
 - ``game.opening_deterministic_fallback`` owns curated-facts-to-text composition.
 - ``game.upstream_response_repairs`` owns canonical upstream-prepared payload packaging.
-- ``game.final_emission_gate`` owns selection, compatibility-local/fail-closed behavior, orchestration, and final route/output wiring.
+- ``game.final_emission_gate`` owns selection, fail-closed behavior, orchestration, and final route/output wiring.
 - ``game.final_emission_meta`` owns owner-bucket mapping and projection metadata.
 
 This file owns only the read-side owner-bucket mapping. Repeated projection fields
@@ -25,10 +25,8 @@ from game.final_emission_meta import (
     opening_fallback_owner_bucket_from_fields,
 )
 from tests.helpers.final_emission_gate_fixtures import assert_fallback_owner_bucket
-from game.upstream_response_repairs import (
-    OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL,
-    OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED,
-)
+from tests.helpers.opening_fallback_evidence import OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL
+from game.upstream_response_repairs import OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED
 
 pytestmark = pytest.mark.unit
 

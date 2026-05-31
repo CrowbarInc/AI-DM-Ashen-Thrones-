@@ -7,7 +7,6 @@ import pytest
 from game.realization_authority import FALLBACK_FAMILIES
 from game.realization_provenance import (
     GATE_TERMINAL_REPAIR,
-    LEGACY_DIEGETIC_FALLBACK,
     REALIZATION_FALLBACK_FAMILY_FIELD,
     RETRY_TERMINAL_FALLBACK,
     UPSTREAM_PREPARED_EMISSION,
@@ -24,9 +23,9 @@ from game.upstream_response_repairs import (
     maybe_attach_upstream_prepared_opening_fallback_payload,
     merge_upstream_prepared_emission_into_gm_output,
 )
-from tests.test_final_emission_gate import (
+from tests.helpers.final_emission_gate_fixtures import (
     EXPECTED_FRONTIER_GATE_OPENING_FALLBACK,
-    _opening_gm_output,
+    opening_gm_output,
 )
 
 pytestmark = pytest.mark.unit
@@ -201,7 +200,7 @@ def test_action_outcome_style_repair_payload_is_labeled_upstream_prepared_emissi
 
 def test_upstream_prepared_opening_fallback_matches_gate_snapshot_and_family() -> None:
     assert UPSTREAM_PREPARED_OPENING_FALLBACK_KEY == "upstream_prepared_opening_fallback"
-    gm = _opening_gm_output()
+    gm = opening_gm_output()
     payload = build_upstream_prepared_opening_fallback_payload(gm)
 
     assert payload["prepared_opening_fallback_text"] == EXPECTED_FRONTIER_GATE_OPENING_FALLBACK
@@ -222,22 +221,22 @@ def test_upstream_prepared_opening_fallback_matches_gate_snapshot_and_family() -
     assert comp["opening_fallback_authorship_source"] == OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED
 
     fam = payload.get(REALIZATION_FALLBACK_FAMILY_FIELD)
-    assert fam == LEGACY_DIEGETIC_FALLBACK
+    assert fam == UPSTREAM_PREPARED_EMISSION
     assert fam in FALLBACK_FAMILIES
 
 
 def test_maybe_attach_upstream_opening_payload_scene_opening_with_curated_facts() -> None:
-    gm = _opening_gm_output()
+    gm = opening_gm_output()
     maybe_attach_upstream_prepared_opening_fallback_payload(gm, resolution={"kind": "scene_opening", "prompt": "Start."})
     assert gm[UPSTREAM_PREPARED_OPENING_FALLBACK_KEY]["prepared_opening_fallback_text"] == EXPECTED_FRONTIER_GATE_OPENING_FALLBACK
 
 
 def test_maybe_attach_upstream_opening_skips_non_scene_opening_or_empty_facts() -> None:
-    gm = _opening_gm_output()
+    gm = opening_gm_output()
     maybe_attach_upstream_prepared_opening_fallback_payload(gm, resolution={"kind": "observe", "prompt": "Look."})
     assert UPSTREAM_PREPARED_OPENING_FALLBACK_KEY not in gm
 
-    gm2 = _opening_gm_output()
+    gm2 = opening_gm_output()
     gm2["opening_curated_facts"] = []
     gm2["opening_selector_selected_facts"] = []
     maybe_attach_upstream_prepared_opening_fallback_payload(gm2, resolution={"kind": "scene_opening", "prompt": "Start."})
@@ -245,7 +244,7 @@ def test_maybe_attach_upstream_opening_skips_non_scene_opening_or_empty_facts() 
 
 
 def test_maybe_attach_upstream_opening_preserves_existing_nonempty_payload() -> None:
-    gm = _opening_gm_output()
+    gm = opening_gm_output()
     custom = build_upstream_prepared_opening_fallback_payload(gm)
     custom["prepared_opening_fallback_text"] = "CUSTOM_OPENING_FALLBACK."
     gm[UPSTREAM_PREPARED_OPENING_FALLBACK_KEY] = custom
@@ -255,7 +254,7 @@ def test_maybe_attach_upstream_opening_preserves_existing_nonempty_payload() -> 
 
 def test_maybe_attach_upstream_opening_replaces_text_only_stub_with_full_snapshot() -> None:
     """Block I: text-only stub is not kept when curated facts can supply a full upstream snapshot."""
-    gm = _opening_gm_output()
+    gm = opening_gm_output()
     gm[UPSTREAM_PREPARED_OPENING_FALLBACK_KEY] = {"prepared_opening_fallback_text": EXPECTED_FRONTIER_GATE_OPENING_FALLBACK}
     assert not is_structurally_usable_upstream_prepared_opening_fallback_payload(
         gm[UPSTREAM_PREPARED_OPENING_FALLBACK_KEY]
@@ -269,7 +268,7 @@ def test_maybe_attach_upstream_opening_replaces_text_only_stub_with_full_snapsho
 def test_block_m_maybe_attach_records_build_failure_on_emission_debug(monkeypatch: pytest.MonkeyPatch) -> None:
     import game.upstream_response_repairs as urr
 
-    gm = _opening_gm_output()
+    gm = opening_gm_output()
     gm.pop(UPSTREAM_PREPARED_OPENING_FALLBACK_KEY, None)
 
     def boom(_mapping: object) -> dict[str, object]:
@@ -285,7 +284,7 @@ def test_block_m_maybe_attach_records_build_failure_on_emission_debug(monkeypatc
 
 
 def test_block_m_maybe_attach_success_clears_stale_attach_failure_keys() -> None:
-    gm = _opening_gm_output()
+    gm = opening_gm_output()
     gm.pop(UPSTREAM_PREPARED_OPENING_FALLBACK_KEY, None)
     md = gm.setdefault("metadata", {})
     em = md.setdefault("emission_debug", {})

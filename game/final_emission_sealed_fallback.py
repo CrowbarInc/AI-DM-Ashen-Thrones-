@@ -52,6 +52,26 @@ class SealedFallbackSelection:
             self.composition_meta,
         )
 
+    @classmethod
+    def from_visibility_tuple(cls, value: tuple[Any, ...]) -> "SealedFallbackSelection":
+        """Adapt a 7-field visibility tuple without changing sealed selection semantics."""
+        (
+            text,
+            fallback_pool,
+            fallback_kind,
+            final_emitted_source,
+            _fallback_strategy,
+            _fallback_candidate_source,
+            composition_meta,
+        ) = value
+        return cls(
+            text=str(text),
+            fallback_pool=str(fallback_pool),
+            fallback_kind=str(fallback_kind),
+            final_emitted_source=str(final_emitted_source),
+            composition_meta=composition_meta if isinstance(composition_meta, Mapping) else None,
+        )
+
 
 class NonStrictSealedFallbackProviders(NamedTuple):
     passive_candidates_provider: Callable[[], Sequence[SealedFallbackSelection]]
@@ -75,7 +95,7 @@ def build_non_strict_sealed_fallback_providers(
     active_interlocutor: str,
     res_kind: str,
     response_type_required: str,
-    opening_scene_safe_fallback_tuple: Callable[[Dict[str, Any]], tuple[Any, ...]],
+    opening_sealed_fallback_provider: Callable[[Dict[str, Any]], SealedFallbackSelection],
     passive_scene_pressure_fallback_candidates: Callable[..., list[tuple[Any, ...]]],
     should_use_neutral_nonprogress_fallback_instead_of_global_stock: Callable[[Any, Any], bool],
     scene_emit_integrity_global_fallback_tuple: Callable[..., tuple[Any, ...]],
@@ -87,22 +107,7 @@ def build_non_strict_sealed_fallback_providers(
     """Assemble sealed fallback branch providers; prose comes from injected gate-owned builders."""
 
     def _opening_provider() -> SealedFallbackSelection:
-        (
-            fallback_text,
-            fallback_pool,
-            fallback_kind,
-            final_emitted_source,
-            _fb_strat_ie,
-            _fb_cand_ie,
-            fallback_composition_meta,
-        ) = opening_scene_safe_fallback_tuple(out)
-        return SealedFallbackSelection(
-            text=fallback_text,
-            fallback_pool=fallback_pool,
-            fallback_kind=fallback_kind,
-            final_emitted_source=final_emitted_source,
-            composition_meta=fallback_composition_meta,
-        )
+        return opening_sealed_fallback_provider(out)
 
     def _social_interlocutor_provider() -> SealedFallbackSelection:
         mini_res: Dict[str, Any] = {
@@ -127,20 +132,7 @@ def build_non_strict_sealed_fallback_providers(
         )
         selections: list[SealedFallbackSelection] = []
         for candidate in passive_candidates:
-            (
-                fallback_text,
-                fallback_pool,
-                fallback_kind,
-                final_emitted_source,
-                _fallback_strategy,
-                _fallback_candidate_source,
-                _composition_meta,
-            ) = candidate
-            selections.append(
-                SealedFallbackSelection(
-                    fallback_text, fallback_pool, fallback_kind, final_emitted_source, None
-                )
-            )
+            selections.append(SealedFallbackSelection.from_visibility_tuple(candidate))
         return selections
 
     def _use_neutral_nonprogress_provider() -> bool:
@@ -183,7 +175,17 @@ def build_non_strict_sealed_fallback_providers(
             res_kind=res_kind,
             response_type_required=response_type_required,
         )
-        return SealedFallbackSelection(fallback_text, fallback_pool, fallback_kind, final_emitted_source, None)
+        return SealedFallbackSelection.from_visibility_tuple(
+            (
+                fallback_text,
+                fallback_pool,
+                fallback_kind,
+                final_emitted_source,
+                _fb_strat_ie,
+                _fb_cand_ie,
+                _comp_ie,
+            )
+        )
 
     return NonStrictSealedFallbackProviders(
         passive_candidates_provider=_passive_candidates_provider,

@@ -25,7 +25,7 @@ from tests.helpers.dialogue_social_plan import (
     attach_dialogue_social_plan_to_resolution,
     make_valid_dialogue_social_plan,
 )
-from tests.test_final_emission_gate import _runner_strict_bundle
+from tests.helpers.final_emission_gate_fixtures import runner_strict_bundle
 
 pytestmark = pytest.mark.unit
 
@@ -40,7 +40,7 @@ def _eff_runner_aligned(resolution: dict) -> dict:
 
 def test_block_t_dual_run_gate_matches_isolated_continuity_locked_opening_mismatch(monkeypatch):
     """Fixture: continuity-locked wrong opening label → ``local_rebind``; Gate vs isolated equivalence."""
-    session, world, sid, resolution = _runner_strict_bundle()
+    session, world, sid, resolution = runner_strict_bundle()
     c = _locked_runner_contract()
     monkeypatch.setattr(feg, "get_speaker_selection_contract", lambda *a, **kw: dict(c))
 
@@ -80,7 +80,7 @@ def test_block_t_dual_run_gate_matches_isolated_continuity_locked_opening_mismat
 
 def test_block_aa_dual_run_declared_alias_dialogue_plan_shadow_equivalence(monkeypatch):
     """Block AA closeout: Block Z declared aliases + passing dialogue plan + local_rebind → shadow equivalence holds."""
-    session, world, sid, resolution = _runner_strict_bundle()
+    session, world, sid, resolution = runner_strict_bundle()
     attach_dialogue_social_plan_to_resolution(
         resolution,
         make_valid_dialogue_social_plan(
@@ -130,7 +130,7 @@ def test_block_aa_dual_run_declared_alias_dialogue_plan_shadow_equivalence(monke
 
 def test_block_t_quoted_dialogue_layers_shadow_records_downstream_delta(monkeypatch):
     """Fixture: quoted strict-social line through NA/tone/authority (validation-only); finalize may reshape."""
-    session, world, sid, resolution = _runner_strict_bundle()
+    session, world, sid, resolution = runner_strict_bundle()
     c = _locked_runner_contract()
     monkeypatch.setattr(feg, "get_speaker_selection_contract", lambda *a, **kw: dict(c))
 
@@ -163,7 +163,7 @@ def test_block_t_quoted_dialogue_layers_shadow_records_downstream_delta(monkeypa
 
 def test_block_t_unit_isolated_mirror_matches_gate_enforce_direct(monkeypatch):
     """Direct gate entry vs isolated mirror (no full gate): same repair metadata slice."""
-    session, world, sid, resolution = _runner_strict_bundle()
+    session, world, sid, resolution = runner_strict_bundle()
     monkeypatch.setattr(feg, "get_speaker_selection_contract", lambda *a, **kw: dict(_locked_runner_contract()))
 
     line = 'Ragged stranger says, "No names, only rumors."'

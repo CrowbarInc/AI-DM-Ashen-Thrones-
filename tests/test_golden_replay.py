@@ -18,7 +18,8 @@ from game.final_emission_meta import (
     read_final_emission_meta_dict,
 )
 from game.runtime_lineage_telemetry import make_runtime_lineage_event
-from game.upstream_response_repairs import OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL
+from game.final_emission_replay_projection import SEALED_REPLACEMENT_SUBKINDS
+from tests.helpers.opening_fallback_evidence import OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL
 from game.scenario_spine import (
     ScenarioBranch,
     ScenarioSpine,
@@ -52,6 +53,7 @@ from tests.helpers.golden_replay import (
     summarize_long_session_replay_observations,
 )
 from tests.helpers.golden_replay_projection import (
+    project_replay_fallback_family_from_fem,
     project_turn_observation,
     protected_field_paths,
 )
@@ -122,6 +124,61 @@ def test_golden_replay_projection_adapter_wires_observed_turn():
     assert "scaffold_leakage" in paths
     assert "route_kind" in paths
     assert paths == tuple(sorted(set(paths)))
+
+
+def test_golden_replay_dual_family_projection_prefers_diegetic_fallback_family_used() -> None:
+    """Read-side ``fallback_family`` prefers diegetic taxonomy when both FEM fields are present."""
+    fem = {
+        "fallback_family_used": "scene_opening",
+        "realization_fallback_family": "upstream_prepared_emission",
+    }
+    assert project_replay_fallback_family_from_fem(fem) == "scene_opening"
+
+    turn = project_turn_observation(
+        {
+            "scenario_id": "dual_family_diegetic_first",
+            "snap": {"turn_index": 0, "gm_text": "Rain on the gate road."},
+            "payload": {"gm_output": {"_final_emission_meta": fem}},
+        }
+    )
+    assert turn["fallback_family"] == "scene_opening"
+    assert "fallback_family_used" in turn["fem_raw_keys"]
+    assert "realization_fallback_family" in turn["fem_raw_keys"]
+
+
+def test_golden_replay_dual_family_projection_falls_back_to_realization_when_diegetic_absent() -> None:
+    """Read-side projection uses governed provenance only when diegetic field is absent."""
+    fem = {"realization_fallback_family": "upstream_prepared_emission"}
+    assert project_replay_fallback_family_from_fem(fem) == "upstream_prepared_emission"
+
+    turn = project_turn_observation(
+        {
+            "scenario_id": "dual_family_realization_fallback",
+            "snap": {"turn_index": 0, "gm_text": "The notice board creaks."},
+            "payload": {"gm_output": {"_final_emission_meta": fem}},
+        }
+    )
+    assert turn["fallback_family"] == "upstream_prepared_emission"
+
+
+def test_golden_replay_dual_family_projection_does_not_rewrite_raw_fem_fields() -> None:
+    """Projection must not collapse or rewrite runtime FEM dual-family stamps."""
+    raw_fem = {
+        "fallback_family_used": "scene_opening",
+        "realization_fallback_family": "upstream_prepared_emission",
+        "final_emitted_source": "opening_deterministic_fallback",
+    }
+    payload = {"gm_output": {"_final_emission_meta": dict(raw_fem)}}
+    project_turn_observation(
+        {
+            "scenario_id": "dual_family_no_rewrite",
+            "snap": {"turn_index": 0, "gm_text": "Torchlight on wet stone."},
+            "payload": payload,
+        }
+    )
+    stored = payload["gm_output"]["_final_emission_meta"]
+    assert stored["fallback_family_used"] == "scene_opening"
+    assert stored["realization_fallback_family"] == "upstream_prepared_emission"
 
 
 def test_protected_replay_manifest_generated_section_matches_projection_field_paths():
@@ -1253,7 +1310,7 @@ def test_golden_observed_turn_projects_neutral_speaker_grounding_replacement_fam
         for event in observed["runtime_lineage_events"]
         if event.get("event_kind") == "fallback_selected"
     ]
-    assert fallback_selected[0]["fallback_kind"] == "sealed_or_global_replacement"
+    assert fallback_selected[0]["fallback_kind"] == "sealed_unknown_replacement"
 
     summary = summarize_long_session_replay_observations([observed])
     fallback_escalation = summary["fallback_escalation_summary"]
@@ -2156,6 +2213,10 @@ def test_golden_direct_seam_canonical_opening_fallback_path_has_no_compatibility
     )
     assert turn["opening_fallback_owner_bucket"] == OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED
     assert turn["opening_fallback_authorship_source"] != OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL
+    assert meta.get("fallback_family_used") == "scene_opening"
+    assert meta.get("realization_fallback_family") == "upstream_prepared_emission"
+    assert meta.get("realization_fallback_family") != "legacy_diegetic_fallback"
+    assert meta.get("fallback_family_used") != meta.get("realization_fallback_family")
 
 
 def test_golden_canonical_opening_fallback_never_reports_compatibility_local_ownership():
@@ -2691,7 +2752,7 @@ def test_golden_replay_frontier_gate_direct_intrusion_25_turn_diagnostic_stabili
         for event in lineage_summary.get("recurring_events", [])
         if isinstance(event, dict)
     }
-    assert recurring_keys <= {
+    allowed_recurring_keys = {
         "gate_outcome:gate:game.final_emission_gate:accept_unchanged",
         "mutation:gate:game.final_emission_gate:fallback_mutation",
         "fallback_selected:gate:game.final_emission_gate:sealed_or_global_replacement",
@@ -2701,7 +2762,11 @@ def test_golden_replay_frontier_gate_direct_intrusion_25_turn_diagnostic_stabili
         "fallback_selected:gate:game.final_emission_gate:response_type_prepared_emission",
         "gate_outcome:gate:game.final_emission_gate:prepared_repair",
         "mutation:gate:game.final_emission_gate:response_type_repair_mutation",
-    }, debug_context
+    } | {
+        f"fallback_selected:gate:game.final_emission_gate:{subkind}"
+        for subkind in SEALED_REPLACEMENT_SUBKINDS
+    }
+    assert recurring_keys <= allowed_recurring_keys, debug_context
     assert all(
         int(event.get("count") or 0) <= 25
         for event in lineage_summary.get("recurring_events", [])

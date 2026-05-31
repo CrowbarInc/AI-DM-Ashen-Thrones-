@@ -8,6 +8,16 @@ from game.final_emission_sealed_fallback import (
     non_strict_sealed_replacement_realization_family_token,
     stamp_non_strict_sealed_replacement_realization_family,
 )
+from game.final_emission_replay_projection import (
+    SEALED_REPLACEMENT_SUBKIND_ANTI_RESET_CONTINUATION,
+    SEALED_REPLACEMENT_SUBKIND_GLOBAL_SCENE,
+    SEALED_REPLACEMENT_SUBKIND_NPC_PURSUIT_NEUTRAL,
+    SEALED_REPLACEMENT_SUBKIND_OPENING,
+    SEALED_REPLACEMENT_SUBKIND_PASSIVE_SCENE_PRESSURE,
+    SEALED_REPLACEMENT_SUBKIND_SOCIAL_INTERLOCUTOR,
+    SEALED_REPLACEMENT_SUBKIND_UNKNOWN,
+    project_sealed_replacement_subkind_from_fem,
+)
 from game.realization_provenance import (
     GATE_TERMINAL_REPAIR,
     REALIZATION_FALLBACK_FAMILY_FIELD,
@@ -871,6 +881,50 @@ def test_build_fem_runtime_lineage_events_preserves_visibility_sealed_projection
     assert json.loads(json.dumps(events)) == events
 
 
+def test_project_sealed_replacement_subkind_maps_terminal_replace_sources() -> None:
+    cases = (
+        ({"final_route": "replaced", "final_emitted_source": "opening_deterministic_fallback"}, SEALED_REPLACEMENT_SUBKIND_OPENING),
+        ({"final_route": "replaced", "final_emitted_source": "social_interlocutor_minimal_fallback"}, SEALED_REPLACEMENT_SUBKIND_SOCIAL_INTERLOCUTOR),
+        ({"final_route": "replaced", "final_emitted_source": "passive_scene_pressure_fallback"}, SEALED_REPLACEMENT_SUBKIND_PASSIVE_SCENE_PRESSURE),
+        ({"final_route": "replaced", "final_emitted_source": "npc_pursuit_neutral_fallback"}, SEALED_REPLACEMENT_SUBKIND_NPC_PURSUIT_NEUTRAL),
+        ({"final_route": "replaced", "final_emitted_source": "anti_reset_local_continuation_fallback"}, SEALED_REPLACEMENT_SUBKIND_ANTI_RESET_CONTINUATION),
+        ({"final_route": "replaced", "final_emitted_source": "global_scene_fallback"}, SEALED_REPLACEMENT_SUBKIND_GLOBAL_SCENE),
+        ({"final_route": "replaced", "final_emitted_source": "acceptance_quality_global_scene_fallback"}, SEALED_REPLACEMENT_SUBKIND_GLOBAL_SCENE),
+        ({"final_route": "replaced", "final_emitted_source": "mystery_terminal_source"}, SEALED_REPLACEMENT_SUBKIND_UNKNOWN),
+        ({"final_route": "accept_candidate", "final_emitted_source": "global_scene_fallback"}, None),
+    )
+    for fem, expected in cases:
+        assert project_sealed_replacement_subkind_from_fem(fem) == expected
+
+
+def test_build_fem_runtime_lineage_events_sealed_branches_remain_distinct_read_side() -> None:
+    """Gate-terminal repairs share ``gate_terminal_repair`` but lineage sub-kinds differ."""
+    shared_realization = {
+        "final_route": "replaced",
+        "realization_fallback_family": GATE_TERMINAL_REPAIR,
+        "sealed_fallback_owner_bucket": SEALED_FALLBACK_OWNER_SEALED_GATE,
+    }
+    branches = (
+        ("social_interlocutor_minimal_fallback", SEALED_REPLACEMENT_SUBKIND_SOCIAL_INTERLOCUTOR),
+        ("passive_scene_pressure_fallback", SEALED_REPLACEMENT_SUBKIND_PASSIVE_SCENE_PRESSURE),
+        ("npc_pursuit_neutral_fallback", SEALED_REPLACEMENT_SUBKIND_NPC_PURSUIT_NEUTRAL),
+        ("anti_reset_local_continuation_fallback", SEALED_REPLACEMENT_SUBKIND_ANTI_RESET_CONTINUATION),
+        ("global_scene_fallback", SEALED_REPLACEMENT_SUBKIND_GLOBAL_SCENE),
+    )
+    projected_kinds: list[str] = []
+    for final_emitted_source, expected_subkind in branches:
+        events = build_fem_runtime_lineage_events(
+            {
+                **shared_realization,
+                "final_emitted_source": final_emitted_source,
+            }
+        )
+        fallback = _lineage_event(events, "fallback_selected")
+        assert fallback["fallback_kind"] == expected_subkind
+        projected_kinds.append(str(fallback["fallback_kind"]))
+    assert len(set(projected_kinds)) == len(branches)
+
+
 def test_build_fem_runtime_lineage_events_projects_explicit_speaker_contract_repairs() -> None:
     for reason, expected_kind in (
         ("continuity_locked_speaker_repair", "local_rebind"),
@@ -969,3 +1023,16 @@ def test_write_time_mutation_seam_helpers_ensure_and_patch_fem_in_place() -> Non
     patch_final_emission_meta(gm2, {"b": 3})
     assert isinstance(gm2[FINAL_EMISSION_META_KEY], dict)
     assert gm2[FINAL_EMISSION_META_KEY]["b"] == 3
+
+
+def test_normalize_fem_preserves_dual_fallback_family_fields_without_collapse() -> None:
+    """Observability normalization must not rewrite diegetic vs provenance family stamps."""
+    raw = {
+        "fallback_family_used": "scene_opening",
+        REALIZATION_FALLBACK_FAMILY_FIELD: "legacy_diegetic_fallback",
+        "fallback_temporal_frame": "first_impression",
+    }
+    normalized = normalize_final_emission_meta_for_observability(raw)
+    assert normalized["fallback_family_used"] == "scene_opening"
+    assert normalized[REALIZATION_FALLBACK_FAMILY_FIELD] == "legacy_diegetic_fallback"
+    assert normalized["fallback_family_used"] != normalized[REALIZATION_FALLBACK_FAMILY_FIELD]

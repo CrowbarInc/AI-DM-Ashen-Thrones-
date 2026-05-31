@@ -14,6 +14,9 @@ from game.final_emission_meta import (
 )
 from game.upstream_response_repairs import OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED
 
+# Legacy compatibility-local authorship token — test/read-side only; never emitted on canonical paths.
+OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL = "compatibility_local_opening_deterministic"
+
 OPENING_FALLBACK_FAMILY = "scene_opening"
 OPENING_SUCCESS_SOURCE = "opening_deterministic_fallback"
 OPENING_FAILED_CLOSED_SOURCE = "opening_fallback_failed_closed"

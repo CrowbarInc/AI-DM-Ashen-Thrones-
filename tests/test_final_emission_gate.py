@@ -63,6 +63,7 @@ import pytest
 
 import game.final_emission_gate as feg
 import game.final_emission_sealed_fallback as fesf
+import game.final_emission_visibility_fallback as visibility_fallback
 import game.scene_state_anchoring as ssa
 from game.contract_registry import emergency_fallback_source_ids
 from game.defaults import default_scene, default_session, default_world
@@ -90,14 +91,15 @@ from game.realization_provenance import (
     UPSTREAM_PREPARED_EMISSION,
 )
 from game.opening_deterministic_fallback import deterministic_opening_fallback_text_and_meta as _deterministic_opening_under_test
+import game.opening_deterministic_fallback as opening_deterministic_fallback
 from game.upstream_response_repairs import (
-    OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL,
     OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED,
     UPSTREAM_PREPARED_EMISSION_KEY,
     UPSTREAM_PREPARED_OPENING_FALLBACK_KEY,
     build_upstream_prepared_opening_fallback_payload,
     maybe_attach_upstream_prepared_opening_fallback_payload,
 )
+from tests.helpers.opening_fallback_evidence import OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL
 from tests.helpers.final_emission_gate_fixtures import (
     EXPECTED_FRONTIER_GATE_OPENING_FALLBACK,
     assert_fallback_owner_bucket,
@@ -1009,7 +1011,7 @@ def test_block_h_empty_curated_facts_skips_gate_local_deterministic_opening_comp
     def _boom(*_a: Any, **_k: Any) -> tuple[str, dict]:
         raise AssertionError("gate-local deterministic opening must not run on Block H fail-closed path")
 
-    monkeypatch.setattr(feg, "_deterministic_opening_fallback_text_and_meta", _boom)
+    monkeypatch.setattr(opening_deterministic_fallback, "deterministic_opening_fallback_text_and_meta", _boom)
     text, dbg = feg._enforce_response_type_contract(
         "Nearby crates appear disturbed.",
         gm_output=gm,
@@ -1036,7 +1038,7 @@ def test_block_h_opening_scene_safe_fallback_tuple_skips_local_composer_when_emp
     def _boom(*_a: Any, **_k: Any) -> tuple[str, dict]:
         raise AssertionError("gate-local deterministic opening must not run on Block H fail-closed path")
 
-    monkeypatch.setattr(feg, "_deterministic_opening_fallback_text_and_meta", _boom)
+    monkeypatch.setattr(opening_deterministic_fallback, "deterministic_opening_fallback_text_and_meta", _boom)
     text, _p, _k, _fe, _fs, _fc, composition_meta = feg._opening_scene_safe_fallback_tuple(gm)
     assert text.startswith("[opening_fallback_failed_closed:")
     assert composition_meta.get("opening_fallback_compatibility_local_disabled") is True
@@ -1050,7 +1052,7 @@ def test_block_g_opening_scene_safe_fallback_prefers_upstream_when_usable(monkey
     def boom(*_a: Any, **_k: Any) -> tuple[str, dict]:
         raise AssertionError("compatibility deterministic opening must not run when upstream snapshot is usable")
 
-    monkeypatch.setattr(feg, "_deterministic_opening_fallback_text_and_meta", boom)
+    monkeypatch.setattr(opening_deterministic_fallback, "deterministic_opening_fallback_text_and_meta", boom)
     _text, _pool, _kind, _fe, _fs, _fc, composition_meta = feg._opening_scene_safe_fallback_tuple(gm)
     assert composition_meta["opening_fallback_authorship_source"] == OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED
 
@@ -1287,15 +1289,15 @@ def _block_e_failing_referential_validation(text: str, **_kwargs):
     }
 
 
-def _block_e_benign_fallback_tuple(*_args, **_kwargs):
-    return (
-        "Block E sealed fallback line.",
-        "block_e_test_pool",
-        "block_e_test_kind",
-        "block_e_test_source",
-        "standard_safe_fallback",
-        "block_e_test_candidate_source",
-        feg._first_mention_composition_meta(),
+def _block_e_benign_fallback_selection(*_args, **_kwargs) -> visibility_fallback.VisibilitySelectedFallback:
+    return visibility_fallback.VisibilitySelectedFallback(
+        text="Block E sealed fallback line.",
+        fallback_pool="block_e_test_pool",
+        fallback_kind="block_e_test_kind",
+        final_emitted_source="block_e_test_source",
+        fallback_strategy="standard_safe_fallback",
+        fallback_candidate_source="block_e_test_candidate_source",
+        composition_meta=feg._first_mention_composition_meta(),
     )
 
 
@@ -1330,7 +1332,7 @@ def test_block_e_strict_social_referential_substitution_skipped_on_non_strict_pa
     monkeypatch.setattr(
         feg, "validate_player_facing_referential_clarity", _block_e_failing_referential_validation
     )
-    monkeypatch.setattr(feg, "_standard_visibility_safe_fallback", _block_e_benign_fallback_tuple)
+    monkeypatch.setattr(feg, "_standard_visibility_safe_fallback", _block_e_benign_fallback_selection)
 
     def boom(*_a, **_k):
         raise AssertionError(
@@ -1368,7 +1370,7 @@ def test_block_e_strict_social_referential_substitution_skipped_on_non_dialogue_
     monkeypatch.setattr(
         feg, "validate_player_facing_referential_clarity", _block_e_failing_referential_validation
     )
-    monkeypatch.setattr(feg, "_standard_visibility_safe_fallback", _block_e_benign_fallback_tuple)
+    monkeypatch.setattr(feg, "_standard_visibility_safe_fallback", _block_e_benign_fallback_selection)
 
     def boom(*_a, **_k):
         raise AssertionError(
@@ -1400,7 +1402,7 @@ def test_block_e_strict_social_referential_substitution_skipped_when_suppressed_
     monkeypatch.setattr(
         feg, "validate_player_facing_referential_clarity", _block_e_failing_referential_validation
     )
-    monkeypatch.setattr(feg, "_standard_visibility_safe_fallback", _block_e_benign_fallback_tuple)
+    monkeypatch.setattr(feg, "_standard_visibility_safe_fallback", _block_e_benign_fallback_selection)
 
     def boom(*_a, **_k):
         raise AssertionError(
@@ -1445,7 +1447,7 @@ def test_block_e_strict_social_referential_substitution_post_validation_rejectio
     monkeypatch.setattr(feg, "validate_player_facing_first_mentions", lambda *a, **k: {"ok": True})
     monkeypatch.setattr(feg, "validate_player_facing_visibility", lambda *a, **k: {"ok": True})
     monkeypatch.setattr(feg, "_active_interlocutor_visible_person_like", lambda *a, **k: True)
-    monkeypatch.setattr(feg, "_standard_visibility_safe_fallback", _block_e_benign_fallback_tuple)
+    monkeypatch.setattr(feg, "_standard_visibility_safe_fallback", _block_e_benign_fallback_selection)
 
     result = feg._apply_referential_clarity_enforcement(
         out,
@@ -3757,7 +3759,7 @@ def _assert_known_realization_family(value: str) -> None:
 # gate-consumer pins; adapter metadata matrices are tested in
 # tests/test_final_emission_opening_fallback.py.
 def test_deterministic_opening_fallback_helper_exact_text_and_meta_snapshot() -> None:
-    text, meta = feg._deterministic_opening_fallback_text_and_meta(opening_gm_output())
+    text, meta = _deterministic_opening_under_test(opening_gm_output())
 
     assert text == EXPECTED_FRONTIER_GATE_OPENING_FALLBACK
     assert meta["opening_fallback_context_source"] == "opening_curated_facts"
@@ -3799,7 +3801,7 @@ def test_canonical_direct_tuple_prefers_upstream_prepared_payload_over_compatibi
     def _should_not_run_local_deterministic_opening(*_a: Any, **_k: Any) -> tuple[str, dict]:
         raise AssertionError("gate-local deterministic opening must not run when upstream payload is present")
 
-    monkeypatch.setattr(feg, "_deterministic_opening_fallback_text_and_meta", _should_not_run_local_deterministic_opening)
+    monkeypatch.setattr(opening_deterministic_fallback, "deterministic_opening_fallback_text_and_meta", _should_not_run_local_deterministic_opening)
     (
         text,
         fallback_pool,
@@ -3830,7 +3832,7 @@ def test_gate_direct_tuple_text_only_stub_fails_closed_without_rebuild(monkeypat
     def _boom(*_a: Any, **_k: Any) -> tuple[str, dict]:
         raise AssertionError("gate must not compose or rebuild deterministic opening from a malformed stub")
 
-    monkeypatch.setattr(feg, "_deterministic_opening_fallback_text_and_meta", _boom)
+    monkeypatch.setattr(opening_deterministic_fallback, "deterministic_opening_fallback_text_and_meta", _boom)
     # Direct tuple only: upstream ``maybe_attach`` would repair this before final emission.
     text, _p, kind, _fe, _fs, _fc, composition_meta = feg._opening_scene_safe_fallback_tuple(gm)
     assert text == "[opening_fallback_failed_closed: empty_curated_facts]"
@@ -3872,7 +3874,7 @@ def test_canonical_opening_failure_recovers_via_upstream_prepared_payload_when_p
     def _should_not_run_local_deterministic_opening(*_a: Any, **_k: Any) -> tuple[str, dict]:
         raise AssertionError("gate-local deterministic opening must not run when upstream payload is present")
 
-    monkeypatch.setattr(feg, "_deterministic_opening_fallback_text_and_meta", _should_not_run_local_deterministic_opening)
+    monkeypatch.setattr(opening_deterministic_fallback, "deterministic_opening_fallback_text_and_meta", _should_not_run_local_deterministic_opening)
     text, dbg = opening_gate_attach_then_enforce_response_type_contract(
         "Nearby crates appear disturbed.",
         gm,
@@ -3889,7 +3891,8 @@ def test_canonical_opening_failure_recovers_via_upstream_prepared_payload_when_p
     assert dbg.get("response_type_repair_kind") == "opening_deterministic_fallback"
     assert dbg.get("fallback_family_used") == "scene_opening"
     family = dbg[REALIZATION_FALLBACK_FAMILY_FIELD]
-    assert family == LEGACY_DIEGETIC_FALLBACK
+    assert family == UPSTREAM_PREPARED_EMISSION
+    assert family != LEGACY_DIEGETIC_FALLBACK
     assert_final_emission_meta_contains(
         dbg,
         opening_fallback_authorship_source=OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED,
@@ -3909,7 +3912,7 @@ def test_gate_opening_failure_text_only_stub_fails_closed_without_rebuild(monkey
         calls.append(1)
         return _deterministic_opening_under_test(*a, **k)
 
-    monkeypatch.setattr(feg, "_deterministic_opening_fallback_text_and_meta", _counting_local_deterministic_opening)
+    monkeypatch.setattr(opening_deterministic_fallback, "deterministic_opening_fallback_text_and_meta", _counting_local_deterministic_opening)
     text, dbg = feg._enforce_response_type_contract(
         "Nearby crates appear disturbed.",
         gm_output=gm,
@@ -4125,7 +4128,8 @@ def test_canonical_final_gate_opening_fallback_fem_is_upstream_prepared_not_comp
     )
     family = fem[REALIZATION_FALLBACK_FAMILY_FIELD]
     assert family in FALLBACK_FAMILIES
-    assert family == LEGACY_DIEGETIC_FALLBACK
+    assert family == UPSTREAM_PREPARED_EMISSION
+    assert family != LEGACY_DIEGETIC_FALLBACK
     assert fem.get("opening_fallback_authorship_source") != OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL
     assert_opening_fallback_source(
         fem,
@@ -4144,7 +4148,7 @@ def test_canonical_final_gate_auto_attaches_upstream_opening_fallback_before_emi
     def _should_not_run_gate_local_deterministic_opening(*_a: Any, **_k: Any) -> tuple[str, dict]:
         raise AssertionError("gate-local deterministic opening must not run when upstream payload is present")
 
-    monkeypatch.setattr(feg, "_deterministic_opening_fallback_text_and_meta", _should_not_run_gate_local_deterministic_opening)
+    monkeypatch.setattr(opening_deterministic_fallback, "deterministic_opening_fallback_text_and_meta", _should_not_run_gate_local_deterministic_opening)
     out = apply_final_emission_gate(
         gm_output,
         resolution={"kind": "scene_opening", "prompt": "Start the campaign."},
@@ -4163,7 +4167,7 @@ def test_canonical_final_gate_auto_attaches_upstream_opening_fallback_before_emi
         final_emitted_source="opening_deterministic_fallback",
         fallback_family_used="scene_opening",
     )
-    assert fem[REALIZATION_FALLBACK_FAMILY_FIELD] == LEGACY_DIEGETIC_FALLBACK
+    assert fem[REALIZATION_FALLBACK_FAMILY_FIELD] == UPSTREAM_PREPARED_EMISSION
     assert_opening_fallback_source(
         fem,
         final_emitted_source="opening_deterministic_fallback",
@@ -4176,7 +4180,7 @@ def test_canonical_final_gate_auto_attaches_upstream_opening_fallback_before_emi
 def test_block_l_apply_final_emission_gate_scene_opening_maybe_attach_runs_before_deterministic_opening_composer(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    """Block L: full gate orchestration always invokes ``maybe_attach_upstream_prepared_opening_fallback_payload`` before any gate-local deterministic opening composer call."""
+    """Block L: full gate orchestration always invokes ``maybe_attach_upstream_prepared_opening_fallback_payload`` before any upstream opening composer call."""
     gm_output = opening_gm_output()
     gm_output["player_facing_text"] = "Nearby crates appear disturbed."
     gm_output["tags"] = []
@@ -4184,7 +4188,7 @@ def test_block_l_apply_final_emission_gate_scene_opening_maybe_attach_runs_befor
 
     seq: list[str] = []
     real_maybe = maybe_attach_upstream_prepared_opening_fallback_payload
-    real_det = feg._deterministic_opening_fallback_text_and_meta
+    real_det = _deterministic_opening_under_test
 
     def wrapped_maybe(out: dict[str, Any], *, resolution: dict[str, Any] | None) -> None:
         seq.append("maybe_attach")
@@ -4195,7 +4199,7 @@ def test_block_l_apply_final_emission_gate_scene_opening_maybe_attach_runs_befor
         return real_det(out)
 
     monkeypatch.setattr(feg, "maybe_attach_upstream_prepared_opening_fallback_payload", wrapped_maybe)
-    monkeypatch.setattr(feg, "_deterministic_opening_fallback_text_and_meta", wrapped_det)
+    monkeypatch.setattr(opening_deterministic_fallback, "deterministic_opening_fallback_text_and_meta", wrapped_det)
 
     apply_final_emission_gate(
         gm_output,
@@ -4227,13 +4231,13 @@ def test_block_n_opening_attach_build_failure_fails_closed_preserves_block_m_tel
     monkeypatch.setattr(urr, "build_upstream_prepared_opening_fallback_payload", boom)
 
     calls: list[str] = []
-    real_det = feg._deterministic_opening_fallback_text_and_meta
+    real_det = _deterministic_opening_under_test
 
     def wrapped_det(out: Mapping[str, Any] | None) -> tuple[str, dict[str, Any]]:
         calls.append("deterministic")
         return real_det(out)
 
-    monkeypatch.setattr(feg, "_deterministic_opening_fallback_text_and_meta", wrapped_det)
+    monkeypatch.setattr(opening_deterministic_fallback, "deterministic_opening_fallback_text_and_meta", wrapped_det)
 
     out = apply_final_emission_gate(
         gm_output,
@@ -4321,7 +4325,7 @@ def test_canonical_final_gate_prefers_upstream_prepared_payload_when_present(mon
     def _should_not_run_local_deterministic_opening(*_a: Any, **_k: Any) -> tuple[str, dict]:
         raise AssertionError("gate-local deterministic opening must not run when upstream payload is present")
 
-    monkeypatch.setattr(feg, "_deterministic_opening_fallback_text_and_meta", _should_not_run_local_deterministic_opening)
+    monkeypatch.setattr(opening_deterministic_fallback, "deterministic_opening_fallback_text_and_meta", _should_not_run_local_deterministic_opening)
     out = apply_final_emission_gate(
         gm_output,
         resolution={"kind": "scene_opening", "prompt": "Start the campaign."},
@@ -4334,7 +4338,7 @@ def test_canonical_final_gate_prefers_upstream_prepared_payload_when_present(mon
     assert out["player_facing_text"] == EXPECTED_FRONTIER_GATE_OPENING_FALLBACK
     assert fem["final_emitted_source"] == "opening_deterministic_fallback"
     assert fem["fallback_family_used"] == "scene_opening"
-    assert fem[REALIZATION_FALLBACK_FAMILY_FIELD] == LEGACY_DIEGETIC_FALLBACK
+    assert fem[REALIZATION_FALLBACK_FAMILY_FIELD] == UPSTREAM_PREPARED_EMISSION
     assert fem["response_type_repair_kind"] == "opening_deterministic_fallback"
     assert fem["opening_fallback_context_source"] == "opening_curated_facts"
     assert fem.get("opening_fallback_authorship_source") == OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED
@@ -4663,7 +4667,7 @@ def test_selector_snapshot_opening_rt_repair_vs_generic_terminal_families() -> N
     g_fem = read_final_emission_meta_dict(gen_out) or {}
     assert o_fem["final_emitted_source"] == "opening_deterministic_fallback"
     assert o_fem["final_route"] == "accept_candidate"
-    assert o_fem[REALIZATION_FALLBACK_FAMILY_FIELD] == LEGACY_DIEGETIC_FALLBACK
+    assert o_fem[REALIZATION_FALLBACK_FAMILY_FIELD] == UPSTREAM_PREPARED_EMISSION
 
     assert g_fem["final_emitted_source"] == "global_scene_fallback"
     assert g_fem["final_route"] == "replaced"
@@ -4809,7 +4813,10 @@ def test_block_ai_sealed_selector_helpers_importable_and_callable() -> None:
         "_route_visibility_enforcement_after_failed_validation",
         "_select_acceptance_quality_n4_sealed_fallback_line",
         "_scene_opening_rt_contract_accept_path_promotes_candidate",
+        "_select_non_strict_replace_path_terminal_sealed_fallback_selection",
         "_select_non_strict_replace_path_terminal_sealed_fallback",
+        "_standard_visibility_safe_fallback",
+        "_standard_visibility_safe_fallback_tuple",
     ):
         fn = getattr(feg, name, None)
         assert callable(fn), name
@@ -4968,6 +4975,50 @@ def test_block_ai_sealed_fallback_selection_round_trips_legacy_tuple() -> None:
     assert selection.as_legacy_tuple() == legacy
 
 
+def test_block_ai_sealed_fallback_selection_round_trips_visibility_tuple() -> None:
+    legacy = (
+        "Visibility fallback text.",
+        "visibility_pool",
+        "visibility_kind",
+        "visibility_source",
+        "standard_safe_fallback",
+        "visibility_candidate_source",
+        {"first_mention_composition_used": False},
+    )
+    selection = fesf.SealedFallbackSelection.from_visibility_tuple(legacy)
+    assert selection.text == "Visibility fallback text."
+    assert selection.fallback_pool == "visibility_pool"
+    assert selection.fallback_kind == "visibility_kind"
+    assert selection.final_emitted_source == "visibility_source"
+    assert selection.composition_meta == {"first_mention_composition_used": False}
+
+
+def test_block_ai_standard_visibility_safe_fallback_tuple_round_trips_selection() -> None:
+    selected = feg._standard_visibility_safe_fallback(
+        gm_output=opening_gm_output(),
+        session={},
+        scene={"scene": opening_gm_output()["prompt_context"]["scene"]["public"]},
+        world={},
+        scene_id="frontier_gate",
+        eff_resolution={"kind": "scene_opening", "prompt": "Start the campaign."},
+        active_interlocutor="",
+        strict_social_active=False,
+        strict_social_suppressed_non_social_turn=False,
+    )
+    assert isinstance(selected, visibility_fallback.VisibilitySelectedFallback)
+    assert feg._standard_visibility_safe_fallback_tuple(
+        gm_output=opening_gm_output(),
+        session={},
+        scene={"scene": opening_gm_output()["prompt_context"]["scene"]["public"]},
+        world={},
+        scene_id="frontier_gate",
+        eff_resolution={"kind": "scene_opening", "prompt": "Start the campaign."},
+        active_interlocutor="",
+        strict_social_active=False,
+        strict_social_suppressed_non_social_turn=False,
+    ) == selected.as_legacy_tuple()
+
+
 def test_block_ai_neutral_nonprogress_prose_is_owned_by_diegetic_fallback_module() -> None:
     expected = "Nothing confirms progress toward that lead yet—the moment stays unresolved."
 
@@ -4988,13 +5039,11 @@ def test_build_non_strict_sealed_fallback_providers_social_branch_uses_injected_
         active_interlocutor="npc_a",
         res_kind="question",
         response_type_required="dialogue",
-        opening_scene_safe_fallback_tuple=lambda _gm: (
+        opening_sealed_fallback_provider=lambda _gm: fesf.SealedFallbackSelection(
             "opening",
             "opening_pool",
             "opening_kind",
             "opening_source",
-            None,
-            None,
             None,
         ),
         passive_scene_pressure_fallback_candidates=lambda **_: [],
@@ -5357,7 +5406,7 @@ def test_block_ai_opening_upstream_prepared_snapshot_remains_preferred_over_comp
     def _compat_must_not_run(*_a: Any, **_k: Any) -> tuple[str, dict]:
         raise AssertionError("compatibility-local opening composer must not run when upstream snapshot is attached")
 
-    monkeypatch.setattr(feg, "_deterministic_opening_fallback_text_and_meta", _compat_must_not_run)
+    monkeypatch.setattr(opening_deterministic_fallback, "deterministic_opening_fallback_text_and_meta", _compat_must_not_run)
     _text, _pool, _kind, _fe_src, _fs, _fc, composition_meta = opening_gate_attach_then_opening_scene_safe_fallback_tuple(gm)
     assert composition_meta["opening_fallback_authorship_source"] == OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED
     assert composition_meta["opening_fallback_authorship_source"] != OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL
@@ -5562,7 +5611,7 @@ def test_opening_failure_fallback_classification_excludes_observe_family():
 
 
 def test_opening_visibility_safe_fallback_routes_to_opening_family_not_observe():
-    fallback = feg._standard_visibility_safe_fallback(
+    selected = feg._standard_visibility_safe_fallback(
         gm_output=opening_gm_output(),
         session={},
         scene={"scene": opening_gm_output()["prompt_context"]["scene"]["public"]},
@@ -5574,11 +5623,10 @@ def test_opening_visibility_safe_fallback_routes_to_opening_family_not_observe()
         strict_social_suppressed_non_social_turn=False,
     )
 
-    text, _pool, fallback_kind, _source, _strategy, _candidate_source, composition_meta = fallback
-    low = text.lower()
-    assert fallback_kind == "opening_deterministic_fallback"
-    assert composition_meta.get("fallback_family_used") == "scene_opening"
-    assert composition_meta.get("fallback_temporal_frame") == "first_impression"
+    low = selected.text.lower()
+    assert selected.fallback_kind == "opening_deterministic_fallback"
+    assert selected.composition_meta.get("fallback_family_used") == "scene_opening"
+    assert selected.composition_meta.get("fallback_temporal_frame") == "first_impression"
     assert "look again" not in low
     assert "still" not in low
 
@@ -5719,7 +5767,7 @@ def test_block_j_missing_curated_facts_skips_gate_local_deterministic_opening_co
     def _boom(*_a: Any, **_k: Any) -> tuple[str, dict]:
         raise AssertionError("gate-local deterministic opening must not run when curated facts key is absent")
 
-    monkeypatch.setattr(feg, "_deterministic_opening_fallback_text_and_meta", _boom)
+    monkeypatch.setattr(opening_deterministic_fallback, "deterministic_opening_fallback_text_and_meta", _boom)
     text, dbg = feg._enforce_response_type_contract(
         "Nearby crates appear disturbed.",
         gm_output=gm,
@@ -5745,7 +5793,7 @@ def test_canonical_missing_curated_facts_upstream_prepared_payload_still_wins(mo
     def _boom(*_a: Any, **_k: Any) -> tuple[str, dict]:
         raise AssertionError("compatibility-local deterministic opening must not run when upstream snapshot is attached")
 
-    monkeypatch.setattr(feg, "_deterministic_opening_fallback_text_and_meta", _boom)
+    monkeypatch.setattr(opening_deterministic_fallback, "deterministic_opening_fallback_text_and_meta", _boom)
     out = apply_final_emission_gate(
         gm_output,
         resolution={"kind": "scene_opening", "prompt": "Start the campaign."},

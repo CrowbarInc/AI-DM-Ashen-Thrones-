@@ -24,14 +24,14 @@ from tests.test_block_s_speaker_local_rebind_equivalence import (
     _locked_runner_contract,
     _stub_strict_social_details,
 )
-from tests.test_final_emission_gate import _runner_strict_bundle
+from tests.helpers.final_emission_gate_fixtures import runner_strict_bundle
 
 pytestmark = pytest.mark.unit
 
 
 @pytest.fixture
 def local_rebind_strict_bundle(monkeypatch):
-    session, world, sid, resolution = _runner_strict_bundle()
+    session, world, sid, resolution = runner_strict_bundle()
     c = _locked_runner_contract()
     monkeypatch.setattr(feg, "get_speaker_selection_contract", lambda *a, **kw: dict(c))
     line = 'Ragged stranger says, "No names, only rumors."'
@@ -46,7 +46,7 @@ def local_rebind_strict_bundle(monkeypatch):
 @pytest.fixture
 def local_rebind_canonical_plan_with_declared_alias_bundle(monkeypatch):
     """Canonical ``speaker_id`` / ``speaker_name`` (Tavern Runner) + declared pregate alias (Block Z)."""
-    session, world, sid, resolution = _runner_strict_bundle()
+    session, world, sid, resolution = runner_strict_bundle()
     attach_dialogue_social_plan_to_resolution(
         resolution,
         make_valid_dialogue_social_plan(
@@ -75,7 +75,7 @@ def local_rebind_passing_dialogue_plan_bundle(monkeypatch):
     Plan speakers must match **pregate** attribution (`Ragged stranger`), not post-``local_rebind``
     canonicalization (`Tavern Runner`): dialogue-plan invariant runs before strict-social build/speaker repair.
     """
-    session, world, sid, resolution = _runner_strict_bundle()
+    session, world, sid, resolution = runner_strict_bundle()
     attach_dialogue_social_plan_to_resolution(
         resolution,
         make_valid_dialogue_social_plan(
@@ -188,7 +188,7 @@ def test_block_v_passing_dialogue_plan_avoids_subtractive_strip_as_first_diverge
 
 def test_block_w_canonical_only_plan_still_mismatch_without_declared_alias(monkeypatch):
     """Canonical plan without declared alias rows still fails closed on pregate writer alias."""
-    session, world, sid, resolution = _runner_strict_bundle()
+    session, world, sid, resolution = runner_strict_bundle()
     attach_dialogue_social_plan_to_resolution(
         resolution,
         make_valid_dialogue_social_plan(
@@ -225,7 +225,7 @@ def test_block_w_canonical_only_plan_still_mismatch_without_declared_alias(monke
 
 def test_block_z_canonical_plan_with_declared_alias_passes_dialogue_plan_gate(monkeypatch):
     """Phase 2: declared ``allowed_pregate_speaker_labels`` accepts pregate alias before speaker repair."""
-    session, world, sid, resolution = _runner_strict_bundle()
+    session, world, sid, resolution = runner_strict_bundle()
     attach_dialogue_social_plan_to_resolution(
         resolution,
         make_valid_dialogue_social_plan(

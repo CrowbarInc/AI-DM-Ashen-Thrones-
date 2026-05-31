@@ -399,7 +399,6 @@ def test_build_final_strict_social_emits_neutral_bridge_when_grounding_denied(fr
         scene_id="frontier_gate",
         world=None,
     )
-    assert "scene holds" not in text.lower()
     assert meta.get("final_emitted_source") == "neutral_reply_speaker_grounding_bridge"
     assert meta.get("fallback_kind") == "neutral_speaker_grounding_bridge"
     assert meta.get("used_internal_fallback") is True

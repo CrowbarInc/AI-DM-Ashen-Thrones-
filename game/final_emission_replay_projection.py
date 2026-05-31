@@ -9,6 +9,9 @@ Owner semantics for projected runtime-lineage events:
 - Opening fallback can therefore project ``owner="game.final_emission_gate"`` while
   carrying ``fallback_owner_bucket="upstream-prepared"`` and
   ``fallback_authorship_source="upstream_prepared_opening_fallback"``.
+- Runtime FEM may carry both ``fallback_family_used`` (diegetic) and
+  ``realization_fallback_family`` (governed provenance); lineage ``fallback_kind``
+  for opening uses diegetic ``scene_opening`` and does not collapse the two FEM fields.
 - Successful opening fallback and gate-selected strict-social fallback carry
   explicit ``fallback_selection_owner`` and ``fallback_content_owner`` fields.
   Fail-closed opening keeps gate/sealed ownership and is not treated as
@@ -33,6 +36,89 @@ OPENING_FALLBACK_CONTENT_OWNER: str = "game.opening_deterministic_fallback"
 OPENING_FAIL_CLOSED_CONTENT_OWNER: str = "game.final_emission_gate"
 STRICT_SOCIAL_FALLBACK_SELECTION_OWNER: str = "game.final_emission_gate"
 STRICT_SOCIAL_FALLBACK_CONTENT_OWNER: str = "game.social_exchange_emission"
+
+# Read-side sealed replacement sub-kinds (Cycle AB6). Runtime FEM keeps
+# ``final_emitted_source`` / ``final_route`` unchanged; lineage projection refines
+# the former catch-all ``sealed_or_global_replacement`` bucket.
+SEALED_REPLACEMENT_SUBKIND_OPENING: str = "sealed_opening_fallback"
+SEALED_REPLACEMENT_SUBKIND_SOCIAL_INTERLOCUTOR: str = "sealed_social_interlocutor_fallback"
+SEALED_REPLACEMENT_SUBKIND_PASSIVE_SCENE_PRESSURE: str = "sealed_passive_scene_pressure_fallback"
+SEALED_REPLACEMENT_SUBKIND_NPC_PURSUIT_NEUTRAL: str = "sealed_npc_pursuit_neutral_fallback"
+SEALED_REPLACEMENT_SUBKIND_ANTI_RESET_CONTINUATION: str = "sealed_anti_reset_continuation_fallback"
+SEALED_REPLACEMENT_SUBKIND_GLOBAL_SCENE: str = "sealed_global_scene_fallback"
+SEALED_REPLACEMENT_SUBKIND_UNKNOWN: str = "sealed_unknown_replacement"
+SEALED_REPLACEMENT_SUBKINDS: frozenset[str] = frozenset(
+    {
+        SEALED_REPLACEMENT_SUBKIND_OPENING,
+        SEALED_REPLACEMENT_SUBKIND_SOCIAL_INTERLOCUTOR,
+        SEALED_REPLACEMENT_SUBKIND_PASSIVE_SCENE_PRESSURE,
+        SEALED_REPLACEMENT_SUBKIND_NPC_PURSUIT_NEUTRAL,
+        SEALED_REPLACEMENT_SUBKIND_ANTI_RESET_CONTINUATION,
+        SEALED_REPLACEMENT_SUBKIND_GLOBAL_SCENE,
+        SEALED_REPLACEMENT_SUBKIND_UNKNOWN,
+    }
+)
+_LEGACY_SEALED_OR_GLOBAL_REPLACEMENT: str = "sealed_or_global_replacement"
+
+
+def _norm_projection_token(value: Any) -> str:
+    return str(value or "").strip().lower()
+
+
+def is_sealed_replacement_lineage_kind(fallback_kind: Any) -> bool:
+    """True when *fallback_kind* is a sealed replacement read-side projection bucket."""
+    token = _norm_projection_token(fallback_kind)
+    if not token:
+        return False
+    if token == _LEGACY_SEALED_OR_GLOBAL_REPLACEMENT:
+        return True
+    return token in SEALED_REPLACEMENT_SUBKINDS
+
+
+def project_sealed_replacement_subkind_from_fem(fem: Mapping[str, Any]) -> str | None:
+    """Map finalized sealed/gate-terminal replace FEM evidence to a stable read-side sub-kind.
+
+    Returns ``None`` when *fem* is not a ``final_route == replaced`` terminal replace turn.
+    Does not mutate *fem* or alter runtime selection metadata.
+    """
+    if _norm_projection_token(fem.get("final_route")) != "replaced":
+        return None
+
+    final_source = _norm_projection_token(fem.get("final_emitted_source"))
+    fallback_kind = _norm_projection_token(
+        fem.get("fallback_kind") or fem.get("visibility_fallback_kind")
+    )
+
+    if final_source == "opening_deterministic_fallback":
+        return SEALED_REPLACEMENT_SUBKIND_OPENING
+    if final_source == "social_interlocutor_minimal_fallback":
+        return SEALED_REPLACEMENT_SUBKIND_SOCIAL_INTERLOCUTOR
+    if (
+        final_source == "passive_scene_pressure_fallback"
+        or fallback_kind.startswith("passive_scene_pressure")
+    ):
+        return SEALED_REPLACEMENT_SUBKIND_PASSIVE_SCENE_PRESSURE
+    if (
+        final_source == "npc_pursuit_neutral_fallback"
+        or fallback_kind == "npc_pursuit_neutral_nonprogress"
+    ):
+        return SEALED_REPLACEMENT_SUBKIND_NPC_PURSUIT_NEUTRAL
+    if (
+        final_source == "anti_reset_local_continuation_fallback"
+        or fallback_kind == "anti_reset_continuation_fallback"
+    ):
+        return SEALED_REPLACEMENT_SUBKIND_ANTI_RESET_CONTINUATION
+    if final_source in {
+        "global_scene_fallback",
+        "scene_emit_integrity_safe_fallback",
+        "narrative_safe_fallback",
+        "acceptance_quality_global_scene_fallback",
+    } or fallback_kind in {
+        "narrative_safe_fallback",
+        "scene_emit_integrity_safe_fallback",
+    }:
+        return SEALED_REPLACEMENT_SUBKIND_GLOBAL_SCENE
+    return SEALED_REPLACEMENT_SUBKIND_UNKNOWN
 
 
 def _opening_fallback_owner_bucket_from_meta(meta: Mapping[str, Any] | None) -> str:
@@ -147,13 +233,15 @@ def _fem_selected_fallback_projection(fem: Mapping[str, Any]) -> tuple[str, str,
         return ("upstream_fast_fallback", "unknown", "retry", "game.api", "fallback_provenance_trace")
 
     if final_route == "replaced":
-        return (
-            "sealed_or_global_replacement",
-            "replaced_or_sealed",
-            "gate",
-            "game.final_emission_gate",
-            final_source,
-        )
+        sealed_subkind = project_sealed_replacement_subkind_from_fem(fem)
+        if sealed_subkind is not None:
+            return (
+                sealed_subkind,
+                "replaced_or_sealed",
+                "gate",
+                "game.final_emission_gate",
+                final_source,
+            )
     return None
 
 

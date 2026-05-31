@@ -37,10 +37,10 @@ from :func:`game.turn_packet.get_turn_packet` and popped in
 derived from the packet boundary and does not own it. Neither layer owns engine truth or
 narration policy.
 
-**Scene-opening deterministic fallback:** canonical prose is packaged upstream as
-``upstream_prepared_opening_fallback`` (:mod:`game.upstream_response_repairs`). This module selects that
-snapshot when usable and uses :mod:`game.opening_deterministic_fallback` only as a **compatibility**
-re-invocation when the snapshot is absent or unusable—never as a parallel author.
+**Scene-opening deterministic fallback:** opening prose is composed by
+:mod:`game.opening_deterministic_fallback`, packaged upstream by
+:mod:`game.upstream_response_repairs` as ``upstream_prepared_opening_fallback``, and selected by this
+module through the opening fallback adapter. The gate must not re-author opening prose.
 
 **Last-mile player text:** :func:`_finalize_emission_output` applies packaging-only normalization
 (whitespace / route-illegal stock stripping via :func:`_strip_appended_route_illegal_contamination_sentences`).
@@ -197,6 +197,7 @@ from game.final_emission_sealed_fallback import (
     stamp_sealed_fallback_realization_family as _stamp_sealed_fallback_realization_family,
 )
 from game.final_emission_visibility_fallback import (
+    VisibilitySelectedFallback,
     build_first_mention_selected_fallback_metadata_payload as _build_first_mention_selected_fallback_metadata_payload,
     build_first_mention_replacement_logging_payload as _build_first_mention_replacement_logging_payload,
     build_referential_clarity_replacement_logging_payload as _build_referential_clarity_replacement_logging_payload,
@@ -206,7 +207,6 @@ from game.final_emission_visibility_fallback import (
     build_visibility_route_dispatch_context as _build_visibility_route_dispatch_context,
     route_visibility_enforcement_after_failed_validation as _route_visibility_enforcement_after_failed_validation,
     stamp_visibility_fallback_metadata as _stamp_visibility_fallback_metadata,
-    visibility_selected_fallback_from_tuple as _visibility_selected_fallback_from_tuple,
 )
 from game.final_emission_opening_fallback import (
     _gm_output_normalized_for_opening_context,
@@ -223,7 +223,6 @@ from game.final_emission_opening_fallback import (
 )
 from game.opening_deterministic_fallback import (
     OPENING_FALLBACK_EMPTY_CURATED_FACTS_MARKER,
-    deterministic_opening_fallback_text_and_meta as _deterministic_opening_fallback_text_and_meta,
     opening_context_from_gm_output as _opening_context_from_gm_output,
 )
 from game.interaction_continuity import repair_interaction_continuity, validate_interaction_continuity
@@ -374,7 +373,7 @@ def _build_non_strict_sealed_fallback_providers(
         active_interlocutor=active_interlocutor,
         res_kind=res_kind,
         response_type_required=response_type_required,
-        opening_scene_safe_fallback_tuple=_opening_scene_safe_fallback_tuple,
+        opening_sealed_fallback_provider=_opening_sealed_fallback_provider,
         passive_scene_pressure_fallback_candidates=_passive_scene_pressure_fallback_candidates,
         should_use_neutral_nonprogress_fallback_instead_of_global_stock=_should_use_neutral_nonprogress_fallback_instead_of_global_stock,
         scene_emit_integrity_global_fallback_tuple=_scene_emit_integrity_global_fallback_tuple,
@@ -3706,6 +3705,38 @@ def _opening_scene_safe_fallback_tuple(
     )
 
 
+def _opening_scene_safe_fallback_selection(
+    gm_output: Mapping[str, Any] | None,
+) -> VisibilitySelectedFallback:
+    """Typed visibility selection for opening-mode safe fallback."""
+    return VisibilitySelectedFallback.from_legacy_tuple(_opening_scene_safe_fallback_tuple(gm_output))
+
+
+def _opening_sealed_fallback_provider(gm_output: Dict[str, Any]) -> SealedFallbackSelection:
+    """Typed sealed selection for opening-mode terminal replace paths."""
+    return SealedFallbackSelection.from_visibility_tuple(_opening_scene_safe_fallback_tuple(gm_output))
+
+
+def _visibility_selected_fallback_candidate(
+    fallback_text: str,
+    fallback_pool: str,
+    fallback_kind: str,
+    final_emitted_source: str,
+    fallback_strategy: str,
+    fallback_candidate_source: str,
+    composition_meta: Mapping[str, Any],
+) -> VisibilitySelectedFallback:
+    return VisibilitySelectedFallback(
+        text=fallback_text,
+        fallback_pool=fallback_pool,
+        fallback_kind=fallback_kind,
+        final_emitted_source=final_emitted_source,
+        fallback_strategy=fallback_strategy,
+        fallback_candidate_source=fallback_candidate_source,
+        composition_meta=composition_meta,
+    )
+
+
 def _enforce_response_type_contract(
     candidate_text: str,
     *,
@@ -3719,9 +3750,9 @@ def _enforce_response_type_contract(
     active_interlocutor: str,
 ) -> tuple[str, Dict[str, Any]]:
     # C2 Block B: answer/action contract-shaped fallback text is read from ``upstream_prepared_emission``
-    # (see :mod:`game.upstream_response_repairs`). Scene-opening deterministic fallback is selected from
-    # ``upstream_prepared_opening_fallback`` when present; compatibility path re-invokes the shared composer only
-    # when that snapshot is absent or unusable.
+    # (see :mod:`game.upstream_response_repairs`). Scene-opening prose is composed by
+    # :mod:`game.opening_deterministic_fallback`, packaged by :mod:`game.upstream_response_repairs`, and
+    # selected from ``upstream_prepared_opening_fallback`` via the opening fallback adapter.
     contract, source = _resolve_response_type_contract(
         gm_output if isinstance(gm_output, dict) else None,
         resolution=resolution,
@@ -3886,7 +3917,10 @@ def _enforce_response_type_contract(
             debug["opening_repair_source"] = "deterministic_fallback"
             debug["fallback_family_used"] = classification.get("fallback_family")
             debug["fallback_temporal_frame"] = classification.get("temporal_frame")
-            attach_realization_fallback_family(debug, LEGACY_DIEGETIC_FALLBACK)
+            attach_realization_fallback_family(
+                debug,
+                UPSTREAM_PREPARED_EMISSION if upstream_opening else LEGACY_DIEGETIC_FALLBACK,
+            )
             debug["response_type_rejection_reasons"] = list(dict.fromkeys(str(r) for r in reasons if r))
             return fallback, debug
 
@@ -6473,9 +6507,9 @@ def _standard_visibility_safe_fallback(
     emit_integrity_authoritative_resolution: Dict[str, Any] | None = None,
     emit_integrity_res_kind: str = "",
     emit_integrity_response_type_required: str = "",
-) -> tuple[str, str, str, str, str, str, Dict[str, Any]]:
+) -> VisibilitySelectedFallback:
     if _opening_mode_active_for_turn(gm_output, eff_resolution):
-        return _opening_scene_safe_fallback_tuple(gm_output)
+        return _opening_scene_safe_fallback_selection(gm_output)
 
     inspected = inspect_interaction_context(session) if isinstance(session, dict) else {}
     mode = str((inspected or {}).get("interaction_mode") or "").strip().lower()
@@ -6500,12 +6534,12 @@ def _standard_visibility_safe_fallback(
     if not rk_emit and isinstance(eff_resolution, dict):
         rk_emit = str(eff_resolution.get("kind") or "").strip().lower()
     rt_emit = str(emit_integrity_response_type_required or "").strip()
-    fallback_candidates: List[tuple[str, str, str, str, str, str, Dict[str, Any]]] = []
+    fallback_candidates: List[VisibilitySelectedFallback] = []
 
     if strict_social_active and isinstance(eff_resolution, dict):
         social_fallback = minimal_social_emergency_fallback_line(eff_resolution)
         fallback_candidates.append(
-            (
+            _visibility_selected_fallback_candidate(
                 social_fallback,
                 "strict_social_visibility_minimal",
                 "visibility_minimal_social_fallback",
@@ -6516,22 +6550,20 @@ def _standard_visibility_safe_fallback(
             )
         )
     else:
-        fallback_candidates.extend(
-            _passive_scene_pressure_fallback_candidates(
-                session=session if isinstance(session, dict) else None,
-                scene=scene,
-                scene_id=scene_id,
-            )
-        )
+        for candidate in _passive_scene_pressure_fallback_candidates(
+            session=session if isinstance(session, dict) else None,
+            scene=scene,
+            scene_id=scene_id,
+        ):
+            fallback_candidates.append(VisibilitySelectedFallback.from_legacy_tuple(candidate))
         if prefer_grounded_scene_intro and not suppress_intro:
-            fallback_candidates.extend(
-                _grounded_scene_intro_fallback_candidates(
-                    session=session,
-                    scene=validation_scene if isinstance(validation_scene, dict) else scene,
-                    world=world,
-                    active_interlocutor=active_interlocutor,
-                )
-            )
+            for candidate in _grounded_scene_intro_fallback_candidates(
+                session=session,
+                scene=validation_scene if isinstance(validation_scene, dict) else scene,
+                world=world,
+                active_interlocutor=active_interlocutor,
+            ):
+                fallback_candidates.append(VisibilitySelectedFallback.from_legacy_tuple(candidate))
 
     sid = str(scene_id or "").strip()
     if (
@@ -6550,7 +6582,7 @@ def _standard_visibility_safe_fallback(
             },
         }
         fallback_candidates.append(
-            (
+            _visibility_selected_fallback_candidate(
                 minimal_social_emergency_fallback_line(mini_res),
                 "social_active_interlocutor_minimal",
                 "social_interlocutor_fallback",
@@ -6563,7 +6595,7 @@ def _standard_visibility_safe_fallback(
 
     if _should_use_neutral_nonprogress_fallback_instead_of_global_stock(session, eff_resolution):
         fallback_candidates.append(
-            (
+            _visibility_selected_fallback_candidate(
                 npc_pursuit_neutral_nonprogress_fallback_line(),
                 "npc_pursuit_fail_closed_neutral",
                 "npc_pursuit_neutral_nonprogress",
@@ -6580,7 +6612,7 @@ def _standard_visibility_safe_fallback(
     ):
         if suppress_intro:
             fallback_candidates.append(
-                (
+                _visibility_selected_fallback_candidate(
                     local_exchange_continuation_fallback_line(
                         session=session if isinstance(session, dict) else None,
                         world=world if isinstance(world, dict) else None,
@@ -6597,26 +6629,22 @@ def _standard_visibility_safe_fallback(
             )
         else:
             fallback_candidates.append(
-                _scene_emit_integrity_global_fallback_tuple(
-                    scene if isinstance(scene, dict) else None,
-                    sid,
-                    authoritative_resolution=auth_res,
-                    session=session if isinstance(session, dict) else None,
-                    world=world if isinstance(world, dict) else None,
-                    res_kind=rk_emit,
-                    response_type_required=rt_emit,
+                VisibilitySelectedFallback.from_legacy_tuple(
+                    _scene_emit_integrity_global_fallback_tuple(
+                        scene if isinstance(scene, dict) else None,
+                        sid,
+                        authoritative_resolution=auth_res,
+                        session=session if isinstance(session, dict) else None,
+                        world=world if isinstance(world, dict) else None,
+                        res_kind=rk_emit,
+                        response_type_required=rt_emit,
+                    )
                 )
             )
 
-    for (
-        fallback_text,
-        fallback_pool,
-        fallback_kind,
-        final_emitted_source,
-        fallback_strategy,
-        fallback_candidate_source,
-        composition_meta,
-    ) in fallback_candidates:
+    for selected in fallback_candidates:
+        fallback_text = selected.text
+        final_emitted_source = selected.final_emitted_source
         if not _normalize_text(fallback_text):
             continue
         if suppress_intro and should_replace_candidate_intro_fallback(
@@ -6651,18 +6679,10 @@ def _standard_visibility_safe_fallback(
                 )
                 if referential_clarity_validation.get("ok") is not True:
                     continue
-            return (
-                fallback_text,
-                fallback_pool,
-                fallback_kind,
-                final_emitted_source,
-                fallback_strategy,
-                fallback_candidate_source,
-                composition_meta,
-            )
+            return selected
 
     if strict_social_active and isinstance(eff_resolution, dict):
-        return (
+        return _visibility_selected_fallback_candidate(
             minimal_social_emergency_fallback_line(eff_resolution),
             "strict_social_visibility_minimal",
             "visibility_minimal_social_fallback",
@@ -6678,19 +6698,10 @@ def _standard_visibility_safe_fallback(
         scene_id=scene_id,
     )
     if passive_candidates:
-        fallback_text, fallback_pool, fallback_kind, final_emitted_source, fallback_strategy, fallback_candidate_source, composition_meta = passive_candidates[0]
-        return (
-            fallback_text,
-            fallback_pool,
-            fallback_kind,
-            final_emitted_source,
-            fallback_strategy,
-            fallback_candidate_source,
-            composition_meta,
-        )
+        return VisibilitySelectedFallback.from_legacy_tuple(passive_candidates[0])
 
     if suppress_intro:
-        return (
+        return _visibility_selected_fallback_candidate(
             local_exchange_continuation_fallback_line(
                 session=session if isinstance(session, dict) else None,
                 world=world if isinstance(world, dict) else None,
@@ -6704,15 +6715,55 @@ def _standard_visibility_safe_fallback(
             "anti_reset_local_continuation_fallback",
             _first_mention_composition_meta(),
         )
-    return _scene_emit_integrity_global_fallback_tuple(
-        scene if isinstance(scene, dict) else None,
-        sid,
-        authoritative_resolution=auth_res,
-        session=session if isinstance(session, dict) else None,
-        world=world if isinstance(world, dict) else None,
-        res_kind=rk_emit,
-        response_type_required=rt_emit,
+    return VisibilitySelectedFallback.from_legacy_tuple(
+        _scene_emit_integrity_global_fallback_tuple(
+            scene if isinstance(scene, dict) else None,
+            sid,
+            authoritative_resolution=auth_res,
+            session=session if isinstance(session, dict) else None,
+            world=world if isinstance(world, dict) else None,
+            res_kind=rk_emit,
+            response_type_required=rt_emit,
+        )
     )
+
+
+def _standard_visibility_safe_fallback_tuple(
+    *,
+    gm_output: Dict[str, Any] | None = None,
+    session: Dict[str, Any] | None,
+    scene: Dict[str, Any] | None,
+    world: Dict[str, Any] | None,
+    scene_id: str,
+    eff_resolution: Dict[str, Any] | None,
+    active_interlocutor: str,
+    strict_social_active: bool,
+    strict_social_suppressed_non_social_turn: bool,
+    enforce_first_mentions: bool = False,
+    enforce_referential_clarity: bool = False,
+    prefer_grounded_scene_intro: bool = False,
+    emit_integrity_authoritative_resolution: Dict[str, Any] | None = None,
+    emit_integrity_res_kind: str = "",
+    emit_integrity_response_type_required: str = "",
+) -> tuple[str, str, str, str, str, str, Dict[str, Any]]:
+    """Backward-compatible tuple adapter for historical private tests/imports."""
+    return _standard_visibility_safe_fallback(
+        gm_output=gm_output,
+        session=session,
+        scene=scene,
+        world=world,
+        scene_id=scene_id,
+        eff_resolution=eff_resolution,
+        active_interlocutor=active_interlocutor,
+        strict_social_active=strict_social_active,
+        strict_social_suppressed_non_social_turn=strict_social_suppressed_non_social_turn,
+        enforce_first_mentions=enforce_first_mentions,
+        enforce_referential_clarity=enforce_referential_clarity,
+        prefer_grounded_scene_intro=prefer_grounded_scene_intro,
+        emit_integrity_authoritative_resolution=emit_integrity_authoritative_resolution,
+        emit_integrity_res_kind=emit_integrity_res_kind,
+        emit_integrity_response_type_required=emit_integrity_response_type_required,
+    ).as_legacy_tuple()
 
 
 def _apply_first_mention_enforcement(
@@ -6797,7 +6848,7 @@ def _apply_first_mention_enforcement(
     )
     prefer_grounded_scene_intro = not suppress_intro
 
-    first_mention_fallback_tuple = _standard_visibility_safe_fallback(
+    first_mention_selected_fallback = _standard_visibility_safe_fallback(
         gm_output=out,
         session=session,
         scene=scene,
@@ -6816,7 +6867,6 @@ def _apply_first_mention_enforcement(
             emit_integrity_response_type_required or meta.get("response_type_required") or ""
         ),
     )
-    first_mention_selected_fallback = _visibility_selected_fallback_from_tuple(first_mention_fallback_tuple)
     assert_final_emission_mutation_allowed(
         "hard_replace_illegal_output_with_sealed_fallback",
         source="gate._apply_first_mention_enforcement",
@@ -7009,7 +7059,7 @@ def _apply_referential_clarity_enforcement(
             )
             return out
 
-    referential_clarity_fallback_tuple = _standard_visibility_safe_fallback(
+    referential_clarity_selected_fallback = _standard_visibility_safe_fallback(
         gm_output=out,
         session=session,
         scene=scene,
@@ -7027,7 +7077,6 @@ def _apply_referential_clarity_enforcement(
             emit_integrity_response_type_required or meta.get("response_type_required") or ""
         ),
     )
-    referential_clarity_selected_fallback = _visibility_selected_fallback_from_tuple(referential_clarity_fallback_tuple)
     assert_final_emission_mutation_allowed(
         "hard_replace_illegal_output_with_sealed_fallback",
         source="gate._apply_referential_clarity_enforcement",
@@ -7190,7 +7239,7 @@ def _apply_visibility_enforcement(
 
     visibility_selection_inputs = visibility_route_dispatch_context.selection_inputs
     assert visibility_selection_inputs is not None
-    visibility_fallback_tuple = _standard_visibility_safe_fallback(
+    visibility_selected_fallback = _standard_visibility_safe_fallback(
         session=session,
         scene=scene,
         world=world,
@@ -7203,7 +7252,6 @@ def _apply_visibility_enforcement(
         emit_integrity_res_kind=emit_integrity_res_kind,
         emit_integrity_response_type_required=visibility_selection_inputs.emit_integrity_response_type_required,
     )
-    visibility_selected_fallback = _visibility_selected_fallback_from_tuple(visibility_fallback_tuple)
     assert_final_emission_mutation_allowed(
         "hard_replace_illegal_output_with_sealed_fallback",
         source="gate._apply_visibility_enforcement",

@@ -26,7 +26,10 @@ from game.upstream_response_repairs import (
     OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED,
     UPSTREAM_PREPARED_OPENING_FALLBACK_KEY,
 )
-from tests.test_final_emission_gate import EXPECTED_FRONTIER_GATE_OPENING_FALLBACK, _opening_gm_output
+from tests.helpers.final_emission_gate_fixtures import (
+    EXPECTED_FRONTIER_GATE_OPENING_FALLBACK,
+    opening_gm_output,
+)
 
 pytestmark = pytest.mark.unit
 
@@ -269,7 +272,7 @@ def test_api_narration_terminal_retry_fallback_path_snapshot(monkeypatch: pytest
 
 
 def test_finalize_player_facing_scene_opening_carries_upstream_opening_fallback_payload() -> None:
-    gm = _opening_gm_output()
+    gm = opening_gm_output()
     gm["player_facing_text"] = "Nearby crates appear disturbed."
     gm["tags"] = []
     session = default_session()

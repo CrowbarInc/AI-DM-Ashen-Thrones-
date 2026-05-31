@@ -1,4 +1,11 @@
-"""Lightweight helpers for realization fallback provenance metadata."""
+"""Lightweight helpers for realization fallback provenance metadata.
+
+``realization_fallback_family`` is the governed provenance taxonomy
+(:data:`game.realization_authority.FALLBACK_FAMILIES`). It is stamped independently
+from diegetic ``fallback_family_used`` (:mod:`game.diegetic_fallback_narration`).
+Golden replay may project a single observed ``fallback_family`` with diegetic-first
+preference; runtime code must not collapse the two FEM fields.
+"""
 from __future__ import annotations
 
 from typing import Any, MutableMapping

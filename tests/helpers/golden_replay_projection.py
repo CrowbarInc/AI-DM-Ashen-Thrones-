@@ -2,6 +2,26 @@
 
 Centralizes payload/snapshot → observation dict projection and protected
 field-path enumeration. Test-only; no runtime behavior changes.
+
+**Dual fallback-family contract (Cycle AB):**
+
+Runtime FEM may carry two independent fallback-family vocabularies:
+
+- ``fallback_family_used`` — diegetic/template taxonomy from
+  :mod:`game.diegetic_fallback_narration` (e.g. ``scene_opening``, ``observe``,
+  ``social``).
+- ``realization_fallback_family`` — governed provenance taxonomy from
+  :mod:`game.realization_provenance` / :mod:`game.realization_authority`
+  (e.g. ``legacy_diegetic_fallback``, ``upstream_prepared_emission``,
+  ``gate_terminal_repair``).
+
+Golden replay exposes a single observed ``fallback_family`` for protected
+structural drift checks. :func:`project_replay_fallback_family_from_fem`
+prefers ``fallback_family_used`` and falls back to ``realization_fallback_family``
+only when the diegetic field is absent. That preference is a **read-side
+compatibility projection**; runtime code must not rewrite either FEM field to
+force one taxonomy into the other, and the two fields must not be collapsed at
+write time until AB4+ replay proof completes.
 """
 from __future__ import annotations
 
@@ -16,6 +36,7 @@ from game.final_emission_meta import (
     read_emission_debug_lane_from_turn_payload,
     read_final_emission_meta_from_turn_payload,
 )
+from game.final_emission_replay_projection import is_sealed_replacement_lineage_kind
 from game.output_sanitizer import resembles_serialized_response_payload
 from game.runtime_lineage_telemetry import normalize_runtime_lineage_events
 
@@ -280,12 +301,22 @@ def _project_replay_fallback_family(
         return None
     if any(
         event.get("event_kind") == "fallback_selected"
-        and event.get("fallback_kind") == "sealed_or_global_replacement"
+        and is_sealed_replacement_lineage_kind(event.get("fallback_kind"))
         for event in runtime_lineage_events
         if isinstance(event, Mapping)
     ):
         return NEUTRAL_REPLY_SPEAKER_GROUNDING_BRIDGE_FAMILY
     return None
+
+
+def project_replay_fallback_family_from_fem(fem: Mapping[str, Any]) -> str | None:
+    """Project golden replay ``fallback_family`` from FEM with diegetic-first preference.
+
+    Prefers ``fallback_family_used`` (diegetic/template taxonomy) over
+    ``realization_fallback_family`` (governed provenance). See module docstring
+    for the Cycle AB dual-field contract.
+    """
+    return _first_present(fem, ("fallback_family_used", "realization_fallback_family"))
 
 
 def project_turn_observation(turn_payload: Mapping[str, Any]) -> dict[str, Any]:
@@ -376,10 +407,7 @@ def project_turn_observation(turn_payload: Mapping[str, Any]) -> dict[str, Any]:
     visibility_replacement_applied = _first_present(fem, ("visibility_replacement_applied",))
     visibility_fallback_pool = _first_present(fem, ("visibility_fallback_pool",))
     visibility_fallback_kind = _first_present(fem, ("visibility_fallback_kind",))
-    fallback_family = _first_present(
-        fem,
-        ("fallback_family_used", "realization_fallback_family"),
-    )
+    fallback_family = project_replay_fallback_family_from_fem(fem)
     if fallback_family is None:
         fallback_family = _project_replay_fallback_family(fem, runtime_lineage_events)
     fallback_temporal_frame = _first_present(fem, ("fallback_temporal_frame",))

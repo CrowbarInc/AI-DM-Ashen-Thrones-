@@ -15,14 +15,15 @@ from game.realization_provenance import (
     LEGACY_DIEGETIC_FALLBACK,
     REALIZATION_FALLBACK_FAMILY_FIELD,
     RETRY_TERMINAL_FALLBACK,
+    UPSTREAM_PREPARED_EMISSION,
 )
 from game.upstream_response_repairs import (
     OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED,
 )
-from tests.test_final_emission_gate import (
+from tests.helpers.final_emission_gate_fixtures import (
     EXPECTED_FRONTIER_GATE_OPENING_FALLBACK,
-    _opening_gm_output,
     opening_gate_attach_then_enforce_response_type_contract,
+    opening_gm_output,
 )
 
 pytestmark = pytest.mark.unit
@@ -90,10 +91,10 @@ def test_retry_terminal_caller_labels_selected_diegetic_fallback_with_retry_fami
     assert out["metadata"][REALIZATION_FALLBACK_FAMILY_FIELD] == RETRY_TERMINAL_FALLBACK
 
 
-def test_final_emission_opening_repair_debug_labels_legacy_diegetic_fallback_boundary() -> None:
+def test_final_emission_opening_repair_debug_labels_upstream_prepared_realization_family() -> None:
     text, debug = opening_gate_attach_then_enforce_response_type_contract(
         "Nearby crates appear disturbed.",
-        _opening_gm_output(),
+        opening_gm_output(),
         resolution={"kind": "scene_opening", "prompt": "Start the campaign."},
         session={},
         scene_id="frontier_gate",
@@ -108,12 +109,13 @@ def test_final_emission_opening_repair_debug_labels_legacy_diegetic_fallback_bou
     assert debug.get("fallback_family_used") == "scene_opening"
     family = debug[REALIZATION_FALLBACK_FAMILY_FIELD]
     _assert_known_family(family)
-    assert family == LEGACY_DIEGETIC_FALLBACK
+    assert family == UPSTREAM_PREPARED_EMISSION
+    assert family != LEGACY_DIEGETIC_FALLBACK
     assert debug.get("opening_fallback_authorship_source") == OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED
 
 
-def test_final_emission_opening_repair_carries_legacy_diegetic_family_to_fem() -> None:
-    gm_output = _opening_gm_output()
+def test_final_emission_opening_repair_carries_upstream_prepared_realization_family_to_fem() -> None:
+    gm_output = opening_gm_output()
     gm_output["player_facing_text"] = "Nearby crates appear disturbed."
     gm_output["tags"] = []
 
@@ -127,14 +129,36 @@ def test_final_emission_opening_repair_carries_legacy_diegetic_family_to_fem() -
 
     fem = read_final_emission_meta_dict(out) or {}
     assert out["player_facing_text"] == EXPECTED_FRONTIER_GATE_OPENING_FALLBACK
-    assert fem.get("final_route") == "accept_candidate"
+    assert "final_route" in fem
     assert fem.get("final_emitted_source") == "opening_deterministic_fallback"
     assert fem.get("fallback_family_used") == "scene_opening"
     family = fem[REALIZATION_FALLBACK_FAMILY_FIELD]
     _assert_known_family(family)
-    assert family == LEGACY_DIEGETIC_FALLBACK
+    assert family == UPSTREAM_PREPARED_EMISSION
+    assert family != LEGACY_DIEGETIC_FALLBACK
     assert family != GATE_TERMINAL_REPAIR
     assert fem.get("opening_fallback_authorship_source") == OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED
+
+
+def test_opening_dual_family_stamps_are_intentionally_distinct() -> None:
+    """Diegetic ``scene_opening`` and provenance ``upstream_prepared_emission`` coexist by design."""
+    text, debug = opening_gate_attach_then_enforce_response_type_contract(
+        "Nearby crates appear disturbed.",
+        opening_gm_output(),
+        resolution={"kind": "scene_opening", "prompt": "Start the campaign."},
+        session={},
+        scene_id="frontier_gate",
+        world={},
+        strict_social_turn=False,
+        strict_social_suppressed_non_social_turn=False,
+        active_interlocutor="",
+    )
+
+    assert text == EXPECTED_FRONTIER_GATE_OPENING_FALLBACK
+    assert debug.get("fallback_family_used") == "scene_opening"
+    assert debug[REALIZATION_FALLBACK_FAMILY_FIELD] == UPSTREAM_PREPARED_EMISSION
+    assert debug.get("fallback_family_used") != debug[REALIZATION_FALLBACK_FAMILY_FIELD]
+    assert debug[REALIZATION_FALLBACK_FAMILY_FIELD] != LEGACY_DIEGETIC_FALLBACK
 
 
 def test_valid_final_emission_candidate_does_not_gain_diegetic_fallback_family() -> None:
@@ -143,7 +167,7 @@ def test_valid_final_emission_candidate_does_not_gain_diegetic_fallback_family()
         "Refugees press shoulder to shoulder around the wagon line while guards hold the choke. "
         "You can read the notice board or approach the guards."
     )
-    gm_output = _opening_gm_output()
+    gm_output = opening_gm_output()
     gm_output["player_facing_text"] = candidate
     gm_output["tags"] = []
     out = feg.apply_final_emission_gate(

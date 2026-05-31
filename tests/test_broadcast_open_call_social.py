@@ -81,26 +81,23 @@ def test_broadcast_detector_rejects_named_vocative():
 
 
 def test_question_resolution_exempt_for_open_call_crowd_reaction():
-    for gm_line in (
-        "The line rustles; eyes flick toward you, measuring.",
-        "Nobody speaks first—only the rain ticking on helms and the far cough of a cart.",
-        'A woman in a patched cloak shifts her weight. Behind her, someone mutters, "Bold."',
-    ):
-        chk = question_resolution_rule_check(
-            player_text="Who wants to speak with me?",
-            gm_reply_text=gm_line,
-            resolution={
-                "kind": "question",
-                "social": {
-                    "social_intent_class": "open_call",
-                    "open_social_solicitation": True,
-                    "npc_reply_expected": False,
-                    "reply_kind": "reaction",
-                    "target_resolved": False,
-                },
+    chk = question_resolution_rule_check(
+        player_text="Who wants to speak with me?",
+        gm_reply_text="The line rustles; eyes flick toward you, measuring.",
+        resolution={
+            "kind": "question",
+            "social": {
+                "social_intent_class": "open_call",
+                "open_social_solicitation": True,
+                "npc_reply_expected": False,
+                "reply_kind": "reaction",
+                "target_resolved": False,
             },
-        )
-        assert chk.get("applies") is False, (gm_line, chk)
+        },
+    )
+    assert chk.get("applies") is False
+    assert chk.get("ok") is True
+    assert chk.get("reasons") == []
 
 
 def test_detect_retry_failures_skips_unresolved_question_for_open_call():

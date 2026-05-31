@@ -19,7 +19,7 @@ from game.final_emission_meta import (
     opening_fallback_owner_bucket_from_meta,
     read_final_emission_meta_dict,
 )
-from game.upstream_response_repairs import OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL
+from tests.helpers.opening_fallback_evidence import OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL
 from game.interaction_context import rebuild_active_scene_entities, set_social_target
 from game.narrative_authority import build_narrative_authority_contract
 from game.social_exchange_emission import effective_strict_social_resolution_for_emission

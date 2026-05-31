@@ -549,6 +549,10 @@ def patch_final_emission_meta(gm_output: MutableMapping[str, Any], patch: Mappin
     meta.update(dict(patch))
     refresh_final_emission_mutation_lineage(meta)
 
+# Dual fallback-family contract (Cycle AB): ``fallback_family_used`` is diegetic/template
+# taxonomy; ``realization_fallback_family`` is governed provenance. Both may coexist on FEM.
+# Read-side golden replay prefers diegetic first when projecting observed ``fallback_family``;
+# observability normalization must preserve both keys without rewriting either taxonomy.
 # Response-type debug fields (RTD1) that may be merged into FEM for observability.
 FEM_RESPONSE_TYPE_KEYS: frozenset[str] = frozenset(
     {

@@ -3,6 +3,12 @@
 Templates are written to avoid patterns flagged by ``player_facing_narration_purity``
 (scaffold headers, coaching, UI labels, meta transition bridges). This module does not
 validate or repair text — the final emission gate remains authoritative.
+
+**Diegetic fallback-family taxonomy:** :func:`fallback_template_metadata` stamps
+``fallback_family`` / ``temporal_frame`` on template IDs (e.g. ``scene_opening``,
+``observe``, ``social``). Runtime FEM exposes this as ``fallback_family_used``.
+This diegetic vocabulary is independent of governed ``realization_fallback_family``
+provenance (:mod:`game.realization_provenance`); both may appear on the same turn.
 """
 from __future__ import annotations
 

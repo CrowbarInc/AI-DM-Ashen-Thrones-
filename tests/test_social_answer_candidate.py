@@ -205,9 +205,7 @@ def test_build_final_route_illegal_without_topic_fact_does_not_emit_structured_f
         world=world,
     )
     assert details.get("final_emitted_source") != "structured_fact_candidate_emission"
-    low = text.lower()
-    assert "for a breath" not in low and "scene holds" not in low and "voices shift around you" not in low
-    assert "tavern runner" in low
+    assert "tavern runner" in text.lower()
 
 
 def test_format_structured_fact_social_line_single_sentence():

@@ -6,10 +6,10 @@ Block C), and the social-resolution helper used for dialogue repair routing live
 :mod:`game.final_emission_gate` consumes structured fields instead of minting substitute prose
 at the boundary.
 
-**Scene-opening deterministic fallback:** canonical authored prose + FEM-shaped composition lives in
-:func:`build_upstream_prepared_opening_fallback_payload` (shared text from
-:mod:`game.opening_deterministic_fallback`). The gate selects that prepared snapshot and only falls
-back to a compatibility re-call of the shared composer when the snapshot is absent or unusable.
+**Scene-opening deterministic fallback:** opening prose is composed by
+:mod:`game.opening_deterministic_fallback` and packaged by
+:func:`build_upstream_prepared_opening_fallback_payload` for gate selection via the opening fallback
+adapter (:mod:`game.final_emission_opening_fallback`). The gate must not re-author opening prose.
 
 See ``docs/final_emission_ownership_convergence.md`` (Objective C2, Block B / Block C).
 """
@@ -32,7 +32,6 @@ from game.interaction_context import inspect as inspect_interaction_context
 from game.leads import get_lead, normalize_lead
 from game.final_emission_validators import _contract_bool
 from game.realization_provenance import (
-    LEGACY_DIEGETIC_FALLBACK,
     UPSTREAM_PREPARED_EMISSION,
     attach_realization_fallback_family,
 )
@@ -52,7 +51,6 @@ UPSTREAM_PREPARED_EMISSION_KEY = "upstream_prepared_emission"
 UPSTREAM_PREPARED_OPENING_FALLBACK_KEY = "upstream_prepared_opening_fallback"
 SANITIZER_BOUNDARY_STRIP_ONLY = "strip_only"
 OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED = "upstream_prepared_opening_fallback"
-OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL = "compatibility_local_opening_deterministic"
 UPSTREAM_PREPARED_OPENING_FALLBACK_ORIGIN = (
     "upstream_response_repairs.build_upstream_prepared_opening_fallback_payload"
 )
@@ -215,7 +213,7 @@ def build_upstream_prepared_opening_fallback_payload(
         "opening_fallback_composition_meta": composition_meta,
         "upstream_prepared_opening_fallback_origin": UPSTREAM_PREPARED_OPENING_FALLBACK_ORIGIN,
     }
-    attach_realization_fallback_family(payload, LEGACY_DIEGETIC_FALLBACK)
+    attach_realization_fallback_family(payload, UPSTREAM_PREPARED_EMISSION)
     return payload
 
 

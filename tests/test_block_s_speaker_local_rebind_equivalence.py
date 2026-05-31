@@ -12,7 +12,7 @@ from tests.helpers.speaker_gate_order import (
     assert_phase_subsequence,
     normalized_player_text_equal,
 )
-from tests.test_final_emission_gate import _runner_strict_bundle
+from tests.helpers.final_emission_gate_fixtures import runner_strict_bundle
 
 pytestmark = pytest.mark.unit
 
@@ -39,7 +39,7 @@ _CHAIN_SOCIAL_TO_POST_SPEAKER = (
 
 
 def _locked_runner_contract() -> dict:
-    """Continuity-locked contract matching `_runner_strict_bundle` NPC id `runner`."""
+    """Continuity-locked contract matching `runner_strict_bundle` NPC id `runner`."""
     return {
         "primary_speaker_id": "runner",
         "primary_speaker_name": "Tavern Runner",
@@ -78,7 +78,7 @@ def _wrap(orig, order: list[str], phase: str):
 
 def test_block_s_strict_social_phase_order_wrapped_build(monkeypatch):
     """Same chain when social build is wrapped (avoid overwriting tracked build)."""
-    session, world, sid, resolution = _runner_strict_bundle()
+    session, world, sid, resolution = runner_strict_bundle()
     order: list[str] = []
 
     orig_rt = feg._enforce_response_type_contract
@@ -119,7 +119,7 @@ def test_block_s_strict_social_phase_order_wrapped_build(monkeypatch):
 
 def test_block_s_local_rebind_full_gate_metadata_not_canonical_or_neutral(monkeypatch):
     """Wrong opening label + continuity lock → local_rebind; no canonical_rewrite / narrator_neutral flags."""
-    session, world, sid, resolution = _runner_strict_bundle()
+    session, world, sid, resolution = runner_strict_bundle()
     c = _locked_runner_contract()
     monkeypatch.setattr(feg, "get_speaker_selection_contract", lambda *a, **kw: dict(c))
 
@@ -158,7 +158,7 @@ def test_block_s_comparison_helper_self_consistent_with_direct_string():
 
 def test_block_s_local_rebind_gate_entry_preserves_full_line_same_as_block_b_direct(monkeypatch):
     """Speaker boundary only: canonical opening label + quoted span unchanged (matches Block B direct test)."""
-    session, world, sid, resolution = _runner_strict_bundle()
+    session, world, sid, resolution = runner_strict_bundle()
     eff_resolution = copy.deepcopy(resolution)
     eff_resolution["social"]["npc_id"] = "runner"
     eff_resolution["social"]["npc_name"] = "Tavern Runner"

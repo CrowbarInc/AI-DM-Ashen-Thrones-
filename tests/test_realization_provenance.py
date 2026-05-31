@@ -19,8 +19,10 @@ from game.realization_provenance import (
 from game.upstream_response_repairs import (
     UPSTREAM_PREPARED_EMISSION_KEY,
     build_upstream_prepared_emission_payload,
+    build_upstream_prepared_opening_fallback_payload,
     merge_upstream_prepared_emission_into_gm_output,
 )
+from tests.helpers.final_emission_gate_fixtures import opening_gm_output
 
 pytestmark = pytest.mark.unit
 
@@ -136,3 +138,13 @@ def test_strict_social_internal_fallback_details_have_strict_social_family() -> 
     family = details[REALIZATION_FALLBACK_FAMILY_FIELD]
     _assert_known_family(family)
     assert family == STRICT_SOCIAL_DETERMINISTIC_FALLBACK
+
+
+def test_upstream_prepared_opening_payload_stamps_realization_family_distinct_from_diegetic() -> None:
+    """Opening upstream payload carries both taxonomies without collapsing them."""
+    payload = build_upstream_prepared_opening_fallback_payload(opening_gm_output())
+    comp = payload["opening_fallback_composition_meta"]
+    assert comp["fallback_family_used"] == "scene_opening"
+    assert payload[REALIZATION_FALLBACK_FAMILY_FIELD] == UPSTREAM_PREPARED_EMISSION
+    assert comp["fallback_family_used"] != payload[REALIZATION_FALLBACK_FAMILY_FIELD]
+    assert payload[REALIZATION_FALLBACK_FAMILY_FIELD] in FALLBACK_FAMILIES
